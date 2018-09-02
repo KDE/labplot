@@ -37,7 +37,7 @@
 #include <QStandardItemModel>
 
 extern "C" {
-#include "backend/nsl/nsl_int.h"
+#include "backend/nsl/nsl_conv.h"
 }
 
 /*!
@@ -71,6 +71,7 @@ XYConvolutionCurveDock::XYConvolutionCurveDock(QWidget* parent) : XYCurveDock(pa
  * 	// Tab "General"
  */
 void XYConvolutionCurveDock::setupGeneral() {
+	DEBUG("XYConvolutionCurveDock::setupGeneral()");
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 
@@ -90,6 +91,8 @@ void XYConvolutionCurveDock::setupGeneral() {
 	gridLayout->addWidget(cbXDataColumn, 6, 2, 1, 3);
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 3);
+	cbY2DataColumn = new TreeViewComboBox(generalTab);
+	gridLayout->addWidget(cbY2DataColumn, 8, 2, 1, 3);
 
 	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
@@ -114,11 +117,13 @@ void XYConvolutionCurveDock::setupGeneral() {
 	connect( cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)) );
 	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
 	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
+	connect( cbY2DataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(y2DataColumnChanged(QModelIndex)) );
 }
 
 void XYConvolutionCurveDock::initGeneralTab() {
+	DEBUG("XYConvolutionCurveDock::initGeneralTab()");
 	//if there are more then one curve in the list, disable the tab "general"
-	if (m_curvesList.size()==1) {
+	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
@@ -144,6 +149,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_convolutionCurve->dataSourceCurve());
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_convolutionCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_convolutionCurve->yDataColumn());
+	XYCurveDock::setModelIndexFromAspect(cbY2DataColumn, m_convolutionCurve->y2DataColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_convolutionData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_convolutionData.xRange.first());
 	uiGeneralTab.sbMax->setValue(m_convolutionData.xRange.last());
@@ -164,13 +170,15 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	connect(m_convolutionCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
 	connect(m_convolutionCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
 	connect(m_convolutionCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
+	connect(m_convolutionCurve, SIGNAL(y2DataColumnChanged(const AbstractColumn*)), this, SLOT(curveY2DataColumnChanged(const AbstractColumn*)));
 	connect(m_convolutionCurve, SIGNAL(convolutionDataChanged(XYConvolutionCurve::ConvolutionData)), this, SLOT(curveConvolutionDataChanged(XYConvolutionCurve::ConvolutionData)));
 	connect(m_convolutionCurve, SIGNAL(sourceDataChanged()), this, SLOT(enableRecalculate()));
 }
 
 void XYConvolutionCurveDock::setModel() {
-	QList<const char*>  list;
-	list<<"Folder"<<"Datapicker"<<"Worksheet"<<"CartesianPlot"<<"XYCurve";
+	DEBUG("XYConvolutionCurveDock::setModel()");
+	QList<const char*> list;
+	list << "Folder" << "Datapicker" << "Worksheet" << "CartesianPlot" << "XYCurve";
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
@@ -179,14 +187,16 @@ void XYConvolutionCurveDock::setModel() {
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
 	list.clear();
-	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
-		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
+	list << "Folder" << "Workbook" << "Datapicker" << "DatapickerCurve" << "Spreadsheet"
+		<< "FileDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYFitCurve";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
+	cbY2DataColumn->setTopLevelClasses(list);
 
 	cbDataSourceCurve->setModel(m_aspectTreeModel);
 	cbXDataColumn->setModel(m_aspectTreeModel);
 	cbYDataColumn->setModel(m_aspectTreeModel);
+	cbY2DataColumn->setModel(m_aspectTreeModel);
 
 	XYCurveDock::setModel();
 }
@@ -195,9 +205,9 @@ void XYConvolutionCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing=true;
-	m_curvesList=list;
-	m_curve=list.first();
+	m_initializing = true;
+	m_curvesList = list;
+	m_curve = list.first();
 	m_convolutionCurve = dynamic_cast<XYConvolutionCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
@@ -237,6 +247,8 @@ void XYConvolutionCurveDock::dataSourceTypeChanged(int index) {
 		cbXDataColumn->show();
 		uiGeneralTab.lYColumn->show();
 		cbYDataColumn->show();
+		uiGeneralTab.lY2Column->show();
+		cbY2DataColumn->show();
 	} else {
 		uiGeneralTab.lDataSourceCurve->show();
 		cbDataSourceCurve->show();
@@ -244,6 +256,8 @@ void XYConvolutionCurveDock::dataSourceTypeChanged(int index) {
 		cbXDataColumn->hide();
 		uiGeneralTab.lYColumn->hide();
 		cbYDataColumn->hide();
+		uiGeneralTab.lY2Column->hide();
+		cbY2DataColumn->hide();
 	}
 
 	if (m_initializing)
@@ -312,6 +326,18 @@ void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYConvolutionCurve*>(curve)->setYDataColumn(column);
 }
 
+void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
+	if (m_initializing)
+		return;
+
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+
+	for (auto* curve : m_curvesList)
+		dynamic_cast<XYConvolutionCurve*>(curve)->setY2DataColumn(column);
+}
+
+
 void XYConvolutionCurveDock::autoRangeChanged() {
 	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
 	m_convolutionData.autoRange = autoRange;
@@ -375,6 +401,7 @@ void XYConvolutionCurveDock::recalculateClicked() {
 }
 
 void XYConvolutionCurveDock::enableRecalculate() const {
+	DEBUG("XYConvolutionCurveDock::enableRecalculate()");
 	if (m_initializing)
 		return;
 
@@ -459,6 +486,12 @@ void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 void XYConvolutionCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
+	m_initializing = false;
+}
+
+void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
+	m_initializing = true;
+	XYCurveDock::setModelIndexFromAspect(cbY2DataColumn, column);
 	m_initializing = false;
 }
 

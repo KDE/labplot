@@ -52,6 +52,7 @@ private:
 	TreeViewComboBox* cbDataSourceCurve;
 	TreeViewComboBox* cbXDataColumn;
 	TreeViewComboBox* cbYDataColumn;
+	TreeViewComboBox* cbY2DataColumn;
 
 	XYConvolutionCurve* m_convolutionCurve;
 	XYConvolutionCurve::ConvolutionData m_convolutionData;
@@ -68,6 +69,7 @@ private slots:
 	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
+	void y2DataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
 	void xRangeMinChanged();
 	void xRangeMaxChanged();
@@ -83,6 +85,7 @@ private slots:
 	void curveDataSourceCurveChanged(const XYCurve*);
 	void curveXDataColumnChanged(const AbstractColumn*);
 	void curveYDataColumnChanged(const AbstractColumn*);
+	void curveY2DataColumnChanged(const AbstractColumn*);
 	void curveConvolutionDataChanged(const XYConvolutionCurve::ConvolutionData&);
 	void dataChanged();
 };

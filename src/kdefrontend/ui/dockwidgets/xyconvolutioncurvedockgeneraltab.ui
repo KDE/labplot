@@ -7,74 +7,38 @@
     <x>0</x>
     <y>0</y>
     <width>625</width>
-    <height>1374</height>
+    <height>749</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="12" column="0">
-    <widget class="QLabel" name="lConvolution">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
+   <item row="5" column="0">
+    <widget class="QLabel" name="lDataSourceCurve">
      <property name="text">
-      <string>Convolution</string>
+      <string>Curve:</string>
      </property>
     </widget>
    </item>
-   <item row="13" column="0">
-    <widget class="QLabel" name="lMethod">
+   <item row="7" column="0">
+    <widget class="QLabel" name="lYColumn">
      <property name="text">
-      <string>Method:</string>
+      <string>y-Data Signal:</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="2" colspan="3">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="lMax">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>50</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Maximum:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="sbMax">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="decimals">
-        <number>6</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="20" column="4">
-    <widget class="QPushButton" name="pbRecalculate">
+   <item row="0" column="0">
+    <widget class="QLabel" name="lName">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text">
-      <string>Recalculate</string>
+      <string>Name:</string>
      </property>
     </widget>
    </item>
-   <item row="21" column="2">
+   <item row="22" column="2">
     <spacer name="verticalSpacerGeneral">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -90,63 +54,14 @@
      </property>
     </spacer>
    </item>
-   <item row="22" column="0">
-    <widget class="QCheckBox" name="chkVisible">
+   <item row="9" column="0">
+    <widget class="QLabel" name="lXRange">
      <property name="text">
-      <string>Visible</string>
+      <string>x-Range:</string>
      </property>
     </widget>
    </item>
-   <item row="20" column="3">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>266</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="17" column="2" colspan="3">
-    <widget class="QTextEdit" name="teResult">
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>13</width>
-       <height>23</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="2" colspan="3">
-    <widget class="QLineEdit" name="leComment"/>
-   </item>
-   <item row="8" column="2" colspan="3">
-    <widget class="QCheckBox" name="cbAutoRange">
-     <property name="text">
-      <string>Auto</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="2" colspan="3">
+   <item row="10" column="2" colspan="3">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="lMin">
@@ -188,26 +103,19 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="2" colspan="3">
-    <widget class="QLineEdit" name="leName"/>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="lXColumn">
-     <property name="text">
-      <string>x-Data:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="lName">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item row="18" column="0">
+    <widget class="QLabel" name="lResults">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
-      <string>Name:</string>
+      <string>Results:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
      </property>
     </widget>
    </item>
@@ -218,6 +126,92 @@
      </property>
     </widget>
    </item>
+   <item row="16" column="4">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="17" column="0">
+    <widget class="QLabel" name="lEval">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="18" column="2" colspan="3">
+    <widget class="QTextEdit" name="teResult">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="2" colspan="3">
+    <widget class="QCheckBox" name="cbAutoRange">
+     <property name="text">
+      <string>Auto</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="lXColumn">
+     <property name="text">
+      <string>x-Data:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <spacer name="verticalSpacer_3">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="23" column="0">
+    <widget class="QCheckBox" name="chkVisible">
+     <property name="text">
+      <string>Visible</string>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="2" colspan="3">
+    <widget class="QComboBox" name="cbMethod"/>
+   </item>
+   <item row="21" column="3">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>266</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="1" column="0">
     <widget class="QLabel" name="lComment">
      <property name="text">
@@ -225,28 +219,50 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="lDataSourceCurve">
+   <item row="0" column="1">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>13</width>
+       <height>23</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="2" colspan="3">
+    <widget class="QLineEdit" name="leName"/>
+   </item>
+   <item row="15" column="2" colspan="3">
+    <widget class="QCheckBox" name="cbAbsolute">
      <property name="text">
-      <string>Curve:</string>
+      <string>Absolute area</string>
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="lYColumn">
-     <property name="text">
-      <string>y-Data:</string>
+   <item row="4" column="2" colspan="3">
+    <widget class="QComboBox" name="cbDataSourceType">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>x-Range:</string>
+   <item row="20" column="0" colspan="5">
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="11" column="4">
+   <item row="12" column="4">
     <spacer name="verticalSpacer_4">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -275,41 +291,61 @@
      </property>
     </widget>
    </item>
-   <item row="13" column="2" colspan="3">
-    <widget class="QComboBox" name="cbMethod"/>
-   </item>
-   <item row="14" column="2" colspan="3">
-    <widget class="QCheckBox" name="cbAbsolute">
+   <item row="14" column="0">
+    <widget class="QLabel" name="lMethod">
      <property name="text">
-      <string>Absolute area</string>
+      <string>Method:</string>
      </property>
     </widget>
    </item>
-   <item row="15" column="4">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="16" column="0">
-    <widget class="QLabel" name="lEval">
+   <item row="21" column="4">
+    <widget class="QPushButton" name="pbRecalculate">
      <property name="text">
-      <string/>
+      <string>Recalculate</string>
      </property>
     </widget>
    </item>
-   <item row="17" column="0">
-    <widget class="QLabel" name="lResults">
+   <item row="1" column="2" colspan="3">
+    <widget class="QLineEdit" name="leComment"/>
+   </item>
+   <item row="11" column="2" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="lMax">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Maximum:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="sbMax">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="decimals">
+        <number>6</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="13" column="0">
+    <widget class="QLabel" name="lConvolution">
      <property name="font">
       <font>
        <weight>75</weight>
@@ -317,43 +353,14 @@
       </font>
      </property>
      <property name="text">
-      <string>Results:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      <string>Convolution</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="2">
-    <spacer name="verticalSpacer_3">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>10</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="4" column="2" colspan="3">
-    <widget class="QComboBox" name="cbDataSourceType">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="19" column="0" colspan="5">
-    <widget class="Line" name="line_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="8" column="0">
+    <widget class="QLabel" name="lY2Column">
+     <property name="text">
+      <string>y-Data Response:</string>
      </property>
     </widget>
    </item>

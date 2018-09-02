@@ -33,7 +33,7 @@
 /* adapted from SciDAVis */
 int nsl_conv_convolution(double sig[], size_t n, double inres[], size_t m, int dir) {
 
-	double *res = (double *)malloc(n * sizeof(double));
+	double* res = (double*)malloc(n * sizeof(double));
 	if (res == NULL) {
 		printf("nsl_conv_convolution(): ERROR allocating memory!\n");
 		return -1;
@@ -53,7 +53,6 @@ int nsl_conv_convolution(double sig[], size_t n, double inres[], size_t m, int d
 	gsl_fft_real_radix2_transform(res, 1, n);
 	gsl_fft_real_radix2_transform(sig, 1, n);
 
-	/* TODO */
 	double re, im, size;
 	for (i = 0; i < n/2; i++) {	/* multiply/divide FFTs */
 		if (i == 0 || i == n/2 - 1) {
@@ -73,9 +72,10 @@ int nsl_conv_convolution(double sig[], size_t n, double inres[], size_t m, int d
 				size = res[i]*res[i] + res[n-i]*res[n-i];
 				re = res[i]*sig[i] + res[n-i]*sig[n-i];
 				im = res[i]*sig[n-i] - res[n-i]*sig[i];
-				/*TODO: size can be zero? */
-				re /= size;
-				im /= size;
+				if (size > 0) {
+					re /= size;
+					im /= size;
+				}
 			}
 
 			sig[i] = re;

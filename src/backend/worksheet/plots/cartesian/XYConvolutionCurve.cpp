@@ -79,6 +79,8 @@ const XYConvolutionCurve::ConvolutionResult& XYConvolutionCurve::convolutionResu
 	return d->convolutionResult;
 }
 
+BASIC_SHARED_D_READER_IMPL(XYConvolutionCurve, const AbstractColumn*, y2DataColumn, y2DataColumn)
+const QString& XYConvolutionCurve::y2DataColumnPath() const { Q_D(const XYConvolutionCurve); return d->y2DataColumnPath; }
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
@@ -88,11 +90,24 @@ void XYConvolutionCurve::setConvolutionData(const XYConvolutionCurve::Convolutio
 	exec(new XYConvolutionCurveSetConvolutionDataCmd(d, convolutionData, ki18n("%1: set options and perform the convolution")));
 }
 
+STD_SETTER_CMD_IMPL_S(XYConvolutionCurve, SetY2DataColumn, const AbstractColumn*, y2DataColumn)
+void XYConvolutionCurve::setY2DataColumn(const AbstractColumn* column) {
+	Q_D(XYConvolutionCurve);
+	if (column != d->y2DataColumn) {
+		exec(new XYConvolutionCurveSetY2DataColumnCmd(d, column, ki18n("%1: assign response y-data")));
+		handleSourceDataChanged();
+		if (column) {
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
+			//TODO disconnect on undo
+		}
+	}
+}
+
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
 XYConvolutionCurvePrivate::XYConvolutionCurvePrivate(XYConvolutionCurve* owner) : XYAnalysisCurvePrivate(owner),
-	q(owner)  {
+	y2DataColumn(nullptr), q(owner)  {
 
 }
 
