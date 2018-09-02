@@ -73,7 +73,7 @@ private slots:
 	void autoRangeChanged();
 	void xRangeMinChanged();
 	void xRangeMaxChanged();
-	void absoluteChanged();
+	void directionChanged();
 
 	void recalculateClicked();
 	void enableRecalculate() const;

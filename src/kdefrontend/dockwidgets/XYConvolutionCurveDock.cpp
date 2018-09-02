@@ -160,8 +160,8 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
-	uiGeneralTab.cbAbsolute->setChecked(m_convolutionData.absolute);
-	this->absoluteChanged();
+	uiGeneralTab.cbDirection->setCurrentIndex(m_convolutionData.direction);
+	this->directionChanged();
 
 	this->showConvolutionResult();
 
@@ -305,9 +305,6 @@ void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	}
 }
 
-/*!
- * disable deriv orders and accuracies that need more data points
- */
 void XYConvolutionCurveDock::updateSettings(const AbstractColumn* column) {
 	if (!column)
 		return;
@@ -385,9 +382,9 @@ void XYConvolutionCurveDock::xRangeMaxChanged() {
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYConvolutionCurveDock::absoluteChanged() {
-	bool absolute = uiGeneralTab.cbAbsolute->isChecked();
-	m_convolutionData.absolute = absolute;
+void XYConvolutionCurveDock::directionChanged() {
+	nsl_conv_direction_type direction = (nsl_conv_direction_type) uiGeneralTab.cbDirection->currentIndex();
+	m_convolutionData.direction = direction;
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
@@ -502,7 +499,7 @@ void XYConvolutionCurveDock::curveConvolutionDataChanged(const XYConvolutionCurv
 	m_initializing = true;
 	m_convolutionData = convolutionData;
 	uiGeneralTab.cbAbsolute->setChecked(m_convolutionData.absolute);
-	this->absoluteChanged();
+	this->directionChanged();
 
 	this->showConvolutionResult();
 	m_initializing = false;

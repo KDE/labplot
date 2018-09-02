@@ -31,15 +31,20 @@
 
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 
+extern "C" {
+#include "backend/nsl/nsl_conv.h"
+}
+
 class XYConvolutionCurvePrivate;
 class XYConvolutionCurve : public XYAnalysisCurve {
 Q_OBJECT
 
 public:
 	struct ConvolutionData {
-		ConvolutionData() : absolute(false), autoRange(true), xRange(2) {};
+		ConvolutionData() : direction(nsl_conv_direction_forward), autoRange(true), xRange(2) {};
 
 		//TODO: check options
+		nsl_conv_direction_type direction;	// forward (convolution) or backward (deconvolution)
 		bool absolute;			// absolute area?
 		bool autoRange;			// use all data?
 		QVector<double> xRange;		// x range for convolution

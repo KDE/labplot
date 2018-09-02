@@ -52,6 +52,7 @@ int nsl_conv_convolution(double sig[], size_t n, double inres[], size_t m, nsl_c
 		res[m2] = inres[m-1];
 
 	/* FFT both */
+	/* TODO: use mixed radix versions */
 	gsl_fft_real_radix2_transform(res, 1, n);
 	gsl_fft_real_radix2_transform(sig, 1, n);
 
@@ -87,6 +88,7 @@ int nsl_conv_convolution(double sig[], size_t n, double inres[], size_t m, nsl_c
 	free(res);
 
 	/* inverse FFT */
+	/* TODO: use mixed radix version */
 	gsl_fft_halfcomplex_radix2_inverse(sig, 1, n);
 
 	return 0 ;

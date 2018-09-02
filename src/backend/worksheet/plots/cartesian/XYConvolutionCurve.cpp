@@ -147,14 +147,17 @@ void XYConvolutionCurvePrivate::recalculate() {
 	//determine the data source columns
 	const AbstractColumn* tmpXDataColumn = nullptr;
 	const AbstractColumn* tmpYDataColumn = nullptr;
+	const AbstractColumn* tmpY2DataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
 		//spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
+		tmpY2DataColumn = y2DataColumn;
 	} else {
 		//curve columns as data source
 		tmpXDataColumn = dataSourceCurve->xColumn();
 		tmpYDataColumn = dataSourceCurve->yColumn();
+		//TODO: tmpY2DataColumn = dataSourceCurve->y2Column();
 	}
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
@@ -176,6 +179,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 	//copy all valid data point for the convolution to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
+	QVector<double> y2dataVector;
 
 	double xmin;
 	double xmax;
@@ -196,6 +200,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
 				xdataVector.append(tmpXDataColumn->valueAt(row));
 				ydataVector.append(tmpYDataColumn->valueAt(row));
+				y2dataVector.append(tmpY2DataColumn->valueAt(row));
 			}
 		}
 	}
@@ -212,15 +217,16 @@ void XYConvolutionCurvePrivate::recalculate() {
 
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
+	double* y2data = y2dataVector.data();
 
 	// convolution settings
-	const bool absolute = convolutionData.absolute;
-
-	DEBUG("absolute area:"<<absolute);
+	const nsl_conv_direction_type direction = convolutionData.direction;
 
 ///////////////////////////////////////////////////////////
 	int status = 0;
 	size_t np = n;
+
+	nsl_conv_convolution(ydata, n, y2data, n, direction);
 
 	xVector->resize((int)np);
 	yVector->resize((int)np);
@@ -258,7 +264,7 @@ void XYConvolutionCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "autoRange", QString::number(d->convolutionData.autoRange) );
 	writer->writeAttribute( "xRangeMin", QString::number(d->convolutionData.xRange.first()) );
 	writer->writeAttribute( "xRangeMax", QString::number(d->convolutionData.xRange.last()) );
-	writer->writeAttribute( "absolute", QString::number(d->convolutionData.absolute) );
+	writer->writeAttribute( "direction", QString::number(d->convolutionData.direction) );
 	writer->writeEndElement();// convolutionData
 
 	// convolution results (generated columns)
