@@ -97,6 +97,9 @@ void XYConvolutionCurveDock::setupGeneral() {
 	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 
+	for (int i = 0; i < NSL_CONV_DIRECTION_COUNT; i++)
+		uiGeneralTab.cbDirection->addItem(i18n(nsl_conv_direction_name[i]));
+
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);

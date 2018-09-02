@@ -197,7 +197,7 @@
     </widget>
    </item>
    <item row="14" column="2" colspan="3">
-    <widget class="QComboBox" name="cbMethod"/>
+    <widget class="QComboBox" name="cbDirection"/>
    </item>
    <item row="21" column="3">
     <spacer name="horizontalSpacer_2">
@@ -292,9 +292,9 @@
     </widget>
    </item>
    <item row="14" column="0">
-    <widget class="QLabel" name="lMethod">
+    <widget class="QLabel" name="lDirection">
      <property name="text">
-      <string>Method:</string>
+      <string>Direction:</string>
      </property>
     </widget>
    </item>

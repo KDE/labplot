@@ -30,7 +30,7 @@
 #include "nsl_common.h"
 #include <gsl/gsl_fft_halfcomplex.h>
 
-const char* nsl_conv_direction_name[] = {i18n("convolution (forward)"), i18n("deconvolution (backward)")};
+const char* nsl_conv_direction_name[] = {i18n("forward (convolution)"), i18n("backward (deconvolution)")};
 
 /* adapted from SciDAVis */
 int nsl_conv_convolution(double sig[], size_t n, double inres[], size_t m, nsl_conv_direction_type dir) {
