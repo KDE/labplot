@@ -41,7 +41,7 @@ CartesianScale::CartesianScale(ScaleType type, const Interval<double> &interval,
 	: m_type(type), m_interval(interval), m_a(a), m_b(b), m_c(c) {
 }
 
-CartesianScale::~CartesianScale() {}
+CartesianScale::~CartesianScale() = default;
 
 void CartesianScale::getProperties(ScaleType *type, Interval<double> *interval,
 		double *a, double *b, double *c) const {
@@ -81,7 +81,7 @@ public:
 
 		}
 
-	~LinearScale() override {}
+	~LinearScale() override = default;
 
 	bool map(double *value) const override {
 		*value = *value * m_b + m_a;
@@ -112,7 +112,7 @@ public:
 			Q_ASSERT(base > 0.0);
 	}
 
-	~LogScale() override {}
+	~LogScale() override = default;
 
 	bool map(double *value) const override {
 		if (*value > 0.0)

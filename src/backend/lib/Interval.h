@@ -46,7 +46,7 @@ template<class T> class IntervalBase {
 			m_start = start;
 			m_end = end;
 		}
-		virtual ~IntervalBase() {}
+		virtual ~IntervalBase() = default;
 		T start() const { return m_start; }
 		T end() const { return m_end; }
 		void setStart(T start) { m_start = start; }
@@ -211,9 +211,9 @@ template<class T> class IntervalBase {
  */
 template<class T> class Interval : public IntervalBase<T> {
 	public:
-		Interval() {}
+		Interval() = default;
 		Interval(T start, T end) : IntervalBase<T>(start, end) {}
-		Interval(const Interval<T>& other) : IntervalBase<T>(other) {}
+		Interval(const Interval<T>& other) = default;
 		T size() const {
 			return IntervalBase<T>::m_end - IntervalBase<T>::m_start + 1;
 		}
@@ -231,7 +231,7 @@ template<> class Interval<float> : public IntervalBase<float> {
 	public:
 		Interval() {}
 		Interval(float start, float end) : IntervalBase<float>(start, end) {}
-		Interval(const Interval<float>& other) : IntervalBase<float>(other) {}
+		Interval(const Interval<float>& other) = default;
 		float size() const { return IntervalBase<float>::m_end - IntervalBase<float>::m_start; }
 		bool isValid() const { return ( IntervalBase<float>::m_start <= IntervalBase<float>::m_end ); }
 		bool touches(const Interval<float>& other) const override {
@@ -244,7 +244,7 @@ template<> class Interval<double> : public IntervalBase<double> {
 	public:
 		Interval() {}
 		Interval(double start, double end) : IntervalBase<double>(start, end) {}
-		Interval(const Interval<double>& other) : IntervalBase<double>(other) {}
+		Interval(const Interval<double>& other) = default;
 		double size() const { return IntervalBase<double>::m_end - IntervalBase<double>::m_start; }
 		bool isValid() const { return ( IntervalBase<double>::m_start <= IntervalBase<double>::m_end ); }
 		bool touches(const Interval<double>& other) const override {
@@ -257,7 +257,7 @@ template<> class Interval<long double> : public IntervalBase<long double> {
 	public:
 		Interval() {}
 		Interval(long double start, long double end) : IntervalBase<long double>(start, end) {}
-		Interval(const Interval<long double>& other) : IntervalBase<long double>(other) {}
+		Interval(const Interval<long double>& other) = default;
 		long double size() const { return IntervalBase<long double>::m_end - IntervalBase<long double>::m_start; }
 		bool isValid() const { return ( IntervalBase<long double>::m_start <= IntervalBase<long double>::m_end ); }
 		bool touches(const Interval<long double>& other) const override {

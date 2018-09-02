@@ -61,8 +61,7 @@
 #define SETTINGS_FORMAT QSettings::NativeFormat
 #endif
 
-PluginManager::PluginManager() {
-}
+PluginManager::PluginManager() = default;
 
 QList<PluginLoader *> PluginManager::m_loadedPlugins;
 QList<PluginLoader *> PluginManager::m_pluginsWithErrors;

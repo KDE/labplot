@@ -82,8 +82,7 @@ DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent) : QWidget(parent),
 	hideErrorBarWidgets(true);
 }
 
-DatapickerCurveWidget::~DatapickerCurveWidget() {
-}
+DatapickerCurveWidget::~DatapickerCurveWidget() = default;
 
 void DatapickerCurveWidget::init() {
 	m_initializing = true;

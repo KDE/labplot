@@ -64,8 +64,7 @@ AbstractColumnClearMasksCmd::AbstractColumnClearMasksCmd(AbstractColumnPrivate* 
  * \brief Dtor
  */
 AbstractColumnClearMasksCmd::~AbstractColumnClearMasksCmd()
-{
-}
+= default;
 
 /**
  * \brief Execute the command
@@ -137,8 +136,7 @@ AbstractColumnSetMaskedCmd::AbstractColumnSetMaskedCmd(AbstractColumnPrivate * c
  * \brief Dtor
  */
 AbstractColumnSetMaskedCmd::~AbstractColumnSetMaskedCmd()
-{
-}
+= default;
 
 /**
  * \brief Execute the command
@@ -197,8 +195,7 @@ AbstractColumnInsertRowsCmd::AbstractColumnInsertRowsCmd(AbstractColumn *col, in
 /**
  * \brief Dtor
  */
-AbstractColumnInsertRowsCmd::~AbstractColumnInsertRowsCmd() {
-}
+AbstractColumnInsertRowsCmd::~AbstractColumnInsertRowsCmd() = default;
 
 void AbstractColumnInsertRowsCmd::redo() {
 	m_col->m_masking.insertRows(m_before, m_count);
@@ -244,8 +241,7 @@ AbstractColumnRemoveRowsCmd::AbstractColumnRemoveRowsCmd(AbstractColumn *col, in
 /**
  * \brief Dtor
  */
-AbstractColumnRemoveRowsCmd::~AbstractColumnRemoveRowsCmd() {
-}
+AbstractColumnRemoveRowsCmd::~AbstractColumnRemoveRowsCmd() = default;
 
 void AbstractColumnRemoveRowsCmd::redo() {
 	m_masking = m_col->m_masking;

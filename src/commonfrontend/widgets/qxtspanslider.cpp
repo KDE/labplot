@@ -428,8 +428,7 @@ QxtSpanSlider::QxtSpanSlider(Qt::Orientation orientation, QWidget* parent) : QSl
     Destructs the span slider.
  */
 QxtSpanSlider::~QxtSpanSlider()
-{
-}
+= default;
 
 /*!
     \property QxtSpanSlider::handleMovementMode

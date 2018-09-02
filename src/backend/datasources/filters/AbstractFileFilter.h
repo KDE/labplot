@@ -48,7 +48,7 @@ public:
 	enum ImportMode {Append, Prepend, Replace};
 
 	AbstractFileFilter() {}
-	~AbstractFileFilter() override {}
+	~AbstractFileFilter() override = default;
 
 	static bool isNan(QString);
 	static AbstractColumn::ColumnMode columnMode(const QString& valueString, const QString& dateTimeFormat, QLocale::Language);

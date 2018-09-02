@@ -41,7 +41,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 */
 NetCDFFilter::NetCDFFilter():AbstractFileFilter(), d(new NetCDFFilterPrivate(this)) {}
 
-NetCDFFilter::~NetCDFFilter() {}
+NetCDFFilter::~NetCDFFilter() = default;
 
 /*!
   parses the content of the file \c ileName.

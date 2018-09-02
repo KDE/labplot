@@ -48,7 +48,7 @@
 */
 JsonFilter::JsonFilter() : AbstractFileFilter(), d(new JsonFilterPrivate(this)) {}
 
-JsonFilter::~JsonFilter() {}
+JsonFilter::~JsonFilter() = default;
 
 /*!
 reads the content of the device \c device.

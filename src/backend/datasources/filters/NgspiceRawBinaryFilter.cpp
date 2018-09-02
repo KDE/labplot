@@ -40,7 +40,7 @@ Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 */
 NgspiceRawBinaryFilter::NgspiceRawBinaryFilter() : AbstractFileFilter(), d(new NgspiceRawBinaryFilterPrivate(this)) {}
 
-NgspiceRawBinaryFilter::~NgspiceRawBinaryFilter() {}
+NgspiceRawBinaryFilter::~NgspiceRawBinaryFilter() = default;
 
 bool NgspiceRawBinaryFilter::isNgspiceBinaryFile(const QString& fileName) {
 	QFile file(fileName);

@@ -43,7 +43,7 @@ class AbstractPlot : public WorksheetElementContainer {
 
 	public:
 		explicit AbstractPlot(const QString &name);
-		~AbstractPlot() override{}
+		~AbstractPlot() override= default;
 
 		void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 		AbstractCoordinateSystem* coordinateSystem() const;

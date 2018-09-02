@@ -40,7 +40,7 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 */
 ImageFilter::ImageFilter():AbstractFileFilter(), d(new ImageFilterPrivate(this)) {}
 
-ImageFilter::~ImageFilter() {}
+ImageFilter::~ImageFilter() = default;
 
 /*!
 returns the list of all predefined import formats.

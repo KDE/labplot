@@ -48,7 +48,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
  */
 FITSFilter::FITSFilter():AbstractFileFilter(), d(new FITSFilterPrivate(this)) {}
 
-FITSFilter::~FITSFilter() {}
+FITSFilter::~FITSFilter() = default;
 
 void FITSFilter::readDataFromFile(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode) {
 	d->readCHDU(fileName, dataSource, importMode);
@@ -1612,8 +1612,7 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
  * \brief FITSFilterPrivate::~FITSFilterPrivate
  */
 
-FITSFilterPrivate::~FITSFilterPrivate() {
-}
+FITSFilterPrivate::~FITSFilterPrivate() = default;
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################

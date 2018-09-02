@@ -35,7 +35,7 @@
 class AbstractPlotPrivate:public WorksheetElementContainerPrivate {
 public:
 	explicit AbstractPlotPrivate(AbstractPlot* owner);
-	~AbstractPlotPrivate() override {}
+	~AbstractPlotPrivate() override = default;
 	virtual QString name() const;
 	virtual void retransform() {}
 

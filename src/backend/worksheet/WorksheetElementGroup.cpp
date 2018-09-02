@@ -45,6 +45,5 @@ WorksheetElementGroup::WorksheetElementGroup(const QString &name, WorksheetEleme
 	: WorksheetElementContainer(name, dd) {
 }
 
-WorksheetElementGroup::~WorksheetElementGroup() {
-}
+WorksheetElementGroup::~WorksheetElementGroup() = default;
 

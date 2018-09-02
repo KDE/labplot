@@ -42,8 +42,7 @@ AbstractCoordinateSystem::AbstractCoordinateSystem(AbstractPlot* plot) {
 	Q_UNUSED(plot)
 }
 
-AbstractCoordinateSystem::~AbstractCoordinateSystem() {
-}
+AbstractCoordinateSystem::~AbstractCoordinateSystem() = default;
 
 /**
  * \fn QList<QPointF> AbstractCoordinateSystem::mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const;

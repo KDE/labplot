@@ -28,8 +28,7 @@
 #include "Transform.h"
 #include <cmath>
 
-Transform::Transform() {
-}
+Transform::Transform() = default;
 
 bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisPoints) {
 	if (axisPoints.type == DatapickerImage::LogarithmicX) {

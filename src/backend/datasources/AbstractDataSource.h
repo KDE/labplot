@@ -40,7 +40,7 @@ class AbstractDataSource : public AbstractPart {
 
 public:
 	explicit AbstractDataSource(const QString& name);
-	~AbstractDataSource() override {}
+	~AbstractDataSource() override = default;
 
 	void clear();
 	virtual int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode, int actualRows, int actualCols,

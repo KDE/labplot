@@ -49,7 +49,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 */
 HDF5Filter::HDF5Filter():AbstractFileFilter(), d(new HDF5FilterPrivate(this)) {}
 
-HDF5Filter::~HDF5Filter() {}
+HDF5Filter::~HDF5Filter() = default;
 
 /*!
   parses the content of the file \c fileName.

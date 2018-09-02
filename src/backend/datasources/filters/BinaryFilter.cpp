@@ -43,7 +43,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 */
 BinaryFilter::BinaryFilter():AbstractFileFilter(), d(new BinaryFilterPrivate(this)) {}
 
-BinaryFilter::~BinaryFilter() {}
+BinaryFilter::~BinaryFilter() = default;
 
 /*!
   reads the content of the file \c fileName.

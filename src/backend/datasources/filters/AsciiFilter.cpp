@@ -55,7 +55,7 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 */
 AsciiFilter::AsciiFilter() : AbstractFileFilter(), d(new AsciiFilterPrivate(this)) {}
 
-AsciiFilter::~AsciiFilter() {}
+AsciiFilter::~AsciiFilter() = default;
 
 /*!
   reads the content of the device \c device.

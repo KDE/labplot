@@ -48,7 +48,7 @@ Copyright            : (C) 2018 by Christoph Roick (chrisito@gmx.de)
 
 ROOTFilter::ROOTFilter():AbstractFileFilter(), d(new ROOTFilterPrivate) {}
 
-ROOTFilter::~ROOTFilter() {}
+ROOTFilter::~ROOTFilter() = default;
 
 void ROOTFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource,
 			AbstractFileFilter::ImportMode importMode) {

@@ -39,7 +39,7 @@ Copyright            : (C) 2018 Alexander Semke (alexander.semke@web.de)
 */
 NgspiceRawAsciiFilter::NgspiceRawAsciiFilter() : AbstractFileFilter(), d(new NgspiceRawAsciiFilterPrivate(this)) {}
 
-NgspiceRawAsciiFilter::~NgspiceRawAsciiFilter() {}
+NgspiceRawAsciiFilter::~NgspiceRawAsciiFilter() = default;
 
 bool NgspiceRawAsciiFilter::isNgspiceAsciiFile(const QString& fileName) {
 	QFile file(fileName);

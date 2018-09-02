@@ -38,7 +38,7 @@ class WorksheetElementContainer;
 class WorksheetElementContainerPrivate : public QGraphicsItem {
 	public:
 		explicit WorksheetElementContainerPrivate(WorksheetElementContainer*);
-		~WorksheetElementContainerPrivate() override{}
+		~WorksheetElementContainerPrivate() override= default;
 
 		QString name() const;
 		QRectF boundingRect() const override;
