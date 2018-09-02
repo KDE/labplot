@@ -30,8 +30,10 @@
 #include "nsl_common.h"
 #include <gsl/gsl_fft_halfcomplex.h>
 
+const char* nsl_conv_direction_name[] = {i18n("convolution (forward)"), i18n("deconvolution (backward)")};
+
 /* adapted from SciDAVis */
-int nsl_conv_convolution(double sig[], size_t n, double inres[], size_t m, int dir) {
+int nsl_conv_convolution(double sig[], size_t n, double inres[], size_t m, nsl_conv_direction_type dir) {
 
 	double* res = (double*)malloc(n * sizeof(double));
 	if (res == NULL) {
@@ -56,7 +58,7 @@ int nsl_conv_convolution(double sig[], size_t n, double inres[], size_t m, int d
 	double re, im, size;
 	for (i = 0; i < n/2; i++) {	/* multiply/divide FFTs */
 		if (i == 0 || i == n/2 - 1) {
-			if (dir == 1)
+			if (dir == nsl_conv_direction_forward)
 				sig[i] = res[i]*sig[i];
 			else {
 				if (res[i] > 0)
@@ -65,7 +67,7 @@ int nsl_conv_convolution(double sig[], size_t n, double inres[], size_t m, int d
 					sig[i] = 0.;
 			}
 		} else {
-			if (dir == 1) {
+			if (dir == nsl_conv_direction_forward) {
 				re = res[i]*sig[i] - res[n-i]*sig[n-i];
 				im = res[i]*sig[n-i] + res[n-i]*sig[i];
 			} else {

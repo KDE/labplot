@@ -31,10 +31,14 @@
 
 #include <stdlib.h>
 
+#define NSL_CONV_DIRECTION_COUNT 2
+// forward: convolution, backward: deconvolution
+typedef enum {nsl_conv_direction_forward, nsl_conv_direction_backward} nsl_conv_direction_type;
+extern const char* nsl_conv_direction_name[];
+
 /* calculate convolution/deconvolution
  * of signal sig of size n with response res of size m
- * direction: 1 (convolution), != 1 (deconvolution)
  */
-int nsl_conv_convolution(double sig[], size_t n, double res[], size_t m, int direction);
+int nsl_conv_convolution(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type direction);
 
 #endif /* NSL_CONV_H */
