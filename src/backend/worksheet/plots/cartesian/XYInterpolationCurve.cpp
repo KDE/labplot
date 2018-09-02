@@ -181,7 +181,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 		xmax = interpolationData.xRange.last();
 	}
 
-	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
+	for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
 		        && !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
@@ -268,13 +268,13 @@ void XYInterpolationCurvePrivate::recalculate() {
 	xVector->resize((int)npoints);
 	yVector->resize((int)npoints);
 	for (unsigned int i = 0; i < npoints; i++) {
-		size_t a=0, b=n-1;
+		size_t a = 0, b = n-1;
 
 		double x = xmin + i*(xmax-xmin)/(npoints-1);
 		(*xVector)[(int)i] = x;
 
 		// find index a,b for interval [x[a],x[b]] around x[i] using bisection
-		unsigned int j=0;
+		unsigned int j = 0;
 		if (type == nsl_interp_type_cosine || type == nsl_interp_type_exponential || type == nsl_interp_type_pch) {
 			while (b-a > 1) {
 				j = floor((a+b)/2.);
@@ -321,56 +321,56 @@ void XYInterpolationCurvePrivate::recalculate() {
 			break;
 		case nsl_interp_type_pch: {
 				t = (x-xdata[a])/(xdata[b]-xdata[a]);
-				double t2=t*t, t3=t2*t;
-				double h1=2.*t3-3.*t2+1, h2=-2.*t3+3.*t2, h3=t3-2*t2+t, h4=t3-t2;
-				double m1=0.,m2=0.;
+				double t2 = t*t, t3 = t2*t;
+				double h1 = 2.*t3-3.*t2+1, h2 = -2.*t3+3.*t2, h3 = t3-2*t2+t, h4 = t3-t2;
+				double m1 = 0.,m2 = 0.;
 				switch (variant) {
 				case nsl_interp_pch_variant_finite_difference:
-					if (a==0)
-						m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+					if (a == 0)
+						m1 = (ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 					else
-						m1=( (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) + (ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1]) )/2.;
-					if (b==n-1)
-						m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+						m1 = ( (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) + (ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1]) )/2.;
+					if (b == n-1)
+						m2 = (ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 					else
-						m2=( (ydata[b+1]-ydata[b])/(xdata[b+1]-xdata[b]) + (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) )/2.;
+						m2 = ( (ydata[b+1]-ydata[b])/(xdata[b+1]-xdata[b]) + (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) )/2.;
 
 					break;
 				case nsl_interp_pch_variant_catmull_rom:
-					if (a==0)
-						m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+					if (a == 0)
+						m1 = (ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 					else
-						m1=(ydata[b]-ydata[a-1])/(xdata[b]-xdata[a-1]);
-					if (b==n-1)
-						m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+						m1 = (ydata[b]-ydata[a-1])/(xdata[b]-xdata[a-1]);
+					if (b == n-1)
+						m2 = (ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 					else
-						m2=(ydata[b+1]-ydata[a])/(xdata[b+1]-xdata[a]);
+						m2 = (ydata[b+1]-ydata[a])/(xdata[b+1]-xdata[a]);
 
 					break;
 				case nsl_interp_pch_variant_cardinal:
-					if (a==0)
-						m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+					if (a == 0)
+						m1 = (ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 					else
-						m1=(ydata[b]-ydata[a-1])/(xdata[b]-xdata[a-1]);
+						m1 = (ydata[b]-ydata[a-1])/(xdata[b]-xdata[a-1]);
 					m1 *= (1.-tension);
-					if (b==n-1)
-						m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+					if (b == n-1)
+						m2 = (ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 					else
-						m2=(ydata[b+1]-ydata[a])/(xdata[b+1]-xdata[a]);
+						m2 = (ydata[b+1]-ydata[a])/(xdata[b+1]-xdata[a]);
 					m2 *= (1.-tension);
 
 					break;
 				case nsl_interp_pch_variant_kochanek_bartels:
-					if (a==0)
-						m1=(1.+continuity)*(1.-bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+					if (a == 0)
+						m1 = (1.+continuity)*(1.-bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 					else
-						m1=( (1.-continuity)*(1.+bias)*(ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1])
+						m1 = ( (1.-continuity)*(1.+bias)*(ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1])
 						     + (1.+continuity)*(1.-bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]) )/2.;
 					m1 *= (1.-tension);
-					if (b==n-1)
-						m2=(1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+					if (b == n-1)
+						m2 = (1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 					else
-						m2=( (1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a])
+						m2 = ( (1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a])
 						     + (1.-continuity)*(1.-bias)*(ydata[b+1]-ydata[b])/(xdata[b+1]-xdata[b]) )/2.;
 					m2 *= (1.-tension);
 

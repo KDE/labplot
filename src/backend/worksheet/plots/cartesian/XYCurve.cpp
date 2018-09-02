@@ -1050,7 +1050,7 @@ void XYCurvePrivate::updateLines() {
 		}
 		break;
 	case XYCurve::Segments2: {
-			int skip=0;
+			int skip = 0;
 			for (unsigned int i = 0; i < count - 1; i++) {
 				if (skip != 1) {
 					if (!lineSkipGaps && !connectedPointsLogical[i]) {
@@ -1210,21 +1210,21 @@ void XYCurvePrivate::updateDropLines() {
 	case XYCurve::NoDropLine:
 		break;
 	case XYCurve::DropLineX:
-		for(int i=0; i<symbolPointsLogical.size(); ++i) {
+		for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append(QLineF(point, QPointF(point.x(), yMin)));
 		}
 		break;
 	case XYCurve::DropLineY:
-		for(int i=0; i<symbolPointsLogical.size(); ++i) {
+		for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append(QLineF(point, QPointF(xMin, point.y())));
 		}
 		break;
 	case XYCurve::DropLineXY:
-		for(int i=0; i<symbolPointsLogical.size(); ++i) {
+		for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append(QLineF(point, QPointF(point.x(), yMin)));
@@ -1232,21 +1232,21 @@ void XYCurvePrivate::updateDropLines() {
 		}
 		break;
 	case XYCurve::DropLineXZeroBaseline:
-		for(int i=0; i<symbolPointsLogical.size(); ++i) {
+		for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append(QLineF(point, QPointF(point.x(), 0)));
 		}
 		break;
 	case XYCurve::DropLineXMinBaseline:
-		for(int i=0; i<symbolPointsLogical.size(); ++i) {
+		for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append( QLineF(point, QPointF(point.x(), dynamic_cast<const Column*>(yColumn)->minimum())) );
 		}
 		break;
 	case XYCurve::DropLineXMaxBaseline:
-		for(int i=0; i<symbolPointsLogical.size(); ++i) {
+		for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append( QLineF(point, QPointF(point.x(), dynamic_cast<const Column*>(yColumn)->maximum())) );
@@ -1309,21 +1309,21 @@ void XYCurvePrivate::updateValues() {
 	switch (valuesType) {
 	case XYCurve::NoValues:
 	case XYCurve::ValuesX: {
-			for(int i=0; i<symbolPointsLogical.size(); ++i) {
+			for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 				if (!visiblePoints[i]) continue;
 				valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).x()) + valuesSuffix;
 			}
 			break;
 		}
 	case XYCurve::ValuesY: {
-			for(int i=0; i<symbolPointsLogical.size(); ++i) {
+			for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 				if (!visiblePoints[i]) continue;
 				valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).y()) + valuesSuffix;
 			}
 			break;
 		}
 	case XYCurve::ValuesXY: {
-			for(int i=0; i<symbolPointsLogical.size(); ++i) {
+			for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 				if (!visiblePoints[i]) continue;
 				valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).x()) + ','
 				              + QString::number(symbolPointsLogical.at(i).y()) + valuesSuffix;
@@ -1331,7 +1331,7 @@ void XYCurvePrivate::updateValues() {
 			break;
 		}
 	case XYCurve::ValuesXYBracketed: {
-			for(int i=0; i<symbolPointsLogical.size(); ++i) {
+			for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 				if (!visiblePoints[i]) continue;
 				valuesStrings <<  valuesPrefix + '(' + QString::number(symbolPointsLogical.at(i).x()) + ','
 				              + QString::number(symbolPointsLogical.at(i).y()) +')' + valuesSuffix;
@@ -1381,7 +1381,7 @@ void XYCurvePrivate::updateValues() {
 	qreal w;
 	qreal h=fm.ascent();
 
-	for (int i=0; i<valuesStrings.size(); i++) {
+	for (int i = 0; i < valuesStrings.size(); i++) {
 		w=fm.width(valuesStrings.at(i));
 		switch (valuesPosition) {
 		case XYCurve::ValuesAbove:
@@ -1406,13 +1406,13 @@ void XYCurvePrivate::updateValues() {
 
 	QTransform trafo;
 	QPainterPath path;
-	for (int i=0; i<valuesPoints.size(); i++) {
+	for (int i = 0; i < valuesPoints.size(); i++) {
 		path = QPainterPath();
 		path.addText( QPoint(0,0), valuesFont, valuesStrings.at(i) );
 
 		trafo.reset();
 		trafo.translate( valuesPoints.at(i).x(), valuesPoints.at(i).y() );
-		if (valuesRotationAngle!=0)
+		if (valuesRotationAngle != 0)
 			trafo.rotate( -valuesRotationAngle );
 
 		valuesPath.addPath(trafo.map(path));
@@ -1440,7 +1440,7 @@ void XYCurvePrivate::updateFilling() {
 	if (!lines.isEmpty())
 		fillLines = lines;
 	else {
-		for (int i=0; i<symbolPointsLogical.count()-1; i++) {
+		for (int i = 0; i < symbolPointsLogical.count()-1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 			fillLines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
@@ -1462,7 +1462,7 @@ void XYCurvePrivate::updateFilling() {
 	const QPointF& first = symbolPointsLogical.at(0); //first point of the curve, may not be visible currently
 	const QPointF& last = symbolPointsLogical.at(symbolPointsLogical.size()-1);//first point of the curve, may not be visible currently
 	QPointF edge;
-	float xEnd=0, yEnd=0;
+	float xEnd = 0, yEnd = 0;
 	if (fillingPosition == XYCurve::FillingAbove) {
 		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()));
 
@@ -1611,11 +1611,11 @@ void XYCurvePrivate::updateFilling() {
 		pol << start;
 
 	QPointF p1, p2;
-	for (int i=0; i<fillLines.size(); ++i) {
+	for (int i = 0; i < fillLines.size(); ++i) {
 		const QLineF& line = fillLines.at(i);
 		p1 = line.p1();
 		p2 = line.p2();
-		if (i!=0 && p1!=fillLines.at(i-1).p2()) {
+		if (i != 0 && p1 != fillLines.at(i-1).p2()) {
 			//the first point of the current line is not equal to the last point of the previous line
 			//->check whether we have a break in between.
 			const bool gap = false; //TODO
@@ -1698,7 +1698,7 @@ void XYCurvePrivate::updateErrorBars() {
 		capSizeY = (pointLogical.x() - symbolPointsLogical.at((int)i).x())/2;
 	}
 
-	for (int i=0; i < symbolPointsLogical.size(); ++i) {
+	for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 		if (!visiblePoints[i])
 			continue;
 
@@ -1730,11 +1730,11 @@ void XYCurvePrivate::updateErrorBars() {
 			case XYCurve::ErrorBarsWithEnds:
 				lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
 				                    QPointF(point.x()+errorPlus, point.y())));
-				if (errorMinus!=0) {
+				if (errorMinus != 0) {
 					lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()-capSizeX),
 					                    QPointF(point.x()-errorMinus, point.y()+capSizeX)));
 				}
-				if (errorPlus!=0) {
+				if (errorPlus != 0) {
 					lines.append(QLineF(QPointF(point.x()+errorPlus, point.y()-capSizeX),
 					                    QPointF(point.x()+errorPlus, point.y()+capSizeX)));
 				}
@@ -1988,13 +1988,13 @@ void XYCurvePrivate::drawSymbols(QPainter* painter) {
 void XYCurvePrivate::drawValues(QPainter* painter) {
 	QTransform trafo;
 	QPainterPath path;
-	for (int i=0; i<valuesPoints.size(); i++) {
+	for (int i = 0; i < valuesPoints.size(); i++) {
 		path = QPainterPath();
 		path.addText( QPoint(0,0), valuesFont, valuesStrings.at(i) );
 
 		trafo.reset();
 		trafo.translate( valuesPoints.at(i).x(), valuesPoints.at(i).y() );
-		if (valuesRotationAngle!=0)
+		if (valuesRotationAngle != 0)
 			trafo.rotate( -valuesRotationAngle );
 
 		painter->drawPath(trafo.map(path));
@@ -2459,9 +2459,9 @@ void XYCurve::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("ValuesFont", this->valuesFont());
 
 	int index = parentAspect()->indexOfChild<XYCurve>(this);
-	if(index<5) {
+	if (index < 5) {
 		KConfigGroup themeGroup = config.group("Theme");
-		for(int i = index; i<5; i++) {
+		for (int i = index; i<5; i++) {
 			QString s = "ThemePaletteColor" + QString::number(i+1);
 			themeGroup.writeEntry(s,(QColor) this->linePen().color());
 		}

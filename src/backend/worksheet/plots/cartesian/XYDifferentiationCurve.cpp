@@ -180,7 +180,7 @@ void XYDifferentiationCurvePrivate::recalculate() {
 		xmax = differentiationData.xRange.last();
 	}
 
-	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
+	for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
 			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {

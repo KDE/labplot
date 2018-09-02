@@ -184,7 +184,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		xmax = filterData.xRange.last();
 	}
 
-	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
+	for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
 		        && !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
@@ -227,7 +227,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 ///////////////////////////////////////////////////////////
 	// calculate index
-	double cutindex=0, cutindex2=0;
+	double cutindex = 0, cutindex2 = 0;
 	switch (unit) {
 	case nsl_filter_cutoff_unit_frequency:
 		cutindex = cutoff*(xmax-xmin);

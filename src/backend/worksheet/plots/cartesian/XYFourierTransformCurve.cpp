@@ -158,7 +158,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	QVector<double> ydataVector;
 	const double xmin = transformData.xRange.first();
 	const double xmax = transformData.xRange.last();
-	for (int row=0; row<xDataColumn->rowCount(); ++row) {
+	for (int row = 0; row < xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 		        && !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
@@ -199,7 +199,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	DEBUG("shifted:" << shifted);
 #ifndef NDEBUG
 	QDebug out = qDebug();
-	for (unsigned int i=0; i < n; i++)
+	for (unsigned int i = 0; i < n; i++)
 		out<<ydata[i];
 #endif
 
@@ -208,20 +208,20 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	int status = nsl_dft_transform_window(ydata, 1, n, twoSided, type, windowType);
 
 	unsigned int N=n;
-	if(twoSided == false)
+	if (twoSided == false)
 		N=n/2;
 
 	switch (xScale) {
 	case nsl_dft_xscale_frequency:
-		for (unsigned int i=0; i < N; i++) {
-			if(i >= n/2 && shifted)
+		for (unsigned int i = 0; i < N; i++) {
+			if (i >= n/2 && shifted)
 				xdata[i] = (n-1)/(xmax-xmin)*(i/(double)n-1.);
 			else
 				xdata[i] = (n-1)*i/(xmax-xmin)/n;
 		}
 		break;
 	case nsl_dft_xscale_index:
-		for (unsigned int i=0; i < N; i++) {
+		for (unsigned int i = 0; i < N; i++) {
 			if (i >= n/2 && shifted)
 				xdata[i] = (int)i-(int) N;
 			else
@@ -230,7 +230,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 		break;
 	case nsl_dft_xscale_period: {
 			double f0 = (n-1)/(xmax-xmin)/n;
-			for (unsigned int i=0; i < N; i++) {
+			for (unsigned int i = 0; i < N; i++) {
 				double f = (n-1)*i/(xmax-xmin)/n;
 				xdata[i] = 1/(f+f0);
 			}
@@ -239,13 +239,13 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	}
 #ifndef NDEBUG
 	out = qDebug();
-	for (unsigned int i=0; i < N; i++)
+	for (unsigned int i = 0; i < N; i++)
 		out << ydata[i] << '(' << xdata[i] << ')';
 #endif
 
 	xVector->resize((int)N);
 	yVector->resize((int)N);
-	if(shifted) {
+	if (shifted) {
 		memcpy(xVector->data(), &xdata[n/2], n/2*sizeof(double));
 		memcpy(&xVector->data()[n/2], xdata, n/2*sizeof(double));
 		memcpy(yVector->data(), &ydata[n/2], n/2*sizeof(double));
