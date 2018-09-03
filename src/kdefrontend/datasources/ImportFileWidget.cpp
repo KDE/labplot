@@ -2042,7 +2042,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 	// enable/disable "on new data"-option
 	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
-        QStandardItem* item = model->item(LiveDataSource::UpdateType::NewData);
+	QStandardItem* item = model->item(LiveDataSource::UpdateType::NewData);
 
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
@@ -2165,6 +2165,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 #ifdef HAVE_MQTT
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
+		//for MQTT we read ascii data only, hide the file type options
 		int idx = ui.cbFileType->findText("ASCII data");
 		ui.cbFileType->setCurrentIndex(idx);
 		ui.cbFileType->hide();
@@ -2197,18 +2198,31 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		break;
 	}
 
-	// "whole file" item
-	model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-	item = model->item(LiveDataSource::ReadingType::WholeFile);
-	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
-		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-	else
+	//deactivate/activate options that are specific to file of pipe sources only
+	if (sourceType != LiveDataSource::FileOrPipe) {
+		//deactivate file types other than ascii and binary
+		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbFileType->model());
+		for (int i = 2; i < ui.cbFileType->count(); ++i)
+			model->item(i)->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+
+		//"whole file" read option is available for file or pipe only, disable it
+		model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
+		QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
-	//"update options" groupbox can be deactived for "file and pipe" if the file is invalid.
-	//Activate the groupbox when switching from "file and pipe" to a different source type.
-	if (sourceType != LiveDataSource::SourceType::FileOrPipe)
+		//"update options" groupbox can be deactived for "file and pipe" if the file is invalid.
+		//Activate the groupbox when switching from "file and pipe" to a different source type.
 		ui.gbUpdateOptions->setEnabled(true);
+	} else {
+		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbFileType->model());
+		for (int i = 2; i < ui.cbFileType->count(); ++i)
+			model->item(i)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+		//enable "whole file" item for file or pipe
+		model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
+		QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+	}
 
 	emit sourceTypeChanged();
 	refreshPreview();
