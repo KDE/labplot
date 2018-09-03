@@ -46,6 +46,8 @@ extern const char* nsl_conv_type_name[];
  */
 int nsl_conv_convolution(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type direction);
 
+/* linear convolution using direct method */
+int nsl_conv_linear_direct(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type direction);
 /* linear convolution using FFT method */
 int nsl_conv_linear_fft(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type direction);
 

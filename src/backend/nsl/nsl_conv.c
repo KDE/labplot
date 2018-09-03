@@ -35,7 +35,13 @@ const char* nsl_conv_type_name[] = {i18n("linear (zero-padded)"), i18n("circular
 
 int nsl_conv_convolution(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type dir) {
 	/* TODO: use different versions */
-	return nsl_conv_linear_fft(sig, n, res, m, dir);
+	return nsl_conv_linear_direct(sig, n, res, m, dir);
+	/* return nsl_conv_linear_fft(sig, n, res, m, dir); */
+}
+
+/* TODO: implement deconcolution */
+int nsl_conv_linear_direct(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type dir) {
+	/* TODO */
 }
 
 /* adapted from SciDAVis */
