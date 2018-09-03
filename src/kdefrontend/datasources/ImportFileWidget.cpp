@@ -327,9 +327,9 @@ void ImportFileWidget::loadSettings() {
 #endif
 
 	//update the widgets and refresh the preview for the for current source type
-	sourceTypeChanged(ui.cbSourceType->currentIndex());
+	sourceTypeChanged(currentSourceType());
 	m_suppressRefresh = false;
-	fileTypeChanged(ui.cbFileType->currentIndex());
+	fileTypeChanged(currentFileType());
 }
 
 ImportFileWidget::~ImportFileWidget() {
@@ -342,12 +342,12 @@ ImportFileWidget::~ImportFileWidget() {
 	KConfigGroup conf(KSharedConfig::openConfig(), confName);
 
 	// general settings
-	conf.writeEntry("Type", ui.cbFileType->currentIndex());
+	conf.writeEntry("Type", (int)currentFileType());
 	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
 	conf.writeEntry("LastImportedFile", ui.leFileName->text());
 
 	//live data related settings
-	conf.writeEntry("SourceType", ui.cbSourceType->currentIndex());
+	conf.writeEntry("SourceType", (int)currentSourceType());
 	conf.writeEntry("UpdateType", ui.cbUpdateType->currentIndex());
 	conf.writeEntry("ReadingType", ui.cbReadingType->currentIndex());
 	conf.writeEntry("SampleSize", ui.sbSampleSize->value());
@@ -471,9 +471,9 @@ int ImportFileWidget::baudRate() const {
 	saves the settings to the data source \c source.
 */
 void ImportFileWidget::saveSettings(LiveDataSource* source) const {
-	AbstractFileFilter::FileType fileType = static_cast<AbstractFileFilter::FileType>(ui.cbFileType->currentIndex());
+	AbstractFileFilter::FileType fileType = currentFileType();
 	LiveDataSource::UpdateType updateType = static_cast<LiveDataSource::UpdateType>(ui.cbUpdateType->currentIndex());
-	LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
+	LiveDataSource::SourceType sourceType = currentSourceType();
 	LiveDataSource::ReadingType readingType = static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex());
 
 	source->setComment( ui.leFileName->text() );
@@ -1535,6 +1535,14 @@ void ImportFileWidget::fileTypeChanged(int index) {
 			updateContent(fileName, static_cast<AbstractFileFilter::FileType>(fileType));
 	}
 
+	//for file types other than ASCII and binary we support re-reading the whole file only
+	//select "read whole file" and deactivate the combobox
+	if (m_liveDataSource && (fileType != AbstractFileFilter::Ascii && fileType != AbstractFileFilter::Binary)) {
+		ui.cbReadingType->setCurrentIndex(3);
+		ui.cbReadingType->setEnabled(false);
+	} else
+		ui.cbReadingType->setEnabled(true);
+
 	refreshPreview();
 }
 
@@ -1651,12 +1659,8 @@ void ImportFileWidget::fileInfoDialog() {
 */
 void ImportFileWidget::filterChanged(int index) {
 	// ignore filter for these formats
-	if (ui.cbFileType->currentIndex() == AbstractFileFilter::HDF5 ||
-			ui.cbFileType->currentIndex() == AbstractFileFilter::NETCDF ||
-			ui.cbFileType->currentIndex() == AbstractFileFilter::Image ||
-			ui.cbFileType->currentIndex() == AbstractFileFilter::FITS ||
-			ui.cbFileType->currentIndex() == AbstractFileFilter::JSON ||
-			ui.cbFileType->currentIndex() == AbstractFileFilter::ROOT) {
+	AbstractFileFilter::FileType fileType = currentFileType();
+	if (fileType != AbstractFileFilter::Ascii && fileType != AbstractFileFilter::Binary) {
 		ui.swOptions->setEnabled(true);
 		return;
 	}
@@ -2012,7 +2016,7 @@ void ImportFileWidget::updateTypeChanged(int idx) {
 
 void ImportFileWidget::readingTypeChanged(int idx) {
 	const LiveDataSource::ReadingType readingType = static_cast<LiveDataSource::ReadingType>(idx);
-	const LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
+	const LiveDataSource::SourceType sourceType = currentSourceType();
 
 	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::LocalSocket
 			|| sourceType == LiveDataSource::SourceType::SerialPort
