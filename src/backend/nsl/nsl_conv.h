@@ -36,9 +36,17 @@
 typedef enum {nsl_conv_direction_forward, nsl_conv_direction_backward} nsl_conv_direction_type;
 extern const char* nsl_conv_direction_name[];
 
+#define NSL_CONV_TYPE_COUNT 2
+// linear (zero-padded), circular
+typedef enum {nsl_conv_type_linear, nsl_conv_type_circular} nsl_conv_type_type;
+extern const char* nsl_conv_type_name[];
+
 /* calculate convolution/deconvolution
  * of signal sig of size n with response res of size m
  */
 int nsl_conv_convolution(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type direction);
+
+/* linear convolution using FFT method */
+int nsl_conv_linear_fft(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type direction);
 
 #endif /* NSL_CONV_H */

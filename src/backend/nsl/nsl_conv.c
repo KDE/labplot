@@ -31,9 +31,16 @@
 #include <gsl/gsl_fft_halfcomplex.h>
 
 const char* nsl_conv_direction_name[] = {i18n("forward (convolution)"), i18n("backward (deconvolution)")};
+const char* nsl_conv_type_name[] = {i18n("linear (zero-padded)"), i18n("circular")};
+
+int nsl_conv_convolution(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type dir) {
+	/* TODO: use different versions */
+	return nsl_conv_linear_fft(sig, n, res, m, dir);
+}
 
 /* adapted from SciDAVis */
-int nsl_conv_convolution(double sig[], size_t n, double inres[], size_t m, nsl_conv_direction_type dir) {
+/* TODO: implement own mixed-radix version */
+int nsl_conv_linear_fft(double sig[], size_t n, double inres[], size_t m, nsl_conv_direction_type dir) {
 
 	double* res = (double*)malloc(n * sizeof(double));
 	if (res == NULL) {
@@ -91,5 +98,5 @@ int nsl_conv_convolution(double sig[], size_t n, double inres[], size_t m, nsl_c
 	/* TODO: use mixed radix version */
 	gsl_fft_halfcomplex_radix2_inverse(sig, 1, n);
 
-	return 0 ;
+	return 0;
 }
