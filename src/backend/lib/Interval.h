@@ -213,7 +213,7 @@ template<class T> class Interval : public IntervalBase<T> {
 	public:
 		Interval() = default;
 		Interval(T start, T end) : IntervalBase<T>(start, end) {}
-		Interval(const Interval<T>& other) = default;
+		Interval(const Interval<T>&) = default;
 		T size() const {
 			return IntervalBase<T>::m_end - IntervalBase<T>::m_start + 1;
 		}
@@ -244,7 +244,7 @@ template<> class Interval<double> : public IntervalBase<double> {
 	public:
 		Interval() {}
 		Interval(double start, double end) : IntervalBase<double>(start, end) {}
-		Interval(const Interval<double>& other) = default;
+		Interval(const Interval<double>&) = default;
 		double size() const { return IntervalBase<double>::m_end - IntervalBase<double>::m_start; }
 		bool isValid() const { return ( IntervalBase<double>::m_start <= IntervalBase<double>::m_end ); }
 		bool touches(const Interval<double>& other) const override {

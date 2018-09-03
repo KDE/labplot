@@ -2480,7 +2480,7 @@ tree<T, tree_node_allocator>::sibling_iterator::sibling_iterator(const iterator_
    }
 
 template <class T, class tree_node_allocator>
-tree<T, tree_node_allocator>::sibling_iterator::sibling_iterator(const sibling_iterator& other)
+tree<T, tree_node_allocator>::sibling_iterator::sibling_iterator(const sibling_iterator&)
    = default;
 
 template <class T, class tree_node_allocator>
