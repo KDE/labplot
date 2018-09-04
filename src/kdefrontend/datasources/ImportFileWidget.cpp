@@ -1560,7 +1560,7 @@ void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) 
 		ui.swOptions->setCurrentWidget(m_asciiOptionsWidget->parentWidget());
 		break;
 	case AbstractFileFilter::Binary:
-		if (m_binaryOptionsWidget) {
+		if (!m_binaryOptionsWidget) {
 			QWidget* binaryw = new QWidget();
 			m_binaryOptionsWidget = std::unique_ptr<BinaryOptionsWidget>(new BinaryOptionsWidget(binaryw));
 			ui.swOptions->addWidget(binaryw);
