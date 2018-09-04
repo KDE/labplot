@@ -26,7 +26,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <sys/param.h>	/*Max()*/
 #include "nsl_conv.h"
 #include "nsl_common.h"
 #include <gsl/gsl_fft_halfcomplex.h>
@@ -45,7 +44,7 @@ int nsl_conv_convolution_direction(double sig[], size_t n, double res[], size_t 
 }
 
 int nsl_conv_convolution(double sig[], size_t n, double res[], size_t m, nsl_conv_type_type type, nsl_conv_method_type method, int normalize, int wrap) {
-	if (method == nsl_conv_method_direct || (method == nsl_conv_method_auto && MAX(n,m) <= NSL_CONV_METHOD_BORDER)) {
+	if (method == nsl_conv_method_direct || (method == nsl_conv_method_auto && GSL_MAX(n,m) <= NSL_CONV_METHOD_BORDER)) {
 		if (type == nsl_conv_type_linear)
 			return nsl_conv_linear_direct(sig, n, res, m, normalize, wrap);
 		else if (type == nsl_conv_type_circular)
@@ -61,7 +60,7 @@ int nsl_conv_convolution(double sig[], size_t n, double res[], size_t m, nsl_con
 }
 
 int nsl_conv_deconvolution(double sig[], size_t n, double res[], size_t m, nsl_conv_type_type type, nsl_conv_method_type method, int normalize, int wrap) {
-	if (method == nsl_conv_method_direct || (method == nsl_conv_method_auto && MAX(n,m) <= NSL_CONV_METHOD_BORDER)) {
+	if (method == nsl_conv_method_direct || (method == nsl_conv_method_auto && GSL_MAX(n,m) <= NSL_CONV_METHOD_BORDER)) {
 		if (type == nsl_conv_type_linear)
 			return nsl_conv_linear_direct_backward(sig, n, res, m, normalize, wrap);
 		else if (type == nsl_conv_type_circular)
