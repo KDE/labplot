@@ -205,7 +205,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 		}
 	}
 
-	const size_t n = (size_t)xdataVector.size();	// number of data points to integrate
+	const size_t n = (size_t)xdataVector.size();	// number of data points to convolute
 	if (n < 2) {
 		convolutionResult.available = true;
 		convolutionResult.valid = false;
@@ -230,7 +230,8 @@ void XYConvolutionCurvePrivate::recalculate() {
 	int status = 0;
 	size_t np = n;
 
-	nsl_conv_convolution_direction(ydata, n, y2data, n, type, method, direction, normalize, wrap);
+	double* out = nullptr;	//TODO
+	nsl_conv_convolution_direction(ydata, n, y2data, n, type, method, direction, normalize, wrap, out);
 
 	xVector->resize((int)np);
 	yVector->resize((int)np);
