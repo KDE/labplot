@@ -102,7 +102,29 @@ int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, int norma
 }
 
 int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, int normalize, int wrap, double out[]) {
-	/* TODO */
+	size_t i, j, size = GSL_MAX(n,m), wi = 0;
+        double norm = 1;
+        if (normalize)
+		norm = cblas_dnrm2(m, r, 1);
+        if (wrap)
+		nsl_stats_maximum(r, m, &wi);
+
+        for (j = 0; j < size; j++) {
+                int index;
+                double res = 0;
+                for (i = 0; i < n; i++) {
+                        index = j-i;
+                        if (index < 0)
+                                index += size;
+                        if (index < (int)m)
+                                res += s[i]*r[index]/norm;
+                }
+                index = j - wi;
+                if (index < 0)
+                        index += size;
+                out[index] = res;
+        }
+
 	return 0;
 }
 
