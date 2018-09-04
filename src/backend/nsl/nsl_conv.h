@@ -49,22 +49,22 @@ typedef enum {nsl_conv_type_linear, nsl_conv_type_circular} nsl_conv_type_type;
 extern const char* nsl_conv_type_name[];
 
 /* calculate convolution/deconvolution
- * of signal sig of size n with response res of size m
+ * of signal s of size n with response r of size m
  */
-int nsl_conv_convolution_direction(double sig[], size_t n, double res[], size_t m, nsl_conv_type_type, nsl_conv_method_type, nsl_conv_direction_type, int normalize, int wrap, double out[]);
+int nsl_conv_convolution_direction(double s[], size_t n, double r[], size_t m, nsl_conv_type_type, nsl_conv_method_type, nsl_conv_direction_type, int normalize, int wrap, double out[]);
 
-int nsl_conv_convolution(double sig[], size_t n, double res[], size_t m, nsl_conv_type_type, nsl_conv_method_type, int normalize, int wrap, double out[]);
-int nsl_conv_deconvolution(double sig[], size_t n, double res[], size_t m, nsl_conv_type_type, nsl_conv_method_type, int normalize, int wrap, double out[]);
+int nsl_conv_convolution(double s[], size_t n, double r[], size_t m, nsl_conv_type_type, nsl_conv_method_type, int normalize, int wrap, double out[]);
+int nsl_conv_deconvolution(double s[], size_t n, double r[], size_t m, nsl_conv_type_type, nsl_conv_method_type, int normalize, int wrap, double out[]);
 
 /* linear/circular convolution using direct method */
-int nsl_conv_linear_direct(double sig[], size_t n, double res[], size_t m, int normalize, int wrap, double out[]);
-int nsl_conv_circular_direct(double sig[], size_t n, double res[], size_t m, int normalize, int wrap, double out[]);
+int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, int normalize, int wrap, double out[]);
+int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, int normalize, int wrap, double out[]);
 /* linear/circular deconvolution using direct method */
-int nsl_conv_linear_direct_backward(double sig[], size_t n, double res[], size_t m, int normalize, int wrap, double out[]);
-int nsl_conv_circular_direct_backward(double sig[], size_t n, double res[], size_t m, int normalize, int wrap, double out[]);
+int nsl_conv_linear_direct_backward(double s[], size_t n, double r[], size_t m, int normalize, int wrap, double out[]);
+int nsl_conv_circular_direct_backward(double s[], size_t n, double r[], size_t m, int normalize, int wrap, double out[]);
 /* linear/circular convolution/deconvolution using FFT method */
-/* TODO: normalize, wrap option */
-int nsl_conv_linear_fft(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type direction, double out[]);
-int nsl_conv_circular_fft(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type direction, double out[]);
+/* TODO: normalize and wrap option */
+int nsl_conv_linear_fft(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type direction, double out[]);
+int nsl_conv_circular_fft(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type direction, double out[]);
 
 #endif /* NSL_CONV_H */
