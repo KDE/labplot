@@ -223,12 +223,14 @@ void XYConvolutionCurvePrivate::recalculate() {
 	const nsl_conv_type_type type = nsl_conv_type_linear;//TODO: convolutionData.type;
 	const nsl_conv_method_type method = nsl_conv_method_auto;//TODO: convolutionData.method;
 	const nsl_conv_direction_type direction = convolutionData.direction;
+	const bool normalize = false;//TODO: convolutionData.normalize;
+	const bool wrap = false;//TODO: convolutionData.wrap;
 
 ///////////////////////////////////////////////////////////
 	int status = 0;
 	size_t np = n;
 
-	nsl_conv_convolution_direction(ydata, n, y2data, n, type, method, direction);
+	nsl_conv_convolution_direction(ydata, n, y2data, n, type, method, direction, normalize, wrap);
 
 	xVector->resize((int)np);
 	yVector->resize((int)np);
