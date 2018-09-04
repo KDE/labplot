@@ -41,7 +41,7 @@ int nsl_conv_convolution_direction(double s[], size_t n, double r[], size_t m, n
 	if (dir == nsl_conv_direction_forward)
 		return nsl_conv_convolution(s, n, r, m, type, method, normalize, wrap, out);
 	else
-		return nsl_conv_deconvolution(s, n, r, m, type, method, normalize, wrap, out);
+		return nsl_conv_deconvolution(s, n, r, m, type, normalize, wrap, out);
 }
 
 int nsl_conv_convolution(double s[], size_t n, double r[], size_t m, nsl_conv_type_type type, nsl_conv_method_type method, int normalize, int wrap, double out[]) {
@@ -60,18 +60,11 @@ int nsl_conv_convolution(double s[], size_t n, double r[], size_t m, nsl_conv_ty
 	return 0;
 }
 
-int nsl_conv_deconvolution(double s[], size_t n, double r[], size_t m, nsl_conv_type_type type, nsl_conv_method_type method, int normalize, int wrap, double out[]) {
-	if (method == nsl_conv_method_direct || (method == nsl_conv_method_auto && GSL_MAX_INT(n,m) <= NSL_CONV_METHOD_BORDER)) {
-		if (type == nsl_conv_type_linear)
-			return nsl_conv_linear_direct_backward(s, n, r, m, normalize, wrap, out);
-		else if (type == nsl_conv_type_circular)
-			return nsl_conv_circular_direct_backward(s, n, r, m, normalize, wrap, out);
-	} else {
-		if (type == nsl_conv_type_linear)
-			return nsl_conv_linear_fft(s, n, r, m, nsl_conv_direction_backward, out);
-		else if (type == nsl_conv_type_circular)
-			return nsl_conv_circular_fft(s, n, r, m, nsl_conv_direction_backward, out);
-	}
+int nsl_conv_deconvolution(double s[], size_t n, double r[], size_t m, nsl_conv_type_type type, int normalize, int wrap, double out[]) {
+	if (type == nsl_conv_type_linear)
+		return nsl_conv_linear_fft(s, n, r, m, nsl_conv_direction_backward, out);
+	else if (type == nsl_conv_type_circular)
+		return nsl_conv_circular_fft(s, n, r, m, nsl_conv_direction_backward, out);
 
 	return 0;
 }
@@ -125,16 +118,6 @@ int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, int nor
                 out[index] = res;
         }
 
-	return 0;
-}
-
-int nsl_conv_linear_direct_backward(double s[], size_t n, double r[], size_t m, int normalize, int wrap, double out[]) {
-	/* TODO */
-	return 0;
-}
-
-int nsl_conv_circular_direct_backward(double s[], size_t n, double r[], size_t m, int normalize, int wrap, double out[]) {
-	/* TODO */
 	return 0;
 }
 
