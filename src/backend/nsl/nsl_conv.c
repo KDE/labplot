@@ -26,26 +26,83 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <sys/param.h>	/*Max()*/
 #include "nsl_conv.h"
 #include "nsl_common.h"
 #include <gsl/gsl_fft_halfcomplex.h>
 
+
 const char* nsl_conv_direction_name[] = {i18n("forward (convolution)"), i18n("backward (deconvolution)")};
+const char* nsl_conv_method_name[] = {i18n("auto"), i18n("direct"), i18n("FFT")};
 const char* nsl_conv_type_name[] = {i18n("linear (zero-padded)"), i18n("circular")};
 
-int nsl_conv_convolution(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type dir) {
-	/* TODO: use different versions */
-	return nsl_conv_linear_direct(sig, n, res, m, dir);
-	/* return nsl_conv_linear_fft(sig, n, res, m, dir); */
+int nsl_conv_convolution_direction(double sig[], size_t n, double res[], size_t m, nsl_conv_type_type type, nsl_conv_method_type method, nsl_conv_direction_type dir) {
+	if (dir == nsl_conv_direction_forward)
+		return nsl_conv_convolution(sig, n, res, m, type, method);
+	else
+		return nsl_conv_deconvolution(sig, n, res, m, type, method);
 }
 
-/* TODO: implement deconcolution */
-int nsl_conv_linear_direct(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type dir) {
+int nsl_conv_convolution(double sig[], size_t n, double res[], size_t m, nsl_conv_type_type type, nsl_conv_method_type method) {
+	if (method == nsl_conv_method_direct || (method == nsl_conv_method_auto && MAX(n,m) <= NSL_CONV_METHOD_BORDER)) {
+		if (type == nsl_conv_type_linear)
+			return nsl_conv_linear_direct(sig, n, res, m);
+		else if (type == nsl_conv_type_circular)
+			return nsl_conv_circular_direct(sig, n, res, m);
+	} else {
+		if (type == nsl_conv_type_linear)
+			return nsl_conv_linear_fft(sig, n, res, m, nsl_conv_direction_forward);
+		else if (type == nsl_conv_type_circular)
+			return nsl_conv_circular_fft(sig, n, res, m, nsl_conv_direction_forward);
+	}
+
+	return 0;
+}
+
+int nsl_conv_deconvolution(double sig[], size_t n, double res[], size_t m, nsl_conv_type_type type, nsl_conv_method_type method) {
+	if (method == nsl_conv_method_direct || (method == nsl_conv_method_auto && MAX(n,m) <= NSL_CONV_METHOD_BORDER)) {
+		if (type == nsl_conv_type_linear)
+			return nsl_conv_linear_direct_backward(sig, n, res, m);
+		else if (type == nsl_conv_type_circular)
+			return nsl_conv_circular_direct_backward(sig, n, res, m);
+	} else {
+		if (type == nsl_conv_type_linear)
+			return nsl_conv_linear_fft(sig, n, res, m, nsl_conv_direction_backward);
+		else if (type == nsl_conv_type_circular)
+			return nsl_conv_circular_fft(sig, n, res, m, nsl_conv_direction_backward);
+	}
+
+	return 0;
+}
+
+int nsl_conv_linear_direct(double sig[], size_t n, double res[], size_t m) {
 	/* TODO */
+	return 0;
+}
+
+int nsl_conv_circular_direct(double sig[], size_t n, double res[], size_t m) {
+	/* TODO */
+	return 0;
+}
+
+int nsl_conv_linear_direct_backward(double sig[], size_t n, double res[], size_t m) {
+	/* TODO */
+	return 0;
+}
+
+int nsl_conv_circular_direct_backward(double sig[], size_t n, double res[], size_t m) {
+	/* TODO */
+	return 0;
+}
+
+/* TODO: implement using GSL and FFTW */
+int nsl_conv_circular_fft(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type dir) {
+	/* TODO */
+	return 0;
 }
 
 /* adapted from SciDAVis */
-/* TODO: implement own mixed-radix version */
+/* TODO: implement own mixed-radix version using GSL and FFTW */
 int nsl_conv_linear_fft(double sig[], size_t n, double inres[], size_t m, nsl_conv_direction_type dir) {
 
 	double* res = (double*)malloc(n * sizeof(double));

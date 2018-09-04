@@ -31,10 +31,17 @@
 
 #include <stdlib.h>
 
+#define NSL_CONV_METHOD_BORDER 100
+
 #define NSL_CONV_DIRECTION_COUNT 2
 // forward: convolution, backward: deconvolution
 typedef enum {nsl_conv_direction_forward, nsl_conv_direction_backward} nsl_conv_direction_type;
 extern const char* nsl_conv_direction_name[];
+
+#define NSL_CONV_METHOD_COUNT 3
+// auto: use direct method for small data size (NSL_CONV_METHOD_BORDER) and FFT method otherwise
+typedef enum {nsl_conv_method_auto, nsl_conv_method_direct, nsl_conv_method_fft} nsl_conv_method_type;
+extern const char* nsl_conv_method_name[];
 
 #define NSL_CONV_TYPE_COUNT 2
 // linear (zero-padded), circular
@@ -44,11 +51,19 @@ extern const char* nsl_conv_type_name[];
 /* calculate convolution/deconvolution
  * of signal sig of size n with response res of size m
  */
-int nsl_conv_convolution(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type direction);
+int nsl_conv_convolution_direction(double sig[], size_t n, double res[], size_t m, nsl_conv_type_type, nsl_conv_method_type, nsl_conv_direction_type);
 
-/* linear convolution using direct method */
-int nsl_conv_linear_direct(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type direction);
-/* linear convolution using FFT method */
+int nsl_conv_convolution(double sig[], size_t n, double res[], size_t m, nsl_conv_type_type, nsl_conv_method_type);
+int nsl_conv_deconvolution(double sig[], size_t n, double res[], size_t m, nsl_conv_type_type, nsl_conv_method_type);
+
+/* linear/circular convolution using direct method */
+int nsl_conv_linear_direct(double sig[], size_t n, double res[], size_t m);
+int nsl_conv_circular_direct(double sig[], size_t n, double res[], size_t m);
+/* linear/circular deconvolution using direct method */
+int nsl_conv_linear_direct_backward(double sig[], size_t n, double res[], size_t m);
+int nsl_conv_circular_direct_backward(double sig[], size_t n, double res[], size_t m);
+/* linear/circular convolution/deconvolution using FFT method */
 int nsl_conv_linear_fft(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type direction);
+int nsl_conv_circular_fft(double sig[], size_t n, double res[], size_t m, nsl_conv_direction_type direction);
 
 #endif /* NSL_CONV_H */
