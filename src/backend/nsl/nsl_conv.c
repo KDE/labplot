@@ -121,15 +121,29 @@ int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, int nor
 	return 0;
 }
 
-/* TODO: implement using GSL and FFTW */
+/* TODO: implement */
+int nsl_conv_linear_fft(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, double out[]) {
+	/* zero pad arrays to n+m-1 */
+	/* call nsl_conv_fft() */
+	return 0;
+}
+
+/* TODO: implement */
 int nsl_conv_circular_fft(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, double out[]) {
+	/* zero pad arrays to MAX(n,m) */
+	/* call nsl_conv_fft() */
+	return 0;
+}
+
+/* TODO: implement using GSL and FFTW */
+int nsl_conv_fft(double s[], double r[], size_t n, nsl_conv_direction_type dir, double out[]) {
 	/* TODO */
 	return 0;
 }
 
 /* adapted from SciDAVis */
 /* TODO: implement own mixed-radix version using GSL and FFTW */
-int nsl_conv_linear_fft(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, double out[]) {
+int nsl_conv_linear_fft_old(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, double out[]) {
 
 	double* res = (double*)malloc(n * sizeof(double));
 	if (res == NULL) {

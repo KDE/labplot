@@ -62,7 +62,9 @@ int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, int norma
 int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, int normalize, int wrap, double out[]);
 /* linear/circular convolution/deconvolution using FFT method */
 /* TODO: normalize and wrap option */
-int nsl_conv_linear_fft(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type direction, double out[]);
-int nsl_conv_circular_fft(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type direction, double out[]);
+int nsl_conv_circular_fft(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type, double out[]);
+int nsl_conv_linear_fft(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type, double out[]);
+int nsl_conv_fft(double s[], double r[], size_t n, nsl_conv_direction_type, double out[]);
+int nsl_conv_linear_fft_old(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type, double out[]);
 
 #endif /* NSL_CONV_H */
