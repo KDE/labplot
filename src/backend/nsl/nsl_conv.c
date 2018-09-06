@@ -30,6 +30,9 @@
 #include "nsl_common.h"
 #include <gsl/gsl_cblas.h>
 #include <gsl/gsl_fft_halfcomplex.h>
+#ifdef HAVE_FFTW3
+#include <fftw3.h>
+#endif
 #include "backend/nsl/nsl_stats.h"
 
 const char* nsl_conv_direction_name[] = {i18n("forward (convolution)"), i18n("backward (deconvolution)")};
@@ -138,15 +141,74 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 		rtmp[i] = 0;
 
 	int status = nsl_conv_fft(stmp, rtmp, size, dir, out);
-	free(stmp);
-	free(rtmp);
 
 	return status;
 }
 
-/* TODO: implement
-int nsl_conv_fft_FFTW(double s[], double r[], size_t n, nsl_conv_direction_type dir, double out[]) {
-} */
+int nsl_conv_fft_FFTW(double sin[], double rin[], size_t n, nsl_conv_direction_type dir, double out[]) {
+	size_t i;
+	const size_t size = 2*(n/2+1);
+	double* in = (double*)malloc(size*sizeof(double));
+	fftw_plan rpf = fftw_plan_dft_r2c_1d(n, in, (fftw_complex*)in, FFTW_ESTIMATE);
+
+	/* zero-pad input */
+	double *s = realloc(sin, size*sizeof(double));
+	if (s == NULL) {
+		printf("ERROR: zero-padding data");
+		free(sin);
+		free(rin);
+		return -1;
+	}
+	double *r = realloc(rin, size*sizeof(double));
+	if (r == NULL) {
+		printf("ERROR: zero-padding data");
+		free(s);
+		free(rin);
+		return -1;
+	}
+	for (i = n; i < size; i++) {
+		s[i] = 0;
+		r[i] = 0;
+	}
+
+	fftw_execute_dft_r2c(rpf, s, (fftw_complex*)s);
+	fftw_execute_dft_r2c(rpf, r, (fftw_complex*)r);
+	fftw_destroy_plan(rpf);
+
+	// multiply/divide
+	if (dir == nsl_conv_direction_forward) {
+		for (i = 0; i < size; i += 2) {
+			double re = s[i]*r[i] - s[i+1]*r[i+1];
+			double im = s[i]*r[i+1] + s[i+1]*r[i];
+
+			s[i] = re;
+			s[i+1] = im;
+		}
+	} else {
+		for (i = 0; i < size; i += 2) {
+			double tmp = r[i]*r[i] + r[i+1]*r[i+1];
+			double re = (s[i]*r[i] + s[i+1]*r[i+1])/tmp;
+			double im = (s[i+1]*r[i] - s[i]*r[i+1])/tmp;
+
+			s[i] = re;
+			s[i+1] = im;
+		}
+	}
+
+	// back transform
+	double* o = (double*)malloc(size*sizeof(double));
+	fftw_plan rpb = fftw_plan_dft_c2r_1d(n, (fftw_complex*)o, o, FFTW_ESTIMATE);
+	fftw_execute_dft_c2r(rpb, (fftw_complex*)s, s);
+	fftw_destroy_plan(rpb);
+
+	for (i = 0; i < n; i++)
+		out[i] = s[i]/n;
+
+	free(s);
+	free(r);
+
+	return 0;
+}
 
 int nsl_conv_fft_GSL(double s[], double r[], size_t n, nsl_conv_direction_type dir, double out[]) {
 	gsl_fft_real_workspace *work = gsl_fft_real_workspace_alloc(n);
@@ -187,15 +249,22 @@ int nsl_conv_fft_GSL(double s[], double r[], size_t n, nsl_conv_direction_type d
 	gsl_fft_halfcomplex_inverse(out, 1, n, hc, work);
 	gsl_fft_halfcomplex_wavetable_free(hc);
 	gsl_fft_real_workspace_free(work);
+
+	return 0;
 }
 
 int nsl_conv_fft(double s[], double r[], size_t n, nsl_conv_direction_type dir, double out[]) {
-	/* TODO: enable if implemented */
-/* #ifdef HAVE_FFTW3
+	int status;
+#ifdef HAVE_FFTW3
 	return nsl_conv_fft_FFTW(s, r, n, dir, out);
-#else */
-	return nsl_conv_fft_GSL(s, r, n, dir, out);
-/* #endif */
+	/* s and r handled in function */
+#else
+	status = nsl_conv_fft_GSL(s, r, n, dir, out);
+	free(s);
+	free(r);
+#endif
+
+	return status;
 }
 
 /* adapted from SciDAVis */
