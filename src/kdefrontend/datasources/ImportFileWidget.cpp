@@ -2303,7 +2303,7 @@ void ImportFileWidget::onMqttConnect() {
 		QMqttTopicFilter globalFilter{"#"};
 		m_mainSubscription = m_client->subscribe(globalFilter, 1);
 		if (!m_mainSubscription)
-			QMessageBox::information(this, "Couldn't subscribe", "Something went wrong");
+			QMessageBox::critical(this, i18n("Couldn't subscribe"), i18n("Couldn't subscribe. Something went wrong"));
 	}
 	ui.cbConnection->setEnabled(true);
 	ui.bManageConnections->setEnabled(true);
@@ -2443,11 +2443,11 @@ void ImportFileWidget::mqttSubscribe() {
 				if(!ui.bWillMessage->isEnabled())
 					ui.bWillMessage->setEnabled(true);
 			} else
-				QMessageBox::warning(this, "Warning", "You already subscribed to a topic containing this one");
+				QMessageBox::warning(this, i18n("Warning"), i18n("You already subscribed to a topic containing this one"));
 		} else
-			QMessageBox::warning(this, "Warning", "You already subscribed to this topic");
+			QMessageBox::warning(this, i18n("Warning"), i18n("You already subscribed to this topic"));
 	} else
-		QMessageBox::warning(this, "Warning", "You didn't select any item from the Tree Widget");
+		QMessageBox::warning(this, i18n("Warning"), i18n("You didn't select any item from the Tree Widget"));
 }
 
 /*!
@@ -2495,7 +2495,7 @@ void ImportFileWidget::mqttUnsubscribe() {
 			ui.bWillMessage->setEnabled(false);
 		}
 	} else
-		QMessageBox::warning(this, "Warning", "You didn't select any item from the Tree Widget");
+		QMessageBox::warning(this, i18n("Warning"), i18n("You didn't select any item from the Tree Widget"));
 }
 
 /*!
@@ -2734,19 +2734,19 @@ void ImportFileWidget::willUpdateTypeChanged(int updateType) {
 void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 	switch (clientError) {
 	case QMqttClient::BadUsernameOrPassword:
-		QMessageBox::warning(this, "Couldn't connect", "Bad username or password");
+		QMessageBox::critical(this, i18n("Couldn't connect"), i18n("Wrong username or password"));
 		break;
 	case QMqttClient::IdRejected:
-		QMessageBox::warning(this, "Couldn't connect", "The client ID wasn't accepted");
+		QMessageBox::critical(this, i18n("Couldn't connect"), i18n("The client ID wasn't accepted"));
 		break;
 	case QMqttClient::ServerUnavailable:
-		QMessageBox::warning(this, "Server unavailable", "The network connection has been established, but the service is unavailable on the broker side.");
+		QMessageBox::critical(this, i18n("Server unavailable"), i18n("The broker %1 couldn't be reached."));
 		break;
 	case QMqttClient::NotAuthorized:
-		QMessageBox::warning(this, "Couldn't connect", "The client is not authorized to connect.");
+		QMessageBox::critical(this, i18n("Not authorized"), i18n("The client is not authorized to connect."));
 		break;
 	case QMqttClient::UnknownError:
-		QMessageBox::warning(this, "Unknown MQTT error", "An unknown error occurred.");
+		QMessageBox::critical(this, i18n("Unknown MQTT error"), i18n("An unknown error occurred."));
 		break;
 	case QMqttClient::NoError:
 	case QMqttClient::InvalidProtocolVersion:
@@ -2809,7 +2809,7 @@ void ImportFileWidget::mqttConnectTimeout() {
 	m_connectionTimedOut = true;
 	m_client->disconnectFromHost();
 	m_connectTimeoutTimer->stop();
-	QMessageBox::warning(this, "Warning", "Connecting to the given broker timed out! Try changing the settings");
+	QMessageBox::warning(this, i18n("Warning"), i18n("Connecting to the given broker timed out! Try changing the settings"));
 	RESET_CURSOR;
 }
 
