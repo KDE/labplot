@@ -2,6 +2,7 @@
 New features:
 	* Import of ROOT (CERN) TH1 histograms
 	* Import of Ngspice raw files (ASCII and binary)
+	* Import of data in JSON format (JSON arrays and objects)
 	* Allow to rotate plot legends
 	* Allow to specify the number format when exporting spreadsheet and matrix
 

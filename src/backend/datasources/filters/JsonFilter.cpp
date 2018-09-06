@@ -163,8 +163,8 @@ void JsonFilter::setCreateIndexEnabled(bool b){
 	d->createIndexEnabled = b;
 }
 
-void JsonFilter::setParseRowsName(bool b) {
-	d->parseRowsName = b;
+void JsonFilter::setImportObjectNames(bool b) {
+	d->importObjectNames = b;
 }
 
 void JsonFilter::setVectorNames(const QString& s) {
@@ -217,7 +217,7 @@ JsonFilterPrivate::JsonFilterPrivate(JsonFilter* owner) : q(owner),
 	rowType(QJsonValue::Object),
 	numberFormat(QLocale::C),
 	createIndexEnabled(false),
-	parseRowsName(false),
+	importObjectNames(false),
 	vectorNames(),
 	startRow(1),
 	endRow(-1),
@@ -268,12 +268,12 @@ int JsonFilterPrivate::parseColumnModes(QJsonValue row, QString rowName) {
 
 	int colIndexInContainer = startColumn - 1;
 	for(int i = 0; i < m_actualCols; ++i){
-		if((createIndexEnabled || parseRowsName) && i == 0){
+		if((createIndexEnabled || importObjectNames) && i == 0){
 			if(createIndexEnabled)
 				columnModes[i] = AbstractColumn::Integer;
-			if(parseRowsName)
+			if(importObjectNames)
 				columnModes[i + createIndexEnabled] = AbstractFileFilter::columnMode(rowName, dateTimeFormat, numberFormat);
-			i = i + createIndexEnabled + parseRowsName - 1;
+			i = i + createIndexEnabled + importObjectNames - 1;
 			continue;
 		}
 
@@ -324,7 +324,7 @@ int JsonFilterPrivate::parseColumnModes(QJsonValue row, QString rowName) {
 		colIndexInContainer++;
 	}
 
-	if(parseRowsName)
+	if(importObjectNames)
 		vectorNames.prepend("row name");
 	if(createIndexEnabled)
 		vectorNames.prepend("index");
@@ -440,7 +440,7 @@ int JsonFilterPrivate::prepareDocumentToRead(const QJsonDocument& doc) {
 	int countCols = -1;
 	QJsonValue firstRow;
 	QString firstRowName = "";
-	parseRowsName = parseRowsName && rowType == QJsonValue::Object;
+	importObjectNames = importObjectNames && rowType == QJsonValue::Object;
 
 	switch(containerType) {
 		case JsonFilter::Array: {
@@ -481,7 +481,7 @@ int JsonFilterPrivate::prepareDocumentToRead(const QJsonDocument& doc) {
 		endColumn = countCols;
 
 	m_actualRows = countRows;
-	m_actualCols = endColumn - startColumn + 1 + createIndexEnabled + parseRowsName;
+	m_actualCols = endColumn - startColumn + 1 + createIndexEnabled + importObjectNames;
 
 	if(parseColumnModes(firstRow, firstRowName) != 0)
 		return 2;
@@ -557,12 +557,12 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 
 		int colIndex = startColumn - 1;
 		for(int n = 0; n < m_actualCols; ++n) {
-			if((createIndexEnabled || parseRowsName) && n == 0) {
+			if((createIndexEnabled || importObjectNames) && n == 0) {
 				if(createIndexEnabled)
 					static_cast<QVector<int>*>(m_dataContainer[n])->operator[](i) = i + 1;
-				if(parseRowsName)
+				if(importObjectNames)
 					setValueFromString(n + createIndexEnabled, i, rowName);
-				n = n + createIndexEnabled + parseRowsName - 1;
+				n = n + createIndexEnabled + importObjectNames - 1;
 				continue;
 			}
 			QJsonValue value;
@@ -663,12 +663,12 @@ QVector<QStringList> JsonFilterPrivate::preview() {
 		QStringList lineString;
 		int colIndex = startColumn - 1;
 		for(int n = 0; n < m_actualCols; ++n) {
-			if((createIndexEnabled || parseRowsName) && n == 0) {
+			if((createIndexEnabled || importObjectNames) && n == 0) {
 				if(createIndexEnabled)
 					lineString += QString::number(i + 1);
-				if(parseRowsName)
+				if(importObjectNames)
 					lineString += rowName;
-				n = n + createIndexEnabled + parseRowsName - 1;
+				n = n + createIndexEnabled + importObjectNames - 1;
 				continue;
 			}
 
@@ -740,7 +740,7 @@ void JsonFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("dateTimeFormat", d->dateTimeFormat);
 	writer->writeAttribute("numberFormat", QString::number(d->numberFormat));
 	writer->writeAttribute("createIndex", QString::number(d->createIndexEnabled));
-	writer->writeAttribute("parseRowsName", QString::number(d->parseRowsName));
+	writer->writeAttribute("importObjectNames", QString::number(d->importObjectNames));
 	writer->writeAttribute("nanValue", QString::number(d->nanValue));
 	writer->writeAttribute("startRow", QString::number(d->startRow));
 	writer->writeAttribute("endRow", QString::number(d->endRow));
@@ -788,11 +788,11 @@ bool JsonFilter::load(XmlStreamReader* reader) {
 	else
 		d->createIndexEnabled = str.toInt();
 
-	str = attribs.value("parseRowsName").toString();
+	str = attribs.value("importObjectNames").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'parseRowsName'"));
+		reader->raiseWarning(attributeWarning.arg("'importObjectNames'"));
 	else
-		d->parseRowsName = str.toInt();
+		d->importObjectNames = str.toInt();
 
 	str = attribs.value("nanValue").toString();
 	if (str.isEmpty())

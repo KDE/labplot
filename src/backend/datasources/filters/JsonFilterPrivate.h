@@ -76,7 +76,7 @@ public:
 	QLocale::Language numberFormat;
 	double nanValue;
 	bool createIndexEnabled;
-	bool parseRowsName;
+	bool importObjectNames;
 	QStringList vectorNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;
 

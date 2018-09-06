@@ -81,9 +81,9 @@
     </widget>
    </item>
    <item row="3" column="0">
-    <widget class="QCheckBox" name="chbParseRowsName">
+    <widget class="QCheckBox" name="chbImportObjectNames">
      <property name="text">
-      <string>Parse rows name</string>
+      <string>Import object names</string>
      </property>
     </widget>
    </item>
