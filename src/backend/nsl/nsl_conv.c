@@ -145,6 +145,7 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 	return status;
 }
 
+#ifdef HAVE_FFTW3
 int nsl_conv_fft_FFTW(double sin[], double rin[], size_t n, nsl_conv_direction_type dir, double out[]) {
 	size_t i;
 	const size_t size = 2*(n/2+1);
@@ -209,6 +210,7 @@ int nsl_conv_fft_FFTW(double sin[], double rin[], size_t n, nsl_conv_direction_t
 
 	return 0;
 }
+#endif
 
 int nsl_conv_fft_GSL(double s[], double r[], size_t n, nsl_conv_direction_type dir, double out[]) {
 	gsl_fft_real_workspace *work = gsl_fft_real_workspace_alloc(n);

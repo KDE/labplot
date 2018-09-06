@@ -70,7 +70,9 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 /* actual FFT method calculation using zero-padded arrays
  * s and r are overwritten
  */
+#ifdef HAVE_FFTW3
 int nsl_conv_fft_FFTW(double s[], double r[], size_t n, nsl_conv_direction_type, double out[]);
+#endif
 int nsl_conv_fft_GSL(double s[], double r[], size_t n, nsl_conv_direction_type, double out[]);
 /* generic function (using FFTW or GSL) */
 int nsl_conv_fft(double s[], double r[], size_t n, nsl_conv_direction_type, double out[]);
