@@ -124,6 +124,12 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 	else	// circular
 		size = GSL_MAX(n, m);
 
+#ifdef HAVE_FFTW3
+	// already zero-pad here for FFT method and FFTW r2c
+	size_t oldsize = size;
+	size = 2*(size/2+1);
+#endif
+
 	// zero-padded arrays
 	double *stmp = (double*)malloc(size*sizeof(double));
 	double *rtmp = (double*)malloc(size*sizeof(double));
@@ -140,44 +146,24 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 	for (i = m; i < size; i++)
 		rtmp[i] = 0;
 
-#ifdef HAVE_FFTW3
-	return nsl_conv_fft_FFTW(stmp, rtmp, size, dir, out);
-	/* s and r handled in function */
-#else
 	int status;
+#ifdef HAVE_FFTW3
+	status = nsl_conv_fft_FFTW(stmp, rtmp, oldsize, dir, out);
+#else
 	status = nsl_conv_fft_GSL(stmp, rtmp, size, dir, out);
+#endif
 	free(s);
 	free(r);
+
 	return status;
-#endif
 }
 
 #ifdef HAVE_FFTW3
-int nsl_conv_fft_FFTW(double sin[], double rin[], size_t n, nsl_conv_direction_type dir, double out[]) {
+int nsl_conv_fft_FFTW(double s[], double r[], size_t n, nsl_conv_direction_type dir, double out[]) {
 	size_t i;
 	const size_t size = 2*(n/2+1);
 	double* in = (double*)malloc(size*sizeof(double));
 	fftw_plan rpf = fftw_plan_dft_r2c_1d(n, in, (fftw_complex*)in, FFTW_ESTIMATE);
-
-	/* zero-pad input */
-	double *s = realloc(sin, size*sizeof(double));
-	if (s == NULL) {
-		printf("ERROR: zero-padding data");
-		free(sin);
-		free(rin);
-		return -1;
-	}
-	double *r = realloc(rin, size*sizeof(double));
-	if (r == NULL) {
-		printf("ERROR: zero-padding data");
-		free(s);
-		free(rin);
-		return -1;
-	}
-	for (i = n; i < size; i++) {
-		s[i] = 0;
-		r[i] = 0;
-	}
 
 	fftw_execute_dft_r2c(rpf, s, (fftw_complex*)s);
 	fftw_execute_dft_r2c(rpf, r, (fftw_complex*)r);
@@ -211,9 +197,6 @@ int nsl_conv_fft_FFTW(double sin[], double rin[], size_t n, nsl_conv_direction_t
 
 	for (i = 0; i < n; i++)
 		out[i] = s[i]/n;
-
-	free(s);
-	free(r);
 
 	return 0;
 }
