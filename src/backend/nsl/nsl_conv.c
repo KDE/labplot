@@ -152,8 +152,8 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 #else
 	status = nsl_conv_fft_GSL(stmp, rtmp, size, dir, out);
 #endif
-	free(s);
-	free(r);
+	free(stmp);
+	free(rtmp);
 
 	return status;
 }
