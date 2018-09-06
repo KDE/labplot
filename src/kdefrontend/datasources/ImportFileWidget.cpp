@@ -786,37 +786,36 @@ bool ImportFileWidget::isMqttValid(){
 bool ImportFileWidget::checkTopicContains(const QString& superior, const QString& inferior) {
 	if (superior == inferior)
 		return true;
-	else {
-		if (superior.contains("/")) {
-			QStringList superiorList = superior.split('/', QString::SkipEmptyParts);
-			QStringList inferiorList = inferior.split('/', QString::SkipEmptyParts);
 
-			//a longer topic can't contain a shorter one
-			if (superiorList.size() > inferiorList.size())
-				return false;
-
-			bool ok = true;
-			for (int i = 0; i < superiorList.size(); ++i) {
-				if (superiorList.at(i) != inferiorList.at(i)) {
-					if ((superiorList.at(i) != "+") &&
-							!(superiorList.at(i) == "#" && i == superiorList.size() - 1)) {
-						//if the two topics differ, and the superior's current level isn't + or #(which can be only in the last position)
-						//then superior can't contain inferior
-						ok = false;
-						break;
-					} else if (i == superiorList.size() - 1 && (superiorList.at(i) == "+" && inferiorList.at(i) == "#") ) {
-						//if the two topics differ at the last level
-						//and the superior's current level is + while the inferior's is #(which can be only in the last position)
-						//then superior can't contain inferior
-						ok = false;
-						break;
-					}
-				}
-			}
-			return ok;
-		}
+	if (!superior.contains("/"))
 		return false;
+
+	const QStringList& superiorList = superior.split('/', QString::SkipEmptyParts);
+	const QStringList& inferiorList = inferior.split('/', QString::SkipEmptyParts);
+
+	//a longer topic can't contain a shorter one
+	if (superiorList.size() > inferiorList.size())
+		return false;
+
+	bool ok = true;
+	for (int i = 0; i < superiorList.size(); ++i) {
+		if (superiorList.at(i) != inferiorList.at(i)) {
+			if ((superiorList.at(i) != "+") &&
+					!(superiorList.at(i) == "#" && i == superiorList.size() - 1)) {
+				//if the two topics differ, and the superior's current level isn't + or #(which can be only in the last position)
+				//then superior can't contain inferior
+				ok = false;
+				break;
+			} else if (i == superiorList.size() - 1 && (superiorList.at(i) == "+" && inferiorList.at(i) == "#") ) {
+				//if the two topics differ at the last level
+				//and the superior's current level is + while the inferior's is #(which can be only in the last position)
+				//then superior can't contain inferior
+				ok = false;
+				break;
+			}
+		}
 	}
+	return ok;
 }
 
 /*!
@@ -827,47 +826,48 @@ bool ImportFileWidget::checkTopicContains(const QString& superior, const QString
  * \return The name of the common topic, if it exists, otherwise ""
  */
 QString ImportFileWidget::checkCommonLevel(const QString& first, const QString& second) {
-	QStringList firstList = first.split('/', QString::SkipEmptyParts);
-	QStringList secondtList = second.split('/', QString::SkipEmptyParts);
+	const QStringList& firstList = first.split('/', QString::SkipEmptyParts);
+	if (firstList.isEmpty())
+		return QString();
+
+	const QStringList& secondtList = second.split('/', QString::SkipEmptyParts);
 	QString commonTopic = "";
 
-	if (!firstList.isEmpty()) {
-		//the two topics have to be the same size and can't be identic
-		if (firstList.size() == secondtList.size() && (first != second))	{
+	//the two topics have to be the same size and can't be identic
+	if (firstList.size() == secondtList.size() && (first != second))	{
 
-			//the index where they differ
-			int differIndex = -1;
-			for (int i = 0; i < firstList.size(); ++i) {
-				if (firstList.at(i) != secondtList.at(i)) {
-					differIndex = i;
+		//the index where they differ
+		int differIndex = -1;
+		for (int i = 0; i < firstList.size(); ++i) {
+			if (firstList.at(i) != secondtList.at(i)) {
+				differIndex = i;
+				break;
+			}
+		}
+
+		//they can differ at only one level
+		bool differ = false;
+		if (differIndex > 0) {
+			for (int j = differIndex + 1; j < firstList.size(); ++j) {
+				if (firstList.at(j) != secondtList.at(j)) {
+					differ = true;
 					break;
 				}
 			}
+		} else
+			differ = true;
 
-			//they can differ at only one level
-			bool differ = false;
-			if (differIndex > 0) {
-				for (int j = differIndex + 1; j < firstList.size(); ++j) {
-					if (firstList.at(j) != secondtList.at(j)) {
-						differ = true;
-						break;
-					}
+		if (!differ) {
+			for (int i = 0; i < firstList.size(); ++i) {
+				if (i != differIndex) {
+					commonTopic.append(firstList.at(i));
+				} else {
+					//we put "+" wildcard at the level where they differ
+					commonTopic.append("+");
 				}
-			} else
-				differ = true;
 
-			if (!differ) {
-				for (int i = 0; i < firstList.size(); ++i) {
-					if (i != differIndex) {
-						commonTopic.append(firstList.at(i));
-					} else {
-						//we put "+" wildcard at the level where they differ
-						commonTopic.append("+");
-					}
-
-					if (i != firstList.size() - 1)
-						commonTopic.append("/");
-				}
+				if (i != firstList.size() - 1)
+					commonTopic.append("/");
 			}
 		}
 	}
@@ -941,61 +941,62 @@ int ImportFileWidget::commonLevelIndex(const QString& first, const QString& seco
  * \param topicName the name of a topic we want to unsubscribe from
  */
 void ImportFileWidget::unsubscribeFromTopic(const QString& topicName) {
-	if (!topicName.isEmpty()) {
-		QMqttTopicFilter filter{topicName};
-		m_client->unsubscribe(filter);
+	if (topicName.isEmpty())
+		return;
 
-		for (int i = 0; i< m_mqttSubscriptions.count(); ++i)
-			if (m_mqttSubscriptions[i]->topic().filter() == topicName) {
-				m_mqttSubscriptions.remove(i);
-				break;
-			}
+	QMqttTopicFilter filter{topicName};
+	m_client->unsubscribe(filter);
 
-		m_mqttReadyForPreview = false;
-
-		QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
-		while(i.hasNext()) {
-			i.next();
-			if (checkTopicContains(topicName, i.key().name())) {
-				m_messageArrived.remove(i.key());
-			}
+	for (int i = 0; i< m_mqttSubscriptions.count(); ++i)
+		if (m_mqttSubscriptions[i]->topic().filter() == topicName) {
+			m_mqttSubscriptions.remove(i);
+			break;
 		}
 
-		QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
-		while(j.hasNext()) {
-			j.next();
-			if (checkTopicContains(topicName, j.key().name())) {
-				m_lastMessage.remove(j.key());
-			}
-		}
+	m_mqttReadyForPreview = false;
 
-		for (int row = 0; row < ui.twSubscriptions->topLevelItemCount(); row++)  {
-			if (ui.twSubscriptions->topLevelItem(row)->text(0) == topicName) {
-				ui.twSubscriptions->topLevelItem(row)->takeChildren();
-				ui.twSubscriptions->takeTopLevelItem(row);
-			}
+	QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
+	while(i.hasNext()) {
+		i.next();
+		if (checkTopicContains(topicName, i.key().name())) {
+			m_messageArrived.remove(i.key());
 		}
-
-		for (int i = 0; i < m_subscribedTopicNames.size(); ++i) {
-			if (checkTopicContains(topicName, m_subscribedTopicNames[i])) {
-				m_subscribedTopicNames.remove(i);
-				i--;
-			}
-		}
-
-		if(m_willSettings.willTopic == topicName) {
-			QVector<QTreeWidgetItem*> children;
-			if(ui.twSubscriptions->topLevelItemCount() > 0) {
-				findSubscriptionLeafChildren(children, ui.twSubscriptions->topLevelItem(0));
-				m_willSettings.willTopic = children[0]->text(0);
-			} else
-				m_willSettings.willTopic = "";
-		}
-
-		//signals that there was a change among the subscribed topics
-		emit subscriptionsChanged();
-		refreshPreview();
 	}
+
+	QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
+	while(j.hasNext()) {
+		j.next();
+		if (checkTopicContains(topicName, j.key().name())) {
+			m_lastMessage.remove(j.key());
+		}
+	}
+
+	for (int row = 0; row < ui.twSubscriptions->topLevelItemCount(); row++)  {
+		if (ui.twSubscriptions->topLevelItem(row)->text(0) == topicName) {
+			ui.twSubscriptions->topLevelItem(row)->takeChildren();
+			ui.twSubscriptions->takeTopLevelItem(row);
+		}
+	}
+
+	for (int i = 0; i < m_subscribedTopicNames.size(); ++i) {
+		if (checkTopicContains(topicName, m_subscribedTopicNames[i])) {
+			m_subscribedTopicNames.remove(i);
+			i--;
+		}
+	}
+
+	if(m_willSettings.willTopic == topicName) {
+		QVector<QTreeWidgetItem*> children;
+		if(ui.twSubscriptions->topLevelItemCount() > 0) {
+			findSubscriptionLeafChildren(children, ui.twSubscriptions->topLevelItem(0));
+			m_willSettings.willTopic = children[0]->text(0);
+		} else
+			m_willSettings.willTopic = "";
+	}
+
+	//signals that there was a change among the subscribed topics
+	emit subscriptionsChanged();
+	refreshPreview();
 }
 
 /*!
@@ -1007,35 +1008,36 @@ void ImportFileWidget::unsubscribeFromTopic(const QString& topicName) {
  */
 void ImportFileWidget::addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription) {
 	//if the topic doesn't have any children we don't do anything
-	if (topic->childCount() > 0) {
-		for (int i = 0; i < topic->childCount(); ++i) {
-			QTreeWidgetItem* temp = topic->child(i);
-			QString name;
-			//if it has children, then we add it as a # wildcrad containing topic
-			if (topic->child(i)->childCount() > 0) {
-				name.append(temp->text(0) + "/#");
-				while(temp->parent() != nullptr) {
-					temp = temp->parent();
-					name.prepend(temp->text(0) + "/");
-				}
-			}
+	if (topic->childCount() <= 0)
+		return;
 
-			//if not then we simply add the topic itself
-			else {
-				name.append(temp->text(0));
-				while(temp->parent() != nullptr) {
-					temp = temp->parent();
-					name.prepend(temp->text(0) + "/");
-				}
+	for (int i = 0; i < topic->childCount(); ++i) {
+		QTreeWidgetItem* temp = topic->child(i);
+		QString name;
+		//if it has children, then we add it as a # wildcrad containing topic
+		if (topic->child(i)->childCount() > 0) {
+			name.append(temp->text(0) + "/#");
+			while(temp->parent() != nullptr) {
+				temp = temp->parent();
+				name.prepend(temp->text(0) + "/");
 			}
-
-			QStringList nameList;
-			nameList.append(name);
-			QTreeWidgetItem* childItem = new QTreeWidgetItem(nameList);
-			subscription->addChild(childItem);
-			//we use the function recursively on the given item
-			addSubscriptionChildren(topic->child(i), childItem);
 		}
+
+		//if not then we simply add the topic itself
+		else {
+			name.append(temp->text(0));
+			while(temp->parent() != nullptr) {
+				temp = temp->parent();
+				name.prepend(temp->text(0) + "/");
+			}
+		}
+
+		QStringList nameList;
+		nameList.append(name);
+		QTreeWidgetItem* childItem = new QTreeWidgetItem(nameList);
+		subscription->addChild(childItem);
+		//we use the function recursively on the given item
+		addSubscriptionChildren(topic->child(i), childItem);
 	}
 }
 
@@ -1340,18 +1342,16 @@ void ImportFileWidget::restoreSubscriptionChildren(QTreeWidgetItem * topic, QTre
  */
 void ImportFileWidget::updateSubscriptionCompleter() {
 	QStringList subscriptionList;
-	for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+	for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i)
 		subscriptionList.append(ui.twSubscriptions->topLevelItem(i)->text(0));
-	}
 
 	if (!subscriptionList.isEmpty()) {
 		m_subscriptionCompleter = new QCompleter(subscriptionList, this);
 		m_subscriptionCompleter->setCompletionMode(QCompleter::PopupCompletion);
 		m_subscriptionCompleter->setCaseSensitivity(Qt::CaseSensitive);
 		ui.leSubscriptions->setCompleter(m_subscriptionCompleter);
-	} else {
+	} else
 		ui.leSubscriptions->setCompleter(nullptr);
-	}
 }
 #endif
 
