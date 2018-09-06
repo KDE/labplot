@@ -231,7 +231,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 	size_t np = n;
 
 	double* out = nullptr;	//TODO
-	nsl_conv_convolution_direction(ydata, n, y2data, n, type, method, direction, normalize, wrap, out);
+	nsl_conv_convolution_direction(ydata, n, y2data, n, direction, method, type, normalize, wrap, out);
 
 	xVector->resize((int)np);
 	yVector->resize((int)np);

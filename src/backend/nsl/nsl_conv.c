@@ -36,7 +36,7 @@ const char* nsl_conv_direction_name[] = {i18n("forward (convolution)"), i18n("ba
 const char* nsl_conv_method_name[] = {i18n("auto"), i18n("direct"), i18n("FFT")};
 const char* nsl_conv_type_name[] = {i18n("linear (zero-padded)"), i18n("circular")};
 
-int nsl_conv_convolution_direction(double s[], size_t n, double r[], size_t m, nsl_conv_type_type type, nsl_conv_method_type method, nsl_conv_direction_type dir,
+int nsl_conv_convolution_direction(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, nsl_conv_method_type method, nsl_conv_type_type type,
 		int normalize, int wrap, double out[]) {
 	if (dir == nsl_conv_direction_forward)
 		return nsl_conv_convolution(s, n, r, m, type, method, normalize, wrap, out);
@@ -44,27 +44,21 @@ int nsl_conv_convolution_direction(double s[], size_t n, double r[], size_t m, n
 		return nsl_conv_deconvolution(s, n, r, m, type, normalize, wrap, out);
 }
 
-int nsl_conv_convolution(double s[], size_t n, double r[], size_t m, nsl_conv_type_type type, nsl_conv_method_type method, int normalize, int wrap, double out[]) {
+int nsl_conv_convolution(double s[], size_t n, double r[], size_t m, nsl_conv_method_type method, nsl_conv_type_type type, int normalize, int wrap, double out[]) {
 	if (method == nsl_conv_method_direct || (method == nsl_conv_method_auto && GSL_MAX_INT(n,m) <= NSL_CONV_METHOD_BORDER)) {
 		if (type == nsl_conv_type_linear)
 			return nsl_conv_linear_direct(s, n, r, m, normalize, wrap, out);
 		else if (type == nsl_conv_type_circular)
 			return nsl_conv_circular_direct(s, n, r, m, normalize, wrap, out);
 	} else {
-		if (type == nsl_conv_type_linear)
-			return nsl_conv_linear_fft(s, n, r, m, nsl_conv_direction_forward, out);
-		else if (type == nsl_conv_type_circular)
-			return nsl_conv_circular_fft(s, n, r, m, nsl_conv_direction_forward, out);
+		return nsl_conv_fft_type(s, n, r, m, nsl_conv_direction_forward, type, out);
 	}
 
 	return 0;
 }
 
 int nsl_conv_deconvolution(double s[], size_t n, double r[], size_t m, nsl_conv_type_type type, int normalize, int wrap, double out[]) {
-	if (type == nsl_conv_type_linear)
-		return nsl_conv_linear_fft(s, n, r, m, nsl_conv_direction_backward, out);
-	else if (type == nsl_conv_type_circular)
-		return nsl_conv_circular_fft(s, n, r, m, nsl_conv_direction_backward, out);
+	return nsl_conv_fft_type(s, n, r, m, nsl_conv_direction_backward, type, out);
 
 	return 0;
 }
@@ -122,15 +116,8 @@ int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, int nor
 }
 
 /* TODO: implement */
-int nsl_conv_linear_fft(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, double out[]) {
-	/* zero pad arrays to n+m-1 */
-	/* call nsl_conv_fft() */
-	return 0;
-}
-
-/* TODO: implement */
-int nsl_conv_circular_fft(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, double out[]) {
-	/* zero pad arrays to MAX(n,m) */
+int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, nsl_conv_type_type type, double out[]) {
+	/* zero pad arrays */
 	/* call nsl_conv_fft() */
 	return 0;
 }
@@ -143,7 +130,7 @@ int nsl_conv_fft(double s[], double r[], size_t n, nsl_conv_direction_type dir, 
 
 /* adapted from SciDAVis */
 /* TODO: implement own mixed-radix version using GSL and FFTW */
-int nsl_conv_linear_fft_old(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, double out[]) {
+int nsl_conv_linear_fft_old(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir) {
 
 	double* res = (double*)malloc(n * sizeof(double));
 	if (res == NULL) {
