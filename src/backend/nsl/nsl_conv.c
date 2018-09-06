@@ -58,9 +58,8 @@ int nsl_conv_convolution(double s[], size_t n, double r[], size_t m, nsl_conv_me
 }
 
 int nsl_conv_deconvolution(double s[], size_t n, double r[], size_t m, nsl_conv_type_type type, int normalize, int wrap, double out[]) {
+	/* only supported by FFT method */
 	return nsl_conv_fft_type(s, n, r, m, nsl_conv_direction_backward, type, out);
-
-	return 0;
 }
 
 int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, int normalize, int wrap, double out[]) {
@@ -145,10 +144,21 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 	return status;
 }
 
-/* TODO: implement using GSL and FFTW */
-int nsl_conv_fft(double s[], double r[], size_t n, nsl_conv_direction_type dir, double out[]) {
+/* TODO: implement
+int nsl_conv_fft_FFTW(double s[], double r[], size_t n, nsl_conv_direction_type dir, double out[]) {
+} */
+
+int nsl_conv_fft_GSL(double s[], double r[], size_t n, nsl_conv_direction_type dir, double out[]) {
 	/* TODO */
-	return 0;
+}
+
+int nsl_conv_fft(double s[], double r[], size_t n, nsl_conv_direction_type dir, double out[]) {
+	/* TODO: enable if implemented */
+/* #ifdef HAVE_FFTW3
+	return nsl_conv_fft_FFTW(s, r, n, dir, out);
+#else */
+	return nsl_conv_fft_GSL(s, r, n, dir, out);
+/* #endif */
 }
 
 /* adapted from SciDAVis */
