@@ -85,10 +85,6 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 		setModel();
 
 	//Signals/Slots
-#ifdef HAVE_MQTT
-	connect(m_importFileWidget, &ImportFileWidget::subscriptionsChanged, this, &ImportFileDialog::checkOkButton);
-	connect(m_importFileWidget, &ImportFileWidget::checkFileType, this, &ImportFileDialog::checkOkButton);
-#endif
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -112,13 +108,17 @@ void ImportFileDialog::loadSettings() {
 	m_importFileWidget->showOptions(m_showOptions);
 
 	//do the signal-slot connections after all settings where loaded in import file widget and check the OK button after this
-	connect(m_importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
-	connect(m_importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
-	connect(m_importFileWidget, SIGNAL(sourceTypeChanged()), this, SLOT(checkOkButton()));
-	connect(m_importFileWidget, SIGNAL(hostChanged()), this, SLOT(checkOkButton()));
-	connect(m_importFileWidget, SIGNAL(portChanged()), this, SLOT(checkOkButton()));
-	connect(m_importFileWidget, SIGNAL(previewRefreshed()), this, SLOT(checkOkButton()));
-	connect(m_optionsButton, SIGNAL(clicked()), this, SLOT(toggleOptions()));
+	connect(m_importFileWidget, &ImportFileWidget::checkedFitsTableToMatrix, this, &ImportFileDialog::checkOnFitsTableToMatrix);
+	connect(m_importFileWidget, static_cast<void (ImportFileWidget::*)()>(&ImportFileWidget::fileNameChanged), this, &ImportFileDialog::checkOkButton);
+	connect(m_importFileWidget, static_cast<void (ImportFileWidget::*)()>(&ImportFileWidget::sourceTypeChanged), this, &ImportFileDialog::checkOkButton);
+	connect(m_importFileWidget, &ImportFileWidget::hostChanged, this, &ImportFileDialog::checkOkButton);
+	connect(m_importFileWidget, &ImportFileWidget::portChanged, this, &ImportFileDialog::checkOkButton);
+	connect(m_importFileWidget, &ImportFileWidget::previewRefreshed, this, &ImportFileDialog::checkOkButton);
+#ifdef HAVE_MQTT
+	connect(m_importFileWidget, &ImportFileWidget::subscriptionsChanged, this, &ImportFileDialog::checkOkButton);
+	connect(m_importFileWidget, &ImportFileWidget::checkFileType, this, &ImportFileDialog::checkOkButton);
+#endif
+	connect(m_optionsButton, &QPushButton::clicked, this, &ImportFileDialog::toggleOptions);
 
 	checkOkButton();
 
@@ -149,7 +149,7 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
 	progressBar->setRange(0, 100);
-    connect(source->filter(), SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
+    connect(source->filter(), &AbstractFileFilter::completed, progressBar, &QProgressBar::setValue);
 
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
