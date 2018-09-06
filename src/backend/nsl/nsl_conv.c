@@ -149,7 +149,44 @@ int nsl_conv_fft_FFTW(double s[], double r[], size_t n, nsl_conv_direction_type 
 } */
 
 int nsl_conv_fft_GSL(double s[], double r[], size_t n, nsl_conv_direction_type dir, double out[]) {
-	/* TODO */
+	gsl_fft_real_workspace *work = gsl_fft_real_workspace_alloc(n);
+	gsl_fft_real_wavetable *real = gsl_fft_real_wavetable_alloc(n);
+
+	/* FFT s and r */
+	gsl_fft_real_transform(s, 1, n, real, work);
+	gsl_fft_real_transform(r, 1, n, real, work);
+	gsl_fft_real_wavetable_free(real);
+
+	size_t i;
+	/* calculate halfcomplex product/quotient depending on direction */
+	if (dir == nsl_conv_direction_forward) {
+		out[0] = s[0]*r[0];
+		for (i = 1; i < n; i++) {
+			if (i%2) { /* Re */
+				out[i] = s[i]*r[i];
+				if (i < n-1) /* when n is even last value is real */
+					out[i] -= s[i+1]*r[i+1];
+			} else 	/* Im */
+				out[i] = s[i-1]*r[i] + s[i]*r[i-1];
+		}
+	} else {
+		out[0] = s[0]/r[0];
+		for (i = 1; i < n; i++) {
+			if (i%2) { /* Re */
+				if (i == n-1) /* when n is even last value is real */
+					out[i] = s[i]/r[i];
+				else
+					out[i] = (s[i]*r[i] + s[i+1]*r[i+1])/(r[i]*r[i] + r[i+1]*r[i+1]);
+			} else 	/* Im */
+				out[i] = (s[i]*r[i-1] - s[i-1]*r[i])/(r[i-1]*r[i-1] + r[i]*r[i]);
+		}
+	}
+
+	/* back transform */
+	gsl_fft_halfcomplex_wavetable *hc = gsl_fft_halfcomplex_wavetable_alloc(n);
+	gsl_fft_halfcomplex_inverse(out, 1, n, hc, work);
+	gsl_fft_halfcomplex_wavetable_free(hc);
+	gsl_fft_real_workspace_free(work);
 }
 
 int nsl_conv_fft(double s[], double r[], size_t n, nsl_conv_direction_type dir, double out[]) {
