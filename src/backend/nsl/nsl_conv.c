@@ -140,9 +140,16 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 	for (i = m; i < size; i++)
 		rtmp[i] = 0;
 
-	int status = nsl_conv_fft(stmp, rtmp, size, dir, out);
-
+#ifdef HAVE_FFTW3
+	return nsl_conv_fft_FFTW(stmp, rtmp, size, dir, out);
+	/* s and r handled in function */
+#else
+	int status;
+	status = nsl_conv_fft_GSL(stmp, rtmp, size, dir, out);
+	free(s);
+	free(r);
 	return status;
+#endif
 }
 
 #ifdef HAVE_FFTW3
@@ -255,16 +262,3 @@ int nsl_conv_fft_GSL(double s[], double r[], size_t n, nsl_conv_direction_type d
 	return 0;
 }
 
-int nsl_conv_fft(double s[], double r[], size_t n, nsl_conv_direction_type dir, double out[]) {
-	int status;
-#ifdef HAVE_FFTW3
-	return nsl_conv_fft_FFTW(s, r, n, dir, out);
-	/* s and r handled in function */
-#else
-	status = nsl_conv_fft_GSL(s, r, n, dir, out);
-	free(s);
-	free(r);
-#endif
-
-	return status;
-}
