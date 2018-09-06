@@ -39,7 +39,7 @@ const char* nsl_conv_type_name[] = {i18n("linear (zero-padded)"), i18n("circular
 int nsl_conv_convolution_direction(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, nsl_conv_method_type method, nsl_conv_type_type type,
 		int normalize, int wrap, double out[]) {
 	if (dir == nsl_conv_direction_forward)
-		return nsl_conv_convolution(s, n, r, m, type, method, normalize, wrap, out);
+		return nsl_conv_convolution(s, n, r, m, method, type, normalize, wrap, out);
 	else
 		return nsl_conv_deconvolution(s, n, r, m, type, normalize, wrap, out);
 }
@@ -90,36 +90,59 @@ int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, int norma
 
 int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, int normalize, int wrap, double out[]) {
 	size_t i, j, size = GSL_MAX(n,m), wi = 0;
-        double norm = 1;
-        if (normalize)
+	double norm = 1;
+	if (normalize)
 		norm = cblas_dnrm2(m, r, 1);
-        if (wrap)
+	if (wrap)
 		nsl_stats_maximum(r, m, &wi);
 
-        for (j = 0; j < size; j++) {
-                int index;
-                double res = 0;
-                for (i = 0; i < n; i++) {
-                        index = j-i;
-                        if (index < 0)
-                                index += size;
-                        if (index < (int)m)
-                                res += s[i]*r[index]/norm;
-                }
-                index = j - wi;
-                if (index < 0)
-                        index += size;
-                out[index] = res;
-        }
+	for (j = 0; j < size; j++) {
+		int index;
+		double res = 0;
+		for (i = 0; i < n; i++) {
+			index = j-i;
+			if (index < 0)
+				index += size;
+			if (index < (int)m)
+				res += s[i]*r[index]/norm;
+		}
+		index = j - wi;
+		if (index < 0)
+			index += size;
+		out[index] = res;
+	}
 
 	return 0;
 }
 
-/* TODO: implement */
 int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, nsl_conv_type_type type, double out[]) {
-	/* zero pad arrays */
-	/* call nsl_conv_fft() */
-	return 0;
+	size_t i, size;
+	if (type == nsl_conv_type_linear)
+		size = n + m - 1;
+	else	// circular
+		size = GSL_MAX(n, m);
+
+	// zero-padded arrays
+	double *stmp = (double*)malloc(size*sizeof(double));
+	double *rtmp = (double*)malloc(size*sizeof(double));
+	if (stmp == NULL || rtmp == NULL) {
+		puts("ERROR: zero-padding data");
+		return -1;
+	}
+	for (i = 0; i < n; i++)
+		stmp[i] = s[i];
+	for (i = n; i < size; i++)
+		stmp[i] = 0;
+	for (i = 0; i < m; i++)
+		rtmp[i] = r[i];
+	for (i = m; i < size; i++)
+		rtmp[i] = 0;
+
+	int status = nsl_conv_fft(stmp, rtmp, size, dir, out);
+	free(stmp);
+	free(rtmp);
+
+	return status;
 }
 
 /* TODO: implement using GSL and FFTW */
