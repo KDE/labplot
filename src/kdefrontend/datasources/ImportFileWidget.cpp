@@ -4,7 +4,7 @@ Project              : LabPlot
 Description          : import file data widget
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2009-2018 Alexander Semke (alexander.semke@web.de)
 Copyright            : (C) 2017-2018 Fabian Kristof (fkristofszabolcs@gmail.com)
 Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
@@ -1878,6 +1878,8 @@ void ImportFileWidget::refreshPreview() {
 		JsonFilter *filter = (JsonFilter*)this->currentFileFilter();
 		m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
 		importedStrings = filter->preview(fileName);
+
+		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
 	}
