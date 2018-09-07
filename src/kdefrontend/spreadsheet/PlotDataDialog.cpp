@@ -202,27 +202,22 @@ void PlotDataDialog::processColumns() {
 	SpreadsheetView* view = reinterpret_cast<SpreadsheetView*>(m_spreadsheet->view());
 	QVector<Column*> selectedColumns = view->selectedColumns(true);
 
-	if (!selectedColumns.size()) {
-		//use all spreadsheet columns if no columns are selected
-		//skip error and non-plottable columns
-		for (Column* col : m_spreadsheet->children<Column>())
-			if ((col->plotDesignation() == AbstractColumn::X || col->plotDesignation() == AbstractColumn::Y
-				|| col->plotDesignation() == AbstractColumn::NoDesignation) && col->isPlottable())
-				m_columns << col;
+	//use all spreadsheet columns if no columns are selected
+	if (selectedColumns.isEmpty())
+		selectedColumns = m_spreadsheet->children<Column>();
 
-		//disable everything if the spreadsheet doesn't have any columns
-		if (!m_columns.size()) {
-			ui->gbData->setEnabled(false);
-			ui->gbCurvePlacement->setEnabled(false);
-			ui->gbPlotPlacement->setEnabled(false);
-			return;
-		}
-	} else {
-		//use selected columns, skip error and non-plottable columns
-		for (Column* col : selectedColumns)
-			if ((col->plotDesignation() == AbstractColumn::X || col->plotDesignation() == AbstractColumn::Y
-				|| col->plotDesignation() == AbstractColumn::NoDesignation) && col->isPlottable())
-				m_columns << col;
+	//skip error and non-plottable columns
+	for (Column* col : selectedColumns) {
+		if ((col->plotDesignation() == AbstractColumn::X || col->plotDesignation() == AbstractColumn::Y
+			|| col->plotDesignation() == AbstractColumn::NoDesignation) && col->isPlottable())
+			m_columns << col;
+	}
+
+	//disable everything if the spreadsheet doesn't have any columns to plot
+	if (m_columns.isEmpty()) {
+		ui->gbCurvePlacement->setEnabled(false);
+		ui->gbPlotPlacement->setEnabled(false);
+		return;
 	}
 
 	//determine the column names and the name of the first column having "X" as the plot designation
@@ -569,7 +564,9 @@ void PlotDataDialog::plotPlacementChanged() {
 void PlotDataDialog::checkOkButton() {
 	bool enable = false;
 	QString msg;
-	if (ui->rbPlotPlacement1->isChecked()) {
+	if (ui->cbXColumn->currentIndex() == -1 || ui->cbYColumn->currentIndex() == -1)
+		msg = i18n("No data selected to plot.");
+	else if (ui->rbPlotPlacement1->isChecked()) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
 		enable = (aspect!=nullptr);
 		if (!enable)
