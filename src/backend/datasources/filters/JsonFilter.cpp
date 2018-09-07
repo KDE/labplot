@@ -267,13 +267,17 @@ int JsonFilterPrivate::parseColumnModes(QJsonValue row, QString rowName) {
 	columnModes.resize(m_actualCols);
 
 	int colIndexInContainer = startColumn - 1;
-	for(int i = 0; i < m_actualCols; ++i){
-		if((createIndexEnabled || importObjectNames) && i == 0){
+	for(int i = 0; i < m_actualCols; ++i) {
+		if(i == 0 && (createIndexEnabled || importObjectNames)) {
+			//add index column if required
 			if(createIndexEnabled)
-				columnModes[i] = AbstractColumn::Integer;
+				columnModes[0] = AbstractColumn::Integer;
+
+			//add column for object names if required
 			if(importObjectNames)
-				columnModes[i + createIndexEnabled] = AbstractFileFilter::columnMode(rowName, dateTimeFormat, numberFormat);
-			i = i + createIndexEnabled + importObjectNames - 1;
+				columnModes[(int)createIndexEnabled] = AbstractFileFilter::columnMode(rowName, dateTimeFormat, numberFormat);
+
+			i = createIndexEnabled + importObjectNames - 1;
 			continue;
 		}
 
@@ -324,10 +328,20 @@ int JsonFilterPrivate::parseColumnModes(QJsonValue row, QString rowName) {
 		colIndexInContainer++;
 	}
 
-	if(importObjectNames)
-		vectorNames.prepend("row name");
+	if(importObjectNames) {
+		const AbstractColumn::ColumnMode mode = columnModes[(int)createIndexEnabled];
+		if (mode == AbstractColumn::DateTime)
+			vectorNames.prepend(QLatin1String("timestamp"));
+		else if (mode == AbstractColumn::Month)
+			vectorNames.prepend(QLatin1String("month"));
+		if (mode == AbstractColumn::Day)
+			vectorNames.prepend(QLatin1String("day"));
+		else
+			vectorNames.prepend(QLatin1String("name"));
+	}
+
 	if(createIndexEnabled)
-		vectorNames.prepend("index");
+		vectorNames.prepend(QLatin1String("index"));
 
 	return 0;
 }
@@ -645,7 +659,7 @@ generates the preview for document \c m_preparedDoc.
 */
 QVector<QStringList> JsonFilterPrivate::preview() {
 	QVector<QStringList> dataStrings;
-	int rowOffset = startRow - 1;
+	const int rowOffset = startRow - 1;
 	DEBUG("reading " << m_actualRows << " lines");
 	for(int i = 0; i < m_actualRows; ++i) {
 		QString rowName;
