@@ -54,7 +54,7 @@ int nsl_conv_convolution(double s[], size_t n, double r[], size_t m, nsl_conv_me
 		else if (type == nsl_conv_type_circular)
 			return nsl_conv_circular_direct(s, n, r, m, normalize, wrap, out);
 	} else {
-		return nsl_conv_fft_type(s, n, r, m, nsl_conv_direction_forward, type, out);
+		return nsl_conv_fft_type(s, n, r, m, nsl_conv_direction_forward, type, normalize, out);
 	}
 
 	return 0;
@@ -62,7 +62,7 @@ int nsl_conv_convolution(double s[], size_t n, double r[], size_t m, nsl_conv_me
 
 int nsl_conv_deconvolution(double s[], size_t n, double r[], size_t m, nsl_conv_type_type type, int normalize, int wrap, double out[]) {
 	/* only supported by FFT method */
-	return nsl_conv_fft_type(s, n, r, m, nsl_conv_direction_backward, type, out);
+	return nsl_conv_fft_type(s, n, r, m, nsl_conv_direction_backward, type, normalize, out);
 }
 
 int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, int normalize, int wrap, double out[]) {
@@ -117,12 +117,16 @@ int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, int nor
 	return 0;
 }
 
-int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, nsl_conv_type_type type, double out[]) {
+int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, nsl_conv_type_type type, int normalize, double out[]) {
 	size_t i, size;
 	if (type == nsl_conv_type_linear)
 		size = n + m - 1;
 	else	// circular
 		size = GSL_MAX(n, m);
+
+	double norm = 1.;
+	if (normalize)
+		norm = cblas_dnrm2(m, r, 1);
 
 #ifdef HAVE_FFTW3
 	// already zero-pad here for FFT method and FFTW r2c
@@ -142,7 +146,7 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 	for (i = n; i < size; i++)
 		stmp[i] = 0;
 	for (i = 0; i < m; i++)
-		rtmp[i] = r[i];
+		rtmp[i] = r[i]/norm;
 	for (i = m; i < size; i++)
 		rtmp[i] = 0;
 
