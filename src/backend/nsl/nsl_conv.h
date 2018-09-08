@@ -56,22 +56,21 @@ extern const char* nsl_conv_wrap_name[];
 /* calculate convolution/deconvolution
  * of signal s of size n with response r of size m
  */
-int nsl_conv_convolution_direction(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type, nsl_conv_method_type, nsl_conv_type_type, int normalize, int wrap, double out[]);
+int nsl_conv_convolution_direction(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type, nsl_conv_method_type, nsl_conv_type_type, int normalize, nsl_conv_wrap_type wrap, double out[]);
 
-int nsl_conv_convolution(double s[], size_t n, double r[], size_t m, nsl_conv_method_type, nsl_conv_type_type, int normalize, int wrap, double out[]);
+int nsl_conv_convolution(double s[], size_t n, double r[], size_t m, nsl_conv_method_type, nsl_conv_type_type, int normalize, nsl_conv_wrap_type wrap, double out[]);
 /* deconvolution only supported by FFT method */
-int nsl_conv_deconvolution(double s[], size_t n, double r[], size_t m, nsl_conv_type_type, int normalize, int wrap, double out[]);
+int nsl_conv_deconvolution(double s[], size_t n, double r[], size_t m, nsl_conv_type_type, int normalize, nsl_conv_wrap_type wrap, double out[]);
 
 /* linear/circular convolution using direct method
  * s and r are untouched
  */
-int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, int normalize, int wrap, double out[]);
-int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, int normalize, int wrap, double out[]);
+int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, int normalize, nsl_conv_wrap_type wrap, double out[]);
+int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, int normalize, nsl_conv_wrap_type wrap, double out[]);
 /* linear/circular convolution/deconvolution using FFT method
  * s and r are untouched
- * TODO: wrap option
  */
-int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type, nsl_conv_type_type, int normalize, double out[]);
+int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type, nsl_conv_type_type, int normalize, nsl_conv_wrap_type wrap, double out[]);
 /* actual FFT method calculation using zero-padded arrays
  * s and r are overwritten
  */
