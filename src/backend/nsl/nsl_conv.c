@@ -71,9 +71,11 @@ int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, int norma
 	double norm = 1;
 	if (normalize)
 		norm = cblas_dnrm2(m, r, 1);
-	/*TODO use wrap */
+
 	if (wrap == nsl_conv_wrap_max)
 		nsl_stats_maximum(r, m, &wi);
+	else if (wrap == nsl_conv_wrap_center)
+		wi = m/2;
 
 	for (j = 0; j < n + m - 1; j++) {
 		int index;
@@ -97,9 +99,11 @@ int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, int nor
 	double norm = 1;
 	if (normalize)
 		norm = cblas_dnrm2(m, r, 1);
-	/*TODO use wrap */
+
 	if (wrap == nsl_conv_wrap_max)
 		nsl_stats_maximum(r, m, &wi);
+	else if (wrap == nsl_conv_wrap_center)
+		wi = m/2;
 
 	for (j = 0; j < size; j++) {
 		int index;
@@ -121,7 +125,7 @@ int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, int nor
 }
 
 int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, nsl_conv_type_type type, int normalize, nsl_conv_wrap_type wrap, double out[]) {
-	size_t i, size;
+	size_t i, size, wi = 0;
 	if (type == nsl_conv_type_linear)
 		size = n + m - 1;
 	else	// circular
@@ -131,7 +135,10 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 	if (normalize)
 		norm = cblas_dnrm2(m, r, 1);
 
-	/*TODO use wrap */
+	if (wrap == nsl_conv_wrap_max)
+		nsl_stats_maximum(r, m, &wi);
+	else if (wrap == nsl_conv_wrap_center)
+		wi = m/2;
 
 #ifdef HAVE_FFTW3
 	// already zero-pad here for FFT method and FFTW r2c
@@ -150,8 +157,10 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 		stmp[i] = s[i];
 	for (i = n; i < size; i++)
 		stmp[i] = 0;
-	for (i = 0; i < m; i++)
-		rtmp[i] = r[i]/norm;
+	for (i = 0; i < m; i++) {
+		size_t index = (i + wi) % m;
+		rtmp[index] = r[index]/norm;	/* wrap and norm response */
+	}
 	for (i = m; i < size; i++)
 		rtmp[i] = 0;
 
