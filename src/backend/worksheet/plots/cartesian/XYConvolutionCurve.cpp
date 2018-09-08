@@ -228,10 +228,10 @@ void XYConvolutionCurvePrivate::recalculate() {
 
 	// convolution settings
 	const nsl_conv_direction_type direction = convolutionData.direction;
-	const nsl_conv_type_type type = nsl_conv_type_linear;//TODO: convolutionData.type;
-	const nsl_conv_method_type method = nsl_conv_method_auto;//TODO: convolutionData.method;
-	const nsl_conv_norm_type norm = nsl_conv_norm_none;	//TODO: convolutionData.normalize;
-	const nsl_conv_wrap_type wrap = nsl_conv_wrap_none;//TODO: convolutionData.wrap;
+	const nsl_conv_type_type type = convolutionData.type;
+	const nsl_conv_method_type method = convolutionData.method;
+	const nsl_conv_norm_type norm = convolutionData.normalize;
+	const nsl_conv_wrap_type wrap = convolutionData.wrap;
 
 	DEBUG("signal n = " << n << ", response m = " << m);
 
@@ -284,7 +284,10 @@ void XYConvolutionCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "xRangeMin", QString::number(d->convolutionData.xRange.first()) );
 	writer->writeAttribute( "xRangeMax", QString::number(d->convolutionData.xRange.last()) );
 	writer->writeAttribute( "direction", QString::number(d->convolutionData.direction) );
-	//TODO: write new options
+	writer->writeAttribute( "type", QString::number(d->convolutionData.type) );
+	writer->writeAttribute( "method", QString::number(d->convolutionData.method) );
+	writer->writeAttribute( "normalize", QString::number(d->convolutionData.normalize) );
+	writer->writeAttribute( "wrap", QString::number(d->convolutionData.wrap) );
 	writer->writeEndElement();// convolutionData
 
 	// convolution results (generated columns)
@@ -329,7 +332,11 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("autoRange", convolutionData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", convolutionData.xRange.first());
 			READ_DOUBLE_VALUE("xRangeMax", convolutionData.xRange.last());
-			//TODO: read new options
+			READ_INT_VALUE("direction", convolutionData.direction, nsl_conv_direction_type);
+			READ_INT_VALUE("type", convolutionData.type, nsl_conv_type_type);
+			READ_INT_VALUE("method", convolutionData.method, nsl_conv_method_type);
+			READ_INT_VALUE("normalize", convolutionData.normalize, nsl_conv_norm_type);
+			READ_INT_VALUE("wrap", convolutionData.wrap, nsl_conv_wrap_type);
 		} else if (!preview && reader->name() == "convolutionResult") {
 			attribs = reader->attributes();
 			READ_INT_VALUE("available", convolutionResult.available, int);

@@ -101,6 +101,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 		uiGeneralTab.cbDirection->addItem(i18n(nsl_conv_direction_name[i]));
 	for (int i = 0; i < NSL_CONV_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_conv_type_name[i]));
+	// nsl_conv_method_type not exposed to user
 	for (int i = 0; i < NSL_CONV_WRAP_COUNT; i++)
 		uiGeneralTab.cbWrap->addItem(i18n(nsl_conv_wrap_name[i]));
 
@@ -165,6 +166,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 
 	uiGeneralTab.cbDirection->setCurrentIndex(m_convolutionData.direction);
 	uiGeneralTab.cbType->setCurrentIndex(m_convolutionData.type);
+	//m_convolutionData.method not used
 	uiGeneralTab.cbWrap->setCurrentIndex(m_convolutionData.wrap);
 	if (m_convolutionData.normalize == nsl_conv_norm_euclidean)
 		uiGeneralTab.cbNorm->setChecked(true);

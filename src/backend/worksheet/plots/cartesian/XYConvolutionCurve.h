@@ -41,11 +41,12 @@ Q_OBJECT
 
 public:
 	struct ConvolutionData {
-		ConvolutionData() : direction(nsl_conv_direction_forward), type(nsl_conv_type_linear), normalize(nsl_conv_norm_none), wrap(nsl_conv_wrap_none),
+		ConvolutionData() : direction(nsl_conv_direction_forward), type(nsl_conv_type_linear), method(nsl_conv_method_auto), normalize(nsl_conv_norm_none), wrap(nsl_conv_wrap_none),
 			autoRange(true), xRange(2) {};
 
 		nsl_conv_direction_type direction;	// forward (convolution) or backward (deconvolution)
 		nsl_conv_type_type type;	// linear or circular
+		nsl_conv_method_type method;	// how to calculate convolution (auto, direct or FFT method)
 		nsl_conv_norm_type normalize;	// normalization of response
 		nsl_conv_wrap_type wrap;	// wrap repsonse
 		bool autoRange;			// use all data?
