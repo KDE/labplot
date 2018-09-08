@@ -220,9 +220,10 @@ void XYConvolutionCurvePrivate::recalculate() {
 	double* y2data = y2dataVector.data();
 
 	// convolution settings
+	const nsl_conv_direction_type direction = convolutionData.direction;
 	const nsl_conv_type_type type = nsl_conv_type_linear;//TODO: convolutionData.type;
 	const nsl_conv_method_type method = nsl_conv_method_auto;//TODO: convolutionData.method;
-	const nsl_conv_direction_type direction = convolutionData.direction;
+	// TODO: mode: all, same, valid
 	const bool normalize = false;//TODO: convolutionData.normalize;
 	const nsl_conv_wrap_type wrap = nsl_conv_wrap_none;//TODO: convolutionData.wrap;
 
@@ -231,7 +232,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 	size_t np = n;
 
 	double* out = nullptr;	//TODO
-	nsl_conv_convolution_direction(ydata, n, y2data, n, direction, method, type, normalize, wrap, out);
+	nsl_conv_convolution_direction(ydata, n, y2data, n, direction, type, method, normalize, wrap, out);
 
 	xVector->resize((int)np);
 	yVector->resize((int)np);

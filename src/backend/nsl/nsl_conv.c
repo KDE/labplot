@@ -36,19 +36,19 @@
 #include "backend/nsl/nsl_stats.h"
 
 const char* nsl_conv_direction_name[] = {i18n("forward (convolution)"), i18n("backward (deconvolution)")};
-const char* nsl_conv_method_name[] = {i18n("auto"), i18n("direct"), i18n("FFT")};
 const char* nsl_conv_type_name[] = {i18n("linear (zero-padded)"), i18n("circular")};
+const char* nsl_conv_method_name[] = {i18n("auto"), i18n("direct"), i18n("FFT")};
 const char* nsl_conv_wrap_name[] = {i18n("none"), i18n("maximum"), i18n("center (acausal)")};
 
-int nsl_conv_convolution_direction(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, nsl_conv_method_type method, nsl_conv_type_type type,
+int nsl_conv_convolution_direction(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, nsl_conv_type_type type, nsl_conv_method_type method,
 		int normalize, nsl_conv_wrap_type wrap, double out[]) {
 	if (dir == nsl_conv_direction_forward)
-		return nsl_conv_convolution(s, n, r, m, method, type, normalize, wrap, out);
+		return nsl_conv_convolution(s, n, r, m, type, method, normalize, wrap, out);
 	else
 		return nsl_conv_deconvolution(s, n, r, m, type, normalize, wrap, out);
 }
 
-int nsl_conv_convolution(double s[], size_t n, double r[], size_t m, nsl_conv_method_type method, nsl_conv_type_type type, int normalize, nsl_conv_wrap_type wrap, double out[]) {
+int nsl_conv_convolution(double s[], size_t n, double r[], size_t m, nsl_conv_type_type type, nsl_conv_method_type method, int normalize, nsl_conv_wrap_type wrap, double out[]) {
 	if (method == nsl_conv_method_direct || (method == nsl_conv_method_auto && GSL_MAX_INT(n,m) <= NSL_CONV_METHOD_BORDER)) {
 		if (type == nsl_conv_type_linear)
 			return nsl_conv_linear_direct(s, n, r, m, normalize, wrap, out);
