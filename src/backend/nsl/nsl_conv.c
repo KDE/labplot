@@ -68,7 +68,7 @@ int nsl_conv_deconvolution(double s[], size_t n, double r[], size_t m, nsl_conv_
 }
 
 int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]) {
-	size_t i, j, wi = 0;
+	size_t i, j, size = n + m -1, wi = 0;
 	double norm = 1;
 	if (normalize == nsl_conv_norm_euclidean)
 		norm = cblas_dnrm2(m, r, 1);
@@ -78,7 +78,7 @@ int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, nsl_conv_
 	else if (wrap == nsl_conv_wrap_center)
 		wi = m/2;
 
-	for (j = 0; j < n + m - 1; j++) {
+	for (j = 0; j < size; j++) {
 		int index;
 		double res = 0;
 		for (i = 0; i < n; i++) {
@@ -88,7 +88,7 @@ int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, nsl_conv_
 		}
 		index = j - wi;
 		if (index < 0)
-			index += n + m - 1;
+			index += size;
 		out[index] = res;
 	}
 

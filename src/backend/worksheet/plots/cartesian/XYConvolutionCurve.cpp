@@ -44,6 +44,10 @@
 #include <QElapsedTimer>
 #include <QThreadPool>
 
+extern "C" {
+#include <gsl/gsl_math.h>
+}
+
 XYConvolutionCurve::XYConvolutionCurve(const QString& name)
 		: XYAnalysisCurve(name, new XYConvolutionCurvePrivate(this)) {
 }
@@ -141,7 +145,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 		yVector->clear();
 	}
 
-	// clear the previous result
+	//clear the previous result
 	convolutionResult = XYConvolutionCurve::ConvolutionResult();
 
 	//determine the data source columns
@@ -157,7 +161,8 @@ void XYConvolutionCurvePrivate::recalculate() {
 		//curve columns as data source
 		tmpXDataColumn = dataSourceCurve->xColumn();
 		tmpYDataColumn = dataSourceCurve->yColumn();
-		//TODO: tmpY2DataColumn = dataSourceCurve->y2Column();
+		//TODO: where to get second y-column?
+		//tmpY2DataColumn = dataSourceCurve->y2Column();
 	}
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
@@ -167,6 +172,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 	}
 
 	//check column sizes
+	//TODO: support no x-Column
 	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
 		convolutionResult.available = true;
 		convolutionResult.valid = false;
@@ -205,8 +211,9 @@ void XYConvolutionCurvePrivate::recalculate() {
 		}
 	}
 
-	const size_t n = (size_t)xdataVector.size();	// number of data points to convolute
-	if (n < 2) {
+	const size_t n = (size_t)ydataVector.size();	// number of points for signal
+	const size_t m = (size_t)y2dataVector.size();	// number of points for response
+	if (n < 1 || m < 1) {
 		convolutionResult.available = true;
 		convolutionResult.valid = false;
 		convolutionResult.status = i18n("Not enough data points available.");
@@ -226,17 +233,24 @@ void XYConvolutionCurvePrivate::recalculate() {
 	const nsl_conv_norm_type norm = nsl_conv_norm_none;	//TODO: convolutionData.normalize;
 	const nsl_conv_wrap_type wrap = nsl_conv_wrap_none;//TODO: convolutionData.wrap;
 
-///////////////////////////////////////////////////////////
-	int status = 0;
-	size_t np = n;
+	DEBUG("signal n = " << n << ", response m = " << m);
 
-	double* out = nullptr;	//TODO
-	nsl_conv_convolution_direction(ydata, n, y2data, n, direction, type, method, norm, wrap, out);
+///////////////////////////////////////////////////////////
+	size_t np;
+	if (type == nsl_conv_type_linear)
+		np = n + m - 1;
+	else
+		np = GSL_MAX(n, m);
+
+	double* out = (double*)malloc(np * sizeof(double));
+	int status = nsl_conv_convolution_direction(ydata, n, y2data, m, direction, type, method, norm, wrap, out);
 
 	xVector->resize((int)np);
 	yVector->resize((int)np);
+	//TODO: handle xdata
 	memcpy(xVector->data(), xdata, np * sizeof(double));
-	memcpy(yVector->data(), ydata, np * sizeof(double));
+	memcpy(yVector->data(), out, np * sizeof(double));
+	free(out);
 ///////////////////////////////////////////////////////////
 
 	//write the result
@@ -244,7 +258,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 	convolutionResult.valid = true;
 	convolutionResult.status = QString::number(status);
 	convolutionResult.elapsedTime = timer.elapsed();
-	convolutionResult.value = ydata[np-1];
+//	convolutionResult.value = ydata[np-1];
 
 	//redraw the curve
 	emit q->dataChanged();
