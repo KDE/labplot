@@ -24,7 +24,10 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include <QtTest/QtTest>
+#ifndef MQTTUNITTEST_H
+#define MQTTUNITTEST_H
+
+#include <QtTest>
 
 class MQTTUnitTest : public QObject {
 #ifdef HAVE_MQTT
@@ -55,3 +58,5 @@ private:
 	QString m_dataDir;
 #endif //HAVE_MQTT
 };
+
+#endif

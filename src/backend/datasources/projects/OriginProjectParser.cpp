@@ -1923,7 +1923,7 @@ QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const 
 	replacements << qMakePair(QString("€"), QString("&euro;"));
 	replacements << qMakePair(QString("£"), QString("&pound;"));
 	replacements << qMakePair(QString("¥"), QString("&yen;"));
-	replacements << qMakePair(QString("¤"), QString("&curren;"));
+	replacements << qMakePair(QString("¤"), QString("&curren;")); // krazy:exclude=spelling
 	replacements << qMakePair(QString("¦"), QString("&brvbar;"));
 	replacements << qMakePair(QString("§"), QString("&sect;"));
 	replacements << qMakePair(QString("µ"), QString("&micro;"));

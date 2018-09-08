@@ -24,6 +24,9 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef ASCIIFILTERTEST_H
+#define ASCIIFILTERTEST_H
+
 #include <QtTest>
 
 class AsciiFilterTest : public QObject {
@@ -62,3 +65,4 @@ private slots:
 private:
 	QString m_dataDir;
 };
+#endif

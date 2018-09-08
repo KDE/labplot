@@ -24,7 +24,10 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include <QtTest/QtTest>
+#ifndef PROJECTIMPORTTEST_H
+#define PROJECTIMPORTTEST_H
+
+#include <QtTest>
 
 class ProjectImportTest : public QObject {
 	Q_OBJECT
@@ -44,3 +47,4 @@ private slots:
 private:
 	QString m_dataDir;
 };
+#endif

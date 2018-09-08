@@ -25,6 +25,9 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef FITTEST_H
+#define FITTEST_H
+
 #include <QtTest>
 #include <backend/lib/macros.h>	// DEBUG()
 
@@ -97,3 +100,4 @@ private slots:
 	void testLinearGP_PY_xyerror_custom_instrumental_weight();
 	void testLinearGP_PY_xyerror_custom_inverse_weight();
 };
+#endif

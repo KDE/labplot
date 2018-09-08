@@ -1,7 +1,7 @@
 #ifndef JSONFILTERTEST_H
 #define JSONFILTERTEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class JsonFilterTest : public QObject {
 	Q_OBJECT

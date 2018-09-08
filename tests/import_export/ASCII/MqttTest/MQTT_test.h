@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MQTT_TEST_H
+#define MQTT_TEST_H
 
 #include <QMainWindow>
 #include <QtMqtt/QMqttClient>
@@ -54,4 +54,4 @@ private:
 	QVector<double> m_x;
 };
 
-#endif // MAINWINDOW_H
+#endif // MQTT_TEST_H

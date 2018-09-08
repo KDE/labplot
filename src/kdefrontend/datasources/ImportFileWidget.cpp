@@ -207,7 +207,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	connect( ui.leFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
 	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
-	connect( ui.tvJson, SIGNAL(clicked(const QModelIndex&)), this, SLOT(refreshPreview()));
+	connect( ui.tvJson, SIGNAL(clicked(QModelIndex)), this, SLOT(refreshPreview()));
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
 	connect( ui.bFileInfo, SIGNAL(clicked()), this, SLOT (fileInfoDialog()) );
 	connect( ui.bSaveFilter, SIGNAL(clicked()), this, SLOT (saveFilter()) );
@@ -2413,7 +2413,7 @@ void ImportFileWidget::mqttSubscribe() {
 				emit subscriptionsChanged();
 			}
 
-			if (name.endsWith("#")) {
+			if (name.endsWith('#'))) {
 				//adding every topic that the subscription contains to twSubscriptions
 				addSubscriptionChildren(item, newTopLevelItem);
 

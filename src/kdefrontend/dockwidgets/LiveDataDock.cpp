@@ -742,7 +742,7 @@ void LiveDataDock::addSubscription() {
 				QTreeWidgetItem* newTopLevelItem = new QTreeWidgetItem(toplevelName);
 				ui.twSubscriptions->addTopLevelItem(newTopLevelItem);
 
-				if(name.endsWith("#")) {
+				if(name.endsWith('#'))) {
 					//adding every topic that the subscription contains to twSubscriptions
 					addSubscriptionChildren(item, newTopLevelItem);
 				}
@@ -752,7 +752,7 @@ void LiveDataDock::addSubscription() {
 					source->addMQTTSubscription(name, ui.cbQoS->currentIndex());
 				}
 
-				if(name.endsWith("#")) {
+				if(name.endsWith('#'))) {
 					//if an already existing subscription contains a topic that the new subscription also contains
 					//we decompose the already existing subscription
 					//by unsubscribing from its topics, that are present in the new subscription as well

@@ -27,8 +27,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "ImportFileWidget.h"
 #include "JsonOptionsWidget.h"
+#include "ImportFileWidget.h"
 #include "backend/datasources/filters/QJsonModel.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/JsonFilter.h"

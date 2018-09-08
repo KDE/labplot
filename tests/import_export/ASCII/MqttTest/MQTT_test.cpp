@@ -1,9 +1,9 @@
 #include "MQTT_test.h"
 #include "ui_MQTT_test.h"
 
-#include <QtCore/QDateTime>
+#include <QDateTime>
 #include <QtMqtt/QMqttClient>
-#include <QtWidgets/QMessageBox>
+#include <QMessageBox>
 #include <QtMath>
 #include <QTimer>
 
