@@ -114,7 +114,6 @@ void XYConvolutionCurveDock::setupGeneral() {
 	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
 	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
 	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
-	connect( uiGeneralTab.cbAbsolute, SIGNAL(clicked(bool)), this, SLOT(absoluteChanged()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 
 	connect( cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)) );
@@ -498,7 +497,6 @@ void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* colu
 void XYConvolutionCurveDock::curveConvolutionDataChanged(const XYConvolutionCurve::ConvolutionData& convolutionData) {
 	m_initializing = true;
 	m_convolutionData = convolutionData;
-	uiGeneralTab.cbAbsolute->setChecked(m_convolutionData.absolute);
 	this->directionChanged();
 
 	this->showConvolutionResult();

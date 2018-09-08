@@ -223,7 +223,6 @@ void XYConvolutionCurvePrivate::recalculate() {
 	const nsl_conv_direction_type direction = convolutionData.direction;
 	const nsl_conv_type_type type = nsl_conv_type_linear;//TODO: convolutionData.type;
 	const nsl_conv_method_type method = nsl_conv_method_auto;//TODO: convolutionData.method;
-	// TODO: mode: all, same, valid
 	const nsl_conv_norm_type norm = nsl_conv_norm_none;	//TODO: convolutionData.normalize;
 	const nsl_conv_wrap_type wrap = nsl_conv_wrap_none;//TODO: convolutionData.wrap;
 

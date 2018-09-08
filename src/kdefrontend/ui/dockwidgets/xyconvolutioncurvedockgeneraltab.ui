@@ -11,53 +11,40 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="5" column="0">
-    <widget class="QLabel" name="lDataSourceCurve">
+   <item row="16" column="2">
+    <widget class="QCheckBox" name="cbNorm">
      <property name="text">
-      <string>Curve:</string>
+      <string>Normalize</string>
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="lYColumn">
+   <item row="15" column="0">
+    <widget class="QLabel" name="lType">
      <property name="text">
-      <string>y-Data Signal:</string>
+      <string>Type:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="lName">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Name:</string>
-     </property>
-    </widget>
+   <item row="14" column="2" colspan="3">
+    <widget class="QComboBox" name="cbDirection"/>
    </item>
-   <item row="22" column="2">
-    <spacer name="verticalSpacerGeneral">
+   <item row="24" column="3">
+    <spacer name="horizontalSpacer_2">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
+      <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>24</width>
-       <height>10</height>
+       <width>266</width>
+       <height>20</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="lXRange">
+   <item row="1" column="0">
+    <widget class="QLabel" name="lComment">
      <property name="text">
-      <string>x-Range:</string>
+      <string>Comment:</string>
      </property>
     </widget>
    </item>
@@ -103,30 +90,7 @@
      </item>
     </layout>
    </item>
-   <item row="18" column="0">
-    <widget class="QLabel" name="lResults">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Results:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="lDataSourceType">
-     <property name="text">
-      <string>Source:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="16" column="4">
+   <item row="19" column="4">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -142,27 +106,10 @@
      </property>
     </spacer>
    </item>
-   <item row="17" column="0">
-    <widget class="QLabel" name="lEval">
+   <item row="14" column="0">
+    <widget class="QLabel" name="lDirection">
      <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="18" column="2" colspan="3">
-    <widget class="QTextEdit" name="teResult">
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="2" colspan="3">
-    <widget class="QCheckBox" name="cbAutoRange">
-     <property name="text">
-      <string>Auto</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
+      <string>Direction:</string>
      </property>
     </widget>
    </item>
@@ -173,75 +120,16 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="2">
-    <spacer name="verticalSpacer_3">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+   <item row="13" column="0" colspan="3">
+    <widget class="QLabel" name="lConvolution">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>10</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="23" column="0">
-    <widget class="QCheckBox" name="chkVisible">
      <property name="text">
-      <string>Visible</string>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="2" colspan="3">
-    <widget class="QComboBox" name="cbDirection"/>
-   </item>
-   <item row="21" column="3">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>266</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="lComment">
-     <property name="text">
-      <string>Comment:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>13</width>
-       <height>23</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="2" colspan="3">
-    <widget class="QLineEdit" name="leName"/>
-   </item>
-   <item row="15" column="2" colspan="3">
-    <widget class="QCheckBox" name="cbAbsolute">
-     <property name="text">
-      <string>Absolute area</string>
+      <string>(De-)Convolution</string>
      </property>
     </widget>
    </item>
@@ -255,50 +143,28 @@
      </property>
     </widget>
    </item>
-   <item row="20" column="0" colspan="5">
+   <item row="23" column="0" colspan="5">
     <widget class="Line" name="line_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="12" column="4">
-    <spacer name="verticalSpacer_4">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="lData">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
+   <item row="4" column="0">
+    <widget class="QLabel" name="lDataSourceType">
      <property name="text">
-      <string>Data</string>
+      <string>Source:</string>
      </property>
     </widget>
    </item>
-   <item row="14" column="0">
-    <widget class="QLabel" name="lDirection">
-     <property name="text">
-      <string>Direction:</string>
+   <item row="21" column="2" colspan="3">
+    <widget class="QTextEdit" name="teResult">
+     <property name="readOnly">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="21" column="4">
+   <item row="24" column="4">
     <widget class="QPushButton" name="pbRecalculate">
      <property name="text">
       <string>Recalculate</string>
@@ -307,6 +173,13 @@
    </item>
    <item row="1" column="2" colspan="3">
     <widget class="QLineEdit" name="leComment"/>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="lY2Column">
+     <property name="text">
+      <string>y-Data Response:</string>
+     </property>
+    </widget>
    </item>
    <item row="11" column="2" colspan="3">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -344,8 +217,18 @@
      </item>
     </layout>
    </item>
-   <item row="13" column="0">
-    <widget class="QLabel" name="lConvolution">
+   <item row="26" column="0">
+    <widget class="QCheckBox" name="chkVisible">
+     <property name="text">
+      <string>Visible</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2" colspan="3">
+    <widget class="QLineEdit" name="leName"/>
+   </item>
+   <item row="21" column="0">
+    <widget class="QLabel" name="lResults">
      <property name="font">
       <font>
        <weight>75</weight>
@@ -353,16 +236,153 @@
       </font>
      </property>
      <property name="text">
-      <string>Convolution</string>
+      <string>Results:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="lY2Column">
+   <item row="9" column="2" colspan="3">
+    <widget class="QCheckBox" name="cbAutoRange">
      <property name="text">
-      <string>y-Data Response:</string>
+      <string>Auto</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
+   </item>
+   <item row="12" column="4">
+    <spacer name="verticalSpacer_4">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="lData">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Data</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>13</width>
+       <height>23</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="lName">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Name:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="lXRange">
+     <property name="text">
+      <string>x-Range:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="lDataSourceCurve">
+     <property name="text">
+      <string>Curve:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="lYColumn">
+     <property name="text">
+      <string>y-Data Signal:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="25" column="2">
+    <spacer name="verticalSpacerGeneral">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>24</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="15" column="2" colspan="3">
+    <widget class="QComboBox" name="cbType"/>
+   </item>
+   <item row="2" column="2">
+    <spacer name="verticalSpacer_3">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="20" column="0">
+    <widget class="QLabel" name="lEval">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="0">
+    <widget class="QLabel" name="lWrap">
+     <property name="text">
+      <string>Wrap Response:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="2" colspan="3">
+    <widget class="QComboBox" name="cbWrap"/>
    </item>
   </layout>
  </widget>

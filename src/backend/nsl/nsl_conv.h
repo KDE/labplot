@@ -58,6 +58,8 @@ extern const char* nsl_conv_norm_name[];
 typedef enum {nsl_conv_wrap_none, nsl_conv_wrap_max, nsl_conv_wrap_center} nsl_conv_wrap_type;
 extern const char* nsl_conv_wrap_name[];
 
+/* TODO: mode: full, same, valid (see NumPy, SciPy) */
+
 /* calculate convolution/deconvolution
  * of signal s of size n with response r of size m
  */
