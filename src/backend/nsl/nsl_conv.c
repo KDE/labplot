@@ -38,6 +38,7 @@
 const char* nsl_conv_direction_name[] = {i18n("forward (convolution)"), i18n("backward (deconvolution)")};
 const char* nsl_conv_method_name[] = {i18n("auto"), i18n("direct"), i18n("FFT")};
 const char* nsl_conv_type_name[] = {i18n("linear (zero-padded)"), i18n("circular")};
+const char* nsl_conv_wrap_name[] = {i18n("none"), i18n("maximum"), i18n("center (acausal)")};
 
 int nsl_conv_convolution_direction(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, nsl_conv_method_type method, nsl_conv_type_type type,
 		int normalize, int wrap, double out[]) {
@@ -83,7 +84,7 @@ int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, int norma
 		}
 		index = j - wi;
 		if (index < 0)
-			index += n+m-1;
+			index += n + m - 1;
 		out[index] = res;
 	}
 

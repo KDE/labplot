@@ -34,19 +34,24 @@
 #define NSL_CONV_METHOD_BORDER 100
 
 #define NSL_CONV_DIRECTION_COUNT 2
-// forward: convolution, backward: deconvolution
+/* forward: convolution, backward: deconvolution */
 typedef enum {nsl_conv_direction_forward, nsl_conv_direction_backward} nsl_conv_direction_type;
 extern const char* nsl_conv_direction_name[];
 
 #define NSL_CONV_METHOD_COUNT 3
-// auto: use direct method for small data size (NSL_CONV_METHOD_BORDER) and FFT method otherwise
+/* auto: use direct method for small data size (NSL_CONV_METHOD_BORDER) and FFT method otherwise */
 typedef enum {nsl_conv_method_auto, nsl_conv_method_direct, nsl_conv_method_fft} nsl_conv_method_type;
 extern const char* nsl_conv_method_name[];
 
 #define NSL_CONV_TYPE_COUNT 2
-// linear (zero-padded), circular
+/* linear (zero-padded), circular */
 typedef enum {nsl_conv_type_linear, nsl_conv_type_circular} nsl_conv_type_type;
 extern const char* nsl_conv_type_name[];
+
+#define NSL_CONV_WRAP_COUNT 3
+/* how to wrap response */
+typedef enum {nsl_conv_wrap_none, nsl_conv_wrap_max, nsl_conv_wrap_center} nsl_conv_wrap_type;
+extern const char* nsl_conv_wrap_name[];
 
 /* calculate convolution/deconvolution
  * of signal s of size n with response r of size m
