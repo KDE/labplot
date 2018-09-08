@@ -99,6 +99,10 @@ void XYConvolutionCurveDock::setupGeneral() {
 
 	for (int i = 0; i < NSL_CONV_DIRECTION_COUNT; i++)
 		uiGeneralTab.cbDirection->addItem(i18n(nsl_conv_direction_name[i]));
+	for (int i = 0; i < NSL_CONV_TYPE_COUNT; i++)
+		uiGeneralTab.cbType->addItem(i18n(nsl_conv_type_name[i]));
+	for (int i = 0; i < NSL_CONV_WRAP_COUNT; i++)
+		uiGeneralTab.cbWrap->addItem(i18n(nsl_conv_wrap_name[i]));
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
@@ -160,6 +164,8 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
 	uiGeneralTab.cbDirection->setCurrentIndex(m_convolutionData.direction);
+	//TODO: other options
+
 	this->directionChanged();
 
 	this->showConvolutionResult();
