@@ -284,6 +284,7 @@ void XYConvolutionCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "xRangeMin", QString::number(d->convolutionData.xRange.first()) );
 	writer->writeAttribute( "xRangeMax", QString::number(d->convolutionData.xRange.last()) );
 	writer->writeAttribute( "direction", QString::number(d->convolutionData.direction) );
+	//TODO: write new options
 	writer->writeEndElement();// convolutionData
 
 	// convolution results (generated columns)
@@ -328,7 +329,7 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("autoRange", convolutionData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", convolutionData.xRange.first());
 			READ_DOUBLE_VALUE("xRangeMax", convolutionData.xRange.last());
-			READ_INT_VALUE("absolute", convolutionData.absolute, bool);
+			//TODO: read new options
 		} else if (!preview && reader->name() == "convolutionResult") {
 			attribs = reader->attributes();
 			READ_INT_VALUE("available", convolutionResult.available, int);

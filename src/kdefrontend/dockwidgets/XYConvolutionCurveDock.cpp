@@ -164,13 +164,13 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
 	uiGeneralTab.cbDirection->setCurrentIndex(m_convolutionData.direction);
-//TODO	uiGeneralTab.cbType->setCurrentIndex(m_convolutionData.type);
-//	uiGeneralTab.cbWrap->setCurrentIndex(m_convolutionData.wrap);
-/*	if (m_convolutionData.normalize == nsl_conv_norm_euclidean)
+	uiGeneralTab.cbType->setCurrentIndex(m_convolutionData.type);
+	uiGeneralTab.cbWrap->setCurrentIndex(m_convolutionData.wrap);
+	if (m_convolutionData.normalize == nsl_conv_norm_euclidean)
 		uiGeneralTab.cbNorm->setChecked(true);
 	else
 		uiGeneralTab.cbNorm->setChecked(false);
-*/
+
 	this->directionChanged();
 
 	this->showConvolutionResult();
