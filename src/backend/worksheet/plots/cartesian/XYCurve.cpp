@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2018 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -93,6 +93,7 @@ void XYCurve::init() {
 	d->yColumn = nullptr;
 
 	d->lineType = (XYCurve::LineType) group.readEntry("LineType", (int)XYCurve::Line);
+	d->lineIncreasingXOnly = group.readEntry("LineIncreasingXOnly", false);
 	d->lineSkipGaps = group.readEntry("SkipLineGaps", false);
 	d->lineInterpolationPointsCount = group.readEntry("LineInterpolationPointsCount", 1);
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine) );
@@ -239,6 +240,7 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QString, yColumnPath, yColumnPath)
 //line
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::LineType, lineType, lineType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, bool, lineSkipGaps, lineSkipGaps)
+BASIC_SHARED_D_READER_IMPL(XYCurve, bool, lineIncreasingXOnly, lineIncreasingXOnly)
 BASIC_SHARED_D_READER_IMPL(XYCurve, int, lineInterpolationPointsCount, lineInterpolationPointsCount)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, linePen, linePen)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, lineOpacity, lineOpacity)
@@ -383,6 +385,13 @@ void XYCurve::setLineSkipGaps(bool skip) {
 	Q_D(XYCurve);
 	if (skip != d->lineSkipGaps)
 		exec(new XYCurveSetLineSkipGapsCmd(d, skip, ki18n("%1: set skip line gaps")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineIncreasingXOnly, bool, lineIncreasingXOnly, updateLines)
+void XYCurve::setLineIncreasingXOnly(bool incr) {
+	Q_D(XYCurve);
+	if (incr != d->lineIncreasingXOnly)
+		exec(new XYCurveSetLineIncreasingXOnlyCmd(d, incr, ki18n("%1: set increasing X")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineInterpolationPointsCount, int, lineInterpolationPointsCount, updateLines)
@@ -1002,12 +1011,14 @@ void XYCurvePrivate::updateLines() {
 	case XYCurve::Line:
 		for (unsigned int i = 0; i < count - 1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
+			if (lineIncreasingXOnly && (symbolPointsLogical.at(i+1).x() < symbolPointsLogical.at(i).x())) continue;
 			lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
 		break;
 	case XYCurve::StartHorizontal:
 		for (unsigned int i = 0; i < count - 1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
+			if (lineIncreasingXOnly && (symbolPointsLogical.at(i+1).x() < symbolPointsLogical.at(i).x())) continue;
 			curPoint = symbolPointsLogical.at(i);
 			nextPoint = symbolPointsLogical.at(i+1);
 			tempPoint1 = QPointF(nextPoint.x(), curPoint.y());
@@ -1018,6 +1029,7 @@ void XYCurvePrivate::updateLines() {
 	case XYCurve::StartVertical:
 		for (unsigned int i = 0; i < count - 1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
+			if (lineIncreasingXOnly && (symbolPointsLogical.at(i+1).x() < symbolPointsLogical.at(i).x())) continue;
 			curPoint = symbolPointsLogical.at(i);
 			nextPoint = symbolPointsLogical.at(i+1);
 			tempPoint1 = QPointF(curPoint.x(), nextPoint.y());
@@ -1028,6 +1040,7 @@ void XYCurvePrivate::updateLines() {
 	case XYCurve::MidpointHorizontal:
 		for (unsigned int i = 0; i < count - 1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
+			if (lineIncreasingXOnly && (symbolPointsLogical.at(i+1).x() < symbolPointsLogical.at(i).x())) continue;
 			curPoint = symbolPointsLogical.at(i);
 			nextPoint = symbolPointsLogical.at(i+1);
 			tempPoint1 = QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, curPoint.y());
@@ -1040,6 +1053,7 @@ void XYCurvePrivate::updateLines() {
 	case XYCurve::MidpointVertical:
 		for (unsigned int i = 0; i < count - 1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
+			if (lineIncreasingXOnly && (symbolPointsLogical.at(i+1).x() < symbolPointsLogical.at(i).x())) continue;
 			curPoint = symbolPointsLogical.at(i);
 			nextPoint = symbolPointsLogical.at(i+1);
 			tempPoint1 = QPointF(curPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
@@ -1053,7 +1067,8 @@ void XYCurvePrivate::updateLines() {
 			int skip = 0;
 			for (unsigned int i = 0; i < count - 1; i++) {
 				if (skip != 1) {
-					if (!lineSkipGaps && !connectedPointsLogical[i]) {
+					if ( (!lineSkipGaps && !connectedPointsLogical[i])
+						|| (lineIncreasingXOnly && (symbolPointsLogical.at(i+1).x() < symbolPointsLogical.at(i).x())) ) {
 						skip = 0;
 						continue;
 					}
@@ -1068,7 +1083,8 @@ void XYCurvePrivate::updateLines() {
 			int skip = 0;
 			for (unsigned int i = 0; i < count - 1; i++) {
 				if (skip != 2) {
-					if (!lineSkipGaps && !connectedPointsLogical[i]) {
+					if ( (!lineSkipGaps && !connectedPointsLogical[i])
+						|| (lineIncreasingXOnly && (symbolPointsLogical.at(i+1).x() < symbolPointsLogical.at(i).x())) ) {
 						skip = 0;
 						continue;
 					}
@@ -2139,6 +2155,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement( "lines" );
 	writer->writeAttribute( "type", QString::number(d->lineType) );
 	writer->writeAttribute( "skipGaps", QString::number(d->lineSkipGaps) );
+	writer->writeAttribute( "increasingXOnly", QString::number(d->lineIncreasingXOnly) );
 	writer->writeAttribute( "interpolationPointsCount", QString::number(d->lineInterpolationPointsCount) );
 	WRITE_QPEN(d->linePen);
 	writer->writeAttribute( "opacity", QString::number(d->lineOpacity) );
@@ -2245,7 +2262,8 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("type", lineType, XYCurve::LineType);
-			READ_INT_VALUE("skipGaps", lineSkipGaps, int);
+			READ_INT_VALUE("skipGaps", lineSkipGaps, bool);
+			READ_INT_VALUE("increasingXOnly", lineIncreasingXOnly, bool);
 			READ_INT_VALUE("interpolationPointsCount", lineInterpolationPointsCount, int);
 			READ_QPEN(d->linePen);
 			READ_DOUBLE_VALUE("opacity", lineOpacity);

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for XYCurve properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2018 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2017 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -114,6 +114,7 @@ XYCurveDock::XYCurveDock(QWidget* parent) : QWidget(parent),
 	connect( ui.cbLineType, SIGNAL(currentIndexChanged(int)), this, SLOT(lineTypeChanged(int)) );
 	connect( ui.sbLineInterpolationPointsCount, SIGNAL(valueChanged(int)), this, SLOT(lineInterpolationPointsCountChanged(int)) );
 	connect( ui.chkLineSkipGaps, SIGNAL(clicked(bool)), this, SLOT(lineSkipGapsChanged(bool)) );
+	connect( ui.chkLineIncreasingXOnly, &QCheckBox::clicked, this, &XYCurveDock::lineIncreasingXOnlyChanged );
 	connect( ui.cbLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(lineStyleChanged(int)) );
 	connect( ui.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
 	connect( ui.sbLineWidth, SIGNAL(valueChanged(double)), this, SLOT(lineWidthChanged(double)) );
@@ -589,6 +590,7 @@ void XYCurveDock::initTabs() {
 	//Line-Tab
 	connect(m_curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(curveLineTypeChanged(XYCurve::LineType)));
 	connect(m_curve, SIGNAL(lineSkipGapsChanged(bool)), this, SLOT(curveLineSkipGapsChanged(bool)));
+	connect(m_curve, &XYCurve::lineIncreasingXOnlyChanged, this, &XYCurveDock::curveLineIncreasingXOnlyChanged);
 	connect(m_curve, SIGNAL(lineInterpolationPointsCountChanged(int)), this, SLOT(curveLineInterpolationPointsCountChanged(int)));
 	connect(m_curve, SIGNAL(linePenChanged(QPen)), this, SLOT(curveLinePenChanged(QPen)));
 	connect(m_curve, SIGNAL(lineOpacityChanged(qreal)), this, SLOT(curveLineOpacityChanged(qreal)));
@@ -767,6 +769,8 @@ void XYCurveDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAs
 //********** SLOTs for changes triggered in XYCurveDock ********
 //*************************************************************
 void XYCurveDock::retranslateUi() {
+	ui.lLineIncreasingXOnly->setToolTip(i18n("Connect data points only for strictly increasing values of X"));
+	ui.chkLineIncreasingXOnly->setToolTip(i18n("Connect data points only for strictly increasing values of X"));
 	//TODO:
 // 	uiGeneralTab.lName->setText(i18n("Name"));
 // 	uiGeneralTab.lComment->setText(i18n("Comment"));
@@ -876,6 +880,14 @@ void XYCurveDock::lineSkipGapsChanged(bool skip) {
 
 	for (auto* curve : m_curvesList)
 		curve->setLineSkipGaps(skip);
+}
+
+void XYCurveDock::lineIncreasingXOnlyChanged(bool incr) {
+	if (m_initializing)
+		return;
+
+	for (auto* curve : m_curvesList)
+		curve->setLineIncreasingXOnly(incr);
 }
 
 void XYCurveDock::lineInterpolationPointsCountChanged(int count) {
@@ -1756,6 +1768,11 @@ void XYCurveDock::curveLineTypeChanged(XYCurve::LineType type) {
 void XYCurveDock::curveLineSkipGapsChanged(bool skip) {
 	m_initializing = true;
 	ui.chkLineSkipGaps->setChecked(skip);
+	m_initializing = false;
+}
+void XYCurveDock::curveLineIncreasingXOnlyChanged(bool incr) {
+	m_initializing = true;
+	ui.chkLineIncreasingXOnly->setChecked(incr);
 	m_initializing = false;
 }
 void XYCurveDock::curveLineInterpolationPointsCountChanged(int count) {

@@ -67,6 +67,7 @@ public:
 	//line
 	XYCurve::LineType lineType;
 	bool lineSkipGaps;
+	bool lineIncreasingXOnly;
 	int lineInterpolationPointsCount;
 	QPen linePen;
 	qreal lineOpacity;
