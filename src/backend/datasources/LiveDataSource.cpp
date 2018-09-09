@@ -570,15 +570,13 @@ void LiveDataSource::read() {
 			} else {
 				bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 				m_bytesRead += bytes;
+				DEBUG("Read " << bytes << " bytes, in total: " << m_bytesRead);
 			}
-
-			DEBUG("Read " << bytes << " bytes, in total: " << m_bytesRead);
-
 			break;
 		case AbstractFileFilter::Binary:
 			//TODO: not implemented yet
 			// bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
-			m_bytesRead += bytes;
+// 			m_bytesRead += bytes;
 		//TODO: other types not implemented yet
 		case AbstractFileFilter::Image:
 		case AbstractFileFilter::HDF5:
@@ -586,8 +584,11 @@ void LiveDataSource::read() {
 		case AbstractFileFilter::FITS:
 		case AbstractFileFilter::JSON:
 		case AbstractFileFilter::ROOT:
+			break;
 		case AbstractFileFilter::NgspiceRawAscii:
 		case AbstractFileFilter::NgspiceRawBinary:
+			//only re-reading of the whole file is supported
+			m_filter->readDataFromFile(m_fileName, this);
 			break;
 		}
 		break;

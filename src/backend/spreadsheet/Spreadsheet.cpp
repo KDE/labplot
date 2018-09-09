@@ -937,7 +937,7 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 	for (int i = 0; i < childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(true);
 
-	if (m_partView != nullptr)
+	if (m_partView != nullptr && m_view != nullptr)
 		m_view->resizeHeader();
 
 	DEBUG("Spreadsheet::finalizeImport() DONE");
