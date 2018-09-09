@@ -42,7 +42,7 @@ Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #endif
 
 LiveDataDock::LiveDataDock(QWidget* parent) :
-	QWidget(parent),	
+	QWidget(parent),
 	m_paused(false)
   #ifdef HAVE_MQTT
   ,
@@ -138,7 +138,7 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 	// disable "whole file" option
 	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
 	QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
-	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));	
+	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
 	//show MQTT connected options
 	ui.gbManageSubscriptions->show();
@@ -203,7 +203,7 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 			addTopicToTree(m_addedTopics[fmc->clientHostName()].at(i));
 		}
 
-		//fill subscriptions tree widget		
+		//fill subscriptions tree widget
 		ui.twSubscriptions->clear();
 		fillSubscriptions();
 
@@ -627,7 +627,7 @@ void LiveDataDock::willUpdateTypeChanged(int updateType) {
  *\brief called when the will update now button is pressed
  * updates the will message of every client in m_mqttClients
  */
-void LiveDataDock::willUpdateNow() {	
+void LiveDataDock::willUpdateNow() {
 	for (auto* source: m_mqttClients)
 		source->updateWillMessage();
 }
@@ -742,7 +742,7 @@ void LiveDataDock::addSubscription() {
 				QTreeWidgetItem* newTopLevelItem = new QTreeWidgetItem(toplevelName);
 				ui.twSubscriptions->addTopLevelItem(newTopLevelItem);
 
-				if(name.endsWith('#'))) {
+				if(name.endsWith('#')) {
 					//adding every topic that the subscription contains to twSubscriptions
 					addSubscriptionChildren(item, newTopLevelItem);
 				}
@@ -752,7 +752,7 @@ void LiveDataDock::addSubscription() {
 					source->addMQTTSubscription(name, ui.cbQoS->currentIndex());
 				}
 
-				if(name.endsWith('#'))) {
+				if(name.endsWith('#')) {
 					//if an already existing subscription contains a topic that the new subscription also contains
 					//we decompose the already existing subscription
 					//by unsubscribing from its topics, that are present in the new subscription as well
@@ -1068,7 +1068,7 @@ void LiveDataDock::scrollToSubsriptionTreeItem(const QString& rootName) {
  * \param second the name of a topic
  * \return The name of the common topic, if it exists, otherwise ""
  */
-QString LiveDataDock::checkCommonLevel(const QString& first, const QString& second) {	
+QString LiveDataDock::checkCommonLevel(const QString& first, const QString& second) {
 	QStringList firstList = first.split('/', QString::SkipEmptyParts);
 	QStringList secondtList = second.split('/', QString::SkipEmptyParts);
 	QString commonTopic = "";
