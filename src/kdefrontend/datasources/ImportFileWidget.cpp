@@ -2413,7 +2413,7 @@ void ImportFileWidget::mqttSubscribe() {
 				emit subscriptionsChanged();
 			}
 
-			if (name.endsWith('#'))) {
+			if (name.endsWith('#')) {
 				//adding every topic that the subscription contains to twSubscriptions
 				addSubscriptionChildren(item, newTopLevelItem);
 
