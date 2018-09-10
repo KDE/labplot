@@ -23,8 +23,11 @@
  */
 
 #include "QJsonModel.h"
-#include <QFile>
+
+#include <QApplication>
 #include <QDebug>
+#include <QFile>
+#include <QPalette>
 
 QJsonTreeItem::QJsonTreeItem(QJsonTreeItem* parent) : mParent(parent) {
 }
@@ -201,10 +204,19 @@ QVariant QJsonModel::data(const QModelIndex& index, int role) const {
 			return QString("%1").arg(item->value());
 	} else if (role == Qt::DecorationRole) {
 		if (index.column() == 0) {
+			QIcon icon;
 			if (item->type() == QJsonValue::Array)
-				return QIcon::fromTheme("labplot-json-array");
+				icon = QIcon::fromTheme("labplot-json-array");
 			else if (item->type() == QJsonValue::Object)
-				return QIcon::fromTheme("labplot-json-object");
+				icon = QIcon::fromTheme("labplot-json-object");
+
+			if (qApp->palette().color(QPalette::Base).lightness() < 128) {
+				//dark theme is used -> invert the icons which use black colors
+				QImage image = icon.pixmap(64, 64).toImage(); //TODO: use different(standard?) pixel size?
+				image.invertPixels();
+				icon = QIcon(QPixmap::fromImage(image));
+			}
+			return icon;
 		}
 		return QIcon();
 	}
