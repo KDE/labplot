@@ -272,7 +272,7 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 		emit q->completed(100 * currentRow/actualRows);
 	}
 
-	dataSource->finalizeImport(columnOffset, -1, -1, currentRow, "", importMode);
+	dataSource->finalizeImport(columnOffset, 1, actualCols, currentRow, "", importMode);
 }
 
 /*!
