@@ -119,6 +119,10 @@ void XYConvolutionCurveDock::setupGeneral() {
 	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
 	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
 	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
+	connect( uiGeneralTab.cbDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(directionChanged()) );
+	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
+	connect( uiGeneralTab.cbNorm, SIGNAL(clicked(bool)), this, SLOT(normChanged()) );
+	connect( uiGeneralTab.cbWrap, SIGNAL(currentIndexChanged(int)), this, SLOT(wrapChanged()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 
 	connect( cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)) );
@@ -167,11 +171,11 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	uiGeneralTab.cbDirection->setCurrentIndex(m_convolutionData.direction);
 	uiGeneralTab.cbType->setCurrentIndex(m_convolutionData.type);
 	//m_convolutionData.method not used
-	uiGeneralTab.cbWrap->setCurrentIndex(m_convolutionData.wrap);
 	if (m_convolutionData.normalize == nsl_conv_norm_euclidean)
 		uiGeneralTab.cbNorm->setChecked(true);
 	else
 		uiGeneralTab.cbNorm->setChecked(false);
+	uiGeneralTab.cbWrap->setCurrentIndex(m_convolutionData.wrap);
 
 	this->directionChanged();
 
@@ -397,6 +401,30 @@ void XYConvolutionCurveDock::xRangeMaxChanged() {
 void XYConvolutionCurveDock::directionChanged() {
 	nsl_conv_direction_type direction = (nsl_conv_direction_type) uiGeneralTab.cbDirection->currentIndex();
 	m_convolutionData.direction = direction;
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYConvolutionCurveDock::typeChanged() {
+	nsl_conv_type_type type = (nsl_conv_type_type) uiGeneralTab.cbType->currentIndex();
+	m_convolutionData.type = type;
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYConvolutionCurveDock::normChanged() {
+	bool norm = uiGeneralTab.cbNorm->isChecked();
+	if (norm)
+		m_convolutionData.normalize = nsl_conv_norm_euclidean;
+	else
+		m_convolutionData.normalize = nsl_conv_norm_none;
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYConvolutionCurveDock::wrapChanged() {
+	nsl_conv_wrap_type wrap = (nsl_conv_wrap_type) uiGeneralTab.cbWrap->currentIndex();
+	m_convolutionData.wrap = wrap;
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
