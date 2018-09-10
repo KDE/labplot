@@ -81,6 +81,7 @@
 #include <QElapsedTimer>
 #include <QHash>
 #include <QStatusBar>
+#include <QTimeLine>
 
 #include <KActionCollection>
 #include <KConfigGroup>
@@ -1612,18 +1613,75 @@ void MainWin::updateMdiWindowVisibility() const {
 	}
 }
 
-void MainWin::toggleDockWidget(QAction* action) const {
+void MainWin::toggleDockWidget(QAction* action)  {
 	if (action->objectName() == "toggle_project_explorer_dock") {
 		if (m_projectExplorerDock->isVisible())
-			m_projectExplorerDock->hide();
+			toggleHideWidget(m_projectExplorerDock, true);
 		else
-			m_projectExplorerDock->show();
+			toggleShowWidget(m_projectExplorerDock, true);
 	} else if (action->objectName() == "toggle_properties_explorer_dock") {
-		if (m_propertiesDock->isVisible())
-			m_propertiesDock->hide();
+		if (m_propertiesDock->isVisible())		
+			toggleHideWidget(m_propertiesDock, false);
 		else
-			m_propertiesDock->show();
+			toggleShowWidget(m_propertiesDock, false);
 	}
+}
+
+void MainWin::toggleHideWidget(QWidget* widget, bool hideToLeft)
+{
+	QTimeLine* timeline = new QTimeLine(800, this);
+	timeline->setEasingCurve(QEasingCurve::InOutQuad);
+
+	connect(timeline, &QTimeLine::valueChanged, [=] {
+		const qreal value = timeline->currentValue();
+		const int widgetWidth = widget->width();
+		const int widgetPosY = widget->pos().y();
+
+		int moveX = 0;
+		if (hideToLeft) {
+			moveX = static_cast<int>(value * widgetWidth) - widgetWidth;
+		}
+		else {
+			const int frameRight = this->frameGeometry().right();
+			moveX = frameRight - static_cast<int>(value * widgetWidth);
+		}
+		widget->move(moveX, widgetPosY);
+	});
+	timeline->setDirection(QTimeLine::Backward);
+	timeline->start();
+
+	connect(timeline, &QTimeLine::finished, [widget] {widget->hide();});
+	connect(timeline, &QTimeLine::finished, timeline, &QTimeLine::deleteLater);
+}
+
+void MainWin::toggleShowWidget(QWidget* widget, bool showToRight)
+{
+	QTimeLine* timeline = new QTimeLine(800, this);
+	timeline->setEasingCurve(QEasingCurve::InOutQuad);
+
+	connect(timeline, &QTimeLine::valueChanged, [=]() {
+		if (widget->isHidden()) {
+			widget->show();
+		}
+		const qreal value = timeline->currentValue();
+		const int widgetWidth = widget->width();
+		const int widgetPosY = widget->pos().y();
+		int moveX = 0;
+
+		if (showToRight) {
+			moveX = static_cast<int>(value * widgetWidth) - widgetWidth;
+		}
+		else {
+			const int frameRight = this->frameGeometry().right();
+			moveX = frameRight - static_cast<int>(value * widgetWidth);
+		}
+		widget->move(moveX, widgetPosY);
+	});
+
+	timeline->setDirection(QTimeLine::Forward);
+	timeline->start();
+
+	connect(timeline, &QTimeLine::finished, timeline, &QTimeLine::deleteLater);
 }
 
 void MainWin::projectExplorerDockVisibilityChanged(bool visible) {

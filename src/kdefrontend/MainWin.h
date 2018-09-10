@@ -212,6 +212,8 @@ private:
 	bool warnModified();
 	void activateSubWindowForAspect(const AbstractAspect*) const;
 	bool save(const QString&);
+	void toggleShowWidget(QWidget* widget, bool showToRight);
+	void toggleHideWidget(QWidget* widget, bool hideToLeft);
 
 	Workbook* activeWorkbook() const;
 	Spreadsheet* activeSpreadsheet() const;
@@ -292,7 +294,7 @@ private slots:
 
 	void setMdiWindowVisibility(QAction*);
 	void updateMdiWindowVisibility() const;
-	void toggleDockWidget(QAction*) const;
+	void toggleDockWidget(QAction*);
 	void toggleFullScreen();
 	void projectExplorerDockVisibilityChanged(bool);
 	void propertiesDockVisibilityChanged(bool);
