@@ -408,7 +408,10 @@ void XYConvolutionCurveDock::recalculateClicked() {
 		dynamic_cast<XYConvolutionCurve*>(curve)->setConvolutionData(m_convolutionData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Convolution status: %1", m_convolutionCurve->convolutionResult().status));
+	if (m_convolutionData.direction == nsl_conv_direction_forward)
+		emit info(i18n("Convolution status: %1", m_convolutionCurve->convolutionResult().status));
+	else
+		emit info(i18n("Deconvolution status: %1", m_convolutionCurve->convolutionResult().status));
 	QApplication::restoreOverrideCursor();
 }
 

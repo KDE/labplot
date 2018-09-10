@@ -397,12 +397,12 @@ void CartesianPlot::initActions() {
 	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
 	addFourierFilterCurveAction = new QAction(i18n("xy-curve from a Fourier filter"), this);
 	addFourierTransformCurveAction = new QAction(i18n("xy-curve from a Fourier transform"), this);
-	addConvolutionCurveAction = new QAction(i18n("xy-curve from a convolution"), this);
+	addConvolutionCurveAction = new QAction(i18n("xy-curve from a (de-)convolution"), this);
 //	addInterpolationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), this);
 //	addSmoothCurveAction = new QAction(QIcon::fromTheme("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), this);
 //	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
 //	addFourierTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_transform-curve"), i18n("xy-curve from a Fourier transform"), this);
-//	addConvolutionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-convolution-curve"), i18n("xy-curve from a convolution"), this);
+//	addConvolutionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-convolution-curve"), i18n("xy-curve from a (de-)convolution"), this);
 	addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("Legend"), this);
 	if (children<CartesianPlotLegend>().size()>0)
 		addLegendAction->setEnabled(false);	//only one legend is allowed -> disable the action
@@ -438,7 +438,7 @@ void CartesianPlot::initActions() {
 	addIntegrationAction = new QAction(i18n("Integrate"), this);
 	addInterpolationAction = new QAction(i18n("Interpolate"), this);
 	addSmoothAction = new QAction(i18n("Smooth"), this);
-	addConvolutionAction = new QAction(i18n("Convolute"), this);
+	//TODO: addConvolutionAction = new QAction(i18n("Convolute/Deconvolute"), this);
 
 	QAction* fitAction = new QAction(i18n("Linear"), this);
 	fitAction->setData(PlotDataDialog::FitLinear);
@@ -1258,7 +1258,7 @@ void CartesianPlot::addFourierTransformCurve() {
 }
 
 void CartesianPlot::addConvolutionCurve() {
-	XYConvolutionCurve* curve = new XYConvolutionCurve("Convolution");
+	XYConvolutionCurve* curve = new XYConvolutionCurve("(De-)Convolution");
 	this->addChild(curve);
 }
 

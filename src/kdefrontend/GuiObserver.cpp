@@ -410,7 +410,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyFourierFilterCurveDock);
 	} else if (className == "XYConvolutionCurve") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Convolution"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Convolution/Deconvolution"));
 
 		if (!m_mainWindow->xyConvolutionCurveDock) {
 			m_mainWindow->xyConvolutionCurveDock = new XYConvolutionCurveDock(m_mainWindow->stackedWidget);
