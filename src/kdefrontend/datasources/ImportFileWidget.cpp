@@ -147,14 +147,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 		ui.cbFileType->addItem(i18n("Ngspice RAW Binary"), AbstractFileFilter::NgspiceRawBinary);
 
 		//hide widgets relevant for live data reading only
-		ui.gbUpdateOptions->hide();
 		ui.lSourceType->hide();
 		ui.cbSourceType->hide();
-		ui.cbUpdateType->hide();
-		ui.lUpdateType->hide();
-		ui.chbLinkFile->hide();
-		ui.sbUpdateInterval->hide();
-		ui.lUpdateInterval->hide();
+		ui.gbUpdateOptions->hide();
 	} else {
 		ui.cbFileType->addItem(i18n("ASCII data"), AbstractFileFilter::Ascii);
 		ui.cbFileType->addItem(i18n("Binary data"), AbstractFileFilter::Binary);

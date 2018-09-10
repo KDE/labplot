@@ -275,7 +275,7 @@
         <property name="toolTip">
          <string>Specify the name of the file to import.</string>
         </property>
-        <property name="clearButtonEnabled" stdset="0">
+        <property name="clearButtonEnabled">
          <bool>true</bool>
         </property>
        </widget>
@@ -311,7 +311,16 @@
          <bool>true</bool>
         </property>
         <layout class="QGridLayout" name="gridLayout_6" columnstretch="2,0,0,0,0">
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item row="0" column="0" colspan="2">
@@ -503,7 +512,16 @@
       <string>Format Options</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -843,7 +861,7 @@
       <item row="10" column="0" colspan="2">
        <widget class="QCheckBox" name="chbLinkFile">
         <property name="toolTip">
-         <string>If this option is checked, only the link to the file is stored in the project file but not it's content.</string>
+         <string>If this option is checked, only the link to the file is stored in the project file but not its content.</string>
         </property>
         <property name="text">
          <string>Link the file</string>
