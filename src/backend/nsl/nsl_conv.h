@@ -80,11 +80,12 @@ int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, nsl_con
 int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type, nsl_conv_type_type, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]);
 /* actual FFT method calculation using zero-padded arrays
  * uses FFTW if available and GSL otherwise
+ * wi is the wrap index
  * s and r are overwritten
  */
 #ifdef HAVE_FFTW3
-int nsl_conv_fft_FFTW(double s[], double r[], size_t n, nsl_conv_direction_type, double out[]);
+int nsl_conv_fft_FFTW(double s[], double r[], size_t n, nsl_conv_direction_type, size_t wi, double out[]);
 #endif
-int nsl_conv_fft_GSL(double s[], double r[], size_t n, nsl_conv_direction_type, double out[]);
+int nsl_conv_fft_GSL(double s[], double r[], size_t n, nsl_conv_direction_type, size_t wi, double out[]);
 
 #endif /* NSL_CONV_H */

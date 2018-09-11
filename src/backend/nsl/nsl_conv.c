@@ -159,17 +159,16 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 	for (i = n; i < size; i++)
 		stmp[i] = 0;
 	for (i = 0; i < m; i++) {
-		size_t index = (i + wi) % m;
-		rtmp[index] = r[index]/norm;	/* wrap and norm response */
+		rtmp[i] = r[i]/norm;	/* norm response */
 	}
 	for (i = m; i < size; i++)
 		rtmp[i] = 0;
 
 	int status;
 #ifdef HAVE_FFTW3
-	status = nsl_conv_fft_FFTW(stmp, rtmp, oldsize, dir, out);
+	status = nsl_conv_fft_FFTW(stmp, rtmp, oldsize, dir, wi, out);
 #else
-	status = nsl_conv_fft_GSL(stmp, rtmp, size, dir, out);
+	status = nsl_conv_fft_GSL(stmp, rtmp, size, dir, wi, ut);
 #endif
 	free(stmp);
 	free(rtmp);
@@ -178,7 +177,7 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 }
 
 #ifdef HAVE_FFTW3
-int nsl_conv_fft_FFTW(double s[], double r[], size_t n, nsl_conv_direction_type dir, double out[]) {
+int nsl_conv_fft_FFTW(double s[], double r[], size_t n, nsl_conv_direction_type dir, size_t wi, double out[]) {
 	size_t i;
 	const size_t size = 2*(n/2+1);
 	double* in = (double*)malloc(size*sizeof(double));
@@ -214,14 +213,16 @@ int nsl_conv_fft_FFTW(double s[], double r[], size_t n, nsl_conv_direction_type 
 	fftw_execute_dft_c2r(rpb, (fftw_complex*)s, s);
 	fftw_destroy_plan(rpb);
 
-	for (i = 0; i < n; i++)
-		out[i] = s[i]/n;
+	for (i = 0; i < n; i++) {
+		size_t index = (i + wi) % n;
+		out[i] = s[index]/n;
+	}
 
 	return 0;
 }
 #endif
 
-int nsl_conv_fft_GSL(double s[], double r[], size_t n, nsl_conv_direction_type dir, double out[]) {
+int nsl_conv_fft_GSL(double s[], double r[], size_t n, nsl_conv_direction_type dir, size_t wi, double out[]) {
 	gsl_fft_real_workspace *work = gsl_fft_real_workspace_alloc(n);
 	gsl_fft_real_wavetable *real = gsl_fft_real_wavetable_alloc(n);
 
@@ -232,6 +233,7 @@ int nsl_conv_fft_GSL(double s[], double r[], size_t n, nsl_conv_direction_type d
 
 	size_t i;
 	/* calculate halfcomplex product/quotient depending on direction */
+	/* TODO: use wi */
 	if (dir == nsl_conv_direction_forward) {
 		out[0] = s[0]*r[0];
 		for (i = 1; i < n; i++) {
