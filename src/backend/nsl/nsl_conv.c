@@ -165,11 +165,17 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 		rtmp[i] = 0;
 
 	int status;
-#ifdef HAVE_FFTW3
+#ifdef HAVE_FFTW3	// already wraps output
 	status = nsl_conv_fft_FFTW(stmp, rtmp, oldsize, dir, wi, out);
-#else
-	status = nsl_conv_fft_GSL(stmp, rtmp, size, dir, wi, ut);
+#else	// GSL
+	status = nsl_conv_fft_GSL(stmp, rtmp, size, dir, out);
+	for (i = 0; i < size; i++) {	// wrap output
+		size_t index = (i + wi) % size;
+		stmp[i] = out[index];
+	}
+	memcpy(out, stmp, size * sizeof(double));
 #endif
+
 	free(stmp);
 	free(rtmp);
 
@@ -222,7 +228,7 @@ int nsl_conv_fft_FFTW(double s[], double r[], size_t n, nsl_conv_direction_type 
 }
 #endif
 
-int nsl_conv_fft_GSL(double s[], double r[], size_t n, nsl_conv_direction_type dir, size_t wi, double out[]) {
+int nsl_conv_fft_GSL(double s[], double r[], size_t n, nsl_conv_direction_type dir, double out[]) {
 	gsl_fft_real_workspace *work = gsl_fft_real_workspace_alloc(n);
 	gsl_fft_real_wavetable *real = gsl_fft_real_wavetable_alloc(n);
 
@@ -233,7 +239,6 @@ int nsl_conv_fft_GSL(double s[], double r[], size_t n, nsl_conv_direction_type d
 
 	size_t i;
 	/* calculate halfcomplex product/quotient depending on direction */
-	/* TODO: use wi */
 	if (dir == nsl_conv_direction_forward) {
 		out[0] = s[0]*r[0];
 		for (i = 1; i < n; i++) {
