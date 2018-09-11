@@ -197,6 +197,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 		xmax = convolutionData.xRange.last();
 	}
 
+	//TODO: don't need x axis
 	for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
@@ -234,6 +235,11 @@ void XYConvolutionCurvePrivate::recalculate() {
 	const nsl_conv_wrap_type wrap = convolutionData.wrap;
 
 	DEBUG("signal n = " << n << ", response m = " << m);
+	DEBUG("direction = " << nsl_conv_direction_name[direction]);
+	DEBUG("type = " << nsl_conv_type_name[type]);
+	DEBUG("method = " << nsl_conv_method_name[method]);
+	DEBUG("norm = " << nsl_conv_norm_name[norm]);
+	DEBUG("wrap = " << nsl_conv_wrap_name[wrap]);
 
 ///////////////////////////////////////////////////////////
 	size_t np;
