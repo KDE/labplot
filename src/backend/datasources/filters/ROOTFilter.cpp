@@ -459,12 +459,12 @@ ROOTHist::ROOTHist(const std::string& filename) : filename(filename) {
 
 						if (chcdata == lcdata - lkey - 9 && chdata == ldata) {
 							if (lib == "ZL" && method == Z_DEFLATED) {
-								it = histkeys.emplace(name + ";" + std::to_string(cycle),
+								it = histkeys.emplace(name + ';' + std::to_string(cycle),
 								                      KeyBuffer{name, title, cycle, type, KeyBuffer::zlib,
 								                                pos + lkey + 9, chcdata, chdata, 0}
 								                     ).first;
 							} else if (lib == "L4" && method == LZ4_versionNumber() / (100 * 100)) {
-								it = histkeys.emplace(name + ";" + std::to_string(cycle),
+								it = histkeys.emplace(name + ';' + std::to_string(cycle),
 								                      KeyBuffer{name, title, cycle, type, KeyBuffer::lz4,
 								                                pos + lkey + 9 + 8, chcdata - 8, chdata, 0}
 								                     ).first;
@@ -473,7 +473,7 @@ ROOTHist::ROOTHist(const std::string& filename) : filename(filename) {
 					}
 #					endif
 				} else {
-					it = histkeys.emplace(name + ";" + std::to_string(cycle),
+					it = histkeys.emplace(name + ';' + std::to_string(cycle),
 					                      KeyBuffer{name, title, cycle, type, KeyBuffer::none,
 					                                pos + lkey, ldata, ldata, 0}
 					                     ).first;
@@ -495,7 +495,7 @@ std::vector<std::string> ROOTHist::listHistograms() const {
 }
 
 std::vector<ROOTHist::BinPars> ROOTHist::readHistogram(const std::string& name, int cycle) {
-	auto it = histkeys.find(name + ";" + std::to_string(cycle));
+	auto it = histkeys.find(name + ';' + std::to_string(cycle));
 	if (it == histkeys.end())
 		return std::vector<ROOTHist::BinPars>();
 

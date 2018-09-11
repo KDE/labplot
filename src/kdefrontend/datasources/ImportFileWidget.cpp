@@ -782,7 +782,7 @@ bool ImportFileWidget::checkTopicContains(const QString& superior, const QString
 	if (superior == inferior)
 		return true;
 
-	if (!superior.contains("/"))
+	if (!superior.contains('/'))
 		return false;
 
 	const QStringList& superiorList = superior.split('/', QString::SkipEmptyParts);
@@ -795,13 +795,13 @@ bool ImportFileWidget::checkTopicContains(const QString& superior, const QString
 	bool ok = true;
 	for (int i = 0; i < superiorList.size(); ++i) {
 		if (superiorList.at(i) != inferiorList.at(i)) {
-			if ((superiorList.at(i) != "+") &&
+			if ((superiorList.at(i) != '+') &&
 					!(superiorList.at(i) == "#" && i == superiorList.size() - 1)) {
 				//if the two topics differ, and the superior's current level isn't + or #(which can be only in the last position)
 				//then superior can't contain inferior
 				ok = false;
 				break;
-			} else if (i == superiorList.size() - 1 && (superiorList.at(i) == "+" && inferiorList.at(i) == "#") ) {
+			} else if (i == superiorList.size() - 1 && (superiorList.at(i) == '+' && inferiorList.at(i) == "#") ) {
 				//if the two topics differ at the last level
 				//and the superior's current level is + while the inferior's is #(which can be only in the last position)
 				//then superior can't contain inferior
@@ -814,7 +814,7 @@ bool ImportFileWidget::checkTopicContains(const QString& superior, const QString
 }
 
 /*!
- *\brief Returns the "+" wildcard containing topic name, which includes the given topic names
+ *\brief Returns the '+' wildcard containing topic name, which includes the given topic names
  *
  * \param first the name of a topic
  * \param second the name of a topic
@@ -857,12 +857,12 @@ QString ImportFileWidget::checkCommonLevel(const QString& first, const QString& 
 				if (i != differIndex) {
 					commonTopic.append(firstList.at(i));
 				} else {
-					//we put "+" wildcard at the level where they differ
-					commonTopic.append("+");
+					//we put '+' wildcard at the level where they differ
+					commonTopic.append('+');
 				}
 
 				if (i != firstList.size() - 1)
-					commonTopic.append("/");
+					commonTopic.append('/');
 			}
 		}
 	}
@@ -914,10 +914,10 @@ int ImportFileWidget::commonLevelIndex(const QString& first, const QString& seco
 					if (i != differIndex)
 						commonTopic.append(firstList.at(i));
 					else
-						commonTopic.append("+");
+						commonTopic.append('+');
 
 					if (i != firstList.size() - 1)
-						commonTopic.append("/");
+						commonTopic.append('/');
 				}
 			}
 		}
@@ -1014,7 +1014,7 @@ void ImportFileWidget::addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWid
 			name.append(temp->text(0) + "/#");
 			while(temp->parent() != nullptr) {
 				temp = temp->parent();
-				name.prepend(temp->text(0) + "/");
+				name.prepend(temp->text(0) + '/');
 			}
 		}
 
@@ -1023,7 +1023,7 @@ void ImportFileWidget::addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWid
 			name.append(temp->text(0));
 			while(temp->parent() != nullptr) {
 				temp = temp->parent();
-				name.prepend(temp->text(0) + "/");
+				name.prepend(temp->text(0) + '/');
 			}
 		}
 
@@ -1051,7 +1051,7 @@ void ImportFileWidget::findSubscriptionLeafChildren(QVector<QTreeWidgetItem*>& c
 }
 
 /*!
- *\brief Returns the amount of topics that the "+" wildcard will replace in the level position
+ *\brief Returns the amount of topics that the '+' wildcard will replace in the level position
  *
  * \param levelIdx the level currently being investigated
  * \param level the level where the new + wildcard will be placed
@@ -1064,7 +1064,7 @@ void ImportFileWidget::findSubscriptionLeafChildren(QVector<QTreeWidgetItem*>& c
 int ImportFileWidget::checkCommonChildCount(int levelIdx, int level, QStringList& commonList, QTreeWidgetItem* currentItem) {
 	//we recursively check the number of children, until we get to level-1
 	if (levelIdx < level - 1) {
-		if (commonList[levelIdx] != "+") {
+		if (commonList[levelIdx] != '+') {
 			for (int j = 0; j < currentItem->childCount(); ++j) {
 				if (currentItem->child(j)->text(0) == commonList[levelIdx]) {
 					//if the level isn't represented by + wildcard we simply return the amount of children of the corresponding item, recursively
@@ -1092,7 +1092,7 @@ int ImportFileWidget::checkCommonChildCount(int levelIdx, int level, QStringList
 				return -1;
 		}
 	} else if (levelIdx == level - 1) {
-		if (commonList[levelIdx] != "+") {
+		if (commonList[levelIdx] != '+') {
 			for (int j = 0; j < currentItem->childCount(); ++j) {
 				if (currentItem->child(j)->text(0) == commonList[levelIdx]) {
 					//if the level isn't represented by + wildcard we simply return the amount of children of the corresponding item
@@ -1189,7 +1189,7 @@ void ImportFileWidget::manageCommonLevelSubscriptions() {
 			}
 
 			if (foundEqual) {
-				//if there are more common topics, the topics of which can be merged, we choose the one which has the lowest level new "+" wildcard
+				//if there are more common topics, the topics of which can be merged, we choose the one which has the lowest level new '+' wildcard
 				int lowestLevel = INT_MAX;
 				int topicIdx = -1;
 				for (int i = 0; i < commonTopics.size(); ++i) {
@@ -1296,7 +1296,7 @@ void ImportFileWidget::updateSubscriptionTree() {
  */
 void ImportFileWidget::restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList& list, int level) {
 	DEBUG("ImportFileWidget::restoreSubscriptionChildren");
-	if (list[level] != "+" && list[level] != "#" && level < list.size() - 1) {
+	if (list[level] != '+' && list[level] != "#" && level < list.size() - 1) {
 		for (int i = 0; i < topic->childCount(); ++i) {
 			//if the current level isn't + or # wildcard we recursively continue with the next level
 			if (topic->child(i)->text(0) == list[level]) {
@@ -1304,18 +1304,18 @@ void ImportFileWidget::restoreSubscriptionChildren(QTreeWidgetItem * topic, QTre
 				break;
 			}
 		}
-	} else if (list[level] == "+") {
+	} else if (list[level] == '+') {
 		for (int i = 0; i < topic->childCount(); ++i) {
 			//determine the name of the topic, contained by the subscription
 			QString name;
 			name.append(topic->child(i)->text(0));
 			for (int j = level + 1; j < list.size(); ++j) {
-				name.append("/" + list[j]);
+				name.append('/' + list[j]);
 			}
 			QTreeWidgetItem* temp = topic->child(i);
 			while(temp->parent() != nullptr) {
 				temp = temp->parent();
-				name.prepend(temp->text(0) + "/");
+				name.prepend(temp->text(0) + '/');
 			}
 
 			//Add the topic as child of the subscription
@@ -2365,7 +2365,7 @@ void ImportFileWidget::mqttSubscribe() {
 
 	while(tempItem->parent() != nullptr) {
 		tempItem = tempItem->parent();
-		name.prepend(tempItem->text(0) + "/");
+		name.prepend(tempItem->text(0) + '/');
 	}
 
 	//check if the subscription already exists
