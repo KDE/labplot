@@ -165,18 +165,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 		//tmpY2DataColumn = dataSourceCurve->y2Column();
 	}
 
-	if (!tmpXDataColumn || !tmpYDataColumn) {
-		emit q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
-
-	//check column sizes
-	//TODO: support no x-Column
-	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
-		convolutionResult.available = true;
-		convolutionResult.valid = false;
-		convolutionResult.status = i18n("Number of x and y data points must be equal.");
+	if (!tmpYDataColumn || !tmpY2DataColumn) {
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -187,30 +176,26 @@ void XYConvolutionCurvePrivate::recalculate() {
 	QVector<double> ydataVector;
 	QVector<double> y2dataVector;
 
-	double xmin;
-	double xmax;
+	//TODO: can we use this?
+	/*double xmin, xmax;
 	if (convolutionData.autoRange) {
 		xmin = tmpXDataColumn->minimum();
 		xmax = tmpXDataColumn->maximum();
 	} else {
 		xmin = convolutionData.xRange.first();
 		xmax = convolutionData.xRange.last();
-	}
+	}*/
 
-	//TODO: don't need x axis
-	for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
-		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
-			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
-
-			// only when inside given range
-			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
-				xdataVector.append(tmpXDataColumn->valueAt(row));
-				ydataVector.append(tmpYDataColumn->valueAt(row));
-				y2dataVector.append(tmpY2DataColumn->valueAt(row));
-			}
-		}
-	}
+	//only copy those data where values are valid
+	for (int row = 0; row < tmpXDataColumn->rowCount(); ++row)
+		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !tmpXDataColumn->isMasked(row))
+			xdataVector.append(tmpXDataColumn->valueAt(row));
+	for (int row = 0; row < tmpYDataColumn->rowCount(); ++row)
+		if (!std::isnan(tmpYDataColumn->valueAt(row)) && !tmpYDataColumn->isMasked(row))
+			ydataVector.append(tmpYDataColumn->valueAt(row));
+	for (int row = 0; row < tmpY2DataColumn->rowCount(); ++row)
+		if (!std::isnan(tmpY2DataColumn->valueAt(row)) && !tmpY2DataColumn->isMasked(row))
+			y2dataVector.append(tmpY2DataColumn->valueAt(row));
 
 	const size_t n = (size_t)ydataVector.size();	// number of points for signal
 	const size_t m = (size_t)y2dataVector.size();	// number of points for response
@@ -253,8 +238,9 @@ void XYConvolutionCurvePrivate::recalculate() {
 
 	xVector->resize((int)np);
 	yVector->resize((int)np);
-	//TODO: handle xdata
-	memcpy(xVector->data(), xdata, np * sizeof(double));
+	// take given x-axis values
+	//TODO: handle empty x axis
+	memcpy(xVector->data(), xdata, xdataVector.size() * sizeof(double));
 	memcpy(yVector->data(), out, np * sizeof(double));
 	free(out);
 ///////////////////////////////////////////////////////////
@@ -264,7 +250,6 @@ void XYConvolutionCurvePrivate::recalculate() {
 	convolutionResult.valid = true;
 	convolutionResult.status = QString::number(status);
 	convolutionResult.elapsedTime = timer.elapsed();
-//	convolutionResult.value = ydata[np-1];
 
 	//redraw the curve
 	emit q->dataChanged();
