@@ -638,13 +638,13 @@ bool MQTTClient::checkTopicContains(const QString &superior, const QString& infe
 			bool ok = true;
 			for (int i = 0; i < superiorList.size(); ++i) {
 				if (superiorList.at(i) != inferiorList.at(i)) {
-					if ((superiorList.at(i) != "+") &&
-							!(superiorList.at(i) == "#" && i == superiorList.size() - 1)) {
+					if ((superiorList.at(i) != '+') &&
+							!(superiorList.at(i) == '#' && i == superiorList.size() - 1)) {
 						//if the two topics differ, and the superior's current level isn't + or #(which can be only in the last position)
 						//then superior can't contain inferior
 						ok = false;
 						break;
-					} else if (i == superiorList.size() - 1 && (superiorList.at(i) == "+" && inferiorList.at(i) == "#") ) {
+					} else if (i == superiorList.size() - 1 && (superiorList.at(i) == '+' && inferiorList.at(i) == '#') ) {
 						//if the two topics differ at the last level
 						//and the superior's current level is + while the inferior's is #(which can be only in the last position)
 						//then superior can't contain inferior
@@ -660,7 +660,7 @@ bool MQTTClient::checkTopicContains(const QString &superior, const QString& infe
 }
 
 /*!
- *\brief Returns the "+" wildcard containing topic name, which includes the given topic names
+ *\brief Returns the '+' wildcard containing topic name, which includes the given topic names
  *
  * \param first the name of a topic
  * \param second the name of a topic
@@ -702,8 +702,8 @@ QString MQTTClient::checkCommonLevel(const QString& first, const QString& second
 					if (i != differIndex) {
 						commonTopic.append(firstList.at(i));
 					} else {
-						//we put "+" wildcard at the level where they differ
-						commonTopic.append("+");
+						//we put '+' wildcard at the level where they differ
+						commonTopic.append('+');
 					}
 
 					if (i != firstList.size() - 1)

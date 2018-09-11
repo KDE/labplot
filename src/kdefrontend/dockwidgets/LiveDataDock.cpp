@@ -83,7 +83,6 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	ui.bUnsubscribe->setToolTip(i18n("Unsubscribe selected topics"));
 	ui.bWillSettings->setToolTip(i18n("Manage MQTT connection's will settings"));
 	ui.bWillSettings->setIcon(ui.bWillSettings->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
-
 #endif
 }
 
@@ -305,7 +304,6 @@ void LiveDataDock::sampleSizeChanged(int sampleSize) {
 			client->setSampleSize(sampleSize);
 	}
 #endif
-
 }
 
 /*!
@@ -353,8 +351,8 @@ void LiveDataDock::updateTypeChanged(int idx) {
 			ui.sbSampleSize->hide();
 
 			for (auto* source: m_liveDataSources) {
-			source->setFileWatched(true);
-			source->setUpdateType(type);
+				source->setFileWatched(true);
+				source->setUpdateType(type);
 			}
 		}
 	}
@@ -707,7 +705,7 @@ void LiveDataDock::addSubscription() {
 			name.append("/#");
 		while(tempItem->parent() != nullptr) {
 			tempItem = tempItem->parent();
-			name.prepend(tempItem->text(0) + "/");
+			name.prepend(tempItem->text(0) + '/');
 		}
 
 		//check if the subscription already exists
@@ -881,7 +879,7 @@ void LiveDataDock::removeSubscription() {
  */
 void LiveDataDock::setTopicCompleter(const QString& topicName) {
 	if(!m_searching) {
-		QStringList list = topicName.split("/", QString::SkipEmptyParts);
+		QStringList list = topicName.split('/', QString::SkipEmptyParts);
 		QString topic;
 		if(!list.isEmpty()) {
 			topic = list.at(0);
@@ -988,7 +986,7 @@ bool LiveDataDock::checkTopicContains(const QString &superior, const QString &in
 	if (superior == inferior)
 		return true;
 	else {
-		if(superior.contains("/")) {
+		if(superior.contains('/')) {
 			QStringList superiorList = superior.split('/', QString::SkipEmptyParts);
 			QStringList inferiorList = inferior.split('/', QString::SkipEmptyParts);
 
@@ -1000,12 +998,12 @@ bool LiveDataDock::checkTopicContains(const QString &superior, const QString &in
 			for(int i = 0; i < superiorList.size(); ++i) {
 				if(superiorList.at(i) != inferiorList.at(i)) {
 					if((superiorList.at(i) != "+") &&
-							!(superiorList.at(i) == "#" && i == superiorList.size() - 1)) {
+							!(superiorList.at(i) == '#' && i == superiorList.size() - 1)) {
 						//if the two topics differ, and the superior's current level isn't + or #(which can be only in the last position)
 						//then superior can't contain inferior
 						ok = false;
 						break;
-					} else if(i == superiorList.size() - 1 && (superiorList.at(i) == "+" && inferiorList.at(i) == "#") ) {
+					} else if(i == superiorList.size() - 1 && (superiorList.at(i) == "+" && inferiorList.at(i) == '#') ) {
 						//if the two topics differ at the last level
 						//and the superior's current level is + while the inferior's is #(which can be only in the last position)
 						//then superior can't contain inferior
@@ -1106,11 +1104,11 @@ QString LiveDataDock::checkCommonLevel(const QString& first, const QString& seco
 						commonTopic.append(firstList.at(i));
 					} else {
 						//we put "+" wildcard at the level where they differ
-						commonTopic.append("+");
+						commonTopic.append('+');
 					}
 
 					if(i != firstList.size() - 1)
-						commonTopic.append("/");
+						commonTopic.append('/');
 				}
 			}
 		}
@@ -1137,7 +1135,7 @@ void LiveDataDock::addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetI
 				name.append(temp->text(0) + "/#");
 				while(temp->parent() != nullptr) {
 					temp = temp->parent();
-					name.prepend(temp->text(0) + "/");
+					name.prepend(temp->text(0) + '/');
 				}
 
 			}
@@ -1146,7 +1144,7 @@ void LiveDataDock::addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetI
 				name.append(temp->text(0));
 				while(temp->parent() != nullptr) {
 					temp = temp->parent();
-					name.prepend(temp->text(0) + "/");
+					name.prepend(temp->text(0) + '/');
 				}
 			}
 
@@ -1170,7 +1168,7 @@ void LiveDataDock::addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetI
  */
 void LiveDataDock::restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList& list, int level) {
 	if(level < list.size()) {
-		if((level < list.size() - 1) && (list[level] != "+") && (list[level] != "#")) {
+		if((level < list.size() - 1) && (list[level] != "+") && (list[level] != '#')) {
 			for(int i = 0; i < topic->childCount(); ++i) {
 				//if the current level isn't + or # wildcard we recursively continue with the next level
 				if(topic->child(i)->text(0) == list[level]) {
@@ -1184,12 +1182,12 @@ void LiveDataDock::restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWid
 				QString name;
 				name.append(topic->child(i)->text(0));
 				for(int j = level + 1; j < list.size(); ++j) {
-					name.append("/" + list[j]);
+					name.append('/' + list[j]);
 				}
 				QTreeWidgetItem* temp = topic->child(i);
 				while(temp->parent() != nullptr) {
 					temp = temp->parent();
-					name.prepend(temp->text(0) + "/");
+					name.prepend(temp->text(0) + '/');
 				}
 
 				//Add the topic as child of the subscription
@@ -1200,7 +1198,7 @@ void LiveDataDock::restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWid
 				//Continue adding children recursively to the new item
 				restoreSubscriptionChildren(topic->child(i), newItem, list, level + 1);
 			}
-		} else if (list[level] == "#") {
+		} else if (list[level] == '#') {
 			//add the children of the # wildcard containing subscription
 			addSubscriptionChildren(topic, subscription);
 		}
@@ -1251,10 +1249,10 @@ int LiveDataDock::commonLevelIndex(const QString& first, const QString& second) 
 					if(i != differIndex)
 						commonTopic.append(firstList.at(i));
 					else
-						commonTopic.append("+");
+						commonTopic.append('+');
 
 					if(i != firstList.size() - 1)
-						commonTopic.append("/");
+						commonTopic.append('/');
 				}
 			}
 		}
@@ -1602,7 +1600,7 @@ void LiveDataDock::removeClient(const QString& name) {
  * \param topic
  */
 bool LiveDataDock::testSubscribe(const QString& topic){
-	QStringList topicList = topic.split("/", QString::SkipEmptyParts);
+	QStringList topicList = topic.split('/', QString::SkipEmptyParts);
 	QTreeWidgetItem* currentItem = nullptr;
 	for(int i = 0; i <ui.twTopics->topLevelItemCount(); ++i) {
 		if(ui.twTopics->topLevelItem(i)->text(0) == topicList[0]) {
@@ -1613,7 +1611,7 @@ bool LiveDataDock::testSubscribe(const QString& topic){
 
 	if (currentItem) {
 		for(int i = 1 ; i < topicList.size(); ++i) {
-			if(topicList[i] == "#")
+			if(topicList[i] == '#')
 				break;
 
 			for(int j = 0; j < currentItem->childCount(); ++j) {
