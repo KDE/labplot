@@ -101,10 +101,11 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 void ImportFileDialog::loadSettings() {
 	//restore saved settings
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	m_importFileWidget->loadSettings();
+
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	m_showOptions ? m_optionsButton->setText(i18n("Hide Options")) : m_optionsButton->setText(i18n("Show Options"));
-
 	m_importFileWidget->showOptions(m_showOptions);
 
 	//do the signal-slot connections after all settings where loaded in import file widget and check the OK button after this
@@ -174,7 +175,6 @@ void ImportFileDialog::importToMQTT(MQTTClient* client) const{
 	m_importFileWidget->saveMQTTSettings(client);
 	client->read();
 	client->ready();
-
 }
 #endif
 

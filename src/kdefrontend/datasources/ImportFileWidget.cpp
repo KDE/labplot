@@ -197,22 +197,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.tePreview->setLayout(layout);
 	m_twPreview->hide();
 
-	//SLOTs for the general part of the data source configuration
-	connect( ui.cbSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(sourceTypeChanged(int)));
-	connect( ui.leFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
-	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
-	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
-	connect( ui.tvJson, SIGNAL(clicked(QModelIndex)), this, SLOT(refreshPreview()));
-	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
-	connect( ui.bFileInfo, SIGNAL(clicked()), this, SLOT (fileInfoDialog()) );
-	connect( ui.bSaveFilter, SIGNAL(clicked()), this, SLOT (saveFilter()) );
-	connect( ui.bManageFilters, SIGNAL(clicked()), this, SLOT (manageFilters()) );
-	connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged(int)) );
-	connect( ui.cbUpdateType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
-	connect( ui.cbReadingType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
-	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
-	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
-
 #ifdef HAVE_MQTT
 	ui.cbSourceType->addItem(QLatin1String("MQTT"));
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "MQTT_connections";
@@ -228,22 +212,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	m_willSettings.willLastMessage = QString();
 	m_willSettings.willStatistics.fill(false, 15);
 
-	connect(ui.cbConnection, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnectionChanged);
-	connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
-	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
-	connect(ui.bSubscribe,  &QPushButton::clicked, this, &ImportFileWidget::mqttSubscribe);
-	connect(ui.bUnsubscribe, &QPushButton::clicked, this,&ImportFileWidget::mqttUnsubscribe);
-	connect(m_client, &QMqttClient::messageReceived, this, &ImportFileWidget::mqttMessageReceived);
-	connect(this, &ImportFileWidget::newTopic, this, &ImportFileWidget::setTopicCompleter);
-	connect(m_searchTimer, &QTimer::timeout, this, &ImportFileWidget::topicTimeout);
-	connect(m_connectTimeoutTimer, &QTimer::timeout, this, &ImportFileWidget::mqttConnectTimeout);
-	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
-	connect(ui.cbFileType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this]() {emit checkFileType();});
-	connect(ui.leTopics, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToTopicTreeItem);
-	connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToSubsriptionTreeItem);
-	connect(ui.bManageConnections, &QPushButton::clicked, this, &ImportFileWidget::showMQTTConnectionManager);
-	connect(ui.bWillMessage, &QPushButton::clicked, this, &ImportFileWidget::showWillSettings);
-
 	ui.bSubscribe->setIcon(ui.bSubscribe->style()->standardIcon(QStyle::SP_ArrowRight));
 	ui.bSubscribe->setToolTip(i18n("Subscribe selected topics"));
 	ui.bUnsubscribe->setIcon(ui.bUnsubscribe->style()->standardIcon(QStyle::SP_ArrowLeft));
@@ -258,9 +226,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
 	ui.bSaveFilter->hide();
 	ui.bManageFilters->hide();
-
-	//defer the loading of settings a bit in order to show the dialog prior to blocking the GUI in refreshPreview()
-	QTimer::singleShot( 100, this, SLOT(loadSettings()) );
 }
 
 void ImportFileWidget::loadSettings() {
@@ -278,7 +243,15 @@ void ImportFileWidget::loadSettings() {
 	ui.cbSourceType->setCurrentIndex(conf.readEntry("SourceType").toInt());
 
 	//general settings
-	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
+	AbstractFileFilter::FileType fileType = static_cast<AbstractFileFilter::FileType>(conf.readEntry("Type", 0));
+	for (int i = 0; i < ui.cbFileType->count(); ++i) {
+		AbstractFileFilter::FileType itemFileType = static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt());
+		if (itemFileType == fileType) {
+			ui.cbFileType->setCurrentIndex(i);
+			break;
+		}
+	}
+
 	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
 	filterChanged(ui.cbFilter->currentIndex());	// needed if filter is not changed
 	if (m_fileName.isEmpty())
@@ -321,10 +294,17 @@ void ImportFileWidget::loadSettings() {
 	m_initialisingMQTT = false;
 #endif
 
-	//update the widgets and refresh the preview for the for current source type
+	//initialize the slots after all settings were set in order to avoid unneeded refreshes
+	initSlots();
+
+	//update the status of the widgets
 	sourceTypeChanged(currentSourceType());
+	fileTypeChanged(fileType);
+	readingTypeChanged(ui.cbReadingType->currentIndex());
+
+	//all set now, refresh the preview
 	m_suppressRefresh = false;
-	fileTypeChanged(currentFileType());
+	QTimer::singleShot(100, this, [=] () { refreshPreview(); });
 }
 
 ImportFileWidget::~ImportFileWidget() {
@@ -380,6 +360,42 @@ ImportFileWidget::~ImportFileWidget() {
 		m_imageOptionsWidget->saveSettings();
 	if (m_jsonOptionsWidget)
 		m_jsonOptionsWidget->saveSettings();
+}
+
+void ImportFileWidget::initSlots() {
+	//SLOTs for the general part of the data source configuration
+	connect( ui.cbSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(sourceTypeChanged(int)));
+	connect( ui.leFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
+	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
+	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
+	connect( ui.tvJson, SIGNAL(clicked(QModelIndex)), this, SLOT(refreshPreview()));
+	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
+	connect( ui.bFileInfo, SIGNAL(clicked()), this, SLOT (fileInfoDialog()) );
+	connect( ui.bSaveFilter, SIGNAL(clicked()), this, SLOT (saveFilter()) );
+	connect( ui.bManageFilters, SIGNAL(clicked()), this, SLOT (manageFilters()) );
+	connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged(int)) );
+	connect( ui.cbUpdateType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
+	connect( ui.cbReadingType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
+	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
+	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
+
+#ifdef HAVE_MQTT
+	connect(ui.cbConnection, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnectionChanged);
+	connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
+	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
+	connect(ui.bSubscribe,  &QPushButton::clicked, this, &ImportFileWidget::mqttSubscribe);
+	connect(ui.bUnsubscribe, &QPushButton::clicked, this,&ImportFileWidget::mqttUnsubscribe);
+	connect(m_client, &QMqttClient::messageReceived, this, &ImportFileWidget::mqttMessageReceived);
+	connect(this, &ImportFileWidget::newTopic, this, &ImportFileWidget::setTopicCompleter);
+	connect(m_searchTimer, &QTimer::timeout, this, &ImportFileWidget::topicTimeout);
+	connect(m_connectTimeoutTimer, &QTimer::timeout, this, &ImportFileWidget::mqttConnectTimeout);
+	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
+	connect(ui.cbFileType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this]() {emit checkFileType();});
+	connect(ui.leTopics, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToTopicTreeItem);
+	connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToSubsriptionTreeItem);
+	connect(ui.bManageConnections, &QPushButton::clicked, this, &ImportFileWidget::showMQTTConnectionManager);
+	connect(ui.bWillMessage, &QPushButton::clicked, this, &ImportFileWidget::showWillSettings);
+#endif
 }
 
 void ImportFileWidget::showAsciiHeaderOptions(bool b) {
@@ -1439,7 +1455,8 @@ void ImportFileWidget::manageFilters() {
 	and populates the combobox with the available pre-defined fllter settings for the selected type.
 */
 void ImportFileWidget::fileTypeChanged(int index) {
-	AbstractFileFilter::FileType fileType = (AbstractFileFilter::FileType)ui.cbFileType->itemData(index).toInt();
+	Q_UNUSED(index);
+	AbstractFileFilter::FileType fileType = currentFileType();//(AbstractFileFilter::FileType)ui.cbFileType->itemData(index).toInt();
 	DEBUG("ImportFileWidget::fileTypeChanged " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
 	initOptionsWidget(fileType);
 
@@ -2737,7 +2754,7 @@ void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 		QMessageBox::critical(this, i18n("Couldn't connect"), i18n("The client ID wasn't accepted"));
 		break;
 	case QMqttClient::ServerUnavailable:
-		QMessageBox::critical(this, i18n("Server unavailable"), i18n("The broker %1 couldn't be reached."));
+		QMessageBox::critical(this, i18n("Server unavailable"), i18n("The broker couldn't be reached."));
 		break;
 	case QMqttClient::NotAuthorized:
 		QMessageBox::critical(this, i18n("Not authorized"), i18n("The client is not authorized to connect."));

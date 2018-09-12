@@ -68,6 +68,7 @@ public:
 
 	void showOptions(bool);
 	void saveSettings(LiveDataSource*) const;
+	void loadSettings();
 	AbstractFileFilter::FileType currentFileType() const;
 	LiveDataSource::SourceType currentSourceType() const;
 	AbstractFileFilter* currentFileFilter() const;
@@ -91,6 +92,7 @@ private:
 	void setMQTTVisible(bool);
 	void updateContent(const QString&, AbstractFileFilter::FileType);
 	void initOptionsWidget(AbstractFileFilter::FileType);
+	void initSlots();
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
@@ -108,7 +110,6 @@ private:
 	bool m_suppressRefresh;
 
 private slots:
-	void loadSettings();
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int);
 
