@@ -165,7 +165,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 		//tmpY2DataColumn = dataSourceCurve->y2Column();
 	}
 
-	if (!tmpYDataColumn || !tmpY2DataColumn) {
+	if (tmpYDataColumn == nullptr || tmpY2DataColumn == nullptr) {
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -187,9 +187,10 @@ void XYConvolutionCurvePrivate::recalculate() {
 	}*/
 
 	//only copy those data where values are valid
-	for (int row = 0; row < tmpXDataColumn->rowCount(); ++row)
-		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !tmpXDataColumn->isMasked(row))
-			xdataVector.append(tmpXDataColumn->valueAt(row));
+	if (tmpXDataColumn != nullptr)
+		for (int row = 0; row < tmpXDataColumn->rowCount(); ++row)
+			if (!std::isnan(tmpXDataColumn->valueAt(row)) && !tmpXDataColumn->isMasked(row))
+				xdataVector.append(tmpXDataColumn->valueAt(row));
 	for (int row = 0; row < tmpYDataColumn->rowCount(); ++row)
 		if (!std::isnan(tmpYDataColumn->valueAt(row)) && !tmpYDataColumn->isMasked(row))
 			ydataVector.append(tmpYDataColumn->valueAt(row));
@@ -238,9 +239,13 @@ void XYConvolutionCurvePrivate::recalculate() {
 
 	xVector->resize((int)np);
 	yVector->resize((int)np);
-	// take given x-axis values
-	//TODO: handle empty x axis
-	memcpy(xVector->data(), xdata, xdataVector.size() * sizeof(double));
+	// take given x-axis values or use index
+	if (tmpXDataColumn != nullptr)
+		memcpy(xVector->data(), xdata, xdataVector.size() * sizeof(double));
+	else {
+		for (size_t i = 0; i < np; i++)
+			xVector->data()[i] = i + 1;
+	}
 	memcpy(yVector->data(), out, np * sizeof(double));
 	free(out);
 ///////////////////////////////////////////////////////////

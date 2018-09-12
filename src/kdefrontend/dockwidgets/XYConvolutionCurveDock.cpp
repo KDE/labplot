@@ -448,12 +448,12 @@ void XYConvolutionCurveDock::enableRecalculate() const {
 	if (m_initializing)
 		return;
 
-	//no convolution possible without the x- and y-data
+	//no convolution possible without the y- and y2-data
 	bool hasSourceData = false;
 	if (m_convolutionCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
-		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX!=nullptr && aspectY!=nullptr);
+		AbstractAspect* aspectY2 = static_cast<AbstractAspect*>(cbY2DataColumn->currentModelIndex().internalPointer());
+		hasSourceData = (aspectY!=nullptr && aspectY2!=nullptr);
 	} else {
 		 hasSourceData = (m_convolutionCurve->dataSourceCurve() != nullptr);
 	}
