@@ -271,7 +271,7 @@ set(BACKEND_SOURCES
 )
 
 IF (ENABLE_LIBORIGIN)
-	lsit(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
+	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
 ENDIF ()
 
 set(NSL_SOURCES
