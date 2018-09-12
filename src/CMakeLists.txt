@@ -223,7 +223,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/ROOTFilter.cpp
 	${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
 	${BACKEND_DIR}/datasources/projects/LabPlotProjectParser.cpp
-	${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
 	${BACKEND_DIR}/matrix/Matrix.cpp
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
@@ -270,6 +269,10 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datapicker/Segments.cpp
 	${BACKEND_DIR}/datapicker/DatapickerCurve.cpp
 )
+
+IF (ENABLE_LIBORIGIN)
+	lsit(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
+ENDIF ()
 
 set(NSL_SOURCES
 	${BACKEND_DIR}/nsl/nsl_conv.c

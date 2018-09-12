@@ -111,8 +111,10 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 		title = i18nc("@title:window", "Import LabPlot Project");
 		break;
 	case (ProjectOrigin):
+#ifdef HAVE_LIBORIGIN
 		m_projectParser = new OriginProjectParser();
 		title = i18nc("@title:window", "Import Origin Project");
+#endif
 		break;
 	}
 
@@ -234,8 +236,10 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	timer.start();
 	connect(m_projectParser, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
 
+#ifdef HAVE_LIBORIGIN
 	if (m_projectType == ProjectOrigin && ui.chbUnusedObjects->isVisible() && ui.chbUnusedObjects->isChecked())
 		reinterpret_cast<OriginProjectParser*>(m_projectParser)->setImportUnusedObjects(true);
+#endif
 
 	m_projectParser->importTo(targetFolder, selectedPathes);
 	statusBar->showMessage( i18n("Project data imported in %1 seconds.", (float)timer.elapsed()/1000) );
@@ -251,6 +255,7 @@ void ImportProjectDialog::refreshPreview() {
 	QString project = ui.leFileName->text();
 	m_projectParser->setProjectFileName(project);
 
+#ifdef HAVE_LIBORIGIN
 	if (m_projectType == ProjectOrigin) {
 		OriginProjectParser* originParser = reinterpret_cast<OriginProjectParser*>(m_projectParser);
 		if (originParser->hasUnusedObjects())
@@ -260,6 +265,7 @@ void ImportProjectDialog::refreshPreview() {
 
 		originParser->setImportUnusedObjects(ui.chbUnusedObjects->isVisible() && ui.chbUnusedObjects->isChecked());
 	}
+#endif
 
 	ui.tvPreview->setModel(m_projectParser->model());
 
@@ -349,9 +355,11 @@ void ImportProjectDialog::selectFile() {
 		supportedFormats = i18n("LabPlot Projects (%1)", Project::supportedExtensions());
 		break;
 	case (ProjectOrigin):
+#ifdef HAVE_LIBORIGIN
 		title = i18nc("@title:window", "Open Origin Project");
 		lastDirConfEntryName = QLatin1String("LastImportOriginProjecttDir");
 		supportedFormats = i18n("Origin Projects (%1)", OriginProjectParser::supportedExtensions());
+#endif
 		break;
 	}
 

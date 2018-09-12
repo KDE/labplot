@@ -37,7 +37,9 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/LiveDataSource.h"
+#ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
+#endif
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #endif
@@ -295,7 +297,11 @@ void MainWin::initGUI(const QString& fileName) {
 	connect(&m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(autoSaveProject()));
 
 	if (!fileName.isEmpty()) {
+#ifdef HAVE_LIBORIGIN
 		if (Project::isLabPlotProject(fileName) || OriginProjectParser::isOriginProject(fileName)) {
+#else
+		if (Project::isLabPlotProject(fileName)) {
+#endif
 			QTimer::singleShot(0, this, [=] () { openProject(fileName); });
 		} else {
 			newProject();
@@ -939,7 +945,11 @@ void MainWin::openProject() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	const QString& dir = conf.readEntry("LastOpenDir", "");
 	const QString& path = QFileDialog::getOpenFileName(this,i18n("Open Project"), dir,
+#ifdef HAVE_LIBORIGIN
 	                      i18n("LabPlot Projects (%1);;Origin Projects (%2)", Project::supportedExtensions(), OriginProjectParser::supportedExtensions()) );
+#else
+	                      i18n("LabPlot Projects (%1)", Project::supportedExtensions()) );
+#endif
 
 	if (path.isEmpty())// "Cancel" was clicked
 		return;
@@ -970,12 +980,14 @@ void MainWin::openProject(const QString& filename) {
 	bool rc = false;
 	if (Project::isLabPlotProject(filename))
 		rc = m_project->load(filename);
+#ifdef HAVE_LIBORIGIN
 	else if (OriginProjectParser::isOriginProject(filename)) {
 		OriginProjectParser parser;
 		parser.setProjectFileName(filename);
 		parser.importTo(m_project, QStringList()); //TODO: add return code
 		rc = true;
 	}
+#endif
 
 	if (!rc) {
 		closeProject();
@@ -1620,7 +1632,7 @@ void MainWin::toggleDockWidget(QAction* action)  {
 		else
 			toggleShowWidget(m_projectExplorerDock, true);
 	} else if (action->objectName() == "toggle_properties_explorer_dock") {
-		if (m_propertiesDock->isVisible())		
+		if (m_propertiesDock->isVisible())
 			toggleHideWidget(m_propertiesDock, false);
 		else
 			toggleShowWidget(m_propertiesDock, false);
@@ -1718,7 +1730,11 @@ void MainWin::dropEvent(QDropEvent* event) {
 		QUrl url = event->mimeData()->urls().at(0);
 		const QString& f = url.toLocalFile();
 
+#ifdef HAVE_LIBORIGIN
 		if (Project::isLabPlotProject(f) || OriginProjectParser::isOriginProject(f))
+#else
+		if (Project::isLabPlotProject(f))
+#endif
 				openProject(f);
 		else {
 			if (!m_project)
