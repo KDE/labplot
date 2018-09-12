@@ -190,7 +190,7 @@ void XYAnalysisCurve::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeEndElement();
 
-	writer->writeEndElement(); //"xyAnalysiCurve"
+	writer->writeEndElement(); //"xyAnalysisCurve"
 }
 
 //! Load from XML

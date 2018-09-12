@@ -2950,6 +2950,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				removeChild(curve);
 				return false;
 			}
+		} else if (reader->name() == "xySmoothCurve") {
+			XYSmoothCurve* curve = new XYSmoothCurve("");
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
+				removeChild(curve);
+				return false;
+			}
 		} else if (reader->name() == "xyFitCurve") {
 			XYFitCurve* curve = new XYFitCurve("");
 			if (curve->load(reader, preview))
@@ -2974,8 +2982,8 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				removeChild(curve);
 				return false;
 			}
-		} else if (reader->name() == "xySmoothCurve") {
-			XYSmoothCurve* curve = new XYSmoothCurve("");
+		} else if (reader->name() == "xyConvolutionCurve") {
+			XYConvolutionCurve* curve = new XYConvolutionCurve("");
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {

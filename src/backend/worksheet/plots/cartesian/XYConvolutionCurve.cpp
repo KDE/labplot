@@ -272,6 +272,7 @@ void XYConvolutionCurve::save(QXmlStreamWriter* writer) const{
 
 	//write the base class
 	XYAnalysisCurve::save(writer);
+	//TODO:	WRITE_COLUMN(d->y2DataColumn, y2DataColumn);
 
 	//write xy-convolution-curve specific information
 	// convolution data
@@ -306,6 +307,7 @@ void XYConvolutionCurve::save(QXmlStreamWriter* writer) const{
 
 //! Load from XML
 bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
+	DEBUG("XYConvolutionCurve::load()");
 	Q_D(XYConvolutionCurve);
 
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
@@ -320,6 +322,7 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
+		//TODO: read y2DataColumn
 		if (reader->name() == "xyAnalysisCurve") {
 			if ( !XYAnalysisCurve::load(reader, preview) )
 				return false;
@@ -346,9 +349,9 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 				delete column;
 				return false;
 			}
-			if (column->name()=="x")
+			if (column->name() == "x")
 				d->xColumn = column;
-			else if (column->name()=="y")
+			else if (column->name() == "y")
 				d->yColumn = column;
 		}
 	}
