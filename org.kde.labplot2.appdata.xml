@@ -119,6 +119,7 @@
       <caption xml:lang="it">Adatta esempio</caption>
       <caption xml:lang="nl">Voorbeeld aanpassing</caption>
       <caption xml:lang="pt">Exemplo de ajuste</caption>
+      <caption xml:lang="pt-BR">Exemplo de ajuste</caption>
       <caption xml:lang="sv">Anpassningsexempel</caption>
       <caption xml:lang="uk">Приклад апроксимації</caption>
       <caption xml:lang="x-test">xxFit examplexx</caption>
@@ -153,6 +154,7 @@
       <caption xml:lang="it">Foglio di lavoro CAS</caption>
       <caption xml:lang="nl">CAS werkblad</caption>
       <caption xml:lang="pt">Folha de cálculo CAS</caption>
+      <caption xml:lang="pt-BR">Folha de trabalho CAS</caption>
       <caption xml:lang="sv">CAS-arbetsblad</caption>
       <caption xml:lang="uk">Робочий аркуш СКА</caption>
       <caption xml:lang="x-test">xxCAS worksheetxx</caption>
