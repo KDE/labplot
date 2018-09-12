@@ -1258,7 +1258,7 @@ void CartesianPlot::addFourierTransformCurve() {
 }
 
 void CartesianPlot::addConvolutionCurve() {
-	XYConvolutionCurve* curve = new XYConvolutionCurve("(De-)Convolution");
+	XYConvolutionCurve* curve = new XYConvolutionCurve("Convolution");
 	this->addChild(curve);
 }
 

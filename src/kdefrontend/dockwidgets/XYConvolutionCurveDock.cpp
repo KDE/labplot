@@ -326,10 +326,10 @@ void XYConvolutionCurveDock::updateSettings(const AbstractColumn* column) {
 		return;
 
 	//TODO
-// 	size_t n=0;
-// 	for (int row=0; row < column->rowCount(); row++)
-// 		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
-// 			n++;
+	// 	size_t n=0;
+	// 	for (int row=0; row < column->rowCount(); row++)
+	// 		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
+	// 			n++;
 }
 void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
@@ -399,8 +399,19 @@ void XYConvolutionCurveDock::xRangeMaxChanged() {
 }
 
 void XYConvolutionCurveDock::directionChanged() {
-	nsl_conv_direction_type direction = (nsl_conv_direction_type) uiGeneralTab.cbDirection->currentIndex();
-	m_convolutionData.direction = direction;
+	DEBUG("XYConvolutionCurveDock::directionChanged()");
+	nsl_conv_direction_type dir = (nsl_conv_direction_type) uiGeneralTab.cbDirection->currentIndex();
+	m_convolutionData.direction = dir;
+
+	// change name if still default
+	if ( m_curve->name().compare(i18n("Convolution")) == 0  && dir == nsl_conv_direction_backward) {
+		m_curve->setName(i18n("Deconvolution"));
+		uiGeneralTab.leName->setText(m_curve->name());
+	}
+	if (m_curve->name().compare(i18n("Deconvolution")) == 0  && dir == nsl_conv_direction_forward) {
+		m_curve->setName(i18n("Convolution"));
+		uiGeneralTab.leName->setText(m_curve->name());
+	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
@@ -478,7 +489,7 @@ void XYConvolutionCurveDock::showConvolutionResult() {
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	if (convolutionResult.elapsedTime>1000)
+	if (convolutionResult.elapsedTime > 1000)
 		str += i18n("calculation time: %1 s", QString::number(convolutionResult.elapsedTime/1000)) + "<br>";
 	else
 		str += i18n("calculation time: %1 ms", QString::number(convolutionResult.elapsedTime)) + "<br>";
