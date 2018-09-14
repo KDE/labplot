@@ -243,9 +243,9 @@ void XYConvolutionCurvePrivate::recalculate() {
 	if (tmpXDataColumn != nullptr) {
 		memcpy(xVector->data(), xdata, xdataVector.size() * sizeof(double));
 		//TODO: set remaining values
-	} else {
+	} else {	// fill with index (starting with 0)
 		for (size_t i = 0; i < np; i++)
-			xVector->data()[i] = i + 1;
+			xVector->data()[i] = i;
 	}
 	memcpy(yVector->data(), out, np * sizeof(double));
 	free(out);

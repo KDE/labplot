@@ -40,6 +40,19 @@ class ConvolutionTest : public QObject {
 private slots:
 	void initTestCase();
 
-	void test1();
+	// linear tests
+	void testLinear();
+	void testLinear_noX();
+	void testLinear_swapped();
+	void testLinear_swapped_noX();
+	void testLinear_norm();
+	void testLinear_swapped_norm();
+//TODO
+//	void testLinear_wrapMax();
+//	void testLinear_swapped_wrapMax();
+//	void testLinear_wrapCenter();
+//	void testLinear_swapped_wrapCenter();
+
+	//TODO: circular tests
 };
 #endif
