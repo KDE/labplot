@@ -240,9 +240,10 @@ void XYConvolutionCurvePrivate::recalculate() {
 	xVector->resize((int)np);
 	yVector->resize((int)np);
 	// take given x-axis values or use index
-	if (tmpXDataColumn != nullptr)
+	if (tmpXDataColumn != nullptr) {
 		memcpy(xVector->data(), xdata, xdataVector.size() * sizeof(double));
-	else {
+		//TODO: set remaining values
+	} else {
 		for (size_t i = 0; i < np; i++)
 			xVector->data()[i] = i + 1;
 	}
