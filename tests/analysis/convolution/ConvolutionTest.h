@@ -47,11 +47,10 @@ private slots:
 	void testLinear_swapped_noX();
 	void testLinear_norm();
 	void testLinear_swapped_norm();
-//TODO
-//	void testLinear_wrapMax();
-//	void testLinear_swapped_wrapMax();
-//	void testLinear_wrapCenter();
-//	void testLinear_swapped_wrapCenter();
+	void testLinear_wrapMax();
+	void testLinear_swapped_wrapMax();
+	void testLinear_wrapCenter();
+	void testLinear_swapped_wrapCenter();
 
 	//TODO: circular tests
 };
