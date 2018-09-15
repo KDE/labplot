@@ -58,6 +58,7 @@ XYConvolutionCurveDock::XYConvolutionCurveDock(QWidget* parent) : XYCurveDock(pa
 	cbDataSourceCurve(nullptr),
 	cbXDataColumn(nullptr),
 	cbYDataColumn(nullptr),
+	cbY2DataColumn(nullptr),
 	m_convolutionCurve(nullptr) {
 
 	//hide the line connection type
@@ -233,7 +234,7 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 	m_convolutionData = m_convolutionCurve->convolutionData();
 	initGeneralTab();
 	initTabs();
-	m_initializing=false;
+	m_initializing = false;
 
 	//hide the "skip gaps" option after the curves were set
 	ui.lLineSkipGaps->hide();
@@ -290,7 +291,6 @@ void XYConvolutionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	XYCurve* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
-	// disable convolution orders and accuracies that need more data points
 	this->updateSettings(dataSourceCurve->xColumn());
 
 	if (m_initializing)
@@ -334,6 +334,7 @@ void XYConvolutionCurveDock::updateSettings(const AbstractColumn* column) {
 void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
+	DEBUG("yDataColumnChanged()");
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -345,6 +346,7 @@ void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
+	DEBUG("y2DataColumnChanged()");
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -352,7 +354,6 @@ void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYConvolutionCurve*>(curve)->setY2DataColumn(column);
 }
-
 
 void XYConvolutionCurveDock::autoRangeChanged() {
 	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();

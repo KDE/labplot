@@ -4,6 +4,7 @@
     Description          : Base class for all analysis curves
     --------------------------------------------------------------------
     Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -52,8 +53,10 @@ public:
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, y2DataColumn, Y2DataColumn)	// optional
 	const QString& xDataColumnPath() const;
 	const QString& yDataColumnPath() const;
+	const QString& y2DataColumnPath() const;
 
 	typedef XYAnalysisCurvePrivate Private;
 
@@ -73,6 +76,7 @@ signals:
 	void dataSourceCurveChanged(const XYCurve*);
 	void xDataColumnChanged(const AbstractColumn*);
 	void yDataColumnChanged(const AbstractColumn*);
+	void y2DataColumnChanged(const AbstractColumn*);
 };
 
 #endif

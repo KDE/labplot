@@ -69,8 +69,6 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, y2DataColumn, Y2DataColumn)
-	const QString& y2DataColumnPath() const;
 	CLASS_D_ACCESSOR_DECL(ConvolutionData, convolutionData, ConvolutionData)
 	const ConvolutionResult& convolutionResult() const;
 
@@ -83,7 +81,6 @@ private:
 	Q_DECLARE_PRIVATE(XYConvolutionCurve)
 
 signals:
-	void y2DataColumnChanged(const AbstractColumn*);
 	void convolutionDataChanged(const XYConvolutionCurve::ConvolutionData&);
 };
 

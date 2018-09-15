@@ -44,8 +44,10 @@ public:
 
 	const AbstractColumn* xDataColumn; //<! column storing the values for the input x-data for the analysis function
 	const AbstractColumn* yDataColumn; //<! column storing the values for the input y-data for the analysis function
+	const AbstractColumn* y2DataColumn; //<! column storing the values for the optional second input y-data
 	QString xDataColumnPath;
 	QString yDataColumnPath;
+	QString y2DataColumnPath;
 
 	Column* xColumn; //<! column used internally for storing the x-values of the result analysis curve
 	Column* yColumn; //<! column used internally for storing the y-values of the result analysis curve

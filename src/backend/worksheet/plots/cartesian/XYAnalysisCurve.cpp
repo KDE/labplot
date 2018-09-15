@@ -4,6 +4,7 @@
     Description          : Base class for all analysis curves
     --------------------------------------------------------------------
     Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -86,8 +87,10 @@ const QString& XYAnalysisCurve::dataSourceCurvePath() const {
 
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const AbstractColumn*, xDataColumn, xDataColumn)
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const AbstractColumn*, yDataColumn, yDataColumn)
+BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const AbstractColumn*, y2DataColumn, y2DataColumn)
 const QString& XYAnalysisCurve::xDataColumnPath() const { Q_D(const XYAnalysisCurve); return d->xDataColumnPath; }
 const QString& XYAnalysisCurve::yDataColumnPath() const { Q_D(const XYAnalysisCurve); return d->yDataColumnPath; }
+const QString& XYAnalysisCurve::y2DataColumnPath() const { Q_D(const XYAnalysisCurve); return d->y2DataColumnPath; }
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
@@ -109,6 +112,7 @@ void XYAnalysisCurve::setDataSourceCurve(const XYCurve* curve) {
 		//handle the changes when different columns were provided for the source curve
 		connect(curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 		connect(curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
+		connect(curve, SIGNAL(y2ColumnChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 
 		//handle the changes when the data inside of the source curve columns
 		connect(curve, &XYCurve::xDataChanged, this, &XYAnalysisCurve::handleSourceDataChanged);
@@ -144,6 +148,19 @@ void XYAnalysisCurve::setYDataColumn(const AbstractColumn* column) {
 	}
 }
 
+STD_SETTER_CMD_IMPL_S(XYAnalysisCurve, SetY2DataColumn, const AbstractColumn*, y2DataColumn)
+void XYAnalysisCurve::setY2DataColumn(const AbstractColumn* column) {
+	Q_D(XYAnalysisCurve);
+	if (column != d->y2DataColumn) {
+		exec(new XYAnalysisCurveSetY2DataColumnCmd(d, column, ki18n("%1: assign second y-data")));
+		handleSourceDataChanged();
+		if (column) {
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
+			//TODO disconnect on undo
+		}
+	}
+}
+
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
@@ -157,11 +174,10 @@ void XYAnalysisCurve::handleSourceDataChanged() {
 //######################### Private implementation #############################
 //##############################################################################
 XYAnalysisCurvePrivate::XYAnalysisCurvePrivate(XYAnalysisCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(nullptr), yDataColumn(nullptr),
+	xDataColumn(nullptr), yDataColumn(nullptr), y2DataColumn(nullptr),
 	xColumn(nullptr), yColumn(nullptr),
 	xVector(nullptr), yVector(nullptr),
 	q(owner) {
-
 }
 
 XYAnalysisCurvePrivate::~XYAnalysisCurvePrivate() {
@@ -188,6 +204,7 @@ void XYAnalysisCurve::save(QXmlStreamWriter* writer) const {
 	WRITE_PATH(d->dataSourceCurve, dataSourceCurve);
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
+	WRITE_COLUMN(d->y2DataColumn, y2DataColumn);
 	writer->writeEndElement();
 
 	writer->writeEndElement(); //"xyAnalysisCurve"
@@ -218,6 +235,7 @@ bool XYAnalysisCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_PATH(dataSourceCurve);
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
+			READ_COLUMN(y2DataColumn);
 		}
 	}
 

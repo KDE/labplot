@@ -45,9 +45,6 @@ public:
 	XYConvolutionCurve::ConvolutionData convolutionData;
 	XYConvolutionCurve::ConvolutionResult convolutionResult;
 
-	const AbstractColumn* y2DataColumn; //<! column storing the values for the input response y-data
-	QString y2DataColumnPath;
-
 	XYConvolutionCurve* const q;
 };
 
