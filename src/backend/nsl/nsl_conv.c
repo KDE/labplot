@@ -50,7 +50,7 @@ int nsl_conv_convolution_direction(double s[], size_t n, double r[], size_t m, n
 }
 
 int nsl_conv_convolution(double s[], size_t n, double r[], size_t m, nsl_conv_type_type type, nsl_conv_method_type method, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]) {
-	if (method == nsl_conv_method_direct || (method == nsl_conv_method_auto && GSL_MAX_INT(n,m) <= NSL_CONV_METHOD_BORDER)) {
+	if (method == nsl_conv_method_direct || (method == nsl_conv_method_auto && GSL_MAX_INT(n, m) <= NSL_CONV_METHOD_BORDER)) {
 		if (type == nsl_conv_type_linear)
 			return nsl_conv_linear_direct(s, n, r, m, normalize, wrap, out);
 		else if (type == nsl_conv_type_circular)

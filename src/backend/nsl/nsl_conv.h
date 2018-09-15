@@ -31,6 +31,8 @@
 
 #include <stdlib.h>
 
+/* when to switch from direct to FFT method */
+/* set to zero to use FFT method for any length */
 #define NSL_CONV_METHOD_BORDER 100
 
 #define NSL_CONV_DIRECTION_COUNT 2

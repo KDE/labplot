@@ -73,7 +73,8 @@ void ConvolutionTest::testLinear() {
 	for (int i = 0; i < np; i++)
 		QCOMPARE(resultXDataColumn->valueAt(i), (double)i + 1);
 
-	QCOMPARE(resultYDataColumn->valueAt(0), 0.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(0));
+	FuzzyCompare(resultYDataColumn->valueAt(0), 0., 1.e-15);
 	QCOMPARE(resultYDataColumn->valueAt(1), 1.);
 	QCOMPARE(resultYDataColumn->valueAt(2), 2.5);
 	QCOMPARE(resultYDataColumn->valueAt(3), 4.);
@@ -167,7 +168,8 @@ void ConvolutionTest::testLinear_noX() {
 	for (int i = 0; i < np; i++)
 		QCOMPARE(resultXDataColumn->valueAt(i), (double)i);
 
-	QCOMPARE(resultYDataColumn->valueAt(0), 0.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(0));
+	FuzzyCompare(resultYDataColumn->valueAt(0), 0., 1.e-15);
 	QCOMPARE(resultYDataColumn->valueAt(1), 1.);
 	QCOMPARE(resultYDataColumn->valueAt(2), 2.5);
 	QCOMPARE(resultYDataColumn->valueAt(3), 4.);
@@ -217,7 +219,8 @@ void ConvolutionTest::testLinear_swapped() {
 	for (int i = 0; i < np; i++)
 		QCOMPARE(resultXDataColumn->valueAt(i), (double)i+1);
 
-	QCOMPARE(resultYDataColumn->valueAt(0), 0.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(0));
+	FuzzyCompare(resultYDataColumn->valueAt(0), 0., 1.e-15);
 	QCOMPARE(resultYDataColumn->valueAt(1), 1.);
 	QCOMPARE(resultYDataColumn->valueAt(2), 2.5);
 	QCOMPARE(resultYDataColumn->valueAt(3), 4.);
@@ -262,7 +265,8 @@ void ConvolutionTest::testLinear_swapped_noX() {
 	for (int i = 0; i < np; i++)
 		QCOMPARE(resultXDataColumn->valueAt(i), (double)i);
 
-	QCOMPARE(resultYDataColumn->valueAt(0), 0.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(0));
+	FuzzyCompare(resultYDataColumn->valueAt(0), 0., 1.e-15);
 	QCOMPARE(resultYDataColumn->valueAt(1), 1.);
 	QCOMPARE(resultYDataColumn->valueAt(2), 2.5);
 	QCOMPARE(resultYDataColumn->valueAt(3), 4.);
@@ -309,7 +313,7 @@ void ConvolutionTest::testLinear_norm() {
 		QCOMPARE(resultXDataColumn->valueAt(i), (double)i);
 
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(0));
-	QCOMPARE(resultYDataColumn->valueAt(0), 0.);
+	FuzzyCompare(resultYDataColumn->valueAt(0), 0., 1.e-15);
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(1));
 	QCOMPARE(resultYDataColumn->valueAt(1), 0.894427190999916);
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(2));
@@ -423,7 +427,7 @@ void ConvolutionTest::testLinear_wrapMax() {
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(4));
 	QCOMPARE(resultYDataColumn->valueAt(4), 2.);
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(5));
-	QCOMPARE(resultYDataColumn->valueAt(5), 0.);
+	FuzzyCompare(resultYDataColumn->valueAt(5), 0., 1.e-15);
 }
 
 void ConvolutionTest::testLinear_swapped_wrapMax() {
@@ -471,7 +475,7 @@ void ConvolutionTest::testLinear_swapped_wrapMax() {
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(2));
 	QCOMPARE(resultYDataColumn->valueAt(2), 2.);
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(3));
-	QCOMPARE(resultYDataColumn->valueAt(3), 0.);
+	FuzzyCompare(resultYDataColumn->valueAt(3), 0., 1.e-15);
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(4));
 	QCOMPARE(resultYDataColumn->valueAt(4), 1.);
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(5));
@@ -527,7 +531,7 @@ void ConvolutionTest::testLinear_wrapCenter() {
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(4));
 	QCOMPARE(resultYDataColumn->valueAt(4), 2.);
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(5));
-	QCOMPARE(resultYDataColumn->valueAt(5), 0.);
+	FuzzyCompare(resultYDataColumn->valueAt(5), 0., 1.e-15);
 }
 
 void ConvolutionTest::testLinear_swapped_wrapCenter() {
@@ -575,7 +579,7 @@ void ConvolutionTest::testLinear_swapped_wrapCenter() {
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(2));
 	QCOMPARE(resultYDataColumn->valueAt(2), 2.);
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(3));
-	QCOMPARE(resultYDataColumn->valueAt(3), 0.);
+	FuzzyCompare(resultYDataColumn->valueAt(3), 0., 1.e-15);
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(4));
 	QCOMPARE(resultYDataColumn->valueAt(4), 1.);
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(5));
