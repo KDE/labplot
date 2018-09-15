@@ -34,7 +34,6 @@
 
 #include <QApplication>
 #include <QBuffer>
-#include <QtConcurrent>
 #include <QDesktopWidget>
 #include <QPainter>
 #include <QGraphicsScene>
@@ -43,6 +42,7 @@
 #include <QTextCharFormat>
 #include <QTextDocument>
 #include <QTextCursor>
+#include <QtConcurrent/QtConcurrentRun>
 
 #include <QIcon>
 #include <KConfig>
