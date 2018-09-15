@@ -546,16 +546,17 @@ void FitTest::testLinearWampler2() {
 	QCOMPARE(fitResult.paramValues.at(5), 0.00001);
 	for (int i = 0; i < np; i++) {
 		const double errorValue = fitResult.errorValues.at(i);
-		FuzzyCompare(errorValue, 0., 1.);
+		DEBUG(std::setprecision(15) << errorValue);	// max. result: 2.32794076549904e-15
+		FuzzyCompare(errorValue, 0., 1.e-14);
 	}
 
 	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 2.32458538254974e-15
-	FuzzyCompare(fitResult.rsd, 0., 1.);
+	FuzzyCompare(fitResult.rsd, 0., 1.e-14);
 	QCOMPARE(fitResult.rsquare, 1.);
 	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 8.1055458011459e-29
-	FuzzyCompare(fitResult.sse, 0., 1.);
+	FuzzyCompare(fitResult.sse, 0., 1.e-15);
 	DEBUG(std::setprecision(15) << fitResult.rms);	// result: 5.40369720076393e-30
-	FuzzyCompare(fitResult.rms, 0., 1.);
+	FuzzyCompare(fitResult.rms, 0., 1.e-15);
 	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 2.44385217688297e+32
 	QVERIFY(fitResult.fdist_F > 2.e+32);
 }
@@ -771,7 +772,7 @@ void FitTest::testLinearWP_OLS() {
 	DEBUG(std::setprecision(15) << fitResult.tdist_tValues.at(0));	// result: 7.89861264848368
 	FuzzyCompare(fitResult.tdist_tValues.at(0), 7.8986, 1.e-5);
 	DEBUG(std::setprecision(15) << fitResult.tdist_pValues.at(0));	// result: 4.28330815316414e-06
-	FuzzyCompare(fitResult.tdist_pValues.at(0), 0.0, 1.);
+	FuzzyCompare(fitResult.tdist_pValues.at(0), 0., 1.e-5);
 	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: -143.16202286476
 	FuzzyCompare(fitResult.paramValues.at(1), -143.1620, 1.e-6);
 	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 19.8331710430895
@@ -779,7 +780,7 @@ void FitTest::testLinearWP_OLS() {
 	DEBUG(std::setprecision(15) << fitResult.tdist_tValues.at(1));	// result: -7.21831231897945
 	FuzzyCompare(fitResult.tdist_tValues.at(1), -7.2183, 1.e-5);
 	DEBUG(std::setprecision(15) << fitResult.tdist_pValues.at(1));	// result: 1.05970640905074e-05
-	FuzzyCompare(fitResult.tdist_pValues.at(1), 0.0, 1.);
+	FuzzyCompare(fitResult.tdist_pValues.at(1), 0., 2.e-5);
 	DEBUG(std::setprecision(15) << fitResult.paramValues.at(2));	// result: 61.9603254424724
 	FuzzyCompare(fitResult.paramValues.at(2), 61.9603, 1.e-6);
 	DEBUG(std::setprecision(15) << fitResult.errorValues.at(2));	// result: 6.00842899301227
@@ -787,7 +788,7 @@ void FitTest::testLinearWP_OLS() {
 	DEBUG(std::setprecision(15) << fitResult.tdist_tValues.at(2));	// result: 10.3122339490958
 	FuzzyCompare(fitResult.tdist_tValues.at(2), 10.3122, 1.e-5);
 	DEBUG(std::setprecision(15) << fitResult.tdist_pValues.at(2));	// result: 2.56647515320682e-07
-	FuzzyCompare(fitResult.tdist_pValues.at(2), 0.0, 1.);
+	FuzzyCompare(fitResult.tdist_pValues.at(2), 0., 1.e-6);
 
 	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 0.25158650082898
 	FuzzyCompare(fitResult.rsd, 0.2516, 1.e-4);
