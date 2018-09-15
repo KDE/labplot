@@ -237,11 +237,15 @@ void XYConvolutionCurvePrivate::recalculate() {
 	double* out = (double*)malloc(np * sizeof(double));
 	int status = nsl_conv_convolution_direction(ydata, n, y2data, m, direction, type, method, norm, wrap, out);
 
+	if (direction == nsl_conv_direction_backward)
+		if (type == nsl_conv_type_linear)
+			np = abs((int)(n - m)) + 1;
+
 	xVector->resize((int)np);
 	yVector->resize((int)np);
 	// take given x-axis values or use index
 	if (tmpXDataColumn != nullptr) {
-		memcpy(xVector->data(), xdata, xdataVector.size() * sizeof(double));
+		memcpy(xVector->data(), xdata, GSL_MIN(xdataVector.size(), (int)np) * sizeof(double));
 		//TODO: set remaining values
 	} else {	// fill with index (starting with 0)
 		for (size_t i = 0; i < np; i++)

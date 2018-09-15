@@ -39,6 +39,16 @@ class ConvolutionTest : public QObject {
 
 private slots:
 	void initTestCase();
+	// compare floats with given delta (could be useful for other tests too)
+	// delta - relative error
+	static inline void FuzzyCompare(double actual, double expected, double delta = 1.e-12) {
+		if (fabs(expected) < delta)
+			QVERIFY(fabs(actual) < delta);
+		else {
+			DEBUG(std::setprecision(15) << actual - fabs(actual)*delta << " <= " << expected << " <= " << actual + fabs(actual)*delta);
+			QVERIFY(!gsl_fcmp(actual, expected, delta));
+		}
+	}
 
 	// linear tests
 	void testLinear();
@@ -53,7 +63,7 @@ private slots:
 	void testLinear_wrapCenter();
 	void testLinear_swapped_wrapCenter();
 
-	//TODO: circular tests
+	// circular tests
 	void testCircular();
 	void testCircular2();
 	void testCircular_noX();
@@ -66,6 +76,14 @@ private slots:
 	void testCircular_wrapCenter();
 	void testCircular_swapped_wrapCenter();
 
-	//TODO: deconvolution tests
+	// deconvolution tests
+	void testLinearDeconv();
+	void testLinearDeconv2();
+	void testLinearDeconv_swapped();
+	void testLinearDeconv2_swapped();
+	void testLinearDeconv_norm();
+	void testCircularDeconv();
+	void testCircularDeconv2();
+	void testCircularDeconv_norm();
 };
 #endif

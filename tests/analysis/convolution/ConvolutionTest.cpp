@@ -1124,4 +1124,387 @@ void ConvolutionTest::testCircular_swapped_wrapCenter() {
 	QCOMPARE(resultYDataColumn->valueAt(3), 3.);
 }
 
+//////////////// Deconvolution tests /////////////////////
+
+void ConvolutionTest::testLinearDeconv() {
+	// data
+	QVector<double> yData = {0., 1., 2.5, 4., 5.5, 2.};
+	QVector<double> y2Data = {0,1.,.5};
+
+	//data source columns
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	Column y2DataColumn("y2", AbstractColumn::Numeric);
+	y2DataColumn.replaceValues(0, y2Data);
+
+	XYConvolutionCurve convolutionCurve("convolution");
+	convolutionCurve.setYDataColumn(&yDataColumn);
+	convolutionCurve.setY2DataColumn(&y2DataColumn);
+
+	//prepare the convolution
+	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	convolutionData.direction = nsl_conv_direction_backward;
+	convolutionCurve.setConvolutionData(convolutionData);
+
+	//perform the convolution
+	convolutionCurve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+
+	//check the results
+	QCOMPARE(convolutionResult.available, true);
+	QCOMPARE(convolutionResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 4);
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), (double)i);
+
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(0));
+	QCOMPARE(resultYDataColumn->valueAt(0), 1.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(1));
+	QCOMPARE(resultYDataColumn->valueAt(1), 2.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(2));
+	QCOMPARE(resultYDataColumn->valueAt(2), 3.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(3));
+	QCOMPARE(resultYDataColumn->valueAt(3), 4.);
+}
+
+void ConvolutionTest::testLinearDeconv2() {
+	// data
+	QVector<double> yData = {0., 1., 2.5, 4., 1.5};
+	QVector<double> y2Data = {0,1.,.5};
+
+	//data source columns
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	Column y2DataColumn("y2", AbstractColumn::Numeric);
+	y2DataColumn.replaceValues(0, y2Data);
+
+	XYConvolutionCurve convolutionCurve("convolution");
+	convolutionCurve.setYDataColumn(&yDataColumn);
+	convolutionCurve.setY2DataColumn(&y2DataColumn);
+
+	//prepare the convolution
+	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	convolutionData.direction = nsl_conv_direction_backward;
+	convolutionCurve.setConvolutionData(convolutionData);
+
+	//perform the convolution
+	convolutionCurve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+
+	//check the results
+	QCOMPARE(convolutionResult.available, true);
+	QCOMPARE(convolutionResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 3);
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), (double)i);
+
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(0));
+	QCOMPARE(resultYDataColumn->valueAt(0), 1.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(1));
+	QCOMPARE(resultYDataColumn->valueAt(1), 2.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(2));
+	QCOMPARE(resultYDataColumn->valueAt(2), 3.);
+}
+
+void ConvolutionTest::testLinearDeconv_swapped() {
+	// data
+	QVector<double> yData = {0., 1., 2.5, 4., 5.5, 2.};
+	QVector<double> y2Data = {1, 2, 3, 4};
+
+	//data source columns
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	Column y2DataColumn("y2", AbstractColumn::Numeric);
+	y2DataColumn.replaceValues(0, y2Data);
+
+	XYConvolutionCurve convolutionCurve("convolution");
+	convolutionCurve.setYDataColumn(&yDataColumn);
+	convolutionCurve.setY2DataColumn(&y2DataColumn);
+
+	//prepare the convolution
+	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	convolutionData.direction = nsl_conv_direction_backward;
+	convolutionCurve.setConvolutionData(convolutionData);
+
+	//perform the convolution
+	convolutionCurve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+
+	//check the results
+	QCOMPARE(convolutionResult.available, true);
+	QCOMPARE(convolutionResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 3);
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), (double)i);
+
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(0));
+	FuzzyCompare(resultYDataColumn->valueAt(0), 0., 1.e-15);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(1));
+	QCOMPARE(resultYDataColumn->valueAt(1), 1.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(2));
+	QCOMPARE(resultYDataColumn->valueAt(2), 0.5);
+}
+
+void ConvolutionTest::testLinearDeconv2_swapped() {
+	// data
+	QVector<double> yData = {0., 1., 2.5, 4., 1.5};
+	QVector<double> y2Data = {1, 2, 3};
+
+	//data source columns
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	Column y2DataColumn("y2", AbstractColumn::Numeric);
+	y2DataColumn.replaceValues(0, y2Data);
+
+	XYConvolutionCurve convolutionCurve("convolution");
+	convolutionCurve.setYDataColumn(&yDataColumn);
+	convolutionCurve.setY2DataColumn(&y2DataColumn);
+
+	//prepare the convolution
+	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	convolutionData.direction = nsl_conv_direction_backward;
+	convolutionCurve.setConvolutionData(convolutionData);
+
+	//perform the convolution
+	convolutionCurve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+
+	//check the results
+	QCOMPARE(convolutionResult.available, true);
+	QCOMPARE(convolutionResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 3);
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), (double)i);
+
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(0));
+	FuzzyCompare(resultYDataColumn->valueAt(0), 0., 1.e-15);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(1));
+	QCOMPARE(resultYDataColumn->valueAt(1), 1.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(2));
+	QCOMPARE(resultYDataColumn->valueAt(2), 0.5);
+}
+
+void ConvolutionTest::testLinearDeconv_norm() {
+	// data
+	QVector<double> yData = {0, 0.894427190999916, 2.23606797749979, 3.57770876399966, 4.91934955049954, 1.78885438199983};
+	QVector<double> y2Data = {0,1.,.5};
+
+	//data source columns
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	Column y2DataColumn("y2", AbstractColumn::Numeric);
+	y2DataColumn.replaceValues(0, y2Data);
+
+	XYConvolutionCurve convolutionCurve("convolution");
+	convolutionCurve.setYDataColumn(&yDataColumn);
+	convolutionCurve.setY2DataColumn(&y2DataColumn);
+
+	//prepare the convolution
+	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	convolutionData.direction = nsl_conv_direction_backward;
+	convolutionData.normalize = nsl_conv_norm_euclidean;
+	convolutionCurve.setConvolutionData(convolutionData);
+
+	//perform the convolution
+	convolutionCurve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+
+	//check the results
+	QCOMPARE(convolutionResult.available, true);
+	QCOMPARE(convolutionResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 4);
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), (double)i);
+
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(0));
+	QCOMPARE(resultYDataColumn->valueAt(0), 1.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(1));
+	QCOMPARE(resultYDataColumn->valueAt(1), 2.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(2));
+	QCOMPARE(resultYDataColumn->valueAt(2), 3.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(3));
+	QCOMPARE(resultYDataColumn->valueAt(3), 4.);
+}
+
+void ConvolutionTest::testCircularDeconv() {
+	// data
+	QVector<double> yData = {5.5, 3., 2.5, 4.};
+	QVector<double> y2Data = {0,1.,.5};
+
+	//data source columns
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	Column y2DataColumn("y2", AbstractColumn::Numeric);
+	y2DataColumn.replaceValues(0, y2Data);
+
+	XYConvolutionCurve convolutionCurve("convolution");
+	convolutionCurve.setYDataColumn(&yDataColumn);
+	convolutionCurve.setY2DataColumn(&y2DataColumn);
+
+	//prepare the convolution
+	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	convolutionData.direction = nsl_conv_direction_backward;
+	convolutionData.type = nsl_conv_type_circular;
+	convolutionCurve.setConvolutionData(convolutionData);
+
+	//perform the convolution
+	convolutionCurve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+
+	//check the results
+	QCOMPARE(convolutionResult.available, true);
+	QCOMPARE(convolutionResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 4);
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), (double)i);
+
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(0));
+	QCOMPARE(resultYDataColumn->valueAt(0), 1.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(1));
+	QCOMPARE(resultYDataColumn->valueAt(1), 2.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(2));
+	QCOMPARE(resultYDataColumn->valueAt(2), 3.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(3));
+	QCOMPARE(resultYDataColumn->valueAt(3), 4.);
+}
+
+void ConvolutionTest::testCircularDeconv2() {
+	// data
+	QVector<double> yData = {4., 2.5, 2.5};
+	QVector<double> y2Data = {0,1.,.5};
+
+	//data source columns
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	Column y2DataColumn("y2", AbstractColumn::Numeric);
+	y2DataColumn.replaceValues(0, y2Data);
+
+	XYConvolutionCurve convolutionCurve("convolution");
+	convolutionCurve.setYDataColumn(&yDataColumn);
+	convolutionCurve.setY2DataColumn(&y2DataColumn);
+
+	//prepare the convolution
+	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	convolutionData.direction = nsl_conv_direction_backward;
+	convolutionData.type = nsl_conv_type_circular;
+	convolutionCurve.setConvolutionData(convolutionData);
+
+	//perform the convolution
+	convolutionCurve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+
+	//check the results
+	QCOMPARE(convolutionResult.available, true);
+	QCOMPARE(convolutionResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 3);
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), (double)i);
+
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(0));
+	QCOMPARE(resultYDataColumn->valueAt(0), 1.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(1));
+	QCOMPARE(resultYDataColumn->valueAt(1), 2.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(2));
+	QCOMPARE(resultYDataColumn->valueAt(2), 3.);
+}
+
+void ConvolutionTest::testCircularDeconv_norm() {
+	// data
+	QVector<double> yData = {4.91934955049954, 2.68328157299975, 2.23606797749979, 3.57770876399966};
+	QVector<double> y2Data = {0,1.,.5};
+
+	//data source columns
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	Column y2DataColumn("y2", AbstractColumn::Numeric);
+	y2DataColumn.replaceValues(0, y2Data);
+
+	XYConvolutionCurve convolutionCurve("convolution");
+	convolutionCurve.setYDataColumn(&yDataColumn);
+	convolutionCurve.setY2DataColumn(&y2DataColumn);
+
+	//prepare the convolution
+	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	convolutionData.direction = nsl_conv_direction_backward;
+	convolutionData.type = nsl_conv_type_circular;
+	convolutionData.normalize = nsl_conv_norm_euclidean;
+	convolutionCurve.setConvolutionData(convolutionData);
+
+	//perform the convolution
+	convolutionCurve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+
+	//check the results
+	QCOMPARE(convolutionResult.available, true);
+	QCOMPARE(convolutionResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 4);
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), (double)i);
+
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(0));
+	QCOMPARE(resultYDataColumn->valueAt(0), 1.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(1));
+	QCOMPARE(resultYDataColumn->valueAt(1), 2.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(2));
+	QCOMPARE(resultYDataColumn->valueAt(2), 3.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(3));
+	QCOMPARE(resultYDataColumn->valueAt(3), 4.);
+}
+
 QTEST_MAIN(ConvolutionTest)
