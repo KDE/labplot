@@ -80,10 +80,10 @@ Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include "MQTTConnectionManagerDialog.h"
 #include "MQTTConnectionManagerWidget.h"
 #include "backend/core/Project.h"
-#include <QtMqtt/QMqttClient>
-#include <QtMqtt/QMqttSubscription>
-#include <QtMqtt/QMqttTopicFilter>
-#include <QtMqtt/QMqttMessage>
+#include <QMqttClient>
+#include <QMqttSubscription>
+#include <QMqttTopicFilter>
+#include <QMqttMessage>
 #include <QMessageBox>
 #include <QWidgetAction>
 #include <QMenu>

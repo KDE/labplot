@@ -31,7 +31,7 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include "ui_MQTT_test.h"
 
 #include <QDateTime>
-#include <QtMqtt/QMqttClient>
+#include <QMqttClient>
 #include <QMessageBox>
 #include <QtMath>
 #include <QTimer>

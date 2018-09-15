@@ -33,7 +33,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 
-#include <QtNetwork/QLocalSocket>
+#include <QLocalSocket>
 #include <QSerialPort>
 #include <QTimer>
 #include <QVector>
@@ -139,7 +139,7 @@ public:
 
 	void updateNow();
 	void pauseReading();
-	void continueReading();    
+	void continueReading();
 
 	void setFilter(AbstractFileFilter*);
 	AbstractFileFilter* filter() const;

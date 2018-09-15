@@ -36,10 +36,6 @@
 
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
-#include <QtMqtt/QMqttClient>
-#include <QtMqtt/QMqttSubscription>
-#include <QtMqtt/QMqttTopicName>
-#include <QtMqtt/QMqttTopicFilter>
 #endif
 
 #include <QVector>

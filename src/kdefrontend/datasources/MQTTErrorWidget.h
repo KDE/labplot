@@ -31,14 +31,9 @@ Copyright            : (C) 2018 by Kovacs Ferencz (kferike98@gmail.com)
 #include <QWidget>
 
 #ifdef HAVE_MQTT
-#include <QtMqtt/QMqttClient>
-#include <QtMqtt/QMqttSubscription>
-#include <QtMqtt/QMqttTopicName>
-#include <QtMqtt/QMqttTopicFilter>
-#include <QString>
-
+#include <QMqttClient>
 #include "ui_mqtterrorwidget.h"
-#include "backend/datasources/MQTTClient.h"
+class MQTTClient;
 #endif
 
 class MQTTErrorWidget : public QWidget {

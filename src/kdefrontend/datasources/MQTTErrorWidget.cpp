@@ -27,12 +27,12 @@ Copyright            : (C) 2018 by Kovacs Ferencz (kferike98@gmail.com)
 
 #include "src/kdefrontend/datasources/MQTTErrorWidget.h"
 #ifdef HAVE_MQTT
-#include <QtMqtt/QMqttClient>
-#include <QtMqtt/QMqttSubscription>
-#include <QtMqtt/QMqttTopicFilter>
-#include <QtMqtt/QMqttMessage>
+#include "backend/datasources/MQTTClient.h"
+#include <QMqttSubscription>
+#include <QMqttTopicFilter>
+#include <QMqttMessage>
 
-MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* client, QWidget *parent) : QWidget(parent),	
+MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* client, QWidget *parent) : QWidget(parent),
 	m_error(error),
 	m_client(client)
 {

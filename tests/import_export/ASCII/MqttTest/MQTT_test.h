@@ -31,8 +31,8 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #define MQTT_TEST_H
 
 #include <QMainWindow>
-#include <QtMqtt/QMqttClient>
-#include <QtMqtt/QMqttTopicName>
+#include <QMqttClient>
+#include <QMqttTopicName>
 #include <QTimer>
 #include <QVector>
 #include <random>

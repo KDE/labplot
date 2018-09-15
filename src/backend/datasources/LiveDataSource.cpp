@@ -49,8 +49,7 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <QTimer>
 #include <QMessageBox>
 
-#include <QtSerialPort/QSerialPort>
-#include <QtSerialPort/QSerialPortInfo>
+#include <QSerialPortInfo>
 #include <QTcpSocket>
 #include <QUdpSocket>
 
