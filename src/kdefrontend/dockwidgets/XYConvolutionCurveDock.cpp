@@ -494,7 +494,6 @@ void XYConvolutionCurveDock::showConvolutionResult() {
 	else
 		str += i18n("calculation time: %1 ms", QString::number(convolutionResult.elapsedTime)) + "<br>";
 
-	str += i18n("value: %1", QString::number(convolutionResult.value)) + "<br>";
  	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);

@@ -48,18 +48,17 @@ public:
 		nsl_conv_type_type type;	// linear or circular
 		nsl_conv_method_type method;	// how to calculate convolution (auto, direct or FFT method)
 		nsl_conv_norm_type normalize;	// normalization of response
-		nsl_conv_wrap_type wrap;	// wrap repsonse
+		nsl_conv_wrap_type wrap;	// wrap response
 		bool autoRange;			// use all data?
 		QVector<double> xRange;		// x range for convolution
 	};
 	struct ConvolutionResult {
-		ConvolutionResult() : available(false), valid(false), elapsedTime(0), value(0) {};
+		ConvolutionResult() : available(false), valid(false), elapsedTime(0) {};
 
 		bool available;
 		bool valid;
 		QString status;
 		qint64 elapsedTime;
-		double value;	// final result of convolution
 	};
 
 	explicit XYConvolutionCurve(const QString& name);

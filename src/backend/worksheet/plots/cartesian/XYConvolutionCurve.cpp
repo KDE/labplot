@@ -303,7 +303,6 @@ void XYConvolutionCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "valid", QString::number(d->convolutionResult.valid) );
 	writer->writeAttribute( "status", d->convolutionResult.status );
 	writer->writeAttribute( "time", QString::number(d->convolutionResult.elapsedTime) );
-	writer->writeAttribute( "value", QString::number(d->convolutionResult.value) );
 
 	//save calculated columns if available
 	if (d->xColumn) {
@@ -352,7 +351,6 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("valid", convolutionResult.valid, int);
 			READ_STRING_VALUE("status", convolutionResult.status);
 			READ_INT_VALUE("time", convolutionResult.elapsedTime, int);
-			READ_DOUBLE_VALUE("value", convolutionResult.value);
 		} else if (!preview && reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader, preview)) {
