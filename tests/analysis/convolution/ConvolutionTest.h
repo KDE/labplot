@@ -27,29 +27,12 @@
 #ifndef CONVOLUTIONTEST_H
 #define CONVOLUTIONTEST_H
 
-#include <QtTest>
-#include <backend/lib/macros.h>	// DEBUG()
+#include <../AnalysisTest.h>
 
-extern "C" {
-#include <gsl/gsl_math.h>
-}
-
-class ConvolutionTest : public QObject {
+class ConvolutionTest : public AnalysisTest {
 	Q_OBJECT
 
 private slots:
-	void initTestCase();
-	// compare floats with given delta (could be useful for other tests too)
-	// delta - relative error
-	static inline void FuzzyCompare(double actual, double expected, double delta = 1.e-12) {
-		if (fabs(expected) < delta)
-			QVERIFY(fabs(actual) < delta);
-		else {
-			DEBUG(std::setprecision(15) << actual - fabs(actual)*delta << " <= " << expected << " <= " << actual + fabs(actual)*delta);
-			QVERIFY(!gsl_fcmp(actual, expected, delta));
-		}
-	}
-
 	// linear tests
 	void testLinear();
 	void testLinear2();

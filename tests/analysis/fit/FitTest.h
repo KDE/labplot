@@ -28,25 +28,12 @@
 #ifndef FITTEST_H
 #define FITTEST_H
 
-#include <QtTest>
-#include <backend/lib/macros.h>	// DEBUG()
+#include <../AnalysisTest.h>
 
-extern "C" {
-#include <gsl/gsl_math.h>
-}
-
-class FitTest : public QObject {
+class FitTest : public AnalysisTest {
 	Q_OBJECT
 
 private slots:
-	void initTestCase();
-	// compare floats with given delta (could be useful for other tests too)
-	// delta - relative error (set to 1. if expected == 0.)
-	static inline void FuzzyCompare(double actual, double expected, double delta = 1.e-12) {
-		DEBUG(std::setprecision(15) << actual - fabs(actual)*delta << " <= " << expected << " <= " << actual + fabs(actual)*delta);
-		QVERIFY(!gsl_fcmp(actual, expected, delta));
-	}
-
 	//linear regression (see NIST/linear data)
 	void testLinearNorris();
 	void testLinearPontius();

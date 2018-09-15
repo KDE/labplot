@@ -29,18 +29,6 @@
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 
-extern "C" {
-#include "backend/nsl/nsl_sf_stats.h"
-#include "backend/nsl/nsl_stats.h"
-}
-
-void ConvolutionTest::initTestCase() {
-	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	//TODO: redesign/remove this
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-}
-
 //##############################################################################
 
 void ConvolutionTest::testLinear() {
