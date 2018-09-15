@@ -42,6 +42,7 @@ private slots:
 
 	// linear tests
 	void testLinear();
+	void testLinear2();
 	void testLinear_noX();
 	void testLinear_swapped();
 	void testLinear_swapped_noX();
@@ -53,5 +54,18 @@ private slots:
 	void testLinear_swapped_wrapCenter();
 
 	//TODO: circular tests
+	void testCircular();
+	void testCircular2();
+	void testCircular_noX();
+	void testCircular_swapped();
+	void testCircular_swapped_noX();
+	void testCircular_norm();
+	void testCircular_swapped_norm();
+	void testCircular_wrapMax();
+	void testCircular_swapped_wrapMax();
+	void testCircular_wrapCenter();
+	void testCircular_swapped_wrapCenter();
+
+	//TODO: deconvolution tests
 };
 #endif
