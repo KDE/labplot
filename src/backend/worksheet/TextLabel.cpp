@@ -34,7 +34,7 @@
 
 #include <QApplication>
 #include <QBuffer>
-#include <QtConcurrentRun>
+#include <QtConcurrent>
 #include <QDesktopWidget>
 #include <QPainter>
 #include <QGraphicsScene>
