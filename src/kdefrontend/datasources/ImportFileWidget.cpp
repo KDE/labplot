@@ -1697,11 +1697,12 @@ void ImportFileWidget::refreshPreview() {
 	WAIT_CURSOR;
 
 	QString fileName = absolutePath(ui.leFileName->text());
-	DEBUG("refreshPreview(): file name = " << fileName.toStdString());
-
-	QVector<QStringList> importedStrings;
 	AbstractFileFilter::FileType fileType = currentFileType();
-// 	initOptionsWidget(fileType);
+	LiveDataSource::SourceType sourceType = currentSourceType();
+	int lines = ui.sbPreviewLines->value();
+
+	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
+		DEBUG("refreshPreview(): file name = " << fileName.toStdString());
 
 	// generic table widget
 	if (fileType == AbstractFileFilter::Ascii || fileType == AbstractFileFilter::Binary
@@ -1711,10 +1712,9 @@ void ImportFileWidget::refreshPreview() {
 	else
 		m_twPreview->hide();
 
-	int lines = ui.sbPreviewLines->value();
-
 	bool ok = true;
 	QTableWidget* tmpTableWidget = m_twPreview;
+	QVector<QStringList> importedStrings;
 	QStringList vectorNameList;
 	QVector<AbstractColumn::ColumnMode> columnModes;
 	DEBUG("Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
@@ -1724,8 +1724,8 @@ void ImportFileWidget::refreshPreview() {
 
 		AsciiFilter* filter = static_cast<AsciiFilter*>(this->currentFileFilter());
 
-		DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, currentSourceType()));
-		switch (currentSourceType()) {
+		DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
+		switch (sourceType) {
 		case LiveDataSource::SourceType::FileOrPipe: {
 			importedStrings = filter->preview(fileName, lines);
 			break;
@@ -2065,8 +2065,15 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bFileInfo->show();
 		ui.bOpen->show();
 		ui.chbLinkFile->show();
-		ui.lSampleSize->show();
-		ui.sbSampleSize->show();
+
+		//option for sample size are available for "continuously fixed" and "from end" reading options
+		if (ui.cbReadingType->currentIndex() < 2) {
+			ui.lSampleSize->show();
+			ui.sbSampleSize->show();
+		} else {
+			ui.lSampleSize->hide();
+			ui.sbSampleSize->hide();
+		}
 
 		ui.cbBaudRate->hide();
 		ui.lBaudRate->hide();
