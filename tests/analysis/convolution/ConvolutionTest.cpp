@@ -70,8 +70,8 @@ void ConvolutionTest::testLinear() {
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 6);
 
-	for (int i = 0; i < 4; i++)	//TODO: other values are zero!
-		QCOMPARE(resultXDataColumn->valueAt(i), (double)i+1);
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), (double)i + 1);
 
 	QCOMPARE(resultYDataColumn->valueAt(0), 0.);
 	QCOMPARE(resultYDataColumn->valueAt(1), 1.);
@@ -120,7 +120,7 @@ void ConvolutionTest::testLinear2() {
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 5);
 
-	for (int i = 0; i < 3; i++)	//TODO: other values are zero!
+	for (int i = 0; i < np; i++)
 		QCOMPARE(resultXDataColumn->valueAt(i), (double)i+1);
 
 	QCOMPARE(resultYDataColumn->valueAt(0), 0.);
@@ -214,7 +214,7 @@ void ConvolutionTest::testLinear_swapped() {
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 6);
 
-	for (int i = 0; i < 4; i++)	//TODO: other values are zero!
+	for (int i = 0; i < np; i++)
 		QCOMPARE(resultXDataColumn->valueAt(i), (double)i+1);
 
 	QCOMPARE(resultYDataColumn->valueAt(0), 0.);

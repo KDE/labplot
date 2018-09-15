@@ -245,12 +245,17 @@ void XYConvolutionCurvePrivate::recalculate() {
 	yVector->resize((int)np);
 	// take given x-axis values or use index
 	if (tmpXDataColumn != nullptr) {
-		memcpy(xVector->data(), xdata, GSL_MIN(xdataVector.size(), (int)np) * sizeof(double));
-		//TODO: set remaining values
+		int size = GSL_MIN(xdataVector.size(), (int)np);
+		memcpy(xVector->data(), xdata, size * sizeof(double));
+		double sampleIntervall = (xVector->data()[size-1] - xVector->data()[0])/(xdataVector.size()-1);
+		DEBUG("xdata size = " << xdataVector.size() << ", np = " << np << ", sample intervall = " << sampleIntervall);
+		for (int i = size; i < (int)np; i++)	// fill missing values
+			xVector->data()[i] = xVector->data()[size-1] + (i-size+1) * sampleIntervall;
 	} else {	// fill with index (starting with 0)
 		for (size_t i = 0; i < np; i++)
 			xVector->data()[i] = i;
 	}
+
 	memcpy(yVector->data(), out, np * sizeof(double));
 	free(out);
 ///////////////////////////////////////////////////////////
