@@ -32,6 +32,7 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	Config
 	ConfigWidgets
 	CoreAddons
+	Crash
 	DocTools
 	I18n
 	IconThemes

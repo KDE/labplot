@@ -38,12 +38,12 @@
 #endif
 
 #include <KAboutData>
+#include <KColorSchemeManager>
+#include <KConfigGroup>
+#include <KCrash>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KSharedConfig>
-#include <KConfigGroup>
-#include <KColorSchemeManager>
-
 
 #include "MainWin.h"
 #include "backend/core/AbstractColumn.h"
@@ -54,6 +54,7 @@ int main (int argc, char *argv[]) {
 	QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 	QApplication app(argc, argv);
 	KLocalizedString::setApplicationDomain("labplot2");
+	KCrash::initialize();
 
 	KAboutData aboutData( QStringLiteral("labplot2"), QString("labplot2"),
 		LVERSION, i18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
