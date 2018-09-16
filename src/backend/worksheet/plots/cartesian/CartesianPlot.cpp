@@ -438,7 +438,7 @@ void CartesianPlot::initActions() {
 	addIntegrationAction = new QAction(i18n("Integrate"), this);
 	addInterpolationAction = new QAction(i18n("Interpolate"), this);
 	addSmoothAction = new QAction(i18n("Smooth"), this);
-	//TODO: addConvolutionAction = new QAction(i18n("Convolute/Deconvolute"), this);
+	addConvolutionAction = new QAction(i18n("Convolute/Deconvolute"), this);
 
 	QAction* fitAction = new QAction(i18n("Linear"), this);
 	fitAction->setData(PlotDataDialog::FitLinear);
@@ -547,6 +547,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addFitCurveAction);
 	addNewMenu->addAction(addFourierFilterCurveAction);
 	addNewMenu->addAction(addFourierTransformCurveAction);
+	addNewMenu->addAction(addConvolutionCurveAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addLegendAction);
 	addNewMenu->addSeparator();
