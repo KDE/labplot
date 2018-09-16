@@ -30,7 +30,9 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/datasources/projects/LabPlotProjectParser.h"
+#ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
+#endif
 #include "kdefrontend/MainWin.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 

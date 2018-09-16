@@ -37,12 +37,14 @@ private slots:
 
 	//import of LabPlot projects
 
+#ifdef HAVE_LIBORIGIN
 	//import of Origin projects
 	void testOrigin01();
 	void testOrigin02();
 	void testOrigin03();
 	void testOrigin04();
 	void testOriginTextNumericColumns();
+#endif
 
 private:
 	QString m_dataDir;

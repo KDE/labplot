@@ -26,7 +26,9 @@
  ***************************************************************************/
 
 #include "ProjectImportTest.h"
+#ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
+#endif
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
 #include "backend/matrix/Matrix.h"
@@ -49,6 +51,7 @@ void ProjectImportTest::initTestCase() {
 //##############################################################################
 
 
+#ifdef HAVE_LIBORIGIN
 //##############################################################################
 //######################  import of Origin projects ############################
 //##############################################################################
@@ -375,5 +378,6 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	QCOMPARE(!std::isnan(column->valueAt(3)), false);
 	QCOMPARE(!std::isnan(column->valueAt(4)), false);
 }
+#endif
 
 QTEST_MAIN(ProjectImportTest)
