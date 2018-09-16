@@ -112,6 +112,8 @@ void XYConvolutionCurveDock::setupGeneral() {
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
+	DEBUG("XYConvolutionCurveDock::setupGeneral() DONE");
+
 	//Slots
 	connect( uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYConvolutionCurveDock::nameChanged );
 	connect( uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYConvolutionCurveDock::commentChanged );
@@ -166,9 +168,9 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	uiGeneralTab.sbMin->setValue(m_convolutionData.xRange.first());
 	uiGeneralTab.sbMax->setValue(m_convolutionData.xRange.last());
 	this->autoRangeChanged();
-	// update list of selectable types
-	xDataColumnChanged(cbXDataColumn->currentModelIndex());
+	y2DataColumnChanged(cbY2DataColumn->currentModelIndex());
 
+	// settings
 	uiGeneralTab.cbDirection->setCurrentIndex(m_convolutionData.direction);
 	uiGeneralTab.cbType->setCurrentIndex(m_convolutionData.type);
 	//m_convolutionData.method not used
@@ -219,6 +221,7 @@ void XYConvolutionCurveDock::setModel() {
 	cbY2DataColumn->setModel(m_aspectTreeModel);
 
 	XYCurveDock::setModel();
+	DEBUG("XYConvolutionCurveDock::setModel() DONE");
 }
 
 /*!
@@ -242,7 +245,7 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 }
 
 //*************************************************************
-//**** SLOTs for changes triggered in XYFitCurveDock *****
+//**** SLOTs for changes triggered in XYConvolutionCurveDock **
 //*************************************************************
 void XYConvolutionCurveDock::nameChanged() {
 	if (m_initializing)
@@ -532,18 +535,21 @@ void XYConvolutionCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
 }
 
 void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
+	DEBUG("XYConvolutionCurveDock::curveXDataColumnChanged()");
 	m_initializing = true;
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
 	m_initializing = false;
 }
 
 void XYConvolutionCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
+	DEBUG("XYConvolutionCurveDock::curveYDataColumnChanged()");
 	m_initializing = true;
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
 	m_initializing = false;
 }
 
 void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
+	DEBUG("XYConvolutionCurveDock::curveY2DataColumnChanged()");
 	m_initializing = true;
 	XYCurveDock::setModelIndexFromAspect(cbY2DataColumn, column);
 	m_initializing = false;

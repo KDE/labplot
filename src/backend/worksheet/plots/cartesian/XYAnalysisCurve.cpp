@@ -124,6 +124,7 @@ void XYAnalysisCurve::setDataSourceCurve(const XYCurve* curve) {
 
 STD_SETTER_CMD_IMPL_S(XYAnalysisCurve, SetXDataColumn, const AbstractColumn*, xDataColumn)
 void XYAnalysisCurve::setXDataColumn(const AbstractColumn* column) {
+	DEBUG("XYAnalysisCurve::setXDataColumn()");
 	Q_D(XYAnalysisCurve);
 	if (column != d->xDataColumn) {
 		exec(new XYAnalysisCurveSetXDataColumnCmd(d, column, ki18n("%1: assign x-data")));
@@ -137,6 +138,7 @@ void XYAnalysisCurve::setXDataColumn(const AbstractColumn* column) {
 
 STD_SETTER_CMD_IMPL_S(XYAnalysisCurve, SetYDataColumn, const AbstractColumn*, yDataColumn)
 void XYAnalysisCurve::setYDataColumn(const AbstractColumn* column) {
+	DEBUG("XYAnalysisCurve::setYDataColumn()");
 	Q_D(XYAnalysisCurve);
 	if (column != d->yDataColumn) {
 		exec(new XYAnalysisCurveSetYDataColumnCmd(d, column, ki18n("%1: assign y-data")));
@@ -150,6 +152,7 @@ void XYAnalysisCurve::setYDataColumn(const AbstractColumn* column) {
 
 STD_SETTER_CMD_IMPL_S(XYAnalysisCurve, SetY2DataColumn, const AbstractColumn*, y2DataColumn)
 void XYAnalysisCurve::setY2DataColumn(const AbstractColumn* column) {
+	DEBUG("XYAnalysisCurve::setY2DataColumn()");
 	Q_D(XYAnalysisCurve);
 	if (column != d->y2DataColumn) {
 		exec(new XYAnalysisCurveSetY2DataColumnCmd(d, column, ki18n("%1: assign second y-data")));

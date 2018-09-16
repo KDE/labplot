@@ -476,9 +476,9 @@ void XYCurveDock::setModel() {
 	m_aspectTreeModel->enablePlottableColumnsOnly(true);
 	m_aspectTreeModel->enableShowPlotDesignation(true);
 
-	QList<const char*>  list;
-	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
-		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve"<<"CantorWorksheet";
+	QList<const char*> list;
+	list << "Folder" << "Workbook" << "Datapicker" << "DatapickerCurve" << "Spreadsheet"
+		<< "FileDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYFitCurve" << "CantorWorksheet";
 
 	if (cbXColumn) {
 		cbXColumn->setTopLevelClasses(list);
@@ -491,7 +491,7 @@ void XYCurveDock::setModel() {
 	cbYErrorPlusColumn->setTopLevelClasses(list);
 
 	list.clear();
-	list<<"Column"<<"XYCurve";
+	list << "Column" << "XYCurve";
 	m_aspectTreeModel->setSelectableAspects(list);
 
 	if (cbXColumn) {
@@ -509,18 +509,19 @@ void XYCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing=true;
-	m_curvesList=list;
-	m_curve=list.first();
+	m_initializing = true;
+	m_curvesList = list;
+	m_curve = list.first();
 	Q_ASSERT(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
 	initGeneralTab();
 	initTabs();
-	m_initializing=false;
+	m_initializing = false;
 }
 
 void XYCurveDock::initGeneralTab() {
+	DEBUG("XYCurveDock::initGeneralTab()");
 	//if there are more than one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
@@ -533,6 +534,7 @@ void XYCurveDock::initGeneralTab() {
 		uiGeneralTab.lYColumn->setEnabled(true);
 		cbYColumn->setEnabled(true);
 
+		DEBUG("setModelIndexFromAspect()");
 		this->setModelIndexFromAspect(cbXColumn, m_curve->xColumn());
 		this->setModelIndexFromAspect(cbYColumn, m_curve->yColumn());
 
@@ -564,6 +566,7 @@ void XYCurveDock::initGeneralTab() {
 	connect(m_curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(curveXColumnChanged(const AbstractColumn*)));
 	connect(m_curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(curveYColumnChanged(const AbstractColumn*)));
 	connect(m_curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged(bool)));
+	DEBUG("XYCurveDock::initGeneralTab() DONE");
 }
 
 void XYCurveDock::initTabs() {
@@ -759,10 +762,14 @@ void XYCurveDock::showValuesColumnFormat(const Column* column) {
 }
 
 void XYCurveDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
-	if (aspect)
+	DEBUG("XYCurveDock::setModelIndexFromAspect()");
+	if (aspect) {
+		DEBUG("aspect OK");
 		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(aspect));
-	else
+	} else {
+		DEBUG("aspect NULL");
 		cb->setCurrentModelIndex(QModelIndex());
+	}
 }
 
 //*************************************************************

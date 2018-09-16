@@ -116,7 +116,7 @@ QMenu* Column::createContextMenu() {
 
 		const XYAnalysisCurve* analysisCurve = dynamic_cast<const XYAnalysisCurve*>(curve);
 		if (analysisCurve) {
-			if (analysisCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet && (analysisCurve->xDataColumn() == this || analysisCurve->yDataColumn() == this) )
+			if (analysisCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet && (analysisCurve->xDataColumn() == this || analysisCurve->yDataColumn() == this || analysisCurve->y2DataColumn() == this) )
 				used = true;
 		} else {
 			if (curve->xColumn() == this || curve->yColumn() == this)

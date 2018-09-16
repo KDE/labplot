@@ -378,6 +378,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 				} else if (analysisCurve) {
 					RESTORE_COLUMN_POINTER(analysisCurve, xDataColumn, XDataColumn);
 					RESTORE_COLUMN_POINTER(analysisCurve, yDataColumn, YDataColumn);
+					RESTORE_COLUMN_POINTER(analysisCurve, y2DataColumn, Y2DataColumn);
 					XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(curve);
 					if (fitCurve) {
 						RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
