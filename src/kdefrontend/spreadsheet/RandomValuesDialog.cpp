@@ -103,7 +103,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent) : QDialo
 	const KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
 	if (conf.exists()) {
 		ui.cbDistribution->setCurrentIndex(conf.readEntry("Distribution", 0));
-		this->distributionChanged(ui.cbDistribution->currentIndex()); //if index=0 no signal is emmited above, call this slot directly here
+		this->distributionChanged(ui.cbDistribution->currentIndex()); //if index=0 no signal is emitted above, call this slot directly here
 		ui.leParameter1->setText(conf.readEntry("Parameter1"));
 		ui.leParameter2->setText(conf.readEntry("Parameter2"));
 		ui.leParameter3->setText(conf.readEntry("Parameter3"));

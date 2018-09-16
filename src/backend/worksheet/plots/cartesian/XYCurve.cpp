@@ -2295,7 +2295,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("rotation", valuesRotationAngle);
 			READ_DOUBLE_VALUE("opacity", valuesOpacity);
 
-			//don't produce any warning if no prefix or suffix is set (empty string is allowd here in xml)
+			//don't produce any warning if no prefix or suffix is set (empty string is allowed here in xml)
 			d->valuesPrefix = attribs.value("prefix").toString();
 			d->valuesSuffix = attribs.value("suffix").toString();
 

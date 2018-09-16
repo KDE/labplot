@@ -245,7 +245,7 @@ void ExportWorksheetDialog::selectFile() {
 	called when the output format was changed. Adjusts the extension for the specified file.
  */
 void ExportWorksheetDialog::formatChanged(int index) {
-	//we have a separator in the format combobox at the 3rd posiiton -> skip it
+	//we have a separator in the format combobox at the 3rd position -> skip it
 	if (index > 2)
 		index --;
 

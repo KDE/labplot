@@ -89,7 +89,7 @@
  */
 
 /**
- * \var ColumnSetModeCmd::m_excecuted
+ * \var ColumnSetModeCmd::m_executed
  * \brief Flag indicating whether the command has been executed at least once.
  */
 
@@ -285,7 +285,7 @@ void ColumnFullCopyCmd::undo() {
  *
  * This is needed because a ColumnPrivate must have an owner and
  * we must have a ColumnPrivate object as backup.
- * Using a Column object as backup would lead to an inifinite loop.
+ * Using a Column object as backup would lead to an infinite loop.
  */
 
 /**
@@ -294,7 +294,7 @@ void ColumnFullCopyCmd::undo() {
  *
  * This is needed because a ColumnPrivate must have an owner and
  * we must have a ColumnPrivate object as backup.
- * Using a Column object as backup would lead to an inifinite loop.
+ * Using a Column object as backup would lead to an infinite loop.
  */
 
 /**

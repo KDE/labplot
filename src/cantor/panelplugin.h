@@ -53,7 +53,7 @@ class CANTOR_EXPORT PanelPlugin : public QObject /*, public KXMLGUIClient*/
 
     /**
      * Sets the properties of this PanelPlugin
-     * accodring to KPluginInfo
+     * according to KPluginInfo
      * @param info KPluginInfo
      */
     void setPluginInfo(KPluginInfo info);

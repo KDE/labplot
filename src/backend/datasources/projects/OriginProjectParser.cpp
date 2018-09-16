@@ -1357,7 +1357,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 //		possible values:
 //			0: Axis is at default position
 //			1: Axis is at (axisPositionValue)% from standard position
-//			2: Axis is at (axisPositionValue) position of ortogonal axis
+//			2: Axis is at (axisPositionValue) position of orthogonal axis
 // 		double axisPositionValue;
 
 // 		bool zeroLine;
@@ -1752,7 +1752,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 
 		//Color fillAreaPatternColor - color for the pattern lines, not supported
 		//double fillAreaPatternWidth - width of the pattern lines, not supported
-		//bool fillAreaWithLineTransparency - transparency of the pattern lines indepetendent of the area transparency, not supported
+		//bool fillAreaWithLineTransparency - transparency of the pattern lines independent of the area transparency, not supported
 
 		//TODO:
 		//unsigned char fillAreaPatternBorderStyle;

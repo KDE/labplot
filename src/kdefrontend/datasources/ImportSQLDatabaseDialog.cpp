@@ -118,7 +118,7 @@ void ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 		Spreadsheet* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
 		importSQLDatabaseWidget->read(spreadsheet, mode);
 	} else if (aspect->inherits("Workbook")) {
-		// use active spreadsheet or matrix (only if numeric data is going to be improted) if present,
+		// use active spreadsheet or matrix (only if numeric data is going to be imported) if present,
 		// create a new spreadsheet in the selected workbook otherwise
 		Workbook* workbook = qobject_cast<Workbook*>(aspect);
 		Spreadsheet* spreadsheet = workbook->currentSpreadsheet();

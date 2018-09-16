@@ -71,7 +71,7 @@ int nsl_smooth_moving_average_lagged(double *data, size_t n, size_t points, nsl_
 /* Percentile filter */
 int nsl_smooth_percentile(double *data, size_t n, size_t points, double percentile, nsl_smooth_pad_mode mode);
 
-/* Savitzky-Golay coefficents */
+/* Savitzky-Golay coefficients */
 /**
  * \brief Compute Savitzky-Golay coefficients and store them into #h.
  *
@@ -102,7 +102,7 @@ void nsl_smooth_pad_constant_set(double lvalue, double rvalue);
  */
 int nsl_smooth_savgol(double *data, size_t n, size_t points, int order, nsl_smooth_pad_mode mode);
 
-/* Savitzky-Golay default smooting (interp) */
+/* Savitzky-Golay default smoothing (interp) */
 int nsl_smooth_savgol_default(double *data, size_t n, size_t points, int order);
 
 /* TODO SmoothFilter::smoothModifiedSavGol(double *x_in, double *y_inout)

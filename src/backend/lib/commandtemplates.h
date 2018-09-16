@@ -80,7 +80,7 @@ public:
 		finalize();
 	}
 
-	//call finalizeUndo() at the end where only the signal is emmited
+	//call finalizeUndo() at the end where only the signal is emitted
 	//and no actual finalize-method is called that can potentially
 	//cause  new entries on the undo-stack
 	void undo() override {

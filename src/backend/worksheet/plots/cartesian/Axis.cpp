@@ -2104,7 +2104,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_QCOLOR(d->labelsColor);
 			READ_QFONT(d->labelsFont);
 
-			//don't produce any warning if no prefix or suffix is set (empty string is allowd here in xml)
+			//don't produce any warning if no prefix or suffix is set (empty string is allowed here in xml)
 			d->labelsPrefix = attribs.value("prefix").toString();
 			d->labelsSuffix = attribs.value("suffix").toString();
 

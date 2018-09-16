@@ -776,7 +776,7 @@ void LiveDataDock::addSubscription() {
 												for (auto* source: m_mqttClients) {
 													source->addBeforeRemoveSubscription(unsubscribeItem->parent()->child(i)->text(0), ui.cbQoS->currentIndex());
 												}
-												//also add it to twSubscripitons
+												//also add it to twSubscriptions
 												ui.twSubscriptions->addTopLevelItem(unsubscribeItem->parent()->takeChild(i));
 												i--;
 											} else {
@@ -838,7 +838,7 @@ void LiveDataDock::removeSubscription() {
 			ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(unsubscribeItem));
 		}
 		//otherwise we remove the selected item, but subscribe to every other topic, that was contained by
-		//the selected item's parent subscription(top level item of twSubscripitons)
+		//the selected item's parent subscription(top level item of twSubscriptions)
 		else{
 			while(unsubscribeItem->parent() != nullptr) {
 				for(int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
@@ -1461,7 +1461,7 @@ void LiveDataDock::manageCommonLevelSubscriptions() {
 					}
 				}
 
-				//make the subscripiton on commonTopic in every MQTTClient from m_mqttClients
+				//make the subscription on commonTopic in every MQTTClient from m_mqttClients
 				for (auto* source: m_mqttClients) {
 					source->addMQTTSubscription(commonTopic, ui.cbQoS->currentIndex());
 				}

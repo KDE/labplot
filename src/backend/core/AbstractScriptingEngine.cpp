@@ -86,7 +86,7 @@ bool AbstractScriptingEngine::isRunning() const {
  */
 
 /**
- * \brief If an exception / error occurred, return a nicely formated stack backtrace.
+ * \brief If an exception / error occurred, return a nicely formatted stack backtrace.
  */
 QString AbstractScriptingEngine::stackTraceString() {
 	return QString();

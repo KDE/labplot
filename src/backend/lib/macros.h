@@ -167,7 +167,7 @@ class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Privat
 		virtual void finalize() { m_target->finalize_method(); } \
 };
 
-// setter class with finalize() and signal emmiting.
+// setter class with finalize() and signal emitting.
 #define STD_SETTER_CMD_IMPL_S(class_name, cmd_name, value_type, field_name) \
 class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Private, value_type> { \
 	public: \
@@ -184,7 +184,7 @@ class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Privat
 		virtual void finalize() { m_target->finalize_method(); emit m_target->q->field_name##Changed(m_target->*m_field); } \
 };
 
-// setter class with finalize() and signal emmiting for changing several properties in one single step (embedded in beginMacro/endMacro)
+// setter class with finalize() and signal emitting for changing several properties in one single step (embedded in beginMacro/endMacro)
 #define STD_SETTER_CMD_IMPL_M_F_S(class_name, cmd_name, value_type, field_name, finalize_method) \
 class class_name ## cmd_name ## Cmd: public StandardMacroSetterCmd<class_name::Private, value_type> { \
 	public: \

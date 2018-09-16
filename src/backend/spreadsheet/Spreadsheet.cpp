@@ -365,7 +365,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 	if(cols.isEmpty()) return;
 
 	// the normal QPair comparison does not work properly with descending sorting
-	// thefore we use our own compare functions
+	// therefore we use our own compare functions
 	class CompareFunctions {
 	public:
 		static bool doubleLess(const QPair<double, int>& a, const QPair<double, int>& b) {

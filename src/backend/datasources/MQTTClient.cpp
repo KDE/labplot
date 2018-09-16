@@ -436,7 +436,7 @@ void MQTTClient::addMQTTSubscription(const QString& topic, quint8 QoS) {
 				}
 			}
 
-			//If there are some inferior subscripitons, we have to deal with them
+			//If there are some inferior subscriptions, we have to deal with them
 			if (found) {
 				for (int sub = 0; sub < inferiorSubscriptions.size(); ++sub) {
 					qDebug()<<"Reparent topics of inferior subscription: "<<inferiorSubscriptions[sub]->subscriptionName();
@@ -447,7 +447,7 @@ void MQTTClient::addMQTTSubscription(const QString& topic, quint8 QoS) {
 						topics[i]->reparent(newSubscription);
 					}
 
-					//Then remove the subscription and every connected informaiton
+					//Then remove the subscription and every connected information
 					QMqttTopicFilter unsubscribeFilter {inferiorSubscriptions[sub]->subscriptionName()};
 					m_client->unsubscribe(unsubscribeFilter);
 
@@ -1048,7 +1048,7 @@ void MQTTClient::onMQTTConnect() {
 		//if there was already a connection made(happens after updating will message)
 		else {
 			qDebug() << "Start resubscribing after will message update";
-			//Only the client has to make the subscriptions again, every other connected data is still avialable
+			//Only the client has to make the subscriptions again, every other connected data is still available
 			QMapIterator<QMqttTopicFilter, quint8> i(m_subscribedTopicNameQoS);
 			while(i.hasNext()) {
 				i.next();
@@ -1104,7 +1104,7 @@ void MQTTClient::MQTTErrorChanged(QMqttClient::ClientError clientError) {
 /*!
  *\brief Called when a subscription is loaded.
  * Checks whether every saved subscription was loaded or not.
- * If everything is loaded, it makes the conneciton and starts the reading
+ * If everything is loaded, it makes the connection and starts the reading
  *
  * \param name, the name of the subscription
  */
@@ -1164,7 +1164,7 @@ void MQTTClient::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("host", m_client->hostname());
 	writer->writeAttribute("port", QString::number(m_client->port()));
 	writer->writeAttribute("username", m_client->username());
-	writer->writeAttribute("pasword", m_client->password());
+	writer->writeAttribute("password", m_client->password());
 	writer->writeAttribute("clientId", m_client->clientId());
 	writer->writeAttribute("useRetain", QString::number(m_MQTTRetain));
 	writer->writeAttribute("useWill", QString::number(m_MQTTWill.MQTTUseWill));

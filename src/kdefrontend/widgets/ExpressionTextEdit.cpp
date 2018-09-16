@@ -149,7 +149,7 @@ void ExpressionTextEdit::insertCompletion(const QString& completion) {
  * \param force forces the validation and highlighting when no text changes were made, used when new parameters/variables were provided
  */
 void ExpressionTextEdit::validateExpression(bool force) {
-	//check whether the expression was changed or only the formating
+	//check whether the expression was changed or only the formatting
 	QString text = toPlainText();
 	bool textChanged = (text != m_currentExpression) ? true : false;
 

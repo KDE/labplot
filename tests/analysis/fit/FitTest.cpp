@@ -882,7 +882,7 @@ void FitTest::testLinearR_lm2() {
 	FuzzyCompare(fitResult.rsquare, 0.6673, 1.e-4);
 	DEBUG(std::setprecision(15) << fitResult.rsquareAdj);	// result: 0.645635000212702
 	DEBUG(std::setprecision(15) << 1.-(1.-fitResult.rsquare)*(50.-1.)/(50.-np));	// result: 0.65317468105924
-// reference calulates 1-(1-R^2)(n-1)/(n-p)
+// reference calculates 1-(1-R^2)(n-1)/(n-p)
 	FuzzyCompare(1.-(1.-fitResult.rsquare)*(50.-1.)/(50.-np), 0.6532, 1.e-4);
 	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 10824.71590767
 	FuzzyCompare(fitResult.sse, 10825, 1.e-4);

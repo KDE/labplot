@@ -239,7 +239,7 @@ void XYCurveDock::init() {
 	ui.cbLineType->addItem(i18n("Akima-spline (Periodic)"));
 
 	QPainter pa;
-	//TODO size of the icon depending on the actuall height of the combobox?
+	//TODO size of the icon depending on the actual height of the combobox?
 	int iconSize = 20;
 	QPixmap pm(iconSize, iconSize);
 	ui.cbLineType->setIconSize(QSize(iconSize, iconSize));
@@ -723,7 +723,7 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 }
 
 /*!
-  shows the formating properties of the column \c column.
+  shows the formatting properties of the column \c column.
   Called, when a new column for the values was selected - either by changing the type of the values (none, x, y, etc.) or
   by selecting a new custom column for the values.
 */
@@ -738,7 +738,7 @@ void XYCurveDock::showValuesColumnFormat(const Column* column) {
 		//update the format widgets for the new column mode
 		this->updateValuesFormatWidgets(columnMode);
 
-		//show the actuall formating properties
+		//show the actual formatting properties
 		switch (columnMode) {
 		case AbstractColumn::Numeric: {
 			Double2StringFilter* filter = static_cast<Double2StringFilter*>(column->outputFilter());

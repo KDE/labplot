@@ -760,7 +760,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 			QModelIndex index;
 			if (row == -1)
-				index = model->modelIndexOfAspect(m_project); //-1 corresponds tothe project-item (s.a. ProjectExplorer::save())
+				index = model->modelIndexOfAspect(m_project); //-1 corresponds to the project-item (s.a. ProjectExplorer::save())
 			else if (row >= aspects.size())
 				continue;
 			else

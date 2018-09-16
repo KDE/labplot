@@ -2231,7 +2231,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
-		//"update options" groupbox can be deactived for "file and pipe" if the file is invalid.
+		//"update options" groupbox can be deactivated for "file and pipe" if the file is invalid.
 		//Activate the groupbox when switching from "file and pipe" to a different source type.
 		ui.gbUpdateOptions->setEnabled(true);
 	} else {
@@ -2489,7 +2489,7 @@ void ImportFileWidget::mqttUnsubscribe() {
 		unsubscribeFromTopic(unsubscribeItem->text(0));
 
 	//otherwise we remove the selected item, but subscribe to every other topic, that was contained by
-	//the selected item's parent subscription(top level item of twSubscripitons)
+	//the selected item's parent subscription(top level item of twSubscriptions)
 	else {
 		while(unsubscribeItem->parent() != nullptr) {
 			for (int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
@@ -2835,7 +2835,7 @@ void ImportFileWidget::mqttConnectTimeout() {
 }
 
 /*!
-	shows the MQTT conneciton manager where the connections are created and edited.
+	shows the MQTT connection manager where the connections are created and edited.
 	The selected connection is selected in the connection combo box in this widget.
 */
 void ImportFileWidget::showMQTTConnectionManager() {

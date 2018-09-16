@@ -39,8 +39,8 @@ public:
 	virtual QString name() const;
 	virtual void retransform() {}
 
-	float horizontalPadding; //horiz. offset between the plot area and the area defining the coodinate system, in scene units
-	float verticalPadding; //vert. offset between the plot area and the area defining the coodinate system, in scene units
+	float horizontalPadding; //horiz. offset between the plot area and the area defining the coordinate system, in scene units
+	float verticalPadding; //vert. offset between the plot area and the area defining the coordinate system, in scene units
 };
 
 #endif

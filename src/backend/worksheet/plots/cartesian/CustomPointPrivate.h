@@ -55,7 +55,7 @@ class CustomPointPrivate: public QGraphicsItem {
 		QPainterPath pointShape;
 
 		QPointF position; //position in plot coordinates
-		QPointF positionScene; //position in scene coordinatates
+		QPointF positionScene; //position in scene coordinates
 
 		//symbol
 		Symbol::Style symbolStyle;

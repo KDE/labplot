@@ -118,7 +118,7 @@ bool XmlStreamReader::skipToEndElement() {
  * Read an XML attribute and convert it to int
   * \param name attribute name
   * \param ok pointer to report back whether the attribute value could be determined (may be NULL)
-  * \return the attriute value if found and converted, otherwise zero (in this case *ok is false)
+  * \return the attribute value if found and converted, otherwise zero (in this case *ok is false)
   */
 int XmlStreamReader::readAttributeInt(const QString& name, bool* ok) {
 	QString str = attributes().value(namespaceUri().toString(), name).toString();

@@ -838,7 +838,7 @@ void HistogramDock::showValuesColumnFormat(const Column* column){
 	//update the format widgets for the new column mode
 	this->updateValuesFormatWidgets(columnMode);
 
-	 //show the actuall formating properties
+	 //show the actual formatting properties
 	switch(columnMode) {
 		case AbstractColumn::Numeric:{
 		  Double2StringFilter * filter = static_cast<Double2StringFilter*>(column->outputFilter());

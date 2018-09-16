@@ -180,7 +180,7 @@ void WorksheetElement::prepareMoveBehindMenu() {
 		}
 	}
 
-	//TODO: doesn't alway work properly
+	//TODO: doesn't always work properly
 	//hide the "move behind" menu if it doesn't have any entries, show if not shown yet otherwise
 	//m_moveBehindMenu->menuAction()->setVisible(!m_moveBehindMenu->isEmpty());
 }

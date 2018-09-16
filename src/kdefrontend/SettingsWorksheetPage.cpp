@@ -132,7 +132,7 @@ void SettingsWorksheetPage::checkTeX(int engineIndex) {
 		return;
 	}
 
-	//engine found, check the precense of other required tools (s.a. TeXRenderer.cpp):
+	//engine found, check the presence of other required tools (s.a. TeXRenderer.cpp):
 	//to convert the generated PDF/PS files to PNG we need 'convert' from the ImageMagic package
 	if (!TeXRenderer::executableExists(QLatin1String("convert"))) {
 		ui.lLatexWarning->show();

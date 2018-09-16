@@ -51,7 +51,7 @@
 
 /**
  * \class TextLabel
- * \brief A label supporting rendering of html- and tex-formated textes.
+ * \brief A label supporting rendering of html- and tex-formatted texts.
  *
  * The label is aligned relative to the specified position.
  * The position can be either specified by providing the x- and y- coordinates
