@@ -1499,4 +1499,42 @@ void ConvolutionTest::testCircularDeconv_norm() {
 	QCOMPARE(resultYDataColumn->valueAt(3), 4.);
 }
 
+void ConvolutionTest::testPerformance() {
+	// data
+	QVector<double> yData;
+	const int N = 2e7;
+	for (int i = 0;  i < N; i++)
+		yData.append(i % 100);
+	QVector<double> y2Data = {0,1.,.5};
+
+	//data source columns
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	Column y2DataColumn("y2", AbstractColumn::Numeric);
+	y2DataColumn.replaceValues(0, y2Data);
+
+	XYConvolutionCurve convolutionCurve("convolution");
+	convolutionCurve.setYDataColumn(&yDataColumn);
+	convolutionCurve.setY2DataColumn(&y2DataColumn);
+
+	//prepare and perform the convolution
+	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	QBENCHMARK {
+		// triggers recalculate()
+		convolutionCurve.setConvolutionData(convolutionData);
+	}
+
+	//check the results
+	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+
+	QCOMPARE(convolutionResult.available, true);
+	QCOMPARE(convolutionResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, N + 2);
+}
+
 QTEST_MAIN(ConvolutionTest)

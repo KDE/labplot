@@ -68,5 +68,7 @@ private slots:
 	void testCircularDeconv();
 	void testCircularDeconv2();
 	void testCircularDeconv_norm();
+
+	void testPerformance();
 };
 #endif
