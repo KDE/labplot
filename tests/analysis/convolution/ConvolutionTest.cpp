@@ -1502,7 +1502,11 @@ void ConvolutionTest::testCircularDeconv_norm() {
 void ConvolutionTest::testPerformance() {
 	// data
 	QVector<double> yData;
+#ifdef HAVE_FFTW3
 	const int N = 2e7;
+#else	// GSL is much slower
+	const int N = 1e6;
+#endif
 	for (int i = 0;  i < N; i++)
 		yData.append(i % 100);
 	QVector<double> y2Data = {0,1.,.5};
