@@ -1505,7 +1505,7 @@ void ConvolutionTest::testPerformance() {
 #ifdef HAVE_FFTW3
 	const int N = 2e7;
 #else	// GSL is much slower
-	const int N = 1e6;
+	const int N = 1e5;
 #endif
 	for (int i = 0;  i < N; i++)
 		yData.append(i % 100);
