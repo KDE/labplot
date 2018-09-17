@@ -160,24 +160,31 @@ void XYConvolutionCurvePrivate::recalculate() {
 	QVector<double> ydataVector;
 	QVector<double> y2dataVector;
 
-	//TODO: can we use this?
-	/*double xmin, xmax;
-	if (convolutionData.autoRange) {
+	double xmin, xmax;
+	if (tmpXDataColumn != nullptr && convolutionData.autoRange) {
 		xmin = tmpXDataColumn->minimum();
 		xmax = tmpXDataColumn->maximum();
 	} else {
 		xmin = convolutionData.xRange.first();
 		xmax = convolutionData.xRange.last();
-	}*/
+	}
 
 	//only copy those data where values are valid
-	if (tmpXDataColumn != nullptr)
-		for (int row = 0; row < tmpXDataColumn->rowCount(); ++row)
-			if (!std::isnan(tmpXDataColumn->valueAt(row)) && !tmpXDataColumn->isMasked(row))
-				xdataVector.append(tmpXDataColumn->valueAt(row));
-	for (int row = 0; row < tmpYDataColumn->rowCount(); ++row)
-		if (!std::isnan(tmpYDataColumn->valueAt(row)) && !tmpYDataColumn->isMasked(row))
-			ydataVector.append(tmpYDataColumn->valueAt(row));
+	if (tmpXDataColumn != nullptr) {	// x-axis present (with possible range)
+		for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
+			if (!std::isnan(tmpXDataColumn->valueAt(row)) && !tmpXDataColumn->isMasked(row)
+				&& !std::isnan(tmpYDataColumn->valueAt(row)) && !tmpYDataColumn->isMasked(row)) {
+				if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+					xdataVector.append(tmpXDataColumn->valueAt(row));
+					ydataVector.append(tmpYDataColumn->valueAt(row));
+				}
+			}
+		}
+	} else {	// no x-axis: take all valid values
+		for (int row = 0; row < tmpYDataColumn->rowCount(); ++row)
+			if (!std::isnan(tmpYDataColumn->valueAt(row)) && !tmpYDataColumn->isMasked(row))
+				ydataVector.append(tmpYDataColumn->valueAt(row));
+	}
 	for (int row = 0; row < tmpY2DataColumn->rowCount(); ++row)
 		if (!std::isnan(tmpY2DataColumn->valueAt(row)) && !tmpY2DataColumn->isMasked(row))
 			y2dataVector.append(tmpY2DataColumn->valueAt(row));
