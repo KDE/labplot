@@ -71,7 +71,8 @@ int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, nsl_conv_
 	size_t i, j, size = n + m - 1, wi = 0;
 	double norm = 1;
 	if (normalize == nsl_conv_norm_euclidean)
-		norm = cblas_dnrm2((int)m, r, 1);
+		if ((norm = cblas_dnrm2((int)m, r, 1)) == 0)
+			norm = 1.;
 
 	if (wrap == nsl_conv_wrap_max)
 		nsl_stats_maximum(r, m, &wi);
@@ -99,7 +100,8 @@ int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, nsl_con
 	size_t i, j, size = GSL_MAX(n,m), wi = 0;
 	double norm = 1;
 	if (normalize == nsl_conv_norm_euclidean)
-		norm = cblas_dnrm2((int)m, r, 1);
+		if ((norm = cblas_dnrm2((int)m, r, 1)) == 0)
+			norm = 1.;
 
 	if (wrap == nsl_conv_wrap_max)
 		nsl_stats_maximum(r, m, &wi);
@@ -134,7 +136,8 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 
 	double norm = 1.;
 	if (normalize == nsl_conv_norm_euclidean)
-		norm = cblas_dnrm2((int)m, r, 1);
+		if ((norm = cblas_dnrm2((int)m, r, 1)) == 0)
+			norm = 1.;
 
 	if (wrap == nsl_conv_wrap_max)
 		nsl_stats_maximum(r, m, &wi);
