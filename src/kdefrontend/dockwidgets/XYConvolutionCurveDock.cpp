@@ -158,6 +158,10 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	m_convolutionCurve = dynamic_cast<XYConvolutionCurve*>(m_curve);
 
+	// hide x-Range per default
+	uiGeneralTab.lXRange->setEnabled(false);
+	uiGeneralTab.cbAutoRange->setEnabled(false);
+
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_convolutionCurve->dataSourceType());
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_convolutionCurve->dataSourceCurve());
@@ -294,8 +298,6 @@ void XYConvolutionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	XYCurve* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
-	this->updateSettings(dataSourceCurve->xColumn());
-
 	if (m_initializing)
 		return;
 
@@ -304,6 +306,7 @@ void XYConvolutionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 }
 
 void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
+	DEBUG("XYConvolutionCurveDock::xDataColumnChanged()");
 	if (m_initializing)
 		return;
 
@@ -318,22 +321,9 @@ void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			uiGeneralTab.sbMin->setValue(column->minimum());
 			uiGeneralTab.sbMax->setValue(column->maximum());
 		}
-
-		// disable convolution methods that need more data points
-		this->updateSettings(column);
 	}
 }
 
-void XYConvolutionCurveDock::updateSettings(const AbstractColumn* column) {
-	if (!column)
-		return;
-
-	//TODO
-	// 	size_t n=0;
-	// 	for (int row=0; row < column->rowCount(); row++)
-	// 		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
-	// 			n++;
-}
 void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
@@ -538,6 +528,15 @@ void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 	DEBUG("XYConvolutionCurveDock::curveXDataColumnChanged()");
 	m_initializing = true;
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
+	if (column != nullptr) {
+		DEBUG("X Column available");
+		uiGeneralTab.lXRange->setEnabled(true);
+		uiGeneralTab.cbAutoRange->setEnabled(true);
+	} else {
+		DEBUG("X Column not available");
+		uiGeneralTab.lXRange->setEnabled(false);
+		uiGeneralTab.cbAutoRange->setEnabled(false);
+	}
 	m_initializing = false;
 }
 

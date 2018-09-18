@@ -46,7 +46,6 @@ public:
 private:
 	void initGeneralTab() override;
 	void showConvolutionResult();
-	void updateSettings(const AbstractColumn*);
 
 	Ui::XYConvolutionCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbDataSourceCurve;
