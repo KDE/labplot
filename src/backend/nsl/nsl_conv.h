@@ -62,6 +62,14 @@ extern const char* nsl_conv_wrap_name[];
 
 /* TODO: mode: full, same, valid (see NumPy, SciPy) */
 
+#define NSL_CONV_KERNEl_COUNT 1010
+/* default response (kernel)
+ * option: number of points
+ */
+typedef enum {nsl_conv_kernel_avg, nsl_conv_kernel_smooth_triangle, nsl_conv_kernel_smooth_gaussian, nsl_conv_kernel_first_derivative, nsl_conv_kernel_smooth_first_derivative,
+	nsl_conv_kernel_second_derivative, nsl_conv_kernel_third_derivative, nsl_conv_kernel_fourth_derivative, nsl_conv_kernel_gaussian, nsl_conv_kernel_lorentzian} nsl_conv_kernel_type;
+extern const char* nsl_conv_kernel_name[];
+
 /* calculate convolution/deconvolution
  * of signal s of size n with response r of size m
  */
