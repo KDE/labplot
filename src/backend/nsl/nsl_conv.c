@@ -207,9 +207,11 @@ int nsl_conv_fft_FFTW(double s[], double r[], size_t n, nsl_conv_direction_type 
 		}
 	} else {
 		for (i = 0; i < size; i += 2) {
-			double tmp = r[i]*r[i] + r[i+1]*r[i+1];
-			double re = (s[i]*r[i] + s[i+1]*r[i+1])/tmp;
-			double im = (s[i+1]*r[i] - s[i]*r[i+1])/tmp;
+			double norm = r[i]*r[i] + r[i+1]*r[i+1];
+			if (norm < DBL_MIN)
+				norm = 1.;
+			double re = (s[i]*r[i] + s[i+1]*r[i+1])/norm;
+			double im = (s[i+1]*r[i] - s[i]*r[i+1])/norm;
 
 			s[i] = re;
 			s[i+1] = im;
@@ -258,10 +260,18 @@ int nsl_conv_fft_GSL(double s[], double r[], size_t n, nsl_conv_direction_type d
 			if (i%2) { /* Re */
 				if (i == n-1) /* when n is even last value is real */
 					out[i] = s[i]/r[i];
-				else
-					out[i] = (s[i]*r[i] + s[i+1]*r[i+1])/(r[i]*r[i] + r[i+1]*r[i+1]);
-			} else 	/* Im */
-				out[i] = (s[i]*r[i-1] - s[i-1]*r[i])/(r[i-1]*r[i-1] + r[i]*r[i]);
+				else {
+					double norm = r[i]*r[i] + r[i+1]*r[i+1];
+					if (norm < DBL_MIN)
+						norm = 1.;
+					out[i] = (s[i]*r[i] + s[i+1]*r[i+1])/norm;
+				}
+			} else { 	/* Im */
+				double norm = r[i-1]*r[i-1] + r[i]*r[i];
+				if (norm < DBL_MIN)
+					norm = 1.;
+				out[i] = (s[i]*r[i-1] - s[i-1]*r[i])/norm;
+			}
 		}
 	}
 
