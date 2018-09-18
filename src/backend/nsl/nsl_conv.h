@@ -70,6 +70,9 @@ typedef enum {nsl_conv_kernel_avg, nsl_conv_kernel_smooth_triangle, nsl_conv_ker
 	nsl_conv_kernel_second_derivative, nsl_conv_kernel_third_derivative, nsl_conv_kernel_fourth_derivative, nsl_conv_kernel_gaussian, nsl_conv_kernel_lorentzian} nsl_conv_kernel_type;
 extern const char* nsl_conv_kernel_name[];
 
+/* standard kernel */
+int nsl_conv_standard_kernel(double k[], size_t n, nsl_conv_kernel_type);
+
 /* calculate convolution/deconvolution
  * of signal s of size n with response r of size m
  */

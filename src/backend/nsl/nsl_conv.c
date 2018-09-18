@@ -43,6 +43,31 @@ const char* nsl_conv_wrap_name[] = {i18n("none"), i18n("maximum"), i18n("center 
 const char* nsl_conv_kernel_name[] = {i18n("sliding average"), i18n("triangular smooth"), i18n("pseudo-Gaussian smooth"), i18n("first derivative"), i18n("smooth first derivative"),
 	i18n("second derivative"), i18n("third derivative"), i18n("fourth derivative"), i18n("Gaussian"), i18n("Lorentzian") };
 
+int nsl_conv_standard_kernel(double k[], size_t n, nsl_conv_kernel_type type) {
+	size_t i;
+	switch (type) {
+	case nsl_conv_kernel_avg:
+		for (i = 0; i < n; i++)
+			k[i] = 1.;
+		break;
+	case nsl_conv_kernel_smooth_triangle:
+		for (i = 0; i < n/2; i++)
+			k[i] = i + 1.;
+		for (i = n/2; i < n; i++)
+			k[i] = n/2 - i;
+		break;
+	/*TODO: all kernel */
+	}
+
+	/* debug */
+	printf("[");
+	for (i = 0; i < n; i++)
+		printf("%g ", k[i]);
+	puts("]");
+
+	return 0;
+}
+
 int nsl_conv_convolution_direction(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type dir, nsl_conv_type_type type, nsl_conv_method_type method,
 		nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]) {
 	if (dir == nsl_conv_direction_forward)
