@@ -96,6 +96,9 @@ void XYConvolutionCurveDock::setupGeneral() {
 	cbY2DataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbY2DataColumn, 8, 2, 1, 3);
 
+	for (int i = 0; i < NSL_CONV_KERNEL_COUNT; i++)
+		uiGeneralTab.cbKernel->addItem(i18n(nsl_conv_kernel_name[i]));
+
 	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 
@@ -552,6 +555,15 @@ void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* colu
 	DEBUG("XYConvolutionCurveDock::curveY2DataColumnChanged()");
 	m_initializing = true;
 	XYCurveDock::setModelIndexFromAspect(cbY2DataColumn, column);
+	if (column != nullptr) {
+		DEBUG("Y2 Column available");
+		uiGeneralTab.lKernel->setEnabled(false);
+		uiGeneralTab.cbKernel->setEnabled(false);
+	} else {
+		DEBUG("Y2 Column not available");
+		uiGeneralTab.lKernel->setEnabled(true);
+		uiGeneralTab.cbKernel->setEnabled(true);
+	}
 	m_initializing = false;
 }
 

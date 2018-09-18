@@ -62,7 +62,7 @@ extern const char* nsl_conv_wrap_name[];
 
 /* TODO: mode: full, same, valid (see NumPy, SciPy) */
 
-#define NSL_CONV_KERNEl_COUNT 1010
+#define NSL_CONV_KERNEL_COUNT 10
 /* default response (kernel)
  * option: number of points
  */
