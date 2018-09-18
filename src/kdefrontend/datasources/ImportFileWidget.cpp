@@ -110,7 +110,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	m_suppressRefresh(false)
 #ifdef HAVE_MQTT
 	,
-	m_client(new QMqttClient(this)),
+	m_client(nullptr),
 	m_searching(false),
 	m_searchTimer(new QTimer(this)),
 	m_connectTimeoutTimer(new QTimer(this)),
@@ -381,15 +381,11 @@ void ImportFileWidget::initSlots() {
 
 #ifdef HAVE_MQTT
 	connect(ui.cbConnection, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnectionChanged);
-	connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
-	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
 	connect(ui.bSubscribe,  &QPushButton::clicked, this, &ImportFileWidget::mqttSubscribe);
 	connect(ui.bUnsubscribe, &QPushButton::clicked, this,&ImportFileWidget::mqttUnsubscribe);
-	connect(m_client, &QMqttClient::messageReceived, this, &ImportFileWidget::mqttMessageReceived);
 	connect(this, &ImportFileWidget::newTopic, this, &ImportFileWidget::setTopicCompleter);
 	connect(m_searchTimer, &QTimer::timeout, this, &ImportFileWidget::topicTimeout);
 	connect(m_connectTimeoutTimer, &QTimer::timeout, this, &ImportFileWidget::mqttConnectTimeout);
-	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
 	connect(ui.cbFileType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this]() {emit checkFileType();});
 	connect(ui.leTopics, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToTopicTreeItem);
 	connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToSubsriptionTreeItem);
@@ -2259,7 +2255,7 @@ void ImportFileWidget::mqttConnectionChanged() {
 	if (m_initialisingMQTT)
 		return;
 
-	if (m_client->state() == QMqttClient::ClientState::Disconnected) {
+	if (m_client == nullptr || m_client->state() == QMqttClient::ClientState::Disconnected) {
 		if (ui.cbConnection->currentIndex() == -1)
 			return;
 		WAIT_CURSOR;
