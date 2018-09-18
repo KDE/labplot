@@ -84,7 +84,8 @@ void XYConvolutionCurveDock::setupGeneral() {
 	}
 
 	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
-	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
+	// one curve is not enough
+	// uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
 
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 3);
@@ -214,7 +215,7 @@ void XYConvolutionCurveDock::setModel() {
 
 	list.clear();
 	list << "Folder" << "Workbook" << "Datapicker" << "DatapickerCurve" << "Spreadsheet"
-		<< "FileDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYFitCurve";
+		<< "FileDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYConvolutionCurve";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 	cbY2DataColumn->setTopLevelClasses(list);
