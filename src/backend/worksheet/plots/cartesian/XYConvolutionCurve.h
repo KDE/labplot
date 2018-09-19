@@ -45,7 +45,7 @@ public:
 			normalize(nsl_conv_norm_none), wrap(nsl_conv_wrap_none), autoRange(true), xRange(2) {};
 
 		nsl_conv_kernel_type kernel;	// kernel to use when no response selected
-		int kernelSize;			// size of kernel
+		size_t kernelSize;		// size of kernel
 		nsl_conv_direction_type direction;	// forward (convolution) or backward (deconvolution)
 		nsl_conv_type_type type;	// linear or circular
 		nsl_conv_method_type method;	// how to calculate convolution (auto, direct or FFT method)

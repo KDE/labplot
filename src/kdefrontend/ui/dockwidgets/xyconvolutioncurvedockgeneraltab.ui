@@ -405,6 +405,9 @@
      <property name="minimum">
       <number>2</number>
      </property>
+     <property name="maximum">
+      <number>999</number>
+     </property>
     </widget>
    </item>
   </layout>

@@ -187,7 +187,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 	}
 
 	const nsl_conv_kernel_type kernel = convolutionData.kernel;
-	int kernelSize = convolutionData.kernelSize;
+	const size_t kernelSize = convolutionData.kernelSize;
 	if (tmpY2DataColumn != nullptr) {
 		for (int row = 0; row < tmpY2DataColumn->rowCount(); ++row)
 			if (!std::isnan(tmpY2DataColumn->valueAt(row)) && !tmpY2DataColumn->isMasked(row))
@@ -195,9 +195,11 @@ void XYConvolutionCurvePrivate::recalculate() {
 		DEBUG("kernel = given response");
 	} else {
 		DEBUG("kernel = " << nsl_conv_kernel_name[kernel] << ", size = " << kernelSize);
-		//TODO: use kernel
-		for (int i = 0; i < kernelSize; i++)
-			y2dataVector.append(1);
+		double* k = new double[kernelSize];
+		nsl_conv_standard_kernel(k, kernelSize, kernel);
+		for (size_t i = 0; i < kernelSize; i++)
+			y2dataVector.append(k[i]);
+		delete[] k;
 	}
 
 	const size_t n = (size_t)ydataVector.size();	// number of points for signal
@@ -340,7 +342,7 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "convolutionData") {
 			attribs = reader->attributes();
 			READ_INT_VALUE("kernel", convolutionData.kernel, nsl_conv_kernel_type);
-			READ_INT_VALUE("kernelSize", convolutionData.kernelSize, int);
+			READ_INT_VALUE("kernelSize", convolutionData.kernelSize, size_t);
 			READ_INT_VALUE("autoRange", convolutionData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", convolutionData.xRange.first());
 			READ_DOUBLE_VALUE("xRangeMax", convolutionData.xRange.last());

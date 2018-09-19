@@ -123,6 +123,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 	connect( uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)) );
 	connect( uiGeneralTab.cbKernel, SIGNAL(currentIndexChanged(int)), this, SLOT(kernelChanged()) );
+	connect( uiGeneralTab.sbKernelSize, SIGNAL(valueChanged(int)), this, SLOT(kernelSizeChanged()) );
 	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
 	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
 	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
@@ -173,6 +174,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_convolutionCurve->yDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbY2DataColumn, m_convolutionCurve->y2DataColumn());
 	uiGeneralTab.cbKernel->setCurrentIndex(m_convolutionData.kernel);
+	uiGeneralTab.sbKernelSize->setValue(m_convolutionData.kernelSize);
 	uiGeneralTab.cbAutoRange->setChecked(m_convolutionData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_convolutionData.xRange.first());
 	uiGeneralTab.sbMax->setValue(m_convolutionData.xRange.last());
@@ -402,6 +404,15 @@ void XYConvolutionCurveDock::kernelChanged() {
 		uiGeneralTab.sbKernelSize->setEnabled(false);
 		break;
 	}
+
+	enableRecalculate();
+}
+
+void XYConvolutionCurveDock::kernelSizeChanged() {
+	size_t kernelSize = uiGeneralTab.sbKernelSize->value();
+	m_convolutionData.kernelSize = kernelSize;
+
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::autoRangeChanged() {
@@ -438,14 +449,14 @@ void XYConvolutionCurveDock::xRangeMinChanged() {
 	double xMin = uiGeneralTab.sbMin->value();
 
 	m_convolutionData.xRange.first() = xMin;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::xRangeMaxChanged() {
 	double xMax = uiGeneralTab.sbMax->value();
 
 	m_convolutionData.xRange.last() = xMax;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::directionChanged() {
@@ -463,14 +474,14 @@ void XYConvolutionCurveDock::directionChanged() {
 		uiGeneralTab.leName->setText(m_curve->name());
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::typeChanged() {
 	nsl_conv_type_type type = (nsl_conv_type_type) uiGeneralTab.cbType->currentIndex();
 	m_convolutionData.type = type;
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::normChanged() {
@@ -480,14 +491,14 @@ void XYConvolutionCurveDock::normChanged() {
 	else
 		m_convolutionData.normalize = nsl_conv_norm_none;
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::wrapChanged() {
 	nsl_conv_wrap_type wrap = (nsl_conv_wrap_type) uiGeneralTab.cbWrap->currentIndex();
 	m_convolutionData.wrap = wrap;
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::recalculateClicked() {
