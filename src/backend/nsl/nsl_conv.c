@@ -45,6 +45,8 @@ const char* nsl_conv_kernel_name[] = {i18n("sliding average"), i18n("triangular 
 
 int nsl_conv_standard_kernel(double k[], size_t n, nsl_conv_kernel_type type) {
 	size_t i;
+
+	int validn = 1;
 	switch (type) {
 	case nsl_conv_kernel_avg:
 		for (i = 0; i < n; i++)
@@ -54,9 +56,75 @@ int nsl_conv_standard_kernel(double k[], size_t n, nsl_conv_kernel_type type) {
 		for (i = 0; i < n/2; i++)
 			k[i] = i + 1.;
 		for (i = n/2; i < n; i++)
-			k[i] = n/2 - i;
+			k[i] = n - i;
 		break;
-	/*TODO: all kernel */
+	case nsl_conv_kernel_smooth_gaussian:
+		switch (n) {
+		case 5:
+			k[0]=1;k[1]=4;k[2]=6;k[3]=4;k[4]=1;
+			break;
+		case 7:
+			k[0]=1;k[1]=4;k[2]=8;k[3]=10;k[4]=8;k[5]=4;k[6]=1;
+			break;
+		case 9:
+			k[0]=1;k[1]=4;k[2]=9;k[3]=14;k[4]=17;k[5]=14;k[6]=9;k[7]=4;k[8]=1;
+			break;
+		default:
+			validn = 0;
+		}
+		break;
+	case nsl_conv_kernel_first_derivative:
+		if (n == 2) {
+			k[0]=-1;k[1]=1;
+		} else
+			validn = 0;
+		break;
+	case nsl_conv_kernel_smooth_first_derivative:
+		if (n%2) {
+			for (i = 0; i < n; i++)
+				k[i] = (int)(i - n/2);
+		} else
+			validn = 0;
+		break;
+	case nsl_conv_kernel_second_derivative:
+		if (n == 3) {
+			k[0]=1;k[1]=-2;k[2]=1;
+		} else
+			validn = 0;
+		break;
+	case nsl_conv_kernel_third_derivative:
+		if (n == 4) {
+			k[0]=1;k[1]=-3;k[2]=3;k[3]=-1;
+		} else
+			validn = 0;
+		break;
+	case nsl_conv_kernel_fourth_derivative:
+		if (n == 5) {
+			k[0]=1;k[1]=-4;k[2]=6;k[3]=-4;k[4]=1;
+		} else
+			validn = 0;
+		break;
+	case nsl_conv_kernel_gaussian: {
+		double s = n/5.;	/* relative width */
+		for (i = 0;i < n; i++) {
+			double x = i - (n-1.)/2.;
+			k[i] = 1./sqrt(2.*M_PI)/s * exp(-x*x/2./s/s);
+		}
+		break;
+	}
+	case nsl_conv_kernel_lorentzian: {
+		double s = n/5.;	/* relative width */
+		for (i = 0;i < n; i++) {
+			double x = i - (n-1.)/2.;
+			k[i] = s/M_PI/(s*s + x*x);
+		}
+		break;
+	}
+	}
+
+	if (!validn) {
+		printf("ERROR: kernel size %zu not supported for kernel %s\n", n, nsl_conv_kernel_name[type]);
+		return -1;
 	}
 
 	/* debug */

@@ -63,7 +63,7 @@ extern const char* nsl_conv_wrap_name[];
 /* TODO: mode: full, same, valid (see NumPy, SciPy) */
 
 #define NSL_CONV_KERNEL_COUNT 10
-/* default response (kernel)
+/* standard kernel (response)
  * option: number of points
  */
 typedef enum {nsl_conv_kernel_avg, nsl_conv_kernel_smooth_triangle, nsl_conv_kernel_smooth_gaussian, nsl_conv_kernel_first_derivative, nsl_conv_kernel_smooth_first_derivative,
