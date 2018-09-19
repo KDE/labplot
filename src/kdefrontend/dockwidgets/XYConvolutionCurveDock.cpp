@@ -91,9 +91,9 @@ void XYConvolutionCurveDock::setupGeneral() {
 	cbXDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbXDataColumn, 6, 2, 1, 3);
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 3);
+	gridLayout->addWidget(cbYDataColumn, 8, 2, 1, 3);
 	cbY2DataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbY2DataColumn, 8, 2, 1, 3);
+	gridLayout->addWidget(cbY2DataColumn, 9, 2, 1, 3);
 
 	for (int i = 0; i < NSL_CONV_KERNEL_COUNT; i++)
 		uiGeneralTab.cbKernel->addItem(i18n(nsl_conv_kernel_name[i]));
@@ -124,6 +124,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYConvolutionCurveDock::commentChanged );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 	connect( uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)) );
+	connect( uiGeneralTab.sbSamplingInterval, SIGNAL(valueChanged(double)), this, SLOT(samplingIntervalChanged()) );
 	connect( uiGeneralTab.cbKernel, SIGNAL(currentIndexChanged(int)), this, SLOT(kernelChanged()) );
 	connect( uiGeneralTab.sbKernelSize, SIGNAL(valueChanged(int)), this, SLOT(kernelSizeChanged()) );
 	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
@@ -175,6 +176,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_convolutionCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_convolutionCurve->yDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbY2DataColumn, m_convolutionCurve->y2DataColumn());
+	uiGeneralTab.sbSamplingInterval->setValue(m_convolutionData.samplingInterval);
 	uiGeneralTab.cbKernel->setCurrentIndex(m_convolutionData.kernel);
 	uiGeneralTab.sbKernelSize->setValue((int)m_convolutionData.kernelSize);
 	uiGeneralTab.cbAutoRange->setChecked(m_convolutionData.autoRange);
@@ -352,6 +354,13 @@ void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYConvolutionCurve*>(curve)->setY2DataColumn(column);
+}
+
+void XYConvolutionCurveDock::samplingIntervalChanged() {
+	double samplingInterval =  uiGeneralTab.sbSamplingInterval->value();
+	m_convolutionData.samplingInterval = samplingInterval;
+
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::kernelChanged() {
@@ -594,10 +603,16 @@ void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 		DEBUG("X Column available");
 		uiGeneralTab.lXRange->setEnabled(true);
 		uiGeneralTab.cbAutoRange->setEnabled(true);
+		uiGeneralTab.lSamplingInterval->setEnabled(false);
+		uiGeneralTab.l2SamplingInterval->setEnabled(false);
+		uiGeneralTab.sbSamplingInterval->setEnabled(false);
 	} else {
 		DEBUG("X Column not available");
 		uiGeneralTab.lXRange->setEnabled(false);
 		uiGeneralTab.cbAutoRange->setEnabled(false);
+		uiGeneralTab.lSamplingInterval->setEnabled(true);
+		uiGeneralTab.l2SamplingInterval->setEnabled(true);
+		uiGeneralTab.sbSamplingInterval->setEnabled(true);
 	}
 	m_initializing = false;
 }
@@ -617,10 +632,12 @@ void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* colu
 		DEBUG("Y2 Column available");
 		uiGeneralTab.lKernel->setEnabled(false);
 		uiGeneralTab.cbKernel->setEnabled(false);
+		uiGeneralTab.sbKernelSize->setEnabled(false);
 	} else {
 		DEBUG("Y2 Column not available");
 		uiGeneralTab.lKernel->setEnabled(true);
 		uiGeneralTab.cbKernel->setEnabled(true);
+		uiGeneralTab.sbKernelSize->setEnabled(true);
 	}
 	m_initializing = false;
 }

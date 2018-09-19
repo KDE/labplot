@@ -41,9 +41,10 @@ Q_OBJECT
 
 public:
 	struct ConvolutionData {
-		ConvolutionData() : kernel(nsl_conv_kernel_avg), kernelSize(2), direction(nsl_conv_direction_forward), type(nsl_conv_type_linear), method(nsl_conv_method_auto),
-			normalize(nsl_conv_norm_none), wrap(nsl_conv_wrap_none), autoRange(true), xRange(2) {};
+		ConvolutionData() : samplingInterval(1.), kernel(nsl_conv_kernel_avg), kernelSize(2), direction(nsl_conv_direction_forward), type(nsl_conv_type_linear),
+			method(nsl_conv_method_auto), normalize(nsl_conv_norm_none), wrap(nsl_conv_wrap_none), autoRange(true), xRange(2) {};
 
+		double samplingInterval;	// sampling interval used when no x-axis is present
 		nsl_conv_kernel_type kernel;	// kernel to use when no response selected
 		size_t kernelSize;		// size of kernel
 		nsl_conv_direction_type direction;	// forward (convolution) or backward (deconvolution)

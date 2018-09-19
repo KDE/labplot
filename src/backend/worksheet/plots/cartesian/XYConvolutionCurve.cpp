@@ -218,6 +218,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 	double* y2data = y2dataVector.data();
 
 	// convolution settings
+	const double samplingInterval = convolutionData.samplingInterval;
 	const nsl_conv_direction_type direction = convolutionData.direction;
 	const nsl_conv_type_type type = convolutionData.type;
 	const nsl_conv_method_type method = convolutionData.method;
@@ -225,6 +226,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 	const nsl_conv_wrap_type wrap = convolutionData.wrap;
 
 	DEBUG("signal n = " << n << ", response m = " << m);
+	DEBUG("sampling interval = " << samplingInterval);
 	DEBUG("direction = " << nsl_conv_direction_name[direction]);
 	DEBUG("type = " << nsl_conv_type_name[type]);
 	DEBUG("method = " << nsl_conv_method_name[method]);
@@ -257,7 +259,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 			xVector->data()[i] = xVector->data()[size-1] + (i-size+1) * sampleInterval;
 	} else {	// fill with index (starting with 0)
 		for (size_t i = 0; i < np; i++)
-			xVector->data()[i] = i;
+			xVector->data()[i] = i * samplingInterval;
 	}
 
 	memcpy(yVector->data(), out, np * sizeof(double));
@@ -290,6 +292,7 @@ void XYConvolutionCurve::save(QXmlStreamWriter* writer) const{
 	//write xy-convolution-curve specific information
 	// convolution data
 	writer->writeStartElement("convolutionData");
+	writer->writeAttribute( "samplingInterval", QString::number(d->convolutionData.samplingInterval) );
 	writer->writeAttribute( "kernel", QString::number(d->convolutionData.kernel) );
 	writer->writeAttribute( "kernelSize", QString::number(d->convolutionData.kernelSize) );
 	writer->writeAttribute( "autoRange", QString::number(d->convolutionData.autoRange) );
@@ -341,6 +344,7 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		} else if (!preview && reader->name() == "convolutionData") {
 			attribs = reader->attributes();
+			READ_DOUBLE_VALUE("samplingInterval", convolutionData.samplingInterval);
 			READ_INT_VALUE("kernel", convolutionData.kernel, nsl_conv_kernel_type);
 			READ_INT_VALUE("kernelSize", convolutionData.kernelSize, size_t);
 			READ_INT_VALUE("autoRange", convolutionData.autoRange, bool);
