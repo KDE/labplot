@@ -176,7 +176,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_convolutionCurve->yDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbY2DataColumn, m_convolutionCurve->y2DataColumn());
 	uiGeneralTab.cbKernel->setCurrentIndex(m_convolutionData.kernel);
-	uiGeneralTab.sbKernelSize->setValue(m_convolutionData.kernelSize);
+	uiGeneralTab.sbKernelSize->setValue((int)m_convolutionData.kernelSize);
 	uiGeneralTab.cbAutoRange->setChecked(m_convolutionData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_convolutionData.xRange.first());
 	uiGeneralTab.sbMax->setValue(m_convolutionData.xRange.last());
