@@ -84,8 +84,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 	}
 
 	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
-	// one curve is not enough
-	// uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
+	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
 
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 3);
@@ -123,6 +122,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYConvolutionCurveDock::commentChanged );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 	connect( uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)) );
+	connect( uiGeneralTab.cbKernel, SIGNAL(currentIndexChanged(int)), this, SLOT(kernelChanged()) );
 	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
 	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
 	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
@@ -172,6 +172,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_convolutionCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_convolutionCurve->yDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbY2DataColumn, m_convolutionCurve->y2DataColumn());
+	uiGeneralTab.cbKernel->setCurrentIndex(m_convolutionData.kernel);
 	uiGeneralTab.cbAutoRange->setChecked(m_convolutionData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_convolutionData.xRange.first());
 	uiGeneralTab.sbMax->setValue(m_convolutionData.xRange.last());
@@ -352,6 +353,11 @@ void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYConvolutionCurve*>(curve)->setY2DataColumn(column);
 }
 
+void XYConvolutionCurveDock::kernelChanged() {
+	nsl_conv_kernel_type kernel = (nsl_conv_kernel_type) uiGeneralTab.cbKernel->currentIndex();
+	m_convolutionData.kernel = kernel;
+}
+
 void XYConvolutionCurveDock::autoRangeChanged() {
 	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
 	m_convolutionData.autoRange = autoRange;
@@ -457,12 +463,11 @@ void XYConvolutionCurveDock::enableRecalculate() const {
 	if (m_initializing)
 		return;
 
-	//no convolution possible without the y- and y2-data
 	bool hasSourceData = false;
+	//no convolution possible without the y-data
 	if (m_convolutionCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		AbstractAspect* aspectY2 = static_cast<AbstractAspect*>(cbY2DataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectY!=nullptr && aspectY2!=nullptr);
+		hasSourceData = (aspectY!=nullptr);
 	} else {
 		 hasSourceData = (m_convolutionCurve->dataSourceCurve() != nullptr);
 	}

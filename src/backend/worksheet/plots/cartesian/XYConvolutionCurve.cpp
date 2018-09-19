@@ -149,7 +149,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 		//tmpY2DataColumn = dataSourceCurve->y2Column();
 	}
 
-	if (tmpYDataColumn == nullptr || tmpY2DataColumn == nullptr) {
+	if (tmpYDataColumn == nullptr) {
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -185,9 +185,19 @@ void XYConvolutionCurvePrivate::recalculate() {
 			if (!std::isnan(tmpYDataColumn->valueAt(row)) && !tmpYDataColumn->isMasked(row))
 				ydataVector.append(tmpYDataColumn->valueAt(row));
 	}
-	for (int row = 0; row < tmpY2DataColumn->rowCount(); ++row)
-		if (!std::isnan(tmpY2DataColumn->valueAt(row)) && !tmpY2DataColumn->isMasked(row))
-			y2dataVector.append(tmpY2DataColumn->valueAt(row));
+
+	const nsl_conv_kernel_type kernel = convolutionData.kernel;
+	if (tmpY2DataColumn != nullptr) {
+		for (int row = 0; row < tmpY2DataColumn->rowCount(); ++row)
+			if (!std::isnan(tmpY2DataColumn->valueAt(row)) && !tmpY2DataColumn->isMasked(row))
+				y2dataVector.append(tmpY2DataColumn->valueAt(row));
+		DEBUG("kernel = given response");
+	} else {
+		//TODO: use kernel and given kernel size
+		for (int i = 0; i < 3; i++)
+			y2dataVector.append(1);
+		DEBUG("kernel = " << nsl_conv_kernel_name[kernel]);
+	}
 
 	const size_t n = (size_t)ydataVector.size();	// number of points for signal
 	const size_t m = (size_t)y2dataVector.size();	// number of points for response
