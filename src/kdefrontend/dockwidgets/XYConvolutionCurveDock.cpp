@@ -106,6 +106,8 @@ void XYConvolutionCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_CONV_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_conv_type_name[i]));
 	// nsl_conv_method_type not exposed to user
+	for (int i = 0; i < NSL_CONV_NORM_COUNT; i++)
+		uiGeneralTab.cbNorm->addItem(i18n(nsl_conv_norm_name[i]));
 	for (int i = 0; i < NSL_CONV_WRAP_COUNT; i++)
 		uiGeneralTab.cbWrap->addItem(i18n(nsl_conv_wrap_name[i]));
 
@@ -129,7 +131,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
 	connect( uiGeneralTab.cbDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(directionChanged()) );
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
-	connect( uiGeneralTab.cbNorm, SIGNAL(clicked(bool)), this, SLOT(normChanged()) );
+	connect( uiGeneralTab.cbNorm, SIGNAL(currentIndexChanged(int)), this, SLOT(normChanged()) );
 	connect( uiGeneralTab.cbWrap, SIGNAL(currentIndexChanged(int)), this, SLOT(wrapChanged()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 
@@ -185,10 +187,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	uiGeneralTab.cbDirection->setCurrentIndex(m_convolutionData.direction);
 	uiGeneralTab.cbType->setCurrentIndex(m_convolutionData.type);
 	//m_convolutionData.method not used
-	if (m_convolutionData.normalize == nsl_conv_norm_euclidean)
-		uiGeneralTab.cbNorm->setChecked(true);
-	else
-		uiGeneralTab.cbNorm->setChecked(false);
+	uiGeneralTab.cbNorm->setCurrentIndex(m_convolutionData.normalize);
 	uiGeneralTab.cbWrap->setCurrentIndex(m_convolutionData.wrap);
 
 	this->directionChanged();
@@ -485,11 +484,8 @@ void XYConvolutionCurveDock::typeChanged() {
 }
 
 void XYConvolutionCurveDock::normChanged() {
-	bool norm = uiGeneralTab.cbNorm->isChecked();
-	if (norm)
-		m_convolutionData.normalize = nsl_conv_norm_euclidean;
-	else
-		m_convolutionData.normalize = nsl_conv_norm_none;
+	nsl_conv_norm_type norm = (nsl_conv_norm_type) uiGeneralTab.cbNorm->currentIndex();
+	m_convolutionData.normalize = norm;
 
 	enableRecalculate();
 }

@@ -38,7 +38,7 @@
 const char* nsl_conv_direction_name[] = {i18n("forward (convolution)"), i18n("backward (deconvolution)")};
 const char* nsl_conv_type_name[] = {i18n("linear (zero-padded)"), i18n("circular")};
 const char* nsl_conv_method_name[] = {i18n("auto"), i18n("direct"), i18n("FFT")};
-const char* nsl_conv_norm_name[] = {i18n("none"), i18n("Euclidean")};
+const char* nsl_conv_norm_name[] = {i18n("none"), i18n("Euclidean"), i18n("sum")};
 const char* nsl_conv_wrap_name[] = {i18n("none"), i18n("maximum"), i18n("center (acausal)")};
 const char* nsl_conv_kernel_name[] = {i18n("sliding average"), i18n("triangular smooth"), i18n("pseudo-Gaussian smooth"), i18n("first derivative"), i18n("smooth first derivative"),
 	i18n("second derivative"), i18n("third derivative"), i18n("fourth derivative"), i18n("Gaussian"), i18n("Lorentzian") };
@@ -165,9 +165,13 @@ int nsl_conv_deconvolution(double s[], size_t n, double r[], size_t m, nsl_conv_
 int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]) {
 	size_t i, j, size = n + m - 1, wi = 0;
 	double norm = 1;
-	if (normalize == nsl_conv_norm_euclidean)
+	if (normalize == nsl_conv_norm_euclidean) {
 		if ((norm = cblas_dnrm2((int)m, r, 1)) == 0)
 			norm = 1.;
+	} else if (normalize == nsl_conv_norm_sum) {
+		if ((norm = cblas_dasum((int)m, r, 1)) == 0)
+			norm = 1.;
+	}
 
 	if (wrap == nsl_conv_wrap_max)
 		nsl_stats_maximum(r, m, &wi);
@@ -194,9 +198,13 @@ int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, nsl_conv_
 int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]) {
 	size_t i, j, size = GSL_MAX(n,m), wi = 0;
 	double norm = 1;
-	if (normalize == nsl_conv_norm_euclidean)
+	if (normalize == nsl_conv_norm_euclidean) {
 		if ((norm = cblas_dnrm2((int)m, r, 1)) == 0)
 			norm = 1.;
+	} else if (normalize == nsl_conv_norm_sum) {
+		if ((norm = cblas_dasum((int)m, r, 1)) == 0)
+			norm = 1.;
+	}
 
 	if (wrap == nsl_conv_wrap_max)
 		nsl_stats_maximum(r, m, &wi);
@@ -230,9 +238,13 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 		size = GSL_MAX(n, m);
 
 	double norm = 1.;
-	if (normalize == nsl_conv_norm_euclidean)
+	if (normalize == nsl_conv_norm_euclidean) {
 		if ((norm = cblas_dnrm2((int)m, r, 1)) == 0)
 			norm = 1.;
+	} else if (normalize == nsl_conv_norm_sum) {
+		if ((norm = cblas_dasum((int)m, r, 1)) == 0)
+			norm = 1.;
+	}
 
 	if (wrap == nsl_conv_wrap_max)
 		nsl_stats_maximum(r, m, &wi);

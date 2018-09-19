@@ -364,13 +364,6 @@
      </property>
     </widget>
    </item>
-   <item row="17" column="2">
-    <widget class="QCheckBox" name="cbNorm">
-     <property name="text">
-      <string>Normalize</string>
-     </property>
-    </widget>
-   </item>
    <item row="25" column="3">
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
@@ -409,6 +402,16 @@
       <number>999</number>
      </property>
     </widget>
+   </item>
+   <item row="17" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Norm. Response:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="2" colspan="3">
+    <widget class="QComboBox" name="cbNorm"/>
    </item>
   </layout>
  </widget>
