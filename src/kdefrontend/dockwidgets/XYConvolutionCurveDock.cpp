@@ -356,6 +356,52 @@ void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 void XYConvolutionCurveDock::kernelChanged() {
 	nsl_conv_kernel_type kernel = (nsl_conv_kernel_type) uiGeneralTab.cbKernel->currentIndex();
 	m_convolutionData.kernel = kernel;
+
+	//TODO: change selectable sizes
+	uiGeneralTab.sbKernelSize->setEnabled(true);
+	switch (kernel) {
+	case nsl_conv_kernel_avg:	// all values allowed
+	case nsl_conv_kernel_smooth_triangle:
+	case nsl_conv_kernel_gaussian:
+	case nsl_conv_kernel_lorentzian:
+		uiGeneralTab.sbKernelSize->setMinimum(2);
+		uiGeneralTab.sbKernelSize->setMaximum(999);
+		uiGeneralTab.sbKernelSize->setSingleStep(1);
+		uiGeneralTab.sbKernelSize->setValue(2);
+		break;
+	case nsl_conv_kernel_smooth_gaussian:
+		uiGeneralTab.sbKernelSize->setMinimum(5);
+		uiGeneralTab.sbKernelSize->setMaximum(9);
+		uiGeneralTab.sbKernelSize->setSingleStep(2);
+		uiGeneralTab.sbKernelSize->setValue(5);
+		break;
+	case nsl_conv_kernel_first_derivative:
+		uiGeneralTab.sbKernelSize->setMinimum(2);
+		uiGeneralTab.sbKernelSize->setValue(2);
+		uiGeneralTab.sbKernelSize->setEnabled(false);
+		break;
+	case nsl_conv_kernel_smooth_first_derivative:
+		uiGeneralTab.sbKernelSize->setMinimum(3);
+		uiGeneralTab.sbKernelSize->setMaximum(999);
+		uiGeneralTab.sbKernelSize->setSingleStep(2);
+		uiGeneralTab.sbKernelSize->setValue(3);
+		break;
+	case nsl_conv_kernel_second_derivative:
+		uiGeneralTab.sbKernelSize->setMinimum(3);
+		uiGeneralTab.sbKernelSize->setValue(3);
+		uiGeneralTab.sbKernelSize->setEnabled(false);
+		break;
+	case nsl_conv_kernel_third_derivative:
+		uiGeneralTab.sbKernelSize->setMinimum(4);
+		uiGeneralTab.sbKernelSize->setValue(4);
+		uiGeneralTab.sbKernelSize->setEnabled(false);
+		break;
+	case nsl_conv_kernel_fourth_derivative:
+		uiGeneralTab.sbKernelSize->setMinimum(5);
+		uiGeneralTab.sbKernelSize->setValue(5);
+		uiGeneralTab.sbKernelSize->setEnabled(false);
+		break;
+	}
 }
 
 void XYConvolutionCurveDock::autoRangeChanged() {

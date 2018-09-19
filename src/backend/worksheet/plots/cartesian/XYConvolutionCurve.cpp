@@ -187,16 +187,17 @@ void XYConvolutionCurvePrivate::recalculate() {
 	}
 
 	const nsl_conv_kernel_type kernel = convolutionData.kernel;
+	int kernelSize = convolutionData.kernelSize;
 	if (tmpY2DataColumn != nullptr) {
 		for (int row = 0; row < tmpY2DataColumn->rowCount(); ++row)
 			if (!std::isnan(tmpY2DataColumn->valueAt(row)) && !tmpY2DataColumn->isMasked(row))
 				y2dataVector.append(tmpY2DataColumn->valueAt(row));
 		DEBUG("kernel = given response");
 	} else {
-		//TODO: use kernel and given kernel size
-		for (int i = 0; i < 3; i++)
+		DEBUG("kernel = " << nsl_conv_kernel_name[kernel] << ", size = " << kernelSize);
+		//TODO: use kernel
+		for (int i = 0; i < kernelSize; i++)
 			y2dataVector.append(1);
-		DEBUG("kernel = " << nsl_conv_kernel_name[kernel]);
 	}
 
 	const size_t n = (size_t)ydataVector.size();	// number of points for signal
@@ -287,6 +288,8 @@ void XYConvolutionCurve::save(QXmlStreamWriter* writer) const{
 	//write xy-convolution-curve specific information
 	// convolution data
 	writer->writeStartElement("convolutionData");
+	writer->writeAttribute( "kernel", QString::number(d->convolutionData.kernel) );
+	writer->writeAttribute( "kernelSize", QString::number(d->convolutionData.kernelSize) );
 	writer->writeAttribute( "autoRange", QString::number(d->convolutionData.autoRange) );
 	writer->writeAttribute( "xRangeMin", QString::number(d->convolutionData.xRange.first()) );
 	writer->writeAttribute( "xRangeMax", QString::number(d->convolutionData.xRange.last()) );
@@ -336,6 +339,8 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		} else if (!preview && reader->name() == "convolutionData") {
 			attribs = reader->attributes();
+			READ_INT_VALUE("kernel", convolutionData.kernel, nsl_conv_kernel_type);
+			READ_INT_VALUE("kernelSize", convolutionData.kernelSize, int);
 			READ_INT_VALUE("autoRange", convolutionData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", convolutionData.xRange.first());
 			READ_DOUBLE_VALUE("xRangeMax", convolutionData.xRange.last());
