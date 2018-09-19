@@ -56,7 +56,7 @@ int nsl_conv_standard_kernel(double k[], size_t n, nsl_conv_kernel_type type) {
 		for (i = 0; i < n/2; i++)
 			k[i] = i + 1.;
 		for (i = n/2; i < n; i++)
-			k[i] = n - i;
+			k[i] = (double)(n - i);
 		break;
 	case nsl_conv_kernel_smooth_gaussian:
 		switch (n) {
