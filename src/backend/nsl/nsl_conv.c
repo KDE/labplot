@@ -38,7 +38,7 @@
 const char* nsl_conv_direction_name[] = {i18n("forward (convolution)"), i18n("backward (deconvolution)")};
 const char* nsl_conv_type_name[] = {i18n("linear (zero-padded)"), i18n("circular")};
 const char* nsl_conv_method_name[] = {i18n("auto"), i18n("direct"), i18n("FFT")};
-const char* nsl_conv_norm_name[] = {i18n("none"), i18n("Euclidean"), i18n("sum")};
+const char* nsl_conv_norm_name[] = {i18n("none"), i18n("sum"), i18n("Euclidean")};
 const char* nsl_conv_wrap_name[] = {i18n("none"), i18n("maximum"), i18n("center (acausal)")};
 const char* nsl_conv_kernel_name[] = {i18n("sliding average"), i18n("triangular smooth"), i18n("pseudo-Gaussian smooth"), i18n("first derivative"), i18n("smooth first derivative"),
 	i18n("second derivative"), i18n("third derivative"), i18n("fourth derivative"), i18n("Gaussian"), i18n("Lorentzian") };

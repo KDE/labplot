@@ -52,7 +52,7 @@ extern const char* nsl_conv_method_name[];
 
 #define NSL_CONV_NORM_COUNT 3
 /* how to normalize response */
-typedef enum {nsl_conv_norm_none, nsl_conv_norm_euclidean, nsl_conv_norm_sum} nsl_conv_norm_type;
+typedef enum {nsl_conv_norm_none, nsl_conv_norm_sum, nsl_conv_norm_euclidean} nsl_conv_norm_type;
 extern const char* nsl_conv_norm_name[];
 
 #define NSL_CONV_WRAP_COUNT 3
