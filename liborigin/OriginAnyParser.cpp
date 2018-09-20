@@ -24,10 +24,18 @@
 #include <cinttypes>
 
 /* define a macro to get an int (or uint) from a istringstream in binary mode */
-#define GET_INT(iss, ovalue) {iss.read(reinterpret_cast<char *>(&ovalue), 4);};
-#define GET_SHORT(iss, ovalue) {iss.read(reinterpret_cast<char *>(&ovalue), 2);};
-#define GET_FLOAT(iss, ovalue) {iss.read(reinterpret_cast<char *>(&ovalue), 4);};
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#define GET_SHORT(iss, ovalue)  {iss.read(reinterpret_cast<char *>(&ovalue), 2);};
+#define GET_INT(iss, ovalue)    {iss.read(reinterpret_cast<char *>(&ovalue), 4);};
+#define GET_FLOAT(iss, ovalue)  {iss.read(reinterpret_cast<char *>(&ovalue), 4);};
 #define GET_DOUBLE(iss, ovalue) {iss.read(reinterpret_cast<char *>(&ovalue), 8);};
+#else
+void inline swap_bytes(unsigned char* data, int size) {int i = 0, j = size - 1; while(i < j) {std::swap(data[i], data[j]); ++i, --j;}}
+#define GET_SHORT(iss, ovalue)  {iss.read(reinterpret_cast<char *>(&ovalue), 2); swap_bytes(reinterpret_cast<unsigned char *>(&ovalue), 2);};
+#define GET_INT(iss, ovalue)    {iss.read(reinterpret_cast<char *>(&ovalue), 4); swap_bytes(reinterpret_cast<unsigned char *>(&ovalue), 4);};
+#define GET_FLOAT(iss, ovalue)  {iss.read(reinterpret_cast<char *>(&ovalue), 4); swap_bytes(reinterpret_cast<unsigned char *>(&ovalue), 4);};
+#define GET_DOUBLE(iss, ovalue) {iss.read(reinterpret_cast<char *>(&ovalue), 8); swap_bytes(reinterpret_cast<unsigned char *>(&ovalue), 8);};
+#endif
 
 OriginAnyParser::OriginAnyParser(const string& fileName)
 :	file(fileName.c_str(),ios::binary),
