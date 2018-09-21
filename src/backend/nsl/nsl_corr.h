@@ -50,11 +50,10 @@ int nsl_corr_correlation(double s[], size_t n, double r[], size_t m, nsl_corr_ty
 int nsl_corr_fft_type(double s[], size_t n, double r[], size_t m, nsl_corr_type_type, nsl_corr_norm_type normalize, double out[]);
 /* actual FFT method calculation using zero-padded arrays
  * uses FFTW if available and GSL otherwise
- * wi is the wrap index
  * s and r are overwritten
  */
 #ifdef HAVE_FFTW3
-int nsl_corr_fft_FFTW(double s[], double r[], size_t n, size_t wi, double out[]);
+int nsl_corr_fft_FFTW(double s[], double r[], size_t n, double out[]);
 #endif
 int nsl_corr_fft_GSL(double s[], double r[], size_t n, double out[]);
 
