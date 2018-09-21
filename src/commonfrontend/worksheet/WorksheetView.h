@@ -202,6 +202,7 @@ private:
 	QAction* addFourierFilterCurveAction;
 	QAction* addFourierTransformCurveAction;
 	QAction* addConvolutionCurveAction;
+	QAction* addCorrelationCurveAction;
 
 	QAction* addHorizontalAxisAction;
 	QAction* addVerticalAxisAction;
@@ -233,6 +234,7 @@ private:
 	QAction* addFourierFilterAction;
 	QAction* addFourierTransformAction;
 	QAction* addConvolutionAction;
+	QAction* addCorrelationAction;
 
 public slots:
 	void createContextMenu(QMenu*);

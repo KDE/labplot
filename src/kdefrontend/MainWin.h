@@ -67,6 +67,7 @@ class XYFitCurveDock;
 class XYFourierFilterCurveDock;
 class XYFourierTransformCurveDock;
 class XYConvolutionCurveDock;
+class XYCorrelationCurveDock;
 class WorksheetDock;
 class LabelWidget;
 class DatapickerImageWidget;
@@ -200,6 +201,7 @@ private:
 	XYFourierFilterCurveDock* xyFourierFilterCurveDock;
 	XYFourierTransformCurveDock* xyFourierTransformCurveDock;
 	XYConvolutionCurveDock* xyConvolutionCurveDock;
+	XYCorrelationCurveDock* xyCorrelationCurveDock;
 	HistogramDock* histogramDock;
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;

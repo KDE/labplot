@@ -144,6 +144,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	  xyFourierFilterCurveDock(nullptr),
 	  xyFourierTransformCurveDock(nullptr),
 	  xyConvolutionCurveDock(nullptr),
+	  xyCorrelationCurveDock(nullptr),
 	  histogramDock(nullptr),
 	  worksheetDock(nullptr),
 	  textLabelDock(nullptr),

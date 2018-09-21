@@ -78,6 +78,7 @@
 #include "kdefrontend/dockwidgets/XYFourierFilterCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFourierTransformCurveDock.h"
 #include "kdefrontend/dockwidgets/XYConvolutionCurveDock.h"
+#include "kdefrontend/dockwidgets/XYCorrelationCurveDock.h"
 #include "kdefrontend/dockwidgets/CustomPointDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
 #ifdef HAVE_CANTOR_LIBS
@@ -425,6 +426,22 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->xyConvolutionCurveDock->setCurves(list);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyConvolutionCurveDock);
+	} else if (className == "XYCorrelationCurve") {
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Correlation"));
+
+		if (!m_mainWindow->xyCorrelationCurveDock) {
+			m_mainWindow->xyCorrelationCurveDock = new XYCorrelationCurveDock(m_mainWindow->stackedWidget);
+			m_mainWindow->xyCorrelationCurveDock->setupGeneral();
+			connect(m_mainWindow->xyCorrelationCurveDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
+			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xyCorrelationCurveDock);
+		}
+
+		QList<XYCurve*> list;
+		for (auto* aspect: selectedAspects)
+			list << qobject_cast<XYCurve*>(aspect);
+		m_mainWindow->xyCorrelationCurveDock->setCurves(list);
+
+		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyCorrelationCurveDock);
 	} else if (className=="Histogram") {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Histogram Properties"));
 

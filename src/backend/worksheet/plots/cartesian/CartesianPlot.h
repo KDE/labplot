@@ -52,6 +52,7 @@ class XYFitCurve;
 class XYFourierFilterCurve;
 class XYFourierTransformCurve;
 class XYConvolutionCurve;
+class XYCorrelationCurve;
 class KConfig;
 
 class CartesianPlot:public AbstractPlot {
@@ -167,6 +168,7 @@ private:
 	QAction* addFourierFilterCurveAction;
 	QAction* addFourierTransformCurveAction;
 	QAction* addConvolutionCurveAction;
+	QAction* addCorrelationCurveAction;
 
 	QAction* addHorizontalAxisAction;
 	QAction* addVerticalAxisAction;
@@ -199,6 +201,7 @@ private:
 	QVector <QAction *> addFitAction;
 	QAction* addFourierFilterAction;
 	QAction* addConvolutionAction;
+	QAction* addCorrelationAction;
 
 	QMenu* addNewMenu;
 	QMenu* zoomMenu;
@@ -222,6 +225,7 @@ public slots:
 	void addFourierFilterCurve();
 	void addFourierTransformCurve();
 	void addConvolutionCurve();
+	void addCorrelationCurve();
 
 	void addLegend();
 	void addTextLabel();

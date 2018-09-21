@@ -43,6 +43,7 @@
 #include "XYFourierFilterCurve.h"
 #include "XYFourierTransformCurve.h"
 #include "XYConvolutionCurve.h"
+#include "XYCorrelationCurve.h"
 #include "backend/core/Project.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -398,11 +399,13 @@ void CartesianPlot::initActions() {
 	addFourierFilterCurveAction = new QAction(i18n("xy-curve from a Fourier filter"), this);
 	addFourierTransformCurveAction = new QAction(i18n("xy-curve from a Fourier transform"), this);
 	addConvolutionCurveAction = new QAction(i18n("xy-curve from a (de-)convolution"), this);
+	addCorrelationCurveAction = new QAction(i18n("xy-curve from a correlation"), this);
 //	addInterpolationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), this);
 //	addSmoothCurveAction = new QAction(QIcon::fromTheme("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), this);
 //	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
 //	addFourierTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_transform-curve"), i18n("xy-curve from a Fourier transform"), this);
 //	addConvolutionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-convolution-curve"), i18n("xy-curve from a (de-)convolution"), this);
+//	addCorrelationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-correlation-curve"), i18n("xy-curve from a correlation"), this);
 	addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("Legend"), this);
 	if (children<CartesianPlotLegend>().size()>0)
 		addLegendAction->setEnabled(false);	//only one legend is allowed -> disable the action
@@ -424,6 +427,7 @@ void CartesianPlot::initActions() {
 	connect(addFourierFilterCurveAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
 	connect(addFourierTransformCurveAction, SIGNAL(triggered()), SLOT(addFourierTransformCurve()));
 	connect(addConvolutionCurveAction, SIGNAL(triggered()), SLOT(addConvolutionCurve()));
+	connect(addCorrelationCurveAction, SIGNAL(triggered()), SLOT(addCorrelationCurve()));
 
 	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
@@ -439,6 +443,7 @@ void CartesianPlot::initActions() {
 	addInterpolationAction = new QAction(i18n("Interpolate"), this);
 	addSmoothAction = new QAction(i18n("Smooth"), this);
 	addConvolutionAction = new QAction(i18n("Convolute/Deconvolute"), this);
+	addCorrelationAction = new QAction(i18n("Correlation"), this);
 
 	QAction* fitAction = new QAction(i18n("Linear"), this);
 	fitAction->setData(PlotDataDialog::FitLinear);
@@ -492,6 +497,7 @@ void CartesianPlot::initActions() {
 	connect(addInterpolationAction, SIGNAL(triggered()), SLOT(addInterpolationCurve()));
 	connect(addSmoothAction, SIGNAL(triggered()), SLOT(addSmoothCurve()));
 	connect(addConvolutionAction, SIGNAL(triggered()), SLOT(addConvolutionCurve()));
+	connect(addCorrelationAction, SIGNAL(triggered()), SLOT(addCorrelationCurve()));
 	for (const auto& action: addFitAction)
 		connect(action, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addFourierFilterAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
@@ -548,6 +554,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addFourierFilterCurveAction);
 	addNewMenu->addAction(addFourierTransformCurveAction);
 	addNewMenu->addAction(addConvolutionCurveAction);
+	addNewMenu->addAction(addCorrelationCurveAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addLegendAction);
 	addNewMenu->addSeparator();
@@ -613,6 +620,7 @@ void CartesianPlot::initMenus() {
 	dataAnalysisMenu->addAction(addSmoothAction);
 	dataAnalysisMenu->addAction(addFourierFilterAction);
 	dataAnalysisMenu->addAction(addConvolutionAction);
+	dataAnalysisMenu->addAction(addCorrelationAction);
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addMenu(dataFitMenu);
 
@@ -1260,6 +1268,11 @@ void CartesianPlot::addFourierTransformCurve() {
 
 void CartesianPlot::addConvolutionCurve() {
 	XYConvolutionCurve* curve = new XYConvolutionCurve("Convolution");
+	this->addChild(curve);
+}
+
+void CartesianPlot::addCorrelationCurve() {
+	XYCorrelationCurve* curve = new XYCorrelationCurve("Correlation");
 	this->addChild(curve);
 }
 
@@ -2985,6 +2998,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xyConvolutionCurve") {
 			XYConvolutionCurve* curve = new XYConvolutionCurve("");
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
+				removeChild(curve);
+				return false;
+			}
+		} else if (reader->name() == "xyCorrelationCurve") {
+			XYCorrelationCurve* curve = new XYCorrelationCurve("");
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
