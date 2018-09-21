@@ -34,8 +34,8 @@
 #include <fftw3.h>
 #endif
 
-const char* nsl_conv_type_name[] = {i18n("linear (zero-padded)"), i18n("circular")};
-const char* nsl_conv_norm_name[] = {i18n("none"), i18n("sum"), i18n("Euclidean")};
+const char* nsl_corr_type_name[] = {i18n("linear (zero-padded)"), i18n("circular")};
+const char* nsl_corr_norm_name[] = {i18n("none"), i18n("sum"), i18n("Euclidean")};
 
 int nsl_corr_correlation(double s[], size_t n, double r[], size_t m, nsl_corr_type_type type, nsl_corr_norm_type normalize, double out[]) {
 	return nsl_corr_fft_type(s, n, r, m, type, normalize, out);

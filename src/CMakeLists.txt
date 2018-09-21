@@ -259,6 +259,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierFilterCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierTransformCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 	${BACKEND_DIR}/datapicker/DatapickerPoint.cpp
 	${BACKEND_DIR}/datapicker/DatapickerImage.cpp
