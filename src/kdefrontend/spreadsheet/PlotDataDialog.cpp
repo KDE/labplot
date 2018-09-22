@@ -73,6 +73,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent) : QDialog(parent
 	m_spreadsheet(s),
 	m_plotsModel(new AspectTreeModel(m_spreadsheet->project())),
 	m_worksheetsModel(new AspectTreeModel(m_spreadsheet->project())),
+	m_plotType(PlotXYCurve),
 	m_analysisAction(Differentiation),
 	m_analysisMode(false) {
 
@@ -189,6 +190,14 @@ PlotDataDialog::~PlotDataDialog() {
 
 	delete m_plotsModel;
 	delete m_worksheetsModel;
+}
+
+/*!
+ * determines how to plot the provided columns - as xy-curves, as histograms, etc.
+ * The possible types are given by \c PlotDataDialog::PlotType.
+ */
+void PlotDataDialog::setPlotType(PlotType type) {
+	m_plotType = type;
 }
 
 void PlotDataDialog::setAnalysisAction(AnalysisAction action) {

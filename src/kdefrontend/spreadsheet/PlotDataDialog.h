@@ -46,6 +46,7 @@ class PlotDataDialog : public QDialog {
 	Q_OBJECT
 
 public:
+	enum PlotType {PlotXYCurve, PlotHistogram};
 	enum AnalysisAction {DataReduction,
 		Differentiation, Integration, Interpolation, Smoothing,
 		FitLinear, FitPower, FitExp1, FitExp2, FitInvExp, FitGauss, FitCauchyLorentz, FitTan, FitTanh, FitErrFunc, FitCustom,
@@ -54,6 +55,7 @@ public:
 	explicit PlotDataDialog(Spreadsheet*, QWidget* parent = nullptr);
 	~PlotDataDialog() override;
 
+	void setPlotType(PlotType);
 	void setAnalysisAction(AnalysisAction);
 
 private:
@@ -66,6 +68,7 @@ private:
 	QVector<QComboBox*> m_columnComboBoxes;
 	AspectTreeModel* m_plotsModel;
 	AspectTreeModel* m_worksheetsModel;
+	PlotType m_plotType;
 	AnalysisAction m_analysisAction;
 	bool m_analysisMode;
 

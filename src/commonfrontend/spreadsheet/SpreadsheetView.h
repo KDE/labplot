@@ -164,7 +164,8 @@ private:
 	QAction* action_statistics_rows;
 
 	//analysis and plot data menu actions
-	QAction* action_plot_data;
+	QAction* action_plot_data_xycurve;
+	QAction* action_plot_data_histogram;
 	QAction* addDataOperationAction;
 	QAction* addDataReductionAction;
 	QAction* addDifferentiationAction;
@@ -182,6 +183,7 @@ private:
 	QMenu* m_columnSortMenu;
 	QMenu* m_rowMenu;
 	QMenu* m_spreadsheetMenu;
+	QMenu* m_plotDataMenu;
 	QMenu* m_analyzePlotMenu;
 
 public slots:

@@ -279,7 +279,10 @@ void SpreadsheetView::initActions() {
 	action_statistics_rows = new QAction(QIcon::fromTheme("view-statistics"), i18n("Row Statisti&cs"), this);
 
 	//plot data action
-	action_plot_data = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot Data"), this);
+	action_plot_data_xycurve = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-Curve"), this);
+	action_plot_data_xycurve->setData(PlotDataDialog::PlotXYCurve);
+	action_plot_data_histogram = new QAction(QIcon::fromTheme("labplot-histogram"), i18n("Histogram"), this);
+	action_plot_data_histogram->setData(PlotDataDialog::PlotHistogram);
 
 	//Analyze and plot menu actions
 	//TODO: no own icons yet
@@ -347,15 +350,6 @@ void SpreadsheetView::initActions() {
 
 	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier Filter"), this);
 	addFourierFilterAction->setData(PlotDataDialog::FourierFilter);
-
-	connect(addDataReductionAction, SIGNAL(triggered()), SLOT(plotData()));
-	connect(addDifferentiationAction, SIGNAL(triggered()), SLOT(plotData()));
-	connect(addIntegrationAction, SIGNAL(triggered()), SLOT(plotData()));
-	connect(addInterpolationAction, SIGNAL(triggered()), SLOT(plotData()));
-	connect(addSmoothAction, SIGNAL(triggered()), SLOT(plotData()));
-	for (const auto& action: addFitAction)
-		connect(action, SIGNAL(triggered()), SLOT(plotData()));
-	connect(addFourierFilterAction, SIGNAL(triggered()), SLOT(plotData()));
 }
 
 void SpreadsheetView::initMenus() {
@@ -384,9 +378,14 @@ void SpreadsheetView::initMenus() {
 		m_selectionMenu->addAction(action_normalize_selection);
 	}
 
+	//plot data menu
+	m_plotDataMenu = new QMenu(i18n("Plot Data"), this);
+	m_plotDataMenu->addAction(action_plot_data_xycurve);
+	m_plotDataMenu->addAction(action_plot_data_histogram);
+
 	// Column menu
 	m_columnMenu = new QMenu(this);
-	m_columnMenu->addAction(action_plot_data);
+	m_columnMenu->addMenu(m_plotDataMenu);
 
 	// Data manipulation sub-menu
 	QMenu* dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
@@ -484,7 +483,7 @@ void SpreadsheetView::initMenus() {
 
 	//Spreadsheet menu
 	m_spreadsheetMenu = new QMenu(this);
-	m_spreadsheetMenu->addAction(action_plot_data);
+	m_spreadsheetMenu->addMenu(m_plotDataMenu);
 	m_spreadsheetMenu->addMenu(m_analyzePlotMenu);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addMenu(m_selectionMenu);
@@ -579,7 +578,16 @@ void SpreadsheetView::connectActions() {
 	connect(action_statistics_rows, SIGNAL(triggered()), this, SLOT(showRowStatistics()));
 	connect(action_toggle_comments, SIGNAL(triggered()), this, SLOT(toggleComments()));
 
-	connect(action_plot_data, SIGNAL(triggered()), this, SLOT(plotData()));
+	connect(action_plot_data_xycurve, SIGNAL(triggered()), this, SLOT(plotData()));
+	connect(action_plot_data_histogram, SIGNAL(triggered()), this, SLOT(plotData()));
+	connect(addDataReductionAction, SIGNAL(triggered()), SLOT(plotData()));
+	connect(addDifferentiationAction, SIGNAL(triggered()), SLOT(plotData()));
+	connect(addIntegrationAction, SIGNAL(triggered()), SLOT(plotData()));
+	connect(addInterpolationAction, SIGNAL(triggered()), SLOT(plotData()));
+	connect(addSmoothAction, SIGNAL(triggered()), SLOT(plotData()));
+	for (const auto& action: addFitAction)
+		connect(action, SIGNAL(triggered()), SLOT(plotData()));
+	connect(addFourierFilterAction, SIGNAL(triggered()), SLOT(plotData()));
 }
 
 void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
@@ -624,7 +632,7 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 		firstAction = menu->actions().at(1);
 
 	if (m_spreadsheet->columnCount() > 0 && m_spreadsheet->rowCount() > 0) {
-		menu->insertAction(firstAction, action_plot_data);
+		menu->insertMenu(firstAction, m_plotDataMenu);
 		menu->insertSeparator(firstAction);
 	}
 	menu->insertMenu(firstAction, m_selectionMenu);
@@ -1012,7 +1020,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				}
 			}
 
-			action_plot_data->setEnabled(plottable);
+			m_plotDataMenu->setEnabled(plottable);
 			m_analyzePlotMenu->setEnabled(numeric);
 			m_columnSetAsMenu->setEnabled(numeric);
 			if (!m_readOnly) {
@@ -1073,7 +1081,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
  */
 void SpreadsheetView::checkSpreadsheetMenu() {
 	const bool cellsAvail = m_spreadsheet->columnCount()>0 && m_spreadsheet->rowCount()>0;
-	action_plot_data->setEnabled(cellsAvail);
+	m_plotDataMenu->setEnabled(cellsAvail);
 	m_selectionMenu->setEnabled(cellsAvail);
 	action_select_all->setEnabled(cellsAvail);
 	action_clear_spreadsheet->setEnabled(cellsAvail);
@@ -1325,10 +1333,13 @@ void SpreadsheetView::unmaskSelection() {
 
 void SpreadsheetView::plotData() {
 	PlotDataDialog* dlg = new PlotDataDialog(m_spreadsheet);
-	const QObject* sender = QObject::sender();
-	if (sender != action_plot_data) {
-		PlotDataDialog::AnalysisAction action = (PlotDataDialog::AnalysisAction)dynamic_cast<const QAction*>(sender)->data().toInt();
-		dlg->setAnalysisAction(action);
+	const QAction* action = reinterpret_cast<const QAction*>(QObject::sender());
+	if (action == action_plot_data_xycurve && action == action_plot_data_histogram) {
+		PlotDataDialog::PlotType type = (PlotDataDialog::PlotType)action->data().toInt();
+		dlg->setPlotType(type);
+	} else {
+		PlotDataDialog::AnalysisAction type = (PlotDataDialog::AnalysisAction)action->data().toInt();
+		dlg->setAnalysisAction(type);
 	}
 	dlg->exec();
 }
