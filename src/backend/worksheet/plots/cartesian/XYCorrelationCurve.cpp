@@ -220,7 +220,7 @@ void XYCorrelationCurvePrivate::recalculate() {
 ///////////////////////////////////////////////////////////
 	size_t np = GSL_MAX(n, m);
 	if (type == nsl_corr_type_linear)
-		np = 2*np - 1;
+		np = 2 * np - 1;
 
 	double* out = (double*)malloc(np * sizeof(double));
 	int status = nsl_corr_correlation(ydata, n, y2data, m, type, norm, out);

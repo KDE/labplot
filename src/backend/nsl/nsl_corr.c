@@ -35,7 +35,7 @@
 #endif
 
 const char* nsl_corr_type_name[] = {i18n("linear (zero-padded)"), i18n("circular")};
-const char* nsl_corr_norm_name[] = {i18n("none"), i18n("sum"), i18n("Euclidean")};
+const char* nsl_corr_norm_name[] = {i18n("none"), i18n("biased"), i18n("unbiased"), i18n("coeff")};
 
 int nsl_corr_correlation(double s[], size_t n, double r[], size_t m, nsl_corr_type_type type, nsl_corr_norm_type normalize, double out[]) {
 	return nsl_corr_fft_type(s, n, r, m, type, normalize, out);
@@ -46,10 +46,7 @@ int nsl_corr_fft_type(double s[], size_t n, double r[], size_t m, nsl_corr_type_
 	if (type == nsl_corr_type_linear)
 		size = maxlag + N;
 	else	// circular: TODO
-		size = GSL_MAX(n, m);
-
-	double norm = 1.;
-	/*TODO: normalize */
+		size = N;
 
 #ifdef HAVE_FFTW3
 	// already zero-pad here for FFT method and FFTW r2c
@@ -84,6 +81,27 @@ int nsl_corr_fft_type(double s[], size_t n, double r[], size_t m, nsl_corr_type_
 
 	free(stmp);
 	free(rtmp);
+
+	/* normalization */
+	switch (normalize) {
+	case nsl_corr_norm_none:
+		break;
+	case nsl_corr_norm_biased:
+		for (i = 0; i < oldsize; i++)
+			out[i] = out[i]/N;
+		break;
+	case nsl_corr_norm_unbiased:
+		for (i = 0; i < oldsize; i++)
+			out[i] = out[i]/(N-abs(N/2+1-i));
+		break;
+	case nsl_corr_norm_coeff: {
+		double snorm = cblas_dnrm2((int)n, s, 1);
+		double rnorm = cblas_dnrm2((int)m, r, 1);
+		for (i = 0; i < oldsize; i++)
+			out[i] = out[i]/snorm/rnorm;
+		break;
+	}
+	}
 
 	return status;
 }

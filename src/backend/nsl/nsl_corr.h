@@ -36,9 +36,9 @@
 typedef enum {nsl_corr_type_linear, nsl_corr_type_circular} nsl_corr_type_type;
 extern const char* nsl_corr_type_name[];
 
-#define NSL_CORR_NORM_COUNT 3
-/* TODO: how to normalize */
-typedef enum {nsl_corr_norm_none, nsl_corr_norm_sum, nsl_corr_norm_euclidean} nsl_corr_norm_type;
+#define NSL_CORR_NORM_COUNT 4
+/* how to normalize */
+typedef enum {nsl_corr_norm_none, nsl_corr_norm_biased, nsl_corr_norm_unbiased, nsl_corr_norm_coeff} nsl_corr_norm_type;
 extern const char* nsl_corr_norm_name[];
 
 

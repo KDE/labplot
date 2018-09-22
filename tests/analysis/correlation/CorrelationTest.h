@@ -39,6 +39,14 @@ private slots:
 	void testLinear_noX();
 	void testLinear_swapped();
 
+	// norm
+	void testLinear_biased();
+	void testLinear2_biased();
+	void testLinear_unbiased();
+	void testLinear2_unbiased();
+	void testLinear_coeff();
+	void testLinear2_coeff();
+
 	// circular tests
 
 	void testPerformance();
