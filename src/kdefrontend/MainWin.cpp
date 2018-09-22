@@ -335,6 +335,7 @@ void MainWin::initActions() {
 	KStandardAction::open(this, SLOT(openProject()),actionCollection());
 	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject(QUrl)),actionCollection());
 	m_closeAction = KStandardAction::close(this, SLOT(closeProject()),actionCollection());
+	actionCollection()->setDefaultShortcut(m_closeAction, QKeySequence()); //remove the shortcut, QKeySequence::Close will be used for closing sub-windows
 	m_saveAction = KStandardAction::save(this, SLOT(saveProject()),actionCollection());
 	m_saveAsAction = KStandardAction::saveAs(this, SLOT(saveProjectAs()),actionCollection());
 	m_printAction = KStandardAction::print(this, SLOT(print()),actionCollection());
@@ -428,7 +429,7 @@ void MainWin::initActions() {
 
 	//Windows
 	QAction* action  = new QAction(i18n("&Close"), this);
-	actionCollection()->setDefaultShortcut(action, Qt::CTRL+Qt::Key_U);
+	actionCollection()->setDefaultShortcut(action, QKeySequence::Close);
 	action->setStatusTip(i18n("Close the active window"));
 	actionCollection()->addAction("close window", action);
 	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(closeActiveSubWindow()));
@@ -448,11 +449,13 @@ void MainWin::initActions() {
 	actionCollection()->addAction("cascade windows", m_cascadeWindows);
 	connect(m_cascadeWindows, SIGNAL(triggered()), m_mdiArea, SLOT(cascadeSubWindows()));
 	action = new QAction(QIcon::fromTheme("go-next-view"), i18n("Ne&xt"), this);
+	actionCollection()->setDefaultShortcut(action, QKeySequence::NextChild);
 	action->setStatusTip(i18n("Move the focus to the next window"));
 	actionCollection()->addAction("next window", action);
 	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(activateNextSubWindow()));
 
 	action = new QAction(QIcon::fromTheme("go-previous-view"), i18n("Pre&vious"), this);
+	actionCollection()->setDefaultShortcut(action, QKeySequence::PreviousChild);
 	action->setStatusTip(i18n("Move the focus to the previous window"));
 	actionCollection()->addAction("previous window", action);
 	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(activatePreviousSubWindow()));
@@ -1508,6 +1511,15 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 			else
 				m_mdiArea->addSubWindow(win);
 			win->show();
+
+			//Qt provides its own "system menu" for every sub-window. The shortcut for the close-action
+			//in this menu collides with our global m_closeAction.
+			//remove the shortcuts in the system menu to avoid this collision.
+			QMenu* menu = win->systemMenu();
+			if (menu) {
+				for (QAction* action : menu->actions())
+					action->setShortcut(QKeySequence());
+			}
 		}
 		m_mdiArea->setActiveSubWindow(win);
 	} else {
