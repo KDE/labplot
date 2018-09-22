@@ -81,7 +81,7 @@ void CorrelationTest::testLinear() {
 	QCOMPARE(resultYDataColumn->valueAt(4), 5.);
 	QCOMPARE(resultYDataColumn->valueAt(5), 4.);
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(6));
-	FuzzyCompare(resultYDataColumn->valueAt(6), 0., 1.e-15);
+	FuzzyCompare(resultYDataColumn->valueAt(6), 0., 2.e-15);
 }
 
 void CorrelationTest::testLinear2() {
@@ -179,7 +179,7 @@ void CorrelationTest::testLinear_noX() {
 	QCOMPARE(resultYDataColumn->valueAt(4), 5.);
 	QCOMPARE(resultYDataColumn->valueAt(5), 4.);
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(6));
-	FuzzyCompare(resultYDataColumn->valueAt(6), 0., 1.e-15);
+	FuzzyCompare(resultYDataColumn->valueAt(6), 0., 2.e-15);
 }
 
 void CorrelationTest::testLinear_swapped() {
