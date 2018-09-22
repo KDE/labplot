@@ -212,7 +212,7 @@ void XYCorrelationCurvePrivate::recalculate() {
 	const nsl_corr_type_type type = correlationData.type;
 	const nsl_corr_norm_type norm = correlationData.normalize;
 
-	DEBUG("signal n = " << n << ", response m = " << m);
+	DEBUG("signal 1 n = " << n << ", signal 2 n = " << m);
 	DEBUG("sampling interval = " << samplingInterval);
 	DEBUG("type = " << nsl_corr_type_name[type]);
 	DEBUG("norm = " << nsl_corr_norm_name[norm]);

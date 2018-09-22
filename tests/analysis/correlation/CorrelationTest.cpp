@@ -236,19 +236,17 @@ void CorrelationTest::testLinear_swapped() {
 }
 
 void CorrelationTest::testPerformance() {
-	return;
-	//TODO
-
 	// data
-	QVector<double> yData;
+	QVector<double> yData, y2Data;
 #ifdef HAVE_FFTW3
-	const int N = 2e7;
+	const int N = 5e6;
 #else	// GSL is much slower
-	const int N = 1e5;
+	const int N = 8.5e4;
 #endif
-	for (int i = 0;  i < N; i++)
+	for (int i = 0;  i < N; i++) {
 		yData.append(i % 100);
-	QVector<double> y2Data = {0,1.,.5};
+		y2Data.append(i % 10);
+	}
 
 	//data source columns
 	Column yDataColumn("y", AbstractColumn::Numeric);
@@ -277,7 +275,7 @@ void CorrelationTest::testPerformance() {
 	const AbstractColumn* resultXDataColumn = correlationCurve.xColumn();
 
 	const int np = resultXDataColumn->rowCount();
-	QCOMPARE(np, N + 2);
+	QCOMPARE(np, 2*N - 1);
 }
 
 QTEST_MAIN(CorrelationTest)
