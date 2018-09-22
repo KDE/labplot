@@ -237,7 +237,7 @@ void XYCorrelationCurvePrivate::recalculate() {
 			xVector->data()[i] = xVector->data()[size-1] + (i-size+1) * sampleInterval;
 	} else {	// fill with index (starting with 0)
 		for (size_t i = 0; i < np; i++)
-			xVector->data()[i] = i * samplingInterval;
+			xVector->data()[i] = (int)(i-np/2) * samplingInterval;
 	}
 
 	memcpy(yVector->data(), out, np * sizeof(double));

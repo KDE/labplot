@@ -169,7 +169,7 @@ void CorrelationTest::testLinear_noX() {
 	QCOMPARE(np, 7);
 
 	for (int i = 0; i < np; i++)
-		QCOMPARE(resultXDataColumn->valueAt(i), (double)i);
+		QCOMPARE(resultXDataColumn->valueAt(i), (double)(i-np/2));
 
 	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(0));
 	FuzzyCompare(resultYDataColumn->valueAt(0), 0., 1.e-15);
