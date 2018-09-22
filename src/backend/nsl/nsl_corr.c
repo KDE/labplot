@@ -48,9 +48,9 @@ int nsl_corr_fft_type(double s[], size_t n, double r[], size_t m, nsl_corr_type_
 	else	// circular: TODO
 		size = N;
 
+	size_t oldsize = size;
 #ifdef HAVE_FFTW3
 	// already zero-pad here for FFT method and FFTW r2c
-	size_t oldsize = size;
 	size = 2*(size/2+1);
 #endif
 
