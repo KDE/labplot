@@ -1,5 +1,5 @@
 #define MyAppName "LabPlot2"
-#define MyAppVersion "2.5.0"
+#define MyAppVersion "2.6.0"
 #define MyAppPublisher "Stefan Gerlach"
 #define MyAppURL "https://labplot.kde.org"
 #define MyAppExeName "labplot2.exe"
