@@ -92,7 +92,7 @@ int nsl_corr_fft_type(double s[], size_t n, double r[], size_t m, nsl_corr_type_
 		break;
 	case nsl_corr_norm_unbiased:
 		for (i = 0; i < oldsize; i++)
-			out[i] = out[i]/(N-abs(N/2+1-i));
+			out[i] = out[i]/(N-abs((int)(N/2+1-i)));
 		break;
 	case nsl_corr_norm_coeff: {
 		double snorm = cblas_dnrm2((int)n, s, 1);
