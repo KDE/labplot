@@ -1332,15 +1332,18 @@ void SpreadsheetView::unmaskSelection() {
 }
 
 void SpreadsheetView::plotData() {
-	PlotDataDialog* dlg = new PlotDataDialog(m_spreadsheet);
-	const QAction* action = reinterpret_cast<const QAction*>(QObject::sender());
-	if (action == action_plot_data_xycurve && action == action_plot_data_histogram) {
-		PlotDataDialog::PlotType type = (PlotDataDialog::PlotType)action->data().toInt();
-		dlg->setPlotType(type);
-	} else {
+	const QAction* action = dynamic_cast<const QAction*>(QObject::sender());
+	PlotDataDialog::PlotType type = PlotDataDialog::PlotXYCurve;
+	if (action == action_plot_data_xycurve || action == action_plot_data_histogram)
+		type = (PlotDataDialog::PlotType)action->data().toInt();
+
+	PlotDataDialog* dlg = new PlotDataDialog(m_spreadsheet, type);
+
+	if ( action != action_plot_data_xycurve && action != action_plot_data_histogram ) {
 		PlotDataDialog::AnalysisAction type = (PlotDataDialog::AnalysisAction)action->data().toInt();
 		dlg->setAnalysisAction(type);
 	}
+
 	dlg->exec();
 }
 

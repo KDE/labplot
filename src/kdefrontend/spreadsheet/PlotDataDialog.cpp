@@ -68,12 +68,12 @@
 
 	\ingroup kdefrontend
  */
-PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent) : QDialog(parent),
+PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) : QDialog(parent),
 	ui(new Ui::PlotDataWidget()),
 	m_spreadsheet(s),
 	m_plotsModel(new AspectTreeModel(m_spreadsheet->project())),
 	m_worksheetsModel(new AspectTreeModel(m_spreadsheet->project())),
-	m_plotType(PlotXYCurve),
+	m_plotType(type),
 	m_analysisAction(Differentiation),
 	m_analysisMode(false) {
 
@@ -192,14 +192,6 @@ PlotDataDialog::~PlotDataDialog() {
 	delete m_worksheetsModel;
 }
 
-/*!
- * determines how to plot the provided columns - as xy-curves, as histograms, etc.
- * The possible types are given by \c PlotDataDialog::PlotType.
- */
-void PlotDataDialog::setPlotType(PlotType type) {
-	m_plotType = type;
-}
-
 void PlotDataDialog::setAnalysisAction(AnalysisAction action) {
 	m_analysisAction = action;
 	m_analysisMode = true;
@@ -229,6 +221,17 @@ void PlotDataDialog::processColumns() {
 		return;
 	}
 
+	switch (m_plotType) {
+	case PlotXYCurve:
+		processColumnsForXYCurve(selectedColumns);
+		break;
+	case PlotHistogram:
+		processColumnsForHistogram(selectedColumns);
+		break;
+	}
+}
+
+void PlotDataDialog::processColumnsForXYCurve(const QVector<Column*>& selectedColumns) {
 	//determine the column names and the name of the first column having "X" as the plot designation
 	QList<QString> columnNames;
 	QString xColumnName;
@@ -271,7 +274,7 @@ void PlotDataDialog::processColumns() {
 		//two columns provided, only one curve is possible -> hide the curve placement options
 		ui->rbCurvePlacement1->setChecked(true);
 		ui->gbCurvePlacement->hide();
-		ui->gbPlotPlacement->setTitle(i18n("Add curve to"));
+		ui->gbPlotPlacement->setTitle(i18n("Add Curve to"));
 	}
 
 	//show all selected/available column names in the data comboboxes
@@ -302,6 +305,22 @@ void PlotDataDialog::processColumns() {
 			yColumnIndex++;
 		}
 	}
+}
+
+void PlotDataDialog::processColumnsForHistogram(const QVector<Column*>& selectedColumns) {
+	if (m_columns.size()==1) {
+		//one columns provided, only one histogram is possible -> hide the curve placement options
+		ui->rbCurvePlacement1->setChecked(true);
+		ui->gbCurvePlacement->hide();
+		ui->gbPlotPlacement->setTitle(i18n("Add Histogram to"));
+	} else {
+		ui->gbCurvePlacement->setTitle(i18n("Histogram Placement"));
+		ui->rbCurvePlacement1->setText(i18n("All histograms in one plot"));
+		ui->rbCurvePlacement2->setText(i18n("One plot per histogram"));
+		ui->gbPlotPlacement->setTitle(i18n("Add Histograms to"));
+	}
+
+	ui->chkCreateDataCurve->hide();
 }
 
 void PlotDataDialog::plot() {

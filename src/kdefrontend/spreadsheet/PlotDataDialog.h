@@ -52,10 +52,9 @@ public:
 		FitLinear, FitPower, FitExp1, FitExp2, FitInvExp, FitGauss, FitCauchyLorentz, FitTan, FitTanh, FitErrFunc, FitCustom,
 		FourierFilter};
 
-	explicit PlotDataDialog(Spreadsheet*, QWidget* parent = nullptr);
+	explicit PlotDataDialog(Spreadsheet*, PlotType = PlotXYCurve, QWidget* parent = nullptr);
 	~PlotDataDialog() override;
 
-	void setPlotType(PlotType);
 	void setAnalysisAction(AnalysisAction);
 
 private:
@@ -73,6 +72,8 @@ private:
 	bool m_analysisMode;
 
 	void processColumns();
+	void processColumnsForXYCurve(const QVector<Column*>&);
+	void processColumnsForHistogram(const QVector<Column*>&);
 	void addCurvesToPlot(CartesianPlot*) const;
 	void addCurvesToPlots(Worksheet*) const;
 	void addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot*) const;
