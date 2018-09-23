@@ -72,11 +72,12 @@ private:
 	bool m_analysisMode;
 
 	void processColumns();
-	void processColumnsForXYCurve(const QVector<Column*>&);
-	void processColumnsForHistogram(const QVector<Column*>&);
+	void processColumnsForXYCurve(const QStringList& columnNames, const QString& xColumnName);
+	void processColumnsForHistogram(const QStringList&);
 	void addCurvesToPlot(CartesianPlot*) const;
 	void addCurvesToPlots(Worksheet*) const;
 	void addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot*) const;
+	void addHistogram(const QString& name, Column* column, CartesianPlot*) const;
 	Column* columnFromName(const QString&) const;
 
 protected  slots:

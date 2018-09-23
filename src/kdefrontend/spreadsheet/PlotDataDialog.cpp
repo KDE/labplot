@@ -221,27 +221,17 @@ void PlotDataDialog::processColumns() {
 		return;
 	}
 
-	switch (m_plotType) {
-	case PlotXYCurve:
-		processColumnsForXYCurve(selectedColumns);
-		break;
-	case PlotHistogram:
-		processColumnsForHistogram(selectedColumns);
-		break;
-	}
-}
-
-void PlotDataDialog::processColumnsForXYCurve(const QVector<Column*>& selectedColumns) {
-	//determine the column names and the name of the first column having "X" as the plot designation
-	QList<QString> columnNames;
+	//determine the column names
+	//and the name of the first column having "X" as the plot designation (relevant for xy-curves only)
+	QStringList columnNames;
 	QString xColumnName;
 	for(const Column* column : m_columns) {
 		columnNames << column->name();
-		if (xColumnName.isEmpty() && column->plotDesignation() == AbstractColumn::X)
+		if (m_plotType == PlotXYCurve && xColumnName.isEmpty() && column->plotDesignation() == AbstractColumn::X)
 			xColumnName = column->name();
 	}
 
-	if (xColumnName.isEmpty()) {
+	if (m_plotType == PlotXYCurve && xColumnName.isEmpty()) {
 		//no X-column was selected -> look for the first non-selected X-column left to the first selected column
 		const int index = m_spreadsheet->indexOfChild<Column>(selectedColumns.first()) - 1;
 		if (index >= 0) {
@@ -257,6 +247,17 @@ void PlotDataDialog::processColumnsForXYCurve(const QVector<Column*>& selectedCo
 		}
 	}
 
+	switch (m_plotType) {
+	case PlotXYCurve:
+		processColumnsForXYCurve(columnNames, xColumnName);
+		break;
+	case PlotHistogram:
+		processColumnsForHistogram(columnNames);
+		break;
+	}
+}
+
+void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, const QString& xColumnName) {
 	m_columnComboBoxes << ui->cbXColumn;
 	m_columnComboBoxes << ui->cbYColumn;
 
@@ -307,20 +308,48 @@ void PlotDataDialog::processColumnsForXYCurve(const QVector<Column*>& selectedCo
 	}
 }
 
-void PlotDataDialog::processColumnsForHistogram(const QVector<Column*>& selectedColumns) {
+void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) {
+	ui->gbData->setTitle(i18n("Histogram Data"));
+	ui->line->hide();
+	ui->chkCreateDataCurve->hide();
+
+	//use the already available cbXColumn combo box
+	ui->lXColumn->setText(i18n("Data"));
+	m_columnComboBoxes << ui->cbXColumn;
+	ui->cbXColumn->addItems(columnNames);
+	ui->cbXColumn->setCurrentIndex(0);
+
 	if (m_columns.size()==1) {
-		//one columns provided, only one histogram is possible -> hide the curve placement options
+		//one column provided, only one histogram is possible
+		//-> hide the curve placement options and the scroll areas for further columns
 		ui->rbCurvePlacement1->setChecked(true);
 		ui->gbCurvePlacement->hide();
 		ui->gbPlotPlacement->setTitle(i18n("Add Histogram to"));
+		ui->scrollAreaYColumns->hide();
 	} else {
 		ui->gbCurvePlacement->setTitle(i18n("Histogram Placement"));
 		ui->rbCurvePlacement1->setText(i18n("All histograms in one plot"));
 		ui->rbCurvePlacement2->setText(i18n("One plot per histogram"));
 		ui->gbPlotPlacement->setTitle(i18n("Add Histograms to"));
-	}
 
-	ui->chkCreateDataCurve->hide();
+		//use the already available cbYColumn combo box
+		ui->lYColumn->setText(i18n("Data"));
+		m_columnComboBoxes << ui->cbYColumn;
+		ui->cbYColumn->addItems(columnNames);
+		ui->cbYColumn->setCurrentIndex(1);
+
+		//add a ComboBox for every further column to be plotted
+		QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaYColumns->widget()->layout());
+		for (int i = 2; i < m_columns.size(); ++i) {
+			QLabel* label = new QLabel(i18n("Data"));
+			QComboBox* comboBox = new QComboBox();
+			gridLayout->addWidget(label, i+1, 0, 1, 1);
+			gridLayout->addWidget(comboBox, i+1, 2, 1, 1);
+			comboBox->addItems(columnNames);
+			comboBox->setCurrentIndex(i);
+			m_columnComboBoxes << comboBox;
+		}
+	}
 }
 
 void PlotDataDialog::plot() {
@@ -435,12 +464,26 @@ Column* PlotDataDialog::columnFromName(const QString& name) const {
  */
 void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
-	Column* xColumn = columnFromName(ui->cbXColumn->currentText());
-	for (int i = 1; i < m_columnComboBoxes.size(); ++i) {
-		QComboBox* comboBox = m_columnComboBoxes[i];
-		const QString& name = comboBox->currentText();
-		Column* yColumn = columnFromName(name);
-		addCurve(name, xColumn, yColumn, plot);
+	switch (m_plotType) {
+	case PlotXYCurve: {
+		Column* xColumn = columnFromName(ui->cbXColumn->currentText());
+		for (int i = 1; i < m_columnComboBoxes.size(); ++i) {
+			QComboBox* comboBox = m_columnComboBoxes[i];
+			const QString& name = comboBox->currentText();
+			Column* yColumn = columnFromName(name);
+			addCurve(name, xColumn, yColumn, plot);
+		}
+		break;
+	}
+	case PlotHistogram: {
+		for (int i = 0; i < m_columnComboBoxes.size(); ++i) {
+			QComboBox* comboBox = m_columnComboBoxes[i];
+			const QString& name = comboBox->currentText();
+			Column* column = columnFromName(name);
+			addHistogram(name, column, plot);
+		}
+		break;
+	}
 	}
 
 	plot->scaleAuto();
@@ -453,32 +496,60 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	worksheet->setSuppressLayoutUpdate(true);
 
-	const QString& xColumnName = ui->cbXColumn->currentText();
-	Column* xColumn = columnFromName(xColumnName);
-	for (int i = 1; i < m_columnComboBoxes.size(); ++i) {
-		QComboBox* comboBox = m_columnComboBoxes[i];
-		const QString& name = comboBox->currentText();
-		Column* yColumn = columnFromName(name);
+	switch (m_plotType) {
+	case PlotXYCurve: {
+		const QString& xColumnName = ui->cbXColumn->currentText();
+		Column* xColumn = columnFromName(xColumnName);
+		for (int i = 1; i < m_columnComboBoxes.size(); ++i) {
+			QComboBox* comboBox = m_columnComboBoxes[i];
+			const QString& name = comboBox->currentText();
+			Column* yColumn = columnFromName(name);
 
-		CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
-		plot->initDefault(CartesianPlot::FourAxes);
+			CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
+			plot->initDefault(CartesianPlot::FourAxes);
 
-		//set the axis names in the new plot
-		bool xSet = false;
-		bool ySet = false;
-		for (auto axis : plot->children<Axis>()) {
-			if (axis->orientation() == Axis::AxisHorizontal && !xSet) {
-				axis->title()->setText(xColumnName);
-				xSet = true;
-			} else if (axis->orientation() == Axis::AxisVertical && !ySet) {
-				axis->title()->setText(name);
-				ySet = true;
+			//set the axis names in the new plot
+			bool xSet = false;
+			bool ySet = false;
+			for (auto axis : plot->children<Axis>()) {
+				if (axis->orientation() == Axis::AxisHorizontal && !xSet) {
+					axis->title()->setText(xColumnName);
+					xSet = true;
+				} else if (axis->orientation() == Axis::AxisVertical && !ySet) {
+					axis->title()->setText(name);
+					ySet = true;
+				}
 			}
-		}
 
-		worksheet->addChild(plot);
-		addCurve(name, xColumn, yColumn, plot);
-		plot->scaleAuto();
+			worksheet->addChild(plot);
+			addCurve(name, xColumn, yColumn, plot);
+			plot->scaleAuto();
+		}
+		break;
+	}
+	case PlotHistogram: {
+		for (int i = 0; i < m_columnComboBoxes.size(); ++i) {
+			QComboBox* comboBox = m_columnComboBoxes[i];
+			const QString& name = comboBox->currentText();
+			Column* column = columnFromName(name);
+
+			CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
+			plot->initDefault(CartesianPlot::FourAxes);
+
+			//set the axis names in the new plot
+			bool xSet = false;
+			for (auto axis : plot->children<Axis>()) {
+				if (axis->orientation() == Axis::AxisHorizontal && !xSet) {
+					axis->title()->setText(name);
+					xSet = true;
+				}
+			}
+
+			worksheet->addChild(plot);
+			addHistogram(name, column, plot);
+			plot->scaleAuto();
+		}
+	}
 	}
 
 	worksheet->setSuppressLayoutUpdate(false);
@@ -557,6 +628,14 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 	}
 }
 
+void PlotDataDialog::addHistogram(const QString& name, Column* column, CartesianPlot* plot) const {
+	Histogram* hist = new Histogram(name);
+	plot->addChild(hist);
+// 	hist->suppressRetransform(true);
+	hist->setDataColumn(column);
+// 	hist->suppressRetransform(false);
+}
+
 //################################################################
 //########################## Slots ###############################
 //################################################################
@@ -592,7 +671,8 @@ void PlotDataDialog::plotPlacementChanged() {
 void PlotDataDialog::checkOkButton() {
 	bool enable = false;
 	QString msg;
-	if (ui->cbXColumn->currentIndex() == -1 || ui->cbYColumn->currentIndex() == -1)
+	if ( (m_plotType == PlotXYCurve && (ui->cbXColumn->currentIndex() == -1 || ui->cbYColumn->currentIndex() == -1)) ||
+		(m_plotType == PlotHistogram && ui->cbXColumn->currentIndex() == -1) )
 		msg = i18n("No data selected to plot.");
 	else if (ui->rbPlotPlacement1->isChecked()) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
