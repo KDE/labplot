@@ -735,10 +735,201 @@ void CorrelationTest::testCircular2_coeff() {
 	QCOMPARE(resultYDataColumn->valueAt(2), 0.836660026534076);
 }
 
-void CorrelationTest::testPerformance() {
-	//TODO
-	return;
+/* samplingInterval */
 
+void CorrelationTest::testLinear_samplingInterval() {
+	// data
+	QVector<double> yData = {1.,2.,3.,4.};
+	QVector<double> y2Data = {0,1.,.5};
+
+	//data source columns
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	Column y2DataColumn("y2", AbstractColumn::Numeric);
+	y2DataColumn.replaceValues(0, y2Data);
+
+	XYCorrelationCurve correlationCurve("correlation");
+	correlationCurve.setYDataColumn(&yDataColumn);
+	correlationCurve.setY2DataColumn(&y2DataColumn);
+
+	//prepare the correlation
+	XYCorrelationCurve::CorrelationData correlationData = correlationCurve.correlationData();
+	correlationData.samplingInterval = 0.1;
+	correlationCurve.setCorrelationData(correlationData);
+
+	//perform the correlation
+	correlationCurve.recalculate();
+	const XYCorrelationCurve::CorrelationResult& correlationResult = correlationCurve.correlationResult();
+
+	//check the results
+	QCOMPARE(correlationResult.available, true);
+	QCOMPARE(correlationResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = correlationCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = correlationCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 7);
+
+	for (int i = 0; i < np; i++) {
+		DEBUG(std::setprecision(15) << resultXDataColumn->valueAt(i));
+		QCOMPARE(resultXDataColumn->valueAt(i), (double) (i-np/2) * correlationData.samplingInterval);
+	}
+
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(0));
+	FuzzyCompare(resultYDataColumn->valueAt(0), 0., 1.e-15);
+	QCOMPARE(resultYDataColumn->valueAt(1), 0.5);
+	QCOMPARE(resultYDataColumn->valueAt(2), 2.);
+	QCOMPARE(resultYDataColumn->valueAt(3), 3.5);
+	QCOMPARE(resultYDataColumn->valueAt(4), 5.);
+	QCOMPARE(resultYDataColumn->valueAt(5), 4.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(6));
+	FuzzyCompare(resultYDataColumn->valueAt(6), 0., 2.e-15);
+}
+
+void CorrelationTest::testLinear2_samplingInterval() {
+	// data
+	QVector<double> yData = {1.,2.,3.};
+	QVector<double> y2Data = {0,1.,.5};
+
+	//data source columns
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	Column y2DataColumn("y2", AbstractColumn::Numeric);
+	y2DataColumn.replaceValues(0, y2Data);
+
+	XYCorrelationCurve correlationCurve("correlation");
+	correlationCurve.setYDataColumn(&yDataColumn);
+	correlationCurve.setY2DataColumn(&y2DataColumn);
+
+	//prepare the correlation
+	XYCorrelationCurve::CorrelationData correlationData = correlationCurve.correlationData();
+	correlationData.samplingInterval = 0.1;
+	correlationCurve.setCorrelationData(correlationData);
+
+	//perform the correlation
+	correlationCurve.recalculate();
+	const XYCorrelationCurve::CorrelationResult& correlationResult = correlationCurve.correlationResult();
+
+	//check the results
+	QCOMPARE(correlationResult.available, true);
+	QCOMPARE(correlationResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = correlationCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = correlationCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 5);
+
+	for (int i = 0; i < np; i++) {
+		DEBUG(std::setprecision(15) << resultXDataColumn->valueAt(i));
+		QCOMPARE(resultXDataColumn->valueAt(i), (double) (i-np/2) * correlationData.samplingInterval);
+	}
+
+	QCOMPARE(resultYDataColumn->valueAt(0), 0.5);
+	QCOMPARE(resultYDataColumn->valueAt(1), 2.);
+	QCOMPARE(resultYDataColumn->valueAt(2), 3.5);
+	QCOMPARE(resultYDataColumn->valueAt(3), 3.);
+	DEBUG(std::setprecision(15) << resultYDataColumn->valueAt(4));
+	FuzzyCompare(resultYDataColumn->valueAt(4), 0., 1.e-15);
+}
+
+void CorrelationTest::testCircular_samplingInterval() {
+	// data
+	QVector<double> yData = {1.,2.,3.,4.};
+	QVector<double> y2Data = {0,1.,.5};
+
+	//data source columns
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	Column y2DataColumn("y2", AbstractColumn::Numeric);
+	y2DataColumn.replaceValues(0, y2Data);
+
+	XYCorrelationCurve correlationCurve("correlation");
+	correlationCurve.setYDataColumn(&yDataColumn);
+	correlationCurve.setY2DataColumn(&y2DataColumn);
+
+	//prepare the correlation
+	XYCorrelationCurve::CorrelationData correlationData = correlationCurve.correlationData();
+	correlationData.type = nsl_corr_type_circular;
+	correlationData.samplingInterval = 0.1;
+	correlationCurve.setCorrelationData(correlationData);
+
+	//perform the correlation
+	correlationCurve.recalculate();
+	const XYCorrelationCurve::CorrelationResult& correlationResult = correlationCurve.correlationResult();
+
+	//check the results
+	QCOMPARE(correlationResult.available, true);
+	QCOMPARE(correlationResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = correlationCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = correlationCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 4);
+
+	for (int i = 0; i < np; i++) {
+		DEBUG(std::setprecision(15) << resultXDataColumn->valueAt(i));
+		QCOMPARE(resultXDataColumn->valueAt(i), (double) i * correlationData.samplingInterval);
+	}
+
+	QCOMPARE(resultYDataColumn->valueAt(0), 2.);
+	QCOMPARE(resultYDataColumn->valueAt(1), 4.5);
+	QCOMPARE(resultYDataColumn->valueAt(2), 5.);
+	QCOMPARE(resultYDataColumn->valueAt(3), 3.5);
+}
+
+void CorrelationTest::testCircular2_samplingInterval() {
+	// data
+	QVector<double> yData = {1.,2.,3.};
+	QVector<double> y2Data = {0,1.,.5};
+
+	//data source columns
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	Column y2DataColumn("y2", AbstractColumn::Numeric);
+	y2DataColumn.replaceValues(0, y2Data);
+
+	XYCorrelationCurve correlationCurve("correlation");
+	correlationCurve.setYDataColumn(&yDataColumn);
+	correlationCurve.setY2DataColumn(&y2DataColumn);
+
+	//prepare the correlation
+	XYCorrelationCurve::CorrelationData correlationData = correlationCurve.correlationData();
+	correlationData.type = nsl_corr_type_circular;
+	correlationData.samplingInterval = 0.1;
+	correlationCurve.setCorrelationData(correlationData);
+
+	//perform the correlation
+	correlationCurve.recalculate();
+	const XYCorrelationCurve::CorrelationResult& correlationResult = correlationCurve.correlationResult();
+
+	//check the results
+	QCOMPARE(correlationResult.available, true);
+	QCOMPARE(correlationResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = correlationCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = correlationCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 3);
+
+	for (int i = 0; i < np; i++) {
+		DEBUG(std::setprecision(15) << resultXDataColumn->valueAt(i));
+		QCOMPARE(resultXDataColumn->valueAt(i), (double) i * correlationData.samplingInterval);
+	}
+
+	QCOMPARE(resultYDataColumn->valueAt(0), 2.);
+	QCOMPARE(resultYDataColumn->valueAt(1), 3.5);
+	QCOMPARE(resultYDataColumn->valueAt(2), 3.5);
+}
+
+void CorrelationTest::testPerformance() {
 	// data
 	QVector<double> yData, y2Data;
 #ifdef HAVE_FFTW3

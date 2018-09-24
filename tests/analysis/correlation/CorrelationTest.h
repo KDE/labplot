@@ -53,6 +53,12 @@ private slots:
 	void testCircular_coeff();
 	void testCircular2_coeff();
 
+	// sampling interval
+	void testLinear_samplingInterval();
+	void testLinear2_samplingInterval();
+	void testCircular_samplingInterval();
+	void testCircular2_samplingInterval();
+
 	void testPerformance();
 };
 #endif
