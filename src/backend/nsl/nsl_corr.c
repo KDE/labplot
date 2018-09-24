@@ -45,7 +45,7 @@ int nsl_corr_fft_type(double s[], size_t n, double r[], size_t m, nsl_corr_type_
 	size_t i, size, N = GSL_MAX(n, m), maxlag = N - 1;
 	if (type == nsl_corr_type_linear)
 		size = maxlag + N;
-	else	// circular: TODO
+	else	// circular
 		size = N;
 
 	size_t oldsize = size;
@@ -61,16 +61,28 @@ int nsl_corr_fft_type(double s[], size_t n, double r[], size_t m, nsl_corr_type_
 		puts("ERROR: zero-padding data");
 		return -1;
 	}
-	for (i = 0; i < maxlag; i++)
-		stmp[i] = 0.;
-	for (i = 0; i < n; i++)
-		stmp[i+maxlag] = s[i];
-	for (i = n+maxlag; i < size; i++)
-		stmp[i] = 0;
-	for (i = 0; i < m; i++)
-		rtmp[i] = r[i];
-	for (i = m; i < size; i++)
-		rtmp[i] = 0;
+
+	if (type == nsl_corr_type_linear) {
+		for (i = 0; i < maxlag; i++)
+			stmp[i] = 0.;
+		for (i = 0; i < n; i++)
+			stmp[i+maxlag] = s[i];
+		for (i = n+maxlag; i < size; i++)
+			stmp[i] = 0;
+		for (i = 0; i < m; i++)
+			rtmp[i] = r[i];
+		for (i = m; i < size; i++)
+			rtmp[i] = 0;
+	} else {	// circular
+		for (i = 0; i < n; i++)
+			stmp[i] = s[i];
+		for (i = n; i < N; i++)
+			stmp[i] = 0.;
+		for (i = 0; i < m; i++)
+			rtmp[i] = r[i];
+		for (i = m; i < N; i++)
+			rtmp[i] = 0.;
+	}
 
 	int status;
 #ifdef HAVE_FFTW3	// already wraps output
@@ -101,6 +113,15 @@ int nsl_corr_fft_type(double s[], size_t n, double r[], size_t m, nsl_corr_type_
 			out[i] = out[i]/snorm/rnorm;
 		break;
 	}
+	}
+
+	// reverse array for circular type
+	if (type == nsl_corr_type_circular) {
+		for (i = 0; i < N/2; i++) {
+			double tmp = out[i];
+			out[i] = out[N - i - 1];
+			out[N -i - 1] = tmp;
+		}
 	}
 
 	return status;

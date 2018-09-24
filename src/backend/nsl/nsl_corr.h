@@ -37,7 +37,11 @@ typedef enum {nsl_corr_type_linear, nsl_corr_type_circular} nsl_corr_type_type;
 extern const char* nsl_corr_type_name[];
 
 #define NSL_CORR_NORM_COUNT 4
-/* how to normalize */
+/* how to normalize (see octave)
+ * biased - 1/N
+ * unbiased - 1/(N-|m|)
+ * coeff - 1/sqrt(R_xx(0) R_yy(0)) = 1/sqrt(sum x_i^2 sum y_i^2) [used in Origin]
+ * */
 typedef enum {nsl_corr_norm_none, nsl_corr_norm_biased, nsl_corr_norm_unbiased, nsl_corr_norm_coeff} nsl_corr_norm_type;
 extern const char* nsl_corr_norm_name[];
 

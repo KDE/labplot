@@ -236,8 +236,12 @@ void XYCorrelationCurvePrivate::recalculate() {
 		for (int i = size; i < (int)np; i++)	// fill missing values
 			xVector->data()[i] = xVector->data()[size-1] + (i-size+1) * sampleInterval;
 	} else {	// fill with index (starting with 0)
-		for (size_t i = 0; i < np; i++)
-			xVector->data()[i] = (int)(i-np/2) * samplingInterval;
+		if (type == nsl_corr_type_linear)
+			for (size_t i = 0; i < np; i++)
+				xVector->data()[i] = (int)(i-np/2) * samplingInterval;
+		else
+			for (size_t i = 0; i < np; i++)
+				xVector->data()[i] = (int)i * samplingInterval;
 	}
 
 	memcpy(yVector->data(), out, np * sizeof(double));
