@@ -267,6 +267,9 @@ void XYCorrelationCurveDock::dataSourceTypeChanged(int index) {
 		cbYDataColumn->show();
 		uiGeneralTab.lY2Column->show();
 		cbY2DataColumn->show();
+		uiGeneralTab.lSamplingInterval->show();
+		uiGeneralTab.l2SamplingInterval->show();
+		uiGeneralTab.sbSamplingInterval->show();
 	} else {
 		uiGeneralTab.lDataSourceCurve->show();
 		cbDataSourceCurve->show();
@@ -276,6 +279,9 @@ void XYCorrelationCurveDock::dataSourceTypeChanged(int index) {
 		cbYDataColumn->hide();
 		uiGeneralTab.lY2Column->hide();
 		cbY2DataColumn->hide();
+		uiGeneralTab.lSamplingInterval->hide();
+		uiGeneralTab.l2SamplingInterval->hide();
+		uiGeneralTab.sbSamplingInterval->hide();
 	}
 
 	if (m_initializing)
