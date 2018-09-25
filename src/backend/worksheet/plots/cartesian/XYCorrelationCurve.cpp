@@ -105,6 +105,7 @@ XYCorrelationCurvePrivate::~XYCorrelationCurvePrivate() {
 }
 
 void XYCorrelationCurvePrivate::recalculate() {
+	DEBUG("XYCorrelationCurvePrivate::recalculate()");
 	QElapsedTimer timer;
 	timer.start();
 
@@ -142,11 +143,10 @@ void XYCorrelationCurvePrivate::recalculate() {
 		tmpYDataColumn = yDataColumn;
 		tmpY2DataColumn = y2DataColumn;
 	} else {
-		//curve columns as data source
+		//curve columns as data source (autocorrelation)
 		tmpXDataColumn = dataSourceCurve->xColumn();
 		tmpYDataColumn = dataSourceCurve->yColumn();
-		//TODO: where to get second y-column?
-		//tmpY2DataColumn = dataSourceCurve->y2Column();
+		tmpY2DataColumn = dataSourceCurve->yColumn();
 	}
 
 	if (tmpYDataColumn == nullptr || tmpY2DataColumn == nullptr) {
@@ -212,7 +212,7 @@ void XYCorrelationCurvePrivate::recalculate() {
 	const nsl_corr_type_type type = correlationData.type;
 	const nsl_corr_norm_type norm = correlationData.normalize;
 
-	DEBUG("signal 1 n = " << n << ", signal 2 n = " << m);
+	DEBUG("signal_1 n = " << n << ", signal_2 n = " << m);
 	DEBUG("sampling interval = " << samplingInterval);
 	DEBUG("type = " << nsl_corr_type_name[type]);
 	DEBUG("norm = " << nsl_corr_norm_name[norm]);
