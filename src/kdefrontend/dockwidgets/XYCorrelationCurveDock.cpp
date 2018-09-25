@@ -84,8 +84,7 @@ void XYCorrelationCurveDock::setupGeneral() {
 	}
 
 	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
-	// not supported
-	//uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
+	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
 
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 3);
@@ -422,10 +421,11 @@ void XYCorrelationCurveDock::enableRecalculate() const {
 		return;
 
 	bool hasSourceData = false;
-	//no correlation possible without the y-data
+	//no correlation possible without y-data and y2-data
 	if (m_correlationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectY!=nullptr);
+		AbstractAspect* aspectY2 = static_cast<AbstractAspect*>(cbY2DataColumn->currentModelIndex().internalPointer());
+		hasSourceData = (aspectY != nullptr && aspectY2 != nullptr);
 	} else {
 		 hasSourceData = (m_correlationCurve->dataSourceCurve() != nullptr);
 	}
