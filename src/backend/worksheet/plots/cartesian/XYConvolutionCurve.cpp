@@ -145,8 +145,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 		//curve columns as data source
 		tmpXDataColumn = dataSourceCurve->xColumn();
 		tmpYDataColumn = dataSourceCurve->yColumn();
-		//TODO: where to get second y-column?
-		//tmpY2DataColumn = dataSourceCurve->y2Column();
+		// no y2 column: use standard kernel
 	}
 
 	if (tmpYDataColumn == nullptr) {

@@ -284,7 +284,11 @@ void XYConvolutionCurveDock::dataSourceTypeChanged(int index) {
 		cbYDataColumn->show();
 		uiGeneralTab.lY2Column->show();
 		cbY2DataColumn->show();
-	} else {
+		uiGeneralTab.lSamplingInterval->show();
+		uiGeneralTab.l2SamplingInterval->show();
+		uiGeneralTab.sbSamplingInterval->show();
+		uiGeneralTab.lKernel->setText(i18n("or Kernel/Size:"));
+	} else {	//xy-curve data source
 		uiGeneralTab.lDataSourceCurve->show();
 		cbDataSourceCurve->show();
 		uiGeneralTab.lXColumn->hide();
@@ -293,6 +297,13 @@ void XYConvolutionCurveDock::dataSourceTypeChanged(int index) {
 		cbYDataColumn->hide();
 		uiGeneralTab.lY2Column->hide();
 		cbY2DataColumn->hide();
+		uiGeneralTab.lSamplingInterval->hide();
+		uiGeneralTab.l2SamplingInterval->hide();
+		uiGeneralTab.sbSamplingInterval->hide();
+		uiGeneralTab.lKernel->setEnabled(true);
+		uiGeneralTab.lKernel->setText(i18n("with Kernel/Size:"));
+		uiGeneralTab.cbKernel->setEnabled(true);
+		uiGeneralTab.sbKernelSize->setEnabled(true);
 	}
 
 	if (m_initializing)
@@ -300,6 +311,8 @@ void XYConvolutionCurveDock::dataSourceTypeChanged(int index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYConvolutionCurve*>(curve)->setDataSourceType(type);
+
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
