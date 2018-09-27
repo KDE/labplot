@@ -502,7 +502,6 @@ void CartesianPlotLegendPrivate::retransform() {
 
 	float maxTextWidth = 0;
 	float legendWidth = 0;
-	XYCurve* curve;
 	int index;
 	for (int c=0; c<columnCount; ++c) {
 		for (int r=0; r<rowCount; ++r) {
@@ -514,7 +513,7 @@ void CartesianPlotLegendPrivate::retransform() {
 			if ( index >= curveCount )
 				break;
 
-			curve = dynamic_cast<XYCurve*>(curvesList.at(index));
+			const WorksheetElement* curve = dynamic_cast<WorksheetElement*>(curvesList.at(index));
 			if (curve) {
 				if (!curve->isVisible())
 					continue;
@@ -740,16 +739,19 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			//draw the legend item for histogram (simple rectangular with the sizes of the ascent)
 			const Histogram* hist = dynamic_cast<Histogram*>(curvesList.at(index));
 			if (hist) {
-				if (hist->linePen() != Qt::NoPen) {
+				//use line's pen (histogram bars, envelope or drop lines) if available,
+				if (hist->lineType() != Histogram::NoLine && hist->linePen() != Qt::NoPen) {
 					painter->setOpacity(hist->lineOpacity());
 					painter->setPen(hist->linePen());
-				} else if (hist->symbolsStyle()) {
-					painter->setOpacity(hist->symbolsOpacity());
-					painter->setPen(hist->symbolsPen());
 				}
 
+				//for the brush, use the histogram filling or symbols filling or no brush
 				if (hist->fillingEnabled())
 					painter->setBrush(QBrush(hist->fillingFirstColor(), hist->fillingBrushStyle()));
+				else if (hist->symbolsStyle() != Symbol::NoSymbols)
+					painter->setBrush(hist->symbolsBrush());
+				else
+					painter->setBrush(Qt::NoBrush);
 
 				painter->translate(QPointF(lineSymbolWidth/2, h/2));
 				painter->drawRect(QRectF(-h/2, -h/2, h, h));
