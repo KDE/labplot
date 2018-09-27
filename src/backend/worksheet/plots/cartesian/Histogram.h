@@ -45,7 +45,7 @@ class Histogram : public WorksheetElement {
 public:
 	enum HistogramType {Ordinary,Cumulative, AvgShift};
 	enum HistogramOrientation {Vertical, Horizontal};
-	enum BinningMethod {ByNumber, ByWidth, SquareRoot, RiceRule, SturgisRule};
+	enum BinningMethod {ByNumber, ByWidth, SquareRoot, Rice, Sturges, Doane, Scott};
 	enum LineType {NoLine, Bars, Envelope, DropLines};
 	enum ValuesType {NoValues, ValuesBinEntries, ValuesCustomColumn};
 	enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};

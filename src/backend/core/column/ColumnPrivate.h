@@ -105,7 +105,7 @@ public:
 	void setIntegerAt(int row, int new_value);
 	void replaceInteger(int first, const QVector<int>&);
 
-	AbstractColumn::ColumnStatistics statistics;
+	mutable AbstractColumn::ColumnStatistics statistics;
 	bool statisticsAvailable; //is 'statistics' already available or needs to be (re-)calculated?
 
 	bool hasValues;

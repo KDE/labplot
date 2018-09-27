@@ -770,22 +770,35 @@ void HistogramPrivate::recalcHistogram() {
 		const double min = dataColumn->minimum();
 		const double max = dataColumn->maximum();
 		switch (binningMethod) {
-			case Histogram::ByNumber:
-				m_bins = (size_t)binCount;
-				break;
-			case Histogram::SquareRoot:
-				m_bins = (size_t)sqrt(count);
-				break;
-			case Histogram::RiceRule:
-				m_bins = (size_t)2*cbrt(count);
-				break;
-			case Histogram::ByWidth:
-				m_bins = (size_t) (max-min)/binWidth;
-				break;
-			case Histogram::SturgisRule:
-				m_bins = (size_t) 1 + 3.33*log(count);
-				break;
+		case Histogram::ByNumber:
+			m_bins = (size_t)binCount;
+			break;
+		case Histogram::ByWidth:
+			m_bins = (size_t) (max-min)/binWidth;
+			break;
+		case Histogram::SquareRoot:
+			m_bins = (size_t)sqrt(count);
+			break;
+		case Histogram::Rice:
+			m_bins = (size_t)2*cbrt(count);
+			break;
+		case Histogram::Sturges:
+			m_bins = (size_t) 1 + log2(count);
+			break;
+		case Histogram::Doane: {
+			const double skewness = dynamic_cast<const Column*>(dataColumn)->statistics().skewness;
+			m_bins = (size_t)( 1 + log2(count) + log2(1 + abs(skewness)/sqrt((double)6*(count-2)/(count+1)/(count+3))) );
+			break;
 		}
+		case Histogram::Scott: {
+			const double sigma = dynamic_cast<const Column*>(dataColumn)->statistics().standardDeviation;
+			const double width = 3.5*sigma/cbrt(count);
+			m_bins = (size_t)(max - min)/width;
+			break;
+		}
+		}
+
+		DEBUG("number of bins " << m_bins);
 
 		m_histogram = gsl_histogram_alloc (m_bins);
 		gsl_histogram_set_ranges_uniform (m_histogram, min, max+1);

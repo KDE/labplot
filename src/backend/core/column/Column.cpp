@@ -464,14 +464,14 @@ void Column::replaceInteger(int first, const QVector<int>& new_values) {
 	}
 }
 
-const Column::ColumnStatistics& Column::statistics() {
+const Column::ColumnStatistics& Column::statistics() const {
 	if (!d->statisticsAvailable)
 		calculateStatistics();
 
 	return d->statistics;
 }
 
-void Column::calculateStatistics() {
+void Column::calculateStatistics() const {
 	d->statistics = ColumnStatistics();
 	ColumnStatistics& statistics = d->statistics;
 

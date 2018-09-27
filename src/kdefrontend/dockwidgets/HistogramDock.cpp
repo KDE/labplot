@@ -189,9 +189,11 @@ void HistogramDock::init(){
 	//bins option
 	ui.cbBinningMethod->addItem(i18n("By Number"));
 	ui.cbBinningMethod->addItem(i18n("By Width"));
-	ui.cbBinningMethod->addItem(i18n("Square-root Rule"));
-	ui.cbBinningMethod->addItem(i18n("Rice Rule"));
-	ui.cbBinningMethod->addItem(i18n("Sturgis Rule"));
+	ui.cbBinningMethod->addItem(i18n("Square-root"));
+	ui.cbBinningMethod->addItem(i18n("Rice"));
+	ui.cbBinningMethod->addItem(i18n("Sturges"));
+	ui.cbBinningMethod->addItem(i18n("Doane"));
+	ui.cbBinningMethod->addItem(i18n("Scott"));
 
 	//histogram type
 	ui.cbType->addItem(i18n("Ordinary Histogram"));

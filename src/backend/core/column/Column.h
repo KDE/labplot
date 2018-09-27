@@ -84,7 +84,7 @@ public:
 	void setFormula(int, const QString&) override;
 	void clearFormulas() override;
 
-	const AbstractColumn::ColumnStatistics& statistics();
+	const AbstractColumn::ColumnStatistics& statistics() const;
 	void* data() const;
 	bool hasValues() const;
 
@@ -123,7 +123,7 @@ private:
 	void handleRowInsertion(int before, int count) override;
 	void handleRowRemoval(int first, int count) override;
 
-	void calculateStatistics();
+	void calculateStatistics() const;
 
 	bool m_suppressDataChangedSignal;
 	QActionGroup* m_usedInActionGroup;
