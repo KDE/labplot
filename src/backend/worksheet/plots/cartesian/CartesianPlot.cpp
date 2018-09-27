@@ -1381,6 +1381,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		if (histo) {
 			connect(histo, &Histogram::dataChanged, this, &CartesianPlot::dataChanged);
 			connect(histo, &Histogram::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
+
+			updateLegend();
 		}
 	}
 

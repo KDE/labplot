@@ -473,10 +473,19 @@ void CartesianPlotLegendPrivate::retransform() {
 	prepareGeometryChange();
 
 	curvesList.clear();
+
+	//add xy-curves
 	for (auto* curve : q->m_plot->children<XYCurve>()) {
 		if (curve && curve->isVisible())
 			curvesList.push_back(curve);
 	}
+
+	//add histograms
+	for (auto* hist : q->m_plot->children<Histogram>()) {
+		if (hist && hist->isVisible())
+			curvesList.push_back(hist);
+	}
+
 	int curveCount = curvesList.size();
 	columnCount = (curveCount<layoutColumnCount) ? curveCount : layoutColumnCount;
 	if (columnCount==0) //no curves available
@@ -505,7 +514,7 @@ void CartesianPlotLegendPrivate::retransform() {
 			if ( index >= curveCount )
 				break;
 
-			curve = curvesList.at(index);
+			curve = dynamic_cast<XYCurve*>(curvesList.at(index));
 			if (curve) {
 				if (!curve->isVisible())
 					continue;
@@ -708,8 +717,6 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	int curveCount = curvesList.size();
 	QFontMetrics fm(labelFont);
 	float h=fm.ascent();
-	XYCurve* curve;
-
 	painter->setFont(labelFont);
 
 	//translate to left upper conner of the bounding rect plus the layout offset and the height of the title
@@ -730,7 +737,35 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			if ( index >= curveCount )
 				break;
 
-			curve = curvesList.at(index);
+			//draw the legend item for histogram (simple rectangular with the sizes of the ascent)
+			const Histogram* hist = dynamic_cast<Histogram*>(curvesList.at(index));
+			if (hist) {
+				if (hist->linePen() != Qt::NoPen) {
+					painter->setOpacity(hist->lineOpacity());
+					painter->setPen(hist->linePen());
+				} else if (hist->symbolsStyle()) {
+					painter->setOpacity(hist->symbolsOpacity());
+					painter->setPen(hist->symbolsPen());
+				}
+
+				if (hist->fillingEnabled())
+					painter->setBrush(QBrush(hist->fillingFirstColor(), hist->fillingBrushStyle()));
+
+				painter->translate(QPointF(lineSymbolWidth/2, h/2));
+				painter->drawRect(QRectF(-h/2, -h/2, h, h));
+				painter->translate(-QPointF(lineSymbolWidth/2, h/2));
+
+				//curve's name
+				painter->setPen(QPen(labelColor));
+				painter->setOpacity(1.0);
+				//TODO: support HTML text?
+				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), hist->name());
+				painter->translate(0, layoutVerticalSpacing + h);
+				continue;
+			}
+
+			//draw the legend item for histogram
+			const XYCurve* curve = dynamic_cast<XYCurve*>(curvesList.at(index));
 
 			//curve's line (painted at the half of the ascent size)
 			if (curve->lineType() != XYCurve::NoLine) {

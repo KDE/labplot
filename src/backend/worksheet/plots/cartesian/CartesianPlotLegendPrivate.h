@@ -60,7 +60,7 @@ public:
 	bool m_printing;
 	bool m_hovered;
 
-	QList<XYCurve*> curvesList; //list containing all visible curves
+	QList<WorksheetElement*> curvesList; //list containing all visible curves
 	QRectF rect;
 	QFont labelFont;
 	QColor labelColor;
