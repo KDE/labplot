@@ -266,7 +266,7 @@ void Histogram::setDataColumn(const AbstractColumn* column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Histogram::dataChanged);
 
 			//update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &Histogram::retransform);
+			connect(column, &AbstractColumn::dataChanged, this, &Histogram::recalcHistogram);
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
 					this, &Histogram::dataColumnAboutToBeRemoved);
 			//TODO: add disconnect in the undo-function
@@ -558,6 +558,10 @@ void Histogram::setErrorBarsOpacity(qreal opacity) {
 //##############################################################################
 void Histogram::retransform() {
 	d_ptr->retransform();
+}
+
+void Histogram::recalcHistogram() {
+	d_ptr->recalcHistogram();
 }
 
 //TODO

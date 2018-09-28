@@ -132,6 +132,7 @@ public slots:
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 private slots:
+	void recalcHistogram();
 	void updateValues();
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 	void valuesColumnAboutToBeRemoved(const AbstractAspect*);
