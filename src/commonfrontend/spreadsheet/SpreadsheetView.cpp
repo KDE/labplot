@@ -1205,17 +1205,17 @@ void SpreadsheetView::pasteIntoSelection() {
 
 	QString input_str = QString(mime_data->data("text/plain")).trimmed();
 	QVector<QStringList> cellTexts;
-	QStringList input_rows(input_str.split('\n'));
+	QStringList input_rows(input_str.split(QLatin1Char('\n')));
 	input_row_count = input_rows.count();
 	input_col_count = 0;
 	for (int i=0; i<input_row_count; i++) {
-		cellTexts.append(input_rows.at(i).split(QRegExp("\\s+")));
+		cellTexts.append(input_rows.at(i).split(QRegExp(QLatin1String("\\s+"))));
 		if (cellTexts.at(i).count() > input_col_count)
 			input_col_count = cellTexts.at(i).count();
 	}
 
 	if ( (first_col == -1 || first_row == -1) || (last_row == first_row && last_col == first_col) ) {
-		// if the is no selection or only one cell selected, the
+		// if there is no selection or only one cell selected, the
 		// selection will be expanded to the needed size from the current cell
 		int current_row, current_col;
 		getCurrentCell(&current_row, &current_col);
@@ -1260,12 +1260,11 @@ void SpreadsheetView::pasteIntoSelection() {
 	const int rows = last_row - first_row + 1;
 	const int cols = last_col - first_col + 1;
 	QLocale locale;
-
 	for (int c = 0; c < cols && c < input_col_count; c++) {
 		Column* col = m_spreadsheet->column(first_col + c);
 		col->setSuppressDataChangedSignal(true);
 		if (col->columnMode() == AbstractColumn::Numeric) {
-			if (rows == m_spreadsheet->rowCount()) {
+			if (rows == m_spreadsheet->rowCount() && rows == cellTexts.size()) {
 				QVector<double> new_data(rows);
 				for (int r = 0; r < rows; ++r)
 					new_data[r] = locale.toDouble(cellTexts.at(r).at(c));
