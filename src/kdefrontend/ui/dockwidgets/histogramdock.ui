@@ -168,7 +168,7 @@
           <number>1</number>
          </property>
          <property name="maximum">
-          <number>30</number>
+          <number>9999</number>
          </property>
          <property name="value">
           <number>10</number>
@@ -1354,14 +1354,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KFontRequester</class>
-   <extends>QWidget</extends>
-   <header>kfontrequester.h</header>
-  </customwidget>
-  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KFontRequester</class>
+   <extends>QWidget</extends>
+   <header>kfontrequester.h</header>
   </customwidget>
   <customwidget>
    <class>KColorButton</class>

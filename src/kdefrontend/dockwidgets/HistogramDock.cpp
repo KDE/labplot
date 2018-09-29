@@ -61,7 +61,7 @@
   \ingroup kdefrontend
 */
 HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
-	cbDataColumn(nullptr),
+	cbDataColumn(new TreeViewComboBox),
 	m_curve(nullptr),
 	m_aspectTreeModel(nullptr),
 	m_initializing(false) {
@@ -70,7 +70,6 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 
 	// Tab "General"
 	QGridLayout* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
-	cbDataColumn = new TreeViewComboBox(ui.tabGeneral);
 	gridLayout->addWidget(cbDataColumn, 3, 2, 1, 1);
 
 	//Tab "Values"
@@ -307,22 +306,21 @@ void HistogramDock::init(){
 }
 
 void HistogramDock::setModel() {
-	QList<const char*>  list;
-	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
-		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<< "Histogram"
-		<<"XYInterpolationCurve"<<"XYFitCurve"<<"XYFourierFilterCurve";
+	m_aspectTreeModel->enablePlottableColumnsOnly(true);
+	m_aspectTreeModel->enableShowPlotDesignation(true);
 
-	if (cbDataColumn) {
-		cbDataColumn->setTopLevelClasses(list);
-	}
+	QList<const char*> list;
+	list << "Folder" << "Workbook" << "Datapicker" << "DatapickerCurve" << "Spreadsheet"
+		<< "FileDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYFitCurve" << "CantorWorksheet";
+
+	cbDataColumn->setTopLevelClasses(list);
 	cbValuesColumn->setTopLevelClasses(list);
 
- 	list.clear();
-	list<<"Column";
+	list.clear();
+	list << "Column";
 	m_aspectTreeModel->setSelectableAspects(list);
-	if (cbDataColumn)
-		cbDataColumn->setModel(m_aspectTreeModel);
 
+	cbDataColumn->setModel(m_aspectTreeModel);
 	cbValuesColumn->setModel(m_aspectTreeModel);
 }
 
