@@ -53,7 +53,7 @@
 class OriginParser
 {
 public:
-	virtual ~OriginParser() = default;;
+	virtual ~OriginParser() = default;
 	virtual bool parse() = 0;
 
 	vector<Origin::SpreadSheet>::difference_type findSpreadByName(const string& name) const;

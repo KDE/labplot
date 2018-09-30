@@ -545,7 +545,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	uiGeneralTab.tbConstants->setVisible(custom);
 
 	// default settings
-	uiGeneralTab.lDegree->setText(i18n("Degree"));
+	uiGeneralTab.lDegree->setText(i18n("Degree:"));
 	uiGeneralTab.sbDegree->setValue(1);
 
 	// TODO: reset start values
@@ -578,7 +578,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		}
 		break;
 	case nsl_fit_model_peak:	// all models support multiple peaks
-		uiGeneralTab.lDegree->setText(i18n("Number of peaks"));
+		uiGeneralTab.lDegree->setText(i18n("Number of peaks:"));
 		uiGeneralTab.lDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setMaximum(9);

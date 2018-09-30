@@ -496,14 +496,15 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		if (!device.canReadLine())
 			DEBUG("WARNING in AsciiFilterPrivate::prepareDeviceToRead(): device cannot 'readLine()' but using it anyway.");
 
-		firstLine = device.readLine();
-
 		if (device.atEnd()) {
+			DEBUG("device at end! Giving up.");
 			if (device.isSequential())
 				break;
 			else
 				return 1;
 		}
+
+		firstLine = device.readLine();
 	} while (firstLine.startsWith(commentCharacter));
 
 	DEBUG(" device position after first line and comments = " << device.pos());
