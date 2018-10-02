@@ -33,21 +33,9 @@
 #include "tree.hh"
 
 #ifdef GENERATE_CODE_FOR_LOG
-
-#ifdef HAVE_WINDOWS
 #define LOG_PRINT( logfile, ... ) { fprintf(logfile, __VA_ARGS__); }
-#else	// NOT WINDOWS
-
-#ifdef NDEBUG
-#define LOG_PRINT( logfile, args... ) { fprintf(logfile, args); }
-#else
-#define LOG_PRINT( logfile, args... ) { int ioret = fprintf(logfile, args); assert(ioret > 0); }
-#endif
-
-#endif
-
 #else // !GENERATE_CODE_FOR_LOG
-#define LOG_PRINT( logfile, args, ... ) {};
+#define LOG_PRINT( logfile, ... ) {};
 #endif
 
 class OriginParser
