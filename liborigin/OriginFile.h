@@ -30,11 +30,6 @@
 #ifndef ORIGIN_FILE_H
 #define ORIGIN_FILE_H
 
-#ifdef LVERSION
-#include "liborigin/config.h"
-#else
-#include "config.h"
-#endif
 #include "OriginObj.h"
 #include "OriginParser.h"
 #include <memory>
@@ -78,5 +73,11 @@ private:
 	unsigned int fileVersion, buildVersion;
 	unique_ptr<OriginParser> parser;
 };
+
+string liboriginVersionString();
+unsigned int liboriginVersion();
+unsigned int liboriginVersionMajor();
+unsigned int liboriginVersionMinor();
+unsigned int liboriginVersionBugfix();
 
 #endif // ORIGIN_FILE_H

@@ -27,6 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "config.h"
 #include "OriginFile.h"
 #include <fstream>
 #include <string>
@@ -249,3 +250,13 @@ string OriginFile::resultsLogString() const
 {
 	return parser->resultsLog;
 }
+
+string liboriginVersionString() { return LIBORIGIN_VERSION_STRING; }
+
+unsigned int liboriginVersion() { return LIBORIGIN_VERSION; }
+
+unsigned int liboriginVersionMajor() { return LIBORIGIN_VERSION_MAJOR; }
+
+unsigned int liboriginVersionMinor() { return LIBORIGIN_VERSION_MINOR; }
+
+unsigned int liboriginVersionBugfix() { return LIBORIGIN_VERSION_BUGFIX; }
