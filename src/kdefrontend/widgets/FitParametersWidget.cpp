@@ -72,6 +72,22 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 	ui.tableWidget->horizontalHeader()->setStretchLastSection(true);
 	ui.tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+	setFitData(data);
+
+	ui.tableWidget->installEventFilter(this);
+
+	connect( ui.tableWidget, SIGNAL(cellChanged(int,int)), this, SLOT(changed()) );
+	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
+	connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
+// we don't need add/remove since parameter are detected automatically
+//	connect( ui.pbAdd, SIGNAL(clicked()), this, SLOT(addParameter()) );
+//	connect( ui.pbRemove, SIGNAL(clicked()), this, SLOT(removeParameter()) );
+}
+
+void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
+	DEBUG("FitParametersWidget::setFitData()");
+	m_fitData = data;
+
 	if (m_fitData->modelCategory != nsl_fit_model_custom) {	// pre-defined models
 		ui.tableWidget->setRowCount(m_fitData->paramNames.size());
 
@@ -218,15 +234,6 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 		ui.pbAdd->setVisible(false);
 		ui.pbRemove->setVisible(false);
 	}
-
-	ui.tableWidget->installEventFilter(this);
-
-	connect( ui.tableWidget, SIGNAL(cellChanged(int,int)), this, SLOT(changed()) );
-	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
-	connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
-// we don't need add/remove since parameter are detected automatically
-//	connect( ui.pbAdd, SIGNAL(clicked()), this, SLOT(addParameter()) );
-//	connect( ui.pbRemove, SIGNAL(clicked()), this, SLOT(removeParameter()) );
 }
 
 bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {

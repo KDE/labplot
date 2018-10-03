@@ -120,6 +120,10 @@ void XYFitCurveDock::setupGeneral() {
 
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height() * 2);
 
+	//TODO
+	//FitParametersWidget* fitParametersWidget = new FitParametersWidget(generalTab, &m_fitData);
+	//gridLayout->addWidget(fitParametersWidget, 20, 4, 1, 4);
+
 	//use white background in the preview label
 	QPalette p;
 	p.setColor(QPalette::Window, Qt::white);
@@ -463,10 +467,6 @@ void XYFitCurveDock::showFitOptions(bool checked) {
 		uiGeneralTab.lEquation->show();
 
 		modelTypeChanged(uiGeneralTab.cbModel->currentIndex());
-	//	uiGeneralTab.teEquation->show();
-	//	uiGeneralTab.teEquation->clear();
-	//	uiGeneralTab.teEquation->insertPlainText(m_fitData.model);
-	//	uiGeneralTab.lFuncPic->hide();
 	} else {
 		uiGeneralTab.lFit->setIcon(QIcon::fromTheme("arrow-right"));
 		uiGeneralTab.lCategory->hide();
