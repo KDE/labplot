@@ -109,6 +109,9 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 	connect( ui.cbBinningMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(binningMethodChanged(int)) );
 	connect(ui.sbBinCount, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &HistogramDock::binCountChanged);
 	connect(ui.leBinWidth, &QLineEdit::textChanged, this, &HistogramDock::binWidthChanged);
+	connect( ui.chkAutoBinRanges, &QCheckBox::stateChanged, this, &HistogramDock::autoBinRangesChanged );
+	connect( ui.leBinRangesMin, &QLineEdit::textChanged, this, &HistogramDock::binRangesMinChanged );
+	connect( ui.leBinRangesMin, &QLineEdit::textChanged, this, &HistogramDock::binRangesMinChanged );
 
 	//Line
 	connect(ui.cbLineType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HistogramDock::lineTypeChanged);
@@ -369,6 +372,9 @@ void HistogramDock::setCurves(QList<Histogram*> list){
 	ui.cbBinningMethod->setCurrentIndex(m_curve->binningMethod());
 	ui.sbBinCount->setValue(m_curve->binCount());
 	ui.leBinWidth->setText(QString::number(m_curve->binWidth()));
+	ui.chkAutoBinRanges->setChecked(m_curve->autoBinRanges());
+	ui.leBinRangesMin->setText( QString::number(m_curve->binRangesMin()) );
+	ui.leBinRangesMax->setText( QString::number(m_curve->binRangesMax()) );
 	ui.chkVisible->setChecked( m_curve->isVisible() );
 
 	KConfig config("", KConfig::SimpleConfig);
@@ -383,6 +389,9 @@ void HistogramDock::setCurves(QList<Histogram*> list){
 	connect(m_curve, &Histogram::binningMethodChanged, this, &HistogramDock::curveBinningMethodChanged);
 	connect(m_curve, &Histogram::binCountChanged, this, &HistogramDock::curveBinCountChanged);
 	connect(m_curve, &Histogram::binWidthChanged, this, &HistogramDock::curveBinWidthChanged);
+	connect(m_curve, &Histogram::autoBinRangesChanged, this, &HistogramDock::curveAutoBinRangesChanged);
+	connect(m_curve, &Histogram::binRangesMinChanged, this, &HistogramDock::curveBinRangesMinChanged);
+	connect(m_curve, &Histogram::binRangesMaxChanged, this, &HistogramDock::curveBinRangesMaxChanged);
 	connect(m_curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged(bool)));
 
 	//Line-tab
@@ -547,6 +556,36 @@ void HistogramDock::binWidthChanged() {
 	float width = ui.leBinWidth->text().toDouble();
 	for (auto* curve : m_curvesList)
 		curve->setBinWidth(width);
+}
+
+void HistogramDock::autoBinRangesChanged(int state) {
+	bool checked = (state==Qt::Checked);
+	ui.leBinRangesMin->setEnabled(!checked);
+	ui.leBinRangesMax->setEnabled(!checked);
+
+	if (m_initializing)
+		return;
+
+	for (auto* hist : m_curvesList)
+		hist->setAutoBinRanges(checked);
+}
+
+void HistogramDock::binRangesMinChanged(const QString& value) {
+	if (m_initializing)
+		return;
+
+	const double min = value.toDouble();
+	for (auto* hist : m_curvesList)
+		hist->setBinRangesMin(min);
+}
+
+void HistogramDock::binRangesMaxChanged(const QString& value) {
+	if (m_initializing)
+		return;
+
+	const double max = value.toDouble();
+	for (auto* hist : m_curvesList)
+		hist->setBinRangesMax(max);
 }
 
 //Line tab
@@ -1353,6 +1392,24 @@ void HistogramDock::curveBinCountChanged(int count) {
 void HistogramDock::curveBinWidthChanged(float width) {
 	m_initializing = true;
 	ui.leBinWidth->setText(QString::number(width));
+	m_initializing = false;
+}
+
+void HistogramDock::curveAutoBinRangesChanged(bool value) {
+	m_initializing = true;
+	ui.chkAutoBinRanges->setChecked(value);
+	m_initializing = false;
+}
+
+void HistogramDock::curveBinRangesMinChanged(double value) {
+	m_initializing = true;
+	ui.leBinRangesMin->setText( QString::number(value) );
+	m_initializing = false;
+}
+
+void HistogramDock::curveBinRangesMaxChanged(double value) {
+	m_initializing = true;
+	ui.leBinRangesMax->setText( QString::number(value) );
 	m_initializing = false;
 }
 

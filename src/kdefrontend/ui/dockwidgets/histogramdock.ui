@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>532</width>
-    <height>1071</height>
+    <width>527</width>
+    <height>1179</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -21,6 +21,159 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
+       <item row="17" column="2">
+        <widget class="QLineEdit" name="leBinWidth"/>
+       </item>
+       <item row="20" column="0">
+        <widget class="QLabel" name="lBinRangesMin">
+         <property name="text">
+          <string>Minimum:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="22" column="0">
+        <spacer name="verticalSpacerGeneral">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::MinimumExpanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>24</width>
+           <height>477</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lXColumn">
+         <property name="text">
+          <string>Data:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="lOrientation">
+         <property name="text">
+          <string>Orientation:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLineEdit" name="leName"/>
+       </item>
+       <item row="6" column="0">
+        <spacer name="verticalSpacerST_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>32</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="16" column="0">
+        <widget class="QLabel" name="lBinCount">
+         <property name="text">
+          <string>Bin Count:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <spacer name="verticalSpacerST">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>32</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="9" column="0">
+        <spacer name="verticalSpacerHT">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>32</width>
+           <height>30</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="15" column="0">
+        <widget class="QLabel" name="lBinningMethod">
+         <property name="text">
+          <string>Method:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="QComboBox" name="cbOrientation"/>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLineEdit" name="leComment"/>
+       </item>
+       <item row="14" column="0">
+        <widget class="QLabel" name="lBinning">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Binning</string>
+         </property>
+        </widget>
+       </item>
+       <item row="20" column="2">
+        <widget class="QLineEdit" name="leBinRangesMin"/>
+       </item>
+       <item row="21" column="0">
+        <widget class="QLabel" name="lBinRangesMax">
+         <property name="text">
+          <string>Maximum:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="21" column="2">
+        <widget class="QLineEdit" name="leBinRangesMax"/>
+       </item>
+       <item row="19" column="0">
+        <widget class="QLabel" name="label">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Bin Ranges</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="QComboBox" name="cbType"/>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="lName">
          <property name="text">
@@ -44,125 +197,31 @@
          </property>
         </spacer>
        </item>
-       <item row="0" column="2">
-        <widget class="QLineEdit" name="leName"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lComment">
+       <item row="23" column="0">
+        <widget class="QCheckBox" name="chkVisible">
          <property name="text">
-          <string>Comment:</string>
+          <string>visible</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
-        <widget class="QLineEdit" name="leComment"/>
-       </item>
-       <item row="2" column="0">
-        <spacer name="verticalSpacerST">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>32</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lXColumn">
+       <item row="17" column="0">
+        <widget class="QLabel" name="lBinWidth">
          <property name="text">
-          <string>Data:</string>
+          <string>Bin Width:</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <spacer name="verticalSpacerST_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>32</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="5" column="0">
+       <item row="7" column="0">
         <widget class="QLabel" name="lType">
          <property name="text">
           <string>Type:</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="2">
-        <widget class="QComboBox" name="cbType"/>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="lOrientation">
-         <property name="text">
-          <string>Orientation:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="QComboBox" name="cbOrientation"/>
-       </item>
-       <item row="7" column="0">
-        <spacer name="verticalSpacerHT">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>32</width>
-           <height>30</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="lBinning">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Binning</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="lBinningMethod">
-         <property name="text">
-          <string>Method:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="2">
+       <item row="15" column="2">
         <widget class="QComboBox" name="cbBinningMethod"/>
        </item>
-       <item row="10" column="0">
-        <widget class="QLabel" name="lBinCount">
-         <property name="text">
-          <string>Bin Count:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="2">
+       <item row="16" column="2">
         <widget class="QSpinBox" name="sbBinCount">
          <property name="minimum">
           <number>1</number>
@@ -175,36 +234,33 @@
          </property>
         </widget>
        </item>
-       <item row="11" column="0">
-        <widget class="QLabel" name="lBinWidth">
+       <item row="1" column="0">
+        <widget class="QLabel" name="lComment">
          <property name="text">
-          <string>Bin Width:</string>
+          <string>Comment:</string>
          </property>
         </widget>
        </item>
-       <item row="11" column="2">
-        <widget class="QLineEdit" name="leBinWidth"/>
-       </item>
-       <item row="12" column="0">
-        <spacer name="verticalSpacerGeneral">
+       <item row="18" column="0">
+        <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::MinimumExpanding</enum>
+          <enum>QSizePolicy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>24</width>
-           <height>477</height>
+           <width>20</width>
+           <height>18</height>
           </size>
          </property>
         </spacer>
        </item>
-       <item row="13" column="0">
-        <widget class="QCheckBox" name="chkVisible">
+       <item row="19" column="2">
+        <widget class="QCheckBox" name="chkAutoBinRanges">
          <property name="text">
-          <string>visible</string>
+          <string>Auto</string>
          </property>
         </widget>
        </item>
@@ -1016,7 +1072,7 @@
          <property name="toolTip">
           <string>Specify the name of the image file.</string>
          </property>
-         <property name="clearButtonEnabled">
+         <property name="clearButtonEnabled" stdset="0">
           <bool>true</bool>
          </property>
         </widget>
@@ -1354,9 +1410,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
   </customwidget>
   <customwidget>
    <class>KFontRequester</class>
@@ -1364,9 +1420,9 @@
    <header>kfontrequester.h</header>
   </customwidget>
   <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

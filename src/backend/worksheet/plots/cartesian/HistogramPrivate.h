@@ -95,6 +95,9 @@ public:
 	Histogram::BinningMethod binningMethod;
 	int binCount;
 	float binWidth;
+	bool autoBinRanges;
+	double binRangesMin;
+	double binRangesMax;
 
 	//line
 	Histogram::LineType lineType;

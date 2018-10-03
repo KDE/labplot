@@ -69,6 +69,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(Histogram::BinningMethod, binningMethod, BinningMethod)
 	BASIC_D_ACCESSOR_DECL(int, binCount, BinCount)
 	BASIC_D_ACCESSOR_DECL(float, binWidth, BinWidth)
+	BASIC_D_ACCESSOR_DECL(bool, autoBinRanges, AutoBinRanges)
+	BASIC_D_ACCESSOR_DECL(double, binRangesMin, BinRangesMin)
+	BASIC_D_ACCESSOR_DECL(double, binRangesMax, BinRangesMax)
 
 	BASIC_D_ACCESSOR_DECL(float, xMin, XMin)
 	BASIC_D_ACCESSOR_DECL(float, xMax, XMax)
@@ -129,10 +132,10 @@ public:
 
 public slots:
 	void retransform() override;
+	void recalcHistogram();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 private slots:
-	void recalcHistogram();
 	void updateValues();
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 	void valuesColumnAboutToBeRemoved(const AbstractAspect*);
@@ -161,6 +164,9 @@ signals:
 	void binningMethodChanged(Histogram::BinningMethod);
 	void binCountChanged(int);
 	void binWidthChanged(float);
+	void autoBinRangesChanged(bool);
+	void binRangesMinChanged(bool);
+	void binRangesMaxChanged(bool);
 
 	//Symbol-Tab
 	void symbolsStyleChanged(Symbol::Style);

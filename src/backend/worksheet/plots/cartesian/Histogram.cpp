@@ -83,6 +83,7 @@ void Histogram::init() {
 	d->binningMethod = (Histogram::BinningMethod) group.readEntry("BinningMethod", (int)Histogram::SquareRoot);
 	d->binCount = group.readEntry("BinCount", 10);
 	d->binWidth = group.readEntry("BinWidth", 1.0f);
+	d->autoBinRanges = group.readEntry("AutoBinRanges", true);
 
 	d->lineType = (Histogram::LineType) group.readEntry("LineType", (int)Histogram::Bars);
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine) );
@@ -183,6 +184,9 @@ BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramOrientation, orientati
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::BinningMethod, binningMethod, binningMethod)
 BASIC_SHARED_D_READER_IMPL(Histogram, int, binCount, binCount)
 BASIC_SHARED_D_READER_IMPL(Histogram, float, binWidth, binWidth)
+BASIC_SHARED_D_READER_IMPL(Histogram, bool, autoBinRanges, autoBinRanges)
+BASIC_SHARED_D_READER_IMPL(Histogram, double, binRangesMin, binRangesMin)
+BASIC_SHARED_D_READER_IMPL(Histogram, double, binRangesMax, binRangesMax)
 BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, dataColumn, dataColumn)
 
 QString& Histogram::dataColumnPath() const {
@@ -307,6 +311,62 @@ void Histogram::setBinWidth(float width) {
 	Q_D(Histogram);
 	if (width != d->binWidth)
 		exec(new HistogramSetBinWidthCmd(d, width, ki18n("%1: set bin width")));
+}
+
+class HistogramSetAutoBinRangesCmd : public QUndoCommand {
+public:
+	HistogramSetAutoBinRangesCmd(HistogramPrivate* private_obj, bool autoBinRanges) :
+		m_private(private_obj), m_autoBinRanges(autoBinRanges), m_autoBinRangesOld(false), m_binRangesMinOld(0.0), m_binRangesMaxOld(0.0) {
+		setText(i18n("%1: change auto bin ranges", m_private->name()));
+	};
+
+	void redo() override {
+		m_autoBinRangesOld = m_private->autoBinRanges;
+		if (m_autoBinRanges) {
+			m_binRangesMinOld = m_private->binRangesMin;
+			m_binRangesMaxOld = m_private->binRangesMax;
+			m_private->q->recalcHistogram();
+		}
+		m_private->autoBinRanges = m_autoBinRanges;
+		emit m_private->q->autoBinRangesChanged(m_autoBinRanges);
+	};
+
+	void undo() override {
+		if (!m_autoBinRangesOld) {
+			m_private->binRangesMin = m_binRangesMinOld;
+			m_private->binRangesMax = m_binRangesMaxOld;
+			m_private->recalcHistogram();
+		}
+		m_private->autoBinRanges = m_autoBinRangesOld;
+		emit m_private->q->autoBinRangesChanged(m_autoBinRangesOld);
+	}
+
+private:
+	HistogramPrivate* m_private;
+	bool m_autoBinRanges;
+	bool m_autoBinRangesOld;
+	double m_binRangesMinOld;
+	double m_binRangesMaxOld;
+};
+
+void Histogram::setAutoBinRanges(bool autoBinRanges) {
+	Q_D(Histogram);
+	if (autoBinRanges != d->autoBinRanges)
+		exec(new HistogramSetAutoBinRangesCmd(d, autoBinRanges));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinRangesMin, double, binRangesMin, recalcHistogram)
+void Histogram::setBinRangesMin(double binRangesMin) {
+	Q_D(Histogram);
+	if (binRangesMin != d->binRangesMin)
+		exec(new HistogramSetBinRangesMinCmd(d, binRangesMin, ki18n("%1: set bin ranges start")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinRangesMax, double, binRangesMax, recalcHistogram)
+void Histogram::setBinRangesMax(double binRangesMax) {
+	Q_D(Histogram);
+	if (binRangesMax != d->binRangesMax)
+		exec(new HistogramSetBinRangesMaxCmd(d, binRangesMax, ki18n("%1: set bin ranges end")));
 }
 
 //Line
@@ -769,10 +829,22 @@ void HistogramPrivate::recalcHistogram() {
 			++count;
 	}
 
-	//TODO: support different column modes
+	//calculate the number of bins
 	if (count > 0) {
-		const double min = dataColumn->minimum();
-		const double max = dataColumn->maximum();
+		double min, max = 0.0;
+		if (autoBinRanges) {
+			min = dataColumn->minimum();
+			max = dataColumn->maximum();
+		} else {
+			if (binRangesMin >= binRangesMax) {
+				emit q->dataChanged();
+				return;
+			}
+
+			min = binRangesMin;
+			max = binRangesMax;
+		}
+
 		switch (binningMethod) {
 		case Histogram::ByNumber:
 			m_bins = (size_t)binCount;
@@ -802,8 +874,11 @@ void HistogramPrivate::recalcHistogram() {
 		}
 		}
 
+		DEBUG("min " << min);
+		DEBUG("max " << max);
 		DEBUG("number of bins " << m_bins);
 
+		//calculate the histogram
 		m_histogram = gsl_histogram_alloc (m_bins);
 		gsl_histogram_set_ranges_uniform (m_histogram, min, max+1);
 
@@ -1519,6 +1594,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "binningMethod", QString::number(d->binningMethod) );
 	writer->writeAttribute( "binCount", QString::number(d->binCount));
 	writer->writeAttribute( "binWidth", QString::number(d->binWidth));
+	writer->writeAttribute( "autoBinRanges", QString::number(d->autoBinRanges));
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 

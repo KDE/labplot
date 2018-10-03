@@ -85,6 +85,9 @@ private slots:
 	void binningMethodChanged(int);
 	void binCountChanged(int);
 	void binWidthChanged();
+	void autoBinRangesChanged(int);
+	void binRangesMinChanged(const QString&);
+	void binRangesMaxChanged(const QString&);
 
 	//Lines-Tab
 	void lineTypeChanged(int);
@@ -146,6 +149,9 @@ private slots:
 	void curveBinningMethodChanged(Histogram::BinningMethod);
 	void curveBinCountChanged(int);
 	void curveBinWidthChanged(float);
+	void curveAutoBinRangesChanged(bool);
+	void curveBinRangesMinChanged(double);
+	void curveBinRangesMaxChanged(double);
 	void curveVisibilityChanged(bool);
 
 	//Line-tab
