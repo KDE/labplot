@@ -112,8 +112,10 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.cbXWeight->setCurrentIndex(nsl_fit_weight_no);
 	uiGeneralTab.cbYWeight->setCurrentIndex(nsl_fit_weight_no);
 
-	// hide weights per default
-	showWeights(false);
+	// show data options per default
+	showDataOptions(true);
+	// hide weights options per default
+	showWeightsOptions(false);
 
 	for(int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
 		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
@@ -171,7 +173,8 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)));
 	connect(uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)));
 
-	connect(uiGeneralTab.lWeights, SIGNAL(clicked(bool)), this, SLOT(showWeights(bool)));
+	connect(uiGeneralTab.lData, SIGNAL(clicked(bool)), this, SLOT(showDataOptions(bool)));
+	connect(uiGeneralTab.lWeights, SIGNAL(clicked(bool)), this, SLOT(showWeightsOptions(bool)));
 	connect(uiGeneralTab.cbXWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(xWeightChanged(int)));
 	connect(uiGeneralTab.cbYWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(yWeightChanged(int)));
 	connect(uiGeneralTab.cbCategory, SIGNAL(currentIndexChanged(int)), this, SLOT(categoryChanged(int)));
@@ -404,8 +407,27 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYFitCurve*>(curve)->setYErrorColumn(column);
 }
 
-void XYFitCurveDock::showWeights(bool checked) {
-	DEBUG("XYFitCurveDock::showWeights() checked = " << checked);
+void XYFitCurveDock::showDataOptions(bool checked) {
+	if (checked) {
+		uiGeneralTab.lData->setIcon(QIcon::fromTheme("arrow-down"));
+		uiGeneralTab.lDataSourceType->show();
+		uiGeneralTab.cbDataSourceType->show();
+		// select options for current source type
+		dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
+	} else {
+		uiGeneralTab.lData->setIcon(QIcon::fromTheme("arrow-right"));
+		uiGeneralTab.lDataSourceType->hide();
+		uiGeneralTab.cbDataSourceType->hide();
+		uiGeneralTab.lXColumn->hide();
+		cbXDataColumn->hide();
+		uiGeneralTab.lYColumn->hide();
+		cbYDataColumn->hide();
+		uiGeneralTab.lDataSourceCurve->hide();
+		cbDataSourceCurve->hide();
+	}
+}
+
+void XYFitCurveDock::showWeightsOptions(bool checked) {
 	if (checked) {
 		uiGeneralTab.lWeights->setIcon(QIcon::fromTheme("arrow-down"));
 		uiGeneralTab.lXWeight->show();

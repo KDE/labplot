@@ -71,7 +71,6 @@ private slots:
 	void commentChanged();
 	void dataSourceTypeChanged(int);
 	void dataSourceCurveChanged(const QModelIndex&);
-	void showWeights(bool);
 	void xWeightChanged(int);
 	void yWeightChanged(int);
 	void categoryChanged(int);
@@ -80,6 +79,9 @@ private slots:
 	void yDataColumnChanged(const QModelIndex&);
 	void xErrorColumnChanged(const QModelIndex&);
 	void yErrorColumnChanged(const QModelIndex&);
+
+	void showDataOptions(bool);
+	void showWeightsOptions(bool);
 
 	void showConstants();
 	void showFunctions();
