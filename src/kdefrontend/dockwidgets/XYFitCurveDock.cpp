@@ -112,11 +112,6 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.cbXWeight->setCurrentIndex(nsl_fit_weight_no);
 	uiGeneralTab.cbYWeight->setCurrentIndex(nsl_fit_weight_no);
 
-	// show data options per default
-	showDataOptions(true);
-	// hide weights options per default
-	showWeightsOptions(false);
-
 	for(int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
 		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
 
@@ -141,6 +136,12 @@ void XYFitCurveDock::setupGeneral() {
 
 	//don't allow word wrapping in the log-table for the multi-line iterations string
 	uiGeneralTab.twLog->setWordWrap(false);
+
+	// show these options per default
+	showDataOptions(true);
+	showFitOptions(true);
+	// hide these options per default
+	showWeightsOptions(false);
 
 	// context menus
 	uiGeneralTab.twParameters->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -186,6 +187,7 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.pbParameters, SIGNAL(clicked()), this, SLOT(showParameters()));
 	connect(uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()));
 	connect(uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()));
+	connect(uiGeneralTab.lFit, SIGNAL(clicked(bool)), this, SLOT(showFitOptions(bool)));
 
 	connect(cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)));
 	connect(cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)));
@@ -298,7 +300,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	initTabs();
 
 	m_initializing = false;
-	// enable/disable "recalculate"
+
 	enableRecalculate();
 }
 
@@ -451,6 +453,36 @@ void XYFitCurveDock::showWeightsOptions(bool checked) {
 	}
 }
 
+void XYFitCurveDock::showFitOptions(bool checked) {
+	if (checked) {
+		uiGeneralTab.lFit->setIcon(QIcon::fromTheme("arrow-down"));
+		uiGeneralTab.lCategory->show();
+		uiGeneralTab.cbCategory->show();
+		uiGeneralTab.lModel->show();
+		uiGeneralTab.cbModel->show();
+		uiGeneralTab.lEquation->show();
+
+		modelTypeChanged(uiGeneralTab.cbModel->currentIndex());
+	//	uiGeneralTab.teEquation->show();
+	//	uiGeneralTab.teEquation->clear();
+	//	uiGeneralTab.teEquation->insertPlainText(m_fitData.model);
+	//	uiGeneralTab.lFuncPic->hide();
+	} else {
+		uiGeneralTab.lFit->setIcon(QIcon::fromTheme("arrow-right"));
+		uiGeneralTab.lCategory->hide();
+		uiGeneralTab.cbCategory->hide();
+		uiGeneralTab.lModel->hide();
+		uiGeneralTab.cbModel->hide();
+		uiGeneralTab.lDegree->hide();
+		uiGeneralTab.sbDegree->hide();
+		uiGeneralTab.lEquation->hide();
+		uiGeneralTab.lFuncPic->hide();
+		uiGeneralTab.teEquation->hide();
+		uiGeneralTab.tbFunctions->hide();
+		uiGeneralTab.tbConstants->hide();
+	}
+}
+
 void XYFitCurveDock::xWeightChanged(int index) {
 	DEBUG("xWeightChanged() weight = " << nsl_fit_weight_type_name[index]);
 
@@ -566,9 +598,8 @@ void XYFitCurveDock::categoryChanged(int index) {
 	}
 
 	//show the fit-model for the currently selected default (first) fit-model
-	m_fitData.modelType = 0;
-	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
-	modelTypeChanged(m_fitData.modelType);
+	uiGeneralTab.cbModel->setCurrentIndex(0);
+	uiGeneralTab.sbDegree->setValue(1);
 
 	m_initializing = false;
 	enableRecalculate();
@@ -579,49 +610,45 @@ void XYFitCurveDock::categoryChanged(int index) {
  * Updates the model type dependent widgets in the general-tab and calls \c updateModelEquation() to update the preview pixmap.
  */
 void XYFitCurveDock::modelTypeChanged(int index) {
-	DEBUG("modelTypeChanged() type = " << index << ", initializing = " << m_initializing);
+	DEBUG("modelTypeChanged() type = " << index << ", initializing = " << m_initializing << ", current type = " << m_fitData.modelType);
 	// leave if there is no selection
 	if(index == -1)
 		return;
 
-	unsigned int type = 0;
 	bool custom = false;
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
 		custom = true;
-	else
-		type = (unsigned int)index;
-	m_fitData.modelType = type;
 	uiGeneralTab.teEquation->setReadOnly(!custom);
+	uiGeneralTab.lModel->setVisible(!custom);
+	uiGeneralTab.cbModel->setVisible(!custom);
 	uiGeneralTab.tbFunctions->setVisible(custom);
 	uiGeneralTab.tbConstants->setVisible(custom);
 
 	// default settings
 	uiGeneralTab.lDegree->setText(i18n("Degree:"));
-	uiGeneralTab.sbDegree->setValue(1);
+	if (m_fitData.modelType != index)
+		uiGeneralTab.sbDegree->setValue(1);
 
 	// TODO: reset start values
 
 	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic:
-		switch (type) {
+		switch (index) {
 		case nsl_fit_model_polynomial:
 		case nsl_fit_model_fourier:
 			uiGeneralTab.lDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setMaximum(10);
-			uiGeneralTab.sbDegree->setValue(1);
 			break;
 		case nsl_fit_model_power:
 			uiGeneralTab.lDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setMaximum(2);
-			uiGeneralTab.sbDegree->setValue(1);
 			break;
 		case nsl_fit_model_exponential:
 			uiGeneralTab.lDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setMaximum(10);
-			uiGeneralTab.sbDegree->setValue(1);
 			break;
 		default:
 			uiGeneralTab.lDegree->setVisible(false);
@@ -633,7 +660,6 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		uiGeneralTab.lDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setMaximum(9);
-		uiGeneralTab.sbDegree->setValue(1);
 		break;
 	case nsl_fit_model_growth:
 	case nsl_fit_model_distribution:
@@ -642,6 +668,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		uiGeneralTab.sbDegree->setVisible(false);
 	}
 
+	m_fitData.modelType = index;
 	this->updateModelEquation();
 }
 
@@ -650,7 +677,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
  * Called when the model type or the degree of the model were changed.
  */
 void XYFitCurveDock::updateModelEquation() {
-	DEBUG("XYFitCurveDock::updateModelEquation()");
+
 	if (m_fitData.modelCategory == nsl_fit_model_custom) {
 		DEBUG("XYFitCurveDock::updateModelEquation() category = nsl_fit_model_custom, type = " << m_fitData.modelType);
 	} else {
@@ -707,10 +734,9 @@ void XYFitCurveDock::updateModelEquation() {
 			uiGeneralTab.lEquation->setText(QLatin1String("f(x)/A ="));
 		break;
 	case nsl_fit_model_custom:
-		uiGeneralTab.teEquation->show();
-		uiGeneralTab.teEquation->clear();
-		uiGeneralTab.teEquation->insertPlainText(m_fitData.model);
 		uiGeneralTab.lFuncPic->hide();
+		uiGeneralTab.teEquation->show();
+		uiGeneralTab.teEquation->setPlainText(m_fitData.model);
 	}
 
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {

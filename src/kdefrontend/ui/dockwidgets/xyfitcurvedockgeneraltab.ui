@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>919</width>
-    <height>1106</height>
+    <height>1138</height>
    </rect>
   </property>
   <property name="autoFillBackground">
@@ -55,13 +55,6 @@
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="19" column="4" colspan="4">
-    <widget class="Line" name="line_3">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
    </item>
    <item row="6" column="0" colspan="2">
     <widget class="QLabel" name="lDataSourceCurve">
@@ -543,16 +536,6 @@
      </property>
     </spacer>
    </item>
-   <item row="21" column="5">
-    <widget class="QPushButton" name="pbParameters">
-     <property name="toolTip">
-      <string>Specify parameters and their properties</string>
-     </property>
-     <property name="text">
-      <string>Parameters</string>
-     </property>
-    </widget>
-   </item>
    <item row="17" column="0">
     <widget class="QLabel" name="lDegree">
      <property name="text">
@@ -575,19 +558,6 @@
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="14" column="0">
-    <widget class="QLabel" name="lFit">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Fit</string>
-     </property>
-    </widget>
    </item>
    <item row="18" column="4" colspan="4">
     <widget class="QFrame" name="frameEquation">
@@ -775,34 +745,6 @@
      </property>
     </widget>
    </item>
-   <item row="20" column="4" rowspan="2">
-    <widget class="QFrame" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <property name="margin">
-       <number>0</number>
-      </property>
-      <item row="0" column="0">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>41</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="16" column="0">
     <widget class="QLabel" name="lModel">
      <property name="text">
@@ -908,7 +850,9 @@
       <string>Data</string>
      </property>
      <property name="icon">
-      <iconset theme="arrow-down"/>
+      <iconset theme="arrow-down">
+       <normaloff/>
+      </iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -930,6 +874,71 @@
       <string>Options</string>
      </property>
     </widget>
+   </item>
+   <item row="14" column="0">
+    <widget class="QPushButton" name="lFit">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Fit</string>
+     </property>
+     <property name="icon">
+      <iconset theme="arrow-down">
+       <normaloff/>
+      </iconset>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="20" column="4" rowspan="2">
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <property name="margin">
+       <number>0</number>
+      </property>
+     </layout>
+    </widget>
+   </item>
+   <item row="19" column="0">
+    <widget class="QPushButton" name="pbParameters">
+     <property name="toolTip">
+      <string>Specify parameters and their properties</string>
+     </property>
+     <property name="text">
+      <string>Parameters</string>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="6">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>41</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
