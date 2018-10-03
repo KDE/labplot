@@ -835,19 +835,22 @@ void HistogramPrivate::recalcHistogram() {
 
 	//calculate the number of bins
 	if (count > 0) {
-		double min, max = 0.0;
 		if (autoBinRanges) {
-			min = dataColumn->minimum();
-			max = dataColumn->maximum();
+			if (binRangesMin != dataColumn->minimum()) {
+				binRangesMin = dataColumn->minimum();
+				emit q->binRangesMinChanged(binRangesMin);
+			}
+
+			if (binRangesMax != dataColumn->maximum()) {
+				binRangesMax = dataColumn->maximum();
+				emit q->binRangesMaxChanged(binRangesMax);
+			}
 		} else {
-			DEBUG("ranges " << binRangesMax << "  " << binRangesMin);
 			if (binRangesMin >= binRangesMax) {
 				emit q->dataChanged();
 				return;
 			}
 
-			min = binRangesMin;
-			max = binRangesMax;
 		}
 
 		switch (binningMethod) {
@@ -855,7 +858,7 @@ void HistogramPrivate::recalcHistogram() {
 			m_bins = (size_t)binCount;
 			break;
 		case Histogram::ByWidth:
-			m_bins = (size_t) (max-min)/binWidth;
+			m_bins = (size_t) (binRangesMax-binRangesMin)/binWidth;
 			break;
 		case Histogram::SquareRoot:
 			m_bins = (size_t)sqrt(count);
@@ -874,18 +877,18 @@ void HistogramPrivate::recalcHistogram() {
 		case Histogram::Scott: {
 			const double sigma = dynamic_cast<const Column*>(dataColumn)->statistics().standardDeviation;
 			const double width = 3.5*sigma/cbrt(count);
-			m_bins = (size_t)(max - min)/width;
+			m_bins = (size_t)(binRangesMax - binRangesMin)/width;
 			break;
 		}
 		}
 
-		DEBUG("min " << min);
-		DEBUG("max " << max);
+		DEBUG("min " << binRangesMin);
+		DEBUG("max " << binRangesMax);
 		DEBUG("number of bins " << m_bins);
 
 		//calculate the histogram
 		m_histogram = gsl_histogram_alloc (m_bins);
-		gsl_histogram_set_ranges_uniform (m_histogram, min, max+1);
+		gsl_histogram_set_ranges_uniform (m_histogram, binRangesMin, binRangesMax+1);
 
 		for (int row = 0; row < dataColumn->rowCount(); ++row) {
 			if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) )
@@ -1599,7 +1602,9 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "binningMethod", QString::number(d->binningMethod) );
 	writer->writeAttribute( "binCount", QString::number(d->binCount));
 	writer->writeAttribute( "binWidth", QString::number(d->binWidth));
-	writer->writeAttribute( "autoBinRanges", QString::number(d->autoBinRanges));
+	writer->writeAttribute( "autoBinRanges", QString::number(d->autoBinRanges) );
+	writer->writeAttribute( "binRangesMin", QString::number(d->binRangesMin) );
+	writer->writeAttribute( "binRangesMax", QString::number(d->binRangesMax) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 
@@ -1685,6 +1690,9 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("binningMethod", binningMethod, Histogram::BinningMethod);
 			READ_INT_VALUE("binCount", binCount, int);
 			READ_DOUBLE_VALUE("binWidth", binWidth);
+			READ_INT_VALUE("autoBinRanges", autoBinRanges, bool);
+			READ_DOUBLE_VALUE("binRangesMin", binRangesMin);
+			READ_DOUBLE_VALUE("binRangesMax", binRangesMax);
 
 			str = attribs.value("visible").toString();
 			if(str.isEmpty())
