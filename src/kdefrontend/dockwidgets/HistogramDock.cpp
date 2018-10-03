@@ -111,7 +111,7 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 	connect(ui.leBinWidth, &QLineEdit::textChanged, this, &HistogramDock::binWidthChanged);
 	connect( ui.chkAutoBinRanges, &QCheckBox::stateChanged, this, &HistogramDock::autoBinRangesChanged );
 	connect( ui.leBinRangesMin, &QLineEdit::textChanged, this, &HistogramDock::binRangesMinChanged );
-	connect( ui.leBinRangesMin, &QLineEdit::textChanged, this, &HistogramDock::binRangesMinChanged );
+	connect( ui.leBinRangesMax, &QLineEdit::textChanged, this, &HistogramDock::binRangesMaxChanged );
 
 	//Line
 	connect(ui.cbLineType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HistogramDock::lineTypeChanged);

@@ -726,7 +726,7 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() {
 double HistogramPrivate::getXMinimum() {
 	switch(orientation) {
 		case Histogram::Vertical: {
-			return dataColumn->minimum();
+			return autoBinRanges ? dataColumn->minimum() : binRangesMin;
 		}
 		case Histogram::Horizontal: {
 			return 0;
@@ -738,7 +738,7 @@ double HistogramPrivate::getXMinimum() {
 double HistogramPrivate::getXMaximum() {
 	switch(orientation) {
 		case Histogram::Vertical: {
-			return dataColumn->maximum();
+			return autoBinRanges ? dataColumn->maximum() : binRangesMax;
 		}
 		case Histogram::Horizontal: {
 			return getMaximumOccuranceofHistogram();
@@ -753,7 +753,7 @@ double HistogramPrivate::getYMinimum() {
 			return 0;
 		}
 		case Histogram::Horizontal: {
-			return dataColumn->minimum();
+			return autoBinRanges ? dataColumn->minimum() : binRangesMin;
 		}
 	}
 	return INFINITY;
@@ -765,7 +765,7 @@ double HistogramPrivate::getYMaximum() {
 			return getMaximumOccuranceofHistogram();
 		}
 		case Histogram::Horizontal: {
-			return dataColumn->maximum();
+			return autoBinRanges ? dataColumn->maximum() : binRangesMax;
 		}
 	}
 	return INFINITY;
@@ -809,18 +809,22 @@ void HistogramPrivate::retransform() {
 		return;
 	}
 
-	m_suppressRecalc = true;
-	updateLines();
-	updateSymbols();
-	updateValues();
-	m_suppressRecalc = false;
+	if (m_histogram) {
+		m_suppressRecalc = true;
+		updateLines();
+		updateSymbols();
+		updateValues();
+		m_suppressRecalc = false;
+	}
 }
 
 void HistogramPrivate::recalcHistogram() {
 	PERFTRACE(name().toLatin1() + ", HistogramPrivate::recalcHistogram()");
 
-	if (m_histogram)
+	if (m_histogram) {
 		gsl_histogram_free(m_histogram);
+		m_histogram = nullptr;
+	}
 
 	//calculate the number of valid data points
 	int count = 0;
@@ -836,6 +840,7 @@ void HistogramPrivate::recalcHistogram() {
 			min = dataColumn->minimum();
 			max = dataColumn->maximum();
 		} else {
+			DEBUG("ranges " << binRangesMax << "  " << binRangesMin);
 			if (binRangesMin >= binRangesMax) {
 				emit q->dataChanged();
 				return;
@@ -940,8 +945,8 @@ void HistogramPrivate::updateLines() {
 }
 
 void HistogramPrivate::verticalHistogram() {
-	const double min = dataColumn->minimum();
-	const double max = dataColumn->maximum();
+	const double min = gsl_histogram_min(m_histogram);
+	const double max = gsl_histogram_max(m_histogram);
 	const double width = (max - min)/m_bins;
 	double value = 0.;
 	if (lineType == Histogram::Bars) {
@@ -992,8 +997,8 @@ void HistogramPrivate::verticalHistogram() {
 }
 
 void HistogramPrivate::horizontalHistogram() {
-	const double min = dataColumn->minimum();
-	const double max = dataColumn->maximum();
+	const double min = gsl_histogram_min(m_histogram);
+	const double max = gsl_histogram_max(m_histogram);
 	const double width = (max - min)/m_bins;
 	double value = 0.;
 	if (lineType == Histogram::Bars) {
