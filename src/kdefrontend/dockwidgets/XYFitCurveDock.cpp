@@ -112,6 +112,9 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.cbXWeight->setCurrentIndex(nsl_fit_weight_no);
 	uiGeneralTab.cbYWeight->setCurrentIndex(nsl_fit_weight_no);
 
+	// hide weights per default
+	showWeights(false);
+
 	for(int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
 		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
 
@@ -168,6 +171,7 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)));
 	connect(uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)));
 
+	connect(uiGeneralTab.lWeights, SIGNAL(clicked(bool)), this, SLOT(showWeights(bool)));
 	connect(uiGeneralTab.cbXWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(xWeightChanged(int)));
 	connect(uiGeneralTab.cbYWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(yWeightChanged(int)));
 	connect(uiGeneralTab.cbCategory, SIGNAL(currentIndexChanged(int)), this, SLOT(categoryChanged(int)));
@@ -398,6 +402,31 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYErrorColumn(column);
+}
+
+void XYFitCurveDock::showWeights(bool checked) {
+	DEBUG("XYFitCurveDock::showWeights() checked = " << checked);
+	if (checked) {
+		uiGeneralTab.lWeights->setIcon(QIcon::fromTheme("arrow-down"));
+		uiGeneralTab.lXWeight->show();
+		uiGeneralTab.cbXWeight->show();
+		uiGeneralTab.lXErrorCol->show();
+		cbXErrorColumn->show();
+		uiGeneralTab.lYWeight->show();
+		uiGeneralTab.cbYWeight->show();
+		uiGeneralTab.lYErrorCol->show();
+		cbYErrorColumn->show();
+	} else {
+		uiGeneralTab.lWeights->setIcon(QIcon::fromTheme("arrow-right"));
+		uiGeneralTab.lXWeight->hide();
+		uiGeneralTab.cbXWeight->hide();
+		uiGeneralTab.lXErrorCol->hide();
+		cbXErrorColumn->hide();
+		uiGeneralTab.lYWeight->hide();
+		uiGeneralTab.cbYWeight->hide();
+		uiGeneralTab.lYErrorCol->hide();
+		cbYErrorColumn->hide();
+	}
 }
 
 void XYFitCurveDock::xWeightChanged(int index) {
