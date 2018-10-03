@@ -76,16 +76,16 @@ private slots:
 	void rangeLastChanged(const QString&);
 
 	void autoScaleXChanged(int);
-	void xMinChanged();
-	void xMaxChanged();
+	void xMinChanged(const QString&);
+	void xMaxChanged(const QString&);
 	void xMinDateTimeChanged(const QDateTime&);
 	void xMaxDateTimeChanged(const QDateTime&);
 	void xRangeFormatChanged(int);
 	void xScaleChanged(int);
 
 	void autoScaleYChanged(int);
-	void yMinChanged();
-	void yMaxChanged();
+	void yMinChanged(const QString&);
+	void yMaxChanged(const QString&);
 	void yMinDateTimeChanged(const QDateTime&);
 	void yMaxDateTimeChanged(const QDateTime&);
 	void yRangeFormatChanged(int);

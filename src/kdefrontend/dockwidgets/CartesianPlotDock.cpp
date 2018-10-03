@@ -124,17 +124,17 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : QWidget(parent),
 	connect( ui.leRangeLast, SIGNAL(textChanged(QString)), this, SLOT(rangeLastChanged(QString)) );
 	connect( rangeButtonsGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(rangeTypeChanged()) );
 
-	connect( ui.chkAutoScaleX, SIGNAL(stateChanged(int)), this, SLOT(autoScaleXChanged(int)) );
-	connect( ui.leXMin, SIGNAL(textChanged(QString)), this, SLOT(xMinChanged()) );
-	connect( ui.leXMax, SIGNAL(textChanged(QString)), this, SLOT(xMaxChanged()) );
+	connect(ui.chkAutoScaleX, &QCheckBox::stateChanged, this, &CartesianPlotDock::autoScaleXChanged);
+	connect(ui.leXMin, &QLineEdit::textChanged, this, &CartesianPlotDock::xMinChanged);
+	connect(ui.leXMax, &QLineEdit::textChanged, this, &CartesianPlotDock::xMaxChanged);
 	connect(ui.dateTimeEditXMin, &QDateTimeEdit::dateTimeChanged, this, &CartesianPlotDock::xMinDateTimeChanged);
 	connect(ui.dateTimeEditXMax, &QDateTimeEdit::dateTimeChanged, this, &CartesianPlotDock::xMaxDateTimeChanged);
 	connect( ui.cbXScaling, SIGNAL(currentIndexChanged(int)), this, SLOT(xScaleChanged(int)) );
 	connect(ui.cbXRangeFormat, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::xRangeFormatChanged);
 
-	connect( ui.chkAutoScaleY, SIGNAL(stateChanged(int)), this, SLOT(autoScaleYChanged(int)) );
-	connect( ui.leYMin, SIGNAL(textChanged(QString)), this, SLOT(yMinChanged()) );
-	connect( ui.leYMax, SIGNAL(textChanged(QString)), this, SLOT(yMaxChanged()) );
+	connect(ui.chkAutoScaleY, &QCheckBox::stateChanged, this, &CartesianPlotDock::autoScaleYChanged);
+	connect(ui.leYMin, &QLineEdit::textChanged, this, &CartesianPlotDock::yMinChanged);
+	connect(ui.leYMax, &QLineEdit::textChanged, this, &CartesianPlotDock::yMaxChanged);
 	connect(ui.dateTimeEditYMin, &QDateTimeEdit::dateTimeChanged, this, &CartesianPlotDock::yMinDateTimeChanged);
 	connect(ui.dateTimeEditYMax, &QDateTimeEdit::dateTimeChanged, this, &CartesianPlotDock::yMaxDateTimeChanged);
 	connect( ui.cbYScaling, SIGNAL(currentIndexChanged(int)), this, SLOT(yScaleChanged(int)) );
@@ -515,22 +515,22 @@ void CartesianPlotDock::autoScaleXChanged(int state) {
 		plot->setAutoScaleX(checked);
 }
 
-void CartesianPlotDock::xMinChanged() {
+void CartesianPlotDock::xMinChanged(const QString& value) {
 	if (m_initializing)
 		return;
 
-	float value = ui.leXMin->text().toDouble();
+	const float min = value.toDouble();
 	for (auto* plot: m_plotList)
-		plot->setXMin(value);
+		plot->setXMin(min);
 }
 
-void CartesianPlotDock::xMaxChanged() {
+void CartesianPlotDock::xMaxChanged(const QString& value) {
 	if (m_initializing)
 		return;
 
-	float value = ui.leXMax->text().toDouble();
+	const float max = value.toDouble();
 	for (auto* plot: m_plotList)
-		plot->setXMax(value);
+		plot->setXMax(max);
 }
 
 void CartesianPlotDock::xMinDateTimeChanged(const QDateTime& dateTime) {
@@ -598,22 +598,22 @@ void CartesianPlotDock::autoScaleYChanged(int state) {
 		plot->setAutoScaleY(checked);
 }
 
-void CartesianPlotDock::yMinChanged() {
+void CartesianPlotDock::yMinChanged(const QString& value) {
 	if (m_initializing)
 		return;
 
-	float value = ui.leYMin->text().toDouble();
+	const float min = value.toDouble();
 	for (auto* plot: m_plotList)
-		plot->setYMin(value);
+		plot->setYMin(min);
 }
 
-void CartesianPlotDock::yMaxChanged() {
+void CartesianPlotDock::yMaxChanged(const QString& value) {
 	if (m_initializing)
 		return;
 
-	float value = ui.leYMax->text().toDouble();
+	const float max = value.toDouble();
 	for (auto* plot: m_plotList)
-		plot->setYMax(value);
+		plot->setYMax(max);
 }
 
 void CartesianPlotDock::yMinDateTimeChanged(const QDateTime& dateTime) {
