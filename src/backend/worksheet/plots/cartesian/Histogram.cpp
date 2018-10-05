@@ -809,13 +809,11 @@ void HistogramPrivate::retransform() {
 		return;
 	}
 
-	if (m_histogram) {
-		m_suppressRecalc = true;
-		updateLines();
-		updateSymbols();
-		updateValues();
-		m_suppressRecalc = false;
-	}
+	m_suppressRecalc = true;
+	updateLines();
+	updateSymbols();
+	updateValues();
+	m_suppressRecalc = false;
 }
 
 void HistogramPrivate::recalcHistogram() {
@@ -877,6 +875,7 @@ void HistogramPrivate::recalcHistogram() {
 		case Histogram::Scott: {
 			const double sigma = dynamic_cast<const Column*>(dataColumn)->statistics().standardDeviation;
 			const double width = 3.5*sigma/cbrt(count);
+			DEBUG("blablub " << sigma << "  " << width << "  " <<(binRangesMax - binRangesMin)/width);
 			m_bins = (size_t)(binRangesMax - binRangesMin)/width;
 			break;
 		}
@@ -887,13 +886,16 @@ void HistogramPrivate::recalcHistogram() {
 		DEBUG("number of bins " << m_bins);
 
 		//calculate the histogram
-		m_histogram = gsl_histogram_alloc (m_bins);
-		gsl_histogram_set_ranges_uniform (m_histogram, binRangesMin, binRangesMax+1);
+		if (m_bins > 0) {
+			m_histogram = gsl_histogram_alloc (m_bins);
+			gsl_histogram_set_ranges_uniform (m_histogram, binRangesMin, binRangesMax+1);
 
-		for (int row = 0; row < dataColumn->rowCount(); ++row) {
-			if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) )
-				gsl_histogram_increment(m_histogram, dataColumn->valueAt(row));
-		}
+			for (int row = 0; row < dataColumn->rowCount(); ++row) {
+				if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) )
+					gsl_histogram_increment(m_histogram, dataColumn->valueAt(row));
+			}
+		} else
+			DEBUG("Number of bins must be positiv integer");
 	}
 
 	//histogram changed because of the actual data changes or because of new bin settings,
@@ -948,6 +950,9 @@ void HistogramPrivate::updateLines() {
 }
 
 void HistogramPrivate::verticalHistogram() {
+	if (!m_histogram)
+		return;
+
 	const double min = gsl_histogram_min(m_histogram);
 	const double max = gsl_histogram_max(m_histogram);
 	const double width = (max - min)/m_bins;
@@ -1000,6 +1005,9 @@ void HistogramPrivate::verticalHistogram() {
 }
 
 void HistogramPrivate::horizontalHistogram() {
+	if (!m_histogram)
+		return;
+
 	const double min = gsl_histogram_min(m_histogram);
 	const double max = gsl_histogram_max(m_histogram);
 	const double width = (max - min)/m_bins;
@@ -1084,7 +1092,7 @@ void HistogramPrivate::updateValues() {
 	valuesPoints.clear();
 	valuesStrings.clear();
 
-	if (valuesType == Histogram::NoValues) {
+	if (valuesType == Histogram::NoValues || !m_histogram) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
