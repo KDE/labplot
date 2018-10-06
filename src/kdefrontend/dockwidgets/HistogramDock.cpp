@@ -182,6 +182,9 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 
 	retranslateUi();
 	init();
+
+	//TODO: activate the tab for error-bars again once the functionality is implemented
+	ui.tabWidget->removeTab(5);
 }
 
 HistogramDock::~HistogramDock() {
