@@ -72,7 +72,8 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 	ui.tableWidget->horizontalHeader()->setStretchLastSection(true);
 	ui.tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-	setFitData(data);
+//	use setFitData() explicitly
+//	setFitData(data);
 
 	ui.tableWidget->installEventFilter(this);
 
@@ -274,6 +275,7 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 }
 
 void FitParametersWidget::applyClicked() {
+	DEBUG("FitParametersWidget::applyClicked()");
 	if (m_fitData->modelCategory != nsl_fit_model_custom) {	// pre-defined models
 		for (int i = 0; i < ui.tableWidget->rowCount(); ++i) {
 			m_fitData->paramStartValues[i] = ((QLineEdit *)ui.tableWidget->cellWidget(i, 1))->text().toDouble();
@@ -328,6 +330,7 @@ void FitParametersWidget::applyClicked() {
 
 // check if start values are inside limits
 void FitParametersWidget::startValueChanged() {
+	DEBUG("FitParametersWidget::startValueChanged()");
 	const int row = ui.tableWidget->currentRow();
 	const double value = ((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->text().toDouble();
 
@@ -361,6 +364,7 @@ void FitParametersWidget::startValueChanged() {
 
 // check if lower limit fits to start value and upper limit
 void FitParametersWidget::lowerLimitChanged() {
+	DEBUG("FitParametersWidget::lowerLimitChanged()");
 	const int row = ui.tableWidget->currentRow();
 
 	const double value = ((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->text().toDouble();
@@ -395,6 +399,7 @@ void FitParametersWidget::lowerLimitChanged() {
 
 // check if upper limit fits to start value and lower limit
 void FitParametersWidget::upperLimitChanged() {
+	DEBUG("FitParametersWidget::upperLimitChanged()");
 	const int row = ui.tableWidget->currentRow();
 
 	const double value = ((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->text().toDouble();
@@ -430,7 +435,7 @@ void FitParametersWidget::upperLimitChanged() {
 void FitParametersWidget::addParameter() {
 	DEBUG("FitParametersWidget::addParameter()");
 	const int rows = ui.tableWidget->rowCount();
-	ui.tableWidget->setRowCount(rows+1);
+	ui.tableWidget->setRowCount(rows + 1);
 
 	// name
 	QTableWidgetItem* item = new QTableWidgetItem();
@@ -475,6 +480,7 @@ void FitParametersWidget::addParameter() {
 }
 
 void FitParametersWidget::removeParameter() {
+	DEBUG("FitParametersWidget::removeParameter()");
 	ui.tableWidget->removeRow(ui.tableWidget->currentRow());
 	if (ui.tableWidget->rowCount() == 1)
 		ui.pbRemove->setEnabled(false);
@@ -482,6 +488,7 @@ void FitParametersWidget::removeParameter() {
 }
 
 void FitParametersWidget::changed() {
+	DEBUG("FitParametersWidget::changed()");
 	m_changed = true;
 	emit parametersChanged();
 }

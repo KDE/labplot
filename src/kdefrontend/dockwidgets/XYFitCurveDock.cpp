@@ -72,9 +72,10 @@ XYFitCurveDock::XYFitCurveDock(QWidget* parent) : XYCurveDock(parent),
 }
 
 /*!
- * 	// Tab "General"
+ * 	set up "General" tab
  */
 void XYFitCurveDock::setupGeneral() {
+	DEBUG("XYFitCurveDock::setupGeneral()");
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	QGridLayout* gridLayout = qobject_cast<QGridLayout*>(generalTab->layout());
@@ -116,10 +117,12 @@ void XYFitCurveDock::setupGeneral() {
 		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
 
 	//show the fit-model category for the currently selected default (first) fit-model category
-	categoryChanged(uiGeneralTab.cbCategory->currentIndex());
+	//TODO: CHECK
+	// categoryChanged(uiGeneralTab.cbCategory->currentIndex());
 
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height() * 2);
 
+	//TODO: don't need m_fitData
 	fitParametersWidget = new FitParametersWidget(generalTab, &m_fitData);
 	gridLayout->addWidget(fitParametersWidget, 19, 4, 2, 4);
 
@@ -187,7 +190,7 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.teEquation, SIGNAL(expressionChanged()), this, SLOT(expressionChanged()));
 	connect(uiGeneralTab.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()));
 	connect(uiGeneralTab.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()));
-	connect(uiGeneralTab.pbParameters, SIGNAL(clicked()), this, SLOT(showParameters()));
+	//TODO connect(uiGeneralTab.pbParameters, SIGNAL(clicked()), this, SLOT(showParameters()));
 	connect(uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()));
 	connect(uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()));
 	connect(uiGeneralTab.lFit, SIGNAL(clicked(bool)), this, SLOT(showFitOptions(bool)));
@@ -197,9 +200,14 @@ void XYFitCurveDock::setupGeneral() {
 	connect(cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)));
 	connect(cbXErrorColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xErrorColumnChanged(QModelIndex)));
 	connect(cbYErrorColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yErrorColumnChanged(QModelIndex)));
+
 }
 
+/*
+ * load curve settings
+ */
 void XYFitCurveDock::initGeneralTab() {
+	DEBUG("XYFitCurveDock::initGeneralTab()");
 	//if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
@@ -220,7 +228,8 @@ void XYFitCurveDock::initGeneralTab() {
 	}
 
 	//show the properties of the first curve
-	m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
+	//CHECK: already done in setCurve
+	//m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
 
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_fitCurve->dataSourceType());
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
@@ -243,7 +252,17 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.yWeightsType);
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 
+	DEBUG("	B start value 0 = " << m_fitData.paramStartValues.at(0));
+	DEBUG("	B model degree = " << m_fitData.degree);
+
+	//show the fit-model category for the currently selected default (first) fit-model category
+	//TODO: CHECK
+	DEBUG("	CALLING categoryChanged()");
+	categoryChanged(uiGeneralTab.cbCategory->currentIndex());
+
+	DEBUG("	CALLING updateModelEquation()");
 	updateModelEquation();
+
 	this->showFitResult();
 
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
@@ -258,9 +277,12 @@ void XYFitCurveDock::initGeneralTab() {
 	connect(m_fitCurve, SIGNAL(yErrorColumnChanged(const AbstractColumn*)), this, SLOT(curveYErrorColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(fitDataChanged(XYFitCurve::FitData)), this, SLOT(curveFitDataChanged(XYFitCurve::FitData)));
 	connect(m_fitCurve, SIGNAL(sourceDataChanged()), this, SLOT(enableRecalculate()));
+
+	connect(fitParametersWidget, &FitParametersWidget::parametersChanged, this, &XYFitCurveDock::parametersChanged);
 }
 
 void XYFitCurveDock::setModel() {
+	DEBUG("XYFitCurveDock::setModel()");
 	QList<const char*> list;
 	list << "Folder" << "Datapicker" << "Worksheet" << "CartesianPlot" << "XYCurve";
 	cbDataSourceCurve->setTopLevelClasses(list);
@@ -299,6 +321,9 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_fitData = m_fitCurve->fitData();
+	DEBUG("	A start value 0 = " << m_fitData.paramStartValues.at(0));
+	DEBUG("	A model degree = " << m_fitData.degree);
+	DEBUG("	CALLING FitParametersWidget::setFitData()");
 	fitParametersWidget->setFitData(&m_fitData);
 
 	initGeneralTab();
@@ -546,6 +571,11 @@ void XYFitCurveDock::categoryChanged(int index) {
 		DEBUG("categoryChanged() category = \"" << nsl_fit_model_category_name[index] << "\"");
 	}
 
+	// nothing has changed
+	bool hasChanged = true;
+	if (m_fitData.modelCategory == (nsl_fit_model_category)index || (m_fitData.modelCategory == nsl_fit_model_custom && index == uiGeneralTab.cbCategory->count() - 1) )
+		hasChanged = false;
+
 	if (uiGeneralTab.cbCategory->currentIndex() == uiGeneralTab.cbCategory->count() - 1)
 		m_fitData.modelCategory = nsl_fit_model_custom;
 	else
@@ -598,16 +628,18 @@ void XYFitCurveDock::categoryChanged(int index) {
 		uiGeneralTab.lModel->hide();
 	}
 
-	//show the fit-model for the currently selected default (first) fit-model
-	uiGeneralTab.cbModel->setCurrentIndex(0);
-	uiGeneralTab.sbDegree->setValue(1);
+	if (hasChanged) {
+		//show the fit-model for the currently selected default (first) fit-model
+		uiGeneralTab.cbModel->setCurrentIndex(0);
+		uiGeneralTab.sbDegree->setValue(1);
+	}
 
 	m_initializing = false;
 	enableRecalculate();
 }
 
 /*!
- * called when the fit model type (polynomial, power, etc.) was changed.
+ * called when the fit model type (depends on category) was changed.
  * Updates the model type dependent widgets in the general-tab and calls \c updateModelEquation() to update the preview pixmap.
  */
 void XYFitCurveDock::modelTypeChanged(int index) {
@@ -669,8 +701,11 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		uiGeneralTab.sbDegree->setVisible(false);
 	}
 
+	if (m_fitData.modelType != index) {
+		DEBUG("	type has changed. CALLING updateModelEquation()");
+		updateModelEquation();
+	}
 	m_fitData.modelType = index;
-	this->updateModelEquation();
 }
 
 /*!
@@ -691,7 +726,7 @@ void XYFitCurveDock::updateModelEquation() {
 	XYFitCurve::initFitData(m_fitData);
 	// set model dependent start values from curve data
 	XYFitCurve::initStartValues(m_fitData, m_curve);
-	fitParametersWidget->setFitData(&m_fitData);
+//TODO	fitParametersWidget->setFitData(&m_fitData);
 
 	// variables/parameter that are known
 	QStringList vars = {"x"};
@@ -840,8 +875,8 @@ void XYFitCurveDock::showParameters() {
 
 	//menu.setWindowFlags(menu.windowFlags() & Qt::MSWindowsFixedSizeDialogHint);
 
-	QPoint pos(-menu.sizeHint().width() + uiGeneralTab.pbParameters->width(), 0);
-	menu.exec(uiGeneralTab.pbParameters->mapToGlobal(pos));
+	//QPoint pos(-menu.sizeHint().width() + uiGeneralTab.pbParameters->width(), 0);
+	//menu.exec(uiGeneralTab.pbParameters->mapToGlobal(pos));
 }
 
 /*!
@@ -853,7 +888,6 @@ void XYFitCurveDock::parametersChanged() {
 
 	//parameter names were (probably) changed -> set the new names in EquationTextEdit
 	uiGeneralTab.teEquation->setVariables(m_fitData.paramNames);
-	fitParametersWidget->setFitData(&m_fitData);
 
 	if (m_initializing)
 		return;
@@ -874,7 +908,7 @@ void XYFitCurveDock::showOptions() {
 
 	//menu.setWindowFlags(menu.windowFlags() & Qt::MSWindowsFixedSizeDialogHint);
 
-	QPoint pos(-menu.sizeHint().width() + uiGeneralTab.pbParameters->width(), 0);
+	QPoint pos(-menu.sizeHint().width() + uiGeneralTab.pbOptions->width(), 0);
 	menu.exec(uiGeneralTab.pbOptions->mapToGlobal(pos));
 }
 

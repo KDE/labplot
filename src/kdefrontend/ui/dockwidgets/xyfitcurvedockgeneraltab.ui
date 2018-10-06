@@ -15,12 +15,30 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="19" column="0">
-    <widget class="QPushButton" name="pbParameters">
+    <widget class="QPushButton" name="lParameters">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="toolTip">
       <string>Specify parameters and their properties</string>
      </property>
      <property name="text">
       <string>Parameters</string>
+     </property>
+     <property name="icon">
+      <iconset theme="arrow-down"/>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

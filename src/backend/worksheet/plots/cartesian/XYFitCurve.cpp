@@ -2230,6 +2230,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
+	DEBUG("XYFitCurve::load()");
 	Q_D(XYFitCurve);
 
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
@@ -2278,6 +2279,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 			//set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
 			XYFitCurve::initFitData(d->fitData);
+			// remove default start values
+			d->fitData.paramStartValues.clear();
 		} else if (!preview && reader->name() == "name") {	// needed for custom model
 			d->fitData.paramNames << reader->readElementText();
 		} else if (!preview && reader->name() == "startValue") {
@@ -2352,7 +2355,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 	// new fit model style (reset model type of old projects)
 	if (d->fitData.modelCategory == nsl_fit_model_basic && d->fitData.modelType >= NSL_FIT_MODEL_BASIC_COUNT) {
-		DEBUG("reset old fit model");
+		DEBUG("RESET old fit model");
 		d->fitData.modelType = 0;
 		d->fitData.degree = 1;
 		// reset size of fields not touched by initFitData()
@@ -2365,12 +2368,13 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		d->fitResult.tdist_marginValues.resize(2);
 	}
 	// not present in old projects
+	int size = d->fitResult.paramValues.size();
 	if (d->fitResult.tdist_tValues.size() == 0)
-		d->fitResult.tdist_tValues.resize(d->fitResult.paramValues.size());
+		d->fitResult.tdist_tValues.resize(size);
 	if (d->fitResult.tdist_pValues.size() == 0)
-		d->fitResult.tdist_pValues.resize(d->fitResult.paramValues.size());
+		d->fitResult.tdist_pValues.resize(size);
 	if (d->fitResult.tdist_marginValues.size() == 0)
-		d->fitResult.tdist_marginValues.resize(d->fitResult.paramValues.size());
+		d->fitResult.tdist_marginValues.resize(size);
 
 	// wait for data to be read before using the pointers
 	QThreadPool::globalInstance()->waitForDone();
