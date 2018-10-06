@@ -275,7 +275,7 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 
 void FitParametersWidget::applyClicked() {
 	if (m_fitData->modelCategory != nsl_fit_model_custom) {	// pre-defined models
-		for (int i=0; i < ui.tableWidget->rowCount(); ++i) {
+		for (int i = 0; i < ui.tableWidget->rowCount(); ++i) {
 			m_fitData->paramStartValues[i] = ((QLineEdit *)ui.tableWidget->cellWidget(i, 1))->text().toDouble();
 
 			QWidget *widget = ui.tableWidget->cellWidget(i, 2)->layout()->itemAt(0)->widget();
@@ -297,7 +297,7 @@ void FitParametersWidget::applyClicked() {
 		m_fitData->paramFixed.clear();
 		m_fitData->paramLowerLimits.clear();
 		m_fitData->paramUpperLimits.clear();
-		for (int i=0; i < ui.tableWidget->rowCount(); ++i) {
+		for (int i = 0; i < ui.tableWidget->rowCount(); ++i) {
 			// skip those rows where either the name or the value is empty
 			if ( !ui.tableWidget->item(i, 0)->text().simplified().isEmpty()
 				&& !((QLineEdit *)ui.tableWidget->cellWidget(i, 1))->text().simplified().isEmpty() ) {
@@ -356,7 +356,7 @@ void FitParametersWidget::startValueChanged() {
 	upperLimitChanged();
 	m_rehighlighting = false;
 
-	m_changed = true;
+	changed();
 }
 
 // check if lower limit fits to start value and upper limit
@@ -390,7 +390,7 @@ void FitParametersWidget::lowerLimitChanged() {
 	upperLimitChanged();
 	m_rehighlighting = false;
 
-	m_changed = true;
+	changed();
 }
 
 // check if upper limit fits to start value and lower limit
@@ -424,10 +424,11 @@ void FitParametersWidget::upperLimitChanged() {
 	lowerLimitChanged();
 	m_rehighlighting = false;
 
-	m_changed = true;
+	changed();
 }
 
 void FitParametersWidget::addParameter() {
+	DEBUG("FitParametersWidget::addParameter()");
 	const int rows = ui.tableWidget->rowCount();
 	ui.tableWidget->setRowCount(rows+1);
 
@@ -482,6 +483,7 @@ void FitParametersWidget::removeParameter() {
 
 void FitParametersWidget::changed() {
 	m_changed = true;
+	emit parametersChanged();
 }
 
 void FitParametersWidget::highlightInvalid(int row, int col, bool invalid) const {

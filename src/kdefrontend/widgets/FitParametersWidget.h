@@ -39,11 +39,11 @@ class FitParametersWidget : public QWidget {
 
 public:
 	explicit FitParametersWidget(QWidget*, XYFitCurve::FitData*);
+	void setFitData(XYFitCurve::FitData*);
 
 private:
 	Ui::FitParametersWidget ui;
 	XYFitCurve::FitData* m_fitData;
-	void setFitData(XYFitCurve::FitData*);
 	bool m_changed;
 	bool m_rehighlighting;
 	bool m_invalidRanges;

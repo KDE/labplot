@@ -35,6 +35,7 @@
 #include "ui_xyfitcurvedockgeneraltab.h"
 
 class TreeViewComboBox;
+class FitParametersWidget;
 
 class XYFitCurveDock: public XYCurveDock {
 	Q_OBJECT
@@ -55,6 +56,7 @@ private:
 	TreeViewComboBox* cbYDataColumn;
 	TreeViewComboBox* cbXErrorColumn;
 	TreeViewComboBox* cbYErrorColumn;
+	FitParametersWidget* fitParametersWidget;
 
 	XYFitCurve* m_fitCurve;
 	XYFitCurve::FitData m_fitData;

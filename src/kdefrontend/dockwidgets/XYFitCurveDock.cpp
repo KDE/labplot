@@ -120,9 +120,8 @@ void XYFitCurveDock::setupGeneral() {
 
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height() * 2);
 
-	//TODO
-	//FitParametersWidget* fitParametersWidget = new FitParametersWidget(generalTab, &m_fitData);
-	//gridLayout->addWidget(fitParametersWidget, 20, 4, 1, 4);
+	fitParametersWidget = new FitParametersWidget(generalTab, &m_fitData);
+	gridLayout->addWidget(fitParametersWidget, 19, 4, 2, 4);
 
 	//use white background in the preview label
 	QPalette p;
@@ -243,6 +242,7 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.cbXWeight->setCurrentIndex(m_fitData.xWeightsType);
 	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.yWeightsType);
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
+
 	updateModelEquation();
 	this->showFitResult();
 
@@ -299,6 +299,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_fitData = m_fitCurve->fitData();
+	fitParametersWidget->setFitData(&m_fitData);
 
 	initGeneralTab();
 	initTabs();
@@ -690,6 +691,7 @@ void XYFitCurveDock::updateModelEquation() {
 	XYFitCurve::initFitData(m_fitData);
 	// set model dependent start values from curve data
 	XYFitCurve::initStartValues(m_fitData, m_curve);
+	fitParametersWidget->setFitData(&m_fitData);
 
 	// variables/parameter that are known
 	QStringList vars = {"x"};
@@ -818,6 +820,7 @@ void XYFitCurveDock::updateParameterList() {
 
 /*!
  * open parameter dialog to change parameter settings
+ * TODO: not needed anymore
  */
 void XYFitCurveDock::showParameters() {
 	DEBUG("XYFitCurveDock::showParameters()");
@@ -850,6 +853,7 @@ void XYFitCurveDock::parametersChanged() {
 
 	//parameter names were (probably) changed -> set the new names in EquationTextEdit
 	uiGeneralTab.teEquation->setVariables(m_fitData.paramNames);
+	fitParametersWidget->setFitData(&m_fitData);
 
 	if (m_initializing)
 		return;
@@ -892,6 +896,7 @@ void XYFitCurveDock::recalculateClicked() {
 	for (XYCurve* curve: m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
 
+	fitParametersWidget->setFitData(&m_fitData);
 	this->showFitResult();
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	emit info(i18n("Fit status: %1", m_fitCurve->fitResult().status));
