@@ -1802,7 +1802,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 //#########################  Theme management ##################################
 //##############################################################################
 void Histogram::loadThemeConfig(const KConfig& config) {
-	KConfigGroup group = config.group("Histogram");
+	KConfigGroup group = config.group("XYCurve");
 
 	int index = parentAspect()->indexOfChild<Histogram>(this);
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(parentAspect());

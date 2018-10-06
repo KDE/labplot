@@ -4,6 +4,7 @@
     Description          : widget for Histogram properties
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Anu Mittal (anu22mittal@gmail.com)
+    Copyright            : (C) 2018 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -97,6 +98,8 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 	}
 
 	ui.leBinWidth->setValidator(new QDoubleValidator(ui.leBinWidth));
+	ui.leBinRangesMin->setValidator(new QDoubleValidator(ui.leBinRangesMin));
+	ui.leBinRangesMax->setValidator(new QDoubleValidator(ui.leBinRangesMax));
 
 	//Slots
 	//General
@@ -179,6 +182,9 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 
 	retranslateUi();
 	init();
+
+	//TODO: activate the tab for error-bars again once the functionality is implemented
+	ui.tabWidget->removeTab(5);
 }
 
 HistogramDock::~HistogramDock() {
