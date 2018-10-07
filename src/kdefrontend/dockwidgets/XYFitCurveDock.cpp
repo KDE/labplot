@@ -253,7 +253,9 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.yWeightsType);
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 
-	DEBUG("	B start value 0 = " << m_fitData.paramStartValues.at(0));
+	if (m_fitData.paramStartValues.size() > 0) {
+		DEBUG("	B start value 0 = " << m_fitData.paramStartValues.at(0));
+	}
 	DEBUG("	B model degree = " << m_fitData.degree);
 
 	//show the fit-model category for the currently selected default (first) fit-model category
@@ -324,7 +326,9 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_fitData = m_fitCurve->fitData();
-	DEBUG("	A start value 0 = " << m_fitData.paramStartValues.at(0));
+	if(m_fitData.paramStartValues.size() > 0) {
+		DEBUG("	A start value 0 = " << m_fitData.paramStartValues.at(0));
+	}
 	DEBUG("	A model degree = " << m_fitData.degree);
 	DEBUG("	CALLING FitParametersWidget::setFitData()");
 	fitParametersWidget->setFitData(&m_fitData);
@@ -334,6 +338,10 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 
 	DEBUG("	INITIALIZING DONE");
 	m_initializing = false;
+
+	//init parameter list when not available
+	if (m_fitData.paramStartValues.size() == 0)
+		updateModelEquation();
 
 	enableRecalculate();
 }
@@ -498,7 +506,9 @@ void XYFitCurveDock::showFitOptions(bool checked) {
 		uiGeneralTab.cbModel->show();
 		uiGeneralTab.lEquation->show();
 
+		m_initializing = true;	// do not change start parameter
 		modelTypeChanged(uiGeneralTab.cbModel->currentIndex());
+		m_initializing = false;
 	} else {
 		uiGeneralTab.lFit->setIcon(QIcon::fromTheme("arrow-right"));
 		uiGeneralTab.lCategory->hide();
