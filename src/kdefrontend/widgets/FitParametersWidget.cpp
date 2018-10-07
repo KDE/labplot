@@ -43,8 +43,6 @@
 FitParametersWidget::FitParametersWidget(QWidget* parent) : QWidget(parent),
 	m_fitData(nullptr), m_rehighlighting(false), m_invalidRanges(false) {
 	ui.setupUi(this);
-	ui.pbApply->setIcon(QIcon::fromTheme("dialog-ok-apply"));
-	ui.pbCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
 
 	ui.tableWidget->setColumnCount(5);
 
@@ -75,11 +73,6 @@ FitParametersWidget::FitParametersWidget(QWidget* parent) : QWidget(parent),
 	ui.tableWidget->installEventFilter(this);
 
 	connect( ui.tableWidget, SIGNAL(cellChanged(int,int)), this, SLOT(changed()) );
-	//connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
-	//connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
-// we don't need add/remove since parameter are detected automatically
-//	connect( ui.pbAdd, SIGNAL(clicked()), this, SLOT(addParameter()) );
-//	connect( ui.pbRemove, SIGNAL(clicked()), this, SLOT(removeParameter()) );
 }
 
 void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
@@ -135,8 +128,6 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 			connect(le, SIGNAL(textChanged(QString)), this, SLOT(upperLimitChanged()) );
 		}
 		ui.tableWidget->setCurrentCell(0, 1);
-		ui.pbAdd->setVisible(false);
-		ui.pbRemove->setVisible(false);
 	} else {	// custom model
 		if (!m_fitData->paramNames.isEmpty()) {	// parameters for the custom model are already available -> show them
 			ui.tableWidget->setRowCount(m_fitData->paramNames.size());
@@ -223,15 +214,6 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 			connect(le, SIGNAL(textChanged(QString)), this, SLOT(upperLimitChanged()) );
 		}
 		ui.tableWidget->setCurrentCell(0, 0);
-		/* we don't need add/remove since parameter are detected automatically
-		ui.pbAdd->setIcon(QIcon::fromTheme("list-add"));
-		ui.pbAdd->setVisible(true);
-		ui.pbRemove->setIcon(QIcon::fromTheme("list-remove"));
-		ui.pbRemove->setVisible(true);
-		ui.pbRemove->setEnabled(m_fitData->paramNames.size() > 1);
-		*/
-		ui.pbAdd->setVisible(false);
-		ui.pbRemove->setVisible(false);
 	}
 	m_initializing = false;
 }
@@ -243,9 +225,8 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 			if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
 				if (m_fitData->modelCategory != nsl_fit_model_custom) {
 					//on the second column with the values is editable.
-					//navigate to the next cell in the second column, or to the apply-button
+					//navigate to the next cell in the second column
 					if (ui.tableWidget->currentRow() == ui.tableWidget->rowCount() - 1) {
-						ui.pbApply->setFocus();
 						ui.tableWidget->clearSelection();
 					} else {
 						ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow() + 1, 1);
@@ -256,9 +237,8 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 						//name was entered, navigate to the value-cell
 						ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow(), 1);
 					} else {
-						//start value was entered, navigate to the next name-cell or to the apply-button
+						//start value was entered, navigate to the next name-cell
 						if (ui.tableWidget->currentRow() == ui.tableWidget->rowCount() - 1) {
-							ui.pbApply->setFocus();
 							ui.tableWidget->clearSelection();
 						} else {
 							ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow() + 1, 0);
@@ -475,7 +455,6 @@ void FitParametersWidget::addParameter() {
 	connect(le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()) );
 
 	ui.tableWidget->setCurrentCell(rows, 0);
-	ui.pbRemove->setEnabled(true);
 	changed();
 }
 
@@ -483,8 +462,6 @@ void FitParametersWidget::addParameter() {
 void FitParametersWidget::removeParameter() {
 	DEBUG("FitParametersWidget::removeParameter()");
 	ui.tableWidget->removeRow(ui.tableWidget->currentRow());
-	if (ui.tableWidget->rowCount() == 1)
-		ui.pbRemove->setEnabled(false);
 	changed();
 }
 
@@ -503,8 +480,6 @@ void FitParametersWidget::highlightInvalid(int row, int col, bool invalid) const
 	else
 		le->setStyleSheet("");
 
-	if (m_invalidRanges)
-		ui.pbApply->setEnabled(false);
-	else
-		ui.pbApply->setEnabled(true);
+	//TODO: emit parameterInvalid?
+	// if (m_invalidRanges)
 }
