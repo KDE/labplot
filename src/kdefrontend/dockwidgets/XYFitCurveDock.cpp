@@ -124,7 +124,7 @@ void XYFitCurveDock::setupGeneral() {
 
 	//TODO: don't need m_fitData
 	fitParametersWidget = new FitParametersWidget(generalTab, &m_fitData);
-	gridLayout->addWidget(fitParametersWidget, 19, 4, 2, 4);
+	gridLayout->addWidget(fitParametersWidget, 20, 4, 2, 4);
 
 	//use white background in the preview label
 	QPalette p;
@@ -146,6 +146,7 @@ void XYFitCurveDock::setupGeneral() {
 	// show these options per default
 	showDataOptions(true);
 	showFitOptions(true);
+	showParametersOptions(true);
 	// hide these options per default
 	showWeightsOptions(false);
 
@@ -193,6 +194,7 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()));
 	connect(uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()));
 	connect(uiGeneralTab.lFit, SIGNAL(clicked(bool)), this, SLOT(showFitOptions(bool)));
+	connect(uiGeneralTab.lParameters, SIGNAL(clicked(bool)), this, SLOT(showParametersOptions(bool)));
 
 	connect(cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)));
 	connect(cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)));
@@ -521,6 +523,16 @@ void XYFitCurveDock::showFitOptions(bool checked) {
 		uiGeneralTab.teEquation->hide();
 		uiGeneralTab.tbFunctions->hide();
 		uiGeneralTab.tbConstants->hide();
+	}
+}
+
+void XYFitCurveDock::showParametersOptions(bool checked) {
+	if (checked) {
+		uiGeneralTab.lParameters->setIcon(QIcon::fromTheme("arrow-down"));
+		fitParametersWidget->show();
+	} else {
+		uiGeneralTab.lParameters->setIcon(QIcon::fromTheme("arrow-right"));
+		fitParametersWidget->hide();
 	}
 }
 

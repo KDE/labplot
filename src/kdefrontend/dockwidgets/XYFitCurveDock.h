@@ -85,6 +85,7 @@ private slots:
 	void showDataOptions(bool);
 	void showWeightsOptions(bool);
 	void showFitOptions(bool);
+	void showParametersOptions(bool);
 
 	void showConstants();
 	void showFunctions();
