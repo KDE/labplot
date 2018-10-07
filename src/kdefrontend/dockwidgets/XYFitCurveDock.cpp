@@ -118,8 +118,7 @@ void XYFitCurveDock::setupGeneral() {
 
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height() * 2);
 
-	//TODO: don't need m_fitData
-	fitParametersWidget = new FitParametersWidget(generalTab, &m_fitData);
+	fitParametersWidget = new FitParametersWidget(generalTab);
 	gridLayout->addWidget(fitParametersWidget, 20, 4, 2, 4);
 
 	//use white background in the preview label

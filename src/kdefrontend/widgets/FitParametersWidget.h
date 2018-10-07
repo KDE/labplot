@@ -38,7 +38,7 @@ class FitParametersWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit FitParametersWidget(QWidget*, XYFitCurve::FitData*);
+	explicit FitParametersWidget(QWidget*);
 	void setFitData(XYFitCurve::FitData*);
 
 private:

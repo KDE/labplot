@@ -40,8 +40,8 @@
 
 	\ingroup kdefrontend
  */
-FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* data) : QWidget(parent),
-	m_fitData(data), m_changed(false), m_rehighlighting(false), m_invalidRanges(false) {
+FitParametersWidget::FitParametersWidget(QWidget* parent) : QWidget(parent),
+	m_fitData(nullptr), m_changed(false), m_rehighlighting(false), m_invalidRanges(false) {
 	ui.setupUi(this);
 	ui.pbApply->setIcon(QIcon::fromTheme("dialog-ok-apply"));
 	ui.pbCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
@@ -71,9 +71,6 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 	ui.tableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	ui.tableWidget->horizontalHeader()->setStretchLastSection(true);
 	ui.tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-//	use setFitData() explicitly
-//	setFitData(data);
 
 	ui.tableWidget->installEventFilter(this);
 
