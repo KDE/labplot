@@ -49,10 +49,11 @@ private:
 	bool m_invalidRanges;
 
 	bool eventFilter(QObject*, QEvent*) override;
-	void highlightInvalid(int row, int col, bool invalid) const;
+	void highlightInvalid(int row, int col, bool invalid);
 
 signals:
 	void parametersChanged();
+	void parametersValid(bool);
 
 private slots:
 	void changed();

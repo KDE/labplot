@@ -65,7 +65,7 @@ extern "C" {
 
 XYFitCurveDock::XYFitCurveDock(QWidget* parent) : XYCurveDock(parent),
 	cbDataSourceCurve(nullptr), cbXDataColumn(nullptr), cbYDataColumn(nullptr), cbXErrorColumn(nullptr),
-	cbYErrorColumn(nullptr), m_fitCurve(nullptr) {
+	cbYErrorColumn(nullptr), m_fitCurve(nullptr), m_parametersValid(true) {
 
 	//remove the tab "Error bars"
 	ui.tabWidget->removeTab(5);
@@ -269,6 +269,7 @@ void XYFitCurveDock::initGeneralTab() {
 	connect(m_fitCurve, SIGNAL(sourceDataChanged()), this, SLOT(enableRecalculate()));
 
 	connect(fitParametersWidget, &FitParametersWidget::parametersChanged, this, &XYFitCurveDock::parametersChanged);
+	connect(fitParametersWidget, &FitParametersWidget::parametersValid, this, &XYFitCurveDock::parametersValid);
 }
 
 void XYFitCurveDock::setModel() {
@@ -878,6 +879,10 @@ void XYFitCurveDock::parametersChanged() {
 
 	enableRecalculate();
 }
+void XYFitCurveDock::parametersValid(bool valid) {
+	DEBUG("XYFitCurveDock::parametersValid() valid = " << valid);
+	m_parametersValid = valid;
+}
 
 void XYFitCurveDock::showOptions() {
 	QMenu menu;
@@ -948,7 +953,7 @@ void XYFitCurveDock::enableRecalculate() const {
 		hasSourceData = (m_fitCurve->dataSourceCurve() != nullptr);
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
+	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData && m_parametersValid);
 	if (hasSourceData) {
 		DEBUG("	enable and preview");
 		// PREVIEW as soon as recalculate is enabled

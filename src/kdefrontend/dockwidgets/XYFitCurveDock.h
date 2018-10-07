@@ -62,6 +62,7 @@ private:
 	XYFitCurve::FitData m_fitData;
 	QList<double> parameters;
 	QList<double> parameterValues;
+	bool m_parametersValid;
 
 protected:
 	void setModel() override;
@@ -91,6 +92,7 @@ private slots:
 	void showFunctions();
 	void updateParameterList();
 	void parametersChanged();
+	void parametersValid(bool);
 	void showOptions();
 	void insertFunction(const QString&) const;
 	void insertConstant(const QString&) const;

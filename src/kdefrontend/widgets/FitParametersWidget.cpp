@@ -419,13 +419,15 @@ void FitParametersWidget::upperLimitChanged() {
 	changed();
 }
 
-void FitParametersWidget::highlightInvalid(int row, int col, bool invalid) const {
+void FitParametersWidget::highlightInvalid(int row, int col, bool invalid) {
 	QLineEdit* le = ((QLineEdit*)ui.tableWidget->cellWidget(row, col));
 	if (invalid)
 		le->setStyleSheet("QLineEdit{background: red;}");
 	else
 		le->setStyleSheet("");
 
-	//TODO: emit parameterInvalid?
-	// if (m_invalidRanges)
+	if (m_invalidRanges)
+		emit parametersValid(false);
+	else
+		emit parametersValid(true);
 }
