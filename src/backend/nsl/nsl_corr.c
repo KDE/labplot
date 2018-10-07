@@ -104,7 +104,7 @@ int nsl_corr_fft_type(double s[], size_t n, double r[], size_t m, nsl_corr_type_
 		break;
 	case nsl_corr_norm_unbiased:
 		for (i = 0; i < oldsize; i++) {
-			int norm = i < oldsize/2 ? i+1 : oldsize - i;
+			size_t norm = i < oldsize/2 ? i+1 : oldsize - i;
 			out[i] = out[i]/norm;
 		}
 		break;
