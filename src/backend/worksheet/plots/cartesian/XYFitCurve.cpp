@@ -2350,6 +2350,9 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
+	if (d->fitData.paramNamesUtf8.isEmpty())
+		d->fitData.paramNamesUtf8 << d->fitData.paramNames;
+
 	if (preview)
 		return true;
 

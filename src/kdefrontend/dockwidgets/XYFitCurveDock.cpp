@@ -244,9 +244,10 @@ void XYFitCurveDock::initGeneralTab() {
 		uiGeneralTab.cbCategory->setCurrentIndex(uiGeneralTab.cbCategory->count() - 1);
 	else
 		uiGeneralTab.cbCategory->setCurrentIndex(m_fitData.modelCategory);
-	m_fitData.modelType = tmpModelType;
+	DEBUG("	RESET mode type");
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
-		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
+		uiGeneralTab.cbModel->setCurrentIndex(tmpModelType);
+	m_fitData.modelType = tmpModelType;
 
 	uiGeneralTab.cbXWeight->setCurrentIndex(m_fitData.xWeightsType);
 	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.yWeightsType);
@@ -257,11 +258,12 @@ void XYFitCurveDock::initGeneralTab() {
 
 	//show the fit-model category for the currently selected default (first) fit-model category
 	//TODO: CHECK
-	DEBUG("	CALLING categoryChanged()");
-	categoryChanged(uiGeneralTab.cbCategory->currentIndex());
+	//DEBUG("	CALLING categoryChanged()");
+	//categoryChanged(uiGeneralTab.cbCategory->currentIndex());
 
-	DEBUG("	CALLING updateModelEquation()");
-	updateModelEquation();
+	//TODO: CHECK
+	//DEBUG("	CALLING updateModelEquation()");
+	//updateModelEquation();
 
 	this->showFitResult();
 
@@ -314,6 +316,7 @@ void XYFitCurveDock::setModel() {
 void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	DEBUG("XYFitCurveDock::setCurves()");
 	m_initializing = true;
+	DEBUG("	INITIALIZING ...");
 	m_curvesList = list;
 	m_curve = list.first();
 
@@ -329,6 +332,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	initGeneralTab();
 	initTabs();
 
+	DEBUG("	INITIALIZING DONE");
 	m_initializing = false;
 
 	enableRecalculate();
@@ -571,17 +575,17 @@ void XYFitCurveDock::categoryChanged(int index) {
 		DEBUG("categoryChanged() category = \"" << nsl_fit_model_category_name[index] << "\"");
 	}
 
-	// nothing has changed
 	bool hasChanged = true;
+	// nothing has changed when ...
 	if (m_fitData.modelCategory == (nsl_fit_model_category)index || (m_fitData.modelCategory == nsl_fit_model_custom && index == uiGeneralTab.cbCategory->count() - 1) )
 		hasChanged = false;
+	DEBUG("	hasChanged: " << hasChanged);
 
 	if (uiGeneralTab.cbCategory->currentIndex() == uiGeneralTab.cbCategory->count() - 1)
 		m_fitData.modelCategory = nsl_fit_model_custom;
 	else
 		m_fitData.modelCategory = (nsl_fit_model_category)index;
 
-	m_initializing = true;
 	uiGeneralTab.cbModel->clear();
 	uiGeneralTab.cbModel->show();
 	uiGeneralTab.lModel->show();
@@ -632,9 +636,10 @@ void XYFitCurveDock::categoryChanged(int index) {
 		//show the fit-model for the currently selected default (first) fit-model
 		uiGeneralTab.cbModel->setCurrentIndex(0);
 		uiGeneralTab.sbDegree->setValue(1);
+		// when model type does not change, call it here
+		updateModelEquation();
 	}
 
-	m_initializing = false;
 	enableRecalculate();
 }
 
@@ -648,6 +653,10 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	if(index == -1)
 		return;
 
+	bool hasChanged = false;
+	if (m_fitData.modelType != index)
+		hasChanged = true;
+
 	bool custom = false;
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
 		custom = true;
@@ -659,7 +668,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 
 	// default settings
 	uiGeneralTab.lDegree->setText(i18n("Degree:"));
-	if (m_fitData.modelType != index)
+	if (hasChanged)
 		uiGeneralTab.sbDegree->setValue(1);
 
 	// TODO: reset start values
@@ -701,11 +710,12 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		uiGeneralTab.sbDegree->setVisible(false);
 	}
 
-	if (m_fitData.modelType != index) {
-		DEBUG("	type has changed. CALLING updateModelEquation()");
+	m_fitData.modelType = index;
+
+	if (hasChanged) {
+		DEBUG("	type has changed to " << m_fitData.modelType  <<  ". CALLING updateModelEquation()");
 		updateModelEquation();
 	}
-	m_fitData.modelType = index;
 }
 
 /*!
@@ -726,7 +736,11 @@ void XYFitCurveDock::updateModelEquation() {
 	XYFitCurve::initFitData(m_fitData);
 	// set model dependent start values from curve data
 	XYFitCurve::initStartValues(m_fitData, m_curve);
-//TODO	fitParametersWidget->setFitData(&m_fitData);
+	// udpate parameter widget
+	if (!m_initializing) {
+		DEBUG("	CALLING FitParametersWidget->setFitData()");
+		fitParametersWidget->setFitData(&m_fitData);
+	}
 
 	// variables/parameter that are known
 	QStringList vars = {"x"};
@@ -1166,6 +1180,9 @@ void XYFitCurveDock::showFitResult() {
 	QStringList headerLabels;
 	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << QLatin1String("P > |t|") << i18n("Conf. Interval");
 	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
+
+	DEBUG("# param names: " << np);
+	DEBUG("# param UTF8 names: " << m_fitData.paramNamesUtf8.size());
 
 	for (int i = 0; i < np; i++) {
 		const double paramValue = fitResult.paramValues.at(i);
