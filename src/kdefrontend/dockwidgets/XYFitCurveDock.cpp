@@ -443,6 +443,8 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYFitCurve*>(curve)->setYErrorColumn(column);
 }
 
+///////////////////////// fold/unfold options //////////////////////////////////////////////////
+
 void XYFitCurveDock::showDataOptions(bool checked) {
 	if (checked) {
 		uiGeneralTab.lData->setIcon(QIcon::fromTheme("arrow-down"));
@@ -512,6 +514,8 @@ void XYFitCurveDock::showFitOptions(bool checked) {
 		uiGeneralTab.tbConstants->hide();
 	}
 }
+
+///////////////////////////////////////////////////////////////////////////
 
 void XYFitCurveDock::xWeightChanged(int index) {
 	DEBUG("xWeightChanged() weight = " << nsl_fit_weight_type_name[index]);
@@ -712,10 +716,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 
 	m_fitData.modelType = index;
 
-	if (hasChanged) {
-		DEBUG("	type has changed to " << m_fitData.modelType  <<  ". CALLING updateModelEquation()");
-		updateModelEquation();
-	}
+	updateModelEquation();
 }
 
 /*!
@@ -732,12 +733,12 @@ void XYFitCurveDock::updateModelEquation() {
 
 	//this function can also be called when the value for the degree was changed -> update the fit data structure
 	int degree = uiGeneralTab.sbDegree->value();
-	m_fitData.degree = degree;
-	XYFitCurve::initFitData(m_fitData);
-	// set model dependent start values from curve data
-	XYFitCurve::initStartValues(m_fitData, m_curve);
-	// udpate parameter widget
 	if (!m_initializing) {
+		m_fitData.degree = degree;
+		XYFitCurve::initFitData(m_fitData);
+		// set model dependent start values from curve data
+		XYFitCurve::initStartValues(m_fitData, m_curve);
+		// udpate parameter widget
 		DEBUG("	CALLING FitParametersWidget->setFitData()");
 		fitParametersWidget->setFitData(&m_fitData);
 	}
@@ -1180,9 +1181,6 @@ void XYFitCurveDock::showFitResult() {
 	QStringList headerLabels;
 	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << QLatin1String("P > |t|") << i18n("Conf. Interval");
 	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
-
-	DEBUG("# param names: " << np);
-	DEBUG("# param UTF8 names: " << m_fitData.paramNamesUtf8.size());
 
 	for (int i = 0; i < np; i++) {
 		const double paramValue = fitResult.paramValues.at(i);
