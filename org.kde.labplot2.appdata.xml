@@ -124,7 +124,7 @@
       <caption xml:lang="sv">Anpassningsexempel</caption>
       <caption xml:lang="uk">Приклад апроксимації</caption>
       <caption xml:lang="x-test">xxFit examplexx</caption>
-      <image>https://labplot.kde.org/wp-content/uploads/2017/01/labplot2_appdata_01.png</image>
+      <image>https://cdn.kde.org/screenshots/labplot2/labplot2_appdata_01.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Mathematical function</caption>
@@ -142,7 +142,7 @@
       <caption xml:lang="sv">Matematisk funktion</caption>
       <caption xml:lang="uk">Математична функція</caption>
       <caption xml:lang="x-test">xxMathematical functionxx</caption>
-      <image>https://labplot.kde.org/wp-content/uploads/2017/01/labplot2_appdata_02.png</image>
+      <image>https://cdn.kde.org/screenshots/labplot2/labplot2_appdata_02.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>CAS worksheet</caption>
@@ -159,7 +159,7 @@
       <caption xml:lang="sv">CAS-arbetsblad</caption>
       <caption xml:lang="uk">Робочий аркуш СКА</caption>
       <caption xml:lang="x-test">xxCAS worksheetxx</caption>
-      <image>https://labplot.kde.org/wp-content/uploads/2017/01/labplot2_appdata_03.png</image>
+      <image>https://cdn.kde.org/screenshots/labplot2/labplot2_appdata_03.png</image>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>
