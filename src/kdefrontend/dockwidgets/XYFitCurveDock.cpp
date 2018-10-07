@@ -116,10 +116,6 @@ void XYFitCurveDock::setupGeneral() {
 	for(int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
 		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
 
-	//show the fit-model category for the currently selected default (first) fit-model category
-	//TODO: CHECK
-	// categoryChanged(uiGeneralTab.cbCategory->currentIndex());
-
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height() * 2);
 
 	//TODO: don't need m_fitData
@@ -181,8 +177,8 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)));
 	connect(uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)));
 
-	connect(uiGeneralTab.lData, SIGNAL(clicked(bool)), this, SLOT(showDataOptions(bool)));
-	connect(uiGeneralTab.lWeights, SIGNAL(clicked(bool)), this, SLOT(showWeightsOptions(bool)));
+	connect(uiGeneralTab.lData, &QPushButton::clicked, this, &XYFitCurveDock::showDataOptions);
+	connect(uiGeneralTab.lWeights, &QPushButton::clicked, this, &XYFitCurveDock::showWeightsOptions);
 	connect(uiGeneralTab.cbXWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(xWeightChanged(int)));
 	connect(uiGeneralTab.cbYWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(yWeightChanged(int)));
 	connect(uiGeneralTab.cbCategory, SIGNAL(currentIndexChanged(int)), this, SLOT(categoryChanged(int)));
@@ -193,8 +189,8 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()));
 	connect(uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()));
 	connect(uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()));
-	connect(uiGeneralTab.lFit, SIGNAL(clicked(bool)), this, SLOT(showFitOptions(bool)));
-	connect(uiGeneralTab.lParameters, SIGNAL(clicked(bool)), this, SLOT(showParametersOptions(bool)));
+	connect(uiGeneralTab.lFit, &QPushButton::clicked, this, &XYFitCurveDock::showFitOptions);
+	connect(uiGeneralTab.lParameters, &QPushButton::clicked, this, &XYFitCurveDock::showParametersOptions);
 
 	connect(cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)));
 	connect(cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)));
@@ -258,15 +254,6 @@ void XYFitCurveDock::initGeneralTab() {
 		DEBUG("	B start value 0 = " << m_fitData.paramStartValues.at(0));
 	}
 	DEBUG("	B model degree = " << m_fitData.degree);
-
-	//show the fit-model category for the currently selected default (first) fit-model category
-	//TODO: CHECK
-	//DEBUG("	CALLING categoryChanged()");
-	//categoryChanged(uiGeneralTab.cbCategory->currentIndex());
-
-	//TODO: CHECK
-	//DEBUG("	CALLING updateModelEquation()");
-	//updateModelEquation();
 
 	this->showFitResult();
 
