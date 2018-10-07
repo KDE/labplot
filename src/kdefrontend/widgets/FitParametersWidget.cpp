@@ -41,7 +41,7 @@
 	\ingroup kdefrontend
  */
 FitParametersWidget::FitParametersWidget(QWidget* parent) : QWidget(parent),
-	m_fitData(nullptr), m_changed(false), m_rehighlighting(false), m_invalidRanges(false) {
+	m_fitData(nullptr), m_rehighlighting(false), m_invalidRanges(false) {
 	ui.setupUi(this);
 	ui.pbApply->setIcon(QIcon::fromTheme("dialog-ok-apply"));
 	ui.pbCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
@@ -75,8 +75,8 @@ FitParametersWidget::FitParametersWidget(QWidget* parent) : QWidget(parent),
 	ui.tableWidget->installEventFilter(this);
 
 	connect( ui.tableWidget, SIGNAL(cellChanged(int,int)), this, SLOT(changed()) );
-	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
-	connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
+	//connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
+	//connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
 // we don't need add/remove since parameter are detected automatically
 //	connect( ui.pbAdd, SIGNAL(clicked()), this, SLOT(addParameter()) );
 //	connect( ui.pbRemove, SIGNAL(clicked()), this, SLOT(removeParameter()) );
@@ -84,6 +84,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent) : QWidget(parent),
 
 void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 	DEBUG("FitParametersWidget::setFitData()");
+	m_initializing = true;
 	m_fitData = data;
 
 	if (m_fitData->modelCategory != nsl_fit_model_custom) {	// pre-defined models
@@ -232,6 +233,7 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 		ui.pbAdd->setVisible(false);
 		ui.pbRemove->setVisible(false);
 	}
+	m_initializing = false;
 }
 
 bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
@@ -271,8 +273,11 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 	return QWidget::eventFilter(watched, event);
 }
 
-void FitParametersWidget::applyClicked() {
-	DEBUG("FitParametersWidget::applyClicked()");
+/*
+ * Apply parameter settings by setting m_fitData
+ */
+void FitParametersWidget::apply() {
+	DEBUG("FitParametersWidget::apply()");
 	if (m_fitData->modelCategory != nsl_fit_model_custom) {	// pre-defined models
 		for (int i = 0; i < ui.tableWidget->rowCount(); ++i) {
 			m_fitData->paramStartValues[i] = ((QLineEdit *)ui.tableWidget->cellWidget(i, 1))->text().toDouble();
@@ -318,14 +323,11 @@ void FitParametersWidget::applyClicked() {
 			}
 		}
 	}
-
-	if (m_changed)
-		emit parametersChanged();
-
-	emit finished();
 }
 
-// check if start values are inside limits
+/*
+ * called when a start value is changed
+ */
 void FitParametersWidget::startValueChanged() {
 	DEBUG("FitParametersWidget::startValueChanged()");
 	const int row = ui.tableWidget->currentRow();
@@ -429,6 +431,7 @@ void FitParametersWidget::upperLimitChanged() {
 	changed();
 }
 
+// TODO: used?
 void FitParametersWidget::addParameter() {
 	DEBUG("FitParametersWidget::addParameter()");
 	const int rows = ui.tableWidget->rowCount();
@@ -476,6 +479,7 @@ void FitParametersWidget::addParameter() {
 	changed();
 }
 
+// TODO: used?
 void FitParametersWidget::removeParameter() {
 	DEBUG("FitParametersWidget::removeParameter()");
 	ui.tableWidget->removeRow(ui.tableWidget->currentRow());
@@ -486,8 +490,10 @@ void FitParametersWidget::removeParameter() {
 
 void FitParametersWidget::changed() {
 	DEBUG("FitParametersWidget::changed()");
-	m_changed = true;
-	emit parametersChanged();
+	if (!m_initializing) {
+		apply();
+		emit parametersChanged();
+	}
 }
 
 void FitParametersWidget::highlightInvalid(int row, int col, bool invalid) const {

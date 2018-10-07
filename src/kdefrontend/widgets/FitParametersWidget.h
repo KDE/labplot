@@ -4,7 +4,7 @@
     Description          : widget for editing the fit parameters
     --------------------------------------------------------------------
     Copyright            : (C) 2014-2016 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2016-2018 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
 
@@ -44,7 +44,7 @@ public:
 private:
 	Ui::FitParametersWidget ui;
 	XYFitCurve::FitData* m_fitData;
-	bool m_changed;
+	bool m_initializing;
 	bool m_rehighlighting;
 	bool m_invalidRanges;
 
@@ -52,11 +52,10 @@ private:
 	void highlightInvalid(int row, int col, bool invalid) const;
 
 signals:
-	void finished();
 	void parametersChanged();
 
 private slots:
-	void applyClicked();
+	void apply();
 	void startValueChanged();
 	void lowerLimitChanged();
 	void upperLimitChanged();
