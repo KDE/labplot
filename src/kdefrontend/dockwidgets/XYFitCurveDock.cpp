@@ -190,7 +190,6 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.teEquation, SIGNAL(expressionChanged()), this, SLOT(expressionChanged()));
 	connect(uiGeneralTab.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()));
 	connect(uiGeneralTab.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()));
-	//TODO connect(uiGeneralTab.pbParameters, SIGNAL(clicked()), this, SLOT(showParameters()));
 	connect(uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()));
 	connect(uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()));
 	connect(uiGeneralTab.lFit, SIGNAL(clicked(bool)), this, SLOT(showFitOptions(bool)));
@@ -876,32 +875,6 @@ void XYFitCurveDock::updateParameterList() {
 	}
 
 	parametersChanged();
-}
-
-/*!
- * open parameter dialog to change parameter settings
- * TODO: not needed anymore
- */
-void XYFitCurveDock::showParameters() {
-	DEBUG("XYFitCurveDock::showParameters()");
-	if (m_fitData.modelCategory == nsl_fit_model_custom)
-		updateParameterList();
-
-	QMenu menu;
-	FitParametersWidget w(&menu, &m_fitData);
-	connect(&w, SIGNAL(finished()), &menu, SLOT(close()));
-	connect(&w, SIGNAL(parametersChanged()), this, SLOT(parametersChanged()));
-
-	QWidgetAction* widgetAction = new QWidgetAction(this);
-	widgetAction->setDefaultWidget(&w);
-	menu.addAction(widgetAction);
-	menu.setMinimumWidth(w.width());
-	menu.setTearOffEnabled(true);
-
-	//menu.setWindowFlags(menu.windowFlags() & Qt::MSWindowsFixedSizeDialogHint);
-
-	//QPoint pos(-menu.sizeHint().width() + uiGeneralTab.pbParameters->width(), 0);
-	//menu.exec(uiGeneralTab.pbParameters->mapToGlobal(pos));
 }
 
 /*!
