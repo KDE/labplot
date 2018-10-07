@@ -240,7 +240,6 @@ void XYFitCurveDock::initGeneralTab() {
 		uiGeneralTab.cbCategory->setCurrentIndex(uiGeneralTab.cbCategory->count() - 1);
 	else
 		uiGeneralTab.cbCategory->setCurrentIndex(m_fitData.modelCategory);
-	DEBUG("	RESET mode type");
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
 		uiGeneralTab.cbModel->setCurrentIndex(tmpModelType);
 	m_fitData.modelType = tmpModelType;
@@ -305,7 +304,6 @@ void XYFitCurveDock::setModel() {
 void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	DEBUG("XYFitCurveDock::setCurves()");
 	m_initializing = true;
-	DEBUG("	INITIALIZING ...");
 	m_curvesList = list;
 	m_curve = list.first();
 
@@ -317,13 +315,11 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 		DEBUG("	A start value 0 = " << m_fitData.paramStartValues.at(0));
 	}
 	DEBUG("	A model degree = " << m_fitData.degree);
-	DEBUG("	CALLING FitParametersWidget::setFitData()");
 	fitParametersWidget->setFitData(&m_fitData);
 
 	initGeneralTab();
 	initTabs();
 
-	DEBUG("	INITIALIZING DONE");
 	m_initializing = false;
 
 	//init parameter list when not available
@@ -590,7 +586,6 @@ void XYFitCurveDock::categoryChanged(int index) {
 	// nothing has changed when ...
 	if (m_fitData.modelCategory == (nsl_fit_model_category)index || (m_fitData.modelCategory == nsl_fit_model_custom && index == uiGeneralTab.cbCategory->count() - 1) )
 		hasChanged = false;
-	DEBUG("	hasChanged: " << hasChanged);
 
 	if (uiGeneralTab.cbCategory->currentIndex() == uiGeneralTab.cbCategory->count() - 1)
 		m_fitData.modelCategory = nsl_fit_model_custom;
@@ -664,10 +659,6 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	if(index == -1)
 		return;
 
-	bool hasChanged = false;
-	if (m_fitData.modelType != index)
-		hasChanged = true;
-
 	bool custom = false;
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
 		custom = true;
@@ -679,10 +670,8 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 
 	// default settings
 	uiGeneralTab.lDegree->setText(i18n("Degree:"));
-	if (hasChanged)
+	if (m_fitData.modelType != index)
 		uiGeneralTab.sbDegree->setValue(1);
-
-	// TODO: reset start values
 
 	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic:
@@ -746,7 +735,6 @@ void XYFitCurveDock::updateModelEquation() {
 		// set model dependent start values from curve data
 		XYFitCurve::initStartValues(m_fitData, m_curve);
 		// udpate parameter widget
-		DEBUG("	CALLING FitParametersWidget->setFitData()");
 		fitParametersWidget->setFitData(&m_fitData);
 	}
 
@@ -947,9 +935,6 @@ void XYFitCurveDock::expressionChanged() {
 
 void XYFitCurveDock::enableRecalculate() const {
 	DEBUG("XYFitCurveDock::enableRecalculate()");
-	if (m_initializing) {
-		DEBUG("	initializing");
-	}
 	if (m_initializing || m_fitCurve == nullptr)
 		return;
 
@@ -965,7 +950,6 @@ void XYFitCurveDock::enableRecalculate() const {
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
 	if (hasSourceData) {
-
 		DEBUG("	enable and preview");
 		// PREVIEW as soon as recalculate is enabled
 		//TODO: this breaks loading a project with fit curve
