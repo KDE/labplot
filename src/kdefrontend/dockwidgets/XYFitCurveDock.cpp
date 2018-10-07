@@ -119,7 +119,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height() * 2);
 
 	fitParametersWidget = new FitParametersWidget(generalTab);
-	gridLayout->addWidget(fitParametersWidget, 20, 4, 2, 4);
+	gridLayout->addWidget(fitParametersWidget, 20, 4, 3, 4);
 
 	//use white background in the preview label
 	QPalette p;
