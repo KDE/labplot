@@ -55,13 +55,11 @@ signals:
 	void parametersChanged();
 
 private slots:
+	void changed();
 	void apply();
 	void startValueChanged();
 	void lowerLimitChanged();
 	void upperLimitChanged();
-	void addParameter();
-	void removeParameter();
-	void changed();
 };
 
 #endif //FITPARAMETERSWIDGET_H

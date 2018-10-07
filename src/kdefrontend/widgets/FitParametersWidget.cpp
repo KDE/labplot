@@ -253,6 +253,14 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 	return QWidget::eventFilter(watched, event);
 }
 
+void FitParametersWidget::changed() {
+	DEBUG("FitParametersWidget::changed()");
+	if (!m_initializing) {
+		apply();
+		emit parametersChanged();
+	}
+}
+
 /*
  * Apply parameter settings by setting m_fitData
  */
@@ -409,68 +417,6 @@ void FitParametersWidget::upperLimitChanged() {
 	m_rehighlighting = false;
 
 	changed();
-}
-
-// TODO: used?
-void FitParametersWidget::addParameter() {
-	DEBUG("FitParametersWidget::addParameter()");
-	const int rows = ui.tableWidget->rowCount();
-	ui.tableWidget->setRowCount(rows + 1);
-
-	// name
-	QTableWidgetItem* item = new QTableWidgetItem();
-	item->setBackground(QBrush(Qt::lightGray));
-	ui.tableWidget->setItem(rows, 0, item);
-
-	// start value
-	QLineEdit *le = new QLineEdit(ui.tableWidget);
-	le->setValidator(new QDoubleValidator(le));
-	le->setFrame(false);
-	le->insert("1");
-	ui.tableWidget->setCellWidget(rows, 1, le);
-	connect(le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()) );
-
-	// fixed
-	QWidget *widget = new QWidget();
-	QCheckBox *cb = new QCheckBox();
-	QHBoxLayout *cbl = new QHBoxLayout(widget);
-	cbl->addWidget(cb);
-	cbl->setAlignment(Qt::AlignCenter);
-	cbl->setContentsMargins(0, 0, 0, 0);
-	widget->setLayout(cbl);
-	ui.tableWidget->setCellWidget(rows, 2, widget);
-	connect(cb, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
-
-	// limits
-	le = new QLineEdit(ui.tableWidget);
-	le->setValidator(new QDoubleValidator(le));
-	le->setFrame(false);
-	ui.tableWidget->setCellWidget(rows, 3, le);
-	connect(le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()) );
-
-	le = new QLineEdit(ui.tableWidget);
-	le->setValidator(new QDoubleValidator(le));
-	le->setFrame(false);
-	ui.tableWidget->setCellWidget(rows, 4, le);
-	connect(le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()) );
-
-	ui.tableWidget->setCurrentCell(rows, 0);
-	changed();
-}
-
-// TODO: used?
-void FitParametersWidget::removeParameter() {
-	DEBUG("FitParametersWidget::removeParameter()");
-	ui.tableWidget->removeRow(ui.tableWidget->currentRow());
-	changed();
-}
-
-void FitParametersWidget::changed() {
-	DEBUG("FitParametersWidget::changed()");
-	if (!m_initializing) {
-		apply();
-		emit parametersChanged();
-	}
 }
 
 void FitParametersWidget::highlightInvalid(int row, int col, bool invalid) const {
