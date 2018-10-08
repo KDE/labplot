@@ -299,7 +299,7 @@ bool Project::load(const QString& filename, bool preview) {
 		qWarning("The following problems occurred when loading the project file:");
 		const QStringList& warnings = reader.warningStrings();
 		for (const auto& str : warnings)
-			qWarning() << str;
+			qWarning() << qUtf8Printable(str);
 
 //TODO: show warnings in a kind of "log window" but not in message box
 // 		KMessageBox::error(this, msg, i18n("Project loading partly failed"));
