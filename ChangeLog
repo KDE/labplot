@@ -7,6 +7,7 @@ New features:
 	* Cross-/Autocorrelation of data sets (sampling interval, linear/circular, normalization)
 	* Allow to rotate plot legends
 	* Allow to specify the number format when exporting spreadsheet and matrix
+	* Improved dock widget for data fitting
 
 Bug fixes:
 	* Fixed several problems in live data support
