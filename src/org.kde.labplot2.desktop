@@ -3,7 +3,6 @@ Type=Application
 Exec=labplot2 -qwindowtitle %c %i %f
 Icon=labplot2
 Name=LabPlot2
-Name[ast]=LabPlot2
 Name[bs]=LabPlot2
 Name[ca]=LabPlot2
 Name[ca@valencia]=LabPlot2
