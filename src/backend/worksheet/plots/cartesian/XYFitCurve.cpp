@@ -2352,6 +2352,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 	if (d->fitData.paramNamesUtf8.isEmpty())
 		d->fitData.paramNamesUtf8 << d->fitData.paramNames;
+	DEBUG("# params = " << d->fitData.paramNames.size());
 
 	if (preview)
 		return true;
@@ -2361,6 +2362,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		DEBUG("RESET old fit model");
 		d->fitData.modelType = 0;
 		d->fitData.degree = 1;
+		d->fitData.paramNames.clear();
+		d->fitData.paramNamesUtf8.clear();
 		// reset size of fields not touched by initFitData()
 		d->fitData.paramStartValues.resize(2);
 		d->fitData.paramFixed.resize(2);
@@ -2371,13 +2374,15 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		d->fitResult.tdist_marginValues.resize(2);
 	}
 	// not present in old projects
-	int size = d->fitResult.paramValues.size();
+	int np = d->fitResult.paramValues.size();
 	if (d->fitResult.tdist_tValues.size() == 0)
-		d->fitResult.tdist_tValues.resize(size);
+		d->fitResult.tdist_tValues.resize(np);
 	if (d->fitResult.tdist_pValues.size() == 0)
-		d->fitResult.tdist_pValues.resize(size);
+		d->fitResult.tdist_pValues.resize(np);
 	if (d->fitResult.tdist_marginValues.size() == 0)
-		d->fitResult.tdist_marginValues.resize(size);
+		d->fitResult.tdist_marginValues.resize(np);
+
+	DEBUG("# start values = " << d->fitData.paramStartValues.size());
 
 	// wait for data to be read before using the pointers
 	QThreadPool::globalInstance()->waitForDone();

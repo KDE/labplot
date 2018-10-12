@@ -80,10 +80,13 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 	m_initializing = true;
 	m_fitData = data;
 
+	int np = m_fitData->paramNames.size();
+	DEBUG("# params = " << np);
+	DEBUG("# start values = " << m_fitData->paramStartValues.size());
 	if (m_fitData->modelCategory != nsl_fit_model_custom) {	// pre-defined models
-		ui.tableWidget->setRowCount(m_fitData->paramNames.size());
+		ui.tableWidget->setRowCount(np);
 
-		for (int i = 0; i < m_fitData->paramNames.size(); ++i) {
+		for (int i = 0; i < np; ++i) {
 			// name
 			QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNamesUtf8.at(i));
 			item->setFlags(item->flags() ^ Qt::ItemIsEditable);
@@ -130,9 +133,9 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 		ui.tableWidget->setCurrentCell(0, 1);
 	} else {	// custom model
 		if (!m_fitData->paramNames.isEmpty()) {	// parameters for the custom model are already available -> show them
-			ui.tableWidget->setRowCount(m_fitData->paramNames.size());
+			ui.tableWidget->setRowCount(np);
 
-			for (int i = 0; i < m_fitData->paramNames.size(); ++i){
+			for (int i = 0; i < np; ++i){
 				// name
 				QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNames.at(i));
 				item->setBackground(QApplication::palette().color(QPalette::Window));
