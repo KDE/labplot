@@ -58,13 +58,13 @@
 */
 
 ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
-	QHBoxLayout* horizontalLayout = new QHBoxLayout(this);
+	auto horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
 	horizontalLayout->setMargin(0);
 
-    m_pbLoadTheme = new QPushButton(this);
-    horizontalLayout->addWidget(m_pbLoadTheme);
-    m_pbLoadTheme->setText(i18n("Apply Theme"));
+	m_pbLoadTheme = new QPushButton(this);
+	horizontalLayout->addWidget(m_pbLoadTheme);
+	m_pbLoadTheme->setText(i18n("Apply Theme"));
 
 // 	pbSaveTheme = new QPushButton(this);
 // 	horizontalLayout->addWidget(pbSaveTheme);
@@ -77,7 +77,7 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 	pbPublishTheme->setEnabled(false);
 */
 
-    connect( m_pbLoadTheme, SIGNAL(clicked()), this, SLOT(showPanel()));
+	connect( m_pbLoadTheme, SIGNAL(clicked()), this, SLOT(showPanel()));
 // 	connect( pbSaveTheme, SIGNAL(clicked()), this, SLOT(saveMenu()));
 // 	connect( pbPublishTheme, SIGNAL(clicked()), this, SLOT(publishThemes()));
 
@@ -90,16 +90,16 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 			m_themeList.append(it.next());
 	}
 
-    m_pbLoadTheme->setEnabled(!m_themeList.isEmpty());
+	m_pbLoadTheme->setEnabled(!m_themeList.isEmpty());
 }
 
 void ThemeHandler::setCurrentTheme(const QString& name) {
 	if (!name.isEmpty()) {
-        m_pbLoadTheme->setText(i18n("Apply theme [active '%1']", name));
-        m_pbLoadTheme->setToolTip(i18n("Theme '%1' is active. Click on the button to change the theme.", name));
+		m_pbLoadTheme->setText(i18n("Apply theme [active '%1']", name));
+		m_pbLoadTheme->setToolTip(i18n("Theme '%1' is active. Click on the button to change the theme.", name));
 	} else {
-        m_pbLoadTheme->setText(i18n("Apply Theme"));
-        m_pbLoadTheme->setToolTip(i18n("No theme is active. Click on the button to select a theme."));
+		m_pbLoadTheme->setText(i18n("Apply Theme"));
+		m_pbLoadTheme->setToolTip(i18n("No theme is active. Click on the button to select a theme."));
 	}
 
 	m_currentTheme = name;
@@ -167,13 +167,13 @@ void ThemeHandler::showPanel() {
 	connect(&themeWidget, SIGNAL(themeSelected(QString)), &menu, SLOT(close()));
 	connect(&themeWidget, SIGNAL(canceled()), &menu, SLOT(close()));
 
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&themeWidget);
 	menu.addAction(widgetAction);
 
-    QPoint pos(-menu.sizeHint().width()+m_pbLoadTheme->width(),-menu.sizeHint().height());
+	QPoint pos(-menu.sizeHint().width()+m_pbLoadTheme->width(),-menu.sizeHint().height());
 	menu.setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    menu.exec(m_pbLoadTheme->mapToGlobal(pos));
+	menu.exec(m_pbLoadTheme->mapToGlobal(pos));
 }
 
 // void ThemeHandler::saveMenu() {

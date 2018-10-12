@@ -56,7 +56,7 @@ FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 	m_textEditWidget.setReadOnly(true);
 	m_textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
 
-	QVBoxLayout* layout = new QVBoxLayout(this);
+	auto layout = new QVBoxLayout(this);
 	layout->addWidget(&m_textEditWidget);
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
@@ -134,7 +134,7 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 
 		// file type and type specific information about the file
 #ifdef Q_OS_LINUX
-		QProcess *proc = new QProcess();
+		auto proc = new QProcess();
 		QStringList args;
 		args<<"-b"<<fileName;
 		proc->start( "file", args);

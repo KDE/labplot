@@ -121,7 +121,7 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 }
 
 void GuiTools::selectPenStyleAction(QActionGroup* actionGroup, Qt::PenStyle style) {
-	int index = (int)style;
+	auto index = (int)style;
 	Q_ASSERT(index < actionGroup->actions().size());
 	actionGroup->actions().at(index)->setChecked(true);
 }

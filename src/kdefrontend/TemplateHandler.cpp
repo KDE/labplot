@@ -53,11 +53,11 @@
 */
 
 TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(parent){
-	QHBoxLayout* horizontalLayout = new QHBoxLayout(this);
+	auto horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
 	horizontalLayout->setMargin(0);
 
-	QSpacerItem* horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+	auto horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 	horizontalLayout->addItem(horizontalSpacer);
 
 	int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
@@ -161,9 +161,9 @@ void TemplateHandler::saveMenu() {
 	connect(&menu, SIGNAL(triggered(QAction*)), this, SLOT(saveMenuSelected(QAction*)));
 
 	// add editable action
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto widgetAction = new QWidgetAction(this);
 	QFrame* frame = new QFrame(this);
-	QHBoxLayout* layout = new QHBoxLayout(frame);
+	auto layout = new QHBoxLayout(frame);
 
 	QLabel* label = new QLabel(i18n("New:"), frame);
 	layout->addWidget(label);

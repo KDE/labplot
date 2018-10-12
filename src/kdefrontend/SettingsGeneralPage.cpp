@@ -71,7 +71,7 @@ void SettingsGeneralPage::loadSettings(){
 	ui.cbInterface->setCurrentIndex(group.readEntry(QLatin1String("ViewMode"), 0));
 	ui.cbTabPosition->setCurrentIndex(group.readEntry(QLatin1String("TabPosition"), 0));
 	ui.cbMdiVisibility->setCurrentIndex(group.readEntry(QLatin1String("MdiWindowVisibility"), 0));
-	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), 0));
+	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), false));
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
 }
 
