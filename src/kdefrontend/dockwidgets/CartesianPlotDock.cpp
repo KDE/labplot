@@ -64,7 +64,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : QWidget(parent),
 	ui.setupUi(this);
 
 	//"General"-tab
-	QButtonGroup* rangeButtonsGroup(new QButtonGroup);
+	auto rangeButtonsGroup(new QButtonGroup);
 	rangeButtonsGroup->addButton(ui.rbRangeFirst);
 	rangeButtonsGroup->addButton(ui.rbRangeLast);
 	rangeButtonsGroup->addButton(ui.rbRangeFree);
@@ -81,19 +81,19 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : QWidget(parent),
 	//"Background"-tab
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	QCompleter* completer = new QCompleter(this);
+	auto completer = new QCompleter(this);
 	completer->setModel(new QDirModel);
 	ui.leBackgroundFileName->setCompleter(completer);
 
 	//"Title"-tab
-	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
-	labelWidget=new LabelWidget(ui.tabTitle);
+	auto hboxLayout = new QHBoxLayout(ui.tabTitle);
+	labelWidget = new LabelWidget(ui.tabTitle);
 	hboxLayout->addWidget(labelWidget);
 	hboxLayout->setContentsMargins(2,2,2,2);
 	hboxLayout->setSpacing(2);
 	//adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
-		QGridLayout* layout = qobject_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		auto layout = qobject_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
 
@@ -184,7 +184,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : QWidget(parent),
 
 	//theme and template handlers
 	QFrame* frame = new QFrame(this);
-	QHBoxLayout* layout = new QHBoxLayout(frame);
+	auto layout = new QHBoxLayout(frame);
 
 	m_themeHandler = new ThemeHandler(this);
 	layout->addWidget(m_themeHandler);
@@ -193,7 +193,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : QWidget(parent),
 	connect(m_themeHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 	//connect(this, SIGNAL(saveThemeEnable(bool)), m_themeHandler, SLOT(saveThemeEnable(bool)));
 
-	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
+	auto templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
 	layout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
@@ -299,7 +299,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	//Deactivate the geometry related widgets, if the worksheet layout is active.
 	//Currently, a plot can only be a child of the worksheet itself, so we only need to ask the parent aspect (=worksheet).
 	//TODO redesign this, if the hierarchy will be changend in future (a plot is a child of a new object group/container or so)
-	Worksheet* w = dynamic_cast<Worksheet*>(m_plot->parentAspect());
+	auto w = dynamic_cast<Worksheet*>(m_plot->parentAspect());
 	if (w) {
 		bool b = (w->layout() == Worksheet::NoLayout);
 		ui.sbTop->setEnabled(b);
@@ -578,7 +578,7 @@ void CartesianPlotDock::xRangeFormatChanged(int index) {
 	if (m_initializing)
 		return;
 
-	CartesianPlot::RangeFormat format = (CartesianPlot::RangeFormat)index;
+	auto format = (CartesianPlot::RangeFormat)index;
 	for (auto* plot: m_plotList)
 		plot->setXRangeFormat(format);
 }
@@ -641,7 +641,7 @@ void CartesianPlotDock::yScaleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	CartesianPlot::Scale scale = (CartesianPlot::Scale)index;
+	auto scale = (CartesianPlot::Scale)index;
 	for (auto* plot: m_plotList)
 		plot->setYScale(scale);
 }
@@ -662,7 +662,7 @@ void CartesianPlotDock::yRangeFormatChanged(int index) {
 	if (m_initializing)
 		return;
 
-	CartesianPlot::RangeFormat format = (CartesianPlot::RangeFormat)index;
+	auto format = (CartesianPlot::RangeFormat)index;
 	for (auto* plot: m_plotList)
 		plot->setYRangeFormat(format);
 }
@@ -781,7 +781,7 @@ void CartesianPlotDock::xBreakStyleChanged(int styleIndex) {
 		return;
 
 	int index = ui.cbXBreak->currentIndex();
-	CartesianPlot::RangeBreakStyle style = CartesianPlot::RangeBreakStyle(styleIndex);
+	auto style = CartesianPlot::RangeBreakStyle(styleIndex);
 	CartesianPlot::RangeBreaks breaks = m_plot->xRangeBreaks();
 	breaks.list[index].style = style;
 	breaks.lastChanged = index;
@@ -902,7 +902,7 @@ void CartesianPlotDock::yBreakStyleChanged(int styleIndex) {
 		return;
 
 	int index = ui.cbYBreak->currentIndex();
-	CartesianPlot::RangeBreakStyle style = CartesianPlot::RangeBreakStyle(styleIndex);
+	auto style = CartesianPlot::RangeBreakStyle(styleIndex);
 	CartesianPlot::RangeBreaks breaks = m_plot->yRangeBreaks();
 	breaks.list[index].style = style;
 	breaks.lastChanged = index;
@@ -913,7 +913,7 @@ void CartesianPlotDock::yBreakStyleChanged(int styleIndex) {
 
 // "Plot area"-tab
 void CartesianPlotDock::backgroundTypeChanged(int index) {
-	PlotArea::BackgroundType type = (PlotArea::BackgroundType)index;
+	auto type = (PlotArea::BackgroundType)index;
 
 	if (type == PlotArea::Color) {
 		ui.lBackgroundColorStyle->show();
@@ -930,8 +930,7 @@ void CartesianPlotDock::backgroundTypeChanged(int index) {
 		ui.lBackgroundFirstColor->show();
 		ui.kcbBackgroundFirstColor->show();
 
-		PlotArea::BackgroundColorStyle style =
-		    (PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
+		auto style = (PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
 		if (style == PlotArea::SingleColor) {
 			ui.lBackgroundFirstColor->setText(i18n("Color:"));
 			ui.lBackgroundSecondColor->hide();
@@ -982,7 +981,7 @@ void CartesianPlotDock::backgroundTypeChanged(int index) {
 }
 
 void CartesianPlotDock::backgroundColorStyleChanged(int index) {
-	PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
+	auto style = (PlotArea::BackgroundColorStyle)index;
 
 	if (style == PlotArea::SingleColor) {
 		ui.lBackgroundFirstColor->setText(i18n("Color:"));
@@ -1007,7 +1006,7 @@ void CartesianPlotDock::backgroundImageStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
+	auto style = (PlotArea::BackgroundImageStyle)index;
 	for (auto* plot: m_plotList)
 		plot->plotArea()->setBackgroundImageStyle(style);
 }
@@ -1016,7 +1015,7 @@ void CartesianPlotDock::backgroundBrushStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	Qt::BrushStyle style = (Qt::BrushStyle)index;
+	auto style = (Qt::BrushStyle)index;
 	for (auto* plot: m_plotList)
 		plot->plotArea()->setBackgroundBrushStyle(style);
 }
@@ -1095,7 +1094,7 @@ void CartesianPlotDock::borderStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	Qt::PenStyle penStyle = Qt::PenStyle(index);
+	auto penStyle = Qt::PenStyle(index);
 	QPen pen;
 	for (auto* plot: m_plotList) {
 		pen = plot->plotArea()->borderPen();

@@ -48,7 +48,7 @@
 #include <QStandardItem>
 
 ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(parent),
-	m_cols(0), m_rows(0), m_databaseTreeModel(nullptr), m_initializing(0), m_valid(false), m_numeric(false) {
+	m_cols(0), m_rows(0), m_databaseTreeModel(nullptr), m_initializing(false), m_valid(false), m_numeric(false) {
 	ui.setupUi(this);
 
 	ui.cbImportFrom->addItem(i18n("Table"));
@@ -243,7 +243,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	m_columnNames.clear();
 	m_columnModes.clear();
 	bool numeric = true;
-	QLocale::Language numberFormat = (QLocale::Language)ui.cbNumberFormat->currentIndex();
+	const auto numberFormat = (QLocale::Language)ui.cbNumberFormat->currentIndex();
 	const QString& dateTimeFormat = ui.cbDateTimeFormat->currentText();
 	q.next(); //go to the first record
 // 	ui.twPreview->setRowCount(1); //add the first row for the check boxes

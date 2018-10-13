@@ -50,11 +50,11 @@
  \ingroup kdefrontend
 */
 
-AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(nullptr), m_aspectTreeModel(nullptr), m_dataChanged(0), m_initializing(false) {
+AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(nullptr), m_aspectTreeModel(nullptr), m_dataChanged(false), m_initializing(false) {
 	ui.setupUi(this);
 
 	//"Title"-tab
-	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
+	auto hboxLayout = new QHBoxLayout(ui.tabTitle);
 	labelWidget = new LabelWidget(ui.tabTitle);
 	labelWidget->setFixedLabelMode(true);
 	hboxLayout->addWidget(labelWidget);
@@ -62,7 +62,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(nullptr), m_aspectTr
 	hboxLayout->setSpacing(2);
 
 	//"Ticks"-tab
-	QGridLayout* layout = static_cast<QGridLayout*>(ui.tabTicks->layout());
+	auto layout = static_cast<QGridLayout*>(ui.tabTicks->layout());
 	cbMajorTicksColumn = new TreeViewComboBox(ui.tabTicks);
 	layout->addWidget(cbMajorTicksColumn, 5, 2);
 
@@ -161,7 +161,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(nullptr), m_aspectTr
 	connect( ui.sbMinorGridOpacity, SIGNAL(valueChanged(int)), this, SLOT(minorGridOpacityChanged(int)) );
 
 
-	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Axis);
+	auto templateHandler = new TemplateHandler(this, TemplateHandler::Axis);
 	ui.verticalLayout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
@@ -486,7 +486,7 @@ void AxisDock::visibilityChanged(bool state) {
 	called if the orientation (horizontal or vertical) of the current axis is changed.
 */
 void AxisDock::orientationChanged(int index) {
-	Axis::AxisOrientation orientation = (Axis::AxisOrientation)index;
+	auto orientation = (Axis::AxisOrientation)index;
 	if (orientation == Axis::AxisHorizontal) {
 		ui.cbPosition->setItemText(0, i18n("Top") );
 		ui.cbPosition->setItemText(1, i18n("Bottom") );
@@ -520,7 +520,7 @@ void AxisDock::orientationChanged(int index) {
 	Axis::AxisPosition axisPosition;
 	int posIndex = ui.cbPosition->currentIndex();
 	if (orientation == Axis::AxisHorizontal) {
-		if (posIndex>1)
+		if (posIndex > 1)
 			posIndex += 2;
 		axisPosition = Axis::AxisPosition(posIndex);
 	} else {
@@ -529,7 +529,7 @@ void AxisDock::orientationChanged(int index) {
 
 	//labels position
 	posIndex = ui.cbLabelsPosition->currentIndex();
-	Axis::LabelsPosition labelsPosition = Axis::LabelsPosition(posIndex);
+	auto labelsPosition = Axis::LabelsPosition(posIndex);
 
 	for (auto* axis : m_axesList) {
 		axis->beginMacro(i18n("%1: set axis orientation", axis->name()));
@@ -587,7 +587,7 @@ void AxisDock::scaleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	Axis::AxisScale scale = (Axis::AxisScale)index;
+	auto scale = (Axis::AxisScale)index;
 	for (auto* axis : m_axesList)
 		axis->setScale(scale);
 }
@@ -613,7 +613,7 @@ void AxisDock::startChanged() {
 	double value = ui.leStart->text().toDouble();
 
 	//check first, whether the value for the lower limit is valid for the log- and square root scaling. If not, set the default values.
-	Axis::AxisScale scale = Axis::AxisScale(ui.cbScale->currentIndex());
+	auto scale = Axis::AxisScale(ui.cbScale->currentIndex());
 	if (scale == Axis::ScaleLog10 || scale == Axis::ScaleLog2 || scale == Axis::ScaleLn) {
 		if (value <= 0) {
 			KMessageBox::sorry(this,
@@ -683,7 +683,7 @@ void AxisDock::scalingFactorChanged() {
 
 // "Line"-tab
 void AxisDock::lineStyleChanged(int index) {
-	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	auto penStyle = Qt::PenStyle(index);
 
 	bool b = (penStyle != Qt::NoPen);
 	ui.lLineColor->setEnabled(b);
@@ -698,7 +698,7 @@ void AxisDock::lineStyleChanged(int index) {
 
 	QPen pen;
 	for (auto* axis : m_axesList) {
-		pen=axis->linePen();
+		pen = axis->linePen();
 		pen.setStyle(penStyle);
 		axis->setLinePen(pen);
 	}
@@ -742,7 +742,7 @@ void AxisDock::lineOpacityChanged(int value) {
 }
 
 void AxisDock::arrowTypeChanged(int index) {
-	Axis::ArrowType type = (Axis::ArrowType)index;
+	auto type = (Axis::ArrowType)index;
 	if (type == Axis::NoArrow) {
 		ui.cbArrowPosition->setEnabled(false);
 		ui.sbArrowSize->setEnabled(false);
@@ -762,7 +762,7 @@ void AxisDock::arrowPositionChanged(int index) {
 	if (m_initializing)
 		return;
 
-	Axis::ArrowPosition position = (Axis::ArrowPosition)index;
+	auto position = (Axis::ArrowPosition)index;
 	for (auto* axis : m_axesList)
 		axis->setArrowPosition(position);
 }
@@ -792,7 +792,7 @@ void AxisDock::majorTicksDirectionChanged(int index) {
 	ui.lMajorTicksLineStyle->setEnabled(b);
 	ui.cbMajorTicksLineStyle->setEnabled(b);
 	if (b) {
-		Qt::PenStyle penStyle=Qt::PenStyle(ui.cbMajorTicksLineStyle->currentIndex());
+		auto penStyle = Qt::PenStyle(ui.cbMajorTicksLineStyle->currentIndex());
 		b = (penStyle != Qt::NoPen);
 	}
 	ui.lMajorTicksColor->setEnabled(b);
@@ -816,7 +816,7 @@ void AxisDock::majorTicksDirectionChanged(int index) {
 	Shows/hides the corresponding widgets.
 */
 void AxisDock::majorTicksTypeChanged(int index) {
-	Axis::TicksType type = Axis::TicksType(index);
+	auto type = Axis::TicksType(index);
 	if ( type == Axis::TicksTotalNumber) {
 		ui.lMajorTicksNumber->show();
 		ui.sbMajorTicksNumber->show();
@@ -866,9 +866,9 @@ void AxisDock::majorTicksIncrementChanged() {
 }
 
 void AxisDock::majorTicksLineStyleChanged(int index) {
-	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	auto penStyle = Qt::PenStyle(index);
 
-	bool b=(penStyle != Qt::NoPen);
+	bool b = (penStyle != Qt::NoPen);
 	ui.lMajorTicksColor->setEnabled(b);
 	ui.kcbMajorTicksColor->setEnabled(b);
 	ui.lMajorTicksWidth->setEnabled(b);
@@ -883,7 +883,7 @@ void AxisDock::majorTicksLineStyleChanged(int index) {
 
 	QPen pen;
 	for (auto* axis : m_axesList) {
-		pen=axis->majorTicksPen();
+		pen = axis->majorTicksPen();
 		pen.setStyle(penStyle);
 		axis->setMajorTicksPen(pen);
 	}
@@ -893,7 +893,7 @@ void AxisDock::majorTicksColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = nullptr;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);
@@ -964,7 +964,7 @@ void AxisDock::minorTicksDirectionChanged(int index) {
 	ui.lMinorTicksLineStyle->setEnabled(b);
 	ui.cbMinorTicksLineStyle->setEnabled(b);
 	if (b) {
-		Qt::PenStyle penStyle=Qt::PenStyle(ui.cbMinorTicksLineStyle->currentIndex());
+		auto penStyle = Qt::PenStyle(ui.cbMinorTicksLineStyle->currentIndex());
 		b = (penStyle != Qt::NoPen);
 	}
 	ui.lMinorTicksColor->setEnabled(b);
@@ -984,7 +984,7 @@ void AxisDock::minorTicksDirectionChanged(int index) {
 }
 
 void AxisDock::minorTicksTypeChanged(int index) {
-	Axis::TicksType type = Axis::TicksType(index);
+	auto type = Axis::TicksType(index);
 	if ( type == Axis::TicksTotalNumber) {
 		ui.lMinorTicksNumber->show();
 		ui.sbMinorTicksNumber->show();
@@ -1037,8 +1037,8 @@ void AxisDock::minorTicksColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto column = dynamic_cast<AbstractColumn*>(aspect);
 	Q_ASSERT(column != nullptr);
 
 	for (auto* axis : m_axesList)
@@ -1046,7 +1046,7 @@ void AxisDock::minorTicksColumnChanged(const QModelIndex& index) {
 }
 
 void AxisDock::minorTicksLineStyleChanged(int index) {
-	Qt::PenStyle penStyle = Qt::PenStyle(index);
+	auto penStyle = Qt::PenStyle(index);
 
 	bool b = (penStyle != Qt::NoPen);
 	ui.lMinorTicksColor->setEnabled(b);
@@ -1152,7 +1152,7 @@ void AxisDock::labelsDateTimeFormatChanged(int) {
 }
 
 void AxisDock::labelsPositionChanged(int index) {
-	Axis::LabelsPosition position = Axis::LabelsPosition(index);
+	auto position = Axis::LabelsPosition(index);
 
 	bool b = (position != Axis::NoLabels);
 	ui.lLabelsOffset->setEnabled(b);
@@ -1241,7 +1241,7 @@ void AxisDock::labelsOpacityChanged(int value) {
 // "Grid"-tab
 //major grid
 void AxisDock::majorGridStyleChanged(int index) {
-	Qt::PenStyle penStyle = Qt::PenStyle(index);
+	auto penStyle = Qt::PenStyle(index);
 
 	bool b = (penStyle != Qt::NoPen);
 	ui.lMajorGridColor->setEnabled(b);
@@ -1301,7 +1301,7 @@ void AxisDock::majorGridOpacityChanged(int value) {
 
 //minor grid
 void AxisDock::minorGridStyleChanged(int index) {
-	Qt::PenStyle penStyle = Qt::PenStyle(index);
+	auto penStyle = Qt::PenStyle(index);
 
 	bool b = (penStyle != Qt::NoPen);
 	ui.lMinorGridColor->setEnabled(b);
@@ -1657,7 +1657,7 @@ void AxisDock::load() {
 	ui.chkVisible->setChecked( m_axis->isVisible() );
 	ui.cbOrientation->setCurrentIndex( (int) m_axis->orientation() );
 
-	int index = (int) m_axis->position();
+	auto index = (int)m_axis->position();
 	if (index > 1)
 		ui.cbPosition->setCurrentIndex(index-2);
 	else
@@ -1669,7 +1669,7 @@ void AxisDock::load() {
 	ui.leStart->setText( QString::number(m_axis->start()) );
 	ui.leEnd->setText( QString::number(m_axis->end()) );
 
-	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+	const auto plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
 	if (plot) {
 		bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
 			|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );

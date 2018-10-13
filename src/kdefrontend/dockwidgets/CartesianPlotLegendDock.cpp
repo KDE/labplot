@@ -56,7 +56,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : QWidget(pare
 	ui.setupUi(this);
 
 	//"Title"-tab
-	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
+	auto hboxLayout = new QHBoxLayout(ui.tabTitle);
 	labelWidget = new LabelWidget(ui.tabTitle);
 	labelWidget->setNoGeometryMode(true);
 	hboxLayout->addWidget(labelWidget);
@@ -65,13 +65,13 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : QWidget(pare
 
 	//"Background"-tab
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
-	QCompleter* completer = new QCompleter(this);
+	auto completer = new QCompleter(this);
 	completer->setModel(new QDirModel);
 	ui.leBackgroundFileName->setCompleter(completer);
 
 	//adjust layouts in the tabs
-	for (int i=0; i<ui.tabWidget->count(); ++i) {
-		QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+	for (int i = 0; i < ui.tabWidget->count(); ++i) {
+		auto layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
 
@@ -126,7 +126,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : QWidget(pare
 	connect( ui.sbLayoutVerticalSpacing, SIGNAL(valueChanged(double)), this, SLOT(layoutVerticalSpacingChanged(double)) );
 	connect( ui.sbLayoutColumnCount, SIGNAL(valueChanged(int)), this, SLOT(layoutColumnCountChanged(int)) );
 
-	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlotLegend);
+	auto templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlotLegend);
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
@@ -396,7 +396,7 @@ void CartesianPlotLegendDock::rotationChanged(int value) {
 
 // "Background"-tab
 void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
-	PlotArea::BackgroundType type = (PlotArea::BackgroundType)index;
+	const auto type = (PlotArea::BackgroundType)index;
 
 	if (type == PlotArea::Color) {
 		ui.lBackgroundColorStyle->show();
@@ -413,8 +413,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 		ui.lBackgroundFirstColor->show();
 		ui.kcbBackgroundFirstColor->show();
 
-		PlotArea::BackgroundColorStyle style =
-			(PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
+		auto style = (PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
 		if (style == PlotArea::SingleColor) {
 			ui.lBackgroundFirstColor->setText(i18n("Color:"));
 			ui.lBackgroundSecondColor->hide();
@@ -465,7 +464,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 }
 
 void CartesianPlotLegendDock::backgroundColorStyleChanged(int index) {
-	PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
+	auto style = (PlotArea::BackgroundColorStyle)index;
 
 	if (style == PlotArea::SingleColor) {
 		ui.lBackgroundFirstColor->setText(i18n("Color:"));
@@ -490,7 +489,7 @@ void CartesianPlotLegendDock::backgroundImageStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
+	auto style = (PlotArea::BackgroundImageStyle)index;
 	for (auto* legend : m_legendList)
 		legend->setBackgroundImageStyle(style);
 }
@@ -499,7 +498,7 @@ void CartesianPlotLegendDock::backgroundBrushStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	Qt::BrushStyle style = (Qt::BrushStyle)index;
+	auto style = (Qt::BrushStyle)index;
 	for (auto* legend : m_legendList)
 		legend->setBackgroundBrushStyle(style);
 }
@@ -578,7 +577,7 @@ void CartesianPlotLegendDock::borderStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	auto penStyle = Qt::PenStyle(index);
 	QPen pen;
 	for (auto* legend : m_legendList) {
 		pen = legend->borderPen();

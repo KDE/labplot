@@ -86,7 +86,7 @@ void NetCDFOptionsWidget::netcdfTreeWidgetSelectionChanged() {
 		m_fileWidget->refreshPreview();
 	else if (item->data(1, Qt::DisplayRole).toString().contains("attribute")) {
 		// reads attributes (only for preview)
-		NetCDFFilter *filter = (NetCDFFilter *)m_fileWidget->currentFileFilter();
+		auto filter = (NetCDFFilter *)m_fileWidget->currentFileFilter();
 		QString fileName = m_fileWidget->ui.leFileName->text();
 		QString name = item->data(0, Qt::DisplayRole).toString();
 		QString varName = item->data(1, Qt::DisplayRole).toString().split(' ')[0];
@@ -106,7 +106,7 @@ void NetCDFOptionsWidget::netcdfTreeWidgetSelectionChanged() {
 				ui.twPreview->setColumnCount(cols);
 
 			for (int j = 0; j < cols; ++j) {
-				QTableWidgetItem* item = new QTableWidgetItem();
+				auto item = new QTableWidgetItem();
 				item->setText(lineString[j]);
 				ui.twPreview->setItem(i, j, item);
 			}

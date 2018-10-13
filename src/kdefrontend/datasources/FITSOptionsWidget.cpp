@@ -110,7 +110,7 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 	}
 
 	if (!selectedExtension.isEmpty()) {
-		FITSFilter* filter = dynamic_cast<FITSFilter*>(m_fileWidget->currentFileFilter());
+		auto filter = dynamic_cast<FITSFilter*>(m_fileWidget->currentFileFilter());
 		bool readFitsTableToMatrix;
 		const QVector<QStringList> importedStrings = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
 		emit m_fileWidget->checkedFitsTableToMatrix(readFitsTableToMatrix);
@@ -130,7 +130,7 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 			colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
 
 			for (int j = 0; j < colCount; ++j) {
-				QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
+				auto item = new QTableWidgetItem(lineString[j]);
 				ui.twPreview->setItem(i, j, item);
 			}
 		}

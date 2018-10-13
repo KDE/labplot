@@ -60,7 +60,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	m_projectType(type),
 	m_aspectTreeModel(new AspectTreeModel(parent->project())) {
 
-	QVBoxLayout* vLayout = new QVBoxLayout(this);
+	auto vLayout = new QVBoxLayout(this);
 
 	//main widget
 	QWidget* mainWidget = new QWidget(this);
@@ -176,7 +176,7 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	QStringList selectedPathes;
 	for (int i = 0; i < indexes.size()/4; ++i) {
 		QModelIndex index = indexes.at(i*4);
-		const AbstractAspect* aspect = static_cast<const AbstractAspect*>(index.internalPointer());
+		const auto aspect = static_cast<const AbstractAspect*>(index.internalPointer());
 
 		//path of the current aspect and the pathes of all aspects it depends on
 		selectedPathes << aspect->path();
@@ -223,7 +223,7 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	}
 
 	//show a progress bar in the status bar
-	QProgressBar* progressBar = new QProgressBar();
+	auto progressBar = new QProgressBar();
 	progressBar->setMinimum(0);
 	progressBar->setMaximum(100);
 
@@ -259,7 +259,7 @@ void ImportProjectDialog::refreshPreview() {
 
 #ifdef HAVE_LIBORIGIN
 	if (m_projectType == ProjectOrigin) {
-		OriginProjectParser* originParser = reinterpret_cast<OriginProjectParser*>(m_projectParser);
+		const auto originParser = reinterpret_cast<OriginProjectParser*>(m_projectParser);
 		if (originParser->hasUnusedObjects())
 			ui.chbUnusedObjects->show();
 		else
@@ -293,7 +293,7 @@ void ImportProjectDialog::showTopLevelOnly(const QModelIndex& index) {
 	for (int i = 0; i < rows; ++i) {
 		QModelIndex child = index.child(i, 0);
 		showTopLevelOnly(child);
-		const AbstractAspect* aspect = static_cast<const AbstractAspect*>(child.internalPointer());
+		const auto aspect = static_cast<const AbstractAspect*>(child.internalPointer());
 		ui.tvPreview->setRowHidden(i, index, !isTopLevel(aspect));
 	}
 }
@@ -322,9 +322,9 @@ void ImportProjectDialog::selectionChanged(const QItemSelection& selected, const
 
 	//for the just selected aspect, determine all the objects it depends on and select them, too
 	//TODO: we need a better "selection", maybe with tri-state check boxes in the tree view
-	const AbstractAspect* aspect = static_cast<const AbstractAspect*>(indexes.at(0).internalPointer());
+	const auto aspect = static_cast<const AbstractAspect*>(indexes.at(0).internalPointer());
 	const QVector<AbstractAspect*> aspects = aspect->dependsOn();
-	AspectTreeModel* model = reinterpret_cast<AspectTreeModel*>(ui.tvPreview->model());
+	const auto model = reinterpret_cast<AspectTreeModel*>(ui.tvPreview->model());
 	for (const auto* aspect : aspects) {
 		QModelIndex index = model->modelIndexOfAspect(aspect, 0);
 		ui.tvPreview->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
@@ -414,7 +414,7 @@ void ImportProjectDialog::newFolder() {
 	QInputDialog* dlg = new QInputDialog(this);
 	name = dlg->getText(this, i18n("Add new folder"), i18n("Folder name:"), QLineEdit::Normal, name, &ok);
 	if (ok) {
-		Folder* folder = new Folder(name);
+		auto folder = new Folder(name);
 		m_mainWin->addAspectToProject(folder);
 		m_cbAddTo->setCurrentModelIndex(m_mainWin->model()->modelIndexOfAspect(folder));
 	}

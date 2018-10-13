@@ -69,7 +69,7 @@ void JsonOptionsWidget::applyFilterSettings(JsonFilter* filter, const QModelInde
 	//TODO: change this after implementation other row types
 	filter->setDataRowType(QJsonValue::Array);
 	if (!index.isValid()) return;
-	QJsonTreeItem *item = static_cast<QJsonTreeItem*>(index.internalPointer());
+	auto item = static_cast<QJsonTreeItem*>(index.internalPointer());
 	if (item->childCount() < 1) return;
 	filter->setDataRowType(item->child(0)->type());
 }
