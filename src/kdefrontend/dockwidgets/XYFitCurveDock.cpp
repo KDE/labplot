@@ -225,10 +225,6 @@ void XYFitCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText("");
 	}
 
-	//show the properties of the first curve
-	//CHECK: already done in setCurve
-	//m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
-
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_fitCurve->dataSourceType());
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_fitCurve->dataSourceCurve());
@@ -245,6 +241,7 @@ void XYFitCurveDock::initGeneralTab() {
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
 		uiGeneralTab.cbModel->setCurrentIndex(tmpModelType);
 	m_fitData.modelType = tmpModelType;
+	categoryChanged(m_fitData.modelCategory);	// fill model types
 
 	uiGeneralTab.cbXWeight->setCurrentIndex(m_fitData.xWeightsType);
 	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.yWeightsType);
