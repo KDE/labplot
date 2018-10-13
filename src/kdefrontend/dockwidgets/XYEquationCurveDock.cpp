@@ -66,14 +66,14 @@ XYEquationCurveDock::XYEquationCurveDock(QWidget *parent): XYCurveDock(parent), 
 void XYEquationCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
-	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
-	if (gridLayout ) {
+	auto gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
+	if (gridLayout) {
 		gridLayout->setContentsMargins(2,2,2,2);
 		gridLayout->setHorizontalSpacing(2);
 		gridLayout->setVerticalSpacing(2);
 	}
 
-	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
+	auto layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
@@ -153,7 +153,7 @@ void XYEquationCurveDock::initGeneralTab() {
 	}
 
 	//show the properties of the first curve
-	const XYEquationCurve* equationCurve = dynamic_cast<const XYEquationCurve*>(m_curve);
+	const auto equationCurve = dynamic_cast<const XYEquationCurve*>(m_curve);
 	Q_ASSERT(equationCurve);
 	const XYEquationCurve::EquationData& data = equationCurve->equationData();
 	uiGeneralTab.cbType->setCurrentIndex(data.type);
@@ -191,8 +191,8 @@ void XYEquationCurveDock::commentChanged(){
 }
 
 void XYEquationCurveDock::typeChanged(int index) {
-	XYEquationCurve::EquationType type = XYEquationCurve::EquationType(index);
-	if (type==XYEquationCurve::Cartesian) {
+	const auto type = XYEquationCurve::EquationType(index);
+	if (type == XYEquationCurve::Cartesian) {
 		uiGeneralTab.lEquation1->setText("y=f(x)");
 		uiGeneralTab.lEquation2->hide();
 		uiGeneralTab.teEquation2->hide();
@@ -204,7 +204,7 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.teMax->show();
 		uiGeneralTab.lMin->setText(i18n("x, min"));
 		uiGeneralTab.lMax->setText(i18n("x, max"));
-	} else if (type==XYEquationCurve::Polar) {
+	} else if (type == XYEquationCurve::Polar) {
 		uiGeneralTab.lEquation1->setText(QString::fromUtf8("r(φ)"));
 		uiGeneralTab.lEquation2->hide();
 		uiGeneralTab.teEquation2->hide();
@@ -216,7 +216,7 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.teMax->show();
 		uiGeneralTab.lMin->setText(i18n("φ, min"));
 		uiGeneralTab.lMax->setText(i18n("φ, max"));
-	} else if (type==XYEquationCurve::Parametric) {
+	} else if (type == XYEquationCurve::Parametric) {
 		uiGeneralTab.lEquation1->setText("x=f(t)");
 		uiGeneralTab.lEquation2->setText("y=f(t)");
 		uiGeneralTab.lEquation2->show();
@@ -229,7 +229,7 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.teMax->show();
 		uiGeneralTab.lMin->setText(i18n("t, min"));
 		uiGeneralTab.lMax->setText(i18n("t, max"));
-	} else if (type==XYEquationCurve::Implicit) {
+	} else if (type == XYEquationCurve::Implicit) {
 		uiGeneralTab.lEquation1->setText("f(x,y)");
 		uiGeneralTab.lEquation2->hide();
 		uiGeneralTab.teEquation2->hide();
@@ -264,7 +264,7 @@ void XYEquationCurveDock::showConstants() {
 	QMenu menu;
 	ConstantsWidget constants(&menu);
 
-	if (QObject::sender()==uiGeneralTab.tbConstants1)
+	if (QObject::sender() == uiGeneralTab.tbConstants1)
 		connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant1(QString)));
 	else
 		connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant2(QString)));
@@ -272,11 +272,11 @@ void XYEquationCurveDock::showConstants() {
 	connect(&constants, SIGNAL(constantSelected(QString)), &menu, SLOT(close()));
 	connect(&constants, SIGNAL(canceled()), &menu, SLOT(close()));
 
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&constants);
 	menu.addAction(widgetAction);
 
-	if (QObject::sender()==uiGeneralTab.tbConstants1) {
+	if (QObject::sender() == uiGeneralTab.tbConstants1) {
 		QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbConstants1->width(),-menu.sizeHint().height());
 		menu.exec(uiGeneralTab.tbConstants1->mapToGlobal(pos));
 	} else {
@@ -288,7 +288,7 @@ void XYEquationCurveDock::showConstants() {
 void XYEquationCurveDock::showFunctions() {
 	QMenu menu;
 	FunctionsWidget functions(&menu);
-	if (QObject::sender()==uiGeneralTab.tbFunctions1)
+	if (QObject::sender() == uiGeneralTab.tbFunctions1)
 		connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insertFunction1(QString)));
 	else
 		connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insertFunction2(QString)));
@@ -296,11 +296,11 @@ void XYEquationCurveDock::showFunctions() {
 	connect(&functions, SIGNAL(functionSelected(QString)), &menu, SLOT(close()));
 	connect(&functions, SIGNAL(canceled()), &menu, SLOT(close()));
 
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&functions);
 	menu.addAction(widgetAction);
 
-	if (QObject::sender()==uiGeneralTab.tbFunctions1) {
+	if (QObject::sender() == uiGeneralTab.tbFunctions1) {
 		QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbFunctions1->width(),-menu.sizeHint().height());
 		menu.exec(uiGeneralTab.tbFunctions1->mapToGlobal(pos));
 	} else {
@@ -311,12 +311,12 @@ void XYEquationCurveDock::showFunctions() {
 
 void XYEquationCurveDock::insertFunction1(const QString& str) {
 	//TODO: not all functions have only one argument
-	XYEquationCurve::EquationType type = XYEquationCurve::EquationType(uiGeneralTab.cbType->currentIndex());
-	if (type==XYEquationCurve::Cartesian)
+	const auto type = XYEquationCurve::EquationType(uiGeneralTab.cbType->currentIndex());
+	if (type == XYEquationCurve::Cartesian)
 		uiGeneralTab.teEquation1->insertPlainText(str + "(x)");
-	else if (type==XYEquationCurve::Polar)
+	else if (type == XYEquationCurve::Polar)
 		uiGeneralTab.teEquation1->insertPlainText(str + "(phi)");
-	else if (type==XYEquationCurve::Parametric)
+	else if (type == XYEquationCurve::Parametric)
 		uiGeneralTab.teEquation1->insertPlainText(str + "(t)");
 }
 
@@ -339,8 +339,8 @@ void XYEquationCurveDock::enableRecalculate() const {
 
 	//check whether the formular expressions are correct
 	bool valid = false;
-	XYEquationCurve::EquationType type = XYEquationCurve::EquationType(uiGeneralTab.cbType->currentIndex());
-	if (type!=XYEquationCurve::Parametric)
+	const auto type = XYEquationCurve::EquationType(uiGeneralTab.cbType->currentIndex());
+	if (type != XYEquationCurve::Parametric)
 		valid = uiGeneralTab.teEquation1->isValid();
 	else
 		valid = (uiGeneralTab.teEquation1->isValid() && uiGeneralTab.teEquation2->isValid());

@@ -77,7 +77,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 
-	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
+	auto gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 		gridLayout->setContentsMargins(2,2,2,2);
 		gridLayout->setHorizontalSpacing(2);
@@ -116,7 +116,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
-	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
+	auto layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
@@ -269,7 +269,7 @@ void XYInterpolationCurveDock::commentChanged() {
 }
 
 void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
-	XYAnalysisCurve::DataSourceType type = (XYAnalysisCurve::DataSourceType)index;
+	const auto type = (XYAnalysisCurve::DataSourceType)index;
 	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
@@ -294,7 +294,7 @@ void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	XYCurve* dataSourceCurve = nullptr;
 	if (aspect) {
 		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
@@ -312,7 +312,7 @@ void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) 
 }
 
 void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = nullptr;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);
@@ -338,15 +338,15 @@ void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
 		uiGeneralTab.sbMax->setValue(column->maximum());
 	}
 
-	unsigned int n=0;
-	for (int row=0; row < column->rowCount(); row++)
+	unsigned int n = 0;
+	for (int row = 0; row < column->rowCount(); row++)
 		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
 			n++;
 	dataPoints = n;
 	if(m_interpolationData.pointsMode == XYInterpolationCurve::Auto)
 		pointsModeChanged();
 
-	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
+	const auto model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
 	QStandardItem* item = model->item(nsl_interp_type_polynomial);
 	if (dataPoints < gsl_interp_type_min_size(gsl_interp_polynomial) || dataPoints > 100) {	// not good for many points
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
@@ -409,7 +409,7 @@ void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = nullptr;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);
@@ -465,7 +465,7 @@ void XYInterpolationCurveDock::xRangeMaxChanged() {
 }
 
 void XYInterpolationCurveDock::typeChanged() {
-	nsl_interp_type type = (nsl_interp_type)uiGeneralTab.cbType->currentIndex();
+	const auto type = (nsl_interp_type)uiGeneralTab.cbType->currentIndex();
 	m_interpolationData.type = type;
 
 	switch (type) {
@@ -499,7 +499,7 @@ void XYInterpolationCurveDock::typeChanged() {
 }
 
 void XYInterpolationCurveDock::variantChanged() {
-	nsl_interp_pch_variant variant = (nsl_interp_pch_variant)uiGeneralTab.cbVariant->currentIndex();
+	const auto variant = (nsl_interp_pch_variant)uiGeneralTab.cbVariant->currentIndex();
 	m_interpolationData.variant = variant;
 
 	switch (variant) {
@@ -574,7 +574,7 @@ void XYInterpolationCurveDock::evaluateChanged() {
 }
 
 void XYInterpolationCurveDock::pointsModeChanged() {
-	XYInterpolationCurve::PointsMode mode = (XYInterpolationCurve::PointsMode)uiGeneralTab.cbPointsMode->currentIndex();
+	const auto mode = (XYInterpolationCurve::PointsMode)uiGeneralTab.cbPointsMode->currentIndex();
 
 	switch (mode) {
 	case XYInterpolationCurve::Auto:

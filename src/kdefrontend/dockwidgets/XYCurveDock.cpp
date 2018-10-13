@@ -70,7 +70,7 @@ XYCurveDock::XYCurveDock(QWidget* parent) : QWidget(parent),
 	ui.setupUi(this);
 
 	//Tab "Values"
-	QGridLayout* gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());
+	auto gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());
 	cbValuesColumn = new TreeViewComboBox(ui.tabValues);
 	gridLayout->addWidget(cbValuesColumn, 2, 2, 1, 1);
 
@@ -78,7 +78,7 @@ XYCurveDock::XYCurveDock(QWidget* parent) : QWidget(parent),
 	ui.cbFillingColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.bFillingOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	QCompleter* completer = new QCompleter(this);
+	auto completer = new QCompleter(this);
 	completer->setModel(new QDirModel);
 	ui.leFillingFileName->setCompleter(completer);
 
@@ -98,8 +98,8 @@ XYCurveDock::XYCurveDock(QWidget* parent) : QWidget(parent),
 	gridLayout->addWidget(cbYErrorMinusColumn, 8, 2, 1, 1);
 
 	//adjust layouts in the tabs
-	for (int i=0; i<ui.tabWidget->count(); ++i) {
-		QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+	for (int i = 0; i < ui.tabWidget->count(); ++i) {
+		auto layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
 
@@ -181,7 +181,7 @@ XYCurveDock::XYCurveDock(QWidget* parent) : QWidget(parent),
 	connect( ui.sbErrorBarsOpacity, SIGNAL(valueChanged(int)), this, SLOT(errorBarsOpacityChanged(int)) );
 
 	//template handler
-	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::XYCurve);
+	auto templateHandler = new TemplateHandler(this, TemplateHandler::XYCurve);
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
@@ -200,12 +200,12 @@ XYCurveDock::~XYCurveDock() {
 void XYCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
-	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
+	auto layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
 	// Tab "General"
-	QGridLayout* gridLayout = qobject_cast<QGridLayout*>(generalTab->layout());
+	auto gridLayout = qobject_cast<QGridLayout*>(generalTab->layout());
 
 	cbXColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbXColumn, 2, 2, 1, 1);
@@ -216,9 +216,9 @@ void XYCurveDock::setupGeneral() {
 	//General
 	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYCurveDock::nameChanged);
 	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYCurveDock::commentChanged);
-	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
-	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
-	connect( cbYColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yColumnChanged(QModelIndex)) );
+	connect(uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)));
+	connect(cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)));
+	connect(cbYColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yColumnChanged(QModelIndex)));
 }
 
 void XYCurveDock::init() {
@@ -379,7 +379,7 @@ void XYCurveDock::init() {
 
 	ui.cbSymbolStyle->addItem(i18n("None"));
 	for (int i = 1; i < 19; ++i) {	//TODO: use enum count
-		Symbol::Style style = (Symbol::Style)i;
+		const auto style = (Symbol::Style)i;
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
 		pa.setPen(pen);
@@ -387,7 +387,7 @@ void XYCurveDock::init() {
 		pa.translate(iconSize/2,iconSize/2);
 		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
 		pa.end();
-        ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style));
+		ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style));
 	}
 
 	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
@@ -741,7 +741,7 @@ void XYCurveDock::showValuesColumnFormat(const Column* column) {
 		//show the actual formatting properties
 		switch (columnMode) {
 		case AbstractColumn::Numeric: {
-			Double2StringFilter* filter = static_cast<Double2StringFilter*>(column->outputFilter());
+			const auto filter = static_cast<Double2StringFilter*>(column->outputFilter());
 			ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->numericFormat()));
 			ui.sbValuesPrecision->setValue(filter->numDigits());
 			break;
@@ -752,7 +752,7 @@ void XYCurveDock::showValuesColumnFormat(const Column* column) {
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
-			DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
+			const auto filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
 			DEBUG("	column values format = " << filter->format().toStdString());
 			ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
 			break;
@@ -804,7 +804,7 @@ void XYCurveDock::xColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = nullptr;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);
@@ -819,7 +819,7 @@ void XYCurveDock::yColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = nullptr;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);
@@ -840,7 +840,7 @@ void XYCurveDock::visibilityChanged(bool state) {
 
 // "Line"-tab
 void XYCurveDock::lineTypeChanged(int index) {
-	XYCurve::LineType lineType = XYCurve::LineType(index);
+	const auto lineType = XYCurve::LineType(index);
 
 	if ( lineType == XYCurve::NoLine) {
 		ui.chkLineSkipGaps->setEnabled(false);
@@ -906,10 +906,10 @@ void XYCurveDock::lineStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	const auto penStyle = Qt::PenStyle(index);
 	QPen pen;
 	for (auto* curve : m_curvesList) {
-		pen=curve->linePen();
+		pen = curve->linePen();
 		pen.setStyle(penStyle);
 		curve->setLinePen(pen);
 	}
@@ -921,7 +921,7 @@ void XYCurveDock::lineColorChanged(const QColor& color) {
 
 	QPen pen;
 	for (auto* curve : m_curvesList) {
-		pen=curve->linePen();
+		pen = curve->linePen();
 		pen.setColor(color);
 		curve->setLinePen(pen);
 	}
@@ -937,7 +937,7 @@ void XYCurveDock::lineWidthChanged(double value) {
 
 	QPen pen;
 	for (auto* curve : m_curvesList) {
-		pen=curve->linePen();
+		pen = curve->linePen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		curve->setLinePen(pen);
 	}
@@ -953,7 +953,7 @@ void XYCurveDock::lineOpacityChanged(int value) {
 }
 
 void XYCurveDock::dropLineTypeChanged(int index) {
-	XYCurve::DropLineType dropLineType = XYCurve::DropLineType(index);
+	const auto dropLineType = XYCurve::DropLineType(index);
 
 	if ( dropLineType == XYCurve::NoDropLine) {
 		ui.cbDropLineStyle->setEnabled(false);
@@ -978,10 +978,10 @@ void XYCurveDock::dropLineStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	auto penStyle = Qt::PenStyle(index);
 	QPen pen;
 	for (auto* curve : m_curvesList) {
-		pen=curve->dropLinePen();
+		pen = curve->dropLinePen();
 		pen.setStyle(penStyle);
 		curve->setDropLinePen(pen);
 	}
@@ -993,7 +993,7 @@ void XYCurveDock::dropLineColorChanged(const QColor& color) {
 
 	QPen pen;
 	for (auto* curve : m_curvesList) {
-		pen=curve->dropLinePen();
+		pen = curve->dropLinePen();
 		pen.setColor(color);
 		curve->setDropLinePen(pen);
 	}
@@ -1009,7 +1009,7 @@ void XYCurveDock::dropLineWidthChanged(double value) {
 
 	QPen pen;
 	for (auto* curve : m_curvesList) {
-		pen=curve->dropLinePen();
+		pen = curve->dropLinePen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		curve->setDropLinePen(pen);
 	}
@@ -1026,7 +1026,7 @@ void XYCurveDock::dropLineOpacityChanged(int value) {
 
 //"Symbol"-tab
 void XYCurveDock::symbolsStyleChanged(int index) {
-	Symbol::Style style = Symbol::Style(index);
+	const auto style = Symbol::Style(index);
 
 	if (style == Symbol::NoSymbols) {
 		ui.sbSymbolSize->setEnabled(false);
@@ -1045,7 +1045,7 @@ void XYCurveDock::symbolsStyleChanged(int index) {
 		ui.sbSymbolOpacity->setEnabled(true);
 
 		//enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
-		if (style!=Symbol::Line && style!=Symbol::Cross) {
+		if (style != Symbol::Line && style != Symbol::Cross) {
 			ui.cbSymbolFillingStyle->setEnabled(true);
 			bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex()) == Qt::NoBrush);
 			ui.kcbSymbolFillingColor->setEnabled(!noBrush);
@@ -1093,7 +1093,7 @@ void XYCurveDock::symbolsOpacityChanged(int value) {
 }
 
 void XYCurveDock::symbolsFillingStyleChanged(int index) {
-	Qt::BrushStyle brushStyle = Qt::BrushStyle(index);
+	const auto brushStyle = Qt::BrushStyle(index);
 	ui.kcbSymbolFillingColor->setEnabled(!(brushStyle == Qt::NoBrush));
 
 	if (m_initializing)
@@ -1101,7 +1101,7 @@ void XYCurveDock::symbolsFillingStyleChanged(int index) {
 
 	QBrush brush;
 	for (auto* curve : m_curvesList) {
-		brush=curve->symbolsBrush();
+		brush = curve->symbolsBrush();
 		brush.setStyle(brushStyle);
 		curve->setSymbolsBrush(brush);
 	}
@@ -1113,7 +1113,7 @@ void XYCurveDock::symbolsFillingColorChanged(const QColor& color) {
 
 	QBrush brush;
 	for (auto* curve : m_curvesList) {
-		brush=curve->symbolsBrush();
+		brush = curve->symbolsBrush();
 		brush.setColor(color);
 		curve->setSymbolsBrush(brush);
 	}
@@ -1124,7 +1124,7 @@ void XYCurveDock::symbolsFillingColorChanged(const QColor& color) {
 }
 
 void XYCurveDock::symbolsBorderStyleChanged(int index) {
-	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	const auto penStyle = Qt::PenStyle(index);
 
 	if ( penStyle == Qt::NoPen ) {
 		ui.kcbSymbolBorderColor->setEnabled(false);
@@ -1139,7 +1139,7 @@ void XYCurveDock::symbolsBorderStyleChanged(int index) {
 
 	QPen pen;
 	for (auto* curve : m_curvesList) {
-		pen=curve->symbolsPen();
+		pen = curve->symbolsPen();
 		pen.setStyle(penStyle);
 		curve->setSymbolsPen(pen);
 	}
@@ -1151,7 +1151,7 @@ void XYCurveDock::symbolsBorderColorChanged(const QColor& color) {
 
 	QPen pen;
 	for (auto* curve : m_curvesList) {
-		pen=curve->symbolsPen();
+		pen = curve->symbolsPen();
 		pen.setColor(color);
 		curve->setSymbolsPen(pen);
 	}
@@ -1167,7 +1167,7 @@ void XYCurveDock::symbolsBorderWidthChanged(double value) {
 
 	QPen pen;
 	for (auto* curve : m_curvesList) {
-		pen=curve->symbolsPen();
+		pen = curve->symbolsPen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		curve->setSymbolsPen(pen);
 	}
@@ -1179,7 +1179,7 @@ void XYCurveDock::symbolsBorderWidthChanged(double value) {
   called when the type of the values (none, x, y, (x,y) etc.) was changed.
 */
 void XYCurveDock::valuesTypeChanged(int index) {
-	XYCurve::ValuesType valuesType = XYCurve::ValuesType(index);
+	const auto valuesType = XYCurve::ValuesType(index);
 
 	if (valuesType == XYCurve::NoValues) {
 		//no values are to paint -> deactivate all the pertinent widgets
@@ -1240,7 +1240,7 @@ void XYCurveDock::valuesColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	Column* column= static_cast<Column*>(index.internalPointer());
+	auto column = static_cast<Column*>(index.internalPointer());
 	this->showValuesColumnFormat(column);
 
 	for (auto* curve : m_curvesList) {
@@ -1320,7 +1320,7 @@ void XYCurveDock::valuesColorChanged(const QColor& color) {
 
 //Filling-tab
 void XYCurveDock::fillingPositionChanged(int index) {
-	XYCurve::FillingPosition fillingPosition = XYCurve::FillingPosition(index);
+	const auto fillingPosition = XYCurve::FillingPosition(index);
 
 	bool b = (fillingPosition != XYCurve::NoFilling);
 	ui.cbFillingType->setEnabled(b);
@@ -1341,7 +1341,7 @@ void XYCurveDock::fillingPositionChanged(int index) {
 }
 
 void XYCurveDock::fillingTypeChanged(int index) {
-	PlotArea::BackgroundType type = (PlotArea::BackgroundType)index;
+	const auto type = (PlotArea::BackgroundType)index;
 
 	if (type == PlotArea::Color) {
 		ui.lFillingColorStyle->show();
@@ -1358,8 +1358,7 @@ void XYCurveDock::fillingTypeChanged(int index) {
 		ui.lFillingFirstColor->show();
 		ui.kcbFillingFirstColor->show();
 
-		PlotArea::BackgroundColorStyle style =
-		    (PlotArea::BackgroundColorStyle) ui.cbFillingColorStyle->currentIndex();
+		auto style = (PlotArea::BackgroundColorStyle) ui.cbFillingColorStyle->currentIndex();
 		if (style == PlotArea::SingleColor) {
 			ui.lFillingFirstColor->setText(i18n("Color:"));
 			ui.lFillingSecondColor->hide();
@@ -1410,7 +1409,7 @@ void XYCurveDock::fillingTypeChanged(int index) {
 }
 
 void XYCurveDock::fillingColorStyleChanged(int index) {
-	PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
+	const auto style = (PlotArea::BackgroundColorStyle)index;
 
 	if (style == PlotArea::SingleColor) {
 		ui.lFillingFirstColor->setText(i18n("Color:"));
@@ -1435,7 +1434,7 @@ void XYCurveDock::fillingImageStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
+	auto style = (PlotArea::BackgroundImageStyle)index;
 	for (auto* curve : m_curvesList)
 		curve->setFillingImageStyle(style);
 }
@@ -1444,7 +1443,7 @@ void XYCurveDock::fillingBrushStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	Qt::BrushStyle style = (Qt::BrushStyle)index;
+	auto style = (Qt::BrushStyle)index;
 	for (auto* curve : m_curvesList)
 		curve->setFillingBrushStyle(style);
 }
@@ -1566,8 +1565,8 @@ void XYCurveDock::xErrorPlusColumnChanged(const QModelIndex& index) const {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto column = dynamic_cast<AbstractColumn*>(aspect);
 	Q_ASSERT(column);
 
 	for (auto* curve : m_curvesList)
@@ -1579,8 +1578,8 @@ void XYCurveDock::xErrorMinusColumnChanged(const QModelIndex& index) const {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto column = dynamic_cast<AbstractColumn*>(aspect);
 	Q_ASSERT(column);
 
 	for (auto* curve : m_curvesList)
@@ -1636,8 +1635,8 @@ void XYCurveDock::yErrorPlusColumnChanged(const QModelIndex& index) const {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto column = dynamic_cast<AbstractColumn*>(aspect);
 	Q_ASSERT(column);
 
 	for (auto* curve : m_curvesList)
@@ -1649,8 +1648,8 @@ void XYCurveDock::yErrorMinusColumnChanged(const QModelIndex& index) const {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto column = dynamic_cast<AbstractColumn*>(aspect);
 	Q_ASSERT(column);
 
 	for (auto* curve : m_curvesList)
@@ -1658,7 +1657,7 @@ void XYCurveDock::yErrorMinusColumnChanged(const QModelIndex& index) const {
 }
 
 void XYCurveDock::errorBarsTypeChanged(int index) const {
-	XYCurve::ErrorBarsType type = XYCurve::ErrorBarsType(index);
+	auto type = XYCurve::ErrorBarsType(index);
 	bool b = (type == XYCurve::ErrorBarsWithEnds);
 	ui.lErrorBarsCapSize->setVisible(b);
 	ui.sbErrorBarsCapSize->setVisible(b);
@@ -1683,10 +1682,10 @@ void XYCurveDock::errorBarsStyleChanged(int index) const {
 	if (m_initializing)
 		return;
 
-	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	auto penStyle = Qt::PenStyle(index);
 	QPen pen;
 	for (auto* curve : m_curvesList) {
-		pen=curve->errorBarsPen();
+		pen = curve->errorBarsPen();
 		pen.setStyle(penStyle);
 		curve->setErrorBarsPen(pen);
 	}
@@ -1698,7 +1697,7 @@ void XYCurveDock::errorBarsColorChanged(const QColor& color) {
 
 	QPen pen;
 	for (auto* curve : m_curvesList) {
-		pen=curve->errorBarsPen();
+		pen = curve->errorBarsPen();
 		pen.setColor(color);
 		curve->setErrorBarsPen(pen);
 	}
@@ -1714,7 +1713,7 @@ void XYCurveDock::errorBarsWidthChanged(double value) const {
 
 	QPen pen;
 	for (auto* curve : m_curvesList) {
-		pen=curve->errorBarsPen();
+		pen = curve->errorBarsPen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		curve->setErrorBarsPen(pen);
 	}

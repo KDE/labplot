@@ -74,7 +74,7 @@ void XYIntegrationCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 
-	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
+	auto gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 		gridLayout->setContentsMargins(2,2,2,2);
 		gridLayout->setHorizontalSpacing(2);
@@ -91,7 +91,7 @@ void XYIntegrationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 3);
 
-	for (int i=0; i < NSL_INT_NETHOD_COUNT; i++)
+	for (int i = 0; i < NSL_INT_NETHOD_COUNT; i++)
 		uiGeneralTab.cbMethod->addItem(i18n(nsl_int_method_name[i]));
 
 	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
@@ -99,7 +99,7 @@ void XYIntegrationCurveDock::setupGeneral() {
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
-	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
+	auto layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
@@ -235,7 +235,7 @@ void XYIntegrationCurveDock::commentChanged() {
 }
 
 void XYIntegrationCurveDock::dataSourceTypeChanged(int index) {
-	XYAnalysisCurve::DataSourceType type = (XYAnalysisCurve::DataSourceType)index;
+	const auto type = (XYAnalysisCurve::DataSourceType)index;
 	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
@@ -260,8 +260,8 @@ void XYIntegrationCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYIntegrationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
 	// disable integration orders and accuracies that need more data points
 	this->updateSettings(dataSourceCurve->xColumn());
@@ -277,8 +277,8 @@ void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYIntegrationCurve*>(curve)->setXDataColumn(column);
@@ -311,8 +311,8 @@ void XYIntegrationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYIntegrationCurve*>(curve)->setYDataColumn(column);
@@ -363,7 +363,7 @@ void XYIntegrationCurveDock::xRangeMaxChanged() {
 }
 
 void XYIntegrationCurveDock::methodChanged() {
-	nsl_int_method_type method = (nsl_int_method_type)uiGeneralTab.cbMethod->currentIndex();
+	const auto method = (nsl_int_method_type)uiGeneralTab.cbMethod->currentIndex();
 	m_integrationData.method = method;
 
 	// update absolute option

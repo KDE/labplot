@@ -45,8 +45,8 @@ CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent), m_point(null
 	ui.lePositionY->setValidator( new QDoubleValidator(ui.lePositionY) );
 
 	//adjust layouts in the tabs
-	for (int i=0; i<ui.tabWidget->count(); ++i) {
-	  QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+	for (int i = 0; i < ui.tabWidget->count(); ++i) {
+	  auto layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 	  if (!layout)
 		continue;
 
@@ -75,7 +75,7 @@ CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent), m_point(null
 	connect( ui.sbSymbolBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(symbolBorderWidthChanged(double)) );
 
 	//Template handler
-	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CustomPoint);
+	auto templateHandler = new TemplateHandler(this, TemplateHandler::CustomPoint);
 	ui.verticalLayout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
@@ -96,7 +96,7 @@ void CustomPointDock::init() {
 	QTransform trafo;
 	trafo.scale(15, 15);
 	for (int i=0; i<18; ++i) {
-		Symbol::Style style = (Symbol::Style)i;
+		auto style = (Symbol::Style)i;
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
 		pa.setPen( pen );
@@ -202,9 +202,9 @@ void CustomPointDock::visibilityChanged(bool state) {
 }
 
 void CustomPointDock::symbolStyleChanged(int index) {
-	Symbol::Style style = Symbol::Style(index);
+	auto style = Symbol::Style(index);
 	//enable/disable the  filling options in the GUI depending on the currently selected points.
-	if (style!=Symbol::Line && style!=Symbol::Cross) {
+	if (style != Symbol::Line && style != Symbol::Cross) {
 		ui.cbSymbolFillingStyle->setEnabled(true);
 		bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex())==Qt::NoBrush);
 		ui.kcbSymbolFillingColor->setEnabled(!noBrush);
@@ -258,7 +258,7 @@ void CustomPointDock::symbolOpacityChanged(int value) {
 }
 
 void CustomPointDock::symbolFillingStyleChanged(int index) {
-	Qt::BrushStyle brushStyle = Qt::BrushStyle(index);
+	auto brushStyle = Qt::BrushStyle(index);
 	ui.kcbSymbolFillingColor->setEnabled(!(brushStyle==Qt::NoBrush));
 
 	if (m_initializing)
@@ -293,7 +293,7 @@ void CustomPointDock::symbolFillingColorChanged(const QColor& color) {
 }
 
 void CustomPointDock::symbolBorderStyleChanged(int index) {
-	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	auto penStyle = Qt::PenStyle(index);
 
 	if ( penStyle == Qt::NoPen ) {
 		ui.kcbSymbolBorderColor->setEnabled(false);

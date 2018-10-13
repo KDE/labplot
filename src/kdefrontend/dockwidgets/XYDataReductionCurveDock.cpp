@@ -74,7 +74,7 @@ void XYDataReductionCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 
-	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
+	auto gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 		gridLayout->setContentsMargins(2,2,2,2);
 		gridLayout->setHorizontalSpacing(2);
@@ -102,7 +102,7 @@ void XYDataReductionCurveDock::setupGeneral() {
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
-	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
+	auto layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
@@ -250,7 +250,7 @@ void XYDataReductionCurveDock::commentChanged() {
 }
 
 void XYDataReductionCurveDock::dataSourceTypeChanged(int index) {
-	XYAnalysisCurve::DataSourceType type = (XYAnalysisCurve::DataSourceType)index;
+	const auto type = (XYAnalysisCurve::DataSourceType)index;
 	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
@@ -275,8 +275,8 @@ void XYDataReductionCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYDataReductionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
 // 	// disable deriv orders and accuracies that need more data points
 // 	this->updateSettings(dataSourceCurve->xColumn());
@@ -292,8 +292,8 @@ void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYDataReductionCurve*>(curve)->setXDataColumn(column);
@@ -312,8 +312,8 @@ void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYDataReductionCurve*>(curve)->setYDataColumn(column);
@@ -366,7 +366,7 @@ void XYDataReductionCurveDock::updateTolerance() {
 	DEBUG("clip_area_perpoint =" << nsl_geom_linesim_clip_area_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size()));
 	DEBUG("avg_dist_perpoint =" << nsl_geom_linesim_avg_dist_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size()));
 
-	nsl_geom_linesim_type type = (nsl_geom_linesim_type)uiGeneralTab.cbType->currentIndex();
+	const auto type = (nsl_geom_linesim_type)uiGeneralTab.cbType->currentIndex();
 	if (type == nsl_geom_linesim_type_raddist || type == nsl_geom_linesim_type_opheim)
 		m_dataReductionData.tolerance = 10. * nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size());
 	else if (type == nsl_geom_linesim_type_visvalingam_whyatt)
@@ -380,7 +380,7 @@ void XYDataReductionCurveDock::updateTolerance() {
 }
 
 void XYDataReductionCurveDock::updateTolerance2() {
-	nsl_geom_linesim_type type = (nsl_geom_linesim_type)uiGeneralTab.cbType->currentIndex();
+	const auto type = (nsl_geom_linesim_type)uiGeneralTab.cbType->currentIndex();
 
 	if (type == nsl_geom_linesim_type_perpdist)
 		uiGeneralTab.sbTolerance2->setValue(10);
@@ -435,7 +435,7 @@ void XYDataReductionCurveDock::xRangeMaxChanged() {
 }
 
 void XYDataReductionCurveDock::typeChanged() {
-	nsl_geom_linesim_type type = (nsl_geom_linesim_type)uiGeneralTab.cbType->currentIndex();
+	const auto type = (nsl_geom_linesim_type)uiGeneralTab.cbType->currentIndex();
 	m_dataReductionData.type = type;
 
 	switch (type) {
@@ -542,7 +542,7 @@ void XYDataReductionCurveDock::typeChanged() {
 }
 
 void XYDataReductionCurveDock::autoToleranceChanged() {
-	bool autoTolerance = (bool)uiGeneralTab.chkAuto->isChecked();
+	const auto autoTolerance = (bool)uiGeneralTab.chkAuto->isChecked();
 	m_dataReductionData.autoTolerance = autoTolerance;
 
 	if (autoTolerance) {
@@ -559,7 +559,7 @@ void XYDataReductionCurveDock::toleranceChanged() {
 }
 
 void XYDataReductionCurveDock::autoTolerance2Changed() {
-	bool autoTolerance2 = (bool)uiGeneralTab.chkAuto2->isChecked();
+	const auto autoTolerance2 = (bool)uiGeneralTab.chkAuto2->isChecked();
 	m_dataReductionData.autoTolerance2 = autoTolerance2;
 
 	if (autoTolerance2) {
@@ -577,7 +577,7 @@ void XYDataReductionCurveDock::tolerance2Changed() {
 
 void XYDataReductionCurveDock::recalculateClicked() {
 	//show a progress bar in the status bar
-	QProgressBar* progressBar = new QProgressBar();
+	auto progressBar = new QProgressBar();
 	progressBar->setMinimum(0);
 	progressBar->setMaximum(100);
 	connect(m_curve, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));

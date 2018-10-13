@@ -51,7 +51,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent): QWidget(parent), m_spreadshee
 	connect(ui.sbRowCount, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SpreadsheetDock::rowCountChanged);
 	connect(ui.cbShowComments, &QCheckBox::stateChanged, this, &SpreadsheetDock::commentsShownChanged);
 
-	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Spreadsheet);
+	auto templateHandler = new TemplateHandler(this, TemplateHandler::Spreadsheet);
 	ui.gridLayout->addWidget(templateHandler, 11, 0, 1, 4);
 	templateHandler->show();
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &SpreadsheetDock::loadConfigFromTemplate);
@@ -180,21 +180,21 @@ void SpreadsheetDock::load() {
 	ui.sbColumnCount->setValue(m_spreadsheet->columnCount());
 	ui.sbRowCount->setValue(m_spreadsheet->rowCount());
 
-	SpreadsheetView* view = qobject_cast<SpreadsheetView*>(m_spreadsheet->view());
+	auto view = qobject_cast<SpreadsheetView*>(m_spreadsheet->view());
 	ui.cbShowComments->setChecked(view->areCommentsShown());
 }
 
 void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
-	int index = config.name().lastIndexOf(QDir::separator());
+	const int index = config.name().lastIndexOf(QDir::separator());
 	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else
 		name = config.name();
 
-	int size = m_spreadsheetList.size();
-	if (size>1)
+	const int size = m_spreadsheetList.size();
+	if (size > 1)
 		m_spreadsheet->beginMacro(i18n("%1 spreadsheets: template \"%2\" loaded", size, name));
 	else
 		m_spreadsheet->beginMacro(i18n("%1: template \"%2\" loaded", m_spreadsheet->name(), name));
@@ -213,7 +213,7 @@ void SpreadsheetDock::loadConfig(KConfig& config) {
 	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_spreadsheet->columnCount()));
 	ui.sbRowCount->setValue(group.readEntry("RowCount", m_spreadsheet->rowCount()));
 
-	SpreadsheetView* view = qobject_cast<SpreadsheetView*>(m_spreadsheet->view());
+	auto view = qobject_cast<SpreadsheetView*>(m_spreadsheet->view());
 	ui.cbShowComments->setChecked(group.readEntry("ShowComments", view->areCommentsShown()));
 }
 

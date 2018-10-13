@@ -250,7 +250,7 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	ui.sbKeepNValues->setValue(fds->keepNValues());
 
 	// disable "whole file" when having no file (i.e. socket or port)
-	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
+	auto model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
 	QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -329,7 +329,7 @@ void LiveDataDock::updateNow() {
 void LiveDataDock::updateTypeChanged(int idx) {
 	if(!m_liveDataSources.isEmpty())  {
 		DEBUG("LiveDataDock::updateTypeChanged()");
-		const LiveDataSource::UpdateType type = static_cast<LiveDataSource::UpdateType>(idx);
+		const auto type = static_cast<LiveDataSource::UpdateType>(idx);
 
 		switch (type) {
 		case LiveDataSource::UpdateType::TimeInterval:
@@ -387,7 +387,7 @@ void LiveDataDock::updateTypeChanged(int idx) {
  */
 void LiveDataDock::readingTypeChanged(int idx) {
 	if(!m_liveDataSources.isEmpty())  {
-		const LiveDataSource::ReadingType type = static_cast<LiveDataSource::ReadingType>(idx);
+		const auto type = static_cast<LiveDataSource::ReadingType>(idx);
 		const LiveDataSource* const fds = m_liveDataSources.at(0);
 		const LiveDataSource::SourceType sourceType = fds->sourceType();
 		const LiveDataSource::UpdateType updateType = fds->updateType();
