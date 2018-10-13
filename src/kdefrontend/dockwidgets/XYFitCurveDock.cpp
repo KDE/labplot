@@ -141,7 +141,8 @@ void XYFitCurveDock::setupGeneral() {
 	// show these options per default
 	showDataOptions(true);
 	showFitOptions(true);
-	showParametersOptions(true);
+	showParameters(true);
+	showResults(true);
 	// hide these options per default
 	showWeightsOptions(false);
 
@@ -189,7 +190,8 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()));
 	connect(uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()));
 	connect(uiGeneralTab.lFit, &QPushButton::clicked, this, &XYFitCurveDock::showFitOptions);
-	connect(uiGeneralTab.lParameters, &QPushButton::clicked, this, &XYFitCurveDock::showParametersOptions);
+	connect(uiGeneralTab.lParameters, &QPushButton::clicked, this, &XYFitCurveDock::showParameters);
+	connect(uiGeneralTab.lResults, &QPushButton::clicked, this, &XYFitCurveDock::showResults);
 
 	connect(cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)));
 	connect(cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)));
@@ -509,13 +511,23 @@ void XYFitCurveDock::showFitOptions(bool checked) {
 	}
 }
 
-void XYFitCurveDock::showParametersOptions(bool checked) {
+void XYFitCurveDock::showParameters(bool checked) {
 	if (checked) {
 		uiGeneralTab.lParameters->setIcon(QIcon::fromTheme("arrow-down"));
 		fitParametersWidget->show();
 	} else {
 		uiGeneralTab.lParameters->setIcon(QIcon::fromTheme("arrow-right"));
 		fitParametersWidget->hide();
+	}
+}
+
+void XYFitCurveDock::showResults(bool checked) {
+	if (checked) {
+		uiGeneralTab.lResults->setIcon(QIcon::fromTheme("arrow-down"));
+		uiGeneralTab.twResults->show();
+	} else {
+		uiGeneralTab.lResults->setIcon(QIcon::fromTheme("arrow-right"));
+		uiGeneralTab.twResults->hide();
 	}
 }
 
