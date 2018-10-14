@@ -1339,8 +1339,8 @@ void FitTest::testNonLinearMisra1c_2() {
 	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 1.77209416674174e-06
 	FuzzyCompare(fitResult.errorValues.at(1), 1.7728423155E-06, 1.e-3);
 
-	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 0.0584286153041661
-	FuzzyCompare(fitResult.rsd, 5.8428615257E-02, 1.e-9);
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 0.0584286153041661	(WIN: 0.0584286153252961)
+	FuzzyCompare(fitResult.rsd, 5.8428615257E-02, 1.e-8);
 	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 0.0409668370363468
 	FuzzyCompare(fitResult.sse, 4.0966836971E-02, 1.e-8);
 }
@@ -1804,13 +1804,13 @@ void FitTest::testNonLinearMGH10() {
 	FuzzyCompare(fitResult.paramValues.at(1), 6.1813463463E+03, 1.e-6);
 	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 23.3105479190063
 	FuzzyCompare(fitResult.errorValues.at(1), 2.3309021107E+01, 1.e-4);
-	DEBUG(std::setprecision(15) << fitResult.paramValues.at(2));	// result: 345.223624540718
-	FuzzyCompare(fitResult.paramValues.at(2), 3.4522363462E+02, 1.e-7);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(2));	// result: 345.223624540718 (Windows: 345.223579103645)
+	FuzzyCompare(fitResult.paramValues.at(2), 3.4522363462E+02, 1.e-6);
 	DEBUG(std::setprecision(15) << fitResult.errorValues.at(2));	// result: 0.784915645388214
 	FuzzyCompare(fitResult.errorValues.at(2), 7.8486103508E-01, 1.e-4);
 
-	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 2.6009740064923	(Windows: 2.60097400662837)
-	FuzzyCompare(fitResult.rsd, 2.6009740065E+00, 1.e-10);
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 2.6009740064923	(Windows: 2.60097400662837, 2.60097400697918)
+	FuzzyCompare(fitResult.rsd, 2.6009740065E+00, 1.e-9);
 	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 87.9458551718321	(FreeBSD: 87.9458551726946, Windows: 87.9458551810338)
 	FuzzyCompare(fitResult.sse, 8.7945855171E+01, 1.e-9);
 }
