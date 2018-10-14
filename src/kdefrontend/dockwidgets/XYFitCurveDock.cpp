@@ -983,10 +983,6 @@ void XYFitCurveDock::enableRecalculate() const {
 			DEBUG(" ERROR: No parameter defined!");
 	        if (m_fitData.paramStartValues.size() == 0)
 			DEBUG(" ERROR: No start values defined!");
-		for (auto name: m_fitData.paramNames)
-			DEBUG(" param names = " << name.toStdString());
-		for (auto value: m_fitData.paramStartValues)
-			DEBUG(" param start values = " << value);
 
 		// use recent fit data
 		m_fitCurve->setFitData(m_fitData);
@@ -1184,6 +1180,7 @@ void XYFitCurveDock::showFitResult() {
 	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
 
 	DEBUG("	showFitResult(): np = " << np << ", # paramValues = " << fitResult.paramValues.size());
+	//TODO: increasing degree: preview crashes here with fitResult.paramValues.size() < np
 	for (int i = 0; i < np; i++) {
 		const double paramValue = fitResult.paramValues.at(i);
 		const double errorValue = fitResult.errorValues.at(i);
@@ -1341,7 +1338,8 @@ void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& fitData) {
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
-	this->showFitResult();
+	//TODO: CHECK
+	//this->showFitResult();
 	m_initializing = false;
 }
 
