@@ -1768,6 +1768,7 @@ void XYFitCurvePrivate::recalculate() {
 	writeSolverState(s);
 	do {
 		iter++;
+		DEBUG("	iter " << iter);
 
 		// update weights for Y-depending weights (using function values from residuals)
 		if (fitData.yWeightsType == nsl_fit_weight_statistical_fit) {
@@ -1778,13 +1779,16 @@ void XYFitCurvePrivate::recalculate() {
 				weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i)/sqrt(weight[i]) + ydata[i]);	// 1/Y_i^2
 		}
 
+		DEBUG("	run fdfsolver_iterate");
 		status = gsl_multifit_fdfsolver_iterate(s);
+		DEBUG("	fdfsolver_iterate DONE");
 		writeSolverState(s);
 		if (status) {
 			DEBUG("iter " << iter << ", status = " << gsl_strerror(status));
 			break;
 		}
 		status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
+		DEBUG("	iter " << iter << ", test status = " << status);
 	} while (status == GSL_CONTINUE && iter < maxIters);
 
 	// second run for x-error fitting
@@ -2077,6 +2081,7 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 	//current value of the chi2-function
 	state += QString::number(gsl_pow_2(gsl_blas_dnrm2(s->f)));
 	state += ';';
+	DEBUG("	chi = " << gsl_pow_2(gsl_blas_dnrm2(s->f)));
 
 	fitResult.solverOutput += state;
 }

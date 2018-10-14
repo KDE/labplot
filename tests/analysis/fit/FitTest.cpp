@@ -379,6 +379,7 @@ void FitTest::testLinearFilip() {
 	fitData.modelCategory = nsl_fit_model_basic;
 	fitData.modelType = nsl_fit_model_polynomial;
 	fitData.degree = 10;
+//	fitData.eps = 1.e-6;
 	XYFitCurve::initFitData(fitData);
 	const int np = fitData.paramNames.size();
 	fitCurve.setFitData(fitData);

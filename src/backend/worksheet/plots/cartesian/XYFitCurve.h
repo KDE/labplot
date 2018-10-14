@@ -49,7 +49,7 @@ public:
 				yWeightsType(nsl_fit_weight_no),
 				degree(1),
 				maxIterations(500),
-				eps(1e-4),
+				eps(1.e-4),
 				evaluatedPoints(1000),
 				useDataErrors(true),
 				useResults(true),
