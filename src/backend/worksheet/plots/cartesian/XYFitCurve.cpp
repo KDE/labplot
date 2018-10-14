@@ -2001,10 +2001,6 @@ void XYFitCurvePrivate::recalculate() {
 	evaluate();
 	fitResult.elapsedTime = timer.elapsed();
 
-	//redraw the curve
-//TODO: CHECK
-//	emit q->dataChanged();
-
 	sourceDataChangedSinceLastRecalc = false;
 }
 
