@@ -177,7 +177,6 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)));
 	connect(uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)));
 
-	connect(uiGeneralTab.lData, &QPushButton::clicked, this, &XYFitCurveDock::showDataOptions);
 	connect(uiGeneralTab.lWeights, &QPushButton::clicked, this, &XYFitCurveDock::showWeightsOptions);
 	connect(uiGeneralTab.cbXWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(xWeightChanged(int)));
 	connect(uiGeneralTab.cbYWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(yWeightChanged(int)));
@@ -189,6 +188,7 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()));
 	connect(uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()));
 	connect(uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()));
+	connect(uiGeneralTab.lData, &QPushButton::clicked, this, &XYFitCurveDock::showDataOptions);
 	connect(uiGeneralTab.lFit, &QPushButton::clicked, this, &XYFitCurveDock::showFitOptions);
 	connect(uiGeneralTab.lParameters, &QPushButton::clicked, this, &XYFitCurveDock::showParameters);
 	connect(uiGeneralTab.lResults, &QPushButton::clicked, this, &XYFitCurveDock::showResults);
@@ -920,6 +920,7 @@ void XYFitCurveDock::insertConstant(const QString& str) const {
 }
 
 void XYFitCurveDock::recalculateClicked() {
+	DEBUG("XYFitCurveDock::recalculateClicked()");
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	m_fitData.degree = uiGeneralTab.sbDegree->value();
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
@@ -928,11 +929,21 @@ void XYFitCurveDock::recalculateClicked() {
 	for (XYCurve* curve: m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
 
-	fitParametersWidget->setFitData(&m_fitData);
+	m_fitCurve->recalculate();
+
+	//update fitParametersWidget
+	if (m_fitData.useResults) {
+		for (int i = 0; i < m_fitData.paramNames.size(); i++)
+			m_fitData.paramStartValues[i] = m_fitCurve->fitResult().paramValues[i];
+		fitParametersWidget->setFitData(&m_fitData);
+	}
+
 	this->showFitResult();
+
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	emit info(i18n("Fit status: %1", m_fitCurve->fitResult().status));
 	QApplication::restoreOverrideCursor();
+	DEBUG("XYFitCurveDock::recalculateClicked() DONE");
 }
 
 void XYFitCurveDock::expressionChanged() {
@@ -963,18 +974,29 @@ void XYFitCurveDock::enableRecalculate() const {
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData && m_parametersValid);
-	if (hasSourceData) {
-		DEBUG("	enable and preview");
-		// PREVIEW as soon as recalculate is enabled
-		//TODO: this breaks loading a project with fit curve?
-		//	(sets starting values again!)
-//		m_fitCurve->evaluate(true);
-		//TODO: Test	(breaks context menu fit)
-//		m_fitCurve->dataChanged();
+
+	DEBUG("	parameters valid = " << m_parametersValid);
+	// PREVIEW as soon as recalculate is enabled
+	if (hasSourceData && m_parametersValid) {
+		DEBUG("	ENABLE RECALCULATE AND PREVIEW");
+	        if (m_fitData.paramNames.size() == 0)
+			DEBUG(" ERROR: No parameter defined!");
+	        if (m_fitData.paramStartValues.size() == 0)
+			DEBUG(" ERROR: No start values defined!");
+		for (auto name: m_fitData.paramNames)
+			DEBUG(" param names = " << name.toStdString());
+		for (auto value: m_fitData.paramStartValues)
+			DEBUG(" param start values = " << value);
+
+		// use recent fit data
+		m_fitCurve->setFitData(m_fitData);
+		// calculate fit function
+		m_fitCurve->evaluate(true);
 	}
 	else {
-		DEBUG("	disable");
+		DEBUG("	DISABLE RECALCULATE");
 	}
+	DEBUG("XYFitCurveDock::enableRecalculate() DONE");
 }
 
 void XYFitCurveDock::resultCopySelection() {
@@ -1161,6 +1183,7 @@ void XYFitCurveDock::showFitResult() {
 	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << QLatin1String("P > |t|") << i18n("Conf. Interval");
 	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
 
+	DEBUG("	showFitResult(): np = " << np << ", # paramValues = " << fitResult.paramValues.size());
 	for (int i = 0; i < np; i++) {
 		const double paramValue = fitResult.paramValues.at(i);
 		const double errorValue = fitResult.errorValues.at(i);

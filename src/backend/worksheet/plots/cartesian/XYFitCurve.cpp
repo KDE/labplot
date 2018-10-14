@@ -703,8 +703,9 @@ void XYFitCurve::setYErrorColumn(const AbstractColumn* column) {
 	}
 }
 
-// TODO: do not recalculate
-STD_SETTER_CMD_IMPL_F_S(XYFitCurve, SetFitData, XYFitCurve::FitData, fitData, recalculate)
+// do not recalculate (allow preview)
+//STD_SETTER_CMD_IMPL_F_S(XYFitCurve, SetFitData, XYFitCurve::FitData, fitData, recalculate)
+STD_SETTER_CMD_IMPL_S(XYFitCurve, SetFitData, XYFitCurve::FitData, fitData)
 void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 	Q_D(XYFitCurve);
 	exec(new XYFitCurveSetFitDataCmd(d, fitData, ki18n("%1: set fit options and perform the fit")));
@@ -2001,7 +2002,8 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
-	emit q->dataChanged();
+//TODO: CHECK
+//	emit q->dataChanged();
 
 	sourceDataChangedSinceLastRecalc = false;
 }
@@ -2050,11 +2052,14 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	if (preview)	// results not available yet
 		paramValues = fitData.paramStartValues;
 // Debug
-/*	if (paramValues.size() == 0)
+	if (paramValues.size() == 0)
 		DEBUG("	ERROR: No parameter defined!");
+	if (fitData.paramStartValues.size() == 0)
+		DEBUG("	ERROR: No start values defined!");
 	for (auto value: paramValues)
 		DEBUG("	param value = " << value);
-*/
+//////
+
 	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), (int)fitData.evaluatedPoints,
 						xVector, yVector, fitData.paramNames, paramValues);
 	if (!rc) {
@@ -2063,20 +2068,15 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 		residualsVector->clear();
 	}
 // Debug
-/*	DEBUG("	x | y");
+	DEBUG("	x | y");
 	for (int i = 0; i < qMin(10, xVector->size()); i++)
 		DEBUG("	" << (*xVector)[i] << " | " << (*yVector)[i]);
-*/
-// TODO: do we weed to do something to make preview work?
-// this should be already done by dataChanged()
-	q->retransform();
+	unsigned int np = fitData.paramNames.size();
+	DEBUG("	np = " << np << ", nresultValues = " << fitResult.paramValues.size());
+//////
 
-// PREVIEW redraw the curve	(this breaks context menu fit!)
-	if (preview) {
-//		emit q->dataChanged();
-//		sourceDataChangedSinceLastRecalc = false;
-	}
-
+	emit q->dataChanged();
+	DEBUG("XYFitCurvePrivate::evaluate() DONE");
 }
 
 /*!
