@@ -53,6 +53,7 @@ public:
 				evaluatedPoints(1000),
 				useDataErrors(true),
 				useResults(true),
+				previewEnabled(false),
 				autoRange(true),
 				autoEvalRange(true),
 				fitRange(2),
@@ -76,6 +77,7 @@ public:
 		size_t evaluatedPoints;
 		bool useDataErrors;		// use given data errors when fitting (default)
 		bool useResults;		// use results as new start values (default)
+		bool previewEnabled;		// preview fit function with given start parameters
 
 		bool autoRange;			// use all data points? (default)
 		bool autoEvalRange;		// evaluate fit function on full data range (default)

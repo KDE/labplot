@@ -2051,14 +2051,6 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	QVector<double> paramValues = fitResult.paramValues;
 	if (preview)	// results not available yet
 		paramValues = fitData.paramStartValues;
-// Debug
-	if (paramValues.size() == 0)
-		DEBUG("	ERROR: No parameter defined!");
-	if (fitData.paramStartValues.size() == 0)
-		DEBUG("	ERROR: No start values defined!");
-	for (auto value: paramValues)
-		DEBUG("	param value = " << value);
-//////
 
 	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), (int)fitData.evaluatedPoints,
 						xVector, yVector, fitData.paramNames, paramValues);
@@ -2067,16 +2059,8 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 		yVector->clear();
 		residualsVector->clear();
 	}
-// Debug
-	DEBUG("	x | y");
-	for (int i = 0; i < qMin(10, xVector->size()); i++)
-		DEBUG("	" << (*xVector)[i] << " | " << (*yVector)[i]);
-	unsigned int np = fitData.paramNames.size();
-	DEBUG("	np = " << np << ", nresultValues = " << fitResult.paramValues.size());
-//////
 
 	emit q->dataChanged();
-	DEBUG("XYFitCurvePrivate::evaluate() DONE");
 }
 
 /*!
@@ -2136,6 +2120,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("autoEvalRange", QString::number(d->fitData.autoEvalRange));
 	writer->writeAttribute("useDataErrors", QString::number(d->fitData.useDataErrors));
 	writer->writeAttribute("useResults", QString::number(d->fitData.useResults));
+	writer->writeAttribute("previewEnabled", QString::number(d->fitData.previewEnabled));
 
 	if (d->fitData.modelCategory == nsl_fit_model_custom) {
 		writer->writeStartElement("paramNames");
@@ -2276,6 +2261,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("autoEvalRange", fitData.autoEvalRange, bool);
 			READ_INT_VALUE("useDataErrors", fitData.useDataErrors, bool);
 			READ_INT_VALUE("useResults", fitData.useResults, bool);
+			READ_INT_VALUE("previewEnabled", fitData.previewEnabled, bool);
 
 			//set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
 			XYFitCurve::initFitData(d->fitData);

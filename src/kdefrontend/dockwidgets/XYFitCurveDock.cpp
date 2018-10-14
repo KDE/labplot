@@ -975,24 +975,17 @@ void XYFitCurveDock::enableRecalculate() const {
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData && m_parametersValid);
 
-	DEBUG("	parameters valid = " << m_parametersValid);
-	// PREVIEW as soon as recalculate is enabled
-	if (hasSourceData && m_parametersValid) {
-		DEBUG("	ENABLE RECALCULATE AND PREVIEW");
-	        if (m_fitData.paramNames.size() == 0)
-			DEBUG(" ERROR: No parameter defined!");
-	        if (m_fitData.paramStartValues.size() == 0)
-			DEBUG(" ERROR: No start values defined!");
-
+	// PREVIEW as soon as recalculate is enabled (does not need source data)
+	if (m_parametersValid && m_fitData.previewEnabled) {
+		DEBUG("	ENABLE EVALUATE AND PREVIEW");
 		// use recent fit data
 		m_fitCurve->setFitData(m_fitData);
 		// calculate fit function
 		m_fitCurve->evaluate(true);
 	}
 	else {
-		DEBUG("	DISABLE RECALCULATE");
+		DEBUG("	EVALUATE PREVIEW DISABLED");
 	}
-	DEBUG("XYFitCurveDock::enableRecalculate() DONE");
 }
 
 void XYFitCurveDock::resultCopySelection() {
@@ -1179,8 +1172,6 @@ void XYFitCurveDock::showFitResult() {
 	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << QLatin1String("P > |t|") << i18n("Conf. Interval");
 	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
 
-	DEBUG("	showFitResult(): np = " << np << ", # paramValues = " << fitResult.paramValues.size());
-	//TODO: increasing degree: preview crashes here with fitResult.paramValues.size() < np
 	for (int i = 0; i < np; i++) {
 		const double paramValue = fitResult.paramValues.at(i);
 		const double errorValue = fitResult.errorValues.at(i);
@@ -1338,8 +1329,6 @@ void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& fitData) {
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
-	//TODO: CHECK
-	//this->showFitResult();
 	m_initializing = false;
 }
 

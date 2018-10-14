@@ -68,17 +68,19 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 
 	ui.cbUseDataErrors->setChecked(m_fitData->useDataErrors);
 	ui.cbUseResults->setChecked(m_fitData->useResults);
+	ui.cbPreview->setChecked(m_fitData->previewEnabled);
 
 	//SLOTS
-	connect(ui.leEps, &QLineEdit::textChanged, this, &FitOptionsWidget::changed) ;
+	connect(ui.leEps, &QLineEdit::textChanged, this, &FitOptionsWidget::changed);
 	connect(ui.leMaxIterations, &QLineEdit::textChanged, this, &FitOptionsWidget::changed);
-	connect(ui.leEvaluatedPoints, &QLineEdit::textChanged, this, &FitOptionsWidget::changed) ;
-	connect(ui.cbUseDataErrors, &QCheckBox::clicked, this, &FitOptionsWidget::changed) ;
-	connect(ui.cbUseResults, &QCheckBox::clicked, this, &FitOptionsWidget::changed) ;
+	connect(ui.leEvaluatedPoints, &QLineEdit::textChanged, this, &FitOptionsWidget::changed);
+	connect(ui.cbUseDataErrors, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
+	connect(ui.cbUseResults, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
+	connect(ui.cbPreview, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
 	connect(ui.pbApply, &QPushButton::clicked, this, &FitOptionsWidget::applyClicked);
 	connect(ui.pbCancel, &QPushButton::clicked, this, &FitOptionsWidget::finished);
 	connect(ui.cbAutoRange, &QCheckBox::clicked, this, &FitOptionsWidget::autoRangeChanged);
-	connect(ui.cbAutoEvalRange, &QCheckBox::clicked, this, &FitOptionsWidget::autoEvalRangeChanged) ;
+	connect(ui.cbAutoEvalRange, &QCheckBox::clicked, this, &FitOptionsWidget::autoEvalRangeChanged);
 	connect(ui.sbMin, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::fitRangeMinChanged);
 	connect(ui.sbMax, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::fitRangeMaxChanged);
 	connect(ui.sbEvalMin, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::evalRangeMinChanged);
@@ -175,6 +177,7 @@ void FitOptionsWidget::applyClicked() {
 	m_fitData->evaluatedPoints = ui.leEvaluatedPoints->text().toInt();
 	m_fitData->useDataErrors = ui.cbUseDataErrors->isChecked();
 	m_fitData->useResults = ui.cbUseResults->isChecked();
+	m_fitData->previewEnabled = ui.cbPreview->isChecked();
 
 	if (m_changed)
 		emit optionsChanged();
