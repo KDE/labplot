@@ -68,7 +68,6 @@ FitParametersWidget::FitParametersWidget(QWidget* parent) : QWidget(parent),
 
 	ui.tableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	ui.tableWidget->horizontalHeader()->setStretchLastSection(true);
-	ui.tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	ui.tableWidget->installEventFilter(this);
 
