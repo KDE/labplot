@@ -258,6 +258,12 @@
      <property name="toolTip">
       <string>Function to fit and options</string>
      </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <property name="text">
       <string>Fit</string>
      </property>

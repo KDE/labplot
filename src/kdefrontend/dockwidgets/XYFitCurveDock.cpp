@@ -131,6 +131,18 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.tbFunctions->setIcon(QIcon::fromTheme("preferences-desktop-font"));
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
+	// TODO: setting checked background color to unchecked color
+//	p = uiGeneralTab.lData->palette();
+	// QWidget::palette().color(QWidget::backgroundRole())
+	// not working with 'transparent'
+//	p.setColor(QPalette::Base, Qt::transparent);
+//	uiGeneralTab.lData->setPalette(p);
+	// see https://forum.qt.io/topic/41325/solved-background-of-checked-qpushbutton-with-stylesheet/2
+	// Styles not usable (here: text color not theme dependent). see https://forum.qt.io/topic/60546/qpushbutton-default-windows-style-sheet/9
+//	uiGeneralTab.lData->setStyleSheet("QToolButton:checked{background-color: transparent;border: 3px transparent;padding: 3px;}");
+
+//	uiGeneralTab.lData->setAutoFillBackground(true);
+
 	uiGeneralTab.twLog->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	uiGeneralTab.twParameters->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	uiGeneralTab.twGoodness->setEditTriggers(QAbstractItemView::NoEditTriggers);
