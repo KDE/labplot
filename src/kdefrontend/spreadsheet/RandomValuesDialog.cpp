@@ -40,9 +40,9 @@
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KWindowConfig>
+#include <cstdio>
 
 extern "C" {
-#include <stdio.h>
 #include "backend/nsl/nsl_sf_stats.h"
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>

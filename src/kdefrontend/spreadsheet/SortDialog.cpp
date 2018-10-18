@@ -37,12 +37,12 @@
 	\ingroup kdefrontend
  */
 
-SortDialog::SortDialog( QWidget* parent ) : QDialog( parent ){
+SortDialog::SortDialog( QWidget* parent ) : QDialog( parent ) {
 
 	setWindowIcon(QIcon::fromTheme("view-sort-ascending"));
 	setWindowTitle(i18nc("@title:window", "Sort Columns"));
 	setSizeGripEnabled(true);
-    setAttribute(Qt::WA_DeleteOnClose);
+	setAttribute(Qt::WA_DeleteOnClose);
 
 	ui.setupUi(this);
 
@@ -57,35 +57,35 @@ SortDialog::SortDialog( QWidget* parent ) : QDialog( parent ){
 	resize(minimumSize());
 }
 
-void SortDialog::sortColumns(){
+void SortDialog::sortColumns() {
 	Column* leading;
-    if(ui.cbType->currentIndex() == Together)
-        leading = m_columns.at(ui.cbColumns->currentIndex());
+	if (ui.cbType->currentIndex() == Together)
+		leading = m_columns.at(ui.cbColumns->currentIndex());
 	else
 		leading = nullptr;
 
-    emit sort(leading, m_columns, ui.cbOrdering->currentIndex() == Ascending );
+	emit sort(leading, m_columns, ui.cbOrdering->currentIndex() == Ascending);
 }
 
-void SortDialog::setColumns(QVector<Column*> columns){
+void SortDialog::setColumns(QVector<Column*> columns) {
 	m_columns = columns;
 
-	for(int i=0; i<m_columns.size(); i++)
-        ui.cbColumns->addItem( m_columns.at(i)->name() );
+	for (auto col: m_columns)
+		ui.cbColumns->addItem(col->name());
 
-    ui.cbColumns->setCurrentIndex(0);
+	ui.cbColumns->setCurrentIndex(0);
 
-	if (m_columns.size() == 1){
-        ui.lType->hide();
-        ui.cbType->hide();
-        ui.lColumns->hide();
-        ui.cbColumns->hide();
+	if (m_columns.size() == 1) {
+		ui.lType->hide();
+		ui.cbType->hide();
+		ui.lColumns->hide();
+		ui.cbColumns->hide();
 	}
 }
 
-void SortDialog::changeType(int Type){
-	if(Type == Together)
-        ui.cbColumns->setEnabled(true);
+void SortDialog::changeType(int Type) {
+	if (Type == Together)
+		ui.cbColumns->setEnabled(true);
 	else
-        ui.cbColumns->setEnabled(false);
+		ui.cbColumns->setEnabled(false);
 }

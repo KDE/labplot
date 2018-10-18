@@ -1054,14 +1054,14 @@ void HDF5FilterPrivate::scanHDF5DataSet(hid_t did, char *dataSetName, QTreeWidge
 	unsigned int rows = 1, cols = 1, regs = 1;
 	if (rank == 1) {
 		hsize_t dims_out[1];
-		m_status = H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
+		m_status = H5Sget_simple_extent_dims(dataspace, dims_out, nullptr);
 		handleError(m_status, "H5Sget_simple_extent_dims");
 		rows = dims_out[0];
 		dataSetProps << QLatin1String(", ") << QString::number(rows)
 		             << QLatin1String(" (") << QString::number(size/typeSize) << QLatin1String(")");
 	} else if (rank == 2) {
 		hsize_t dims_out[2];
-		m_status = H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
+		m_status = H5Sget_simple_extent_dims(dataspace, dims_out, nullptr);
 		handleError(m_status, "H5Sget_simple_extent_dims");
 		rows = dims_out[0];
 		cols = dims_out[1];
@@ -1069,7 +1069,7 @@ void HDF5FilterPrivate::scanHDF5DataSet(hid_t did, char *dataSetName, QTreeWidge
 		             << QLatin1String(" (") << QString::number(size/typeSize) << QLatin1String(")");
 	} else if (rank == 3) {
 		hsize_t dims_out[3];
-		m_status = H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
+		m_status = H5Sget_simple_extent_dims(dataspace, dims_out, nullptr);
 		handleError(m_status, "H5Sget_simple_extent_dims");
 		rows = dims_out[0];
 		cols = dims_out[1];
@@ -1494,7 +1494,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 		}
 	case 2: {	// matrix
 			hsize_t dims_out[2];
-			m_status = H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
+			m_status = H5Sget_simple_extent_dims(dataspace, dims_out, nullptr);
 			handleError(m_status, "H5Sget_simple_extent_dims");
 			int rows = dims_out[0];
 			int cols = dims_out[1];

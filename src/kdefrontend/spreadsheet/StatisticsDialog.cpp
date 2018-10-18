@@ -203,10 +203,10 @@ void StatisticsDialog::setColumns(const QVector<Column*>& columns) {
 
 	m_columns = columns;
 
-	for (int i = 0; i < m_columns.size(); ++i) {
+	for (auto col: m_columns) {
 		QTextEdit* textEdit = new QTextEdit;
 		textEdit->setReadOnly(true);
-		m_twStatistics->addTab(textEdit, m_columns[i]->name());
+		m_twStatistics->addTab(textEdit, col->name());
 	}
 	currentTabChanged(0);
 }

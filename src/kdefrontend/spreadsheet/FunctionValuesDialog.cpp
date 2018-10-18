@@ -289,10 +289,10 @@ void FunctionValuesDialog::deleteVariable() {
 void FunctionValuesDialog::variableNameChanged() {
 	QStringList vars;
 	QString text;
-	for (int i = 0; i < m_variableNames.size(); ++i) {
-		QString name = m_variableNames.at(i)->text().simplified();
+	for (auto varName: m_variableNames) {
+		QString name = varName->text().simplified();
 		if (!name.isEmpty()) {
-			vars<<name;
+			vars << name;
 
 			if (text.isEmpty()) {
 				text += name;
@@ -348,8 +348,8 @@ void FunctionValuesDialog::generate() {
 	//the vectors with the variable data can be smaller then the result vector. So, not all values in the result vector might get initialized.
 	//->"clean" the result vector first
 	QVector<double> new_data(maxRowCount);
-	for (int i = 0; i < new_data.size(); ++i)
-		new_data[i] = NAN;
+	for (auto d: new_data)
+		d = NAN;
 
 	//evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 	ExpressionParser* parser = ExpressionParser::getInstance();

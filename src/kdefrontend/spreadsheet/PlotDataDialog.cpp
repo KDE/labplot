@@ -467,8 +467,7 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
 	switch (m_plotType) {
 	case PlotXYCurve: {
 		Column* xColumn = columnFromName(ui->cbXColumn->currentText());
-		for (int i = 1; i < m_columnComboBoxes.size(); ++i) {
-			QComboBox* comboBox = m_columnComboBoxes[i];
+		for (auto comboBox: m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* yColumn = columnFromName(name);
 			addCurve(name, xColumn, yColumn, plot);
@@ -476,8 +475,7 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
 		break;
 	}
 	case PlotHistogram: {
-		for (int i = 0; i < m_columnComboBoxes.size(); ++i) {
-			QComboBox* comboBox = m_columnComboBoxes[i];
+		for (auto comboBox: m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
 			addHistogram(name, column, plot);
@@ -500,8 +498,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 	case PlotXYCurve: {
 		const QString& xColumnName = ui->cbXColumn->currentText();
 		Column* xColumn = columnFromName(xColumnName);
-		for (int i = 1; i < m_columnComboBoxes.size(); ++i) {
-			QComboBox* comboBox = m_columnComboBoxes[i];
+		for (auto comboBox: m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* yColumn = columnFromName(name);
 
@@ -528,8 +525,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 		break;
 	}
 	case PlotHistogram: {
-		for (int i = 0; i < m_columnComboBoxes.size(); ++i) {
-			QComboBox* comboBox = m_columnComboBoxes[i];
+		for (auto comboBox: m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
 
