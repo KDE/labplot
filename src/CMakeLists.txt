@@ -351,6 +351,8 @@ set(GENERATED_SOURCES
 	${BISON_GslParser_OUTPUTS}
 )
 
+set_property(SOURCE gsl_parser.h PROPERTY SKIP_AUTOMOC ON)
+
 ##############################################################################
 INCLUDE_DIRECTORIES( . ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} )
 set( LABPLOT_SRCS ${GUI_SOURCES} )
