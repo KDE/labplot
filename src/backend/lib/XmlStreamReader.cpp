@@ -34,8 +34,7 @@
  * \brief XML stream parser that supports errors as well as warnings.
  * This class also adds line and column numbers to the error message.
  */
-XmlStreamReader::XmlStreamReader() {
-}
+XmlStreamReader::XmlStreamReader() = default;
 
 XmlStreamReader::XmlStreamReader(QIODevice* device) : QXmlStreamReader(device) {
 }

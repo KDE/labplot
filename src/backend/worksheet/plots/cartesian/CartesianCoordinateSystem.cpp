@@ -328,7 +328,7 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, Mappi
 		}
 	}
 
-	return QPointF();
+	return QPointF{};
 }
 
 QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLineF> &lines, MappingFlags flags) const{

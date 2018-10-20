@@ -54,10 +54,9 @@ PlotArea::PlotArea(const QString &name, PlotAreaPrivate *dd)
 	init();
 }
 
-PlotArea::~PlotArea() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+PlotArea::~PlotArea() = default;
 
 void PlotArea::init() {
 	Q_D(PlotArea);
@@ -267,8 +266,8 @@ QRectF PlotAreaPrivate::boundingRect () const {
 	float width = rect.width();
 	float height = rect.height();
 	float penWidth = borderPen.width();
-	return QRectF(-width/2 - penWidth/2, -height/2 - penWidth/2,
-	              width + penWidth, height + penWidth);
+	return QRectF{-width/2 - penWidth/2, -height/2 - penWidth/2,
+	              width + penWidth, height + penWidth};
 }
 
 QPainterPath PlotAreaPrivate::shape() const {

@@ -56,10 +56,9 @@ XYConvolutionCurve::XYConvolutionCurve(const QString& name, XYConvolutionCurvePr
 		: XYAnalysisCurve(name, dd) {
 }
 
-XYConvolutionCurve::~XYConvolutionCurve() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+XYConvolutionCurve::~XYConvolutionCurve() = default;
 
 void XYConvolutionCurve::recalculate() {
 	Q_D(XYConvolutionCurve);
@@ -99,10 +98,9 @@ XYConvolutionCurvePrivate::XYConvolutionCurvePrivate(XYConvolutionCurve* owner) 
 	q(owner)  {
 }
 
-XYConvolutionCurvePrivate::~XYConvolutionCurvePrivate() {
-	//no need to delete xColumn and yColumn, they are deleted
-	//when the parent aspect is removed
-}
+//no need to delete xColumn and yColumn, they are deleted
+//when the parent aspect is removed
+XYConvolutionCurvePrivate::~XYConvolutionCurvePrivate() = default;
 
 void XYConvolutionCurvePrivate::recalculate() {
 	QElapsedTimer timer;

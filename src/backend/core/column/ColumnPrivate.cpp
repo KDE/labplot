@@ -984,7 +984,7 @@ QDate ColumnPrivate::dateAt(int row) const {
 	if (m_column_mode != AbstractColumn::DateTime &&
 	        m_column_mode != AbstractColumn::Month &&
 	        m_column_mode != AbstractColumn::Day)
-		return QDate();
+		return QDate{};
 	return dateTimeAt(row).date();
 }
 
@@ -997,7 +997,7 @@ QTime ColumnPrivate::timeAt(int row) const {
 	if (m_column_mode != AbstractColumn::DateTime &&
 	        m_column_mode != AbstractColumn::Month &&
 	        m_column_mode != AbstractColumn::Day)
-		return QTime();
+		return QTime{};
 	return dateTimeAt(row).time();
 }
 

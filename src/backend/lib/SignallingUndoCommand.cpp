@@ -115,9 +115,9 @@ SignallingUndoCommand::~SignallingUndoCommand() {
 
 QGenericArgument SignallingUndoCommand::arg(int index) {
 	if (index >= m_argument_count)
-		return QGenericArgument();
-	else
-		return QGenericArgument(QMetaType::typeName(m_argument_types[index]), m_argument_data[index]);
+		return QGenericArgument{};
+
+	return QGenericArgument{QMetaType::typeName(m_argument_types[index]), m_argument_data[index]};
 }
 
 void SignallingUndoCommand::redo() {

@@ -57,11 +57,9 @@ XYDifferentiationCurve::XYDifferentiationCurve(const QString& name, XYDifferenti
 		: XYAnalysisCurve(name, dd) {
 }
 
-
-XYDifferentiationCurve::~XYDifferentiationCurve() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+XYDifferentiationCurve::~XYDifferentiationCurve() = default;
 
 void XYDifferentiationCurve::recalculate() {
 	Q_D(XYDifferentiationCurve);
@@ -99,13 +97,11 @@ void XYDifferentiationCurve::setDifferentiationData(const XYDifferentiationCurve
 //##############################################################################
 XYDifferentiationCurvePrivate::XYDifferentiationCurvePrivate(XYDifferentiationCurve* owner) : XYAnalysisCurvePrivate(owner),
 	q(owner)  {
-
 }
 
-XYDifferentiationCurvePrivate::~XYDifferentiationCurvePrivate() {
-	//no need to delete xColumn and yColumn, they are deleted
-	//when the parent aspect is removed
-}
+//no need to delete xColumn and yColumn, they are deleted
+//when the parent aspect is removed
+XYDifferentiationCurvePrivate::~XYDifferentiationCurvePrivate() = default;
 
 // ...
 // see XYFitCurvePrivate

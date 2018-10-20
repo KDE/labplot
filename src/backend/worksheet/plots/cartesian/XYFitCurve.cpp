@@ -68,10 +68,9 @@ XYFitCurve::XYFitCurve(const QString& name, XYFitCurvePrivate* dd)
 		: XYAnalysisCurve(name, dd) {
 }
 
-XYFitCurve::~XYFitCurve() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+XYFitCurve::~XYFitCurve() = default;
 
 void XYFitCurve::recalculate() {
 	Q_D(XYFitCurve);
@@ -719,13 +718,11 @@ XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner) : XYAnalysisCurvePrivate
 	residualsColumn(nullptr),
 	residualsVector(nullptr),
 	q(owner)  {
-
 }
 
-XYFitCurvePrivate::~XYFitCurvePrivate() {
-	//no need to delete xColumn and yColumn, they are deleted
-	//when the parent aspect is removed
-}
+//no need to delete xColumn and yColumn, they are deleted
+//when the parent aspect is removed
+XYFitCurvePrivate::~XYFitCurvePrivate() = default;
 
 // data structure to pass parameter to fit functions
 struct data {

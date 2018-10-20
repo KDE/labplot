@@ -213,7 +213,7 @@ QModelIndex MatrixModel::index(int row, int column, const QModelIndex& parent) c
 
 QModelIndex MatrixModel::parent(const QModelIndex& child) const {
 	Q_UNUSED(child)
-    return QModelIndex();
+	return QModelIndex{};
 }
 
 void MatrixModel::updateHeader() {

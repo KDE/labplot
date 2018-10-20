@@ -429,25 +429,24 @@ returns 2 if a parse error has occurred and 0 otherwise.
 int JsonFilterPrivate::prepareDocumentToRead(const QJsonDocument& doc) {
 	model->loadJson(doc);
 
-	if(modelRows.isEmpty())
+	if (modelRows.isEmpty())
 		m_preparedDoc = doc;
 	else {
 		QModelIndex index;
-		for(auto it = modelRows.begin(); it != modelRows.end(); ++it){
+		for (auto it = modelRows.begin(); it != modelRows.end(); ++it) {
 			index = model->index(*it, 0, index);
 		}
 		m_preparedDoc = model->genJsonByIndex(index);
 	}
 
-	if(!m_preparedDoc.isEmpty()){
-		if(m_preparedDoc.isArray())
+	if (!m_preparedDoc.isEmpty()) {
+		if (m_preparedDoc.isArray())
 			containerType = JsonFilter::Array;
-		else if(m_preparedDoc.isObject())
+		else if (m_preparedDoc.isObject())
 			containerType = JsonFilter::Object;
 		else
 			return 2;
-	}
-	else
+	} else
 		return 2;
 
 	int countRows = 0;
@@ -843,8 +842,8 @@ bool JsonFilter::load(XmlStreamReader* reader) {
 		reader->raiseWarning(attributeWarning.arg("'modelRows'"));
 	else{
 		d->modelRows = QVector<int>();
-		for(auto it = list.begin(); it !=list.end(); ++it)
-			d->modelRows.append((*it).toInt());
+		for (auto& it: list)
+			d->modelRows.append(it.toInt());
 	}
 
 	DEBUG("JsonFilter load params");

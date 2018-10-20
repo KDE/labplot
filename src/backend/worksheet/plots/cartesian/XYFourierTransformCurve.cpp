@@ -60,10 +60,9 @@ XYFourierTransformCurve::XYFourierTransformCurve(const QString& name, XYFourierT
 	: XYAnalysisCurve(name, dd) {
 }
 
-XYFourierTransformCurve::~XYFourierTransformCurve() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+XYFourierTransformCurve::~XYFourierTransformCurve() = default;
 
 void XYFourierTransformCurve::recalculate() {
 	Q_D(XYFourierTransformCurve);
@@ -101,13 +100,11 @@ void XYFourierTransformCurve::setTransformData(const XYFourierTransformCurve::Tr
 //##############################################################################
 XYFourierTransformCurvePrivate::XYFourierTransformCurvePrivate(XYFourierTransformCurve* owner) : XYAnalysisCurvePrivate(owner),
 	q(owner) {
-
 }
 
-XYFourierTransformCurvePrivate::~XYFourierTransformCurvePrivate() {
-	//no need to delete xColumn and yColumn, they are deleted
-	//when the parent aspect is removed
-}
+//no need to delete xColumn and yColumn, they are deleted
+//when the parent aspect is removed
+XYFourierTransformCurvePrivate::~XYFourierTransformCurvePrivate() = default;
 
 void XYFourierTransformCurvePrivate::recalculate() {
 	QElapsedTimer timer;

@@ -243,13 +243,13 @@ QVariant QJsonModel::headerData(int section, Qt::Orientation orientation, int ro
 
 	if (orientation == Qt::Horizontal)
 		return mHeaders.value(section);
-	else
-		return QVariant();
+
+	return QVariant();
 }
 
 QModelIndex QJsonModel::index(int row, int column, const QModelIndex& parent) const {
 	if (!hasIndex(row, column, parent))
-		return QModelIndex();
+		return QModelIndex{};
 
 	QJsonTreeItem* parentItem;
 
@@ -261,19 +261,19 @@ QModelIndex QJsonModel::index(int row, int column, const QModelIndex& parent) co
 	QJsonTreeItem* childItem = parentItem->child(row);
 	if (childItem)
 		return createIndex(row, column, childItem);
-	else
-		return QModelIndex();
+
+	return QModelIndex{};
 }
 
 QModelIndex QJsonModel::parent(const QModelIndex& index) const {
 	if (!index.isValid())
-		return QModelIndex();
+		return QModelIndex{};
 
 	QJsonTreeItem* childItem = static_cast<QJsonTreeItem*>(index.internalPointer());
 	QJsonTreeItem* parentItem = childItem->parent();
 
 	if (parentItem == mHeadItem)
-		return QModelIndex();
+		return QModelIndex{};
 
 	return createIndex(parentItem->row(), 0, parentItem);
 }

@@ -61,10 +61,9 @@ XYInterpolationCurve::XYInterpolationCurve(const QString& name, XYInterpolationC
 	: XYAnalysisCurve(name, dd) {
 }
 
-XYInterpolationCurve::~XYInterpolationCurve() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+XYInterpolationCurve::~XYInterpolationCurve() = default;
 
 void XYInterpolationCurve::recalculate() {
 	Q_D(XYInterpolationCurve);
@@ -102,13 +101,11 @@ void XYInterpolationCurve::setInterpolationData(const XYInterpolationCurve::Inte
 //##############################################################################
 XYInterpolationCurvePrivate::XYInterpolationCurvePrivate(XYInterpolationCurve* owner) : XYAnalysisCurvePrivate(owner),
 	q(owner) {
-
 }
 
-XYInterpolationCurvePrivate::~XYInterpolationCurvePrivate() {
-	//no need to delete xColumn and yColumn, they are deleted
-	//when the parent aspect is removed
-}
+//no need to delete xColumn and yColumn, they are deleted
+//when the parent aspect is removed
+XYInterpolationCurvePrivate::~XYInterpolationCurvePrivate() = default;
 
 void XYInterpolationCurvePrivate::recalculate() {
 	QElapsedTimer timer;

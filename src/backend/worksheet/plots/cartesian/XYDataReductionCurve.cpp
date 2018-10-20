@@ -54,11 +54,9 @@ XYDataReductionCurve::XYDataReductionCurve(const QString& name, XYDataReductionC
 		: XYAnalysisCurve(name, dd) {
 }
 
-
-XYDataReductionCurve::~XYDataReductionCurve() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+XYDataReductionCurve::~XYDataReductionCurve() = default;
 
 void XYDataReductionCurve::recalculate() {
 	Q_D(XYDataReductionCurve);
@@ -96,13 +94,11 @@ void XYDataReductionCurve::setDataReductionData(const XYDataReductionCurve::Data
 //##############################################################################
 XYDataReductionCurvePrivate::XYDataReductionCurvePrivate(XYDataReductionCurve* owner) : XYAnalysisCurvePrivate(owner),
 	q(owner)  {
-
 }
 
-XYDataReductionCurvePrivate::~XYDataReductionCurvePrivate() {
-	//no need to delete xColumn and yColumn, they are deleted
-	//when the parent aspect is removed
-}
+//no need to delete xColumn and yColumn, they are deleted
+//when the parent aspect is removed
+XYDataReductionCurvePrivate::~XYDataReductionCurvePrivate() = default;
 
 void XYDataReductionCurvePrivate::recalculate() {
 	QElapsedTimer timer;

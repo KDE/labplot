@@ -60,10 +60,9 @@ CustomPoint::CustomPoint(const QString& name, CustomPointPrivate* dd):WorksheetE
 	init();
 }
 
-CustomPoint::~CustomPoint() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+CustomPoint::~CustomPoint() = default;
 
 void CustomPoint::init() {
 	Q_D(CustomPoint);

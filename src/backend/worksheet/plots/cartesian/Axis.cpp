@@ -1503,8 +1503,8 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, increase the precision.
 	QVector<double> tempValues;
-	for (int i = 0; i < tickLabelValues.size(); ++i)
-		tempValues.append( nsl_math_round_places(tickLabelValues[i], precision) );
+	for (auto value: tickLabelValues)
+		tempValues.append( nsl_math_round_places(value, precision) );
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
@@ -1530,8 +1530,8 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
 	QVector<double> tempValues;
-	for (int i = 0; i < tickLabelValues.size(); ++i)
-		tempValues.append( nsl_math_round_places(tickLabelValues[i], precision-1) );
+	for (auto value: tickLabelValues)
+		tempValues.append( nsl_math_round_places(value, precision-1) );
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
@@ -1725,18 +1725,14 @@ void AxisPrivate::retransformMinorGrid() {
 		double yMin = plot->yMin();
 		double yMax = plot->yMax();
 
-		for (int i = 0; i < logicalMinorTickPoints.size(); ++i) {
-			const QPointF& point = logicalMinorTickPoints.at(i);
+		for (auto point: logicalMinorTickPoints)
 			lines.append( QLineF(point.x(), yMin, point.x(), yMax) );
-		}
 	} else { //vertical axis
 		double xMin = plot->xMin();
 		double xMax = plot->xMax();
 
-		for (int i = 0; i < logicalMinorTickPoints.size(); ++i) {
-			const QPointF& point = logicalMinorTickPoints.at(i);
+		for (auto point: logicalMinorTickPoints)
 			lines.append( QLineF(xMin, point.y(), xMax, point.y()) );
-		}
 	}
 
 	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);

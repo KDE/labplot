@@ -1234,9 +1234,9 @@ void SpreadsheetView::pasteIntoSelection() {
 				const int curCol = columnCount - 1 + c;
 				//first non-empty value in the column to paste determines the column mode/type of the new column to be added
 				QString nonEmptyValue;
-				for (int r = 0; r<cellTexts.size(); ++r) {
-					if (!cellTexts.at(r).at(curCol).isEmpty()) {
-						nonEmptyValue = cellTexts.at(r).at(curCol);
+				for (auto r: cellTexts) {
+					if (!r.at(curCol).isEmpty()) {
+						nonEmptyValue = r.at(curCol);
 						break;
 					}
 				}

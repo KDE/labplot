@@ -485,7 +485,7 @@ do {																				\
 if (!obj->name ##Path().isEmpty()) {												\
 	for (AbstractAspect* aspect : list) {											\
 		if (aspect->path() == obj->name ##Path()) {									\
-			Type * a = dynamic_cast<Type*>(aspect);									\
+			auto a = dynamic_cast<Type*>(aspect);									\
 			if (!a) continue;														\
  			obj->set## Name(a);														\
 			break;				 													\

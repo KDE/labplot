@@ -56,10 +56,9 @@ XYCorrelationCurve::XYCorrelationCurve(const QString& name, XYCorrelationCurvePr
 		: XYAnalysisCurve(name, dd) {
 }
 
-XYCorrelationCurve::~XYCorrelationCurve() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+XYCorrelationCurve::~XYCorrelationCurve() = default;
 
 void XYCorrelationCurve::recalculate() {
 	Q_D(XYCorrelationCurve);
@@ -99,10 +98,9 @@ XYCorrelationCurvePrivate::XYCorrelationCurvePrivate(XYCorrelationCurve* owner) 
 	q(owner)  {
 }
 
-XYCorrelationCurvePrivate::~XYCorrelationCurvePrivate() {
-	//no need to delete xColumn and yColumn, they are deleted
-	//when the parent aspect is removed
-}
+//no need to delete xColumn and yColumn, they are deleted
+//when the parent aspect is removed
+XYCorrelationCurvePrivate::~XYCorrelationCurvePrivate() = default;
 
 void XYCorrelationCurvePrivate::recalculate() {
 	DEBUG("XYCorrelationCurvePrivate::recalculate()");

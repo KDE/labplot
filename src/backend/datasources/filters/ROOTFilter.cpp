@@ -148,7 +148,7 @@ bool ROOTFilter::load(XmlStreamReader* reader) {
 
 /**************** ROOTFilterPrivate implementation *******************/
 
-ROOTFilterPrivate::ROOTFilterPrivate() {}
+ROOTFilterPrivate::ROOTFilterPrivate() = default;
 
 void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource,
 		AbstractFileFilter::ImportMode importMode) {

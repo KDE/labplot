@@ -228,7 +228,7 @@ QModelIndex SpreadsheetModel::index(int row, int column, const QModelIndex& pare
 
 QModelIndex SpreadsheetModel::parent(const QModelIndex& child) const {
 	Q_UNUSED(child)
-	return QModelIndex();
+	return QModelIndex{};
 }
 
 bool SpreadsheetModel::hasChildren(const QModelIndex& parent) const {

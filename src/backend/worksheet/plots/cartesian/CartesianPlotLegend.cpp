@@ -60,10 +60,9 @@ CartesianPlotLegend::CartesianPlotLegend(CartesianPlot* plot, const QString &nam
 	init();
 }
 
-CartesianPlotLegend::~CartesianPlotLegend() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+CartesianPlotLegend::~CartesianPlotLegend() = default;
 
 void CartesianPlotLegend::init() {
 	Q_D(CartesianPlotLegend);

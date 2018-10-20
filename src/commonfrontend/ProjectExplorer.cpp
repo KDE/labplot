@@ -183,8 +183,8 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 			QMenu* columnsMenu = menu->addMenu(i18n("Show/Hide columns"));
 			columnsMenu->addAction(showAllColumnsAction);
 			columnsMenu->addSeparator();
-			for (int i=0; i<list_showColumnActions.size(); i++)
-				columnsMenu->addAction(list_showColumnActions.at(i));
+			for (auto action: list_showColumnActions)
+				columnsMenu->addAction(action);
 
 			//TODO
 			//Menu for showing/hiding the top-level aspects (Worksheet, Spreadhsheet, etc) in the tree view
@@ -268,8 +268,8 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 		columnsMenu->addSection(i18n("Columns"));
 		columnsMenu->addAction(showAllColumnsAction);
 		columnsMenu->addSeparator();
-		for (int i=0; i<list_showColumnActions.size(); i++)
-			columnsMenu->addAction(list_showColumnActions.at(i));
+		for (auto action: list_showColumnActions)
+			columnsMenu->addAction(action);
 
 		QContextMenuEvent* e = static_cast<QContextMenuEvent*>(event);
 		columnsMenu->exec(e->globalPos());
@@ -676,13 +676,13 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("state");
 
 	writer->writeStartElement("expanded");
-	for (int i = 0; i < expanded.size(); ++i)
-		writer->writeTextElement("row", QString::number(expanded.at(i)));
+	for (auto e: expanded)
+		writer->writeTextElement("row", QString::number(e));
 	writer->writeEndElement();
 
 	writer->writeStartElement("selected");
-	for (int i = 0; i < selected.size(); ++i)
-		writer->writeTextElement("row", QString::number(selected.at(i)));
+	for (auto s: selected)
+		writer->writeTextElement("row", QString::number(s));
 	writer->writeEndElement();
 
 	writer->writeStartElement("view");

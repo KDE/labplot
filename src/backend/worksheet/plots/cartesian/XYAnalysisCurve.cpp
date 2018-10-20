@@ -61,11 +61,9 @@ XYAnalysisCurve::XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd
 // 	init();
 // }
 
-
-XYAnalysisCurve::~XYAnalysisCurve() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+XYAnalysisCurve::~XYAnalysisCurve() = default;
 
 void XYAnalysisCurve::init() {
 	Q_D(XYAnalysisCurve);
@@ -183,11 +181,9 @@ XYAnalysisCurvePrivate::XYAnalysisCurvePrivate(XYAnalysisCurve* owner) : XYCurve
 	q(owner) {
 }
 
-XYAnalysisCurvePrivate::~XYAnalysisCurvePrivate() {
-	//no need to delete xColumn and yColumn, they are deleted
-	//when the parent aspect is removed
-}
-
+//no need to delete xColumn and yColumn, they are deleted
+//when the parent aspect is removed
+XYAnalysisCurvePrivate::~XYAnalysisCurvePrivate() = default;
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################

@@ -43,7 +43,7 @@ class VariableParser {
 		QString m_backendName;
 		QString m_string;
 		QVector<double> m_values;
-		bool m_parsed = false;
+		bool m_parsed{false};
 		
 		void parseMaximaValues();
 		void parsePythonValues();

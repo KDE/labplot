@@ -60,10 +60,9 @@ WorksheetElementContainer::WorksheetElementContainer(const QString& name, Worksh
 	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
 
-WorksheetElementContainer::~WorksheetElementContainer() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+WorksheetElementContainer::~WorksheetElementContainer() = default;
 
 QGraphicsItem* WorksheetElementContainer::graphicsItem() const {
 	return const_cast<QGraphicsItem*>(static_cast<const QGraphicsItem*>(d_ptr));

@@ -33,7 +33,7 @@
 #include <cmath>
 
 VariableParser::VariableParser(const QString& name, const QString& value)
-	: m_backendName(name), m_string(value), m_parsed(false) {
+	: m_backendName(name), m_string(value) {
 
 	PERFTRACE("parsing variable");
 	if(m_backendName.compare(QStringLiteral("Maxima"), Qt::CaseInsensitive) == 0)

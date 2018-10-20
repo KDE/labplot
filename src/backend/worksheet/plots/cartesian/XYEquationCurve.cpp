@@ -53,10 +53,9 @@ XYEquationCurve::XYEquationCurve(const QString& name, XYEquationCurvePrivate* dd
 	init();
 }
 
-XYEquationCurve::~XYEquationCurve() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+XYEquationCurve::~XYEquationCurve() = default;
 
 void XYEquationCurve::init() {
 	Q_D(XYEquationCurve);
@@ -122,10 +121,9 @@ XYEquationCurvePrivate::XYEquationCurvePrivate(XYEquationCurve* owner) : XYCurve
 
 }
 
-XYEquationCurvePrivate::~XYEquationCurvePrivate() {
-	//no need to delete xColumn and yColumn, they are deleted
-	//when the parent aspect is removed
-}
+//no need to delete xColumn and yColumn, they are deleted
+//when the parent aspect is removed
+XYEquationCurvePrivate::~XYEquationCurvePrivate() = default;
 
 void XYEquationCurvePrivate::recalculate() {
 	//resize the vector if a new number of point to calculate was provided

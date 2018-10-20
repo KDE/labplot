@@ -71,10 +71,9 @@ XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd) : WorksheetElement(nam
 	init();
 }
 
-XYCurve::~XYCurve() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+XYCurve::~XYCurve() = default;
 
 void XYCurve::finalizeAdd() {
 	Q_D(XYCurve);

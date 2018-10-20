@@ -130,10 +130,9 @@ void TextLabel::init() {
 	connect(&d->teXImageFutureWatcher, &QFutureWatcher<QImage>::finished, this, &TextLabel::updateTeXImage);
 }
 
-TextLabel::~TextLabel() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+TextLabel::~TextLabel() = default;
 
 QGraphicsItem* TextLabel::graphicsItem() const {
 	return d_ptr;

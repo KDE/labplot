@@ -64,10 +64,9 @@ XYFourierFilterCurve::XYFourierFilterCurve(const QString& name, XYFourierFilterC
 	: XYAnalysisCurve(name, dd) {
 }
 
-XYFourierFilterCurve::~XYFourierFilterCurve() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+XYFourierFilterCurve::~XYFourierFilterCurve() = default;
 
 void XYFourierFilterCurve::recalculate() {
 	Q_D(XYFourierFilterCurve);
@@ -105,13 +104,11 @@ void XYFourierFilterCurve::setFilterData(const XYFourierFilterCurve::FilterData&
 //##############################################################################
 XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* owner) : XYAnalysisCurvePrivate(owner),
 	q(owner) {
-
 }
 
-XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
-	//no need to delete xColumn and yColumn, they are deleted
-	//when the parent aspect is removed
-}
+//no need to delete xColumn and yColumn, they are deleted
+//when the parent aspect is removed
+XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() = default;
 
 void XYFourierFilterCurvePrivate::recalculate() {
 	QElapsedTimer timer;

@@ -119,14 +119,12 @@ DatapickerPoint::DatapickerPoint(const QString& name):AbstractAspect(name),
 }
 
 DatapickerPoint::DatapickerPoint(const QString& name, DatapickerPointPrivate *dd):AbstractAspect(name), d_ptr(dd) {
-
 	init();
 }
 
-DatapickerPoint::~DatapickerPoint() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+DatapickerPoint::~DatapickerPoint() = default;
 
 void DatapickerPoint::init() {
 	Q_D(DatapickerPoint);

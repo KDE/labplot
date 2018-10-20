@@ -58,10 +58,9 @@ XYIntegrationCurve::XYIntegrationCurve(const QString& name, XYIntegrationCurvePr
 		: XYAnalysisCurve(name, dd) {
 }
 
-XYIntegrationCurve::~XYIntegrationCurve() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+XYIntegrationCurve::~XYIntegrationCurve() = default;
 
 void XYIntegrationCurve::recalculate() {
 	Q_D(XYIntegrationCurve);
@@ -99,13 +98,11 @@ void XYIntegrationCurve::setIntegrationData(const XYIntegrationCurve::Integratio
 //##############################################################################
 XYIntegrationCurvePrivate::XYIntegrationCurvePrivate(XYIntegrationCurve* owner) : XYAnalysisCurvePrivate(owner),
 	q(owner)  {
-
 }
 
-XYIntegrationCurvePrivate::~XYIntegrationCurvePrivate() {
-	//no need to delete xColumn and yColumn, they are deleted
-	//when the parent aspect is removed
-}
+//no need to delete xColumn and yColumn, they are deleted
+//when the parent aspect is removed
+XYIntegrationCurvePrivate::~XYIntegrationCurvePrivate() = default;
 
 void XYIntegrationCurvePrivate::recalculate() {
 	QElapsedTimer timer;

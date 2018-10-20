@@ -1810,59 +1810,59 @@ QColor OriginProjectParser::color(Origin::Color color) const {
 		case Origin::Color::ColorType::Regular:
 			switch (color.regular) {
 				case Origin::Color::Black:
-					return QColor(Qt::black);
+					return QColor{Qt::black};
 				case Origin::Color::Red:
-					return QColor(Qt::red);
+					return QColor{Qt::red};
 				case Origin::Color::Green:
-					return QColor(Qt::green);
+					return QColor{Qt::green};
 				case Origin::Color::Blue:
-					return QColor(Qt::blue);
+					return QColor{Qt::blue};
 				case Origin::Color::Cyan:
-					return QColor(Qt::cyan);
+					return QColor{Qt::cyan};
 				case Origin::Color::Magenta:
-					return QColor(Qt::magenta);
+					return QColor{Qt::magenta};
 				case Origin::Color::Yellow:
-					return QColor(Qt::yellow);
+					return QColor{Qt::yellow};
 				case Origin::Color::DarkYellow:
-					return QColor(Qt::darkYellow);
+					return QColor{Qt::darkYellow};
 				case Origin::Color::Navy:
-					return QColor(0, 0, 128);
+					return QColor{0, 0, 128};
 				case Origin::Color::Purple:
-					return QColor(128, 0, 128);
+					return QColor{128, 0, 128};
 				case Origin::Color::Wine:
-					return QColor(128, 0, 0);
+					return QColor{128, 0, 0};
 				case Origin::Color::Olive:
-					return QColor(0, 128, 0);
+					return QColor{0, 128, 0};
 				case Origin::Color::DarkCyan:
-					return QColor(Qt::darkCyan);
+					return QColor{Qt::darkCyan};
 				case Origin::Color::Royal:
-					return QColor(0, 0, 160);
+					return QColor{0, 0, 160};
 				case Origin::Color::Orange:
-					return QColor(255, 128, 0);
+					return QColor{255, 128, 0};
 				case Origin::Color::Violet:
-					return QColor(128, 0, 255);
+					return QColor{128, 0, 255};
 				case Origin::Color::Pink:
-					return QColor(255, 0, 128);
+					return QColor{255, 0, 128};
 				case Origin::Color::White:
-					return QColor(Qt::white);
+					return QColor{Qt::white};
 				case Origin::Color::LightGray:
-					return QColor(Qt::lightGray);
+					return QColor{Qt::lightGray};
 				case Origin::Color::Gray:
-					return QColor(Qt::gray);
+					return QColor{Qt::gray};
 				case Origin::Color::LTYellow:
-					return QColor(255, 0, 128);
+					return QColor{255, 0, 128};
 				case Origin::Color::LTCyan:
-					return QColor(128, 255, 255);
+					return QColor{128, 255, 255};
 				case Origin::Color::LTMagenta:
-					return QColor(255, 128, 255);
+					return QColor{255, 128, 255};
 				case Origin::Color::DarkGray:
-					return QColor(Qt::darkGray);
+					return QColor{Qt::darkGray};
 				case Origin::Color::SpecialV7Axis:
-					return QColor(Qt::black);
+					return QColor{Qt::black};
 			}
 			break;
 		case Origin::Color::ColorType::Custom:
-			return QColor(color.custom[0], color.custom[1], color.custom[2]);
+			return QColor{color.custom[0], color.custom[1], color.custom[2]};
 		case Origin::Color::ColorType::None:
 		case Origin::Color::ColorType::Automatic:
 		case Origin::Color::ColorType::Increment:

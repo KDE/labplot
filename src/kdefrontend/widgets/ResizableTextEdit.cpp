@@ -40,7 +40,7 @@ GrabBar::GrabBar(ResizableTextEdit* parent, bool vertResizeOnly) : QWidget(paren
 }
 
 QSize GrabBar::sizeHint() const {
-	return QSize(20, 10);
+	return QSize{20, 10};
 }
 
 void GrabBar::paintEvent(QPaintEvent*){

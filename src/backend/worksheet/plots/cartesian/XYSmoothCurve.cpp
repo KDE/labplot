@@ -59,10 +59,9 @@ XYSmoothCurve::XYSmoothCurve(const QString& name, XYSmoothCurvePrivate* dd)
 		: XYAnalysisCurve(name, dd) {
 }
 
-XYSmoothCurve::~XYSmoothCurve() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
+//no need to delete the d-pointer here - it inherits from QGraphicsItem
+//and is deleted during the cleanup in QGraphicsScene
+XYSmoothCurve::~XYSmoothCurve() = default;
 
 void XYSmoothCurve::recalculate() {
 	Q_D(XYSmoothCurve);
@@ -100,13 +99,11 @@ void XYSmoothCurve::setSmoothData(const XYSmoothCurve::SmoothData& smoothData) {
 //##############################################################################
 XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner) : XYAnalysisCurvePrivate(owner),
 	q(owner)  {
-
 }
 
-XYSmoothCurvePrivate::~XYSmoothCurvePrivate() {
-	//no need to delete xColumn and yColumn, they are deleted
-	//when the parent aspect is removed
-}
+//no need to delete xColumn and yColumn, they are deleted
+//when the parent aspect is removed
+XYSmoothCurvePrivate::~XYSmoothCurvePrivate() = default;
 
 void XYSmoothCurvePrivate::recalculate() {
 	QElapsedTimer timer;

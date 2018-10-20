@@ -121,25 +121,28 @@ void AspectTreeModel::enableShowPlotDesignation(bool value) {
 
 QModelIndex AspectTreeModel::index(int row, int column, const QModelIndex &parent) const {
 	if (!hasIndex(row, column, parent))
-		return QModelIndex();
+		return QModelIndex{};
 
 	if(!parent.isValid()) {
-		if(row != 0) return QModelIndex();
+		if(row != 0)
+			return QModelIndex{};
 		return createIndex(row, column, m_root);
 	}
 
 	AbstractAspect *parent_aspect = static_cast<AbstractAspect*>(parent.internalPointer());
 	AbstractAspect *child_aspect = parent_aspect->child<AbstractAspect>(row);
-	if (!child_aspect) return QModelIndex();
+	if (!child_aspect)
+		return QModelIndex{};
 	return createIndex(row, column, child_aspect);
 }
 
 QModelIndex AspectTreeModel::parent(const QModelIndex &index) const {
 	if (!index.isValid())
-		return QModelIndex();
+		return QModelIndex{};
 
 	AbstractAspect *parent_aspect = static_cast<AbstractAspect*>(index.internalPointer())->parentAspect();
-	if (!parent_aspect) return QModelIndex();
+	if (!parent_aspect)
+		return QModelIndex{};
 	return modelIndexOfAspect(parent_aspect);
 }
 
@@ -430,8 +433,8 @@ QModelIndex AspectTreeModel::modelIndexOfAspect(const QString& path, int column)
 	//return the model index of the aspect
 	if (aspect)
 		return modelIndexOfAspect(aspect, column);
-	else
-		return QModelIndex();
+
+	return QModelIndex{};
 }
 
 void AspectTreeModel::setFilterString(const QString & s) {

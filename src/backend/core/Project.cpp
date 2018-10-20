@@ -85,22 +85,19 @@
 class Project::Private {
 public:
 	Private() :
-		mdiWindowVisibility(Project::folderOnly),
-		scriptingEngine(nullptr),
 		version(LVERSION),
 		author(QString(qgetenv("USER"))),
-		modificationTime(QDateTime::currentDateTime()),
-		changed(false) {
+		modificationTime(QDateTime::currentDateTime()) {
 	}
 
 	QUndoStack undo_stack;
-	MdiWindowVisibility mdiWindowVisibility;
-	AbstractScriptingEngine* scriptingEngine;
+	MdiWindowVisibility mdiWindowVisibility{Project::folderOnly};
+	AbstractScriptingEngine* scriptingEngine{nullptr};
 	QString fileName;
 	QString version;
 	QString author;
 	QDateTime modificationTime;
-	bool changed;
+	bool changed{false};
 };
 
 Project::Project() : Folder(i18n("Project")), d(new Private()) {

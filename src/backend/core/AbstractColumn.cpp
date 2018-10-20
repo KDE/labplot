@@ -445,7 +445,7 @@ void AbstractColumn::replaceTexts(int first, const QVector<QString>& new_values)
  */
 QDate AbstractColumn::dateAt(int row) const {
 	Q_UNUSED(row);
-	return QDate();
+	return QDate{};
 }
 
 /**
@@ -464,7 +464,7 @@ void AbstractColumn::setDateAt(int row, QDate new_value) {
  */
 QTime AbstractColumn::timeAt(int row) const {
 	Q_UNUSED(row);
-	return QTime();
+	return QTime{};
 }
 
 /**
