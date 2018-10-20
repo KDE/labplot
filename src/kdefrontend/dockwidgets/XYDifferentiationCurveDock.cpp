@@ -73,7 +73,7 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 
-	auto gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
+	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 		gridLayout->setContentsMargins(2,2,2,2);
 		gridLayout->setHorizontalSpacing(2);
@@ -90,7 +90,7 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 3);
 
-	for (int i=0; i < NSL_DIFF_DERIV_ORDER_COUNT; ++i)
+	for (int i = 0; i < NSL_DIFF_DERIV_ORDER_COUNT; ++i)
 		uiGeneralTab.cbDerivOrder->addItem(i18n(nsl_diff_deriv_order_name[i]));
 
 	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
@@ -98,7 +98,7 @@ void XYDifferentiationCurveDock::setupGeneral() {
 
 	uiGeneralTab.pbRecalculate->setIcon( QIcon::fromTheme("run-build") );
 
-	auto layout = new QHBoxLayout(ui.tabGeneral);
+	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
@@ -174,12 +174,12 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 }
 
 void XYDifferentiationCurveDock::setModel() {
-	QList<const char*>  list;
+	QList<const char*> list;
 	list<<"Folder"<<"Datapicker"<<"Worksheet"<<"CartesianPlot"<<"XYCurve";
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
-	for (auto curve : m_curvesList)
+	for (auto* curve : m_curvesList)
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
@@ -259,8 +259,8 @@ void XYDifferentiationCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
 	// disable deriv orders and accuracies that need more data points
 	this->updateSettings(dataSourceCurve->xColumn());
@@ -276,8 +276,8 @@ void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	// disable deriv orders and accuracies that need more data points
 	this->updateSettings(column);
@@ -293,8 +293,8 @@ void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYDifferentiationCurve*>(curve)->setYDataColumn(column);
@@ -317,7 +317,7 @@ void XYDifferentiationCurveDock::updateSettings(const AbstractColumn* column) {
 		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
 			n++;
 
-	const auto model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbDerivOrder->model());
+	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbDerivOrder->model());
 	QStandardItem* item = model->item(nsl_diff_deriv_order_first);
 	if (n < 3)
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));

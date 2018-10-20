@@ -66,14 +66,14 @@ XYEquationCurveDock::XYEquationCurveDock(QWidget *parent): XYCurveDock(parent), 
 void XYEquationCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
-	auto gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
+	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 		gridLayout->setContentsMargins(2,2,2,2);
 		gridLayout->setHorizontalSpacing(2);
 		gridLayout->setVerticalSpacing(2);
 	}
 
-	auto layout = new QHBoxLayout(ui.tabGeneral);
+	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
@@ -153,7 +153,7 @@ void XYEquationCurveDock::initGeneralTab() {
 	}
 
 	//show the properties of the first curve
-	const auto equationCurve = dynamic_cast<const XYEquationCurve*>(m_curve);
+	const auto* equationCurve = dynamic_cast<const XYEquationCurve*>(m_curve);
 	Q_ASSERT(equationCurve);
 	const XYEquationCurve::EquationData& data = equationCurve->equationData();
 	uiGeneralTab.cbType->setCurrentIndex(data.type);
@@ -272,7 +272,7 @@ void XYEquationCurveDock::showConstants() {
 	connect(&constants, SIGNAL(constantSelected(QString)), &menu, SLOT(close()));
 	connect(&constants, SIGNAL(canceled()), &menu, SLOT(close()));
 
-	auto widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&constants);
 	menu.addAction(widgetAction);
 
@@ -296,7 +296,7 @@ void XYEquationCurveDock::showFunctions() {
 	connect(&functions, SIGNAL(functionSelected(QString)), &menu, SLOT(close()));
 	connect(&functions, SIGNAL(canceled()), &menu, SLOT(close()));
 
-	auto widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&functions);
 	menu.addAction(widgetAction);
 

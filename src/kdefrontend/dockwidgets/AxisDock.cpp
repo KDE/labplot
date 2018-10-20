@@ -54,7 +54,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(nullptr), m_aspectTr
 	ui.setupUi(this);
 
 	//"Title"-tab
-	auto hboxLayout = new QHBoxLayout(ui.tabTitle);
+	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);
 	labelWidget = new LabelWidget(ui.tabTitle);
 	labelWidget->setFixedLabelMode(true);
 	hboxLayout->addWidget(labelWidget);
@@ -62,7 +62,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(nullptr), m_aspectTr
 	hboxLayout->setSpacing(2);
 
 	//"Ticks"-tab
-	auto layout = static_cast<QGridLayout*>(ui.tabTicks->layout());
+	auto* layout = static_cast<QGridLayout*>(ui.tabTicks->layout());
 	cbMajorTicksColumn = new TreeViewComboBox(ui.tabTicks);
 	layout->addWidget(cbMajorTicksColumn, 5, 2);
 
@@ -70,7 +70,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(nullptr), m_aspectTr
 	layout->addWidget(cbMinorTicksColumn, 18, 2);
 
 	//adjust layouts in the tabs
-	for (int i=0; i<ui.tabWidget->count(); ++i) {
+	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
@@ -161,7 +161,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(nullptr), m_aspectTr
 	connect( ui.sbMinorGridOpacity, SIGNAL(valueChanged(int)), this, SLOT(minorGridOpacityChanged(int)) );
 
 
-	auto templateHandler = new TemplateHandler(this, TemplateHandler::Axis);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::Axis);
 	ui.verticalLayout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
@@ -860,7 +860,7 @@ void AxisDock::majorTicksIncrementChanged() {
 		return;
 
 	double value = ui.leMajorTicksIncrement->text().toDouble();
-	if (value<0) value = -1*value; //don't allow negative values
+	if (value < 0) value = -1.*value; //don't allow negative values
 	for (auto* axis : m_axesList)
 		axis->setMajorTicksIncrement(value);
 }
@@ -893,7 +893,7 @@ void AxisDock::majorTicksColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = nullptr;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);
@@ -1028,7 +1028,7 @@ void AxisDock::minorTicksIncrementChanged() {
 		return;
 
 	double value = ui.leMinorTicksIncrement->text().toDouble();
-	if (value<0) value = -1*value; //don't allow negative values
+	if (value < 0) value = -1. * value; //don't allow negative values
 	for (auto* axis : m_axesList)
 		axis->setMinorTicksIncrement(value);
 }
@@ -1037,8 +1037,8 @@ void AxisDock::minorTicksColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 	Q_ASSERT(column != nullptr);
 
 	for (auto* axis : m_axesList)
@@ -1657,7 +1657,7 @@ void AxisDock::load() {
 	ui.chkVisible->setChecked( m_axis->isVisible() );
 	ui.cbOrientation->setCurrentIndex( (int) m_axis->orientation() );
 
-	auto index = (int)m_axis->position();
+	int index = (int)m_axis->position();
 	if (index > 1)
 		ui.cbPosition->setCurrentIndex(index-2);
 	else
@@ -1669,7 +1669,7 @@ void AxisDock::load() {
 	ui.leStart->setText( QString::number(m_axis->start()) );
 	ui.leEnd->setText( QString::number(m_axis->end()) );
 
-	const auto plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
 	if (plot) {
 		bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
 			|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );

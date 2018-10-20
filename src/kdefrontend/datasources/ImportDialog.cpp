@@ -98,7 +98,7 @@ void ImportDialog::setModel() {
 	//Frame for the "Import To"-Stuff
 	frameAddTo = new QGroupBox(this);
 	frameAddTo->setTitle(i18n("Import to"));
-	auto grid = new QGridLayout(frameAddTo);
+	auto* grid = new QGridLayout(frameAddTo);
 	grid->addWidget(new QLabel(i18n("Data container"), frameAddTo), 0, 0);
 
 	cbAddTo = new TreeViewComboBox(frameAddTo);

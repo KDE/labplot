@@ -187,14 +187,14 @@ MainWin::~MainWin() {
 void MainWin::showPresenter() {
 	Worksheet* w = activeWorksheet();
 	if (w) {
-		auto view = dynamic_cast<WorksheetView*>(w->view());
+		auto* view = dynamic_cast<WorksheetView*>(w->view());
 		view->presenterMode();
 	} else {
 		//currently active object is not a worksheet but we're asked to start in the presenter mode
 		//determine the first available worksheet and show it in the presenter mode
 		QVector<Worksheet*> worksheets = m_project->children<Worksheet>();
-		if (worksheets.size()>0) {
-			auto view = qobject_cast<WorksheetView*>(worksheets.first()->view());
+		if (worksheets.size() > 0) {
+			auto* view = qobject_cast<WorksheetView*>(worksheets.first()->view());
 			view->presenterMode();
 		} else {
 			QMessageBox::information(this, i18n("Presenter Mode"),
@@ -242,7 +242,7 @@ void MainWin::initGUI(const QString& fileName) {
 
 		//show icons only
 		for (auto* container : factory()->containers(QLatin1String("ToolBar"))) {
-			auto toolbar = dynamic_cast<QToolBar*>(container);
+			auto* toolbar = dynamic_cast<QToolBar*>(container);
 			if (toolbar)
 				toolbar->setToolButtonStyle(Qt::ToolButtonIconOnly);
 		}
@@ -250,7 +250,7 @@ void MainWin::initGUI(const QString& fileName) {
 
 	initMenus();
 
-	auto mainToolBar = qobject_cast<QToolBar*>(factory()->container("main_toolbar", this));
+	auto* mainToolBar = qobject_cast<QToolBar*>(factory()->container("main_toolbar", this));
 	if (!mainToolBar) {
 		QMessageBox::critical(this, i18n("GUI configuration file not found"), i18n("labplot2ui.rc file was not found. Please check your installation."));
 		//TODO: the application is not really usable if the rc file was not found. We should quit the application. The following line crashes
@@ -258,7 +258,7 @@ void MainWin::initGUI(const QString& fileName) {
 // 		QMetaObject::invokeMethod(this, "close", Qt::QueuedConnection); //call close as soon as we enter the eventloop
 		return;
 	}
-	auto tbImport = new QToolButton(mainToolBar);
+	auto* tbImport = new QToolButton(mainToolBar);
 	tbImport->setPopupMode(QToolButton::MenuButtonPopup);
 	tbImport->setMenu(m_importMenu);
 	tbImport->setDefaultAction(m_importFileAction);
@@ -465,7 +465,7 @@ void MainWin::initActions() {
 	KStandardAction::quit(this, SLOT(close()), actionCollection());
 
 	//Actions for window visibility
-	auto windowVisibilityActions = new QActionGroup(this);
+	auto* windowVisibilityActions = new QActionGroup(this);
 	windowVisibilityActions->setExclusive(true);
 
 	m_visibilityFolderAction = new QAction(QIcon::fromTheme("folder"), i18n("Current &Folder Only"), windowVisibilityActions);
@@ -483,7 +483,7 @@ void MainWin::initActions() {
 	connect(windowVisibilityActions, SIGNAL(triggered(QAction*)), this, SLOT(setMdiWindowVisibility(QAction*)));
 
 	//Actions for hiding/showing the dock widgets
-	auto docksActions = new QActionGroup(this);
+	auto* docksActions = new QActionGroup(this);
 	docksActions->setExclusive(false);
 
 	m_toggleProjectExplorerDockAction = new QAction(QIcon::fromTheme("view-list-tree"), i18n("Project Explorer"), docksActions);
@@ -745,8 +745,8 @@ void MainWin::updateGUI() {
 		factory->container("matrix", this)->setEnabled(false);
 
 		//populate worksheet menu
-		auto view = qobject_cast<WorksheetView*>(w->view());
-		auto menu = qobject_cast<QMenu*>(factory->container("worksheet", this));
+		auto* view = qobject_cast<WorksheetView*>(w->view());
+		auto* menu = qobject_cast<QMenu*>(factory->container("worksheet", this));
 		menu->clear();
 		view->createContextMenu(menu);
 
@@ -756,7 +756,7 @@ void MainWin::updateGUI() {
 		view->createAnalysisMenu(menu);
 
 		//populate worksheet-toolbar
-		auto toolbar = qobject_cast<QToolBar*>(factory->container("worksheet_toolbar", this));
+		auto* toolbar = qobject_cast<QToolBar*>(factory->container("worksheet_toolbar", this));
 		toolbar->clear();
 		view->fillToolBar(toolbar);
 		toolbar->setVisible(true);
@@ -780,19 +780,19 @@ void MainWin::updateGUI() {
 	}
 
 	//Handle the Spreadsheet-object
-	const  Spreadsheet* spreadsheet = this->activeSpreadsheet();
+	const  auto* spreadsheet = this->activeSpreadsheet();
 	if (spreadsheet) {
 		//enable spreadsheet related menus
 		factory->container("spreadsheet", this)->setEnabled(true);
 
 		//populate spreadsheet-menu
-		auto view = qobject_cast<SpreadsheetView*>(spreadsheet->view());
-		auto menu = qobject_cast<QMenu*>(factory->container("spreadsheet", this));
+		auto* view = qobject_cast<SpreadsheetView*>(spreadsheet->view());
+		auto* menu = qobject_cast<QMenu*>(factory->container("spreadsheet", this));
 		menu->clear();
 		view->createContextMenu(menu);
 
 		//populate spreadsheet-toolbar
-		auto toolbar = qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
+		auto* toolbar = qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
 		toolbar->clear();
 		view->fillToolBar(toolbar);
 		toolbar->setVisible(true);
@@ -808,8 +808,8 @@ void MainWin::updateGUI() {
 		factory->container("matrix", this)->setEnabled(true);
 
 		//populate matrix-menu
-		auto view = qobject_cast<MatrixView*>(matrix->view());
-		auto menu = qobject_cast<QMenu*>(factory->container("matrix", this));
+		auto* view = qobject_cast<MatrixView*>(matrix->view());
+		auto* menu = qobject_cast<QMenu*>(factory->container("matrix", this));
 		menu->clear();
 		view->createContextMenu(menu);
 	} else
@@ -820,11 +820,11 @@ void MainWin::updateGUI() {
 	if(cantorworksheet) {
 		// enable Cantor Worksheet related menus
 		factory->container("cas_worksheet", this)->setEnabled(true);
-		auto view = qobject_cast<CantorWorksheetView*>(cantorworksheet->view());
-		auto menu = qobject_cast<QMenu*>(factory->container("cas_worksheet", this));
+		auto* view = qobject_cast<CantorWorksheetView*>(cantorworksheet->view());
+		auto* menu = qobject_cast<QMenu*>(factory->container("cas_worksheet", this));
 		menu->clear();
 		view->createContextMenu(menu);
-		auto toolbar = qobject_cast<QToolBar*>(factory->container("cas_worksheet_toolbar", this));
+		auto* toolbar = qobject_cast<QToolBar*>(factory->container("cas_worksheet_toolbar", this));
 		toolbar->setVisible(true);
 		toolbar->clear();
 		view->fillToolBar(toolbar);
@@ -839,13 +839,13 @@ void MainWin::updateGUI() {
 	if (datapicker) {
 		factory->container("datapicker", this)->setEnabled(true);
 		//populate datapicker-menu
-		auto view = qobject_cast<DatapickerView*>(datapicker->view());
-		auto menu = qobject_cast<QMenu*>(factory->container("datapicker", this));
+		auto* view = qobject_cast<DatapickerView*>(datapicker->view());
+		auto* menu = qobject_cast<QMenu*>(factory->container("datapicker", this));
 		menu->clear();
 		view->createContextMenu(menu);
 
 		//populate spreadsheet-toolbar
-		auto toolbar = qobject_cast<QToolBar*>(factory->container("datapicker_toolbar", this));
+		auto* toolbar = qobject_cast<QToolBar*>(factory->container("datapicker_toolbar", this));
 		toolbar->clear();
 		view->fillToolBar(toolbar);
 		toolbar->setVisible(true);
@@ -908,7 +908,7 @@ bool MainWin::newProject() {
 		m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties"));
 		addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
 
-		auto sa = new QScrollArea(m_propertiesDock);
+		auto* sa = new QScrollArea(m_propertiesDock);
 		stackedWidget = new QStackedWidget(sa);
 		sa->setWidget(stackedWidget);
 		sa->setWidgetResizable(true);
@@ -1216,7 +1216,7 @@ void MainWin::newSpreadsheet() {
 	Workbook* workbook = activeWorkbook();
 	if (workbook) {
 		QModelIndex index = m_projectExplorer->currentIndex();
-		const auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		if (!aspect->inherits("Folder")) {
 			workbook->addChild(spreadsheet);
 			return;
@@ -1237,7 +1237,7 @@ void MainWin::newMatrix() {
 	Workbook* workbook = activeWorkbook();
 	if (workbook) {
 		QModelIndex index = m_projectExplorer->currentIndex();
-		const auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		if (!aspect->inherits("Folder")) {
 			workbook->addChild(matrix);
 			return;
@@ -1304,7 +1304,7 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);
 	Spreadsheet* spreadsheet = nullptr;
-	const auto workbook = dynamic_cast<const Workbook*>(part);
+	const auto* workbook = dynamic_cast<const Workbook*>(part);
 	if (workbook) {
 		spreadsheet = workbook->currentSpreadsheet();
 		if (!spreadsheet) {
@@ -1336,7 +1336,7 @@ Matrix* MainWin::activeMatrix() const {
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);
 	Matrix* matrix = nullptr;
-	auto workbook = dynamic_cast<Workbook*>(part);
+	const auto* workbook = dynamic_cast<Workbook*>(part);
 	if (workbook) {
 		matrix = workbook->currentMatrix();
 		if (!matrix) {
@@ -1405,7 +1405,7 @@ void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win) {
 	if (!win)
 		return;
 
-	auto view = qobject_cast<PartMdiView*>(win);
+	auto* view = qobject_cast<PartMdiView*>(win);
 	if (!view) {
 		updateGUI();
 		return;
@@ -1425,7 +1425,7 @@ void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win) {
 }
 
 void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
-	const auto part = dynamic_cast<const AbstractPart*>(aspect);
+	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
 // 		connect(part, &AbstractPart::importFromFileRequested, this, &MainWin::importFileDialog);
 		connect(part, SIGNAL(importFromFileRequested()), this, SLOT(importFileDialog()));
@@ -1445,11 +1445,11 @@ void MainWin::handleAspectRemoved(const AbstractAspect* parent,const AbstractAsp
 }
 
 void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
-	const auto part = qobject_cast<const AbstractPart*>(aspect);
+	const auto* part = qobject_cast<const AbstractPart*>(aspect);
 	if (!part) return;
 
-	const auto workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
-	auto datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
+	const auto* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
+	auto* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
 	if (!datapicker)
 		datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect()->parentAspect());
 
@@ -1484,7 +1484,7 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect) {
 }
 
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
-	const auto part = dynamic_cast<const AbstractPart*>(aspect);
+	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
 		//for LiveDataSource we currently don't show any view
 		/*if (dynamic_cast<const LiveDataSource*>(part))
@@ -1493,8 +1493,8 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 		PartMdiView* win;
 
 		//for aspects being children of a Workbook, we show workbook's window, otherwise the window of the selected part
-		const auto workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
-		auto datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
+		const auto* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
+		auto* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
 		if (!datapicker)
 			datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect()->parentAspect());
 
@@ -1531,8 +1531,8 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 			//if the parent's parent is a Workbook (a column of a spreadsheet in workbook was selected),
 			//we need to select the corresponding tab in WorkbookView too
 			if (parent->parentAspect()) {
-				auto workbook = dynamic_cast<Workbook*>(parent->parentAspect());
-				auto datapicker = dynamic_cast<Datapicker*>(parent->parentAspect());
+				auto* workbook = dynamic_cast<Workbook*>(parent->parentAspect());
+				auto* datapicker = dynamic_cast<Datapicker*>(parent->parentAspect());
 				if (!datapicker)
 					datapicker = dynamic_cast<Datapicker*>(parent->parentAspect()->parentAspect());
 
@@ -1654,7 +1654,7 @@ void MainWin::toggleDockWidget(QAction* action)  {
 
 void MainWin::toggleHideWidget(QWidget* widget, bool hideToLeft)
 {
-	auto timeline = new QTimeLine(800, this);
+	auto* timeline = new QTimeLine(800, this);
 	timeline->setEasingCurve(QEasingCurve::InOutQuad);
 
 	connect(timeline, &QTimeLine::valueChanged, [=] {
@@ -1681,7 +1681,7 @@ void MainWin::toggleHideWidget(QWidget* widget, bool hideToLeft)
 
 void MainWin::toggleShowWidget(QWidget* widget, bool showToRight)
 {
-	auto timeline = new QTimeLine(800, this);
+	auto* timeline = new QTimeLine(800, this);
 	timeline->setEasingCurve(QEasingCurve::InOutQuad);
 
 	connect(timeline, &QTimeLine::valueChanged, [=]() {
@@ -1807,7 +1807,7 @@ void MainWin::historyDialog() {
 	if (!m_project->undoStack())
 		return;
 
-	auto dialog = new HistoryDialog(this, m_project->undoStack(), m_undoViewEmptyLabel);
+	auto* dialog = new HistoryDialog(this, m_project->undoStack(), m_undoViewEmptyLabel);
 	int index = m_project->undoStack()->index();
 	if (dialog->exec() != QDialog::Accepted) {
 		if (m_project->undoStack()->count() != 0)
@@ -1827,7 +1827,7 @@ void MainWin::historyDialog() {
 */
 void MainWin::importFileDialog(const QString& fileName) {
 	DEBUG("MainWin::importFileDialog()");
-	auto dlg = new ImportFileDialog(this, false, fileName);
+	auto* dlg = new ImportFileDialog(this, false, fileName);
 
 	// select existing container
 	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook"))
@@ -1848,7 +1848,7 @@ void MainWin::importFileDialog(const QString& fileName) {
 
 void MainWin::importSqlDialog() {
 	DEBUG("MainWin::importSqlDialog()");
-	auto dlg = new ImportSQLDatabaseDialog(this);
+	auto* dlg = new ImportSQLDatabaseDialog(this);
 
 	// select existing container
 	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook"))
@@ -1876,7 +1876,7 @@ void MainWin::importProjectDialog() {
 	else
 		type = ImportProjectDialog::ProjectLabPlot;
 
-	auto dlg = new ImportProjectDialog(this, type);
+	auto* dlg = new ImportProjectDialog(this, type);
 
 	// set current folder
 	dlg->setCurrentFolder(m_currentFolder);
@@ -1905,7 +1905,7 @@ void MainWin::exportDialog() {
 }
 
 void MainWin::editFitsFileDialog() {
-	auto editDialog = new FITSHeaderEditDialog(this);
+	auto* editDialog = new FITSHeaderEditDialog(this);
 	if (editDialog->exec() == QDialog::Accepted) {
 		if (editDialog->saved())
 			statusBar()->showMessage(i18n("FITS files saved"));
@@ -1955,7 +1955,7 @@ void MainWin::newLiveDataSourceActionTriggered() {
 void MainWin::addAspectToProject(AbstractAspect* aspect) {
 	const QModelIndex& index = m_projectExplorer->currentIndex();
 	if (index.isValid()) {
-		auto parent = static_cast<AbstractAspect*>(index.internalPointer());
+		auto* parent = static_cast<AbstractAspect*>(index.internalPointer());
 #ifdef HAVE_MQTT
 		//doesn't make sense to add a new MQTTClient to an existing MQTTClient or to any of its successors
 		QString className = parent->metaObject()->className();
@@ -1971,7 +1971,7 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 }
 
 void MainWin::settingsDialog() {
-	auto dlg = new SettingsDialog(this);
+	auto* dlg = new SettingsDialog(this);
 	connect (dlg, SIGNAL(settingsChanged()), this, SLOT(handleSettingsChanges()));
 	dlg->exec();
 }

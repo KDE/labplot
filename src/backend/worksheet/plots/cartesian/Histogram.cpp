@@ -940,7 +940,7 @@ void HistogramPrivate::updateLines() {
 	cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
 
 	//new line path
-	for (const auto& line: lines) {
+	for (const auto& line : lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}

@@ -58,7 +58,7 @@
 */
 
 ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
-	auto horizontalLayout = new QHBoxLayout(this);
+	auto* horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
 	horizontalLayout->setMargin(0);
 
@@ -167,7 +167,7 @@ void ThemeHandler::showPanel() {
 	connect(&themeWidget, SIGNAL(themeSelected(QString)), &menu, SLOT(close()));
 	connect(&themeWidget, SIGNAL(canceled()), &menu, SLOT(close()));
 
-	auto widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&themeWidget);
 	menu.addAction(widgetAction);
 

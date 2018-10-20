@@ -167,7 +167,7 @@ void SpreadsheetView::init() {
 	        this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(m_spreadsheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 
-	for (auto* column: m_spreadsheet->children<Column>())
+	for (auto* column : m_spreadsheet->children<Column>())
 		connect(column, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createColumnContextMenu(QMenu*)));
 
 	//selection relevant connections
@@ -585,7 +585,7 @@ void SpreadsheetView::connectActions() {
 	connect(addIntegrationAction, SIGNAL(triggered()), SLOT(plotData()));
 	connect(addInterpolationAction, SIGNAL(triggered()), SLOT(plotData()));
 	connect(addSmoothAction, SIGNAL(triggered()), SLOT(plotData()));
-	for (const auto& action: addFitAction)
+	for (const auto& action : addFitAction)
 		connect(action, SIGNAL(triggered()), SLOT(plotData()));
 	connect(addFourierFilterAction, SIGNAL(triggered()), SLOT(plotData()));
 }
@@ -1234,7 +1234,7 @@ void SpreadsheetView::pasteIntoSelection() {
 				const int curCol = columnCount - 1 + c;
 				//first non-empty value in the column to paste determines the column mode/type of the new column to be added
 				QString nonEmptyValue;
-				for (auto r: cellTexts) {
+				for (auto r : cellTexts) {
 					if (!r.at(curCol).isEmpty()) {
 						nonEmptyValue = r.at(curCol);
 						break;
@@ -1354,7 +1354,7 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with row numbers", m_spreadsheet->name()));
-	for (auto* col_ptr: selectedColumns()) {
+	for (auto* col_ptr : selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
@@ -1418,7 +1418,7 @@ void SpreadsheetView::fillWithRowNumbers() {
 	for (int i = 0; i < rows; ++i)
 		double_data[i] = int_data[i] = i+1;
 
-	for (auto* col: selectedColumns()) {
+	for (auto* col : selectedColumns()) {
 		switch (col->columnMode()) {
 		case AbstractColumn::Numeric:
 			col->replaceValues(0, double_data);
@@ -1448,7 +1448,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with random values", m_spreadsheet->name()));
 	qsrand(QTime::currentTime().msec());
-	for (auto* col_ptr: selectedColumns()) {
+	for (auto* col_ptr : selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
@@ -1542,7 +1542,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 	QString stringValue;
 
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with const values", m_spreadsheet->name()));
-	for (auto* col_ptr: selectedColumns()) {
+	for (auto* col_ptr : selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
@@ -1717,14 +1717,14 @@ void SpreadsheetView::clearSelectedColumns() {
 	m_spreadsheet->beginMacro(i18n("%1: clear selected columns", m_spreadsheet->name()));
 
 	if (formulaModeActive()) {
-		for (auto* col: selectedColumns()) {
+		for (auto* col : selectedColumns()) {
 			col->setSuppressDataChangedSignal(true);
 			col->clearFormulas();
 			col->setSuppressDataChangedSignal(false);
 			col->setChanged();
 		}
 	} else {
-		for (auto* col: selectedColumns()) {
+		for (auto* col : selectedColumns()) {
 			col->setSuppressDataChangedSignal(true);
 			col->clear();
 			col->setSuppressDataChangedSignal(false);
@@ -1748,7 +1748,7 @@ void SpreadsheetView::setSelectionAs() {
 		return;
 
 	AbstractColumn::PlotDesignation pd = (AbstractColumn::PlotDesignation)action->data().toInt();
-	for (auto* col: columns)
+	for (auto* col : columns)
 		col->setPlotDesignation(pd);
 
 	m_spreadsheet->endMacro();
@@ -1759,7 +1759,7 @@ void SpreadsheetView::reverseColumns() {
 	QVector<Column*> cols = selectedColumns();
 	m_spreadsheet->beginMacro(i18np("%1: reverse column", "%1: reverse columns",
 	                                m_spreadsheet->name(), cols.size()));
-	for (auto* col: cols) {
+	for (auto* col : cols) {
 		if (col->columnMode() != AbstractColumn::Numeric)
 			continue;
 
@@ -1924,7 +1924,7 @@ void SpreadsheetView::removeSelectedRows() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: remove selected rows", m_spreadsheet->name()));
 	//TODO setSuppressDataChangedSignal
-	for (const auto& i: selectedRows().intervals())
+	for (const auto& i : selectedRows().intervals())
 		m_spreadsheet->removeRows(i.start(), i.size());
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -1935,13 +1935,13 @@ void SpreadsheetView::clearSelectedRows() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: clear selected rows", m_spreadsheet->name()));
-	for (auto* col: selectedColumns()) {
+	for (auto* col : selectedColumns()) {
 		col->setSuppressDataChangedSignal(true);
 		if (formulaModeActive()) {
-			for (const auto& i: selectedRows().intervals())
+			for (const auto& i : selectedRows().intervals())
 				col->setFormula(i, "");
 		} else {
-			for (const auto& i: selectedRows().intervals()) {
+			for (const auto& i : selectedRows().intervals()) {
 				if (i.end() == col->rowCount()-1)
 					col->removeRows(i.start(), i.size());
 				else {
@@ -2008,7 +2008,7 @@ void SpreadsheetView::goToCell() {
 void SpreadsheetView::sortDialog(QVector<Column*> cols) {
 	if (cols.isEmpty()) return;
 
-	for (auto* col: cols)
+	for (auto* col : cols)
 		col->setSuppressDataChangedSignal(true);
 
 	SortDialog* dlg = new SortDialog();
@@ -2016,7 +2016,7 @@ void SpreadsheetView::sortDialog(QVector<Column*> cols) {
 	dlg->setColumns(cols);
 	int rc = dlg->exec();
 
-	for (auto* col: cols) {
+	for (auto* col : cols) {
 		col->setSuppressDataChangedSignal(false);
 		if (rc == QDialog::Accepted)
 			col->setChanged();
@@ -2028,7 +2028,7 @@ void SpreadsheetView::sortColumnAscending() {
 	for (auto* col : cols)
 		col->setSuppressDataChangedSignal(true);
 	m_spreadsheet->sortColumns(cols.first(), cols, true);
-	for (auto* col: cols) {
+	for (auto* col : cols) {
 		col->setSuppressDataChangedSignal(false);
 		col->setChanged();
 	}
@@ -2039,7 +2039,7 @@ void SpreadsheetView::sortColumnDescending() {
 	for (auto* col : cols)
 		col->setSuppressDataChangedSignal(true);
 	m_spreadsheet->sortColumns(cols.first(), cols, false);
-	for (auto* col: cols) {
+	for (auto* col : cols) {
 		col->setSuppressDataChangedSignal(false);
 		col->setChanged();
 	}

@@ -250,7 +250,7 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	ui.sbKeepNValues->setValue(fds->keepNValues());
 
 	// disable "whole file" when having no file (i.e. socket or port)
-	auto model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
+	auto* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
 	QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -338,7 +338,7 @@ void LiveDataDock::updateTypeChanged(int idx) {
 			ui.lSampleSize->show();
 			ui.sbSampleSize->show();
 
-			for (auto* source: m_liveDataSources) {
+			for (auto* source : m_liveDataSources) {
 				source->setUpdateType(type);
 				source->setUpdateInterval(ui.sbUpdateInterval->value());
 				source->setFileWatched(false);
@@ -350,7 +350,7 @@ void LiveDataDock::updateTypeChanged(int idx) {
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 
-			for (auto* source: m_liveDataSources) {
+			for (auto* source : m_liveDataSources) {
 				source->setFileWatched(true);
 				source->setUpdateType(type);
 			}
@@ -478,7 +478,7 @@ void LiveDataDock::pauseReading() {
  */
 void LiveDataDock::continueReading() {
 	if(!m_liveDataSources.isEmpty())  {
-		for (auto* source: m_liveDataSources)
+		for (auto* source : m_liveDataSources)
 			source->continueReading();
 	}
 #ifdef HAVE_MQTT
@@ -518,14 +518,14 @@ void LiveDataDock::useWillMessage(int state) {
 	qDebug()<<"Use will message: " <<state;
 
 	if(state == Qt::Checked) {
-		for (auto* source: m_mqttClients)
+		for (auto* source : m_mqttClients)
 			source->setMQTTWillUse(true);
 
 		if (m_mqttClients.first()->willUpdateType() == MQTTClient::WillUpdateType::OnClick)
 			ui.bWillUpdateNow->show();
 
 	} else if (state == Qt::Unchecked) {
-		for (auto* source: m_mqttClients)
+		for (auto* source : m_mqttClients)
 			source->setMQTTWillUse(false);
 
 		ui.bWillUpdateNow->hide();
@@ -539,7 +539,7 @@ void LiveDataDock::useWillMessage(int state) {
  * \param QoS the QoS level of the will message
  */
 void LiveDataDock::willQoSChanged(int QoS) {
-	for (auto* source: m_mqttClients)
+	for (auto* source : m_mqttClients)
 		source->setWillQoS(QoS);
 }
 
@@ -551,10 +551,10 @@ void LiveDataDock::willQoSChanged(int QoS) {
  */
 void LiveDataDock::willRetainChanged(int state) {
 	if(state == Qt::Checked) {
-		for (auto* source: m_mqttClients)
+		for (auto* source : m_mqttClients)
 			source->setWillRetain(true);
 	} else if (state == Qt::Unchecked) {
-		for (auto* source: m_mqttClients)
+		for (auto* source : m_mqttClients)
 			source->setWillRetain(false);
 	}
 }
@@ -566,7 +566,7 @@ void LiveDataDock::willRetainChanged(int state) {
  * \param topic the current text of cbWillTopic
  */
 void LiveDataDock::willTopicChanged(const QString& topic) {
-	for (auto* source: m_mqttClients) {
+	for (auto* source : m_mqttClients) {
 		if(source->willTopic() != topic)
 			source->clearLastMessage();
 
@@ -581,7 +581,7 @@ void LiveDataDock::willTopicChanged(const QString& topic) {
  * \param type the selected will message type
  */
 void LiveDataDock::willMessageTypeChanged(int type) {
-	for (auto* source: m_mqttClients)
+	for (auto* source : m_mqttClients)
 		source->setWillMessageType(static_cast<MQTTClient::WillMessageType> (type));
 }
 
@@ -592,7 +592,7 @@ void LiveDataDock::willMessageTypeChanged(int type) {
  * \param message the will message given by the user
  */
 void LiveDataDock::willOwnMessageChanged(const QString& message) {
-	for (auto* source: m_mqttClients)
+	for (auto* source : m_mqttClients)
 		source->setWillOwnMessage(message);
 }
 
@@ -603,20 +603,20 @@ void LiveDataDock::willOwnMessageChanged(const QString& message) {
  * \param type the selected will update type
  */
 void LiveDataDock::willUpdateTypeChanged(int updateType) {
-	for (auto* source: m_mqttClients)
+	for (auto* source : m_mqttClients)
 		source->setWillUpdateType(static_cast<MQTTClient::WillUpdateType>(updateType));
 
 	if(static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::TimePeriod) {
 		ui.bWillUpdateNow->hide();
 
-		for (auto* source: m_mqttClients) {
+		for (auto* source : m_mqttClients) {
 			source->startWillTimer();
 		}
 	} else if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::OnClick) {
 		ui.bWillUpdateNow->show();
 
 		//if update type is on click we stop the will timer
-		for (auto* source: m_mqttClients)
+		for (auto* source : m_mqttClients)
 			source->stopWillTimer();
 	}
 }
@@ -626,7 +626,7 @@ void LiveDataDock::willUpdateTypeChanged(int updateType) {
  * updates the will message of every client in m_mqttClients
  */
 void LiveDataDock::willUpdateNow() {
-	for (auto* source: m_mqttClients)
+	for (auto* source : m_mqttClients)
 		source->updateWillMessage();
 }
 
@@ -637,7 +637,7 @@ void LiveDataDock::willUpdateNow() {
  * \param interval the new will update interval
  */
 void LiveDataDock::willUpdateIntervalChanged(int interval) {
-	for (auto* source: m_mqttClients) {
+	for (auto* source : m_mqttClients) {
 		source->setWillTimeInterval(interval);
 		source->startWillTimer();
 	}
@@ -653,14 +653,14 @@ void LiveDataDock::statisticsChanged(int index) {
 	//if it's checked we add it
 	if(!useStatistic) {
 		if(index >= 0) {
-			for (auto* source: m_mqttClients)
+			for (auto* source : m_mqttClients)
 				source->addWillStatistics(static_cast<MQTTClient::WillStatistics>(index) );
 		}
 	}
 	//otherwise remove it
 	else {
 		if(index >= 0){
-			for (auto* source: m_mqttClients)
+			for (auto* source : m_mqttClients)
 				source->removeWillStatistics(static_cast<MQTTClient::WillStatistics>(index) );
 		}
 	}
@@ -746,7 +746,7 @@ void LiveDataDock::addSubscription() {
 				}
 
 				//subscribe in every MQTTClient
-				for (auto* source: m_mqttClients) {
+				for (auto* source : m_mqttClients) {
 					source->addMQTTSubscription(name, ui.cbQoS->currentIndex());
 				}
 
@@ -773,7 +773,7 @@ void LiveDataDock::addSubscription() {
 
 											if(unsubscribeItem->text(0) != unsubscribeItem->parent()->child(i)->text(0)) {
 												//add topic as subscription to every client
-												for (auto* source: m_mqttClients) {
+												for (auto* source : m_mqttClients) {
 													source->addBeforeRemoveSubscription(unsubscribeItem->parent()->child(i)->text(0), ui.cbQoS->currentIndex());
 												}
 												//also add it to twSubscriptions
@@ -782,7 +782,7 @@ void LiveDataDock::addSubscription() {
 											} else {
 												//before we remove the topic, we reparent it to the new subscription
 												//so no data is lost
-												for (auto* source: m_mqttClients) {
+												for (auto* source : m_mqttClients) {
 													source->reparentTopic(unsubscribeItem->text(0), name);
 												}
 											}
@@ -792,7 +792,7 @@ void LiveDataDock::addSubscription() {
 
 									qDebug()<<"Remove: "<<unsubscribeItem->text(0);
 									//Remove topic/subscription
-									for (auto* source: m_mqttClients) {
+									for (auto* source : m_mqttClients) {
 										source->removeMQTTSubscription(unsubscribeItem->text(0));
 									}
 
@@ -832,7 +832,7 @@ void LiveDataDock::removeSubscription() {
 		//if it is a top level item, meaning a topic that we really subscribed to(not one that belongs to a subscription)
 		//we can simply unsubscribe from it
 		if(unsubscribeItem->parent() == nullptr) {
-			for (auto* source: m_mqttClients) {
+			for (auto* source : m_mqttClients) {
 				source->removeMQTTSubscription(unsubscribeItem->text(0));
 			}
 			ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(unsubscribeItem));
@@ -844,7 +844,7 @@ void LiveDataDock::removeSubscription() {
 				for(int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
 					if(unsubscribeItem->text(0) != unsubscribeItem->parent()->child(i)->text(0)) {
 						//add topic as subscription to every client
-						for (auto* source: m_mqttClients) {
+						for (auto* source : m_mqttClients) {
 							source->addBeforeRemoveSubscription(unsubscribeItem->parent()->child(i)->text(0), ui.cbQoS->currentIndex());
 						}
 						ui.twSubscriptions->addTopLevelItem(unsubscribeItem->parent()->takeChild(i));
@@ -855,7 +855,7 @@ void LiveDataDock::removeSubscription() {
 			}
 
 			//remove topic/subscription from every client
-			for (auto* source: m_mqttClients) {
+			for (auto* source : m_mqttClients) {
 				source->removeMQTTSubscription(unsubscribeItem->text(0));
 			}
 			ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(unsubscribeItem));
@@ -1462,7 +1462,7 @@ void LiveDataDock::manageCommonLevelSubscriptions() {
 				}
 
 				//make the subscription on commonTopic in every MQTTClient from m_mqttClients
-				for (auto* source: m_mqttClients) {
+				for (auto* source : m_mqttClients) {
 					source->addMQTTSubscription(commonTopic, ui.cbQoS->currentIndex());
 				}
 			}

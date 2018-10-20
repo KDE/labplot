@@ -183,7 +183,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 			QMenu* columnsMenu = menu->addMenu(i18n("Show/Hide columns"));
 			columnsMenu->addAction(showAllColumnsAction);
 			columnsMenu->addSeparator();
-			for (auto action: list_showColumnActions)
+			for (auto* action : list_showColumnActions)
 				columnsMenu->addAction(action);
 
 			//TODO
@@ -268,7 +268,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 		columnsMenu->addSection(i18n("Columns"));
 		columnsMenu->addAction(showAllColumnsAction);
 		columnsMenu->addSeparator();
-		for (auto action: list_showColumnActions)
+		for (auto* action : list_showColumnActions)
 			columnsMenu->addAction(action);
 
 		QContextMenuEvent* e = static_cast<QContextMenuEvent*>(event);
@@ -676,12 +676,12 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("state");
 
 	writer->writeStartElement("expanded");
-	for (auto e: expanded)
+	for (const auto e : expanded)
 		writer->writeTextElement("row", QString::number(e));
 	writer->writeEndElement();
 
 	writer->writeStartElement("selected");
-	for (auto s: selected)
+	for (const auto s : selected)
 		writer->writeTextElement("row", QString::number(s));
 	writer->writeEndElement();
 

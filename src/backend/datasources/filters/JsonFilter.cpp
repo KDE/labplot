@@ -433,8 +433,8 @@ int JsonFilterPrivate::prepareDocumentToRead(const QJsonDocument& doc) {
 		m_preparedDoc = doc;
 	else {
 		QModelIndex index;
-		for (auto it = modelRows.begin(); it != modelRows.end(); ++it) {
-			index = model->index(*it, 0, index);
+		for (auto& it : modelRows) {
+			index = model->index(it, 0, index);
 		}
 		m_preparedDoc = model->genJsonByIndex(index);
 	}
@@ -761,9 +761,9 @@ void JsonFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("endColumn", QString::number(d->endColumn));
 
 	QStringList list;
-	for(auto it = modelRows().begin(); it != modelRows().end(); ++it){
-		list.append(QString::number(*it));
-	}
+	for (auto& it : modelRows())
+		list.append(QString::number(it));
+
 	writer->writeAttribute("modelRows", list.join(';'));
 
 	writer->writeEndElement();
@@ -842,7 +842,7 @@ bool JsonFilter::load(XmlStreamReader* reader) {
 		reader->raiseWarning(attributeWarning.arg("'modelRows'"));
 	else{
 		d->modelRows = QVector<int>();
-		for (auto& it: list)
+		for (auto& it : list)
 			d->modelRows.append(it.toInt());
 	}
 

@@ -46,13 +46,13 @@ CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent), m_point(null
 
 	//adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
-	  auto layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
-	  if (!layout)
-		continue;
+		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		if (!layout)
+			continue;
 
-	  layout->setContentsMargins(2,2,2,2);
-	  layout->setHorizontalSpacing(2);
-	  layout->setVerticalSpacing(2);
+		layout->setContentsMargins(2,2,2,2);
+		layout->setHorizontalSpacing(2);
+		layout->setVerticalSpacing(2);
 	}
 
 	//SLOTS
@@ -75,7 +75,7 @@ CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent), m_point(null
 	connect( ui.sbSymbolBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(symbolBorderWidthChanged(double)) );
 
 	//Template handler
-	auto templateHandler = new TemplateHandler(this, TemplateHandler::CustomPoint);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::CustomPoint);
 	ui.verticalLayout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));

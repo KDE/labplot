@@ -806,7 +806,7 @@ AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QStrin
 }
 
 AbstractAspectPrivate::~AbstractAspectPrivate() {
-	for(auto* child : m_children)
+	for (auto* child : m_children)
 		delete child;
 }
 

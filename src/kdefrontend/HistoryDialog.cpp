@@ -43,7 +43,7 @@
  */
 HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& emptyLabel) : QDialog(parent),
 	m_undoStack(stack), m_clearUndoStackButton(nullptr) {
-	auto undoView = new QUndoView(stack, this);
+	auto* undoView = new QUndoView(stack, this);
 	undoView->setCleanIcon( QIcon::fromTheme("edit-clear-history") );
 	undoView->setEmptyLabel(emptyLabel);
 	undoView->setMinimumWidth(350);
@@ -73,7 +73,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 	line->setFrameShape(QFrame::HLine);
 	line->setFrameShadow(QFrame::Sunken);
 
-	auto layout = new QVBoxLayout;
+	auto* layout = new QVBoxLayout;
 
 	layout->addWidget(undoView);
 	layout->addWidget(line);

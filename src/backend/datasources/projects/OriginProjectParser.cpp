@@ -1007,7 +1007,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 	//add plots
 	int index = 1;
-	for (const auto& layer: graph.layers) {
+	for (const auto& layer : graph.layers) {
 		if (!layer.is3D()) {
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot%1", QString::number(index)));
 			worksheet->addChildFast(plot);
@@ -1204,7 +1204,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			}
 
 			//texts
-			for (const auto& s: layer.texts) {
+			for (const auto& s : layer.texts) {
 				DEBUG("EXTRA TEXT = " << s.text.c_str());
 				TextLabel* label = new TextLabel("text label");
 				label->setText(parseOriginText(QString::fromLatin1(s.text.c_str())));
@@ -1231,7 +1231,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 			//curves
 			int curveIndex = 1;
-			for (const auto& originCurve: layer.curves) {
+			for (const auto& originCurve : layer.curves) {
 
 				QString data(originCurve.dataName.c_str());
 				switch(data[0].toLatin1()) {
@@ -2021,7 +2021,7 @@ QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const 
 
 QString OriginProjectParser::replaceSpecialChars(QString text) const {
 	QString t = text;
-        for (auto const &r : charReplacementList())
+        for (const auto& r : charReplacementList())
                 t.replace(r.first, r.second);
 	return t;
 }

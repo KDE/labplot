@@ -220,7 +220,7 @@ class DropValuesTask : public QRunnable {
 
 			//equal to
 			if (m_operator == 0) {
-				for (auto d: new_data) {
+				for (auto d : new_data) {
 					if (d == m_value1) {
 						d = NAN;
 						changed = true;
@@ -230,7 +230,7 @@ class DropValuesTask : public QRunnable {
 
 			//between (including end points)
 			else if (m_operator == 1) {
-				for (auto d: new_data) {
+				for (auto d : new_data) {
 					if (d >= m_value1 && d <= m_value2) {
 						d = NAN;
 						changed = true;
@@ -240,7 +240,7 @@ class DropValuesTask : public QRunnable {
 
 			//between (excluding end points)
 			else if (m_operator == 2) {
-				for (auto d: new_data) {
+				for (auto d : new_data) {
 					if (d > m_value1 && d < m_value2) {
 						d = NAN;
 						changed = true;
@@ -250,7 +250,7 @@ class DropValuesTask : public QRunnable {
 
 			//greater than
 			else if (m_operator == 3) {
-				for (auto d: new_data) {
+				for (auto d : new_data) {
 					if (d > m_value1) {
 						d = NAN;
 						changed = true;
@@ -260,7 +260,7 @@ class DropValuesTask : public QRunnable {
 
 			//greater than or equal to
 			else if (m_operator == 4) {
-				for (auto d: new_data) {
+				for (auto d : new_data) {
 					if (d >= m_value1) {
 						d = NAN;
 						changed = true;
@@ -270,7 +270,7 @@ class DropValuesTask : public QRunnable {
 
 			//less than
 			else if (m_operator == 5) {
-				for (auto d: new_data) {
+				for (auto d : new_data) {
 					if (d < m_value1) {
 						d = NAN;
 						changed = true;
@@ -280,7 +280,7 @@ class DropValuesTask : public QRunnable {
 
 			//less than or equal to
 			else if (m_operator == 6) {
-				for (auto d: new_data) {
+				for (auto d : new_data) {
 					if (d <= m_value1) {
 						d = NAN;
 						changed = true;

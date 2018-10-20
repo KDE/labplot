@@ -70,7 +70,7 @@ void SortDialog::sortColumns() {
 void SortDialog::setColumns(QVector<Column*> columns) {
 	m_columns = columns;
 
-	for (auto col: m_columns)
+	for (auto* col : m_columns)
 		ui.cbColumns->addItem(col->name());
 
 	ui.cbColumns->setCurrentIndex(0);

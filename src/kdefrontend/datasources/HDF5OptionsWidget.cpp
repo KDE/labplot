@@ -96,7 +96,7 @@ const QStringList HDF5OptionsWidget::selectedHDF5Names() const {
 	QStringList names;
 
 	// the data link is saved in the second column
-	for (auto* item: ui.twContent->selectedItems())
+	for (auto* item : ui.twContent->selectedItems())
 		names << item->text(1);
 
 	return names;

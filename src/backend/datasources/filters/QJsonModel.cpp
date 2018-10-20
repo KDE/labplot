@@ -316,8 +316,8 @@ QJsonDocument QJsonModel::json() const {
 }
 
 QJsonValue  QJsonModel::genJson(QJsonTreeItem* item) const {
-	auto type   = item->type();
-	const int  nchild = item->childCount();
+	auto type = item->type();
+	const int nchild = item->childCount();
 
 	if (QJsonValue::Object == type) {
 		QJsonObject jo;

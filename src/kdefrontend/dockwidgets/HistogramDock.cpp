@@ -70,7 +70,7 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 	ui.setupUi(this);
 
 	// Tab "General"
-	auto gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
+	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
 	gridLayout->addWidget(cbDataColumn, 3, 2, 1, 1);
 
 	//Tab "Values"
@@ -82,13 +82,13 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 	ui.cbFillingColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.bFillingOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	auto completer = new QCompleter(this);
+	auto* completer = new QCompleter(this);
 	completer->setModel(new QDirModel);
 	ui.leFillingFileName->setCompleter(completer);
 
 	//adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i){
-		auto layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
 
@@ -173,7 +173,7 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 	connect( ui.sbErrorBarsOpacity, SIGNAL(valueChanged(int)), this, SLOT(errorBarsOpacityChanged(int)) );
 
 	//template handler
-	auto templateHandler = new TemplateHandler(this, TemplateHandler::Histogram);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::Histogram);
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
@@ -484,7 +484,7 @@ void HistogramDock::visibilityChanged(bool state){
 	if (m_initializing)
 		return;
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setVisible(state);
 }
 
@@ -867,7 +867,7 @@ void HistogramDock::valuesTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesType(valuesType);
 }
 
@@ -886,7 +886,7 @@ void HistogramDock::showValuesColumnFormat(const Column* column){
 	 //show the actual formatting properties
 	switch(columnMode) {
 		case AbstractColumn::Numeric:{
-		  auto filter = static_cast<Double2StringFilter*>(column->outputFilter());
+		  auto* filter = static_cast<Double2StringFilter*>(column->outputFilter());
 		  ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->numericFormat()));
 		  ui.sbValuesPrecision->setValue(filter->numDigits());
 		  break;
@@ -897,7 +897,7 @@ void HistogramDock::showValuesColumnFormat(const Column* column){
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
-				auto filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
+				auto* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
 				ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
 				break;
 			}
@@ -935,14 +935,14 @@ void HistogramDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode c
 		ui.cbValuesFormat->addItem(i18n("Full Day Name"), QVariant("dddd"));
 		break;
 	case AbstractColumn::DateTime:
-		for (const auto& s: AbstractColumn::dateFormats())
+		for (const auto& s : AbstractColumn::dateFormats())
 			ui.cbValuesFormat->addItem(s, QVariant(s));
 
-		for (const auto& s: AbstractColumn::timeFormats())
+		for (const auto& s : AbstractColumn::timeFormats())
 			ui.cbValuesFormat->addItem(s, QVariant(s));
 
-		for (const auto& s1: AbstractColumn::dateFormats())
-			for (const auto& s2: AbstractColumn::timeFormats())
+		for (const auto& s1 : AbstractColumn::dateFormats())
+			for (const auto& s2 : AbstractColumn::timeFormats())
 				ui.cbValuesFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
 		break;
 	}
@@ -982,10 +982,10 @@ void HistogramDock::valuesColumnChanged(const QModelIndex& index){
 	if (m_initializing)
 		return;
 
-	auto column = static_cast<Column*>(index.internalPointer());
+	auto* column = static_cast<Column*>(index.internalPointer());
 	this->showValuesColumnFormat(column);
 
-	for (auto* curve: m_curvesList) {
+	for (auto* curve : m_curvesList) {
 	//TODO save also the format of the currently selected column for the values (precision etc.)
 		curve->setValuesColumn(column);
 	}
@@ -1003,7 +1003,7 @@ void HistogramDock::valuesDistanceChanged(double  value){
 	if (m_initializing)
 		return;
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesDistance( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
@@ -1011,7 +1011,7 @@ void HistogramDock::valuesRotationChanged(int value){
 	if (m_initializing)
 		return;
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesRotationAngle(value);
 }
 
@@ -1020,7 +1020,7 @@ void HistogramDock::valuesOpacityChanged(int value){
 		return;
 
 	qreal opacity = (float)value/100.;
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesOpacity(opacity);
 }
 
@@ -1029,7 +1029,7 @@ void HistogramDock::valuesPrefixChanged(){
 		return;
 
 	QString prefix = ui.leValuesPrefix->text();
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesPrefix(prefix);
 }
 
@@ -1038,7 +1038,7 @@ void HistogramDock::valuesSuffixChanged(){
 		return;
 
 	QString suffix = ui.leValuesSuffix->text();
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesSuffix(suffix);
 }
 
@@ -1048,7 +1048,7 @@ void HistogramDock::valuesFontChanged(const QFont& font){
 
 	QFont valuesFont = font;
 	valuesFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesFont(valuesFont);
 }
 
@@ -1056,7 +1056,7 @@ void HistogramDock::valuesColorChanged(const QColor& color){
 	if (m_initializing)
 		return;
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesColor(color);
 }
 
@@ -1075,7 +1075,7 @@ void HistogramDock::fillingEnabledChanged(int state) {
 	if (m_initializing)
 		return;
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingEnabled(state);
 }
 
@@ -1143,7 +1143,7 @@ void HistogramDock::fillingTypeChanged(int index){
 	if (m_initializing)
 		return;
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingType(type);
 }
 
@@ -1165,7 +1165,7 @@ void HistogramDock::fillingColorStyleChanged(int index){
 	if (m_initializing)
 		return;
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingColorStyle(style);
 }
 
@@ -1174,7 +1174,7 @@ void HistogramDock::fillingImageStyleChanged(int index){
 		return;
 
 	auto style = (PlotArea::BackgroundImageStyle)index;
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingImageStyle(style);
 }
 
@@ -1183,7 +1183,7 @@ void HistogramDock::fillingBrushStyleChanged(int index){
 		return;
 
 	auto style = (Qt::BrushStyle)index;
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingBrushStyle(style);
 }
 
@@ -1191,7 +1191,7 @@ void HistogramDock::fillingFirstColorChanged(const QColor& c){
 	if (m_initializing)
 		return;
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingFirstColor(c);
 }
 
@@ -1199,7 +1199,7 @@ void HistogramDock::fillingSecondColorChanged(const QColor& c){
 	if (m_initializing)
 		return;
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingSecondColor(c);
 }
 
@@ -1324,7 +1324,7 @@ void HistogramDock::selectFile() {
 
 	ui.leFillingFileName->setText( path );
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingFileName(path);
 }
 
@@ -1333,7 +1333,7 @@ void HistogramDock::fileNameChanged(){
 		return;
 
 	QString fileName = ui.leFillingFileName->text();
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingFileName(fileName);
 }
 
@@ -1342,7 +1342,7 @@ void HistogramDock::fillingOpacityChanged(int value){
 		return;
 
 	qreal opacity = (float)value/100.;
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingOpacity(opacity);
 }
 

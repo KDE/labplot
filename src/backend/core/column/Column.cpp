@@ -106,12 +106,12 @@ QMenu* Column::createContextMenu() {
 	usedInMenu->setIcon(QIcon::fromTheme("go-next-view"));
 
 	//remove previously added actions
-	for (auto* action: m_usedInActionGroup->actions())
+	for (auto* action : m_usedInActionGroup->actions())
 		m_usedInActionGroup->removeAction(action);
 
 	//add curves where the column is currently in use
 	QVector<XYCurve*> curves = project()->children<XYCurve>(AbstractAspect::Recursive);
-	for (const auto* curve: curves) {
+	for (const auto* curve : curves) {
 		bool used = false;
 
 		const XYAnalysisCurve* analysisCurve = dynamic_cast<const XYAnalysisCurve*>(curve);
@@ -566,7 +566,7 @@ void Column::calculateStatistics() const {
 	statistics.meanDeviation = columnSumMeanDeviation / notNanCount;
 
 	double entropy = 0.0;
-	for (const auto& v: frequencyOfValues) {
+	for (const auto& v : frequencyOfValues) {
 		const double frequencyNorm = static_cast<double>(v) / notNanCount;
 		entropy += (frequencyNorm * log2(frequencyNorm));
 	}
@@ -704,12 +704,12 @@ void Column::save(QXmlStreamWriter* writer) const {
 		writer->writeTextElement("text", formula());
 
 		writer->writeStartElement("variableNames");
-		for (const auto& name: formulaVariableNames())
+		for (const auto& name : formulaVariableNames())
 			writer->writeTextElement("name", name);
 		writer->writeEndElement();
 
 		writer->writeStartElement("columnPathes");
-		for (const auto& path: formulaVariableColumnPathes())
+		for (const auto& path : formulaVariableColumnPathes())
 			writer->writeTextElement("path", path);
 		writer->writeEndElement();
 

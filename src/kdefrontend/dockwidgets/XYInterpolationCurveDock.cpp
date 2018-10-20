@@ -77,7 +77,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 
-	auto gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
+	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 		gridLayout->setContentsMargins(2,2,2,2);
 		gridLayout->setHorizontalSpacing(2);
@@ -94,7 +94,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 2);
 
-	for (int i=0; i < NSL_INTERP_TYPE_COUNT; i++)
+	for (int i = 0; i < NSL_INTERP_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_interp_type_name[i]));
 #if GSL_MAJOR_VERSION < 2
 	// disable Steffen spline item
@@ -102,9 +102,9 @@ void XYInterpolationCurveDock::setupGeneral() {
 	QStandardItem* item = model->item(nsl_interp_type_steffen);
 	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 #endif
-	for (int i=0; i < NSL_INTERP_PCH_VARIANT_COUNT; i++)
+	for (int i = 0; i < NSL_INTERP_PCH_VARIANT_COUNT; i++)
 		uiGeneralTab.cbVariant->addItem(i18n(nsl_interp_pch_variant_name[i]));
-	for (int i=0; i < NSL_INTERP_EVALUATE_COUNT; i++)
+	for (int i = 0; i < NSL_INTERP_EVALUATE_COUNT; i++)
 		uiGeneralTab.cbEval->addItem(i18n(nsl_interp_evaluate_name[i]));
 
 	uiGeneralTab.cbPointsMode->addItem(i18n("Auto (5x data points)"));
@@ -116,7 +116,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
-	auto layout = new QHBoxLayout(ui.tabGeneral);
+	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
@@ -294,7 +294,7 @@ void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	XYCurve* dataSourceCurve = nullptr;
 	if (aspect) {
 		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
@@ -312,7 +312,7 @@ void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) 
 }
 
 void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = nullptr;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);
@@ -346,7 +346,7 @@ void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
 	if(m_interpolationData.pointsMode == XYInterpolationCurve::Auto)
 		pointsModeChanged();
 
-	const auto model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
+	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
 	QStandardItem* item = model->item(nsl_interp_type_polynomial);
 	if (dataPoints < gsl_interp_type_min_size(gsl_interp_polynomial) || dataPoints > 100) {	// not good for many points
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
@@ -409,7 +409,7 @@ void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = nullptr;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);

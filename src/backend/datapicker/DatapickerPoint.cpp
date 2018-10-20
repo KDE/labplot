@@ -320,7 +320,7 @@ void DatapickerPointPrivate::retransform() {
   update color and size of all error-bar.
 */
 void DatapickerPointPrivate::retransformErrorBar() {
-	for(auto* item : q->m_errorBarItemList) {
+	for (auto* item : q->m_errorBarItemList) {
 		if (item) {
 			item->setBrush(errorBarBrush);
 			item->setPen(errorBarPen);

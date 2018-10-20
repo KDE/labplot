@@ -70,7 +70,7 @@ XYCurveDock::XYCurveDock(QWidget* parent) : QWidget(parent),
 	ui.setupUi(this);
 
 	//Tab "Values"
-	auto gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());
+	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());
 	cbValuesColumn = new TreeViewComboBox(ui.tabValues);
 	gridLayout->addWidget(cbValuesColumn, 2, 2, 1, 1);
 
@@ -78,7 +78,7 @@ XYCurveDock::XYCurveDock(QWidget* parent) : QWidget(parent),
 	ui.cbFillingColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.bFillingOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	auto completer = new QCompleter(this);
+	auto* completer = new QCompleter(this);
 	completer->setModel(new QDirModel);
 	ui.leFillingFileName->setCompleter(completer);
 
@@ -99,7 +99,7 @@ XYCurveDock::XYCurveDock(QWidget* parent) : QWidget(parent),
 
 	//adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
-		auto layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
 
@@ -181,7 +181,7 @@ XYCurveDock::XYCurveDock(QWidget* parent) : QWidget(parent),
 	connect( ui.sbErrorBarsOpacity, SIGNAL(valueChanged(int)), this, SLOT(errorBarsOpacityChanged(int)) );
 
 	//template handler
-	auto templateHandler = new TemplateHandler(this, TemplateHandler::XYCurve);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::XYCurve);
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
@@ -200,12 +200,12 @@ XYCurveDock::~XYCurveDock() {
 void XYCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
-	auto layout = new QHBoxLayout(ui.tabGeneral);
+	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
 	// Tab "General"
-	auto gridLayout = qobject_cast<QGridLayout*>(generalTab->layout());
+	auto* gridLayout = qobject_cast<QGridLayout*>(generalTab->layout());
 
 	cbXColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbXColumn, 2, 2, 1, 1);
@@ -681,14 +681,14 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 		ui.cbValuesFormat->addItem(i18n("Full Day Name"), QVariant("dddd"));
 		break;
 	case AbstractColumn::DateTime: {
-			for (const auto& s: AbstractColumn::dateFormats())
+			for (const auto& s : AbstractColumn::dateFormats())
 				ui.cbValuesFormat->addItem(s, QVariant(s));
 
-			for (const auto& s: AbstractColumn::timeFormats())
+			for (const auto& s : AbstractColumn::timeFormats())
 				ui.cbValuesFormat->addItem(s, QVariant(s));
 
-			for (const auto& s1: AbstractColumn::dateFormats()) {
-				for (const auto& s2: AbstractColumn::timeFormats())
+			for (const auto& s1 : AbstractColumn::dateFormats()) {
+				for (const auto& s2 : AbstractColumn::timeFormats())
 					ui.cbValuesFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
 			}
 			break;
@@ -741,7 +741,7 @@ void XYCurveDock::showValuesColumnFormat(const Column* column) {
 		//show the actual formatting properties
 		switch (columnMode) {
 		case AbstractColumn::Numeric: {
-			const auto filter = static_cast<Double2StringFilter*>(column->outputFilter());
+			const auto* filter = static_cast<Double2StringFilter*>(column->outputFilter());
 			ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->numericFormat()));
 			ui.sbValuesPrecision->setValue(filter->numDigits());
 			break;
@@ -752,7 +752,7 @@ void XYCurveDock::showValuesColumnFormat(const Column* column) {
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
-			const auto filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
+			const auto* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
 			DEBUG("	column values format = " << filter->format().toStdString());
 			ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
 			break;
@@ -804,7 +804,7 @@ void XYCurveDock::xColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = nullptr;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);
@@ -819,7 +819,7 @@ void XYCurveDock::yColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = nullptr;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);
@@ -1240,7 +1240,7 @@ void XYCurveDock::valuesColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto column = static_cast<Column*>(index.internalPointer());
+	auto* column = static_cast<Column*>(index.internalPointer());
 	this->showValuesColumnFormat(column);
 
 	for (auto* curve : m_curvesList) {
@@ -1565,8 +1565,8 @@ void XYCurveDock::xErrorPlusColumnChanged(const QModelIndex& index) const {
 	if (m_initializing)
 		return;
 
-	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 	Q_ASSERT(column);
 
 	for (auto* curve : m_curvesList)
@@ -1578,8 +1578,8 @@ void XYCurveDock::xErrorMinusColumnChanged(const QModelIndex& index) const {
 	if (m_initializing)
 		return;
 
-	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 	Q_ASSERT(column);
 
 	for (auto* curve : m_curvesList)
@@ -1635,8 +1635,8 @@ void XYCurveDock::yErrorPlusColumnChanged(const QModelIndex& index) const {
 	if (m_initializing)
 		return;
 
-	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 	Q_ASSERT(column);
 
 	for (auto* curve : m_curvesList)
@@ -1648,8 +1648,8 @@ void XYCurveDock::yErrorMinusColumnChanged(const QModelIndex& index) const {
 	if (m_initializing)
 		return;
 
-	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 	Q_ASSERT(column);
 
 	for (auto* curve : m_curvesList)

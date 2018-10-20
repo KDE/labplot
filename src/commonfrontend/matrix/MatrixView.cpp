@@ -1166,7 +1166,7 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 
 	for (int col = 0; col < cols; ++col) {
 		int maxSize = -1;
-		for (auto row: toExport) {
+		for (auto row : toExport) {
 			if (row.at(col).size() > maxSize)
 				maxSize = row.at(col).size();
 		}

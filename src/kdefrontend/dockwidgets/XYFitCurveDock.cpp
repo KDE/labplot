@@ -1092,12 +1092,12 @@ void XYFitCurveDock::resultCopyAll() {
 		str += i18n("fit range:") + ' ' + QString::number(m_fitData.fitRange.first()) + " .. " + QString::number(m_fitData.fitRange.last()) + '\n';
 
 		str += i18n("Iterations:") + '\n';
-		for (const auto &s: m_fitData.paramNamesUtf8)
+		for (const auto &s : m_fitData.paramNamesUtf8)
 			str += s + '\t';
 		str += UTF8_QSTRING("χ²");
 
 		const QStringList iterations = fitResult.solverOutput.split(';');
-		for (const auto &s: iterations)
+		for (const auto &s : iterations)
 			if (!s.isEmpty())
 				str += '\n' + s;
 	}
@@ -1166,12 +1166,12 @@ void XYFitCurveDock::showFitResult() {
 
 	// show all iterations
 	QString str;
-	for (const auto &s: m_fitData.paramNamesUtf8)
+	for (const auto &s : m_fitData.paramNamesUtf8)
 		str += s + '\t';
 	str += UTF8_QSTRING("χ²");
 
 	const QStringList iterations = fitResult.solverOutput.split(';');
-	for (const auto &s: iterations)
+	for (const auto &s : iterations)
 		if (!s.isEmpty())
 			str += '\n' + s;
 	uiGeneralTab.twLog->item(7, 1)->setText(str);

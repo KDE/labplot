@@ -150,9 +150,9 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 	m_importFileWidget->saveSettings(source);
 
 	//show a progress bar in the status bar
-	auto progressBar = new QProgressBar();
+	auto* progressBar = new QProgressBar();
 	progressBar->setRange(0, 100);
-    connect(source->filter(), &AbstractFileFilter::completed, progressBar, &QProgressBar::setValue);
+	connect(source->filter(), &AbstractFileFilter::completed, progressBar, &QProgressBar::setValue);
 
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
@@ -204,7 +204,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	auto mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
 
 	//show a progress bar in the status bar
-	auto progressBar = new QProgressBar();
+	auto* progressBar = new QProgressBar();
 	progressBar->setRange(0, 100);
 	connect(filter, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
 
@@ -218,16 +218,16 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	timer.start();
 	if (aspect->inherits("Matrix")) {
 		DEBUG("	to Matrix");
-		auto matrix = qobject_cast<Matrix*>(aspect);
+		auto* matrix = qobject_cast<Matrix*>(aspect);
 		filter->readDataFromFile(fileName, matrix, mode);
 	} else if (aspect->inherits("Spreadsheet")) {
 		DEBUG("	to Spreadsheet");
-		auto spreadsheet = qobject_cast<Spreadsheet*>(aspect);
+		auto* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
 		DEBUG(" Calling readDataFromFile()");
 		filter->readDataFromFile(fileName, spreadsheet, mode);
 	} else if (aspect->inherits("Workbook")) {
 		DEBUG("	to Workbook");
-		auto workbook = qobject_cast<Workbook*>(aspect);
+		auto* workbook = qobject_cast<Workbook*>(aspect);
 		QVector<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
 
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
@@ -370,7 +370,7 @@ void ImportFileDialog::checkOkButton() {
 
 			//when doing ASCII import to a matrix, hide the options for using the file header (first line)
 			//to name the columns since the column names are fixed in a matrix
-			const auto matrix = dynamic_cast<const Matrix*>(aspect);
+			const auto* matrix = dynamic_cast<const Matrix*>(aspect);
 			m_importFileWidget->showAsciiHeaderOptions(matrix == nullptr);
 		}
 	}

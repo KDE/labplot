@@ -1474,7 +1474,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 	bool stop = false;
 	for (int i = 0; i < yVector->size(); i++) {
 		//stop iterating over i if one of the x-vectors has no elements anymore.
-		for (auto xVector: xVectors) {
+		for (auto* xVector : xVectors) {
 			if (i == xVector->size()) {
 				stop = true;
 				break;

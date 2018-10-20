@@ -114,7 +114,7 @@ bool Spreadsheet::printPreview() const {
  */
 int Spreadsheet::rowCount() const {
 	int col_rows, result = 0;
-	for (auto* col: children<Column>())
+	for (auto* col : children<Column>())
 		if ((col_rows = col->rowCount()) > result)
 			result = col_rows;
 	return result;
@@ -124,7 +124,7 @@ void Spreadsheet::removeRows(int first, int count) {
 	if( count < 1 || first < 0 || first+count > rowCount()) return;
 	WAIT_CURSOR;
 	beginMacro( i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count) );
-	for (auto* col: children<Column>(IncludeHidden))
+	for (auto* col : children<Column>(IncludeHidden))
 		col->removeRows(first, count);
 	endMacro();
 	RESET_CURSOR;
@@ -134,7 +134,7 @@ void Spreadsheet::insertRows(int before, int count) {
 	if( count < 1 || before < 0 || before > rowCount()) return;
 	WAIT_CURSOR;
 	beginMacro( i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count) );
-	for (auto* col: children<Column>(IncludeHidden))
+	for (auto* col : children<Column>(IncludeHidden))
 		col->insertRows(before, count);
 	endMacro();
 	RESET_CURSOR;
@@ -199,7 +199,7 @@ int Spreadsheet::columnCount() const {
  */
 int Spreadsheet::columnCount(AbstractColumn::PlotDesignation pd) const {
 	int count = 0;
-	for (auto* col: children<Column>())
+	for (auto* col : children<Column>())
 		if (col->plotDesignation() == pd)
 			count++;
 	return count;
@@ -249,7 +249,7 @@ void Spreadsheet::setColumnCount(int new_size) {
 void Spreadsheet::clear() {
 	WAIT_CURSOR;
 	beginMacro(i18n("%1: clear", name()));
-	for (auto* col: children<Column>())
+	for (auto* col : children<Column>())
 		col->clear();
 	endMacro();
 	RESET_CURSOR;
@@ -261,7 +261,7 @@ void Spreadsheet::clear() {
 void Spreadsheet::clearMasks() {
 	WAIT_CURSOR;
 	beginMacro(i18n("%1: clear all masks", name()));
-	for (auto* col: children<Column>())
+	for (auto* col : children<Column>())
 		col->clearMasks();
 	endMacro();
 	RESET_CURSOR;
@@ -289,17 +289,17 @@ void Spreadsheet::copy(Spreadsheet* other) {
 	WAIT_CURSOR;
 	beginMacro(i18n("%1: copy %2", name(), other->name()));
 
-	for (auto* col: children<Column>())
+	for (auto* col : children<Column>())
 		col->remove();
-	for (auto* src_col: other->children<Column>()) {
+	for (auto* src_col : other->children<Column>()) {
 		Column * new_col = new Column(src_col->name(), src_col->columnMode());
 		new_col->copy(src_col);
 		new_col->setPlotDesignation(src_col->plotDesignation());
 		QVector< Interval<int> > masks = src_col->maskedIntervals();
-		for (const auto& iv: masks)
+		for (const auto& iv : masks)
 			new_col->setMasked(iv);
 		QVector< Interval<int> > formulas = src_col->formulaIntervals();
-		for (const auto& iv: formulas)
+		for (const auto& iv : formulas)
 			new_col->setFormula(iv, src_col->formula(iv.start()));
 		new_col->setWidth(src_col->width());
 		addChild(new_col);
@@ -398,13 +398,13 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 	beginMacro(i18n("%1: sort columns", name()));
 
 	if(leading == nullptr) { // sort separately
-		for (auto* col: cols) {
+		for (auto* col : cols) {
 			switch (col->columnMode()) {
 			case AbstractColumn::Numeric: {
 					int rows = col->rowCount();
 					QVector< QPair<double, int> > map;
 
-					for(int j=0; j<rows; j++)
+					for(int j = 0; j < rows; j++)
 						map.append(QPair<double, int>(col->valueAt(j), j));
 
 					if(ascending)
@@ -415,7 +415,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					QVectorIterator< QPair<double, int> > it(map);
 					Column *temp_col = new Column("temp", col->columnMode());
 
-					int k=0;
+					int k = 0;
 					// put the values in the right order into temp_col
 					while(it.hasNext()) {
 						temp_col->copy(col, it.peekNext().second, k, 1);
@@ -527,7 +527,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
 				QVectorIterator<QPair<double, int>> it(map);
 
-				for (auto* col: cols) {
+				for (auto* col : cols) {
 					Column *temp_col = new Column("temp", col->columnMode());
 					it.toFront();
 					int j = 0;
@@ -556,7 +556,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::integerGreater);
 				QVectorIterator<QPair<int, int>> it(map);
 
-				for (auto* col: cols) {
+				for (auto* col : cols) {
 					Column *temp_col = new Column("temp", col->columnMode());
 					it.toFront();
 					int j = 0;
@@ -585,7 +585,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringGreater);
 				QVectorIterator<QPair<QString, int>> it(map);
 
-				for (auto* col: cols) {
+				for (auto* col : cols) {
 					Column *temp_col = new Column("temp", col->columnMode());
 					it.toFront();
 					int j = 0;
@@ -616,7 +616,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
 				QVectorIterator<QPair<QDateTime, int>> it(map);
 
-				for (auto* col: cols) {
+				for (auto* col : cols) {
 					Column *temp_col = new Column("temp", col->columnMode());
 					it.toFront();
 					int j=0;
@@ -709,7 +709,7 @@ void Spreadsheet::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	//columns
-	for (auto* col: children<Column>(IncludeHidden))
+	for (auto* col : children<Column>(IncludeHidden))
 		col->save(writer);
 
 	writer->writeEndElement(); // "spreadsheet"

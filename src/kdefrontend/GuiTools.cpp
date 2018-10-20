@@ -52,24 +52,24 @@ static QColor colors[colorsCount] = {QColor(255,255,255), QColor(0,0,0),
 	fills the ComboBox \c combobox with the six possible Qt::PenStyles, the color \c color is used.
 */
 void GuiTools::updatePenStyles(QComboBox* comboBox, const QColor& color){
-	int index=comboBox->currentIndex();
+	int index = comboBox->currentIndex();
 	comboBox->clear();
 
 	QPainter pa;
-	int offset=2;
-	int w=50;
-	int h=10;
-	QPixmap pm( w, h );
-	comboBox->setIconSize( QSize(w,h) );
+	int offset = 2;
+	int w = 50;
+	int h = 10;
+	QPixmap pm(w, h);
+	comboBox->setIconSize(QSize(w,h));
 
 	//loop over six possible Qt-PenStyles, draw on the pixmap and insert it
 	static QString list[6] = { i18n("No Line"), i18n("Solid Line"), i18n("Dash Line"),
 							   i18n("Dot Line"), i18n("Dash-dot Line"), i18n("Dash-dot-dot Line") };
-	for (int i=0;i<6;i++){
+	for (int i = 0; i < 6; i++) {
 		pm.fill(Qt::transparent);
-		pa.begin( &pm );
-		pa.setPen( QPen( color, 1, (Qt::PenStyle)i ) );
-		pa.drawLine( offset, h/2, w-offset, h/2);
+		pa.begin(&pm);
+		pa.setPen( QPen(color, 1, (Qt::PenStyle)i) );
+		pa.drawLine(offset, h/2, w-offset, h/2);
 		pa.end();
 		comboBox->addItem( QIcon(pm), list[i] );
 	}
@@ -83,36 +83,36 @@ void GuiTools::updatePenStyles(QComboBox* comboBox, const QColor& color){
 */
 void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QColor& color){
 	QPainter pa;
-	int offset=2;
-	int w=50;
-	int h=10;
-	QPixmap pm( w, h );
+	int offset = 2;
+	int w = 50;
+	int h = 10;
+	QPixmap pm(w, h);
 
 	//loop over six possible Qt-PenStyles, draw on the pixmap and insert it
 	static QString list[6] = { i18n("No Line"), i18n("Solid Line"), i18n("Dash Line"),
 							   i18n("Dot Line"), i18n("Dash-dot Line"), i18n("Dash-dot-dot Line") };
 
 	QAction* action;
-	if (actionGroup->actions().isEmpty()){
+	if (actionGroup->actions().isEmpty()) {
 		//TODO setting of the icon size doesn't work here
 		menu->setStyleSheet( "QMenu::icon { width:50px; height:10px; }" );
 
-		for (int i=0;i<6;i++){
+		for (int i = 0; i < 6; i++) {
 			pm.fill(Qt::transparent);
-			pa.begin( &pm );
+			pa.begin(&pm);
 			pa.setPen( QPen( color, 1, (Qt::PenStyle)i ) );
-			pa.drawLine( offset, h/2, w-offset, h/2);
+			pa.drawLine(offset, h/2, w-offset, h/2);
 			pa.end();
 			action = new QAction( QIcon(pm), list[i], actionGroup );
 			action->setCheckable(true);
 			menu->addAction( action );
 		}
 	}else{
-		for (int i=0;i<6;i++){
+		for (int i = 0; i < 6; i++) {
 			pm.fill(Qt::transparent);
 			pa.begin( &pm );
 			pa.setPen( QPen( color, 1, (Qt::PenStyle)i ) );
-			pa.drawLine( offset, h/2, w-offset, h/2);
+			pa.drawLine(offset, h/2, w-offset, h/2);
 			pa.end();
 			action = actionGroup->actions().at(i);
 			action->setIcon( QIcon(pm) );
@@ -121,7 +121,7 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 }
 
 void GuiTools::selectPenStyleAction(QActionGroup* actionGroup, Qt::PenStyle style) {
-	auto index = (int)style;
+	int index = (int)style;
 	Q_ASSERT(index < actionGroup->actions().size());
 	actionGroup->actions().at(index)->setChecked(true);
 }
@@ -135,18 +135,18 @@ Qt::PenStyle GuiTools::penStyleFromAction(QActionGroup* actionGroup, QAction* ac
 	fills the ComboBox for the symbol filling patterns with the 14 possible Qt::BrushStyles.
 */
 void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
-	int index=comboBox->currentIndex();
+	int index = comboBox->currentIndex();
 	comboBox->clear();
 
 	QPainter pa;
-	int offset=2;
-	int w=50;
-	int h=20;
-	QPixmap pm( w, h );
-	comboBox->setIconSize( QSize(w,h) );
+	int offset = 2;
+	int w = 50;
+	int h = 20;
+	QPixmap pm(w, h);
+	comboBox->setIconSize(QSize(w, h));
 
 	QPen pen(Qt::SolidPattern, 1);
-	pa.setPen( pen );
+	pa.setPen(pen);
 
 	static QString list[15] = { i18n("None"), i18n("Uniform"), i18n("Extremely Dense"),
 								i18n("Very Dense"), i18n("Somewhat Dense"), i18n("Half Dense"),
@@ -154,15 +154,15 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
 								i18n("Horiz. Lines"), i18n("Vert. Lines"), i18n("Crossing Lines"),
 								i18n("Backward Diag. Lines"), i18n("Forward Diag. Lines"), i18n("Crossing Diag. Lines") };
 	const QColor& borderColor = (qApp->palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
-	for (int i=0;i<15;i++) {
+	for (int i = 0; i < 15; i++) {
 		pm.fill(Qt::transparent);
-		pa.begin( &pm );
+		pa.begin(&pm);
 		pa.setPen(borderColor);
 		pa.setRenderHint(QPainter::Antialiasing);
  		pa.setBrush( QBrush(color, (Qt::BrushStyle)i) );
-		pa.drawRect( offset, offset, w - 2*offset, h - 2*offset);
+		pa.drawRect(offset, offset, w - 2*offset, h - 2*offset);
 		pa.end();
-		comboBox->addItem( QIcon(pm), list[i] );
+		comboBox->addItem(QIcon(pm), list[i]);
 	}
 
 	comboBox->setCurrentIndex(index);
@@ -180,9 +180,9 @@ void GuiTools::fillColorMenu(QMenu* menu, QActionGroup* actionGroup){
 							i18n("Dark Grey"), i18n("Grey"), i18n("Light Grey")
 							};
 
-	QPixmap pix(16,16);
+	QPixmap pix(16, 16);
 	QPainter p(&pix);
-	for (int i=0; i<colorsCount; ++i) {
+	for (int i = 0; i < colorsCount; ++i) {
 		p.fillRect(pix.rect(), colors[i]);
 		QAction* action = new QAction(QIcon(pix), colorNames[i], actionGroup);
 		action->setCheckable(true);
@@ -197,14 +197,14 @@ void GuiTools::fillColorMenu(QMenu* menu, QActionGroup* actionGroup){
  */
 void GuiTools::selectColorAction(QActionGroup* actionGroup, const QColor& color) {
 	int index;
-	for (index=0; index<colorsCount; ++index) {
-		if (color==colors[index]) {
+	for (index = 0; index < colorsCount; ++index) {
+		if (color == colors[index]) {
 			actionGroup->actions().at(index)->setChecked(true);
 			break;
 		}
 	}
 
-	if (index==colorsCount) {
+	if (index == colorsCount) {
 		//the color was not found in the list of predefined colors
 		// -> uncheck the previously checked action
 		QAction* checkedAction = actionGroup->checkedAction();
@@ -215,7 +215,7 @@ void GuiTools::selectColorAction(QActionGroup* actionGroup, const QColor& color)
 
 QColor& GuiTools::colorFromAction(QActionGroup* actionGroup, QAction* action) {
 	int index = actionGroup->actions().indexOf(action);
-	if (index==-1 || index>=colorsCount)
+	if (index == -1 || index >= colorsCount)
 		index = 0;
 
 	return colors[index];

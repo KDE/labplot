@@ -130,7 +130,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 	//check, whether objects of different types where selected
 	//don't show any dock widgets in this case.
-	for (auto* aspect: selectedAspects) {
+	for (auto* aspect : selectedAspects) {
 		className = aspect->metaObject()->className();
 		if (className != prevClassName && !prevClassName.isEmpty()) {
 			if (m_mainWindow->stackedWidget->currentWidget())
@@ -155,7 +155,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<Spreadsheet*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<Spreadsheet *>(aspect);
 		m_mainWindow->spreadsheetDock->setSpreadsheets(list);
 
@@ -170,7 +170,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<Column*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<Column *>(aspect);
 		m_mainWindow->columnDock->setColumns(list);
 
@@ -185,7 +185,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<Matrix*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<Matrix*>(aspect);
 		m_mainWindow->matrixDock->setMatrices(list);
 
@@ -200,7 +200,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<Worksheet*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<Worksheet *>(aspect);
 		m_mainWindow->worksheetDock->setWorksheets(list);
 
@@ -215,7 +215,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<CartesianPlot*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<CartesianPlot *>(aspect);
 		m_mainWindow->cartesianPlotDock->setPlots(list);
 
@@ -230,7 +230,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<CartesianPlotLegend*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<CartesianPlotLegend*>(aspect);
 		m_mainWindow->cartesianPlotLegendDock->setLegends(list);
 
@@ -245,7 +245,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<Axis*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<Axis *>(aspect);
 		m_mainWindow->axisDock->setAxes(list);
 
@@ -261,7 +261,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<XYCurve *>(aspect);
 		m_mainWindow->xyCurveDock->setCurves(list);
 
@@ -277,7 +277,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<XYCurve *>(aspect);
 		m_mainWindow->xyEquationCurveDock->setCurves(list);
 
@@ -293,7 +293,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<XYCurve*>(aspect);
 		m_mainWindow->xyDataReductionCurveDock->setCurves(list);
 
@@ -309,7 +309,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<XYCurve*>(aspect);
 		m_mainWindow->xyDifferentiationCurveDock->setCurves(list);
 
@@ -325,7 +325,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<XYCurve*>(aspect);
 		m_mainWindow->xyIntegrationCurveDock->setCurves(list);
 
@@ -341,7 +341,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<XYCurve*>(aspect);
 		m_mainWindow->xyInterpolationCurveDock->setCurves(list);
 
@@ -357,7 +357,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<XYCurve*>(aspect);
 		m_mainWindow->xySmoothCurveDock->setCurves(list);
 
@@ -373,7 +373,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<XYCurve*>(aspect);
 		m_mainWindow->xyFitCurveDock->setCurves(list);
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyFitCurveDock);
@@ -388,7 +388,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<XYCurve*>(aspect);
 
 		m_mainWindow->xyFourierTransformCurveDock->setCurves(list);
@@ -405,7 +405,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<XYCurve*>(aspect);
 		m_mainWindow->xyFourierFilterCurveDock->setCurves(list);
 
@@ -421,7 +421,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<XYCurve*>(aspect);
 		m_mainWindow->xyConvolutionCurveDock->setCurves(list);
 
@@ -437,7 +437,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<XYCurve*>(aspect);
 		m_mainWindow->xyCorrelationCurveDock->setCurves(list);
 
@@ -452,7 +452,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<Histogram*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list<<qobject_cast<Histogram *>(aspect);
 		m_mainWindow->histogramDock->setCurves(list);
 
@@ -466,7 +466,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<TextLabel*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<TextLabel*>(aspect);
 		m_mainWindow->textLabelDock->setLabels(list);
 
@@ -480,7 +480,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<CustomPoint*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<CustomPoint*>(aspect);
 		m_mainWindow->customPointDock->setPoints(list);
 
@@ -494,7 +494,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<DatapickerCurve*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<DatapickerCurve*>(aspect);
 		m_mainWindow->datapickerCurveDock->setCurves(list);
 
@@ -508,7 +508,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<DatapickerImage*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<Datapicker*>(aspect)->image();
 		m_mainWindow->datapickerImageDock->setImages(list);
 
@@ -533,7 +533,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<CantorWorksheet*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<CantorWorksheet *>(aspect);
 		if (list.size() == 1)
 			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Properties", list.first()->backendName()));
@@ -552,7 +552,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<Note*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<Note*>(aspect);
 		m_mainWindow->notesDock->setNotesList(list);
 
@@ -569,7 +569,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<MQTTClient*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<MQTTClient*>(aspect);
 		m_mainWindow->m_liveDataDock->setMQTTClients(list);
 
@@ -584,7 +584,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<MQTTClient*> list;
-		for (auto* aspect: selectedAspects) {
+		for (auto* aspect : selectedAspects) {
 			QString clientName = qobject_cast<MQTTSubscription*>(aspect)->mqttClient()->name();
 			bool found = false;
 			for (int i = 0; i < list.size(); ++i) {
@@ -608,7 +608,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<MQTTClient*> list;
-		for (auto* aspect: selectedAspects) {
+		for (auto* aspect : selectedAspects) {
 			QString clientName = qobject_cast<MQTTClient*>(qobject_cast<MQTTTopic*>(aspect)->mqttClient())->name();
 			bool found = false;
 			for (int i = 0; i < list.size(); ++i) {
@@ -634,7 +634,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<LiveDataSource*> list;
-		for (auto* aspect: selectedAspects)
+		for (auto* aspect : selectedAspects)
 			list << qobject_cast<LiveDataSource*>(aspect);
 		m_mainWindow->m_liveDataDock->setLiveDataSources(list);
 

@@ -593,7 +593,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		col = 1;
 	}
 
-	for (auto& valueString: firstLineStringList) { // parse columns available in first data line
+	for (auto& valueString : firstLineStringList) { // parse columns available in first data line
 		if (simplifyWhitespacesEnabled)
 			valueString = valueString.simplified();
 		if (col == m_actualCols)
@@ -608,7 +608,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 		createIndexEnabled ? col = 1 : col = 0;
 
-		for (auto& valueString: firstLineStringList) {
+		for (auto& valueString : firstLineStringList) {
 			if (simplifyWhitespacesEnabled)
 				valueString = valueString.simplified();
 			if (col == m_actualCols)
@@ -1215,7 +1215,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			Column* column = spreadsheet->column(n);
 
 			//determine the plots where the column is consumed
-			for (const auto* curve: curves) {
+			for (const auto* curve : curves) {
 				if (curve->xColumn() == column || curve->yColumn() == column) {
 					CartesianPlot* plot = dynamic_cast<CartesianPlot*>(curve->parentAspect());
 					if (plots.indexOf(plot) == -1) {
@@ -1229,7 +1229,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		}
 
 		//loop over all affected plots and retransform them
-		for (auto* plot: plots) {
+		for (auto* plot : plots) {
 			plot->setSuppressDataChangedSignal(false);
 			plot->dataChanged();
 		}
@@ -1260,7 +1260,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			auto mode = columnModes[0];
 			if (mode == AbstractColumn::Text)
 				mode = AbstractColumn::Numeric;
-			for (auto& c: columnModes)
+			for (auto& c : columnModes)
 				if (c != mode)
 					c = mode;
 		}
@@ -1420,7 +1420,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 	vectorNames.append(i18n("Value"));
 	QDEBUG("	vector names = " << vectorNames);
 
-	for (const auto& valueString: newData.at(0).split(' ', QString::SkipEmptyParts)) {
+	for (const auto& valueString : newData.at(0).split(' ', QString::SkipEmptyParts)) {
 		if (col == colMax)
 			break;
 		columnModes[col++] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
@@ -1734,9 +1734,9 @@ void AsciiFilterPrivate::MQTTPreview(QVector<QStringList>& list, const QString& 
 		int linesToRead = 0;
 		QVector<QString> newData;
 		QStringList newDataList = message.split(QRegExp("\n|\r\n|\r"), QString::SkipEmptyParts);
-		for (auto& valueString: newDataList) {
+		for (auto& valueString : newDataList) {
 			QStringList splitString = valueString.split(' ', QString::SkipEmptyParts);
-			for ( const auto& valueString2: splitString) {
+			for (const auto& valueString2 : splitString) {
 				if (!valueString2.isEmpty() && !valueString2.startsWith(commentCharacter) ) {
 					linesToRead++;
 					newData.push_back(valueString2);
@@ -2183,12 +2183,12 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 		PERFTRACE("AsciiLiveDataImportReadingFromFile: ");
 #endif
 		QStringList newDataList = message.split(QRegExp("\n|\r\n|\r"), QString::SkipEmptyParts);
-		for (auto& valueString: newDataList) {			
+		for (auto& valueString : newDataList) {			
 			if(!valueString.startsWith(commentCharacter)) {
 
 				QStringList splitString = valueString.split(m_separator, static_cast<QString::SplitBehavior>(skipEmptyParts));
 
-				for (const auto& valueString2: splitString) {
+				for (const auto& valueString2 : splitString) {
 					if (!valueString2.isEmpty() && !valueString2.startsWith(commentCharacter)) {
 
 						if (readingType != MQTTClient::ReadingType::TillEnd)
@@ -2685,7 +2685,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 			Column* column = spreadsheet->column(n);
 
 			//determine the plots where the column is consumed
-			for (const auto* curve: curves) {
+			for (const auto* curve : curves) {
 				if (curve->xColumn() == column || curve->yColumn() == column) {
 					CartesianPlot* plot = dynamic_cast<CartesianPlot*>(curve->parentAspect());
 					if (plots.indexOf(plot) == -1) {
@@ -2699,7 +2699,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 		}
 
 		//loop over all affected plots and retransform them
-		for (auto* const plot: plots) {
+		for (auto* const plot : plots) {
 			//TODO setting this back to true triggers again a lot of retransforms in the plot (one for each curve).
 			// 				plot->setSuppressDataChangedSignal(false);
 			plot->dataChanged();
@@ -2818,9 +2818,9 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 		}
 	}
 	//Improve the column mode based on the remaining values
-	for (auto& valueString: lineList) {
+	for (auto& valueString : lineList) {
 		QStringList splitString = valueString.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-		for (auto& valueString2: splitString) {
+		for (auto& valueString2 : splitString) {
 			if (!valueString2.isEmpty() && !valueString2.startsWith(commentCharacter)) {
 
 				if (simplifyWhitespacesEnabled)
@@ -2842,10 +2842,10 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 	//determine rowcount
 	int tempRowCount = 0;
 	QStringList newDataList = message.split(QRegExp("\n|\r\n|\r"), QString::SkipEmptyParts);
-	for (auto& valueString: newDataList) {
+	for (auto& valueString : newDataList) {
 		if(!valueString.startsWith(commentCharacter)) {
 			QStringList splitString = valueString.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-			for (auto& valueString2: splitString) {
+			for (auto& valueString2 : splitString) {
 				if (!valueString2.isEmpty() && !valueString2.startsWith(commentCharacter)) {
 					tempRowCount ++;
 				}

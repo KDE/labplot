@@ -1442,7 +1442,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 		|| (orientation == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) ) {
 		if (labelsFormat == Axis::FormatDecimal) {
 			QString nullStr = QString::number(0, 'f', labelsPrecision);
-			for (auto value : tickLabelValues) {
+			for (const auto value : tickLabelValues) {
 				str = QString::number(value, 'f', labelsPrecision);
 				if (str == "-" + nullStr) str = nullStr;
 				str = labelsPrefix + str + labelsSuffix;
@@ -1450,38 +1450,38 @@ void AxisPrivate::retransformTickLabelStrings() {
 			}
 		} else if (labelsFormat == Axis::FormatScientificE) {
 			QString nullStr = QString::number(0, 'e', labelsPrecision);
-			for (auto value : tickLabelValues) {
+			for (const auto value : tickLabelValues) {
 				str = QString::number(value, 'e', labelsPrecision);
 				if (str == "-" + nullStr) str = nullStr;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::FormatPowers10) {
-			for (auto value : tickLabelValues) {
+			for (const auto value : tickLabelValues) {
 				str = "10<span style=\"vertical-align:super\">" + QString::number(log10(value), 'f', labelsPrecision) + "</span>";
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::FormatPowers2) {
-			for (auto value : tickLabelValues) {
+			for (const auto value : tickLabelValues) {
 				str = "2<span style=\"vertical-align:super\">" + QString::number(log2(value), 'f', labelsPrecision) + "</span>";
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::FormatPowersE) {
-			for (auto value : tickLabelValues) {
+			for (const auto value : tickLabelValues) {
 				str = "e<span style=\"vertical-align:super\">" + QString::number(log(value), 'f', labelsPrecision) + "</span>";
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::FormatMultipliesPi) {
-			for (auto value : tickLabelValues) {
+			for (const auto value : tickLabelValues) {
 				str = "<span>" + QString::number(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		}
 	} else {
-		for (auto value : tickLabelValues) {
+		for (const auto value : tickLabelValues) {
 			QDateTime dateTime;
 			dateTime.setMSecsSinceEpoch(value);
 			str = dateTime.toString(labelsDateTimeFormat);
@@ -1503,7 +1503,7 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, increase the precision.
 	QVector<double> tempValues;
-	for (auto value: tickLabelValues)
+	for (const auto value : tickLabelValues)
 		tempValues.append( nsl_math_round_places(value, precision) );
 
 	for (int i = 0; i < tempValues.size(); ++i) {
@@ -1530,7 +1530,7 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
 	QVector<double> tempValues;
-	for (auto value: tickLabelValues)
+	for (const auto value : tickLabelValues)
 		tempValues.append( nsl_math_round_places(value, precision-1) );
 
 	for (int i = 0; i < tempValues.size(); ++i) {
@@ -1725,13 +1725,13 @@ void AxisPrivate::retransformMinorGrid() {
 		double yMin = plot->yMin();
 		double yMax = plot->yMax();
 
-		for (auto point: logicalMinorTickPoints)
+		for (const auto point : logicalMinorTickPoints)
 			lines.append( QLineF(point.x(), yMin, point.x(), yMax) );
 	} else { //vertical axis
 		double xMin = plot->xMin();
 		double xMax = plot->xMax();
 
-		for (auto point: logicalMinorTickPoints)
+		for (const auto point: logicalMinorTickPoints)
 			lines.append( QLineF(xMin, point.y(), xMax, point.y()) );
 	}
 

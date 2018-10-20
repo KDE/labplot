@@ -568,7 +568,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 			coll = matrixNumericColumnIndices.first();
 			actualCols = matrixNumericColumnIndices.last();
 			if (importMode == AbstractFileFilter::Replace) {
-				for (auto* col: numericDataPointers)
+				for (auto* col : numericDataPointers)
 					static_cast<QVector<double>*>(col)->clear();
 			}
 		}

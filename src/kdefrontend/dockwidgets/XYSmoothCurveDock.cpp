@@ -90,13 +90,13 @@ void XYSmoothCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 2);
 
-	for (int i=0; i < NSL_SMOOTH_TYPE_COUNT; i++)
+	for (int i = 0; i < NSL_SMOOTH_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_smooth_type_name[i]));
 
-	for (int i=0; i < NSL_SMOOTH_WEIGHT_TYPE_COUNT; i++)
+	for (int i = 0; i < NSL_SMOOTH_WEIGHT_TYPE_COUNT; i++)
 		uiGeneralTab.cbWeight->addItem(i18n(nsl_smooth_weight_type_name[i]));
 
-	for (int i=0; i < NSL_SMOOTH_PAD_MODE_COUNT; i++)
+	for (int i = 0; i < NSL_SMOOTH_PAD_MODE_COUNT; i++)
 		uiGeneralTab.cbMode->addItem(i18n(nsl_smooth_pad_mode_name[i]));
 
 	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());

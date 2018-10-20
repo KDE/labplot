@@ -180,7 +180,7 @@ void Segments::loadSegment(Segment** columnSegment, int height) {
 }
 
 void Segments::clearSegments() {
-	for(auto* seg : segments)
+	for (auto* seg : segments)
 		m_image->scene()->removeItem(seg->graphicsItem());
 
 	segments.clear();
@@ -190,7 +190,7 @@ void Segments::clearSegments() {
     set segments visible
 */
 void Segments::setSegmentsVisible(bool on) {
-	for(auto* seg : segments)
+	for (auto* seg : segments)
 		seg->setVisible(on);
 }
 

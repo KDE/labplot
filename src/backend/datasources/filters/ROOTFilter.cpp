@@ -488,9 +488,9 @@ ROOTHist::ROOTHist(const std::string& filename) : filename(filename) {
 
 std::vector<std::string> ROOTHist::listHistograms() const {
 	std::vector<std::string> l;
-	for (auto& n : histkeys) {
+	for (auto& n : histkeys)
 		l.emplace_back(n.first);
-	}
+
 	return l;
 }
 

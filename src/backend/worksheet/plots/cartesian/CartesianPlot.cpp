@@ -498,7 +498,7 @@ void CartesianPlot::initActions() {
 	connect(addSmoothAction, SIGNAL(triggered()), SLOT(addSmoothCurve()));
 	connect(addConvolutionAction, SIGNAL(triggered()), SLOT(addConvolutionCurve()));
 	connect(addCorrelationAction, SIGNAL(triggered()), SLOT(addCorrelationCurve()));
-	for (const auto& action: addFitAction)
+	for (const auto& action : addFitAction)
 		connect(action, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addFourierFilterAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
 
@@ -1105,7 +1105,7 @@ void CartesianPlot::addHistogram() {
  * returns the first selected XYCurve in the plot
  */
 const XYCurve* CartesianPlot::currentCurve() const {
-	for (const auto* curve: this->children<const XYCurve>()) {
+	for (const auto* curve : this->children<const XYCurve>()) {
 		if (curve->graphicsItem()->isSelected())
 			return curve;
 	}
@@ -1484,7 +1484,7 @@ void CartesianPlot::dataChanged() {
 				//no sender available, the function was called in CartesianPlot::dataChanged() (live data source got new data)
 				//-> retransform all available curves since we don't know which curves are affected.
 				//TODO: this logic can be very expensive
-				for (auto c : children<XYCurve>())
+				for (auto* c : children<XYCurve>())
 					c->retransform();
 			}
 		}
@@ -1576,10 +1576,10 @@ void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
 
 	QList<QGraphicsItem*> items = d->childItems();
 	if (d->mouseMode == CartesianPlot::SelectionMode) {
-		for (auto* item: items)
+		for (auto* item : items)
 			item->setFlag(QGraphicsItem::ItemStacksBehindParent, false);
 	} else {
-		for (auto* item: items)
+		for (auto* item : items)
 			item->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
 	}
 
@@ -1617,7 +1617,7 @@ void CartesianPlot::scaleAutoX() {
 		d->curvesXMax = -INFINITY;
 
 		//loop over all xy-curves and determine the maximum and minimum x-values
-		for (const auto* curve: this->children<const XYCurve>()) {
+		for (const auto* curve : this->children<const XYCurve>()) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->xColumn())
@@ -1633,7 +1633,7 @@ void CartesianPlot::scaleAutoX() {
 		}
 
 		//loop over all histograms and determine the maximum and minimum x-values
-		for (const auto* curve: this->children<const Histogram>()) {
+		for (const auto* curve : this->children<const Histogram>()) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->dataColumn())
@@ -1702,7 +1702,7 @@ void CartesianPlot::scaleAutoY() {
 		d->curvesYMax = -INFINITY;
 
 		//loop over all xy-curves and determine the maximum and minimum y-values
-		for (const auto* curve: this->children<const XYCurve>()) {
+		for (const auto* curve : this->children<const XYCurve>()) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->yColumn())
@@ -1718,7 +1718,7 @@ void CartesianPlot::scaleAutoY() {
 		}
 
 		//loop over all histograms and determine the maximum y-value
-		for (const auto* curve: this->children<const Histogram>()) {
+		for (const auto* curve : this->children<const Histogram>()) {
 			if (!curve->isVisible())
 				continue;
 
@@ -1786,7 +1786,7 @@ void CartesianPlot::scaleAuto() {
 		d->curvesXMax = -INFINITY;
 
 		//loop over all xy-curves and determine the maximum and minimum x-values
-		for (const auto* curve: this->children<const XYCurve>()) {
+		for (const auto* curve : this->children<const XYCurve>()) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->xColumn())
@@ -1802,7 +1802,7 @@ void CartesianPlot::scaleAuto() {
 		}
 
 		//loop over all histograms and determine the maximum and minimum x-values
-		for (const auto* curve: this->children<const Histogram>()) {
+		for (const auto* curve : this->children<const Histogram>()) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->dataColumn())
@@ -1826,7 +1826,7 @@ void CartesianPlot::scaleAuto() {
 		d->curvesYMax = -INFINITY;
 
 		//loop over all xy-curves and determine the maximum and minimum y-values
-		for (const auto* curve: this->children<const XYCurve>()) {
+		for (const auto* curve : this->children<const XYCurve>()) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->yColumn())
@@ -1842,7 +1842,7 @@ void CartesianPlot::scaleAuto() {
 		}
 
 		//loop over all histograms and determine the maximum y-value
-		for (const auto* curve: this->children<const Histogram>()) {
+		for (const auto* curve : this->children<const Histogram>()) {
 			if (!curve->isVisible())
 				continue;
 
@@ -2109,7 +2109,7 @@ void CartesianPlotPrivate::retransformScales() {
 	} else {
 		int sceneEndLast = plotSceneStart;
 		int logicalEndLast = xMin;
-		for (const auto& rb: xRangeBreaks.list) {
+		for (const auto& rb : xRangeBreaks.list) {
 			if (!rb.isValid())
 				break;
 
@@ -2162,7 +2162,7 @@ void CartesianPlotPrivate::retransformScales() {
 	} else {
 		int sceneEndLast = plotSceneStart;
 		int logicalEndLast = yMin;
-		for (const auto& rb: yRangeBreaks.list) {
+		for (const auto& rb : yRangeBreaks.list) {
 			if (!rb.isValid())
 				break;
 
@@ -2223,7 +2223,7 @@ void CartesianPlotPrivate::retransformScales() {
 	yMinPrev = yMin;
 	yMaxPrev = yMax;
 	//adjust auto-scale axes
-	for (auto* axis: q->children<Axis>()) {
+	for (auto* axis : q->children<Axis>()) {
 		if (!axis->autoScale())
 			continue;
 
@@ -2540,7 +2540,7 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 	//zoom the entire plot if no axes selected.
 	bool zoomX = false;
 	bool zoomY = false;
-	for (auto* axis: q->children<Axis>()) {
+	for (auto* axis : q->children<Axis>()) {
 		if (!axis->graphicsItem()->isSelected())
 			continue;
 
@@ -2685,7 +2685,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	if (d->xRangeBreakingEnabled || !d->xRangeBreaks.list.isEmpty()) {
 		writer->writeStartElement("xRangeBreaks");
 		writer->writeAttribute( "enabled", QString::number(d->xRangeBreakingEnabled) );
-		for (const auto& rb: d->xRangeBreaks.list) {
+		for (const auto& rb : d->xRangeBreaks.list) {
 			writer->writeStartElement("xRangeBreak");
 			writer->writeAttribute("start", QString::number(rb.start));
 			writer->writeAttribute("end", QString::number(rb.end));
@@ -2700,7 +2700,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	if (d->yRangeBreakingEnabled || !d->yRangeBreaks.list.isEmpty()) {
 		writer->writeStartElement("yRangeBreaks");
 		writer->writeAttribute( "enabled", QString::number(d->yRangeBreakingEnabled) );
-		for (const auto& rb: d->yRangeBreaks.list) {
+		for (const auto& rb : d->yRangeBreaks.list) {
 			writer->writeStartElement("yRangeBreak");
 			writer->writeAttribute("start", QString::number(rb.start));
 			writer->writeAttribute("end", QString::number(rb.end));
@@ -2712,7 +2712,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	}
 
 	//serialize all children (plot area, title text label, axes and curves)
-	for (auto *elem: children<WorksheetElement>(IncludeHidden))
+	for (auto* elem : children<WorksheetElement>(IncludeHidden))
 		elem->save(writer);
 
 	writer->writeEndElement(); // close "cartesianPlot" section
@@ -3079,7 +3079,7 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 	this->setColorPalette(config);
 
 	//load the theme for all the children
-	for (auto* child: children<WorksheetElement>(AbstractAspect::IncludeHidden))
+	for (auto* child : children<WorksheetElement>(AbstractAspect::IncludeHidden))
 		child->loadThemeConfig(config);
 
 	Q_D(CartesianPlot);
@@ -3095,7 +3095,7 @@ void CartesianPlot::saveTheme(KConfig &config) {
 	plotAreaElements.at(0)->saveThemeConfig(config);
 	textLabelElements.at(0)->saveThemeConfig(config);
 
-	for (auto *child: children<XYCurve>(AbstractAspect::IncludeHidden))
+	for (auto *child : children<XYCurve>(AbstractAspect::IncludeHidden))
 		child->saveThemeConfig(config);
 }
 

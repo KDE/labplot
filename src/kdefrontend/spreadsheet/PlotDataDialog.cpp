@@ -116,7 +116,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 	//select the first available plot, if available
 	auto plots = m_spreadsheet->project()->children<CartesianPlot>(AbstractAspect::Recursive);
 	if (!plots.isEmpty()) {
-		const auto plot = plots.first();
+		const auto* plot = plots.first();
 		cbExistingPlots->setCurrentModelIndex(m_plotsModel->modelIndexOfAspect(plot));
 	}
 
@@ -131,7 +131,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 	//select the first available worksheet, if available
 	auto worksheets = m_spreadsheet->project()->children<Worksheet>(AbstractAspect::Recursive);
 	if (!worksheets.isEmpty()) {
-		const auto worksheet = worksheets.first();
+		const auto* worksheet = worksheets.first();
 		cbExistingWorksheets->setCurrentModelIndex(m_worksheetsModel->modelIndexOfAspect(worksheet));
 	}
 
@@ -376,7 +376,7 @@ void PlotDataDialog::plot() {
 			//set the axis titles before we add the plot to the worksheet
 			//set the x-axis names
 			const QString& xColumnName = ui->cbXColumn->currentText();
-			for (auto axis : plot->children<Axis>()) {
+			for (auto* axis : plot->children<Axis>()) {
 				if (axis->orientation() == Axis::AxisHorizontal) {
 					axis->title()->setText(xColumnName);
 					break;
@@ -386,7 +386,7 @@ void PlotDataDialog::plot() {
 			//if we only have one single y-column to plot, we can set the title of the y-axes
 			if (m_columnComboBoxes.size() == 2) {
 				const QString& yColumnName = m_columnComboBoxes[1]->currentText();
-				for (auto axis : plot->children<Axis>()) {
+				for (auto* axis : plot->children<Axis>()) {
 					if (axis->orientation() == Axis::AxisVertical) {
 						axis->title()->setText(yColumnName);
 						break;
@@ -421,7 +421,7 @@ void PlotDataDialog::plot() {
 			//set the axis titles before we add the plot to the worksheet
 			//set the x-axis names
 			const QString& xColumnName = ui->cbXColumn->currentText();
-			for (auto axis : plot->children<Axis>()) {
+			for (auto* axis : plot->children<Axis>()) {
 				if (axis->orientation() == Axis::AxisHorizontal) {
 					axis->title()->setText(xColumnName);
 					break;
@@ -431,7 +431,7 @@ void PlotDataDialog::plot() {
 			//if we only have one single y-column to plot, we can set the title of the y-axes
 			if (m_columnComboBoxes.size() == 2) {
 				const QString& yColumnName = m_columnComboBoxes[1]->currentText();
-				for (auto axis : plot->children<Axis>()) {
+				for (auto* axis : plot->children<Axis>()) {
 					if (axis->orientation() == Axis::AxisVertical) {
 						axis->title()->setText(yColumnName);
 						break;
@@ -467,7 +467,7 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
 	switch (m_plotType) {
 	case PlotXYCurve: {
 		Column* xColumn = columnFromName(ui->cbXColumn->currentText());
-		for (auto comboBox: m_columnComboBoxes) {
+		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* yColumn = columnFromName(name);
 			addCurve(name, xColumn, yColumn, plot);
@@ -475,7 +475,7 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
 		break;
 	}
 	case PlotHistogram: {
-		for (auto comboBox: m_columnComboBoxes) {
+		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
 			addHistogram(name, column, plot);
@@ -498,7 +498,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 	case PlotXYCurve: {
 		const QString& xColumnName = ui->cbXColumn->currentText();
 		Column* xColumn = columnFromName(xColumnName);
-		for (auto comboBox: m_columnComboBoxes) {
+		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* yColumn = columnFromName(name);
 
@@ -508,7 +508,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 			//set the axis names in the new plot
 			bool xSet = false;
 			bool ySet = false;
-			for (auto axis : plot->children<Axis>()) {
+			for (auto* axis : plot->children<Axis>()) {
 				if (axis->orientation() == Axis::AxisHorizontal && !xSet) {
 					axis->title()->setText(xColumnName);
 					xSet = true;
@@ -525,7 +525,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 		break;
 	}
 	case PlotHistogram: {
-		for (auto comboBox: m_columnComboBoxes) {
+		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
 
@@ -534,7 +534,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 
 			//set the axis names in the new plot
 			bool xSet = false;
-			for (auto axis : plot->children<Axis>()) {
+			for (auto* axis : plot->children<Axis>()) {
 				if (axis->orientation() == Axis::AxisHorizontal && !xSet) {
 					axis->title()->setText(name);
 					xSet = true;

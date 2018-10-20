@@ -275,7 +275,7 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 		for (auto* point : childPoints)
 			handleChildAspectAboutToBeRemoved(point);
 
-		if (curve==m_activeCurve) {
+		if (curve == m_activeCurve) {
 			m_activeCurve = nullptr;
 			emit statusInfo("");
 		}

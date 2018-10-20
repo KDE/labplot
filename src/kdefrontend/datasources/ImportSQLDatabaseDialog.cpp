@@ -98,7 +98,7 @@ void ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 	const auto mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
 
 	//show a progress bar in the status bar
-	auto progressBar = new QProgressBar();
+	auto* progressBar = new QProgressBar();
 	progressBar->setMinimum(0);
 	progressBar->setMaximum(100);
 	connect(importSQLDatabaseWidget, &ImportSQLDatabaseWidget::completed, progressBar, &QProgressBar::setValue);
@@ -112,15 +112,15 @@ void ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 	QTime timer;
 	timer.start();
 	if (aspect->inherits("Matrix")) {
-		auto matrix = qobject_cast<Matrix*>(aspect);
+		auto* matrix = qobject_cast<Matrix*>(aspect);
 		importSQLDatabaseWidget->read(matrix, mode);
 	} else if (aspect->inherits("Spreadsheet")) {
-		auto spreadsheet = qobject_cast<Spreadsheet*>(aspect);
+		auto* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
 		importSQLDatabaseWidget->read(spreadsheet, mode);
 	} else if (aspect->inherits("Workbook")) {
 		// use active spreadsheet or matrix (only if numeric data is going to be imported) if present,
 		// create a new spreadsheet in the selected workbook otherwise
-		auto workbook = qobject_cast<Workbook*>(aspect);
+		auto* workbook = qobject_cast<Workbook*>(aspect);
 		Spreadsheet* spreadsheet = workbook->currentSpreadsheet();
 		Matrix* matrix = workbook->currentMatrix();
 		if (spreadsheet)
