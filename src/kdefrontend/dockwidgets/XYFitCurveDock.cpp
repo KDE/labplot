@@ -898,6 +898,8 @@ void XYFitCurveDock::parametersChanged() {
 	if (m_initializing)
 		return;
 
+	fitParametersWidget->setFitData(&m_fitData);
+
 	enableRecalculate();
 }
 void XYFitCurveDock::parametersValid(bool valid) {
