@@ -55,7 +55,7 @@ SpreadsheetCommentsHeaderView::~SpreadsheetCommentsHeaderView() {
 void SpreadsheetCommentsHeaderView::setModel(QAbstractItemModel* model) {
 	Q_ASSERT(model->inherits("SpreadsheetModel"));
 	delete QHeaderView::model();
-	SpreadsheetCommentsHeaderModel* new_model = new SpreadsheetCommentsHeaderModel(static_cast<SpreadsheetModel*>(model));
+	auto* new_model = new SpreadsheetCommentsHeaderModel(static_cast<SpreadsheetModel*>(model));
 	QHeaderView::setModel(new_model);
 }
 

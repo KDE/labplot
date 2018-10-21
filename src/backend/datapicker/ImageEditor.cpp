@@ -103,11 +103,11 @@ void ImageEditor::discretize(QImage* plotImage, QImage* originalImage,
 	plotImage->fill(white);
 	QThreadPool* pool = QThreadPool::globalInstance();
 	int range = ceil(double(plotImage->height())/pool->maxThreadCount());
-	for (int i=0; i<pool->maxThreadCount(); ++i) {
+	for (int i = 0; i < pool->maxThreadCount(); ++i) {
 		const int start = i*range;
 		int end = (i+1)*range;
 		if (end>plotImage->height()) end = plotImage->height();
-		DiscretizeTask* task = new DiscretizeTask(start, end, plotImage, originalImage, settings, background);
+		auto* task = new DiscretizeTask(start, end, plotImage, originalImage, settings, background);
 		pool->start(task);
 	}
 	pool->waitForDone();

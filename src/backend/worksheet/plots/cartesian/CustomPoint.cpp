@@ -241,7 +241,7 @@ void CustomPointPrivate::retransform() {
 		return;
 
 	//calculate the point in the scene coordinates
-	const CartesianCoordinateSystem* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
+	const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 	QVector<QPointF> list, listScene;
 	list<<position;
 	listScene = cSystem->mapLogicalToScene(list, CartesianCoordinateSystem::DefaultMapping);
@@ -338,7 +338,7 @@ QVariant CustomPointPrivate::itemChange(GraphicsItemChange change, const QVarian
 		//emit the signals in order to notify the UI.
 		//we don't set the position related member variables during the mouse movements.
 		//this is done on mouse release events only.
-		const CartesianCoordinateSystem* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
+		const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 		emit q->positionChanged(cSystem->mapSceneToLogical(value.toPointF()));
 	}
 
@@ -348,7 +348,7 @@ QVariant CustomPointPrivate::itemChange(GraphicsItemChange change, const QVarian
 void CustomPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	//position was changed -> set the position member variables
 	suppressRetransform = true;
-	const CartesianCoordinateSystem* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
+	const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 	q->setPosition(cSystem->mapSceneToLogical(pos()));
 	suppressRetransform = false;
 

@@ -97,7 +97,7 @@ void MatrixView::init() {
 	connectActions();
 	initMenus();
 
-	QHBoxLayout* layout = new QHBoxLayout(this);
+	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
 	setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
 	setFocusPolicy(Qt::StrongFocus);
@@ -124,7 +124,7 @@ void MatrixView::init() {
 	adjustHeaders();
 
 	//image view
-	QScrollArea* area = new QScrollArea(this);
+	auto* area = new QScrollArea(this);
 	m_stackedWidget->addWidget(area);
 	area->setWidget(m_imageLabel);
 
@@ -149,7 +149,7 @@ void MatrixView::initActions() {
 	action_select_all = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this);
 
 	// matrix related actions
-	QActionGroup* viewActionGroup = new QActionGroup(this);
+	auto* viewActionGroup = new QActionGroup(this);
 	viewActionGroup->setExclusive(true);
 	action_data_view = new QAction(QIcon::fromTheme("labplot-matrix"), i18n("Data"), viewActionGroup);
 	action_data_view->setCheckable(true);
@@ -169,7 +169,7 @@ void MatrixView::initActions() {
 // 	action_duplicate = new QAction(i18nc("duplicate matrix", "&Duplicate"), this);
 	//TODO
 	//icon
-	QActionGroup* headerFormatActionGroup = new QActionGroup(this);
+	auto* headerFormatActionGroup = new QActionGroup(this);
 	headerFormatActionGroup->setExclusive(true);
 	action_header_format_1= new QAction(i18n("Rows and Columns"), headerFormatActionGroup);
 	action_header_format_1->setCheckable(true);
@@ -509,7 +509,7 @@ void MatrixView::getCurrentCell(int* row, int* col) const {
 
 bool MatrixView::eventFilter(QObject * watched, QEvent * event) {
 	if (event->type() == QEvent::ContextMenu) {
-		QContextMenuEvent* cm_event = static_cast<QContextMenuEvent*>(event);
+		auto* cm_event = static_cast<QContextMenuEvent*>(event);
 		QPoint global_pos = cm_event->globalPos();
 		if (watched == m_tableView->verticalHeader())
 			m_rowMenu->exec(global_pos);
@@ -570,7 +570,7 @@ void MatrixView::handleVerticalSectionResized(int logicalIndex, int oldSize, int
 }
 
 void MatrixView::fillWithFunctionValues() {
-	MatrixFunctionDialog* dlg = new MatrixFunctionDialog(m_matrix);
+	auto* dlg = new MatrixFunctionDialog(m_matrix);
 	dlg->exec();
 }
 
@@ -580,7 +580,7 @@ void MatrixView::fillWithConstValues() {
 	                                       i18n("Value"), 0, -2147483647, 2147483647, 6, &ok);
 	if (ok) {
 		WAIT_CURSOR;
-		QVector<QVector<double>>* newData = static_cast<QVector<QVector<double>>*>(m_matrix->data());
+		auto* newData = static_cast<QVector<QVector<double>>*>(m_matrix->data());
 		for (int col = 0; col < m_matrix->columnCount(); ++col) {
 			for (int row = 0; row < m_matrix->rowCount(); ++row)
 				(newData->operator[](col))[row] = value;
@@ -776,8 +776,8 @@ void MatrixView::updateImage() {
 	for (int i = 0; i < pool->maxThreadCount(); ++i) {
 		const int start = i*range;
 		int end = (i+1)*range;
-		if (end>m_image.height()) end = m_image.height();
-		UpdateImageTask* task = new UpdateImageTask(start, end, m_image, data, scaleFactor, dmin);
+		if (end > m_image.height()) end = m_image.height();
+		auto* task = new UpdateImageTask(start, end, m_image, data, scaleFactor, dmin);
 		pool->start(task);
 	}
 	pool->waitForDone();
@@ -939,9 +939,9 @@ void MatrixView::print(QPrinter* printer) const {
 	const int dpiy = printer->logicalDpiY();
 	const int margin = (int) ( (1/2.54)*dpiy ); // 1 cm margins
 
-	QHeaderView *hHeader = m_tableView->horizontalHeader();
-	QHeaderView *vHeader = m_tableView->verticalHeader();
-	QVector<QVector<double>>* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
+	QHeaderView* hHeader = m_tableView->horizontalHeader();
+	QHeaderView* vHeader = m_tableView->verticalHeader();
+	auto* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
 
 	const int rows = m_matrix->rowCount();
 	const int cols = m_matrix->columnCount();
@@ -1436,7 +1436,7 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 void MatrixView::showColumnStatistics() {
 	if (selectedColumnCount() > 0) {
 		QString dlgTitle (m_matrix->name() + " column statistics");
-		StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
+		auto* dlg = new StatisticsDialog(dlgTitle);
 		QVector<Column*> columns;
 		for (int col = 0; col < m_matrix->columnCount(); ++col) {
 			if (isColumnSelected(col, false)) {
@@ -1455,7 +1455,7 @@ void MatrixView::showColumnStatistics() {
 void MatrixView::showRowStatistics() {
 	if (selectedRowCount() > 0) {
 		QString dlgTitle (m_matrix->name() + " row statistics");
-		StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
+		auto* dlg = new StatisticsDialog(dlgTitle);
 		QVector<Column*> columns;
 		for (int row = 0; row < m_matrix->rowCount(); ++row) {
 			if (isRowSelected(row, false)) {
@@ -1473,7 +1473,7 @@ void MatrixView::showRowStatistics() {
 }
 
 void MatrixView::exportToFits(const QString &fileName, const int exportTo) const {
-	FITSFilter* filter = new FITSFilter;
+	auto* filter = new FITSFilter;
 	filter->setExportTo(exportTo);
 	filter->write(fileName, m_matrix);
 

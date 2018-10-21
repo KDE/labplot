@@ -151,7 +151,7 @@ QWidget* DatapickerImage::view() const {
 }
 
 bool DatapickerImage::exportView() const {
-	ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
+	auto* dlg = new ExportWorksheetDialog(m_view);
 	dlg->setFileName(name());
 	bool ret;
 	if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
@@ -169,7 +169,7 @@ bool DatapickerImage::exportView() const {
 
 bool DatapickerImage::printView() {
 	QPrinter printer;
-	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
+	auto* dlg = new QPrintDialog(&printer, m_view);
 	bool ret;
 	dlg->setWindowTitle(i18nc("@title:window", "Print Datapicker Image"));
 	if ( (ret = (dlg->exec() == QDialog::Accepted)) )

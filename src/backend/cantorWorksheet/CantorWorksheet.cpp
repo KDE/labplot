@@ -88,7 +88,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 		connect(m_variableModel, SIGNAL(modelReset()), this, SLOT(modelReset()));
 
 		//available plugins
-		Cantor::PanelPluginHandler* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
+		auto* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
 		if(!handler) {
 			KMessageBox::error(view(), i18n("no PanelPluginHandle found for the Cantor Part."));
 			return false;
@@ -110,7 +110,7 @@ void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int las
 	for(int i = first; i <= last; ++i) {
 		const QString name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
 		const QString value = m_variableModel->data(m_variableModel->index(first, 1)).toString();
-		VariableParser* parser = new VariableParser(m_backendName, value);
+		auto* parser = new VariableParser(m_backendName, value);
 		if(parser->isParsed()) {
 			Column* col = child<Column>(name);
 			if (col) {

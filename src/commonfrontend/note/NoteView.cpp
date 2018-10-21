@@ -36,7 +36,7 @@
 
 NoteView::NoteView(Note* notes) : m_notes(notes) {
 
-	QHBoxLayout* layout = new QHBoxLayout(this);
+	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
 
 	m_textEdit = new QTextEdit(this);

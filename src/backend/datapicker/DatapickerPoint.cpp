@@ -215,7 +215,7 @@ STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaXPos, QPointF, plusDeltaXPo
 void DatapickerPoint::setPlusDeltaXPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if ( pos != d->plusDeltaXPos ) {
-		DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
+		auto* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
 		if (!curve)
 			return;
 
@@ -233,7 +233,7 @@ STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaXPos, QPointF, minusDeltaX
 void DatapickerPoint::setMinusDeltaXPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if ( pos != d->minusDeltaXPos ) {
-		DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
+		auto* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
 		if (!curve)
 			return;
 
@@ -251,7 +251,7 @@ STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaYPos, QPointF, plusDeltaYPo
 void DatapickerPoint::setPlusDeltaYPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if ( pos != d->plusDeltaYPos ) {
-		DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
+		auto* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
 		if (!curve)
 			return;
 
@@ -269,7 +269,7 @@ STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaYPos, QPointF, minusDeltaY
 void DatapickerPoint::setMinusDeltaYPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if ( pos != d->minusDeltaYPos ) {
-		DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
+		auto* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
 		if (!curve)
 			return;
 
@@ -333,14 +333,14 @@ void DatapickerPointPrivate::retransformErrorBar() {
   update datasheet on any change in position of Datapicker-Point or it's error-bar.
 */
 void DatapickerPointPrivate::updateData() {
-	DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(q->parentAspect());
+	auto* curve = dynamic_cast<DatapickerCurve*>(q->parentAspect());
 	if (curve)
 		curve->updateData(q);
 }
 
 void DatapickerPointPrivate::updatePropeties() {
-	DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(q->parentAspect());
-	DatapickerImage* image = dynamic_cast<DatapickerImage*>(q->parentAspect());
+	auto* curve = dynamic_cast<DatapickerCurve*>(q->parentAspect());
+	auto* image = dynamic_cast<DatapickerImage*>(q->parentAspect());
 	if (image) {
 		rotationAngle = image->pointRotationAngle();
 		pointStyle = image->pointStyle();

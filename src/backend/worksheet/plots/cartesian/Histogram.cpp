@@ -932,8 +932,8 @@ void HistogramPrivate::updateLines() {
 		horizontalHistogram();
 
 	//map the lines and the symbol positions to the scene coordinates
-	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
-	const CartesianCoordinateSystem* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
+	const auto* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 	Q_ASSERT(cSystem);
 	lines = cSystem->mapLogicalToScene(lines);
 	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
@@ -1214,7 +1214,7 @@ void HistogramPrivate::updateFilling() {
 	}
 
 	QVector<QLineF> fillLines;
-	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	const auto* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
 
 	//if there're no interpolation lines available (Histogram::NoLine selected), create line-interpolation,
@@ -1222,7 +1222,7 @@ void HistogramPrivate::updateFilling() {
 	if (lines.size())
 		fillLines = lines;
 	else {
-		for (int i=0; i<symbolPointsLogical.count()-1; i++)
+		for (int i = 0; i < symbolPointsLogical.count()-1; i++)
 			fillLines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		fillLines = cSystem->mapLogicalToScene(fillLines);
 	}
@@ -1574,7 +1574,7 @@ void HistogramPrivate::drawFilling(QPainter* painter) {
 }
 
 void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	const auto* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	if (plot->mouseMode() == CartesianPlot::SelectionMode && !isSelected()) {
 		m_hovered = true;
 		emit q->hovered();
@@ -1583,7 +1583,7 @@ void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 }
 
 void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	const auto* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	if (plot->mouseMode() == CartesianPlot::SelectionMode && m_hovered) {
 		m_hovered = false;
 		emit q->unhovered();
@@ -1805,7 +1805,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("XYCurve");
 
 	int index = parentAspect()->indexOfChild<Histogram>(this);
-	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
+	const auto* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
 	QColor themeColor;
 	if (index<plot->themeColorPalette().size())
 		themeColor = plot->themeColorPalette().at(index);

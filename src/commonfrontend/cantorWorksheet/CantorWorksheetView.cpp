@@ -41,7 +41,7 @@
 CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget(),
 	m_worksheet(worksheet) {
 
-	QHBoxLayout* layout = new QHBoxLayout(this);
+	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
 	part = worksheet->part();
 	if (part) {
@@ -58,7 +58,7 @@ CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget()
 }
 
 void CantorWorksheetView::initActions() {
-	QActionGroup* cantorActionGroup = new QActionGroup(this);
+	auto* cantorActionGroup = new QActionGroup(this);
 	cantorActionGroup->setExclusive(false);
 
 	m_restartBackendAction = new QAction(QIcon::fromTheme("system-reboot"), i18n("Restart Backend"), cantorActionGroup);

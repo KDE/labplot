@@ -174,7 +174,7 @@ QMenu* XYCurve::createContextMenu() {
 	menu->insertAction(firstAction, visibilityAction);
 
 	//"data analysis" menu
-	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(parentAspect());
+	auto* plot = dynamic_cast<CartesianPlot*>(parentAspect());
 	menu->insertMenu(visibilityAction, plot->analysisMenu());
 	menu->insertSeparator(visibilityAction);
 
@@ -2106,7 +2106,7 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 }
 
 void XYCurvePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	const auto* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	if (plot->mouseMode() == CartesianPlot::SelectionMode && !isSelected()) {
 		m_hovered = true;
 		emit q->hovered();
@@ -2115,7 +2115,7 @@ void XYCurvePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 }
 
 void XYCurvePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	const auto* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	if (plot->mouseMode() == CartesianPlot::SelectionMode && m_hovered) {
 		m_hovered = false;
 		emit q->unhovered();
@@ -2377,7 +2377,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("XYCurve");
 
 	int index = parentAspect()->indexOfChild<XYCurve>(this);
-	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
+	const auto* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
 	QColor themeColor;
 	if (index<plot->themeColorPalette().size())
 		themeColor = plot->themeColorPalette().at(index);

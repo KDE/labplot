@@ -626,11 +626,11 @@ void CartesianPlot::initMenus() {
 
 	//themes menu
 	themeMenu = new QMenu(i18n("Apply Theme"));
-	ThemesWidget* themeWidget = new ThemesWidget(nullptr);
+	auto* themeWidget = new ThemesWidget(nullptr);
 	connect(themeWidget, SIGNAL(themeSelected(QString)), this, SLOT(loadTheme(QString)));
 	connect(themeWidget, SIGNAL(themeSelected(QString)), themeMenu, SLOT(close()));
 
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(themeWidget);
 	themeMenu->addAction(widgetAction);
 
@@ -718,9 +718,9 @@ void CartesianPlot::processDropEvent(QDropEvent* event) {
 	QDataStream stream(&data, QIODevice::ReadOnly);
 	stream >> vec;
 	QVector<AbstractColumn*> columns;
-	for (auto i : vec) {
-		AbstractAspect* aspect = (AbstractAspect*)i;
-		AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	for (auto a : vec) {
+		auto* aspect = (AbstractAspect*)a;
+		auto* column = dynamic_cast<AbstractColumn*>(aspect);
 		if (column)
 			columns << column;
 	}
@@ -1220,7 +1220,7 @@ void CartesianPlot::addFitCurve() {
 
 
 		//set the fit model category and type
-		const QAction* action = qobject_cast<const QAction*>(QObject::sender());
+		const auto* action = qobject_cast<const QAction*>(QObject::sender());
 		PlotDataDialog::AnalysisAction type = (PlotDataDialog::AnalysisAction)action->data().toInt();
 		curve->initFitData(type);
 		curve->initStartValues(curCurve);
@@ -1311,7 +1311,7 @@ void CartesianPlot::addCustomPoint() {
 
 void CartesianPlot::childAdded(const AbstractAspect* child) {
 	Q_D(CartesianPlot);
-	const XYCurve* curve = qobject_cast<const XYCurve*>(child);
+	const auto* curve = qobject_cast<const XYCurve*>(child);
 	if (curve) {
 		connect(curve, SIGNAL(dataChanged()), this, SLOT(dataChanged()));
 		connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
@@ -1336,7 +1336,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 		//in case the first curve is added, check whether we start plotting datetime data
 		if (children<XYCurve>().size() == 1) {
-			const Column* col = dynamic_cast<const Column*>(curve->xColumn());
+			const auto* col = dynamic_cast<const Column*>(curve->xColumn());
 			if (col) {
 				if (col->columnMode() == AbstractColumn::DateTime) {
 					setUndoAware(false);
@@ -1346,7 +1346,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 					//set column's datetime format for all horizontal axis
 					for (auto* axis : children<Axis>()) {
 						if (axis->orientation() == Axis::AxisHorizontal) {
-							DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+							auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 							d->xRangeDateTimeFormat = filter->format();
 							axis->setUndoAware(false);
 							axis->setLabelsDateTimeFormat(d->xRangeDateTimeFormat);
@@ -1366,7 +1366,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 					//set column's datetime format for all vertical axis
 					for (auto* axis : children<Axis>()) {
 						if (axis->orientation() == Axis::AxisVertical) {
-							DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+							auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 							d->yRangeDateTimeFormat = filter->format();
 							axis->setUndoAware(false);
 							axis->setLabelsDateTimeFormat(d->yRangeDateTimeFormat);
@@ -1377,10 +1377,10 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			}
 		}
 	} else {
-		const Histogram* histo = qobject_cast<const Histogram*>(child);
-		if (histo) {
-			connect(histo, &Histogram::dataChanged, this, &CartesianPlot::dataChanged);
-			connect(histo, &Histogram::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
+		const auto* hist = qobject_cast<const Histogram*>(child);
+		if (hist) {
+			connect(hist, &Histogram::dataChanged, this, &CartesianPlot::dataChanged);
+			connect(hist, &Histogram::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
 
 			updateLegend();
 		}
@@ -1389,14 +1389,14 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	if (!isLoading()) {
 		//if a theme was selected, apply the theme settings for newly added children, too
 		if (!d->theme.isEmpty()) {
-			const WorksheetElement* el = dynamic_cast<const WorksheetElement*>(child);
-			if (el) {
+			const auto* elem = dynamic_cast<const WorksheetElement*>(child);
+			if (elem) {
 				KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
-				const_cast<WorksheetElement*>(el)->loadThemeConfig(config);
+				const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
 			}
 		} else {
 			//no theme is available, apply the default colors for curves only, s.a. XYCurve::loadThemeConfig()
-			const XYCurve* curve = dynamic_cast<const XYCurve*>(child);
+			const auto* curve = dynamic_cast<const XYCurve*>(child);
 			if (curve) {
 				int index = indexOfChild<XYCurve>(curve);
 				QColor themeColor;
@@ -1407,7 +1407,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 						themeColor = m_themeColorPalette.last();
 				}
 
-				XYCurve* c = const_cast<XYCurve*>(curve);
+				auto* c = const_cast<XYCurve*>(curve);
 
 				//Line
 				QPen p = curve->linePen();
@@ -1446,7 +1446,7 @@ void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAsp
 			addLegendAction->setEnabled(true);
 		m_legend = nullptr;
 	} else {
-		const XYCurve* curve = qobject_cast<const XYCurve*>(child);
+		const auto* curve = qobject_cast<const XYCurve*>(child);
 		if (curve)
 			updateLegend();
 	}
@@ -1473,11 +1473,11 @@ void CartesianPlot::dataChanged() {
 		this->scaleAutoY();
 	else {
 		//free ranges -> rentransform the curve that sent
-		XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
+		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
 		if (curve)
 			curve->retransform();
 		else {
-			Histogram* hist = dynamic_cast<Histogram*>(QObject::sender());
+			auto* hist = dynamic_cast<Histogram*>(QObject::sender());
 			if (hist)
 				hist->retransform();
 			else {
@@ -1507,13 +1507,13 @@ void CartesianPlot::xDataChanged() {
 	if (d->autoScaleX)
 		this->scaleAutoX();
 	else {
-		XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
+		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
 		curve->retransform();
 	}
 
 	//in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
 	if (children<XYCurve>().size() == 1) {
-		XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
+		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
 		const AbstractColumn* col = curve->xColumn();
 		if (col->columnMode() == AbstractColumn::DateTime && d->xRangeFormat != CartesianPlot::DateTime) {
 			setUndoAware(false);
@@ -1539,13 +1539,13 @@ void CartesianPlot::yDataChanged() {
 	if (d->autoScaleY)
 		this->scaleAutoY();
 	else {
-		XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
+		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
 		curve->retransform();
 	}
 
 	//in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
 	if (children<XYCurve>().size() == 1) {
-		XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
+		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
 		const AbstractColumn* col = curve->yColumn();
 		if (col->columnMode() == AbstractColumn::DateTime && d->xRangeFormat != CartesianPlot::DateTime) {
 			setUndoAware(false);
@@ -1585,7 +1585,7 @@ void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
 
 	//when doing zoom selection, prevent the graphics item from being movable
 	//if it's currently movable (no worksheet layout available)
-	const Worksheet* worksheet = dynamic_cast<const Worksheet*>(parentAspect());
+	const auto* worksheet = dynamic_cast<const Worksheet*>(parentAspect());
 	if (worksheet) {
 		if (mouseMode == CartesianPlot::SelectionMode) {
 			if (worksheet->layout() != Worksheet::NoLayout)
@@ -2076,7 +2076,7 @@ void CartesianPlotPrivate::retransformScales() {
 	PERFTRACE("CartesianPlotPrivate::retransformScales()");
 	DEBUG(" xmin/xmax = " << xMin << '/'<< xMax << ", ymin/ymax = " << yMin << '/' << yMax);
 
-	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
+	auto* plot = dynamic_cast<CartesianPlot*>(q);
 	QVector<CartesianScale*> scales;
 
 	//perform the mapping from the scene coordinates to the plot's coordinates here.

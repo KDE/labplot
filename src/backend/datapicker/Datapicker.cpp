@@ -137,7 +137,7 @@ Spreadsheet* Datapicker::currentSpreadsheet() const {
 
 	const int index = m_view->currentIndex();
 	if(index>0) {
-		DatapickerCurve* curve = child<DatapickerCurve>(index-1);
+		auto* curve = child<DatapickerCurve>(index-1);
 		return curve->child<Spreadsheet>(0);
 	}
 	return nullptr;
@@ -162,8 +162,8 @@ void Datapicker::childSelected(const AbstractAspect* aspect) {
 		emit statusInfo(i18n("%1, active curve \"%2\"", this->name(), m_activeCurve->name()));
 		emit requestUpdateActions();
 	} else {
-		const DatapickerCurve* curve = aspect->ancestor<const DatapickerCurve>();
-		index= indexOfChild<AbstractAspect>(curve);
+		const auto* curve = aspect->ancestor<const DatapickerCurve>();
+		index = indexOfChild<AbstractAspect>(curve);
 		++index; //+1 because of the hidden plot image being the first child and shown in the first tab in the view
 	}
 
@@ -237,13 +237,13 @@ void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
 	else
 		beginMacro(i18n("%1: add new point %2", parentAspect->name(), childPoints.count()));
 
-	DatapickerPoint* newPoint = new DatapickerPoint(i18n("%1 Point", parentAspect->name()));
+	auto* newPoint = new DatapickerPoint(i18n("%1 Point", parentAspect->name()));
 	newPoint->setPosition(pos);
 	newPoint->setHidden(true);
 	parentAspect->addChild(newPoint);
 	newPoint->retransform();
 
-	DatapickerCurve* datapickerCurve = dynamic_cast<DatapickerCurve*>(parentAspect);
+	auto* datapickerCurve = dynamic_cast<DatapickerCurve*>(parentAspect);
 	if (m_image == parentAspect) {
 		DatapickerImage::ReferencePoints points = m_image->axisPoints();
 		points.scenePos[childPoints.count()].setX(pos.x());
@@ -268,7 +268,7 @@ QVector3D Datapicker::mapSceneLengthToLogical(const QPointF& point) const {
 }
 
 void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-	const DatapickerCurve* curve = qobject_cast<const DatapickerCurve*>(aspect);
+	const auto* curve = qobject_cast<const DatapickerCurve*>(aspect);
 	if (curve) {
 		//clear scene
 		QVector<DatapickerPoint*> childPoints = curve->children<DatapickerPoint>(IncludeHidden);
@@ -286,8 +286,8 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 }
 
 void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
-	const DatapickerPoint* addedPoint = qobject_cast<const DatapickerPoint*>(aspect);
-	const DatapickerCurve* curve = qobject_cast<const DatapickerCurve*>(aspect);
+	const auto* addedPoint = qobject_cast<const DatapickerPoint*>(aspect);
+	const auto* curve = qobject_cast<const DatapickerCurve*>(aspect);
 	if (addedPoint)
 		handleChildAspectAdded(addedPoint);
 	else if (curve) {
@@ -311,9 +311,9 @@ void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
 }
 
 void Datapicker::handleChildAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-	const DatapickerPoint *removedPoint = qobject_cast<const DatapickerPoint*>(aspect);
+	const auto* removedPoint = qobject_cast<const DatapickerPoint*>(aspect);
 	if (removedPoint) {
-		QGraphicsItem *item = removedPoint->graphicsItem();
+		QGraphicsItem* item = removedPoint->graphicsItem();
 		Q_ASSERT(item != nullptr);
 		Q_ASSERT(m_image != nullptr);
 		m_image->scene()->removeItem(item);
@@ -321,9 +321,9 @@ void Datapicker::handleChildAspectAboutToBeRemoved(const AbstractAspect* aspect)
 }
 
 void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
-	const DatapickerPoint* addedPoint = qobject_cast<const DatapickerPoint*>(aspect);
+	const auto* addedPoint = qobject_cast<const DatapickerPoint*>(aspect);
 	if (addedPoint) {
-		QGraphicsItem *item = addedPoint->graphicsItem();
+		QGraphicsItem* item = addedPoint->graphicsItem();
 		Q_ASSERT(item != nullptr);
 		Q_ASSERT(m_image != nullptr);
 		m_image->scene()->addItem(item);

@@ -411,7 +411,7 @@ void DatapickerCurve::updateDatasheet() {
 */
 void DatapickerCurve::updateData(const DatapickerPoint* point) {
 	Q_D(DatapickerCurve);
-	Datapicker* datapicker = dynamic_cast<Datapicker*>(parentAspect());
+	auto* datapicker = dynamic_cast<Datapicker*>(parentAspect());
 	if (!datapicker)
 		return;
 
