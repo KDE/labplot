@@ -90,13 +90,13 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 	m_okButton->setToolTip(i18n("Plot the selected data"));
 	m_okButton->setText(i18n("&Plot"));
 
-	QVBoxLayout* layout = new QVBoxLayout(this);
+	auto* layout = new QVBoxLayout(this);
 	layout->addWidget(mainWidget);
 	layout->addWidget(buttonBox);
 	setLayout(layout);
 
 	//create combox boxes for the existing plots and worksheets
-	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(ui->gbPlotPlacement->layout());
+	auto* gridLayout = dynamic_cast<QGridLayout*>(ui->gbPlotPlacement->layout());
 	cbExistingPlots = new TreeViewComboBox(ui->gbPlotPlacement);
 	cbExistingPlots->setMinimumWidth(250);//TODO: use proper sizeHint in TreeViewComboBox
 	gridLayout->addWidget(cbExistingPlots, 0, 1, 1, 1);
@@ -200,7 +200,7 @@ void PlotDataDialog::setAnalysisAction(AnalysisAction action) {
 
 void PlotDataDialog::processColumns() {
 	//columns to plot
-	SpreadsheetView* view = reinterpret_cast<SpreadsheetView*>(m_spreadsheet->view());
+	auto* view = reinterpret_cast<SpreadsheetView*>(m_spreadsheet->view());
 	QVector<Column*> selectedColumns = view->selectedColumns(true);
 
 	//use all spreadsheet columns if no columns are selected
@@ -263,10 +263,10 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 
 	//ui-widget only has one combobox for the y-data -> add additional comboboxes dynamically if required
 	if (m_columns.size()>2) {
-		QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaYColumns->widget()->layout());
+		auto* gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaYColumns->widget()->layout());
 		for (int i = 2; i < m_columns.size(); ++i) {
 			QLabel* label = new QLabel(i18n("Y-data"));
-			QComboBox* comboBox = new QComboBox();
+			auto* comboBox = new QComboBox();
 			gridLayout->addWidget(label, i+1, 0, 1, 1);
 			gridLayout->addWidget(comboBox, i+1, 2, 1, 1);
 			m_columnComboBoxes << comboBox;
@@ -339,10 +339,10 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 		ui->cbYColumn->setCurrentIndex(1);
 
 		//add a ComboBox for every further column to be plotted
-		QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaYColumns->widget()->layout());
+		auto* gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaYColumns->widget()->layout());
 		for (int i = 2; i < m_columns.size(); ++i) {
-			QLabel* label = new QLabel(i18n("Data"));
-			QComboBox* comboBox = new QComboBox();
+			auto* label = new QLabel(i18n("Data"));
+			auto* comboBox = new QComboBox();
 			gridLayout->addWidget(label, i+1, 0, 1, 1);
 			gridLayout->addWidget(comboBox, i+1, 2, 1, 1);
 			comboBox->addItems(columnNames);
@@ -357,15 +357,15 @@ void PlotDataDialog::plot() {
 	WAIT_CURSOR;
 	if (ui->rbPlotPlacement1->isChecked()) {
 		//add curves to an existing plot
-		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
-		CartesianPlot* plot = dynamic_cast<CartesianPlot*>(aspect);
+		auto* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
+		auto* plot = dynamic_cast<CartesianPlot*>(aspect);
 		plot->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
 		addCurvesToPlot(plot);
 		plot->endMacro();
 	} else if (ui->rbPlotPlacement2->isChecked()) {
 		//add curves to a new plot in an existing worksheet
-		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingWorksheets->currentModelIndex().internalPointer());
-		Worksheet* worksheet = dynamic_cast<Worksheet*>(aspect);
+		auto* aspect = static_cast<AbstractAspect*>(cbExistingWorksheets->currentModelIndex().internalPointer());
+		auto* worksheet = dynamic_cast<Worksheet*>(aspect);
 		worksheet->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
 
 		if (ui->rbCurvePlacement1->isChecked()) {
@@ -558,7 +558,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot* plot) const {
 	DEBUG("PlotDataDialog::addCurve()");
 	if (!m_analysisMode) {
-		XYCurve* curve = new XYCurve(name);
+		auto* curve = new XYCurve(name);
 		curve->suppressRetransform(true);
 		curve->setXColumn(xColumn);
 		curve->setYColumn(yColumn);
@@ -625,7 +625,7 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 }
 
 void PlotDataDialog::addHistogram(const QString& name, Column* column, CartesianPlot* plot) const {
-	Histogram* hist = new Histogram(name);
+	auto* hist = new Histogram(name);
 	plot->addChild(hist);
 // 	hist->suppressRetransform(true);
 	hist->setDataColumn(column);

@@ -50,7 +50,7 @@ GridDialog::GridDialog(QWidget* parent) : QDialog(parent){
 	setWindowTitle(i18nc("@title:window", "Custom Grid"));
 
 	QWidget* widget = new QWidget;
-	QGridLayout* layout = new QGridLayout(widget);
+	auto* layout = new QGridLayout(widget);
 
 	QLabel* label = new QLabel(i18n("Style:"), widget);
 	layout->addWidget(label, 0, 0);
@@ -96,8 +96,8 @@ GridDialog::GridDialog(QWidget* parent) : QDialog(parent){
 	layout->addWidget(label, 4, 2);
 
 
-	QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-	QVBoxLayout* vlayout = new QVBoxLayout(this);
+	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	auto* vlayout = new QVBoxLayout(this);
 	vlayout->addWidget(widget);
 	vlayout->addWidget(buttonBox);
 

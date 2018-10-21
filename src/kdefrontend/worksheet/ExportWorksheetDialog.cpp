@@ -63,7 +63,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
-	QCompleter* completer = new QCompleter(this);
+	auto* completer = new QCompleter(this);
 	completer->setModel(new QDirModel);
 	ui->leFileName->setCompleter(completer);
 

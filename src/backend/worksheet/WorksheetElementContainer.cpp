@@ -152,7 +152,7 @@ void WorksheetElementContainer::handleResize(double horizontalRatio, double vert
 void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) {
 	Q_D(WorksheetElementContainer);
 
-	const WorksheetElement* element = qobject_cast<const WorksheetElement*>(aspect);
+	const auto* element = qobject_cast<const WorksheetElement*>(aspect);
 	if (element && (aspect->parentAspect() == this)) {
 		connect(element, &WorksheetElement::hovered, this, &WorksheetElementContainer::childHovered);
 		connect(element, &WorksheetElement::unhovered, this, &WorksheetElementContainer::childUnhovered);

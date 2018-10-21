@@ -446,7 +446,7 @@ void Axis::setAutoScale(bool autoScale) {
 		exec(new AxisSetAutoScaleCmd(d, autoScale, ki18n("%1: set axis auto scaling")));
 
 		if (autoScale) {
-			CartesianPlot *plot = qobject_cast<CartesianPlot*>(parentAspect());
+			auto* plot = qobject_cast<CartesianPlot*>(parentAspect());
 			if (!plot)
 				return;
 

@@ -60,9 +60,9 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent) : QDialo
 
 	QWidget* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
-	QVBoxLayout *layout = new QVBoxLayout(this);
+	auto* layout = new QVBoxLayout(this);
 
-	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	m_okButton = buttonBox->button(QDialogButtonBox::Ok);
 	m_okButton->setDefault(true);
 	m_okButton->setToolTip(i18n("Generate random values according to the selected distribution"));
@@ -75,7 +75,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent) : QDialo
 	layout->addWidget(mainWidget);
 	layout->addWidget(buttonBox);
 	setLayout(layout);
-    setAttribute(Qt::WA_DeleteOnClose);
+	setAttribute(Qt::WA_DeleteOnClose);
 	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
 		ui.cbDistribution->addItem(i18n(nsl_sf_stats_distribution_name[i]), i);
 

@@ -236,7 +236,7 @@ void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 		}
 	}
 
-	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
 		for ( int n = 0; n < actualCols; ++n) {

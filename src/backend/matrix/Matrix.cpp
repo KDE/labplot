@@ -128,7 +128,7 @@ QWidget* Matrix::view() const {
 }
 
 bool Matrix::exportView() const {
-	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(m_view);
+	auto* dlg = new ExportSpreadsheetDialog(m_view);
 	dlg->setFileName(name());
 	dlg->setMatrixMode(true);
 
@@ -169,7 +169,7 @@ bool Matrix::exportView() const {
 
 bool Matrix::printView() {
 	QPrinter printer;
-	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
+	auto* dlg = new QPrintDialog(&printer, m_view);
 	bool ret;
 	dlg->setWindowTitle(i18nc("@title:window", "Print Matrix"));
 	if ( (ret = (dlg->exec() == QDialog::Accepted)) )

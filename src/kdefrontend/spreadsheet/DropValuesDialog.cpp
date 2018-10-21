@@ -120,11 +120,12 @@ class MaskValuesTask : public QRunnable {
 		void run() override {
 			m_column->setSuppressDataChangedSignal(true);
 			bool changed = false;
-			QVector<double>* data = static_cast<QVector<double>* >(m_column->data());
+			auto* data = static_cast<QVector<double>* >(m_column->data());
 
 			//equal to
+			//TODO: use an enum
 			if (m_operator == 0) {
-				for (int i=0; i<data->size(); ++i) {
+				for (int i = 0; i < data->size(); ++i) {
 					if (data->at(i) == m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
@@ -134,7 +135,7 @@ class MaskValuesTask : public QRunnable {
 
 			//between (including end points)
 			else if (m_operator == 1) {
-				for (int i=0; i<data->size(); ++i) {
+				for (int i = 0; i < data->size(); ++i) {
 					if (data->at(i) >= m_value1 && data->at(i) <= m_value2) {
 						m_column->setMasked(i, true);
 						changed = true;
@@ -144,7 +145,7 @@ class MaskValuesTask : public QRunnable {
 
 			//between (excluding end points)
 			else if (m_operator == 2) {
-				for (int i=0; i<data->size(); ++i) {
+				for (int i = 0; i < data->size(); ++i) {
 					if (data->at(i) > m_value1 && data->at(i) < m_value2) {
 						m_column->setMasked(i, true);
 						changed = true;
@@ -154,7 +155,7 @@ class MaskValuesTask : public QRunnable {
 
 			//greater than
 			else if (m_operator == 3) {
-				for (int i=0; i<data->size(); ++i) {
+				for (int i = 0; i < data->size(); ++i) {
 					if (data->at(i) > m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
@@ -164,7 +165,7 @@ class MaskValuesTask : public QRunnable {
 
 			//greater than or equal to
 			else if (m_operator == 4) {
-				for (int i=0; i<data->size(); ++i) {
+				for (int i = 0; i < data->size(); ++i) {
 					if (data->at(i) >= m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
@@ -174,7 +175,7 @@ class MaskValuesTask : public QRunnable {
 
 			//lesser than
 			else if (m_operator == 5) {
-				for (int i=0; i<data->size(); ++i) {
+				for (int i = 0; i < data->size(); ++i) {
 					if (data->at(i) < m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
@@ -184,7 +185,7 @@ class MaskValuesTask : public QRunnable {
 
 			//lesser than or equal to
 			else if (m_operator == 6) {
-				for (int i=0; i<data->size(); ++i) {
+				for (int i = 0; i < data->size(); ++i) {
 					if (data->at(i) <= m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
@@ -215,7 +216,7 @@ class DropValuesTask : public QRunnable {
 
 		void run() override {
 			bool changed = false;
-			QVector<double>* data = static_cast<QVector<double>* >(m_column->data());
+			auto* data = static_cast<QVector<double>* >(m_column->data());
 			QVector<double> new_data(*data);
 
 			//equal to
@@ -310,7 +311,7 @@ void DropValuesDialog::maskValues() const {
 	const double value2 = ui.leValue2->text().toDouble();
 
 	for(Column* col: m_columns) {
-		MaskValuesTask* task = new MaskValuesTask(col, op, value1, value2);
+		auto* task = new MaskValuesTask(col, op, value1, value2);
 		task->run();
 		//TODO: writing to the undo-stack in Column::setMasked() is not tread-safe -> redesign
 // 		QThreadPool::globalInstance()->start(task);
@@ -334,7 +335,7 @@ void DropValuesDialog::dropValues() const {
 	const double value2 = ui.leValue2->text().toDouble();
 
 	for(Column* col: m_columns) {
-		DropValuesTask* task = new DropValuesTask(col, op, value1, value2);
+		auto* task = new DropValuesTask(col, op, value1, value2);
 		QThreadPool::globalInstance()->start(task);
 	}
 

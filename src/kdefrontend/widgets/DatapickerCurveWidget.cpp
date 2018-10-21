@@ -95,11 +95,12 @@ void DatapickerCurveWidget::init() {
 	ui.cbStyle->setIconSize(QSize(iconSize, iconSize));
 	QTransform trafo;
 	trafo.scale(15, 15);
-	for (int i=1; i<19; ++i) {
-		Symbol::Style style = (Symbol::Style)i;
+	//TODO: constant?
+	for (int i = 1; i < 19; ++i) {
+		auto style = (Symbol::Style)i;
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
-		pa.setPen( pen );
+		pa.setPen(pen);
 		pa.setRenderHint(QPainter::Antialiasing);
 		pa.translate(iconSize/2,iconSize/2);
 		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
@@ -118,7 +119,7 @@ void DatapickerCurveWidget::setCurves(QList<DatapickerCurve*> list) {
 	m_curveList = list;
 	m_curve = list.first();
 
-	if (list.size()==1) {
+	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
@@ -220,7 +221,7 @@ void DatapickerCurveWidget::yErrorTypeChanged(int index) {
 }
 
 void DatapickerCurveWidget::styleChanged(int index) {
-	Symbol::Style style = Symbol::Style(index + 1);
+	auto style = Symbol::Style(index + 1);
 	//enable/disable the  filling options in the GUI depending on the currently selected points.
 	if (style != Symbol::Line && style != Symbol::Cross) {
  		ui.cbFillingStyle->setEnabled(true);
@@ -276,7 +277,7 @@ void DatapickerCurveWidget::errorBarSizeChanged(double value) {
 }
 
 void DatapickerCurveWidget::fillingStyleChanged(int index) {
-	Qt::BrushStyle brushStyle = Qt::BrushStyle(index);
+	auto brushStyle = Qt::BrushStyle(index);
 	ui.kcbFillingColor->setEnabled(!(brushStyle==Qt::NoBrush));
 
 	if (m_initializing)
@@ -291,7 +292,7 @@ void DatapickerCurveWidget::fillingStyleChanged(int index) {
 }
 
 void DatapickerCurveWidget::errorBarFillingStyleChanged(int index) {
-	Qt::BrushStyle brushStyle = Qt::BrushStyle(index);
+	auto brushStyle = Qt::BrushStyle(index);
 	ui.kcbErrorBarFillingColor->setEnabled(!(brushStyle==Qt::NoBrush));
 
 	if (m_initializing)
@@ -339,7 +340,7 @@ void DatapickerCurveWidget::errorBarFillingColorChanged(const QColor& color) {
 }
 
 void DatapickerCurveWidget::borderStyleChanged(int index) {
-	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	auto penStyle = Qt::PenStyle(index);
 
 	if ( penStyle == Qt::NoPen ) {
 		ui.kcbBorderColor->setEnabled(false);

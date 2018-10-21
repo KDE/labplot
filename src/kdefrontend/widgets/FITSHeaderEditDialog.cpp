@@ -40,9 +40,8 @@ Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.c
 FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : QDialog(parent), m_saved(false) {
 	m_headerEditWidget = new FITSHeaderEditWidget(this);
 
-	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-
-	QVBoxLayout* layout = new QVBoxLayout;
+	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	auto* layout = new QVBoxLayout;
 
 	layout->addWidget(m_headerEditWidget);
 	layout->addWidget(btnBox);

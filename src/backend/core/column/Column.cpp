@@ -114,9 +114,10 @@ QMenu* Column::createContextMenu() {
 	for (const auto* curve : curves) {
 		bool used = false;
 
-		const XYAnalysisCurve* analysisCurve = dynamic_cast<const XYAnalysisCurve*>(curve);
+		const auto* analysisCurve = dynamic_cast<const XYAnalysisCurve*>(curve);
 		if (analysisCurve) {
-			if (analysisCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet && (analysisCurve->xDataColumn() == this || analysisCurve->yDataColumn() == this || analysisCurve->y2DataColumn() == this) )
+			if (analysisCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet
+					&& (analysisCurve->xDataColumn() == this || analysisCurve->yDataColumn() == this || analysisCurve->y2DataColumn() == this) )
 				used = true;
 		} else {
 			if (curve->xColumn() == this || curve->yColumn() == this)
@@ -476,7 +477,7 @@ void Column::calculateStatistics() const {
 	ColumnStatistics& statistics = d->statistics;
 
 	// TODO: support other data types?
-	QVector<double>* rowValues = reinterpret_cast<QVector<double>*>(data());
+	auto* rowValues = reinterpret_cast<QVector<double>*>(data());
 
 	size_t notNanCount = 0;
 	double val;
@@ -785,11 +786,11 @@ public:
 	void run() override {
 		QByteArray bytes = QByteArray::fromBase64(m_content.toLatin1());
 		if (m_private->columnMode() == AbstractColumn::Numeric) {
-			QVector<double>* data = new QVector<double>(bytes.size()/(int)sizeof(double));
+			auto* data = new QVector<double>(bytes.size()/(int)sizeof(double));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
 		} else {
-			QVector<int>* data = new QVector<int>(bytes.size()/(int)sizeof(int));
+			auto* data = new QVector<int>(bytes.size()/(int)sizeof(int));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
 		}
@@ -858,7 +859,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 		if (!preview) {
 			QString content = reader->text().toString().trimmed();
 			if (!content.isEmpty() && ( columnMode() == AbstractColumn::Numeric ||  columnMode() == AbstractColumn::Integer)) {
-				DecodeColumnTask* task = new DecodeColumnTask(d, content);
+				auto* task = new DecodeColumnTask(d, content);
 				QThreadPool::globalInstance()->start(task);
 			}
 		}
@@ -1117,7 +1118,7 @@ double Column::minimum(int count) const {
 
 		switch (mode) {
 		case Numeric: {
-			QVector<double>* vec = static_cast<QVector<double>*>(data());
+			auto* vec = static_cast<QVector<double>*>(data());
 			for (int row = start; row < end; ++row) {
 				const double val = vec->at(row);
 				if (std::isnan(val))
@@ -1129,7 +1130,7 @@ double Column::minimum(int count) const {
 			break;
 		}
 		case Integer: {
-			QVector<int>* vec = static_cast<QVector<int>*>(data());
+			auto* vec = static_cast<QVector<int>*>(data());
 			for (int row = start; row < end; ++row) {
 				const int val = vec->at(row);
 
@@ -1141,7 +1142,7 @@ double Column::minimum(int count) const {
 		case Text:
 			break;
 		case DateTime: {
-			QVector<QDateTime>* vec = static_cast<QVector<QDateTime>*>(data());
+			auto* vec = static_cast<QVector<QDateTime>*>(data());
 			for (int row = start; row < end; ++row) {
 				const qint64 val = vec->at(row).toMSecsSinceEpoch();
 
@@ -1189,7 +1190,7 @@ double Column::maximum(int count) const {
 
 		switch (mode) {
 		case Numeric: {
-			QVector<double>* vec = static_cast<QVector<double>*>(data());
+			auto* vec = static_cast<QVector<double>*>(data());
 			for (int row = start; row < end; ++row) {
 				const double val = vec->at(row);
 				if (std::isnan(val))
@@ -1201,7 +1202,7 @@ double Column::maximum(int count) const {
 			break;
 		}
 		case Integer: {
-			QVector<int>* vec = static_cast<QVector<int>*>(data());
+			auto* vec = static_cast<QVector<int>*>(data());
 			for (int row = start; row < end; ++row) {
 				const int val = vec->at(row);
 
@@ -1213,7 +1214,7 @@ double Column::maximum(int count) const {
 		case Text:
 			break;
 		case DateTime: {
-			QVector<QDateTime>* vec = static_cast<QVector<QDateTime>*>(data());
+			auto* vec = static_cast<QVector<QDateTime>*>(data());
 			for (int row = start; row < end; ++row) {
 				const qint64 val = vec->at(row).toMSecsSinceEpoch();
 

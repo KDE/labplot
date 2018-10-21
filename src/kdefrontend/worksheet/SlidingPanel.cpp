@@ -45,9 +45,9 @@ SlidingPanel::SlidingPanel(QWidget *parent, const QString &worksheetName) : QFra
 	m_quitPresentingMode = new QPushButton(i18n("Quit Presentation"));
 	m_quitPresentingMode->setIcon(QIcon::fromTheme(QLatin1String("window-close")));
 
-	QHBoxLayout* hlayout = new QHBoxLayout;
+	auto* hlayout = new QHBoxLayout;
 	hlayout->addWidget(m_worksheetName);
-	QSpacerItem* spacer = new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
+	auto* spacer = new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
 	hlayout->addItem(spacer);
 	hlayout->addWidget(m_quitPresentingMode);
 	setLayout(hlayout);

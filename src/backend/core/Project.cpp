@@ -365,8 +365,8 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 				if (!curve) continue;
 				curve->suppressRetransform(true);
 
-				XYEquationCurve* equationCurve = dynamic_cast<XYEquationCurve*>(curve);
-				XYAnalysisCurve* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
+				auto* equationCurve = dynamic_cast<XYEquationCurve*>(curve);
+				auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
 				if (equationCurve) {
 					//curves defined by a mathematical equations recalculate their own columns on load again.
 					if (!preview)
@@ -375,7 +375,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 					RESTORE_COLUMN_POINTER(analysisCurve, xDataColumn, XDataColumn);
 					RESTORE_COLUMN_POINTER(analysisCurve, yDataColumn, YDataColumn);
 					RESTORE_COLUMN_POINTER(analysisCurve, y2DataColumn, Y2DataColumn);
-					XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(curve);
+					auto* fitCurve = dynamic_cast<XYFitCurve*>(curve);
 					if (fitCurve) {
 						RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
 						RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);

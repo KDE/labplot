@@ -46,7 +46,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent) : QWidget(parent),
 
 	ui.tableWidget->setColumnCount(5);
 
-	QTableWidgetItem* headerItem = new QTableWidgetItem();
+	auto* headerItem = new QTableWidgetItem();
 	headerItem->setText(i18n("Name"));
 	ui.tableWidget->setHorizontalHeaderItem(0, headerItem);
 
@@ -87,13 +87,13 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 
 		for (int i = 0; i < np; ++i) {
 			// name
-			QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNamesUtf8.at(i));
+			auto* item = new QTableWidgetItem(m_fitData->paramNamesUtf8.at(i));
 			item->setFlags(item->flags() ^ Qt::ItemIsEditable);
 			item->setBackground(QApplication::palette().color(QPalette::Window));
 			ui.tableWidget->setItem(i, 0, item);
 
 			// start value
-			QLineEdit *le = new QLineEdit(ui.tableWidget);
+			auto* le = new QLineEdit(ui.tableWidget);
 			le->setValidator(new QDoubleValidator(le));
 			le->setFrame(false);
 			le->insert(QString::number(m_fitData->paramStartValues.at(i), 'g'));
@@ -101,10 +101,10 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 			connect(le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()) );
 
 			// fixed
-			QWidget *widget = new QWidget();
-			QCheckBox *cb = new QCheckBox();
+			QWidget* widget = new QWidget();
+			auto* cb = new QCheckBox();
 			cb->setChecked(m_fitData->paramFixed.at(i));
-			QHBoxLayout *cbl = new QHBoxLayout(widget);
+			auto* cbl = new QHBoxLayout(widget);
 			cbl->addWidget(cb);
 			cbl->setAlignment(Qt::AlignCenter);
 			cbl->setContentsMargins(0, 0, 0, 0);
@@ -136,12 +136,12 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 
 			for (int i = 0; i < np; ++i){
 				// name
-				QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNames.at(i));
+				auto* item = new QTableWidgetItem(m_fitData->paramNames.at(i));
 				item->setBackground(QApplication::palette().color(QPalette::Window));
 				ui.tableWidget->setItem(i, 0, item);
 
 				// start value
-				QLineEdit *le = new QLineEdit(ui.tableWidget);
+				auto* le = new QLineEdit(ui.tableWidget);
 				le->setValidator(new QDoubleValidator(le));
 				le->setFrame(false);
 				le->insert(QString::number(m_fitData->paramStartValues.at(i), 'g'));
@@ -149,10 +149,10 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 				connect(le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()) );
 
 				// fixed
-				QWidget *widget = new QWidget();
-				QCheckBox *cb = new QCheckBox();
+				QWidget* widget = new QWidget();
+				auto* cb = new QCheckBox();
 				cb->setChecked(m_fitData->paramFixed.at(i));
-				QHBoxLayout *cbl = new QHBoxLayout(widget);
+				auto* cbl = new QHBoxLayout(widget);
 				cbl->addWidget(cb);
 				cbl->setAlignment(Qt::AlignCenter);
 				cbl->setContentsMargins(0, 0, 0, 0);
@@ -180,21 +180,21 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 		} else {			// no parameters available yet -> create the first row in the table for the first parameter
 			ui.tableWidget->setRowCount(1);
 			// name
-			QTableWidgetItem* item = new QTableWidgetItem();
+			auto* item = new QTableWidgetItem();
 			item->setBackground(QApplication::palette().color(QPalette::Window));
 			ui.tableWidget->setItem(0, 0, item);
 
 			// start value
-			QLineEdit *le = new QLineEdit(ui.tableWidget);
+			auto* le = new QLineEdit(ui.tableWidget);
 			le->setValidator(new QDoubleValidator(le));
 			le->setFrame(false);
 			ui.tableWidget->setCellWidget(0, 1, le);
 			connect(le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()) );
 
 			// fixed
-			QWidget *widget = new QWidget();
-			QCheckBox *cb = new QCheckBox();
-			QHBoxLayout *cbl = new QHBoxLayout(widget);
+			QWidget* widget = new QWidget();
+			auto* cb = new QCheckBox();
+			auto* cbl = new QHBoxLayout(widget);
 			cbl->addWidget(cb);
 			cbl->setAlignment(Qt::AlignCenter);
 			cbl->setContentsMargins(0, 0, 0, 0);
@@ -223,7 +223,7 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 	if (watched == ui.tableWidget) {
 		if (event->type() == QEvent::KeyPress) {
-			QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+			auto* keyEvent = static_cast<QKeyEvent*>(event);
 			if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
 				if (m_fitData->modelCategory != nsl_fit_model_custom) {
 					//on the second column with the values is editable.

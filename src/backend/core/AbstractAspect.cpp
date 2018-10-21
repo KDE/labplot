@@ -477,8 +477,8 @@ void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 
 	AbstractAspect* old_parent = parentAspect();
 	int old_index = old_parent->indexOfChild<AbstractAspect>(this, IncludeHidden);
-	AbstractAspect* old_sibling = old_parent->child<AbstractAspect>(old_index+1, IncludeHidden);
-	AbstractAspect* new_sibling = newParent->child<AbstractAspect>(newIndex, IncludeHidden);
+	auto* old_sibling = old_parent->child<AbstractAspect>(old_index+1, IncludeHidden);
+	auto* new_sibling = newParent->child<AbstractAspect>(newIndex, IncludeHidden);
 
 	//TODO check/test this!
 	emit aspectAboutToBeRemoved(this);

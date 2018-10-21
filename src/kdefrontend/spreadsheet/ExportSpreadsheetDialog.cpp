@@ -70,7 +70,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
-	QCompleter* completer = new QCompleter(this);
+	auto* completer = new QCompleter(this);
 	completer->setModel(new QDirModel);
 	ui->leFileName->setCompleter(completer);
 
@@ -465,7 +465,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 
 void ExportSpreadsheetDialog::setExportSelection(bool enable) {
 	if (!enable) {
-		const QStandardItemModel* areaToExportModel = qobject_cast<const QStandardItemModel*>(ui->cbLaTeXExport->model());
+		const auto* areaToExportModel = qobject_cast<const QStandardItemModel*>(ui->cbLaTeXExport->model());
 		QStandardItem* item = areaToExportModel->item(1);
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 	}

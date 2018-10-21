@@ -40,7 +40,7 @@
     \ingroup backend/widgets
 */
 ThemesComboBox::ThemesComboBox(QWidget* parent) : QComboBox(parent) {
-	QVBoxLayout* layout = new QVBoxLayout;
+	auto* layout = new QVBoxLayout;
 	m_view = new ThemesWidget(this);
 	m_groupBox = new QGroupBox;
 

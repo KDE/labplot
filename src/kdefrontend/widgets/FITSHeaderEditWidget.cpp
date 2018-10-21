@@ -323,7 +323,7 @@ void FITSHeaderEditWidget::initContextMenus() {
  * can be added to the new keywords or not. Updates the tablewidget if it's needed.
  */
 void FITSHeaderEditWidget::addKeyword() {
-	FITSHeaderEditNewKeywordDialog* newKeywordDialog = new FITSHeaderEditNewKeywordDialog;
+	auto* newKeywordDialog = new FITSHeaderEditNewKeywordDialog;
 	m_initializingTable = true;
 	if (newKeywordDialog->exec() == QDialog::Accepted) {
 		FITSFilter::Keyword newKeyWord = newKeywordDialog->newKeyword();
@@ -362,7 +362,7 @@ void FITSHeaderEditWidget::addKeyword() {
 
 		const int lastRow = ui->twKeywordsTable->rowCount();
 		ui->twKeywordsTable->setRowCount(lastRow + 1);
-		QTableWidgetItem* newKeyWordItem = new QTableWidgetItem(newKeyWord.key);
+		auto* newKeyWordItem = new QTableWidgetItem(newKeyWord.key);
 		newKeyWordItem->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 		ui->twKeywordsTable->setItem(lastRow, 0, newKeyWordItem);
 
@@ -559,7 +559,7 @@ QList<QString> FITSHeaderEditWidget::mandatoryKeywords() const {
  */
 bool FITSHeaderEditWidget::eventFilter(QObject* watched, QEvent* event) {
 	if (event->type() == QEvent::ContextMenu) {
-		QContextMenuEvent *cm_event = static_cast<QContextMenuEvent*>(event);
+		auto* cm_event = static_cast<QContextMenuEvent*>(event);
 		const QPoint& global_pos = cm_event->globalPos();
 		if (watched == ui->twKeywordsTable) {
 			if (ui->twExtensions->selectedItems().size() != 0)
@@ -593,7 +593,7 @@ void FITSHeaderEditWidget::closeFile() {
 			}
 		}
 
-		QTreeWidgetItem* newCurrent = (QTreeWidgetItem*)nullptr;
+		auto* newCurrent = (QTreeWidgetItem*)nullptr;
 		if (idxOfCurrentAsTopLevel == 0) {
 			if (ui->twExtensions->topLevelItemCount() == 1) {
 				//last file closed, deactivate action buttons, clear keywords table

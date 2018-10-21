@@ -195,7 +195,7 @@ QVector<AbstractAspect*> Worksheet::dependsOn() const {
 }
 
 bool Worksheet::exportView() const {
-	ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
+	auto* dlg = new ExportWorksheetDialog(m_view);
 	dlg->setFileName(name());
 	bool ret;
 	if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
@@ -215,7 +215,7 @@ bool Worksheet::exportView() const {
 
 bool Worksheet::printView() {
 	QPrinter printer;
-	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
+	auto* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18nc("@title:window", "Print Worksheet"));
 	bool ret;
 	if ( (ret = (dlg->exec() == QDialog::Accepted)) )
@@ -226,13 +226,13 @@ bool Worksheet::printView() {
 }
 
 bool Worksheet::printPreview() const {
-	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
+	auto* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &WorksheetView::print);
 	return dlg->exec();
 }
 
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
-	const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
+	const auto* addedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (!addedElement)
 		return;
 
@@ -261,7 +261,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 }
 
 void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-	const WorksheetElement* removedElement = qobject_cast<const WorksheetElement*>(aspect);
+	const auto* removedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (removedElement) {
 		QGraphicsItem* item = removedElement->graphicsItem();
 		d->m_scene->removeItem(item);
@@ -291,7 +291,7 @@ QRectF Worksheet::pageRect() const {
 	in order to select the corresponding \c QGraphicsItem.
  */
 void Worksheet::childSelected(const AbstractAspect* aspect) {
-	WorksheetElement* element=qobject_cast<WorksheetElement*>(const_cast<AbstractAspect*>(aspect));
+	auto* element = qobject_cast<WorksheetElement*>(const_cast<AbstractAspect*>(aspect));
 	if (element)
 		emit itemSelected(element->graphicsItem());
 }
@@ -302,7 +302,7 @@ void Worksheet::childSelected(const AbstractAspect* aspect) {
 	in order to deselect the corresponding \c QGraphicsItem.
  */
 void Worksheet::childDeselected(const AbstractAspect* aspect) {
-	WorksheetElement* element=qobject_cast<WorksheetElement*>(const_cast<AbstractAspect*>(aspect));
+	auto* element = qobject_cast<WorksheetElement*>(const_cast<AbstractAspect*>(aspect));
 	if (element)
 		emit itemDeselected(element->graphicsItem());
 }

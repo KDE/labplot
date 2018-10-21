@@ -767,7 +767,7 @@ void LiveDataSource::watch() {
 }
 
 void LiveDataSource::plotData() {
-	PlotDataDialog* dlg = new PlotDataDialog(this);
+	auto* dlg = new PlotDataDialog(this);
 	dlg->exec();
 }
 

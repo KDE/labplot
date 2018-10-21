@@ -487,7 +487,7 @@ void LabelWidget::charMenu() {
 	connect(&selection, SIGNAL(charSelected(QChar)), this, SLOT(insertChar(QChar)));
 	connect(&selection, SIGNAL(charSelected(QChar)), &menu, SLOT(close()));
 
-	QWidgetAction *widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&selection);
 	menu.addAction(widgetAction);
 

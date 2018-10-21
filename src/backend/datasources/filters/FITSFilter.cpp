@@ -509,7 +509,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 			*okToMatrix = matrixNumericColumnIndices.isEmpty() ? false : true;
 		if (!noDataSource) {
 			DEBUG("HAS DataSource");
-			Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+			auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 			if(spreadsheet) {
 				numericDataPointers.reserve(actualCols - startCol);
 
@@ -528,13 +528,13 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 				for (int n = 0; n < actualCols - startCol; ++n) {
 					if (columnNumericTypes.at(n)) {
 						spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::Numeric);
-						QVector<double>* datap = static_cast<QVector<double>* >(spreadsheet->column(columnOffset+n)->data());
+						auto* datap = static_cast<QVector<double>* >(spreadsheet->column(columnOffset+n)->data());
 						numericDataPointers.push_back(datap);
 						if (importMode == AbstractFileFilter::Replace)
 							datap->clear();
 					} else {
 						spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::Text);
-						QStringList* list = static_cast<QStringList* >(spreadsheet->column(columnOffset+n)->data());
+						auto* list = static_cast<QStringList*>(spreadsheet->column(columnOffset+n)->data());
 						stringDataPointers.push_back(list);
 						if (importMode == AbstractFileFilter::Replace)
 							list->clear();
@@ -776,7 +776,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 		return;
 	}
 
-	Spreadsheet* const spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	auto* const spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
 		//FITS image
 		if (exportTo == 0) {

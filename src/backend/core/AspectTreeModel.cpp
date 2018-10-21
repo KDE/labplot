@@ -123,14 +123,14 @@ QModelIndex AspectTreeModel::index(int row, int column, const QModelIndex &paren
 	if (!hasIndex(row, column, parent))
 		return QModelIndex{};
 
-	if(!parent.isValid()) {
-		if(row != 0)
+	if (!parent.isValid()) {
+		if (row != 0)
 			return QModelIndex{};
 		return createIndex(row, column, m_root);
 	}
 
-	AbstractAspect *parent_aspect = static_cast<AbstractAspect*>(parent.internalPointer());
-	AbstractAspect *child_aspect = parent_aspect->child<AbstractAspect>(row);
+	auto* parent_aspect = static_cast<AbstractAspect*>(parent.internalPointer());
+	auto* child_aspect = parent_aspect->child<AbstractAspect>(row);
 	if (!child_aspect)
 		return QModelIndex{};
 	return createIndex(row, column, child_aspect);
@@ -140,7 +140,7 @@ QModelIndex AspectTreeModel::parent(const QModelIndex &index) const {
 	if (!index.isValid())
 		return QModelIndex{};
 
-	AbstractAspect *parent_aspect = static_cast<AbstractAspect*>(index.internalPointer())->parentAspect();
+	auto* parent_aspect = static_cast<AbstractAspect*>(index.internalPointer())->parentAspect();
 	if (!parent_aspect)
 		return QModelIndex{};
 	return modelIndexOfAspect(parent_aspect);
@@ -150,7 +150,7 @@ int AspectTreeModel::rowCount(const QModelIndex &parent) const {
 	if (!parent.isValid())
 		return 1;
 
-	AbstractAspect *parent_aspect =  static_cast<AbstractAspect*>(parent.internalPointer());
+	auto* parent_aspect =  static_cast<AbstractAspect*>(parent.internalPointer());
 	return parent_aspect->childCount<AbstractAspect>();
 }
 
@@ -160,7 +160,7 @@ int AspectTreeModel::columnCount(const QModelIndex &parent) const {
 }
 
 QVariant AspectTreeModel::headerData(int section, Qt::Orientation orientation, int role) const {
-	if(orientation != Qt::Horizontal)
+	if (orientation != Qt::Horizontal)
 		return QVariant();
 
 	switch(role) {
@@ -186,13 +186,13 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 	if (!index.isValid())
 		return QVariant();
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	switch(role) {
 	case Qt::DisplayRole:
 	case Qt::EditRole:
 		switch(index.column()) {
 		case 0: {
-			const Column* column = dynamic_cast<const Column*>(aspect);
+			const auto* column = dynamic_cast<const Column*>(aspect);
 			if (column) {
 				QString name = aspect->name();
 				if (m_plottableColumnsOnly && !column->isPlottable())
@@ -279,13 +279,13 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const {
 		return nullptr;
 
 	Qt::ItemFlags result;
-	AbstractAspect *aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 
 	if (!m_selectableAspects.isEmpty()) {
-		foreach(const char * classString, m_selectableAspects) {
+		foreach (const char* classString, m_selectableAspects) {
 			if (aspect->inherits(classString)) {
 				result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-				if( index!=this->index(0,0,QModelIndex()) &&  !m_filterString.isEmpty() ) {
+				if (index != this->index(0,0,QModelIndex()) &&  !m_filterString.isEmpty()) {
 					if (this->containsFilterString(aspect))
 						result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 					else
@@ -299,7 +299,7 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const {
 		//default case: the list for the selectable aspects is empty and all aspects are selectable.
 		// Apply filter, if available. Indices, that don't match the filter are not selectable.
 		//Don't apply any filter to the very first index in the model  - this top index corresponds to the project item.
-		if ( index!=this->index(0,0,QModelIndex()) &&  !m_filterString.isEmpty() ) {
+		if (index != this->index(0,0,QModelIndex()) &&  !m_filterString.isEmpty()) {
 			if (this->containsFilterString(aspect))
 				result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 			else
@@ -314,7 +314,7 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const {
 			result |= Qt::ItemIsEditable;
 	}
 
-	const Column* column = dynamic_cast<const Column*>(aspect);
+	const auto* column = dynamic_cast<const Column*>(aspect);
 	if (column) {
 		//allow to drag and drop columns for the faster creation of curves in the plots.
 		//TODO: allow drag&drop later for other objects too, once we implement copy and paste in the project explorer
@@ -395,7 +395,7 @@ void AspectTreeModel::aspectHiddenChanged(const AbstractAspect *aspect) {
 
 bool AspectTreeModel::setData(const QModelIndex &index, const QVariant &value, int role) {
 	if (!index.isValid() || role != Qt::EditRole) return false;
-	AbstractAspect *aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	switch (index.column()) {
 	case 0:
 		aspect->setName(value.toString());
@@ -479,7 +479,7 @@ bool AspectTreeModel::containsFilterString(const AbstractAspect* aspect) const {
 //#################################  SLOTS  ####################################
 //##############################################################################
 void AspectTreeModel::renameRequestedSlot() {
-	AbstractAspect* aspect = qobject_cast<AbstractAspect*>(QObject::sender());
+	auto* aspect = qobject_cast<AbstractAspect*>(QObject::sender());
 	if (aspect)
 		emit renameRequested(modelIndexOfAspect(aspect));
 }

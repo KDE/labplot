@@ -321,7 +321,7 @@ void SpreadsheetModel::handleModeChange(const AbstractColumn* col) {
 }
 
 void SpreadsheetModel::handleDigitsChange() {
-	const Double2StringFilter* filter = dynamic_cast<const Double2StringFilter*>(QObject::sender());
+	const auto* filter = dynamic_cast<const Double2StringFilter*>(QObject::sender());
 	if (!filter)
 		return;
 

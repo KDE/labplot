@@ -111,7 +111,7 @@ Spreadsheet* Workbook::currentSpreadsheet() const {
 
 	int index = m_view->currentIndex();
 	if(index != -1) {
-		AbstractAspect* aspect = child<AbstractAspect>(index);
+		auto* aspect = child<AbstractAspect>(index);
 		return dynamic_cast<Spreadsheet*>(aspect);
 	}
 	return nullptr;
@@ -123,7 +123,7 @@ Matrix* Workbook::currentMatrix() const {
 
 	int index = reinterpret_cast<const WorkbookView*>(m_view)->currentIndex();
 	if(index != -1) {
-		AbstractAspect* aspect = child<AbstractAspect>(index);
+		auto* aspect = child<AbstractAspect>(index);
 		return dynamic_cast<Matrix*>(aspect);
 	}
 	return nullptr;
@@ -153,7 +153,7 @@ void Workbook::childDeselected(const AbstractAspect* aspect) {
  *  This function is called in \c WorkbookView when the current tab was changed
  */
 void Workbook::setChildSelectedInView(int index, bool selected) {
-	AbstractAspect* aspect = child<AbstractAspect>(index);
+	auto* aspect = child<AbstractAspect>(index);
 	if (selected) {
 		emit childAspectSelectedInView(aspect);
 

@@ -131,11 +131,11 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : QWidget(parent),
 	ui.leFileName->setClearButtonEnabled(true);
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	QCompleter* completer = new QCompleter(this);
+	auto* completer = new QCompleter(this);
 	completer->setModel(new QDirModel);
 	ui.leFileName->setCompleter(completer);
 
-	QGridLayout* editTabLayout = static_cast<QGridLayout*>(ui.tEdit->layout());
+	auto* editTabLayout = static_cast<QGridLayout*>(ui.tEdit->layout());
 	editTabLayout->setContentsMargins(2,2,2,2);
 	editTabLayout->setHorizontalSpacing(2);
 	editTabLayout->setVerticalSpacing(4);
@@ -283,8 +283,9 @@ void DatapickerImageWidget::init() {
 	ui.cbSymbolStyle->setIconSize(QSize(iconSize, iconSize));
 	QTransform trafo;
 	trafo.scale(15, 15);
-	for (int i=1; i<19; ++i) {
-		Symbol::Style style = (Symbol::Style)i;
+	//TODO: constant?
+	for (int i = 1; i < 19; ++i) {
+		auto style = (Symbol::Style)i;
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
 		pa.setPen( pen );
@@ -302,7 +303,7 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 	m_imagesList = list;
 	m_image = list.first();
 
-	if (list.size()==1) {
+	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
@@ -485,7 +486,7 @@ void DatapickerImageWidget::logicalPositionChanged() {
 }
 
 void DatapickerImageWidget::pointsStyleChanged(int index) {
-	Symbol::Style style = Symbol::Style(index + 1);
+	auto style = Symbol::Style(index + 1);
 	//enable/disable the  filling options in the GUI depending on the currently selected points.
 	if (style != Symbol::Line && style != Symbol::Cross) {
 		ui.cbSymbolFillingStyle->setEnabled(true);
@@ -533,7 +534,7 @@ void DatapickerImageWidget::pointsOpacityChanged(int value) {
 }
 
 void DatapickerImageWidget::pointsFillingStyleChanged(int index) {
-	Qt::BrushStyle brushStyle = Qt::BrushStyle(index);
+	auto brushStyle = Qt::BrushStyle(index);
 	ui.kcbSymbolFillingColor->setEnabled(!(brushStyle==Qt::NoBrush));
 
 	if (m_initializing)
@@ -564,7 +565,7 @@ void DatapickerImageWidget::pointsFillingColorChanged(const QColor& color) {
 }
 
 void DatapickerImageWidget::pointsBorderStyleChanged(int index) {
-	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	auto penStyle=Qt::PenStyle(index);
 
 	if ( penStyle == Qt::NoPen ) {
 		ui.kcbSymbolBorderColor->setEnabled(false);

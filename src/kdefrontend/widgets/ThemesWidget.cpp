@@ -60,7 +60,7 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	//show preview pixmaps
-	QStandardItemModel* mContentItemModel = new QStandardItemModel(this);
+	auto* mContentItemModel = new QStandardItemModel(this);
 	QStringList themeList = ThemeHandler::themes();
 	QStringList themeImgPathList = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes/screenshots/", QStandardPaths::LocateDirectory);
 	if (themeImgPathList.isEmpty())
@@ -70,7 +70,7 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	QString tempPath;
 
 	for (int i = 0; i < themeList.size(); ++i) {
-		QStandardItem* listItem = new QStandardItem();
+		auto* listItem = new QStandardItem();
 
 		tempPath = themeImgPath + themeList.at(i) + ".png";
 		if (!QFile::exists(tempPath))
@@ -94,7 +94,7 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	pa.drawRect(5, 5, size-10, size-10);
 	pa.end();
 
-	QStandardItem* listItem = new QStandardItem();
+	auto* listItem = new QStandardItem();
 	listItem->setIcon(pm);
 	listItem->setText(i18n("None"));
 	mContentItemModel->appendRow(listItem);

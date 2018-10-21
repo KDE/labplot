@@ -268,7 +268,7 @@ void AbstractFilter::inputDescriptionAboutToChange(const AbstractColumn* source)
 } 
 
 void AbstractFilter::inputDescriptionAboutToChange(const AbstractAspect* aspect) {
-	const AbstractColumn* col = qobject_cast<const AbstractColumn*>(aspect);
+	const auto* col = qobject_cast<const AbstractColumn*>(aspect);
 	if (col) inputDescriptionAboutToChange(col);
 }
 
@@ -282,7 +282,7 @@ void AbstractFilter::inputDescriptionChanged(const AbstractColumn* source) {
 }
 
 void AbstractFilter::inputDescriptionChanged(const AbstractAspect* aspect) {
-	const AbstractColumn* col = qobject_cast<const AbstractColumn*>(aspect);
+	const auto* col = qobject_cast<const AbstractColumn*>(aspect);
 	if (col && m_inputs.contains(col)) inputDescriptionChanged(col);
 }
 

@@ -797,19 +797,19 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 
 		switch (columnMode[n]) {
 		case AbstractColumn::Numeric: {
-			QVector<double>* vector = static_cast<QVector<double>*>(column->data());
+			auto* vector = static_cast<QVector<double>*>(column->data());
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
 		case AbstractColumn::Integer: {
-			QVector<int>* vector = static_cast<QVector<int>*>(column->data());
+			auto* vector = static_cast<QVector<int>*>(column->data());
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
 		case AbstractColumn::Text: {
-			QVector<QString>* vector = static_cast<QVector<QString>*>(column->data());
+			auto* vector = static_cast<QVector<QString>*>(column->data());
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
@@ -817,7 +817,7 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
-			QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(column->data());
+			auto* vector = static_cast<QVector<QDateTime>* >(column->data());
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
@@ -921,7 +921,7 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 		case AbstractColumn::DateTime:
 			comment = i18np("date and time data, %1 element", "date and time data, %1 elements", rows);
 			// set same datetime format in column
-			DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
+			auto* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
 			filter->setFormat(dateTimeFormat);
 		}
 		column->setComment(comment);

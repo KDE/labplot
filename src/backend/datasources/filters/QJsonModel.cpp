@@ -84,7 +84,7 @@ QJsonValue::Type QJsonTreeItem::type() const {
 }
 
 QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* parent) {
-	QJsonTreeItem* rootItem = new QJsonTreeItem(parent);
+	auto* rootItem = new QJsonTreeItem(parent);
 	rootItem->setKey("root");
 
 	if ( value.isObject()) {
@@ -191,7 +191,7 @@ QVariant QJsonModel::data(const QModelIndex& index, int role) const {
 	if (!index.isValid())
 		return QVariant();
 
-	QJsonTreeItem* item = static_cast<QJsonTreeItem*>(index.internalPointer());
+	auto* item = static_cast<QJsonTreeItem*>(index.internalPointer());
 
 	if (role == Qt::DisplayRole) {
 		if (index.column() == 0)
@@ -227,7 +227,7 @@ QVariant QJsonModel::data(const QModelIndex& index, int role) const {
 bool QJsonModel::setData(const QModelIndex& index, const QVariant& value, int role) {
 	if (Qt::EditRole == role) {
 		if (index.column() == 1) {
-			QJsonTreeItem* item = static_cast<QJsonTreeItem*>(index.internalPointer());
+			auto* item = static_cast<QJsonTreeItem*>(index.internalPointer());
 			item->setValue(value.toString());
 			emit dataChanged(index, index, {Qt::EditRole});
 			return true;
@@ -269,7 +269,7 @@ QModelIndex QJsonModel::parent(const QModelIndex& index) const {
 	if (!index.isValid())
 		return QModelIndex{};
 
-	QJsonTreeItem* childItem = static_cast<QJsonTreeItem*>(index.internalPointer());
+	auto* childItem = static_cast<QJsonTreeItem*>(index.internalPointer());
 	QJsonTreeItem* parentItem = childItem->parent();
 
 	if (parentItem == mHeadItem)
@@ -345,6 +345,6 @@ QJsonDocument QJsonModel::genJsonByIndex(const QModelIndex& index) const {
 	if (!index.isValid())
 		return QJsonDocument();
 
-	QJsonTreeItem* item = static_cast<QJsonTreeItem*>(index.internalPointer());
+	auto* item = static_cast<QJsonTreeItem*>(index.internalPointer());
 	return QJsonDocument::fromVariant(genJson(item).toVariant());
 }

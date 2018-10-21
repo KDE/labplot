@@ -662,7 +662,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	}
 
 	//TODO: may be also a matrix?
-	LiveDataSource* spreadsheet = dynamic_cast<LiveDataSource*>(dataSource);
+	auto* spreadsheet = dynamic_cast<LiveDataSource*>(dataSource);
 
 	if (spreadsheet->sourceType() != LiveDataSource::SourceType::FileOrPipe)
 		if (device.isSequential() && device.bytesAvailable() < (int)sizeof(quint16))
@@ -1217,7 +1217,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			//determine the plots where the column is consumed
 			for (const auto* curve : curves) {
 				if (curve->xColumn() == column || curve->yColumn() == column) {
-					CartesianPlot* plot = dynamic_cast<CartesianPlot*>(curve->parentAspect());
+					auto* plot = dynamic_cast<CartesianPlot*>(curve->parentAspect());
 					if (plots.indexOf(plot) == -1) {
 						plots << plot;
 						plot->setSuppressDataChangedSignal(true);

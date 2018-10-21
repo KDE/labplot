@@ -610,14 +610,14 @@ void ColumnClearCmd::redo() {
 		const int rowCount = m_col->rowCount();
 		switch(m_col->columnMode()) {
 		case AbstractColumn::Numeric: {
-			QVector<double>* vec = new QVector<double>(rowCount);
+			auto* vec = new QVector<double>(rowCount);
 			m_empty_data = vec;
 			for (int i = 0; i < rowCount; ++i)
 				vec->operator[](i) = NAN;
 			break;
 		}
 		case AbstractColumn::Integer: {
-			QVector<int>* vec = new QVector<int>(rowCount);
+			auto* vec = new QVector<int>(rowCount);
 			m_empty_data = vec;
 			for (int i = 0; i < rowCount; ++i)
 				vec->operator[](i) = 0;

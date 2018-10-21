@@ -54,7 +54,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	connect(btnOk, &QPushButton::clicked, this, &StatisticsDialog::close);
 	connect(btnBox, &QDialogButtonBox::accepted, this, &StatisticsDialog::accept);
 
-	QVBoxLayout* layout = new QVBoxLayout;
+	auto* layout = new QVBoxLayout;
 	layout->addWidget(m_twStatistics);
 	layout->addWidget(btnBox);
 
@@ -204,7 +204,7 @@ void StatisticsDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
 
 	for (auto* col : m_columns) {
-		QTextEdit* textEdit = new QTextEdit;
+		auto* textEdit = new QTextEdit;
 		textEdit->setReadOnly(true);
 		m_twStatistics->addTab(textEdit, col->name());
 	}
@@ -220,7 +220,7 @@ void StatisticsDialog::currentTabChanged(int index) {
 	const Column::ColumnStatistics& statistics = m_columns[index]->statistics();
 	RESET_CURSOR;
 
-	QTextEdit* const textEdit = static_cast<QTextEdit*>(m_twStatistics->currentWidget());
+	auto* const textEdit = static_cast<QTextEdit*>(m_twStatistics->currentWidget());
 	textEdit->setHtml(m_htmlText.arg(isNanValue(statistics.minimum == INFINITY ? NAN : statistics.minimum),
 	                                 isNanValue(statistics.maximum == -INFINITY ? NAN : statistics.maximum),
 	                                 isNanValue(statistics.arithmeticMean),

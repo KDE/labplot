@@ -727,12 +727,12 @@ void ColumnPrivate::resizeTo(int new_size) {
 
 	switch(m_column_mode) {
 	case AbstractColumn::Numeric: {
-		QVector<double>* numeric_data = static_cast<QVector<double>*>(m_data);
+		auto* numeric_data = static_cast<QVector<double>*>(m_data);
 		numeric_data->insert(numeric_data->end(), new_size - old_size, NAN);
 		break;
 	}
 	case AbstractColumn::Integer: {
-		QVector<int>* numeric_data = static_cast<QVector<int>*>(m_data);
+		auto* numeric_data = static_cast<QVector<int>*>(m_data);
 		numeric_data->insert(numeric_data->end(), new_size - old_size, 0);
 		break;
 	}
