@@ -67,7 +67,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 
-	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
+	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 		gridLayout->setContentsMargins(2,2,2,2);
 		gridLayout->setHorizontalSpacing(2);
@@ -100,7 +100,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
-	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
+	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
@@ -244,7 +244,7 @@ void XYFourierFilterCurveDock::commentChanged(){
 }
 
 void XYFourierFilterCurveDock::dataSourceTypeChanged(int index) {
-	XYAnalysisCurve::DataSourceType type = (XYAnalysisCurve::DataSourceType)index;
+	auto type = (XYAnalysisCurve::DataSourceType)index;
 	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
@@ -269,8 +269,8 @@ void XYFourierFilterCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYFourierFilterCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* dataSourceCurve = nullptr;
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	XYCurve* dataSourceCurve{};
 	if (aspect)
 		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
@@ -289,8 +289,8 @@ void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setXDataColumn(column);
@@ -311,8 +311,8 @@ void XYFourierFilterCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setYDataColumn(column);
@@ -363,7 +363,7 @@ void XYFourierFilterCurveDock::xRangeMaxChanged() {
 }
 
 void XYFourierFilterCurveDock::typeChanged() {
-	nsl_filter_type type = (nsl_filter_type)uiGeneralTab.cbType->currentIndex();
+	auto type = (nsl_filter_type)uiGeneralTab.cbType->currentIndex();
 	m_filterData.type = type;
 
 	switch (type) {
@@ -395,7 +395,7 @@ void XYFourierFilterCurveDock::typeChanged() {
 }
 
 void XYFourierFilterCurveDock::formChanged() {
-	nsl_filter_form form = (nsl_filter_form)uiGeneralTab.cbForm->currentIndex();
+	auto form = (nsl_filter_form)uiGeneralTab.cbForm->currentIndex();
 	m_filterData.form = form;
 
 	switch (form) {
@@ -423,7 +423,7 @@ void XYFourierFilterCurveDock::orderChanged() {
 }
 
 void XYFourierFilterCurveDock::unitChanged() {
-	nsl_filter_cutoff_unit unit = (nsl_filter_cutoff_unit)uiGeneralTab.cbUnit->currentIndex();
+	auto unit = (nsl_filter_cutoff_unit)uiGeneralTab.cbUnit->currentIndex();
 	nsl_filter_cutoff_unit oldUnit = m_filterData.unit;
 	double oldValue = uiGeneralTab.sbCutoff->value();
 	m_filterData.unit = unit;
@@ -500,7 +500,7 @@ void XYFourierFilterCurveDock::unitChanged() {
 }
 
 void XYFourierFilterCurveDock::unit2Changed() {
-	nsl_filter_cutoff_unit unit = (nsl_filter_cutoff_unit)uiGeneralTab.cbUnit2->currentIndex();
+	auto unit = (nsl_filter_cutoff_unit)uiGeneralTab.cbUnit2->currentIndex();
 	nsl_filter_cutoff_unit oldUnit = m_filterData.unit2;
 	double oldValue = uiGeneralTab.sbCutoff2->value();
 	m_filterData.unit2 = unit;

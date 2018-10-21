@@ -76,7 +76,7 @@ void XYCorrelationCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 
-	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
+	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 		gridLayout->setContentsMargins(2,2,2,2);
 		gridLayout->setHorizontalSpacing(2);
@@ -106,7 +106,7 @@ void XYCorrelationCurveDock::setupGeneral() {
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
-	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
+	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
@@ -257,7 +257,7 @@ void XYCorrelationCurveDock::commentChanged() {
 }
 
 void XYCorrelationCurveDock::dataSourceTypeChanged(int index) {
-	XYAnalysisCurve::DataSourceType type = (XYAnalysisCurve::DataSourceType)index;
+	auto type = (XYAnalysisCurve::DataSourceType)index;
 	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
@@ -292,8 +292,8 @@ void XYCorrelationCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYCorrelationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
 	if (m_initializing)
 		return;
@@ -307,8 +307,8 @@ void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYCorrelationCurve*>(curve)->setXDataColumn(column);
@@ -326,8 +326,8 @@ void XYCorrelationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		return;
 	DEBUG("yDataColumnChanged()");
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYCorrelationCurve*>(curve)->setYDataColumn(column);
@@ -338,8 +338,8 @@ void XYCorrelationCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 		return;
 	DEBUG("y2DataColumnChanged()");
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYCorrelationCurve*>(curve)->setY2DataColumn(column);
@@ -397,14 +397,14 @@ void XYCorrelationCurveDock::xRangeMaxChanged() {
 }
 
 void XYCorrelationCurveDock::typeChanged() {
-	nsl_corr_type_type type = (nsl_corr_type_type) uiGeneralTab.cbType->currentIndex();
+	auto type = (nsl_corr_type_type) uiGeneralTab.cbType->currentIndex();
 	m_correlationData.type = type;
 
 	enableRecalculate();
 }
 
 void XYCorrelationCurveDock::normChanged() {
-	nsl_corr_norm_type norm = (nsl_corr_norm_type) uiGeneralTab.cbNorm->currentIndex();
+	auto norm = (nsl_corr_norm_type) uiGeneralTab.cbNorm->currentIndex();
 	m_correlationData.normalize = norm;
 
 	enableRecalculate();

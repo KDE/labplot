@@ -76,7 +76,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 
-	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
+	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 		gridLayout->setContentsMargins(2,2,2,2);
 		gridLayout->setHorizontalSpacing(2);
@@ -113,7 +113,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
-	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
+	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
@@ -274,7 +274,7 @@ void XYConvolutionCurveDock::commentChanged() {
 }
 
 void XYConvolutionCurveDock::dataSourceTypeChanged(int index) {
-	XYAnalysisCurve::DataSourceType type = (XYAnalysisCurve::DataSourceType)index;
+	auto type = (XYAnalysisCurve::DataSourceType)index;
 	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
@@ -316,8 +316,8 @@ void XYConvolutionCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYConvolutionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
 	if (m_initializing)
 		return;
@@ -331,8 +331,8 @@ void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYConvolutionCurve*>(curve)->setXDataColumn(column);
@@ -350,8 +350,8 @@ void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		return;
 	DEBUG("yDataColumnChanged()");
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYConvolutionCurve*>(curve)->setYDataColumn(column);
@@ -362,8 +362,8 @@ void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 		return;
 	DEBUG("y2DataColumnChanged()");
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYConvolutionCurve*>(curve)->setY2DataColumn(column);
@@ -377,7 +377,7 @@ void XYConvolutionCurveDock::samplingIntervalChanged() {
 }
 
 void XYConvolutionCurveDock::kernelChanged() {
-	nsl_conv_kernel_type kernel = (nsl_conv_kernel_type) uiGeneralTab.cbKernel->currentIndex();
+	auto kernel = (nsl_conv_kernel_type) uiGeneralTab.cbKernel->currentIndex();
 	m_convolutionData.kernel = kernel;
 
 	//TODO: change selectable sizes
@@ -482,7 +482,7 @@ void XYConvolutionCurveDock::xRangeMaxChanged() {
 
 void XYConvolutionCurveDock::directionChanged() {
 	DEBUG("XYConvolutionCurveDock::directionChanged()");
-	nsl_conv_direction_type dir = (nsl_conv_direction_type) uiGeneralTab.cbDirection->currentIndex();
+	auto dir = (nsl_conv_direction_type) uiGeneralTab.cbDirection->currentIndex();
 	m_convolutionData.direction = dir;
 
 	// change name if still default
@@ -499,21 +499,21 @@ void XYConvolutionCurveDock::directionChanged() {
 }
 
 void XYConvolutionCurveDock::typeChanged() {
-	nsl_conv_type_type type = (nsl_conv_type_type) uiGeneralTab.cbType->currentIndex();
+	auto type = (nsl_conv_type_type)uiGeneralTab.cbType->currentIndex();
 	m_convolutionData.type = type;
 
 	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::normChanged() {
-	nsl_conv_norm_type norm = (nsl_conv_norm_type) uiGeneralTab.cbNorm->currentIndex();
+	auto norm = (nsl_conv_norm_type)uiGeneralTab.cbNorm->currentIndex();
 	m_convolutionData.normalize = norm;
 
 	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::wrapChanged() {
-	nsl_conv_wrap_type wrap = (nsl_conv_wrap_type) uiGeneralTab.cbWrap->currentIndex();
+	auto wrap = (nsl_conv_wrap_type)uiGeneralTab.cbWrap->currentIndex();
 	m_convolutionData.wrap = wrap;
 
 	enableRecalculate();

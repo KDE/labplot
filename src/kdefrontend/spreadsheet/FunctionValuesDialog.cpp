@@ -134,7 +134,7 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 
 			for (const auto* aspect : cols) {
 				if (aspect->path() == columnPathes.at(i)) {
-					const AbstractColumn* column = dynamic_cast<const AbstractColumn*>(aspect);
+					const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
 					if (column)
 						m_variableDataColumns[i]->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
 					else
@@ -188,7 +188,7 @@ void FunctionValuesDialog::showConstants() {
 	connect(&constants, SIGNAL(constantSelected(QString)), &menu, SLOT(close()));
 	connect(&constants, SIGNAL(canceled()), &menu, SLOT(close()));
 
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&constants);
 	menu.addAction(widgetAction);
 
@@ -203,7 +203,7 @@ void FunctionValuesDialog::showFunctions() {
 	connect(&functions, SIGNAL(functionSelected(QString)), &menu, SLOT(close()));
 	connect(&functions, SIGNAL(canceled()), &menu, SLOT(close()));
 
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&functions);
 	menu.addAction(widgetAction);
 
@@ -221,23 +221,23 @@ void FunctionValuesDialog::insertConstant(const QString& str) {
 }
 
 void FunctionValuesDialog::addVariable() {
-	QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.frameVariables->layout());
+	auto* layout = dynamic_cast<QGridLayout*>(ui.frameVariables->layout());
 	int row = m_variableNames.size();
 
 	//text field for the variable name
-	QLineEdit* le = new QLineEdit();
+	auto* le = new QLineEdit();
 	le->setMaximumWidth(30);
 	connect(le, SIGNAL(textChanged(QString)), this, SLOT(variableNameChanged()));
 	layout->addWidget(le, row, 0, 1, 1);
 	m_variableNames << le;
 
 	//label for the "="-sign
-	QLabel* l = new QLabel("=");
+	auto* l = new QLabel("=");
 	layout->addWidget(l, row, 1, 1, 1);
 	m_variableLabels << l;
 
 	//combo box for the data column
-	TreeViewComboBox* cb = new TreeViewComboBox();
+	auto* cb = new TreeViewComboBox();
 	cb->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
 	connect( cb, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkValues()) );
 	layout->addWidget(cb, row, 2, 1, 1);
@@ -253,7 +253,7 @@ void FunctionValuesDialog::addVariable() {
 
 	//add delete-button for the just added variable
 	if (row != 0) {
-		QToolButton* b = new QToolButton();
+		auto* b = new QToolButton();
 		b->setIcon(QIcon::fromTheme("list-remove"));
 		b->setToolTip(i18n("Delete variable"));
 		layout->addWidget(b, row, 3, 1, 1);
@@ -330,7 +330,7 @@ void FunctionValuesDialog::generate() {
 
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(m_variableDataColumns.at(i)->currentModelIndex().internalPointer());
 		Q_ASSERT(aspect);
-		Column* column = dynamic_cast<Column*>(aspect);
+		auto* column = dynamic_cast<Column*>(aspect);
 		Q_ASSERT(column);
 		columnPathes << column->path();
 		xColumns << column;
@@ -348,7 +348,7 @@ void FunctionValuesDialog::generate() {
 	//the vectors with the variable data can be smaller then the result vector. So, not all values in the result vector might get initialized.
 	//->"clean" the result vector first
 	QVector<double> new_data(maxRowCount);
-	for (auto d : new_data)
+	for (auto& d : new_data)
 		d = NAN;
 
 	//evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.

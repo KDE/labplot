@@ -64,7 +64,7 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 
-	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
+	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 		gridLayout->setContentsMargins(2,2,2,2);
 		gridLayout->setHorizontalSpacing(2);
@@ -76,17 +76,17 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 6, 2, 1, 2);
 
-	for (int i=0; i < NSL_SF_WINDOW_TYPE_COUNT; i++)
+	for (int i = 0; i < NSL_SF_WINDOW_TYPE_COUNT; i++)
 		uiGeneralTab.cbWindowType->addItem(i18n(nsl_sf_window_type_name[i]));
-	for (int i=0; i < NSL_DFT_RESULT_TYPE_COUNT; i++)
+	for (int i = 0; i < NSL_DFT_RESULT_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_dft_result_type_name[i]));
-	for (int i=0; i < NSL_DFT_XSCALE_COUNT; i++)
+	for (int i = 0; i < NSL_DFT_XSCALE_COUNT; i++)
 		uiGeneralTab.cbXScale->addItem(i18n(nsl_dft_xscale_name[i]));
 
 	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 
-	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
+	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
@@ -215,8 +215,8 @@ void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setXDataColumn(column);
@@ -233,8 +233,8 @@ void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setYDataColumn(column);
@@ -277,14 +277,14 @@ void XYFourierTransformCurveDock::xRangeMaxChanged() {
 }
 
 void XYFourierTransformCurveDock::windowTypeChanged() {
-	nsl_sf_window_type windowType = (nsl_sf_window_type)uiGeneralTab.cbWindowType->currentIndex();
+	auto windowType = (nsl_sf_window_type)uiGeneralTab.cbWindowType->currentIndex();
 	m_transformData.windowType = windowType;
 
 	enableRecalculate();
 }
 
 void XYFourierTransformCurveDock::typeChanged() {
-	nsl_dft_result_type type = (nsl_dft_result_type)uiGeneralTab.cbType->currentIndex();
+	auto type = (nsl_dft_result_type)uiGeneralTab.cbType->currentIndex();
 	m_transformData.type = type;
 
 	enableRecalculate();
@@ -312,7 +312,7 @@ void XYFourierTransformCurveDock::shiftedChanged() {
 }
 
 void XYFourierTransformCurveDock::xScaleChanged() {
-	nsl_dft_xscale xScale = (nsl_dft_xscale)uiGeneralTab.cbXScale->currentIndex();
+	auto xScale = (nsl_dft_xscale)uiGeneralTab.cbXScale->currentIndex();
 	m_transformData.xScale = xScale;
 
 	enableRecalculate();

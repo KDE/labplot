@@ -73,7 +73,7 @@ void XYSmoothCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 
-	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
+	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 		gridLayout->setContentsMargins(2,2,2,2);
 		gridLayout->setHorizontalSpacing(2);
@@ -104,7 +104,7 @@ void XYSmoothCurveDock::setupGeneral() {
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
-	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
+	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
@@ -255,7 +255,7 @@ void XYSmoothCurveDock::commentChanged() {
 }
 
 void XYSmoothCurveDock::dataSourceTypeChanged(int index) {
-	XYAnalysisCurve::DataSourceType type = (XYAnalysisCurve::DataSourceType)index;
+	auto type = (XYAnalysisCurve::DataSourceType)index;
 	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
@@ -280,8 +280,8 @@ void XYSmoothCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYSmoothCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
 	if (m_initializing)
 		return;
@@ -291,8 +291,8 @@ void XYSmoothCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 }
 
 void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYSmoothCurve*>(curve)->setXDataColumn(column);
@@ -319,8 +319,8 @@ void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYSmoothCurve*>(curve)->setYDataColumn(column);
@@ -371,10 +371,10 @@ void XYSmoothCurveDock::xRangeMaxChanged() {
 }
 
 void XYSmoothCurveDock::typeChanged() {
-	nsl_smooth_type type = (nsl_smooth_type)uiGeneralTab.cbType->currentIndex();
+	auto type = (nsl_smooth_type)uiGeneralTab.cbType->currentIndex();
 	m_smoothData.type = type;
 
-	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbMode->model());
+	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbMode->model());
 	QStandardItem* pad_interp_item = model->item(nsl_smooth_pad_interp);
 	if (type == nsl_smooth_type_moving_average || type == nsl_smooth_type_moving_average_lagged) {
 		uiGeneralTab.lWeight->show();

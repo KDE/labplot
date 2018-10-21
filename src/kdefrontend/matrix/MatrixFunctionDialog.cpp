@@ -111,7 +111,7 @@ void MatrixFunctionDialog::showConstants() {
 	connect(&constants, &ConstantsWidget::constantSelected, &menu, &QMenu::close);
 	connect(&constants, &ConstantsWidget::canceled, &menu, &QMenu::close);
 
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&constants);
 	menu.addAction(widgetAction);
 
@@ -126,7 +126,7 @@ void MatrixFunctionDialog::showFunctions() {
 	connect(&functions, &FunctionsWidget::functionSelected, &menu, &QMenu::close);
 	connect(&functions, &FunctionsWidget::canceled, &menu, &QMenu::close);
 
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&functions);
 	menu.addAction(widgetAction);
 
@@ -190,7 +190,7 @@ void MatrixFunctionDialog::generate() {
 	m_matrix->beginMacro(i18n("%1: fill matrix with function values", m_matrix->name()));
 
 	//TODO: data types
-	QVector<QVector<double>>* new_data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
+	auto* new_data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
 
 	QByteArray funcba = ui.teEquation->toPlainText().toLocal8Bit();
 	char* func = funcba.data();

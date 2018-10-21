@@ -78,7 +78,7 @@ void XYFitCurveDock::setupGeneral() {
 	DEBUG("XYFitCurveDock::setupGeneral()");
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
-	QGridLayout* gridLayout = qobject_cast<QGridLayout*>(generalTab->layout());
+	auto* gridLayout = qobject_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 		gridLayout->setContentsMargins(2, 2, 2, 2);
 		gridLayout->setHorizontalSpacing(2);
@@ -179,7 +179,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²") + ' ' + i18n("test"));
 	uiGeneralTab.twGoodness->item(5, 1)->setText("P > " + UTF8_QSTRING("χ²"));
 
-	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
+	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
@@ -359,7 +359,7 @@ void XYFitCurveDock::commentChanged() {
 }
 
 void XYFitCurveDock::dataSourceTypeChanged(int index) {
-	const XYAnalysisCurve::DataSourceType type = (XYAnalysisCurve::DataSourceType)index;
+	const auto type = (XYAnalysisCurve::DataSourceType)index;
 	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
@@ -384,8 +384,8 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
 	if (m_initializing)
 		return;
@@ -399,8 +399,8 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setXDataColumn(column);
@@ -414,8 +414,8 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYDataColumn(column);
@@ -428,8 +428,8 @@ void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setXErrorColumn(column);
@@ -439,8 +439,8 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYErrorColumn(column);
@@ -620,11 +620,11 @@ void XYFitCurveDock::categoryChanged(int index) {
 
 	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic:
-		for(int i = 0; i < NSL_FIT_MODEL_BASIC_COUNT; i++)
+		for (int i = 0; i < NSL_FIT_MODEL_BASIC_COUNT; i++)
 			uiGeneralTab.cbModel->addItem(nsl_fit_model_basic_name[i]);
 		break;
 	case nsl_fit_model_peak: {
-		for(int i = 0; i < NSL_FIT_MODEL_PEAK_COUNT; i++)
+		for (int i = 0; i < NSL_FIT_MODEL_PEAK_COUNT; i++)
 			uiGeneralTab.cbModel->addItem(nsl_fit_model_peak_name[i]);
 #if defined(_MSC_VER)
 		// disable voigt model
@@ -635,17 +635,17 @@ void XYFitCurveDock::categoryChanged(int index) {
 		break;
 	}
 	case nsl_fit_model_growth:
-		for(int i = 0; i < NSL_FIT_MODEL_GROWTH_COUNT; i++)
+		for (int i = 0; i < NSL_FIT_MODEL_GROWTH_COUNT; i++)
 			uiGeneralTab.cbModel->addItem(nsl_fit_model_growth_name[i]);
 		break;
 	case nsl_fit_model_distribution: {
-		for(int i = 0; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++)
+		for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++)
 			uiGeneralTab.cbModel->addItem(nsl_sf_stats_distribution_name[i]);
 
 		// not-used items are disabled here
-		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
+		const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
 
-		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
+		for (int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
 			// unused distributions
 			if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable || i == nsl_sf_stats_bernoulli) {
 					QStandardItem* item = model->item(i);
@@ -826,7 +826,7 @@ void XYFitCurveDock::showConstants() {
 	connect(&constants, SIGNAL(constantSelected(QString)), &menu, SLOT(close()));
 	connect(&constants, SIGNAL(canceled()), &menu, SLOT(close()));
 
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&constants);
 	menu.addAction(widgetAction);
 
@@ -841,7 +841,7 @@ void XYFitCurveDock::showFunctions() {
 	connect(&functions, SIGNAL(functionSelected(QString)), &menu, SLOT(close()));
 	connect(&functions, SIGNAL(canceled()), &menu, SLOT(close()));
 
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&functions);
 	menu.addAction(widgetAction);
 
@@ -911,7 +911,7 @@ void XYFitCurveDock::showOptions() {
 	connect(&w, SIGNAL(finished()), &menu, SLOT(close()));
 	connect(&w, SIGNAL(optionsChanged()), this, SLOT(enableRecalculate()));
 
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&w);
 	menu.addAction(widgetAction);
 	menu.setTearOffEnabled(true);
@@ -1107,19 +1107,19 @@ void XYFitCurveDock::resultCopyAll() {
 }
 
 void XYFitCurveDock::resultParametersContextMenuRequest(QPoint pos) {
-	QMenu *contextMenu = new QMenu;
+	auto* contextMenu = new QMenu;
 	contextMenu->addAction(i18n("Copy Selection"), this, SLOT(resultCopySelection()));
 	contextMenu->addAction(i18n("Copy All"), this, SLOT(resultCopyAll()));
 	contextMenu->exec(uiGeneralTab.twParameters->mapToGlobal(pos));
 }
 void XYFitCurveDock::resultGoodnessContextMenuRequest(QPoint pos) {
-	QMenu *contextMenu = new QMenu;
+	auto* contextMenu = new QMenu;
 	contextMenu->addAction(i18n("Copy Selection"), this, SLOT(resultCopySelection()));
 	contextMenu->addAction(i18n("Copy All"), this, SLOT(resultCopyAll()));
 	contextMenu->exec(uiGeneralTab.twGoodness->mapToGlobal(pos));
 }
 void XYFitCurveDock::resultLogContextMenuRequest(QPoint pos) {
-	QMenu *contextMenu = new QMenu;
+	auto* contextMenu = new QMenu;
 	contextMenu->addAction(i18n("Copy Selection"), this, SLOT(resultCopySelection()));
 	contextMenu->addAction(i18n("Copy All"), this, SLOT(resultCopyAll()));
 	contextMenu->exec(uiGeneralTab.twLog->mapToGlobal(pos));
@@ -1188,7 +1188,7 @@ void XYFitCurveDock::showFitResult() {
 		const double paramValue = fitResult.paramValues.at(i);
 		const double errorValue = fitResult.errorValues.at(i);
 
-		QTableWidgetItem* item = new QTableWidgetItem(m_fitData.paramNamesUtf8.at(i));
+		auto* item = new QTableWidgetItem(m_fitData.paramNamesUtf8.at(i));
 		item->setBackground(QApplication::palette().color(QPalette::Window));
 		uiGeneralTab.twParameters->setItem(i, 0, item);
 		item = new QTableWidgetItem(QString::number(paramValue));

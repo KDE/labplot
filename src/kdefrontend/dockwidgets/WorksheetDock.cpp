@@ -57,13 +57,13 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(null
 	ui.cbBackgroundColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	QCompleter* completer = new QCompleter(this);
+	auto* completer = new QCompleter(this);
 	completer->setModel(new QDirModel);
 	ui.leBackgroundFileName->setCompleter(completer);
 
 	//adjust layouts in the tabs
-	for (int i=0; i<ui.tabWidget->count(); ++i) {
-		QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+	for (int i = 0; i < ui.tabWidget->count(); ++i) {
+		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
 
@@ -106,15 +106,15 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(null
 	connect( ui.sbLayoutColumnCount, SIGNAL(valueChanged(int)), this, SLOT(layoutColumnCountChanged(int)) );
 
 	//theme and template handlers
-	QFrame* frame = new QFrame(this);
-	QHBoxLayout* layout = new QHBoxLayout(frame);
+	auto* frame = new QFrame(this);
+	auto* layout = new QHBoxLayout(frame);
 
 	m_themeHandler = new ThemeHandler(this);
 	layout->addWidget(m_themeHandler);
 	connect(m_themeHandler, SIGNAL(loadThemeRequested(QString)), this, SLOT(loadTheme(QString)));
 	connect(m_themeHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
-	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
 	layout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
@@ -206,7 +206,7 @@ void WorksheetDock::updatePaperSize() {
 		if (!v.isValid())
 			continue;
 
-		const QPageSize::PageSizeId id = v.value<QPageSize::PageSizeId>();
+		const auto id = v.value<QPageSize::PageSizeId>();
 		const QSizeF ps = QPageSize::size(id, QPageSize::Millimeter);
 		if (s == ps) { //check the portrait-orientation first
 			ui.cbSize->setCurrentIndex(i);
@@ -326,7 +326,7 @@ void WorksheetDock::scaleContentChanged(bool scaled) {
 }
 
 void WorksheetDock::sizeChanged(int i) {
-	const QPageSize::PageSizeId index = ui.cbSize->itemData(i).value<QPageSize::PageSizeId>();
+	const auto index = ui.cbSize->itemData(i).value<QPageSize::PageSizeId>();
 
 	if (index==QPageSize::Custom) {
 		ui.sbWidth->setEnabled(true);
@@ -399,7 +399,7 @@ void WorksheetDock::orientationChanged(int index) {
 
 // "Background"-tab
 void WorksheetDock::backgroundTypeChanged(int index) {
-	PlotArea::BackgroundType type = (PlotArea::BackgroundType)index;
+	auto type = (PlotArea::BackgroundType)index;
 
 	if (type == PlotArea::Color) {
 		ui.lBackgroundColorStyle->show();
@@ -416,8 +416,7 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 		ui.lBackgroundFirstColor->show();
 		ui.kcbBackgroundFirstColor->show();
 
-		PlotArea::BackgroundColorStyle style =
-		    (PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
+		auto style = (PlotArea::BackgroundColorStyle)ui.cbBackgroundColorStyle->currentIndex();
 		if (style == PlotArea::SingleColor) {
 			ui.lBackgroundFirstColor->setText(i18n("Color:"));
 			ui.lBackgroundSecondColor->hide();
@@ -468,7 +467,7 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 }
 
 void WorksheetDock::backgroundColorStyleChanged(int index) {
-	PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
+	auto style = (PlotArea::BackgroundColorStyle)index;
 
 	if (style == PlotArea::SingleColor) {
 		ui.lBackgroundFirstColor->setText(i18n("Color:"));
@@ -497,7 +496,7 @@ void WorksheetDock::backgroundImageStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
+	auto style = (PlotArea::BackgroundImageStyle)index;
 	for (auto* worksheet : m_worksheetList)
 		worksheet->setBackgroundImageStyle(style);
 }
@@ -506,7 +505,7 @@ void WorksheetDock::backgroundBrushStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	Qt::BrushStyle style = (Qt::BrushStyle)index;
+	auto style = (Qt::BrushStyle)index;
 	for (auto* worksheet : m_worksheetList)
 		worksheet->setBackgroundBrushStyle(style);
 }
