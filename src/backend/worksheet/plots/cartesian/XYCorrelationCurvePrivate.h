@@ -26,8 +26,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYCONVOLUTIONCURVEPRIVATE_H
-#define XYCONVOLUTIONCURVEPRIVATE_H
+#ifndef XYCORRELATIONCURVEPRIVATE_H
+#define XYCORRELATIONCURVEPRIVATE_H
 
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
