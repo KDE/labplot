@@ -90,7 +90,7 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly) : QWid
 	m_columnGenerateDataMenu(nullptr),
 	m_columnSortMenu(nullptr) {
 
-	QHBoxLayout* layout = new QHBoxLayout(this);
+	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
 	layout->addWidget(m_tableView);
 	if (m_readOnly)
@@ -975,7 +975,7 @@ void SpreadsheetView::getCurrentCell(int* row, int* col) const {
 
 bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 	if (event->type() == QEvent::ContextMenu) {
-		QContextMenuEvent* cm_event = static_cast<QContextMenuEvent*>(event);
+		auto* cm_event = static_cast<QContextMenuEvent*>(event);
 		const QPoint global_pos = cm_event->globalPos();
 		if (watched == m_tableView->verticalHeader()) {
 			bool onlyNumeric = true;
@@ -1066,7 +1066,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 
 		return true;
 	} else if (event->type() == QEvent::KeyPress) {
-		QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
+		auto* key_event = static_cast<QKeyEvent*>(event);
 		if (key_event->matches(QKeySequence::Copy))
 			copySelection();
 		else if (key_event->matches(QKeySequence::Paste))
@@ -1316,7 +1316,7 @@ void SpreadsheetView::maskSelection() {
 
 void SpreadsheetView::unmaskSelection() {
 	int first = firstSelectedRow();
-	if ( first < 0 ) return;
+	if (first < 0) return;
 	int last = lastSelectedRow();
 
 	WAIT_CURSOR;
@@ -1336,9 +1336,9 @@ void SpreadsheetView::plotData() {
 	if (action == action_plot_data_xycurve || action == action_plot_data_histogram)
 		type = (PlotDataDialog::PlotType)action->data().toInt();
 
-	PlotDataDialog* dlg = new PlotDataDialog(m_spreadsheet, type);
+	auto* dlg = new PlotDataDialog(m_spreadsheet, type);
 
-	if ( action != action_plot_data_xycurve && action != action_plot_data_histogram ) {
+	if (action != action_plot_data_xycurve && action != action_plot_data_histogram) {
 		PlotDataDialog::AnalysisAction type = (PlotDataDialog::AnalysisAction)action->data().toInt();
 		dlg->setAnalysisAction(type);
 	}
@@ -1349,7 +1349,7 @@ void SpreadsheetView::plotData() {
 void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 	if (selectedColumnCount() < 1) return;
 	int first = firstSelectedRow();
-	if ( first < 0 ) return;
+	if (first < 0) return;
 	int last = lastSelectedRow();
 
 	WAIT_CURSOR;
@@ -1508,21 +1508,21 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 
 void SpreadsheetView::fillWithRandomValues() {
 	if (selectedColumnCount() < 1) return;
-	RandomValuesDialog* dlg = new RandomValuesDialog(m_spreadsheet);
+	auto* dlg = new RandomValuesDialog(m_spreadsheet);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();
 }
 
 void SpreadsheetView::fillWithEquidistantValues() {
 	if (selectedColumnCount() < 1) return;
-	EquidistantValuesDialog* dlg = new EquidistantValuesDialog(m_spreadsheet);
+	auto* dlg = new EquidistantValuesDialog(m_spreadsheet);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();
 }
 
 void SpreadsheetView::fillWithFunctionValues() {
 	if (selectedColumnCount() < 1) return;
-	FunctionValuesDialog* dlg = new FunctionValuesDialog(m_spreadsheet);
+	auto* dlg = new FunctionValuesDialog(m_spreadsheet);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();
 }
@@ -1763,7 +1763,7 @@ void SpreadsheetView::reverseColumns() {
 		if (col->columnMode() != AbstractColumn::Numeric)
 			continue;
 
-		QVector<double>* data = static_cast<QVector<double>* >(col->data());
+		auto* data = static_cast<QVector<double>* >(col->data());
 		QVector<double> new_data(*data);
 		std::reverse(new_data.begin(), new_data.end());
 		col->replaceValues(0, new_data);
@@ -1774,14 +1774,14 @@ void SpreadsheetView::reverseColumns() {
 
 void SpreadsheetView::dropColumnValues() {
 	if (selectedColumnCount() < 1) return;
-	DropValuesDialog* dlg = new DropValuesDialog(m_spreadsheet);
+	auto* dlg = new DropValuesDialog(m_spreadsheet);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();
 }
 
 void SpreadsheetView::maskColumnValues() {
 	if (selectedColumnCount() < 1) return;
-	DropValuesDialog* dlg = new DropValuesDialog(m_spreadsheet, true);
+	auto* dlg = new DropValuesDialog(m_spreadsheet, true);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();
 }
@@ -1844,7 +1844,7 @@ void SpreadsheetView::showAllColumnsStatistics() {
 
 void SpreadsheetView::showColumnStatistics(bool forAll) {
 	QString dlgTitle(m_spreadsheet->name() + " column statistics");
-	StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
+	auto* dlg = new StatisticsDialog(dlgTitle);
 	QVector<Column*> columns;
 
 	if (!forAll)
@@ -1864,7 +1864,7 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 
 void SpreadsheetView::showRowStatistics() {
 	QString dlgTitle(m_spreadsheet->name() + " row statistics");
-	StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
+	auto* dlg = new StatisticsDialog(dlgTitle);
 
 	QVector<Column*> columns;
 	for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
@@ -2011,7 +2011,7 @@ void SpreadsheetView::sortDialog(QVector<Column*> cols) {
 	for (auto* col : cols)
 		col->setSuppressDataChangedSignal(true);
 
-	SortDialog* dlg = new SortDialog();
+	auto* dlg = new SortDialog();
 	connect(dlg, SIGNAL(sort(Column*,QVector<Column*>,bool)), m_spreadsheet, SLOT(sortColumns(Column*,QVector<Column*>,bool)));
 	dlg->setColumns(cols);
 	int rc = dlg->exec();
@@ -2103,7 +2103,7 @@ void SpreadsheetView::selectionChanged(const QItemSelection &selected, const QIt
 }
 
 bool SpreadsheetView::exportView() {
-	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(this);
+	auto* dlg = new ExportSpreadsheetDialog(this);
 	dlg->setFileName(m_spreadsheet->name());
 
 	dlg->setExportTo(QStringList() << i18n("FITS image") << i18n("FITS table"));
@@ -2147,7 +2147,7 @@ bool SpreadsheetView::exportView() {
 
 bool SpreadsheetView::printView() {
 	QPrinter printer;
-	QPrintDialog* dlg = new QPrintDialog(&printer, this);
+	auto* dlg = new QPrintDialog(&printer, this);
 	dlg->setWindowTitle(i18nc("@title:window", "Print Spreadsheet"));
 
 	bool ret;
@@ -2660,7 +2660,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 }
 
 void SpreadsheetView::exportToFits(const QString &fileName, const int exportTo, const bool commentsAsUnits) const {
-	FITSFilter* filter = new FITSFilter;
+	auto* filter = new FITSFilter;
 
 	filter->setExportTo(exportTo);
 	filter->setCommentsAsUnits(commentsAsUnits);

@@ -154,13 +154,13 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 }
 
 void WorksheetView::initActions() {
-	QActionGroup* addNewActionGroup = new QActionGroup(this);
-	QActionGroup* zoomActionGroup = new QActionGroup(this);
-	QActionGroup* mouseModeActionGroup = new QActionGroup(this);
-	QActionGroup* layoutActionGroup = new QActionGroup(this);
-	QActionGroup* gridActionGroup = new QActionGroup(this);
+	auto* addNewActionGroup = new QActionGroup(this);
+	auto* zoomActionGroup = new QActionGroup(this);
+	auto* mouseModeActionGroup = new QActionGroup(this);
+	auto* layoutActionGroup = new QActionGroup(this);
+	auto* gridActionGroup = new QActionGroup(this);
 	gridActionGroup->setExclusive(true);
-	QActionGroup* magnificationActionGroup = new QActionGroup(this);
+	auto* magnificationActionGroup = new QActionGroup(this);
 
 	selectAllAction = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this);
 	selectAllAction->setShortcut(Qt::CTRL+Qt::Key_A);
@@ -281,7 +281,7 @@ void WorksheetView::initActions() {
 	connect(showPresenterMode, SIGNAL(triggered()), this, SLOT(presenterMode()));
 
 	//action for cartesian plots
-	QActionGroup* cartesianPlotActionModeActionGroup = new QActionGroup(this);
+	auto* cartesianPlotActionModeActionGroup = new QActionGroup(this);
 	cartesianPlotActionModeActionGroup->setExclusive(true);
 	cartesianPlotApplyToSelectionAction = new QAction(i18n("Selected Plots"), cartesianPlotActionModeActionGroup);
 	cartesianPlotApplyToSelectionAction->setCheckable(true);
@@ -290,7 +290,7 @@ void WorksheetView::initActions() {
 	cartesianPlotApplyToAllAction->setCheckable(true);
 	connect(cartesianPlotActionModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotActionModeChanged(QAction*)));
 
-	QActionGroup* cartesianPlotMouseModeActionGroup = new QActionGroup(this);
+	auto* cartesianPlotMouseModeActionGroup = new QActionGroup(this);
 	cartesianPlotMouseModeActionGroup->setExclusive(true);
 	cartesianPlotSelectionModeAction = new QAction(QIcon::fromTheme("labplot-cursor-arrow"), i18n("Select and Edit"), cartesianPlotMouseModeActionGroup);
 	cartesianPlotSelectionModeAction->setCheckable(true);
@@ -307,7 +307,7 @@ void WorksheetView::initActions() {
 
 	connect(cartesianPlotMouseModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotMouseModeChanged(QAction*)));
 
-	QActionGroup* cartesianPlotAddNewActionGroup = new QActionGroup(this);
+	auto* cartesianPlotAddNewActionGroup = new QActionGroup(this);
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), cartesianPlotAddNewActionGroup);
 	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve From a Mathematical Equation"), cartesianPlotAddNewActionGroup);
 	// TODO: no own icons yet
@@ -357,7 +357,7 @@ void WorksheetView::initActions() {
 
 	connect(cartesianPlotAddNewActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotAddNew(QAction*)));
 
-	QActionGroup* cartesianPlotNavigationGroup = new QActionGroup(this);
+	auto* cartesianPlotNavigationGroup = new QActionGroup(this);
 	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("Auto Scale"), cartesianPlotNavigationGroup);
 	scaleAutoAction->setData(CartesianPlot::ScaleAuto);
 	scaleAutoXAction = new QAction(QIcon::fromTheme("labplot-auto-scale-x"), i18n("Auto Scale X"), cartesianPlotNavigationGroup);
@@ -521,11 +521,11 @@ void WorksheetView::initMenus() {
 
 	//themes menu
 	m_themeMenu = new QMenu(i18n("Apply Theme"));
-	ThemesWidget* themeWidget = new ThemesWidget(nullptr);
+	auto* themeWidget = new ThemesWidget(nullptr);
 	connect(themeWidget, SIGNAL(themeSelected(QString)), m_worksheet, SLOT(setTheme(QString)));
 	connect(themeWidget, SIGNAL(themeSelected(QString)), m_themeMenu, SLOT(close()));
 
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(themeWidget);
 	m_themeMenu->addAction(widgetAction);
 
@@ -904,7 +904,7 @@ void WorksheetView::zoom(int numSteps) {
 	if (m_numScheduledScalings * numSteps < 0) // if user moved the wheel in another direction, we reset previously scheduled scalings
 		m_numScheduledScalings = numSteps;
 
-	QTimeLine* anim = new QTimeLine(350, this);
+	auto* anim = new QTimeLine(350, this);
 	anim->setUpdateInterval(20);
 
 	connect(anim, SIGNAL (valueChanged(qreal)), SLOT (scalingTime()));
@@ -1249,14 +1249,14 @@ void WorksheetView::addNew(QAction* action) {
 	//if there is already an element fading in, stop the time line and show the element with the full opacity.
 	if (m_fadeInTimeLine->state() == QTimeLine::Running) {
 		m_fadeInTimeLine->stop();
-		QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
+		auto* effect = new QGraphicsOpacityEffect();
 		effect->setOpacity(1);
 		lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 	}
 
 	//fade-in the newly added element
 	lastAddedWorksheetElement = aspect;
-	QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
+	auto* effect = new QGraphicsOpacityEffect();
 	effect->setOpacity(0);
 	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 	m_fadeInTimeLine->start();
@@ -1326,13 +1326,13 @@ void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* aspect) {
 }
 
 void WorksheetView::fadeIn(qreal value) {
-	QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
+	auto* effect = new QGraphicsOpacityEffect();
 	effect->setOpacity(value);
 	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 }
 
 void WorksheetView::fadeOut(qreal value) {
-	QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
+	auto* effect = new QGraphicsOpacityEffect();
 	effect->setOpacity(1 - value);
 	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 }
@@ -1403,7 +1403,7 @@ void WorksheetView::changeGrid(QAction* action) {
 		m_gridSettings.horizontalSpacing = 15;
 		m_gridSettings.verticalSpacing = 15;
 	} else if (action == customGridAction) {
-		GridDialog* dlg = new GridDialog(this);
+		auto* dlg = new GridDialog(this);
 		if (dlg->exec() == QDialog::Accepted)
 			dlg->save(m_gridSettings);
 		else
@@ -1879,7 +1879,7 @@ void WorksheetView::presenterMode() {
 
 	//show dynamic presenter widget, if enabled
 	if (group.readEntry("PresenterModeInteractive", false)) {
-		DynamicPresenterWidget* dynamicPresenterWidget = new DynamicPresenterWidget(m_worksheet);
+		auto* dynamicPresenterWidget = new DynamicPresenterWidget(m_worksheet);
 		dynamicPresenterWidget->showFullScreen();
 		return;
 	}

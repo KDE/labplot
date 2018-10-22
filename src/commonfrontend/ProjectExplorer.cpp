@@ -68,11 +68,11 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) : m_columnToHide(0),
 	m_dragStarted(false),
 	m_frameFilter(new QFrame(this))  {
 
-	QVBoxLayout* layout = new QVBoxLayout(this);
+	auto* layout = new QVBoxLayout(this);
 	layout->setSpacing(0);
 	layout->setContentsMargins(0, 0, 0, 0);
 
-	QHBoxLayout* layoutFilter= new QHBoxLayout(m_frameFilter);
+	auto* layoutFilter= new QHBoxLayout(m_frameFilter);
 	layoutFilter->setSpacing(0);
 	layoutFilter->setContentsMargins(0, 0, 0, 0);
 
@@ -163,7 +163,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 	const QModelIndexList& items = m_treeView->selectionModel()->selectedIndexes();
 	QMenu* menu = nullptr;
 	if (items.size()/4 == 1) {
-		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		menu = aspect->createContextMenu();
 	} else {
 		menu = new QMenu();
@@ -271,13 +271,13 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 		for (auto* action : list_showColumnActions)
 			columnsMenu->addAction(action);
 
-		QContextMenuEvent* e = static_cast<QContextMenuEvent*>(event);
+		auto* e = static_cast<QContextMenuEvent*>(event);
 		columnsMenu->exec(e->globalPos());
 		delete columnsMenu;
 
 		return true;
 	} else if (obj == m_treeView->viewport()) {
-		QMouseEvent* e = static_cast<QMouseEvent*>(event);
+		auto* e = static_cast<QMouseEvent*>(event);
 		if (event->type() == QEvent::MouseButtonPress) {
 			if (e->button() == Qt::LeftButton) {
 				m_dragStartPos = e->globalPos();
@@ -288,8 +288,8 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 				&& (e->globalPos() - m_dragStartPos).manhattanLength() >= QApplication::startDragDistance()) {
 
 				m_dragStarted = true;
-				QDrag* drag = new QDrag(this);
-				QMimeData* mimeData = new QMimeData;
+				auto* drag = new QDrag(this);
+				auto* mimeData = new QMimeData;
 
 				//determine the selected objects and serialize the pointers to QMimeData
 				QVector<quintptr> vec;
@@ -297,7 +297,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 				//there are four model indices in each row -> divide by 4 to obtain the number of selected rows (=aspects)
 				for (int i = 0; i < items.size()/4; ++i) {
 					const QModelIndex& index = items.at(i*4);
-					AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+					auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 					vec << (quintptr)aspect;
 				}
 
@@ -312,7 +312,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 		}
 		else if (event->type() == QEvent::DragEnter) {
 			//ignore events not related to internal drags of columns etc., e.g. dropping of external files onto LabPlot
-			QDragEnterEvent* dragEnterEvent = static_cast<QDragEnterEvent*>(event);
+			auto* dragEnterEvent = static_cast<QDragEnterEvent*>(event);
 			const QMimeData* mimeData = dragEnterEvent->mimeData();
 			if (!mimeData) {
 				event->ignore();
@@ -327,22 +327,22 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			event->setAccepted(true);
 		} else if (event->type() == QEvent::DragMove) {
 			// only accept drop events if we have a plot under the cursor where we can drop columns onto
-			QDragMoveEvent* dragMoveEvent = static_cast<QDragMoveEvent*>(event);
+			auto* dragMoveEvent = static_cast<QDragMoveEvent*>(event);
 			QModelIndex index = m_treeView->indexAt(dragMoveEvent->pos());
 			if (!index.isValid())
 				return false;
 
-			AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+			auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 			const bool isPlot = (dynamic_cast<CartesianPlot*>(aspect) != nullptr);
 			event->setAccepted(isPlot);
 		} else if (event->type() == QEvent::Drop) {
-			QDropEvent* dropEvent = static_cast<QDropEvent*>(event);
+			auto* dropEvent = static_cast<QDropEvent*>(event);
 			QModelIndex index = m_treeView->indexAt(dropEvent->pos());
 			if (!index.isValid())
 				return false;
 
-			AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-			CartesianPlot* plot = dynamic_cast<CartesianPlot*>(aspect);
+			auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+			auto* plot = dynamic_cast<CartesianPlot*>(aspect);
 			if (plot != nullptr)
 				plot->processDropEvent(dropEvent);
 		}
@@ -500,7 +500,7 @@ bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 	const int rows = index.model()->rowCount(index);
 	for (int i=0; i<rows; i++) {
 		QModelIndex child = index.child(i, 0);
-		AbstractAspect* aspect =  static_cast<AbstractAspect*>(child.internalPointer());
+		auto* aspect =  static_cast<AbstractAspect*>(child.internalPointer());
 		bool visible;
 		if(text.isEmpty())
 			visible = true;
@@ -617,7 +617,7 @@ void ProjectExplorer::deleteSelected() {
 	m_project->beginMacro(i18np("Project Explorer: delete %1 selected object", "Project Explorer: delete %1 selected objects", items.size()/4));
 	for (int i = 0; i < items.size()/4; ++i) {
 		const QModelIndex& index = items.at(i*4);
-		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		aspect->remove();
 	}
 	m_project->endMacro();
@@ -636,7 +636,7 @@ struct ViewState {
  * (expanded items and the currently selected item) as XML
  */
 void ProjectExplorer::save(QXmlStreamWriter* writer) const {
-	AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
+	auto* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	QList<int> selected;
 	QList<int> expanded;
 	QList<int> withView;
@@ -654,7 +654,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 	for (const auto* aspect : aspects) {
 		const QModelIndex& index = model->modelIndexOfAspect(aspect);
 
-		const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
+		const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 		if (part && part->hasMdiSubWindow()) {
 			withView.push_back(row);
 			ViewState s = {part->view()->windowState(), part->view()->geometry()};
@@ -773,7 +773,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 			else if (currentItem)
 				currentIndex = index;
 			else if (viewItem) {
-				AbstractPart* part = dynamic_cast<AbstractPart*>(aspects.at(row));
+				auto* part = dynamic_cast<AbstractPart*>(aspects.at(row));
 				if (!part)
 					continue; //TODO: add error/warning message here?
 

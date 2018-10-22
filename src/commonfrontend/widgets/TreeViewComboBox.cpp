@@ -54,7 +54,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent) : QComboBox(parent),
 	m_groupBox(new QGroupBox),
 	m_lineEdit(new QLineEdit) {
 
-	QVBoxLayout* layout = new QVBoxLayout;
+	auto* layout = new QVBoxLayout;
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->setSpacing(0);
 
@@ -150,7 +150,7 @@ void TreeViewComboBox::showTopLevelOnly(const QModelIndex & index) {
 	for (int i = 0; i < rows; i++) {
 		QModelIndex child = index.child(i, 0);
 		showTopLevelOnly(child);
-		const AbstractAspect* aspect = static_cast<const AbstractAspect*>(child.internalPointer());
+		const auto* aspect = static_cast<const AbstractAspect*>(child.internalPointer());
 		m_treeView->setRowHidden(i, index, !(isTopLevel(aspect) && !isHidden(aspect)));
 	}
 }
@@ -194,7 +194,7 @@ bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
 	const int rows = index.model()->rowCount(index);
 	for (int i = 0; i < rows; i++) {
 		QModelIndex child = index.child(i, 0);
-		AbstractAspect* aspect = static_cast<AbstractAspect*>(child.internalPointer());
+		auto* aspect = static_cast<AbstractAspect*>(child.internalPointer());
 		bool topLevel = isTopLevel(aspect);
 		if (!topLevel)
 			continue;

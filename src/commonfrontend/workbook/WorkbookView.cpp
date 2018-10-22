@@ -56,7 +56,7 @@ WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
 	m_tabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 	m_tabWidget->setMinimumSize(200, 200);
 
-	QHBoxLayout* layout = new QHBoxLayout(this);
+	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
 	layout->addWidget(m_tabWidget);
 
@@ -160,8 +160,8 @@ void WorkbookView::createContextMenu(QMenu* menu) const {
 
 void WorkbookView::showTabContextMenu(QPoint point) {
 	QMenu* menu = nullptr;
-	AbstractAspect* aspect = m_workbook->child<AbstractAspect>(m_tabWidget->currentIndex());
-	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
+	auto* aspect = m_workbook->child<AbstractAspect>(m_tabWidget->currentIndex());
+	auto* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
 	if (spreadsheet) {
 		menu = spreadsheet->createContextMenu();
 	} else {
@@ -191,7 +191,7 @@ void WorkbookView::handleDescriptionChanged(const AbstractAspect* aspect) {
 }
 
 void WorkbookView::handleAspectAdded(const AbstractAspect* aspect) {
-	const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
+	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (!part)
 		return;
 

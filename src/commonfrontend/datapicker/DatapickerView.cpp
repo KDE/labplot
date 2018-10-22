@@ -58,7 +58,7 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 	m_tabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 	m_tabWidget->setMinimumSize(600, 600);
 
-	QHBoxLayout* layout = new QHBoxLayout(this);
+	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
 	layout->addWidget(m_tabWidget);
 
@@ -87,18 +87,18 @@ DatapickerView::~DatapickerView() {
 	//delete all children views here, its own view will be deleted in ~AbstractPart()
 	for (const auto* aspect : m_datapicker->children<AbstractAspect>(AbstractAspect::IncludeHidden)) {
 		for (const auto* child : aspect->children<AbstractAspect>()) {
-			const AbstractPart* part = dynamic_cast<const AbstractPart*>(child);
+			const auto* part = dynamic_cast<const AbstractPart*>(child);
 			if (part)
 				part->deleteView();
 		}
-		const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
+		const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 		if (part)
 			part->deleteView();
 	}
 }
 
 void DatapickerView::fillToolBar(QToolBar* toolBar) {
-	DatapickerImageView* view = dynamic_cast<DatapickerImageView*>(m_datapicker->image()->view());
+	auto* view = dynamic_cast<DatapickerImageView*>(m_datapicker->image()->view());
 	view->fillToolBar(toolBar);
 }
 
@@ -154,12 +154,12 @@ void DatapickerView::itemSelected(int index) {
 
 void DatapickerView::showTabContextMenu(QPoint point) {
 	QMenu* menu = nullptr;
-	AbstractAspect* aspect = m_datapicker->child<AbstractAspect>(m_tabWidget->currentIndex(), AbstractAspect::IncludeHidden);
-	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
+	auto* aspect = m_datapicker->child<AbstractAspect>(m_tabWidget->currentIndex(), AbstractAspect::IncludeHidden);
+	auto* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
 	if (spreadsheet) {
 		menu = spreadsheet->createContextMenu();
 	} else {
-		DatapickerImage* image = dynamic_cast<DatapickerImage*>(aspect);
+		auto* image = dynamic_cast<DatapickerImage*>(aspect);
 		if (image)
 			menu = image->createContextMenu();
 	}
@@ -208,7 +208,7 @@ void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
 }
 
 void DatapickerView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-	const DatapickerCurve* curve = dynamic_cast<const DatapickerCurve*>(aspect);
+	const auto* curve = dynamic_cast<const DatapickerCurve*>(aspect);
 	if (curve) {
 		int index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
 		m_tabWidget->removeTab(index);

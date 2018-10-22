@@ -113,9 +113,9 @@ DatapickerImageView::~DatapickerImageView() {
 }
 
 void DatapickerImageView::initActions() {
-	QActionGroup* zoomActionGroup = new QActionGroup(this);
-	QActionGroup* mouseModeActionGroup = new QActionGroup(this);
-	QActionGroup* plotPointsTypeActionGroup = new QActionGroup(this);
+	auto* zoomActionGroup = new QActionGroup(this);
+	auto* mouseModeActionGroup = new QActionGroup(this);
+	auto* plotPointsTypeActionGroup = new QActionGroup(this);
 	navigationActionGroup = new QActionGroup(this);
 	magnificationActionGroup = new QActionGroup(this);
 

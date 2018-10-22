@@ -88,7 +88,7 @@ void ProjectImportTest::testOrigin01() {
 	//check the project tree for the imported project
 
 	//first child of the root folder, spreadsheet "Book3"
-	AbstractAspect* aspect = project.child<AbstractAspect>(0);
+	auto* aspect = project.child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
 	QCOMPARE(aspect->name(), QLatin1String("Book3"));
 	QCOMPARE(dynamic_cast<Spreadsheet*>(aspect) != nullptr, true);
@@ -185,7 +185,7 @@ void ProjectImportTest::testOrigin02() {
 	//check the project tree for the imported project
 
 	//first child of the root folder, folder "Folder1" -> import into a Folder
-	AbstractAspect* aspect = project.child<AbstractAspect>(0);
+	auto* aspect = project.child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
 	QCOMPARE(aspect->name(), QLatin1String("Folder1"));
 	QCOMPARE(dynamic_cast<Folder*>(aspect) != nullptr, true);
@@ -214,7 +214,7 @@ void ProjectImportTest::testOrigin03() {
 	parser.importTo(&project, selectedPathes);
 
 	//first child of the root folder, folder "Folder1" -> import into a Folder
-	AbstractAspect* aspect = project.child<AbstractAspect>(0);
+	auto* aspect = project.child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
 	QCOMPARE(aspect->name(), QLatin1String("Folder1"));
 	QCOMPARE(dynamic_cast<Folder*>(aspect) != nullptr, true);
@@ -268,13 +268,13 @@ void ProjectImportTest::testOrigin04() {
 	parser.importTo(&project, selectedPathes);
 
 	//first child of folder "Folder1", workbook "Book1" with one sheet -> import into a spreadsheet
-	AbstractAspect* aspect = project.child<AbstractAspect>(0);
+	auto* aspect = project.child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
 	QCOMPARE(aspect->name(), QLatin1String("Folder1"));
 	aspect = project.child<AbstractAspect>(0)->child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
 	QCOMPARE(aspect->name(), QLatin1String("Book1"));
-	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
+	auto* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
 	QCOMPARE(spreadsheet != nullptr, true);
 
 	//the (0,0)-cell has the value 1.0
@@ -306,13 +306,13 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	parser.importTo(&project, selectedPathes);
 
 	//first child of folder "Folder1", workbook "Book1" with one sheet -> import into a spreadsheet
-	AbstractAspect* aspect = project.child<AbstractAspect>(0);
+	auto* aspect = project.child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
 	QCOMPARE(aspect->name(), QLatin1String("Folder1"));
 	aspect = project.child<AbstractAspect>(0)->child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
 	QCOMPARE(aspect->name(), QLatin1String("Book1"));
-	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
+	auto* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
 	QCOMPARE(spreadsheet != nullptr, true);
 
 	//check the values in the imported columns
