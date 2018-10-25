@@ -47,8 +47,8 @@ public:
 	void recalculate();
 	void evaluate(bool preview = false);
 
-	const AbstractColumn* xErrorColumn; //<! column storing the values for the x-error to be used in the fit
-	const AbstractColumn* yErrorColumn; //<! column storing the values for the y-error to be used in the fit
+	const AbstractColumn* xErrorColumn{nullptr}; //<! column storing the values for the x-error to be used in the fit
+	const AbstractColumn* yErrorColumn{nullptr}; //<! column storing the values for the y-error to be used in the fit
 	QString xErrorColumnPath;
 	QString yErrorColumnPath;
 
@@ -56,8 +56,8 @@ public:
 	XYFitCurve::FitResult fitResult;
 	QStringList solverOutput;
 
-	Column* residualsColumn;
-	QVector<double>* residualsVector;
+	Column* residualsColumn{nullptr};
+	QVector<double>* residualsVector{nullptr};
 
 	XYFitCurve* const q;
 

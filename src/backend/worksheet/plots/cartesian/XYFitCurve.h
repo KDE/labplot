@@ -44,26 +44,13 @@ class XYFitCurve : public XYAnalysisCurve {
 
 public:
 	struct FitData {
-		FitData() : modelCategory(nsl_fit_model_basic), modelType(0),
-				xWeightsType(nsl_fit_weight_no),
-				yWeightsType(nsl_fit_weight_no),
-				degree(1),
-				maxIterations(500),
-				eps(1.e-4),
-				evaluatedPoints(1000),
-				useDataErrors(true),
-				useResults(true),
-				previewEnabled(false),
-				autoRange(true),
-				autoEvalRange(true),
-				fitRange(2),
-				evalRange(2) {};
+		FitData() {};
 
-		nsl_fit_model_category modelCategory;
-		int modelType;
-		nsl_fit_weight_type xWeightsType;
-		nsl_fit_weight_type yWeightsType;
-		int degree;
+		nsl_fit_model_category modelCategory{nsl_fit_model_basic};
+		int modelType{0};
+		nsl_fit_weight_type xWeightsType{nsl_fit_weight_no};
+		nsl_fit_weight_type yWeightsType{nsl_fit_weight_no};
+		int degree{1};
 		QString model;
 		QStringList paramNames;
 		QStringList paramNamesUtf8;	// Utf8 version of paramNames
@@ -72,46 +59,44 @@ public:
 		QVector<double> paramUpperLimits;
 		QVector<bool> paramFixed;
 
-		int maxIterations;
-		double eps;
-		size_t evaluatedPoints;
-		bool useDataErrors;		// use given data errors when fitting (default)
-		bool useResults;		// use results as new start values (default)
-		bool previewEnabled;		// preview fit function with given start parameters
+		int maxIterations{500};
+		double eps{1.e-4};
+		size_t evaluatedPoints{1000};
+		bool useDataErrors{true};	// use given data errors when fitting (default)
+		bool useResults{true};		// use results as new start values (default)
+		bool previewEnabled{false};	// preview fit function with given start parameters
 
-		bool autoRange;			// use all data points? (default)
-		bool autoEvalRange;		// evaluate fit function on full data range (default)
-		QVector<double> fitRange;	// x fit range
-		QVector<double> evalRange;	// x evaluation range
+		bool autoRange{true};		// use all data points? (default)
+		bool autoEvalRange{true};	// evaluate fit function on full data range (default)
+		QVector<double> fitRange{0., 0.};	// x fit range
+		QVector<double> evalRange{0., 0.};	// x evaluation range
 	};
 
 	struct FitResult {
-		FitResult() : available(false), valid(false), iterations(0), elapsedTime(0),
-			dof(0), sse(0), sst(0), rms(0), rsd(0), mse(0), rmse(0), mae(0), rsquare(0), rsquareAdj(0),
-			chisq_p(0), fdist_F(0), fdist_p(0), logLik(0), aic(0), bic(0) {};
+		FitResult() {};
 
-		bool available;
-		bool valid;
+		bool available{false};
+		bool valid{false};
 		QString status;
-		int iterations;
-		qint64 elapsedTime;
-		double dof; //degrees of freedom
+		int iterations{0};
+		qint64 elapsedTime{0};
+		double dof{0}; //degrees of freedom
 		// residuals: r_i = y_i - Y_i
-		double sse; // sum of squared errors (SSE) / residual sum of squares (RSS) / sum of sq. residuals (SSR) / S = chi^2 = \sum_i^n r_i^2
-		double sst; // total sum of squares (SST) = \sum_i^n (y_i - <y>)^2
-		double rms; // residual mean square / reduced chi^2 = SSE/dof
-		double rsd; // residual standard deviation = sqrt(SSE/dof)
-		double mse; // mean squared error = SSE/n
-		double rmse; // root-mean squared error = \sqrt(mse)
-		double mae; // mean absolute error = \sum_i^n |r_i|
-		double rsquare;
-		double rsquareAdj;
-		double chisq_p;	// chi^2 distribution p-value
-		double fdist_F;	// F distribution F-value
-		double fdist_p;	// F distribution p-value
-		double logLik;	// log likelihood
-		double aic;	// Akaike information criterion
-		double bic;	// Schwarz Bayesian information criterion
+		double sse{0}; // sum of squared errors (SSE) / residual sum of squares (RSS) / sum of sq. residuals (SSR) / S = chi^2 = \sum_i^n r_i^2
+		double sst{0}; // total sum of squares (SST) = \sum_i^n (y_i - <y>)^2
+		double rms{0}; // residual mean square / reduced chi^2 = SSE/dof
+		double rsd{0}; // residual standard deviation = sqrt(SSE/dof)
+		double mse{0}; // mean squared error = SSE/n
+		double rmse{0}; // root-mean squared error = \sqrt(mse)
+		double mae{0}; // mean absolute error = \sum_i^n |r_i|
+		double rsquare{0};
+		double rsquareAdj{0};
+		double chisq_p{0};	// chi^2 distribution p-value
+		double fdist_F{0};	// F distribution F-value
+		double fdist_p{0};	// F distribution p-value
+		double logLik{0};	// log likelihood
+		double aic{0};	// Akaike information criterion
+		double bic{0};	// Schwarz Bayesian information criterion
 		// see also http://www.originlab.com/doc/Origin-Help/NLFit-Algorithm
 		QVector<double> paramValues;
 		QVector<double> errorValues;

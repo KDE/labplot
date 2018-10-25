@@ -713,12 +713,7 @@ void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner) : XYAnalysisCurvePrivate(owner),
-	xErrorColumn(nullptr), yErrorColumn(nullptr),
-	residualsColumn(nullptr),
-	residualsVector(nullptr),
-	q(owner)  {
-}
+XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner)  {}
 
 //no need to delete xColumn and yColumn, they are deleted
 //when the parent aspect is removed
@@ -1547,6 +1542,7 @@ void XYFitCurvePrivate::prepareResultColumns() {
 
 void XYFitCurvePrivate::recalculate() {
 	DEBUG("XYFitCurvePrivate::recalculate()");
+
 	QElapsedTimer timer;
 	timer.start();
 
