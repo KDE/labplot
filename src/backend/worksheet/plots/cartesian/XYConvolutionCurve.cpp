@@ -94,9 +94,7 @@ void XYConvolutionCurve::setConvolutionData(const XYConvolutionCurve::Convolutio
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYConvolutionCurvePrivate::XYConvolutionCurvePrivate(XYConvolutionCurve* owner) : XYAnalysisCurvePrivate(owner),
-	q(owner)  {
-}
+XYConvolutionCurvePrivate::XYConvolutionCurvePrivate(XYConvolutionCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner)  {}
 
 //no need to delete xColumn and yColumn, they are deleted
 //when the parent aspect is removed

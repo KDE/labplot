@@ -51,18 +51,18 @@ private:
 	void updateSettings(const AbstractColumn*);
 
 	Ui::XYFitCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbDataSourceCurve;
-	TreeViewComboBox* cbXDataColumn;
-	TreeViewComboBox* cbYDataColumn;
-	TreeViewComboBox* cbXErrorColumn;
-	TreeViewComboBox* cbYErrorColumn;
+	TreeViewComboBox* cbDataSourceCurve{nullptr};
+	TreeViewComboBox* cbXDataColumn{nullptr};
+	TreeViewComboBox* cbYDataColumn{nullptr};
+	TreeViewComboBox* cbXErrorColumn{nullptr};
+	TreeViewComboBox* cbYErrorColumn{nullptr};
 	FitParametersWidget* fitParametersWidget;
 
-	XYFitCurve* m_fitCurve;
+	XYFitCurve* m_fitCurve{nullptr};
 	XYFitCurve::FitData m_fitData;
 	QList<double> parameters;
 	QList<double> parameterValues;
-	bool m_parametersValid;
+	bool m_parametersValid{true};
 
 protected:
 	void setModel() override;

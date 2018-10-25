@@ -63,10 +63,7 @@ extern "C" {
   \ingroup kdefrontend
 */
 
-XYFitCurveDock::XYFitCurveDock(QWidget* parent) : XYCurveDock(parent),
-	cbDataSourceCurve(nullptr), cbXDataColumn(nullptr), cbYDataColumn(nullptr), cbXErrorColumn(nullptr),
-	cbYErrorColumn(nullptr), m_fitCurve(nullptr), m_parametersValid(true) {
-
+XYFitCurveDock::XYFitCurveDock(QWidget* parent) : XYCurveDock(parent) {
 	//remove the tab "Error bars"
 	ui.tabWidget->removeTab(5);
 }

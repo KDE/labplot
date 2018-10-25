@@ -41,21 +41,21 @@ Q_OBJECT
 
 public:
 	struct CorrelationData {
-		CorrelationData() : samplingInterval(1.), type(nsl_corr_type_linear), normalize(nsl_corr_norm_none), autoRange(true), xRange(2) {};
+		CorrelationData() {};
 
-		double samplingInterval;	// sampling interval used when no x-axis is present
-		nsl_corr_type_type type;	// linear or circular
-		nsl_corr_norm_type normalize;	// normalization
-		bool autoRange;			// use all data?
-		QVector<double> xRange;		// x range for correlation
+		double samplingInterval{1.};			// sampling interval used when no x-axis is present
+		nsl_corr_type_type type{nsl_corr_type_linear};	// linear or circular
+		nsl_corr_norm_type normalize{nsl_corr_norm_none};	// normalization
+		bool autoRange{true};				// use all data?
+		QVector<double> xRange{0., 0.};			// x range for correlation
 	};
 	struct CorrelationResult {
-		CorrelationResult() : available(false), valid(false), elapsedTime(0) {};
+		CorrelationResult() {};
 
-		bool available;
-		bool valid;
+		bool available{false};
+		bool valid{false};
 		QString status;
-		qint64 elapsedTime;
+		qint64 elapsedTime{0};
 	};
 
 	explicit XYCorrelationCurve(const QString& name);
