@@ -199,17 +199,14 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 
 #ifdef HAVE_MQTT
 	ui.cbSourceType->addItem(QLatin1String("MQTT"));
-	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "MQTT_connections";
+	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QLatin1String("MQTT_connections");
 
 	m_willSettings.MQTTUseWill = false;
 	m_willSettings.willRetain = false;
-	m_willSettings.willOwnMessage = QString();
 	m_willSettings.willQoS = 0;
 	m_willSettings.willMessageType = MQTTClient::WillMessageType::OwnMessage;
 	m_willSettings.willUpdateType = MQTTClient::WillUpdateType::TimePeriod;
 	m_willSettings.willTimeInterval = 10000;
-	m_willSettings.willTopic = QString();
-	m_willSettings.willLastMessage = QString();
 	m_willSettings.willStatistics.fill(false, 15);
 
 	ui.bSubscribe->setIcon(ui.bSubscribe->style()->standardIcon(QStyle::SP_ArrowRight));
@@ -965,17 +962,15 @@ void ImportFileWidget::unsubscribeFromTopic(const QString& topicName) {
 	QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
 	while(i.hasNext()) {
 		i.next();
-		if (checkTopicContains(topicName, i.key().name())) {
+		if (checkTopicContains(topicName, i.key().name()))
 			m_messageArrived.remove(i.key());
-		}
 	}
 
 	QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
 	while(j.hasNext()) {
 		j.next();
-		if (checkTopicContains(topicName, j.key().name())) {
+		if (checkTopicContains(topicName, j.key().name()))
 			m_lastMessage.remove(j.key());
-		}
 	}
 
 	for (int row = 0; row < ui.twSubscriptions->topLevelItemCount(); row++)  {
@@ -1792,9 +1787,8 @@ void ImportFileWidget::refreshPreview() {
 			if (sPort.open(QIODevice::ReadOnly)) {
 				if (sPort.waitForReadyRead(2000))
 					importedStrings = filter->preview(sPort);
-				else {
+				else
 					DEBUG("	ERROR: not ready for read after 2 sec");
-				}
 
 				sPort.close();
 			} else {
@@ -2886,14 +2880,13 @@ void ImportFileWidget::showWillSettings() {
 	QMenu menu;
 
 	QVector<QTreeWidgetItem*> children;
-	for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+	for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i)
 		findSubscriptionLeafChildren(children, ui.twSubscriptions->topLevelItem(i));
-	}
 
 	QVector<QString> topics;
-	for (int i = 0; i < children.size(); ++i) {
+	for (int i = 0; i < children.size(); ++i)
 		topics.append(children[i]->text(0));
-	}
+
 	MQTTWillSettingsWidget willSettings(&menu, m_willSettings, topics);
 
 	connect(&willSettings, &MQTTWillSettingsWidget::useChanged, this, &ImportFileWidget::useWillMessage);
