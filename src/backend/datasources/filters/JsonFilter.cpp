@@ -334,7 +334,7 @@ int JsonFilterPrivate::parseColumnModes(QJsonValue row, QString rowName) {
 			vectorNames.prepend(QLatin1String("timestamp"));
 		else if (mode == AbstractColumn::Month)
 			vectorNames.prepend(QLatin1String("month"));
-		if (mode == AbstractColumn::Day)
+		else if (mode == AbstractColumn::Day)
 			vectorNames.prepend(QLatin1String("day"));
 		else
 			vectorNames.prepend(QLatin1String("name"));
