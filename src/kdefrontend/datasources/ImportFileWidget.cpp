@@ -2824,12 +2824,12 @@ void ImportFileWidget::mqttConnectTimeout() {
 }
 
 /*!
-	shows the MQTT connection manager where the connections are created and edited.
+	Shows the MQTT connection manager where the connections are created and edited.
 	The selected connection is selected in the connection combo box in this widget.
 */
 void ImportFileWidget::showMQTTConnectionManager() {
 	bool previousConnectionChanged = false;
-	MQTTConnectionManagerDialog* dlg = new MQTTConnectionManagerDialog(this, ui.cbConnection->currentText(), &previousConnectionChanged);
+	MQTTConnectionManagerDialog* dlg = new MQTTConnectionManagerDialog(this, ui.cbConnection->currentText(), previousConnectionChanged);
 
 	if (dlg->exec() == QDialog::Accepted) {
 
@@ -2841,7 +2841,7 @@ void ImportFileWidget::showMQTTConnectionManager() {
 		m_initialisingMQTT = false;
 
 		//select the connection the user has selected in MQTTConnectionManager
-		QString conn = dlg->connection();
+		const QString conn = dlg->connection();
 
 		int index = ui.cbConnection->findText(conn);
 		if (conn != prevConn) {//Current connection isn't the previous one
@@ -2849,7 +2849,7 @@ void ImportFileWidget::showMQTTConnectionManager() {
 				ui.cbConnection->setCurrentIndex(index);
 			else
 				mqttConnectionChanged();
-		} else if (previousConnectionChanged) {//Current connection is the same with previous one but it changed
+		} else if (dlg->initialConnectionChanged()) {//Current connection is the same with previous one but it changed
 			if (ui.cbConnection->currentIndex() == index)
 				mqttConnectionChanged();
 			else

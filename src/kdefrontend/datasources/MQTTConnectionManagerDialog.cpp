@@ -44,7 +44,7 @@ Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
 
 	\ingroup kdefrontend
 */
-MQTTConnectionManagerDialog::MQTTConnectionManagerDialog(QWidget* parent, const QString& conn, bool* changed) : QDialog(parent),
+MQTTConnectionManagerDialog::MQTTConnectionManagerDialog(QWidget* parent, const QString& conn, bool changed) : QDialog(parent),
 	mainWidget(new MQTTConnectionManagerWidget(this, conn)), m_changed(false),
 	m_initialConnectionChanged(changed), m_initialConnection(conn) {
 
@@ -83,6 +83,15 @@ QString MQTTConnectionManagerDialog::connection() const {
 	return mainWidget->connection();
 }
 
+/*!
+ * \brief Returns whether the initial connection has been changed
+ * \return m_initialConnectionChanged
+ */
+bool MQTTConnectionManagerDialog::initialConnectionChanged() const
+{
+	return m_initialConnectionChanged;
+}
+
 MQTTConnectionManagerDialog::~MQTTConnectionManagerDialog() {
 	//save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "MQTTConnectionManagerDialog");
@@ -97,13 +106,14 @@ void MQTTConnectionManagerDialog::changed() {
 
 	//set true if initial connection was changed
 	if (mainWidget->connection() == m_initialConnection)
-		*m_initialConnectionChanged = true;
+		m_initialConnectionChanged = true;
 
 	if (mainWidget->checkConnections()) {
 		m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 		m_changed = true;
-	} else
+	} else {
 		m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+	}
 }
 
 /*!
