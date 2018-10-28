@@ -60,6 +60,7 @@ private:
 	QAction* m_evaluateEntryAction;
 	QAction* m_insertCommandEntryAction;
 	QAction* m_insertTextEntryAction;
+	QAction* m_insertMarkdownEntryAction;
 	QAction* m_insertLatexEntryAction;
 	QAction* m_insertPageBreakAction;
 	QAction* m_removeCurrentEntryAction;

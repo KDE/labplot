@@ -41,6 +41,7 @@
 CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget(),
 	m_worksheet(worksheet),
 	m_part(nullptr),
+	m_insertMarkdownEntryAction(nullptr),
 	m_computeEigenvectorsAction(nullptr),
 	m_createMattrixAction(nullptr),
 	m_computeEigenvaluesAction(nullptr),
@@ -88,6 +89,12 @@ void CantorWorksheetView::initActions() {
 
 	m_insertTextEntryAction = new QAction(QIcon::fromTheme(QLatin1String("draw-text")), i18n("Insert Text Entry"), cantorActionGroup);
 	m_insertTextEntryAction->setData("insert_text_entry");
+
+	//markdown entry is only available if cantor was compiled with libdiscovery (cantor 18.12 and later)
+	if (m_part->action("insert_markdown_entry")) {
+		m_insertTextEntryAction = new QAction(QIcon::fromTheme(QLatin1String("text-x-markdown")), i18n("Insert Markdown Entry"), cantorActionGroup);
+		m_insertTextEntryAction->setData("insert_markdown_entry");
+	}
 
 	m_insertLatexEntryAction = new QAction(QIcon::fromTheme(QLatin1String("text-x-tex")), i18n("Insert LaTeX Entry"), cantorActionGroup);
 	m_insertLatexEntryAction->setData("insert_latex_entry");
@@ -176,6 +183,8 @@ void CantorWorksheetView::initMenus() {
 	m_worksheetMenu->addAction(m_evaluateEntryAction);
 	m_worksheetMenu->addAction(m_insertCommandEntryAction);
 	m_worksheetMenu->addAction(m_insertTextEntryAction);
+	if (m_insertMarkdownEntryAction)
+		m_worksheetMenu->addAction(m_insertMarkdownEntryAction);
 	m_worksheetMenu->addAction(m_insertLatexEntryAction);
 	m_worksheetMenu->addAction(m_insertPageBreakAction);
 	m_worksheetMenu->addSeparator();
