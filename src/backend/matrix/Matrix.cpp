@@ -595,7 +595,7 @@ QVector<T> Matrix::columnCells(int col, int first_row, int last_row) {
 	return d->columnCells<T>(col, first_row, last_row);
 }
 
-//! Set the values in the given cells from a double vector
+//! Set the values in the given cells from a type T vector
 template <typename T>
 void Matrix::setColumnCells(int col, int first_row, int last_row, const QVector<T>& values) {
 	WAIT_CURSOR;
@@ -613,7 +613,7 @@ template QVector<QString> Matrix::rowCells<QString>(int row, int first_column, i
 template QVector<int> Matrix::rowCells<int>(int row, int first_column, int last_column);
 template QVector<QDateTime> Matrix::rowCells<QDateTime>(int row, int first_column, int last_column);
 
-//! Set the values in the given cells from a double vector
+//! Set the values in the given cells from a type T vector
 template <typename T>
 void Matrix::setRowCells(int row, int first_column, int last_column, const QVector<T>& values) {
 	WAIT_CURSOR;
@@ -963,6 +963,7 @@ void MatrixPrivate::clearColumn(int col) {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 void Matrix::save(QXmlStreamWriter* writer) const {
+	DEBUG("Matrix::save()");
 	writer->writeStartElement("matrix");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
@@ -1005,6 +1006,7 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//columns
+	DEBUG("	mode = " << d->mode);
 	switch (d->mode) {
 	case AbstractColumn::Numeric:
 		size = d->rowCount*sizeof(double);
@@ -1018,6 +1020,7 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 	case AbstractColumn::Text:
 		size = d->rowCount*sizeof(QString);
 		for (int i = 0; i < d->columnCount; ++i) {
+			QDEBUG("	string: " << static_cast<QVector<QVector<QString>>*>(d->data)->at(i));
 			data = reinterpret_cast<const char*>(static_cast<QVector<QVector<QString>>*>(d->data)->at(i).constData());
 			writer->writeStartElement("column");
 			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
@@ -1050,6 +1053,7 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 }
 
 bool Matrix::load(XmlStreamReader* reader, bool preview) {
+	DEBUG("Matrix::load()");
 	if (!readBasicAttributes(reader))
 		return false;
 
@@ -1168,11 +1172,12 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 				break;
 			}
 			case AbstractColumn::Text: {
-				int count = bytes.size()/sizeof(QString);
+				int count = bytes.size()/sizeof(char);
 				QVector<QString> column;
 				column.resize(count);
-				//TODO: warning (GCC8): writing to an object of type 'class QDateTime' with no trivial copy-assignment; use copy-assignment or copy-initialization instead
-				memcpy(column.data(), bytes.data(), count*sizeof(QString));
+				//TODO: warning (GCC8): writing to an object of type 'class QString' with no trivial copy-assignment; use copy-assignment or copy-initialization instead
+				memcpy(column.data(), bytes.data(), count*sizeof(char));
+				QDEBUG("	string: " << column.data());
 				static_cast<QVector<QVector<QString>>*>(d->data)->append(column);
 				break;
 			}
@@ -1191,7 +1196,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 				QVector<QDateTime> column;
 				column.resize(count);
 				//TODO: warning (GCC8): writing to an object of type 'class QDateTime' with no trivial copy-assignment; use copy-assignment or copy-initialization instead
-				memcpy(column.data(), bytes.data(), count*sizeof(QDateTime));
+				//memcpy(column.data(), bytes.data(), count*sizeof(QDateTime));
 				static_cast<QVector<QVector<QDateTime>>*>(d->data)->append(column);
 				break;
 			}
@@ -1212,6 +1217,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode mode,
 	int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
 	QDEBUG("prepareImport() rows =" << actualRows << " cols =" << actualCols);
+	QDEBUG("	column modes = " << columnMode);
 	Q_UNUSED(colNameList);
 	int columnOffset = 0;
 	setUndoAware(false);
