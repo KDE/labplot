@@ -48,17 +48,19 @@ Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
    \ingroup kdefrontend
 */
 MQTTConnectionManagerWidget::MQTTConnectionManagerWidget(QWidget* parent, const QString& conn) : QWidget(parent),
-	m_initializing(false), m_initConnName(conn), m_testing(false) {
+	m_initializing(false),
+	m_initConnName(conn),
+	m_client(new QMqttClient),
+	m_testing(false),
+	m_testTimer(new QTimer) {
 
-	m_client = new QMqttClient();
-	m_testTimer = new QTimer();
+	ui.setupUi(this);
+
 	m_testTimer->setInterval(5000);
 
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "MQTT_connections";
 
-	ui.setupUi(this);
-
-	ui.lePort->setValidator( new QIntValidator(ui.lePort) );
+	ui.lePort->setValidator(new QIntValidator(ui.lePort));
 	ui.bAdd->setIcon(QIcon::fromTheme("list-add"));
 	ui.bRemove->setIcon(QIcon::fromTheme("list-remove"));
 	ui.bAdd->setToolTip(i18n("Add new MQTT connection"));
@@ -95,7 +97,7 @@ MQTTConnectionManagerWidget::MQTTConnectionManagerWidget(QWidget* parent, const 
 	ui.leHost->setToolTip("Please set a valid host name");
 	ui.leHost->setToolTip("Please set a valid name");
 
-	QTimer::singleShot( 100, this, SLOT(loadConnections()) );
+	QTimer::singleShot( 100, this, SLOT(loadConnections()));
 }
 
 /*!
@@ -109,7 +111,8 @@ QString MQTTConnectionManagerWidget::connection() const {
 }
 
 /*!
-		shows the settings of the currently selected connection
+ * \brief Shows the settings of the currently selected connection
+ * \param index the index of the new connection
  */
 void MQTTConnectionManagerWidget::connectionChanged(int index) {
 	if (m_initializing)
@@ -118,9 +121,9 @@ void MQTTConnectionManagerWidget::connectionChanged(int index) {
 	if (index == -1)
 		return;
 
-	//show the settings for the selected connection
 	m_initializing = true;
 
+	//show the settings for the selected connection
 	ui.leName->setText(m_connections[index].name);
 	ui.leHost->setText(m_connections[index].hostName);
 	ui.lePort->setText(QString::number(m_connections[index].port));
@@ -231,15 +234,15 @@ void MQTTConnectionManagerWidget::portChanged() {
 	if (m_initializing)
 		return;
 
-	m_connections[ui.lwConnections->currentRow()].port = ui.lePort->text().simplified().toUInt();
+	m_connections[ui.lwConnections->currentRow()].port = ui.lePort->text().simplified().toInt();
 	emit changed();
 }
 
 /*!
- *\brief called when authentication checkbox's state is changed,
+ *\brief Called when authentication checkbox's state is changed,
  *       if checked two lineEdits are shown so the user can set the username and password
  *
- * \param state the state of the checbox
+ * \param state the state of the checkbox
  */
 void MQTTConnectionManagerWidget::authenticationChecked(int state) {
 	if (state == Qt::CheckState::Checked) {
@@ -276,7 +279,7 @@ void MQTTConnectionManagerWidget::authenticationChecked(int state) {
 
 /*!
  *\brief called when ID checkbox's state is changed, if checked a lineEdit is shown so the user can set the ID
- * \param state the state of the checbox
+ * \param state the state of the checkbox
  */
 void MQTTConnectionManagerWidget::idChecked(int state) {
 	if (state == Qt::CheckState::Checked) {
@@ -307,7 +310,7 @@ void MQTTConnectionManagerWidget::idChecked(int state) {
 
 /*!
  * \brief called when retain checkbox's state is changed
- * \param state the state of the checbox
+ * \param state the state of the checkbox
  */
 void MQTTConnectionManagerWidget::retainChecked(int state) {
 	if (m_initializing)
@@ -422,7 +425,8 @@ void MQTTConnectionManagerWidget::deleteConnection() {
 	m_connections.removeAt(ui.lwConnections->currentRow());
 	m_initializing = true;
 	QListWidgetItem* item = ui.lwConnections->takeItem(ui.lwConnections->currentRow());
-	if (item) delete item;
+	if (item)
+		delete item;
 	m_initializing = false;
 
 	//show the connection for the item that was automatically selected after the deletion
@@ -490,9 +494,9 @@ void MQTTConnectionManagerWidget::loadConnections() {
 			if (item)
 				ui.lwConnections->setCurrentItem(item);
 			else
-				ui.lwConnections->setCurrentRow(ui.lwConnections->count()-1);
+				ui.lwConnections->setCurrentRow(ui.lwConnections->count() - 1);
 		} else {
-			ui.lwConnections->setCurrentRow(ui.lwConnections->count()-1);
+			ui.lwConnections->setCurrentRow(ui.lwConnections->count() - 1);
 		}
 	} else {
 		addConnection();
@@ -505,7 +509,7 @@ void MQTTConnectionManagerWidget::loadConnections() {
 }
 
 /*!
-		Saves the connections present in the list widget.
+ * \brief Saves the connections present in the list widget.
  */
 void MQTTConnectionManagerWidget::saveConnections() {
 	qDebug() << "Saving connections to " << m_configPath;
@@ -573,35 +577,35 @@ bool MQTTConnectionManagerWidget::checkConnections() {
 }
 
 /*!
-		Provides a sample host name, which has to be changed before use.
+ * \brief Provides a sample host name, which has to be changed before use.
+ * \return
  */
 QString MQTTConnectionManagerWidget::uniqueName() {
 	QString name = i18n("New connection");
 
-	//TODO
-	QStringList connection_names;
+	QStringList connectionNames;
 	for (int row = 0; row < ui.lwConnections->count(); row++)
-		connection_names << ui.lwConnections->item(row)->text();
+		connectionNames << ui.lwConnections->item(row)->text();
 
-	if (!connection_names.contains(name))
+	if (!connectionNames.contains(name))
 		return name;
 
 	QString base = name;
-	int last_non_digit;
-	for (last_non_digit = base.size()-1; last_non_digit>=0 &&
-		 base[last_non_digit].category() == QChar::Number_DecimalDigit; --last_non_digit)
+	int lastNonDigit;
+	for (lastNonDigit = base.size()-1; lastNonDigit >= 0 &&
+		 base[lastNonDigit].category() == QChar::Number_DecimalDigit; --lastNonDigit)
 		base.chop(1);
 
-	if (last_non_digit >=0 && base[last_non_digit].category() != QChar::Separator_Space)
+	if (lastNonDigit >=0 && base[lastNonDigit].category() != QChar::Separator_Space)
 		base.append(" ");
 
-	int new_nr = name.rightRef(name.size() - base.size()).toInt();
-	QString new_name;
+	int newNr = name.rightRef(name.size() - base.size()).toInt();
+	QString newName;
 	do
-		new_name = base + QString::number(++new_nr);
-	while (connection_names.contains(new_name));
+		newName = base + QString::number(++newNr);
+	while (connectionNames.contains(newName));
 
-	return new_name;
+	return newName;
 }
 
 /*!
@@ -611,7 +615,7 @@ void MQTTConnectionManagerWidget::testConnection() {
 	WAIT_CURSOR;
 
 	m_testing = true;
-	int index = ui.lwConnections->currentRow();
+	const int index = ui.lwConnections->currentRow();
 
 	ui.leHost->setEnabled(false);
 	ui.lePort->setEnabled(false);
