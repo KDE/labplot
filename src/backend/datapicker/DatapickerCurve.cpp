@@ -65,13 +65,6 @@ void DatapickerCurve::init() {
 	KConfig config;
 	KConfigGroup group;
 	group = config.group("DatapickerCurve");
-	d->posXColumn = nullptr;
-	d->posYColumn = nullptr;
-	d->posZColumn = nullptr;
-	d->plusDeltaXColumn = nullptr;
-	d->minusDeltaXColumn = nullptr;
-	d->plusDeltaYColumn = nullptr;
-	d->minusDeltaYColumn = nullptr;
 	d->curveErrorTypes.x = (ErrorType) group.readEntry("CurveErrorType_X", (int) NoError);
 	d->curveErrorTypes.y = (ErrorType) group.readEntry("CurveErrorType_X", (int) NoError);
 
@@ -312,7 +305,6 @@ void DatapickerCurve::setPointStyle(Symbol::Style newStyle) {
 		exec(new DatapickerCurveSetPointStyleCmd(d, newStyle, ki18n("%1: set point's style")));
 }
 
-
 STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointSize, qreal, pointSize, retransform)
 void DatapickerCurve::setPointSize(qreal value) {
 	Q_D(DatapickerCurve);
@@ -451,7 +443,10 @@ void DatapickerCurve::updateData(const DatapickerPoint* point) {
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-DatapickerCurvePrivate::DatapickerCurvePrivate(DatapickerCurve *curve) : q(curve) {
+DatapickerCurvePrivate::DatapickerCurvePrivate(DatapickerCurve *curve) : q(curve),
+	posXColumn(nullptr), posYColumn(nullptr), posZColumn(nullptr),
+	plusDeltaXColumn(nullptr), minusDeltaXColumn(nullptr),
+	plusDeltaYColumn(nullptr), minusDeltaYColumn(nullptr) {
 
 }
 

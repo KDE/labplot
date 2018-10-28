@@ -88,6 +88,8 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
  */
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, void* data)
 	: statisticsAvailable(false),
+	hasValues(false),
+	hasValuesAvailable(false),
 	m_column_mode(mode),
 	m_data(data),
 	m_plot_designation(AbstractColumn::NoDesignation),

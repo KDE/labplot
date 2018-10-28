@@ -65,7 +65,6 @@ public:
 private:
 	ImportFileWidget* m_importFileWidget;
 	bool m_showOptions;
-	QMenu* m_newDataContainerMenu;
 	QPushButton* m_optionsButton;
 
 protected  slots:

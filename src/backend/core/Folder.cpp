@@ -141,8 +141,14 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 
 		//skip the current child aspect it is not in the list of aspects to be loaded
 		if (m_pathesToLoad.indexOf(childPath) == -1) {
-			reader->skipToEndElement(); //skip to the end of the current element
-			reader->skipToEndElement(); //skip to the end of the "child_asspect" element
+			 //skip to the end of the current element
+			if (reader->skipToEndElement())
+				return false;
+
+			//skip to the end of the "child_asspect" element
+			if (reader->skipToEndElement())
+				return false;
+
 			return true;
 		}
 	}
@@ -220,7 +226,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 			return false;
 		}
 		addChildFast(cantorWorksheet);
-#endif	
+#endif
 #ifdef HAVE_MQTT
 	} else if (element_name == QLatin1String("MQTTClient")) {
 		qDebug()<<"Load MQTTClient";

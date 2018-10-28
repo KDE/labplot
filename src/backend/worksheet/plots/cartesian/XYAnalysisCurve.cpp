@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Base class for all analysis curves
     --------------------------------------------------------------------
-    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017-2018 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -36,7 +36,6 @@
 
 #include "XYAnalysisCurve.h"
 #include "XYAnalysisCurvePrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
@@ -53,23 +52,12 @@ XYAnalysisCurve::XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd
 	init();
 }
 
-// XYCurve::XYCurve(const QString &name) : WorksheetElement(name), d_ptr(new XYCurvePrivate(this)) {
-// 	init();
-// }
-//
-// XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd) : WorksheetElement(name), d_ptr(dd) {
-// 	init();
-// }
-
 //no need to delete the d-pointer here - it inherits from QGraphicsItem
 //and is deleted during the cleanup in QGraphicsScene
 XYAnalysisCurve::~XYAnalysisCurve() = default;
 
 void XYAnalysisCurve::init() {
 	Q_D(XYAnalysisCurve);
-
-	d->dataSourceType = XYAnalysisCurve::DataSourceSpreadsheet;
-	d->dataSourceCurve = nullptr;
 	d->lineType = XYCurve::Line;
 	d->symbolsStyle = Symbol::NoSymbols;
 }
@@ -175,6 +163,8 @@ void XYAnalysisCurve::handleSourceDataChanged() {
 //######################### Private implementation #############################
 //##############################################################################
 XYAnalysisCurvePrivate::XYAnalysisCurvePrivate(XYAnalysisCurve* owner) : XYCurvePrivate(owner),
+	dataSourceType(XYAnalysisCurve::DataSourceSpreadsheet),
+	dataSourceCurve(nullptr),
 	xDataColumn(nullptr), yDataColumn(nullptr), y2DataColumn(nullptr),
 	xColumn(nullptr), yColumn(nullptr),
 	xVector(nullptr), yVector(nullptr),
