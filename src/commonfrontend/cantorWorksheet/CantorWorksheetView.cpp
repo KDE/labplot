@@ -41,6 +41,13 @@
 CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget(),
 	m_worksheet(worksheet),
 	m_part(nullptr),
+	m_computeEigenvectorsAction(nullptr),
+	m_createMattrixAction(nullptr),
+	m_computeEigenvaluesAction(nullptr),
+	m_invertMattrixAction(nullptr),
+	m_differentiationAction(nullptr),
+	m_integrationAction(nullptr),
+	m_solveEquationsAction(nullptr),
 	m_worksheetMenu(nullptr),
 	m_linearAlgebraMenu(nullptr),
 	m_calculateMenu(nullptr),
@@ -91,27 +98,6 @@ void CantorWorksheetView::initActions() {
 	m_removeCurrentEntryAction = new QAction(i18n("Remove Current Entry"), cantorActionGroup);
 	m_removeCurrentEntryAction->setData("remove_current");
 
-	m_computeEigenvectorsAction = new QAction(i18n("Compute Eigenvectors"), cantorActionGroup);
-	m_computeEigenvectorsAction->setData("eigenvectors_assistant");
-
-	m_createMattrixAction = new QAction(i18n("Create Matrix"), cantorActionGroup);
-	m_createMattrixAction->setData("creatematrix_assistant");
-
-	m_computeEigenvaluesAction = new QAction(i18n("Compute Eigenvalues"), cantorActionGroup);
-	m_computeEigenvaluesAction->setData("eigenvalues_assistant");
-
-	m_invertMattrixAction = new QAction(i18n("Invert Matrix"), cantorActionGroup);
-	m_invertMattrixAction->setData("invertmatrix_assistant");
-
-	m_differentiationAction = new QAction(i18n("Differentiation"), cantorActionGroup);
-	m_differentiationAction->setData("differentiate_assistant");
-
-	m_integrationAction = new QAction(i18n("Integration"), cantorActionGroup);
-	m_integrationAction->setData("integrate_assistant");
-
-	m_solveEquationsAction = new QAction(i18n("Solve Equations"), cantorActionGroup);
-	m_solveEquationsAction->setData("solve_assistant");
-
 	m_zoomIn = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom In"), cantorActionGroup);
 	m_zoomIn->setData("view_zoom_in");
 	m_zoomIn->setShortcut(Qt::CTRL+Qt::Key_Plus);
@@ -144,6 +130,42 @@ void CantorWorksheetView::initActions() {
 	m_showCompletion->setShortcut(Qt::CTRL + Qt::Key_Space);
 	m_showCompletion->setData("show_completion");
 
+	//actions, that are CAS-backend specific and not always available
+	if (m_part->action("eigenvectors_assistant")) {
+		m_computeEigenvectorsAction = new QAction(i18n("Compute Eigenvectors"), cantorActionGroup);
+		m_computeEigenvectorsAction->setData("eigenvectors_assistant");
+	}
+
+	if (m_part->action("creatematrix_assistant")) {
+		m_createMattrixAction = new QAction(i18n("Create Matrix"), cantorActionGroup);
+		m_createMattrixAction->setData("creatematrix_assistant");
+	}
+
+	if (m_part->action("eigenvalues_assistant")) {
+		m_computeEigenvaluesAction = new QAction(i18n("Compute Eigenvalues"), cantorActionGroup);
+		m_computeEigenvaluesAction->setData("eigenvalues_assistant");
+	}
+
+	if (m_part->action("invertmatrix_assistant")) {
+		m_invertMattrixAction = new QAction(i18n("Invert Matrix"), cantorActionGroup);
+		m_invertMattrixAction->setData("invertmatrix_assistant");
+	}
+
+	if (m_part->action("differentiate_assistant")) {
+		m_differentiationAction = new QAction(i18n("Differentiation"), cantorActionGroup);
+		m_differentiationAction->setData("differentiate_assistant");
+	}
+
+	if (m_part->action("integrate_assistant")) {
+		m_integrationAction = new QAction(i18n("Integration"), cantorActionGroup);
+		m_integrationAction->setData("integrate_assistant");
+	}
+
+	if (m_part->action("solve_assistant")) {
+		m_solveEquationsAction = new QAction(i18n("Solve Equations"), cantorActionGroup);
+		m_solveEquationsAction->setData("solve_assistant");
+	}
+
 	connect(cantorActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(triggerCantorAction(QAction*)));
 }
 
@@ -158,16 +180,27 @@ void CantorWorksheetView::initMenus() {
 	m_worksheetMenu->addAction(m_removeCurrentEntryAction);
 	m_worksheetMenu->addAction(m_showCompletion);
 
-	m_linearAlgebraMenu = new QMenu("Linear Algebra", m_part->widget());
-	m_linearAlgebraMenu->addAction(m_invertMattrixAction);
-	m_linearAlgebraMenu->addAction(m_createMattrixAction);
-	m_linearAlgebraMenu->addAction(m_computeEigenvectorsAction);
-	m_linearAlgebraMenu->addAction(m_computeEigenvaluesAction);
+	if (m_invertMattrixAction || m_createMattrixAction || m_computeEigenvectorsAction || m_computeEigenvaluesAction) {
+		m_linearAlgebraMenu = new QMenu("Linear Algebra", m_part->widget());
+		if (m_invertMattrixAction)
+			m_linearAlgebraMenu->addAction(m_invertMattrixAction);
+		if (m_createMattrixAction)
+			m_linearAlgebraMenu->addAction(m_createMattrixAction);
+		if (m_computeEigenvectorsAction)
+			m_linearAlgebraMenu->addAction(m_computeEigenvectorsAction);
+		if (m_computeEigenvaluesAction)
+			m_linearAlgebraMenu->addAction(m_computeEigenvaluesAction);
+	}
 
-	m_calculateMenu = new QMenu("Calculate", m_part->widget());
-	m_calculateMenu->addAction(m_solveEquationsAction);
-	m_calculateMenu->addAction(m_integrationAction);
-	m_calculateMenu->addAction(m_differentiationAction);
+	if (m_solveEquationsAction || m_integrationAction || m_differentiationAction) {
+		m_calculateMenu = new QMenu("Calculate", m_part->widget());
+		if (m_solveEquationsAction)
+			m_calculateMenu->addAction(m_solveEquationsAction);
+		if (m_integrationAction)
+			m_calculateMenu->addAction(m_integrationAction);
+		if (m_differentiationAction)
+			m_calculateMenu->addAction(m_differentiationAction);
+	}
 
 	m_settingsMenu = new QMenu("Settings", m_part->widget());
 	m_settingsMenu->addAction(m_lineNumbers);
@@ -198,8 +231,10 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) {
 		initMenus();
 
 	menu->insertMenu(firstAction, m_worksheetMenu);
-	menu->insertMenu(firstAction, m_linearAlgebraMenu);
-	menu->insertMenu(firstAction, m_calculateMenu);
+	if (m_linearAlgebraMenu)
+		menu->insertMenu(firstAction, m_linearAlgebraMenu);
+	if (m_calculateMenu)
+		menu->insertMenu(firstAction, m_calculateMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, m_zoomIn);
 	menu->insertAction(firstAction, m_zoomOut);
