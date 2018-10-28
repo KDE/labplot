@@ -78,39 +78,39 @@ void CantorWorksheetView::initActions() {
 	m_evaluateWorsheetAction = new QAction(QIcon::fromTheme("system-run"), i18n("Evaluate Worksheet"), cantorActionGroup);
 	m_evaluateWorsheetAction->setData("evaluate_worksheet");
 
-	m_evaluateEntryAction = new QAction(i18n("Evaluate Entry"), cantorActionGroup);
+	m_evaluateEntryAction = new QAction(QIcon::fromTheme(QLatin1String("media-playback-start")), i18n("Evaluate Entry"), cantorActionGroup);
 	m_evaluateEntryAction->setShortcut(Qt::SHIFT + Qt::Key_Return);
 	m_evaluateEntryAction->setData("evaluate_current");
 
-	m_insertCommandEntryAction = new QAction(i18n("Insert Command Entry"), cantorActionGroup);
+	m_insertCommandEntryAction = new QAction(QIcon::fromTheme(QLatin1String("run-build")), i18n("Insert Command Entry"), cantorActionGroup);
 	m_insertCommandEntryAction->setData("insert_command_entry");
 	m_insertCommandEntryAction->setShortcut(Qt::CTRL + Qt::Key_Return);
 
-	m_insertTextEntryAction = new QAction(i18n("Insert Text Entry"), cantorActionGroup);
+	m_insertTextEntryAction = new QAction(QIcon::fromTheme(QLatin1String("draw-text")), i18n("Insert Text Entry"), cantorActionGroup);
 	m_insertTextEntryAction->setData("insert_text_entry");
 
-	m_insertLatexEntryAction = new QAction(i18n("Insert LaTeX Entry"), cantorActionGroup);
+	m_insertLatexEntryAction = new QAction(QIcon::fromTheme(QLatin1String("text-x-tex")), i18n("Insert LaTeX Entry"), cantorActionGroup);
 	m_insertLatexEntryAction->setData("insert_latex_entry");
 
-	m_insertPageBreakAction = new QAction(i18n("Insert Page Break"), cantorActionGroup);
+	m_insertPageBreakAction = new QAction(QIcon::fromTheme(QLatin1String("go-next-view-page")), i18n("Insert Page Break"), cantorActionGroup);
 	m_insertPageBreakAction->setData("insert_page_break_entry");
 
-	m_removeCurrentEntryAction = new QAction(i18n("Remove Current Entry"), cantorActionGroup);
+	m_removeCurrentEntryAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Remove Current Entry"), cantorActionGroup);
 	m_removeCurrentEntryAction->setData("remove_current");
 
-	m_zoomIn = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom In"), cantorActionGroup);
+	m_zoomIn = new QAction(QIcon::fromTheme(QLatin1String("zoom-in")), i18n("Zoom In"), cantorActionGroup);
 	m_zoomIn->setData("view_zoom_in");
 	m_zoomIn->setShortcut(Qt::CTRL+Qt::Key_Plus);
 
-	m_zoomOut = new QAction(QIcon::fromTheme("zoom-out"), i18n("Zoom Out"), cantorActionGroup);
+	m_zoomOut = new QAction(QIcon::fromTheme(QLatin1String("zoom-out")), i18n("Zoom Out"), cantorActionGroup);
 	m_zoomOut->setData("view_zoom_out");
 	m_zoomOut->setShortcut(Qt::CTRL+Qt::Key_Minus);
 
-	m_find = new QAction(QIcon::fromTheme("edit-find"), i18n("Find"), cantorActionGroup);
+	m_find = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Find"), cantorActionGroup);
 	m_find->setData("edit_find");
 	m_find->setShortcut(Qt::CTRL+Qt::Key_F);
 
-	m_replace = new QAction(QIcon::fromTheme("edit-replace"), i18n("Replace"), cantorActionGroup);
+	m_replace = new QAction(QIcon::fromTheme(QLatin1String("edit-find-replace")), i18n("Replace"), cantorActionGroup);
 	m_replace->setData("edit_replace");
 	m_replace->setShortcut(Qt::CTRL+Qt::Key_R);
 
@@ -170,15 +170,16 @@ void CantorWorksheetView::initActions() {
 }
 
 void CantorWorksheetView::initMenus() {
-	m_worksheetMenu = new QMenu("Worksheet", m_part->widget());
+	m_worksheetMenu = new QMenu(i18n("Worksheet"), m_part->widget());
 	m_worksheetMenu->addAction(m_evaluateWorsheetAction);
+	m_worksheetMenu->addSeparator();
 	m_worksheetMenu->addAction(m_evaluateEntryAction);
 	m_worksheetMenu->addAction(m_insertCommandEntryAction);
 	m_worksheetMenu->addAction(m_insertTextEntryAction);
 	m_worksheetMenu->addAction(m_insertLatexEntryAction);
 	m_worksheetMenu->addAction(m_insertPageBreakAction);
+	m_worksheetMenu->addSeparator();
 	m_worksheetMenu->addAction(m_removeCurrentEntryAction);
-	m_worksheetMenu->addAction(m_showCompletion);
 
 	if (m_invertMattrixAction || m_createMattrixAction || m_computeEigenvectorsAction || m_computeEigenvaluesAction) {
 		m_linearAlgebraMenu = new QMenu("Linear Algebra", m_part->widget());
@@ -193,7 +194,7 @@ void CantorWorksheetView::initMenus() {
 	}
 
 	if (m_solveEquationsAction || m_integrationAction || m_differentiationAction) {
-		m_calculateMenu = new QMenu("Calculate", m_part->widget());
+		m_calculateMenu = new QMenu(i18n("Calculate"), m_part->widget());
 		if (m_solveEquationsAction)
 			m_calculateMenu->addAction(m_solveEquationsAction);
 		if (m_integrationAction)
@@ -202,10 +203,12 @@ void CantorWorksheetView::initMenus() {
 			m_calculateMenu->addAction(m_differentiationAction);
 	}
 
-	m_settingsMenu = new QMenu("Settings", m_part->widget());
+	m_settingsMenu = new QMenu(i18n("Settings"), m_part->widget());
+	m_settingsMenu->setIcon(QIcon::fromTheme(QLatin1String("settings-configure")));
 	m_settingsMenu->addAction(m_lineNumbers);
 	m_settingsMenu->addAction(m_animateWorksheet);
 	m_settingsMenu->addAction(m_latexTypesetting);
+	m_settingsMenu->addAction(m_showCompletion);
 }
 
 /*!
