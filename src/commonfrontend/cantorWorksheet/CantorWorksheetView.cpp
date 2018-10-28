@@ -39,15 +39,19 @@
 #include <KParts/ReadWritePart>
 
 CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget(),
-	m_worksheet(worksheet) {
+	m_worksheet(worksheet),
+	m_part(nullptr),
+	m_worksheetMenu(nullptr),
+	m_linearAlgebraMenu(nullptr),
+	m_calculateMenu(nullptr),
+	m_settingsMenu(nullptr) {
 
 	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
-	part = worksheet->part();
-	if (part) {
-		layout->addWidget(part->widget());
+	m_part = worksheet->part();
+	if (m_part) {
+		layout->addWidget(m_part->widget());
 		initActions();
-		initMenus();
 		connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 		connect(m_worksheet, SIGNAL(statusChanged(Cantor::Session::Status)), this, SLOT(statusChanged(Cantor::Session::Status)));
 	} else {
@@ -144,7 +148,7 @@ void CantorWorksheetView::initActions() {
 }
 
 void CantorWorksheetView::initMenus() {
-	m_worksheetMenu = new QMenu("Worksheet", part->widget());
+	m_worksheetMenu = new QMenu("Worksheet", m_part->widget());
 	m_worksheetMenu->addAction(m_evaluateWorsheetAction);
 	m_worksheetMenu->addAction(m_evaluateEntryAction);
 	m_worksheetMenu->addAction(m_insertCommandEntryAction);
@@ -154,18 +158,18 @@ void CantorWorksheetView::initMenus() {
 	m_worksheetMenu->addAction(m_removeCurrentEntryAction);
 	m_worksheetMenu->addAction(m_showCompletion);
 
-	m_linearAlgebraMenu = new QMenu("Linear Algebra", part->widget());
+	m_linearAlgebraMenu = new QMenu("Linear Algebra", m_part->widget());
 	m_linearAlgebraMenu->addAction(m_invertMattrixAction);
 	m_linearAlgebraMenu->addAction(m_createMattrixAction);
 	m_linearAlgebraMenu->addAction(m_computeEigenvectorsAction);
 	m_linearAlgebraMenu->addAction(m_computeEigenvaluesAction);
 
-	m_calculateMenu = new QMenu("Calculate", part->widget());
+	m_calculateMenu = new QMenu("Calculate", m_part->widget());
 	m_calculateMenu->addAction(m_solveEquationsAction);
 	m_calculateMenu->addAction(m_integrationAction);
 	m_calculateMenu->addAction(m_differentiationAction);
 
-	m_settingsMenu = new QMenu("Settings", part->widget());
+	m_settingsMenu = new QMenu("Settings", m_part->widget());
 	m_settingsMenu->addAction(m_lineNumbers);
 	m_settingsMenu->addAction(m_animateWorksheet);
 	m_settingsMenu->addAction(m_latexTypesetting);
@@ -178,9 +182,9 @@ void CantorWorksheetView::initMenus() {
  *   - as the "CantorWorksheet menu" in the main menu-bar (called form MainWin)
  *   - as a part of the CantorWorksheet context menu in project explorer
  */
-void CantorWorksheetView::createContextMenu(QMenu* menu) const{
+void CantorWorksheetView::createContextMenu(QMenu* menu) {
 	Q_ASSERT(menu);
-	if (!part)
+	if (!m_part)
 		return;
 
 	QAction* firstAction = nullptr;
@@ -189,6 +193,9 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) const{
 	//and insert the action at the beginning of the menu.
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
+
+	if (!m_worksheetMenu)
+		initMenus();
 
 	menu->insertMenu(firstAction, m_worksheetMenu);
 	menu->insertMenu(firstAction, m_linearAlgebraMenu);
@@ -207,7 +214,7 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) const{
 }
 
 void CantorWorksheetView::fillToolBar(QToolBar* toolbar) {
-	if (!part)
+	if (!m_part)
 		return;
 	toolbar->addAction(m_restartBackendAction);
 	toolbar->addAction(m_evaluateWorsheetAction);
@@ -218,12 +225,12 @@ void CantorWorksheetView::fillToolBar(QToolBar* toolbar) {
  */
 void CantorWorksheetView::triggerCantorAction(QAction* action) {
 	QString actionName = action->data().toString();
-	if(!actionName.isEmpty()) part->action(actionName.toStdString().c_str())->trigger();
+	if(!actionName.isEmpty()) m_part->action(actionName.toStdString().c_str())->trigger();
 }
 
 CantorWorksheetView::~CantorWorksheetView() {
-	if (part)
-		part->widget()->setParent(nullptr);
+	if (m_part)
+		m_part->widget()->setParent(nullptr);
 }
 
 void CantorWorksheetView::statusChanged(Cantor::Session::Status status) {
