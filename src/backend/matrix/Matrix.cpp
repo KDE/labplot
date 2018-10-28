@@ -1176,8 +1176,8 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 				QVector<QString> column;
 				column.resize(count);
 				//TODO: warning (GCC8): writing to an object of type 'class QString' with no trivial copy-assignment; use copy-assignment or copy-initialization instead
-				memcpy(column.data(), bytes.data(), count*sizeof(char));
-				QDEBUG("	string: " << column.data());
+				//memcpy(column.data(), bytes.data(), count*sizeof(QString));
+				//QDEBUG("	string: " << column.data());
 				static_cast<QVector<QVector<QString>>*>(d->data)->append(column);
 				break;
 			}
@@ -1241,7 +1241,6 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 	case AbstractColumn::Numeric:
 		for (int n = 0; n < actualCols; n++) {
 			QVector<double>* vector = &(static_cast<QVector<QVector<double>>*>(data())->operator[](n));
-			vector->reserve(actualRows);
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 		}
@@ -1250,7 +1249,6 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 	case AbstractColumn::Integer:
 		for (int n = 0; n < actualCols; n++) {
 			QVector<int>* vector = &(static_cast<QVector<QVector<int>>*>(data())->operator[](n));
-			vector->reserve(actualRows);
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 		}
@@ -1259,7 +1257,6 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 	case AbstractColumn::Text:
 		for (int n = 0; n < actualCols; n++) {
 			QVector<QString>* vector = &(static_cast<QVector<QVector<QString>>*>(data())->operator[](n));
-			vector->reserve(actualRows);
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 		}
@@ -1270,7 +1267,6 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 	case AbstractColumn::DateTime:
 		for (int n = 0; n < actualCols; n++) {
 			QVector<QDateTime>* vector = &(static_cast<QVector<QVector<QDateTime>>*>(data())->operator[](n));
-			vector->reserve(actualRows);
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 		}

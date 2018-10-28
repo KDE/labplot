@@ -1255,9 +1255,10 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			return;
 		}
 
-		// matrix data has only one column mode (which is not text)
+		// matrix data has only one column mode
 		if (dynamic_cast<Matrix*>(dataSource)) {
 			auto mode = columnModes[0];
+			//TODO: remove this when Matrix supports text type
 			if (mode == AbstractColumn::Text)
 				mode = AbstractColumn::Numeric;
 			for (auto& c : columnModes)
@@ -1335,11 +1336,15 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 					static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
 					break;
 				}
-				case AbstractColumn::Text:
+				case AbstractColumn::Text: {
 					if (removeQuotesEnabled)
 						valueString.remove(QRegExp("[\"\']"));
-					static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = valueString;
+					DEBUG("	set value (" << currentRow << ", " << n << "): " << valueString.toStdString());
+					QVector<QString>* colData = static_cast<QVector<QString>*>(m_dataContainer[n]);
+					//TODO: QString size is not defined. Can not preallocate data matrix!
+					//colData->operator[](currentRow) = valueString;
 					break;
+				}
 				case AbstractColumn::Month:	// never happens
 				case AbstractColumn::Day:
 					break;
