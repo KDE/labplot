@@ -47,7 +47,7 @@ public:
 private:
 	MQTTConnectionManagerWidget* mainWidget;
 	QDialogButtonBox* m_buttonBox;
-	bool m_changed;
+	bool m_changed{false};
 	bool m_initialConnectionChanged;
 	QString m_initialConnection;
 

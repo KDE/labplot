@@ -62,12 +62,12 @@ public:
 private:
 	Ui::MQTTConnectionManagerWidget ui;
 	QList<MQTTConnection> m_connections;
-	bool m_initializing;
+	bool m_initializing{false};
 	QString m_configPath;
 	QString m_initConnName;
-	QMqttClient* m_client;
-	bool m_testing;
-	QTimer* m_testTimer;
+	QMqttClient* m_client{new QMqttClient};
+	bool m_testing{false};
+	QTimer* m_testTimer{new QTimer};
 
 	QString uniqueName();
 	void loadConnection();

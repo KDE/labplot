@@ -55,22 +55,22 @@ private slots:
 
 private:
 	CantorWorksheet* m_worksheet;
-	KParts::ReadWritePart* m_part;
+	KParts::ReadWritePart* m_part{nullptr};
 
 	QAction* m_evaluateEntryAction;
 	QAction* m_insertCommandEntryAction;
 	QAction* m_insertTextEntryAction;
-	QAction* m_insertMarkdownEntryAction;
+	QAction* m_insertMarkdownEntryAction{nullptr};
 	QAction* m_insertLatexEntryAction;
 	QAction* m_insertPageBreakAction;
 	QAction* m_removeCurrentEntryAction;
-	QAction* m_computeEigenvectorsAction;
-	QAction* m_createMattrixAction;
-	QAction* m_computeEigenvaluesAction;
-	QAction* m_invertMattrixAction;
-	QAction* m_differentiationAction;
-	QAction* m_integrationAction;
-	QAction* m_solveEquationsAction;
+	QAction* m_computeEigenvectorsAction{nullptr};
+	QAction* m_createMatrixAction{nullptr};
+	QAction* m_computeEigenvaluesAction{nullptr};
+	QAction* m_invertMatrixAction{nullptr};
+	QAction* m_differentiationAction{nullptr};
+	QAction* m_integrationAction{nullptr};
+	QAction* m_solveEquationsAction{nullptr};
 	QAction* m_restartBackendAction;
 	QAction* m_evaluateWorsheetAction;
 	QAction* m_zoomIn;
@@ -83,10 +83,10 @@ private:
 	QAction* m_latexTypesetting;
 	QAction* m_showCompletion;
 
-	QMenu* m_worksheetMenu;
-	QMenu* m_linearAlgebraMenu;
-	QMenu* m_calculateMenu;
-	QMenu* m_settingsMenu;
+	QMenu* m_worksheetMenu{nullptr};
+	QMenu* m_linearAlgebraMenu{nullptr};
+	QMenu* m_calculateMenu{nullptr};
+	QMenu* m_settingsMenu{nullptr};
 
 	void initActions();
 	void initMenus();

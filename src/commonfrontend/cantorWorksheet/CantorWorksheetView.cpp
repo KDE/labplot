@@ -39,20 +39,7 @@
 #include <KParts/ReadWritePart>
 
 CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget(),
-	m_worksheet(worksheet),
-	m_part(nullptr),
-	m_insertMarkdownEntryAction(nullptr),
-	m_computeEigenvectorsAction(nullptr),
-	m_createMattrixAction(nullptr),
-	m_computeEigenvaluesAction(nullptr),
-	m_invertMattrixAction(nullptr),
-	m_differentiationAction(nullptr),
-	m_integrationAction(nullptr),
-	m_solveEquationsAction(nullptr),
-	m_worksheetMenu(nullptr),
-	m_linearAlgebraMenu(nullptr),
-	m_calculateMenu(nullptr),
-	m_settingsMenu(nullptr) {
+	m_worksheet(worksheet) {
 
 	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -144,8 +131,8 @@ void CantorWorksheetView::initActions() {
 	}
 
 	if (m_part->action("creatematrix_assistant")) {
-		m_createMattrixAction = new QAction(i18n("Create Matrix"), cantorActionGroup);
-		m_createMattrixAction->setData("creatematrix_assistant");
+		m_createMatrixAction = new QAction(i18n("Create Matrix"), cantorActionGroup);
+		m_createMatrixAction->setData("creatematrix_assistant");
 	}
 
 	if (m_part->action("eigenvalues_assistant")) {
@@ -154,8 +141,8 @@ void CantorWorksheetView::initActions() {
 	}
 
 	if (m_part->action("invertmatrix_assistant")) {
-		m_invertMattrixAction = new QAction(i18n("Invert Matrix"), cantorActionGroup);
-		m_invertMattrixAction->setData("invertmatrix_assistant");
+		m_invertMatrixAction = new QAction(i18n("Invert Matrix"), cantorActionGroup);
+		m_invertMatrixAction->setData("invertmatrix_assistant");
 	}
 
 	if (m_part->action("differentiate_assistant")) {
@@ -190,12 +177,12 @@ void CantorWorksheetView::initMenus() {
 	m_worksheetMenu->addSeparator();
 	m_worksheetMenu->addAction(m_removeCurrentEntryAction);
 
-	if (m_invertMattrixAction || m_createMattrixAction || m_computeEigenvectorsAction || m_computeEigenvaluesAction) {
+	if (m_invertMatrixAction || m_createMatrixAction || m_computeEigenvectorsAction || m_computeEigenvaluesAction) {
 		m_linearAlgebraMenu = new QMenu("Linear Algebra", m_part->widget());
-		if (m_invertMattrixAction)
-			m_linearAlgebraMenu->addAction(m_invertMattrixAction);
-		if (m_createMattrixAction)
-			m_linearAlgebraMenu->addAction(m_createMattrixAction);
+		if (m_invertMatrixAction)
+			m_linearAlgebraMenu->addAction(m_invertMatrixAction);
+		if (m_createMatrixAction)
+			m_linearAlgebraMenu->addAction(m_createMatrixAction);
 		if (m_computeEigenvectorsAction)
 			m_linearAlgebraMenu->addAction(m_computeEigenvectorsAction);
 		if (m_computeEigenvaluesAction)

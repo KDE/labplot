@@ -48,11 +48,7 @@ Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
    \ingroup kdefrontend
 */
 MQTTConnectionManagerWidget::MQTTConnectionManagerWidget(QWidget* parent, const QString& conn) : QWidget(parent),
-	m_initializing(false),
-	m_initConnName(conn),
-	m_client(new QMqttClient),
-	m_testing(false),
-	m_testTimer(new QTimer) {
+	m_initConnName(conn) {
 
 	ui.setupUi(this);
 
