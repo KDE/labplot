@@ -1340,8 +1340,8 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 					if (removeQuotesEnabled)
 						valueString.remove(QRegExp("[\"\']"));
 					DEBUG("	set value (" << currentRow << ", " << n << "): " << valueString.toStdString());
-					QVector<QString>* colData = static_cast<QVector<QString>*>(m_dataContainer[n]);
 					//TODO: QString size is not defined. Can not preallocate data matrix!
+					//QVector<QString>* colData = static_cast<QVector<QString>*>(m_dataContainer[n]);
 					//colData->operator[](currentRow) = valueString;
 					break;
 				}
