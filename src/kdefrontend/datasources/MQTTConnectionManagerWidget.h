@@ -65,9 +65,9 @@ private:
 	bool m_initializing{false};
 	QString m_configPath;
 	QString m_initConnName;
-	QMqttClient* m_client{new QMqttClient};
-	bool m_testing{false};
-	QTimer* m_testTimer{new QTimer};
+	QMqttClient* m_client;
+	bool m_testing {false};
+	QTimer* m_testTimer;
 
 	QString uniqueName();
 	void loadConnection();

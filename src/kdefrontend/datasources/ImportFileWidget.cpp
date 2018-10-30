@@ -2254,7 +2254,7 @@ void ImportFileWidget::mqttConnectionChanged() {
 		WAIT_CURSOR;
 
 		delete m_client;
-		m_client = new QMqttClient();
+		m_client = new QMqttClient;
 		connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
 		connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
 		connect(m_client, &QMqttClient::messageReceived, this, &ImportFileWidget::mqttMessageReceived);
@@ -2270,13 +2270,13 @@ void ImportFileWidget::mqttConnectionChanged() {
 		m_client->setHostname(group.readEntry("Host"));
 		m_client->setPort(group.readEntry("Port").toUInt());
 
-		bool useID = group.readEntry("UseID").toUInt();
+		const bool useID = group.readEntry("UseID").toUInt();
 		if (useID)
 			m_client->setClientId(group.readEntry("ClientID"));
 		else
 			m_client->setClientId("");
 
-		bool useAuthentication = group.readEntry("UseAuthentication").toUInt();
+		const bool useAuthentication = group.readEntry("UseAuthentication").toUInt();
 		if (useAuthentication) {
 			m_client->setUsername(group.readEntry("UserName"));
 			m_client->setPassword(group.readEntry("Password"));
@@ -2326,30 +2326,28 @@ void ImportFileWidget::onMqttConnect() {
  * removes every information about the former connection
  */
 void ImportFileWidget::onMqttDisconnect() {
-	ui.gbManageSubscriptions->setVisible(false);
+	m_lastMessage.clear();
+	m_messageArrived.clear();
+	m_mqttSubscriptions.clear();
+	m_topicList.clear();
 	ui.twSubscriptions->clear();
 	ui.twTopics->clear();
 
+	m_searchTimer->stop();
+	m_connectTimeoutTimer->stop();
+
+	ui.gbManageSubscriptions->setVisible(false);
 	ui.cbSourceType->setEnabled(true);
+	ui.cbConnection->setEnabled(true);
+	ui.bManageConnections->setEnabled(true);
 
 	m_mqttReadyForPreview = false;
-	m_mqttSubscriptions.clear();
-
+	m_searching = false;
 	m_topicCompleter = new QCompleter;
 	m_subscriptionCompleter = new QCompleter;
 
-	m_topicList.clear();
-	m_searching = false;
-	m_searchTimer->stop();
-	m_connectTimeoutTimer->stop();
-	m_messageArrived.clear();
-	m_lastMessage.clear();
-
 	emit subscriptionsChanged();
 	RESET_CURSOR;
-
-	ui.cbConnection->setEnabled(true);
-	ui.bManageConnections->setEnabled(true);
 
 	if (!m_initialisingMQTT) {
 		if (!m_connectionTimedOut)
@@ -2371,7 +2369,7 @@ void ImportFileWidget::mqttSubscribe() {
 	}
 
 	//determine the topic name that the current item represents
-	QTreeWidgetItem*tempItem = item;
+	QTreeWidgetItem* tempItem = item;
 	QString name = item->text(0);
 	if (item->childCount() != 0)
 		name.append("/#");
@@ -2392,7 +2390,7 @@ void ImportFileWidget::mqttSubscribe() {
 			if (checkTopicContains(name, ui.twSubscriptions->topLevelItem(i)->text(0))
 					&& name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
 				unsubscribeFromTopic(ui.twSubscriptions->topLevelItem(i)->text(0));
-				i--;
+				--i;
 				continue;
 			}
 
@@ -2412,12 +2410,12 @@ void ImportFileWidget::mqttSubscribe() {
 			QTreeWidgetItem* newTopLevelItem = new QTreeWidgetItem(toplevelName);
 			ui.twSubscriptions->addTopLevelItem(newTopLevelItem);
 
-			QMqttTopicFilter filter {name};
-			QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+			const QMqttTopicFilter filter {name};
+			QMqttSubscription *tempSubscription = m_client->subscribe(filter, static_cast<quint8>(ui.cbQos->currentText().toUInt()) );
 
-			if (temp_subscription) {
-				m_mqttSubscriptions.push_back(temp_subscription);
-				connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+			if (tempSubscription) {
+				m_mqttSubscriptions.push_back(tempSubscription);
+				connect(tempSubscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
 				emit subscriptionsChanged();
 			}
 
@@ -2428,8 +2426,8 @@ void ImportFileWidget::mqttSubscribe() {
 				//if an already existing subscription contains a topic that the new subscription also contains
 				//we decompose the already existing subscription
 				//by unsubscribing from its topics, that are present in the new subscription as well
-				QStringList nameList = name.split('/', QString::SkipEmptyParts);
-				QString root = nameList.first();
+				const QStringList nameList = name.split('/', QString::SkipEmptyParts);
+				const QString& root = nameList.first();
 				QVector<QTreeWidgetItem*> children;
 				for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
 					if (ui.twSubscriptions->topLevelItem(i)->text(0).startsWith(root)
@@ -2442,7 +2440,7 @@ void ImportFileWidget::mqttSubscribe() {
 								//if the new subscription contains a topic, we unsubscribe from it
 								ui.twSubscriptions->setCurrentItem(children[j]);
 								mqttUnsubscribe();
-								i--;
+								--i;
 							}
 						}
 					}
@@ -2483,17 +2481,17 @@ void ImportFileWidget::mqttUnsubscribe() {
 		while(unsubscribeItem->parent() != nullptr) {
 			for (int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
 				if (unsubscribeItem->text(0) != unsubscribeItem->parent()->child(i)->text(0)) {
-					QMqttTopicFilter filter {unsubscribeItem->parent()->child(i)->text(0)};
-					QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+					const QMqttTopicFilter filter {unsubscribeItem->parent()->child(i)->text(0)};
+					QMqttSubscription *tempSubscription = m_client->subscribe(filter, static_cast<quint8>(ui.cbQos->currentText().toUInt()) );
 
 					ui.twSubscriptions->addTopLevelItem(unsubscribeItem->parent()->takeChild(i));
 
-					if (temp_subscription) {
-						m_mqttSubscriptions.push_back(temp_subscription);
-						connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+					if (tempSubscription) {
+						m_mqttSubscriptions.push_back(tempSubscription);
+						connect(tempSubscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
 						emit subscriptionsChanged();
 					}
-					i--;
+					--i;
 				}
 			}
 			unsubscribeItem = unsubscribeItem->parent();
@@ -2513,22 +2511,22 @@ void ImportFileWidget::mqttUnsubscribe() {
  *\brief called when the client receives a message
  * if the message arrived from a new topic, the topic is put in twTopics
  */
-void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMqttTopicName &topic) {
+void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqttTopicName& topic) {
 	Q_UNUSED(message);
 	if (m_addedTopics.contains(topic.name()))
 		return;
 
 	m_addedTopics.push_back(topic.name());
 	QStringList name;
-	QChar sep = '/';
 	QString rootName;
+	const QChar sep = '/';
+
 	if (topic.name().contains(sep)) {
 		const QStringList& list = topic.name().split(sep, QString::SkipEmptyParts);
 
 		if (!list.isEmpty()) {
 			rootName = list.at(0);
 			name.append(list.at(0));
-			QTreeWidgetItem* currentItem;
 			int topItemIdx = -1;
 			//check whether the first level of the topic can be found in twTopics
 			for (int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
@@ -2537,6 +2535,8 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMq
 					break;
 				}
 			}
+
+			QTreeWidgetItem* currentItem = nullptr;
 			//if not we simply add every level of the topic to the tree
 			if (topItemIdx < 0) {
 				currentItem = new QTreeWidgetItem(name);
@@ -2587,7 +2587,7 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMq
 
 	//if a subscribed topic contains the new topic, we have to update twSubscriptions
 	for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
-		QStringList subscriptionName = ui.twSubscriptions->topLevelItem(i)->text(0).split('/', QString::SkipEmptyParts);
+		const QStringList subscriptionName = ui.twSubscriptions->topLevelItem(i)->text(0).split('/', QString::SkipEmptyParts);
 		if (!subscriptionName.isEmpty()) {
 			if (rootName == subscriptionName.first()) {
 				updateSubscriptionTree();
@@ -2636,11 +2636,11 @@ void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) 
 		m_subscribedTopicNames.push_back(msg.topic().name());
 	}
 
-	if (m_messageArrived[msg.topic()] == false)
+	if (!m_messageArrived[msg.topic()])
 		m_messageArrived[msg.topic()] = true;
 
 	//updates the last message of the topic
-	m_lastMessage[msg.topic()]= msg;
+	m_lastMessage[msg.topic()] = msg;
 
 	//check if the client received a message from every subscribed topic, since the last time the preview was refreshed
 	bool check = true;
@@ -2654,7 +2654,7 @@ void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) 
 	}
 
 	//if there is a message from every subscribed topic, we refresh the preview
-	if (check == true) {
+	if (check) {
 		m_mqttReadyForPreview = true;
 		refreshPreview();
 	}
@@ -2832,16 +2832,15 @@ void ImportFileWidget::showMQTTConnectionManager() {
 	MQTTConnectionManagerDialog* dlg = new MQTTConnectionManagerDialog(this, ui.cbConnection->currentText(), previousConnectionChanged);
 
 	if (dlg->exec() == QDialog::Accepted) {
-
 		//re-read the available connections to be in sync with the changes in MQTTConnectionManager
 		m_initialisingMQTT = true;
-		QString prevConn = ui.cbConnection->currentText();
+		const QString& prevConn = ui.cbConnection->currentText();
 		ui.cbConnection->clear();
 		readMQTTConnections();
 		m_initialisingMQTT = false;
 
 		//select the connection the user has selected in MQTTConnectionManager
-		const QString conn = dlg->connection();
+		const QString& conn = dlg->connection();
 
 		int index = ui.cbConnection->findText(conn);
 		if (conn != prevConn) {//Current connection isn't the previous one
@@ -2904,7 +2903,7 @@ void ImportFileWidget::showWillSettings() {
 	widgetAction->setDefaultWidget(&willSettings);
 	menu.addAction(widgetAction);
 
-	QPoint pos(ui.bWillMessage->sizeHint().width(),ui.bWillMessage->sizeHint().height());
+	const QPoint pos(ui.bWillMessage->sizeHint().width(),ui.bWillMessage->sizeHint().height());
 	menu.exec(ui.bWillMessage->mapToGlobal(pos));
 }
 #endif
