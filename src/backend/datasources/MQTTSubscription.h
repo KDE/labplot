@@ -49,7 +49,7 @@ public:
 	void setMQTTClient(MQTTClient *client);
 	QString subscriptionName() const;
 	void addTopic(const QString&);
-	const QVector<MQTTTopic*> topics();
+	const QVector<MQTTTopic*> topics() const;
 	MQTTClient* mqttClient() const;
 	void messageArrived(const QString&, const QString&);
 

@@ -66,8 +66,8 @@ void MQTTSubscription::addTopic(const QString& topicName) {
  *
  * \return a vector of pointers to the children of the MQTTSubscription
  */
-const QVector<MQTTTopic*> MQTTSubscription::topics() {
-	return  children<MQTTTopic>();
+const QVector<MQTTTopic*> MQTTSubscription::topics() const {
+	return children<MQTTTopic>();
 }
 
 /*!
