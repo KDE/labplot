@@ -76,7 +76,7 @@ qint64 AsciiFilter::readFromLiveDevice(QIODevice& device, AbstractDataSource* da
 /*!
   reads the content of a message received by the topic.
 */
-void AsciiFilter::readMQTTTopic(const QString& message, const QString& topic, AbstractDataSource*dataSource) {
+void AsciiFilter::readMQTTTopic(const QString& message, const QString& topic, AbstractDataSource* dataSource) {
 	d->readMQTTTopic(message, topic, dataSource);
 }
 
@@ -1739,8 +1739,8 @@ void AsciiFilterPrivate::MQTTPreview(QVector<QStringList>& list, const QString& 
 		int linesToRead = 0;
 		QVector<QString> newData;
 		QStringList newDataList = message.split(QRegExp("\n|\r\n|\r"), QString::SkipEmptyParts);
-		for (auto& valueString : newDataList) {
-			QStringList splitString = valueString.split(' ', QString::SkipEmptyParts);
+		for (const auto& valueString : newDataList) {
+			const QStringList splitString = valueString.split(' ', QString::SkipEmptyParts);
 			for (const auto& valueString2 : splitString) {
 				if (!valueString2.isEmpty() && !valueString2.startsWith(commentCharacter) ) {
 					linesToRead++;
@@ -1825,7 +1825,7 @@ void AsciiFilterPrivate::MQTTPreview(QVector<QStringList>& list, const QString& 
 				forStart = 1;
 				forEnd = linesToRead;
 				dataStrings = list;
-				QLocale locale(numberFormat);
+				const QLocale locale(numberFormat);
 				//this is the first column having values, after at least 1 empty column
 				//until now only one row was filled with NaN values, so for starters we fill this row with the new value
 				switch (columnModes[colSize - 1]) {
@@ -1995,7 +1995,7 @@ void AsciiFilterPrivate::MQTTPreview(QVector<QStringList>& list, const QString& 
  * \param topic
  */
 QString AsciiFilterPrivate::MQTTColumnStatistics(const MQTTTopic* topic) const{
-	Column* tempColumn = topic->child<Column>(m_actualCols - 1);
+	Column* const tempColumn = topic->child<Column>(m_actualCols - 1);
 	QString statistics;
 
 	QVector<bool> willStatistics = topic->mqttClient()->willStatistics();
@@ -2076,7 +2076,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 	MQTTTopic* spreadsheet = dynamic_cast<MQTTTopic*>(dataSource);
 
-	int keepNValues = spreadsheet->keepNValues();
+	const int keepNValues = spreadsheet->keepNValues();
 
 	if (!m_prepared) {
 		qDebug()<<"Start preparing filter for: " << spreadsheet->topicName();
@@ -2190,8 +2190,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 		QStringList newDataList = message.split(QRegExp("\n|\r\n|\r"), QString::SkipEmptyParts);
 		for (auto& valueString : newDataList) {			
 			if(!valueString.startsWith(commentCharacter)) {
-
-				QStringList splitString = valueString.split(m_separator, static_cast<QString::SplitBehavior>(skipEmptyParts));
+				const QStringList splitString = valueString.split(m_separator, static_cast<QString::SplitBehavior>(skipEmptyParts));
 
 				for (const auto& valueString2 : splitString) {
 					if (!valueString2.isEmpty() && !valueString2.startsWith(commentCharacter)) {
@@ -2751,8 +2750,8 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 	QStringList firstLineStringList;
 	if (separatingCharacter == "auto") {
 		DEBUG("automatic separator");
-		QRegExp regExp("(\\s+)|(,\\s+)|(;\\s+)|(:\\s+)");
-		firstLineStringList = firstLine.split(regExp, (QString::SplitBehavior)skipEmptyParts);
+		const QRegExp regExp("(\\s+)|(,\\s+)|(;\\s+)|(:\\s+)");
+		firstLineStringList = firstLine.split(regExp, static_cast<QString::SplitBehavior>(skipEmptyParts));
 
 		if (!firstLineStringList.isEmpty()) {
 			int length1 = firstLineStringList.at(0).length();
@@ -2823,7 +2822,7 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 		}
 	}
 	//Improve the column mode based on the remaining values
-	for (auto& valueString : lineList) {
+	for (const auto& valueString : lineList) {
 		QStringList splitString = valueString.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 		for (auto& valueString2 : splitString) {
 			if (!valueString2.isEmpty() && !valueString2.startsWith(commentCharacter)) {
@@ -2847,10 +2846,10 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 	//determine rowcount
 	int tempRowCount = 0;
 	QStringList newDataList = message.split(QRegExp("\n|\r\n|\r"), QString::SkipEmptyParts);
-	for (auto& valueString : newDataList) {
+	for (const auto& valueString : newDataList) {
 		if(!valueString.startsWith(commentCharacter)) {
-			QStringList splitString = valueString.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-			for (auto& valueString2 : splitString) {
+			QStringList splitString = valueString.split(m_separator, static_cast<QString::SplitBehavior>(skipEmptyParts));
+			for (const auto& valueString2 : splitString) {
 				if (!valueString2.isEmpty() && !valueString2.startsWith(commentCharacter)) {
 					tempRowCount ++;
 				}
@@ -2885,10 +2884,10 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
  * \param topic
  * \param separator
  */
-void AsciiFilterPrivate::setPreparedForMQTT(bool prepared, MQTTTopic *topic, const QString& separator) {
+void AsciiFilterPrivate::setPreparedForMQTT(bool prepared, MQTTTopic* topic, const QString& separator) {
 	m_prepared = prepared;
 	//If originally it was prepared we have to restore the settings
-	if(prepared == true) {
+	if(prepared) {
 		m_separator = separator;
 		m_actualCols = endColumn - startColumn + 1;
 		m_actualRows = topic->rowCount();

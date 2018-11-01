@@ -76,8 +76,8 @@ public:
 	void MQTTPreview(QVector<QStringList>&, const QString&, const QString&);
 	QString MQTTColumnStatistics(const MQTTTopic * topic) const;
 	AbstractColumn::ColumnMode MQTTColumnMode() const;
-	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
-	void setPreparedForMQTT(bool, MQTTTopic *topic, const QString&);	
+	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*);
+	void setPreparedForMQTT(bool, MQTTTopic* , const QString&);
 #endif
 
 	QString separator() const;

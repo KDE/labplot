@@ -74,12 +74,13 @@ MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool l
 		myFilter->setSkipEmptyParts(mainFilter->skipEmptyParts());
 		myFilter->setHeaderEnabled(mainFilter->isHeaderEnabled());
 		QString vectorNames;
-		QStringList filterVectorNames = mainFilter->vectorNames();
+		const QStringList& filterVectorNames = mainFilter->vectorNames();
 		for (int i = 0; i < filterVectorNames.size(); ++i) {
 			vectorNames.append(filterVectorNames.at(i));
 			if (i != vectorNames.size() - 1)
 				vectorNames.append(QLatin1String(" "));
 		}
+
 		myFilter->setVectorNames(vectorNames);
 		myFilter->setStartRow(mainFilter->startRow());
 		myFilter->setEndRow(mainFilter->endRow());
@@ -116,9 +117,7 @@ AbstractFileFilter* MQTTTopic::filter() const {
  *\brief Returns the MQTTTopic's icon
  */
 QIcon MQTTTopic::icon() const {
-	QIcon icon;
-	icon = QIcon::fromTheme("text-plain");
-	return icon;
+	return QIcon::fromTheme("text-plain");
 }
 
 /*!
@@ -228,7 +227,7 @@ void MQTTTopic::plotData() {
 void MQTTTopic::read() {
 	while(!m_messagePuffer.isEmpty()) {
 		qDebug()<< "Reading from topic " << m_topicName;
-		QString tempMessage = m_messagePuffer.takeFirst();
+		const QString tempMessage = m_messagePuffer.takeFirst();
 		dynamic_cast<AsciiFilter*>(m_filter)->readMQTTTopic(tempMessage, m_topicName, this);
 	}
 }

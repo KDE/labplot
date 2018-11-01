@@ -57,7 +57,7 @@ MQTTSubscription::~MQTTSubscription() {
  * \param topicName the name of the topic, which will be added to the tree widget
  */
 void MQTTSubscription::addTopic(const QString& topicName) {
-	MQTTTopic * newTopic = new MQTTTopic(topicName, this, false);
+	MQTTTopic* newTopic = new MQTTTopic(topicName, this, false);
 	addChild(newTopic);
 }
 
@@ -75,7 +75,7 @@ const QVector<MQTTTopic*> MQTTSubscription::topics() const {
  *
  * \return a pointer to the parent MQTTTopic of the object
  */
-MQTTClient* MQTTSubscription::mqttClient() const{
+MQTTClient* MQTTSubscription::mqttClient() const {
 	return m_MQTTClient;
 }
 
@@ -91,15 +91,15 @@ void MQTTSubscription::messageArrived(const QString& message, const QString& top
 	bool found = false;
 	QVector<MQTTTopic*> topics = children<MQTTTopic>();
 	//search for the topic among the MQTTTopic children
-	for (int i = 0; i < topics.size(); ++i) {
-		if (topicName == topics[i]->topicName()) {
+	for (auto* topic: topics) {
+		if (topicName == topic->topicName()) {
 			//pass the message to the topic
-			topics[i]->newMessage(message);
+			topic->newMessage(message);
 
 			//read the message if needed
 			if ((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) &&
 					!m_MQTTClient->isPaused())
-				topics[i]->read();
+				topic->read();
 
 			found = true;
 			break;
@@ -111,13 +111,12 @@ void MQTTSubscription::messageArrived(const QString& message, const QString& top
 		addTopic(topicName);
 		topics = children<MQTTTopic>();
 		MQTTTopic* newTopic = nullptr;
-		for (int i = 0; i < topics.size(); ++i) {
-			if (topicName == topics[i]->topicName()) {
-				newTopic = topics[i];
+		for (auto* topic: topics) {
+			if (topicName == topic->topicName()) {
+				newTopic = topic;
 				break;
 			}
 		}
-
 		if (newTopic != nullptr) {
 			newTopic->newMessage(message);
 			if ((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) && !m_MQTTClient->isPaused())
@@ -148,9 +147,7 @@ void MQTTSubscription::setMQTTClient(MQTTClient* client) {
  *\brief Returns the icon of MQTTSubscription
  */
 QIcon MQTTSubscription::icon() const {
-	QIcon icon;
-	icon = QIcon::fromTheme("labplot-MQTT");
-	return icon;
+	return QIcon::fromTheme("labplot-MQTT");
 }
 
 //##############################################################################
