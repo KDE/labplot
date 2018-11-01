@@ -1928,8 +1928,8 @@ void MainWin::newLiveDataSourceActionTriggered() {
 
 			//doesn't make sense to have more MQTTClients connected to the same broker
 			bool found = false;
-			for(int i = 0; i < existingClients.size(); ++i) {
-				if(existingClients[i]->clientHostName() == mqttClient->clientHostName()) {
+			for (const auto* client : existingClients) {
+				if(client->clientHostName() == mqttClient->clientHostName()) {
 					found = true;
 					break;
 				}

@@ -558,7 +558,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->notesDock);
 	}
 #ifdef HAVE_MQTT
-	else if (className == "MQTTClient") {
+	else if (className == QLatin1String("MQTTClient")) {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("MQTT Data Source"));
 
 		if (!m_mainWindow->m_liveDataDock) {
@@ -573,7 +573,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->m_liveDataDock->setMQTTClients(list);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
-	} else if (className == "MQTTSubscription") {
+	} else if (className == QLatin1String("MQTTSubscription")) {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("MQTT Data Source"));
 
 		if (!m_mainWindow->m_liveDataDock) {
@@ -584,10 +584,10 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		QList<MQTTClient*> list;
 		for (auto* aspect : selectedAspects) {
-			QString clientName = qobject_cast<MQTTSubscription*>(aspect)->mqttClient()->name();
+			const QString clientName = qobject_cast<MQTTSubscription*>(aspect)->mqttClient()->name();
 			bool found = false;
-			for (int i = 0; i < list.size(); ++i) {
-				if(list.at(i)->name() == clientName) {
+			for (const auto* client : list) {
+				if(client->name() == clientName) {
 					found = true;
 					break;
 				}
@@ -598,7 +598,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->m_liveDataDock->setMQTTClients(list);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
-	} else if (className == "MQTTTopic") {
+	} else if (className == QLatin1String("MQTTTopic")) {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("MQTT Data Source"));
 
 		if (!m_mainWindow->m_liveDataDock) {
@@ -610,8 +610,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		for (auto* aspect : selectedAspects) {
 			QString clientName = qobject_cast<MQTTClient*>(qobject_cast<MQTTTopic*>(aspect)->mqttClient())->name();
 			bool found = false;
-			for (int i = 0; i < list.size(); ++i) {
-				if(list.at(i)->name() == clientName) {
+			for (const auto* client : list) {
+				if(client->name() == clientName) {
 					found = true;
 					break;
 				}
