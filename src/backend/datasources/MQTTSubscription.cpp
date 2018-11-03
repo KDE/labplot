@@ -87,7 +87,7 @@ MQTTClient* MQTTSubscription::mqttClient() const {
  * \param message the message to pass
  * \param topicName the name of the topic the message was sent to
  */
-void MQTTSubscription::messageArrived(const QString& message, const QString& topicName){
+void MQTTSubscription::messageArrived(const QString& message, const QString& topicName) {
 	bool found = false;
 	QVector<MQTTTopic*> topics = children<MQTTTopic>();
 	//search for the topic among the MQTTTopic children

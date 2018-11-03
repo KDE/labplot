@@ -348,7 +348,7 @@ bool MQTTClient::MQTTUseID() const {
  *
  * \param id
  */
-void MQTTClient::setMQTTClientId(const QString &id){
+void MQTTClient::setMQTTClientId(const QString &id) {
 	m_client->setClientId(id);
 }
 
@@ -441,7 +441,7 @@ void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
 
 					//We have to reparent every topic of the inferior subscription, so no data is lost
 					QVector<MQTTTopic*> topics = inferiorSubscriptions[sub]->topics();
-					for(auto* topic : topics) {
+					for (auto* topic : topics) {
 						topic->reparent(newSubscription);
 					}
 
@@ -501,7 +501,7 @@ void MQTTClient::removeMQTTSubscription(const QString& subscriptionName) {
 		}
 
 		QMapIterator<QMqttTopicFilter, quint8> j(m_subscribedTopicNameQoS);
-		while(j.hasNext()) {
+		while (j.hasNext()) {
 			j.next();
 			if (j.key().filter() == subscriptionName) {
 				m_subscribedTopicNameQoS.remove(j.key());
@@ -943,7 +943,7 @@ void MQTTClient::clearLastMessage() {
  *
  * \param statistics
  */
-void MQTTClient::addWillStatistics(WillStatistics statistic){
+void MQTTClient::addWillStatistics(WillStatistics statistic) {
 	m_MQTTWill.willStatistics[static_cast<int>(statistic)] = true;
 }
 
@@ -1016,7 +1016,7 @@ void MQTTClient::onMQTTConnect() {
 
 			//Subscribe to initial or loaded topics
 			QMapIterator<QMqttTopicFilter, quint8> i(m_subscribedTopicNameQoS);
-			while(i.hasNext()) {
+			while (i.hasNext()) {
 				i.next();
 				qDebug()<<i.key();
 				QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
@@ -1045,7 +1045,7 @@ void MQTTClient::onMQTTConnect() {
 			qDebug() << "Start resubscribing after will message update";
 			//Only the client has to make the subscriptions again, every other connected data is still available
 			QMapIterator<QMqttTopicFilter, quint8> i(m_subscribedTopicNameQoS);
-			while(i.hasNext()) {
+			while (i.hasNext()) {
 				i.next();
 				QMqttSubscription* temp = m_client->subscribe(i.key(), i.value());
 				if (temp) {

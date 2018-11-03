@@ -225,7 +225,7 @@ void MQTTTopic::plotData() {
  *\brief Reads every message from the message puffer
  */
 void MQTTTopic::read() {
-	while(!m_messagePuffer.isEmpty()) {
+	while (!m_messagePuffer.isEmpty()) {
 		qDebug()<< "Reading from topic " << m_topicName;
 		const QString tempMessage = m_messagePuffer.takeFirst();
 		dynamic_cast<AsciiFilter*>(m_filter)->readMQTTTopic(tempMessage, m_topicName, this);
