@@ -805,6 +805,14 @@ void HistogramPrivate::retransform() {
 		linePath = QPainterPath();
 		symbolsPath = QPainterPath();
 		valuesPath = QPainterPath();
+		curveShape = QPainterPath();
+		lines.clear();
+		symbolPointsLogical.clear();
+		symbolPointsScene.clear();
+		visiblePoints.clear();
+		valuesPoints.clear();
+		valuesStrings.clear();
+		fillPolygons.clear();
 		recalcShapeAndBoundingRect();
 		return;
 	}

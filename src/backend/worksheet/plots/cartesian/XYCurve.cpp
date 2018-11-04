@@ -898,6 +898,12 @@ void XYCurvePrivate::retransform() {
 		symbolsPath = QPainterPath();
 		valuesPath = QPainterPath();
 		errorBarsPath = QPainterPath();
+		curveShape = QPainterPath();
+		lines.clear();
+		visiblePoints.clear();
+		valuesPoints.clear();
+		valuesStrings.clear();
+		fillPolygons.clear();
 		recalcShapeAndBoundingRect();
 		return;
 	}
