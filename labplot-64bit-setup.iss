@@ -96,6 +96,9 @@ Source: "{#CraftRoot}\bin\Qt5SerialPort.dll"; DestDir: "{app}"; Flags: ignorever
 Source: "{#CraftRoot}\bin\Qt5TextToSpeech.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\plugins\platforms\qwindows.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: "{#CraftRoot}\plugins\printsupport\windowsprintersupport.dll"; DestDir: "{app}\printsupport"; Flags: ignoreversion
+Source: "{#CraftRoot}\plugins\sqldrivers/qsqlite.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion
+Source: "{#CraftRoot}\plugins\sqldrivers/qsqlmysql.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion
+Source: "{#CraftRoot}\plugins\sqldrivers/qsqlodbc.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion
 ; fix https://stackoverflow.com/questions/20495620/qt-5-1-1-application-failed-to-start-because-platform-plugin-windows-is-missi
 Source: "{#CraftRoot}\bin\libEGL.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; missing lib on minimal Windows 10
