@@ -27,7 +27,7 @@ Copyright            : (C) 2018 by Christoph Roick (chrisito@gmx.de)
 
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/datasources/filters/ROOTFilterPrivate.h"
-#include "backend/datasources/AbstractDataSource.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
 
 #include <KLocalizedString>
@@ -173,25 +173,41 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 	DEBUG("reading " << first - last + 1 << " lines");
 
 	int c = 0;
+	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (columns & ROOTFilter::Center) {
-		QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c++]);
+		if (spreadsheet)
+			spreadsheet->column(columnOffset)->setPlotDesignation(Column::X);
+
+		QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c]);
 		for (int i = first; i <= last; ++i)
 			container[i - first] = (i > 0 && i < nbins - 1) ? 0.5 * (bins[i].lowedge + bins[i + 1].lowedge)
 			                                       : i == 0 ? bins.front().lowedge   // -infinity
 			                                                : -bins.front().lowedge; // +infinity
+		c++;
 	}
 	if (columns & ROOTFilter::Low) {
-		QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c++]);
+		if (spreadsheet)
+			spreadsheet->column(columnOffset + c)->setPlotDesignation(Column::X);
+
+		QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c]);
 		for (int i = first; i <= last; ++i)
 			container[i - first] = bins[i].lowedge;
+		c++;
 	}
 	if (columns & ROOTFilter::Content) {
-		QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c++]);
+		if (spreadsheet)
+			spreadsheet->column(columnOffset + c)->setPlotDesignation(Column::Y);
+
+		QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c]);
 		for (int i = first; i <= last; ++i)
 			container[i - first] = bins[i].content;
+		c++;
 	}
 	if (columns & ROOTFilter::Error) {
-		QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c++]);
+		if (spreadsheet)
+			spreadsheet->column(columnOffset + c)->setPlotDesignation(Column::XError);
+
+		QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c]);
 		for (int i = first; i <= last; ++i)
 			container[i - first] = std::sqrt(bins[i].sumw2);
 	}
