@@ -68,7 +68,7 @@
        </property>
        <widget class="QTreeWidget" name="twContent">
         <property name="toolTip">
-         <string>Shows the content of a HDF5 file</string>
+         <string>Shows the content of the selected HDF5 file</string>
         </property>
         <attribute name="headerStretchLastSection">
          <bool>false</bool>

@@ -170,7 +170,7 @@
        </property>
        <widget class="QListWidget" name="lwContent">
         <property name="toolTip">
-         <string>Shows the content of a HDF5 file</string>
+         <string>Shows the content of the selected ROOT file</string>
         </property>
         <property name="selectionMode">
          <enum>QAbstractItemView::ExtendedSelection</enum>

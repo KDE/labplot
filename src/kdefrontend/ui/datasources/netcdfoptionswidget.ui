@@ -20,7 +20,7 @@
        </property>
        <widget class="QTreeWidget" name="twContent">
         <property name="toolTip">
-         <string>Shows the content of a NetCDF file</string>
+         <string>Shows the content of the selected NetCDF file</string>
         </property>
         <attribute name="headerStretchLastSection">
          <bool>false</bool>
