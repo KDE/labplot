@@ -46,7 +46,8 @@ Source: "{#CraftRoot}\mingw64\bin\libwinpthread-1.dll"; DestDir: "{app}";Flags: 
 Source: "{#CraftRoot}\mingw64\bin\libstdc++-6.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\mingw64\bin\libssp-0.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libz.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "{#CraftRoot}\bin\liblzma.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "{#CraftRoot}\bin\liblzma.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\liblzma-5.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5Completion.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5ConfigCore.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5ConfigGui.dll"; DestDir: "{app}";Flags: ignoreversion
@@ -76,8 +77,8 @@ Source: "{#CraftRoot}\bin\libKF5Service.dll"; DestDir: "{app}";Flags: ignorevers
 Source: "{#CraftRoot}\bin\Qt5Network.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libeay32.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\ssleay32.dll"; DestDir: "{app}";Flags: ignoreversion
-;Source: "{#CraftRoot}\bin\libssl-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
-;Source: "{#CraftRoot}\bin\libcrypto-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libssl-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libcrypto-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
 ;Source: "{#CraftRoot}\bin\libdbus-1-3.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5KIOFileWidgets.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5KIOWidgets.dll"; DestDir: "{app}";Flags: ignoreversion
