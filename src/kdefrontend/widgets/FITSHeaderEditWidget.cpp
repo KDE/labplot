@@ -493,7 +493,7 @@ void FITSHeaderEditWidget::addModifyKeywordUnit() {
 		if (fromNewKeyword) {
 			m_extensionData[m_seletedExtension].updates.newKeywords.operator [](idx).unit = addUnitDialog->unit();
 			if (!m_extensionData[m_seletedExtension].updates.newKeywords.at(idx).unit.isEmpty()) {
-				m_extensionData[m_seletedExtension].updates.newKeywords.operator [](idx).updates.unitUpdated = true;;
+				m_extensionData[m_seletedExtension].updates.newKeywords.operator [](idx).updates.unitUpdated = true;
 			}
 		} else {
 			m_extensionData[m_seletedExtension].keywords.operator [](idx).unit = addUnitDialog->unit();

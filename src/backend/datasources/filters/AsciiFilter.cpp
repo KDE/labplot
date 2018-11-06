@@ -2229,7 +2229,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 	qDebug()<<"Create index enabled:  "<<createIndexEnabled;
 
-	const int spreadsheetRowCountBeforeResize = spreadsheet->rowCount();;
+	const int spreadsheetRowCountBeforeResize = spreadsheet->rowCount();
 
 	if(m_prepared ) {
 		if (keepNValues == 0)

@@ -241,7 +241,7 @@ void Column::handleRowInsertion(int before, int count) {
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this);
 
-	d->statisticsAvailable = false;;
+	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
 }
 
@@ -254,7 +254,7 @@ void Column::handleRowRemoval(int first, int count) {
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this);
 
-	d->statisticsAvailable = false;;
+	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
 }
 
@@ -354,7 +354,7 @@ void Column::clearFormulas() {
  */
 void Column::setTextAt(int row, const QString& new_value) {
 	DEBUG("Column::setTextAt()");
-	d->statisticsAvailable = false;;
+	d->statisticsAvailable = false;
 	exec(new ColumnSetTextCmd(d, row, new_value));
 }
 
@@ -366,7 +366,7 @@ void Column::setTextAt(int row, const QString& new_value) {
 void Column::replaceTexts(int first, const QVector<QString>& new_values) {
 	DEBUG("Column::replaceTexts()");
 	if (!new_values.isEmpty()) { //TODO: do we really need this check?
-		d->statisticsAvailable = false;;
+		d->statisticsAvailable = false;
 		exec(new ColumnReplaceTextsCmd(d, first, new_values));
 	}
 }
@@ -377,7 +377,7 @@ void Column::replaceTexts(int first, const QVector<QString>& new_values) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::setDateAt(int row, QDate new_value) {
-	d->statisticsAvailable = false;;
+	d->statisticsAvailable = false;
 	setDateTimeAt(row, QDateTime(new_value, timeAt(row)));
 }
 
@@ -387,7 +387,7 @@ void Column::setDateAt(int row, QDate new_value) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::setTimeAt(int row, QTime new_value) {
-	d->statisticsAvailable = false;;
+	d->statisticsAvailable = false;
 	setDateTimeAt(row, QDateTime(dateAt(row), new_value));
 }
 
@@ -397,7 +397,7 @@ void Column::setTimeAt(int row, QTime new_value) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::setDateTimeAt(int row, const QDateTime& new_value) {
-	d->statisticsAvailable = false;;
+	d->statisticsAvailable = false;
 	exec(new ColumnSetDateTimeCmd(d, row, new_value));
 }
 
@@ -408,7 +408,7 @@ void Column::setDateTimeAt(int row, const QDateTime& new_value) {
  */
 void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 	if (!new_values.isEmpty()) {
-		d->statisticsAvailable = false;;
+		d->statisticsAvailable = false;
 		exec(new ColumnReplaceDateTimesCmd(d, first, new_values));
 	}
 }
@@ -420,7 +420,7 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
  */
 void Column::setValueAt(int row, const double new_value) {
 // 	DEBUG("Column::setValueAt()");
-	d->statisticsAvailable = false;;
+	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
 	exec(new ColumnSetValueCmd(d, row, new_value));
 }
@@ -433,7 +433,7 @@ void Column::setValueAt(int row, const double new_value) {
 void Column::replaceValues(int first, const QVector<double>& new_values) {
 	DEBUG("Column::replaceValues()");
 	if (!new_values.isEmpty()) {
-		d->statisticsAvailable = false;;
+		d->statisticsAvailable = false;
 		d->hasValuesAvailable = false;
 		exec(new ColumnReplaceValuesCmd(d, first, new_values));
 	}
@@ -446,7 +446,7 @@ void Column::replaceValues(int first, const QVector<double>& new_values) {
  */
 void Column::setIntegerAt(int row, const int new_value) {
 	DEBUG("Column::setIntegerAt()");
-	d->statisticsAvailable = false;;
+	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
 	exec(new ColumnSetIntegerCmd(d, row, new_value));
 }
@@ -459,7 +459,7 @@ void Column::setIntegerAt(int row, const int new_value) {
 void Column::replaceInteger(int first, const QVector<int>& new_values) {
 	DEBUG("Column::replaceInteger()");
 	if (!new_values.isEmpty()) {
-		d->statisticsAvailable = false;;
+		d->statisticsAvailable = false;
 		d->hasValuesAvailable = false;
 		exec(new ColumnReplaceIntegersCmd(d, first, new_values));
 	}
@@ -668,7 +668,7 @@ void Column::setChanged() {
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this);
 
-	d->statisticsAvailable = false;;
+	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
 }
 
@@ -1086,7 +1086,7 @@ void Column::handleFormatChange() {
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this); // all cells must be repainted
 
-	d->statisticsAvailable = false;;
+	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
 	DEBUG("Column::handleFormatChange() DONE");
 }
