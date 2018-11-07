@@ -432,7 +432,7 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	m_actualStartRow(1),
 	m_actualRows(0),
 	m_actualCols(0),
-	m_prepared(false),	
+	m_prepared(false),
 	m_columnOffset(0) {
 }
 
@@ -596,10 +596,13 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	for (auto& valueString : firstLineStringList) { // parse columns available in first data line
 		if (simplifyWhitespacesEnabled)
 			valueString = valueString.simplified();
+		if (removeQuotesEnabled)
+			valueString.remove(QRegExp("[\"\']"));
 		if (col == m_actualCols)
 			break;
 		columnModes[col++] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 	}
+
 	// parsing more lines to better determine data types
 	for (unsigned int i = 0; i < m_dataTypeLines; ++i) {
 		if (device.atEnd())	// EOF reached
@@ -611,6 +614,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		for (auto& valueString : firstLineStringList) {
 			if (simplifyWhitespacesEnabled)
 				valueString = valueString.simplified();
+			if (removeQuotesEnabled)
+				valueString.remove(QRegExp("[\"\']"));
 			if (col == m_actualCols)
 				break;
 			AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
@@ -2188,7 +2193,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 		PERFTRACE("AsciiLiveDataImportReadingFromFile: ");
 #endif
 		QStringList newDataList = message.split(QRegExp("\n|\r\n|\r"), QString::SkipEmptyParts);
-		for (auto& valueString : newDataList) {			
+		for (auto& valueString : newDataList) {
 			if(!valueString.startsWith(commentCharacter)) {
 				const QStringList splitString = valueString.split(m_separator, static_cast<QString::SplitBehavior>(skipEmptyParts));
 
@@ -2790,7 +2795,7 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 	columnModes[col] = AbstractColumn::DateTime;
 	col++;
 
-	auto firstValue = firstLineStringList.takeFirst();//use first value to identify column mode	
+	auto firstValue = firstLineStringList.takeFirst();//use first value to identify column mode
 	while(firstValue.isEmpty() || firstValue.startsWith(commentCharacter) )//get the first usable value
 		firstValue = firstLineStringList.takeFirst();
 
