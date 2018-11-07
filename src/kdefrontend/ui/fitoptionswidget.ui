@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>325</width>
-    <height>466</height>
+    <width>344</width>
+    <height>490</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -64,7 +64,7 @@
       <item row="6" column="0" colspan="3">
        <widget class="QCheckBox" name="cbAutoEvalRange">
         <property name="toolTip">
-         <string>If selected, the fit function is evaluated for the full range of data points and not only for the given x-range.</string>
+         <string>Select the range to evaluate the resulting fit function</string>
         </property>
         <property name="text">
          <string>Auto evaluation range</string>
@@ -96,6 +96,9 @@
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="lEps">
+        <property name="toolTip">
+         <string>Specify the tolerance for the fit algorithm convergence</string>
+        </property>
         <property name="text">
          <string>Tolerance:</string>
         </property>
@@ -119,6 +122,9 @@
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="lMaxIterations">
+        <property name="toolTip">
+         <string>Specify maximum number of iterations for the fit algorithm</string>
+        </property>
         <property name="text">
          <string>Max. iterations:</string>
         </property>
@@ -126,6 +132,9 @@
       </item>
       <item row="4" column="0">
        <widget class="QCheckBox" name="cbAutoRange">
+        <property name="toolTip">
+         <string>Select range of data to use for fitting</string>
+        </property>
         <property name="text">
          <string>Auto fit range</string>
         </property>
@@ -139,6 +148,9 @@
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="lEvaluatedPoints">
+        <property name="toolTip">
+         <string>Number of points to use when evaluating the final fit function</string>
+        </property>
         <property name="text">
          <string>Evaluated points:</string>
         </property>
