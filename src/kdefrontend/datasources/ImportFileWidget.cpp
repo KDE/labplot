@@ -733,6 +733,10 @@ void ImportFileWidget::selectFile() {
 			conf.writeEntry("LastDir", newDir);
 	}
 
+	//process all events after the FileDialog was closed to repaint the widget
+	//bevor we start calculating the preview
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+
 	ui.leFileName->setText(path);
 
 	//TODO: decide whether the selection of several files should be possible
