@@ -55,14 +55,10 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	ui.leEvaluatedPoints->setText(QString::number(m_fitData->evaluatedPoints));
 	ui.cbAutoRange->setChecked(m_fitData->autoRange);
 	ui.cbAutoEvalRange->setChecked(m_fitData->autoEvalRange);
-	ui.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
-	ui.sbMin->setValue(m_fitData->fitRange.first());
-	ui.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
-	ui.sbMax->setValue(m_fitData->fitRange.last());
-	ui.sbEvalMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
-	ui.sbEvalMin->setValue(m_fitData->evalRange.first());
-	ui.sbEvalMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
-	ui.sbEvalMax->setValue(m_fitData->evalRange.last());
+	ui.leMin->setText(QString::number(m_fitData->fitRange.first()));
+	ui.leMax->setText(QString::number(m_fitData->fitRange.last()));
+	ui.leEvalMin->setText(QString::number(m_fitData->evalRange.first()));
+	ui.leEvalMax->setText(QString::number(m_fitData->evalRange.last()));
 	this->autoRangeChanged();
 	this->autoEvalRangeChanged();
 
@@ -81,10 +77,10 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	connect(ui.pbCancel, &QPushButton::clicked, this, &FitOptionsWidget::finished);
 	connect(ui.cbAutoRange, &QCheckBox::clicked, this, &FitOptionsWidget::autoRangeChanged);
 	connect(ui.cbAutoEvalRange, &QCheckBox::clicked, this, &FitOptionsWidget::autoEvalRangeChanged);
-	connect(ui.sbMin, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::fitRangeMinChanged);
-	connect(ui.sbMax, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::fitRangeMaxChanged);
-	connect(ui.sbEvalMin, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::evalRangeMinChanged);
-	connect(ui.sbEvalMax, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::evalRangeMaxChanged);
+	connect(ui.leMin, &QLineEdit::textChanged, this, &FitOptionsWidget::fitRangeMinChanged);
+	connect(ui.leMax, &QLineEdit::textChanged, this, &FitOptionsWidget::fitRangeMaxChanged);
+	connect(ui.leEvalMin, &QLineEdit::textChanged, this, &FitOptionsWidget::evalRangeMinChanged);
+	connect(ui.leEvalMax, &QLineEdit::textChanged, this, &FitOptionsWidget::evalRangeMaxChanged);
 }
 
 void FitOptionsWidget::autoRangeChanged() {
@@ -92,9 +88,9 @@ void FitOptionsWidget::autoRangeChanged() {
 	m_fitData->autoRange = autoRange;
 
 	if (autoRange) {
-		ui.sbMin->setEnabled(false);
+		ui.leMin->setEnabled(false);
 		ui.lXRange->setEnabled(false);
-		ui.sbMax->setEnabled(false);
+		ui.leMax->setEnabled(false);
 
 		const AbstractColumn* xDataColumn = nullptr;
 		if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
@@ -105,15 +101,14 @@ void FitOptionsWidget::autoRangeChanged() {
 		}
 
 		if (xDataColumn) {
-			ui.sbMin->setValue(xDataColumn->minimum());
-			ui.sbMax->setValue(xDataColumn->maximum());
+			ui.leMin->setText(QString::number(xDataColumn->minimum()));
+			ui.leMax->setText(QString::number(xDataColumn->maximum()));
 		}
 	} else {
-		ui.sbMin->setEnabled(true);
+		ui.leMin->setEnabled(true);
 		ui.lXRange->setEnabled(true);
-		ui.sbMax->setEnabled(true);
+		ui.leMax->setEnabled(true);
 	}
-
 }
 
 void FitOptionsWidget::autoEvalRangeChanged() {
@@ -121,9 +116,9 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 	m_fitData->autoEvalRange = autoRange;
 
 	if (autoRange) {
-		ui.sbEvalMin->setEnabled(false);
+		ui.leEvalMin->setEnabled(false);
 		ui.lEvalRange->setEnabled(false);
-		ui.sbEvalMax->setEnabled(false);
+		ui.leEvalMax->setEnabled(false);
 
 		const AbstractColumn* xDataColumn = nullptr;
 		if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
@@ -134,38 +129,38 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 		}
 
 		if (xDataColumn) {
-			ui.sbEvalMin->setValue(xDataColumn->minimum());
-			ui.sbEvalMax->setValue(xDataColumn->maximum());
+			ui.leEvalMin->setText(QString::number(xDataColumn->minimum()));
+			ui.leEvalMax->setText(QString::number(xDataColumn->maximum()));
 		}
 	} else {
-		ui.sbEvalMin->setEnabled(true);
+		ui.leEvalMin->setEnabled(true);
 		ui.lEvalRange->setEnabled(true);
-		ui.sbEvalMax->setEnabled(true);
+		ui.leEvalMax->setEnabled(true);
 	}
 
 }
 
 void FitOptionsWidget::fitRangeMinChanged() {
-	const double xMin = ui.sbMin->value();
+	const double xMin = ui.leMin->text().toDouble();
 
 	m_fitData->fitRange.first() = xMin;
 	changed();
 }
 void FitOptionsWidget::fitRangeMaxChanged() {
-	const double xMax = ui.sbMax->value();
+	const double xMax = ui.leMax->text().toDouble();
 
 	m_fitData->fitRange.last() = xMax;
 	changed();
 }
 
 void FitOptionsWidget::evalRangeMinChanged() {
-	const double xMin = ui.sbEvalMin->value();
+	const double xMin = ui.leEvalMin->text().toDouble();
 
 	m_fitData->evalRange.first() = xMin;
 	changed();
 }
 void FitOptionsWidget::evalRangeMaxChanged() {
-	const double xMax = ui.sbEvalMax->value();
+	const double xMax = ui.leEvalMax->text().toDouble();
 
 	m_fitData->evalRange.last() = xMax;
 	changed();
