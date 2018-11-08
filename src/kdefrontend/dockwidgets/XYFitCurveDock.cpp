@@ -886,7 +886,7 @@ void XYFitCurveDock::updateParameterList() {
  * called when parameter names and/or start values for the model were changed
  * also called from parameter widget
  */
-void XYFitCurveDock::parametersChanged() {
+void XYFitCurveDock::parametersChanged(bool updateParameterWidget) {
 	DEBUG("XYFitCurveDock::parametersChanged() m_initializing = " << m_initializing);
 
 	//parameter names were (probably) changed -> set the new names in EquationTextEdit
@@ -895,7 +895,8 @@ void XYFitCurveDock::parametersChanged() {
 	if (m_initializing)
 		return;
 
-	fitParametersWidget->setFitData(&m_fitData);
+	if (updateParameterWidget)
+		fitParametersWidget->setFitData(&m_fitData);
 
 	enableRecalculate();
 }

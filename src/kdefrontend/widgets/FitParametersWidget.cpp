@@ -244,7 +244,7 @@ void FitParametersWidget::changed() {
 	DEBUG("FitParametersWidget::changed()");
 	if (!m_initializing) {
 		apply();
-		emit parametersChanged();
+		emit parametersChanged(false);
 	}
 }
 

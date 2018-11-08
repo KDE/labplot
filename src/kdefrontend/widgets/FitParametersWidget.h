@@ -52,7 +52,7 @@ private:
 	void highlightInvalid(int row, int col, bool invalid);
 
 signals:
-	void parametersChanged();
+	void parametersChanged(bool);
 	void parametersValid(bool);
 
 private slots:

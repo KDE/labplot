@@ -92,7 +92,7 @@ private slots:
 	void showConstants();
 	void showFunctions();
 	void updateParameterList();
-	void parametersChanged();
+	void parametersChanged(bool updateParameterWidget = true);
 	void parametersValid(bool);
 	void showOptions();
 	void insertFunction(const QString&) const;
