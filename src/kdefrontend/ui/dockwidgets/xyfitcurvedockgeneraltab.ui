@@ -112,10 +112,13 @@
       </size>
      </property>
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Plain</enum>
+     </property>
+     <property name="lineWidth">
+      <number>0</number>
      </property>
      <widget class="QToolButton" name="lResults">
       <property name="geometry">
@@ -156,7 +159,7 @@
        <bool>true</bool>
       </property>
       <property name="toolButtonStyle">
-       <enum>Qt::ToolButtonFollowStyle</enum>
+       <enum>Qt::ToolButtonTextBesideIcon</enum>
       </property>
       <property name="autoRaise">
        <bool>true</bool>
@@ -286,10 +289,13 @@
       </size>
      </property>
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Plain</enum>
+     </property>
+     <property name="lineWidth">
+      <number>0</number>
      </property>
      <widget class="QToolButton" name="lParameters">
       <property name="geometry">
