@@ -109,52 +109,7 @@
 \ingroup kdefrontend
 */
 MainWin::MainWin(QWidget *parent, const QString& filename)
-	: KXmlGuiWindow(parent),
-	  m_currentSubWindow(nullptr),
-	  m_project(nullptr),
-	  m_aspectTreeModel(nullptr),
-	  m_projectExplorer(nullptr),
-	  m_projectExplorerDock(nullptr),
-	  m_propertiesDock(nullptr),
-	  m_currentAspect(nullptr),
-	  m_currentFolder(nullptr),
-	  m_suppressCurrentSubWindowChangedEvent(false),
-	  m_closing(false),
-	  m_autoSaveActive(false),
-	  m_visibilityMenu(nullptr),
-	  m_newMenu(nullptr),
-	  m_editMenu(nullptr),
-	  axisDock(nullptr),
-	  notesDock(nullptr),
-	  cartesianPlotDock(nullptr),
-	  cartesianPlotLegendDock(nullptr),
-	  columnDock(nullptr),
-	  m_liveDataDock(nullptr),
-	  matrixDock(nullptr),
-	  spreadsheetDock(nullptr),
-	  projectDock(nullptr),
-	  xyCurveDock(nullptr),
-	  xyEquationCurveDock(nullptr),
-	  xyDataReductionCurveDock(nullptr),
-	  xyDifferentiationCurveDock(nullptr),
-	  xyIntegrationCurveDock(nullptr),
-	  xyInterpolationCurveDock(nullptr),
-	  xySmoothCurveDock(nullptr),
-	  xyFitCurveDock(nullptr),
-	  xyFourierFilterCurveDock(nullptr),
-	  xyFourierTransformCurveDock(nullptr),
-	  xyConvolutionCurveDock(nullptr),
-	  xyCorrelationCurveDock(nullptr),
-	  histogramDock(nullptr),
-	  worksheetDock(nullptr),
-	  textLabelDock(nullptr),
-	  customPointDock(nullptr),
-	  datapickerImageDock(nullptr),
-	  datapickerCurveDock(nullptr),
-#ifdef HAVE_CANTOR_LIBS
-	  cantorWorksheetDock(nullptr),
-#endif
-	  m_guiObserver(nullptr) {
+	: KXmlGuiWindow(parent) {
 
 	initGUI(filename);
 	setAcceptDrops(true);

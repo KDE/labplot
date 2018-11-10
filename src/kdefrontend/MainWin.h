@@ -101,19 +101,19 @@ public:
 
 private:
 	QMdiArea* m_mdiArea;
-	QMdiSubWindow* m_currentSubWindow;
-	Project* m_project;
-	AspectTreeModel* m_aspectTreeModel;
-	ProjectExplorer* m_projectExplorer;
-	QDockWidget* m_projectExplorerDock;
-	QDockWidget* m_propertiesDock;
-	AbstractAspect* m_currentAspect;
-	Folder* m_currentFolder;
+	QMdiSubWindow* m_currentSubWindow{nullptr};
+	Project* m_project{nullptr};
+	AspectTreeModel* m_aspectTreeModel{nullptr};
+	ProjectExplorer* m_projectExplorer{nullptr};
+	QDockWidget* m_projectExplorerDock{nullptr};
+	QDockWidget* m_propertiesDock{nullptr};
+	AbstractAspect* m_currentAspect{nullptr};
+	Folder* m_currentFolder{nullptr};
 	QString m_currentFileName;
 	QString m_undoViewEmptyLabel;
-	bool m_suppressCurrentSubWindowChangedEvent;
-	bool m_closing;
-	bool m_autoSaveActive;
+	bool m_suppressCurrentSubWindowChangedEvent{false};
+	bool m_closing{false};
+	bool m_autoSaveActive{false};
 	QTimer m_autoSaveTimer;
 	Qt::WindowStates m_lastWindowState; //< last window state before switching to full screen mode
 
@@ -174,40 +174,40 @@ private:
 	QAction* m_togglePropertiesDockAction;
 
 	//Menus
-	QMenu* m_visibilityMenu;
-	QMenu* m_newMenu;
+	QMenu* m_visibilityMenu{nullptr};
+	QMenu* m_newMenu{nullptr};
 	QMenu* m_importMenu;
-	QMenu* m_editMenu;
+	QMenu* m_editMenu{nullptr};
 
 	//Docks
 	QStackedWidget* stackedWidget;
-	AxisDock* axisDock;
-	NoteDock* notesDock;
-	CartesianPlotDock* cartesianPlotDock;
-	CartesianPlotLegendDock* cartesianPlotLegendDock;
-	ColumnDock* columnDock;
-	LiveDataDock* m_liveDataDock;
-	MatrixDock* matrixDock;
-	SpreadsheetDock* spreadsheetDock;
-	ProjectDock* projectDock;
-	XYCurveDock* xyCurveDock;
-	XYEquationCurveDock* xyEquationCurveDock;
-	XYDataReductionCurveDock* xyDataReductionCurveDock;
-	XYDifferentiationCurveDock* xyDifferentiationCurveDock;
-	XYIntegrationCurveDock* xyIntegrationCurveDock;
-	XYInterpolationCurveDock* xyInterpolationCurveDock;
-	XYSmoothCurveDock* xySmoothCurveDock;
-	XYFitCurveDock* xyFitCurveDock;
-	XYFourierFilterCurveDock* xyFourierFilterCurveDock;
-	XYFourierTransformCurveDock* xyFourierTransformCurveDock;
-	XYConvolutionCurveDock* xyConvolutionCurveDock;
-	XYCorrelationCurveDock* xyCorrelationCurveDock;
-	HistogramDock* histogramDock;
-	WorksheetDock* worksheetDock;
-	LabelWidget* textLabelDock;
-	CustomPointDock* customPointDock;
-	DatapickerImageWidget* datapickerImageDock;
-	DatapickerCurveWidget* datapickerCurveDock;
+	AxisDock* axisDock{nullptr};
+	NoteDock* notesDock{nullptr};
+	CartesianPlotDock* cartesianPlotDock{nullptr};
+	CartesianPlotLegendDock* cartesianPlotLegendDock{nullptr};
+	ColumnDock* columnDock{nullptr};
+	LiveDataDock* m_liveDataDock{nullptr};
+	MatrixDock* matrixDock{nullptr};
+	SpreadsheetDock* spreadsheetDock{nullptr};
+	ProjectDock* projectDock{nullptr};
+	XYCurveDock* xyCurveDock{nullptr};
+	XYEquationCurveDock* xyEquationCurveDock{nullptr};
+	XYDataReductionCurveDock* xyDataReductionCurveDock{nullptr};
+	XYDifferentiationCurveDock* xyDifferentiationCurveDock{nullptr};
+	XYIntegrationCurveDock* xyIntegrationCurveDock{nullptr};
+	XYInterpolationCurveDock* xyInterpolationCurveDock{nullptr};
+	XYSmoothCurveDock* xySmoothCurveDock{nullptr};
+	XYFitCurveDock* xyFitCurveDock{nullptr};
+	XYFourierFilterCurveDock* xyFourierFilterCurveDock{nullptr};
+	XYFourierTransformCurveDock* xyFourierTransformCurveDock{nullptr};
+	XYConvolutionCurveDock* xyConvolutionCurveDock{nullptr};
+	XYCorrelationCurveDock* xyCorrelationCurveDock{nullptr};
+	HistogramDock* histogramDock{nullptr};
+	WorksheetDock* worksheetDock{nullptr};
+	LabelWidget* textLabelDock{nullptr};
+	CustomPointDock* customPointDock{nullptr};
+	DatapickerImageWidget* datapickerImageDock{nullptr};
+	DatapickerCurveWidget* datapickerCurveDock{nullptr};
 
 	void initActions();
 	void initMenus();
@@ -226,12 +226,12 @@ private:
 	//Cantor
 #ifdef HAVE_CANTOR_LIBS
 	QMenu* m_newCantorWorksheetMenu;
-	CantorWorksheetDock* cantorWorksheetDock;
+	CantorWorksheetDock* cantorWorksheetDock{nullptr};
 	CantorWorksheet* activeCantorWorksheet() const;
 #endif
 
 	friend class GuiObserver;
-	GuiObserver* m_guiObserver;
+	GuiObserver* m_guiObserver{nullptr};
 
 protected:
 	void closeEvent(QCloseEvent*) override;
