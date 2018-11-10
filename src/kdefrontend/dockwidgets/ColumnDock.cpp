@@ -2,7 +2,7 @@
     File                 : ColumnDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : widget for column properties
 
@@ -102,7 +102,9 @@ void ColumnDock::setColumns(QList<Column*> list) {
 
 	//show the properties of the first column
 	AbstractColumn::ColumnMode columnMode = m_column->columnMode();
-	ui.cbType->setCurrentIndex(ui.cbType->findData((int)columnMode));
+	this->updateFormatWidgets(columnMode);
+	this->updateTypeWidgets(columnMode);
+	ui.cbPlotDesignation->setCurrentIndex( int(m_column->plotDesignation()) );
 
 	//disable widgets if we have at least one non-editable column
 	ui.cbType->setEnabled(!nonEditable);
@@ -117,9 +119,19 @@ void ColumnDock::setColumns(QList<Column*> list) {
 		return;
 	}
 
-	this->updateFormatWidgets(columnMode);
+	// slots
+	connect(m_column, &AbstractColumn::aspectDescriptionChanged, this, &ColumnDock::columnDescriptionChanged);
+	connect(m_column, &AbstractColumn::modeChanged, this, &ColumnDock::columnModeChanged);
+	connect(m_column->outputFilter(), &AbstractSimpleFilter::formatChanged, this, &ColumnDock::columnFormatChanged);
+	connect(m_column->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &ColumnDock::columnPrecisionChanged);
+	connect(m_column, &AbstractColumn::plotDesignationChanged, this, &ColumnDock::columnPlotDesignationChanged);
 
-	switch(columnMode) {
+	m_initializing = false;
+}
+
+void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
+	ui.cbType->setCurrentIndex(ui.cbType->findData((int)mode));
+	switch(mode) {
 	case AbstractColumn::Numeric: {
 			auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
 			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->numericFormat()));
@@ -138,16 +150,6 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	case AbstractColumn::Text:
 		break;
 	}
-
-	ui.cbPlotDesignation->setCurrentIndex( int(m_column->plotDesignation()) );
-
-	// slots
-	connect(m_column, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(columnDescriptionChanged(const AbstractAspect*)));
-	connect(m_column->outputFilter(), SIGNAL(formatChanged()),this, SLOT(columnFormatChanged()));
-	connect(m_column->outputFilter(), SIGNAL(digitsChanged()),this, SLOT(columnPrecisionChanged()));
-	connect(m_column, SIGNAL(plotDesignationChanged(const AbstractColumn*)),this, SLOT(columnPlotDesignationChanged(const AbstractColumn*)));
-
-	m_initializing = false;
 }
 
 /*!
@@ -155,10 +157,10 @@ void ColumnDock::setColumns(QList<Column*> list) {
   shows/hides the allowed widgets, fills the corresponding combobox with the possible entries.
   Called when the type (column mode) is changed.
 */
-void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode) {
+void ColumnDock::updateFormatWidgets(AbstractColumn::ColumnMode mode) {
 	ui.cbFormat->clear();
 
-	switch (columnMode) {
+	switch (mode) {
 	case AbstractColumn::Numeric:
 		ui.cbFormat->addItem(i18n("Decimal"), QVariant('f'));
 		ui.cbFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
@@ -187,7 +189,7 @@ void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode
 		break;
 	}
 
-	if (columnMode == AbstractColumn::Numeric) {
+	if (mode == AbstractColumn::Numeric) {
 		ui.lPrecision->show();
 		ui.sbPrecision->show();
 	} else {
@@ -195,7 +197,7 @@ void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode
 		ui.sbPrecision->hide();
 	}
 
-	if (columnMode == AbstractColumn::Text || columnMode == AbstractColumn::Integer) {
+	if (mode == AbstractColumn::Text || mode == AbstractColumn::Integer) {
 		ui.lFormat->hide();
 		ui.cbFormat->hide();
 	} else {
@@ -203,7 +205,7 @@ void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode
 		ui.cbFormat->show();
 	}
 
-	if (columnMode == AbstractColumn::DateTime) {
+	if (mode == AbstractColumn::DateTime) {
 		ui.cbFormat->setEditable(true);
 		ui.cbFormat->setCurrentItem("yyyy-MM-dd hh:mm:ss.zzz");
 	} else {
@@ -382,6 +384,17 @@ void ColumnDock::columnDescriptionChanged(const AbstractAspect* aspect) {
 		ui.leName->setText(aspect->name());
 	else if (aspect->comment() != ui.leComment->text())
 		ui.leComment->setText(aspect->comment());
+	m_initializing = false;
+}
+
+void ColumnDock::columnModeChanged(const AbstractAspect* aspect) {
+	if (m_column != aspect)
+		return;
+
+	m_initializing = true;
+	AbstractColumn::ColumnMode columnMode = m_column->columnMode();
+	this->updateFormatWidgets(columnMode);
+	this->updateTypeWidgets(columnMode);
 	m_initializing = false;
 }
 

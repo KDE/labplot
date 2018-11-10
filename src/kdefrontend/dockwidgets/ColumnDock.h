@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for column properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -48,7 +48,8 @@ private:
 	Column* m_column;
 	bool m_initializing;
 
-	void updateFormatWidgets(const AbstractColumn::ColumnMode);
+	void updateTypeWidgets(AbstractColumn::ColumnMode);
+	void updateFormatWidgets(AbstractColumn::ColumnMode);
 
 private slots:
 	void retranslateUi();
@@ -62,6 +63,7 @@ private slots:
 
 	//SLOTs for changes triggered in Column
 	void columnDescriptionChanged(const AbstractAspect*);
+	void columnModeChanged(const AbstractAspect*);
 	void columnFormatChanged();
 	void columnPrecisionChanged();
 	void columnPlotDesignationChanged(const AbstractColumn*);
