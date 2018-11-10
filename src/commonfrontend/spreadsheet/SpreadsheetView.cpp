@@ -1413,15 +1413,15 @@ void SpreadsheetView::fillWithRowNumbers() {
 
 	const int rows = m_spreadsheet->rowCount();
 
-	QVector<double> double_data(rows);
 	QVector<int> int_data(rows);
 	for (int i = 0; i < rows; ++i)
-		double_data[i] = int_data[i] = i+1;
+		int_data[i] = i+1;
 
 	for (auto* col : selectedColumns()) {
 		switch (col->columnMode()) {
 		case AbstractColumn::Numeric:
-			col->replaceValues(0, double_data);
+			col->setColumnMode(AbstractColumn::Integer);
+			col->replaceInteger(0, int_data);
 			break;
 		case AbstractColumn::Integer:
 			col->replaceInteger(0, int_data);
