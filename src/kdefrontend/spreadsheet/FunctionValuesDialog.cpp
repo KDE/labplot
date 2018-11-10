@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dialog for generating values from a mathematical function
     --------------------------------------------------------------------
-    Copyright            : (C) 2014-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2018 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -323,7 +323,7 @@ void FunctionValuesDialog::generate() {
 	QStringList variableNames;
 	QStringList columnPathes;
 	QVector<QVector<double>*> xVectors;
-	QVector<Column*> xColumns;
+	QVector<QVector<double>*> xNewVectors;
 	int maxRowCount = m_spreadsheet->rowCount();
 	for (int i = 0; i < m_variableNames.size(); ++i) {
 		variableNames << m_variableNames.at(i)->text().simplified();
@@ -333,8 +333,16 @@ void FunctionValuesDialog::generate() {
 		auto* column = dynamic_cast<Column*>(aspect);
 		Q_ASSERT(column);
 		columnPathes << column->path();
-		xColumns << column;
-		xVectors << static_cast<QVector<double>* >(column->data());
+		if (column->columnMode() == AbstractColumn::Integer) {
+			//conver integers to doubles first
+			QVector<double>* xVector = new QVector<double>(column->rowCount());
+			for (int i = 0; i<column->rowCount(); ++i)
+				xVector->operator[](i) = column->valueAt(i);
+
+			xNewVectors << xVector;
+			xVectors << xVector;
+		} else
+			xVectors << static_cast<QVector<double>* >(column->data());
 
 		if (column->rowCount() > maxRowCount)
 			maxRowCount = column->rowCount();
@@ -363,5 +371,10 @@ void FunctionValuesDialog::generate() {
 	}
 
 	m_spreadsheet->endMacro();
+
+	//delete help vectors created for the conversion from int to double
+	for (auto* vector : xNewVectors)
+		delete vector;
+
 	RESET_CURSOR;
 }
