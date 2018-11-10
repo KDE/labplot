@@ -8,9 +8,12 @@ New features:
 	* Allow to rotate plot legends
 	* Allow to specify the number format when exporting spreadsheet and matrix
 	* Improved user interface for data fitting (add fit function preview, show parameters directly, make options foldable)
+	* [spreadsheet] when filling a float column with row numbers, automatically convert its type to integer
+	* [spreadsheet] when filling an integer column with function values, automatically convert its type to float
 
 Bug fixes:
 	* Fixed several problems in live data support
+	* [spreadsheet] properly calculate function values out of integer x-values
 
 -----2.5-----
 New features:

@@ -368,6 +368,9 @@ void FunctionValuesDialog::generate() {
 
 	//set the new values and store the expression, variable names and the used data columns
 	for (auto* col : m_columns) {
+		if (col->columnMode() != AbstractColumn::Numeric)
+			col->setColumnMode(AbstractColumn::Numeric);
+
 		col->setFormula(expression, variableNames, columnPathes);
 		col->replaceValues(0, new_data);
 	}
