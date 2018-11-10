@@ -10,6 +10,9 @@
     <height>1238</height>
    </rect>
   </property>
+  <property name="toolTip">
+   <string>Source of y data</string>
+  </property>
   <property name="autoFillBackground">
    <bool>true</bool>
   </property>
@@ -19,6 +22,9 @@
    </item>
    <item row="5" column="0" colspan="2">
     <widget class="QLabel" name="lDataSourceType">
+     <property name="toolTip">
+      <string>Type of data source</string>
+     </property>
      <property name="text">
       <string>Source:</string>
      </property>
@@ -182,6 +188,9 @@
    </item>
    <item row="18" column="0">
     <widget class="QLabel" name="lEquation">
+     <property name="toolTip">
+      <string>Function of fit model</string>
+     </property>
      <property name="text">
       <string>f(x) =</string>
      </property>
@@ -189,6 +198,9 @@
    </item>
    <item row="8" column="0" colspan="2">
     <widget class="QLabel" name="lYColumn">
+     <property name="toolTip">
+      <string>Source of y data</string>
+     </property>
      <property name="text">
       <string>y-Data:</string>
      </property>
@@ -196,6 +208,9 @@
    </item>
    <item row="34" column="0" colspan="2">
     <widget class="QCheckBox" name="chkVisible">
+     <property name="toolTip">
+      <string>Show fit curve</string>
+     </property>
      <property name="text">
       <string>Visible</string>
      </property>
@@ -256,6 +271,9 @@
         <property name="toolTip">
          <string>Functions</string>
         </property>
+        <property name="whatsThis">
+         <string>Select predefined function</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -265,6 +283,9 @@
        <widget class="QToolButton" name="tbConstants">
         <property name="toolTip">
          <string>Constants</string>
+        </property>
+        <property name="whatsThis">
+         <string>Select predefined constants</string>
         </property>
         <property name="text">
          <string/>
@@ -418,6 +439,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QTabWidget" name="twResults">
+       <property name="toolTip">
+        <string>Resulting fit parameter and properties</string>
+       </property>
        <property name="autoFillBackground">
         <bool>true</bool>
        </property>
@@ -820,6 +844,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip">
+      <string>Run fit</string>
+     </property>
      <property name="text">
       <string>Recalculate</string>
      </property>
@@ -892,6 +919,9 @@
    </item>
    <item row="16" column="0">
     <widget class="QLabel" name="lModel">
+     <property name="toolTip">
+      <string>Fit model type</string>
+     </property>
      <property name="text">
       <string>Model:</string>
      </property>
@@ -899,6 +929,9 @@
    </item>
    <item row="17" column="0">
     <widget class="QLabel" name="lDegree">
+     <property name="toolTip">
+      <string>Degree of fit model</string>
+     </property>
      <property name="text">
       <string>Degree:</string>
      </property>
@@ -906,6 +939,9 @@
    </item>
    <item row="0" column="0">
     <widget class="QLabel" name="lName">
+     <property name="toolTip">
+      <string>Name of the fit curve</string>
+     </property>
      <property name="text">
       <string>Name:</string>
      </property>
@@ -913,6 +949,9 @@
    </item>
    <item row="12" column="0">
     <widget class="QLabel" name="lYWeight">
+     <property name="toolTip">
+      <string>Weight for y data</string>
+     </property>
      <property name="text">
       <string>y-Weight:</string>
      </property>
@@ -946,6 +985,9 @@
    </item>
    <item row="15" column="0">
     <widget class="QLabel" name="lCategory">
+     <property name="toolTip">
+      <string>Fit model category</string>
+     </property>
      <property name="text">
       <string>Category:</string>
      </property>
@@ -953,6 +995,9 @@
    </item>
    <item row="7" column="0" colspan="2">
     <widget class="QLabel" name="lXColumn">
+     <property name="toolTip">
+      <string>Source of x data</string>
+     </property>
      <property name="text">
       <string>x-Data:</string>
      </property>
@@ -1015,6 +1060,9 @@
    </item>
    <item row="11" column="0">
     <widget class="QLabel" name="lXWeight">
+     <property name="toolTip">
+      <string>Weight for x data</string>
+     </property>
      <property name="text">
       <string>x-Weight:</string>
      </property>
@@ -1022,6 +1070,9 @@
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="lComment">
+     <property name="toolTip">
+      <string>Optional comment</string>
+     </property>
      <property name="text">
       <string>Comment:</string>
      </property>
@@ -1039,6 +1090,9 @@
    </item>
    <item row="6" column="0" colspan="2">
     <widget class="QLabel" name="lDataSourceCurve">
+     <property name="toolTip">
+      <string>Source curve</string>
+     </property>
      <property name="text">
       <string>Curve:</string>
      </property>
@@ -1101,6 +1155,9 @@
        </property>
        <property name="toolTip">
         <string>Advanced fit options</string>
+       </property>
+       <property name="whatsThis">
+        <string>Opens a dialog to change advanced fit options</string>
        </property>
        <property name="layoutDirection">
         <enum>Qt::RightToLeft</enum>
