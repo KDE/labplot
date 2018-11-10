@@ -145,6 +145,8 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 			}
 		}
 	}
+
+	checkValues();
 }
 
 /*!
