@@ -227,7 +227,7 @@ void MainWin::initGUI(const QString& fileName) {
 	QFont font;
 	font.setFamily(font.defaultFamily());
 	QFontMetrics fm(font);
-	statusBar()->setFixedHeight(fm.height()+5);
+	statusBar()->setFixedHeight(fm.height() + 5);
 
 	//load recently used projects
 	m_recentProjectsAction->loadEntries( KSharedConfig::openConfig()->group("Recent Files") );
@@ -296,32 +296,38 @@ void MainWin::initActions() {
 	m_printAction = KStandardAction::print(this, SLOT(print()),actionCollection());
 	m_printPreviewAction = KStandardAction::printPreview(this, SLOT(printPreview()),actionCollection());
 	KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
+
 	//New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
 	m_newWorkbookAction = new QAction(QIcon::fromTheme("labplot-workbook-new"),i18n("Workbook"),this);
 	actionCollection()->addAction("new_workbook", m_newWorkbookAction);
+	m_newWorkbookAction->setWhatsThis(i18n("Creates a new workbook for collection spreadsheets, matrices and plots"));
 	connect(m_newWorkbookAction, SIGNAL(triggered()), SLOT(newWorkbook()));
 
 	m_newDatapickerAction = new QAction(QIcon::fromTheme("color-picker-black"), i18n("Datapicker"), this);
+	m_newDatapickerAction->setWhatsThis(i18n("Creates a data picker for getting data from a picture"));
 	actionCollection()->addAction("new_datapicker", m_newDatapickerAction);
 	connect(m_newDatapickerAction, SIGNAL(triggered()), SLOT(newDatapicker()));
 
 	m_newSpreadsheetAction = new QAction(QIcon::fromTheme("labplot-spreadsheet-new"),i18n("Spreadsheet"),this);
-
 // 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
+	m_newSpreadsheetAction->setWhatsThis(i18n("Creates a new spreadsheet for data editing"));
 	actionCollection()->addAction("new_spreadsheet", m_newSpreadsheetAction);
 	connect(m_newSpreadsheetAction, SIGNAL(triggered()), SLOT(newSpreadsheet()));
 
 	m_newMatrixAction = new QAction(QIcon::fromTheme("labplot-matrix-new"),i18n("Matrix"),this);
 // 	m_newMatrixAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
+	m_newMatrixAction->setWhatsThis(i18n("Creates a new matrix for data editing"));
 	actionCollection()->addAction("new_matrix", m_newMatrixAction);
 	connect(m_newMatrixAction, SIGNAL(triggered()), SLOT(newMatrix()));
 
-	m_newWorksheetAction= new QAction(QIcon::fromTheme("labplot-worksheet-new"),i18n("Worksheet"),this);
+	m_newWorksheetAction = new QAction(QIcon::fromTheme("labplot-worksheet-new"),i18n("Worksheet"),this);
 // 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
+	m_newWorksheetAction->setWhatsThis(i18n("Creates a new worksheet for data plotting"));
 	actionCollection()->addAction("new_worksheet", m_newWorksheetAction);
 	connect(m_newWorksheetAction, SIGNAL(triggered()), SLOT(newWorksheet()));
 
-	m_newNotesAction= new QAction(QIcon::fromTheme("document-new"),i18n("Note"),this);
+	m_newNotesAction = new QAction(QIcon::fromTheme("document-new"),i18n("Note"),this);
+	m_newNotesAction->setWhatsThis(i18n("Creates a new note for arbitrary text"));
 	actionCollection()->addAction("new_notes", m_newNotesAction);
 	connect(m_newNotesAction, SIGNAL(triggered()), SLOT(newNotes()));
 
@@ -330,40 +336,48 @@ void MainWin::initActions() {
 // 	connect(m_newScriptAction, SIGNAL(triggered()),SLOT(newScript()));
 
 	m_newFolderAction = new QAction(QIcon::fromTheme("folder-new"),i18n("Folder"),this);
+	m_newFolderAction->setWhatsThis(i18n("Creates a new folder to collect sheets and other elements"));
 	actionCollection()->addAction("new_folder", m_newFolderAction);
 	connect(m_newFolderAction, SIGNAL(triggered()), SLOT(newFolder()));
 
 	//"New file datasources"
 	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"),i18n("Live Data Source"),this);
+	m_newLiveDataSourceAction->setWhatsThis(i18n("Creates a live data source to read data from a real time device"));
 	actionCollection()->addAction("new_live_datasource", m_newLiveDataSourceAction);
 	connect(m_newLiveDataSourceAction, SIGNAL(triggered()), this, SLOT(newLiveDataSourceActionTriggered()));
 
 	//Import/Export
 	m_importFileAction = new QAction(QIcon::fromTheme("document-import"), i18n("From File"), this);
 	actionCollection()->setDefaultShortcut(m_importFileAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
+	m_importFileAction->setWhatsThis(i18n("Import data from a regular file"));
 	actionCollection()->addAction("import_file", m_importFileAction);
 	connect(m_importFileAction, SIGNAL(triggered()), SLOT(importFileDialog()));
 
 	m_importSqlAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("From SQL Database"), this);
+	m_importSqlAction->setWhatsThis(i18n("Import data from a SQL database"));
 	actionCollection()->addAction("import_sql", m_importSqlAction);
 	connect(m_importSqlAction, SIGNAL(triggered()),SLOT(importSqlDialog()));
 
 	m_importLabPlotAction = new QAction(QIcon::fromTheme("document-import"), i18n("LabPlot Project"), this);
+	m_importLabPlotAction->setWhatsThis(i18n("Import a project from a LabPlot project file (.lml)"));
 	actionCollection()->addAction("import_labplot", m_importLabPlotAction);
 	connect(m_importLabPlotAction, SIGNAL(triggered()),SLOT(importProjectDialog()));
 
 #ifdef HAVE_LIBORIGIN
 	m_importOpjAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Origin Project (OPJ)"), this);
+	m_importOpjAction->setWhatsThis(i18n("Import a project from an OriginLab Origin project file (.opj)"));
 	actionCollection()->addAction("import_opj", m_importOpjAction);
 	connect(m_importOpjAction, SIGNAL(triggered()),SLOT(importProjectDialog()));
 #endif
 
 	m_exportAction = new QAction(QIcon::fromTheme("document-export"), i18n("Export"), this);
+	m_exportAction->setWhatsThis(i18n("Export selected element"));
 	actionCollection()->setDefaultShortcut(m_exportAction, Qt::CTRL+Qt::SHIFT+Qt::Key_E);
 	actionCollection()->addAction("export", m_exportAction);
 	connect(m_exportAction, SIGNAL(triggered()), SLOT(exportDialog()));
 
 	m_editFitsFileAction = new QAction(i18n("FITS Metadata Editor"), this);
+	m_editFitsFileAction->setWhatsThis(i18n("Open editor to edit FITS meta data"));
 	actionCollection()->addAction("edit_fits", m_editFitsFileAction);
 	connect(m_editFitsFileAction, SIGNAL(triggered()), SLOT(editFitsFileDialog()));
 
