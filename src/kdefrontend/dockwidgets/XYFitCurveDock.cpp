@@ -32,6 +32,7 @@
 #include "backend/core/Project.h"
 #include "backend/lib/macros.h"
 #include "backend/gsl/ExpressionParser.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
@@ -931,6 +932,23 @@ void XYFitCurveDock::insertConstant(const QString& str) const {
 	uiGeneralTab.teEquation->insertPlainText(str);
 }
 
+/*!
+ * When a custom evaluate range is specified, set the plot range too.
+ */
+void XYFitCurveDock::setPlotXRange() {
+	if (m_fitData.autoEvalRange || m_curve == nullptr)
+		return;
+
+	auto* plot = dynamic_cast<CartesianPlot*>(m_curve->parentAspect());
+	if (plot != nullptr) {
+		double rmin = m_fitData.evalRange.first();
+		double rmax = m_fitData.evalRange.last();
+		double extend = (rmax-rmin) * 0.05;	// 5 percent of range
+		plot->setXMin(rmin - extend);
+		plot->setXMax(rmax + extend);
+	}
+}
+
 void XYFitCurveDock::recalculateClicked() {
 	DEBUG("XYFitCurveDock::recalculateClicked()");
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -942,6 +960,7 @@ void XYFitCurveDock::recalculateClicked() {
 		dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
 
 	m_fitCurve->recalculate();
+	setPlotXRange();
 
 	//update fitParametersWidget
 	if (m_fitData.useResults) {
@@ -970,7 +989,7 @@ void XYFitCurveDock::expressionChanged() {
 	enableRecalculate();
 }
 
-void XYFitCurveDock::enableRecalculate() const {
+void XYFitCurveDock::enableRecalculate() {
 	DEBUG("XYFitCurveDock::enableRecalculate()");
 	if (m_initializing || m_fitCurve == nullptr)
 		return;
@@ -994,6 +1013,7 @@ void XYFitCurveDock::enableRecalculate() const {
 		m_fitCurve->setFitData(m_fitData);
 		// calculate fit function
 		m_fitCurve->evaluate(true);
+		setPlotXRange();
 	}
 	else {
 		DEBUG("	EVALUATE PREVIEW DISABLED");

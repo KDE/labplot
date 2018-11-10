@@ -97,10 +97,11 @@ private slots:
 	void showOptions();
 	void insertFunction(const QString&) const;
 	void insertConstant(const QString&) const;
+	void setPlotXRange();
 	void recalculateClicked();
 	void updateModelEquation();
 	void expressionChanged();
-	void enableRecalculate() const;
+	void enableRecalculate();
 	void resultParametersContextMenuRequest(QPoint);
 	void resultGoodnessContextMenuRequest(QPoint);
 	void resultLogContextMenuRequest(QPoint);
