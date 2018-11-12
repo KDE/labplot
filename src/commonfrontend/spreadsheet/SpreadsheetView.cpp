@@ -65,6 +65,7 @@
 
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
+#include "kdefrontend/spreadsheet/AddSubtractValueDialog.h"
 #include "kdefrontend/spreadsheet/DropValuesDialog.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
 #include "kdefrontend/spreadsheet/RandomValuesDialog.h"
@@ -260,12 +261,17 @@ void SpreadsheetView::initActions() {
 	action_set_as_yerr_plus = new QAction(i18n("Y-error plus"), this);
 	action_set_as_yerr_plus->setData(AbstractColumn::YErrorPlus);
 
-	action_reverse_columns = new QAction(QIcon::fromTheme(""), i18n("Reverse"), this);
+	//data manipulation
+	action_add_value = new QAction(i18n("Add Value"), this);
+	action_subtract_value = new QAction(i18n("Subtract Value"), this);
 	action_drop_values = new QAction(QIcon::fromTheme(""), i18n("Drop Values"), this);
 	action_mask_values = new QAction(QIcon::fromTheme(""), i18n("Mask Values"), this);
+	action_reverse_columns = new QAction(QIcon::fromTheme(""), i18n("Reverse"), this);
 // 	action_join_columns = new QAction(QIcon::fromTheme(""), i18n("Join"), this);
 	action_normalize_columns = new QAction(QIcon::fromTheme(""), i18n("&Normalize"), this);
 	action_normalize_selection = new QAction(QIcon::fromTheme(""), i18n("&Normalize Selection"), this);
+
+	//sort and statistics
 	action_sort_columns = new QAction(QIcon::fromTheme(""), i18n("&Selected Columns"), this);
 	action_sort_asc_column = new QAction(QIcon::fromTheme("view-sort-ascending"), i18n("&Ascending"), this);
 	action_sort_desc_column = new QAction(QIcon::fromTheme("view-sort-descending"), i18n("&Descending"), this);
@@ -285,11 +291,6 @@ void SpreadsheetView::initActions() {
 	action_plot_data_histogram->setData(PlotDataDialog::PlotHistogram);
 
 	//Analyze and plot menu actions
-	//TODO: no own icons yet
-	addDataOperationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Data Operation"), this);
-//	addDataOperationAction = new QAction(QIcon::fromTheme("labplot-xy-data-operation-curve"), i18n("Data Operation"), this);
-	//TODO: enable when available
-	addDataOperationAction->setEnabled(false);
 	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Reduce Data"), this);
 //	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-data-reduction-curve"), i18n("Reduce Data"), this);
 	addDataReductionAction->setData(PlotDataDialog::DataReduction);
@@ -390,7 +391,6 @@ void SpreadsheetView::initMenus() {
 	// Data manipulation sub-menu
 	QMenu* dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
 	dataManipulationMenu->setIcon(QIcon::fromTheme("zoom-draw"));
-	dataManipulationMenu->addAction(addDataOperationAction);
 	dataManipulationMenu->addAction(addDataReductionAction);
 
 	// Data fit sub-menu
@@ -453,11 +453,19 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addMenu(m_columnGenerateDataMenu);
 		m_columnMenu->addSeparator();
 
-		m_columnMenu->addAction(action_reverse_columns);
-		m_columnMenu->addAction(action_drop_values);
-		m_columnMenu->addAction(action_mask_values);
-		// 	m_columnMenu->addAction(action_join_columns);
-		m_columnMenu->addAction(action_normalize_columns);
+		m_columnManipulateDataMenu = new QMenu(i18n("Manipulate Data"), this);
+		m_columnManipulateDataMenu->addAction(action_add_value);
+		m_columnManipulateDataMenu->addAction(action_subtract_value);
+		m_columnManipulateDataMenu->addSeparator();
+		m_columnManipulateDataMenu->addAction(action_reverse_columns);
+		m_columnManipulateDataMenu->addSeparator();
+		m_columnManipulateDataMenu->addAction(action_drop_values);
+		m_columnManipulateDataMenu->addAction(action_mask_values);
+		m_columnManipulateDataMenu->addSeparator();
+		// 	m_columnManipulateDataMenu->addAction(action_join_columns);
+		m_columnManipulateDataMenu->addAction(action_normalize_columns);
+		m_columnMenu->addMenu(m_columnManipulateDataMenu);
+		m_columnMenu->addSeparator();
 
 		m_columnSortMenu = new QMenu(i18n("Sort"), this);
 		m_columnSortMenu->setIcon(QIcon::fromTheme("view-sort-ascending"));
@@ -559,15 +567,23 @@ void SpreadsheetView::connectActions() {
 	connect(action_set_as_yerr, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
 	connect(action_set_as_yerr_minus, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
 	connect(action_set_as_yerr_plus, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
+
+	//data manipulation
+	connect(action_add_value, SIGNAL(triggered()), this, SLOT(addValue()));
+	connect(action_subtract_value, SIGNAL(triggered()), this, SLOT(subtractValue()));
 	connect(action_reverse_columns, SIGNAL(triggered()), this, SLOT(reverseColumns()));
 	connect(action_drop_values, SIGNAL(triggered()), this, SLOT(dropColumnValues()));
 	connect(action_mask_values, SIGNAL(triggered()), this, SLOT(maskColumnValues()));
 // 	connect(action_join_columns, SIGNAL(triggered()), this, SLOT(joinColumns()));
 	connect(action_normalize_columns, SIGNAL(triggered()), this, SLOT(normalizeSelectedColumns()));
 	connect(action_normalize_selection, SIGNAL(triggered()), this, SLOT(normalizeSelection()));
+
+	//sort
 	connect(action_sort_columns, SIGNAL(triggered()), this, SLOT(sortSelectedColumns()));
 	connect(action_sort_asc_column, SIGNAL(triggered()), this, SLOT(sortColumnAscending()));
 	connect(action_sort_desc_column, SIGNAL(triggered()), this, SLOT(sortColumnDescending()));
+
+	//statistics
 	connect(action_statistics_columns, SIGNAL(triggered()), this, SLOT(showColumnStatistics()));
 	connect(action_statistics_all_columns, SIGNAL(triggered()), this, SLOT(showAllColumnsStatistics()));
 
@@ -672,13 +688,8 @@ void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
 		if (!m_readOnly) {
 			menu->insertSeparator(firstAction);
 			menu->insertMenu(firstAction, m_columnGenerateDataMenu);
-
 			menu->insertSeparator(firstAction);
-			menu->insertAction(firstAction, action_reverse_columns);
-			menu->insertAction(firstAction, action_drop_values);
-			menu->insertAction(firstAction, action_mask_values);
-			menu->insertAction(firstAction, action_normalize_columns);
-
+			menu->insertMenu(firstAction, m_columnManipulateDataMenu);
 			menu->insertSeparator(firstAction);
 			menu->insertMenu(firstAction, m_columnSortMenu);
 			action_sort_asc_column->setVisible(true);
@@ -1025,10 +1036,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			m_columnSetAsMenu->setEnabled(numeric);
 			if (!m_readOnly) {
 				m_columnGenerateDataMenu->setEnabled(numeric);
-				action_reverse_columns->setEnabled(numeric);
-				action_drop_values->setEnabled(numeric);
-				action_mask_values->setEnabled(numeric);
-				action_normalize_columns->setEnabled(numeric);
+				m_columnManipulateDataMenu->setEnabled(numeric);
 				m_columnSortMenu->setEnabled(numeric);
 			}
 			action_statistics_columns->setEnabled(numeric);
@@ -1048,10 +1056,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 					m_columnGenerateDataMenu->setEnabled(hasCells);
 
 					//in case no valid numerical values are available, deactivate the actions that only make sense in the presence of values
-					action_reverse_columns->setEnabled(hasValues);
-					action_drop_values->setEnabled(hasValues);
-					action_mask_values->setEnabled(hasValues);
-					action_normalize_columns->setEnabled(hasValues);
+					m_columnManipulateDataMenu->setEnabled(hasValues);
 					m_columnSortMenu->setEnabled(hasValues);
 				}
 
@@ -1752,6 +1757,20 @@ void SpreadsheetView::setSelectionAs() {
 		col->setPlotDesignation(pd);
 
 	m_spreadsheet->endMacro();
+}
+
+void SpreadsheetView::addValue() {
+	if (selectedColumnCount() < 1) return;
+	auto* dlg = new AddSubtractValueDialog(m_spreadsheet, true);
+	dlg->setColumns(selectedColumns());
+	dlg->exec();
+}
+
+void SpreadsheetView::subtractValue() {
+	if (selectedColumnCount() < 1) return;
+	auto* dlg = new AddSubtractValueDialog(m_spreadsheet, false);
+	dlg->setColumns(selectedColumns());
+	dlg->exec();
 }
 
 void SpreadsheetView::reverseColumns() {

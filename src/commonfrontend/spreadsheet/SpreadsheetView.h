@@ -146,6 +146,8 @@ private:
 	QAction* action_set_as_yerr_plus;
 	QAction* action_set_as_yerr_minus;
 	QAction* action_reverse_columns;
+	QAction* action_add_value;
+	QAction* action_subtract_value;
 	QAction* action_drop_values;
 	QAction* action_mask_values;
 	QAction* action_join_columns;
@@ -180,6 +182,7 @@ private:
 	QMenu* m_columnMenu;
 	QMenu* m_columnSetAsMenu;
 	QMenu* m_columnGenerateDataMenu;
+	QMenu* m_columnManipulateDataMenu;
 	QMenu* m_columnSortMenu;
 	QMenu* m_rowMenu;
 	QMenu* m_spreadsheetMenu;
@@ -229,12 +232,15 @@ private slots:
 	void removeSelectedColumns();
 	void clearSelectedColumns();
 
+	void addValue();
+	void subtractValue();
 	void reverseColumns();
 	void dropColumnValues();
 	void maskColumnValues();
 	void joinColumns();
 	void normalizeSelectedColumns();
 	void normalizeSelection();
+
 	void sortSelectedColumns();
 	void sortColumnAscending();
 	void sortColumnDescending();

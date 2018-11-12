@@ -586,26 +586,32 @@ void* Column::data() const {
  * return \c true if the column has numeric values, \false otherwise.
  */
 bool Column::hasValues() const {
-	if (columnMode() == AbstractColumn::Numeric) {
-		if (d->hasValuesAvailable) {
-			return d->hasValues;
-		} else {
-			bool foundValues = false;
-			for (int row = 0; row < rowCount(); ++row) {
-				if (!std::isnan(valueAt(row))) {
-					foundValues = true;
-					break;
-				}
-			}
+	if (d->hasValuesAvailable)
+		return d->hasValues;
 
-			d->hasValues = foundValues;
-			d->hasValuesAvailable = true;
-			return d->hasValues;
+	bool foundValues = false;
+	if (columnMode() == AbstractColumn::Numeric) {
+		for (int row = 0; row < rowCount(); ++row) {
+			if (!std::isnan(valueAt(row))) {
+				foundValues = true;
+				break;
+			}
 		}
-	} else if (columnMode() == AbstractColumn::Integer)
-		return true; //integer column has always valid values
-	else
-		return false; //non-numerical column
+	} else if (columnMode() == AbstractColumn::Integer) {
+		//integer column has always valid values
+		foundValues = true;
+	} else if (columnMode() == AbstractColumn::DateTime) {
+		for (int row = 0; row < rowCount(); ++row) {
+			if (dateTimeAt(row).isValid()) {
+				foundValues = true;
+				break;
+			}
+		}
+	}
+
+	d->hasValues = foundValues;
+	d->hasValuesAvailable = true;
+	return d->hasValues;
 }
 
 //TODO: support all data types
