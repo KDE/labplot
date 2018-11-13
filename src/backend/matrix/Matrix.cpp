@@ -429,8 +429,8 @@ template QString Matrix::text<QDateTime>(int row, int col);
 //! Set the value of the cell (needs explicit instantiation)
 template <typename T>
 void Matrix::setCell(int row, int col, T value) {
-	if(row < 0 || row >= rowCount()) return;
-	if(col < 0 || col >= columnCount()) return;
+	if (row < 0 || row >= rowCount()) return;
+	if (col < 0 || col >= columnCount()) return;
 	exec(new MatrixSetCellValueCmd<T>(d, row, col, value));
 }
 template void Matrix::setCell<double>(int row, int col, double value);
