@@ -1021,9 +1021,11 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			//check whether we have non-numeric columns selected and deactivate actions for numeric columns
 			bool numeric = true;
 			bool plottable = true;
+			bool datetime = false;
 			for(const Column* col : selectedColumns()) {
 				if ( !(col->columnMode() == AbstractColumn::Numeric || col->columnMode() == AbstractColumn::Integer) ) {
-					if (col->columnMode() != AbstractColumn::DateTime)
+					datetime = (col->columnMode() == AbstractColumn::DateTime);
+					if (!datetime)
 						plottable = false;
 
 					numeric = false;
@@ -1036,7 +1038,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			m_columnSetAsMenu->setEnabled(numeric);
 			if (!m_readOnly) {
 				m_columnGenerateDataMenu->setEnabled(numeric);
-				m_columnManipulateDataMenu->setEnabled(numeric);
+				m_columnManipulateDataMenu->setEnabled(numeric || datetime);
 				m_columnSortMenu->setEnabled(numeric);
 			}
 			action_statistics_columns->setEnabled(numeric);
