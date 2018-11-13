@@ -47,6 +47,10 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include <QProcess>
 #include <QDateTime>
 
+#ifdef Q_OS_LINUX
+#include <QStandardPaths>
+#endif
+
 /*!
 \class AsciiFilter
 \brief Manages the import/export of data organized as columns (vectors) from/to an ASCII-file.
@@ -246,22 +250,24 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 // 		return -1;
 
 	size_t lineCount = 0;
+#ifdef Q_OS_LINUX
+	//on linux use wc, if available, which is much faster than counting lines in the file
+	if (!QStandardPaths::findExecutable(QLatin1String("wc")).isEmpty()) {
+		QProcess wc;
+		wc.start(QLatin1String("wc"), QStringList() << QLatin1String("-l") << fileName);
+		size_t lineCount = 0;
+		while (wc.waitForReadyRead())
+			lineCount = wc.readLine().split(' ')[0].toInt();
+		lineCount++;	// last line not counted
+		return lineCount;
+	}
+#endif
+
 	while (!device.atEnd()) {
 		device.readLine();
 		lineCount++;
 	}
 
-//TODO: wc is much faster but not portable
-	/*	QElapsedTimer myTimer;
-		myTimer.start();
-		QProcess wc;
-		wc.start(QString("wc"), QStringList() << "-l" << fileName);
-		size_t lineCount = 0;
-		while (wc.waitForReadyRead())
-			lineCount = wc.readLine().split(' ')[0].toInt();
-		lineCount++;	// last line not counted
-		DEBUG(" Elapsed time counting lines : " << myTimer.elapsed() << " ms");
-	*/
 	return lineCount;
 }
 
