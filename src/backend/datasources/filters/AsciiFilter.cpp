@@ -242,8 +242,8 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 
 		return 0;
 	}
-	if (!device.canReadLine())
-		return -1;
+// 	if (!device.canReadLine())
+// 		return -1;
 
 	size_t lineCount = 0;
 	while (!device.atEnd()) {
@@ -272,8 +272,8 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 size_t AsciiFilter::lineNumber(QIODevice &device) {
 	if (device.isSequential())
 		return 0;
-	if (!device.canReadLine())
-		DEBUG("WARNING in AsciiFilter::lineNumber(): device cannot 'readLine()' but using it anyway.");
+// 	if (!device.canReadLine())
+// 		DEBUG("WARNING in AsciiFilter::lineNumber(): device cannot 'readLine()' but using it anyway.");
 
 	size_t lineCount = 0;
 	device.seek(0);
