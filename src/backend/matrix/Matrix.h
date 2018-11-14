@@ -156,8 +156,8 @@ private:
 	void init();
 
 	MatrixPrivate* const d;
-	mutable MatrixModel* m_model;
-	mutable MatrixView* m_view;
+	mutable MatrixModel* m_model{nullptr};
+	mutable MatrixView* m_view{nullptr};
 
 	friend class MatrixPrivate;
 };
