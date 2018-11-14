@@ -1669,10 +1669,12 @@ void AxisDock::load() {
 	ui.leStart->setText( QString::number(m_axis->start()) );
 	ui.leEnd->setText( QString::number(m_axis->end()) );
 
+	//depending on range format of the axis (numeric vs. datetime), show/hide the corresponding widgets
 	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
 	if (plot) {
 		bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
 			|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
+		//ranges
 		ui.lStart->setVisible(numeric);
 		ui.lEnd->setVisible(numeric);
 		ui.leStart->setVisible(numeric);
@@ -1681,6 +1683,16 @@ void AxisDock::load() {
 		ui.dateTimeEditStart->setVisible(!numeric);
 		ui.lEndDateTime->setVisible(!numeric);
 		ui.dateTimeEditEnd->setVisible(!numeric);
+
+		//tick labels format
+		ui.lLabelsFormat->setVisible(numeric);
+		ui.cbLabelsFormat->setVisible(numeric);
+		ui.chkLabelsAutoPrecision->setVisible(numeric);
+		ui.lLabelsPrecision->setVisible(numeric);
+		ui.sbLabelsPrecision->setVisible(numeric);
+		ui.cbLabelsDateTimeFormat->setVisible(numeric);
+		ui.lLabelsDateTimeFormat->setVisible(!numeric);
+		ui.cbLabelsDateTimeFormat->setVisible(!numeric);
 
 		if (!numeric) {
 			if (m_axis->orientation() == Axis::AxisHorizontal) {
@@ -1733,13 +1745,13 @@ void AxisDock::load() {
 	//TODO
 
 	// Tick label
+	ui.cbLabelsPosition->setCurrentIndex( (int) m_axis->labelsPosition() );
+	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(m_axis->labelsOffset(),Worksheet::Point) );
+	ui.sbLabelsRotation->setValue( m_axis->labelsRotationAngle() );
 	ui.cbLabelsFormat->setCurrentIndex( (int) m_axis->labelsFormat() );
 	ui.chkLabelsAutoPrecision->setChecked( (int) m_axis->labelsAutoPrecision() );
 	ui.sbLabelsPrecision->setValue( (int)m_axis->labelsPrecision() );
 	ui.cbLabelsDateTimeFormat->setCurrentText(m_axis->labelsDateTimeFormat());
-	ui.cbLabelsPosition->setCurrentIndex( (int) m_axis->labelsPosition() );
-	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(m_axis->labelsOffset(),Worksheet::Point) );
-	ui.sbLabelsRotation->setValue( m_axis->labelsRotationAngle() );
 	//we need to set the font size in points for KFontRequester
 	QFont font = m_axis->labelsFont();
 	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
