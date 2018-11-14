@@ -192,7 +192,6 @@ int MatrixModel::columnCount(const QModelIndex& parent) const {
 }
 
 bool MatrixModel::setData(const QModelIndex& index, const QVariant& value, int role) {
-	//QDEBUG("MatrixModel::setData() value =" << value);
 	if (!index.isValid())
 		return false;
 
@@ -200,8 +199,7 @@ bool MatrixModel::setData(const QModelIndex& index, const QVariant& value, int r
 	int column = index.column();
 
 	if(role ==  Qt::EditRole) {
-		AbstractColumn::ColumnMode mode = m_matrix->mode();
-		//DEBUG("	mode = " << mode);
+		const AbstractColumn::ColumnMode mode = m_matrix->mode();
 		switch (mode) {
 		case AbstractColumn::Numeric: 
 			m_matrix->setCell(row, column, value.toDouble());
@@ -212,14 +210,15 @@ bool MatrixModel::setData(const QModelIndex& index, const QVariant& value, int r
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
+			DEBUG("	WARNING: DateTime format not supported yet");	// should not happen
 			//TODO: m_matrix->setCell(row, column, value.toDateTime());
 			break;
 		case AbstractColumn::Text:
-			DEBUG("	WARNING: Text format not supported");	// should not happen
+			DEBUG("	WARNING: Text format not supported yet");	// should not happen
 			m_matrix->setCell(row, column, value.toString());
 			break;
 		default:
-			DEBUG("	unknown column mode " << mode << " found");
+			DEBUG("	Unsupported column mode " << mode);
 			break;
 		}
 
