@@ -15,6 +15,7 @@ New features:
 Bug fixes:
 	* Fixed several problems in live data support
 	* [spreadsheet] properly calculate function values out of integer x-values
+	* [matrix] fix editing integer values
 
 -----2.5-----
 New features:
