@@ -701,6 +701,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("column");
 	writeBasicAttributes(writer);
 
+	writer->writeAttribute("rows", QString::number(rowCount()));
 	writer->writeAttribute("designation", QString::number(plotDesignation()));
 	writer->writeAttribute("mode", QString::number(columnMode()));
 	writer->writeAttribute("width", QString::number(width()));
@@ -817,7 +818,13 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 
-	QString str = attribs.value("designation").toString();
+	QString str = attribs.value("rows").toString();
+	if (str.isEmpty())
+		reader->raiseWarning(attributeWarning.subs("rows").toString());
+	else
+		d->resizeTo(str.toInt());
+
+	str = attribs.value("designation").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.subs("designation").toString());
 	else
