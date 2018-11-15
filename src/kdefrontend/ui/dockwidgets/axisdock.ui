@@ -1052,7 +1052,7 @@
        <item row="8" column="0">
         <widget class="QLabel" name="lLabelsDateTimeFormat">
          <property name="text">
-          <string>Type:</string>
+          <string>DateTime:</string>
          </property>
         </widget>
        </item>
@@ -1174,7 +1174,11 @@
         <widget class="KComboBox" name="cbLabelsPosition"/>
        </item>
        <item row="8" column="2" colspan="2">
-        <widget class="KComboBox" name="cbLabelsDateTimeFormat"/>
+        <widget class="KComboBox" name="cbLabelsDateTimeFormat">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item row="10" column="2" colspan="2">
         <widget class="KFontRequester" name="kfrLabelsFont"/>
@@ -1470,9 +1474,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>KFontRequester</class>
@@ -1480,9 +1484,9 @@
    <header>kfontrequester.h</header>
   </customwidget>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
