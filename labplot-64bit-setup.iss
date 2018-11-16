@@ -26,6 +26,8 @@ ArchitecturesAllowed=x64
 Compression=lzma
 SolidCompression=yes
 Uninstallable=yes
+;we install a file association for lml projects
+ChangesAssociations=yes
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -169,5 +171,10 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
-; [Registry]
+[Registry]
+; project file association
+Root: HKCR; Subkey: ".lml"; ValueType: string; ValueName: ""; ValueData: "{#MyAppName}"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "{#MyAppName}"; ValueType: string; ValueName: ""; ValueData: "MyView"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "{#MyAppName}\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\labplot2\application-x-labplot2.ico,0"
+Root: HKCR; Subkey: "{#MyAppName}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
 ; Root: HKCU; Subkey: "Environment"; ValueType:string; ValueName:"KDEROOT"; ValueData:"{app}" ; Flags: preservestringtype ;
