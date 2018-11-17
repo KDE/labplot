@@ -142,7 +142,7 @@ void CartesianPlot::init() {
 	addChildFast(m_plotArea);
 
 	//Plot title
-	m_title = new TextLabel(this->name(), TextLabel::PlotTitle);
+	m_title = new TextLabel(this->name() + QLatin1String("- ") + i18n("Title"), TextLabel::PlotTitle);
 	addChild(m_title);
 	m_title->setHidden(true);
 	m_title->setParentGraphicsItem(m_plotArea->graphicsItem());
@@ -2898,6 +2898,11 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				//the first text label is always the title label
 				m_title->load(reader, preview);
 				titleLabelRead = true;
+
+				//TODO: the name is read in m_title->load() but we overwrite it here
+				//since the old projects don't have this " - Title" appendix yet that we add in init().
+				//can be removed in couple of releases
+				m_title->setName(name() + QLatin1String(" - ") + i18n("Title"));
 			} else {
 				TextLabel* label = new TextLabel("text label");
 				if (label->load(reader, preview)) {
