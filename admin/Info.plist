@@ -36,7 +36,7 @@
 			<key>CFBundleTypeName</key>
 			<string>LabPlot 2 project</string>
 			<key>CFBundleTypeIconFile</key>
-			<string>LABPLOT_SOURCE.icns</string>
+			<string>LML_ICONS.icns</string>
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>lml</string>
