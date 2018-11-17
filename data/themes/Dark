@@ -41,7 +41,7 @@ BackgroundType=0
 BorderColor=128,128,128
 BorderCornerRadius=0
 BorderOpacity=1
-BorderStyle=0
+BorderStyle=1
 BorderWidth=3.52778
 
 [Label]

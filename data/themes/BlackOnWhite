@@ -38,10 +38,10 @@ BackgroundImageStyle=1
 BackgroundOpacity=1
 BackgroundSecondColor=160,160,160
 BackgroundType=0
-BorderColor=0,0,0
+BorderColor=104,104,104
 BorderCornerRadius=0
 BorderOpacity=1
-BorderStyle=0
+BorderStyle=1
 BorderWidth=3.52778
 
 [Label]

@@ -1208,7 +1208,6 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 }
 
 void CartesianPlotLegend::loadThemeConfig(const KConfig& config) {
-
 	KConfigGroup groupLabel = config.group("Label");
 	this->setLabelColor(groupLabel.readEntry("FontColor", QColor(Qt::white)));
 
@@ -1221,11 +1220,13 @@ void CartesianPlotLegend::loadThemeConfig(const KConfig& config) {
 	this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor",(QColor) this->backgroundSecondColor()));
 	this->setBackgroundType((PlotArea::BackgroundType)(group.readEntry("BackgroundType",(int) this->backgroundType())));
 
-	this->borderPen().setColor(group.readEntry("BorderColor",(QColor) this->borderPen().color()));
+	QPen pen = this->borderPen();
+	pen.setColor(group.readEntry("BorderColor", pen.color()));
+	pen.setStyle((Qt::PenStyle)(group.readEntry("BorderStyle", (int) pen.style())));
+	pen.setWidthF(group.readEntry("BorderWidth", pen.widthF()));
+	this->setBorderPen(pen);
 	this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", this->borderCornerRadius()));
 	this->setBorderOpacity(group.readEntry("BorderOpacity", this->borderOpacity()));
-	this->borderPen().setStyle((Qt::PenStyle)(group.readEntry("BorderStyle", (int) this->borderPen().style())));
-	this->borderPen().setWidthF(group.readEntry("BorderWidth", this->borderPen().widthF()));
 
 	title()->loadThemeConfig(config);
 }
