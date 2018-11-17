@@ -25,10 +25,10 @@ MinorGridColor=128,128,128
 MinorGridOpacity=0.5
 MinorGridStyle=2
 MinorGridWidth=1.76389
-MinorTicksColor=0,0,0
-MinorTicksLineStyle=0
+MinorTicksColor=128,128,128
+MinorTicksLineStyle=1
 MinorTicksOpacity=1
-MinorTicksWidth=0.283465
+MinorTicksWidth=3.52778
 
 [CartesianPlot]
 BackgroundBrushStyle=1
