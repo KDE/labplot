@@ -10,4 +10,5 @@ cd $BUILDDIR
 
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
 
-sudo make -j 2 install
+make -j 4
+sudo make install
