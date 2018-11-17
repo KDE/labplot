@@ -61,8 +61,8 @@ cp -v kde/share/applications/org.kde.$NAME.desktop $INPREFIX/share/applications/
 cp -vf kde/share/icontheme.rcc $INPREFIX/Resources/icontheme.rcc
 
 # misc
-cp /Applications/KDE/labplot2.app/Contents/Info.plist $INPREFIX
-cp /Applications/KDE/labplot2.app/Contents/Resources/LABPLOT_SOURCE.icns $INPREFIX/Resources
+cp -v labplot/admin/Info.plist $INPREFIX
+cp -v /Applications/KDE/labplot2.app/Contents/Resources/LABPLOT_SOURCE.icns $INPREFIX/Resources
 
 ### TODO
 # package icon
