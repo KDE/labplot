@@ -677,8 +677,9 @@ void AxisDock::scalingFactorChanged() {
 		return;
 
 	double scalingFactor = ui.leScalingFactor->text().toDouble();
-	for (auto* axis : m_axesList)
-		axis->setScalingFactor(scalingFactor);
+	if (scalingFactor != 0.0)
+		for (auto* axis : m_axesList)
+			axis->setScalingFactor(scalingFactor);
 }
 
 // "Line"-tab

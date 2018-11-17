@@ -71,7 +71,8 @@ Bug fixes:
 	* Axes now support values larger than FLT_MAX (~10^38) and smaller than FLT_MIN (~10^-38)
 	* When a LabPlot project is being droped in the main window, load the project directly instead of showing the import file dialog
 	* Correctly save and restore masked cells
-	* Don't crash if the rc-file was not found during the startup.
+	* Don't crash if the rc-file was not found during the startup
+	* Don't crash when a scaling factor equal to zero was set for axis
 
 -----2.4-----
 New features:
