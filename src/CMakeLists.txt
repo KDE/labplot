@@ -438,6 +438,7 @@ set(LML_ICONS
     ${CMAKE_CURRENT_SOURCE_DIR}/../icons/128-application-x-labplot2.png
     ${CMAKE_CURRENT_SOURCE_DIR}/../icons/256-application-x-labplot2.png
     ${CMAKE_CURRENT_SOURCE_DIR}/../icons/512-application-x-labplot2.png
+)
 
 # main executable
 set(LABPLOT_SOURCE ${KDEFRONTEND_DIR}/LabPlot.cpp)
