@@ -84,7 +84,6 @@ mv $PREFIX/$PNAME.app ./$TMPDIR
 ln -s /Applications ./$TMPDIR/Applications
 
 ## remove stuff we don't need or like
-rm -rf $TMPDIR/$PNAME.app/Contents/Frameworks/QtTextToSpeech.framework
 #rm -rf $TMPDIR/$PNAME.app/Contents/Plugins/bearer
 
 ###############################################
