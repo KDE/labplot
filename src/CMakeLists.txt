@@ -430,10 +430,19 @@ set(LABPLOT_ICONS
     ${CMAKE_CURRENT_SOURCE_DIR}/../icons/256-apps-labplot2.png
     ${CMAKE_CURRENT_SOURCE_DIR}/../icons/512-apps-labplot2.png
 )
+set(LML_ICONS
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/16-application-x-labplot2.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/32-application-x-labplot2.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/48-application-x-labplot2.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/64-application-x-labplot2.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/128-application-x-labplot2.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/256-application-x-labplot2.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/512-application-x-labplot2.png
 
 # main executable
 set(LABPLOT_SOURCE ${KDEFRONTEND_DIR}/LabPlot.cpp)
-ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LABPLOT_ICONS})
+ecm_add_app_icon(LABPLOT_ICONS ICONS ${LABPLOT_ICONS})
+ecm_add_app_icon(LML_ICONS ICONS ${LML_ICONS})
 add_executable( labplot2 ${LABPLOT_SOURCE} )
 target_link_libraries( labplot2 labplot2lib )
 
