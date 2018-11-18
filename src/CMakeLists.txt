@@ -419,7 +419,7 @@ IF (ENABLE_LIBORIGIN)
 	target_link_libraries( labplot2lib liborigin-static )
 ENDIF ()
 
-# icons for the executable on Windows and Mac OS X
+# icons for the executable and project files on Windows and Mac OS X
 
 set(LABPLOT_ICONS
     ${CMAKE_CURRENT_SOURCE_DIR}/../icons/16-apps-labplot2.png
