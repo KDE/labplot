@@ -700,17 +700,17 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		return filter;
 	}
 	case AbstractFileFilter::NgspiceRawAscii: {
-			auto* filter = new NgspiceRawAsciiFilter();
-			filter->setStartRow( ui.sbStartRow->value() );
-			filter->setEndRow( ui.sbEndRow->value() );
-			return filter;
-		}
+		auto* filter = new NgspiceRawAsciiFilter();
+		filter->setStartRow( ui.sbStartRow->value() );
+		filter->setEndRow( ui.sbEndRow->value() );
+		return filter;
+	}
 	case AbstractFileFilter::NgspiceRawBinary: {
-			auto* filter = new NgspiceRawBinaryFilter();
-			filter->setStartRow( ui.sbStartRow->value() );
-			filter->setEndRow( ui.sbEndRow->value() );
-			return filter;
-		}
+		auto* filter = new NgspiceRawBinaryFilter();
+		filter->setStartRow( ui.sbStartRow->value() );
+		filter->setEndRow( ui.sbEndRow->value() );
+		return filter;
+	}
 	}
 
 	return nullptr;
@@ -774,7 +774,7 @@ void ImportFileWidget::setMQTTVisible(bool visible) {
  * returns \c true if there is a valid connection to an MQTT broker and the user has subscribed to at least 1 topic,
  * returns \c false otherwise.
  */
-bool ImportFileWidget::isMqttValid(){
+bool ImportFileWidget::isMqttValid() {
 	bool connected = (m_client->state() == QMqttClient::ClientState::Connected);
 	bool subscribed = (ui.twSubscriptions->topLevelItemCount() > 0);
 	bool fileTypeOk = false;
@@ -991,9 +991,9 @@ void ImportFileWidget::unsubscribeFromTopic(const QString& topicName) {
 		}
 	}
 
-	if(m_willSettings.willTopic == topicName) {
+	if (m_willSettings.willTopic == topicName) {
 		QVector<QTreeWidgetItem*> children;
-		if(ui.twSubscriptions->topLevelItemCount() > 0) {
+		if (ui.twSubscriptions->topLevelItemCount() > 0) {
 			findSubscriptionLeafChildren(children, ui.twSubscriptions->topLevelItem(0));
 			m_willSettings.willTopic = children[0]->text(0);
 		} else
@@ -1231,7 +1231,7 @@ void ImportFileWidget::manageCommonLevelSubscriptions() {
 
 				//remove the "merged" topics
 				for (int i = 0; i < equalTopics.size(); ++i) {
-					for (int j = 0; j < ui.twSubscriptions->topLevelItemCount(); ++j){
+					for (int j = 0; j < ui.twSubscriptions->topLevelItemCount(); ++j) {
 						if (ui.twSubscriptions->topLevelItem(j)->text(0) == equalTopics[i]) {
 							newTopic->addChild(ui.twSubscriptions->takeTopLevelItem(j));
 							unsubscribeFromTopic(equalTopics[i]);
@@ -1379,6 +1379,7 @@ QString absolutePath(const QString& fileName)
 	and activates the corresponding options.
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
+	DEBUG("ImportFileWidget::fileNameChanged()");
 	const QString fileName = absolutePath(name);
 
 	bool fileExists = QFile::exists(fileName);
@@ -2454,7 +2455,7 @@ void ImportFileWidget::mqttSubscribe() {
 			manageCommonLevelSubscriptions();
 			updateSubscriptionCompleter();
 
-			if(!ui.bWillMessage->isEnabled())
+			if (!ui.bWillMessage->isEnabled())
 				ui.bWillMessage->setEnabled(true);
 		} else
 			QMessageBox::warning(this, i18n("Warning"), i18n("You already subscribed to a topic containing this one"));
@@ -2507,7 +2508,7 @@ void ImportFileWidget::mqttUnsubscribe() {
 	}
 	updateSubscriptionCompleter();
 
-	if(ui.twSubscriptions->topLevelItemCount() <= 0)
+	if (ui.twSubscriptions->topLevelItemCount() <= 0)
 		ui.bWillMessage->setEnabled(false);
 }
 
