@@ -443,9 +443,11 @@ set(LML_ICONS
 # main executable
 set(LABPLOT_SOURCE ${KDEFRONTEND_DIR}/LabPlot.cpp)
 ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LABPLOT_ICONS} OUTFILE_BASENAME LABPLOT_ICONS)
-ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
-add_executable( labplot2 ${LABPLOT_SOURCE} )
-target_link_libraries( labplot2 labplot2lib )
+IF (APPLE)
+	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
+ENDIF ()
+add_executable(labplot2 ${LABPLOT_SOURCE})
+target_link_libraries(labplot2 labplot2lib)
 
 ############## installation ################################
 install( TARGETS labplot2 DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS} )
