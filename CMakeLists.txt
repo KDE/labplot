@@ -135,7 +135,7 @@ add_definitions (-DLVERSION=\"2.6.0\")
 # add_definitions (-DLDEBUG='1')
 set(BUILD_SHARED_LIBS true)
 
-cmake_policy(SET CMP0002 OLD)
+#cmake_policy(SET CMP0002 OLD)
 IF (CMAKE_VERSION VERSION_EQUAL "3.3" OR CMAKE_VERSION VERSION_GREATER "3.3")
 	cmake_policy(SET CMP0063 NEW)
 ENDIF()
