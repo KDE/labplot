@@ -34,6 +34,10 @@ class DifferentiationTest : public AnalysisTest {
 
 private slots:
 	void testLinear();
+	void testLinearNonEquidistant();
+	void testQuadratic();
+	void testQuadraticNonEquidistant();
+
 //	void testPerformance();
 };
 #endif

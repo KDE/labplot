@@ -74,4 +74,133 @@ void DifferentiationTest::testLinear() {
 	QCOMPARE(resultYDataColumn->valueAt(3), 1.);
 }
 
+void DifferentiationTest::testLinearNonEquidistant() {
+	// data
+	QVector<double> xData = {1.,1.5,3.,5.};
+	QVector<double> yData = {1.,1.5,3.,5.};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	XYDifferentiationCurve differentiationCurve("differentiation");
+	differentiationCurve.setXDataColumn(&xDataColumn);
+	differentiationCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the differentiation
+	XYDifferentiationCurve::DifferentiationData differentiationData = differentiationCurve.differentiationData();
+	differentiationCurve.setDifferentiationData(differentiationData);
+
+	//perform the differentiation
+	differentiationCurve.recalculate();
+	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = differentiationCurve.differentiationResult();
+
+	//check the results
+	QCOMPARE(differentiationResult.available, true);
+	QCOMPARE(differentiationResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = differentiationCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = differentiationCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 4);
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), xData[i]);
+
+	QCOMPARE(resultYDataColumn->valueAt(0), 1.);
+	QCOMPARE(resultYDataColumn->valueAt(1), 1.);
+	QCOMPARE(resultYDataColumn->valueAt(2), 1.);
+	QCOMPARE(resultYDataColumn->valueAt(3), 1.);
+}
+
+void DifferentiationTest::testQuadratic() {
+	// data
+	QVector<double> xData = {1.,2.,3.,4.};
+	QVector<double> yData = {1.,4.,9.,16.};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	XYDifferentiationCurve differentiationCurve("differentiation");
+	differentiationCurve.setXDataColumn(&xDataColumn);
+	differentiationCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the differentiation
+	XYDifferentiationCurve::DifferentiationData differentiationData = differentiationCurve.differentiationData();
+	differentiationCurve.setDifferentiationData(differentiationData);
+
+	//perform the differentiation
+	differentiationCurve.recalculate();
+	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = differentiationCurve.differentiationResult();
+
+	//check the results
+	QCOMPARE(differentiationResult.available, true);
+	QCOMPARE(differentiationResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = differentiationCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = differentiationCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 4);
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), xData[i]);
+
+	QCOMPARE(resultYDataColumn->valueAt(0), 2.);
+	QCOMPARE(resultYDataColumn->valueAt(1), 4.);
+	QCOMPARE(resultYDataColumn->valueAt(2), 6.);
+	QCOMPARE(resultYDataColumn->valueAt(3), 8.);
+}
+
+void DifferentiationTest::testQuadraticNonEquidistant() {
+	// data
+	QVector<double> xData = {1.,1.5,3.,5.};
+	QVector<double> yData = {1.,2.25,9.,25.};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	XYDifferentiationCurve differentiationCurve("differentiation");
+	differentiationCurve.setXDataColumn(&xDataColumn);
+	differentiationCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the differentiation
+	XYDifferentiationCurve::DifferentiationData differentiationData = differentiationCurve.differentiationData();
+	differentiationCurve.setDifferentiationData(differentiationData);
+
+	//perform the differentiation
+	differentiationCurve.recalculate();
+	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = differentiationCurve.differentiationResult();
+
+	//check the results
+	QCOMPARE(differentiationResult.available, true);
+	QCOMPARE(differentiationResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = differentiationCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = differentiationCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 4);
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), xData[i]);
+
+	QCOMPARE(resultYDataColumn->valueAt(0), 2.);
+	QCOMPARE(resultYDataColumn->valueAt(1), 3.);
+	QCOMPARE(resultYDataColumn->valueAt(2), 6.);
+	QCOMPARE(resultYDataColumn->valueAt(3), 10.);
+}
+
 QTEST_MAIN(DifferentiationTest)
