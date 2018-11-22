@@ -646,7 +646,7 @@ std::string ROOTHist::data(const ROOTHist::KeyBuffer& buffer, std::ifstream& is)
 	} else if (buffer.compression == KeyBuffer::zlib) {
 		std::string cdata(buffer.compressed_count, 0);
 		is.read(&cdata[0], buffer.compressed_count);
-		size_t luncomp = buffer.count;
+		uLongf luncomp = buffer.count;
 		if (uncompress((Bytef *)data.data(), &luncomp, (Bytef *)cdata.data(), cdata.size()) == Z_OK && data.size() == luncomp)
 			return data;
 	} else {
