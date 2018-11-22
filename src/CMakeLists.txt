@@ -444,7 +444,7 @@ set(LML_ICONS
 set(LABPLOT_SOURCE ${KDEFRONTEND_DIR}/LabPlot.cpp)
 
 # create icon files on WIN/MAC and add icons to the executable
-IF (${ECM_VERSION} VERSION_GREATER_EQUAL "5.49.0")
+IF (${ECM_VERSION} VERSION_GREATER "5.48.0")
 	# creates LABPLOT_ICONS.ico/LABPLOT_ICONS.icns
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LABPLOT_ICONS} OUTFILE_BASENAME LABPLOT_ICONS)
 ELSE ()
@@ -454,7 +454,7 @@ ENDIF ()
 add_executable(labplot2 ${LABPLOT_SOURCE})
 
 # create LML_ICONS.icns on MACOSX
-IF (APPLE AND ${ECM_VERSION} VERSION_GREATER_EQUAL "5.49.0")
+IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 ENDIF ()
 target_link_libraries(labplot2 labplot2lib)
