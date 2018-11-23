@@ -52,7 +52,6 @@ SortDialog::SortDialog(QWidget* parent) : QDialog(parent) {
 	connect(ui.buttonBox, &QDialogButtonBox::accepted, this, &SortDialog::sortColumns);
 	connect(ui.buttonBox, &QDialogButtonBox::rejected, this, &SortDialog::reject);
 	connect(ui.buttonBox, &QDialogButtonBox::accepted, this, &SortDialog::accept);
-	connect(ui.cbSorting, SIGNAL(currentIndexChanged(int)), this, SLOT(changeType(int)));
 	connect(ui.cbSorting, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged),
 			this, &SortDialog::changeType);
 
