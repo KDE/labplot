@@ -6,76 +6,84 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>258</width>
-    <height>147</height>
+    <width>448</width>
+    <height>237</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="lOrdering">
-       <property name="text">
-        <string>Order:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QComboBox" name="cbOrdering">
-       <item>
-        <property name="text">
-         <string>Ascending</string>
-        </property>
-        <property name="icon">
-         <iconset theme="view-sort-ascending">
-          <normaloff>.</normaloff>.</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Descending</string>
-        </property>
-        <property name="icon">
-         <iconset theme="view-sort-descending">
-          <normaloff>.</normaloff>.</iconset>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="lType">
-       <property name="text">
-        <string>Sort columns:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="cbType">
-       <item>
-        <property name="text">
-         <string>Separately</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Together</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="lColumns">
-       <property name="text">
-        <string>Leading column:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QComboBox" name="cbColumns"/>
-     </item>
-    </layout>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="lOrdering">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Order:</string>
+     </property>
+    </widget>
    </item>
-   <item>
+   <item row="0" column="2">
+    <widget class="QComboBox" name="cbOrdering">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <item>
+      <property name="text">
+       <string>Ascending</string>
+      </property>
+      <property name="icon">
+       <iconset theme="view-sort-ascending">
+        <normaloff>.</normaloff>.</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Descending</string>
+      </property>
+      <property name="icon">
+       <iconset theme="view-sort-descending">
+        <normaloff>.</normaloff>.</iconset>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lSorting">
+     <property name="text">
+      <string>Sort columns:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QComboBox" name="cbSorting">
+     <item>
+      <property name="text">
+       <string>Separately</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Together</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QLabel" name="lColumns">
+     <property name="text">
+      <string>Leading column:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QComboBox" name="cbColumns"/>
+   </item>
+   <item row="3" column="2">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -88,7 +96,20 @@
      </property>
     </spacer>
    </item>
-   <item>
+   <item row="4" column="0">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>209</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="1" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>

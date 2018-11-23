@@ -36,7 +36,9 @@ class SortDialog : public QDialog {
 Q_OBJECT
 
 public:
-	explicit SortDialog( QWidget* parent = nullptr );
+	explicit SortDialog(QWidget* parent = nullptr);
+	~SortDialog() override;
+
 	void setColumns(QVector<Column*>);
 
 	enum { Separately=0, Together=1 };

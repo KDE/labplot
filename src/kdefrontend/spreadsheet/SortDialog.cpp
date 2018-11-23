@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Sorting options dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,6 +29,9 @@
 
 #include <QPushButton>
 
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KWindowConfig>
 
 /*!
 	\class SortDialog
@@ -36,9 +39,7 @@
 
 	\ingroup kdefrontend
  */
-
-SortDialog::SortDialog( QWidget* parent ) : QDialog( parent ) {
-
+SortDialog::SortDialog(QWidget* parent) : QDialog(parent) {
 	setWindowIcon(QIcon::fromTheme("view-sort-ascending"));
 	setWindowTitle(i18nc("@title:window", "Sort Columns"));
 	setSizeGripEnabled(true);
@@ -51,15 +52,33 @@ SortDialog::SortDialog( QWidget* parent ) : QDialog( parent ) {
 	connect(ui.buttonBox, &QDialogButtonBox::accepted, this, &SortDialog::sortColumns);
 	connect(ui.buttonBox, &QDialogButtonBox::rejected, this, &SortDialog::reject);
 	connect(ui.buttonBox, &QDialogButtonBox::accepted, this, &SortDialog::accept);
+	connect(ui.cbSorting, SIGNAL(currentIndexChanged(int)), this, SLOT(changeType(int)));
+	connect(ui.cbSorting, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged),
+			this, &SortDialog::changeType);
 
-	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(changeType(int)));
+	//restore saved settings if available
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SortDialog"));
+	if (conf.exists())
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+	else
+		resize(QSize(300, 0).expandedTo(minimumSize()));
 
-	resize(minimumSize());
+	ui.cbOrdering->setCurrentIndex(conf.readEntry(QLatin1String("Ordering"), 0));
+	ui.cbSorting->setCurrentIndex(conf.readEntry(QLatin1String("Sorting"), 0));
+}
+
+SortDialog::~SortDialog() {
+	//save the current settings
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SortDialog"));
+
+	// general settings
+	conf.writeEntry(QLatin1String("Ordering"), ui.cbOrdering->currentIndex());
+	conf.writeEntry(QLatin1String("Sorting"), ui.cbSorting->currentIndex());
 }
 
 void SortDialog::sortColumns() {
 	Column* leading;
-	if (ui.cbType->currentIndex() == Together)
+	if (ui.cbSorting->currentIndex() == Together)
 		leading = m_columns.at(ui.cbColumns->currentIndex());
 	else
 		leading = nullptr;
@@ -76,8 +95,8 @@ void SortDialog::setColumns(QVector<Column*> columns) {
 	ui.cbColumns->setCurrentIndex(0);
 
 	if (m_columns.size() == 1) {
-		ui.lType->hide();
-		ui.cbType->hide();
+		ui.lSorting->hide();
+		ui.cbSorting->hide();
 		ui.lColumns->hide();
 		ui.cbColumns->hide();
 	}
