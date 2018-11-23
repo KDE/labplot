@@ -2130,6 +2130,20 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 void Axis::loadThemeConfig(const KConfig& config) {
 	const KConfigGroup group = config.group("Axis");
 
+	//we don't want to show the major and minor grid lines for non-first horizontal/vertical axes
+	//determine the index of the axis among other axes having the same orientation
+	bool firstAxis = true;
+	for (const auto* axis : parentAspect()->children<Axis>()) {
+		if (orientation() == axis->orientation()) {
+			if (axis == this) {
+				break;
+			} else {
+				firstAxis = false;
+				break;
+			}
+		}
+	}
+
 	QPen p;
 	// Tick label
 	this->setLabelsColor(group.readEntry("LabelsFontColor",(QColor) this->labelsColor()));
@@ -2145,7 +2159,10 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	//Major ticks
 	this->setMajorGridOpacity(group.readEntry("MajorGridOpacity", this->majorGridOpacity()));
 	p.setColor(group.readEntry("MajorGridColor",(QColor) this->majorGridPen().color()));
-	p.setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle",(int) this->majorGridPen().style()));
+	if (firstAxis)
+		p.setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle",(int) this->majorGridPen().style()));
+	else
+		p.setStyle(Qt::NoPen);
 	p.setWidthF(group.readEntry("MajorGridWidth", this->majorGridPen().widthF()));
 	this->setMajorGridPen(p);
 	p.setColor(group.readEntry("MajorTicksColor",(QColor)this->majorTicksPen().color()));
@@ -2157,11 +2174,13 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	//Minor ticks
 	this->setMinorGridOpacity(group.readEntry("MinorGridOpacity", this->minorGridOpacity()));
 	p.setColor(group.readEntry("MinorGridColor",(QColor) this->minorGridPen().color()));
-	p.setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle",(int) this->minorGridPen().style()));
+	if (firstAxis)
+		p.setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle",(int) this->minorGridPen().style()));
+	else
+		p.setStyle(Qt::NoPen);
 	p.setWidthF(group.readEntry("MinorGridWidth", this->minorGridPen().widthF()));
 	this->setMinorGridPen(p);
 	p.setColor(group.readEntry("MinorTicksColor",(QColor) this->minorTicksPen().color()));
-	p.setStyle((Qt::PenStyle)group.readEntry("MinorTicksLineStyle",(int) this->minorTicksPen().style()));
 	p.setWidthF(group.readEntry("MinorTicksWidth", this->minorTicksPen().widthF()));
 	this->setMinorTicksPen(p);
 	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity",this->minorTicksOpacity()));

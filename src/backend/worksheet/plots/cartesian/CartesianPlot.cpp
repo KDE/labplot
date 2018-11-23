@@ -205,6 +205,12 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksIn);
 			axis->setMinorTicksNumber(1);
+			pen = axis->minorGridPen();
+			pen.setStyle(Qt::NoPen);
+			axis->setMajorGridPen(pen);
+			pen = axis->minorGridPen();
+			pen.setStyle(Qt::NoPen);
+			axis->setMinorGridPen(pen);
 			axis->setLabelsPosition(Axis::NoLabels);
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
@@ -238,6 +244,11 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksIn);
 			axis->setMinorTicksNumber(1);
+			pen = axis->minorGridPen();
+			pen.setStyle(Qt::NoPen);
+			axis->setMajorGridPen(pen);
+			pen = axis->minorGridPen();
+			pen.setStyle(Qt::NoPen);
 			axis->setLabelsPosition(Axis::NoLabels);
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
