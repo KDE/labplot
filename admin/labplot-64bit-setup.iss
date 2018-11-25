@@ -44,12 +44,19 @@ Source: "{#CraftRoot}\bin\Qt5DBus.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\Qt5TextToSpeech.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; fix https://stackoverflow.com/questions/20495620/qt-5-1-1-application-failed-to-start-because-platform-plugin-windows-is-missi
 ; Source: "{#CraftRoot}\bin\libEGL.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "{#CraftRoot}\mingw64\bin\libssp-0.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\mingw64\bin\libssp-0.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libkdewin.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5Archive.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libz.dll"; DestDir: "{app}";Flags: ignoreversion
 ;Source: "{#CraftRoot}\bin\liblzma.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\liblzma-5.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libintl-8.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\iconv.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libeay32.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\ssleay32.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libssl-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libcrypto-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "{#CraftRoot}\bin\libdbus-1-3.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5Completion.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5ConfigCore.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5ConfigGui.dll"; DestDir: "{app}";Flags: ignoreversion
@@ -60,8 +67,6 @@ Source: "{#CraftRoot}\bin\libKF5CoreAddons.dll"; DestDir: "{app}";Flags: ignorev
 Source: "{#CraftRoot}\bin\libKF5Codecs.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5GuiAddons.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5I18n.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "{#CraftRoot}\bin\libintl-8.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "{#CraftRoot}\bin\iconv.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5IconThemes.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5ItemViews.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5Crash.dll"; DestDir: "{app}";Flags: ignoreversion
@@ -71,11 +76,6 @@ Source: "{#CraftRoot}\bin\libKF5JobWidgets.dll"; DestDir: "{app}";Flags: ignorev
 Source: "{#CraftRoot}\bin\libKF5KIOCore.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5DBusAddons.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5Service.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "{#CraftRoot}\bin\libeay32.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "{#CraftRoot}\bin\ssleay32.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "{#CraftRoot}\bin\libssl-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "{#CraftRoot}\bin\libcrypto-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
-;Source: "{#CraftRoot}\bin\libdbus-1-3.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5KIOFileWidgets.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5KIOWidgets.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5XmlGui.dll"; DestDir: "{app}";Flags: ignoreversion
@@ -86,6 +86,7 @@ Source: "{#CraftRoot}\bin\libKF5SonnetUi.dll"; DestDir: "{app}";Flags: ignorever
 Source: "{#CraftRoot}\bin\libKF5NewStuff.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5SyntaxHighlighting.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5Parts.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libKF5NewStuffCore.dll"; DestDir: "{app}";Flags: ignoreversion
 ;Source: "{#CraftRoot}\bin\libKF5Notifications.dll"; DestDir: "{app}";Flags: ignoreversion
 ; missing lib on minimal Windows 10
 Source: "C:\Python36\vcruntime140.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -96,14 +97,13 @@ Source: "{#CraftRoot}\bin\cantor_scripteditor.exe"; DestDir: "{app}"; Flags: ign
 Source: "{#CraftRoot}\bin\libcantorlibs.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libcantor_config.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\plugins\cantor\*"; DestDir: "{app}\plugins\cantor"; Flags: recursesubdirs ignoreversion
-Source: "{#CraftRoot}\bin\libKF5NewStuffCore.dll"; DestDir: "{app}";Flags: ignoreversion
 ; misc
 Source: "{#CraftRoot}\bin\libfftw3.dll"; DestDir: "{app}"; DestName: "libfftw3-3.dll"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\netcdf.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\hdf5_hl.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\hdf5.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#CraftRoot}\bin\liblz4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CraftRoot}\bin\liblz4.so.1.8.3.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; TODO craft does not install own version (check)
 ;Source: "C:\Program Files\cfitsio\cfitsio.dll"; DestDir: "{app}";Flags: ignoreversion
 
