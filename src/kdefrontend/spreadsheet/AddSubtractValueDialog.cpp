@@ -45,15 +45,24 @@
 	\ingroup kdefrontend
  */
 
-AddSubtractValueDialog::AddSubtractValueDialog(Spreadsheet* s, bool addValue, QWidget* parent) : QDialog(parent),
-	m_spreadsheet(s), m_addValue(addValue) {
+AddSubtractValueDialog::AddSubtractValueDialog(Spreadsheet* s, Operation op, QWidget* parent) : QDialog(parent),
+	m_spreadsheet(s), m_operation(op) {
 	Q_ASSERT(s != nullptr);
 
-	if (addValue)
+	switch (m_operation) {
+	case Add:
 		setWindowTitle(i18nc("@title:window", "Add Value"));
-	else
+		break;
+	case Subtract:
 		setWindowTitle(i18nc("@title:window", "Subtract Value"));
-
+		break;
+	case Multiply:
+		setWindowTitle(i18nc("@title:window", "Multiply by Value"));
+		break;
+	case Divide:
+		setWindowTitle(i18nc("@title:window", "Divide by Value"));
+		break;
+	}
 	ui.setupUi(this);
 	setAttribute(Qt::WA_DeleteOnClose);
 
@@ -62,12 +71,23 @@ AddSubtractValueDialog::AddSubtractValueDialog(Spreadsheet* s, bool addValue, QW
 	ui.gridLayout->addWidget(btnBox, 3, 0, 1, 2);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 
-	if (addValue) {
+	switch (m_operation) {
+	case Add:
 		m_okButton->setText(i18n("&Add"));
-		m_okButton->setToolTip(i18n("Add value to column values"));
-	} else {
+		m_okButton->setToolTip(i18n("Add the specified value to column values"));
+		break;
+	case Subtract:
 		m_okButton->setText(i18n("&Subtract"));
-		m_okButton->setToolTip(i18n("Subtract value from column values"));
+		m_okButton->setToolTip(i18n("Subtract the specified value from column values"));
+		break;
+	case Multiply:
+		m_okButton->setText(i18n("&Multiply"));
+		m_okButton->setToolTip(i18n("Multiply column values by the specified value"));
+		break;
+	case Divide:
+		m_okButton->setText(i18n("&Divide"));
+		m_okButton->setToolTip(i18n("Divide column values by the specified value"));
+		break;
 	}
 
 	connect(m_okButton, &QPushButton::clicked, this, &AddSubtractValueDialog::generate);
@@ -142,13 +162,21 @@ void AddSubtractValueDialog::generate() {
 
 	WAIT_CURSOR;
 	QString msg;
-	if (m_addValue)
-		msg = i18np("%1: add value to column", "%1: add value to columns",
-					m_spreadsheet->name(), m_columns.size());
-	else
-		msg = i18np("%1: subtract value from column", "%1: subtract value from columns",
-					m_spreadsheet->name(), m_columns.size());
-
+	QString value = ui.leValue->text();
+	switch (m_operation) {
+	case Add:
+		msg = i18n("%1: add %2 to column values", m_spreadsheet->name(), value);
+		break;
+	case Subtract:
+		msg = i18n("%1: subtract %2 from column values", m_spreadsheet->name(), value);
+		break;
+	case Multiply:
+		msg = i18n("%1: multiply column values by %2", m_spreadsheet->name(), value);
+		break;
+	case Divide:
+		msg = i18n("%1: divide column values by %2", m_spreadsheet->name(), value);
+		break;
+	}
 	m_spreadsheet->beginMacro(msg);
 
 	AbstractColumn::ColumnMode mode = m_columns.first()->columnMode();
@@ -156,42 +184,94 @@ void AddSubtractValueDialog::generate() {
 	if (mode == AbstractColumn::Integer) {
 		QVector<int> new_data(rows);
 		int value = ui.leValue->text().toInt();
-		if (!m_addValue)
+
+		switch (m_operation) {
+		case Subtract:
 			value *= -1;
+			//fall through
+		case Add:
+			for (auto* col : m_columns) {
+				QVector<int>* data = static_cast<QVector<int>* >(col->data());
+				for (int i = 0; i<rows; ++i)
+					new_data[i] = data->operator[](i) + value;
 
-		for (auto* col : m_columns) {
-			QVector<int>* data = static_cast<QVector<int>* >(col->data());
-			for (int i = 0; i<rows; ++i)
-				new_data[i] = data->operator[](i) + value;
+				col->replaceInteger(0, new_data);
+			}
+			break;
+		case Multiply:
+			for (auto* col : m_columns) {
+				QVector<int>* data = static_cast<QVector<int>* >(col->data());
+				for (int i = 0; i<rows; ++i)
+					new_data[i] = data->operator[](i) * value;
 
-			col->replaceInteger(0, new_data);
+				col->replaceInteger(0, new_data);
+			}
+			break;
+		case Divide:
+			for (auto* col : m_columns) {
+				QVector<int>* data = static_cast<QVector<int>* >(col->data());
+				for (int i = 0; i<rows; ++i)
+					new_data[i] = data->operator[](i) / value;
+
+				col->replaceInteger(0, new_data);
+			}
+			break;
 		}
 	} else if (mode == AbstractColumn::Numeric) {
 		QVector<double> new_data(rows);
 		double value = ui.leValue->text().toDouble();
-		if (!m_addValue)
+		switch (m_operation) {
+		case Subtract:
 			value *= -1.;
+			//fall through
+		case Add:
+			for (auto* col : m_columns) {
+				QVector<double>* data = static_cast<QVector<double>* >(col->data());
+				for (int i = 0; i<rows; ++i)
+					new_data[i] = data->operator[](i) + value;
 
-		for (auto* col : m_columns) {
-			QVector<double>* data = static_cast<QVector<double>* >(col->data());
-			for (int i = 0; i<rows; ++i)
-				new_data[i] = data->operator[](i) + value;
+				col->replaceValues(0, new_data);
+			}
+			break;
+		case Multiply:
+			for (auto* col : m_columns) {
+				QVector<double>* data = static_cast<QVector<double>* >(col->data());
+				for (int i = 0; i<rows; ++i)
+					new_data[i] = data->operator[](i) * value;
 
-			col->replaceValues(0, new_data);
-		}
+				col->replaceValues(0, new_data);
+			}
+			break;
+		case Divide:
+			for (auto* col : m_columns) {
+				QVector<double>* data = static_cast<QVector<double>* >(col->data());
+				for (int i = 0; i<rows; ++i)
+					new_data[i] = data->operator[](i) / value;
+
+				col->replaceValues(0, new_data);
+			}
+			break;
+	}
 	} else { //datetime
 		QVector<QDateTime> new_data(rows);
 		quint64 value = ui.dateTimeEdit->dateTime().toMSecsSinceEpoch();
-		if (!m_addValue)
-			value *= -1;
+		switch(m_operation) {
+		case Subtract:
+			value *= -1.;
+			//fall through
+		case Add:
+			for (auto* col : m_columns) {
+				QVector<QDateTime>* data = static_cast<QVector<QDateTime>* >(col->data());
+				for (int i = 0; i<rows; ++i)
+					new_data[i] = QDateTime::fromMSecsSinceEpoch(data->operator[](i).toMSecsSinceEpoch() + value);
 
-		for (auto* col : m_columns) {
-			QVector<QDateTime>* data = static_cast<QVector<QDateTime>* >(col->data());
-			for (int i = 0; i<rows; ++i)
-				new_data[i] = QDateTime::fromMSecsSinceEpoch(data->operator[](i).toMSecsSinceEpoch() + value);
-
-			col->replaceDateTimes(0, new_data);
+				col->replaceDateTimes(0, new_data);
+			}
+		case Multiply:
+		case Divide:
+			break;
 		}
+
 	}
 
 	m_spreadsheet->endMacro();

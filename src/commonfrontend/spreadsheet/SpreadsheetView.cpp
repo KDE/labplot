@@ -263,7 +263,13 @@ void SpreadsheetView::initActions() {
 
 	//data manipulation
 	action_add_value = new QAction(i18n("Add Value"), this);
+	action_add_value->setData(AddSubtractValueDialog::Add);
 	action_subtract_value = new QAction(i18n("Subtract Value"), this);
+	action_subtract_value->setData(AddSubtractValueDialog::Subtract);
+	action_multiply_value = new QAction(i18n("Multiply by Value"), this);
+	action_multiply_value->setData(AddSubtractValueDialog::Multiply);
+	action_divide_value = new QAction(i18n("Divide by Value"), this);
+	action_divide_value->setData(AddSubtractValueDialog::Divide);
 	action_drop_values = new QAction(QIcon::fromTheme(""), i18n("Drop Values"), this);
 	action_mask_values = new QAction(QIcon::fromTheme(""), i18n("Mask Values"), this);
 	action_reverse_columns = new QAction(QIcon::fromTheme(""), i18n("Reverse"), this);
@@ -456,6 +462,8 @@ void SpreadsheetView::initMenus() {
 		m_columnManipulateDataMenu = new QMenu(i18n("Manipulate Data"), this);
 		m_columnManipulateDataMenu->addAction(action_add_value);
 		m_columnManipulateDataMenu->addAction(action_subtract_value);
+		m_columnManipulateDataMenu->addAction(action_multiply_value);
+		m_columnManipulateDataMenu->addAction(action_divide_value);
 		m_columnManipulateDataMenu->addSeparator();
 		m_columnManipulateDataMenu->addAction(action_reverse_columns);
 		m_columnManipulateDataMenu->addSeparator();
@@ -569,8 +577,10 @@ void SpreadsheetView::connectActions() {
 	connect(action_set_as_yerr_plus, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
 
 	//data manipulation
-	connect(action_add_value, SIGNAL(triggered()), this, SLOT(addValue()));
-	connect(action_subtract_value, SIGNAL(triggered()), this, SLOT(subtractValue()));
+	connect(action_add_value, SLOT(triggered()), this, SLOT(modifyValues()));
+	connect(action_subtract_value, SIGNAL(triggered()), this, SLOT(modifyValues()));
+	connect(action_multiply_value, SIGNAL(triggered()), this, SLOT(modifyValues()));
+	connect(action_divide_value, SIGNAL(triggered()), this, SLOT(modifyValues()));
 	connect(action_reverse_columns, SIGNAL(triggered()), this, SLOT(reverseColumns()));
 	connect(action_drop_values, SIGNAL(triggered()), this, SLOT(dropColumnValues()));
 	connect(action_mask_values, SIGNAL(triggered()), this, SLOT(maskColumnValues()));
@@ -1761,16 +1771,16 @@ void SpreadsheetView::setSelectionAs() {
 	m_spreadsheet->endMacro();
 }
 
-void SpreadsheetView::addValue() {
-	if (selectedColumnCount() < 1) return;
-	auto* dlg = new AddSubtractValueDialog(m_spreadsheet, true);
-	dlg->setColumns(selectedColumns());
-	dlg->exec();
-}
+/*!
+ * add, subtract, multiply, divide
+ */
+void SpreadsheetView::modifyValues() {
+	if (selectedColumnCount() < 1)
+		return;
 
-void SpreadsheetView::subtractValue() {
-	if (selectedColumnCount() < 1) return;
-	auto* dlg = new AddSubtractValueDialog(m_spreadsheet, false);
+	const QAction* action = dynamic_cast<const QAction*>(QObject::sender());
+	AddSubtractValueDialog::Operation op = (AddSubtractValueDialog::Operation)action->data().toInt();
+	auto* dlg = new AddSubtractValueDialog(m_spreadsheet, op);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();
 }
