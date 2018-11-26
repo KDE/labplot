@@ -141,10 +141,10 @@ void SpreadsheetView::init() {
 
 	resizeHeader();
 
-	connect(m_horizontalHeader, SIGNAL(sectionMoved(int,int,int)), this, SLOT(handleHorizontalSectionMoved(int,int,int)));
-	connect(m_horizontalHeader, SIGNAL(sectionDoubleClicked(int)), this, SLOT(handleHorizontalHeaderDoubleClicked(int)));
-	connect(m_horizontalHeader, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
-	connect(m_horizontalHeader, SIGNAL(sectionClicked(int)), this, SLOT(columnClicked(int)) );
+	connect(m_horizontalHeader, &SpreadsheetHeaderView::sectionMoved, this, &SpreadsheetView::handleHorizontalSectionMoved);
+	connect(m_horizontalHeader, &SpreadsheetHeaderView::sectionDoubleClicked, this, &SpreadsheetView::handleHorizontalHeaderDoubleClicked);
+	connect(m_horizontalHeader, &SpreadsheetHeaderView::sectionResized, this, &SpreadsheetView::handleHorizontalSectionResized);
+	connect(m_horizontalHeader, &SpreadsheetHeaderView::sectionClicked, this, &SpreadsheetView::columnClicked);
 
 	// vertical header
 	QHeaderView* v_header = m_tableView->verticalHeader();
@@ -158,30 +158,23 @@ void SpreadsheetView::init() {
 	connectActions();
 	showComments(false);
 
-	connect(m_model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this,
-	        SLOT(updateHeaderGeometry(Qt::Orientation,int,int)) );
-	connect(m_model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this,
-	        SLOT(handleHeaderDataChanged(Qt::Orientation,int,int)) );
-	connect(m_spreadsheet, SIGNAL(aspectAdded(const AbstractAspect*)),
-	        this, SLOT(handleAspectAdded(const AbstractAspect*)));
-	connect(m_spreadsheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-	        this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
-	connect(m_spreadsheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
+	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::updateHeaderGeometry);
+	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::handleHeaderDataChanged);
+	connect(m_spreadsheet, &Spreadsheet::aspectAdded, this, &SpreadsheetView::handleAspectAdded);
+	connect(m_spreadsheet, &Spreadsheet::aspectAboutToBeRemoved,this, &SpreadsheetView::handleAspectAboutToBeRemoved);
+	connect(m_spreadsheet, &Spreadsheet::requestProjectContextMenu, this, &SpreadsheetView::createContextMenu);
 
 	for (auto* column : m_spreadsheet->children<Column>())
-		connect(column, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createColumnContextMenu(QMenu*)));
+		connect(column, &Column::requestProjectContextMenu, this, &SpreadsheetView::createColumnContextMenu);
 
 	//selection relevant connections
 	QItemSelectionModel* sel_model = m_tableView->selectionModel();
-	connect(sel_model, SIGNAL(currentColumnChanged(QModelIndex,QModelIndex)),
-	        this, SLOT(currentColumnChanged(QModelIndex,QModelIndex)));
-	connect(sel_model, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-	        this, SLOT(selectionChanged(QItemSelection,QItemSelection)));
-	connect(sel_model, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-	        this, SLOT(selectionChanged(QItemSelection,QItemSelection)) );
+	connect(sel_model, &QItemSelectionModel::currentColumnChanged, this, &SpreadsheetView::currentColumnChanged);
+	connect(sel_model, &QItemSelectionModel::selectionChanged, this, &SpreadsheetView::selectionChanged);
+	connect(sel_model, &QItemSelectionModel::selectionChanged, this, &SpreadsheetView::selectionChanged);
 
-	connect(m_spreadsheet, SIGNAL(columnSelected(int)), this, SLOT(selectColumn(int)) );
-	connect(m_spreadsheet, SIGNAL(columnDeselected(int)), this, SLOT(deselectColumn(int)) );
+	connect(m_spreadsheet, &Spreadsheet::columnSelected, this, &SpreadsheetView::selectColumn);
+	connect(m_spreadsheet, &Spreadsheet::columnDeselected, this, &SpreadsheetView::deselectColumn);
 }
 
 /*!
@@ -540,80 +533,81 @@ void SpreadsheetView::initMenus() {
 }
 
 void SpreadsheetView::connectActions() {
-	connect(action_cut_selection, SIGNAL(triggered()), this, SLOT(cutSelection()));
-	connect(action_copy_selection, SIGNAL(triggered()), this, SLOT(copySelection()));
-	connect(action_paste_into_selection, SIGNAL(triggered()), this, SLOT(pasteIntoSelection()));
-	connect(action_mask_selection, SIGNAL(triggered()), this, SLOT(maskSelection()));
-	connect(action_unmask_selection, SIGNAL(triggered()), this, SLOT(unmaskSelection()));
+	connect(action_cut_selection, &QAction::triggered, this, &SpreadsheetView::cutSelection);
+	connect(action_copy_selection, &QAction::triggered, this, &SpreadsheetView::copySelection);
+	connect(action_paste_into_selection, &QAction::triggered, this, &SpreadsheetView::pasteIntoSelection);
+	connect(action_mask_selection, &QAction::triggered, this, &SpreadsheetView::maskSelection);
+	connect(action_unmask_selection, &QAction::triggered, this, &SpreadsheetView::unmaskSelection);
 
-	connect(action_clear_selection, SIGNAL(triggered()), this, SLOT(clearSelectedCells()));
-// 	connect(action_recalculate, SIGNAL(triggered()), this, SLOT(recalculateSelectedCells()));
-	connect(action_fill_row_numbers, SIGNAL(triggered()), this, SLOT(fillWithRowNumbers()));
-	connect(action_fill_sel_row_numbers, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRowNumbers()));
-// 	connect(action_fill_random, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRandomNumbers()));
-	connect(action_fill_random_nonuniform, SIGNAL(triggered()), this, SLOT(fillWithRandomValues()));
-	connect(action_fill_equidistant, SIGNAL(triggered()), this, SLOT(fillWithEquidistantValues()));
-	connect(action_fill_function, SIGNAL(triggered()), this, SLOT(fillWithFunctionValues()));
-	connect(action_fill_const, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithConstValues()));
-	connect(action_select_all, SIGNAL(triggered()), m_tableView, SLOT(selectAll()));
-	connect(action_clear_spreadsheet, SIGNAL(triggered()), m_spreadsheet, SLOT(clear()));
-	connect(action_clear_masks, SIGNAL(triggered()), m_spreadsheet, SLOT(clearMasks()));
-	connect(action_sort_spreadsheet, SIGNAL(triggered()), this, SLOT(sortSpreadsheet()));
-	connect(action_go_to_cell, SIGNAL(triggered()), this, SLOT(goToCell()));
+	connect(action_clear_selection, &QAction::triggered, this, &SpreadsheetView::clearSelectedCells);
+// 	connect(action_recalculate, &QAction::triggered, this, &SpreadsheetView::recalculateSelectedCells);
+	connect(action_fill_row_numbers, &QAction::triggered, this, &SpreadsheetView::fillWithRowNumbers);
+	connect(action_fill_sel_row_numbers, &QAction::triggered, this, &SpreadsheetView::fillSelectedCellsWithRowNumbers);
+// 	connect(action_fill_random, &QAction::triggered, this, &SpreadsheetView::fillSelectedCellsWithRandomNumbers);
+	connect(action_fill_random_nonuniform, &QAction::triggered, this, &SpreadsheetView::fillWithRandomValues);
+	connect(action_fill_equidistant, &QAction::triggered, this, &SpreadsheetView::fillWithEquidistantValues);
+	connect(action_fill_function, &QAction::triggered, this, &SpreadsheetView::fillWithFunctionValues);
+	connect(action_fill_const, &QAction::triggered, this, &SpreadsheetView::fillSelectedCellsWithConstValues);
+	connect(action_select_all, &QAction::triggered, m_tableView, &QTableView::selectAll);
+	connect(action_clear_spreadsheet, &QAction::triggered, m_spreadsheet, &Spreadsheet::clear);
+	connect(action_clear_masks, &QAction::triggered, m_spreadsheet, &Spreadsheet::clearMasks);
+	connect(action_sort_spreadsheet, &QAction::triggered, this, &SpreadsheetView::sortSpreadsheet);
+	connect(action_go_to_cell, &QAction::triggered, this,
+			static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
 
-	connect(action_insert_column_left, SIGNAL(triggered()), this, SLOT(insertColumnLeft()));
-	connect(action_insert_column_right, SIGNAL(triggered()), this, SLOT(insertColumnRight()));
-	connect(action_remove_columns, SIGNAL(triggered()), this, SLOT(removeSelectedColumns()));
-	connect(action_clear_columns, SIGNAL(triggered()), this, SLOT(clearSelectedColumns()));
-	connect(action_set_as_none, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
-	connect(action_set_as_x, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
-	connect(action_set_as_y, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
-	connect(action_set_as_z, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
-	connect(action_set_as_xerr, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
-	connect(action_set_as_xerr_minus, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
-	connect(action_set_as_xerr_plus, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
-	connect(action_set_as_yerr, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
-	connect(action_set_as_yerr_minus, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
-	connect(action_set_as_yerr_plus, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
+	connect(action_insert_column_left, &QAction::triggered, this, &SpreadsheetView::insertColumnLeft);
+	connect(action_insert_column_right, &QAction::triggered, this, &SpreadsheetView::insertColumnRight);
+	connect(action_remove_columns, &QAction::triggered, this, &SpreadsheetView::removeSelectedColumns);
+	connect(action_clear_columns, &QAction::triggered, this, &SpreadsheetView::clearSelectedColumns);
+	connect(action_set_as_none, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
+	connect(action_set_as_x, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
+	connect(action_set_as_y, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
+	connect(action_set_as_z, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
+	connect(action_set_as_xerr, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
+	connect(action_set_as_xerr_minus, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
+	connect(action_set_as_xerr_plus, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
+	connect(action_set_as_yerr, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
+	connect(action_set_as_yerr_minus, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
+	connect(action_set_as_yerr_plus, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
 
 	//data manipulation
-	connect(action_add_value, SLOT(triggered()), this, SLOT(modifyValues()));
-	connect(action_subtract_value, SIGNAL(triggered()), this, SLOT(modifyValues()));
-	connect(action_multiply_value, SIGNAL(triggered()), this, SLOT(modifyValues()));
-	connect(action_divide_value, SIGNAL(triggered()), this, SLOT(modifyValues()));
-	connect(action_reverse_columns, SIGNAL(triggered()), this, SLOT(reverseColumns()));
-	connect(action_drop_values, SIGNAL(triggered()), this, SLOT(dropColumnValues()));
-	connect(action_mask_values, SIGNAL(triggered()), this, SLOT(maskColumnValues()));
-// 	connect(action_join_columns, SIGNAL(triggered()), this, SLOT(joinColumns()));
-	connect(action_normalize_columns, SIGNAL(triggered()), this, SLOT(normalizeSelectedColumns()));
-	connect(action_normalize_selection, SIGNAL(triggered()), this, SLOT(normalizeSelection()));
+	connect(action_add_value, &QAction::triggered, this, &SpreadsheetView::modifyValues);
+	connect(action_subtract_value, &QAction::triggered, this, &SpreadsheetView::modifyValues);
+	connect(action_multiply_value, &QAction::triggered, this, &SpreadsheetView::modifyValues);
+	connect(action_divide_value, &QAction::triggered, this, &SpreadsheetView::modifyValues);
+	connect(action_reverse_columns, &QAction::triggered, this, &SpreadsheetView::reverseColumns);
+	connect(action_drop_values, &QAction::triggered, this, &SpreadsheetView::dropColumnValues);
+	connect(action_mask_values, &QAction::triggered, this, &SpreadsheetView::maskColumnValues);
+// 	connect(action_join_columns, &QAction::triggered, this, &SpreadsheetView::joinColumns);
+	connect(action_normalize_columns, &QAction::triggered, this, &SpreadsheetView::normalizeSelectedColumns);
+	connect(action_normalize_selection, &QAction::triggered, this, &SpreadsheetView::normalizeSelection);
 
 	//sort
-	connect(action_sort_columns, SIGNAL(triggered()), this, SLOT(sortSelectedColumns()));
-	connect(action_sort_asc_column, SIGNAL(triggered()), this, SLOT(sortColumnAscending()));
-	connect(action_sort_desc_column, SIGNAL(triggered()), this, SLOT(sortColumnDescending()));
+	connect(action_sort_columns, &QAction::triggered, this, &SpreadsheetView::sortSelectedColumns);
+	connect(action_sort_asc_column, &QAction::triggered, this, &SpreadsheetView::sortColumnAscending);
+	connect(action_sort_desc_column, &QAction::triggered, this, &SpreadsheetView::sortColumnDescending);
 
 	//statistics
-	connect(action_statistics_columns, SIGNAL(triggered()), this, SLOT(showColumnStatistics()));
-	connect(action_statistics_all_columns, SIGNAL(triggered()), this, SLOT(showAllColumnsStatistics()));
+	connect(action_statistics_columns, &QAction::triggered, this, &SpreadsheetView::showColumnStatistics);
+	connect(action_statistics_all_columns, &QAction::triggered, this, &SpreadsheetView::showAllColumnsStatistics);
 
-	connect(action_insert_row_above, SIGNAL(triggered()), this, SLOT(insertRowAbove()));
-	connect(action_insert_row_below, SIGNAL(triggered()), this, SLOT(insertRowBelow()));
-	connect(action_remove_rows, SIGNAL(triggered()), this, SLOT(removeSelectedRows()));
-	connect(action_clear_rows, SIGNAL(triggered()), this, SLOT(clearSelectedRows()));
-	connect(action_statistics_rows, SIGNAL(triggered()), this, SLOT(showRowStatistics()));
-	connect(action_toggle_comments, SIGNAL(triggered()), this, SLOT(toggleComments()));
+	connect(action_insert_row_above, &QAction::triggered, this, &SpreadsheetView::insertRowAbove);
+	connect(action_insert_row_below, &QAction::triggered, this, &SpreadsheetView::insertRowBelow);
+	connect(action_remove_rows, &QAction::triggered, this, &SpreadsheetView::removeSelectedRows);
+	connect(action_clear_rows, &QAction::triggered, this, &SpreadsheetView::clearSelectedRows);
+	connect(action_statistics_rows, &QAction::triggered, this, &SpreadsheetView::showRowStatistics);
+	connect(action_toggle_comments, &QAction::triggered, this, &SpreadsheetView::toggleComments);
 
-	connect(action_plot_data_xycurve, SIGNAL(triggered()), this, SLOT(plotData()));
-	connect(action_plot_data_histogram, SIGNAL(triggered()), this, SLOT(plotData()));
-	connect(addDataReductionAction, SIGNAL(triggered()), SLOT(plotData()));
-	connect(addDifferentiationAction, SIGNAL(triggered()), SLOT(plotData()));
-	connect(addIntegrationAction, SIGNAL(triggered()), SLOT(plotData()));
-	connect(addInterpolationAction, SIGNAL(triggered()), SLOT(plotData()));
-	connect(addSmoothAction, SIGNAL(triggered()), SLOT(plotData()));
+	connect(action_plot_data_xycurve, &QAction::triggered, this, &SpreadsheetView::plotData);
+	connect(action_plot_data_histogram, &QAction::triggered, this, &SpreadsheetView::plotData);
+	connect(addDataReductionAction, &QAction::triggered, this, &SpreadsheetView::plotData);
+	connect(addDifferentiationAction, &QAction::triggered, this, &SpreadsheetView::plotData);
+	connect(addIntegrationAction, &QAction::triggered, this, &SpreadsheetView::plotData);
+	connect(addInterpolationAction, &QAction::triggered, this, &SpreadsheetView::plotData);
+	connect(addSmoothAction, &QAction::triggered, this, &SpreadsheetView::plotData);
 	for (const auto& action : addFitAction)
-		connect(action, SIGNAL(triggered()), SLOT(plotData()));
-	connect(addFourierFilterAction, SIGNAL(triggered()), SLOT(plotData()));
+		connect(action, &QAction::triggered, this, &SpreadsheetView::plotData);
+	connect(addFourierFilterAction, &QAction::triggered,this, &SpreadsheetView::plotData);
 }
 
 void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
@@ -736,7 +730,7 @@ void SpreadsheetView::handleAspectAdded(const AbstractAspect* aspect) {
 	else
 		m_tableView->setColumnWidth(index, col->width());
 
-	connect(col, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createColumnContextMenu(QMenu*)));
+	connect(col, &Column::requestProjectContextMenu, this, &SpreadsheetView::createColumnContextMenu);
 }
 
 void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
