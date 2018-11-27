@@ -91,41 +91,22 @@ AbstractColumn::~AbstractColumn() {
 }
 
 QStringList AbstractColumn::dateFormats() {
-	QStringList dates;
-	dates << "yyyy-MM-dd";
-	dates << "yyyy/MM/dd";
-	dates << "dd/MM/yyyy";
-	dates << "dd/MM/yy";
-	dates << "dd.MM.yyyy";
-	dates << "dd.MM.yy";
-	dates << "MM/yyyy";
-	dates << "dd.MM.";
-	dates << "yyyyMMdd";
+	static const QStringList dates{"yyyy-MM-dd", "yyyy/MM/dd", "dd/MM/yyyy",
+		"dd/MM/yy", "dd.MM.yyyy", "dd.MM.yy", "MM/yyyy", "dd.MM.", "yyyyMMdd"};
 
 	return dates;
 }
 
 QStringList AbstractColumn::timeFormats() {
-	QStringList times;
-	times << "hh";
-	times << "hh ap";
-	times << "hh:mm";
-	times << "hh:mm ap";
-	times << "hh:mm:ss";
-	times << "hh:mm:ss.zzz";
-	times << "hh:mm:ss:zzz";
-	times << "mm:ss.zzz";
-	times << "hhmmss";
+	static const QStringList times{"hh", "hh ap", "hh:mm", "hh:mm ap",
+		"hh:mm:ss", "hh:mm:ss.zzz", "hh:mm:ss:zzz", "mm:ss.zzz", "hhmmss"};
 
 	return times;
 }
 
 QStringList AbstractColumn::dateTimeFormats() {
-	QStringList dateTimes;
-
 	// any combination of date and times
-	for (const auto& d : dateFormats())
-		dateTimes << d;
+	QStringList dateTimes = dateFormats();
 	for (const auto& t : timeFormats())
 		dateTimes << t;
 	for (const auto& d : dateFormats())

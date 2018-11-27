@@ -2347,10 +2347,10 @@ void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader,
 		for (int j = 0; j < cols; ++j) {
 			Column* col = m_spreadsheet->column(j);
 			if (col->columnMode() == AbstractColumn::Numeric) {
-					const Double2StringFilter* out_fltr = static_cast<Double2StringFilter*>(col->outputFilter());
-					out << locale.toString(col->valueAt(i), out_fltr->numericFormat(), 16); // export with max. precision
+				const Double2StringFilter* out_fltr = static_cast<Double2StringFilter*>(col->outputFilter());
+				out << locale.toString(col->valueAt(i), out_fltr->numericFormat(), 16); // export with max. precision
 			} else
-					out << col->asStringColumn()->textAt(i);
+				out << col->asStringColumn()->textAt(i);
 
 			if (j != cols-1)
 				out << sep;
