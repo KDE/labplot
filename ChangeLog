@@ -10,12 +10,13 @@ New features:
 	* Improved user interface for data fitting (add fit function preview, show parameters directly, make options foldable)
 	* [spreadsheet] when filling a float column with row numbers, automatically convert its type to integer
 	* [spreadsheet] when filling an integer column with function values, automatically convert its type to float
-	* [spreadsheet] data manipulation: add/subtract a value from column values
+	* [spreadsheet] data manipulation: add/subtract/multiply/divide for column values
 
 Bug fixes:
 	* Fixed several problems in live data support
 	* [spreadsheet] properly calculate function values out of integer x-values
 	* [matrix] fix editing integer values
+	* Don't crash when a scaling factor equal to zero was set for axis
 
 -----2.5-----
 New features:
@@ -72,7 +73,6 @@ Bug fixes:
 	* When a LabPlot project is being droped in the main window, load the project directly instead of showing the import file dialog
 	* Correctly save and restore masked cells
 	* Don't crash if the rc-file was not found during the startup
-	* Don't crash when a scaling factor equal to zero was set for axis
 
 -----2.4-----
 New features:

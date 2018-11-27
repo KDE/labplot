@@ -112,7 +112,8 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		//*.json files can be recognized as ASCII. so, do the check for the json-extension as first.
 		fileType = JSON;
 	} else if (fileInfo.contains(QLatin1String("compressed data")) || fileInfo.contains(QLatin1String("ASCII")) ||
-			fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)) {
+			fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("csv"), Qt::CaseInsensitive) ||
+			fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive) ) {
 		if (NgspiceRawAsciiFilter::isNgspiceAsciiFile(fileName))
 			fileType = NgspiceRawAscii;
 		else //probably ascii data

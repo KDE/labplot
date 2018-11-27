@@ -148,6 +148,8 @@ private:
 	QAction* action_reverse_columns;
 	QAction* action_add_value;
 	QAction* action_subtract_value;
+	QAction* action_multiply_value;
+	QAction* action_divide_value;
 	QAction* action_drop_values;
 	QAction* action_mask_values;
 	QAction* action_join_columns;
@@ -232,8 +234,7 @@ private slots:
 	void removeSelectedColumns();
 	void clearSelectedColumns();
 
-	void addValue();
-	void subtractValue();
+	void modifyValues();
 	void reverseColumns();
 	void dropColumnValues();
 	void maskColumnValues();

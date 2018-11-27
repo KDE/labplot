@@ -1350,10 +1350,8 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				case AbstractColumn::Text: {
 					if (removeQuotesEnabled)
 						valueString.remove(QRegExp("[\"\']"));
-					DEBUG("	set value (" << currentRow << ", " << n << "): " << valueString.toStdString());
-					//TODO: QString size is not defined. Can not preallocate data matrix!
-					//QVector<QString>* colData = static_cast<QVector<QString>*>(m_dataContainer[n]);
-					//colData->operator[](currentRow) = valueString;
+					QVector<QString>* colData = static_cast<QVector<QString>*>(m_dataContainer[n]);
+					colData->operator[](currentRow) = valueString;
 					break;
 				}
 				case AbstractColumn::Month:	// never happens

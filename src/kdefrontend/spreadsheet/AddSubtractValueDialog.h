@@ -39,7 +39,9 @@ class AddSubtractValueDialog : public QDialog {
 Q_OBJECT
 
 public:
-	explicit AddSubtractValueDialog(Spreadsheet* s, bool addValue, QWidget* parent = nullptr);
+	enum Operation {Add, Subtract, Multiply, Divide};
+
+	explicit AddSubtractValueDialog(Spreadsheet*, Operation, QWidget* parent = nullptr);
 	~AddSubtractValueDialog() override;
 	void setColumns(QVector<Column*>);
 
@@ -48,7 +50,7 @@ private:
 	QVector<Column*> m_columns;
 	Spreadsheet* m_spreadsheet;
 	QPushButton* m_okButton;
-	bool m_addValue;
+	Operation m_operation;
 
 private slots:
 	void generate();

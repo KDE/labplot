@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : SortDialog.h
+    File                 : DifferentiationTest.h
     Project              : LabPlot
-    Description          : Sorting options dialog
+    Description          : Tests for numerical differentiation
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 by Alexander Semke (alexander.semke@web.de)
-
+    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -25,35 +24,20 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef SORTDIALOG_H
-#define SORTDIALOG_H
+#ifndef DIFFERENTIATIONTEST_H
+#define DIFFERENTIATIONTEST_H
 
-#include "backend/core/column/Column.h"
-#include <ui_sortdialogwidget.h>
-#include <QDialog>
+#include <../AnalysisTest.h>
 
-class SortDialog : public QDialog {
-Q_OBJECT
-
-public:
-	explicit SortDialog(QWidget* parent = nullptr);
-	~SortDialog() override;
-
-	void setColumns(QVector<Column*>);
-
-	enum { Separately=0, Together=1 };
-	enum { Ascending=0, Descending=1 };
+class DifferentiationTest : public AnalysisTest {
+	Q_OBJECT
 
 private slots:
-	void sortColumns();
-	void changeType(int index);
+	void testLinear();
+	void testLinearNonEquidistant();
+	void testQuadratic();
+	void testQuadraticNonEquidistant();
 
-signals:
-	void sort(Column*, QVector<Column*>, bool ascending);
-
-private:
-	Ui::SortDialogWidget ui;
-	QVector<Column*> m_columns;
+//	void testPerformance();
 };
-
 #endif
