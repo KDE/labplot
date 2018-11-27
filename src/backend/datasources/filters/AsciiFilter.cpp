@@ -1544,7 +1544,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 			continue;
 
 
-		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
+		const QStringList& lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 		QDEBUG(" line = " << lineStringList);
 
 		QStringList lineString;
