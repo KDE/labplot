@@ -70,7 +70,7 @@ public:
 	string resultsLogString() const;													//!< get Results Log
 
 private:
-	unsigned int fileVersion, buildVersion;
+	unsigned int fileVersion, buildVersion, ioError;
 	unique_ptr<OriginParser> parser;
 };
 

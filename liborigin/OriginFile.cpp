@@ -33,14 +33,15 @@
 #include <string>
 
 OriginFile::OriginFile(const string& fileName)
-:	fileVersion(0)
+:	fileVersion(0), ioError(0)
 {
 	ifstream file(fileName.c_str(), ios_base::binary);
 
 	if (!file.is_open())
 	{
-		cerr <<  "Could not open " << fileName.c_str() << "!" << endl;
-		exit(EXIT_FAILURE);
+		cerr << endl << "liborigin: " << strerror(errno) << ": " << fileName.c_str() << endl;
+		ioError = errno;
+		return;
 	}
 
 #ifdef GENERATE_CODE_FOR_LOG
@@ -48,8 +49,9 @@ OriginFile::OriginFile(const string& fileName)
 	logfile = fopen("./opjfile.log", "w");
 	if (logfile == nullptr)
 	{
-		cerr <<  "Could not open opjfile.log !" << endl;
-		exit(EXIT_FAILURE);
+		cerr << endl <<  "liborigin: " << strerror(errno) << ": opjfile.log" << endl;
+		ioError = errno;
+		return;
 	}
 #endif // GENERATE_CODE_FOR_LOG
 
@@ -155,10 +157,13 @@ OriginFile::OriginFile(const string& fileName)
 	fclose(logfile);
 #endif // GENERATE_CODE_FOR_LOG
 	parser.reset(createOriginAnyParser(fileName));
+	ioError=0;
 }
 
 bool OriginFile::parse()
 {
+	if (ioError != 0)
+		return false;
 	parser->buildVersion = buildVersion;
 	parser->fileVersion = fileVersion;
 	return parser->parse();
