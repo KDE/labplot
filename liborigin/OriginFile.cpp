@@ -131,11 +131,14 @@ OriginFile::OriginFile(const string& fileName)
 	} else if (buildVersion < 3296) { // 2018b.0 (9.5.5.409) SR0, SR1 3295
 		fileVersion = 955;
 		newFileVersion = 20185;
+	} else if (buildVersion < 3331) { // 2019.0 (9.6.0.172) SR0 3330
+		fileVersion = 960;
+		newFileVersion = 20190;
 	} else {
-		// > 2018bSR0
-		fileVersion = 956;
-		newFileVersion = 20186;
-		LOG_PRINT(logfile, "Found project version 2018b.1 (9.5.6) or newer\n")
+		// > 2019SR0
+		fileVersion = 961;
+		newFileVersion = 20191;
+		LOG_PRINT(logfile, "Found project version 2019.1 (9.6.1) or newer\n")
 	}
 
 	if (newFileVersion == 0) {
