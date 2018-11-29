@@ -43,20 +43,20 @@ Q_OBJECT
 
 public:
 	struct DifferentiationData {
-		DifferentiationData() : derivOrder(nsl_diff_deriv_order_first), accOrder(2), autoRange(true), xRange(2) {};
+		DifferentiationData() : xRange(2) {};
 
-		nsl_diff_deriv_order_type derivOrder;	// order of differentiation
-		int accOrder;				// order of accuracy
-		bool autoRange;				// use all data?
-		QVector<double> xRange;			// x range for integration
+		nsl_diff_deriv_order_type derivOrder{nsl_diff_deriv_order_first};	// order of differentiation
+		int accOrder{2};							// order of accuracy
+		bool autoRange{true};							// use all data?
+		QVector<double> xRange;							// x range for integration
 	};
 	struct DifferentiationResult {
-		DifferentiationResult() : available(false), valid(false), elapsedTime(0) {};
+		DifferentiationResult() {};
 
-		bool available;
-		bool valid;
+		bool available{false};
+		bool valid{false};
 		QString status;
-		qint64 elapsedTime;
+		qint64 elapsedTime{0};
 	};
 
 	explicit XYDifferentiationCurve(const QString& name);
