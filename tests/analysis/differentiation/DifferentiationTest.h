@@ -38,6 +38,11 @@ private slots:
 	void testQuadratic();
 	void testQuadraticNonEquidistant();
 
+	// higher order
+	void testQuadraticSecondOrder();
+	void testCubicSecondOrder();
+	void testCubicThirdOrder();
+
 //	void testPerformance();
 };
 #endif

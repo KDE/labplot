@@ -46,7 +46,7 @@ public:
 		DifferentiationData() : derivOrder(nsl_diff_deriv_order_first), accOrder(2), autoRange(true), xRange(2) {};
 
 		nsl_diff_deriv_order_type derivOrder;	// order of differentiation
-		int accOrder;				// order ofaccuracy
+		int accOrder;				// order of accuracy
 		bool autoRange;				// use all data?
 		QVector<double> xRange;			// x range for integration
 	};

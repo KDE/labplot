@@ -203,4 +203,137 @@ void DifferentiationTest::testQuadraticNonEquidistant() {
 	QCOMPARE(resultYDataColumn->valueAt(3), 10.);
 }
 
+void DifferentiationTest::testQuadraticSecondOrder() {
+	// data
+	QVector<double> xData = {1.,2.,3.,4.};
+	QVector<double> yData = {1.,4.,9.,16.};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	XYDifferentiationCurve differentiationCurve("differentiation");
+	differentiationCurve.setXDataColumn(&xDataColumn);
+	differentiationCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the differentiation
+	XYDifferentiationCurve::DifferentiationData differentiationData = differentiationCurve.differentiationData();
+	differentiationData.derivOrder = nsl_diff_deriv_order_second;
+	differentiationCurve.setDifferentiationData(differentiationData);
+
+	//perform the differentiation
+	differentiationCurve.recalculate();
+	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = differentiationCurve.differentiationResult();
+
+	//check the results
+	QCOMPARE(differentiationResult.available, true);
+	QCOMPARE(differentiationResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = differentiationCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = differentiationCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 4);
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), xData[i]);
+
+	QCOMPARE(resultYDataColumn->valueAt(0), 2.);
+	QCOMPARE(resultYDataColumn->valueAt(1), 2.);
+	QCOMPARE(resultYDataColumn->valueAt(2), 2.);
+	QCOMPARE(resultYDataColumn->valueAt(3), 2.);
+}
+
+void DifferentiationTest::testCubicSecondOrder() {
+	// data
+	QVector<double> xData = {1.,2.,3.,4.};
+	QVector<double> yData = {1.,8.,27.,64.};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	XYDifferentiationCurve differentiationCurve("differentiation");
+	differentiationCurve.setXDataColumn(&xDataColumn);
+	differentiationCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the differentiation
+	XYDifferentiationCurve::DifferentiationData differentiationData = differentiationCurve.differentiationData();
+	differentiationData.derivOrder = nsl_diff_deriv_order_second;
+	differentiationCurve.setDifferentiationData(differentiationData);
+
+	//perform the differentiation
+	differentiationCurve.recalculate();
+	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = differentiationCurve.differentiationResult();
+
+	//check the results
+	QCOMPARE(differentiationResult.available, true);
+	QCOMPARE(differentiationResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = differentiationCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = differentiationCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 4);
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), xData[i]);
+
+	QCOMPARE(resultYDataColumn->valueAt(0), 6.);
+	QCOMPARE(resultYDataColumn->valueAt(1), 12.);
+	QCOMPARE(resultYDataColumn->valueAt(2), 18.);
+	QCOMPARE(resultYDataColumn->valueAt(3), 24.);
+}
+
+void DifferentiationTest::testCubicThirdOrder() {
+	// data
+	QVector<double> xData = {1.,2.,3.,4.};
+	QVector<double> yData = {1.,8.,27.,64.};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	XYDifferentiationCurve differentiationCurve("differentiation");
+	differentiationCurve.setXDataColumn(&xDataColumn);
+	differentiationCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the differentiation
+	XYDifferentiationCurve::DifferentiationData differentiationData = differentiationCurve.differentiationData();
+	differentiationData.derivOrder = nsl_diff_deriv_order_third;
+	differentiationCurve.setDifferentiationData(differentiationData);
+
+	//perform the differentiation
+	differentiationCurve.recalculate();
+	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = differentiationCurve.differentiationResult();
+
+	//check the results
+	QCOMPARE(differentiationResult.available, true);
+	QCOMPARE(differentiationResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = differentiationCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = differentiationCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 4);
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), xData[i]);
+
+	//TODO: check expectation
+	QCOMPARE(resultYDataColumn->valueAt(0), 1.);
+	QCOMPARE(resultYDataColumn->valueAt(1), 8.);
+	QCOMPARE(resultYDataColumn->valueAt(2), 27.);
+	QCOMPARE(resultYDataColumn->valueAt(3), 64.);
+}
+
 QTEST_MAIN(DifferentiationTest)
