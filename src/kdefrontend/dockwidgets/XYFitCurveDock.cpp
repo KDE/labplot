@@ -322,9 +322,11 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	this->setModel();
 	m_fitData = m_fitCurve->fitData();
 	if(m_fitData.paramStartValues.size() > 0) {
-		DEBUG("	A start value 0 = " << m_fitData.paramStartValues.at(0));
+		DEBUG("	start value 1 = " << m_fitData.paramStartValues.at(0));
 	}
-	DEBUG("	A model degree = " << m_fitData.degree);
+	DEBUG("	model degree = " << m_fitData.degree);
+	DEBUG("	# params = " << m_fitData.paramNames.size());
+	DEBUG("	# start values = " << m_fitData.paramStartValues.size());
 	fitParametersWidget->setFitData(&m_fitData);
 
 	initGeneralTab();

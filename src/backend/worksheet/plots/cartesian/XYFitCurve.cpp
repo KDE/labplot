@@ -1999,6 +1999,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.elapsedTime = timer.elapsed();
 
 	sourceDataChangedSinceLastRecalc = false;
+	DEBUG("XYFitCurvePrivate::recalculate() DONE");
 }
 
 /* evaluate fit function */
@@ -2259,7 +2260,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 			//set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
 			XYFitCurve::initFitData(d->fitData);
-			// remove default start values
+			// remove default names and start values
 			d->fitData.paramStartValues.clear();
 		} else if (!preview && reader->name() == "name") {	// needed for custom model
 			d->fitData.paramNames << reader->readElementText();
@@ -2329,6 +2330,10 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				d->residualsColumn = column;
 		}
 	}
+
+	// older model save the param names also for non-custom models: remove them
+	while (d->fitData.paramNames.size() > d->fitData.paramStartValues.size())
+		d->fitData.paramNames.removeLast();
 
 	if (d->fitData.paramNamesUtf8.isEmpty())
 		d->fitData.paramNamesUtf8 << d->fitData.paramNames;
