@@ -119,6 +119,13 @@ void TextLabel::init() {
 		d->verticalAlignment= (TextLabel::VerticalAlignment) group.readEntry("VerticalAlignment", (int)TextLabel::vAlignCenter);
 	}
 
+	//border
+	d->borderShape = (TextLabel::BorderShape)group.readEntry("BorderShape", (int)TextLabel::NoBorder);
+	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
+	                    group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
+	                    (Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
+	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
+
 	//scaling:
 	//we need to scale from the font size specified in points to scene units.
 	//furhermore, we create the tex-image in a higher resolution then usual desktop resolution
@@ -209,6 +216,10 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::HorizontalAlignment, horizontal
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::VerticalAlignment, verticalAlignment, verticalAlignment);
 BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, rotationAngle, rotationAngle);
 
+BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::BorderShape, borderShape, borderShape)
+CLASS_SHARED_D_READER_IMPL(TextLabel, QPen, borderPen, borderPen)
+BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, borderOpacity, borderOpacity)
+
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText);
 void TextLabel::setText(const TextWrapper &textWrapper) {
@@ -288,6 +299,29 @@ void TextLabel::setVerticalAlignment(const TextLabel::VerticalAlignment vAlign) 
 		exec(new TextLabelSetVerticalAlignmentCmd(d, vAlign, ki18n("%1: set vertical alignment")));
 }
 
+//Border
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetBorderShape, TextLabel::BorderShape, borderShape, updateBorder)
+void TextLabel::setBorderShape(TextLabel::BorderShape shape) {
+	Q_D(TextLabel);
+	if (shape != d->borderShape)
+		exec(new TextLabelSetBorderShapeCmd(d, shape, ki18n("%1: set border shape")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetBorderPen, QPen, borderPen, update)
+void TextLabel::setBorderPen(const QPen &pen) {
+	Q_D(TextLabel);
+	if (pen != d->borderPen)
+		exec(new TextLabelSetBorderPenCmd(d, pen, ki18n("%1: set border")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetBorderOpacity, qreal, borderOpacity, update)
+void TextLabel::setBorderOpacity(qreal opacity) {
+	Q_D(TextLabel);
+	if (opacity != d->borderOpacity)
+		exec(new TextLabelSetBorderOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
+}
+
+//misc
 STD_SWAP_METHOD_SETTER_CMD_IMPL_F(TextLabel, SetVisible, bool, swapVisible, retransform);
 void TextLabel::setVisible(bool on) {
 	Q_D(TextLabel);
@@ -401,7 +435,7 @@ void TextLabelPrivate::retransform() {
 	boundingRectangle.setWidth(w);
 	boundingRectangle.setHeight(h);
 
-	recalcShapeAndBoundingRect();
+	updateBorder();
 }
 
 /*!
@@ -476,6 +510,179 @@ void TextLabelPrivate::updateTeXImage() {
 	emit q->teXImageUpdated(teXRenderSuccessful);
 }
 
+void TextLabelPrivate::updateBorder() {
+	borderShapePath = QPainterPath();
+	switch (borderShape) {
+	case (TextLabel::NoBorder):
+		break;
+	case (TextLabel::BorderShape::Rect): {
+		borderShapePath.addRect(boundingRectangle);
+		break;
+	}
+	case (TextLabel::BorderShape::Ellipse): {
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.addEllipse(xs  - 0.1 * w, ys - 0.1 * h, 1.2 * w,  1.2 * h);
+		break;
+	}
+	case (TextLabel::BorderShape::RoundSideRect): {
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs, ys);
+		borderShapePath.lineTo(xs + w, ys);
+		borderShapePath.quadTo(xs + w + h/2, ys + h/2, xs + w, ys + h);
+		borderShapePath.lineTo(xs, ys + h);
+		borderShapePath.quadTo(xs - h/2, ys + h/2, xs, ys);
+		break;
+	}
+	case (TextLabel::BorderShape::RoundCornerRect): {
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs + h * 0.2, ys);
+		borderShapePath.lineTo(xs + w - h * 0.2, ys);
+		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
+		borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
+		borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
+		borderShapePath.lineTo(xs + 0.2 * h, ys + h);
+		borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
+		borderShapePath.lineTo(xs, ys + 0.2 * h);
+		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
+		break;
+
+	}
+	case (TextLabel::BorderShape::InwardsRoundCornerRect): {
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs, ys - 0.3 * h);
+		borderShapePath.lineTo(xs + w, ys - 0.3 * h);
+		borderShapePath.quadTo(xs + w, ys, xs + w + 0.3 * h, ys);
+		borderShapePath.lineTo(xs + w + 0.3 * h, ys + h);
+		borderShapePath.quadTo(xs + w, ys + h, xs + w, ys + h + 0.3 * h);
+		borderShapePath.lineTo(xs, ys + h + 0.3 * h);
+		borderShapePath.quadTo(xs, ys + h, xs - 0.3 * h, ys + h);
+		borderShapePath.lineTo(xs - 0.3 * h, ys);
+		borderShapePath.quadTo(xs, ys, xs, ys - 0.3 * h);
+		break;
+	}
+	case (TextLabel::BorderShape::DentedBorderRect): {
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs - 0.2 * h, ys - 0.2 * h);
+		borderShapePath.quadTo(xs + w / 2, ys, xs + w + 0.2 * h, ys - 0.2 * h);
+		borderShapePath.quadTo(xs + w, ys + h / 2, xs + w + 0.2 * h, ys + h + 0.2 * h);
+		borderShapePath.quadTo(xs + w / 2, ys + h, xs - 0.2 * h, ys + h + 0.2 * h);
+		borderShapePath.quadTo(xs, ys + h / 2, xs - 0.2 * h, ys - 0.2 * h);
+		break;
+	}
+	case (TextLabel::BorderShape::Cuboid): {
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs, ys);
+		borderShapePath.lineTo(xs + w, ys);
+		borderShapePath.lineTo(xs + w, ys + h);
+		borderShapePath.lineTo(xs, ys + h);
+		borderShapePath.lineTo(xs, ys);
+		borderShapePath.lineTo(xs + 0.3 * h, ys - 0.2 * h);
+		borderShapePath.lineTo(xs + w + 0.3 * h, ys - 0.2 * h);
+		borderShapePath.lineTo(xs + w, ys);
+		borderShapePath.moveTo(xs + w, ys + h);
+		borderShapePath.lineTo(xs + w + 0.3 * h, ys + h - 0.2 * h);
+		borderShapePath.lineTo(xs + w + 0.3 * h, ys - 0.2 * h);
+		break;
+	}
+	case (TextLabel::BorderShape::UpPointingRectangle): {
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs + h * 0.2, ys);
+		borderShapePath.lineTo(xs + w / 2 - 0.2 * h, ys);
+		borderShapePath.lineTo(xs + w / 2, ys - 0.2 * h);
+		borderShapePath.lineTo(xs + w / 2 + 0.2 * h, ys);
+		borderShapePath.lineTo(xs + w - h * 0.2, ys);
+		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
+		borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
+		borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
+		borderShapePath.lineTo(xs + 0.2 * h, ys + h);
+		borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
+		borderShapePath.lineTo(xs, ys + 0.2 * h);
+		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
+		break;
+	}
+	case (TextLabel::BorderShape::DownPointingRectangle): {
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs +h * 0.2, ys);
+		borderShapePath.lineTo(xs + w - h * 0.2, ys);
+		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
+		borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
+		borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
+		borderShapePath.lineTo(xs + w / 2 + 0.2 * h, ys + h);
+		borderShapePath.lineTo(xs + w / 2, ys + h + 0.2 * h);
+		borderShapePath.lineTo(xs + w / 2 - 0.2 * h, ys + h);
+		borderShapePath.lineTo(xs + 0.2 * h, ys + h);
+		borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
+		borderShapePath.lineTo(xs, ys + 0.2 * h);
+		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
+		break;
+	}
+	case (TextLabel::BorderShape::LeftPointingRectangle): {
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs + h*0.2, ys);
+		borderShapePath.lineTo(xs + w - h * 0.2, ys);
+		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
+		borderShapePath.lineTo(xs + w,  ys + h - 0.2 * h);
+		borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
+		borderShapePath.lineTo(xs + 0.2 * h, ys + h);
+		borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
+		borderShapePath.lineTo(xs, ys + h / 2 + 0.2 * h);
+		borderShapePath.lineTo(xs - 0.2 * h, ys + h / 2);
+		borderShapePath.lineTo(xs, ys + h / 2 - 0.2 * h);
+		borderShapePath.lineTo(xs, ys + 0.2 * h);
+		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
+		break;
+	}
+	case (TextLabel::BorderShape::RightPointingRectangle): {
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs + h * 0.2, ys);
+		borderShapePath.lineTo(xs + w - h * 0.2, ys);
+		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
+		borderShapePath.lineTo(xs + w, ys + h / 2 - 0.2 * h);
+		borderShapePath.lineTo(xs + w + 0.2 * h, ys + h / 2);
+		borderShapePath.lineTo(xs + w, ys + h / 2 + 0.2 * h);
+		borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
+		borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
+		borderShapePath.lineTo(xs + 0.2 * h, ys + h);
+		borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
+		borderShapePath.lineTo(xs, ys + 0.2 * h);
+		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
+		break;
+	}
+	}
+
+	recalcShapeAndBoundingRect();
+}
+
 bool TextLabelPrivate::swapVisible(bool on) {
 	bool oldValue = isVisible();
 	setVisible(on);
@@ -506,9 +713,13 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 
 	QMatrix matrix;
 	matrix.rotate(-rotationAngle);
-	transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
-
 	labelShape = QPainterPath();
+	if (borderShape != TextLabel::NoBorder) {
+		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));
+		transformedBoundingRectangle = matrix.mapRect(labelShape.boundingRect());
+	} else
+		transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
+
 	labelShape.addRect(boundingRectangle);
 	labelShape = matrix.map(labelShape);
 
@@ -540,14 +751,18 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	}
 	painter->restore();
 
+	painter->setPen(borderPen);
+	painter->setOpacity(borderOpacity);
+	painter->drawPath(borderShapePath);
+
 	if (m_hovered && !isSelected() && !m_printing){
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(labelShape);
+		painter->drawPath(borderShapePath);
 	}
 
 	if (isSelected() && !m_printing){
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(labelShape);
+		painter->drawPath(borderShapePath);
 	}
 }
 
@@ -688,6 +903,13 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "teXFontColor_b", QString::number(d->teXFontColor.blue()) );
 	writer->writeEndElement();
 
+	//border
+	writer->writeStartElement("border");
+	writer->writeAttribute("borderShape", QString::number(d->borderShape));
+	WRITE_QPEN(d->borderPen);
+	writer->writeAttribute("borderOpacity", QString::number(d->borderOpacity));
+	writer->writeEndElement();
+
 	if (d->textWrapper.teXUsed) {
 		writer->writeStartElement("teXImage");
 		QByteArray ba;
@@ -802,6 +1024,11 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("teXFontColor_b").toString());
 			else
 				d->teXFontColor.setBlue( str.toInt() );
+		} else if (!preview && reader->name() == "border") {
+			attribs = reader->attributes();
+			READ_INT_VALUE("borderShape", borderShape, BorderShape);
+			READ_QPEN(d->borderPen);
+			READ_DOUBLE_VALUE("borderOpacity", borderOpacity);
 		} else if (!preview && reader->name() == "teXImage") {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
@@ -856,6 +1083,15 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 		this->setTeXFontColor(fontColor);
 		this->setTeXBackgroundColor(backgroundColor);
 	}
+
+	group = config.group("CartesianPlot");
+	QPen pen = this->borderPen();
+	pen.setColor(group.readEntry("BorderColor", pen.color()));
+	pen.setStyle((Qt::PenStyle)(group.readEntry("BorderStyle", (int) pen.style())));
+	pen.setWidthF(group.readEntry("BorderWidth", pen.widthF()));
+	this->setBorderPen(pen);
+	this->setBorderOpacity(group.readEntry("BorderOpacity", this->borderOpacity()));
+
 	d->suppressRetransform = false;
 	d->updateText();
 }

@@ -29,6 +29,7 @@
 #include "LabelWidget.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "kdefrontend/GuiTools.h"
 #include "tools/TeXRenderer.h"
 
 #include <QMenu>
@@ -44,6 +45,8 @@
 #include <KF5/KSyntaxHighlighting/Definition>
 #include <KF5/KSyntaxHighlighting/Theme>
 #endif
+
+#include <math.h>
 
 /*!
 	\class LabelWidget
@@ -96,6 +99,26 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	ui.cbVerticalAlignment->addItem(i18n("Center"));
 	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
 
+	ui.cbBorderShape->addItem(i18n("No Border"));
+	ui.cbBorderShape->addItem(i18n("Rectangle"));
+	ui.cbBorderShape->addItem(i18n("Ellipse"));
+	ui.cbBorderShape->addItem(i18n("Round sided rectangle"));
+	ui.cbBorderShape->addItem(i18n("Round corner rectangle"));
+	ui.cbBorderShape->addItem(i18n("Inwards round corner rectangle"));
+	ui.cbBorderShape->addItem(i18n("Dented border rectangle"));
+	ui.cbBorderShape->addItem(i18n("Cuboid"));
+	ui.cbBorderShape->addItem(i18n("Up Pointing rectangle"));
+	ui.cbBorderShape->addItem(i18n("Down Pointing rectangle"));
+	ui.cbBorderShape->addItem(i18n("Left Pointing rectangle"));
+	ui.cbBorderShape->addItem(i18n("Right Pointing rectangle"));
+
+	ui.cbBorderStyle->addItem(i18n("No line"));
+	ui.cbBorderStyle->addItem(i18n("Solid line"));
+	ui.cbBorderStyle->addItem(i18n("Dash line"));
+	ui.cbBorderStyle->addItem(i18n("Dot line"));
+	ui.cbBorderStyle->addItem(i18n("Dash dot line"));
+	ui.cbBorderStyle->addItem(i18n("Dash dot dot line"));
+
 	//check whether the used latex compiler is available.
 	//Following logic is implemented (s.a. LabelWidget::teXUsedChanged()):
 	//1. in case latex was used to generate the text label in the stored project
@@ -147,6 +170,13 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 
 	connect( ui.chbVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
+	//Border
+	connect(ui.cbBorderShape, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &LabelWidget::borderShapeChanged);
+	connect(ui.cbBorderStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &LabelWidget::borderStyleChanged);
+	connect(ui.kcbBorderColor, &KColorButton::changed, this, &LabelWidget::borderColorChanged);
+	connect(ui.sbBorderWidth, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &LabelWidget::borderWidthChanged);
+	connect(ui.sbBorderOpacity, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &LabelWidget::borderOpacityChanged);
+
 	//TODO: https://bugreports.qt.io/browse/QTBUG-25420
 	ui.tbFontUnderline->hide();
 	ui.tbFontStrikeOut->hide();
@@ -163,6 +193,8 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 	ui.sbOffsetY->hide();
 
 	this->load();
+	borderShapeChanged(ui.cbBorderShape->currentIndex());
+
 	initConnections();
 }
 
@@ -197,6 +229,9 @@ void LabelWidget::initConnections() const {
 	connect( m_label, SIGNAL(verticalAlignmentChanged(TextLabel::VerticalAlignment)),
 	         this, SLOT(labelVerticalAlignmentChanged(TextLabel::VerticalAlignment)) );
 	connect( m_label, SIGNAL(rotationAngleChanged(qreal)), this, SLOT(labelRotationAngleChanged(qreal)) );
+	connect(m_label, &TextLabel::borderShapeChanged, this, &LabelWidget::labelBorderShapeChanged);
+	connect(m_label, &TextLabel::borderPenChanged, this, &LabelWidget::labelBorderPenChanged);
+	connect(m_label, &TextLabel::borderOpacityChanged, this, &LabelWidget::labelBorderOpacityChanged);
 	connect( m_label, SIGNAL(visibleChanged(bool)), this, SLOT(labelVisibleChanged(bool)) );
 }
 
@@ -633,6 +668,76 @@ void LabelWidget::visibilityChanged(bool state) {
 		label->setVisible(state);
 }
 
+//border
+void LabelWidget::borderShapeChanged(int index) {
+	TextLabel::BorderShape shape = (TextLabel::BorderShape)index;
+	bool b = (shape != TextLabel::NoBorder);
+	ui.lBorderStyle->setVisible(b);
+	ui.cbBorderStyle->setVisible(b);
+	ui.lBorderWidth->setVisible(b);
+	ui.sbBorderWidth->setVisible(b);
+	ui.lBorderColor->setVisible(b);
+	ui.kcbBorderColor->setVisible(b);
+	ui.lBorderOpacity->setVisible(b);
+	ui.sbBorderOpacity->setVisible(b);
+
+	if (m_initializing)
+		return;
+
+	for (auto* label : m_labelsList)
+		label->setBorderShape(shape);
+}
+
+void LabelWidget::borderStyleChanged(int index) {
+	if (m_initializing)
+		return;
+
+	auto penStyle = Qt::PenStyle(index);
+	QPen pen;
+	for (auto* label : m_labelsList) {
+		pen = label->borderPen();
+		pen.setStyle(penStyle);
+		label->setBorderPen(pen);
+	}
+}
+
+void LabelWidget::borderColorChanged(const QColor& color) {
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	for (auto* label : m_labelsList) {
+		pen = label->borderPen();
+		pen.setColor(color);
+		label->setBorderPen(pen);
+	}
+
+	m_initializing = true;
+	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
+	m_initializing = false;
+}
+
+void LabelWidget::borderWidthChanged(double value) {
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	for (auto* label : m_labelsList) {
+		pen = label->borderPen();
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		label->setBorderPen(pen);
+	}
+}
+
+void LabelWidget::borderOpacityChanged(int value) {
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	for (auto* label : m_labelsList)
+		label->setBorderOpacity(opacity);
+}
+
 //*********************************************************
 //****** SLOTs for changes triggered in TextLabel *********
 //*********************************************************
@@ -724,6 +829,31 @@ void LabelWidget::labelVisibleChanged(bool on) {
 	m_initializing = false;
 }
 
+//border
+void LabelWidget::labelBorderShapeChanged(TextLabel::BorderShape shape) {
+	m_initializing = true;
+	ui.cbBorderShape->setCurrentIndex(shape);
+	m_initializing = false;
+}
+
+void LabelWidget::labelBorderPenChanged(QPen& pen) {
+	m_initializing = true;
+	if (ui.cbBorderStyle->currentIndex() != pen.style())
+		ui.cbBorderStyle->setCurrentIndex(pen.style());
+	if (ui.kcbBorderColor->color() != pen.color())
+		ui.kcbBorderColor->setColor(pen.color());
+	if (ui.sbBorderWidth->value() != pen.widthF())
+		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
+	m_initializing = false;
+}
+
+void LabelWidget::labelBorderOpacityChanged(float value) {
+	m_initializing = true;
+	float v = (float)value*100.;
+	ui.sbBorderOpacity->setValue(v);
+	m_initializing = false;
+}
+
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
@@ -768,6 +898,14 @@ void LabelWidget::load() {
 	ui.cbVerticalAlignment->setCurrentIndex( (int) m_label->verticalAlignment() );
 	ui.sbRotation->setValue( m_label->rotationAngle() );
 
+	//Border
+    ui.cbBorderShape->setCurrentIndex( m_label->borderShape() );
+	ui.kcbBorderColor->setColor( m_label->borderPen().color() );
+	ui.cbBorderStyle->setCurrentIndex( (int) m_label->borderPen().style() );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_label->borderPen().widthF(), Worksheet::Point) );
+	ui.sbBorderOpacity->setValue( round(m_label->borderOpacity()*100) );
+	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
+
 	m_initializing = false;
 }
 
@@ -797,6 +935,12 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	ui.cbVerticalAlignment->setCurrentIndex( group.readEntry("VerticalAlignment", (int) m_label->verticalAlignment()) );
 	ui.sbRotation->setValue( group.readEntry("Rotation", m_label->rotationAngle()) );
 
+	//Border
+    ui.cbBorderShape->setCurrentIndex(group.readEntry("BorderShape").toInt());
+	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_label->borderPen().color()) );
+	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int)m_label->borderPen().style()) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_label->borderPen().widthF()), Worksheet::Point) );
+	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", m_label->borderOpacity())*100 );
 	m_initializing = false;
 }
 
@@ -820,4 +964,11 @@ void LabelWidget::saveConfig(KConfigGroup& group) {
 	group.writeEntry("HorizontalAlignment", ui.cbHorizontalAlignment->currentIndex());
 	group.writeEntry("VerticalAlignment", ui.cbVerticalAlignment->currentIndex());
 	group.writeEntry("Rotation", ui.sbRotation->value());
+
+	//Border
+    group.writeEntry("BorderShape", ui.cbBorderShape->currentIndex());
+	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
+	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
+	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Point));
+	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
 }

@@ -57,6 +57,10 @@ class TextLabelPrivate: public QGraphicsItem {
 		TextLabel::HorizontalAlignment horizontalAlignment;
 		TextLabel::VerticalAlignment verticalAlignment;
 
+		TextLabel::BorderShape borderShape;
+		QPen borderPen;
+		qreal borderOpacity;
+
 		QString name() const;
 		void retransform();
 		bool swapVisible(bool on);
@@ -65,6 +69,7 @@ class TextLabelPrivate: public QGraphicsItem {
 		QPointF positionFromItemPosition(QPointF);
 		void updateText();
 		void updateTeXImage();
+		void updateBorder();
 		QStaticText staticText;
 
 		bool suppressItemChangeEvent;
@@ -74,6 +79,7 @@ class TextLabelPrivate: public QGraphicsItem {
 
 		QRectF boundingRectangle; //bounding rectangle of the text
 		QRectF transformedBoundingRectangle; //bounding rectangle of transformed (rotated etc.) text
+		QPainterPath borderShapePath;
 		QPainterPath labelShape;
 
 		//reimplemented from QGraphicsItem

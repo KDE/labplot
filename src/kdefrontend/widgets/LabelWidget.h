@@ -109,6 +109,12 @@ private slots:
 	void offsetXChanged(double);
 	void offsetYChanged(double);
 
+	void borderShapeChanged(int);
+	void borderStyleChanged(int);
+	void borderColorChanged(const QColor&);
+	void borderWidthChanged(double);
+	void borderOpacityChanged(int);
+
 	void visibilityChanged(bool);
 
 	//SLOTs for changes triggered in TextLabel
@@ -122,6 +128,11 @@ private slots:
 	void labelOffsetxChanged(qreal);
 	void labelOffsetyChanged(qreal);
 	void labelRotationAngleChanged(qreal);
+
+	void labelBorderShapeChanged(TextLabel::BorderShape);
+	void labelBorderPenChanged(QPen&);
+	void labelBorderOpacityChanged(float);
+
 	void labelVisibleChanged(bool);
 };
 

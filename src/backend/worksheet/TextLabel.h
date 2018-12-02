@@ -52,6 +52,9 @@ public:
 	enum HorizontalAlignment {hAlignLeft, hAlignCenter, hAlignRight};
 	enum VerticalAlignment {vAlignTop, vAlignCenter, vAlignBottom};
 
+	enum BorderShape {NoBorder, Rect, Ellipse, RoundSideRect, RoundCornerRect, InwardsRoundCornerRect, DentedBorderRect,
+			Cuboid, UpPointingRectangle, DownPointingRectangle, LeftPointingRectangle, RightPointingRectangle};
+
 	struct TextWrapper {
 		TextWrapper() : teXUsed(false) {}
 		TextWrapper(const QString& t, bool b) : text(t), teXUsed(b) {}
@@ -92,6 +95,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 
+	BASIC_D_ACCESSOR_DECL(BorderShape, borderShape, BorderShape);
+	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
+	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
+
 	void setVisible(bool on) override;
 	bool isVisible() const override;
 	void setPrinting(bool) override;
@@ -129,6 +136,9 @@ signals:
 	void verticalAlignmentChanged(TextLabel::VerticalAlignment);
 	void rotationAngleChanged(qreal);
 	void visibleChanged(bool);
+	void borderShapeChanged(TextLabel::BorderShape);
+	void borderPenChanged(QPen&);
+	void borderOpacityChanged(float);
 
 	void teXImageUpdated(bool);
 	void changed();
