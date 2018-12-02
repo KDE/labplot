@@ -39,11 +39,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "{#CraftRoot}\bin\labplot2.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; use: windeployqt.exe --release bin\labplot2.exe --dir DEPLOY
 Source: "{#CraftRoot}\DEPLOY\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
-Source: "{#CraftRoot}\bin\Qt5Xml.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\Qt5DBus.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "{#CraftRoot}\bin\Qt5TextToSpeech.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; fix https://stackoverflow.com/questions/20495620/qt-5-1-1-application-failed-to-start-because-platform-plugin-windows-is-missi
-; Source: "{#CraftRoot}\bin\libEGL.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\mingw64\bin\libssp-0.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libkdewin.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5Archive.dll"; DestDir: "{app}";Flags: ignoreversion
