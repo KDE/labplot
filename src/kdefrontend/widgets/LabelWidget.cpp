@@ -836,7 +836,7 @@ void LabelWidget::labelBorderShapeChanged(TextLabel::BorderShape shape) {
 	m_initializing = false;
 }
 
-void LabelWidget::labelBorderPenChanged(QPen& pen) {
+void LabelWidget::labelBorderPenChanged(const QPen& pen) {
 	m_initializing = true;
 	if (ui.cbBorderStyle->currentIndex() != pen.style())
 		ui.cbBorderStyle->setCurrentIndex(pen.style());
@@ -899,7 +899,7 @@ void LabelWidget::load() {
 	ui.sbRotation->setValue( m_label->rotationAngle() );
 
 	//Border
-    ui.cbBorderShape->setCurrentIndex( m_label->borderShape() );
+	ui.cbBorderShape->setCurrentIndex( m_label->borderShape() );
 	ui.kcbBorderColor->setColor( m_label->borderPen().color() );
 	ui.cbBorderStyle->setCurrentIndex( (int) m_label->borderPen().style() );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_label->borderPen().widthF(), Worksheet::Point) );
@@ -936,7 +936,7 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	ui.sbRotation->setValue( group.readEntry("Rotation", m_label->rotationAngle()) );
 
 	//Border
-    ui.cbBorderShape->setCurrentIndex(group.readEntry("BorderShape").toInt());
+	ui.cbBorderShape->setCurrentIndex(group.readEntry("BorderShape").toInt());
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_label->borderPen().color()) );
 	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int)m_label->borderPen().style()) );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_label->borderPen().widthF()), Worksheet::Point) );
@@ -966,7 +966,7 @@ void LabelWidget::saveConfig(KConfigGroup& group) {
 	group.writeEntry("Rotation", ui.sbRotation->value());
 
 	//Border
-    group.writeEntry("BorderShape", ui.cbBorderShape->currentIndex());
+	group.writeEntry("BorderShape", ui.cbBorderShape->currentIndex());
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
 	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Point));

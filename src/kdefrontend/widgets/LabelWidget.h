@@ -130,7 +130,7 @@ private slots:
 	void labelRotationAngleChanged(qreal);
 
 	void labelBorderShapeChanged(TextLabel::BorderShape);
-	void labelBorderPenChanged(QPen&);
+	void labelBorderPenChanged(const QPen&);
 	void labelBorderOpacityChanged(float);
 
 	void labelVisibleChanged(bool);
