@@ -108,7 +108,7 @@ Source: "{#CraftRoot}\bin\netcdf.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\hdf5_hl.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\hdf5.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#CraftRoot}\bin\liblz4.so.1.8.3.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CraftRoot}\bin\liblz4.so.1.8.3.dll"; DestDir: "{app}"; DestName: "liblz4.dll"; Flags: ignoreversion
 ; TODO craft does not install own version (check)
 ;Source: "C:\Program Files\cfitsio\cfitsio.dll"; DestDir: "{app}";Flags: ignoreversion
 
