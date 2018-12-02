@@ -91,12 +91,20 @@ Source: "{#CraftRoot}\bin\libKF5NewStuffCore.dll"; DestDir: "{app}";Flags: ignor
 ; missing lib on minimal Windows 10
 Source: "C:\Python36\vcruntime140.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#CraftRoot}\dev-utils\bin\msvcr120.dll"; DestDir: "{app}"; Flags: ignoreversion
-; cantor
+; Cantor
 Source: "{#CraftRoot}\bin\cantor.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\cantor_scripteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libcantorlibs.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libcantor_config.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CraftRoot}\plugins\libcantorpart.dll"; DestDir: "{app}\plugins"; Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\plugins\cantor\*"; DestDir: "{app}\plugins\cantor"; Flags: recursesubdirs ignoreversion
+Source: "{#CraftRoot}\bin\data\kxmlgui5\cantor\*"; DestDir: "{app}\cantor"; Flags: recursesubdirs ignoreversion
+Source: "{#CraftRoot}\bin\data\cantor\*"; DestDir: "{app}\cantor"; Flags: recursesubdirs ignoreversion
+Source: "{#CraftRoot}\bin\data\doc\HTML\en\cantor\*"; DestDir: "{app}\doc\HTML\en\cantor";Flags: recursesubdirs ignoreversion
+Source: "{#CraftRoot}\etc\xdg\cantor*"; DestDir: "{app}\etc\xdg"; Flags: recursesubdirs ignoreversion
+Source: "{#CraftRoot}\bin\data\metainfo\org.kde.cantor.appdata.xml"; DestDir: "{app}\data\metainfo"; Flags: ignoreversion
+Source: "{#CraftRoot}\bin\data\applications\org.kde.cantor.desktop"; DestDir: "{app}\data\applications"; Flags: ignoreversion
+Source: "{#CraftRoot}\bin\data\config.kcfg\*"; DestDir: "{app}\data\config.kcfg"; Flags: recursesubdirs ignoreversion
 ; misc
 Source: "{#CraftRoot}\bin\libfftw3.dll"; DestDir: "{app}"; DestName: "libfftw3-3.dll"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\netcdf.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -115,6 +123,8 @@ Source: "{#CraftRoot}\bin\data\labplot2\pics\*"; DestDir: "{app}\data\pics"; Fla
 Source: "{#CraftRoot}\bin\data\labplot2\themes\*"; DestDir: "{app}\data\themes"; Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\bin\data\labplot2\color-schemes\*"; DestDir: "{app}\data\color-schemes"; Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\bin\data\labplot2\splash.png"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CraftRoot}\bin\data\metainfo\org.kde.labplot2.appdata.xml"; DestDir: "{app}\data\metainfo"; Flags: ignoreversion
+Source: "{#CraftRoot}\bin\data\applications\org.kde.labplot2.desktop"; DestDir: "{app}\data\applications"; Flags: ignoreversion
 ; Source: "{#CraftRoot}\labplot\labplot2.cmd"; DestDir: "{app}";Flags: ignoreversion
 
 ; icon theme
