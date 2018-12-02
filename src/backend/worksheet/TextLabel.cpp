@@ -959,35 +959,11 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			else
 				d->position.point.setY(str.toDouble());
 
-			str = attribs.value("horizontalPosition").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("horizontalPosition").toString());
-			else
-				d->position.horizontalPosition = (TextLabel::HorizontalPosition)str.toInt();
-
-			str = attribs.value("verticalPosition").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("verticalPosition").toString());
-			else
-				d->position.verticalPosition = (TextLabel::VerticalPosition)str.toInt();
-
-			str = attribs.value("horizontalAlignment").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("horizontalAlignment").toString());
-			else
-				d->horizontalAlignment = (TextLabel::HorizontalAlignment)str.toInt();
-
-			str = attribs.value("verticalAlignment").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("verticalAlignment").toString());
-			else
-				d->verticalAlignment = (TextLabel::VerticalAlignment)str.toInt();
-
-			str = attribs.value("rotationAngle").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("rotationAngle").toString());
-			else
-				d->rotationAngle = str.toInt();
+			READ_INT_VALUE("horizontalPosition", position.horizontalPosition, TextLabel::HorizontalPosition);
+			READ_INT_VALUE("verticalPosition", position.verticalPosition, TextLabel::VerticalPosition);
+			READ_INT_VALUE("horizontalAlignment", horizontalAlignment, TextLabel::HorizontalAlignment);
+			READ_INT_VALUE("verticalAlignment", verticalAlignment, TextLabel::VerticalAlignment);
+			READ_INT_VALUE("rotationAngle", rotationAngle, int);
 
 			str = attribs.value("visible").toString();
 			if(str.isEmpty())
@@ -999,12 +975,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "format") {
 			attribs = reader->attributes();
 
-			str = attribs.value("teXUsed").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("teXUsed").toString());
-			else
-				d->textWrapper.teXUsed = str.toInt();
-
+			READ_INT_VALUE("teXUsed", textWrapper.teXUsed, bool);
 			READ_QFONT(d->teXFont);
 
 			str = attribs.value("teXFontColor_r").toString();
