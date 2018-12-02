@@ -10,6 +10,7 @@ cd $BUILDDIR
 
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
 #cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
+# cmake -DCMAKE_BUILD_TYPE=DebugFull -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
 
 make -j 4
 sudo make install
