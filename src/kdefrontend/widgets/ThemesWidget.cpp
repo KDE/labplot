@@ -52,6 +52,7 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	setWordWrap(true);
 	setViewMode(QListWidget::IconMode);
 	setResizeMode(QListWidget::Adjust);
+	setDragDropMode(QListView::NoDragDrop);
 
 	//make the icon 3x3cm big and show two of them in the height
 	int size = 3.0/2.54 * QApplication::desktop()->physicalDpiX();
