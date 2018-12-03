@@ -143,7 +143,8 @@ void DatabaseManagerWidget::nameChanged(const QString& name) {
 
 void DatabaseManagerWidget::driverChanged() {
 	//hide non-relevant fields (like host name, etc.) for file DBs
-	bool fileDB = isFileDB(ui.cbDriver->currentText());
+	const QString driver = ui.cbDriver->currentText();
+	const bool fileDB = isFileDB(driver);
 	ui.lHost->setVisible(!fileDB);
 	ui.leHost->setVisible(!fileDB);
 	ui.lPort->setVisible(!fileDB);
@@ -151,10 +152,15 @@ void DatabaseManagerWidget::driverChanged() {
 	ui.bOpen->setVisible(fileDB);
 	ui.gbAuthentication->setVisible(!fileDB);
 
+	if (driver.startsWith(QLatin1String("QODBC")))
+		ui.lDatabase->setText(i18n("ODBC datasource:"));
+	else
+		ui.lDatabase->setText(i18n("Database:"));
+
 	if (m_initializing)
 		return;
 
-	m_connections[ui.lwConnections->currentRow()].driver = ui.cbDriver->currentText();
+	m_connections[ui.lwConnections->currentRow()].driver = driver;
 	emit changed();
 }
 
@@ -425,9 +431,15 @@ void DatabaseManagerWidget::testConnection() {
 	}
 }
 
+/*!
+ * returns \c true if \c driver is for file databases like Sqlite or for ODBC datasources.
+ * returns \false otherwise.
+ * for file databases and for ODBC/ODBC3, only the name of the database/ODBC-datasource is required.
+ * used to show/hide relevant connection settins widgets.
+ */
 bool DatabaseManagerWidget::isFileDB(const QString& driver) {
-	return (driver == QLatin1String("QSQLITE"))
-			|| (driver == QLatin1String("QSQLITE3"));
+	//QSQLITE, QSQLITE3, QODBC, QODBC3
+	return ( driver.startsWith(QLatin1String("QSQLITE")) || driver.startsWith(QLatin1String("QODBC")) );
 }
 
 QString DatabaseManagerWidget::uniqueName() {
