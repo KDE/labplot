@@ -180,6 +180,10 @@ void DatabaseManagerWidget::hostChanged() {
 		return;
 
 	m_connections[ui.lwConnections->currentRow()].hostName = ui.leHost->text();
+
+	//don't allow to try to connect if no hostname provided
+	ui.bTestConnection->setEnabled( !ui.leHost->text().simplified().isEmpty() );
+
 	emit changed();
 }
 
@@ -192,9 +196,6 @@ void DatabaseManagerWidget::portChanged() {
 }
 
 void DatabaseManagerWidget::databaseNameChanged() {
-	if (m_initializing)
-		return;
-
 	QString dbName = ui.leDatabase->text().simplified();
 	if (isFileDB(ui.cbDriver->currentText())) {
 #ifndef HAVE_WINDOWS
@@ -218,6 +219,9 @@ void DatabaseManagerWidget::databaseNameChanged() {
 
 	//don't allow to try to connect if no database name was provided
 	ui.bTestConnection->setEnabled( !dbName.isEmpty() );
+
+	if (m_initializing)
+		return;
 
 	m_connections[ui.lwConnections->currentRow()].dbName = dbName;
 	emit changed();

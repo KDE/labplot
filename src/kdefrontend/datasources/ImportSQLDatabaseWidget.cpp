@@ -177,10 +177,20 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	KConfigGroup group = config.group(ui.cbConnection->currentText());
 
 	//open the selected connection
-	const QString driver = group.readEntry("Driver");
+	const QString& driver = group.readEntry("Driver");
 	m_db = QSqlDatabase::addDatabase(driver);
-	m_db.setDatabaseName( group.readEntry("DatabaseName") );
-	if (!DatabaseManagerWidget::isFileDB(driver)) {
+
+	const QString& dbName = group.readEntry("DatabaseName");
+	if (DatabaseManagerWidget::isFileDB(driver)) {
+		if (!QFile::exists(dbName)) {
+			KMessageBox::error(this, i18n("Couldn't find the database file '%1'. Please check the connection settings.", dbName),
+									i18n("Connection Failed"));
+			setInvalid();
+			return;
+		} else
+			m_db.setDatabaseName(dbName);
+	} else {
+		m_db.setDatabaseName(dbName);
 		m_db.setHostName( group.readEntry("HostName") );
 		m_db.setPort( group.readEntry("Port", 0) );
 		m_db.setUserName( group.readEntry("UserName") );
