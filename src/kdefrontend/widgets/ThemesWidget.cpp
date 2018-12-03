@@ -121,7 +121,10 @@ void ThemesWidget::applyClicked(const QModelIndex& index) {
 // 		this->downloadThemes();
 // 	else
 
-	emit themeSelected(themeName);
+	if (index.row() == model()->rowCount()-1)
+		emit themeSelected(""); //item with the string "None" was selected -> no theme
+	else
+		emit themeSelected(themeName);
 }
 
 //TODO: activate this later
