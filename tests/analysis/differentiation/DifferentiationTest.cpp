@@ -293,8 +293,8 @@ void DifferentiationTest::testCubicSecondOrder() {
 
 void DifferentiationTest::testCubicThirdOrder() {
 	// data
-	QVector<double> xData = {1.,2.,3.,4.};
-	QVector<double> yData = {1.,8.,27.,64.};
+	QVector<double> xData = {1.,2.,3.,4.,5.};
+	QVector<double> yData = {1.,8.,27.,64.,125.};
 
 	//data source columns
 	Column xDataColumn("x", AbstractColumn::Numeric);
@@ -324,16 +324,16 @@ void DifferentiationTest::testCubicThirdOrder() {
 	const AbstractColumn* resultYDataColumn = differentiationCurve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
-	QCOMPARE(np, 4);
+	QCOMPARE(np, 5);
 
 	for (int i = 0; i < np; i++)
 		QCOMPARE(resultXDataColumn->valueAt(i), xData[i]);
 
-	//TODO: check expectation
-	QCOMPARE(resultYDataColumn->valueAt(0), 1.);
-	QCOMPARE(resultYDataColumn->valueAt(1), 8.);
-	QCOMPARE(resultYDataColumn->valueAt(2), 27.);
-	QCOMPARE(resultYDataColumn->valueAt(3), 64.);
+	QCOMPARE(resultYDataColumn->valueAt(0), 6.);
+	QCOMPARE(resultYDataColumn->valueAt(1), 6.);
+	QCOMPARE(resultYDataColumn->valueAt(2), 6.);
+	QCOMPARE(resultYDataColumn->valueAt(3), 6.);
+	QCOMPARE(resultYDataColumn->valueAt(4), 6.);
 }
 
 QTEST_MAIN(DifferentiationTest)
