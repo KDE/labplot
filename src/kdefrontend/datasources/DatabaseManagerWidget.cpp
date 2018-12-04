@@ -46,8 +46,8 @@ Copyright            : (C) 2017-2018 Alexander Semke (alexander.semke@web.de)
 
    \ingroup kdefrontend
 */
-DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent, const QString& conn) : QWidget(parent),
-	m_initializing(false), m_initConnName(conn) {
+DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent, QString conn) : QWidget(parent),
+	m_initializing(false), m_initConnName(std::move(conn)) {
 
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "sql_connections";
 

@@ -34,7 +34,7 @@ class DatabaseManagerWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit DatabaseManagerWidget(QWidget*, const QString&);
+	explicit DatabaseManagerWidget(QWidget*, QString);
 
 	struct SQLConnection {
 		int port;

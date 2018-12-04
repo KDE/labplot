@@ -89,7 +89,7 @@ void MatrixSetCoordinatesCmd::undo() {
 
 //set formula
 MatrixSetFormulaCmd::MatrixSetFormulaCmd(MatrixPrivate* private_obj, QString formula)
-	: m_private_obj(private_obj), m_other_formula(formula) {
+	: m_private_obj(private_obj), m_other_formula(std::move(formula)) {
 	setText(i18n("%1: set formula", m_private_obj->name()));
 }
 

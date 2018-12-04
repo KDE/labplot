@@ -35,7 +35,7 @@
 
 class VariableParser {
 	public:
-		VariableParser(const QString& name, const QString& value);
+		VariableParser(QString name, QString value);
 		QVector<double> values();
 		bool isParsed();
 		

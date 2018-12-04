@@ -337,7 +337,7 @@ void FunctionValuesDialog::generate() {
 		columnPathes << column->path();
 		if (column->columnMode() == AbstractColumn::Integer) {
 			//convert integers to doubles first
-			QVector<double>* xVector = new QVector<double>(column->rowCount());
+			auto* xVector = new QVector<double>(column->rowCount());
 			for (int i = 0; i<column->rowCount(); ++i)
 				xVector->operator[](i) = column->valueAt(i);
 

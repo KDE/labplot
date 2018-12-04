@@ -159,7 +159,7 @@ private:
 
 class ColumnSetGlobalFormulaCmd : public QUndoCommand {
 public:
-	explicit ColumnSetGlobalFormulaCmd(ColumnPrivate* col, const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
+	explicit ColumnSetGlobalFormulaCmd(ColumnPrivate* col, QString formula, QStringList variableNames, QStringList variableColumnPathes);
 
 	void redo() override;
 	void undo() override;
@@ -177,7 +177,7 @@ private:
 
 class ColumnSetFormulaCmd : public QUndoCommand {
 public:
-	explicit ColumnSetFormulaCmd(ColumnPrivate* col, const Interval<int>& interval, const QString& formula, QUndoCommand* parent = nullptr);
+	explicit ColumnSetFormulaCmd(ColumnPrivate* col, const Interval<int>& interval, QString formula, QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;
@@ -206,7 +206,7 @@ private:
 
 class ColumnSetTextCmd : public QUndoCommand {
 public:
-	explicit ColumnSetTextCmd(ColumnPrivate* col, int row, const QString& new_value, QUndoCommand* parent = nullptr);
+	explicit ColumnSetTextCmd(ColumnPrivate* col, int row, QString new_value, QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;
@@ -251,7 +251,7 @@ private:
 
 class ColumnSetDateTimeCmd : public QUndoCommand {
 public:
-	explicit ColumnSetDateTimeCmd(ColumnPrivate* col, int row, const QDateTime& new_value, QUndoCommand* parent = nullptr);
+	explicit ColumnSetDateTimeCmd(ColumnPrivate* col, int row, QDateTime new_value, QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;

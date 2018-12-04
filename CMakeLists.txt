@@ -147,6 +147,7 @@ if (CMAKE_VERSION VERSION_GREATER "3.5")
     if (CLANG_TIDY_EXE)
       message(STATUS "Clang-tidy supported, found and enabled: ${CLANG_TIDY_EXE}")
       set(CLANG_TIDY_CHECKS "-*,modernize-*")
+      # -extra-arg=--std=c++11
       set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE};-checks=${CLANG_TIDY_CHECKS};-header-filter='${CMAKE_SOURCE_DIR}/*'"
         CACHE STRING "" FORCE)
     else()

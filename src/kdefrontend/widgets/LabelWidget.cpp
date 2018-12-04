@@ -46,7 +46,7 @@
 #include <KF5/KSyntaxHighlighting/Theme>
 #endif
 
-#include <math.h>
+#include <cmath>
 
 /*!
 	\class LabelWidget
@@ -670,7 +670,7 @@ void LabelWidget::visibilityChanged(bool state) {
 
 //border
 void LabelWidget::borderShapeChanged(int index) {
-	TextLabel::BorderShape shape = (TextLabel::BorderShape)index;
+	auto shape = (TextLabel::BorderShape)index;
 	bool b = (shape != TextLabel::NoBorder);
 	ui.lBorderStyle->setVisible(b);
 	ui.cbBorderStyle->setVisible(b);

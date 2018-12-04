@@ -655,8 +655,9 @@ void ColumnClearCmd::undo() {
  * \class ColumSetGlobalFormulaCmd
  * \brief Set the formula for the entire column (global formula)
  ** ***************************************************************************/
-ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col, const QString& formula, const QStringList& variableNames, const QStringList& variableColumns)
-	: QUndoCommand(), m_col(col), m_newFormula(formula), m_newVariableNames(variableNames), m_newVariableColumnPathes(variableColumns), m_copied(false) {
+ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col, QString formula, QStringList variableNames, QStringList variableColumns)
+	: QUndoCommand(), m_col(col), m_newFormula(std::move(formula)), m_newVariableNames(std::move(variableNames)), m_newVariableColumnPathes(std::move(variableColumns)),
+		m_copied(false) {
 	setText(i18n("%1: set formula", col->name()));
 }
 
@@ -709,8 +710,8 @@ void ColumnSetGlobalFormulaCmd::undo() {
 /**
  * \brief Ctor
  */
-ColumnSetFormulaCmd::ColumnSetFormulaCmd(ColumnPrivate* col, const Interval<int>& interval, const QString& formula, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_interval(interval), m_newFormula(formula), m_copied(false) {
+ColumnSetFormulaCmd::ColumnSetFormulaCmd(ColumnPrivate* col, const Interval<int>& interval, QString formula, QUndoCommand* parent)
+	: QUndoCommand(parent), m_col(col), m_interval(interval), m_newFormula(std::move(formula)), m_copied(false) {
 	setText(i18n("%1: set cell formula", col->name()));
 }
 
@@ -809,8 +810,8 @@ void ColumnClearFormulasCmd::undo() {
 /**
  * \brief Ctor
  */
-ColumnSetTextCmd::ColumnSetTextCmd(ColumnPrivate* col, int row, const QString& new_value, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(new_value), m_row_count(0) {
+ColumnSetTextCmd::ColumnSetTextCmd(ColumnPrivate* col, int row, QString new_value, QUndoCommand* parent)
+	: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(std::move(new_value)), m_row_count(0) {
 	setText(i18n("%1: set text for row %2", col->name(), row));
 }
 
@@ -950,8 +951,8 @@ void ColumnSetIntegerCmd::undo() {
 /**
  * \brief Ctor
  */
-ColumnSetDateTimeCmd::ColumnSetDateTimeCmd(ColumnPrivate* col, int row, const QDateTime& new_value, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(new_value), m_row_count(0) {
+ColumnSetDateTimeCmd::ColumnSetDateTimeCmd(ColumnPrivate* col, int row, QDateTime new_value, QUndoCommand* parent)
+	: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(std::move(new_value)), m_row_count(0) {
 	setText(i18n("%1: set value for row %2", col->name(), row));
 }
 

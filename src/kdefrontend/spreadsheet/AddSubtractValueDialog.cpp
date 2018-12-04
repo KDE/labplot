@@ -191,7 +191,7 @@ void AddSubtractValueDialog::generate() {
 			//fall through
 		case Add:
 			for (auto* col : m_columns) {
-				QVector<int>* data = static_cast<QVector<int>* >(col->data());
+				auto* data = static_cast<QVector<int>* >(col->data());
 				for (int i = 0; i<rows; ++i)
 					new_data[i] = data->operator[](i) + value;
 
@@ -200,7 +200,7 @@ void AddSubtractValueDialog::generate() {
 			break;
 		case Multiply:
 			for (auto* col : m_columns) {
-				QVector<int>* data = static_cast<QVector<int>* >(col->data());
+				auto* data = static_cast<QVector<int>* >(col->data());
 				for (int i = 0; i<rows; ++i)
 					new_data[i] = data->operator[](i) * value;
 
@@ -209,7 +209,7 @@ void AddSubtractValueDialog::generate() {
 			break;
 		case Divide:
 			for (auto* col : m_columns) {
-				QVector<int>* data = static_cast<QVector<int>* >(col->data());
+				auto* data = static_cast<QVector<int>* >(col->data());
 				for (int i = 0; i<rows; ++i)
 					new_data[i] = data->operator[](i) / value;
 
@@ -226,7 +226,7 @@ void AddSubtractValueDialog::generate() {
 			//fall through
 		case Add:
 			for (auto* col : m_columns) {
-				QVector<double>* data = static_cast<QVector<double>* >(col->data());
+				auto* data = static_cast<QVector<double>* >(col->data());
 				for (int i = 0; i<rows; ++i)
 					new_data[i] = data->operator[](i) + value;
 
@@ -235,7 +235,7 @@ void AddSubtractValueDialog::generate() {
 			break;
 		case Multiply:
 			for (auto* col : m_columns) {
-				QVector<double>* data = static_cast<QVector<double>* >(col->data());
+				auto* data = static_cast<QVector<double>* >(col->data());
 				for (int i = 0; i<rows; ++i)
 					new_data[i] = data->operator[](i) * value;
 
@@ -244,7 +244,7 @@ void AddSubtractValueDialog::generate() {
 			break;
 		case Divide:
 			for (auto* col : m_columns) {
-				QVector<double>* data = static_cast<QVector<double>* >(col->data());
+				auto* data = static_cast<QVector<double>* >(col->data());
 				for (int i = 0; i<rows; ++i)
 					new_data[i] = data->operator[](i) / value;
 
@@ -261,7 +261,7 @@ void AddSubtractValueDialog::generate() {
 			//fall through
 		case Add:
 			for (auto* col : m_columns) {
-				QVector<QDateTime>* data = static_cast<QVector<QDateTime>* >(col->data());
+				auto* data = static_cast<QVector<QDateTime>* >(col->data());
 				for (int i = 0; i<rows; ++i)
 					new_data[i] = QDateTime::fromMSecsSinceEpoch(data->operator[](i).toMSecsSinceEpoch() + value);
 

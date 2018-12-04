@@ -44,7 +44,7 @@ class PluginLoader: public QObject {
 	};
 
 	public:
-		explicit PluginLoader(const QString& fileName);
+		explicit PluginLoader(QString fileName);
 		~PluginLoader() override;
 		QString statusString() const;
 		PluginStatus status() const;

@@ -32,8 +32,8 @@
 #include "backend/lib/trace.h"
 #include <cmath>
 
-VariableParser::VariableParser(const QString& name, const QString& value)
-	: m_backendName(name), m_string(value) {
+VariableParser::VariableParser(QString name, QString value)
+	: m_backendName(std::move(name)), m_string(std::move(value)) {
 
 	PERFTRACE("parsing variable");
 	if(m_backendName.compare(QStringLiteral("Maxima"), Qt::CaseInsensitive) == 0)
