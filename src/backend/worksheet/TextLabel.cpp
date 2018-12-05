@@ -717,10 +717,11 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	if (borderShape != TextLabel::NoBorder) {
 		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));
 		transformedBoundingRectangle = matrix.mapRect(labelShape.boundingRect());
-	} else
+	} else {
+		labelShape.addRect(boundingRectangle);
 		transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
+	}
 
-	labelShape.addRect(boundingRectangle);
 	labelShape = matrix.map(labelShape);
 
 	emit q->changed();
@@ -737,7 +738,8 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		return;
 
 	painter->save();
-// 	painter->resetMatrix();
+
+	//draw the text
 	painter->rotate(-rotationAngle);
 
 	if (textWrapper.teXUsed) {
@@ -751,18 +753,23 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	}
 	painter->restore();
 
-	painter->setPen(borderPen);
-	painter->setOpacity(borderOpacity);
-	painter->drawPath(borderShapePath);
+	//draw the border
+	if (borderShape != TextLabel::NoBorder) {
+		painter->rotate(-rotationAngle);
+		painter->setPen(borderPen);
+		painter->setOpacity(borderOpacity);
+		painter->drawPath(borderShapePath);
+		painter->restore();
+	}
 
 	if (m_hovered && !isSelected() && !m_printing){
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(borderShapePath);
+		painter->drawPath(labelShape);
 	}
 
 	if (isSelected() && !m_printing){
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(borderShapePath);
+		painter->drawPath(labelShape);
 	}
 }
 
