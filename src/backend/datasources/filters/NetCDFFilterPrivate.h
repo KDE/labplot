@@ -3,7 +3,7 @@ File                 : NetCDFFilterPrivate.h
 Project              : LabPlot
 Description          : Private implementation class for NetCDFFilter.
 --------------------------------------------------------------------
-Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -49,10 +49,10 @@ public:
 	const NetCDFFilter* q;
 
 	QString currentVarName;
-	int startRow;
-	int endRow;
-	int startColumn;
-	int endColumn;
+	int startRow{-1};
+	int endRow{-1};
+	int startColumn{1};
+	int endColumn{-1};
 
 private:
 #ifdef HAVE_NETCDF

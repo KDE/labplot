@@ -3,7 +3,7 @@ File                 : HDF5FilterPrivate.h
 Project              : LabPlot
 Description          : Private implementation class for HDF5Filter.
 --------------------------------------------------------------------
-Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -47,11 +47,11 @@ public:
 
 	const HDF5Filter* q;
 
-	QString currentDataSetName;
-	int startRow;
-	int endRow;
-	int startColumn;
-	int endColumn;
+	QString currentDataSetName{""};
+	int startRow{1};
+	int endRow{-1};
+	int startColumn{1};
+	int endColumn{-1};
 
 private:
 #ifdef HAVE_HDF5

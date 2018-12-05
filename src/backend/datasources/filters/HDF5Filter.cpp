@@ -3,7 +3,7 @@ File                 : HDF5Filter.cpp
 Project              : LabPlot
 Description          : HDF5 I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2015-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
@@ -140,8 +140,7 @@ int HDF5Filter::endColumn() const {
 //################### Private implementation ##########################
 //#####################################################################
 
-HDF5FilterPrivate::HDF5FilterPrivate(HDF5Filter* owner) :
-	q(owner),currentDataSetName(""),startRow(1), endRow(-1), startColumn(1), endColumn(-1) {
+HDF5FilterPrivate::HDF5FilterPrivate(HDF5Filter* owner) : q(owner) {
 #ifdef HAVE_HDF5
 	m_status = 0;
 #endif

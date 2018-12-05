@@ -3,7 +3,7 @@ File                 : NetCDFFilter.cpp
 Project              : LabPlot
 Description          : NetCDF I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2015-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
@@ -141,8 +141,7 @@ int NetCDFFilter::endColumn() const {
 //################### Private implementation ##########################
 //#####################################################################
 
-NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) :
-	q(owner), startRow(1), endRow(-1), startColumn(1), endColumn(-1) {
+NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) : q(owner) {
 #ifdef HAVE_NETCDF
 	m_status = 0;
 #endif

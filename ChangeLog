@@ -17,6 +17,7 @@ Bug fixes:
 	* Fixed several problems in live data support
 	* [spreadsheet] properly calculate function values out of integer x-values
 	* [matrix] fix editing integer values
+	* [import] fix preview update and add missing close of netcdf files
 	* Don't crash when a scaling factor equal to zero was set for axis
 
 -----2.5-----
