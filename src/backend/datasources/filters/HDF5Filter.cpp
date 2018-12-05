@@ -155,7 +155,7 @@ void HDF5FilterPrivate::handleError(int err, const QString& function, const QStr
 	Q_UNUSED(arg)
 #else
 	if (err < 0)
-		DEBUG("ERROR " << err << ":" << function.toStdString() << "() - " << arg.toStdString());
+		DEBUG("ERROR " << err << ": " << function.toStdString() << "() - " << arg.toStdString());
 #endif
 }
 
@@ -774,7 +774,7 @@ QStringList HDF5FilterPrivate::scanHDF5Attrs(hid_t oid) {
 
 	int numAttr = H5Aget_num_attrs(oid);
 	handleError(numAttr, "H5Aget_num_attrs");
-	DEBUG("number of attr =" << numAttr);
+	DEBUG("number of attr = " << numAttr);
 
 	for (int i = 0; i < numAttr; ++i) {
 		hid_t aid = H5Aopen_idx(oid, i);

@@ -420,8 +420,10 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
     parses the content of the file \c fileName and fill the tree using rootItem.
 */
 void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem) {
+	DEBUG("NetCDFFilterPrivate::parse()");
 #ifdef HAVE_NETCDF
 	QByteArray bafileName = fileName.toLatin1();
+	DEBUG("fileName = " << bafileName.data());
 
 	int ncid;
 	m_status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
@@ -449,6 +451,9 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 	varItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(varItem);
 	scanVars(ncid, nvars, varItem);
+
+	m_status = ncclose(ncid);
+	handleError(m_status, "nc_close");
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(rootItem)
