@@ -1687,6 +1687,7 @@ void ImportFileWidget::filterChanged(int index) {
 }
 
 void ImportFileWidget::refreshPreview() {
+	DEBUG("ImportFileWidget::refreshPreview()");
 	if (m_suppressRefresh)
 		return;
 
@@ -1848,6 +1849,8 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::HDF5: {
 		auto* filter = (HDF5Filter*)this->currentFileFilter();
 		lines = m_hdf5OptionsWidget->lines();
+
+		m_hdf5OptionsWidget->updateContent(filter, fileName);
 		importedStrings = filter->readCurrentDataSet(fileName, nullptr, ok, AbstractFileFilter::Replace, lines);
 		tmpTableWidget = m_hdf5OptionsWidget->previewWidget();
 		break;
@@ -1855,6 +1858,8 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::NETCDF: {
 		auto* filter = (NetCDFFilter*)this->currentFileFilter();
 		lines = m_netcdfOptionsWidget->lines();
+
+		m_netcdfOptionsWidget->updateContent(filter, fileName);
 		importedStrings = filter->readCurrentVar(fileName, nullptr, AbstractFileFilter::Replace, lines);
 		tmpTableWidget = m_netcdfOptionsWidget->previewWidget();
 		break;
@@ -1883,6 +1888,7 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 		m_jsonOptionsWidget->loadDocument(fileName);
 		auto* filter = (JsonFilter*)this->currentFileFilter();
+
 		m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
 		importedStrings = filter->preview(fileName);
 
@@ -1893,6 +1899,8 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::ROOT: {
 		auto* filter = (ROOTFilter*)this->currentFileFilter();
 		lines = m_rootOptionsWidget->lines();
+
+		m_rootOptionsWidget->updateContent(filter, fileName);
 		m_rootOptionsWidget->setNBins(filter->binsInCurrentHistogram(fileName));
 		importedStrings = filter->previewCurrentHistogram(
 					fileName,
@@ -1981,6 +1989,7 @@ void ImportFileWidget::refreshPreview() {
 }
 
 void ImportFileWidget::updateContent(const QString& fileName, AbstractFileFilter::FileType fileType) {
+	DEBUG("ImportFileWidget::updateContent()");
 	initOptionsWidget(fileType);
 	if (auto* filter = currentFileFilter()) {
 		switch (fileType) {
