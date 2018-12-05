@@ -412,6 +412,7 @@ void DatabaseManagerWidget::testConnection() {
 		}
 	}
 
+	WAIT_CURSOR;
 	QSqlDatabase db = QSqlDatabase::addDatabase(m_connections[row].driver);
 	db.setDatabaseName(m_connections[row].dbName);
 	if (!isFileDB(m_connections[row].driver)) {
@@ -423,10 +424,13 @@ void DatabaseManagerWidget::testConnection() {
 
 	if (db.isValid() && db.open() && db.isOpen()) {
 		db.close();
+		RESET_CURSOR;
 		KMessageBox::information(this, i18n("Connection to the database '%1' was successful.", m_connections[row].dbName),
 								 i18n("Connection Successful"));
 	} else {
-		KMessageBox::error(this, i18n("Failed to connect to the database '%1'.", m_connections[row].dbName),
+		RESET_CURSOR;
+		KMessageBox::error(this, i18n("Failed to connect to the database '%1'.", m_connections[row].dbName) +
+								 QLatin1String("\n\n") + db.lastError().databaseText(),
 								 i18n("Connection Failed"));
 	}
 }

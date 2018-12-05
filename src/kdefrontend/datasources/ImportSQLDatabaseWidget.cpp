@@ -197,8 +197,11 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 		m_db.setPassword( group.readEntry("Password") );
 	}
 
+	WAIT_CURSOR;
 	if (!m_db.open()) {
-		KMessageBox::error(this, i18n("Failed to connect to the database '%1'. Please check the connection settings.", ui.cbConnection->currentText()),
+		RESET_CURSOR;
+		KMessageBox::error(this, i18n("Failed to connect to the database '%1'. Please check the connection settings.", ui.cbConnection->currentText()) +
+									QLatin1String("\n\n") + m_db.lastError().databaseText(),
 								 i18n("Connection Failed"));
 		setInvalid();
 		return;
@@ -212,6 +215,8 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 			ui.lwTables->item(i)->setIcon(QIcon::fromTheme("view-form-table"));
 	} else
 		setInvalid();
+
+	RESET_CURSOR;
 }
 
 void ImportSQLDatabaseWidget::refreshPreview() {
