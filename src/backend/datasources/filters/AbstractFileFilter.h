@@ -47,7 +47,7 @@ public:
 	enum FileType {Ascii, Binary, Image, HDF5, NETCDF, FITS, JSON, ROOT, NgspiceRawAscii, NgspiceRawBinary};
 	enum ImportMode {Append, Prepend, Replace};
 
-	AbstractFileFilter() {}
+	explicit AbstractFileFilter(FileType type) : m_type(type) {}
 	~AbstractFileFilter() override = default;
 
 	static bool isNan(QString);
@@ -65,8 +65,13 @@ public:
 	virtual void save(QXmlStreamWriter*) const = 0;
 	virtual bool load(XmlStreamReader*) = 0;
 
+	constexpr FileType type() const { return m_type; }
+
 signals:
 	void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of a read/write process
+
+protected:
+	const FileType m_type;
 };
 
 #endif

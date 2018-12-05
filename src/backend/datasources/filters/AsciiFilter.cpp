@@ -57,7 +57,7 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 
 \ingroup datasources
 */
-AsciiFilter::AsciiFilter() : AbstractFileFilter(), d(new AsciiFilterPrivate(this)) {}
+AsciiFilter::AsciiFilter() : AbstractFileFilter(Ascii), d(new AsciiFilterPrivate(this)) {}
 
 AsciiFilter::~AsciiFilter() = default;
 

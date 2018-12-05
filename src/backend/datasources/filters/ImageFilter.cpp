@@ -38,7 +38,7 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
 \ingroup datasources
 */
-ImageFilter::ImageFilter():AbstractFileFilter(), d(new ImageFilterPrivate(this)) {}
+ImageFilter::ImageFilter():AbstractFileFilter(Image), d(new ImageFilterPrivate(this)) {}
 
 ImageFilter::~ImageFilter() = default;
 

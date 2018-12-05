@@ -47,7 +47,7 @@ Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <string>
 #include <vector>
 
-ROOTFilter::ROOTFilter():AbstractFileFilter(), d(new ROOTFilterPrivate) {}
+ROOTFilter::ROOTFilter():AbstractFileFilter(ROOT), d(new ROOTFilterPrivate) {}
 
 ROOTFilter::~ROOTFilter() = default;
 

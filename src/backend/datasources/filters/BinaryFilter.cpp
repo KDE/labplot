@@ -41,7 +41,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
 \ingroup datasources
 */
-BinaryFilter::BinaryFilter():AbstractFileFilter(), d(new BinaryFilterPrivate(this)) {}
+BinaryFilter::BinaryFilter():AbstractFileFilter(Binary), d(new BinaryFilterPrivate(this)) {}
 
 BinaryFilter::~BinaryFilter() = default;
 

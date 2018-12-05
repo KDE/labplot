@@ -249,6 +249,7 @@ AbstractFileFilter::FileType LiveDataSource::fileType() const {
 }
 
 void LiveDataSource::setFilter(AbstractFileFilter* f) {
+	delete m_filter;
 	m_filter = f;
 }
 
@@ -497,7 +498,7 @@ QMenu* LiveDataSource::createContextMenu() {
  */
 void LiveDataSource::read() {
 	DEBUG("\nLiveDataSource::read()");
-	if (m_filter == nullptr)
+	if (!m_filter)
 		return;
 
 	//initialize the device (file, socket, serial port) when calling this function for the first time
@@ -565,16 +566,16 @@ void LiveDataSource::read() {
 		switch (m_fileType) {
 		case AbstractFileFilter::Ascii:
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
-				dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, 0);
+				static_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, 0);
 			} else {
-				bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
+				bytes = static_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 				m_bytesRead += bytes;
 				DEBUG("Read " << bytes << " bytes, in total: " << m_bytesRead);
 			}
 			break;
 		case AbstractFileFilter::Binary:
 			//TODO: not implemented yet
-			// bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
+			// bytes = qSharedPointerCast<BinaryFilter>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 // 			m_bytesRead += bytes;
 		//TODO: other types not implemented yet
 		case AbstractFileFilter::Image:
@@ -602,7 +603,7 @@ void LiveDataSource::read() {
 
 		// reading data here
 		if (m_fileType == AbstractFileFilter::Ascii)
-			dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+			static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 		break;
 	case LocalSocket:
 		DEBUG("	Reading from local socket. state before abort = " << m_localSocket->state());
@@ -618,7 +619,7 @@ void LiveDataSource::read() {
 
 		// reading data here
 		if (m_fileType == AbstractFileFilter::Ascii)
-			dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+			static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 		break;
 	case MQTT:
 		break;
@@ -635,7 +636,7 @@ void LiveDataSource::readyRead() {
 	DEBUG("	REMAINING TIME = " << m_updateTimer->remainingTime());
 
 	if (m_fileType == AbstractFileFilter::Ascii)
-		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+		static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 
 //TODO: not implemented yet
 //	else if (m_fileType == AbstractFileFilter::Binary)
@@ -957,7 +958,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			}
 
 		} else if (reader->name() == "asciiFilter") {
-			m_filter = new AsciiFilter();
+			setFilter(new AsciiFilter);
 			if (!m_filter->load(reader))
 				return false;
 		} else if (reader->name() == "column") {

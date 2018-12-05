@@ -37,7 +37,7 @@ Copyright            : (C) 2018 Alexander Semke (alexander.semke@web.de)
 
 \ingroup datasources
 */
-NgspiceRawAsciiFilter::NgspiceRawAsciiFilter() : AbstractFileFilter(), d(new NgspiceRawAsciiFilterPrivate(this)) {}
+NgspiceRawAsciiFilter::NgspiceRawAsciiFilter() : AbstractFileFilter(NgspiceRawAscii), d(new NgspiceRawAsciiFilterPrivate(this)) {}
 
 NgspiceRawAsciiFilter::~NgspiceRawAsciiFilter() = default;
 

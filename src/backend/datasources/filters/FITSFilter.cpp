@@ -46,7 +46,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
  * \since 2.2.0
  * \ingroup datasources
  */
-FITSFilter::FITSFilter():AbstractFileFilter(), d(new FITSFilterPrivate(this)) {}
+FITSFilter::FITSFilter():AbstractFileFilter(FITS), d(new FITSFilterPrivate(this)) {}
 
 FITSFilter::~FITSFilter() = default;
 

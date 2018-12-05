@@ -99,6 +99,8 @@ private:
 	std::unique_ptr<JsonOptionsWidget> m_jsonOptionsWidget;
 	std::unique_ptr<ROOTOptionsWidget> m_rootOptionsWidget;
 
+	mutable std::unique_ptr<AbstractFileFilter> m_currentFilter;
+
 	QTableWidget* m_twPreview;
 	const QString& m_fileName;
 	bool m_fileEmpty;

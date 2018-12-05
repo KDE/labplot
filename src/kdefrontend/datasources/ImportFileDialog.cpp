@@ -200,13 +200,13 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	}
 
 	QString fileName = m_importFileWidget->fileName();
-	AbstractFileFilter* filter = m_importFileWidget->currentFileFilter();
+	auto filter = m_importFileWidget->currentFileFilter();
 	auto mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
 
 	//show a progress bar in the status bar
 	auto* progressBar = new QProgressBar();
 	progressBar->setRange(0, 100);
-	connect(filter, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
+	connect(filter, &AbstractFileFilter::completed, progressBar, &QProgressBar::setValue);
 
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
@@ -279,13 +279,13 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			for (int i = 0; i < nrNames; ++i) {
 				switch (fileType) {
 					case AbstractFileFilter::HDF5:
-						((HDF5Filter*) filter)->setCurrentDataSetName(names[i]);
+						static_cast<HDF5Filter*>(filter)->setCurrentDataSetName(names[i]);
 						break;
 					case AbstractFileFilter::NETCDF:
-						((NetCDFFilter*) filter)->setCurrentVarName(names[i]);
+						static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names[i]);
 						break;
 					case AbstractFileFilter::ROOT:
-						((ROOTFilter*) filter)->setCurrentHistogram(names[i]);
+						static_cast<ROOTFilter*>(filter)->setCurrentHistogram(names[i]);
 						break;
 					case AbstractFileFilter::Ascii:
 					case AbstractFileFilter::Binary:
@@ -321,7 +321,6 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
-	delete filter;
 }
 
 void ImportFileDialog::toggleOptions() {

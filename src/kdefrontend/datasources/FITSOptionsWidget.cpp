@@ -60,7 +60,7 @@ QString FITSOptionsWidget::currentExtensionName() {
 	return name;
 }
 
-void FITSOptionsWidget::updateContent(FITSFilter *filter, const QString& fileName) {
+void FITSOptionsWidget::updateContent(FITSFilter* filter, const QString& fileName) {
 	DEBUG("FITSOptionsWidget::updateContent() file name = " << fileName.toStdString());
 	ui.twExtensions->clear();
 	filter->parseExtensions(fileName, ui.twExtensions, true);
@@ -110,7 +110,7 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 	}
 
 	if (!selectedExtension.isEmpty()) {
-		auto* filter = dynamic_cast<FITSFilter*>(m_fileWidget->currentFileFilter());
+		auto filter = static_cast<FITSFilter*>(m_fileWidget->currentFileFilter());
 		bool readFitsTableToMatrix;
 		const QVector<QStringList> importedStrings = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
 		emit m_fileWidget->checkedFitsTableToMatrix(readFitsTableToMatrix);
