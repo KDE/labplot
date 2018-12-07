@@ -81,12 +81,12 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
-	void loadThemeConfig(const KConfig& config) override;
-	void saveThemeConfig(const KConfig& config) override;
+	void loadThemeConfig(const KConfig&) override;
+	void saveThemeConfig(const KConfig&) override;
 
 	CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text)
-	BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor)
-	BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor)
+	BASIC_D_ACCESSOR_DECL(QColor, fontColor, FontColor)
+	BASIC_D_ACCESSOR_DECL(QColor, backgroundColor, BackgroundColor)
 	CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
 	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
 	void setPosition(QPointF);
@@ -129,8 +129,8 @@ signals:
 	void textWrapperChanged(const TextLabel::TextWrapper&);
 	void teXFontSizeChanged(const int);
 	void teXFontChanged(const QFont);
-	void teXFontColorChanged(const QColor);
-	void teXBackgroundColorChanged(const QColor);
+	void fontColorChanged(const QColor);
+	void backgroundColorChanged(const QColor);
 	void positionChanged(const TextLabel::PositionWrapper&);
 	void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);
 	void verticalAlignmentChanged(TextLabel::VerticalAlignment);

@@ -92,8 +92,8 @@ void TextLabel::init() {
 	d->textWrapper.teXUsed = group.readEntry("TeXUsed", false);
 	d->teXFont.setFamily(group.readEntry("TeXFontFamily", "Computer Modern"));
 	d->teXFont.setPointSize(group.readEntry("TeXFontSize", 12));
-	d->teXFontColor = group.readEntry("TeXFontColor", QColor(Qt::black));
-	d->teXBackgroundColor = group.readEntry("TeXBackgroundColor", QColor(Qt::white));
+	d->fontColor = group.readEntry("TeXFontColor", QColor(Qt::black));
+	d->backgroundColor = group.readEntry("TeXBackgroundColor", QColor(Qt::white));
 	d->rotationAngle = group.readEntry("Rotation", 0.0);
 
 	d->staticText.setTextFormat(Qt::RichText);
@@ -208,8 +208,8 @@ QMenu* TextLabel::createContextMenu() {
 
 /* ============================ getter methods ================= */
 CLASS_SHARED_D_READER_IMPL(TextLabel, TextLabel::TextWrapper, text, textWrapper)
-CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, teXFontColor, teXFontColor);
-CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, teXBackgroundColor, teXBackgroundColor);
+CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, fontColor, fontColor);
+CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, backgroundColor, backgroundColor);
 CLASS_SHARED_D_READER_IMPL(TextLabel, QFont, teXFont, teXFont);
 CLASS_SHARED_D_READER_IMPL(TextLabel, TextLabel::PositionWrapper, position, position);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::HorizontalAlignment, horizontalAlignment, horizontalAlignment);
@@ -235,18 +235,18 @@ void TextLabel::setTeXFont(const QFont& font) {
 		exec(new TextLabelSetTeXFontCmd(d, font, ki18n("%1: set TeX main font")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFontColor, QColor, teXFontColor, updateText);
-void TextLabel::setTeXFontColor(const QColor color) {
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFontColor, QColor, fontColor, updateText);
+void TextLabel::setFontColor(const QColor color) {
 	Q_D(TextLabel);
-	if (color != d->teXFontColor)
-		exec(new TextLabelSetTeXFontColorCmd(d, color, ki18n("%1: set TeX font color")));
+	if (color != d->fontColor)
+		exec(new TextLabelSetTeXFontColorCmd(d, color, ki18n("%1: set font color")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXBackgroundColor, QColor, teXBackgroundColor, updateText);
-void TextLabel::setTeXBackgroundColor(const QColor color) {
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXBackgroundColor, QColor, backgroundColor, updateText);
+void TextLabel::setBackgroundColor(const QColor color) {
 	Q_D(TextLabel);
-	if (color != d->teXBackgroundColor)
-		exec(new TextLabelSetTeXBackgroundColorCmd(d, color, ki18n("%1: set TeX background color")));
+	if (color != d->backgroundColor)
+		exec(new TextLabelSetTeXBackgroundColorCmd(d, color, ki18n("%1: set background color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPosition, TextLabel::PositionWrapper, position, retransform);
@@ -484,8 +484,8 @@ void TextLabelPrivate::updateText() {
 
 	if (textWrapper.teXUsed) {
 		TeXRenderer::Formatting format;
-		format.fontColor = teXFontColor;
-		format.backgroundColor = teXBackgroundColor;
+		format.fontColor = fontColor;
+		format.backgroundColor = backgroundColor;
 		format.fontSize = teXFont.pointSize();
 		format.fontFamily = teXFont.family();
 		format.dpi = teXImageResolution;
@@ -746,6 +746,7 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		if (boundingRect().width() != 0.0 &&  boundingRect().height() != 0.0)
 			painter->drawImage(boundingRect(), teXImage);
 	} else {
+		painter->setPen(fontColor);
 		painter->scale(scaleFactor, scaleFactor);
 		float w = staticText.size().width();
 		float h = staticText.size().height();
@@ -905,9 +906,9 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement( "format" );
 	writer->writeAttribute( "teXUsed", QString::number(d->textWrapper.teXUsed) );
 	WRITE_QFONT(d->teXFont);
-	writer->writeAttribute( "teXFontColor_r", QString::number(d->teXFontColor.red()) );
-	writer->writeAttribute( "teXFontColor_g", QString::number(d->teXFontColor.green()) );
-	writer->writeAttribute( "teXFontColor_b", QString::number(d->teXFontColor.blue()) );
+	writer->writeAttribute( "fontColor_r", QString::number(d->fontColor.red()) );
+	writer->writeAttribute( "fontColor_g", QString::number(d->fontColor.green()) );
+	writer->writeAttribute( "fontColor_b", QString::number(d->fontColor.blue()) );
 	writer->writeEndElement();
 
 	//border
@@ -985,23 +986,23 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("teXUsed", textWrapper.teXUsed, bool);
 			READ_QFONT(d->teXFont);
 
-			str = attribs.value("teXFontColor_r").toString();
+			str = attribs.value("fontColor_r").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("teXFontColor_r").toString());
+				reader->raiseWarning(attributeWarning.subs("fontColor_r").toString());
 			else
-				d->teXFontColor.setRed( str.toInt() );
+				d->fontColor.setRed( str.toInt() );
 
-			str = attribs.value("teXFontColor_g").toString();
+			str = attribs.value("fontColor_g").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("teXFontColor_g").toString());
+				reader->raiseWarning(attributeWarning.subs("fontColor_g").toString());
 			else
-				d->teXFontColor.setGreen( str.toInt() );
+				d->fontColor.setGreen( str.toInt() );
 
-			str = attribs.value("teXFontColor_b").toString();
+			str = attribs.value("fontColor_b").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("teXFontColor_b").toString());
+				reader->raiseWarning(attributeWarning.subs("fontColor_b").toString());
 			else
-				d->teXFontColor.setBlue( str.toInt() );
+				d->fontColor.setBlue( str.toInt() );
 		} else if (!preview && reader->name() == "border") {
 			attribs = reader->attributes();
 			READ_INT_VALUE("borderShape", borderShape, BorderShape);
@@ -1039,28 +1040,8 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	Q_D(TextLabel);
 
 	KConfigGroup group = config.group("Label");
-	const QColor fontColor = group.readEntry("FontColor", QColor(Qt::white));
-	const QColor backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::black));
-
-	d->suppressRetransform = true;
-	if (!d->textWrapper.teXUsed && !d->textWrapper.text.isEmpty()) {
-		//replace colors in the html-formatted string
-		QTextDocument doc;
-		doc.setHtml(d->textWrapper.text);
-		QTextCharFormat fmt;
-		fmt.setForeground(QBrush(fontColor));
-		fmt.setBackground(QBrush(backgroundColor));
-		QTextCursor cursor(&doc);
-		cursor.select(QTextCursor::Document);
-		cursor.setCharFormat(fmt);
-
-		TextLabel::TextWrapper wrapper(doc.toHtml(), d->textWrapper.teXUsed);
-		this->setText(wrapper);
-	} else {
-		//replace colors in the TeX-string
-		this->setTeXFontColor(fontColor);
-		this->setTeXBackgroundColor(backgroundColor);
-	}
+	d->fontColor = group.readEntry("FontColor", QColor(Qt::white));
+	d->backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::black));
 
 	group = config.group("CartesianPlot");
 	QPen pen = this->borderPen();
@@ -1070,12 +1051,11 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	this->setBorderPen(pen);
 	this->setBorderOpacity(group.readEntry("BorderOpacity", this->borderOpacity()));
 
-	d->suppressRetransform = false;
 	d->updateText();
 }
 
 void TextLabel::saveThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("Label");
 	//TODO
-// 	group.writeEntry("TeXFontColor", (QColor) this->teXFontColor());
+// 	group.writeEntry("TeXFontColor", (QColor) this->fontColor());
 }

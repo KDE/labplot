@@ -33,8 +33,9 @@
 #include "tools/TeXRenderer.h"
 
 #include <QMenu>
-#include <QWidgetAction>
 #include <QSplitter>
+#include <QTextDocumentFragment>
+#include <QWidgetAction>
 
 #include <KConfigGroup>
 #include <KSharedConfig>
@@ -220,8 +221,8 @@ void LabelWidget::initConnections() const {
 	connect( m_label, SIGNAL(teXImageUpdated(bool)), this, SLOT(labelTeXImageUpdated(bool)) );
 	connect( m_label, SIGNAL(teXFontChanged(QFont)),
 	         this, SLOT(labelTeXFontChanged(QFont)) );
-	connect( m_label, SIGNAL(teXFontColorChanged(QColor)),
-	         this, SLOT(labelTeXFontColorChanged(QColor)) );
+	connect( m_label, SIGNAL(fontColorChanged(QColor)),
+	         this, SLOT(labelFontColorChanged(QColor)) );
 	connect( m_label, SIGNAL(positionChanged(TextLabel::PositionWrapper)),
 	         this, SLOT(labelPositionChanged(TextLabel::PositionWrapper)) );
 	connect( m_label, SIGNAL(horizontalAlignmentChanged(TextLabel::HorizontalAlignment)),
@@ -313,8 +314,13 @@ void LabelWidget::textChanged() {
 }
 
 void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
+	if (m_initializing)
+		return;
+
 	if(ui.tbTexUsed->isChecked())
 		return;
+
+	m_initializing = true;
 
 	// update button state
 	ui.tbFontBold->setChecked(ui.teLabel->fontWeight()==QFont::Bold);
@@ -325,9 +331,14 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
 	ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
 
 	//font and colors
-	ui.kcbFontColor->setColor(format.foreground().color());
+	if (format.foreground().color().isValid())
+		ui.kcbFontColor->setColor(format.foreground().color());
+	else
+		ui.kcbFontColor->setColor(m_label->fontColor());
 	ui.kcbBackgroundColor->setColor(format.background().color());
 	ui.kfontRequester->setFont(format.font());
+
+	m_initializing = false;
 }
 
 void LabelWidget::teXUsedChanged(bool checked) {
@@ -374,8 +385,8 @@ void LabelWidget::teXUsedChanged(bool checked) {
 		}
 
 		//update TeX colors
-		ui.kcbFontColor->setColor(m_label->teXFontColor());
-		ui.kcbBackgroundColor->setColor(m_label->teXBackgroundColor());
+		ui.kcbFontColor->setColor(m_label->fontColor());
+		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
 	} else {
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 		m_highlighter->setDocument(nullptr);
@@ -413,9 +424,14 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	ui.teLabel->setTextColor(color);
-	for (auto* label : m_labelsList)
-		label->setTeXFontColor(color);
+	//if no selection is done, apply the new color for the whole label,
+	//apply to the currently selected part of the text only otherwise
+	QTextCursor cursor = ui.teLabel->textCursor();
+	if (cursor.selection().isEmpty())
+		for (auto* label : m_labelsList)
+			label->setFontColor(color);
+	else
+		ui.teLabel->setTextColor(color);
 }
 
 void LabelWidget::backgroundColorChanged(const QColor& color) {
@@ -424,7 +440,7 @@ void LabelWidget::backgroundColorChanged(const QColor& color) {
 
 	ui.teLabel->setTextBackgroundColor(color);
 	for (auto* label : m_labelsList)
-		label->setTeXBackgroundColor(color);
+		label->setBackgroundColor(color);
 }
 
 void LabelWidget::fontSizeChanged(int value) {
@@ -778,7 +794,7 @@ void LabelWidget::labelTeXFontChanged(const QFont& font) {
 	m_initializing = false;
 }
 
-void LabelWidget::labelTeXFontColorChanged(const QColor color) {
+void LabelWidget::labelFontColorChanged(const QColor color) {
 	m_initializing = true;
 	ui.kcbFontColor->setColor(color);
 	m_initializing = false;
@@ -872,6 +888,8 @@ void LabelWidget::load() {
 	else
 		ui.teLabel->setHtml(m_label->text().text);
 
+	ui.kcbFontColor->setColor(m_label->fontColor());
+	ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
 	this->teXUsedChanged(m_label->text().teXUsed);
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
