@@ -118,7 +118,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "PGI")
 # " x" postfix to work around a bug in CMake that causes "MSVC" to translate to something completely different
 elseif (("${CMAKE_CXX_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
 	message(STATUS "MSVC C++ compiler detected, adding compile flags")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -W3")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -W3 -DPSAPI_VERSION=1")
 	set(MSVC_FOUND TRUE)
 else ()
 	message(STATUS "UNKNOWN C++ compiler, adding compile flags")
