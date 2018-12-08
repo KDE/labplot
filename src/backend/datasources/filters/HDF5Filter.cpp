@@ -299,7 +299,7 @@ QStringList HDF5FilterPrivate::readHDF5Compound(hid_t tid) {
 
 template <typename T>
 QStringList HDF5FilterPrivate::readHDF5Data1D(hid_t dataset, hid_t type, int rows, int lines, void* dataContainer) {
-	DEBUG("readHDF5Data1D() rows =" << rows << "lines =" << lines);
+	DEBUG("readHDF5Data1D() rows = " << rows << ", lines = " << lines);
 	QStringList dataString;
 
 	// we read all rows of data
@@ -307,9 +307,9 @@ QStringList HDF5FilterPrivate::readHDF5Data1D(hid_t dataset, hid_t type, int row
 
 	m_status = H5Dread(dataset, type, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
 	handleError(m_status, "H5Dread");
-	DEBUG(" startRow =" << startRow << "endRow =" << endRow);
-//	DEBUG("dataContainer =" << dataContainer);
-	for (int i = startRow-1; i < qMin(endRow, lines+startRow-1); ++i) {
+	DEBUG(" startRow = " << startRow << ", endRow = " << endRow);
+	DEBUG("	dataContainer = " << dataContainer);
+	for (int i = startRow - 1; i < qMin(endRow, lines+startRow-1); ++i) {
 		if (dataContainer)	// read to data source
 			static_cast<QVector<T>*>(dataContainer)->operator[](i-startRow+1) = data[i];
 		else				// for preview
@@ -1243,7 +1243,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 		ok = false;
 		return dataStrings << (QStringList() << i18n("No data set selected"));
 	}
-	DEBUG(" current data set =" << currentDataSetName.toStdString());
+	DEBUG(" current data set = " << currentDataSetName.toStdString());
 
 #ifdef HAVE_HDF5
 	QByteArray bafileName = fileName.toLatin1();
@@ -1265,7 +1265,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 	handleError((int)dataspace, "H5Dget_space");
 	int rank = H5Sget_simple_extent_ndims(dataspace);
 	handleError(rank, "H5Dget_simple_extent_ndims");
-	DEBUG(" rank =" << rank);
+	DEBUG(" rank = " << rank);
 
 	int columnOffset = 0;			// offset to import data
 	int actualRows = 0, actualCols = 0;	// rows and cols to read
@@ -1671,7 +1671,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
     Uses the settings defined in the data source.
 */
 void HDF5FilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
-	DEBUG("HDF5Filter::read()");
+	DEBUG("HDF5Filter::readDataFromFile()");
 
 	if (currentDataSetName.isEmpty()) {
 		DEBUG("No data set selected");

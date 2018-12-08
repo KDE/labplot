@@ -216,6 +216,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 	QTime timer;
 	timer.start();
+
 	if (aspect->inherits("Matrix")) {
 		DEBUG("	to Matrix");
 		auto* matrix = qobject_cast<Matrix*>(aspect);
@@ -223,7 +224,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	} else if (aspect->inherits("Spreadsheet")) {
 		DEBUG("	to Spreadsheet");
 		auto* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
-		DEBUG(" Calling readDataFromFile()");
+		DEBUG(" Calling readDataFromFile() with spreadsheet = " << spreadsheet);
 		filter->readDataFromFile(fileName, spreadsheet, mode);
 	} else if (aspect->inherits("Workbook")) {
 		DEBUG("	to Workbook");
@@ -255,12 +256,11 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				case AbstractFileFilter::NgspiceRawBinary:
 					break; // never reached, omit warning
 			}
-
 			int nrNames = names.size(), offset = sheets.size();
 
-			int start=0;
+			int start = 0;
 			if (mode == AbstractFileFilter::Replace)
-				start=offset;
+				start = offset;
 
 			// add additional sheets
 			for (int i = start; i < nrNames; ++i) {

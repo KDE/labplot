@@ -93,11 +93,15 @@ void HDF5OptionsWidget::hdf5TreeWidgetSelectionChanged() {
 	return list of selected HDF5 item names
 */
 const QStringList HDF5OptionsWidget::selectedHDF5Names() const {
+	DEBUG("HDF5OptionsWidget::selectedHDF5Names()");
 	QStringList names;
 
 	// the data link is saved in the second column
-	for (auto* item : ui.twContent->selectedItems())
+	auto items = ui.twContent->selectedItems();
+	QDEBUG("SELECTED ITEMS =" << items);
+	for (auto* item : items)
 		names << item->text(1);
+	QDEBUG("	HDF5OptionsWidget: selected names =" << names);
 
 	return names;
 }
