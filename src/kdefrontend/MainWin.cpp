@@ -175,9 +175,6 @@ void MainWin::initGUI(const QString& fileName) {
 
 	statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
 
-	MemoryWidget* memoryWidget = new MemoryWidget(statusBar());
-	statusBar()->addPermanentWidget(memoryWidget);
-
 	initActions();
 #ifdef Q_OS_DARWIN
 	setupGUI(Default, QLatin1String("/Applications/labplot2.app/Contents/Resources/labplot2ui.rc"));
@@ -192,12 +189,15 @@ void MainWin::initGUI(const QString& fileName) {
 	// * on later program starts, set stored lock status
 	//Furthermore, we want to show icons only after the first program start.
 	KConfigGroup groupMain = KSharedConfig::openConfig()->group("MainWindow");
+	bool showMemoryInfo = true;
 	if (groupMain.exists()) {
 		//KXMLGUI framework automatically stores "Disabled" for the key "ToolBarsMovable"
 		//in case the toolbars are locked -> load this value
 		const QString& str = groupMain.readEntry(QLatin1String("ToolBarsMovable"), "");
 		bool locked = (str == QLatin1String("Disabled"));
 		KToolBar::setToolBarsLocked(locked);
+
+		showMemoryInfo = groupMain.readEntry(QLatin1String("showMemoryInfo"), true);
 	} else {
 		//first start
 		KToolBar::setToolBarsLocked(false);
@@ -210,6 +210,13 @@ void MainWin::initGUI(const QString& fileName) {
 		}
 	}
 
+	if (showMemoryInfo) {
+#ifdef Q_OS_LINUX
+		MemoryWidget* memoryWidget = new MemoryWidget(statusBar());
+		statusBar()->addPermanentWidget(memoryWidget);
+#endif
+
+	}
 	initMenus();
 
 	auto* mainToolBar = qobject_cast<QToolBar*>(factory()->container("main_toolbar", this));
