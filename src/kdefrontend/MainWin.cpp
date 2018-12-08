@@ -62,6 +62,7 @@
 #include "commonfrontend/datapicker/DatapickerView.h"
 #include "commonfrontend/datapicker/DatapickerImageView.h"
 #include "commonfrontend/note/NoteView.h"
+#include "commonfrontend/widgets/MemoryWidget.h"
 
 #include "kdefrontend/datasources/ImportFileDialog.h"
 #include "kdefrontend/datasources/ImportProjectDialog.h"
@@ -173,6 +174,10 @@ void MainWin::initGUI(const QString& fileName) {
 	        this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
 
 	statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
+
+	MemoryWidget* memoryWidget = new MemoryWidget(statusBar());
+	statusBar()->addPermanentWidget(memoryWidget);
+
 	initActions();
 #ifdef Q_OS_DARWIN
 	setupGUI(Default, QLatin1String("/Applications/labplot2.app/Contents/Resources/labplot2ui.rc"));
