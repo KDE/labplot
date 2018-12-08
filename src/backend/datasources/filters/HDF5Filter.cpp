@@ -309,7 +309,7 @@ QStringList HDF5FilterPrivate::readHDF5Data1D(hid_t dataset, hid_t type, int row
 	handleError(m_status, "H5Dread");
 	DEBUG(" startRow = " << startRow << ", endRow = " << endRow);
 	DEBUG("	dataContainer = " << dataContainer);
-	for (int i = startRow - 1; i < qMin(endRow, lines+startRow-1); ++i) {
+	for (int i = startRow - 1; i < qMin(endRow, lines + startRow - 1); ++i) {
 		if (dataContainer)	// read to data source
 			static_cast<QVector<T>*>(dataContainer)->operator[](i-startRow+1) = data[i];
 		else				// for preview
@@ -403,8 +403,8 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 			mdataString = readHDF5Data1D<long double>(dataset, ctype, rows, lines, dataContainer[m]);
 		else {
 			if (dataContainer[m]) {
-				for (int i = startRow-1; i < qMin(endRow, lines+startRow-1); ++i)
-					static_cast<QVector<double>*>(dataContainer[m])->operator[](i-startRow+1) = 0;
+				for (int i = startRow-1; i < qMin(endRow, lines + startRow - 1); ++i)
+					static_cast<QVector<double>*>(dataContainer[m])->operator[](i - startRow + 1) = 0;
 			} else {
 				for (int i = 0; i < qMin(rows, lines); ++i)
 					mdataString << QLatin1String("_");
@@ -417,7 +417,7 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 		if (!dataContainer[0]) {
 			for (int i = 0; i < qMin(rows, lines); ++i) {
 				dataString[i] +=  mdataString[i];
-				if (m < members-1)
+				if (m < members - 1)
 					dataString[i] += QLatin1String(",");
 			}
 		}
@@ -441,7 +441,7 @@ QVector<QStringList> HDF5FilterPrivate::readHDF5Data2D(hid_t dataset, hid_t type
 	T** data = (T**) malloc(rows*sizeof(T*));
 	data[0] = (T*) malloc(cols*rows*sizeof(T));
 	for (int i = 1; i < rows; ++i)
-		data[i] = data[0]+i*cols;
+		data[i] = data[0] + i*cols;
 
 	m_status = H5Dread(dataset, type, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data[0][0]);
 	handleError(m_status,"H5Dread");
@@ -1325,7 +1325,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 				endRow = rows;
 			if (lines == -1)
 				lines = endRow;
-			actualRows = endRow-startRow+1;
+			actualRows = endRow - startRow + 1;
 			actualCols = 1;
 #ifndef NDEBUG
 			H5T_order_t order = H5Tget_order(dtype);
@@ -1370,7 +1370,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 						handleError(m_status, "H5Dread");
 					}
 
-					for (int i = startRow-1; i < qMin(endRow, lines+startRow-1); ++i)
+					for (int i = startRow-1; i < qMin(endRow, lines + startRow - 1); ++i)
 						dataString << data[i];
 
 					free(data);
@@ -1483,9 +1483,11 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 				break;
 			}
 
-			if (!dataSource) {
+			if (!dataSource) {	// preview
 				QDEBUG("dataString =" << dataString);
-				for (int i = 0; i < qMin(rows, lines); ++i)
+				DEBUG("	data string size = " << dataString.size());
+				DEBUG("	rows = " << rows << ", lines = " << lines << ", actual rows = " << actualRows);
+				for (int i = 0; i < qMin(actualRows, lines); ++i)
 					dataStrings << (QStringList() << dataString[i]);
 			}
 
@@ -1585,7 +1587,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 					else if (H5Tequal(dtype, H5T_STD_U64LE) || H5Tequal(dtype, H5T_STD_U64BE) || H5Tequal(dtype, H5T_NATIVE_ULLONG))
 						dataStrings << readHDF5Data2D<unsigned long long>(dataset, H5T_NATIVE_ULLONG, rows, cols, lines, dataContainer);
 					else {
-						ok=false;
+						ok = false;
 						dataStrings << (QStringList() << i18n("unsupported integer type for rank 2"));
 						qDebug() << dataStrings;
 					}
