@@ -419,6 +419,9 @@ ENDIF ()
 IF (ENABLE_LIBORIGIN)
 	target_link_libraries( labplot2lib liborigin-static )
 ENDIF ()
+IF (WIN32)
+	target_link_libraries( labplot2lib ${PSAPI} )
+ENDIF ()
 
 # icons for the executable and project files on Windows and Mac OS X
 

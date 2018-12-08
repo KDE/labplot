@@ -174,6 +174,8 @@ option(ENABLE_MQTT "Build with MQTT support" ON)
 ### OS macros ####################################
 IF (WIN32)
 	add_definitions (-DHAVE_WINDOWS)
+	find_library (PSAPI Psapi)
+	message (STATUS "PSAPI: ${PSAPI}")
 ENDIF ()
 
 ### GSL (required) ###############################
