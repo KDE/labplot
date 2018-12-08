@@ -51,6 +51,7 @@ private:
 
 private slots:
 	void interfaceChanged(int);
+	void autoSaveChanged(int);
 	void changed();
 
 signals:

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : general settings page
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2018 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -39,16 +39,23 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 	m_changed(false) {
 
 	ui.setupUi(this);
+	ui.sbAutoSaveInterval->setSuffix(i18n("min."));
 	retranslateUi();
 
-	connect(ui.cbLoadOnStart, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
-	connect(ui.cbInterface, SIGNAL(currentIndexChanged(int)), this, SLOT(interfaceChanged(int)) );
-	connect(ui.cbMdiVisibility, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
-	connect(ui.cbTabPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
-	connect(ui.chkAutoSave, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
+	connect(ui.cbLoadOnStart, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &SettingsGeneralPage::changed);
+	connect(ui.cbInterface, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &SettingsGeneralPage::interfaceChanged);
+	connect(ui.cbMdiVisibility, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &SettingsGeneralPage::changed);
+	connect(ui.cbTabPosition, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &SettingsGeneralPage::changed);
+	connect(ui.chkAutoSave, &QCheckBox::stateChanged, this, &SettingsGeneralPage::autoSaveChanged);
+	connect(ui.chkMemoryInfo, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
 
 	loadSettings();
 	interfaceChanged(ui.cbInterface->currentIndex());
+	autoSaveChanged(ui.chkAutoSave->checkState());
 }
 
 void SettingsGeneralPage::applySettings(){
@@ -59,6 +66,7 @@ void SettingsGeneralPage::applySettings(){
 	group.writeEntry(QLatin1String("MdiWindowVisibility"), ui.cbMdiVisibility->currentIndex());
 	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
+	group.writeEntry(QLatin1String("ShowMemoryInfo"), ui.chkMemoryInfo->isChecked());
 }
 
 void SettingsGeneralPage::restoreDefaults(){
@@ -73,6 +81,7 @@ void SettingsGeneralPage::loadSettings(){
 	ui.cbMdiVisibility->setCurrentIndex(group.readEntry(QLatin1String("MdiWindowVisibility"), 0));
 	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), false));
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
+	ui.chkMemoryInfo->setChecked(group.readEntry<bool>(QLatin1String("ShowMemoryInfo"), true));
 }
 
 void SettingsGeneralPage::retranslateUi() {
@@ -109,5 +118,12 @@ void SettingsGeneralPage::interfaceChanged(int index) {
 	ui.cbTabPosition->setVisible(tabbedView);
 	ui.lMdiVisibility->setVisible(!tabbedView);
 	ui.cbMdiVisibility->setVisible(!tabbedView);
+	changed();
+}
+
+void SettingsGeneralPage::autoSaveChanged(int state) {
+	const bool visible = (state == Qt::Checked);
+	ui.lAutoSaveInterval->setVisible(visible);
+	ui.sbAutoSaveInterval->setVisible(visible);
 	changed();
 }

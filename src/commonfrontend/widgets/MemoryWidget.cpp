@@ -32,6 +32,7 @@
 
 MemoryWidget::MemoryWidget(QWidget* parent) : QLabel(parent) {
 	connect(&m_timer, &QTimer::timeout, this, &MemoryWidget::refreshMemoryInfo);
+	refreshMemoryInfo();
 	m_timer.start(2000);
 }
 

@@ -189,15 +189,12 @@ void MainWin::initGUI(const QString& fileName) {
 	// * on later program starts, set stored lock status
 	//Furthermore, we want to show icons only after the first program start.
 	KConfigGroup groupMain = KSharedConfig::openConfig()->group("MainWindow");
-	bool showMemoryInfo = true;
 	if (groupMain.exists()) {
 		//KXMLGUI framework automatically stores "Disabled" for the key "ToolBarsMovable"
 		//in case the toolbars are locked -> load this value
 		const QString& str = groupMain.readEntry(QLatin1String("ToolBarsMovable"), "");
 		bool locked = (str == QLatin1String("Disabled"));
 		KToolBar::setToolBarsLocked(locked);
-
-		showMemoryInfo = groupMain.readEntry(QLatin1String("showMemoryInfo"), true);
 	} else {
 		//first start
 		KToolBar::setToolBarsLocked(false);
@@ -210,13 +207,6 @@ void MainWin::initGUI(const QString& fileName) {
 		}
 	}
 
-	if (showMemoryInfo) {
-#ifdef Q_OS_LINUX
-		MemoryWidget* memoryWidget = new MemoryWidget(statusBar());
-		statusBar()->addPermanentWidget(memoryWidget);
-#endif
-
-	}
 	initMenus();
 
 	auto* mainToolBar = qobject_cast<QToolBar*>(factory()->container("main_toolbar", this));
@@ -294,6 +284,16 @@ void MainWin::initGUI(const QString& fileName) {
 			}
 		}
 	}
+
+	//show memory info
+	const bool showMemoryInfo = group.readEntry(QLatin1String("ShowMemoryInfo"), true);
+	if (showMemoryInfo) {
+#ifdef Q_OS_LINUX
+		m_memoryInfoWidget = new MemoryWidget(statusBar());
+		statusBar()->addPermanentWidget(m_memoryInfoWidget);
+#endif
+	}
+
 	updateGUIOnProjectChanges();
 }
 
@@ -1778,6 +1778,22 @@ void MainWin::handleSettingsChanges() {
 	interval *= 60*1000;
 	if (interval != m_autoSaveTimer.interval())
 		m_autoSaveTimer.setInterval(interval);
+
+	//show memory info
+	bool showMemoryInfo = group.readEntry(QLatin1String("ShowMemoryInfo"), true);
+	if (m_showMemoryInfo != showMemoryInfo) {
+		m_showMemoryInfo = showMemoryInfo;
+		if (showMemoryInfo) {
+			m_memoryInfoWidget = new MemoryWidget(statusBar());
+			statusBar()->addPermanentWidget(m_memoryInfoWidget);
+		} else {
+			if (m_memoryInfoWidget) {
+				statusBar()->removeWidget(m_memoryInfoWidget);
+				delete m_memoryInfoWidget;
+				m_memoryInfoWidget = nullptr;
+			}
+		}
+	}
 }
 
 /***************************************************************************************/

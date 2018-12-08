@@ -72,6 +72,7 @@ class WorksheetDock;
 class LabelWidget;
 class DatapickerImageWidget;
 class DatapickerCurveWidget;
+class MemoryWidget;
 
 #ifdef HAVE_CANTOR_LIBS
 class CantorWorksheet;
@@ -115,6 +116,8 @@ private:
 	bool m_closing{false};
 	bool m_autoSaveActive{false};
 	QTimer m_autoSaveTimer;
+	bool m_showMemoryInfo{true};
+	MemoryWidget* m_memoryInfoWidget{nullptr};
 	Qt::WindowStates m_lastWindowState; //< last window state before switching to full screen mode
 
 	KRecentFilesAction* m_recentProjectsAction;
