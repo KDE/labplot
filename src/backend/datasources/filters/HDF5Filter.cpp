@@ -196,8 +196,9 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 	H5F_info_t file_info;
 	status = H5Fget_info(file, &file_info);
 	if (status >= 0) {
-		// using H5Fget_info2 struct (see H5Fpublic.h)
 		info += QLatin1String("<br>");
+#ifdef HAVE_HDF5_1_10
+		// using H5Fget_info2 struct (see H5Fpublic.h)
 		info += i18n("Version of superblock: %1", QString::number(file_info.super.version));
 		info += QLatin1String("<br>");
 		info += i18n("Size of superblock: %1", QString::number(file_info.super.super_size));
@@ -214,6 +215,13 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 		info += QLatin1String("<br>");
 		info += i18n("Size of shared object header: %1", QString::number(file_info.sohm.hdr_size));
 		info += QLatin1String("<br>");
+#else
+		// using H5Fget_info1 struct (see H5Fpublic.h)
+		info += i18n("Size of superblock extension: %1", QString::number(file_info.super_ext_size));
+		info += QLatin1String("<br>");
+		info += i18n("Size of shared object header: %1", QString::number(file_info.sohm.hdr_size));
+		info += QLatin1String("<br>");
+#endif
 		info += i18n("Size of all shared object header indexes: %1", QString::number(file_info.sohm.msgs_info.index_size));
 		info += QLatin1String("<br>");
 		info += i18n("Size of the heap: %1", QString::number(file_info.sohm.msgs_info.heap_size));
@@ -222,10 +230,10 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 
 	//TODO: cache information
 	//see https://support.hdfgroup.org/HDF5/doc/RM/RM_H5F.html
+	info += QLatin1String("<br>");
 	//herr_t H5Fget_mdc_config(hid_t file_id, H5AC_cache_config_t *config_ptr)
 	double hit_rate;
 	status = H5Fget_mdc_hit_rate(file, &hit_rate);
-	info += QLatin1String("<br>");
 	info += i18n("Metadata cache hit rate: %1", QString::number(hit_rate));
 	info += QLatin1String("<br>");
 	// herr_t H5Fget_mdc_image_info(hid_t file_id, haddr_t *image_addr, hsize_t *image_len)
