@@ -253,14 +253,6 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 	info += i18n("Metadata cache hit rate: %1", QString::number(hit_rate));
 	info += QLatin1String("<br>");
 	//TODO: herr_t H5Fget_mdc_image_info(hid_t file_id, haddr_t *image_addr, hsize_t *image_len)
-	hbool_t is_enabled, is_currently_logging;
-	status = H5Fget_mdc_logging_status(file, &is_enabled, &is_currently_logging);
-	if (status >= 0) {
-		info += i18n("Logging enabled: %1", is_enabled ? i18n("Yes") : i18n("No"));
-		info += QLatin1String("<br>");
-		info += i18n("Events are currently logged: %1", is_currently_logging ? i18n("Yes") : i18n("No"));
-		info += QLatin1String("<br>");
-	}
 	size_t max_size, min_clean_size, cur_size;
 	int cur_num_entries;
 	status = H5Fget_mdc_size(file, &max_size, &min_clean_size, &cur_size, &cur_num_entries);
@@ -283,6 +275,14 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 		info += QLatin1String("<br>");
 	}*/
 #ifdef HAVE_HDF5_1_10
+	hbool_t is_enabled, is_currently_logging;
+	status = H5Fget_mdc_logging_status(file, &is_enabled, &is_currently_logging);
+	if (status >= 0) {
+		info += i18n("Logging enabled: %1", is_enabled ? i18n("Yes") : i18n("No"));
+		info += QLatin1String("<br>");
+		info += i18n("Events are currently logged: %1", is_currently_logging ? i18n("Yes") : i18n("No"));
+		info += QLatin1String("<br>");
+	}
 	unsigned int accesses[2], hits[2], misses[2], evictions[2], bypasses[2];
 	status = H5Fget_page_buffering_stats(file, accesses, hits, misses, evictions, bypasses);
 	if (status >= 0) {
