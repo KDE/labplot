@@ -594,11 +594,11 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 			actualRows = endRow-startRow+1;
 			actualCols = endColumn-startColumn+1;
 
-			DEBUG("dim =" << rows << "x" << cols);
-			DEBUG("startRow/endRow:" << startRow << endRow);
-			DEBUG("startColumn/endColumn:" << startColumn << endColumn);
-			DEBUG("actual rows/cols:" << actualRows << actualCols);
-			DEBUG("lines:" << lines);
+			DEBUG("dim = " << rows << "x" << cols);
+			DEBUG("startRow/endRow: " << startRow << ' ' << endRow);
+			DEBUG("startColumn/endColumn: " << startColumn << ' ' << endColumn);
+			DEBUG("actual rows/cols: " << actualRows << ' ' << actualCols);
+			DEBUG("lines: " << lines);
 
 			//TODO: support other modes
 			QVector<AbstractColumn::ColumnMode> columnModes;
@@ -616,16 +616,19 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 
 			m_status = nc_get_var_double(ncid, varid, &data[0][0]);
 			handleError(m_status, "nc_get_var_double");
-			for (int i = 0; i < qMin((int)rows, lines); i++) {
-				QStringList line;
-				for (size_t j = 0; j < cols; j++) {
-					if (dataContainer[0])
-						static_cast<QVector<double>*>(dataContainer[(int)(j-(size_t)startColumn+1)])->operator[](i-startRow+1) = data[i][(int)j];
-					else
-						line << QString::number(data[i][j]);
+
+			if (m_status == NC_NOERR) {
+				for (int i = 0; i < qMin((int)rows, lines); i++) {
+					QStringList line;
+					for (size_t j = 0; j < cols; j++) {
+						if (dataContainer[0])
+							static_cast<QVector<double>*>(dataContainer[(int)(j-(size_t)startColumn+1)])->operator[](i-startRow+1) = data[i][(int)j];
+						else
+							line << QString::number(data[i][j]);
+					}
+					dataStrings << line;
+					emit q->completed(100*i/actualRows);
 				}
-				dataStrings << line;
-				emit q->completed(100*i/actualRows);
 			}
 			free(data[0]);
 			free(data);
