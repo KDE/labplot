@@ -235,7 +235,7 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 	// herr_t H5Fget_mpi_atomicity( hid_t file_id, hbool_t *flag )
 	// herr_t H5Fget_page_buffering_stats( hid_t file_id, int accesses[2], int hits[2], int misses[2], int evictions[2], int bypasses[2] )
 #else
-	QUNUSED(fileName);
+	Q_UNUSED(fileName);
 #endif
 	return info;
 }
