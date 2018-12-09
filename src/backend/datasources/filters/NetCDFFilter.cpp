@@ -209,7 +209,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 		handleError(m_status, "nc_inq_varnatts");
 	} else {
 		nstart = attid;
-		nattr = attid+1;
+		nattr = attid + 1;
 	}
 
 	nc_type type;
@@ -482,7 +482,12 @@ QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QStri
 	m_status = nc_inq_attid(ncid, varid, baName.data(), &attid);
 	handleError(m_status, "nc_inq_attid");
 
-	return scanAttrs(ncid, varid, attid);
+	QString nameString = scanAttrs(ncid, varid, attid);
+
+	m_status = ncclose(ncid);
+	handleError(m_status, "nc_close");
+
+	return nameString;
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(name)
@@ -540,11 +545,11 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 				endRow = (int)size;
 			if (lines == -1)
 				lines = endRow;
-			actualRows = endRow-startRow+1;
+			actualRows = endRow - startRow + 1;
 			actualCols = 1;
 
-			DEBUG("start/end row" << startRow << endRow);
-			DEBUG("act rows/cols" << actualRows << actualCols);
+			DEBUG("start/end row: " << startRow << ' ' << endRow);
+			DEBUG("act rows/cols: " << actualRows << ' ' << actualCols);
 
 			//TODO: support other modes
 			QVector<AbstractColumn::ColumnMode> columnModes;
@@ -634,6 +639,9 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 
 	free(dimids);
 
+	m_status = ncclose(ncid);
+	handleError(m_status, "nc_close");
+
 	if (dataSource)
 		dataSource->finalizeImport(columnOffset, 1, actualCols, -1, "", mode);
 #else
@@ -668,7 +676,7 @@ QVector<QStringList> NetCDFFilterPrivate::readDataFromFile(const QString& fileNa
 void NetCDFFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
 	Q_UNUSED(fileName);
 	Q_UNUSED(dataSource);
-	//TODO: not implemented yet
+	//TODO: write NetCDF files not implemented yet
 }
 
 //##############################################################################
