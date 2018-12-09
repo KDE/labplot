@@ -38,6 +38,10 @@ class HDF5FilterPrivate {
 
 public:
 	explicit HDF5FilterPrivate(HDF5Filter*);
+	
+#ifdef HAVE_HDF5
+	static void handleError(int err, const QString& function, const QString& arg = QString());
+#endif
 
 	void parse(const QString & fileName, QTreeWidgetItem* rootItem);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace);
@@ -62,7 +66,6 @@ private:
 	QList<unsigned long> m_multiLinkList;	// used to find hard links
 
 #ifdef HAVE_HDF5
-	void handleError(int err, const QString& function, const QString& arg = QString());
 	QString translateHDF5Order(H5T_order_t);
 	QString translateHDF5Type(hid_t);
 	QString translateHDF5Class(H5T_class_t);

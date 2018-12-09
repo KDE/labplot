@@ -40,6 +40,8 @@ public:
 	HDF5Filter();
 	~HDF5Filter() override;
 
+	static QString fileInfoString(const QString&);
+
 	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace) override;
 	QVector<QStringList> readCurrentDataSet(const QString& fileName, AbstractDataSource*, bool& ok,
@@ -60,6 +62,7 @@ public:
 	int startColumn() const;
 	void setEndColumn(const int);
 	int endColumn() const;
+
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;

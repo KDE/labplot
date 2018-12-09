@@ -136,6 +136,110 @@ int HDF5Filter::endColumn() const {
 	return d->endColumn;
 }
 
+QString HDF5Filter::fileInfoString(const QString& fileName) {
+	DEBUG("HDF5Filter::fileInfoString()");
+	QString info;
+#ifdef HAVE_HDF5
+	QByteArray bafileName = fileName.toLatin1();
+	DEBUG("fileName = " << bafileName.data());
+
+	// check file type first
+	htri_t isHdf5 = H5Fis_hdf5(bafileName.data());
+	if (isHdf5 == 0) {
+		DEBUG(bafileName.data() << " is not a HDF5 file! Giving up.");
+		return QString();
+	}
+	if (isHdf5 < 0) {
+		DEBUG("H5Fis_hdf5() failed on " << bafileName.data() << "! Giving up.");
+		return QString();
+	}
+
+	// open file
+	hid_t file = H5Fopen(bafileName.data(), H5F_ACC_RDONLY, H5P_DEFAULT);
+	HDF5FilterPrivate::handleError((int)file, "H5Fopen", fileName);
+	if (file < 0) {
+		DEBUG("Opening file " << bafileName.data() << " failed! Giving up.");
+		return QString();
+	}
+
+	hsize_t size;
+	herr_t status = H5Fget_filesize(file, &size);
+	if (status >= 0) {
+		info += i18n("File size: %1 bytes", QString::number(size));
+		info += QLatin1String("<br>");
+	}
+
+	hssize_t freesize = H5Fget_freespace(file);
+	info += i18n("Free space: %1 bytes", QString::number(freesize));
+	info += QLatin1String("<br>");
+
+	ssize_t objectCount;
+	objectCount = H5Fget_obj_count(file, H5F_OBJ_FILE);
+	info += i18n("Number of files: %1", QString::number(objectCount));
+	info += QLatin1String("<br>");
+	objectCount = H5Fget_obj_count(file, H5F_OBJ_DATASET);
+	info += i18n("Number of data sets: %1", QString::number(objectCount));
+	info += QLatin1String("<br>");
+	objectCount = H5Fget_obj_count(file, H5F_OBJ_GROUP);
+	info += i18n("Number of groups: %1", QString::number(objectCount));
+	info += QLatin1String("<br>");
+	objectCount = H5Fget_obj_count(file, H5F_OBJ_DATATYPE);
+	info += i18n("Number of named datatypes: %1", QString::number(objectCount));
+	info += QLatin1String("<br>");
+	objectCount = H5Fget_obj_count(file, H5F_OBJ_ATTR);
+	info += i18n("Number of attributes: %1", QString::number(objectCount));
+	info += QLatin1String("<br>");
+	objectCount = H5Fget_obj_count(file, H5F_OBJ_ALL);
+	info += i18n("Number of all objects: %1", QString::number(objectCount));
+	info += QLatin1String("<br>");
+
+	H5F_info_t file_info;
+	status = H5Fget_info(file, &file_info);
+	if (status >= 0) {
+		// using H5Fget_info2 struct (see H5Fpublic.h)
+		info += QLatin1String("<br>");
+		info += i18n("Version of superblock: %1", QString::number(file_info.super.version));
+		info += QLatin1String("<br>");
+		info += i18n("Size of superblock: %1", QString::number(file_info.super.super_size));
+		info += QLatin1String("<br>");
+		info += i18n("Size of superblock extension: %1", QString::number(file_info.super.super_ext_size));
+		info += QLatin1String("<br>");
+		info += i18n("Version of free-space manager: %1", QString::number(file_info.free.version));
+		info += QLatin1String("<br>");
+		info += i18n("Size of free-space manager metadata: %1", QString::number(file_info.free.meta_size));
+		info += QLatin1String("<br>");
+		info += i18n("Total size of free space: %1", QString::number(file_info.free.tot_space));
+		info += QLatin1String("<br>");
+		info += i18n("Version of shared object header: %1", QString::number(file_info.sohm.version));
+		info += QLatin1String("<br>");
+		info += i18n("Size of shared object header: %1", QString::number(file_info.sohm.hdr_size));
+		info += QLatin1String("<br>");
+		info += i18n("Size of all shared object header indexes: %1", QString::number(file_info.sohm.msgs_info.index_size));
+		info += QLatin1String("<br>");
+		info += i18n("Size of the heap: %1", QString::number(file_info.sohm.msgs_info.heap_size));
+		info += QLatin1String("<br>");
+	}
+
+	//TODO: cache information
+	//see https://support.hdfgroup.org/HDF5/doc/RM/RM_H5F.html
+	//herr_t H5Fget_mdc_config(hid_t file_id, H5AC_cache_config_t *config_ptr)
+	double hit_rate;
+	status = H5Fget_mdc_hit_rate(file, &hit_rate);
+	info += QLatin1String("<br>");
+	info += i18n("Metadata cache hit rate: %1", QString::number(hit_rate));
+	info += QLatin1String("<br>");
+	// herr_t H5Fget_mdc_image_info(hid_t file_id, haddr_t *image_addr, hsize_t *image_len)
+	// herr_t H5Fget_mdc_logging_status( hid_t file_id, hbool_t *is_enabled, hbool_t *is_currently_logging )
+	// herr_t H5Fget_mdc_size(hid_t file_id, size_t *max_size_ptr, size_t *min_clean_size_ptr, size_t *cur_size_ptr, int *cur_num_entries_ptr)
+	// herr_t H5Fget_metadata_read_retry_info( hid_t file_id, H5F_retry_info_t *info )
+	// herr_t H5Fget_mpi_atomicity( hid_t file_id, hbool_t *flag )
+	// herr_t H5Fget_page_buffering_stats( hid_t file_id, int accesses[2], int hits[2], int misses[2], int evictions[2], int bypasses[2] )
+#else
+	QUNUSED(fileName);
+#endif
+	return info;
+}
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
@@ -153,8 +257,9 @@ void HDF5FilterPrivate::handleError(int err, const QString& function, const QStr
 	Q_UNUSED(function)
 	Q_UNUSED(arg)
 #else
-	if (err < 0)
+	if (err < 0) {
 		DEBUG("ERROR " << err << ": " << function.toStdString() << "() - " << arg.toStdString());
+	}
 #endif
 }
 
@@ -1218,7 +1323,7 @@ void HDF5FilterPrivate::parse(const QString& fileName, QTreeWidgetItem* rootItem
 	char rootName[] = "/";
 	hid_t group = H5Gopen(file, rootName, H5P_DEFAULT);
 	handleError((int)group, "H5Gopen", rootName);
-	// CRASHES multiLinkList.clear();
+	// multiLinkList.clear(); crashes
 	scanHDF5Group(group, rootName, rootItem);
 	m_status = H5Gclose(group);
 	handleError(m_status, "H5Gclose", "");

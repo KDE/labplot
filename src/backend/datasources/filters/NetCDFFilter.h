@@ -39,6 +39,8 @@ public:
 	NetCDFFilter();
 	~NetCDFFilter() override;
 
+	static QString fileInfoString(const QString&);
+
 	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace) override;
 	QString readAttribute(const QString & fileName, const QString & name, const QString & varName);
@@ -60,8 +62,6 @@ public:
 	int startColumn() const;
 	void setEndColumn(const int);
 	int endColumn() const;
-
-	static QString fileInfoString(const QString&);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;
