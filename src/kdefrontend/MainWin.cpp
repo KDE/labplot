@@ -288,10 +288,8 @@ void MainWin::initGUI(const QString& fileName) {
 	//show memory info
 	const bool showMemoryInfo = group.readEntry(QLatin1String("ShowMemoryInfo"), true);
 	if (showMemoryInfo) {
-#ifdef Q_OS_LINUX
 		m_memoryInfoWidget = new MemoryWidget(statusBar());
 		statusBar()->addPermanentWidget(m_memoryInfoWidget);
-#endif
 	}
 
 	updateGUIOnProjectChanges();
