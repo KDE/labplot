@@ -427,11 +427,15 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 	int ncid;
 	m_status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
 	handleError(m_status, "nc_open");
+	if (m_status != NC_NOERR) {
+		DEBUG("	Giving up");
+		return;
+	}
 
 	int ndims, nvars, nattr, uldid;
 	m_status = nc_inq(ncid, &ndims, &nvars, &nattr, &uldid);
 	handleError(m_status, "nc_inq");
-	DEBUG(" nattr/ndims/nvars =" << nattr << ndims << nvars);
+	DEBUG(" nattr/ndims/nvars = " << nattr << ' ' << ndims << ' '  << nvars);
 
 	QTreeWidgetItem *attrItem = new QTreeWidgetItem(QStringList() << QString(i18n("Attributes")));
 	attrItem->setIcon(0,QIcon::fromTheme("folder"));
@@ -465,6 +469,10 @@ QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QStri
 	QByteArray bafileName = fileName.toLatin1();
 	m_status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
 	handleError(m_status, "nc_open");
+	if (m_status != NC_NOERR) {
+		DEBUG("	Giving up");
+		return QString();
+	}
 
 	// get varid
 	int varid;
@@ -511,6 +519,10 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 	QByteArray bafileName = fileName.toLatin1();
 	m_status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
 	handleError(m_status, "nc_open");
+	if (m_status != NC_NOERR) {
+		DEBUG("	Giving up");
+		return dataStrings;
+	}
 
 	int varid;
 	QByteArray baVarName = currentVarName.toLatin1();
