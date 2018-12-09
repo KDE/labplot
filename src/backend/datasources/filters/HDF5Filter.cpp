@@ -172,6 +172,7 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 	hssize_t freesize = H5Fget_freespace(file);
 	info += i18n("Free space: %1 bytes", QString::number(freesize));
 	info += QLatin1String("<br>");
+	info += QLatin1String("<br>");
 
 	ssize_t objectCount;
 	objectCount = H5Fget_obj_count(file, H5F_OBJ_FILE);
@@ -201,47 +202,106 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 		// using H5Fget_info2 struct (see H5Fpublic.h)
 		info += i18n("Version of superblock: %1", QString::number(file_info.super.version));
 		info += QLatin1String("<br>");
-		info += i18n("Size of superblock: %1", QString::number(file_info.super.super_size));
+		info += i18n("Size of superblock: %1 bytes", QString::number(file_info.super.super_size));
 		info += QLatin1String("<br>");
-		info += i18n("Size of superblock extension: %1", QString::number(file_info.super.super_ext_size));
+		info += i18n("Size of superblock extension: %1 bytes", QString::number(file_info.super.super_ext_size));
 		info += QLatin1String("<br>");
 		info += i18n("Version of free-space manager: %1", QString::number(file_info.free.version));
 		info += QLatin1String("<br>");
-		info += i18n("Size of free-space manager metadata: %1", QString::number(file_info.free.meta_size));
+		info += i18n("Size of free-space manager metadata: %1 bytes", QString::number(file_info.free.meta_size));
 		info += QLatin1String("<br>");
-		info += i18n("Total size of free space: %1", QString::number(file_info.free.tot_space));
+		info += i18n("Total size of free space: %1 bytes", QString::number(file_info.free.tot_space));
 		info += QLatin1String("<br>");
 		info += i18n("Version of shared object header: %1", QString::number(file_info.sohm.version));
 		info += QLatin1String("<br>");
-		info += i18n("Size of shared object header: %1", QString::number(file_info.sohm.hdr_size));
+		info += i18n("Size of shared object header: %1 bytes", QString::number(file_info.sohm.hdr_size));
 		info += QLatin1String("<br>");
 #else
 		// using H5Fget_info1 struct (see H5Fpublic.h)
-		info += i18n("Size of superblock extension: %1", QString::number(file_info.super_ext_size));
+		info += i18n("Size of superblock extension: %1 bytes", QString::number(file_info.super_ext_size));
 		info += QLatin1String("<br>");
-		info += i18n("Size of shared object header: %1", QString::number(file_info.sohm.hdr_size));
+		info += i18n("Size of shared object header: %1 bytes", QString::number(file_info.sohm.hdr_size));
 		info += QLatin1String("<br>");
 #endif
-		info += i18n("Size of all shared object header indexes: %1", QString::number(file_info.sohm.msgs_info.index_size));
+		info += i18n("Size of all shared object header indexes: %1 bytes", QString::number(file_info.sohm.msgs_info.index_size));
 		info += QLatin1String("<br>");
-		info += i18n("Size of the heap: %1", QString::number(file_info.sohm.msgs_info.heap_size));
+		info += i18n("Size of the heap: %1 bytes", QString::number(file_info.sohm.msgs_info.heap_size));
 		info += QLatin1String("<br>");
 	}
 
-	//TODO: cache information
+	// cache information
 	//see https://support.hdfgroup.org/HDF5/doc/RM/RM_H5F.html
 	info += QLatin1String("<br>");
-	//herr_t H5Fget_mdc_config(hid_t file_id, H5AC_cache_config_t *config_ptr)
+	H5AC_cache_config_t config;
+	config.version = H5AC__CURR_CACHE_CONFIG_VERSION;
+	status = H5Fget_mdc_config(file, &config);
+	if (status >= 0) {
+		info += i18n("Cache config version: %1", QString::number(config.version));
+		info += QLatin1String("<br>");
+		info += i18n("Adaptive cache resize report function enabled: %1", config.rpt_fcn_enabled ? i18n("Yes") : i18n("No"));
+		info += QLatin1String("<br>");
+		info += i18n("Cache initial maximum size: %1 bytes", QString::number(config.initial_size));
+		info += QLatin1String("<br>");
+		info += i18n("Adaptive cache maximum size: %1 bytes", QString::number(config.max_size));
+		info += QLatin1String("<br>");
+		info += i18n("Adaptive cache minimum size: %1 bytes", QString::number(config.min_size));
+		info += QLatin1String("<br>");
+		//TODO: more settings
+	}
 	double hit_rate;
 	status = H5Fget_mdc_hit_rate(file, &hit_rate);
 	info += i18n("Metadata cache hit rate: %1", QString::number(hit_rate));
 	info += QLatin1String("<br>");
-	// herr_t H5Fget_mdc_image_info(hid_t file_id, haddr_t *image_addr, hsize_t *image_len)
-	// herr_t H5Fget_mdc_logging_status( hid_t file_id, hbool_t *is_enabled, hbool_t *is_currently_logging )
-	// herr_t H5Fget_mdc_size(hid_t file_id, size_t *max_size_ptr, size_t *min_clean_size_ptr, size_t *cur_size_ptr, int *cur_num_entries_ptr)
-	// herr_t H5Fget_metadata_read_retry_info( hid_t file_id, H5F_retry_info_t *info )
-	// herr_t H5Fget_mpi_atomicity( hid_t file_id, hbool_t *flag )
-	// herr_t H5Fget_page_buffering_stats( hid_t file_id, int accesses[2], int hits[2], int misses[2], int evictions[2], int bypasses[2] )
+	//TODO: herr_t H5Fget_mdc_image_info(hid_t file_id, haddr_t *image_addr, hsize_t *image_len)
+	hbool_t is_enabled, is_currently_logging;
+	status = H5Fget_mdc_logging_status(file, &is_enabled, &is_currently_logging);
+	if (status >= 0) {
+		info += i18n("Logging enabled: %1", is_enabled ? i18n("Yes") : i18n("No"));
+		info += QLatin1String("<br>");
+		info += i18n("Events are currently logged: %1", is_currently_logging ? i18n("Yes") : i18n("No"));
+		info += QLatin1String("<br>");
+	}
+	size_t max_size, min_clean_size, cur_size;
+	int cur_num_entries;
+	status = H5Fget_mdc_size(file, &max_size, &min_clean_size, &cur_size, &cur_num_entries);
+	if (status >= 0) {
+		info += i18n("Current cache maximum size: %1 bytes", QString::number(max_size));
+		info += QLatin1String("<br>");
+		info += i18n("Current cache minimum clean size: %1 bytes", QString::number(min_clean_size));
+		info += QLatin1String("<br>");
+		info += i18n("Current cache size: %1 bytes", QString::number(cur_size));
+		info += QLatin1String("<br>");
+		info += i18n("Current number of entries in the cache: %1", QString::number(cur_num_entries));
+		info += QLatin1String("<br>");
+	}
+	//TODO: 1.10 herr_t H5Fget_metadata_read_retry_info( hid_t file_id, H5F_retry_info_t *info )
+	/* TODO: not available
+	hbool_t atomicMode;
+	status = H5Fget_mpi_atomicity(file, &atomicMode);
+	if (status >= 0) {
+		info += i18n("MPI file access atomic mode: %1", atomicMode ? i18n("Yes") : i18n("No"));
+		info += QLatin1String("<br>");
+	}*/
+#ifdef HAVE_HDF5_1_10
+	unsigned int accesses[2], hits[2], misses[2], evictions[2], bypasses[2];
+	status = H5Fget_page_buffering_stats(file, accesses, hits, misses, evictions, bypasses);
+	if (status >= 0) {
+		info += i18n("Metadata/raw data page buffer accesses: %1 %2", QString::number(accesses[0]), QString::number(accesses[1]));
+		info += QLatin1String("<br>");
+		info += i18n("Metadata/raw data page buffer hits: %1 %2", QString::number(hits[0]), QString::number(hits[1]));
+		info += QLatin1String("<br>");
+		info += i18n("Metadata/raw data page buffer misses: %1 %2", QString::number(misses[0]), QString::number(misses[1]));
+		info += QLatin1String("<br>");
+		info += i18n("Metadata/raw data page buffer evictions: %1 %2", QString::number(evictions[0]), QString::number(evictions[1]));
+		info += QLatin1String("<br>");
+		info += i18n("Metadata/raw data accesses bypassing page buffer: %1 %2", QString::number(bypasses[0]), QString::number(bypasses[1]));
+		info += QLatin1String("<br>");
+	} else {
+		info += i18n("Page buffer disabled");
+		info += QLatin1String("<br>");
+		DEBUG("H5Fget_page_buffering_stats() status = " << status);
+	}
+#endif
 #else
 	Q_UNUSED(fileName);
 #endif
