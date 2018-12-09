@@ -137,6 +137,53 @@ int NetCDFFilter::endColumn() const {
 	return d->endColumn;
 }
 
+QString NetCDFFilter::fileInfoString(const QString& fileName) {
+	DEBUG("NetCDFFilter::fileInfoString()");
+
+	QByteArray bafileName = fileName.toLatin1();
+	DEBUG("fileName = " << bafileName.data());
+
+	QString info;
+#ifdef HAVE_NETCDF
+	int ncid, status;
+	status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
+	NetCDFFilterPrivate::handleError(status, "nc_open");
+	if (status != NC_NOERR) {
+		DEBUG("	File error. Giving up");
+		return QString();
+	}
+
+	int ndims, nvars, nattr, uldid;
+	status = nc_inq(ncid, &ndims, &nvars, &nattr, &uldid);
+	NetCDFFilterPrivate::handleError(status, "nc_inq");
+	DEBUG(" nattr/ndims/nvars = " << nattr << ' ' << ndims << ' '  << nvars);
+
+	if (status == NC_NOERR) {
+		info += i18n("Number of global attributes: %1", QString::number(nattr));
+		info += QLatin1String("<br>");
+		info += i18n("Number of dimensions: %1", QString::number(ndims));
+		info += QLatin1String("<br>");
+		info += i18n("Number of variables: %1", QString::number(nvars));
+		info += QLatin1String("<br>");
+
+		int format;
+		status = nc_inq_format(ncid, &format);
+		if (status == NC_NOERR)
+			info += i18n("Format version: %1", NetCDFFilterPrivate::translateFormat(format));
+		info += QLatin1String("<br>");
+
+		info += i18n("Using library version %1", QString(nc_inq_libvers()));
+	} else {
+		info += i18n("Error getting file info");
+	}
+
+	status = ncclose(ncid);
+	NetCDFFilterPrivate::handleError(status, "nc_close");
+#endif
+
+	return info;
+}
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
@@ -150,7 +197,7 @@ NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) : q(owner) {
 #ifdef HAVE_NETCDF
 void NetCDFFilterPrivate::handleError(int err, const QString& function) {
 	if (err != NC_NOERR)
-		qDebug() << "NETCDF ERROR:" << function << "() - " << nc_strerror(m_status);
+		qDebug() << "NETCDF ERROR:" << function << "() - " << nc_strerror(err);
 }
 
 QString NetCDFFilterPrivate::translateDataType(nc_type type) {
@@ -198,6 +245,27 @@ QString NetCDFFilterPrivate::translateDataType(nc_type type) {
 	}
 
 	return typeString;
+}
+
+QString NetCDFFilterPrivate::translateFormat(int format) {
+	QString formatString;
+
+	switch (format) {
+	case NC_FORMAT_CLASSIC:
+		formatString = "NC_FORMAT_CLASSIC";
+		break;
+	case NC_FORMAT_64BIT:
+		formatString = "NC_FORMAT_64BIT";
+		break;
+	case NC_FORMAT_NETCDF4:
+		formatString = "NC_FORMAT_NETCDF4";
+		break;
+	case NC_FORMAT_NETCDF4_CLASSIC:
+		formatString = "NC_FORMAT_NETCDF4_CLASSIC";
+		break;
+	}
+
+	return formatString;
 }
 
 QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidgetItem* parentItem) {

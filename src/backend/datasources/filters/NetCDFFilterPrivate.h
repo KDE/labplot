@@ -45,6 +45,11 @@ public:
 	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
+#ifdef HAVE_NETCDF
+	static void handleError(int status, const QString& function);
+	static QString translateFormat(int format);
+	static QString translateDataType(nc_type type);
+#endif
 
 	const NetCDFFilter* q;
 
@@ -58,8 +63,6 @@ private:
 #ifdef HAVE_NETCDF
 	int m_status;
 
-	void handleError(int status, const QString& function);
-	QString translateDataType(nc_type type);
 	QString scanAttrs(int ncid, int varid, int attid, QTreeWidgetItem* parentItem = nullptr);
 	void scanDims(int ncid, int ndims, QTreeWidgetItem* parentItem);
 	void scanVars(int ncid, int nvars, QTreeWidgetItem* parentItem);

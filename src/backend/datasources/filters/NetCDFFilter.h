@@ -61,6 +61,8 @@ public:
 	void setEndColumn(const int);
 	int endColumn() const;
 
+	static QString fileInfoString(const QString&);
+
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;
 

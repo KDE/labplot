@@ -248,7 +248,7 @@ void FITSFilter::setExportTo(const int exportTo) {
 
 QString FITSFilter::fileInfoString(const QString& fileName) {
 	const int imagesCount = FITSFilterPrivate::extensionNames(fileName).values(QLatin1String("IMAGES")).size();
-	QString info(i18n("Images: %1", QString::number(imagesCount )));
+	QString info(i18n("Images: %1", QString::number(imagesCount)));
 
 	info += QLatin1String("<br>");
 

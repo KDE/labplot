@@ -30,6 +30,7 @@
 #include "FileInfoDialog.h"
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
 
@@ -169,7 +170,7 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 			//TODO infoStrings << HDF5Filter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::NETCDF:
-			//TODO infoStrings << NETCDFFilter::fileInfoString(fileName);
+			infoStrings << NetCDFFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::FITS:
 			infoStrings << FITSFilter::fileInfoString(fileName);
