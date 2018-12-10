@@ -100,9 +100,8 @@ MQTTClient::~MQTTClient() {
 	//stop reading before deleting the objects
 	pauseReading();
 	qDebug()<<"Delete MQTTClient: "  << m_client->hostname();
-	if (m_filter)
-		delete m_filter;
 
+	delete m_filter;
 	delete m_updateTimer;
 	delete m_willTimer;
 	m_client->disconnectFromHost();
@@ -147,17 +146,19 @@ void MQTTClient::pauseReading() {
 
 /*!
  * \brief Sets the filter of the MQTTClient.
+ * The ownership of the filter is passed to MQTTClient.
  *
  * \param f a pointer to the new filter
  */
-void MQTTClient::setFilter(AbstractFileFilter* f) {
+void MQTTClient::setFilter(AsciiFilter* f) {
+	delete m_filter;
 	m_filter = f;
 }
 
 /*!
  * \brief Returns the filter of the MQTTClient.
  */
-AbstractFileFilter* MQTTClient::filter() const {
+AsciiFilter* MQTTClient::filter() const {
 	return m_filter;
 }
 
@@ -823,7 +824,6 @@ QString MQTTClient::willOwnMessage() const {
  */
 void MQTTClient::updateWillMessage() {
 	QVector<const MQTTTopic*> topics = children<const MQTTTopic>(AbstractAspect::Recursive);
-	const AsciiFilter* asciiFilter = nullptr;
 	const MQTTTopic* willTopic = nullptr;
 
 	//Search for the will topic
@@ -865,7 +865,7 @@ void MQTTClient::updateWillMessage() {
 				qDebug()<<"Will own message" << m_MQTTWill.willOwnMessage;
 				break;
 			case WillMessageType::Statistics: {
-				asciiFilter = dynamic_cast<AsciiFilter*>(willTopic->filter());
+				const auto asciiFilter = willTopic->filter();
 
 				//If the topic's asciiFilter was found, get the needed statistics
 				if (asciiFilter != nullptr) {
@@ -988,7 +988,7 @@ void MQTTClient::stopWillTimer() const{
  *\brief called periodically when update type is TimeInterval
  */
 void MQTTClient::read() {
-	if (m_filter == nullptr)
+	if (!m_filter)
 		return;
 
 	if (!m_prepared) {
@@ -1358,7 +1358,7 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 			}
 
 		} else if (reader->name() == "asciiFilter") {
-			m_filter = new AsciiFilter();
+			setFilter(new AsciiFilter);
 			if (!m_filter->load(reader))
 				return false;
 		} else if (reader->name() == "MQTTSubscription") {

@@ -57,22 +57,21 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool loading)
 	: Spreadsheet(name, loading),
 	  m_topicName(name),
-	  m_MQTTClient(subscription->mqttClient()),	 
-	  m_filter(new AsciiFilter()) {
-	AsciiFilter* mainFilter = dynamic_cast<AsciiFilter*>(m_MQTTClient->filter());
-	AsciiFilter* myFilter = dynamic_cast<AsciiFilter*>(m_filter);
+	  m_MQTTClient(subscription->mqttClient()),
+	  m_filter(new AsciiFilter) {
+	auto mainFilter = m_MQTTClient->filter();
 
-	myFilter->setAutoModeEnabled(mainFilter->isAutoModeEnabled());
+	m_filter->setAutoModeEnabled(mainFilter->isAutoModeEnabled());
 	if (!mainFilter->isAutoModeEnabled()) {
-		myFilter->setCommentCharacter(mainFilter->commentCharacter());
-		myFilter->setSeparatingCharacter(mainFilter->separatingCharacter());
-		myFilter->setDateTimeFormat(mainFilter->dateTimeFormat());
-		myFilter->setCreateIndexEnabled(mainFilter->createIndexEnabled());
-		myFilter->setSimplifyWhitespacesEnabled(mainFilter->simplifyWhitespacesEnabled());
-		myFilter->setNaNValueToZero(mainFilter->NaNValueToZeroEnabled());
-		myFilter->setRemoveQuotesEnabled(mainFilter->removeQuotesEnabled());
-		myFilter->setSkipEmptyParts(mainFilter->skipEmptyParts());
-		myFilter->setHeaderEnabled(mainFilter->isHeaderEnabled());
+		m_filter->setCommentCharacter(mainFilter->commentCharacter());
+		m_filter->setSeparatingCharacter(mainFilter->separatingCharacter());
+		m_filter->setDateTimeFormat(mainFilter->dateTimeFormat());
+		m_filter->setCreateIndexEnabled(mainFilter->createIndexEnabled());
+		m_filter->setSimplifyWhitespacesEnabled(mainFilter->simplifyWhitespacesEnabled());
+		m_filter->setNaNValueToZero(mainFilter->NaNValueToZeroEnabled());
+		m_filter->setRemoveQuotesEnabled(mainFilter->removeQuotesEnabled());
+		m_filter->setSkipEmptyParts(mainFilter->skipEmptyParts());
+		m_filter->setHeaderEnabled(mainFilter->isHeaderEnabled());
 		QString vectorNames;
 		const QStringList& filterVectorNames = mainFilter->vectorNames();
 		for (int i = 0; i < filterVectorNames.size(); ++i) {
@@ -81,11 +80,11 @@ MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool l
 				vectorNames.append(QLatin1String(" "));
 		}
 
-		myFilter->setVectorNames(vectorNames);
-		myFilter->setStartRow(mainFilter->startRow());
-		myFilter->setEndRow(mainFilter->endRow());
-		myFilter->setStartColumn(mainFilter->startColumn());
-		myFilter->setEndColumn(mainFilter->endColumn());
+		m_filter->setVectorNames(vectorNames);
+		m_filter->setStartRow(mainFilter->startRow());
+		m_filter->setEndRow(mainFilter->endRow());
+		m_filter->setStartColumn(mainFilter->startColumn());
+		m_filter->setEndColumn(mainFilter->endColumn());
 	}
 
 	connect(m_MQTTClient, &MQTTClient::readFromTopics, this, &MQTTTopic::read);
@@ -95,21 +94,24 @@ MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool l
 
 MQTTTopic::~MQTTTopic() {
 	qDebug()<<"MqttTopic destructor:"<<m_topicName;
+	delete m_filter;
 }
 
 /*!
  *\brief Sets the MQTTTopic's filter
+ * The ownership of the filter is passed to MQTTTopic.
  *
  * \param filter
  */
-void MQTTTopic::setFilter(AbstractFileFilter* f) {
+void MQTTTopic::setFilter(AsciiFilter* f) {
+	delete m_filter;
 	m_filter = f;
 }
 
 /*!
  *\brief Returns the MQTTTopic's filter
  */
-AbstractFileFilter* MQTTTopic::filter() const {
+AsciiFilter* MQTTTopic::filter() const {
 	return m_filter;
 }
 
@@ -228,7 +230,7 @@ void MQTTTopic::read() {
 	while (!m_messagePuffer.isEmpty()) {
 		qDebug()<< "Reading from topic " << m_topicName;
 		const QString tempMessage = m_messagePuffer.takeFirst();
-		dynamic_cast<AsciiFilter*>(m_filter)->readMQTTTopic(tempMessage, m_topicName, this);
+		m_filter->readMQTTTopic(tempMessage, m_topicName, this);
 	}
 }
 
@@ -246,8 +248,8 @@ void MQTTTopic::save(QXmlStreamWriter* writer) const {
 	//general
 	writer->writeStartElement("general");
 	writer->writeAttribute("topicName", m_topicName);
-	writer->writeAttribute("filterPrepared", QString::number(dynamic_cast<AsciiFilter*>(m_filter)->isPrepared()));
-	writer->writeAttribute("filterSeparator", dynamic_cast<AsciiFilter*>(m_filter)->separator());
+	writer->writeAttribute("filterPrepared", QString::number(m_filter->isPrepared()));
+	writer->writeAttribute("filterSeparator", m_filter->separator());
 	writer->writeAttribute("messagePufferSize", QString::number(m_messagePuffer.size()));
 	for (int i = 0; i < m_messagePuffer.count(); ++i)
 		writer->writeAttribute("message"+QString::number(i), m_messagePuffer[i]);
@@ -346,7 +348,7 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 	}
 
 	//prepare filter for reading
-	dynamic_cast<AsciiFilter*>(m_filter)->setPreparedForMQTT(isFilterPrepared, this, separator);
+	m_filter->setPreparedForMQTT(isFilterPrepared, this, separator);
 
 	return !reader->hasError();
 }

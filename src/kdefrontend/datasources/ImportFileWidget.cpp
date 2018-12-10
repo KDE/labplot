@@ -526,7 +526,7 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	MQTTClient::ReadingType readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadingType->currentIndex());
 
 	client->setComment( ui.leFileName->text() );
-	client->setFilter(this->currentFileFilter());
+	client->setFilter(static_cast<AsciiFilter*>(currentFileFilter()));
 
 	client->setReadingType(readingType);
 

@@ -41,7 +41,7 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include <QMap>
 
 class QString;
-class AbstractFileFilter;
+class AsciiFilter;
 class MQTTSubscription;
 class QAction;
 #endif
@@ -150,8 +150,8 @@ public:
 	void pauseReading();
 	void continueReading();
 
-	void setFilter(AbstractFileFilter*);
-	AbstractFileFilter* filter() const;
+	void setFilter(AsciiFilter*);
+	AsciiFilter* filter() const;
 
 	QIcon icon() const override;
 
@@ -221,7 +221,7 @@ private:
 	int m_sampleSize;
 	int m_keepNValues;
 	int m_updateInterval;
-	AbstractFileFilter* m_filter;
+	AsciiFilter* m_filter;
 	QTimer* m_updateTimer;
 	QMqttClient* m_client;
 	QMap<QMqttTopicFilter, quint8> m_subscribedTopicNameQoS;
