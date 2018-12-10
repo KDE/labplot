@@ -146,6 +146,15 @@ bool ROOTFilter::load(XmlStreamReader* reader) {
 	return true;
 }
 
+QString ROOTFilter::fileInfoString(const QString& fileName) {
+	QString info;
+
+	//TODO
+	Q_UNUSED(fileName);
+
+	return info;
+}
+
 /**************** ROOTFilterPrivate implementation *******************/
 
 ROOTFilterPrivate::ROOTFilterPrivate() = default;
@@ -218,7 +227,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 void ROOTFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
 	Q_UNUSED(fileName);
 	Q_UNUSED(dataSource);
-	//TODO
+	//TODO: writing ROOT not implemented yet
 }
 
 QStringList ROOTFilterPrivate::listHistograms(const QString& fileName) {
