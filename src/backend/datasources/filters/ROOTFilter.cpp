@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : ROOT(CERN) I/O-filter
 --------------------------------------------------------------------
 Copyright            : (C) 2018 by Christoph Roick (chrisito@gmx.de)
+Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
