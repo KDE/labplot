@@ -146,15 +146,6 @@ bool ROOTFilter::load(XmlStreamReader* reader) {
 	return true;
 }
 
-QString ROOTFilter::fileInfoString(const QString& fileName) {
-	QString info;
-
-	//TODO
-	Q_UNUSED(fileName);
-
-	return info;
-}
-
 /**************** ROOTFilterPrivate implementation *******************/
 
 ROOTFilterPrivate::ROOTFilterPrivate() = default;
@@ -667,4 +658,53 @@ std::string ROOTHist::data(const ROOTHist::KeyBuffer& buffer, std::ifstream& is)
 	}
 
 	return std::string();
+}
+
+// needs to be after ROOTHistHelpers namespace declaration
+
+QString ROOTFilter::fileInfoString(const QString& fileName) {
+	DEBUG("ROOTFilter::fileInfoString()");
+	QString info;
+
+	// The file structure is described in root/io/io/src/TFile.cxx
+	std::ifstream is(fileName.toStdString(), std::ifstream::binary);
+	std::string root(4, 0);
+	is.read(const_cast<char*>(root.data()), 4);
+	if (root != "root") {
+		DEBUG("	Not a ROOT file. root = " << root);
+		return i18n("Not a ROOT file");
+	}
+
+	int version = ROOTHistHelpers::read<int>(is);
+
+	info += i18n("File format version: %1", QString::number(version));
+	info += QLatin1String("<br>");
+
+	is.seekg(20);
+	int freeBytes = ROOTHistHelpers::read<int>(is);
+	int freeRecords = ROOTHistHelpers::read<int>(is);
+	int namedBytes = ROOTHistHelpers::read<int>(is);
+	char pointerBytes = ROOTHistHelpers::read<char>(is);
+	info += i18n("FREE data record size: %1 bytes", QString::number(freeBytes));
+	info += QLatin1String("<br>");
+	info += i18n("Number of free data records: %1", QString::number(freeRecords));
+	info += QLatin1String("<br>");
+	info += i18n("TNamed size: %1 bytes", QString::number(namedBytes));
+	info += QLatin1String("<br>");
+	info += i18n("Size of file pointers: %1 bytes", QString::number(pointerBytes));
+	info += QLatin1String("<br>");
+
+	int compression = ROOTHistHelpers::read<int>(is);
+	compression = compression > 0 ? compression : 0;
+	info += i18n("Compression level and algorithm: %1", QString::number(compression));
+	info += QLatin1String("<br>");
+
+	is.seekg(41);
+	int infoBytes = ROOTHistHelpers::read<int>(is);
+	info += i18n("Size of TStreamerInfo record: %1 bytes", QString::number(infoBytes));
+	info += QLatin1String("<br>");
+
+	Q_UNUSED(fileName);
+
+	return info;
 }

@@ -33,6 +33,7 @@
 #include "backend/datasources/filters/HDF5Filter.h"
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
+#include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
 
 #include <QDialogButtonBox>
@@ -180,7 +181,7 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 			//TODO infoStrings << JsonFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::ROOT:
-			//TODO infoStrings << ROOTFilter::fileInfoString(fileName);
+			infoStrings << ROOTFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::NgspiceRawAscii:
 		case AbstractFileFilter::NgspiceRawBinary:
