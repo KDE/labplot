@@ -96,14 +96,6 @@ Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
    \ingroup kdefrontend
 */
 ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const QString& fileName) : QWidget(parent),
-	m_asciiOptionsWidget(nullptr),
-	m_binaryOptionsWidget(nullptr),
-	m_hdf5OptionsWidget(nullptr),
-	m_imageOptionsWidget(nullptr),
-	m_netcdfOptionsWidget(nullptr),
-	m_fitsOptionsWidget(nullptr),
-	m_jsonOptionsWidget(nullptr),
-	m_rootOptionsWidget(nullptr),
 	m_fileName(fileName),
 	m_fileEmpty(false),
 	m_liveDataSource(liveDataSource),
