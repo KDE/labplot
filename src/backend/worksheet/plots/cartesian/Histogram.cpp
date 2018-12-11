@@ -84,6 +84,8 @@ void Histogram::init() {
 	d->binCount = group.readEntry("BinCount", 10);
 	d->binWidth = group.readEntry("BinWidth", 1.0f);
 	d->autoBinRanges = group.readEntry("AutoBinRanges", true);
+	d->binRangesMin = 0.0;
+	d->binRangesMax = 1.0;
 
 	d->lineType = (Histogram::LineType) group.readEntry("LineType", (int)Histogram::Bars);
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine) );
@@ -831,6 +833,9 @@ void HistogramPrivate::recalcHistogram() {
 		gsl_histogram_free(m_histogram);
 		m_histogram = nullptr;
 	}
+
+	if (!dataColumn)
+		return;
 
 	//calculate the number of valid data points
 	int count = 0;
