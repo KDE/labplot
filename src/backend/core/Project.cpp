@@ -44,6 +44,9 @@
 #include "backend/worksheet/plots/cartesian/XYFourierTransformCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/datapicker/DatapickerCurve.h"
+#ifdef HAVE_MQTT
+#include "backend/datasources/MQTTClient.h"
+#endif
 
 #include <QDateTime>
 #include <QFile>
@@ -131,6 +134,11 @@ Project::~Project() {
 	//->stop reading the live data sources prior to deleting all objects.
 	for (auto* lds : children<LiveDataSource>())
 		lds->pauseReading();
+
+#ifdef HAVE_MQTT
+	for (auto* client : children<MQTTClient>())
+		client->pauseReading();
+#endif
 
 	//if the project is being closed, in Worksheet the scene items are being removed and the selection in the view can change.
 	//don't react on these changes since this can lead crashes (worksheet object is already in the destructor).
