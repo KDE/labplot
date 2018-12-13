@@ -49,7 +49,7 @@ public:
 
 	size_t vectors{2};
 	BinaryFilter::DataType dataType{BinaryFilter::INT8};
-	BinaryFilter::ByteOrder byteOrder{BinaryFilter::LittleEndian};
+	QDataStream::ByteOrder byteOrder{QDataStream::LittleEndian};
 	QVector<AbstractColumn::ColumnMode> columnModes;
 
 	int startRow{1};		// start row (value*vectors) to read (can be -1)

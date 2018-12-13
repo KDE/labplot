@@ -3,7 +3,7 @@ File                 : BinaryFilter.cpp
 Project              : LabPlot
 Description          : Binary I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2015-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
@@ -81,13 +81,6 @@ QStringList BinaryFilter::dataTypes() {
 }
 
 /*!
-returns the list of all predefined byte order.
-*/
-QStringList BinaryFilter::byteOrders() {
-	return (QStringList() << "Little endian" << "Big endian");
-}
-
-/*!
 returns the size of the predefined data types
 */
 int BinaryFilter::dataSize(BinaryFilter::DataType type) {
@@ -150,11 +143,11 @@ BinaryFilter::DataType BinaryFilter::dataType() const {
 	return d->dataType;
 }
 
-void BinaryFilter::setByteOrder(const BinaryFilter::ByteOrder b) {
+void BinaryFilter::setByteOrder(const QDataStream::ByteOrder b) {
 	d->byteOrder = b;
 }
 
-BinaryFilter::ByteOrder BinaryFilter::byteOrder() const {
+QDataStream::ByteOrder BinaryFilter::byteOrder() const {
 	return d->byteOrder;
 }
 
@@ -241,10 +234,7 @@ void BinaryFilterPrivate::readDataFromFile(const QString& fileName, AbstractData
 int BinaryFilterPrivate::prepareStreamToRead(QDataStream& in) {
 	DEBUG("prepareStreamToRead()");
 
-	if (byteOrder == BinaryFilter::BigEndian)
-		in.setByteOrder(QDataStream::BigEndian);
-	else if (byteOrder == BinaryFilter::LittleEndian)
-		in.setByteOrder(QDataStream::LittleEndian);
+	in.setByteOrder(byteOrder);
 
 	// catch case that skipStartBytes or startRow is bigger than file
 	if (skipStartBytes >= BinaryFilter::dataSize(dataType) * vectors * numRows || startRow > (int)numRows)
@@ -571,7 +561,7 @@ bool BinaryFilter::load(XmlStreamReader* reader) {
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.subs("byteOrder").toString());
 	else
-		d->byteOrder = (BinaryFilter::ByteOrder) str.toInt();
+		d->byteOrder = (QDataStream::ByteOrder) str.toInt();
 
 	str = attribs.value("autoMode").toString();
 	if (str.isEmpty())

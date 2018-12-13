@@ -3,7 +3,7 @@ File                 : BinaryFilter.h
 Project              : LabPlot
 Description          : Binary I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
@@ -27,6 +27,7 @@ Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 #ifndef BINARYFILTER_H
 #define BINARYFILTER_H
 
+#include <QDataStream>
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 class BinaryFilterPrivate;
@@ -36,18 +37,15 @@ class QIODevice;
 class BinaryFilter : public AbstractFileFilter {
 	Q_OBJECT
 	Q_ENUMS(DataType)
-	Q_ENUMS(ByteOrder)
 
 public:
 	//TODO; use ColumnMode when it support all these types
 	enum DataType {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, REAL32, REAL64};
-	enum ByteOrder {LittleEndian, BigEndian};
 
 	BinaryFilter();
 	~BinaryFilter() override;
 
 	static QStringList dataTypes();
-	static QStringList byteOrders();
 	static int dataSize(BinaryFilter::DataType);
 	static size_t rowNumber(const QString& fileName, const size_t vectors, const BinaryFilter::DataType);
 	static QString fileInfoString(const QString&);
@@ -67,8 +65,8 @@ public:
 
 	void setDataType(const BinaryFilter::DataType);
 	BinaryFilter::DataType dataType() const;
-	void setByteOrder(const BinaryFilter::ByteOrder);
-	BinaryFilter::ByteOrder byteOrder() const;
+	void setByteOrder(const QDataStream::ByteOrder);
+	QDataStream::ByteOrder byteOrder() const;
 	void setSkipStartBytes(const size_t);
 	size_t skipStartBytes() const;
 	void setStartRow(const int);
