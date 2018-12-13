@@ -222,20 +222,7 @@ QString JsonFilter::fileInfoString(const QString& fileName) {
 //#####################################################################
 JsonFilterPrivate::JsonFilterPrivate(JsonFilter* owner) : q(owner),
 	model(new QJsonModel()),
-	containerType(JsonFilter::Object),
-	rowType(QJsonValue::Object),
-	numberFormat(QLocale::C),
-	createIndexEnabled(false),
-	importObjectNames(false),
-	vectorNames(),
-	startRow(1),
-	endRow(-1),
-	startColumn(1),
-	endColumn(-1),
-	m_actualRows(0),
-	m_actualCols(0),
-	m_prepared(false),
-	m_columnOffset(0) {
+	vectorNames() {
 }
 //TODO: delete model from memory
 
