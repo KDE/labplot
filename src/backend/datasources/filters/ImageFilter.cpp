@@ -120,6 +120,16 @@ int ImageFilter::endColumn() const {
 	return d->endColumn;
 }
 
+QString ImageFilter::fileInfoString(const QString& fileName) {
+	DEBUG("ImageFilter::fileInfoString()");
+	QString info;
+
+	//TODO
+	Q_UNUSED(fileName);
+
+	return info;
+}
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################

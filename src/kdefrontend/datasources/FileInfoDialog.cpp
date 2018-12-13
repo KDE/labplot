@@ -30,6 +30,8 @@
 #include "FileInfoDialog.h"
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/BinaryFilter.h"
+#include "backend/datasources/filters/ImageFilter.h"
 #include "backend/datasources/filters/HDF5Filter.h"
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
@@ -164,10 +166,10 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 			infoStrings << AsciiFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::Binary:
-			//TODO infoStrings << BinaryFilter::fileInfoString(fileName);
+			infoStrings << BinaryFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::Image:
-			//TODO infoStrings << ImageFilter::fileInfoString(fileName);
+			infoStrings << ImageFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::HDF5:
 			infoStrings << HDF5Filter::fileInfoString(fileName);

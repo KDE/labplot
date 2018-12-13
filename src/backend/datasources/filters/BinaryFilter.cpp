@@ -201,6 +201,17 @@ void BinaryFilter::setAutoModeEnabled(bool b) {
 bool BinaryFilter::isAutoModeEnabled() const {
 	return d->autoModeEnabled;
 }
+
+QString BinaryFilter::fileInfoString(const QString& fileName) {
+	DEBUG("BinaryFilter::fileInfoString()");
+	QString info;
+
+	//TODO
+	Q_UNUSED(fileName);
+
+	return info;
+}
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
