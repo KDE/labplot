@@ -734,7 +734,7 @@ void JsonFilterPrivate::write(const QString& fileName, AbstractDataSource* dataS
 	Q_UNUSED(fileName);
 	Q_UNUSED(dataSource);
 
-	//TODO: save data to json file
+	//TODO: saving data to json file not supported yet
 }
 
 //##############################################################################

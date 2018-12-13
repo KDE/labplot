@@ -303,7 +303,6 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 		lines = m_actualRows;
 
 	// read data
-	//TODO: use ColumnMode ?
 	DEBUG("generating preview for " << qMin(lines, m_actualRows)  << " lines");
 	for (int i = 0; i < qMin(m_actualRows, lines); ++i) {
 		QStringList lineString;
@@ -313,6 +312,7 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 			lineString << QString::number(i+1);
 
 		for (int n = 0; n < m_actualCols; ++n) {
+			//TODO: use ColumnMode when it supports all types
 			switch (dataType) {
 			case BinaryFilter::INT8: {
 					qint8 value;
@@ -427,7 +427,6 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 		startColumn++;
 
 	// read data
-	//TODO: use ColumnMode ?
 	DEBUG("reading " << qMin(lines, m_actualRows)  << " lines");
 	for (int i = 0; i < qMin(m_actualRows, lines); ++i) {
 		DEBUG("reading row " << i);
@@ -437,6 +436,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 
 		for (int n = startColumn; n < m_actualCols; ++n) {
 			DEBUG("reading column " << n);
+			//TODO: use ColumnMode when it supports all types
 			switch (dataType) {
 			case BinaryFilter::INT8: {
 					qint8 value;
@@ -513,7 +513,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 void BinaryFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
 	Q_UNUSED(fileName);
 	Q_UNUSED(dataSource);
-	//TODO
+	//TODO: writing binary files not supported yet
 }
 
 //##############################################################################
