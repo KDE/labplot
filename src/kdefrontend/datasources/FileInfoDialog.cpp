@@ -33,6 +33,7 @@
 #include "backend/datasources/filters/HDF5Filter.h"
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
+#include "backend/datasources/filters/JsonFilter.h"
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
 
@@ -178,7 +179,7 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 			infoStrings << FITSFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::JSON:
-			//TODO infoStrings << JsonFilter::fileInfoString(fileName);
+			infoStrings << JsonFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::ROOT:
 			infoStrings << ROOTFilter::fileInfoString(fileName);

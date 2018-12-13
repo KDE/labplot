@@ -52,6 +52,7 @@ public:
 
 	static QStringList dataTypes();
 	static QStringList dataRowTypes();
+	static QString fileInfoString(const QString&);
 
 	// read data from any device
 	void readDataFromDevice(QIODevice& device, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
@@ -77,7 +78,7 @@ public:
 	QLocale::Language numberFormat() const;
 	void setNaNValueToZero(const bool);
 	bool NaNValueToZeroEnabled() const;
-    void setCreateIndexEnabled(const bool);
+	void setCreateIndexEnabled(const bool);
 	void setImportObjectNames(const bool);
 
 	void setVectorNames(const QString&);
