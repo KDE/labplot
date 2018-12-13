@@ -216,21 +216,7 @@ QString BinaryFilter::fileInfoString(const QString& fileName) {
 //################### Private implementation ##########################
 //#####################################################################
 
-BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
-	q(owner),
-	vectors(2),
-	dataType(BinaryFilter::INT8),
-	byteOrder(BinaryFilter::LittleEndian),
-	startRow(1),
-	endRow(-1),
-	numRows(0),
-	skipStartBytes(0),
-	skipBytes(0),
-	createIndexEnabled(false),
-	autoModeEnabled(true),
-	m_actualRows(0),
-	m_actualCols(0) {
-}
+BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) : q(owner) {}
 
 /*!
     reads the content of the device \c device to the data source \c dataSource or return as string for preview.
