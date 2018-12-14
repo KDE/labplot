@@ -103,13 +103,19 @@ void DatabaseManagerWidget::connectionChanged(int index) {
 
 	//show the settings for the selected connection
 	m_initializing = true;
+	const QString& driver = m_connections[index].driver;
 	ui.leName->setText(m_connections[index].name);
-	ui.cbDriver->setCurrentIndex(ui.cbDriver->findText(m_connections[index].driver));
+	ui.cbDriver->setCurrentIndex(ui.cbDriver->findText(driver));
 	ui.leDatabase->setText(m_connections[index].dbName);
 
-	if (!isFileDB(m_connections[index].driver)) {
+	//no host and port number required for file DB and ODBC connections
+	if (!isFileDB(driver) || !isODBC(driver)) {
 		ui.leHost->setText(m_connections[index].hostName);
 		ui.sbPort->setValue(m_connections[index].port);
+	}
+
+	//no credentials required for file DB
+	if (!isFileDB(driver)) {
 		ui.leUserName->setText(m_connections[index].userName);
 		ui.lePassword->setText(m_connections[index].password);
 	}
@@ -142,8 +148,8 @@ void DatabaseManagerWidget::nameChanged(const QString& name) {
 }
 
 void DatabaseManagerWidget::driverChanged() {
-	//hide non-relevant fields (like host name, etc.) for file DBs
-	const QString driver = ui.cbDriver->currentText();
+	//hide non-relevant fields (like host name, etc.) for file DBs and ODBC
+	const QString& driver = ui.cbDriver->currentText();
 	const bool fileDB = isFileDB(driver);
 	ui.lHost->setVisible(!fileDB);
 	ui.leHost->setVisible(!fileDB);
@@ -152,10 +158,31 @@ void DatabaseManagerWidget::driverChanged() {
 	ui.bOpen->setVisible(fileDB);
 	ui.gbAuthentication->setVisible(!fileDB);
 
-	if (driver.startsWith(QLatin1String("QODBC")))
-		ui.lDatabase->setText(i18n("ODBC datasource:"));
-	else
+	if (isFileDB(driver)) {
+		ui.lHost->hide();
+		ui.leHost->hide();
+		ui.lPort->hide();
+		ui.sbPort->hide();
+		ui.bOpen->show();
+		ui.gbAuthentication->hide();
 		ui.lDatabase->setText(i18n("Database:"));
+	} else if (isODBC(driver)) {
+		ui.lHost->hide();
+		ui.leHost->hide();
+		ui.lPort->hide();
+		ui.sbPort->hide();
+		ui.bOpen->hide();
+		ui.gbAuthentication->show();
+		ui.lDatabase->setText(i18n("ODBC datasource:"));
+	} else {
+		ui.lHost->show();
+		ui.leHost->show();
+		ui.lPort->show();
+		ui.sbPort->show();
+		ui.bOpen->hide();
+		ui.gbAuthentication->show();
+		ui.lDatabase->setText(i18n("Database:"));
+	}
 
 	if (m_initializing)
 		return;
@@ -256,7 +283,7 @@ void DatabaseManagerWidget::addConnection() {
 	conn.driver = ui.cbDriver->currentText();
 	conn.hostName = QLatin1String("localhost");
 
-	if (!isFileDB(conn.driver))
+	if (!isFileDB(conn.driver) && !isODBC(conn.driver))
 		conn.port = defaultPort(conn.driver);
 
 	m_connections.append(conn);
@@ -335,9 +362,11 @@ void DatabaseManagerWidget::loadConnections() {
 		conn.name = groupName;
 		conn.driver = group.readEntry("Driver","");
 		conn.dbName = group.readEntry("DatabaseName", "");
-		if (!isFileDB(conn.driver)) {
+		if (!isFileDB(conn.driver) && !isODBC(conn.driver)) {
 			conn.hostName = group.readEntry("HostName", "localhost");
 			conn.port = group.readEntry("Port", defaultPort(conn.driver));
+		}
+		if (!isFileDB(conn.driver)) {
 			conn.userName = group.readEntry("UserName", "root");
 			conn.password = group.readEntry("Password", "");
 		}
@@ -357,9 +386,8 @@ void DatabaseManagerWidget::loadConnections() {
 		} else {
 			ui.lwConnections->setCurrentRow(ui.lwConnections->count()-1);
 		}
-	} else {
+	} else
 		addConnection();
-	}
 
 	//show/hide the driver dependent options
 	driverChanged();
@@ -382,9 +410,11 @@ void DatabaseManagerWidget::saveConnections() {
 		KConfigGroup group = config.group(conn.name);
 		group.writeEntry("Driver", conn.driver);
 		group.writeEntry("DatabaseName", conn.dbName);
-		if (!isFileDB(conn.driver)) {
+		if (!isFileDB(conn.driver) && !isODBC(conn.driver)) {
 			group.writeEntry("HostName", conn.hostName);
 			group.writeEntry("Port", conn.port);
+		}
+		if (!isFileDB(conn.driver)) {
 			group.writeEntry("UserName", conn.userName);
 			group.writeEntry("Password", conn.password);
 		}
@@ -413,11 +443,14 @@ void DatabaseManagerWidget::testConnection() {
 	}
 
 	WAIT_CURSOR;
-	QSqlDatabase db = QSqlDatabase::addDatabase(m_connections[row].driver);
+	const QString& driver = m_connections[row].driver;
+	QSqlDatabase db = QSqlDatabase::addDatabase(driver);
 	db.setDatabaseName(m_connections[row].dbName);
-	if (!isFileDB(m_connections[row].driver)) {
+	if (!isFileDB(driver) && !isODBC(driver)) {
 		db.setHostName(m_connections[row].hostName);
 		db.setPort(m_connections[row].port);
+	}
+	if (!isFileDB(driver)) {
 		db.setUserName(m_connections[row].userName);
 		db.setPassword(m_connections[row].password);
 	}
@@ -442,8 +475,13 @@ void DatabaseManagerWidget::testConnection() {
  * used to show/hide relevant connection settins widgets.
  */
 bool DatabaseManagerWidget::isFileDB(const QString& driver) {
-	//QSQLITE, QSQLITE3, QODBC, QODBC3
-	return ( driver.startsWith(QLatin1String("QSQLITE")) || driver.startsWith(QLatin1String("QODBC")) );
+	//QSQLITE, QSQLITE3
+	return driver.startsWith(QLatin1String("QSQLITE"));
+}
+
+bool DatabaseManagerWidget::isODBC(const QString& driver) {
+	//QODBC, QODBC3
+	return driver.startsWith(QLatin1String("QODBC"));
 }
 
 QString DatabaseManagerWidget::uniqueName() {

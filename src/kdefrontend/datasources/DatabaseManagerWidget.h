@@ -50,6 +50,7 @@ public:
 	void setCurrentConnection(const QString&);
 	void saveConnections();
 	static bool isFileDB(const QString&);
+	static bool isODBC(const QString&);
 
 private:
 	Ui::DatabaseManagerWidget ui;
