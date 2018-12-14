@@ -65,7 +65,7 @@ public:
 	virtual void save(QXmlStreamWriter*) const = 0;
 	virtual bool load(XmlStreamReader*) = 0;
 
-	constexpr FileType type() const { return m_type; }
+	FileType type() const { return m_type; }
 
 signals:
 	void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of a read/write process
