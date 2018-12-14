@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     --------------------------------------------------------------------
     Copyright            : (C) 2018 Andrey Cygankov (craftplace.ms@gmail.com)
+    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -210,10 +211,31 @@ int JsonFilter::endColumn() const {
 
 QString JsonFilter::fileInfoString(const QString& fileName) {
 	DEBUG("JsonFilter::fileInfoString()");
-	QString info;
 
-	//TODO
-	Q_UNUSED(fileName);
+	KFilterDev device(fileName);
+
+	if (!device.open(QIODevice::ReadOnly))
+		return i18n("Open device failed");
+
+	if (device.atEnd() && !device.isSequential())
+		return i18n("Empty file");
+
+	QJsonParseError err;
+	QJsonDocument doc = QJsonDocument::fromJson(device.readAll(), &err);
+
+	if (err.error != QJsonParseError::NoError || doc.isEmpty())
+		return i18n("Parse error: %1 at offset %2", err.errorString(), err.offset);
+
+	QString info;
+	info += i18n("Valid JSON document");
+
+	//TODO: get number of object, etc.
+	//if (prepareDocumentToRead(doc) != 0)
+	//	return info;
+
+	// reset to start of file
+	if (!device.isSequential())
+		device.seek(0);
 
 	return info;
 }
