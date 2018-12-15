@@ -150,7 +150,7 @@ QString NetCDFFilter::fileInfoString(const QString& fileName) {
 	NetCDFFilterPrivate::handleError(status, "nc_open");
 	if (status != NC_NOERR) {
 		DEBUG("	File error. Giving up");
-		return QString();
+		return i18n("Error opening file");
 	}
 
 	int ndims, nvars, nattr, uldid;

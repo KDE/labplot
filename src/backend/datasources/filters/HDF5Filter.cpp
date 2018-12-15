@@ -146,12 +146,12 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 	// check file type first
 	htri_t isHdf5 = H5Fis_hdf5(bafileName.data());
 	if (isHdf5 == 0) {
-		DEBUG(bafileName.data() << " is not a HDF5 file! Giving up.");
-		return QString();
+		DEBUG(bafileName.data() << " is not a HDF5 file! isHdf5 = " << isHdf5 << " Giving up.");
+		return i18n("Not a HDF5 file");
 	}
 	if (isHdf5 < 0) {
 		DEBUG("H5Fis_hdf5() failed on " << bafileName.data() << "! Giving up.");
-		return QString();
+		return i18n("Failed checking file");
 	}
 
 	// open file
@@ -159,7 +159,7 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 	HDF5FilterPrivate::handleError((int)file, "H5Fopen", fileName);
 	if (file < 0) {
 		DEBUG("Opening file " << bafileName.data() << " failed! Giving up.");
-		return QString();
+		return i18n("Failed opening HDF5 file");
 	}
 
 	hsize_t size;
