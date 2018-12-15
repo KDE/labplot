@@ -29,15 +29,7 @@
 
 #include "FileInfoDialog.h"
 #include "backend/datasources/LiveDataSource.h"
-#include "backend/datasources/filters/AsciiFilter.h"
-#include "backend/datasources/filters/BinaryFilter.h"
-#include "backend/datasources/filters/ImageFilter.h"
-#include "backend/datasources/filters/HDF5Filter.h"
-#include "backend/datasources/filters/NetCDFFilter.h"
-#include "backend/datasources/filters/FITSFilter.h"
-#include "backend/datasources/filters/JsonFilter.h"
-#include "backend/datasources/filters/ROOTFilter.h"
-#include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
+#include "backend/datasources/filters/filters.h"
 
 #include <QDialogButtonBox>
 #include <QDir>
