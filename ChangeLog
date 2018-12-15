@@ -12,6 +12,7 @@ New features:
 	* [spreadsheet] when filling a float column with row numbers, automatically convert its type to integer
 	* [spreadsheet] when filling an integer column with function values, automatically convert its type to float
 	* [spreadsheet] data manipulation: add/subtract/multiply/divide for column values
+	* [spreadsheet] export to SQLite
 	* [worksheet] Allow to specify different border shapes for labels (rectangle, elipse, etc.)
 	* Allow to connect to SQL databases via ODBC
 

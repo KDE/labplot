@@ -55,6 +55,8 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
 #include <QTableView>
 #include <QToolBar>
 #include <QTextStream>
@@ -2714,6 +2716,7 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 		return;
 
 	PERFTRACE("export spreadsheet to SQLite database");
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
 	//create database
 	const QStringList& drivers = QSqlDatabase::drivers();
@@ -2725,11 +2728,81 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 
 	QSqlDatabase db = QSqlDatabase::addDatabase(driver);
 	db.setDatabaseName(path);
-	if (!db.open())
+	if (!db.open()) {
+		RESET_CURSOR;
 		KMessageBox::error(nullptr, i18n("Couldn't create the SQLite database %1.", path));
+	}
 
 	//create table
+	const int cols = m_spreadsheet->columnCount();
+	QString query = QLatin1String("create table ") + m_spreadsheet->name() + QLatin1String(" (");
+	for (int i = 0; i < cols; ++i) {
+		Column* col = m_spreadsheet->column(i);
+		if (i != 0)
+			query += QLatin1String(", ");
 
-	//export values
+		query += QLatin1String("\"") + col->name() + QLatin1String("\" ");
+		switch (col->columnMode()) {
+		case AbstractColumn::Numeric:
+			query += QLatin1String("REAL");
+			break;
+		case AbstractColumn::Integer:
+			query += QLatin1String("INTEGER");
+			break;
+		case AbstractColumn::Text:
+		case AbstractColumn::Month:
+		case AbstractColumn::Day:
+		case AbstractColumn::DateTime:
+			query += QLatin1String("TEXT");
+			break;
+		}
+	}
+	query += QLatin1Char(')');
+	QSqlQuery q;
+	if (!q.exec(query)) {
+		RESET_CURSOR;
+		KMessageBox::error(nullptr, i18n("Failed to create table in the SQLite database %1.", path) + "\n" + q.lastError().databaseText());
+		db.close();
+		return;
+	}
 
+	//create bulk insert statement
+	{
+	PERFTRACE("Create the bulk insert statement");
+	q.exec(QLatin1String("BEGIN TRANSACTION;"));
+	query = "INSERT INTO '" + m_spreadsheet->name() + "' (";
+	for (int i = 0; i < cols; ++i) {
+		if (i != 0)
+			query += QLatin1String(", ");
+		query += QLatin1Char('\'') + m_spreadsheet->column(i)->name() + QLatin1Char('\'');
+	}
+	query += QLatin1String(") VALUES ");
+
+	for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
+		if (i != 0)
+			query += QLatin1String(",");
+
+		query += QLatin1Char('(');
+		for (int j = 0; j < cols; ++j) {
+			Column* col = m_spreadsheet->column(j);
+			if (j != 0)
+				query += QLatin1String(", ");
+
+			query += QLatin1Char('\'') + col->asStringColumn()->textAt(i) + QLatin1Char('\'');
+		}
+		query += QLatin1String(")");
+	}
+	query += QLatin1Char(';');
+	}
+
+	//insert values
+	if (!q.exec(query)) {
+		RESET_CURSOR;
+		KMessageBox::error(nullptr, i18n("Failed to insert values into the table."));
+		QDEBUG("bulk insert error " << q.lastError().databaseText());
+	} else
+		q.exec(QLatin1String("COMMIT TRANSACTION;"));
+
+	//close the database
+	db.close();
 }
