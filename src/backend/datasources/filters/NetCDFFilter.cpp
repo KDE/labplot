@@ -393,6 +393,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 				free(value);
 				break;
 			}
+		//TODO: NC_STRING
 		default:
 			valueString << "not supported";
 		}
@@ -634,14 +635,21 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 			QVector<AbstractColumn::ColumnMode> columnModes;
 			columnModes.resize(actualCols);
 			switch (type) {
+			case NC_BYTE:
+			case NC_UBYTE:
+			case NC_SHORT:
+			case NC_USHORT:
 			case NC_INT:
 				columnModes[0] = AbstractColumn::Integer;
 				break;
+			case NC_UINT: 	// converted to double (int is too small)
+			case NC_INT64: 	// converted to double (int is too small)
+			case NC_UINT64:	// converted to double (int is too small)
 			case NC_DOUBLE:
 			case NC_FLOAT:
 				columnModes[0] = AbstractColumn::Numeric;
 				break;
-			//TODO: support other modes
+			//TODO: NC_STRING
 			}
 
 			//TODO: use given names?
@@ -650,14 +658,90 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 			if (dataSource)
 				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
 
-			DEBUG("	type = " << translateDataType(type).toStdString());
+			DEBUG("	Reading data of type " << translateDataType(type).toStdString());
 			switch (type) {
+			case NC_BYTE: {
+				signed char* data = new signed char[(unsigned int)actualRows];;
+
+				size_t start = (size_t)(startRow - 1), count = (size_t)actualRows;
+				m_status = nc_get_vara_schar(ncid, varid, &start, &count, data);
+				handleError(m_status, "nc_get_vara_schar");
+
+				if (dataSource) {
+					int *sourceData = static_cast<QVector<int>*>(dataContainer[0])->data();
+					for (int i = 0; i < actualRows; i++)
+						sourceData[i] = (int)data[i];
+				} else {	// preview
+					for (int i = 0; i < qMin(actualRows, lines); i++)
+						dataStrings << (QStringList() << QString::number(data[i]));
+				}
+				delete[] data;
+
+				break;
+			}
+			case NC_UBYTE: {
+				unsigned char* data = new unsigned char[(unsigned int)actualRows];;
+
+				size_t start = (size_t)(startRow - 1), count = (size_t)actualRows;
+				m_status = nc_get_vara_uchar(ncid, varid, &start, &count, data);
+				handleError(m_status, "nc_get_vara_uchar");
+
+				if (dataSource) {
+					int *sourceData = static_cast<QVector<int>*>(dataContainer[0])->data();
+					for (int i = 0; i < actualRows; i++)
+						sourceData[i] = (int)data[i];
+				} else {	// preview
+					for (int i = 0; i < qMin(actualRows, lines); i++)
+						dataStrings << (QStringList() << QString::number(data[i]));
+				}
+				delete[] data;
+
+				break;
+			}
 			case NC_CHAR: {	//TODO: convert to string instead of int
 				char* data = new char[(unsigned int)actualRows];;
 
 				size_t start = (size_t)(startRow - 1), count = (size_t)actualRows;
 				m_status = nc_get_vara_text(ncid, varid, &start, &count, data);
 				handleError(m_status, "nc_get_vara_text");
+
+				if (dataSource) {
+					int *sourceData = static_cast<QVector<int>*>(dataContainer[0])->data();
+					for (int i = 0; i < actualRows; i++)
+						sourceData[i] = (int)data[i];
+				} else {	// preview
+					for (int i = 0; i < qMin(actualRows, lines); i++)
+						dataStrings << (QStringList() << QString::number(data[i]));
+				}
+				delete[] data;
+
+				break;
+			}
+			case NC_SHORT: {
+				short* data = new short[(unsigned int)actualRows];;
+
+				size_t start = (size_t)(startRow - 1), count = (size_t)actualRows;
+				m_status = nc_get_vara_short(ncid, varid, &start, &count, data);
+				handleError(m_status, "nc_get_vara_short");
+
+				if (dataSource) {
+					int *sourceData = static_cast<QVector<int>*>(dataContainer[0])->data();
+					for (int i = 0; i < actualRows; i++)
+						sourceData[i] = (int)data[i];
+				} else {	// preview
+					for (int i = 0; i < qMin(actualRows, lines); i++)
+						dataStrings << (QStringList() << QString::number(data[i]));
+				}
+				delete[] data;
+
+				break;
+			}
+			case NC_USHORT: {
+				unsigned short* data = new unsigned short[(unsigned int)actualRows];;
+
+				size_t start = (size_t)(startRow - 1), count = (size_t)actualRows;
+				m_status = nc_get_vara_ushort(ncid, varid, &start, &count, data);
+				handleError(m_status, "nc_get_vara_ushort");
 
 				if (dataSource) {
 					int *sourceData = static_cast<QVector<int>*>(dataContainer[0])->data();
@@ -687,6 +771,63 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 						dataStrings << (QStringList() << QString::number(data[i]));
 					delete[] data;
 				}
+				break;
+			}
+			case NC_UINT: {	// converted to double (int is too small)
+				unsigned int* data = new unsigned int[(unsigned int)actualRows];;
+
+				size_t start = (size_t)(startRow - 1), count = (size_t)actualRows;
+				m_status = nc_get_vara_uint(ncid, varid, &start, &count, data);
+				handleError(m_status, "nc_get_vara_uint");
+
+				if (dataSource) {
+					double *sourceData = static_cast<QVector<double>*>(dataContainer[0])->data();
+					for (int i = 0; i < actualRows; i++)
+						sourceData[i] = (double)data[i];
+				} else {	// preview
+					for (int i = 0; i < qMin(actualRows, lines); i++)
+						dataStrings << (QStringList() << QString::number(data[i]));
+				}
+				delete[] data;
+
+				break;
+			}
+			case NC_INT64: {	// converted to double (int is too small)
+				long long* data = new long long[(unsigned int)actualRows];;
+
+				size_t start = (size_t)(startRow - 1), count = (size_t)actualRows;
+				m_status = nc_get_vara_longlong(ncid, varid, &start, &count, data);
+				handleError(m_status, "nc_get_vara_longlong");
+
+				if (dataSource) {
+					double *sourceData = static_cast<QVector<double>*>(dataContainer[0])->data();
+					for (int i = 0; i < actualRows; i++)
+						sourceData[i] = (double)data[i];
+				} else {	// preview
+					for (int i = 0; i < qMin(actualRows, lines); i++)
+						dataStrings << (QStringList() << QString::number(data[i]));
+				}
+				delete[] data;
+
+				break;
+			}
+			case NC_UINT64: {	// converted to double (int is too small)
+				unsigned long long* data = new unsigned long long[(unsigned int)actualRows];;
+
+				size_t start = (size_t)(startRow - 1), count = (size_t)actualRows;
+				m_status = nc_get_vara_ulonglong(ncid, varid, &start, &count, data);
+				handleError(m_status, "nc_get_vara_ulonglong");
+
+				if (dataSource) {
+					double *sourceData = static_cast<QVector<double>*>(dataContainer[0])->data();
+					for (int i = 0; i < actualRows; i++)
+						sourceData[i] = (double)data[i];
+				} else {	// preview
+					for (int i = 0; i < qMin(actualRows, lines); i++)
+						dataStrings << (QStringList() << QString::number(data[i]));
+				}
+				delete[] data;
+
 				break;
 			}
 			case NC_DOUBLE: {
@@ -726,7 +867,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 
 				break;
 			}
-			//TODO: support other types
+			//TODO: NC_STRING
 			default:
 				DEBUG("	data type not supported yet");
 			}
