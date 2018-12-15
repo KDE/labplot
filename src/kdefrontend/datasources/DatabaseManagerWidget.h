@@ -44,6 +44,8 @@ public:
 		QString dbName;
 		QString userName;
 		QString password;
+		bool customConnectionEnabled{false};
+		QString customConnectionString;
 	};
 
 	QString connection() const;
@@ -77,6 +79,8 @@ private slots:
 	void hostChanged();
 	void portChanged();
 	void databaseNameChanged();
+	void customConnectionEnabledChanged(int);
+	void customConnectionChanged();
 	void userNameChanged();
 	void passwordChanged();
 

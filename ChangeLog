@@ -13,6 +13,7 @@ New features:
 	* [spreadsheet] when filling an integer column with function values, automatically convert its type to float
 	* [spreadsheet] data manipulation: add/subtract/multiply/divide for column values
 	* [worksheet] Allow to specify different border shapes for labels (rectangle, elipse, etc.)
+	* Allow to connect to SQL databases via ODBC
 
 Bug fixes:
 	* Fixed several problems in live data support
