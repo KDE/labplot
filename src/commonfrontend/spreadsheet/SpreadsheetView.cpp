@@ -54,6 +54,7 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
+#include <QSqlDatabase>
 #include <QTableView>
 #include <QToolBar>
 #include <QTextStream>
@@ -61,6 +62,7 @@
 
 #include <KConfigGroup>
 #include <KLocalizedString>
+#include <KMessageBox>
 #include <KSharedConfig>
 
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
@@ -2146,7 +2148,16 @@ bool SpreadsheetView::exportView() {
 		const QString path = dlg->path();
 		const bool exportHeader = dlg->exportHeader();
 		WAIT_CURSOR;
-		if (dlg->format() == ExportSpreadsheetDialog::LaTeX) {
+		switch (dlg->format()) {
+		case ExportSpreadsheetDialog::ASCII: {
+			const QString separator = dlg->separator();
+			const QLocale::Language format = dlg->numberFormat();
+			exportToFile(path, exportHeader, separator, format);
+			break;
+		}
+		case ExportSpreadsheetDialog::Binary:
+			break;
+		case ExportSpreadsheetDialog::LaTeX: {
 			const bool exportLatexHeader = dlg->exportLatexHeader();
 			const bool gridLines = dlg->gridLines();
 			const bool captions = dlg->captions();
@@ -2154,14 +2165,17 @@ bool SpreadsheetView::exportView() {
 			const bool exportEntire = dlg->entireSpreadheet();
 			exportToLaTeX(path, exportHeader, gridLines, captions,
 			                    exportLatexHeader, skipEmptyRows, exportEntire);
-		} else if (dlg->format() == ExportSpreadsheetDialog::FITS) {
+			break;
+		}
+		case ExportSpreadsheetDialog::FITS: {
 			const int exportTo = dlg->exportToFits();
 			const bool commentsAsUnits = dlg->commentsAsUnitsFits();
 			exportToFits(path, exportTo, commentsAsUnits);
-		} else {
-			const QString separator = dlg->separator();
-			const QLocale::Language format = dlg->numberFormat();
-			exportToFile(path, exportHeader, separator, format);
+			break;
+		}
+		case ExportSpreadsheetDialog::SQLite:
+			exportToSQLite(path);
+			break;
 		}
 		RESET_CURSOR;
 	}
@@ -2692,4 +2706,30 @@ void SpreadsheetView::exportToFits(const QString &fileName, const int exportTo, 
 	filter->write(fileName, m_spreadsheet);
 
 	delete filter;
+}
+
+void SpreadsheetView::exportToSQLite(const QString& path) const {
+	QFile file(path);
+	if (!file.open(QFile::WriteOnly | QFile::Truncate))
+		return;
+
+	PERFTRACE("export spreadsheet to SQLite database");
+
+	//create database
+	const QStringList& drivers = QSqlDatabase::drivers();
+	QString driver;
+	if (drivers.contains(QLatin1String("QSQLITE3")))
+		driver = QLatin1String("QSQLITE3");
+	else
+		driver = QLatin1String("QSQLITE");
+
+	QSqlDatabase db = QSqlDatabase::addDatabase(driver);
+	db.setDatabaseName(path);
+	if (!db.open())
+		KMessageBox::error(nullptr, i18n("Couldn't create the SQLite database %1.", path));
+
+	//create table
+
+	//export values
+
 }

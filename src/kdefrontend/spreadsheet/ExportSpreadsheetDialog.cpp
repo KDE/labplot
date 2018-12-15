@@ -36,6 +36,7 @@
 #include <QFileDialog>
 #include <QStandardItemModel>
 #include <QDialogButtonBox>
+#include <QSqlDatabase>
 #include <QTimer>
 
 #include <KMessageBox>
@@ -74,10 +75,14 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	completer->setModel(new QDirModel);
 	ui->leFileName->setCompleter(completer);
 
-	ui->cbFormat->addItem("ASCII");
-	ui->cbFormat->addItem("Binary");
-	ui->cbFormat->addItem("LaTeX");
-	ui->cbFormat->addItem("FITS");
+	ui->cbFormat->addItem("ASCII", ASCII);
+	ui->cbFormat->addItem("Binary", Binary);
+	ui->cbFormat->addItem("LaTeX", LaTeX);
+	ui->cbFormat->addItem("FITS", FITS);
+
+	const QStringList& drivers = QSqlDatabase::drivers();
+	if (drivers.contains(QLatin1String("QSQLITE")) || drivers.contains(QLatin1String("QSQLITE3")))
+		ui->cbFormat->addItem("SQLite", SQLite);
 
 	QStringList separators = AsciiFilter::separatorCharacters();
 	separators.takeAt(0); //remove the first entry "auto"
@@ -319,17 +324,27 @@ void ExportSpreadsheetDialog::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
 	QString dir = conf.readEntry("LastDir", "");
 
-	QString format;
-	if (ui->cbFormat->currentIndex() == 0)
-		format = i18n("Text files (*.txt *.dat *.csv)");
-	else if (ui->cbFormat->currentIndex() == 1)
-		format = i18n("Binary files (*.*)");
-	else if (ui->cbFormat->currentIndex() == 2)
-		format = i18n("LaTeX files (*.tex)");
-	else
-		format =  i18n("FITS files (*.fits *.fit *.fts)");
+	QString extensions;
+	const Format format = (Format)(ui->cbFormat->itemData(ui->cbFormat->currentIndex()).toInt());
+	switch (format) {
+	case ASCII:
+		extensions = i18n("Text files (*.txt *.dat *.csv)");
+		break;
+	case Binary:
+		extensions = i18n("Binary files (*.*)");
+		break;
+	case LaTeX:
+		extensions = i18n("LaTeX files (*.tex)");
+		break;
+	case FITS:
+		extensions = i18n("FITS files (*.fits *.fit *.fts)");
+		break;
+	case SQLite:
+		extensions = i18n("SQLite databases files (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *.db3 *.sqlite3 *.sdb3)");
+		break;
+	}
 
-	const QString path = QFileDialog::getSaveFileName(this, i18n("Export to file"), dir, format);
+	const QString path = QFileDialog::getSaveFileName(this, i18n("Export to file"), dir, extensions);
 	if (!path.isEmpty()) {
 		ui->leFileName->setText(path);
 
@@ -347,7 +362,7 @@ void ExportSpreadsheetDialog::selectFile() {
  */
 void ExportSpreadsheetDialog::formatChanged(int index) {
 	QStringList extensions;
-	extensions << ".txt" << ".bin" << ".tex" << ".fits";
+	extensions << ".txt" << ".bin" << ".tex" << ".fits" << ".db";
 	QString path = ui->leFileName->text();
 	int i = path.indexOf(".");
 	if (index != 1) {
@@ -356,7 +371,9 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		else
 			path=path.left(i) + extensions.at(index);
 	}
-	if (ui->cbFormat->currentIndex() == 2) {
+
+	const Format format = (Format)(ui->cbFormat->itemData(ui->cbFormat->currentIndex()).toInt());
+	if (format == LaTeX) {
 		ui->cbSeparator->hide();
 		ui->lSeparator->hide();
 		ui->lNumberFormat->hide();
@@ -388,8 +405,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->lExportToFITS->hide();
 		ui->lColumnAsUnits->hide();
 		ui->chkColumnsAsUnits->hide();
-		//FITS
-	} else if(ui->cbFormat->currentIndex() == 3) {
+	} else if (format == FITS) {
 		ui->lCaptions->hide();
 		ui->lEmptyRows->hide();
 		ui->lExportArea->hide();
@@ -419,6 +435,35 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 				ui->chkColumnsAsUnits->show();
 			}
 		}
+	} else if (format == SQLite) {
+		ui->cbSeparator->hide();
+		ui->lSeparator->hide();
+		ui->lNumberFormat->hide();
+		ui->cbNumberFormat->hide();
+
+		ui->chkCaptions->hide();
+		ui->chkEmptyRows->hide();
+		ui->chkGridLines->hide();
+		ui->lEmptyRows->hide();
+		ui->lExportArea->hide();
+		ui->lGridLines->hide();
+		ui->lCaptions->hide();
+		ui->cbLaTeXExport->hide();
+		ui->cbLaTeXExport->hide();
+		ui->lMatrixHHeader->hide();
+		ui->lMatrixVHeader->hide();
+		ui->chkMatrixHHeader->hide();
+		ui->chkMatrixVHeader->hide();
+
+		ui->lHeader->hide();
+		ui->chkHeaders->hide();
+		ui->chkExportHeader->hide();
+		ui->lExportHeader->hide();
+
+		ui->cbExportToFITS->hide();
+		ui->lExportToFITS->hide();
+		ui->lColumnAsUnits->hide();
+		ui->chkColumnsAsUnits->hide();
 	} else {
 		ui->cbSeparator->show();
 		ui->lSeparator->show();
@@ -447,16 +492,9 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->chkColumnsAsUnits->hide();
 	}
 
-	if (!m_matrixMode) {
+	if (!m_matrixMode && !(format == FITS || format == SQLite)) {
 		ui->chkExportHeader->show();
 		ui->lExportHeader->show();
-	} else {
-		ui->chkExportHeader->hide();
-		ui->lExportHeader->hide();
-	}
-	if (ui->cbFormat->currentIndex() == 3) {
-		ui->chkExportHeader->hide();
-		ui->lExportHeader->hide();
 	}
 
 	setFormat(static_cast<Format>(index));
