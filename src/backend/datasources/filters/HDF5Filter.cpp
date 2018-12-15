@@ -194,7 +194,7 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 	info += i18n("Number of all objects: %1", QString::number(objectCount));
 	info += QLatin1String("<br>");
 
-#ifdef HAVE_HDF5_1_10	// using H5Fget_info2 struct (see H5Fpublic.h)
+#ifdef HAVE_AT_LEAST_HDF5_1_10_0	// using H5Fget_info2 struct (see H5Fpublic.h)
 	H5F_info2_t file_info;
 	status = H5Fget_info2(file, &file_info);
 	if (status >= 0) {
@@ -280,7 +280,7 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 		info += i18n("MPI file access atomic mode: %1", atomicMode ? i18n("Yes") : i18n("No"));
 		info += QLatin1String("<br>");
 	}*/
-#ifdef HAVE_HDF5_1_10
+#ifdef HAVE_AT_LEAST_HDF5_1_10_0
 	hbool_t is_enabled, is_currently_logging;
 	status = H5Fget_mdc_logging_status(file, &is_enabled, &is_currently_logging);
 	if (status >= 0) {
@@ -289,6 +289,8 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 		info += i18n("Events are currently logged: %1", is_currently_logging ? i18n("Yes") : i18n("No"));
 		info += QLatin1String("<br>");
 	}
+#endif
+#ifdef HAVE_AT_LEAST_HDF5_1_10_1
 	unsigned int accesses[2], hits[2], misses[2], evictions[2], bypasses[2];
 	status = H5Fget_page_buffering_stats(file, accesses, hits, misses, evictions, bypasses);
 	if (status >= 0) {
