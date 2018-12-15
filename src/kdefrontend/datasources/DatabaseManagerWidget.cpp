@@ -467,8 +467,8 @@ void DatabaseManagerWidget::saveConnections() {
 		}
 
 		if (isODBC(conn.driver)) {
-			group.writeEntry("CustomConnectionEnabled", ui.chkCustomConnection->isChecked());
-			group.writeEntry("CustomConnectinString", ui.teCustomConnection->toPlainText());
+			group.writeEntry("CustomConnectionEnabled", conn.customConnectionEnabled);
+			group.writeEntry("CustomConnectionString", conn.customConnectionString);
 		}
 	}
 
