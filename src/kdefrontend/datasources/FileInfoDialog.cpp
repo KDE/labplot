@@ -128,9 +128,10 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 
 	if (file->open(QIODevice::ReadOnly)) {
 		QStringList infoStrings;
+
 		infoStrings << "<u><b>" + fileName + "</b></u><br>";
 
-		// file type and type specific information about the file
+		// File type given by "file"
 #ifdef Q_OS_LINUX
 		auto* proc = new QProcess();
 		QStringList args;
@@ -141,19 +142,34 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 			infoStrings << i18n("Could not open file %1 for reading.", fileName);
 		else {
 			fileTypeString = proc->readLine();
-			if ( fileTypeString.contains(i18n("cannot open")) )
+			if (fileTypeString.contains(i18n("cannot open")))
 				fileTypeString="";
 			else {
-				fileTypeString.remove(fileTypeString.length()-1,1);	// remove '\n'
+				fileTypeString.remove(fileTypeString.length() - 1, 1);	// remove '\n'
 			}
 		}
-		infoStrings << i18n("File type: %1", fileTypeString);
+		infoStrings << i18n("<b>File type:</b> %1", fileTypeString);
 #endif
 
-		//depending on the file type, generate additional information about the file:
-		infoStrings << "<br>";
-		AbstractFileFilter::FileType fileType = AbstractFileFilter::fileType(fileName);
-		switch (fileType) {
+		// General:
+		fileInfo.setFile(fileName);
+		infoStrings << "<b>" << i18n("General:") << "</b>";
+
+		infoStrings << i18n("Readable: %1", fileInfo.isReadable() ? i18n("yes") : i18n("no"));
+		infoStrings << i18n("Writable: %1", fileInfo.isWritable() ? i18n("yes") : i18n("no"));
+		infoStrings << i18n("Executable: %1", fileInfo.isExecutable() ? i18n("yes") : i18n("no"));
+
+		infoStrings << i18n("Created: %1", fileInfo.created().toString());
+		infoStrings << i18n("Last modified: %1", fileInfo.lastModified().toString());
+		infoStrings << i18n("Last read: %1", fileInfo.lastRead().toString());
+		infoStrings << i18n("Owner: %1", fileInfo.owner());
+		infoStrings << i18n("Group: %1", fileInfo.group());
+		infoStrings << i18n("Size: %1", i18np("%1 cByte", "%1 cBytes", fileInfo.size()));
+
+		// Summary:
+		infoStrings << "<b>" << i18n("Summary:") << "</b>";
+		//depending on the file type, generate summary information about the file
+		switch (AbstractFileFilter::fileType(fileName)) {
 		case AbstractFileFilter::Ascii:
 			infoStrings << AsciiFilter::fileInfoString(fileName);
 			break;
@@ -184,21 +200,11 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 			break;
 		}
 
-		//general information about the file
-		infoStrings << "<br>";
-		fileInfo.setFile(fileName);
+		//TODO: content information (in BNF)
+		//NetCDF: CDL, HDF5: DDL
 
-		infoStrings << i18n("Readable: %1", fileInfo.isReadable() ? i18n("yes") : i18n("no"));
-		infoStrings << i18n("Writable: %1", fileInfo.isWritable() ? i18n("yes") : i18n("no"));
-		infoStrings << i18n("Executable: %1", fileInfo.isExecutable() ? i18n("yes") : i18n("no"));
-
-		infoStrings << i18n("Created: %1", fileInfo.created().toString());
-		infoStrings << i18n("Last modified: %1", fileInfo.lastModified().toString());
-		infoStrings << i18n("Last read: %1", fileInfo.lastRead().toString());
-		infoStrings << i18n("Owner: %1", fileInfo.owner());
-		infoStrings << i18n("Group: %1", fileInfo.group());
-		infoStrings << i18n("Size: %1", i18np("%1 cByte", "%1 cBytes", fileInfo.size()));
 		infoString += infoStrings.join("<br>");
+
 	} else
 		infoString += i18n("Could not open file %1 for reading.", fileName);
 
