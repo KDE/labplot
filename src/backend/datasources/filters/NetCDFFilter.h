@@ -40,6 +40,7 @@ public:
 	~NetCDFFilter() override;
 
 	static QString fileInfoString(const QString&);
+	static QString fileCDLString(const QString&);
 
 	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace) override;

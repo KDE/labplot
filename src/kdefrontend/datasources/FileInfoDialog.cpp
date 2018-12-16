@@ -4,7 +4,7 @@
     Description          : import file data dialog
     --------------------------------------------------------------------
     Copyright            : (C) 2009-2018 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2015-2016 Stefan-Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2015-2018 Stefan-Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -135,11 +135,11 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 #ifdef Q_OS_LINUX
 		auto* proc = new QProcess();
 		QStringList args;
-		args<<"-b"<<fileName;
+		args << "-b" << fileName;
 		proc->start( "file", args);
 
 		if (proc->waitForReadyRead(1000) == false)
-			infoStrings << i18n("Could not open file %1 for reading.", fileName);
+			infoStrings << i18n("Reading from file %1 failed.", fileName);
 		else {
 			fileTypeString = proc->readLine();
 			if (fileTypeString.contains(i18n("cannot open")))
@@ -184,6 +184,8 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 			break;
 		case AbstractFileFilter::NETCDF:
 			infoStrings << NetCDFFilter::fileInfoString(fileName);
+			infoStrings << "<b>" << i18n("Content:") << "</b>";
+			infoStrings << NetCDFFilter::fileCDLString(fileName);
 			break;
 		case AbstractFileFilter::FITS:
 			infoStrings << FITSFilter::fileInfoString(fileName);

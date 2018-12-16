@@ -31,7 +31,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/core/column/Column.h"
 
 #include <KLocalizedString>
-#include <QDebug>
+#include <QProcess>
 
 /*!
 	\class NetCDFFilter
@@ -184,6 +184,36 @@ QString NetCDFFilter::fileInfoString(const QString& fileName) {
 	return info;
 }
 
+/*!
+ * Get file content in CDL (Common Data form Language) format
+ * uses "ncdump"
+ */
+QString NetCDFFilter::fileCDLString(const QString& fileName) {
+	DEBUG("NetCDFFilter::fileInfoString()");
+
+	QByteArray bafileName = fileName.toLatin1();
+	DEBUG("fileName = " << bafileName.data());
+
+	QString CDLString;
+#ifdef Q_OS_LINUX
+	auto* proc = new QProcess();
+	QStringList args;
+	args << "-cs" << fileName;
+	proc->start( "ncdump", args);
+
+	if (proc->waitForReadyRead(1000) == false)
+		CDLString += i18n("Reading from file %1 failed.", fileName);
+	else {
+		CDLString += proc->readAll();
+		CDLString.replace('\n', "<br>\n");
+		CDLString.replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;");
+		//DEBUG("	CDL string: " << CDLString.toStdString());
+	}
+#endif
+
+	return CDLString;
+}
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
@@ -196,8 +226,9 @@ NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) : q(owner) {
 
 #ifdef HAVE_NETCDF
 void NetCDFFilterPrivate::handleError(int err, const QString& function) {
-	if (err != NC_NOERR)
-		qDebug() << "NETCDF ERROR:" << function << "() - " << nc_strerror(err);
+	if (err != NC_NOERR) {
+		DEBUG("NETCDF ERROR:" << function.toStdString() << "() - " << nc_strerror(err));
+	}
 }
 
 QString NetCDFFilterPrivate::translateDataType(nc_type type) {
@@ -615,7 +646,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 	switch (ndims) {
 	case 0:
 		dataStrings << (QStringList() << i18n("zero dimensions"));
-		qDebug() << dataStrings;
+		QDEBUG(dataStrings);
 		break;
 	case 1: {
 		size_t size;
@@ -1220,7 +1251,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 	}
 	default:
 		dataStrings << (QStringList() << i18n("%1 dimensional data of type %2 not supported yet", ndims, translateDataType(type)));
-		qDebug() << dataStrings;
+		QDEBUG(dataStrings);
 	}
 
 	free(dimids);
