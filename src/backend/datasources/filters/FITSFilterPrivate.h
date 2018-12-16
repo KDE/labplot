@@ -59,18 +59,18 @@ public:
 
 	const FITSFilter* q;
 
-	int startRow;
-	int endRow;
-	int startColumn;
-	int endColumn;
+	int startRow{-1};
+	int endRow{-1};
+	int startColumn{-1};
+	int endColumn{-1};
 
-	bool commentsAsUnits;
-	int exportTo;
+	bool commentsAsUnits{false};
+	int exportTo{0};
 private:
 	void printError(int status) const;
 
 #ifdef HAVE_FITS
-	fitsfile* m_fitsFile;
+	fitsfile* m_fitsFile{nullptr};
 #endif
 };
 

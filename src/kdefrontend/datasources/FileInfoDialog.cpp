@@ -168,8 +168,8 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 
 		// Summary:
 		infoStrings << "<b>" << i18n("Summary:") << "</b>";
-		//depending on the file type, generate summary information about the file
-		//TODO: more content information (in BNF)
+		//depending on the file type, generate summary and content information about the file
+		//TODO: content information (in BNF) for more types
 		switch (AbstractFileFilter::fileType(fileName)) {
 		case AbstractFileFilter::Ascii:
 			infoStrings << AsciiFilter::fileInfoString(fileName);
