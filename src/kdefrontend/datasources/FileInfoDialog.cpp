@@ -169,6 +169,7 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 		// Summary:
 		infoStrings << "<b>" << i18n("Summary:") << "</b>";
 		//depending on the file type, generate summary information about the file
+		//TODO: more content information (in BNF)
 		switch (AbstractFileFilter::fileType(fileName)) {
 		case AbstractFileFilter::Ascii:
 			infoStrings << AsciiFilter::fileInfoString(fileName);
@@ -181,6 +182,8 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 			break;
 		case AbstractFileFilter::HDF5:
 			infoStrings << HDF5Filter::fileInfoString(fileName);
+			infoStrings << "<b>" << i18n("Content:") << "</b>";
+			infoStrings << HDF5Filter::fileDDLString(fileName);
 			break;
 		case AbstractFileFilter::NETCDF:
 			infoStrings << NetCDFFilter::fileInfoString(fileName);
@@ -202,8 +205,6 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 			break;
 		}
 
-		//TODO: content information (in BNF)
-		//NetCDF: CDL, HDF5: DDL
 
 		infoString += infoStrings.join("<br>");
 

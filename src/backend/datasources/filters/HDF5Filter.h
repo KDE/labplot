@@ -41,6 +41,7 @@ public:
 	~HDF5Filter() override;
 
 	static QString fileInfoString(const QString&);
+	static QString fileDDLString(const QString&);
 
 	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace) override;

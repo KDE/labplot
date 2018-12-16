@@ -189,10 +189,7 @@ QString NetCDFFilter::fileInfoString(const QString& fileName) {
  * uses "ncdump"
  */
 QString NetCDFFilter::fileCDLString(const QString& fileName) {
-	DEBUG("NetCDFFilter::fileInfoString()");
-
-	QByteArray bafileName = fileName.toLatin1();
-	DEBUG("fileName = " << bafileName.data());
+	DEBUG("NetCDFFilter::fileCDLString()");
 
 	QString CDLString;
 #ifdef Q_OS_LINUX
