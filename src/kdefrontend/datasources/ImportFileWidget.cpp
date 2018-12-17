@@ -555,7 +555,7 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 		client->addInitialMQTTSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
 	}
 
-	bool retain = group.readEntry("Retain").toUInt();
+	const bool retain = group.readEntry("Retain").toUInt();
 	client->setMQTTRetain(retain);
 
 	client->setWillSettings(m_willSettings);
@@ -788,6 +788,8 @@ void ImportFileWidget::setMQTTVisible(bool visible) {
 	}
 
 	//will message
+	ui.chkEnableWillSettings->setVisible(visible);
+	ui.lEnableWillSettings->setVisible(visible);
 	ui.lWillMessage->setVisible(visible);
 	ui.bWillMessage->setVisible(visible);
 }
