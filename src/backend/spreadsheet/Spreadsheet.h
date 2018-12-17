@@ -34,6 +34,7 @@
 
 class AbstractFileFilter;
 class SpreadsheetView;
+class SpreadsheetModel;
 template <class T> class QVector;
 
 class Spreadsheet : public AbstractDataSource {
@@ -49,6 +50,9 @@ public:
 	bool exportView() const override;
 	bool printView() override;
 	bool printPreview() const override;
+
+	void setModel(SpreadsheetModel*);
+	SpreadsheetModel* model();
 
 	int columnCount() const;
 	int columnCount(AbstractColumn::PlotDesignation) const;
@@ -101,7 +105,8 @@ public slots:
 
 private:
 	void init();
-	mutable SpreadsheetView* m_view;
+	mutable SpreadsheetView* m_view{nullptr};
+	SpreadsheetModel* m_model{nullptr};
 
 private slots:
 	void childSelected(const AbstractAspect*) override;

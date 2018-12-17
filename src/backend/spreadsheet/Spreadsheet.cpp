@@ -28,6 +28,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "Spreadsheet.h"
+#include "SpreadsheetModel.h"
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/column/ColumnStringIO.h"
@@ -63,8 +64,7 @@
   \ingroup backend
 */
 
-Spreadsheet::Spreadsheet(const QString& name, bool loading) : AbstractDataSource(name), m_view(nullptr) {
-
+Spreadsheet::Spreadsheet(const QString& name, bool loading) : AbstractDataSource(name) {
 	if (!loading)
 		init();
 }
@@ -83,6 +83,14 @@ void Spreadsheet::init() {
 		addChild(new_col);
 	}
 	setRowCount(rows);
+}
+
+void Spreadsheet::setModel(SpreadsheetModel* model) {
+	m_model = model;
+}
+
+SpreadsheetModel * Spreadsheet::model() {
+	return m_model;
 }
 
 /*! Constructs a primary view on me.
@@ -759,6 +767,7 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 	DEBUG("	resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols);
 	int columnOffset = 0;
 	setUndoAware(false);
+	m_model->suppressSignals(true);
 
 	//make the available columns undo unaware before we resize and rename them below,
 	//the same will be done for new columns in this->resize().
@@ -936,6 +945,8 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 	setUndoAware(true);
 	for (int i = 0; i < childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(true);
+
+	m_model->suppressSignals(false);
 
 	if (m_partView != nullptr && m_view != nullptr)
 		m_view->resizeHeader();

@@ -67,6 +67,12 @@ SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet)
 		beginInsertColumns(QModelIndex(), i, i);
 		handleAspectAdded(spreadsheet->column(i));
 	}
+
+	m_spreadsheet->setModel(this);
+}
+
+void SpreadsheetModel::suppressSignals(bool value) {
+	m_suppressSignals = value;
 }
 
 Qt::ItemFlags SpreadsheetModel::flags(const QModelIndex& index) const {
@@ -237,6 +243,9 @@ bool SpreadsheetModel::hasChildren(const QModelIndex& parent) const {
 }
 
 void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* new_child) {
+	if (m_suppressSignals)
+		return;
+
 	const Column* col = qobject_cast<const Column*>(new_child);
 
 	if (!col || parent != static_cast<AbstractAspect*>(m_spreadsheet))
@@ -248,7 +257,10 @@ void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect* parent, 
 	//beginInsertColumns(QModelIndex(), index, index);
 }
 
-void SpreadsheetModel::handleAspectAdded(const AbstractAspect * aspect) {
+void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
+	if (m_suppressSignals)
+		return;
+
 	const Column* col = qobject_cast<const Column*>(aspect);
 
 	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
@@ -275,6 +287,9 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect * aspect) {
 }
 
 void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
+	if (m_suppressSignals)
+		return;
+
 	const Column* col = qobject_cast<const Column*>(aspect);
 
 	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
@@ -285,6 +300,9 @@ void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect* aspect
 }
 
 void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
+	if (m_suppressSignals)
+		return;
+
 	Q_UNUSED(before)
 	const Column* col = qobject_cast<const Column*>(child);
 
@@ -299,6 +317,9 @@ void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* parent, const A
 }
 
 void SpreadsheetModel::handleDescriptionChange(const AbstractAspect* aspect) {
+	if (m_suppressSignals)
+		return;
+
 	const Column* col = qobject_cast<const Column*>(aspect);
 
 	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
@@ -310,6 +331,9 @@ void SpreadsheetModel::handleDescriptionChange(const AbstractAspect* aspect) {
 }
 
 void SpreadsheetModel::handleModeChange(const AbstractColumn* col) {
+	if (m_suppressSignals)
+		return;
+
 	updateHorizontalHeader();
 	int index = m_spreadsheet->indexOfChild<Column>(col);
 	emit headerDataChanged(Qt::Horizontal, index, index);
@@ -321,6 +345,9 @@ void SpreadsheetModel::handleModeChange(const AbstractColumn* col) {
 }
 
 void SpreadsheetModel::handleDigitsChange() {
+	if (m_suppressSignals)
+		return;
+
 	const auto* filter = dynamic_cast<const Double2StringFilter*>(QObject::sender());
 	if (!filter)
 		return;
@@ -330,17 +357,26 @@ void SpreadsheetModel::handleDigitsChange() {
 }
 
 void SpreadsheetModel::handlePlotDesignationChange(const AbstractColumn* col) {
+	if (m_suppressSignals)
+		return;
+
 	updateHorizontalHeader();
 	int index = m_spreadsheet->indexOfChild<Column>(col);
 	emit headerDataChanged(Qt::Horizontal, index, m_spreadsheet->columnCount()-1);
 }
 
 void SpreadsheetModel::handleDataChange(const AbstractColumn* col) {
+	if (m_suppressSignals)
+		return;
+
 	int i = m_spreadsheet->indexOfChild<Column>(col);
 	emit dataChanged(index(0, i), index(col->rowCount()-1, i));
 }
 
 void SpreadsheetModel::handleRowsInserted(const AbstractColumn* col, int before, int count) {
+	if (m_suppressSignals)
+		return;
+
 	Q_UNUSED(before) Q_UNUSED(count)
 	updateVerticalHeader();
 	int i = m_spreadsheet->indexOfChild<Column>(col);
@@ -349,6 +385,9 @@ void SpreadsheetModel::handleRowsInserted(const AbstractColumn* col, int before,
 }
 
 void SpreadsheetModel::handleRowsRemoved(const AbstractColumn* col, int first, int count) {
+	if (m_suppressSignals)
+		return;
+
 	Q_UNUSED(first) Q_UNUSED(count)
 	updateVerticalHeader();
 	int i = m_spreadsheet->indexOfChild<Column>(col);

@@ -66,6 +66,8 @@ public:
 	void activateFormulaMode(bool on);
 	bool formulaModeActive() const;
 
+	void suppressSignals(bool);
+
 private slots:
 	void handleAspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void handleAspectAdded(const AbstractAspect*);
@@ -90,6 +92,7 @@ private:
 	QList<int> m_vertical_header_data;
 	QStringList m_horizontal_header_data;
 	int m_defaultHeaderHeight;
+	bool m_suppressSignals{false};
 };
 
 #endif
