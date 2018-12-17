@@ -333,7 +333,7 @@ ImportFileWidget::~ImportFileWidget() {
 	QString willStatistics;
 	for (int i = 0; i < m_willSettings.willStatistics.size(); ++i) {
 		if (m_willSettings.willStatistics[i])
-			willStatistics += QString::number(i)+"|";
+			willStatistics += QString::number(i)+ QLatin1Char('|');
 	}
 	conf.writeEntry("mqttWillStatistics", willStatistics);
 	conf.writeEntry("mqttWillRetain", static_cast<int>(m_willSettings.willRetain));
@@ -380,6 +380,9 @@ void ImportFileWidget::initSlots() {
 	connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToSubsriptionTreeItem);
 	connect(ui.bManageConnections, &QPushButton::clicked, this, &ImportFileWidget::showMQTTConnectionManager);
 	connect(ui.bWillMessage, &QPushButton::clicked, this, &ImportFileWidget::showWillSettings);
+	connect(ui.twTopics, &QTreeWidget::itemDoubleClicked, this, &ImportFileWidget::mqttAvailableTopicDoubleClicked);
+	connect(ui.twSubscriptions, &QTreeWidget::itemDoubleClicked, this, &ImportFileWidget::mqttSubscribedTopicDoubleClicked);
+	connect(ui.chkEnableWillSettings, &QCheckBox::stateChanged, this, &ImportFileWidget::enableWillSettings);
 #endif
 }
 
@@ -526,7 +529,7 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	MQTTClient::UpdateType updateType = static_cast<MQTTClient::UpdateType>(ui.cbUpdateType->currentIndex());
 	MQTTClient::ReadingType readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadingType->currentIndex());
 
-	client->setComment( ui.leFileName->text() );
+	client->setComment(ui.leFileName->text());
 	currentFileFilter();
 	client->setFilter(static_cast<AsciiFilter*>(m_currentFilter.release())); // pass ownership of the filter to MQTTClient
 
@@ -536,7 +539,6 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 		client->setUpdateInterval(ui.sbUpdateInterval->value());
 
 	client->setKeepNValues(ui.sbKeepNValues->value());
-
 	client->setUpdateType(updateType);
 
 	if (readingType != MQTTClient::ReadingType::TillEnd)
@@ -805,12 +807,15 @@ void ImportFileWidget::setMQTTVisible(bool visible) {
  * returns \c false otherwise.
  */
 bool ImportFileWidget::isMqttValid() {
-	bool connected = (m_client->state() == QMqttClient::ClientState::Connected);
-	bool subscribed = (ui.twSubscriptions->topLevelItemCount() > 0);
-	bool fileTypeOk = false;
-	if (this->currentFileType() == AbstractFileFilter::FileType::Ascii)
-		fileTypeOk = true;
-	return connected && subscribed && fileTypeOk;
+	if (m_client) {
+		bool connected = (m_client->state() == QMqttClient::ClientState::Connected);
+		bool subscribed = (ui.twSubscriptions->topLevelItemCount() > 0);
+		bool fileTypeOk = false;
+		if (this->currentFileType() == AbstractFileFilter::FileType::Ascii)
+			fileTypeOk = true;
+		return connected && subscribed && fileTypeOk;
+	}
+	return false;
 }
 
 /*!
@@ -2399,6 +2404,28 @@ void ImportFileWidget::onMqttDisconnect() {
 }
 
 /*!
+ *\brief When a leaf topic is double clicked in the topics tree widget we subscribe on that
+ */
+void ImportFileWidget::mqttAvailableTopicDoubleClicked(QTreeWidgetItem* item, int column) {
+	Q_UNUSED(column)
+	// Only for leaf topics
+	if (item->childCount() == 0) {
+		mqttSubscribe();
+	}
+}
+
+/*!
+ *\brief When a leaf subscription is double clicked in the topics tree widget we unsubscribe
+ */
+void ImportFileWidget::mqttSubscribedTopicDoubleClicked(QTreeWidgetItem* item, int column) {
+	Q_UNUSED(column)
+	// Only for leaf subscriptions
+	if (item->childCount() == 0) {
+		mqttUnsubscribe();
+	}
+}
+
+/*!
  *\brief called when the subscribe button is pressed
  * subscribes to the topic represented by the current item of twTopics
  */
@@ -2415,7 +2442,7 @@ void ImportFileWidget::mqttSubscribe() {
 	if (item->childCount() != 0)
 		name.append("/#");
 
-	while(tempItem->parent() != nullptr) {
+	while(tempItem->parent()) {
 		tempItem = tempItem->parent();
 		name.prepend(tempItem->text(0) + '/');
 	}
@@ -2757,7 +2784,8 @@ void ImportFileWidget::willTopicChanged(const QString& topic) {
  * Updates the will settings
  */
 void ImportFileWidget::willStatisticsChanged(int index) {
-	m_willSettings.willStatistics[index] = !m_willSettings.willStatistics[index];
+	if (index >= 0)
+		m_willSettings.willStatistics[index] = !m_willSettings.willStatistics[index];
 }
 
 /*!
@@ -2927,24 +2955,38 @@ void ImportFileWidget::showWillSettings() {
 	for (int i = 0; i < children.size(); ++i)
 		topics.append(children[i]->text(0));
 
-	MQTTWillSettingsWidget willSettings(&menu, m_willSettings, topics);
+	MQTTWillSettingsWidget willSettingsWidget(&menu, m_willSettings, topics);
 
-	connect(&willSettings, &MQTTWillSettingsWidget::useChanged, this, &ImportFileWidget::useWillMessage);
-	connect(&willSettings, &MQTTWillSettingsWidget::messageTypeChanged, this, &ImportFileWidget::willMessageTypeChanged);
-	connect(&willSettings, &MQTTWillSettingsWidget::updateTypeChanged, this, &ImportFileWidget::willUpdateTypeChanged);
-	connect(&willSettings, &MQTTWillSettingsWidget::retainChanged, this, &ImportFileWidget::willRetainChanged);
-	connect(&willSettings, &MQTTWillSettingsWidget::intervalChanged, this, &ImportFileWidget::willTimeIntervalChanged);
-	connect(&willSettings, &MQTTWillSettingsWidget::ownMessageChanged, this, &ImportFileWidget::willOwnMessageChanged);
-	connect(&willSettings, &MQTTWillSettingsWidget::topicChanged, this, &ImportFileWidget::willTopicChanged);
-	connect(&willSettings, &MQTTWillSettingsWidget::statisticsChanged, this, &ImportFileWidget::willStatisticsChanged);
-	connect(&willSettings, &MQTTWillSettingsWidget::QoSChanged, this, &ImportFileWidget::willQoSChanged);
-	connect(&willSettings, SIGNAL(canceled()), &menu, SLOT(close()));
+	connect(&willSettingsWidget, &MQTTWillSettingsWidget::applyClicked, [this, &menu, &willSettingsWidget]() {
+		this->useWillMessage(willSettingsWidget.will().MQTTUseWill);
+		this->willMessageTypeChanged(willSettingsWidget.will().willMessageType);
+		this->updateTypeChanged(willSettingsWidget.will().willUpdateType);
+		this->willRetainChanged(willSettingsWidget.will().willRetain);
+		this->willTimeIntervalChanged(willSettingsWidget.will().willTimeInterval);
+		this->willOwnMessageChanged(willSettingsWidget.will().willOwnMessage);
+		this->willTopicChanged(willSettingsWidget.will().willTopic);
+		this->willStatisticsChanged(willSettingsWidget.statisticsType());
 
+		menu.close();
+	});
 	QWidgetAction* widgetAction = new QWidgetAction(this);
-	widgetAction->setDefaultWidget(&willSettings);
+	widgetAction->setDefaultWidget(&willSettingsWidget);
 	menu.addAction(widgetAction);
 
 	const QPoint pos(ui.bWillMessage->sizeHint().width(),ui.bWillMessage->sizeHint().height());
 	menu.exec(ui.bWillMessage->mapToGlobal(pos));
 }
+
+void ImportFileWidget::enableWillSettings(int state) {
+	if (state == Qt::Checked) {
+		useWillMessage(state);
+		ui.lWillMessage->show();
+		ui.bWillMessage->show();
+	} else if (state == Qt::Unchecked) {
+		useWillMessage(state);
+		ui.lWillMessage->hide();
+		ui.bWillMessage->hide();
+	}
+}
+
 #endif

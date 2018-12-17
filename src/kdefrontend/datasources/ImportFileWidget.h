@@ -150,16 +150,16 @@ private:
 	void updateSubscriptionTree();
 	void restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList& list, int level);
 
-	QMqttClient *m_client;
-	QMqttSubscription *m_mainSubscription;
-	QMqttTopicFilter *m_filter;
-	QVector <QMqttSubscription*> m_mqttSubscriptions;
+	QMqttClient* m_client;
+	QMqttSubscription* m_mainSubscription;
+	QMqttTopicFilter* m_filter;
+	QVector<QMqttSubscription*> m_mqttSubscriptions;
 	QCompleter* m_topicCompleter;
 	QCompleter* m_subscriptionCompleter;
 	QStringList m_topicList;
 	bool m_searching;
-	QTimer *m_searchTimer;
-	QTimer *m_connectTimeoutTimer;
+	QTimer* m_searchTimer;
+	QTimer* m_connectTimeoutTimer;
 	QMap<QMqttTopicName, bool> m_messageArrived;
 	QMap<QMqttTopicName, QMqttMessage> m_lastMessage;
 	bool m_mqttReadyForPreview;
@@ -169,7 +169,6 @@ private:
 	bool m_initialisingMQTT;
 	bool m_connectionTimedOut;
 	MQTTClient::MQTTWill m_willSettings;
-
 public:
 	void saveMQTTSettings(MQTTClient*) const;
 	bool isMqttValid();
@@ -182,6 +181,8 @@ signals:
 private slots:
 	void mqttConnectionChanged();
 	void onMqttConnect();
+	void mqttAvailableTopicDoubleClicked(QTreeWidgetItem*, int);
+	void mqttSubscribedTopicDoubleClicked(QTreeWidgetItem*, int);
 	void mqttSubscribe();
 	void mqttUnsubscribe();
 	void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
@@ -205,6 +206,7 @@ private slots:
 	void showMQTTConnectionManager();
 	void readMQTTConnections();
 	void showWillSettings();
+	void enableWillSettings(int enable);
 #endif
 };
 

@@ -943,7 +943,7 @@ void MQTTClient::clearLastMessage() {
  *
  * \param statistics
  */
-void MQTTClient::addWillStatistics(WillStatistics statistic) {
+void MQTTClient::addWillStatistics(WillStatisticsType statistic) {
 	m_MQTTWill.willStatistics[static_cast<int>(statistic)] = true;
 }
 
@@ -953,7 +953,7 @@ void MQTTClient::addWillStatistics(WillStatistics statistic) {
  *
  * \param statistics
  */
-void MQTTClient::removeWillStatistics(WillStatistics statistic) {
+void MQTTClient::removeWillStatistics(WillStatisticsType statistic) {
 	m_MQTTWill.willStatistics[static_cast<int>(statistic)] = false;
 }
 

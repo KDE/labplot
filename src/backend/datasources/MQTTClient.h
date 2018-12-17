@@ -73,8 +73,9 @@ public:
 		OnClick
 	};
 
-	enum WillStatistics {
-		Minimum = 0,
+	enum WillStatisticsType {
+		NoStatistics = -1,
+		Minimum,
 		Maximum,
 		ArithmeticMean,
 		GeometricMean,
@@ -203,8 +204,8 @@ public:
 	bool MQTTUseAuthentication() const;
 
 	void clearLastMessage();
-	void addWillStatistics(WillStatistics);
-	void removeWillStatistics(WillStatistics);
+	void addWillStatistics(WillStatisticsType);
+	void removeWillStatistics(WillStatisticsType);
 	QVector<bool> willStatistics() const;
 
 	void addMQTTSubscription(const QString&, quint8);

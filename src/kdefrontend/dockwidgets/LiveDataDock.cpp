@@ -514,17 +514,17 @@ void LiveDataDock::pauseContinueReading() {
  *
  * \param state the state of the checbox
  */
-void LiveDataDock::useWillMessage(int state) {
-	qDebug()<<"Use will message: " <<state;
+void LiveDataDock::useWillMessage(bool use) {
+	qDebug()<<"Use will message: " << use;
 
-	if (state == Qt::Checked) {
+	if (use) {
 		for (auto* source : m_mqttClients)
 			source->setMQTTWillUse(true);
 
 		if (m_mqttClients.first()->willUpdateType() == MQTTClient::WillUpdateType::OnClick)
 			ui.bWillUpdateNow->show();
 
-	} else if (state == Qt::Unchecked) {
+	} else {
 		for (auto* source : m_mqttClients)
 			source->setMQTTWillUse(false);
 
@@ -549,11 +549,11 @@ void LiveDataDock::willQoSChanged(int QoS) {
  *
  * \param state the state of the will retain chechbox
  */
-void LiveDataDock::willRetainChanged(int state) {
-	if (state == Qt::Checked) {
+void LiveDataDock::willRetainChanged(bool useWillRetainMessages) {
+	if (useWillRetainMessages) {
 		for (auto* source : m_mqttClients)
 			source->setWillRetain(true);
-	} else if (state == Qt::Unchecked) {
+	} else {
 		for (auto* source : m_mqttClients)
 			source->setWillRetain(false);
 	}
@@ -580,9 +580,9 @@ void LiveDataDock::willTopicChanged(const QString& topic) {
  *
  * \param type the selected will message type
  */
-void LiveDataDock::willMessageTypeChanged(int type) {
+void LiveDataDock::willMessageTypeChanged(MQTTClient::WillMessageType willMessageType) {
 	for (auto* source : m_mqttClients)
-		source->setWillMessageType(static_cast<MQTTClient::WillMessageType> (type));
+		source->setWillMessageType(willMessageType);
 }
 
 /*!
@@ -645,21 +645,19 @@ void LiveDataDock::willUpdateIntervalChanged(int interval) {
  *\brief called when the will statistics are changed in the will settings widget
  * adds or removes the statistic represented by the index from every client in m_mqttClients
  */
-void LiveDataDock::statisticsChanged(int index) {
-	const bool useStatistic = m_mqttClients.first()->willStatistics()[index];
+void LiveDataDock::statisticsChanged(MQTTClient::WillStatisticsType willStatisticsType) {
+	const bool useStatistic = m_mqttClients.first()->willStatistics()[static_cast<int>(willStatisticsType)];
 
-	//if it's checked we add it
-	if (!useStatistic) {
-		if (index >= 0) {
+	if (willStatisticsType >= 0) {
+		//if it's not already added and it's checked we add it
+		if (!useStatistic)
+		{
 			for (auto* source : m_mqttClients)
-				source->addWillStatistics(static_cast<MQTTClient::WillStatistics>(index) );
-		}
-	}
-	//otherwise remove it
-	else {
-		if (index >= 0) {
+				source->addWillStatistics(willStatisticsType);
+		} else {
+			//otherwise remove it
 			for (auto* source : m_mqttClients)
-				source->removeWillStatistics(static_cast<MQTTClient::WillStatistics>(index) );
+				source->removeWillStatistics(willStatisticsType);
 		}
 	}
 }
@@ -1668,26 +1666,27 @@ bool LiveDataDock::testUnsubscribe(const QString& topic) {
 void LiveDataDock::showWillSettings() {
 	QMenu menu;
 	const MQTTClient* const fmc = m_mqttClients.at(0);
-	QVector<QString> topics = fmc->topicNames();
+	const QVector<QString>& topics = fmc->topicNames();
+	MQTTWillSettingsWidget willSettingsWidget(&menu, fmc->willSettings(), topics);
 
-	MQTTWillSettingsWidget willSettings(&menu, fmc->willSettings(), topics);
+	connect(&willSettingsWidget, &MQTTWillSettingsWidget::applyClicked, [this, &menu, &willSettingsWidget]() {
+		this->useWillMessage(willSettingsWidget.will().MQTTUseWill);
+		this->willMessageTypeChanged(willSettingsWidget.will().willMessageType);
+		this->updateTypeChanged(willSettingsWidget.will().willUpdateType);
+		this->willRetainChanged(willSettingsWidget.will().willRetain);
+		this->willUpdateIntervalChanged(willSettingsWidget.will().willTimeInterval);
+		this->willOwnMessageChanged(willSettingsWidget.will().willOwnMessage);
+		this->willTopicChanged(willSettingsWidget.will().willTopic);
+		this->statisticsChanged(willSettingsWidget.statisticsType());
 
-	connect(&willSettings, &MQTTWillSettingsWidget::useChanged, this, &LiveDataDock::useWillMessage);
-	connect(&willSettings, &MQTTWillSettingsWidget::messageTypeChanged, this, &LiveDataDock::willMessageTypeChanged);
-	connect(&willSettings, &MQTTWillSettingsWidget::updateTypeChanged, this, &LiveDataDock::willUpdateTypeChanged);
-	connect(&willSettings, &MQTTWillSettingsWidget::retainChanged, this, &LiveDataDock::willRetainChanged);
-	connect(&willSettings, &MQTTWillSettingsWidget::intervalChanged, this, &LiveDataDock::willUpdateIntervalChanged);
-	connect(&willSettings, &MQTTWillSettingsWidget::ownMessageChanged, this, &LiveDataDock::willOwnMessageChanged);
-	connect(&willSettings, &MQTTWillSettingsWidget::topicChanged, this, &LiveDataDock::willTopicChanged);
-	connect(&willSettings, &MQTTWillSettingsWidget::statisticsChanged, this, &LiveDataDock::statisticsChanged);
-	connect(&willSettings, &MQTTWillSettingsWidget::QoSChanged, this, &LiveDataDock::willQoSChanged);
-	connect(&willSettings, SIGNAL(canceled()), &menu, SLOT(close()));
+		menu.close();
+	});
 
 	QWidgetAction* widgetAction = new QWidgetAction(this);
-	widgetAction->setDefaultWidget(&willSettings);
+	widgetAction->setDefaultWidget(&willSettingsWidget);
 	menu.addAction(widgetAction);
 
-	QPoint pos(ui.bWillSettings->sizeHint().width(),ui.bWillSettings->sizeHint().height());
+	QPoint pos(ui.bWillSettings->sizeHint().width(), ui.bWillSettings->sizeHint().height());
 	menu.exec(ui.bWillSettings->mapToGlobal(pos));
 }
 #endif

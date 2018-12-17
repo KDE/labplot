@@ -40,30 +40,24 @@ class MQTTWillSettingsWidget: public QWidget {
 	Q_OBJECT
 
 public:
-	explicit MQTTWillSettingsWidget(QWidget*, MQTTClient::MQTTWill, QVector<QString>);
+	explicit MQTTWillSettingsWidget(QWidget*, const MQTTClient::MQTTWill&, const QVector<QString>&);
+
+	MQTTClient::MQTTWill will() const;
+	MQTTClient::WillStatisticsType statisticsType() const;
 
 private:
 	Ui::MQTTWillSettingsWidget ui;
-	MQTTClient::MQTTWill m_MQTTWill;
-	QVector<QString> m_topics;
 	bool m_initialising;
+	MQTTClient::MQTTWill m_will;
+
+	MQTTClient::WillStatisticsType m_statisticsType;
 
 signals:
-	void useChanged(int);
-	void messageTypeChanged(int);
-	void updateTypeChanged(int);
-	void ownMessageChanged(const QString&);
-	void topicChanged (const QString&);
-	void QoSChanged(int);
-	void statisticsChanged(int);
-	void retainChanged(int);
-	void intervalChanged(int);
-	void canceled();
+	void applyClicked();
 
 private slots:
-	void useWillMessage(int);
 	void willMessageTypeChanged(int);
-	void loadSettings();
+	void loadSettings(const MQTTClient::MQTTWill&, const QVector<QString>&);
 	void willUpdateTypeChanged(int);
 
 #endif	// HAVE_MQTT

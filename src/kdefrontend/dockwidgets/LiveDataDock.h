@@ -80,16 +80,16 @@ public:
 	bool testUnsubscribe(const QString&);
 
 private slots:
-	void useWillMessage(int);
+	void useWillMessage(bool use);
 	void willQoSChanged(int);
-	void willRetainChanged(int);
+	void willRetainChanged(bool);
 	void willTopicChanged(const QString &);
-	void willMessageTypeChanged(int);
+	void willMessageTypeChanged(MQTTClient::WillMessageType);
 	void willOwnMessageChanged(const QString&);
 	void willUpdateTypeChanged(int);
 	void willUpdateNow();
 	void willUpdateIntervalChanged(int);
-	void statisticsChanged(int);
+	void statisticsChanged(MQTTClient::WillStatisticsType);
 	void addSubscription();
 	void removeSubscription();
 	void onMQTTConnect();
