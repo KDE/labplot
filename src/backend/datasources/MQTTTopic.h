@@ -30,7 +30,6 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #define MQTTTOPIC_H
 
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/matrix/Matrix.h"
 
 #ifdef HAVE_MQTT
 class MQTTSubscription;

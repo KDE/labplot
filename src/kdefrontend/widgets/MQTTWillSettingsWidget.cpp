@@ -88,24 +88,24 @@ MQTTClient::WillStatisticsType MQTTWillSettingsWidget::statisticsType() const {
  *
  * \param type the selected will message type
  */
-void MQTTWillSettingsWidget::willMessageTypeChanged(int messageType) {
-	if (static_cast<MQTTClient::WillMessageType>(messageType) == MQTTClient::WillMessageType::OwnMessage) {
+void MQTTWillSettingsWidget::willMessageTypeChanged(int index) {
+	m_will.willMessageType = static_cast<MQTTClient::WillMessageType>(index);
+	if (m_will.willMessageType == MQTTClient::WillMessageType::OwnMessage) {
 		ui.leWillOwnMessage->show();
 		ui.lWillOwnMessage->show();
 		ui.lWillStatistics->hide();
 		ui.lwWillStatistics->hide();
-	} else if (static_cast<MQTTClient::WillMessageType>(messageType) == MQTTClient::WillMessageType::LastMessage) {
+	} else if (m_will.willMessageType == MQTTClient::WillMessageType::LastMessage) {
 		ui.leWillOwnMessage->hide();
 		ui.lWillOwnMessage->hide();
 		ui.lWillStatistics->hide();
 		ui.lwWillStatistics->hide();
-	} else if (static_cast<MQTTClient::WillMessageType>(messageType) == MQTTClient::WillMessageType::Statistics) {
+	} else if (m_will.willMessageType == MQTTClient::WillMessageType::Statistics) {
 		ui.lWillStatistics->show();
 		ui.lwWillStatistics->show();
 		ui.leWillOwnMessage->hide();
 		ui.lWillOwnMessage->hide();
 	}
-	m_will.willMessageType = static_cast<MQTTClient::WillMessageType>(messageType);
 }
 
 /*!
@@ -114,15 +114,15 @@ void MQTTWillSettingsWidget::willMessageTypeChanged(int messageType) {
  *
  * \param type the selected will update type
  */
-void MQTTWillSettingsWidget::willUpdateTypeChanged(int updateType) {
-	if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::TimePeriod) {
+void MQTTWillSettingsWidget::willUpdateTypeChanged(int index) {
+	m_will.willUpdateType = static_cast<MQTTClient::WillUpdateType>(index);
+	if (m_will.willUpdateType == MQTTClient::WillUpdateType::TimePeriod) {
 		ui.leWillUpdateInterval->show();
 		ui.lWillUpdateInterval->show();
-	} else if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::OnClick) {
+	} else if (m_will.willUpdateType == MQTTClient::WillUpdateType::OnClick) {
 		ui.leWillUpdateInterval->hide();
 		ui.lWillUpdateInterval->hide();
 	}
-	m_will.willUpdateType = static_cast<MQTTClient::WillUpdateType>(updateType);
 }
 
 /*!
