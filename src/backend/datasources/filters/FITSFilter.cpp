@@ -107,7 +107,7 @@ void FITSFilter::saveFilterSettings(const QString& fileName) const {
  * \return A list of keywords
  */
 QStringList FITSFilter::standardKeywords() {
-	return QStringList() << QLatin1String("(blank)") << QLatin1String("CROTA")   << QLatin1String("EQUINOX")  << QLatin1String("NAXIS")   << QLatin1String("TBCOL") << QLatin1String("TUNIT")
+	return QStringList() << QLatin1String("(blank)") << QLatin1String("CROTA") << QLatin1String("EQUINOX") << QLatin1String("NAXIS") << QLatin1String("TBCOL") << QLatin1String("TUNIT")
 	       << QLatin1String("AUTHOR")  << QLatin1String("CRPIX")   << QLatin1String("EXTEND")   << QLatin1String("OBJECT")   << QLatin1String("TDIM")  << QLatin1String("TZERO")
 	       << QLatin1String("BITPIX")  << QLatin1String("CRVAL")   << QLatin1String("EXTLEVEL") << QLatin1String("OBSERVER") << QLatin1String("TDISP") << QLatin1String("XTENSION")
 	       << QLatin1String("BLANK")   << QLatin1String("CTYPE")   << QLatin1String("EXTNAME")  << QLatin1String("ORIGIN")   << QLatin1String("TELESCOP")
@@ -128,8 +128,8 @@ QStringList FITSFilter::standardKeywords() {
 
 QStringList FITSFilter::mandatoryImageExtensionKeywords() {
 	return QStringList() << QLatin1String("XTENSION") << QLatin1String("BITPIX")
-	       << QLatin1String("NAXIS") << QLatin1String("PCOUNT")
-	       << QLatin1String("GCOUNT") << QLatin1String("END");
+		<< QLatin1String("NAXIS") << QLatin1String("PCOUNT")
+		<< QLatin1String("GCOUNT") << QLatin1String("END");
 }
 
 /*!
@@ -142,10 +142,10 @@ QStringList FITSFilter::mandatoryImageExtensionKeywords() {
  */
 QStringList FITSFilter::mandatoryTableExtensionKeywords() {
 	return QStringList() << QLatin1String("XTENSION") << QLatin1String("BITPIX")
-	       << QLatin1String("NAXIS") << QLatin1String("NAXIS1")
-	       << QLatin1String("NAXIS2") << QLatin1String("PCOUNT")
-	       << QLatin1String("GCOUNT") << QLatin1String("TFIELDS")
-	       << QLatin1String("END");
+		<< QLatin1String("NAXIS") << QLatin1String("NAXIS1")
+		<< QLatin1String("NAXIS2") << QLatin1String("PCOUNT")
+		<< QLatin1String("GCOUNT") << QLatin1String("TFIELDS")
+		<< QLatin1String("END");
 }
 
 /*!
@@ -155,9 +155,9 @@ QStringList FITSFilter::mandatoryTableExtensionKeywords() {
  */
 QStringList FITSFilter::units() {
 	return QStringList() << QLatin1String("m (Metre)") << QLatin1String("kg (Kilogram)") << QLatin1String("s (Second)")
-	       << QString("M☉ (Solar mass)") << QLatin1String("AU (Astronomical unit") << QLatin1String("l.y (Light year)")
-	       << QLatin1String("km (Kilometres") << QLatin1String("pc (Parsec)") << QLatin1String("K (Kelvin)")
-	       << QLatin1String("mol (Mole)") << QLatin1String("cd (Candela)");
+		<< QString("M☉ (Solar mass)") << QLatin1String("AU (Astronomical unit") << QLatin1String("l.y (Light year)")
+		<< QLatin1String("km (Kilometres") << QLatin1String("pc (Parsec)") << QLatin1String("K (Kelvin)")
+		<< QLatin1String("mol (Mole)") << QLatin1String("cd (Candela)");
 }
 
 /*!
@@ -262,22 +262,10 @@ QString FITSFilter::fileInfoString(const QString& fileName) {
 //################### Private implementation ##########################
 //#####################################################################
 
-FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
-	q(owner),
-	startRow(-1),
-	endRow(-1),
-	startColumn(-1),
-	endColumn(-1),
-	commentsAsUnits(false),
-	exportTo(0) {
-#ifdef HAVE_FITS
-	m_fitsFile = nullptr;
-#endif
-}
+FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) : q(owner) {}
 
 /*!
- * \brief Read the current header data unit from file \a filename in data source \a dataSource in
-    \a importMode import mode
+ * \brief Read the current header data unit from file \a filename in data source \a dataSource in \a importMode import mode
  * \param fileName the name of the file to be read
  * \param dataSource the data source to be filled
  * \param importMode
@@ -289,7 +277,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 #ifdef HAVE_FITS
 	int status = 0;
 
-	if(fits_open_file(&m_fitsFile, fileName.toLatin1(), READONLY, &status)) {
+	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READONLY, &status)) {
 		DEBUG("	ERROR opening file " << fileName.toStdString());
 		printError(status);
 		return dataStrings;
@@ -308,7 +296,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 
 	bool noDataSource = (dataSource == nullptr);
 
-	if(chduType == IMAGE_HDU) {
+	if (chduType == IMAGE_HDU) {
 		DEBUG("IMAGE_HDU");
 		int maxdim = 2;
 		int bitpix;
@@ -510,7 +498,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		if (!noDataSource) {
 			DEBUG("HAS DataSource");
 			auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-			if(spreadsheet) {
+			if (spreadsheet) {
 				numericDataPointers.reserve(actualCols - startCol);
 
 				stringDataPointers.reserve(actualCols - startCol);
@@ -583,7 +571,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 					if (!matrixNumericColumnIndices.contains(col))
 						continue;
 				}
-				if(fits_read_col_str(m_fitsFile, col, row, 1, 1, nullptr, &array, nullptr, &status))
+				if (fits_read_col_str(m_fitsFile, col, row, 1, 1, nullptr, &array, nullptr, &status))
 					printError(status);
 				if (!noDataSource) {
 					const QString& str = QString::fromLatin1(array);
@@ -720,8 +708,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 				}
 				QString tformn;
 				if (precision > 0) {
-					tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".") +
-					         QString::number(precision);
+					tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".") + QString::number(precision);
 				} else
 					tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".0");
 				tform[i] = new char[tformn.size()];
@@ -729,10 +716,8 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			}
 			//TODO extension name containing[] ?
 
-			if (fits_create_tbl(m_fitsFile, ASCII_TBL,
-			                    nrows, tfields,
-								columnNames.data(), tform.data(), tunit.data(),
-			                    matrix->name().toLatin1().data(),&status )) {
+			if (fits_create_tbl(m_fitsFile, ASCII_TBL, nrows, tfields, columnNames.data(), tform.data(), tunit.data(),
+						matrix->name().toLatin1().data(),&status )) {
 				printError(status);
 
 				qDeleteAll(tform);
@@ -883,8 +868,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 							}
 							const int diff = abs(maxSize - maxStringSize);
 							maxSize+= diff;
-							tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".") +
-							         QString::number(filter->numDigits());
+							tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".") + QString::number(filter->numDigits());
 						} else
 							tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".0");
 						tform[i] = new char[tformn.size()];
@@ -911,10 +895,8 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			}
 			//TODO extension name containing[] ?
 
-			if (fits_create_tbl(m_fitsFile, ASCII_TBL,
-			                    nrows, tfields,
-								columnNames.data(), tform.data(), tunit.data(),
-			                    spreadsheet->name().toLatin1().data(),&status )) {
+			if (fits_create_tbl(m_fitsFile, ASCII_TBL, nrows, tfields, columnNames.data(), tform.data(), tunit.data(),
+						spreadsheet->name().toLatin1().data(),&status )) {
 				printError(status);
 				qDeleteAll(tform);
 				qDeleteAll(tunit);
@@ -1128,7 +1110,7 @@ void FITSFilterPrivate::addNewKeyword(const QString& fileName, const QList<FITSF
 				ok++;
 				if (keyword.value.length() <= FLEN_VALUE) {
 					ok++;
-					if(keyword.comment.length() <= FLEN_COMMENT)
+					if (keyword.comment.length() <= FLEN_COMMENT)
 						ok++;
 				}
 			}
@@ -1324,7 +1306,7 @@ void FITSFilterPrivate::addKeywordUnit(const QString &fileName, const QList<FITS
 		return;
 	}
 
-	for(const FITSFilter::Keyword& keyword : keywords) {
+	for (const FITSFilter::Keyword& keyword : keywords) {
 		if (keyword.updates.unitUpdated) {
 			if (fits_write_key_unit(m_fitsFile, keyword.key.toLatin1(), keyword.unit.toLatin1().data(), &status)) {
 				printError(status);
@@ -1433,8 +1415,7 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
  * file \a fileName
  * \param keys The keywords that are provided if the keywords were read already.
  */
-void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *headerEditTable,
-                                    bool readKeys, const QList<FITSFilter::Keyword>& keys) {
+void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *headerEditTable, bool readKeys, const QList<FITSFilter::Keyword>& keys) {
 #ifdef HAVE_FITS
 	QList<FITSFilter::Keyword> keywords;
 	if (readKeys)
@@ -1447,19 +1428,19 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
 	for (int i = 0; i < keywords.size(); ++i) {
 		const FITSFilter::Keyword& keyword = keywords.at(i);
 		const bool mandatory = FITSFilter::mandatoryImageExtensionKeywords().contains(keyword.key) ||
-		                       FITSFilter::mandatoryTableExtensionKeywords().contains(keyword.key);
+					FITSFilter::mandatoryTableExtensionKeywords().contains(keyword.key);
 		item = new QTableWidgetItem(keyword.key);
 		const QString& itemText = item->text();
 		const bool notEditableKey = mandatory || itemText.contains(QLatin1String("TFORM")) ||
-		                            itemText.contains(QLatin1String("TTYPE")) ||
-		                            itemText.contains(QLatin1String("TUNIT"))  ||
-		                            itemText.contains(QLatin1String("TDISP")) ||
-		                            itemText.contains(QLatin1String("TBCOL")) ||
-		                            itemText.contains(QLatin1String("TZERO"));
-		const bool notEditableValue= mandatory || itemText.contains(QLatin1String("TFORM")) ||
-		                             itemText.contains(QLatin1String("TDISP")) ||
-		                             itemText.contains(QLatin1String("TBCOL")) ||
-		                             itemText.contains(QLatin1String("TZERO"));
+						itemText.contains(QLatin1String("TTYPE")) ||
+						itemText.contains(QLatin1String("TUNIT"))  ||
+						itemText.contains(QLatin1String("TDISP")) ||
+						itemText.contains(QLatin1String("TBCOL")) ||
+						itemText.contains(QLatin1String("TZERO"));
+		const bool notEditableValue = mandatory || itemText.contains(QLatin1String("TFORM")) ||
+						itemText.contains(QLatin1String("TDISP")) ||
+						itemText.contains(QLatin1String("TBCOL")) ||
+						itemText.contains(QLatin1String("TZERO"));
 
 		if (notEditableKey)
 			item->setFlags(item->flags() & ~Qt::ItemIsEditable);
@@ -1476,8 +1457,7 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
 		QString commentFieldText;
 		if (!keyword.unit.isEmpty()) {
 			if (keyword.updates.unitUpdated) {
-				const QString& comment = keyword.comment.right(
-				                             keyword.comment.size() - keyword.comment.indexOf(QChar(']'))-1);
+				const QString& comment = keyword.comment.right(keyword.comment.size() - keyword.comment.indexOf(QChar(']'))-1);
 				commentFieldText = QLatin1String("[") + keyword.unit + QLatin1String("] ") + comment;
 			} else {
 				if (keyword.comment.at(0) == QLatin1Char('['))

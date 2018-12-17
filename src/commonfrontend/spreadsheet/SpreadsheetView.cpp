@@ -54,6 +54,9 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
 #include <QTableView>
 #include <QToolBar>
 #include <QTextStream>
@@ -61,6 +64,7 @@
 
 #include <KConfigGroup>
 #include <KLocalizedString>
+#include <KMessageBox>
 #include <KSharedConfig>
 
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
@@ -2146,7 +2150,16 @@ bool SpreadsheetView::exportView() {
 		const QString path = dlg->path();
 		const bool exportHeader = dlg->exportHeader();
 		WAIT_CURSOR;
-		if (dlg->format() == ExportSpreadsheetDialog::LaTeX) {
+		switch (dlg->format()) {
+		case ExportSpreadsheetDialog::ASCII: {
+			const QString separator = dlg->separator();
+			const QLocale::Language format = dlg->numberFormat();
+			exportToFile(path, exportHeader, separator, format);
+			break;
+		}
+		case ExportSpreadsheetDialog::Binary:
+			break;
+		case ExportSpreadsheetDialog::LaTeX: {
 			const bool exportLatexHeader = dlg->exportLatexHeader();
 			const bool gridLines = dlg->gridLines();
 			const bool captions = dlg->captions();
@@ -2154,14 +2167,17 @@ bool SpreadsheetView::exportView() {
 			const bool exportEntire = dlg->entireSpreadheet();
 			exportToLaTeX(path, exportHeader, gridLines, captions,
 			                    exportLatexHeader, skipEmptyRows, exportEntire);
-		} else if (dlg->format() == ExportSpreadsheetDialog::FITS) {
+			break;
+		}
+		case ExportSpreadsheetDialog::FITS: {
 			const int exportTo = dlg->exportToFits();
 			const bool commentsAsUnits = dlg->commentsAsUnitsFits();
 			exportToFits(path, exportTo, commentsAsUnits);
-		} else {
-			const QString separator = dlg->separator();
-			const QLocale::Language format = dlg->numberFormat();
-			exportToFile(path, exportHeader, separator, format);
+			break;
+		}
+		case ExportSpreadsheetDialog::SQLite:
+			exportToSQLite(path);
+			break;
 		}
 		RESET_CURSOR;
 	}
@@ -2692,4 +2708,101 @@ void SpreadsheetView::exportToFits(const QString &fileName, const int exportTo, 
 	filter->write(fileName, m_spreadsheet);
 
 	delete filter;
+}
+
+void SpreadsheetView::exportToSQLite(const QString& path) const {
+	QFile file(path);
+	if (!file.open(QFile::WriteOnly | QFile::Truncate))
+		return;
+
+	PERFTRACE("export spreadsheet to SQLite database");
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+
+	//create database
+	const QStringList& drivers = QSqlDatabase::drivers();
+	QString driver;
+	if (drivers.contains(QLatin1String("QSQLITE3")))
+		driver = QLatin1String("QSQLITE3");
+	else
+		driver = QLatin1String("QSQLITE");
+
+	QSqlDatabase db = QSqlDatabase::addDatabase(driver);
+	db.setDatabaseName(path);
+	if (!db.open()) {
+		RESET_CURSOR;
+		KMessageBox::error(nullptr, i18n("Couldn't create the SQLite database %1.", path));
+	}
+
+	//create table
+	const int cols = m_spreadsheet->columnCount();
+	QString query = QLatin1String("create table ") + m_spreadsheet->name() + QLatin1String(" (");
+	for (int i = 0; i < cols; ++i) {
+		Column* col = m_spreadsheet->column(i);
+		if (i != 0)
+			query += QLatin1String(", ");
+
+		query += QLatin1String("\"") + col->name() + QLatin1String("\" ");
+		switch (col->columnMode()) {
+		case AbstractColumn::Numeric:
+			query += QLatin1String("REAL");
+			break;
+		case AbstractColumn::Integer:
+			query += QLatin1String("INTEGER");
+			break;
+		case AbstractColumn::Text:
+		case AbstractColumn::Month:
+		case AbstractColumn::Day:
+		case AbstractColumn::DateTime:
+			query += QLatin1String("TEXT");
+			break;
+		}
+	}
+	query += QLatin1Char(')');
+	QSqlQuery q;
+	if (!q.exec(query)) {
+		RESET_CURSOR;
+		KMessageBox::error(nullptr, i18n("Failed to create table in the SQLite database %1.", path) + "\n" + q.lastError().databaseText());
+		db.close();
+		return;
+	}
+
+	//create bulk insert statement
+	{
+	PERFTRACE("Create the bulk insert statement");
+	q.exec(QLatin1String("BEGIN TRANSACTION;"));
+	query = "INSERT INTO '" + m_spreadsheet->name() + "' (";
+	for (int i = 0; i < cols; ++i) {
+		if (i != 0)
+			query += QLatin1String(", ");
+		query += QLatin1Char('\'') + m_spreadsheet->column(i)->name() + QLatin1Char('\'');
+	}
+	query += QLatin1String(") VALUES ");
+
+	for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
+		if (i != 0)
+			query += QLatin1String(",");
+
+		query += QLatin1Char('(');
+		for (int j = 0; j < cols; ++j) {
+			Column* col = m_spreadsheet->column(j);
+			if (j != 0)
+				query += QLatin1String(", ");
+
+			query += QLatin1Char('\'') + col->asStringColumn()->textAt(i) + QLatin1Char('\'');
+		}
+		query += QLatin1String(")");
+	}
+	query += QLatin1Char(';');
+	}
+
+	//insert values
+	if (!q.exec(query)) {
+		RESET_CURSOR;
+		KMessageBox::error(nullptr, i18n("Failed to insert values into the table."));
+		QDEBUG("bulk insert error " << q.lastError().databaseText());
+	} else
+		q.exec(QLatin1String("COMMIT TRANSACTION;"));
+
+	//close the database
+	db.close();
 }

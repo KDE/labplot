@@ -189,6 +189,11 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 			return;
 		} else
 			m_db.setDatabaseName(dbName);
+	} else if (DatabaseManagerWidget::isODBC(driver)) {
+		if (group.readEntry("CustomConnectionEnabled", false))
+			m_db.setDatabaseName(group.readEntry("CustomConnectionString"));
+		else
+			m_db.setDatabaseName(dbName);
 	} else {
 		m_db.setDatabaseName(dbName);
 		m_db.setHostName( group.readEntry("HostName") );
@@ -439,11 +444,13 @@ void ImportSQLDatabaseWidget::showDatabaseManager() {
 
 	if (dlg->exec() == QDialog::Accepted) {
 		//re-read the available connections to be in sync with the changes in DatabaseManager
+		m_initializing = true;
 		ui.cbConnection->clear();
 		readConnections();
+		m_initializing = false;
 
 		//select the connection the user has selected in DatabaseManager
-		QString conn = dlg->connection();
+		const QString& conn = dlg->connection();
 		ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conn));
 	}
 

@@ -91,7 +91,8 @@ private:
 	void exportToLaTeX(const QString&, const bool exportHeaders,
 	                   const bool gridLines, const bool captions, const bool latexHeaders,
 	                   const bool skipEmptyRows,const bool exportEntire) const;
-	void exportToFits(const QString &fileName, const int exportTo, const bool commentsAsUnits) const;
+	void exportToFits(const QString& path, const int exportTo, const bool commentsAsUnits) const;
+	void exportToSQLite(const QString& path) const;
 
 	QTableView* m_tableView;
 	Spreadsheet* m_spreadsheet;

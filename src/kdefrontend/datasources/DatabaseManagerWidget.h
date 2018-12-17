@@ -44,12 +44,15 @@ public:
 		QString dbName;
 		QString userName;
 		QString password;
+		bool customConnectionEnabled{false};
+		QString customConnectionString;
 	};
 
 	QString connection() const;
 	void setCurrentConnection(const QString&);
 	void saveConnections();
 	static bool isFileDB(const QString&);
+	static bool isODBC(const QString&);
 
 private:
 	Ui::DatabaseManagerWidget ui;
@@ -76,6 +79,8 @@ private slots:
 	void hostChanged();
 	void portChanged();
 	void databaseNameChanged();
+	void customConnectionEnabledChanged(int);
+	void customConnectionChanged();
 	void userNameChanged();
 	void passwordChanged();
 

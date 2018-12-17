@@ -68,28 +68,28 @@ public:
 	const JsonFilter* q;
 	QJsonModel* model;
 
-	JsonFilter::DataContainerType containerType;
-	QJsonValue::Type rowType;
+	JsonFilter::DataContainerType containerType{JsonFilter::Object};
+	QJsonValue::Type rowType{QJsonValue::Object};
 	QVector<int> modelRows;
 
 	QString dateTimeFormat;
-	QLocale::Language numberFormat;
+	QLocale::Language numberFormat{QLocale::C};
 	double nanValue;
-	bool createIndexEnabled;
-	bool importObjectNames;
+	bool createIndexEnabled{false};
+	bool importObjectNames{false};
 	QStringList vectorNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;
 
-	int startRow;		// start row
-	int endRow;			// end row
-	int startColumn;	// start column
-	int endColumn;		// end column
+	int startRow{1};	// start row
+	int endRow{-1};		// end row
+	int startColumn{1};	// start column
+	int endColumn{-1};	// end column
 
 private:
-	int m_actualRows;
-	int m_actualCols;
-	int m_prepared;
-	int m_columnOffset; // indexes the "start column" in the datasource. Data will be imported starting from this column.
+	int m_actualRows{0};
+	int m_actualCols{0};
+	int m_prepared{false};
+	int m_columnOffset{0}; // indexes the "start column" in the datasource. Data will be imported starting from this column.
 	QVector<void*> m_dataContainer; // pointers to the actual data containers (columns).
 	QJsonDocument m_preparedDoc; // parsed Json document
 };

@@ -43,7 +43,8 @@ BinaryOptionsWidget::BinaryOptionsWidget(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(parent);
 
 	ui.cbDataType->addItems(BinaryFilter::dataTypes());
-	ui.cbByteOrder->addItems(BinaryFilter::byteOrders());
+	ui.cbByteOrder->addItem(i18n("Little endian"));
+	ui.cbByteOrder->addItem(i18n("Big endian"));
 
 	const QString textDataTypeShort = i18n("This option determines the data type that the imported data while converting to numbers.");
 

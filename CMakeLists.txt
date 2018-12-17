@@ -15,7 +15,7 @@ find_package(ECM 1.3.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 # build type: "release", "debug", "debugfull"
 string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
-find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
+find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE COMPONENTS
 	Concurrent
 	Gui
 	PrintSupport
@@ -24,6 +24,8 @@ find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Widgets
 	Test
 	SerialPort
+OPTIONAL_COMPONENTS
+	Mqtt
 )
 
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
@@ -250,7 +252,10 @@ FIND_PACKAGE(HDF5 COMPONENTS C)
 IF (HDF5_FOUND)
 	add_definitions (-DHAVE_HDF5)
 	IF (HDF5_VERSION VERSION_GREATER "1.9")
-		add_definitions (-DHAVE_HDF5_1_10)
+		add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_0)
+	ENDIF ()
+	IF (HDF5_VERSION VERSION_GREATER "1.10.0.1")
+		add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_1)
 	ENDIF ()
 	include_directories (${HDF5_INCLUDE_DIRS})
 ELSE ()
@@ -288,10 +293,6 @@ ENDIF ()
 
 ### MQTT (optional) ###############################
 IF (ENABLE_MQTT)
-find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE COMPONENTS
-OPTIONAL_COMPONENTS
-	Mqtt
-)
 IF (Qt5Mqtt_FOUND)
 	MESSAGE (STATUS "Found MQTT")
 	add_definitions (-DHAVE_MQTT)

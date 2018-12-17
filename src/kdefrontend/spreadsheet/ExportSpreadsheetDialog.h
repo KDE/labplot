@@ -71,6 +71,7 @@ public:
 		Binary,
 		LaTeX,
 		FITS,
+		SQLite
 	};
 
 	Format format() const;

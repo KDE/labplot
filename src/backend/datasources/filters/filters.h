@@ -1,9 +1,10 @@
 /***************************************************************************
-File                 : ImageFilterPrivate.h
-Project              : LabPlot
-Description          : Private implementation class for ImageFilter.
---------------------------------------------------------------------
-Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+    File                 : filters.h
+    Project              : LabPlot
+    Description          : header including all filters
+    --------------------------------------------------------------------
+    Copyright            : (C) 2018 Stefan-Gerlach (stefan.gerlach@uni.kn)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -24,26 +25,19 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef IMAGEFILTERPRIVATE_H
-#define IMAGEFILTERPRIVATE_H
 
-class AbstractDataSource;
+#ifndef FILTERS_H
+#define FILTERS_H
 
-class ImageFilterPrivate {
-
-public:
-	explicit ImageFilterPrivate(ImageFilter*);
-
-	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace);
-	void write(const QString& fileName, AbstractDataSource*);
-
-	const ImageFilter* q;
-
-	ImageFilter::ImportFormat importFormat{ImageFilter::MATRIX};	// how to import the image
-	int startRow{1};		// start row
-	int endRow{-1}; 		// end row
-	int startColumn{1};		// start column
-	int endColumn{-1};		// end column
-};
+#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/BinaryFilter.h"
+#include "backend/datasources/filters/ImageFilter.h"
+#include "backend/datasources/filters/HDF5Filter.h"
+#include "backend/datasources/filters/NetCDFFilter.h"
+#include "backend/datasources/filters/FITSFilter.h"
+#include "backend/datasources/filters/JsonFilter.h"
+#include "backend/datasources/filters/ROOTFilter.h"
+#include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
+#include "backend/datasources/filters/NgspiceRawBinaryFilter.h"
 
 #endif

@@ -120,18 +120,21 @@ int ImageFilter::endColumn() const {
 	return d->endColumn;
 }
 
+QString ImageFilter::fileInfoString(const QString& fileName) {
+	DEBUG("ImageFilter::fileInfoString()");
+	QString info;
+
+	//TODO
+	Q_UNUSED(fileName);
+
+	return info;
+}
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
 
-ImageFilterPrivate::ImageFilterPrivate(ImageFilter* owner) :
-	q(owner),
-	importFormat(ImageFilter::MATRIX),
-	startRow(1),
-	endRow(-1),
-	startColumn(1),
-	endColumn(-1) {
-}
+ImageFilterPrivate::ImageFilterPrivate(ImageFilter* owner) : q(owner) {}
 
 /*!
     reads the content of the file \c fileName to the data source \c dataSource.
