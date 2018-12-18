@@ -767,7 +767,8 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 	DEBUG("	resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols);
 	int columnOffset = 0;
 	setUndoAware(false);
-	m_model->suppressSignals(true);
+	if (m_model != nullptr)
+		m_model->suppressSignals(true);
 
 	//make the available columns undo unaware before we resize and rename them below,
 	//the same will be done for new columns in this->resize().
@@ -946,7 +947,8 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 	for (int i = 0; i < childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(true);
 
-	m_model->suppressSignals(false);
+	if (m_model != nullptr)
+		m_model->suppressSignals(false);
 
 	if (m_partView != nullptr && m_view != nullptr)
 		m_view->resizeHeader();
