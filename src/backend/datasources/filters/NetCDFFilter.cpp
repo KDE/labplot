@@ -225,7 +225,9 @@ NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) : q(owner) {
 void NetCDFFilterPrivate::handleError(int err, const QString& function) {
 	if (err != NC_NOERR) {
 		DEBUG("NETCDF ERROR:" << function.toStdString() << "() - " << nc_strerror(err));
+		return;
 	}
+	Q_UNUSED(function);
 }
 
 QString NetCDFFilterPrivate::translateDataType(nc_type type) {
