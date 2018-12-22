@@ -102,6 +102,7 @@ Source: "{#CraftRoot}\etc\xdg\cantor*"; DestDir: "{app}\etc\xdg"; Flags: recurse
 Source: "{#CraftRoot}\bin\data\metainfo\org.kde.cantor.appdata.xml"; DestDir: "{app}\data\metainfo"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\data\applications\org.kde.cantor.desktop"; DestDir: "{app}\data\applications"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\data\config.kcfg\*"; DestDir: "{app}\data\config.kcfg"; Flags: recursesubdirs ignoreversion
+Source: "{#CraftRoot}\bin\data\icons\hicolor\48x48\apps\*"; DestDir: "{app}\data\icons\hicolor\48x48\apps\"; Flags: recursesubdirs ignoreversion
 ; misc
 Source: "{#CraftRoot}\bin\libfftw3.dll"; DestDir: "{app}"; DestName: "libfftw3-3.dll"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\netcdf.dll"; DestDir: "{app}"; Flags: ignoreversion
