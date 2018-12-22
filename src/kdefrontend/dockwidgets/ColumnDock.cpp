@@ -106,25 +106,23 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	this->updateTypeWidgets(columnMode);
 	ui.cbPlotDesignation->setCurrentIndex( int(m_column->plotDesignation()) );
 
-	//disable widgets if we have at least one non-editable column
-	ui.cbType->setEnabled(!nonEditable);
-	ui.lFormat->setVisible(!nonEditable);
-	ui.cbFormat->setVisible(!nonEditable);
-	ui.lPrecision->setVisible(!nonEditable);
-	ui.sbPrecision->setVisible(!nonEditable);
-	ui.lPlotDesignation->setVisible(!nonEditable);
-	ui.cbPlotDesignation->setVisible(!nonEditable);
-	if (nonEditable) {
-		m_initializing = false;
-		return;
+	if (!nonEditable) {
+		// slots
+		connect(m_column, &AbstractColumn::aspectDescriptionChanged, this, &ColumnDock::columnDescriptionChanged);
+		connect(m_column, &AbstractColumn::modeChanged, this, &ColumnDock::columnModeChanged);
+		connect(m_column->outputFilter(), &AbstractSimpleFilter::formatChanged, this, &ColumnDock::columnFormatChanged);
+		connect(m_column->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &ColumnDock::columnPrecisionChanged);
+		connect(m_column, &AbstractColumn::plotDesignationChanged, this, &ColumnDock::columnPlotDesignationChanged);
+	} else {
+		//disable widgets if we have at least one non-editable column
+		ui.cbType->setEnabled(false);
+		ui.lFormat->hide();
+		ui.cbFormat->hide();
+		ui.lPrecision->hide();
+		ui.sbPrecision->hide();
+		ui.lPlotDesignation->hide();
+		ui.cbPlotDesignation->hide();
 	}
-
-	// slots
-	connect(m_column, &AbstractColumn::aspectDescriptionChanged, this, &ColumnDock::columnDescriptionChanged);
-	connect(m_column, &AbstractColumn::modeChanged, this, &ColumnDock::columnModeChanged);
-	connect(m_column->outputFilter(), &AbstractSimpleFilter::formatChanged, this, &ColumnDock::columnFormatChanged);
-	connect(m_column->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &ColumnDock::columnPrecisionChanged);
-	connect(m_column, &AbstractColumn::plotDesignationChanged, this, &ColumnDock::columnPlotDesignationChanged);
 
 	m_initializing = false;
 }
