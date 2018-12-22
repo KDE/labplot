@@ -45,19 +45,24 @@ public:
 	/// Return a list of selected histograms
 	const QStringList selectedROOTNames() const;
 	int lines() const { return ui.sbPreviewLines->value(); }
-	int startBin() const { return ui.sbFirst->value(); }
-	int endBin() const { return ui.sbLast->value(); }
-	int columns() const;
-	void setNBins(int nbins);
+	int startRow() const { return ui.sbFirst->value(); }
+	int endRow() const { return ui.sbLast->value(); }
+	QVector<QStringList> columns() const;
+	void setNRows(int nrows);
 	QTableWidget* previewWidget() const { return ui.twPreview; }
 
 private:
 	Ui::ROOTOptionsWidget ui;
+	QTreeWidgetItem* histItem;
+	QTreeWidgetItem* treeItem;
+	QHash<QString, QVector<QStringList> > leaves;
+
 	ImportFileWidget* m_fileWidget;
+	bool histselected = false;
 
 private slots:
 	/// Updates the selected data set of a ROOT file when a new item is selected
-	void rootListWidgetSelectionChanged();
+	void rootObjectSelectionChanged();
 };
 
 #endif

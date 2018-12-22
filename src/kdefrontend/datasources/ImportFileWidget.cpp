@@ -124,7 +124,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #endif
 		ui.cbFileType->addItem(i18n("JSON data"), AbstractFileFilter::JSON);
 #ifdef HAVE_ZIP
-		ui.cbFileType->addItem(i18n("ROOT (CERN) Histograms"), AbstractFileFilter::ROOT);
+		ui.cbFileType->addItem(i18n("ROOT (CERN)"), AbstractFileFilter::ROOT);
 #endif
 		ui.cbFileType->addItem(i18n("Ngspice RAW ASCII"), AbstractFileFilter::NgspiceRawAscii);
 		ui.cbFileType->addItem(i18n("Ngspice RAW Binary"), AbstractFileFilter::NgspiceRawBinary);
@@ -706,10 +706,10 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		auto filter = static_cast<ROOTFilter*>(m_currentFilter.get());
 		QStringList names = selectedROOTNames();
 		if (!names.isEmpty())
-			filter->setCurrentHistogram(names.first());
+			filter->setCurrentObject(names.first());
 
-		filter->setStartBin( m_rootOptionsWidget->startBin() );
-		filter->setEndBin( m_rootOptionsWidget->endBin() );
+		filter->setStartRow( m_rootOptionsWidget->startRow() );
+		filter->setEndRow( m_rootOptionsWidget->endRow() );
 		filter->setColumns( m_rootOptionsWidget->columns() );
 
 		break;
@@ -1925,13 +1925,12 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::ROOT: {
 		auto filter = static_cast<ROOTFilter*>(currentFileFilter());
 		lines = m_rootOptionsWidget->lines();
-
-		m_rootOptionsWidget->setNBins(filter->binsInCurrentHistogram(fileName));
-		importedStrings = filter->previewCurrentHistogram(
+		m_rootOptionsWidget->setNRows(filter->rowsInCurrentObject(fileName));
+		importedStrings = filter->previewCurrentObject(
 					fileName,
-					m_rootOptionsWidget->startBin(),
-					qMin(m_rootOptionsWidget->startBin() + m_rootOptionsWidget->lines() - 1,
-						 m_rootOptionsWidget->endBin())
+					m_rootOptionsWidget->startRow(),
+					qMin(m_rootOptionsWidget->startRow() + m_rootOptionsWidget->lines() - 1,
+						 m_rootOptionsWidget->endRow())
 					);
 		tmpTableWidget = m_rootOptionsWidget->previewWidget();
 		// the last vector element contains the column names

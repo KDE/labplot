@@ -30,10 +30,12 @@ Copyright            : (C) 2018 Christoph Roick (chrisito@gmx.de)
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
+#include <QStringList>
+#include <QVector>
+
 class ROOTFilterPrivate;
 class QStringList;
 class QIODevice;
-
 
 /// Manages the importing of histograms from ROOT files
 class ROOTFilter : public AbstractFileFilter {
@@ -60,45 +62,57 @@ public:
 	void saveFilterSettings(const QString&) const override;
 
 	/// List names of histograms contained in ROOT file
-	QStringList listHistograms(const QString& fileName);
+	QStringList listHistograms(const QString& fileName) const;
+	/// List names of trees contained in ROOT file
+	QStringList listTrees(const QString& fileName) const;
+	/// List names of leaves contained in ROOT tree
+	QVector<QStringList> listLeaves(const QString& fileName, const QString& treeName) const;
 
 	/// Set the current histograms, which is one out of listHistograms
-	void setCurrentHistogram(const QString&);
-	/// Get the name of the currently set histogram
-	const QString currentHistogram() const;
+	void setCurrentObject(const QString&);
+	/// Get the name of the currently set object
+	const QString currentObject() const;
 
-	/// Get preview data of the currently set histogram
-	QVector<QStringList> previewCurrentHistogram(const QString& fileName,
-	                                             int first, int last);
+	/// Get preview data of the currently set object
+	QVector<QStringList> previewCurrentObject(const QString& fileName,
+	                                             int first, int last) const;
 
-	/// Get the number of bins in the current histogram
-	int binsInCurrentHistogram(const QString& fileName);
-
-	/**
-	 * @brief Set the first bin of the histogram to be read
-	 *
-	 * The default of -1 skips the underflow bin with index 0
-	 */
-	void setStartBin(const int bin);
-	/// Get the index of the first bin to be read
-	int startBin() const;
-	/**
-	 * @brief Set the last bin of the histogram to be read
-	 *
-	 * The default of -1 skips the overflow bin
-	 */
-	void setEndBin(const int bin);
-	/// Get the index of the last bin to be read
-	int endBin() const;
+	/// Get the number of rows in the current object
+	int rowsInCurrentObject(const QString& fileName) const;
 
 	/**
-	 * @brief Set the first column of the histogram to be read
+	 * @brief Set the last bin of the object to be read
 	 *
-	 * The following columns are available: Bin Center, Content, Error
+	 * -1 skips the underflow bin of histograms
 	 */
-	void setColumns(const int columns);
-	/// Get the index of the first column to be read
-	int columns() const;
+	void setStartRow(const int bin);
+	/// Get the index of the first row to be read
+	int startRow() const;
+	/**
+	 * @brief Set the last row of the object to be read
+	 *
+	 * -1 skips the overflow bin of histograms
+	 */
+	void setEndRow(const int bin);
+	/// Get the index of the last row to be read
+	int endRow() const;
+
+	/**
+	 * @brief Set the colums of the object to be read
+	 *
+	 * For histograms the following are available: center, low, content, error
+	 */
+	void setColumns(const QVector<QStringList>& columns);
+	/**
+     * @brief Get the columns to be read
+     *
+     * For histograms, the identifiers for location, content and error are given
+     * as the first part, the corresponding translation as the second part.
+     * For trees, the branch name and the leaf name are returned.
+     *
+     * @return A pair of strings with different content depending on the object type
+     */
+	QVector<QStringList> columns() const;
 
 	/// Save bin limitation settings
 	void save(QXmlStreamWriter*) const override;

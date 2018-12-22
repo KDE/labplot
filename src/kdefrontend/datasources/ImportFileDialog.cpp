@@ -283,7 +283,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 						static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names[i]);
 						break;
 					case AbstractFileFilter::ROOT:
-						static_cast<ROOTFilter*>(filter)->setCurrentHistogram(names[i]);
+						static_cast<ROOTFilter*>(filter)->setCurrentObject(names[i]);
 						break;
 					case AbstractFileFilter::Ascii:
 					case AbstractFileFilter::Binary:
