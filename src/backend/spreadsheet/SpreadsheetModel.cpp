@@ -73,6 +73,13 @@ SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet)
 
 void SpreadsheetModel::suppressSignals(bool value) {
 	m_suppressSignals = value;
+
+	//update the headers after all the data was added to the model
+	//and we start listening to signals again
+	if (!m_suppressSignals) {
+		updateVerticalHeader();
+		updateHorizontalHeader();
+	}
 }
 
 Qt::ItemFlags SpreadsheetModel::flags(const QModelIndex& index) const {
@@ -88,7 +95,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 
 	const int row = index.row();
 	const int col = index.column();
-	Column* col_ptr = m_spreadsheet->column(col);
+	const Column* col_ptr = m_spreadsheet->column(col);
 
 	if(!col_ptr)
 		return QVariant();
@@ -258,9 +265,6 @@ void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect* parent, 
 }
 
 void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
-	if (m_suppressSignals)
-		return;
-
 	const Column* col = qobject_cast<const Column*>(aspect);
 
 	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
