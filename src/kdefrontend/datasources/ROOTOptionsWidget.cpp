@@ -106,7 +106,7 @@ void ROOTOptionsWidget::rootObjectSelectionChanged() {
 			bool ok = false;
 			if (l.count() > 1) {
 				QString index(l.back());
-				if (index.front() == '[' && index.back() == ']') {
+				if (index.at(0) == '[' && index.at(index.size() - 1) == ']') {
 					size_t elements = index.mid(1, index.length() - 2).toUInt(&ok);
 					if (ok) {
 						leaf->setFlags(Qt::ItemIsEnabled);

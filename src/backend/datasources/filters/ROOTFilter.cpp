@@ -229,7 +229,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		for (const auto& l : columns) {
 			QString lastelement = l.back(), leaf = l.front();
 			bool isArray = false;
-			if (lastelement.front() == '[' && lastelement.back() == ']') {
+			if (lastelement.at(0) == '[' && lastelement.at(lastelement.size() - 1) == ']') {
 				lastelement.mid(1, lastelement.length() - 2).toUInt(&isArray);
 			}
 			if (!isArray || l.count() == 2)
@@ -248,7 +248,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 			size_t element = 0;
 			QString lastelement = l.back(), leaf = l.front();
 			bool isArray = false;
-			if (lastelement.front() == '[' && lastelement.back() == ']') {
+			if (lastelement.at(0) == '[' && lastelement.at(lastelement.size() - 1) == ']') {
 				element = lastelement.mid(1, lastelement.length() - 2).toUInt(&isArray);
 				if (!isArray)
 					element = 0;
@@ -367,7 +367,7 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 			size_t element = 0;
 			QString lastelement = l.back(), leaf = l.front();
 			bool isArray = false;
-			if (lastelement.front() == '[' && lastelement.back() == ']') {
+			if (lastelement.at(0) == '[' && lastelement.at(lastelement.size() - 1) == ']') {
 				element = lastelement.mid(1, lastelement.length() - 2).toUInt(&isArray);
 				if (!isArray)
 					element = 0;
