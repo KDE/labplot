@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>469</width>
-    <height>499</height>
+    <width>636</width>
+    <height>399</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,152 +17,14 @@
    </sizepolicy>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="9" column="0" colspan="2">
-    <widget class="QCheckBox" name="chbSkipEmptyParts">
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="label_7">
      <property name="text">
-      <string>Skip empty parts</string>
+      <string>Comment character:</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="0" colspan="4">
-    <widget class="QCheckBox" name="chbHeader">
-     <property name="text">
-      <string>Use the first row to name the vectors</string>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QLabel" name="lDateTimeFormat">
-     <property name="text">
-      <string>DateTime format:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="0" colspan="2">
-    <widget class="QLabel" name="lVectorNames">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="text">
-      <string>Vector names:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0" colspan="3">
-    <widget class="QCheckBox" name="chbSimplifyWhitespaces">
-     <property name="toolTip">
-      <string>Removes the whitespaces from the start and the end, and replaces each sequence of internal whitespaces with a single space.</string>
-     </property>
-     <property name="text">
-      <string>Simplify whitespaces</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <widget class="KComboBox" name="cbSeparatingCharacter">
-     <property name="editable">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="2">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="3" column="0" colspan="2">
-    <widget class="QLabel" name="lNumberFormat">
-     <property name="text">
-      <string>Number format:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="3">
-    <widget class="QLineEdit" name="kleVectorNames">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="toolTip">
-      <string>Vector names, space separated. E.g. &quot;x y&quot;</string>
-     </property>
-     <property name="showClearButton" stdset="0">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="12" column="1">
-    <spacer name="verticalSpacer_4">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>44</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="3" column="3">
-    <widget class="QComboBox" name="cbNumberFormat"/>
-   </item>
-   <item row="4" column="3">
-    <widget class="KComboBox" name="cbDateTimeFormat">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="editable">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <spacer name="verticalSpacer_3">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="0" colspan="3">
-    <widget class="QLabel" name="lSeparatingCharacter">
-     <property name="text">
-      <string>Separating string:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="3">
+   <item row="0" column="2" colspan="2">
     <widget class="KComboBox" name="cbCommentCharacter">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -172,13 +34,6 @@
      </property>
      <property name="editable">
       <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="3">
-    <widget class="QLabel" name="label_7">
-     <property name="text">
-      <string>Comment character:</string>
      </property>
     </widget>
    </item>
@@ -195,7 +50,74 @@
      </property>
     </spacer>
    </item>
-   <item row="6" column="3">
+   <item row="1" column="0" colspan="2">
+    <widget class="QLabel" name="lSeparatingCharacter">
+     <property name="text">
+      <string>Separating string:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2" colspan="2">
+    <widget class="KComboBox" name="cbSeparatingCharacter">
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QLabel" name="lNumberFormat">
+     <property name="text">
+      <string>Number format:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2" colspan="2">
+    <widget class="QComboBox" name="cbNumberFormat"/>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QLabel" name="lDateTimeFormat">
+     <property name="text">
+      <string>DateTime format:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2" colspan="2">
+    <widget class="KComboBox" name="cbDateTimeFormat">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <spacer name="verticalSpacer_3">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="QCheckBox" name="chbCreateIndex">
+     <property name="text">
+      <string>Create index column</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
     <widget class="QCheckBox" name="chbConvertNaNToZero">
      <property name="text">
       <string>Convert NaN to 0</string>
@@ -205,17 +127,79 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="3">
-    <widget class="QCheckBox" name="chbCreateIndex">
+   <item row="5" column="3">
+    <widget class="QCheckBox" name="chbSkipEmptyParts">
      <property name="text">
-      <string>Create index column</string>
+      <string>Skip empty parts</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="3">
+   <item row="6" column="0" colspan="2">
+    <widget class="QCheckBox" name="chbSimplifyWhitespaces">
+     <property name="toolTip">
+      <string>Removes the whitespaces from the start and the end, and replaces each sequence of internal whitespaces with a single space.</string>
+     </property>
+     <property name="text">
+      <string>Simplify whitespaces</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2">
     <widget class="QCheckBox" name="chbRemoveQuotes">
      <property name="text">
       <string>Remove quotes</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="3">
+    <widget class="QCheckBox" name="chbHeader">
+     <property name="text">
+      <string>Use the first row to name the vectors</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="2">
+    <widget class="QLabel" name="lVectorNames">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="text">
+      <string>Vector names:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="1">
+    <spacer name="verticalSpacer_4">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>44</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="8" column="2" colspan="2">
+    <widget class="QLineEdit" name="kleVectorNames">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="toolTip">
+      <string>Vector names, space separated. E.g. &quot;x y&quot;</string>
+     </property>
+     <property name="showClearButton" stdset="0">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

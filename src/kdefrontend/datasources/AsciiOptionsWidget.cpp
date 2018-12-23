@@ -126,17 +126,17 @@ void AsciiOptionsWidget::showAsciiHeaderOptions(bool b) {
 }
 
 /*!
-  enables a text field for the vector names if the option "Use the first row..." was not selected.
-  Disables it otherwise.
+  Shows a text field for the vector names if the option "Use the first row..." was not selected.
+  Hides it otherwise.
 */
 void AsciiOptionsWidget::headerChanged(int state) {
 	DEBUG("AsciiOptionsWidget::headerChanged(" << state << ")");
 	if (state == Qt::Checked) {
-		ui.kleVectorNames->setEnabled(false);
-		ui.lVectorNames->setEnabled(false);
+		ui.kleVectorNames->hide();
+		ui.lVectorNames->hide();
 	} else {
-		ui.kleVectorNames->setEnabled(true);
-		ui.lVectorNames->setEnabled(true);
+		ui.kleVectorNames->show();
+		ui.lVectorNames->show();
 	}
 }
 
