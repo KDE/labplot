@@ -615,20 +615,6 @@ void MQTTConnectionManagerWidget::testConnection() {
 	m_testing = true;
 	const int index = ui.lwConnections->currentRow();
 
-	ui.leHost->setEnabled(false);
-	ui.lePort->setEnabled(false);
-	ui.leID ->setEnabled(false);
-	ui.leName->setEnabled(false);
-	ui.leUserName->setEnabled(false);
-	ui.lePassword->setEnabled(false);
-	ui.bAdd->setEnabled(false);
-	ui.bRemove->setEnabled(false);
-	ui.bTest->setEnabled(false);
-	ui.chbAuthentication->setEnabled(false);
-	ui.chbID->setEnabled(false);
-	ui.chbRetain->setEnabled(false);
-	ui.lwConnections->setEnabled(false);
-
 	m_client->setHostname(m_connections[index].hostName);
 	m_client->setPort(m_connections[index].port);
 
@@ -651,7 +637,8 @@ void MQTTConnectionManagerWidget::onConnect() {
 	RESET_CURSOR;
 	m_testTimer->stop();
 
-	KMessageBox::information(this, i18n("Connection to the broker '%1' was successful.", m_connections[ui.lwConnections->currentRow()].hostName),
+	const QString& hostName = m_connections[ui.lwConnections->currentRow()].hostName;
+	KMessageBox::information(this, i18n("Connection to the broker '%1' was successful.", hostName),
 			i18n("Connection Successful"));
 
 	m_client->disconnectFromHost();
@@ -664,7 +651,8 @@ void MQTTConnectionManagerWidget::testTimeout() {
 	RESET_CURSOR;
 	m_testTimer->stop();
 
-	KMessageBox::error(this, i18n("Failed to connect to the broker '%1'.", m_connections[ui.lwConnections->currentRow()].hostName),
+	const QString& hostName = m_connections[ui.lwConnections->currentRow()].hostName;
+	KMessageBox::error(this, i18n("Failed to connect to the broker '%1'.", hostName),
 			i18n("Connection Failed"));
 
 	m_client->disconnectFromHost();
@@ -672,28 +660,15 @@ void MQTTConnectionManagerWidget::testTimeout() {
 
 /*!
  * \brief Called when the client disconnects from the host
- * Enables the widgets, because the test has ended
  */
 void MQTTConnectionManagerWidget::onDisconnect() {
 	RESET_CURSOR;
-
-	ui.leHost->setEnabled(true);
-	ui.lePort->setEnabled(true);
-	ui.leID ->setEnabled(true);
-	ui.leName->setEnabled(true);
-	ui.leUserName->setEnabled(true);
-	ui.lePassword->setEnabled(true);
-	ui.bAdd->setEnabled(true);
-	ui.bRemove->setEnabled(true);
-	ui.bTest->setEnabled(true);
-	ui.chbAuthentication->setEnabled(true);
-	ui.chbID->setEnabled(true);
-	ui.chbRetain->setEnabled(true);
-	ui.lwConnections->setEnabled(true);
-
-	m_client->setClientId("");
-	m_client->setUsername("");
-	m_client->setPassword("");
+	if (m_testTimer->isActive()) {
+		const QString& hostName = m_connections[ui.lwConnections->currentRow()].hostName;
+		KMessageBox::error(this, i18n("Disconnected from the broker '%1' befor the connection was successful.", hostName),
+			i18n("Connection Failed"));
+		m_testTimer->stop();
+	}
 }
 
 #endif

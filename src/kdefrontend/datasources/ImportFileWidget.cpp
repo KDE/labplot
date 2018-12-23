@@ -90,6 +90,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_MQTT
 	,
 	m_client(nullptr),
+	m_topicCompleter(nullptr),
+	m_subscriptionCompleter(nullptr),
 	m_searching(false),
 	m_searchTimer(new QTimer(this)),
 	m_connectTimeoutTimer(new QTimer(this)),
@@ -1500,7 +1502,7 @@ void ImportFileWidget::fileTypeChanged(int index) {
 	//when switching from the previous file type we re-set the tab widget to its original state
 	//and remove/add the required tabs further below
 	for (int i = 0; i<ui.tabWidget->count(); ++i)
-		ui.tabWidget->count();
+		ui.tabWidget->removeTab(0);
 
 	ui.tabWidget->addTab(ui.tabDataFormat, i18n("Data format"));
 	ui.tabWidget->addTab(ui.tabDataPreview, i18n("Preview"));
@@ -1573,8 +1575,7 @@ void ImportFileWidget::fileTypeChanged(int index) {
 	filterChanged(lastUsedFilterIndex);
 
 	if (currentSourceType() == LiveDataSource::FileOrPipe) {
-		const QString fileName = absolutePath(ui.leFileName->text());
-
+		const QString& fileName = absolutePath(ui.leFileName->text());
 		if (QFile::exists(fileName))
 			updateContent(fileName, static_cast<AbstractFileFilter::FileType>(fileType));
 	}
@@ -1968,7 +1969,6 @@ void ImportFileWidget::refreshPreview() {
 	tmpTableWidget->setRowCount(0);
 	tmpTableWidget->setColumnCount(0);
 	if ( !importedStrings.isEmpty() ) {
-		//QDEBUG("importedStrings =" << importedStrings);
 		if (!ok) {
 			// show imported strings as error message
 			tmpTableWidget->setRowCount(1);
@@ -1983,9 +1983,7 @@ void ImportFileWidget::refreshPreview() {
 			tmpTableWidget->setRowCount(rows);
 
 			for (int i = 0; i < rows; ++i) {
-				// 				QDEBUG("imported string " << importedStrings[i]);
-
-				int cols = importedStrings[i].size() > maxColumns ? maxColumns : importedStrings[i].size();	// new
+				const int cols = importedStrings[i].size() > maxColumns ? maxColumns : importedStrings[i].size();
 				if (cols > tmpTableWidget->columnCount())
 					tmpTableWidget->setColumnCount(cols);
 
@@ -2000,6 +1998,7 @@ void ImportFileWidget::refreshPreview() {
 				QString columnName = QString::number(i+1);
 				if (i < vectorNameList.size())
 					columnName = vectorNameList[i];
+
 				auto* item = new QTableWidgetItem(columnName + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, columnModes[i]) + QLatin1String("}"));
 				item->setTextAlignment(Qt::AlignLeft);
 				item->setIcon(AbstractColumn::iconForMode(columnModes[i]));
@@ -2305,9 +2304,6 @@ void ImportFileWidget::mqttConnectionChanged() {
 		connect(m_client, &QMqttClient::messageReceived, this, &ImportFileWidget::mqttMessageReceived);
 		connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
 
-		ui.cbConnection->setEnabled(false);
-		ui.bManageConnections->setEnabled(false);
-
 		//determine the current connection's settings
 		KConfig config(m_configPath, KConfig::SimpleConfig);
 		KConfigGroup group = config.group(ui.cbConnection->currentText());
@@ -2338,9 +2334,7 @@ void ImportFileWidget::mqttConnectionChanged() {
 		m_client->connectToHost();
 	} else if (m_client->state() == QMqttClient::ClientState::Connected) {
 		WAIT_CURSOR;
-		ui.cbConnection->setEnabled(false);
-		ui.bManageConnections->setEnabled(false);
-		qDebug()<<"Disconnecting from MQTT broker"	;
+		qDebug()<<"Disconnecting from MQTT broker";
 		m_client->disconnectFromHost();
 	}
 }
@@ -2360,8 +2354,6 @@ void ImportFileWidget::onMqttConnect() {
 		if (!m_mainSubscription)
 			QMessageBox::critical(this, i18n("Couldn't subscribe"), i18n("Couldn't subscribe. Something went wrong"));
 	}
-	ui.cbConnection->setEnabled(true);
-	ui.bManageConnections->setEnabled(true);
 	emit subscriptionsChanged();
 	RESET_CURSOR;
 }
@@ -2371,35 +2363,27 @@ void ImportFileWidget::onMqttConnect() {
  * removes every information about the former connection
  */
 void ImportFileWidget::onMqttDisconnect() {
-	m_lastMessage.clear();
-	m_messageArrived.clear();
-	m_mqttSubscriptions.clear();
-	m_topicList.clear();
-	ui.twSubscriptions->clear();
-	ui.twTopics->clear();
-
+	DEBUG("Disconected from " << m_client->hostname().toStdString());
 	m_searchTimer->stop();
 	m_connectTimeoutTimer->stop();
 
-	ui.gbManageSubscriptions->setVisible(false);
-	ui.cbSourceType->setEnabled(true);
-	ui.cbConnection->setEnabled(true);
-	ui.bManageConnections->setEnabled(true);
+	ui.lTopics->hide();
+	ui.gbManageSubscriptions->hide();
+	ui.lEnableWillSettings->hide();
+	ui.chkEnableWillSettings->hide();
+	ui.lWillMessage->hide();
+	ui.bWillMessage->hide();
 
+	ui.cbConnection->setItemText(ui.cbConnection->currentIndex(), ui.cbConnection->currentText() + " " + i18n("(Disconnected)"));
 	m_mqttReadyForPreview = false;
 	m_searching = false;
-	m_topicCompleter = new QCompleter;
-	m_subscriptionCompleter = new QCompleter;
+	delete m_topicCompleter;
+	delete m_subscriptionCompleter;
 
 	emit subscriptionsChanged();
 	RESET_CURSOR;
-
-	if (!m_initialisingMQTT) {
-		if (!m_connectionTimedOut)
-			QTimer::singleShot(300, this, &ImportFileWidget::mqttConnectionChanged);
-		else
-			m_connectionTimedOut = false;
-	}
+	QMessageBox::critical(this, i18n("Disconnected"),
+		i18n("Disconnected from the broker '%1' befor the connection was successful.", m_client->hostname()));
 }
 
 /*!
@@ -2408,9 +2392,8 @@ void ImportFileWidget::onMqttDisconnect() {
 void ImportFileWidget::mqttAvailableTopicDoubleClicked(QTreeWidgetItem* item, int column) {
 	Q_UNUSED(column)
 	// Only for leaf topics
-	if (item->childCount() == 0) {
+	if (item->childCount() == 0)
 		mqttSubscribe();
-	}
 }
 
 /*!
@@ -2884,8 +2867,8 @@ void ImportFileWidget::mqttConnectTimeout() {
 	m_connectionTimedOut = true;
 	m_client->disconnectFromHost();
 	m_connectTimeoutTimer->stop();
-	QMessageBox::warning(this, i18n("Warning"), i18n("Connecting to the given broker timed out! Try changing the settings"));
 	RESET_CURSOR;
+	QMessageBox::warning(this, i18n("Warning"), i18n("Connecting to the given broker timed out! Try changing the settings"));
 }
 
 /*!
