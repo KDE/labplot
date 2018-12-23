@@ -32,7 +32,6 @@ Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include "ImportFileWidget.h"
 #include "FileInfoDialog.h"
 #include "backend/datasources/filters/filters.h"
-#include "backend/datasources/filters/QJsonModel.h"
 #include "AsciiOptionsWidget.h"
 #include "BinaryOptionsWidget.h"
 #include "HDF5OptionsWidget.h"
@@ -50,7 +49,6 @@ Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include <QInputDialog>
 #include <QIntValidator>
 #include <QLocalSocket>
-#include <QJsonDocument>
 #include <QProcess>
 #include <QStandardItemModel>
 #include <QTableWidget>
@@ -60,7 +58,6 @@ Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include <QCheckBox>
 #include <QTreeWidgetItem>
 #include <QStringList>
-#include <QBuffer>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -70,7 +67,6 @@ Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include "kdefrontend/widgets/MQTTWillSettingsWidget.h"
 #include "MQTTConnectionManagerDialog.h"
 #include "MQTTConnectionManagerWidget.h"
-#include "backend/core/Project.h"
 #include <QMqttClient>
 #include <QMqttSubscription>
 #include <QMqttTopicFilter>
@@ -103,10 +99,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #endif
 {
 	ui.setupUi(this);
-
-	auto* completer = new QCompleter(this);
-	completer->setModel(new QDirModel);
-	ui.leFileName->setCompleter(completer);
+	ui.leFileName->setCompleter(new QCompleter(new QDirModel));
 
 	//add supported file types
 	if (!liveDataSource) {
@@ -252,10 +245,10 @@ void ImportFileWidget::loadSettings() {
 
 #ifdef HAVE_MQTT
 	//MQTT related settings
-	//read available connections
 	m_initialisingMQTT = true;
-	readMQTTConnections();
 
+	//read available connections
+	readMQTTConnections();
 	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conf.readEntry("Connection", "")));
 
 	m_willSettings.willRetain = conf.readEntry("mqttWillRetain").toInt();
@@ -263,11 +256,12 @@ void ImportFileWidget::loadSettings() {
 	m_willSettings.willQoS = conf.readEntry("mqttWillQoS").toInt();
 	m_willSettings.willOwnMessage = conf.readEntry("mqttWillOwnMessage","");
 	m_willSettings.willTimeInterval = conf.readEntry("mqttWillUpdateInterval","").toInt();
-	QString willStatistics = conf.readEntry("mqttWillStatistics","");
-	QStringList statisticsList = willStatistics.split('|', QString::SplitBehavior::SkipEmptyParts);
-	for (auto value : statisticsList) {
+
+	const QString& willStatistics = conf.readEntry("mqttWillStatistics","");
+	const QStringList& statisticsList = willStatistics.split('|', QString::SplitBehavior::SkipEmptyParts);
+	for (auto value : statisticsList)
 		m_willSettings.willStatistics[value.toInt()] = true;
-	}
+
 	m_willSettings.willMessageType = static_cast<MQTTClient::WillMessageType>(conf.readEntry("mqttWillMessageType").toInt());
 	m_willSettings.MQTTUseWill = conf.readEntry("mqttWillUse").toInt();
 
@@ -2725,10 +2719,7 @@ void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) 
  * Updates the will settings
  */
 void ImportFileWidget::useWillMessage(int state) {
-	if (state == Qt::Checked)
-		m_willSettings.MQTTUseWill = true;
-	else if (state == Qt::Unchecked)
-		m_willSettings.MQTTUseWill = false;
+	m_willSettings.MQTTUseWill = (state == Qt::Checked);
 }
 
 /*!

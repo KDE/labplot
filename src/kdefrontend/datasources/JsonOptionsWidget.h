@@ -34,6 +34,7 @@
 
 class ImportFileWidget;
 class JsonFilter;
+class QAbstractItemModel;
 class QJsonModel;
 class QJsonTreeItem;
 
@@ -47,7 +48,7 @@ public:
 	void loadSettings() const;
 	void saveSettings();
 	void loadDocument(QString filename);
-	QJsonModel* model();
+	QAbstractItemModel* model();
 
 private:
 	void setTooltips();

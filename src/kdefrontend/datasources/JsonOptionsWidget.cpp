@@ -113,7 +113,7 @@ void JsonOptionsWidget::loadDocument(QString filename) {
 		m_model->clear();
 }
 
-QJsonModel* JsonOptionsWidget::model() {
+QAbstractItemModel* JsonOptionsWidget::model() {
 	return m_model;
 }
 
