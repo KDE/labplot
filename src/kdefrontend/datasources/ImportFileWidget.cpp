@@ -474,7 +474,6 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 		source->setFileWatched(true);
 
 	source->setKeepNValues(ui.sbKeepNValues->value());
-
 	source->setUpdateType(updateType);
 
 	if (readingType != LiveDataSource::ReadingType::TillEnd)
@@ -545,9 +544,8 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	if (useID)
 		client->setMQTTClientId(m_client->clientId());
 
-	for (int i = 0; i < m_mqttSubscriptions.count(); ++i) {
+	for (int i = 0; i < m_mqttSubscriptions.count(); ++i)
 		client->addInitialMQTTSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
-	}
 
 	const bool retain = group.readEntry("Retain").toUInt();
 	client->setMQTTRetain(retain);
@@ -737,9 +735,9 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	opens a file dialog and lets the user select the file data source.
 */
 void ImportFileWidget::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileWidget");
-	QString dir = conf.readEntry("LastDir", "");
-	QString path = QFileDialog::getOpenFileName(this, i18n("Select the File Data Source"), dir);
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("ImportFileWidget"));
+	const QString& dir = conf.readEntry(QLatin1String("LastDir"), "");
+	const QString& path = QFileDialog::getOpenFileName(this, i18n("Select the File Data Source"), dir);
 	if (path.isEmpty())	//cancel was clicked in the file-dialog
 		return;
 
@@ -747,7 +745,7 @@ void ImportFileWidget::selectFile() {
 	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir != dir)
-			conf.writeEntry("LastDir", newDir);
+			conf.writeEntry(QLatin1String("LastDir"), newDir);
 	}
 
 	//process all events after the FileDialog was closed to repaint the widget
@@ -755,11 +753,6 @@ void ImportFileWidget::selectFile() {
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
 	ui.leFileName->setText(path);
-
-	//TODO: decide whether the selection of several files should be possible
-	// 	QStringList filelist = QFileDialog::getOpenFileNames(this,i18n("Select one or more files to open"));
-	// 	if (! filelist.isEmpty() )
-	// 		ui.leFileName->setText(filelist.join(";"));
 }
 
 /*!
@@ -794,15 +787,16 @@ void ImportFileWidget::setMQTTVisible(bool visible) {
  * returns \c false otherwise.
  */
 bool ImportFileWidget::isMqttValid() {
-	if (m_client) {
-		bool connected = (m_client->state() == QMqttClient::ClientState::Connected);
-		bool subscribed = (ui.twSubscriptions->topLevelItemCount() > 0);
-		bool fileTypeOk = false;
-		if (this->currentFileType() == AbstractFileFilter::FileType::Ascii)
-			fileTypeOk = true;
-		return connected && subscribed && fileTypeOk;
-	}
-	return false;
+	if (!m_client)
+		return false;
+
+	bool connected = (m_client->state() == QMqttClient::ClientState::Connected);
+	bool subscribed = (ui.twSubscriptions->topLevelItemCount() > 0);
+	bool fileTypeOk = false;
+	if (this->currentFileType() == AbstractFileFilter::FileType::Ascii)
+		fileTypeOk = true;
+
+	return connected && subscribed && fileTypeOk;
 }
 
 /*!
@@ -1421,12 +1415,31 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		//available from the previously selected file
 		ui.tePreview->clear();
 		m_twPreview->clear();
-		//TODO:
-// 		m_hdf5OptionsWidget->clear();
-// 		m_netcdfOptionsWidget->clear();
-// 		m_fitsOptionsWidget->clear();
-// 		m_jsonOptionsWidget->clearModel();
-// 		m_rootOptionsWidget->clear();
+
+		AbstractFileFilter::FileType fileType = currentFileType();
+		switch (fileType) {
+		case AbstractFileFilter::Ascii:
+		case AbstractFileFilter::Binary:
+		case AbstractFileFilter::Image:
+		case AbstractFileFilter::NgspiceRawAscii:
+		case AbstractFileFilter::NgspiceRawBinary:
+			break;
+		case AbstractFileFilter::HDF5:
+			m_hdf5OptionsWidget->clear();
+			break;
+		case AbstractFileFilter::NETCDF:
+			m_netcdfOptionsWidget->clear();
+			break;
+		case AbstractFileFilter::FITS:
+			m_fitsOptionsWidget->clear();
+			break;
+		case AbstractFileFilter::JSON:
+			m_jsonOptionsWidget->clearModel();
+			break;
+		case AbstractFileFilter::ROOT:
+			m_rootOptionsWidget->clear();
+			break;
+		}
 
 		emit fileNameChanged();
 		return;
@@ -1475,7 +1488,7 @@ void ImportFileWidget::manageFilters() {
 */
 void ImportFileWidget::fileTypeChanged(int index) {
 	Q_UNUSED(index);
-	AbstractFileFilter::FileType fileType = currentFileType();//(AbstractFileFilter::FileType)ui.cbFileType->itemData(index).toInt();
+	AbstractFileFilter::FileType fileType = currentFileType();
 	DEBUG("ImportFileWidget::fileTypeChanged " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
 	initOptionsWidget(fileType);
 
