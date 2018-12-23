@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>715</width>
-    <height>1588</height>
+    <width>674</width>
+    <height>1593</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -76,6 +76,9 @@
          <property name="bottomMargin">
           <number>0</number>
          </property>
+         <property name="spacing">
+          <number>0</number>
+         </property>
          <item row="0" column="0" colspan="2">
           <widget class="QTreeWidget" name="twTopics">
            <property name="sizePolicy">
@@ -93,15 +96,30 @@
          </item>
          <item row="1" column="3">
           <widget class="QLabel" name="lSubscriptionSearch">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
-            <string>Scroll to root:</string>
+            <string/>
            </property>
           </widget>
          </item>
          <item row="0" column="2">
-          <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,1,1,0">
+          <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,1,1,0,0">
            <property name="spacing">
             <number>12</number>
+           </property>
+           <property name="leftMargin">
+            <number>6</number>
+           </property>
+           <property name="topMargin">
+            <number>6</number>
+           </property>
+           <property name="rightMargin">
+            <number>6</number>
            </property>
            <item>
             <spacer name="verticalSpacer_5">
@@ -143,6 +161,25 @@
              </property>
             </spacer>
            </item>
+           <item>
+            <widget class="QComboBox" name="cbQos">
+             <item>
+              <property name="text">
+               <string>QoS 0</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>QoS 1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>QoS 2</string>
+              </property>
+             </item>
+            </widget>
+           </item>
           </layout>
          </item>
          <item row="1" column="4">
@@ -165,8 +202,14 @@
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="lTopicSearch">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
-            <string>Scroll to root:</string>
+            <string/>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -175,35 +218,6 @@
          </item>
          <item row="1" column="1">
           <widget class="QLineEdit" name="leTopics"/>
-         </item>
-         <item row="2" column="1">
-          <widget class="QComboBox" name="cbQos">
-           <item>
-            <property name="text">
-             <string>0</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>1</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="lQos">
-           <property name="text">
-            <string>QOS level:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
          </item>
         </layout>
        </widget>
@@ -545,7 +559,7 @@
       <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="currentIndex">
-         <number>2</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tabDataFormat">
          <property name="sizePolicy">

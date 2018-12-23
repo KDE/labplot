@@ -187,6 +187,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	m_willSettings.willTimeInterval = 10000;
 	m_willSettings.willStatistics.fill(false, 15);
 
+	const int size = ui.leTopics->height();
+	ui.lTopicSearch->setPixmap( QIcon::fromTheme(QLatin1String("view-filter")).pixmap(size, size) );
+	ui.lSubscriptionSearch->setPixmap( QIcon::fromTheme(QLatin1String("view-filter")).pixmap(size, size) );
 	ui.bSubscribe->setIcon(ui.bSubscribe->style()->standardIcon(QStyle::SP_ArrowRight));
 	ui.bSubscribe->setToolTip(i18n("Subscribe selected topics"));
 	ui.bUnsubscribe->setIcon(ui.bUnsubscribe->style()->standardIcon(QStyle::SP_ArrowLeft));
@@ -765,7 +768,6 @@ void ImportFileWidget::setMQTTVisible(bool visible) {
 	ui.cbConnection->setVisible(visible);
 	ui.bManageConnections->setVisible(visible);
 	ui.cbQos->setVisible(visible);
-	ui.lQos->setVisible(visible);
 
 	//topics
 	if (ui.cbConnection->currentIndex() != -1 && visible) {
@@ -2247,7 +2249,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
 
-		//in case there are already connections defined, show the available topics for the currently selected connection
+		//in case there are already connections defined,
+		//show the available topics for the currently selected connection
 		mqttConnectionChanged();
 #endif
 		break;
