@@ -91,8 +91,11 @@ Source: "C:\Python36\vcruntime140.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; Cantor
 Source: "{#CraftRoot}\bin\cantor.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\cantor_scripteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CraftRoot}\bin\cantor_python3server.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CraftRoot}\bin\cantor_juliaserver.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libcantorlibs.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libcantor_config.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libcantor_pythonbackend.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\plugins\libcantorpart.dll"; DestDir: "{app}\plugins"; Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\plugins\cantor\*"; DestDir: "{app}\plugins\cantor"; Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\bin\data\kxmlgui5\cantor\*"; DestDir: "{app}\cantor"; Flags: recursesubdirs ignoreversion
