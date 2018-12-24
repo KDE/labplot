@@ -417,6 +417,7 @@ ENDIF()
 add_subdirectory(data)
 add_subdirectory(icons)
 add_subdirectory(src)
+add_subdirectory(doc)
 
 IF (ENABLE_LIBORIGIN)
 	add_subdirectory(liborigin)

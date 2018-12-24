@@ -470,5 +470,4 @@ install( FILES ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico ${C
 install( PROGRAMS org.kde.labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
 install( FILES labplot2_themes.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
-install( FILES labplot2.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1 )
 update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )
