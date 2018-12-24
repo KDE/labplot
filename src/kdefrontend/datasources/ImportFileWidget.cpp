@@ -2386,7 +2386,7 @@ void ImportFileWidget::onMqttDisconnect() {
 	emit subscriptionsChanged();
 	RESET_CURSOR;
 	QMessageBox::critical(this, i18n("Disconnected"),
-		i18n("Disconnected from the broker '%1' befor the connection was successful.", m_client->hostname()));
+		i18n("Disconnected from the broker '%1' before the connection was successful.", m_client->hostname()));
 }
 
 /*!

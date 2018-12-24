@@ -665,7 +665,7 @@ void MQTTConnectionManagerWidget::onDisconnect() {
 	RESET_CURSOR;
 	if (m_testTimer->isActive()) {
 		const QString& hostName = m_connections[ui.lwConnections->currentRow()].hostName;
-		KMessageBox::error(this, i18n("Disconnected from the broker '%1' befor the connection was successful.", hostName),
+		KMessageBox::error(this, i18n("Disconnected from the broker '%1' before the connection was successful.", hostName),
 			i18n("Connection Failed"));
 		m_testTimer->stop();
 	}
