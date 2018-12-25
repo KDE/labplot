@@ -57,8 +57,7 @@ MQTTSubscription::~MQTTSubscription() {
  * \param topicName the name of the topic, which will be added to the tree widget
  */
 void MQTTSubscription::addTopic(const QString& topicName) {
-	MQTTTopic* newTopic = new MQTTTopic(topicName, this, false);
-	addChild(newTopic);
+	addChild(new MQTTTopic(topicName, this, false));
 }
 
 /*!

@@ -63,8 +63,7 @@ It manages the MQTTSubscriptions, and the MQTTTopics.
 
   \ingroup datasources
 */
-MQTTClient::MQTTClient(const QString& name)
-	: Folder(name),
+MQTTClient::MQTTClient(const QString& name) : Folder(name),
 	  m_paused(false),
 	  m_prepared(false),
 	  m_sampleSize(1),
@@ -274,7 +273,7 @@ void MQTTClient::setMQTTClientHostPort(const QString& host, const quint16& port)
 /*!
  * \brief Returns hostname of the broker the client is connected to.
  */
-QString MQTTClient::clientHostName() const{
+QString MQTTClient::clientHostName() const {
 	return m_client->hostname();
 }
 
@@ -316,14 +315,14 @@ void MQTTClient::setMQTTClientAuthentication(const QString& username, const QStr
 /*!
  * \brief Returns the username used for authentication.
  */
-QString MQTTClient::clientUserName() const{
+QString MQTTClient::clientUserName() const {
 	return m_client->username();
 }
 
 /*!
  * \brief Returns the password used for authentication.
  */
-QString MQTTClient::clientPassword() const{
+QString MQTTClient::clientPassword() const {
 	return m_client->password();
 }
 
@@ -349,14 +348,14 @@ bool MQTTClient::MQTTUseID() const {
  *
  * \param id
  */
-void MQTTClient::setMQTTClientId(const QString &id) {
-	m_client->setClientId(id);
+void MQTTClient::setMQTTClientId(const QString& clientId) {
+	m_client->setClientId(clientId);
 }
 
 /*!
  * \brief Returns the ID of the client
  */
-QString MQTTClient::clientID () const{
+QString MQTTClient::clientID () const {
 	return m_client->clientId();
 }
 
@@ -408,7 +407,7 @@ QVector<QString> MQTTClient::MQTTSubscriptions() const {
  * \param QoS
  */
 void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
-	//Check whether the subscription already exists, if not we can add it
+	//Check whether the subscription already exists, if it doesn't, we can add it
 	if (!m_subscriptions.contains(topicName)) {
 		const QMqttTopicFilter filter {topicName};
 		QMqttSubscription* temp = m_client->subscribe(filter, QoS);
@@ -427,39 +426,39 @@ void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
 			//Search for inferior subscriptions, that the new subscription contains
 			bool found = false;
 			QVector<MQTTSubscription*> inferiorSubscriptions;
-			for (int i = 0; i < m_MQTTSubscriptions.size(); ++i) {
-				if (checkTopicContains(topicName, m_MQTTSubscriptions[i]->subscriptionName())
-						&& topicName != m_MQTTSubscriptions[i]->subscriptionName()) {
+			for (auto* subscription : m_MQTTSubscriptions) {
+				if (checkTopicContains(topicName, subscription->subscriptionName())
+						&& topicName != subscription->subscriptionName()) {
 					found = true;
-					inferiorSubscriptions.push_back(m_MQTTSubscriptions[i]);
+					inferiorSubscriptions.push_back(subscription);
 				}
 			}
 
 			//If there are some inferior subscriptions, we have to deal with them
 			if (found) {
-				for (int sub = 0; sub < inferiorSubscriptions.size(); ++sub) {
-					qDebug()<<"Reparent topics of inferior subscription: "<<inferiorSubscriptions[sub]->subscriptionName();
+				for (auto* inferiorSubscription : inferiorSubscriptions) {
+					qDebug()<<"Reparent topics of inferior subscription: "<< inferiorSubscription->subscriptionName();
 
 					//We have to reparent every topic of the inferior subscription, so no data is lost
-					QVector<MQTTTopic*> topics = inferiorSubscriptions[sub]->topics();
+					QVector<MQTTTopic*> topics = inferiorSubscription->topics();
 					for (auto* topic : topics) {
 						topic->reparent(newSubscription);
 					}
 
 					//Then remove the subscription and every connected information
-					QMqttTopicFilter unsubscribeFilter {inferiorSubscriptions[sub]->subscriptionName()};
+					QMqttTopicFilter unsubscribeFilter {inferiorSubscription->subscriptionName()};
 					m_client->unsubscribe(unsubscribeFilter);
 
 					for (int j = 0; j < m_MQTTSubscriptions.size(); ++j) {
 						if (m_MQTTSubscriptions[j]->subscriptionName() ==
-								inferiorSubscriptions[sub]->subscriptionName()) {
+								inferiorSubscription->subscriptionName()) {
 							m_MQTTSubscriptions.remove(j);
 						}
 					}
-					m_subscriptions.removeAll(inferiorSubscriptions[sub]->subscriptionName());
-					m_subscribedTopicNameQoS.remove(inferiorSubscriptions[sub]->subscriptionName());
+					m_subscriptions.removeAll(inferiorSubscription->subscriptionName());
+					m_subscribedTopicNameQoS.remove(inferiorSubscription->subscriptionName());
 
-					removeChild(inferiorSubscriptions[sub]);
+					removeChild(inferiorSubscription);
 				}
 			}
 

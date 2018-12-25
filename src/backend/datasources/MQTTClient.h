@@ -107,7 +107,7 @@ public:
 	};
 
 	explicit MQTTClient(const QString& name);
-	~MQTTClient() override;
+	virtual ~MQTTClient() override;
 
 	void ready();
 
