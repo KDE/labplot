@@ -3,7 +3,6 @@
   <mime-type type="application/x-labplot2">
     <sub-class-of type="application/gzip"/>
     <comment>LabPlot2 Project File</comment>
-    <comment xml:lang="de">LabPlot2-Projektdatei</comment>
     <glob pattern="*.lml"/>
   </mime-type>
 </mime-info>
