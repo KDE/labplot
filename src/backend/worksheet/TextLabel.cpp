@@ -756,6 +756,7 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
 	//draw the border
 	if (borderShape != TextLabel::NoBorder) {
+		painter->save();
 		painter->rotate(-rotationAngle);
 		painter->setPen(borderPen);
 		painter->setOpacity(borderOpacity);
