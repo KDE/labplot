@@ -170,8 +170,7 @@ Project* MainWin::project() const {
 void MainWin::initGUI(const QString& fileName) {
 	m_mdiArea = new QMdiArea;
 	setCentralWidget(m_mdiArea);
-	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),
-	        this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
+	connect(m_mdiArea, &QMdiArea::subWindowActivated, this, &MainWin::handleCurrentSubWindowChanged);
 
 	statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
 
@@ -254,7 +253,7 @@ void MainWin::initGUI(const QString& fileName) {
 	int interval = group.readEntry("AutoSaveInterval", 1);
 	interval = interval*60*1000;
 	m_autoSaveTimer.setInterval(interval);
-	connect(&m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(autoSaveProject()));
+	connect(&m_autoSaveTimer, &QTimer::timeout, this, &MainWin::autoSaveProject);
 
 	if (!fileName.isEmpty()) {
 #ifdef HAVE_LIBORIGIN
@@ -313,85 +312,85 @@ void MainWin::initActions() {
 	m_newWorkbookAction = new QAction(QIcon::fromTheme("labplot-workbook-new"),i18n("Workbook"),this);
 	actionCollection()->addAction("new_workbook", m_newWorkbookAction);
 	m_newWorkbookAction->setWhatsThis(i18n("Creates a new workbook for collection spreadsheets, matrices and plots"));
-	connect(m_newWorkbookAction, SIGNAL(triggered()), SLOT(newWorkbook()));
+	connect(m_newWorkbookAction, &QAction::triggered, this, &MainWin::newWorkbook);
 
 	m_newDatapickerAction = new QAction(QIcon::fromTheme("color-picker-black"), i18n("Datapicker"), this);
 	m_newDatapickerAction->setWhatsThis(i18n("Creates a data picker for getting data from a picture"));
 	actionCollection()->addAction("new_datapicker", m_newDatapickerAction);
-	connect(m_newDatapickerAction, SIGNAL(triggered()), SLOT(newDatapicker()));
+	connect(m_newDatapickerAction, &QAction::triggered, this, &MainWin::newDatapicker);
 
 	m_newSpreadsheetAction = new QAction(QIcon::fromTheme("labplot-spreadsheet-new"),i18n("Spreadsheet"),this);
 // 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	m_newSpreadsheetAction->setWhatsThis(i18n("Creates a new spreadsheet for data editing"));
 	actionCollection()->addAction("new_spreadsheet", m_newSpreadsheetAction);
-	connect(m_newSpreadsheetAction, SIGNAL(triggered()), SLOT(newSpreadsheet()));
+	connect(m_newSpreadsheetAction, &QAction::triggered, this, &MainWin::newSpreadsheet);
 
 	m_newMatrixAction = new QAction(QIcon::fromTheme("labplot-matrix-new"),i18n("Matrix"),this);
 // 	m_newMatrixAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	m_newMatrixAction->setWhatsThis(i18n("Creates a new matrix for data editing"));
 	actionCollection()->addAction("new_matrix", m_newMatrixAction);
-	connect(m_newMatrixAction, SIGNAL(triggered()), SLOT(newMatrix()));
+	connect(m_newMatrixAction, &QAction::triggered, this, &MainWin::newMatrix);
 
 	m_newWorksheetAction = new QAction(QIcon::fromTheme("labplot-worksheet-new"),i18n("Worksheet"),this);
 // 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
 	m_newWorksheetAction->setWhatsThis(i18n("Creates a new worksheet for data plotting"));
 	actionCollection()->addAction("new_worksheet", m_newWorksheetAction);
-	connect(m_newWorksheetAction, SIGNAL(triggered()), SLOT(newWorksheet()));
+	connect(m_newWorksheetAction, &QAction::triggered, this, &MainWin::newWorksheet);
 
 	m_newNotesAction = new QAction(QIcon::fromTheme("document-new"),i18n("Note"),this);
 	m_newNotesAction->setWhatsThis(i18n("Creates a new note for arbitrary text"));
 	actionCollection()->addAction("new_notes", m_newNotesAction);
-	connect(m_newNotesAction, SIGNAL(triggered()), SLOT(newNotes()));
+	connect(m_newNotesAction, &QAction::triggered, this, &MainWin::newNotes);
 
 // 	m_newScriptAction = new QAction(QIcon::fromTheme("insert-text"),i18n("Note/Script"),this);
 // 	actionCollection()->addAction("new_script", m_newScriptAction);
-// 	connect(m_newScriptAction, SIGNAL(triggered()),SLOT(newScript()));
+// 	connect(m_newScriptAction, &QAction::triggered,SLOT(newScript()));
 
 	m_newFolderAction = new QAction(QIcon::fromTheme("folder-new"),i18n("Folder"),this);
 	m_newFolderAction->setWhatsThis(i18n("Creates a new folder to collect sheets and other elements"));
 	actionCollection()->addAction("new_folder", m_newFolderAction);
-	connect(m_newFolderAction, SIGNAL(triggered()), SLOT(newFolder()));
+	connect(m_newFolderAction, &QAction::triggered, this, &MainWin::newFolder);
 
 	//"New file datasources"
 	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"),i18n("Live Data Source"),this);
 	m_newLiveDataSourceAction->setWhatsThis(i18n("Creates a live data source to read data from a real time device"));
 	actionCollection()->addAction("new_live_datasource", m_newLiveDataSourceAction);
-	connect(m_newLiveDataSourceAction, SIGNAL(triggered()), this, SLOT(newLiveDataSourceActionTriggered()));
+	connect(m_newLiveDataSourceAction, &QAction::triggered, this, &MainWin::newLiveDataSourceActionTriggered);
 
 	//Import/Export
 	m_importFileAction = new QAction(QIcon::fromTheme("document-import"), i18n("From File"), this);
 	actionCollection()->setDefaultShortcut(m_importFileAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
 	m_importFileAction->setWhatsThis(i18n("Import data from a regular file"));
 	actionCollection()->addAction("import_file", m_importFileAction);
-	connect(m_importFileAction, SIGNAL(triggered()), SLOT(importFileDialog()));
+	connect(m_importFileAction, &QAction::triggered, this, [=]() {importFileDialog();});
 
 	m_importSqlAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("From SQL Database"), this);
 	m_importSqlAction->setWhatsThis(i18n("Import data from a SQL database"));
 	actionCollection()->addAction("import_sql", m_importSqlAction);
-	connect(m_importSqlAction, SIGNAL(triggered()),SLOT(importSqlDialog()));
+	connect(m_importSqlAction, &QAction::triggered, this, &MainWin::importSqlDialog);
 
 	m_importLabPlotAction = new QAction(QIcon::fromTheme("document-import"), i18n("LabPlot Project"), this);
 	m_importLabPlotAction->setWhatsThis(i18n("Import a project from a LabPlot project file (.lml)"));
 	actionCollection()->addAction("import_labplot", m_importLabPlotAction);
-	connect(m_importLabPlotAction, SIGNAL(triggered()),SLOT(importProjectDialog()));
+	connect(m_importLabPlotAction, &QAction::triggered, this, &MainWin::importProjectDialog);
 
 #ifdef HAVE_LIBORIGIN
 	m_importOpjAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Origin Project (OPJ)"), this);
 	m_importOpjAction->setWhatsThis(i18n("Import a project from an OriginLab Origin project file (.opj)"));
 	actionCollection()->addAction("import_opj", m_importOpjAction);
-	connect(m_importOpjAction, SIGNAL(triggered()),SLOT(importProjectDialog()));
+	connect(m_importOpjAction, &QAction::triggered, this, &MainWin::importProjectDialog);
 #endif
 
 	m_exportAction = new QAction(QIcon::fromTheme("document-export"), i18n("Export"), this);
 	m_exportAction->setWhatsThis(i18n("Export selected element"));
 	actionCollection()->setDefaultShortcut(m_exportAction, Qt::CTRL+Qt::SHIFT+Qt::Key_E);
 	actionCollection()->addAction("export", m_exportAction);
-	connect(m_exportAction, SIGNAL(triggered()), SLOT(exportDialog()));
+	connect(m_exportAction, &QAction::triggered, this, &MainWin::exportDialog);
 
 	m_editFitsFileAction = new QAction(i18n("FITS Metadata Editor"), this);
 	m_editFitsFileAction->setWhatsThis(i18n("Open editor to edit FITS meta data"));
 	actionCollection()->addAction("edit_fits", m_editFitsFileAction);
-	connect(m_editFitsFileAction, SIGNAL(triggered()), SLOT(editFitsFileDialog()));
+	connect(m_editFitsFileAction, &QAction::triggered, this, &MainWin::editFitsFileDialog);
 
 	// Edit
 	//Undo/Redo-stuff
@@ -400,7 +399,7 @@ void MainWin::initActions() {
 
 	m_historyAction = new QAction(QIcon::fromTheme("view-history"), i18n("Undo/Redo History"),this);
 	actionCollection()->addAction("history", m_historyAction);
-	connect(m_historyAction, SIGNAL(triggered()), SLOT(historyDialog()));
+	connect(m_historyAction, &QAction::triggered, this, &MainWin::historyDialog);
 
 	// TODO: more menus
 	//  Appearance
@@ -413,33 +412,33 @@ void MainWin::initActions() {
 	actionCollection()->setDefaultShortcut(action, QKeySequence::Close);
 	action->setStatusTip(i18n("Close the active window"));
 	actionCollection()->addAction("close window", action);
-	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(closeActiveSubWindow()));
+	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::closeActiveSubWindow);
 
 	action = new QAction(i18n("Close &All"), this);
 	action->setStatusTip(i18n("Close all the windows"));
 	actionCollection()->addAction("close all windows", action);
-	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(closeAllSubWindows()));
+	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::closeAllSubWindows);
 
 	m_tileWindows = new QAction(i18n("&Tile"), this);
 	m_tileWindows->setStatusTip(i18n("Tile the windows"));
 	actionCollection()->addAction("tile windows", m_tileWindows);
-	connect(m_tileWindows, SIGNAL(triggered()), m_mdiArea, SLOT(tileSubWindows()));
+	connect(m_tileWindows, &QAction::triggered, m_mdiArea, &QMdiArea::tileSubWindows);
 
 	m_cascadeWindows = new QAction(i18n("&Cascade"), this);
 	m_cascadeWindows->setStatusTip(i18n("Cascade the windows"));
 	actionCollection()->addAction("cascade windows", m_cascadeWindows);
-	connect(m_cascadeWindows, SIGNAL(triggered()), m_mdiArea, SLOT(cascadeSubWindows()));
+	connect(m_cascadeWindows, &QAction::triggered, m_mdiArea, &QMdiArea::cascadeSubWindows);
 	action = new QAction(QIcon::fromTheme("go-next-view"), i18n("Ne&xt"), this);
 	actionCollection()->setDefaultShortcut(action, QKeySequence::NextChild);
 	action->setStatusTip(i18n("Move the focus to the next window"));
 	actionCollection()->addAction("next window", action);
-	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(activateNextSubWindow()));
+	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::activateNextSubWindow);
 
 	action = new QAction(QIcon::fromTheme("go-previous-view"), i18n("Pre&vious"), this);
 	actionCollection()->setDefaultShortcut(action, QKeySequence::PreviousChild);
 	action->setStatusTip(i18n("Move the focus to the previous window"));
 	actionCollection()->addAction("previous window", action);
-	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(activatePreviousSubWindow()));
+	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::activatePreviousSubWindow);
 
 	//"Standard actions"
 	KStandardAction::preferences(this, SLOT(settingsDialog()), actionCollection());
@@ -461,7 +460,7 @@ void MainWin::initActions() {
 	m_visibilityAllAction->setCheckable(true);
 	m_visibilityAllAction->setData(Project::allMdiWindows);
 
-	connect(windowVisibilityActions, SIGNAL(triggered(QAction*)), this, SLOT(setMdiWindowVisibility(QAction*)));
+	connect(windowVisibilityActions, &QActionGroup::triggered, this, &MainWin::setMdiWindowVisibility);
 
 	//Actions for hiding/showing the dock widgets
 	auto* docksActions = new QActionGroup(this);
@@ -477,7 +476,7 @@ void MainWin::initActions() {
 	m_togglePropertiesDockAction->setChecked(true);
 	actionCollection()->addAction("toggle_properties_explorer_dock", m_togglePropertiesDockAction);
 
-	connect(docksActions, SIGNAL(triggered(QAction*)), this, SLOT(toggleDockWidget(QAction*)));
+	connect(docksActions, &QActionGroup::triggered, this, &MainWin::toggleDockWidget);
 }
 
 void MainWin::initMenus() {
@@ -523,7 +522,7 @@ void MainWin::initMenus() {
 			m_newCantorWorksheetMenu->addAction(action);
 		}
 
-		connect(m_newCantorWorksheetMenu, SIGNAL(triggered(QAction*)), this, SLOT(newCantorWorksheet(QAction*)));
+		connect(m_newCantorWorksheetMenu, &QMenu::triggered, this, &MainWin::newCantorWorksheet);
 		plugActionList(QLatin1String("backends_list"), newBackendActions);
 	}
 	m_newMenu->addMenu(m_newCantorWorksheetMenu);
@@ -879,9 +878,8 @@ bool MainWin::newProject() {
 		m_projectExplorer = new ProjectExplorer(m_projectExplorerDock);
 		m_projectExplorerDock->setWidget(m_projectExplorer);
 
-		connect(m_projectExplorer, SIGNAL(currentAspectChanged(AbstractAspect*)),
-		        this, SLOT(handleCurrentAspectChanged(AbstractAspect*)));
-		connect(m_projectExplorerDock, SIGNAL(visibilityChanged(bool)), SLOT(projectExplorerDockVisibilityChanged(bool)));
+		connect(m_projectExplorer, &ProjectExplorer::currentAspectChanged, this, &MainWin::handleCurrentAspectChanged);
+		connect(m_projectExplorerDock, &QDockWidget::visibilityChanged, this, &MainWin::projectExplorerDockVisibilityChanged);
 
 		//Properties dock
 		m_propertiesDock = new QDockWidget(this);
@@ -895,7 +893,7 @@ bool MainWin::newProject() {
 		sa->setWidgetResizable(true);
 		m_propertiesDock->setWidget(sa);
 
-		connect(m_propertiesDock, SIGNAL(visibilityChanged(bool)), SLOT(propertiesDockVisibilityChanged(bool)));
+		connect(m_propertiesDock, &QDockWidget::visibilityChanged, this, &MainWin::propertiesDockVisibilityChanged);
 
 		//GUI-observer;
 		m_guiObserver = new GuiObserver(this);
@@ -909,16 +907,14 @@ bool MainWin::newProject() {
 	m_propertiesDock->show();
 	updateGUIOnProjectChanges();
 
-	connect(m_project, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
-	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-	        this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
-	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-	        this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
+	connect(m_project, &Project::aspectAdded, this, &MainWin::handleAspectAdded);
+	connect(m_project, &Project::aspectRemoved, this, &MainWin::handleAspectRemoved);
+	connect(m_project, &Project::aspectAboutToBeRemoved, this, &MainWin::handleAspectAboutToBeRemoved);
 	connect(m_project, SIGNAL(statusInfo(QString)), statusBar(), SLOT(showMessage(QString)));
-	connect(m_project, SIGNAL(changed()), this, SLOT(projectChanged()));
-	connect(m_project, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
-	connect(m_project, SIGNAL(requestFolderContextMenu(const Folder*,QMenu*)), this, SLOT(createFolderContextMenu(const Folder*,QMenu*)));
-	connect(m_project, SIGNAL(mdiWindowVisibilityChanged()), this, SLOT(updateMdiWindowVisibility()));
+	connect(m_project, &Project::changed, this, &MainWin::projectChanged);
+	connect(m_project, &Project::requestProjectContextMenu, this, &MainWin::createContextMenu);
+	connect(m_project, &Project::requestFolderContextMenu, this, &MainWin::createFolderContextMenu);
+	connect(m_project, &Project::mdiWindowVisibilityChanged, this, &MainWin::updateMdiWindowVisibility);
 
 	m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
 	setCaption(m_project->name());
@@ -1409,13 +1405,13 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
 // 		connect(part, &AbstractPart::importFromFileRequested, this, &MainWin::importFileDialog);
-		connect(part, SIGNAL(importFromFileRequested()), this, SLOT(importFileDialog()));
+		connect(part, &AbstractPart::importFromFileRequested, this, [=]() {importFileDialog();});
 		connect(part, &AbstractPart::importFromSQLDatabaseRequested, this, &MainWin::importSqlDialog);
 		//TODO: export, print and print preview should be handled in the views and not in MainWin.
-		connect(part, SIGNAL(exportRequested()), this, SLOT(exportDialog()));
-		connect(part, SIGNAL(printRequested()), this, SLOT(print()));
-		connect(part, SIGNAL(printPreviewRequested()), this, SLOT(printPreview()));
-		connect(part, SIGNAL(showRequested()), this, SLOT(handleShowSubWindowRequested()));
+		connect(part, &AbstractPart::exportRequested, this, &MainWin::exportDialog);
+		connect(part, &AbstractPart::printRequested, this, &MainWin::print);
+		connect(part, &AbstractPart::printPreviewRequested, this, &MainWin::printPreview);
+		connect(part, &AbstractPart::showRequested, this, &MainWin::handleShowSubWindowRequested);
 	}
 }
 
@@ -1972,6 +1968,6 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 
 void MainWin::settingsDialog() {
 	auto* dlg = new SettingsDialog(this);
-	connect (dlg, SIGNAL(settingsChanged()), this, SLOT(handleSettingsChanges()));
+	connect (dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
 	dlg->exec();
 }
