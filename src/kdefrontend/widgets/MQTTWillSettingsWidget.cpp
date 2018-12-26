@@ -161,12 +161,12 @@ void MQTTWillSettingsWidget::loadSettings(const MQTTClient::MQTTWill& will, cons
 }
 
 void MQTTWillSettingsWidget::enableWillSettings(int state) {
-	const bool enabled = (state == Qt::Checked);
+	const bool enabled = m_will.enabled = (state == Qt::Checked);
 	ui.lWillMessageType->setEnabled(enabled);
 	ui.cbWillMessageType->setEnabled(enabled);
 	ui.lWillOwnMessage->setEnabled(enabled);
 	ui.leWillOwnMessage->setEnabled(enabled);
-	ui.lWillStatistics->setEnabled(state);
+	ui.lWillStatistics->setEnabled(enabled);
 	ui.lwWillStatistics->setEnabled(enabled);
 	ui.lWillTopic->setEnabled(enabled);
 	ui.cbWillTopic->setEnabled(enabled);
@@ -178,8 +178,6 @@ void MQTTWillSettingsWidget::enableWillSettings(int state) {
 	ui.cbWillUpdate->setEnabled(enabled);
 	ui.lWillUpdateInterval->setEnabled(enabled);
 	ui.leWillUpdateInterval->setEnabled(enabled);
-
-	m_will.enabled = enabled;
 }
 
 #endif

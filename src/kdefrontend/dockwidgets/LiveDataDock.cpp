@@ -1670,7 +1670,7 @@ void LiveDataDock::showWillSettings() {
 	MQTTWillSettingsWidget willSettingsWidget(&menu, fmc->willSettings(), topics);
 
 	connect(&willSettingsWidget, &MQTTWillSettingsWidget::applyClicked, [this, &menu, &willSettingsWidget]() {
-		this->useWillMessage(willSettingsWidget.will().MQTTUseWill);
+		this->useWillMessage(willSettingsWidget.will().enabled);
 		this->willMessageTypeChanged(willSettingsWidget.will().willMessageType);
 		this->updateTypeChanged(willSettingsWidget.will().willUpdateType);
 		this->willRetainChanged(willSettingsWidget.will().willRetain);
