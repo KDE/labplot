@@ -93,9 +93,9 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
     m_tbCopy->setIcon(QIcon::fromTheme("edit-copy"));
     m_tbPaste->setIcon(QIcon::fromTheme("edit-paste"));
 
-    connect( m_tbLoad, SIGNAL(clicked()), this, SLOT(loadMenu()));
-    connect( m_tbSave, SIGNAL(clicked()), this, SLOT(saveMenu()));
-    connect( m_tbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
+    connect(m_tbLoad, &QToolButton::clicked, this, &TemplateHandler::loadMenu);
+    connect(m_tbSave, &QToolButton::clicked, this, &TemplateHandler::saveMenu);
+    connect(m_tbSaveDefault, &QToolButton::clicked, this, &TemplateHandler::saveDefaults);
 
     m_className = name;
 
@@ -134,7 +134,7 @@ void TemplateHandler::loadMenu() {
 			QAction* action = menu.addAction(fileinfo.fileName());
 			action->setData(QVariant(list.at(i)));
 	}
-	connect(&menu, SIGNAL(triggered(QAction*)), this, SLOT(loadMenuSelected(QAction*)));
+	connect(&menu, &QMenu::triggered, this, &TemplateHandler::loadMenuSelected);
 
     QPoint pos(-menu.sizeHint().width()+m_tbLoad->width(),-menu.sizeHint().height());
     menu.exec(m_tbLoad->mapToGlobal(pos));
@@ -158,7 +158,7 @@ void TemplateHandler::saveMenu() {
 			menu.addAction(action);
 			action->setShortcut(QKeySequence());
 	}
-	connect(&menu, SIGNAL(triggered(QAction*)), this, SLOT(saveMenuSelected(QAction*)));
+	connect(&menu, &QMenu::triggered, this, &TemplateHandler::saveMenuSelected);
 
 	// add editable action
 	auto* widgetAction = new QWidgetAction(this);
@@ -170,8 +170,8 @@ void TemplateHandler::saveMenu() {
 
 	QLineEdit* leFilename = new QLineEdit("", frame);
 	layout->addWidget(leFilename);
-	connect(leFilename, SIGNAL(returnPressed(QString)), this, SLOT(saveNewSelected(QString)));
-	connect(leFilename, SIGNAL(returnPressed(QString)), &menu, SLOT(close()));
+	connect(leFilename, &QLineEdit::returnPressed, this, [=]() {saveNewSelected(leFilename->text());} );
+	connect(leFilename, &QLineEdit::returnPressed, &menu, &QMenu::close);
 
 	widgetAction->setDefaultWidget(frame);
 	menu.addAction(widgetAction);

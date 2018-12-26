@@ -108,44 +108,44 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) : m_columnToHide(0),
 
 	this->createActions();
 
-	connect(m_leFilter, SIGNAL(textChanged(QString)), this, SLOT(filterTextChanged(QString)));
-	connect(bFilterOptions, SIGNAL(toggled(bool)), this, SLOT(toggleFilterOptionsMenu(bool)));
+	connect(m_leFilter, &QLineEdit::textChanged, this, &ProjectExplorer::filterTextChanged);
+	connect(bFilterOptions, &QPushButton::toggled, this, &ProjectExplorer::toggleFilterOptionsMenu);
 }
 
 void ProjectExplorer::createActions() {
 	caseSensitiveAction = new QAction(i18n("Case Sensitive"), this);
 	caseSensitiveAction->setCheckable(true);
 	caseSensitiveAction->setChecked(false);
-	connect(caseSensitiveAction, SIGNAL(triggered()), this, SLOT(toggleFilterCaseSensitivity()));
+	connect(caseSensitiveAction, &QAction::triggered, this, &ProjectExplorer::toggleFilterCaseSensitivity);
 
 	matchCompleteWordAction = new QAction(i18n("Match Complete Word"), this);
 	matchCompleteWordAction->setCheckable(true);
 	matchCompleteWordAction->setChecked(false);
-	connect(matchCompleteWordAction, SIGNAL(triggered()), this, SLOT(toggleFilterMatchCompleteWord()));
+	connect(matchCompleteWordAction, &QAction::triggered, this, &ProjectExplorer::toggleFilterMatchCompleteWord);
 
 	expandTreeAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("Expand All"), this);
-	connect(expandTreeAction, SIGNAL(triggered()), m_treeView, SLOT(expandAll()));
+	connect(expandTreeAction, &QAction::triggered, m_treeView, &QTreeView::expandAll);
 
 	expandSelectedTreeAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("Expand Selected"), this);
-	connect(expandSelectedTreeAction, SIGNAL(triggered()), this, SLOT(expandSelected()));
+	connect(expandSelectedTreeAction, &QAction::triggered, this, &ProjectExplorer::expandSelected);
 
 	collapseTreeAction = new QAction(i18n("Collapse All"), this);
-	connect(collapseTreeAction, SIGNAL(triggered()), m_treeView, SLOT(collapseAll()));
+	connect(collapseTreeAction, &QAction::triggered, m_treeView, &QTreeView::collapseAll);
 
 	collapseSelectedTreeAction = new QAction(i18n("Collapse Selected"), this);
-	connect(collapseSelectedTreeAction, SIGNAL(triggered()), this, SLOT(collapseSelected()));
+	connect(collapseSelectedTreeAction, &QAction::triggered, this, &ProjectExplorer::collapseSelected);
 
 	deleteSelectedTreeAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete Selected"), this);
-	connect(deleteSelectedTreeAction, SIGNAL(triggered()), this, SLOT(deleteSelected()));
+	connect(deleteSelectedTreeAction, &QAction::triggered, this, &ProjectExplorer::deleteSelected);
 
 	toggleFilterAction = new QAction(QIcon::fromTheme(QLatin1String("view-filter")), i18n("Hide Search/Filter Options"), this);
-	connect(toggleFilterAction, SIGNAL(triggered()), this, SLOT(toggleFilterWidgets()));
+	connect(toggleFilterAction, &QAction::triggered, this, &ProjectExplorer::toggleFilterWidgets);
 
 	showAllColumnsAction = new QAction(i18n("Show All"),this);
 	showAllColumnsAction->setCheckable(true);
 	showAllColumnsAction->setChecked(true);
 	showAllColumnsAction->setEnabled(false);
-	connect(showAllColumnsAction, SIGNAL(triggered()), this, SLOT(showAllColumns()));
+	connect(showAllColumnsAction, &QAction::triggered, this, &ProjectExplorer::showAllColumns);
 }
 
 /*!
@@ -207,15 +207,14 @@ void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect) {
 void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 	m_treeView->setModel(treeModel);
 
-	connect(treeModel, SIGNAL(renameRequested(QModelIndex)), m_treeView, SLOT(edit(QModelIndex)));
-	connect(treeModel, SIGNAL(indexSelected(QModelIndex)), this, SLOT(selectIndex(QModelIndex)));
-	connect(treeModel, SIGNAL(indexDeselected(QModelIndex)), this, SLOT(deselectIndex(QModelIndex)));
-	connect(treeModel, SIGNAL(hiddenAspectSelected(const AbstractAspect*)), this, SIGNAL(hiddenAspectSelected(const AbstractAspect*)));
+	connect(treeModel, &AspectTreeModel::renameRequested,
+			m_treeView,  static_cast<void (QAbstractItemView::*)(const QModelIndex&)>(&QAbstractItemView::edit));
+	connect(treeModel, &AspectTreeModel::indexSelected, this, &ProjectExplorer::selectIndex);
+	connect(treeModel, &AspectTreeModel::indexDeselected, this, &ProjectExplorer::deselectIndex);
+	connect(treeModel, &AspectTreeModel::hiddenAspectSelected, this, &ProjectExplorer::hiddenAspectSelected);
 
-	connect(m_treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-	        this, SLOT(currentChanged(QModelIndex,QModelIndex)) );
-	connect(m_treeView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-	        this, SLOT(selectionChanged(QItemSelection,QItemSelection)) );
+	connect(m_treeView->selectionModel(), &QItemSelectionModel::currentChanged, this, &ProjectExplorer::currentChanged);
+	connect(m_treeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ProjectExplorer::selectionChanged);
 
 	//create action for showing/hiding the columns in the tree.
 	//this is done here since the number of columns is  not available in createActions() yet.
@@ -227,10 +226,13 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 			showColumnAction->setChecked(true);
 			list_showColumnActions.append(showColumnAction);
 
-			connect(showColumnAction, SIGNAL(triggered(bool)), showColumnsSignalMapper, SLOT(map()));
+			connect(showColumnAction, &QAction::triggered,
+					showColumnsSignalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+
 			showColumnsSignalMapper->setMapping(showColumnAction, i);
 		}
-		connect(showColumnsSignalMapper, SIGNAL(mapped(int)), this, SLOT(toggleColumn(int)));
+		connect(showColumnsSignalMapper, static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped),
+				this, &ProjectExplorer::toggleColumn);
 	} else {
 		for (int i=0; i<list_showColumnActions.size(); ++i) {
 			if (!list_showColumnActions.at(i)->isChecked())
@@ -240,11 +242,11 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 }
 
 void ProjectExplorer::setProject(Project* project) {
-	connect(project, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(aspectAdded(const AbstractAspect*)));
-	connect(project, SIGNAL(requestSaveState(QXmlStreamWriter*)), this, SLOT(save(QXmlStreamWriter*)));
-	connect(project, SIGNAL(requestLoadState(XmlStreamReader*)), this, SLOT(load(XmlStreamReader*)));
-	connect(project, SIGNAL(requestNavigateTo(QString)), this, SLOT(navigateTo(QString)));
-	connect(project, SIGNAL(loaded()), this, SLOT(resizeHeader()));
+	connect(project, &Project::aspectAdded, this, &ProjectExplorer::aspectAdded);
+	connect(project, &Project::requestSaveState, this, &ProjectExplorer::save);
+	connect(project, &Project::requestLoadState, this, &ProjectExplorer::load);
+	connect(project, &Project::requestNavigateTo, this, &ProjectExplorer::navigateTo);
+	connect(project, &Project::loaded, this, &ProjectExplorer::resizeHeader);
 	m_project = project;
 
 	//for newly created projects, resize the header to fit the size of the header section names.
@@ -474,7 +476,7 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 		QMenu menu;
 		menu.addAction(caseSensitiveAction);
 		menu.addAction(matchCompleteWordAction);
-		connect(&menu, SIGNAL(aboutToHide()), bFilterOptions, SLOT(toggle()));
+		connect(&menu, &QMenu::aboutToHide, bFilterOptions, &QPushButton::toggle);
 		menu.exec(bFilterOptions->mapToGlobal(QPoint(0,bFilterOptions->height())));
 	}
 }

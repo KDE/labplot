@@ -77,7 +77,7 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 	pbPublishTheme->setEnabled(false);
 */
 
-	connect( m_pbLoadTheme, SIGNAL(clicked()), this, SLOT(showPanel()));
+	connect(m_pbLoadTheme, &QPushButton::clicked, this, &ThemeHandler::showPanel);
 // 	connect( pbSaveTheme, SIGNAL(clicked()), this, SLOT(saveMenu()));
 // 	connect( pbPublishTheme, SIGNAL(clicked()), this, SLOT(publishThemes()));
 
@@ -163,9 +163,9 @@ const QString ThemeHandler::themeFilePath(const QString& name) {
 void ThemeHandler::showPanel() {
 	QMenu menu;
 	ThemesWidget themeWidget(&menu);
-	connect(&themeWidget, SIGNAL(themeSelected(QString)), this, SLOT(loadSelected(QString)));
-	connect(&themeWidget, SIGNAL(themeSelected(QString)), &menu, SLOT(close()));
-	connect(&themeWidget, SIGNAL(canceled()), &menu, SLOT(close()));
+	connect(&themeWidget, &ThemesWidget::themeSelected, this, &ThemeHandler::loadSelected);
+	connect(&themeWidget, &ThemesWidget::themeSelected, &menu, &QMenu::close);
+	connect(&themeWidget, &ThemesWidget::canceled, &menu, &QMenu::close);
 
 	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&themeWidget);
