@@ -84,7 +84,7 @@ MQTTClient::MQTTClient(const QString& name) : Folder(name),
 	  m_subscriptionCountToLoad(0) {
 
 	qDebug() << "MQTTClient constructor: " << m_client->hostname();
-	m_MQTTWill.MQTTUseWill = false;
+	m_MQTTWill.enabled = false;
 	m_MQTTWill.willRetain = false;
 	m_MQTTWill.willStatistics.fill(false, 15);
 
@@ -725,7 +725,7 @@ MQTTClient::MQTTWill MQTTClient::willSettings() const{
  * \param use
  */
 void MQTTClient::setMQTTWillUse(bool use) {
-	m_MQTTWill.MQTTUseWill = use;
+	m_MQTTWill.enabled = use;
 	if (use == false)
 		m_willTimer->stop();
 }
@@ -734,7 +734,7 @@ void MQTTClient::setMQTTWillUse(bool use) {
  * \brief Returns whether the user wants to use will message or not
  */
 bool MQTTClient::MQTTWillUse() const{
-	return m_MQTTWill.MQTTUseWill;
+	return m_MQTTWill.enabled;
 }
 
 /*!
@@ -836,7 +836,7 @@ void MQTTClient::updateWillMessage() {
 	//if the will topic is found we can update the will message
 	if (willTopic != nullptr) {
 		//To update the will message we have to disconnect first, then after setting everything connect again
-		if (m_MQTTWill.MQTTUseWill && (m_client->state() == QMqttClient::ClientState::Connected) ) {
+		if (m_MQTTWill.enabled && (m_client->state() == QMqttClient::ClientState::Connected) ) {
 			//Disconnect only once (disconnecting may take a while)
 			if (!m_disconnectForWill) {
 				qDebug() << "Disconnecting from host in order to update will message";
@@ -847,7 +847,7 @@ void MQTTClient::updateWillMessage() {
 			updateWillMessage();
 		}
 		//If client is disconnected we can update the settings
-		else if (m_MQTTWill.MQTTUseWill && (m_client->state() == QMqttClient::ClientState::Disconnected) && m_disconnectForWill) {
+		else if (m_MQTTWill.enabled && (m_client->state() == QMqttClient::ClientState::Disconnected) && m_disconnectForWill) {
 			m_client->setWillQoS(m_MQTTWill.willQoS);
 			qDebug()<<"Will QoS" << m_MQTTWill.willQoS;
 
@@ -1161,7 +1161,7 @@ void MQTTClient::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("password", m_client->password());
 	writer->writeAttribute("clientId", m_client->clientId());
 	writer->writeAttribute("useRetain", QString::number(m_MQTTRetain));
-	writer->writeAttribute("useWill", QString::number(m_MQTTWill.MQTTUseWill));
+	writer->writeAttribute("useWill", QString::number(m_MQTTWill.enabled));
 	writer->writeAttribute("willTopic", m_MQTTWill.willTopic);
 	writer->writeAttribute("willOwnMessage", m_MQTTWill.willOwnMessage);
 	writer->writeAttribute("willQoS", QString::number(m_MQTTWill.willQoS));
@@ -1302,9 +1302,9 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'useWill'"));
 			else
-				m_MQTTWill.MQTTUseWill = str.toInt();
+				m_MQTTWill.enabled = str.toInt();
 
-			if (m_MQTTWill.MQTTUseWill) {
+			if (m_MQTTWill.enabled) {
 				str = attribs.value("willTopic").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'willTopic'"));

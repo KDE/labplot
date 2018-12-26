@@ -56,6 +56,7 @@ signals:
 	void applyClicked();
 
 private slots:
+	void enableWillSettings(int);
 	void willMessageTypeChanged(int);
 	void loadSettings(const MQTTClient::MQTTWill&, const QVector<QString>&);
 	void willUpdateTypeChanged(int);

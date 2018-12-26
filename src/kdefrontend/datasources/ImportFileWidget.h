@@ -206,7 +206,6 @@ private slots:
 	void showMQTTConnectionManager();
 	void readMQTTConnections();
 	void showWillSettings();
-	void enableWillSettings(int enable);
 #endif
 };
 

@@ -29,14 +29,14 @@
       <string>Data Source</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="9" column="5">
-       <widget class="QPushButton" name="bWillMessage">
+      <item row="9" column="3">
+       <widget class="QPushButton" name="bLWT">
         <property name="text">
          <string/>
         </property>
        </widget>
       </item>
-      <item row="10" column="6">
+      <item row="10" column="4">
        <spacer name="spacerWillMessage">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -49,7 +49,7 @@
         </property>
        </spacer>
       </item>
-      <item row="8" column="2" colspan="5">
+      <item row="8" column="2" colspan="3">
        <widget class="QGroupBox" name="gbManageSubscriptions">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -222,10 +222,10 @@
         </layout>
        </widget>
       </item>
-      <item row="3" column="2" colspan="5">
+      <item row="3" column="2" colspan="3">
        <widget class="QComboBox" name="cbConnection"/>
       </item>
-      <item row="6" column="2" colspan="5">
+      <item row="6" column="2" colspan="3">
        <widget class="QComboBox" name="cbBaudRate"/>
       </item>
       <item row="12" column="0">
@@ -235,6 +235,9 @@
         </property>
        </widget>
       </item>
+      <item row="4" column="2" colspan="3">
+       <widget class="QLineEdit" name="lePort"/>
+      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="lConnections">
         <property name="text">
@@ -242,24 +245,17 @@
         </property>
        </widget>
       </item>
-      <item row="11" column="2" colspan="5">
+      <item row="11" column="2" colspan="3">
        <widget class="KComboBox" name="cbFileType">
         <property name="enabled">
          <bool>false</bool>
         </property>
        </widget>
       </item>
-      <item row="4" column="2" colspan="5">
-       <widget class="QLineEdit" name="lePort"/>
+      <item row="5" column="2" colspan="3">
+       <widget class="QComboBox" name="cbSerialPort"/>
       </item>
-      <item row="9" column="4">
-       <widget class="QLabel" name="lWillMessage">
-        <property name="text">
-         <string>LWT:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="9">
+      <item row="3" column="7">
        <widget class="QPushButton" name="bManageConnections">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -271,9 +267,6 @@
          <string/>
         </property>
        </widget>
-      </item>
-      <item row="5" column="2" colspan="5">
-       <widget class="QComboBox" name="cbSerialPort"/>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="lPort">
@@ -299,7 +292,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="7" colspan="2">
+      <item row="1" column="5" colspan="2">
        <widget class="QPushButton" name="bOpen">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -338,21 +331,7 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="lSourceType">
-        <property name="text">
-         <string>Source:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="0">
-       <widget class="QLabel" name="lFileType">
-        <property name="text">
-         <string>Type:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2" colspan="5">
+      <item row="0" column="2" colspan="3">
        <widget class="QComboBox" name="cbSourceType">
         <item>
          <property name="text">
@@ -381,7 +360,24 @@
         </item>
        </widget>
       </item>
-      <item row="1" column="2" colspan="5">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lSourceType">
+        <property name="text">
+         <string>Source:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="0">
+       <widget class="QLabel" name="lFileType">
+        <property name="text">
+         <string>Type:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2" colspan="3">
+       <widget class="QLineEdit" name="leHost"/>
+      </item>
+      <item row="1" column="2" colspan="3">
        <widget class="QLineEdit" name="leFileName">
         <property name="toolTip">
          <string>Specify the name of the file to import.</string>
@@ -391,7 +387,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="9">
+      <item row="1" column="7">
        <widget class="QPushButton" name="bFileInfo">
         <property name="enabled">
          <bool>false</bool>
@@ -410,9 +406,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2" colspan="5">
-       <widget class="QLineEdit" name="leHost"/>
-      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="lFileName">
         <property name="text">
@@ -427,7 +420,23 @@
         </property>
        </widget>
       </item>
-      <item row="12" column="8" colspan="2">
+      <item row="13" column="2" colspan="3">
+       <widget class="QTreeView" name="tvJson">
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="showDropIndicator" stdset="0">
+         <bool>false</bool>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>16</width>
+          <height>16</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="6" colspan="2">
        <widget class="QPushButton" name="bManageFilters">
         <property name="enabled">
          <bool>false</bool>
@@ -456,23 +465,7 @@
         </property>
        </widget>
       </item>
-      <item row="13" column="2" colspan="5">
-       <widget class="QTreeView" name="tvJson">
-        <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
-        </property>
-        <property name="showDropIndicator" stdset="0">
-         <bool>false</bool>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>16</width>
-          <height>16</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item row="12" column="7">
+      <item row="12" column="5">
        <widget class="QPushButton" name="bSaveFilter">
         <property name="enabled">
          <bool>false</bool>
@@ -482,7 +475,7 @@
         </property>
        </widget>
       </item>
-      <item row="12" column="2" colspan="5">
+      <item row="12" column="2" colspan="3">
        <widget class="KComboBox" name="cbFilter">
         <property name="enabled">
          <bool>false</bool>
@@ -495,36 +488,12 @@
         </property>
        </widget>
       </item>
-      <item row="9" column="2">
-       <widget class="QCheckBox" name="chkEnableWillSettings">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
       <item row="9" column="0">
-       <widget class="QLabel" name="lEnableWillSettings">
+       <widget class="QLabel" name="lLWT">
         <property name="text">
-         <string>Enable will 
- features:</string>
+         <string>LWT:</string>
         </property>
        </widget>
-      </item>
-      <item row="9" column="3">
-       <spacer name="enableWillSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
      </layout>
     </widget>

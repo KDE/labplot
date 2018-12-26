@@ -179,7 +179,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.cbSourceType->addItem(QLatin1String("MQTT"));
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QLatin1String("MQTT_connections");
 
-	m_willSettings.MQTTUseWill = false;
+	m_willSettings.enabled = false;
 	m_willSettings.willRetain = false;
 	m_willSettings.willQoS = 0;
 	m_willSettings.willMessageType = MQTTClient::WillMessageType::OwnMessage;
@@ -196,11 +196,12 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.bUnsubscribe->setToolTip(i18n("Unsubscribe selected topics"));
 	ui.bManageConnections->setIcon(QIcon::fromTheme(QLatin1String("network-server")));
 	ui.bManageConnections->setToolTip(i18n("Manage MQTT connections"));
-	ui.bWillMessage->setEnabled(false);
-	ui.bWillMessage->setToolTip(i18n("Manage MQTT connection's will settings"));
-	ui.bWillMessage->setIcon(ui.bWillMessage->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
+	ui.lLWT->setToolTip(i18n("Specifyt the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed."));
+	ui.bLWT->setEnabled(false);
+	ui.bLWT->setToolTip(i18n("Specifyt the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed."));
+	ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
 
-	QString info = i18n("Set the Quality of Service for the subscription to define the guarantee of the message delivery:"
+	QString info = i18n("Set the Quality of Service (QoS) for the subscription to define the guarantee of the message delivery:"
 	"<ul>"
 	"<li>0 - deliver at most once</li>"
 	"<li>1 - deliver at least once</li>"
@@ -276,7 +277,7 @@ void ImportFileWidget::loadSettings() {
 		m_willSettings.willStatistics[value.toInt()] = true;
 
 	m_willSettings.willMessageType = static_cast<MQTTClient::WillMessageType>(conf.readEntry("mqttWillMessageType").toInt());
-	m_willSettings.MQTTUseWill = conf.readEntry("mqttWillUse").toInt();
+	m_willSettings.enabled = conf.readEntry("mqttWillUse").toInt();
 
 	m_initialisingMQTT = false;
 #endif
@@ -335,7 +336,7 @@ ImportFileWidget::~ImportFileWidget() {
 	}
 	conf.writeEntry("mqttWillStatistics", willStatistics);
 	conf.writeEntry("mqttWillRetain", static_cast<int>(m_willSettings.willRetain));
-	conf.writeEntry("mqttWillUse", static_cast<int>(m_willSettings.MQTTUseWill));
+	conf.writeEntry("mqttWillUse", static_cast<int>(m_willSettings.enabled));
 #endif
 
 	// data type specific settings
@@ -377,10 +378,9 @@ void ImportFileWidget::initSlots() {
 	connect(ui.leTopics, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToTopicTreeItem);
 	connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToSubsriptionTreeItem);
 	connect(ui.bManageConnections, &QPushButton::clicked, this, &ImportFileWidget::showMQTTConnectionManager);
-	connect(ui.bWillMessage, &QPushButton::clicked, this, &ImportFileWidget::showWillSettings);
+	connect(ui.bLWT, &QPushButton::clicked, this, &ImportFileWidget::showWillSettings);
 	connect(ui.twTopics, &QTreeWidget::itemDoubleClicked, this, &ImportFileWidget::mqttAvailableTopicDoubleClicked);
 	connect(ui.twSubscriptions, &QTreeWidget::itemDoubleClicked, this, &ImportFileWidget::mqttSubscribedTopicDoubleClicked);
-	connect(ui.chkEnableWillSettings, &QCheckBox::stateChanged, this, &ImportFileWidget::enableWillSettings);
 #endif
 }
 
@@ -787,10 +787,8 @@ void ImportFileWidget::setMQTTVisible(bool visible) {
 	}
 
 	//will message
-	ui.chkEnableWillSettings->setVisible(visible);
-	ui.lEnableWillSettings->setVisible(visible);
-	ui.lWillMessage->setVisible(visible);
-	ui.bWillMessage->setVisible(visible);
+	ui.lLWT->setVisible(visible);
+	ui.bLWT->setVisible(visible);
 }
 
 #ifdef HAVE_MQTT
@@ -2375,10 +2373,8 @@ void ImportFileWidget::onMqttDisconnect() {
 
 	ui.lTopics->hide();
 	ui.gbManageSubscriptions->hide();
-	ui.lEnableWillSettings->hide();
-	ui.chkEnableWillSettings->hide();
-	ui.lWillMessage->hide();
-	ui.bWillMessage->hide();
+	ui.lLWT->hide();
+	ui.bLWT->hide();
 
 	ui.cbConnection->setItemText(ui.cbConnection->currentIndex(), ui.cbConnection->currentText() + " " + i18n("(Disconnected)"));
 	m_mqttReadyForPreview = false;
@@ -2506,8 +2502,8 @@ void ImportFileWidget::mqttSubscribe() {
 			manageCommonLevelSubscriptions();
 			updateSubscriptionCompleter();
 
-			if (!ui.bWillMessage->isEnabled())
-				ui.bWillMessage->setEnabled(true);
+			if (!ui.bLWT->isEnabled())
+				ui.bLWT->setEnabled(true);
 		} else
 			QMessageBox::warning(this, i18n("Warning"), i18n("You already subscribed to a topic containing this one"));
 	} else
@@ -2560,7 +2556,7 @@ void ImportFileWidget::mqttUnsubscribe() {
 	updateSubscriptionCompleter();
 
 	if (ui.twSubscriptions->topLevelItemCount() <= 0)
-		ui.bWillMessage->setEnabled(false);
+		ui.bLWT->setEnabled(false);
 }
 
 /*!
@@ -2721,7 +2717,7 @@ void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) 
  * Updates the will settings
  */
 void ImportFileWidget::useWillMessage(int state) {
-	m_willSettings.MQTTUseWill = (state == Qt::Checked);
+	m_willSettings.enabled = (state == Qt::Checked);
 }
 
 /*!
@@ -2943,7 +2939,7 @@ void ImportFileWidget::showWillSettings() {
 	MQTTWillSettingsWidget willSettingsWidget(&menu, m_willSettings, topics);
 
 	connect(&willSettingsWidget, &MQTTWillSettingsWidget::applyClicked, [this, &menu, &willSettingsWidget]() {
-		this->useWillMessage(willSettingsWidget.will().MQTTUseWill);
+		this->useWillMessage(willSettingsWidget.will().enabled);
 		this->willMessageTypeChanged(willSettingsWidget.will().willMessageType);
 		this->updateTypeChanged(willSettingsWidget.will().willUpdateType);
 		this->willRetainChanged(willSettingsWidget.will().willRetain);
@@ -2958,20 +2954,8 @@ void ImportFileWidget::showWillSettings() {
 	widgetAction->setDefaultWidget(&willSettingsWidget);
 	menu.addAction(widgetAction);
 
-	const QPoint pos(ui.bWillMessage->sizeHint().width(),ui.bWillMessage->sizeHint().height());
-	menu.exec(ui.bWillMessage->mapToGlobal(pos));
-}
-
-void ImportFileWidget::enableWillSettings(int state) {
-	if (state == Qt::Checked) {
-		useWillMessage(state);
-		ui.lWillMessage->show();
-		ui.bWillMessage->show();
-	} else if (state == Qt::Unchecked) {
-		useWillMessage(state);
-		ui.lWillMessage->hide();
-		ui.bWillMessage->hide();
-	}
+	const QPoint pos(ui.bLWT->sizeHint().width(),ui.bLWT->sizeHint().height());
+	menu.exec(ui.bLWT->mapToGlobal(pos));
 }
 
 #endif

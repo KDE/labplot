@@ -93,7 +93,7 @@ public:
 	};
 
 	struct MQTTWill {
-		bool MQTTUseWill;
+		bool enabled;
 		QString willMessage;
 		QString willTopic;
 		bool willRetain;

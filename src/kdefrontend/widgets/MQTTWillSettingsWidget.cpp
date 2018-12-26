@@ -49,6 +49,7 @@ MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient
 	loadSettings(will, topics);
 	m_initialising = false;
 
+	connect(ui.chbEnabled, &QCheckBox::stateChanged, this, &MQTTWillSettingsWidget::enableWillSettings);
 	connect(ui.chbWillRetain, &QCheckBox::stateChanged, [this](int state) {
 		if (state == Qt::Checked) {
 			m_will.willRetain = true;
@@ -72,6 +73,9 @@ MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient
 		m_will.willTopic = text;
 	});
 	connect(ui.bApply, &QPushButton::clicked, this, &MQTTWillSettingsWidget::applyClicked);
+
+	//on default, disable the LWT message
+	enableWillSettings(false);
 }
 
 MQTTClient::MQTTWill MQTTWillSettingsWidget::will() const {
@@ -155,4 +159,27 @@ void MQTTWillSettingsWidget::loadSettings(const MQTTClient::MQTTWill& will, cons
 			ui.lwWillStatistics->item(i)->setCheckState(Qt::Unchecked);
 	}
 }
+
+void MQTTWillSettingsWidget::enableWillSettings(int state) {
+	const bool enabled = (state == Qt::Checked);
+	ui.lWillMessageType->setEnabled(enabled);
+	ui.cbWillMessageType->setEnabled(enabled);
+	ui.lWillOwnMessage->setEnabled(enabled);
+	ui.leWillOwnMessage->setEnabled(enabled);
+	ui.lWillStatistics->setEnabled(state);
+	ui.lwWillStatistics->setEnabled(enabled);
+	ui.lWillTopic->setEnabled(enabled);
+	ui.cbWillTopic->setEnabled(enabled);
+	ui.lWillQoS->setEnabled(enabled);
+	ui.cbWillQoS->setEnabled(enabled);
+	ui.lUseRetainMessage->setEnabled(enabled);
+	ui.chbWillRetain->setEnabled(enabled);
+	ui.lWillUpdateType->setEnabled(enabled);
+	ui.cbWillUpdate->setEnabled(enabled);
+	ui.lWillUpdateInterval->setEnabled(enabled);
+	ui.leWillUpdateInterval->setEnabled(enabled);
+
+	m_will.enabled = enabled;
+}
+
 #endif

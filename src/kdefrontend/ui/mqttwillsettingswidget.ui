@@ -17,7 +17,14 @@
    </sizepolicy>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="1">
+   <item row="5" column="0">
+    <widget class="QLabel" name="lWillQoS">
+     <property name="text">
+      <string>QoS</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
     <widget class="QListWidget" name="lwWillStatistics">
      <item>
       <property name="text">
@@ -186,52 +193,7 @@
      </item>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="lWillTopic">
-     <property name="text">
-      <string>Topic:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QComboBox" name="cbWillTopic">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="lWillQos">
-     <property name="text">
-      <string>QoS</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1">
-    <widget class="QComboBox" name="cbWillUpdate">
-     <item>
-      <property name="text">
-       <string>Time Interval</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>On Click</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="lWillUpdateType">
-     <property name="text">
-      <string>Update type:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
+   <item row="5" column="1">
     <widget class="QComboBox" name="cbWillQoS">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -256,35 +218,52 @@
      </item>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="2" column="0">
     <widget class="QLabel" name="lWillOwnMessage">
      <property name="text">
       <string>Own message:</string>
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
-    <widget class="QLineEdit" name="leWillUpdateInterval">
-     <property name="text">
-      <string>10000</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="lWillUpdateInterval">
-     <property name="text">
-      <string>Time interval:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
+   <item row="1" column="0">
     <widget class="QLabel" name="lWillMessageType">
      <property name="text">
       <string>Message type:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item row="7" column="1">
+    <widget class="QComboBox" name="cbWillUpdate">
+     <item>
+      <property name="text">
+       <string>Time Interval</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>On Click</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="leWillOwnMessage"/>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="lWillUpdateInterval">
+     <property name="text">
+      <string>Time interval:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1">
+    <widget class="QLineEdit" name="leWillUpdateInterval">
+     <property name="text">
+      <string>10000</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
     <widget class="QComboBox" name="cbWillMessageType">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -309,32 +288,67 @@
      </item>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QLineEdit" name="leWillOwnMessage"/>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="lWillStatistics">
+   <item row="6" column="1">
+    <widget class="QCheckBox" name="chbWillRetain">
      <property name="text">
-      <string>Will statistics:</string>
+      <string/>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item row="6" column="0">
     <widget class="QLabel" name="lUseRetainMessage">
      <property name="text">
       <string>Retain:</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="0" colspan="2">
+   <item row="3" column="0">
+    <widget class="QLabel" name="lWillStatistics">
+     <property name="text">
+      <string>Will statistics:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="lWillUpdateType">
+     <property name="text">
+      <string>Update type:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="2">
     <widget class="QPushButton" name="bApply">
      <property name="text">
       <string>Apply</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
-    <widget class="QCheckBox" name="chbWillRetain">
+   <item row="4" column="1">
+    <widget class="QComboBox" name="cbWillTopic">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="lWillTopic">
+     <property name="text">
+      <string>Topic:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="lEnabled">
+     <property name="text">
+      <string>Enabled:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QCheckBox" name="chbEnabled">
      <property name="text">
       <string/>
      </property>
