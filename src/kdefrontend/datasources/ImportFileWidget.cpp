@@ -199,6 +199,14 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.bWillMessage->setEnabled(false);
 	ui.bWillMessage->setToolTip(i18n("Manage MQTT connection's will settings"));
 	ui.bWillMessage->setIcon(ui.bWillMessage->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
+
+	QString info = i18n("Set the Quality of Service for the subscription to define the guarantee of the message delivery:"
+	"<ul>"
+	"<li>0 - deliver at most once</li>"
+	"<li>1 - deliver at least once</li>"
+	"<li>2 - deliver exactly once</li>"
+	"</ul>");
+	ui.cbQos->setToolTip(info);
 #endif
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
@@ -2317,16 +2325,11 @@ void ImportFileWidget::mqttConnectionChanged() {
 		const bool useID = group.readEntry("UseID").toUInt();
 		if (useID)
 			m_client->setClientId(group.readEntry("ClientID"));
-		else
-			m_client->setClientId("");
 
 		const bool useAuthentication = group.readEntry("UseAuthentication").toUInt();
 		if (useAuthentication) {
 			m_client->setUsername(group.readEntry("UserName"));
 			m_client->setPassword(group.readEntry("Password"));
-		} else {
-			m_client->setUsername("");
-			m_client->setPassword("");
 		}
 
 		qDebug()<< "Use ID" << useID << " " << m_client->clientId();
@@ -2566,6 +2569,7 @@ void ImportFileWidget::mqttUnsubscribe() {
  */
 void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqttTopicName& topic) {
 	Q_UNUSED(message);
+	qDebug()<<"recieved " << topic.name();
 	if (m_addedTopics.contains(topic.name()))
 		return;
 
@@ -2589,10 +2593,9 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqt
 				}
 			}
 
-			QTreeWidgetItem* currentItem = nullptr;
 			//if not we simply add every level of the topic to the tree
 			if (topItemIdx < 0) {
-				currentItem = new QTreeWidgetItem(name);
+				QTreeWidgetItem* currentItem = new QTreeWidgetItem(name);
 				ui.twTopics->addTopLevelItem(currentItem);
 				for (int i = 1; i < list.size(); ++i) {
 					name.clear();
@@ -2604,7 +2607,7 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqt
 			//otherwise we search for the first level that isn't part of the tree,
 			//then add every level of the topic to the tree from that certain level
 			else {
-				currentItem = ui.twTopics->topLevelItem(topItemIdx);
+				QTreeWidgetItem* currentItem = ui.twTopics->topLevelItem(topItemIdx);
 				int listIdx = 1;
 				for (; listIdx < list.size(); ++listIdx) {
 					QTreeWidgetItem* childItem = nullptr;
