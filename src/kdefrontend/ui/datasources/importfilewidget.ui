@@ -510,7 +510,10 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Format Options</string>
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <property name="leftMargin">
