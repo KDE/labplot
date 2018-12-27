@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>702</width>
+    <width>913</width>
     <height>242</height>
    </rect>
   </property>
@@ -15,6 +15,9 @@
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="childrenCollapsible">
+      <bool>false</bool>
      </property>
      <widget class="QTreeWidget" name="twContent">
       <property name="sizePolicy">

@@ -124,10 +124,12 @@ void ROOTOptionsWidget::rootObjectSelectionChanged() {
 			} else
 				leaf->setFirstColumnSpanned(true);
 
-			if (!ok) {
+			if (!ok)
 				leaf->setData(0, Qt::UserRole, l);
-			}
 		}
+
+		ui.twColumns->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
 		if (histselected) {
 			histselected = false;
 			ui.sbFirst->setMaximum(0);
@@ -156,9 +158,9 @@ QVector<QStringList> ROOTOptionsWidget::columns() const {
 
 	auto item = ui.twColumns->topLevelItem(0);
 	while (item) {
-		if (item->isSelected()) {
+		if (item->isSelected())
 			cols << item->data(0,Qt::UserRole).toStringList();
-		}
+
 		item = ui.twColumns->itemBelow(item);
 	}
 
