@@ -196,9 +196,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.bUnsubscribe->setToolTip(i18n("Unsubscribe selected topics"));
 	ui.bManageConnections->setIcon(QIcon::fromTheme(QLatin1String("network-server")));
 	ui.bManageConnections->setToolTip(i18n("Manage MQTT connections"));
-	ui.lLWT->setToolTip(i18n("Specifyt the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed."));
+	ui.lLWT->setToolTip(i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed."));
 	ui.bLWT->setEnabled(false);
-	ui.bLWT->setToolTip(i18n("Specifyt the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed."));
+	ui.bLWT->setToolTip(i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed."));
 	ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
 
 	QString info = i18n("Set the Quality of Service (QoS) for the subscription to define the guarantee of the message delivery:"
