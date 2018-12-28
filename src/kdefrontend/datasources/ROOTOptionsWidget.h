@@ -43,7 +43,7 @@ public:
 	/// Fill the list of available histograms
 	void updateContent(ROOTFilter* filter, const QString &fileName);
 	/// Return a list of selected histograms
-	const QStringList selectedROOTNames() const;
+	const QStringList selectedNames() const;
 	int lines() const { return ui.sbPreviewLines->value(); }
 	int startRow() const { return ui.sbFirst->value(); }
 	int endRow() const { return ui.sbLast->value(); }

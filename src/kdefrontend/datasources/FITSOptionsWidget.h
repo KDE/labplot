@@ -42,7 +42,7 @@ public:
 	void clear();
 	QString currentExtensionName();
 	void updateContent(FITSFilter*, const QString& fileName);
-	const QStringList selectedFITSExtensions() const;
+	const QStringList selectedExtensions() const;
 	int lines() const { return ui.sbPreviewLines->value(); }
 	QTableWidget* previewWidget() const { return ui.twPreview; }
 	const QString extensionName(bool* ok);

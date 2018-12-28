@@ -420,11 +420,11 @@ QString ImportFileWidget::selectedObject() const {
 	//for multi-dimensional formats like HDF, netCDF and FITS add the currently selected object
 	const auto format = currentFileType();
 	if (format == AbstractFileFilter::HDF5) {
-		const QStringList& hdf5Names = m_hdf5OptionsWidget->selectedHDF5Names();
+		const QStringList& hdf5Names = m_hdf5OptionsWidget->selectedNames();
 		if (hdf5Names.size())
 			name += hdf5Names.first(); //the names of the selected HDF5 objects already have '/'
 	} else if (format == AbstractFileFilter::NETCDF) {
-		const QStringList& names = m_netcdfOptionsWidget->selectedNetCDFNames();
+		const QStringList& names = m_netcdfOptionsWidget->selectedNames();
 		if (names.size())
 			name += QLatin1Char('/') + names.first();
 	} else if (format == AbstractFileFilter::FITS) {
@@ -432,7 +432,7 @@ QString ImportFileWidget::selectedObject() const {
 		if (!extensionName.isEmpty())
 			name += QLatin1Char('/') + extensionName;
 	} else if (format == AbstractFileFilter::ROOT) {
-		const QStringList& names = m_rootOptionsWidget->selectedROOTNames();
+		const QStringList& names = m_rootOptionsWidget->selectedNames();
 		if (names.size())
 			name += QLatin1Char('/') + names.first();
 	}
@@ -601,13 +601,13 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			if (m_asciiOptionsWidget)
 				m_asciiOptionsWidget->applyFilterSettings(filter);
 		} else
-			filter->loadFilterSettings( ui.cbFilter->currentText() );
+			filter->loadFilterSettings(ui.cbFilter->currentText());
 
 		//save the data portion to import
 		filter->setStartRow( ui.sbStartRow->value());
-		filter->setEndRow( ui.sbEndRow->value() );
-		filter->setStartColumn( ui.sbStartColumn->value());
-		filter->setEndColumn( ui.sbEndColumn->value());
+		filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartColumn(ui.sbStartColumn->value());
+		filter->setEndColumn(ui.sbEndColumn->value());
 
 		break;
 	}
@@ -639,10 +639,10 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		auto filter = static_cast<ImageFilter*>(m_currentFilter.get());
 
 		filter->setImportFormat(m_imageOptionsWidget->currentFormat());
-		filter->setStartRow( ui.sbStartRow->value() );
-		filter->setEndRow( ui.sbEndRow->value() );
-		filter->setStartColumn( ui.sbStartColumn->value() );
-		filter->setEndColumn( ui.sbEndColumn->value() );
+		filter->setStartRow(ui.sbStartRow->value());
+		filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartColumn(ui.sbStartColumn->value());
+		filter->setEndColumn(ui.sbEndColumn->value());
 
 		break;
 	}
@@ -655,10 +655,10 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		QDEBUG("ImportFileWidget::currentFileFilter(): selected HDF5 names =" << names);
 		if (!names.isEmpty())
 			filter->setCurrentDataSetName(names[0]);
-		filter->setStartRow( ui.sbStartRow->value() );
-		filter->setEndRow( ui.sbEndRow->value() );
-		filter->setStartColumn( ui.sbStartColumn->value() );
-		filter->setEndColumn( ui.sbEndColumn->value() );
+		filter->setStartRow(ui.sbStartRow->value());
+		filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartColumn(ui.sbStartColumn->value());
+		filter->setEndColumn(ui.sbEndColumn->value());
 		DEBUG("ImportFileWidget::currentFileFilter(): OK");
 
 		break;
@@ -671,10 +671,10 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		if (!selectedNetCDFNames().isEmpty())
 			filter->setCurrentVarName(selectedNetCDFNames()[0]);
-		filter->setStartRow( ui.sbStartRow->value() );
-		filter->setEndRow( ui.sbEndRow->value() );
-		filter->setStartColumn( ui.sbStartColumn->value() );
-		filter->setEndColumn( ui.sbEndColumn->value() );
+		filter->setStartRow(ui.sbStartRow->value());
+		filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartColumn(ui.sbStartColumn->value());
+		filter->setEndColumn(ui.sbEndColumn->value());
 
 		break;
 	}
@@ -683,10 +683,10 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		if (!m_currentFilter)
 			m_currentFilter.reset(new FITSFilter);
 		auto filter = static_cast<FITSFilter*>(m_currentFilter.get());
-		filter->setStartRow( ui.sbStartRow->value());
-		filter->setEndRow( ui.sbEndRow->value() );
-		filter->setStartColumn( ui.sbStartColumn->value());
-		filter->setEndColumn( ui.sbEndColumn->value());
+		filter->setStartRow(ui.sbStartRow->value());
+		filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartColumn(ui.sbStartColumn->value());
+		filter->setEndColumn(ui.sbEndColumn->value());
 
 		break;
 	}
@@ -697,10 +697,10 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		auto filter = static_cast<JsonFilter*>(m_currentFilter.get());
 		m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
 
-		filter->setStartRow( ui.sbStartRow->value() );
-		filter->setEndRow( ui.sbEndRow->value() );
-		filter->setStartColumn( ui.sbStartColumn->value());
-		filter->setEndColumn( ui.sbEndColumn->value());
+		filter->setStartRow(ui.sbStartRow->value());
+		filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartColumn(ui.sbStartColumn->value());
+		filter->setEndColumn(ui.sbEndColumn->value());
 
 		break;
 	}
@@ -713,9 +713,9 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		if (!names.isEmpty())
 			filter->setCurrentObject(names.first());
 
-		filter->setStartRow( m_rootOptionsWidget->startRow() );
-		filter->setEndRow( m_rootOptionsWidget->endRow() );
-		filter->setColumns( m_rootOptionsWidget->columns() );
+		filter->setStartRow(m_rootOptionsWidget->startRow());
+		filter->setEndRow(m_rootOptionsWidget->endRow());
+		filter->setColumns(m_rootOptionsWidget->columns());
 
 		break;
 	}
@@ -724,8 +724,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		if (!m_currentFilter)
 			m_currentFilter.reset(new NgspiceRawAsciiFilter);
 		auto filter = static_cast<NgspiceRawAsciiFilter*>(m_currentFilter.get());
-		filter->setStartRow( ui.sbStartRow->value() );
-		filter->setEndRow( ui.sbEndRow->value() );
+		filter->setStartRow(ui.sbStartRow->value());
+		filter->setEndRow(ui.sbEndRow->value());
 
 		break;
 	}
@@ -734,8 +734,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		if (!m_currentFilter)
 			m_currentFilter.reset(new NgspiceRawBinaryFilter);
 		auto filter = static_cast<NgspiceRawBinaryFilter*>(m_currentFilter.get());
-		filter->setStartRow( ui.sbStartRow->value() );
-		filter->setEndRow( ui.sbEndRow->value() );
+		filter->setStartRow(ui.sbStartRow->value());
+		filter->setEndRow(ui.sbEndRow->value());
 
 		break;
 	}
@@ -1682,19 +1682,19 @@ void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) 
 }
 
 const QStringList ImportFileWidget::selectedHDF5Names() const {
-	return m_hdf5OptionsWidget->selectedHDF5Names();
+	return m_hdf5OptionsWidget->selectedNames();
 }
 
 const QStringList ImportFileWidget::selectedNetCDFNames() const {
-	return m_netcdfOptionsWidget->selectedNetCDFNames();
+	return m_netcdfOptionsWidget->selectedNames();
 }
 
 const QStringList ImportFileWidget::selectedFITSExtensions() const {
-	return m_fitsOptionsWidget->selectedFITSExtensions();
+	return m_fitsOptionsWidget->selectedExtensions();
 }
 
 const QStringList ImportFileWidget::selectedROOTNames() const {
-	return m_rootOptionsWidget->selectedROOTNames();
+	return m_rootOptionsWidget->selectedNames();
 }
 
 /*!

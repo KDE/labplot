@@ -611,7 +611,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 
 	if (currentVarName.isEmpty())
 		return dataStrings << (QStringList() << i18n("No variable selected"));
-	QDEBUG(" current variable =" << currentVarName);
+	DEBUG(" current variable = " << currentVarName.toStdString());
 
 #ifdef HAVE_NETCDF
 	int ncid;
@@ -1282,7 +1282,6 @@ QVector<QStringList> NetCDFFilterPrivate::readDataFromFile(const QString& fileNa
 		return dataStrings;
 	}
 
-	DEBUG(" current variable =" << currentVarName.toStdString());
 	return readCurrentVar(fileName, dataSource, mode);
 }
 

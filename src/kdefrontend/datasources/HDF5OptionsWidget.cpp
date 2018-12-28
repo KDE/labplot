@@ -92,8 +92,8 @@ void HDF5OptionsWidget::hdf5TreeWidgetSelectionChanged() {
 /*!
 	return list of selected HDF5 item names
 */
-const QStringList HDF5OptionsWidget::selectedHDF5Names() const {
-	DEBUG("HDF5OptionsWidget::selectedHDF5Names()");
+const QStringList HDF5OptionsWidget::selectedNames() const {
+	DEBUG("HDF5OptionsWidget::selectedNames()");
 	QStringList names;
 
 	// the data link is saved in the second column

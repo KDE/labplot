@@ -40,7 +40,7 @@ public:
 	explicit NetCDFOptionsWidget(QWidget*, ImportFileWidget*);
 	void clear();
 	void updateContent(NetCDFFilter*, const QString& fileName);
-	const QStringList selectedNetCDFNames() const;
+	const QStringList selectedNames() const;
 	int lines() const { return ui.sbPreviewLines->value(); }
 	QTableWidget* previewWidget() const { return ui.twPreview; }
 

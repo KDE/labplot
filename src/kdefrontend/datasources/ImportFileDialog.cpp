@@ -222,7 +222,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	} else if (aspect->inherits("Spreadsheet")) {
 		DEBUG("	to Spreadsheet");
 		auto* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
-		DEBUG(" Calling readDataFromFile() with spreadsheet = " << spreadsheet);
+		DEBUG(" Calling readDataFromFile() with spreadsheet " << spreadsheet);
 		filter->readDataFromFile(fileName, spreadsheet, mode);
 	} else if (aspect->inherits("Workbook")) {
 		DEBUG("	to Workbook");
@@ -231,28 +231,27 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
 		// multiple data sets/variables for HDF5, NetCDF and ROOT
-		if (fileType == AbstractFileFilter::HDF5 ||
-			fileType == AbstractFileFilter::NETCDF ||
+		if (fileType == AbstractFileFilter::HDF5 || fileType == AbstractFileFilter::NETCDF ||
 			fileType == AbstractFileFilter::ROOT) {
 			QStringList names;
 			switch (fileType) {
-				case AbstractFileFilter::HDF5:
-					names = m_importFileWidget->selectedHDF5Names();
-					break;
-				case AbstractFileFilter::NETCDF:
-					names = m_importFileWidget->selectedNetCDFNames();
-					break;
-				case AbstractFileFilter::ROOT:
-					names = m_importFileWidget->selectedROOTNames();
-					break;
-				case AbstractFileFilter::Ascii:
-				case AbstractFileFilter::Binary:
-				case AbstractFileFilter::Image:
-				case AbstractFileFilter::FITS:
-				case AbstractFileFilter::JSON:
-				case AbstractFileFilter::NgspiceRawAscii:
-				case AbstractFileFilter::NgspiceRawBinary:
-					break; // never reached, omit warning
+			case AbstractFileFilter::HDF5:
+				names = m_importFileWidget->selectedHDF5Names();
+				break;
+			case AbstractFileFilter::NETCDF:
+				names = m_importFileWidget->selectedNetCDFNames();
+				break;
+			case AbstractFileFilter::ROOT:
+				names = m_importFileWidget->selectedROOTNames();
+				break;
+			case AbstractFileFilter::Ascii:
+			case AbstractFileFilter::Binary:
+			case AbstractFileFilter::Image:
+			case AbstractFileFilter::FITS:
+			case AbstractFileFilter::JSON:
+			case AbstractFileFilter::NgspiceRawAscii:
+			case AbstractFileFilter::NgspiceRawBinary:
+				break; // never reached, omit warning
 			}
 			int nrNames = names.size(), offset = sheets.size();
 
@@ -264,7 +263,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			for (int i = start; i < nrNames; ++i) {
 				Spreadsheet *spreadsheet = new Spreadsheet(i18n("Spreadsheet"));
 				if (mode == AbstractFileFilter::Prepend)
-					workbook->insertChildBefore(spreadsheet,sheets[0]);
+					workbook->insertChildBefore(spreadsheet, sheets[0]);
 				else
 					workbook->addChild(spreadsheet);
 			}
@@ -276,23 +275,23 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			sheets = workbook->children<AbstractAspect>();
 			for (int i = 0; i < nrNames; ++i) {
 				switch (fileType) {
-					case AbstractFileFilter::HDF5:
-						static_cast<HDF5Filter*>(filter)->setCurrentDataSetName(names[i]);
-						break;
-					case AbstractFileFilter::NETCDF:
-						static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names[i]);
-						break;
-					case AbstractFileFilter::ROOT:
-						static_cast<ROOTFilter*>(filter)->setCurrentObject(names[i]);
-						break;
-					case AbstractFileFilter::Ascii:
-					case AbstractFileFilter::Binary:
-					case AbstractFileFilter::Image:
-					case AbstractFileFilter::FITS:
-					case AbstractFileFilter::JSON:
-					case AbstractFileFilter::NgspiceRawAscii:
-					case AbstractFileFilter::NgspiceRawBinary:
-						break; // never reached, omit warning
+				case AbstractFileFilter::HDF5:
+					static_cast<HDF5Filter*>(filter)->setCurrentDataSetName(names[i]);
+					break;
+				case AbstractFileFilter::NETCDF:
+					static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names[i]);
+					break;
+				case AbstractFileFilter::ROOT:
+					static_cast<ROOTFilter*>(filter)->setCurrentObject(names[i]);
+					break;
+				case AbstractFileFilter::Ascii:
+				case AbstractFileFilter::Binary:
+				case AbstractFileFilter::Image:
+				case AbstractFileFilter::FITS:
+				case AbstractFileFilter::JSON:
+				case AbstractFileFilter::NgspiceRawAscii:
+				case AbstractFileFilter::NgspiceRawBinary:
+					break; // never reached, omit warning
 				}
 
 				if (sheets[i+offset]->inherits("Matrix"))
@@ -315,7 +314,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			}
 		}
 	}
-	statusBar->showMessage( i18n("File %1 imported in %2 seconds.", fileName, (float)timer.elapsed()/1000) );
+	statusBar->showMessage(i18n("File %1 imported in %2 seconds.", fileName, (float)timer.elapsed()/1000));
 
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);

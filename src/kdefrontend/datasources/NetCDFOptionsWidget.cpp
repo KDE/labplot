@@ -118,7 +118,7 @@ void NetCDFOptionsWidget::netcdfTreeWidgetSelectionChanged() {
 /*!
 	return list of selected NetCDF item names
 */
-const QStringList NetCDFOptionsWidget::selectedNetCDFNames() const {
+const QStringList NetCDFOptionsWidget::selectedNames() const {
 	QStringList names;
 	for (auto* item : ui.twContent->selectedItems())
 		names << item->text(0);

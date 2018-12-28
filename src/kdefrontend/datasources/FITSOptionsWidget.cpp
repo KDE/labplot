@@ -142,7 +142,7 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 /*!
 	return list of selected FITS extension names
 */
-const QStringList FITSOptionsWidget::selectedFITSExtensions() const {
+const QStringList FITSOptionsWidget::selectedExtensions() const {
 	QStringList names;
 	for (const auto* item : ui.twExtensions->selectedItems())
 		names << item->text(0);

@@ -140,7 +140,7 @@ void ROOTOptionsWidget::rootObjectSelectionChanged() {
 	m_fileWidget->refreshPreview();
 }
 
-const QStringList ROOTOptionsWidget::selectedROOTNames() const {
+const QStringList ROOTOptionsWidget::selectedNames() const {
 	QStringList names;
 
 	for (const QTreeWidgetItem* const item : ui.twContent->selectedItems()) {
