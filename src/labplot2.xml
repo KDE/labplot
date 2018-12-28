@@ -4,8 +4,10 @@
     <sub-class-of type="application/gzip"/>
     <comment>LabPlot2 Project File</comment>
     <comment xml:lang="ca">Fitxer de projecte LabPlot2</comment>
+    <comment xml:lang="nl">Projectbestand LabPlot</comment>
     <comment xml:lang="pt">Ficheiro de Projecto do LabPlot2</comment>
     <comment xml:lang="sk">Súbor projektu LabPlot2</comment>
+    <comment xml:lang="sv">Labplot2 projektfil</comment>
     <comment xml:lang="uk">файл проекту LabPlot2</comment>
     <glob pattern="*.lml"/>
   </mime-type>
