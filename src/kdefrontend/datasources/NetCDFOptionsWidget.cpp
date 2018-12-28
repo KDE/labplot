@@ -117,11 +117,18 @@ void NetCDFOptionsWidget::netcdfTreeWidgetSelectionChanged() {
 
 /*!
 	return list of selected NetCDF item names
+	selects all items if nothing is selected
 */
 const QStringList NetCDFOptionsWidget::selectedNames() const {
+	DEBUG("NetCDFOptionsWidget::selectedNames()");
 	QStringList names;
+
+	if (ui.twContent->selectedItems().size() == 0)
+		ui.twContent->selectAll();
+
 	for (auto* item : ui.twContent->selectedItems())
 		names << item->text(0);
+	QDEBUG("	NetCDFOptionsWidget: selected names =" << names);
 
 	return names;
 }
