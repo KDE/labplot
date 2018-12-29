@@ -1461,11 +1461,11 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			AbstractFileFilter::FileType itemFileType = static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt());
 			if (itemFileType == fileType) {
 				ui.cbFileType->setCurrentIndex(i);
+				// update content widgets when file name changes
+				updateContent(fileName, fileType);
 				break;
 			}
 		}
-		// update content widgets when file name changes
-		updateContent(fileName, fileType);
 	}
 
 	refreshPreview();
