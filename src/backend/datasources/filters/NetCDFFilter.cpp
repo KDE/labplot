@@ -643,10 +643,195 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 	int columnOffset = 0;
 	QVector<void*> dataContainer;
 	switch (ndims) {
-	case 0:
-		dataStrings << (QStringList() << i18n("zero dimensions"));
-		QDEBUG(dataStrings);
+	case 0: {
+		DEBUG("	zero dimensions");
+		actualRows = actualCols = 1;	// only one value
+		QVector<AbstractColumn::ColumnMode> columnModes;
+		columnModes.resize(actualCols);
+		switch (type) {
+		case NC_BYTE:
+		case NC_UBYTE:
+		case NC_CHAR:
+		case NC_SHORT:
+		case NC_USHORT:
+		case NC_INT:
+			columnModes[0] = AbstractColumn::Integer;
+			break;
+		case NC_UINT: 	// converted to double (int is too small)
+		case NC_INT64: 	// converted to double (int is too small)
+		case NC_UINT64:	// converted to double (int is too small)
+		case NC_DOUBLE:
+		case NC_FLOAT:
+			columnModes[0] = AbstractColumn::Numeric;
+			break;
+		//TODO: NC_STRING
+		}
+
+		//TODO: use given names?
+		QStringList vectorNames;
+
+		if (dataSource)
+			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
+
+		DEBUG("	Reading data of type " << translateDataType(type).toStdString());
+		switch (type) {
+		case NC_BYTE: {
+			signed char data;
+
+			m_status = nc_get_var_schar(ncid, varid, &data);
+			handleError(m_status, "nc_get_var_schar");
+
+			if (dataSource) {
+				int *sourceData = static_cast<QVector<int>*>(dataContainer[0])->data();
+				sourceData[0] = (int)data;
+			} else {	// preview
+				dataStrings << (QStringList() << QString::number(data));
+			}
+			break;
+		}
+		case NC_UBYTE: {
+			unsigned char data;
+
+			m_status = nc_get_var_uchar(ncid, varid, &data);
+			handleError(m_status, "nc_get_var_uchar");
+
+			if (dataSource) {
+				int *sourceData = static_cast<QVector<int>*>(dataContainer[0])->data();
+				sourceData[0] = (int)data;
+			} else {	// preview
+				dataStrings << (QStringList() << QString::number(data));
+			}
+			break;
+		}
+		case NC_CHAR: {	//TODO: convert to string instead of char
+			char data;
+
+			m_status = nc_get_var_text(ncid, varid, &data);
+			handleError(m_status, "nc_get_var_text");
+
+			if (dataSource) {
+				int *sourceData = static_cast<QVector<int>*>(dataContainer[0])->data();
+				sourceData[0] = (int)data;
+			} else {	// preview
+				dataStrings << (QStringList() << QString::number(data));
+			}
+			break;
+		}
+		case NC_SHORT: {
+			short data;
+
+			m_status = nc_get_var_short(ncid, varid, &data);
+			handleError(m_status, "nc_get_var_short");
+
+			if (dataSource) {
+				int *sourceData = static_cast<QVector<int>*>(dataContainer[0])->data();
+				sourceData[0] = (int)data;
+			} else {	// preview
+				dataStrings << (QStringList() << QString::number(data));
+			}
+			break;
+		}
+		case NC_USHORT: {
+			unsigned short data;
+
+			m_status = nc_get_var_ushort(ncid, varid, &data);
+			handleError(m_status, "nc_get_var_ushort");
+
+			if (dataSource) {
+				int *sourceData = static_cast<QVector<int>*>(dataContainer[0])->data();
+				sourceData[0] = (int)data;
+			} else {	// preview
+				dataStrings << (QStringList() << QString::number(data));
+			}
+			break;
+		}
+		case NC_INT: {
+			int data;
+
+			m_status = nc_get_var_int(ncid, varid, &data);
+			handleError(m_status, "nc_get_var_int");
+
+			if (dataSource) {
+				int *sourceData = static_cast<QVector<int>*>(dataContainer[0])->data();
+				sourceData[0] = data;
+			} else {	// preview
+				dataStrings << (QStringList() << QString::number(data));
+			}
+			break;
+		}
+		case NC_UINT: {	// converted to double (int is too small)
+			unsigned int data;
+
+			m_status = nc_get_var_uint(ncid, varid, &data);
+			handleError(m_status, "nc_get_var_uint");
+
+			if (dataSource) {
+				double *sourceData = static_cast<QVector<double>*>(dataContainer[0])->data();
+				sourceData[0] = (double)data;
+			} else {	// preview
+				dataStrings << (QStringList() << QString::number(data));
+			}
+			break;
+		}
+		case NC_INT64: {	// converted to double (int is too small)
+			long long data;
+
+			m_status = nc_get_var_longlong(ncid, varid, &data);
+			handleError(m_status, "nc_get_var_longlong");
+
+			if (dataSource) {
+				double *sourceData = static_cast<QVector<double>*>(dataContainer[0])->data();
+				sourceData[0] = (double)data;
+			} else {	// preview
+				dataStrings << (QStringList() << QString::number(data));
+			}
+			break;
+		}
+		case NC_UINT64: {	// converted to double (int is too small)
+			unsigned long long data;
+
+			m_status = nc_get_var_ulonglong(ncid, varid, &data);
+			handleError(m_status, "nc_get_var_ulonglong");
+
+			if (dataSource) {
+				double *sourceData = static_cast<QVector<double>*>(dataContainer[0])->data();
+				sourceData[0] = (double)data;
+			} else {	// preview
+				dataStrings << (QStringList() << QString::number(data));
+			}
+			break;
+		}
+		case NC_DOUBLE: {
+			double data;
+
+			m_status = nc_get_var_double(ncid, varid, &data);
+			handleError(m_status, "nc_get_var_double");
+
+			if (dataSource) {
+				double *sourceData = static_cast<QVector<double>*>(dataContainer[0])->data();
+				sourceData[0] = data;
+			} else {	// preview
+				dataStrings << (QStringList() << QString::number(data));
+			}
+			break;
+		}
+		case NC_FLOAT: {
+			float data;
+
+			m_status = nc_get_var_float(ncid, varid, &data);
+			handleError(m_status, "nc_get_var_float");
+
+			if (dataSource) {
+				double *sourceData = static_cast<QVector<double>*>(dataContainer[0])->data();
+				sourceData[0] = (double)data;
+			} else {	// preview
+				dataStrings << (QStringList() << QString::number(data));
+			}
+			break;
+		}
+		}
 		break;
+	}
 	case 1: {
 		size_t size;
 		m_status = nc_inq_dimlen(ncid, dimids[0], &size);
