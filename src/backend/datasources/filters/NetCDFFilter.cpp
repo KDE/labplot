@@ -486,11 +486,13 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 		QDEBUG("	var" << i+1 << ": name/type=" << name << translateDataType(type));
 		DEBUG("		ndims/nattr" << ndims << nattrs);
 
-		QStringList props;
+		QStringList props;	// properties column
 		props << translateDataType(type);
 		char dname[NC_MAX_NAME + 1];
 		size_t dlen;
 		props << "(";
+		if (ndims == 0)
+			props << QString::number(0);
 		for (int j = 0; j < ndims; j++) {
 			m_status = nc_inq_dim(ncid, dimids[j], dname, &dlen);
 			if (j != 0)
@@ -499,7 +501,105 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 		}
 		props << ")";
 
-		QTreeWidgetItem *varItem = new QTreeWidgetItem(QStringList() << QString(name) << i18n("variable") << props.join("")<<"");
+		QStringList rowStrings;
+		rowStrings << QString(name) << i18n("variable") << props.join("");
+		if (ndims == 0)	{// get value of zero dim var
+			switch (type) {
+			case NC_BYTE: {
+				signed char data;
+				m_status = nc_get_var_schar(ncid, i, &data);
+				handleError(m_status, "nc_get_var_schar");
+
+				rowStrings << QString::number(data);
+				break;
+			}
+			case NC_UBYTE: {
+				unsigned char data;
+				m_status = nc_get_var_uchar(ncid, i, &data);
+				handleError(m_status, "nc_get_var_uchar");
+
+				rowStrings << QString::number(data);
+				break;
+			}
+			case NC_CHAR: {
+				char data;
+				m_status = nc_get_var_text(ncid, i, &data);
+				handleError(m_status, "nc_get_var_text");
+
+				rowStrings << QString(data);
+				break;
+			}
+			case NC_SHORT: {
+				short data;
+				m_status = nc_get_var_short(ncid, i, &data);
+				handleError(m_status, "nc_get_var_short");
+
+				rowStrings << QString::number(data);
+				break;
+			}
+			case NC_USHORT: {
+				unsigned short data;
+				m_status = nc_get_var_ushort(ncid, i, &data);
+				handleError(m_status, "nc_get_var_ushort");
+
+				rowStrings << QString::number(data);
+				break;
+			}
+			case NC_INT: {
+				int data;
+				m_status = nc_get_var_int(ncid, i, &data);
+				handleError(m_status, "nc_get_var_int");
+
+				rowStrings << QString::number(data);
+				break;
+			}
+			case NC_UINT: {
+				unsigned int data;
+				m_status = nc_get_var_uint(ncid, i, &data);
+				handleError(m_status, "nc_get_var_uint");
+
+				rowStrings << QString::number(data);
+				break;
+			}
+			case NC_INT64: {
+				long long data;
+				m_status = nc_get_var_longlong(ncid, i, &data);
+				handleError(m_status, "nc_get_var_longlong");
+
+				rowStrings << QString::number(data);
+				break;
+			}
+			case NC_UINT64: {
+				unsigned long long data;
+				m_status = nc_get_var_ulonglong(ncid, i, &data);
+				handleError(m_status, "nc_get_var_ulonglong");
+
+				rowStrings << QString::number(data);
+				break;
+			}
+			case NC_DOUBLE: {
+				double data;
+				m_status = nc_get_var_double(ncid, i, &data);
+				handleError(m_status, "nc_get_var_double");
+
+				rowStrings << QString::number(data);
+				break;
+			}
+			case NC_FLOAT: {
+				float data;
+				m_status = nc_get_var_float(ncid, i, &data);
+				handleError(m_status, "nc_get_var_float");
+
+				rowStrings << QString::number(data);
+				break;
+			}
+			}
+
+		} else {
+			rowStrings << "";
+		}
+
+		QTreeWidgetItem *varItem = new QTreeWidgetItem(rowStrings);
 		varItem->setIcon(0, QIcon::fromTheme("x-office-spreadsheet"));
 		varItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 		// highlight item
