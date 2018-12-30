@@ -3090,7 +3090,7 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 	QString str = config.name();
 
 	// theme path is saved with UNIX dir separator
-	str = str.right(str.length() - str.lastIndexOf('/') - 1);
+	str = str.right(str.length() - str.lastIndexOf(QLatin1Char('/')) - 1);
 	DEBUG("	set theme to " << str.toStdString());
 	this->setTheme(str);
 
