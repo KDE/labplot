@@ -3088,7 +3088,10 @@ void CartesianPlot::loadTheme(const QString& theme) {
 
 void CartesianPlot::loadThemeConfig(const KConfig& config) {
 	QString str = config.name();
-	str = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
+
+	// theme path is saved with UNIX dir separator
+	str = str.right(str.length() - str.lastIndexOf('/') - 1);
+	DEBUG("	set theme to " << str.toStdString());
 	this->setTheme(str);
 
 	//load the color palettes for the curves
