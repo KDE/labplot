@@ -304,9 +304,6 @@ void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect* aspect
 }
 
 void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
-	if (m_suppressSignals)
-		return;
-
 	Q_UNUSED(before)
 	const Column* col = qobject_cast<const Column*>(child);
 
