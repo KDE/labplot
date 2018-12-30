@@ -909,7 +909,7 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 	const int rows = rowCount();
 	for (int n = startColumn; n <= endColumn; n++) {
 		Column* column = this->column(columnOffset + n - startColumn);
-		//DEBUG("	column " << n << " of type " << column->columnMode());
+		DEBUG("	column " << n << " of type " << column->columnMode());
 
 		QString comment;
 		switch (column->columnMode()) {
@@ -944,14 +944,18 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 
 	//make the spreadsheet and all its children undo aware again
 	setUndoAware(true);
-	for (int i = 0; i < childCount<Column>(); i++)
+	for (int i = 0; i < childCount<Column>(); i++) {
+		DEBUG("	setUndoAware() of column " << i+1);
 		child<Column>(i)->setUndoAware(true);
+	}
 
 	if (m_model != nullptr)
 		m_model->suppressSignals(false);
 
-	if (m_partView != nullptr && m_view != nullptr)
+	if (m_partView != nullptr && m_view != nullptr) {
+		DEBUG("	resizeHeader() of view");
 		m_view->resizeHeader();
+	}
 
 	DEBUG("Spreadsheet::finalizeImport() DONE");
 }

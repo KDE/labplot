@@ -4,7 +4,7 @@
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
-						   (C) 2016      by Fabian Kristof (fkristofszabolcs@gmail.com)
+    Copyright            : (C) 2016      by Fabian Kristof (fkristofszabolcs@gmail.com)
 
  ***************************************************************************/
 
@@ -88,12 +88,8 @@
 SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly) : QWidget(),
 	m_tableView(new QTableView(this)),
 	m_spreadsheet(spreadsheet),
-	m_model( new SpreadsheetModel(spreadsheet) ),
-	m_suppressSelectionChangedEvent(false),
-	m_readOnly(readOnly),
-	m_columnSetAsMenu(nullptr),
-	m_columnGenerateDataMenu(nullptr),
-	m_columnSortMenu(nullptr) {
+	m_model(new SpreadsheetModel(spreadsheet)),
+	m_readOnly(readOnly) {
 
 	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
@@ -185,13 +181,16 @@ void SpreadsheetView::init() {
 	set the column sizes to the saved values or resize to content if no size was saved yet
 */
 void SpreadsheetView::resizeHeader() {
+	DEBUG("SpreadsheetView::resizeHeader()");
 	for (int i = 0; i < m_spreadsheet->children<Column>().size(); ++i) {
+		DEBUG("	resize header of column " << i+1);
 		Column* col = m_spreadsheet->child<Column>(i);
 		if (col->width() == 0)
 			m_tableView->resizeColumnToContents(i);
 		else
 			m_tableView->setColumnWidth(i, col->width());
 	}
+	DEBUG("SpreadsheetView::resizeHeader() DONE");
 }
 
 void SpreadsheetView::initActions() {
@@ -774,13 +773,13 @@ void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to) 
 	m_spreadsheet->moveColumn(from, to);
 }
 
-//TODO Implement the "change of the column name"-mode  upon a double click
+//TODO Implement the "change of the column name"-mode upon a double click
 void SpreadsheetView::handleHorizontalHeaderDoubleClicked(int index) {
 	Q_UNUSED(index);
 }
 
 /*!
-  Returns whether comments are show currently or not.
+  Returns whether comments are shown currently or not
 */
 bool SpreadsheetView::areCommentsShown() const {
 	return m_horizontalHeader->areCommentsShown();
@@ -838,7 +837,7 @@ int SpreadsheetView::selectedColumnCount(bool full) const {
 int SpreadsheetView::selectedColumnCount(AbstractColumn::PlotDesignation pd) const{
 	int count = 0;
 	const int cols = m_spreadsheet->columnCount();
-	for (int i=0; i<cols; i++)
+	for (int i = 0; i < cols; i++)
 		if ( isColumnSelected(i, false) && (m_spreadsheet->column(i)->plotDesignation() == pd) ) count++;
 
 	return count;
@@ -862,7 +861,7 @@ bool SpreadsheetView::isColumnSelected(int col, bool full) const {
 QVector<Column*> SpreadsheetView::selectedColumns(bool full) const {
 	QVector<Column*> columns;
 	const int cols = m_spreadsheet->columnCount();
-	for (int i=0; i<cols; i++)
+	for (int i = 0; i < cols; i++)
 		if (isColumnSelected(i, full)) columns << m_spreadsheet->column(i);
 
 	return columns;
@@ -885,7 +884,7 @@ bool SpreadsheetView::isRowSelected(int row, bool full) const {
 */
 int SpreadsheetView::firstSelectedColumn(bool full) const {
 	const int cols = m_spreadsheet->columnCount();
-	for (int i=0; i<cols; i++) {
+	for (int i = 0; i < cols; i++) {
 		if (isColumnSelected(i, full))
 			return i;
 	}
@@ -898,7 +897,7 @@ int SpreadsheetView::firstSelectedColumn(bool full) const {
   */
 int SpreadsheetView::lastSelectedColumn(bool full) const {
 	const int cols = m_spreadsheet->columnCount();
-	for (int i=cols-1; i>=0; i--)
+	for (int i = cols - 1; i >= 0; i--)
 		if (isColumnSelected(i, full)) return i;
 
 	return -2;
@@ -954,7 +953,7 @@ bool SpreadsheetView::isCellSelected(int row, int col) const {
 IntervalAttribute<bool> SpreadsheetView::selectedRows(bool full) const {
 	IntervalAttribute<bool> result;
 	const int rows = m_spreadsheet->rowCount();
-	for (int i=0; i<rows; i++)
+	for (int i = 0; i < rows; i++)
 		if (isRowSelected(i, full))
 			result.setValue(i, true);
 	return result;
@@ -983,7 +982,7 @@ void SpreadsheetView::setCellsSelected(int first_row, int first_col, int last_ro
  */
 void SpreadsheetView::getCurrentCell(int* row, int* col) const {
 	QModelIndex index = m_tableView->selectionModel()->currentIndex();
-	if (index.isValid())	{
+	if (index.isValid()) {
 		*row = index.row();
 		*col = index.column();
 	} else {
@@ -1012,11 +1011,11 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				QItemSelectionModel* sel_model = m_tableView->selectionModel();
 				sel_model->clearSelection();
 				sel_model->select(QItemSelection(m_model->index(0, col, QModelIndex()),
-												m_model->index(m_model->rowCount()-1, col, QModelIndex())),
+								m_model->index(m_model->rowCount()-1, col, QModelIndex())),
 								QItemSelectionModel::Select);
 			}
 
-			if (selectedColumns().size()==1) {
+			if (selectedColumns().size() == 1) {
 				action_sort_columns->setVisible(false);
 				action_sort_asc_column->setVisible(true);
 				action_sort_desc_column->setVisible(true);
@@ -1030,7 +1029,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			bool numeric = true;
 			bool plottable = true;
 			bool datetime = false;
-			for(const Column* col : selectedColumns()) {
+			for (const Column* col : selectedColumns()) {
 				if ( !(col->columnMode() == AbstractColumn::Numeric || col->columnMode() == AbstractColumn::Integer) ) {
 					datetime = (col->columnMode() == AbstractColumn::DateTime);
 					if (!datetime)
@@ -1315,7 +1314,7 @@ void SpreadsheetView::pasteIntoSelection() {
 
 void SpreadsheetView::maskSelection() {
 	int first = firstSelectedRow();
-	if ( first < 0 ) return;
+	if (first < 0) return;
 	int last = lastSelectedRow();
 
 	WAIT_CURSOR;
@@ -1430,7 +1429,7 @@ void SpreadsheetView::fillWithRowNumbers() {
 
 	QVector<int> int_data(rows);
 	for (int i = 0; i < rows; ++i)
-		int_data[i] = i+1;
+		int_data[i] = i + 1;
 
 	for (auto* col : selectedColumns()) {
 		switch (col->columnMode()) {
@@ -1501,9 +1500,9 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 		case AbstractColumn::Month:
 		case AbstractColumn::Day: {
 				QVector<QDateTime> results;
-				QDate earliestDate(1,1,1);
-				QDate latestDate(2999,12,31);
-				QTime midnight(0,0,0,0);
+				QDate earliestDate(1, 1, 1);
+				QDate latestDate(2999, 12, 31);
+				QTime midnight(0, 0, 0, 0);
 				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
 						results << QDateTime( earliestDate.addDays(((double)qrand())*((double)earliestDate.daysTo(latestDate))/((double)RAND_MAX)), midnight.addMSecs(((qint64)qrand())*1000*60*60*24/RAND_MAX));
@@ -2221,7 +2220,6 @@ void SpreadsheetView::print(QPrinter* printer) const {
 	const int rows = m_spreadsheet->rowCount();
 	const int cols = m_spreadsheet->columnCount();
 	int height = margin;
-	int i;
 	const int vertHeaderWidth = vHeader->width();
 	int right = margin + vertHeaderWidth;
 
@@ -2251,6 +2249,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 	if (remainingColumns > 0)
 		tablesCount++;
 	//Paint the horizontal header first
+	int i;
 	for (int table = 0; table < tablesCount; ++table) {
 		right = margin + vertHeaderWidth;
 
@@ -2290,7 +2289,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 
 		// print table values
 		QString cellText;
-		for (i=0; i<rows; ++i) {
+		for (i = 0; i < rows; ++i) {
 			right = margin;
 			cellText = m_tableView->model()->headerData(i, Qt::Vertical).toString()+'\t';
 			tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);
@@ -2308,7 +2307,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 				j = (tablesCount-1)*columnsPerTable;
 				toJ = (tablesCount-1)* columnsPerTable + remainingColumns;
 			}
-			for (; j< toJ; j++) {
+			for (; j < toJ; j++) {
 				int w = m_tableView->columnWidth(j);
 				cellText = m_spreadsheet->column(j)->isValid(i) ? m_spreadsheet->text(i,j)+'\t':
 				           QLatin1String("- \t");
@@ -2324,7 +2323,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 			height += br.height();
 			painter.drawLine(margin, height, right-1, height);
 
-			if (height >= printer->height()-margin ) {
+			if (height >= printer->height() - margin) {
 				printer->newPage();
 				height = margin;
 				painter.drawLine(margin, height, right, height);
@@ -2351,7 +2350,7 @@ void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader,
 	if (exportHeader) {
 		for (int j = 0; j < cols; ++j) {
 			out << m_spreadsheet->column(j)->name();
-			if (j != cols-1)
+			if (j != cols - 1)
 				out << sep;
 		}
 		out << '\n';
@@ -2368,7 +2367,7 @@ void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader,
 			} else
 				out << col->asStringColumn()->textAt(i);
 
-			if (j != cols-1)
+			if (j != cols - 1)
 				out << sep;
 		}
 		out << '\n';
@@ -2447,7 +2446,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 	}
 
 	if (texVersionOutput.at(yearidx+1) == QChar('/'))
-		yearidx-=3;
+		yearidx -= 3;
 
 	bool ok;
 	texVersionOutput.midRef(yearidx, 4).toInt(&ok);

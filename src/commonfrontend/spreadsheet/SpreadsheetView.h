@@ -99,7 +99,7 @@ private:
 	SpreadsheetItemDelegate* m_delegate;
 	SpreadsheetModel* m_model;
 	SpreadsheetHeaderView* m_horizontalHeader;
-	bool m_suppressSelectionChangedEvent;
+	bool m_suppressSelectionChangedEvent{false};
 	bool m_readOnly;
 	bool eventFilter(QObject*, QEvent*) override;
 	void checkSpreadsheetMenu();
@@ -183,10 +183,10 @@ private:
 	//Menus
 	QMenu* m_selectionMenu;
 	QMenu* m_columnMenu;
-	QMenu* m_columnSetAsMenu;
-	QMenu* m_columnGenerateDataMenu;
+	QMenu* m_columnSetAsMenu{nullptr};
+	QMenu* m_columnGenerateDataMenu{nullptr};
 	QMenu* m_columnManipulateDataMenu;
-	QMenu* m_columnSortMenu;
+	QMenu* m_columnSortMenu{nullptr};
 	QMenu* m_rowMenu;
 	QMenu* m_spreadsheetMenu;
 	QMenu* m_plotDataMenu;
