@@ -206,6 +206,8 @@ QString NetCDFFilter::fileCDLString(const QString& fileName) {
 		CDLString.replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;");
 		//DEBUG("	CDL string: " << CDLString.toStdString());
 	}
+#else	//TODO: ncdump on Win, Mac
+	Q_UNUSED(fileName)
 #endif
 
 	return CDLString;

@@ -338,6 +338,8 @@ QString HDF5Filter::fileDDLString(const QString& fileName) {
 		DDLString.replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;");
 		//DEBUG("	DDL string: " << DDLString.toStdString());
 	}
+#else	//TODO: h5dump on Win, Mac
+	Q_UNUSED(fileName)
 #endif
 
 	return DDLString;
