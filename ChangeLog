@@ -15,6 +15,7 @@ New features:
 	* [spreadsheet] export to SQLite
 	* [worksheet] Allow to specify different border shapes for labels (rectangle, elipse, etc.)
 	* Allow to connect to SQL databases via ODBC
+	* Improved import of NetCDF files
 
 Bug fixes:
 	* Fixed several problems in live data support
