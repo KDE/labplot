@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Prakriti Bhardwaj (p_bhardwaj14@informatik.uni-kl.de)
     Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -29,13 +30,12 @@
 
 #include "ThemeHandler.h"
 #include "widgets/ThemesWidget.h"
+#include "backend/lib/macros.h"
 
 #include <QDir>
 #include <QDirIterator>
 #include <QFileInfo>
 #include <QHBoxLayout>
-#include <QLabel>
-#include <QLineEdit>
 #include <QMenu>
 #include <QPushButton>
 #include <QWidgetAction>
@@ -81,17 +81,68 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 // 	connect( pbSaveTheme, SIGNAL(clicked()), this, SLOT(saveMenu()));
 // 	connect( pbPublishTheme, SIGNAL(clicked()), this, SLOT(publishThemes()));
 
-	//find all available themes files (system wide and user specific local files)
-	//the list m_themeList contains full paths (path + file name)
-	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory);
-	for (const auto& dir : dirs) {
-		QDirIterator it(dir, QStringList() << QStringLiteral("*"), QDir::Files);
-		while (it.hasNext())
-			m_themeList.append(it.next());
-	}
+	m_themeList = themeList();
 
 	m_pbLoadTheme->setEnabled(!m_themeList.isEmpty());
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*!
+ * get list of all theme files (full path)
+ */
+QStringList ThemeHandler::themeList() {
+	DEBUG("ThemeHandler::themeList()");
+	// find all available themes files (system wide and user specific local files)
+	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory);
+
+	QStringList themes;
+	for (const auto& dir : dirs) {
+		QDirIterator it(dir, QStringList() << QStringLiteral("*"), QDir::Files);
+		while (it.hasNext())
+			themes.append(it.next());
+	}
+
+	DEBUG("	first theme path: " << themes.first().toStdString());
+	return themes;
+}
+
+/*!
+ * get list of all theme names
+ */
+QStringList ThemeHandler::themes() {
+	DEBUG("ThemeHandler::themes()");
+	QStringList themePaths = themeList();
+
+	QStringList themes;
+	for (int i = 0; i < themePaths.size(); ++i) {
+		QFileInfo fileinfo(themePaths.at(i));
+		themes.append(fileinfo.fileName().split('.').at(0));
+	}
+
+	DEBUG("	first theme: " << themes.first().toStdString());
+	QDEBUG("	themes = " << themes);
+	return themes;
+}
+
+/*!
+ * get path for theme of name 'name'
+ */
+const QString ThemeHandler::themeFilePath(const QString& name) {
+	DEBUG("ThemeHandler::themeFilePath()");
+	QStringList themePaths = themeList();
+
+	for (int i = 0; i < themePaths.size(); ++i) {
+		if (themePaths.at(i).indexOf(name) != -1) {
+			DEBUG("	theme \"" << name.toStdString() << "\" path: " << themePaths.at(i).toStdString());
+			return themePaths.at(i);
+		}
+	}
+
+	return QString();
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ThemeHandler::setCurrentTheme(const QString& name) {
 	if (!name.isEmpty()) {
@@ -123,41 +174,6 @@ void ThemeHandler::loadSelected(const QString& name) {
 // 		pbPublishTheme->setEnabled(false);
 // 		m_currentLocalTheme.clear();
 // 	}
-}
-
-QStringList ThemeHandler::themes() {
-	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory);
-	QStringList pathList;
-	for (const auto& dir : dirs) {
-		QDirIterator it(dir, QStringList() << QStringLiteral("*"), QDir::Files);
-		while (it.hasNext())
-			pathList.append(it.next());
-	}
-
-	QStringList themeList;
-	for (int i = 0; i < pathList.size(); ++i) {
-		QFileInfo fileinfo(pathList.at(i));
-		themeList.append(fileinfo.fileName().split('.').at(0));
-	}
-	return themeList;
-}
-
-const QString ThemeHandler::themeFilePath(const QString& name) {
-	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory);
-
-	QStringList themes;
-	for (const auto& dir : dirs) {
-		QDirIterator it(dir, QStringList() << QStringLiteral("*"), QDir::Files);
-		while (it.hasNext())
-			themes.append(it.next());
-	}
-
-	for (int i = 0; i < themes.size(); ++i) {
-		if (themes.at(i).indexOf(name) != -1)
-			return themes.at(i);
-	}
-
-	return QString();
 }
 
 void ThemeHandler::showPanel() {
