@@ -944,18 +944,14 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 
 	//make the spreadsheet and all its children undo aware again
 	setUndoAware(true);
-	for (int i = 0; i < childCount<Column>(); i++) {
-		DEBUG("	setUndoAware() of column " << i+1);
+	for (int i = 0; i < childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(true);
-	}
 
 	if (m_model != nullptr)
 		m_model->suppressSignals(false);
 
-	if (m_partView != nullptr && m_view != nullptr) {
-		DEBUG("	resizeHeader() of view");
+	if (m_partView != nullptr && m_view != nullptr)
 		m_view->resizeHeader();
-	}
 
 	DEBUG("Spreadsheet::finalizeImport() DONE");
 }

@@ -183,14 +183,12 @@ void SpreadsheetView::init() {
 void SpreadsheetView::resizeHeader() {
 	DEBUG("SpreadsheetView::resizeHeader()");
 	for (int i = 0; i < m_spreadsheet->children<Column>().size(); ++i) {
-		DEBUG("	resize header of column " << i+1);
 		Column* col = m_spreadsheet->child<Column>(i);
 		if (col->width() == 0)
 			m_tableView->resizeColumnToContents(i);
 		else
 			m_tableView->setColumnWidth(i, col->width());
 	}
-	DEBUG("SpreadsheetView::resizeHeader() DONE");
 }
 
 void SpreadsheetView::initActions() {

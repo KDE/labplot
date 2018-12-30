@@ -82,7 +82,7 @@ public:
 //		Int64 = 26,	// qint64 (long)
 //		UInt64 = 27,	// quint64 (unsigned long)
 		// MISC
-		// 30 = QBrush
+		// QBrush = 30
 		// QColor
 		// QFont
 		// QPoint
