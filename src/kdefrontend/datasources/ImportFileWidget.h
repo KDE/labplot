@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009-2017 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
-	Copyright            : (C) 2017-2018 Fabian Kristof (fkristofszabolcs@gmail.com)
+    Copyright            : (C) 2017-2018 Fabian Kristof (fkristofszabolcs@gmail.com)
 
  ***************************************************************************/
 
@@ -103,9 +103,9 @@ private:
 
 	QTableWidget* m_twPreview;
 	const QString& m_fileName;
-	bool m_fileEmpty;
+	bool m_fileEmpty{false};
 	bool m_liveDataSource;
-	bool m_suppressRefresh;
+	bool m_suppressRefresh{false};
 
 private slots:
 	void fileNameChanged(const QString&);
@@ -150,24 +150,24 @@ private:
 	void updateSubscriptionTree();
 	void restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList& list, int level);
 
-	QMqttClient* m_client;
-	QMqttSubscription* m_mainSubscription;
-	QMqttTopicFilter* m_filter;
+	QMqttClient* m_client{nullptr};
+	QMqttSubscription* m_mainSubscription{nullptr};
+	QMqttTopicFilter* m_filter{nullptr};
 	QVector<QMqttSubscription*> m_mqttSubscriptions;
-	QCompleter* m_topicCompleter;
-	QCompleter* m_subscriptionCompleter;
+	QCompleter* m_topicCompleter{nullptr};
+	QCompleter* m_subscriptionCompleter{nullptr};
 	QStringList m_topicList;
-	bool m_searching;
+	bool m_searching{false};
 	QTimer* m_searchTimer;
 	QTimer* m_connectTimeoutTimer;
 	QMap<QMqttTopicName, bool> m_messageArrived;
 	QMap<QMqttTopicName, QMqttMessage> m_lastMessage;
-	bool m_mqttReadyForPreview;
+	bool m_mqttReadyForPreview{false};
 	QVector<QString> m_subscribedTopicNames;
 	QVector<QString> m_addedTopics;
 	QString m_configPath;
-	bool m_initialisingMQTT;
-	bool m_connectionTimedOut;
+	bool m_initialisingMQTT{false};
+	bool m_connectionTimedOut{false};
 	MQTTClient::MQTTWill m_willSettings;
 public:
 	void saveMQTTSettings(MQTTClient*) const;

@@ -671,16 +671,7 @@ void Histogram::visibilityChangedSlot() {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-HistogramPrivate::HistogramPrivate(Histogram *owner) :
-	m_printing(false),
-	m_hovered(false),
-	m_suppressRetransform(false),
-	m_suppressRecalc(false),
-	m_hoverEffectImageIsDirty(false),
-	m_selectionEffectImageIsDirty(false),
-	q(owner),
-	m_histogram(nullptr),
-	m_bins(0) {
+HistogramPrivate::HistogramPrivate(Histogram *owner) : q(owner) {
 
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(true);

@@ -214,31 +214,30 @@ public:
 	void reparentTopic(const QString& topic, const QString& parent);
 
 private:
-
-	UpdateType m_updateType;
-	ReadingType m_readingType;
-	bool m_paused;
-	bool m_prepared;
-	int m_sampleSize;
-	int m_keepNValues;
-	int m_updateInterval;
-	AsciiFilter* m_filter;
+	UpdateType m_updateType{TimeInterval};
+	ReadingType m_readingType{ContinuousFixed};
+	bool m_paused{false};
+	bool m_prepared{false};
+	int m_sampleSize{1};
+	int m_keepNValues{0};
+	int m_updateInterval{1000};
+	AsciiFilter* m_filter{nullptr};
 	QTimer* m_updateTimer;
 	QMqttClient* m_client;
 	QMap<QMqttTopicFilter, quint8> m_subscribedTopicNameQoS;
 	QVector<QString> m_subscriptions;
 	QVector<QString> m_topicNames;
-	bool m_MQTTTest;
+	bool m_MQTTTest{false};
 	QTimer* m_willTimer;
-	bool m_MQTTFirstConnectEstablished;
-	bool m_MQTTRetain;
-	bool m_MQTTUseID;
-	bool m_MQTTUseAuthentication;
+	bool m_MQTTFirstConnectEstablished{false};
+	bool m_MQTTRetain{false};
+	bool m_MQTTUseID{false};
+	bool m_MQTTUseAuthentication{false};
 	QVector<MQTTSubscription*> m_MQTTSubscriptions;
-	bool m_disconnectForWill;
-	bool m_loaded;
-	int m_subscriptionsLoaded;
-	int m_subscriptionCountToLoad;
+	bool m_disconnectForWill{false};
+	bool m_loaded{false};
+	int m_subscriptionsLoaded{0};
+	int m_subscriptionCountToLoad{0};
 	MQTTWill m_MQTTWill;
 
 public slots:

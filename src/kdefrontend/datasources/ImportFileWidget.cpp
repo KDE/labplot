@@ -84,22 +84,11 @@ Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 */
 ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const QString& fileName) : QWidget(parent),
 	m_fileName(fileName),
-	m_fileEmpty(false),
-	m_liveDataSource(liveDataSource),
-	m_suppressRefresh(false)
+	m_liveDataSource(liveDataSource)
 #ifdef HAVE_MQTT
 	,
-	m_client(nullptr),
-	m_mainSubscription(nullptr),
-	m_filter(nullptr),
-	m_topicCompleter(nullptr),
-	m_subscriptionCompleter(nullptr),
-	m_searching(false),
 	m_searchTimer(new QTimer(this)),
-	m_connectTimeoutTimer(new QTimer(this)),
-	m_mqttReadyForPreview (false),
-	m_initialisingMQTT(false),
-	m_connectionTimedOut(false)
+	m_connectTimeoutTimer(new QTimer(this))
 #endif
 {
 	ui.setupUi(this);

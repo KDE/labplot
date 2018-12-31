@@ -58,7 +58,7 @@ private:
 	Ui::LiveDataDock ui;
 	QList<LiveDataSource*> m_liveDataSources;
 
-	bool m_paused;
+	bool m_paused{false};
 
 	void pauseReading();
 	void continueReading();
@@ -120,13 +120,13 @@ private:
 
 	QList<MQTTClient*> m_mqttClients;
 	QMap<QString, QMqttClient*> m_clients;
-	QCompleter* m_topicCompleter;
-	QCompleter* m_subscriptionCompleter;
+	QCompleter* m_topicCompleter{nullptr};
+	QCompleter* m_subscriptionCompleter{nullptr};
 	QMap<QString, QStringList> m_topicList;
-	bool m_searching;
+	bool m_searching{true};
 	QTimer* m_searchTimer;
-	bool m_interpretMessage;
-	const MQTTClient* m_previousMQTTClient;
+	bool m_interpretMessage{true};
+	const MQTTClient* m_previousMQTTClient{nullptr};
 	QString m_mqttUnsubscribeName;
 	QMap<QString, QVector<QString>> m_addedTopics;
 #endif

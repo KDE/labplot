@@ -56,7 +56,7 @@ public:
 private:
 	QString mKey;
 	QString mValue;
-	QJsonValue::Type mType;
+	QJsonValue::Type mType{QJsonValue::Undefined};
 	QList<QJsonTreeItem*> mChilds;
 	QJsonTreeItem* mParent;
 };

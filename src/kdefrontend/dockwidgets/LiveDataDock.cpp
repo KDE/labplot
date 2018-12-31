@@ -41,15 +41,10 @@ Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <QMenu>
 #endif
 
-LiveDataDock::LiveDataDock(QWidget* parent) : QWidget(parent), m_paused(false)
+LiveDataDock::LiveDataDock(QWidget* parent) : QWidget(parent)
 #ifdef HAVE_MQTT
 	,
-	m_topicCompleter(nullptr),
-	m_subscriptionCompleter(nullptr),
-	m_searching(true),
-	m_searchTimer(new QTimer(this)),
-	m_interpretMessage(true),
-	m_previousMQTTClient(nullptr)
+	m_searchTimer(new QTimer(this))
 #endif
 {
 	ui.setupUi(this);

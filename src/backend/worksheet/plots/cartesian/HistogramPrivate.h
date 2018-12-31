@@ -49,15 +49,15 @@ public:
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
-	bool m_printing;
-	bool m_hovered;
-	bool m_suppressRetransform;
-	bool m_suppressRecalc;
+	bool m_printing{false};
+	bool m_hovered{false};
+	bool m_suppressRetransform{false};
+	bool m_suppressRecalc{false};
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;
 	QImage m_selectionEffectImage;
-	bool m_hoverEffectImageIsDirty;
-	bool m_selectionEffectImageIsDirty;
+	bool m_hoverEffectImageIsDirty{false};
+	bool m_selectionEffectImageIsDirty{false};
 
 	void retransform();
 	void recalcHistogram();
@@ -160,8 +160,8 @@ public:
 	Histogram* const q;
 
 private:
-	gsl_histogram* m_histogram;
-	size_t m_bins;
+	gsl_histogram* m_histogram{nullptr};
+	size_t m_bins{0};
 
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
