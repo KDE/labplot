@@ -239,7 +239,8 @@ QString JsonFilter::fileInfoString(const QString& fileName) {
 //################### Private implementation ##########################
 //#####################################################################
 JsonFilterPrivate::JsonFilterPrivate(JsonFilter* owner) : q(owner),
-	model(new QJsonModel()) {
+	model(new QJsonModel()),
+	nanValue(NAN) {
 
 }
 //TODO: delete model from memory

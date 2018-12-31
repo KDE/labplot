@@ -679,7 +679,8 @@ HistogramPrivate::HistogramPrivate(Histogram *owner) :
 	m_hoverEffectImageIsDirty(false),
 	m_selectionEffectImageIsDirty(false),
 	q(owner),
-	m_histogram(nullptr) {
+	m_histogram(nullptr),
+	m_bins(0) {
 
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(true);

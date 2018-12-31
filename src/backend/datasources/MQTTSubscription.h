@@ -59,7 +59,7 @@ public:
 
 private:
 	QString m_subscriptionName;
-	MQTTClient* m_MQTTClient;
+	MQTTClient* m_MQTTClient{nullptr};
 
 public slots:
 

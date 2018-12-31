@@ -29,7 +29,7 @@
 #include <QFile>
 #include <QPalette>
 
-QJsonTreeItem::QJsonTreeItem(QJsonTreeItem* parent) : mParent(parent) {
+QJsonTreeItem::QJsonTreeItem(QJsonTreeItem* parent) : mParent(parent), mType(QJsonValue::Undefined) {
 }
 
 QJsonTreeItem::~QJsonTreeItem() {

@@ -56,7 +56,7 @@ private:
 	TreeViewComboBox* cbYDataColumn{nullptr};
 	TreeViewComboBox* cbXErrorColumn{nullptr};
 	TreeViewComboBox* cbYErrorColumn{nullptr};
-	FitParametersWidget* fitParametersWidget;
+	FitParametersWidget* fitParametersWidget{nullptr};
 
 	XYFitCurve* m_fitCurve{nullptr};
 	XYFitCurve::FitData m_fitData;

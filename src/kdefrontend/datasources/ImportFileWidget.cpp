@@ -90,6 +90,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_MQTT
 	,
 	m_client(nullptr),
+	m_mainSubscription(nullptr),
+	m_filter(nullptr),
 	m_topicCompleter(nullptr),
 	m_subscriptionCompleter(nullptr),
 	m_searching(false),
