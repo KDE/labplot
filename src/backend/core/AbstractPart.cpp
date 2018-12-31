@@ -44,8 +44,7 @@
  * \class AbstractPart
  * \brief Base class of Aspects with MDI windows as views (AspectParts).
  */
-AbstractPart::AbstractPart(const QString& name) : AbstractAspect(name),
-	m_mdiWindow(nullptr), m_partView(nullptr) {
+AbstractPart::AbstractPart(const QString& name) : AbstractAspect(name) {
 }
 
 AbstractPart::~AbstractPart() {

@@ -764,7 +764,7 @@ QString AbstractAspect::uniqueNameFor(const QString& current_name) const {
 
 	QString base = current_name;
 	int last_non_digit;
-	for (last_non_digit = base.size()-1; last_non_digit>=0 &&
+	for (last_non_digit = base.size() - 1; last_non_digit >= 0 &&
 	        base[last_non_digit].category() == QChar::Number_DecimalDigit; --last_non_digit)
 		base.chop(1);
 
@@ -799,9 +799,7 @@ void AbstractAspect::connectChild(AbstractAspect* child) {
 //######################  Private implementation ###############################
 //##############################################################################
 AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QString& name)
-	: m_name(name.isEmpty() ? QLatin1String("1") : name), m_hidden(false), q(owner), m_parent(nullptr),
-	m_undoAware(true), m_isLoading(false)
-{
+	: m_name(name.isEmpty() ? QLatin1String("1") : name), q(owner) {
 	m_creation_time = QDateTime::currentDateTime();
 }
 
@@ -821,7 +819,7 @@ void AbstractAspectPrivate::insertChild(int index, AbstractAspect* child) {
 }
 
 int AbstractAspectPrivate::indexOfChild(const AbstractAspect* child) const {
-	for(int i=0; i<m_children.size(); ++i)
+	for (int i = 0; i < m_children.size(); ++i)
 		if(m_children.at(i) == child) return i;
 
 	return -1;

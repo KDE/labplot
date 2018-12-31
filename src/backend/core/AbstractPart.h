@@ -52,10 +52,10 @@ public:
 	virtual bool printPreview() const = 0;
 
 private:
-	mutable PartMdiView* m_mdiWindow;
+	mutable PartMdiView* m_mdiWindow{nullptr};
 
 protected:
-	mutable QWidget* m_partView;
+	mutable QWidget* m_partView{nullptr};
 
 signals:
 	void showRequested();

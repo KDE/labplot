@@ -1,11 +1,11 @@
 /***************************************************************************
-	File       		: AspectTreeModel.h
+    File       	    : AspectTreeModel.h
     Project         : LabPlot
     Description     : Represents a tree of AbstractAspect objects as a Qt item model.
     --------------------------------------------------------------------
-	Copyright            : (C) 2007-2009 by Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2007-2009 by Knut Franke (knut.franke@gmx.de)
     Copyright            : (C) 2007-2009 by Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2011-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -75,17 +75,17 @@ private slots:
 
 private:
 	AbstractAspect* m_root;
-	bool m_readOnly;
-	bool m_folderSelectable;
-	bool m_plottableColumnsOnly;
-	bool m_numericColumnsOnly;
-	bool m_nonEmptyNumericColumnsOnly;
-	bool m_showPlotDesignation;
+	bool m_readOnly{false};
+	bool m_folderSelectable{true};
+	bool m_plottableColumnsOnly{false};
+	bool m_numericColumnsOnly{false};
+	bool m_nonEmptyNumericColumnsOnly{false};
+	bool m_showPlotDesignation{false};
 	QList<const char*> m_selectableAspects;
 
 	QString m_filterString;
-	Qt::CaseSensitivity m_filterCaseSensitivity;
-	bool m_matchCompleteWord;
+	Qt::CaseSensitivity m_filterCaseSensitivity{Qt::CaseInsensitive};
+	bool m_matchCompleteWord{false};
 	bool containsFilterString(const AbstractAspect*) const;
 
 signals:

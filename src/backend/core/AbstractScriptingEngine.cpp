@@ -51,11 +51,8 @@
  * instantiating ScriptingEngineManager). Therefor, loading the actual interpreter is done
  * in initialize().
  */
-AbstractScriptingEngine::AbstractScriptingEngine(const char *lang_name)
-{
+AbstractScriptingEngine::AbstractScriptingEngine(const char *lang_name) {
 	setObjectName(lang_name);
-	m_initialized=false;
-	m_refcount=0;
 }
 
 /**
