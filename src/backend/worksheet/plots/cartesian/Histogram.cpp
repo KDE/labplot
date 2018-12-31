@@ -861,7 +861,6 @@ void HistogramPrivate::recalcHistogram() {
 				emit q->dataChanged();
 				return;
 			}
-
 		}
 
 		switch (binningMethod) {
@@ -1799,13 +1798,6 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 			d->fillingFileName = attribs.value("fileName").toString();
 			READ_DOUBLE_VALUE("opacity", fillingOpacity);
-		} else if(reader->name() == "column") {
-			Column* column = new Column("", AbstractColumn::Numeric);
-			if (!column->load(reader, preview)) {
-				delete column;
-				return false;
-			}
-			d->dataColumn = column;
 		}
 	}
 	return true;
