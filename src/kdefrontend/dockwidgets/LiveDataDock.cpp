@@ -68,6 +68,10 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 #ifdef HAVE_MQTT
 	m_searchTimer->setInterval(10000);
 
+	const int size = ui.leTopics->height();
+	ui.lTopicSearch->setPixmap( QIcon::fromTheme(QLatin1String("view-filter")).pixmap(size, size) );
+	ui.lSubscriptionSearch->setPixmap( QIcon::fromTheme(QLatin1String("view-filter")).pixmap(size, size) );
+
 	connect(this, &LiveDataDock::newTopic, this, &LiveDataDock::setTopicCompleter);
 	connect(m_searchTimer, &QTimer::timeout, this, &LiveDataDock::topicTimeout);
 	connect(ui.bSubscribe, &QPushButton::clicked, this, &LiveDataDock::addSubscription);
@@ -140,6 +144,7 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *>& clients) {
 	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
 	//show MQTT connected options
+	ui.lTopics->show();
 	ui.gbManageSubscriptions->show();
 	ui.bSubscribe->show();
 	ui.bUnsubscribe->show();
@@ -147,7 +152,6 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *>& clients) {
 	ui.leTopics->show();
 	ui.lTopicSearch->show();
 	ui.twSubscriptions->show();
-	ui.lQoS->show();
 	ui.cbQoS->show();
 	ui.lWillSettings->show();
 	ui.bWillSettings->show();
@@ -269,12 +273,12 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
 	item = model->item(LiveDataSource::UpdateType::NewData);
 	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::NetworkUdpSocket ||
-			sourceType == LiveDataSource::SourceType::SerialPort) {
+			sourceType == LiveDataSource::SourceType::SerialPort)
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
-	} else {
+	else
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-	}
 
+	ui.lTopics->hide();
 	ui.bWillSettings->hide();
 	ui.lWillSettings->hide();
 	ui.bWillUpdateNow->hide();
@@ -285,8 +289,6 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	ui.lTopicSearch->hide();
 	ui.twSubscriptions->hide();
 	ui.gbManageSubscriptions->hide();
-	ui.lQoS->hide();
-	ui.cbQoS->hide();
 }
 
 /*!
