@@ -30,25 +30,25 @@
 #ifndef VARIABLEPARSER_H
 #define VARIABLEPARSER_H
 
-#include <QString>
+class QString;
 #include <QVector>
 
 class VariableParser {
-	public:
-		VariableParser(QString name, QString value);
-		QVector<double> values();
-		bool isParsed();
+public:
+	VariableParser(QString name, QString value);
+	QVector<double> values();
+	bool isParsed();
 		
-	private:
-		QString m_backendName;
-		QString m_string;
-		QVector<double> m_values;
-		bool m_parsed{false};
+private:
+	QString m_backendName;
+	QString m_string;
+	QVector<double> m_values;
+	bool m_parsed{false};
 		
-		void parseMaximaValues();
-		void parsePythonValues();
-		void parseRValues();
-		void parseValues(const QStringList&);
+	void parseMaximaValues();
+	void parsePythonValues();
+	void parseRValues();
+	void parseValues(const QStringList&);
 };
 
 #endif // VARIABLEPARSER_H

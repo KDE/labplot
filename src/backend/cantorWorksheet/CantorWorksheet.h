@@ -4,7 +4,7 @@
     Description          : Aspect providing a Cantor Worksheets for Multiple backends
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Garvit Khatri (garvitdelhi@gmail.com)
-	Copyright            : (C) 2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -67,13 +67,13 @@ public:
 	QList<Cantor::PanelPlugin*> getPlugins();
 
 private:
-	mutable CantorWorksheetView* m_view;
+	mutable CantorWorksheetView* m_view{nullptr};
 	QString m_backendName;
-	Cantor::Session* m_session;
-	KParts::ReadWritePart* m_part;
+	Cantor::Session* m_session{nullptr};
+	KParts::ReadWritePart* m_part{nullptr};
 	QList<Cantor::PanelPlugin*> m_plugins;
-	QAbstractItemModel* m_variableModel;
-	Cantor::WorksheetAccessInterface* m_worksheetAccess;
+	QAbstractItemModel* m_variableModel{nullptr};
+	Cantor::WorksheetAccessInterface* m_worksheetAccess{nullptr};
 
 	bool init(QByteArray* content = nullptr);
 

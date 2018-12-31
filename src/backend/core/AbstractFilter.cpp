@@ -230,7 +230,7 @@ QString AbstractFilter::inputLabel(int port) const {
  */
 int AbstractFilter::portIndexOf(const AbstractColumn* column) {
 	for (int i = 0; i < m_inputs.size(); ++i)
-		if(m_inputs.at(i) == column) return i;
+		if (m_inputs.at(i) == column) return i;
 	return -1;
 }
 

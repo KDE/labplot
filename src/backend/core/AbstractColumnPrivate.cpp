@@ -4,7 +4,7 @@
     Description          : Private data class of AbstractColumn
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net),
-	Copyright            : (C) 2007-2009  Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2007-2009  Knut Franke (knut.franke@gmx.de)
 
  ***************************************************************************/
 

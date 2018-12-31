@@ -4,7 +4,7 @@
     Description          : Commands to be called by AbstractColumn to modify AbstractColumnPrivate
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2010 Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2010 Knut Franke (knut.franke@gmx.de)
 
  ***************************************************************************/
 

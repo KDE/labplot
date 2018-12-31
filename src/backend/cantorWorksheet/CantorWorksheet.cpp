@@ -47,12 +47,7 @@
 #include <cantor/worksheetaccess.h>
 
 CantorWorksheet::CantorWorksheet(const QString &name, bool loading) : AbstractPart(name),
-	m_view(nullptr),
-	m_backendName(name),
-	m_session(nullptr),
-	m_part(nullptr),
-	m_variableModel(nullptr),
-	m_worksheetAccess(nullptr) {
+	m_backendName(name)  {
 
 	if(!loading)
 		init();

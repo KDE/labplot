@@ -4,7 +4,7 @@
     Description          : Commands to be called by AbstractColumn to modify AbstractColumnPrivate
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2010 Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2010 Knut Franke (knut.franke@gmx.de)
 
  ***************************************************************************/
 
@@ -54,8 +54,7 @@
  * \brief Ctor
  */
 AbstractColumnClearMasksCmd::AbstractColumnClearMasksCmd(AbstractColumnPrivate* col, QUndoCommand* parent)
-: QUndoCommand( parent ), m_col(col)
-{
+: QUndoCommand( parent ), m_col(col) {
 	setText(i18n("%1: clear masks", col->name()));
 	m_copied = false;
 }
@@ -69,10 +68,8 @@ AbstractColumnClearMasksCmd::~AbstractColumnClearMasksCmd()
 /**
  * \brief Execute the command
  */
-void AbstractColumnClearMasksCmd::redo()
-{
-	if(!m_copied)
-	{
+void AbstractColumnClearMasksCmd::redo() {
+	if (!m_copied) {
 		m_masking = m_col->m_masking;
 		m_copied = true;
 	}
@@ -83,8 +80,7 @@ void AbstractColumnClearMasksCmd::redo()
 /**
  * \brief Undo the command
  */
-void AbstractColumnClearMasksCmd::undo()
-{
+void AbstractColumnClearMasksCmd::undo() {
 	m_col->m_masking = m_masking;
 	emit m_col->owner()->dataChanged(m_col->owner());
 }
@@ -123,9 +119,8 @@ void AbstractColumnClearMasksCmd::undo()
  * \brief Ctor
  */
 AbstractColumnSetMaskedCmd::AbstractColumnSetMaskedCmd(AbstractColumnPrivate * col, const Interval<int>& interval, bool masked, QUndoCommand * parent )
-: QUndoCommand( parent ), m_col(col), m_interval(interval), m_masked(masked)
-{
-	if(masked)
+: QUndoCommand(parent), m_col(col), m_interval(interval), m_masked(masked) {
+	if (masked)
 		setText(i18n("%1: mask cells", col->name()));
 	else
 		setText(i18n("%1: unmask cells", col->name()));
@@ -141,10 +136,8 @@ AbstractColumnSetMaskedCmd::~AbstractColumnSetMaskedCmd()
 /**
  * \brief Execute the command
  */
-void AbstractColumnSetMaskedCmd::redo()
-{
-	if(!m_copied)
-	{
+void AbstractColumnSetMaskedCmd::redo() {
+	if (!m_copied) {
 		m_masking = m_col->m_masking;
 		m_copied = true;
 	}
@@ -155,8 +148,7 @@ void AbstractColumnSetMaskedCmd::redo()
 /**
  * \brief Undo the command
  */
-void AbstractColumnSetMaskedCmd::undo()
-{
+void AbstractColumnSetMaskedCmd::undo() {
 	m_col->m_masking = m_masking;
 	emit m_col->owner()->dataChanged(m_col->owner());
 }
