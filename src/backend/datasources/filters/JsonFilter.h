@@ -81,7 +81,6 @@ public:
 	void setCreateIndexEnabled(const bool);
 	void setImportObjectNames(const bool);
 
-	void setVectorNames(const QString&);
 	QStringList vectorNames() const;
 	QVector<AbstractColumn::ColumnMode> columnModes();
 
