@@ -33,36 +33,31 @@
 
 #include <QStringList>
 
-ScriptingEngineManager * ScriptingEngineManager::instance()
-{
+ScriptingEngineManager* ScriptingEngineManager::instance() {
 	static ScriptingEngineManager the_instance;
 	return &the_instance;
 }
 
-ScriptingEngineManager::ScriptingEngineManager()
-{
-	foreach(QObject *plugin, PluginManager::plugins()) {
-		AbstractScriptingEngine * engine = qobject_cast<AbstractScriptingEngine*>(plugin);
+ScriptingEngineManager::ScriptingEngineManager() {
+	for (auto* plugin : PluginManager::plugins()) {
+		AbstractScriptingEngine* engine = qobject_cast<AbstractScriptingEngine*>(plugin);
 		if (engine) m_engines << engine;
 	}
 }
 
-ScriptingEngineManager::~ScriptingEngineManager()
-{
+ScriptingEngineManager::~ScriptingEngineManager() {
 	qDeleteAll(m_engines);
 }
 
-QStringList ScriptingEngineManager::engineNames() const
-{
+QStringList ScriptingEngineManager::engineNames() const {
 	QStringList result;
-	foreach(AbstractScriptingEngine * engine, m_engines)
+	for (auto* engine : m_engines)
 		result << engine->objectName();
 	return result;
 }
 
-AbstractScriptingEngine * ScriptingEngineManager::engine(const QString &name)
-{
-	foreach(AbstractScriptingEngine * engine, m_engines)
+AbstractScriptingEngine * ScriptingEngineManager::engine(const QString &name) {
+	for (auto* engine : m_engines)
 		if (engine->objectName() == name) {
 			if (!engine->initialized())
 				engine->initialize();

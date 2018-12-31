@@ -32,12 +32,11 @@
 
 #include "AbstractFilter.h"
 
-class CopyThroughFilter : public AbstractFilter
-{
-	public:
-		virtual int inputCount() const;
-		virtual int outputCount() const;
-		virtual AbstractColumn* output(int port) const;
+class CopyThroughFilter : public AbstractFilter {
+public:
+	virtual int inputCount() const;
+	virtual int outputCount() const;
+	virtual AbstractColumn* output(int port) const;
 };
 
 #endif // ifndef COPY_THROUGH_FILTER_H

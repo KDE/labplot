@@ -263,7 +263,7 @@ void Project::save(QXmlStreamWriter* writer) const {
 }
 
 bool Project::load(const QString& filename, bool preview) {
-	QIODevice *file;
+	QIODevice* file;
 	// first try gzip compression, because projects can be gzipped and end with .lml
 	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive))
 		file = new KCompressionDevice(filename,KFilterDev::compressionTypeForMimeType("application/x-gzip"));

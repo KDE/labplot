@@ -35,9 +35,9 @@
 #include "backend/core/column/Column.h"
 
 #include <QUndoCommand>
-#include <QStringList>
 #include <QDateTime>
 
+class QStringList;
 class AbstractSimpleFilter;
 
 class ColumnSetModeCmd : public QUndoCommand {
@@ -58,8 +58,8 @@ private:
 	AbstractSimpleFilter* m_new_out_filter;
 	AbstractSimpleFilter* m_old_in_filter;
 	AbstractSimpleFilter* m_old_out_filter;
-	bool m_undone;
-	bool m_executed;
+	bool m_undone{false};
+	bool m_executed{false};
 };
 
 class ColumnFullCopyCmd : public QUndoCommand {
@@ -73,8 +73,8 @@ public:
 private:
 	ColumnPrivate* m_col;
 	const AbstractColumn* m_src;
-	ColumnPrivate* m_backup;
-	Column* m_backup_owner;
+	ColumnPrivate* m_backup{nullptr};
+	Column* m_backup_owner{nullptr};
 };
 
 class ColumnPartialCopyCmd : public QUndoCommand {
@@ -88,14 +88,14 @@ public:
 private:
 	ColumnPrivate* m_col;
 	const AbstractColumn * m_src;
-	ColumnPrivate* m_col_backup;
-	ColumnPrivate* m_src_backup;
-	Column* m_col_backup_owner;
-	Column* m_src_backup_owner;
+	ColumnPrivate* m_col_backup{nullptr};
+	ColumnPrivate* m_src_backup{nullptr};
+	Column* m_col_backup_owner{nullptr};
+	Column* m_src_backup_owner{nullptr};
 	int m_src_start;
 	int m_dest_start;
 	int m_num_rows;
-	int m_old_row_count;
+	int m_old_row_count{0};
 };
 
 class ColumnInsertRowsCmd : public QUndoCommand {
@@ -121,10 +121,10 @@ public:
 private:
 	ColumnPrivate* m_col;
 	int m_first, m_count;
-	int m_data_row_count;
-	int m_old_size;
-	ColumnPrivate* m_backup;
-	Column* m_backup_owner;
+	int m_data_row_count{0};
+	int m_old_size{0};
+	ColumnPrivate* m_backup{nullptr};
+	Column* m_backup_owner{nullptr};
 	IntervalAttribute<QString> m_formulas;
 };
 
@@ -151,9 +151,9 @@ public:
 
 private:
 	ColumnPrivate* m_col;
-	void* m_data;
-	void* m_empty_data;
-	bool m_undone;
+	void* m_data{nullptr};
+	void* m_empty_data{nullptr};
+	bool m_undone{false};
 
 };
 
@@ -172,7 +172,7 @@ private:
 	QString m_newFormula;
 	QStringList m_newVariableNames;
 	QStringList m_newVariableColumnPathes;
-	bool m_copied;
+	bool m_copied{false};
 };
 
 class ColumnSetFormulaCmd : public QUndoCommand {
@@ -188,7 +188,7 @@ private:
 	QString m_oldFormula;
 	QString m_newFormula;
 	IntervalAttribute<QString> m_formulas;
-	bool m_copied;
+	bool m_copied{false};
 };
 
 class ColumnClearFormulasCmd : public QUndoCommand {
@@ -201,7 +201,7 @@ public:
 private:
 	ColumnPrivate* m_col;
 	IntervalAttribute<QString> m_formulas;
-	bool m_copied;
+	bool m_copied{false};
 };
 
 class ColumnSetTextCmd : public QUndoCommand {
@@ -216,7 +216,7 @@ private:
 	int m_row;
 	QString m_new_value;
 	QString m_old_value;
-	int m_row_count;
+	int m_row_count{0};
 };
 
 class ColumnSetValueCmd : public QUndoCommand {
@@ -230,7 +230,7 @@ private:
 	ColumnPrivate* m_col;
 	int m_row;
 	double m_new_value;
-	double m_old_value;
+	double m_old_value{0.};
 	int m_row_count;
 };
 
@@ -245,8 +245,8 @@ private:
 	ColumnPrivate* m_col;
 	int m_row;
 	int m_new_value;
-	int m_old_value;
-	int m_row_count;
+	int m_old_value{0};
+	int m_row_count{0};
 };
 
 class ColumnSetDateTimeCmd : public QUndoCommand {
@@ -261,7 +261,7 @@ private:
 	int m_row;
 	QDateTime m_new_value;
 	QDateTime m_old_value;
-	int m_row_count;
+	int m_row_count{0};
 };
 
 class ColumnReplaceTextsCmd : public QUndoCommand {
@@ -276,8 +276,8 @@ private:
 	int m_first;
 	QVector<QString> m_new_values;
 	QVector<QString> m_old_values;
-	bool m_copied;
-	int m_row_count;
+	bool m_copied{false};
+	int m_row_count{0};
 };
 
 class ColumnReplaceValuesCmd : public QUndoCommand {
@@ -292,8 +292,8 @@ private:
 	int m_first;
 	QVector<double> m_new_values;
 	QVector<double> m_old_values;
-	bool m_copied;
-	int m_row_count;
+	bool m_copied{false};
+	int m_row_count{0};
 };
 
 class ColumnReplaceIntegersCmd : public QUndoCommand {
@@ -308,8 +308,8 @@ private:
 	int m_first;
 	QVector<int> m_new_values;
 	QVector<int> m_old_values;
-	bool m_copied;
-	int m_row_count;
+	bool m_copied{false};
+	int m_row_count{0};
 };
 
 class ColumnReplaceDateTimesCmd : public QUndoCommand {
@@ -324,8 +324,8 @@ private:
 	int m_first;
 	QVector<QDateTime> m_new_values;
 	QVector<QDateTime> m_old_values;
-	bool m_copied;
-	int m_row_count;
+	bool m_copied{false};
+	int m_row_count{0};
 };
 
 #endif

@@ -62,7 +62,7 @@ public slots:
 	void childSelected(const AbstractAspect*) override;
 
 private:
-	mutable WorkbookView* m_view;
+	mutable WorkbookView* m_view{nullptr};
 
 private slots:
 	void childDeselected(const AbstractAspect*) override;

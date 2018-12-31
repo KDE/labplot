@@ -260,8 +260,8 @@ QString PluginManager::errorOfPlugin(const QString &fileName) {
 /**
  * \brief Get the plugin root instance for a given file name.
  */
-QObject *PluginManager::instanceOfPlugin(const QString &fileName) {
-	QObject *result = nullptr;
+QObject* PluginManager::instanceOfPlugin(const QString &fileName) {
+	QObject* result = nullptr;
 	for (auto* loader : m_loadedPlugins)
 		if (loader->fileName() == fileName)
 			result = loader->instance();

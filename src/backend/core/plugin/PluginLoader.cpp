@@ -40,9 +40,7 @@
  *  custom error/status strings. 
  */
 
-PluginLoader::PluginLoader(QString fileName) 
-		: m_loader(nullptr), m_fileName(std::move(fileName)) {
-	m_status = NotYetLoaded;
+PluginLoader::PluginLoader(QString fileName) : m_fileName(std::move(fileName)) {
 	m_statusString = i18n("Not yet loaded.");
 }
  

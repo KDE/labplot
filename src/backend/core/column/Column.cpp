@@ -747,7 +747,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 	// 	}
 
 	int i;
-	switch(columnMode()) {
+	switch (columnMode()) {
 	case AbstractColumn::Numeric: {
 			const char* data = reinterpret_cast<const char*>(static_cast< QVector<double>* >(d->data())->constData());
 			size_t size = d->rowCount() * sizeof(double);

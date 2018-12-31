@@ -106,10 +106,10 @@ public:
 	void replaceInteger(int first, const QVector<int>&);
 
 	mutable AbstractColumn::ColumnStatistics statistics;
-	bool statisticsAvailable; //is 'statistics' already available or needs to be (re-)calculated?
+	bool statisticsAvailable{false}; //is 'statistics' already available or needs to be (re-)calculated?
 
-	bool hasValues;
-	bool hasValuesAvailable; //is 'hasValues' already available or needs to be (re-)calculated?
+	bool hasValues{false};
+	bool hasValuesAvailable{false}; //is 'hasValues' already available or needs to be (re-)calculated?
 
 private:
 	AbstractColumn::ColumnMode m_column_mode;	// type of column data
@@ -120,8 +120,8 @@ private:
 	QStringList m_formulaVariableNames;
 	QStringList m_formulaVariableColumnPathes;
 	IntervalAttribute<QString> m_formulas;
-	AbstractColumn::PlotDesignation m_plot_designation;
-	int m_width; //column width in the view
+	AbstractColumn::PlotDesignation m_plot_designation{AbstractColumn::NoDesignation};
+	int m_width{0}; //column width in the view
 	Column* m_owner;
 };
 

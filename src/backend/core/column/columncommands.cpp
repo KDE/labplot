@@ -99,16 +99,14 @@
 ColumnSetModeCmd::ColumnSetModeCmd(ColumnPrivate* col, AbstractColumn::ColumnMode mode, QUndoCommand* parent)
 	: QUndoCommand(parent), m_col(col), m_mode(mode) {
 	setText(i18n("%1: change column type", col->name()));
-	m_undone = false;
-	m_executed = false;
 }
 
 /**
  * \brief Dtor
  */
 ColumnSetModeCmd::~ColumnSetModeCmd() {
-	if(m_undone) {
-		if(m_new_data != m_old_data)
+	if (m_undone) {
+		if (m_new_data != m_old_data)
 			switch (m_mode) {
 			case AbstractColumn::Numeric:
 				delete static_cast<QVector<double>*>(m_new_data);
@@ -126,7 +124,7 @@ ColumnSetModeCmd::~ColumnSetModeCmd() {
 				break;
 			}
 	} else {
-		if(m_new_data != m_old_data)
+		if (m_new_data != m_old_data)
 			switch (m_old_mode) {
 			case AbstractColumn::Numeric:
 				delete static_cast<QVector<double>*>(m_old_data);
@@ -150,7 +148,7 @@ ColumnSetModeCmd::~ColumnSetModeCmd() {
  * \brief Execute the command
  */
 void ColumnSetModeCmd::redo() {
-	if(!m_executed) {
+	if (!m_executed) {
 		// save old values
 		m_old_mode = m_col->columnMode();
 		m_old_data = m_col->data();
@@ -215,7 +213,7 @@ void ColumnSetModeCmd::undo() {
  * \brief Ctor
  */
 ColumnFullCopyCmd::ColumnFullCopyCmd(ColumnPrivate* col, const AbstractColumn* src, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_src(src), m_backup(nullptr), m_backup_owner(nullptr) {
+	: QUndoCommand(parent), m_col(col), m_src(src) {
 	setText(i18n("%1: change cell values", col->name()));
 }
 
@@ -231,14 +229,14 @@ ColumnFullCopyCmd::~ColumnFullCopyCmd() {
  * \brief Execute the command
  */
 void ColumnFullCopyCmd::redo() {
-	if(m_backup == nullptr) {
+	if (m_backup == nullptr) {
 		m_backup_owner = new Column("temp", m_src->columnMode());
 		m_backup = new ColumnPrivate(m_backup_owner, m_src->columnMode());
 		m_backup->copy(m_col);
 		m_col->copy(m_src);
 	} else {
 		// swap data of orig. column and backup
-		void * data_temp = m_col->data();
+		void* data_temp = m_col->data();
 		m_col->replaceData(m_backup->data());
 		m_backup->replaceData(data_temp);
 	}
@@ -249,7 +247,7 @@ void ColumnFullCopyCmd::redo() {
  */
 void ColumnFullCopyCmd::undo() {
 	// swap data of orig. column and backup
-	void * data_temp = m_col->data();
+	void* data_temp = m_col->data();
 	m_col->replaceData(m_backup->data());
 	m_backup->replaceData(data_temp);
 }
@@ -321,8 +319,7 @@ void ColumnFullCopyCmd::undo() {
  * \brief Ctor
  */
 ColumnPartialCopyCmd::ColumnPartialCopyCmd(ColumnPrivate* col, const AbstractColumn* src, int src_start, int dest_start, int num_rows, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_src(src), m_col_backup(nullptr), m_src_backup(nullptr), m_col_backup_owner(nullptr), m_src_backup_owner(nullptr),
-	m_src_start(src_start), m_dest_start(dest_start), m_num_rows(num_rows), m_old_row_count(0) {
+	: QUndoCommand(parent), m_col(col), m_src(src), m_src_start(src_start), m_dest_start(dest_start), m_num_rows(num_rows) {
 	setText(i18n("%1: change cell values", col->name()));
 }
 
@@ -340,7 +337,7 @@ ColumnPartialCopyCmd::~ColumnPartialCopyCmd() {
  * \brief Execute the command
  */
 void ColumnPartialCopyCmd::redo() {
-	if(m_src_backup == nullptr) {
+	if (m_src_backup == nullptr) {
 		// copy the relevant rows of source and destination column into backup columns
 		m_src_backup_owner = new Column("temp", m_col->columnMode());
 		m_src_backup = new ColumnPrivate(m_src_backup_owner, m_col->columnMode());
@@ -437,8 +434,7 @@ void ColumnInsertRowsCmd::undo() {
  */
 
 ColumnRemoveRowsCmd::ColumnRemoveRowsCmd(ColumnPrivate* col, int first, int count, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_first(first), m_count(count),
-	m_data_row_count(0), m_old_size(0), m_backup(nullptr), m_backup_owner(nullptr) {
+	: QUndoCommand(parent), m_col(col), m_first(first), m_count(count) {
 }
 
 /**
@@ -453,10 +449,10 @@ ColumnRemoveRowsCmd::~ColumnRemoveRowsCmd() {
  * \brief Execute the command
  */
 void ColumnRemoveRowsCmd::redo() {
-	if(m_backup == nullptr) {
-		if(m_first >= m_col->rowCount())
+	if (m_backup == nullptr) {
+		if (m_first >= m_col->rowCount())
 			m_data_row_count = 0;
-		else if(m_first + m_count > m_col->rowCount())
+		else if (m_first + m_count > m_col->rowCount())
 			m_data_row_count = m_col->rowCount() - m_first;
 		else
 			m_data_row_count = m_count;
@@ -554,18 +550,15 @@ void ColumnSetPlotDesignationCmd::undo() {
 ColumnClearCmd::ColumnClearCmd(ColumnPrivate* col, QUndoCommand* parent)
 	: QUndoCommand(parent), m_col(col) {
 	setText(i18n("%1: clear column", col->name()));
-	m_empty_data = nullptr;
-	m_data = nullptr;
-	m_undone = false;
 }
 
 /**
  * \brief Dtor
  */
 ColumnClearCmd::~ColumnClearCmd() {
-	if(m_undone) {
+	if (m_undone) {
 		if (!m_empty_data) return;
-		switch(m_col->columnMode()) {
+		switch (m_col->columnMode()) {
 		case AbstractColumn::Numeric:
 			delete static_cast<QVector<double>*>(m_empty_data);
 			break;
@@ -583,7 +576,7 @@ ColumnClearCmd::~ColumnClearCmd() {
 		}
 	} else {
 		if (!m_data) return;
-		switch(m_col->columnMode()) {
+		switch (m_col->columnMode()) {
 		case AbstractColumn::Numeric:
 			delete static_cast<QVector<double>*>(m_data);
 			break;
@@ -606,9 +599,9 @@ ColumnClearCmd::~ColumnClearCmd() {
  * \brief Execute the command
  */
 void ColumnClearCmd::redo() {
-	if(!m_empty_data) {
+	if (!m_empty_data) {
 		const int rowCount = m_col->rowCount();
-		switch(m_col->columnMode()) {
+		switch (m_col->columnMode()) {
 		case AbstractColumn::Numeric: {
 			auto* vec = new QVector<double>(rowCount);
 			m_empty_data = vec;
@@ -656,13 +649,12 @@ void ColumnClearCmd::undo() {
  * \brief Set the formula for the entire column (global formula)
  ** ***************************************************************************/
 ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col, QString formula, QStringList variableNames, QStringList variableColumns)
-	: QUndoCommand(), m_col(col), m_newFormula(std::move(formula)), m_newVariableNames(std::move(variableNames)), m_newVariableColumnPathes(std::move(variableColumns)),
-		m_copied(false) {
+	: QUndoCommand(), m_col(col), m_newFormula(std::move(formula)), m_newVariableNames(std::move(variableNames)), m_newVariableColumnPathes(std::move(variableColumns)) {
 	setText(i18n("%1: set formula", col->name()));
 }
 
 void ColumnSetGlobalFormulaCmd::redo() {
-	if(!m_copied) {
+	if (!m_copied) {
 		m_formula = m_col->formula();
 		m_variableNames = m_col->formulaVariableNames();
 		m_variableColumnPathes = m_col->formulaVariableColumnPathes();
@@ -711,13 +703,13 @@ void ColumnSetGlobalFormulaCmd::undo() {
  * \brief Ctor
  */
 ColumnSetFormulaCmd::ColumnSetFormulaCmd(ColumnPrivate* col, const Interval<int>& interval, QString formula, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_interval(interval), m_newFormula(std::move(formula)), m_copied(false) {
+	: QUndoCommand(parent), m_col(col), m_interval(interval), m_newFormula(std::move(formula)) {
 	setText(i18n("%1: set cell formula", col->name()));
 }
 
 
 void ColumnSetFormulaCmd::redo() {
-	if(!m_copied) {
+	if (!m_copied) {
 		m_formulas = m_col->formulaAttribute();
 		m_copied = true;
 	}
@@ -756,14 +748,13 @@ void ColumnSetFormulaCmd::undo() {
 ColumnClearFormulasCmd::ColumnClearFormulasCmd(ColumnPrivate* col, QUndoCommand* parent)
 	: QUndoCommand(parent), m_col(col) {
 	setText(i18n("%1: clear all formulas", col->name()));
-	m_copied = false;
 }
 
 /**
  * \brief Execute the command
  */
 void ColumnClearFormulasCmd::redo() {
-	if(!m_copied) {
+	if (!m_copied) {
 		m_formulas = m_col->formulaAttribute();
 		m_copied = true;
 	}
@@ -811,7 +802,7 @@ void ColumnClearFormulasCmd::undo() {
  * \brief Ctor
  */
 ColumnSetTextCmd::ColumnSetTextCmd(ColumnPrivate* col, int row, QString new_value, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(std::move(new_value)), m_row_count(0) {
+	: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(std::move(new_value)) {
 	setText(i18n("%1: set text for row %2", col->name(), row));
 }
 
@@ -867,7 +858,7 @@ void ColumnSetTextCmd::undo() {
  * \brief Ctor
  */
 ColumnSetValueCmd::ColumnSetValueCmd(ColumnPrivate* col, int row, double new_value, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(new_value), m_old_value(0.0) {
+	: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(new_value) {
 	setText(i18n("%1: set value for row %2", col->name(), row));
 }
 
@@ -895,7 +886,7 @@ void ColumnSetValueCmd::undo() {
  ** ***************************************************************************/
 
 ColumnSetIntegerCmd::ColumnSetIntegerCmd(ColumnPrivate* col, int row, int new_value, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(new_value), m_old_value(0), m_row_count(0) {
+	: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(new_value) {
 		DEBUG("ColumnSetIntegerCmd::ColumnSetIntegerCmd()");
 	setText(i18n("%1: set value for row %2", col->name(), row));
 }
@@ -952,7 +943,7 @@ void ColumnSetIntegerCmd::undo() {
  * \brief Ctor
  */
 ColumnSetDateTimeCmd::ColumnSetDateTimeCmd(ColumnPrivate* col, int row, QDateTime new_value, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(std::move(new_value)), m_row_count(0) {
+	: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(std::move(new_value)) {
 	setText(i18n("%1: set value for row %2", col->name(), row));
 }
 
@@ -1013,7 +1004,7 @@ void ColumnSetDateTimeCmd::undo() {
  * \brief Ctor
  */
 ColumnReplaceTextsCmd::ColumnReplaceTextsCmd(ColumnPrivate* col, int first, const QVector<QString>& new_values, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values), m_copied(false), m_row_count(0) {
+	: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values) {
 	setText(i18n("%1: replace the texts for rows %2 to %3", col->name(), first, first + new_values.count() - 1));
 }
 
@@ -1021,7 +1012,7 @@ ColumnReplaceTextsCmd::ColumnReplaceTextsCmd(ColumnPrivate* col, int first, cons
  * \brief Execute the command
  */
 void ColumnReplaceTextsCmd::redo() {
-	if(!m_copied) {
+	if (!m_copied) {
 		m_old_values = static_cast<QVector<QString>*>(m_col->data())->mid(m_first, m_new_values.count());
 		m_row_count = m_col->rowCount();
 		m_copied = true;
@@ -1077,16 +1068,15 @@ void ColumnReplaceTextsCmd::undo() {
  * \brief Ctor
  */
 ColumnReplaceValuesCmd::ColumnReplaceValuesCmd(ColumnPrivate* col, int first, const QVector<double>& new_values, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values), m_row_count(0) {
+	: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values) {
 	setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() -1));
-	m_copied = false;
 }
 
 /**
  * \brief Execute the command
  */
 void ColumnReplaceValuesCmd::redo() {
-	if(!m_copied) {
+	if (!m_copied) {
 		m_old_values = static_cast<QVector<double>*>(m_col->data())->mid(m_first, m_new_values.count());
 		m_row_count = m_col->rowCount();
 		m_copied = true;
@@ -1109,7 +1099,7 @@ void ColumnReplaceValuesCmd::undo() {
  ** ***************************************************************************/
 
 ColumnReplaceIntegersCmd::ColumnReplaceIntegersCmd(ColumnPrivate* col, int first, const QVector<int>& new_values, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values), m_copied(false), m_row_count(0) {
+	: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values) {
 	setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() -1));
 }
 
@@ -1117,7 +1107,7 @@ ColumnReplaceIntegersCmd::ColumnReplaceIntegersCmd(ColumnPrivate* col, int first
  * \brief Execute the command
  */
 void ColumnReplaceIntegersCmd::redo() {
-	if(!m_copied) {
+	if (!m_copied) {
 		m_old_values = static_cast<QVector<int>*>(m_col->data())->mid(m_first, m_new_values.count());
 		m_row_count = m_col->rowCount();
 		m_copied = true;
@@ -1173,16 +1163,15 @@ void ColumnReplaceIntegersCmd::undo() {
  * \brief Ctor
  */
 ColumnReplaceDateTimesCmd::ColumnReplaceDateTimesCmd(ColumnPrivate* col, int first, const QVector<QDateTime>& new_values, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values), m_row_count(0) {
+	: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values) {
 	setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() -1));
-	m_copied = false;
 }
 
 /**
  * \brief Execute the command
  */
 void ColumnReplaceDateTimesCmd::redo() {
-	if(!m_copied) {
+	if (!m_copied) {
 		m_old_values = static_cast<QVector<QDateTime>*>(m_col->data())->mid(m_first, m_new_values.count());
 		m_row_count = m_col->rowCount();
 		m_copied = true;

@@ -36,19 +36,18 @@ class AbstractScriptingEngine;
 class QStringList;
 
 //! Entry point for dealing with scripting.
-class ScriptingEngineManager
-{
-	private:
-		ScriptingEngineManager();
-		ScriptingEngineManager(const ScriptingEngineManager&) {}
+class ScriptingEngineManager {
+private:
+	ScriptingEngineManager();
+	ScriptingEngineManager(const ScriptingEngineManager&) {}
 
-		QList<AbstractScriptingEngine*> m_engines;
+	QList<AbstractScriptingEngine*> m_engines;
 
-	public:
-		static ScriptingEngineManager * instance();
-		~ScriptingEngineManager();
-		QStringList engineNames() const;
-		AbstractScriptingEngine * engine(const QString &name);
+public:
+	static ScriptingEngineManager * instance();
+	~ScriptingEngineManager();
+	QStringList engineNames() const;
+	AbstractScriptingEngine * engine(const QString &name);
 };
 
 #endif // ifndef SCRIPTING_ENGINE_MANAGER_H

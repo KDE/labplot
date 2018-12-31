@@ -50,7 +50,7 @@ public:
 	bool load(XmlStreamReader*, bool preview) override {Q_UNUSED(preview); return true;};
 private:
 	Column* m_owner;
-	bool m_setting;
+	bool m_setting{false};
 	QString m_to_set;
 };
 
