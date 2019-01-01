@@ -756,7 +756,7 @@ void XYCurve::handleResize(double horizontalRatio, double verticalRatio, bool pa
 	setLinePen(pen);
 
 	//setValuesDistance(d->distance*);
-	QFont font=d->valuesFont;
+	QFont font = d->valuesFont;
 	font.setPointSizeF(font.pointSizeF()*horizontalRatio);
 	setValuesFont(font);
 }
@@ -1387,10 +1387,10 @@ void XYCurvePrivate::updateValues() {
 	QPointF tempPoint;
 	QFontMetrics fm(valuesFont);
 	qreal w;
-	qreal h=fm.ascent();
+	qreal h = fm.ascent();
 
 	for (int i = 0; i < valuesStrings.size(); i++) {
-		w=fm.width(valuesStrings.at(i));
+		w = fm.width(valuesStrings.at(i));
 		switch (valuesPosition) {
 		case XYCurve::ValuesAbove:
 			tempPoint.setX( symbolPointsScene.at(i).x() - w/2);
@@ -1436,7 +1436,7 @@ void XYCurvePrivate::updateFilling() {
 	fillPolygons.clear();
 
 	//don't try to calculate the filling polygons if no filling was enabled or the nubmer of visible points on the scene is too high
-	if (fillingPosition==XYCurve::NoFilling || symbolPointsScene.size()>1000) {
+	if (fillingPosition == XYCurve::NoFilling || symbolPointsScene.size()>1000) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1632,7 +1632,7 @@ void XYCurvePrivate::updateFilling() {
 				pol << fillLines.at(i-1).p2() << p1;
 			} else {
 				//-> we have a break in the curve -> close the polygon add it to the polygon list and start a new polygon
-				if (fillingPosition==XYCurve::FillingAbove || fillingPosition==XYCurve::FillingBelow || fillingPosition==XYCurve::FillingZeroBaseline) {
+				if (fillingPosition == XYCurve::FillingAbove || fillingPosition == XYCurve::FillingBelow || fillingPosition == XYCurve::FillingZeroBaseline) {
 					pol << QPointF(fillLines.at(i-1).p2().x(), yEnd);
 					pol << QPointF(start.x(), yEnd);
 				} else {
@@ -1648,11 +1648,11 @@ void XYCurvePrivate::updateFilling() {
 		pol << p1 << p2;
 	}
 
-	if (p2!=end)
+	if (p2 != end)
 		pol << end;
 
 	//close the last polygon
-	if (fillingPosition==XYCurve::FillingAbove || fillingPosition==XYCurve::FillingBelow || fillingPosition==XYCurve::FillingZeroBaseline) {
+	if (fillingPosition == XYCurve::FillingAbove || fillingPosition == XYCurve::FillingBelow || fillingPosition == XYCurve::FillingZeroBaseline) {
 		pol << QPointF(end.x(), yEnd);
 		pol << QPointF(start.x(), yEnd);
 	} else {
@@ -1666,7 +1666,7 @@ void XYCurvePrivate::updateFilling() {
 
 void XYCurvePrivate::updateErrorBars() {
 	errorBarsPath = QPainterPath();
-	if (xErrorType==XYCurve::NoError && yErrorType==XYCurve::NoError) {
+	if (xErrorType == XYCurve::NoError && yErrorType == XYCurve::NoError) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1720,7 +1720,7 @@ void XYCurvePrivate::updateErrorBars() {
 			else
 				errorPlus = 0;
 
-			if (xErrorType==XYCurve::SymmetricError)
+			if (xErrorType == XYCurve::SymmetricError)
 				errorMinus = errorPlus;
 			else {
 				if (xErrorMinusColumn && xErrorMinusColumn->isValid(i) && !xErrorMinusColumn->isMasked(i))

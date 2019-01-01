@@ -131,7 +131,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	m_worksheet = list.first();
 
 	//if there are more then one worksheet in the list, disable the name and comment field in the tab "general"
-	if (list.size()==1) {
+	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
@@ -194,8 +194,8 @@ void WorksheetDock::updatePaperSize() {
 	}
 
 	//In UI we use cm, so we need to convert to mm first before we check with QPageSize
-	float w=(float)ui.sbWidth->value()*10;
-	float h=(float)ui.sbHeight->value()*10;
+	float w = (float)ui.sbWidth->value()*10;
+	float h = (float)ui.sbHeight->value()*10;
 	const QSizeF s = QSizeF(w, h);
 	const QSizeF st = s.transposed();
 
@@ -328,7 +328,7 @@ void WorksheetDock::scaleContentChanged(bool scaled) {
 void WorksheetDock::sizeChanged(int i) {
 	const auto index = ui.cbSize->itemData(i).value<QPageSize::PageSizeId>();
 
-	if (index==QPageSize::Custom) {
+	if (index == QPageSize::Custom) {
 		ui.sbWidth->setEnabled(true);
 		ui.sbHeight->setEnabled(true);
 		ui.lOrientation->hide();
@@ -336,7 +336,7 @@ void WorksheetDock::sizeChanged(int i) {
 	} else {
 		ui.sbWidth->setEnabled(false);
 		ui.sbHeight->setEnabled(false);
-		if (i==0) { //no orientation available when using the complete view size (first item in the combox is selected)
+		if (i == 0) { //no orientation available when using the complete view size (first item in the combox is selected)
 			ui.lOrientation->hide();
 			ui.cbOrientation->hide();
 		} else {
@@ -348,11 +348,11 @@ void WorksheetDock::sizeChanged(int i) {
 	if (m_initializing)
 		return;
 
-	if (i==0) {
+	if (i == 0) {
 		//use the complete view size (first item in the combox is selected)
 		for (auto* worksheet : m_worksheetList)
 			worksheet->setUseViewSize(true);
-	} else if (index==QPageSize::Custom) {
+	} else if (index == QPageSize::Custom) {
 		if (m_worksheet->useViewSize()) {
 			for (auto* worksheet : m_worksheetList)
 				worksheet->setUseViewSize(false);
@@ -368,7 +368,7 @@ void WorksheetDock::sizeChanged(int i) {
 		//s is in mm, in UI we show everything in cm
 		ui.sbWidth->setValue(s.width()/10);
 		ui.sbHeight->setValue(s.height()/10);
-		m_initializing=false;
+		m_initializing = false;
 
 		float w = Worksheet::convertToSceneUnits(s.width(), Worksheet::Millimeter);
 		float h = Worksheet::convertToSceneUnits(s.height(), Worksheet::Millimeter);
@@ -610,7 +610,7 @@ void WorksheetDock::selectFile() {
 	QString formats;
 	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
-		formats.isEmpty() ? formats+=f : formats+=' '+f;
+		formats.isEmpty() ? formats += f : formats += ' ' + f;
 	}
 
 	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
@@ -618,9 +618,9 @@ void WorksheetDock::selectFile() {
 		return; //cancel was clicked in the file-dialog
 
 	int pos = path.lastIndexOf(QDir::separator());
-	if (pos!=-1) {
+	if (pos != -1) {
 		QString newDir = path.left(pos);
-		if (newDir!=dir)
+		if (newDir != dir)
 			conf.writeEntry("LastImageDir", newDir);
 	}
 
@@ -838,13 +838,13 @@ void WorksheetDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
 	int index = config.name().lastIndexOf(QDir::separator());
-	if (index!=-1)
+	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else
 		name = config.name();
 
 	int size = m_worksheetList.size();
-	if (size>1)
+	if (size > 1)
 		m_worksheet->beginMacro(i18n("%1 worksheets: template \"%2\" loaded", size, name));
 	else
 		m_worksheet->beginMacro(i18n("%1: template \"%2\" loaded", m_worksheet->name(), name));
@@ -892,7 +892,7 @@ void WorksheetDock::saveConfigAsTemplate(KConfig& config) {
 
 	//General
 	group.writeEntry("ScaleContent",ui.chScaleContent->isChecked());
-	group.writeEntry("UseViewSize",ui.cbSize->currentIndex()==0);
+	group.writeEntry("UseViewSize",ui.cbSize->currentIndex() == 0);
 	group.writeEntry("Width",Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter));
 	group.writeEntry("Height",Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter));
 

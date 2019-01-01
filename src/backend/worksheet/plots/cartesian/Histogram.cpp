@@ -633,7 +633,7 @@ void Histogram::handleResize(double horizontalRatio, double verticalRatio, bool 
 	Q_D(const Histogram);
 
 	//setValuesDistance(d->distance*);
-	QFont font=d->valuesFont;
+	QFont font = d->valuesFont;
 	font.setPointSizeF(font.pointSizeF()*horizontalRatio);
 	setValuesFont(font);
 
@@ -687,7 +687,7 @@ QRectF HistogramPrivate::boundingRect() const {
 double HistogramPrivate::getMaximumOccuranceofHistogram() {
 	if (m_histogram) {
 		double yMaxRange = -INFINITY;
-		switch(type) {
+		switch (type) {
 		case Histogram::Ordinary: {
 			size_t maxYAddes = gsl_histogram_max_bin(m_histogram);
 			yMaxRange = gsl_histogram_get(m_histogram, maxYAddes);
@@ -717,7 +717,7 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() {
 }
 
 double HistogramPrivate::getXMinimum() {
-	switch(orientation) {
+	switch (orientation) {
 	case Histogram::Vertical:
 		return autoBinRanges ? dataColumn->minimum() : binRangesMin;
 	case Histogram::Horizontal:
@@ -727,7 +727,7 @@ double HistogramPrivate::getXMinimum() {
 }
 
 double HistogramPrivate::getXMaximum() {
-	switch(orientation) {
+	switch (orientation) {
 	case Histogram::Vertical:
 		return autoBinRanges ? dataColumn->maximum() : binRangesMax;
 	case Histogram::Horizontal:
@@ -737,7 +737,7 @@ double HistogramPrivate::getXMaximum() {
 }
 
 double HistogramPrivate::getYMinimum() {
-	switch(orientation) {
+	switch (orientation) {
 	case Histogram::Vertical:
 		return 0;
 	case Histogram::Horizontal:
@@ -747,7 +747,7 @@ double HistogramPrivate::getYMinimum() {
 }
 
 double HistogramPrivate::getYMaximum() {
-	switch(orientation) {
+	switch (orientation) {
 	case Histogram::Vertical:
 		return getMaximumOccuranceofHistogram();
 	case Histogram::Horizontal:
@@ -978,7 +978,7 @@ void HistogramPrivate::verticalHistogram() {
 			lines.append(QLineF(x, value, x + width, value));
 			symbolPointsLogical.append(QPointF(x+width/2, value));
 
-			if (i== m_bins - 1)
+			if (i == m_bins - 1)
 				lines.append(QLineF(x + width, value, x + width, 0.));
 
 			prevValue = value;
@@ -1033,7 +1033,7 @@ void HistogramPrivate::horizontalHistogram() {
 			lines.append(QLineF(value, y, value, y + width));
 			symbolPointsLogical.append(QPointF(value, y+width/2));
 
-			if (i== m_bins - 1)
+			if (i == m_bins - 1)
 				lines.append(QLineF(value, y + width, 0., y + width));
 
 			prevValue = value;
@@ -1094,16 +1094,16 @@ void HistogramPrivate::updateValues() {
 
 	//determine the value string for all points that are currently visible in the plot
 	if (valuesType == Histogram::ValuesBinEntries) {
-		switch(type) {
+		switch (type) {
 		case Histogram::Ordinary:
-			for (size_t i=0; i<m_bins; ++i) {
+			for (size_t i = 0; i < m_bins; ++i) {
 				if (!visiblePoints[i]) continue;
 				valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(m_histogram, i)) + valuesSuffix;
 			}
 			break;
 		case Histogram::Cumulative: {
 			value = 0;
-			for (size_t i=0; i<m_bins; ++i) {
+			for (size_t i = 0; i < m_bins; ++i) {
 				if (!visiblePoints[i]) continue;
 				value += gsl_histogram_get(m_histogram, i);
 				valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
@@ -1149,38 +1149,38 @@ void HistogramPrivate::updateValues() {
 	QFontMetrics fm(valuesFont);
 	qreal w;
 	const qreal h = fm.ascent();
-	switch(valuesPosition) {
-		case Histogram::ValuesAbove:
-			for (int i = 0; i < valuesStrings.size(); i++) {
-				w = fm.width(valuesStrings.at(i));
-				tempPoint.setX( symbolPointsScene.at(i).x() -w/2);
-				tempPoint.setY( symbolPointsScene.at(i).y() - valuesDistance );
-				valuesPoints.append(tempPoint);
-			}
-			break;
-		case Histogram::ValuesUnder:
-			for (int i = 0; i < valuesStrings.size(); i++) {
-				w = fm.width(valuesStrings.at(i));
-				tempPoint.setX( symbolPointsScene.at(i).x() -w/2);
-				tempPoint.setY( symbolPointsScene.at(i).y() + valuesDistance + h/2);
-				valuesPoints.append(tempPoint);
-			}
-			break;
-		case Histogram::ValuesLeft:
-			for (int i = 0; i < valuesStrings.size(); i++) {
-				w = fm.width(valuesStrings.at(i));
-				tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1);
-				tempPoint.setY( symbolPointsScene.at(i).y());
-				valuesPoints.append(tempPoint);
-			}
-			break;
-		case Histogram::ValuesRight:
-			for (int i = 0; i < valuesStrings.size(); i++) {
-				tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1);
-				tempPoint.setY( symbolPointsScene.at(i).y() );
-				valuesPoints.append(tempPoint);
-			}
-			break;
+	switch (valuesPosition) {
+	case Histogram::ValuesAbove:
+		for (int i = 0; i < valuesStrings.size(); i++) {
+			w = fm.width(valuesStrings.at(i));
+			tempPoint.setX( symbolPointsScene.at(i).x() -w/2);
+			tempPoint.setY( symbolPointsScene.at(i).y() - valuesDistance );
+			valuesPoints.append(tempPoint);
+		}
+		break;
+	case Histogram::ValuesUnder:
+		for (int i = 0; i < valuesStrings.size(); i++) {
+			w = fm.width(valuesStrings.at(i));
+			tempPoint.setX( symbolPointsScene.at(i).x() -w/2);
+			tempPoint.setY( symbolPointsScene.at(i).y() + valuesDistance + h/2);
+			valuesPoints.append(tempPoint);
+		}
+		break;
+	case Histogram::ValuesLeft:
+		for (int i = 0; i < valuesStrings.size(); i++) {
+			w = fm.width(valuesStrings.at(i));
+			tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1);
+			tempPoint.setY( symbolPointsScene.at(i).y());
+			valuesPoints.append(tempPoint);
+		}
+		break;
+	case Histogram::ValuesRight:
+		for (int i = 0; i < valuesStrings.size(); i++) {
+			tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1);
+			tempPoint.setY( symbolPointsScene.at(i).y() );
+			valuesPoints.append(tempPoint);
+		}
+		break;
 	}
 
 	QTransform trafo;
@@ -1238,14 +1238,14 @@ void HistogramPrivate::updateFilling() {
 	const QPointF& first = symbolPointsLogical.at(0); //first point of the curve, may not be visible currently
 	const QPointF& last = symbolPointsLogical.at(symbolPointsLogical.size()-1);//first point of the curve, may not be visible currently
 	QPointF edge;
-	float yEnd=0;
+	float yEnd = 0;
 
 	//fillingPosition == Histogram::FillingZeroBaseline)
 	edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
 
 	//start point
 	if (AbstractCoordinateSystem::essentiallyEqual(start.y(), edge.y())) {
-		if (plot->yMax()>0) {
+		if (plot->yMax() > 0) {
 			if (first.x() < plot->xMin())
 				start = edge;
 			else if (first.x() > plot->xMax())
@@ -1287,17 +1287,17 @@ void HistogramPrivate::updateFilling() {
 		pol << start;
 
 	QPointF p1, p2;
-	for (int i=0; i<fillLines.size(); ++i) {
+	for (int i = 0; i < fillLines.size(); ++i) {
 		const QLineF& line = fillLines.at(i);
 		p1 = line.p1();
 		p2 = line.p2();
-		if (i!=0 && p1!=fillLines.at(i-1).p2())
+		if (i != 0 && p1 != fillLines.at(i-1).p2())
 			pol << fillLines.at(i-1).p2() << p1;
 
 		pol << p1 << p2;
 	}
 
-	if (p2!=end)
+	if (p2 != end)
 		pol << end;
 
 	//close the last polygon
@@ -1380,7 +1380,7 @@ void HistogramPrivate::draw(QPainter* painter) {
 
 void HistogramPrivate::updatePixmap() {
 	QPixmap pixmap(boundingRectangle.width(), boundingRectangle.height());
-	if (boundingRectangle.width()==0 || boundingRectangle.height()==0) {
+	if (boundingRectangle.width() == 0 || boundingRectangle.height() == 0) {
 		m_pixmap = pixmap;
 		m_hoverEffectImageIsDirty = true;
 		m_selectionEffectImageIsDirty = true;
@@ -1466,7 +1466,7 @@ void HistogramPrivate::drawSymbols(QPainter* painter) {
 void HistogramPrivate::drawValues(QPainter* painter) {
 	QTransform trafo;
 	QPainterPath path;
-	for (int i=0; i<valuesPoints.size(); i++) {
+	for (int i = 0; i < valuesPoints.size(); i++) {
 		path = QPainterPath();
 		path.addText( QPoint(0,0), valuesFont, valuesStrings.at(i) );
 

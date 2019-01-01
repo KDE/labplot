@@ -179,7 +179,7 @@
  */
 
 /**
- * \fn protected virtual void childSelected(const AbstractAspect*){}
+ * \fn protected virtual void childSelected(const AbstractAspect*) {}
  * \brief called when a child's child aspect was selected in the model
  */
 
@@ -320,9 +320,9 @@ void AbstractAspect::setParentAspect(AbstractAspect* parent) {
  * The returned folder may be the aspect itself if it inherits Folder.
  */
 Folder* AbstractAspect::folder() {
-	if(inherits("Folder")) return static_cast<Folder*>(this);
+	if (inherits("Folder")) return static_cast<Folder*>(this);
 	AbstractAspect* parent_aspect = parentAspect();
-	while(parent_aspect && !parent_aspect->inherits("Folder"))
+	while (parent_aspect && !parent_aspect->inherits("Folder"))
 		parent_aspect = parent_aspect->parentAspect();
 	return static_cast<Folder*>(parent_aspect);
 }
@@ -333,10 +333,10 @@ Folder* AbstractAspect::folder() {
  * This also returns true if other==this.
  */
 bool AbstractAspect::isDescendantOf(AbstractAspect* other) {
-	if(other == this) return true;
+	if (other == this) return true;
 	AbstractAspect* parent_aspect = parentAspect();
-	while(parent_aspect) 	{
-		if(parent_aspect == other) return true;
+	while (parent_aspect) {
+		if (parent_aspect == other) return true;
 		parent_aspect = parent_aspect->parentAspect();
 	}
 	return false;
@@ -496,7 +496,7 @@ QVector<AbstractAspect*> AbstractAspect::children(const char* className, ChildIn
 		if (flags & IncludeHidden || !child->hidden()) {
 			if ( child->inherits(className) || !(flags & Compress)) {
 				result << child;
-				if (flags & Recursive){
+				if (flags & Recursive) {
 					result << child->children(className, flags);
 				}
 			}
@@ -513,7 +513,7 @@ const QVector<AbstractAspect*> AbstractAspect::children() const {
  * \brief Remove me from my parent's list of children.
  */
 void AbstractAspect::remove() {
-	if(parentAspect())
+	if (parentAspect())
 		parentAspect()->removeChild(this);
 }
 
@@ -568,7 +568,7 @@ void AbstractAspect::writeCommentElement(QXmlStreamWriter * writer) const{
 /**
  * \brief Load comment from an XML element
  */
-bool AbstractAspect::readCommentElement(XmlStreamReader * reader){
+bool AbstractAspect::readCommentElement(XmlStreamReader * reader) {
 	setComment(reader->readElementText());
 	return true;
 }
@@ -586,19 +586,19 @@ void AbstractAspect::writeBasicAttributes(QXmlStreamWriter* writer) const {
  *
  * \return false on error
  */
-bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader){
+bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 	const QXmlStreamAttributes& attribs = reader->attributes();
 
 	// name
 	QString str = attribs.value(QLatin1String("name")).toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(i18n("Attribute 'name' is missing or empty."));
 
 	d->m_name = str;
 
 	// creation time
 	str = attribs.value(QLatin1String("creation_time")).toString();
-	if(str.isEmpty()) {
+	if (str.isEmpty()) {
 		reader->raiseWarning(i18n("Invalid creation time for '%1'. Using current time.", name()));
 		d->m_creation_time = QDateTime::currentDateTime();
 	} else {
@@ -720,11 +720,11 @@ void AbstractAspect::endMacro() {
  * this function is called when the selection in ProjectExplorer was changed.
  * forwards the selection/deselection to the parent aspect via emitting a signal.
  */
-void AbstractAspect::setSelected(bool s){
-  if (s)
-	emit selected(this);
-  else
-	emit deselected(this);
+void AbstractAspect::setSelected(bool s) {
+	if (s)
+		emit selected(this);
+	else
+		emit deselected(this);
 }
 
 void AbstractAspect::childSelected(const AbstractAspect* aspect) {
@@ -820,7 +820,7 @@ void AbstractAspectPrivate::insertChild(int index, AbstractAspect* child) {
 
 int AbstractAspectPrivate::indexOfChild(const AbstractAspect* child) const {
 	for (int i = 0; i < m_children.size(); ++i)
-		if(m_children.at(i) == child) return i;
+		if (m_children.at(i) == child) return i;
 
 	return -1;
 }

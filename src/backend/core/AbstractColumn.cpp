@@ -678,7 +678,7 @@ bool AbstractColumn::XmlReadMask(XmlStreamReader *reader) {
 	int start, end;
 	start = reader->readAttributeInt("start_row", &ok1);
 	end = reader->readAttributeInt("end_row", &ok2);
-	if(!ok1 || !ok2) {
+	if (!ok1 || !ok2) {
 		reader->raiseError(i18n("invalid or missing start or end row"));
 		return false;
 	}

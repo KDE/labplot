@@ -104,7 +104,7 @@ QVector3D Transform::mapSceneToLogical(const QPointF& scenePoint, const Datapick
 			cos = 0;
 		}
 
-		if((x[1] - x[0]) != 0) {
+		if ((x[1] - x[0]) != 0) {
 			scaleOfX = (x[1] - x[0])/((X[1] - X[0])*cos - (Y[1] - Y[0])*sin);
 		} else {
 			scaleOfX = (x[2] - x[0])/((X[2] - X[0])*cos - (Y[2] - Y[0])*sin);

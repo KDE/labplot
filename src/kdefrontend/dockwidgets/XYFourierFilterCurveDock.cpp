@@ -79,13 +79,13 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 2);
 
-	for(int i=0; i < NSL_FILTER_TYPE_COUNT; i++)
+	for (int i = 0; i < NSL_FILTER_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_filter_type_name[i]));
 
-	for(int i=0; i < NSL_FILTER_FORM_COUNT; i++)
+	for (int i = 0; i < NSL_FILTER_FORM_COUNT; i++)
 		uiGeneralTab.cbForm->addItem(i18n(nsl_filter_form_name[i]));
 
-	for(int i=0; i < NSL_FILTER_CUTOFF_UNIT_COUNT; i++) {
+	for (int i = 0; i < NSL_FILTER_CUTOFF_UNIT_COUNT; i++) {
 		uiGeneralTab.cbUnit->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
 		uiGeneralTab.cbUnit2->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
 	}
@@ -124,7 +124,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 
 void XYFourierFilterCurveDock::initGeneralTab() {
 	//if there are more then one curve in the list, disable the tab "general"
-	if (m_curvesList.size()==1){
+	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
@@ -132,7 +132,7 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 
 		uiGeneralTab.leName->setText(m_curve->name());
 		uiGeneralTab.leComment->setText(m_curve->comment());
-	}else {
+	} else {
 		uiGeneralTab.lName->setEnabled(false);
 		uiGeneralTab.leName->setEnabled(false);
 		uiGeneralTab.lComment->setEnabled(false);
@@ -209,29 +209,29 @@ void XYFourierFilterCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing=true;
-	m_curvesList=list;
-	m_curve=list.first();
+	m_initializing = true;
+	m_curvesList = list;
+	m_curve = list.first();
 	m_filterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_filterData = m_filterCurve->filterData();
 	initGeneralTab();
 	initTabs();
-	m_initializing=false;
+	m_initializing = false;
 }
 
 //*************************************************************
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
-void XYFourierFilterCurveDock::nameChanged(){
+void XYFourierFilterCurveDock::nameChanged() {
 	if (m_initializing)
 		return;
 
 	m_curve->setName(uiGeneralTab.leName->text());
 }
 
-void XYFourierFilterCurveDock::commentChanged(){
+void XYFourierFilterCurveDock::commentChanged() {
 	if (m_initializing)
 		return;
 
@@ -600,7 +600,7 @@ void XYFourierFilterCurveDock::enableRecalculate() const {
 	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX!=nullptr && aspectY!=nullptr);
+		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
 	} else {
 		 hasSourceData = (m_filterCurve->dataSourceCurve() != nullptr);
 	}

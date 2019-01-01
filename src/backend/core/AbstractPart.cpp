@@ -122,17 +122,17 @@ QMenu* AbstractPart::createContextMenu() {
 		menu->addSeparator();
 
 		const QStyle *widget_style = m_mdiWindow->style();
-		if(m_mdiWindow->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized)) {
+		if (m_mdiWindow->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized)) {
 			QAction* action = menu->addAction(i18n("&Restore"), m_mdiWindow, SLOT(showNormal()));
 			action->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarNormalButton));
 		}
 
-		if(!(m_mdiWindow->windowState() & Qt::WindowMinimized))	{
+		if (!(m_mdiWindow->windowState() & Qt::WindowMinimized))	{
 			QAction* action = menu->addAction(i18n("Mi&nimize"), m_mdiWindow, SLOT(showMinimized()));
 			action->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMinButton));
 		}
 
-		if(!(m_mdiWindow->windowState() & Qt::WindowMaximized))	{
+		if (!(m_mdiWindow->windowState() & Qt::WindowMaximized))	{
 			QAction* action = menu->addAction(i18n("Ma&ximize"), m_mdiWindow, SLOT(showMaximized()));
 			action->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMaxButton));
 		}

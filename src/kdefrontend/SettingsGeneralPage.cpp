@@ -111,7 +111,7 @@ void SettingsGeneralPage::changed() {
 }
 
 void SettingsGeneralPage::interfaceChanged(int index) {
-	bool tabbedView = (index==1);
+	bool tabbedView = (index == 1);
 	ui.lTabPosition->setVisible(tabbedView);
 	ui.cbTabPosition->setVisible(tabbedView);
 	ui.lMdiVisibility->setVisible(!tabbedView);

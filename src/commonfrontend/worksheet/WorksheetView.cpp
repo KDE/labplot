@@ -195,7 +195,7 @@ void WorksheetView::initActions() {
 	addCartesianPlot3Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered"), i18n("Two Axes, Centered"), addNewActionGroup);
 	addCartesianPlot4Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin"), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), addNewActionGroup);
-	addBarChartPlot= new QAction(QIcon::fromTheme("office-chart-line"), i18n("Bar Chart"), addNewActionGroup);
+	addBarChartPlot = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Bar Chart"), addNewActionGroup);
 	//Layout actions
 	verticalLayoutAction = new QAction(QIcon::fromTheme("labplot-editvlayout"), i18n("Vertical Layout"), layoutActionGroup);
 	verticalLayoutAction->setCheckable(true);
@@ -637,7 +637,7 @@ void WorksheetView::setIsClosing() {
 }
 
 void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
-	if (m_mouseMode==ZoomSelectionMode && m_selectionBandIsShown) {
+	if (m_mouseMode == ZoomSelectionMode && m_selectionBandIsShown) {
 		painter->save();
 		const QRectF& selRect = mapToScene(QRect(m_selectionStart, m_selectionEnd).normalized()).boundingRect();
 		//TODO: don't hardcode for black here, use a a different color depending on the theme of the worksheet/plot under the mouse cursor?
@@ -736,7 +736,7 @@ void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_r
 
 	//grid
 	if (m_gridSettings.style != WorksheetView::NoGrid) {
-		QColor c=m_gridSettings.color;
+		QColor c = m_gridSettings.color;
 		c.setAlphaF(m_gridSettings.opacity);
 		painter->setPen(c);
 
@@ -746,7 +746,7 @@ void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_r
 		qreal top = scene_rect.top();
 		qreal bottom = scene_rect.bottom();
 
-		if (m_gridSettings.style==WorksheetView::LineGrid) {
+		if (m_gridSettings.style == WorksheetView::LineGrid) {
 			QLineF line;
 
 			//horizontal lines
@@ -879,7 +879,7 @@ void WorksheetView::zoom(int numSteps) {
 	anim->start();
 }
 
-void WorksheetView::scalingTime(){
+void WorksheetView::scalingTime() {
 	qreal factor = 1.0 + qreal(m_numScheduledScalings) / 300.0;
 	scale(factor, factor);
 }
@@ -1668,7 +1668,7 @@ void WorksheetView::print(QPrinter* printer) {
 	QRectF scene_rect = scene()->sceneRect();
 	//qDebug()<<"source (scene):"<<scene_rect;
 	//qDebug()<<"target (page):"<<page_rect;
-	float scale=qMax(scene_rect.width()/page_rect.width(),scene_rect.height()/page_rect.height());
+	float scale = qMax(scene_rect.width()/page_rect.width(),scene_rect.height()/page_rect.height());
 	//qDebug()<<"scale ="<<scale;
 	//qDebug()<<"background size ="<<scene_rect.width()/scale<<scene_rect.height()/scale;
 	drawBackgroundItems(&painter, QRectF(0,0,scene_rect.width()/scale,scene_rect.height()/scale));

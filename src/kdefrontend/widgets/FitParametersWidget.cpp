@@ -133,7 +133,7 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 		if (!m_fitData->paramNames.isEmpty()) {	// parameters for the custom model are already available -> show them
 			ui.tableWidget->setRowCount(np);
 
-			for (int i = 0; i < np; ++i){
+			for (int i = 0; i < np; ++i) {
 				// name
 				auto* item = new QTableWidgetItem(m_fitData->paramNames.at(i));
 				item->setBackground(QApplication::palette().color(QPalette::Window));

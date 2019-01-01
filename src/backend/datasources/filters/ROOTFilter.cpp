@@ -673,7 +673,7 @@ ROOTData::ROOTData(const std::string& filename) : filename(filename) {
 	//
 	// auto l = (TStreamerInfo*)_file0->GetStreamerInfoList()->At(ENTRYNUMBER);
 	// l->Print();
-	// for (int i=0; i<l->GetNelement(); ++i) {
+	// for (int i = 0; i < l->GetNelement(); ++i) {
 	//     auto e = l->GetElement(i);
 	//     e->Print();
 	//     cout << e->GetFullName() << " " << e->GetTypeName() << " " << e->GetSize() << endl;
@@ -1235,7 +1235,7 @@ void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer)
 								}
 								if (isbasicpointer) {
 									// see root/io/io/inc/TStreamerInfo.h -> TStreamerInfo::EReadWrite
-									switch(type - 40) {
+									switch (type - 40) {
 										case 1:  // char
 										case 11: // unsigned char
 											size = 1;

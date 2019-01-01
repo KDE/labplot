@@ -93,7 +93,7 @@ void DropValuesDialog::setColumns(QVector<Column*> columns) {
 }
 
 void DropValuesDialog::operatorChanged(int index) const {
-	bool value2 = (index==1) || (index==2);
+	bool value2 = (index == 1) || (index == 2);
 	ui.lMin->setVisible(value2);
 	ui.lMax->setVisible(value2);
 	ui.lAnd->setVisible(value2);
@@ -110,7 +110,7 @@ void DropValuesDialog::okClicked() const {
 //TODO: m_column->setMasked() is slow, we need direct access to the masked-container -> redesign
 class MaskValuesTask : public QRunnable {
 	public:
-		MaskValuesTask(Column* col, int op, double value1, double value2){
+		MaskValuesTask(Column* col, int op, double value1, double value2) {
 			m_column = col;
 			m_operator = op;
 			m_value1 = value1;
@@ -207,7 +207,7 @@ class MaskValuesTask : public QRunnable {
 
 class DropValuesTask : public QRunnable {
 	public:
-		DropValuesTask(Column* col, int op, double value1, double value2){
+		DropValuesTask(Column* col, int op, double value1, double value2) {
 			m_column = col;
 			m_operator = op;
 			m_value1 = value1;
@@ -310,7 +310,7 @@ void DropValuesDialog::maskValues() const {
 	const double value1 = ui.leValue1->text().toDouble();
 	const double value2 = ui.leValue2->text().toDouble();
 
-	for(Column* col: m_columns) {
+	for (Column* col: m_columns) {
 		auto* task = new MaskValuesTask(col, op, value1, value2);
 		task->run();
 		//TODO: writing to the undo-stack in Column::setMasked() is not tread-safe -> redesign
@@ -334,7 +334,7 @@ void DropValuesDialog::dropValues() const {
 	const double value1 = ui.leValue1->text().toDouble();
 	const double value2 = ui.leValue2->text().toDouble();
 
-	for(Column* col: m_columns) {
+	for (Column* col: m_columns) {
 		auto* task = new DropValuesTask(col, op, value1, value2);
 		QThreadPool::globalInstance()->start(task);
 	}

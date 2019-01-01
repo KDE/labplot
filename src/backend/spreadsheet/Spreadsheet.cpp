@@ -131,7 +131,7 @@ int Spreadsheet::rowCount() const {
 }
 
 void Spreadsheet::removeRows(int first, int count) {
-	if( count < 1 || first < 0 || first+count > rowCount()) return;
+	if ( count < 1 || first < 0 || first+count > rowCount()) return;
 	WAIT_CURSOR;
 	beginMacro( i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count) );
 	for (auto* col : children<Column>(IncludeHidden))
@@ -141,7 +141,7 @@ void Spreadsheet::removeRows(int first, int count) {
 }
 
 void Spreadsheet::insertRows(int before, int count) {
-	if( count < 1 || before < 0 || before > rowCount()) return;
+	if ( count < 1 || before < 0 || before > rowCount()) return;
 	WAIT_CURSOR;
 	beginMacro( i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count) );
 	for (auto* col : children<Column>(IncludeHidden))
@@ -216,7 +216,7 @@ int Spreadsheet::columnCount(AbstractColumn::PlotDesignation pd) const {
 }
 
 void Spreadsheet::removeColumns(int first, int count) {
-	if( count < 1 || first < 0 || first+count > columnCount()) return;
+	if ( count < 1 || first < 0 || first+count > columnCount()) return;
 	WAIT_CURSOR;
 	beginMacro( i18np("%1: remove 1 column", "%1: remove %2 columns", name(), count) );
 	for (int i = 0; i < count; i++)
@@ -325,12 +325,12 @@ void Spreadsheet::copy(Spreadsheet* other) {
   Determines the corresponding X column.
 */
 int Spreadsheet::colX(int col) {
-	for(int i = col-1; i >= 0; i--) {
+	for (int i = col-1; i >= 0; i--) {
 		if (column(i)->plotDesignation() == AbstractColumn::X)
 			return i;
 	}
 	int cols = columnCount();
-	for(int i = col+1; i < cols; i++) {
+	for (int i = col+1; i < cols; i++) {
 		if (column(i)->plotDesignation() == AbstractColumn::X)
 			return i;
 	}
@@ -346,21 +346,21 @@ int Spreadsheet::colY(int col) {
 	if (column(col)->plotDesignation() == AbstractColumn::XError ||
 	        column(col)->plotDesignation() == AbstractColumn::YError) {
 		// look to the left first
-		for(int i=col-1; i>=0; i--) {
+		for (int i = col-1; i >= 0; i--) {
 			if (column(i)->plotDesignation() == AbstractColumn::Y)
 				return i;
 		}
-		for(int i=col+1; i<cols; i++) {
+		for (int i = col+1; i < cols; i++) {
 			if (column(i)->plotDesignation() == AbstractColumn::Y)
 				return i;
 		}
 	} else {
 		// look to the right first
-		for(int i=col+1; i<cols; i++) {
+		for (int i = col+1; i < cols; i++) {
 			if (column(i)->plotDesignation() == AbstractColumn::Y)
 				return i;
 		}
-		for(int i=col-1; i>=0; i--) {
+		for (int i = col-1; i >= 0; i--) {
 			if (column(i)->plotDesignation() == AbstractColumn::Y)
 				return i;
 		}
@@ -372,7 +372,7 @@ int Spreadsheet::colY(int col) {
   If 'leading' is a null pointer, each column is sorted separately.
 */
 void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascending) {
-	if(cols.isEmpty()) return;
+	if (cols.isEmpty()) return;
 
 	// the normal QPair comparison does not work properly with descending sorting
 	// therefore we use our own compare functions
@@ -407,17 +407,17 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 	WAIT_CURSOR;
 	beginMacro(i18n("%1: sort columns", name()));
 
-	if(leading == nullptr) { // sort separately
+	if (leading == nullptr) { // sort separately
 		for (auto* col : cols) {
 			switch (col->columnMode()) {
 			case AbstractColumn::Numeric: {
 					int rows = col->rowCount();
 					QVector< QPair<double, int> > map;
 
-					for(int j = 0; j < rows; j++)
+					for (int j = 0; j < rows; j++)
 						map.append(QPair<double, int>(col->valueAt(j), j));
 
-					if(ascending)
+					if (ascending)
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
 					else
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
@@ -427,7 +427,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 
 					int k = 0;
 					// put the values in the right order into temp_col
-					while(it.hasNext()) {
+					while (it.hasNext()) {
 						temp_col->copy(col, it.peekNext().second, k, 1);
 						temp_col->setMasked(col->isMasked(it.next().second));
 						k++;
@@ -454,7 +454,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 
 					int k = 0;
 					// put the values in the right order into temp_col
-					while(it.hasNext()) {
+					while (it.hasNext()) {
 						temp_col->copy(col, it.peekNext().second, k, 1);
 						temp_col->setMasked(col->isMasked(it.next().second));
 						k++;
@@ -481,7 +481,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 
 					int k = 0;
 					// put the values in the right order into temp_col
-					while(it.hasNext()) {
+					while (it.hasNext()) {
 						temp_col->copy(col, it.peekNext().second, k, 1);
 						temp_col->setMasked(col->isMasked(it.next().second));
 						k++;
@@ -497,10 +497,10 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					int rows = col->rowCount();
 					QVector< QPair<QDateTime, int> > map;
 
-					for(int j=0; j<rows; j++)
+					for (int j = 0; j < rows; j++)
 						map.append(QPair<QDateTime, int>(col->dateTimeAt(j), j));
 
-					if(ascending)
+					if (ascending)
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
 					else
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
@@ -508,9 +508,9 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					QVectorIterator< QPair<QDateTime, int> > it(map);
 					Column *temp_col = new Column("temp", col->columnMode());
 
-					int k=0;
+					int k = 0;
 					// put the values in the right order into temp_col
-					while(it.hasNext()) {
+					while (it.hasNext()) {
 						temp_col->copy(col, it.peekNext().second, k, 1);
 						temp_col->setMasked(col->isMasked(it.next().second));
 						k++;
@@ -542,7 +542,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					it.toFront();
 					int j = 0;
 					// put the values in the right order into temp_col
-					while(it.hasNext()) {
+					while (it.hasNext()) {
 						temp_col->copy(col, it.peekNext().second, j, 1);
 						temp_col->setMasked(col->isMasked(it.next().second));
 						j++;
@@ -571,7 +571,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					it.toFront();
 					int j = 0;
 					// put the values in the right order into temp_col
-					while(it.hasNext()) {
+					while (it.hasNext()) {
 						temp_col->copy(col, it.peekNext().second, j, 1);
 						temp_col->setMasked(col->isMasked(it.next().second));
 						j++;
@@ -589,7 +589,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 				for (int i = 0; i < rows; i++)
 					map.append(QPair<QString, int>(leading->textAt(i), i));
 
-				if(ascending)
+				if (ascending)
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringLess);
 				else
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringGreater);
@@ -600,7 +600,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					it.toFront();
 					int j = 0;
 					// put the values in the right order into temp_col
-					while(it.hasNext()) {
+					while (it.hasNext()) {
 						temp_col->copy(col, it.peekNext().second, j, 1);
 						temp_col->setMasked(col->isMasked(it.next().second));
 						j++;
@@ -629,9 +629,9 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 				for (auto* col : cols) {
 					Column *temp_col = new Column("temp", col->columnMode());
 					it.toFront();
-					int j=0;
+					int j = 0;
 					// put the values in the right order into temp_col
-					while(it.hasNext()) {
+					while (it.hasNext()) {
 						temp_col->copy(col, it.peekNext().second, j, 1);
 						temp_col->setMasked(col->isMasked(it.next().second));
 						j++;
@@ -660,7 +660,7 @@ QIcon Spreadsheet::icon() const {
 */
 QString Spreadsheet::text(int row, int col) const {
 	Column* c = column(col);
-	if(!c)
+	if (!c)
 		return QString();
 
 	return c->asStringColumn()->textAt(row);
@@ -741,7 +741,7 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 		if (reader->isStartElement()) {
 			if (reader->name() == "comment") {
 				if (!readCommentElement(reader)) return false;
-			} else if(reader->name() == "column") {
+			} else if (reader->name() == "column") {
 				Column* column = new Column("");
 				if (!column->load(reader, preview)) {
 					delete column;

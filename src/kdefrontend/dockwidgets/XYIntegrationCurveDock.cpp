@@ -117,7 +117,7 @@ void XYIntegrationCurveDock::setupGeneral() {
 
 void XYIntegrationCurveDock::initGeneralTab() {
 	//if there are more then one curve in the list, disable the tab "general"
-	if (m_curvesList.size()==1) {
+	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
@@ -125,7 +125,7 @@ void XYIntegrationCurveDock::initGeneralTab() {
 
 		uiGeneralTab.leName->setText(m_curve->name());
 		uiGeneralTab.leComment->setText(m_curve->comment());
-	}else {
+	} else {
 		uiGeneralTab.lName->setEnabled(false);
 		uiGeneralTab.leName->setEnabled(false);
 		uiGeneralTab.lComment->setEnabled(false);
@@ -196,16 +196,16 @@ void XYIntegrationCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYIntegrationCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing=true;
-	m_curvesList=list;
-	m_curve=list.first();
+	m_initializing = true;
+	m_curvesList = list;
+	m_curve = list.first();
 	m_integrationCurve = dynamic_cast<XYIntegrationCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_integrationData = m_integrationCurve->integrationData();
 	initGeneralTab();
 	initTabs();
-	m_initializing=false;
+	m_initializing = false;
 
 	//hide the "skip gaps" option after the curves were set
 	ui.lLineSkipGaps->hide();
@@ -297,8 +297,8 @@ void XYIntegrationCurveDock::updateSettings(const AbstractColumn* column) {
 		return;
 
 	//TODO
-// 	size_t n=0;
-// 	for (int row=0; row < column->rowCount(); row++)
+// 	size_t n = 0;
+// 	for (int row = 0; row < column->rowCount(); row++)
 // 		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
 // 			n++;
 }
@@ -403,7 +403,7 @@ void XYIntegrationCurveDock::enableRecalculate() const {
 	if (m_integrationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX!=nullptr && aspectY!=nullptr);
+		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
 	} else {
 		 hasSourceData = (m_integrationCurve->dataSourceCurve() != nullptr);
 	}

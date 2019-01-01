@@ -317,7 +317,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 }
 
 void ImportSQLDatabaseWidget::importFromChanged(int index) {
-	if (index==0) { //import from a table
+	if (index == 0) { //import from a table
 		ui.gbQuery->hide();
 		ui.lwTables->show();
 	} else { //import the result set of a custom query

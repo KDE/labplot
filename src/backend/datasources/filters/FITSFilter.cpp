@@ -413,7 +413,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 			if (startColumn != 0)
 				col = startColumn;
 		}
-		for (; col <=actualCols; ++col) {
+		for (; col <= actualCols; ++col) {
 			status = 0;
 			fits_make_keyn("TTYPE", col, keyword, &status);
 			fits_read_key(m_fitsFile, TSTRING, keyword, value, nullptr, &status);

@@ -223,7 +223,7 @@ void PlotDataDialog::processColumns() {
 	//and the name of the first column having "X" as the plot designation (relevant for xy-curves only)
 	QStringList columnNames;
 	QString xColumnName;
-	for(const Column* column : m_columns) {
+	for (const Column* column : m_columns) {
 		columnNames << column->name();
 		if (m_plotType == PlotXYCurve && xColumnName.isEmpty() && column->plotDesignation() == AbstractColumn::X)
 			xColumnName = column->name();
@@ -277,7 +277,7 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 	}
 
 	//show all selected/available column names in the data comboboxes
-	for(QComboBox* const comboBox : m_columnComboBoxes)
+	for (QComboBox* const comboBox : m_columnComboBoxes)
 		comboBox->addItems(columnNames);
 
 	if (!xColumnName.isEmpty()) {
@@ -287,7 +287,7 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 		//for the remaining columns, show the names in the comboboxes for the Y-data
 		//TODO: handle columns with error-designations
 		int yColumnIndex = 1; //the index of the first Y-data comboBox in m_columnComboBoxes
-		for(const QString& name : columnNames) {
+		for (const QString& name : columnNames) {
 			if (name != xColumnName) {
 				QComboBox* comboBox = m_columnComboBoxes[yColumnIndex];
 				comboBox->setCurrentIndex(comboBox->findText(name));
@@ -298,7 +298,7 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 		//no column with "x plot designation" is selected, simply show all columns in the order they were selected.
 		//first selected column will serve as the x-column.
 		int yColumnIndex = 0;
-		for(const QString& name : columnNames) {
+		for (const QString& name : columnNames) {
 			QComboBox* comboBox = m_columnComboBoxes[yColumnIndex];
 			comboBox->setCurrentIndex(comboBox->findText(name));
 			yColumnIndex++;
@@ -317,7 +317,7 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 	ui->cbXColumn->addItems(columnNames);
 	ui->cbXColumn->setCurrentIndex(0);
 
-	if (m_columns.size()==1) {
+	if (m_columns.size() == 1) {
 		//one column provided, only one histogram is possible
 		//-> hide the curve placement options and the scroll areas for further columns
 		ui->rbCurvePlacement1->setChecked(true);
@@ -404,7 +404,7 @@ void PlotDataDialog::plot() {
 		AbstractAspect* parent = m_spreadsheet->parentAspect();
 #ifdef HAVE_MQTT
 		MQTTTopic* topic = qobject_cast<MQTTTopic*>(m_spreadsheet);
-		if(topic != nullptr)
+		if (topic != nullptr)
 			parent = qobject_cast<AbstractAspect*>(m_spreadsheet->project());
 #endif
 		parent->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
@@ -450,7 +450,7 @@ void PlotDataDialog::plot() {
 }
 
 Column* PlotDataDialog::columnFromName(const QString& name) const {
-	for(auto* column : m_columns) {
+	for (auto* column : m_columns) {
 		if (column->name() == name)
 			return column;
 	}
@@ -671,12 +671,12 @@ void PlotDataDialog::checkOkButton() {
 		msg = i18n("No data selected to plot.");
 	else if (ui->rbPlotPlacement1->isChecked()) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
-		enable = (aspect!=nullptr);
+		enable = (aspect != nullptr);
 		if (!enable)
 			msg = i18n("An already existing plot has to be selected.");
 	} else if (ui->rbPlotPlacement2->isChecked()) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingWorksheets->currentModelIndex().internalPointer());
-		enable = (aspect!=nullptr);
+		enable = (aspect != nullptr);
 		if (!enable)
 			msg = i18n("An already existing worksheet has to be selected.");
 	} else

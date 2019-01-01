@@ -259,7 +259,7 @@ void CantorWorksheetView::fillToolBar(QToolBar* toolbar) {
  */
 void CantorWorksheetView::triggerCantorAction(QAction* action) {
 	QString actionName = action->data().toString();
-	if(!actionName.isEmpty()) m_part->action(actionName.toStdString().c_str())->trigger();
+	if (!actionName.isEmpty()) m_part->action(actionName.toStdString().c_str())->trigger();
 }
 
 CantorWorksheetView::~CantorWorksheetView() {
@@ -268,7 +268,7 @@ CantorWorksheetView::~CantorWorksheetView() {
 }
 
 void CantorWorksheetView::statusChanged(Cantor::Session::Status status) {
-	if(status==Cantor::Session::Running) {
+	if (status == Cantor::Session::Running) {
 		m_evaluateWorsheetAction->setText(i18n("Interrupt"));
 		m_evaluateWorsheetAction->setIcon(QIcon::fromTheme(QLatin1String("dialog-close")));
 		emit m_worksheet->statusInfo(i18n("Calculating..."));

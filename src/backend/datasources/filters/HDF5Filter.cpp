@@ -482,7 +482,7 @@ QStringList HDF5FilterPrivate::readHDF5Compound(hid_t tid) {
 	line += QLatin1String("COMPOUND(") + QString::number(typeSize) + QLatin1String(") : (");
 	int members = H5Tget_nmembers(tid);
 	handleError(members, "H5Tget_nmembers");
-	for (int i=0; i < members; ++i) {
+	for (int i = 0; i < members; ++i) {
 		H5T_class_t mclass = H5Tget_member_class(tid, i);
 		handleError((int)mclass, "H5Tget_member_class");
 		hid_t mtype = H5Tget_member_type(tid, i);
@@ -1156,8 +1156,8 @@ QStringList HDF5FilterPrivate::readHDF5PropertyList(hid_t pid) {
 			props << QLatin1String(": FLETCHER32");  /* Error Detection Code */
 			break;
 		case H5Z_FILTER_SZIP: {
-				//unsigned int szip_options_mask=cd_values[0];
-				unsigned int szip_pixels_per_block=cd_values[1];
+				//unsigned int szip_options_mask = cd_values[0];
+				unsigned int szip_pixels_per_block = cd_values[1];
 
 				props << QLatin1String(": SZIP COMPRESSION - PIXELS_PER_BLOCK ") << QString::number(szip_pixels_per_block);
 				break;
@@ -1711,7 +1711,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 			int cols = dims_out[1];
 
 			if (endRow == -1)
-				endRow=rows;
+				endRow = rows;
 			if (lines == -1)
 				lines = endRow;
 			if (endColumn == -1)

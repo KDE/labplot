@@ -88,14 +88,14 @@ SignallingUndoCommand::SignallingUndoCommand(const QString &text, QObject *recei
 	// munge arguments
 	const char *type_names[] = { val0.name(), val1.name(), val2.name(), val3.name() };
 	void *argument_data[] = { val0.data(), val1.data(), val2.data(), val3.data() };
-	for (m_argument_count=0; qstrlen(type_names[m_argument_count]) > 0; ++m_argument_count);
+	for (m_argument_count = 0; qstrlen(type_names[m_argument_count]) > 0; ++m_argument_count);
 
 	// copy arguments (Q_ARG references will often go out of scope before redo/undo are called)
 	m_argument_types = new int[m_argument_count];
 	Q_CHECK_PTR(m_argument_types);
 	m_argument_data = new void*[m_argument_count];
 	Q_CHECK_PTR(m_argument_data);
-	for (int i=0; i<m_argument_count; i++) {
+	for (int i = 0; i < m_argument_count; i++) {
 		m_argument_types[i] = QMetaType::type(type_names[i]);
 		if (m_argument_types[i]) // type is known to QMetaType
 			m_argument_data[i] = QMetaType::create(m_argument_types[i], argument_data[i]);
@@ -106,7 +106,7 @@ SignallingUndoCommand::SignallingUndoCommand(const QString &text, QObject *recei
 }
 
 SignallingUndoCommand::~SignallingUndoCommand() {
-	for (int i=0; i<m_argument_count; ++i)
+	for (int i = 0; i < m_argument_count; ++i)
 		if (m_argument_types[i] && m_argument_data[i])
 			QMetaType::destroy(m_argument_types[i], m_argument_data[i]);
 	delete[] m_argument_types;

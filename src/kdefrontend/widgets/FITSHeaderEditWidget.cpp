@@ -193,9 +193,9 @@ void FITSHeaderEditWidget::openFile() {
 		return;
 
 	int pos = fileName.lastIndexOf(QDir::separator());
-	if (pos!=-1) {
+	if (pos != -1) {
 		QString newDir = fileName.left(pos);
-		if (newDir!=dir)
+		if (newDir != dir)
 			conf.writeEntry("LastDir", newDir);
 	}
 
@@ -204,7 +204,7 @@ void FITSHeaderEditWidget::openFile() {
 	const int childCount = root->childCount();
 	bool opened = false;
 	for (int i = 0; i < childCount; ++i) {
-		if(root->child(i)->text(0) == fileName) {
+		if (root->child(i)->text(0) == fileName) {
 			opened = true;
 			break;
 		}
@@ -322,21 +322,21 @@ void FITSHeaderEditWidget::addKeyword() {
 		FITSFilter::Keyword newKeyWord = newKeywordDialog->newKeyword();
 		QList<FITSFilter::Keyword> currentKeywords = m_extensionData[m_seletedExtension].keywords;
 
-		for(const FITSFilter::Keyword& keyword : currentKeywords) {
-			if (keyword.operator==(newKeyWord)) {
+		for (const FITSFilter::Keyword& keyword : currentKeywords) {
+			if (keyword.operator == (newKeyWord)) {
 				KMessageBox::information(this, i18n("Cannot add keyword, keyword already added"), i18n("Cannot Add Keyword"));
 				return;
 			}
 		}
 
-		for(const FITSFilter::Keyword& keyword : m_extensionData[m_seletedExtension].updates.newKeywords) {
-			if (keyword.operator==(newKeyWord)) {
+		for (const FITSFilter::Keyword& keyword : m_extensionData[m_seletedExtension].updates.newKeywords) {
+			if (keyword.operator == (newKeyWord)) {
 				KMessageBox::information(this, i18n("Cannot add keyword, keyword already added"), i18n("Cannot Add Keyword"));
 				return;
 			}
 		}
 
-		for(const QString& keyword : mandatoryKeywords()) {
+		for (const QString& keyword : mandatoryKeywords()) {
 			if (!keyword.compare(newKeyWord.key)) {
 				KMessageBox::information(this, i18n("Cannot add mandatory keyword, they are already present"),
 				                         i18n("Cannot Add Keyword"));
@@ -386,7 +386,7 @@ void FITSHeaderEditWidget::removeKeyword() {
 	               i18n("Confirm Deletion"));
 	if (rc == KMessageBox::Yes) {
 		bool remove = true;
-		for(const QString& k : mandatoryKeywords()) {
+		for (const QString& k : mandatoryKeywords()) {
 			if (!k.compare(key)) {
 				remove = false;
 				break;
@@ -605,7 +605,7 @@ void FITSHeaderEditWidget::closeFile() {
 			fillTable();
 		}
 
-		for(const QString& key : m_extensionData.keys()) {
+		for (const QString& key : m_extensionData.keys()) {
 			if (key.startsWith(current->text(0)))
 				m_extensionData.remove(key);
 		}

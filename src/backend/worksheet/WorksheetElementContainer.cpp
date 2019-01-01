@@ -221,7 +221,7 @@ void WorksheetElementContainerPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*
 	}
 }
 
-bool WorksheetElementContainerPrivate::swapVisible(bool on){
+bool WorksheetElementContainerPrivate::swapVisible(bool on) {
 	bool oldValue = isVisible();
 	setVisible(on);
 	emit q->visibleChanged(on);
@@ -267,12 +267,12 @@ void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOpti
 	if (!isVisible())
 		return;
 
-	if (m_hovered && !isSelected() && !m_printing){
+	if (m_hovered && !isSelected() && !m_printing) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
 		painter->drawPath(containerShape);
 	}
 
-	if (isSelected() && !m_printing){
+	if (isSelected() && !m_printing) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(containerShape);
 	}

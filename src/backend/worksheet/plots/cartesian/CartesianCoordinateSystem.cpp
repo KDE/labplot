@@ -269,7 +269,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 		for (const auto* yScale : d->yScales) {
 			if (!yScale) continue;
 
-			for (int i=0; i<logicalPoints.size(); ++i) {
+			for (int i = 0; i < logicalPoints.size(); ++i) {
 				const QPointF& point = logicalPoints.at(i);
 
 				double x = point.x();

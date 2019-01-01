@@ -119,9 +119,9 @@ void XYEquationCurveDock::setupGeneral() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing=true;
-	m_curvesList=list;
-	m_curve=list.first();
+	m_initializing = true;
+	m_curvesList = list;
+	m_curve = list.first();
 	m_equationCurve = dynamic_cast<XYEquationCurve*>(m_curve);
 	Q_ASSERT(m_equationCurve);
 	m_aspectTreeModel =  new AspectTreeModel(m_curve->project());
@@ -129,12 +129,12 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	initGeneralTab();
 	initTabs();
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	m_initializing=false;
+	m_initializing = false;
 }
 
 void XYEquationCurveDock::initGeneralTab() {
 	//if there are more then one curve in the list, disable the tab "general"
-	if (m_curvesList.size()==1){
+	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
@@ -142,7 +142,7 @@ void XYEquationCurveDock::initGeneralTab() {
 
 		uiGeneralTab.leName->setText(m_curve->name());
 		uiGeneralTab.leComment->setText(m_curve->comment());
-	}else {
+	} else {
 		uiGeneralTab.lName->setEnabled(false);
 		uiGeneralTab.leName->setEnabled(false);
 		uiGeneralTab.lComment->setEnabled(false);
@@ -176,14 +176,14 @@ void XYEquationCurveDock::initGeneralTab() {
 //*************************************************************
 //**** SLOTs for changes triggered in XYEquationCurveDock *****
 //*************************************************************
-void XYEquationCurveDock::nameChanged(){
+void XYEquationCurveDock::nameChanged() {
 	if (m_initializing)
 		return;
 
 	m_curve->setName(uiGeneralTab.leName->text());
 }
 
-void XYEquationCurveDock::commentChanged(){
+void XYEquationCurveDock::commentChanged() {
 	if (m_initializing)
 		return;
 

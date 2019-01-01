@@ -82,7 +82,7 @@ bool ThemesComboBox::eventFilter(QObject* object, QEvent* event) {
 }
 
 void ThemesComboBox::handleThemeChanged(const QString& theme) {
-	if (theme!=currentText()) {
+	if (theme != currentText()) {
 		setItemText(0, theme);
 		emit currentThemeChanged(theme);
 	}

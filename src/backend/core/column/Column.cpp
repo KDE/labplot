@@ -538,7 +538,7 @@ void Column::calculateStatistics() const {
 	absoluteMedianList.resize((int)notNanCount);
 
 	int idx = 0;
-	for(int row = 0; row < rowValues->size(); ++row) {
+	for (int row = 0; row < rowValues->size(); ++row) {
 		val = rowValues->value(row);
 		if (std::isnan(val) || isMasked(row) )
 			continue;
@@ -946,7 +946,7 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 // 	int start, end;
 // 	start = reader->readAttributeInt("start_row", &ok1);
 // 	end = reader->readAttributeInt("end_row", &ok2);
-// 	if(!ok1 || !ok2)
+// 	if (!ok1 || !ok2)
 // 	{
 // 		reader->raiseError(i18n("invalid or missing start or end row"));
 // 		return false;
@@ -976,7 +976,7 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 	switch (columnMode()) {
 	case AbstractColumn::Numeric: {
 			double value = str.toDouble(&ok);
-			if(!ok) {
+			if (!ok) {
 				reader->raiseError(i18n("invalid row value"));
 				return false;
 			}
@@ -985,7 +985,7 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 		}
 	case AbstractColumn::Integer: {
 			int value = str.toInt(&ok);
-			if(!ok) {
+			if (!ok) {
 				reader->raiseError(i18n("invalid row value"));
 				return false;
 			}

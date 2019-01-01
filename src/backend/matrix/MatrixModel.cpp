@@ -76,13 +76,13 @@ Qt::ItemFlags MatrixModel::flags(const QModelIndex& index) const {
 }
 
 QVariant MatrixModel::data(const QModelIndex& index, int role) const {
-	if( !index.isValid() )
+	if ( !index.isValid() )
 		return QVariant();
 
 	int row = index.row();
 	int col = index.column();
 
-	switch(role) {
+	switch (role) {
 		case Qt::ToolTipRole:
 		case Qt::EditRole:
 		case Qt::DisplayRole: {
@@ -119,12 +119,12 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int role) const {
 	QString result;
 	Matrix::HeaderFormat headerFormat = m_matrix->headerFormat();
-	switch(orientation) {
+	switch (orientation) {
 		case Qt::Horizontal:
-			switch(role) {
+			switch (role) {
 				case Qt::DisplayRole:
 				case Qt::ToolTipRole:
-					if (headerFormat==Matrix::HeaderRowsColumns) {
+					if (headerFormat == Matrix::HeaderRowsColumns) {
 						result = QString::number(section+1);
 					} else if (headerFormat == Matrix::HeaderValues) {
 						double diff = m_matrix->xEnd() - m_matrix->xStart();
@@ -148,12 +148,12 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 			}
 			break;
 		case Qt::Vertical:
-			switch(role) {
+			switch (role) {
 				case Qt::DisplayRole:
 				case Qt::ToolTipRole:
-					if (headerFormat==Matrix::HeaderRowsColumns) {
+					if (headerFormat == Matrix::HeaderRowsColumns) {
 						result = QString::number(section+1);
-					} else if (headerFormat==Matrix::HeaderValues) {
+					} else if (headerFormat == Matrix::HeaderValues) {
 						double diff = m_matrix->yEnd() - m_matrix->yStart();
 						double step = 0.0;
 						if (m_matrix->rowCount() > 1)
@@ -198,7 +198,7 @@ bool MatrixModel::setData(const QModelIndex& index, const QVariant& value, int r
 	int row = index.row();
 	int column = index.column();
 
-	if(role ==  Qt::EditRole) {
+	if (role == Qt::EditRole) {
 		const AbstractColumn::ColumnMode mode = m_matrix->mode();
 		switch (mode) {
 		case AbstractColumn::Numeric: 

@@ -210,16 +210,16 @@ void XYDataReductionCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYDataReductionCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing=true;
-	m_curvesList=list;
-	m_curve=list.first();
+	m_initializing = true;
+	m_curvesList = list;
+	m_curve = list.first();
 	m_dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_dataReductionData = m_dataReductionCurve->dataReductionData();
 	initGeneralTab();
 	initTabs();
-	m_initializing=false;
+	m_initializing = false;
 
 	//hide the "skip gaps" option after the curves were set
 	ui.lLineSkipGaps->hide();
@@ -329,7 +329,7 @@ void XYDataReductionCurveDock::updateTolerance() {
 		}
 	}
 
-	if(xDataColumn == nullptr || yDataColumn == nullptr)
+	if (xDataColumn == nullptr || yDataColumn == nullptr)
 		return;
 
 	//copy all valid data points for calculating tolerance to temporary vectors
@@ -337,7 +337,7 @@ void XYDataReductionCurveDock::updateTolerance() {
 	QVector<double> ydataVector;
 	const double xmin = m_dataReductionData.xRange.first();
 	const double xmax = m_dataReductionData.xRange.last();
-	for (int row=0; row<xDataColumn->rowCount(); ++row) {
+	for (int row = 0; row < xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 		        && !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
@@ -349,7 +349,7 @@ void XYDataReductionCurveDock::updateTolerance() {
 		}
 	}
 
-	if(xdataVector.size() > 1)
+	if (xdataVector.size() > 1)
 		uiGeneralTab.cbType->setEnabled(true);
 	else {
 		uiGeneralTab.cbType->setEnabled(false);
@@ -598,7 +598,7 @@ void XYDataReductionCurveDock::enableRecalculate() const {
 	if (m_dataReductionCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX!=nullptr && aspectY!=nullptr);
+		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
 	} else {
 		 hasSourceData = (m_dataReductionCurve->dataSourceCurve() != nullptr);
 	}

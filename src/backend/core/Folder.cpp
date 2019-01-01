@@ -103,7 +103,7 @@ bool Folder::load(XmlStreamReader* reader, bool preview) {
 			if (reader->name() == QLatin1String("comment")) {
 				if (!readCommentElement(reader))
 					return false;
-			} else if(reader->name() == QLatin1String("child_aspect")) {
+			} else if (reader->name() == QLatin1String("child_aspect")) {
 				if (!readChildAspectElement(reader, preview))
 					return false;
 			} else {// unknown element

@@ -153,7 +153,7 @@ QMenu* WorksheetElement::createContextMenu() {
 	//don't add the drawing order menu if the parent element has no other children
 	int children = 0;
 	for (auto* child : parentAspect()->children<WorksheetElement>()) {
-		if( !dynamic_cast<Axis*>(child) )
+		if ( !dynamic_cast<Axis*>(child) )
 			children++;
 	}
 
@@ -171,7 +171,7 @@ void WorksheetElement::prepareMoveBehindMenu() {
 	int index = parent->indexOfChild<WorksheetElement>(this);
 	const QVector<WorksheetElement*>& children = parent->children<WorksheetElement>();
 
-	for (int i=0; i<index; ++i) {
+	for (int i = 0; i < index; ++i) {
 		const WorksheetElement* elem = children.at(i);
 		//axes are always drawn on top of other elements, don't add them to the menu
 		if (!dynamic_cast<const Axis*>(elem)) {

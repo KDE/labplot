@@ -350,7 +350,7 @@ bool AbstractSimpleFilter::load(XmlStreamReader* reader, bool preview) {
 
 	QXmlStreamAttributes attribs = reader->attributes();
 	QString str = attribs.value(reader->namespaceUri().toString(), "filter_name").toString();
-	if(str != metaObject()->className()) {
+	if (str != metaObject()->className()) {
 		reader->raiseError(i18n("incompatible filter type"));
 		return false;
 	}

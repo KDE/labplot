@@ -90,49 +90,49 @@ Qt::ItemFlags SpreadsheetModel::flags(const QModelIndex& index) const {
 }
 
 QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
-	if( !index.isValid() )
+	if ( !index.isValid() )
 		return QVariant();
 
 	const int row = index.row();
 	const int col = index.column();
 	const Column* col_ptr = m_spreadsheet->column(col);
 
-	if(!col_ptr)
+	if (!col_ptr)
 		return QVariant();
 
-	switch(role) {
+	switch (role) {
 	case Qt::ToolTipRole:
-		if(col_ptr->isValid(row)) {
-			if(col_ptr->isMasked(row))
+		if (col_ptr->isValid(row)) {
+			if (col_ptr->isMasked(row))
 				return QVariant(i18n("%1, masked (ignored in all operations)", col_ptr->asStringColumn()->textAt(row)));
 			else
 				return QVariant(col_ptr->asStringColumn()->textAt(row));
 		} else {
-			if(col_ptr->isMasked(row))
+			if (col_ptr->isMasked(row))
 				return QVariant(i18n("invalid cell, masked (ignored in all operations)"));
 			else
 				return QVariant(i18n("invalid cell (ignored in all operations)"));
 		}
 	case Qt::EditRole:
-		if(col_ptr->isValid(row))
+		if (col_ptr->isValid(row))
 			return QVariant(col_ptr->asStringColumn()->textAt(row));
 
 		//m_formula_mode is not used at the moment
-		//if(m_formula_mode)
+		//if (m_formula_mode)
 		//	return QVariant(col_ptr->formula(row));
 
 		break;
 	case Qt::DisplayRole:
-		if(!col_ptr->isValid(row))
+		if (!col_ptr->isValid(row))
 			return QVariant("-");
 
 		//m_formula_mode is not used at the moment
-		//if(m_formula_mode)
+		//if (m_formula_mode)
 		//	return QVariant(col_ptr->formula(row));
 
 		return QVariant(col_ptr->asStringColumn()->textAt(row));
 	case Qt::ForegroundRole:
-		if(!col_ptr->isValid(index.row()))
+		if (!col_ptr->isValid(index.row()))
 			return QVariant(QBrush(Qt::red));
 		break;
 	case MaskingRole:
@@ -140,7 +140,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 	case FormulaRole:
 		return QVariant(col_ptr->formula(row));
 // 	case Qt::DecorationRole:
-// 		if(m_formula_mode)
+// 		if (m_formula_mode)
 // 			return QIcon(QPixmap(":/equals.png")); //TODO
 	}
 
@@ -152,9 +152,9 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 		|| (orientation == Qt::Vertical && section > m_spreadsheet->rowCount()-1) )
 		return QVariant();
 
-	switch(orientation) {
+	switch (orientation) {
 	case Qt::Horizontal:
-		switch(role) {
+		switch (role) {
 		case Qt::DisplayRole:
 		case Qt::ToolTipRole:
 		case Qt::EditRole:
@@ -166,7 +166,7 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 		}
 		break;
 	case Qt::Vertical:
-		switch(role) {
+		switch (role) {
 		case Qt::DisplayRole:
 		case Qt::ToolTipRole:
 			return m_vertical_header_data.at(section);
@@ -211,7 +211,7 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 			return false;
 	}
 
-	switch(role) {
+	switch (role) {
 	case Qt::EditRole: {
 		// remark: the validity of the cell is determined by the input filter
 		if (m_formula_mode)
@@ -403,7 +403,7 @@ void SpreadsheetModel::updateVerticalHeader() {
 	if (new_rows > old_rows) {
 		beginInsertRows(QModelIndex(), old_rows, new_rows-1);
 
-		for(int i = old_rows+1; i <= new_rows; i++)
+		for (int i = old_rows+1; i <= new_rows; i++)
 			m_vertical_header_data << i;
 
 		endInsertRows();
@@ -420,17 +420,17 @@ void SpreadsheetModel::updateVerticalHeader() {
 void SpreadsheetModel::updateHorizontalHeader() {
 	int column_count = m_spreadsheet->childCount<Column>();
 
-	while(m_horizontal_header_data.size() < column_count)
+	while (m_horizontal_header_data.size() < column_count)
 		m_horizontal_header_data << QString();
 
-	while(m_horizontal_header_data.size() > column_count)
+	while (m_horizontal_header_data.size() > column_count)
 		m_horizontal_header_data.removeLast();
 
 	for (int i = 0; i < column_count; i++) {
 		Column* col = m_spreadsheet->child<Column>(i);
 
 		QString type;
-		switch(col->columnMode()) {
+		switch (col->columnMode()) {
 		case AbstractColumn::Numeric:
 			type = QLatin1String(" {") + i18n("Numeric") + QLatin1Char('}');
 			break;
@@ -452,7 +452,7 @@ void SpreadsheetModel::updateHorizontalHeader() {
 		}
 
 		QString designation;
-		switch(col->plotDesignation()) {
+		switch (col->plotDesignation()) {
 		case AbstractColumn::NoDesignation:
 			break;
 		case AbstractColumn::X:

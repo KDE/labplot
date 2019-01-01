@@ -355,8 +355,8 @@ void AxisDock::setModel() {
 */
 void AxisDock::setAxes(QList<Axis*> list) {
 	m_initializing = true;
-	m_axesList=list;
-	m_axis=list.first();
+	m_axesList = list;
+	m_axis = list.first();
 	Q_ASSERT(m_axis != nullptr);
 	m_aspectTreeModel = new AspectTreeModel(m_axis->project());
 	this->setModel();
@@ -621,7 +621,7 @@ void AxisDock::startChanged() {
 			                   i18n("The axes lower limit has a non-positive value. Default minimal value will be used."),
 			                   i18n("Wrong lower limit value") );
 			ui.leStart->setText( "0.01" );
-			value=0.01;
+			value = 0.01;
 		}
 	} else if (scale == Axis::ScaleSqrt) {
 		if (value < 0) {
@@ -629,7 +629,7 @@ void AxisDock::startChanged() {
 			                   i18n("The axes lower limit has a negative value. Default minimal value will be used."),
 			                   i18n("Wrong lower limit value") );
 			ui.leStart->setText( "0" );
-			value=0;
+			value = 0;
 		}
 	}
 
@@ -712,7 +712,7 @@ void AxisDock::lineColorChanged(const QColor& color) {
 
 	QPen pen;
 	for (auto* axis : m_axesList) {
-		pen=axis->linePen();
+		pen = axis->linePen();
 		pen.setColor(color);
 		axis->setLinePen(pen);
 	}
@@ -728,7 +728,7 @@ void AxisDock::lineWidthChanged(double  value) {
 
 	QPen pen;
 	for (auto* axis : m_axesList) {
-		pen=axis->linePen();
+		pen = axis->linePen();
 		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Point));
 		axis->setLinePen(pen);
 	}
@@ -912,7 +912,7 @@ void AxisDock::majorTicksColorChanged(const QColor& color) {
 
 	QPen pen;
 	for (auto* axis : m_axesList) {
-		pen=axis->majorTicksPen();
+		pen = axis->majorTicksPen();
 		pen.setColor(color);
 		axis->setMajorTicksPen(pen);
 	}
@@ -928,7 +928,7 @@ void AxisDock::majorTicksWidthChanged(double value) {
 
 	QPen pen;
 	for (auto* axis : m_axesList) {
-		pen=axis->majorTicksPen();
+		pen = axis->majorTicksPen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		axis->setMajorTicksPen(pen);
 	}
@@ -1077,7 +1077,7 @@ void AxisDock::minorTicksColorChanged(const QColor& color) {
 
 	QPen pen;
 	for (auto* axis : m_axesList) {
-		pen=axis->minorTicksPen();
+		pen = axis->minorTicksPen();
 		pen.setColor(color);
 		axis->setMinorTicksPen(pen);
 	}
@@ -1270,7 +1270,7 @@ void AxisDock::majorGridColorChanged(const QColor& color) {
 
 	QPen pen;
 	for (auto* axis : m_axesList) {
-		pen=axis->majorGridPen();
+		pen = axis->majorGridPen();
 		pen.setColor(color);
 		axis->setMajorGridPen(pen);
 	}
@@ -1346,7 +1346,7 @@ void AxisDock::minorGridWidthChanged(double  value) {
 
 	QPen pen;
 	for (auto* axis : m_axesList) {
-		pen=axis->minorGridPen();
+		pen = axis->minorGridPen();
 		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Point));
 		axis->setMinorGridPen(pen);
 	}
@@ -1789,13 +1789,13 @@ void AxisDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
 	int index = config.name().lastIndexOf(QDir::separator());
-	if (index!=-1)
+	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else
 		name = config.name();
 
 	int size = m_axesList.size();
-	if (size>1)
+	if (size > 1)
 		m_axis->beginMacro(i18n("%1 axes: template \"%2\" loaded", size, name));
 	else
 		m_axis->beginMacro(i18n("%1: template \"%2\" loaded", m_axis->name(), name));

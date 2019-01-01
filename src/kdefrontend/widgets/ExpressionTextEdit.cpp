@@ -113,13 +113,13 @@ bool ExpressionTextEdit::isValid() const {
 void ExpressionTextEdit::setExpressionType(XYEquationCurve::EquationType type) {
 	m_expressionType = type;
 	m_variables.clear();
-	if (type==XYEquationCurve::Cartesian)
+	if (type == XYEquationCurve::Cartesian)
 		m_variables<<"x";
-	else if (type==XYEquationCurve::Polar)
+	else if (type == XYEquationCurve::Polar)
 		m_variables<<"phi";
-	else if (type==XYEquationCurve::Parametric)
+	else if (type == XYEquationCurve::Parametric)
 		m_variables<<"t";
-	else if (type==XYEquationCurve::Implicit)
+	else if (type == XYEquationCurve::Implicit)
 		m_variables<<"x"<<"y";
 
 	m_highlighter->setVariables(m_variables);

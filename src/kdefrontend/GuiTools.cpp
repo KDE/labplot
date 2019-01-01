@@ -107,7 +107,7 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 			action->setCheckable(true);
 			menu->addAction( action );
 		}
-	}else{
+	} else {
 		for (int i = 0; i < 6; i++) {
 			pm.fill(Qt::transparent);
 			pa.begin( &pm );

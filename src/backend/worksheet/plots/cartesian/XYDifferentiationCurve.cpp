@@ -327,9 +327,9 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader, bool preview) {
 				delete column;
 				return false;
 			}
-			if (column->name()=="x")
+			if (column->name() == "x")
 				d->xColumn = column;
-			else if (column->name()=="y")
+			else if (column->name() == "y")
 				d->yColumn = column;
 		}
 	}

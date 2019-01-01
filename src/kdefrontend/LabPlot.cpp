@@ -91,7 +91,7 @@ int main (int argc, char *argv[]) {
 	if (args.count() > 0)
 		filename = args[0];
 
-	if(!filename.isEmpty() ) {
+	if (!filename.isEmpty() ) {
 		//determine the absolute file path in order to properly save it in MainWin in "Recent Files"
 		QDir dir;
 		filename = dir.absoluteFilePath(filename);
@@ -142,7 +142,7 @@ int main (int argc, char *argv[]) {
 	MainWin* window = new MainWin(nullptr, filename);
 	window->show();
 
-	if(splash)
+	if (splash)
 		splash->finish(window);
 
 	if (parser.isSet(presenterOption))

@@ -132,7 +132,7 @@ bool AbstractFilter::input(int port, const AbstractColumn* source) {
 		inputPlotDesignationAboutToChange(old_input);
 		inputMaskingAboutToChange(old_input);
 		inputDataAboutToChange(old_input);
-		if(source && source->columnMode() != old_input->columnMode())
+		if (source && source->columnMode() != old_input->columnMode())
 			inputModeAboutToChange(old_input);
 	}
 	if (!source)
@@ -140,7 +140,7 @@ bool AbstractFilter::input(int port, const AbstractColumn* source) {
 	m_inputs[port] = source;
 	if (source) { // we have a new source
 //		DEBUG("	new source");
-		if(old_input && source->columnMode() != old_input->columnMode())
+		if (old_input && source->columnMode() != old_input->columnMode())
 			inputModeAboutToChange(source);
 		inputDataChanged(source);
 		inputMaskingChanged(source);
@@ -164,13 +164,13 @@ bool AbstractFilter::input(int port, const AbstractColumn* source) {
 		connect(source, &AbstractColumn::maskingAboutToChange, this, &AbstractFilter::inputMaskingAboutToChange);
 		connect(source, &AbstractColumn::maskingChanged, this, &AbstractFilter::inputMaskingChanged);
 		connect(source, &AbstractColumn::aboutToBeDestroyed, this, &AbstractFilter::inputAboutToBeDestroyed);
-	} else { // source==0, that is, the input port has been disconnected
+	} else { // source == 0, that is, the input port has been disconnected
 //		DEBUG("	no source");
 		// try to shrink m_inputs
 		int num_connected_inputs = m_inputs.size();
 		while (m_inputs.at(num_connected_inputs-1) == nullptr) {
 			num_connected_inputs--;
-			if(!num_connected_inputs) break;
+			if (!num_connected_inputs) break;
 		}
 		m_inputs.resize(num_connected_inputs);
 	}

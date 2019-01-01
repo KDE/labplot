@@ -139,7 +139,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 
 void XYInterpolationCurveDock::initGeneralTab() {
 	//if there are more then one curve in the list, disable the tab "general"
-	if (m_curvesList.size()==1) {
+	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
@@ -147,7 +147,7 @@ void XYInterpolationCurveDock::initGeneralTab() {
 
 		uiGeneralTab.leName->setText(m_curve->name());
 		uiGeneralTab.leComment->setText(m_curve->comment());
-	}else {
+	} else {
 		uiGeneralTab.lName->setEnabled(false);
 		uiGeneralTab.leName->setEnabled(false);
 		uiGeneralTab.lComment->setEnabled(false);
@@ -208,7 +208,7 @@ void XYInterpolationCurveDock::setModel() {
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
-	for(XYCurve* curve: m_curvesList)
+	for (XYCurve* curve: m_curvesList)
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
@@ -228,9 +228,9 @@ void XYInterpolationCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing=true;
-	m_curvesList=list;
-	m_curve=list.first();
+	m_initializing = true;
+	m_curvesList = list;
+	m_curve = list.first();
 	m_interpolationCurve = dynamic_cast<XYInterpolationCurve*>(m_curve);
 	Q_ASSERT(m_interpolationCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
@@ -238,7 +238,7 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_interpolationData = m_interpolationCurve->interpolationData();
 	initGeneralTab();
 	initTabs();
-	m_initializing=false;
+	m_initializing = false;
 
 	//hide the "skip gaps" option after the curves were set
 	ui.lLineSkipGaps->hide();
@@ -283,7 +283,7 @@ void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	for(XYCurve* curve: m_curvesList)
+	for (XYCurve* curve: m_curvesList)
 		dynamic_cast<XYInterpolationCurve*>(curve)->setDataSourceType(type);
 }
 
@@ -301,7 +301,7 @@ void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) 
 	if (m_initializing)
 		return;
 
-	for(XYCurve* curve: m_curvesList)
+	for (XYCurve* curve: m_curvesList)
 		dynamic_cast<XYInterpolationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
@@ -318,7 +318,7 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	for(XYCurve* curve: m_curvesList)
+	for (XYCurve* curve: m_curvesList)
 		dynamic_cast<XYInterpolationCurve*>(curve)->setXDataColumn(column);
 }
 
@@ -337,7 +337,7 @@ void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
 		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
 			n++;
 	dataPoints = n;
-	if(m_interpolationData.pointsMode == XYInterpolationCurve::Auto)
+	if (m_interpolationData.pointsMode == XYInterpolationCurve::Auto)
 		pointsModeChanged();
 
 	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
@@ -410,7 +410,7 @@ void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	for(XYCurve* curve: m_curvesList)
+	for (XYCurve* curve: m_curvesList)
 		dynamic_cast<XYInterpolationCurve*>(curve)->setYDataColumn(column);
 }
 
@@ -579,7 +579,7 @@ void XYInterpolationCurveDock::pointsModeChanged() {
 		break;
 	case XYInterpolationCurve::Multiple:
 		uiGeneralTab.sbPoints->setEnabled(true);
-		if(m_interpolationData.pointsMode != XYInterpolationCurve::Multiple && dataPoints > 0) {
+		if (m_interpolationData.pointsMode != XYInterpolationCurve::Multiple && dataPoints > 0) {
 			uiGeneralTab.sbPoints->setDecimals(2);
 			uiGeneralTab.sbPoints->setValue(uiGeneralTab.sbPoints->value()/(double)dataPoints);
 			uiGeneralTab.sbPoints->setSingleStep(0.01);
@@ -587,7 +587,7 @@ void XYInterpolationCurveDock::pointsModeChanged() {
 		break;
 	case XYInterpolationCurve::Custom:
 		uiGeneralTab.sbPoints->setEnabled(true);
-		if(m_interpolationData.pointsMode == XYInterpolationCurve::Multiple) {
+		if (m_interpolationData.pointsMode == XYInterpolationCurve::Multiple) {
 			uiGeneralTab.sbPoints->setDecimals(0);
 			uiGeneralTab.sbPoints->setSingleStep(1.0);
 			uiGeneralTab.sbPoints->setValue(uiGeneralTab.sbPoints->value()*dataPoints);
@@ -599,14 +599,14 @@ void XYInterpolationCurveDock::pointsModeChanged() {
 }
 
 void XYInterpolationCurveDock::numberOfPointsChanged() {
-	if(uiGeneralTab.cbPointsMode->currentIndex() == XYInterpolationCurve::Multiple)
+	if (uiGeneralTab.cbPointsMode->currentIndex() == XYInterpolationCurve::Multiple)
 		m_interpolationData.npoints = uiGeneralTab.sbPoints->value()*dataPoints;
 	else
 		m_interpolationData.npoints = uiGeneralTab.sbPoints->value();
 
 	// warn if points is smaller than data points
 	QPalette palette = uiGeneralTab.sbPoints->palette();
-	if(m_interpolationData.npoints < dataPoints)
+	if (m_interpolationData.npoints < dataPoints)
 		palette.setColor(QPalette::Text, Qt::red);
 	else
 		palette.setColor(QPalette::Text, Qt::black);
@@ -618,7 +618,7 @@ void XYInterpolationCurveDock::numberOfPointsChanged() {
 void XYInterpolationCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-	for(XYCurve* curve: m_curvesList)
+	for (XYCurve* curve: m_curvesList)
 		dynamic_cast<XYInterpolationCurve*>(curve)->setInterpolationData(m_interpolationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
@@ -635,7 +635,7 @@ void XYInterpolationCurveDock::enableRecalculate() const {
 	if (m_interpolationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX!=nullptr && aspectY!=nullptr);
+		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
 	} else {
 		 hasSourceData = (m_interpolationCurve->dataSourceCurve() != nullptr);
 	}

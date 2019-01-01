@@ -441,7 +441,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->xyCorrelationCurveDock->setCurves(list);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyCorrelationCurveDock);
-	} else if (className=="Histogram") {
+	} else if (className == "Histogram") {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Histogram Properties"));
 
 		if (!m_mainWindow->histogramDock) {
@@ -523,7 +523,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->projectDock->setProject(m_mainWindow->m_project);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->projectDock);
-	} else if (className=="CantorWorksheet") {
+	} else if (className == "CantorWorksheet") {
 #ifdef HAVE_CANTOR_LIBS
 		if (!m_mainWindow->cantorWorksheetDock) {
 			m_mainWindow->cantorWorksheetDock = new CantorWorksheetDock(m_mainWindow->stackedWidget);
@@ -587,12 +587,12 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 			const QString clientName = qobject_cast<MQTTSubscription*>(aspect)->mqttClient()->name();
 			bool found = false;
 			for (const auto* client : list) {
-				if(client->name() == clientName) {
+				if (client->name() == clientName) {
 					found = true;
 					break;
 				}
 			}
-			if(!found)
+			if (!found)
 				list << qobject_cast<MQTTSubscription*>(aspect)->mqttClient();
 		}
 		m_mainWindow->m_liveDataDock->setMQTTClients(list);
@@ -611,12 +611,12 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 			QString clientName = qobject_cast<MQTTClient*>(qobject_cast<MQTTTopic*>(aspect)->mqttClient())->name();
 			bool found = false;
 			for (const auto* client : list) {
-				if(client->name() == clientName) {
+				if (client->name() == clientName) {
 					found = true;
 					break;
 				}
 			}
-			if(!found)
+			if (!found)
 				list << qobject_cast<MQTTClient*>(qobject_cast<MQTTTopic*>(aspect)->mqttClient());
 		}
 		m_mainWindow->m_liveDataDock->setMQTTClients(list);

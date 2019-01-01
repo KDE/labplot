@@ -195,7 +195,7 @@ void Axis::init() {
 	d->labelsPrecision = group.readEntry("LabelsPrecision", 1);
 	d->labelsDateTimeFormat = group.readEntry("LabelsDateTimeFormat", "yyyy-MM-dd hh:mm:ss");
 	d->labelsPosition = (Axis::LabelsPosition) group.readEntry("LabelsPosition", (int) Axis::LabelsOut);
-	d->labelsOffset= group.readEntry("LabelsOffset",  Worksheet::convertToSceneUnits( 5.0, Worksheet::Point ));
+	d->labelsOffset = group.readEntry("LabelsOffset",  Worksheet::convertToSceneUnits( 5.0, Worksheet::Point ));
 	d->labelsRotationAngle = group.readEntry("LabelsRotation", 0);
 	d->labelsFont = group.readEntry("LabelsFont", QFont());
 	d->labelsFont.setPixelSize( Worksheet::convertToSceneUnits( 10.0, Worksheet::Point ) );
@@ -1218,7 +1218,7 @@ void AxisPrivate::retransformTicks() {
 	QPointF anchorPoint;
 	QPointF startPoint;
 	QPointF endPoint;
-	qreal majorTickPos=0.0;
+	qreal majorTickPos = 0.0;
 	qreal minorTickPos;
 	qreal nextMajorTickPos = 0.0;
 	const int xDirection = cSystem->xDirection();
@@ -1668,7 +1668,7 @@ void AxisPrivate::retransformMajorGrid() {
 		double yMin = plot->yMin();
 		double yMax = plot->yMax();
 
-		for (int i=start; i<end; ++i) {
+		for (int i = start; i < end; ++i) {
 			const QPointF& point = logicalMajorTickPoints.at(i);
 			lines.append( QLineF(point.x(), yMin, point.x(), yMax) );
 		}
@@ -1783,7 +1783,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		//determine the new position of the title label:
 		//we calculate the new position here and not in retransform(),
 		//since it depends on the size and position of the tick labels, tickLabelsPath, available here.
-		QRectF rect=linePath.boundingRect();
+		QRectF rect = linePath.boundingRect();
 		qreal offsetX = titleOffsetX - labelsOffset; //the distance to the axis line
 		qreal offsetY = titleOffsetY - labelsOffset; //the distance to the axis line
 		if (orientation == Axis::AxisHorizontal) {
@@ -1871,12 +1871,12 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		}
 	}
 
-	if (m_hovered && !isSelected() && !m_printing){
+	if (m_hovered && !isSelected() && !m_printing) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
 		painter->drawPath(axisShape);
 	}
 
-	if (isSelected() && !m_printing){
+	if (isSelected() && !m_printing) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(axisShape);
 	}

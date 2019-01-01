@@ -678,8 +678,8 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 		return;
 	}
 
-	float x=layoutLeftMargin;
-	float y=layoutTopMargin;
+	float x = layoutLeftMargin;
+	float y = layoutTopMargin;
 	float w, h;
 	int count = list.count();
 	if (layout == Worksheet::VerticalLayout) {
@@ -705,7 +705,7 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 
 		w = (m_scene->sceneRect().width()-layoutLeftMargin-layoutRightMargin- (layoutColumnCount-1)*layoutHorizontalSpacing)/layoutColumnCount;
 		h = (m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (layoutRowCount-1)*layoutVerticalSpacing)/layoutRowCount;
-		int columnIndex=0; //counts the columns in a row
+		int columnIndex = 0; //counts the columns in a row
 		for (auto* elem : list) {
 			setContainerRect(elem, x, y, h, w, undoable);
 			x += w + layoutHorizontalSpacing;
@@ -749,7 +749,7 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	//applied theme
-	if (!d->theme.isEmpty()){
+	if (!d->theme.isEmpty()) {
 		writer->writeStartElement( "theme" );
 		writer->writeAttribute("name", d->theme);
 		writer->writeEndElement();

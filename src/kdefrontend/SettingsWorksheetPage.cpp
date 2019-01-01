@@ -139,7 +139,7 @@ void SettingsWorksheetPage::checkTeX(int engineIndex) {
 	}
 
 	QString engine = ui.cbTexEngine->itemData(engineIndex).toString();
-	if (engine=="latex") {
+	if (engine == "latex") {
 		//to convert the generated PS files to DVI we need 'dvips'
 		if (!TeXRenderer::executableExists(QLatin1String("dvips"))) {
 			ui.lLatexWarning->show();

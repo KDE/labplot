@@ -118,7 +118,7 @@ void ThemesWidget::applyClicked(const QModelIndex& index) {
 	const QString& themeName = index.data(Qt::DisplayRole).toString();
 
 	//TODO: activate this later
-// 	if(themeName=="file_download_theme")
+// 	if (themeName == "file_download_theme")
 // 		this->downloadThemes();
 // 	else
 

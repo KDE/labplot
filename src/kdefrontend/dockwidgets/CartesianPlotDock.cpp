@@ -501,7 +501,7 @@ void CartesianPlotDock::rangeLastChanged(const QString& text) {
 }
 
 void CartesianPlotDock::autoScaleXChanged(int state) {
-	bool checked = (state==Qt::Checked);
+	bool checked = (state == Qt::Checked);
 	ui.cbXRangeFormat->setEnabled(!checked);
 	ui.leXMin->setEnabled(!checked);
 	ui.leXMax->setEnabled(!checked);
@@ -584,7 +584,7 @@ void CartesianPlotDock::xRangeFormatChanged(int index) {
 }
 
 void CartesianPlotDock::autoScaleYChanged(int state) {
-	bool checked = (state==Qt::Checked);
+	bool checked = (state == Qt::Checked);
 	ui.cbYRangeFormat->setEnabled(!checked);
 	ui.leYMin->setEnabled(!checked);
 	ui.leYMax->setEnabled(!checked);
@@ -1046,7 +1046,7 @@ void CartesianPlotDock::selectFile() {
 	QString formats;
 	for (const auto& format : QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
-		formats.isEmpty() ? formats+=f : formats+=' '+f;
+		formats.isEmpty() ? formats += f : formats += ' ' + f;
 	}
 
 	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
@@ -1597,6 +1597,6 @@ void CartesianPlotDock::loadTheme(const QString& theme) {
 }
 
 void CartesianPlotDock::saveTheme(KConfig& config) const {
-	if(!m_plotList.isEmpty())
+	if (!m_plotList.isEmpty())
 		m_plotList.at(0)->saveTheme(config);
 }

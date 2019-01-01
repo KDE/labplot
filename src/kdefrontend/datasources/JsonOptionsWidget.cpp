@@ -187,7 +187,7 @@ void JsonOptionsWidget::setTooltips() {
 QVector<int> JsonOptionsWidget::getIndexRows(const QModelIndex &index) const {
 	QVector<int> rows;
 	QModelIndex current = index;
-	while(current.isValid()){
+	while (current.isValid()) {
 		rows.prepend(current.row());
 		current = current.parent();
 	}

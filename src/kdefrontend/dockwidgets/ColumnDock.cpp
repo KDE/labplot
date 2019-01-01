@@ -129,7 +129,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 
 void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 	ui.cbType->setCurrentIndex(ui.cbType->findData((int)mode));
-	switch(mode) {
+	switch (mode) {
 	case AbstractColumn::Numeric: {
 			auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
 			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->numericFormat()));
@@ -270,7 +270,7 @@ void ColumnDock::typeChanged(int index) {
 	this->updateFormatWidgets(columnMode);
 	m_initializing = false;
 
-	switch(columnMode) {
+	switch (columnMode) {
 	case AbstractColumn::Numeric: {
 			int digits = ui.sbPrecision->value();
 			for (auto* col : m_columnsList) {
@@ -326,7 +326,7 @@ void ColumnDock::formatChanged(int index) {
 	AbstractColumn::ColumnMode mode = (AbstractColumn::ColumnMode)ui.cbType->itemData(ui.cbType->currentIndex()).toInt();
 	int format_index = index;
 
-	switch(mode) {
+	switch (mode) {
 	case AbstractColumn::Numeric: {
 			for (auto* col : m_columnsList) {
 				auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
@@ -400,7 +400,7 @@ void ColumnDock::columnFormatChanged() {
 	DEBUG("ColumnDock::columnFormatChanged()");
 	m_initializing = true;
 	AbstractColumn::ColumnMode columnMode = m_column->columnMode();
-	switch(columnMode) {
+	switch (columnMode) {
 	case AbstractColumn::Numeric: {
 			auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
 			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->numericFormat()));

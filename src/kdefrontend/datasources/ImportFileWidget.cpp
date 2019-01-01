@@ -981,14 +981,14 @@ void ImportFileWidget::unsubscribeFromTopic(const QString& topicName) {
 	m_mqttReadyForPreview = false;
 
 	QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
-	while(i.hasNext()) {
+	while (i.hasNext()) {
 		i.next();
 		if (checkTopicContains(topicName, i.key().name()))
 			m_messageArrived.remove(i.key());
 	}
 
 	QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
-	while(j.hasNext()) {
+	while (j.hasNext()) {
 		j.next();
 		if (checkTopicContains(topicName, j.key().name()))
 			m_lastMessage.remove(j.key());
@@ -1040,7 +1040,7 @@ void ImportFileWidget::addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWid
 		//if it has children, then we add it as a # wildcrad containing topic
 		if (topic->child(i)->childCount() > 0) {
 			name.append(temp->text(0) + "/#");
-			while(temp->parent() != nullptr) {
+			while (temp->parent() != nullptr) {
 				temp = temp->parent();
 				name.prepend(temp->text(0) + '/');
 			}
@@ -1049,7 +1049,7 @@ void ImportFileWidget::addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWid
 		//if not then we simply add the topic itself
 		else {
 			name.append(temp->text(0));
-			while(temp->parent() != nullptr) {
+			while (temp->parent() != nullptr) {
 				temp = temp->parent();
 				name.prepend(temp->text(0) + '/');
 			}
@@ -1160,7 +1160,7 @@ int ImportFileWidget::checkCommonChildCount(int levelIdx, int level, QStringList
 void ImportFileWidget::manageCommonLevelSubscriptions() {
 	bool foundEqual = false;
 
-	do{
+	do {
 		foundEqual = false;
 		QMap<QString, QVector<QString>> equalTopicsMap;
 		QVector<QString> equalTopics;
@@ -1190,7 +1190,7 @@ void ImportFileWidget::manageCommonLevelSubscriptions() {
 			QMapIterator<QString, QVector<QString>> topics(equalTopicsMap);
 
 			//check for every map entry, if the found topics can be merged or not
-			while(topics.hasNext()) {
+			while (topics.hasNext()) {
 				topics.next();
 
 				int level = commonLevelIndex(topics.value().last(), topics.value().first());
@@ -1270,7 +1270,7 @@ void ImportFileWidget::manageCommonLevelSubscriptions() {
 				}
 			}
 		}
-	} while(foundEqual);
+	} while (foundEqual);
 }
 
 /*!
@@ -1344,7 +1344,7 @@ void ImportFileWidget::restoreSubscriptionChildren(QTreeWidgetItem * topic, QTre
 				name.append('/' + list[j]);
 			}
 			QTreeWidgetItem* temp = topic->child(i);
-			while(temp->parent() != nullptr) {
+			while (temp->parent() != nullptr) {
 				temp = temp->parent();
 				name.prepend(temp->text(0) + '/');
 			}
@@ -1596,7 +1596,7 @@ void ImportFileWidget::fileTypeChanged(int index) {
 // file type specific option widgets
 void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) {
 	DEBUG("ImportFileWidget::initOptionsWidget for " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
-	switch(fileType) {
+	switch (fileType) {
 	case AbstractFileFilter::Ascii:
 		if (!m_asciiOptionsWidget) {
 			QWidget* asciiw = new QWidget();
@@ -1847,7 +1847,7 @@ void ImportFileWidget::refreshPreview() {
 			if (m_mqttReadyForPreview) {
 				filter->vectorNames().clear();
 				QMapIterator<QMqttTopicName, QMqttMessage> i(m_lastMessage);
-				while(i.hasNext()) {
+				while (i.hasNext()) {
 					i.next();
 					filter->MQTTPreview(importedStrings, QString(i.value().payload().data()), i.key().name() );
 					if (importedStrings.isEmpty())
@@ -1855,7 +1855,7 @@ void ImportFileWidget::refreshPreview() {
 				}
 
 				QMapIterator<QMqttTopicName, bool> j(m_messageArrived);
-				while(j.hasNext()) {
+				while (j.hasNext()) {
 					j.next();
 					m_messageArrived[j.key()] = false;
 				}
@@ -2420,7 +2420,7 @@ void ImportFileWidget::mqttSubscribe() {
 	if (item->childCount() != 0)
 		name.append("/#");
 
-	while(tempItem->parent()) {
+	while (tempItem->parent()) {
 		tempItem = tempItem->parent();
 		name.prepend(tempItem->text(0) + '/');
 	}
@@ -2524,7 +2524,7 @@ void ImportFileWidget::mqttUnsubscribe() {
 	//otherwise we remove the selected item, but subscribe to every other topic, that was contained by
 	//the selected item's parent subscription(top level item of twSubscriptions)
 	else {
-		while(unsubscribeItem->parent() != nullptr) {
+		while (unsubscribeItem->parent() != nullptr) {
 			for (int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
 				if (unsubscribeItem->text(0) != unsubscribeItem->parent()->child(i)->text(0)) {
 					const QMqttTopicFilter filter {unsubscribeItem->parent()->child(i)->text(0)};
@@ -2691,7 +2691,7 @@ void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) 
 	//check if the client received a message from every subscribed topic, since the last time the preview was refreshed
 	bool check = true;
 	QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
-	while(i.hasNext()) {
+	while (i.hasNext()) {
 		i.next();
 		if (i.value() == false ) {
 			check = false;

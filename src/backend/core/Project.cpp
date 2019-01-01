@@ -313,13 +313,13 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	while (!(reader->isStartDocument() || reader->atEnd()))
 		reader->readNext();
 
-	if(!(reader->atEnd())) {
+	if (!(reader->atEnd())) {
 		if (!reader->skipToNextTag())
 			return false;
 
 		if (reader->name() == "project") {
 			QString version = reader->attributes().value("version").toString();
-			if(version.isEmpty())
+			if (version.isEmpty())
 				reader->raiseWarning(i18n("Attribute 'version' is missing."));
 			else
 				d->version = version;
@@ -336,10 +336,10 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 					if (reader->name() == "comment") {
 						if (!readCommentElement(reader))
 							return false;
-					} else if(reader->name() == "child_aspect") {
+					} else if (reader->name() == "child_aspect") {
 						if (!readChildAspectElement(reader, preview))
 							return false;
-					} else if(reader->name() == "state") {
+					} else if (reader->name() == "state") {
 						//load the state of the views (visible, maximized/minimized/geometry)
 						//and the state of the project explorer (expanded items, currently selected item)
 						emit requestLoadState(reader);
@@ -438,7 +438,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 bool Project::readProjectAttributes(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs = reader->attributes();
 	QString str = attribs.value(reader->namespaceUri().toString(), "fileName").toString();
-	if(str.isEmpty()) {
+	if (str.isEmpty()) {
 		reader->raiseError(i18n("Project file name missing."));
 		return false;
 	}
@@ -446,7 +446,7 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 
 	str = attribs.value(reader->namespaceUri().toString(), "modificationTime").toString();
 	QDateTime modificationTime = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
-	if(str.isEmpty() || !modificationTime.isValid()) {
+	if (str.isEmpty() || !modificationTime.isValid()) {
 		reader->raiseWarning(i18n("Invalid project modification time. Using current time."));
 		d->modificationTime = QDateTime::currentDateTime();
 	} else

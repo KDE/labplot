@@ -649,7 +649,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		}
 
 		QString format;
-		switch(column.valueType) {
+		switch (column.valueType) {
 		case Origin::Numeric: {
 			for (unsigned int i = column.beginRow; i < column.endRow; ++i) {
 				const double value = column.data.at(i).as_double();
@@ -705,37 +705,37 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		case Origin::Time: {
 			switch (column.valueTypeSpecification + 128) {
 			case Origin::TIME_HH_MM:
-				format="hh:mm";
+				format = "hh:mm";
 				break;
 			case Origin::TIME_HH:
-				format="hh";
+				format = "hh";
 				break;
 			case Origin::TIME_HH_MM_SS:
-				format="hh:mm:ss";
+				format = "hh:mm:ss";
 				break;
 			case Origin::TIME_HH_MM_SS_ZZ:
-				format="hh:mm:ss.zzz";
+				format = "hh:mm:ss.zzz";
 				break;
 			case Origin::TIME_HH_AP:
-				format="hh ap";
+				format = "hh ap";
 				break;
 			case Origin::TIME_HH_MM_AP:
-				format="hh:mm ap";
+				format = "hh:mm ap";
 				break;
 			case Origin::TIME_MM_SS:
-				format="mm:ss";
+				format = "mm:ss";
 				break;
 			case Origin::TIME_MM_SS_ZZ:
-				format="mm:ss.zzz";
+				format = "mm:ss.zzz";
 				break;
 			case Origin::TIME_HHMM:
-				format="hhmm";
+				format = "hhmm";
 				break;
 			case Origin::TIME_HHMMSS:
-				format="hhmmss";
+				format = "hhmmss";
 				break;
 			case Origin::TIME_HH_MM_SS_ZZZ:
-				format="hh:mm:ss.zzz";
+				format = "hh:mm:ss.zzz";
 				break;
 			}
 
@@ -750,54 +750,54 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		case Origin::Date: {
 			switch (column.valueTypeSpecification) {
 			case Origin::DATE_DD_MM_YYYY:
-				format="dd/MM/yyyy";
+				format = "dd/MM/yyyy";
 				break;
 			case Origin::DATE_DD_MM_YYYY_HH_MM:
-				format="dd/MM/yyyy HH:mm";
+				format = "dd/MM/yyyy HH:mm";
 				break;
 			case Origin::DATE_DD_MM_YYYY_HH_MM_SS:
-				format="dd/MM/yyyy HH:mm:ss";
+				format = "dd/MM/yyyy HH:mm:ss";
 				break;
 			case Origin::DATE_DDMMYYYY:
 			case Origin::DATE_DDMMYYYY_HH_MM:
 			case Origin::DATE_DDMMYYYY_HH_MM_SS:
-				format="dd.MM.yyyy";
+				format = "dd.MM.yyyy";
 					break;
 			case Origin::DATE_MMM_D:
-				format="MMM d";
+				format = "MMM d";
 				break;
 			case Origin::DATE_M_D:
-				format="M/d";
+				format = "M/d";
 				break;
 			case Origin::DATE_D:
-				format='d';
+				format = 'd';
 				break;
 			case Origin::DATE_DDD:
 			case Origin::DATE_DAY_LETTER:
-				format="ddd";
+				format = "ddd";
 				break;
 			case Origin::DATE_YYYY:
-				format="yyyy";
+				format = "yyyy";
 				break;
 			case Origin::DATE_YY:
-				format="yy";
+				format = "yy";
 				break;
 			case Origin::DATE_YYMMDD:
 			case Origin::DATE_YYMMDD_HH_MM:
 			case Origin::DATE_YYMMDD_HH_MM_SS:
 			case Origin::DATE_YYMMDD_HHMM:
 			case Origin::DATE_YYMMDD_HHMMSS:
-				format="yyMMdd";
+				format = "yyMMdd";
 				break;
 			case Origin::DATE_MMM:
 			case Origin::DATE_MONTH_LETTER:
-				format="MMM";
+				format = "MMM";
 				break;
 			case Origin::DATE_M_D_YYYY:
-				format="M-d-yyyy";
+				format = "M-d-yyyy";
 				break;
 			default:
-				format="dd.MM.yyyy";
+				format = "dd.MM.yyyy";
 			}
 
 			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
@@ -936,16 +936,16 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetI
 	//int prec = 6;
 	switch (layer.valueTypeSpecification) {
 	case 0: //Decimal 1000
-		format='f';
+		format = 'f';
 	//	prec = layer.decimalPlaces;
 		break;
 	case 1: //Scientific
-		format='e';
+		format = 'e';
 	//	prec = layer.decimalPlaces;
 		break;
 	case 2: //Engineering
 	case 3: //Decimal 1,000
-		format='g';
+		format = 'g';
 	//	prec = layer.significantDigits;
 		break;
 	}
@@ -1038,7 +1038,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			plot->setYMax(originYAxis.max);
 
 			//scales
-			switch(originXAxis.scale) {
+			switch (originXAxis.scale) {
 			case Origin::GraphAxis::Linear:
 				plot->setXScale(CartesianPlot::ScaleLinear);
 				break;
@@ -1061,7 +1061,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				break;
 			}
 
-			switch(originYAxis.scale) {
+			switch (originYAxis.scale) {
 			case Origin::GraphAxis::Linear:
 				plot->setYScale(CartesianPlot::ScaleLinear);
 				break;
@@ -1234,7 +1234,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			for (const auto& originCurve : layer.curves) {
 
 				QString data(originCurve.dataName.c_str());
-				switch(data[0].toLatin1()) {
+				switch (data[0].toLatin1()) {
 				case 'T':
 				case 'E': {
 					if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::Scatter || originCurve.type == Origin::GraphCurve::LineSymbol
@@ -1290,7 +1290,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 					eqData.count = function.totalPoints;
 					eqData.expression1 = QString(function.formula.c_str());
 
-					if(function.type == Origin::Function::Polar) {
+					if (function.type == Origin::Function::Polar) {
 						eqData.type = XYEquationCurve::Polar;
 
 						//replace 'x' by 'phi'
@@ -1374,7 +1374,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->setMinorTicksNumber(originAxis.minorTicks);
 
 	//scale
-	switch(originAxis.scale) {
+	switch (originAxis.scale) {
 	case Origin::GraphAxis::Linear:
 		axis->setScale(Axis::ScaleLinear);
 		break;
@@ -1536,7 +1536,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 	QPen pen = curve->linePen();
 	Qt::PenStyle penStyle(Qt::NoPen);
 	if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::LineSymbol) {
-		switch(originCurve.lineConnect) {
+		switch (originCurve.lineConnect) {
 		case Origin::GraphCurve::NoLine:
 			curve->setLineType(XYCurve::NoLine);
 			break;
@@ -1604,7 +1604,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 	if (originCurve.type == Origin::GraphCurve::Scatter || originCurve.type == Origin::GraphCurve::LineSymbol) {
 		//try to map the different symbols, mapping is not exact
 		curve->setSymbolsRotationAngle(0);
-		switch(originCurve.symbolShape) {
+		switch (originCurve.symbolShape) {
 		case 0: //NoSymbol
 			curve->setSymbolsStyle(Symbol::NoSymbols);
 			break;
@@ -1696,7 +1696,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 	}
 
 	//filling properties
-	if(originCurve.fillArea) {
+	if (originCurve.fillArea) {
 		//TODO: handle unsigned char fillAreaType;
 		//with 'fillAreaType'=0x10 the area between the curve and the x-axis is filled
 		//with 'fillAreaType'=0x14 the area included inside the curve is filled. First and last curve points are joined by a line to close the otherwise open area.
@@ -1710,7 +1710,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			curve->setFillingType(PlotArea::Pattern);
 
 			//map different patterns in originCurve.fillAreaPattern (has the values of Origin::FillPattern) to Qt::BrushStyle;
-			switch(originCurve.fillAreaPattern) {
+			switch (originCurve.fillAreaPattern) {
 			case 0:
 				curve->setFillingBrushStyle(Qt::NoBrush);
 				break;

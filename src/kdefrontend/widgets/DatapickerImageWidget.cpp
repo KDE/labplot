@@ -391,16 +391,16 @@ void DatapickerImageWidget::selectFile() {
 	QString formats;
 	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
-		formats.isEmpty() ? formats+=f : formats+=" "+f;
+		formats.isEmpty() ? formats += f : formats += " " + f;
 	}
 	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
 	if (path.isEmpty())
 		return; //cancel was clicked in the file-dialog
 
 	int pos = path.lastIndexOf(QDir::separator());
-	if (pos!=-1) {
+	if (pos != -1) {
 		QString newDir = path.left(pos);
-		if (newDir!=dir)
+		if (newDir != dir)
 			conf.writeEntry("LastImageDir", newDir);
 	}
 
@@ -488,14 +488,14 @@ void DatapickerImageWidget::pointsStyleChanged(int index) {
 	//enable/disable the  filling options in the GUI depending on the currently selected points.
 	if (style != Symbol::Line && style != Symbol::Cross) {
 		ui.cbSymbolFillingStyle->setEnabled(true);
-		bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex())==Qt::NoBrush);
+		bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex()) == Qt::NoBrush);
 		ui.kcbSymbolFillingColor->setEnabled(!noBrush);
 	} else {
 		ui.kcbSymbolFillingColor->setEnabled(false);
 		ui.cbSymbolFillingStyle->setEnabled(false);
 	}
 
-	bool noLine = (Qt::PenStyle(ui.cbSymbolBorderStyle->currentIndex())== Qt::NoPen);
+	bool noLine = (Qt::PenStyle(ui.cbSymbolBorderStyle->currentIndex()) == Qt::NoPen);
 	ui.kcbSymbolBorderColor->setEnabled(!noLine);
 	ui.sbSymbolBorderWidth->setEnabled(!noLine);
 
@@ -533,7 +533,7 @@ void DatapickerImageWidget::pointsOpacityChanged(int value) {
 
 void DatapickerImageWidget::pointsFillingStyleChanged(int index) {
 	auto brushStyle = Qt::BrushStyle(index);
-	ui.kcbSymbolFillingColor->setEnabled(!(brushStyle==Qt::NoBrush));
+	ui.kcbSymbolFillingColor->setEnabled(!(brushStyle == Qt::NoBrush));
 
 	if (m_initializing)
 		return;
@@ -563,7 +563,7 @@ void DatapickerImageWidget::pointsFillingColorChanged(const QColor& color) {
 }
 
 void DatapickerImageWidget::pointsBorderStyleChanged(int index) {
-	auto penStyle=Qt::PenStyle(index);
+	auto penStyle = Qt::PenStyle(index);
 
 	if ( penStyle == Qt::NoPen ) {
 		ui.kcbSymbolBorderColor->setEnabled(false);
@@ -834,7 +834,7 @@ void DatapickerImageWidget::symbolVisibleChanged(bool on) {
 //******************** SETTINGS ****************************
 //**********************************************************
 void DatapickerImageWidget::load() {
-	if(!m_image)
+	if (!m_image)
 		return;
 
 	m_initializing = true;

@@ -296,7 +296,7 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 	QDataStream in(&device);
 	const int deviceError = prepareStreamToRead(in);
 
-	if(deviceError)
+	if (deviceError)
 		return dataStrings << (QStringList() << i18n("data selection empty"));
 
 	//TODO: support other modes

@@ -358,9 +358,9 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 			endMacro();
 		}
 		m_segments->setSegmentsVisible(false);
-	} else if (pointsType==DatapickerImage::CurvePoints)
+	} else if (pointsType == DatapickerImage::CurvePoints)
 		m_segments->setSegmentsVisible(false);
-	else if (pointsType==DatapickerImage::SegmentPoints) {
+	else if (pointsType == DatapickerImage::SegmentPoints) {
 		d->makeSegments();
 		m_segments->setSegmentsVisible(true);
 	}

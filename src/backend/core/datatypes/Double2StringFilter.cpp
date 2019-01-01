@@ -96,7 +96,7 @@ void Double2StringFilter::setNumDigits(int digits) {
 
 Double2StringFilterSetFormatCmd::Double2StringFilterSetFormatCmd(Double2StringFilter* target, char new_format)
 	: m_target(target), m_other_format(new_format) {
-	if(m_target->parentAspect())
+	if (m_target->parentAspect())
 		setText(i18n("%1: set numeric format to '%2'", m_target->parentAspect()->name(), new_format));
 	else
 		setText(i18n("set numeric format to '%1'", new_format));
@@ -115,7 +115,7 @@ void Double2StringFilterSetFormatCmd::undo() {
 
 Double2StringFilterSetDigitsCmd::Double2StringFilterSetDigitsCmd(Double2StringFilter* target, int new_digits)
 	: m_target(target), m_other_digits(new_digits) {
-	if(m_target->parentAspect())
+	if (m_target->parentAspect())
 		setText(i18n("%1: set decimal digits to %2", m_target->parentAspect()->name(), new_digits));
 	else
 		setText(i18n("set decimal digits to %1", new_digits));

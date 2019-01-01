@@ -359,7 +359,7 @@ void SpreadsheetView::initMenus() {
 	QMenu* submenu = nullptr;
 
 	if (!m_readOnly) {
-		submenu= new QMenu(i18n("Fi&ll Selection With"), this);
+		submenu = new QMenu(i18n("Fi&ll Selection With"), this);
 		submenu->addAction(action_fill_sel_row_numbers);
 		submenu->addAction(action_fill_const);
 		m_selectionMenu->addMenu(submenu);
@@ -824,7 +824,7 @@ void SpreadsheetView::handleHeaderDataChanged(Qt::Orientation orientation, int f
 int SpreadsheetView::selectedColumnCount(bool full) const {
 	int count = 0;
 	const int cols = m_spreadsheet->columnCount();
-	for (int i=0; i<cols; i++)
+	for (int i = 0; i < cols; i++)
 		if (isColumnSelected(i, full)) count++;
 	return count;
 }
@@ -1220,7 +1220,7 @@ void SpreadsheetView::pasteIntoSelection() {
 	QStringList input_rows(input_str.split(QLatin1Char('\n')));
 	input_row_count = input_rows.count();
 	input_col_count = 0;
-	for (int i=0; i<input_row_count; i++) {
+	for (int i = 0; i < input_row_count; i++) {
 		cellTexts.append(input_rows.at(i).split(QRegExp(QLatin1String("\\s+"))));
 		if (cellTexts.at(i).count() > input_col_count)
 			input_col_count = cellTexts.at(i).count();
@@ -1319,7 +1319,7 @@ void SpreadsheetView::maskSelection() {
 	m_spreadsheet->beginMacro(i18n("%1: mask selected cells", m_spreadsheet->name()));
 	for (auto* column : selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(column);
-		for (int row=first; row<=last; row++)
+		for (int row = first; row <= last; row++)
 			if (isCellSelected(row, col)) column->setMasked(row);
 	}
 	m_spreadsheet->endMacro();
@@ -1335,7 +1335,7 @@ void SpreadsheetView::unmaskSelection() {
 	m_spreadsheet->beginMacro(i18n("%1: unmask selected cells", m_spreadsheet->name()));
 	for (auto* column : selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(column);
-		for (int row=first; row<=last; row++)
+		for (int row = first; row <= last; row++)
 			if (isCellSelected(row, col)) column->setMasked(row, false);
 	}
 	m_spreadsheet->endMacro();
@@ -1824,7 +1824,7 @@ void SpreadsheetView::normalizeSelectedColumns() {
 			col->setSuppressDataChangedSignal(true);
 			double max = col->maximum();
 			if (max != 0.0) {// avoid division by zero
-				for (int row=0; row<col->rowCount(); row++)
+				for (int row = 0; row < col->rowCount(); row++)
 					col->setValueAt(row, col->valueAt(row) / max);
 			}
 			col->setSuppressDataChangedSignal(false);
@@ -2124,7 +2124,7 @@ void SpreadsheetView::selectionChanged(const QItemSelection &selected, const QIt
 		return;
 
 	QItemSelectionModel* selModel = m_tableView->selectionModel();
-	for (int i=0; i<m_spreadsheet->columnCount(); i++)
+	for (int i = 0; i < m_spreadsheet->columnCount(); i++)
 		m_spreadsheet->setColumnSelectedInView(i, selModel->isColumnSelected(i, QModelIndex()));
 }
 
@@ -2160,7 +2160,7 @@ bool SpreadsheetView::exportView() {
 			const bool exportLatexHeader = dlg->exportLatexHeader();
 			const bool gridLines = dlg->gridLines();
 			const bool captions = dlg->captions();
-			const bool skipEmptyRows =dlg->skipEmptyRows();
+			const bool skipEmptyRows = dlg->skipEmptyRows();
 			const bool exportEntire = dlg->entireSpreadheet();
 			exportToLaTeX(path, exportHeader, gridLines, captions,
 			                    exportLatexHeader, skipEmptyRows, exportEntire);

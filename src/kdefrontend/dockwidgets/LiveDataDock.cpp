@@ -832,7 +832,7 @@ void LiveDataDock::removeSubscription() {
 		}
 		//otherwise we remove the selected item, but subscribe to every other topic, that was contained by
 		//the selected item's parent subscription(top level item of twSubscriptions)
-		else{
+		else {
 			while (unsubscribeItem->parent() != nullptr) {
 				for (int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
 					if (unsubscribeItem->text(0) != unsubscribeItem->parent()->child(i)->text(0)) {

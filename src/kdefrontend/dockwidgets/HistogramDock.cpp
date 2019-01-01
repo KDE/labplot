@@ -436,7 +436,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	connect(m_curve, SIGNAL(errorBarsPenChanged(QPen)), this, SLOT(curveErrorBarsPenChanged(QPen)));
 	connect(m_curve, SIGNAL(errorBarsOpacityChanged(qreal)), this, SLOT(curveErrorBarsOpacityChanged(qreal)));
 
-	m_initializing=false;
+	m_initializing = false;
 }
 
 void HistogramDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column) {
@@ -560,7 +560,7 @@ void HistogramDock::binWidthChanged() {
 }
 
 void HistogramDock::autoBinRangesChanged(int state) {
-	bool checked = (state==Qt::Checked);
+	bool checked = (state == Qt::Checked);
 	ui.leBinRangesMin->setEnabled(!checked);
 	ui.leBinRangesMax->setEnabled(!checked);
 
@@ -789,7 +789,7 @@ void HistogramDock::symbolsBorderColorChanged(const QColor& color) {
 
 	QPen pen;
 	for (auto* curve : m_curvesList) {
-		pen=curve->symbolsPen();
+		pen = curve->symbolsPen();
 		pen.setColor(color);
 		curve->setSymbolsPen(pen);
 	}
@@ -805,7 +805,7 @@ void HistogramDock::symbolsBorderWidthChanged(double value) {
 
 	QPen pen;
 	for (auto* curve : m_curvesList) {
-		pen=curve->symbolsPen();
+		pen = curve->symbolsPen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		curve->setSymbolsPen(pen);
 	}
@@ -850,7 +850,7 @@ void HistogramDock::valuesTypeChanged(int index) {
 			ui.lValuesColumn->show();
 			cbValuesColumn->show();
 
-			column= static_cast<Column*>(cbValuesColumn->currentModelIndex().internalPointer());
+			column = static_cast<Column*>(cbValuesColumn->currentModelIndex().internalPointer());
 		} else {
 			ui.lValuesColumn->hide();
 			cbValuesColumn->hide();
@@ -879,7 +879,7 @@ void HistogramDock::showValuesColumnFormat(const Column* column) {
 	this->updateValuesFormatWidgets(columnMode);
 
 	 //show the actual formatting properties
-	switch(columnMode) {
+	switch (columnMode) {
 		case AbstractColumn::Numeric:{
 		  auto* filter = static_cast<Double2StringFilter*>(column->outputFilter());
 		  ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->numericFormat()));
@@ -1303,7 +1303,7 @@ void HistogramDock::selectFile() {
 	QString formats;
 	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
-		formats.isEmpty() ? formats+=f : formats+=' '+f;
+		formats.isEmpty() ? formats += f : formats += ' ' + f;
 	}
 
 	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
@@ -1313,7 +1313,7 @@ void HistogramDock::selectFile() {
 	int pos = path.lastIndexOf(QDir::separator());
 	if (pos != -1) {
 		QString newDir = path.left(pos);
-		if (newDir!=dir)
+		if (newDir != dir)
 			conf.writeEntry("LastImageDir", newDir);
 	}
 

@@ -240,9 +240,9 @@ void CustomPointPrivate::retransform() {
 	if (!listScene.isEmpty()) {
 		m_visible = true;
 		positionScene = listScene.at(0);
-		suppressItemChangeEvent=true;
+		suppressItemChangeEvent = true;
 		setPos(positionScene);
-		suppressItemChangeEvent=false;
+		suppressItemChangeEvent = false;
 	} else {
 		m_visible = false;
 	}
@@ -311,12 +311,12 @@ void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 		painter->drawPath(pointShape);
 	}
 
-	if (m_hovered && !isSelected() && !m_printing){
+	if (m_hovered && !isSelected() && !m_printing) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
 		painter->drawPath(pointShape);
 	}
 
-	if (isSelected() && !m_printing){
+	if (isSelected() && !m_printing) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(pointShape);
 	}

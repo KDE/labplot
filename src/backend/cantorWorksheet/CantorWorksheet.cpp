@@ -49,7 +49,7 @@
 CantorWorksheet::CantorWorksheet(const QString &name, bool loading) : AbstractPart(name),
 	m_backendName(name)  {
 
-	if(!loading)
+	if (!loading)
 		init();
 }
 
@@ -67,7 +67,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 		m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
 
 		//load worksheet content if available
-		if(content)
+		if (content)
 			m_worksheetAccess->loadWorksheetFromByteArray(content);
 
 		connect(m_worksheetAccess, SIGNAL(modified()), this, SLOT(modified()));
@@ -84,7 +84,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 
 		//available plugins
 		auto* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
-		if(!handler) {
+		if (!handler) {
 			KMessageBox::error(view(), i18n("no PanelPluginHandle found for the Cantor Part."));
 			return false;
 		}
@@ -102,11 +102,11 @@ bool CantorWorksheet::init(QByteArray* content) {
 //SLots
 void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int last) {
 	Q_UNUSED(parent)
-	for(int i = first; i <= last; ++i) {
+	for (int i = first; i <= last; ++i) {
 		const QString name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
 		const QString value = m_variableModel->data(m_variableModel->index(first, 1)).toString();
 		auto* parser = new VariableParser(m_backendName, value);
-		if(parser->isParsed()) {
+		if (parser->isParsed()) {
 			Column* col = child<Column>(name);
 			if (col) {
 				col->replaceValues(0, parser->values());
@@ -138,7 +138,7 @@ void CantorWorksheet::modified() {
 }
 
 void CantorWorksheet::modelReset() {
-	for(int i = 0; i < childCount<Column>(); ++i)
+	for (int i = 0; i < childCount<Column>(); ++i)
 		child<Column>(i)->remove();
 }
 
@@ -152,15 +152,15 @@ void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex & parent, int first
 	return;
 
 // 	Q_UNUSED(parent)
-// 	for(int i = first; i <= last; ++i) {
+// 	for (int i = first; i <= last; ++i) {
 // 		const QString name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
 // 		Column* column = child<Column>(name);
-// 		if(column)
+// 		if (column)
 // 			column->remove();
 // 	}
 }
 
-QList<Cantor::PanelPlugin*> CantorWorksheet::getPlugins(){
+QList<Cantor::PanelPlugin*> CantorWorksheet::getPlugins() {
 	return m_plugins;
 }
 
@@ -169,7 +169,7 @@ KParts::ReadWritePart* CantorWorksheet::part() {
 }
 
 QIcon CantorWorksheet::icon() const {
-	if(m_session)
+	if (m_session)
 		return QIcon::fromTheme(m_session->backend()->icon());
 	return QIcon();
 }
@@ -253,7 +253,7 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 	QString str;
 	bool rc = false;
 
-	while (!reader->atEnd()){
+	while (!reader->atEnd()) {
 		reader->readNext();
 		if (reader->isEndElement() && reader->name() == "cantorWorksheet")
 			break;
@@ -261,20 +261,20 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment"){
+		if (reader->name() == "comment") {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "general"){
+		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
 			m_backendName = attribs.value("backend_name").toString().trimmed();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("backend_name").toString());
-		} else if (!preview && reader->name() == "worksheet"){
+		} else if (!preview && reader->name() == "worksheet") {
 			attribs = reader->attributes();
 
 			str = attribs.value("content").toString().trimmed();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("content").toString());
 
 			QByteArray content = QByteArray::fromBase64(str.toLatin1());
@@ -284,7 +284,7 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseError(msg);
 				return false;
 			}
-		} else if(!preview && reader->name() == "column") {
+		} else if (!preview && reader->name() == "column") {
 			Column* column = new Column("");
 			column->setUndoAware(false);
 			if (!column->load(reader, preview)) {

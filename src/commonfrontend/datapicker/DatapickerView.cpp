@@ -121,7 +121,7 @@ void DatapickerView::tabChanged(int index) {
 	if (m_initializing)
 		return;
 
-	if (index==-1)
+	if (index == -1)
 		return;
 
 	m_datapicker->setChildSelectedInView(lastSelectedIndex, false);
@@ -172,7 +172,7 @@ void DatapickerView::handleDescriptionChanged(const AbstractAspect* aspect) {
 	QString name;
 	if (aspect->parentAspect() == m_datapicker) {
 		//datapicker curve was renamed
-		index= m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
+		index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
 		name = aspect->name() + ": " + aspect->children<Spreadsheet>().constFirst()->name();
 	} else {
 		//data spreadsheet was renamed or one of its columns, which is not relevant here

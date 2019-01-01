@@ -61,16 +61,16 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
 
 	// first try the selected format string m_format
 	QDateTime result = QDateTime::fromString(input_value, m_format);
-	if(result.isValid())
+	if (result.isValid())
 		return result;
 
 	// fallback:
 	// try other format strings built from date_formats and time_formats
 	// comma and space are valid separators between date and time
 	QStringList strings = input_value.simplified().split(',', QString::SkipEmptyParts);
-	if(strings.size() == 1) strings = strings.at(0).split(' ', QString::SkipEmptyParts);
+	if (strings.size() == 1) strings = strings.at(0).split(' ', QString::SkipEmptyParts);
 
-	if(strings.size() < 1)
+	if (strings.size() < 1)
 		return result; // invalid date/time from first attempt
 
 	QDate date_result;
@@ -78,7 +78,7 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
 
 	QString date_string = strings.at(0).trimmed();
 	QString time_string;
-	if(strings.size() > 1)
+	if (strings.size() > 1)
 		time_string = strings.at(1).trimmed();
 	else
 		time_string = date_string;
@@ -142,7 +142,7 @@ void String2DateTimeFilter::setFormat(const QString& format) {
 
 String2DateTimeFilterSetFormatCmd::String2DateTimeFilterSetFormatCmd(String2DateTimeFilter* target, const QString &new_format)
 	: m_target(target), m_other_format(new_format) {
-	if(m_target->parentAspect())
+	if (m_target->parentAspect())
 		setText(i18n("%1: set date-time format to %2", m_target->parentAspect()->name(), new_format));
 	else
 		setText(i18n("set date-time format to %1", new_format));

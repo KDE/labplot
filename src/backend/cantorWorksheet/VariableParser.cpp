@@ -36,22 +36,22 @@ VariableParser::VariableParser(QString name, QString value)
 	: m_backendName(std::move(name)), m_string(std::move(value)) {
 
 	PERFTRACE("parsing variable");
-	if(m_backendName.compare(QStringLiteral("Maxima"), Qt::CaseInsensitive) == 0)
+	if (m_backendName.compare(QStringLiteral("Maxima"), Qt::CaseInsensitive) == 0)
 		parseMaximaValues();
-	else if(m_backendName.compare(QStringLiteral("Python 3"), Qt::CaseInsensitive) == 0)
+	else if (m_backendName.compare(QStringLiteral("Python 3"), Qt::CaseInsensitive) == 0)
 		parsePythonValues();
-	else if(m_backendName.compare(QStringLiteral("Python 2"), Qt::CaseInsensitive) == 0)
+	else if (m_backendName.compare(QStringLiteral("Python 2"), Qt::CaseInsensitive) == 0)
 		parsePythonValues();
-	else if(m_backendName.compare(QStringLiteral("Sage"), Qt::CaseInsensitive) == 0)
+	else if (m_backendName.compare(QStringLiteral("Sage"), Qt::CaseInsensitive) == 0)
 		parsePythonValues();
-	else if(m_backendName.compare(QStringLiteral("R"), Qt::CaseInsensitive) == 0)
+	else if (m_backendName.compare(QStringLiteral("R"), Qt::CaseInsensitive) == 0)
 		parseRValues();
-	else if(m_backendName.compare(QStringLiteral("Julia"), Qt::CaseInsensitive) == 0)
+	else if (m_backendName.compare(QStringLiteral("Julia"), Qt::CaseInsensitive) == 0)
 		parsePythonValues();
 }
 
 void VariableParser::parseMaximaValues() {
-	if(m_string.count(QStringLiteral("[")) < 2) {
+	if (m_string.count(QStringLiteral("[")) < 2) {
 		m_string = m_string.replace(QStringLiteral("["), QStringLiteral(""));
 		m_string = m_string.replace(QStringLiteral("]"), QStringLiteral(""));
 		m_string = m_string.trimmed();
@@ -72,7 +72,7 @@ void VariableParser::parsePythonValues() {
 		//parse python's lists
 		m_string = m_string.replace(QStringLiteral("["), QStringLiteral(""));
 		m_string = m_string.replace(QStringLiteral("]"), QStringLiteral(""));
-	} else if(m_string.startsWith(QStringLiteral("("))) {
+	} else if (m_string.startsWith(QStringLiteral("("))) {
 		//parse python's tuples
 		m_string = m_string.replace(QStringLiteral("("), QStringLiteral(""));
 		m_string = m_string.replace(QStringLiteral(")"), QStringLiteral(""));
@@ -80,7 +80,7 @@ void VariableParser::parsePythonValues() {
 		return;
 	}
 
-	if(m_string.count(QStringLiteral(","))>1)
+	if (m_string.count(QStringLiteral(","))>1)
 		valueStringList = m_string.split(QStringLiteral(","));
 	else
 		valueStringList = m_string.split(QStringLiteral(" "));
@@ -104,12 +104,12 @@ QVector< double > VariableParser::values() {
 
 void VariableParser::parseValues(const QStringList& values) {
 	PERFTRACE("parsing variable values string list");
-	for(const QString& v : values) {
+	for (const QString& v : values) {
 		bool isNumber = false;
 		double value = v.trimmed().toDouble(&isNumber);
 
 		//accept the variable only if there is at least one numerical value in the array.
-		if(isNumber) {
+		if (isNumber) {
 			if (!m_parsed)
 				m_parsed = true;
 		} else {

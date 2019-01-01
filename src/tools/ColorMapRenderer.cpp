@@ -34,7 +34,7 @@
 
 QPixmap ColorMapRenderer::pixmap(const QString& fileName) {
 	QFile file(fileName);
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		kDebug()<<"file "<<fileName<<" not found"<<endl;
 		return QPixmap();
 	}
@@ -44,7 +44,7 @@ QPixmap ColorMapRenderer::pixmap(const QString& fileName) {
 	int  red, green, blue;
 	QTextStream in(&file);
 
-	while ( !in.atEnd() ){
+	while (!in.atEnd()) {
         in.readLine();
  		in >> red >> green >> blue;
 		rgb.setRgb( red, green, blue );
@@ -52,12 +52,12 @@ QPixmap ColorMapRenderer::pixmap(const QString& fileName) {
 //		kDebug()<<red<<"\t"<<green<<"\t"<<blue<<endl;
 	}
 
-	int height=list_rgb.size();
-	int width=80;
+	int height = list_rgb.size();
+	int width = 80;
 // 	kDebug()<<height<<"line read."<<endl;
 	QPixmap pixmap(width, height);
 	QPainter p( &pixmap );
-	for (int i=0; i!=height; ++i)	{
+	for (int i = 0; i != height; ++i) {
 		rgb = list_rgb.at(i);
 		p.setPen( rgb );
 		p.drawLine( QPoint(0, height-i), QPoint(width, height-i) );

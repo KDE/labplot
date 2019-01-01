@@ -104,14 +104,14 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.hlYWeight->addWidget(cbYErrorColumn);
 
 	// X/Y-Weight
-	for(int i = 0; i < NSL_FIT_WEIGHT_TYPE_COUNT; i++) {
+	for (int i = 0; i < NSL_FIT_WEIGHT_TYPE_COUNT; i++) {
 		uiGeneralTab.cbXWeight->addItem(nsl_fit_weight_type_name[i]);
 		uiGeneralTab.cbYWeight->addItem(nsl_fit_weight_type_name[i]);
 	}
 	uiGeneralTab.cbXWeight->setCurrentIndex(nsl_fit_weight_no);
 	uiGeneralTab.cbYWeight->setCurrentIndex(nsl_fit_weight_no);
 
-	for(int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
+	for (int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
 		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
 
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height() * 2);
@@ -321,7 +321,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_fitData = m_fitCurve->fitData();
-	if(m_fitData.paramStartValues.size() > 0) {
+	if (m_fitData.paramStartValues.size() > 0) {
 		DEBUG("	start value 1 = " << m_fitData.paramStartValues.at(0));
 	}
 	DEBUG("	model degree = " << m_fitData.degree);
@@ -678,7 +678,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 void XYFitCurveDock::modelTypeChanged(int index) {
 	DEBUG("modelTypeChanged() type = " << index << ", initializing = " << m_initializing << ", current type = " << m_fitData.modelType);
 	// leave if there is no selection
-	if(index == -1)
+	if (index == -1)
 		return;
 
 	bool custom = false;

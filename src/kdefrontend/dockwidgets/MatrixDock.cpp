@@ -84,13 +84,13 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 	m_matrixList = list;
 	m_matrix = list.first();
 
-	if (list.size()==1) {
+	if (list.size() == 1) {
 		ui.leName->setEnabled(true);
 		ui.leComment->setEnabled(true);
 
 		ui.leName->setText(m_matrix->name());
 		ui.leComment->setText(m_matrix->comment());
-	}else{
+	} else {
 		//disable the fields "Name" and "Comment" if there are more the one matrix
 		ui.leName->setEnabled(false);
 		ui.leComment->setEnabled(false);

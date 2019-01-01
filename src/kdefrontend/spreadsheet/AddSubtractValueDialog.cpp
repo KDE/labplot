@@ -255,7 +255,7 @@ void AddSubtractValueDialog::generate() {
 	} else { //datetime
 		QVector<QDateTime> new_data(rows);
 		quint64 value = ui.dateTimeEdit->dateTime().toMSecsSinceEpoch();
-		switch(m_operation) {
+		switch (m_operation) {
 		case Subtract:
 			value *= -1.;
 			//fall through

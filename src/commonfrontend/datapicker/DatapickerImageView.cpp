@@ -82,7 +82,7 @@ DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView
 	setInteractive(true);
 
 	changeZoom(zoomOriginAction);
-	currentZoomAction=zoomInViewAction;
+	currentZoomAction = zoomInViewAction;
 
 	if (m_image->plotPointsType() == DatapickerImage::AxisPoints)
 		setAxisPointsAction->setChecked(true);

@@ -222,14 +222,14 @@ void DatapickerCurveWidget::styleChanged(int index) {
 	//enable/disable the  filling options in the GUI depending on the currently selected points.
 	if (style != Symbol::Line && style != Symbol::Cross) {
  		ui.cbFillingStyle->setEnabled(true);
-		bool noBrush = (Qt::BrushStyle(ui.cbFillingStyle->currentIndex())==Qt::NoBrush);
+		bool noBrush = (Qt::BrushStyle(ui.cbFillingStyle->currentIndex()) == Qt::NoBrush);
 		ui.kcbFillingColor->setEnabled(!noBrush);
 	} else {
 		ui.kcbFillingColor->setEnabled(false);
 		ui.cbFillingStyle->setEnabled(false);
 	}
 
-	bool noLine = (Qt::PenStyle(ui.cbBorderStyle->currentIndex())== Qt::NoPen);
+	bool noLine = (Qt::PenStyle(ui.cbBorderStyle->currentIndex()) == Qt::NoPen);
 	ui.kcbBorderColor->setEnabled(!noLine);
 	ui.sbBorderWidth->setEnabled(!noLine);
 
@@ -275,7 +275,7 @@ void DatapickerCurveWidget::errorBarSizeChanged(double value) {
 
 void DatapickerCurveWidget::fillingStyleChanged(int index) {
 	auto brushStyle = Qt::BrushStyle(index);
-	ui.kcbFillingColor->setEnabled(!(brushStyle==Qt::NoBrush));
+	ui.kcbFillingColor->setEnabled(!(brushStyle == Qt::NoBrush));
 
 	if (m_initializing)
 		return;
@@ -290,7 +290,7 @@ void DatapickerCurveWidget::fillingStyleChanged(int index) {
 
 void DatapickerCurveWidget::errorBarFillingStyleChanged(int index) {
 	auto brushStyle = Qt::BrushStyle(index);
-	ui.kcbErrorBarFillingColor->setEnabled(!(brushStyle==Qt::NoBrush));
+	ui.kcbErrorBarFillingColor->setEnabled(!(brushStyle == Qt::NoBrush));
 
 	if (m_initializing)
 		return;
@@ -497,7 +497,7 @@ void DatapickerCurveWidget::symbolVisibleChanged(bool on) {
 //******************** SETTINGS ****************************
 //**********************************************************
 void DatapickerCurveWidget::load() {
-	if(!m_curve)
+	if (!m_curve)
 		return;
 
 	m_initializing = true;

@@ -77,24 +77,24 @@ void ProjectDock::setProject(Project *project) {
 //************************************************************
 //****************** SLOTS ********************************
 //************************************************************
-void ProjectDock::retranslateUi(){
+void ProjectDock::retranslateUi() {
 }
 
-void ProjectDock::titleChanged(const QString& title){
+void ProjectDock::titleChanged(const QString& title) {
 	if (m_initializing)
 		return;
 
 	m_project->setName(title);
 }
 
-void ProjectDock::authorChanged(const QString& author){
+void ProjectDock::authorChanged(const QString& author) {
 	if (m_initializing)
 		return;
 
 	m_project->setAuthor(author);
 }
 
-void ProjectDock::commentChanged(){
+void ProjectDock::commentChanged() {
 	if (m_initializing)
 		return;
 
@@ -120,7 +120,7 @@ void ProjectDock::projectDescriptionChanged(const AbstractAspect* aspect) {
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
-void ProjectDock::loadConfig(KConfig& config){
+void ProjectDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group( "Project" );
 
 	ui.leName->setText( group.readEntry("Name", m_project->name()) );
@@ -128,7 +128,7 @@ void ProjectDock::loadConfig(KConfig& config){
 	ui.tbComment->setText( group.readEntry("Comment", m_project->comment()) );
 }
 
-void ProjectDock::saveConfig(KConfig& config){
+void ProjectDock::saveConfig(KConfig& config) {
 	KConfigGroup group = config.group( "Project" );
 
 	group.writeEntry("Name", ui.leName->text());

@@ -122,7 +122,7 @@ int NetCDFFilter::endRow() const {
 }
 
 void NetCDFFilter::setStartColumn(const int c) {
-	d->startColumn=c;
+	d->startColumn = c;
 }
 
 int NetCDFFilter::startColumn() const {

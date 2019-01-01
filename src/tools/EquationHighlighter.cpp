@@ -87,8 +87,8 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 		for (const QString& var: m_variables) {
 			if (remaining.startsWith(var)) {
 				QString nextChar = remaining.mid(var.length(), 1);
-				if (nextChar==" " || nextChar==")" || nextChar=="+" || nextChar=="-"
-					|| nextChar=="*" || nextChar=="/" || nextChar=="^") {
+				if (nextChar == " " || nextChar == ")" || nextChar == "+" || nextChar == "-"
+					|| nextChar == "*" || nextChar == "/" || nextChar == "^") {
 					setFormat(i, var.length(), variable);
 					i += var.length() - 1;
 					found = true;

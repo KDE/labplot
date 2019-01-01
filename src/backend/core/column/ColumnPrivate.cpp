@@ -728,10 +728,10 @@ void ColumnPrivate::resizeTo(int new_size) {
 	case AbstractColumn::Text: {
 		int new_rows = new_size - old_size;
 		if (new_rows > 0) {
-			for(int i = 0; i < new_rows; ++i)
+			for (int i = 0; i < new_rows; ++i)
 				static_cast<QVector<QString>*>(m_data)->append(QString());
 		} else {
-			for(int i = 0; i < -new_rows; ++i)
+			for (int i = 0; i < -new_rows; ++i)
 				static_cast<QVector<QString>*>(m_data)->removeLast();
 		}
 		break;
@@ -744,7 +744,7 @@ void ColumnPrivate::resizeTo(int new_size) {
 			for (int i = 0; i < new_rows; ++i)
 				static_cast<QVector<QDateTime>*>(m_data)->append(QDateTime());
 		} else {
-			for(int i = 0; i < -new_rows; ++i)
+			for (int i = 0; i < -new_rows; ++i)
 				static_cast<QVector<QDateTime>*>(m_data)->removeLast();
 		}
 		break;

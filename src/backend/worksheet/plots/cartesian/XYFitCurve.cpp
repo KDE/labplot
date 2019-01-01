@@ -444,7 +444,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			}
 			break;
 		case nsl_fit_model_voigt:
-			switch(degree) {
+			switch (degree) {
 			case 1:
 				paramNames << "a" << "mu" << "s" << "g";
 				paramNamesUtf8 << "A" << UTF8_QSTRING("μ") << UTF8_QSTRING("σ") << UTF8_QSTRING("γ");
@@ -462,13 +462,13 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			}
 			break;
 		case nsl_fit_model_pseudovoigt1:
-			switch(degree) {
+			switch (degree) {
 			case 1:
 				paramNames << "a" << "et" << "w" << "mu";	// eta function exists!
 				paramNamesUtf8 << "A" << UTF8_QSTRING("η") << "w" << UTF8_QSTRING("μ");
 				break;
 			default:
-				model="";
+				model = "";
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)

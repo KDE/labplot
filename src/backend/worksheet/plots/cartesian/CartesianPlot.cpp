@@ -2211,7 +2211,7 @@ void CartesianPlotPrivate::retransformScales() {
 		emit plot->yMinChanged(yMin);
 	}
 
-	if (yMax!=yMaxPrev) {
+	if (yMax != yMaxPrev) {
 		deltaYMax = yMax - yMaxPrev;
 		emit plot->yMaxChanged(yMax);
 	}
@@ -2400,7 +2400,7 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 		m_selectionEnd = m_selectionStart;
 		m_selectionBandIsShown = true;
 	} else {
-		if ( dataRect.contains(event->pos()) ){
+		if (dataRect.contains(event->pos())) {
 			panningStarted = true;
 			m_panningStart = event->pos();
 			setCursor(Qt::ClosedHandCursor);
@@ -3033,7 +3033,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete point;
 				return false;
 			}
-		} else if(reader->name() == "Histogram") {
+		} else if (reader->name() == "Histogram") {
 			Histogram* curve = new Histogram("Histogram");
 			if (curve->load(reader, preview))
 				addChildFast(curve);

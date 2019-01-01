@@ -189,7 +189,7 @@ void ExportWorksheetDialog::okClicked() {
 		int pos = path.lastIndexOf(QDir::separator());
 		if (pos != -1) {
 			QString newDir = path.left(pos);
-			if (newDir!=dir)
+			if (newDir != dir)
 				conf.writeEntry("LastDir", newDir);
 		}
 	}

@@ -215,7 +215,7 @@ void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 			int currentRow = 0;
 			for (int i = startRow-1; i < endRow; ++i) {
 				for (int j = startColumn-1; j < endColumn; ++j) {
-					QRgb color=image.pixel(j, i);
+					QRgb color = image.pixel(j, i);
 					static_cast<QVector<int>*>(dataContainer[0])->operator[](currentRow) = i+1;
 					static_cast<QVector<int>*>(dataContainer[1])->operator[](currentRow) = j+1;
 					static_cast<QVector<int>*>(dataContainer[2])->operator[](currentRow) = qGray(color);

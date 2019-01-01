@@ -55,11 +55,11 @@ public:
 		{};
 
 	void run() override {
-		for (int y=m_start; y<m_end; ++y) {
+		for (int y = m_start; y < m_end; ++y) {
 			mutex.lock();
 			QRgb* line = reinterpret_cast<QRgb*>(m_plotImage->scanLine(y));
 			mutex.unlock();
-			for (int x=0; x<m_plotImage->width(); ++x) {
+			for (int x = 0; x < m_plotImage->width(); ++x) {
 				int value = ImageEditor::discretizeHue(x, y, m_originalImage);
 				if (!ImageEditor::pixelIsOn(value, DatapickerImage::Hue, m_settings))
 					continue;

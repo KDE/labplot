@@ -65,7 +65,7 @@ QVariant SpreadsheetCommentsHeaderModel::data(const QModelIndex& index, int role
 }
 
 QVariant SpreadsheetCommentsHeaderModel::headerData(int section, Qt::Orientation orientation, int role) const {
-	if( orientation != Qt::Horizontal || role != Qt::DisplayRole || section < 0 || section >= columnCount())
+	if (orientation != Qt::Horizontal || role != Qt::DisplayRole || section < 0 || section >= columnCount())
 		return QVariant();
 
 	return QVariant(m_spreadsheet_model->headerData(section, Qt::Horizontal, SpreadsheetModel::CommentRole));

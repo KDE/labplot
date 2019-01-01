@@ -154,9 +154,9 @@ QVariant AspectTreeModel::headerData(int section, Qt::Orientation orientation, i
 	if (orientation != Qt::Horizontal)
 		return QVariant();
 
-	switch(role) {
+	switch (role) {
 	case Qt::DisplayRole:
-		switch(section) {
+		switch (section) {
 		case 0:
 			return i18n("Name");
 		case 1:
@@ -178,10 +178,10 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 		return QVariant();
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	switch(role) {
+	switch (role) {
 	case Qt::DisplayRole:
 	case Qt::EditRole:
-		switch(index.column()) {
+		switch (index.column()) {
 		case 0: {
 			const auto* column = dynamic_cast<const Column*>(aspect);
 			if (column) {
@@ -195,36 +195,36 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 
 				if (m_showPlotDesignation) {
 					QString designation;
-					switch(column->plotDesignation()) {
-						case AbstractColumn::NoDesignation:
-							break;
-						case AbstractColumn::X:
-							designation = QLatin1String(" [X]");
-							break;
-						case AbstractColumn::Y:
-							designation = QLatin1String(" [Y]");
-							break;
-						case AbstractColumn::Z:
-							designation = QLatin1String(" [Z]");
-							break;
-						case AbstractColumn::XError:
-							designation = QLatin1String(" [") + i18n("X-error") + QLatin1Char(']');
-							break;
-						case AbstractColumn::XErrorPlus:
-							designation = QLatin1String(" [") + i18n("X-error +") + QLatin1Char(']');
-							break;
-						case AbstractColumn::XErrorMinus:
-							designation = QLatin1String(" [") + i18n("X-error -") + QLatin1Char(']');
-							break;
-						case AbstractColumn::YError:
-							designation = QLatin1String(" [") + i18n("Y-error") + QLatin1Char(']');
-							break;
-						case AbstractColumn::YErrorPlus:
-							designation = QLatin1String(" [") + i18n("Y-error +") + QLatin1Char(']');
-							break;
-						case AbstractColumn::YErrorMinus:
-							designation = QLatin1String(" [") + i18n("Y-error -") + QLatin1Char(']');
-							break;
+					switch (column->plotDesignation()) {
+					case AbstractColumn::NoDesignation:
+						break;
+					case AbstractColumn::X:
+						designation = QLatin1String(" [X]");
+						break;
+					case AbstractColumn::Y:
+						designation = QLatin1String(" [Y]");
+						break;
+					case AbstractColumn::Z:
+						designation = QLatin1String(" [Z]");
+						break;
+					case AbstractColumn::XError:
+						designation = QLatin1String(" [") + i18n("X-error") + QLatin1Char(']');
+						break;
+					case AbstractColumn::XErrorPlus:
+						designation = QLatin1String(" [") + i18n("X-error +") + QLatin1Char(']');
+						break;
+					case AbstractColumn::XErrorMinus:
+						designation = QLatin1String(" [") + i18n("X-error -") + QLatin1Char(']');
+						break;
+					case AbstractColumn::YError:
+						designation = QLatin1String(" [") + i18n("Y-error") + QLatin1Char(']');
+						break;
+					case AbstractColumn::YErrorPlus:
+						designation = QLatin1String(" [") + i18n("Y-error +") + QLatin1Char(']');
+						break;
+					case AbstractColumn::YErrorMinus:
+						designation = QLatin1String(" [") + i18n("Y-error -") + QLatin1Char(']');
+						break;
 					}
 					name += QLatin1Char('\t') + designation;
 				}
@@ -460,7 +460,7 @@ bool AspectTreeModel::containsFilterString(const AbstractAspect* aspect) const {
 
 	//TODO make this optional
 	// 	//check for the occurrence of the filter string in the names of the children
-// 	foreach(const AbstractAspect * child, aspect->children<AbstractAspect>()){
+// 	foreach(const AbstractAspect * child, aspect->children<AbstractAspect>()) {
 // 	  if ( this->containsFilterString(child) )
 // 		return true;
 // 	}

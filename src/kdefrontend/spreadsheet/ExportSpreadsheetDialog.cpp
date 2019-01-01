@@ -276,8 +276,8 @@ void ExportSpreadsheetDialog::setExportToImage(bool possible) {
 void ExportSpreadsheetDialog::okClicked() {
 	if (format() != FITS)
 		if ( QFile::exists(ui->leFileName->text()) ) {
-			int r=KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
-			if (r==KMessageBox::No)
+			int r = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
+			if (r == KMessageBox::No)
 				return;
 		}
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
@@ -290,9 +290,9 @@ void ExportSpreadsheetDialog::okClicked() {
 		QString dir = conf.readEntry("LastDir", "");
 		ui->leFileName->setText(path);
 		int pos = path.lastIndexOf(QDir::separator());
-		if (pos!=-1) {
+		if (pos != -1) {
 			QString newDir = path.left(pos);
-			if (newDir!=dir)
+			if (newDir != dir)
 				conf.writeEntry("LastDir", newDir);
 		}
 	}
@@ -345,9 +345,9 @@ void ExportSpreadsheetDialog::selectFile() {
 		ui->leFileName->setText(path);
 
 		int pos = path.lastIndexOf(QDir::separator());
-		if (pos!=-1) {
+		if (pos != -1) {
 			QString newDir = path.left(pos);
-			if (newDir!=dir)
+			if (newDir != dir)
 				conf.writeEntry("LastDir", newDir);
 		}
 	}
@@ -362,10 +362,10 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	QString path = ui->leFileName->text();
 	int i = path.indexOf(".");
 	if (index != 1) {
-		if (i==-1)
+		if (i == -1)
 			path = path + extensions.at(index);
 		else
-			path=path.left(i) + extensions.at(index);
+			path = path.left(i) + extensions.at(index);
 	}
 
 	const Format format = (Format)(ui->cbFormat->itemData(ui->cbFormat->currentIndex()).toInt());

@@ -70,7 +70,7 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) :
 	layout->setSpacing(0);
 	layout->setContentsMargins(0, 0, 0, 0);
 
-	auto* layoutFilter= new QHBoxLayout(m_frameFilter);
+	auto* layoutFilter = new QHBoxLayout(m_frameFilter);
 	layoutFilter->setSpacing(0);
 	layoutFilter->setContentsMargins(0, 0, 0, 0);
 
@@ -151,7 +151,7 @@ void ProjectExplorer::createActions() {
   treeview specific options are added.
 */
 void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
-	if(!m_treeView->model())
+	if (!m_treeView->model())
 		return;
 
 	const QModelIndex& index = m_treeView->indexAt(m_treeView->viewport()->mapFrom(this, event->pos()));
@@ -195,7 +195,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 
 void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect) {
 	const AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	if(tree_model)
+	if (tree_model)
 		m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(aspect));
 }
 
@@ -216,9 +216,9 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 
 	//create action for showing/hiding the columns in the tree.
 	//this is done here since the number of columns is  not available in createActions() yet.
-	if (list_showColumnActions.size()==0) {
+	if (list_showColumnActions.size() == 0) {
 		showColumnsSignalMapper = new QSignalMapper(this);
-		for (int i=0; i<m_treeView->model()->columnCount(); i++) {
+		for (int i = 0; i < m_treeView->model()->columnCount(); i++) {
 			QAction* showColumnAction =  new QAction(treeModel->headerData(i, Qt::Horizontal).toString(), this);
 			showColumnAction->setCheckable(true);
 			showColumnAction->setChecked(true);
@@ -232,7 +232,7 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 		connect(showColumnsSignalMapper, static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped),
 				this, &ProjectExplorer::toggleColumn);
 	} else {
-		for (int i=0; i<list_showColumnActions.size(); ++i) {
+		for (int i = 0; i < list_showColumnActions.size(); ++i) {
 			if (!list_showColumnActions.at(i)->isChecked())
 				m_treeView->hideColumn(i);
 		}
@@ -392,7 +392,7 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 
 void ProjectExplorer::navigateTo(const QString& path) {
 	const AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	if(tree_model)
+	if (tree_model)
 		m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(path));
 }
 
@@ -430,8 +430,8 @@ void ProjectExplorer::toggleColumn(int index) {
 		//if there is only one checked column-action, deactivated it.
 		//It should't be possible to hide all columns
 		if ( checked == 1 ) {
-			int i=0;
-			while( !list_showColumnActions.at(i)->isChecked() )
+			int i = 0;
+			while ( !list_showColumnActions.at(i)->isChecked() )
 				i++;
 
 			list_showColumnActions.at(i)->setEnabled(false);
@@ -440,7 +440,7 @@ void ProjectExplorer::toggleColumn(int index) {
 }
 
 void ProjectExplorer::showAllColumns() {
-	for (int i=0; i<m_treeView->model()->columnCount(); i++) {
+	for (int i = 0; i < m_treeView->model()->columnCount(); i++) {
 		m_treeView->showColumn(i);
 		m_treeView->header()->resizeSection(0,0 );
 		m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
@@ -498,11 +498,11 @@ bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 
 	bool childVisible = false;
 	const int rows = index.model()->rowCount(index);
-	for (int i=0; i<rows; i++) {
+	for (int i = 0; i < rows; i++) {
 		QModelIndex child = index.child(i, 0);
 		auto* aspect =  static_cast<AbstractAspect*>(child.internalPointer());
 		bool visible;
-		if(text.isEmpty())
+		if (text.isEmpty())
 			visible = true;
 		else if (matchCompleteWord)
 			visible = aspect->name().startsWith(text, sensitivity);
@@ -511,9 +511,9 @@ bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 
 		if (visible) {
 			//current item is visible -> make all its children visible without applying the filter
-			for (int j=0; j<child.model()->rowCount(child); ++j) {
+			for (int j = 0; j < child.model()->rowCount(child); ++j) {
 				m_treeView->setRowHidden(j, child, false);
-				if(text.isEmpty())
+				if (text.isEmpty())
 					filter(child, text);
 			}
 
@@ -566,7 +566,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	//there are four model indices in each row
 	//-> divide by 4 to obtain the number of selected rows (=aspects)
 	items = selected.indexes();
-	for (int i=0; i<items.size()/4; ++i) {
+	for (int i = 0; i < items.size()/4; ++i) {
 		index = items.at(i*4);
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		aspect->setSelected(true);
@@ -780,7 +780,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 				emit currentAspectChanged(part);
 
 				str = attribs.value("state").toString();
-				if(str.isEmpty())
+				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.subs("state").toString());
 				else {
 					part->view()->setWindowState(Qt::WindowStates(str.toInt()));
@@ -792,25 +792,25 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 				QRect geometry;
 				str = attribs.value("x").toString();
-				if(str.isEmpty())
+				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.subs("x").toString());
 				else
 					geometry.setX(str.toInt());
 
 				str = attribs.value("y").toString();
-				if(str.isEmpty())
+				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.subs("y").toString());
 				else
 					geometry.setY(str.toInt());
 
 				str = attribs.value("width").toString();
-				if(str.isEmpty())
+				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.subs("width").toString());
 				else
 					geometry.setWidth(str.toInt());
 
 				str = attribs.value("height").toString();
-				if(str.isEmpty())
+				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.subs("height").toString());
 				else
 					geometry.setHeight(str.toInt());
@@ -839,7 +839,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 void ProjectExplorer::collapseParents(const QModelIndex& index, const QList<QModelIndex>& expanded) {
 	//root index doesn't have any parents - this case is not caught by the second if-statement below
-	if (index.column()==0 && index.row()==0)
+	if (index.column() == 0 && index.row() == 0)
 		return;
 
 	const QModelIndex parent = index.parent();

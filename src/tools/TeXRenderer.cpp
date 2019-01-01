@@ -49,8 +49,8 @@
 	\ingroup tools
 */
 QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, const TeXRenderer::Formatting& format) {
-	const QColor& fontColor =format.fontColor;
-	const QColor& backgroundColor =format.backgroundColor;
+	const QColor& fontColor = format.fontColor;
+	const QColor& backgroundColor = format.backgroundColor;
 	const int fontSize = format.fontSize;
 	const QString& fontFamily = format.fontFamily;
 	const int dpi = format.dpi;
@@ -72,7 +72,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	QTemporaryFile file(tempPath + QDir::separator() + "labplot_XXXXXX.tex");
 	// FOR DEBUG: file.setAutoRemove(false);
 	// DEBUG("temp file path = " << file.fileName().toUtf8().constData());
-	if(file.open()) {
+	if (file.open()) {
 		QDir::setCurrent(tempPath);
 	} else {
 		WARN(QString("Couldn't open the file " + file.fileName()).toStdString());
@@ -152,7 +152,7 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 
 /// HEAD
 		//TODO: pdflatex doesn't come back with EX_OK
-// 		if(latexProcess.exitCode() != 0)	// skip if pdflatex failed
+// 		if (latexProcess.exitCode() != 0)	// skip if pdflatex failed
 // 			return QImage();
 
 		// convert: PDF -> PNG
@@ -169,11 +169,11 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 ///			QFile::remove(fi.completeBaseName()+".png");
 
 ///			return image;
-///		}else{
+///		} else {
 ///			QFile::remove(fi.completeBaseName()+".pdf");
 ///			return QImage();
 ///		}
-///	}else{
+///	} else {
 ///		qWarning()<<"pdflatex failed."<<endl;
 	*success = (latexProcess.exitCode() == 0);
 	bool removeLog = true;

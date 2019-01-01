@@ -345,7 +345,7 @@ void MatrixView::adjustHeaders() {
 
 	//resize columns to the saved sizes or to fit the contents if the widht is 0
 	int cols = m_matrix->columnCount();
-	for (int i=0; i<cols; i++) {
+	for (int i = 0; i < cols; i++) {
 		if (m_matrix->columnWidth(i) == 0)
 			m_tableView->resizeColumnToContents(i);
 		else
@@ -354,7 +354,7 @@ void MatrixView::adjustHeaders() {
 
 	//resize rows to the saved sizes or to fit the contents if the height is 0
 	int rows = m_matrix->rowCount();
-	for (int i=0; i<rows; i++) {
+	for (int i = 0; i < rows; i++) {
 		if (m_matrix->rowHeight(i) == 0)
 			m_tableView->resizeRowToContents(i);
 		else
@@ -616,8 +616,8 @@ void MatrixView::copySelection() {
 	WAIT_CURSOR;
 	QString output_str;
 
-	for (int r=0; r < rows; r++) 	{
-		for (int c=0; c < cols; c++) {
+	for (int r = 0; r < rows; r++) 	{
+		for (int c = 0; c < cols; c++) {
 			//TODO: mode
 			if (isCellSelected(first_row + r, first_col + c))
 				output_str += QLocale().toString(m_matrix->cell<double>(first_row + r, first_col + c),
@@ -655,7 +655,7 @@ void MatrixView::pasteIntoSelection() {
 	QStringList input_rows(input_str.split('\n'));
 	input_row_count = input_rows.count();
 	input_col_count = 0;
-	for (int i=0; i < input_row_count; i++) {
+	for (int i = 0; i < input_row_count; i++) {
 		cell_texts.append(input_rows.at(i).split('\t'));
 		if (cell_texts.at(i).count() > input_col_count) input_col_count = cell_texts.at(i).count();
 	}
@@ -684,8 +684,8 @@ void MatrixView::pasteIntoSelection() {
 
 	rows = last_row - first_row + 1;
 	cols = last_col - first_col + 1;
-	for (int r=0; r<rows && r<input_row_count; r++) {
-		for (int c=0; c<cols && c<input_col_count; c++) {
+	for (int r = 0; r < rows && r < input_row_count; r++) {
+		for (int c = 0; c < cols && c < input_col_count; c++) {
 			if (isCellSelected(first_row + r, first_col + c) && (c < cell_texts.at(r).count()) )
 				m_matrix->setCell(first_row + r, first_col + c, cell_texts.at(r).at(c).toDouble());
 		}
@@ -709,8 +709,8 @@ void MatrixView::clearSelectedCells() {
 
 	WAIT_CURSOR;
 	m_matrix->beginMacro(i18n("%1: clear selected cell(s)", m_matrix->name()));
-	for (int i=first_row; i <= last_row; i++) {
-		for (int j=first_col; j <= last_col; j++) {
+	for (int i = first_row; i <= last_row; i++) {
+		for (int j = first_col; j <= last_col; j++) {
 			if (isCellSelected(i, j))
 				m_matrix->clearCell(i, j);
 		}
@@ -851,7 +851,7 @@ void MatrixView::removeSelectedColumns() {
 
 	WAIT_CURSOR;
 	m_matrix->beginMacro(i18n("%1: remove selected column(s)", m_matrix->name()));
-	for (int i=last; i >= first; i--)
+	for (int i = last; i >= first; i--)
 		if (isColumnSelected(i, false)) m_matrix->removeColumns(i, 1);
 	m_matrix->endMacro();
 	RESET_CURSOR;
@@ -860,7 +860,7 @@ void MatrixView::removeSelectedColumns() {
 void MatrixView::clearSelectedColumns() {
 	WAIT_CURSOR;
 	m_matrix->beginMacro(i18n("%1: clear selected column(s)", m_matrix->name()));
-	for (int i=0; i < m_matrix->columnCount(); i++) {
+	for (int i = 0; i < m_matrix->columnCount(); i++) {
 		if (isColumnSelected(i, false))
 			m_matrix->clearColumn(i);
 	}
@@ -906,7 +906,7 @@ void MatrixView::removeSelectedRows() {
 
 	WAIT_CURSOR;
 	m_matrix->beginMacro(i18n("%1: remove selected rows(s)", m_matrix->name()));
-	for (int i=last; i >= first; i--)
+	for (int i = last; i >= first; i--)
 		if (isRowSelected(i, false)) m_matrix->removeRows(i, 1);
 	m_matrix->endMacro();
 	RESET_CURSOR;
@@ -919,7 +919,7 @@ void MatrixView::clearSelectedRows() {
 
 	WAIT_CURSOR;
 	m_matrix->beginMacro(i18n("%1: clear selected rows(s)", m_matrix->name()));
-	for (int i=first; i <= last; i++) {
+	for (int i = first; i <= last; i++) {
 		if (isRowSelected(i))
 			m_matrix->clearRow(i);
 	}
@@ -1021,7 +1021,7 @@ void MatrixView::print(QPrinter* printer) const {
 
 		// print table values
 		QString cellText;
-		for (i=0; i<rows; ++i) {
+		for (i = 0; i < rows; ++i) {
 			right = margin;
 			cellText = m_tableView->model()->headerData(i, Qt::Vertical).toString()+'\t';
 			tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);
@@ -1080,12 +1080,12 @@ void MatrixView::exportToFile(const QString& path, const QString& separator, QLo
 	const QVector<QVector<double> >* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
 	QLocale locale(language);
 	for (int row = 0; row < rows; ++row) {
-		for (int col=0; col<cols; ++col) {
+		for (int col = 0; col < cols; ++col) {
 			out << locale.toString(data->at(col)[row], m_matrix->numericFormat(), m_matrix->precision());
 
 			out << data->at(col)[row];
-			if (col!=cols-1)
-				out<<sep;
+			if (col != cols-1)
+				out << sep;
 		}
 		out << '\n';
 	}

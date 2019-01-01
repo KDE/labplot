@@ -120,7 +120,7 @@ QMenu* Matrix::createContextMenu() {
 
 QWidget* Matrix::view() const {
 	if (!m_partView) {
-		m_view= new MatrixView(const_cast<Matrix*>(this));
+		m_view = new MatrixView(const_cast<Matrix*>(this));
 		m_partView = m_view;
 		m_model = m_view->model();
 	}
@@ -458,7 +458,7 @@ void Matrix::clearCell(int row, int col) {
 }
 
 void Matrix::setDimensions(int rows, int cols) {
-	if( (rows < 0) || (cols < 0 ) || (rows == rowCount() && cols == columnCount()) )
+	if ( (rows < 0) || (cols < 0 ) || (rows == rowCount() && cols == columnCount()) )
 		return;
 
 	WAIT_CURSOR;
@@ -471,7 +471,7 @@ void Matrix::setDimensions(int rows, int cols) {
 		removeColumns(columnCount() + col_diff, -col_diff);
 
 	int row_diff = rows - rowCount();
-	if(row_diff > 0)
+	if (row_diff > 0)
 		appendRows(row_diff);
 	else if (row_diff < 0)
 		removeRows(rowCount() + row_diff, -row_diff);
@@ -488,10 +488,10 @@ void Matrix::copy(Matrix* other) {
 	int columns = other->columnCount();
 	setDimensions(rows, columns);
 
-	for (int i=0; i<rows; i++)
+	for (int i = 0; i < rows; i++)
 		setRowHeight(i, other->rowHeight(i));
 
-	for (int i=0; i<columns; i++)
+	for (int i = 0; i < columns; i++)
 		setColumnWidth(i, other->columnWidth(i));
 
 	d->suppressDataChange = true;
@@ -893,7 +893,7 @@ void MatrixPrivate::insertRows(int before, int count) {
 				(static_cast<QVector<QVector<QDateTime>>*>(data))->operator[](col).insert(before+i, QDateTime());
 	}
 
-	for(int i=0; i<count; i++)
+	for (int i = 0; i < count; i++)
 		rowHeights.insert(before+i, 0);
 
 	rowCount += count;
@@ -1073,25 +1073,25 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 
 		if (reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
-		} else if(!preview && reader->name() == "formula") {
+		} else if (!preview && reader->name() == "formula") {
 			d->formula = reader->text().toString().trimmed();
 		} else if (!preview && reader->name() == "format") {
 			attribs = reader->attributes();
 
 			str = attribs.value("mode").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("mode").toString());
 			else
 				d->mode = AbstractColumn::ColumnMode(str.toInt());
 
 			str = attribs.value("headerFormat").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("headerFormat").toString());
 			else
 				d->headerFormat = Matrix::HeaderFormat(str.toInt());
 
 			str = attribs.value("numericFormat").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("numericFormat").toString());
 			else {
 				QByteArray formatba = str.toLatin1();
@@ -1099,7 +1099,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 			}
 
 			str = attribs.value("precision").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("precision").toString());
 			else
 				d->precision = str.toInt();
@@ -1108,37 +1108,37 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			str = attribs.value("columns").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("columns").toString());
 			else
 				d->columnCount = str.toInt();
 
 			str = attribs.value("rows").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("rows").toString());
 			else
 				d->rowCount = str.toInt();
 
 			str = attribs.value("x_start").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("x_start").toString());
 			else
 				d->xStart = str.toDouble();
 
 			str = attribs.value("x_end").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("x_end").toString());
 			else
 				d->xEnd = str.toDouble();
 
 			str = attribs.value("y_start").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("y_start").toString());
 			else
 				d->yStart = str.toDouble();
 
 			str = attribs.value("y_end").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("y_end").toString());
 			else
 				d->yEnd = str.toDouble();

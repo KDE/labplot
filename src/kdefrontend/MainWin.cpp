@@ -511,7 +511,7 @@ void MainWin::initMenus() {
 
 	//"Adding Cantor backends to menue and context menu"
 	QStringList m_availableBackend = Cantor::Backend::listAvailableBackends();
-	if(m_availableBackend.count() > 0) {
+	if (m_availableBackend.count() > 0) {
 		unplugActionList(QLatin1String("backends_list"));
 		QList<QAction*> newBackendActions;
 		for (Cantor::Backend* backend : Cantor::Backend::availableBackends()) {
@@ -797,7 +797,7 @@ void MainWin::updateGUI() {
 
 #ifdef HAVE_CANTOR_LIBS
 	CantorWorksheet* cantorworksheet = this->activeCantorWorksheet();
-	if(cantorworksheet) {
+	if (cantorworksheet) {
 		// enable Cantor Worksheet related menus
 		factory->container("cas_worksheet", this)->setEnabled(true);
 		auto* view = qobject_cast<CantorWorksheetView*>(cantorworksheet->view());
@@ -1565,7 +1565,7 @@ void MainWin::createFolderContextMenu(const Folder* folder, QMenu* menu) const {
 void MainWin::undo() {
 	WAIT_CURSOR;
 	m_project->undoStack()->undo();
-	if (m_project->undoStack()->index()==0) {
+	if (m_project->undoStack()->index() == 0) {
 		setCaption(m_project->name());
 		m_saveAction->setEnabled(false);
 		m_undoAction->setEnabled(false);
@@ -1914,7 +1914,7 @@ void MainWin::editFitsFileDialog() {
 void MainWin::newLiveDataSourceActionTriggered() {
 	ImportFileDialog* dlg = new ImportFileDialog(this, true);
 	if (dlg->exec() == QDialog::Accepted) {
-		if(static_cast<LiveDataSource::SourceType>(dlg->sourceType()) == LiveDataSource::MQTT) {
+		if (static_cast<LiveDataSource::SourceType>(dlg->sourceType()) == LiveDataSource::MQTT) {
 #ifdef HAVE_MQTT
 			MQTTClient* mqttClient = new MQTTClient(i18n("MQTT Client%1", 1));
 			dlg->importToMQTT(mqttClient);
@@ -1925,13 +1925,13 @@ void MainWin::newLiveDataSourceActionTriggered() {
 			//doesn't make sense to have more MQTTClients connected to the same broker
 			bool found = false;
 			for (const auto* client : existingClients) {
-				if(client->clientHostName() == mqttClient->clientHostName()) {
+				if (client->clientHostName() == mqttClient->clientHostName()) {
 					found = true;
 					break;
 				}
 			}
 
-			if(!found)
+			if (!found)
 				this->addAspectToProject(mqttClient);
 			else {
 				delete mqttClient;
@@ -1956,7 +1956,7 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 		//doesn't make sense to add a new MQTTClient to an existing MQTTClient or to any of its successors
 		QString className = parent->metaObject()->className();
 		MQTTClient* clientAncestor = parent->ancestor<MQTTClient>();
-		if(className == "MQTTClient")
+		if (className == "MQTTClient")
 			parent = parent->parentAspect();
 		else if (clientAncestor != nullptr)
 			parent = clientAncestor->parentAspect();

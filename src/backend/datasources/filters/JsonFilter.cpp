@@ -826,7 +826,7 @@ bool JsonFilter::load(XmlStreamReader* reader) {
 	QStringList list = attribs.value("modelRows").toString().split(';');
 	if (list.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'modelRows'"));
-	else{
+	else {
 		d->modelRows = QVector<int>();
 		for (auto& it : list)
 			d->modelRows.append(it.toInt());

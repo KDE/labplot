@@ -253,9 +253,9 @@ void CartesianPlotLegend::setLineSymbolWidth(float width) {
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetPosition, CartesianPlotLegend::PositionWrapper, position, updatePosition);
 void CartesianPlotLegend::setPosition(const PositionWrapper& pos) {
 	Q_D(CartesianPlotLegend);
-	if (pos.point!=d->position.point
-		|| pos.horizontalPosition!=d->position.horizontalPosition
-		|| pos.verticalPosition!=d->position.verticalPosition)
+	if (pos.point != d->position.point
+		|| pos.horizontalPosition != d->position.horizontalPosition
+		|| pos.verticalPosition != d->position.verticalPosition)
 		exec(new CartesianPlotLegendSetPositionCmd(d, pos, ki18n("%1: set position")));
 }
 
@@ -485,7 +485,7 @@ void CartesianPlotLegendPrivate::retransform() {
 
 	int curveCount = curvesList.size();
 	columnCount = (curveCount<layoutColumnCount) ? curveCount : layoutColumnCount;
-	if (columnCount==0) //no curves available
+	if (columnCount == 0) //no curves available
 		rowCount = 0;
 	else
 		rowCount = ceil(double(curveCount)/double(columnCount));
@@ -495,13 +495,13 @@ void CartesianPlotLegendPrivate::retransform() {
 	//determine the width of the legend
 	QFontMetrics fm(labelFont);
 	float w;
-	float h=fm.ascent();
+	float h = fm.ascent();
 
 	float maxTextWidth = 0;
 	float legendWidth = 0;
 	int index;
-	for (int c=0; c<columnCount; ++c) {
-		for (int r=0; r<rowCount; ++r) {
+	for (int c = 0; c < columnCount; ++c) {
+		for (int r = 0; r < rowCount; ++r) {
 			if (labelColumnMajor)
 				index = c*rowCount + r;
 			else
@@ -594,9 +594,9 @@ void CartesianPlotLegendPrivate::updatePosition() {
 			position.point.setY(parentRect.y() + parentRect.height() -  rect.height()/2 -vOffset);
 	}
 
-	suppressItemChangeEvent=true;
+	suppressItemChangeEvent = true;
 	setPos(position.point);
-	suppressItemChangeEvent=false;
+	suppressItemChangeEvent = false;
 	emit q->positionChanged(position);
 
 	suppressRetransform = true;
@@ -712,7 +712,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	//draw curve's line+symbol and the names
 	int curveCount = curvesList.size();
 	QFontMetrics fm(labelFont);
-	float h=fm.ascent();
+	float h = fm.ascent();
 	painter->setFont(labelFont);
 
 	//translate to left upper conner of the bounding rect plus the layout offset and the height of the title
@@ -723,8 +723,8 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	painter->save();
 
 	int index;
-	for (int c=0; c<columnCount; ++c) {
-		for (int r=0; r<rowCount; ++r) {
+	for (int c = 0; c < columnCount; ++c) {
+		for (int r = 0; r < rowCount; ++r) {
 			if (labelColumnMajor)
 				index = c*rowCount + r;
 			else
@@ -864,12 +864,12 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	painter->restore();
 	painter->restore();
 
-	if (m_hovered && !isSelected() && !m_printing){
+	if (m_hovered && !isSelected() && !m_printing) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
 		painter->drawPath(shape());
 	}
 
-	if (isSelected() && !m_printing){
+	if (isSelected() && !m_printing) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(shape());
 	}
@@ -898,7 +898,7 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 void CartesianPlotLegendPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	//convert position of the item in parent coordinates to label's position
 	QPointF point = pos();
-	if (point!=position.point) {
+	if (point != position.point) {
 		//position was changed -> set the position related member variables
 		suppressRetransform = true;
 		CartesianPlotLegend::PositionWrapper tempPosition;
@@ -1071,7 +1071,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == "textLabel") {
 			if (!d->title->load(reader, preview)) {
 				delete d->title;
-				d->title=nullptr;
+				d->title = nullptr;
 				return false;
 			}
 		} else if (!preview && reader->name() == "background") {

@@ -140,7 +140,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	}
 
 	//check column sizes
-	if (xDataColumn->rowCount()!=yDataColumn->rowCount()) {
+	if (xDataColumn->rowCount() != yDataColumn->rowCount()) {
 		transformResult.available = true;
 		transformResult.valid = false;
 		transformResult.status = i18n("Number of x and y data points must be equal.");
@@ -203,9 +203,9 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	// transform with window
 	int status = nsl_dft_transform_window(ydata, 1, n, twoSided, type, windowType);
 
-	unsigned int N=n;
+	unsigned int N = n;
 	if (twoSided == false)
-		N=n/2;
+		N = n/2;
 
 	switch (xScale) {
 	case nsl_dft_xscale_frequency:

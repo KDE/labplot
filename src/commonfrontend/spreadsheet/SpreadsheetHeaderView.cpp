@@ -88,7 +88,7 @@ SpreadsheetHeaderView::~SpreadsheetHeaderView() {
 QSize SpreadsheetHeaderView::sizeHint() const {
 	QSize master_size = QHeaderView::sizeHint();
 	master_size.setHeight(master_size.height());
-	if(m_showComments)
+	if (m_showComments)
 		master_size.setHeight(master_size.height() + m_slave->sizeHint().height());
 
 	return master_size;
@@ -103,11 +103,11 @@ void SpreadsheetHeaderView::setModel(QAbstractItemModel* model) {
 
 void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const {
 	QRect master_rect = rect;
-	if(m_showComments)
+	if (m_showComments)
 		master_rect = rect.adjusted(0, 0, 0, -m_slave->sizeHint().height());
 
 	QHeaderView::paintSection(painter, master_rect, logicalIndex);
-	if(m_showComments && rect.height() > QHeaderView::sizeHint().height()) {
+	if (m_showComments && rect.height() > QHeaderView::sizeHint().height()) {
 		QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
 		m_slave->paintSection(painter, slave_rect, logicalIndex);
 	}
@@ -151,6 +151,6 @@ void SpreadsheetHeaderView::refresh() {
 void SpreadsheetHeaderView::headerDataChanged(Qt::Orientation orientation, int logicalFirst, int logicalLast) {
 	Q_UNUSED(logicalFirst);
 	Q_UNUSED(logicalLast);
-	if(orientation == Qt::Horizontal)
+	if (orientation == Qt::Horizontal)
 		refresh();
 }

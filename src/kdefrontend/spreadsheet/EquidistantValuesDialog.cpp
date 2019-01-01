@@ -95,7 +95,7 @@ void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 }
 
 void EquidistantValuesDialog::typeChanged(int index) {
-	if (index==0) { //fixed number
+	if (index == 0) { //fixed number
 		ui.lIncrement->hide();
 		ui.leIncrement->hide();
 		ui.lNumber->show();
@@ -120,7 +120,7 @@ void EquidistantValuesDialog::checkValues() {
 	}
 
 	if (ui.cbType->currentIndex() == 0) {
-		if (ui.leNumber->text().simplified().isEmpty() || ui.leNumber->text().simplified().toInt()==0) {
+		if (ui.leNumber->text().simplified().isEmpty() || ui.leNumber->text().simplified().toInt() == 0) {
 			m_okButton->setEnabled(false);
 			return;
 		}
@@ -147,7 +147,7 @@ void EquidistantValuesDialog::generate() {
 	double end  = ui.leTo->text().toDouble();
 	int number;
 	double dist;
-	if (ui.cbType->currentIndex()==0) { //fixed number
+	if (ui.cbType->currentIndex() == 0) { //fixed number
 		number = ui.leNumber->text().toInt();
 		if (number!=1)
 			dist = (end - start)/ (number - 1);
@@ -167,7 +167,7 @@ void EquidistantValuesDialog::generate() {
 		if (m_spreadsheet->rowCount()>number)
 			col->clear();
 
-		for (int i=0; i<number; ++i) {
+		for (int i = 0; i < number; ++i) {
 			col->setValueAt(i, start + dist*i);
 		}
 

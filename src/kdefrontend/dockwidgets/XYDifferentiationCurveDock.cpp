@@ -116,7 +116,7 @@ void XYDifferentiationCurveDock::setupGeneral() {
 
 void XYDifferentiationCurveDock::initGeneralTab() {
 	//if there are more than one curve in the list, disable the tab "general"
-	if (m_curvesList.size()==1) {
+	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
@@ -124,7 +124,7 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 
 		uiGeneralTab.leName->setText(m_curve->name());
 		uiGeneralTab.leComment->setText(m_curve->comment());
-	}else {
+	} else {
 		uiGeneralTab.lName->setEnabled(false);
 		uiGeneralTab.leName->setEnabled(false);
 		uiGeneralTab.lComment->setEnabled(false);
@@ -307,8 +307,8 @@ void XYDifferentiationCurveDock::updateSettings(const AbstractColumn* column) {
 		uiGeneralTab.sbMax->setValue(column->maximum());
 	}
 
-	size_t n=0;
-	for (int row=0; row < column->rowCount(); ++row)
+	size_t n = 0;
+	for (int row = 0; row < column->rowCount(); ++row)
 		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
 			n++;
 
@@ -489,7 +489,7 @@ void XYDifferentiationCurveDock::enableRecalculate() const {
 	if (m_differentiationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX!=nullptr && aspectY!=nullptr);
+		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
 	} else {
 		 hasSourceData = (m_differentiationCurve->dataSourceCurve() != nullptr);
 	}

@@ -107,7 +107,7 @@ void WorkbookView::tabChanged(int index) {
 	if (m_initializing)
 		return;
 
-	if (index==-1)
+	if (index == -1)
 		return;
 
 	m_workbook->setChildSelectedInView(lastSelectedIndex, false);

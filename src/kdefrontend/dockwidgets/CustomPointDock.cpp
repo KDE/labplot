@@ -124,7 +124,7 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 		ui.leComment->setEnabled(true);
 		ui.leName->setText(m_point->name());
 		ui.leComment->setText(m_point->comment());
-	}else{
+	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
@@ -206,14 +206,14 @@ void CustomPointDock::symbolStyleChanged(int index) {
 	//enable/disable the  filling options in the GUI depending on the currently selected points.
 	if (style != Symbol::Line && style != Symbol::Cross) {
 		ui.cbSymbolFillingStyle->setEnabled(true);
-		bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex())==Qt::NoBrush);
+		bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex()) == Qt::NoBrush);
 		ui.kcbSymbolFillingColor->setEnabled(!noBrush);
 	} else {
 		ui.kcbSymbolFillingColor->setEnabled(false);
 		ui.cbSymbolFillingStyle->setEnabled(false);
 	}
 
-	bool noLine = (Qt::PenStyle(ui.cbSymbolBorderStyle->currentIndex())== Qt::NoPen);
+	bool noLine = (Qt::PenStyle(ui.cbSymbolBorderStyle->currentIndex()) == Qt::NoPen);
 	ui.kcbSymbolBorderColor->setEnabled(!noLine);
 	ui.sbSymbolBorderWidth->setEnabled(!noLine);
 
@@ -259,7 +259,7 @@ void CustomPointDock::symbolOpacityChanged(int value) {
 
 void CustomPointDock::symbolFillingStyleChanged(int index) {
 	auto brushStyle = Qt::BrushStyle(index);
-	ui.kcbSymbolFillingColor->setEnabled(!(brushStyle==Qt::NoBrush));
+	ui.kcbSymbolFillingColor->setEnabled(!(brushStyle == Qt::NoBrush));
 
 	if (m_initializing)
 		return;
@@ -453,13 +453,13 @@ void CustomPointDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
 	int index = config.name().lastIndexOf(QDir::separator());
-	if (index!=-1)
+	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else
 		name = config.name();
 
 	int size = m_pointsList.size();
-	if (size>1)
+	if (size > 1)
 		m_point->beginMacro(i18n("%1 custom points: template \"%2\" loaded", size, name));
 	else
 		m_point->beginMacro(i18n("%1: template \"%2\" loaded", m_point->name(), name));
@@ -482,10 +482,10 @@ void CustomPointDock::loadConfig(KConfig& config) {
 	ui.kcbSymbolBorderColor->setColor( group.readEntry("SymbolBorderColor", m_point->symbolPen().color()) );
 	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth",m_point->symbolPen().widthF()), Worksheet::Point) );
 
-	m_initializing=true;
+	m_initializing = true;
 	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, ui.kcbSymbolFillingColor->color());
 	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, ui.kcbSymbolBorderColor->color());
-	m_initializing=false;
+	m_initializing = false;
 }
 
 void CustomPointDock::saveConfigAsTemplate(KConfig& config) {

@@ -289,7 +289,7 @@ void LabelWidget::textChanged() {
 		return;
 
 	if (ui.tbTexUsed->isChecked()) {
-		QString text=ui.teLabel->toPlainText();
+		QString text = ui.teLabel->toPlainText();
 		TextLabel::TextWrapper wrapper(text, true);
 
 		for (auto* label : m_labelsList)
@@ -312,13 +312,13 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
 	if (m_initializing)
 		return;
 
-	if(ui.tbTexUsed->isChecked())
+	if (ui.tbTexUsed->isChecked())
 		return;
 
 	m_initializing = true;
 
 	// update button state
-	ui.tbFontBold->setChecked(ui.teLabel->fontWeight()==QFont::Bold);
+	ui.tbFontBold->setChecked(ui.teLabel->fontWeight() == QFont::Bold);
 	ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
 	ui.tbFontUnderline->setChecked(ui.teLabel->fontUnderline());
 	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
@@ -869,7 +869,7 @@ void LabelWidget::labelBorderOpacityChanged(float value) {
 //******************** SETTINGS ****************************
 //**********************************************************
 void LabelWidget::load() {
-	if(!m_label)
+	if (!m_label)
 		return;
 
 	m_initializing = true;
@@ -923,7 +923,7 @@ void LabelWidget::load() {
 }
 
 void LabelWidget::loadConfig(KConfigGroup& group) {
-	if(!m_label)
+	if (!m_label)
 		return;
 
 	m_initializing = true;

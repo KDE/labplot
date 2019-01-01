@@ -55,12 +55,12 @@ void NoteDock::setNotesList(QList< Note* > list) {
 	m_notesList = list;
 	m_notes = list.first();
 
-	m_initializing=true;
+	m_initializing = true;
 	ui.leName->setText(m_notes->name());
 	ui.kcbBgColor->setColor(m_notes->backgroundColor());
 	ui.kcbTextColor->setColor(m_notes->textColor());
 	ui.kfrTextFont->setFont(m_notes->textFont());
-	m_initializing=false;
+	m_initializing = false;
 }
 
 //*************************************************************
