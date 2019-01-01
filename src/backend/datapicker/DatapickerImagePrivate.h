@@ -38,16 +38,16 @@ public:
 
 	DatapickerImage::ReferencePoints axisPoints;
 	DatapickerImage::EditorSettings settings;
-	DatapickerImage::PointsType plotPointsType;
-	DatapickerImage::PlotImageType plotImageType;
+	DatapickerImage::PointsType plotPointsType{DatapickerImage::AxisPoints};
+	DatapickerImage::PlotImageType plotImageType{DatapickerImage::NoImage};
 
 	DatapickerImage* const q;
 	QRectF pageRect;
 	QGraphicsScene* m_scene;
-	float rotationAngle;
+	float rotationAngle{0.0};
 	QString fileName;
-	int pointSeparation;
-	int minSegmentLength;
+	int pointSeparation{0};
+	int minSegmentLength{0};
 
 	qreal pointRotationAngle;
 	Symbol::Style pointStyle;

@@ -52,12 +52,12 @@ private:
 	ColumnPrivate* m_col;
 	AbstractColumn::ColumnMode m_old_mode;
 	AbstractColumn::ColumnMode m_mode;
-	void* m_old_data;
-	void* m_new_data;
-	AbstractSimpleFilter* m_new_in_filter;
-	AbstractSimpleFilter* m_new_out_filter;
-	AbstractSimpleFilter* m_old_in_filter;
-	AbstractSimpleFilter* m_old_out_filter;
+	void* m_old_data{nullptr};
+	void* m_new_data{nullptr};
+	AbstractSimpleFilter* m_new_in_filter{nullptr};
+	AbstractSimpleFilter* m_new_out_filter{nullptr};
+	AbstractSimpleFilter* m_old_in_filter{nullptr};
+	AbstractSimpleFilter* m_old_out_filter{nullptr};
 	bool m_undone{false};
 	bool m_executed{false};
 };
@@ -231,7 +231,7 @@ private:
 	int m_row;
 	double m_new_value;
 	double m_old_value{0.};
-	int m_row_count;
+	int m_row_count{0};
 };
 
 class ColumnSetIntegerCmd : public QUndoCommand {
