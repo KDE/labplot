@@ -242,7 +242,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 
 		int c = 0;
 		for (const auto& l : columns) {
-			size_t element = 0;
+			unsigned int element = 0;
 			QString lastelement = l.back(), leaf = l.front();
 			bool isArray = false;
 			if (lastelement.at(0) == '[' && lastelement.at(lastelement.size() - 1) == ']') {
@@ -255,7 +255,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 				leaf = l.at(1);
 
 			QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c++]);
-			auto data = readTree(treeName, l.first(), leaf, element, last);
+			auto data = readTree(treeName, l.first(), leaf, (int)element, last);
 			for (int i = first; i <= last; ++i)
 				container[i - first] = data[i];
 		}
@@ -361,7 +361,7 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 
 		// read data leaf by leaf and set headers
 		for (const auto& l : columns) {
-			size_t element = 0;
+			unsigned int element = 0;
 			QString lastelement = l.back(), leaf = l.front();
 			bool isArray = false;
 			if (lastelement.at(0) == '[' && lastelement.at(lastelement.size() - 1) == ']') {
@@ -373,7 +373,7 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 			} else if (l.count() > 1)
 				leaf = l.at(1);
 
-			auto data = readTree(treeName, l.first(), leaf, element, last);
+			auto data = readTree(treeName, l.first(), leaf, (int)element, last);
 			for (int i = first; i <= last; ++i)
 				preview[i - first] << QString::number(data[i]);
 			if (!isArray || l.count() == 2)
