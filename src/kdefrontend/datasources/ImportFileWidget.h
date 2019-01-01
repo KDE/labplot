@@ -39,7 +39,6 @@
 #endif
 
 #include <QVector>
-#include <QStringList>
 
 class AbstractFileFilter;
 class AsciiOptionsWidget;
@@ -54,6 +53,7 @@ class QTableWidget;
 class QCompleter;
 class QTimer;
 class QTreeWidgetItem;
+class QStringList;
 
 class ImportFileWidget : public QWidget {
 	Q_OBJECT

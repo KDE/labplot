@@ -56,7 +56,6 @@
  */
 ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QDialog(parent),
 	m_mainWin(parent),
-	m_projectParser(nullptr),
 	m_projectType(type),
 	m_aspectTreeModel(new AspectTreeModel(parent->project())) {
 

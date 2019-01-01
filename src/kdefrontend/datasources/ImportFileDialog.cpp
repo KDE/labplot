@@ -66,8 +66,7 @@
  */
 
 ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const QString& fileName) : ImportDialog(parent),
-	m_importFileWidget(new ImportFileWidget(this, liveDataSource, fileName)),
-	m_showOptions(false) {
+	m_importFileWidget(new ImportFileWidget(this, liveDataSource, fileName)) {
 
 	vLayout->addWidget(m_importFileWidget);
 
