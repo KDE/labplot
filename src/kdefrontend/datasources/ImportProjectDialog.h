@@ -56,7 +56,7 @@ public:
 private:
 	Ui::ImportProjectWidget ui;
 	MainWin* m_mainWin;
-	ProjectParser* m_projectParser;
+	ProjectParser* m_projectParser{nullptr};
 	ProjectType m_projectType;
 	AspectTreeModel* m_aspectTreeModel;
 	TreeViewComboBox* m_cbAddTo;

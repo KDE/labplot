@@ -61,14 +61,14 @@ private:
 	QList<QString> m_tableNamesList;
 	QStringList m_columnNames;
 	QVector<AbstractColumn::ColumnMode> m_columnModes;
-	int m_cols;
-	int m_rows;
+	int m_cols{0};
+	int m_rows{0};
 	QSqlDatabase m_db;
-	QStandardItemModel* m_databaseTreeModel;
+	QStandardItemModel* m_databaseTreeModel{nullptr};
 	QString m_configPath;
-	bool m_initializing;
-	bool m_valid;
-	bool m_numeric;
+	bool m_initializing{false};
+	bool m_valid{false};
+	bool m_numeric{false};
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
 	KSyntaxHighlighting::Repository m_repository;
