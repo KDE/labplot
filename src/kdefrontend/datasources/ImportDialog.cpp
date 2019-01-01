@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import file data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2018 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -39,7 +39,6 @@
 
 #include <QDir>
 #include <QGroupBox>
-#include <QGridLayout>
 #include <QInputDialog>
 #include <QLabel>
 #include <QMenu>
@@ -59,17 +58,9 @@
 
 	\ingroup kdefrontend
  */
-
 ImportDialog::ImportDialog(MainWin* parent) : QDialog(parent),
 	vLayout(new QVBoxLayout(this)),
-	okButton(nullptr),
-	lPosition(nullptr),
-	cbPosition(nullptr),
-	cbAddTo(nullptr),
 	m_mainWin(parent),
-	frameAddTo(nullptr),
-	tbNewDataContainer(nullptr),
-	m_newDataContainerMenu(nullptr),
 	m_aspectTreeModel(new AspectTreeModel(parent->project())) {
 
 	//menu for new data container
@@ -77,7 +68,7 @@ ImportDialog::ImportDialog(MainWin* parent) : QDialog(parent),
 	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-workbook-new"), i18n("New Workbook") );
 	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-spreadsheet-new"), i18n("New Spreadsheet") );
 	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-matrix-new"), i18n("New Matrix") );
-	connect(m_newDataContainerMenu, SIGNAL(triggered(QAction*)), this, SLOT(newDataContainer(QAction*)));
+	connect(m_newDataContainerMenu, &QMenu::triggered, this, &ImportDialog::newDataContainer);
 }
 
 ImportDialog::~ImportDialog() {
@@ -138,8 +129,8 @@ void ImportDialog::setModel() {
 	//add the "Import to"-frame to the layout after the first main widget
 	vLayout->insertWidget(1, frameAddTo);
 
-	connect(tbNewDataContainer, SIGNAL(clicked(bool)), this, SLOT(newDataContainerMenu()));
-	connect(cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkOkButton()));
+	connect(tbNewDataContainer, &QToolButton::clicked, this, &ImportDialog::newDataContainerMenu);
+	connect(cbAddTo, &TreeViewComboBox::currentModelIndexChanged, this, &ImportDialog::checkOkButton);
 }
 
 void ImportDialog::setCurrentIndex(const QModelIndex& index) {

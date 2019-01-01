@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2018 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -61,14 +61,14 @@ protected:
 	void setModel();
 
 	QVBoxLayout* vLayout;
-	QPushButton* okButton;
-	QLabel* lPosition;
-	QComboBox* cbPosition;
-	TreeViewComboBox* cbAddTo;
+	QPushButton* okButton{nullptr};
+	QLabel* lPosition{nullptr};
+	QComboBox* cbPosition{nullptr};
+	TreeViewComboBox* cbAddTo{nullptr};
 	MainWin* m_mainWin;
-	QGroupBox* frameAddTo;
-	QToolButton* tbNewDataContainer;
-	QMenu* m_newDataContainerMenu;
+	QGroupBox* frameAddTo{nullptr};
+	QToolButton* tbNewDataContainer{nullptr};
+	QMenu* m_newDataContainerMenu{nullptr};
 	AspectTreeModel* m_aspectTreeModel;
 
 protected slots:
