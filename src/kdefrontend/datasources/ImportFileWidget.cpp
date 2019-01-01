@@ -1204,6 +1204,9 @@ void ImportFileWidget::manageCommonLevelSubscriptions() {
 					}
 				}
 
+				if (!currentItem)
+					break;
+
 				//calculate the number of topics the new + wildcard could replace
 				int childCount = checkCommonChildCount(1, level, commonList, currentItem);
 				if (childCount > 0) {

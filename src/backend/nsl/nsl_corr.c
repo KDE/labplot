@@ -56,9 +56,14 @@ int nsl_corr_fft_type(double s[], size_t n, double r[], size_t m, nsl_corr_type_
 
 	// zero-padded arrays
 	double *stmp = (double*)malloc(size*sizeof(double));
+	if (stmp == NULL) {
+		printf("nsl_corr_fft_type(): ERROR allocating memory for 'stmp'!\n");
+		return -1;
+	}
+
 	double *rtmp = (double*)malloc(size*sizeof(double));
-	if (stmp == NULL || rtmp == NULL) {
-		puts("ERROR: zero-padding data");
+	if (stmp == NULL) {
+		printf("nsl_corr_fft_type(): ERROR allocating memory for 'rtmp'!\n");
 		return -1;
 	}
 

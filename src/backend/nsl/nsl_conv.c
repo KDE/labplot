@@ -259,11 +259,17 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 
 	// zero-padded arrays
 	double *stmp = (double*)malloc(size*sizeof(double));
-	double *rtmp = (double*)malloc(size*sizeof(double));
-	if (stmp == NULL || rtmp == NULL) {
-		puts("ERROR: zero-padding data");
+	if (stmp == NULL) {
+		printf("nsl_conv_fft_type(): ERROR allocating memory for 'stmp'!\n");
 		return -1;
 	}
+
+	double *rtmp = (double*)malloc(size*sizeof(double));
+	if (rtmp == NULL) {
+		printf("nsl_corr_fft_type(): ERROR allocating memory for 'rtmp'!\n");
+		return -1;
+	}
+
 	for (i = 0; i < n; i++)
 		stmp[i] = s[i];
 	for (i = n; i < size; i++)
