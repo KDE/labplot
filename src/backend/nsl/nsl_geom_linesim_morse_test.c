@@ -35,17 +35,18 @@
 #define NOUT 15200
 
 int main() {
+	FILE *file;
+	if((file = fopen(FILENAME, "r")) == NULL) {
+		printf("ERROR reading %s. Giving up.\n", FILENAME);
+		return -1;
+	}
+
 	double *xdata, *ydata;
 	size_t index[N], i;
 
 	xdata = (double *)malloc(N*sizeof(double));
 	ydata = (double *)malloc(N*sizeof(double));
 
-	FILE *file;
-	if((file = fopen(FILENAME, "r")) == NULL) {
-		printf("ERROR reading %s. Giving up.\n", FILENAME);
-		return -1;
-	}
 	for(i=0; i<N; i++)
 		fscanf(file,"%lf %lf", &xdata[i], &ydata[i]);
 
@@ -62,5 +63,8 @@ int main() {
 	printf("run time : %llu ms\n", 1000 * (time2.tv_sec - time1.tv_sec) + (time2.tv_usec - time1.tv_usec) / 1000);
 
 	printf("maxtol = %g (pos. error = %g, area error = %g)\n", tolout, nsl_geom_linesim_positional_squared_error(xdata, ydata, N, index), nsl_geom_linesim_area_error(xdata, ydata, N, index));
+
+	free(xdata);
+	free(ydata);
 
 }
