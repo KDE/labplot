@@ -37,8 +37,6 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
-
-
 #include <QFileInfo>
 #include <QDateTime>
 #include <QProcess>
@@ -64,26 +62,7 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
   \ingroup datasources
 */
 LiveDataSource::LiveDataSource(const QString& name, bool loading) : Spreadsheet(name, loading),
-	m_fileType(AbstractFileFilter::Ascii),
-	m_fileWatched(false),
-	m_fileLinked(false),
-	m_paused(false),
-	m_prepared(false),
-	m_sampleSize(1),
-	m_keepNValues(0),
-	m_updateInterval(1000),
-	m_port(1027),
-	m_baudRate(9600),
-	m_bytesRead(0),
-	m_filter(nullptr),
-	m_updateTimer(new QTimer(this)),
-	m_fileSystemWatcher(nullptr),
-	m_file(nullptr),
-	m_localSocket(nullptr),
-	m_tcpSocket(nullptr),
-	m_udpSocket(nullptr),
-	m_serialPort(nullptr),
-	m_device(nullptr) {
+	m_updateTimer(new QTimer(this)) {
 
 	initActions();
 

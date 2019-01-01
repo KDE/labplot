@@ -30,9 +30,9 @@ Copyright            : (C) 2018 Christoph Roick (chrisito@gmx.de)
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-#include <QStringList>
 #include <QVector>
 
+class QStringList;
 class ROOTFilterPrivate;
 class QStringList;
 class QIODevice;
@@ -74,8 +74,7 @@ public:
 	const QString currentObject() const;
 
 	/// Get preview data of the currently set object
-	QVector<QStringList> previewCurrentObject(const QString& fileName,
-	                                             int first, int last) const;
+	QVector<QStringList> previewCurrentObject(const QString& fileName, int first, int last) const;
 
 	/// Get the number of rows in the current object
 	int rowsInCurrentObject(const QString& fileName) const;
@@ -104,14 +103,14 @@ public:
 	 */
 	void setColumns(const QVector<QStringList>& columns);
 	/**
-     * @brief Get the columns to be read
-     *
-     * For histograms, the identifiers for location, content and error are given
-     * as the first part, the corresponding translation as the second part.
-     * For trees, the branch name and the leaf name are returned.
-     *
-     * @return A pair of strings with different content depending on the object type
-     */
+	 * @brief Get the columns to be read
+	 *
+	 * For histograms, the identifiers for location, content and error are given
+	 * as the first part, the corresponding translation as the second part.
+	 * For trees, the branch name and the leaf name are returned.
+	 *
+	 * @return A pair of strings with different content depending on the object type
+	 */
 	QVector<QStringList> columns() const;
 
 	/// Save bin limitation settings

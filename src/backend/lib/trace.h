@@ -89,7 +89,7 @@ static inline void print_callstack() {
 	char buf[1024];
 
 	// iterate over the frames, skip the first one (frame of this function call)
-    for (int i = 1; i < frames_count; i++) {
+	for (int i = 1; i < frames_count; i++) {
 		Dl_info info;
 		if (dladdr(callstack[i], &info) && info.dli_sname) {
 			char* demangled_name = nullptr;
@@ -108,19 +108,19 @@ static inline void print_callstack() {
 			}
 
 			snprintf(buf, sizeof(buf), "%-3d %*p %s + %zd\n",
-                     i,
+					 i,
 					 int(2 + sizeof(void*) * 2),
 					 callstack[i],
 					 name_to_print,
-                     (char*)callstack[i] - (char*)info.dli_saddr);
+					 (char*)callstack[i] - (char*)info.dli_saddr);
 
 			free(demangled_name);
-        } else {
+		} else {
 			snprintf(buf, sizeof(buf), "%-3d %*p %s\n",
 						i, int(2 + sizeof(void*) * 2), callstack[i], symbols[i]);
-        }
+		}
 		out << buf;
-    }
+	}
 	free(symbols);
 
 	std::cout << "stack trace:\n" <<  out.str();

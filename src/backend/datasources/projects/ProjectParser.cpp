@@ -39,8 +39,7 @@
 
 \ingroup datasources
 */
-ProjectParser::ProjectParser() : QObject(), m_project(nullptr) {
-
+ProjectParser::ProjectParser() : QObject() {
 }
 
 ProjectParser::~ProjectParser() {

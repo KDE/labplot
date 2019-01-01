@@ -28,10 +28,11 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #define NETCDFFILTER_H
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
-#include <QStringList>
 #include <QTreeWidgetItem>
 
+class QStringList;
 class NetCDFFilterPrivate;
+
 class NetCDFFilter : public AbstractFileFilter {
 	Q_OBJECT
 

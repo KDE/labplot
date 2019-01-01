@@ -28,8 +28,8 @@ Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 #define HDF5FILTER_H
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
-#include <QStringList>
 
+class QStringList;
 class QTreeWidgetItem;
 class HDF5FilterPrivate;
 
@@ -63,7 +63,6 @@ public:
 	int startColumn() const;
 	void setEndColumn(const int);
 	int endColumn() const;
-
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;

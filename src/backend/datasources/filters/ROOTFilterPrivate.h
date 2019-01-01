@@ -28,8 +28,6 @@ Copyright            : (C) 2018 Christoph Roick (chrisito@gmx.de)
 #ifndef ROOTFILTERPRIVATE_H
 #define ROOTFILTERPRIVATE_H
 
-#include <QString>
-#include <QStringList>
 #include <QVector>
 
 #include <map>
@@ -39,6 +37,8 @@ Copyright            : (C) 2018 Christoph Roick (chrisito@gmx.de)
 
 class ROOTFilter;
 
+class QString;
+class QStringList;
 class AbstractDataSource;
 class AbstractColumn;
 
@@ -53,14 +53,14 @@ public:
 	 *
 	 * Also checks for the compression level. Currently the default ZLIB and LZ4 compression
 	 * types are supported. The TStreamerInfo is read if it is available, otherwise the
-     * data structure as of ROOT v6.15 is used. No tests were performed with data written
-     * prior to ROOT v5.34.
+	 * data structure as of ROOT v6.15 is used. No tests were performed with data written
+	 * prior to ROOT v5.34.
 	 *
 	 * @param[in] filename ROOT file to be read
 	 */
 	explicit ROOTData (const std::string& filename);
 
-    /// Parameters to describe a bin
+	/// Parameters to describe a bin
 	struct BinPars {
 		double content;
 		double sumw2;

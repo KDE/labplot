@@ -33,7 +33,7 @@
 
 //Insert columns
 MatrixInsertColumnsCmd::MatrixInsertColumnsCmd(MatrixPrivate* private_obj, int before, int count, QUndoCommand* parent)
- : QUndoCommand(parent), m_private_obj(private_obj), m_before(before), m_count(count) {
+		: QUndoCommand(parent), m_private_obj(private_obj), m_before(before), m_count(count) {
 	setText(i18np("%1: insert %2 column", "%1: insert %2 columns", m_private_obj->name(), m_count));
 }
 
@@ -49,7 +49,7 @@ void MatrixInsertColumnsCmd::undo() {
 
 //Insert rows
 MatrixInsertRowsCmd::MatrixInsertRowsCmd(MatrixPrivate* private_obj, int before, int count, QUndoCommand* parent)
- : QUndoCommand(parent), m_private_obj(private_obj), m_before(before), m_count(count) {
+		: QUndoCommand(parent), m_private_obj(private_obj), m_before(before), m_count(count) {
 	setText(i18np("%1: insert %2 row", "%1: insert %2 rows", m_private_obj->name(), m_count));
 }
 
@@ -89,7 +89,7 @@ void MatrixSetCoordinatesCmd::undo() {
 
 //set formula
 MatrixSetFormulaCmd::MatrixSetFormulaCmd(MatrixPrivate* private_obj, QString formula)
-	: m_private_obj(private_obj), m_other_formula(std::move(formula)) {
+		: m_private_obj(private_obj), m_other_formula(std::move(formula)) {
 	setText(i18n("%1: set formula", m_private_obj->name()));
 }
 
@@ -105,7 +105,7 @@ void MatrixSetFormulaCmd::undo() {
 
 //replace values
 MatrixReplaceValuesCmd::MatrixReplaceValuesCmd(MatrixPrivate* private_obj, void* new_values, QUndoCommand* parent)
- : QUndoCommand(parent), m_private_obj(private_obj), m_old_values(nullptr), m_new_values(new_values) {
+		: QUndoCommand(parent), m_private_obj(private_obj), m_new_values(new_values) {
 	setText(i18n("%1: replace values", m_private_obj->name()));
 }
 

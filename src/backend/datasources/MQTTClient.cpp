@@ -224,9 +224,9 @@ MQTTClient::ReadingType MQTTClient::readingType() const {
  * \param updatetype
  */
 void MQTTClient::setUpdateType(UpdateType updateType) {
-	if (updateType == NewData) {
+	if (updateType == NewData)
 		m_updateTimer->stop();
-	}
+
 	m_updateType = updateType;
 }
 

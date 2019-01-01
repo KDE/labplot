@@ -54,11 +54,11 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
   \ingroup datasources
 */
-MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool loading)
-	: Spreadsheet(name, loading),
-	  m_topicName(name),
-	  m_MQTTClient(subscription->mqttClient()),
-	  m_filter(new AsciiFilter) {
+MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool loading) : Spreadsheet(name, loading),
+	m_topicName(name),
+	m_MQTTClient(subscription->mqttClient()),
+	m_filter(new AsciiFilter) {
+
 	auto mainFilter = m_MQTTClient->filter();
 
 	m_filter->setAutoModeEnabled(mainFilter->isAutoModeEnabled());
@@ -132,7 +132,7 @@ QMenu* MQTTTopic::createContextMenu() {
 	// if we're populating the context menu for the project explorer, then
 	//there're already actions available there. Skip the first title-action
 	//and insert the action at the beginning of the menu.
-	if (menu->actions().size()>1)
+	if (menu->actions().size() > 1)
 		firstAction = menu->actions().at(1);
 
 	menu->insertAction(firstAction, m_plotDataAction);
@@ -228,7 +228,7 @@ void MQTTTopic::plotData() {
  */
 void MQTTTopic::read() {
 	while (!m_messagePuffer.isEmpty()) {
-		qDebug()<< "Reading from topic " << m_topicName;
+		qDebug() << "Reading from topic " << m_topicName;
 		const QString tempMessage = m_messagePuffer.takeFirst();
 		m_filter->readMQTTTopic(tempMessage, m_topicName, this);
 	}

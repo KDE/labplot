@@ -44,8 +44,8 @@ public:
 
 	QStringList vectorNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;
-	int startRow;
-	int endRow;
+	int startRow{1};
+	int endRow{-1};
 
 private:
 	QVector<void*> m_dataContainer; // pointers to the actual data containers

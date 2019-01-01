@@ -32,8 +32,8 @@
 #define SPREADSHEETMODEL_H
 
 #include <QAbstractItemModel>
-#include <QStringList>
 
+class QStringList;
 class Column;
 class Spreadsheet;
 class AbstractAspect;
@@ -88,7 +88,7 @@ protected:
 
 private:
 	Spreadsheet* m_spreadsheet;
-	bool m_formula_mode;
+	bool m_formula_mode{false};
 	QList<int> m_vertical_header_data;
 	QStringList m_horizontal_header_data;
 	int m_defaultHeaderHeight;

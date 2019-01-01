@@ -31,7 +31,6 @@
 #include "backend/gsl/ExpressionParser.h"
 
 #include <klocalizedstring.h>
-#include <QDebug>
 
 #include <cmath>
 extern "C" {

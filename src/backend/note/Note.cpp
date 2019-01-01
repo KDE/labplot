@@ -41,7 +41,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-Note::Note(const QString& name) : AbstractPart(name), m_view(nullptr) {
+Note::Note(const QString& name) : AbstractPart(name) {
 	KConfig config;
 	KConfigGroup group = config.group("Notes");
 
@@ -59,7 +59,7 @@ bool Note::printView() {
 	auto* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18nc("@title:window", "Print Worksheet"));
 	bool ret;
-    if ( (ret = (dlg->exec() == QDialog::Accepted)) )
+	if ( (ret = (dlg->exec() == QDialog::Accepted)) )
 		m_view->print(&printer);
 
 	delete dlg;

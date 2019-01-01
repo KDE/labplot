@@ -4,7 +4,7 @@
     Description          : Undo/Redo command templates
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -37,7 +37,7 @@ template <class target_class, typename value_type>
 class StandardSetterCmd : public QUndoCommand {
 public:
 	StandardSetterCmd(target_class* target, value_type target_class::* field, value_type newValue, const KLocalizedString& description) // use ki18n("%1: ...")
-		: m_target(target), m_field(field), m_otherValue(newValue)  {
+		: m_target(target), m_field(field), m_otherValue(newValue) {
 			setText(description.subs(m_target->name()).toString());
 		}
 
@@ -64,7 +64,7 @@ template <class target_class, typename value_type>
 class StandardMacroSetterCmd : public QUndoCommand {
 public:
 	StandardMacroSetterCmd(target_class* target, value_type target_class::*field, value_type newValue, const KLocalizedString& description) // use ki18n("%1: ...")
-		: m_target(target), m_field(field), m_otherValue(newValue)  {
+		: m_target(target), m_field(field), m_otherValue(newValue) {
 			setText(description.subs(m_target->name()).toString());
 		}
 

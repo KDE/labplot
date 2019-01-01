@@ -37,7 +37,6 @@
 #include <QSerialPort>
 #include <QTimer>
 #include <QVector>
-
 #include <QMap>
 
 class QString;
@@ -160,35 +159,35 @@ private:
 	QString m_localSocketName;
 	QString m_host;
 
-	AbstractFileFilter::FileType m_fileType;
+	AbstractFileFilter::FileType m_fileType{AbstractFileFilter::Ascii};
 	UpdateType m_updateType;
 	SourceType m_sourceType;
 	ReadingType m_readingType;
 
-	bool m_fileWatched;
-	bool m_fileLinked;
-	bool m_paused;
-	bool m_prepared;
+	bool m_fileWatched{false};
+	bool m_fileLinked{false};
+	bool m_paused{false};
+	bool m_prepared{false};
 
-	int m_sampleSize;
-	int m_keepNValues;	// number of values to keep (0 - all)
-	int m_updateInterval;
-	quint16 m_port;
-	int m_baudRate;
+	int m_sampleSize{1};
+	int m_keepNValues{0};	// number of values to keep (0 - all)
+	int m_updateInterval{1000};
+	quint16 m_port{1027};
+	int m_baudRate{9600};
 
-	qint64 m_bytesRead;
+	qint64 m_bytesRead{0};
 
-	AbstractFileFilter* m_filter;
+	AbstractFileFilter* m_filter{nullptr};
 
 	QTimer* m_updateTimer;
-	QFileSystemWatcher* m_fileSystemWatcher;
+	QFileSystemWatcher* m_fileSystemWatcher{nullptr};
 
-	QFile* m_file;
-	QLocalSocket* m_localSocket;
-	QTcpSocket* m_tcpSocket;
-	QUdpSocket* m_udpSocket;
-	QSerialPort* m_serialPort;
-	QIODevice* m_device;
+	QFile* m_file{nullptr};
+	QLocalSocket* m_localSocket{nullptr};
+	QTcpSocket* m_tcpSocket{nullptr};
+	QUdpSocket* m_udpSocket{nullptr};
+	QSerialPort* m_serialPort{nullptr};
+	QIODevice* m_device{nullptr};
 
 	QAction* m_reloadAction;
 	QAction* m_toggleLinkAction;
@@ -209,9 +208,6 @@ private slots:
 	void localSocketError(QLocalSocket::LocalSocketError);
 	void tcpSocketError(QAbstractSocket::SocketError);
 	void serialPortError(QSerialPort::SerialPortError);
-
-signals:
-
 };
 
 #endif

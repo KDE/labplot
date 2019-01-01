@@ -143,14 +143,14 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 */
 QStringList AbstractFileFilter::fileTypes() {
 	return (QStringList() << i18n("ASCII data")
-	        << i18n("Binary data")
-	        << i18n("Image")
-	        << i18n("Hierarchical Data Format 5 (HDF5)")
-	        << i18n("Network Common Data Format (NetCDF)")
-	        << i18n("Flexible Image Transport System Data Format (FITS)")
-			<< i18n("JSON data")
-	        << i18n("ROOT (CERN) Histograms")
-			<< "Ngspice RAW ASCII"
-			<< "Ngspice RAW Binary"
-	       );
+		<< i18n("Binary data")
+		<< i18n("Image")
+		<< i18n("Hierarchical Data Format 5 (HDF5)")
+		<< i18n("Network Common Data Format (NetCDF)")
+		<< i18n("Flexible Image Transport System Data Format (FITS)")
+		<< i18n("JSON data")
+		<< i18n("ROOT (CERN) Histograms")
+		<< "Ngspice RAW ASCII"
+		<< "Ngspice RAW Binary"
+	);
 }

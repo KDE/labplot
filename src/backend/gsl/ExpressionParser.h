@@ -30,7 +30,8 @@
 #define EXPRESSIONPARSER_H
 
 #include <QVector>
-#include <QStringList>
+
+class QStringList;
 
 class ExpressionParser {
 

@@ -38,7 +38,6 @@ Copyright		: (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 */
 
 AbstractDataSource::AbstractDataSource(const QString& name) : AbstractPart(name) {
-
 }
 
 void AbstractDataSource::clear() {

@@ -32,7 +32,6 @@
 #define MATRIX_COMMANDS_H
 
 #include <QUndoCommand>
-#include <QVector>
 #include <KLocalizedString>
 #include "Matrix.h"
 #include "MatrixPrivate.h"
@@ -404,7 +403,7 @@ public:
 
 private:
 	MatrixPrivate* m_private_obj;
-	void* m_old_values;
+	void* m_old_values{nullptr};
 	void* m_new_values;
 };
 

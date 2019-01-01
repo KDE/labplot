@@ -29,12 +29,12 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-#include <QStringList>
 #include <KI18n/KLocalizedString>
 #include <QTableWidget>
 #include <QTreeWidgetItem>
-#include <QXmlStreamReader>
 
+class QStringList;
+class QXmlStreamReader;
 class FITSFilterPrivate;
 class FITSHeaderEditWidget;
 

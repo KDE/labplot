@@ -43,7 +43,7 @@ NgspiceRawAsciiFilter::~NgspiceRawAsciiFilter() = default;
 
 bool NgspiceRawAsciiFilter::isNgspiceAsciiFile(const QString& fileName) {
 	QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		DEBUG("Failed to open the file " << fileName.toStdString());
 		return false;
 	}
@@ -81,7 +81,7 @@ bool NgspiceRawAsciiFilter::isNgspiceAsciiFile(const QString& fileName) {
 
 QString NgspiceRawAsciiFilter::fileInfoString(const QString& fileName) {
 	QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 		return QString();
 
 	QString info;
@@ -156,9 +156,7 @@ QVector<AbstractColumn::ColumnMode> NgspiceRawAsciiFilter::columnModes() {
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-NgspiceRawAsciiFilterPrivate::NgspiceRawAsciiFilterPrivate(NgspiceRawAsciiFilter* owner) : q(owner),
-	startRow(1),
-	endRow(-1) {
+NgspiceRawAsciiFilterPrivate::NgspiceRawAsciiFilterPrivate(NgspiceRawAsciiFilter* owner) : q(owner) {
 }
 
 /*!
@@ -169,7 +167,7 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode));
 
 	QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		DEBUG("Failed to open the file " << fileName.toStdString());
 		return;
 	}
@@ -195,7 +193,7 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 	vectorNames.clear();
 	columnModes.clear();
 	file.readLine();
-	for (int i = 0; i<vars; ++i) {
+	for (int i = 0; i < vars; ++i) {
 		line = file.readLine();
 		QStringList tokens = line.split('\t');
 
@@ -282,7 +280,7 @@ QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileNa
 	QVector<QStringList> dataStrings;
 
 	QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		DEBUG("Failed to open the file " << fileName.toStdString());
 		return dataStrings;
 	}
@@ -308,7 +306,7 @@ QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileNa
 	vectorNames.clear();
 	columnModes.clear();
 	file.readLine();
-	for (int i = 0; i<vars; ++i) {
+	for (int i = 0; i < vars; ++i) {
 		line = file.readLine();
 		QStringList tokens = line.split('\t');
 
@@ -332,7 +330,7 @@ QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileNa
 
 	//read the data points
 	QStringList lineString;
-	for (int i = 0; i< qMin(lines, points); ++i) {
+	for (int i = 0; i < qMin(lines, points); ++i) {
 		lineString.clear();
 		for (int j = 0; j < vars; ++j) {
 			line = file.readLine();
@@ -366,6 +364,7 @@ QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileNa
 void NgspiceRawAsciiFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
 	Q_UNUSED(fileName);
 	Q_UNUSED(dataSource);
+	//TODO: not implemented yet
 }
 
 //##############################################################################

@@ -46,7 +46,11 @@ ImageFilter::~ImageFilter() = default;
 returns the list of all predefined import formats.
 */
 QStringList ImageFilter::importFormats() {
-	return (QStringList() << i18n("Matrix (grayscale)") << i18n("XYZ (grayscale)") << i18n("XYRGB"));
+	return (QStringList()
+		<< i18n("Matrix (grayscale)")
+		<< i18n("XYZ (grayscale)")
+		<< i18n("XYRGB")
+	);
 }
 
 /*!

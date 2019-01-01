@@ -59,7 +59,7 @@
 \ingroup datasources
 */
 
-OriginProjectParser::OriginProjectParser() : ProjectParser(), m_originFile(nullptr), m_importUnusedObjects(false) {
+OriginProjectParser::OriginProjectParser() : ProjectParser() {
 	m_topLevelClasses << "Folder" << "Workbook" << "Spreadsheet" << "Matrix" << "Worksheet" << "Note";
 }
 

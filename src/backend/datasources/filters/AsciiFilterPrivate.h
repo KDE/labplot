@@ -86,7 +86,7 @@ public:
 	int endColumn;
 	int mqttPreviewFirstEmptyColCount;
 
-    int isPrepared();
+	int isPrepared();
 
 private:
 	static const unsigned int m_dataTypeLines = 10;	// maximum lines to read for determining data types

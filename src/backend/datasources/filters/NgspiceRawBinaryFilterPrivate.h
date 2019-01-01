@@ -44,8 +44,8 @@ public:
 
 	QStringList vectorNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;
-	int startRow;
-	int endRow;
+	int startRow{1};
+	int endRow{-1};
 
 private:
 	const static int BYTE_SIZE = 8;

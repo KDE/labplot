@@ -34,8 +34,7 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTTopic.h"
 
-#include <QVector>
-#include <QString>
+class QString;
 #endif
 
 class MQTTSubscription : public Folder {
@@ -60,10 +59,6 @@ public:
 private:
 	QString m_subscriptionName;
 	MQTTClient* m_MQTTClient{nullptr};
-
-public slots:
-
-private slots:
 
 signals:
 	void loaded(const QString &);

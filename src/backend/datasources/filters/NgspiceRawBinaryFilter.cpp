@@ -44,7 +44,7 @@ NgspiceRawBinaryFilter::~NgspiceRawBinaryFilter() = default;
 
 bool NgspiceRawBinaryFilter::isNgspiceBinaryFile(const QString& fileName) {
 	QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		DEBUG("Failed to open the file " << fileName.toStdString());
 		return false;
 	}
@@ -82,7 +82,7 @@ bool NgspiceRawBinaryFilter::isNgspiceBinaryFile(const QString& fileName) {
 
 QString NgspiceRawBinaryFilter::fileInfoString(const QString& fileName) {
 	QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 		return QString();
 
 	QString info;
@@ -157,9 +157,7 @@ QVector<AbstractColumn::ColumnMode> NgspiceRawBinaryFilter::columnModes() {
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-NgspiceRawBinaryFilterPrivate::NgspiceRawBinaryFilterPrivate(NgspiceRawBinaryFilter* owner) : q(owner),
-	startRow(1),
-	endRow(-1) {
+NgspiceRawBinaryFilterPrivate::NgspiceRawBinaryFilterPrivate(NgspiceRawBinaryFilter* owner) : q(owner) {
 }
 
 /*!

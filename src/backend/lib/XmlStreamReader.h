@@ -30,29 +30,30 @@
 #define XML_STREAM_READER_H
 
 #include <QXmlStreamReader>
-#include <QString>
-#include <QStringList>
+
+class QString;
+class QStringList;
 
 class XmlStreamReader : public QXmlStreamReader {
-	public:
-		XmlStreamReader();
-		explicit XmlStreamReader(QIODevice* device);
-		explicit XmlStreamReader(const QByteArray& data);
-		explicit XmlStreamReader(const QString& data);
-		explicit XmlStreamReader(const char* data);
+public:
+	XmlStreamReader();
+	explicit XmlStreamReader(QIODevice* device);
+	explicit XmlStreamReader(const QByteArray& data);
+	explicit XmlStreamReader(const QString& data);
+	explicit XmlStreamReader(const char* data);
 
-		QStringList warningStrings() const;
-		bool hasWarnings() const;
-		void raiseWarning(const QString&);
-		void raiseError(const QString&);
+	QStringList warningStrings() const;
+	bool hasWarnings() const;
+	void raiseWarning(const QString&);
+	void raiseError(const QString&);
 
-		bool skipToNextTag();
-		bool skipToEndElement();
-		int readAttributeInt(const QString& name, bool* ok);
+	bool skipToNextTag();
+	bool skipToEndElement();
+	int readAttributeInt(const QString& name, bool* ok);
 
-	private:
-		QStringList m_warnings;
-		void init();
+private:
+	QStringList m_warnings;
+	void init();
 };
 
 #endif // XML_STREAM_READER_H

@@ -39,7 +39,7 @@ class BinaryFilter : public AbstractFileFilter {
 	Q_ENUMS(DataType)
 
 public:
-	//TODO; use ColumnMode when it support all these types
+	//TODO; use ColumnMode when it supports all these types
 	enum DataType {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, REAL32, REAL64};
 
 	BinaryFilter();

@@ -75,9 +75,18 @@ void BinaryFilter::write(const QString & fileName, AbstractDataSource* dataSourc
 returns the list of all predefined data formats.
 */
 QStringList BinaryFilter::dataTypes() {
-	return (QStringList()<<"int8 (8 bit signed integer)"<<"int16 (16 bit signed integer)"<<"int32 (32 bit signed integer)"<<"int64 (64 bit signed integer)"
-	        <<"uint8 (8 bit unsigned integer)"<<"uint16 (16 bit unsigned integer)"<<"uint32 (32 bit unsigned integer)"<<"uint64 (64 bit unsigned integer)"
-	        <<"real32 (single precision floats)"<<"real64 (double precision floats)");
+	return (QStringList()
+		<<"int8 (8 bit signed integer)"
+		<<"int16 (16 bit signed integer)"
+		<<"int32 (32 bit signed integer)"
+		<<"int64 (64 bit signed integer)"
+	        <<"uint8 (8 bit unsigned integer)"
+		<<"uint16 (16 bit unsigned integer)"
+		<<"uint32 (32 bit unsigned integer)"
+		<<"uint64 (64 bit unsigned integer)"
+	        <<"real32 (single precision floats)"
+		<<"real64 (double precision floats)"
+	);
 }
 
 /*!

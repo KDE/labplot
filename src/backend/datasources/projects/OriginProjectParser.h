@@ -81,13 +81,13 @@ private:
 	QList<QPair<QString, QString>> charReplacementList() const;
 	QString replaceSpecialChars(QString text) const;
 
-	OriginFile* m_originFile;
+	OriginFile* m_originFile{nullptr};
 	QStringList m_spreadNameList;
 	QStringList m_excelNameList;
 	QStringList m_matrixNameList;
 	QStringList m_graphNameList;
 	QStringList m_noteNameList;
-	bool m_importUnusedObjects;
+	bool m_importUnusedObjects{false};
 
 protected:
 	bool load(Project*, bool) override;

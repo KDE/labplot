@@ -54,7 +54,7 @@ protected:
 	virtual bool load(Project*, bool preview) = 0;
 
 	QString m_projectFileName;
-	Project* m_project;
+	Project* m_project{nullptr};
 	QList<const char*>  m_topLevelClasses;
 
 private:

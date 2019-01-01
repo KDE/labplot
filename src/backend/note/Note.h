@@ -32,14 +32,14 @@
 
 #include "backend/core/AbstractPart.h"
 
-#include <QIcon>
-#include <QColor>
 #include <QFont>
+#include <QIcon>
 
+class QColor;
 class NoteView;
 
 class Note : public AbstractPart {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit Note(const QString& name);
@@ -73,7 +73,7 @@ signals:
 	void textFontChanged(QFont);
 
 private:
-	mutable NoteView* m_view;
+	mutable NoteView* m_view{nullptr};
 	QColor m_backgroundColor;
 	QColor m_textColor;
 	QFont m_textFont;

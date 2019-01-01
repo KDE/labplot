@@ -36,10 +36,8 @@ Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <QDebug>
 
 #ifdef HAVE_ZIP
-
 #include <lz4.h>
 #include <zlib.h>
-
 #endif
 
 #include <cmath>
@@ -90,8 +88,7 @@ QVector<QStringList> ROOTFilter::listLeaves(const QString& fileName, const QStri
 	return d->listLeaves(fileName, treeName);
 }
 
-QVector<QStringList> ROOTFilter::previewCurrentObject(const QString& fileName,
-                                                      int first, int last) const {
+QVector<QStringList> ROOTFilter::previewCurrentObject(const QString& fileName, int first, int last) const {
 	return d->previewCurrentObject(fileName, first, last);
 }
 

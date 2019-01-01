@@ -30,8 +30,8 @@
 #ifndef JSONFILTERPRIVATE_H
 #define JSONFILTERPRIVATE_H
 
-#include <QJsonDocument>
 #include "QJsonModel.h"
+class QJsonDocument;
 class KFilterDev;
 class AbstractDataSource;
 class AbstractColumn;
