@@ -33,11 +33,11 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
-#include <QImage>
 #include <QVector3D>
 #include <QPen>
-#include <QBrush>
 
+class QImage;
+class QBrush;
 class DatapickerImagePrivate;
 class DatapickerImageView;
 class ImageEditor;
@@ -100,7 +100,7 @@ public:
 	void setPlotImageType(const DatapickerImage::PlotImageType);
 	DatapickerImage::PlotImageType plotImageType();
 
-	bool isLoaded;
+	bool isLoaded{false};
 	QImage originalPlotImage;
 	QImage processedPlotImage;
 	QColor background;
@@ -110,7 +110,7 @@ public:
 	int *valueBins;
 	int *intensityBins;
 
-	QGraphicsPixmapItem* m_magnificationWindow;
+	QGraphicsPixmapItem* m_magnificationWindow{nullptr};
 
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
 	CLASS_D_ACCESSOR_DECL(DatapickerImage::ReferencePoints, axisPoints, AxisPoints)
@@ -135,7 +135,7 @@ private:
 	void initSceneParameters();
 
 	DatapickerImagePrivate* const d;
-	mutable DatapickerImageView* m_view;
+	mutable DatapickerImageView* m_view{nullptr};
 	friend class DatapickerImagePrivate;
 	Segments* m_segments;
 

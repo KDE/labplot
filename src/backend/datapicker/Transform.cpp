@@ -32,7 +32,7 @@ Transform::Transform() = default;
 
 bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisPoints) {
 	if (axisPoints.type == DatapickerImage::LogarithmicX) {
-		for(int i=0; i<3; ++i) {
+		for (int i = 0; i < 3; ++i) {
 			if (axisPoints.logicalPos[i].x() <= 0)
 				return false;
 			x[i] = log(axisPoints.logicalPos[i].x());
@@ -41,7 +41,7 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 			Y[i] = axisPoints.scenePos[i].y();
 		}
 	} else if (axisPoints.type == DatapickerImage::LogarithmicY) {
-		for(int i=0; i<3; ++i) {
+		for (int i = 0; i < 3; ++i) {
 			if (axisPoints.logicalPos[i].y() <= 0)
 				return false;
 			x[i] = axisPoints.logicalPos[i].x();
@@ -50,7 +50,7 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 			Y[i] = axisPoints.scenePos[i].y();
 		}
 	} else if (axisPoints.type == DatapickerImage::PolarInDegree) {
-		for(int i=0; i<3; ++i) {
+		for (int i = 0; i < 3; ++i) {
 			if (axisPoints.logicalPos[i].x() < 0)
 				return false;
 			x[i] = axisPoints.logicalPos[i].x()*cos(axisPoints.logicalPos[i].y()*M_PI / 180.0);
@@ -59,7 +59,7 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 			Y[i] = axisPoints.scenePos[i].y();
 		}
 	} else if (axisPoints.type == DatapickerImage::PolarInRadians) {
-		for(int i=0; i<3; ++i) {
+		for (int i = 0; i < 3; ++i) {
 			if (axisPoints.logicalPos[i].x() < 0)
 				return false;
 			x[i] = axisPoints.logicalPos[i].x()*cos(axisPoints.logicalPos[i].y());
@@ -68,14 +68,14 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 			Y[i] = axisPoints.scenePos[i].y();
 		}
 	} else if (axisPoints.type == DatapickerImage::Ternary) {
-		for(int i=0; i<3; ++i) {
+		for (int i = 0; i < 3; ++i) {
 			x[i] = (2*axisPoints.logicalPos[i].y() + axisPoints.logicalPos[i].z())/(2*axisPoints.ternaryScale);
 			y[i] = (sqrt(3)*axisPoints.logicalPos[i].z())/(2*axisPoints.ternaryScale);
 			X[i] = axisPoints.scenePos[i].x();
 			Y[i] = axisPoints.scenePos[i].y();
 		}
 	} else {
-		for(int i=0; i<3; ++i) {
+		for (int i = 0; i < 3; ++i) {
 			x[i] = axisPoints.logicalPos[i].x();
 			y[i] = axisPoints.logicalPos[i].y();
 			X[i] = axisPoints.scenePos[i].x();
@@ -95,22 +95,22 @@ QVector3D Transform::mapSceneToLogical(const QPointF& scenePoint, const Datapick
 		double cos;
 		double scaleOfX;
 		double scaleOfY;
-		if (((Y[1] - Y[0])*(x[2] - x[0]) - (Y[2] - Y[0])*(x[1] - x[0]))!=0) {
+		if (((Y[1] - Y[0])*(x[2] - x[0]) - (Y[2] - Y[0])*(x[1] - x[0])) != 0) {
 			double tan = ((X[1] - X[0])*(x[2] - x[0]) - (X[2] - X[0])*(x[1] - x[0]))/((Y[1] - Y[0])*(x[2] - x[0]) - (Y[2] - Y[0])*(x[1] - x[0]));
 			sin = tan/sqrt(1 + tan*tan);
 			cos = sqrt(1 - sin*sin);
 		} else {
-			sin=1;
-			cos=0;
+			sin = 1;
+			cos = 0;
 		}
 
-		if((x[1] - x[0])!=0) {
+		if((x[1] - x[0]) != 0) {
 			scaleOfX = (x[1] - x[0])/((X[1] - X[0])*cos - (Y[1] - Y[0])*sin);
 		} else {
 			scaleOfX = (x[2] - x[0])/((X[2] - X[0])*cos - (Y[2] - Y[0])*sin);
 		}
 
-		if ((y[1]-y[0])!=0) {
+		if ((y[1]-y[0]) != 0) {
 			scaleOfY = (y[1] - y[0])/((X[1] - X[0])*sin + (Y[1] - Y[0])*cos);
 		} else {
 			scaleOfY = (y[2] - y[0])/((X[2] - X[0])*sin + (Y[2] - Y[0])*cos);

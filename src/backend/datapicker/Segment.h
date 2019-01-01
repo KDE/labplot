@@ -40,8 +40,8 @@ public:
 	explicit Segment(DatapickerImage*);
 
 	QList<QLine*> path;
-	int yLast;
-	int length;
+	int yLast{0};
+	int length{0};
 
 	QGraphicsItem *graphicsItem() const;
 	void setParentGraphicsItem(QGraphicsItem*);

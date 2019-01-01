@@ -75,10 +75,10 @@ public slots:
 	void childSelected(const AbstractAspect*) override;
 
 private:
-	mutable DatapickerView* m_view;
-	DatapickerCurve* m_activeCurve;
+	mutable DatapickerView* m_view{nullptr};
+	DatapickerCurve* m_activeCurve{nullptr};
 	Transform* m_transform;
-	DatapickerImage* m_image;
+	DatapickerImage* m_image{nullptr};
 	void init();
 	void handleChildAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleChildAspectAdded(const AbstractAspect*);

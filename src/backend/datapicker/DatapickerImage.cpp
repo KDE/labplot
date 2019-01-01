@@ -57,15 +57,12 @@
  * * \ingroup datapicker
  */
 DatapickerImage::DatapickerImage(const QString& name, bool loading) : AbstractPart(name),
-	isLoaded(false),
 	foregroundBins( new int[ImageEditor::colorAttributeMax(Foreground) + 1]),
 	hueBins( new int[ImageEditor::colorAttributeMax(Hue) + 1]),
 	saturationBins( new int[ImageEditor::colorAttributeMax(Saturation) + 1]),
 	valueBins( new int[ImageEditor::colorAttributeMax(Value) + 1]),
 	intensityBins( new int[ImageEditor::colorAttributeMax(Intensity) + 1]),
-	m_magnificationWindow(nullptr),
 	d(new DatapickerImagePrivate(this)),
-	m_view(nullptr),
 	m_segments(new Segments(this)) {
 
 	if (!loading)
@@ -376,7 +373,7 @@ void DatapickerImage::setPointSeparation(const int value) {
 //##############################################################################
 //######################  Private implementation ###############################
 //##############################################################################
-DatapickerImagePrivate::DatapickerImagePrivate(DatapickerImage *owner):q(owner),
+DatapickerImagePrivate::DatapickerImagePrivate(DatapickerImage *owner) : q(owner),
 	pageRect(0, 0, 1500, 1500),
 	m_scene(new QGraphicsScene(pageRect)) {
 }
@@ -448,7 +445,7 @@ void DatapickerImagePrivate::updateFileName() {
 	q->isLoaded = false;
 	const QString& address = fileName.trimmed();
 
-	if ( !address.isEmpty() ) {
+	if (!address.isEmpty()) {
 		if (uploadImage(address)) {
 			q->initSceneParameters();
 			fileName = address;
@@ -566,7 +563,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			d->fileName = str;
 
 			str = attribs.value("plotPointsType").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("plotPointsType").toString());
 			else
 				d->plotPointsType = DatapickerImage::PointsType(str.toInt());
@@ -575,103 +572,103 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			str = attribs.value("graphType").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("graphType").toString());
 			else
 				d->axisPoints.type = DatapickerImage::GraphType(str.toInt());
 
 			str = attribs.value("ternaryScale").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("ternaryScale").toString());
 			else
 				d->axisPoints.ternaryScale = str.toDouble();
 
 			str = attribs.value("axisPointLogicalX1").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("axisPointLogicalX1").toString());
 			else
 				d->axisPoints.logicalPos[0].setX(str.toDouble());
 
 			str = attribs.value("axisPointLogicalY1").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("axisPointLogicalY1").toString());
 			else
 				d->axisPoints.logicalPos[0].setY(str.toDouble());
 
 			str = attribs.value("axisPointLogicalZ1").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("axisPointLogicalZ1").toString());
 			else
 				d->axisPoints.logicalPos[0].setZ(str.toDouble());
 
 			str = attribs.value("axisPointLogicalX2").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("axisPointLogicalX2").toString());
 			else
 				d->axisPoints.logicalPos[1].setX(str.toDouble());
 
 			str = attribs.value("axisPointLogicalY2").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("axisPointLogicalY2").toString());
 			else
 				d->axisPoints.logicalPos[1].setY(str.toDouble());
 
 			str = attribs.value("axisPointLogicalZ2").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("axisPointLogicalZ2").toString());
 			else
 				d->axisPoints.logicalPos[1].setZ(str.toDouble());
 
 			str = attribs.value("axisPointLogicalX3").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("axisPointLogicalX3").toString());
 			else
 				d->axisPoints.logicalPos[2].setX(str.toDouble());
 
 			str = attribs.value("axisPointLogicalY3").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("axisPointLogicalY3").toString());
 			else
 				d->axisPoints.logicalPos[2].setY(str.toDouble());
 
 			str = attribs.value("axisPointLogicalZ3").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("axisPointLogicalZ3").toString());
 			else
 				d->axisPoints.logicalPos[2].setZ(str.toDouble());
 
 			str = attribs.value("axisPointSceneX1").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("axisPointSceneX1").toString());
 			else
 				d->axisPoints.scenePos[0].setX(str.toDouble());
 
 			str = attribs.value("axisPointSceneY1").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("axisPointSceneY1").toString());
 			else
 				d->axisPoints.scenePos[0].setY(str.toDouble());
 
 			str = attribs.value("axisPointSceneX2").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("axisPointSceneX2").toString());
 			else
 				d->axisPoints.scenePos[1].setX(str.toDouble());
 
 			str = attribs.value("axisPointSceneY2").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("axisPointSceneY2").toString());
 			else
 				d->axisPoints.scenePos[1].setY(str.toDouble());
 
 			str = attribs.value("axisPointSceneX3").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("axisPointSceneX3").toString());
 			else
 				d->axisPoints.scenePos[2].setX(str.toDouble());
 
 			str = attribs.value("axisPointSceneY3").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("axisPointSceneY3").toString());
 			else
 				d->axisPoints.scenePos[2].setY(str.toDouble());
@@ -680,125 +677,125 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			str = attribs.value("plotImageType").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("plotImageType").toString());
 			else
 				d->plotImageType = DatapickerImage::PlotImageType(str.toInt());
 
 			str = attribs.value("rotationAngle").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("rotationAngle").toString());
 			else
 				d->rotationAngle = str.toFloat();
 
 			str = attribs.value("minSegmentLength").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("minSegmentLength").toString());
 			else
 				d->minSegmentLength = str.toInt();
 
 			str = attribs.value("pointSeparation").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("pointSeparation").toString());
 			else
 				d->pointSeparation = str.toInt();
 
 			str = attribs.value("foregroundThresholdHigh").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("foregroundThresholdHigh").toString());
 			else
 				d->settings.foregroundThresholdHigh = str.toInt();
 
 			str = attribs.value("foregroundThresholdLow").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("foregroundThresholdLow").toString());
 			else
 				d->settings.foregroundThresholdLow = str.toInt();
 
 			str = attribs.value("hueThresholdHigh").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("hueThresholdHigh").toString());
 			else
 				d->settings.hueThresholdHigh = str.toInt();
 
 			str = attribs.value("hueThresholdLow").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("hueThresholdLow").toString());
 			else
 				d->settings.hueThresholdLow = str.toInt();
 
 			str = attribs.value("intensityThresholdHigh").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("intensityThresholdHigh").toString());
 			else
 				d->settings.intensityThresholdHigh = str.toInt();
 
 			str = attribs.value("intensityThresholdLow").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("intensityThresholdLow").toString());
 			else
 				d->settings.intensityThresholdLow = str.toInt();
 
 			str = attribs.value("saturationThresholdHigh").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("saturationThresholdHigh").toString());
 			else
 				d->settings.saturationThresholdHigh = str.toInt();
 
 			str = attribs.value("saturationThresholdLow").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("saturationThresholdLow").toString());
 			else
 				d->settings.saturationThresholdLow = str.toInt();
 
 			str = attribs.value("valueThresholdHigh").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("valueThresholdHigh").toString());
 			else
 				d->settings.valueThresholdHigh = str.toInt();
 
 			str = attribs.value("valueThresholdLow").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("valueThresholdLow").toString());
 			else
 				d->settings.valueThresholdLow = str.toInt();
 
-		} else if(!preview && reader->name() == "symbolProperties") {
+		} else if (!preview && reader->name() == "symbolProperties") {
 			attribs = reader->attributes();
 
 			str = attribs.value("pointRotationAngle").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("pointRotationAngle").toString());
 			else
 				d->pointRotationAngle = str.toFloat();
 
 			str = attribs.value("pointOpacity").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("pointOpacity").toString());
 			else
 				d->pointOpacity = str.toFloat();
 
 			str = attribs.value("pointSize").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("pointSize").toString());
 			else
 				d->pointSize = str.toFloat();
 
 			str = attribs.value("pointStyle").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("pointStyle").toString());
 			else
 				d->pointStyle = (Symbol::Style)str.toInt();
 
 			str = attribs.value("pointVisibility").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("pointVisibility").toString());
 			else
 				d->pointVisibility = (bool)str.toInt();
 
 			READ_QBRUSH(d->pointBrush);
 			READ_QPEN(d->pointPen);
-		} else if(reader->name() == "datapickerPoint") {
+		} else if (reader->name() == "datapickerPoint") {
 			DatapickerPoint* datapickerPoint = new DatapickerPoint("");
 			datapickerPoint->setHidden(true);
 			if (!datapickerPoint->load(reader, preview)) {

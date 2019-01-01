@@ -48,7 +48,7 @@ float DatapickerPoint::selectedOpacity = 0.3f;
  * \brief A customizable error-bar for DatapickerPoint.
  */
 
-ErrorBarItem::ErrorBarItem(DatapickerPoint *parent, const ErrorBarType& type) :
+ErrorBarItem::ErrorBarItem(DatapickerPoint* parent, const ErrorBarType& type) :
 	QGraphicsRectItem(parent->graphicsItem()),
 	barLineItem(new QGraphicsLineItem(parent->graphicsItem())),
 	m_type(type),
@@ -80,7 +80,7 @@ void ErrorBarItem::setRectSize(const qreal size) {
 	setRect(matrix.mapRect(m_rect));
 }
 
-void ErrorBarItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+void ErrorBarItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	if (m_type == PlusDeltaX)
 		m_parentItem->setPlusDeltaXPos(pos());
 	else if (m_type == MinusDeltaX)
@@ -112,13 +112,13 @@ QVariant ErrorBarItem::itemChange(QGraphicsItem::GraphicsItemChange change, cons
  * of the predefined position flags (\ca HorizontalPosition, \ca VerticalPosition).
  */
 
-DatapickerPoint::DatapickerPoint(const QString& name):AbstractAspect(name),
+DatapickerPoint::DatapickerPoint(const QString& name) : AbstractAspect(name),
 	d_ptr(new DatapickerPointPrivate(this)) {
 
 	init();
 }
 
-DatapickerPoint::DatapickerPoint(const QString& name, DatapickerPointPrivate *dd):AbstractAspect(name), d_ptr(dd) {
+DatapickerPoint::DatapickerPoint(const QString& name, DatapickerPointPrivate *dd) : AbstractAspect(name), d_ptr(dd) {
 	init();
 }
 
@@ -207,14 +207,14 @@ CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPointF, minusDeltaYPos, minusDeltaY
 STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPosition, QPointF, position, retransform)
 void DatapickerPoint::setPosition(const QPointF& pos) {
 	Q_D(DatapickerPoint);
-	if (pos!=d->position)
+	if (pos != d->position)
 		exec(new DatapickerPointSetPositionCmd(d, pos, ki18n("%1: set position")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaXPos, QPointF, plusDeltaXPos, updateData)
 void DatapickerPoint::setPlusDeltaXPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
-	if ( pos != d->plusDeltaXPos ) {
+	if (pos != d->plusDeltaXPos) {
 		auto* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
 		if (!curve)
 			return;
@@ -232,7 +232,7 @@ void DatapickerPoint::setPlusDeltaXPos(const QPointF& pos) {
 STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaXPos, QPointF, minusDeltaXPos, updateData)
 void DatapickerPoint::setMinusDeltaXPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
-	if ( pos != d->minusDeltaXPos ) {
+	if (pos != d->minusDeltaXPos) {
 		auto* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
 		if (!curve)
 			return;
@@ -250,7 +250,7 @@ void DatapickerPoint::setMinusDeltaXPos(const QPointF& pos) {
 STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaYPos, QPointF, plusDeltaYPos, updateData)
 void DatapickerPoint::setPlusDeltaYPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
-	if ( pos != d->plusDeltaYPos ) {
+	if (pos != d->plusDeltaYPos) {
 		auto* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
 		if (!curve)
 			return;
@@ -268,7 +268,7 @@ void DatapickerPoint::setPlusDeltaYPos(const QPointF& pos) {
 STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaYPos, QPointF, minusDeltaYPos, updateData)
 void DatapickerPoint::setMinusDeltaYPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
-	if ( pos != d->minusDeltaYPos ) {
+	if (pos != d->minusDeltaYPos) {
 		auto* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
 		if (!curve)
 			return;
@@ -291,9 +291,7 @@ void DatapickerPoint::setPrinting(bool on) {
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-DatapickerPointPrivate::DatapickerPointPrivate(DatapickerPoint* owner)
-	: m_printing(false), q(owner) {
-
+DatapickerPointPrivate::DatapickerPointPrivate(DatapickerPoint* owner) : q(owner) {
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(true);
@@ -478,13 +476,13 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			str = attribs.value("x").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("x").toString());
 			else
 				d->position.setX(str.toDouble());
 
 			str = attribs.value("y").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("y").toString());
 			else
 				d->position.setY(str.toDouble());
@@ -492,49 +490,49 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			str = attribs.value("plusDeltaXPos_x").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("plusDeltaXPos_x").toString());
 			else
 				d->plusDeltaXPos.setX(str.toDouble());
 
 			str = attribs.value("plusDeltaXPos_y").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("plusDeltaXPos_y").toString());
 			else
 				d->plusDeltaXPos.setY(str.toDouble());
 
 			str = attribs.value("minusDeltaXPos_x").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("minusDeltaXPos_x").toString());
 			else
 				d->minusDeltaXPos.setX(str.toDouble());
 
 			str = attribs.value("minusDeltaXPos_y").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("minusDeltaXPos_y").toString());
 			else
 				d->minusDeltaXPos.setY(str.toDouble());
 
 			str = attribs.value("plusDeltaYPos_x").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("plusDeltaYPos_x").toString());
 			else
 				d->plusDeltaYPos.setX(str.toDouble());
 
 			str = attribs.value("plusDeltaYPos_y").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("plusDeltaYPos_y").toString());
 			else
 				d->plusDeltaYPos.setY(str.toDouble());
 
 			str = attribs.value("minusDeltaYPos_x").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("minusDeltaYPos_x").toString());
 			else
 				d->minusDeltaYPos.setX(str.toDouble());
 
 			str = attribs.value("minusDeltaYPos_y").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("minusDeltaYPos_y").toString());
 			else
 				d->minusDeltaYPos.setY(str.toDouble());

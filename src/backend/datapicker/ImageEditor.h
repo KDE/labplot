@@ -27,10 +27,11 @@
 #ifndef IMAGEEDITOR_H
 #define IMAGEEDITOR_H
 
-#include <QColor>
 #include <QList>
 
 #include <backend/datapicker/DatapickerImage.h>
+
+class QColor;
 
 class ImageEditor {
 public:

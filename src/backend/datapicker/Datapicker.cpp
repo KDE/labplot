@@ -45,10 +45,7 @@
  * \ingroup backend
  */
 Datapicker::Datapicker(const QString& name, const bool loading) : AbstractPart(name),
-	m_view(nullptr),
-	m_activeCurve(nullptr),
-	m_transform(new Transform()),
-	m_image(nullptr) {
+	m_transform(new Transform()) {
 
 	connect(this, &Datapicker::aspectAdded, this, &Datapicker::handleAspectAdded);
 	connect(this, &Datapicker::aspectAboutToBeRemoved, this, &Datapicker::handleAspectAboutToBeRemoved);
@@ -136,7 +133,7 @@ Spreadsheet* Datapicker::currentSpreadsheet() const {
 		return nullptr;
 
 	const int index = m_view->currentIndex();
-	if(index>0) {
+	if (index > 0) {
 		auto* curve = child<DatapickerCurve>(index-1);
 		return curve->child<Spreadsheet>(0);
 	}
@@ -185,7 +182,7 @@ void Datapicker::childDeselected(const AbstractAspect* aspect) {
  */
 void Datapicker::setChildSelectedInView(int index, bool selected) {
 	//select/deselect the datapicker itself if the first tab "representing" the plot image and the curves was selected in the view
-	if (index==0) {
+	if (index == 0) {
 		if (selected)
 			emit childAspectSelectedInView(this);
 		else {
@@ -261,7 +258,6 @@ void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
 QVector3D Datapicker::mapSceneToLogical(const QPointF& point) const {
 	return m_transform->mapSceneToLogical(point, m_image->axisPoints());
 }
-
 
 QVector3D Datapicker::mapSceneLengthToLogical(const QPointF& point) const {
 	return m_transform->mapSceneLengthToLogical(point, m_image->axisPoints());

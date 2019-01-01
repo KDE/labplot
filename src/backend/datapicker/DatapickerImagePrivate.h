@@ -28,8 +28,7 @@
 #ifndef DATAPICKERIMAGEPRIVATE_H
 #define DATAPICKERIMAGEPRIVATE_H
 
-#include <QBrush>
-
+class QBrush;
 class QGraphicsScene;
 
 class DatapickerImagePrivate {
@@ -50,16 +49,16 @@ public:
 	int pointSeparation;
 	int minSegmentLength;
 
-    qreal pointRotationAngle;
-    Symbol::Style pointStyle;
-    QBrush pointBrush;
-    QPen pointPen;
-    qreal pointOpacity;
-    qreal pointSize;
-    bool pointVisibility;
+	qreal pointRotationAngle;
+	Symbol::Style pointStyle;
+	QBrush pointBrush;
+	QPen pointPen;
+	qreal pointOpacity;
+	qreal pointSize;
+	bool pointVisibility;
 
 	QString name() const;
-    void retransform();
+	void retransform();
 	void updateFileName();
 	void discretize();
 	void makeSegments();

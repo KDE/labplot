@@ -27,23 +27,23 @@
 #ifndef DATAPICKERPOINT_H
 #define DATAPICKERPOINT_H
 
-#include <QObject>
-#include <QBrush>
-#include <QPen>
-
 #include "backend/core/AbstractAspect.h"
 #include "backend/lib/macros.h"
 #include "backend/datapicker/DatapickerCurve.h"
 #include <QGraphicsItem>
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
+class QObject;
+class QBrush;
+class QPen;
 class DatapickerPoint;
 
+//TODO: own file
 class ErrorBarItem : public QObject, public QGraphicsRectItem {
 	Q_OBJECT
 
 public:
-	enum ErrorBarType { PlusDeltaX, MinusDeltaX, PlusDeltaY, MinusDeltaY};
+	enum ErrorBarType {PlusDeltaX, MinusDeltaX, PlusDeltaY, MinusDeltaY};
 
 	explicit ErrorBarItem(DatapickerPoint* parent = nullptr, const ErrorBarType& type = PlusDeltaX);
 
@@ -67,12 +67,12 @@ class DatapickerPoint : public AbstractAspect {
 	Q_OBJECT
 
 public:
-	explicit DatapickerPoint(const QString& name );
+	explicit DatapickerPoint(const QString& name);
 	~DatapickerPoint() override;
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-	QGraphicsItem *graphicsItem() const;
+	QGraphicsItem* graphicsItem() const;
 	void setParentGraphicsItem(QGraphicsItem*);
 	void setPrinting(bool);
 	void initErrorBar(const DatapickerCurve::Errors&);

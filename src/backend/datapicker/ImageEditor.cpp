@@ -44,55 +44,55 @@ static const int maxValue = 100;
 QMutex mutex;
 
 class DiscretizeTask : public QRunnable {
-	public:
-		DiscretizeTask(int start, int end, QImage* plotImage, QImage* originalImage, DatapickerImage::EditorSettings settings, QColor background) {
-			m_start = start;
-			m_end = end;
-			m_plotImage = plotImage;
-			m_originalImage = originalImage;
-			m_settings = settings;
-			m_background = background;
-		};
+public:
+	DiscretizeTask(int start, int end, QImage* plotImage, QImage* originalImage, DatapickerImage::EditorSettings settings, QColor background) :
+		m_start(start),
+		m_end(end),
+		m_plotImage(plotImage),
+		m_originalImage(originalImage),
+		m_settings(settings),
+		m_background(background)
+		{};
 
-		void run() override {
-			for (int y=m_start; y<m_end; ++y) {
-				mutex.lock();
-				QRgb* line = reinterpret_cast<QRgb*>(m_plotImage->scanLine(y));
-				mutex.unlock();
-				int value;
-				for (int x=0; x<m_plotImage->width(); ++x) {
-					value = ImageEditor::discretizeHue(x, y, m_originalImage);
-					if (!ImageEditor::pixelIsOn(value, DatapickerImage::Hue, m_settings))
-						continue;
+	void run() override {
+		for (int y=m_start; y<m_end; ++y) {
+			mutex.lock();
+			QRgb* line = reinterpret_cast<QRgb*>(m_plotImage->scanLine(y));
+			mutex.unlock();
+			int value;
+			for (int x=0; x<m_plotImage->width(); ++x) {
+				value = ImageEditor::discretizeHue(x, y, m_originalImage);
+				if (!ImageEditor::pixelIsOn(value, DatapickerImage::Hue, m_settings))
+					continue;
 
-					value = ImageEditor::discretizeSaturation(x, y, m_originalImage);
-					if (!ImageEditor::pixelIsOn(value, DatapickerImage::Saturation, m_settings))
-						continue;
+				value = ImageEditor::discretizeSaturation(x, y, m_originalImage);
+				if (!ImageEditor::pixelIsOn(value, DatapickerImage::Saturation, m_settings))
+					continue;
 
-					value = ImageEditor::discretizeValue(x, y, m_originalImage);
-					if (!ImageEditor::pixelIsOn(value, DatapickerImage::Value, m_settings))
-						continue;
+				value = ImageEditor::discretizeValue(x, y, m_originalImage);
+				if (!ImageEditor::pixelIsOn(value, DatapickerImage::Value, m_settings))
+					continue;
 
-					value = ImageEditor::discretizeIntensity(x, y, m_originalImage);
-					if (!ImageEditor::pixelIsOn(value, DatapickerImage::Saturation, m_settings))
-						continue;
+				value = ImageEditor::discretizeIntensity(x, y, m_originalImage);
+				if (!ImageEditor::pixelIsOn(value, DatapickerImage::Saturation, m_settings))
+					continue;
 
-					value = ImageEditor::discretizeForeground(x, y, m_background, m_originalImage);
-					if (!ImageEditor::pixelIsOn(value, DatapickerImage::Foreground, m_settings))
-						continue;
+				value = ImageEditor::discretizeForeground(x, y, m_background, m_originalImage);
+				if (!ImageEditor::pixelIsOn(value, DatapickerImage::Foreground, m_settings))
+					continue;
 
-					line[x] = black;
-				}
+				line[x] = black;
 			}
 		}
+	}
 
-	private:
-		int m_start;
-		int m_end;
-		QImage* m_plotImage;
-		QImage* m_originalImage;
-		DatapickerImage::EditorSettings m_settings;
-		QColor m_background;
+private:
+	int m_start;
+	int m_end;
+	QImage* m_plotImage;
+	QImage* m_originalImage;
+	DatapickerImage::EditorSettings m_settings;
+	QColor m_background;
 };
 
 /*!
@@ -106,7 +106,7 @@ void ImageEditor::discretize(QImage* plotImage, QImage* originalImage,
 	for (int i = 0; i < pool->maxThreadCount(); ++i) {
 		const int start = i*range;
 		int end = (i+1)*range;
-		if (end>plotImage->height()) end = plotImage->height();
+		if (end > plotImage->height()) end = plotImage->height();
 		auto* task = new DiscretizeTask(start, end, plotImage, originalImage, settings, background);
 		pool->start(task);
 	}
@@ -204,7 +204,7 @@ int ImageEditor::discretizeHue(int x, int y, const QImage* originalImage) {
 	const int h = color.hue();
 	int value = h * maxHue / 359;
 
-	if (value<0) //QColor::hue() can return -1
+	if (value < 0) //QColor::hue() can return -1
 		value = 0;
 	if (maxHue < value)
 		value = maxHue;
@@ -301,7 +301,7 @@ int ImageEditor::discretizeValueForeground(int x, int y, DatapickerImage::ColorA
 	case DatapickerImage::Hue: {
 		const int h = color.hue();
 		value = h * maxHue / 359;
-		if (value<0)
+		if (value < 0)
 			value = 0;
 		if (maxHue < value)
 			value = maxHue;

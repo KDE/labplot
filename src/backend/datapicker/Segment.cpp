@@ -42,8 +42,7 @@
  * \brief graphics-item class for curve-segment
  */
 
-Segment::Segment(DatapickerImage* image):
-	yLast(0), length(0), m_image(image), d_ptr(new SegmentPrivate(this)) {
+Segment::Segment(DatapickerImage* image) : m_image(image), d_ptr(new SegmentPrivate(this)) {
 	m_image->scene()->addItem(this->graphicsItem());
 }
 
@@ -76,7 +75,6 @@ void Segment::setVisible(bool on) {
 //##############################################################################
 SegmentPrivate::SegmentPrivate(Segment *owner) :
 	scaleFactor(Worksheet::convertToSceneUnits(1, Worksheet::Inch)/QApplication::desktop()->physicalDpiX()),
-	m_hovered(false),
 	q(owner) {
 
 	setFlag(QGraphicsItem::ItemIsSelectable);
@@ -123,7 +121,7 @@ void SegmentPrivate::recalcShapeAndBoundingRect() {
 	itemShape.addRect(transformedBoundingRectangle);
 }
 
-void SegmentPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+void SegmentPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -167,7 +165,7 @@ void SegmentPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 }
 
 QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
-	if ( change == QGraphicsItem::ItemSelectedChange && value == true ) {
+	if (change == QGraphicsItem::ItemSelectedChange && value == true) {
 		auto* datapicker = dynamic_cast<Datapicker*>(q->m_image->parentAspect());
 		Q_ASSERT(datapicker);
 		if (datapicker->activeCurve()) {
@@ -183,7 +181,7 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
 						bool positionUsed = false;
 						const QVector<DatapickerPoint*> curvePointsList = datapicker->activeCurve()->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
 						for (const auto* point : curvePointsList) {
-							if ( point->position() == QPoint(line->x1(), i)*scaleFactor )
+							if (point->position() == QPoint(line->x1(), i)*scaleFactor)
 								positionUsed = true;
 						}
 

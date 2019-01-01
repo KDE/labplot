@@ -27,43 +27,43 @@
 #ifndef DATAPICKERCURVEPRIVATE_H
 #define DATAPICKERCURVEPRIVATE_H
 
-#include <QBrush>
-#include <QPen>
+class QBrush;
+class QPen;
 
 class DatapickerCurvePrivate {
 public:
-    explicit DatapickerCurvePrivate(DatapickerCurve* curve);
+	explicit DatapickerCurvePrivate(DatapickerCurve* curve);
 
-    QString name() const;
+	QString name() const;
 
 	DatapickerCurve* const q;
-    void retransform();
+	void retransform();
 
 	DatapickerCurve::Errors curveErrorTypes;
-    qreal pointRotationAngle;
-    Symbol::Style pointStyle;
-    QBrush pointBrush;
-    QPen pointPen;
-    qreal pointOpacity;
-    qreal pointSize;
-    QBrush pointErrorBarBrush;
-    QPen pointErrorBarPen;
-    qreal pointErrorBarSize;
-    bool pointVisibility;
+	qreal pointRotationAngle;
+	Symbol::Style pointStyle;
+	QBrush pointBrush;
+	QPen pointPen;
+	qreal pointOpacity;
+	qreal pointSize;
+	QBrush pointErrorBarBrush;
+	QPen pointErrorBarPen;
+	qreal pointErrorBarSize;
+	bool pointVisibility;
 
-	AbstractColumn* posXColumn;
+	AbstractColumn* posXColumn{nullptr};
 	QString posXColumnPath;
-	AbstractColumn* posYColumn;
+	AbstractColumn* posYColumn{nullptr};
 	QString posYColumnPath;
-	AbstractColumn* posZColumn;
+	AbstractColumn* posZColumn{nullptr};
 	QString posZColumnPath;
-	AbstractColumn* plusDeltaXColumn;
+	AbstractColumn* plusDeltaXColumn{nullptr};
 	QString plusDeltaXColumnPath;
-	AbstractColumn* minusDeltaXColumn;
+	AbstractColumn* minusDeltaXColumn{nullptr};
 	QString minusDeltaXColumnPath;
-	AbstractColumn* plusDeltaYColumn;
+	AbstractColumn* plusDeltaYColumn{nullptr};
 	QString plusDeltaYColumnPath;
-	AbstractColumn* minusDeltaYColumn;
+	AbstractColumn* minusDeltaYColumn{nullptr};
 	QString minusDeltaYColumnPath;
 };
 

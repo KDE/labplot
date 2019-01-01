@@ -47,7 +47,7 @@ public:
 	explicit DatapickerCurve(const QString&);
 	~DatapickerCurve() override;
 
-	enum ErrorType { NoError, SymmetricError, AsymmetricError };
+	enum ErrorType {NoError, SymmetricError, AsymmetricError};
 	struct Errors {
 		ErrorType x;
 		ErrorType y;
