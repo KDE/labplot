@@ -31,37 +31,38 @@
 #define XYDATAREDUCTIONCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
+
 extern "C" {
 #include "backend/nsl/nsl_geom_linesim.h"
 }
 
 class XYDataReductionCurvePrivate;
+
 class XYDataReductionCurve : public XYAnalysisCurve {
 	Q_OBJECT
 
 public:
 	struct DataReductionData {
-		DataReductionData() : type(nsl_geom_linesim_type_douglas_peucker_variant), autoTolerance(true), tolerance(0.0),
-			autoTolerance2(true), tolerance2(0.0), autoRange(true), xRange(2) {};
+		DataReductionData() : xRange(2) {};
 
-		nsl_geom_linesim_type type;	// type of simplification
-		bool autoTolerance;		// automatic tolerance
-		double tolerance;		// tolerance
-		bool autoTolerance2;		// automatic tolerance2
-		double tolerance2;		// tolerance2
-		bool autoRange;			// use all data?
+		nsl_geom_linesim_type type{nsl_geom_linesim_type_douglas_peucker_variant};	// type of simplification
+		bool autoTolerance{true};	// automatic tolerance
+		double tolerance{0.0};		// tolerance
+		bool autoTolerance2{true};	// automatic tolerance2
+		double tolerance2{0.0};		// tolerance2
+		bool autoRange{true};		// use all data?
 		QVector<double> xRange;		// x range for integration
 	};
 	struct DataReductionResult {
-		DataReductionResult() : available(false), valid(false), elapsedTime(0), npoints(0), posError(0), areaError(0) {};
+		DataReductionResult() {};
 
-		bool available;
-		bool valid;
+		bool available{false};
+		bool valid{false};
 		QString status;
-		qint64 elapsedTime;
-		size_t npoints;
-		double posError;
-		double areaError;
+		qint64 elapsedTime{0};
+		size_t npoints{0};
+		double posError{0};
+		double areaError{0};
 	};
 
 	explicit XYDataReductionCurve(const QString& name);

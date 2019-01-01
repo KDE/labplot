@@ -66,14 +66,14 @@ public:
 	QString theme;
 
 	//cached values of minimum and maximum for all visible curves
-	bool curvesXMinMaxIsDirty, curvesYMinMaxIsDirty;
-	double curvesXMin, curvesXMax, curvesYMin, curvesYMax;
+	bool curvesXMinMaxIsDirty{false}, curvesYMinMaxIsDirty{false};
+	double curvesXMin{INFINITY}, curvesXMax{-INFINITY}, curvesYMin{INFINITY}, curvesYMax{-INFINITY};
 
 	CartesianPlot* const q;
-	CartesianPlot::MouseMode mouseMode;
-	CartesianCoordinateSystem* cSystem;
-	bool suppressRetransform;
-	bool panningStarted;
+	CartesianPlot::MouseMode mouseMode{CartesianPlot::SelectionMode};
+	CartesianCoordinateSystem* cSystem{nullptr};
+	bool suppressRetransform{false};
+	bool panningStarted{false};
 
 private:
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
@@ -91,7 +91,7 @@ private:
 		double sceneStart, double sceneEnd,
 		double logicalStart, double logicalEnd);
 
-	bool m_selectionBandIsShown;
+	bool m_selectionBandIsShown{false};
 	QPointF m_selectionStart;
 	QPointF m_selectionEnd;
 	QLineF m_selectionStartLine;

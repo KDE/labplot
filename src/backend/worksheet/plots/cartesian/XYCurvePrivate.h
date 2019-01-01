@@ -62,7 +62,7 @@ public:
 	QString dataSourceCurvePath;
 	QString xColumnPath;
 	QString yColumnPath;
-	bool sourceDataChangedSinceLastRecalc;
+	bool sourceDataChangedSinceLastRecalc{false};
 
 	//line
 	XYCurve::LineType lineType;
@@ -130,8 +130,8 @@ public:
 	XYCurve* const q;
 	friend class XYCurve;
 
-	const CartesianPlot* plot;
-	const CartesianCoordinateSystem* cSystem;
+	const CartesianPlot* plot{nullptr};
+	const CartesianCoordinateSystem* cSystem{nullptr};
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
@@ -164,12 +164,12 @@ private:
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;
 	QImage m_selectionEffectImage;
-	bool m_hoverEffectImageIsDirty;
-	bool m_selectionEffectImageIsDirty;
-	bool m_hovered;
-	bool m_suppressRecalc;
-	bool m_suppressRetransform;
-	bool m_printing;
+	bool m_hoverEffectImageIsDirty{false};
+	bool m_selectionEffectImageIsDirty{false};
+	bool m_hovered{false};
+	bool m_suppressRecalc{false};
+	bool m_suppressRetransform{false};
+	bool m_printing{false};
 };
 
 #endif

@@ -41,29 +41,29 @@ class AbstractPlotPrivate;
 class AbstractPlot : public WorksheetElementContainer {
 	Q_OBJECT
 
-	public:
-		explicit AbstractPlot(const QString &name);
-		~AbstractPlot() override= default;
+public:
+	explicit AbstractPlot(const QString &name);
+	~AbstractPlot() override= default;
 
-		void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
-		AbstractCoordinateSystem* coordinateSystem() const;
-		PlotArea* plotArea();
-		TextLabel* title();
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	AbstractCoordinateSystem* coordinateSystem() const;
+	PlotArea* plotArea();
+	TextLabel* title();
 
-		BASIC_D_ACCESSOR_DECL(float, horizontalPadding, HorizontalPadding)
-		BASIC_D_ACCESSOR_DECL(float, verticalPadding, VerticalPadding)
+	BASIC_D_ACCESSOR_DECL(float, horizontalPadding, HorizontalPadding)
+	BASIC_D_ACCESSOR_DECL(float, verticalPadding, VerticalPadding)
 
-		typedef AbstractPlotPrivate Private;
+	typedef AbstractPlotPrivate Private;
 
-	protected:
-		AbstractPlot(const QString&, AbstractPlotPrivate*);
-		AbstractCoordinateSystem* m_coordinateSystem;
-		PlotArea* m_plotArea;
-		TextLabel* m_title;
+protected:
+	AbstractPlot(const QString&, AbstractPlotPrivate*);
+	AbstractCoordinateSystem* m_coordinateSystem{nullptr};
+	PlotArea* m_plotArea{nullptr};
+	TextLabel* m_title{nullptr};
 
-	private:
-		void init();
-		Q_DECLARE_PRIVATE(AbstractPlot)
+private:
+	void init();
+	Q_DECLARE_PRIVATE(AbstractPlot)
 };
 
 #endif

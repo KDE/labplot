@@ -34,7 +34,7 @@
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 
-#include <math.h>
+#include <cmath>
 
 class QDropEvent;
 class QToolBar;
@@ -148,10 +148,10 @@ private:
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
 
-	CartesianPlotLegend* m_legend;
-	double m_zoomFactor;
+	CartesianPlotLegend* m_legend{nullptr};
+	double m_zoomFactor{1.2};
 	QList<QColor> m_themeColorPalette;
-	bool m_menusInitialized;
+	bool m_menusInitialized{false};
 
 	QAction* visibilityAction;
 
@@ -203,10 +203,10 @@ private:
 	QAction* addConvolutionAction;
 	QAction* addCorrelationAction;
 
-	QMenu* addNewMenu;
-	QMenu* zoomMenu;
-	QMenu* dataAnalysisMenu;
-	QMenu* themeMenu;
+	QMenu* addNewMenu{nullptr};
+	QMenu* zoomMenu{nullptr};
+	QMenu* dataAnalysisMenu{nullptr};
+	QMenu* themeMenu{nullptr};
 
 	Q_DECLARE_PRIVATE(CartesianPlot)
 

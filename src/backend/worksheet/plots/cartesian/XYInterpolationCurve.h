@@ -37,32 +37,31 @@ extern "C" {
 }
 
 class XYInterpolationCurvePrivate;
+
 class XYInterpolationCurve : public XYAnalysisCurve {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	enum PointsMode {Auto, Multiple, Custom};
 	struct InterpolationData {
-		InterpolationData() : type(nsl_interp_type_linear), variant(nsl_interp_pch_variant_finite_difference),
-			tension(0.0), continuity(0.0), bias(0.0), evaluate(nsl_interp_evaluate_function), npoints(100),
-			pointsMode(XYInterpolationCurve::Auto), autoRange(true), xRange(2) {};
+		InterpolationData() : xRange(2) {};
 
-		nsl_interp_type type;			// type of interpolation
-		nsl_interp_pch_variant variant;		// variant of cubic Hermite interpolation
-		double tension, continuity, bias;	// TCB values
-		nsl_interp_evaluate evaluate;		// what to evaluate
-		size_t npoints;				// nr. of points
-		XYInterpolationCurve::PointsMode pointsMode;	// mode to interpret points
-		bool autoRange;				// use all data?
-		QVector<double> xRange;			// x range for interpolation
+		nsl_interp_type type{nsl_interp_type_linear};			// type of interpolation
+		nsl_interp_pch_variant variant{nsl_interp_pch_variant_finite_difference};		// variant of cubic Hermite interpolation
+		double tension{0.0}, continuity{0.0}, bias{0.0};		// TCB values
+		nsl_interp_evaluate evaluate{nsl_interp_evaluate_function};	// what to evaluate
+		size_t npoints{100};						// nr. of points
+		XYInterpolationCurve::PointsMode pointsMode{XYInterpolationCurve::Auto};	// mode to interpret points
+		bool autoRange{true};						// use all data?
+		QVector<double> xRange;						// x range for interpolation
 	};
 	struct InterpolationResult {
-		InterpolationResult() : available(false), valid(false), elapsedTime(0) {};
+		InterpolationResult() {};
 
-		bool available;
-		bool valid;
+		bool available{false};
+		bool valid{false};
 		QString status;
-		qint64 elapsedTime;
+		qint64 elapsedTime{0};
 	};
 
 	explicit XYInterpolationCurve(const QString& name);

@@ -162,13 +162,7 @@ void XYAnalysisCurve::handleSourceDataChanged() {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYAnalysisCurvePrivate::XYAnalysisCurvePrivate(XYAnalysisCurve* owner) : XYCurvePrivate(owner),
-	dataSourceType(XYAnalysisCurve::DataSourceSpreadsheet),
-	dataSourceCurve(nullptr),
-	xDataColumn(nullptr), yDataColumn(nullptr), y2DataColumn(nullptr),
-	xColumn(nullptr), yColumn(nullptr),
-	xVector(nullptr), yVector(nullptr),
-	q(owner) {
+XYAnalysisCurvePrivate::XYAnalysisCurvePrivate(XYAnalysisCurve* owner) : XYCurvePrivate(owner), q(owner) {
 }
 
 //no need to delete xColumn and yColumn, they are deleted

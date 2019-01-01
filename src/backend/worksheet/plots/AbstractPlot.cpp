@@ -4,7 +4,7 @@
     Description          : Base class for plots of different types
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -44,34 +44,32 @@
  *
  */
 
-AbstractPlot::AbstractPlot(const QString &name):WorksheetElementContainer(name, new AbstractPlotPrivate(this)),
-	m_coordinateSystem(nullptr), m_plotArea(nullptr), m_title(nullptr){
+AbstractPlot::AbstractPlot(const QString &name) : WorksheetElementContainer(name, new AbstractPlotPrivate(this)) {
 	init();
 }
 
 AbstractPlot::AbstractPlot(const QString &name, AbstractPlotPrivate *dd)
-	: WorksheetElementContainer(name, dd),
-	m_coordinateSystem(nullptr), m_plotArea(nullptr), m_title(nullptr){
+	: WorksheetElementContainer(name, dd) {
 	init();
 }
 
-void AbstractPlot::init(){
+void AbstractPlot::init() {
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-    graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
 }
 
-PlotArea* AbstractPlot::plotArea(){
+PlotArea* AbstractPlot::plotArea() {
 	return m_plotArea;
 }
 
-AbstractCoordinateSystem* AbstractPlot::coordinateSystem() const{
+AbstractCoordinateSystem* AbstractPlot::coordinateSystem() const {
 	return m_coordinateSystem;
 }
 
-TextLabel* AbstractPlot::title(){
+TextLabel* AbstractPlot::title() {
 	return m_title;
 }
 
@@ -113,9 +111,9 @@ void AbstractPlot::setVerticalPadding(float padding) {
 //################### Private implementation #####################
 //################################################################
 AbstractPlotPrivate::AbstractPlotPrivate(AbstractPlot *owner)
-	:WorksheetElementContainerPrivate(owner){
+	: WorksheetElementContainerPrivate(owner) {
 }
 
-QString AbstractPlotPrivate::name() const{
+QString AbstractPlotPrivate::name() const {
 	return q->name();
 }

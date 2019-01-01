@@ -39,20 +39,20 @@ public:
 	explicit XYAnalysisCurvePrivate(XYAnalysisCurve*);
 	~XYAnalysisCurvePrivate() override;
 
-	XYAnalysisCurve::DataSourceType dataSourceType;
-	const XYCurve* dataSourceCurve;
+	XYAnalysisCurve::DataSourceType dataSourceType{XYAnalysisCurve::DataSourceSpreadsheet};
+	const XYCurve* dataSourceCurve{nullptr};
 
-	const AbstractColumn* xDataColumn; //<! column storing the values for the input x-data for the analysis function
-	const AbstractColumn* yDataColumn; //<! column storing the values for the input y-data for the analysis function
-	const AbstractColumn* y2DataColumn; //<! column storing the values for the optional second input y-data
+	const AbstractColumn* xDataColumn{nullptr}; //<! column storing the values for the input x-data for the analysis function
+	const AbstractColumn* yDataColumn{nullptr}; //<! column storing the values for the input y-data for the analysis function
+	const AbstractColumn* y2DataColumn{nullptr}; //<! column storing the values for the optional second input y-data
 	QString xDataColumnPath;
 	QString yDataColumnPath;
 	QString y2DataColumnPath;
 
-	Column* xColumn; //<! column used internally for storing the x-values of the result analysis curve
-	Column* yColumn; //<! column used internally for storing the y-values of the result analysis curve
-	QVector<double>* xVector;
-	QVector<double>* yVector;
+	Column* xColumn{nullptr}; //<! column used internally for storing the x-values of the result analysis curve
+	Column* yColumn{nullptr}; //<! column used internally for storing the y-values of the result analysis curve
+	QVector<double>* xVector{nullptr};
+	QVector<double>* yVector{nullptr};
 
 	XYAnalysisCurve* const q;
 };

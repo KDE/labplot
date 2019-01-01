@@ -28,18 +28,18 @@
 #ifndef CUSTOMPOINT_H
 #define CUSTOMPOINT_H
 
-#include <QBrush>
 #include <QPen>
 
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/WorksheetElement.h"
 
+class QBrush;
 class CustomPointPrivate;
 class CartesianPlot;
 
 class CustomPoint : public WorksheetElement {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit CustomPoint(const CartesianPlot*, const QString&);

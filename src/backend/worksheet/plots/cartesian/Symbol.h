@@ -30,16 +30,17 @@
 #define SYMBOL_H
 
 #include <QPainterPath>
-#include <QString>
+
+class QString;
 
 class Symbol {
-	public:
-		enum Style {NoSymbols, Circle, Square, EquilateralTriangle, RightTriangle, Bar, PeakedBar,
-                            SkewedBar, Diamond, Lozenge, Tie, TinyTie, Plus, Boomerang, SmallBoomerang,
-                            Star4, Star5, Line, Cross};
+public:
+	enum Style {NoSymbols, Circle, Square, EquilateralTriangle, RightTriangle, Bar, PeakedBar,
+			SkewedBar, Diamond, Lozenge, Tie, TinyTie, Plus, Boomerang, SmallBoomerang,
+			Star4, Star5, Line, Cross};
 
-		static QPainterPath pathFromStyle(Symbol::Style);
-		static QString nameFromStyle(Symbol::Style);
+	static QPainterPath pathFromStyle(Symbol::Style);
+	static QString nameFromStyle(Symbol::Style);
 };
 
 #endif

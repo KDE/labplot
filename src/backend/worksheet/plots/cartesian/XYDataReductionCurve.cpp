@@ -92,8 +92,7 @@ void XYDataReductionCurve::setDataReductionData(const XYDataReductionCurve::Data
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYDataReductionCurvePrivate::XYDataReductionCurvePrivate(XYDataReductionCurve* owner) : XYAnalysisCurvePrivate(owner),
-	q(owner)  {
+XYDataReductionCurvePrivate::XYDataReductionCurvePrivate(XYDataReductionCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner)  {
 }
 
 //no need to delete xColumn and yColumn, they are deleted

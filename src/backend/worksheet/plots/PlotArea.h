@@ -35,7 +35,7 @@
 class PlotAreaPrivate;
 
 class PlotArea : public WorksheetElement {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit PlotArea(const QString& name);
@@ -43,9 +43,7 @@ public:
 
 	enum BackgroundType {Color, Image, Pattern};
 	enum BackgroundColorStyle {SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
-							TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient,
-							RadialGradient
-							};
+			TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient, RadialGradient};
 	enum BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
 
 	QGraphicsItem* graphicsItem() const override;

@@ -168,7 +168,7 @@ private:
 	QMenu* lineStyleMenu;
 	QMenu* lineColorMenu;
 
-	bool m_menusInitialized;
+	bool m_menusInitialized{false};
 
 private slots:
 	void labelChanged();

@@ -30,25 +30,24 @@
 #define XYEQUATIONCURVEPRIVATE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
-#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 
 class XYEquationCurve;
 class Column;
 
 class XYEquationCurvePrivate: public XYCurvePrivate {
-	public:
-		explicit XYEquationCurvePrivate(XYEquationCurve*);
-		~XYEquationCurvePrivate() override;
+public:
+	explicit XYEquationCurvePrivate(XYEquationCurve*);
+	~XYEquationCurvePrivate() override;
 
-		void recalculate();
+	void recalculate();
 
-		XYEquationCurve::EquationData equationData;
-		Column* xColumn;
-		Column* yColumn;
-		QVector<double>* xVector;
-		QVector<double>* yVector;
+	XYEquationCurve::EquationData equationData;
+	Column* xColumn;
+	Column* yColumn;
+	QVector<double>* xVector;
+	QVector<double>* yVector;
 
-		XYEquationCurve* const q;
+	XYEquationCurve* const q;
 };
 
 #endif

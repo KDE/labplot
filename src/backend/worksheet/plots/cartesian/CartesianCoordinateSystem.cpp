@@ -140,13 +140,14 @@ public:
 /* ============================================================================ */
 /* ========================= coordinate system ================================ */
 /* ============================================================================ */
+//TODO: own header
 class CartesianCoordinateSystemPrivate {
 public:
 	CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner);
 	~CartesianCoordinateSystemPrivate();
 
 	CartesianCoordinateSystem* const q;
-	CartesianPlot* plot;
+	CartesianPlot* plot{nullptr};
 	QVector<CartesianScale*> xScales;
 	QVector<CartesianScale*> yScales;
 };
@@ -157,7 +158,7 @@ public:
  */
 CartesianCoordinateSystem::CartesianCoordinateSystem(CartesianPlot* plot)
 		: AbstractCoordinateSystem(plot), d(new CartesianCoordinateSystemPrivate(this)) {
-			d->plot=plot;
+			d->plot = plot;
 	// TODO: set some standard scales
 }
 
@@ -258,9 +259,7 @@ QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPoi
 	\param flags
  */
 void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logicalPoints,
-												  QVector<QPointF>& scenePoints,
-												  std::vector<bool>& visiblePoints,
-												  MappingFlags flags) const{
+		QVector<QPointF>& scenePoints, std::vector<bool>& visiblePoints, MappingFlags flags) const {
 	const QRectF pageRect = d->plot->dataRect();
 	const bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
@@ -297,7 +296,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 	}
 }
 
-QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, MappingFlags flags) const{
+QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, MappingFlags flags) const {
 	const QRectF pageRect = d->plot->dataRect();
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
@@ -331,7 +330,7 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, Mappi
 	return QPointF{};
 }
 
-QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLineF> &lines, MappingFlags flags) const{
+QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLineF> &lines, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
 	QVector<QLineF> result;
 	const bool doPageClipping = !pageRect.isNull() && !(flags & SuppressPageClipping);
@@ -594,7 +593,7 @@ int CartesianCoordinateSystem::xDirection() const {
  * This function is needed for untransformed lengths such as axis tick length.
  * \return 1 or -1
  */
-int CartesianCoordinateSystem::yDirection() const{
+int CartesianCoordinateSystem::yDirection() const {
 	if (d->yScales.isEmpty())
 		return 1;
 
@@ -666,8 +665,7 @@ bool CartesianCoordinateSystem::rectContainsPoint(const QRectF& rect, QPointF po
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-CartesianCoordinateSystemPrivate::CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner)
-	:q(owner), plot(nullptr) {
+CartesianCoordinateSystemPrivate::CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner) :q(owner) {
 }
 
 CartesianCoordinateSystemPrivate::~CartesianCoordinateSystemPrivate() {

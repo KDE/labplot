@@ -50,13 +50,13 @@
  * x- and y- coordinates in parent's coordinate system
  */
 
-CustomPoint::CustomPoint(const CartesianPlot* plot, const QString& name):WorksheetElement(name),
-	d_ptr(new CustomPointPrivate(this,plot)) {
+CustomPoint::CustomPoint(const CartesianPlot* plot, const QString& name) : WorksheetElement(name),
+	d_ptr(new CustomPointPrivate(this, plot)) {
 
 	init();
 }
 
-CustomPoint::CustomPoint(const QString& name, CustomPointPrivate* dd):WorksheetElement(name), d_ptr(dd) {
+CustomPoint::CustomPoint(const QString& name, CustomPointPrivate* dd) : WorksheetElement(name), d_ptr(dd) {
 	init();
 }
 
@@ -214,15 +214,7 @@ void CustomPoint::visibilityChanged() {
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-CustomPointPrivate::CustomPointPrivate(CustomPoint* owner, const CartesianPlot* p)
-	: plot(p),
-	suppressItemChangeEvent(false),
-	suppressRetransform(false),
-	m_printing(false),
-	m_hovered(false),
-	m_visible(true),
-	q(owner) {
-
+CustomPointPrivate::CustomPointPrivate(CustomPoint* owner, const CartesianPlot* p) : plot(p), q(owner) {
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);

@@ -37,29 +37,29 @@ extern "C" {
 }
 
 class XYFourierTransformCurvePrivate;
+
 class XYFourierTransformCurve : public XYAnalysisCurve {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	struct TransformData {
-		TransformData() : type(nsl_dft_result_magnitude), twoSided(false), shifted(false),
-			xScale(nsl_dft_xscale_frequency), windowType(nsl_sf_window_uniform), autoRange(true), xRange(2) {};
+		TransformData() : xRange(2) {};
 
-		nsl_dft_result_type type;
-		bool twoSided;
-		bool shifted;
-		nsl_dft_xscale xScale;
-		nsl_sf_window_type windowType;
-		bool autoRange;			// use all data?
+		nsl_dft_result_type type{nsl_dft_result_magnitude};
+		bool twoSided{false};
+		bool shifted{false};
+		nsl_dft_xscale xScale{nsl_dft_xscale_frequency};
+		nsl_sf_window_type windowType{nsl_sf_window_uniform};
+		bool autoRange{true};		// use all data?
 		QVector<double> xRange;		// x range for transform
 	};
 	struct TransformResult {
-		TransformResult() : available(false), valid(false), elapsedTime(0) {};
+		TransformResult() {};
 
-		bool available;
-		bool valid;
+		bool available{false};
+		bool valid{false};
 		QString status;
-		qint64 elapsedTime;
+		qint64 elapsedTime{0};
 	};
 
 	explicit XYFourierTransformCurve(const QString& name);

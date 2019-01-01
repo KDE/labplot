@@ -36,32 +36,31 @@ extern "C" {
 }
 
 class XYFourierFilterCurvePrivate;
+
 class XYFourierFilterCurve : public XYAnalysisCurve {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	struct FilterData {
-		FilterData() : type(nsl_filter_type_low_pass), form(nsl_filter_form_ideal), order(1),
-			cutoff(0), unit(nsl_filter_cutoff_unit_frequency), cutoff2(0), unit2(nsl_filter_cutoff_unit_frequency),
-			autoRange(true), xRange(2) {};
+		FilterData() : xRange(2) {};
 
-		nsl_filter_type type;
-		nsl_filter_form form;
-		int order;
-		double cutoff;			// (low) cutoff
-		nsl_filter_cutoff_unit unit;	// (low) value unit
-		double cutoff2;			// high cutoff
-		nsl_filter_cutoff_unit unit2;	// high value unit
-		bool autoRange;			// use all data?
+		nsl_filter_type type{nsl_filter_type_low_pass};
+		nsl_filter_form form{nsl_filter_form_ideal};
+		int order{1};
+		double cutoff{0.0};		// (low) cutoff
+		nsl_filter_cutoff_unit unit{nsl_filter_cutoff_unit_frequency};	// (low) value unit
+		double cutoff2{0.0};			// high cutoff
+		nsl_filter_cutoff_unit unit2{nsl_filter_cutoff_unit_frequency};	// high value unit
+		bool autoRange{true};			// use all data?
 		QVector<double> xRange;		// x range for integration
 	};
 	struct FilterResult {
-		FilterResult() : available(false), valid(false), elapsedTime(0) {};
+		FilterResult() {};
 
-		bool available;
-		bool valid;
+		bool available{false};
+		bool valid{false};
 		QString status;
-		qint64 elapsedTime;
+		qint64 elapsedTime{0};
 	};
 
 	explicit XYFourierFilterCurve(const QString& name);

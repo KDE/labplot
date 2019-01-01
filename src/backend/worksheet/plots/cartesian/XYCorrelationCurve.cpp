@@ -94,8 +94,7 @@ void XYCorrelationCurve::setCorrelationData(const XYCorrelationCurve::Correlatio
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYCorrelationCurvePrivate::XYCorrelationCurvePrivate(XYCorrelationCurve* owner) : XYAnalysisCurvePrivate(owner),
-	q(owner)  {
+XYCorrelationCurvePrivate::XYCorrelationCurvePrivate(XYCorrelationCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner) {
 }
 
 //no need to delete xColumn and yColumn, they are deleted

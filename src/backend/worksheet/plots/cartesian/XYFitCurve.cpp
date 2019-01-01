@@ -61,11 +61,11 @@ extern "C" {
 #include <QThreadPool>
 
 XYFitCurve::XYFitCurve(const QString& name)
-		: XYAnalysisCurve(name, new XYFitCurvePrivate(this)) {
+	: XYAnalysisCurve(name, new XYFitCurvePrivate(this)) {
 }
 
 XYFitCurve::XYFitCurve(const QString& name, XYFitCurvePrivate* dd)
-		: XYAnalysisCurve(name, dd) {
+	: XYAnalysisCurve(name, dd) {
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -713,7 +713,7 @@ void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner)  {}
+XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner) {}
 
 //no need to delete xColumn and yColumn, they are deleted
 //when the parent aspect is removed

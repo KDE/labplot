@@ -31,54 +31,55 @@
 #define ABSTRACTCOORDINATESYSTEM_H
 
 #include "backend/worksheet/plots/AbstractPlot.h"
-#include <QString>
 #include <QVector>
-#include <QLine>
-#include <QRectF>
+
+class QString;
+class QLine;
+class QRectF;
 
 class AbstractCoordinateSystem {
+public:
+	enum MappingFlag {
+		DefaultMapping = 0x00,
+		SuppressPageClipping = 0x01,
+		MarkGaps = 0x02,
+	};
+	Q_DECLARE_FLAGS(MappingFlags, MappingFlag)
+
+	explicit AbstractCoordinateSystem(AbstractPlot*);
+	virtual ~AbstractCoordinateSystem();
+
+	virtual QVector<QPointF> mapLogicalToScene(const QVector<QPointF>&, MappingFlags flags = DefaultMapping) const = 0;
+	virtual QPointF mapLogicalToScene(QPointF, MappingFlags flags = DefaultMapping) const = 0;
+	virtual QVector<QLineF> mapLogicalToScene(const QVector<QLineF>&, MappingFlags flags = DefaultMapping) const = 0;
+	virtual QVector<QPointF> mapSceneToLogical(const QVector<QPointF>&, MappingFlags flags = DefaultMapping) const = 0;
+	virtual QPointF mapSceneToLogical(QPointF, MappingFlags flags = DefaultMapping) const = 0;
+
+	class LineClipResult {
 	public:
-		enum MappingFlag {
-			DefaultMapping = 0x00,
-			SuppressPageClipping = 0x01,
-			MarkGaps = 0x02,
-		};
-		Q_DECLARE_FLAGS(MappingFlags, MappingFlag)
+		LineClipResult() {
+			reset();
+		}
+		inline void reset() {
+			for (int i = 0; i < 2; i++) {
+				xClippedRight[i] = false;
+				xClippedLeft[i] = false;
+				yClippedTop[i] = false;
+				yClippedBottom[i] = false;
+			}
+		}
+		bool xClippedRight[2];
+		bool xClippedLeft[2];
+		bool yClippedTop[2];
+		bool yClippedBottom[2];
+	};
 
-		explicit AbstractCoordinateSystem(AbstractPlot*);
-		virtual ~AbstractCoordinateSystem();
-
-		virtual QVector<QPointF> mapLogicalToScene(const QVector<QPointF>&, MappingFlags flags = DefaultMapping) const = 0;
-		virtual QPointF mapLogicalToScene(QPointF, MappingFlags flags = DefaultMapping) const = 0;
-		virtual QVector<QLineF> mapLogicalToScene(const QVector<QLineF>&, MappingFlags flags = DefaultMapping) const = 0;
-		virtual QVector<QPointF> mapSceneToLogical(const QVector<QPointF>&, MappingFlags flags = DefaultMapping) const = 0;
-		virtual QPointF mapSceneToLogical(QPointF, MappingFlags flags = DefaultMapping) const = 0;
-
-		class LineClipResult {
-			public:
-				LineClipResult() {
-					reset();
-				}
-				inline void reset() {
-					for (int i=0; i<2; i++) {
-						xClippedRight[i] = false;
-						xClippedLeft[i] = false;
-						yClippedTop[i] = false;
-						yClippedBottom[i] = false;
-					}
-				}
-				bool xClippedRight[2];
-				bool xClippedLeft[2];
-				bool yClippedTop[2];
-				bool yClippedBottom[2];
-		};
-
-		//static members
-		static bool clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult = nullptr);
-		static bool approximatelyEqual(float a, float b, float epsilon=0.0000001);
-		static bool essentiallyEqual(float a, float b, float epsilon=0.0000001);
-		static bool definitelyGreaterThan(float a, float b, float epsilon=0.0000001);
-		static bool definitelyLessThan(float a, float b, float epsilon=0.0000001);
+	//static members
+	static bool clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult = nullptr);
+	static bool approximatelyEqual(float a, float b, float epsilon=0.0000001);
+	static bool essentiallyEqual(float a, float b, float epsilon=0.0000001);
+	static bool definitelyGreaterThan(float a, float b, float epsilon=0.0000001);
+	static bool definitelyLessThan(float a, float b, float epsilon=0.0000001);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractCoordinateSystem::MappingFlags)

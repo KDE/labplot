@@ -36,7 +36,6 @@
 #include "Symbol.h"
 #include <KLocalizedString>
 
-
 QPainterPath Symbol::pathFromStyle(Symbol::Style style) {
 	QPainterPath path;
 	QPolygonF polygon;
@@ -106,6 +105,7 @@ QPainterPath Symbol::pathFromStyle(Symbol::Style style) {
 
 QString Symbol::nameFromStyle(Symbol::Style style) {
 	QString name;
+	//TODO: use 'switch'
 	if (style == Symbol::Circle)
 		name = i18n("circle");
 	else if (style == Symbol::Square)

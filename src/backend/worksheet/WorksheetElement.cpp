@@ -226,12 +226,8 @@ void WorksheetElement::execMoveBehind(QAction* action) {
 	endMacro();
 }
 
-void WorksheetElement::loadThemeConfig(const KConfig &)
-{
-
+void WorksheetElement::loadThemeConfig(const KConfig &) {
 }
 
-void WorksheetElement::saveThemeConfig(const KConfig &)
-{
-
+void WorksheetElement::saveThemeConfig(const KConfig &) {
 }

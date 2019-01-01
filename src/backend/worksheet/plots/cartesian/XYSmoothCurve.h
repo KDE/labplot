@@ -37,31 +37,31 @@ extern "C" {
 }
 
 class XYSmoothCurvePrivate;
+
 class XYSmoothCurve : public XYAnalysisCurve {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	struct SmoothData {
-		SmoothData() : type(nsl_smooth_type_moving_average), points(5), weight(nsl_smooth_weight_uniform), percentile(0.5), order(2),
-			mode(nsl_smooth_pad_none), lvalue(0.0), rvalue(0.0), autoRange(true), xRange(2) {};
+		SmoothData() : xRange(2) {};
 
-		nsl_smooth_type type;			// type of smoothing
-		size_t points;				// number of points
-		nsl_smooth_weight_type weight;		// type of weight
-		double percentile;			// percentile for percentile filter (0.0 .. 1.0)
-		int order;				// order for Savitzky-Golay filter
-		nsl_smooth_pad_mode mode;		// mode of padding for edges
-		double lvalue, rvalue;			// values for constant padding
-		bool autoRange;				// use all data?
+		nsl_smooth_type type{nsl_smooth_type_moving_average};		// type of smoothing
+		size_t points{5};			// number of points
+		nsl_smooth_weight_type weight{nsl_smooth_weight_uniform};	// type of weight
+		double percentile{0.5};			// percentile for percentile filter (0.0 .. 1.0)
+		int order{2};				// order for Savitzky-Golay filter
+		nsl_smooth_pad_mode mode{nsl_smooth_pad_none};		// mode of padding for edges
+		double lvalue{0.0}, rvalue{0.0};	// values for constant padding
+		bool autoRange{true};			// use all data?
 		QVector<double> xRange;			// x range for integration
 	};
 	struct SmoothResult {
-		SmoothResult() : available(false), valid(false), elapsedTime(0) {};
+		SmoothResult() {};
 
-		bool available;
-		bool valid;
+		bool available{false};
+		bool valid{false};
 		QString status;
-		qint64 elapsedTime;
+		qint64 elapsedTime{0};
 	};
 
 	explicit XYSmoothCurve(const QString& name);

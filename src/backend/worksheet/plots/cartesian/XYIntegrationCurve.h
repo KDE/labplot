@@ -36,26 +36,27 @@ extern "C" {
 }
 
 class XYIntegrationCurvePrivate;
+
 class XYIntegrationCurve : public XYAnalysisCurve {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	struct IntegrationData {
-		IntegrationData() : method(nsl_int_method_trapezoid), absolute(false), autoRange(true), xRange(2) {};
+		IntegrationData() : xRange(2) {};
 
-		nsl_int_method_type method;	// method for integration
-		bool absolute;			// absolute area?
-		bool autoRange;			// use all data?
+		nsl_int_method_type method{nsl_int_method_trapezoid};	// method for integration
+		bool absolute{false};		// absolute area?
+		bool autoRange{true};		// use all data?
 		QVector<double> xRange;		// x range for integration
 	};
 	struct IntegrationResult {
-		IntegrationResult() : available(false), valid(false), elapsedTime(0), value(0) {};
+		IntegrationResult() {};
 
-		bool available;
-		bool valid;
+		bool available{false};
+		bool valid{false};
 		QString status;
-		qint64 elapsedTime;
-		double value;	// final result of integration
+		qint64 elapsedTime{0};
+		double value{0.0};	// final result of integration
 	};
 
 	explicit XYIntegrationCurve(const QString& name);

@@ -55,7 +55,7 @@ WorksheetElementContainer::WorksheetElementContainer(const QString& name)
 }
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, WorksheetElementContainerPrivate* dd)
-    : WorksheetElement(name), d_ptr(dd) {
+	: WorksheetElement(name), d_ptr(dd) {
 
 	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
@@ -82,7 +82,7 @@ void WorksheetElementContainer::setVisible(bool on) {
 	//if visible is set true, change the visibility of the container first
 	if (on) {
 		beginMacro( i18n("%1: set visible", name()) );
-    	exec( new WorksheetElementContainerSetVisibleCmd(d, on, ki18n("%1: set visible")) );
+		exec( new WorksheetElementContainerSetVisibleCmd(d, on, ki18n("%1: set visible")) );
 	} else {
 		beginMacro( i18n("%1: set invisible", name()) );
 	}
@@ -192,8 +192,7 @@ void WorksheetElementContainer::prepareGeometryChange() {
 //################################################################
 //################### Private implementation ##########################
 //################################################################
-WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer *owner)
-	: q(owner), m_hovered(false), m_printing(false) {
+WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer *owner) : q(owner) {
 	setAcceptHoverEvents(true);
 }
 
@@ -245,8 +244,8 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 		boundingRectangle |= elem->graphicsItem()->mapRectToParent(elem->graphicsItem()->boundingRect());
 
 	float penWidth = 2.;
-    boundingRectangle = QRectF(-boundingRectangle.width()/2 - penWidth / 2, -boundingRectangle.height()/2 - penWidth / 2,
-                  boundingRectangle.width() + penWidth, boundingRectangle.height() + penWidth);
+	boundingRectangle = QRectF(-boundingRectangle.width()/2 - penWidth / 2, -boundingRectangle.height()/2 - penWidth / 2,
+				  boundingRectangle.width() + penWidth, boundingRectangle.height() + penWidth);
 
 	QPainterPath path;
 	path.addRect(boundingRectangle);

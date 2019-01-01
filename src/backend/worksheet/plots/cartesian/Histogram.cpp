@@ -1,11 +1,11 @@
 /***************************************************************************
-	File                 : Histogram.cpp
-	Project              : LabPlot
-	Description          : Histogram
-	--------------------------------------------------------------------
-	Copyright            : (C) 2016 Anu Mittal (anu22mittal@gmail.com)
-	Copyright            : (C) 2016-2018 by Alexander Semke (alexander.semke@web.de)
-	Copyright            : (C) 2017-2018 by Garvit Khatri (garvitdelhi@gmail.com)
+    File                 : Histogram.cpp
+    Project              : LabPlot
+    Description          : Histogram
+    --------------------------------------------------------------------
+    Copyright            : (C) 2016 Anu Mittal (anu22mittal@gmail.com)
+    Copyright            : (C) 2016-2018 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017-2018 by Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
 
@@ -318,7 +318,7 @@ void Histogram::setBinWidth(float width) {
 class HistogramSetAutoBinRangesCmd : public QUndoCommand {
 public:
 	HistogramSetAutoBinRangesCmd(HistogramPrivate* private_obj, bool autoBinRanges) :
-		m_private(private_obj), m_autoBinRanges(autoBinRanges), m_autoBinRangesOld(false), m_binRangesMinOld(0.0), m_binRangesMaxOld(0.0) {
+		m_private(private_obj), m_autoBinRanges(autoBinRanges) {
 		setText(i18n("%1: change auto bin ranges", m_private->name()));
 	};
 
@@ -346,9 +346,9 @@ public:
 private:
 	HistogramPrivate* m_private;
 	bool m_autoBinRanges;
-	bool m_autoBinRangesOld;
-	double m_binRangesMinOld;
-	double m_binRangesMaxOld;
+	bool m_autoBinRangesOld{false};
+	double m_binRangesMinOld{0.0};
+	double m_binRangesMaxOld{0.0};
 };
 
 void Histogram::setAutoBinRanges(bool autoBinRanges) {
@@ -672,7 +672,6 @@ void Histogram::visibilityChangedSlot() {
 //######################### Private implementation #############################
 //##############################################################################
 HistogramPrivate::HistogramPrivate(Histogram *owner) : q(owner) {
-
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(true);
 }
@@ -689,27 +688,27 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() {
 	if (m_histogram) {
 		double yMaxRange = -INFINITY;
 		switch(type) {
-			case Histogram::Ordinary: {
-				size_t maxYAddes = gsl_histogram_max_bin(m_histogram);
-				yMaxRange = gsl_histogram_get(m_histogram, maxYAddes);
-				break;
-			}
-			case Histogram::Cumulative: {
-				size_t maxYAddes = gsl_histogram_max_bin(m_histogram);
-				yMaxRange = gsl_histogram_get(m_histogram, maxYAddes);
-				double point =0.0;
-				for(size_t i=0; i < m_bins; ++i) {
-					point+= gsl_histogram_get(m_histogram,i);
-					if (point > yMaxRange) {
-						yMaxRange = point;
-					}
+		case Histogram::Ordinary: {
+			size_t maxYAddes = gsl_histogram_max_bin(m_histogram);
+			yMaxRange = gsl_histogram_get(m_histogram, maxYAddes);
+			break;
+		}
+		case Histogram::Cumulative: {
+			size_t maxYAddes = gsl_histogram_max_bin(m_histogram);
+			yMaxRange = gsl_histogram_get(m_histogram, maxYAddes);
+			double point = 0.0;
+			for (size_t i = 0; i < m_bins; ++i) {
+				point+= gsl_histogram_get(m_histogram,i);
+				if (point > yMaxRange) {
+					yMaxRange = point;
 				}
-				//yMaxRange = dataColumn->rowCount();
-				break;
 			}
-			case Histogram::AvgShift: {
-				//TODO
-			}
+			//yMaxRange = dataColumn->rowCount();
+			break;
+		}
+		case Histogram::AvgShift: {
+			//TODO
+		}
 		}
 		return yMaxRange;
 	}
@@ -719,48 +718,40 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() {
 
 double HistogramPrivate::getXMinimum() {
 	switch(orientation) {
-		case Histogram::Vertical: {
-			return autoBinRanges ? dataColumn->minimum() : binRangesMin;
-		}
-		case Histogram::Horizontal: {
-			return 0;
-		}
+	case Histogram::Vertical:
+		return autoBinRanges ? dataColumn->minimum() : binRangesMin;
+	case Histogram::Horizontal:
+		return 0;
 	}
 	return INFINITY;
 }
 
 double HistogramPrivate::getXMaximum() {
 	switch(orientation) {
-		case Histogram::Vertical: {
-			return autoBinRanges ? dataColumn->maximum() : binRangesMax;
-		}
-		case Histogram::Horizontal: {
-			return getMaximumOccuranceofHistogram();
-		}
+	case Histogram::Vertical:
+		return autoBinRanges ? dataColumn->maximum() : binRangesMax;
+	case Histogram::Horizontal:
+		return getMaximumOccuranceofHistogram();
 	}
 	return -INFINITY;
 }
 
 double HistogramPrivate::getYMinimum() {
 	switch(orientation) {
-		case Histogram::Vertical: {
-			return 0;
-		}
-		case Histogram::Horizontal: {
-			return autoBinRanges ? dataColumn->minimum() : binRangesMin;
-		}
+	case Histogram::Vertical:
+		return 0;
+	case Histogram::Horizontal:
+		return autoBinRanges ? dataColumn->minimum() : binRangesMin;
 	}
 	return INFINITY;
 }
 
 double HistogramPrivate::getYMaximum() {
 	switch(orientation) {
-		case Histogram::Vertical: {
-			return getMaximumOccuranceofHistogram();
-		}
-		case Histogram::Horizontal: {
-			return autoBinRanges ? dataColumn->maximum() : binRangesMax;
-		}
+	case Histogram::Vertical:
+		return getMaximumOccuranceofHistogram();
+	case Histogram::Horizontal:
+		return autoBinRanges ? dataColumn->maximum() : binRangesMax;
 	}
 	return INFINITY;
 }
@@ -831,7 +822,7 @@ void HistogramPrivate::recalcHistogram() {
 
 	//calculate the number of valid data points
 	int count = 0;
-	for (int row = 0; row <dataColumn->rowCount(); ++row) {
+	for (int row = 0; row < dataColumn->rowCount(); ++row) {
 		if (dataColumn->isValid(row) && !dataColumn->isMasked(row))
 			++count;
 	}
@@ -962,7 +953,7 @@ void HistogramPrivate::verticalHistogram() {
 	const double width = (max - min)/m_bins;
 	double value = 0.;
 	if (lineType == Histogram::Bars) {
-		for(size_t i = 0; i < m_bins; ++i) {
+		for (size_t i = 0; i < m_bins; ++i) {
 			if (type == Histogram::Ordinary)
 				value = gsl_histogram_get(m_histogram, i);
 			else
@@ -976,7 +967,7 @@ void HistogramPrivate::verticalHistogram() {
 		}
 	} else if (lineType == Histogram::NoLine || lineType == Histogram::Envelope) {
 		double prevValue = 0.;
-		for(size_t i = 0; i < m_bins; ++i) {
+		for (size_t i = 0; i < m_bins; ++i) {
 			if (type == Histogram::Ordinary)
 				value = gsl_histogram_get(m_histogram, i);
 			else
@@ -993,7 +984,7 @@ void HistogramPrivate::verticalHistogram() {
 			prevValue = value;
 		}
 	} else { //drop lines
-		for(size_t i = 0; i < m_bins; ++i) {
+		for (size_t i = 0; i < m_bins; ++i) {
 			if (type == Histogram::Ordinary)
 				value = gsl_histogram_get(m_histogram, i);
 			else
@@ -1017,7 +1008,7 @@ void HistogramPrivate::horizontalHistogram() {
 	const double width = (max - min)/m_bins;
 	double value = 0.;
 	if (lineType == Histogram::Bars) {
-		for(size_t i = 0; i < m_bins; ++i) {
+		for (size_t i = 0; i < m_bins; ++i) {
 			if (type == Histogram::Ordinary)
 				value = gsl_histogram_get(m_histogram,i);
 			else
@@ -1031,7 +1022,7 @@ void HistogramPrivate::horizontalHistogram() {
 		}
 	} else if (lineType == Histogram::NoLine || lineType == Histogram::Envelope) {
 		double prevValue = 0.;
-		for(size_t i = 0; i < m_bins; ++i) {
+		for (size_t i = 0; i < m_bins; ++i) {
 			if (type == Histogram::Ordinary)
 				value = gsl_histogram_get(m_histogram, i);
 			else
@@ -1048,7 +1039,7 @@ void HistogramPrivate::horizontalHistogram() {
 			prevValue = value;
 		}
 	} else { //drop lines
-		for(size_t i = 0; i < m_bins; ++i) {
+		for (size_t i = 0; i < m_bins; ++i) {
 			if (type == Histogram::Ordinary)
 				value = gsl_histogram_get(m_histogram, i);
 			else
@@ -1105,14 +1096,14 @@ void HistogramPrivate::updateValues() {
 	if (valuesType == Histogram::ValuesBinEntries) {
 		switch(type) {
 		case Histogram::Ordinary:
-			for(size_t i=0; i<m_bins; ++i) {
+			for (size_t i=0; i<m_bins; ++i) {
 				if (!visiblePoints[i]) continue;
 				valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(m_histogram, i)) + valuesSuffix;
 			}
 			break;
 		case Histogram::Cumulative: {
 			value = 0;
-			for(size_t i=0; i<m_bins; ++i) {
+			for (size_t i=0; i<m_bins; ++i) {
 				if (!visiblePoints[i]) continue;
 				value += gsl_histogram_get(m_histogram, i);
 				valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
@@ -1707,7 +1698,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("binRangesMax", binRangesMax);
 
 			str = attribs.value("visible").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("visible").toString());
 			else
 				d->setVisible(str.toInt());
@@ -1753,37 +1744,37 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("brushStyle", fillingBrushStyle, Qt::BrushStyle);
 
 			str = attribs.value("firstColor_r").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("firstColor_r").toString());
 			else
 				d->fillingFirstColor.setRed(str.toInt());
 
 			str = attribs.value("firstColor_g").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("firstColor_g").toString());
 			else
 				d->fillingFirstColor.setGreen(str.toInt());
 
 			str = attribs.value("firstColor_b").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("firstColor_b").toString());
 			else
 				d->fillingFirstColor.setBlue(str.toInt());
 
 			str = attribs.value("secondColor_r").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("secondColor_r").toString());
 			else
 				d->fillingSecondColor.setRed(str.toInt());
 
 			str = attribs.value("secondColor_g").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("secondColor_g").toString());
 			else
 				d->fillingSecondColor.setGreen(str.toInt());
 
 			str = attribs.value("secondColor_b").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("secondColor_b").toString());
 			else
 				d->fillingSecondColor.setBlue(str.toInt());
@@ -1887,9 +1878,9 @@ void Histogram::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("ValuesFont", this->valuesFont());
 
 	int index = parentAspect()->indexOfChild<Histogram>(this);
-	if(index<5) {
+	if (index < 5) {
 		KConfigGroup themeGroup = config.group("Theme");
-		for(int i = index; i<5; i++) {
+		for (int i = index; i < 5; i++) {
 			QString s = "ThemePaletteColor" + QString::number(i+1);
 			themeGroup.writeEntry(s,(QColor) this->linePen().color());
 		}

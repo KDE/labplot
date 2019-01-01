@@ -1,11 +1,11 @@
 /***************************************************************************
-	File                 : CartesianPlot.cpp
-	Project              : LabPlot
-	Description          : Cartesian plot
-	--------------------------------------------------------------------
-	Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
-	Copyright            : (C) 2016-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
-	Copyright            : (C) 2017-2018 by Garvit Khatri (garvitdelhi@gmail.com)
+    File                 : CartesianPlot.cpp
+    Project              : LabPlot
+    Description          : Cartesian plot
+    --------------------------------------------------------------------
+    Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2018 by Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
 
@@ -81,15 +81,11 @@
  *
  *
  */
-CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)),
-	m_legend(nullptr), m_zoomFactor(1.2), m_menusInitialized(false),
-	addNewMenu(nullptr), zoomMenu(nullptr), dataAnalysisMenu(nullptr), themeMenu(nullptr) {
+CartesianPlot::CartesianPlot(const QString &name) : AbstractPlot(name, new CartesianPlotPrivate(this)) {
 	init();
 }
 
-CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd):AbstractPlot(name, dd),
-	m_legend(nullptr), m_zoomFactor(1.2),
-	addNewMenu(nullptr), zoomMenu(nullptr), dataAnalysisMenu(nullptr), themeMenu(nullptr) {
+CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd) : AbstractPlot(name, dd) {
 	init();
 }
 
@@ -2038,16 +2034,7 @@ void CartesianPlot::visibilityChanged() {
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot) : AbstractPlotPrivate(plot),
-	curvesXMinMaxIsDirty(false), curvesYMinMaxIsDirty(false),
-	curvesXMin(INFINITY), curvesXMax(-INFINITY), curvesYMin(INFINITY), curvesYMax(-INFINITY),
-	q(plot),
-	mouseMode(CartesianPlot::SelectionMode),
-	cSystem(nullptr),
-	suppressRetransform(false),
-	panningStarted(false),
-	m_selectionBandIsShown(false) {
-
+CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot) : AbstractPlotPrivate(plot), q(plot) {
 	setData(0, WorksheetElement::NameCartesianPlot);
 }
 

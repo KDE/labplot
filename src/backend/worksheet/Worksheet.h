@@ -40,7 +40,7 @@ class WorksheetPrivate;
 class WorksheetView;
 
 class Worksheet : public AbstractPart {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit Worksheet(const QString& name, bool loading = false);
@@ -113,7 +113,7 @@ private:
 	void loadTheme(const QString&);
 
 	WorksheetPrivate* const d;
-	mutable WorksheetView* m_view;
+	mutable WorksheetView* m_view{nullptr};
 	friend class WorksheetPrivate;
 
 	private slots:

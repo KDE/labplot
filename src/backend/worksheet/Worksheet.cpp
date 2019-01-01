@@ -4,7 +4,7 @@
     Description          : Worksheet
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -59,9 +59,7 @@
  *
  * * \ingroup worksheet
  */
-Worksheet::Worksheet(const QString& name, bool loading)
-	: AbstractPart(name), d(new WorksheetPrivate(this)), m_view(nullptr) {
-
+Worksheet::Worksheet(const QString& name, bool loading) : AbstractPart(name), d(new WorksheetPrivate(this)) {
 	connect(this, &Worksheet::aspectAdded, this, &Worksheet::handleAspectAdded);
 	connect(this, &Worksheet::aspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
 	connect(this, &Worksheet::aspectRemoved, this, &Worksheet::handleAspectRemoved);
@@ -76,7 +74,7 @@ Worksheet::~Worksheet() {
 
 void Worksheet::init() {
 	KConfig config;
-	KConfigGroup group = config.group( "Worksheet" );
+	KConfigGroup group = config.group("Worksheet");
 
 	//size
 	d->scaleContent = group.readEntry("ScaleContent", false);
@@ -84,7 +82,7 @@ void Worksheet::init() {
 	d->pageRect.setX(0);
 	d->pageRect.setY(0);
 	d->pageRect.setWidth(group.readEntry("Width", 1500));
-	d->pageRect.setHeight(group.readEntry("Height",1500));
+	d->pageRect.setHeight(group.readEntry("Height", 1500));
 	d->m_scene->setSceneRect(d->pageRect);
 
 	//background
@@ -627,10 +625,7 @@ void Worksheet::setTheme(const QString& theme) {
 //##############################################################################
 //######################  Private implementation ###############################
 //##############################################################################
-WorksheetPrivate::WorksheetPrivate(Worksheet* owner):q(owner),
-	m_scene(new QGraphicsScene()),
-	scaleContent(false),
-	suppressLayoutUpdate(false) {
+WorksheetPrivate::WorksheetPrivate(Worksheet* owner) : q(owner), m_scene(new QGraphicsScene()) {
 }
 
 QString WorksheetPrivate::name() const {
@@ -676,8 +671,8 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 		return;
 
 	QVector<WorksheetElementContainer*> list = q->children<WorksheetElementContainer>();
-	if (layout==Worksheet::NoLayout) {
-		for(auto* elem : list)
+	if (layout == Worksheet::NoLayout) {
+		for (auto* elem : list)
 			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 
 		return;
@@ -686,39 +681,39 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 	float x=layoutLeftMargin;
 	float y=layoutTopMargin;
 	float w, h;
-	int count=list.count();
+	int count = list.count();
 	if (layout == Worksheet::VerticalLayout) {
-		w= m_scene->sceneRect().width() - layoutLeftMargin - layoutRightMargin;
-		h=(m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (count-1)*layoutVerticalSpacing)/count;
+		w = m_scene->sceneRect().width() - layoutLeftMargin - layoutRightMargin;
+		h = (m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (count-1)*layoutVerticalSpacing)/count;
 		for (auto* elem : list) {
 			setContainerRect(elem, x, y, h, w, undoable);
-			y+=h + layoutVerticalSpacing;
+			y += h + layoutVerticalSpacing;
 		}
 	} else if (layout == Worksheet::HorizontalLayout) {
-		w=(m_scene->sceneRect().width()-layoutLeftMargin-layoutRightMargin- (count-1)*layoutHorizontalSpacing)/count;
-		h= m_scene->sceneRect().height() - layoutTopMargin-layoutBottomMargin;
+		w = (m_scene->sceneRect().width()-layoutLeftMargin-layoutRightMargin- (count-1)*layoutHorizontalSpacing)/count;
+		h = m_scene->sceneRect().height() - layoutTopMargin-layoutBottomMargin;
 		for (auto* elem : list) {
 			setContainerRect(elem, x, y, h, w, undoable);
-			x+=w + layoutHorizontalSpacing;
+			x += w + layoutHorizontalSpacing;
 		}
 	} else { //GridLayout
 		//add new rows, if not sufficient
-		if (count>layoutRowCount*layoutColumnCount) {
+		if (count > layoutRowCount*layoutColumnCount) {
 			layoutRowCount = floor( (float)count/layoutColumnCount + 0.5);
 			emit q->layoutRowCountChanged(layoutRowCount);
 		}
 
-		w=(m_scene->sceneRect().width()-layoutLeftMargin-layoutRightMargin- (layoutColumnCount-1)*layoutHorizontalSpacing)/layoutColumnCount;
-		h=(m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (layoutRowCount-1)*layoutVerticalSpacing)/layoutRowCount;
+		w = (m_scene->sceneRect().width()-layoutLeftMargin-layoutRightMargin- (layoutColumnCount-1)*layoutHorizontalSpacing)/layoutColumnCount;
+		h = (m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (layoutRowCount-1)*layoutVerticalSpacing)/layoutRowCount;
 		int columnIndex=0; //counts the columns in a row
 		for (auto* elem : list) {
 			setContainerRect(elem, x, y, h, w, undoable);
-			x+=w + layoutHorizontalSpacing;
+			x += w + layoutHorizontalSpacing;
 			columnIndex++;
-			if (columnIndex==layoutColumnCount) {
-				columnIndex=0;
-				x=layoutLeftMargin;
-				y+=h + layoutVerticalSpacing;
+			if (columnIndex == layoutColumnCount) {
+				columnIndex = 0;
+				x = layoutLeftMargin;
+				y += h + layoutVerticalSpacing;
 			}
 		}
 	}
@@ -837,25 +832,25 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			str = attribs.value("x").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("x").toString());
 			else
 				rect.setX(str.toDouble());
 
 			str = attribs.value("y").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("y").toString());
 			else
 				rect.setY(str.toDouble());
 
 			str = attribs.value("width").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("width").toString());
 			else
 				rect.setWidth(str.toDouble());
 
 			str = attribs.value("height").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("height").toString());
 			else
 				rect.setHeight(str.toDouble());
@@ -882,37 +877,37 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("brushStyle", backgroundBrushStyle, Qt::BrushStyle);
 
 			str = attribs.value("firstColor_r").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("firstColor_r").toString());
 			else
 				d->backgroundFirstColor.setRed(str.toInt());
 
 			str = attribs.value("firstColor_g").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("firstColor_g").toString());
 			else
 				d->backgroundFirstColor.setGreen(str.toInt());
 
 			str = attribs.value("firstColor_b").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("firstColor_b").toString());
 			else
 				d->backgroundFirstColor.setBlue(str.toInt());
 
 			str = attribs.value("secondColor_r").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("secondColor_r").toString());
 			else
 				d->backgroundSecondColor.setRed(str.toInt());
 
 			str = attribs.value("secondColor_g").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("secondColor_g").toString());
 			else
 				d->backgroundSecondColor.setGreen(str.toInt());
 
 			str = attribs.value("secondColor_b").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("secondColor_b").toString());
 			else
 				d->backgroundSecondColor.setBlue(str.toInt());
@@ -921,7 +916,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			d->backgroundFileName = str;
 
 			READ_DOUBLE_VALUE("opacity", backgroundOpacity);
-		} else if(reader->name() == "cartesianPlot") {
+		} else if (reader->name() == "cartesianPlot") {
 			CartesianPlot* plot = new CartesianPlot("");
 			plot->setIsLoading(true);
 			if (!plot->load(reader, preview)) {
@@ -929,7 +924,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			} else
 				addChildFast(plot);
-		} else if(reader->name() == "textLabel") {
+		} else if (reader->name() == "textLabel") {
 			TextLabel* label = new TextLabel("");
 			if (!label->load(reader, preview)) {
 				delete label;

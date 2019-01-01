@@ -39,7 +39,7 @@ class QPen;
 class KConfig;
 
 class WorksheetElement : public AbstractAspect {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit WorksheetElement(const QString&);

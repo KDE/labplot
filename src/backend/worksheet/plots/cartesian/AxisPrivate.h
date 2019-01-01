@@ -90,7 +90,7 @@ public:
 	Axis::TicksType majorTicksType; //!< the way how the number of major ticks is specified  - either as a total number or an increment
 	int majorTicksNumber; //!< number of major ticks
 	qreal majorTicksIncrement; //!< increment (step) for the major ticks
-	const AbstractColumn* majorTicksColumn; //!< column containing values for major ticks' positions
+	const AbstractColumn* majorTicksColumn{nullptr}; //!< column containing values for major ticks' positions
 	QString majorTicksColumnPath;
 	qreal majorTicksLength; //!< major tick length (in page units!)
 	QPen majorTicksPen;
@@ -100,7 +100,7 @@ public:
 	Axis::TicksType minorTicksType;  //!< the way how the number of minor ticks is specified  - either as a total number or an increment
 	int minorTicksNumber; //!< number of minor ticks (between each two major ticks)
 	qreal minorTicksIncrement; //!< increment (step) for the minor ticks
-	const AbstractColumn* minorTicksColumn; //!< column containing values for minor ticks' positions
+	const AbstractColumn* minorTicksColumn{nullptr}; //!< column containing values for minor ticks' positions
 	QString minorTicksColumnPath;
 	qreal minorTicksLength; //!< minor tick length (in page units!)
 	QPen minorTicksPen;
@@ -132,12 +132,12 @@ public:
 	QPainterPath linePath;
 	QPainterPath majorGridPath;
 	QPainterPath minorGridPath;
-	bool suppressRetransform;
-	bool labelsFormatDecimalOverruled;
-	bool labelsFormatAutoChanged;
+	bool suppressRetransform{false};
+	bool labelsFormatDecimalOverruled{false};
+	bool labelsFormatAutoChanged{false};
 
-	CartesianPlot* plot;
-	const CartesianCoordinateSystem* cSystem;
+	CartesianPlot* plot{nullptr};
+	const CartesianCoordinateSystem* cSystem{nullptr};
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
@@ -162,9 +162,9 @@ private:
 	QVector<double> tickLabelValues; //!< major tick labels values
 	QVector<QString> tickLabelStrings; //!< the actual text of the major tick labels
 
-	bool m_hovered;
-	bool m_suppressRecalc;
-	bool m_printing;
+	bool m_hovered{false};
+	bool m_suppressRecalc{false};
+	bool m_printing{false};
 };
 
 #endif

@@ -4,7 +4,7 @@
     Description          : A xy-curve defined by a smooth
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-	Copyright            : (C) 2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -52,11 +52,11 @@ extern "C" {
 }
 
 XYSmoothCurve::XYSmoothCurve(const QString& name)
-		: XYAnalysisCurve(name, new XYSmoothCurvePrivate(this)) {
+	: XYAnalysisCurve(name, new XYSmoothCurvePrivate(this)) {
 }
 
 XYSmoothCurve::XYSmoothCurve(const QString& name, XYSmoothCurvePrivate* dd)
-		: XYAnalysisCurve(name, dd) {
+	: XYAnalysisCurve(name, dd) {
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -97,8 +97,7 @@ void XYSmoothCurve::setSmoothData(const XYSmoothCurve::SmoothData& smoothData) {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner) : XYAnalysisCurvePrivate(owner),
-	q(owner)  {
+XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner)  {
 }
 
 //no need to delete xColumn and yColumn, they are deleted

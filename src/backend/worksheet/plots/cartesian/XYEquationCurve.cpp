@@ -171,13 +171,13 @@ void XYEquationCurvePrivate::recalculate() {
 void XYEquationCurve::save(QXmlStreamWriter* writer) const{
 	Q_D(const XYEquationCurve);
 
-	writer->writeStartElement( "xyEquationCurve" );
+	writer->writeStartElement("xyEquationCurve");
 
 	//write xy-curve information
 	XYCurve::save(writer);
 
 	//write xy-equationCurve specific information
-	writer->writeStartElement( "equationData" );
+	writer->writeStartElement("equationData");
 	writer->writeAttribute( "type", QString::number(d->equationData.type) );
 	writer->writeAttribute( "expression1", d->equationData.expression1 );
 	writer->writeAttribute( "expression2", d->equationData.expression2 );

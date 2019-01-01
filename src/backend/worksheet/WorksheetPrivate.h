@@ -29,49 +29,50 @@
 #ifndef WORKSHEETPRIVATE_H
 #define WORKSHEETPRIVATE_H
 
-#include <QBrush>
+#include <QColor>
 
+class QBrush;
 class Worksheet;
 class WorksheetElementContainer;
 class QGraphicsScene;
 
-class WorksheetPrivate{
-	public:
-		explicit WorksheetPrivate(Worksheet*);
-		virtual ~WorksheetPrivate();
+class WorksheetPrivate {
+public:
+	explicit WorksheetPrivate(Worksheet*);
+	virtual ~WorksheetPrivate();
 
-		Worksheet* const q;
-		QRectF pageRect;
-		QGraphicsScene* m_scene;
-		bool useViewSize;
-		bool scaleContent;
+	Worksheet* const q;
+	QRectF pageRect;
+	QGraphicsScene* m_scene;
+	bool useViewSize;
+	bool scaleContent{false};
 
-		QString name() const;
-		void update();
-		void updateLayout(bool undoable = true);
-		void setContainerRect(WorksheetElementContainer*, float x, float y, float h, float w, bool undoable);
-		void updatePageRect();
+	QString name() const;
+	void update();
+	void updateLayout(bool undoable = true);
+	void setContainerRect(WorksheetElementContainer*, float x, float y, float h, float w, bool undoable);
+	void updatePageRect();
 
-		PlotArea::BackgroundType backgroundType;
-		PlotArea::BackgroundColorStyle backgroundColorStyle;
-		PlotArea::BackgroundImageStyle backgroundImageStyle;
-		Qt::BrushStyle backgroundBrushStyle;
-		QColor backgroundFirstColor;
-		QColor backgroundSecondColor;
-		QString backgroundFileName;
-		float backgroundOpacity;
+	PlotArea::BackgroundType backgroundType;
+	PlotArea::BackgroundColorStyle backgroundColorStyle;
+	PlotArea::BackgroundImageStyle backgroundImageStyle;
+	Qt::BrushStyle backgroundBrushStyle;
+	QColor backgroundFirstColor;
+	QColor backgroundSecondColor;
+	QString backgroundFileName;
+	float backgroundOpacity;
 
-		Worksheet::Layout layout;
-		bool suppressLayoutUpdate;
-		float layoutTopMargin;
-		float layoutBottomMargin;
-		float layoutLeftMargin;
-		float layoutRightMargin;
-		float layoutVerticalSpacing;
-		float layoutHorizontalSpacing;
-		int layoutColumnCount;
-		int layoutRowCount;
-		QString theme;
+	Worksheet::Layout layout;
+	bool suppressLayoutUpdate{false};
+	float layoutTopMargin;
+	float layoutBottomMargin;
+	float layoutLeftMargin;
+	float layoutRightMargin;
+	float layoutVerticalSpacing;
+	float layoutHorizontalSpacing;
+	int layoutColumnCount;
+	int layoutRowCount;
+	QString theme;
 };
 
 #endif

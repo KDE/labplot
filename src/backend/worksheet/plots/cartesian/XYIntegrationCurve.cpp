@@ -96,8 +96,7 @@ void XYIntegrationCurve::setIntegrationData(const XYIntegrationCurve::Integratio
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYIntegrationCurvePrivate::XYIntegrationCurvePrivate(XYIntegrationCurve* owner) : XYAnalysisCurvePrivate(owner),
-	q(owner)  {
+XYIntegrationCurvePrivate::XYIntegrationCurvePrivate(XYIntegrationCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner) {
 }
 
 //no need to delete xColumn and yColumn, they are deleted

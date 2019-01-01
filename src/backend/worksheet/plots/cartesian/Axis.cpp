@@ -64,48 +64,48 @@ extern "C" {
  *  \ingroup worksheet
  */
 class AxisGrid : public QGraphicsItem {
-	public:
-		AxisGrid(AxisPrivate* a) {
-			axis = a;
-			setFlag(QGraphicsItem::ItemIsSelectable, false);
-			setFlag(QGraphicsItem::ItemIsFocusable, false);
-			setAcceptHoverEvents(false);
+public:
+	AxisGrid(AxisPrivate* a) {
+		axis = a;
+		setFlag(QGraphicsItem::ItemIsSelectable, false);
+		setFlag(QGraphicsItem::ItemIsFocusable, false);
+		setAcceptHoverEvents(false);
+	}
+
+	QRectF boundingRect() const override {
+		QPainterPath gridShape;
+		gridShape.addPath(WorksheetElement::shapeFromPath(axis->majorGridPath, axis->majorGridPen));
+		gridShape.addPath(WorksheetElement::shapeFromPath(axis->minorGridPath, axis->minorGridPen));
+		QRectF boundingRectangle = gridShape.boundingRect();
+		return boundingRectangle;
+	}
+
+	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override {
+		Q_UNUSED(option)
+		Q_UNUSED(widget)
+
+		if (!axis->isVisible()) return;
+		if (axis->linePath.isEmpty()) return;
+
+		//draw major grid
+		if (axis->majorGridPen.style() != Qt::NoPen) {
+			painter->setOpacity(axis->majorGridOpacity);
+			painter->setPen(axis->majorGridPen);
+			painter->setBrush(Qt::NoBrush);
+			painter->drawPath(axis->majorGridPath);
 		}
 
-		QRectF boundingRect() const override {
-			QPainterPath gridShape;
-			gridShape.addPath(WorksheetElement::shapeFromPath(axis->majorGridPath, axis->majorGridPen));
-			gridShape.addPath(WorksheetElement::shapeFromPath(axis->minorGridPath, axis->minorGridPen));
-			QRectF boundingRectangle = gridShape.boundingRect();
-			return boundingRectangle;
+		//draw minor grid
+		if (axis->minorGridPen.style() != Qt::NoPen) {
+			painter->setOpacity(axis->minorGridOpacity);
+			painter->setPen(axis->minorGridPen);
+			painter->setBrush(Qt::NoBrush);
+			painter->drawPath(axis->minorGridPath);
 		}
+	}
 
-		void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override {
-			Q_UNUSED(option)
-			Q_UNUSED(widget)
-
-			if (!axis->isVisible()) return;
-			if (axis->linePath.isEmpty()) return;
-
-			//draw major grid
-			if (axis->majorGridPen.style() != Qt::NoPen) {
-				painter->setOpacity(axis->majorGridOpacity);
-				painter->setPen(axis->majorGridPen);
-				painter->setBrush(Qt::NoBrush);
-				painter->drawPath(axis->majorGridPath);
-			}
-
-			//draw minor grid
-			if (axis->minorGridPen.style() != Qt::NoPen) {
-				painter->setOpacity(axis->minorGridOpacity);
-				painter->setPen(axis->minorGridPen);
-				painter->setBrush(Qt::NoBrush);
-				painter->drawPath(axis->minorGridPath);
-			}
-		}
-
-	private:
-		AxisPrivate* axis;
+private:
+	AxisPrivate* axis;
 };
 
 /**
@@ -115,13 +115,13 @@ class AxisGrid : public QGraphicsItem {
  *  \ingroup worksheet
  */
 Axis::Axis(const QString& name, AxisOrientation orientation)
-		: WorksheetElement(name), d_ptr(new AxisPrivate(this)), m_menusInitialized(false) {
+		: WorksheetElement(name), d_ptr(new AxisPrivate(this)) {
 	d_ptr->orientation = orientation;
 	init();
 }
 
 Axis::Axis(const QString& name, AxisOrientation orientation, AxisPrivate* dd)
-		: WorksheetElement(name), d_ptr(dd), m_menusInitialized(false) {
+		: WorksheetElement(name), d_ptr(dd) {
 	d_ptr->orientation = orientation;
 	init();
 }
@@ -137,7 +137,7 @@ void Axis::init() {
 	Q_D(Axis);
 
 	KConfig config;
-	KConfigGroup group = config.group( "Axis" );
+	KConfigGroup group = config.group("Axis");
 
 	d->autoScale = true;
 	d->position = Axis::AxisCustom;
@@ -907,20 +907,7 @@ void Axis::visibilityChangedSlot() {
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-AxisPrivate::AxisPrivate(Axis* owner) :
-	majorTicksColumn(nullptr),
-	minorTicksColumn(nullptr),
-	gridItem(new AxisGrid(this)),
-	q(owner),
-	suppressRetransform(false),
-	labelsFormatDecimalOverruled(false),
-	labelsFormatAutoChanged(false),
-	plot(nullptr),
-	cSystem(nullptr),
-	m_hovered(false),
-	m_suppressRecalc(false),
-	m_printing(false) {
-
+AxisPrivate::AxisPrivate(Axis* owner) : gridItem(new AxisGrid(this)), q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
 	setAcceptHoverEvents(true);

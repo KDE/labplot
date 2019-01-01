@@ -413,9 +413,7 @@ void CartesianPlotLegend::visibilityChangedSlot() {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-CartesianPlotLegendPrivate::CartesianPlotLegendPrivate(CartesianPlotLegend *owner):q(owner),
-	suppressItemChangeEvent(false), suppressRetransform(false), m_printing(false), m_hovered(false) {
-
+CartesianPlotLegendPrivate::CartesianPlotLegendPrivate(CartesianPlotLegend *owner) : q(owner) {
 	setAcceptHoverEvents(true);
 }
 

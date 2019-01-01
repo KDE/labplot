@@ -36,8 +36,9 @@ extern "C" {
 }
 
 class XYConvolutionCurvePrivate;
+
 class XYConvolutionCurve : public XYAnalysisCurve {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	struct ConvolutionData {

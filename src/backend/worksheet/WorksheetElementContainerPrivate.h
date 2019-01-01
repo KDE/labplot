@@ -4,7 +4,7 @@
     Description          : Private members of WorksheetElementContainer.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -36,30 +36,30 @@ class QGraphicsSceneContextMenuEvent;
 class WorksheetElementContainer;
 
 class WorksheetElementContainerPrivate : public QGraphicsItem {
-	public:
-		explicit WorksheetElementContainerPrivate(WorksheetElementContainer*);
-		~WorksheetElementContainerPrivate() override= default;
+public:
+	explicit WorksheetElementContainerPrivate(WorksheetElementContainer*);
+	~WorksheetElementContainerPrivate() override= default;
 
-		QString name() const;
-		QRectF boundingRect() const override;
-		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
-		void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-		void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	QString name() const;
+	QRectF boundingRect() const override;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
+	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 
-		bool swapVisible(bool on);
-		void prepareGeometryChangeRequested();
-		void recalcShapeAndBoundingRect();
-		void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+	bool swapVisible(bool on);
+	void prepareGeometryChangeRequested();
+	void recalcShapeAndBoundingRect();
+	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 
-		WorksheetElementContainer* q;
-		QRectF boundingRectangle;
-		QPainterPath containerShape;
-		QRectF rect;
-		bool m_hovered;
-		bool m_printing;
+	WorksheetElementContainer* q;
+	QRectF boundingRectangle;
+	QPainterPath containerShape;
+	QRectF rect;
+	bool m_hovered{false};
+	bool m_printing{false};
 
-	signals:
-		void selectedChange(QGraphicsItem*);
+signals:
+	void selectedChange(QGraphicsItem*);
 };
 
 #endif

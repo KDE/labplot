@@ -35,12 +35,12 @@
 class WorksheetElementGroup: public WorksheetElementContainer {
 	Q_OBJECT
 
-	public:
-		explicit WorksheetElementGroup(const QString &name);
-		~WorksheetElementGroup() override;
+public:
+	explicit WorksheetElementGroup(const QString &name);
+	~WorksheetElementGroup() override;
 
-	protected:
-		WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd);
+protected:
+	WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd);
 };
 
 #endif

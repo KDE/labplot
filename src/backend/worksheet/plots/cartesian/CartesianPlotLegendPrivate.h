@@ -29,10 +29,10 @@
 #define CARTESIANPLOTLEGENDPRIVATE_H
 
 #include <QGraphicsItem>
-#include <QBrush>
 #include <QPen>
 #include <QFont>
 
+class QBrush;
 class CartesianPlotLegend;
 class XYCurve;
 class QGraphicsSceneContextMenuEvent;
@@ -55,10 +55,10 @@ public:
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 
-	bool suppressItemChangeEvent;
-	bool suppressRetransform;
-	bool m_printing;
-	bool m_hovered;
+	bool suppressItemChangeEvent{false};
+	bool suppressRetransform{false};
+	bool m_printing{false};
+	bool m_hovered{false};
 
 	QList<WorksheetElement*> curvesList; //list containing all visible curves
 	QRectF rect;

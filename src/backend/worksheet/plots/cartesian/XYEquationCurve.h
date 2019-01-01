@@ -32,21 +32,22 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 class XYEquationCurvePrivate;
+
 class XYEquationCurve : public XYCurve {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	enum EquationType {Cartesian, Polar, Parametric, Implicit, Neutral};
 
 	struct EquationData {
-		EquationData() : type(Cartesian), min("0"), max("1"), count(1000) {};
+		EquationData() : min("0"), max("1") {};
 
-		EquationType type;
+		EquationType type{Cartesian};
 		QString expression1;
 		QString expression2;
 		QString min;
 		QString max;
-		int count;
+		int count{1000};
 	};
 
 	explicit XYEquationCurve(const QString& name);

@@ -30,39 +30,40 @@
 #define PLOTAREAPRIVATE_H
 
 #include <QGraphicsItem>
-#include <QBrush>
 #include <QPen>
 
+class QBrush;
 class PlotArea;
+
 class PlotAreaPrivate: public QGraphicsItem {
-	public:
-		explicit PlotAreaPrivate(PlotArea *owner);
+public:
+	explicit PlotAreaPrivate(PlotArea *owner);
 
-		QString name() const;
-		bool swapVisible(bool on);
-		bool toggleClipping(bool on);
-		bool clippingEnabled() const;
-		void setRect(const QRectF&);
+	QString name() const;
+	bool swapVisible(bool on);
+	bool toggleClipping(bool on);
+	bool clippingEnabled() const;
+	void setRect(const QRectF&);
 
-		//QGraphicsItem's virtual functions
-		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
-		QRectF boundingRect() const override;
-		QPainterPath shape() const override;
+	//QGraphicsItem's virtual functions
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
+	QRectF boundingRect() const override;
+	QPainterPath shape() const override;
 
-		QRectF rect;
-		PlotArea::BackgroundType backgroundType;
-		PlotArea::BackgroundColorStyle backgroundColorStyle;
-		PlotArea::BackgroundImageStyle backgroundImageStyle;
-		Qt::BrushStyle backgroundBrushStyle;
-		QColor backgroundFirstColor;
-		QColor backgroundSecondColor;
-		QString backgroundFileName;
-		qreal backgroundOpacity;
-		QPen borderPen;
-		qreal borderOpacity;
-		qreal borderCornerRadius;
+	QRectF rect;
+	PlotArea::BackgroundType backgroundType;
+	PlotArea::BackgroundColorStyle backgroundColorStyle;
+	PlotArea::BackgroundImageStyle backgroundImageStyle;
+	Qt::BrushStyle backgroundBrushStyle;
+	QColor backgroundFirstColor;
+	QColor backgroundSecondColor;
+	QString backgroundFileName;
+	qreal backgroundOpacity;
+	QPen borderPen;
+	qreal borderOpacity;
+	qreal borderCornerRadius;
 
-		PlotArea* const q;
+	PlotArea* const q;
 };
 
 #endif

@@ -36,65 +36,65 @@
 class QGraphicsSceneHoverEvent;
 
 class TextLabelPrivate: public QGraphicsItem {
-	public:
-		explicit TextLabelPrivate(TextLabel*);
+public:
+	explicit TextLabelPrivate(TextLabel*);
 
-		qreal rotationAngle;
-		float scaleFactor;
-		int teXImageResolution;
-		float teXImageScaleFactor;
-		TextLabel::TextWrapper textWrapper;
-		QFont teXFont;
-		QColor fontColor;
-		QColor backgroundColor;
-		QImage teXImage;
-		QFutureWatcher<QImage> teXImageFutureWatcher;
-		bool teXRenderSuccessful;
+	qreal rotationAngle;
+	float scaleFactor;
+	int teXImageResolution;
+	float teXImageScaleFactor;
+	TextLabel::TextWrapper textWrapper;
+	QFont teXFont;
+	QColor fontColor;
+	QColor backgroundColor;
+	QImage teXImage;
+	QFutureWatcher<QImage> teXImageFutureWatcher;
+	bool teXRenderSuccessful{false};
 
-		TextLabel::PositionWrapper position; //position in parent's coordinate system, the label gets aligned around this point.
-		bool positionInvalid;
+	TextLabel::PositionWrapper position; //position in parent's coordinate system, the label gets aligned around this point.
+	bool positionInvalid{false};
 
-		TextLabel::HorizontalAlignment horizontalAlignment;
-		TextLabel::VerticalAlignment verticalAlignment;
+	TextLabel::HorizontalAlignment horizontalAlignment;
+	TextLabel::VerticalAlignment verticalAlignment;
 
-		TextLabel::BorderShape borderShape;
-		QPen borderPen;
-		qreal borderOpacity;
+	TextLabel::BorderShape borderShape;
+	QPen borderPen;
+	qreal borderOpacity;
 
-		QString name() const;
-		void retransform();
-		bool swapVisible(bool on);
-		virtual void recalcShapeAndBoundingRect();
-		void updatePosition();
-		QPointF positionFromItemPosition(QPointF);
-		void updateText();
-		void updateTeXImage();
-		void updateBorder();
-		QStaticText staticText;
+	QString name() const;
+	void retransform();
+	bool swapVisible(bool on);
+	virtual void recalcShapeAndBoundingRect();
+	void updatePosition();
+	QPointF positionFromItemPosition(QPointF);
+	void updateText();
+	void updateTeXImage();
+	void updateBorder();
+	QStaticText staticText;
 
-		bool suppressItemChangeEvent;
-		bool suppressRetransform;
-		bool m_printing;
-		bool m_hovered;
+	bool suppressItemChangeEvent{false};
+	bool suppressRetransform{false};
+	bool m_printing{false};
+	bool m_hovered{false};
 
-		QRectF boundingRectangle; //bounding rectangle of the text
-		QRectF transformedBoundingRectangle; //bounding rectangle of transformed (rotated etc.) text
-		QPainterPath borderShapePath;
-		QPainterPath labelShape;
+	QRectF boundingRectangle; //bounding rectangle of the text
+	QRectF transformedBoundingRectangle; //bounding rectangle of transformed (rotated etc.) text
+	QPainterPath borderShapePath;
+	QPainterPath labelShape;
 
-		//reimplemented from QGraphicsItem
-		QRectF boundingRect() const override;
- 		QPainterPath shape() const override;
-		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
-		QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+	//reimplemented from QGraphicsItem
+	QRectF boundingRect() const override;
+	QPainterPath shape() const override;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
+	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
-		TextLabel* const q;
+	TextLabel* const q;
 
-	private:
-		void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-		void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-		void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-		void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+private:
+	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };
 
 #endif

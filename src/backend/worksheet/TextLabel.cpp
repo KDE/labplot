@@ -60,13 +60,13 @@
  */
 
 
-TextLabel::TextLabel(const QString& name, Type type):WorksheetElement(name),
-	d_ptr(new TextLabelPrivate(this)), m_type(type), visibilityAction(nullptr) {
+TextLabel::TextLabel(const QString& name, Type type) : WorksheetElement(name),
+		d_ptr(new TextLabelPrivate(this)), m_type(type) {
 	init();
 }
 
-TextLabel::TextLabel(const QString &name, TextLabelPrivate *dd, Type type):WorksheetElement(name),
-	d_ptr(dd), m_type(type), visibilityAction(nullptr) {
+TextLabel::TextLabel(const QString &name, TextLabelPrivate *dd, Type type) : WorksheetElement(name),
+		d_ptr(dd), m_type(type) {
 	init();
 }
 
@@ -354,15 +354,7 @@ void TextLabel::visibilityChanged() {
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-TextLabelPrivate::TextLabelPrivate(TextLabel* owner)
-	: teXRenderSuccessful(false),
-	  positionInvalid(false),
-	  suppressItemChangeEvent(false),
-	  suppressRetransform(false),
-	  m_printing(false),
-	  m_hovered(false),
-	  q(owner) {
-
+TextLabelPrivate::TextLabelPrivate(TextLabel* owner) : q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);

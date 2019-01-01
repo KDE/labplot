@@ -32,52 +32,52 @@
 #include <QGraphicsItem>
 
 class CustomPointPrivate: public QGraphicsItem {
-	public:
-		explicit CustomPointPrivate(CustomPoint*, const CartesianPlot*);
+public:
+	explicit CustomPointPrivate(CustomPoint*, const CartesianPlot*);
 
-		const CartesianPlot* plot;
+	const CartesianPlot* plot;
 
-		QString name() const;
-		void retransform();
-		bool swapVisible(bool);
-		virtual void recalcShapeAndBoundingRect();
-		void updatePosition();
-		void updateData();
+	QString name() const;
+	void retransform();
+	bool swapVisible(bool);
+	virtual void recalcShapeAndBoundingRect();
+	void updatePosition();
+	void updateData();
 
-		bool suppressItemChangeEvent;
-		bool suppressRetransform;
-		bool m_printing;
-		bool m_hovered;
-		bool m_visible; //point inside the plot (visible) or not
+	bool suppressItemChangeEvent{false};
+	bool suppressRetransform{false};
+	bool m_printing{false};
+	bool m_hovered{false};
+	bool m_visible{true}; //point inside the plot (visible) or not
 
-		QRectF boundingRectangle;
-		QRectF transformedBoundingRectangle;
-		QPainterPath pointShape;
+	QRectF boundingRectangle;
+	QRectF transformedBoundingRectangle;
+	QPainterPath pointShape;
 
-		QPointF position; //position in plot coordinates
-		QPointF positionScene; //position in scene coordinates
+	QPointF position; //position in plot coordinates
+	QPointF positionScene; //position in scene coordinates
 
-		//symbol
-		Symbol::Style symbolStyle;
-		QBrush symbolBrush;
-		QPen symbolPen;
-		qreal symbolOpacity;
-		qreal symbolRotationAngle;
-		qreal symbolSize;
+	//symbol
+	Symbol::Style symbolStyle;
+	QBrush symbolBrush;
+	QPen symbolPen;
+	qreal symbolOpacity;
+	qreal symbolRotationAngle;
+	qreal symbolSize;
 
-		//reimplemented from QGraphicsItem
-		QRectF boundingRect() const override;
-		QPainterPath shape() const override;
-		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
-		QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
+	//reimplemented from QGraphicsItem
+	QRectF boundingRect() const override;
+	QPainterPath shape() const override;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
+	QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 
-		CustomPoint* const q;
+	CustomPoint* const q;
 
-	private:
-		void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-		void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-		void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-		void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+private:
+	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };
 
 #endif

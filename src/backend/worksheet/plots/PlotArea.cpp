@@ -44,7 +44,7 @@
  * \ingroup worksheet
  */
 
-PlotArea::PlotArea(const QString &name):WorksheetElement(name),
+PlotArea::PlotArea(const QString &name) : WorksheetElement(name),
 	d_ptr(new PlotAreaPrivate(this)) {
 	init();
 }
@@ -113,7 +113,6 @@ void PlotArea::handleResize(double horizontalRatio, double verticalRatio, bool p
 }
 
 void PlotArea::retransform() {
-
 }
 
 /* ============================ getter methods ================= */
@@ -234,7 +233,7 @@ void PlotArea::setBorderOpacity(qreal opacity) {
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-PlotAreaPrivate::PlotAreaPrivate(PlotArea *owner):q(owner) {
+PlotAreaPrivate::PlotAreaPrivate(PlotArea *owner) : q(owner) {
 }
 
 QString PlotAreaPrivate::name() const {
@@ -280,7 +279,7 @@ QPainterPath PlotAreaPrivate::shape() const {
 	return path;
 }
 
-void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget *widget) {
 // 	DEBUG("PlotAreaPrivate::paint()");
 	Q_UNUSED(option)
 	Q_UNUSED(widget)

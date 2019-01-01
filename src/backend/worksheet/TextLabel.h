@@ -34,14 +34,14 @@
 #include "tools/TeXRenderer.h"
 #include "backend/worksheet/WorksheetElement.h"
 
-#include <QFont>
-#include <QBrush>
 #include <QPen>
 
+class QBrush;
+class QFont;
 class TextLabelPrivate;
 
 class TextLabel : public WorksheetElement {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	enum Type {General, PlotTitle, AxisTitle, PlotLegendTitle};
@@ -56,18 +56,18 @@ public:
 			Cuboid, UpPointingRectangle, DownPointingRectangle, LeftPointingRectangle, RightPointingRectangle};
 
 	struct TextWrapper {
-		TextWrapper() : teXUsed(false) {}
+		TextWrapper() {}
 		TextWrapper(const QString& t, bool b) : text(t), teXUsed(b) {}
-		TextWrapper(const QString& t) : text(t), teXUsed(false) {}
+		TextWrapper(const QString& t) : text(t) {}
 
 		QString text;
-		bool teXUsed;
+		bool teXUsed{false};
 	};
 
 	struct PositionWrapper {
-		QPointF 		   point;
+		QPointF point;
 		HorizontalPosition horizontalPosition;
-		VerticalPosition   verticalPosition;
+		VerticalPosition verticalPosition;
 	};
 
 	explicit TextLabel(const QString& name, Type type = General);
@@ -123,7 +123,7 @@ private:
 	void init();
 
 	Type m_type;
-	QAction* visibilityAction;
+	QAction* visibilityAction{nullptr};
 
 signals:
 	void textWrapperChanged(const TextLabel::TextWrapper&);

@@ -63,11 +63,11 @@ extern "C" {
 #include <gsl/gsl_errno.h>
 }
 
-XYCurve::XYCurve(const QString &name) : WorksheetElement(name), d_ptr(new XYCurvePrivate(this)), m_menusInitialized(false) {
+XYCurve::XYCurve(const QString &name) : WorksheetElement(name), d_ptr(new XYCurvePrivate(this)) {
 	init();
 }
 
-XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd) : WorksheetElement(name), d_ptr(dd), m_menusInitialized(false) {
+XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd) : WorksheetElement(name), d_ptr(dd) {
 	init();
 }
 
@@ -832,18 +832,7 @@ void XYCurve::navigateTo() {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYCurvePrivate::XYCurvePrivate(XYCurve *owner) :
-	sourceDataChangedSinceLastRecalc(false),
-	q(owner),
-	plot(nullptr),
-	cSystem(nullptr),
-	m_hoverEffectImageIsDirty(false),
-	m_selectionEffectImageIsDirty(false),
-	m_hovered(false),
-	m_suppressRecalc(false),
-	m_suppressRetransform(false),
-	m_printing(false) {
-
+XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(true);
 }

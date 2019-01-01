@@ -99,8 +99,7 @@ void XYInterpolationCurve::setInterpolationData(const XYInterpolationCurve::Inte
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYInterpolationCurvePrivate::XYInterpolationCurvePrivate(XYInterpolationCurve* owner) : XYAnalysisCurvePrivate(owner),
-	q(owner) {
+XYInterpolationCurvePrivate::XYInterpolationCurvePrivate(XYInterpolationCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner) {
 }
 
 //no need to delete xColumn and yColumn, they are deleted

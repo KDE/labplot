@@ -34,46 +34,45 @@
 
 class WorksheetElementContainerPrivate;
 
-//TODO: align
 class WorksheetElementContainer : public WorksheetElement {
 	Q_OBJECT
 
-	public:
-		explicit WorksheetElementContainer(const QString&);
-		~WorksheetElementContainer() override;
+public:
+	explicit WorksheetElementContainer(const QString&);
+	~WorksheetElementContainer() override;
 
-		QGraphicsItem* graphicsItem() const override;
+	QGraphicsItem* graphicsItem() const override;
 
-		void setVisible(bool) override;
-		bool isVisible() const override;
-		bool isFullyVisible() const override;
-		void setPrinting(bool) override;
+	void setVisible(bool) override;
+	bool isVisible() const override;
+	bool isFullyVisible() const override;
+	void setPrinting(bool) override;
 
-		QRectF rect() const;
-		virtual void setRect(const QRectF&) = 0;
-		virtual void prepareGeometryChange();
+	QRectF rect() const;
+	virtual void setRect(const QRectF&) = 0;
+	virtual void prepareGeometryChange();
 
-		typedef WorksheetElementContainerPrivate Private;
+	typedef WorksheetElementContainerPrivate Private;
 
-	public slots:
-		void retransform() override;
-		void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) override;
-		void childHovered();
-		void childUnhovered();
+public slots:
+	void retransform() override;
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) override;
+	void childHovered();
+	void childUnhovered();
 
-	protected:
-		WorksheetElementContainerPrivate* const d_ptr;
-		WorksheetElementContainer(const QString&, WorksheetElementContainerPrivate*);
+protected:
+	WorksheetElementContainerPrivate* const d_ptr;
+	WorksheetElementContainer(const QString&, WorksheetElementContainerPrivate*);
 
-	protected slots:
-		virtual void handleAspectAdded(const AbstractAspect*);
+protected slots:
+	virtual void handleAspectAdded(const AbstractAspect*);
 
-	private:
-		Q_DECLARE_PRIVATE(WorksheetElementContainer)
+private:
+	Q_DECLARE_PRIVATE(WorksheetElementContainer)
 
-	signals:
-		friend class WorksheetElementContainerSetVisibleCmd;
-		void visibleChanged(bool);
+signals:
+	friend class WorksheetElementContainerSetVisibleCmd;
+	void visibleChanged(bool);
 };
 
 #endif

@@ -37,7 +37,7 @@ class QAction;
 class KToggleAction;
 class KProgressDialog;
 
-namespace Cantor{
+namespace Cantor {
     class PanelPluginHandler;
 }
 

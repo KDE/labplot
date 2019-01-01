@@ -102,8 +102,7 @@ void XYFourierFilterCurve::setFilterData(const XYFourierFilterCurve::FilterData&
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* owner) : XYAnalysisCurvePrivate(owner),
-	q(owner) {
+XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner) {
 }
 
 //no need to delete xColumn and yColumn, they are deleted

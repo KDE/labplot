@@ -95,8 +95,7 @@ void XYDifferentiationCurve::setDifferentiationData(const XYDifferentiationCurve
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYDifferentiationCurvePrivate::XYDifferentiationCurvePrivate(XYDifferentiationCurve* owner) : XYAnalysisCurvePrivate(owner),
-	q(owner)  {
+XYDifferentiationCurvePrivate::XYDifferentiationCurvePrivate(XYDifferentiationCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner)  {
 }
 
 //no need to delete xColumn and yColumn, they are deleted

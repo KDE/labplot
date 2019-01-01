@@ -36,8 +36,9 @@ extern "C" {
 }
 
 class XYCorrelationCurvePrivate;
+
 class XYCorrelationCurve : public XYAnalysisCurve {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	struct CorrelationData {

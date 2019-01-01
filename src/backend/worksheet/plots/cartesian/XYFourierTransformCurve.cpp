@@ -98,8 +98,7 @@ void XYFourierTransformCurve::setTransformData(const XYFourierTransformCurve::Tr
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYFourierTransformCurvePrivate::XYFourierTransformCurvePrivate(XYFourierTransformCurve* owner) : XYAnalysisCurvePrivate(owner),
-	q(owner) {
+XYFourierTransformCurvePrivate::XYFourierTransformCurvePrivate(XYFourierTransformCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner) {
 }
 
 //no need to delete xColumn and yColumn, they are deleted

@@ -39,7 +39,7 @@ extern "C" {
 class XYDifferentiationCurvePrivate;
 
 class XYDifferentiationCurve : public XYAnalysisCurve {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	struct DifferentiationData {
