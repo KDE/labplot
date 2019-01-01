@@ -62,7 +62,8 @@ int nsl_corr_fft_type(double s[], size_t n, double r[], size_t m, nsl_corr_type_
 	}
 
 	double *rtmp = (double*)malloc(size*sizeof(double));
-	if (stmp == NULL) {
+	if (rtmp == NULL) {
+		free(stmp);
 		printf("nsl_corr_fft_type(): ERROR allocating memory for 'rtmp'!\n");
 		return -1;
 	}

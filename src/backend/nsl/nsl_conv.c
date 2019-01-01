@@ -266,6 +266,7 @@ int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direc
 
 	double *rtmp = (double*)malloc(size*sizeof(double));
 	if (rtmp == NULL) {
+		free(stmp);
 		printf("nsl_corr_fft_type(): ERROR allocating memory for 'rtmp'!\n");
 		return -1;
 	}
