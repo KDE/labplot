@@ -95,7 +95,6 @@ public:
 
 	QUndoStack undo_stack;
 	MdiWindowVisibility mdiWindowVisibility{Project::folderOnly};
-	AbstractScriptingEngine* scriptingEngine{nullptr};
 	QString fileName;
 	QString version;
 	QString author;
@@ -119,11 +118,6 @@ Project::Project() : Folder(i18n("Project")), d(new Private()) {
 	setUndoAware(true);
 	setIsLoading(false);
 	d->changed = false;
-
-	// TODO: intelligent engine choosing
-// 	Q_ASSERT(ScriptingEngineManager::instance()->engineNames().size() > 0);
-// 	QString engine_name = ScriptingEngineManager::instance()->engineNames()[0];
-// 	d->scriptingEngine = ScriptingEngineManager::instance()->engine(engine_name);
 
 	connect(this, &Project::aspectDescriptionChanged,this, &Project::descriptionChanged);
 }
@@ -173,10 +167,6 @@ void Project::setMdiWindowVisibility(MdiWindowVisibility visibility) {
 
 Project::MdiWindowVisibility Project::mdiWindowVisibility() const {
 	return d->mdiWindowVisibility;
-}
-
-AbstractScriptingEngine* Project::scriptingEngine() const {
-	return d->scriptingEngine;
 }
 
 CLASS_D_ACCESSOR_IMPL(Project, QString, fileName, FileName, fileName)

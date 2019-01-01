@@ -34,7 +34,6 @@
 #include "backend/lib/macros.h"
 
 class QString;
-class AbstractScriptingEngine;
 
 class Project : public Folder {
 	Q_OBJECT
@@ -62,8 +61,6 @@ public:
 	}
 	QMenu* createContextMenu() override;
 	virtual QMenu* createFolderContextMenu(const Folder*);
-
-	AbstractScriptingEngine* scriptingEngine() const;
 
 	void setMdiWindowVisibility(MdiWindowVisibility visibility);
 	MdiWindowVisibility mdiWindowVisibility() const;

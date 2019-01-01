@@ -177,9 +177,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/column/ColumnPrivate.cpp
 	${BACKEND_DIR}/core/column/ColumnStringIO.cpp
 	${BACKEND_DIR}/core/column/columncommands.cpp
-	${BACKEND_DIR}/core/AbstractScriptingEngine.cpp
-	${BACKEND_DIR}/core/AbstractScript.cpp
-	${BACKEND_DIR}/core/ScriptingEngineManager.cpp
 	${BACKEND_DIR}/core/Project.cpp
 	${BACKEND_DIR}/core/AbstractPart.cpp
 	${BACKEND_DIR}/core/Workbook.cpp
