@@ -151,7 +151,7 @@ private:
 	Q_DECLARE_PRIVATE(Histogram)
 	void init();
 	void initActions();
-	QAction* visibilityAction;
+	QAction* visibilityAction{nullptr};
 
 signals:
 	//General-Tab

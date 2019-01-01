@@ -109,8 +109,8 @@ private:
 	void init();
 	void initActions();
 
-	CartesianPlot* m_plot;
-	QAction* visibilityAction;
+	CartesianPlot* m_plot{nullptr};
+	QAction* visibilityAction{nullptr};
 
 private slots:
 	//SLOTs for changes triggered via QActions in the context menu

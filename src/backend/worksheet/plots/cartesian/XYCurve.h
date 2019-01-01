@@ -162,8 +162,8 @@ private:
 	void init();
 	void initActions();
 
-	QAction* visibilityAction;
-	QAction* navigateToAction;
+	QAction* visibilityAction{nullptr};
+	QAction* navigateToAction{nullptr};
 	bool m_menusInitialized{false};
 
 signals:

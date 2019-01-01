@@ -89,7 +89,7 @@ public:
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	//General
-	const AbstractColumn* dataColumn;
+	const AbstractColumn* dataColumn{nullptr};
 	QString dataColumnPath;
 	Histogram::HistogramType type;
 	Histogram::HistogramOrientation orientation;
@@ -116,7 +116,7 @@ public:
 	//values
 	int value;
 	Histogram::ValuesType valuesType;
-	const AbstractColumn* valuesColumn;
+	const AbstractColumn* valuesColumn{nullptr};
 	QString valuesColumnPath;
 	Histogram::ValuesPosition valuesPosition;
 	qreal valuesDistance;

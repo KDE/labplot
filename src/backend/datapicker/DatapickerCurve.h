@@ -105,8 +105,8 @@ private:
 	void initAction();
 	Column* appendColumn(const QString&);
 
-	Spreadsheet* m_datasheet;
-	QAction* updateDatasheetAction;
+	Spreadsheet* m_datasheet{nullptr};
+	QAction* updateDatasheetAction{nullptr};
 
 signals:
 	void curveErrorTypesChanged(const DatapickerCurve::Errors&);
