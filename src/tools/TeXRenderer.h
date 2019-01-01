@@ -28,15 +28,13 @@
 #ifndef TEXRENDERER_H
 #define TEXRENDERER_H
 
-class QColor;
+#include <QColor>
+
+class QString;
 class QImage;
 class QTemporaryFile;
 
-#include <QString>
-#include <QColor>
-
 class TeXRenderer {
-
 public:
 	struct Formatting {
 		QColor fontColor;

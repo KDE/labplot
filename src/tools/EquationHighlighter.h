@@ -29,26 +29,26 @@
 #define EQUATIONHIGHLIGHTER_H
 
 #include <QSyntaxHighlighter>
-#include <QStringList>
 
+class QStringList;
 class KTextEdit;
 
 class EquationHighlighter : public QSyntaxHighlighter {
 	Q_OBJECT
-	public:
-		explicit EquationHighlighter(KTextEdit* parent);
-		void setVariables(const QStringList&);
-// 		void setErrorPosition(int position);
+public:
+	explicit EquationHighlighter(KTextEdit* parent);
+	void setVariables(const QStringList&);
+// 	void setErrorPosition(int position);
 
-	public slots:
-		void rehighlight();
+public slots:
+	void rehighlight();
 
-	protected:
-		void highlightBlock(const QString& text) override;
+protected:
+	void highlightBlock(const QString& text) override;
 
-// 		int m_errorPosition;
-		KTextEdit* m_parent;
-		QStringList m_variables;
+//	int m_errorPosition;
+	KTextEdit* m_parent;
+	QStringList m_variables;
 };
 
 #endif
