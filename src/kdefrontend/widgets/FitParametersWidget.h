@@ -43,10 +43,10 @@ public:
 
 private:
 	Ui::FitParametersWidget ui;
-	XYFitCurve::FitData* m_fitData;
+	XYFitCurve::FitData* m_fitData{nullptr};
 	bool m_initializing;
-	bool m_rehighlighting;
-	bool m_invalidRanges;
+	bool m_rehighlighting{false};
+	bool m_invalidRanges{false};
 
 	bool eventFilter(QObject*, QEvent*) override;
 	void highlightInvalid(int row, int col, bool invalid);

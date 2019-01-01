@@ -48,9 +48,7 @@
 
 #include <cmath>
 
-HistogramView::HistogramView(QWidget* parent, int range) :
-	QGraphicsView(parent),
-	bins(nullptr),
+HistogramView::HistogramView(QWidget* parent, int range) : QGraphicsView(parent),
 	m_scene(new QGraphicsScene()),
 	m_range(range) {
 
@@ -61,17 +59,17 @@ HistogramView::HistogramView(QWidget* parent, int range) :
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    m_lowerSlider = new QGraphicsRectItem(pageRect, nullptr);
-    m_lowerSlider->setPen(QPen(Qt::black, 0.5));
-    m_lowerSlider->setBrush(Qt::blue);
-    m_lowerSlider->setOpacity(0.2);
-    m_scene->addItem(m_lowerSlider);
+	m_lowerSlider = new QGraphicsRectItem(pageRect, nullptr);
+	m_lowerSlider->setPen(QPen(Qt::black, 0.5));
+	m_lowerSlider->setBrush(Qt::blue);
+	m_lowerSlider->setOpacity(0.2);
+	m_scene->addItem(m_lowerSlider);
 
-    m_upperSlider = new QGraphicsRectItem(pageRect, nullptr);
-    m_upperSlider->setPen(QPen(Qt::black, 0.5));
-    m_upperSlider->setBrush(Qt::blue);
-    m_upperSlider->setOpacity(0.2);
-    m_scene->addItem(m_upperSlider);
+	m_upperSlider = new QGraphicsRectItem(pageRect, nullptr);
+	m_upperSlider->setPen(QPen(Qt::black, 0.5));
+	m_upperSlider->setBrush(Qt::blue);
+	m_upperSlider->setOpacity(0.2);
+	m_scene->addItem(m_upperSlider);
 }
 
 void HistogramView::setScalePixmap(const QString& file) {
@@ -86,8 +84,8 @@ void HistogramView::setScalePixmap(const QString& file) {
 void HistogramView::setSpan(int l, int h) {
 	l = l*1000/m_range;
 	h = h*1000/m_range;
-    m_lowerSlider->setPos(QPointF(l - 1000, 0));
-    m_upperSlider->setPos(QPointF(h, 0));
+	m_lowerSlider->setPos(QPointF(l - 1000, 0));
+	m_upperSlider->setPos(QPointF(h, 0));
 	invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer);
 }
 
@@ -330,7 +328,7 @@ void DatapickerImageWidget::initConnections() {
 	connect( m_image, SIGNAL(fileNameChanged(QString)), this, SLOT(imageFileNameChanged(QString)) );
 	connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(imageRotationAngleChanged(float)) );
 	connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-	         this,SLOT(updateSymbolWidgets()) );
+			 this,SLOT(updateSymbolWidgets()) );
 	connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(updateSymbolWidgets()) );
 	connect( m_image, SIGNAL(axisPointsChanged(DatapickerImage::ReferencePoints)), this, SLOT(imageAxisPointsChanged(DatapickerImage::ReferencePoints)) );
 	connect( m_image, SIGNAL(settingsChanged(DatapickerImage::EditorSettings)), this, SLOT(imageEditorSettingsChanged(DatapickerImage::EditorSettings)) );
@@ -713,7 +711,7 @@ void DatapickerImageWidget::pointSeparationChanged(int value) {
 //******** SLOTs for changes triggered in DatapickerImage ***********
 //*******************************************************************
 /*!
-    called when the name or comment of image's parent (datapicker) was changed.
+ * called when the name or comment of image's parent (datapicker) was changed.
  */
 void DatapickerImageWidget::imageDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_image->parentAspect() != aspect)

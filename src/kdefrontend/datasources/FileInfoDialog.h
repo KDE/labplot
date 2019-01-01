@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : file info dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2018 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2018 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2015-2016 Stefan-Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -34,7 +34,7 @@
 #include <QTextEdit>
 
 class FileInfoDialog : public QDialog {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit FileInfoDialog(QWidget*);

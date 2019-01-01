@@ -4,7 +4,7 @@
     Description          : widget for worksheet properties
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-	Copyright            : (C) 2010-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -48,7 +48,7 @@ public:
 private:
 	Ui::WorksheetDock ui;
 	QList<Worksheet*> m_worksheetList;
-	Worksheet* m_worksheet;
+	Worksheet* m_worksheet{nullptr};
 	bool m_initializing;
 	ThemeHandler* m_themeHandler;
 

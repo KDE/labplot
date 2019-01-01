@@ -36,7 +36,7 @@ class Spreadsheet;
 class QPushButton;
 
 class EquidistantValuesDialog : public QDialog {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit EquidistantValuesDialog(Spreadsheet* s, QWidget* parent = nullptr);

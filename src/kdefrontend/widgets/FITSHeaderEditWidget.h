@@ -31,7 +31,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "backend/datasources/filters/FITSFilter.h"
 
 namespace Ui {
-class FITSHeaderEditWidget;
+	class FITSHeaderEditWidget;
 }
 
 class FITSHeaderEditWidget : public QWidget {
@@ -43,13 +43,13 @@ public:
 
 private:
 	Ui::FITSHeaderEditWidget* ui;
-	QAction* m_actionRemoveKeyword;
-	QAction* m_actionAddKeyword;
-	QAction* m_actionAddmodifyUnit;
-	QAction* m_actionRemoveExtension;
+	QAction* m_actionRemoveKeyword{nullptr};
+	QAction* m_actionAddKeyword{nullptr};
+	QAction* m_actionAddmodifyUnit{nullptr};
+	QAction* m_actionRemoveExtension{nullptr};
 
-	QMenu* m_keywordActionsMenu;
-	QMenu* m_extensionActionsMenu;
+	QMenu* m_keywordActionsMenu{nullptr};
+	QMenu* m_extensionActionsMenu{nullptr};
 
 	struct HeaderUpdate {
 		QList<FITSFilter::Keyword> newKeywords;
@@ -68,7 +68,7 @@ private:
 
 	FITSFilter* m_fitsFilter;
 
-	bool m_initializingTable;
+	bool m_initializingTable{false};
 
 	void initActions();
 	void initContextMenus();

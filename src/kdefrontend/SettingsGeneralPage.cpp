@@ -35,9 +35,7 @@
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
  */
-SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent),
-	m_changed(false) {
-
+SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent) {
 	ui.setupUi(this);
 	ui.sbAutoSaveInterval->setSuffix(i18n("min."));
 	retranslateUi();
@@ -58,7 +56,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 	autoSaveChanged(ui.chkAutoSave->checkState());
 }
 
-void SettingsGeneralPage::applySettings(){
+void SettingsGeneralPage::applySettings() {
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	group.writeEntry(QLatin1String("LoadOnStart"), ui.cbLoadOnStart->currentIndex());
 	group.writeEntry(QLatin1String("ViewMode"), ui.cbInterface->currentIndex());
@@ -69,11 +67,11 @@ void SettingsGeneralPage::applySettings(){
 	group.writeEntry(QLatin1String("ShowMemoryInfo"), ui.chkMemoryInfo->isChecked());
 }
 
-void SettingsGeneralPage::restoreDefaults(){
+void SettingsGeneralPage::restoreDefaults() {
 	loadSettings();
 }
 
-void SettingsGeneralPage::loadSettings(){
+void SettingsGeneralPage::loadSettings() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	ui.cbLoadOnStart->setCurrentIndex(group.readEntry(QLatin1String("LoadOnStart"), 0));
 	ui.cbInterface->setCurrentIndex(group.readEntry(QLatin1String("ViewMode"), 0));

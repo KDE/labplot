@@ -73,9 +73,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 	m_spreadsheet(s),
 	m_plotsModel(new AspectTreeModel(m_spreadsheet->project())),
 	m_worksheetsModel(new AspectTreeModel(m_spreadsheet->project())),
-	m_plotType(type),
-	m_analysisAction(Differentiation),
-	m_analysisMode(false) {
+	m_plotType(type) {
 
 	setAttribute(Qt::WA_DeleteOnClose);
 	setWindowTitle(i18nc("@title:window", "Plot Spreadsheet Data"));

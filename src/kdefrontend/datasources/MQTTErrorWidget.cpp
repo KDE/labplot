@@ -34,8 +34,8 @@ Copyright            : (C) 2018 by Kovacs Ferencz (kferike98@gmail.com)
 
 MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* client, QWidget *parent) : QWidget(parent),
 	m_error(error),
-	m_client(client)
-{
+	m_client(client) {
+
 	ui.setupUi(this);
 	bool close = false;
 	//showing the appropriate options according to the error type

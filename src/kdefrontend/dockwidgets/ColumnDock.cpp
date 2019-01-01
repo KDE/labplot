@@ -47,7 +47,7 @@
   \ingroup kdefrontend
 */
 
-ColumnDock::ColumnDock(QWidget* parent) : QWidget(parent), m_column(nullptr), m_initializing(false) {
+ColumnDock::ColumnDock(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &ColumnDock::nameChanged);

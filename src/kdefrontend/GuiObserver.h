@@ -40,7 +40,7 @@ public:
 	explicit GuiObserver(MainWin*);
 
 private:
-    MainWin* m_mainWindow;
+	MainWin* m_mainWindow;
 
 private slots:
 	void selectedAspectsChanged(QList<AbstractAspect*>&) const;

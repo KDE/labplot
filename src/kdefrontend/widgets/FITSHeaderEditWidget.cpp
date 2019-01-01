@@ -48,14 +48,7 @@ Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.c
  */
 FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) : QWidget(parent),
 	ui(new Ui::FITSHeaderEditWidget()),
-	m_actionRemoveKeyword(nullptr),
-	m_actionAddKeyword(nullptr),
-	m_actionAddmodifyUnit(nullptr),
-	m_actionRemoveExtension(nullptr),
-	m_keywordActionsMenu(nullptr),
-	m_extensionActionsMenu(nullptr),
-	m_fitsFilter(new FITSFilter()),
-	m_initializingTable(false) {
+	m_fitsFilter(new FITSFilter()) {
 
 	ui->setupUi(this);
 	initActions();

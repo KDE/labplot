@@ -51,11 +51,7 @@
 
 	\ingroup kdefrontend
 */
-ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(parent),
-	ui(new Ui::ExportSpreadsheetWidget()),
-	m_showOptions(true),
-	m_matrixMode(false),
-	m_format(Format::ASCII) {
+ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ExportSpreadsheetWidget()) {
 	ui->setupUi(this);
 
 	ui->gbOptions->hide();

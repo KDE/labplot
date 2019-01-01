@@ -42,7 +42,7 @@ private:
 	Ui::FitOptionsWidget ui;
 	XYFitCurve::FitData* m_fitData;
 	XYFitCurve* m_fitCurve;
-	bool m_changed;
+	bool m_changed{false};
 
 signals:
 	void finished();

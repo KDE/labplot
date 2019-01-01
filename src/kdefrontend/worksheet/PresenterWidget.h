@@ -27,7 +27,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #ifndef PRESENTERWIDGET_H
 #define PRESENTERWIDGET_H
 
-#include <QFrame>
+#include <QWidget>
 
 class QLabel;
 class QTimeLine;
@@ -38,7 +38,7 @@ class PresenterWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit PresenterWidget(const QPixmap& pixmap,const QString& worksheetName, QWidget *parent = nullptr);
+	explicit PresenterWidget(const QPixmap& pixmap, const QString& worksheetName, QWidget *parent = nullptr);
 	~PresenterWidget() override;
 
 private:

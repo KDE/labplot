@@ -46,7 +46,7 @@
  * @brief Provides a dialog for editing the grid properties for the worksheet view
  * \ingroup kdefrontend
  */
-GridDialog::GridDialog(QWidget* parent) : QDialog(parent){
+GridDialog::GridDialog(QWidget* parent) : QDialog(parent) {
 	setWindowTitle(i18nc("@title:window", "Custom Grid"));
 
 	QWidget* widget = new QWidget;
@@ -105,7 +105,7 @@ GridDialog::GridDialog(QWidget* parent) : QDialog(parent){
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
-void GridDialog::save(WorksheetView::GridSettings& settings){
+void GridDialog::save(WorksheetView::GridSettings& settings) {
 	if (cbStyle->currentIndex() == 0)
 		settings.style  = WorksheetView::LineGrid;
 	else

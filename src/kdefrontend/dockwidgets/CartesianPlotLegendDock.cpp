@@ -48,11 +48,7 @@
 
   \ingroup kdefrontend
 */
-CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : QWidget(parent),
-	m_legend(nullptr),
-	labelWidget(nullptr),
-	m_initializing(false) {
-
+CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
 
 	//"Title"-tab

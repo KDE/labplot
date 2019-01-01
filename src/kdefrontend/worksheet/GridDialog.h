@@ -50,8 +50,6 @@ private:
 	QSpinBox* sbVerticalSpacing;
 	KColorButton* kcbColor;
 	QSpinBox* sbOpacity;
-
-private slots:
 };
 
 #endif

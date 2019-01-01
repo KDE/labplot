@@ -26,7 +26,6 @@ Copyright            : (C) 2018 Christoph Roick (chrisito@gmx.de)
  ***************************************************************************/
 
 #include "ROOTOptionsWidget.h"
-
 #include "ImportFileWidget.h"
 
 #include "backend/datasources/filters/ROOTFilter.h"

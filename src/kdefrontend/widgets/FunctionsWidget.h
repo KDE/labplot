@@ -29,13 +29,12 @@
 #define FUNCTIONSWIDGET_H
 
 #include <QWidget>
-#include <QStringList>
 
 #include "ui_functionswidget.h"
 
 class ExpressionParser;
 
-class FunctionsWidget: public QWidget{
+class FunctionsWidget: public QWidget {
 	Q_OBJECT
 
 public:

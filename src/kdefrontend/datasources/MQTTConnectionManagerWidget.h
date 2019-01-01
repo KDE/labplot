@@ -1,9 +1,9 @@
 /***************************************************************************
-	File                 : MQTTConnectionManagerWidget.h
-	Project              : LabPlot
-	Description          : widget for managing MQTT connections
-	--------------------------------------------------------------------
-	Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
+File                 : MQTTConnectionManagerWidget.h
+Project              : LabPlot
+Description          : widget for managing MQTT connections
+--------------------------------------------------------------------
+Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
 
  ***************************************************************************/
 

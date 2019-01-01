@@ -50,9 +50,7 @@
   \ingroup kdefrontend
 */
 
-XYFourierTransformCurveDock::XYFourierTransformCurveDock(QWidget *parent):
-	XYCurveDock(parent), cbXDataColumn(nullptr), cbYDataColumn(nullptr), m_transformCurve(nullptr) {
-
+XYFourierTransformCurveDock::XYFourierTransformCurveDock(QWidget *parent) : XYCurveDock(parent) {
 	//remove the tab "Error bars"
 	ui.tabWidget->removeTab(5);
 }

@@ -44,7 +44,7 @@ public:
 
 private:
 	Ui::SettingsGeneralPage ui;
-	bool m_changed;
+	bool m_changed{false};
 
 	void loadSettings();
 	void retranslateUi();

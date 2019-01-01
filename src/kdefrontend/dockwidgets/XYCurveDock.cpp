@@ -61,12 +61,7 @@
   \ingroup kdefrontend
 */
 
-XYCurveDock::XYCurveDock(QWidget* parent) : QWidget(parent),
-	cbXColumn(nullptr),
-	cbYColumn(nullptr),
-	m_curve(nullptr),
-	m_aspectTreeModel(nullptr) {
-
+XYCurveDock::XYCurveDock(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
 
 	//Tab "Values"

@@ -44,7 +44,7 @@ class AxisDock : public QWidget{
 
 public:
 	explicit AxisDock(QWidget*);
-    ~AxisDock() override;
+	~AxisDock() override;
 
 	void setAxes(QList<Axis*>);
 	void activateTitleTab();
@@ -52,13 +52,13 @@ public:
 private:
 	Ui::AxisDock ui;
 	QList<Axis*> m_axesList;
-	Axis* m_axis;
-	AspectTreeModel* m_aspectTreeModel;
+	Axis* m_axis{nullptr};
+	AspectTreeModel* m_aspectTreeModel{nullptr};
 	LabelWidget* labelWidget;
 	TreeViewComboBox* cbMajorTicksColumn;
 	TreeViewComboBox* cbMinorTicksColumn;
-	bool m_dataChanged;
-	bool m_initializing;
+	bool m_dataChanged{false};
+	bool m_initializing{false};
 
 	void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);

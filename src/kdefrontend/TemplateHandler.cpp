@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
-	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni.kn)
-	Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -52,7 +52,7 @@
   \ingroup kdefrontend
 */
 
-TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(parent){
+TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(parent) {
 	auto* horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
 	horizontalLayout->setMargin(0);
@@ -62,63 +62,63 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 
 	int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
 
-    m_tbLoad = new QToolButton(this);
-    m_tbLoad->setIconSize(QSize(size, size));
-    horizontalLayout->addWidget(m_tbLoad);
+	m_tbLoad = new QToolButton(this);
+	m_tbLoad->setIconSize(QSize(size, size));
+	horizontalLayout->addWidget(m_tbLoad);
 
-    m_tbSave = new QToolButton(this);
-    m_tbSave->setIconSize(QSize(size, size));
-    horizontalLayout->addWidget(m_tbSave);
+	m_tbSave = new QToolButton(this);
+	m_tbSave->setIconSize(QSize(size, size));
+	horizontalLayout->addWidget(m_tbSave);
 
-    m_tbSaveDefault = new QToolButton(this);
-    m_tbSaveDefault->setIconSize(QSize(size, size));
-    horizontalLayout->addWidget(m_tbSaveDefault);
+	m_tbSaveDefault = new QToolButton(this);
+	m_tbSaveDefault->setIconSize(QSize(size, size));
+	horizontalLayout->addWidget(m_tbSaveDefault);
 
 // 	QSpacerItem* horizontalSpacer2 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
 // 	horizontalLayout->addItem(horizontalSpacer2);
 
-    m_tbCopy = new QToolButton(this);
-    m_tbCopy->setIconSize(QSize(size, size));
-    m_tbCopy->setEnabled(false);
-    horizontalLayout->addWidget(m_tbCopy);
+	m_tbCopy = new QToolButton(this);
+	m_tbCopy->setIconSize(QSize(size, size));
+	m_tbCopy->setEnabled(false);
+	horizontalLayout->addWidget(m_tbCopy);
 
-    m_tbPaste = new QToolButton(this);
-    m_tbPaste->setIconSize(QSize(size, size));
-    m_tbPaste->setEnabled(false);
-    horizontalLayout->addWidget(m_tbPaste);
+	m_tbPaste = new QToolButton(this);
+	m_tbPaste->setIconSize(QSize(size, size));
+	m_tbPaste->setEnabled(false);
+	horizontalLayout->addWidget(m_tbPaste);
 
-    m_tbLoad->setIcon(QIcon::fromTheme("document-open"));
-    m_tbSave->setIcon(QIcon::fromTheme("document-save"));
-    m_tbSaveDefault->setIcon(QIcon::fromTheme("document-save-as"));
-    m_tbCopy->setIcon(QIcon::fromTheme("edit-copy"));
-    m_tbPaste->setIcon(QIcon::fromTheme("edit-paste"));
+	m_tbLoad->setIcon(QIcon::fromTheme("document-open"));
+	m_tbSave->setIcon(QIcon::fromTheme("document-save"));
+	m_tbSaveDefault->setIcon(QIcon::fromTheme("document-save-as"));
+	m_tbCopy->setIcon(QIcon::fromTheme("edit-copy"));
+	m_tbPaste->setIcon(QIcon::fromTheme("edit-paste"));
 
-    connect(m_tbLoad, &QToolButton::clicked, this, &TemplateHandler::loadMenu);
-    connect(m_tbSave, &QToolButton::clicked, this, &TemplateHandler::saveMenu);
-    connect(m_tbSaveDefault, &QToolButton::clicked, this, &TemplateHandler::saveDefaults);
+	connect(m_tbLoad, &QToolButton::clicked, this, &TemplateHandler::loadMenu);
+	connect(m_tbSave, &QToolButton::clicked, this, &TemplateHandler::saveMenu);
+	connect(m_tbSaveDefault, &QToolButton::clicked, this, &TemplateHandler::saveDefaults);
 
-    m_className = name;
+	m_className = name;
 
 	//synchronize this with the ordering in TemplateHandler::ClassName
-    m_dirNames <<"spreadsheet"<<"matrix"<<"worksheet"<<"cartesianplot"<<"cartesianplotlegend"<<"xycurve"<<"axis"<<"custompoint"<<"histogram";
+	m_dirNames <<"spreadsheet"<<"matrix"<<"worksheet"<<"cartesianplot"<<"cartesianplotlegend"<<"xycurve"<<"axis"<<"custompoint"<<"histogram";
 
 	this->retranslateUi();
 
 	//disable the load-button if no templates are available yet
-    QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/" + m_dirNames.at(m_className) + "/*");
-    m_tbLoad->setEnabled(list.size());
+	QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/" + m_dirNames.at(m_className) + "/*");
+	m_tbLoad->setEnabled(list.size());
 
 	//TODO: implement copy&paste of properties and activate copy- and paste-buttons again
-    m_tbCopy->hide();
-    m_tbPaste->hide();
+	m_tbCopy->hide();
+	m_tbPaste->hide();
 }
 
-void TemplateHandler::retranslateUi(){
-    m_tbLoad->setToolTip(i18n("Load properties from a template"));
-    m_tbSave->setToolTip(i18n("Save current properties as a template"));
-    m_tbSaveDefault->setToolTip(i18n("Save current properties as default"));
-    m_tbCopy->setToolTip(i18n("Copy properties"));
-    m_tbPaste->setToolTip(i18n("Paste properties"));
+void TemplateHandler::retranslateUi() {
+	m_tbLoad->setToolTip(i18n("Load properties from a template"));
+	m_tbSave->setToolTip(i18n("Save current properties as a template"));
+	m_tbSaveDefault->setToolTip(i18n("Save current properties as default"));
+	m_tbCopy->setToolTip(i18n("Copy properties"));
+	m_tbPaste->setToolTip(i18n("Paste properties"));
 }
 
 //##############################################################################
@@ -128,7 +128,7 @@ void TemplateHandler::loadMenu() {
 	QMenu menu;
 	menu.addSection(i18n("Load From"));
 
-    QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/" + m_dirNames.at(m_className) + "/*");
+	QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/" + m_dirNames.at(m_className) + "/*");
 	for (int i = 0; i < list.size(); ++i) {
 			QFileInfo fileinfo(list.at(i));
 			QAction* action = menu.addAction(fileinfo.fileName());
@@ -136,8 +136,8 @@ void TemplateHandler::loadMenu() {
 	}
 	connect(&menu, &QMenu::triggered, this, &TemplateHandler::loadMenuSelected);
 
-    QPoint pos(-menu.sizeHint().width()+m_tbLoad->width(),-menu.sizeHint().height());
-    menu.exec(m_tbLoad->mapToGlobal(pos));
+	QPoint pos(-menu.sizeHint().width()+m_tbLoad->width(),-menu.sizeHint().height());
+	menu.exec(m_tbLoad->mapToGlobal(pos));
 }
 
 void TemplateHandler::loadMenuSelected(QAction* action) {
@@ -151,7 +151,7 @@ void TemplateHandler::saveMenu() {
 	QMenu menu;
 	menu.addSection(i18n("Save As"));
 
-    QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/"+ m_dirNames.at(m_className) + "/*");
+	QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/"+ m_dirNames.at(m_className) + "/*");
 	for (int i = 0; i < list.size(); ++i) {
 			QFileInfo fileinfo(list.at(i));
 			QAction* action = menu.addAction(fileinfo.fileName());
@@ -176,8 +176,8 @@ void TemplateHandler::saveMenu() {
 	widgetAction->setDefaultWidget(frame);
 	menu.addAction(widgetAction);
 
-    QPoint pos(-menu.sizeHint().width()+m_tbSave->width(),-menu.sizeHint().height());
-    menu.exec(m_tbSave->mapToGlobal(pos));
+	QPoint pos(-menu.sizeHint().width()+m_tbSave->width(),-menu.sizeHint().height());
+	menu.exec(m_tbSave->mapToGlobal(pos));
 
 	//TODO: focus is not set. why?
 	leFilename->setFocus();
@@ -188,11 +188,11 @@ void TemplateHandler::saveMenu() {
  * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
 void TemplateHandler::saveNewSelected(const QString& filename) {
-    KConfig config(QStandardPaths::locate(QStandardPaths::ApplicationsLocation, "templates") + '/' + m_dirNames.at(m_className) + '/' + filename, KConfig::SimpleConfig);
+	KConfig config(QStandardPaths::locate(QStandardPaths::ApplicationsLocation, "templates") + '/' + m_dirNames.at(m_className) + '/' + filename, KConfig::SimpleConfig);
 	emit saveConfigRequested(config);
 
 	//we have at least one saved template now -> enable the load button
-    m_tbLoad->setEnabled(true);
+	m_tbLoad->setEnabled(true);
 
 	emit info( i18n("New template \"%1\" was saved.", filename) );
 }

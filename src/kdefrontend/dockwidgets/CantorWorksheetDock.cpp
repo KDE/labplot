@@ -32,7 +32,7 @@
 #include <KParts/ReadWritePart>
 #include <QAction>
 
-CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent), m_worksheet(nullptr), m_initializing(false) {
+CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent) {
 	ui.setupUi(this);
 	ui.tabWidget->setMovable(true);
 
@@ -40,8 +40,8 @@ CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent), m_wo
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CantorWorksheetDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &CantorWorksheetDock::commentChanged);
-	connect( ui.evaluate_worksheet, SIGNAL(pressed()), this, SLOT(evaluateWorksheet()) );
-	connect( ui.restart_backend, SIGNAL(pressed()), this, SLOT(restartBackend()) );
+	connect(ui.evaluate_worksheet, SIGNAL(pressed()), this, SLOT(evaluateWorksheet()));
+	connect(ui.restart_backend, SIGNAL(pressed()), this, SLOT(restartBackend()));
 }
 
 void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
@@ -61,7 +61,7 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 		++k;
 	}
 
-	if (m_cantorworksheetlist.size()==1) {
+	if (m_cantorworksheetlist.size() == 1) {
 		QList<Cantor::PanelPlugin*> plugins = m_cantorworksheetlist.first()->getPlugins();
 		index.clear();
 		for (auto* plugin : plugins) {
@@ -89,14 +89,14 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 //**** SLOTs for changes triggered in CantorWorksheetDock *****
 //*************************************************************
 // "General"-tab
-void CantorWorksheetDock::nameChanged(){
+void CantorWorksheetDock::nameChanged() {
 	if (m_initializing)
 		return;
 
 	m_worksheet->setName(ui.leName->text());
 }
 
-void CantorWorksheetDock::commentChanged(){
+void CantorWorksheetDock::commentChanged() {
 	if (m_initializing)
 		return;
 

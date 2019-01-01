@@ -36,7 +36,7 @@ class Spreadsheet;
 class QPushButton;
 
 class RandomValuesDialog : public QDialog {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit RandomValuesDialog(Spreadsheet* s, QWidget* parent = nullptr);

@@ -49,9 +49,9 @@ public:
 private:
 	Ui::CartesianPlotLegendDock ui;
 	QList<CartesianPlotLegend*> m_legendList;
-	CartesianPlotLegend* m_legend;
-	LabelWidget* labelWidget;
-	bool m_initializing;
+	CartesianPlotLegend* m_legend{nullptr};
+	LabelWidget* labelWidget{nullptr};
+	bool m_initializing{false};
 
 	void load();
 	void loadConfig(KConfig&);

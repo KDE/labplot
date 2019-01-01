@@ -37,7 +37,7 @@
 #include <KConfig>
 #include <KConfigGroup>
 
-CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent), m_point(nullptr) {
+CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
 
 	//Validators
@@ -95,7 +95,7 @@ void CustomPointDock::init() {
 	ui.cbSymbolStyle->setIconSize(QSize(iconSize, iconSize));
 	QTransform trafo;
 	trafo.scale(15, 15);
-	for (int i=0; i<18; ++i) {
+	for (int i = 0; i < 18; ++i) {
 		auto style = (Symbol::Style)i;
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
@@ -111,13 +111,13 @@ void CustomPointDock::init() {
 }
 
 void CustomPointDock::setPoints(QList<CustomPoint*> list) {
-	m_initializing=true;
+	m_initializing = true;
 	m_pointsList = list;
 	m_point = list.first();
 	Q_ASSERT(m_point);
 
 	//if there are more then one point in the list, disable the comment and name widgets in the tab "general"
-	if (list.size()==1) {
+	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);

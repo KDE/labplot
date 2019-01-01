@@ -38,9 +38,8 @@ class QMenu;
 class QActionGroup;
 class QAction;
 
-class GuiTools{
-  public:
-
+class GuiTools {
+public:
 	static void updateBrushStyles(QComboBox*, const QColor&);
 	static void updatePenStyles(QComboBox*, const QColor&);
 	static void updatePenStyles(QMenu*, QActionGroup*, const QColor&);

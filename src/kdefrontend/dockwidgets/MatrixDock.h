@@ -45,8 +45,8 @@ public:
 private:
 	Ui::MatrixDock ui;
 	QList<Matrix*> m_matrixList;
-	Matrix* m_matrix;
-	bool m_initializing;
+	Matrix* m_matrix{nullptr};
+	bool m_initializing{false};
 
 	void load();
 	void loadConfig(KConfig&);

@@ -37,7 +37,6 @@
 #include "ui_xycurvedock.h"
 #include "ui_xycurvedockgeneraltab.h"
 
-class XYCurve;
 class TreeViewComboBox;
 class AspectTreeModel;
 class Column;
@@ -62,8 +61,8 @@ private:
 
 	Ui::XYCurveDockGeneralTab uiGeneralTab;
 
-	TreeViewComboBox* cbXColumn;
-	TreeViewComboBox* cbYColumn;
+	TreeViewComboBox* cbXColumn{nullptr};
+	TreeViewComboBox* cbYColumn{nullptr};
 	TreeViewComboBox* cbValuesColumn;
 	TreeViewComboBox* cbXErrorPlusColumn;
 	TreeViewComboBox* cbXErrorMinusColumn;
@@ -78,8 +77,8 @@ protected:
 	Ui::XYCurveDock ui;
 	bool m_initializing;
 	QList<XYCurve*> m_curvesList;
-	XYCurve* m_curve;
-	AspectTreeModel* m_aspectTreeModel;
+	XYCurve* m_curve{nullptr};
+	AspectTreeModel* m_aspectTreeModel{nullptr};
 
 private slots:
 	void init();

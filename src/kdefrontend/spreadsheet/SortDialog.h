@@ -33,7 +33,7 @@
 #include <QDialog>
 
 class SortDialog : public QDialog {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit SortDialog(QWidget* parent = nullptr);
@@ -41,8 +41,8 @@ public:
 
 	void setColumns(QVector<Column*>);
 
-	enum { Separately=0, Together=1 };
-	enum { Ascending=0, Descending=1 };
+	enum {Separately = 0, Together = 1};
+	enum {Ascending = 0, Descending = 1};
 
 private slots:
 	void sortColumns();

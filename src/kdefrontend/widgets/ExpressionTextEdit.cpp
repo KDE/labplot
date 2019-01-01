@@ -4,8 +4,7 @@
     --------------------------------------------------------------------
     Copyright        : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
     Description      : widget for defining mathematical expressions
-					   modified version of
-					   http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
+	modified version of http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
  ***************************************************************************/
 
 /***************************************************************************
@@ -86,9 +85,7 @@
   \ingroup kdefrontend
 */
 ExpressionTextEdit::ExpressionTextEdit(QWidget* parent) : KTextEdit(parent),
-	m_highlighter(new EquationHighlighter(this)),
-	m_expressionType(XYEquationCurve::Neutral),
-	m_isValid(false) {
+	m_highlighter(new EquationHighlighter(this)) {
 
 	QStringList list = ExpressionParser::getInstance()->functions();
 	list.append(ExpressionParser::getInstance()->constants());

@@ -53,12 +53,7 @@ extern "C" {
   \ingroup kdefrontend
 */
 
-XYDifferentiationCurveDock::XYDifferentiationCurveDock(QWidget* parent) : XYCurveDock(parent),
-	cbDataSourceCurve(nullptr),
-	cbXDataColumn(nullptr),
-	cbYDataColumn(nullptr),
-	m_differentiationCurve(nullptr) {
-
+XYDifferentiationCurveDock::XYDifferentiationCurveDock(QWidget* parent) : XYCurveDock(parent) {
 	//hide the line connection type
 	ui.cbLineType->setDisabled(true);
 

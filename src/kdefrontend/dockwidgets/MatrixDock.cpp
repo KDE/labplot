@@ -40,7 +40,7 @@
 
   \ingroup kdefrontend
 */
-MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_matrix(nullptr), m_initializing(false) {
+MatrixDock::MatrixDock(QWidget* parent): QWidget(parent) {
 	ui.setupUi(this);
 
 	ui.cbFormat->addItem(i18n("Decimal"), QVariant('f'));
@@ -79,12 +79,12 @@ MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_matrix(nullptr), m_i
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 }
 
-void MatrixDock::setMatrices(QList<Matrix*> list){
+void MatrixDock::setMatrices(QList<Matrix*> list) {
 	m_initializing = true;
 	m_matrixList = list;
 	m_matrix = list.first();
 
-	if (list.size()==1){
+	if (list.size()==1) {
 		ui.leName->setEnabled(true);
 		ui.leComment->setEnabled(true);
 
@@ -343,7 +343,7 @@ void MatrixDock::loadConfigFromTemplate(KConfig& config) {
 /*!
 	loads saved matrix properties from \c config.
  */
-void MatrixDock::loadConfig(KConfig& config){
+void MatrixDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group("Matrix");
 
 	//matrix dimensions
@@ -365,7 +365,7 @@ void MatrixDock::loadConfig(KConfig& config){
 /*!
 	saves matrix properties to \c config.
  */
-void MatrixDock::saveConfigAsTemplate(KConfig& config){
+void MatrixDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group("Matrix");
 
 	//matrix dimensions

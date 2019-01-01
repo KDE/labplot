@@ -62,9 +62,9 @@ private:
 protected:
 	Ui::HistogramDock ui;
 	QList<Histogram*> m_curvesList;
-	Histogram* m_curve;
-	AspectTreeModel* m_aspectTreeModel;
-	bool m_initializing;
+	Histogram* m_curve{nullptr};
+	AspectTreeModel* m_aspectTreeModel{nullptr};
+	bool m_initializing{false};
 
 	virtual void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);

@@ -33,6 +33,7 @@
 
 class Matrix;
 class QPushButton;
+
 class MatrixFunctionDialog : public QDialog {
 	Q_OBJECT
 

@@ -43,11 +43,10 @@
  */
 
 EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent) : QDialog(parent), m_spreadsheet(s) {
-
 	setWindowTitle(i18nc("@title:window", "Equidistant Values"));
 
 	ui.setupUi(this);
-    setAttribute(Qt::WA_DeleteOnClose);
+	setAttribute(Qt::WA_DeleteOnClose);
 	ui.cbType->addItem(i18n("Number"));
 	ui.cbType->addItem(i18n("Increment"));
 

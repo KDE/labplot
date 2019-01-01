@@ -40,8 +40,7 @@
 
 	\ingroup kdefrontend
  */
-FitParametersWidget::FitParametersWidget(QWidget* parent) : QWidget(parent),
-	m_fitData(nullptr), m_rehighlighting(false), m_invalidRanges(false) {
+FitParametersWidget::FitParametersWidget(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
 
 	ui.tableWidget->setColumnCount(5);

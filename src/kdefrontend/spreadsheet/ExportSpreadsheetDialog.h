@@ -77,9 +77,9 @@ public:
 	Format format() const;
 private:
 	Ui::ExportSpreadsheetWidget* ui;
-	bool m_showOptions;
-	bool m_matrixMode;
-	Format m_format;
+	bool m_showOptions{true};
+	bool m_matrixMode{false};
+	Format m_format{Format::ASCII};
 
 	QPushButton* m_showOptionsButton;
 	QPushButton* m_okButton;

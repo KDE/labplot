@@ -1,10 +1,10 @@
 /***************************************************************************
-File                 : FITSOptionsWidget.cpp
-Project              : LabPlot
-Description          : Widget providing options for the import of FITS data
---------------------------------------------------------------------
-Copyright            : (C) 2016 Fabian Kristof (fkristofszabolcs@gmail.com)
-Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    File                 : FITSOptionsWidget.cpp
+    Project              : LabPlot
+    Description          : Widget providing options for the import of FITS data
+    --------------------------------------------------------------------
+    Copyright            : (C) 2016 Fabian Kristof (fkristofszabolcs@gmail.com)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 ***************************************************************************/
 
@@ -26,6 +26,7 @@ Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
+
 #include "FITSOptionsWidget.h"
 #include "ImportFileWidget.h"
 #include "backend/datasources/filters/FITSFilter.h"

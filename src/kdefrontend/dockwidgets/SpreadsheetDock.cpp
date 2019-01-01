@@ -34,6 +34,7 @@
 #include <QDir>
 #include <KLocalizedString>
 #include <KConfigGroup>
+#include <KConfig>
 
  /*!
   \class SpreadsheetDock
@@ -42,7 +43,7 @@
   \ingroup kdefrontend
 */
 
-SpreadsheetDock::SpreadsheetDock(QWidget* parent): QWidget(parent), m_spreadsheet(nullptr), m_initializing(false) {
+SpreadsheetDock::SpreadsheetDock(QWidget* parent): QWidget(parent) {
 	ui.setupUi(this);
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &SpreadsheetDock::nameChanged);

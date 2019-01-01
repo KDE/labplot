@@ -1,10 +1,10 @@
 /***************************************************************************
-File                 : FITSOptionsWidget.cpp
-Project              : LabPlot
-Description          : Widget providing options for the import of FITS data
---------------------------------------------------------------------
-Copyright            : (C) 2016 Fabian Kristof (fkristofszabolcs@gmail.com)
-Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    File                 : FITSOptionsWidget.cpp
+    Project              : LabPlot
+    Description          : Widget providing options for the import of FITS data
+    --------------------------------------------------------------------
+    Copyright            : (C) 2016 Fabian Kristof (fkristofszabolcs@gmail.com)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 ***************************************************************************/
 
@@ -38,7 +38,7 @@ class FITSOptionsWidget : public QWidget {
 	Q_OBJECT
 
 public:
-    explicit FITSOptionsWidget(QWidget*, ImportFileWidget*);
+	explicit FITSOptionsWidget(QWidget*, ImportFileWidget*);
 	void clear();
 	QString currentExtensionName();
 	void updateContent(FITSFilter*, const QString& fileName);
@@ -48,7 +48,7 @@ public:
 	const QString extensionName(bool* ok);
 
 private:
-    Ui::FITSOptionsWidget ui;
+	Ui::FITSOptionsWidget ui;
 	ImportFileWidget* m_fileWidget;
 
 private slots:

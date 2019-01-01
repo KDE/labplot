@@ -1,9 +1,9 @@
 /***************************************************************************
-	File                 : MQTTWillSettingsWidget.h
-	Project              : LabPlot
-	Description          : widget for managing MQTT connection's will settings
-	--------------------------------------------------------------------
-	Copyright            : (C) 2018 by Ferencz Kovacs (kferike98@gmail.com)
+File                 : MQTTWillSettingsWidget.h
+Project              : LabPlot
+Description          : widget for managing MQTT connection's will settings
+--------------------------------------------------------------------
+Copyright            : (C) 2018 by Ferencz Kovacs (kferike98@gmail.com)
 
  ***************************************************************************/
 
@@ -47,10 +47,10 @@ public:
 
 private:
 	Ui::MQTTWillSettingsWidget ui;
-	bool m_initialising;
+	bool m_initialising{false};
 	MQTTClient::MQTTWill m_will;
 
-	MQTTClient::WillStatisticsType m_statisticsType;
+	MQTTClient::WillStatisticsType m_statisticsType{MQTTClient::WillStatisticsType::NoStatistics};
 
 signals:
 	void applyClicked();

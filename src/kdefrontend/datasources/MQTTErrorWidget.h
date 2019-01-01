@@ -46,7 +46,7 @@ public:
 private:
 	Ui::MQTTErrorWidget ui;
 	QMqttClient::ClientError m_error;
-	MQTTClient* m_client ;
+	MQTTClient* m_client;
 
 private slots:
 	void tryToReconnect();

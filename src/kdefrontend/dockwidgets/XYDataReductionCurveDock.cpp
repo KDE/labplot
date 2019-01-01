@@ -53,13 +53,7 @@
   \ingroup kdefrontend
 */
 
-XYDataReductionCurveDock::XYDataReductionCurveDock(QWidget* parent, QStatusBar* sb) : XYCurveDock(parent),
-	statusBar(sb),
-	cbDataSourceCurve(nullptr),
-	cbXDataColumn(nullptr),
-	cbYDataColumn(nullptr),
-	m_dataReductionCurve(nullptr) {
-
+XYDataReductionCurveDock::XYDataReductionCurveDock(QWidget* parent, QStatusBar* sb) : XYCurveDock(parent), statusBar(sb) {
 	//hide the line connection type
 	ui.cbLineType->setDisabled(true);
 

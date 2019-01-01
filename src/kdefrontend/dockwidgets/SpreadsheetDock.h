@@ -32,8 +32,7 @@
 
 #include "ui_spreadsheetdock.h"
 
-#include <KConfig>
-
+class KConfig;
 class Spreadsheet;
 class AbstractAspect;
 
@@ -47,8 +46,8 @@ public:
 private:
 	Ui::SpreadsheetDock ui;
 	QList<Spreadsheet*> m_spreadsheetList;
-	Spreadsheet* m_spreadsheet;
-	bool m_initializing;
+	Spreadsheet* m_spreadsheet{nullptr};
+	bool m_initializing{false};
 
 	void load();
 	void loadConfig(KConfig&);

@@ -47,7 +47,7 @@ public:
 private:
 	Ui::SettingsWorksheetPage ui;
 	ThemesComboBox* m_cbThemes;
-	bool m_changed;
+	bool m_changed{false};
 
 	void loadSettings();
 

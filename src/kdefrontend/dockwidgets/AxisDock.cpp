@@ -26,6 +26,7 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+
 #include "AxisDock.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/column/Column.h"
@@ -50,7 +51,7 @@
  \ingroup kdefrontend
 */
 
-AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(nullptr), m_aspectTreeModel(nullptr), m_dataChanged(false), m_initializing(false) {
+AxisDock::AxisDock(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
 
 	//"Title"-tab

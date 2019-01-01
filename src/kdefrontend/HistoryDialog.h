@@ -31,6 +31,7 @@
 #define HISTORYDIALOG_H
 
 #include <QDialog>
+
 class QUndoStack;
 class QPushButton;
 
@@ -44,7 +45,7 @@ public:
 private:
 	QUndoStack* m_undoStack;
 	QPushButton* m_okButton;
-	QPushButton* m_clearUndoStackButton;
+	QPushButton* m_clearUndoStackButton{nullptr};
 
 private slots:
 	void clearUndoStack();

@@ -37,7 +37,7 @@ Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.c
  * \since 2.4.0
  * \ingroup widgets
  */
-FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : QDialog(parent), m_saved(false) {
+FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : QDialog(parent) {
 	m_headerEditWidget = new FITSHeaderEditWidget(this);
 
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);

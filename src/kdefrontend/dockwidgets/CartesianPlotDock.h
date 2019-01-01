@@ -52,9 +52,9 @@ public:
 private:
 	Ui::CartesianPlotDock ui;
 	QList<CartesianPlot*> m_plotList;
-	CartesianPlot* m_plot;
-	LabelWidget* labelWidget;
-	bool m_initializing;
+	CartesianPlot* m_plot{nullptr};
+	LabelWidget* labelWidget{nullptr};
+	bool m_initializing{false};
 	ThemeHandler* m_themeHandler;
 
 	void loadConfig(KConfig&);

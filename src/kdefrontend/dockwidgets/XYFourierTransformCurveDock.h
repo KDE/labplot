@@ -48,10 +48,10 @@ private:
 	void showTransformResult();
 
 	Ui::XYFourierTransformCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbXDataColumn;
-	TreeViewComboBox* cbYDataColumn;
+	TreeViewComboBox* cbXDataColumn{nullptr};
+	TreeViewComboBox* cbYDataColumn{nullptr};
 
-	XYFourierTransformCurve* m_transformCurve;
+	XYFourierTransformCurve* m_transformCurve{nullptr};
 	XYFourierTransformCurve::TransformData m_transformData;
 
 protected:
@@ -85,7 +85,6 @@ private slots:
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveTransformDataChanged(const XYFourierTransformCurve::TransformData&);
 	void dataChanged();
-
 };
 
 #endif

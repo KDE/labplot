@@ -43,7 +43,7 @@
 	\ingroup kdefrontend
 */
 DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& conn) : QDialog(parent),
-	mainWidget(new DatabaseManagerWidget(this, conn)), m_changed(false) {
+	mainWidget(new DatabaseManagerWidget(this, conn)) {
 
 	setWindowIcon(QIcon::fromTheme("network-server-database"));
 	setWindowTitle(i18nc("@title:window", "SQL Database Connections"));
@@ -58,7 +58,7 @@ DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& con
 	connect(buttonBox->button(QDialogButtonBox::Ok),&QPushButton::clicked, this, &DatabaseManagerDialog::save);
 	connect(buttonBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &DatabaseManagerDialog::close);
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	QTimer::singleShot(0, this, &DatabaseManagerDialog::loadSettings);
 }

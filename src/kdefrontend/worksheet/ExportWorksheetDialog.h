@@ -38,6 +38,7 @@ namespace Ui {
 
 class QPushButton;
 class QAbstractButton;
+
 class ExportWorksheetDialog : public QDialog {
 	Q_OBJECT
 
@@ -54,7 +55,7 @@ public:
 
 private:
 	Ui::ExportWorksheetWidget* ui;
-	bool m_showOptions;
+	bool m_showOptions{true};
 	QPushButton* m_showOptionsButton;
 	QPushButton* m_okButton;
 	QPushButton* m_cancelButton;

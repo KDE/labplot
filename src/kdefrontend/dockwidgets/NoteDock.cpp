@@ -32,8 +32,9 @@
 #include <QDir>
 #include <KConfigGroup>
 #include <KLocalizedString>
+#include <KConfig>
 
-NoteDock::NoteDock(QWidget *parent) : QWidget(parent), m_initializing(false), m_notes(nullptr) {
+NoteDock::NoteDock(QWidget *parent) : QWidget(parent) {
 	ui.setupUi(this);
 
 	connect(ui.leName, &QLineEdit::textChanged, this, [this]() { nameChanged(ui.leName->text()); });
@@ -109,7 +110,7 @@ void NoteDock::textFontChanged(const QFont& font) {
 void NoteDock::loadConfigFromTemplate(KConfig& config) {
 	QString name;
 	int index = config.name().lastIndexOf(QDir::separator());
-	if (index!=-1)
+	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else
 		name = config.name();

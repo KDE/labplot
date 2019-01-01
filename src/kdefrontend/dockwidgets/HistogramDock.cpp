@@ -61,12 +61,7 @@
 
   \ingroup kdefrontend
 */
-HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
-	cbDataColumn(new TreeViewComboBox),
-	m_curve(nullptr),
-	m_aspectTreeModel(nullptr),
-	m_initializing(false) {
-
+HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent), cbDataColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
 
 	// Tab "General"
@@ -87,7 +82,7 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 	ui.leFillingFileName->setCompleter(completer);
 
 	//adjust layouts in the tabs
-	for (int i = 0; i < ui.tabWidget->count(); ++i){
+	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
@@ -192,7 +187,7 @@ HistogramDock::~HistogramDock() {
 		delete m_aspectTreeModel;
 }
 
-void HistogramDock::init(){
+void HistogramDock::init() {
 	//General
 	//bins option
 	ui.cbBinningMethod->addItem(i18n("By Number"));
@@ -333,7 +328,7 @@ void HistogramDock::setModel() {
 	cbValuesColumn->setModel(m_aspectTreeModel);
 }
 
-void HistogramDock::setCurves(QList<Histogram*> list){
+void HistogramDock::setCurves(QList<Histogram*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
@@ -342,7 +337,7 @@ void HistogramDock::setCurves(QList<Histogram*> list){
 	setModel();
 
 	//if there are more then one curve in the list, disable the content in the tab "general"
-	if (m_curvesList.size()==1){
+	if (m_curvesList.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
@@ -356,7 +351,7 @@ void HistogramDock::setCurves(QList<Histogram*> list){
 
 		ui.leName->setText(m_curve->name());
 		ui.leComment->setText(m_curve->comment());
-	}else {
+	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
@@ -480,7 +475,7 @@ void HistogramDock::commentChanged() {
 	m_curve->setComment(ui.leComment->text());
 }
 
-void HistogramDock::visibilityChanged(bool state){
+void HistogramDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
 
@@ -823,7 +818,7 @@ void HistogramDock::symbolsBorderWidthChanged(double value) {
 void HistogramDock::valuesTypeChanged(int index) {
 	auto valuesType = Histogram::ValuesType(index);
 
-	if (valuesType == Histogram::NoValues){
+	if (valuesType == Histogram::NoValues) {
 		//no values are to paint -> deactivate all the pertinent widgets
 		ui.cbValuesPosition->setEnabled(false);
 		ui.lValuesColumn->hide();
@@ -872,12 +867,12 @@ void HistogramDock::valuesTypeChanged(int index) {
 }
 
 //TODO: very similar to ColumnDock
-void HistogramDock::showValuesColumnFormat(const Column* column){
-  if (!column){
+void HistogramDock::showValuesColumnFormat(const Column* column) {
+  if (!column) {
 	// no valid column is available
 	// -> hide all the format properties widgets (equivalent to showing the properties of the column mode "Text")
 	this->updateValuesFormatWidgets(AbstractColumn::Text);
-  }else{
+  } else {
 	AbstractColumn::ColumnMode columnMode = column->columnMode();
 
 	//update the format widgets for the new column mode
@@ -978,7 +973,7 @@ void HistogramDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode c
 /*!
   called when the custom column for the values was changed.
 */
-void HistogramDock::valuesColumnChanged(const QModelIndex& index){
+void HistogramDock::valuesColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
@@ -991,7 +986,7 @@ void HistogramDock::valuesColumnChanged(const QModelIndex& index){
 	}
 }
 
-void HistogramDock::valuesPositionChanged(int index){
+void HistogramDock::valuesPositionChanged(int index) {
 	if (m_initializing)
 		return;
 
@@ -999,7 +994,7 @@ void HistogramDock::valuesPositionChanged(int index){
 		curve->setValuesPosition(Histogram::ValuesPosition(index));
 }
 
-void HistogramDock::valuesDistanceChanged(double  value){
+void HistogramDock::valuesDistanceChanged(double  value) {
 	if (m_initializing)
 		return;
 
@@ -1007,7 +1002,7 @@ void HistogramDock::valuesDistanceChanged(double  value){
 		curve->setValuesDistance( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
-void HistogramDock::valuesRotationChanged(int value){
+void HistogramDock::valuesRotationChanged(int value) {
 	if (m_initializing)
 		return;
 
@@ -1015,7 +1010,7 @@ void HistogramDock::valuesRotationChanged(int value){
 		curve->setValuesRotationAngle(value);
 }
 
-void HistogramDock::valuesOpacityChanged(int value){
+void HistogramDock::valuesOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
@@ -1024,7 +1019,7 @@ void HistogramDock::valuesOpacityChanged(int value){
 		curve->setValuesOpacity(opacity);
 }
 
-void HistogramDock::valuesPrefixChanged(){
+void HistogramDock::valuesPrefixChanged() {
 	if (m_initializing)
 		return;
 
@@ -1033,7 +1028,7 @@ void HistogramDock::valuesPrefixChanged(){
 		curve->setValuesPrefix(prefix);
 }
 
-void HistogramDock::valuesSuffixChanged(){
+void HistogramDock::valuesSuffixChanged() {
 	if (m_initializing)
 		return;
 
@@ -1042,7 +1037,7 @@ void HistogramDock::valuesSuffixChanged(){
 		curve->setValuesSuffix(suffix);
 }
 
-void HistogramDock::valuesFontChanged(const QFont& font){
+void HistogramDock::valuesFontChanged(const QFont& font) {
 	if (m_initializing)
 		return;
 
@@ -1052,7 +1047,7 @@ void HistogramDock::valuesFontChanged(const QFont& font){
 		curve->setValuesFont(valuesFont);
 }
 
-void HistogramDock::valuesColorChanged(const QColor& color){
+void HistogramDock::valuesColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
@@ -1079,10 +1074,10 @@ void HistogramDock::fillingEnabledChanged(int state) {
 		curve->setFillingEnabled(state);
 }
 
-void HistogramDock::fillingTypeChanged(int index){
+void HistogramDock::fillingTypeChanged(int index) {
 	auto type = (PlotArea::BackgroundType)index;
 
-	if (type == PlotArea::Color){
+	if (type == PlotArea::Color) {
 		ui.lFillingColorStyle->show();
 		ui.cbFillingColorStyle->show();
 		ui.lFillingImageStyle->hide();
@@ -1098,16 +1093,16 @@ void HistogramDock::fillingTypeChanged(int index){
 		ui.kcbFillingFirstColor->show();
 
 		auto style = (PlotArea::BackgroundColorStyle) ui.cbFillingColorStyle->currentIndex();
-		if (style == PlotArea::SingleColor){
+		if (style == PlotArea::SingleColor) {
 			ui.lFillingFirstColor->setText(i18n("Color:"));
 			ui.lFillingSecondColor->hide();
 			ui.kcbFillingSecondColor->hide();
-		}else{
+		} else {
 			ui.lFillingFirstColor->setText(i18n("First color:"));
 			ui.lFillingSecondColor->show();
 			ui.kcbFillingSecondColor->show();
 		}
-	}else if(type == PlotArea::Image){
+	} else if (type == PlotArea::Image) {
 		ui.lFillingColorStyle->hide();
 		ui.cbFillingColorStyle->hide();
 		ui.lFillingImageStyle->show();
@@ -1122,7 +1117,7 @@ void HistogramDock::fillingTypeChanged(int index){
 		ui.kcbFillingFirstColor->hide();
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
-	}else if(type == PlotArea::Pattern) {
+	} else if (type == PlotArea::Pattern) {
 		ui.lFillingFirstColor->setText(i18n("Color:"));
 		ui.lFillingColorStyle->hide();
 		ui.cbFillingColorStyle->hide();
@@ -1147,10 +1142,10 @@ void HistogramDock::fillingTypeChanged(int index){
 		curve->setFillingType(type);
 }
 
-void HistogramDock::fillingColorStyleChanged(int index){
+void HistogramDock::fillingColorStyleChanged(int index) {
 	auto style = (PlotArea::BackgroundColorStyle)index;
 
-	if (style == PlotArea::SingleColor){
+	if (style == PlotArea::SingleColor) {
 		ui.lFillingFirstColor->setText(i18n("Color:"));
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
@@ -1169,7 +1164,7 @@ void HistogramDock::fillingColorStyleChanged(int index){
 		curve->setFillingColorStyle(style);
 }
 
-void HistogramDock::fillingImageStyleChanged(int index){
+void HistogramDock::fillingImageStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
@@ -1178,7 +1173,7 @@ void HistogramDock::fillingImageStyleChanged(int index){
 		curve->setFillingImageStyle(style);
 }
 
-void HistogramDock::fillingBrushStyleChanged(int index){
+void HistogramDock::fillingBrushStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
@@ -1187,7 +1182,7 @@ void HistogramDock::fillingBrushStyleChanged(int index){
 		curve->setFillingBrushStyle(style);
 }
 
-void HistogramDock::fillingFirstColorChanged(const QColor& c){
+void HistogramDock::fillingFirstColorChanged(const QColor& c) {
 	if (m_initializing)
 		return;
 
@@ -1195,7 +1190,7 @@ void HistogramDock::fillingFirstColorChanged(const QColor& c){
 		curve->setFillingFirstColor(c);
 }
 
-void HistogramDock::fillingSecondColorChanged(const QColor& c){
+void HistogramDock::fillingSecondColorChanged(const QColor& c) {
 	if (m_initializing)
 		return;
 
@@ -1328,7 +1323,7 @@ void HistogramDock::selectFile() {
 		curve->setFillingFileName(path);
 }
 
-void HistogramDock::fileNameChanged(){
+void HistogramDock::fileNameChanged() {
 	if (m_initializing)
 		return;
 
@@ -1337,7 +1332,7 @@ void HistogramDock::fileNameChanged(){
 		curve->setFillingFileName(fileName);
 }
 
-void HistogramDock::fillingOpacityChanged(int value){
+void HistogramDock::fillingOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
@@ -1540,42 +1535,42 @@ void HistogramDock::curveFillingEnabledChanged(bool status) {
 	ui.chkFillingEnabled->setChecked(status);
 	m_initializing = false;
 }
-void HistogramDock::curveFillingTypeChanged(PlotArea::BackgroundType type){
+void HistogramDock::curveFillingTypeChanged(PlotArea::BackgroundType type) {
 	m_initializing = true;
 	ui.cbFillingType->setCurrentIndex(type);
 	m_initializing = false;
 }
-void HistogramDock::curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle style){
+void HistogramDock::curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle style) {
 	m_initializing = true;
 	ui.cbFillingColorStyle->setCurrentIndex(style);
 	m_initializing = false;
 }
-void HistogramDock::curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle style){
+void HistogramDock::curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle style) {
 	m_initializing = true;
 	ui.cbFillingImageStyle->setCurrentIndex(style);
 	m_initializing = false;
 }
-void HistogramDock::curveFillingBrushStyleChanged(Qt::BrushStyle style){
+void HistogramDock::curveFillingBrushStyleChanged(Qt::BrushStyle style) {
 	m_initializing = true;
 	ui.cbFillingBrushStyle->setCurrentIndex(style);
 	m_initializing = false;
 }
-void HistogramDock::curveFillingFirstColorChanged(QColor& color){
+void HistogramDock::curveFillingFirstColorChanged(QColor& color) {
 	m_initializing = true;
 	ui.kcbFillingFirstColor->setColor(color);
 	m_initializing = false;
 }
-void HistogramDock::curveFillingSecondColorChanged(QColor& color){
+void HistogramDock::curveFillingSecondColorChanged(QColor& color) {
 	m_initializing = true;
 	ui.kcbFillingSecondColor->setColor(color);
 	m_initializing = false;
 }
-void HistogramDock::curveFillingFileNameChanged(QString& filename){
+void HistogramDock::curveFillingFileNameChanged(QString& filename) {
 	m_initializing = true;
 	ui.leFillingFileName->setText(filename);
 	m_initializing = false;
 }
-void HistogramDock::curveFillingOpacityChanged(float opacity){
+void HistogramDock::curveFillingOpacityChanged(float opacity) {
 	m_initializing = true;
 	ui.sbFillingOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
@@ -1679,13 +1674,13 @@ void HistogramDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
 	int index = config.name().lastIndexOf(QDir::separator());
-	if (index!=-1)
+	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else
 		name = config.name();
 
 	int size = m_curvesList.size();
-	if (size>1)
+	if (size > 1)
 		m_curve->beginMacro(i18n("%1 xy-curves: template \"%2\" loaded", size, name));
 	else
 		m_curve->beginMacro(i18n("%1: template \"%2\" loaded", m_curve->name(), name));

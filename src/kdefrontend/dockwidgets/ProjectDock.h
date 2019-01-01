@@ -30,9 +30,10 @@
 #define PROJECTDOCK_H
 
 #include "ui_projectdock.h"
-#include <KConfig>
+
 class Project;
 class AbstractAspect;
+class KConfig;
 
 class ProjectDock: public QWidget {
 	Q_OBJECT
@@ -43,8 +44,8 @@ public:
 
 private:
 	Ui::ProjectDock ui;
-	Project* m_project;
-	bool m_initializing;
+	Project* m_project{nullptr};
+	bool m_initializing{false};
 
 private slots:
 	void retranslateUi();

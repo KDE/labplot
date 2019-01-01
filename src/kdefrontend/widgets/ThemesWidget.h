@@ -30,21 +30,20 @@
 #define THEMESWIDGET_H
 
 #include <QListView>
-#include <QStringList>
 
 class ThemesWidget : public QListView {
 	Q_OBJECT
 
-	public:
-		explicit ThemesWidget(QWidget*);
+public:
+	explicit ThemesWidget(QWidget*);
 
-	signals:
-		void themeSelected(const QString&);
-		void canceled();
+signals:
+	void themeSelected(const QString&);
+	void canceled();
 
-	private slots:
-		void applyClicked(const QModelIndex&);
-// 		void downloadThemes();
+private slots:
+	void applyClicked(const QModelIndex&);
+// 	void downloadThemes();
 };
 
 #endif //THEMESWIDGET_H

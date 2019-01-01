@@ -49,11 +49,11 @@ private:
 	void updateSettings(const AbstractColumn*);
 
 	Ui::XYIntegrationCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbDataSourceCurve;
-	TreeViewComboBox* cbXDataColumn;
-	TreeViewComboBox* cbYDataColumn;
+	TreeViewComboBox* cbDataSourceCurve{nullptr};
+	TreeViewComboBox* cbXDataColumn{nullptr};
+	TreeViewComboBox* cbYDataColumn{nullptr};
 
-	XYIntegrationCurve* m_integrationCurve;
+	XYIntegrationCurve* m_integrationCurve{nullptr};
 	XYIntegrationCurve::IntegrationData m_integrationData;
 
 protected:

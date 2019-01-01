@@ -4,8 +4,7 @@
     --------------------------------------------------------------------
     Copyright        : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
     Description      : widget for defining mathematical expressions
-					   modified version of
-					   http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
+	modified version of http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
  ***************************************************************************/
 
 /***************************************************************************
@@ -94,14 +93,14 @@ protected:
 
 private slots:
 	void insertCompletion(const QString&);
-	void validateExpression(bool force=false);
+	void validateExpression(bool force = false);
 
 private:
 	EquationHighlighter* m_highlighter;
-	XYEquationCurve::EquationType m_expressionType;
+	XYEquationCurve::EquationType m_expressionType{XYEquationCurve::Neutral};
 	QStringList m_variables;
 	QCompleter* m_completer;
-	bool m_isValid;
+	bool m_isValid{false};
 	QString m_currentExpression;
 
 signals:

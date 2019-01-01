@@ -62,12 +62,12 @@ public:
 
 private:
 	Ui::LabelWidget ui;
-	TextLabel* m_label;
+	TextLabel* m_label{nullptr};
 	QList<TextLabel*> m_labelsList;
 	QList<Axis*> m_axesList;
-	bool m_initializing;
+	bool m_initializing{false};
 	QMenu* m_dateTimeMenu;
-	bool m_teXEnabled;
+	bool m_teXEnabled{false};
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
 	KSyntaxHighlighting::Repository m_repository;

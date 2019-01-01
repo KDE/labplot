@@ -31,30 +31,30 @@
 #include "ui_dropvalueswidget.h"
 #include <QDialog>
 
-
 class Column;
 class Spreadsheet;
 class QPushButton;
+
 class DropValuesDialog : public QDialog {
 	Q_OBJECT
 
-	public:
-		explicit DropValuesDialog(Spreadsheet* s, bool mask = false, QWidget* parent = nullptr);
-		void setColumns(QVector<Column*>);
+public:
+	explicit DropValuesDialog(Spreadsheet* s, bool mask = false, QWidget* parent = nullptr);
+	void setColumns(QVector<Column*>);
 
-	private:
-		Ui::DropValuesWidget ui;
-		QVector<Column*> m_columns;
-		Spreadsheet* m_spreadsheet;
-		bool m_mask;
+private:
+	Ui::DropValuesWidget ui;
+	QVector<Column*> m_columns;
+	Spreadsheet* m_spreadsheet;
+	bool m_mask;
 
-		void dropValues() const;
-		void maskValues() const;
+	void dropValues() const;
+	void maskValues() const;
 
-		QPushButton* m_okButton;
-	private slots:
-		void operatorChanged(int) const;
-		void okClicked() const;
+	QPushButton* m_okButton;
+private slots:
+	void operatorChanged(int) const;
+	void okClicked() const;
 };
 
 #endif

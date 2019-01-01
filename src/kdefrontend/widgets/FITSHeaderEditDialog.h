@@ -31,6 +31,7 @@ Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.c
 #include <QDialog>
 
 class QPushButton;
+
 class FITSHeaderEditDialog : public QDialog {
 	Q_OBJECT
 
@@ -41,8 +42,9 @@ public:
 
 private:
 	FITSHeaderEditWidget* m_headerEditWidget;
-	bool m_saved;
+	bool m_saved{false};
 	QPushButton* m_okButton;
+
 private slots:
 	void save();
 	void headersChanged(bool);

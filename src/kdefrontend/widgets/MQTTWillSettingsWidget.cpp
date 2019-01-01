@@ -1,10 +1,10 @@
 /***************************************************************************
-	File                 : MQTTWillSettingsWidget.cpp
-	Project              : LabPlot
-	Description          : widget for managing MQTT connection's will settings
-	--------------------------------------------------------------------
-	Copyright            : (C) 2018 by Ferencz Kovacs (kferike98@gmail.com)
-	Copyright            : (C) 2018 Fabian Kristof (fkristofszabolcs@gmail.com)
+File                 : MQTTWillSettingsWidget.cpp
+Project              : LabPlot
+Description          : widget for managing MQTT connection's will settings
+--------------------------------------------------------------------
+Copyright            : (C) 2018 by Ferencz Kovacs (kferike98@gmail.com)
+Copyright            : (C) 2018 Fabian Kristof (fkristofszabolcs@gmail.com)
  ***************************************************************************/
 
 /***************************************************************************
@@ -34,11 +34,7 @@
 
 	\ingroup kdefrontend
  */
-MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient::MQTTWill& will, const QVector<QString>& topics) :
-	QWidget(parent),
-	m_initialising(false),
-	m_will(will),
-	m_statisticsType(MQTTClient::WillStatisticsType::NoStatistics) {
+MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient::MQTTWill& will, const QVector<QString>& topics) : QWidget(parent), m_will(will) {
 	ui.setupUi(this);
 	ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000));
 

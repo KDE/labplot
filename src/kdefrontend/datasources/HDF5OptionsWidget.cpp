@@ -1,9 +1,9 @@
 /***************************************************************************
-File                 : HDF5OptionsWidget.cpp
-Project              : LabPlot
-Description          : widget providing options for the import of HDF5 data
---------------------------------------------------------------------
-Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    File                 : HDF5OptionsWidget.cpp
+    Project              : LabPlot
+    Description          : widget providing options for the import of HDF5 data
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************

@@ -64,7 +64,7 @@ void ConstantsWidget::groupChanged(int index) {
 	static const QVector<int>& indices = m_expressionParser->constantsGroupIndices();
 
 	ui.lwConstants->clear();
-	for (int i=0; i<names.size(); ++i) {
+	for (int i = 0; i < names.size(); ++i) {
 		if (indices.at(i) == index)
 			ui.lwConstants->addItem( names.at(i) + " (" + constants.at(i) + ')' );
 	}
@@ -78,7 +78,7 @@ void ConstantsWidget::filterChanged(const QString& filter) {
 		static const QStringList& names = m_expressionParser->constantsNames();
 		static const QStringList& constants = m_expressionParser->constants();
 		ui.lwConstants->clear();
-		for (int i=0; i<names.size(); ++i) {
+		for (int i = 0; i < names.size(); ++i) {
 			if (names.at(i).contains(filter, Qt::CaseInsensitive) || constants.at(i).contains(filter, Qt::CaseInsensitive))
 				ui.lwConstants->addItem( names.at(i) + " (" + constants.at(i) + ')' );
 		}
@@ -104,7 +104,7 @@ void ConstantsWidget::constantChanged(const QString& text) {
 
 	QString name = text.left( text.indexOf(" (") );
 	int index = names.indexOf(name);
-	if (index!=-1){
+	if (index != -1) {
 		ui.leValue->setText(values.at(index));
 		ui.leValue->setCursorPosition(0);
 		ui.lUnit->setText(units.at(index));

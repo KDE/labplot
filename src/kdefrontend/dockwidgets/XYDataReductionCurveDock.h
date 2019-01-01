@@ -31,10 +31,10 @@
 #define XYDATAREDUCTIONCURVEDOCK_H
 
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
-#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
 #include "ui_xydatareductioncurvedockgeneraltab.h"
 
+class XYAnalysisCurve;
 class TreeViewComboBox;
 class QStatusBar;
 
@@ -54,11 +54,11 @@ private:
 
 	Ui::XYDataReductionCurveDockGeneralTab uiGeneralTab;
 	QStatusBar* statusBar;	// main status bar to display progress
-	TreeViewComboBox* cbDataSourceCurve;
-	TreeViewComboBox* cbXDataColumn;
-	TreeViewComboBox* cbYDataColumn;
+	TreeViewComboBox* cbDataSourceCurve{nullptr};
+	TreeViewComboBox* cbXDataColumn{nullptr};
+	TreeViewComboBox* cbYDataColumn{nullptr};
 
-	XYDataReductionCurve* m_dataReductionCurve;
+	XYDataReductionCurve* m_dataReductionCurve{nullptr};
 	XYDataReductionCurve::DataReductionData m_dataReductionData;
 
 protected:
@@ -94,7 +94,6 @@ private slots:
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveDataReductionDataChanged(const XYDataReductionCurve::DataReductionData&);
 	void dataChanged();
-
 };
 
 #endif

@@ -41,10 +41,8 @@
 #include <cmath>
 #include <KSharedConfig>
 
-StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
-	QDialog(parent) {
-
-	m_twStatistics = new QTabWidget;
+StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) : QDialog(parent),
+	m_twStatistics(new QTabWidget) {
 
 	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok);
 

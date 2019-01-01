@@ -37,24 +37,24 @@ class SettingsWorksheetPage;
 class SettingsDialog : public KPageDialog {
 	Q_OBJECT
 
-	public:
-		explicit SettingsDialog(QWidget*);
-		~SettingsDialog() override;
+public:
+	explicit SettingsDialog(QWidget*);
+	~SettingsDialog() override;
 
-	private slots:
-		void changed();
-		void slotButtonClicked(QAbstractButton*);
+private slots:
+	void changed();
+	void slotButtonClicked(QAbstractButton*);
 
-	private:
-		bool m_changed;
-        SettingsGeneralPage* m_generalPage;
-        SettingsWorksheetPage* m_worksheetPage;
+private:
+	bool m_changed{false};
+	SettingsGeneralPage* m_generalPage;
+	SettingsWorksheetPage* m_worksheetPage;
 
-		void applySettings();
-		void restoreDefaults();
+	void applySettings();
+	void restoreDefaults();
 
-	signals:
-		void settingsChanged();
+signals:
+	void settingsChanged();
 };
 
 #endif

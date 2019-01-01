@@ -50,13 +50,13 @@ private:
 	void updateSettings(const AbstractColumn*);
 
 	Ui::XYInterpolationCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbDataSourceCurve;
-	TreeViewComboBox* cbXDataColumn;
-	TreeViewComboBox* cbYDataColumn;
+	TreeViewComboBox* cbDataSourceCurve{nullptr};
+	TreeViewComboBox* cbXDataColumn{nullptr};
+	TreeViewComboBox* cbYDataColumn{nullptr};
 
-	XYInterpolationCurve* m_interpolationCurve;
+	XYInterpolationCurve* m_interpolationCurve{nullptr};
 	XYInterpolationCurve::InterpolationData m_interpolationData;
-	unsigned int dataPoints;	// number of data points in selected column
+	unsigned int dataPoints{0};	// number of data points in selected column
 
 protected:
 	void setModel() override;
@@ -94,7 +94,6 @@ private slots:
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveInterpolationDataChanged(const XYInterpolationCurve::InterpolationData&);
 	void dataChanged();
-
 };
 
 #endif

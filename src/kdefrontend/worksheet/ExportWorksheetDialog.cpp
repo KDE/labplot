@@ -48,9 +48,7 @@
 	\ingroup kdefrontend
 */
 
-ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
-	ui(new Ui::ExportWorksheetWidget()), m_showOptions(true) {
-
+ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ExportWorksheetWidget()) {
 	ui->setupUi(this);
 
 	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -189,7 +187,7 @@ void ExportWorksheetDialog::okClicked() {
 		QString dir = conf.readEntry("LastDir", "");
 		ui->leFileName->setText(path);
 		int pos = path.lastIndexOf(QDir::separator());
-		if (pos!=-1) {
+		if (pos != -1) {
 			QString newDir = path.left(pos);
 			if (newDir!=dir)
 				conf.writeEntry("LastDir", newDir);
@@ -233,7 +231,7 @@ void ExportWorksheetDialog::selectFile() {
 		ui->leFileName->setText(path);
 
 		int pos = path.lastIndexOf(QDir::separator());
-		if (pos!=-1) {
+		if (pos != -1) {
 			const QString newDir = path.left(pos);
 			if (newDir != dir)
 				conf.writeEntry("LastDir", newDir);

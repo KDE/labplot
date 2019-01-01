@@ -46,7 +46,7 @@
  * Contains the pages for general settings and view settings.
  *
  */
-SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent), m_changed(false) {
+SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 	setFaceType(List);
 	setWindowTitle(i18nc("@title:window", "Preferences"));
 	setWindowIcon(QIcon::fromTheme("preferences-other"));
@@ -70,14 +70,14 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent), m_changed
 	KWindowConfig::restoreWindowSize(windowHandle(), dialogConfig);
 }
 
-SettingsDialog::~SettingsDialog(){
+SettingsDialog::~SettingsDialog() {
 	KConfigGroup dialogConfig = KSharedConfig::openConfig()->group("SettingsDialog");
 	KWindowConfig::saveWindowSize(windowHandle(), dialogConfig);
 }
 
 void SettingsDialog::slotButtonClicked(QAbstractButton* button) {
 	if ((button == buttonBox()->button(QDialogButtonBox::Ok)) || (button == buttonBox()->button(QDialogButtonBox::Apply))) {
-		if (m_changed){
+		if (m_changed) {
 			applySettings();
 			setWindowTitle(i18nc("@title:window", "Preferences"));
 			buttonBox()->button(QDialogButtonBox::Apply)->setEnabled(false);
@@ -98,7 +98,7 @@ void SettingsDialog::changed() {
 	buttonBox()->button(QDialogButtonBox::Apply)->setEnabled(true);
 }
 
-void SettingsDialog::applySettings(){
+void SettingsDialog::applySettings() {
 	m_changed = false;
 	m_generalPage->applySettings();
 	m_worksheetPage->applySettings();
@@ -106,7 +106,7 @@ void SettingsDialog::applySettings(){
 	emit settingsChanged();
 }
 
-void SettingsDialog::restoreDefaults(){
+void SettingsDialog::restoreDefaults() {
 	m_changed = false;
 	m_generalPage->restoreDefaults();
 	m_worksheetPage->restoreDefaults();

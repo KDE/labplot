@@ -34,9 +34,10 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QPushButton>
 
 #include <KLocalizedString>
+
 DynamicPresenterWidget::DynamicPresenterWidget(Worksheet *worksheet, QWidget *parent) : QWidget(parent),
-	m_view(new WorksheetView(worksheet)),
-	m_timeLine(new QTimeLine(600)) {
+	m_view(new WorksheetView(worksheet)), m_timeLine(new QTimeLine(600)) {
+
 	setAttribute(Qt::WA_DeleteOnClose);
 	setFocus();
 

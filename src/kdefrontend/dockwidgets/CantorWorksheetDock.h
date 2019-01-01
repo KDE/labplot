@@ -40,29 +40,29 @@ class AbstractAspect;
 class CantorWorksheetDock : public QWidget {
 	Q_OBJECT
 
-	public:
-		explicit CantorWorksheetDock(QWidget *parent);
-		void setCantorWorksheets(QList<CantorWorksheet*>);
+public:
+	explicit CantorWorksheetDock(QWidget *parent);
+	void setCantorWorksheets(QList<CantorWorksheet*>);
 
-	private:
-		Ui::CantorWorksheetDock ui;
-		QList< CantorWorksheet* > m_cantorworksheetlist;
-		CantorWorksheet* m_worksheet;
-		QList<int> index;
-		bool m_initializing;
+private:
+	Ui::CantorWorksheetDock ui;
+	QList< CantorWorksheet* > m_cantorworksheetlist;
+	CantorWorksheet* m_worksheet{nullptr};
+	QList<int> index;
+	bool m_initializing{false};
 
-	private slots:
-		//SLOTs for changes triggered in WorksheetDock
-		//"General"-tab
-		void nameChanged();
-		void commentChanged();
-		void evaluateWorksheet();
-		void restartBackend();
+private slots:
+	//SLOTs for changes triggered in WorksheetDock
+	//"General"-tab
+	void nameChanged();
+	void commentChanged();
+	void evaluateWorksheet();
+	void restartBackend();
 
-		//SLOTs for changes triggered in Worksheet
-		void worksheetDescriptionChanged(const AbstractAspect*);
-	signals:
-		void info(const QString&);
+	//SLOTs for changes triggered in Worksheet
+	void worksheetDescriptionChanged(const AbstractAspect*);
+signals:
+	void info(const QString&);
 
 };
 

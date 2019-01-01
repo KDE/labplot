@@ -51,7 +51,7 @@ static QColor colors[colorsCount] = {QColor(255,255,255), QColor(0,0,0),
 /*!
 	fills the ComboBox \c combobox with the six possible Qt::PenStyles, the color \c color is used.
 */
-void GuiTools::updatePenStyles(QComboBox* comboBox, const QColor& color){
+void GuiTools::updatePenStyles(QComboBox* comboBox, const QColor& color) {
 	int index = comboBox->currentIndex();
 	comboBox->clear();
 
@@ -81,7 +81,7 @@ void GuiTools::updatePenStyles(QComboBox* comboBox, const QColor& color){
 	QActions are created with \c actionGroup as the parent, if not available.
 	If already available, onle the color in the QAction's icons is updated.
 */
-void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QColor& color){
+void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QColor& color) {
 	QPainter pa;
 	int offset = 2;
 	int w = 50;
@@ -168,7 +168,7 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
 	comboBox->setCurrentIndex(index);
 }
 
-void GuiTools::fillColorMenu(QMenu* menu, QActionGroup* actionGroup){
+void GuiTools::fillColorMenu(QMenu* menu, QActionGroup* actionGroup) {
 	static const QString colorNames[colorsCount] = {i18n("White"), i18n("Black"),
 							i18n("Dark Red"), i18n("Red"), i18n("Light Red"),
 							i18n("Dark Green"), i18n("Green"), i18n("Light Green"),

@@ -37,9 +37,7 @@
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
  */
-SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(parent),
-	m_changed(false) {
-
+SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(parent) {
 	ui.setupUi(this);
 
 	m_cbThemes = new ThemesComboBox();

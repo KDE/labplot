@@ -1,9 +1,9 @@
 /***************************************************************************
-	File                 : MQTTConnectionManagerDialog.h
-	Project              : LabPlot
-	Description          : dialog for managing MQTT connections
-	--------------------------------------------------------------------
-	Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
+File                 : MQTTConnectionManagerDialog.h
+Project              : LabPlot
+Description          : dialog for managing MQTT connections
+--------------------------------------------------------------------
+Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
 
  ***************************************************************************/
 

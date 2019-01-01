@@ -59,7 +59,7 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent) : QDialog
 	setWindowTitle(i18nc("@title:window", "Function Values"));
 
 	ui.setupUi(this);
-    setAttribute(Qt::WA_DeleteOnClose);
+	setAttribute(Qt::WA_DeleteOnClose);
 	ui.tbConstants->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
 	ui.tbFunctions->setIcon( QIcon::fromTheme("preferences-desktop-font") );
 

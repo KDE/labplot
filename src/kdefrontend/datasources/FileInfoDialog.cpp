@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import file data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2018 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2018 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2015-2018 Stefan-Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -50,7 +50,6 @@
 */
 
 FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
-
 	m_textEditWidget.setReadOnly(true);
 	m_textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
 

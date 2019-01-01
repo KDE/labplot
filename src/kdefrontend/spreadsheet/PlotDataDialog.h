@@ -68,8 +68,8 @@ private:
 	AspectTreeModel* m_plotsModel;
 	AspectTreeModel* m_worksheetsModel;
 	PlotType m_plotType;
-	AnalysisAction m_analysisAction;
-	bool m_analysisMode;
+	AnalysisAction m_analysisAction{Differentiation};
+	bool m_analysisMode{false};
 
 	void processColumns();
 	void processColumnsForXYCurve(const QStringList& columnNames, const QString& xColumnName);

@@ -30,7 +30,6 @@
 
 #include "ui_functionvalueswidget.h"
 #include <QDialog>
-#include <QLineEdit>
 
 #include <memory>
 
@@ -40,42 +39,43 @@ class TreeViewComboBox;
 class AspectTreeModel;
 class QPushButton;
 class QLineEdit;
+
 class FunctionValuesDialog : public QDialog {
 	Q_OBJECT
 
-	public:
-		explicit FunctionValuesDialog(Spreadsheet* s, QWidget* parent = nullptr);
-		~FunctionValuesDialog() override;
-		void setColumns(QVector<Column*>);
+public:
+	explicit FunctionValuesDialog(Spreadsheet* s, QWidget* parent = nullptr);
+	~FunctionValuesDialog() override;
+	void setColumns(QVector<Column*>);
 
-	private:
-		Ui::FunctionValuesWidget ui;
-		QVector<Column*> m_columns;
-		Spreadsheet* m_spreadsheet;
+private:
+	Ui::FunctionValuesWidget ui;
+	QVector<Column*> m_columns;
+	Spreadsheet* m_spreadsheet;
 #if __cplusplus < 201103L
-		std::auto_ptr<AspectTreeModel> m_aspectTreeModel;
+	std::auto_ptr<AspectTreeModel> m_aspectTreeModel;
 #else
-		std::unique_ptr<AspectTreeModel> m_aspectTreeModel;
+	std::unique_ptr<AspectTreeModel> m_aspectTreeModel;
 #endif
-		QList<const char*>  m_topLevelClasses;
-		QList<const char*>  m_selectableClasses;
+	QList<const char*>  m_topLevelClasses;
+	QList<const char*>  m_selectableClasses;
 
-		QList<QLineEdit*> m_variableNames;
-		QList<QLabel*> m_variableLabels;
-		QList<TreeViewComboBox*> m_variableDataColumns;
-		QList<QToolButton*> m_variableDeleteButtons;
+	QList<QLineEdit*> m_variableNames;
+	QList<QLabel*> m_variableLabels;
+	QList<TreeViewComboBox*> m_variableDataColumns;
+	QList<QToolButton*> m_variableDeleteButtons;
 
-		QPushButton* m_okButton;
-	private slots:
-		void generate();
-		void checkValues();
-		void showConstants();
-		void showFunctions();
-		void insertFunction(const QString&);
-		void insertConstant(const QString&);
-		void addVariable();
-		void deleteVariable();
-		void variableNameChanged();
+	QPushButton* m_okButton;
+private slots:
+	void generate();
+	void checkValues();
+	void showConstants();
+	void showFunctions();
+	void insertFunction(const QString&);
+	void insertConstant(const QString&);
+	void addVariable();
+	void deleteVariable();
+	void variableNameChanged();
 };
 
 #endif

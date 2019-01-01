@@ -42,7 +42,7 @@
 	\ingroup kdefrontend
  */
 HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& emptyLabel) : QDialog(parent),
-	m_undoStack(stack), m_clearUndoStackButton(nullptr) {
+	m_undoStack(stack) {
 	auto* undoView = new QUndoView(stack, this);
 	undoView->setCleanIcon( QIcon::fromTheme("edit-clear-history") );
 	undoView->setEmptyLabel(emptyLabel);

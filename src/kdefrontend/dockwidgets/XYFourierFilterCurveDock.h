@@ -48,11 +48,11 @@ private:
 	void showFilterResult();
 
 	Ui::XYFourierFilterCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbDataSourceCurve;
-	TreeViewComboBox* cbXDataColumn;
-	TreeViewComboBox* cbYDataColumn;
+	TreeViewComboBox* cbDataSourceCurve{nullptr};
+	TreeViewComboBox* cbXDataColumn{nullptr};
+	TreeViewComboBox* cbYDataColumn{nullptr};
 
-	XYFourierFilterCurve* m_filterCurve;
+	XYFourierFilterCurve* m_filterCurve{nullptr};
 	XYFourierFilterCurve::FilterData m_filterData;
 
 protected:
@@ -88,7 +88,6 @@ private slots:
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveFilterDataChanged(const XYFourierFilterCurve::FilterData&);
 	void dataChanged();
-
 };
 
 #endif

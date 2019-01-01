@@ -4,7 +4,7 @@
     Description          : widget for project properties
     --------------------------------------------------------------------
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-	Copyright            : (C) 2013 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -31,6 +31,7 @@
 #include "backend/core/Project.h"
 #include "kdefrontend/TemplateHandler.h"
 #include <KConfigGroup>
+#include <KConfig>
 
 /*!
   \class ProjectDock
@@ -39,7 +40,7 @@
   \ingroup kdefrontend
 */
 
-ProjectDock::ProjectDock(QWidget *parent): QWidget(parent),	m_project(nullptr), m_initializing(false) {
+ProjectDock::ProjectDock(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
 
 	// SLOTS
@@ -57,7 +58,7 @@ ProjectDock::ProjectDock(QWidget *parent): QWidget(parent),	m_project(nullptr), 
 }
 
 void ProjectDock::setProject(Project *project) {
-	m_initializing=true;
+	m_initializing = true;
 	m_project = project;
 	ui.leFileName->setText(project->fileName());
 	ui.lVersion->setText(project->version());

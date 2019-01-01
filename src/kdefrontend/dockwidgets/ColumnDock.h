@@ -45,8 +45,8 @@ public:
 private:
 	Ui::ColumnDock ui;
 	QList<Column*> m_columnsList;
-	Column* m_column;
-	bool m_initializing;
+	Column* m_column{nullptr};
+	bool m_initializing{false};
 
 	void updateTypeWidgets(AbstractColumn::ColumnMode);
 	void updateFormatWidgets(AbstractColumn::ColumnMode);

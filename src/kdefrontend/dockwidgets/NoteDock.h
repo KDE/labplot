@@ -32,32 +32,33 @@
 #include <QWidget>
 #include "backend/note/Note.h"
 #include "ui_notedock.h"
-#include <KConfig>
+
+class KConfig;
 
 class NoteDock : public QWidget {
 	Q_OBJECT
 
-	public:
-		explicit NoteDock(QWidget *parent);
-		void setNotesList(QList<Note*>);
+public:
+	explicit NoteDock(QWidget *parent);
+	void setNotesList(QList<Note*>);
 
-	private:
-		Ui::NoteDock ui;
-		bool m_initializing;
-		Note* m_notes;
-		QList<Note*> m_notesList;
+private:
+	Ui::NoteDock ui;
+	bool m_initializing{false};
+	Note* m_notes{nullptr};
+	QList<Note*> m_notesList;
 
-		void init();
+	void init();
 
-	private slots:
-		void nameChanged(const QString&);
-		void commentChanged(const QString&);
-		void backgroundColorChanged(const QColor&);
-		void textColorChanged(const QColor&);
-		void textFontChanged(const QFont&);
+private slots:
+	void nameChanged(const QString&);
+	void commentChanged(const QString&);
+	void backgroundColorChanged(const QColor&);
+	void textColorChanged(const QColor&);
+	void textFontChanged(const QFont&);
 
-		void loadConfigFromTemplate(KConfig&);
-		void saveConfigAsTemplate(KConfig&);
+	void loadConfigFromTemplate(KConfig&);
+	void saveConfigAsTemplate(KConfig&);
 };
 
 #endif // NOTEDOCK_H

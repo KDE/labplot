@@ -29,13 +29,13 @@
 #define CONSTANTSWIDGET_H
 
 #include <QWidget>
-#include <QStringList>
 
 #include "ui_constantswidget.h"
 
+class QStringList;
 class ExpressionParser;
 
-class ConstantsWidget: public QWidget{
+class ConstantsWidget: public QWidget {
 	Q_OBJECT
 
 public:

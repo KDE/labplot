@@ -36,7 +36,7 @@ class Spreadsheet;
 class QPushButton;
 
 class AddSubtractValueDialog : public QDialog {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	enum Operation {Add, Subtract, Multiply, Divide};

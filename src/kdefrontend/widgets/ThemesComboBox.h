@@ -37,23 +37,23 @@ class ThemesWidget;
 class ThemesComboBox : public QComboBox {
 	Q_OBJECT
 
-	public:
-		explicit ThemesComboBox(QWidget* parent = nullptr);
-		void setCurrentTheme(const QString&);
+public:
+	explicit ThemesComboBox(QWidget* parent = nullptr);
+	void setCurrentTheme(const QString&);
 
-		void showPopup() override;
-		void hidePopup() override;
+	void showPopup() override;
+	void hidePopup() override;
 
-	private:
-		QGroupBox* m_groupBox;
-		ThemesWidget* m_view;
-		bool eventFilter(QObject*, QEvent*) override;
+private:
+	QGroupBox* m_groupBox;
+	ThemesWidget* m_view;
+	bool eventFilter(QObject*, QEvent*) override;
 
-	private slots:
-		void handleThemeChanged(const QString&);
+private slots:
+	void handleThemeChanged(const QString&);
 
-	signals:
-		void currentThemeChanged(const QString&);
+signals:
+	void currentThemeChanged(const QString&);
 };
 
 #endif

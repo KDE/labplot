@@ -32,9 +32,7 @@
 #include <QPainter>
 
 GrabBar::GrabBar(ResizableTextEdit* parent, bool vertResizeOnly) : QWidget(parent),
-	m_parent(parent),
-	m_pressed(false),
-	m_vertResizeOnly(vertResizeOnly) {
+	m_parent(parent), m_vertResizeOnly(vertResizeOnly) {
 
 	resize(20,10);
 }

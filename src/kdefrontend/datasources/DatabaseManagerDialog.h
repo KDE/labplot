@@ -44,7 +44,7 @@ public:
 
 private:
 	DatabaseManagerWidget* mainWidget;
-	bool m_changed;
+	bool m_changed{false};
 
 private slots:
 	void changed();

@@ -1,11 +1,11 @@
 /***************************************************************************
-	File                 : GuiObserver.cpp
-	Project              : LabPlot
-	Description 		 : GUI observer
+File                 : GuiObserver.cpp
+Project              : LabPlot
+Description 	     : GUI observer
 --------------------------------------------------------------------
-	Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
-	Copyright            : (C) 2015-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-	Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
+Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2015-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 
 ***************************************************************************/
 
