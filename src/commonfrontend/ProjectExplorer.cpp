@@ -62,11 +62,9 @@
   \ingroup commonfrontend
 */
 
-ProjectExplorer::ProjectExplorer(QWidget* parent) : m_columnToHide(0),
+ProjectExplorer::ProjectExplorer(QWidget* parent) :
 	m_treeView(new QTreeView(parent)),
-	m_project(nullptr),
-	m_dragStarted(false),
-	m_frameFilter(new QFrame(this))  {
+	m_frameFilter(new QFrame(this)) {
 
 	auto* layout = new QVBoxLayout(this);
 	layout->setSpacing(0);

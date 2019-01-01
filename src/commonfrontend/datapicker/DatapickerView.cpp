@@ -49,8 +49,7 @@
  */
 DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 	m_tabWidget(new TabWidget(this)),
-	m_datapicker(datapicker),
-	lastSelectedIndex(0) {
+	m_datapicker(datapicker) {
 
 	m_tabWidget->setTabPosition(QTabWidget::South);
 	m_tabWidget->setTabShape(QTabWidget::Rounded);

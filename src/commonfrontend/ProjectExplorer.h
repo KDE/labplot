@@ -47,7 +47,7 @@ class QItemSelection;
 class QMenu;
 
 class ProjectExplorer : public QWidget {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit ProjectExplorer(QWidget* parent = nullptr);
@@ -63,11 +63,11 @@ private:
 	bool eventFilter(QObject*, QEvent*) override;
 	void collapseParents(const QModelIndex&, const QList<QModelIndex>& expanded);
 	bool filter(const QModelIndex&, const QString&);
-	int m_columnToHide;
+	int m_columnToHide{0};
 	QTreeView* m_treeView;
-	Project* m_project;
+	Project* m_project{nullptr};
 	QPoint m_dragStartPos;
-	bool m_dragStarted;
+	bool m_dragStarted{false};
 
 	QAction* caseSensitiveAction;
 	QAction* matchCompleteWordAction;

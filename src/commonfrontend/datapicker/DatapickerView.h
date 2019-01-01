@@ -52,7 +52,7 @@ public:
 private:
 	TabWidget* m_tabWidget;
 	Datapicker* m_datapicker;
-	int lastSelectedIndex;
+	int lastSelectedIndex{0};
 	bool m_initializing;
 
 private  slots:

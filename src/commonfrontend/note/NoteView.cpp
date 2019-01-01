@@ -35,7 +35,6 @@
 #include <QTextEdit>
 
 NoteView::NoteView(Note* notes) : m_notes(notes) {
-
 	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
 

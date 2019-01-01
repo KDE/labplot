@@ -49,7 +49,7 @@ SpreadsheetItemDelegate::SpreadsheetItemDelegate(QObject* parent)  : QItemDelega
 }
 
 void SpreadsheetItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
-                                    const QModelIndex &index) const {
+		const QModelIndex &index) const {
 
 	QItemDelegate::paint(painter, option, index);
 	if (!index.data(SpreadsheetModel::MaskingRole).toBool())

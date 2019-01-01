@@ -72,12 +72,12 @@ private:
 	DatapickerImage* m_image;
 	Datapicker* m_datapicker;
 	Transform* m_transform;
-	MouseMode m_mouseMode;
-	bool m_selectionBandIsShown;
+	MouseMode m_mouseMode{SelectAndEditMode};
+	bool m_selectionBandIsShown{false};
 	QPoint m_selectionStart;
 	QPoint m_selectionEnd;
-	int magnificationFactor;
-	float m_rotationAngle;
+	int magnificationFactor{0};
+	float m_rotationAngle{0.0};
 
 	//Menus
 	QMenu* m_zoomMenu;
@@ -86,7 +86,7 @@ private:
 	QMenu* m_navigationMenu;
 	QMenu* m_magnificationMenu;
 
-	QToolButton* tbZoom;
+	QToolButton* tbZoom{nullptr};
 	QAction* currentZoomAction;
 
 	//Actions

@@ -69,8 +69,7 @@ MatrixView::MatrixView(Matrix* matrix) : QWidget(),
 	m_tableView(new QTableView(this)),
 	m_imageLabel(new QLabel(this)),
 	m_matrix(matrix),
-	m_model(new MatrixModel(matrix)),
-	m_imageIsDirty(true) {
+	m_model(new MatrixModel(matrix)) {
 
 	init();
 
@@ -98,7 +97,7 @@ void MatrixView::init() {
 	initMenus();
 
 	auto* layout = new QHBoxLayout(this);
-	layout->setContentsMargins(0,0,0,0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
 	setFocusPolicy(Qt::StrongFocus);
 	setFocus();
@@ -388,7 +387,7 @@ void MatrixView::resizeHeaders() {
 int MatrixView::selectedColumnCount(bool full) const {
 	int count = 0;
 	int cols = m_matrix->columnCount();
-	for (int i=0; i<cols; i++)
+	for (int i = 0; i < cols; i++)
 		if (isColumnSelected(i, full)) count++;
 	return count;
 }
@@ -411,7 +410,7 @@ bool MatrixView::isColumnSelected(int col, bool full) const {
 int MatrixView::selectedRowCount(bool full) const {
 	int count = 0;
 	int rows = m_matrix->rowCount();
-	for (int i=0; i < rows; i++)
+	for (int i = 0; i < rows; i++)
 		if (isRowSelected(i, full)) count++;
 	return count;
 }
@@ -433,7 +432,7 @@ bool MatrixView::isRowSelected(int row, bool full) const {
 */
 int MatrixView::firstSelectedColumn(bool full) const {
 	int cols = m_matrix->columnCount();
-	for (int i=0; i<cols; i++) {
+	for (int i = 0; i < cols; i++) {
 		if (isColumnSelected(i, full))
 			return i;
 	}
@@ -446,7 +445,7 @@ int MatrixView::firstSelectedColumn(bool full) const {
 */
 int MatrixView::lastSelectedColumn(bool full) const {
 	int cols = m_matrix->columnCount();
-	for (int i=cols-1; i >= 0; i--)
+	for (int i = cols-1; i >= 0; i--)
 		if (isColumnSelected(i, full)) return i;
 
 	return -2;
@@ -458,7 +457,7 @@ int MatrixView::lastSelectedColumn(bool full) const {
 */
 int MatrixView::firstSelectedRow(bool full) const {
 	int rows = m_matrix->rowCount();
-	for (int i=0; i < rows; i++) 	{
+	for (int i = 0; i < rows; i++) 	{
 		if (isRowSelected(i, full))
 			return i;
 	}
@@ -471,7 +470,7 @@ int MatrixView::firstSelectedRow(bool full) const {
 */
 int MatrixView::lastSelectedRow(bool full) const {
 	int rows = m_matrix->rowCount();
-	for (int i=rows-1; i >= 0; i--)
+	for (int i = rows-1; i >= 0; i--)
 		if (isRowSelected(i, full)) return i;
 
 	return -2;

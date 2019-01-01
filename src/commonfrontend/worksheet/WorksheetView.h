@@ -33,8 +33,8 @@
 #include <QGraphicsView>
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include <QPrinter>
 
+class QPrinter;
 class QMenu;
 class QToolBar;
 class QToolButton;
@@ -97,44 +97,44 @@ private:
 	void dropEvent(QDropEvent*) override;
 
 	Worksheet* m_worksheet;
-	MouseMode m_mouseMode;
-	CartesianPlotActionMode m_cartesianPlotActionMode;
-	CartesianPlot::MouseMode m_cartesianPlotMouseMode;
-	bool m_selectionBandIsShown;
+	MouseMode m_mouseMode{SelectionMode};
+	CartesianPlotActionMode m_cartesianPlotActionMode{ApplyActionToSelection};
+	CartesianPlot::MouseMode m_cartesianPlotMouseMode{CartesianPlot::SelectionMode};
+	bool m_selectionBandIsShown{false};
 	QPoint m_selectionStart;
 	QPoint m_selectionEnd;
-	int magnificationFactor;
-	QGraphicsPixmapItem* m_magnificationWindow;
+	int magnificationFactor{0};
+	QGraphicsPixmapItem* m_magnificationWindow{nullptr};
 	GridSettings m_gridSettings;
 	QList<QGraphicsItem*> m_selectedItems;
-	bool m_suppressSelectionChangedEvent;
-	WorksheetElement* lastAddedWorksheetElement;
-	QTimeLine* m_fadeInTimeLine;
-	QTimeLine* m_fadeOutTimeLine;
-	bool m_isClosing;
-	bool m_menusInitialized;
-	bool m_ctrlPressed;
-	int m_numScheduledScalings;
+	bool m_suppressSelectionChangedEvent{false};
+	WorksheetElement* lastAddedWorksheetElement{nullptr};
+	QTimeLine* m_fadeInTimeLine{nullptr};
+	QTimeLine* m_fadeOutTimeLine{nullptr};
+	bool m_isClosing{false};
+	bool m_menusInitialized{false};
+	bool m_ctrlPressed{false};
+	int m_numScheduledScalings{0};
 
 	//Menus
-	QMenu* m_addNewMenu;
-	QMenu* m_addNewCartesianPlotMenu;
-	QMenu* m_zoomMenu;
-	QMenu* m_magnificationMenu;
-	QMenu* m_layoutMenu;
-	QMenu* m_gridMenu;
-	QMenu* m_themeMenu;
-	QMenu* m_viewMouseModeMenu;
-	QMenu* m_cartesianPlotMenu;
-	QMenu* m_cartesianPlotMouseModeMenu;
-	QMenu* m_cartesianPlotAddNewMenu;
-	QMenu* m_cartesianPlotZoomMenu;
-	QMenu* m_cartesianPlotActionModeMenu;
-	QMenu* m_dataManipulationMenu;
+	QMenu* m_addNewMenu{nullptr};
+	QMenu* m_addNewCartesianPlotMenu{nullptr};
+	QMenu* m_zoomMenu{nullptr};
+	QMenu* m_magnificationMenu{nullptr};
+	QMenu* m_layoutMenu{nullptr};
+	QMenu* m_gridMenu{nullptr};
+	QMenu* m_themeMenu{nullptr};
+	QMenu* m_viewMouseModeMenu{nullptr};
+	QMenu* m_cartesianPlotMenu{nullptr};
+	QMenu* m_cartesianPlotMouseModeMenu{nullptr};
+	QMenu* m_cartesianPlotAddNewMenu{nullptr};
+	QMenu* m_cartesianPlotZoomMenu{nullptr};
+	QMenu* m_cartesianPlotActionModeMenu{nullptr};
+	QMenu* m_dataManipulationMenu{nullptr};
 
-	QToolButton* tbNewCartesianPlot;
-	QToolButton* tbZoom;
-	QToolButton* tbMagnification;
+	QToolButton* tbNewCartesianPlot{nullptr};
+	QToolButton* tbZoom{nullptr};
+	QToolButton* tbMagnification{nullptr};
 	QAction* currentZoomAction;
 	QAction* currentMagnificationAction;
 

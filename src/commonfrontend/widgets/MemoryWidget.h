@@ -32,7 +32,7 @@
 #include <QLabel>
 
 class MemoryWidget : public QLabel {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit MemoryWidget(QWidget*);

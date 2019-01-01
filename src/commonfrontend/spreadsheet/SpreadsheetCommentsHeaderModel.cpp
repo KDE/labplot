@@ -34,8 +34,8 @@
 	\ingroup commonfrontend
  */
 
-SpreadsheetCommentsHeaderModel::SpreadsheetCommentsHeaderModel( SpreadsheetModel * spreadsheet_model, QObject * parent )
-	: QAbstractTableModel( parent ), m_spreadsheet_model(spreadsheet_model){
+SpreadsheetCommentsHeaderModel::SpreadsheetCommentsHeaderModel(SpreadsheetModel* spreadsheet_model, QObject* parent)
+	: QAbstractTableModel(parent), m_spreadsheet_model(spreadsheet_model) {
 	  
 	connect(m_spreadsheet_model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
 		this, SIGNAL(headerDataChanged(Qt::Orientation,int,int)));

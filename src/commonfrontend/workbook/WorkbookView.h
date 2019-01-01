@@ -41,46 +41,45 @@ class QToolBar;
 
 class TabWidget : public QTabWidget {
 	Q_OBJECT
-	public:
-		explicit TabWidget(QWidget* parent) : QTabWidget(parent) {
-			connect(tabBar(),SIGNAL(tabMoved(int,int)),this, SIGNAL(tabMoved(int,int)));
-		}
+public:
+	explicit TabWidget(QWidget* parent) : QTabWidget(parent) {
+		connect(tabBar(), SIGNAL(tabMoved(int, int)), this, SIGNAL(tabMoved(int, int)));
+	}
 
-	signals:
-		void tabMoved(int, int);
+signals:
+	void tabMoved(int, int);
 };
 
 class WorkbookView : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 
-	public:
-		explicit WorkbookView(Workbook*);
-		~WorkbookView() override;
+public:
+	explicit WorkbookView(Workbook*);
+	~WorkbookView() override;
 
-		int currentIndex() const;
+	int currentIndex() const;
 
-	private:
-		TabWidget* m_tabWidget;
-		Workbook* m_workbook;
-		int lastSelectedIndex;
-		bool m_initializing;
+private:
+	TabWidget* m_tabWidget;
+	Workbook* m_workbook;
+	int lastSelectedIndex{0};
+	bool m_initializing;
 
-		//actions
-		QAction* action_add_spreadsheet;
-		QAction* action_add_matrix;
+	//actions
+	QAction* action_add_spreadsheet;
+	QAction* action_add_matrix;
 
-	private  slots:
-		void createContextMenu(QMenu*) const;
-		void showTabContextMenu(QPoint);
-		void addSpreadsheet();
-		void addMatrix();
-		void itemSelected(int);
-		void tabChanged(int);
-		void tabMoved(int,int);
-		void handleDescriptionChanged(const AbstractAspect*);
-		void handleAspectAdded(const AbstractAspect*);
-		void handleAspectAboutToBeRemoved(const AbstractAspect*);
-
+private  slots:
+	void createContextMenu(QMenu*) const;
+	void showTabContextMenu(QPoint);
+	void addSpreadsheet();
+	void addMatrix();
+	void itemSelected(int);
+	void tabChanged(int);
+	void tabMoved(int, int);
+	void handleDescriptionChanged(const AbstractAspect*);
+	void handleAspectAdded(const AbstractAspect*);
+	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 };
 
 #endif

@@ -39,40 +39,40 @@ class QTreeView;
 class TreeViewComboBox : public QComboBox {
 	Q_OBJECT
 
-	public:
-		explicit TreeViewComboBox(QWidget* parent = nullptr);
+public:
+	explicit TreeViewComboBox(QWidget* parent = nullptr);
 
-		void setModel(QAbstractItemModel*);
-		void setCurrentModelIndex(const QModelIndex&);
-		QModelIndex currentModelIndex() const;
+	void setModel(QAbstractItemModel*);
+	void setCurrentModelIndex(const QModelIndex&);
+	QModelIndex currentModelIndex() const;
 
-		void setTopLevelClasses(const QList<const char *> &);
-		void setHiddenAspects(const QList<const AbstractAspect*>&);
+	void setTopLevelClasses(const QList<const char *> &);
+	void setHiddenAspects(const QList<const AbstractAspect*>&);
 
-		void showPopup() override;
-		void hidePopup() override;
+	void showPopup() override;
+	void hidePopup() override;
 
-	private:
-		QTreeView* m_treeView;
-		QGroupBox* m_groupBox;
-		QLineEdit* m_lineEdit;
+private:
+	QTreeView* m_treeView;
+	QGroupBox* m_groupBox;
+	QLineEdit* m_lineEdit;
 
-		QList<const char*> m_topLevelClasses;
-		QList<const char*> m_selectableClasses;
-		QList<const AbstractAspect*> m_hiddenAspects;
+	QList<const char*> m_topLevelClasses;
+	QList<const char*> m_selectableClasses;
+	QList<const AbstractAspect*> m_hiddenAspects;
 
-		void showTopLevelOnly(const QModelIndex&);
-		bool eventFilter(QObject*, QEvent*) override;
-		bool filter(const QModelIndex&, const QString&);
-		bool isTopLevel(const AbstractAspect*) const;
-		bool isHidden(const AbstractAspect*) const;
+	void showTopLevelOnly(const QModelIndex&);
+	bool eventFilter(QObject*, QEvent*) override;
+	bool filter(const QModelIndex&, const QString&);
+	bool isTopLevel(const AbstractAspect*) const;
+	bool isHidden(const AbstractAspect*) const;
 
-	private slots:
-		void treeViewIndexActivated(const QModelIndex&);
-		void filterChanged(const QString&);
+private slots:
+	void treeViewIndexActivated(const QModelIndex&);
+	void filterChanged(const QString&);
 
-	signals:
-		void currentModelIndexChanged(const QModelIndex&);
+signals:
+	void currentModelIndexChanged(const QModelIndex&);
 };
 
 #endif

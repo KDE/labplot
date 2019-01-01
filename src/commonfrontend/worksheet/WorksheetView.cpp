@@ -71,40 +71,7 @@
   Constructur of the class.
   Creates a view for the Worksheet \c worksheet and initializes the internal model.
 */
-WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
-	m_worksheet(worksheet),
-	m_mouseMode(SelectionMode),
-	m_cartesianPlotActionMode(ApplyActionToSelection),
-	m_cartesianPlotMouseMode(CartesianPlot::SelectionMode),
-	m_selectionBandIsShown(false),
-	magnificationFactor(0),
-	m_magnificationWindow(nullptr),
-	m_suppressSelectionChangedEvent(false),
-	lastAddedWorksheetElement(nullptr),
-	m_fadeInTimeLine(nullptr),
-	m_fadeOutTimeLine(nullptr),
-	m_isClosing(false),
-	m_menusInitialized(false),
-	m_ctrlPressed(false),
-	m_numScheduledScalings(0),
-	m_addNewMenu(nullptr),
-	m_addNewCartesianPlotMenu(nullptr),
-	m_zoomMenu(nullptr),
-	m_magnificationMenu(nullptr),
-	m_layoutMenu(nullptr),
-	m_gridMenu(nullptr),
-	m_themeMenu(nullptr),
-	m_viewMouseModeMenu(nullptr),
-	m_cartesianPlotMenu(nullptr),
-	m_cartesianPlotMouseModeMenu(nullptr),
-	m_cartesianPlotAddNewMenu(nullptr),
-	m_cartesianPlotZoomMenu(nullptr),
-	m_cartesianPlotActionModeMenu(nullptr),
-	m_dataManipulationMenu(nullptr),
-	tbNewCartesianPlot(nullptr),
-	tbZoom(nullptr),
-	tbMagnification(nullptr) {
-
+WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(), m_worksheet(worksheet) {
 	setScene(m_worksheet->scene());
 
 	setRenderHint(QPainter::Antialiasing);

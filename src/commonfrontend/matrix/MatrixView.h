@@ -95,7 +95,7 @@ private:
 	Matrix* m_matrix;
 	MatrixModel* m_model;
 	QImage m_image;
-	bool m_imageIsDirty;
+	bool m_imageIsDirty{true};
 
 	//Actions
 	QAction* action_cut_selection;

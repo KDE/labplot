@@ -38,17 +38,17 @@ class AbstractPart;
 class PartMdiView : public QMdiSubWindow {
 	Q_OBJECT
 
-	public:
-		explicit PartMdiView(AbstractPart* part);
-		AbstractPart* part() const;
+public:
+	explicit PartMdiView(AbstractPart* part);
+	AbstractPart* part() const;
 
-	private:
-		void closeEvent(QCloseEvent*) override;
-		AbstractPart* m_part;
+private:
+	void closeEvent(QCloseEvent*) override;
+	AbstractPart* m_part;
 
-	private slots:
-		void handleAspectDescriptionChanged(const AbstractAspect*);
-		void handleAspectAboutToBeRemoved(const AbstractAspect*);
+private slots:
+	void handleAspectDescriptionChanged(const AbstractAspect*);
+	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 };
 
 #endif // ifndef PART_MDI_VIEW_H

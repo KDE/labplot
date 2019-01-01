@@ -40,7 +40,7 @@ class ReadWritePart;
 }
 
 class CantorWorksheetView : public QWidget {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit CantorWorksheetView(CantorWorksheet*);

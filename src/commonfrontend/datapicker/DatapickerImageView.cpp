@@ -4,7 +4,7 @@
     Description          : DatapickerImage view for datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-	Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -60,12 +60,7 @@
 DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView(),
 	m_image(image),
 	m_datapicker(dynamic_cast<Datapicker*>(m_image->parentAspect())),
-	m_transform(new Transform()),
-	m_mouseMode(SelectAndEditMode),
-	m_selectionBandIsShown(false),
-	magnificationFactor(0),
-	m_rotationAngle(0),
-	tbZoom(nullptr) {
+	m_transform(new Transform()) {
 
 	setScene(m_image->scene());
 
@@ -298,7 +293,7 @@ void DatapickerImageView::setScene(QGraphicsScene* scene) {
 }
 
 void DatapickerImageView::drawForeground(QPainter* painter, const QRectF& rect) {
-	if (m_mouseMode==ZoomSelectionMode && m_selectionBandIsShown) {
+	if (m_mouseMode == ZoomSelectionMode && m_selectionBandIsShown) {
 		painter->save();
 		const QRectF& selRect = mapToScene(QRect(m_selectionStart, m_selectionEnd).normalized()).boundingRect();
 		painter->setPen(QPen(Qt::black, 5/transform().m11()));
@@ -517,35 +512,35 @@ void DatapickerImageView::contextMenuEvent(QContextMenuEvent* e) {
 //####################################  SLOTs   ###############################
 //##############################################################################
 void DatapickerImageView::changePointsType(QAction* action) {
-	if (action==setAxisPointsAction)
+	if (action == setAxisPointsAction)
 		m_image->setPlotPointsType(DatapickerImage::AxisPoints);
-	else if (action==setCurvePointsAction)
+	else if (action == setCurvePointsAction)
 		m_image->setPlotPointsType(DatapickerImage::CurvePoints);
-	else if (action==selectSegmentAction)
+	else if (action == selectSegmentAction)
 		m_image->setPlotPointsType(DatapickerImage::SegmentPoints);
 }
 
 void DatapickerImageView::changeZoom(QAction* action) {
-	if (action==zoomInViewAction) {
+	if (action == zoomInViewAction) {
 		scale(1.2, 1.2);
-	} else if (action==zoomOutViewAction) {
+	} else if (action == zoomOutViewAction) {
 		scale(1.0/1.2, 1.0/1.2);
-	} else if (action==zoomOriginAction) {
+	} else if (action == zoomOriginAction) {
 		static const float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
 		static const float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
 		setTransform(QTransform::fromScale(hscale, vscale));
 		m_rotationAngle = 0;
-	} else if (action==zoomFitPageWidthAction) {
+	} else if (action == zoomFitPageWidthAction) {
 		float scaleFactor = viewport()->width()/scene()->sceneRect().width();
 		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
 		m_rotationAngle = 0;
-	} else if (action==zoomFitPageHeightAction) {
+	} else if (action == zoomFitPageHeightAction) {
 		float scaleFactor = viewport()->height()/scene()->sceneRect().height();
 		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
 		m_rotationAngle = 0;
 	}
 
-	currentZoomAction=action;
+	currentZoomAction = action;
 	if (tbZoom)
 		tbZoom->setDefaultAction(action);
 
@@ -602,17 +597,17 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 }
 
 void DatapickerImageView::mouseModeChanged(QAction* action) {
-	if (action==selectAndEditModeAction) {
+	if (action == selectAndEditModeAction) {
 		m_mouseMode = SelectAndEditMode;
 		setInteractive(true);
 		setDragMode(QGraphicsView::NoDrag);
 		m_image->setSegmentsHoverEvent(true);
-	} else if (action==navigationModeAction) {
+	} else if (action == navigationModeAction) {
 		m_mouseMode = NavigationMode;
 		setInteractive(false);
 		setDragMode(QGraphicsView::ScrollHandDrag);
 		m_image->setSegmentsHoverEvent(false);
-	} else if (action==zoomSelectionModeAction) {
+	} else if (action == zoomSelectionModeAction) {
 		m_mouseMode = ZoomSelectionMode;
 		setInteractive(false);
 		setDragMode(QGraphicsView::NoDrag);
@@ -626,15 +621,15 @@ void DatapickerImageView::mouseModeChanged(QAction* action) {
 }
 
 void DatapickerImageView::magnificationChanged(QAction* action) {
-	if (action==noMagnificationAction)
+	if (action == noMagnificationAction)
 		magnificationFactor = 0;
-	else if (action==twoTimesMagnificationAction)
+	else if (action == twoTimesMagnificationAction)
 		magnificationFactor = 2;
-	else if (action==threeTimesMagnificationAction)
+	else if (action == threeTimesMagnificationAction)
 		magnificationFactor = 3;
-	else if (action==fourTimesMagnificationAction)
+	else if (action == fourTimesMagnificationAction)
 		magnificationFactor = 4;
-	else if (action==fiveTimesMagnificationAction)
+	else if (action == fiveTimesMagnificationAction)
 		magnificationFactor = 5;
 }
 
@@ -659,7 +654,7 @@ void DatapickerImageView::handleImageActions() {
 		setAxisPointsAction->setEnabled(true);
 
 		int pointsCount = m_image->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
-		if (pointsCount>0)
+		if (pointsCount > 0)
 			navigationActionGroup->setEnabled(true);
 		else
 			navigationActionGroup->setEnabled(false);
@@ -698,7 +693,7 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 	sourceRect = scene()->sceneRect();
 
 	//print
-	if (format==WorksheetView::Pdf) {
+	if (format == WorksheetView::Pdf) {
 		QPrinter printer(QPrinter::HighResolution);
 		printer.setOutputFormat(QPrinter::PdfFormat);
 		printer.setOutputFileName(path);
@@ -715,7 +710,7 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		painter.begin(&printer);
 		exportPaint(&painter, targetRect, sourceRect);
 		painter.end();
-	} else if (format==WorksheetView::Svg) {
+	} else if (format == WorksheetView::Svg) {
 		QSvgGenerator generator;
 		generator.setFileName(path);
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);

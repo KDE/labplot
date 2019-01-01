@@ -47,8 +47,7 @@
  */
 WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
 	m_tabWidget(new TabWidget(this)),
-	m_workbook(workbook),
-	lastSelectedIndex(0) {
+	m_workbook(workbook) {
 
 	m_tabWidget->setTabPosition(QTabWidget::South);
 	m_tabWidget->setTabShape(QTabWidget::Rounded);

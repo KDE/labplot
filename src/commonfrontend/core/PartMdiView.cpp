@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : QMdiSubWindow wrapper for aspect views.
     --------------------------------------------------------------------
-	Copyright            : (C) 2013 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
@@ -43,7 +43,6 @@
  * and holds the connection to the actual data visualized in this window via the pointer to \c AbstractPart.
  */
 PartMdiView::PartMdiView(AbstractPart* part) : QMdiSubWindow(nullptr), m_part(part) {
-
 	setWindowIcon(m_part->icon());
 	setWidget(m_part->view());
 	setAttribute(Qt::WA_DeleteOnClose);
