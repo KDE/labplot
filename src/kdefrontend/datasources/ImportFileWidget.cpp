@@ -343,20 +343,25 @@ ImportFileWidget::~ImportFileWidget() {
 
 void ImportFileWidget::initSlots() {
 	//SLOTs for the general part of the data source configuration
-	connect( ui.cbSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(sourceTypeChanged(int)));
-	connect( ui.leFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
-	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
-	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
-	connect( ui.tvJson, SIGNAL(clicked(QModelIndex)), this, SLOT(refreshPreview()));
-	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
-	connect( ui.bFileInfo, SIGNAL(clicked()), this, SLOT (fileInfoDialog()) );
-	connect( ui.bSaveFilter, SIGNAL(clicked()), this, SLOT (saveFilter()) );
-	connect( ui.bManageFilters, SIGNAL(clicked()), this, SLOT (manageFilters()) );
-	connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged(int)) );
-	connect( ui.cbUpdateType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
-	connect( ui.cbReadingType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
-	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
-	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
+	connect(ui.cbSourceType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged),
+	        this, static_cast<void (ImportFileWidget::*) (int)>(&ImportFileWidget::sourceTypeChanged));
+	connect(ui.leFileName, &QLineEdit::textChanged,
+	        this, static_cast<void (ImportFileWidget::*) (const QString&)>(&ImportFileWidget::fileNameChanged));
+	connect(ui.leHost, &QLineEdit::textChanged, this, &ImportFileWidget::hostChanged);
+	connect(ui.lePort, &QLineEdit::textChanged, this, &ImportFileWidget::portChanged);
+	connect(ui.tvJson, &QTreeView::clicked, this, &ImportFileWidget::refreshPreview);
+	connect(ui.bOpen, &QPushButton::clicked, this, &ImportFileWidget::selectFile);
+	connect(ui.bFileInfo, &QPushButton::clicked, this, &ImportFileWidget::fileInfoDialog);
+	connect(ui.bSaveFilter, &QPushButton::clicked, this, &ImportFileWidget::saveFilter);
+	connect(ui.bManageFilters, &QPushButton::clicked, this, &ImportFileWidget::manageFilters);
+	connect(ui.cbFileType, static_cast<void (KComboBox::*) (int)>(&KComboBox::currentIndexChanged),
+	        this, &ImportFileWidget::fileTypeChanged);
+	connect(ui.cbUpdateType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged),
+	        this, &ImportFileWidget::updateTypeChanged);
+	connect(ui.cbReadingType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged),
+	        this, &ImportFileWidget::readingTypeChanged);
+	connect(ui.cbFilter, static_cast<void (KComboBox::*) (int)>(&KComboBox::activated), this, &ImportFileWidget::filterChanged);
+	connect(ui.bRefreshPreview, &QPushButton::clicked, this, &ImportFileWidget::refreshPreview);
 
 #ifdef HAVE_MQTT
 	connect(ui.cbConnection, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnectionChanged);
