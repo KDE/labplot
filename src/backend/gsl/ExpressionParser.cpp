@@ -1338,7 +1338,6 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 	QByteArray funcba = expr.toLatin1();
 	const char* func = funcba.constData();
 
-	double x, y;
 	gsl_set_error_handler_off();
 
 	for (int i = 0; i < paramNames.size(); ++i) {
@@ -1347,9 +1346,9 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 	}
 
 	for (int i = 0; i < count; i++) {
-		x = xMin + step * i;
+		const double x = xMin + step * i;
 		assign_variable("x", x);
-		y = parse(func);
+		const double y = parse(func);
 
 		if (parse_errors() > 0)
 			return false;
@@ -1378,13 +1377,12 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 	QByteArray funcba = expr.toLatin1();
 	const char* func = funcba.constData();
 
-	double x, y;
 	gsl_set_error_handler_off();
 
 	for (int i = 0; i < count; i++) {
-		x = xMin + step*i;
+		const double x = xMin + step*i;
 		assign_variable("x", x);
-		y = parse(func);
+		const double y = parse(func);
 
 		if (parse_errors() > 0)
 			return false;
@@ -1403,13 +1401,12 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	QByteArray funcba = expr.toLatin1();
 	const char* func = funcba.constData();
 
-	double x, y;
 	gsl_set_error_handler_off();
 
 	for (int i = 0; i < xVector->count(); i++) {
-		x = xVector->at(i);
+		const double x = xVector->at(i);
 		assign_variable("x", x);
-		y = parse(func);
+		const double y = parse(func);
 
 		if (parse_errors() > 0)
 			return false;
@@ -1429,7 +1426,6 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	QByteArray funcba = expr.toLatin1();
 	const char* func = funcba.constData();
 
-	double x, y;
 	gsl_set_error_handler_off();
 
 	for (int i = 0; i < paramNames.size(); ++i) {
@@ -1438,9 +1434,9 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	}
 
 	for (int i = 0; i < xVector->count(); i++) {
-		x = xVector->at(i);
+		const double x = xVector->at(i);
 		assign_variable("x", x);
-		y = parse(func);
+		const double y = parse(func);
 
 		if (parse_errors() > 0)
 			return false;
@@ -1465,9 +1461,6 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 	QByteArray funcba = expr.toLatin1();
 	const char* func = funcba.constData();
 
-	double y, varValue;
-	QString varName;
-
 	gsl_set_error_handler_off();
 
 	bool stop = false;
@@ -1483,13 +1476,13 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 			break;
 
 		for (int n = 0; n < vars.size(); ++n) {
-			varName = vars.at(n);
-			varValue = xVectors.at(n)->at(i);
+			const QString& varName = vars.at(n);
+			const double varValue = xVectors.at(n)->at(i);
 			QByteArray varba = varName.toLatin1();
 			assign_variable(varba.constData(), varValue);
 		}
 
-		y = parse(func);
+		const double y = parse(func);
 
 		if (parse_errors() > 0)
 			return false;
@@ -1517,13 +1510,12 @@ bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, co
 	QByteArray funcba = expr.toLatin1();
 	const char* func = funcba.constData();
 
-	double r, phi;
 	gsl_set_error_handler_off();
 
 	for (int i = 0; i < count; i++) {
-		phi = minValue + step * i;
+		const double phi = minValue + step * i;
 		assign_variable("phi", phi);
-		r = parse(func);
+		const double r = parse(func);
 		if (parse_errors() > 0)
 			return false;
 
@@ -1556,13 +1548,12 @@ bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& e
 	QByteArray yfuncba = expr2.toLatin1();
 	const char* yFunc = yfuncba.constData();
 
-	double x, y, t;
 	gsl_set_error_handler_off();
 
 	for (int i = 0; i < count; i++) {
-		t = minValue + step*i;
+		const double t = minValue + step*i;
 		assign_variable("t", t);
-		x = parse(xFunc);
+		const double x = parse(xFunc);
 		if (parse_errors() > 0)
 			return false;
 
@@ -1571,7 +1562,7 @@ bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& e
 		else
 			(*xVector)[i] = NAN;
 
-		y = parse(yFunc);
+		const double y = parse(yFunc);
 		if (parse_errors() > 0)
 			return false;
 

@@ -1885,7 +1885,7 @@ void AsciiFilterPrivate::MQTTPreview(QVector<QStringList>& list, const QString& 
 				lineString = dataStrings[i];
 
 			//Add index if it is the case
-			if(list.isEmpty() || (!list.isEmpty() && mqttPreviewFirstEmptyColCount > 0) )
+			if(list.isEmpty() || mqttPreviewFirstEmptyColCount > 0)
 				if (createIndexEnabled)
 					lineString += QString::number(i);
 
@@ -1927,7 +1927,7 @@ void AsciiFilterPrivate::MQTTPreview(QVector<QStringList>& list, const QString& 
 			qDebug()<<"column updated with value";
 
 			// if the list was empty, or this is the first not empty topic, we append the new line
-			if(list.isEmpty() || (!list.isEmpty() && mqttPreviewFirstEmptyColCount > 0))
+			if(list.isEmpty() || mqttPreviewFirstEmptyColCount > 0)
 				dataStrings << lineString;
 			//Otherwise we update the already existing line
 			if (!list.isEmpty() && mqttPreviewFirstEmptyColCount == 0)
@@ -1939,7 +1939,7 @@ void AsciiFilterPrivate::MQTTPreview(QVector<QStringList>& list, const QString& 
 		}
 	}
 	//the message is empty and there were only empty messages before this
-	else if (list.isEmpty() || (!list.isEmpty() && mqttPreviewFirstEmptyColCount > 0) ) {
+	else if (list.isEmpty() || mqttPreviewFirstEmptyColCount > 0) {
 		//increment the counter
 		mqttPreviewFirstEmptyColCount ++;
 

@@ -121,10 +121,12 @@ bool Spreadsheet::printPreview() const {
   Returns the maximum number of rows in the spreadsheet.
  */
 int Spreadsheet::rowCount() const {
-	int col_rows, result = 0;
-	for (auto* col : children<Column>())
-		if ((col_rows = col->rowCount()) > result)
+	int result = 0;
+	for (auto* col : children<Column>()) {
+		const int col_rows = col->rowCount();
+		if ( col_rows > result)
 			result = col_rows;
+	}
 	return result;
 }
 

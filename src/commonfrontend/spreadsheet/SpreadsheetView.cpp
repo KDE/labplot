@@ -2247,7 +2247,6 @@ void SpreadsheetView::print(QPrinter* printer) const {
 	if (remainingColumns > 0)
 		tablesCount++;
 	//Paint the horizontal header first
-	int i;
 	for (int table = 0; table < tablesCount; ++table) {
 		right = margin + vertHeaderWidth;
 
@@ -2260,8 +2259,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 			height += tr.height();
 		painter.drawLine(right, height, right, height+br.height());
 
-		int w;
-		i = table * columnsPerTable;
+		int i = table * columnsPerTable;
 		int toI = table * columnsPerTable + columnsPerTable;
 		if ((remainingColumns > 0) && (table == tablesCount-1)) {
 			i = (tablesCount-1)*columnsPerTable;
@@ -2270,7 +2268,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 
 		for (; i<toI; ++i) {
 			headerString = m_tableView->model()->headerData(i, Qt::Horizontal).toString();
-			w = m_tableView->columnWidth(i);
+			const int w = m_tableView->columnWidth(i);
 			tr.setTopLeft(QPoint(right,height));
 			tr.setWidth(w);
 			tr.setHeight(br.height());

@@ -549,8 +549,8 @@ bool MQTTConnectionManagerWidget::checkConnections() {
 		bool idUsed = m_connections[i].useID;
 		bool authenticationFilled = !m_connections[i].userName.isEmpty() && !m_connections[i].password.isEmpty();
 		bool idFilled = !m_connections[i].clientID.isEmpty();
-		bool authenticationOK = !authenticationUsed || (authenticationUsed && authenticationFilled);
-		bool idOK = !idUsed || (idUsed && idFilled);
+		bool authenticationOK = (!authenticationUsed || authenticationFilled);
+		bool idOK = (!idUsed || idFilled);
 
 		bool uniqueHost = true;
 		for (int j = 0; j < m_connections.size(); ++j) {

@@ -1380,7 +1380,7 @@ void HistogramPrivate::draw(QPainter* painter) {
 
 void HistogramPrivate::updatePixmap() {
 	QPixmap pixmap(boundingRectangle.width(), boundingRectangle.height());
-	if (boundingRectangle.width()==0 || boundingRectangle.width()==0) {
+	if (boundingRectangle.width()==0 || boundingRectangle.height()==0) {
 		m_pixmap = pixmap;
 		m_hoverEffectImageIsDirty = true;
 		m_selectionEffectImageIsDirty = true;

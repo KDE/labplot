@@ -431,7 +431,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 
 		const QString childPath = folder->path() + '/' + name;
 		// we could also use spread.loose
-		if (!m_spreadNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
+		if (!m_spreadNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose spread: " << name.toStdString());
 
 			Spreadsheet* spreadsheet = new Spreadsheet(name);
@@ -459,7 +459,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 
 		const QString childPath = folder->path() + '/' + name;
 		// we could also use excel.loose
-		if (!m_excelNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
+		if (!m_excelNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose excel: " << name.toStdString());
 			DEBUG("	 containing number of sheets = " << excel.sheets.size());
 
@@ -487,7 +487,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 
 		const QString childPath = folder->path() + '/' + name;
-		if (!m_matrixNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
+		if (!m_matrixNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose matrix: " << name.toStdString());
 			DEBUG("	containing number of sheets = " << originMatrix.sheets.size());
 			if (originMatrix.sheets.size() == 1) { // single sheet -> load into a matrix
@@ -519,7 +519,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 
 		const QString childPath = folder->path() + '/' + name;
-		if (!m_graphNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
+		if (!m_graphNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose graph: " << name.toStdString());
 			Worksheet* worksheet = new Worksheet(name);
 			loadWorksheet(worksheet, preview);
@@ -544,7 +544,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 
 		const QString childPath = folder->path() + '/' + name;
-		if (!m_noteNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
+		if (!m_noteNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose note: " << name.toStdString());
 			Note* note = new Note(name);
 			loadNote(note, preview);

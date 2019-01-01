@@ -826,14 +826,14 @@ void MatrixView::insertEmptyColumns() {
 	int first = firstSelectedColumn();
 	int last = lastSelectedColumn();
 	if (first < 0) return;
-	int count, current = first;
+	int current = first;
 
 	WAIT_CURSOR;
 	m_matrix->beginMacro(i18n("%1: insert empty column(s)", m_matrix->name()));
 	while (current <= last) {
 		current = first+1;
 		while (current <= last && isColumnSelected(current)) current++;
-		count = current-first;
+		const int count = current-first;
 		m_matrix->insertColumns(first, count);
 		current += count;
 		last += count;
@@ -879,7 +879,7 @@ void MatrixView::addRows() {
 void MatrixView::insertEmptyRows() {
 	int first = firstSelectedRow();
 	int last = lastSelectedRow();
-	int count, current = first;
+	int current = first;
 
 	if (first < 0) return;
 
@@ -888,7 +888,7 @@ void MatrixView::insertEmptyRows() {
 	while (current <= last) {
 		current = first+1;
 		while (current <= last && isRowSelected(current)) current++;
-		count = current-first;
+		const int count = current-first;
 		m_matrix->insertRows(first, count);
 		current += count;
 		last += count;
@@ -995,7 +995,6 @@ void MatrixView::print(QPrinter* printer) const {
 			height += tr.height();
 		painter.drawLine(right, height, right, height+br.height());
 
-		int w;
 		int i = table * columnsPerTable;
 		int toI = table * columnsPerTable + columnsPerTable;
 		if ((remainingColumns > 0) && (table == tablesCount-1)) {
@@ -1005,7 +1004,7 @@ void MatrixView::print(QPrinter* printer) const {
 
 		for (; i<toI; ++i) {
 			headerString = m_tableView->model()->headerData(i, Qt::Horizontal).toString();
-			w = /*m_tableView->columnWidth(i)*/ firstRowCeilSizes[i];
+			const int w = /*m_tableView->columnWidth(i)*/ firstRowCeilSizes[i];
 			tr.setTopLeft(QPoint(right,height));
 			tr.setWidth(w);
 			tr.setHeight(br.height());
@@ -1134,11 +1133,10 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 		toExport.reserve(lastSelectedRowi - firstSelectedRowi+1);
 		toExport.resize(lastSelectedRowi - firstSelectedRowi+1);
 		int r = 0;
-		int c = 0;
 		for (int row = firstSelectedRowi; row <= lastSelectedRowi; ++row, ++r) {
 			toExport[r].reserve(lastSelectedCol - firstSelectedCol+1);
 			toExport[r].resize(lastSelectedCol - firstSelectedCol+1);
-			c = 0;
+			int c = 0;
 			//TODO: mode
 			for (int col = firstSelectedCol; col <= lastSelectedCol; ++col,++c)
 				toExport[r][c] = m_matrix->text<double>(row, col);

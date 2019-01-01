@@ -1148,15 +1148,13 @@ void XYCurvePrivate::updateLines() {
 
 			//create interpolating points
 			std::vector<double> xinterp, yinterp;
-			double step;
-			double xi, yi, x1, x2;
 			for (unsigned int i = 0; i < count - 1; i++) {
-				x1 = x[i];
-				x2 = x[i+1];
-				step=fabs(x2 - x1)/(lineInterpolationPointsCount + 1);
+				const double x1 = x[i];
+				const double x2 = x[i+1];
+				const double step = fabs(x2 - x1)/(lineInterpolationPointsCount + 1);
 
-				for (xi = x1; xi < x2; xi += step) {
-					yi = gsl_spline_eval(spline, xi, acc);
+				for (double xi = x1; xi < x2; xi += step) {
+					const double yi = gsl_spline_eval(spline, xi, acc);
 					xinterp.push_back(xi);
 					yinterp.push_back(yi);
 				}

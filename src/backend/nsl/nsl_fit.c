@@ -47,7 +47,7 @@ const char* nsl_fit_model_peak_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2
 	"a/4/s * sech((x-mu)/2/s)**2", "a*voigt(x - mu, s, g)", "a*pseudovoigt1(x - mu, et, w)"};	// eta is already used as function
 const char* nsl_fit_model_peak_pic_name[] = {"gaussian", "cauchy_lorentz", "sech", "logistic", "voigt", "pseudovoigt1"};
 
-const char* nsl_fit_model_growth_name[] = {i18n("Inverse tangent"), i18n("Hyperbolic tangent"), i18n("Algebraic sigmoid"), i18n("Logistic function"), 
+const char* nsl_fit_model_growth_name[] = {i18n("Inverse tangent"), i18n("Hyperbolic tangent"), i18n("Algebraic sigmoid"), i18n("Logistic function"),
 	i18n("Error function (erf)"), i18n("Hill"), i18n("Gompertz"), i18n("Gudermann (gd)")};
 const char* nsl_fit_model_growth_equation[] = {"a * atan((x-mu)/s)", "a * tanh((x-mu)/s)", "a * (x-mu)/s/sqrt(1+((x-mu)/s)^2)", "a/(1+exp(-k*(x-mu)))",
 	"a/2 * erf((x-mu)/s/sqrt(2))", "a * x^n/(s^n + x^n)", "a*exp(-b*exp(-c*x))", "a * asin(tanh((x-mu)/s))"};
@@ -55,7 +55,7 @@ const char* nsl_fit_model_growth_pic_name[] = {"atan", "tanh", "alg_sigmoid", "l
 
 const char* nsl_fit_weight_type_name[] = {"No", "Instrumental (1/col^2)", "Direct (col)", "Inverse (1/col)", "Statistical (1/data)", "Statistical (Fit)", "Relative (1/data^2)", "Relative (Fit)"};
 
-/* 
+/*
 	see http://seal.web.cern.ch/seal/documents/minuit/mnusersguide.pdf
 	and https://lmfit.github.io/lmfit-py/bounds.html
 */
@@ -82,7 +82,7 @@ double nsl_fit_map_bound(double x, double min, double max) {
 	*/
 }
 
-/* 
+/*
 	see http://seal.web.cern.ch/seal/documents/minuit/mnusersguide.pdf
 	and https://lmfit.github.io/lmfit-py/bounds.html
 */
@@ -117,7 +117,7 @@ double nsl_fit_map_unbound(double x, double min, double max) {
 
 /* basic */
 double nsl_fit_model_polynomial_param_deriv(double x, int j, double weight) {
-	return sqrt(weight)*pow(x, j);	
+	return sqrt(weight)*pow(x, j);
 }
 double nsl_fit_model_power1_param_deriv(unsigned int param, double x, double a, double b, double weight) {
 	if (param == 0)
@@ -473,7 +473,7 @@ double nsl_fit_model_rayleigh_tail_param_deriv(unsigned int param, double x, dou
 	if (param == 2)
 		return A * mu * norm/(s*s) * exp(y);
 
-	return 0;	
+	return 0;
 }
 double nsl_fit_model_levy_param_deriv(unsigned int param, double x, double A, double g, double mu, double weight) {
 	double y=x-mu, norm = sqrt(weight)*sqrt(g/(2.*M_PI))/pow(y, 1.5), efactor = exp(-g/2./y);
@@ -508,7 +508,7 @@ double nsl_fit_model_students_t_param_deriv(unsigned int param, double x, double
 		return sqrt(weight) * gsl_ran_tdist_pdf(x, n);
 	if (param == 1)
 		return sqrt(weight) * A * gsl_sf_gamma((n+1.)/2.)/2./pow(n, 1.5)/sqrt(M_PI)/gsl_sf_gamma(n/2.) * pow(1.+x*x/n, - (n+3.)/2.)
-			* (x*x - 1. - (n+x*x)*log(1.+x*x/n)  + (n+x*x)*(gsl_sf_psi((n+1.)/2.) - gsl_sf_psi(n/2.)) ) ;
+			* (x*x - 1. - (n+x*x)*log1p(x*x/n)  + (n+x*x)*(gsl_sf_psi((n+1.)/2.) - gsl_sf_psi(n/2.)) ) ;
 
 	return 0;
 }

@@ -1048,7 +1048,7 @@ void MQTTClient::onMQTTConnect() {
  */
 void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
 	//Decide to interpret retain message or not
-	if (!msg.retain() || (msg.retain() && m_MQTTRetain) ) {
+	if (!msg.retain() || m_MQTTRetain) {
 		//If this is the first message from the topic, save its name
 		if (!m_topicNames.contains(msg.topic().name())) {
 			m_topicNames.push_back(msg.topic().name());
