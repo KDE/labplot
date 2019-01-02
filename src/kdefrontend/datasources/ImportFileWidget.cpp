@@ -223,9 +223,12 @@ void ImportFileWidget::loadSettings() {
 	//general settings
 	AbstractFileFilter::FileType fileType = static_cast<AbstractFileFilter::FileType>(conf.readEntry("Type", 0));
 	for (int i = 0; i < ui.cbFileType->count(); ++i) {
-		AbstractFileFilter::FileType itemFileType = static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt());
-		if (itemFileType == fileType) {
-			ui.cbFileType->setCurrentIndex(i);
+		if (static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt()) == fileType) {
+			if (ui.cbFileType->currentIndex() == i)
+				initOptionsWidget();
+			else
+				ui.cbFileType->setCurrentIndex(i);
+
 			break;
 		}
 	}
@@ -1435,8 +1438,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	if (currentSourceType() == LiveDataSource::FileOrPipe) {
 		const AbstractFileFilter::FileType fileType = AbstractFileFilter::fileType(fileName);
 		for (int i = 0; i < ui.cbFileType->count(); ++i) {
-			AbstractFileFilter::FileType itemFileType = static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt());
-			if (itemFileType == fileType) {
+			if (static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt()) == fileType) {
 				// automatically select a new file type
 				if (ui.cbFileType->currentIndex() != i) {
 					ui.cbFileType->setCurrentIndex(i); // will call the slot fileTypeChanged which updates content and preview
@@ -2214,8 +2216,16 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
 		//for MQTT we read ascii data only, hide the file type options
-		int idx = ui.cbFileType->findText("ASCII data");
-		ui.cbFileType->setCurrentIndex(idx);
+		for (int i = 0; i < ui.cbFileType->count(); ++i) {
+			if (static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt()) == AbstractFileFilter::Ascii) {
+				if (ui.cbFileType->currentIndex() == i)
+					initOptionsWidget();
+				else
+					ui.cbFileType->setCurrentIndex(i);
+
+				break;
+			}
+		}
 		ui.cbFileType->hide();
 		ui.lFileType->hide();
 
