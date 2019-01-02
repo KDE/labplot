@@ -277,8 +277,10 @@ void ImportFileWidget::loadSettings() {
 	initSlots();
 
 	//update the status of the widgets
-	sourceTypeChanged(currentSourceType());
-	fileTypeChanged(fileType);
+	LiveDataSource::SourceType sourceType = currentSourceType();
+	sourceTypeChanged(sourceType);
+	if (sourceType != LiveDataSource::FileOrPipe)
+		fileTypeChanged(fileType); // only for FileOrPipe this was indirectly called by sourceTypeChanged
 	readingTypeChanged(ui.cbReadingType->currentIndex());
 
 	//all set now, refresh the preview
@@ -567,7 +569,7 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	returns the currently used file type.
 */
 AbstractFileFilter::FileType ImportFileWidget::currentFileType() const {
-	return static_cast<AbstractFileFilter::FileType>( ui.cbFileType->itemData(ui.cbFileType->currentIndex()).toInt() );
+	return static_cast<AbstractFileFilter::FileType>(ui.cbFileType->currentData().toInt());
 }
 
 LiveDataSource::SourceType ImportFileWidget::currentSourceType() const {
@@ -1424,31 +1426,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		//available from the previously selected file
 		ui.tePreview->clear();
 		m_twPreview->clear();
-
-		AbstractFileFilter::FileType fileType = currentFileType();
-		switch (fileType) {
-		case AbstractFileFilter::Ascii:
-		case AbstractFileFilter::Binary:
-		case AbstractFileFilter::Image:
-		case AbstractFileFilter::NgspiceRawAscii:
-		case AbstractFileFilter::NgspiceRawBinary:
-			break;
-		case AbstractFileFilter::HDF5:
-			m_hdf5OptionsWidget->clear();
-			break;
-		case AbstractFileFilter::NETCDF:
-			m_netcdfOptionsWidget->clear();
-			break;
-		case AbstractFileFilter::FITS:
-			m_fitsOptionsWidget->clear();
-			break;
-		case AbstractFileFilter::JSON:
-			m_jsonOptionsWidget->clearModel();
-			break;
-		case AbstractFileFilter::ROOT:
-			m_rootOptionsWidget->clear();
-			break;
-		}
+		initOptionsWidget();
 
 		emit fileNameChanged();
 		return;
@@ -1459,16 +1437,23 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		for (int i = 0; i < ui.cbFileType->count(); ++i) {
 			AbstractFileFilter::FileType itemFileType = static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt());
 			if (itemFileType == fileType) {
-				ui.cbFileType->setCurrentIndex(i);
-				// update content widgets when file name changes
-				updateContent(fileName, fileType);
-				break;
+				// automatically select a new file type
+				if (ui.cbFileType->currentIndex() != i) {
+					ui.cbFileType->setCurrentIndex(i); // will call the slot fileTypeChanged which updates content and preview
+
+					emit fileNameChanged();
+					return;
+				} else {
+					initOptionsWidget();
+					updateContent(fileName);
+					break;
+				}
 			}
 		}
 	}
 
-	refreshPreview();
 	emit fileNameChanged();
+	refreshPreview();
 }
 
 /*!
@@ -1499,7 +1484,7 @@ void ImportFileWidget::fileTypeChanged(int index) {
 	Q_UNUSED(index);
 	AbstractFileFilter::FileType fileType = currentFileType();
 	DEBUG("ImportFileWidget::fileTypeChanged " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
-	initOptionsWidget(fileType);
+	initOptionsWidget();
 
 	//default
 	ui.lFilter->show();
@@ -1584,7 +1569,7 @@ void ImportFileWidget::fileTypeChanged(int index) {
 	if (currentSourceType() == LiveDataSource::FileOrPipe) {
 		const QString& fileName = absolutePath(ui.leFileName->text());
 		if (QFile::exists(fileName))
-			updateContent(fileName, static_cast<AbstractFileFilter::FileType>(fileType));
+			updateContent(fileName);
 	}
 
 	//for file types other than ASCII and binary we support re-reading the whole file only
@@ -1599,9 +1584,9 @@ void ImportFileWidget::fileTypeChanged(int index) {
 }
 
 // file type specific option widgets
-void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) {
-	DEBUG("ImportFileWidget::initOptionsWidget for " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
-	switch (fileType) {
+void ImportFileWidget::initOptionsWidget() {
+	DEBUG("ImportFileWidget::initOptionsWidget for " << ENUM_TO_STRING(AbstractFileFilter, FileType, currentFileType()));
+	switch (currentFileType()) {
 	case AbstractFileFilter::Ascii:
 		if (!m_asciiOptionsWidget) {
 			QWidget* asciiw = new QWidget();
@@ -1652,7 +1637,8 @@ void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) 
 			QWidget* fitsw = new QWidget();
 			m_fitsOptionsWidget = std::unique_ptr<FITSOptionsWidget>(new FITSOptionsWidget(fitsw, this));
 			ui.swOptions->addWidget(fitsw);
-		}
+		} else
+			m_fitsOptionsWidget->clear();
 		ui.swOptions->setCurrentWidget(m_fitsOptionsWidget->parentWidget());
 		break;
 	case AbstractFileFilter::JSON:
@@ -1662,7 +1648,8 @@ void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) 
 			ui.tvJson->setModel(m_jsonOptionsWidget->model());
 			ui.swOptions->addWidget(jsonw);
 			m_jsonOptionsWidget->loadSettings();
-		}
+		} else
+			m_jsonOptionsWidget->clearModel();
 		ui.swOptions->setCurrentWidget(m_jsonOptionsWidget->parentWidget());
 		break;
 	case AbstractFileFilter::ROOT:
@@ -2025,11 +2012,10 @@ void ImportFileWidget::refreshPreview() {
 	RESET_CURSOR;
 }
 
-void ImportFileWidget::updateContent(const QString& fileName, AbstractFileFilter::FileType fileType) {
+void ImportFileWidget::updateContent(const QString& fileName) {
 	DEBUG("ImportFileWidget::updateContent()");
-	initOptionsWidget(fileType);
 	if (auto filter = currentFileFilter()) {
-		switch (fileType) {
+		switch (filter->type()) {
 		case AbstractFileFilter::HDF5:
 			m_hdf5OptionsWidget->updateContent(static_cast<HDF5Filter*>(filter), fileName);
 			break;

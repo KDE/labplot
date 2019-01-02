@@ -86,8 +86,8 @@ public:
 private:
 	Ui::ImportFileWidget ui;
 	void setMQTTVisible(bool);
-	void updateContent(const QString&, AbstractFileFilter::FileType);
-	void initOptionsWidget(AbstractFileFilter::FileType);
+	void updateContent(const QString&);
+	void initOptionsWidget();
 	void initSlots();
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
