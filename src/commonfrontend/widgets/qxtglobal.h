@@ -226,7 +226,7 @@ public:
     }
 private:
     QxtPrivateInterface(const QxtPrivateInterface&) { }
-    QxtPrivateInterface& operator=(const QxtPrivateInterface&) { }
+    QxtPrivateInterface& operator=(const QxtPrivateInterface& i) { return i; }
     QxtPrivate<PUB>* pvt;
 };
 

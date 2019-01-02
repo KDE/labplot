@@ -676,7 +676,7 @@ void XYFitCurveDock::categoryChanged(int index) {
  * Updates the model type dependent widgets in the general-tab and calls \c updateModelEquation() to update the preview pixmap.
  */
 void XYFitCurveDock::modelTypeChanged(int index) {
-	DEBUG("modelTypeChanged() type = " << index << ", initializing = " << m_initializing << ", current type = " << m_fitData.modelType);
+	DEBUG("modelTypeChanged() type = " << (unsigned int)index << ", initializing = " << m_initializing << ", current type = " << m_fitData.modelType);
 	// leave if there is no selection
 	if (index == -1)
 		return;
