@@ -29,7 +29,7 @@ nsl_diff_test: nsl_diff_test.c nsl_diff.c nsl_sf_poly.c
 	gcc -o $@ $^ -lm -lgsl -lgslcblas
 nsl_int_test: nsl_int_test.c nsl_int.c nsl_sf_poly.c
 	gcc -o $@ $^ -lm -lgsl -lgslcblas
-nsl_fit_test: nsl_fit_test.c nsl_fit.c
+nsl_fit_test: nsl_fit_test.c nsl_fit.c nsl_sf_basic.c Faddeeva.c
 	gcc -o $@ $^ -lm -lgsl -lgslcblas
 
 clean:
