@@ -620,7 +620,7 @@ static inline double sqr(double x) { return x*x; }
 
 // precomputed table of expa2n2[n-1] = exp(-a2*n*n)
 // for double-precision a2 = 0.26865... in FADDEEVA(w), below.
-const int expa2n2_size 52;
+const int expa2n2_size=52;
 static const double expa2n2[] = {
   7.64405281671221563e-01,
   3.41424527166548425e-01,
