@@ -601,7 +601,7 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 			rowStrings << "";
 		}
 
-		QTreeWidgetItem *varItem = new QTreeWidgetItem(rowStrings);
+		auto* varItem = new QTreeWidgetItem(rowStrings);
 		varItem->setIcon(0, QIcon::fromTheme("x-office-spreadsheet"));
 		varItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 		// highlight item

@@ -56,11 +56,7 @@
   \ingroup kdefrontend
 */
 
-CartesianPlotDock::CartesianPlotDock(QWidget* parent) : QWidget(parent),
-	m_plot(nullptr),
-	labelWidget(nullptr),
-	m_initializing(false) {
-
+CartesianPlotDock::CartesianPlotDock(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
 
 	//"General"-tab

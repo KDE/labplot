@@ -85,16 +85,18 @@ LiveDataDock::LiveDataDock(QWidget* parent) : QWidget(parent)
 #endif
 }
 
-LiveDataDock::~LiveDataDock() {
 #ifdef HAVE_MQTT
+LiveDataDock::~LiveDataDock() {
 	delete m_searchTimer;
 	QMapIterator<QString, QMqttClient*> clients(m_clients);
 	while (clients.hasNext()) {
 		clients.next();
 		delete clients.value();
 	}
-#endif
 }
+#else
+LiveDataDock::~LiveDataDock() = default;
+#endif
 
 #ifdef HAVE_MQTT
 /*!
