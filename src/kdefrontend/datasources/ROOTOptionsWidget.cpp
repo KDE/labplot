@@ -161,12 +161,17 @@ const QStringList ROOTOptionsWidget::selectedNames() const {
 QVector<QStringList> ROOTOptionsWidget::columns() const {
 	QVector<QStringList> cols;
 
-	auto item = ui.twColumns->topLevelItem(0);
-	while (item) {
-		if (item->isSelected())
-			cols << item->data(0,Qt::UserRole).toStringList();
-
-		item = ui.twColumns->itemBelow(item);
+	// ui.twColumns->selectedItems() returns the items in the order of selection.
+	// Iterate through the tree to retain the displayed order.
+	for (int t = 0; t < ui.twColumns->topLevelItemCount(); ++t) {
+		auto titem = ui.twColumns->topLevelItem(t);
+		if (titem->isSelected())
+			cols << titem->data(0,Qt::UserRole).toStringList();
+		for (int c = 0; c < titem->childCount(); ++c) {
+			auto citem = titem->child(c);
+			if (citem->isSelected())
+				cols << citem->data(0,Qt::UserRole).toStringList();
+		}
 	}
 
 	return cols;
