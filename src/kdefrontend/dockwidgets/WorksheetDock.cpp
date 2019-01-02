@@ -77,33 +77,50 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent) {
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &WorksheetDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &WorksheetDock::commentChanged);
-	connect( ui.cbSize, SIGNAL(currentIndexChanged(int)), this, SLOT(sizeChanged(int)) );
-	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(sizeChanged()) );
-	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(sizeChanged()) );
-	connect( ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)) );
+	connect(ui.cbSize, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			 this, static_cast<void (WorksheetDock::*)(int)>(&WorksheetDock::sizeChanged));
+	connect(ui.sbWidth, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, static_cast<void (WorksheetDock::*)()>(&WorksheetDock::sizeChanged));
+	connect(ui.sbHeight, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			 this, static_cast<void (WorksheetDock::*)()>(&WorksheetDock::sizeChanged));
+	connect(ui.cbOrientation, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			 this, &WorksheetDock::orientationChanged);
 
 	//Background
-	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
-	connect( ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundColorStyleChanged(int)) );
-	connect( ui.cbBackgroundImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundImageStyleChanged(int)) );
-	connect( ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundBrushStyleChanged(int)) );
-	connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
-	connect( ui.leBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
-	connect( ui.leBackgroundFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged()) );
-	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed(QColor)), this, SLOT(backgroundFirstColorChanged(QColor)) );
-	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed(QColor)), this, SLOT(backgroundSecondColorChanged(QColor)) );
-	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
+	connect(ui.cbBackgroundType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			 this, &WorksheetDock::backgroundTypeChanged);
+	connect(ui.cbBackgroundColorStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			 this, &WorksheetDock::backgroundColorStyleChanged);
+	connect(ui.cbBackgroundImageStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			 this, &WorksheetDock::backgroundImageStyleChanged);
+	connect(ui.cbBackgroundBrushStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			 this, &WorksheetDock::backgroundBrushStyleChanged);
+	connect(ui.bOpen, &QPushButton::clicked, this, &WorksheetDock::selectFile);
+	connect(ui.leBackgroundFileName, &QLineEdit::returnPressed, this, &WorksheetDock::fileNameChanged);
+	connect(ui.leBackgroundFileName, &QLineEdit::textChanged, this, &WorksheetDock::fileNameChanged);
+	connect(ui.kcbBackgroundFirstColor, &KColorButton::changed, this, &WorksheetDock::backgroundFirstColorChanged);
+	connect(ui.kcbBackgroundSecondColor, &KColorButton::changed, this, &WorksheetDock::backgroundSecondColorChanged);
+	connect(ui.sbBackgroundOpacity, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+			this, &WorksheetDock::backgroundOpacityChanged);
 
 	//Layout
-	connect( ui.chScaleContent, SIGNAL(clicked(bool)), this, SLOT(scaleContentChanged(bool)) );
-	connect( ui.sbLayoutTopMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutTopMarginChanged(double)) );
-	connect( ui.sbLayoutBottomMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutBottomMarginChanged(double)) );
-	connect( ui.sbLayoutLeftMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutLeftMarginChanged(double)) );
-	connect( ui.sbLayoutRightMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutRightMarginChanged(double)) );
-	connect( ui.sbLayoutHorizontalSpacing, SIGNAL(valueChanged(double)), this, SLOT(layoutHorizontalSpacingChanged(double)) );
-	connect( ui.sbLayoutVerticalSpacing, SIGNAL(valueChanged(double)), this, SLOT(layoutVerticalSpacingChanged(double)) );
-	connect( ui.sbLayoutRowCount, SIGNAL(valueChanged(int)), this, SLOT(layoutRowCountChanged(int)) );
-	connect( ui.sbLayoutColumnCount, SIGNAL(valueChanged(int)), this, SLOT(layoutColumnCountChanged(int)) );
+	connect( ui.chScaleContent, &QCheckBox::clicked, this, &WorksheetDock::scaleContentChanged);
+	connect( ui.sbLayoutTopMargin, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			 this, &WorksheetDock::layoutTopMarginChanged);
+	connect( ui.sbLayoutBottomMargin, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			 this, &WorksheetDock::layoutBottomMarginChanged);
+	connect( ui.sbLayoutLeftMargin, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			 this, &WorksheetDock::layoutLeftMarginChanged);
+	connect( ui.sbLayoutRightMargin, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			 this, &WorksheetDock::layoutRightMarginChanged);
+	connect( ui.sbLayoutHorizontalSpacing, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			 this, &WorksheetDock::layoutHorizontalSpacingChanged);
+	connect( ui.sbLayoutVerticalSpacing, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			 this, &WorksheetDock::layoutVerticalSpacingChanged);
+	connect( ui.sbLayoutRowCount, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged),
+			 this, &WorksheetDock::layoutRowCountChanged);
+	connect( ui.sbLayoutColumnCount, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged),
+			 this, &WorksheetDock::layoutColumnCountChanged);
 
 	//theme and template handlers
 	auto* frame = new QFrame(this);
@@ -111,14 +128,14 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent) {
 
 	m_themeHandler = new ThemeHandler(this);
 	layout->addWidget(m_themeHandler);
-	connect(m_themeHandler, SIGNAL(loadThemeRequested(QString)), this, SLOT(loadTheme(QString)));
-	connect(m_themeHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+	connect(m_themeHandler, &ThemeHandler::loadThemeRequested, this, &WorksheetDock::loadTheme);
+	connect(m_themeHandler, &ThemeHandler::info, this, &WorksheetDock::info);
 
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
 	layout->addWidget(templateHandler);
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &WorksheetDock::loadConfigFromTemplate);
+	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &WorksheetDock::saveConfigAsTemplate);
+	connect(templateHandler, &TemplateHandler::info, this, &WorksheetDock::info);
 
 	ui.verticalLayout->addWidget(frame);
 
@@ -155,30 +172,30 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 
 	m_themeHandler->setCurrentTheme(m_worksheet->theme());
 
-	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
-	connect(m_worksheet, SIGNAL(pageRectChanged(QRectF)),this, SLOT(worksheetPageRectChanged(QRectF)));
-	connect(m_worksheet,SIGNAL(scaleContentChanged(bool)),this,SLOT(worksheetScaleContentChanged(bool)));
+	connect(m_worksheet, &Worksheet::aspectDescriptionChanged, this, &WorksheetDock::worksheetDescriptionChanged);
+	connect(m_worksheet, &Worksheet::pageRectChanged, this, &WorksheetDock::worksheetPageRectChanged);
+	connect(m_worksheet, &Worksheet::scaleContentChanged, this, &WorksheetDock::worksheetScaleContentChanged);
 
-	connect(m_worksheet,SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)),this,SLOT(worksheetBackgroundTypeChanged(PlotArea::BackgroundType)));
-	connect(m_worksheet,SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)),this,SLOT(worksheetBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)));
-	connect(m_worksheet,SIGNAL(backgroundImageStyleChanged(PlotArea::BackgroundImageStyle)),this,SLOT(worksheetBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle)));
-	connect(m_worksheet,SIGNAL(backgroundBrushStyleChanged(Qt::BrushStyle)),this,SLOT(worksheetBackgroundBrushStyleChanged(Qt::BrushStyle)));
-	connect(m_worksheet,SIGNAL(backgroundFirstColorChanged(QColor)),this,SLOT(worksheetBackgroundFirstColorChanged(QColor)));
-	connect(m_worksheet,SIGNAL(backgroundSecondColorChanged(QColor)),this,SLOT(worksheetBackgroundSecondColorChanged(QColor)));
-	connect(m_worksheet,SIGNAL(backgroundFileNameChanged(QString)),this,SLOT(worksheetBackgroundFileNameChanged(QString)));
-	connect(m_worksheet,SIGNAL(backgroundOpacityChanged(float)),this,SLOT(worksheetBackgroundOpacityChanged(float)));
+	connect(m_worksheet, &Worksheet::backgroundTypeChanged, this, &WorksheetDock::worksheetBackgroundTypeChanged);
+	connect(m_worksheet, &Worksheet::backgroundColorStyleChanged, this, &WorksheetDock::worksheetBackgroundColorStyleChanged);
+	connect(m_worksheet, &Worksheet::backgroundImageStyleChanged, this, &WorksheetDock::worksheetBackgroundImageStyleChanged);
+	connect(m_worksheet, &Worksheet::backgroundBrushStyleChanged, this, &WorksheetDock::worksheetBackgroundBrushStyleChanged);
+	connect(m_worksheet, &Worksheet::backgroundFirstColorChanged, this, &WorksheetDock::worksheetBackgroundFirstColorChanged);
+	connect(m_worksheet, &Worksheet::backgroundSecondColorChanged, this, &WorksheetDock::worksheetBackgroundSecondColorChanged);
+	connect(m_worksheet, &Worksheet::backgroundFileNameChanged, this, &WorksheetDock::worksheetBackgroundFileNameChanged);
+	connect(m_worksheet, &Worksheet::backgroundOpacityChanged, this, &WorksheetDock::worksheetBackgroundOpacityChanged);
 
-	connect(m_worksheet,SIGNAL(layoutChanged(Worksheet::Layout)),this,SLOT(worksheetLayoutChanged(Worksheet::Layout)));
-	connect(m_worksheet,SIGNAL(layoutTopMarginChanged(float)),this,SLOT(worksheetLayoutTopMarginChanged(float)));
-	connect(m_worksheet,SIGNAL(layoutBottomMarginChanged(float)),this,SLOT(worksheetLayoutBottomMarginChanged(float)));
-	connect(m_worksheet,SIGNAL(layoutLeftMarginChanged(float)),this,SLOT(worksheetLayoutLeftMarginChanged(float)));
-	connect(m_worksheet,SIGNAL(layoutRightMarginChanged(float)),this,SLOT(worksheetLayoutRightMarginChanged(float)));
-	connect(m_worksheet,SIGNAL(layoutVerticalSpacingChanged(float)),this,SLOT(worksheetLayoutVerticalSpacingChanged(float)));
-	connect(m_worksheet,SIGNAL(layoutHorizontalSpacingChanged(float)),this,SLOT(worksheetLayoutHorizontalSpacingChanged(float)));
-	connect(m_worksheet,SIGNAL(layoutRowCountChanged(int)),this,SLOT(worksheetLayoutRowCountChanged(int)));
-	connect(m_worksheet,SIGNAL(layoutColumnCountChanged(int)),this,SLOT(worksheetLayoutColumnCountChanged(int)));
+	connect(m_worksheet, &Worksheet::layoutChanged, this, &WorksheetDock::worksheetLayoutChanged);
+	connect(m_worksheet, &Worksheet::layoutTopMarginChanged, this, &WorksheetDock::worksheetLayoutTopMarginChanged);
+	connect(m_worksheet, &Worksheet::layoutBottomMarginChanged, this, &WorksheetDock::worksheetLayoutBottomMarginChanged);
+	connect(m_worksheet, &Worksheet::layoutLeftMarginChanged, this, &WorksheetDock::worksheetLayoutLeftMarginChanged);
+	connect(m_worksheet, &Worksheet::layoutRightMarginChanged, this, &WorksheetDock::worksheetLayoutRightMarginChanged);
+	connect(m_worksheet, &Worksheet::layoutVerticalSpacingChanged, this, &WorksheetDock::worksheetLayoutVerticalSpacingChanged);
+	connect(m_worksheet, &Worksheet::layoutHorizontalSpacingChanged, this, &WorksheetDock::worksheetLayoutHorizontalSpacingChanged);
+	connect(m_worksheet, &Worksheet::layoutRowCountChanged, this, &WorksheetDock::worksheetLayoutRowCountChanged);
+	connect(m_worksheet, &Worksheet::layoutColumnCountChanged, this, &WorksheetDock::worksheetLayoutColumnCountChanged);
 
-	connect(m_worksheet,SIGNAL(themeChanged(QString)),m_themeHandler,SLOT(setCurrentTheme(QString)));
+	connect(m_worksheet, &Worksheet::themeChanged, m_themeHandler, &ThemeHandler::setCurrentTheme);
 
 	m_initializing = false;
 }
