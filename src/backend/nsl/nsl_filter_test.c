@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include "nsl_filter.h"
 
-print_data(double data[], int n) {
+void print_data(double data[], int n) {
 	int i;
 	for(i=0; i < n; i++)
 		printf("%g ", data[i]);

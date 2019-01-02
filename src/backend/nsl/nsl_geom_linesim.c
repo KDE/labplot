@@ -107,12 +107,12 @@ double nsl_geom_linesim_clip_area_perpoint(const double xdata[], const double yd
 }
 
 double nsl_geom_linesim_avg_dist_perpoint(const double xdata[], const double ydata[], const size_t n) {
-	double dist = 0, dx, dy;
+	double dist = 0;
 	size_t i;
 	for (i = 0; i < n-1; i++) {
-		dx = xdata[i+1]-xdata[i];
-		dy = ydata[i+1]-ydata[i];
-		dist += sqrt(dx*dx+dy*dy);
+		double dx = xdata[i+1] - xdata[i];
+		double dy = ydata[i+1] - ydata[i];
+		dist += sqrt(dx*dx + dy*dy);
 	}
 	dist /= (double)n;
 
@@ -125,20 +125,20 @@ void nsl_geom_linesim_douglas_peucker_step(const double xdata[], const double yd
 	/*printf("DP: %d - %d\n", start, end);*/
 
 	size_t i, nkey = start;
-	double dist, maxdist = 0;
+	double maxdist = 0;
 	/* search for key (biggest perp. distance) */
 	for (i = start+1; i < end; i++) {
-		dist = nsl_geom_point_line_dist(xdata[start], ydata[start], xdata[end], ydata[end], xdata[i], ydata[i]);
+		double dist = nsl_geom_point_line_dist(xdata[start], ydata[start], xdata[end], ydata[end], xdata[i], ydata[i]);
 		if (dist > maxdist) {
-			maxdist=dist;
-			nkey=i;
+			maxdist = dist;
+			nkey = i;
 		}
 	}
 	/*printf("maxdist = %g @ i = %zu\n", maxdist, nkey);*/
 
 	if (maxdist > tol) {
 		/*printf("take %d\n", nkey);*/
-		index[(*nout)++]=nkey;
+		index[(*nout)++] = nkey;
 		if (nkey-start > 1)
 			nsl_geom_linesim_douglas_peucker_step(xdata, ydata, start, nkey, nout, tol, index);
 		if (end-nkey > 1)
@@ -452,9 +452,10 @@ size_t nsl_geom_linesim_visvalingam_whyatt(const double xdata[], const double yd
 	for (i = 1; i < n-1; i++)
 		area[i-1] = nsl_geom_three_point_area(xdata[i-1], ydata[i-1], xdata[i], ydata[i], xdata[i+1], ydata[i+1]);
 
-	double minarea;
 	size_t minindex;
-	while ( (minarea = nsl_stats_minimum(area, n-2, &minindex)) < tol && nout > 2) {
+	while ( nsl_stats_minimum(area, n-2, &minindex) < tol && nout > 2) {
+	/* double minarea;
+	while ( (minarea = nsl_stats_minimum(area, n-2, &minindex)) < tol && nout > 2) { */
 		/*for (i=0; i < n-2; i++)
 			if (area[i]<DBL_MAX)
 				printf("area[%zu] = %g\n", i, area[i]);
@@ -468,7 +469,7 @@ size_t nsl_geom_linesim_visvalingam_whyatt(const double xdata[], const double yd
 		size_t before = minindex, after = minindex+2;	/* find index before and after */
 		while (index[before] == 0 && before > 0)
 			before--;
-		while (index[after] == 0 && after < n-1)
+		while (after < n+1 && index[after] == 0)
 			after++;
 		if (minindex > 0) {	/*before */
 			if (before > 0) {
@@ -484,7 +485,7 @@ size_t nsl_geom_linesim_visvalingam_whyatt(const double xdata[], const double yd
 		if (minindex < n-3) {	/* after */
 			if (after < n-1) {
 				size_t afterafter = after+1;
-				while (index[afterafter] == 0 && afterafter < n-1)
+				while (afterafter < n-1 && index[afterafter] == 0)
 					afterafter++;
 				/*printf("recalculate area[%zu] from %zu %zu %zu\n",after-1, before, after, afterafter);*/
 				tmparea = nsl_geom_three_point_area(xdata[before], ydata[before], xdata[after], ydata[after], xdata[afterafter], ydata[afterafter]);

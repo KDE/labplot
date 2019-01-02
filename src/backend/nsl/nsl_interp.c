@@ -35,9 +35,9 @@ const char* nsl_interp_pch_variant_name[] = { i18n("finite differences"), i18n("
 const char* nsl_interp_evaluate_name[] = { i18n("function"), i18n("derivative"), i18n("second derivative"), i18n("integral")};
 
 int nsl_interp_ratint(double *x, double *y, int n, double xn, double *v, double *dv) {
-	int i,j,a = 0,b = n-1;
+	int i, a = 0, b = n-1;
 	while (b-a > 1) {       /* find interval using bisection */
-		j = (int)floor((a+b)/2.);
+		int j = (int)floor((a+b)/2.);
 		if (x[j] > xn)
 			b = j;
 		else

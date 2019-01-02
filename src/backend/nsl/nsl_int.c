@@ -41,11 +41,11 @@ int nsl_int_rectangle(const double *x, double *y, const size_t n, int abs) {
 		return -1;
 
 	size_t i, j;
-	double s, sum=0, xdata[2];
+	double sum = 0, xdata[2];
 	for (i = 0; i < n-1; i++) {
 		for (j=0; j < 2; j++)
 			xdata[j] = x[i+j];
-		s = nsl_sf_poly_interp_lagrange_0_int(xdata, y[i]);
+		double s = nsl_sf_poly_interp_lagrange_0_int(xdata, y[i]);
 		if (abs)
 			s = fabs(s);
 		y[i] = sum;
@@ -61,9 +61,9 @@ int nsl_int_trapezoid(const double *x, double *y, const size_t n, int abs) {
 		return -1;
 
 	size_t i, j;
-	double sum=0, xdata[2], ydata[2];
+	double sum = 0, xdata[2], ydata[2];
 	for (i = 0; i < n-1; i++) {
-		for (j=0; j < 2; j++)
+		for (j = 0; j < 2; j++)
 			xdata[j] = x[i+j], ydata[j] = y[i+j];
 		y[i] = sum;
 		if (abs)
