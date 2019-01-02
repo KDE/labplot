@@ -115,7 +115,11 @@ size_t getCurrentRSS( )
 		return (size_t)0L;		/* Can't read? */
 	}
 	fclose( fp );
-	return (size_t)rss * (size_t)sysconf( _SC_PAGESIZE);
+
+	if ((size_t)rss > std::numeric_limits<size_t>::max()/(size_t)sysconf( _SC_PAGESIZE))
+		return std::numeric_limits<size_t>::max();
+	else
+		return (size_t)rss * (size_t)sysconf( _SC_PAGESIZE);
 
 #else
 	/* AIX, BSD, Solaris, and Unknown OS ------------------------ */
