@@ -44,7 +44,7 @@ public:
 private:
 	Ui::FitParametersWidget ui;
 	XYFitCurve::FitData* m_fitData{nullptr};
-	bool m_initializing;
+	bool m_initializing{false};
 	bool m_rehighlighting{false};
 	bool m_invalidRanges{false};
 

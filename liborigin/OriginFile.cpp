@@ -33,7 +33,7 @@
 #include <string>
 
 OriginFile::OriginFile(const string& fileName)
-:	fileVersion(0), ioError(0)
+:	fileVersion(0), buildVersion(0), ioError(0)
 {
 	ifstream file(fileName.c_str(), ios_base::binary);
 

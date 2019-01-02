@@ -1559,15 +1559,17 @@ void XYFitCurvePrivate::recalculate() {
 		tmpYDataColumn = dataSourceCurve->yColumn();
 	}
 
+	// clear the previous result
+	fitResult = XYFitCurve::FitResult();
+
 	if (!tmpXDataColumn || !tmpYDataColumn) {
 		DEBUG("ERROR: Preparing source data columns failed!");
+		emit q->dataChanged();
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
 	prepareResultColumns();
-
-	// clear the previous result
-	fitResult = XYFitCurve::FitResult();
 
 	//fit settings
 	const unsigned int maxIters = fitData.maxIterations;	//maximal number of iterations
@@ -1577,14 +1579,6 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Model has no parameters.");
-		emit q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
-
-	//determine the data source columns
-
-	if (!tmpXDataColumn || !tmpYDataColumn) {
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -1636,13 +1630,13 @@ void XYFitCurvePrivate::recalculate() {
 				if (dataSourceType == XYAnalysisCurve::DataSourceCurve || (!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) {	// x-y
 					xdataVector.append(tmpXDataColumn->valueAt(row));
 					ydataVector.append(tmpYDataColumn->valueAt(row));
-				} else if (!xErrorColumn) {		// x-y-dy
+				} else if (!xErrorColumn && yErrorColumn) {	// x-y-dy
 					if (!std::isnan(yErrorColumn->valueAt(row))) {
 						xdataVector.append(tmpXDataColumn->valueAt(row));
 						ydataVector.append(tmpYDataColumn->valueAt(row));
 						yerrorVector.append(yErrorColumn->valueAt(row));
 					}
-				} else {				// x-y-dx-dy
+				} else if (xErrorColumn && yErrorColumn) {	// x-y-dx-dy
 					if (!std::isnan(xErrorColumn->valueAt(row)) && !std::isnan(yErrorColumn->valueAt(row))) {
 						xdataVector.append(tmpXDataColumn->valueAt(row));
 						ydataVector.append(tmpYDataColumn->valueAt(row));
