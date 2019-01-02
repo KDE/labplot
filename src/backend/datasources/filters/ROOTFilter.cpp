@@ -450,7 +450,7 @@ T read(std::ifstream& is) {
 		char buf[sizeof(T)];
 	} r;
 	for (size_t i = 0; i < sizeof(T); ++i) {
-		r.buf[sizeof(T) - i - 1] = is.get();
+		is.get(r.buf[sizeof(T) - i - 1]);
 	}
 
 	return r.val;
@@ -616,7 +616,7 @@ ROOTData::ROOTData(const std::string& filename) : filename(filename) {
 			if (complib > 0) {
 #			ifdef HAVE_ZIP
 				// see root/core/zip/src/RZip.cxx -> R__unzip
-				char method = is.get();
+				const int method = is.get();
 				size_t chcdata = is.get();
 				chcdata |= (is.get() << 8);
 				chcdata |= (is.get() << 16);
@@ -904,7 +904,7 @@ std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(const std::string& treename
 					Version(buf); // TNamed
 					SkipObject(buf);
 					const std::string leafname = String(buf);
-					const std::string leaftitle = String(buf);
+					String(buf); // title
 					size_t elements = read<int>(buf);
 					int bytes = read<int>(buf);
 					if ((leafType(clname.back()) & 0xF) != bytes)
