@@ -118,8 +118,8 @@ void CartesianPlot::init() {
 	d->yRangeFormat = CartesianPlot::Numeric;
 	d->xRangeDateTimeFormat = "yyyy-MM-dd hh:mm:ss";
 	d->yRangeDateTimeFormat = "yyyy-MM-dd hh:mm:ss";
-	d->rangeLastValues = 1000;
 	d->rangeFirstValues = 1000;
+	d->rangeLastValues = 1000;
 	d->autoScaleX = true;
 	d->autoScaleY = true;
 	d->xScale = ScaleLinear;
@@ -167,10 +167,10 @@ void CartesianPlot::initDefault(Type type) {
 
 	switch (type) {
 	case FourAxes: {
-			d->xMin = 0;
-			d->xMax = 1;
-			d->yMin = 0;
-			d->yMax = 1;
+			d->xMin = 0.0;
+			d->xMax = 1.0;
+			d->yMin = 0.0;
+			d->yMax = 1.0;
 
 			//Axes
 			Axis* axis = new Axis("x axis 1", Axis::AxisHorizontal);
@@ -252,10 +252,10 @@ void CartesianPlot::initDefault(Type type) {
 			break;
 		}
 	case TwoAxes: {
-			d->xMin = 0;
-			d->xMax = 1;
-			d->yMin = 0;
-			d->yMax = 1;
+			d->xMin = 0.0;
+			d->xMax = 1.0;
+			d->yMin = 0.0;
+			d->yMax = 1.0;
 
 			Axis* axis = new Axis("x axis 1", Axis::AxisHorizontal);
 			axis->setSuppressRetransform(true);

@@ -271,9 +271,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 		// find index a,b for interval [x[a],x[b]] around x[i] using bisection
 		if (type == nsl_interp_type_cosine || type == nsl_interp_type_exponential || type == nsl_interp_type_pch) {
-			unsigned int j = 0;
 			while (b-a > 1) {
-				j = floor((a+b)/2.);
+				unsigned int j = floor((a+b)/2.);
 				if (xdata[j] > x)
 					b = j;
 				else

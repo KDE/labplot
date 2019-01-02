@@ -55,7 +55,7 @@ public:
 	QPen pointPen;
 	qreal pointOpacity;
 	qreal pointSize;
-	bool pointVisibility;
+	bool pointVisibility{true};
 
 	QString name() const;
 	void retransform();

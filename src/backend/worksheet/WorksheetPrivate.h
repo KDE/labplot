@@ -44,7 +44,7 @@ public:
 	Worksheet* const q;
 	QRectF pageRect;
 	QGraphicsScene* m_scene;
-	bool useViewSize;
+	bool useViewSize{false};
 	bool scaleContent{false};
 
 	QString name() const;
@@ -60,18 +60,18 @@ public:
 	QColor backgroundFirstColor;
 	QColor backgroundSecondColor;
 	QString backgroundFileName;
-	float backgroundOpacity;
+	float backgroundOpacity{1.0};
 
-	Worksheet::Layout layout;
+	Worksheet::Layout layout{Worksheet::VerticalLayout};
 	bool suppressLayoutUpdate{false};
-	float layoutTopMargin;
-	float layoutBottomMargin;
-	float layoutLeftMargin;
-	float layoutRightMargin;
-	float layoutVerticalSpacing;
-	float layoutHorizontalSpacing;
-	int layoutColumnCount;
-	int layoutRowCount;
+	float layoutTopMargin{0.0};
+	float layoutBottomMargin{0.0};
+	float layoutLeftMargin{0.0};
+	float layoutRightMargin{0.0};
+	float layoutVerticalSpacing{0.0};
+	float layoutHorizontalSpacing{0.0};
+	int layoutColumnCount{2};
+	int layoutRowCount{2};
 	QString theme;
 };
 

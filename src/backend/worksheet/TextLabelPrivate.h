@@ -40,9 +40,9 @@ public:
 	explicit TextLabelPrivate(TextLabel*);
 
 	qreal rotationAngle;
-	float scaleFactor;
-	int teXImageResolution;
-	float teXImageScaleFactor;
+	float scaleFactor{1.0};
+	int teXImageResolution{600};
+	float teXImageScaleFactor{1.0};
 	TextLabel::TextWrapper textWrapper;
 	QFont teXFont;
 	QColor fontColor;
@@ -51,13 +51,13 @@ public:
 	QFutureWatcher<QImage> teXImageFutureWatcher;
 	bool teXRenderSuccessful{false};
 
-	TextLabel::PositionWrapper position; //position in parent's coordinate system, the label gets aligned around this point.
+	TextLabel::PositionWrapper position;	//position in parent's coordinate system, the label gets aligned around this point.
 	bool positionInvalid{false};
 
-	TextLabel::HorizontalAlignment horizontalAlignment;
-	TextLabel::VerticalAlignment verticalAlignment;
+	TextLabel::HorizontalAlignment horizontalAlignment{TextLabel::hAlignLeft};
+	TextLabel::VerticalAlignment verticalAlignment{TextLabel::vAlignTop};
 
-	TextLabel::BorderShape borderShape;
+	TextLabel::BorderShape borderShape{TextLabel::NoBorder};
 	QPen borderPen;
 	qreal borderOpacity;
 

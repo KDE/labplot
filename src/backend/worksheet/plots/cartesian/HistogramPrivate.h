@@ -91,17 +91,17 @@ public:
 	//General
 	const AbstractColumn* dataColumn{nullptr};
 	QString dataColumnPath;
-	Histogram::HistogramType type;
-	Histogram::HistogramOrientation orientation;
-	Histogram::BinningMethod binningMethod;
-	int binCount;
-	float binWidth;
-	bool autoBinRanges;
-	double binRangesMin;
-	double binRangesMax;
+	Histogram::HistogramType type{Histogram::Ordinary};
+	Histogram::HistogramOrientation orientation{Histogram::Vertical};
+	Histogram::BinningMethod binningMethod{Histogram::SquareRoot};
+	int binCount{10};
+	float binWidth{1.0f};
+	bool autoBinRanges{true};
+	double binRangesMin{0.0};
+	double binRangesMax{1.0};
 
 	//line
-	Histogram::LineType lineType;
+	Histogram::LineType lineType{Histogram::Bars};
 	QPen linePen;
 	qreal lineOpacity;
 
@@ -114,11 +114,11 @@ public:
 	qreal symbolsSize;
 
 	//values
-	int value;
-	Histogram::ValuesType valuesType;
+	int value{0};
+	Histogram::ValuesType valuesType{Histogram::NoValues};
 	const AbstractColumn* valuesColumn{nullptr};
 	QString valuesColumnPath;
-	Histogram::ValuesPosition valuesPosition;
+	Histogram::ValuesPosition valuesPosition{Histogram::ValuesAbove};
 	qreal valuesDistance;
 	qreal valuesRotationAngle;
 	qreal valuesOpacity;
@@ -128,7 +128,7 @@ public:
 	QColor valuesColor;
 
 	//filling
-	bool fillingEnabled;
+	bool fillingEnabled{true};
 	PlotArea::BackgroundType fillingType;
 	PlotArea::BackgroundColorStyle fillingColorStyle;
 	PlotArea::BackgroundImageStyle fillingImageStyle;
@@ -139,9 +139,9 @@ public:
 	qreal fillingOpacity;
 
 	//error bars
-	Histogram::ErrorType errorType;
+	Histogram::ErrorType errorType{Histogram::NoError};
 	XYCurve::ErrorBarsType errorBarsType;
-	double errorBarsCapSize;
+	double errorBarsCapSize{1};
 	QPen errorBarsPen;
 	qreal errorBarsOpacity;
 
