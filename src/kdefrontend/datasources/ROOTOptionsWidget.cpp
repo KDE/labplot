@@ -69,12 +69,16 @@ void ROOTOptionsWidget::rootObjectSelectionChanged() {
 
 	ui.twColumns->clear();
 
-	if (items.isEmpty())
+	if (items.isEmpty()) {
+		ui.twColumns->setHeaderHidden(true);
 		return;
+	}
 
 	QTreeWidgetItem* const p = items.first()->parent();
 	if (p == histItem) {
 		ui.twColumns->setColumnCount(1);
+		ui.twColumns->setHeaderHidden(false);
+		ui.twColumns->setHeaderLabels(QStringList(i18n("Histogram Data")));
 
 		auto center = new QTreeWidgetItem(ui.twColumns, QStringList(i18n("Bin Center")));
 		center->setData(0, Qt::UserRole, QStringList(QStringLiteral("center")));
@@ -99,6 +103,8 @@ void ROOTOptionsWidget::rootObjectSelectionChanged() {
 		}
 	} else if (p == treeItem) {
 		ui.twColumns->setColumnCount(2);
+		ui.twColumns->setHeaderHidden(false);
+		ui.twColumns->setHeaderLabels(QStringList({i18n("Branch/Leaf"), i18n("Array Size")}));
 
 		for (const auto& l : leaves[items.first()->text(0)]) {
 			auto leaf = new QTreeWidgetItem(ui.twColumns, l);
