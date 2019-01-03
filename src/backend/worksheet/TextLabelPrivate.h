@@ -57,18 +57,18 @@ public:
 	QFutureWatcher<QImage> teXImageFutureWatcher;
 	bool teXRenderSuccessful{false};
 
+	// see TextLabel::init() for type specific default settings
 	// position in parent's coordinate system, the label gets aligned around this point
 	TextLabel::PositionWrapper position{
 		QPoint(Worksheet::convertToSceneUnits(1, Worksheet::Centimeter), Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)),
 		TextLabel::hPositionCenter, TextLabel::vPositionTop};
 	bool positionInvalid{false};
 
-	// see TextLabel::init() for type specific default settings
 	TextLabel::HorizontalAlignment horizontalAlignment{TextLabel::hAlignCenter};
 	TextLabel::VerticalAlignment verticalAlignment{TextLabel::vAlignBottom};
 
 	TextLabel::BorderShape borderShape{TextLabel::NoBorder};
-	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Point),Qt::SolidLine};
+	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Point), Qt::SolidLine};
 	qreal borderOpacity{1.0};
 
 	QString name() const;
