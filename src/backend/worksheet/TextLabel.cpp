@@ -89,12 +89,12 @@ void TextLabel::init() {
 		group = config.group("TextLabel");
 
 	//properties common to all types
-	d->textWrapper.teXUsed = group.readEntry("TeXUsed", false);
-	d->teXFont.setFamily(group.readEntry("TeXFontFamily", "Computer Modern"));
-	d->teXFont.setPointSize(group.readEntry("TeXFontSize", 12));
-	d->fontColor = group.readEntry("TeXFontColor", QColor(Qt::black));
-	d->backgroundColor = group.readEntry("TeXBackgroundColor", QColor(Qt::white));
-	d->rotationAngle = group.readEntry("Rotation", 0.0);
+	d->textWrapper.teXUsed = group.readEntry("TeXUsed", d->textWrapper.teXUsed);
+	d->teXFont.setFamily(group.readEntry("TeXFontFamily", d->teXFont.family()));
+	d->teXFont.setPointSize(group.readEntry("TeXFontSize", d->teXFont.pointSize()));
+	d->fontColor = group.readEntry("TeXFontColor", d->fontColor);
+	d->backgroundColor = group.readEntry("TeXBackgroundColor", d->backgroundColor);
+	d->rotationAngle = group.readEntry("Rotation", d->rotationAngle);
 
 	d->staticText.setTextFormat(Qt::RichText);
 	// explicitly set no wrap mode for text label to avoid unnecessary line breaks
@@ -104,35 +104,27 @@ void TextLabel::init() {
 
 	//position and alignment relevant properties, dependent on the actual type
 	if (m_type == PlotTitle || m_type == PlotLegendTitle) {
-		d->position.horizontalPosition = (HorizontalPosition) group.readEntry("PositionX", (int)TextLabel::hPositionCenter);
-		d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionY", (int) TextLabel::vPositionTop);
-		d->position.point.setX( group.readEntry("PositionXValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
-		d->position.point.setY( group.readEntry("PositionYValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
-		d->horizontalAlignment = (TextLabel::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)TextLabel::hAlignCenter);
-		d->verticalAlignment = (TextLabel::VerticalAlignment) group.readEntry("VerticalAlignment", (int)TextLabel::vAlignBottom);
+		d->position.horizontalPosition = (HorizontalPosition) group.readEntry("PositionX", (int)d->position.horizontalPosition);
+		d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionY", (int)d->position.verticalPosition);
+		d->position.point.setX( group.readEntry("PositionXValue", d->position.point.x()) );
+		d->position.point.setY( group.readEntry("PositionYValue", d->position.point.y()) );
+		d->horizontalAlignment = (TextLabel::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)d->horizontalAlignment);
+		d->verticalAlignment = (TextLabel::VerticalAlignment) group.readEntry("VerticalAlignment", (int)d->verticalAlignment);
 	} else {
 		d->position.horizontalPosition = (HorizontalPosition) group.readEntry("PositionX", (int)TextLabel::hPositionCustom);
-		d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionY", (int) TextLabel::vPositionCustom);
-		d->position.point.setX( group.readEntry("PositionXValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
-		d->position.point.setY( group.readEntry("PositionYValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
-		d->horizontalAlignment = (TextLabel::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)TextLabel::hAlignCenter);
+		d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionY", (int)TextLabel::vPositionCustom);
+		d->position.point.setX( group.readEntry("PositionXValue", d->position.point.x()) );
+		d->position.point.setY( group.readEntry("PositionYValue", d->position.point.y()) );
+		d->horizontalAlignment = (TextLabel::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)d->horizontalAlignment);
 		d->verticalAlignment = (TextLabel::VerticalAlignment) group.readEntry("VerticalAlignment", (int)TextLabel::vAlignCenter);
 	}
 
 	//border
-	d->borderShape = (TextLabel::BorderShape)group.readEntry("BorderShape", (int)TextLabel::NoBorder);
-	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
-	                    group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
-	                    (Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
-	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
-
-	//scaling:
-	//we need to scale from the font size specified in points to scene units.
-	//furhermore, we create the tex-image in a higher resolution then usual desktop resolution
-	// -> take this into account
-	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
-	d->teXImageResolution = QApplication::desktop()->physicalDpiX();
-	d->teXImageScaleFactor = Worksheet::convertToSceneUnits(2.54/QApplication::desktop()->physicalDpiX(), Worksheet::Centimeter);
+	d->borderShape = (TextLabel::BorderShape)group.readEntry("BorderShape", (int)d->borderShape);
+	d->borderPen = QPen(group.readEntry("BorderColor", d->borderPen.color()),
+	                    group.readEntry("BorderWidth", d->borderPen.width()),
+	                    (Qt::PenStyle) group.readEntry("BorderStyle", (int)(d->borderPen.style())));
+	d->borderOpacity = group.readEntry("BorderOpacity", d->borderOpacity);
 
 	connect(&d->teXImageFutureWatcher, &QFutureWatcher<QImage>::finished, this, &TextLabel::updateTeXImage);
 }
@@ -964,7 +956,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("verticalPosition", position.verticalPosition, TextLabel::VerticalPosition);
 			READ_INT_VALUE("horizontalAlignment", horizontalAlignment, TextLabel::HorizontalAlignment);
 			READ_INT_VALUE("verticalAlignment", verticalAlignment, TextLabel::VerticalAlignment);
-			READ_INT_VALUE("rotationAngle", rotationAngle, int);
+			READ_DOUBLE_VALUE("rotationAngle", rotationAngle);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())

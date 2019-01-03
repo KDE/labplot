@@ -32,6 +32,7 @@
 #include <QStaticText>
 #include <QFutureWatcher>
 #include <QGraphicsItem>
+#include <QDesktopWidget>
 
 class QGraphicsSceneHoverEvent;
 
@@ -39,27 +40,36 @@ class TextLabelPrivate: public QGraphicsItem {
 public:
 	explicit TextLabelPrivate(TextLabel*);
 
-	qreal rotationAngle;
-	float scaleFactor{1.0};
-	int teXImageResolution{600};
-	float teXImageScaleFactor{1.0};
+	qreal rotationAngle{0.0};
+	//scaling:
+	//we need to scale from the font size specified in points to scene units.
+	//furhermore, we create the tex-image in a higher resolution then usual desktop resolution
+	// -> take this into account
+	float scaleFactor{Worksheet::convertToSceneUnits(1, Worksheet::Point)};
+	int teXImageResolution{QApplication::desktop()->physicalDpiX()};
+	float teXImageScaleFactor{Worksheet::convertToSceneUnits(2.54/QApplication::desktop()->physicalDpiX(), Worksheet::Centimeter)};
+
 	TextLabel::TextWrapper textWrapper;
-	QFont teXFont;
-	QColor fontColor;
-	QColor backgroundColor;
+	QFont teXFont{"Computer Modern",42};
+	QColor fontColor{Qt::black};
+	QColor backgroundColor{Qt::white};
 	QImage teXImage;
 	QFutureWatcher<QImage> teXImageFutureWatcher;
 	bool teXRenderSuccessful{false};
 
-	TextLabel::PositionWrapper position;	//position in parent's coordinate system, the label gets aligned around this point.
+	// position in parent's coordinate system, the label gets aligned around this point
+	TextLabel::PositionWrapper position{
+		QPoint(Worksheet::convertToSceneUnits(1, Worksheet::Centimeter), Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)),
+		TextLabel::hPositionCenter, TextLabel::vPositionTop};
 	bool positionInvalid{false};
 
-	TextLabel::HorizontalAlignment horizontalAlignment{TextLabel::hAlignLeft};
-	TextLabel::VerticalAlignment verticalAlignment{TextLabel::vAlignTop};
+	// see TextLabel::init() for type specific default settings
+	TextLabel::HorizontalAlignment horizontalAlignment{TextLabel::hAlignCenter};
+	TextLabel::VerticalAlignment verticalAlignment{TextLabel::vAlignBottom};
 
 	TextLabel::BorderShape borderShape{TextLabel::NoBorder};
-	QPen borderPen;
-	qreal borderOpacity;
+	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Point),Qt::SolidLine};
+	qreal borderOpacity{1.0};
 
 	QString name() const;
 	void retransform();
