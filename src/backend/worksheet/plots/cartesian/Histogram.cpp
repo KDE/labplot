@@ -999,7 +999,8 @@ void HistogramPrivate::verticalHistogram() {
 		}
 	}
 
-	lines.append(QLineF(min, 0., max, 0.));
+	if (lineType != Histogram::DropLines)
+		lines.append(QLineF(min, 0., max, 0.));
 }
 
 void HistogramPrivate::horizontalHistogram() {
@@ -1054,7 +1055,8 @@ void HistogramPrivate::horizontalHistogram() {
 		}
 	}
 
-	lines.append(QLineF(0., min, 0., max));
+	if (lineType != Histogram::DropLines)
+		lines.append(QLineF(0., min, 0., max));
 }
 
 void HistogramPrivate::updateSymbols() {
