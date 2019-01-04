@@ -781,6 +781,9 @@ void HistogramPrivate::retransform() {
 	if (m_suppressRetransform)
 		return;
 
+	if (!isVisible())
+		return;
+
 	PERFTRACE(name().toLatin1() + ", HistogramPrivate::retransform()");
 
 	symbolPointsScene.clear();
