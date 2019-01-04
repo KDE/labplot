@@ -73,23 +73,12 @@ LiveDataSource::~LiveDataSource() {
 	//stop reading before deleting the objects
 	pauseReading();
 
-	if (m_filter)
-		delete m_filter;
-
-	if (m_fileSystemWatcher)
-		delete m_fileSystemWatcher;
-
-	if (m_file)
-		delete m_file;
-
-	if (m_localSocket)
-		delete m_localSocket;
-
-	if (m_tcpSocket)
-		delete m_tcpSocket;
-
-	if (m_serialPort)
-		delete m_serialPort;
+	delete m_filter;
+	delete m_fileSystemWatcher;
+	delete m_file;
+	delete m_localSocket;
+	delete m_tcpSocket;
+	delete m_serialPort;
 
 	delete m_updateTimer;
 }
