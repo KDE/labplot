@@ -28,6 +28,7 @@ Copyright            : (C) 2018 Christoph Roick (chrisito@gmx.de)
 #ifndef ROOTFILTERPRIVATE_H
 #define ROOTFILTERPRIVATE_H
 
+#include <QDateTime>
 #include <QVector>
 
 #include <map>
@@ -287,7 +288,7 @@ public:
 	int startRow = -1;
 	/// Last row to read (can be -1, skips the overflow bin)
 	int endRow = -1;
-	/// Start column to read
+	/// Columns to read
 	QVector<QStringList> columns;
 private:
 	/// Checks and updates the current ROOT file path
@@ -297,8 +298,12 @@ private:
 	/// Calls listEntries from ROOTHist
 	std::vector<double> readTree(const QString& treeName, const QString& branchName, const QString& leafName, int element, int last);
 
-	/// Currently set ROOT file path
-	QString currentFile;
+	/// Information about currently set ROOT file
+    struct {
+        QString name;
+        QDateTime modified;
+        qint64 size;
+    } currentFile;
 	/// ROOTHist instance kept alive while currentFile does not change
 	std::unique_ptr<ROOTData> currentROOTData;
 };

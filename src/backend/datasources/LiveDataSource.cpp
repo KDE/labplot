@@ -32,6 +32,7 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/datasources/filters/BinaryFilter.h"
+#include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/core/Project.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 
@@ -545,18 +546,18 @@ void LiveDataSource::read() {
 			//TODO: not implemented yet
 			// bytes = qSharedPointerCast<BinaryFilter>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 // 			m_bytesRead += bytes;
+		case AbstractFileFilter::ROOT:
+		case AbstractFileFilter::NgspiceRawAscii:
+		case AbstractFileFilter::NgspiceRawBinary:
+			//only re-reading of the whole file is supported
+			m_filter->readDataFromFile(m_fileName, this);
+			break;
 		//TODO: other types not implemented yet
 		case AbstractFileFilter::Image:
 		case AbstractFileFilter::HDF5:
 		case AbstractFileFilter::NETCDF:
 		case AbstractFileFilter::FITS:
 		case AbstractFileFilter::JSON:
-		case AbstractFileFilter::ROOT:
-			break;
-		case AbstractFileFilter::NgspiceRawAscii:
-		case AbstractFileFilter::NgspiceRawBinary:
-			//only re-reading of the whole file is supported
-			m_filter->readDataFromFile(m_fileName, this);
 			break;
 		}
 		break;
@@ -927,6 +928,10 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 
 		} else if (reader->name() == "asciiFilter") {
 			setFilter(new AsciiFilter);
+			if (!m_filter->load(reader))
+				return false;
+		} else if (reader->name() == "rootFilter") {
+			setFilter(new ROOTFilter);
 			if (!m_filter->load(reader))
 				return false;
 		} else if (reader->name() == "column") {

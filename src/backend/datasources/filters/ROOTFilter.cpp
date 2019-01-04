@@ -34,6 +34,7 @@ Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <KLocalizedString>
 
 #include <QDebug>
+#include <QFileInfo>
 
 #ifdef HAVE_ZIP
 #include <lz4.h>
@@ -122,8 +123,15 @@ QVector<QStringList> ROOTFilter::columns() const {
 
 void ROOTFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("rootFilter");
-	writer->writeAttribute("startRow", QString::number(d->startRow) );
-	writer->writeAttribute("endRow", QString::number(d->endRow) );
+	writer->writeAttribute("object", d->currentObject);
+	writer->writeAttribute("startRow", QString::number(d->startRow));
+	writer->writeAttribute("endRow", QString::number(d->endRow));
+	for (const auto & c : d->columns) {
+		writer->writeStartElement("column");
+		for (const auto & s : c)
+			writer->writeTextElement("id", s);
+		writer->writeEndElement();
+	}
 	writer->writeEndElement();
 }
 
@@ -132,17 +140,39 @@ bool ROOTFilter::load(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	// read attributes
+	d->currentObject = attribs.value("object").toString();
+	if (d->currentObject.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("object"));
+
 	QString str = attribs.value("startRow").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'startRow'"));
+		reader->raiseWarning(attributeWarning.arg("startRow"));
 	else
 		d->startRow = str.toInt();
 
 	str = attribs.value("endRow").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'endRow'"));
+		reader->raiseWarning(attributeWarning.arg("endRow"));
 	else
 		d->endRow = str.toInt();
+
+	d->columns.clear();
+	while (reader->readNextStartElement()) {
+		if (reader->name() == "column") {
+			QStringList c;
+			while (reader->readNextStartElement()) {
+				if (reader->name() == "id")
+					c << reader->readElementText();
+				else
+					reader->skipCurrentElement();
+			}
+			if (!c.empty())
+				d->columns << c;
+		} else
+			reader->skipCurrentElement();
+	}
+	if (d->columns.empty())
+		reader->raiseWarning(i18n("No column available"));
 
 	return true;
 }
@@ -413,8 +443,22 @@ int ROOTFilterPrivate::rowsInCurrentObject(const QString& fileName) {
 }
 
 void ROOTFilterPrivate::setFile(const QString& fileName) {
-	if (!currentROOTData || fileName != currentFile) {
-		currentFile = fileName;
+	QFileInfo file(fileName);
+	if (!file.exists()) {
+		currentObject.clear();
+		columns.clear();
+		currentROOTData.reset();
+		return;
+	}
+
+	QDateTime modified = file.lastModified();
+	qint64 size = file.size();
+	if (!currentROOTData || fileName != currentFile.name
+	                     || modified != currentFile.modified
+	                     || size != currentFile.size) {
+		currentFile.name = fileName;
+		currentFile.modified = modified;
+		currentFile.size = size;
 		currentROOTData.reset(new ROOTData(fileName.toStdString()));
 	}
 }

@@ -122,6 +122,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	} else {
 		ui.cbFileType->addItem(i18n("ASCII data"), AbstractFileFilter::Ascii);
 		ui.cbFileType->addItem(i18n("Binary data"), AbstractFileFilter::Binary);
+#ifdef HAVE_ZIP
+		ui.cbFileType->addItem(i18n("ROOT (CERN)"), AbstractFileFilter::ROOT);
+#endif
 		ui.cbFileType->addItem(i18n("Ngspice RAW ASCII"), AbstractFileFilter::NgspiceRawAscii);
 		ui.cbFileType->addItem(i18n("Ngspice RAW Binary"), AbstractFileFilter::NgspiceRawBinary);
 
