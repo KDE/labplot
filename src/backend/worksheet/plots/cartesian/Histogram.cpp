@@ -786,17 +786,14 @@ void HistogramPrivate::retransform() {
 
 	PERFTRACE(name().toLatin1() + ", HistogramPrivate::retransform()");
 
-	symbolPointsScene.clear();
-	symbolPointsLogical.clear();
-
 	if (!dataColumn) {
 		linePath = QPainterPath();
 		symbolsPath = QPainterPath();
 		valuesPath = QPainterPath();
 		curveShape = QPainterPath();
 		lines.clear();
-		symbolPointsLogical.clear();
-		symbolPointsScene.clear();
+		pointsLogical.clear();
+		pointsScene.clear();
 		visiblePoints.clear();
 		valuesPoints.clear();
 		valuesStrings.clear();
@@ -922,7 +919,8 @@ void HistogramPrivate::updateLines() {
 
 	linePath = QPainterPath();
 	lines.clear();
-	symbolPointsLogical.clear();
+	pointsLogical.clear();
+	pointsScene.clear();
 
 	if (orientation == Histogram::Vertical)
 		verticalHistogram();
@@ -934,8 +932,8 @@ void HistogramPrivate::updateLines() {
 	const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 	Q_ASSERT(cSystem);
 	lines = cSystem->mapLogicalToScene(lines);
-	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
-	cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
+	visiblePoints = std::vector<bool>(pointsLogical.count(), false);
+	cSystem->mapLogicalToScene(pointsLogical, pointsScene, visiblePoints);
 
 	//new line path
 	for (const auto& line : lines) {
@@ -966,7 +964,7 @@ void HistogramPrivate::verticalHistogram() {
 			lines.append(QLineF(x, 0., x, value));
 			lines.append(QLineF(x, value, x + width, value));
 			lines.append(QLineF(x + width, value, x + width, 0.));
-			symbolPointsLogical.append(QPointF(x+width/2, value));
+			pointsLogical.append(QPointF(x+width/2, value));
 		}
 	} else if (lineType == Histogram::NoLine || lineType == Histogram::Envelope) {
 		double prevValue = 0.;
@@ -979,7 +977,7 @@ void HistogramPrivate::verticalHistogram() {
 			const double x = min + i*width;
 			lines.append(QLineF(x, prevValue, x, value));
 			lines.append(QLineF(x, value, x + width, value));
-			symbolPointsLogical.append(QPointF(x+width/2, value));
+			pointsLogical.append(QPointF(x+width/2, value));
 
 			if (i == m_bins - 1)
 				lines.append(QLineF(x + width, value, x + width, 0.));
@@ -995,7 +993,7 @@ void HistogramPrivate::verticalHistogram() {
 
 			const double x = min + i*width - width/2;
 			lines.append(QLineF(x, 0., x, value));
-			symbolPointsLogical.append(QPointF(x, value));
+			pointsLogical.append(QPointF(x, value));
 		}
 	}
 
@@ -1022,7 +1020,7 @@ void HistogramPrivate::horizontalHistogram() {
 			lines.append(QLineF(0., y, value, y));
 			lines.append(QLineF(value, y, value, y + width));
 			lines.append(QLineF(value, y + width, 0., y + width));
-			symbolPointsLogical.append(QPointF(value, y+width/2));
+			pointsLogical.append(QPointF(value, y+width/2));
 		}
 	} else if (lineType == Histogram::NoLine || lineType == Histogram::Envelope) {
 		double prevValue = 0.;
@@ -1035,7 +1033,7 @@ void HistogramPrivate::horizontalHistogram() {
 			const double y = min + i*width;
 			lines.append(QLineF(prevValue, y, value, y));
 			lines.append(QLineF(value, y, value, y + width));
-			symbolPointsLogical.append(QPointF(value, y+width/2));
+			pointsLogical.append(QPointF(value, y+width/2));
 
 			if (i == m_bins - 1)
 				lines.append(QLineF(value, y + width, 0., y + width));
@@ -1051,7 +1049,7 @@ void HistogramPrivate::horizontalHistogram() {
 
 			const double y = min + i*width - width/2;
 			lines.append(QLineF(0., y, value, y));
-			symbolPointsLogical.append(QPointF(value, y));
+			pointsLogical.append(QPointF(value, y));
 		}
 	}
 
@@ -1074,7 +1072,7 @@ void HistogramPrivate::updateSymbols() {
 			path = trafo.map(path);
 		}
 
-		for (const auto& point : symbolPointsScene) {
+		for (const auto& point : pointsScene) {
 			trafo.reset();
 			trafo.translate(point.x(), point.y());
 			symbolsPath.addPath(trafo.map(path));
@@ -1124,7 +1122,7 @@ void HistogramPrivate::updateValues() {
 			return;
 		}
 
-		const int endRow = qMin(symbolPointsLogical.size(), valuesColumn->rowCount());
+		const int endRow = qMin(pointsLogical.size(), valuesColumn->rowCount());
 		const AbstractColumn::ColumnMode xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!visiblePoints[i]) continue;
@@ -1158,31 +1156,31 @@ void HistogramPrivate::updateValues() {
 	case Histogram::ValuesAbove:
 		for (int i = 0; i < valuesStrings.size(); i++) {
 			w = fm.width(valuesStrings.at(i));
-			tempPoint.setX( symbolPointsScene.at(i).x() -w/2);
-			tempPoint.setY( symbolPointsScene.at(i).y() - valuesDistance );
+			tempPoint.setX( pointsScene.at(i).x() -w/2);
+			tempPoint.setY( pointsScene.at(i).y() - valuesDistance );
 			valuesPoints.append(tempPoint);
 		}
 		break;
 	case Histogram::ValuesUnder:
 		for (int i = 0; i < valuesStrings.size(); i++) {
 			w = fm.width(valuesStrings.at(i));
-			tempPoint.setX( symbolPointsScene.at(i).x() -w/2);
-			tempPoint.setY( symbolPointsScene.at(i).y() + valuesDistance + h/2);
+			tempPoint.setX( pointsScene.at(i).x() -w/2);
+			tempPoint.setY( pointsScene.at(i).y() + valuesDistance + h/2);
 			valuesPoints.append(tempPoint);
 		}
 		break;
 	case Histogram::ValuesLeft:
 		for (int i = 0; i < valuesStrings.size(); i++) {
 			w = fm.width(valuesStrings.at(i));
-			tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1);
-			tempPoint.setY( symbolPointsScene.at(i).y());
+			tempPoint.setX( pointsScene.at(i).x() - valuesDistance - w - 1);
+			tempPoint.setY( pointsScene.at(i).y());
 			valuesPoints.append(tempPoint);
 		}
 		break;
 	case Histogram::ValuesRight:
 		for (int i = 0; i < valuesStrings.size(); i++) {
-			tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1);
-			tempPoint.setY( symbolPointsScene.at(i).y() );
+			tempPoint.setX( pointsScene.at(i).x() + valuesDistance - 1);
+			tempPoint.setY( pointsScene.at(i).y() );
 			valuesPoints.append(tempPoint);
 		}
 		break;
@@ -1222,8 +1220,8 @@ void HistogramPrivate::updateFilling() {
 	if (lines.size())
 		fillLines = lines;
 	else {
-		for (int i = 0; i < symbolPointsLogical.count()-1; i++)
-			fillLines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
+		for (int i = 0; i < pointsLogical.count()-1; i++)
+			fillLines.append(QLineF(pointsLogical.at(i), pointsLogical.at(i+1)));
 		fillLines = cSystem->mapLogicalToScene(fillLines);
 	}
 
@@ -1240,8 +1238,8 @@ void HistogramPrivate::updateFilling() {
 	QPolygonF pol;
 	QPointF start = fillLines.at(0).p1(); //starting point of the current polygon, initialize with the first visible point
 	QPointF end = fillLines.at(fillLines.size()-1).p2(); //starting point of the current polygon, initialize with the last visible point
-	const QPointF& first = symbolPointsLogical.at(0); //first point of the curve, may not be visible currently
-	const QPointF& last = symbolPointsLogical.at(symbolPointsLogical.size()-1);//first point of the curve, may not be visible currently
+	const QPointF& first = pointsLogical.at(0); //first point of the curve, may not be visible currently
+	const QPointF& last = pointsLogical.at(pointsLogical.size()-1);//first point of the curve, may not be visible currently
 	QPointF edge;
 	float yEnd = 0;
 
@@ -1461,7 +1459,7 @@ void HistogramPrivate::drawSymbols(QPainter* painter) {
 		trafo.rotate(-symbolsRotationAngle);
 		path = trafo.map(path);
 	}
-	for (const auto& point : symbolPointsScene) {
+	for (const auto& point : pointsScene) {
 		trafo.reset();
 		trafo.translate(point.x(), point.y());
 		painter->drawPath(trafo.map(path));

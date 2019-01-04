@@ -151,8 +151,8 @@ public:
 	QRectF boundingRectangle;
 	QPainterPath curveShape;
 	QVector<QLineF> lines;
-	QVector<QPointF> symbolPointsLogical;	//points in logical coordinates
-	QVector<QPointF> symbolPointsScene;	//points in scene coordinates
+	QVector<QPointF> pointsLogical;	//points in logical coordinates
+	QVector<QPointF> pointsScene;	//points in scene coordinates
 	std::vector<bool> visiblePoints;	//vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
 	QVector<QPointF> valuesPoints;
 	QVector<QString> valuesStrings;
