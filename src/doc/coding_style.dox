@@ -104,7 +104,7 @@ Very short classes can be bundled in one file which then is named using all lowe
 	http://en.cppreference.com/w/cpp/language/override
 * Use braces to enclose a single statement only for readability
 * In C++ nullptr should be used instead of bug-prone NULL and 0.
-* Use brace initializing for default values (default initialization should be avoided, like bool/int/double = false/0/0.0).
+* Use brace initializing for default values (but avoid default initialization like bool/int/double = false/0/0.0) and use them when reading config settings: see TextLabel::init()
 	Examples: int{0}, double{0.0}, color{Qt::black}, font{"Times", 12}, point{QPoint(1, 1)}
 	Run time settings like QApplication::desktop()->physicalDpiX() can be used too.
 	Attention: v{2} initializes a vector to one element of value 2, use v{0., 0.} for two values initalized to 0.

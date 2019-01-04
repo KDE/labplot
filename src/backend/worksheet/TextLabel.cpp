@@ -78,54 +78,66 @@ TextLabel::Type TextLabel::type() const {
 void TextLabel::init() {
 	Q_D(TextLabel);
 
-	KConfig config;
+	QString groupName;
+	switch (m_type) {
+	case General:
+		groupName = "TextLabel";
+		break;
+	case PlotTitle:
+		groupName = "PlotTitle";
+		break;
+	case AxisTitle:
+		groupName = "AxisTitle";
+		break;
+	case PlotLegendTitle:
+		groupName = "PlotLegendTitle";
+		break;
+	}
+
+	const KConfig config;
+	DEBUG("	config has group \"" << groupName.toStdString() << "\": " << config.hasGroup(groupName));
+	// group is always valid if you call config.group(..;
 	KConfigGroup group;
-	if (m_type == AxisTitle)
-		group = config.group("AxisTitle");
-	else if (m_type == PlotTitle)
-		group = config.group("PlotTitle");
-	else if (m_type == PlotLegendTitle)
-		group = config.group("PlotLegendTitle");
-	else
-		group = config.group("TextLabel");
+	if (config.hasGroup(groupName))
+		group = config.group(groupName);
 
-	//properties common to all types
-	d->textWrapper.teXUsed = group.readEntry("TeXUsed", d->textWrapper.teXUsed);
-	d->teXFont.setFamily(group.readEntry("TeXFontFamily", d->teXFont.family()));
-	d->teXFont.setPointSize(group.readEntry("TeXFontSize", d->teXFont.pointSize()));
-	d->fontColor = group.readEntry("TeXFontColor", d->fontColor);
-	d->backgroundColor = group.readEntry("TeXBackgroundColor", d->backgroundColor);
-	d->rotationAngle = group.readEntry("Rotation", d->rotationAngle);
-
+	// non-default settings
 	d->staticText.setTextFormat(Qt::RichText);
 	// explicitly set no wrap mode for text label to avoid unnecessary line breaks
 	QTextOption textOption;
 	textOption.setWrapMode(QTextOption::NoWrap);
 	d->staticText.setTextOption(textOption);
-
-	//position and alignment relevant properties, dependent on the actual type
-	if (m_type == PlotTitle || m_type == PlotLegendTitle) {
-		d->position.horizontalPosition = (HorizontalPosition) group.readEntry("PositionX", (int)d->position.horizontalPosition);
-		d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionY", (int)d->position.verticalPosition);
-		d->position.point.setX( group.readEntry("PositionXValue", d->position.point.x()) );
-		d->position.point.setY( group.readEntry("PositionYValue", d->position.point.y()) );
-		d->horizontalAlignment = (TextLabel::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)d->horizontalAlignment);
-		d->verticalAlignment = (TextLabel::VerticalAlignment) group.readEntry("VerticalAlignment", (int)d->verticalAlignment);
-	} else {
-		d->position.horizontalPosition = (HorizontalPosition) group.readEntry("PositionX", (int)TextLabel::hPositionCustom);
-		d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionY", (int)TextLabel::vPositionCustom);
-		d->position.point.setX( group.readEntry("PositionXValue", d->position.point.x()) );
-		d->position.point.setY( group.readEntry("PositionYValue", d->position.point.y()) );
-		d->horizontalAlignment = (TextLabel::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)d->horizontalAlignment);
-		d->verticalAlignment = (TextLabel::VerticalAlignment) group.readEntry("VerticalAlignment", (int)TextLabel::vAlignCenter);
+	if (m_type != PlotTitle && m_type != PlotLegendTitle) {
+		d->position.horizontalPosition = TextLabel::hPositionCustom;
+		d->position.verticalPosition = TextLabel::vPositionCustom;
+		d->verticalAlignment = TextLabel::vAlignCenter;
 	}
 
-	//border
-	d->borderShape = (TextLabel::BorderShape)group.readEntry("BorderShape", (int)d->borderShape);
-	d->borderPen = QPen(group.readEntry("BorderColor", d->borderPen.color()),
-	                    group.readEntry("BorderWidth", d->borderPen.width()),
-	                    (Qt::PenStyle) group.readEntry("BorderStyle", (int)(d->borderPen.style())));
-	d->borderOpacity = group.readEntry("BorderOpacity", d->borderOpacity);
+	// read settings from config if group exists
+	if (group.isValid()) {
+		//properties common to all types
+		d->textWrapper.teXUsed = group.readEntry("TeXUsed", d->textWrapper.teXUsed);
+		d->teXFont.setFamily(group.readEntry("TeXFontFamily", d->teXFont.family()));
+		d->teXFont.setPointSize(group.readEntry("TeXFontSize", d->teXFont.pointSize()));
+		d->fontColor = group.readEntry("TeXFontColor", d->fontColor);
+		d->backgroundColor = group.readEntry("TeXBackgroundColor", d->backgroundColor);
+		d->rotationAngle = group.readEntry("Rotation", d->rotationAngle);
+
+		//border
+		d->borderShape = (TextLabel::BorderShape)group.readEntry("BorderShape", (int)d->borderShape);
+		d->borderPen = QPen(group.readEntry("BorderColor", d->borderPen.color()),
+		                    group.readEntry("BorderWidth", d->borderPen.width()),
+		                    (Qt::PenStyle) group.readEntry("BorderStyle", (int)(d->borderPen.style())));
+		d->borderOpacity = group.readEntry("BorderOpacity", d->borderOpacity);
+
+		//position and alignment relevant properties
+		d->position.point.setX( group.readEntry("PositionXValue", d->position.point.x()) );
+		d->position.point.setY( group.readEntry("PositionYValue", d->position.point.y()) );
+		d->position.horizontalPosition = (HorizontalPosition) group.readEntry("PositionX", (int)d->position.horizontalPosition);
+		d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionY", (int)d->position.verticalPosition);
+		d->horizontalAlignment = (TextLabel::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)d->horizontalAlignment);
+		d->verticalAlignment = (TextLabel::VerticalAlignment) group.readEntry("VerticalAlignment", (int)d->verticalAlignment);
+	}
 
 	DEBUG("CHECK: default/run time image resolution: " << d->teXImageResolution << '/' << QApplication::desktop()->physicalDpiX());
 
