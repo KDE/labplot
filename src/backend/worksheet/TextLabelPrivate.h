@@ -4,6 +4,7 @@
     Description          : Private members of TextLabel
     --------------------------------------------------------------------
     Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2019 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -50,7 +51,7 @@ public:
 	float teXImageScaleFactor{Worksheet::convertToSceneUnits(2.54/QApplication::desktop()->physicalDpiX(), Worksheet::Centimeter)};
 
 	TextLabel::TextWrapper textWrapper;
-	QFont teXFont{"Computer Modern",42};
+	QFont teXFont{"Computer Modern", 42};
 	QColor fontColor{Qt::black};
 	QColor backgroundColor{Qt::white};
 	QImage teXImage;

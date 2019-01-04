@@ -104,7 +104,9 @@ Very short classes can be bundled in one file which then is named using all lowe
 	http://en.cppreference.com/w/cpp/language/override
 * Use braces to enclose a single statement only for readability
 * In C++ nullptr should be used instead of bug-prone NULL and 0.
-* Use brace initializing for default values (default initialization should be avoided, like bool, int, double: false, 0, 0.0).
+* Use brace initializing for default values (default initialization should be avoided, like bool/int/double = false/0/0.0).
+	Examples: int{0}, double{0.0}, color{Qt::black}, font{"Times", 12}, point{QPoint(1, 1)}
+	Run time settings like QApplication::desktop()->physicalDpiX() can be used too.
 	Attention: v{2} initializes a vector to one element of value 2, use v{0., 0.} for two values initalized to 0.
 * #include <...> vs. #include "...": Include headers from external libraries using angle brackets (as in #include <QDebug>) and headers from LabPlot/SciDAVis using double quotes (as in #include "core/AbstractAspect.h"). Rationale: Headers of external libraries are never in the same directory as the including file, so it makes sense to use the angle bracket form (which searches only in directories specified using -I). If you work with a build system that does not include the current source directory, or disable CMAKE_INCLUDE_CURRENT_DIR, then all angle-bracket-includes referencing LabPlot/SciDAVis headers will break. Excluding the current directory from -I dirs may be desirable one day when using a new library or a new version of a library containing a header file with the same name as one of our headers.
 * Use DEBUG() macro for debugging code when possible and QDEBUG() only for special Qt data types. DEBUG() works on all supported systems.

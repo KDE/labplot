@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2012-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2019 by Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -125,6 +126,8 @@ void TextLabel::init() {
 	                    group.readEntry("BorderWidth", d->borderPen.width()),
 	                    (Qt::PenStyle) group.readEntry("BorderStyle", (int)(d->borderPen.style())));
 	d->borderOpacity = group.readEntry("BorderOpacity", d->borderOpacity);
+
+	DEBUG("CHECK: default/run time image resolution: " << d->teXImageResolution << '/' << QApplication::desktop()->physicalDpiX());
 
 	connect(&d->teXImageFutureWatcher, &QFutureWatcher<QImage>::finished, this, &TextLabel::updateTeXImage);
 }
