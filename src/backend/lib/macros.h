@@ -128,8 +128,8 @@
 #define FLAG_D_ACCESSOR_DECL(Method) \
 	bool is ## Method() const; \
 	bool has ## Method() const; \
-	void set ## Method(const bool value=true); \
-	void enable ## Method(const bool value=true);
+	void set ## Method(const bool value = true); \
+	void enable ## Method(const bool value = true);
 
 #define FLAG_D_ACCESSOR_IMPL(classname, Method, var) \
 	void classname::set ## Method(const bool value) \

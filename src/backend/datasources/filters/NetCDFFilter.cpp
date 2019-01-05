@@ -33,6 +33,12 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include <KLocalizedString>
 #include <QProcess>
 
+#define NC_GET_VAR(type, ftype) \
+	type data; \
+	m_status = nc_get_var_ ##ftype(ncid, i, &data); \
+	handleError(m_status, "nc_get_var_" #ftype); \
+	rowStrings << QString::number(data);
+
 /*!
 	\class NetCDFFilter
 	\brief Manages the import/export of data from/to a NetCDF file.
@@ -327,104 +333,104 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 		//read attribute
 		switch (type) {
 		case NC_BYTE: {
-				signed char *value = (signed char *)malloc(len*sizeof(signed char));
-				m_status = nc_get_att_schar(ncid, varid, name, value);
-				handleError(m_status, "nc_get_att_schar");
-				for (unsigned int l = 0; l < len; l++)
-					valueString << QString::number(value[l]);
-				free(value);
-				break;
-			}
+			signed char *value = (signed char *)malloc(len*sizeof(signed char));
+			m_status = nc_get_att_schar(ncid, varid, name, value);
+			handleError(m_status, "nc_get_att_schar");
+			for (unsigned int l = 0; l < len; l++)
+				valueString << QString::number(value[l]);
+			free(value);
+			break;
+		}
 		case NC_UBYTE: {
-				unsigned char *value = (unsigned char *)malloc(len*sizeof(unsigned char));
-				m_status = nc_get_att_uchar(ncid, varid, name, value);
-				handleError(m_status, "nc_get_att_uchar");
-				for (unsigned int l = 0; l < len; l++)
-					valueString << QString::number(value[l]);
-				free(value);
-				break;
-			}
+			unsigned char *value = (unsigned char *)malloc(len*sizeof(unsigned char));
+			m_status = nc_get_att_uchar(ncid, varid, name, value);
+			handleError(m_status, "nc_get_att_uchar");
+			for (unsigned int l = 0; l < len; l++)
+				valueString << QString::number(value[l]);
+			free(value);
+			break;
+		}
 		case NC_CHAR: {
-				char *value = (char *)malloc((len+1)*sizeof(char));
-				m_status = nc_get_att_text(ncid, varid, name, value);
-				handleError(m_status, "nc_get_att_text");
-				value[len] = 0;
-				valueString << value;
-				free(value);
-				break;
-			}
+			char *value = (char *)malloc((len+1)*sizeof(char));
+			m_status = nc_get_att_text(ncid, varid, name, value);
+			handleError(m_status, "nc_get_att_text");
+			value[len] = 0;
+			valueString << value;
+			free(value);
+			break;
+		}
 		case NC_SHORT: {
-				short *value = (short *)malloc(len*sizeof(short));
-				m_status = nc_get_att_short(ncid, varid, name, value);
-				handleError(m_status, "nc_get_att_short");
-				for (unsigned int l = 0; l < len; l++)
-					valueString << QString::number(value[l]);
-				free(value);
-				break;
-			}
+			short *value = (short *)malloc(len*sizeof(short));
+			m_status = nc_get_att_short(ncid, varid, name, value);
+			handleError(m_status, "nc_get_att_short");
+			for (unsigned int l = 0; l < len; l++)
+				valueString << QString::number(value[l]);
+			free(value);
+			break;
+		}
 		case NC_USHORT: {
-				unsigned short *value = (unsigned short *)malloc(len*sizeof(unsigned short));
-				m_status = nc_get_att_ushort(ncid, varid, name, value);
-				handleError(m_status, "nc_get_att_ushort");
-				for (unsigned int l = 0; l < len; l++)
-					valueString << QString::number(value[l]);
-				free(value);
-				break;
-			}
+			unsigned short *value = (unsigned short *)malloc(len*sizeof(unsigned short));
+			m_status = nc_get_att_ushort(ncid, varid, name, value);
+			handleError(m_status, "nc_get_att_ushort");
+			for (unsigned int l = 0; l < len; l++)
+				valueString << QString::number(value[l]);
+			free(value);
+			break;
+		}
 		case NC_INT: {
-				int *value = (int *)malloc(len*sizeof(int));
-				m_status = nc_get_att_int(ncid, varid, name, value);
-				handleError(m_status, "nc_get_att_int");
-				for (unsigned int l = 0; l < len; l++)
-					valueString << QString::number(value[l]);
-				free(value);
-				break;
-			}
+			int *value = (int *)malloc(len*sizeof(int));
+			m_status = nc_get_att_int(ncid, varid, name, value);
+			handleError(m_status, "nc_get_att_int");
+			for (unsigned int l = 0; l < len; l++)
+				valueString << QString::number(value[l]);
+			free(value);
+			break;
+		}
 		case NC_UINT: {
-				unsigned int *value = (unsigned int *)malloc(len*sizeof(unsigned int));
-				m_status = nc_get_att_uint(ncid, varid, name, value);
-				handleError(m_status, "nc_get_att_uint");
-				for (unsigned int l = 0; l < len; l++)
-					valueString << QString::number(value[l]);
-				free(value);
-				break;
-			}
+			unsigned int *value = (unsigned int *)malloc(len*sizeof(unsigned int));
+			m_status = nc_get_att_uint(ncid, varid, name, value);
+			handleError(m_status, "nc_get_att_uint");
+			for (unsigned int l = 0; l < len; l++)
+				valueString << QString::number(value[l]);
+			free(value);
+			break;
+		}
 		case NC_INT64: {
-				long long *value = (long long *)malloc(len*sizeof(long long));
-				m_status = nc_get_att_longlong(ncid, varid, name, value);
-				handleError(m_status, "nc_get_att_longlong");
-				for (unsigned int l = 0; l < len; l++)
-					valueString << QString::number(value[l]);
-				free(value);
-				break;
-			}
+			long long *value = (long long *)malloc(len*sizeof(long long));
+			m_status = nc_get_att_longlong(ncid, varid, name, value);
+			handleError(m_status, "nc_get_att_longlong");
+			for (unsigned int l = 0; l < len; l++)
+				valueString << QString::number(value[l]);
+			free(value);
+			break;
+		}
 		case NC_UINT64: {
-				unsigned long long *value = (unsigned long long *)malloc(len*sizeof(unsigned long long));
-				m_status = nc_get_att_ulonglong(ncid, varid, name, value);
-				handleError(m_status, "nc_get_att_ulonglong");
-				for (unsigned int l = 0; l < len; l++)
-					valueString << QString::number(value[l]);
-				free(value);
-				break;
-			}
+			unsigned long long *value = (unsigned long long *)malloc(len*sizeof(unsigned long long));
+			m_status = nc_get_att_ulonglong(ncid, varid, name, value);
+			handleError(m_status, "nc_get_att_ulonglong");
+			for (unsigned int l = 0; l < len; l++)
+				valueString << QString::number(value[l]);
+			free(value);
+			break;
+		}
 		case NC_FLOAT: {
-				float *value = (float *)malloc(len*sizeof(float));
-				m_status = nc_get_att_float(ncid, varid, name, value);
-				handleError(m_status, "nc_get_att_float");
-				for (unsigned int l = 0; l < len; l++)
-					valueString << QString::number(value[l]);
-				free(value);
-				break;
-			}
+			float *value = (float *)malloc(len*sizeof(float));
+			m_status = nc_get_att_float(ncid, varid, name, value);
+			handleError(m_status, "nc_get_att_float");
+			for (unsigned int l = 0; l < len; l++)
+				valueString << QString::number(value[l]);
+			free(value);
+			break;
+		}
 		case NC_DOUBLE: {
-				double *value = (double *)malloc(len*sizeof(double));
-				m_status = nc_get_att_double(ncid, varid, name, value);
-				handleError(m_status, "nc_get_att_double");
-				for (unsigned int l = 0; l < len; l++)
-					valueString << QString::number(value[l]);
-				free(value);
-				break;
-			}
+			double *value = (double *)malloc(len*sizeof(double));
+			m_status = nc_get_att_double(ncid, varid, name, value);
+			handleError(m_status, "nc_get_att_double");
+			for (unsigned int l = 0; l < len; l++)
+				valueString << QString::number(value[l]);
+			free(value);
+			break;
+		}
 		//TODO: NC_STRING
 		default:
 			valueString << "not supported";
@@ -507,23 +513,9 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 		rowStrings << QString(name) << i18n("variable") << props.join("");
 		if (ndims == 0)	{// get value of zero dim var
 			switch (type) {
-			case NC_BYTE: {
-				signed char data;
-				m_status = nc_get_var_schar(ncid, i, &data);
-				handleError(m_status, "nc_get_var_schar");
-
-				rowStrings << QString::number(data);
-				break;
-			}
-			case NC_UBYTE: {
-				unsigned char data;
-				m_status = nc_get_var_uchar(ncid, i, &data);
-				handleError(m_status, "nc_get_var_uchar");
-
-				rowStrings << QString::number(data);
-				break;
-			}
-			case NC_CHAR: {
+			case NC_BYTE: { NC_GET_VAR(signed char, schar); break; }
+			case NC_UBYTE: { NC_GET_VAR(unsigned char, uchar); break; }
+			case NC_CHAR: {	// not number
 				char data;
 				m_status = nc_get_var_text(ncid, i, &data);
 				handleError(m_status, "nc_get_var_text");
@@ -531,70 +523,14 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 				rowStrings << QString(data);
 				break;
 			}
-			case NC_SHORT: {
-				short data;
-				m_status = nc_get_var_short(ncid, i, &data);
-				handleError(m_status, "nc_get_var_short");
-
-				rowStrings << QString::number(data);
-				break;
-			}
-			case NC_USHORT: {
-				unsigned short data;
-				m_status = nc_get_var_ushort(ncid, i, &data);
-				handleError(m_status, "nc_get_var_ushort");
-
-				rowStrings << QString::number(data);
-				break;
-			}
-			case NC_INT: {
-				int data;
-				m_status = nc_get_var_int(ncid, i, &data);
-				handleError(m_status, "nc_get_var_int");
-
-				rowStrings << QString::number(data);
-				break;
-			}
-			case NC_UINT: {
-				unsigned int data;
-				m_status = nc_get_var_uint(ncid, i, &data);
-				handleError(m_status, "nc_get_var_uint");
-
-				rowStrings << QString::number(data);
-				break;
-			}
-			case NC_INT64: {
-				long long data;
-				m_status = nc_get_var_longlong(ncid, i, &data);
-				handleError(m_status, "nc_get_var_longlong");
-
-				rowStrings << QString::number(data);
-				break;
-			}
-			case NC_UINT64: {
-				unsigned long long data;
-				m_status = nc_get_var_ulonglong(ncid, i, &data);
-				handleError(m_status, "nc_get_var_ulonglong");
-
-				rowStrings << QString::number(data);
-				break;
-			}
-			case NC_DOUBLE: {
-				double data;
-				m_status = nc_get_var_double(ncid, i, &data);
-				handleError(m_status, "nc_get_var_double");
-
-				rowStrings << QString::number(data);
-				break;
-			}
-			case NC_FLOAT: {
-				float data;
-				m_status = nc_get_var_float(ncid, i, &data);
-				handleError(m_status, "nc_get_var_float");
-
-				rowStrings << QString::number(data);
-				break;
-			}
+			case NC_SHORT: { NC_GET_VAR(short, short); break; }
+			case NC_USHORT: { NC_GET_VAR(unsigned short, ushort); break; }
+			case NC_INT: { NC_GET_VAR(int, int); break; }
+			case NC_UINT: { NC_GET_VAR(unsigned int, uint); break; }
+			case NC_INT64: { NC_GET_VAR(long long, longlong); break; }
+			case NC_UINT64: { NC_GET_VAR(unsigned long long, ulonglong); break; }
+			case NC_DOUBLE: { NC_GET_VAR(double, double); break; }
+			case NC_FLOAT: { NC_GET_VAR(float, float); break; }
 			}
 
 		} else {
