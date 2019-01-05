@@ -255,6 +255,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			int nrNames = names.size(), offset = sheets.size();
 
 			int start = 0;
+			//TODO: correct?
 			if (mode == AbstractFileFilter::Replace)
 				start = offset;
 
@@ -267,6 +268,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					workbook->addChild(spreadsheet);
 			}
 
+			// TODO: correct?
 			if (mode != AbstractFileFilter::Append)
 				offset = 0;
 
@@ -293,10 +295,11 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					break; // never reached, omit warning
 				}
 
-				if (sheets[i+offset]->inherits("Matrix"))
-					filter->readDataFromFile(fileName, qobject_cast<Matrix*>(sheets[i+offset]));
-				else if (sheets[i+offset]->inherits("Spreadsheet"))
-					filter->readDataFromFile(fileName, qobject_cast<Spreadsheet*>(sheets[i+offset]));
+				int index = i + offset;
+				if (sheets[index]->inherits("Matrix"))
+					filter->readDataFromFile(fileName, qobject_cast<Matrix*>(sheets[index]));
+				else if (sheets[index]->inherits("Spreadsheet"))
+					filter->readDataFromFile(fileName, qobject_cast<Spreadsheet*>(sheets[index]));
 			}
 		} else { // single import file types
 			// use active spreadsheet/matrix if present, else new spreadsheet
