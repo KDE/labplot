@@ -608,7 +608,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			filter->loadFilterSettings(ui.cbFilter->currentText());
 
 		//save the data portion to import
-		filter->setStartRow( ui.sbStartRow->value());
+		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
 		filter->setStartColumn(ui.sbStartColumn->value());
 		filter->setEndColumn(ui.sbEndColumn->value());

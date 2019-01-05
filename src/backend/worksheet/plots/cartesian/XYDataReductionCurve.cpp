@@ -251,7 +251,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 
 	DEBUG("npoints =" << npoints);
 	if (type == nsl_geom_linesim_type_douglas_peucker_variant)
-		DEBUG("calculated tolerance =" << calcTolerance);
+		DEBUG("calculated tolerance =" << calcTolerance)
 	else
 		Q_UNUSED(calcTolerance);
 
