@@ -289,14 +289,11 @@ void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
 
 void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* dataSourceCurve = nullptr;
-	if (aspect) {
-		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
-		Q_ASSERT(dataSourceCurve);
-	}
+	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
 	// disable types that need more data points
-	this->updateSettings(dataSourceCurve->xColumn());
+	if (dataSourceCurve)
+		this->updateSettings(dataSourceCurve->xColumn());
 
 	if (m_initializing)
 		return;
