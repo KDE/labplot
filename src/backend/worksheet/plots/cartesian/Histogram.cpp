@@ -775,8 +775,10 @@ bool HistogramPrivate::swapVisible(bool on) {
 }
 
 /*!
-  Triggers the update of lines, drop lines, symbols etc.
-  */
+  called when the size of the plot or its data ranges (manual changes, zooming, etc.) were changed.
+  recalculates the position of the scene points to be drawn.
+  triggers the update of lines, drop lines, symbols etc.
+*/
 void HistogramPrivate::retransform() {
 	if (m_suppressRetransform)
 		return;
@@ -809,6 +811,9 @@ void HistogramPrivate::retransform() {
 	m_suppressRecalc = false;
 }
 
+/*!
+ * called when the data was changed. recalculates the histogram.
+ */
 void HistogramPrivate::recalcHistogram() {
 	PERFTRACE(name().toLatin1() + ", HistogramPrivate::recalcHistogram()");
 

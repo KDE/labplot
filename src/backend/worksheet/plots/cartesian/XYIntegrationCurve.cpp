@@ -145,6 +145,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 	}
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
+		recalcLogicalPoints();
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -155,6 +156,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 		integrationResult.available = true;
 		integrationResult.valid = false;
 		integrationResult.status = i18n("Number of x and y data points must be equal.");
+		recalcLogicalPoints();
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -192,6 +194,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 		integrationResult.available = true;
 		integrationResult.valid = false;
 		integrationResult.status = i18n("Not enough data points available.");
+		recalcLogicalPoints();
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -240,6 +243,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 	integrationResult.value = ydata[np-1];
 
 	//redraw the curve
+	recalcLogicalPoints();
 	emit q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
 }

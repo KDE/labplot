@@ -135,6 +135,7 @@ void XYEquationCurvePrivate::recalculate() {
 			//invalid number of points provided
 			xVector->clear();
 			yVector->clear();
+			recalcLogicalPoints();
 			emit q->dataChanged();
 			return;
 		}
@@ -161,6 +162,8 @@ void XYEquationCurvePrivate::recalculate() {
 		xVector->clear();
 		yVector->clear();
 	}
+
+	recalcLogicalPoints();
 	emit q->dataChanged();
 }
 

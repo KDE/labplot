@@ -146,6 +146,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 	}
 
 	if (tmpYDataColumn == nullptr) {
+		recalcLogicalPoints();
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -204,6 +205,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 		convolutionResult.available = true;
 		convolutionResult.valid = false;
 		convolutionResult.status = i18n("Not enough data points available.");
+		recalcLogicalPoints();
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -269,6 +271,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 	convolutionResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
+	recalcLogicalPoints();
 	emit q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
 }

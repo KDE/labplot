@@ -134,6 +134,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	transformResult = XYFourierTransformCurve::TransformResult();
 
 	if (!xDataColumn || !yDataColumn) {
+		recalcLogicalPoints();
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -172,6 +173,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 		transformResult.available = true;
 		transformResult.valid = false;
 		transformResult.status = i18n("No data points available.");
+		recalcLogicalPoints();
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -259,6 +261,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	transformResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
+	recalcLogicalPoints();
 	emit q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
 }

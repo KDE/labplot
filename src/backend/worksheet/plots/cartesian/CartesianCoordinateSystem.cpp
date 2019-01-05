@@ -179,7 +179,6 @@ CartesianScale *CartesianScale::createScale(ScaleType type, const Interval<doubl
 
 CartesianScale *CartesianScale::createLinearScale(const Interval<double> &interval,
 		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
-	DEBUG("CartesianScale::createLinearScale() scene start/end = " << sceneStart << '/' << sceneEnd << ", logical start/end = " << logicalStart << '/' << logicalEnd);
 
 	double lDiff = logicalEnd - logicalStart;
 	if (lDiff == 0.0)

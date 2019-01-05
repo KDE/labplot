@@ -2012,6 +2012,8 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 
 	if (!tmpXDataColumn) {
 		DEBUG("ERROR: Preparing source data column failed!");
+		recalcLogicalPoints();
+		emit q->dataChanged();
 		return;
 	}
 
@@ -2019,6 +2021,8 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 
 	if (!xVector || !yVector) {
 		DEBUG(" xVector or yVector not defined!");
+		recalcLogicalPoints();
+		emit q->dataChanged();
 		return;
 	}
 
@@ -2048,6 +2052,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 		residualsVector->clear();
 	}
 
+	recalcLogicalPoints();
 	emit q->dataChanged();
 }
 

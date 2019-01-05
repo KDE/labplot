@@ -1924,7 +1924,6 @@ void CartesianPlot::scaleAuto() {
 }
 
 void CartesianPlot::zoomIn() {
-	DEBUG("CartesianPlot::zoomIn()");
 	Q_D(CartesianPlot);
 
 	double oldRange = (d->xMax - d->xMin);

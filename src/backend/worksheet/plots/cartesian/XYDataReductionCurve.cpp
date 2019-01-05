@@ -141,6 +141,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 	}
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
+		recalcLogicalPoints();
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -189,6 +190,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 		dataReductionResult.available = true;
 		dataReductionResult.valid = false;
 		dataReductionResult.status = i18n("Not enough data points available.");
+		recalcLogicalPoints();
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -248,9 +250,9 @@ void XYDataReductionCurvePrivate::recalculate() {
 	}
 
 	DEBUG("npoints =" << npoints);
-	if (type == nsl_geom_linesim_type_douglas_peucker_variant) {
+	if (type == nsl_geom_linesim_type_douglas_peucker_variant)
 		DEBUG("calculated tolerance =" << calcTolerance);
-	} else
+	else
 		Q_UNUSED(calcTolerance);
 
 	emit q->completed(80);
@@ -284,6 +286,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 	dataReductionResult.areaError = areaError;
 
 	//redraw the curve
+	recalcLogicalPoints();
 	emit q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
 

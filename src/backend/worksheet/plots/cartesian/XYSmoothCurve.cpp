@@ -156,6 +156,7 @@ void XYSmoothCurvePrivate::recalculate() {
 		smoothResult.available = true;
 		smoothResult.valid = false;
 		smoothResult.status = i18n("Number of x and y data points must be equal.");
+		recalcLogicalPoints();
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -194,6 +195,7 @@ void XYSmoothCurvePrivate::recalculate() {
 		smoothResult.available = true;
 		smoothResult.valid = false;
 		smoothResult.status = i18n("Not enough data points available.");
+		recalcLogicalPoints();
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -253,6 +255,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	smoothResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
+	recalcLogicalPoints();
 	emit q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
 }

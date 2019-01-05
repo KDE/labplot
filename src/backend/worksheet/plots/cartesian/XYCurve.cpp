@@ -167,8 +167,7 @@ QMenu* XYCurve::createContextMenu() {
 	if (!m_menusInitialized)
 		initActions();
 
-
-	QMenu *menu = WorksheetElement::createContextMenu();
+	QMenu* menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
@@ -321,7 +320,7 @@ bool XYCurve::isSourceDataChangedSinceLastRecalc() const {
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXColumn, const AbstractColumn*, xColumn, retransform)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXColumn, const AbstractColumn*, xColumn, recalcLogicalPoints)
 void XYCurve::setXColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xColumn) {
@@ -333,7 +332,7 @@ void XYCurve::setXColumn(const AbstractColumn* column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(xDataChanged()));
 
 			//update the curve itself on changes
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
+			connect(column, &AbstractColumn::dataChanged, this, [=](){ d->recalcLogicalPoints(); });
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
 					this, &XYCurve::xColumnAboutToBeRemoved);
 			//TODO: add disconnect in the undo-function
@@ -341,7 +340,7 @@ void XYCurve::setXColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYColumn, const AbstractColumn*, yColumn, retransform)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYColumn, const AbstractColumn*, yColumn, recalcLogicalPoints)
 void XYCurve::setYColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->yColumn) {
@@ -353,7 +352,7 @@ void XYCurve::setYColumn(const AbstractColumn* column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(yDataChanged()));
 
 			//update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, [=](){ retransform(); });
+			connect(column, &AbstractColumn::dataChanged, this, [=](){ d->recalcLogicalPoints(); });
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
 					this, &XYCurve::yColumnAboutToBeRemoved);
 			//TODO: add disconnect in the undo-function
@@ -864,8 +863,9 @@ bool XYCurvePrivate::swapVisible(bool on) {
 }
 
 /*!
-  recalculates the position of the points to be drawn. Called when the data was changed.
-  Triggers the update of lines, drop lines, symbols etc.
+  called when the size of the plot or its data ranges (manual changes, zooming, etc.) were changed.
+  recalculates the position of the scene points to be drawn.
+  triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
 	DEBUG("\nXYCurvePrivate::retransform() name = " << name().toStdString() << ", m_suppressRetransform = " << m_suppressRetransform);
@@ -876,9 +876,8 @@ void XYCurvePrivate::retransform() {
 #ifdef PERFTRACE_CURVES
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform()");
 #endif
-	symbolPointsLogical.clear();
+
 	symbolPointsScene.clear();
-	connectedPointsLogical.clear();
 
 	if ( (nullptr == xColumn) || (nullptr == yColumn) ) {
 		DEBUG("	xColumn or yColumn == NULL");
@@ -889,7 +888,6 @@ void XYCurvePrivate::retransform() {
 		errorBarsPath = QPainterPath();
 		curveShape = QPainterPath();
 		lines.clear();
-		visiblePoints.clear();
 		valuesPoints.clear();
 		valuesStrings.clear();
 		fillPolygons.clear();
@@ -900,10 +898,42 @@ void XYCurvePrivate::retransform() {
 	if (!plot->isPanningActive())
 		WAIT_CURSOR;
 
-	QPointF tempPoint;
+	//calculate the scene coordinates
+	{
+#ifdef PERFTRACE_CURVES
+		PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform(), map logical points to scene coordinates");
+#endif
+		cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
+	}
+
+	m_suppressRecalc = true;
+	updateLines();
+	updateDropLines();
+	updateSymbols();
+	updateValues();
+	m_suppressRecalc = false;
+	updateErrorBars();
+
+	RESET_CURSOR;
+}
+
+/*!
+ * called if the x- or y-data was changed.
+ * copies the valid data points from the x- and y-columns into the internal container
+ */
+void XYCurvePrivate::recalcLogicalPoints() {
+	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::recalcLogicalPoints()");
+
+	symbolPointsLogical.clear();
+	connectedPointsLogical.clear();
+	visiblePoints.clear();
+
+	if (!xColumn || !yColumn)
+		return;
 
 	AbstractColumn::ColumnMode xColMode = xColumn->columnMode();
 	AbstractColumn::ColumnMode yColMode = yColumn->columnMode();
+	QPointF tempPoint;
 
 	//take over only valid and non masked points.
 	for (int row = 0; row < xColumn->rowCount(); row++) {
@@ -946,24 +976,7 @@ void XYCurvePrivate::retransform() {
 		}
 	}
 
-	//calculate the scene coordinates
 	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
-	{
-#ifdef PERFTRACE_CURVES
-		PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform(), map logical points to scene coordinates");
-#endif
-		cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
-	}
-
-	m_suppressRecalc = true;
-	updateLines();
-	updateDropLines();
-	updateSymbols();
-	updateValues();
-	m_suppressRecalc = false;
-	updateErrorBars();
-
-	RESET_CURSOR;
 }
 
 /*!
@@ -1301,7 +1314,9 @@ void XYCurvePrivate::updateSymbols() {
   recreates the value strings to be shown and recalculates their draw position.
 */
 void XYCurvePrivate::updateValues() {
-	DEBUG("XYCurvePrivate::updateValues()");
+#ifdef PERFTRACE_CURVES
+	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateValues()");
+#endif
 	valuesPath = QPainterPath();
 	valuesPoints.clear();
 	valuesStrings.clear();
@@ -1836,7 +1851,6 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	//search for an alternative.
 	//curveShape = curveShape.simplified();
 
-	DEBUG("	Calling updatePixmap()");
 	updatePixmap();
 }
 

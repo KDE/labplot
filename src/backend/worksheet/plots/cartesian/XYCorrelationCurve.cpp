@@ -147,6 +147,7 @@ void XYCorrelationCurvePrivate::recalculate() {
 	}
 
 	if (tmpYDataColumn == nullptr || tmpY2DataColumn == nullptr) {
+		recalcLogicalPoints();
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -195,6 +196,7 @@ void XYCorrelationCurvePrivate::recalculate() {
 		correlationResult.available = true;
 		correlationResult.valid = false;
 		correlationResult.status = i18n("Not enough data points available.");
+		recalcLogicalPoints();
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -252,6 +254,7 @@ void XYCorrelationCurvePrivate::recalculate() {
 	correlationResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
+	recalcLogicalPoints();
 	emit q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
 }

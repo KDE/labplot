@@ -44,6 +44,7 @@ public:
 
 	QString name() const;
 	void retransform();
+	void recalcLogicalPoints();
 	void updateLines();
 	void updateDropLines();
 	void updateSymbols();
