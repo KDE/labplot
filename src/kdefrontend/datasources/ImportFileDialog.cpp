@@ -233,25 +233,13 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		if (fileType == AbstractFileFilter::HDF5 || fileType == AbstractFileFilter::NETCDF ||
 			fileType == AbstractFileFilter::ROOT) {
 			QStringList names;
-			switch (fileType) {
-			case AbstractFileFilter::HDF5:
+			if (fileType == AbstractFileFilter::HDF5)
 				names = m_importFileWidget->selectedHDF5Names();
-				break;
-			case AbstractFileFilter::NETCDF:
+			else if (fileType == AbstractFileFilter::NETCDF)
 				names = m_importFileWidget->selectedNetCDFNames();
-				break;
-			case AbstractFileFilter::ROOT:
+			else
 				names = m_importFileWidget->selectedROOTNames();
-				break;
-			case AbstractFileFilter::Ascii:
-			case AbstractFileFilter::Binary:
-			case AbstractFileFilter::Image:
-			case AbstractFileFilter::FITS:
-			case AbstractFileFilter::JSON:
-			case AbstractFileFilter::NgspiceRawAscii:
-			case AbstractFileFilter::NgspiceRawBinary:
-				break; // never reached, omit warning
-			}
+
 			int nrNames = names.size(), offset = sheets.size();
 
 			int start = 0;
@@ -275,25 +263,12 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			// import to sheets
 			sheets = workbook->children<AbstractAspect>();
 			for (int i = 0; i < nrNames; ++i) {
-				switch (fileType) {
-				case AbstractFileFilter::HDF5:
+				if (fileType == AbstractFileFilter::HDF5)
 					static_cast<HDF5Filter*>(filter)->setCurrentDataSetName(names[i]);
-					break;
-				case AbstractFileFilter::NETCDF:
+				else if (fileType == AbstractFileFilter::NETCDF)
 					static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names[i]);
-					break;
-				case AbstractFileFilter::ROOT:
+				else
 					static_cast<ROOTFilter*>(filter)->setCurrentObject(names[i]);
-					break;
-				case AbstractFileFilter::Ascii:
-				case AbstractFileFilter::Binary:
-				case AbstractFileFilter::Image:
-				case AbstractFileFilter::FITS:
-				case AbstractFileFilter::JSON:
-				case AbstractFileFilter::NgspiceRawAscii:
-				case AbstractFileFilter::NgspiceRawBinary:
-					break; // never reached, omit warning
-				}
 
 				int index = i + offset;
 				if (sheets[index]->inherits("Matrix"))
