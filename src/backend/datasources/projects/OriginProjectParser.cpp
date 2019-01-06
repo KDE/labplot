@@ -4,7 +4,7 @@
     Description          : parser for Origin projects
     --------------------------------------------------------------------
     Copyright            : (C) 2017-2018 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2017-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2019 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -181,17 +181,18 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	//convert the project tree from liborigin's representation to LabPlot's project object
 	project->setIsLoading(true);
 	if (projectIt.node) { // only opj files from version >= 6.0 do have project tree
+		DEBUG("	have a project tree");
 		QString name(QString::fromLatin1(projectIt->name.c_str()));
 		project->setName(name);
 		project->setCreationTime(creationTime(projectIt));
 		loadFolder(project, projectIt, preview);
 	} else { // for lower versions put all windows on rootfolder
+		DEBUG("	have no project tree");
 		int pos = m_projectFileName.lastIndexOf(QDir::separator()) + 1;
 		project->setName((const char*)m_projectFileName.mid(pos).toLocal8Bit());
 	}
 	// imports all loose windows (like prior version 6 which has no project tree)
 	handleLooseWindows(project, preview);
-
 
 	//restore column pointers:
 	//1. extend the pathes to contain the parent structures first
@@ -258,22 +259,32 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 }
 
 bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::iterator baseIt, bool preview) {
-	DEBUG("OriginProjectParser::loadFolder()\n--------------------------------");
+	DEBUG("OriginProjectParser::loadFolder()")
 	const tree<Origin::ProjectNode>* projectTree = m_originFile->project();
+
+	// do not skip anything if pathesToLoad() constains root folder
+	bool containsRootFolder = folder->pathesToLoad().contains(folder->path());
+	if (containsRootFolder) {
+		DEBUG("	pathesToLoad contains folder path \""  << folder->path().toStdString() << "\". Clearing pathes to load.")
+		folder->setPathesToLoad(QStringList());
+	}
 
 	//load folder's children: logic for reading the selected objects only is similar to Folder::readChildAspectElement
 	for (tree<Origin::ProjectNode>::sibling_iterator it = projectTree->begin(baseIt); it != projectTree->end(baseIt); ++it) {
 		QString name(QString::fromLatin1(it->name.c_str())); //name of the current child
-		DEBUG("	* folder item name = " << name.toStdString());
+		DEBUG("	* folder item name = " << name.toStdString())
 
 		//check whether we need to skip the loading of the current child
 		if (!folder->pathesToLoad().isEmpty()) {
 			//child's path is not available yet (child not added yet) -> construct the path manually
 			const QString childPath = folder->path() + '/' + name;
+			DEBUG("		path = " << childPath.toStdString())
 
 			//skip the current child aspect it is not in the list of aspects to be loaded
-			if (folder->pathesToLoad().indexOf(childPath) == -1)
+			if (folder->pathesToLoad().indexOf(childPath) == -1) {
+				DEBUG("		skip it!")
 				continue;
+			}
 		}
 
 		//load top-level children

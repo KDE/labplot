@@ -4,6 +4,7 @@
     Description          : base class for project parsers
     --------------------------------------------------------------------
     Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2019 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -83,7 +84,9 @@ QAbstractItemModel* ProjectParser::model() {
 }
 
 void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPathes) {
-	QDEBUG("Starting the import of " + m_projectFileName);
+	DEBUG("ProjectParser::importTo()");
+	QDEBUG("	Starting the import of " + m_projectFileName);
+	QDEBUG("	Selected pathes: " << selectedPathes);
 
 	//import the selected objects into a temporary project
 	auto* project = new Project();
@@ -92,9 +95,9 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 
 	//determine the first child of the last top level child in the list of the imported objects
 	//we want to navigate to in the project explorer after the import
-	auto* lastTopLevelChild = project->child<AbstractAspect>(project->childCount<AbstractAspect>()-1);
+	auto* lastTopLevelChild = project->child<AbstractAspect>(project->childCount<AbstractAspect>() - 1);
 	AbstractAspect* childToNavigate = nullptr;
-	if (lastTopLevelChild->childCount<AbstractAspect>() > 0) {
+	if (lastTopLevelChild != nullptr && lastTopLevelChild->childCount<AbstractAspect>() > 0) {
 		childToNavigate = lastTopLevelChild->child<AbstractAspect>(0);
 
 		//we don't want to select columns, select rather their parent spreadsheet
@@ -108,9 +111,9 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 	targetFolder->beginMacro(i18n("%1: Import from %2", targetFolder->name(), m_projectFileName));
 	for (auto* child : project->children<AbstractAspect>()) {
 		auto* folder = dynamic_cast<Folder*>(child);
-		if (folder) {
+		if (folder)
 			moveFolder(targetFolder, folder);
-		} else {
+		else {
 			project->removeChild(child);
 
 			//remove the object to be imported in the target folder if it's already existing
@@ -125,7 +128,8 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 
 	delete project;
 
-	targetFolder->project()->navigateTo(childToNavigate->path());
+	if (childToNavigate != nullptr)
+		targetFolder->project()->navigateTo(childToNavigate->path());
 
 	QDEBUG("Import of " + m_projectFileName + " done.");
 }

@@ -112,7 +112,7 @@ Very short classes can be bundled in one file which then is named using all lowe
 * Use DEBUG() macro for debugging code when possible and QDEBUG() only for special Qt data types. DEBUG() works on all supported systems.
 @code
 	QString string;
-	DEBUG(" string : " << string.toStdString());
+	DEBUG(" string : " << string.toStdString())
 @endcode
 * Use Qt functions for user messages: qDebug(), qWarning(), qCritical(), qFatal(). Check conditions with Q_ASSERT(cond) or Q_ASSERT_X(cond, where, what) and pointers with Q_CHECK_PTR(ptr).
 * Import C header (from GSL etc.) with extern statement. We use "std::" prefix (C++11) and try to avoid C header like cmath, cfloat etc. by using corresponding C++ constructs (fabs() -> std::abs(), DBL_MAX -> std::numeric_limits<double>::max(), round() -> qRound()). Example:
