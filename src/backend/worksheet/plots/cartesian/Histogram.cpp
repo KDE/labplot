@@ -799,7 +799,7 @@ void HistogramPrivate::retransform() {
 		visiblePoints.clear();
 		valuesPoints.clear();
 		valuesStrings.clear();
-		fillPolygons.clear();
+		fillPolygon.clear();
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1209,7 +1209,7 @@ void HistogramPrivate::updateValues() {
 }
 
 void HistogramPrivate::updateFilling() {
-	fillPolygons.clear();
+	fillPolygon.clear();
 
 	if (!fillingEnabled || lineType == Histogram::DropLines) {
 		recalcShapeAndBoundingRect();
@@ -1234,85 +1234,22 @@ void HistogramPrivate::updateFilling() {
 	if (!fillLines.size())
 		return;
 
-
-	//create polygon(s):
-	//1. Depending on the current zoom-level, only a subset of the curve may be visible in the plot
-	//and more of the filling area should be shown than the area defined by the start and end points of the currently visible points.
-	//We check first whether the curve crosses the boundaries of the plot and determine new start and end points and put them to the boundaries.
-	//2. Furthermore, depending on the current filling type we determine the end point (x- or y-coordinate) where all polygons are closed at the end.
-	QPolygonF pol;
-	QPointF start = fillLines.at(0).p1(); //starting point of the current polygon, initialize with the first visible point
-	QPointF end = fillLines.at(fillLines.size()-1).p2(); //starting point of the current polygon, initialize with the last visible point
-	const QPointF& first = pointsLogical.at(0); //first point of the curve, may not be visible currently
-	const QPointF& last = pointsLogical.at(pointsLogical.size()-1);//first point of the curve, may not be visible currently
-	QPointF edge;
-	float yEnd = 0;
-
-	//fillingPosition == Histogram::FillingZeroBaseline)
-	edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
-
-	//start point
-	if (AbstractCoordinateSystem::essentiallyEqual(start.y(), edge.y())) {
-		if (plot->yMax() > 0) {
-			if (first.x() < plot->xMin())
-				start = edge;
-			else if (first.x() > plot->xMax())
-				start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
-			else
-				start = cSystem->mapLogicalToScene(QPointF(first.x(), plot->yMax()));
-		} else {
-			if (first.x() < plot->xMin())
-				start = edge;
-			else if (first.x() > plot->xMax())
-				start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
-			else
-				start = cSystem->mapLogicalToScene(QPointF(first.x(), plot->yMin()));
-		}
-	}
-
-	//end point
-	if (AbstractCoordinateSystem::essentiallyEqual(end.y(), edge.y())) {
-		if (plot->yMax()>0) {
-			if (last.x() < plot->xMin())
-				end = edge;
-			else if (last.x() > plot->xMax())
-				end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
-			else
-				end = cSystem->mapLogicalToScene(QPointF(last.x(), plot->yMax()));
-		} else {
-			if (last.x() < plot->xMin())
-				end = edge;
-			else if (last.x() > plot->xMax())
-				end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
-			else
-				end = cSystem->mapLogicalToScene(QPointF(last.x(), plot->yMin()));
-		}
-	}
-
-	yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()>0 ? plot->yMin() : 0)).y();
-
-	if (start != fillLines.at(0).p1())
-		pol << start;
-
 	QPointF p1, p2;
 	for (int i = 0; i < fillLines.size(); ++i) {
 		const QLineF& line = fillLines.at(i);
 		p1 = line.p1();
 		p2 = line.p2();
 		if (i != 0 && p1 != fillLines.at(i-1).p2())
-			pol << fillLines.at(i-1).p2() << p1;
+			fillPolygon << fillLines.at(i-1).p2() << p1;
 
-		pol << p1 << p2;
+		fillPolygon << p1 << p2;
 	}
 
-	if (p2 != end)
-		pol << end;
-
 	//close the last polygon
-	pol << QPointF(end.x(), yEnd);
-	pol << QPointF(start.x(), yEnd);
+	float yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()>0 ? plot->yMin() : 0)).y();
+	fillPolygon << QPointF(fillLines.last().p2().x(), yEnd);
+	fillPolygon << QPointF(fillLines.first().p1().x(), yEnd);
 
-	fillPolygons << pol;
 	recalcShapeAndBoundingRect();
 }
 
@@ -1340,8 +1277,7 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 
 	boundingRectangle = curveShape.boundingRect();
 
-	for (const auto& pol : fillPolygons)
-		boundingRectangle = boundingRectangle.united(pol.boundingRect());
+	boundingRectangle = boundingRectangle.united(fillPolygon.boundingRect());
 
 	//TODO: when the selection is painted, line intersections are visible.
 	//simplified() removes those artifacts but is horrible slow for curves with large number of points.
@@ -1488,92 +1424,90 @@ void HistogramPrivate::drawValues(QPainter* painter) {
 }
 
 void HistogramPrivate::drawFilling(QPainter* painter) {
-	for (const auto& pol : fillPolygons) {
-		QRectF rect = pol.boundingRect();
-		if (fillingType == PlotArea::Color) {
-			switch (fillingColorStyle) {
-			case PlotArea::SingleColor: {
-				painter->setBrush(QBrush(fillingFirstColor));
+	const QRectF& rect = fillPolygon.boundingRect();
+	if (fillingType == PlotArea::Color) {
+		switch (fillingColorStyle) {
+		case PlotArea::SingleColor: {
+			painter->setBrush(QBrush(fillingFirstColor));
+			break;
+		}
+		case PlotArea::HorizontalLinearGradient: {
+			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
+			linearGrad.setColorAt(0, fillingFirstColor);
+			linearGrad.setColorAt(1, fillingSecondColor);
+			painter->setBrush(QBrush(linearGrad));
+			break;
+		}
+		case PlotArea::VerticalLinearGradient: {
+			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
+			linearGrad.setColorAt(0, fillingFirstColor);
+			linearGrad.setColorAt(1, fillingSecondColor);
+			painter->setBrush(QBrush(linearGrad));
+			break;
+		}
+		case PlotArea::TopLeftDiagonalLinearGradient: {
+			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
+			linearGrad.setColorAt(0, fillingFirstColor);
+			linearGrad.setColorAt(1, fillingSecondColor);
+			painter->setBrush(QBrush(linearGrad));
+			break;
+		}
+		case PlotArea::BottomLeftDiagonalLinearGradient: {
+			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
+			linearGrad.setColorAt(0, fillingFirstColor);
+			linearGrad.setColorAt(1, fillingSecondColor);
+			painter->setBrush(QBrush(linearGrad));
+			break;
+		}
+		case PlotArea::RadialGradient: {
+			QRadialGradient radialGrad(rect.center(), rect.width()/2);
+			radialGrad.setColorAt(0, fillingFirstColor);
+			radialGrad.setColorAt(1, fillingSecondColor);
+			painter->setBrush(QBrush(radialGrad));
+			break;
+		}
+		}
+	} else if (fillingType == PlotArea::Image) {
+		if ( !fillingFileName.trimmed().isEmpty() ) {
+			QPixmap pix(fillingFileName);
+			switch (fillingImageStyle) {
+			case PlotArea::ScaledCropped:
+				pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
+				painter->setBrush(QBrush(pix));
+				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+				break;
+			case PlotArea::Scaled:
+				pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+				painter->setBrush(QBrush(pix));
+				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+				break;
+			case PlotArea::ScaledAspectRatio:
+				pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+				painter->setBrush(QBrush(pix));
+				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+				break;
+			case PlotArea::Centered: {
+				QPixmap backpix(rect.size().toSize());
+				backpix.fill();
+				QPainter p(&backpix);
+				p.drawPixmap(QPointF(0,0),pix);
+				p.end();
+				painter->setBrush(QBrush(backpix));
+				painter->setBrushOrigin(-pix.size().width()/2,-pix.size().height()/2);
 				break;
 			}
-			case PlotArea::HorizontalLinearGradient: {
-				QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-				linearGrad.setColorAt(0, fillingFirstColor);
-				linearGrad.setColorAt(1, fillingSecondColor);
-				painter->setBrush(QBrush(linearGrad));
+			case PlotArea::Tiled:
+				painter->setBrush(QBrush(pix));
 				break;
+			case PlotArea::CenterTiled:
+				painter->setBrush(QBrush(pix));
+				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 			}
-			case PlotArea::VerticalLinearGradient: {
-				QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-				linearGrad.setColorAt(0, fillingFirstColor);
-				linearGrad.setColorAt(1, fillingSecondColor);
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case PlotArea::TopLeftDiagonalLinearGradient: {
-				QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-				linearGrad.setColorAt(0, fillingFirstColor);
-				linearGrad.setColorAt(1, fillingSecondColor);
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case PlotArea::BottomLeftDiagonalLinearGradient: {
-				QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-				linearGrad.setColorAt(0, fillingFirstColor);
-				linearGrad.setColorAt(1, fillingSecondColor);
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case PlotArea::RadialGradient: {
-				QRadialGradient radialGrad(rect.center(), rect.width()/2);
-				radialGrad.setColorAt(0, fillingFirstColor);
-				radialGrad.setColorAt(1, fillingSecondColor);
-				painter->setBrush(QBrush(radialGrad));
-				break;
-			}
-			}
-		} else if (fillingType == PlotArea::Image) {
-			if ( !fillingFileName.trimmed().isEmpty() ) {
-				QPixmap pix(fillingFileName);
-				switch (fillingImageStyle) {
-				case PlotArea::ScaledCropped:
-					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
-					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
-					break;
-				case PlotArea::Scaled:
-					pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
-					break;
-				case PlotArea::ScaledAspectRatio:
-					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
-					break;
-				case PlotArea::Centered: {
-					QPixmap backpix(rect.size().toSize());
-					backpix.fill();
-					QPainter p(&backpix);
-					p.drawPixmap(QPointF(0,0),pix);
-					p.end();
-					painter->setBrush(QBrush(backpix));
-					painter->setBrushOrigin(-pix.size().width()/2,-pix.size().height()/2);
-					break;
-				}
-				case PlotArea::Tiled:
-					painter->setBrush(QBrush(pix));
-					break;
-				case PlotArea::CenterTiled:
-					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
-				}
-			}
-		} else if (fillingType == PlotArea::Pattern)
-			painter->setBrush(QBrush(fillingFirstColor,fillingBrushStyle));
+		}
+	} else if (fillingType == PlotArea::Pattern)
+		painter->setBrush(QBrush(fillingFirstColor,fillingBrushStyle));
 
-		painter->drawPolygon(pol);
-	}
+	painter->drawPolygon(fillPolygon);
 }
 
 void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
