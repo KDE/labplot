@@ -173,14 +173,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.cbSourceType->addItem(QLatin1String("MQTT"));
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QLatin1String("MQTT_connections");
 
-	m_willSettings.enabled = false;
-	m_willSettings.willRetain = false;
-	m_willSettings.willQoS = 0;
-	m_willSettings.willMessageType = MQTTClient::WillMessageType::OwnMessage;
-	m_willSettings.willUpdateType = MQTTClient::WillUpdateType::TimePeriod;
-	m_willSettings.willTimeInterval = 10000;
-	m_willSettings.willStatistics.fill(false, 15);
-
 	const int size = ui.leTopics->height();
 	ui.lTopicSearch->setPixmap( QIcon::fromTheme(QLatin1String("view-filter")).pixmap(size, size) );
 	ui.lSubscriptionSearch->setPixmap( QIcon::fromTheme(QLatin1String("view-filter")).pixmap(size, size) );

@@ -93,17 +93,17 @@ public:
 	};
 
 	struct MQTTWill {
-		bool enabled;
+		bool enabled{false};
 		QString willMessage;
 		QString willTopic;
-		bool willRetain;
-		quint8 willQoS;
-		WillMessageType willMessageType;
+		bool willRetain{false};
+		quint8 willQoS{0};
+		WillMessageType willMessageType{MQTTClient::WillMessageType::OwnMessage};
 		QString willOwnMessage;
 		QString willLastMessage;
-		int willTimeInterval;
-		WillUpdateType willUpdateType;
-		QVector<bool> willStatistics;
+		int willTimeInterval{1000};
+		WillUpdateType willUpdateType{MQTTClient::WillUpdateType::TimePeriod};
+		QVector<bool> willStatistics{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	};
 
 	explicit MQTTClient(const QString& name);

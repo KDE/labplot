@@ -2057,6 +2057,7 @@ QString AsciiFilterPrivate::MQTTColumnStatistics(const MQTTTopic* topic) const{
 			case MQTTClient::WillStatisticsType::Variance:
 				statistics += QLatin1String("Variance: ") + QString::number(tempColumn->statistics().variance) + "\n";
 				break;
+			case MQTTClient::WillStatisticsType::NoStatistics:
 			default:
 				break;
 			}
