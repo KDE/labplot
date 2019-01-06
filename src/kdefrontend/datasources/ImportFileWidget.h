@@ -190,15 +190,6 @@ private slots:
 	void topicTimeout();
 	void mqttSubscriptionMessageReceived(const QMqttMessage& );
 	void onMqttDisconnect();
-	void useWillMessage(int);
-	void willMessageTypeChanged(int);
-	void willUpdateTypeChanged(int);
-	void willRetainChanged(bool);
-	void willTimeIntervalChanged(int);
-	void willOwnMessageChanged(const QString&);
-	void willTopicChanged(const QString&);
-	void willStatisticsChanged(int);
-	void willQoSChanged(int);
 	void mqttErrorChanged(QMqttClient::ClientError);
 	void scrollToTopicTreeItem(const QString&);
 	void scrollToSubsriptionTreeItem(const QString&);

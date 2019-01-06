@@ -2712,80 +2712,6 @@ void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) 
 }
 
 /*!
- *\brief called when use will message is changed in the settings widget
- * Updates the will settings
- */
-void ImportFileWidget::useWillMessage(int state) {
-	m_willSettings.enabled = (state == Qt::Checked);
-}
-
-/*!
- *\brief called when the selected will message type is changed in the settings widget
- * Updates the will settings
- */
-void ImportFileWidget::willMessageTypeChanged(int type) {
-	m_willSettings.willMessageType = static_cast<MQTTClient::WillMessageType>(type);
-}
-
-/*!
- *\brief called when the selected will message' type's retain flag is changed in the settings widget
- * Updates the will settings
- */
-void ImportFileWidget::willRetainChanged(bool retain) {
-	m_willSettings.willRetain = retain;
-}
-
-/*!
- *\brief called when the selected will update interval is changed in the settings widget
- * Updates the will settings
- */
-void ImportFileWidget::willTimeIntervalChanged(int interval) {
-	m_willSettings.willTimeInterval = interval;
-}
-
-/*!
- *\brief called when the selected will own message is changed in the settings widget
- * Updates the will settings
- */
-void ImportFileWidget::willOwnMessageChanged(const QString& msg) {
-	m_willSettings.willOwnMessage = msg;
-}
-
-/*!
- *\brief called when the selected will topic is changed in the settings widget
- * Updates the will settings
- */
-void ImportFileWidget::willTopicChanged(const QString& topic) {
-	m_willSettings.willTopic = topic;
-}
-
-/*!
- *\brief called when the selected will statistics are changed in the settings widget
- * Updates the will settings
- */
-void ImportFileWidget::willStatisticsChanged(int index) {
-	if (index >= 0)
-		m_willSettings.willStatistics[index] = !m_willSettings.willStatistics[index];
-}
-
-/*!
- *\brief called when the selected will message's QoS is changed in the settings widget
- * Updates the will settings
- */
-void ImportFileWidget::willQoSChanged(int qos) {
-	m_willSettings.willQoS = qos;
-}
-
-/*!
- *\brief called when the selected will update type is changed in the settings widget
- * Updates the will settings
- */
-void ImportFileWidget::willUpdateTypeChanged(int updateType) {
-	qDebug() << "update type changed: " <<updateType;
-	m_willSettings.willUpdateType = static_cast<MQTTClient::WillUpdateType>(updateType);
-}
-
-/*!
  *\brief called when the clientError of the MQTT client changes
  *
  * \param clientError the current error of the client
@@ -2938,15 +2864,7 @@ void ImportFileWidget::showWillSettings() {
 	MQTTWillSettingsWidget willSettingsWidget(&menu, m_willSettings, topics);
 
 	connect(&willSettingsWidget, &MQTTWillSettingsWidget::applyClicked, [this, &menu, &willSettingsWidget]() {
-		this->useWillMessage(willSettingsWidget.will().enabled);
-		this->willMessageTypeChanged(willSettingsWidget.will().willMessageType);
-		this->updateTypeChanged(willSettingsWidget.will().willUpdateType);
-		this->willRetainChanged(willSettingsWidget.will().willRetain);
-		this->willTimeIntervalChanged(willSettingsWidget.will().willTimeInterval);
-		this->willOwnMessageChanged(willSettingsWidget.will().willOwnMessage);
-		this->willTopicChanged(willSettingsWidget.will().willTopic);
-		this->willStatisticsChanged(willSettingsWidget.statisticsType());
-
+		m_willSettings = willSettingsWidget.will();
 		menu.close();
 	});
 	QWidgetAction* widgetAction = new QWidgetAction(this);
