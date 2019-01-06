@@ -476,8 +476,7 @@ std::vector<ROOTData::BinPars> ROOTFilterPrivate::readHistogram(const QString& h
 	return currentROOTData->readHistogram(nameindex.join(';').toStdString(), cycle);
 }
 
-std::vector<double> ROOTFilterPrivate::readTree(const QString& treeName, const QString& branchName, const QString& leafName, int element, int last)
-{
+std::vector<double> ROOTFilterPrivate::readTree(const QString& treeName, const QString& branchName, const QString& leafName, int element, int last) {
 	return currentROOTData->listEntries<double>(treeName.toStdString(), branchName.toStdString(), leafName.toStdString(), element, last + 1);
 }
 
@@ -493,9 +492,8 @@ T read(std::ifstream& is) {
 		T val;
 		char buf[sizeof(T)];
 	} r;
-	for (size_t i = 0; i < sizeof(T); ++i) {
+	for (size_t i = 0; i < sizeof(T); ++i)
 		is.get(r.buf[sizeof(T) - i - 1]);
-	}
 
 	return r.val;
 }
@@ -507,9 +505,8 @@ T read(char*& s) {
 		T val;
 		char buf[sizeof(T)];
 	} r;
-	for (size_t i = 0; i < sizeof(T); ++i) {
+	for (size_t i = 0; i < sizeof(T); ++i)
 		r.buf[sizeof(T) - i - 1] = *(s++);
-	}
 
 	return r.val;
 }
@@ -565,8 +562,7 @@ std::string String(char*& buffer) {
 }
 
 /// Get the header of an object in TObjArray
-std::string readObject(char*& buf, char* const buf0, std::map<size_t, std::string>& tags)
-{
+std::string readObject(char*& buf, char* const buf0, std::map<size_t, std::string>& tags) {
 	// root/io/io/src/TBufferFile.cxx -> ReadObjectAny
 	std::string clname;
 	unsigned int tag = read<unsigned int>(buf);
@@ -1107,73 +1103,70 @@ std::vector<T> ROOTData::listEntries(const std::string& treename, const std::str
 	return entries;
 }
 
-ROOTData::ContentType ROOTData::histType(const char type)
-{
+ROOTData::ContentType ROOTData::histType(const char type) {
 	switch (type) {
-		case 'D':
-			return Double;
-		case 'F':
-			return Float;
-		case 'I':
-			return Int;
-		case 'S':
-			return Short;
-		case 'C':
-			return Byte;
-		default:
-			return Invalid;
+	case 'D':
+		return Double;
+	case 'F':
+		return Float;
+	case 'I':
+		return Int;
+	case 'S':
+		return Short;
+	case 'C':
+		return Byte;
+	default:
+		return Invalid;
 	}
 }
 
-ROOTData::ContentType ROOTData::leafType(const char type)
-{
+ROOTData::ContentType ROOTData::leafType(const char type) {
 	switch (type) {
-		case 'D':
-			return Double;
-		case 'F':
-			return Float;
-		case 'L':
-			return Long;
-		case 'I':
-			return Int;
-		case 'S':
-			return Short;
-		case 'B':
-			return Byte;
-		case 'O':
-			return Bool;
-		case 'C':
-			return CString;
-		default:
-			return Invalid;
+	case 'D':
+		return Double;
+	case 'F':
+		return Float;
+	case 'L':
+		return Long;
+	case 'I':
+		return Int;
+	case 'S':
+		return Short;
+	case 'B':
+		return Byte;
+	case 'O':
+		return Bool;
+	case 'C':
+		return CString;
+	default:
+		return Invalid;
 	}
 }
 
 template<class T>
-T (*ROOTData::readType(ROOTData::ContentType type, bool sign) const)(char*&)
-{
+T (*ROOTData::readType(ROOTData::ContentType type, bool sign) const)(char*&) {
 	switch (type) {
-		case Double:
-			return readcast<double, T>;
-		case Float:
-			return readcast<float, T>;
-		case Long:
-			return sign ? readcast<long, T> : readcast<unsigned long, T>;
-		case Int:
-			return sign ? readcast<int, T> : readcast<unsigned int, T>;
-		case Short:
-			return sign ? readcast<short, T> : readcast<unsigned short, T>;
-		case Byte:
-			return sign ? readcast<char, T> : readcast<unsigned char, T>;
-		case Bool:
-			return readcast<bool, T>;
-		case CString:
-		case Tree:
-		case NTuple:
-		case Basket:
-		case Streamer:
-		case Invalid:
-			break;
+	case Double:
+		return readcast<double, T>;
+	case Float:
+		return readcast<float, T>;
+	case Long:
+		return sign ? readcast<long, T> : readcast<unsigned long, T>;
+	case Int:
+		return sign ? readcast<int, T> : readcast<unsigned int, T>;
+	case Short:
+		return sign ? readcast<short, T> : readcast<unsigned short, T>;
+	case Byte:
+		return sign ? readcast<char, T> : readcast<unsigned char, T>;
+	case Bool:
+		return readcast<bool, T>;
+	case CString:
+	case Tree:
+	case NTuple:
+	case Basket:
+	case Streamer:
+	case Invalid:
+		break;
 	}
 	return readcast<char, T>;
 }
@@ -1207,8 +1200,7 @@ std::string ROOTData::data(const ROOTData::KeyBuffer& buffer, std::ifstream& is)
 	return std::string();
 }
 
-void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer)
-{
+void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer) {
 	std::ifstream is(filename, std::ifstream::binary);
 	std::string datastring = data(buffer, is);
 	if (!datastring.empty()) {
@@ -1317,11 +1309,10 @@ void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer)
 			buf += 1; // trailing zero of TObjArray*
 		}
 	} else
-		qDebug() << "ROOTData: Inflation failed!";
+		DEBUG("ROOTData: Inflation failed!")
 }
 
-bool ROOTData::advanceTo(char*& buf, const std::vector<ROOTData::StreamerInfo>& objects, const std::string& current, const std::string& target, std::map<std::string, size_t>& counts)
-{
+bool ROOTData::advanceTo(char*& buf, const std::vector<ROOTData::StreamerInfo>& objects, const std::string& current, const std::string& target, std::map<std::string, size_t>& counts) {
 	// The object structure can be retrieved from TFile::GetStreamerInfoList().
 	// Every ROOT object contains a version number which may include the byte count
 	// for the object. The latter is currently assumed to be present to skip unused
