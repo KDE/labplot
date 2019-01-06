@@ -242,9 +242,10 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 			int nrNames = names.size(), offset = sheets.size();
 
-			int start = 0;
-			//TODO: correct?
-			if (mode == AbstractFileFilter::Replace)
+			//TODO: think about importing multiple sets into one sheet
+
+			int start = 0;	// add nrNames sheets (0 to nrNames)
+			if (mode == AbstractFileFilter::Replace) // add only missing sheets (from offset to nrNames)
 				start = offset;
 
 			// add additional sheets
@@ -256,11 +257,11 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					workbook->addChild(spreadsheet);
 			}
 
-			// TODO: correct?
+			// start at offset for append, else at 0
 			if (mode != AbstractFileFilter::Append)
 				offset = 0;
 
-			// import to sheets
+			// import all sets to a different sheet
 			sheets = workbook->children<AbstractAspect>();
 			for (int i = 0; i < nrNames; ++i) {
 				if (fileType == AbstractFileFilter::HDF5)
