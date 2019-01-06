@@ -262,10 +262,10 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 	DEBUG("OriginProjectParser::loadFolder()")
 	const tree<Origin::ProjectNode>* projectTree = m_originFile->project();
 
-	// do not skip anything if pathesToLoad() constains root folder
-	bool containsRootFolder = folder->pathesToLoad().contains(folder->path());
+	// do not skip anything if pathesToLoad() constains only root folder
+	bool containsRootFolder = (folder->pathesToLoad().size() == 1 && folder->pathesToLoad().contains(folder->path()));
 	if (containsRootFolder) {
-		DEBUG("	pathesToLoad contains folder path \""  << folder->path().toStdString() << "\". Clearing pathes to load.")
+		DEBUG("	pathesToLoad contains only folder path \""  << folder->path().toStdString() << "\". Clearing pathes to load.")
 		folder->setPathesToLoad(QStringList());
 	}
 
