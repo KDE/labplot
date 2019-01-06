@@ -1919,9 +1919,7 @@ void ImportFileWidget::refreshPreview() {
 	}
 	case AbstractFileFilter::JSON: {
 		ui.tePreview->clear();
-		m_jsonOptionsWidget->loadDocument(fileName);
 		auto filter = static_cast<JsonFilter*>(currentFileFilter());
-
 		m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
 		importedStrings = filter->preview(fileName);
 
@@ -2035,10 +2033,13 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 		case AbstractFileFilter::ROOT:
 			m_rootOptionsWidget->updateContent(static_cast<ROOTFilter*>(filter), fileName);
 			break;
+		case AbstractFileFilter::JSON:
+			m_jsonOptionsWidget->loadDocument(fileName);
+			ui.tvJson->setExpanded( m_jsonOptionsWidget->model()->index(0, 0), true); //expand the root node
+			break;
 		case AbstractFileFilter::Ascii:
 		case AbstractFileFilter::Binary:
 		case AbstractFileFilter::Image:
-		case AbstractFileFilter::JSON:
 		case AbstractFileFilter::NgspiceRawAscii:
 		case AbstractFileFilter::NgspiceRawBinary:
 			break;
