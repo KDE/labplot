@@ -1479,9 +1479,9 @@ void XYCurvePrivate::updateFilling() {
 	//2. Furthermore, depending on the current filling type we determine the end point (x- or y-coordinate) where all polygons are closed at the end.
 	QPolygonF pol;
 	QPointF start = fillLines.at(0).p1(); //starting point of the current polygon, initialize with the first visible point
-	QPointF end = fillLines.at(fillLines.size()-1).p2(); //starting point of the current polygon, initialize with the last visible point
+	QPointF end = fillLines.at(fillLines.size()-1).p2(); //end point of the current polygon, initialize with the last visible point
 	const QPointF& first = symbolPointsLogical.at(0); //first point of the curve, may not be visible currently
-	const QPointF& last = symbolPointsLogical.at(symbolPointsLogical.size()-1);//first point of the curve, may not be visible currently
+	const QPointF& last = symbolPointsLogical.at(symbolPointsLogical.size()-1);//last point of the curve, may not be visible currently
 	QPointF edge;
 	float xEnd = 0, yEnd = 0;
 	if (fillingPosition == XYCurve::FillingAbove) {
@@ -1644,7 +1644,7 @@ void XYCurvePrivate::updateFilling() {
 				//-> we have no break in the curve -> connect the points by a horizontal/vertical line
 				pol << fillLines.at(i-1).p2() << p1;
 			} else {
-				//-> we have a break in the curve -> close the polygon add it to the polygon list and start a new polygon
+				//-> we have a break in the curve -> close the polygon, add it to the polygon list and start a new polygon
 				if (fillingPosition == XYCurve::FillingAbove || fillingPosition == XYCurve::FillingBelow || fillingPosition == XYCurve::FillingZeroBaseline) {
 					pol << QPointF(fillLines.at(i-1).p2().x(), yEnd);
 					pol << QPointF(start.x(), yEnd);

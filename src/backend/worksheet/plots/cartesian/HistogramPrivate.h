@@ -156,7 +156,7 @@ public:
 	std::vector<bool> visiblePoints;	//vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
 	QVector<QPointF> valuesPoints;
 	QVector<QString> valuesStrings;
-	QVector<QPolygonF> fillPolygons;
+	QPolygonF fillPolygon;
 
 	Histogram* const q;
 
