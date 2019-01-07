@@ -47,7 +47,6 @@ public:
 
 private:
 	Ui::MQTTWillSettingsWidget ui;
-	bool m_initialising{false};
 	MQTTClient::MQTTWill m_will;
 
 	MQTTClient::WillStatisticsType m_statisticsType{MQTTClient::WillStatisticsType::NoStatistics};

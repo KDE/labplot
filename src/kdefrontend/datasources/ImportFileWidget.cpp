@@ -4,7 +4,7 @@ Project              : LabPlot
 Description          : import file data widget
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-Copyright            : (C) 2009-2018 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2009-2019 Alexander Semke (alexander.semke@web.de)
 Copyright            : (C) 2017-2018 Fabian Kristof (fkristofszabolcs@gmail.com)
 Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
@@ -247,28 +247,24 @@ void ImportFileWidget::loadSettings() {
 	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
 
 #ifdef HAVE_MQTT
-	//MQTT related settings
+	//read available MQTT connections
 	m_initialisingMQTT = true;
-
-	//read available connections
 	readMQTTConnections();
 	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conf.readEntry("Connection", "")));
+	m_initialisingMQTT = false;
 
-	m_willSettings.willRetain = conf.readEntry("mqttWillRetain").toInt();
-	m_willSettings.willUpdateType = static_cast<MQTTClient::WillUpdateType>(conf.readEntry("mqttWillUpdateType").toInt());
-	m_willSettings.willQoS = conf.readEntry("mqttWillQoS").toInt();
-	m_willSettings.willOwnMessage = conf.readEntry("mqttWillOwnMessage","");
-	m_willSettings.willTimeInterval = conf.readEntry("mqttWillUpdateInterval","").toInt();
+	m_willSettings.enabled = conf.readEntry("mqttWillEnabled", m_willSettings.enabled);
+	m_willSettings.willRetain = conf.readEntry("mqttWillRetain", m_willSettings.willRetain);
+	m_willSettings.willUpdateType = static_cast<MQTTClient::WillUpdateType>(conf.readEntry("mqttWillUpdateType", (int)m_willSettings.willUpdateType));
+	m_willSettings.willMessageType = static_cast<MQTTClient::WillMessageType>(conf.readEntry("mqttWillMessageType", (int)m_willSettings.willMessageType));
+	m_willSettings.willQoS = conf.readEntry("mqttWillQoS", (int)m_willSettings.willQoS);
+	m_willSettings.willOwnMessage = conf.readEntry("mqttWillOwnMessage", m_willSettings.willOwnMessage);
+	m_willSettings.willTimeInterval = conf.readEntry("mqttWillUpdateInterval", m_willSettings.willTimeInterval);
 
 	const QString& willStatistics = conf.readEntry("mqttWillStatistics","");
 	const QStringList& statisticsList = willStatistics.split('|', QString::SplitBehavior::SkipEmptyParts);
 	for (auto value : statisticsList)
 		m_willSettings.willStatistics[value.toInt()] = true;
-
-	m_willSettings.willMessageType = static_cast<MQTTClient::WillMessageType>(conf.readEntry("mqttWillMessageType").toInt());
-	m_willSettings.enabled = conf.readEntry("mqttWillUse").toInt();
-
-	m_initialisingMQTT = false;
 #endif
 
 	//initialize the slots after all settings were set in order to avoid unneeded refreshes
@@ -283,7 +279,7 @@ void ImportFileWidget::loadSettings() {
 
 	//all set now, refresh the preview
 	m_suppressRefresh = false;
-	QTimer::singleShot(100, this, [=] () { refreshPreview(); });
+	QTimer::singleShot(0, this, [=] () { refreshPreview(); });
 }
 
 ImportFileWidget::~ImportFileWidget() {
@@ -559,7 +555,8 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	const bool retain = group.readEntry("Retain").toUInt();
 	client->setMQTTRetain(retain);
 
-	client->setWillSettings(m_willSettings);
+	if (m_willSettings.enabled)
+		client->setWillSettings(m_willSettings);
 }
 #endif
 
@@ -1177,13 +1174,11 @@ void ImportFileWidget::manageCommonLevelSubscriptions() {
 
 				//if there is a common topic for the 2 compared topics, we add them to the map (using the common topic as key)
 				if (!commonTopic.isEmpty()) {
-					if (!equalTopicsMap[commonTopic].contains(ui.twSubscriptions->topLevelItem(i)->text(0))) {
+					if (!equalTopicsMap[commonTopic].contains(ui.twSubscriptions->topLevelItem(i)->text(0)))
 						equalTopicsMap[commonTopic].push_back(ui.twSubscriptions->topLevelItem(i)->text(0));
-					}
 
-					if (!equalTopicsMap[commonTopic].contains(ui.twSubscriptions->topLevelItem(j)->text(0))) {
+					if (!equalTopicsMap[commonTopic].contains(ui.twSubscriptions->topLevelItem(j)->text(0)))
 						equalTopicsMap[commonTopic].push_back(ui.twSubscriptions->topLevelItem(j)->text(0));
-					}
 				}
 			}
 		}

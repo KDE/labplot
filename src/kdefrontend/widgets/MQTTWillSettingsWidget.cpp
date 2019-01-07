@@ -41,17 +41,9 @@ MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient
 	connect(ui.cbWillMessageType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &MQTTWillSettingsWidget::willMessageTypeChanged);
 	connect(ui.cbWillUpdate, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &MQTTWillSettingsWidget::willUpdateTypeChanged);
 
-	m_initialising = true;
-	loadSettings(will, topics);
-	m_initialising = false;
-
 	connect(ui.chbEnabled, &QCheckBox::stateChanged, this, &MQTTWillSettingsWidget::enableWillSettings);
 	connect(ui.chbWillRetain, &QCheckBox::stateChanged, [this](int state) {
-		if (state == Qt::Checked) {
-			m_will.willRetain = true;
-		} else if (state == Qt::Unchecked) {
-			m_will.willRetain = false;
-		}
+		m_will.willRetain = (state == Qt::Checked);
 	});
 	connect(ui.leWillOwnMessage, &QLineEdit::textChanged, [this](const QString& text) {
 		m_will.willOwnMessage = text;
@@ -70,8 +62,7 @@ MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient
 	});
 	connect(ui.bApply, &QPushButton::clicked, this, &MQTTWillSettingsWidget::applyClicked);
 
-	//on default, disable the LWT message
-	enableWillSettings(false);
+	loadSettings(will, topics);
 }
 
 MQTTClient::MQTTWill MQTTWillSettingsWidget::will() const {
@@ -129,6 +120,8 @@ void MQTTWillSettingsWidget::willUpdateTypeChanged(int index) {
  * \brief Updates the widget based on the will settings
  */
 void MQTTWillSettingsWidget::loadSettings(const MQTTClient::MQTTWill& will, const QVector<QString>& topics) {
+	ui.chbEnabled->setChecked(will.enabled);
+
 	ui.cbWillTopic->addItems(topics.toList());
 	//Set back the initial value
 	if (!will.willTopic.isEmpty())

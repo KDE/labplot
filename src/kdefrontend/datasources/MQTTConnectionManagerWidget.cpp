@@ -446,7 +446,6 @@ void MQTTConnectionManagerWidget::deleteConnection() {
 		ui.lePassword->setEnabled(false);
 		ui.leID->clear();
 		ui.leID->setEnabled(false);
-
 		m_initializing = false;
 	}
 	emit changed();
@@ -475,9 +474,8 @@ void MQTTConnectionManagerWidget::loadConnections() {
 		}
 
 		conn.useID = group.readEntry("UseID", false);
-		if (conn.useID) {
+		if (conn.useID)
 			conn.clientID = group.readEntry("ClientID", "");
-		}
 
 		conn.retain = group.readEntry("Retain", false);
 
