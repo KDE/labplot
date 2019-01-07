@@ -292,7 +292,8 @@ ENDIF ()
 ### MQTT (optional) ###############################
 IF (ENABLE_MQTT)
 # ATTENTION: unit test uses qWaitFor() which needs Qt >= 5.10
-find_package(Qt5Mqtt ${QT_MIN_VERSION} NO_MODULE)
+# avoid warning for the moment using QUIET
+find_package(Qt5Mqtt ${QT_MIN_VERSION} QUIET NO_MODULE)
 IF (Qt5Mqtt_FOUND)
 	MESSAGE (STATUS "Found MQTT Library")
 	add_definitions (-DHAVE_MQTT)
