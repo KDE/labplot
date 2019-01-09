@@ -151,8 +151,6 @@ private:
 	void restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList& list, int level);
 
 	QMqttClient* m_client{nullptr};
-	QMqttSubscription* m_mainSubscription{nullptr};
-	QMqttTopicFilter* m_filter{nullptr};
 	QVector<QMqttSubscription*> m_mqttSubscriptions;
 	QCompleter* m_topicCompleter{nullptr};
 	QCompleter* m_subscriptionCompleter{nullptr};

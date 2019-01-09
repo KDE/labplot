@@ -2330,18 +2330,15 @@ void ImportFileWidget::mqttConnectionChanged() {
 }
 
 /*!
- *\brief called when the client connects to the broker successfully, it subscribes to every topic (# wildcard)
- * in order to later list every available topic
+ *\brief called when the client connects to the broker successfully.
+ * subscribes to every topic (# wildcard) in order to later list every available topic
  */
 void ImportFileWidget::onMqttConnect() {
 	if (m_client->error() == QMqttClient::NoError) {
 		m_connectTimeoutTimer->stop();
 		ui.gbManageSubscriptions->setVisible(true);
 
-		//subscribing to every topic (# wildcard) in order to later list every available topic
-		QMqttTopicFilter globalFilter{"#"};
-		m_mainSubscription = m_client->subscribe(globalFilter, 1);
-		if (!m_mainSubscription)
+		if (!m_client->subscribe(QMqttTopicFilter(QLatin1String("#")), 1))
 			QMessageBox::critical(this, i18n("Couldn't subscribe"), i18n("Couldn't subscribe. Something went wrong"));
 	}
 	emit subscriptionsChanged();
@@ -2556,6 +2553,7 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqt
 		return;
 
 	m_addedTopics.push_back(topic.name());
+	ui.twTopics->headerItem()->setText(0, i18n("Available (%1)", m_addedTopics.size()));
 	QStringList name;
 	QString rootName;
 	const QChar sep = '/';
@@ -2828,7 +2826,7 @@ void ImportFileWidget::showMQTTConnectionManager() {
 	loads all available saved MQTT nconnections
 */
 void ImportFileWidget::readMQTTConnections() {
-	qDebug()<< "ImportFileWidget: reading available MQTT connections";
+	DEBUG("ImportFileWidget: reading available MQTT connections");
 	KConfig config(m_configPath, KConfig::SimpleConfig);
 	for (const auto& name : config.groupList())
 		ui.cbConnection->addItem(name);
