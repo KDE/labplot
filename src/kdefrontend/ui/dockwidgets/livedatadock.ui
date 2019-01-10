@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>571</width>
-    <height>843</height>
+    <width>479</width>
+    <height>818</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -224,7 +224,11 @@
        </widget>
       </item>
       <item row="2" column="2">
-       <widget class="QLineEdit" name="leTopics"/>
+       <widget class="QLineEdit" name="leTopics">
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="1" column="4" colspan="2">
        <widget class="QTreeWidget" name="twSubscriptions">
@@ -236,7 +240,11 @@
        </widget>
       </item>
       <item row="2" column="5">
-       <widget class="QLineEdit" name="leSubscriptions"/>
+       <widget class="QLineEdit" name="leSubscriptions">
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="2" column="4">
        <widget class="QLabel" name="lSubscriptionSearch">
@@ -315,14 +323,14 @@
     </widget>
    </item>
    <item row="9" column="0">
-    <widget class="QLabel" name="lWillSettings">
+    <widget class="QLabel" name="lLWT">
      <property name="text">
       <string>LWT:</string>
      </property>
     </widget>
    </item>
    <item row="9" column="2">
-    <widget class="QPushButton" name="bWillSettings">
+    <widget class="QPushButton" name="bLWT">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -346,19 +354,6 @@
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="10" column="2" colspan="2">
-    <widget class="QPushButton" name="bWillUpdateNow">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Update Will Message</string>
-     </property>
-    </widget>
    </item>
    <item row="11" column="0">
     <spacer name="verticalSpacer_6">
@@ -421,6 +416,19 @@
      </property>
      <property name="text">
       <string>Pause Reading</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="2" colspan="2">
+    <widget class="QPushButton" name="bWillUpdateNow">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Update Will Message</string>
      </property>
     </widget>
    </item>

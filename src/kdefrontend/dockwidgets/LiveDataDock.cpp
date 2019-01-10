@@ -64,8 +64,8 @@ LiveDataDock::LiveDataDock(QWidget* parent) : QWidget(parent)
 	m_searchTimer->setInterval(10000);
 
 	const int size = ui.leTopics->height();
-	ui.lTopicSearch->setPixmap( QIcon::fromTheme(QLatin1String("view-filter")).pixmap(size, size) );
-	ui.lSubscriptionSearch->setPixmap( QIcon::fromTheme(QLatin1String("view-filter")).pixmap(size, size) );
+	ui.lTopicSearch->setPixmap( QIcon::fromTheme(QLatin1String("go-next")).pixmap(size, size) );
+	ui.lSubscriptionSearch->setPixmap( QIcon::fromTheme(QLatin1String("go-next")).pixmap(size, size) );
 
 	connect(this, &LiveDataDock::newTopic, this, &LiveDataDock::setTopicCompleter);
 	connect(m_searchTimer, &QTimer::timeout, this, &LiveDataDock::topicTimeout);
@@ -74,14 +74,34 @@ LiveDataDock::LiveDataDock(QWidget* parent) : QWidget(parent)
 	connect(ui.bWillUpdateNow, &QPushButton::clicked, this, &LiveDataDock::willUpdateNow);
 	connect(ui.leTopics, &QLineEdit::textChanged, this, &LiveDataDock::scrollToTopicTreeItem);
 	connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &LiveDataDock::scrollToSubsriptionTreeItem);
-	connect(ui.bWillSettings, &QPushButton::clicked, this, &LiveDataDock::showWillSettings);
+	connect(ui.bLWT, &QPushButton::clicked, this, &LiveDataDock::showWillSettings);
 
 	ui.bSubscribe->setIcon(ui.bSubscribe->style()->standardIcon(QStyle::SP_ArrowRight));
 	ui.bSubscribe->setToolTip(i18n("Subscribe selected topics"));
 	ui.bUnsubscribe->setIcon(ui.bUnsubscribe->style()->standardIcon(QStyle::SP_ArrowLeft));
 	ui.bUnsubscribe->setToolTip(i18n("Unsubscribe selected topics"));
-	ui.bWillSettings->setToolTip(i18n("Manage MQTT connection's will settings"));
-	ui.bWillSettings->setIcon(ui.bWillSettings->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
+	ui.bLWT->setToolTip(i18n("Manage MQTT connection's will settings"));
+	ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
+
+	QString info = i18n("Enter the name of the topic to navigate to it.");
+	ui.lTopicSearch->setToolTip(info);
+	ui.leTopics->setToolTip(info);
+	ui.lSubscriptionSearch->setToolTip(info);
+	ui.leSubscriptions->setToolTip(info);
+
+	info = i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed.");
+	ui.lLWT->setToolTip(info);
+	ui.bLWT->setToolTip(info);
+	ui.bLWT->setEnabled(false);
+	ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
+
+	info = i18n("Set the Quality of Service (QoS) for the subscription to define the guarantee of the message delivery:"
+	"<ul>"
+	"<li>0 - deliver at most once</li>"
+	"<li>1 - deliver at least once</li>"
+	"<li>2 - deliver exactly once</li>"
+	"</ul>");
+	ui.cbQoS->setToolTip(info);
 #endif
 }
 
@@ -150,8 +170,8 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *>& clients) {
 	ui.lTopicSearch->show();
 	ui.twSubscriptions->show();
 	ui.cbQoS->show();
-	ui.lWillSettings->show();
-	ui.bWillSettings->show();
+	ui.lLWT->show();
+	ui.bLWT->show();
 
 	//if there isn't a client with this hostname we instantiate a new one
 	if (m_clients[fmc->clientHostName()] == nullptr) {
@@ -276,8 +296,8 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
 	ui.lTopics->hide();
-	ui.bWillSettings->hide();
-	ui.lWillSettings->hide();
+	ui.bLWT->hide();
+	ui.lLWT->hide();
 	ui.bWillUpdateNow->hide();
 	ui.bSubscribe->hide();
 	ui.bUnsubscribe->hide();
@@ -801,8 +821,8 @@ void LiveDataDock::addSubscription() {
 				manageCommonLevelSubscriptions();
 				updateSubscriptionCompleter();
 
-				if (!ui.bWillSettings->isEnabled())
-					ui.bWillSettings->setEnabled(true);
+				if (!ui.bLWT->isEnabled())
+					ui.bLWT->setEnabled(true);
 			} else {
 				QMessageBox::warning(this, "Warning", "You already subscribed to a topic containing this one");
 			}
@@ -860,7 +880,7 @@ void LiveDataDock::removeSubscription() {
 		}
 
 		if (ui.twSubscriptions->topLevelItemCount() <= 0)
-			ui.bWillSettings->setEnabled(false);
+			ui.bLWT->setEnabled(false);
 
 		updateSubscriptionCompleter();
 	} else
@@ -899,9 +919,8 @@ void LiveDataDock::updateSubscriptionCompleter() {
 	const QVector<QString>& subscriptions = m_mqttClients.first()->MQTTSubscriptions();
 
 	if (!subscriptions.isEmpty()) {
-		for (const auto& subscription : subscriptions) {
+		for (const auto& subscription : subscriptions)
 			subscriptionList << subscription;
-		}
 
 		m_subscriptionCompleter = new QCompleter(subscriptionList, this);
 		m_subscriptionCompleter->setCompletionMode(QCompleter::PopupCompletion);
@@ -961,9 +980,8 @@ void LiveDataDock::fillSubscriptions() {
 			}
 
 			//restore the children of the subscription
-			if (topic != nullptr && topic->childCount() > 0) {
+			if (topic != nullptr && topic->childCount() > 0)
 				restoreSubscriptionChildren(topic, newItem, name, 1);
-			}
 		}
 	}
 	m_searching = false;
@@ -1031,9 +1049,8 @@ void LiveDataDock::scrollToTopicTreeItem(const QString& rootName) {
 			break;
 		}
 
-	if (topItemIdx >= 0) {
+	if (topItemIdx >= 0)
 		ui.twTopics->scrollToItem(ui.twTopics->topLevelItem(topItemIdx), QAbstractItemView::ScrollHint::PositionAtTop);
-	}
 }
 
 /*!
@@ -1050,9 +1067,8 @@ void LiveDataDock::scrollToSubsriptionTreeItem(const QString& rootName) {
 			break;
 		}
 
-	if (topItemIdx >= 0) {
+	if (topItemIdx >= 0)
 		ui.twSubscriptions->scrollToItem(ui.twSubscriptions->topLevelItem(topItemIdx), QAbstractItemView::ScrollHint::PositionAtTop);
-	}
 }
 
 /*!
@@ -1561,9 +1577,8 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
  */
 void LiveDataDock::mqttMessageReceivedInBackground(const QByteArray& message, const QMqttTopicName& topic) {
 	Q_UNUSED(message)
-	if (!m_addedTopics[m_mqttClients.first()->clientHostName()].contains(topic.name())) {
+	if (!m_addedTopics[m_mqttClients.first()->clientHostName()].contains(topic.name()))
 		m_addedTopics[m_mqttClients.first()->clientHostName()].push_back(topic.name());
-	}
 }
 
 /*!
@@ -1688,7 +1703,7 @@ void LiveDataDock::showWillSettings() {
 	widgetAction->setDefaultWidget(&willSettingsWidget);
 	menu.addAction(widgetAction);
 
-	QPoint pos(ui.bWillSettings->sizeHint().width(), ui.bWillSettings->sizeHint().height());
-	menu.exec(ui.bWillSettings->mapToGlobal(pos));
+	QPoint pos(ui.bLWT->sizeHint().width(), ui.bLWT->sizeHint().height());
+	menu.exec(ui.bLWT->mapToGlobal(pos));
 }
 #endif

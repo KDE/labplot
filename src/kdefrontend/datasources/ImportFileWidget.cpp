@@ -174,26 +174,35 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QLatin1String("MQTT_connections");
 
 	const int size = ui.leTopics->height();
-	ui.lTopicSearch->setPixmap( QIcon::fromTheme(QLatin1String("view-filter")).pixmap(size, size) );
-	ui.lSubscriptionSearch->setPixmap( QIcon::fromTheme(QLatin1String("view-filter")).pixmap(size, size) );
+	ui.lTopicSearch->setPixmap( QIcon::fromTheme(QLatin1String("go-next")).pixmap(size, size) );
+	ui.lSubscriptionSearch->setPixmap( QIcon::fromTheme(QLatin1String("go-next")).pixmap(size, size) );
 	ui.bSubscribe->setIcon(ui.bSubscribe->style()->standardIcon(QStyle::SP_ArrowRight));
 	ui.bSubscribe->setToolTip(i18n("Subscribe selected topics"));
 	ui.bUnsubscribe->setIcon(ui.bUnsubscribe->style()->standardIcon(QStyle::SP_ArrowLeft));
 	ui.bUnsubscribe->setToolTip(i18n("Unsubscribe selected topics"));
 	ui.bManageConnections->setIcon(QIcon::fromTheme(QLatin1String("network-server")));
 	ui.bManageConnections->setToolTip(i18n("Manage MQTT connections"));
-	ui.lLWT->setToolTip(i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed."));
+
+	QString info = i18n("Enter the name of the topic to navigate to it.");
+	ui.lTopicSearch->setToolTip(info);
+	ui.leTopics->setToolTip(info);
+	ui.lSubscriptionSearch->setToolTip(info);
+	ui.leSubscriptions->setToolTip(info);
+
+	info = i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed.");
+	ui.lLWT->setToolTip(info);
+	ui.bLWT->setToolTip(info);
 	ui.bLWT->setEnabled(false);
-	ui.bLWT->setToolTip(i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed."));
 	ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
 
-	QString info = i18n("Set the Quality of Service (QoS) for the subscription to define the guarantee of the message delivery:"
+	info = i18n("Set the Quality of Service (QoS) for the subscription to define the guarantee of the message delivery:"
 	"<ul>"
 	"<li>0 - deliver at most once</li>"
 	"<li>1 - deliver at least once</li>"
 	"<li>2 - deliver exactly once</li>"
 	"</ul>");
 	ui.cbQos->setToolTip(info);
+
 #endif
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again

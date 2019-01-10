@@ -183,7 +183,11 @@
           </layout>
          </item>
          <item row="1" column="4">
-          <widget class="QLineEdit" name="leSubscriptions"/>
+          <widget class="QLineEdit" name="leSubscriptions">
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item row="0" column="3" colspan="2">
           <widget class="QTreeWidget" name="twSubscriptions">
@@ -217,7 +221,11 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QLineEdit" name="leTopics"/>
+          <widget class="QLineEdit" name="leTopics">
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
