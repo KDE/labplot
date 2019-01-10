@@ -1960,8 +1960,11 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	if (m_hovered && !isSelected() && !m_printing) {
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
-			pix.fill(QApplication::palette().color(QPalette::Shadow));
-			pix.setAlphaChannel(m_pixmap.alphaChannel());
+                        QPainter p(&pix);
+                        p.setCompositionMode(QPainter::CompositionMode_SourceIn);	// source (shadow) pixels merged with the alpha channel of the destination (m_pixmap)
+                        p.fillRect(pix.rect(), QApplication::palette().color(QPalette::Shadow));
+                        p.end();
+
 			m_hoverEffectImage = ImageTools::blurred(pix.toImage(), m_pixmap.rect(), 5);
 			m_hoverEffectImageIsDirty = false;
 		}
@@ -1973,8 +1976,11 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	if (isSelected() && !m_printing) {
 		if (m_selectionEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
-			pix.fill(QApplication::palette().color(QPalette::Highlight));
-			pix.setAlphaChannel(m_pixmap.alphaChannel());
+                        QPainter p(&pix);
+                        p.setCompositionMode(QPainter::CompositionMode_SourceIn);
+                        p.fillRect(pix.rect(), QApplication::palette().color(QPalette::Highlight));
+                        p.end();
+
 			m_selectionEffectImage = ImageTools::blurred(pix.toImage(), m_pixmap.rect(), 5);
 			m_selectionEffectImageIsDirty = false;
 		}
