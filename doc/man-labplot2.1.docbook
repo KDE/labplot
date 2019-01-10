@@ -12,7 +12,7 @@
 <email>helen_ml_faulkner@yahoo.co.uk</email></author>
 <date>2018-09-28</date>
 <releaseinfo>LabPlot 2.6</releaseinfo>
-<productname>KDE Extragear Applications</productname>
+<productname>LabPlot</productname>
 </refentryinfo>
 
 <refmeta>
@@ -22,7 +22,7 @@
 
 <refnamediv>
 <refname>labplot2</refname>
-<refpurpose>a KDE-application for interactive graphing and analysis of scientific data.</refpurpose>
+<refpurpose>an application by KDE for interactive graphing and analysis of scientific data.</refpurpose>
 </refnamediv>
 <!-- body begins here -->
 <refsynopsisdiv id='synopsis'>
@@ -36,7 +36,7 @@
 
 <refsect1 id="description"><title>Description</title>
 <para>
-    LabPlot is a data plotting and analysis tool for the Plasma desktop.
+    LabPlot is a data plotting and analysis tool.
 </para>
 <para>
     Its features include 2D and 3D data and function plotting, easy editing of plots, analysis of data and functions, support for different worksheets using MDI and LabPlot project files.
