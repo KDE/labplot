@@ -123,7 +123,7 @@ int nsl_conv_standard_kernel(double k[], size_t n, nsl_conv_kernel_type type) {
 	}
 
 	if (!validn) {
-		printf("ERROR: kernel size %zu not supported for kernel %s\n", n, nsl_conv_kernel_name[type]);
+		printf("ERROR: kernel size %lu not supported for kernel %s\n", (unsigned long)n, nsl_conv_kernel_name[type]);
 		return -1;
 	}
 
