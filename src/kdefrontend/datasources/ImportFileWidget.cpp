@@ -2293,49 +2293,49 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
  * connects to the MQTT broker according to the connection settings.
  */
 void ImportFileWidget::mqttConnectionChanged() {
-	if (m_initialisingMQTT)
+	if (m_initialisingMQTT || ui.cbConnection->currentIndex() == -1)
 		return;
 
-	if (m_client == nullptr || m_client->state() == QMqttClient::ClientState::Disconnected) {
-		if (ui.cbConnection->currentIndex() == -1)
-			return;
-		WAIT_CURSOR;
+	WAIT_CURSOR;
 
-		delete m_client;
-		m_client = new QMqttClient;
-		connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
-		connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
-		connect(m_client, &QMqttClient::messageReceived, this, &ImportFileWidget::mqttMessageReceived);
-		connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
-
-		//determine the current connection's settings
-		KConfig config(m_configPath, KConfig::SimpleConfig);
-		KConfigGroup group = config.group(ui.cbConnection->currentText());
-
-		m_client->setHostname(group.readEntry("Host"));
-		m_client->setPort(group.readEntry("Port").toUInt());
-
-		const bool useID = group.readEntry("UseID").toUInt();
-		if (useID)
-			m_client->setClientId(group.readEntry("ClientID"));
-
-		const bool useAuthentication = group.readEntry("UseAuthentication").toUInt();
-		if (useAuthentication) {
-			m_client->setUsername(group.readEntry("UserName"));
-			m_client->setPassword(group.readEntry("Password"));
-		}
-
-		qDebug()<< "Use ID" << useID << " " << m_client->clientId();
-		qDebug()<< "Use authentication" << useAuthentication << " " << m_client->username() << " " << m_client->password();
-		qDebug()<< m_client->hostname() << "   " << m_client->port();
-		qDebug()<< "Trying to connect";
-		m_connectTimeoutTimer->start();
-		m_client->connectToHost();
-	} else if (m_client->state() == QMqttClient::ClientState::Connected) {
-		WAIT_CURSOR;
-		qDebug()<<"Disconnecting from MQTT broker";
+	//disconnected from the broker that was selected before, if this is the case
+	if (m_client && m_client->state() == QMqttClient::ClientState::Connected) {
+		ui.twTopics->clear();
+		ui.twSubscriptions->clear();
+		ui.twTopics->headerItem()->setText(0, i18n("Available"));
+		disconnect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
+		QDEBUG("Disconnecting from " << m_client->hostname());
 		m_client->disconnectFromHost();
+		delete m_client;
 	}
+
+	//determine the connection settings for the new broker and initialize the mqtt client
+	KConfig config(m_configPath, KConfig::SimpleConfig);
+	KConfigGroup group = config.group(ui.cbConnection->currentText());
+
+	m_client = new QMqttClient;
+	connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
+	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
+	connect(m_client, &QMqttClient::messageReceived, this, &ImportFileWidget::mqttMessageReceived);
+	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
+
+	m_client->setHostname(group.readEntry("Host"));
+	m_client->setPort(group.readEntry("Port").toUInt());
+
+	const bool useID = group.readEntry("UseID").toUInt();
+	if (useID)
+		m_client->setClientId(group.readEntry("ClientID"));
+
+	const bool useAuthentication = group.readEntry("UseAuthentication").toUInt();
+	if (useAuthentication) {
+		m_client->setUsername(group.readEntry("UserName"));
+		m_client->setPassword(group.readEntry("Password"));
+	}
+
+	//connect to the selected broker
+	QDEBUG("Connect to " << m_client->hostname() << ":" << m_client->port());
+	m_connectTimeoutTimer->start();
+	m_client->connectToHost();
 }
 
 /*!
@@ -2396,9 +2396,8 @@ void ImportFileWidget::mqttAvailableTopicDoubleClicked(QTreeWidgetItem* item, in
 void ImportFileWidget::mqttSubscribedTopicDoubleClicked(QTreeWidgetItem* item, int column) {
 	Q_UNUSED(column)
 	// Only for leaf subscriptions
-	if (item->childCount() == 0) {
+	if (item->childCount() == 0)
 		mqttUnsubscribe();
-	}
 }
 
 /*!
@@ -2557,7 +2556,7 @@ void ImportFileWidget::mqttUnsubscribe() {
  */
 void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqttTopicName& topic) {
 	Q_UNUSED(message);
-	qDebug()<<"recieved " << topic.name();
+// 	qDebug()<<"recieved " << topic.name();
 	if (m_addedTopics.contains(topic.name()))
 		return;
 
