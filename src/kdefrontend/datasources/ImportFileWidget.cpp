@@ -2348,7 +2348,7 @@ void ImportFileWidget::onMqttConnect() {
 		ui.gbManageSubscriptions->setVisible(true);
 
 		if (!m_client->subscribe(QMqttTopicFilter(QLatin1String("#")), 1))
-			QMessageBox::critical(this, i18n("Couldn't subscribe"), i18n("Couldn't subscribe. Something went wrong"));
+			QMessageBox::critical(this, i18n("Couldn't subscribe"), i18n("Couldn't subscribe to all available topics. Something went wrong"));
 	}
 	emit subscriptionsChanged();
 	RESET_CURSOR;

@@ -686,10 +686,9 @@ void LiveDataDock::statisticsChanged(MQTTClient::WillStatisticsType willStatisti
  * in order to later list every available topic
  */
 void LiveDataDock::onMQTTConnect() {
-	const QMqttTopicFilter globalFilter{"#"};
-	QMqttSubscription* subscription { m_clients[m_mqttClients.first()->clientHostName()]->subscribe(globalFilter, 1) };
-	if (!subscription)
-		qDebug()<<"Couldn't make global subscription in LiveDataDock";
+	auto* client = m_clients[m_mqttClients.first()->clientHostName()];
+	if (!client || !client->subscribe(QMqttTopicFilter(QLatin1String("#")), 1))
+		QMessageBox::critical(this, i18n("Couldn't subscribe"), i18n("Couldn't subscribe to all available topics. Something went wrong"));
 }
 
 /*!
