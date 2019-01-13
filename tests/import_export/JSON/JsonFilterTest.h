@@ -42,6 +42,7 @@ private slots:
 	void testObjectImport01();
 	void testObjectImport02();
 	void testObjectImport03();
+	void testObjectImport04();
 
 private:
 	QString m_dataDir;

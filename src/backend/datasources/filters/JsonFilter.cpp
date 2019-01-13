@@ -282,7 +282,7 @@ int JsonFilterPrivate::parseColumnModes(QJsonValue row, QString rowName) {
 	//add index column if required
 	if (createIndexEnabled) {
 		columnModes << AbstractColumn::Integer;
-		vectorNames << QLatin1String("index");
+		vectorNames << i18n("index");
 	}
 
 	//add column for object names if required
@@ -290,13 +290,13 @@ int JsonFilterPrivate::parseColumnModes(QJsonValue row, QString rowName) {
 		const AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(rowName, dateTimeFormat, numberFormat);
 		columnModes << mode;
 		if (mode == AbstractColumn::DateTime)
-			vectorNames << QLatin1String("timestamp");
+			vectorNames << i18n("timestamp");
 		else if (mode == AbstractColumn::Month)
-			vectorNames << QLatin1String("month");
+			vectorNames << i18n("month");
 		else if (mode == AbstractColumn::Day)
-			vectorNames << QLatin1String("day");
+			vectorNames << i18n("day");
 		else
-			vectorNames << QLatin1String("name");
+			vectorNames << i18n("name");
 	}
 
 	//determine the column modes and names
@@ -306,7 +306,7 @@ int JsonFilterPrivate::parseColumnModes(QJsonValue row, QString rowName) {
 			case QJsonValue::Array: {
 				QJsonArray arr = row.toArray();
 				columnValue = *(row.toArray().begin() + i);
-				vectorNames << "Column " + QString::number(i + 1);
+				vectorNames << i18n("Column %1", QString::number(i + 1));
 				break;
 			}
 			case QJsonValue::Object: {
