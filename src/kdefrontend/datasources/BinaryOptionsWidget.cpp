@@ -32,19 +32,19 @@
 #include <KSharedConfig>
 #include <KConfigGroup>
 
- /*!
+/*!
 	\class BinaryOptionsWidget
 	\brief Widget providing options for the import of binary data
 
 	\ingroup kdefrontend
- */
+*/
 
 BinaryOptionsWidget::BinaryOptionsWidget(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(parent);
 
 	ui.cbDataType->addItems(BinaryFilter::dataTypes());
-	ui.cbByteOrder->addItem(i18n("Little endian"));
-	ui.cbByteOrder->addItem(i18n("Big endian"));
+	ui.cbByteOrder->addItem(i18n("Little endian"), QDataStream::LittleEndian);
+	ui.cbByteOrder->addItem(i18n("Big endian"), QDataStream::BigEndian);
 
 	const QString textDataTypeShort = i18n("This option determines the data type that the imported data while converting to numbers.");
 
@@ -71,11 +71,14 @@ void BinaryOptionsWidget::applyFilterSettings(BinaryFilter* filter) const {
 
 	filter->setVectors( ui.niVectors->value() );
 	filter->setDataType( (BinaryFilter::DataType)ui.cbDataType->currentIndex() );
+	filter->setByteOrder(static_cast<QDataStream::ByteOrder>(ui.cbByteOrder->currentData().toInt()));
+	filter->setSkipBytes(ui.sbSkipBytes->value());
+	filter->setSkipStartBytes(ui.sbSkipStartBytes->value());
 	filter->setCreateIndexEnabled( ui.chbCreateIndex->isChecked() );
 }
 
 void BinaryOptionsWidget::loadSettings() const {
-    KConfigGroup conf(KSharedConfig::openConfig(), "ImportBinary");
+	KConfigGroup conf(KSharedConfig::openConfig(), "ImportBinary");
 
 	ui.niVectors->setValue(conf.readEntry("Vectors", "2").toInt());
 	ui.cbDataType->setCurrentIndex(conf.readEntry("DataType", 0));
@@ -86,7 +89,7 @@ void BinaryOptionsWidget::loadSettings() const {
 }
 
 void BinaryOptionsWidget::saveSettings() {
-    KConfigGroup conf(KSharedConfig::openConfig(), "ImportBinary");
+	KConfigGroup conf(KSharedConfig::openConfig(), "ImportBinary");
 
 	conf.writeEntry("Vectors", ui.niVectors->value());
 	conf.writeEntry("ByteOrder", ui.cbByteOrder->currentIndex());
