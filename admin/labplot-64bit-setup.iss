@@ -84,6 +84,7 @@ Source: "{#CraftRoot}\bin\libKF5NewStuff.dll"; DestDir: "{app}";Flags: ignorever
 Source: "{#CraftRoot}\bin\libKF5SyntaxHighlighting.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5Parts.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5NewStuffCore.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libKF5Bookmarks.dll"; DestDir: "{app}";Flags: ignoreversion
 ;Source: "{#CraftRoot}\bin\libKF5Notifications.dll"; DestDir: "{app}";Flags: ignoreversion
 ; missing lib on minimal Windows 10
 Source: "C:\Python36\vcruntime140.dll"; DestDir: "{app}"; Flags: ignoreversion
