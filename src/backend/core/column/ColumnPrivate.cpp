@@ -1219,7 +1219,7 @@ void ColumnPrivate::replaceInteger(int first, const QVector<int>& new_values) {
  */
 void ColumnPrivate::updateProperties() {
 
-    // TODO: for double Properties::Constant will never be used. Use an epsilon (difference smaller than epsilon is zero)
+	// TODO: for double Properties::Constant will never be used. Use an epsilon (difference smaller than epsilon is zero)
 	if (rowCount() == 0) {
 		properties = AbstractColumn::Properties::No;
 		propertiesAvailable = true;
@@ -1228,7 +1228,7 @@ void ColumnPrivate::updateProperties() {
 
 	double prevValue = NAN;
 	int prevValueInt = 0;
-	qint64 prevValueDatetime;
+	qint64 prevValueDatetime = 0;
 
 	if (m_column_mode == AbstractColumn::Integer)
 		prevValueInt = integerAt(0);
@@ -1252,7 +1252,7 @@ void ColumnPrivate::updateProperties() {
 	int valueInt;
 	qint64 valueDateTime;
 
-	for (int row=1; row< rowCount(); row++) {
+	for (int row = 1; row < rowCount(); row++) {
 
 		if (m_column_mode == AbstractColumn::Integer) {
 			valueInt = integerAt(row);
@@ -1260,14 +1260,14 @@ void ColumnPrivate::updateProperties() {
 			// check monotonic increasing
 			if (valueInt >= prevValueInt && monotonic_increasing < 0)
 				monotonic_increasing = 1;
-			else if (valueInt < prevValueInt && monotonic_increasing >=0)
+			else if (valueInt < prevValueInt && monotonic_increasing >= 0)
 				monotonic_increasing = 0;
 			// else: nothing
 
 			// check monotonic decreasing
 			if (valueInt <= prevValueInt && monotonic_decreasing < 0)
 				monotonic_decreasing = 1;
-			else if (valueInt > prevValueInt && monotonic_decreasing >=0)
+			else if (valueInt > prevValueInt && monotonic_decreasing >= 0)
 				monotonic_decreasing = 0;
 
 			prevValueInt = valueInt;
