@@ -105,12 +105,16 @@ public:
 	void setIntegerAt(int row, int new_value);
 	void replaceInteger(int first, const QVector<int>&);
 
+	void updateProperties();
+
 	mutable AbstractColumn::ColumnStatistics statistics;
 	bool statisticsAvailable{false}; //is 'statistics' already available or needs to be (re-)calculated?
 
 	bool hasValues{false};
 	bool hasValuesAvailable{false}; //is 'hasValues' already available or needs to be (re-)calculated?
 
+	mutable bool propertiesAvailable{false}; //is 'properties' already available (true) or needs to be (re-)calculated (false)?
+	mutable AbstractColumn::Properties properties{AbstractColumn::Properties::No}; // declares the properties of the curve (monotonic increasing/decreasing ...). Speed up algorithms
 private:
 	AbstractColumn::ColumnMode m_column_mode;	// type of column data
 	void* m_data;	//pointer to the data container (QVector<T>)

@@ -541,6 +541,14 @@ void AbstractColumn::replaceInteger(int first, const QVector<int>& new_values) {
 	Q_UNUSED(first) Q_UNUSED(new_values)
 }
 
+/**
+ * Returns the properties hold by this column (no, monotonic increasing, monotonic decreasing,...)
+ * Is used in XYCurve to improve the search velocity for the y value for a specific x value
+ */
+AbstractColumn::Properties AbstractColumn::properties() const {
+	return AbstractColumn::Properties::No;
+}
+
 /**********************************************************************/
 double AbstractColumn::minimum(int count) const {
 	Q_UNUSED(count);

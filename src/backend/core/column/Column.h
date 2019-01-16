@@ -104,6 +104,7 @@ public:
 	int integerAt(int) const override;
 	void setIntegerAt(int, int) override;
 	void replaceInteger(int, const QVector<int>&) override;
+	Properties properties() const override;
 
 	double maximum(int count = 0) const override;
 	double minimum(int count = 0) const override;

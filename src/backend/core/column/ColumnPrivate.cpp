@@ -575,7 +575,6 @@ bool ColumnPrivate::copy(const AbstractColumn* source, int source_start, int des
 
 	if (!m_owner->m_suppressDataChangedSignal)
 		emit m_owner->dataChanged(m_owner);
-
 	return true;
 }
 
@@ -1211,6 +1210,118 @@ void ColumnPrivate::replaceInteger(int first, const QVector<int>& new_values) {
 
 	if (!m_owner->m_suppressDataChangedSignal)
 		emit m_owner->dataChanged(m_owner);
+}
+
+/*!
+ * Updates the properties. Will be called, when data in the column changed.
+ * The properies will be used to speed up some algorithms.
+ * See where variable properties will be used.
+ */
+void ColumnPrivate::updateProperties() {
+
+    // TODO: for double Properties::Constant will never be used. Use an epsilon (difference smaller than epsilon is zero)
+	if (rowCount() == 0) {
+		properties = AbstractColumn::Properties::No;
+		propertiesAvailable = true;
+		return;
+	}
+
+	double prevValue = NAN;
+	int prevValueInt = 0;
+	qint64 prevValueDatetime;
+
+	if (m_column_mode == AbstractColumn::Integer)
+		prevValueInt = integerAt(0);
+	else if (m_column_mode == AbstractColumn::Numeric)
+		prevValue = valueAt(0);
+	else if (m_column_mode == AbstractColumn::DateTime ||
+			m_column_mode == AbstractColumn::Month ||
+			m_column_mode == AbstractColumn::Day)
+		prevValueDatetime = dateTimeAt(0).toMSecsSinceEpoch();
+	else {
+		properties = AbstractColumn::Properties::No;
+		propertiesAvailable = true;
+		return;
+	}
+
+
+	int monotonic_decreasing = -1;
+	int monotonic_increasing = -1;
+
+	double value;
+	int valueInt;
+	qint64 valueDateTime;
+
+	for (int row=1; row< rowCount(); row++) {
+
+		if (m_column_mode == AbstractColumn::Integer) {
+			valueInt = integerAt(row);
+
+			// check monotonic increasing
+			if (valueInt >= prevValueInt && monotonic_increasing < 0)
+				monotonic_increasing = 1;
+			else if (valueInt < prevValueInt && monotonic_increasing >=0)
+				monotonic_increasing = 0;
+			// else: nothing
+
+			// check monotonic decreasing
+			if (valueInt <= prevValueInt && monotonic_decreasing < 0)
+				monotonic_decreasing = 1;
+			else if (valueInt > prevValueInt && monotonic_decreasing >=0)
+				monotonic_decreasing = 0;
+
+			prevValueInt = valueInt;
+
+			} else if (m_column_mode == AbstractColumn::Numeric) {
+				value = valueAt(row);
+
+				// check monotonic increasing
+				if (value >= prevValue && monotonic_increasing < 0)
+					monotonic_increasing = 1;
+				else if (value < prevValue)
+					monotonic_increasing = 0;
+				// else: nothing
+
+				// check monotonic decreasing
+				if (value <= prevValue && monotonic_decreasing < 0)
+					monotonic_decreasing = 1;
+				else if (value > prevValue)
+					monotonic_decreasing = 0;
+
+				prevValue = value;
+
+			} else if (m_column_mode == AbstractColumn::DateTime ||
+					   m_column_mode == AbstractColumn::Month ||
+					   m_column_mode == AbstractColumn::Day) {
+
+				valueDateTime = dateTimeAt(row).toMSecsSinceEpoch();
+
+				// check monotonic increasing
+				if (valueDateTime >= prevValueDatetime && monotonic_increasing < 0)
+					monotonic_increasing = 1;
+				else if (valueDateTime < prevValueDatetime)
+					monotonic_increasing = 0;
+				// else: nothing
+
+				// check monotonic decreasing
+				if (valueDateTime <= prevValueDatetime && monotonic_decreasing < 0)
+					monotonic_decreasing = 1;
+				else if (valueDateTime > prevValueDatetime)
+					monotonic_decreasing = 0;
+
+				prevValueDatetime = valueDateTime;
+			}
+	}
+
+	properties = AbstractColumn::Properties::No;
+	if (monotonic_increasing > 0 && monotonic_decreasing > 0)
+		properties = AbstractColumn::Properties::Constant;
+	else if (monotonic_decreasing > 0)
+		properties = AbstractColumn::Properties::MonotonicDecreasing;
+	else if (monotonic_increasing > 0)
+		properties = AbstractColumn::Properties::MonotonicIncreasing;
+
+	propertiesAvailable = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -91,6 +91,13 @@ public:
 		// QMatrix
 		// etc.
 	};
+	enum Properties {
+		No = 0x00,
+		Constant = 0x01,
+		MonotonicIncreasing = 0x02, // prev_value >= value for all values in column
+		MonotonicDecreasing = 0x04 // prev_value <= value for all values in column
+		// add new values with next bit set (0x08)
+	};
 
 	struct ColumnStatistics {
 		ColumnStatistics() {
@@ -187,6 +194,7 @@ public:
 	virtual int integerAt(int row) const;
 	virtual void setIntegerAt(int row, int new_value);
 	virtual void replaceInteger(int first, const QVector<int>& new_values);
+	virtual Properties properties() const;
 
 signals:
 	void plotDesignationAboutToChange(const AbstractColumn* source);

@@ -243,6 +243,7 @@ void Column::handleRowInsertion(int before, int count) {
 
 	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
+	d->propertiesAvailable = false;
 }
 
 /**
@@ -256,6 +257,7 @@ void Column::handleRowRemoval(int first, int count) {
 
 	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
+	d->propertiesAvailable = false;
 }
 
 /**
@@ -355,6 +357,7 @@ void Column::clearFormulas() {
 void Column::setTextAt(int row, const QString& new_value) {
 	DEBUG("Column::setTextAt()");
 	d->statisticsAvailable = false;
+	d->propertiesAvailable = false;
 	exec(new ColumnSetTextCmd(d, row, new_value));
 }
 
@@ -367,6 +370,7 @@ void Column::replaceTexts(int first, const QVector<QString>& new_values) {
 	DEBUG("Column::replaceTexts()");
 	if (!new_values.isEmpty()) { //TODO: do we really need this check?
 		d->statisticsAvailable = false;
+		d->propertiesAvailable = false;
 		exec(new ColumnReplaceTextsCmd(d, first, new_values));
 	}
 }
@@ -378,6 +382,7 @@ void Column::replaceTexts(int first, const QVector<QString>& new_values) {
  */
 void Column::setDateAt(int row, QDate new_value) {
 	d->statisticsAvailable = false;
+	d->propertiesAvailable = false;
 	setDateTimeAt(row, QDateTime(new_value, timeAt(row)));
 }
 
@@ -388,6 +393,7 @@ void Column::setDateAt(int row, QDate new_value) {
  */
 void Column::setTimeAt(int row, QTime new_value) {
 	d->statisticsAvailable = false;
+	d->propertiesAvailable = false;
 	setDateTimeAt(row, QDateTime(dateAt(row), new_value));
 }
 
@@ -398,6 +404,7 @@ void Column::setTimeAt(int row, QTime new_value) {
  */
 void Column::setDateTimeAt(int row, const QDateTime& new_value) {
 	d->statisticsAvailable = false;
+	d->propertiesAvailable = false;
 	exec(new ColumnSetDateTimeCmd(d, row, new_value));
 }
 
@@ -409,6 +416,7 @@ void Column::setDateTimeAt(int row, const QDateTime& new_value) {
 void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 	if (!new_values.isEmpty()) {
 		d->statisticsAvailable = false;
+		d->propertiesAvailable = false;
 		exec(new ColumnReplaceDateTimesCmd(d, first, new_values));
 	}
 }
@@ -422,6 +430,7 @@ void Column::setValueAt(int row, const double new_value) {
 // 	DEBUG("Column::setValueAt()");
 	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
+	d->propertiesAvailable = false;
 	exec(new ColumnSetValueCmd(d, row, new_value));
 }
 
@@ -435,6 +444,7 @@ void Column::replaceValues(int first, const QVector<double>& new_values) {
 	if (!new_values.isEmpty()) {
 		d->statisticsAvailable = false;
 		d->hasValuesAvailable = false;
+		d->propertiesAvailable = false;
 		exec(new ColumnReplaceValuesCmd(d, first, new_values));
 	}
 }
@@ -448,6 +458,7 @@ void Column::setIntegerAt(int row, const int new_value) {
 	DEBUG("Column::setIntegerAt()");
 	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
+	d->propertiesAvailable = false;
 	exec(new ColumnSetIntegerCmd(d, row, new_value));
 }
 
@@ -461,8 +472,20 @@ void Column::replaceInteger(int first, const QVector<int>& new_values) {
 	if (!new_values.isEmpty()) {
 		d->statisticsAvailable = false;
 		d->hasValuesAvailable = false;
+		d->propertiesAvailable = false;
 		exec(new ColumnReplaceIntegersCmd(d, first, new_values));
 	}
+}
+/*!
+ * \brief Column::properties
+ * Returns the column properties of this curve (monoton increasing, monoton decreasing, ... )
+ * \see AbstractColumn::properties
+ */
+AbstractColumn::Properties Column::properties() const{
+	if (!d->propertiesAvailable)
+		d->updateProperties();
+
+	return d->properties;
 }
 
 const Column::ColumnStatistics& Column::statistics() const {
@@ -573,6 +596,7 @@ void Column::calculateStatistics() const {
 	}
 
 	statistics.entropy = -entropy;
+
 	d->statisticsAvailable = true;
 }
 
@@ -671,11 +695,15 @@ int Column::integerAt(int row) const {
  * This is used e.g. in \c XYFitCurvePrivate::recalculate()
  */
 void Column::setChanged() {
+
+    d->propertiesAvailable = false;
+
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this);
 
 	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1101,6 +1129,7 @@ void Column::handleFormatChange() {
 
 	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
+    d->propertiesAvailable = false;
 	DEBUG("Column::handleFormatChange() DONE");
 }
 
