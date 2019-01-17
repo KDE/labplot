@@ -888,7 +888,7 @@ void HistogramPrivate::recalcHistogram() {
 		//calculate the histogram
 		if (m_bins > 0) {
 			m_histogram = gsl_histogram_alloc (m_bins);
-			gsl_histogram_set_ranges_uniform (m_histogram, binRangesMin, binRangesMax+1);
+			gsl_histogram_set_ranges_uniform (m_histogram, binRangesMin, binRangesMax);
 
 			for (int row = 0; row < dataColumn->rowCount(); ++row) {
 				if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) )
@@ -954,9 +954,7 @@ void HistogramPrivate::verticalHistogram() {
 	if (!m_histogram)
 		return;
 
-	const double min = gsl_histogram_min(m_histogram);
-	const double max = gsl_histogram_max(m_histogram);
-	const double width = (max - min)/m_bins;
+	const double width = (binRangesMax - binRangesMin)/m_bins;
 	double value = 0.;
 	if (lineType == Histogram::Bars) {
 		for (size_t i = 0; i < m_bins; ++i) {
@@ -965,7 +963,7 @@ void HistogramPrivate::verticalHistogram() {
 			else
 				value += gsl_histogram_get(m_histogram, i);
 
-			const double x = min + i*width;
+			const double x = binRangesMin + i*width;
 			lines.append(QLineF(x, 0., x, value));
 			lines.append(QLineF(x, value, x + width, value));
 			lines.append(QLineF(x + width, value, x + width, 0.));
@@ -979,7 +977,7 @@ void HistogramPrivate::verticalHistogram() {
 			else
 				value += gsl_histogram_get(m_histogram, i);
 
-			const double x = min + i*width;
+			const double x = binRangesMin + i*width;
 			lines.append(QLineF(x, prevValue, x, value));
 			lines.append(QLineF(x, value, x + width, value));
 			pointsLogical.append(QPointF(x+width/2, value));
@@ -996,23 +994,21 @@ void HistogramPrivate::verticalHistogram() {
 			else
 				value += gsl_histogram_get(m_histogram, i);
 
-			const double x = min + i*width - width/2;
+			const double x = binRangesMin + i*width - width/2;
 			lines.append(QLineF(x, 0., x, value));
 			pointsLogical.append(QPointF(x, value));
 		}
 	}
 
 	if (lineType != Histogram::DropLines)
-		lines.append(QLineF(min, 0., max, 0.));
+		lines.append(QLineF(binRangesMin, 0., binRangesMax, 0.));
 }
 
 void HistogramPrivate::horizontalHistogram() {
 	if (!m_histogram)
 		return;
 
-	const double min = gsl_histogram_min(m_histogram);
-	const double max = gsl_histogram_max(m_histogram);
-	const double width = (max - min)/m_bins;
+	const double width = (binRangesMax - binRangesMin)/m_bins;
 	double value = 0.;
 	if (lineType == Histogram::Bars) {
 		for (size_t i = 0; i < m_bins; ++i) {
@@ -1021,7 +1017,7 @@ void HistogramPrivate::horizontalHistogram() {
 			else
 				value += gsl_histogram_get(m_histogram,i);
 
-			const double y = min + i*width;
+			const double y = binRangesMin + i*width;
 			lines.append(QLineF(0., y, value, y));
 			lines.append(QLineF(value, y, value, y + width));
 			lines.append(QLineF(value, y + width, 0., y + width));
@@ -1035,7 +1031,7 @@ void HistogramPrivate::horizontalHistogram() {
 			else
 				value += gsl_histogram_get(m_histogram, i);
 
-			const double y = min + i*width;
+			const double y = binRangesMin + i*width;
 			lines.append(QLineF(prevValue, y, value, y));
 			lines.append(QLineF(value, y, value, y + width));
 			pointsLogical.append(QPointF(value, y+width/2));
@@ -1052,14 +1048,14 @@ void HistogramPrivate::horizontalHistogram() {
 			else
 				value += gsl_histogram_get(m_histogram, i);
 
-			const double y = min + i*width - width/2;
+			const double y = binRangesMin + i*width - width/2;
 			lines.append(QLineF(0., y, value, y));
 			pointsLogical.append(QPointF(value, y));
 		}
 	}
 
 	if (lineType != Histogram::DropLines)
-		lines.append(QLineF(0., min, 0., max));
+		lines.append(QLineF(0., binRangesMin, 0., binRangesMax));
 }
 
 void HistogramPrivate::updateSymbols() {
