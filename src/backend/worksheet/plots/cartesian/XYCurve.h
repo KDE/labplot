@@ -66,6 +66,13 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
+	static int calculateMaxSteps(unsigned int value);
+	double y(double x, bool &valueFound) const;
+	QDateTime yDateTime(double x, bool &valueFound) const;
+	int indexForX(double x) const;
+	int indexForX(double x, QVector<double>& column, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
+	int indexForX(double x, QVector<QPointF>& column, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
+	int indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)

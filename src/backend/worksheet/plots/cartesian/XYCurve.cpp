@@ -1677,6 +1677,443 @@ void XYCurvePrivate::updateFilling() {
 	recalcShapeAndBoundingRect();
 }
 
+/*!
+ * calculates log2(x)+1 for an integer value.
+ * Used in y(double x) to calculate the maximum steps
+ * source: https://stackoverflow.com/questions/11376288/fast-computing-of-log2-for-64-bit-integers
+ * source: http://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
+ * @param value
+ * @return returns calculated value
+ */
+// TODO: testing if it is faster than calculating log2.
+int XYCurve::calculateMaxSteps (unsigned int value) {
+	const char LogTable256[256] =
+	{
+		-1,0,1,1,2,2,2,2,3,3,3,3,3,3,3,3,
+		4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
+		5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
+		5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
+		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7
+	};
+
+	unsigned int r;     // r will be lg(v)
+	unsigned int t, tt; // temporaries
+	if ((tt = value >> 16))
+		r = (t = tt >> 8) ? 24 + LogTable256[t] : 16 + LogTable256[tt];
+	else
+		r = (t = value >> 8) ? 8 + LogTable256[t] : LogTable256[value];
+
+	return r+1;
+}
+
+ /*!
+ * Find y value which corresponds to a @p x . @p valueFound indicates, if value was found.
+ * When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+ * @param x
+ * @param valueFound
+ * @return
+ */
+double XYCurve::y(double x, bool &valueFound) const {
+
+    AbstractColumn::ColumnMode yColumnMode = yColumn()->columnMode();
+	int index = indexForX(x);
+	if (index < 0) {
+		valueFound = false;
+		return NAN;
+	}
+
+	valueFound = true;
+	if (yColumnMode == AbstractColumn::ColumnMode::Numeric ||
+		yColumnMode == AbstractColumn::ColumnMode::Integer) {
+		return yColumn()->valueAt(index);
+	} else {
+		valueFound = false;
+		return NAN;
+	}
+}
+
+/*!
+* Find y DateTime which corresponds to a @p x . @p valueFound indicates, if value was found.
+* When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+* @param x
+* @param valueFound
+* @return Return found value
+*/
+QDateTime XYCurve::yDateTime(double x, bool &valueFound) const {
+
+   AbstractColumn::ColumnMode yColumnMode = yColumn()->columnMode();
+   int index = indexForX(x);
+   if (index < 0) {
+	   valueFound = false;
+	   return QDateTime();
+   }
+
+   valueFound = true;
+   if (yColumnMode == AbstractColumn::ColumnMode::Day ||
+	   yColumnMode == AbstractColumn::ColumnMode::Month ||
+	   yColumnMode == AbstractColumn::ColumnMode::DateTime)
+	   return yColumn()->dateTimeAt(index);
+
+   valueFound = false;
+   return QDateTime();
+}
+
+/*!
+* Find index which corresponds to a @p x .
+* When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+* @param x
+* @return -1 if index not found, otherwise the index
+*/
+int XYCurve::indexForX(double x) const {
+	int rowCount = xColumn()->rowCount();
+
+	double prevValue = 0;
+	qint64 prevValueDateTime = 0;
+	AbstractColumn::ColumnMode xColumnMode = xColumn()->columnMode();
+	int properties = xColumn()->properties();
+	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
+			properties == AbstractColumn::Properties::MonotonicDecreasing) {
+		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
+		bool increase = (properties != AbstractColumn::Properties::MonotonicDecreasing);
+
+		int lowerIndex = 0;
+		int higherIndex = rowCount-1;
+
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount));
+
+		if ((xColumnMode == AbstractColumn::ColumnMode::Numeric ||
+			 xColumnMode == AbstractColumn::ColumnMode::Integer)) {
+			for (int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
+				double value = xColumn()->valueAt(index);
+
+				if (higherIndex-lowerIndex < 3) {
+					if (abs(xColumn()->valueAt(lowerIndex) - x) < abs(xColumn()->valueAt(higherIndex) - x))
+						index = lowerIndex;
+					else
+						index = higherIndex;
+
+					return index;
+				}
+
+				if (value > x && increase)
+					higherIndex = index;
+				else if (value > x && !increase)
+					lowerIndex = index;
+				else if (value < x && increase)
+					lowerIndex = index;
+				else if (value < x && !increase)
+					higherIndex = index;
+
+			}
+		} else if ((xColumnMode == AbstractColumn::ColumnMode::DateTime ||
+					xColumnMode == AbstractColumn::ColumnMode::Month ||
+					xColumnMode == AbstractColumn::ColumnMode::Day)) {
+			qint64 xInt64 = static_cast<qint64>(x);
+			for (int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
+				qint64 value = xColumn()->dateTimeAt(index).toMSecsSinceEpoch();
+
+				if (higherIndex - lowerIndex < 3) {
+					if (abs(xColumn()->dateTimeAt(lowerIndex).toMSecsSinceEpoch() - xInt64) < abs(xColumn()->dateTimeAt(higherIndex).toMSecsSinceEpoch() - xInt64))
+						index = lowerIndex;
+					else
+						index = higherIndex;
+
+					return index;
+				}
+
+				if (value > xInt64 && increase)
+					higherIndex = index;
+				else if (value > xInt64 && !increase)
+					lowerIndex = index;
+				else if (value < xInt64 && increase)
+					lowerIndex = index;
+				else if (value < xInt64 && !increase)
+					higherIndex = index;
+
+			}
+		}
+
+	} else if (properties == AbstractColumn::Properties::Constant) {
+		if (rowCount > 0)
+			return 0;
+		else
+			return -1;
+	} else {
+		// naiv way
+		if ((xColumnMode == AbstractColumn::ColumnMode::Numeric ||
+			 xColumnMode == AbstractColumn::ColumnMode::Integer)) {
+			for (int row = 0; row < rowCount; row++) {
+				if (xColumn()->isValid(row)) {
+					if (row == 0)
+						prevValue = xColumn()->valueAt(row);
+
+					double value = xColumn()->valueAt(row);
+					if (abs(value - x) <= abs(prevValue - x)) { // <= prevents also that row-1 become < 0
+						if (row < rowCount-1)
+							prevValue = value;
+						else {
+							return row;
+						}
+					}else{
+						return row-1;
+					}
+				}
+			}
+		} else if ((xColumnMode == AbstractColumn::ColumnMode::DateTime ||
+					xColumnMode == AbstractColumn::ColumnMode::Month ||
+					xColumnMode == AbstractColumn::ColumnMode::Day)) {
+			qint64 xInt64 = static_cast<qint64>(x);
+			for (int row = 0; row < rowCount; row++) {
+				if (xColumn()->isValid(row)) {
+					if (row == 0)
+						prevValueDateTime = xColumn()->dateTimeAt(row).toMSecsSinceEpoch();
+
+					qint64 value = xColumn()->dateTimeAt(row).toMSecsSinceEpoch();
+					if (abs(value - xInt64) <= abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row-1 become < 0
+						if (row < rowCount-1)
+							prevValueDateTime = value;
+						else {
+							return row;
+						}
+					}else{
+						return row-1;
+					}
+				}
+			}
+
+		}
+	}
+	return -1;
+}
+
+/*!
+* Find index which corresponds to a @p x . In a vector of values
+* When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+* @param x
+* @return -1 if index not found, otherwise the index
+*/
+int XYCurve::indexForX(double x, QVector<double>& column, AbstractColumn::Properties properties) const {
+	int rowCount = column.count();
+	if (rowCount == 0)
+		return -1;
+
+	double prevValue = 0;
+	qint64 prevValueDateTime = 0;
+	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
+			properties == AbstractColumn::Properties::MonotonicDecreasing) {
+		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
+		bool increase = true;
+		if(properties == AbstractColumn::Properties::MonotonicDecreasing)
+			increase = false;
+
+		int lowerIndex = 0;
+		int higherIndex = rowCount-1;
+
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount));
+
+		for (int i = 0; i< maxSteps; i++) { // so no log_2(rowCount) needed
+			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
+			double value = column[index];
+
+			if (higherIndex - lowerIndex < 3) {
+				if (abs(column[lowerIndex] - x) < abs(column[higherIndex] - x))
+					index = lowerIndex;
+				else
+					index = higherIndex;
+
+				return index;
+			}
+
+			if (value > x && increase)
+				higherIndex = index;
+			else if (value > x && !increase)
+				lowerIndex = index;
+			else if (value < x && increase)
+				lowerIndex = index;
+			else if (value < x && !increase)
+				higherIndex = index;
+
+		}
+
+	} else if (properties == AbstractColumn::Properties::Constant) {
+		return 0;
+	} else {
+		// AbstractColumn::Properties::No
+		// naiv way
+		prevValue = column[0];
+		for (int row = 0; row < rowCount; row++) {
+
+			double value = column[row];
+			if (abs(value - x) <= abs(prevValue - x)) { // "<=" prevents also that row-1 become < 0
+				if (row < rowCount-1)
+					prevValue = value;
+				else
+					return row;
+			}else{
+				return row-1;
+			}
+		}
+	}
+	return -1;
+}
+
+/*!
+* Find index which corresponds to a @p x . In a vector of values
+* When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+* @param x
+* @return -1 if index not found, otherwise the index
+*/
+int XYCurve::indexForX(double x, QVector<QPointF>& points, AbstractColumn::Properties properties) const {
+	int rowCount = points.count();
+
+	if (rowCount == 0)
+		return -1;
+
+	double prevValue = 0;
+	qint64 prevValueDateTime = 0;
+	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
+			properties == AbstractColumn::Properties::MonotonicDecreasing) {
+		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
+		bool increase = true;
+		if(properties == AbstractColumn::Properties::MonotonicDecreasing)
+			increase = false;
+
+		int lowerIndex = 0;
+		int higherIndex = rowCount-1;
+
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount));
+
+		for (int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
+			double value = points[index].x();
+
+			if (higherIndex - lowerIndex < 3) {
+				if (abs(points[lowerIndex].x() - x) < abs(points[higherIndex].x() - x))
+					index = lowerIndex;
+				else
+					index = higherIndex;
+
+				return index;
+			}
+
+			if (value > x && increase)
+				higherIndex = index;
+			else if (value > x && !increase)
+				lowerIndex = index;
+			else if (value < x && increase)
+				lowerIndex = index;
+			else if (value < x && !increase)
+				higherIndex = index;
+
+		}
+
+	} else if (properties == AbstractColumn::Properties::Constant) {
+		return 0;
+	} else {
+		// AbstractColumn::Properties::No
+		// naiv way
+		prevValue = points[0].x();
+		for (int row = 0; row < rowCount; row++) {
+
+			double value = points[row].x();
+			if (abs(value - x) <= abs(prevValue - x)) { // "<=" prevents also that row-1 become < 0
+				if (row < rowCount-1)
+					prevValue = value;
+				else
+					return row;
+			}else{
+				return row-1;
+			}
+		}
+	}
+	return -1;
+}
+
+/*!
+* Find index which corresponds to a @p x . In a vector of values
+* When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+* @param x
+* @return -1 if index not found, otherwise the index
+*/
+int XYCurve::indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Properties properties) const {
+	int rowCount = lines.count();
+	if (rowCount == 0)
+		return -1;
+	// use only p1 to find index
+	double prevValue = 0;
+	qint64 prevValueDateTime = 0;
+	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
+			properties == AbstractColumn::Properties::MonotonicDecreasing) {
+		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
+		bool increase = true;
+		if(properties == AbstractColumn::Properties::MonotonicDecreasing)
+			increase = false;
+
+		int lowerIndex = 0;
+		int higherIndex = rowCount-1;
+
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount));
+
+		for (int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+
+
+			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
+			double value = lines[index].p1().x();
+
+			if (higherIndex - lowerIndex < 3) {
+				if (abs(lines[lowerIndex].p1().x() - x) < abs(lines[higherIndex].p1().x() - x))
+					index = lowerIndex;
+				else
+					index = higherIndex;
+
+				return index;
+			}
+
+			if (value > x && increase)
+				higherIndex = index;
+			else if (value > x && !increase)
+				lowerIndex = index;
+			else if (value < x && increase)
+				lowerIndex = index;
+			else if (value < x && !increase)
+				higherIndex = index;
+
+		}
+
+	} else if (properties == AbstractColumn::Properties::Constant) {
+		return 0;
+	} else {
+		// AbstractColumn::Properties::No
+		// naiv way
+		prevValue = lines[0].p1().x();
+		for (int row = 0; row < rowCount; row++) {
+			double value = lines[row].p1().x();
+			if (abs(value - x) <= abs(prevValue - x)) { // "<=" prevents also that row-1 become < 0
+				if (row < rowCount-1)
+					prevValue = value;
+				else
+					return row;
+			}else{
+				return row-1;
+			}
+		}
+	}
+	return -1;
+}
+
 void XYCurvePrivate::updateErrorBars() {
 	errorBarsPath = QPainterPath();
 	if (xErrorType == XYCurve::NoError && yErrorType == XYCurve::NoError) {
