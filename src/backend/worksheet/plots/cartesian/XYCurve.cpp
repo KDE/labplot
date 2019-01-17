@@ -1687,8 +1687,7 @@ void XYCurvePrivate::updateFilling() {
  */
 // TODO: testing if it is faster than calculating log2.
 int XYCurve::calculateMaxSteps (unsigned int value) {
-	const char LogTable256[256] =
-	{
+	const char LogTable256[256] = {
 		-1,0,1,1,2,2,2,2,3,3,3,3,3,3,3,3,
 		4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
 		5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
@@ -1788,17 +1787,17 @@ int XYCurve::indexForX(double x) const {
 		bool increase = (properties != AbstractColumn::Properties::MonotonicDecreasing);
 
 		int lowerIndex = 0;
-		int higherIndex = rowCount-1;
+		int higherIndex = rowCount - 1;
 
 		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount));
 
 		if ((xColumnMode == AbstractColumn::ColumnMode::Numeric ||
 			 xColumnMode == AbstractColumn::ColumnMode::Integer)) {
-			for (int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
 				double value = xColumn()->valueAt(index);
 
-				if (higherIndex-lowerIndex < 3) {
+				if (higherIndex - lowerIndex < 3) {
 					if (abs(xColumn()->valueAt(lowerIndex) - x) < abs(xColumn()->valueAt(higherIndex) - x))
 						index = lowerIndex;
 					else
@@ -1821,7 +1820,7 @@ int XYCurve::indexForX(double x) const {
 					xColumnMode == AbstractColumn::ColumnMode::Month ||
 					xColumnMode == AbstractColumn::ColumnMode::Day)) {
 			qint64 xInt64 = static_cast<qint64>(x);
-			for (int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
 				qint64 value = xColumn()->dateTimeAt(index).toMSecsSinceEpoch();
 
@@ -1861,8 +1860,8 @@ int XYCurve::indexForX(double x) const {
 						prevValue = xColumn()->valueAt(row);
 
 					double value = xColumn()->valueAt(row);
-					if (abs(value - x) <= abs(prevValue - x)) { // <= prevents also that row-1 become < 0
-						if (row < rowCount-1)
+					if (abs(value - x) <= abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
+						if (row < rowCount - 1)
 							prevValue = value;
 						else {
 							return row;
@@ -1882,14 +1881,13 @@ int XYCurve::indexForX(double x) const {
 						prevValueDateTime = xColumn()->dateTimeAt(row).toMSecsSinceEpoch();
 
 					qint64 value = xColumn()->dateTimeAt(row).toMSecsSinceEpoch();
-					if (abs(value - xInt64) <= abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row-1 become < 0
-						if (row < rowCount-1)
+					if (abs(value - xInt64) <= abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
+						if (row < rowCount - 1)
 							prevValueDateTime = value;
-						else {
+						else
 							return row;
-						}
-					}else{
-						return row-1;
+					} else {
+						return row - 1;
 					}
 				}
 			}
@@ -1911,7 +1909,7 @@ int XYCurve::indexForX(double x, QVector<double>& column, AbstractColumn::Proper
 		return -1;
 
 	double prevValue = 0;
-	qint64 prevValueDateTime = 0;
+	//qint64 prevValueDateTime = 0;
 	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
 			properties == AbstractColumn::Properties::MonotonicDecreasing) {
 		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
@@ -1924,7 +1922,7 @@ int XYCurve::indexForX(double x, QVector<double>& column, AbstractColumn::Proper
 
 		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount));
 
-		for (int i = 0; i< maxSteps; i++) { // so no log_2(rowCount) needed
+		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
 			double value = column[index];
 
@@ -1957,13 +1955,13 @@ int XYCurve::indexForX(double x, QVector<double>& column, AbstractColumn::Proper
 		for (int row = 0; row < rowCount; row++) {
 
 			double value = column[row];
-			if (abs(value - x) <= abs(prevValue - x)) { // "<=" prevents also that row-1 become < 0
-				if (row < rowCount-1)
+			if (abs(value - x) <= abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+				if (row < rowCount - 1)
 					prevValue = value;
 				else
 					return row;
-			}else{
-				return row-1;
+			} else {
+				return row - 1;
 			}
 		}
 	}
@@ -1983,7 +1981,7 @@ int XYCurve::indexForX(double x, QVector<QPointF>& points, AbstractColumn::Prope
 		return -1;
 
 	double prevValue = 0;
-	qint64 prevValueDateTime = 0;
+	//qint64 prevValueDateTime = 0;
 	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
 			properties == AbstractColumn::Properties::MonotonicDecreasing) {
 		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
@@ -1992,11 +1990,11 @@ int XYCurve::indexForX(double x, QVector<QPointF>& points, AbstractColumn::Prope
 			increase = false;
 
 		int lowerIndex = 0;
-		int higherIndex = rowCount-1;
+		int higherIndex = rowCount - 1;
 
 		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount));
 
-		for (int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
 			double value = points[index].x();
 
@@ -2029,13 +2027,13 @@ int XYCurve::indexForX(double x, QVector<QPointF>& points, AbstractColumn::Prope
 		for (int row = 0; row < rowCount; row++) {
 
 			double value = points[row].x();
-			if (abs(value - x) <= abs(prevValue - x)) { // "<=" prevents also that row-1 become < 0
-				if (row < rowCount-1)
+			if (abs(value - x) <= abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+				if (row < rowCount - 1)
 					prevValue = value;
 				else
 					return row;
-			}else{
-				return row-1;
+			} else {
+				return row - 1;
 			}
 		}
 	}
@@ -2054,7 +2052,7 @@ int XYCurve::indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Propert
 		return -1;
 	// use only p1 to find index
 	double prevValue = 0;
-	qint64 prevValueDateTime = 0;
+	//qint64 prevValueDateTime = 0;
 	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
 			properties == AbstractColumn::Properties::MonotonicDecreasing) {
 		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
@@ -2067,9 +2065,7 @@ int XYCurve::indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Propert
 
 		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount));
 
-		for (int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
-
-
+		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
 			double value = lines[index].p1().x();
 
@@ -2101,13 +2097,13 @@ int XYCurve::indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Propert
 		prevValue = lines[0].p1().x();
 		for (int row = 0; row < rowCount; row++) {
 			double value = lines[row].p1().x();
-			if (abs(value - x) <= abs(prevValue - x)) { // "<=" prevents also that row-1 become < 0
-				if (row < rowCount-1)
+			if (abs(value - x) <= abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+				if (row < rowCount - 1)
 					prevValue = value;
 				else
 					return row;
-			}else{
-				return row-1;
+			} else {
+				return row - 1;
 			}
 		}
 	}
