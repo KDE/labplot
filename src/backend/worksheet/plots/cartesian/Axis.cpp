@@ -1440,6 +1440,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			for (const auto value : tickLabelValues) {
 				str = QString::number(value, 'e', labelsPrecision);
 				if (str == "-" + nullStr) str = nullStr;
+				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::FormatPowers10) {
