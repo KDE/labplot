@@ -109,14 +109,7 @@ signals:
 private:
 	void updateSubscriptionCompleter();
 	void addTopicToTree(const QString&);
-	bool checkTopicContains(const QString& superior, const QString& inferior);
-	QString checkCommonLevel(const QString& first, const QString& second);
-	void findSubscriptionLeafChildren(QVector<QTreeWidgetItem *>&, QTreeWidgetItem*);
-	int checkCommonChildCount(int levelIdx, int level, QStringList& namelist, QTreeWidgetItem* currentItem);
 	void manageCommonLevelSubscriptions();
-	int commonLevelIndex(const QString& first, const QString& second);
-	void addSubscriptionChildren(QTreeWidgetItem* topic, QTreeWidgetItem* subscription);
-	void restoreSubscriptionChildren(QTreeWidgetItem* topic, QTreeWidgetItem* subscription, const QStringList&, int level);
 
 	QList<MQTTClient*> m_mqttClients;
 	QMap<QString, QMqttClient*> m_clients;

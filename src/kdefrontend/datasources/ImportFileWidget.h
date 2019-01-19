@@ -4,7 +4,7 @@
     Description          : import file data widget
     --------------------------------------------------------------------
     Copyright            : (C) 2009-2017 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-    Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2019 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017-2018 Fabian Kristof (fkristofszabolcs@gmail.com)
 
  ***************************************************************************/
@@ -139,16 +139,9 @@ signals:
 #ifdef HAVE_MQTT
 private:
 	void updateSubscriptionCompleter();
-	bool checkTopicContains(const QString&, const QString&)	;
-	QString checkCommonLevel(const QString&, const QString&);
-	int commonLevelIndex(const QString& first, const QString& second);
 	void unsubscribeFromTopic(const QString&);
-	void addSubscriptionChildren(QTreeWidgetItem*, QTreeWidgetItem*);
-	void findSubscriptionLeafChildren(QVector<QTreeWidgetItem*>&, QTreeWidgetItem*);
-	int checkCommonChildCount(int levelIdx, int level, QStringList& namelist, QTreeWidgetItem* currentItem);
 	void manageCommonLevelSubscriptions();
 	void updateSubscriptionTree();
-	void restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList& list, int level);
 
 	QMqttClient* m_client{nullptr};
 	QVector<QMqttSubscription*> m_mqttSubscriptions;
