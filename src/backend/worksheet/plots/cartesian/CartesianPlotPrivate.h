@@ -74,6 +74,7 @@ public:
 	CartesianCoordinateSystem* cSystem{nullptr};
 	bool suppressRetransform{false};
 	bool panningStarted{false};
+	bool locked{false};
 
 private:
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;

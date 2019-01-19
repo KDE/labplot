@@ -30,6 +30,7 @@
 #include "WorksheetPrivate.h"
 #include "WorksheetElement.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
+#include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/commandtemplates.h"
@@ -251,6 +252,12 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		const_cast<WorksheetElement*>(addedElement)->loadThemeConfig(config);
 	}
 
+	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(aspect);
+	if (plot) {
+		auto* p = const_cast<CartesianPlot*>(plot);
+		p->setLocked(d->plotsLocked);
+	}
+
 	//recalculated the layout
 	if (!isLoading()) {
 		if (d->layout != Worksheet::NoLayout)
@@ -394,6 +401,34 @@ void Worksheet::setSuppressLayoutUpdate(bool value) {
 
 void Worksheet::updateLayout() {
 	d->updateLayout();
+}
+
+Worksheet::CartesianPlotActionMode Worksheet::cartesianPlotActionMode() {
+	return d->cartesianPlotActionMode;
+}
+
+bool Worksheet::plotsLocked() {
+	return d->plotsLocked;
+}
+
+void Worksheet::setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode mode) {
+	if (d->cartesianPlotActionMode == mode)
+		return;
+
+	d->cartesianPlotActionMode = mode;
+	project()->setChanged(true);
+}
+
+void Worksheet::setPlotsLocked(bool lock) {
+	if (d->plotsLocked == lock)
+		return;
+
+	d->plotsLocked = lock;
+
+	for (auto* plot: children<CartesianPlot>())
+		plot->setLocked(lock);
+
+	project()->setChanged(true);
 }
 
 /* =============================== getter methods for general options ==================================== */
@@ -794,6 +829,12 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "opacity", QString::number(d->backgroundOpacity) );
 	writer->writeEndElement();
 
+	// cartesian properties
+	writer->writeStartElement( "plotProperties" );
+	writer->writeAttribute( "plotsLocked", QString::number(d->plotsLocked) );
+	writer->writeAttribute( "cartesianPlotActionMode", QString::number(d->cartesianPlotActionMode));
+	writer->writeEndElement();
+
 	//serialize all children
 	for (auto* child : children<WorksheetElement>(IncludeHidden))
 		child->save(writer);
@@ -916,6 +957,11 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			d->backgroundFileName = str;
 
 			READ_DOUBLE_VALUE("opacity", backgroundOpacity);
+		} else if(!preview && reader->name() == "plotProperties") {
+			attribs = reader->attributes();
+
+			READ_INT_VALUE("plotsLocked", plotsLocked, bool);
+			READ_INT_VALUE("cartesianPlotActionMode", cartesianPlotActionMode, Worksheet::CartesianPlotActionMode);
 		} else if (reader->name() == "cartesianPlot") {
 			CartesianPlot* plot = new CartesianPlot("");
 			plot->setIsLoading(true);

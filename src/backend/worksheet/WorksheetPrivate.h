@@ -4,7 +4,7 @@
     Description          : Private members of Worksheet.
     --------------------------------------------------------------------
     Copyright            : (C) 2012 by Alexander Semke (alexander.semke@web.de)
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -28,6 +28,8 @@
 
 #ifndef WORKSHEETPRIVATE_H
 #define WORKSHEETPRIVATE_H
+
+#include <backend/worksheet/Worksheet.h>
 
 #include <QColor>
 
@@ -73,6 +75,8 @@ public:
 	int layoutColumnCount{2};
 	int layoutRowCount{2};
 	QString theme;
+	bool plotsLocked{false};
+	Worksheet::CartesianPlotActionMode cartesianPlotActionMode{Worksheet::CartesianPlotActionMode::ApplyActionToSelection};
 };
 
 #endif

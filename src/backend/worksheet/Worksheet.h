@@ -48,6 +48,7 @@ public:
 
 	enum Unit {Millimeter, Centimeter, Inch, Point};
 	enum Layout {NoLayout, VerticalLayout, HorizontalLayout, GridLayout};
+	enum CartesianPlotActionMode {ApplyActionToSelection, ApplyActionToAll};
 
 	static float convertToSceneUnits(const float value, const Worksheet::Unit unit);
 	static float convertFromSceneUnits(const float value, const Worksheet::Unit unit);
@@ -75,6 +76,11 @@ public:
 	void setSelectedInView(const bool);
 	void deleteAspectFromGraphicsItem(const QGraphicsItem*);
 	void setIsClosing();
+
+	CartesianPlotActionMode cartesianPlotActionMode();
+	void setCartesianPlotActionMode(CartesianPlotActionMode mode);
+	void setPlotsLocked(bool);
+	bool plotsLocked();
 
 	BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
 	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)

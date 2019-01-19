@@ -1604,6 +1604,11 @@ void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
 	}
 }
 
+void CartesianPlot::setLocked(bool locked) {
+	Q_D(CartesianPlot);
+	d->locked = locked;
+}
+
 void CartesianPlot::scaleAutoX() {
 	Q_D(CartesianPlot);
 	if (d->curvesXMinMaxIsDirty) {
@@ -2399,7 +2404,7 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 		m_selectionEnd = m_selectionStart;
 		m_selectionBandIsShown = true;
 	} else {
-		if (dataRect.contains(event->pos())) {
+		if (!locked && dataRect.contains(event->pos()) ){
 			panningStarted = true;
 			m_panningStart = event->pos();
 			setCursor(Qt::ClosedHandCursor);
@@ -2533,6 +2538,9 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
+
+	if (locked)
+		return;
 	//determine first, which axes are selected and zoom only in the corresponding direction.
 	//zoom the entire plot if no axes selected.
 	bool zoomX = false;

@@ -247,14 +247,21 @@ void WorksheetView::initActions() {
 	connect(snapToGridAction, SIGNAL(triggered()), this, SLOT(changeSnapToGrid()));
 	connect(showPresenterMode, SIGNAL(triggered()), this, SLOT(presenterMode()));
 
+	//worksheet control actions
+	plotsLockedAction = new QAction(i18n("Non-interactive Plots"));
+	plotsLockedAction->setToolTip(i18n("If activated, plots on the worksheet don't react on drag and mouse wheel events."));
+	plotsLockedAction->setCheckable(true);
+	plotsLockedAction->setChecked(m_worksheet->plotsLocked());
+	connect(plotsLockedAction, &QAction::triggered, this, &WorksheetView::plotsLockedActionChanged);
+
 	//action for cartesian plots
 	auto* cartesianPlotActionModeActionGroup = new QActionGroup(this);
 	cartesianPlotActionModeActionGroup->setExclusive(true);
 	cartesianPlotApplyToSelectionAction = new QAction(i18n("Selected Plots"), cartesianPlotActionModeActionGroup);
 	cartesianPlotApplyToSelectionAction->setCheckable(true);
-	cartesianPlotApplyToSelectionAction->setChecked(true);
 	cartesianPlotApplyToAllAction = new QAction(i18n("All Plots"), cartesianPlotActionModeActionGroup);
 	cartesianPlotApplyToAllAction->setCheckable(true);
+	setCartesianPlotActionMode(m_worksheet->cartesianPlotActionMode());
 	connect(cartesianPlotActionModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotActionModeChanged(QAction*)));
 
 	auto* cartesianPlotMouseModeActionGroup = new QActionGroup(this);
@@ -479,6 +486,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotZoomMenu);
 	m_cartesianPlotMenu->addSeparator();
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotActionModeMenu);
+	m_cartesianPlotMenu->addAction(plotsLockedAction);
 
 	// Data manipulation menu
 	m_dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
@@ -527,6 +535,8 @@ void WorksheetView::createContextMenu(QMenu* menu) {
 	menu->insertMenu(firstAction, m_layoutMenu);
 	menu->insertMenu(firstAction, m_gridMenu);
 	menu->insertMenu(firstAction, m_themeMenu);
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, plotsLockedAction);
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_cartesianPlotMenu);
 	menu->insertSeparator(firstAction);
@@ -634,6 +644,17 @@ void WorksheetView::setScene(QGraphicsScene* scene) {
 
 void WorksheetView::setIsClosing() {
 	m_isClosing = true;
+}
+
+void WorksheetView::setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode mode) {
+	if (mode == Worksheet::CartesianPlotActionMode::ApplyActionToAll)
+		cartesianPlotApplyToAllAction->setChecked(true);
+	else
+		cartesianPlotApplyToSelectionAction->setChecked(true);
+}
+
+void WorksheetView::setPlotLock(bool lock) {
+	plotsLockedAction->setChecked(lock);
 }
 
 void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
@@ -1478,7 +1499,7 @@ void WorksheetView::handleCartesianPlotActions() {
 		return;
 
 	bool plot = false;
-	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+	if (m_worksheet->cartesianPlotActionMode() == Worksheet::CartesianPlotActionMode::ApplyActionToSelection) {
 		//check whether we have cartesian plots selected
 		for (auto* item : m_selectedItems) {
 			//TODO: or if a children of a plot is selected
@@ -1718,11 +1739,15 @@ void WorksheetView::layoutChanged(Worksheet::Layout layout) {
 //##############################################################################
 void WorksheetView::cartesianPlotActionModeChanged(QAction* action) {
 	if (action == cartesianPlotApplyToSelectionAction)
-		m_cartesianPlotActionMode = ApplyActionToSelection;
+		m_worksheet->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
 	else
-		m_cartesianPlotActionMode = ApplyActionToAll;
+		m_worksheet->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToAll);
 
 	handleCartesianPlotActions();
+}
+
+void WorksheetView::plotsLockedActionChanged(bool checked) {
+	m_worksheet->setPlotsLocked(checked);
 }
 
 void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
@@ -1741,7 +1766,7 @@ void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
 
 void WorksheetView::cartesianPlotAddNew(QAction* action) {
 	QVector<CartesianPlot*> plots = m_worksheet->children<CartesianPlot>();
-	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+	if (m_worksheet->cartesianPlotActionMode() == Worksheet::ApplyActionToSelection) {
 		int selectedPlots = 0;
 		for (auto* plot : plots) {
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
@@ -1830,7 +1855,7 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 
 void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 	CartesianPlot::NavigationOperation op = (CartesianPlot::NavigationOperation)action->data().toInt();
-	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+	if (m_worksheet->cartesianPlotActionMode() == Worksheet::ApplyActionToSelection) {
 		for (auto* plot : m_worksheet->children<CartesianPlot>() ) {
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
 				plot->navigate(op);

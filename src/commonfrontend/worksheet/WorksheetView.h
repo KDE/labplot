@@ -67,10 +67,11 @@ public:
 	void exportToClipboard();
 	void setIsClosing();
 	void setIsBeingPresented(bool presenting);
+	void setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode mode);
+	void setPlotLock(bool lock);
 
 private:
 	enum MouseMode {SelectionMode, NavigationMode, ZoomSelectionMode};
-	enum CartesianPlotActionMode {ApplyActionToSelection, ApplyActionToAll};
 
 	void initActions();
 	void initMenus();
@@ -98,7 +99,7 @@ private:
 
 	Worksheet* m_worksheet;
 	MouseMode m_mouseMode{SelectionMode};
-	CartesianPlotActionMode m_cartesianPlotActionMode{ApplyActionToSelection};
+	Worksheet::CartesianPlotActionMode m_cartesianPlotActionMode{Worksheet::CartesianPlotActionMode::ApplyActionToSelection};
 	CartesianPlot::MouseMode m_cartesianPlotMouseMode{CartesianPlot::SelectionMode};
 	bool m_selectionBandIsShown{false};
 	QPoint m_selectionStart;
@@ -181,7 +182,9 @@ private:
 	QAction* fourTimesMagnificationAction;
 	QAction* fiveTimesMagnificationAction;
 
+	QAction* plotsLockedAction;
 	QAction* showPresenterMode;
+
 	//Actions for cartesian plots
 	QAction* cartesianPlotApplyToSelectionAction;
 	QAction* cartesianPlotApplyToAllAction;
@@ -258,6 +261,7 @@ private slots:
 	void changeLayout(QAction*);
 	void changeGrid(QAction*);
 	void changeSnapToGrid();
+	void plotsLockedActionChanged(bool checked);
 
 	void deselectItem(QGraphicsItem*);
 	void selectionChanged();

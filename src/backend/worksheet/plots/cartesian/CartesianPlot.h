@@ -101,6 +101,7 @@ public:
 	void setRect(const QRectF&) override;
 	QRectF dataRect() const;
 	void setMouseMode(const MouseMode);
+	void setLocked(const bool);
 	MouseMode mouseMode() const;
 	void navigate(NavigationOperation);
 	void setSuppressDataChangedSignal(bool);
