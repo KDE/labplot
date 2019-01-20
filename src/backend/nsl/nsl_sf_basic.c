@@ -77,14 +77,14 @@ double nsl_sf_theta(double x) {
 #endif
 int nsl_sf_log2_int(unsigned int x) {
 #ifdef _MSC_VER
-	return (int) (__lzcnt(x) - 1);
+	return (int) (__lzcnt(x));
 #else
 	return (int) (8*sizeof (unsigned int) - __builtin_clz(x) - 1);
 #endif
 }
 int nsl_sf_log2_longlong(unsigned long long x) {
 #ifdef _MSC_VER
-	return (int) (__lzcnt64(x) - 1);
+	return (int) (__lzcnt64(x));
 #else
 	return (int) (8*sizeof (unsigned long long) - __builtin_clzll(x) - 1);
 #endif
