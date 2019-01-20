@@ -35,8 +35,12 @@ class NSLSFBasicTest : public QObject {
 private slots:
 	void initTestCase();
 
-	//TODO
-	void testlog2p1_int_C99();
+	// log2
+	void testlog2_int_C99();
+	void testlog2_int();
+	void testlog2_longlong();
+	void testlog2_int2();
+	void testlog2_int3();
 	void testlog2p1_int();
 private:
 	QString m_dataDir;

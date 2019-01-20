@@ -72,7 +72,13 @@ double nsl_sf_theta(double x) {
  * source: https://stackoverflow.com/questions/11376288/fast-computing-of-log2-for-64-bit-integers
  * source: http://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
  */
-int nsl_sf_log2p1_int(int x) {
+int nsl_sf_log2_int(unsigned int x) {
+	return (int) (8*sizeof (unsigned int) - __builtin_clz((x)) - 1);
+}
+int nsl_sf_log2_longlong(unsigned long long x) {
+	return (int) (8*sizeof (unsigned long long) - __builtin_clzll((x)) - 1);
+}
+int nsl_sf_log2_int2(int x) {
 	const signed char LogTable256[256] = {
 		-1,0,1,1,2,2,2,2,3,3,3,3,3,3,3,3,
 		4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
@@ -99,7 +105,33 @@ int nsl_sf_log2p1_int(int x) {
 	else
 		r = (t = x >> 8) ? 8 + LogTable256[t] : LogTable256[x];
 
-	return r + 1;
+	return r;
+}
+int nsl_sf_log2_int3(uint64_t value) {
+	const int tab64[64] = {
+		63,  0, 58,  1, 59, 47, 53,  2,
+		60, 39, 48, 27, 54, 33, 42,  3,
+		61, 51, 37, 40, 49, 18, 28, 20,
+		55, 30, 34, 11, 43, 14, 22,  4,
+		62, 57, 46, 52, 38, 26, 32, 41,
+		50, 36, 17, 19, 29, 10, 13, 21,
+		56, 45, 25, 31, 35, 16,  9, 12,
+		44, 24, 15,  8, 23,  7,  6,  5};
+
+	value |= value >> 1;
+	value |= value >> 2;
+	value |= value >> 4;
+	value |= value >> 8;
+	value |= value >> 16;
+	value |= value >> 32;
+
+	return tab64[((uint64_t)((value - (value >> 1))*0x07EDD5E59A4E28C2)) >> 58];
+}
+int nsl_sf_log2p1_int(int x) {
+	// fastest method
+	return nsl_sf_log2_int(x) + 1;
+	//TODO: why is this so slow
+	//return (int)log2(x) + 1;
 }
 
 double nsl_sf_sec(double x) { return 1./cos(x); }

@@ -29,6 +29,7 @@
 #ifndef NSL_SF_BASIC_H
 #define NSL_SF_BASIC_H
 
+#include <stdint.h>	/* fixed size int types */
 #include <gsl/gsl_version.h>
 #include "nsl_complex.h"
 
@@ -42,7 +43,11 @@ double nsl_sf_sgn(double x);
 /* Heavyside theta function */
 double nsl_sf_theta(double x);
 
-/* log2(x) + 1 for integer value x */
+/* log2(x) for integer value x */
+int nsl_sf_log2_int(unsigned int x);
+int nsl_sf_log2_longlong(unsigned long long x);
+int nsl_sf_log2_int2(int x);
+int nsl_sf_log2_int3(uint64_t x);
 int nsl_sf_log2p1_int(int x);
 
 /* more trig. functions */
