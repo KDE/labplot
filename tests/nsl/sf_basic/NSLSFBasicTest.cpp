@@ -28,6 +28,7 @@
 #include "NSLSFBasicTest.h"
 
 extern "C" {
+#include <gsl/gsl_version.h>
 #include "backend/nsl/nsl_sf_basic.h"
 }
 

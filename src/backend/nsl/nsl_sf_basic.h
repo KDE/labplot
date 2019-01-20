@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL special basic functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2017-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2019 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -29,8 +29,8 @@
 #ifndef NSL_SF_BASIC_H
 #define NSL_SF_BASIC_H
 
-#include <gsl/gsl_version.h>
 #include "nsl_complex.h"
+#include <gsl/gsl_version.h>
 
 /* random functions */
 double nsl_sf_rand(void);
