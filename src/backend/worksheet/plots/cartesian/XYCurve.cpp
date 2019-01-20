@@ -1687,7 +1687,7 @@ void XYCurvePrivate::updateFilling() {
  */
 // TODO: testing if it is faster than calculating log2.
 int XYCurve::calculateMaxSteps (unsigned int value) {
-	const char LogTable256[256] = {
+	const signed char LogTable256[256] = {
 		-1,0,1,1,2,2,2,2,3,3,3,3,3,3,3,3,
 		4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
 		5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
