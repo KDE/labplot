@@ -279,10 +279,8 @@ void ImportFileWidget::loadSettings() {
 	initSlots();
 
 	//update the status of the widgets
-	LiveDataSource::SourceType sourceType = currentSourceType();
-	sourceTypeChanged(sourceType);
-	if (sourceType != LiveDataSource::FileOrPipe)
-		fileTypeChanged(fileType); // only for FileOrPipe this was indirectly called by sourceTypeChanged
+	fileTypeChanged(fileType);
+	sourceTypeChanged(currentSourceType());
 	readingTypeChanged(ui.cbReadingType->currentIndex());
 
 	//all set now, refresh the preview
@@ -901,7 +899,7 @@ void ImportFileWidget::manageCommonLevelSubscriptions() {
 		}
 
 		if (!equalTopicsMap.isEmpty()) {
-			qDebug()<<"Manage common topics";
+			DEBUG("Manage common topics");
 
 			QVector<QString> commonTopics;
 			QMapIterator<QString, QVector<QString>> topics(equalTopicsMap);
@@ -929,7 +927,7 @@ void ImportFileWidget::manageCommonLevelSubscriptions() {
 				if (childCount > 0) {
 					//if the number of topics found and the calculated number of topics is equal, the topics can be merged
 					if (topics.value().size() == childCount) {
-						qDebug() << "Found common topic to manage: " << topics.key();
+						QDEBUG("Found common topic to manage: " << topics.key());
 						foundEqual = true;
 						commonTopics.push_back(topics.key());
 					}
@@ -947,7 +945,7 @@ void ImportFileWidget::manageCommonLevelSubscriptions() {
 						lowestLevel = level;
 					}
 				}
-				qDebug() << "Manage: " << commonTopics[topicIdx];
+				QDEBUG("Manage: " << commonTopics[topicIdx]);
 				equalTopics.append(equalTopicsMap[commonTopics[topicIdx]]);
 
 				//Add the common topic ("merging")
@@ -1496,7 +1494,7 @@ void ImportFileWidget::refreshPreview() {
 		}
 		case LiveDataSource::SourceType::MQTT: {
 #ifdef HAVE_MQTT
-			qDebug()<<"Start MQTT preview, is it ready:"<<m_mqttReadyForPreview;
+			QDEBUG("Start MQTT preview, ready  = " << m_mqttReadyForPreview);
 			if (m_mqttReadyForPreview) {
 				filter->vectorNames().clear();
 				QMapIterator<QMqttTopicName, QMqttMessage> i(m_lastMessage);
@@ -2085,7 +2083,7 @@ void ImportFileWidget::mqttSubscribe() {
 	//check if the subscription already exists
 	const QList<QTreeWidgetItem*>& topLevelList = ui.twSubscriptions->findItems(name, Qt::MatchExactly);
 	if (topLevelList.isEmpty() || topLevelList.first()->parent() != nullptr) {
-		qDebug() << "Subscribe to: " << name;
+		QDEBUG("Subscribe to: " << name);
 		bool foundSuperior = false;
 
 		for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
@@ -2101,7 +2099,7 @@ void ImportFileWidget::mqttSubscribe() {
 			if (MQTTHelpers::checkTopicContains(ui.twSubscriptions->topLevelItem(i)->text(0), name)
 					&& name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
 				foundSuperior = true;
-				qDebug()<<"Can't continue subscribe. Found superior for " << name <<" : "<< ui.twSubscriptions->topLevelItem(i)->text(0);
+				QDEBUG("Can't continue subscribing. Found superior for " << name << " : " << ui.twSubscriptions->topLevelItem(i)->text(0));
 				break;
 			}
 		}
@@ -2172,7 +2170,7 @@ void ImportFileWidget::mqttUnsubscribe() {
 		return;
 	}
 
-	qDebug() << "Unsubscribe from: " << unsubscribeItem->text(0);
+	QDEBUG("Unsubscribe from: " << unsubscribeItem->text(0));
 	//if it is a top level item, meaning a topic that we really subscribed to(not one that belongs to a subscription)
 	//we can simply unsubscribe from it
 	if (unsubscribeItem->parent() == nullptr)
@@ -2334,7 +2332,7 @@ void ImportFileWidget::topicTimeout() {
  *\brief called when the client receives a message from a subscribed topic (that isn't the "#" wildcard)
  */
 void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) {
-	qDebug()<<"message received from: "<<msg.topic().name();
+	QDEBUG("message received from: " << msg.topic().name());
 	if (!m_subscribedTopicNames.contains(msg.topic().name())) {
 		m_messageArrived[msg.topic()] = true;
 		m_subscribedTopicNames.push_back(msg.topic().name());
