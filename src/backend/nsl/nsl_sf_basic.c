@@ -75,11 +75,9 @@ double nsl_sf_theta(double x) {
 int nsl_sf_log2_int(unsigned int x) {
 #ifdef _MSC_VER
 #include <intrin.h>
-	DWORD leading_zero = 0;
-	 _BitScanReverse(&leading_zero, x);
-	unsigned int clz = 31 - leading_zero;
+	unsigned int clz = __lzcnt64(x);
 #else
-	unsigned int clz = __builtin_clz((x));
+	unsigned int clz = __builtin_clz(x);
 #endif
 	return (int) (8*sizeof (unsigned int) - clz - 1);
 }
