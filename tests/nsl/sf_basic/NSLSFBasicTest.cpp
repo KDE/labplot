@@ -39,14 +39,23 @@ void NSLSFBasicTest::initTestCase() {
 //##############################################################################
 //#################  handling of empty and sparse files ########################
 //##############################################################################
-void NSLSFBasicTest::testlog2p1_int() {
+void NSLSFBasicTest::testlog2p1_int_C99() {
+	QBENCHMARK {
+		for (int i = 1; i < 1e7; i++)
+			((int)log2(i) + 1);
+	}
+}
 
+void NSLSFBasicTest::testlog2p1_int() {
 	for (int i = 1; i < 1e6; i++) {
 		int result = nsl_sf_log2p1_int(i);
 		QCOMPARE(result, (int)log2(i) + 1);
 	}
 
-	//TODO: Performance test
+	QBENCHMARK {
+		for (int i = 1; i < 1e7; i++)
+			nsl_sf_log2p1_int(i);
+	}
 
 }
 

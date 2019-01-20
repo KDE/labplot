@@ -36,6 +36,7 @@ private slots:
 	void initTestCase();
 
 	//TODO
+	void testlog2p1_int_C99();
 	void testlog2p1_int();
 private:
 	QString m_dataDir;

@@ -102,7 +102,6 @@ int nsl_sf_log2p1_int(int x) {
 	return r + 1;
 }
 
-
 double nsl_sf_sec(double x) { return 1./cos(x); }
 double nsl_sf_csc(double x) { return 1./sin(x); }
 double nsl_sf_cot(double x) { return 1./tan(x); }
