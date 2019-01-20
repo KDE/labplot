@@ -73,10 +73,22 @@ double nsl_sf_theta(double x) {
  * source: http://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
  */
 int nsl_sf_log2_int(unsigned int x) {
-	return (int) (8*sizeof (unsigned int) - __builtin_clz((x)) - 1);
+#ifdef _MSC_VER
+#include <intrin.h>
+	DWORD leading_zero = 0;
+	 _BitScanReverse(&leading_zero, x);
+	unsigned int clz = 31 - leading_zero;
+#else
+	unsigned int clz = __builtin_clz((x));
+#endif
+	return (int) (8*sizeof (unsigned int) - clz - 1);
 }
 int nsl_sf_log2_longlong(unsigned long long x) {
+#ifdef _MSC_VER
+	return 0;	/* not implemented yet */
+#else
 	return (int) (8*sizeof (unsigned long long) - __builtin_clzll((x)) - 1);
+#endif
 }
 int nsl_sf_log2_int2(int x) {
 	const signed char LogTable256[256] = {
