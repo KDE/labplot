@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : ImportFileWidget.h
+    File                 : MQTTHelpers.h
     Project              : LabPlot
     Description          : MQTT related helper functions
     --------------------------------------------------------------------

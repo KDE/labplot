@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : ImportFileWidget.cpp
+    File                 : MQTTHelpers.cpp
     Project              : LabPlot
     Description          : MQTT related helper functions
     --------------------------------------------------------------------
