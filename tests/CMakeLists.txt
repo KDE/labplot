@@ -3,3 +3,4 @@ INCLUDE_DIRECTORIES(${SRC_DIR})
 
 add_subdirectory(analysis)
 add_subdirectory(import_export)
+add_subdirectory(nsl)

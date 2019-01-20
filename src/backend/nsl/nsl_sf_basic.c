@@ -68,6 +68,41 @@ double nsl_sf_theta(double x) {
 		return 0;
 }
 
+/*
+ * source: https://stackoverflow.com/questions/11376288/fast-computing-of-log2-for-64-bit-integers
+ * source: http://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
+ */
+int nsl_sf_log2p1_int(int x) {
+	const signed char LogTable256[256] = {
+		-1,0,1,1,2,2,2,2,3,3,3,3,3,3,3,3,
+		4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
+		5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
+		5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
+		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7
+	};
+
+	unsigned int r;     // r will be lg(v)
+	unsigned int t, tt; // temporaries
+	if ((tt = x >> 16))
+		r = (t = tt >> 8) ? 24 + LogTable256[t] : 16 + LogTable256[tt];
+	else
+		r = (t = x >> 8) ? 8 + LogTable256[t] : LogTable256[x];
+
+	return r + 1;
+}
+
+
 double nsl_sf_sec(double x) { return 1./cos(x); }
 double nsl_sf_csc(double x) { return 1./sin(x); }
 double nsl_sf_cot(double x) { return 1./tan(x); }
@@ -126,7 +161,7 @@ double nsl_sf_im_w_of_x(double x) {
 }
 
 #if !defined(_MSC_VER)
-double nsl_sf_im_w_of_z(complex double z) {
+double nsl_sf_im_w_of_z(COMPLEX z) {
 #ifdef HAVE_LIBCERF
 	return cimag(w_of_z(z));
 #else
@@ -151,7 +186,7 @@ double nsl_sf_voigt(double x, double sigma, double gamma) {
 #elif defined(_MSC_VER)
 	return 0.;	// not supported yet
 #else
-	double complex z = (x + I*gamma)/(sqrt(2.)*sigma);
+	COMPLEX z = (x + I*gamma)/(sqrt(2.)*sigma);
 	return creal(Faddeeva_w(z, 0))/(sqrt(2.*M_PI)*sigma);
 #endif
 }

@@ -30,9 +30,7 @@
 #define NSL_SF_BASIC_H
 
 #include <gsl/gsl_version.h>
-#if !defined(_MSC_VER)
-#include <complex.h>
-#endif
+#include "nsl_complex.h"
 
 /* random functions */
 double nsl_sf_rand(void);
@@ -43,6 +41,9 @@ double nsl_sf_drand(void);
 double nsl_sf_sgn(double x);
 /* Heavyside theta function */
 double nsl_sf_theta(double x);
+
+/* log2(x) + 1 for integer value x */
+int nsl_sf_log2p1_int(int x);
 
 /* more trig. functions */
 double nsl_sf_sec(double x);
@@ -66,7 +67,7 @@ double nsl_sf_erfcx(double x);
 double nsl_sf_erfi(double x);
 double nsl_sf_im_w_of_x(double x);
 #if !defined(_MSC_VER)
-double nsl_sf_im_w_of_z(complex double z);
+double nsl_sf_im_w_of_z(COMPLEX z);
 #endif
 double nsl_sf_dawson(double x);
 double nsl_sf_voigt(double x, double sigma, double gamma);
