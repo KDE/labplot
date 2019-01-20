@@ -77,7 +77,7 @@ double nsl_sf_theta(double x) {
 #endif
 int nsl_sf_log2_int(unsigned int x) {
 #ifdef _MSC_VER
-	unsigned int clz = __lzcnt64(x);
+	unsigned int clz = __lzcnt(x);
 #else
 	unsigned int clz = __builtin_clz(x);
 #endif
@@ -85,10 +85,11 @@ int nsl_sf_log2_int(unsigned int x) {
 }
 int nsl_sf_log2_longlong(unsigned long long x) {
 #ifdef _MSC_VER
-	return 0;	/* not implemented yet */
+	unsigned int clz = __lzcnt64(x);
 #else
-	return (int) (8*sizeof (unsigned long long) - __builtin_clzll((x)) - 1);
+	unsigned int clz = __builtin_clzll(x);
 #endif
+	return (int) (8*sizeof (unsigned long long) - clz - 1);
 }
 int nsl_sf_log2_int2(int x) {
 	const signed char LogTable256[256] = {
