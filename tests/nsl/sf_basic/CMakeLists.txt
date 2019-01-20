@@ -1,3 +1,4 @@
+INCLUDE_DIRECTORIES(${GSL_INCLUDE_DIR})
 add_executable (nslsfbasictest NSLSFBasicTest.cpp)
 
 target_link_libraries(nslsfbasictest Qt5::Test)

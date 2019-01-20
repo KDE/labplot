@@ -27,6 +27,10 @@
 
 #include "NSLSFBasicTest.h"
 
+extern "C" {
+#include "backend/nsl/nsl_sf_basic.h"
+}
+
 void NSLSFBasicTest::initTestCase() {
 	const QString currentDir = __FILE__;
 	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();

@@ -29,10 +29,6 @@
 
 #include <QtTest>
 
-extern "C" {
-#include "backend/nsl/nsl_sf_basic.h"
-}
-
 class NSLSFBasicTest : public QObject {
 	Q_OBJECT
 
