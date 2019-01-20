@@ -29,8 +29,8 @@
 #ifndef NSL_SF_BASIC_H
 #define NSL_SF_BASIC_H
 
-#include "nsl_complex.h"
 #include <gsl/gsl_version.h>
+#include "nsl_complex.h"
 
 /* random functions */
 double nsl_sf_rand(void);

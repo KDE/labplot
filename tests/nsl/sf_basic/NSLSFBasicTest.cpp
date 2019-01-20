@@ -27,11 +27,6 @@
 
 #include "NSLSFBasicTest.h"
 
-extern "C" {
-#include <gsl/gsl_version.h>
-#include "backend/nsl/nsl_sf_basic.h"
-}
-
 void NSLSFBasicTest::initTestCase() {
 	const QString currentDir = __FILE__;
 	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
@@ -43,7 +38,7 @@ void NSLSFBasicTest::initTestCase() {
 void NSLSFBasicTest::testlog2p1_int_C99() {
 	QBENCHMARK {
 		for (int i = 1; i < 1e7; i++)
-			((int)log2(i) + 1);
+			Q_UNUSED(((int)log2(i) + 1));
 	}
 }
 
