@@ -66,7 +66,6 @@ Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #ifdef HAVE_MQTT
 #include "kdefrontend/widgets/MQTTWillSettingsWidget.h"
 #include "MQTTConnectionManagerDialog.h"
-#include "MQTTConnectionManagerWidget.h"
 #include "MQTTHelpers.h"
 #include <QMqttClient>
 #include <QMqttSubscription>
@@ -203,7 +202,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	"<li>2 - deliver exactly once</li>"
 	"</ul>");
 	ui.cbQos->setToolTip(info);
-
 #endif
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
@@ -1316,6 +1314,7 @@ void ImportFileWidget::initOptionsWidget() {
 		} else
 			m_jsonOptionsWidget->clearModel();
 		ui.swOptions->setCurrentWidget(m_jsonOptionsWidget->parentWidget());
+		showJsonModel(true);
 		break;
 	case AbstractFileFilter::ROOT:
 		if (!m_rootOptionsWidget) {
@@ -1383,10 +1382,10 @@ void ImportFileWidget::filterChanged(int index) {
 }
 
 void ImportFileWidget::refreshPreview() {
-	DEBUG("ImportFileWidget::refreshPreview()");
 	if (m_suppressRefresh)
 		return;
 
+	DEBUG("ImportFileWidget::refreshPreview()");
 	WAIT_CURSOR;
 
 	QString fileName = absolutePath(ui.leFileName->text());
@@ -1434,9 +1433,8 @@ void ImportFileWidget::refreshPreview() {
 				DEBUG("Local socket: DISCONNECT PREVIEW");
 				lsocket.disconnectFromServer();
 				// read-only socket is disconnected immediately (no waitForDisconnected())
-			} else {
+			} else
 				DEBUG("failed connect to local socket " << fileName.toStdString() << " - " << lsocket.errorString().toStdString());
-			}
 
 			break;
 		}
@@ -1449,9 +1447,8 @@ void ImportFileWidget::refreshPreview() {
 					importedStrings = filter->preview(tcpSocket);
 
 				tcpSocket.disconnectFromHost();
-			} else {
+			} else
 				DEBUG("failed to connect to TCP socket " << " - " << tcpSocket.errorString().toStdString());
-			}
 
 			break;
 		}
@@ -1473,9 +1470,8 @@ void ImportFileWidget::refreshPreview() {
 
 				DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
 				udpSocket.disconnectFromHost();
-			} else {
+			} else
 				DEBUG("failed to connect to UDP socket " << " - " << udpSocket.errorString().toStdString());
-			}
 
 			break;
 		}
@@ -1493,9 +1489,9 @@ void ImportFileWidget::refreshPreview() {
 					DEBUG("	ERROR: not ready for read after 2 sec");
 
 				sPort.close();
-			} else {
+			} else
 				DEBUG("	ERROR: failed to open serial port. error: " << sPort.error());
-			}
+
 			break;
 		}
 		case LiveDataSource::SourceType::MQTT: {
@@ -1676,7 +1672,7 @@ void ImportFileWidget::refreshPreview() {
 }
 
 void ImportFileWidget::updateContent(const QString& fileName) {
-	DEBUG("ImportFileWidget::updateContent()");
+	QDEBUG("ImportFileWidget::updateContent(): file name = " << fileName);
 	if (auto filter = currentFileFilter()) {
 		switch (filter->type()) {
 		case AbstractFileFilter::HDF5:
