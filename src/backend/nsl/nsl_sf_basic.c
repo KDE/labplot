@@ -72,21 +72,18 @@ double nsl_sf_theta(double x) {
  * source: https://stackoverflow.com/questions/11376288/fast-computing-of-log2-for-64-bit-integers
  * source: http://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
  */
-#ifdef _MSC_VER
-#include <intrin.h>
-#endif
 int nsl_sf_log2_int(unsigned int x) {
 #ifdef _MSC_VER
-	return (int) (__lzcnt(x));
+	return nsl_sf_log2_int2(x);
 #else
-	return (int) (8*sizeof (unsigned int) - __builtin_clz(x) - 1);
+	return nsl_sf_log2_int0(x);
 #endif
 }
-int nsl_sf_log2_longlong(unsigned long long x) {
+int nsl_sf_log2_int0(unsigned int x) {
 #ifdef _MSC_VER
-	return (int) (__lzcnt64(x));
+	return 0;	/* not implemented yet */
 #else
-	return (int) (8*sizeof (unsigned long long) - __builtin_clzll(x) - 1);
+	return (int) (8*sizeof (unsigned int) - __builtin_clz(x) - 1);
 #endif
 }
 int nsl_sf_log2_int2(int x) {
@@ -143,6 +140,13 @@ int nsl_sf_log2p1_int(int x) {
 	return nsl_sf_log2_int(x) + 1;
 	//TODO: why is this so slow
 	//return (int)log2(x) + 1;
+}
+int nsl_sf_log2_longlong(unsigned long long x) {
+#ifdef _MSC_VER
+	return 0;	/* not implemented yet */
+#else
+	return (int) (8*sizeof (unsigned long long) - __builtin_clzll(x) - 1);
+#endif
 }
 
 double nsl_sf_sec(double x) { return 1./cos(x); }

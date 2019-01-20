@@ -58,6 +58,7 @@ void NSLSFBasicTest::testlog2_int() {
 	}
 }
 void NSLSFBasicTest::testlog2_longlong() {
+#ifndef _MSC_VER	/* not implemented yet */
 	for (unsigned long long i = 1; i < 1e6; i++) {
 		int result = nsl_sf_log2_longlong(i);
 		QCOMPARE(result, (int)log2(i));
@@ -65,8 +66,9 @@ void NSLSFBasicTest::testlog2_longlong() {
 
 	QBENCHMARK {
 		for (unsigned long long i = 1; i < 1e7; i++)
-			nsl_sf_log2_int(i);
+			nsl_sf_log2_longlong(i);
 	}
+#endif
 }
 
 

@@ -45,10 +45,11 @@ double nsl_sf_theta(double x);
 
 /* log2(x) for integer value x */
 int nsl_sf_log2_int(unsigned int x);
-int nsl_sf_log2_longlong(unsigned long long x);
+int nsl_sf_log2_int0(unsigned int x);
 int nsl_sf_log2_int2(int x);
 int nsl_sf_log2_int3(uint64_t x);
 int nsl_sf_log2p1_int(int x);
+int nsl_sf_log2_longlong(unsigned long long x);
 
 /* more trig. functions */
 double nsl_sf_sec(double x);
