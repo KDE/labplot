@@ -25,6 +25,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "backend/lib/macros.h"
 #include "NSLDFTTest.h"
 
 extern "C" {
@@ -59,8 +60,10 @@ void NSLDFTTest::testOnesided_imag() {
 
 	nsl_dft_transform(data, 1, N, ONESIDED, nsl_dft_result_imag);
 	QCOMPARE(data[0] + 1., 1.);	// compare to 0 may fail
-	for (unsigned int i = 1; i < N/2; i++)
+	for (unsigned int i = 0; i < N/2; i++) {
+		DEBUG(std::setprecision(15) << data[i]);
 		QCOMPARE(data[i], result[i]);
+	}
 }
 
 void NSLDFTTest::testOnesided_magnitude() {
@@ -95,11 +98,13 @@ void NSLDFTTest::testOnesided_phase() {
 	double result[] = {0, 1.18889174012102, -3.14159265358979, -0.220851801285041, 0};
 
 	nsl_dft_transform(data, 1, N, ONESIDED, nsl_dft_result_phase);
-	for (unsigned int i = 0; i < N/2; i++)
+	for (unsigned int i = 0; i < N/2; i++) {
+		DEBUG(std::setprecision(15) << data[i]);
 		if (i == 2)	// sign can be + or -
 			QCOMPARE(fabs(data[i]), fabs(result[i]));
 		else
 			QCOMPARE(data[i], result[i]);
+	}
 }
 
 void NSLDFTTest::testOnesided_dB() {
@@ -157,8 +162,10 @@ void NSLDFTTest::testTwosided_imag() {
 
 	nsl_dft_transform(data, 1, N, TWOSIDED, nsl_dft_result_imag);
 	QCOMPARE(data[0] + 1., 1.);	// compare to 0 may fail
-	for (unsigned int i = 1; i < N; i++)
+	for (unsigned int i = 0; i < N; i++) {
+		DEBUG(std::setprecision(15) << data[i]);
 		QCOMPARE(data[i], result[i]);
+	}
 }
 
 void NSLDFTTest::testTwosided_magnitude() {
@@ -193,11 +200,13 @@ void NSLDFTTest::testTwosided_phase() {
 	double result[] = {0, 1.18889174012102, -3.14159265358979, -0.220851801285041, 0, 0, 0, 0.220851801285041, 3.14159265358979, -1.18889174012102};
 
 	nsl_dft_transform(data, 1, N, TWOSIDED, nsl_dft_result_phase);
-	for (unsigned int i = 0; i < N; i++)
-		if (i == 2)	// sign can be + or -
+	for (unsigned int i = 0; i < N; i++) {
+		DEBUG(std::setprecision(15) << data[i]);
+		if (i == 2 || i == 8)	// sign can be + or -
 			QCOMPARE(fabs(data[i]), fabs(result[i]));
 		else
 			QCOMPARE(data[i], result[i]);
+	}
 }
 
 void NSLDFTTest::testTwosided_dB() {
