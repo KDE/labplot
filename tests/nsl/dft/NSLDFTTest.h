@@ -36,29 +36,30 @@ private slots:
 	void initTestCase();
 
 	// one sided
-	void test_onesided_real();
-	void test_onesided_imag();
-	void test_onesided_magnitude();
-	void test_onesided_amplitude();
-	void test_onesided_power();
-	void test_onesided_phase();
-	void test_onesided_dB();
-	void test_onesided_squaremagnitude();
-	void test_onesided_squareamplitude();
-	void test_onesided_normdB();
+	void testOnesided_real();
+	void testOnesided_imag();
+	void testOnesided_magnitude();
+	void testOnesided_amplitude();
+	void testOnesided_power();
+	void testOnesided_phase();
+	void testOnesided_dB();
+	void testOnesided_squaremagnitude();
+	void testOnesided_squareamplitude();
+	void testOnesided_normdB();
 	// two sided
-	void test_twosided_real();
-	void test_twosided_imag();
-	void test_twosided_magnitude();
-	void test_twosided_amplitude();
-	void test_twosided_power();
-	void test_twosided_phase();
-	void test_twosided_dB();
-	void test_twosided_squaremagnitude();
-	void test_twosided_squareamplitude();
-	void test_twosided_normdB();
+	void testTwosided_real();
+	void testTwosided_imag();
+	void testTwosided_magnitude();
+	void testTwosided_amplitude();
+	void testTwosided_power();
+	void testTwosided_phase();
+	void testTwosided_dB();
+	void testTwosided_squaremagnitude();
+	void testTwosided_squareamplitude();
+	void testTwosided_normdB();
 	// performance
-	// TODO
+	void testPerformance_onesided();
+	void testPerformance_twosided();
 private:
 	QString m_dataDir;
 };

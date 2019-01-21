@@ -38,13 +38,13 @@ void NSLDFTTest::initTestCase() {
 
 #define ONESIDED 0
 #define TWOSIDED 1
-#define N 10
+const int N = 10;
 
 //##############################################################################
 //#################  one sided tests
 //##############################################################################
 
-void NSLDFTTest::test_onesided_real() {
+void NSLDFTTest::testOnesided_real() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {10, 2, -5.85410196624968, 2, 0.854101966249685};
 
@@ -53,7 +53,7 @@ void NSLDFTTest::test_onesided_real() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_onesided_imag() {
+void NSLDFTTest::testOnesided_imag() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {0, -4.97979656976556, 0, 0.449027976579585, 0};
 
@@ -62,7 +62,7 @@ void NSLDFTTest::test_onesided_imag() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_onesided_magnitude() {
+void NSLDFTTest::testOnesided_magnitude() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {10, 5.36641163872553, 5.85410196624968, 2.04978684837013, 0.854101966249685};
 
@@ -71,7 +71,7 @@ void NSLDFTTest::test_onesided_magnitude() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_onesided_amplitude() {
+void NSLDFTTest::testOnesided_amplitude() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {1, 1.07328232774511, 1.17082039324994, 0.409957369674026, 0.170820393249937};
 
@@ -80,7 +80,7 @@ void NSLDFTTest::test_onesided_amplitude() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_onesided_power() {
+void NSLDFTTest::testOnesided_power() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {10, 5.75967477524977, 6.85410196624968, 0.840325224750231, 0.145898033750316};
 
@@ -89,7 +89,7 @@ void NSLDFTTest::test_onesided_power() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_onesided_phase() {
+void NSLDFTTest::testOnesided_phase() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {0, 1.18889174012102, -3.14159265358979, -0.220851801285041, 0};
 
@@ -98,7 +98,7 @@ void NSLDFTTest::test_onesided_phase() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_onesided_dB() {
+void NSLDFTTest::testOnesided_dB() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {0, 0.614279569861449, 1.36980556663896, -7.7452260401377, -15.3492056533593};
 
@@ -107,7 +107,7 @@ void NSLDFTTest::test_onesided_dB() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_onesided_squaremagnitude() {
+void NSLDFTTest::testOnesided_squaremagnitude() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {100, 28.7983738762488, 34.2705098312484, 4.20162612375116, 0.729490168751578};
 
@@ -116,7 +116,7 @@ void NSLDFTTest::test_onesided_squaremagnitude() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_onesided_squareamplitude() {
+void NSLDFTTest::testOnesided_squareamplitude() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {1, 1.15193495504995, 1.37082039324994, 0.168065044950046, 0.0291796067500631};
 
@@ -125,7 +125,7 @@ void NSLDFTTest::test_onesided_squareamplitude() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_onesided_normdB() {
+void NSLDFTTest::testOnesided_normdB() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {-1.36980556663896, -0.755525996777514, 0, -9.11503160677666, -16.7190112199983};
 
@@ -138,7 +138,7 @@ void NSLDFTTest::test_onesided_normdB() {
 //#################  two sided tests
 //##############################################################################
 
-void NSLDFTTest::test_twosided_real() {
+void NSLDFTTest::testTwosided_real() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {10, 2, -5.85410196624968, 2, 0.854101966249685, 2, 0.854101966249685, 2, -5.85410196624968, 2};
 
@@ -147,7 +147,7 @@ void NSLDFTTest::test_twosided_real() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_twosided_imag() {
+void NSLDFTTest::testTwosided_imag() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {0, -4.97979656976556, 0, 0.449027976579585, 0, 0, 0, -0.449027976579585, 0, 4.97979656976556};
 
@@ -156,7 +156,7 @@ void NSLDFTTest::test_twosided_imag() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_twosided_magnitude() {
+void NSLDFTTest::testTwosided_magnitude() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {10, 5.36641163872553, 5.85410196624968, 2.04978684837013, 0.854101966249685, 2, 0.854101966249685, 2.04978684837013, 5.85410196624968, 5.36641163872553};
 
@@ -165,7 +165,7 @@ void NSLDFTTest::test_twosided_magnitude() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_twosided_amplitude() {
+void NSLDFTTest::testTwosided_amplitude() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {1, 1.07328232774511, 1.17082039324994, 0.409957369674026, 0.170820393249937, 0.4, 0.170820393249937, 0.409957369674026, 1.17082039324994, 1.07328232774511};
 
@@ -174,7 +174,7 @@ void NSLDFTTest::test_twosided_amplitude() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_twosided_power() {
+void NSLDFTTest::testTwosided_power() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {10, 5.75967477524977, 6.85410196624968, 0.840325224750231, 0.145898033750316, 0.8, 0.145898033750316, 0.840325224750231, 6.85410196624968, 5.75967477524977};
 
@@ -183,7 +183,7 @@ void NSLDFTTest::test_twosided_power() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_twosided_phase() {
+void NSLDFTTest::testTwosided_phase() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {0, 1.18889174012102, -3.14159265358979, -0.220851801285041, 0, 0, 0, 0.220851801285041, 3.14159265358979, -1.18889174012102};
 
@@ -192,7 +192,7 @@ void NSLDFTTest::test_twosided_phase() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_twosided_dB() {
+void NSLDFTTest::testTwosided_dB() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {0, 0.614279569861449, 1.36980556663896, -7.7452260401377, -15.3492056533593, -7.95880017344075, -15.3492056533593, -7.7452260401377, 1.36980556663896, 0.614279569861449};
 
@@ -201,7 +201,7 @@ void NSLDFTTest::test_twosided_dB() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_twosided_squaremagnitude() {
+void NSLDFTTest::testTwosided_squaremagnitude() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {100, 28.7983738762488, 34.2705098312484, 4.20162612375116, 0.729490168751578, 4, 0.729490168751578, 4.20162612375116, 34.2705098312484, 28.7983738762488};
 
@@ -210,7 +210,7 @@ void NSLDFTTest::test_twosided_squaremagnitude() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_twosided_squareamplitude() {
+void NSLDFTTest::testTwosided_squareamplitude() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {1, 1.15193495504995, 1.37082039324994, 0.168065044950046, 0.0291796067500631, 0.16, 0.0291796067500631, 0.168065044950046, 1.37082039324994, 1.15193495504995};
 
@@ -219,7 +219,7 @@ void NSLDFTTest::test_twosided_squareamplitude() {
 		QCOMPARE(data[i], result[i]);
 }
 
-void NSLDFTTest::test_twosided_normdB() {
+void NSLDFTTest::testTwosided_normdB() {
 	double data[] = {1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	double result[] = {-1.36980556663896, -0.755525996777514, 0, -9.11503160677666, -16.7190112199983, -9.32860574007971, -16.7190112199983, -9.11503160677666, 0, -0.755525996777514};
 
@@ -232,10 +232,36 @@ void NSLDFTTest::test_twosided_normdB() {
 //#################  performance
 //##############################################################################
 
-/*	QBENCHMARK {
-		for (unsigned int i = 1; i < 1e7; i++)
-			Q_UNUSED((int)log2(i));
+#ifdef HAVE_FFTW3
+const int NN = 1e6;
+#else	// GSL is much slower
+const int NN = 1e5;
+#endif
+
+void NSLDFTTest::testPerformance_onesided() {
+	double* data = new double[NN];
+
+	for (int i = 0;  i < NN; i++)
+		data[i] = 1.;
+	
+	QBENCHMARK {
+		nsl_dft_transform(data, 1, NN, ONESIDED, nsl_dft_result_real);
 	}
-*/
+
+	delete[] data;
+}
+
+void NSLDFTTest::testPerformance_twosided() {
+	double* data = new double[NN];
+
+	for (int i = 0;  i < NN; i++)
+		data[i] = 1.;
+	
+	QBENCHMARK {
+		nsl_dft_transform(data, 1, NN, TWOSIDED, nsl_dft_result_real);
+	}
+
+	delete[] data;
+}
 
 QTEST_MAIN(NSLDFTTest)
