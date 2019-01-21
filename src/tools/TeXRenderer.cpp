@@ -135,6 +135,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 // TEX -> PDF -> PNG
 QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine, bool* success) {
 	QFileInfo fi(file.fileName());
+	const QString& baseName = fi.completeBaseName();
 
 	// pdflatex: produce the PDF file
 	QProcess latexProcess;
@@ -148,8 +149,8 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 	if (!latexProcess.waitForFinished() || latexProcess.exitCode() != 0) {
 		WARN("pdflatex process failed, exit code = " << latexProcess.exitCode());
 		*success = false;
-		QFile::remove(fi.completeBaseName() + ".aux");
-		QFile::remove(fi.completeBaseName() + ".log");
+		QFile::remove(baseName + ".aux");
+		QFile::remove(baseName + ".log");
 		return QImage();
 	}
 
@@ -162,36 +163,35 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 	convertProcess.setProcessEnvironment(env);
 #endif
 
-	const QStringList params{"-density " + QString::number(dpi) + 'x' + QString::number(dpi),
-							fi.completeBaseName() + ".pdf",
-							fi.completeBaseName() + ".png"};
+	const QStringList params{"-density", QString::number(dpi), baseName + ".pdf", baseName + ".png"};
 	convertProcess.start("convert", params);
 
 	if (!convertProcess.waitForFinished() || convertProcess.exitCode() != 0) {
 		WARN("convert process failed, exit code = " << convertProcess.exitCode());
 		*success = false;
-		QFile::remove(fi.completeBaseName() + ".aux");
-		QFile::remove(fi.completeBaseName() + ".log");
-		QFile::remove(fi.completeBaseName() + ".pdf");
+		QFile::remove(baseName + ".aux");
+		QFile::remove(baseName + ".log");
+		QFile::remove(baseName + ".pdf");
 		return QImage();
 	}
 
 	// read png file
-	QImage image;
-	image.load(fi.completeBaseName() + ".png");
+	QImage image(baseName + ".png", "png");
 
 	// final clean up
-	QFile::remove(fi.completeBaseName() + ".aux");
-	QFile::remove(fi.completeBaseName() + ".log");
-	QFile::remove(fi.completeBaseName() + ".pdf");
-	QFile::remove(fi.completeBaseName() + ".png");
+	QFile::remove(baseName + ".aux");
+	QFile::remove(baseName + ".log");
+	QFile::remove(baseName + ".pdf");
+	QFile::remove(baseName + ".png");
 
+	*success = true;
 	return image;
 }
 
 // TEX -> DVI -> PS -> PNG
 QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool* success) {
 	QFileInfo fi(file.fileName());
+	const QString& baseName = fi.completeBaseName();
 
 	//latex: produce the DVI file
 	QProcess latexProcess;
@@ -199,20 +199,20 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	if (!latexProcess.waitForFinished() || latexProcess.exitCode() != 0) {
 		WARN("latex process failed, exit code = " << latexProcess.exitCode());
 		*success = false;
-		QFile::remove(fi.completeBaseName() + ".aux");
-		QFile::remove(fi.completeBaseName() + ".log");
+		QFile::remove(baseName + ".aux");
+		QFile::remove(baseName + ".log");
 		return QImage();
 	}
 
 	// dvips: DVI -> PS
 	QProcess dvipsProcess;
-	dvipsProcess.start("dvips", QStringList() << "-E" << fi.completeBaseName());
+	dvipsProcess.start("dvips", QStringList() << "-E" << baseName);
 	if (!dvipsProcess.waitForFinished() || dvipsProcess.exitCode() != 0) {
 		WARN("dvips process failed, exit code = " << dvipsProcess.exitCode());
 		*success = false;
-		QFile::remove(fi.completeBaseName() + ".aux");
-		QFile::remove(fi.completeBaseName() + ".log");
-		QFile::remove(fi.completeBaseName() + ".dvi");
+		QFile::remove(baseName + ".aux");
+		QFile::remove(baseName + ".log");
+		QFile::remove(baseName + ".dvi");
 		return QImage();
 	}
 
@@ -225,32 +225,30 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	convertProcess.setProcessEnvironment(env);
 #endif
 
-	const QStringList params{"-density " + QString::number(dpi) + 'x' + QString::number(dpi),
-							fi.completeBaseName() + ".ps",
-							fi.completeBaseName() + ".png"};
+	const QStringList params{"-density", QString::number(dpi), baseName + ".ps", baseName + ".png"};
 	convertProcess.start("convert", params);
 
 	if (!convertProcess.waitForFinished() || convertProcess.exitCode() != 0) {
 		WARN("convert process failed, exit code = " << convertProcess.exitCode());
 		*success = false;
-		QFile::remove(fi.completeBaseName() + ".aux");
-		QFile::remove(fi.completeBaseName() + ".log");
-		QFile::remove(fi.completeBaseName() + ".dvi");
-		QFile::remove(fi.completeBaseName() + ".ps");
+		QFile::remove(baseName + ".aux");
+		QFile::remove(baseName + ".log");
+		QFile::remove(baseName + ".dvi");
+		QFile::remove(baseName + ".ps");
 		return QImage();
 	}
 
 	// read png file
-	QImage image;
-	image.load(fi.completeBaseName() + ".png", "png");
+	QImage image(baseName + ".png", "png");
 
 	// final clean up
-	QFile::remove(fi.completeBaseName() + ".aux");
-	QFile::remove(fi.completeBaseName() + ".log");
-	QFile::remove(fi.completeBaseName() + ".dvi");
-	QFile::remove(fi.completeBaseName() + ".ps");
-	QFile::remove(fi.completeBaseName() + ".png");
+	QFile::remove(baseName + ".aux");
+	QFile::remove(baseName + ".log");
+	QFile::remove(baseName + ".dvi");
+	QFile::remove(baseName + ".ps");
+	QFile::remove(baseName + ".png");
 
+	*success = true;
 	return image;
 }
 
