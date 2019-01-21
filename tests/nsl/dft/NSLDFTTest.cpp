@@ -25,8 +25,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "backend/lib/macros.h"
 #include "NSLDFTTest.h"
+#include "backend/lib/macros.h"
 
 extern "C" {
 #include "backend/nsl/nsl_dft.h"
@@ -59,10 +59,12 @@ void NSLDFTTest::testOnesided_imag() {
 	double result[] = {0, -4.97979656976556, 0, 0.449027976579585, 0};
 
 	nsl_dft_transform(data, 1, N, ONESIDED, nsl_dft_result_imag);
-	QCOMPARE(data[0] + 1., 1.);	// compare to 0 may fail
 	for (unsigned int i = 0; i < N/2; i++) {
 		DEBUG(std::setprecision(15) << data[i]);
-		QCOMPARE(data[i], result[i]);
+		if (i == 2)
+			QCOMPARE(data[i] + 1., 1.);	// -1.11022302462516e-16 (Win)
+		else
+			QCOMPARE(data[i], result[i]);
 	}
 }
 
@@ -161,10 +163,12 @@ void NSLDFTTest::testTwosided_imag() {
 	double result[] = {0, -4.97979656976556, 0, 0.449027976579585, 0, 0, 0, -0.449027976579585, 0, 4.97979656976556};
 
 	nsl_dft_transform(data, 1, N, TWOSIDED, nsl_dft_result_imag);
-	QCOMPARE(data[0] + 1., 1.);	// compare to 0 may fail
 	for (unsigned int i = 0; i < N; i++) {
 		DEBUG(std::setprecision(15) << data[i]);
-		QCOMPARE(data[i], result[i]);
+		if (i == 2)
+			QCOMPARE(data[i] + 1., 1.);	// -1.11022302462516e-16 (Win)
+		else
+			QCOMPARE(data[i], result[i]);
 	}
 }
 
