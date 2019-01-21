@@ -207,7 +207,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	// dvips: DVI -> PS
 	QProcess dvipsProcess;
 	dvipsProcess.start("dvips", QStringList() << "-E" << fi.completeBaseName());
-	if (!dvipsProcess.waitForFinished() || dvipsProcess.exitCode() == 0) {
+	if (!dvipsProcess.waitForFinished() || dvipsProcess.exitCode() != 0) {
 		WARN("dvips process failed, exit code = " << dvipsProcess.exitCode());
 		*success = false;
 		QFile::remove(fi.completeBaseName() + ".aux");
