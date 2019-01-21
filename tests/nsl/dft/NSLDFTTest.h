@@ -47,7 +47,16 @@ private slots:
 	void test_onesided_squareamplitude();
 	void test_onesided_normdB();
 	// two sided
-	// TODO
+	void test_twosided_real();
+	void test_twosided_imag();
+	void test_twosided_magnitude();
+	void test_twosided_amplitude();
+	void test_twosided_power();
+	void test_twosided_phase();
+	void test_twosided_dB();
+	void test_twosided_squaremagnitude();
+	void test_twosided_squareamplitude();
+	void test_twosided_normdB();
 	// performance
 	// TODO
 private:
