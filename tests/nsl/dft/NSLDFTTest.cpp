@@ -165,7 +165,7 @@ void NSLDFTTest::testTwosided_imag() {
 	nsl_dft_transform(data, 1, N, TWOSIDED, nsl_dft_result_imag);
 	for (unsigned int i = 0; i < N; i++) {
 		DEBUG(std::setprecision(15) << data[i]);
-		if (i == 2)
+		if (i == 2 || i == 8)
 			QCOMPARE(data[i] + 1., 1.);	// -1.11022302462516e-16 (Win)
 		else
 			QCOMPARE(data[i], result[i]);
