@@ -1,0 +1,36 @@
+INCLUDE_DIRECTORIES(${GSL_INCLUDE_DIR})
+add_executable (nsldfttest NSLDFTTest.cpp)
+
+target_link_libraries(nsldfttest Qt5::Test)
+target_link_libraries(nsldfttest KF5::Archive KF5::XmlGui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+
+IF (Qt5SerialPort_FOUND)
+	target_link_libraries(nsldfttest Qt5::SerialPort )
+ENDIF ()
+IF (KF5SyntaxHighlighting_FOUND)
+	target_link_libraries(nsldfttest KF5::SyntaxHighlighting )
+ENDIF ()
+#TODO: KF5::NewStuff
+
+IF (CANTOR_LIBS_FOUND)
+	target_link_libraries(nsldfttest ${CANTOR_LIBS} )
+ENDIF ()
+IF (HDF5_FOUND)
+	target_link_libraries(nsldfttest ${HDF5_C_LIBRARIES} )
+ENDIF ()
+IF (FFTW_FOUND)
+	target_link_libraries(nsldfttest ${FFTW_LIBRARIES} )
+ENDIF ()
+IF (NETCDF_FOUND)
+	target_link_libraries(nsldfttest ${NETCDF_LIBRARY} )
+ENDIF ()
+IF (CFITSIO_FOUND)
+	target_link_libraries(nsldfttest ${CFITSIO_LIBRARY} )
+ENDIF ()
+IF (USE_LIBORIGIN)
+target_link_libraries(nsldfttest liborigin-static )
+ENDIF ()
+
+target_link_libraries(nsldfttest labplot2lib)
+
+add_test(NAME nsldfttest COMMAND nsldfttest)

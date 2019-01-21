@@ -30,7 +30,7 @@
 #include "nsl_dft.h"
 
 #define NN 10
-#define TWOSIDED 1	/* 0,1 */
+#define TWOSIDED 0	/* 0,1 */
 
 int main() {
 	double data[]={1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
