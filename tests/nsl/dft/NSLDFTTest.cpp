@@ -58,7 +58,8 @@ void NSLDFTTest::testOnesided_imag() {
 	double result[] = {0, -4.97979656976556, 0, 0.449027976579585, 0};
 
 	nsl_dft_transform(data, 1, N, ONESIDED, nsl_dft_result_imag);
-	for (unsigned int i = 0; i < N/2; i++)
+	QCOMPARE(data[0] + 1., 1.);	// compare to 0 may fail
+	for (unsigned int i = 1; i < N/2; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -95,7 +96,10 @@ void NSLDFTTest::testOnesided_phase() {
 
 	nsl_dft_transform(data, 1, N, ONESIDED, nsl_dft_result_phase);
 	for (unsigned int i = 0; i < N/2; i++)
-		QCOMPARE(data[i], result[i]);
+		if (i == 2)	// sign can be + or -
+			QCOMPARE(fabs(data[i]), fabs(result[i]));
+		else
+			QCOMPARE(data[i], result[i]);
 }
 
 void NSLDFTTest::testOnesided_dB() {
@@ -152,7 +156,8 @@ void NSLDFTTest::testTwosided_imag() {
 	double result[] = {0, -4.97979656976556, 0, 0.449027976579585, 0, 0, 0, -0.449027976579585, 0, 4.97979656976556};
 
 	nsl_dft_transform(data, 1, N, TWOSIDED, nsl_dft_result_imag);
-	for (unsigned int i = 0; i < N; i++)
+	QCOMPARE(data[0] + 1., 1.);	// compare to 0 may fail
+	for (unsigned int i = 1; i < N; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -189,7 +194,10 @@ void NSLDFTTest::testTwosided_phase() {
 
 	nsl_dft_transform(data, 1, N, TWOSIDED, nsl_dft_result_phase);
 	for (unsigned int i = 0; i < N; i++)
-		QCOMPARE(data[i], result[i]);
+		if (i == 2)	// sign can be + or -
+			QCOMPARE(fabs(data[i]), fabs(result[i]));
+		else
+			QCOMPARE(data[i], result[i]);
 }
 
 void NSLDFTTest::testTwosided_dB() {
@@ -235,7 +243,7 @@ void NSLDFTTest::testTwosided_normdB() {
 #ifdef HAVE_FFTW3
 const int NN = 1e6;
 #else	// GSL is much slower
-const int NN = 1e5;
+const int NN = 1e6;
 #endif
 
 void NSLDFTTest::testPerformance_onesided() {
