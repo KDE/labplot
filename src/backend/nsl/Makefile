@@ -1,4 +1,4 @@
-all: nsl_stats_test nsl_smooth_ma_test nsl_smooth_mal_test nsl_smooth_percentile_test nsl_smooth_savgol_test nsl_dft_test nsl_dft_test_fftw nsl_sf_window_test nsl_filter_test nsl_filter_test_fftw nsl_geom_linesim_test nsl_geom_linesim_morse_test nsl_diff_test nsl_int_test nsl_fit_test
+all: nsl_stats_test nsl_smooth_ma_test nsl_smooth_mal_test nsl_smooth_percentile_test nsl_smooth_savgol_test nsl_dft_test_fftw nsl_sf_window_test nsl_filter_test nsl_filter_test_fftw nsl_geom_linesim_test nsl_geom_linesim_morse_test nsl_diff_test nsl_int_test nsl_fit_test
 
 nsl_stats_test: nsl_stats_test.c nsl_stats.c
 	gcc -o $@ $^ -lm -lgsl -lgslcblas
@@ -11,10 +11,6 @@ nsl_smooth_percentile_test: nsl_smooth_percentile_test.c nsl_smooth.c nsl_sf_ker
 	gcc -o $@ $^ -lm -lgsl -lgslcblas
 nsl_smooth_savgol_test: nsl_smooth_savgol_test.c nsl_smooth.c nsl_sf_kernel.c nsl_stats.c
 	gcc -o $@ $^ -lm -lgsl -lgslcblas
-nsl_dft_test: nsl_dft_test.c nsl_dft.c nsl_sf_window.c
-	gcc -o $@ $^ -lm -lgsl -lgslcblas
-nsl_dft_test_fftw: nsl_dft_test.c nsl_dft.c nsl_sf_window.c
-	gcc -o $@ $^ -lm -DHAVE_FFTW3 -lfftw3 -lgsl -lgslcblas
 nsl_sf_window_test: nsl_sf_window_test.c nsl_sf_window.c
 	gcc -o $@ $^ -lm -lgsl -lgslcblas
 nsl_filter_test: nsl_filter_test.c nsl_filter.c nsl_sf_poly.c
