@@ -1,4 +1,4 @@
-all: nsl_stats_test nsl_smooth_ma_test nsl_smooth_mal_test nsl_smooth_percentile_test nsl_smooth_savgol_test nsl_dft_test_fftw nsl_sf_window_test nsl_filter_test nsl_filter_test_fftw nsl_geom_linesim_test nsl_geom_linesim_morse_test nsl_diff_test nsl_int_test nsl_fit_test
+all: nsl_stats_test nsl_smooth_ma_test nsl_smooth_mal_test nsl_smooth_percentile_test nsl_smooth_savgol_test nsl_sf_window_test nsl_filter_test nsl_filter_test_fftw nsl_geom_linesim_test nsl_geom_linesim_morse_test nsl_diff_test nsl_int_test nsl_fit_test
 
 nsl_stats_test: nsl_stats_test.c nsl_stats.c
 	gcc -o $@ $^ -lm -lgsl -lgslcblas
