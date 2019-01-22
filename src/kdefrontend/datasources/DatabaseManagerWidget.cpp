@@ -497,11 +497,20 @@ void DatabaseManagerWidget::testConnection() {
 	WAIT_CURSOR;
 	const QString& driver = m_connections[row].driver;
 	QSqlDatabase db = QSqlDatabase::addDatabase(driver);
-	db.setDatabaseName(m_connections[row].dbName);
+
+	//db name or custom connection string for ODBC, if available
+	if (isODBC(driver) && m_connections[row].customConnectionEnabled)
+		db.setDatabaseName(m_connections[row].customConnectionString);
+	else
+		db.setDatabaseName(m_connections[row].dbName);
+
+	//host and port number, if required
 	if (!isFileDB(driver) && !isODBC(driver)) {
 		db.setHostName(m_connections[row].hostName);
 		db.setPort(m_connections[row].port);
 	}
+
+	//authentication, if required
 	if (!isFileDB(driver)) {
 		db.setUserName(m_connections[row].userName);
 		db.setPassword(m_connections[row].password);
