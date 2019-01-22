@@ -81,7 +81,7 @@ void MQTTHelpers::addSubscriptionChildren(QTreeWidgetItem* topic, QTreeWidgetIte
  * \param level the level's number which is being investigated
  */
 void MQTTHelpers::restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList& list, int level) {
-	if (list[level] != '+' && list[level] != "#" && level < list.size() - 1) {
+	if (list[level] != "+" && list[level] != "#" && level < list.size() - 1) {
 		for (int i = 0; i < topic->childCount(); ++i) {
 			//if the current level isn't + or # wildcard we recursively continue with the next level
 			if (topic->child(i)->text(0) == list[level]) {
@@ -89,7 +89,7 @@ void MQTTHelpers::restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidg
 				break;
 			}
 		}
-	} else if (list[level] == '+') {
+	} else if (list[level] == "+") {
 		for (int i = 0; i < topic->childCount(); ++i) {
 			//determine the name of the topic, contained by the subscription
 			QString name;
@@ -131,7 +131,7 @@ void MQTTHelpers::restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidg
 int MQTTHelpers::checkCommonChildCount(int levelIdx, int level, QStringList& commonList, QTreeWidgetItem* currentItem) {
 	//we recursively check the number of children, until we get to level-1
 	if (levelIdx < level - 1) {
-		if (commonList[levelIdx] != '+') {
+		if (commonList[levelIdx] != "+") {
 			for (int j = 0; j < currentItem->childCount(); ++j) {
 				if (currentItem->child(j)->text(0) == commonList[levelIdx]) {
 					//if the level isn't represented by + wildcard we simply return the amount of children of the corresponding item, recursively
@@ -159,7 +159,7 @@ int MQTTHelpers::checkCommonChildCount(int levelIdx, int level, QStringList& com
 				return -1;
 		}
 	} else if (levelIdx == level - 1) {
-		if (commonList[levelIdx] != '+') {
+		if (commonList[levelIdx] != "+") {
 			for (int j = 0; j < currentItem->childCount(); ++j) {
 				if (currentItem->child(j)->text(0) == commonList[levelIdx]) {
 					//if the level isn't represented by + wildcard we simply return the amount of children of the corresponding item
@@ -350,13 +350,13 @@ bool MQTTHelpers::checkTopicContains(const QString& superior, const QString& inf
 	bool ok = true;
 	for (int i = 0; i < superiorList.size(); ++i) {
 		if (superiorList.at(i) != inferiorList.at(i)) {
-			if ((superiorList.at(i) != '+') &&
+			if ((superiorList.at(i) != "+") &&
 					!(superiorList.at(i) == "#" && i == superiorList.size() - 1)) {
 				//if the two topics differ, and the superior's current level isn't + or #(which can be only in the last position)
 				//then superior can't contain inferior
 				ok = false;
 				break;
-			} else if (i == superiorList.size() - 1 && (superiorList.at(i) == '+' && inferiorList.at(i) == "#") ) {
+			} else if (i == superiorList.size() - 1 && (superiorList.at(i) == "+" && inferiorList.at(i) == "#") ) {
 				//if the two topics differ at the last level
 				//and the superior's current level is + while the inferior's is #(which can be only in the last position)
 				//then superior can't contain inferior
