@@ -40,6 +40,7 @@
 #include <QWidgetAction>
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QWindow>
 
 #include <KLocalizedString>
 #include <KSharedConfig>
@@ -53,7 +54,6 @@
 
 	\ingroup kdefrontend
  */
-
 FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent) : QDialog(parent), m_spreadsheet(s) {
 	Q_ASSERT(s != nullptr);
 	setWindowTitle(i18nc("@title:window", "Function Values"));
@@ -101,10 +101,12 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent) : QD
 	connect(m_okButton, &QPushButton::clicked, this, &FunctionValuesDialog::generate);
 
 	//restore saved settings if available
+	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "FunctionValuesDialog");
-	if (conf.exists())
+	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
-	else
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
 		resize(QSize(300, 0).expandedTo(minimumSize()));
 }
 
