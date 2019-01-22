@@ -248,7 +248,7 @@ void WorksheetView::initActions() {
 	connect(showPresenterMode, SIGNAL(triggered()), this, SLOT(presenterMode()));
 
 	//worksheet control actions
-	plotsLockedAction = new QAction(i18n("Non-interactive Plots"));
+	plotsLockedAction = new QAction(i18n("Non-interactive Plots"), this);
 	plotsLockedAction->setToolTip(i18n("If activated, plots on the worksheet don't react on drag and mouse wheel events."));
 	plotsLockedAction->setCheckable(true);
 	plotsLockedAction->setChecked(m_worksheet->plotsLocked());
