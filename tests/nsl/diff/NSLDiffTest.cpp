@@ -156,7 +156,6 @@ void NSLDiffTest::testSixth_order1() {
 //#################  performance
 //##############################################################################
 
-
 void NSLDiffTest::testPerformance_first() {
 	const int NN = 1e6;
 	double* xdata = new double[NN];
