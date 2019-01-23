@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : nsl_sf_window_test.c
+    File                 : NSLSFWindowTest.h
     Project              : LabPlot
-    Description          : NSL window functions test
+    Description          : NSL Tests for special window functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    Copyright            : (C) 2019 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -25,21 +24,23 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef NSLSFWINDOWTEST_H
+#define NSLSFWINDOWTEST_H
 
-#include <stdio.h>
-#include "nsl_sf_window.h"
+#include <QtTest>
 
-int main() {
-	const int N = 10;
-	double data[] = {1,1,1,1,1,1,1,1,1,1};
+class NSLSFWindowTest : public QObject {
+	Q_OBJECT
 
-	int i;
-	nsl_sf_window_type t;
+private slots:
+	void initTestCase();
 
-	for (t = nsl_sf_window_uniform; t <= nsl_sf_window_lanczos; t++) {
-		nsl_sf_apply_window(data, N, t);
-		for(i = 0; i < N; i++)
-			printf("%.15g ", data[i]);
-		puts("\n");
-	}
-}
+	void testWindowTypes();
+
+	void testPerformance_triangle();
+	void testPerformance_welch();
+	void testPerformance_flat_top();
+private:
+	QString m_dataDir;
+};
+#endif
