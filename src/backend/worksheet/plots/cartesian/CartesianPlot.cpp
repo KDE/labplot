@@ -2538,9 +2538,9 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
-
 	if (locked)
 		return;
+
 	//determine first, which axes are selected and zoom only in the corresponding direction.
 	//zoom the entire plot if no axes selected.
 	bool zoomX = false;
@@ -2674,10 +2674,10 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement( "coordinateSystem" );
 	writer->writeAttribute( "autoScaleX", QString::number(d->autoScaleX) );
 	writer->writeAttribute( "autoScaleY", QString::number(d->autoScaleY) );
-	writer->writeAttribute( "xMin", QString::number(d->xMin) );
-	writer->writeAttribute( "xMax", QString::number(d->xMax) );
-	writer->writeAttribute( "yMin", QString::number(d->yMin) );
-	writer->writeAttribute( "yMax", QString::number(d->yMax) );
+	writer->writeAttribute( "xMin", QString::number(d->xMin, 'g', 16));
+	writer->writeAttribute( "xMax", QString::number(d->xMax, 'g', 16) );
+	writer->writeAttribute( "yMin", QString::number(d->yMin, 'g', 16) );
+	writer->writeAttribute( "yMax", QString::number(d->yMax, 'g', 16) );
 	writer->writeAttribute( "xScale", QString::number(d->xScale) );
 	writer->writeAttribute( "yScale", QString::number(d->yScale) );
 	writer->writeAttribute( "xRangeFormat", QString::number(d->xRangeFormat) );
