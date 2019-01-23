@@ -40,8 +40,19 @@ private slots:
 	void testFirst_order4();
 	void testFirst_avg();
 	// second derivative
+	void testSecond_order1();
+	void testSecond_order2();
+	void testSecond_order3();
 	// higher derivative
+	void testThird_order2();
+	void testFourth_order1();
+	void testFourth_order3();
+	void testFifth_order2();
+	void testSixth_order1();
 	// performance
+	void testPerformance_first();
+	void testPerformance_second();
+	void testPerformance_third();
 private:
 	QString m_dataDir;
 };
