@@ -173,7 +173,7 @@ class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Privat
 	public: \
 		class_name ## cmd_name ## Cmd(class_name::Private *target, value_type newValue, const KLocalizedString &description) \
 			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {} \
-		virtual void finalize() { emit m_target->q->field_name##Changed(m_target->*m_field); } \
+		virtual void finalize() override { emit m_target->q->field_name##Changed(m_target->*m_field); } \
 };
 
 #define STD_SETTER_CMD_IMPL_F_S(class_name, cmd_name, value_type, field_name, finalize_method) \
@@ -181,7 +181,7 @@ class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Privat
 	public: \
 		class_name ## cmd_name ## Cmd(class_name::Private *target, value_type newValue, const KLocalizedString &description) \
 			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {} \
-		virtual void finalize() { m_target->finalize_method(); emit m_target->q->field_name##Changed(m_target->*m_field); } \
+		virtual void finalize() override { m_target->finalize_method(); emit m_target->q->field_name##Changed(m_target->*m_field); } \
 };
 
 // setter class with finalize() and signal emitting for changing several properties in one single step (embedded in beginMacro/endMacro)
@@ -190,8 +190,8 @@ class class_name ## cmd_name ## Cmd: public StandardMacroSetterCmd<class_name::P
 	public: \
 		class_name ## cmd_name ## Cmd(class_name::Private *target, value_type newValue, const KLocalizedString &description) \
 			: StandardMacroSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {} \
-		virtual void finalize() { m_target->finalize_method(); emit m_target->q->field_name##Changed(m_target->*m_field); } \
-		virtual void finalizeUndo() { emit m_target->q->field_name##Changed(m_target->*m_field); } \
+		virtual void finalize() override { m_target->finalize_method(); emit m_target->q->field_name##Changed(m_target->*m_field); } \
+		virtual void finalizeUndo() override { emit m_target->q->field_name##Changed(m_target->*m_field); } \
 };
 
 #define STD_SETTER_CMD_IMPL_I(class_name, cmd_name, value_type, field_name, init_method) \
@@ -223,7 +223,7 @@ class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_na
 	public: \
 		class_name ## cmd_name ## Cmd(class_name::Private *target, value_type newValue, const KLocalizedString &description) \
 			: StandardSwapMethodSetterCmd<class_name::Private, value_type>(target, &class_name::Private::method_name, newValue, description) {} \
-		virtual void finalize() { m_target->finalize_method(); } \
+		virtual void finalize() override { m_target->finalize_method(); } \
 };
 
 #define STD_SWAP_METHOD_SETTER_CMD_IMPL_I(class_name, cmd_name, value_type, method_name, init_method) \
