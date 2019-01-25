@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import file data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2019 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -57,6 +57,7 @@
 #include <QDir>
 #include <QInputDialog>
 #include <QMenu>
+#include <QWindow>
 
 /*!
 	\class ImportFileDialog
@@ -92,37 +93,39 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 
 	setWindowIcon(QIcon::fromTheme("document-import-database"));
 
-	QTimer::singleShot(0, this, &ImportFileDialog::loadSettings);
-}
+	//restore saved settings if available
+	create(); // ensure there's a window created
 
-void ImportFileDialog::loadSettings() {
-	//restore saved settings
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	m_importFileWidget->loadSettings();
 
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
-	m_showOptions = conf.readEntry("ShowOptions", false);
-	m_showOptions ? m_optionsButton->setText(i18n("Hide Options")) : m_optionsButton->setText(i18n("Show Options"));
-	m_importFileWidget->showOptions(m_showOptions);
+	if (conf.exists()) {
+		m_showOptions = conf.readEntry("ShowOptions", false);
+		m_showOptions ? m_optionsButton->setText(i18n("Hide Options")) : m_optionsButton->setText(i18n("Show Options"));
+		m_importFileWidget->showOptions(m_showOptions);
 
-	//do the signal-slot connections after all settings where loaded in import file widget and check the OK button after this
-	connect(m_importFileWidget, &ImportFileWidget::checkedFitsTableToMatrix, this, &ImportFileDialog::checkOnFitsTableToMatrix);
-	connect(m_importFileWidget, static_cast<void (ImportFileWidget::*)()>(&ImportFileWidget::fileNameChanged), this, &ImportFileDialog::checkOkButton);
-	connect(m_importFileWidget, static_cast<void (ImportFileWidget::*)()>(&ImportFileWidget::sourceTypeChanged), this, &ImportFileDialog::checkOkButton);
-	connect(m_importFileWidget, &ImportFileWidget::hostChanged, this, &ImportFileDialog::checkOkButton);
-	connect(m_importFileWidget, &ImportFileWidget::portChanged, this, &ImportFileDialog::checkOkButton);
-	//TODO: do we really need to check the ok button when the preview was refreshed?
-	//If not, remove this together with the previewRefreshed signal in ImportFileWidget
-	//connect(m_importFileWidget, &ImportFileWidget::previewRefreshed, this, &ImportFileDialog::checkOkButton);
+		//do the signal-slot connections after all settings where loaded in import file widget and check the OK button after this
+		connect(m_importFileWidget, &ImportFileWidget::checkedFitsTableToMatrix, this, &ImportFileDialog::checkOnFitsTableToMatrix);
+		connect(m_importFileWidget, static_cast<void (ImportFileWidget::*)()>(&ImportFileWidget::fileNameChanged), this, &ImportFileDialog::checkOkButton);
+		connect(m_importFileWidget, static_cast<void (ImportFileWidget::*)()>(&ImportFileWidget::sourceTypeChanged), this, &ImportFileDialog::checkOkButton);
+		connect(m_importFileWidget, &ImportFileWidget::hostChanged, this, &ImportFileDialog::checkOkButton);
+		connect(m_importFileWidget, &ImportFileWidget::portChanged, this, &ImportFileDialog::checkOkButton);
+		//TODO: do we really need to check the ok button when the preview was refreshed?
+		//If not, remove this together with the previewRefreshed signal in ImportFileWidget
+		//connect(m_importFileWidget, &ImportFileWidget::previewRefreshed, this, &ImportFileDialog::checkOkButton);
 #ifdef HAVE_MQTT
-	connect(m_importFileWidget, &ImportFileWidget::subscriptionsChanged, this, &ImportFileDialog::checkOkButton);
-	connect(m_importFileWidget, &ImportFileWidget::checkFileType, this, &ImportFileDialog::checkOkButton);
+		connect(m_importFileWidget, &ImportFileWidget::subscriptionsChanged, this, &ImportFileDialog::checkOkButton);
+		connect(m_importFileWidget, &ImportFileWidget::checkFileType, this, &ImportFileDialog::checkOkButton);
 #endif
-	connect(m_optionsButton, &QPushButton::clicked, this, &ImportFileDialog::toggleOptions);
+		connect(m_optionsButton, &QPushButton::clicked, this, &ImportFileDialog::toggleOptions);
+
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(300, 0).expandedTo(minimumSize()));
 
 	checkOkButton();
-
-	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }
 
 ImportFileDialog::~ImportFileDialog() {

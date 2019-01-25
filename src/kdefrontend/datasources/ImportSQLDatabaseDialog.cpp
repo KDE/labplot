@@ -40,6 +40,7 @@
 #include <QDialogButtonBox>
 #include <QProgressBar>
 #include <QStatusBar>
+#import <QWindow>
 
 #include <KLocalizedString>
 #include <KSharedConfig>
@@ -71,14 +72,14 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent) : ImportDialog
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-	QTimer::singleShot(0, this, &ImportSQLDatabaseDialog::loadSettings);
-}
-
-void ImportSQLDatabaseDialog::loadSettings() {
-	//restore saved settings
-	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	//restore saved settings if available
+	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseDialog");
-	KWindowConfig::restoreWindowSize(windowHandle(), conf);
+	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(300, 0).expandedTo(minimumSize()));
 }
 
 ImportSQLDatabaseDialog::~ImportSQLDatabaseDialog() {

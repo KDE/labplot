@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2019 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -73,7 +73,6 @@ protected  slots:
 private slots:
 	void toggleOptions();
 	void checkOnFitsTableToMatrix(const bool enable);
-	void loadSettings();
 };
 
 #endif //IMPORTFILEDIALOG_H
