@@ -80,7 +80,7 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent) : QDialog
 	ui.teEquation->setPlainText(m_matrix->formula());
 	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-	ui.gridLayout_2->addWidget(btnBox);
+	ui.gridLayout_2->addWidget(btnBox, 3, 0, 1, 3);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 
 	connect(btnBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &MatrixFunctionDialog::close);
