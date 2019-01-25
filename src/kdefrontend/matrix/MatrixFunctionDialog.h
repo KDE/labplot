@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dialog for generating matrix values from a mathematical function
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -39,11 +39,13 @@ class MatrixFunctionDialog : public QDialog {
 
 public:
 	explicit MatrixFunctionDialog(Matrix*, QWidget* parent = nullptr);
+	~MatrixFunctionDialog();
 
 private:
 	Ui::MatrixFunctionWidget ui;
 	Matrix* m_matrix;
 	QPushButton* m_okButton;
+
 private slots:
 	void generate();
 	void checkValues();

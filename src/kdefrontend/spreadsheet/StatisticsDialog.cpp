@@ -4,7 +4,7 @@
     Description          : Dialog showing statistics for column values
     --------------------------------------------------------------------
     Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.com))
-    Copyright            : (C) 2016-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -30,16 +30,18 @@
 #include "StatisticsDialog.h"
 #include "backend/core/column/Column.h"
 
-#include <QTextEdit>
-#include <QTimer>
-#include <QTabWidget>
-#include <KLocalizedString>
 #include <QDialogButtonBox>
-#include <QVBoxLayout>
-#include <KWindowConfig>
 #include <QPushButton>
-#include <cmath>
+#include <QTabWidget>
+#include <QTextEdit>
+#include <QVBoxLayout>
+#include <QWindow>
+
+#include <KLocalizedString>
 #include <KSharedConfig>
+#include <KWindowConfig>
+
+#include <cmath>
 
 StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) : QDialog(parent),
 	m_twStatistics(new QTabWidget) {
@@ -177,16 +179,14 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) : QDia
 	                     "</table>");
 
 	connect(m_twStatistics, &QTabWidget::currentChanged, this, &StatisticsDialog::currentTabChanged);
-	QTimer::singleShot(0, this, &StatisticsDialog::loadSettings);
-}
 
-void StatisticsDialog::loadSettings() {
 	//restore saved settings if available
-	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "StatisticsDialog");
-	if (conf.exists())
+	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
-	else
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
 		resize(QSize(490, 520));
 }
 

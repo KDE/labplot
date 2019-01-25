@@ -36,7 +36,7 @@ Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
 #include <KWindowConfig>
 
 #include <QDialogButtonBox>
-#include <QTimer>
+#include <QWindow>
 
 /*!
 	\class MQTTConnectionManagerDialog
@@ -64,17 +64,14 @@ MQTTConnectionManagerDialog::MQTTConnectionManagerDialog(QWidget* parent, const 
 	connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-	QTimer::singleShot(0, this, &MQTTConnectionManagerDialog::loadSettings);
-}
-
-/*!
- * \brief Loads the settings for the dialog
- */
-void MQTTConnectionManagerDialog::loadSettings() {
-	//restore saved settings
-	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	//restore saved settings if available
+	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "MQTTConnectionManagerDialog");
-	KWindowConfig::restoreWindowSize(windowHandle(), conf);
+	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(0, 0).expandedTo(minimumSize()));
 }
 
 /*!

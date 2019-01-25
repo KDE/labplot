@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : export spreadsheet dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2014-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -37,7 +37,7 @@
 #include <QStandardItemModel>
 #include <QDialogButtonBox>
 #include <QSqlDatabase>
-#include <QTimer>
+#include <QWindow>
 
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -108,11 +108,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	setWindowTitle(i18nc("@title:window", "Export Spreadsheet"));
 	setWindowIcon(QIcon::fromTheme("document-export-database"));
 
-	QTimer::singleShot(0, this, &ExportSpreadsheetDialog::loadSettings);
-}
-
-void ExportSpreadsheetDialog::loadSettings() {
-	//restore saved settings
+	//restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 	ui->cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
@@ -132,6 +128,13 @@ void ExportSpreadsheetDialog::loadSettings() {
 	ui->gbOptions->setVisible(m_showOptions);
 	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) :
 			m_showOptionsButton->setText(i18n("Show Options"));
+
+	create(); // ensure there's a window created
+	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(0, 0).expandedTo(minimumSize()));
 }
 
 ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {

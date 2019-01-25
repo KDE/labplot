@@ -2,9 +2,9 @@
     File                 : SettingsDialog.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2019 by Alexander Semke (alexander.semke@web.de)
     Description          : application settings dialog
- 
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -33,6 +33,7 @@
 
 #include <QPushButton>
 #include <QDialogButtonBox>
+#include <QWindow>
 
 #include <KMessageBox>
 #include <KConfigGroup>
@@ -66,8 +67,14 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 	worksheetFrame->setIcon(QIcon::fromTheme(QLatin1String("labplot-worksheet")));
 	connect(m_worksheetPage, &SettingsWorksheetPage::settingsChanged, this, &SettingsDialog::changed);
 
-	const KConfigGroup dialogConfig = KSharedConfig::openConfig()->group("SettingsDialog");
-	KWindowConfig::restoreWindowSize(windowHandle(), dialogConfig);
+	//restore saved settings if available
+	create(); // ensure there's a window created
+	KConfigGroup conf(KSharedConfig::openConfig(), "SettingsDialog");
+	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(0, 0).expandedTo(minimumSize()));
 }
 
 SettingsDialog::~SettingsDialog() {

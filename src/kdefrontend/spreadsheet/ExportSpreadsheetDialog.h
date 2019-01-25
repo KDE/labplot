@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : export spreadsheet dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2014-2018 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -94,7 +94,6 @@ private slots:
 	void formatChanged(int);
 	void fileNameChanged(const QString&);
 	void fitsExportToChanged(int);
-	void loadSettings();
 };
 
 #endif

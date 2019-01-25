@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dialog for generating matrix values from a mathematical function
     ------------------------------------------------------------------------
-    Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2019 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -32,20 +32,24 @@
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
 
-extern "C" {
-#include "backend/gsl/parser.h"
-}
-#include <cmath>
-
 #include <QMenu>
 #include <QWidgetAction>
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <KLocalizedString>
 #include <QThreadPool>
+#include <QWindow>
 #ifndef NDEBUG
 #include <QElapsedTimer>
 #endif
+
+#include <KSharedConfig>
+#include <KWindowConfig>
+
+extern "C" {
+#include "backend/gsl/parser.h"
+}
+#include <cmath>
 
 /*!
 	\class MatrixFunctionDialog
@@ -53,7 +57,6 @@ extern "C" {
 
 	\ingroup kdefrontend
  */
-
 MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent) : QDialog(parent), m_matrix(m) {
 	Q_ASSERT(m_matrix);
 	setWindowTitle(i18nc("@title:window", "Function Values"));
@@ -92,7 +95,19 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent) : QDialog
 	connect(ui.tbFunctions, &QToolButton::clicked, this, &MatrixFunctionDialog::showFunctions);
 	connect(m_okButton, &QPushButton::clicked, this, &MatrixFunctionDialog::generate);
 
-	resize(QSize(300,0).expandedTo(minimumSize()));
+	//restore saved settings if available
+	create(); // ensure there's a window created
+	KConfigGroup conf(KSharedConfig::openConfig(), "MatrixFunctionDialog");
+	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(300, 0).expandedTo(minimumSize()));
+}
+
+MatrixFunctionDialog::~MatrixFunctionDialog() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "MatrixFunctionDialog");
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 void MatrixFunctionDialog::checkValues() {

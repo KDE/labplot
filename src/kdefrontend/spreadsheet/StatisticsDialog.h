@@ -4,7 +4,7 @@
     Description          : Dialog showing statistics for column values
     --------------------------------------------------------------------
     Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
-    Copyright            : (C) 2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -51,7 +51,6 @@ private:
 
 private slots:
 	void currentTabChanged(int);
-	void loadSettings();
 };
 
 #endif
