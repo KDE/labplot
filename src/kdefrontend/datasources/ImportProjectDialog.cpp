@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import project dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017-2019 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -42,6 +42,7 @@
 #include <QInputDialog>
 #include <QProgressBar>
 #include <QStatusBar>
+#include <QWindow>
 
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -123,13 +124,14 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	setWindowTitle(title);
 	setWindowIcon(QIcon::fromTheme("document-import"));
 
-	QTimer::singleShot(0, this, &ImportProjectDialog::loadSettings);
-}
-
-void ImportProjectDialog::loadSettings() {
-	//restore saved settings
+	//restore saved settings if available
+	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportProjectDialog");
-	KWindowConfig::restoreWindowSize(windowHandle(), conf);
+	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(300, 0).expandedTo(minimumSize()));
 
 	QString lastImportedFile;
 	switch (m_projectType) {

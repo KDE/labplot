@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : export worksheet dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -33,7 +33,7 @@
 #include <QDesktopWidget>
 #include <QDirModel>
 #include <QFileDialog>
-#include <QTimer>
+#include <QWindow>
 
 #include <QDialogButtonBox>
 #include <KLocalizedString>
@@ -93,15 +93,8 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	setWindowTitle(i18nc("@title:window", "Export Worksheet"));
 	setWindowIcon(QIcon::fromTheme(QLatin1String("document-export-database")));
 
-	QTimer::singleShot(0, this, &ExportWorksheetDialog::loadSettings);
-}
-
-void ExportWorksheetDialog::loadSettings() {
-	//restore saved setting
+	//restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
-
-	KWindowConfig::restoreWindowSize(windowHandle(), conf);
-
 	ui->cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
 	ui->cbExportArea->setCurrentIndex(conf.readEntry("Area", 0));
 	ui->chkExportBackground->setChecked(conf.readEntry("Background", true));
@@ -110,6 +103,13 @@ void ExportWorksheetDialog::loadSettings() {
 	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) :
 				m_showOptionsButton->setText(i18n("Show Options"));
 	ui->gbOptions->setVisible(m_showOptions);
+
+	create(); // ensure there's a window created
+	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(0, 0).expandedTo(minimumSize()));
 }
 
 ExportWorksheetDialog::~ExportWorksheetDialog() {

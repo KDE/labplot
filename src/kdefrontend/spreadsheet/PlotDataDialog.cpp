@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dialog for generating plots for the spreadsheet data
     --------------------------------------------------------------------
-    Copyright            : (C) 2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -54,7 +54,7 @@
 
 #include <QDialogButtonBox>
 #include <QPushButton>
-#include <QTimer>
+#include <QWindow>
 
 #include <KConfigGroup>
 #include <KSharedConfig>
@@ -148,24 +148,21 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 	connect(cbExistingPlots, &TreeViewComboBox::currentModelIndexChanged, this, &PlotDataDialog::checkOkButton);
 	connect(cbExistingWorksheets, &TreeViewComboBox::currentModelIndexChanged, this, &PlotDataDialog::checkOkButton);
 
-	QTimer::singleShot(0, this, &PlotDataDialog::loadSettings);
-}
-
-void PlotDataDialog::loadSettings() {
 	//restore saved settings if available
-	 QApplication::processEvents(QEventLoop::AllEvents, 0);
-	const KConfigGroup conf(KSharedConfig::openConfig(), "PlotDataDialog");
+	create(); // ensure there's a window created
+	KConfigGroup conf(KSharedConfig::openConfig(), "PlotDataDialog");
 	if (conf.exists()) {
-		KWindowConfig::restoreWindowSize(windowHandle(), conf);
-
 		int index = conf.readEntry("CurvePlacement", 0);
 		if (index == 2) ui->rbCurvePlacement2->setChecked(true);
 
 		index = conf.readEntry("PlotPlacement", 0);
 		if (index == 2) ui->rbPlotPlacement2->setChecked(true);
 		if (index == 3) ui->rbPlotPlacement3->setChecked(true);
+
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else
-		resize( QSize(0,0).expandedTo(minimumSize()) );
+		resize(QSize(0, 0).expandedTo(minimumSize()));
 
 	processColumns();
 	plotPlacementChanged();

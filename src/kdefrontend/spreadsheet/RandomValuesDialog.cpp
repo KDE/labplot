@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dialog for generating non-uniformly distributed random numbers
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2019 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -32,9 +32,10 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QDialogButtonBox>
+#include <QDir>
 #include <QPushButton>
 #include <QStandardPaths>
-#include <QDir>
+#include <QWindow>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -100,6 +101,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent) : QDialo
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &RandomValuesDialog::generate);
 
 	//restore saved settings if available
+	create(); // ensure there's a window created
 	const KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
 	if (conf.exists()) {
 		ui.cbDistribution->setCurrentIndex(conf.readEntry("Distribution", 0));
@@ -109,6 +111,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent) : QDialo
 		ui.leParameter3->setText(conf.readEntry("Parameter3"));
 
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else {
 		//Gaussian distribution as default
 		this->distributionChanged(0);

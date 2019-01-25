@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : export worksheet dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -60,7 +60,6 @@ private:
 	QPushButton* m_okButton;
 	QPushButton* m_cancelButton;
 
-
 private slots:
 	void slotButtonClicked(QAbstractButton *);
 	void okClicked();
@@ -68,7 +67,6 @@ private slots:
 	void selectFile();
 	void formatChanged(int);
 	void fileNameChanged(const QString&);
-	void loadSettings();
 };
 
 #endif

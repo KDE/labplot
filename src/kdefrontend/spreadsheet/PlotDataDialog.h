@@ -87,7 +87,6 @@ private slots:
 	void plot();
 	void curvePlacementChanged();
 	void plotPlacementChanged();
-	void loadSettings();
 };
 
 #endif

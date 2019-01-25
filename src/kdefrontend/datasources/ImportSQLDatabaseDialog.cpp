@@ -79,7 +79,7 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent) : ImportDialog
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else
-		resize(QSize(300, 0).expandedTo(minimumSize()));
+		resize(QSize(0, 0).expandedTo(minimumSize()));
 }
 
 ImportSQLDatabaseDialog::~ImportSQLDatabaseDialog() {

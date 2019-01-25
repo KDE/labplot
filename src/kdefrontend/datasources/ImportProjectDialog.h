@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import project dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017-2019 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -67,7 +67,6 @@ private:
 	bool isTopLevel(const AbstractAspect*) const;
 
 private slots:
-	void loadSettings();
 	void fileNameChanged(const QString&);
 	void refreshPreview();
 	void selectionChanged(const QItemSelection&, const QItemSelection&);

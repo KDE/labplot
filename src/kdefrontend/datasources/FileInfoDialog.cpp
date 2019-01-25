@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import file data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2019 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2015-2018 Stefan-Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -37,6 +37,7 @@
 #include <QFileInfo>
 #include <QProcess>
 #include <QVBoxLayout>
+#include <QWindow>
 
 #include <KLocalizedString>
 #include <KSharedConfig>
@@ -68,13 +69,14 @@ FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 
 	setLayout(layout);
 
-	QTimer::singleShot(0, this, &FileInfoDialog::loadSettings);
-}
-
-void FileInfoDialog::loadSettings() {
-	//restore saved settings
+	//restore saved settings if available
+	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "FileInfoDialog");
-	KWindowConfig::restoreWindowSize(windowHandle(), conf);
+	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(300, 200).expandedTo(minimumSize()));
 }
 
 FileInfoDialog::~FileInfoDialog() {
