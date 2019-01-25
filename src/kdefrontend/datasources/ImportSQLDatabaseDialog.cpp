@@ -40,7 +40,7 @@
 #include <QDialogButtonBox>
 #include <QProgressBar>
 #include <QStatusBar>
-#import <QWindow>
+#include <QWindow>
 
 #include <KLocalizedString>
 #include <KSharedConfig>
