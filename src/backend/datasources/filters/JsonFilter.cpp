@@ -33,6 +33,7 @@
 #include "backend/datasources/filters/JsonFilterPrivate.h"
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/core/column/Column.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -613,6 +614,13 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 		}
 		emit q->completed(100 * i/m_actualRows);
 	}
+
+	//set the plot designation to 'X' for index and name columns, if available
+	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	if (createIndexEnabled)
+		spreadsheet->column(m_columnOffset )->setPlotDesignation(Column::X);
+	if (importObjectNames)
+		spreadsheet->column(m_columnOffset + (int)createIndexEnabled)->setPlotDesignation(Column::X);
 
 	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, m_actualRows, dateTimeFormat, importMode);
 }
