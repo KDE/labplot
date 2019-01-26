@@ -1147,17 +1147,33 @@ void CartesianPlotDock::borderOpacityChanged(int value) {
 void CartesianPlotDock::horizontalPaddingChanged(double value) {
 	if (m_initializing)
 		return;
-
-	for (auto* plot : m_plotList)
-		plot->setHorizontalPadding(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+	double padding = Worksheet::convertToSceneUnits(value, Worksheet::Centimeter);
+	for (auto* plot : m_plotList) {
+		if (plot->rect().width() > 2*padding) {
+			plot->setHorizontalPadding(padding);
+		} else { // preventing that padding is bigger than the size of the plot
+			m_initializing = true;
+			ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(plot->horizontalPadding(), Worksheet::Centimeter));
+			m_initializing = false;
+		}
+	}
 }
 
 void CartesianPlotDock::verticalPaddingChanged(double value) {
 	if (m_initializing)
 		return;
 
-	for (auto* plot : m_plotList)
-		plot->setVerticalPadding(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+	// TODO: find better solution (set spinbox range). When plot->rect().width() does change?
+	double padding = Worksheet::convertToSceneUnits(value, Worksheet::Centimeter);
+	for (auto* plot : m_plotList) {
+		if (plot->rect().height() > 2 * padding) {
+			plot->setVerticalPadding(padding);
+		} else { // preventing that padding is bigger than the size of the plot
+			m_initializing = true;
+			ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(plot->verticalPadding(), Worksheet::Centimeter));
+			m_initializing = false;
+		}
+	}
 }
 
 //*************************************************************
