@@ -37,6 +37,7 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/LabelWidget.h"
+#include "commonfrontend/widgets/DateTimeSpinBox.h"
 
 #include <QTimer>
 #include <QDir>
@@ -65,10 +66,13 @@ AxisDock::AxisDock(QWidget* parent) : QWidget(parent) {
 	//"Ticks"-tab
 	auto* layout = static_cast<QGridLayout*>(ui.tabTicks->layout());
 	cbMajorTicksColumn = new TreeViewComboBox(ui.tabTicks);
-	layout->addWidget(cbMajorTicksColumn, 5, 2);
-
+	layout->addWidget(cbMajorTicksColumn, 7, 2);
 	cbMinorTicksColumn = new TreeViewComboBox(ui.tabTicks);
-	layout->addWidget(cbMinorTicksColumn, 18, 2);
+	layout->addWidget(cbMinorTicksColumn, 21, 2);
+	dtsbMajorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
+	layout->addWidget(dtsbMajorTicksIncrement, 6, 2);
+	dtsbMinorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
+	layout->addWidget(dtsbMinorTicksIncrement, 20, 2);
 
 	//adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -114,7 +118,9 @@ AxisDock::AxisDock(QWidget* parent) : QWidget(parent) {
 	connect( ui.cbMajorTicksDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksDirectionChanged(int)) );
 	connect( ui.cbMajorTicksType, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksTypeChanged(int)) );
 	connect( ui.sbMajorTicksNumber, SIGNAL(valueChanged(int)), this, SLOT(majorTicksNumberChanged(int)) );
-	connect( ui.leMajorTicksIncrement, SIGNAL(textChanged(QString)), this, SLOT(majorTicksIncrementChanged()) );
+	connect( ui.sbMajorTicksIncrementNumeric, SIGNAL(valueChanged(double)), this, SLOT(majorTicksIncrementChanged()) );
+	connect( dtsbMajorTicksIncrement, SIGNAL(valueChanged()), this, SLOT(majorTicksIncrementChanged()) );
+	//connect( ui.sbMajorTicksIncrementNumeric, &QDoubleSpinBox::valueChanged, this, &AxisDock::majorTicksIncrementChanged);
 	connect( cbMajorTicksColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(majorTicksColumnChanged(QModelIndex)) );
 	connect( ui.cbMajorTicksLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksLineStyleChanged(int)) );
 	connect( ui.kcbMajorTicksColor, SIGNAL(changed(QColor)), this, SLOT(majorTicksColorChanged(QColor)) );
@@ -126,7 +132,8 @@ AxisDock::AxisDock(QWidget* parent) : QWidget(parent) {
 	connect( ui.cbMinorTicksDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(minorTicksDirectionChanged(int)) );
 	connect( ui.cbMinorTicksType, SIGNAL(currentIndexChanged(int)), this, SLOT(minorTicksTypeChanged(int)) );
 	connect( ui.sbMinorTicksNumber, SIGNAL(valueChanged(int)), this, SLOT(minorTicksNumberChanged(int)) );
-	connect( ui.leMinorTicksIncrement, SIGNAL(textChanged(QString)), this, SLOT(minorTicksIncrementChanged()) );
+	connect( ui.sbMajorTicksIncrementNumeric, SIGNAL(valueChanged(double)), this, SLOT(minorTicksIncrementChanged()) );
+	connect( dtsbMinorTicksIncrement, SIGNAL(valueChanged()), this, SLOT(minorTicksIncrementChanged()) );
 	connect( cbMinorTicksColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(minorTicksColumnChanged(QModelIndex)) );
 	connect( ui.cbMinorTicksLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(minorTicksLineStyleChanged(int)) );
 	connect( ui.kcbMinorTicksColor, SIGNAL(changed(QColor)), this, SLOT(minorTicksColorChanged(QColor)) );
@@ -185,9 +192,6 @@ void AxisDock::init() {
 	ui.leEnd->setValidator( new QDoubleValidator(ui.leEnd) );
 	ui.leZeroOffset->setValidator( new QDoubleValidator(ui.leZeroOffset) );
 	ui.leScalingFactor->setValidator( new QDoubleValidator(ui.leScalingFactor) );
-
-	ui.leMajorTicksIncrement->setValidator( new QDoubleValidator(ui.leMajorTicksIncrement) );
-	ui.leMinorTicksIncrement->setValidator( new QDoubleValidator(ui.leMinorTicksIncrement) );
 
 	//TODO move this stuff to retranslateUI()
 	ui.cbPosition->addItem(i18n("Top"));
@@ -789,10 +793,13 @@ void AxisDock::majorTicksDirectionChanged(int index) {
 	ui.cbMajorTicksType->setEnabled(b);
 	ui.lMajorTicksNumber->setEnabled(b);
 	ui.sbMajorTicksNumber->setEnabled(b);
-	ui.lMajorTicksIncrement->setEnabled(b);
-	ui.leMajorTicksIncrement->setEnabled(b);
+	ui.lMajorTicksIncrementNumeric->setEnabled(b);
+	ui.sbMajorTicksIncrementNumeric->setEnabled(b);
+	ui.lMajorTicksIncrementDateTime->setEnabled(b);
+	dtsbMajorTicksIncrement->setEnabled(b);
 	ui.lMajorTicksLineStyle->setEnabled(b);
 	ui.cbMajorTicksLineStyle->setEnabled(b);
+	dtsbMinorTicksIncrement->setEnabled(b);
 	if (b) {
 		auto penStyle = Qt::PenStyle(ui.cbMajorTicksLineStyle->currentIndex());
 		b = (penStyle != Qt::NoPen);
@@ -818,26 +825,52 @@ void AxisDock::majorTicksDirectionChanged(int index) {
 	Shows/hides the corresponding widgets.
 */
 void AxisDock::majorTicksTypeChanged(int index) {
+
+	if (!m_axis) // If elements are added to the combobox 'cbMajorTicksType' (at init of this class), then this function is called, which is a problem if no axis are available
+		return;
+
 	auto type = Axis::TicksType(index);
+	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+
+	bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
+		|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
+
 	if ( type == Axis::TicksTotalNumber) {
 		ui.lMajorTicksNumber->show();
 		ui.sbMajorTicksNumber->show();
-		ui.lMajorTicksIncrement->hide();
-		ui.leMajorTicksIncrement->hide();
+		ui.lMajorTicksIncrementNumeric->hide();
+		ui.sbMajorTicksIncrementNumeric->hide();
+		ui.lMajorTicksIncrementDateTime->hide();
+		dtsbMajorTicksIncrement->hide();
 		ui.lMajorTicksColumn->hide();
 		cbMajorTicksColumn->hide();
 	} else if ( type == Axis::TicksIncrement) {
 		ui.lMajorTicksNumber->hide();
 		ui.sbMajorTicksNumber->hide();
-		ui.lMajorTicksIncrement->show();
-		ui.leMajorTicksIncrement->show();
+		ui.lMajorTicksIncrementNumeric->show();
+		if (numeric) {
+			ui.lMajorTicksIncrementDateTime->hide();
+			dtsbMajorTicksIncrement->hide();
+			ui.lMajorTicksIncrementNumeric->show();
+			ui.sbMajorTicksIncrementNumeric->show();
+		} else {
+			ui.lMajorTicksIncrementDateTime->show();
+			dtsbMajorTicksIncrement->show();
+			ui.lMajorTicksIncrementNumeric->hide();
+			ui.sbMajorTicksIncrementNumeric->hide();
+		}
 		ui.lMajorTicksColumn->hide();
 		cbMajorTicksColumn->hide();
+
+		// Check if Increment is not to small
+		majorTicksIncrementChanged();
 	} else {
 		ui.lMajorTicksNumber->hide();
 		ui.sbMajorTicksNumber->hide();
-		ui.lMajorTicksIncrement->hide();
-		ui.leMajorTicksIncrement->hide();
+		ui.lMajorTicksIncrementNumeric->hide();
+		ui.sbMajorTicksIncrementNumeric->hide();
+		dtsbMajorTicksIncrement->hide();
+		dtsbMajorTicksIncrement->hide();
 		ui.lMajorTicksColumn->show();
 		cbMajorTicksColumn->show();
 	}
@@ -847,6 +880,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTicksType(type);
+
 }
 
 void AxisDock::majorTicksNumberChanged(int value) {
@@ -861,8 +895,40 @@ void AxisDock::majorTicksIncrementChanged() {
 	if (m_initializing)
 		return;
 
-	double value = ui.leMajorTicksIncrement->text().toDouble();
-	if (value < 0) value = -1.*value; //don't allow negative values
+	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+
+	bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
+		|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
+
+	double value;
+
+	if (numeric)
+		value = ui.sbMajorTicksIncrementNumeric->value();
+	else
+		value = dtsbMajorTicksIncrement->value();
+
+	double diff = m_axis->end() - m_axis->start();
+
+	if (value == 0 || diff / value > 100 || value < 0) { // maximum of 100 ticks
+
+		if (value == 0)
+			value = diff / ui.sbMajorTicksNumber->value();
+
+		if (diff / value > 100)
+			value = diff / 100;
+
+		// determine stepsize and number of decimals
+		m_initializing = true;
+		if (numeric) {
+			int decimal = determineDecimals(value * 10);
+			ui.sbMajorTicksIncrementNumeric->setDecimals(decimal);
+			ui.sbMajorTicksIncrementNumeric->setSingleStep(determineStep(diff, decimal));
+			ui.sbMajorTicksIncrementNumeric->setValue(value);
+		} else
+			dtsbMajorTicksIncrement->setValue(value);
+		m_initializing = false;
+	}
+
 	for (auto* axis : m_axesList)
 		axis->setMajorTicksIncrement(value);
 }
@@ -961,8 +1027,10 @@ void AxisDock::minorTicksDirectionChanged(int index) {
 	ui.cbMinorTicksType->setEnabled(b);
 	ui.lMinorTicksNumber->setEnabled(b);
 	ui.sbMinorTicksNumber->setEnabled(b);
-	ui.lMinorTicksIncrement->setEnabled(b);
-	ui.leMinorTicksIncrement->setEnabled(b);
+	ui.lMinorTicksIncrementNumeric->setEnabled(b);
+	ui.sbMinorTicksIncrementNumeric->setEnabled(b);
+	ui.lMinorTicksIncrementDateTime->setEnabled(b);
+	dtsbMinorTicksIncrement->setEnabled(b);
 	ui.lMinorTicksLineStyle->setEnabled(b);
 	ui.cbMinorTicksLineStyle->setEnabled(b);
 	if (b) {
@@ -986,26 +1054,52 @@ void AxisDock::minorTicksDirectionChanged(int index) {
 }
 
 void AxisDock::minorTicksTypeChanged(int index) {
+
+	if (!m_axis) // If elements are added to the combobox 'cbMajorTicksType' (at init of this class), then this function is called, which is a problem if no axis are available
+		return;
+
 	auto type = Axis::TicksType(index);
+	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+
+	bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
+		|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
+
+
 	if ( type == Axis::TicksTotalNumber) {
 		ui.lMinorTicksNumber->show();
 		ui.sbMinorTicksNumber->show();
-		ui.lMinorTicksIncrement->hide();
-		ui.leMinorTicksIncrement->hide();
+		ui.lMinorTicksIncrementNumeric->hide();
+		ui.sbMinorTicksIncrementNumeric->hide();
 		ui.lMinorTicksColumn->hide();
 		cbMinorTicksColumn->hide();
+		ui.lMinorTicksIncrementDateTime->hide();
+		dtsbMinorTicksIncrement->hide();
 	} else if ( type == Axis::TicksIncrement) {
 		ui.lMinorTicksNumber->hide();
 		ui.sbMinorTicksNumber->hide();
-		ui.lMinorTicksIncrement->show();
-		ui.leMinorTicksIncrement->show();
+		if (numeric) {
+			ui.lMinorTicksIncrementNumeric->show();
+			ui.sbMinorTicksIncrementNumeric->show();
+			ui.lMinorTicksIncrementDateTime->hide();
+			dtsbMinorTicksIncrement->hide();
+		} else {
+			ui.lMinorTicksIncrementNumeric->hide();
+			ui.sbMinorTicksIncrementNumeric->hide();
+			ui.lMinorTicksIncrementDateTime->show();
+			dtsbMinorTicksIncrement->show();
+		}
 		ui.lMinorTicksColumn->hide();
 		cbMinorTicksColumn->hide();
+
+		// Check if Increment is not to small
+		minorTicksIncrementChanged();
 	} else {
 		ui.lMinorTicksNumber->hide();
 		ui.sbMinorTicksNumber->hide();
-		ui.lMinorTicksIncrement->hide();
-		ui.leMinorTicksIncrement->hide();
+		ui.lMinorTicksIncrementNumeric->hide();
+		ui.sbMinorTicksIncrementNumeric->hide();
+		ui.lMinorTicksIncrementDateTime->hide();
+		dtsbMinorTicksIncrement->hide();
 		ui.lMinorTicksColumn->show();
 		cbMinorTicksColumn->show();
 	}
@@ -1029,8 +1123,44 @@ void AxisDock::minorTicksIncrementChanged() {
 	if (m_initializing)
 		return;
 
-	double value = ui.leMinorTicksIncrement->text().toDouble();
-	if (value < 0) value = -1. * value; //don't allow negative values
+	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+
+	bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
+		|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
+
+	double value;
+
+	if (numeric)
+		value = ui.sbMinorTicksIncrementNumeric->value();
+	else
+		value = dtsbMinorTicksIncrement->value();
+
+	double numberTicks;
+
+	if (value > 0)
+		numberTicks = (m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1) / value -1; // recal
+
+	if (value == 0 || numberTicks > 100 || value < 0) {
+		if (value == 0)
+			value = (m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1) / (ui.sbMinorTicksNumber->value() + 1);
+
+		numberTicks = (m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1) / value -1; // recalculate number of ticks
+
+		if (numberTicks > 100) // maximum 100 minor ticks
+			value = (m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1) / (100 + 1);
+
+		// determine stepsize and number of decimals
+		m_initializing = true;
+		if (numeric) {
+			int decimal = determineDecimals(value * 10);
+			ui.sbMinorTicksIncrementNumeric->setDecimals(decimal);
+			ui.sbMinorTicksIncrementNumeric->setSingleStep(determineStep((m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1), decimal));
+			ui.sbMinorTicksIncrementNumeric->setValue(value);
+		} else
+			dtsbMinorTicksIncrement->setValue(value);
+		m_initializing = false;
+	}
+
 	for (auto* axis : m_axesList)
 		axis->setMinorTicksIncrement(value);
 }
@@ -1418,6 +1548,12 @@ void AxisDock::axisStartChanged(double value) {
 	m_initializing = true;
 	ui.leStart->setText( QString::number(value) );
 	ui.dateTimeEditStart->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
+
+	// determine stepsize and number of decimals
+	double diff = m_axis->end() - m_axis->start();
+	int decimal = determineDecimals(diff);
+	ui.sbMajorTicksIncrementNumeric->setDecimals(decimal);
+	ui.sbMajorTicksIncrementNumeric->setSingleStep(determineStep(diff, decimal));
 	m_initializing = false;
 }
 
@@ -1425,6 +1561,13 @@ void AxisDock::axisEndChanged(double value) {
 	m_initializing = true;
 	ui.leEnd->setText( QString::number(value) );
 	ui.dateTimeEditEnd->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
+	ui.sbMajorTicksIncrementNumeric->setSingleStep(floor(m_axis->end() - m_axis->start())/10);
+
+	// determine stepsize and number of decimals
+	double diff = m_axis->end() - m_axis->start();
+	int decimal = determineDecimals(diff);
+	ui.sbMajorTicksIncrementNumeric->setDecimals(decimal);
+	ui.sbMajorTicksIncrementNumeric->setSingleStep(determineStep(diff, decimal));
 	m_initializing = false;
 }
 
@@ -1492,7 +1635,17 @@ void AxisDock::axisMajorTicksNumberChanged(int number) {
 }
 void AxisDock::axisMajorTicksIncrementChanged(qreal increment) {
 	m_initializing = true;
-	ui.leMajorTicksIncrement->setText( QString::number(increment));
+	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+	if (plot) {
+		bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
+			|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
+
+		if (numeric)
+			ui.sbMajorTicksIncrementNumeric->setValue(increment);
+		else {
+			dtsbMajorTicksIncrement->setValue(increment);
+		}
+	}
 	m_initializing = false;
 }
 void AxisDock::axisMajorTicksPenChanged(const QPen& pen) {
@@ -1531,7 +1684,17 @@ void AxisDock::axisMinorTicksNumberChanged(int number) {
 }
 void AxisDock::axisMinorTicksIncrementChanged(qreal increment) {
 	m_initializing = true;
-	ui.leMinorTicksIncrement->setText( QString::number(increment));
+	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+	if (plot) {
+		bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
+			|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
+
+		if (numeric)
+			ui.sbMinorTicksIncrementNumeric->setValue(increment);
+		else {
+			dtsbMinorTicksIncrement->setValue(increment);
+		}
+	}
 	m_initializing = false;
 }
 void AxisDock::axisMinorTicksPenChanged(const QPen& pen) {
@@ -1671,6 +1834,10 @@ void AxisDock::load() {
 	ui.leStart->setText( QString::number(m_axis->start()) );
 	ui.leEnd->setText( QString::number(m_axis->end()) );
 
+
+	ui.sbMajorTicksIncrementNumeric->setDecimals(0);
+	ui.sbMajorTicksIncrementNumeric->setSingleStep(m_axis->majorTicksIncrement());
+
 	//depending on range format of the axis (numeric vs. datetime), show/hide the corresponding widgets
 	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
 	if (plot) {
@@ -1706,6 +1873,7 @@ void AxisDock::load() {
 			}
 			ui.dateTimeEditStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->start()));
 			ui.dateTimeEditEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->end()));
+
 		}
 	}
 
@@ -1725,7 +1893,6 @@ void AxisDock::load() {
 	ui.cbMajorTicksDirection->setCurrentIndex( (int) m_axis->majorTicksDirection() );
 	ui.cbMajorTicksType->setCurrentIndex( (int) m_axis->majorTicksType() );
 	ui.sbMajorTicksNumber->setValue( m_axis->majorTicksNumber() );
-	ui.leMajorTicksIncrement->setText( QString::number(m_axis->majorTicksIncrement()) );
 	ui.cbMajorTicksLineStyle->setCurrentIndex( (int) m_axis->majorTicksPen().style() );
 	ui.kcbMajorTicksColor->setColor( m_axis->majorTicksPen().color() );
 	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits( m_axis->majorTicksPen().widthF(),Worksheet::Point) );
@@ -1736,7 +1903,6 @@ void AxisDock::load() {
 	ui.cbMinorTicksDirection->setCurrentIndex( (int) m_axis->minorTicksDirection() );
 	ui.cbMinorTicksType->setCurrentIndex( (int) m_axis->minorTicksType() );
 	ui.sbMinorTicksNumber->setValue( m_axis->minorTicksNumber() );
-	ui.leMinorTicksIncrement->setText( QString::number( m_axis->minorTicksIncrement()) );
 	ui.cbMinorTicksLineStyle->setCurrentIndex( (int) m_axis->minorTicksPen().style() );
 	ui.kcbMinorTicksColor->setColor( m_axis->minorTicksPen().color() );
 	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->minorTicksPen().widthF(),Worksheet::Point) );
@@ -1774,7 +1940,6 @@ void AxisDock::load() {
 	ui.sbMinorGridWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->minorGridPen().widthF(),Worksheet::Point) );
 	ui.sbMinorGridOpacity->setValue( round(m_axis->minorGridOpacity()*100.0) );
 
-	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
 	this->majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
 	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, ui.kcbMajorTicksColor->color());
@@ -1782,7 +1947,46 @@ void AxisDock::load() {
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, ui.kcbMinorTicksColor->color());
 	GuiTools::updatePenStyles(ui.cbMajorGridStyle, ui.kcbMajorGridColor->color());
 	GuiTools::updatePenStyles(ui.cbMinorGridStyle, ui.kcbMinorGridColor->color());
-	m_initializing = false;
+}
+
+/*!
+ * Determine the number of decimals for using in a QDoubleSpinBox
+ * \param diff
+ * \return
+ */
+int AxisDock::determineDecimals(double diff) {
+	diff /= 10; // step one decimal before
+	double power10 = 1;
+	for (int i = 0; i < 10; i++) {
+		double nearest = round(diff * power10) / power10;
+		if (nearest > 0) {
+			return i;
+		}
+		power10 *= 10;
+	}
+
+	return 10;
+}
+
+/*!
+ * Determine the step in a QDoubleSpinBox with specific decimals and diff
+ * \param diff Difference between the largest value and smallest value
+ * \param decimal
+ * \return
+ */
+double AxisDock::determineStep(double diff, int decimal) {
+	double ten = 1;
+	if (decimal == 0) {
+		for (unsigned int i = 1; i < 1000000000; i++) {
+			if (diff/ten <= 10) {
+				return ten/10; // use one decimal before
+			}
+			ten *= 10;
+		}
+		return 1;
+	}
+
+	return static_cast<double>(1)/(pow(10,decimal));
 }
 
 void AxisDock::loadConfigFromTemplate(KConfig& config) {
@@ -1807,6 +2011,13 @@ void AxisDock::loadConfigFromTemplate(KConfig& config) {
 
 void AxisDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group( "Axis" );
+
+	bool numeric = false;
+	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+	if (plot) {
+		numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
+			|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
+	}
 
 	//General
 	ui.cbOrientation->setCurrentIndex( group.readEntry("Orientation", (int) m_axis->orientation()) );
@@ -1842,7 +2053,10 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.cbMajorTicksDirection->setCurrentIndex( group.readEntry("MajorTicksDirection", (int) m_axis->majorTicksDirection()) );
 	ui.cbMajorTicksType->setCurrentIndex( group.readEntry("MajorTicksType", (int) m_axis->majorTicksType()) );
 	ui.sbMajorTicksNumber->setValue( group.readEntry("MajorTicksNumber", m_axis->majorTicksNumber()) );
-	ui.leMajorTicksIncrement->setText( QString::number( group.readEntry("MajorTicksIncrement", m_axis->majorTicksIncrement())) );
+	if (numeric)
+		ui.sbMajorTicksIncrementNumeric->setValue(group.readEntry("MajorTicksIncrement", m_axis->majorTicksIncrement()));
+	else
+		dtsbMajorTicksIncrement->setValue(group.readEntry("MajorTicksIncrement", m_axis->majorTicksIncrement()));
 	ui.cbMajorTicksLineStyle->setCurrentIndex( group.readEntry("MajorTicksLineStyle", (int) m_axis->majorTicksPen().style()) );
 	ui.kcbMajorTicksColor->setColor( group.readEntry("MajorTicksColor", m_axis->majorTicksPen().color()) );
 	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorTicksWidth", m_axis->majorTicksPen().widthF()),Worksheet::Point) );
@@ -1853,7 +2067,10 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.cbMinorTicksDirection->setCurrentIndex( group.readEntry("MinorTicksDirection", (int) m_axis->minorTicksDirection()) );
 	ui.cbMinorTicksType->setCurrentIndex( group.readEntry("MinorTicksType", (int) m_axis->minorTicksType()) );
 	ui.sbMinorTicksNumber->setValue( group.readEntry("MinorTicksNumber", m_axis->minorTicksNumber()) );
-	ui.leMinorTicksIncrement->setText( QString::number( group.readEntry("MinorTicksIncrement", m_axis->minorTicksIncrement())) );
+	if (numeric)
+		ui.sbMinorTicksIncrementNumeric->setValue(group.readEntry("MajorTicksIncrement", m_axis->majorTicksIncrement()));
+	else
+		dtsbMinorTicksIncrement->setValue(group.readEntry("MajorTicksIncrement", m_axis->majorTicksIncrement()));
 	ui.cbMinorTicksLineStyle->setCurrentIndex( group.readEntry("MinorTicksLineStyle", (int) m_axis->minorTicksPen().style()) );
 	ui.kcbMinorTicksColor->setColor( group.readEntry("MinorTicksColor", m_axis->minorTicksPen().color()) );
 	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksWidth", m_axis->minorTicksPen().widthF()),Worksheet::Point) );
@@ -1905,6 +2122,14 @@ void AxisDock::loadConfig(KConfig& config) {
 void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group( "Axis" );
 
+	bool numeric = false;
+	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+	if (plot) {
+		numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
+			|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
+	}
+
+
 	//General
 	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
 
@@ -1940,7 +2165,10 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("MajorTicksDirection", ui.cbMajorTicksDirection->currentIndex());
 	group.writeEntry("MajorTicksType", ui.cbMajorTicksType->currentIndex());
 	group.writeEntry("MajorTicksNumber", ui.sbMajorTicksNumber->value());
-	group.writeEntry("MajorTicksIncrement", ui.leMajorTicksIncrement->text());
+	if (numeric)
+		group.writeEntry("MajorTicksIncrement", QString::number(ui.sbMajorTicksIncrementNumeric->value()));
+	else
+		group.writeEntry("MajorTicksIncrement", QString::number(dtsbMajorTicksIncrement->value()));
 	group.writeEntry("MajorTicksLineStyle", ui.cbMajorTicksLineStyle->currentIndex());
 	group.writeEntry("MajorTicksColor", ui.kcbMajorTicksColor->color());
 	group.writeEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(ui.sbMajorTicksWidth->value(),Worksheet::Point));
@@ -1951,7 +2179,10 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("MinorTicksDirection", ui.cbMinorTicksDirection->currentIndex());
 	group.writeEntry("MinorTicksType", ui.cbMinorTicksType->currentIndex());
 	group.writeEntry("MinorTicksNumber", ui.sbMinorTicksNumber->value());
-	group.writeEntry("MinorTicksIncrement", ui.leMinorTicksIncrement->text());
+	if (numeric)
+		group.writeEntry("MinorTicksIncrement", QString::number(ui.sbMinorTicksIncrementNumeric->value()));
+	else
+		group.writeEntry("MinorTicksIncrement", QString::number(dtsbMinorTicksIncrement->value()));
 	group.writeEntry("MinorTicksLineStyle", ui.cbMinorTicksLineStyle->currentIndex());
 	group.writeEntry("MinorTicksColor", ui.kcbMinorTicksColor->color());
 	group.writeEntry("MinorTicksWidth", Worksheet::convertFromSceneUnits(ui.sbMinorTicksWidth->value(),Worksheet::Point));

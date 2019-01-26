@@ -172,7 +172,7 @@ void Axis::init() {
 	d->majorTicksDirection = (Axis::TicksDirection) group.readEntry("MajorTicksDirection", (int) Axis::ticksOut);
 	d->majorTicksType = (Axis::TicksType) group.readEntry("MajorTicksType", (int) Axis::TicksTotalNumber);
 	d->majorTicksNumber = group.readEntry("MajorTicksNumber", 11);
-	d->majorTicksIncrement = group.readEntry("MajorTicksIncrement", 1.0);
+	d->majorTicksIncrement = group.readEntry("MajorTicksIncrement", -1.0); // set to negative value, so axisdocks determines the value to not to have to much labels the first time switched to TicksIncrement
 	d->majorTicksPen.setStyle((Qt::PenStyle) group.readEntry("MajorTicksLineStyle", (int)Qt::SolidLine) );
 	d->majorTicksPen.setColor( group.readEntry("MajorTicksColor", QColor(Qt::black) ) );
 	d->majorTicksPen.setWidthF( group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point) ) );
@@ -182,7 +182,7 @@ void Axis::init() {
 	d->minorTicksDirection = (Axis::TicksDirection) group.readEntry("MinorTicksDirection", (int) Axis::ticksOut);
 	d->minorTicksType = (Axis::TicksType) group.readEntry("MinorTicksType", (int) Axis::TicksTotalNumber);
 	d->minorTicksNumber = group.readEntry("MinorTicksNumber", 1);
-	d->minorTicksIncrement = group.readEntry("MinorTicksIncrement", 0.5);
+	d->minorTicksIncrement = group.readEntry("MinorTicksIncrement", -1.0);
 	d->minorTicksPen.setStyle((Qt::PenStyle) group.readEntry("MinorTicksLineStyle", (int)Qt::SolidLine) );
 	d->minorTicksPen.setColor( group.readEntry("MinorTicksColor", QColor(Qt::black) ) );
 	d->minorTicksPen.setWidthF( group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point) ) );
@@ -774,7 +774,7 @@ void Axis::setLabelsOffset(double offset) {
 		exec(new AxisSetLabelsOffsetCmd(d, offset, ki18n("%1: set label offset")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsRotationAngle, qreal, labelsRotationAngle, recalcShapeAndBoundingRect);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsRotationAngle, qreal, labelsRotationAngle, retransformTickLabelPositions);
 void Axis::setLabelsRotationAngle(qreal angle) {
 	Q_D(Axis);
 	if (angle != d->labelsRotationAngle)
@@ -1496,10 +1496,12 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
-			if (i == j) continue;
-				if (tempValues.at(i) == tempValues.at(j)) {
-				//duplicate for the current precision found, increase the precision and check again
-				return upperLabelsPrecision(precision + 1);
+			if (i == j)
+				continue;
+
+			if (tempValues.at(i) == tempValues.at(j)) {
+			//duplicate for the current precision found, increase the precision and check again
+			return upperLabelsPrecision(precision + 1);
 			}
 		}
 	}
@@ -1564,15 +1566,24 @@ void AxisPrivate::retransformTickLabelPositions() {
 
 	QTextDocument td;
 	td.setDefaultFont(labelsFont);
-
+	double cosinus = cos(labelsRotationAngle * M_PI / 180); // calculate only one time
+	double sinus = sin(labelsRotationAngle * M_PI / 180); // calculate only one time
 	for ( int i = 0; i < majorTickPoints.size(); i++ ) {
-		if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
+		if ((orientation == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric) ||
+				(orientation == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric)) {
+			if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
+				width = fm.width(tickLabelStrings.at(i));
+			} else {
+				td.setHtml(tickLabelStrings.at(i));
+				width = td.size().width();
+				height = td.size().height();
+			}
+		} else { // Datetime
 			width = fm.width(tickLabelStrings.at(i));
-		} else {
-			td.setHtml(tickLabelStrings.at(i));
-			width = td.size().width();
-			height = td.size().height();
 		}
+
+		double diffx = cosinus * width;
+		double diffy = sinus * width;
 		anchorPoint = majorTickPoints.at(i);
 
 		//center align all labels with respect to the end point of the tick line
@@ -1580,19 +1591,47 @@ void AxisPrivate::retransformTickLabelPositions() {
 			if (offset < middleY) {
 				startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
 				endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
-			}
-			else {
+			} else {
 				startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut)  ? yDirection * majorTicksLength  : 0);
 				endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? -yDirection * majorTicksLength : 0);
 			}
-			if (labelsPosition == Axis::LabelsOut) {
-				pos.setX( endPoint.x() - width/2);
-				pos.setY( endPoint.y() + height + labelsOffset );
-			} else {
-				pos.setX( startPoint.x() - width/2);
-				pos.setY( startPoint.y() - labelsOffset );
+
+			// for rotated labels (angle is not zero), align label's corner at the position of the tick
+			if (abs(labelsRotationAngle) > 179.999 && abs(labelsRotationAngle) < 180.009) { // +-180°
+				if (labelsPosition == Axis::LabelsOut) {
+					pos.setX( endPoint.x() + width/2);
+					pos.setY( endPoint.y() + labelsOffset );
+				} else {
+					pos.setX( startPoint.x() + width/2);
+					pos.setY( startPoint.y() - height + labelsOffset );
+				}
+			} else if (labelsRotationAngle <= -0.01) { // [-0.01°, -180°)
+				if (labelsPosition == Axis::LabelsOut) {
+					pos.setX( endPoint.x() + sinus * height/2);
+					pos.setY( endPoint.y() + labelsOffset + cosinus * height/2);
+				} else {
+					pos.setX( startPoint.x() + sinus * height/2 - diffx);
+					pos.setY( startPoint.y() + labelsOffset + cosinus * height/2 + diffy);
+				}
+			} else if (labelsRotationAngle >= 0.01) { // [0.01°, 180°)
+				if (labelsPosition == Axis::LabelsOut) {
+					pos.setX( endPoint.x() - diffx + sinus * height/2);
+					pos.setY( endPoint.y() + labelsOffset + diffy + cosinus * height/2);
+				} else {
+					pos.setX( startPoint.x() + sinus * height/2);
+					pos.setY( startPoint.y() + labelsOffset + cosinus * height/2);
+				}
+			} else {	// 0°
+				if (labelsPosition == Axis::LabelsOut) {
+					pos.setX( endPoint.x() - width/2);
+					pos.setY( endPoint.y() + height + labelsOffset );
+				} else {
+					pos.setX( startPoint.x() - width/2);
+					pos.setY( startPoint.y() + labelsOffset );
+				}
 			}
-		} else {// vertical
+		// ---------------------- vertical -------------------------
+		} else {
 			if (offset < middleX) {
 				startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
 				endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
@@ -1600,12 +1639,57 @@ void AxisPrivate::retransformTickLabelPositions() {
 				startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? xDirection * majorTicksLength : 0, 0);
 				endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? -xDirection *  majorTicksLength  : 0, 0);
 			}
-			if (labelsPosition == Axis::LabelsOut) {
-				pos.setX( endPoint.x() - width - labelsOffset );
-				pos.setY( endPoint.y() + height/2 );
-			} else {
-				pos.setX( startPoint.x() + labelsOffset );
-				pos.setY( startPoint.y() + height/2 );
+
+			if (labelsRotationAngle >= 89.999 && labelsRotationAngle <= 90.009) { // +90°
+				if (labelsPosition == Axis::LabelsOut) {
+					pos.setX( endPoint.x() - labelsOffset);
+					pos.setY( endPoint.y() + width/2 );
+				} else {
+					pos.setX( startPoint.x() - labelsOffset);
+					pos.setY( startPoint.y() + width/2);
+				}
+			} else if (labelsRotationAngle >= -90.999 && labelsRotationAngle <= -89.009) { // -90°
+				if (labelsPosition == Axis::LabelsOut) {
+					pos.setX( endPoint.x() - labelsOffset - height);
+					pos.setY( endPoint.y() - width/2 );
+				} else {
+					pos.setX( startPoint.x() - labelsOffset);
+					pos.setY( startPoint.y() - width/2 );
+				}
+			} else if (abs(labelsRotationAngle) > 179.999 && abs(labelsRotationAngle) < 180.009) { // +-180°
+				if (labelsPosition == Axis::LabelsOut) {
+					pos.setX( endPoint.x() - labelsOffset);
+					pos.setY( endPoint.y() - height/2);
+				} else {
+					pos.setX( startPoint.x() - labelsOffset + width);
+					pos.setY( startPoint.y() - height/2 );
+				}
+			} else if (abs(labelsRotationAngle) >= 0.01 && abs(labelsRotationAngle) < 90.01) { // [0.01°, 90°)
+				if (labelsPosition == Axis::LabelsOut) {
+					// left
+					pos.setX( endPoint.x() - labelsOffset - diffx + sinus * height/2);
+					pos.setY( endPoint.y() + cosinus * height/2 + diffy);
+				} else {
+					pos.setX( startPoint.x() - labelsOffset + sinus * height/2);
+					pos.setY( startPoint.y() + cosinus * height/2);
+				}
+			} else if (abs(labelsRotationAngle) >= 90.01 && abs(labelsRotationAngle) < 180) { // [90.01, 180)
+				if (labelsPosition == Axis::LabelsOut) {
+					// left
+					pos.setX( endPoint.x() - labelsOffset + sinus * height/2);
+					pos.setY( endPoint.y() + cosinus * height/2);
+				} else {
+					pos.setX( startPoint.x() - labelsOffset - diffx + sinus * height/2);
+					pos.setY( startPoint.y() + diffy + cosinus * height/2);
+				}
+			} else { // 0°
+				if (labelsPosition == Axis::LabelsOut) {
+					pos.setX( endPoint.x() - width - labelsOffset);
+					pos.setY( endPoint.y() + height/2 );
+				} else {
+					pos.setX( startPoint.x() - labelsOffset);
+					pos.setY( startPoint.y() + height/2 );
+				}
 			}
 		}
 		tickLabelPoints << pos;
@@ -1763,15 +1847,16 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		for (int i = 0; i < tickLabelPoints.size(); i++) {
 			tempPath = QPainterPath();
 			if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
-				tempPath.addRect( fm.boundingRect(tickLabelStrings.at(i)) );
+				tempPath.addRect(fm.boundingRect(tickLabelStrings.at(i)));
 			} else {
 				td.setHtml(tickLabelStrings.at(i));
-				tempPath.addRect( QRectF(0, -td.size().height(), td.size().width(), td.size().height()) );
+				tempPath.addRect(QRectF(0, -td.size().height(), td.size().width(), td.size().height()));
 			}
 
 			trafo.reset();
 			trafo.translate( tickLabelPoints.at(i).x(), tickLabelPoints.at(i).y() );
-			trafo.rotate( -labelsRotationAngle );
+
+			trafo.rotate(-labelsRotationAngle);
 			tempPath = trafo.map(tempPath);
 
 			tickLabelsPath.addPath(WorksheetElement::shapeFromPath(tempPath, linePen));
@@ -1788,11 +1873,15 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		qreal offsetX = titleOffsetX - labelsOffset; //the distance to the axis line
 		qreal offsetY = titleOffsetY - labelsOffset; //the distance to the axis line
 		if (orientation == Axis::AxisHorizontal) {
-			offsetY -= title->graphicsItem()->boundingRect().height()/2 + tickLabelsPath.boundingRect().height();
-			title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2 + offsetX, rect.bottomLeft().y() - offsetY ) );
+			offsetY -= title->graphicsItem()->boundingRect().height()/2;
+			if (labelsPosition == Axis::LabelsOut)
+				offsetY -= tickLabelsPath.boundingRect().height();
+			title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2 + titleOffsetX, rect.bottomLeft().y() - offsetY ) );
 		} else {
-			offsetX -= title->graphicsItem()->boundingRect().width()/2 + tickLabelsPath.boundingRect().width();
-			title->setPosition( QPointF( rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y())/2 - offsetY) );
+			offsetX -= title->graphicsItem()->boundingRect().width()/2;
+			if (labelsPosition == Axis::LabelsOut)
+				offsetX -= tickLabelsPath.boundingRect().width();
+			title->setPosition( QPointF( rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y())/2 - titleOffsetY) );
 		}
 		axisShape.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 	}
@@ -1854,21 +1943,32 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		painter->setFont(labelsFont);
 		QTextDocument td;
 		td.setDefaultFont(labelsFont);
-		for (int i = 0; i < tickLabelPoints.size(); i++) {
-			painter->translate(tickLabelPoints.at(i));
-			painter->save();
-			painter->rotate(-labelsRotationAngle);
+		if ((orientation == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric) ||
+				(orientation == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric)) {
+			for (int i = 0; i < tickLabelPoints.size(); i++) {
+				painter->translate(tickLabelPoints.at(i));
+				painter->save();
+				painter->rotate(-labelsRotationAngle);
 
-			if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
-				painter->drawText(QPoint(0,0), tickLabelStrings.at(i));
-			} else {
-				td.setHtml(tickLabelStrings.at(i));
-				painter->translate(0, -td.size().height());
-				td.drawContents(painter);
+				if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
+					painter->drawText(QPoint(0,0), tickLabelStrings.at(i));
+				} else {
+					td.setHtml(tickLabelStrings.at(i));
+					painter->translate(0, -td.size().height());
+					td.drawContents(painter);
+				}
+				painter->restore();
+				painter->translate(-tickLabelPoints.at(i));
 			}
-
-			painter->restore();
-			painter->translate(-tickLabelPoints.at(i));
+		} else { // datetime
+			for (int i = 0; i < tickLabelPoints.size(); i++) {
+				painter->translate(tickLabelPoints.at(i));
+				painter->save();
+				painter->rotate(-labelsRotationAngle);
+				painter->drawText(QPoint(0,0), tickLabelStrings.at(i));
+				painter->restore();
+				painter->translate(-tickLabelPoints.at(i));
+			}
 		}
 	}
 
