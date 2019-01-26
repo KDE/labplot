@@ -1,22 +1,26 @@
 -----2.6-----
 New features:
+	* Histogram
+	* Import from MQTT sources
 	* Import of ROOT (CERN) TH1 histograms
 	* Import of Ngspice raw files (ASCII and binary)
 	* Import of data in JSON format (JSON arrays and objects)
+	* Improved import of NetCDF files
+	* Added file type specific summary and content for special file types in info box of import dialog
 	* Convolution/Deconvolution of data sets (sampling interval, linear/circular, normalization, wrap, standard kernel)
 	* Cross-/Autocorrelation of data sets (sampling interval, linear/circular, normalization)
-	* Allow to rotate plot legends
 	* Allow to specify the number format when exporting spreadsheet and matrix
 	* Improved user interface for data fitting (add fit function preview, show parameters directly, make options foldable)
-	* Added file type specific summary and content for special file types in info box of import dialog
 	* [spreadsheet] when filling a float column with row numbers, automatically convert its type to integer
 	* [spreadsheet] when filling an integer column with function values, automatically convert its type to float
 	* [spreadsheet] data manipulation: add/subtract/multiply/divide for column values
 	* [spreadsheet] export to SQLite
-	* [worksheet] Allow to specify different border shapes for labels (rectangle, elipse, etc.)
+	* [worksheet] Allow to specify different border shapes for labels (rectangle, eclipse, etc.)
+	* [worksheet] Allow to rotate plot legends
+	* [worksheet] Better positioning of rotated axis tick labels
+	* [worksheet] Allow to make plots not-interactive (ignore mouse drag and wheel events) to avoid unwanted occasional panning and zooming
 	* Allow to connect to SQL databases via ODBC
-	* Improved import of NetCDF files
-	* Allow to make plots not-interactive (ignore mouse drag and wheel events) to avoid unwanted ocasional panning and zooming
+	* Show the amount of consumed memory in the status bar (optional)
 
 Bug fixes:
 	* Fixed several problems in live data support
