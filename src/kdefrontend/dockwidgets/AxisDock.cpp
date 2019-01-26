@@ -825,17 +825,11 @@ void AxisDock::majorTicksDirectionChanged(int index) {
 	Shows/hides the corresponding widgets.
 */
 void AxisDock::majorTicksTypeChanged(int index) {
-
 	if (!m_axis) // If elements are added to the combobox 'cbMajorTicksType' (at init of this class), then this function is called, which is a problem if no axis are available
 		return;
 
 	auto type = Axis::TicksType(index);
-	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
-
-	bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
-		|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
-
-	if ( type == Axis::TicksTotalNumber) {
+	if (type == Axis::TicksTotalNumber) {
 		ui.lMajorTicksNumber->show();
 		ui.sbMajorTicksNumber->show();
 		ui.lMajorTicksIncrementNumeric->hide();
@@ -844,10 +838,14 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		dtsbMajorTicksIncrement->hide();
 		ui.lMajorTicksColumn->hide();
 		cbMajorTicksColumn->hide();
-	} else if ( type == Axis::TicksIncrement) {
+	} else if (type == Axis::TicksIncrement) {
 		ui.lMajorTicksNumber->hide();
 		ui.sbMajorTicksNumber->hide();
 		ui.lMajorTicksIncrementNumeric->show();
+
+		const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+		bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
+					|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
 		if (numeric) {
 			ui.lMajorTicksIncrementDateTime->hide();
 			dtsbMajorTicksIncrement->hide();
@@ -859,6 +857,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 			ui.lMajorTicksIncrementNumeric->hide();
 			ui.sbMajorTicksIncrementNumeric->hide();
 		}
+
 		ui.lMajorTicksColumn->hide();
 		cbMajorTicksColumn->hide();
 
@@ -880,7 +879,6 @@ void AxisDock::majorTicksTypeChanged(int index) {
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTicksType(type);
-
 }
 
 void AxisDock::majorTicksNumberChanged(int value) {
@@ -900,13 +898,7 @@ void AxisDock::majorTicksIncrementChanged() {
 	bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
 		|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
 
-	double value;
-
-	if (numeric)
-		value = ui.sbMajorTicksIncrementNumeric->value();
-	else
-		value = dtsbMajorTicksIncrement->value();
-
+	double value = numeric ? ui.sbMajorTicksIncrementNumeric->value() : dtsbMajorTicksIncrement->value();
 	double diff = m_axis->end() - m_axis->start();
 
 	if (value == 0 || diff / value > 100 || value < 0) { // maximum of 100 ticks
@@ -1054,18 +1046,11 @@ void AxisDock::minorTicksDirectionChanged(int index) {
 }
 
 void AxisDock::minorTicksTypeChanged(int index) {
-
 	if (!m_axis) // If elements are added to the combobox 'cbMajorTicksType' (at init of this class), then this function is called, which is a problem if no axis are available
 		return;
 
 	auto type = Axis::TicksType(index);
-	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
-
-	bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
-		|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
-
-
-	if ( type == Axis::TicksTotalNumber) {
+	if (type == Axis::TicksTotalNumber) {
 		ui.lMinorTicksNumber->show();
 		ui.sbMinorTicksNumber->show();
 		ui.lMinorTicksIncrementNumeric->hide();
@@ -1077,6 +1062,10 @@ void AxisDock::minorTicksTypeChanged(int index) {
 	} else if ( type == Axis::TicksIncrement) {
 		ui.lMinorTicksNumber->hide();
 		ui.sbMinorTicksNumber->hide();
+
+		const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+		bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
+					|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
 		if (numeric) {
 			ui.lMinorTicksIncrementNumeric->show();
 			ui.sbMinorTicksIncrementNumeric->show();
@@ -1088,6 +1077,7 @@ void AxisDock::minorTicksTypeChanged(int index) {
 			ui.lMinorTicksIncrementDateTime->show();
 			dtsbMinorTicksIncrement->show();
 		}
+
 		ui.lMinorTicksColumn->hide();
 		cbMinorTicksColumn->hide();
 
@@ -1128,14 +1118,8 @@ void AxisDock::minorTicksIncrementChanged() {
 	bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
 		|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
 
-	double value;
-
-	if (numeric)
-		value = ui.sbMinorTicksIncrementNumeric->value();
-	else
-		value = dtsbMinorTicksIncrement->value();
-
-	double numberTicks;
+	double value = numeric ? ui.sbMinorTicksIncrementNumeric->value() : dtsbMinorTicksIncrement->value();
+	double numberTicks = 0.0;
 
 	if (value > 0)
 		numberTicks = (m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1) / value -1; // recal

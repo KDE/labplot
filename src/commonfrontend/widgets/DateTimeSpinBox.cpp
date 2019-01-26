@@ -32,8 +32,7 @@
 #include <QKeyEvent>
 #include <QRegularExpressionValidator>
 
-DateTimeSpinBox::DateTimeSpinBox(QWidget* parent) : QAbstractSpinBox (parent)
-{
+DateTimeSpinBox::DateTimeSpinBox(QWidget* parent) : QAbstractSpinBox(parent) {
 	lineEdit()->setText("0000.00.00 00:00:00.001");
 	stepEnabled();
 
@@ -45,8 +44,7 @@ DateTimeSpinBox::DateTimeSpinBox(QWidget* parent) : QAbstractSpinBox (parent)
 	lineEdit()->setValidator(m_regularExpressionValidator);
 }
 
-void DateTimeSpinBox::keyPressEvent(QKeyEvent *event) {
-
+void DateTimeSpinBox::keyPressEvent(QKeyEvent* event) {
 	if (event->key() >= Qt::Key_0 && event->key() <= Qt::Key_9) {
 		int cursorPos = lineEdit()->cursorPosition();
 		int textLenght = lineEdit()->text().length();
@@ -228,11 +226,9 @@ bool DateTimeSpinBox::increaseValue(DateTimeSpinBox::Type type, int step) {
 		return false;
 		break;
 	}
-
 }
 
 bool DateTimeSpinBox::changeValue(qint64& thisType, DateTimeSpinBox::Type nextTypeType, int step) {
-
 	int maxValue = 1;
 	switch (nextTypeType) {
 		case (Type::year):
