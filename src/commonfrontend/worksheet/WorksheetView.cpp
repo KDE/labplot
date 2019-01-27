@@ -607,6 +607,7 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(cartesianPlotZoomYSelectionModeAction);
 	toolBar->addSeparator();
 	toolBar->addAction(addCurveAction);
+	toolBar->addAction(addHistogramAction);
 	toolBar->addAction(addEquationCurveAction);
 // don't over-populate the tool bar
 //	toolBar->addAction(addDifferentiationCurveAction);
@@ -620,6 +621,7 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 //	toolBar->addAction(addFourierTransformCurveAction);
 //	toolBar->addAction(addConvolutionCurveAction);
 //	toolBar->addAction(addCorrelationCurveAction);
+	toolBar->addSeparator();
 	toolBar->addAction(addLegendAction);
 	toolBar->addSeparator();
 	toolBar->addAction(addHorizontalAxisAction);
@@ -1523,6 +1525,7 @@ void WorksheetView::handleCartesianPlotActions() {
 	cartesianPlotZoomYSelectionModeAction->setEnabled(plot);
 
 	addCurveAction->setEnabled(plot);
+	addHistogramAction->setEnabled(plot);
 	addEquationCurveAction->setEnabled(plot);
 	addDataOperationCurveAction->setEnabled(false);
 	addDataReductionCurveAction->setEnabled(plot);

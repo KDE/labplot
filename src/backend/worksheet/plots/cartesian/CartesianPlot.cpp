@@ -68,7 +68,6 @@
 #include <QMenu>
 #include <QMimeData>
 #include <QPainter>
-#include <QToolBar>
 #include <QWidgetAction>
 
 #include <KConfig>
