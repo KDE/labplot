@@ -394,7 +394,7 @@ void CartesianPlot::initDefault(Type type) {
 void CartesianPlot::initActions() {
 	//"add new" actions
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), this);
-	addHistogramPlot = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("Histogram"), this);
+	addHistogramPlot = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), this);
 	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
 // no icons yet
 	addDataReductionCurveAction = new QAction(i18n("xy-curve from a data reduction"), this);

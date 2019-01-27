@@ -154,7 +154,7 @@ QMenu* Histogram::createContextMenu() {
   Returns an icon to be used in the project explorer.
   */
 QIcon Histogram::icon() const {
-	return QIcon::fromTheme("labplot-xy-curve");
+	return QIcon::fromTheme("view-object-histogram-linear");
 }
 
 QGraphicsItem* Histogram::graphicsItem() const {
