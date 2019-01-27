@@ -194,6 +194,7 @@ private:
 	QAction* cartesianPlotZoomYSelectionModeAction;
 
 	QAction* addCurveAction;
+	QAction* addHistogramAction;
 	QAction* addEquationCurveAction;
 	QAction* addDataOperationCurveAction;
 	QAction* addDataReductionCurveAction;

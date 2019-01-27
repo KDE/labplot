@@ -394,19 +394,19 @@ void CartesianPlot::initDefault(Type type) {
 void CartesianPlot::initActions() {
 	//"add new" actions
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), this);
-	addHistogramPlot = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), this);
-	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
+	addHistogramAction = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), this);
+	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical Equation"), this);
 // no icons yet
-	addDataReductionCurveAction = new QAction(i18n("xy-curve from a data reduction"), this);
-	addDifferentiationCurveAction = new QAction(i18n("xy-curve from a differentiation"), this);
-	addIntegrationCurveAction = new QAction(i18n("xy-curve from an integration"), this);
-	addInterpolationCurveAction = new QAction(i18n("xy-curve from an interpolation"), this);
-	addSmoothCurveAction = new QAction(i18n("xy-curve from a smooth"), this);
-	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
-	addFourierFilterCurveAction = new QAction(i18n("xy-curve from a Fourier filter"), this);
-	addFourierTransformCurveAction = new QAction(i18n("xy-curve from a Fourier transform"), this);
-	addConvolutionCurveAction = new QAction(i18n("xy-curve from a (de-)convolution"), this);
-	addCorrelationCurveAction = new QAction(i18n("xy-curve from a correlation"), this);
+	addDataReductionCurveAction = new QAction(i18n("xy-curve from a Data Reduction"), this);
+	addDifferentiationCurveAction = new QAction(i18n("xy-curve from a Differentiation"), this);
+	addIntegrationCurveAction = new QAction(i18n("xy-curve from an Integration"), this);
+	addInterpolationCurveAction = new QAction(i18n("xy-curve from an Interpolation"), this);
+	addSmoothCurveAction = new QAction(i18n("xy-curve from a Smooth"), this);
+	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a Fit to Data"), this);
+	addFourierFilterCurveAction = new QAction(i18n("xy-curve from a Fourier Filter"), this);
+	addFourierTransformCurveAction = new QAction(i18n("xy-curve from a Fourier Transform"), this);
+	addConvolutionCurveAction = new QAction(i18n("xy-curve from a (De-)Convolution"), this);
+	addCorrelationCurveAction = new QAction(i18n("xy-curve from a Correlation"), this);
 //	addInterpolationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), this);
 //	addSmoothCurveAction = new QAction(QIcon::fromTheme("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), this);
 //	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
@@ -423,7 +423,7 @@ void CartesianPlot::initActions() {
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), this);
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
-	connect(addHistogramPlot,SIGNAL(triggered()), SLOT(addHistogram()));
+	connect(addHistogramAction,SIGNAL(triggered()), SLOT(addHistogram()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
 	connect(addDataReductionCurveAction, SIGNAL(triggered()), SLOT(addDataReductionCurve()));
 	connect(addDifferentiationCurveAction, SIGNAL(triggered()), SLOT(addDifferentiationCurve()));
@@ -549,7 +549,7 @@ void CartesianPlot::initMenus() {
 
 	addNewMenu = new QMenu(i18n("Add New"));
 	addNewMenu->addAction(addCurveAction);
-	addNewMenu->addAction(addHistogramPlot);
+	addNewMenu->addAction(addHistogramAction);
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addDataReductionCurveAction);

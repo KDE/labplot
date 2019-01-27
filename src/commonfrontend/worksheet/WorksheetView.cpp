@@ -283,26 +283,27 @@ void WorksheetView::initActions() {
 
 	auto* cartesianPlotAddNewActionGroup = new QActionGroup(this);
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), cartesianPlotAddNewActionGroup);
-	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve From a Mathematical Equation"), cartesianPlotAddNewActionGroup);
+	addHistogramAction = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), cartesianPlotAddNewActionGroup);
+	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical Equation"), cartesianPlotAddNewActionGroup);
 	// TODO: no own icons yet
-	addDataOperationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve From a Data Operation"), cartesianPlotAddNewActionGroup);
+	addDataOperationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve from a Data Operation"), cartesianPlotAddNewActionGroup);
 //	addDataOperationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-data-operation-curve"), i18n("xy-curve From a Data Operation"), cartesianPlotAddNewActionGroup);
-	addDataReductionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve From a Data Reduction"), cartesianPlotAddNewActionGroup);
+	addDataReductionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve from a Data Reduction"), cartesianPlotAddNewActionGroup);
 //	addDataReductionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-data-reduction-curve"), i18n("xy-curve From a Data Reduction"), cartesianPlotAddNewActionGroup);
-	addDifferentiationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve From a Differentiation"), cartesianPlotAddNewActionGroup);
+	addDifferentiationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve from a Differentiation"), cartesianPlotAddNewActionGroup);
 //	addDifferentiationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-differentiation-curve"), i18n("xy-curve From a Differentiation"), cartesianPlotAddNewActionGroup);
-	addIntegrationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve From an Integration"), cartesianPlotAddNewActionGroup);
+	addIntegrationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curvefFrom an Integration"), cartesianPlotAddNewActionGroup);
 //	addIntegrationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-integration-curve"), i18n("xy-curve From an Integration"), cartesianPlotAddNewActionGroup);
-	addConvolutionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve From a (De-)Convolution"), cartesianPlotAddNewActionGroup);
+	addConvolutionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve from a (De-)Convolution"), cartesianPlotAddNewActionGroup);
 //	addConvolutionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-convolution-curve"), i18n("xy-curve From a (De-)Convolution"), cartesianPlotAddNewActionGroup);
-	addCorrelationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve From a Correlation"), cartesianPlotAddNewActionGroup);
+	addCorrelationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve from a Correlation"), cartesianPlotAddNewActionGroup);
 //	addCorrelationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-convolution-curve"), i18n("xy-curve From a Correlation"), cartesianPlotAddNewActionGroup);
 
 	addInterpolationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("xy-curve From an Interpolation"), cartesianPlotAddNewActionGroup);
-	addSmoothCurveAction = new QAction(QIcon::fromTheme("labplot-xy-smoothing-curve"), i18n("xy-curve From a Smooth"), cartesianPlotAddNewActionGroup);
-	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve From a Fit to Data"), cartesianPlotAddNewActionGroup);
-	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("xy-curve From a Fourier Filter"), cartesianPlotAddNewActionGroup);
-	addFourierTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-transform-curve"), i18n("xy-curve From a Fourier Transform"), cartesianPlotAddNewActionGroup);
+	addSmoothCurveAction = new QAction(QIcon::fromTheme("labplot-xy-smoothing-curve"), i18n("xy-curve from a Smooth"), cartesianPlotAddNewActionGroup);
+	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a Fit to Data"), cartesianPlotAddNewActionGroup);
+	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("xy-curve from a Fourier Filter"), cartesianPlotAddNewActionGroup);
+	addFourierTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-transform-curve"), i18n("xy-curve from a Fourier Transform"), cartesianPlotAddNewActionGroup);
 	addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("Legend"), cartesianPlotAddNewActionGroup);
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("Horizontal Axis"), cartesianPlotAddNewActionGroup);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("Vertical Axis"), cartesianPlotAddNewActionGroup);
@@ -439,8 +440,10 @@ void WorksheetView::initMenus() {
 
 	m_cartesianPlotAddNewMenu = new QMenu(i18n("Add New"), this);
 	m_cartesianPlotAddNewMenu->addAction(addCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addHistogramAction);
 	m_cartesianPlotAddNewMenu->addAction(addEquationCurveAction);
-	m_cartesianPlotAddNewMenu->addAction(addDataOperationCurveAction);
+	m_cartesianPlotAddNewMenu->addSeparator();
+// 	m_cartesianPlotAddNewMenu->addAction(addDataOperationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addDataReductionCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addDifferentiationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addIntegrationCurveAction);
@@ -451,6 +454,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotAddNewMenu->addAction(addFourierTransformCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addConvolutionCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addCorrelationCurveAction);
+	m_cartesianPlotAddNewMenu->addSeparator();
 	m_cartesianPlotAddNewMenu->addAction(addLegendAction);
 	m_cartesianPlotAddNewMenu->addSeparator();
 	m_cartesianPlotAddNewMenu->addAction(addHorizontalAxisAction);
@@ -1800,6 +1804,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 	DEBUG("WorksheetView::cartesianPlotAdd()");
 	if (action == addCurveAction)
 		plot->addCurve();
+	else if (action == addHistogramAction)
+		plot->addHistogram();
 	else if (action == addEquationCurveAction)
 		plot->addEquationCurve();
 	else if (action == addDataReductionCurveAction)

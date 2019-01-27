@@ -159,7 +159,7 @@ private:
 	//"add new" actions
 	QAction* addCurveAction;
 	QAction* addEquationCurveAction;
-	QAction* addHistogramPlot;
+	QAction* addHistogramAction;
 	QAction* addDataReductionCurveAction;
 	QAction* addDifferentiationCurveAction;
 	QAction* addIntegrationCurveAction;
