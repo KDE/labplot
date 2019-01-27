@@ -473,7 +473,7 @@ void XYCurveDock::setModel() {
 
 	QList<const char*> list;
 	list << "Folder" << "Workbook" << "Datapicker" << "DatapickerCurve" << "Spreadsheet"
-		<< "FileDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYFitCurve" << "CantorWorksheet";
+		<< "LiveDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYFitCurve" << "CantorWorksheet";
 
 	if (cbXColumn) {
 		cbXColumn->setTopLevelClasses(list);

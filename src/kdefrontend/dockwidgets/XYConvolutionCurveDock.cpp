@@ -216,7 +216,7 @@ void XYConvolutionCurveDock::setModel() {
 
 	list.clear();
 	list << "Folder" << "Workbook" << "Datapicker" << "DatapickerCurve" << "Spreadsheet"
-		<< "FileDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYConvolutionCurve";
+		<< "LiveDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYConvolutionCurve";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 	cbY2DataColumn->setTopLevelClasses(list);

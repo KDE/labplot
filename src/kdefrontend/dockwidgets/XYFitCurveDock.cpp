@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
     File             : XYFitCurveDock.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
@@ -293,7 +293,7 @@ void XYFitCurveDock::setModel() {
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
 	list.clear();
-	list << "Folder" << "Workbook" << "Spreadsheet" << "FileDataSource" << "Column" << "CantorWorksheet" << "Datapicker";
+	list << "Folder" << "Workbook" << "Spreadsheet" << "LiveDataSource" << "Column" << "CantorWorksheet" << "Datapicker";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 	cbXErrorColumn->setTopLevelClasses(list);

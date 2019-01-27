@@ -199,7 +199,7 @@ void XYCorrelationCurveDock::setModel() {
 
 	list.clear();
 	list << "Folder" << "Workbook" << "Datapicker" << "DatapickerCurve" << "Spreadsheet"
-		<< "FileDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYCorrelationCurve";
+		<< "LiveDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYCorrelationCurve";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 	cbY2DataColumn->setTopLevelClasses(list);
