@@ -52,6 +52,7 @@ LiveDataDock::LiveDataDock(QWidget* parent) : QWidget(parent)
 
 	ui.bUpdateNow->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
 
+	connect(ui.leName, &QLineEdit::textChanged, this, &LiveDataDock::nameChanged);
 	connect(ui.bPausePlayReading, &QPushButton::clicked, this, &LiveDataDock::pauseContinueReading);
 	connect(ui.bUpdateNow, &QPushButton::clicked, this, &LiveDataDock::updateNow);
 	connect(ui.sbUpdateInterval, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::updateIntervalChanged);
@@ -109,11 +110,8 @@ LiveDataDock::LiveDataDock(QWidget* parent) : QWidget(parent)
 #ifdef HAVE_MQTT
 LiveDataDock::~LiveDataDock() {
 	delete m_searchTimer;
-	QMapIterator<QString, QMqttClient*> clients(m_clients);
-	while (clients.hasNext()) {
-		clients.next();
-		delete clients.value();
-	}
+	for (auto & host : m_hosts)
+		delete host.client;
 }
 #else
 LiveDataDock::~LiveDataDock() = default;
@@ -121,25 +119,30 @@ LiveDataDock::~LiveDataDock() = default;
 
 #ifdef HAVE_MQTT
 /*!
- * \brief Sets the MQTTClients of this dock widget
+ * \brief Sets the MQTTClient of this dock widget
  * \param clients
  */
-void LiveDataDock::setMQTTClients(const QList<MQTTClient *>& clients) {
-	m_liveDataSources.clear();
-	m_mqttClients.clear();
-	m_mqttClients = clients;
-	const MQTTClient* const fmc = clients.at(0);
+void LiveDataDock::setMQTTClient(MQTTClient* const client) {
+	m_liveDataSource = nullptr; // prevent updates due to changes to input widgets
+	if (m_mqttClient == client)
+		return;
+	auto oldclient = m_mqttClient;
+	m_mqttClient = nullptr; // prevent updates due to changes to input widgets
 
-	ui.sbUpdateInterval->setValue(fmc->updateInterval());
-	ui.cbUpdateType->setCurrentIndex(static_cast<int>(fmc->updateType()));
-	ui.cbReadingType->setCurrentIndex(static_cast<int>(fmc->readingType()));
+	ui.leName->setText(client->name());
+	const QPair<QString, quint16> id(client->clientHostName(), client->clientPort());
+	ui.leSourceInfo->setText(QStringLiteral("%1:%2").arg(id.first).arg(id.second));
 
-	if (fmc->updateType() == MQTTClient::UpdateType::NewData) {
+	ui.sbUpdateInterval->setValue(client->updateInterval());
+	ui.cbUpdateType->setCurrentIndex(static_cast<int>(client->updateType()));
+	ui.cbReadingType->setCurrentIndex(static_cast<int>(client->readingType()));
+
+	if (client->updateType() == MQTTClient::NewData) {
 		ui.lUpdateInterval->hide();
 		ui.sbUpdateInterval->hide();
 	}
 
-	if (fmc->isPaused()) {
+	if (client->isPaused()) {
 		ui.bPausePlayReading->setText(i18n("Continue reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
 	} else {
@@ -147,19 +150,23 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *>& clients) {
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
 	}
 
-	ui.sbKeepNValues->setValue(fmc->keepNValues());
+	ui.sbKeepNValues->setValue(client->keepNValues());
 	ui.sbKeepNValues->setEnabled(true);
 
-	if (fmc->readingType() == MQTTClient::ReadingType::TillEnd) {
+	if (client->readingType() == MQTTClient::TillEnd) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
 	} else
-		ui.sbSampleSize->setValue(fmc->sampleSize());
+		ui.sbSampleSize->setValue(client->sampleSize());
 
 	// disable "whole file" option
 	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-	QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
+	QStandardItem* item = model->item(LiveDataSource::WholeFile);
 	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+	if (static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex()) == LiveDataSource::WholeFile)
+		ui.cbReadingType->setCurrentIndex(LiveDataSource::TillEnd);
+
+	m_mqttClient = client; // updates may be applied from now on
 
 	//show MQTT connected options
 	ui.lTopics->show();
@@ -174,35 +181,41 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *>& clients) {
 	ui.lLWT->show();
 	ui.bLWT->show();
 
+	m_previousHost = m_currentHost;
 	//if there isn't a client with this hostname we instantiate a new one
-	if (m_clients[fmc->clientHostName()] == nullptr) {
-		m_clients[fmc->clientHostName()] = new QMqttClient();
+	auto it = m_hosts.find(id);
+	if (it == m_hosts.end()) {
+		m_currentHost = &m_hosts[id];
+		m_currentHost->count = 1;
+		m_currentHost->client = new QMqttClient;
 
-		connect(fmc, &MQTTClient::clientAboutToBeDeleted, this, &LiveDataDock::removeClient);
+		connect(client, &MQTTClient::clientAboutToBeDeleted, this, &LiveDataDock::removeClient);
 
-		connect(m_clients[fmc->clientHostName()], &QMqttClient::connected, this, &LiveDataDock::onMQTTConnect);
-		connect(m_clients[fmc->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
+		connect(m_currentHost->client, &QMqttClient::connected, this, &LiveDataDock::onMQTTConnect);
+		connect(m_currentHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 
-		m_clients[fmc->clientHostName()]->setHostname(fmc->clientHostName());
-		m_clients[fmc->clientHostName()]->setPort(fmc->clientPort());
+		m_currentHost->client->setHostname(id.first);
+		m_currentHost->client->setPort(id.second);
 
-		if (fmc->MQTTUseAuthentication()) {
-			m_clients[fmc->clientHostName()]->setUsername(fmc->clientUserName());
-			m_clients[fmc->clientHostName()]->setPassword(fmc->clientPassword());
+		if (client->MQTTUseAuthentication()) {
+			m_currentHost->client->setUsername(client->clientUserName());
+			m_currentHost->client->setPassword(client->clientPassword());
 		}
 
-		if (fmc->MQTTUseID()) {
-			m_clients[fmc->clientHostName()]->setClientId(fmc->clientID());
-		}
+		if (client->MQTTUseID())
+			m_currentHost->client->setClientId(client->clientID());
 
-		m_clients[fmc->clientHostName()]->connectToHost();
+		m_currentHost->client->connectToHost();
+	} else {
+		m_currentHost = &it.value();
+		++m_currentHost->count;
 	}
 
 	if (m_previousMQTTClient == nullptr) {
-		connect(fmc, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
+		connect(client, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
 
 		//Fill the subscription tree(useful if the MQTTClient was loaded)
-		QVector<QString> topics = fmc->topicNames();
+		QVector<QString> topics = client->topicNames();
 		for (const auto& topic : topics) {
 			addTopicToTree(topic);
 		}
@@ -211,57 +224,79 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *>& clients) {
 
 	//if the previous MQTTClient's host name was different from the current one we have to disconnect some slots
 	//and clear the tree widgets
-	else if (m_previousMQTTClient->clientHostName() != fmc->clientHostName()) {
+	else if (m_previousMQTTClient->clientHostName() != client->clientHostName()) {
 		disconnect(m_previousMQTTClient, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
-		disconnect(m_clients[m_previousMQTTClient->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
-		connect(m_clients[m_previousMQTTClient->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
+		disconnect(m_previousHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
+		connect(m_previousHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
 
-		disconnect(m_clients[fmc->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
+		disconnect(m_currentHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
 
 		ui.twTopics->clear();
 		//repopulating the tree widget with the already known topics of the client
-		for (int i = 0; i < m_addedTopics[fmc->clientHostName()].size(); ++i) {
-			addTopicToTree(m_addedTopics[fmc->clientHostName()].at(i));
+		for (int i = 0; i < m_currentHost->addedTopics.size(); ++i) {
+			addTopicToTree(m_currentHost->addedTopics.at(i));
 		}
 
 		//fill subscriptions tree widget
 		ui.twSubscriptions->clear();
 		fillSubscriptions();
 
-		connect(fmc, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
-		connect(m_clients[fmc->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
+		connect(client, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
+		connect(m_currentHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 	}
 
-	if (fmc->willUpdateType() == MQTTClient::WillUpdateType::OnClick && fmc->MQTTWillUse())
+	if (client->willUpdateType() == MQTTClient::OnClick && client->MQTTWillUse())
 		ui.bWillUpdateNow->show();
 
-	m_previousMQTTClient = fmc;
+	m_previousMQTTClient = oldclient;
 }
 #endif
 
 /*!
- * \brief Sets the live data sources of this dock widget
+ * \brief Sets the live data source of this dock widget
  * \param sources
  */
-void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
+void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 #ifdef HAVE_MQTT
-	m_mqttClients.clear();
+	m_mqttClient = nullptr;
 #endif
-	m_liveDataSources = sources;
-	const LiveDataSource* const fds = sources.at(0);
-	const LiveDataSource::SourceType sourceType = fds->sourceType();
-	const LiveDataSource::ReadingType readingType = fds->readingType();
-	const LiveDataSource::UpdateType updateType = fds->updateType();
-	ui.sbUpdateInterval->setValue(fds->updateInterval());
+	if (m_liveDataSource == source)
+		return;
+	m_liveDataSource = nullptr; // prevent updates due to changes to input widgets
+
+	ui.leName->setText(source->name());
+	const LiveDataSource::SourceType sourceType = source->sourceType();
+	const LiveDataSource::ReadingType readingType = source->readingType();
+	const LiveDataSource::UpdateType updateType = source->updateType();
+	const AbstractFileFilter::FileType fileType = source->fileType();
+	ui.sbUpdateInterval->setValue(source->updateInterval());
 	ui.cbUpdateType->setCurrentIndex(static_cast<int>(updateType));
 	ui.cbReadingType->setCurrentIndex(static_cast<int>(readingType));
+
+	switch (sourceType) {
+	case LiveDataSource::FileOrPipe:
+		ui.leSourceInfo->setText(source->fileName());
+		break;
+	case LiveDataSource::NetworkTcpSocket:
+	case LiveDataSource::NetworkUdpSocket:
+		ui.leSourceInfo->setText(QStringLiteral("%1:%2").arg(source->host()).arg(source->port()));
+		break;
+	case LiveDataSource::LocalSocket:
+		ui.leSourceInfo->setText(source->localSocketName());
+		break;
+	case LiveDataSource::SerialPort:
+		ui.leSourceInfo->setText(source->serialPortName());
+		break;
+	case LiveDataSource::MQTT:
+		break;
+	}
 
 	if (updateType == LiveDataSource::UpdateType::NewData) {
 		ui.lUpdateInterval->hide();
 		ui.sbUpdateInterval->hide();
 	}
 
-	if (fds->isPaused()) {
+	if (source->isPaused()) {
 		ui.bPausePlayReading->setText(i18n("Continue Reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
 	} else {
@@ -269,29 +304,39 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
 	}
 
-	ui.sbKeepNValues->setValue(fds->keepNValues());
+	ui.sbKeepNValues->setValue(source->keepNValues());
 
 	// disable "whole file" when having no file (i.e. socket or port)
 	auto* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-	QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
-	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
+	QStandardItem* item = model->item(LiveDataSource::WholeFile);
+	if (sourceType == LiveDataSource::SourceType::FileOrPipe) {
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-	else
+		//for file types other than ASCII and binary we support re-reading the whole file only
+		//select "read whole file" and deactivate the combobox
+		if (fileType != AbstractFileFilter::Ascii && fileType != AbstractFileFilter::Binary) {
+			ui.cbReadingType->setCurrentIndex(LiveDataSource::WholeFile);
+			ui.cbReadingType->setEnabled(false);
+		} else
+			ui.cbReadingType->setEnabled(true);
+	} else {
+		if (static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex()) == LiveDataSource::WholeFile)
+			ui.cbReadingType->setCurrentIndex(LiveDataSource::TillEnd);
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+	}
 
-	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::LocalSocket || sourceType == LiveDataSource::SourceType::SerialPort
-			|| readingType == LiveDataSource::ReadingType::TillEnd || readingType == LiveDataSource::ReadingType::WholeFile) {
+	if (((sourceType == LiveDataSource::FileOrPipe || sourceType == LiveDataSource::NetworkUdpSocket) &&
+	     (readingType == LiveDataSource::ContinuousFixed || readingType == LiveDataSource::FromEnd)))
+		ui.sbSampleSize->setValue(source->sampleSize());
+	else {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
-	} else {
-		ui.sbSampleSize->setValue(fds->sampleSize());
 	}
 
 	// disable "on new data"-option if not available
 	model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
-	item = model->item(LiveDataSource::UpdateType::NewData);
-	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::NetworkUdpSocket ||
-			sourceType == LiveDataSource::SourceType::SerialPort)
+	item = model->item(LiveDataSource::NewData);
+	if (sourceType == LiveDataSource::NetworkTcpSocket || sourceType == LiveDataSource::NetworkUdpSocket ||
+	    sourceType == LiveDataSource::SerialPort)
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	else
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -307,38 +352,41 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	ui.lTopicSearch->hide();
 	ui.twSubscriptions->hide();
 	ui.gbManageSubscriptions->hide();
+
+	m_liveDataSource = source; // updates may be applied from now on
 }
 
 /*!
- * \brief Modifies the sample size of the live data sources or MQTTClient objects
+ * \brief Modifies the sample size of the live data source or MQTTClient object
  * \param sampleSize
  */
 void LiveDataDock::sampleSizeChanged(int sampleSize) {
-	if (!m_liveDataSources.isEmpty()) {
-		for (auto* source : m_liveDataSources)
-			source->setSampleSize(sampleSize);
-	}
+	if (m_liveDataSource)
+		m_liveDataSource->setSampleSize(sampleSize);
 #ifdef HAVE_MQTT
-	else if (!m_mqttClients.isEmpty()) {
-		for (auto* client : m_mqttClients)
-			client->setSampleSize(sampleSize);
-	}
+	else if (m_mqttClient)
+		m_mqttClient->setSampleSize(sampleSize);
 #endif
 }
 
 /*!
- * \brief Updates the live data sources now
+ * \brief Updates the live data source now
  */
 void LiveDataDock::updateNow() {
-	if (!m_liveDataSources.isEmpty()) {
-		for (auto* source : m_liveDataSources)
-			source->updateNow();
-	}
+	if (m_liveDataSource)
+		m_liveDataSource->updateNow();
 #ifdef HAVE_MQTT
-	else if (!m_mqttClients.isEmpty()) {
-		for (auto* client : m_mqttClients)
-			client->updateNow();
-	}
+	else if (m_mqttClient)
+		m_mqttClient->updateNow();
+#endif
+}
+
+void LiveDataDock::nameChanged(const QString& name) {
+	if (m_liveDataSource)
+		m_liveDataSource->setName(name);
+#ifdef HAVE_MQTT
+	else if (m_mqttClient)
+		m_mqttClient->setName(name);
 #endif
 }
 
@@ -347,55 +395,52 @@ void LiveDataDock::updateNow() {
  * \param idx
  */
 void LiveDataDock::updateTypeChanged(int idx) {
-	if (!m_liveDataSources.isEmpty())  {
+	if (m_liveDataSource)  {
 		DEBUG("LiveDataDock::updateTypeChanged()");
-		const auto type = static_cast<LiveDataSource::UpdateType>(idx);
+		const LiveDataSource::UpdateType updateType = static_cast<LiveDataSource::UpdateType>(idx);
 
-		switch (type) {
-		case LiveDataSource::UpdateType::TimeInterval:
+		switch (updateType) {
+		case LiveDataSource::TimeInterval: {
 			ui.lUpdateInterval->show();
 			ui.sbUpdateInterval->show();
-			ui.lSampleSize->show();
-			ui.sbSampleSize->show();
+			const LiveDataSource::SourceType s = m_liveDataSource->sourceType();
+			const LiveDataSource::ReadingType r = m_liveDataSource->readingType();
+			const bool showSampleSize = ((s == LiveDataSource::FileOrPipe || s == LiveDataSource::NetworkUdpSocket) &&
+			                             (r == LiveDataSource::ContinuousFixed || r == LiveDataSource::FromEnd));
+			ui.lSampleSize->setVisible(showSampleSize);
+			ui.sbSampleSize->setVisible(showSampleSize);
 
-			for (auto* source : m_liveDataSources) {
-				source->setUpdateType(type);
-				source->setUpdateInterval(ui.sbUpdateInterval->value());
-				source->setFileWatched(false);
-			}
+			m_liveDataSource->setUpdateType(updateType);
+			m_liveDataSource->setUpdateInterval(ui.sbUpdateInterval->value());
+			m_liveDataSource->setFileWatched(false);
 			break;
-		case LiveDataSource::UpdateType::NewData:
+		}
+		case LiveDataSource::NewData:
 			ui.lUpdateInterval->hide();
 			ui.sbUpdateInterval->hide();
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 
-			for (auto* source : m_liveDataSources) {
-				source->setFileWatched(true);
-				source->setUpdateType(type);
-			}
+			m_liveDataSource->setFileWatched(true);
+			m_liveDataSource->setUpdateType(updateType);
 		}
 	}
 #ifdef HAVE_MQTT
-	else if (!m_mqttClients.isEmpty()) {
+	else if (m_mqttClient) {
 		DEBUG("LiveDataDock::updateTypeChanged()");
 		const MQTTClient::UpdateType type = static_cast<MQTTClient::UpdateType>(idx);
 
-		if (type == MQTTClient::UpdateType::TimeInterval) {
+		if (type == MQTTClient::TimeInterval) {
 			ui.lUpdateInterval->show();
 			ui.sbUpdateInterval->show();
 
-			for (auto* client : m_mqttClients) {
-				client->setUpdateType(type);
-				client->setUpdateInterval(ui.sbUpdateInterval->value());
-			}
-		} else if (type == MQTTClient::UpdateType::NewData) {
+			m_mqttClient->setUpdateType(type);
+			m_mqttClient->setUpdateInterval(ui.sbUpdateInterval->value());
+		} else if (type == MQTTClient::NewData) {
 			ui.lUpdateInterval->hide();
 			ui.sbUpdateInterval->hide();
 
-			for (auto* client : m_mqttClients) {
-				client->setUpdateType(type);
-			}
+			m_mqttClient->setUpdateType(type);
 		}
 	}
 #endif
@@ -406,15 +451,14 @@ void LiveDataDock::updateTypeChanged(int idx) {
  * \param idx
  */
 void LiveDataDock::readingTypeChanged(int idx) {
-	if (!m_liveDataSources.isEmpty())  {
+	if (m_liveDataSource)  {
 		const auto type = static_cast<LiveDataSource::ReadingType>(idx);
-		const LiveDataSource* const fds = m_liveDataSources.at(0);
-		const LiveDataSource::SourceType sourceType = fds->sourceType();
-		const LiveDataSource::UpdateType updateType = fds->updateType();
+		const LiveDataSource::SourceType sourceType = m_liveDataSource->sourceType();
+		const LiveDataSource::UpdateType updateType = m_liveDataSource->updateType();
 
-		if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::LocalSocket || sourceType == LiveDataSource::SourceType::SerialPort
-				|| type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile
-				|| updateType == LiveDataSource::UpdateType::NewData) {
+		if (sourceType == LiveDataSource::NetworkTcpSocket || sourceType == LiveDataSource::LocalSocket || sourceType == LiveDataSource::SerialPort
+				|| type == LiveDataSource::TillEnd || type == LiveDataSource::WholeFile
+				|| updateType == LiveDataSource::NewData) {
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 		} else {
@@ -422,14 +466,13 @@ void LiveDataDock::readingTypeChanged(int idx) {
 			ui.sbSampleSize->show();
 		}
 
-		for (auto* source : m_liveDataSources)
-			source->setReadingType(type);
+		m_liveDataSource->setReadingType(type);
 	}
 #ifdef HAVE_MQTT
-	else if (!m_mqttClients.isEmpty()) {
+	else if (m_mqttClient) {
 		MQTTClient::ReadingType type = static_cast<MQTTClient::ReadingType>(idx);
 
-		if (type == MQTTClient::ReadingType::TillEnd) {
+		if (type == MQTTClient::TillEnd) {
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 		} else {
@@ -437,43 +480,34 @@ void LiveDataDock::readingTypeChanged(int idx) {
 			ui.sbSampleSize->show();
 		}
 
-		for (auto* client : m_mqttClients)
-			client->setReadingType(type);
+		m_mqttClient->setReadingType(type);
 	}
 #endif
 }
 
 /*!
- * \brief Modifies the update interval of the live data sources
+ * \brief Modifies the update interval of the live data source
  * \param updateInterval
  */
 void LiveDataDock::updateIntervalChanged(int updateInterval) {
-	if (!m_liveDataSources.isEmpty())  {
-		for (auto* source : m_liveDataSources)
-			source->setUpdateInterval(updateInterval);
-	}
+	if (m_liveDataSource)
+		m_liveDataSource->setUpdateInterval(updateInterval);
 #ifdef HAVE_MQTT
-	else if (!m_mqttClients.isEmpty()) {
-		for (auto* client : m_mqttClients)
-			client->setUpdateInterval(updateInterval);
-	}
+	else if (m_mqttClient)
+		m_mqttClient->setUpdateInterval(updateInterval);
 #endif
 }
 
 /*!
- * \brief Modifies the number of samples to keep in each of the live data sources
+ * \brief Modifies the number of samples to keep in each of the live data source
  * \param keepNValues
  */
 void LiveDataDock::keepNValuesChanged(const int keepNValues) {
-	if (!m_liveDataSources.isEmpty())  {
-		for (auto* source : m_liveDataSources)
-			source->setKeepNValues(keepNValues);
-	}
+	if (m_liveDataSource)
+		m_liveDataSource->setKeepNValues(keepNValues);
 #ifdef HAVE_MQTT
-	else if (!m_mqttClients.isEmpty()) {
-		for (auto* client : m_mqttClients)
-			client->setKeepNValues(keepNValues);
-	}
+	else if (m_mqttClient)
+		m_mqttClient->setKeepNValues(keepNValues);
 #endif
 }
 
@@ -481,15 +515,11 @@ void LiveDataDock::keepNValuesChanged(const int keepNValues) {
  * \brief Pauses the reading of the live data source
  */
 void LiveDataDock::pauseReading() {
-	if (!m_liveDataSources.isEmpty())  {
-		for (auto* source: m_liveDataSources)
-			source->pauseReading();
-	}
+	if (m_liveDataSource)
+		m_liveDataSource->pauseReading();
 #ifdef HAVE_MQTT
-	else if (!m_mqttClients.isEmpty()) {
-		for (auto* client : m_mqttClients)
-			client->pauseReading();
-	}
+	else if (m_mqttClient)
+		m_mqttClient->pauseReading();
 #endif
 }
 
@@ -497,15 +527,11 @@ void LiveDataDock::pauseReading() {
  * \brief Continues the reading of the live data source
  */
 void LiveDataDock::continueReading() {
-	if (!m_liveDataSources.isEmpty())  {
-		for (auto* source : m_liveDataSources)
-			source->continueReading();
-	}
+	if (m_liveDataSource)
+		m_liveDataSource->continueReading();
 #ifdef HAVE_MQTT
-	else if (!m_mqttClients.isEmpty()) {
-		for (auto* client : m_mqttClients)
-			client->continueReading();
-	}
+	else if (m_mqttClient)
+		m_mqttClient->continueReading();
 #endif
 }
 
@@ -530,7 +556,7 @@ void LiveDataDock::pauseContinueReading() {
 
 /*!
  *\brief called when use will message checkbox's state is changed in the will settings widget,
- * Sets the mqttUseWill according to state for every client in m_mqttClients
+ * Sets the mqttUseWill according to state for the m_mqttClient
  *
  * \param state the state of the checbox
  */
@@ -538,147 +564,123 @@ void LiveDataDock::useWillMessage(bool use) {
 	qDebug()<<"Use will message: " << use;
 
 	if (use) {
-		for (auto* source : m_mqttClients)
-			source->setMQTTWillUse(true);
-
-		if (m_mqttClients.first()->willUpdateType() == MQTTClient::WillUpdateType::OnClick)
+		m_mqttClient->setMQTTWillUse(true);
+		if (m_mqttClient->willUpdateType() == MQTTClient::OnClick)
 			ui.bWillUpdateNow->show();
 
 	} else {
-		for (auto* source : m_mqttClients)
-			source->setMQTTWillUse(false);
-
+		m_mqttClient->setMQTTWillUse(false);
 		ui.bWillUpdateNow->hide();
 	}
 }
 
 /*!
  *\brief called when will message's QoS is changed in the will settings widget
- * sets the will QoS level for every client in m_mqttClients
+ * sets the will QoS level for the m_mqttClient
  *
  * \param QoS the QoS level of the will message
  */
 void LiveDataDock::willQoSChanged(int QoS) {
-	for (auto* source : m_mqttClients)
-		source->setWillQoS(QoS);
+	m_mqttClient->setWillQoS(QoS);
 }
 
 /*!
  *\brief called when will message's retain flag is changed in the will settings widget
- * sets the retain flag for the will message in every client in m_mqttClients
+ * sets the retain flag for the will message in in m_mqttClient
  *
  * \param state the state of the will retain chechbox
  */
 void LiveDataDock::willRetainChanged(bool useWillRetainMessages) {
 	if (useWillRetainMessages) {
-		for (auto* source : m_mqttClients)
-			source->setWillRetain(true);
+		m_mqttClient->setWillRetain(true);
 	} else {
-		for (auto* source : m_mqttClients)
-			source->setWillRetain(false);
+		m_mqttClient->setWillRetain(false);
 	}
 }
 
 /*!
  *\brief called when will topic combobox's current item is changed in the will settings widget
- * sets the will topic for every client in m_mqttClients
+ * sets the will topic for the m_mqttClient
  *
  * \param topic the current text of cbWillTopic
  */
 void LiveDataDock::willTopicChanged(const QString& topic) {
-	for (auto* source : m_mqttClients) {
-		if (source->willTopic() != topic)
-			source->clearLastMessage();
+	if (m_mqttClient->willTopic() != topic)
+		m_mqttClient->clearLastMessage();
 
-		source->setWillTopic(topic);
-	}
+	m_mqttClient->setWillTopic(topic);
 }
 
 /*!
  *\brief called when the selected will message type is changed in the will settings widget
- * sets the will message type for every client in m_mqttClients
+ * sets the will message type for the m_mqttClient
  *
  * \param type the selected will message type
  */
 void LiveDataDock::willMessageTypeChanged(MQTTClient::WillMessageType willMessageType) {
-	for (auto* source : m_mqttClients)
-		source->setWillMessageType(willMessageType);
+	m_mqttClient->setWillMessageType(willMessageType);
 }
 
 /*!
  *\brief called when the will own message is changed in the will settings widget
- * sets the will own message for every client in m_mqttClients
+ * sets the will own message for the m_mqttClient
  *
  * \param message the will message given by the user
  */
 void LiveDataDock::willOwnMessageChanged(const QString& message) {
-	for (auto* source : m_mqttClients)
-		source->setWillOwnMessage(message);
+	m_mqttClient->setWillOwnMessage(message);
 }
 
 /*!
  *\brief called when the selected update type for the will message is changed in the will settings widget
- * sets the will update type for every client in m_mqttClients
+ * sets the will update type for the m_mqttClient
  *
  * \param type the selected will update type
  */
 void LiveDataDock::willUpdateTypeChanged(int updateType) {
-	for (auto* source : m_mqttClients)
-		source->setWillUpdateType(static_cast<MQTTClient::WillUpdateType>(updateType));
+	m_mqttClient->setWillUpdateType(static_cast<MQTTClient::WillUpdateType>(updateType));
 
-	if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::TimePeriod) {
+	if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::TimePeriod) {
 		ui.bWillUpdateNow->hide();
-		for (auto* source : m_mqttClients)
-			source->startWillTimer();
-	} else if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::OnClick) {
+		m_mqttClient->startWillTimer();
+	} else if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::OnClick) {
 		ui.bWillUpdateNow->show();
 
 		//if update type is on click we stop the will timer
-		for (auto* source : m_mqttClients)
-			source->stopWillTimer();
+		m_mqttClient->stopWillTimer();
 	}
 }
 
 /*!
  *\brief called when the will update now button is pressed
- * updates the will message of every client in m_mqttClients
+ * updates the will message of m_mqttClient
  */
 void LiveDataDock::willUpdateNow() {
-	for (auto* source : m_mqttClients)
-		source->updateWillMessage();
+	m_mqttClient->updateWillMessage();
 }
 
 /*!
  *\brief called when the update interval for will message is changed in the will settings widget
- * sets the will update interval for every client in m_mqttClients, then starts the will timer for each one
+ * sets the will update interval for the m_mqttClient, then starts the will timer for each one
  *
  * \param interval the new will update interval
  */
 void LiveDataDock::willUpdateIntervalChanged(int interval) {
-	for (auto* source : m_mqttClients) {
-		source->setWillTimeInterval(interval);
-		source->startWillTimer();
-	}
+	m_mqttClient->setWillTimeInterval(interval);
+	m_mqttClient->startWillTimer();
 }
 
 /*!
  *\brief called when the will statistics are changed in the will settings widget
- * adds or removes the statistic represented by the index from every client in m_mqttClients
+ * adds or removes the statistic represented by the index from m_mqttClient
  */
 void LiveDataDock::statisticsChanged(MQTTClient::WillStatisticsType willStatisticsType) {
-	const bool useStatistic = m_mqttClients.first()->willStatistics()[static_cast<int>(willStatisticsType)];
-
 	if (willStatisticsType >= 0) {
 		//if it's not already added and it's checked we add it
-		if (!useStatistic)
-		{
-			for (auto* source : m_mqttClients)
-				source->addWillStatistics(willStatisticsType);
-		} else {
-			//otherwise remove it
-			for (auto* source : m_mqttClients)
-				source->removeWillStatistics(willStatisticsType);
-		}
+		if (!m_mqttClient->willStatistics()[static_cast<int>(willStatisticsType)])
+			m_mqttClient->addWillStatistics(willStatisticsType);
+		else //otherwise remove it
+			m_mqttClient->removeWillStatistics(willStatisticsType);
 	}
 }
 
@@ -687,8 +689,7 @@ void LiveDataDock::statisticsChanged(MQTTClient::WillStatisticsType willStatisti
  * in order to later list every available topic
  */
 void LiveDataDock::onMQTTConnect() {
-	auto* client = m_clients[m_mqttClients.first()->clientHostName()];
-	if (!client || !client->subscribe(QMqttTopicFilter(QLatin1String("#")), 1))
+	if (!m_currentHost || !m_currentHost->client || !m_currentHost->client->subscribe(QMqttTopicFilter(QLatin1String("#")), 1))
 		QMessageBox::critical(this, i18n("Couldn't subscribe"), i18n("Couldn't subscribe to all available topics. Something went wrong"));
 }
 
@@ -698,8 +699,8 @@ void LiveDataDock::onMQTTConnect() {
  */
 void LiveDataDock::mqttMessageReceived(const QByteArray& message, const QMqttTopicName& topic) {
 	Q_UNUSED(message)
-	if (!m_addedTopics[m_mqttClients.first()->clientHostName()].contains(topic.name())) {
-		m_addedTopics[m_mqttClients.first()->clientHostName()].push_back(topic.name());
+	if (!m_currentHost->addedTopics.contains(topic.name())) {
+		m_currentHost->addedTopics.push_back(topic.name());
 		addTopicToTree(topic.name());
 	}
 }
@@ -760,10 +761,7 @@ void LiveDataDock::addSubscription() {
 					MQTTHelpers::addSubscriptionChildren(item, newTopLevelItem);
 				}
 
-				//subscribe in every MQTTClient
-				for (auto* source : m_mqttClients) {
-					source->addMQTTSubscription(name, ui.cbQoS->currentIndex());
-				}
+				m_mqttClient->addMQTTSubscription(name, ui.cbQoS->currentIndex());
 
 				if (name.endsWith('#')) {
 					//if an already existing subscription contains a topic that the new subscription also contains
@@ -787,29 +785,22 @@ void LiveDataDock::addSubscription() {
 										for (int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
 
 											if (unsubscribeItem->text(0) != unsubscribeItem->parent()->child(i)->text(0)) {
-												//add topic as subscription to every client
-												for (auto* source : m_mqttClients) {
-													source->addBeforeRemoveSubscription(unsubscribeItem->parent()->child(i)->text(0), ui.cbQoS->currentIndex());
-												}
+												//add topic as subscription
+												m_mqttClient->addBeforeRemoveSubscription(unsubscribeItem->parent()->child(i)->text(0), ui.cbQoS->currentIndex());
 												//also add it to twSubscriptions
 												ui.twSubscriptions->addTopLevelItem(unsubscribeItem->parent()->takeChild(i));
 												--i;
 											} else {
 												//before we remove the topic, we reparent it to the new subscription
 												//so no data is lost
-												for (auto* source : m_mqttClients) {
-													source->reparentTopic(unsubscribeItem->text(0), name);
-												}
+												m_mqttClient->reparentTopic(unsubscribeItem->text(0), name);
 											}
 										}
 										unsubscribeItem = unsubscribeItem->parent();
 									}
 
 									qDebug()<<"Remove: "<<unsubscribeItem->text(0);
-									//Remove topic/subscription
-									for (auto* source : m_mqttClients) {
-										source->removeMQTTSubscription(unsubscribeItem->text(0));
-									}
+									m_mqttClient->removeMQTTSubscription(unsubscribeItem->text(0));
 
 									ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(unsubscribeItem));
 								}
@@ -836,7 +827,7 @@ void LiveDataDock::addSubscription() {
 
 /*!
  *\brief called when the unsubscribe button is pressed
- * unsubscribes from the topic represented by the current item of twSubscription in every client from m_mqttClients
+ * unsubscribes from the topic represented by the current item of twSubscription in m_mqttClient
  */
 void LiveDataDock::removeSubscription() {
 	QTreeWidgetItem* unsubscribeItem = ui.twSubscriptions->currentItem();
@@ -847,9 +838,7 @@ void LiveDataDock::removeSubscription() {
 		//if it is a top level item, meaning a topic that we really subscribed to(not one that belongs to a subscription)
 		//we can simply unsubscribe from it
 		if (unsubscribeItem->parent() == nullptr) {
-			for (auto* source : m_mqttClients) {
-				source->removeMQTTSubscription(unsubscribeItem->text(0));
-			}
+			m_mqttClient->removeMQTTSubscription(unsubscribeItem->text(0));
 			ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(unsubscribeItem));
 		}
 		//otherwise we remove the selected item, but subscribe to every other topic, that was contained by
@@ -858,10 +847,8 @@ void LiveDataDock::removeSubscription() {
 			while (unsubscribeItem->parent() != nullptr) {
 				for (int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
 					if (unsubscribeItem->text(0) != unsubscribeItem->parent()->child(i)->text(0)) {
-						//add topic as subscription to every client
-						for (auto* source : m_mqttClients) {
-							source->addBeforeRemoveSubscription(unsubscribeItem->parent()->child(i)->text(0), ui.cbQoS->currentIndex());
-						}
+						//add topic as subscription
+						m_mqttClient->addBeforeRemoveSubscription(unsubscribeItem->parent()->child(i)->text(0), ui.cbQoS->currentIndex());
 						ui.twSubscriptions->addTopLevelItem(unsubscribeItem->parent()->takeChild(i));
 						--i;
 					}
@@ -869,10 +856,8 @@ void LiveDataDock::removeSubscription() {
 				unsubscribeItem = unsubscribeItem->parent();
 			}
 
-			//remove topic/subscription from every client
-			for (auto* source : m_mqttClients) {
-				source->removeMQTTSubscription(unsubscribeItem->text(0));
-			}
+			//remove topic/subscription
+			m_mqttClient->removeMQTTSubscription(unsubscribeItem->text(0));
 			ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(unsubscribeItem));
 
 			//check if any common topics were subscribed, if possible merge them
@@ -901,9 +886,9 @@ void LiveDataDock::setTopicCompleter(const QString& topicName) {
 		} else
 			topic = topicName;
 
-		if (!m_topicList[m_mqttClients.first()->clientHostName()].contains(topic)) {
-			m_topicList[m_mqttClients.first()->clientHostName()].append(topic);
-			m_topicCompleter = new QCompleter(m_topicList[m_mqttClients.first()->clientHostName()], this);
+		if (!m_currentHost->topicList.contains(topic)) {
+			m_currentHost->topicList.append(topic);
+			m_topicCompleter = new QCompleter(m_currentHost->topicList, this);
 			m_topicCompleter->setCompletionMode(QCompleter::PopupCompletion);
 			m_topicCompleter->setCaseSensitivity(Qt::CaseSensitive);
 			ui.leTopics->setCompleter(m_topicCompleter);
@@ -916,7 +901,7 @@ void LiveDataDock::setTopicCompleter(const QString& topicName) {
  */
 void LiveDataDock::updateSubscriptionCompleter() {
 	QStringList subscriptionList;
-	const QVector<QString>& subscriptions = m_mqttClients.first()->MQTTSubscriptions();
+	const QVector<QString>& subscriptions = m_mqttClient->MQTTSubscriptions();
 
 	if (!subscriptions.isEmpty()) {
 		for (const auto& subscription : subscriptions)
@@ -941,16 +926,14 @@ void LiveDataDock::topicTimeout() {
 }
 
 /*!
- *\brief called when a new the host name of the MQTTClients from m _mqttClients changes
+ *\brief called when a new the host name of m_mqttClient changes
  * or when the MQTTClients initialize their subscriptions
  * Fills twSubscriptions with the subscriptions of the MQTTClient
  */
 void LiveDataDock::fillSubscriptions() {
-	const MQTTClient* const fmc = m_mqttClients.at(0);
-
 	ui.twSubscriptions->clear();
 
-	QVector<QString> subscriptions = fmc->MQTTSubscriptions();
+	QVector<QString> subscriptions = m_mqttClient->MQTTSubscriptions();
 	for (int i = 0; i < subscriptions.count(); ++i) {
 		QStringList name;
 		name.append(subscriptions[i]);
@@ -1134,10 +1117,8 @@ void LiveDataDock::manageCommonLevelSubscriptions() {
 					}
 				}
 
-				//make the subscription on commonTopic in every MQTTClient from m_mqttClients
-				for (auto* source : m_mqttClients) {
-					source->addMQTTSubscription(commonTopic, ui.cbQoS->currentIndex());
-				}
+				//make the subscription on commonTopic in m_mqttClient
+				m_mqttClient->addMQTTSubscription(commonTopic, ui.cbQoS->currentIndex());
 			}
 		}
 	} while (foundEqual);
@@ -1231,40 +1212,49 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 }
 
 /*!
- *\brief called when a client receives a message, if the clients hostname isn't identic with the host name of MQTTClients
- * if the message arrived from a new topic, the topic is put in m_addedTopics
+ *\brief called when a client receives a message, if the clients hostname isn't identic with the host name of MQTTClient
+ * if the message arrived from a new topic, the topic is added to the host data
  */
 void LiveDataDock::mqttMessageReceivedInBackground(const QByteArray& message, const QMqttTopicName& topic) {
 	Q_UNUSED(message)
-	if (!m_addedTopics[m_mqttClients.first()->clientHostName()].contains(topic.name()))
-		m_addedTopics[m_mqttClients.first()->clientHostName()].push_back(topic.name());
+	if (!m_currentHost->addedTopics.contains(topic.name()))
+		m_currentHost->addedTopics.push_back(topic.name());
 }
 
 /*!
  *\brief called when an MQTTClient is about to be deleted
- * removes every data connected to the MQTTClient, and disconnects the corresponding client from m_clients
+ * removes every data connected to the MQTTClient, and disconnects the corresponding client from the host
  *
+ * \param hostname the host name of the MQTTClient that will be deleted
  * \param name the host name of the MQTTClient that will be deleted
  */
-void LiveDataDock::removeClient(const QString& name) {
-	m_clients[name]->disconnectFromHost();
+void LiveDataDock::removeClient(const QString& hostname, quint16 port) {
+	auto it = m_hosts.find(qMakePair(hostname, port));
+	if (it == m_hosts.end())
+		return;
 
-	m_addedTopics.remove(name);
-	m_topicList.remove(name);
+	MQTTHost & host = it.value();
 
-	if (m_previousMQTTClient != nullptr && m_previousMQTTClient->clientHostName() == name) {
-		disconnect(m_clients[m_previousMQTTClient->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
+	if (host.count > 1) {
+		--host.count;
+		return;
+	}
+
+	host.client->disconnectFromHost();
+
+	if (m_previousMQTTClient != nullptr && m_previousMQTTClient->clientHostName() == hostname) {
+		disconnect(m_previousHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
 		m_previousMQTTClient = nullptr;
 	}
 
-	if (m_mqttClients.first()->clientHostName() == name) {
+	if (m_mqttClient->clientHostName() == hostname) {
 		ui.twSubscriptions->clear();
 		ui.twTopics->clear();
-		m_mqttClients.clear();
+		m_mqttClient = nullptr;
 	}
 
-	delete m_clients[name];
-	m_clients.remove(name);
+	delete host.client;
+	m_hosts.erase(it);
 }
 
 /*!
@@ -1341,9 +1331,8 @@ bool LiveDataDock::testUnsubscribe(const QString& topic) {
 
 void LiveDataDock::showWillSettings() {
 	QMenu menu;
-	const MQTTClient* const fmc = m_mqttClients.at(0);
-	const QVector<QString>& topics = fmc->topicNames();
-	MQTTWillSettingsWidget willSettingsWidget(&menu, fmc->willSettings(), topics);
+	const QVector<QString>& topics = m_mqttClient->topicNames();
+	MQTTWillSettingsWidget willSettingsWidget(&menu, m_mqttClient->willSettings(), topics);
 
 	connect(&willSettingsWidget, &MQTTWillSettingsWidget::applyClicked, [this, &menu, &willSettingsWidget]() {
 		this->useWillMessage(willSettingsWidget.will().enabled);

@@ -248,6 +248,7 @@ void ImportFileWidget::loadSettings() {
 	ui.cbReadingType->setCurrentIndex(conf.readEntry("ReadingType").toInt());
 	ui.cbSerialPort->setCurrentIndex(conf.readEntry("SerialPort").toInt());
 	ui.cbUpdateType->setCurrentIndex(conf.readEntry("UpdateType").toInt());
+	updateTypeChanged(ui.cbUpdateType->currentIndex());
 	ui.leHost->setText(conf.readEntry("Host",""));
 	ui.sbKeepNValues->setValue(conf.readEntry("KeepNValues").toInt());
 	ui.lePort->setText(conf.readEntry("Port",""));
@@ -1236,7 +1237,7 @@ void ImportFileWidget::fileTypeChanged(int index) {
 	//for file types other than ASCII and binary we support re-reading the whole file only
 	//select "read whole file" and deactivate the combobox
 	if (m_liveDataSource && (fileType != AbstractFileFilter::Ascii && fileType != AbstractFileFilter::Binary)) {
-		ui.cbReadingType->setCurrentIndex(3);
+		ui.cbReadingType->setCurrentIndex(LiveDataSource::ReadingType::WholeFile);
 		ui.cbReadingType->setEnabled(false);
 	} else
 		ui.cbReadingType->setEnabled(true);
@@ -1921,11 +1922,15 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		//deactivate file types other than ascii and binary
 		for (int i = 2; i < ui.cbFileType->count(); ++i)
 			typeModel->item(i)->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+		if (ui.cbFileType->currentIndex() > 1)
+			ui.cbFileType->setCurrentIndex(1);
 
 		//"whole file" read option is available for file or pipe only, disable it
 		typeModel = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-		QStandardItem* item = typeModel->item(LiveDataSource::ReadingType::WholeFile);
+		QStandardItem* item = typeModel->item(LiveDataSource::WholeFile);
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+		if (static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex()) == LiveDataSource::WholeFile)
+			ui.cbReadingType->setCurrentIndex(LiveDataSource::TillEnd);
 
 		//"update options" groupbox can be deactivated for "file and pipe" if the file is invalid.
 		//Activate the groupbox when switching from "file and pipe" to a different source type.

@@ -1920,29 +1920,29 @@ void MainWin::newLiveDataSourceActionTriggered() {
 			dlg->importToMQTT(mqttClient);
 
 			mqttClient->setName(mqttClient->clientHostName());
+
 			QVector<const MQTTClient*> existingClients = m_project->children<const MQTTClient>(AbstractAspect::Recursive);
 
 			//doesn't make sense to have more MQTTClients connected to the same broker
 			bool found = false;
 			for (const auto* client : existingClients) {
-				if (client->clientHostName() == mqttClient->clientHostName()) {
+				if (client->clientHostName() == mqttClient->clientHostName() && client->clientPort() == mqttClient->clientPort()) {
 					found = true;
 					break;
 				}
 			}
 
 			if (!found)
-				this->addAspectToProject(mqttClient);
+				addAspectToProject(mqttClient);
 			else {
 				delete mqttClient;
-				QMessageBox::warning(this, "Warning", "There already is a MQTTClient with this host name!");
+				QMessageBox::warning(this, "Warning", "There already is a MQTTClient with this host!");
 			}
 #endif
-		}
-		else {
+		} else {
 			LiveDataSource* dataSource = new LiveDataSource(i18n("Live data source%1", 1), false);
 			dlg->importToLiveDataSource(dataSource, statusBar());
-			this->addAspectToProject(dataSource);
+			addAspectToProject(dataSource);
 		}
 	}
 	delete dlg;

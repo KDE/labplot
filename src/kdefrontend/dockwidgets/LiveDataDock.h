@@ -51,12 +51,12 @@ class LiveDataDock : public QWidget {
 
 public:
 	explicit LiveDataDock(QWidget *parent = nullptr);
-	void setLiveDataSources(const QList<LiveDataSource*>& sources);
+	void setLiveDataSource(LiveDataSource* const source);
 	~LiveDataDock() override;
 
 private:
 	Ui::LiveDataDock ui;
-	QList<LiveDataSource*> m_liveDataSources;
+	LiveDataSource* m_liveDataSource{nullptr};
 
 	bool m_paused{false};
 
@@ -64,6 +64,7 @@ private:
 	void continueReading();
 
 private slots:
+	void nameChanged(const QString&);
 	void updateTypeChanged(int);
 	void readingTypeChanged(int);
 	void sampleSizeChanged(int);
@@ -75,7 +76,7 @@ private slots:
 
 #ifdef HAVE_MQTT
 public:
-	void setMQTTClients(const QList<MQTTClient*>& clients);
+	void setMQTTClient(MQTTClient* const client);
 	bool testSubscribe(const QString&);
 	bool testUnsubscribe(const QString&);
 
@@ -100,7 +101,7 @@ private slots:
 	void fillSubscriptions();
 	void scrollToTopicTreeItem(const QString&);
 	void scrollToSubsriptionTreeItem(const QString&);
-	void removeClient(const QString&);
+	void removeClient(const QString&, quint16);
 	void showWillSettings();
 
 signals:
@@ -111,17 +112,24 @@ private:
 	void addTopicToTree(const QString&);
 	void manageCommonLevelSubscriptions();
 
-	QList<MQTTClient*> m_mqttClients;
-	QMap<QString, QMqttClient*> m_clients;
+	struct MQTTHost {
+		int count;
+		QMqttClient* client;
+		QStringList topicList;
+		QVector<QString> addedTopics;
+	};
+
+	MQTTClient* m_mqttClient{nullptr};
+	const MQTTClient* m_previousMQTTClient{nullptr};
+	QMap<QPair<QString, int>, MQTTHost> m_hosts;
+	MQTTHost* m_currentHost{nullptr};
+	MQTTHost* m_previousHost{nullptr};
 	QCompleter* m_topicCompleter{nullptr};
 	QCompleter* m_subscriptionCompleter{nullptr};
-	QMap<QString, QStringList> m_topicList;
 	bool m_searching{true};
 	QTimer* m_searchTimer;
 	bool m_interpretMessage{true};
-	const MQTTClient* m_previousMQTTClient{nullptr};
 	QString m_mqttUnsubscribeName;
-	QMap<QString, QVector<QString>> m_addedTopics;
 #endif
 };
 

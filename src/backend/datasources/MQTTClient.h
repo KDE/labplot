@@ -253,7 +253,7 @@ signals:
 	void MQTTSubscribed();
 	void MQTTTopicsChanged();
 	void readFromTopics();
-	void clientAboutToBeDeleted(const QString&);
+	void clientAboutToBeDeleted(const QString&, quint16);
 
 #endif //HAVE_MQTT
 };

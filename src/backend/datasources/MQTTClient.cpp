@@ -80,10 +80,10 @@ MQTTClient::MQTTClient(const QString& name) : Folder(name),
 }
 
 MQTTClient::~MQTTClient() {
-	emit clientAboutToBeDeleted(m_client->hostname());
+	emit clientAboutToBeDeleted(m_client->hostname(), m_client->port());
 	//stop reading before deleting the objects
 	pauseReading();
-	qDebug()<<"Delete MQTTClient: "  << m_client->hostname();
+	qDebug() << "Delete MQTTClient: " << m_client->hostname() << m_client->port();
 
 	delete m_filter;
 	delete m_updateTimer;

@@ -117,11 +117,15 @@ GuiObserver::GuiObserver(MainWin* mainWin) {
   and activates the corresponding dockwidgets, toolbars etc.
 */
 void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects) const {
-	if (selectedAspects.isEmpty()) {
+	auto clearDock = [&](){
 		if (m_mainWindow->stackedWidget->currentWidget())
 			m_mainWindow->stackedWidget->currentWidget()->hide();
 
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties"));
+	};
+
+	if (selectedAspects.isEmpty()) {
+		clearDock();
 		return;
 	}
 
@@ -132,10 +136,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 	for (auto* aspect : selectedAspects) {
 		className = aspect->metaObject()->className();
 		if (className != prevClassName && !prevClassName.isEmpty()) {
-			if (m_mainWindow->stackedWidget->currentWidget())
-				m_mainWindow->stackedWidget->currentWidget()->hide();
-
-			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties"));
+			clearDock();
 			return;
 		}
 		prevClassName = className;
@@ -567,10 +568,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 			m_mainWindow->stackedWidget->addWidget(m_mainWindow->m_liveDataDock);
 		}
 
-		QList<MQTTClient*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<MQTTClient*>(aspect);
-		m_mainWindow->m_liveDataDock->setMQTTClients(list);
+		m_mainWindow->m_liveDataDock->setMQTTClient(static_cast<MQTTClient*>(selectedAspects.first()));
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
 	} else if (className == QStringLiteral("MQTTSubscription")) {
@@ -582,20 +580,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 			m_mainWindow->stackedWidget->addWidget(m_mainWindow->m_liveDataDock);
 		}
 
-		QList<MQTTClient*> list;
-		for (auto* aspect : selectedAspects) {
-			const QString clientName = qobject_cast<MQTTSubscription*>(aspect)->mqttClient()->name();
-			bool found = false;
-			for (const auto* client : list) {
-				if (client->name() == clientName) {
-					found = true;
-					break;
-				}
-			}
-			if (!found)
-				list << qobject_cast<MQTTSubscription*>(aspect)->mqttClient();
-		}
-		m_mainWindow->m_liveDataDock->setMQTTClients(list);
+		m_mainWindow->m_liveDataDock->setMQTTClient(static_cast<MQTTSubscription*>(selectedAspects.first())->mqttClient());
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
 	} else if (className == QStringLiteral("MQTTTopic")) {
@@ -606,20 +591,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 			m_mainWindow->stackedWidget->addWidget(m_mainWindow->m_liveDataDock);
 		}
 
-		QList<MQTTClient*> list;
-		for (auto* aspect : selectedAspects) {
-			QString clientName = qobject_cast<MQTTClient*>(qobject_cast<MQTTTopic*>(aspect)->mqttClient())->name();
-			bool found = false;
-			for (const auto* client : list) {
-				if (client->name() == clientName) {
-					found = true;
-					break;
-				}
-			}
-			if (!found)
-				list << qobject_cast<MQTTClient*>(qobject_cast<MQTTTopic*>(aspect)->mqttClient());
-		}
-		m_mainWindow->m_liveDataDock->setMQTTClients(list);
+		m_mainWindow->m_liveDataDock->setMQTTClient(static_cast<MQTTTopic*>(selectedAspects.first())->mqttClient());
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
 	}
@@ -632,16 +604,11 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 			m_mainWindow->stackedWidget->addWidget(m_mainWindow->m_liveDataDock);
 		}
 
-		QList<LiveDataSource*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<LiveDataSource*>(aspect);
-		m_mainWindow->m_liveDataDock->setLiveDataSources(list);
+		m_mainWindow->m_liveDataDock->setLiveDataSource(static_cast<LiveDataSource*>(selectedAspects.first()));
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
 	} else {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties"));
-		if (m_mainWindow->stackedWidget->currentWidget())
-			m_mainWindow->stackedWidget->currentWidget()->hide();
+		clearDock();
 	}
 }
 
