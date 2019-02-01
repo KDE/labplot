@@ -139,7 +139,7 @@ void DateTimeSpinBox::getValue() {
 	int counter = 0;
 	int startIndex = 0;
 	for (int i=0; i< text.length(); i++) {
-		if (text[i] == "." || text[i] == ":" || text[i] == " " || i == text.length()-1)	{
+		if (text[i] == '.' || text[i] == ':' || text[i] == ' ' || i == text.length()-1)	{
 			switch(counter) {
 				case Type::year:
 					m_year = text.mid(startIndex, i - startIndex).toInt();
@@ -175,7 +175,7 @@ void DateTimeSpinBox::setCursorPosition(Type type) {
 	QString text = lineEdit()->text();
 	int counter = 0;
 	for (int i = 0; i < text.length(); i++) {
-		if (text[i] == "." || text[i] == ":" || text[i] == " ")
+		if (text[i] == '.' || text[i] == ':' || text[i] == ' ')
 			counter ++;
 
 		if (counter-1 == type) {
@@ -289,7 +289,7 @@ DateTimeSpinBox::Type DateTimeSpinBox::determineType(int cursorPos) const{
 
 	int counter = 0;
 	for (int i = 0; i < cursorPos; i++) {
-		if (text[i] == "." || text[i] == ":" || text[i] == " ")
+		if (text[i] == '.' || text[i] == ':' || text[i] == ' ')
 			counter ++;
 	}
 
