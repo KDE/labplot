@@ -36,6 +36,10 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/PropertyChangeCommand.h"
+#ifdef HAVE_MQTT
+#include "backend/datasources/MQTTSubscription.h"
+#include "backend/datasources/MQTTTopic.h"
+#endif
 
 #include <QMenu>
 
@@ -294,10 +298,30 @@ QMenu* AbstractAspect::createContextMenu() {
 // 	menu->addAction(KStandardAction::copy(this));
 // 	menu->addAction(KStandardAction::paste(this));
 // 	menu->addSeparator();
-    menu->addAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
 
-	//don't allow to delete data spreadsheets in the datapicker curves
-    if ( !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DatapickerCurve*>(this->parentAspect())) )
+	//don't allow to rename:
+	//1. Mqtt subscriptions
+	//2. Mqtt topics
+	//3. Columns in Mqtt topics
+#ifdef HAVE_MQTT
+	if( !dynamic_cast<const MQTTSubscription*>(this)
+		&& !dynamic_cast<const MQTTTopic*>(this)
+		&& !(dynamic_cast<const Column*>(this) && dynamic_cast<const MQTTTopic*>(this->parentAspect())) )
+#endif
+		menu->addAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
+
+	//don't allow to delete:
+	//1. data spreadsheets in the datapicker curves
+	//2. Mqtt subscriptions
+	//3. Mqtt topics
+	//4. Columns in Mqtt topics
+    if ( !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DatapickerCurve*>(this->parentAspect()))
+#ifdef HAVE_MQTT
+		&& !dynamic_cast<const MQTTSubscription*>(this)
+		&& !dynamic_cast<const MQTTTopic*>(this)
+		&& !(dynamic_cast<const Column*>(this) && dynamic_cast<const MQTTTopic*>(this->parentAspect()))
+#endif
+	)
 		menu->addAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this, SLOT(remove()));
 
 	return menu;

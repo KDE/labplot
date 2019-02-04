@@ -34,6 +34,9 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/datapicker/DatapickerCurve.h"
+#ifdef HAVE_MQTT
+#include "backend/datasources/MQTTTopic.h"
+#endif
 
 #include <QMenu>
 #include <QStyle>
@@ -108,7 +111,11 @@ QMenu* AbstractPart::createContextMenu() {
 	menu->addSeparator();
 
 	if (m_mdiWindow) {
-		if (dynamic_cast<Spreadsheet*>(this) || dynamic_cast<Matrix*>(this)) {
+		if ( (dynamic_cast<Spreadsheet*>(this) || dynamic_cast<Matrix*>(this))
+#ifdef HAVE_MQTT
+		&& !dynamic_cast<const MQTTTopic*>(this)
+#endif
+		) {
 			QMenu* subMenu = new QMenu(i18n("Import Data"), menu);
 			subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From File"), this, SIGNAL(importFromFileRequested()));
 			subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From SQL Database"), this, SIGNAL(importFromSQLDatabaseRequested()));

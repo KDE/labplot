@@ -189,7 +189,10 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 			// QMenu* objectsMenu = menu->addMenu(i18n("Show/Hide objects"));
 		}
 	}
-	menu->exec(event->globalPos());
+
+	if (menu)
+		menu->exec(event->globalPos());
+
 	delete menu;
 }
 

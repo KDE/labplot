@@ -42,6 +42,7 @@
 #endif
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
+#include "backend/datasources/MQTTSubscription.h"
 #endif
 #include "backend/worksheet/Worksheet.h"
 
@@ -65,7 +66,11 @@ QIcon Folder::icon() const {
  * The caller takes ownership of the menu.
  */
 QMenu* Folder::createContextMenu() {
-	if (project())
+	if (project()
+#ifdef HAVE_MQTT
+		&& !dynamic_cast<const MQTTSubscription*>(this)
+#endif
+	)
 		return project()->createFolderContextMenu(this);
 	return nullptr;
 }
