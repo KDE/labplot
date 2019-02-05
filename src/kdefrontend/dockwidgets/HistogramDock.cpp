@@ -77,9 +77,7 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent), cbDataColumn(ne
 	ui.cbFillingColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.bFillingOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	auto* completer = new QCompleter(this);
-	completer->setModel(new QDirModel);
-	ui.leFillingFileName->setCompleter(completer);
+	ui.leFillingFileName->setCompleter(new QCompleter(new QDirModel, this));
 
 	//adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {

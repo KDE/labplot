@@ -128,10 +128,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : QWidget(parent),
 
 	ui.leFileName->setClearButtonEnabled(true);
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
-
-	auto* completer = new QCompleter(this);
-	completer->setModel(new QDirModel);
-	ui.leFileName->setCompleter(completer);
+	ui.leFileName->setCompleter(new QCompleter(new QDirModel, this));
 
 	auto* editTabLayout = static_cast<QGridLayout*>(ui.tEdit->layout());
 	editTabLayout->setContentsMargins(2,2,2,2);

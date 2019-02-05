@@ -57,9 +57,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent) {
 	ui.cbBackgroundColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	auto* completer = new QCompleter(this);
-	completer->setModel(new QDirModel);
-	ui.leBackgroundFileName->setCompleter(completer);
+	ui.leBackgroundFileName->setCompleter(new QCompleter(new QDirModel, this));
 
 	//adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {

@@ -77,9 +77,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : QWidget(parent) {
 	//"Background"-tab
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	auto* completer = new QCompleter(this);
-	completer->setModel(new QDirModel);
-	ui.leBackgroundFileName->setCompleter(completer);
+	ui.leBackgroundFileName->setCompleter(new QCompleter(new QDirModel, this));
 
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);

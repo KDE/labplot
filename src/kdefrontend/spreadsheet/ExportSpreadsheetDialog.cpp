@@ -67,9 +67,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
-	auto* completer = new QCompleter(this);
-	completer->setModel(new QDirModel);
-	ui->leFileName->setCompleter(completer);
+	ui->leFileName->setCompleter(new QCompleter(new QDirModel, this));
 
 	ui->cbFormat->addItem("ASCII", ASCII);
 	ui->cbFormat->addItem("Binary", Binary);

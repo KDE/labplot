@@ -61,9 +61,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
-	auto* completer = new QCompleter(this);
-	completer->setModel(new QDirModel);
-	ui->leFileName->setCompleter(completer);
+	ui->leFileName->setCompleter(new QCompleter(new QDirModel, this));
 
 	ui->bOpen->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
 

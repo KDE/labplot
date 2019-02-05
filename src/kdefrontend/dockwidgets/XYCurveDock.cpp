@@ -73,9 +73,7 @@ XYCurveDock::XYCurveDock(QWidget* parent) : QWidget(parent) {
 	ui.cbFillingColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.bFillingOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	auto* completer = new QCompleter(this);
-	completer->setModel(new QDirModel);
-	ui.leFillingFileName->setCompleter(completer);
+	ui.leFillingFileName->setCompleter(new QCompleter(new QDirModel, this));
 
 	//Tab "Error bars"
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
