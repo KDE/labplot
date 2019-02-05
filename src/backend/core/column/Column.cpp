@@ -96,10 +96,20 @@ Column::~Column() {
 
 QMenu* Column::createContextMenu() {
 	QMenu* menu = AbstractAspect::createContextMenu();
-	QAction* firstAction = menu->actions().at(1);
+	QAction* firstAction{nullptr};
+
+	 //insert after "rename" and "delete" actions, if available.
+	 //MQTTTopic columns don't have these actions
+	if (menu->actions().size() > 1)
+		firstAction = menu->actions().at(1);
 
 	//add actions available in SpreadsheetView
-	emit requestProjectContextMenu(menu);
+	//TODO: we don't need to add anything from the view for MQTTTopic columns.
+	//at the moment it's ok to check to the null pointer for firstAction here.
+	//later, once we have some actions in the menu also for MQTT topics we'll
+	//need to explicitely to dynamic_cast for MQTTTopic
+	if (firstAction)
+		emit requestProjectContextMenu(menu);
 
 	//"Used in" menu containing all curves where the column is used
 	QMenu* usedInMenu = new QMenu(i18n("Used in"));
@@ -131,7 +141,9 @@ QMenu* Column::createContextMenu() {
 		}
 	}
 
-	menu->insertSeparator(firstAction);
+	if (firstAction)
+		menu->insertSeparator(firstAction);
+
 	menu->insertMenu(firstAction, usedInMenu);
 	menu->insertSeparator(firstAction);
 
