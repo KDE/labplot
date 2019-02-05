@@ -389,12 +389,12 @@ void SpreadsheetView::initMenus() {
 	m_columnMenu->addMenu(m_plotDataMenu);
 
 	// Data manipulation sub-menu
-	QMenu* dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
+	QMenu* dataManipulationMenu = new QMenu(i18n("Data Manipulation"), this);
 	dataManipulationMenu->setIcon(QIcon::fromTheme("zoom-draw"));
 	dataManipulationMenu->addAction(addDataReductionAction);
 
 	// Data fit sub-menu
-	QMenu* dataFitMenu = new QMenu(i18n("Fit"));
+	QMenu* dataFitMenu = new QMenu(i18n("Fit"), this);
 	dataFitMenu->setIcon(QIcon::fromTheme("labplot-xy-fit-curve"));
 	dataFitMenu->addAction(addFitAction.at(0));
 	dataFitMenu->addAction(addFitAction.at(1));

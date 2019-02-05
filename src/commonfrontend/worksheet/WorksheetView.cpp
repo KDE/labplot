@@ -493,13 +493,13 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotMenu->addAction(plotsLockedAction);
 
 	// Data manipulation menu
-	m_dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
+	m_dataManipulationMenu = new QMenu(i18n("Data Manipulation") ,this);
 	m_dataManipulationMenu->setIcon(QIcon::fromTheme("zoom-draw"));
 	m_dataManipulationMenu->addAction(addDataOperationAction);
 	m_dataManipulationMenu->addAction(addDataReductionAction);
 
 	//themes menu
-	m_themeMenu = new QMenu(i18n("Apply Theme"));
+	m_themeMenu = new QMenu(i18n("Apply Theme"), this);
 	auto* themeWidget = new ThemesWidget(nullptr);
 	connect(themeWidget, SIGNAL(themeSelected(QString)), m_worksheet, SLOT(setTheme(QString)));
 	connect(themeWidget, SIGNAL(themeSelected(QString)), m_themeMenu, SLOT(close()));

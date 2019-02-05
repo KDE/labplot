@@ -676,6 +676,11 @@ HistogramPrivate::HistogramPrivate(Histogram *owner) : q(owner) {
 	setAcceptHoverEvents(true);
 }
 
+HistogramPrivate::~HistogramPrivate() {
+	if (m_histogram)
+		gsl_histogram_free(m_histogram);
+}
+
 QString HistogramPrivate::name() const {
 	return q->name();
 }

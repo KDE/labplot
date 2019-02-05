@@ -45,6 +45,7 @@ class QFont;
 class HistogramPrivate : public QGraphicsItem {
 public:
 	explicit HistogramPrivate(Histogram* owner);
+	~HistogramPrivate() override;
 
 	QString name() const;
 	QRectF boundingRect() const override;
