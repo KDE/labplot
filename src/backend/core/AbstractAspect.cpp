@@ -299,30 +299,25 @@ QMenu* AbstractAspect::createContextMenu() {
 // 	menu->addAction(KStandardAction::paste(this));
 // 	menu->addSeparator();
 
-	//don't allow to rename:
+	//don't allow to rename and delete
+	//1. data spreadsheets of datapicker curves
+	//2. columns in data spreadsheets of datapicker curves
 	//1. Mqtt subscriptions
 	//2. Mqtt topics
 	//3. Columns in Mqtt topics
-#ifdef HAVE_MQTT
-	if( !dynamic_cast<const MQTTSubscription*>(this)
-		&& !dynamic_cast<const MQTTTopic*>(this)
-		&& !(dynamic_cast<const Column*>(this) && dynamic_cast<const MQTTTopic*>(this->parentAspect())) )
-#endif
-		menu->addAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
-
-	//don't allow to delete:
-	//1. data spreadsheets in the datapicker curves
-	//2. Mqtt subscriptions
-	//3. Mqtt topics
-	//4. Columns in Mqtt topics
-    if ( !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DatapickerCurve*>(this->parentAspect()))
+	bool enabled = !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DatapickerCurve*>(this->parentAspect()))
+		&& !(dynamic_cast<const Column*>(this) && this->parentAspect()->parentAspect() && dynamic_cast<const DatapickerCurve*>(this->parentAspect()->parentAspect()))
 #ifdef HAVE_MQTT
 		&& !dynamic_cast<const MQTTSubscription*>(this)
 		&& !dynamic_cast<const MQTTTopic*>(this)
 		&& !(dynamic_cast<const Column*>(this) && dynamic_cast<const MQTTTopic*>(this->parentAspect()))
 #endif
-	)
+		;
+
+	if(enabled) {
+		menu->addAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
 		menu->addAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this, SLOT(remove()));
+	}
 
 	return menu;
 }
