@@ -417,9 +417,7 @@ void MQTTUnitTest::testSubscriptions() {
 	mqttClient->addInitialMQTTSubscriptions(topicFilter, 0);
 
 	LiveDataDock* liveDock = new LiveDataDock();
-	QList<MQTTClient*> list;
-	list.push_back(mqttClient);
-	liveDock->setMQTTClients(list);
+	liveDock->setMQTTClient(mqttClient);
 
 	mqttClient->read();
 	mqttClient->ready();
