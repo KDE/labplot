@@ -357,15 +357,17 @@ void Histogram::setAutoBinRanges(bool autoBinRanges) {
 		exec(new HistogramSetAutoBinRangesCmd(d, autoBinRanges));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinRangesMin, double, binRangesMin, recalcHistogram)
+STD_SETTER_CMD_IMPL_F(Histogram, SetBinRangesMin, double, binRangesMin, recalcHistogram)
 void Histogram::setBinRangesMin(double binRangesMin) {
+	DEBUG("Histogram::setBinRangesMin() value = " << binRangesMin)
 	Q_D(Histogram);
 	if (binRangesMin != d->binRangesMin)
 		exec(new HistogramSetBinRangesMinCmd(d, binRangesMin, ki18n("%1: set bin ranges start")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinRangesMax, double, binRangesMax, recalcHistogram)
+STD_SETTER_CMD_IMPL_F(Histogram, SetBinRangesMax, double, binRangesMax, recalcHistogram)
 void Histogram::setBinRangesMax(double binRangesMax) {
+	DEBUG("Histogram::setBinRangesMax() value = " << binRangesMax)
 	Q_D(Histogram);
 	if (binRangesMax != d->binRangesMax)
 		exec(new HistogramSetBinRangesMaxCmd(d, binRangesMax, ki18n("%1: set bin ranges end")));
@@ -886,9 +888,9 @@ void HistogramPrivate::recalcHistogram() {
 		}
 		}
 
-		DEBUG("min " << binRangesMin);
-		DEBUG("max " << binRangesMax);
-		DEBUG("number of bins " << m_bins);
+		DEBUG("min " << binRangesMin)
+		DEBUG("max " << binRangesMax)
+		DEBUG("number of bins " << m_bins)
 
 		//calculate the histogram
 		if (m_bins > 0) {
@@ -900,7 +902,7 @@ void HistogramPrivate::recalcHistogram() {
 					gsl_histogram_increment(m_histogram, dataColumn->valueAt(row));
 			}
 		} else
-			DEBUG("Number of bins must be positiv integer");
+			DEBUG("Number of bins must be positiv integer")
 	}
 
 	//histogram changed because of the actual data changes or because of new bin settings,

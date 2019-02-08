@@ -570,8 +570,10 @@ void HistogramDock::autoBinRangesChanged(int state) {
 }
 
 void HistogramDock::binRangesMinChanged(const QString& value) {
+	DEBUG("HistogramDock::binRangesMinChanged() value = " << value.toDouble());
 	if (m_initializing)
 		return;
+	DEBUG("	set value")
 
 	const double min = value.toDouble();
 	for (auto* hist : m_curvesList)
@@ -1400,6 +1402,7 @@ void HistogramDock::curveAutoBinRangesChanged(bool value) {
 }
 
 void HistogramDock::curveBinRangesMinChanged(double value) {
+	DEBUG("HistogramDock::curveBinRangesMinChanged() value = " << value)
 	m_initializing = true;
 	ui.leBinRangesMin->setText( QString::number(value) );
 	m_initializing = false;
