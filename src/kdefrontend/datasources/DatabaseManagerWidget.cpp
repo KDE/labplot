@@ -100,31 +100,34 @@ void DatabaseManagerWidget::connectionChanged(int index) {
 	if (m_initializing)
 		return;
 
-	if (index == -1)
+	if (index == -1) {
+		m_current_connection = nullptr;
 		return;
+	}
 
+	m_current_connection = &m_connections[index];
 	//show the settings for the selected connection
 	m_initializing = true;
-	const QString& driver = m_connections[index].driver;
-	ui.leName->setText(m_connections[index].name);
+	const QString& driver = m_current_connection->driver;
+	ui.leName->setText(m_current_connection->name);
 	ui.cbDriver->setCurrentIndex(ui.cbDriver->findText(driver));
-	ui.leDatabase->setText(m_connections[index].dbName);
+	ui.leDatabase->setText(m_current_connection->dbName);
 
 	//no host and port number required for file DB and ODBC connections
 	if (!isFileDB(driver) || !isODBC(driver)) {
-		ui.leHost->setText(m_connections[index].hostName);
-		ui.sbPort->setValue(m_connections[index].port);
+		ui.leHost->setText(m_current_connection->hostName);
+		ui.sbPort->setValue(m_current_connection->port);
 	}
 
 	//no credentials required for file DB
 	if (!isFileDB(driver)) {
-		ui.leUserName->setText(m_connections[index].userName);
-		ui.lePassword->setText(m_connections[index].password);
+		ui.leUserName->setText(m_current_connection->userName);
+		ui.lePassword->setText(m_current_connection->password);
 	}
 
 	if (isODBC(driver)) {
-		ui.chkCustomConnection->setChecked(m_connections[index].customConnectionEnabled);
-		ui.teCustomConnection->setPlainText(m_connections[index].customConnectionString);
+		ui.chkCustomConnection->setChecked(m_current_connection->customConnectionEnabled);
+		ui.teCustomConnection->setPlainText(m_current_connection->customConnectionString);
 	}
 	m_initializing = false;
 }
@@ -144,11 +147,13 @@ void DatabaseManagerWidget::nameChanged(const QString& name) {
 
 	if (unique) {
 		ui.leName->setStyleSheet("");
-		ui.lwConnections->currentItem()->setText(name);
+		if (auto item = ui.lwConnections->currentItem()) {
+			item->setText(name);
 
-		if (!m_initializing) {
-			m_connections[ui.lwConnections->currentRow()].name = name;
-			emit changed();
+			if (!m_initializing) {
+				m_current_connection->name = name;
+				emit changed();
+			}
 		}
 	} else
 		ui.leName->setStyleSheet("QLineEdit{background: red;}");
@@ -157,13 +162,6 @@ void DatabaseManagerWidget::nameChanged(const QString& name) {
 void DatabaseManagerWidget::driverChanged() {
 	//hide non-relevant fields (like host name, etc.) for file DBs and ODBC
 	const QString& driver = ui.cbDriver->currentText();
-	const bool fileDB = isFileDB(driver);
-	ui.lHost->setVisible(!fileDB);
-	ui.leHost->setVisible(!fileDB);
-	ui.lPort->setVisible(!fileDB);
-	ui.sbPort->setVisible(!fileDB);
-	ui.bOpen->setVisible(fileDB);
-	ui.gbAuthentication->setVisible(!fileDB);
 
 	if (isFileDB(driver)) {
 		ui.lHost->hide();
@@ -195,6 +193,7 @@ void DatabaseManagerWidget::driverChanged() {
 		ui.leHost->show();
 		ui.lPort->show();
 		ui.sbPort->show();
+		ui.sbPort->setValue(defaultPort(driver));
 		ui.bOpen->hide();
 		ui.gbAuthentication->show();
 		ui.lDatabase->setText(i18n("Database:"));
@@ -207,7 +206,8 @@ void DatabaseManagerWidget::driverChanged() {
 	if (m_initializing)
 		return;
 
-	m_connections[ui.lwConnections->currentRow()].driver = driver;
+	if (m_current_connection)
+		m_current_connection->driver = driver;
 	emit changed();
 }
 
@@ -232,7 +232,8 @@ void DatabaseManagerWidget::hostChanged() {
 	if (m_initializing)
 		return;
 
-	m_connections[ui.lwConnections->currentRow()].hostName = ui.leHost->text();
+	if (m_current_connection)
+		m_current_connection->hostName = ui.leHost->text();
 
 	//don't allow to try to connect if no hostname provided
 	ui.bTestConnection->setEnabled( !ui.leHost->text().simplified().isEmpty() );
@@ -244,7 +245,8 @@ void DatabaseManagerWidget::portChanged() {
 	if (m_initializing)
 		return;
 
-	m_connections[ui.lwConnections->currentRow()].port = ui.sbPort->value();
+	if (m_current_connection)
+		m_current_connection->port = ui.sbPort->value();
 	emit changed();
 }
 
@@ -276,7 +278,8 @@ void DatabaseManagerWidget::databaseNameChanged() {
 	if (m_initializing)
 		return;
 
-	m_connections[ui.lwConnections->currentRow()].dbName = dbName;
+	if (m_current_connection)
+		m_current_connection->dbName = dbName;
 	emit changed();
 }
 
@@ -292,12 +295,14 @@ void DatabaseManagerWidget::customConnectionEnabledChanged(int state) {
 	else
 		ui.leDatabase->setFocus();
 
-	m_connections[ui.lwConnections->currentRow()].customConnectionEnabled = (state == Qt::Checked);
+	if (m_current_connection)
+		m_current_connection->customConnectionEnabled = (state == Qt::Checked);
 	emit changed();
 }
 
 void DatabaseManagerWidget::customConnectionChanged() {
-	m_connections[ui.lwConnections->currentRow()].customConnectionString = ui.teCustomConnection->toPlainText();
+	if (m_current_connection)
+		m_current_connection->customConnectionString = ui.teCustomConnection->toPlainText();
 	emit changed();
 }
 
@@ -305,7 +310,8 @@ void DatabaseManagerWidget::userNameChanged() {
 	if (m_initializing)
 		return;
 
-	m_connections[ui.lwConnections->currentRow()].userName = ui.leUserName->text();
+	if (m_current_connection)
+		m_current_connection->userName = ui.leUserName->text();
 	emit changed();
 }
 
@@ -313,7 +319,8 @@ void DatabaseManagerWidget::passwordChanged() {
 	if (m_initializing)
 		return;
 
-	m_connections[ui.lwConnections->currentRow()].password = ui.lePassword->text();
+	if (m_current_connection)
+		m_current_connection->password = ui.lePassword->text();
 	emit changed();
 }
 
@@ -358,11 +365,13 @@ void DatabaseManagerWidget::deleteConnection() {
 		return;
 
 	//remove the current selected connection
-	m_connections.removeAt(ui.lwConnections->currentRow());
-	m_initializing = true;
-	QListWidgetItem* item = ui.lwConnections->takeItem(ui.lwConnections->currentRow());
-	if (item) delete item;
-	m_initializing = false;
+	int row = ui.lwConnections->currentRow();
+	if (row != -1) {
+		m_connections.removeAt(row);
+		m_initializing = true;
+		delete ui.lwConnections->takeItem(row);
+		m_initializing = false;
+	}
 
 	//show the connection for the item that was automatically selected afte the deletion
 	connectionChanged(ui.lwConnections->currentRow());
@@ -476,7 +485,8 @@ void DatabaseManagerWidget::saveConnections() {
 }
 
 void DatabaseManagerWidget::testConnection() {
-	int row = ui.lwConnections->currentRow();
+	if (!m_current_connection)
+		return;
 
 	//don't allow to test the connection for file DBs if the file doesn't exist
 	if (isFileDB(ui.cbDriver->currentText())) {
@@ -488,42 +498,43 @@ void DatabaseManagerWidget::testConnection() {
 #endif
 
 		if (!QFile::exists(fileName)) {
-			KMessageBox::error(this, i18n("Failed to connect to the database '%1'.", m_connections[row].dbName),
+			KMessageBox::error(this, i18n("Failed to connect to the database '%1'.", m_current_connection->dbName),
 								 i18n("Connection Failed"));
 			return;
 		}
 	}
 
 	WAIT_CURSOR;
-	const QString& driver = m_connections[row].driver;
+	const QString& driver = m_current_connection->driver;
 	QSqlDatabase db = QSqlDatabase::addDatabase(driver);
+	db.close();
 
 	//db name or custom connection string for ODBC, if available
-	if (isODBC(driver) && m_connections[row].customConnectionEnabled)
-		db.setDatabaseName(m_connections[row].customConnectionString);
+	if (isODBC(driver) && m_current_connection->customConnectionEnabled)
+		db.setDatabaseName(m_current_connection->customConnectionString);
 	else
-		db.setDatabaseName(m_connections[row].dbName);
+		db.setDatabaseName(m_current_connection->dbName);
 
 	//host and port number, if required
 	if (!isFileDB(driver) && !isODBC(driver)) {
-		db.setHostName(m_connections[row].hostName);
-		db.setPort(m_connections[row].port);
+		db.setHostName(m_current_connection->hostName);
+		db.setPort(m_current_connection->port);
 	}
 
 	//authentication, if required
 	if (!isFileDB(driver)) {
-		db.setUserName(m_connections[row].userName);
-		db.setPassword(m_connections[row].password);
+		db.setUserName(m_current_connection->userName);
+		db.setPassword(m_current_connection->password);
 	}
 
 	if (db.isValid() && db.open() && db.isOpen()) {
 		db.close();
 		RESET_CURSOR;
-		KMessageBox::information(this, i18n("Connection to the database '%1' was successful.", m_connections[row].dbName),
+		KMessageBox::information(this, i18n("Connection to the database '%1' was successful.", m_current_connection->dbName),
 								 i18n("Connection Successful"));
 	} else {
 		RESET_CURSOR;
-		KMessageBox::error(this, i18n("Failed to connect to the database '%1'.", m_connections[row].dbName) +
+		KMessageBox::error(this, i18n("Failed to connect to the database '%1'.", m_current_connection->dbName) +
 								 QLatin1String("\n\n") + db.lastError().databaseText(),
 								 i18n("Connection Failed"));
 	}

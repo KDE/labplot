@@ -167,6 +167,8 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	ui.teQuery->clear();
 	ui.lwTables->clear();
 	ui.twPreview->clear();
+	ui.twPreview->setColumnCount(0);
+	ui.twPreview->setRowCount(0);
 
 	if (ui.cbConnection->currentIndex() == -1)
 		return;
@@ -250,7 +252,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	q.prepare(currentQuery(true));
 	q.setForwardOnly(true);
 	q.exec();
-	if (!q.isActive()) {
+	if (!q.isActive() || !q.next()) { // check if query was succesful and got to first record
 		RESET_CURSOR;
 		if (!q.lastError().databaseText().isEmpty())
 			KMessageBox::error(this, q.lastError().databaseText(), i18n("Unable to Execute Query"));
@@ -270,7 +272,6 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	bool numeric = true;
 	const auto numberFormat = (QLocale::Language)ui.cbNumberFormat->currentIndex();
 	const QString& dateTimeFormat = ui.cbDateTimeFormat->currentText();
-	q.next(); //go to the first record
 // 	ui.twPreview->setRowCount(1); //add the first row for the check boxes
 	for (int i = 0; i < m_cols; ++i) {
 		//name
@@ -455,11 +456,13 @@ void ImportSQLDatabaseWidget::showDatabaseManager() {
 		m_initializing = true;
 		ui.cbConnection->clear();
 		readConnections();
-		m_initializing = false;
 
 		//select the connection the user has selected in DatabaseManager
 		const QString& conn = dlg->connection();
 		ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conn));
+		m_initializing = false;
+
+		connectionChanged();
 	}
 
 	delete dlg;
@@ -467,6 +470,9 @@ void ImportSQLDatabaseWidget::showDatabaseManager() {
 
 void ImportSQLDatabaseWidget::setInvalid() {
 	if (m_valid) {
+		ui.twPreview->setColumnCount(0);
+		ui.twPreview->setRowCount(0);
+
 		m_valid = false;
 		emit stateChanged();
 	}

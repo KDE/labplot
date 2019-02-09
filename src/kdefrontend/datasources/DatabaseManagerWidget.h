@@ -57,6 +57,7 @@ public:
 private:
 	Ui::DatabaseManagerWidget ui;
 	QList<SQLConnection> m_connections;
+	SQLConnection* m_current_connection = nullptr;
 	bool m_initializing{false};
 	QString m_configPath;
 	QString m_initConnName;
