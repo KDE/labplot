@@ -1502,7 +1502,7 @@ void CartesianPlot::dataChanged() {
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
 void CartesianPlot::xDataChanged() {
-	if (project()->isLoading())
+	if (project() && project()->isLoading())
 		return;
 
 	Q_D(CartesianPlot);
@@ -1534,7 +1534,7 @@ void CartesianPlot::xDataChanged() {
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
 void CartesianPlot::yDataChanged() {
-	if (project()->isLoading())
+	if (project() && project()->isLoading())
 		return;
 
 	Q_D(CartesianPlot);
