@@ -111,7 +111,7 @@ ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
 	KConfigGroup config(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
 	config.writeEntry("Connection", ui.cbConnection->currentText());
 	config.writeEntry("ImportFrom", ui.cbImportFrom->currentIndex());
-	config.writeEntry("NumberFormat", ui.cbNumberFormat->currentText());
+	config.writeEntry("NumberFormat", ui.cbNumberFormat->currentIndex());
 	config.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
 	config.writeEntry("SplitterMainSizes", ui.splitterMain->sizes());
 	config.writeEntry("SplitterPreviewSizes", ui.splitterPreview->sizes());
@@ -174,6 +174,12 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	//connection name was changed, determine the current connections settings
 	KConfig config(m_configPath, KConfig::SimpleConfig);
 	KConfigGroup group = config.group(ui.cbConnection->currentText());
+
+	//close and remove the previos connection, if available
+	if (m_db.isOpen()) {
+		m_db.close();
+		QSqlDatabase::removeDatabase(m_db.driverName());
+	}
 
 	//open the selected connection
 	const QString& driver = group.readEntry("Driver");
@@ -415,7 +421,9 @@ QString ImportSQLDatabaseWidget::currentQuery(bool preview) {
 			//preview the content of the currently selected table
 			const QString& driver = m_db.driverName();
 			const QString& limit = QString::number(ui.sbPreviewLines->value());
-			if ( (driver == QLatin1String("QSQLITE3")) || (driver == QLatin1String("QMYSQL3")) || (driver == QLatin1String("QPSQL")) || (driver == QLatin1String("QSQLITE")) || (driver == QLatin1String("QMYSQL")) )
+			if ( (driver == QLatin1String("QSQLITE3")) || (driver == QLatin1String("QSQLITE"))
+				|| (driver == QLatin1String("QMYSQL3")) || (driver == QLatin1String("QMYSQL"))
+				|| (driver == QLatin1String("QPSQL"))  )
 				query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" LIMIT ") +  limit;
 			else if (driver == QLatin1String("QOCI"))
 				query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWNUM<=") + limit;
@@ -424,7 +432,8 @@ QString ImportSQLDatabaseWidget::currentQuery(bool preview) {
 			else if (driver == QLatin1String("QIBASE"))
 				query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWS ") + limit;
 			else
-				query = QLatin1String("SELECT TOP ") + limit + QLatin1String(" * FROM ") + tableName;
+				//for ODBC the DBMS is not known and it's not clear what syntax to use -> select all rows
+				query = QLatin1String("SELECT * FROM ") + tableName;
 		}
 	} else {
 		//preview the result of a custom query

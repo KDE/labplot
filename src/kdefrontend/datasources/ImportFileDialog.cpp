@@ -105,7 +105,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 		m_showOptions ? m_optionsButton->setText(i18n("Hide Options")) : m_optionsButton->setText(i18n("Show Options"));
 		m_importFileWidget->showOptions(m_showOptions);
 
-		//do the signal-slot connections after all settings where loaded in import file widget and check the OK button after this
+		//do the signal-slot connections after all settings were loaded in import file widget and check the OK button after this
 		connect(m_importFileWidget, &ImportFileWidget::checkedFitsTableToMatrix, this, &ImportFileDialog::checkOnFitsTableToMatrix);
 		connect(m_importFileWidget, static_cast<void (ImportFileWidget::*)()>(&ImportFileWidget::fileNameChanged), this, &ImportFileDialog::checkOkButton);
 		connect(m_importFileWidget, static_cast<void (ImportFileWidget::*)()>(&ImportFileWidget::sourceTypeChanged), this, &ImportFileDialog::checkOkButton);
