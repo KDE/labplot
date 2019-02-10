@@ -41,13 +41,12 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/MQTTTopic.h"
 #endif
 
-#include <QTextStream>
 #include <KLocalizedString>
 #include <KFilterDev>
-#include <QProcess>
 #include <QDateTime>
 
 #ifdef Q_OS_LINUX
+#include <QProcess>
 #include <QStandardPaths>
 #endif
 
@@ -252,7 +251,7 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 	size_t lineCount = 0;
 #ifdef Q_OS_LINUX
 	//on linux use wc, if available, which is much faster than counting lines in the file
-	if (!QStandardPaths::findExecutable(QLatin1String("wc")).isEmpty()) {
+	if (device.compressionType() == KCompressionDevice::None && !QStandardPaths::findExecutable(QLatin1String("wc")).isEmpty()) {
 		QProcess wc;
 		wc.start(QLatin1String("wc"), QStringList() << QLatin1String("-l") << fileName);
 		size_t lineCount = 0;
@@ -1523,7 +1522,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 		if (createIndexEnabled)
 			start = 1;
 		for (int i = start; i < m_actualCols; i++)
-				vectorNames << "Column " + QString::number(i + 1);
+			vectorNames << "Column " + QString::number(i + 1);
 	}
 	QDEBUG("	column names = " << vectorNames);
 
@@ -1542,7 +1541,6 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 
 		if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
 			continue;
-
 
 		const QStringList& lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 		QDEBUG(" line = " << lineStringList);
@@ -1809,13 +1807,12 @@ void AsciiFilterPrivate::MQTTPreview(QVector<QStringList>& list, const QString& 
 			AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(tempLine, dateTimeFormat, numberFormat);
 
 			// numeric: integer -> numeric
-			if (mode == AbstractColumn::Numeric && columnModes[colSize - 1] == AbstractColumn::Integer) {
+			if (mode == AbstractColumn::Numeric && columnModes[colSize - 1] == AbstractColumn::Integer)
 				columnModes[colSize - 1] = mode;
-			}
+
 			// text: non text -> text
-			if ( (mode == AbstractColumn::Text) && (columnModes[colSize - 1] != AbstractColumn::Text) ) {
+			if ( (mode == AbstractColumn::Text) && (columnModes[colSize - 1] != AbstractColumn::Text) )
 				columnModes[colSize - 1] = mode;
-			}
 		}
 		int forStart = 0;
 		int forEnd = 0;
@@ -1891,9 +1888,8 @@ void AsciiFilterPrivate::MQTTPreview(QVector<QStringList>& list, const QString& 
 
 			//If this is the first not empty topic, add nan value to all the empty topics before this one
 			if (!list.isEmpty() && mqttPreviewFirstEmptyColCount > 0) {
-				for (int j = 0; j < mqttPreviewFirstEmptyColCount; j++) {
+				for (int j = 0; j < mqttPreviewFirstEmptyColCount; j++)
 					lineString += QString::number(nanValue, 'g', 16);
-				}
 			}
 
 			//Add the actual value to the topic
@@ -1991,9 +1987,8 @@ void AsciiFilterPrivate::MQTTPreview(QVector<QStringList>& list, const QString& 
 		columnModes[colSize-1] = AbstractColumn::ColumnMode::Numeric;
 		dataStrings = list;
 		//Add as many NaN values as many lines the list already has
-		for (int i = 0; i < dataStrings.size(); ++i) {
+		for (int i = 0; i < dataStrings.size(); ++i)
 			dataStrings[i] += QString::number(nanValue, 'g', 16);
-		}
 	}
 	//update the list
 	list = dataStrings;
@@ -2173,11 +2168,10 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 	} else {
 		//we have to read all the data when reading from end
 		//so we set readingType to TillEnd
-		if (spreadsheet->readingType() == MQTTClient::ReadingType::FromEnd) {
+		if (spreadsheet->readingType() == MQTTClient::ReadingType::FromEnd)
 			readingType = MQTTClient::ReadingType::TillEnd;
-		} else {
+		else
 			readingType = static_cast<MQTTClient::ReadingType>(spreadsheet->readingType());
-		}
 	}
 
 	//count the new lines, increase actualrows on each
