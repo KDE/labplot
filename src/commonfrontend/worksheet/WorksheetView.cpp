@@ -296,8 +296,8 @@ void WorksheetView::initActions() {
 //	addIntegrationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-integration-curve"), i18n("xy-curve From an Integration"), cartesianPlotAddNewActionGroup);
 	addConvolutionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve from a (De-)Convolution"), cartesianPlotAddNewActionGroup);
 //	addConvolutionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-convolution-curve"), i18n("xy-curve From a (De-)Convolution"), cartesianPlotAddNewActionGroup);
-	addCorrelationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve from a Correlation"), cartesianPlotAddNewActionGroup);
-//	addCorrelationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-convolution-curve"), i18n("xy-curve From a Correlation"), cartesianPlotAddNewActionGroup);
+	addCorrelationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve from a Auto-/Cross-Correlation"), cartesianPlotAddNewActionGroup);
+//	addCorrelationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-convolution-curve"), i18n("xy-curve From a Auto-/Cross-Correlation"), cartesianPlotAddNewActionGroup);
 
 	addInterpolationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("xy-curve From an Interpolation"), cartesianPlotAddNewActionGroup);
 	addSmoothCurveAction = new QAction(QIcon::fromTheme("labplot-xy-smoothing-curve"), i18n("xy-curve from a Smooth"), cartesianPlotAddNewActionGroup);
@@ -321,8 +321,8 @@ void WorksheetView::initActions() {
 //	addIntegrationAction = new QAction(QIcon::fromTheme("labplot-xy-integration-curve"), i18n("Integration"), cartesianPlotAddNewActionGroup);
 	addConvolutionAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Convolution/Deconvolution"), cartesianPlotAddNewActionGroup);
 //	addConvolutionAction = new QAction(QIcon::fromTheme("labplot-xy-convolution-curve"), i18n("Convolution/Deconvolution"), cartesianPlotAddNewActionGroup);
-	addCorrelationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Correlation"), cartesianPlotAddNewActionGroup);
-//	addCorrelationAction = new QAction(QIcon::fromTheme("labplot-xy-convolution-curve"), i18n("Correlation"), cartesianPlotAddNewActionGroup);
+	addCorrelationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Auto-/Cross-Correlation"), cartesianPlotAddNewActionGroup);
+//	addCorrelationAction = new QAction(QIcon::fromTheme("labplot-xy-correlation-curve"), i18n("Auto-/Cross-Correlation"), cartesianPlotAddNewActionGroup);
 
 	addInterpolationAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("Interpolation"), cartesianPlotAddNewActionGroup);
 	addSmoothAction = new QAction(QIcon::fromTheme("labplot-xy-smoothing-curve"), i18n("Smooth"), cartesianPlotAddNewActionGroup);

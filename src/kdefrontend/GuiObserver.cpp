@@ -427,7 +427,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyConvolutionCurveDock);
 	} else if (className == QStringLiteral("XYCorrelationCurve")) {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Correlation"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Auto-/Cross-Correlation"));
 
 		if (!m_mainWindow->xyCorrelationCurveDock) {
 			m_mainWindow->xyCorrelationCurveDock = new XYCorrelationCurveDock(m_mainWindow->stackedWidget);
