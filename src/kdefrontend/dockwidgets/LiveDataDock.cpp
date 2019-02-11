@@ -330,13 +330,15 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 	else
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
+#ifdef HAVE_MQTT
 	ui.lTopics->hide();
 	ui.bLWT->hide();
 	ui.lLWT->hide();
 	ui.bWillUpdateNow->hide();
-    ui.swSubscriptions->setVisible(false);
-    m_subscriptionWidget->setVisible(false);
-    m_subscriptionWidget->makeVisible(false);
+	ui.swSubscriptions->setVisible(false);
+	m_subscriptionWidget->setVisible(false);
+	m_subscriptionWidget->makeVisible(false);
+#endif
 	m_liveDataSource = source; // updates may be applied from now on
 }
 

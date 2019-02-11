@@ -752,26 +752,30 @@ void ImportFileWidget::selectFile() {
 	hides the MQTT related items of the widget
 */
 void ImportFileWidget::setMQTTVisible(bool visible) {
+#ifdef HAVE_MQTT
 	ui.lConnections->setVisible(visible);
 	ui.cbConnection->setVisible(visible);
-    ui.bManageConnections->setVisible(visible);
+	ui.bManageConnections->setVisible(visible);
 
 	//topics
 	if (ui.cbConnection->currentIndex() != -1 && visible) {
 		ui.lTopics->setVisible(true);
-        ui.swSubscriptions->setVisible(true);
-        m_subscriptionWidget->setVisible(true);
-        m_subscriptionWidget->makeVisible(true);
+		ui.swSubscriptions->setVisible(true);
+		m_subscriptionWidget->setVisible(true);
+		m_subscriptionWidget->makeVisible(true);
 	} else {
 		ui.lTopics->setVisible(false);
-        ui.swSubscriptions->setVisible(false);
-        m_subscriptionWidget->setVisible(false);
-        m_subscriptionWidget->makeVisible(false);
+		ui.swSubscriptions->setVisible(false);
+		m_subscriptionWidget->setVisible(false);
+		m_subscriptionWidget->makeVisible(false);
 	}
 
 	//will message
 	ui.lLWT->setVisible(visible);
 	ui.bLWT->setVisible(visible);
+#else
+	Q_UNUSED(visible)
+#endif
 }
 
 #ifdef HAVE_MQTT
