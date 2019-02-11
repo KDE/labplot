@@ -6,6 +6,7 @@
     Copyright            : (C) 2009-2017 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Copyright            : (C) 2009-2019 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017-2018 Fabian Kristof (fkristofszabolcs@gmail.com)
+    Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
 
  ***************************************************************************/
 
@@ -36,6 +37,7 @@
 
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
+class MQTTSubscriptionWidget;
 #endif
 
 #include <QVector>
@@ -138,18 +140,10 @@ signals:
 
 #ifdef HAVE_MQTT
 private:
-	void updateSubscriptionCompleter();
-	void unsubscribeFromTopic(const QString&);
-	void manageCommonLevelSubscriptions();
-	void updateSubscriptionTree();
+    void unsubscribeFromTopic(const QString&, QVector<QTreeWidgetItem*> children);
 
 	QMqttClient* m_client{nullptr};
-	QVector<QMqttSubscription*> m_mqttSubscriptions;
-	QCompleter* m_topicCompleter{nullptr};
-	QCompleter* m_subscriptionCompleter{nullptr};
-	QStringList m_topicList;
-	bool m_searching{false};
-	QTimer* m_searchTimer;
+    QVector<QMqttSubscription*> m_mqttSubscriptions;
 	QTimer* m_connectTimeoutTimer;
 	QMap<QMqttTopicName, bool> m_messageArrived;
 	QMap<QMqttTopicName, QMqttMessage> m_lastMessage;
@@ -158,36 +152,34 @@ private:
 	QVector<QString> m_addedTopics;
 	QString m_configPath;
 	bool m_initialisingMQTT{false};
-	bool m_connectionTimedOut{false};
+	bool m_connectionTimedOut{false};    
 	MQTTClient::MQTTWill m_willSettings;
+    MQTTSubscriptionWidget* m_subscriptionWidget;
+
 public:
 	void saveMQTTSettings(MQTTClient*) const;
-	bool isMqttValid();
+	bool isMqttValid();    
 
 signals:
-	void newTopic(QString);
+    void newTopic(const QString&);
 	void subscriptionsChanged();
 	void checkFileType();
+    void updateSubscriptionTree(const QVector<QString>&);
+    void MQTTClearTopics();
 
 private slots:
 	void mqttConnectionChanged();
-	void onMqttConnect();
-	void mqttAvailableTopicDoubleClicked(QTreeWidgetItem*, int);
-	void mqttSubscribedTopicDoubleClicked(QTreeWidgetItem*, int);
-	void mqttSubscribe();
-	void mqttUnsubscribe();
-	void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
-	void setTopicCompleter(const QString&);
-	void topicTimeout();
+    void onMqttConnect();
+    void mqttSubscribe(const QString&, uint);
+    void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
 	void mqttSubscriptionMessageReceived(const QMqttMessage& );
 	void onMqttDisconnect();
-	void mqttErrorChanged(QMqttClient::ClientError);
-	void scrollToTopicTreeItem(const QString&);
-	void scrollToSubsriptionTreeItem(const QString&);
+    void mqttErrorChanged(QMqttClient::ClientError);
 	void mqttConnectTimeout();
 	void showMQTTConnectionManager();
 	void readMQTTConnections();
 	void showWillSettings();
+    void enableWill(bool);
 #endif
 };
 

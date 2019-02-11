@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : Dock widget for live data properties
 --------------------------------------------------------------------
 Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
 ***************************************************************************/
 
 /***************************************************************************
@@ -33,6 +34,8 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QMap>
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/MQTTClient.h"
+
+class MQTTSubscriptionWidget;
 #endif
 
 #include <QWidget>
@@ -90,27 +93,21 @@ private slots:
 	void willUpdateTypeChanged(int);
 	void willUpdateNow();
 	void willUpdateIntervalChanged(int);
-	void statisticsChanged(MQTTClient::WillStatisticsType);
-	void addSubscription();
-	void removeSubscription();
+    void statisticsChanged(MQTTClient::WillStatisticsType);
 	void onMQTTConnect();
 	void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
-	void mqttMessageReceivedInBackground(const QByteArray&, const QMqttTopicName&);
-	void setTopicCompleter(const QString&);
-	void topicTimeout();
-	void fillSubscriptions();
-	void scrollToTopicTreeItem(const QString&);
-	void scrollToSubsriptionTreeItem(const QString&);
+    void mqttMessageReceivedInBackground(const QByteArray&, const QMqttTopicName&);
 	void removeClient(const QString&, quint16);
 	void showWillSettings();
+    void enableWill(bool enable);
 
 signals:
 	void newTopic(const QString&);
+    void MQTTClearTopics();
+    void updateSubscriptionTree(const QVector<QString>&);
 
 private:
-	void updateSubscriptionCompleter();
-	void addTopicToTree(const QString&);
-	void manageCommonLevelSubscriptions();
+    void addTopicToTree(const QString&);
 
 	struct MQTTHost {
 		int count;
@@ -123,13 +120,10 @@ private:
 	const MQTTClient* m_previousMQTTClient{nullptr};
 	QMap<QPair<QString, int>, MQTTHost> m_hosts;
 	MQTTHost* m_currentHost{nullptr};
-	MQTTHost* m_previousHost{nullptr};
-	QCompleter* m_topicCompleter{nullptr};
-	QCompleter* m_subscriptionCompleter{nullptr};
-	bool m_searching{true};
-	QTimer* m_searchTimer;
-	bool m_interpretMessage{true};
-	QString m_mqttUnsubscribeName;
+    MQTTHost* m_previousHost{nullptr};
+    bool m_interpretMessage{true};
+    MQTTSubscriptionWidget* m_subscriptionWidget;
+    QMetaObject::Connection m_updateSubscriptionConn;
 #endif
 };
 

@@ -4,7 +4,7 @@ Project              : LabPlot
 Description          : Dock widget for live data properties
 --------------------------------------------------------------------
 Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
-Copyright            : (C) 2018 by Kovacs Ferencz (kferike98@gmail.com)
+Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
 Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
@@ -37,6 +37,7 @@ Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #ifdef HAVE_MQTT
 #include "kdefrontend/widgets/MQTTWillSettingsWidget.h"
 #include "kdefrontend/datasources/MQTTHelpers.h"
+#include "kdefrontend/datasources/MQTTSubscriptionWidget.h"
 #include <QMessageBox>
 #include <QWidgetAction>
 #include <QMenu>
@@ -44,8 +45,8 @@ Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
 LiveDataDock::LiveDataDock(QWidget* parent) : QWidget(parent)
 #ifdef HAVE_MQTT
-	,
-	m_searchTimer(new QTimer(this))
+    ,
+    m_subscriptionWidget(new MQTTSubscriptionWidget(this))
 #endif
 {
 	ui.setupUi(this);
@@ -63,55 +64,30 @@ LiveDataDock::LiveDataDock(QWidget* parent) : QWidget(parent)
 	connect(ui.cbReadingType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::readingTypeChanged);
 
 #ifdef HAVE_MQTT
-	m_searchTimer->setInterval(10000);
+    connect(ui.bWillUpdateNow, &QPushButton::clicked, this, &LiveDataDock::willUpdateNow);
+    connect(ui.bLWT, &QPushButton::clicked, this, &LiveDataDock::showWillSettings);
+    connect(m_subscriptionWidget, &MQTTSubscriptionWidget::enableWill, this, &LiveDataDock::enableWill);
 
-	const int size = ui.leTopics->height();
-	ui.lTopicSearch->setPixmap( QIcon::fromTheme(QLatin1String("go-next")).pixmap(size, size) );
-	ui.lSubscriptionSearch->setPixmap( QIcon::fromTheme(QLatin1String("go-next")).pixmap(size, size) );
+    ui.swSubscriptions->addWidget(m_subscriptionWidget);
+    ui.swSubscriptions->setCurrentWidget(m_subscriptionWidget);
 
-	connect(this, &LiveDataDock::newTopic, this, &LiveDataDock::setTopicCompleter);
-	connect(m_searchTimer, &QTimer::timeout, this, &LiveDataDock::topicTimeout);
-	connect(ui.bSubscribe, &QPushButton::clicked, this, &LiveDataDock::addSubscription);
-	connect(ui.bUnsubscribe, &QPushButton::clicked, this, &LiveDataDock::removeSubscription);
-	connect(ui.bWillUpdateNow, &QPushButton::clicked, this, &LiveDataDock::willUpdateNow);
-	connect(ui.leTopics, &QLineEdit::textChanged, this, &LiveDataDock::scrollToTopicTreeItem);
-	connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &LiveDataDock::scrollToSubsriptionTreeItem);
-	connect(ui.bLWT, &QPushButton::clicked, this, &LiveDataDock::showWillSettings);
-
-	ui.bSubscribe->setIcon(ui.bSubscribe->style()->standardIcon(QStyle::SP_ArrowRight));
-	ui.bSubscribe->setToolTip(i18n("Subscribe selected topics"));
-	ui.bUnsubscribe->setIcon(ui.bUnsubscribe->style()->standardIcon(QStyle::SP_ArrowLeft));
-	ui.bUnsubscribe->setToolTip(i18n("Unsubscribe selected topics"));
 	ui.bLWT->setToolTip(i18n("Manage MQTT connection's will settings"));
 	ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
 
-	QString info = i18n("Enter the name of the topic to navigate to it.");
-	ui.lTopicSearch->setToolTip(info);
-	ui.leTopics->setToolTip(info);
-	ui.lSubscriptionSearch->setToolTip(info);
-	ui.leSubscriptions->setToolTip(info);
-
-	info = i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed.");
+    QString info = i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed.");
 	ui.lLWT->setToolTip(info);
 	ui.bLWT->setToolTip(info);
 	ui.bLWT->setEnabled(false);
-	ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
-
-	info = i18n("Set the Quality of Service (QoS) for the subscription to define the guarantee of the message delivery:"
-	"<ul>"
-	"<li>0 - deliver at most once</li>"
-	"<li>1 - deliver at least once</li>"
-	"<li>2 - deliver exactly once</li>"
-	"</ul>");
-	ui.cbQoS->setToolTip(info);
+    ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
 #endif
 }
 
 #ifdef HAVE_MQTT
 LiveDataDock::~LiveDataDock() {
-	delete m_searchTimer;
 	for (auto & host : m_hosts)
 		delete host.client;
+
+    delete m_subscriptionWidget;
 }
 #else
 LiveDataDock::~LiveDataDock() = default;
@@ -169,15 +145,10 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 	m_mqttClient = client; // updates may be applied from now on
 
 	//show MQTT connected options
-	ui.lTopics->show();
-	ui.gbManageSubscriptions->show();
-	ui.bSubscribe->show();
-	ui.bUnsubscribe->show();
-	ui.twTopics->show();
-	ui.leTopics->show();
-	ui.lTopicSearch->show();
-	ui.twSubscriptions->show();
-	ui.cbQoS->show();
+    ui.lTopics->show();
+    ui.swSubscriptions->setVisible(true);
+    m_subscriptionWidget->setVisible(true);
+    m_subscriptionWidget->makeVisible(true);
 	ui.lLWT->show();
 	ui.bLWT->show();
 
@@ -193,6 +164,12 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 
 		connect(m_currentHost->client, &QMqttClient::connected, this, &LiveDataDock::onMQTTConnect);
 		connect(m_currentHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
+
+        connect(m_subscriptionWidget, &MQTTSubscriptionWidget::reparentTopic, client, &MQTTClient::reparentTopic);
+        connect(m_subscriptionWidget, &MQTTSubscriptionWidget::addBeforeRemoveSubscription, client, &MQTTClient::addBeforeRemoveSubscription);
+        connect(m_subscriptionWidget, &MQTTSubscriptionWidget::removeMQTTSubscription, client, &MQTTClient::removeMQTTSubscription);
+        connect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription, client, &MQTTClient::addMQTTSubscription);
+
 
 		m_currentHost->client->setHostname(id.first);
 		m_currentHost->client->setPort(id.second);
@@ -211,38 +188,50 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 		++m_currentHost->count;
 	}
 
-	if (m_previousMQTTClient == nullptr) {
-		connect(client, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
+    if (m_previousMQTTClient == nullptr) {
+       m_updateSubscriptionConn = connect(client, &MQTTClient::MQTTSubscribed, [this]() {emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());});
 
 		//Fill the subscription tree(useful if the MQTTClient was loaded)
 		QVector<QString> topics = client->topicNames();
 		for (const auto& topic : topics) {
 			addTopicToTree(topic);
 		}
-		fillSubscriptions();
+        emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 	}
 
 	//if the previous MQTTClient's host name was different from the current one we have to disconnect some slots
 	//and clear the tree widgets
-	else if (m_previousMQTTClient->clientHostName() != client->clientHostName()) {
-		disconnect(m_previousMQTTClient, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
+	else if (m_previousMQTTClient->clientHostName() != client->clientHostName()) {        
+        disconnect(m_updateSubscriptionConn);
 		disconnect(m_previousHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 		connect(m_previousHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
 
 		disconnect(m_currentHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
 
-		ui.twTopics->clear();
+        disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::reparentTopic, m_previousMQTTClient, &MQTTClient::reparentTopic);
+        disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::addBeforeRemoveSubscription, m_previousMQTTClient, &MQTTClient::addBeforeRemoveSubscription);
+        disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::removeMQTTSubscription, m_previousMQTTClient, &MQTTClient::removeMQTTSubscription);
+        disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription,  m_previousMQTTClient, &MQTTClient::addMQTTSubscription);
+
+        m_previousHost->topicList = m_subscriptionWidget->getTopicList();
+        m_subscriptionWidget->setTopicList(m_currentHost->topicList);
+
+        emit MQTTClearTopics();
 		//repopulating the tree widget with the already known topics of the client
 		for (int i = 0; i < m_currentHost->addedTopics.size(); ++i) {
 			addTopicToTree(m_currentHost->addedTopics.at(i));
 		}
 
-		//fill subscriptions tree widget
-		ui.twSubscriptions->clear();
-		fillSubscriptions();
+        //fill subscriptions tree widget
+        emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 
-		connect(client, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
+        m_updateSubscriptionConn = connect(client, &MQTTClient::MQTTSubscribed, [this]() {emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());});
 		connect(m_currentHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
+
+        connect(m_subscriptionWidget, &MQTTSubscriptionWidget::reparentTopic, client, &MQTTClient::reparentTopic);
+        connect(m_subscriptionWidget, &MQTTSubscriptionWidget::addBeforeRemoveSubscription, client, &MQTTClient::addBeforeRemoveSubscription);
+        connect(m_subscriptionWidget, &MQTTSubscriptionWidget::removeMQTTSubscription, client, &MQTTClient::removeMQTTSubscription);
+        connect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription, client, &MQTTClient::addMQTTSubscription);
 	}
 
 	if (client->willUpdateType() == MQTTClient::OnClick && client->MQTTWillUse())
@@ -275,7 +264,7 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 
 	switch (sourceType) {
 	case LiveDataSource::FileOrPipe:
-		ui.leSourceInfo->setText(source->fileName());
+        ui.leSourceInfo->setText(source->fileName());
 		break;
 	case LiveDataSource::NetworkTcpSocket:
 	case LiveDataSource::NetworkUdpSocket:
@@ -345,14 +334,9 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 	ui.bLWT->hide();
 	ui.lLWT->hide();
 	ui.bWillUpdateNow->hide();
-	ui.bSubscribe->hide();
-	ui.bUnsubscribe->hide();
-	ui.twTopics->hide();
-	ui.leTopics->hide();
-	ui.lTopicSearch->hide();
-	ui.twSubscriptions->hide();
-	ui.gbManageSubscriptions->hide();
-
+    ui.swSubscriptions->setVisible(false);
+    m_subscriptionWidget->setVisible(false);
+    m_subscriptionWidget->makeVisible(false);
 	m_liveDataSource = source; // updates may be applied from now on
 }
 
@@ -706,425 +690,6 @@ void LiveDataDock::mqttMessageReceived(const QByteArray& message, const QMqttTop
 }
 
 /*!
- *\brief called when the subscribe button is pressed
- * subscribes to the topic represented by the current item of twTopics in every client from m_mqttClients
- */
-void LiveDataDock::addSubscription() {
-	QString name;
-	QTreeWidgetItem* item = ui.twTopics->currentItem();
-	if (item != nullptr) {
-		QTreeWidgetItem* tempItem = item;
-
-		//determine the topic name that the current item represents
-		name.prepend(item->text(0));
-		if (item->childCount() != 0)
-			name.append("/#");
-		while (tempItem->parent() != nullptr) {
-			tempItem = tempItem->parent();
-			name.prepend(tempItem->text(0) + '/');
-		}
-
-		//check if the subscription already exists
-		const QList<QTreeWidgetItem *> topLevelList = ui.twSubscriptions->findItems(name, Qt::MatchExactly);
-		if (topLevelList.isEmpty() || topLevelList.first()->parent() != nullptr) {
-			qDebug() << "LiveDataDock: start to add new subscription: " << name;
-			bool foundSuperior = false;
-
-			for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
-				//if the new subscriptions contains an already existing one, we remove the inferior one
-				if (MQTTHelpers::checkTopicContains(name, ui.twSubscriptions->topLevelItem(i)->text(0))
-						&& name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
-					ui.twSubscriptions->topLevelItem(i)->takeChildren();
-					ui.twSubscriptions->takeTopLevelItem(i);
-					--i;
-					continue;
-				}
-
-				//if there is a subscription containing the new one we set foundSuperior true
-				if (MQTTHelpers::checkTopicContains(ui.twSubscriptions->topLevelItem(i)->text(0), name)
-						&& name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
-					foundSuperior = true;
-					qDebug()<<"Can't add "<<name<<" because found superior: "<< ui.twSubscriptions->topLevelItem(i)->text(0);
-					break;
-				}
-			}
-
-			//if there wasn't a superior subscription we can subscribe to the new topic
-			if (!foundSuperior) {
-				QStringList toplevelName;
-				toplevelName.push_back(name);
-				QTreeWidgetItem* newTopLevelItem = new QTreeWidgetItem(toplevelName);
-				ui.twSubscriptions->addTopLevelItem(newTopLevelItem);
-
-				if (name.endsWith('#')) {
-					//adding every topic that the subscription contains to twSubscriptions
-					MQTTHelpers::addSubscriptionChildren(item, newTopLevelItem);
-				}
-
-				m_mqttClient->addMQTTSubscription(name, ui.cbQoS->currentIndex());
-
-				if (name.endsWith('#')) {
-					//if an already existing subscription contains a topic that the new subscription also contains
-					//we decompose the already existing subscription
-					//by unsubscribing from its topics, that are present in the new subscription as well
-					const QStringList& nameList = name.split('/', QString::SkipEmptyParts);
-					const QString root = nameList.first();
-					QVector<QTreeWidgetItem*> children;
-					for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
-						if (ui.twSubscriptions->topLevelItem(i)->text(0).startsWith(root)
-								&& name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
-							children.clear();
-
-							//get the "leaf" children of the inspected subscription
-							MQTTHelpers::findSubscriptionLeafChildren(children, ui.twSubscriptions->topLevelItem(i));
-							for (int j = 0; j < children.size(); ++j) {
-								if (MQTTHelpers::checkTopicContains(name, children[j]->text(0))) {
-									//if the new subscription contains a topic, we unsubscribe from it
-									QTreeWidgetItem* unsubscribeItem = children[j];
-									while (unsubscribeItem->parent() != nullptr) {
-										for (int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
-
-											if (unsubscribeItem->text(0) != unsubscribeItem->parent()->child(i)->text(0)) {
-												//add topic as subscription
-												m_mqttClient->addBeforeRemoveSubscription(unsubscribeItem->parent()->child(i)->text(0), ui.cbQoS->currentIndex());
-												//also add it to twSubscriptions
-												ui.twSubscriptions->addTopLevelItem(unsubscribeItem->parent()->takeChild(i));
-												--i;
-											} else {
-												//before we remove the topic, we reparent it to the new subscription
-												//so no data is lost
-												m_mqttClient->reparentTopic(unsubscribeItem->text(0), name);
-											}
-										}
-										unsubscribeItem = unsubscribeItem->parent();
-									}
-
-									qDebug()<<"Remove: "<<unsubscribeItem->text(0);
-									m_mqttClient->removeMQTTSubscription(unsubscribeItem->text(0));
-
-									ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(unsubscribeItem));
-								}
-							}
-						}
-					}
-				}
-
-				manageCommonLevelSubscriptions();
-				updateSubscriptionCompleter();
-
-				if (!ui.bLWT->isEnabled())
-					ui.bLWT->setEnabled(true);
-			} else {
-				QMessageBox::warning(this, "Warning", "You already subscribed to a topic containing this one");
-			}
-		}
-		else
-			QMessageBox::warning(this, "Warning", "You already subscribed to this topic");
-	}
-	else
-		QMessageBox::warning(this, "Warning", "You didn't select any item from the Tree Widget");
-}
-
-/*!
- *\brief called when the unsubscribe button is pressed
- * unsubscribes from the topic represented by the current item of twSubscription in m_mqttClient
- */
-void LiveDataDock::removeSubscription() {
-	QTreeWidgetItem* unsubscribeItem = ui.twSubscriptions->currentItem();
-
-	if (unsubscribeItem != nullptr) {
-		qDebug() << "LiveDataDock: unsubscribe from " << unsubscribeItem->text(0);
-
-		//if it is a top level item, meaning a topic that we really subscribed to(not one that belongs to a subscription)
-		//we can simply unsubscribe from it
-		if (unsubscribeItem->parent() == nullptr) {
-			m_mqttClient->removeMQTTSubscription(unsubscribeItem->text(0));
-			ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(unsubscribeItem));
-		}
-		//otherwise we remove the selected item, but subscribe to every other topic, that was contained by
-		//the selected item's parent subscription(top level item of twSubscriptions)
-		else {
-			while (unsubscribeItem->parent() != nullptr) {
-				for (int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
-					if (unsubscribeItem->text(0) != unsubscribeItem->parent()->child(i)->text(0)) {
-						//add topic as subscription
-						m_mqttClient->addBeforeRemoveSubscription(unsubscribeItem->parent()->child(i)->text(0), ui.cbQoS->currentIndex());
-						ui.twSubscriptions->addTopLevelItem(unsubscribeItem->parent()->takeChild(i));
-						--i;
-					}
-				}
-				unsubscribeItem = unsubscribeItem->parent();
-			}
-
-			//remove topic/subscription
-			m_mqttClient->removeMQTTSubscription(unsubscribeItem->text(0));
-			ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(unsubscribeItem));
-
-			//check if any common topics were subscribed, if possible merge them
-			manageCommonLevelSubscriptions();
-		}
-
-		if (ui.twSubscriptions->topLevelItemCount() <= 0)
-			ui.bLWT->setEnabled(false);
-
-		updateSubscriptionCompleter();
-	} else
-		QMessageBox::warning(this, "Warning", "You didn't select any item from the Tree Widget");
-}
-
-/*!
- *\brief called when a new topic is added to the tree(twTopics)
- * appends the topic's root to the topicList if it isn't in the list already
- * then sets the completer for leTopics
- */
-void LiveDataDock::setTopicCompleter(const QString& topicName) {
-	if (!m_searching) {
-		const QStringList& list = topicName.split('/', QString::SkipEmptyParts);
-		QString topic;
-		if (!list.isEmpty()) {
-			topic = list.at(0);
-		} else
-			topic = topicName;
-
-		if (!m_currentHost->topicList.contains(topic)) {
-			m_currentHost->topicList.append(topic);
-			m_topicCompleter = new QCompleter(m_currentHost->topicList, this);
-			m_topicCompleter->setCompletionMode(QCompleter::PopupCompletion);
-			m_topicCompleter->setCaseSensitivity(Qt::CaseSensitive);
-			ui.leTopics->setCompleter(m_topicCompleter);
-		}
-	}
-}
-
-/*!
- *\brief Updates the completer for leSubscriptions
- */
-void LiveDataDock::updateSubscriptionCompleter() {
-	QStringList subscriptionList;
-	const QVector<QString>& subscriptions = m_mqttClient->MQTTSubscriptions();
-
-	if (!subscriptions.isEmpty()) {
-		for (const auto& subscription : subscriptions)
-			subscriptionList << subscription;
-
-		m_subscriptionCompleter = new QCompleter(subscriptionList, this);
-		m_subscriptionCompleter->setCompletionMode(QCompleter::PopupCompletion);
-		m_subscriptionCompleter->setCaseSensitivity(Qt::CaseSensitive);
-		ui.leSubscriptions->setCompleter(m_subscriptionCompleter);
-	} else {
-		ui.leSubscriptions->setCompleter(nullptr);
-	}
-}
-
-/*!
- *\brief called when 10 seconds passed since the last time the user searched for a certain root in twTopics
- * enables updating the completer for le
- */
-void LiveDataDock::topicTimeout() {
-	m_searching = false;
-	m_searchTimer->stop();
-}
-
-/*!
- *\brief called when a new the host name of m_mqttClient changes
- * or when the MQTTClients initialize their subscriptions
- * Fills twSubscriptions with the subscriptions of the MQTTClient
- */
-void LiveDataDock::fillSubscriptions() {
-	ui.twSubscriptions->clear();
-
-	QVector<QString> subscriptions = m_mqttClient->MQTTSubscriptions();
-	for (int i = 0; i < subscriptions.count(); ++i) {
-		QStringList name;
-		name.append(subscriptions[i]);
-
-		bool found = false;
-		for (int j = 0; j < ui.twSubscriptions->topLevelItemCount(); ++j) {
-			if (ui.twSubscriptions->topLevelItem(j)->text(0) == subscriptions[i]) {
-				found = true;
-				break;
-			}
-		}
-
-		if (!found) {
-			//Add the subscription to the tree widget
-			QTreeWidgetItem* newItem = new QTreeWidgetItem(name);
-			ui.twSubscriptions->addTopLevelItem(newItem);
-			name.clear();
-			name = subscriptions[i].split('/', QString::SkipEmptyParts);
-
-			//find the corresponding "root" item in twTopics
-			QTreeWidgetItem* topic = nullptr;
-			for (int j = 0; j < ui.twTopics->topLevelItemCount(); ++j) {
-				if (ui.twTopics->topLevelItem(j)->text(0) == name[0]) {
-					topic = ui.twTopics->topLevelItem(j);
-					break;
-				}
-			}
-
-			//restore the children of the subscription
-			if (topic != nullptr && topic->childCount() > 0)
-				MQTTHelpers::restoreSubscriptionChildren(topic, newItem, name, 1);
-		}
-	}
-	m_searching = false;
-}
-
-/*!
- *\brief called when leTopics' text is changed
- *		 if the rootName can be found in twTopics, then we scroll it to the top of the tree widget
- *
- * \param rootName the current text of leTopics
- */
-void LiveDataDock::scrollToTopicTreeItem(const QString& rootName) {
-	m_searching = true;
-	m_searchTimer->start();
-
-	int topItemIdx = -1;
-	for (int i = 0; i < ui.twTopics->topLevelItemCount(); ++i)
-		if (ui.twTopics->topLevelItem(i)->text(0) == rootName) {
-			topItemIdx = i;
-			break;
-		}
-
-	if (topItemIdx >= 0)
-		ui.twTopics->scrollToItem(ui.twTopics->topLevelItem(topItemIdx), QAbstractItemView::ScrollHint::PositionAtTop);
-}
-
-/*!
- *\brief called when leSubscriptions' text is changed
- *		 if the rootName can be found in twSubscriptions, then we scroll it to the top of the tree widget
- *
- * \param rootName the current text of leSubscriptions
- */
-void LiveDataDock::scrollToSubsriptionTreeItem(const QString& rootName) {
-	int topItemIdx = -1;
-	for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i)
-		if (ui.twSubscriptions->topLevelItem(i)->text(0) == rootName) {
-			topItemIdx = i;
-			break;
-		}
-
-	if (topItemIdx >= 0)
-		ui.twSubscriptions->scrollToItem(ui.twSubscriptions->topLevelItem(topItemIdx), QAbstractItemView::ScrollHint::PositionAtTop);
-}
-
-/*!
- *\brief We search in twSubscriptions for topics that can be represented using + wildcards, then merge them.
- *		 We do this until there are no topics to merge
- */
-void LiveDataDock::manageCommonLevelSubscriptions() {
-	bool foundEqual = false;
-	do {
-		foundEqual = false;
-		QMap<QString, QVector<QString>> equalTopicsMap;
-		QVector<QString> equalTopics;
-
-		//compare the subscriptions present in the TreeWidget
-		for (int i = 0; i < ui.twSubscriptions->topLevelItemCount() - 1; ++i) {
-			for (int j = i + 1; j < ui.twSubscriptions->topLevelItemCount(); ++j) {
-				QString commonTopic = MQTTHelpers::checkCommonLevel(ui.twSubscriptions->topLevelItem(i)->text(0), ui.twSubscriptions->topLevelItem(j)->text(0));
-
-				//if there is a common topic for the 2 compared topics, we add them to the map (using the common topic as key)
-				if (!commonTopic.isEmpty()) {
-					if (!equalTopicsMap[commonTopic].contains(ui.twSubscriptions->topLevelItem(i)->text(0))) {
-						equalTopicsMap[commonTopic].push_back(ui.twSubscriptions->topLevelItem(i)->text(0));
-					}
-
-					if (!equalTopicsMap[commonTopic].contains(ui.twSubscriptions->topLevelItem(j)->text(0))) {
-						equalTopicsMap[commonTopic].push_back(ui.twSubscriptions->topLevelItem(j)->text(0));
-					}
-				}
-			}
-		}
-
-		if (!equalTopicsMap.isEmpty()) {
-			qDebug()<<"Manage equal topics";
-
-			QVector<QString> commonTopics;
-			QMapIterator<QString, QVector<QString>> topics(equalTopicsMap);
-
-			//check for every map entry, if the found topics can be merged or not
-			while (topics.hasNext()) {
-				topics.next();
-
-				int level = MQTTHelpers::commonLevelIndex(topics.value().last(), topics.value().first());
-				QStringList commonList = topics.value().first().split('/', QString::SkipEmptyParts);
-				QTreeWidgetItem* currentItem = nullptr;
-
-				//search the corresponding item to the common topics first level(root)
-				for (int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
-					if (ui.twTopics->topLevelItem(i)->text(0) == commonList.first()) {
-						currentItem = ui.twTopics->topLevelItem(i);
-						break;
-					}
-				}
-
-				if (!currentItem)
-					break;
-
-				//calculate the number of topics the new + wildcard could replace
-				int childCount = MQTTHelpers::checkCommonChildCount(1, level, commonList, currentItem);
-				if (childCount > 0) {
-					//if the number of topics found and the calculated number of topics is equal, the topics can be merged
-					if (topics.value().size() == childCount) {
-						qDebug() << "Found common topic to manage: " << topics.key();
-						foundEqual = true;
-						commonTopics.push_back(topics.key());
-					}
-				}
-			}
-
-			if (foundEqual) {
-				//if there are more common topics, the topics of which can be merged, we choose the one which has the lowest level new "+" wildcard
-				int highestLevel = INT_MAX;
-				int topicIdx = -1;
-				for (int i = 0; i < commonTopics.size(); ++i) {
-					int level = MQTTHelpers::commonLevelIndex(equalTopicsMap[commonTopics[i]].first(), commonTopics[i]);
-					if (level < highestLevel) {
-						topicIdx = i;
-						highestLevel = level;
-					}
-				}
-				qDebug() << "Start to manage: " << commonTopics[topicIdx];
-				equalTopics.append(equalTopicsMap[commonTopics[topicIdx]]);
-
-				//Add the common topic ("merging")
-				QString commonTopic;
-				commonTopic = MQTTHelpers::checkCommonLevel(equalTopics.first(), equalTopics.last());
-				QStringList nameList;
-				nameList.append(commonTopic);
-				QTreeWidgetItem* newTopic = new QTreeWidgetItem(nameList);
-				ui.twSubscriptions->addTopLevelItem(newTopic);
-
-				//remove the "merged" topics
-				for (int i = 0; i < equalTopics.size(); ++i) {
-					for (int j = 0; j < ui.twSubscriptions->topLevelItemCount(); ++j) {
-						if (ui.twSubscriptions->topLevelItem(j)->text(0) == equalTopics[i]) {
-							newTopic->addChild(ui.twSubscriptions->takeTopLevelItem(j));
-							break;
-						}
-					}
-				}
-
-				//remove any subscription that the new subscription contains
-				for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
-					if (MQTTHelpers::checkTopicContains(commonTopic, ui.twSubscriptions->topLevelItem(i)->text(0)) &&
-							commonTopic != ui.twSubscriptions->topLevelItem(i)->text(0) ) {
-						ui.twSubscriptions->topLevelItem(i)->takeChildren();
-						ui.twSubscriptions->takeTopLevelItem(i);
-						i--;
-					}
-				}
-
-				//make the subscription on commonTopic in m_mqttClient
-				m_mqttClient->addMQTTSubscription(commonTopic, ui.cbQoS->currentIndex());
-			}
-		}
-	} while (foundEqual);
-}
-
-/*!
  *\brief Adds topicName to twTopics
  *
  * \param topicName the name of the topic, which will be added to the tree widget
@@ -1142,8 +707,8 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 			QTreeWidgetItem* currentItem;
 			//check whether the first level of the topic can be found in twTopics
 			int topItemIdx = -1;
-			for (int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
-				if (ui.twTopics->topLevelItem(i)->text(0) == list.at(0)) {
+            for (int i = 0; i < m_subscriptionWidget->topicCount(); ++i) {
+                if (m_subscriptionWidget->topLevelTopic(i)->text(0) == list.at(0)) {
 					topItemIdx = i;
 					break;
 				}
@@ -1151,7 +716,7 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 			//if not we simply add every level of the topic to the tree
 			if ( topItemIdx < 0) {
 				currentItem = new QTreeWidgetItem(name);
-				ui.twTopics->addTopLevelItem(currentItem);
+                m_subscriptionWidget->addTopic(currentItem);
 				for (int i = 1; i < list.size(); ++i) {
 					name.clear();
 					name.append(list.at(i));
@@ -1162,7 +727,7 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 			//otherwise we search for the first level that isn't part of the tree,
 			//then add every level of the topic to the tree from that certain level
 			else {
-				currentItem = ui.twTopics->topLevelItem(topItemIdx);
+                currentItem = m_subscriptionWidget->topLevelTopic(topItemIdx);
 				int listIdx = 1;
 				for (; listIdx < list.size(); ++listIdx) {
 					QTreeWidgetItem* childItem = nullptr;
@@ -1194,14 +759,14 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 	else {
 		rootName = topicName;
 		name.append(topicName);
-		ui.twTopics->addTopLevelItem(new QTreeWidgetItem(name));
+        m_subscriptionWidget->addTopic(new QTreeWidgetItem(name));
 	}
 
 	//if a subscribed topic contains the new topic, we have to update twSubscriptions
-	for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
-		QStringList subscriptionName = ui.twSubscriptions->topLevelItem(i)->text(0).split('/', QString::SkipEmptyParts);
+    for (int i = 0; i < m_subscriptionWidget->subscriptionCount(); ++i) {
+        QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split('/', QString::SkipEmptyParts);
 		if (rootName == subscriptionName[0]) {
-			fillSubscriptions();
+            emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 			break;
 		}
 	}
@@ -1248,8 +813,7 @@ void LiveDataDock::removeClient(const QString& hostname, quint16 port) {
 	}
 
 	if (m_mqttClient->clientHostName() == hostname) {
-		ui.twSubscriptions->clear();
-		ui.twTopics->clear();
+        emit MQTTClearTopics();
 		m_mqttClient = nullptr;
 	}
 
@@ -1264,9 +828,9 @@ void LiveDataDock::removeClient(const QString& hostname, quint16 port) {
 bool LiveDataDock::testSubscribe(const QString& topic) {
 	QStringList topicList = topic.split('/', QString::SkipEmptyParts);
 	QTreeWidgetItem* currentItem = nullptr;
-	for (int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
-		if (ui.twTopics->topLevelItem(i)->text(0) == topicList[0]) {
-			currentItem = ui.twTopics->topLevelItem(i);
+    for (int i = 0; i < m_subscriptionWidget->topicCount(); ++i) {
+        if (m_subscriptionWidget->topLevelTopic(i)->text(0) == topicList[0]) {
+            currentItem = m_subscriptionWidget->topLevelTopic(i);
 			break;
 		}
 	}
@@ -1288,8 +852,7 @@ bool LiveDataDock::testSubscribe(const QString& topic) {
 	} else
 		return false;
 
-	ui.twTopics->setCurrentItem(currentItem);
-	addSubscription();
+    m_subscriptionWidget->testSubscribe(currentItem);
 	return true;
 }
 
@@ -1299,9 +862,9 @@ bool LiveDataDock::testSubscribe(const QString& topic) {
  */
 bool LiveDataDock::testUnsubscribe(const QString& topic) {
 	QTreeWidgetItem* currentItem = nullptr;
-	for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
-		if (MQTTHelpers::checkTopicContains(ui.twSubscriptions->topLevelItem(i)->text(0), topic)) {
-			currentItem = ui.twSubscriptions->topLevelItem(i);
+    for (int i = 0; i < m_subscriptionWidget->subscriptionCount(); ++i) {
+        if (MQTTHelpers::checkTopicContains(m_subscriptionWidget->topLevelSubscription(i)->text(0), topic)) {
+            currentItem = m_subscriptionWidget->topLevelSubscription(i);
 			break;
 		}
 	}
@@ -1309,8 +872,7 @@ bool LiveDataDock::testUnsubscribe(const QString& topic) {
 	if (currentItem) {
 		do {
 			if (topic == currentItem->text(0)) {
-				ui.twSubscriptions->setCurrentItem(currentItem);
-				removeSubscription();
+                 m_subscriptionWidget->testUnsubscribe(currentItem);
 				return true;
 			} else {
 				for (int i = 0; i < currentItem->childCount(); ++i) {
@@ -1353,5 +915,14 @@ void LiveDataDock::showWillSettings() {
 
 	QPoint pos(ui.bLWT->sizeHint().width(), ui.bLWT->sizeHint().height());
 	menu.exec(ui.bLWT->mapToGlobal(pos));
+}
+
+void LiveDataDock::enableWill(bool enable) {
+    if(enable) {
+        if(!ui.bLWT->isEnabled())
+            ui.bLWT->setEnabled(enable);
+    } else {
+        ui.bLWT->setEnabled(enable);
+    }
 }
 #endif
