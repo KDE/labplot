@@ -118,6 +118,7 @@
       <caption xml:lang="id">Contoh pas</caption>
       <caption xml:lang="it">Adatta esempio</caption>
       <caption xml:lang="nl">Voorbeeld aanpassing</caption>
+      <caption xml:lang="pl">Przykład dopasowania</caption>
       <caption xml:lang="pt">Exemplo de ajuste</caption>
       <caption xml:lang="pt-BR">Exemplo de ajuste</caption>
       <caption xml:lang="sv">Anpassningsexempel</caption>
@@ -137,6 +138,7 @@
       <caption xml:lang="id">Fungsi matematika</caption>
       <caption xml:lang="it">Funzioni matematica</caption>
       <caption xml:lang="nl">Wiskundige functie</caption>
+      <caption xml:lang="pl">Funkcja matematyczna</caption>
       <caption xml:lang="pt">Função matemática</caption>
       <caption xml:lang="pt-BR">Função matemática</caption>
       <caption xml:lang="sv">Matematisk funktion</caption>
@@ -155,6 +157,7 @@
       <caption xml:lang="id">Lembar kerja CAS</caption>
       <caption xml:lang="it">Foglio di lavoro CAS</caption>
       <caption xml:lang="nl">CAS werkblad</caption>
+      <caption xml:lang="pl">Arkusz roboczy CAS</caption>
       <caption xml:lang="pt">Folha de cálculo CAS</caption>
       <caption xml:lang="pt-BR">Folha de trabalho CAS</caption>
       <caption xml:lang="sv">CAS-arbetsblad</caption>
