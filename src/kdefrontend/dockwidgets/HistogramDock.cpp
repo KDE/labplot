@@ -1402,15 +1402,14 @@ void HistogramDock::curveAutoBinRangesChanged(bool value) {
 }
 
 void HistogramDock::curveBinRangesMinChanged(double value) {
-	DEBUG("HistogramDock::curveBinRangesMinChanged() value = " << value)
 	m_initializing = true;
-	ui.leBinRangesMin->setText( QString::number(value) );
+	ui.leBinRangesMin->setText(QString::number(value));
 	m_initializing = false;
 }
 
 void HistogramDock::curveBinRangesMaxChanged(double value) {
 	m_initializing = true;
-	ui.leBinRangesMax->setText( QString::number(value) );
+	ui.leBinRangesMax->setText(QString::number(value));
 	m_initializing = false;
 }
 

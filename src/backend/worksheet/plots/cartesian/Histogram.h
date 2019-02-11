@@ -165,8 +165,8 @@ signals:
 	void binCountChanged(int);
 	void binWidthChanged(float);
 	void autoBinRangesChanged(bool);
-	void binRangesMinChanged(bool);
-	void binRangesMaxChanged(bool);
+	void binRangesMinChanged(double);
+	void binRangesMaxChanged(double);
 
 	//Symbol-Tab
 	void symbolsStyleChanged(Symbol::Style);

@@ -357,17 +357,15 @@ void Histogram::setAutoBinRanges(bool autoBinRanges) {
 		exec(new HistogramSetAutoBinRangesCmd(d, autoBinRanges));
 }
 
-STD_SETTER_CMD_IMPL_F(Histogram, SetBinRangesMin, double, binRangesMin, recalcHistogram)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinRangesMin, double, binRangesMin, recalcHistogram)
 void Histogram::setBinRangesMin(double binRangesMin) {
-	DEBUG("Histogram::setBinRangesMin() value = " << binRangesMin)
 	Q_D(Histogram);
 	if (binRangesMin != d->binRangesMin)
 		exec(new HistogramSetBinRangesMinCmd(d, binRangesMin, ki18n("%1: set bin ranges start")));
 }
 
-STD_SETTER_CMD_IMPL_F(Histogram, SetBinRangesMax, double, binRangesMax, recalcHistogram)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinRangesMax, double, binRangesMax, recalcHistogram)
 void Histogram::setBinRangesMax(double binRangesMax) {
-	DEBUG("Histogram::setBinRangesMax() value = " << binRangesMax)
 	Q_D(Histogram);
 	if (binRangesMax != d->binRangesMax)
 		exec(new HistogramSetBinRangesMaxCmd(d, binRangesMax, ki18n("%1: set bin ranges end")));
