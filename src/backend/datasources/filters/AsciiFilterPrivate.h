@@ -59,10 +59,10 @@ public:
 #ifdef HAVE_MQTT
 	void MQTTPreview(QVector<QStringList>&, const QString&, const QString&);
 	AbstractColumn::ColumnMode MQTTColumnMode() const;
-	QString MQTTColumnStatistics(const MQTTTopic* ) const;
+	QString MQTTColumnStatistics(const MQTTTopic*) const;
 	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
 	int prepareMQTTTopicToRead(const QString& message,  const QString& topic);
-	void setPreparedForMQTT(bool, MQTTTopic*topic, const QString&);	
+	void setPreparedForMQTT(bool, MQTTTopic*, const QString&);
 #endif
 
 	const AsciiFilter* q;
@@ -87,6 +87,10 @@ public:
 	int mqttPreviewFirstEmptyColCount;
 
 	int isPrepared();
+
+	//TODO: redesign and remove this later
+	bool readingFile{false};
+	QString readingFileName;
 
 private:
 	static const unsigned int m_dataTypeLines = 10;	// maximum lines to read for determining data types

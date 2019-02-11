@@ -3,7 +3,7 @@ File                 : AsciiFilter.h
 Project              : LabPlot
 Description          : ASCII I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2009-2019 Alexander Semke (alexander.semke@web.de)
 Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
@@ -54,7 +54,7 @@ public:
 	static QString fileInfoString(const QString&);
 	static int columnNumber(const QString& fileName, const QString& separator = QString());
 	static size_t lineNumber(const QString& fileName);
-	static size_t lineNumber(QIODevice&);	// calculate number of lines if device supports it
+	size_t lineNumber(QIODevice&) const;	// calculate number of lines if device supports it
 
 	// read data from any device
 	void readDataFromDevice(QIODevice& device, AbstractDataSource*,
@@ -74,10 +74,10 @@ public:
 
 #ifdef HAVE_MQTT
 	void MQTTPreview(QVector<QStringList>&, const QString&, const QString&);
-	QString MQTTColumnStatistics(const MQTTTopic * topic) const;
+	QString MQTTColumnStatistics(const MQTTTopic*) const;
 	AbstractColumn::ColumnMode MQTTColumnMode() const;
 	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*);
-	void setPreparedForMQTT(bool, MQTTTopic* , const QString&);
+	void setPreparedForMQTT(bool, MQTTTopic*, const QString&);
 #endif
 
 	QString separator() const;

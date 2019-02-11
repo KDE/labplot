@@ -4,7 +4,7 @@ Project              : LabPlot
 Description          : ASCII I/O-filter
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2009-2019 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 
@@ -274,7 +274,7 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
   returns the number of lines in the device \c device and 0 if sequential.
   resets the position to 0!
 */
-size_t AsciiFilter::lineNumber(QIODevice &device) {
+size_t AsciiFilter::lineNumber(QIODevice& device) const {
 	if (device.isSequential())
 		return 0;
 // 	if (!device.canReadLine())
@@ -282,9 +282,13 @@ size_t AsciiFilter::lineNumber(QIODevice &device) {
 
 	size_t lineCount = 0;
 	device.seek(0);
-	while (!device.atEnd()) {
-		device.readLine();
-		lineCount++;
+	if (d->readingFile)
+		lineCount = lineNumber(d->readingFileName);
+	else {
+		while (!device.atEnd()) {
+			device.readLine();
+			lineCount++;
+		}
 	}
 	device.seek(0);
 
@@ -362,9 +366,7 @@ void AsciiFilter::setNaNValueToZero(bool b) {
 		d->nanValue = NAN;
 }
 bool AsciiFilter::NaNValueToZeroEnabled() const {
-	if (d->nanValue == 0)
-		return true;
-	return false;
+	return (d->nanValue == 0);
 }
 
 void AsciiFilter::setRemoveQuotesEnabled(bool b) {
@@ -638,7 +640,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	QDEBUG("column modes = " << columnModes);
 
 	// ATTENTION: This resets the position in the device to 0
-	m_actualRows = (int)AsciiFilter::lineNumber(device);
+	m_actualRows = (int)q->lineNumber(device);
 
 	const int actualEndRow = (endRow == -1 || endRow > m_actualRows) ? m_actualRows : endRow;
 	m_actualRows = actualEndRow - m_actualStartRow + 1;
@@ -660,8 +662,14 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	DEBUG("AsciiFilterPrivate::readDataFromFile(): fileName = \'" << fileName.toStdString() << "\', dataSource = "
 	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode));
 
+	//dirty hack: set readingFile and readingFileName in order to know in lineNumber(QIODevice)
+	//that we're reading from a file and to benefit from much faster wc on linux
+	//TODO: redesign the APIs and remove this later
+	readingFile = true;
+	readingFileName = fileName;
 	KFilterDev device(fileName);
 	readDataFromDevice(device, dataSource, importMode);
+	readingFile = false;
 }
 
 qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSource* dataSource, qint64 from) {
@@ -1501,8 +1509,15 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int lines) {
 	QVector<QStringList> dataStrings;
 
+	//dirty hack: set readingFile and readingFileName in order to know in lineNumber(QIODevice)
+	//that we're reading from a file and to benefit from much faster wc on linux
+	//TODO: redesign the APIs and remove this later
+	readingFile = true;
+	readingFileName = fileName;
 	KFilterDev device(fileName);
 	const int deviceError = prepareDeviceToRead(device);
+	readingFile = false;
+
 	if (deviceError != 0) {
 		DEBUG("Device error = " << deviceError);
 		return dataStrings;
