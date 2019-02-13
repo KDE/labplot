@@ -1471,14 +1471,18 @@ void CartesianPlot::dataChanged() {
 	Q_D(CartesianPlot);
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
+	bool updated = false;
 	if (d->autoScaleX && d->autoScaleY)
-		this->scaleAuto();
+		updated = this->scaleAuto();
 	else if (d->autoScaleX)
-		this->scaleAutoX();
+		updated = this->scaleAutoX();
 	else if (d->autoScaleY)
-		this->scaleAutoY();
-	else {
-		//free ranges -> rentransform the curve that sent
+		updated = this->scaleAutoY();
+
+	if (!updated) {
+		//even if the plot ranges were not changed, either no auto scale active or the new data
+		//is within the current ranges and no change of the ranges is required,
+		//retransform the curve in order to show the changes
 		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
 		if (curve)
 			curve->retransform();
@@ -1510,11 +1514,22 @@ void CartesianPlot::xDataChanged() {
 		return;
 
 	d->curvesXMinMaxIsDirty = true;
+	bool updated = false;
 	if (d->autoScaleX)
-		this->scaleAutoX();
-	else {
+		updated = this->scaleAutoX();
+
+	if (!updated) {
+		//even if the plot ranges were not changed, either no auto scale active or the new data
+		//is within the current ranges and no change of the ranges is required,
+		//retransform the curve in order to show the changes
 		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
-		curve->retransform();
+		if (curve)
+			curve->retransform();
+		else {
+			auto* hist = dynamic_cast<Histogram*>(QObject::sender());
+			if (hist)
+				hist->retransform();
+		}
 	}
 
 	//in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
@@ -1542,11 +1557,22 @@ void CartesianPlot::yDataChanged() {
 		return;
 
 	d->curvesYMinMaxIsDirty = true;
+	bool updated = false;
 	if (d->autoScaleY)
 		this->scaleAutoY();
-	else {
+
+	if (!updated) {
+		//even if the plot ranges were not changed, either no auto scale active or the new data
+		//is within the current ranges and no change of the ranges is required,
+		//retransform the curve in order to show the changes
 		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
-		curve->retransform();
+		if (curve)
+			curve->retransform();
+		else {
+			auto* hist = dynamic_cast<Histogram*>(QObject::sender());
+			if (hist)
+				hist->retransform();
+		}
 	}
 
 	//in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
@@ -1608,7 +1634,7 @@ void CartesianPlot::setLocked(bool locked) {
 	d->locked = locked;
 }
 
-void CartesianPlot::scaleAutoX() {
+bool CartesianPlot::scaleAutoX() {
 	Q_D(CartesianPlot);
 	if (d->curvesXMinMaxIsDirty) {
 		int count = 0;
@@ -1690,9 +1716,11 @@ void CartesianPlot::scaleAutoX() {
 		}
 		d->retransformScales();
 	}
+
+	return update;
 }
 
-void CartesianPlot::scaleAutoY() {
+bool CartesianPlot::scaleAutoY() {
 	Q_D(CartesianPlot);
 
 	if (d->curvesYMinMaxIsDirty) {
@@ -1773,9 +1801,11 @@ void CartesianPlot::scaleAutoY() {
 		}
 		d->retransformScales();
 	}
+
+	return update;
 }
 
-void CartesianPlot::scaleAuto() {
+bool CartesianPlot::scaleAuto() {
 	DEBUG("CartesianPlot::scaleAuto()");
 	Q_D(CartesianPlot);
 
@@ -1925,6 +1955,8 @@ void CartesianPlot::scaleAuto() {
 		}
 		d->retransformScales();
 	}
+
+	return (updateX || updateY);
 }
 
 void CartesianPlot::zoomIn() {

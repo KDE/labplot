@@ -231,9 +231,9 @@ public slots:
 	void addLegend();
 	void addTextLabel();
 	void addCustomPoint();
-	void scaleAuto();
-	void scaleAutoX();
-	void scaleAutoY();
+	bool scaleAuto();
+	bool scaleAutoX();
+	bool scaleAutoY();
 	void zoomIn();
 	void zoomOut();
 	void zoomInX();
