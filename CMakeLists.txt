@@ -11,6 +11,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(QT_MINIMUM_VERSION 5.6.0)
 set(KF5_MIN_VERSION "5.16.0")
 
+set(APPLE_SUPPRESS_X11_WARNING ON)
+
 find_package(ECM 1.3.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 # build type: "release", "debug", "debugfull"
