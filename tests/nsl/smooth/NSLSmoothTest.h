@@ -57,9 +57,22 @@ private slots:
 	void testSG_coeff53();
 	void testSG_coeff73();
 	void testSG_coeff74();
+	void testSG_coeff92();
+	void testSG_coeff94();
 
-	// TODO: performance
-	//void testPerformance();
+	// Savivitzky-Golay modes
+	void testSG_mode_interp();
+	void testSG_mode_mirror();
+	void testSG_mode_nearest();
+	void testSG_mode_constant();
+	void testSG_mode_periodic();
+
+	// performance
+	void testPerformance_interp();
+	void testPerformance_mirror();
+	void testPerformance_nearest();
+	void testPerformance_constant();
+	void testPerformance_periodic();
 private:
 	QString m_dataDir;
 };

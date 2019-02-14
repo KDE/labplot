@@ -40,7 +40,7 @@ class CommonTest : public QObject {
 private slots:
 	void initTestCase();
 protected:
-	// compare floats with given delta (could be useful for other tests too)
+	// compare floats with given delta
 	// delta - relative error
 	static inline void FuzzyCompare(double actual, double expected, double delta = 1.e-12) {
 		if (fabs(expected) < delta)

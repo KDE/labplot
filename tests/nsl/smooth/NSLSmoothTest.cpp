@@ -263,21 +263,176 @@ void NSLSmoothTest::testSG_coeff74() {
 	int status = nsl_smooth_savgol_coeff(points, order, h);
 	QCOMPARE(status, 0);
 
-	// see AnalysisTests.h
-	//FuzzyCompare(231 * gsl_matrix_get(h,(points-1)/2, 0), 5., 1.e-8);
-	for(int i = 1; i < points; i++) {
-		DEBUG(std::setprecision(15) << 231 * gsl_matrix_get(h,(points-1)/2, i));
-//TODO		QCOMPARE(231 * gsl_matrix_get(h,(points-1)/2, i), result[i]);
+	for(int i = 0; i < points; i++) {
+		FuzzyCompare(result[i], 231 * gsl_matrix_get(h,(points-1)/2, i), 1.e-10);
+		//QCOMPARE(231 * gsl_matrix_get(h,(points-1)/2, i), result[i]);
 	}
 
 	gsl_matrix_free(h);
 }
 
+void NSLSmoothTest::testSG_coeff92() {
+	int points = 9, order = 2;
+	gsl_matrix *h = gsl_matrix_alloc(points, points);
+	double result[] = {-21, 14, 39, 54, 59, 54, 39, 14, -21};
+
+	int status = nsl_smooth_savgol_coeff(points, order, h);
+	QCOMPARE(status, 0);
+
+	for(int i = 0; i < points; i++) {
+		//FuzzyCompare(result[i], 231 * gsl_matrix_get(h,(points-1)/2, i), 1.e-10);
+		QCOMPARE(231 * gsl_matrix_get(h,(points-1)/2, i), result[i]);
+	}
+
+	gsl_matrix_free(h);
+}
+
+void NSLSmoothTest::testSG_coeff94() {
+	int points = 9, order = 4;
+	gsl_matrix *h = gsl_matrix_alloc(points, points);
+	double result[] = {15, -55, 30, 135, 179, 135, 30, -55, 15};
+
+	int status = nsl_smooth_savgol_coeff(points, order, h);
+	QCOMPARE(status, 0);
+
+	for(int i = 0; i < points; i++) {
+		FuzzyCompare(result[i], 429 * gsl_matrix_get(h,(points-1)/2, i), 1.e-10);
+		//QCOMPARE(429 * gsl_matrix_get(h,(points-1)/2, i), result[i]);
+	}
+
+	gsl_matrix_free(h);
+}
+
+//##############################################################################
+//#################  Savitzky-Golay modes
+//##############################################################################
+
+const int n = 9, m = 5, order = 2;
+
+void NSLSmoothTest::testSG_mode_interp() {
+	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
+	double result[] = {1.65714285714286, 3.17142857142857, 3.54285714285714, 2.85714285714285, 0.65714285714287, 0.17142857142858, 1., 4., 9.};
+
+	int status = nsl_smooth_savgol(data, n, m, order, nsl_smooth_pad_interp);
+	QCOMPARE(status, 0);
+
+	for(int i = 0; i < n; i++)
+		QCOMPARE(data[i], result[i]);
+		//FuzzyCompare(data[i], result[i], 1.e-11);
+}
+
+void NSLSmoothTest::testSG_mode_mirror() {
+	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
+	double result[] = {1.48571428571430, 3.02857142857143, 3.542857142857, 2.857142857143, 0.657142857143, 0.171428571429, 1., 5.02857142857142, 6.94285714285713};
+
+	int status = nsl_smooth_savgol(data, n, m, order, nsl_smooth_pad_mirror);
+	QCOMPARE(status, 0);
+
+	for(int i = 0; i < n; i++)
+		FuzzyCompare(data[i], result[i], 1.e-11);
+		//QCOMPARE(data[i], result[i]);
+}
+
+void NSLSmoothTest::testSG_mode_nearest() {
+	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
+	double result[] = {1.74285714285715, 3.02857142857143, 3.542857142857, 2.857142857143, 0.657142857143, 0.171428571429, 1., 4.6, 7.97142857142856};
+
+	int status = nsl_smooth_savgol(data, n, m, order, nsl_smooth_pad_nearest);
+	QCOMPARE(status, 0);
+
+	for(int i = 0; i < n; i++)
+		FuzzyCompare(data[i], result[i], 1.e-11);
+		//QCOMPARE(data[i], result[i]);
+}
+
+void NSLSmoothTest::testSG_mode_constant() {
+	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
+	double result[] = {1.22857142857143, 3.2, 3.542857142857, 2.857142857143, 0.657142857143, 0.171428571429, 1., 5.37142857142855, 5.65714285714284};
+
+	int status = nsl_smooth_savgol(data, n, m, order, nsl_smooth_pad_constant);
+	QCOMPARE(status, 0);
+
+	for(int i = 0; i < n; i++)
+		FuzzyCompare(data[i], result[i], 1.e-11);
+		//QCOMPARE(data[i], result[i]);
+}
+
+void NSLSmoothTest::testSG_mode_periodic() {
+	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
+	double result[] = {3.97142857142858, 2.42857142857144, 3.542857142857, 2.857142857143, 0.657142857143, 0.171428571429, 1., 5.2, 6.17142857142856};
+
+	int status = nsl_smooth_savgol(data, n, m, order, nsl_smooth_pad_periodic);
+	QCOMPARE(status, 0);
+
+	for(int i = 0; i < n; i++)
+		FuzzyCompare(data[i], result[i], 1.e-11);
+		//QCOMPARE(data[i], result[i]);
+}
 
 //##############################################################################
 //#################  performance
 //##############################################################################
 
-//TODO
+const int nn = 1e6;
+
+void NSLSmoothTest::testPerformance_interp() {
+	double* data = new double[nn];
+
+	QBENCHMARK {
+		for (int i = 0;  i < nn; i++)
+			data[i] = i;
+		int status = nsl_smooth_savgol(data, nn, m, order, nsl_smooth_pad_interp);
+		QCOMPARE(status, 0);
+	}
+	delete[] data;
+}
+
+void NSLSmoothTest::testPerformance_mirror() {
+	double* data = new double[nn];
+
+	QBENCHMARK {
+		for (int i = 0;  i < nn; i++)
+			data[i] = i;
+		int status = nsl_smooth_savgol(data, nn, m, order, nsl_smooth_pad_mirror);
+		QCOMPARE(status, 0);
+	}
+	delete[] data;
+}
+
+void NSLSmoothTest::testPerformance_nearest() {
+	double* data = new double[nn];
+
+	QBENCHMARK {
+		for (int i = 0;  i < nn; i++)
+			data[i] = i;
+		int status = nsl_smooth_savgol(data, nn, m, order, nsl_smooth_pad_nearest);
+		QCOMPARE(status, 0);
+	}
+	delete[] data;
+}
+
+void NSLSmoothTest::testPerformance_constant() {
+	double* data = new double[nn];
+
+	QBENCHMARK {
+		for (int i = 0;  i < nn; i++)
+			data[i] = i;
+		int status = nsl_smooth_savgol(data, nn, m, order, nsl_smooth_pad_constant);
+		QCOMPARE(status, 0);
+	}
+	delete[] data;
+}
+
+void NSLSmoothTest::testPerformance_periodic() {
+	double* data = new double[nn];
+
+	QBENCHMARK {
+		for (int i = 0;  i < nn; i++)
+			data[i] = i;
+		int status = nsl_smooth_savgol(data, nn, m, order, nsl_smooth_pad_periodic);
+		QCOMPARE(status, 0);
+	}
+	delete[] data;
+}
 
 QTEST_MAIN(NSLSmoothTest)
