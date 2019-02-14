@@ -217,8 +217,8 @@ private:
 	bool warnModified();
 	void activateSubWindowForAspect(const AbstractAspect*) const;
 	bool save(const QString&);
-	void toggleShowWidget(QWidget* widget, bool showToRight);
-	void toggleHideWidget(QWidget* widget, bool hideToLeft);
+// 	void toggleShowWidget(QWidget* widget, bool showToRight);
+// 	void toggleHideWidget(QWidget* widget, bool hideToLeft);
 
 	Workbook* activeWorkbook() const;
 	Spreadsheet* activeSpreadsheet() const;

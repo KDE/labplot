@@ -1621,17 +1621,22 @@ void MainWin::updateMdiWindowVisibility() const {
 void MainWin::toggleDockWidget(QAction* action)  {
 	if (action->objectName() == "toggle_project_explorer_dock") {
 		if (m_projectExplorerDock->isVisible())
-			toggleHideWidget(m_projectExplorerDock, true);
+			m_projectExplorerDock->hide();
+// 			toggleHideWidget(m_projectExplorerDock, true);
 		else
-			toggleShowWidget(m_projectExplorerDock, true);
+			m_projectExplorerDock->show();
+// 			toggleShowWidget(m_projectExplorerDock, true);
 	} else if (action->objectName() == "toggle_properties_explorer_dock") {
 		if (m_propertiesDock->isVisible())
-			toggleHideWidget(m_propertiesDock, false);
+			m_propertiesDock->hide();
+// 			toggleHideWidget(m_propertiesDock, false);
 		else
-			toggleShowWidget(m_propertiesDock, false);
+			m_propertiesDock->show();
+// 			toggleShowWidget(m_propertiesDock, false);
 	}
 }
 
+/*
 void MainWin::toggleHideWidget(QWidget* widget, bool hideToLeft)
 {
 	auto* timeline = new QTimeLine(800, this);
@@ -1688,7 +1693,7 @@ void MainWin::toggleShowWidget(QWidget* widget, bool showToRight)
 
 	connect(timeline, &QTimeLine::finished, timeline, &QTimeLine::deleteLater);
 }
-
+*/
 void MainWin::projectExplorerDockVisibilityChanged(bool visible) {
 	m_toggleProjectExplorerDockAction->setChecked(visible);
 }
