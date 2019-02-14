@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : AnalysisTest.cpp
+    File                 : CommonTest.h
     Project              : LabPlot
-    Description          : Tests any analysis method
+    Description          : General test class
     --------------------------------------------------------------------
-    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2019 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -24,7 +24,31 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef COMMONTEST_H
+#define COMMONTEST_H
 
-#include "AnalysisTest.h"
-#include "backend/core/column/Column.h"
+#include <QtTest>
+#include <backend/lib/macros.h>	// DEBUG()
 
+extern "C" {
+#include <gsl/gsl_math.h>
+}
+
+class CommonTest : public QObject {
+	Q_OBJECT
+
+private slots:
+	void initTestCase();
+protected:
+	// compare floats with given delta (could be useful for other tests too)
+	// delta - relative error
+	static inline void FuzzyCompare(double actual, double expected, double delta = 1.e-12) {
+		if (fabs(expected) < delta)
+			QVERIFY(fabs(actual) < delta);
+		else {
+			DEBUG(std::setprecision(15) << actual - fabs(actual)*delta << " <= " << expected << " <= " << actual + fabs(actual)*delta);
+			QVERIFY(!gsl_fcmp(actual, expected, delta));
+		}
+	}
+};
+#endif

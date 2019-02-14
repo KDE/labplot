@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : AnalysisTest.cpp
+    File                 : CommonTest.cpp
     Project              : LabPlot
-    Description          : Tests any analysis method
+    Description          : General test class
     --------------------------------------------------------------------
-    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2019 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -25,6 +25,13 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "AnalysisTest.h"
+#include "CommonTest.h"
 #include "backend/core/column/Column.h"
+
+void CommonTest::initTestCase() {
+	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
+	//TODO: redesign/remove this
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+}
 
