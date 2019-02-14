@@ -949,14 +949,14 @@ void CartesianPlot::setAutoScaleX(bool autoScaleX) {
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXMin, double, xMin, retransformScales)
 void CartesianPlot::setXMin(double xMin) {
 	Q_D(CartesianPlot);
-	if (xMin != d->xMin)
+	if (xMin != d->xMin && xMin != -INFINITY && xMin != INFINITY)
 		exec(new CartesianPlotSetXMinCmd(d, xMin, ki18n("%1: set min x")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXMax, double, xMax, retransformScales)
 void CartesianPlot::setXMax(double xMax) {
 	Q_D(CartesianPlot);
-	if (xMax != d->xMax)
+	if (xMax != d->xMax && xMax != -INFINITY && xMax != INFINITY)
 		exec(new CartesianPlotSetXMaxCmd(d, xMax, ki18n("%1: set max x")));
 }
 
