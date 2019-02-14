@@ -115,7 +115,7 @@ void NSLSmoothTest::testMAL_padmirror() {
 
 void NSLSmoothTest::testMAL_padnearest() {
 	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
-	double result[] = {0.4, 0.8, 1.8, 2.2, 2.4, 2, 1.8, 1.6, 3};
+	double result[] = {2., 2., 2.6, 2.6, 2.4, 2, 1.8, 1.6, 3};
 
 	int status = nsl_smooth_moving_average_lagged(data, N, points, weight, nsl_smooth_pad_nearest);
 	QCOMPARE(status, 0);

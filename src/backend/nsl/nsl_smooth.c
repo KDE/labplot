@@ -265,8 +265,8 @@ int nsl_smooth_moving_average_lagged(double *data, size_t n, size_t points, nsl_
 				result[i] += w[j]*data[index];
 				break;
 			case nsl_smooth_pad_nearest:
-				/*printf(" %d",GSL_MAX(0,index));*/
-				result[i] += w[j]*data[index];
+				/*printf(" %d", index);*/
+				result[i] += w[j]*data[GSL_MAX(0, index)];
 				break;
 			case nsl_smooth_pad_constant:
 				if (index < 0)
