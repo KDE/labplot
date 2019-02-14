@@ -27,14 +27,12 @@
 #ifndef NSLSMOOTHTEST_H
 #define NSLSMOOTHTEST_H
 
-#include <QtTest>
+#include "../NSLTest.h"
 
-class NSLSmoothTest : public QObject {
+class NSLSmoothTest : public NSLTest {
 	Q_OBJECT
 
 private slots:
-	void initTestCase();
-
 	// moving average tests
 	void testMA_padnone();
 	void testMA_padmirror();

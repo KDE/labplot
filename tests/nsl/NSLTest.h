@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : AnalysisTest.h
+    File                 : NSLTest.h
     Project              : LabPlot
-    Description          : Tests any analysis method
+    Description          : NSL tests
     --------------------------------------------------------------------
-    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2019 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -24,12 +24,12 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef ANALYSISTEST_H
-#define ANALYSISTEST_H
+#ifndef NSLTEST_H
+#define NSLTEST_H
 
 #include "../CommonTest.h"
 
-class AnalysisTest : public CommonTest {
+class NSLTest : public CommonTest {
 	Q_OBJECT
 };
 #endif
