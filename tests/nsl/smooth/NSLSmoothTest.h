@@ -41,7 +41,24 @@ private slots:
 	void testMA_padnearest();
 	void testMA_padconstant();
 	void testMA_padperiodic();
-	// TODO: other types
+	// lagged moving average tests
+	void testMAL_padnone();
+	void testMAL_padmirror();
+	void testMAL_padnearest();
+	void testMAL_padconstant();
+	void testMAL_padperiodic();
+	// percentile tests
+	void testPercentile_padnone();
+	void testPercentile_padmirror();
+	void testPercentile_padnearest();
+	void testPercentile_padconstant();
+	void testPercentile_padperiodic();
+	// Savivitzky-Golay coeff tests
+	void testSG_coeff31();
+	void testSG_coeff51();
+	void testSG_coeff53();
+	void testSG_coeff73();
+	void testSG_coeff74();
 
 	// TODO: performance
 	//void testPerformance();
