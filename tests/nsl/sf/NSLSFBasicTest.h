@@ -27,14 +27,12 @@
 #ifndef NSLSFBASICTEST_H
 #define NSLSFBASICTEST_H
 
-#include <QtTest>
+#include "../NSLTest.h"
 
-class NSLSFBasicTest : public QObject {
+class NSLSFBasicTest : public NSLTest {
 	Q_OBJECT
 
 private slots:
-	void initTestCase();
-
 	// log2
 	void testlog2_int_C99();
 	void testlog2_int();

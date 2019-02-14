@@ -27,14 +27,12 @@
 #ifndef NSLDIFFTEST_H
 #define NSLDIFFTEST_H
 
-#include <QtTest>
+#include "../NSLTest.h"
 
-class NSLDiffTest : public QObject {
+class NSLDiffTest : public NSLTest {
 	Q_OBJECT
 
 private slots:
-	void initTestCase();
-
 	// first derivative
 	void testFirst_order2();
 	void testFirst_order4();

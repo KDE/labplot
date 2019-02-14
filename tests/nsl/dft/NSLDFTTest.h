@@ -27,14 +27,12 @@
 #ifndef NSLDFTTEST_H
 #define NSLDFTTEST_H
 
-#include <QtTest>
+#include "../NSLTest.h"
 
-class NSLDFTTest : public QObject {
+class NSLDFTTest : public NSLTest {
 	Q_OBJECT
 
 private slots:
-	void initTestCase();
-
 	// one sided
 	void testOnesided_real();
 	void testOnesided_imag();

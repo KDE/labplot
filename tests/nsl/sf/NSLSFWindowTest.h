@@ -27,14 +27,12 @@
 #ifndef NSLSFWINDOWTEST_H
 #define NSLSFWINDOWTEST_H
 
-#include <QtTest>
+#include "../NSLTest.h"
 
-class NSLSFWindowTest : public QObject {
+class NSLSFWindowTest : public NSLTest {
 	Q_OBJECT
 
 private slots:
-	void initTestCase();
-
 	void testWindowTypes();
 
 	void testPerformance_triangle();

@@ -26,15 +26,9 @@
  ***************************************************************************/
 
 #include "NSLDiffTest.h"
-#include "backend/lib/macros.h"
 
 extern "C" {
 #include "backend/nsl/nsl_diff.h"
-}
-
-void NSLDiffTest::initTestCase() {
-	const QString currentDir = __FILE__;
-	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
 }
 
 //##############################################################################

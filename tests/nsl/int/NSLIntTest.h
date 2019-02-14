@@ -27,14 +27,12 @@
 #ifndef NSLINTTEST_H
 #define NSLINTTEST_H
 
-#include <QtTest>
+#include "../NSLTest.h"
 
-class NSLIntTest : public QObject {
+class NSLIntTest : public NSLTest {
 	Q_OBJECT
 
 private slots:
-	void initTestCase();
-
 	// rules integral/area
 	void testRectangle_integral();
 	void testRectangle_area();
