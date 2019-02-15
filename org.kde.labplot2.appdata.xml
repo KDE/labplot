@@ -29,6 +29,7 @@
   <name xml:lang="uk">LabPlot</name>
   <name xml:lang="x-test">xxLabPlotxx</name>
   <name xml:lang="zh-CN">LabPlot</name>
+  <name xml:lang="zh-TW">LabPlot</name>
   <summary>LabPlot is a KDE application for interactive graphing and analysis of scientific data</summary>
   <summary xml:lang="ca">El LabPlot és una aplicació KDE per a la representació interactiva de grafs i anàlisi de dades científiques</summary>
   <summary xml:lang="ca-valencia">El LabPlot és una aplicació KDE per a la representació interactiva de grafs i anàlisi de dades científiques</summary>
