@@ -574,11 +574,16 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			//number of vector names provided in the import dialog (not more than the maximal number of columns in the file)
 			endColumn = qMin(vectorNames.size(), firstLineStringList.size());
 	}
+
+	if (endColumn < startColumn)
+		m_actualCols = 0;
+	else
+		m_actualCols = endColumn - startColumn + 1;
+
 	if (createIndexEnabled) {
 		vectorNames.prepend(i18n("Index"));
-		endColumn++;
+		m_actualCols++;
 	}
-	m_actualCols = endColumn - startColumn + 1;
 
 //TEST: readline-seek-readline fails
 	/*	qint64 testpos = device.pos();
@@ -1301,7 +1306,11 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	for (int i = 0; i < m_actualStartRow - 1; ++i)
 		device.readLine();
 
-	DEBUG("	Reading " << qMin(lines, m_actualRows)  << " lines");
+	DEBUG("	Reading " << qMin(lines, m_actualRows)  << " lines, " << m_actualCols << " columns");
+
+	if (qMin(lines, m_actualRows) == 0 || m_actualCols == 0)
+		return;
+
 	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
 		QString line = device.readLine();
 
@@ -1332,8 +1341,12 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				continue;
 			}
 
-			if ((createIndexEnabled ? n - 1 : n) < lineStringList.size()) {
-				QString valueString = lineStringList.at(createIndexEnabled ? n - 1 : n);
+			//column counting starts with 1, substract 1 as well as another 1 for the index column if required
+			int col = createIndexEnabled ? n + startColumn - 2: n + startColumn - 1;
+
+
+			if (col < lineStringList.size()) {
+				QString valueString = lineStringList.at(col);
 
 				// set value depending on data type
 				switch (columnModes[n]) {
@@ -1391,7 +1404,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	}
 	DEBUG("	Read " << currentRow << " lines");
 
-	dataSource->finalizeImport(m_columnOffset, startColumn, endColumn, currentRow, dateTimeFormat, importMode);
+	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, currentRow, dateTimeFormat, importMode);
 }
 
 /*!
@@ -1568,8 +1581,11 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 				continue;
 			}
 
-			if ((createIndexEnabled ? n - 1 : n) < lineStringList.size()) {
-				QString valueString = lineStringList.at(createIndexEnabled ? n - 1 : n);
+			//column counting starts with 1, substract 1 as well as another 1 for the index column if required
+			int col = createIndexEnabled ? n + startColumn - 2: n + startColumn - 1;
+
+			if (col < lineStringList.size()) {
+				QString valueString = lineStringList.at(col);
 				//DEBUG(" valueString = " << valueString.toStdString());
 				if (skipEmptyParts && !QString::compare(valueString, " "))	// handle left white spaces
 					continue;
@@ -1644,7 +1660,6 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "endRow", QString::number(d->endRow));
 	writer->writeAttribute( "startColumn", QString::number(d->startColumn));
 	writer->writeAttribute( "endColumn", QString::number(d->endColumn));
-
 	writer->writeEndElement();
 }
 

@@ -335,6 +335,172 @@ void AsciiFilterTest::testHeader06() {
 }
 
 //##############################################################################
+//#####################  handling of different read ranges #####################
+//##############################################################################
+void AsciiFilterTest::testColumnRange00() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "numeric_data.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter("auto");
+	filter.setHeaderEnabled(false);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//no ranges specified, all rows and columns have to be read
+	QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.columnCount(), 3);
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
+
+	//check the values for the first line
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1.716299);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), -0.485527);
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), -0.288690);
+}
+
+void AsciiFilterTest::testColumnRange01() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "numeric_data.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter("auto");
+	filter.setHeaderEnabled(false);
+	filter.setCreateIndexEnabled(true);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//no ranges specified, all rows and columns have to be read plus the additional column for the index
+	QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.columnCount(), 4);
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
+
+	//check the values for the first line
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.716299);
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), -0.485527);
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), -0.288690);
+}
+
+void AsciiFilterTest::testColumnRange02() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "numeric_data.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter("auto");
+	filter.setHeaderEnabled(false);
+	filter.setStartColumn(2);
+	filter.setEndColumn(3);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//read all rows and the last two columns only
+	QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+
+	//check the values for the first line
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), -0.485527);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), -0.288690);
+}
+
+void AsciiFilterTest::testColumnRange03() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "numeric_data.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter("auto");
+	filter.setHeaderEnabled(false);
+	filter.setCreateIndexEnabled(true);
+	filter.setStartColumn(2);
+	filter.setEndColumn(3);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//read all rows and the last two columns only plus the additional column for the index
+	QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.columnCount(), 3);
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
+
+	//check the values for the first line
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), -0.485527);
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), -0.288690);
+}
+
+void AsciiFilterTest::testColumnRange04() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "numeric_data.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter("auto");
+	filter.setHeaderEnabled(false);
+	filter.setStartColumn(3);
+	filter.setEndColumn(3);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//read all rows and the last column only
+	QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Numeric);
+
+	//check the values for the first line
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), -0.288690);
+}
+
+void AsciiFilterTest::testColumnRange05() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "numeric_data.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter("auto");
+	filter.setHeaderEnabled(false);
+	filter.setStartColumn(3);
+	filter.setEndColumn(2);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//wrong column range specified (start>end), nothing to read,
+	//empty spreadsheet because of the replace mode
+	QCOMPARE(spreadsheet.rowCount(), 0);
+	QCOMPARE(spreadsheet.columnCount(), 0);
+}
+
+void AsciiFilterTest::testColumnRange06() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "numeric_data.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter("auto");
+	filter.setHeaderEnabled(false);
+	filter.setCreateIndexEnabled(true);
+	filter.setStartColumn(3);
+	filter.setEndColumn(2);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//wrong column range specified (start>end), only the index column is created
+	QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+}
+
+//##############################################################################
 //#####################  handling of different separators ######################
 //##############################################################################
 

@@ -54,6 +54,15 @@ private slots:
 	void testHeader05();
 	void testHeader06();
 
+	//read ranges
+	void testColumnRange00();
+	void testColumnRange01();
+	void testColumnRange02();
+	void testColumnRange03();
+	void testColumnRange04();
+	void testColumnRange05();
+	void testColumnRange06();
+
 	//different separators
 
 	//different locales
