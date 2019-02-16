@@ -1682,75 +1682,21 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 	else
 		d->separatingCharacter = str;
 
-	str = attribs.value("createIndex").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("createIndex").toString());
-	else
-		d->createIndexEnabled = str.toInt();
-
-	str = attribs.value("autoMode").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("autoMode").toString());
-	else
-		d->autoModeEnabled = str.toInt();
-
-	str = attribs.value("header").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("header").toString());
-	else
-		d->headerEnabled = str.toInt();
+	READ_INT_VALUE("createIndex", createIndexEnabled, bool);
+	READ_INT_VALUE("autoMode", autoModeEnabled, bool);
+	READ_INT_VALUE("header", headerEnabled, bool);
 
 	str = attribs.value("vectorNames").toString();
 	d->vectorNames = str.split(' '); //may be empty
 
-	str = attribs.value("simplifyWhitespaces").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("simplifyWhitespaces").toString());
-	else
-		d->simplifyWhitespacesEnabled = str.toInt();
-
-	str = attribs.value("nanValue").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("nanValue").toString());
-	else
-		d->nanValue = str.toDouble();
-
-	str = attribs.value("removeQuotes").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("removeQuotes").toString());
-	else
-		d->removeQuotesEnabled = str.toInt();
-
-	str = attribs.value("skipEmptyParts").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("skipEmptyParts").toString());
-	else
-		d->skipEmptyParts = str.toInt();
-
-	str = attribs.value("startRow").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("startRow").toString());
-	else
-		d->startRow = str.toInt();
-
-	str = attribs.value("endRow").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("endRow").toString());
-	else
-		d->endRow = str.toInt();
-
-	str = attribs.value("startColumn").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("startColumn").toString());
-	else
-		d->startColumn = str.toInt();
-
-	str = attribs.value("endColumn").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("endColumn").toString());
-	else
-		d->endColumn = str.toInt();
-
+	READ_INT_VALUE("simplifyWhitespaces", simplifyWhitespacesEnabled, bool);
+	READ_DOUBLE_VALUE("nanValue", nanValue);
+	READ_INT_VALUE("removeQuotes", removeQuotesEnabled, bool);
+	READ_INT_VALUE("skipEmptyParts", skipEmptyParts, bool);
+	READ_INT_VALUE("startRow", startRow, int);
+	READ_INT_VALUE("endRow", endRow, int);
+	READ_INT_VALUE("startColumn", startColumn, int);
+	READ_INT_VALUE("endColumn", endColumn, int);
 	return true;
 }
 
@@ -2278,12 +2224,11 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 				//Calculate the difference between the old and new keepNValues
 				int rowDiff = 0;
-				if (m_actualRows > spreadsheet->keepNValues()) {
+				if (m_actualRows > spreadsheet->keepNValues())
 					rowDiff = m_actualRows -  spreadsheet->keepNValues();
-				}
-				if (m_actualRows < spreadsheet->keepNValues()) {
+
+				if (m_actualRows < spreadsheet->keepNValues())
 					rowDiff = spreadsheet->keepNValues() - m_actualRows;
-				}
 
 				for (int n = 0; n < columnModes.size(); ++n) {
 					// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
@@ -2311,9 +2256,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 								static_cast<QVector<double>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNValues() - i) =
 										static_cast<QVector<double>*>(m_dataContainer[n])->operator[](spreadsheet->keepNValues() - i - rowDiff);
 							}
-							for (int i = 0; i < rowDiff; i++) {
+							for (int i = 0; i < rowDiff; i++)
 								static_cast<QVector<double>*>(m_dataContainer[n])->operator[](i) = nanValue;
-							}
 						}
 						break;
 					}
@@ -2339,9 +2283,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 								static_cast<QVector<int>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNValues() - i) =
 										static_cast<QVector<int>*>(m_dataContainer[n])->operator[](spreadsheet->keepNValues() - i - rowDiff);
 							}
-							for (int i = 0; i < rowDiff; i++) {
+							for (int i = 0; i < rowDiff; i++)
 								static_cast<QVector<int>*>(m_dataContainer[n])->operator[](i) = 0;
-							}
 						}
 						break;
 					}
@@ -2448,20 +2391,16 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 				else
 					linesToRead = qMin(spreadsheet->keepNValues(), newLinesTillEnd);
 			}
-		} else {
+		} else
 			linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
-		}
 
 		if (linesToRead == 0)
 			return;
-
 	} else {
-		if (keepNValues != 0) {
+		if (keepNValues != 0)
 			linesToRead = newLinesTillEnd > m_actualRows ? m_actualRows : newLinesTillEnd;
-		}
-		else {
+		else
 			linesToRead = newLinesTillEnd;
-		}
 	}
 	qDebug()<<"linestoread = " << linesToRead;
 
@@ -2530,9 +2469,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 			if (readingType == MQTTClient::ReadingType::TillEnd) {
 				if (newLinesTillEnd > m_actualRows)
 					currentRow = 0;
-				else {
+				else
 					currentRow = m_actualRows - newLinesTillEnd;
-				}
 			} else {
 				//we read max sample rate number of lines when the reading mode
 				//is ContinuouslyFixed or FromEnd
@@ -2618,8 +2556,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 			if (simplifyWhitespacesEnabled)
 				line = line.simplified();
 
-			if (line.isEmpty() || line.startsWith(commentCharacter))
-			{
+			if (line.isEmpty() || line.startsWith(commentCharacter)) {
 				qDebug()<<"found empty line     "<<currentRow;
 				continue;
 			}
@@ -2846,13 +2783,12 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 			AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 
 			// numeric: integer -> numeric
-			if (mode == AbstractColumn::Numeric && columnModes[m_actualCols-1] == AbstractColumn::Integer) {
+			if (mode == AbstractColumn::Numeric && columnModes[m_actualCols-1] == AbstractColumn::Integer)
 				columnModes[m_actualCols-1] = mode;
-			}
+
 			// text: non text -> text
-			if (mode == AbstractColumn::Text && columnModes[m_actualCols-1] != AbstractColumn::Text) {
+			if (mode == AbstractColumn::Text && columnModes[m_actualCols-1] != AbstractColumn::Text)
 				columnModes[m_actualCols-1] = mode;
-			}
 		}
 	}
 	//Improve the column mode based on the remaining values
@@ -2866,13 +2802,12 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 				AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString2, dateTimeFormat, numberFormat);
 
 				// numeric: integer -> numeric
-				if (mode == AbstractColumn::Numeric && columnModes[m_actualCols-1] == AbstractColumn::Integer) {
+				if (mode == AbstractColumn::Numeric && columnModes[m_actualCols-1] == AbstractColumn::Integer)
 					columnModes[m_actualCols-1] = mode;
-				}
+
 				// text: non text -> text
-				if (mode == AbstractColumn::Text && columnModes[m_actualCols-1] != AbstractColumn::Text) {
+				if (mode == AbstractColumn::Text && columnModes[m_actualCols-1] != AbstractColumn::Text)
 					columnModes[m_actualCols-1] = mode;
-				}
 			}
 		}
 	}
@@ -2883,11 +2818,9 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 	for (const auto& valueString : newDataList) {
 		if (!valueString.startsWith(commentCharacter)) {
 			QStringList splitString = valueString.split(m_separator, static_cast<QString::SplitBehavior>(skipEmptyParts));
-			for (const auto& valueString2 : splitString) {
-				if (!valueString2.isEmpty() && !valueString2.startsWith(commentCharacter)) {
+			for (const auto& valueString2 : splitString)
+				if (!valueString2.isEmpty() && !valueString2.startsWith(commentCharacter))
 					tempRowCount ++;
-				}
-			}
 		}
 	}
 
