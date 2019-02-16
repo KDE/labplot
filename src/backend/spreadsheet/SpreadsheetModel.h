@@ -89,7 +89,7 @@ protected:
 private:
 	Spreadsheet* m_spreadsheet;
 	bool m_formula_mode{false};
-	QList<int> m_vertical_header_data;
+	QVector<int> m_vertical_header_data;
 	QStringList m_horizontal_header_data;
 	int m_defaultHeaderHeight;
 	bool m_suppressSignals{false};
