@@ -101,6 +101,9 @@
 
 #ifdef HAVE_CANTOR_LIBS
 #include <cantor/backend.h>
+#include <KConfigDialog>
+#include <KCoreConfigSkeleton>
+#include <KConfigSkeleton>
 #endif
 
 /*!
@@ -566,6 +569,13 @@ void MainWin::initMenus() {
 	}
 
 	connect(schemesMenu->menu(), &QMenu::triggered, this, &MainWin::colorSchemeChanged);
+
+#ifdef HAVE_CANTOR_LIBS
+	QAction* action = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS"), this);
+	connect(action, &QAction::triggered, this, &MainWin::cantorSettingsDialog);
+	if (settingsMenu)
+		settingsMenu->addAction(action);
+#endif
 }
 
 void MainWin::colorSchemeChanged(QAction* action) {
@@ -1976,3 +1986,16 @@ void MainWin::settingsDialog() {
 	connect (dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
 	dlg->exec();
 }
+
+#ifdef HAVE_CANTOR_LIBS
+void MainWin::cantorSettingsDialog()
+{
+	static KCoreConfigSkeleton* emptyConfig = new KCoreConfigSkeleton();
+	KConfigDialog *cantorDialog = new KConfigDialog(this,  QLatin1String("Cantor Settings"), emptyConfig);
+	for (auto* backend : Cantor::Backend::availableBackends())
+		if (backend->config()) //It has something to configure, so add it to the dialog
+			cantorDialog->addPage(backend->settingsWidget(cantorDialog), backend->config(), backend->name(),  backend->icon());
+
+	cantorDialog->show();
+}
+#endif

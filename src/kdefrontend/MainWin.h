@@ -273,6 +273,7 @@ private slots:
 	//Cantor
 #ifdef HAVE_CANTOR_LIBS
 	void newCantorWorksheet(QAction* action);
+	void cantorSettingsDialog();
 #endif
 
 	void newFolder();
