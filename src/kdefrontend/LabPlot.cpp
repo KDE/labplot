@@ -142,8 +142,10 @@ int main (int argc, char *argv[]) {
 	MainWin* window = new MainWin(nullptr, filename);
 	window->show();
 
-	if (splash)
+	if (splash) {
 		splash->finish(window);
+		delete splash;
+	}
 
 	if (parser.isSet(presenterOption))
 		window->showPresenter();
