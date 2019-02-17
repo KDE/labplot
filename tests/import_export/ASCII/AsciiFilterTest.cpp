@@ -500,6 +500,116 @@ void AsciiFilterTest::testColumnRange06() {
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
 }
 
+
+void AsciiFilterTest::testRowRange00() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "numeric_data.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter("auto");
+	filter.setHeaderEnabled(false);
+	filter.setStartRow(3);
+	filter.setEndRow(5);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//three rows to read
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 3);
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
+
+	//check the values for the first and for the last lines
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1.711721);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), -0.485527);
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), -0.293267);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 1.716299);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), -0.494682);
+	QCOMPARE(spreadsheet.column(2)->valueAt(2), -0.284112);
+}
+
+void AsciiFilterTest::testRowRange01() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "numeric_data.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter("auto");
+	filter.setHeaderEnabled(false);
+	filter.setStartRow(3);
+	filter.setEndRow(10);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//end row larger than the the number of available rows, three rows to read
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 3);
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
+
+	//check the values for the first and for the last lines
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1.711721);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), -0.485527);
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), -0.293267);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 1.716299);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), -0.494682);
+	QCOMPARE(spreadsheet.column(2)->valueAt(2), -0.284112);
+}
+
+void AsciiFilterTest::testRowRange02() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "numeric_data.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter("auto");
+	filter.setHeaderEnabled(false);
+	filter.setStartRow(3);
+	filter.setEndRow(1);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//start bigger than end, no rows to read
+	//wrong row range specified (start>end), nothing to read,
+	//spreadsheet is not touched, default number of rows and columns
+	//TODO: this is inconsistent with the handling for columns, see testColumnRange05()
+	QCOMPARE(spreadsheet.rowCount(), 100);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+}
+
+void AsciiFilterTest::testRowColumnRange00() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "numeric_data.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter("auto");
+	filter.setHeaderEnabled(false);
+	filter.setStartRow(3);
+	filter.setEndRow(5);
+	filter.setStartColumn(2);
+	filter.setEndColumn(3);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//three rows and two columns to read
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+
+	//check the values for the first and for the last lines
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), -0.485527);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), -0.293267);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), -0.494682);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), -0.284112);
+}
+
 //##############################################################################
 //#####################  handling of different separators ######################
 //##############################################################################

@@ -648,7 +648,10 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	m_actualRows = (int)q->lineNumber(device);
 
 	const int actualEndRow = (endRow == -1 || endRow > m_actualRows) ? m_actualRows : endRow;
-	m_actualRows = actualEndRow - m_actualStartRow + 1;
+	if (actualEndRow > m_actualStartRow)
+		m_actualRows = actualEndRow - m_actualStartRow + 1;
+	else
+		m_actualRows = 0;
 
 	DEBUG("start/end column: " << startColumn << ' ' << endColumn);
 	DEBUG("start/end row: " << m_actualStartRow << ' ' << actualEndRow);
@@ -1669,18 +1672,10 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 bool AsciiFilter::load(XmlStreamReader* reader) {
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
+	QString str;
 
-	QString str = attribs.value("commentCharacter").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("commentCharacter").toString());
-	else
-		d->commentCharacter = str;
-
-	str = attribs.value("separatingCharacter").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("separatingCharacter").toString());
-	else
-		d->separatingCharacter = str;
+	READ_STRING_VALUE("commentCharacter", commentCharacter);
+	READ_STRING_VALUE("separatingCharacter", separatingCharacter);
 
 	READ_INT_VALUE("createIndex", createIndexEnabled, bool);
 	READ_INT_VALUE("autoMode", autoModeEnabled, bool);
