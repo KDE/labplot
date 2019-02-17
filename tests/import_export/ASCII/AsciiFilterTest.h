@@ -63,6 +63,12 @@ private slots:
 	void testColumnRange05();
 	void testColumnRange06();
 
+	void testRowRange00();
+	void testRowRange01();
+	void testRowRange02();
+
+	void testRowColumnRange00();
+
 	//different separators
 
 	//different locales
