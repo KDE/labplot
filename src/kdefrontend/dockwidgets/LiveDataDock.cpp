@@ -36,7 +36,6 @@ Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
 #ifdef HAVE_MQTT
 #include "kdefrontend/widgets/MQTTWillSettingsWidget.h"
-#include "kdefrontend/datasources/MQTTHelpers.h"
 #include "kdefrontend/datasources/MQTTSubscriptionWidget.h"
 #include <QMessageBox>
 #include <QWidgetAction>
@@ -865,7 +864,7 @@ bool LiveDataDock::testSubscribe(const QString& topic) {
 bool LiveDataDock::testUnsubscribe(const QString& topic) {
 	QTreeWidgetItem* currentItem = nullptr;
     for (int i = 0; i < m_subscriptionWidget->subscriptionCount(); ++i) {
-        if (MQTTHelpers::checkTopicContains(m_subscriptionWidget->topLevelSubscription(i)->text(0), topic)) {
+        if (MQTTSubscriptionWidget::checkTopicContains(m_subscriptionWidget->topLevelSubscription(i)->text(0), topic)) {
             currentItem = m_subscriptionWidget->topLevelSubscription(i);
 			break;
 		}
@@ -879,7 +878,7 @@ bool LiveDataDock::testUnsubscribe(const QString& topic) {
 			} else {
 				for (int i = 0; i < currentItem->childCount(); ++i) {
 					qDebug()<<currentItem->child(i)->text(0)<<" "<<topic;
-					if (MQTTHelpers::checkTopicContains(currentItem->child(i)->text(0), topic)) {
+                    if (MQTTSubscriptionWidget::checkTopicContains(currentItem->child(i)->text(0), topic)) {
 						currentItem = currentItem->child(i);
 						break;
 					} else if (i == currentItem->childCount() - 1)

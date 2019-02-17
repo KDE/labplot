@@ -59,6 +59,8 @@ public:
     void makeVisible(bool);
     void testSubscribe(QTreeWidgetItem*);
     void testUnsubscribe(QTreeWidgetItem*);
+    static bool checkTopicContains(const QString&, const QString&);
+    static void findSubscriptionLeafChildren(QVector<QTreeWidgetItem*>&, QTreeWidgetItem*);
 
 signals:
     void makeSubscription(const QString& name, quint8 QoS);
@@ -81,6 +83,11 @@ private:
     void unsubscribeFromTopic(const QString&);
     void manageCommonLevelSubscriptions();
     void updateSubscriptionCompleter();
+    static void addSubscriptionChildren(QTreeWidgetItem*, QTreeWidgetItem*);
+    static void restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList& list, int level);
+    static int checkCommonChildCount(int levelIdx, int level, QStringList& namelist, QTreeWidgetItem* currentItem);
+    static int commonLevelIndex(const QString& first, const QString& second);
+    static QString checkCommonLevel(const QString&, const QString&);
 
 private slots:
     void mqttAvailableTopicDoubleClicked(QTreeWidgetItem* item, int column);

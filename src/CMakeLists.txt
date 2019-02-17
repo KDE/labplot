@@ -39,8 +39,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ROOTOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/MQTTErrorWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/MQTTHelpers.cpp
-    ${KDEFRONTEND_DIR}/datasources/MQTTSubscriptionWidget
+    ${KDEFRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp

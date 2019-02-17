@@ -66,7 +66,6 @@ Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
 #ifdef HAVE_MQTT
 #include "kdefrontend/widgets/MQTTWillSettingsWidget.h"
 #include "MQTTConnectionManagerDialog.h"
-#include "MQTTHelpers.h"
 #include "MQTTSubscriptionWidget.h"
 #include <QMqttClient>
 #include <QMqttSubscription>
@@ -821,19 +820,19 @@ void ImportFileWidget::unsubscribeFromTopic(const QString& topicName, QVector<QT
 	QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
 	while (i.hasNext()) {
 		i.next();
-		if (MQTTHelpers::checkTopicContains(topicName, i.key().name()))
+        if (MQTTSubscriptionWidget::checkTopicContains(topicName, i.key().name()))
 			m_messageArrived.remove(i.key());
 	}
 
 	QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
 	while (j.hasNext()) {
 		j.next();
-		if (MQTTHelpers::checkTopicContains(topicName, j.key().name()))
+        if (MQTTSubscriptionWidget::checkTopicContains(topicName, j.key().name()))
 			m_lastMessage.remove(j.key());
 	}
 
 	for (int i = 0; i < m_subscribedTopicNames.size(); ++i) {
-		if (MQTTHelpers::checkTopicContains(topicName, m_subscribedTopicNames[i])) {
+        if (MQTTSubscriptionWidget::checkTopicContains(topicName, m_subscribedTopicNames[i])) {
 			m_subscribedTopicNames.remove(i);
 			i--;
 		}
@@ -2087,7 +2086,7 @@ void ImportFileWidget::showWillSettings() {
 
 	QVector<QTreeWidgetItem*> children;
 	for (int i = 0; i < m_subscriptionWidget->subscriptionCount(); ++i)
-		MQTTHelpers::findSubscriptionLeafChildren(children, m_subscriptionWidget->topLevelSubscription(i));
+        MQTTSubscriptionWidget::findSubscriptionLeafChildren(children, m_subscriptionWidget->topLevelSubscription(i));
 
 	QVector<QString> topics;
 	for (int i = 0; i < children.size(); ++i)
