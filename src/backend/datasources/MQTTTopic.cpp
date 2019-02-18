@@ -29,19 +29,13 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTSubscription.h"
-
 #include "backend/datasources/MQTTClient.h"
-#include "backend/core/Project.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 
-#include <QDateTime>
-#include <QProcess>
-#include <QDir>
 #include <QMenu>
 #include <QTimer>
-#include <QMessageBox>
 #include <QIcon>
 #include <QAction>
 #include <KLocalizedString>
@@ -49,8 +43,7 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
 /*!
   \class MQTTTopic
-  \brief Represents data stored in a file. Reading and writing is done with the help of appropriate I/O-filters.
-  Represents a topic of a subscription made in MQTTClient
+  \brief  Represents a topic of a subscription made in MQTTClient.
 
   \ingroup datasources
 */

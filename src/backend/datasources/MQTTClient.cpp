@@ -68,11 +68,6 @@ MQTTClient::MQTTClient(const QString& name) : Folder(name),
 	m_client(new QMqttClient(this)),
 	m_willTimer(new QTimer(this)) {
 
-	qDebug() << "MQTTClient constructor: " << m_client->hostname();
-	m_MQTTWill.enabled = false;
-	m_MQTTWill.willRetain = false;
-	m_MQTTWill.willStatistics.fill(false, 15);
-
 	connect(m_updateTimer, &QTimer::timeout, this, &MQTTClient::read);
 	connect(m_client, &QMqttClient::connected, this, &MQTTClient::onMQTTConnect);
 	connect(m_willTimer, &QTimer::timeout, this, &MQTTClient::updateWillMessage);
@@ -448,8 +443,6 @@ void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
 			}
 
 			connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::MQTTSubscriptionMessageReceived);
-
-			emit MQTTTopicsChanged();
 		}
 	}
 }
@@ -493,9 +486,6 @@ void MQTTClient::removeMQTTSubscription(const QString& subscriptionName) {
 				break;
 			}
 		}
-
-		//Signal that there was a change among the topics
-		emit MQTTTopicsChanged();
 	}
 }
 
@@ -983,7 +973,7 @@ void MQTTClient::read() {
 	}
 
 	if ((m_client->state() == QMqttClient::ClientState::Connected) && m_MQTTFirstConnectEstablished) {
-		qDebug()<<"Read";
+// 		qDebug()<<"Read";
 		//Signal for every MQTTTopic that they can read
 		emit readFromTopics();
 	}
@@ -1050,11 +1040,8 @@ void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
 	//Decide to interpret retain message or not
 	if (!msg.retain() || m_MQTTRetain) {
 		//If this is the first message from the topic, save its name
-		if (!m_topicNames.contains(msg.topic().name())) {
+		if (!m_topicNames.contains(msg.topic().name()))
 			m_topicNames.push_back(msg.topic().name());
-			//Signal that a new topic is found
-			emit MQTTTopicsChanged();
-		}
 
 		//Pass the message and the topic name to the MQTTSubscription which contains the topic
 		for (auto* subscription : m_MQTTSubscriptions) {
