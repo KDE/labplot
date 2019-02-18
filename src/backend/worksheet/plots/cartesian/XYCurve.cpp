@@ -729,6 +729,11 @@ void XYCurve::retransform() {
 	d->retransform();
 }
 
+void XYCurve::recalcLogicalPoints() {
+	Q_D(XYCurve);
+	d->recalcLogicalPoints();
+}
+
 void XYCurve::updateValues() {
 	Q_D(XYCurve);
 	d->updateValues();

@@ -143,6 +143,7 @@ public:
 	typedef XYCurvePrivate Private;
 
 	void retransform() override;
+	void recalcLogicalPoints();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 private slots:

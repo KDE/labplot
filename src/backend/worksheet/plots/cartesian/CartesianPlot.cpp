@@ -1479,7 +1479,7 @@ void CartesianPlot::dataChanged() {
 	else if (d->autoScaleY)
 		updated = this->scaleAutoY();
 
-	if (!updated) {
+	if (!updated || !QObject::sender()) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
 		//is within the current ranges and no change of the ranges is required,
 		//retransform the curve in order to show the changes
@@ -1491,11 +1491,14 @@ void CartesianPlot::dataChanged() {
 			if (hist)
 				hist->retransform();
 			else {
-				//no sender available, the function was called in CartesianPlot::dataChanged() (live data source got new data)
+				//no sender available, the function was called in CartesianPlot::dataChanged()
+				//via plot->dataChaged() in the file filter (live data source got new data)
 				//-> retransform all available curves since we don't know which curves are affected.
 				//TODO: this logic can be very expensive
-				for (auto* c : children<XYCurve>())
+				for (auto* c : children<XYCurve>()) {
+					c->recalcLogicalPoints();
 					c->retransform();
+				}
 			}
 		}
 	}
