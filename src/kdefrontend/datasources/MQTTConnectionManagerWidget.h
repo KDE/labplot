@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : widget for managing MQTT connections
 --------------------------------------------------------------------
 Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
+Copyright            : (C) 2018-2019 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -41,6 +42,7 @@ class MQTTConnectionManagerWidget : public QWidget {
 
 public:
 	explicit MQTTConnectionManagerWidget(QWidget*, const QString&);
+	~MQTTConnectionManagerWidget() override;
 
 	struct MQTTConnection {
 		QString name;
@@ -65,9 +67,9 @@ private:
 	bool m_initializing{false};
 	QString m_configPath;
 	QString m_initConnName;
-	QMqttClient* m_client;
-	bool m_testing {false};
-	QTimer* m_testTimer;
+	QMqttClient* m_client{nullptr};
+	bool m_testing{false};
+	QTimer* m_testTimer{nullptr};
 
 	QString uniqueName();
 	void loadConnection();

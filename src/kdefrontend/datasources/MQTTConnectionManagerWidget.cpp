@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : widget for managing MQTT connections
 --------------------------------------------------------------------
 Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
+Copyright            : (C) 2018-2019 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 
@@ -36,6 +37,7 @@ Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KSharedConfig>
+
 #include <QTimer>
 #include <QtMqtt>
 #include <QDebug>
@@ -48,13 +50,9 @@ Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
    \ingroup kdefrontend
 */
 MQTTConnectionManagerWidget::MQTTConnectionManagerWidget(QWidget* parent, const QString& conn) : QWidget(parent),
-	m_initConnName(conn),
-	m_client(new QMqttClient),
-	m_testTimer(new QTimer(this)) {
+	m_initConnName(conn) {
 
 	ui.setupUi(this);
-
-	m_testTimer->setInterval(5000);
 
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "MQTT_connections";
 
@@ -66,9 +64,6 @@ MQTTConnectionManagerWidget::MQTTConnectionManagerWidget(QWidget* parent, const 
 	ui.bTest->setIcon(QIcon::fromTheme("network-connect"));
 
 	//SIGNALs/SLOTs
-	connect(m_testTimer, &QTimer::timeout, this, &MQTTConnectionManagerWidget::testTimeout);
-	connect(m_client, &QMqttClient::connected, this, &MQTTConnectionManagerWidget::onConnect);
-	connect(m_client, &QMqttClient::disconnected, this, &MQTTConnectionManagerWidget::onDisconnect);
 	connect(ui.leName, &QLineEdit::textChanged, this, &MQTTConnectionManagerWidget::nameChanged);
 	connect(ui.lwConnections, &QListWidget::currentRowChanged, this, &MQTTConnectionManagerWidget::connectionChanged);
 	connect(ui.bAdd, &QPushButton::clicked, this, &MQTTConnectionManagerWidget::addConnection);
@@ -95,7 +90,11 @@ MQTTConnectionManagerWidget::MQTTConnectionManagerWidget(QWidget* parent, const 
 	ui.leHost->setToolTip("Please set a valid host name");
 	ui.leHost->setToolTip("Please set a valid name");
 
-	QTimer::singleShot( 100, this, SLOT(loadConnections()));
+	QTimer::singleShot(100, this, SLOT(loadConnections()));
+}
+
+MQTTConnectionManagerWidget::~MQTTConnectionManagerWidget() {
+	delete m_client;
 }
 
 /*!
@@ -612,6 +611,15 @@ void MQTTConnectionManagerWidget::testConnection() {
 
 	m_testing = true;
 	const int index = ui.lwConnections->currentRow();
+
+	if (!m_client) {
+		m_client = new QMqttClient;
+		m_testTimer = new QTimer(this);
+		m_testTimer->setInterval(5000);
+		connect(m_client, &QMqttClient::connected, this, &MQTTConnectionManagerWidget::onConnect);
+		connect(m_client, &QMqttClient::disconnected, this, &MQTTConnectionManagerWidget::onDisconnect);
+		connect(m_testTimer, &QTimer::timeout, this, &MQTTConnectionManagerWidget::testTimeout);
+	}
 
 	m_client->setHostname(m_connections[index].hostName);
 	m_client->setPort(m_connections[index].port);
