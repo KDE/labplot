@@ -443,6 +443,8 @@ void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
 			}
 
 			connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::MQTTSubscriptionMessageReceived);
+
+            emit MQTTTopicsChanged();
 		}
 	}
 }
@@ -486,6 +488,7 @@ void MQTTClient::removeMQTTSubscription(const QString& subscriptionName) {
 				break;
 			}
 		}
+        emit MQTTTopicsChanged();
 	}
 }
 
@@ -1052,8 +1055,11 @@ void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
 		}
 
 		//if the message was received by the will topic, update the last message received by it
-		if (msg.topic().name() == m_MQTTWill.willTopic)
+        if (msg.topic().name() == m_MQTTWill.willTopic) {
 			m_MQTTWill.willLastMessage = QString(msg.payload());
+
+            emit MQTTTopicsChanged();
+        }
 	}
 }
 

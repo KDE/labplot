@@ -55,12 +55,7 @@ public:
 
 	QString topicName() const;
 	MQTTClient* mqttClient() const;
-	void newMessage(const QString&);
-	int readingType() const;
-	int sampleSize() const;
-	bool isPaused() const;
-	int updateInterval() const;
-	int keepNValues() const;
+    void newMessage(const QString&);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

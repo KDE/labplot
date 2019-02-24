@@ -141,41 +141,6 @@ QWidget* MQTTTopic::view() const {
 }
 
 /*!
- *\brief Returns the reading type of the MQTTClient to which the MQTTTopic belongs
- */
-int MQTTTopic::readingType() const {
-	return static_cast<int> (m_MQTTClient->readingType());
-}
-
-/*!
- *\brief Returns sampleSize of the MQTTClient to which the MQTTTopic belongs
- */
-int MQTTTopic::sampleSize() const {
-	return m_MQTTClient->sampleSize();
-}
-
-/*!
- *\brief Returns whether reading is paused or not in the MQTTClient to which the MQTTTopic belongs
- */
-bool  MQTTTopic::isPaused() const {
-	return m_MQTTClient->isPaused();
-}
-
-/*!
- *\brief Returns update interval of the MQTTClient to which the MQTTTopic belongs
- */
-int MQTTTopic::updateInterval() const {
-	return m_MQTTClient->updateInterval();
-}
-
-/*!
- *\brief Returns the keepNValues (how many values we should keep) of the MQTTClient to which the MQTTTopic belongs
- */
-int MQTTTopic::keepNValues() const {
-	return m_MQTTClient->keepNValues();
-}
-
-/*!
  *\brief Adds a message received by the topic to the message puffer
  */
 void MQTTTopic::newMessage(const QString& message) {
