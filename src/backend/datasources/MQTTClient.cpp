@@ -236,7 +236,7 @@ MQTTClient::UpdateType MQTTClient::updateType() const {
  * \brief Returns the MQTTClient's icon
  */
 QIcon MQTTClient::icon() const {
-	return QIcon::fromTheme("labplot-MQTT");
+	return QIcon::fromTheme("network-server-database");
 }
 
 /*!

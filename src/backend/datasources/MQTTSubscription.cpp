@@ -145,7 +145,7 @@ void MQTTSubscription::setMQTTClient(MQTTClient* client) {
  *\brief Returns the icon of MQTTSubscription
  */
 QIcon MQTTSubscription::icon() const {
-	return QIcon::fromTheme("labplot-MQTT");
+	return QIcon::fromTheme("mail-signed-full");
 }
 
 //##############################################################################
