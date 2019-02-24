@@ -724,7 +724,13 @@ void LiveDataSource::watch() {
 		DEBUG("	file is watched");
 		if (!m_fileSystemWatcher) {
 			m_fileSystemWatcher = new QFileSystemWatcher;
+
+			//connect to file changes to read the new data
 			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
+
+			//connect to file changes to re-add the file path again - need to cope with deletion of files in text editors which
+			//on save create a new file in the temp folder first and then swap with the original one.
+			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, [=]() {m_fileSystemWatcher->addPath(m_fileName);});
 		}
 
 		if (!m_fileSystemWatcher->files().contains(m_fileName))

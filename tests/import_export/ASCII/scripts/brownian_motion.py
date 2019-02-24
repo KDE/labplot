@@ -42,7 +42,7 @@ for k in range(itersTotal):
 		datafile.write(out)
 		datafile.close()
 		if LIVE_DATA_DEBUG:
-			print out
+			print(out)
 		out = ""
 		i = 0
 		time.sleep(sleepInterval)
@@ -52,7 +52,7 @@ if LIVE_DATA and out != "":
 	datafile.write(out)
 	datafile.close()
 	if LIVE_DATA_DEBUG:
-		print out
+		print(out)
 
 if not LIVE_DATA:
 	datafile = open(fileName, "a")
