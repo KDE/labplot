@@ -959,7 +959,8 @@ void ImportFileWidget::fileTypeChanged(int index) {
 
 	ui.tabWidget->addTab(ui.tabDataFormat, i18n("Data format"));
 	ui.tabWidget->addTab(ui.tabDataPreview, i18n("Preview"));
-	ui.tabWidget->addTab(ui.tabDataPortion, i18n("Data portion to read"));
+	if (!m_liveDataSource)
+		ui.tabWidget->addTab(ui.tabDataPortion, i18n("Data portion to read"));
 
 	ui.lPreviewLines->show();
 	ui.sbPreviewLines->show();
