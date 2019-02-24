@@ -51,15 +51,6 @@ MQTTSubscription::~MQTTSubscription() {
 }
 
 /*!
- *\brief Adds an MQTTTopic as a child
- *
- * \param topicName the name of the topic, which will be added to the tree widget
- */
-void MQTTSubscription::addTopic(const QString& topicName) {
-	addChild(new MQTTTopic(topicName, this, false));
-}
-
-/*!
  *\brief Returns the object's MQTTTopic children
  *
  * \return a vector of pointers to the children of the MQTTSubscription
@@ -106,20 +97,11 @@ void MQTTSubscription::messageArrived(const QString& message, const QString& top
 
 	//if the topic can't be found, we add it as a new MQTTTopic, and read from it if needed
 	if (!found) {
-		addTopic(topicName);
-		topics = children<MQTTTopic>();
-		MQTTTopic* newTopic = nullptr;
-		for (auto* topic: topics) {
-			if (topicName == topic->topicName()) {
-				newTopic = topic;
-				break;
-			}
-		}
-		if (newTopic != nullptr) {
-			newTopic->newMessage(message);
-			if ((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) && !m_MQTTClient->isPaused())
-				newTopic->read();
-		}
+		MQTTTopic* newTopic = new MQTTTopic(topicName, this, false);
+		addChildFast(newTopic); //no need for undo/redo here
+		newTopic->newMessage(message);
+		if ((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) && !m_MQTTClient->isPaused())
+			newTopic->read();
 	}
 }
 
@@ -195,16 +177,8 @@ bool MQTTSubscription::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		} else if (reader->name() == "general") {
 			attribs = reader->attributes();
-
-			str = attribs.value("subscriptionName").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'subscriptionName'"));
-			else {
-				m_subscriptionName =  str;
-				setName(str);
-			}
-
-		}  else if ( reader->name() == QLatin1String("MQTTTopic")) {
+			m_subscriptionName = attribs.value("subscriptionName").toString();
+		} else if(reader->name() == QLatin1String("MQTTTopic")) {
 			MQTTTopic* topic = new MQTTTopic("", this, false);
 			if (!topic->load(reader, preview)) {
 				delete topic;

@@ -400,7 +400,7 @@ void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
 			MQTTSubscription* newSubscription = new MQTTSubscription(temp->topic().filter());
 			newSubscription->setMQTTClient(this);
 
-			addChild(newSubscription);
+			addChildFast(newSubscription);
 			m_MQTTSubscriptions.push_back(newSubscription);
 
 			//Search for inferior subscriptions, that the new subscription contains
@@ -511,7 +511,7 @@ void MQTTClient::addBeforeRemoveSubscription(const QString& topicName, quint8 Qo
 			MQTTSubscription* newSubscription = new MQTTSubscription(temp->topic().filter());
 			newSubscription->setMQTTClient(this);
 
-			addChild(newSubscription);
+			addChildFast(newSubscription);
 			m_MQTTSubscriptions.push_back(newSubscription);
 
 			//Search for the subscription the topic belonged to
@@ -1002,7 +1002,7 @@ void MQTTClient::onMQTTConnect() {
 						MQTTSubscription* newSubscription = new MQTTSubscription(temp->topic().filter());
 						newSubscription->setMQTTClient(this);
 
-						addChild(newSubscription);
+						addChildFast(newSubscription);
 
 						m_MQTTSubscriptions.push_back(newSubscription);
 					}
@@ -1327,7 +1327,6 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 						m_MQTTWill.willStatistics[i] = str.toInt();
 				}
 			}
-
 		} else if (reader->name() == "asciiFilter") {
 			setFilter(new AsciiFilter);
 			if (!m_filter->load(reader))
