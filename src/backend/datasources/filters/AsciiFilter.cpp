@@ -93,14 +93,14 @@ void AsciiFilter::MQTTPreview(QVector<QStringList>& list, const QString& message
 /*!
   Returns the statistical data, that the MQTTTopic needs for the will message.
 */
-QString AsciiFilter::MQTTColumnStatistics(const MQTTTopic* topic) const{
+QString AsciiFilter::MQTTColumnStatistics(const MQTTTopic* topic) const {
 	return d->MQTTColumnStatistics(topic);
 }
 
 /*!
   Returns the column mode of the last column (the value column of the MQTTTopic).
 */
-AbstractColumn::ColumnMode AsciiFilter::MQTTColumnMode() const{
+AbstractColumn::ColumnMode AsciiFilter::MQTTColumnMode() const {
 	return d->MQTTColumnMode();
 }
 
@@ -218,7 +218,7 @@ QString AsciiFilter::fileInfoString(const QString& fileName) {
     returns the number of columns in the file \c fileName.
 */
 int AsciiFilter::columnNumber(const QString& fileName, const QString& separator) {
-    KFilterDev device(fileName);
+	KFilterDev device(fileName);
 	if (!device.open(QIODevice::ReadOnly)) {
 		DEBUG("Could not open file " << fileName.toStdString() << " for determining number of columns");
 		return -1;
@@ -348,7 +348,7 @@ void AsciiFilter::setCreateIndexEnabled(bool b) {
 	d->createIndexEnabled = b;
 }
 
-bool AsciiFilter::createIndexEnabled() const{
+bool AsciiFilter::createIndexEnabled() const {
 	return d->createIndexEnabled;
 }
 
@@ -472,7 +472,7 @@ QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
 int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	DEBUG("AsciiFilterPrivate::prepareDeviceToRead(): is sequential = " << device.isSequential() << ", can readLine = " << device.canReadLine());
 
-    if (!device.open(QIODevice::ReadOnly))
+	if (!device.open(QIODevice::ReadOnly))
 		return -1;
 
 	if (device.atEnd() && !device.isSequential()) // empty file
@@ -1696,7 +1696,7 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 }
 
 int AsciiFilterPrivate::isPrepared() {
-    return m_prepared;
+	return m_prepared;
 }
 
 #ifdef HAVE_MQTT
@@ -1969,7 +1969,7 @@ void AsciiFilterPrivate::MQTTPreview(QVector<QStringList>& list, const QString& 
  * \brief Returns the statistical data that is needed by the topic for its MQTTClient's will message
  * \param topic
  */
-QString AsciiFilterPrivate::MQTTColumnStatistics(const MQTTTopic* topic) const{
+QString AsciiFilterPrivate::MQTTColumnStatistics(const MQTTTopic* topic) const {
 	Column* const tempColumn = topic->child<Column>(m_actualCols - 1);
 	QString statistics;
 
@@ -2032,7 +2032,7 @@ QString AsciiFilterPrivate::MQTTColumnStatistics(const MQTTTopic* topic) const{
 	return statistics;
 }
 
-AbstractColumn::ColumnMode AsciiFilterPrivate::MQTTColumnMode() const{
+AbstractColumn::ColumnMode AsciiFilterPrivate::MQTTColumnMode() const {
 	return columnModes[m_actualCols - 1];
 }
 
@@ -2052,7 +2052,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 	MQTTTopic* spreadsheet = dynamic_cast<MQTTTopic*>(dataSource);
 
-    const int keepNValues = spreadsheet->mqttClient()->keepNValues();
+	const int keepNValues = spreadsheet->mqttClient()->keepNValues();
 
 	if (!m_prepared) {
 		qDebug()<<"Start preparing filter for: " << spreadsheet->topicName();
@@ -2082,8 +2082,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 		if (keepNValues == 0)
 			spreadsheet->setRowCount(m_actualRows > 1 ? m_actualRows : 1);
 		else {
-            spreadsheet->setRowCount(spreadsheet->mqttClient()->keepNValues());
-            m_actualRows = spreadsheet->mqttClient()->keepNValues();
+			spreadsheet->setRowCount(spreadsheet->mqttClient()->keepNValues());
+			m_actualRows = spreadsheet->mqttClient()->keepNValues();
 		}
 
 		m_dataContainer.resize(m_actualCols);
@@ -2120,7 +2120,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-				//TODO
+			//TODO
 			case AbstractColumn::Month:
 			case AbstractColumn::Day:
 				break;
@@ -2139,10 +2139,10 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 	} else {
 		//we have to read all the data when reading from end
 		//so we set readingType to TillEnd
-        if (static_cast<int> (spreadsheet->mqttClient()->readingType()) == MQTTClient::ReadingType::FromEnd)
+		if (static_cast<int> (spreadsheet->mqttClient()->readingType()) == MQTTClient::ReadingType::FromEnd)
 			readingType = MQTTClient::ReadingType::TillEnd;
 		else
-            readingType = spreadsheet->mqttClient()->readingType();
+			readingType = spreadsheet->mqttClient()->readingType();
 	}
 
 	//count the new lines, increase actualrows on each
@@ -2152,8 +2152,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 	int newLinesTillEnd = 0;
 	QVector<QString> newData;
 	if (readingType != MQTTClient::ReadingType::TillEnd) {
-        newData.reserve(spreadsheet->mqttClient()->sampleSize());
-        newData.resize(spreadsheet->mqttClient()->sampleSize());
+		newData.reserve(spreadsheet->mqttClient()->sampleSize());
+		newData.resize(spreadsheet->mqttClient()->sampleSize());
 	}
 
 	int newDataIdx = 0;
@@ -2179,7 +2179,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 						if (readingType != MQTTClient::ReadingType::TillEnd) {
 							newLinesForSampleSizeNotTillEnd++;
 							//for Continuous reading and FromEnd we read sample rate number of lines if possible
-                            if (newLinesForSampleSizeNotTillEnd == spreadsheet->mqttClient()->sampleSize()) {
+							if (newLinesForSampleSizeNotTillEnd == spreadsheet->mqttClient()->sampleSize()) {
 								sampleSizeReached = true;
 								break;
 							}
@@ -2195,8 +2195,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 	qDebug()<<"Processing message done";
 	//now we reset the readingType
-    if (spreadsheet->mqttClient()->readingType() == MQTTClient::ReadingType::FromEnd)
-        readingType = static_cast<MQTTClient::ReadingType>(spreadsheet->mqttClient()->readingType());
+	if (spreadsheet->mqttClient()->readingType() == MQTTClient::ReadingType::FromEnd)
+		readingType = static_cast<MQTTClient::ReadingType>(spreadsheet->mqttClient()->readingType());
 
 	//we had less new lines than the sample rate specified
 	if (readingType != MQTTClient::ReadingType::TillEnd)
@@ -2211,19 +2211,19 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 			m_actualRows = spreadsheetRowCountBeforeResize;
 		else {
 			//if the keepNValues changed since the last read we have to manage the columns accordingly
-            if (m_actualRows != spreadsheet->mqttClient()->keepNValues()) {
-                if (m_actualRows < spreadsheet->mqttClient()->keepNValues()) {
-                    spreadsheet->setRowCount(spreadsheet->mqttClient()->keepNValues());
-                    qDebug()<<"rowcount set to: " << spreadsheet->mqttClient()->keepNValues();
+			if (m_actualRows != spreadsheet->mqttClient()->keepNValues()) {
+				if (m_actualRows < spreadsheet->mqttClient()->keepNValues()) {
+					spreadsheet->setRowCount(spreadsheet->mqttClient()->keepNValues());
+					qDebug()<<"rowcount set to: " << spreadsheet->mqttClient()->keepNValues();
 				}
 
 				//Calculate the difference between the old and new keepNValues
 				int rowDiff = 0;
-                if (m_actualRows > spreadsheet->mqttClient()->keepNValues())
-                    rowDiff = m_actualRows -  spreadsheet->mqttClient()->keepNValues();
+				if (m_actualRows > spreadsheet->mqttClient()->keepNValues())
+					rowDiff = m_actualRows -  spreadsheet->mqttClient()->keepNValues();
 
-                if (m_actualRows < spreadsheet->mqttClient()->keepNValues())
-                    rowDiff = spreadsheet->mqttClient()->keepNValues() - m_actualRows;
+				if (m_actualRows < spreadsheet->mqttClient()->keepNValues())
+					rowDiff = spreadsheet->mqttClient()->keepNValues() - m_actualRows;
 
 				for (int n = 0; n < columnModes.size(); ++n) {
 					// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
@@ -2234,22 +2234,22 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 						//if the keepNValues got smaller then we move the last keepNValues count of data
 						//in the first keepNValues places
-                        if (m_actualRows > spreadsheet->mqttClient()->keepNValues()) {
-                            for (int i = 0; i < spreadsheet->mqttClient()->keepNValues(); i++) {
+						if (m_actualRows > spreadsheet->mqttClient()->keepNValues()) {
+							for (int i = 0; i < spreadsheet->mqttClient()->keepNValues(); i++) {
 								static_cast<QVector<double>*>(m_dataContainer[n])->operator[] (i) =
-                                        static_cast<QVector<double>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->mqttClient()->keepNValues() + i);
+								    static_cast<QVector<double>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->mqttClient()->keepNValues() + i);
 							}
 						}
 
 						//if the keepNValues got bigger we move the existing values to the last m_actualRows positions
 						//then fill the remaining lines with NaN
-                        if (m_actualRows < spreadsheet->mqttClient()->keepNValues()) {
-                            vector->reserve( spreadsheet->mqttClient()->keepNValues());
-                            vector->resize( spreadsheet->mqttClient()->keepNValues());
+						if (m_actualRows < spreadsheet->mqttClient()->keepNValues()) {
+							vector->reserve( spreadsheet->mqttClient()->keepNValues());
+							vector->resize( spreadsheet->mqttClient()->keepNValues());
 
 							for (int i = 1; i <= m_actualRows; i++) {
-                                static_cast<QVector<double>*>(m_dataContainer[n])->operator[] (spreadsheet->mqttClient()->keepNValues() - i) =
-                                        static_cast<QVector<double>*>(m_dataContainer[n])->operator[](spreadsheet->mqttClient()->keepNValues() - i - rowDiff);
+								static_cast<QVector<double>*>(m_dataContainer[n])->operator[] (spreadsheet->mqttClient()->keepNValues() - i) =
+								    static_cast<QVector<double>*>(m_dataContainer[n])->operator[](spreadsheet->mqttClient()->keepNValues() - i - rowDiff);
 							}
 							for (int i = 0; i < rowDiff; i++)
 								static_cast<QVector<double>*>(m_dataContainer[n])->operator[](i) = nanValue;
@@ -2262,21 +2262,21 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 						//if the keepNValues got smaller then we move the last keepNValues count of data
 						//in the first keepNValues places
-                        if (m_actualRows > spreadsheet->mqttClient()->keepNValues()) {
-                            for (int i = 0; i < spreadsheet->mqttClient()->keepNValues(); i++) {
+						if (m_actualRows > spreadsheet->mqttClient()->keepNValues()) {
+							for (int i = 0; i < spreadsheet->mqttClient()->keepNValues(); i++) {
 								static_cast<QVector<int>*>(m_dataContainer[n])->operator[] (i) =
-                                        static_cast<QVector<int>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->mqttClient()->keepNValues() + i);
+								    static_cast<QVector<int>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->mqttClient()->keepNValues() + i);
 							}
 						}
 
 						//if the keepNValues got bigger we move the existing values to the last m_actualRows positions
 						//then fill the remaining lines with 0
-                        if (m_actualRows < spreadsheet->mqttClient()->keepNValues()) {
-                            vector->reserve( spreadsheet->mqttClient()->keepNValues());
-                            vector->resize( spreadsheet->mqttClient()->keepNValues());
+						if (m_actualRows < spreadsheet->mqttClient()->keepNValues()) {
+							vector->reserve( spreadsheet->mqttClient()->keepNValues());
+							vector->resize( spreadsheet->mqttClient()->keepNValues());
 							for (int i = 1; i <= m_actualRows; i++) {
-                                static_cast<QVector<int>*>(m_dataContainer[n])->operator[] (spreadsheet->mqttClient()->keepNValues() - i) =
-                                        static_cast<QVector<int>*>(m_dataContainer[n])->operator[](spreadsheet->mqttClient()->keepNValues() - i - rowDiff);
+								static_cast<QVector<int>*>(m_dataContainer[n])->operator[] (spreadsheet->mqttClient()->keepNValues() - i) =
+								    static_cast<QVector<int>*>(m_dataContainer[n])->operator[](spreadsheet->mqttClient()->keepNValues() - i - rowDiff);
 							}
 							for (int i = 0; i < rowDiff; i++)
 								static_cast<QVector<int>*>(m_dataContainer[n])->operator[](i) = 0;
@@ -2289,21 +2289,21 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 						//if the keepNValues got smaller then we move the last keepNValues count of data
 						//in the first keepNValues places
-                        if (m_actualRows > spreadsheet->mqttClient()->keepNValues()) {
-                            for (int i = 0; i < spreadsheet->mqttClient()->keepNValues(); i++) {
+						if (m_actualRows > spreadsheet->mqttClient()->keepNValues()) {
+							for (int i = 0; i < spreadsheet->mqttClient()->keepNValues(); i++) {
 								static_cast<QVector<QString>*>(m_dataContainer[n])->operator[] (i) =
-                                        static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->mqttClient()->keepNValues() + i);
+								    static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->mqttClient()->keepNValues() + i);
 							}
 						}
 
 						//if the keepNValues got bigger we move the existing values to the last m_actualRows positions
 						//then fill the remaining lines with ""
-                        if (m_actualRows < spreadsheet->mqttClient()->keepNValues()) {
-                            vector->reserve( spreadsheet->mqttClient()->keepNValues());
-                            vector->resize( spreadsheet->mqttClient()->keepNValues());
+						if (m_actualRows < spreadsheet->mqttClient()->keepNValues()) {
+							vector->reserve( spreadsheet->mqttClient()->keepNValues());
+							vector->resize( spreadsheet->mqttClient()->keepNValues());
 							for (int i = 1; i <= m_actualRows; i++) {
-                                static_cast<QVector<QString>*>(m_dataContainer[n])->operator[] (spreadsheet->mqttClient()->keepNValues() - i) =
-                                        static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](spreadsheet->mqttClient()->keepNValues() - i - rowDiff);
+								static_cast<QVector<QString>*>(m_dataContainer[n])->operator[] (spreadsheet->mqttClient()->keepNValues() - i) =
+								    static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](spreadsheet->mqttClient()->keepNValues() - i - rowDiff);
 							}
 							for (int i = 0; i < rowDiff; i++)
 								static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](i) = "";
@@ -2316,39 +2316,39 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 						//if the keepNValues got smaller then we move the last keepNValues count of data
 						//in the first keepNValues places
-                        if (m_actualRows > spreadsheet->mqttClient()->keepNValues()) {
-                            for (int i = 0; i < spreadsheet->mqttClient()->keepNValues(); i++) {
+						if (m_actualRows > spreadsheet->mqttClient()->keepNValues()) {
+							for (int i = 0; i < spreadsheet->mqttClient()->keepNValues(); i++) {
 								static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[] (i) =
-                                        static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->mqttClient()->keepNValues() + i);
+								    static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->mqttClient()->keepNValues() + i);
 							}
 						}
 
 						//if the keepNValues got bigger we move the existing values to the last m_actualRows positions
 						//then fill the remaining lines with null datetime
-                        if (m_actualRows < spreadsheet->mqttClient()->keepNValues()) {
-                            vector->reserve( spreadsheet->mqttClient()->keepNValues());
-                            vector->resize( spreadsheet->mqttClient()->keepNValues());
+						if (m_actualRows < spreadsheet->mqttClient()->keepNValues()) {
+							vector->reserve( spreadsheet->mqttClient()->keepNValues());
+							vector->resize( spreadsheet->mqttClient()->keepNValues());
 							for (int i = 1; i <= m_actualRows; i++) {
-                                static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[] (spreadsheet->mqttClient()->keepNValues() - i) =
-                                        static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](spreadsheet->mqttClient()->keepNValues() - i - rowDiff);
+								static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[] (spreadsheet->mqttClient()->keepNValues() - i) =
+								    static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](spreadsheet->mqttClient()->keepNValues() - i - rowDiff);
 							}
 							for (int i = 0; i < rowDiff; i++)
 								static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](i) = QDateTime();
 						}
 						break;
 					}
-						//TODO
+					//TODO
 					case AbstractColumn::Month:
 					case AbstractColumn::Day:
 						break;
 					}
 				}
 				//if the keepNValues got smaller resize the spreadsheet
-                if (m_actualRows > spreadsheet->mqttClient()->keepNValues())
-                    spreadsheet->setRowCount(spreadsheet->mqttClient()->keepNValues());
+				if (m_actualRows > spreadsheet->mqttClient()->keepNValues())
+					spreadsheet->setRowCount(spreadsheet->mqttClient()->keepNValues());
 
 				//set the new row count
-                m_actualRows = spreadsheet->mqttClient()->keepNValues();
+				m_actualRows = spreadsheet->mqttClient()->keepNValues();
 				qDebug()<<"actual rows: "<<m_actualRows;
 			}
 		}
@@ -2364,7 +2364,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 		//but only after the preparation step
 		if (keepNValues == 0) {
 			if (readingType != MQTTClient::ReadingType::TillEnd)
-                m_actualRows += qMin(newData.size(), spreadsheet->mqttClient()->sampleSize());
+				m_actualRows += qMin(newData.size(), spreadsheet->mqttClient()->sampleSize());
 			else {
 				m_actualRows += newData.size();
 			}
@@ -2381,10 +2381,10 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 			} else {
 				//we read max sample size number of lines when the reading mode
 				//is ContinuouslyFixed or FromEnd
-                if (spreadsheet->mqttClient()->sampleSize() <= spreadsheet->mqttClient()->keepNValues())
-                    linesToRead = qMin(spreadsheet->mqttClient()->sampleSize(), newLinesTillEnd);
+				if (spreadsheet->mqttClient()->sampleSize() <= spreadsheet->mqttClient()->keepNValues())
+					linesToRead = qMin(spreadsheet->mqttClient()->sampleSize(), newLinesTillEnd);
 				else
-                    linesToRead = qMin(spreadsheet->mqttClient()->keepNValues(), newLinesTillEnd);
+					linesToRead = qMin(spreadsheet->mqttClient()->keepNValues(), newLinesTillEnd);
 			}
 		} else
 			linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
@@ -2449,7 +2449,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-				//TODO
+			//TODO
 			case AbstractColumn::Month:
 			case AbstractColumn::Day:
 				break;
@@ -2512,7 +2512,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
 					}
-						//TODO
+					//TODO
 					case AbstractColumn::Month:
 					case AbstractColumn::Day:
 						break;
@@ -2529,8 +2529,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 	//From end means that we read the last sample size amount of data
 	if (readingType == MQTTClient::ReadingType::FromEnd) {
 		if (m_prepared) {
-            if (newData.size() > spreadsheet->mqttClient()->sampleSize())
-                newDataIdx = newData.size() - spreadsheet->mqttClient()->sampleSize();
+			if (newData.size() > spreadsheet->mqttClient()->sampleSize())
+				newDataIdx = newData.size() - spreadsheet->mqttClient()->sampleSize();
 		}
 	}
 
@@ -2892,7 +2892,7 @@ void AsciiFilterPrivate::setPreparedForMQTT(bool prepared, MQTTTopic* topic, con
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-				//TODO
+			//TODO
 			case AbstractColumn::Month:
 			case AbstractColumn::Day:
 				break;

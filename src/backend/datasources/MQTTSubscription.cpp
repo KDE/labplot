@@ -87,7 +87,7 @@ void MQTTSubscription::messageArrived(const QString& message, const QString& top
 
 			//read the message if needed
 			if ((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) &&
-					!m_MQTTClient->isPaused())
+			        !m_MQTTClient->isPaused())
 				topic->read();
 
 			found = true;

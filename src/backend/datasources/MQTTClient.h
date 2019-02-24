@@ -251,7 +251,7 @@ private slots:
 
 signals:
 	void MQTTSubscribed();
-    void MQTTTopicsChanged();
+	void MQTTTopicsChanged();
 	void readFromTopics();
 	void clientAboutToBeDeleted(const QString&, quint16);
 

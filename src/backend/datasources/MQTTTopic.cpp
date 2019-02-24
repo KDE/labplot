@@ -150,7 +150,7 @@ void MQTTTopic::newMessage(const QString& message) {
 /*!
  *\brief Returns the name of the MQTTTopic
  */
-QString MQTTTopic::topicName() const{
+QString MQTTTopic::topicName() const {
 	return m_topicName;
 }
 
@@ -165,7 +165,7 @@ void MQTTTopic::initActions() {
 /*!
  *\brief Returns the MQTTClient the topic belongs to
  */
-MQTTClient *MQTTTopic::mqttClient() const{
+MQTTClient *MQTTTopic::mqttClient() const {
 	return m_MQTTClient;
 }
 

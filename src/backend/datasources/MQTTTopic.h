@@ -55,7 +55,7 @@ public:
 
 	QString topicName() const;
 	MQTTClient* mqttClient() const;
-    void newMessage(const QString&);
+	void newMessage(const QString&);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

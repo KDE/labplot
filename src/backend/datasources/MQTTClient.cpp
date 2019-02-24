@@ -408,7 +408,7 @@ void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
 			QVector<MQTTSubscription*> inferiorSubscriptions;
 			for (auto* subscription : m_MQTTSubscriptions) {
 				if (checkTopicContains(topicName, subscription->subscriptionName())
-						&& topicName != subscription->subscriptionName()) {
+				        && topicName != subscription->subscriptionName()) {
 					found = true;
 					inferiorSubscriptions.push_back(subscription);
 				}
@@ -431,7 +431,7 @@ void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
 
 					for (int j = 0; j < m_MQTTSubscriptions.size(); ++j) {
 						if (m_MQTTSubscriptions[j]->subscriptionName() ==
-								inferiorSubscription->subscriptionName()) {
+						        inferiorSubscription->subscriptionName()) {
 							m_MQTTSubscriptions.remove(j);
 						}
 					}
@@ -444,7 +444,7 @@ void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
 
 			connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::MQTTSubscriptionMessageReceived);
 
-            emit MQTTTopicsChanged();
+			emit MQTTTopicsChanged();
 		}
 	}
 }
@@ -488,7 +488,7 @@ void MQTTClient::removeMQTTSubscription(const QString& subscriptionName) {
 				break;
 			}
 		}
-        emit MQTTTopicsChanged();
+		emit MQTTTopicsChanged();
 	}
 }
 
@@ -522,7 +522,7 @@ void MQTTClient::addBeforeRemoveSubscription(const QString& topicName, quint8 Qo
 			MQTTSubscription* superiorSubscription = nullptr;
 			for (auto* subscription : m_MQTTSubscriptions) {
 				if (checkTopicContains(subscription->subscriptionName(), topicName)
-						&& topicName != subscription->subscriptionName()) {
+				        && topicName != subscription->subscriptionName()) {
 					found = true;
 					superiorSubscription = subscription;
 					break;
@@ -612,7 +612,7 @@ bool MQTTClient::checkTopicContains(const QString& superior, const QString& infe
 			for (int i = 0; i < superiorList.size(); ++i) {
 				if (superiorList.at(i) != inferiorList.at(i)) {
 					if ((superiorList.at(i) != '+') &&
-							!(superiorList.at(i) == '#' && i == superiorList.size() - 1)) {
+					        !(superiorList.at(i) == '#' && i == superiorList.size() - 1)) {
 						//if the two topics differ, and the superior's current level isn't + or #(which can be only in the last position)
 						//then superior can't contain inferior
 						ok = false;
@@ -693,7 +693,7 @@ void MQTTClient::setWillSettings(MQTTWill settings) {
 	m_MQTTWill = settings;
 }
 
-MQTTClient::MQTTWill MQTTClient::willSettings() const{
+MQTTClient::MQTTWill MQTTClient::willSettings() const {
 	return m_MQTTWill;
 }
 
@@ -711,7 +711,7 @@ void MQTTClient::setMQTTWillUse(bool use) {
 /*!
  * \brief Returns whether the user wants to use will message or not
  */
-bool MQTTClient::MQTTWillUse() const{
+bool MQTTClient::MQTTWillUse() const {
 	return m_MQTTWill.enabled;
 }
 
@@ -728,7 +728,7 @@ void  MQTTClient::setWillTopic(const QString& topic) {
 /*!
  * \brief Returns the will topic of the client
  */
-QString MQTTClient::willTopic() const{
+QString MQTTClient::willTopic() const {
 	return m_MQTTWill.willTopic;
 }
 
@@ -848,7 +848,7 @@ void MQTTClient::updateWillMessage() {
 				if (asciiFilter != nullptr) {
 					//Statistics is only possible if the data stored in the MQTTTopic is of type integer or numeric
 					if ((asciiFilter->MQTTColumnMode() == AbstractColumn::ColumnMode::Integer) ||
-							(asciiFilter->MQTTColumnMode() == AbstractColumn::ColumnMode::Numeric)) {
+					        (asciiFilter->MQTTColumnMode() == AbstractColumn::ColumnMode::Numeric)) {
 						m_client->setWillMessage(asciiFilter->MQTTColumnStatistics(willTopic).toUtf8());
 					}
 					//Otherwise set empty message
@@ -877,7 +877,7 @@ void MQTTClient::updateWillMessage() {
 /*!
  * \brief Returns the MQTTClient's will update type
  */
-MQTTClient::WillUpdateType MQTTClient::willUpdateType() const{
+MQTTClient::WillUpdateType MQTTClient::willUpdateType() const {
 	return m_MQTTWill.willUpdateType;
 }
 
@@ -893,7 +893,7 @@ void MQTTClient::setWillUpdateType(WillUpdateType willUpdateType) {
 /*!
  * \brief Returns the time interval of updating the MQTTClient's will message
  */
-int MQTTClient::willTimeInterval() const{
+int MQTTClient::willTimeInterval() const {
 	return m_MQTTWill.willTimeInterval;
 }
 
@@ -938,14 +938,14 @@ void MQTTClient::removeWillStatistics(WillStatisticsType statistic) {
  * \brief Returns a bool vector, meaning which statistic types are included in the will message
  * If the corresponding value is true, the statistic type is included, otherwise it isn't
  */
-QVector<bool> MQTTClient::willStatistics() const{
+QVector<bool> MQTTClient::willStatistics() const {
 	return m_MQTTWill.willStatistics;
 }
 
 /*!
  * \brief Starts the will timer, which will update the will message
  */
-void MQTTClient::startWillTimer() const{
+void MQTTClient::startWillTimer() const {
 	if (m_MQTTWill.willUpdateType == WillUpdateType::TimePeriod)
 		m_willTimer->start(m_MQTTWill.willTimeInterval);
 }
@@ -953,7 +953,7 @@ void MQTTClient::startWillTimer() const{
 /*!
  * \brief Stops the will timer
  */
-void MQTTClient::stopWillTimer() const{
+void MQTTClient::stopWillTimer() const {
 	m_willTimer->stop();
 }
 
@@ -1055,11 +1055,11 @@ void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
 		}
 
 		//if the message was received by the will topic, update the last message received by it
-        if (msg.topic().name() == m_MQTTWill.willTopic) {
+		if (msg.topic().name() == m_MQTTWill.willTopic) {
 			m_MQTTWill.willLastMessage = QString(msg.payload());
 
-            emit MQTTTopicsChanged();
-        }
+			emit MQTTTopicsChanged();
+		}
 	}
 }
 
