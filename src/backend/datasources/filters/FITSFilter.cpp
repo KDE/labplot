@@ -680,10 +680,10 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			const int tfields = matrix->columnCount();
 			QVector<char*> columnNames;
 			columnNames.resize(tfields);
-			columnNames.shrink_to_fit();
+			columnNames.squeeze();
 			QVector<char*> tform;
 			tform.resize(tfields);
-			tform.shrink_to_fit();
+			tform.squeeze();
 			//TODO: mode
 			const QVector<QVector<double>>* const matrixData = static_cast<QVector<QVector<double>>*>(matrix->data());
 			const MatrixModel* matrixModel = static_cast<MatrixView*>(matrix->view())->model();
@@ -809,13 +809,13 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
 			QVector<char*> columnNames;
 			columnNames.resize(tfields);
-			columnNames.shrink_to_fit();
+			columnNames.squeeze();
 			QVector<char*> tform;
 			tform.resize(tfields);
-			tform.shrink_to_fit();
+			tform.squeeze();
 			QVector<char*> tunit;
 			tunit.resize(tfields);
-			tunit.shrink_to_fit();
+			tunit.squeeze();
 
 			for (int i = 0; i < tfields; ++i) {
 				const Column* const column =  spreadsheet->column(i);
@@ -904,7 +904,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
 			QVector<char*> column;
 			column.resize(nrows);
-			column.shrink_to_fit();
+			column.squeeze();
 
 			double* columnNumeric = new double[nrows];
 			for (int col = 1; col <= tfields; ++col) {
