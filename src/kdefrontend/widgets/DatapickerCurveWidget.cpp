@@ -128,8 +128,8 @@ void DatapickerCurveWidget::setCurves(QList<DatapickerCurve*> list) {
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
 		ui.leComment->setEnabled(false);
-		ui.leName->setText("");
-		ui.leComment->setText("");
+		ui.leName->setText(QString());
+		ui.leComment->setText(QString());
 	}
 
 	load();

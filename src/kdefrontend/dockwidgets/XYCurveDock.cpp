@@ -547,8 +547,8 @@ void XYCurveDock::initGeneralTab() {
 		cbXColumn->setCurrentModelIndex(QModelIndex());
 		cbYColumn->setCurrentModelIndex(QModelIndex());
 
-		uiGeneralTab.leName->setText("");
-		uiGeneralTab.leComment->setText("");
+		uiGeneralTab.leName->setText(QString());
+		uiGeneralTab.leComment->setText(QString());
 	}
 
 	//show the properties of the first curve

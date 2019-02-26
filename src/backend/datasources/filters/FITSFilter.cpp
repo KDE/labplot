@@ -380,7 +380,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		delete[] data;
 
 		if (dataSource)
-			dataSource->finalizeImport(columnOffset, 1, actualCols, lines, "", importMode);
+			dataSource->finalizeImport(columnOffset, 1, actualCols, lines, QString(), importMode);
 
 		fits_close_file(m_fitsFile, &status);
 
@@ -603,7 +603,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		}
 
 		if (!noDataSource)
-			dataSource->finalizeImport(columnOffset, 1, actualCols, lines, "", importMode);
+			dataSource->finalizeImport(columnOffset, 1, actualCols, lines, QString(), importMode);
 
 		fits_close_file(m_fitsFile, &status);
 		return dataStrings;
@@ -1232,7 +1232,7 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName,
 			if (keywordUpdate.commentUpdated) {
 				if (fits_modify_comment(m_fitsFile,
 				                        keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
-				                        QString("").toLatin1().data(), &status)) {
+				                        QByteArray().constData(), &status)) {
 					printError(status);
 					status = 0;
 				}

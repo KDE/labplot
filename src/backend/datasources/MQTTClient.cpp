@@ -637,12 +637,12 @@ bool MQTTClient::checkTopicContains(const QString& superior, const QString& infe
  *
  * \param first the name of a topic
  * \param second the name of a topic
- * \return The name of the common topic, if it exists, otherwise ""
+ * \return The name of the common topic, if it exists, otherwise an empty string
  */
 QString MQTTClient::checkCommonLevel(const QString& first, const QString& second) {
 	QStringList firstList = first.split('/', QString::SkipEmptyParts);
 	QStringList secondtList = second.split('/', QString::SkipEmptyParts);
-	QString commonTopic = "";
+	QString commonTopic;
 
 	if (!firstList.isEmpty()) {
 		//the two topics have to be the same size and can't be identic
@@ -853,7 +853,7 @@ void MQTTClient::updateWillMessage() {
 					}
 					//Otherwise set empty message
 					else {
-						m_client->setWillMessage(QString("").toUtf8());
+						m_client->setWillMessage(QByteArray());
 					}
 					qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
 				}
@@ -1338,7 +1338,7 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 			if (!m_filter->load(reader))
 				return false;
 		} else if (reader->name() == "MQTTSubscription") {
-			MQTTSubscription* subscription = new MQTTSubscription("");
+			MQTTSubscription* subscription = new MQTTSubscription(QString());
 			subscription->setMQTTClient(this);
 			m_MQTTSubscriptions.push_back(subscription);
 			connect(subscription, &MQTTSubscription::loaded, this, &MQTTClient::subscriptionLoaded);

@@ -796,7 +796,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			READ_QBRUSH(d->pointBrush);
 			READ_QPEN(d->pointPen);
 		} else if (reader->name() == "datapickerPoint") {
-			DatapickerPoint* datapickerPoint = new DatapickerPoint("");
+			DatapickerPoint* datapickerPoint = new DatapickerPoint(QString());
 			datapickerPoint->setHidden(true);
 			if (!datapickerPoint->load(reader, preview)) {
 				delete datapickerPoint;

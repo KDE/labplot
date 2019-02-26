@@ -168,7 +168,7 @@ void TemplateHandler::saveMenu() {
 	QLabel* label = new QLabel(i18n("New:"), frame);
 	layout->addWidget(label);
 
-	QLineEdit* leFilename = new QLineEdit("", frame);
+	QLineEdit* leFilename = new QLineEdit(QString(), frame);
 	layout->addWidget(leFilename);
 	connect(leFilename, &QLineEdit::returnPressed, this, [=]() {saveNewSelected(leFilename->text());} );
 	connect(leFilename, &QLineEdit::returnPressed, &menu, &QMenu::close);

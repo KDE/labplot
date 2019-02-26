@@ -232,7 +232,7 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 		return false;
 
 	bool isFilterPrepared = false;
-	QString separator = "";
+	QString separator;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
@@ -291,7 +291,7 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 			if (!m_filter->load(reader))
 				return false;
 		} else if (reader->name() == "column") {
-			Column* column = new Column("", AbstractColumn::Text);
+			Column* column = new Column(QString(), AbstractColumn::Text);
 			if (!column->load(reader, preview)) {
 				delete column;
 				setColumnCount(0);

@@ -398,7 +398,7 @@ void AbstractColumn::clearFormulas() {};
  */
 QString AbstractColumn::textAt(int row) const {
 	Q_UNUSED(row);
-	return "";
+	return QString();
 }
 
 /**

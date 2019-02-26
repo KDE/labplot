@@ -74,7 +74,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent) : QComboBox(parent),
 	m_lineEdit->setClearButtonEnabled(true);
 	m_lineEdit->setFocus();
 
-	addItem("");
+	addItem(QString());
 	setCurrentIndex(0);
 
 	// signal activated() is platform dependent
@@ -132,7 +132,7 @@ void TreeViewComboBox::showPopup() {
 	QModelIndex root = m_treeView->model()->index(0,0);
 	showTopLevelOnly(root);
 
-	m_lineEdit->setText("");
+	m_lineEdit->setText(QString());
 	m_groupBox->show();
 	m_groupBox->resize(this->width(), 250);
 	m_groupBox->move(mapToGlobal( this->rect().topLeft() ));
@@ -179,7 +179,7 @@ void TreeViewComboBox::treeViewIndexActivated(const QModelIndex& index) {
 
 	m_treeView->setCurrentIndex(QModelIndex());
 	setCurrentIndex(0);
-	QComboBox::setItemText(0, "");
+	QComboBox::setItemText(0, QString());
 	emit currentModelIndexChanged(QModelIndex());
 	m_groupBox->hide();
 }

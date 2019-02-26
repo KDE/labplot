@@ -204,7 +204,7 @@ void ThemeHandler::showPanel() {
 // 	QLabel* label = new QLabel(i18n("Enter name:"), frame);
 // 	layout->addWidget(label);
 //
-// 	QLineEdit* leFilename = new QLineEdit("", frame);
+// 	QLineEdit* leFilename = new QLineEdit(QString(), frame);
 // 	layout->addWidget(leFilename);
 // 	connect(leFilename, SIGNAL(returnPressed(QString)), this, SLOT(saveNewSelected(QString)));
 // 	connect(leFilename, SIGNAL(returnPressed(QString)), &menu, SLOT(close()));

@@ -96,8 +96,8 @@ void ColumnDock::setColumns(QList<Column*> list) {
 		ui.leName->setEnabled(false);
 		ui.leComment->setEnabled(false);
 
-		ui.leName->setText("");
-		ui.leComment->setText("");
+		ui.leName->setText(QString());
+		ui.leComment->setText(QString());
 	}
 
 	//show the properties of the first column

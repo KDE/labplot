@@ -79,8 +79,8 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 		ui.leName->setEnabled(false);
 		ui.teComment->setEnabled(false);
 
-		ui.leName->setText("");
-		ui.teComment->setText("");
+		ui.leName->setText(QString());
+		ui.teComment->setText(QString());
   	}
 
 	//show the properties of the first Spreadsheet in the list

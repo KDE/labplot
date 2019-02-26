@@ -1025,7 +1025,7 @@ bool MainWin::closeProject() {
 	m_aspectTreeModel = nullptr;
 	delete m_project;
 	m_project = nullptr;
-	m_currentFileName = "";
+	m_currentFileName.clear();
 
 	//update the UI if we're just closing a project
 	//and not closing(quitting) the application
@@ -1151,7 +1151,7 @@ void MainWin::print() {
 	if (part->printView())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
 	else
-		statusBar()->showMessage("");
+		statusBar()->showMessage(QString());
 }
 
 void MainWin::printPreview() {
@@ -1164,7 +1164,7 @@ void MainWin::printPreview() {
 	if (part->printPreview())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
 	else
-		statusBar()->showMessage("");
+		statusBar()->showMessage(QString());
 }
 
 /**************************************************************************************/

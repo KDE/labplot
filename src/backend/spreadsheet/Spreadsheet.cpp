@@ -742,7 +742,7 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 			if (reader->name() == "comment") {
 				if (!readCommentElement(reader)) return false;
 			} else if (reader->name() == "column") {
-				Column* column = new Column("");
+				Column* column = new Column(QString());
 				if (!column->load(reader, preview)) {
 					delete column;
 					setColumnCount(0);

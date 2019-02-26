@@ -451,7 +451,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 			}
 			QStringList props;
 			props << translateDataType(type) << " (" << QString::number(len) << ")";
-			QTreeWidgetItem *attrItem = new QTreeWidgetItem(QStringList() << QString(name) << typeName << props.join("") << valueString.join(", "));
+			QTreeWidgetItem *attrItem = new QTreeWidgetItem(QStringList() << QString(name) << typeName << props.join(QString()) << valueString.join(", "));
 			attrItem->setIcon(0, QIcon::fromTheme("accessories-calculator"));
 			attrItem->setFlags(Qt::ItemIsEnabled);
 			parentItem->addChild(attrItem);
@@ -478,7 +478,7 @@ void NetCDFFilterPrivate::scanDims(int ncid, int ndims, QTreeWidgetItem* parentI
 		QString value;
 		if (i == ulid)
 			value = i18n("unlimited");
-		QTreeWidgetItem *attrItem = new QTreeWidgetItem(QStringList() << QString(name) << i18n("dimension") << props.join("") << value);
+		QTreeWidgetItem *attrItem = new QTreeWidgetItem(QStringList() << QString(name) << i18n("dimension") << props.join(QString()) << value);
 		attrItem->setIcon(0, QIcon::fromTheme("accessories-calculator"));
 		attrItem->setFlags(Qt::ItemIsEnabled);
 		parentItem->addChild(attrItem);
@@ -514,7 +514,7 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 		props << ")";
 
 		QStringList rowStrings;
-		rowStrings << QString(name) << i18n("variable") << props.join("");
+		rowStrings << QString(name) << i18n("variable") << props.join(QString());
 		if (ndims == 0)	{// get value of zero dim var
 			switch (type) {
 			case NC_BYTE: { NC_SCAN_VAR(signed char, schar); break; }
@@ -538,7 +538,7 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 			}
 
 		} else {
-			rowStrings << "";
+			rowStrings << QString();
 		}
 
 		auto* varItem = new QTreeWidgetItem(rowStrings);
@@ -936,7 +936,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 	handleError(m_status, "nc_close");
 
 	if (dataSource)
-		dataSource->finalizeImport(columnOffset, 1, actualCols, -1, "", mode);
+		dataSource->finalizeImport(columnOffset, 1, actualCols, -1, QString(), mode);
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)

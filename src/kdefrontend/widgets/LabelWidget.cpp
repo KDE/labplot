@@ -297,8 +297,8 @@ void LabelWidget::textChanged() {
 	} else {
 		//save an empty string instead of a html-string with empty body, if no text available in QTextEdit
 		QString text;
-		if (ui.teLabel->toPlainText() == "")
-			text = "";
+		if (ui.teLabel->toPlainText().isEmpty())
+			text.clear();
 		else
 			text = ui.teLabel->toHtml();
 
@@ -393,7 +393,7 @@ void LabelWidget::teXUsedChanged(bool checked) {
 
 		//when switching to the text mode, set the background color to white just for the case the latex code provided by the user
 		//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
-		ui.teLabel->setStyleSheet(QLatin1String(""));
+		ui.teLabel->setStyleSheet(QString());
 	}
 
 	//no latex is available and the user switched to the text mode,
@@ -403,7 +403,7 @@ void LabelWidget::teXUsedChanged(bool checked) {
 		ui.tbTexUsed->setToolTip(i18n("LaTeX typesetting not possible. Please check the settings."));
 	} else {
 		ui.tbTexUsed->setEnabled(true);
-		ui.tbTexUsed->setToolTip(QLatin1String(""));
+		ui.tbTexUsed->setToolTip(QString());
 	}
 
 	if (m_initializing)
@@ -779,7 +779,7 @@ void LabelWidget::labelTeXImageUpdated(bool valid) {
 	if (!valid)
 		ui.teLabel->setStyleSheet(QLatin1String("QTextEdit{background: red;}"));
 	else
-		ui.teLabel->setStyleSheet(QLatin1String(""));
+		ui.teLabel->setStyleSheet(QString());
 }
 
 void LabelWidget::labelTeXFontChanged(const QFont& font) {

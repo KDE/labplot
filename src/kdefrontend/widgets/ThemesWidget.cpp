@@ -123,7 +123,7 @@ void ThemesWidget::applyClicked(const QModelIndex& index) {
 // 	else
 
 	if (index.row() == model()->rowCount()-1)
-		emit themeSelected(""); //item with the string "None" was selected -> no theme
+		emit themeSelected(QString()); //item with the string "None" was selected -> no theme
 	else
 		emit themeSelected(themeName);
 }

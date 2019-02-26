@@ -131,8 +131,8 @@ void XYIntegrationCurveDock::initGeneralTab() {
 		uiGeneralTab.lComment->setEnabled(false);
 		uiGeneralTab.leComment->setEnabled(false);
 
-		uiGeneralTab.leName->setText("");
-		uiGeneralTab.leComment->setText("");
+		uiGeneralTab.leName->setText(QString());
+		uiGeneralTab.leComment->setText(QString());
 	}
 
 	//show the properties of the first curve

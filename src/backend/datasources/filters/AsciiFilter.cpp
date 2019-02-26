@@ -886,7 +886,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 	//we had less new lines than the sample size specified
 	if (readingType != LiveDataSource::ReadingType::TillEnd)
-		QDEBUG("	Removed empty lines: " << newData.removeAll(""));
+		QDEBUG("	Removed empty lines: " << newData.removeAll(QString()));
 
 	//back to the last read position before counting when reading from files
 	if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe)
@@ -1216,7 +1216,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 						static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = QDateTime();
 						break;
 					case AbstractColumn::Text:
-						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = "";
+						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow).clear();
 						break;
 					case AbstractColumn::Month:
 						//TODO
@@ -1393,7 +1393,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 					static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = QDateTime();
 					break;
 				case AbstractColumn::Text:
-					static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = "";
+					static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow).clear();
 					break;
 				case AbstractColumn::Month:	// never happens
 				case AbstractColumn::Day:
@@ -1511,7 +1511,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 					break;
 				}
 			} else 	// missing columns in this line
-				lineString += QLatin1String("");
+				lineString += QString();
 		}
 		dataStrings << lineString;
 	}
@@ -1622,7 +1622,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 					break;
 				}
 			} else 	// missing columns in this line
-				lineString += QLatin1String("");
+				lineString += QString();
 		}
 
 		dataStrings << lineString;
@@ -2200,7 +2200,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 	//we had less new lines than the sample rate specified
 	if (readingType != MQTTClient::ReadingType::TillEnd)
-		qDebug() << "Removed empty lines: " << newData.removeAll("");
+		qDebug() << "Removed empty lines: " << newData.removeAll(QString());
 
 	qDebug()<<"Create index enabled:  "<<createIndexEnabled;
 
@@ -2297,7 +2297,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 						}
 
 						//if the keepNValues got bigger we move the existing values to the last m_actualRows positions
-						//then fill the remaining lines with ""
+						//then fill the remaining lines with empty lines
 						if (m_actualRows < spreadsheet->mqttClient()->keepNValues()) {
 							vector->reserve( spreadsheet->mqttClient()->keepNValues());
 							vector->resize( spreadsheet->mqttClient()->keepNValues());
@@ -2306,7 +2306,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 								    static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](spreadsheet->mqttClient()->keepNValues() - i - rowDiff);
 							}
 							for (int i = 0; i < rowDiff; i++)
-								static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](i) = "";
+								static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](i).clear();
 						}
 						break;
 					}

@@ -862,7 +862,7 @@ QStringList HDF5FilterPrivate::readHDF5Attr(hid_t aid) {
 				}
 			default:
 				DEBUG("unknown size " << sizeof(H5T_NATIVE_CHAR) << " of H5T_NATIVE_CHAR");
-				return QStringList("");
+				return QStringList(QString());
 			}
 		} else if (H5Tequal(atype, H5T_STD_U8LE)) {
 			uint8_t value;
@@ -906,7 +906,7 @@ QStringList HDF5FilterPrivate::readHDF5Attr(hid_t aid) {
 				}
 			default:
 				DEBUG("unknown size " << sizeof(H5T_NATIVE_UCHAR) << " of H5T_NATIVE_UCHAR");
-				return QStringList("");
+				return QStringList(QString());
 			}
 		} else if (H5Tequal(atype, H5T_STD_I16LE) || H5Tequal(atype, H5T_STD_I16BE) || H5Tequal(atype, H5T_NATIVE_SHORT)) {
 			short value;
@@ -1082,7 +1082,7 @@ QStringList HDF5FilterPrivate::readHDF5DataType(hid_t tid) {
 		}
 	case H5T_COMPOUND: {
 			// not shown in tree widget
-			QDEBUG(readHDF5Compound(tid).join(""));
+			QDEBUG(readHDF5Compound(tid).join(QString()));
 			break;
 		}
 	case H5T_ENUM: {
@@ -1234,14 +1234,14 @@ void HDF5FilterPrivate::scanHDF5DataType(hid_t tid, char *dataSetName, QTreeWidg
 	m_status = H5Iget_name(tid, link, MAXNAMELENGTH);
 	handleError(m_status, "H5Iget_name");
 
-	QTreeWidgetItem* dataTypeItem = new QTreeWidgetItem(QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data type")<<typeProps.join("")<<attr);
+	QTreeWidgetItem* dataTypeItem = new QTreeWidgetItem(QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data type")<<typeProps.join(QString())<<attr);
 	dataTypeItem->setIcon(0, QIcon::fromTheme("accessories-calculator"));
 	dataTypeItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(dataTypeItem);
 }
 
 void HDF5FilterPrivate::scanHDF5DataSet(hid_t did, char *dataSetName, QTreeWidgetItem* parentItem) {
-	QString attr = scanHDF5Attrs(did).join("");
+	QString attr = scanHDF5Attrs(did).join(QString());
 
 	char link[MAXNAMELENGTH];
 	m_status = H5Iget_name(did, link, MAXNAMELENGTH);
@@ -1291,9 +1291,9 @@ void HDF5FilterPrivate::scanHDF5DataSet(hid_t did, char *dataSetName, QTreeWidge
 
 	hid_t pid = H5Dget_create_plist(did);
 	handleError((int)pid, "H5Dget_create_plist");
-	dataSetProps << ", " << readHDF5PropertyList(pid).join("");
+	dataSetProps << ", " << readHDF5PropertyList(pid).join(QString());
 
-	QTreeWidgetItem* dataSetItem = new QTreeWidgetItem(QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data set")<<dataSetProps.join("")<<attr);
+	QTreeWidgetItem* dataSetItem = new QTreeWidgetItem(QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data set")<<dataSetProps.join(QString())<<attr);
 	dataSetItem->setIcon(0, QIcon::fromTheme("x-office-spreadsheet"));
 	for (int i = 0; i < dataSetItem->columnCount(); ++i) {
 		if (rows > 0 && cols > 0 && regs > 0) {
@@ -1431,9 +1431,9 @@ void HDF5FilterPrivate::parse(const QString& fileName, QTreeWidgetItem* rootItem
 	// multiLinkList.clear(); crashes
 	scanHDF5Group(group, rootName, rootItem);
 	m_status = H5Gclose(group);
-	handleError(m_status, "H5Gclose", "");
+	handleError(m_status, "H5Gclose", QString());
 	m_status = H5Fclose(file);
-	handleError(m_status, "H5Fclose", "");
+	handleError(m_status, "H5Fclose", QString());
 #else
 	DEBUG("HDF5 not available");
 	Q_UNUSED(fileName)
@@ -1867,7 +1867,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 	if (!dataSource)
 		return dataStrings;
 
-	dataSource->finalizeImport(columnOffset, 1, actualCols, -1, "", mode);
+	dataSource->finalizeImport(columnOffset, 1, actualCols, -1, QString(), mode);
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)

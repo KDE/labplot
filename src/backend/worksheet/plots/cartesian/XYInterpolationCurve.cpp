@@ -515,7 +515,7 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("status", interpolationResult.status);
 			READ_INT_VALUE("time", interpolationResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
-			Column* column = new Column("", AbstractColumn::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::Numeric);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;

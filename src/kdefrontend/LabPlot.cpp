@@ -102,7 +102,7 @@ int main (int argc, char *argv[]) {
 					i18n("Failed to Open")) == KMessageBox::Cancel) {
 				exit(-1);  //"Cancel" clicked -> exit the application
 			} else {
-				filename = ""; //Wrong file -> clear the file name and continue
+				filename.clear(); //Wrong file -> clear the file name and continue
 			}
 		}
 	}

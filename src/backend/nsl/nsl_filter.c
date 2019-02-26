@@ -262,12 +262,10 @@ void print_fdata(double data[], size_t n) {
 	size_t i;
 	for(i=0; i < 2*(n/2+1); i++)
 		printf("%g ", data[i]);
-	puts("");
-	printf("real: ");
+	printf("\nreal: ");
 	for(i=0; i < n/2+1; i++)
 		printf("%g ", data[2*i]);
-	puts("");
-	printf("imag: ");
+	printf("\nimag: ");
 	for(i=0; i < n/2+1; i++)
 		printf("%g ", data[2*i+1]);
 	puts("");

@@ -273,7 +273,7 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 
 		if (curve == m_activeCurve) {
 			m_activeCurve = nullptr;
-			emit statusInfo("");
+			emit statusInfo(QString());
 		}
 	} else
 		handleChildAspectAboutToBeRemoved(aspect);
@@ -367,7 +367,7 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 				m_image = plot;
 			}
 		} else if (reader->name() == "datapickerCurve") {
-			DatapickerCurve* curve = new DatapickerCurve("");
+			DatapickerCurve* curve = new DatapickerCurve(QString());
 			if (!curve->load(reader, preview)) {
 				delete curve;
 				return false;

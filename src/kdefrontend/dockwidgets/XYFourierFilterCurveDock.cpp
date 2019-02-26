@@ -138,8 +138,8 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 		uiGeneralTab.lComment->setEnabled(false);
 		uiGeneralTab.leComment->setEnabled(false);
 
-		uiGeneralTab.leName->setText("");
-		uiGeneralTab.leComment->setText("");
+		uiGeneralTab.leName->setText(QString());
+		uiGeneralTab.leComment->setText(QString());
 	}
 
 	//show the properties of the first curve
@@ -461,7 +461,7 @@ void XYFourierFilterCurveDock::unitChanged() {
 		uiGeneralTab.sbCutoff->setDecimals(6);
 		uiGeneralTab.sbCutoff->setMaximum(1.0);
 		uiGeneralTab.sbCutoff->setSingleStep(0.01);
-		uiGeneralTab.sbCutoff->setSuffix("");
+		uiGeneralTab.sbCutoff->setSuffix(QString());
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
 			uiGeneralTab.sbCutoff->setValue(oldValue/f);
@@ -477,7 +477,7 @@ void XYFourierFilterCurveDock::unitChanged() {
 		uiGeneralTab.sbCutoff->setDecimals(0);
 		uiGeneralTab.sbCutoff->setSingleStep(1);
 		uiGeneralTab.sbCutoff->setMaximum(n);
-		uiGeneralTab.sbCutoff->setSuffix("");
+		uiGeneralTab.sbCutoff->setSuffix(QString());
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
 			uiGeneralTab.sbCutoff->setValue(oldValue*n/f);
@@ -538,7 +538,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 		uiGeneralTab.sbCutoff2->setDecimals(6);
 		uiGeneralTab.sbCutoff2->setMaximum(1.0);
 		uiGeneralTab.sbCutoff2->setSingleStep(0.01);
-		uiGeneralTab.sbCutoff2->setSuffix("");
+		uiGeneralTab.sbCutoff2->setSuffix(QString());
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
 			uiGeneralTab.sbCutoff2->setValue(oldValue/f);
@@ -554,7 +554,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 		uiGeneralTab.sbCutoff2->setDecimals(0);
 		uiGeneralTab.sbCutoff2->setSingleStep(1);
 		uiGeneralTab.sbCutoff2->setMaximum(n);
-		uiGeneralTab.sbCutoff2->setSuffix("");
+		uiGeneralTab.sbCutoff2->setSuffix(QString());
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
 			uiGeneralTab.sbCutoff2->setValue(oldValue*n/f);

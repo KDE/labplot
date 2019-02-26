@@ -450,7 +450,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				paramNamesUtf8 << "A" << UTF8_QSTRING("μ") << UTF8_QSTRING("σ") << UTF8_QSTRING("γ");
 				break;
 			default:
-				model = "";
+				model.clear();
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
@@ -468,7 +468,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				paramNamesUtf8 << "A" << UTF8_QSTRING("η") << "w" << UTF8_QSTRING("μ");
 				break;
 			default:
-				model = "";
+				model.clear();
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
@@ -2316,7 +2316,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("bic", fitResult.bic);
 			READ_STRING_VALUE("solverOutput", fitResult.solverOutput);
 		} else if (reader->name() == "column") {
-			Column* column = new Column("", AbstractColumn::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::Numeric);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;

@@ -325,7 +325,7 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("status", differentiationResult.status);
 			READ_INT_VALUE("time", differentiationResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
-			Column* column = new Column("", AbstractColumn::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::Numeric);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;

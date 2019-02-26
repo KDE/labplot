@@ -201,15 +201,15 @@ void SpreadsheetView::initActions() {
 	action_clear_selection = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Selection"), this);
 	action_select_all = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this);
 
-// 	action_set_formula = new QAction(QIcon::fromTheme(""), i18n("Assign &Formula"), this);
-// 	action_recalculate = new QAction(QIcon::fromTheme(""), i18n("Recalculate"), this);
-	action_fill_sel_row_numbers = new QAction(QIcon::fromTheme(""), i18n("Row Numbers"), this);
-	action_fill_row_numbers = new QAction(QIcon::fromTheme(""), i18n("Row Numbers"), this);
-	action_fill_random = new QAction(QIcon::fromTheme(""), i18n("Uniform Random Values"), this);
-	action_fill_random_nonuniform = new QAction(QIcon::fromTheme(""), i18n("Random Values"), this);
-	action_fill_equidistant = new QAction(QIcon::fromTheme(""), i18n("Equidistant Values"), this);
-	action_fill_function = new QAction(QIcon::fromTheme(""), i18n("Function Values"), this);
-	action_fill_const = new QAction(QIcon::fromTheme(""), i18n("Const Values"), this);
+// 	action_set_formula = new QAction(QIcon::fromTheme(QString()), i18n("Assign &Formula"), this);
+// 	action_recalculate = new QAction(QIcon::fromTheme(QString()), i18n("Recalculate"), this);
+	action_fill_sel_row_numbers = new QAction(QIcon::fromTheme(QString()), i18n("Row Numbers"), this);
+	action_fill_row_numbers = new QAction(QIcon::fromTheme(QString()), i18n("Row Numbers"), this);
+	action_fill_random = new QAction(QIcon::fromTheme(QString()), i18n("Uniform Random Values"), this);
+	action_fill_random_nonuniform = new QAction(QIcon::fromTheme(QString()), i18n("Random Values"), this);
+	action_fill_equidistant = new QAction(QIcon::fromTheme(QString()), i18n("Equidistant Values"), this);
+	action_fill_function = new QAction(QIcon::fromTheme(QString()), i18n("Function Values"), this);
+	action_fill_const = new QAction(QIcon::fromTheme(QString()), i18n("Const Values"), this);
 
 	//spreadsheet related actions
 	action_toggle_comments = new QAction(QIcon::fromTheme("document-properties"), i18n("Show Comments"), this);
@@ -264,15 +264,15 @@ void SpreadsheetView::initActions() {
 	action_multiply_value->setData(AddSubtractValueDialog::Multiply);
 	action_divide_value = new QAction(i18n("Divide by Value"), this);
 	action_divide_value->setData(AddSubtractValueDialog::Divide);
-	action_drop_values = new QAction(QIcon::fromTheme(""), i18n("Drop Values"), this);
-	action_mask_values = new QAction(QIcon::fromTheme(""), i18n("Mask Values"), this);
-	action_reverse_columns = new QAction(QIcon::fromTheme(""), i18n("Reverse"), this);
-// 	action_join_columns = new QAction(QIcon::fromTheme(""), i18n("Join"), this);
-	action_normalize_columns = new QAction(QIcon::fromTheme(""), i18n("&Normalize"), this);
-	action_normalize_selection = new QAction(QIcon::fromTheme(""), i18n("&Normalize Selection"), this);
+	action_drop_values = new QAction(QIcon::fromTheme(QString()), i18n("Drop Values"), this);
+	action_mask_values = new QAction(QIcon::fromTheme(QString()), i18n("Mask Values"), this);
+	action_reverse_columns = new QAction(QIcon::fromTheme(QString()), i18n("Reverse"), this);
+// 	action_join_columns = new QAction(QIcon::fromTheme(QString()), i18n("Join"), this);
+	action_normalize_columns = new QAction(QIcon::fromTheme(QString()), i18n("&Normalize"), this);
+	action_normalize_selection = new QAction(QIcon::fromTheme(QString()), i18n("&Normalize Selection"), this);
 
 	//sort and statistics
-	action_sort_columns = new QAction(QIcon::fromTheme(""), i18n("&Selected Columns"), this);
+	action_sort_columns = new QAction(QIcon::fromTheme(QString()), i18n("&Selected Columns"), this);
 	action_sort_asc_column = new QAction(QIcon::fromTheme("view-sort-ascending"), i18n("&Ascending"), this);
 	action_sort_desc_column = new QAction(QIcon::fromTheme("view-sort-descending"), i18n("&Descending"), this);
 	action_statistics_columns = new QAction(QIcon::fromTheme("view-statistics"), i18n("Column Statisti&cs"), this);
@@ -1965,7 +1965,7 @@ void SpreadsheetView::clearSelectedRows() {
 		col->setSuppressDataChangedSignal(true);
 		if (formulaModeActive()) {
 			for (const auto& i : selectedRows().intervals())
-				col->setFormula(i, "");
+				col->setFormula(i, QString());
 		} else {
 			for (const auto& i : selectedRows().intervals()) {
 				if (i.end() == col->rowCount()-1)
@@ -2002,7 +2002,7 @@ void SpreadsheetView::clearSelectedCells() {
 			int col = m_spreadsheet->indexOfChild<Column>(column);
 			for (int row = last; row >= first; row--)
 				if (isCellSelected(row, col))
-					column->setFormula(row, "");
+					column->setFormula(row, QString());
 		} else {
 			int col = m_spreadsheet->indexOfChild<Column>(column);
 			for (int row = last; row >= first; row--)
@@ -2486,7 +2486,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 			if (captions)
 				textable << tableCaption;
 			textable << QLatin1String("\\centering \n");
-			textable << QLatin1String("\\begin{tabular}{") << (gridLines ?QLatin1String("|") : QLatin1String(""));
+			textable << QLatin1String("\\begin{tabular}{") << (gridLines ? QStringLiteral("|") : QString());
 			for (int i = 0; i < columnsPerTable; ++i)
 				textable << ( gridLines ? QLatin1String(" c |") : QLatin1String(" c ") );
 			textable << QLatin1String("} \n");
@@ -2559,7 +2559,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 		if (captions)
 			remainingTable << tableCaption;
 		remainingTable << QLatin1String("\\centering \n");
-		remainingTable << QLatin1String("\\begin{tabular}{") <<  (gridLines ? QLatin1String("|"):QLatin1String(""));
+		remainingTable << QLatin1String("\\begin{tabular}{") << (gridLines ? QStringLiteral("|") : QString());
 		for (int c = 0; c < remainingColumns; ++c)
 			remainingTable << ( gridLines ? QLatin1String(" c |") : QLatin1String(" c ") );
 		remainingTable << QLatin1String("} \n");
@@ -2625,7 +2625,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 		if (captions)
 			textable << tableCaption;
 		textable << QLatin1String("\\centering \n");
-		textable << QLatin1String("\\begin{tabular}{") << (gridLines ? QLatin1String("|"):QLatin1String(""));
+		textable << QLatin1String("\\begin{tabular}{") << (gridLines ? QStringLiteral("|") : QString());
 		for (int c = 0; c < cols; ++c)
 			textable << ( gridLines ? QLatin1String(" c |") : QLatin1String(" c ") );
 		textable << QLatin1String("} \n");

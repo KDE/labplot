@@ -323,7 +323,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.lParameter2->hide();
 		ui.leParameter2->hide();
 		if (dist == nsl_sf_stats_bernoulli)
-			ui.lFunc->setText("");
+			ui.lFunc->setText(QString());
 		else
 			ui.lFunc->setText("p(k) =");
 		ui.lParameter1->setText("p =");

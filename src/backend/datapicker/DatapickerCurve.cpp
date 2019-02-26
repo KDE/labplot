@@ -595,7 +595,7 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_QBRUSH(d->pointErrorBarBrush);
 			READ_QPEN(d->pointErrorBarPen);
 		} else if (reader->name() == "datapickerPoint") {
-			DatapickerPoint* curvePoint = new DatapickerPoint("");
+			DatapickerPoint* curvePoint = new DatapickerPoint(QString());
 			curvePoint->setHidden(true);
 			if (!curvePoint->load(reader, preview)) {
 				delete curvePoint;

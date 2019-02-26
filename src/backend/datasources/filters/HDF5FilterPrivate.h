@@ -51,7 +51,7 @@ public:
 
 	const HDF5Filter* q;
 
-	QString currentDataSetName{""};
+	QString currentDataSetName;
 	int startRow{1};
 	int endRow{-1};
 	int startColumn{1};

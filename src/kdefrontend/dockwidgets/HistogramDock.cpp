@@ -361,8 +361,8 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
 		cbValuesColumn->setCurrentModelIndex(QModelIndex());
 
-		ui.leName->setText("");
-		ui.leComment->setText("");
+		ui.leName->setText(QString());
+		ui.leComment->setText(QString());
 	}
 
 	//show the properties of the first curve
@@ -376,7 +376,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	ui.leBinRangesMax->setText( QString::number(m_curve->binRangesMax()) );
 	ui.chkVisible->setChecked( m_curve->isVisible() );
 
-	KConfig config("", KConfig::SimpleConfig);
+	KConfig config(QString(), KConfig::SimpleConfig);
 	loadConfig(config);
 
 	//Slots

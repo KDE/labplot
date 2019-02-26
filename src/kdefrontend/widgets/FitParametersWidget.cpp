@@ -410,7 +410,7 @@ void FitParametersWidget::highlightInvalid(int row, int col, bool invalid) {
 	if (invalid)
 		le->setStyleSheet("QLineEdit{background: red;}");
 	else
-		le->setStyleSheet("");
+		le->setStyleSheet(QString());
 
 	if (m_invalidRanges)
 		emit parametersValid(false);

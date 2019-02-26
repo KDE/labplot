@@ -163,7 +163,7 @@ namespace Origin
 		Color windowBackgroundColorBase;
 		Color windowBackgroundColorEnd;
 
-		Window(const string& _name= "", const string& _label = "", bool _hidden = false)
+		Window(const string& _name = string(), const string& _label = string(), bool _hidden = false)
 		:	name(_name)
 		,	label(_label)
 		,	objectID(-1)
@@ -265,7 +265,7 @@ namespace Origin
 		unsigned int endRow;
 		vector<variant> data;
 
-		SpreadColumn(const string& _name = "", unsigned int _index = 0)
+		SpreadColumn(const string& _name = string(), unsigned int _index = 0)
 		:	name(_name)
 		,	type(ColumnType::Y)
 		,	valueType(Numeric)
@@ -273,8 +273,6 @@ namespace Origin
 		,	significantDigits(6)
 		,	decimalPlaces(6)
 		,	numericDisplayType(DefaultDecimalDigits)
-		,	command("")
-		,	comment("")
 		,	width(8)
 		,	index(_index)
 		,	colIndex(0)
@@ -292,7 +290,7 @@ namespace Origin
 		unsigned int sheets;
 		vector<SpreadColumn> columns;
 
-		SpreadSheet(const string& _name = "")
+		SpreadSheet(const string& _name = string())
 		:	Window(_name)
 		,	maxRows(30)
 		,	loose(true)
@@ -306,7 +304,7 @@ namespace Origin
 		bool loose;
 		vector<SpreadSheet> sheets;
 
-		Excel(const string& _name = "", const string& _label = "", int _maxRows = 0, bool _hidden = false, bool _loose = true)
+		Excel(const string& _name = string(), const string& _label = string(), int _maxRows = 0, bool _hidden = false, bool _loose = true)
 		:	Window(_name, _label, _hidden)
 		,	maxRows(_maxRows)
 		,	loose(_loose)
@@ -333,7 +331,7 @@ namespace Origin
 		vector<double> data;
 		vector<double> coordinates;
 
-		MatrixSheet(const string& _name = "", unsigned int _index = 0)
+		MatrixSheet(const string& _name = string(), unsigned int _index = 0)
 		:	name(_name)
 		,	rowCount(8)
 		,	columnCount(8)
@@ -341,7 +339,6 @@ namespace Origin
 		,	significantDigits(6)
 		,	decimalPlaces(6)
 		,	numericDisplayType(DefaultDecimalDigits)
-		,	command("")
 		,	width(8)
 		,	index(_index)
 		,	view(DataView)
@@ -356,7 +353,7 @@ namespace Origin
 		HeaderViewType header;
 		vector<MatrixSheet> sheets;
 
-		Matrix(const string& _name = "")
+		Matrix(const string& _name = string())
 		:	Window(_name)
 		,	activeSheet(0)
 		,	header(ColumnRow)
@@ -375,10 +372,9 @@ namespace Origin
 		int totalPoints;
 		unsigned int index;
 
-		Function(const string& _name = "", unsigned int _index = 0)
+		Function(const string& _name = string(), unsigned int _index = 0)
 		:	name(_name)
 		,	type(Normal)
-		,	formula("")
 		,	begin(0.0)
 		,	end(0.0)
 		,	totalPoints(0)
@@ -398,7 +394,7 @@ namespace Origin
 		BorderType borderType;
 		Attach attach;
 
-		TextBox(const string& _text = "")
+		TextBox(const string& _text = string())
 		:	text(_text)
 		,	color({Color::Regular, {Color::Black}})
 		,	fontSize(20)
@@ -794,7 +790,7 @@ namespace Origin
 		BorderType borderType;
 		unsigned char* data;
 
-		Bitmap(const string& _name = "")
+		Bitmap(const string& _name = string())
 		:	attach(Frame)
 		,	size(0)
 		,	windowName(_name)
@@ -964,21 +960,20 @@ namespace Origin
 		bool connectMissingData;
 		string templateName;
 
-		Graph(const string& _name = "")
+		Graph(const string& _name = string())
 		:	Window(_name)
 		,	width(400)
 		,	height(300)
 		,	is3D(false)
 		,	isLayout(false)
 		,	connectMissingData(false)
-		,	templateName("")
 		{};
 	};
 
 	struct Note : public Window
 	{
 		string text;
-		Note(const string& _name = "")
+		Note(const string& _name = string())
 		:	Window(_name)
 		{};
 	};
@@ -993,7 +988,7 @@ namespace Origin
 		time_t modificationDate;
 		bool active;
 
-		ProjectNode(const string& _name = "", NodeType _type = Folder, const time_t _creationDate = time(nullptr), const time_t _modificationDate = time(nullptr), bool _active = false)
+		ProjectNode(const string& _name = string(), NodeType _type = Folder, const time_t _creationDate = time(nullptr), const time_t _modificationDate = time(nullptr), bool _active = false)
 		:	type(_type)
 		,	name(_name)
 		,	creationDate(_creationDate)

@@ -842,7 +842,7 @@ void ImportFileWidget::unsubscribeFromTopic(const QString& topicName, QVector<QT
 		if (m_subscriptionWidget->subscriptionCount() > 0)
 			m_willSettings.willTopic = children[0]->text(0);
 		else
-			m_willSettings.willTopic = "";
+			m_willSettings.willTopic.clear();
 	}
 
 	//signals that there was a change among the subscribed topics
@@ -873,7 +873,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 	bool fileExists = QFile::exists(fileName);
 	if (fileExists)
-		ui.leFileName->setStyleSheet("");
+		ui.leFileName->setStyleSheet(QString());
 	else
 		ui.leFileName->setStyleSheet("QLineEdit{background:red;}");
 

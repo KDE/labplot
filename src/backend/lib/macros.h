@@ -416,7 +416,7 @@ do {																				\
 if (column){																		\
 	writer->writeAttribute( #columnName, column->path() );							\
 } else {																			\
-	writer->writeAttribute( #columnName, "" );										\
+	writer->writeAttribute( #columnName, QString() );										\
 }																					\
 } while(0)
 
@@ -470,7 +470,7 @@ do {																				\
 if (obj){																			\
 	writer->writeAttribute( #name, obj->path() );									\
 } else {																			\
-	writer->writeAttribute( #name, "" );											\
+	writer->writeAttribute( #name, QString() );											\
 }																					\
 } while(0)
 

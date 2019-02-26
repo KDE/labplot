@@ -241,7 +241,7 @@ void AsciiFilterTest::testHeader01() {
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
 	filter.setSeparatingCharacter(";");
 	filter.setHeaderEnabled(false);
-	filter.setVectorNames("");
+	filter.setVectorNames(QString());
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
 	QCOMPARE(spreadsheet.rowCount(), 3);
@@ -256,7 +256,7 @@ void AsciiFilterTest::testHeader02() {
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
 	filter.setSeparatingCharacter(";");
 	filter.setHeaderEnabled(true);
-	filter.setVectorNames("");
+	filter.setVectorNames(QString());
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
 	QCOMPARE(spreadsheet.rowCount(), 2);//out of 3 rows one row is used for the column names (header)

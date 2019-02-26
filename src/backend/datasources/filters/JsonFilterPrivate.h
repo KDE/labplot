@@ -42,7 +42,7 @@ public:
 	explicit JsonFilterPrivate (JsonFilter* owner);
 
 	int checkRow(QJsonValueRef value, int &countCols);
-	int parseColumnModes(QJsonValue row, QString rowName = "");
+	int parseColumnModes(QJsonValue row, QString rowName = QString());
 	void setEmptyValue(int column, int row);
 	void setValueFromString(int column, int row, QString value);
 

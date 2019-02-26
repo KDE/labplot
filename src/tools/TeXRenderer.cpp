@@ -141,7 +141,7 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 	QProcess latexProcess;
 #if defined(HAVE_WINDOWS)
 	latexProcess.setNativeArguments("-interaction=batchmode " + file.fileName());
-	latexProcess.start(engine, QStringList() << "");
+	latexProcess.start(engine, QStringList() << QString());
 #else
 	latexProcess.start(engine, QStringList() << "-interaction=batchmode" << file.fileName());
 #endif

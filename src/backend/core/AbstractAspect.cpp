@@ -372,7 +372,7 @@ Project* AbstractAspect::project() {
  * \brief Return the path that leads from the top-most Aspect (usually a Project) to me.
  */
 QString AbstractAspect::path() const {
-	return parentAspect() ? parentAspect()->path() + QLatin1Char('/') + name() : QLatin1String("");
+	return parentAspect() ? parentAspect()->path() + QLatin1Char('/') + name() : QString();
 }
 
 /**

@@ -66,7 +66,7 @@ void ProjectDock::setProject(Project *project) {
 	ui.lModified->setText(project->modificationTime().toString());
 
 	//show default properties of the project
-	KConfig config("", KConfig::SimpleConfig);
+	KConfig config(QString(), KConfig::SimpleConfig);
 	loadConfig(config);
 
 	connect(m_project, &Project::aspectDescriptionChanged, this, &ProjectDock::projectDescriptionChanged);

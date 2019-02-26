@@ -179,7 +179,7 @@ bool MQTTSubscription::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			m_subscriptionName = attribs.value("subscriptionName").toString();
 		} else if(reader->name() == QLatin1String("MQTTTopic")) {
-			MQTTTopic* topic = new MQTTTopic("", this, false);
+			MQTTTopic* topic = new MQTTTopic(QString(), this, false);
 			if (!topic->load(reader, preview)) {
 				delete topic;
 				return false;

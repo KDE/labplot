@@ -52,8 +52,8 @@ VariableParser::VariableParser(QString name, QString value)
 
 void VariableParser::parseMaximaValues() {
 	if (m_string.count(QStringLiteral("[")) < 2) {
-		m_string = m_string.replace(QStringLiteral("["), QStringLiteral(""));
-		m_string = m_string.replace(QStringLiteral("]"), QStringLiteral(""));
+		m_string = m_string.replace(QStringLiteral("["), QString());
+		m_string = m_string.replace(QStringLiteral("]"), QString());
 		m_string = m_string.trimmed();
 
 		const QStringList valueStringList = m_string.split(QStringLiteral(","));
@@ -66,16 +66,16 @@ void VariableParser::parsePythonValues() {
 	m_string = m_string.trimmed();
 	if (m_string.startsWith(QStringLiteral("array"))) {
 		//parse numpy arrays, string representation like array([1,2,3,4,5])
-		m_string = m_string.replace(QStringLiteral("array(["), QStringLiteral(""));
-		m_string = m_string.replace(QStringLiteral("])"), QStringLiteral(""));
+		m_string = m_string.replace(QStringLiteral("array(["), QString());
+		m_string = m_string.replace(QStringLiteral("])"), QString());
 	} else if (m_string.startsWith(QStringLiteral("["))) {
 		//parse python's lists
-		m_string = m_string.replace(QStringLiteral("["), QStringLiteral(""));
-		m_string = m_string.replace(QStringLiteral("]"), QStringLiteral(""));
+		m_string = m_string.replace(QStringLiteral("["), QString());
+		m_string = m_string.replace(QStringLiteral("]"), QString());
 	} else if (m_string.startsWith(QStringLiteral("("))) {
 		//parse python's tuples
-		m_string = m_string.replace(QStringLiteral("("), QStringLiteral(""));
-		m_string = m_string.replace(QStringLiteral(")"), QStringLiteral(""));
+		m_string = m_string.replace(QStringLiteral("("), QString());
+		m_string = m_string.replace(QStringLiteral(")"), QString());
 	} else {
 		return;
 	}

@@ -513,7 +513,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 			emit q->completed(100*i/m_actualRows);
 	}
 
-	dataSource->finalizeImport(columnOffset, 1, m_actualCols, m_actualRows, "", importMode);
+	dataSource->finalizeImport(columnOffset, 1, m_actualCols, m_actualRows, QString(), importMode);
 }
 
 /*!

@@ -157,8 +157,8 @@ void MatrixView::initActions() {
 	action_image_view->setCheckable(true);
 	connect(viewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(switchView(QAction*)));
 
-	action_fill_function = new QAction(QIcon::fromTheme(""), i18n("Function Values"), this);
-	action_fill_const = new QAction(QIcon::fromTheme(""), i18n("Const Values"), this);
+	action_fill_function = new QAction(QIcon::fromTheme(QString()), i18n("Function Values"), this);
+	action_fill_const = new QAction(QIcon::fromTheme(QString()), i18n("Const Values"), this);
 	action_clear_matrix = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Matrix"), this);
 	action_go_to_cell = new QAction(QIcon::fromTheme("go-jump"), i18n("&Go to Cell"), this);
 
@@ -1242,7 +1242,7 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 				textable << tableCaption;
 			textable << QLatin1String("\\centering \n");
 			textable << QLatin1String("\\begin{tabular}{");
-			textable<< (gridLines ?QLatin1String("|") : QLatin1String(""));
+			textable << (gridLines ? QStringLiteral("|") : QString());
 			for (int i = 0; i < columnsPerTable; ++i)
 				textable << centeredColumn;
 			if (verticalHeaders)
@@ -1305,7 +1305,7 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 		if (captions)
 			remainingTable << tableCaption;
 		remainingTable << QLatin1String("\\centering \n");
-		remainingTable << QLatin1String("\\begin{tabular}{") <<  (gridLines ? QLatin1String("|"):QLatin1String(""));
+		remainingTable << QLatin1String("\\begin{tabular}{") << (gridLines ? QStringLiteral("|") : QString());
 		for (int c = 0; c < remainingColumns; ++c)
 			remainingTable << centeredColumn;
 		if (verticalHeaders)
@@ -1368,7 +1368,7 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 		if (captions)
 			textable << tableCaption;
 		textable << QLatin1String("\\centering \n");
-		textable << QLatin1String("\\begin{tabular}{") << (gridLines ? QLatin1String("|"):QLatin1String(""));
+		textable << QLatin1String("\\begin{tabular}{") << (gridLines ? QStringLiteral("|") : QString());
 		for (int c = 0; c < cols; ++c)
 			textable << centeredColumn;
 		if (verticalHeaders)

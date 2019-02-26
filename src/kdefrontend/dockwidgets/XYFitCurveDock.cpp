@@ -231,8 +231,8 @@ void XYFitCurveDock::initGeneralTab() {
 		uiGeneralTab.lComment->setEnabled(false);
 		uiGeneralTab.leComment->setEnabled(false);
 
-		uiGeneralTab.leName->setText("");
-		uiGeneralTab.leComment->setText("");
+		uiGeneralTab.leName->setText(QString());
+		uiGeneralTab.leComment->setText(QString());
 	}
 
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_fitCurve->dataSourceType());
@@ -1156,9 +1156,9 @@ void XYFitCurveDock::showFitResult() {
 	//clear the previous result
 	uiGeneralTab.twParameters->setRowCount(0);
 	for (int row = 0; row < uiGeneralTab.twGoodness->rowCount(); ++row)
-		uiGeneralTab.twGoodness->item(row, 2)->setText("");
+		uiGeneralTab.twGoodness->item(row, 2)->setText(QString());
 	for (int row = 0; row < uiGeneralTab.twLog->rowCount(); ++row)
-		uiGeneralTab.twLog->item(row, 1)->setText("");
+		uiGeneralTab.twLog->item(row, 1)->setText(QString());
 
 	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
 

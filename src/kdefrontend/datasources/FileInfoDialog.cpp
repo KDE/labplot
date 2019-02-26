@@ -144,7 +144,7 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 		else {
 			fileTypeString = proc->readLine();
 			if (fileTypeString.contains(i18n("cannot open")))
-				fileTypeString = "";
+				fileTypeString.clear();
 			else {
 				fileTypeString.remove(fileTypeString.length() - 1, 1);	// remove '\n'
 			}

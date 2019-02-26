@@ -584,7 +584,7 @@ int MQTTSubscriptionWidget::checkCommonChildCount(int levelIdx, int level, QStri
 int MQTTSubscriptionWidget::commonLevelIndex(const QString& first, const QString& second) {
     QStringList firstList = first.split('/', QString::SkipEmptyParts);
     QStringList secondtList = second.split('/', QString::SkipEmptyParts);
-    QString commonTopic = "";
+    QString commonTopic;
     int differIndex = -1;
 
     if (!firstList.isEmpty()) {
@@ -646,7 +646,7 @@ QString MQTTSubscriptionWidget::checkCommonLevel(const QString& first, const QSt
         return QString();
 
     const QStringList& secondtList = second.split('/', QString::SkipEmptyParts);
-    QString commonTopic = "";
+    QString commonTopic;
 
     //the two topics have to be the same size and can't be identic
     if (firstList.size() == secondtList.size() && (first != second))	{

@@ -160,8 +160,8 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 		ui.lComment->setEnabled(false);
 		ui.leComment->setEnabled(false);
 
-		ui.leName->setText("");
-		ui.leComment->setText("");
+		ui.leName->setText(QString());
+		ui.leComment->setText(QString());
 	}
 
 	//show the properties of the first worksheet
@@ -653,7 +653,7 @@ void WorksheetDock::fileNameChanged() {
 	if (!fileName.isEmpty() && !QFile::exists(fileName))
 		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
 	else
-		ui.leBackgroundFileName->setStyleSheet("");
+		ui.leBackgroundFileName->setStyleSheet(QString());
 
 	for (auto* worksheet : m_worksheetList)
 		worksheet->setBackgroundFileName(fileName);
@@ -835,7 +835,7 @@ void WorksheetDock::load() {
 	if (!m_worksheet->backgroundFileName().isEmpty() && !QFile::exists(m_worksheet->backgroundFileName()))
 		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
 	else
-		ui.leBackgroundFileName->setStyleSheet("");
+		ui.leBackgroundFileName->setStyleSheet(QString());
 
 	// Layout
 	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), Worksheet::Centimeter) );

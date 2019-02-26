@@ -53,7 +53,7 @@ ThemesComboBox::ThemesComboBox(QWidget* parent) : QComboBox(parent) {
 	m_groupBox->hide();
 	m_groupBox->installEventFilter(this);
 
-	addItem("");
+	addItem(QString());
 	setCurrentIndex(0);
 
 	connect(m_view, &ThemesWidget::themeSelected, this, &ThemesComboBox::handleThemeChanged);

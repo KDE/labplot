@@ -539,7 +539,7 @@ bool OriginAnyParser::readAnnotationElement() {
 		if (angroup_size > 0) {
 			LOG_PRINT(logfile, "  ... group end at %" PRId64 " [0x%" PRIx64 "]. Annotations: %d\n", curpos, curpos, angroup_size)
 		}
-		andt2_data = string("");
+		andt2_data = string();
 	} else {
 		andt2_data = readObjectAsString(ane_data_2_size);
 		// TODO: get known info
@@ -2166,7 +2166,7 @@ void OriginAnyParser::getCurveProperties(const string& cvehd, unsigned int cvehd
 		GET_SHORT(stmp, w)
 		column = findDataByIndex(w-1);
 		if (column.first.size() > 0) {
-			curve.xDataName = (curve.dataName != column.first) ? column.first : "";
+			curve.xDataName = (curve.dataName != column.first) ? column.first : string();
 			if (glayer.is3D() || (curve.type == GraphCurve::XYZContour)) {
 				curve.yColumnName = column.second;
 			} else if (glayer.isXYY3D){

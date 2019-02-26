@@ -357,7 +357,7 @@ void JsonFilterPrivate::setEmptyValue(int column, int row) {
 			static_cast<QVector<QDateTime>*>(m_dataContainer[column])->operator[](row) = QDateTime();
 			break;
 		case AbstractColumn::Text:
-			static_cast<QVector<QString>*>(m_dataContainer[column])->operator[](row) = "";
+			static_cast<QVector<QString>*>(m_dataContainer[column])->operator[](row) = QString();
 			break;
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
@@ -451,7 +451,7 @@ int JsonFilterPrivate::prepareDocumentToRead(const QJsonDocument& doc) {
 	int countRows = 0;
 	int countCols = -1;
 	QJsonValue firstRow;
-	QString firstRowName = "";
+	QString firstRowName;
 	importObjectNames = (importObjectNames && (rowType == QJsonValue::Object));
 
 	switch (containerType) {
@@ -704,7 +704,7 @@ QVector<QStringList> JsonFilterPrivate::preview() {
 				if (columnModes[n] == AbstractColumn::Numeric)
 					lineString += QString::number(value.toDouble(), 'g', 16);
 				else
-					lineString += lineString += QLatin1String("");
+					lineString += lineString += QString();
 				break;
 			case QJsonValue::String:
 				//TODO: add parsing string before appending
@@ -715,7 +715,7 @@ QVector<QStringList> JsonFilterPrivate::preview() {
 			case QJsonValue::Bool:
 			case QJsonValue::Null:
 			case QJsonValue::Undefined:
-				lineString += QLatin1String("");
+				lineString += QString();
 				break;
 			}
 		}

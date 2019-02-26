@@ -2471,7 +2471,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	} else if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
 		QGraphicsItem::mouseMoveEvent(event);
 		if ( !boundingRect().contains(event->pos()) ) {
-			q->info("");
+			q->info(QString());
 			return;
 		}
 
@@ -2955,7 +2955,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == "plotArea")
 			m_plotArea->load(reader, preview);
 		else if (reader->name() == "axis") {
-			Axis* axis = new Axis("");
+			Axis* axis = new Axis(QString());
 			if (axis->load(reader, preview))
 				addChildFast(axis);
 			else {
@@ -2963,7 +2963,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyCurve") {
-			XYCurve* curve = new XYCurve("");
+			XYCurve* curve = new XYCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -2971,7 +2971,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyEquationCurve") {
-			XYEquationCurve* curve = new XYEquationCurve("");
+			XYEquationCurve* curve = new XYEquationCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -2979,7 +2979,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyDataReductionCurve") {
-			XYDataReductionCurve* curve = new XYDataReductionCurve("");
+			XYDataReductionCurve* curve = new XYDataReductionCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -2987,7 +2987,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyDifferentiationCurve") {
-			XYDifferentiationCurve* curve = new XYDifferentiationCurve("");
+			XYDifferentiationCurve* curve = new XYDifferentiationCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -2995,7 +2995,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyIntegrationCurve") {
-			XYIntegrationCurve* curve = new XYIntegrationCurve("");
+			XYIntegrationCurve* curve = new XYIntegrationCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3003,7 +3003,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyInterpolationCurve") {
-			XYInterpolationCurve* curve = new XYInterpolationCurve("");
+			XYInterpolationCurve* curve = new XYInterpolationCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3011,7 +3011,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xySmoothCurve") {
-			XYSmoothCurve* curve = new XYSmoothCurve("");
+			XYSmoothCurve* curve = new XYSmoothCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3019,7 +3019,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyFitCurve") {
-			XYFitCurve* curve = new XYFitCurve("");
+			XYFitCurve* curve = new XYFitCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3027,7 +3027,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyFourierFilterCurve") {
-			XYFourierFilterCurve* curve = new XYFourierFilterCurve("");
+			XYFourierFilterCurve* curve = new XYFourierFilterCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3035,7 +3035,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyFourierTransformCurve") {
-			XYFourierTransformCurve* curve = new XYFourierTransformCurve("");
+			XYFourierTransformCurve* curve = new XYFourierTransformCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3043,7 +3043,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyConvolutionCurve") {
-			XYConvolutionCurve* curve = new XYConvolutionCurve("");
+			XYConvolutionCurve* curve = new XYConvolutionCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3051,7 +3051,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyCorrelationCurve") {
-			XYCorrelationCurve* curve = new XYCorrelationCurve("");
+			XYCorrelationCurve* curve = new XYCorrelationCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3059,7 +3059,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "cartesianPlotLegend") {
-			m_legend = new CartesianPlotLegend(this, "");
+			m_legend = new CartesianPlotLegend(this, QString());
 			if (m_legend->load(reader, preview))
 				addChildFast(m_legend);
 			else {
@@ -3067,7 +3067,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "customPoint") {
-			CustomPoint* point = new CustomPoint(this, "");
+			CustomPoint* point = new CustomPoint(this, QString());
 			if (point->load(reader, preview))
 				addChildFast(point);
 			else {

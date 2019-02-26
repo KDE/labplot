@@ -392,7 +392,7 @@ void ImportProjectDialog::fileNameChanged(const QString& name) {
 
 	bool fileExists = QFile::exists(fileName);
 	if (fileExists)
-		ui.leFileName->setStyleSheet("");
+		ui.leFileName->setStyleSheet(QString());
 	else
 		ui.leFileName->setStyleSheet("QLineEdit{background:red;}");
 

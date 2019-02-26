@@ -146,7 +146,7 @@ void DatabaseManagerWidget::nameChanged(const QString& name) {
 	}
 
 	if (unique) {
-		ui.leName->setStyleSheet("");
+		ui.leName->setStyleSheet(QString());
 		if (auto item = ui.lwConnections->currentItem()) {
 			item->setText(name);
 
@@ -262,14 +262,14 @@ void DatabaseManagerWidget::databaseNameChanged() {
 		if (!dbName.isEmpty()) {
 			bool fileExists = QFile::exists(dbName);
 			if (fileExists)
-				ui.leDatabase->setStyleSheet("");
+				ui.leDatabase->setStyleSheet(QString());
 			else
-				ui.leDatabase->setStyleSheet("QLineEdit{background:red;}");
+				ui.leDatabase->setStyleSheet(QStringLiteral("QLineEdit{background:red;}"));
 		} else {
-			ui.leDatabase->setStyleSheet("");
+			ui.leDatabase->setStyleSheet(QString());
 		}
 	} else {
-		ui.leDatabase->setStyleSheet("");
+		ui.leDatabase->setStyleSheet(QString());
 	}
 
 	//don't allow to try to connect if no database name was provided

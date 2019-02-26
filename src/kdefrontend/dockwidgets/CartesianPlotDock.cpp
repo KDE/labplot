@@ -278,8 +278,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 		ui.lComment->setEnabled(false);
 		ui.leComment->setEnabled(false);
 
-		ui.leName->setText("");
-		ui.leComment->setText("");
+		ui.leName->setText(QString());
+		ui.leComment->setText(QString());
 	}
 
 	//show the properties of the first plot
@@ -722,9 +722,9 @@ void CartesianPlotDock::currentXBreakChanged(int index) {
 
 	m_initializing = true;
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->xRangeBreaks().list.at(index);
-	QString str = std::isnan(rangeBreak.start) ? "" : QString::number(rangeBreak.start);
+	QString str = std::isnan(rangeBreak.start) ? QString() : QString::number(rangeBreak.start);
 	ui.leXBreakStart->setText(str);
-	str = std::isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.end);
+	str = std::isnan(rangeBreak.end) ? QString() : QString::number(rangeBreak.end);
 	ui.leXBreakEnd->setText(str);
 	ui.sbXBreakPosition->setValue(rangeBreak.position*100);
 	ui.cbXBreakStyle->setCurrentIndex((int)rangeBreak.style);
@@ -843,9 +843,9 @@ void CartesianPlotDock::currentYBreakChanged(int index) {
 
 	m_initializing = true;
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->yRangeBreaks().list.at(index);
-	QString str = std::isnan(rangeBreak.start) ? "" : QString::number(rangeBreak.start);
+	QString str = std::isnan(rangeBreak.start) ? QString() : QString::number(rangeBreak.start);
 	ui.leYBreakStart->setText(str);
-	str = std::isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.end);
+	str = std::isnan(rangeBreak.end) ? QString() : QString::number(rangeBreak.end);
 	ui.leYBreakEnd->setText(str);
 	ui.sbYBreakPosition->setValue(rangeBreak.position*100);
 	ui.cbYBreakStyle->setCurrentIndex((int)rangeBreak.style);
@@ -1068,7 +1068,7 @@ void CartesianPlotDock::fileNameChanged() {
 	if (!fileName.isEmpty() && !QFile::exists(fileName))
 		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
 	else
-		ui.leBackgroundFileName->setStyleSheet("");
+		ui.leBackgroundFileName->setStyleSheet(QString());
 
 	for (auto* plot : m_plotList)
 		plot->plotArea()->setBackgroundFileName(fileName);
@@ -1511,7 +1511,7 @@ void CartesianPlotDock::load() {
 	if (!m_plot->plotArea()->backgroundFileName().isEmpty() && !QFile::exists(m_plot->plotArea()->backgroundFileName()))
 		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
 	else
-		ui.leBackgroundFileName->setStyleSheet("");
+		ui.leBackgroundFileName->setStyleSheet(QString());
 
 	//Padding
 	ui.sbPaddingHorizontal->setValue( Worksheet::convertFromSceneUnits(m_plot->horizontalPadding(), Worksheet::Centimeter) );

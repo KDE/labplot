@@ -152,9 +152,9 @@ void MainWindow::on_buttonSubscribe_clicked() {
 void MainWindow::onTimeout() {
 	if(m_client->state() == QMqttClient::ClientState::Connected &&
 			!m_brownianTopics.isEmpty()) {
-		QString s = "";
+		QString s;
 		QVector<QString> brownianY;
-		brownianY.fill("", m_pathes);
+		brownianY.fill(QString(), m_pathes);
 
 		if(m_iterCount < m_itersTotal - m_iters - 1)
 			for (int i = 0; i < m_iters; i++) {

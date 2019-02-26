@@ -87,8 +87,8 @@ void ConstantsWidget::filterChanged(const QString& filter) {
 			ui.lwConstants->setCurrentRow(0);
 			ui.bInsert->setEnabled(true);
 		} else {
-			ui.leValue->setText("");
-			ui.lUnit->setText("");
+			ui.leValue->setText(QString());
+			ui.lUnit->setText(QString());
 			ui.bInsert->setEnabled(false);
 		}
 	} else {

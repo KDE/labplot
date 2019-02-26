@@ -377,7 +377,7 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("posError", dataReductionResult.posError);
 			READ_DOUBLE_VALUE("areaError", dataReductionResult.areaError);
 		} else if (reader->name() == "column") {
-			Column* column = new Column("", AbstractColumn::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::Numeric);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;

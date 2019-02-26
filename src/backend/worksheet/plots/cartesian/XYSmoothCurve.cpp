@@ -344,7 +344,7 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("status", smoothResult.status);
 			READ_INT_VALUE("time", smoothResult.elapsedTime, int);
 		} else if (!preview && reader->name() == "column") {
-			Column* column = new Column("", AbstractColumn::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::Numeric);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;

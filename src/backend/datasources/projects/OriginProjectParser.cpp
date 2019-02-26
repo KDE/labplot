@@ -335,7 +335,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 			DEBUG("	top level graph");
 			Worksheet* worksheet = new Worksheet(name);
 			worksheet->setIsLoading(true);
-			worksheet->setTheme("");
+			worksheet->setTheme(QString());
 			loadWorksheet(worksheet, preview);
 			aspect = worksheet;
 			break;
@@ -624,7 +624,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		Column* col = spreadsheet->column((int)j);
 
 		QString name(column.name.c_str());
-		col->setName(name.replace(QRegExp(".*_"),""));
+		col->setName(name.replace(QRegExp(".*_"), QString()));
 
 		if (preview)
 			continue;
@@ -1804,7 +1804,7 @@ QDateTime OriginProjectParser::creationTime(tree<Origin::ProjectNode>::iterator 
 QString OriginProjectParser::parseOriginText(const QString &str) const {
 	DEBUG("parseOriginText()");
 	QStringList lines = str.split('\n');
-	QString text = "";
+	QString text;
 	for (int i = 0; i < lines.size(); ++i) {
 		if (i > 0)
 			text.append("<br>");
@@ -2051,7 +2051,7 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	while (pos > -1) {
 		QString value = rxline.cap(0);
 		int len = value.length();
-		value.replace(QRegExp(" "),"");
+		value.replace(QRegExp(" "), QString());
 		value = "\\c{" + value.mid(3, value.length()-4) + '}';
 		line.replace(pos, len, value);
 		pos = rxline.indexIn(line);

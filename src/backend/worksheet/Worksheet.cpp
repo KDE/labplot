@@ -109,7 +109,7 @@ void Worksheet::init() {
 
 	//default theme
 	KConfigGroup settings = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
-	d->theme = settings.readEntry(QLatin1String("Theme"), "");
+	d->theme = settings.readEntry(QStringLiteral("Theme"), QString());
 	if (!d->theme.isEmpty())
 		loadTheme(d->theme);
 }
@@ -848,7 +848,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 		return false;
 
 	//clear the theme that was potentially set in init() in order to correctly load here the worksheets without any theme used
-	d->theme = "";
+	d->theme.clear();
 
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
@@ -963,7 +963,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("plotsLocked", plotsLocked, bool);
 			READ_INT_VALUE("cartesianPlotActionMode", cartesianPlotActionMode, Worksheet::CartesianPlotActionMode);
 		} else if (reader->name() == "cartesianPlot") {
-			CartesianPlot* plot = new CartesianPlot("");
+			CartesianPlot* plot = new CartesianPlot(QString());
 			plot->setIsLoading(true);
 			if (!plot->load(reader, preview)) {
 				delete plot;
@@ -971,7 +971,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			} else
 				addChildFast(plot);
 		} else if (reader->name() == "textLabel") {
-			TextLabel* label = new TextLabel("");
+			TextLabel* label = new TextLabel(QString());
 			if (!label->load(reader, preview)) {
 				delete label;
 				return false;

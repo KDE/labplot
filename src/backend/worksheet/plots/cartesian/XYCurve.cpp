@@ -157,7 +157,7 @@ void XYCurve::initActions() {
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered(bool)), this, SLOT(visibilityChanged()));
 
-	navigateToAction = new QAction(QIcon::fromTheme("go-next-view"), "", this);
+	navigateToAction = new QAction(QIcon::fromTheme("go-next-view"), QString(), this);
 	connect(navigateToAction, SIGNAL(triggered(bool)), this, SLOT(navigateTo()));
 
 	m_menusInitialized = true;

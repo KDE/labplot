@@ -322,7 +322,7 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("time", integrationResult.elapsedTime, int);
 			READ_DOUBLE_VALUE("value", integrationResult.value);
 		} else if (!preview && reader->name() == "column") {
-			Column* column = new Column("", AbstractColumn::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::Numeric);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;

@@ -160,7 +160,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 
 	QString element_name = reader->name().toString();
 	if (element_name == QLatin1String("folder")) {
-		Folder* folder = new Folder("");
+		Folder* folder = new Folder(QString());
 
 		if (!m_pathesToLoad.isEmpty()) {
 			//a child folder to be read -> provide the list of aspects to be loaded to the child folder, too.
@@ -194,28 +194,28 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		}
 		addChildFast(folder);
 	} else if (element_name == QLatin1String("workbook")) {
-		Workbook* workbook = new Workbook("");
+		Workbook* workbook = new Workbook(QString());
 		if (!workbook->load(reader, preview)) {
 			delete workbook;
 			return false;
 		}
 		addChildFast(workbook);
 	} else if (element_name == QLatin1String("spreadsheet")) {
-		Spreadsheet* spreadsheet = new Spreadsheet("", true);
+		Spreadsheet* spreadsheet = new Spreadsheet(QString(), true);
 		if (!spreadsheet->load(reader, preview)) {
 			delete spreadsheet;
 			return false;
 		}
 		addChildFast(spreadsheet);
 	} else if (element_name == QLatin1String("matrix")) {
-		Matrix* matrix = new Matrix("", true);
+		Matrix* matrix = new Matrix(QString(), true);
 		if (!matrix->load(reader, preview)) {
 			delete matrix;
 			return false;
 		}
 		addChildFast(matrix);
 	} else if (element_name == QLatin1String("worksheet")) {
-		Worksheet* worksheet = new Worksheet("");
+		Worksheet* worksheet = new Worksheet(QString());
 		worksheet->setIsLoading(true);
 		if (!worksheet->load(reader, preview)) {
 			delete worksheet;
@@ -235,7 +235,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 #ifdef HAVE_MQTT
 	} else if (element_name == QLatin1String("MQTTClient")) {
 		qDebug()<<"Load MQTTClient";
-		MQTTClient* client = new MQTTClient("");
+		MQTTClient* client = new MQTTClient(QString());
 		if (!client->load(reader, preview)) {
 			delete client;
 			return false;
@@ -243,21 +243,21 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		addChildFast(client);
 #endif
 	} else if (element_name == QLatin1String("LiveDataSource")) {
-		LiveDataSource* liveDataSource = new LiveDataSource("", true);
+		LiveDataSource* liveDataSource = new LiveDataSource(QString(), true);
 		if (!liveDataSource->load(reader, preview)) {
 			delete liveDataSource;
 			return false;
 		}
 		addChildFast(liveDataSource);
 	} else if (element_name == QLatin1String("datapicker")) {
-		Datapicker* datapicker = new Datapicker("", true);
+		Datapicker* datapicker = new Datapicker(QString(), true);
 		if (!datapicker->load(reader, preview)) {
 			delete datapicker;
 			return false;
 		}
 		addChildFast(datapicker);
 	} else if (element_name == QLatin1String("note")) {
-		Note* note = new Note("");
+		Note* note = new Note(QString());
 		if (!note->load(reader, preview)) {
 			delete note;
 			return false;

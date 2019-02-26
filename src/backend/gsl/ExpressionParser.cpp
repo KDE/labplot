@@ -851,13 +851,13 @@ void ExpressionParser::initConstants() {
 	//Mathematical constants
 	m_constantsNames << i18n("Base of exponentials");
 	m_constantsValues << QString::number(M_E,'g',15);
-	m_constantsUnits << "";
+	m_constantsUnits << QString();
 	m_constantsNames << i18n("Pi");
 	m_constantsValues << QString::number(M_PI,'g',15);
-	m_constantsUnits << "";
+	m_constantsUnits << QString();
 	m_constantsNames << i18n("Euler's constant");
 	m_constantsValues << QString::number(M_EULER,'g',15);
-	m_constantsUnits << "";
+	m_constantsUnits << QString();
 
 	for (int i = 0; i < 3; i++)
 		m_constantsGroupIndex << 0;
@@ -950,7 +950,7 @@ void ExpressionParser::initConstants() {
 	m_constantsUnits << "kg";
 	m_constantsNames << i18n("Electromagnetic fine structure constant");
 	m_constantsValues << QString::number(GSL_CONST_NUM_FINE_STRUCTURE,'g',15);
-	m_constantsUnits << "";
+	m_constantsUnits << QString();
 	m_constantsNames << i18n("Rydberg constant");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_RYDBERG,'g',15);
 	m_constantsUnits << "kg m^2 / s^2";

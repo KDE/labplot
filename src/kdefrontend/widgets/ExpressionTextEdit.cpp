@@ -155,7 +155,7 @@ void ExpressionTextEdit::validateExpression(bool force) {
 		if (!m_isValid)
 			setStyleSheet("QTextEdit{background: red;}");
 		else
-			setStyleSheet("");
+			setStyleSheet(QString());
 
 		m_currentExpression = text;
 	}
@@ -223,7 +223,7 @@ void ExpressionTextEdit::mouseMoveEvent(QMouseEvent* e) {
 
 	const QString& token = tc.selectedText();
 	if (token.isEmpty()) {
-		setToolTip("");
+		setToolTip(QString());
 		return;
 	}
 
@@ -244,7 +244,7 @@ void ExpressionTextEdit::mouseMoveEvent(QMouseEvent* e) {
 			static const QStringList& names = ExpressionParser::getInstance()->functionsNames();
 			setToolTip(functions.at(index) + " - " + names.at(index));
 		} else
-			setToolTip("");
+			setToolTip(QString());
 	}
 
 	KTextEdit::mouseMoveEvent(e);
