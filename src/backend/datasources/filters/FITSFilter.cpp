@@ -538,7 +538,6 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 			numericDataPointers.squeeze();
 		}
 
-		char* array = new char[1000];	//TODO: why 1000?
 		int row = 1;
 		if (startRow != 1) {
 			if (startRow != 0)
@@ -561,6 +560,8 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 			}
 		}
 
+		char array[FLEN_VALUE];
+		char* tmpArr[1] = {array};
 		for (; row <= lines; ++row) {
 			int numericixd = 0;
 			int stringidx = 0;
@@ -571,10 +572,10 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 					if (!matrixNumericColumnIndices.contains(col))
 						continue;
 				}
-				if (fits_read_col_str(m_fitsFile, col, row, 1, 1, nullptr, &array, nullptr, &status))
+				if (fits_read_col_str(m_fitsFile, col, row, 1, 1, nullptr, tmpArr, nullptr, &status))
 					printError(status);
 				if (!noDataSource) {
-					const QString& str = QString::fromLatin1(array);
+					QString str = QString::fromLatin1(array);
 					if (str.isEmpty()) {
 						if (columnNumericTypes.at(col - 1))
 							static_cast<QVector<double>*>(numericDataPointers[numericixd++])->push_back(0);
@@ -600,8 +601,6 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 			}
 			dataStrings << line;
 		}
-
-		delete[] array;
 
 		if (!noDataSource)
 			dataSource->finalizeImport(columnOffset, 1, actualCols, lines, "", importMode);
@@ -681,26 +680,18 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			const int tfields = matrix->columnCount();
 			QVector<char*> columnNames;
 			columnNames.resize(tfields);
-			columnNames.reserve(tfields);
+			columnNames.shrink_to_fit();
 			QVector<char*> tform;
 			tform.resize(tfields);
-			tform.reserve(tfields);
-			QVector<char*> tunit;
-			tunit.resize(tfields);
-			tunit.reserve(tfields);
+			tform.shrink_to_fit();
 			//TODO: mode
 			const QVector<QVector<double>>* const matrixData = static_cast<QVector<QVector<double>>*>(matrix->data());
-			QVector<double> column;
 			const MatrixModel* matrixModel = static_cast<MatrixView*>(matrix->view())->model();
 			const int precision = matrix->precision();
 			for (int i = 0; i < tfields; ++i) {
-				column = matrixData->at(i);
 				const QString& columnName = matrixModel->headerData(i, Qt::Horizontal).toString();
-				columnNames[i] = new char[columnName.size()];
-				strcpy(columnNames[i], columnName.toLatin1().data());
-
-				tunit[i] = new char[1];
-				strcpy(tunit[i], "");
+				columnNames[i] = new char[columnName.size() + 1];
+				strcpy(columnNames[i], columnName.toLatin1().constData());
 				int maxSize = -1;
 				for (int row = 0; row < nrows; ++row) {
 					if (matrix->text<double>(row, i).size() > maxSize)
@@ -711,18 +702,19 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 					tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".") + QString::number(precision);
 				} else
 					tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".0");
-				tform[i] = new char[tformn.size()];
-				strcpy(tform[i], tformn.toLatin1().data());
+				tform[i] = new char[tformn.size() + 1];
+				strcpy(tform[i], tformn.toLatin1().constData());
 			}
 			//TODO extension name containing[] ?
 
-			if (fits_create_tbl(m_fitsFile, ASCII_TBL, nrows, tfields, columnNames.data(), tform.data(), tunit.data(),
-						matrix->name().toLatin1().data(),&status )) {
+			int r = fits_create_tbl(m_fitsFile, ASCII_TBL, nrows, tfields, columnNames.data(), tform.data(), nullptr,
+			            matrix->name().toLatin1().constData(), &status);
+			for (int i = 0; i < tfields; ++i) {
+				delete[] tform[i];
+				delete[] columnNames[i];
+			}
+			if (r) {
 				printError(status);
-
-				qDeleteAll(tform);
-				qDeleteAll(tunit);
-				qDeleteAll(columnNames);
 				status = 0;
 				fits_close_file(m_fitsFile, &status);
 				if (!existed) {
@@ -731,13 +723,10 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 				}
 				return;
 			}
-			qDeleteAll(tform);
-			qDeleteAll(tunit);
-			qDeleteAll(columnNames);
 
 			double* columnNumeric = new double[nrows];
 			for (int col = 1; col <= tfields; ++col) {
-				column = matrixData->at(col-1);
+				const QVector<double>& column = matrixData->at(col-1);
 				for (int r = 0; r < column.size(); ++r)
 					columnNumeric[r] = column.at(r);
 
@@ -820,25 +809,25 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
 			QVector<char*> columnNames;
 			columnNames.resize(tfields);
-			columnNames.reserve(tfields);
+			columnNames.shrink_to_fit();
 			QVector<char*> tform;
 			tform.resize(tfields);
-			tform.reserve(tfields);
+			tform.shrink_to_fit();
 			QVector<char*> tunit;
 			tunit.resize(tfields);
-			tunit.reserve(tfields);
+			tunit.shrink_to_fit();
 
 			for (int i = 0; i < tfields; ++i) {
 				const Column* const column =  spreadsheet->column(i);
 
-				columnNames[i] = new char[column->name().size()];
-				strcpy(columnNames[i], column->name().toLatin1().data());
+				columnNames[i] = new char[column->name().size() + 1];
+				strcpy(columnNames[i], column->name().toLatin1().constData());
 				if (commentsAsUnits) {
-					tunit[i] = new char[column->comment().size()];
+					tunit[i] = new char[column->comment().size() + 1];
 					strcpy(tunit[i], column->comment().toLatin1().constData());
 				} else {
-					tunit[i] = new char[2];
-					strcpy(tunit[i], "");
+					tunit[i] = new char[1];
+					tunit[i][0] = '\0';
 				}
 				switch (column->columnMode()) {
 				case AbstractColumn::Numeric: {
@@ -895,12 +884,15 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			}
 			//TODO extension name containing[] ?
 
-			if (fits_create_tbl(m_fitsFile, ASCII_TBL, nrows, tfields, columnNames.data(), tform.data(), tunit.data(),
-						spreadsheet->name().toLatin1().data(),&status )) {
+			int r = fits_create_tbl(m_fitsFile, ASCII_TBL, nrows, tfields, columnNames.data(), tform.data(), tunit.data(),
+			            spreadsheet->name().toLatin1().constData(), &status);
+			for (int i = 0; i < tfields; ++i) {
+				delete[] tform[i];
+				delete[] tunit[i];
+				delete[] columnNames[i];
+			}
+			if (r) {
 				printError(status);
-				qDeleteAll(tform);
-				qDeleteAll(tunit);
-				qDeleteAll(columnNames);
 				status = 0;
 				fits_close_file(m_fitsFile, &status);
 				if (!existed) {
@@ -910,16 +902,11 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 				return;
 			}
 
-			qDeleteAll(tform);
-			qDeleteAll(tunit);
-			qDeleteAll(columnNames);
-
 			QVector<char*> column;
 			column.resize(nrows);
-			column.reserve(nrows);
+			column.shrink_to_fit();
 
 			double* columnNumeric = new double[nrows];
-			bool hadTextColumn = false;
 			for (int col = 1; col <= tfields; ++col) {
 				const Column* c =  spreadsheet->column(col-1);
 				AbstractColumn::ColumnMode columnMode = c->columnMode();
@@ -941,16 +928,15 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 						return;
 					}
 				} else {
-					hadTextColumn = true;
 					for (int row = 0; row < nrows; ++row) {
-						column[row] = new char[c->textAt(row).size()];
-
-						strcpy(column[row], c->textAt(row).toLatin1().data());
+						column[row] = new char[c->textAt(row).size() + 1];
+						strcpy(column[row], c->textAt(row).toLatin1().constData());
 					}
 					fits_write_col(m_fitsFile, TSTRING, col, 1, 1, nrows, column.data(), &status);
+					for (int row = 0; row < nrows; ++row)
+						delete[] column[row];
 					if (status) {
 						printError(status);
-						qDeleteAll(column);
 						status = 0;
 						fits_close_file(m_fitsFile, &status);
 						return;
@@ -959,8 +945,6 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			}
 
 			delete[] columnNumeric;
-			if (hadTextColumn)
-				qDeleteAll(column);
 
 			status = 0;
 			fits_close_file(m_fitsFile, &status);
