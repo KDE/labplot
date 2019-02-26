@@ -64,6 +64,7 @@ public:
 private:
 	Ui::MQTTConnectionManagerWidget ui;
 	QList<MQTTConnection> m_connections;
+	MQTTConnection* m_currentConnection = nullptr;
 	bool m_initializing{false};
 	QString m_configPath;
 	QString m_initConnName;
@@ -83,7 +84,7 @@ private slots:
 	void connectionChanged(int);
 	void nameChanged(const QString&);
 	void hostChanged(const QString&);
-	void portChanged();
+	void portChanged(const QString&);
 	void userNameChanged(const QString&);
 	void passwordChanged(const QString&);
 	void clientIdChanged(const QString&);
