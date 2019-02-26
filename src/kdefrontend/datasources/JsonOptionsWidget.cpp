@@ -76,6 +76,7 @@ void JsonOptionsWidget::applyFilterSettings(JsonFilter* filter, const QModelInde
 
 void JsonOptionsWidget::clearModel() {
 	m_model->clear();
+	m_filename.clear();
 }
 
 void JsonOptionsWidget::loadSettings() const {
