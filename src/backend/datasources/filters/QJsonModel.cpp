@@ -27,7 +27,9 @@
 #include <QApplication>
 #include <QDebug>
 #include <QFile>
+#include <QMessageBox>
 #include <QPalette>
+#include <KLocalizedString>
 
 QJsonTreeItem::QJsonTreeItem(QJsonTreeItem* parent) : mParent(parent) {}
 
@@ -156,7 +158,16 @@ bool QJsonModel::load(QIODevice* device) {
 }
 
 bool QJsonModel::loadJson(const QByteArray& json) {
-	return loadJson(QJsonDocument::fromJson(json));
+	QJsonParseError error;
+	QJsonDocument doc = QJsonDocument::fromJson(json, &error);
+	if (error.error == QJsonParseError::NoError)
+		return loadJson(doc);
+	else {
+		QMessageBox::critical(0, i18n("Failed to load JSON document"),
+							  i18n("Failed to load JSON document. Error: %1").arg(error.errorString()));
+		return false;
+	}
+
 }
 
 bool QJsonModel::loadJson(const QJsonDocument& jdoc) {
@@ -181,7 +192,6 @@ bool QJsonModel::loadJson(const QJsonDocument& jdoc) {
 		return true;
 	}
 
-	qDebug()<<Q_FUNC_INFO<<"cannot load json";
 	return false;
 }
 
