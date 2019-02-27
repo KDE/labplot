@@ -21,6 +21,7 @@ New features:
 	* [worksheet] Allow to make plots not-interactive (ignore mouse drag and wheel events) to avoid unwanted occasional panning and zooming
 	* Allow to connect to SQL databases via ODBC
 	* Show the amount of consumed memory in the status bar (optional)
+	* Allow to change the settings for different computer algebra systems (Maxima, etc.) directly in LabPlot (embedd Cantor's settings widgets)
 
 Bug fixes:
 	* Fixed several problems in live data support
