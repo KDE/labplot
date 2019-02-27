@@ -94,15 +94,14 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	QString fileInfo;
 #ifndef HAVE_WINDOWS
 	//check, if we can guess the file type by content
-	auto* proc = new QProcess();
-	QStringList args;
-	args << "-b" << fileName;
-	proc->start("file", args);
-	if (!proc->waitForReadyRead(1000)) {
+	QProcess proc;
+	proc.start("file", QStringList() << "-b" << "-z" << fileName);
+	if (!proc.waitForFinished(1000)) {
+		proc.kill();
 		DEBUG("ERROR: reading file type of file" << fileName.toStdString());
 		return Binary;
 	}
-	fileInfo = proc->readLine();
+	fileInfo = proc.readLine();
 #endif
 
 	FileType fileType;

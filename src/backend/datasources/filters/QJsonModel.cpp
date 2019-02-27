@@ -156,8 +156,7 @@ bool QJsonModel::load(QIODevice* device) {
 }
 
 bool QJsonModel::loadJson(const QByteArray& json) {
-	auto const& jdoc = QJsonDocument::fromJson(json);
-	return loadJson(jdoc);
+	return loadJson(QJsonDocument::fromJson(json));
 }
 
 bool QJsonModel::loadJson(const QJsonDocument& jdoc) {

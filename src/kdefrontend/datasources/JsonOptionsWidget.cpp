@@ -105,13 +105,11 @@ void JsonOptionsWidget::loadDocument(QString filename) {
 		m_filename = filename;
 
 	KFilterDev device(m_filename);
-	if (!device.open(QIODevice::ReadOnly))
-		return;
-
-	if (device.atEnd() && !device.isSequential()) // empty file
-		return;
-	if (!m_model->loadJson(device.readAll()))
-		m_model->clear();
+	if (!device.open(QIODevice::ReadOnly) ||
+	    (device.atEnd() && !device.isSequential()) || // empty file
+	    !m_model->loadJson(device.readAll())
+	   )
+		clearModel();
 }
 
 QAbstractItemModel* JsonOptionsWidget::model() {
