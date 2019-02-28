@@ -106,7 +106,12 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 
 	FileType fileType;
 	QByteArray imageFormat = QImageReader::imageFormat(fileName);
-	if (fileInfo.contains(QLatin1String("JSON")) || fileName.endsWith(QLatin1String("json"), Qt::CaseInsensitive)) {
+	if (fileInfo.contains(QLatin1String("JSON")) || fileName.endsWith(QLatin1String("json"), Qt::CaseInsensitive)
+		//json file can be compressed. add all formats supported by KFilterDev, \sa KCompressionDevice::CompressionType
+		|| fileName.endsWith(QLatin1String("json.gz"), Qt::CaseInsensitive)
+		|| fileName.endsWith(QLatin1String("json.bz2"), Qt::CaseInsensitive)
+		|| fileName.endsWith(QLatin1String("json.lzma"), Qt::CaseInsensitive)
+		|| fileName.endsWith(QLatin1String("json.xz"), Qt::CaseInsensitive) ) {
 		//*.json files can be recognized as ASCII. so, do the check for the json-extension as first.
 		fileType = JSON;
 	} else if (fileInfo.contains(QLatin1String("ASCII"))
