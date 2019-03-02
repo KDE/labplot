@@ -489,7 +489,6 @@ void SpreadsheetView::initMenus() {
 	m_columnMenu->addSeparator();
 
 	m_columnMenu->addAction(action_statistics_columns);
-	action_statistics_columns->setVisible(false);
 
 	//Spreadsheet menu
 	m_spreadsheetMenu = new QMenu(this);
@@ -510,7 +509,6 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu->addAction(action_toggle_comments);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_statistics_all_columns);
-	action_statistics_all_columns->setVisible(true);
 
 	//Row menu
 	m_rowMenu = new QMenu(this);
