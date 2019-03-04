@@ -267,13 +267,18 @@ void MatrixView::initMenus() {
 	m_matrixMenu->addMenu(submenu);
 	m_matrixMenu->addSeparator();
 
-	m_matrixMenu->addAction(action_select_all);
-	m_matrixMenu->addAction(action_clear_matrix);
+	// Data manipulation sub-menu
+	QMenu* dataManipulationMenu = new QMenu(i18n("Manipulate Data"), this);
+	dataManipulationMenu->addAction(action_transpose);
+	dataManipulationMenu->addAction(action_mirror_horizontally);
+	dataManipulationMenu->addAction(action_mirror_vertically);
+
+
+	m_matrixMenu->addMenu(dataManipulationMenu);
 	m_matrixMenu->addSeparator();
 
-	m_matrixMenu->addAction(action_transpose);
-	m_matrixMenu->addAction(action_mirror_horizontally);
-	m_matrixMenu->addAction(action_mirror_vertically);
+	m_matrixMenu->addAction(action_select_all);
+	m_matrixMenu->addAction(action_clear_matrix);
 	m_matrixMenu->addSeparator();
 
 	m_headerFormatMenu = new QMenu(i18n("Header Format"), this);
@@ -318,14 +323,17 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	menu->insertMenu(firstAction, submenu);
 	menu->insertSeparator(firstAction);
 
+	// Data manipulation sub-menu
+	submenu = new QMenu(i18n("Manipulate Data"), const_cast<MatrixView*>(this));
+	submenu->addAction(action_transpose);
+	submenu->addAction(action_mirror_horizontally);
+	submenu->addAction(action_mirror_vertically);
+	menu->insertMenu(firstAction, submenu);
+	menu->insertSeparator(firstAction);
+
 	menu->insertAction(firstAction, action_select_all);
 	menu->insertAction(firstAction, action_clear_matrix);
 	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, action_transpose);
-	menu->insertAction(firstAction, action_mirror_horizontally);
-	menu->insertAction(firstAction, action_mirror_vertically);
-	menu->insertSeparator(firstAction);
-// 	menu->insertAction(firstAction, action_duplicate);
 	menu->insertMenu(firstAction, m_headerFormatMenu);
 
 	menu->insertSeparator(firstAction);
