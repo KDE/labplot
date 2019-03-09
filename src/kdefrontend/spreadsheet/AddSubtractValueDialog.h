@@ -33,6 +33,7 @@
 
 class Column;
 class Spreadsheet;
+class Matrix;
 class QPushButton;
 
 class AddSubtractValueDialog : public QDialog {
@@ -42,19 +43,25 @@ public:
 	enum Operation {Add, Subtract, Multiply, Divide};
 
 	explicit AddSubtractValueDialog(Spreadsheet*, Operation, QWidget* parent = nullptr);
+	explicit AddSubtractValueDialog(Matrix*, Operation, QWidget* parent = nullptr);
 	~AddSubtractValueDialog() override;
 	void setColumns(QVector<Column*>);
+	void setMatrices();
 
 private:
 	Ui::AddSubtractValueWidget ui;
 	QVector<Column*> m_columns;
-	Spreadsheet* m_spreadsheet;
+	Spreadsheet* m_spreadsheet = nullptr;
+	Matrix* m_matrix = nullptr;
 	QPushButton* m_okButton;
 	Operation m_operation;
 
 private slots:
 	void generate();
 	void valueChanged();
+	void generateForColumns();
+	void generateForMatrices();
+	QString getMessage(QString);
 };
 
 #endif

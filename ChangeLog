@@ -15,6 +15,7 @@ New features:
 	* [spreadsheet] when filling an integer column with function values, automatically convert its type to float
 	* [spreadsheet] data manipulation: add/subtract/multiply/divide for column values
 	* [spreadsheet] export to SQLite
+	* [matrix] data manipulation: add/subtract/multiply/divide for matrix values
 	* [worksheet] Allow to specify different border shapes for labels (rectangle, eclipse, etc.)
 	* [worksheet] Allow to rotate plot legends
 	* [worksheet] Better positioning of rotated axis tick labels

@@ -113,6 +113,11 @@ private:
 	QAction* action_mirror_vertically;
 	QAction* action_mirror_horizontally;
 
+	QAction* action_add_value;
+	QAction* action_subtract_value;
+	QAction* action_multiply_value;
+	QAction* action_divide_value;
+
 	QAction* action_header_format_1;
 	QAction* action_header_format_2;
 	QAction* action_header_format_3;
@@ -159,6 +164,8 @@ private slots:
 	void clearSelectedCells();
 
 	void headerFormatChanged(QAction*);
+
+	void modifyValues();
 
 	void addColumns();
 	void insertEmptyColumns();

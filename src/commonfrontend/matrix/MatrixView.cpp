@@ -37,6 +37,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
 
+#include "kdefrontend/spreadsheet/AddSubtractValueDialog.h"
 #include "kdefrontend/matrix/MatrixFunctionDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
 
@@ -165,6 +166,16 @@ void MatrixView::initActions() {
 	action_transpose = new QAction(i18n("&Transpose"), this);
 	action_mirror_horizontally = new QAction(QIcon::fromTheme("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
 	action_mirror_vertically = new QAction(QIcon::fromTheme("object-flip-vertical"), i18n("Mirror &Vertically"), this);
+
+	action_add_value = new QAction(i18n("Add Value"), this);
+	action_add_value->setData(AddSubtractValueDialog::Add);
+	action_subtract_value = new QAction(i18n("Subtract Value"), this);
+	action_subtract_value->setData(AddSubtractValueDialog::Subtract);
+	action_multiply_value = new QAction(i18n("Multiply Value"), this);
+	action_multiply_value->setData(AddSubtractValueDialog::Multiply);
+	action_divide_value = new QAction(i18n("Divide Value"), this);
+	action_divide_value->setData(AddSubtractValueDialog::Divide);
+
 // 	action_duplicate = new QAction(i18nc("duplicate matrix", "&Duplicate"), this);
 	//TODO
 	//icon
@@ -193,6 +204,15 @@ void MatrixView::initActions() {
 	action_statistics_rows = new QAction(QIcon::fromTheme("view-statistics"), i18n("Statisti&cs"), this);
 }
 
+void MatrixView::modifyValues() {
+	const QAction* action = dynamic_cast<const QAction*>(QObject::sender());
+	AddSubtractValueDialog::Operation op = (AddSubtractValueDialog::Operation)action->data().toInt();
+	auto* dlg = new AddSubtractValueDialog(m_matrix, op);
+	dlg->setMatrices();
+	dlg->exec();
+}
+
+
 void MatrixView::connectActions() {
 	// selection related actions
 	connect(action_cut_selection, SIGNAL(triggered()), this, SLOT(cutSelection()));
@@ -211,6 +231,10 @@ void MatrixView::connectActions() {
 	connect(action_transpose, SIGNAL(triggered()), m_matrix, SLOT(transpose()));
 	connect(action_mirror_horizontally, SIGNAL(triggered()), m_matrix, SLOT(mirrorHorizontally()));
 	connect(action_mirror_vertically, SIGNAL(triggered()), m_matrix, SLOT(mirrorVertically()));
+	connect(action_add_value, &QAction::triggered, this, &MatrixView::modifyValues);
+	connect(action_subtract_value, &QAction::triggered, this, &MatrixView::modifyValues);
+	connect(action_multiply_value, &QAction::triggered, this, &MatrixView::modifyValues);
+	connect(action_divide_value, &QAction::triggered, this, &MatrixView::modifyValues);
 
 	// column related actions
 	connect(action_add_columns, SIGNAL(triggered()), this, SLOT(addColumns()));
@@ -266,6 +290,11 @@ void MatrixView::initMenus() {
 	dataManipulationMenu->addAction(action_transpose);
 	dataManipulationMenu->addAction(action_mirror_horizontally);
 	dataManipulationMenu->addAction(action_mirror_vertically);
+	dataManipulationMenu->addAction(action_add_value);
+	dataManipulationMenu->addAction(action_subtract_value);
+	dataManipulationMenu->addAction(action_multiply_value);
+	dataManipulationMenu->addAction(action_divide_value);
+
 	m_matrixMenu->addMenu(dataManipulationMenu);
 	m_matrixMenu->addSeparator();
 
@@ -322,6 +351,11 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	submenu->addAction(action_transpose);
 	submenu->addAction(action_mirror_horizontally);
 	submenu->addAction(action_mirror_vertically);
+	submenu->addAction(action_add_value);
+	submenu->addAction(action_subtract_value);
+	submenu->addAction(action_multiply_value);
+	submenu->addAction(action_divide_value);
+
 	menu->insertMenu(firstAction, submenu);
 	menu->insertSeparator(firstAction);
 
