@@ -61,6 +61,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) : QDia
 	setLayout(layout);
 
 	setWindowTitle(title);
+	setWindowIcon(QIcon::fromTheme("view-statistics"));
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#5f5f5f") : QLatin1String("#D1D1D1");

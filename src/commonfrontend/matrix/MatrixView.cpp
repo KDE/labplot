@@ -287,13 +287,15 @@ void MatrixView::initMenus() {
 
 	// Data manipulation sub-menu
 	QMenu* dataManipulationMenu = new QMenu(i18n("Manipulate Data"), this);
-	dataManipulationMenu->addAction(action_transpose);
-	dataManipulationMenu->addAction(action_mirror_horizontally);
-	dataManipulationMenu->addAction(action_mirror_vertically);
 	dataManipulationMenu->addAction(action_add_value);
 	dataManipulationMenu->addAction(action_subtract_value);
 	dataManipulationMenu->addAction(action_multiply_value);
 	dataManipulationMenu->addAction(action_divide_value);
+	dataManipulationMenu->addSeparator();
+	dataManipulationMenu->addAction(action_mirror_horizontally);
+	dataManipulationMenu->addAction(action_mirror_vertically);
+	dataManipulationMenu->addSeparator();
+	dataManipulationMenu->addAction(action_transpose);
 
 	m_matrixMenu->addMenu(dataManipulationMenu);
 	m_matrixMenu->addSeparator();
