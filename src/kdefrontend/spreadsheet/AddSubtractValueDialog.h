@@ -49,6 +49,7 @@ public:
 	void setMatrices();
 
 private:
+	void init();
 	Ui::AddSubtractValueWidget ui;
 	QVector<Column*> m_columns;
 	Spreadsheet* m_spreadsheet = nullptr;

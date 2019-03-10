@@ -50,63 +50,46 @@ AddSubtractValueDialog::AddSubtractValueDialog(Spreadsheet* s, Operation op, QWi
 	m_spreadsheet(s), m_operation(op) {
 	Q_ASSERT(s != nullptr);
 
-	switch (m_operation) {
-	case Add:
-		setWindowTitle(i18nc("@title:window", "Add Value"));
-		break;
-	case Subtract:
-		setWindowTitle(i18nc("@title:window", "Subtract Value"));
-		break;
-	case Multiply:
-		setWindowTitle(i18nc("@title:window", "Multiply by Value"));
-		break;
-	case Divide:
-		setWindowTitle(i18nc("@title:window", "Divide by Value"));
-		break;
-	}
-	ui.setupUi(this);
-	setAttribute(Qt::WA_DeleteOnClose);
-
-	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-
-	ui.gridLayout->addWidget(btnBox, 3, 0, 1, 2);
-	m_okButton = btnBox->button(QDialogButtonBox::Ok);
+	init();
 
 	switch (m_operation) {
 	case Add:
-		m_okButton->setText(i18n("&Add"));
 		m_okButton->setToolTip(i18n("Add the specified value to column values"));
 		break;
 	case Subtract:
-		m_okButton->setText(i18n("&Subtract"));
 		m_okButton->setToolTip(i18n("Subtract the specified value from column values"));
 		break;
 	case Multiply:
-		m_okButton->setText(i18n("&Multiply"));
 		m_okButton->setToolTip(i18n("Multiply column values by the specified value"));
 		break;
 	case Divide:
-		m_okButton->setText(i18n("&Divide"));
 		m_okButton->setToolTip(i18n("Divide column values by the specified value"));
 		break;
 	}
-
-	connect(m_okButton, &QPushButton::clicked, this, &AddSubtractValueDialog::generate);
-	connect(btnBox, &QDialogButtonBox::accepted, this, &AddSubtractValueDialog::accept);
-	connect(btnBox, &QDialogButtonBox::rejected, this, &AddSubtractValueDialog::reject);
-
-	//restore saved settings if available
-	KConfigGroup conf(KSharedConfig::openConfig(), "AddSubtractValueDialog");
-	if (conf.exists())
-		KWindowConfig::restoreWindowSize(windowHandle(), conf);
-	else
-		resize(QSize(300, 0).expandedTo(minimumSize()));
 }
 
 AddSubtractValueDialog::AddSubtractValueDialog(Matrix* m, Operation op, QWidget* parent) : QDialog(parent),
 	m_matrix(m), m_operation(op) {
 	Q_ASSERT(m != nullptr);
 
+	init();
+
+	switch (m_operation) {
+	case Add:
+		m_okButton->setToolTip(i18n("Add the specified value to matrix values"));
+		break;
+	case Subtract:
+		m_okButton->setToolTip(i18n("Subtract the specified value from matrix values"));
+		break;
+	case Multiply:
+		m_okButton->setToolTip(i18n("Multiply matrix values by the specified value"));
+		break;
+	case Divide:
+		m_okButton->setToolTip(i18n("Divide matrix values by the specified value"));
+	}
+}
+
+void AddSubtractValueDialog::init() {
 	switch (m_operation) {
 	case Add:
 		setWindowTitle(i18nc("@title:window", "Add Value"));
@@ -132,19 +115,15 @@ AddSubtractValueDialog::AddSubtractValueDialog(Matrix* m, Operation op, QWidget*
 	switch (m_operation) {
 	case Add:
 		m_okButton->setText(i18n("&Add"));
-		m_okButton->setToolTip(i18n("Add the specified value to column values"));
 		break;
 	case Subtract:
 		m_okButton->setText(i18n("&Subtract"));
-		m_okButton->setToolTip(i18n("Subtract the specified value from column values"));
 		break;
 	case Multiply:
 		m_okButton->setText(i18n("&Multiply"));
-		m_okButton->setToolTip(i18n("Multiply column values by the specified value"));
 		break;
 	case Divide:
 		m_okButton->setText(i18n("&Divide"));
-		m_okButton->setToolTip(i18n("Divide column values by the specified value"));
 		break;
 	}
 
@@ -159,7 +138,6 @@ AddSubtractValueDialog::AddSubtractValueDialog(Matrix* m, Operation op, QWidget*
 	else
 		resize(QSize(300, 0).expandedTo(minimumSize()));
 }
-
 
 AddSubtractValueDialog::~AddSubtractValueDialog() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "AddSubtractValueDialog");
