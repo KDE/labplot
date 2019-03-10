@@ -34,6 +34,7 @@
 
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QWindow>
 
 #include <KLocalizedString>
 #include <KSharedConfig>
@@ -131,11 +132,15 @@ void AddSubtractValueDialog::init() {
 	connect(btnBox, &QDialogButtonBox::accepted, this, &AddSubtractValueDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &AddSubtractValueDialog::reject);
 
+	connect(ui.leValue, &QLineEdit::textChanged, this, [=]() {m_okButton->setEnabled(!ui.leValue->text().isEmpty());});
+
 	//restore saved settings if available
+	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "AddSubtractValueDialog");
-	if (conf.exists())
+	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
-	else
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
 		resize(QSize(300, 0).expandedTo(minimumSize()));
 }
 
@@ -182,8 +187,6 @@ void AddSubtractValueDialog::setColumns(QVector<Column*> columns) {
 			}
 		}
 	}
-
-	valueChanged();
 }
 
 void AddSubtractValueDialog::setMatrices() {
@@ -201,11 +204,6 @@ void AddSubtractValueDialog::setMatrices() {
 		ui.lValue->setVisible(false);
 		ui.leValue->setVisible(false);
 	}
-	valueChanged();
-}
-
-void AddSubtractValueDialog::valueChanged() {
-
 }
 
 /*!

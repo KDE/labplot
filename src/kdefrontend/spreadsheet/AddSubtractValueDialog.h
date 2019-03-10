@@ -50,6 +50,10 @@ public:
 
 private:
 	void init();
+	void generateForColumns();
+	void generateForMatrices();
+	QString getMessage(QString);
+
 	Ui::AddSubtractValueWidget ui;
 	QVector<Column*> m_columns;
 	Spreadsheet* m_spreadsheet = nullptr;
@@ -59,10 +63,6 @@ private:
 
 private slots:
 	void generate();
-	void valueChanged();
-	void generateForColumns();
-	void generateForMatrices();
-	QString getMessage(QString);
 };
 
 #endif
