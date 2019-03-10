@@ -68,6 +68,10 @@ MQTTSubscriptionWidget::MQTTSubscriptionWidget( QWidget* parent): QWidget(parent
     ui.bUnsubscribe->setIcon(ui.bUnsubscribe->style()->standardIcon(QStyle::SP_ArrowLeft));
     ui.bUnsubscribe->setToolTip(i18n("Unsubscribe selected topics"));
 
+	//subscribe/unsubscribe buttons only enabled if something was selected
+	ui.bSubscribe->setEnabled(false);
+	ui.bUnsubscribe->setEnabled(false);
+
     QString info = i18n("Enter the name of the topic to navigate to it.");
     ui.lTopicSearch->setToolTip(info);
     ui.leTopics->setToolTip(info);
@@ -100,6 +104,14 @@ MQTTSubscriptionWidget::MQTTSubscriptionWidget( QWidget* parent): QWidget(parent
     connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &MQTTSubscriptionWidget::scrollToSubsriptionTreeItem);
     connect(ui.twTopics, &QTreeWidget::itemDoubleClicked, this, &MQTTSubscriptionWidget::mqttAvailableTopicDoubleClicked);
     connect(ui.twSubscriptions, &QTreeWidget::itemDoubleClicked, this, &MQTTSubscriptionWidget::mqttSubscribedTopicDoubleClicked);
+
+	connect(ui.twTopics, &QTreeWidget::itemSelectionChanged, this, [=]() {
+		ui.bSubscribe->setEnabled(!ui.twTopics->selectedItems().isEmpty());
+	});
+
+	connect(ui.twSubscriptions, &QTreeWidget::itemSelectionChanged, this, [=]() {
+		ui.bUnsubscribe->setEnabled(!ui.twSubscriptions->selectedItems().isEmpty());
+	});
 }
 
 MQTTSubscriptionWidget::~MQTTSubscriptionWidget() {
@@ -403,9 +415,8 @@ void MQTTSubscriptionWidget::updateSubscriptionTree(const QVector<QString>& mqtt
             }
 
             //restore the children of the subscription
-            if (topic != nullptr && topic->childCount() > 0) {
+            if (topic != nullptr && topic->childCount() > 0)
                 restoreSubscriptionChildren(topic, newItem, name, 1);
-            }
         }
     }
     m_searching = false;
@@ -475,9 +486,9 @@ void MQTTSubscriptionWidget::restoreSubscriptionChildren(QTreeWidgetItem * topic
             //determine the name of the topic, contained by the subscription
             QString name;
             name.append(topic->child(i)->text(0));
-            for (int j = level + 1; j < list.size(); ++j) {
+            for (int j = level + 1; j < list.size(); ++j)
                 name.append('/' + list[j]);
-            }
+
             QTreeWidgetItem* temp = topic->child(i);
             while (temp->parent() != nullptr) {
                 temp = temp->parent();
@@ -719,10 +730,8 @@ void MQTTSubscriptionWidget::mqttSubscribedTopicDoubleClicked(QTreeWidgetItem* i
  */
 void MQTTSubscriptionWidget::mqttSubscribe() {
     QTreeWidgetItem* item = ui.twTopics->currentItem();
-    if (!item) {
-        QMessageBox::warning(this, i18n("Warning"), i18n("You didn't select any item from the Tree Widget"));
-        return;
-    }
+    if (!item)
+        return; //should never happen
 
     //determine the topic name that the current item represents
     QTreeWidgetItem* tempItem = item;
@@ -803,11 +812,11 @@ void MQTTSubscriptionWidget::mqttSubscribe() {
                                     QTreeWidgetItem* unsubscribeItem = children[j];
                                     while (unsubscribeItem->parent() != nullptr) {
                                         for (int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
-
-                                            if (unsubscribeItem->text(0) != unsubscribeItem->parent()->child(i)->text(0)) {
+											const QString& childText = unsubscribeItem->parent()->child(i)->text(0);
+                                            if (unsubscribeItem->text(0) != childText) {
                                                 //add topic as subscription
-
-                                                emit addBeforeRemoveSubscription(unsubscribeItem->parent()->child(i)->text(0), static_cast<quint8>(ui.cbQos->currentText().toUInt()));
+												quint8 qos = static_cast<quint8>(ui.cbQos->currentText().toUInt());
+                                                emit addBeforeRemoveSubscription(childText, qos);
                                                 //also add it to twSubscriptions
                                                 ui.twSubscriptions->addTopLevelItem(unsubscribeItem->parent()->takeChild(i));
                                                 --i;
@@ -867,10 +876,8 @@ void MQTTSubscriptionWidget::updateSubscriptionCompleter() {
  */
 void MQTTSubscriptionWidget::mqttUnsubscribe() {
     QTreeWidgetItem* unsubscribeItem = ui.twSubscriptions->currentItem();
-    if (!unsubscribeItem) {
-        QMessageBox::warning(this, i18n("Warning"), i18n("You didn't select any item from the Tree Widget"));
-        return;
-    }
+    if (!unsubscribeItem)
+        return; //should never happen
 
     QDEBUG("Unsubscribe from: " << unsubscribeItem->text(0));
     //if it is a top level item, meaning a topic that we really subscribed to(not one that belongs to a subscription)
@@ -890,11 +897,13 @@ void MQTTSubscriptionWidget::mqttUnsubscribe() {
     else {
         while (unsubscribeItem->parent() != nullptr) {
             for (int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
-                if (unsubscribeItem->text(0) != unsubscribeItem->parent()->child(i)->text(0)) {
+				const QString& childText = unsubscribeItem->parent()->child(i)->text(0);
+                if (unsubscribeItem->text(0) != childText) {
+					quint8 qos = static_cast<quint8>(ui.cbQos->currentText().toUInt());
                     if(m_parent == MQTTParentWidget::ImportFileWidget)
-                        emit makeSubscription(unsubscribeItem->parent()->child(i)->text(0), static_cast<quint8>(ui.cbQos->currentText().toUInt()));
+                        emit makeSubscription(childText, qos);
                     else {
-                        emit addBeforeRemoveSubscription(unsubscribeItem->parent()->child(i)->text(0), static_cast<quint8>(ui.cbQos->currentText().toUInt()));
+                        emit addBeforeRemoveSubscription(childText, qos);
                     }
 
                     ui.twSubscriptions->addTopLevelItem(unsubscribeItem->parent()->takeChild(i));
@@ -929,9 +938,9 @@ void MQTTSubscriptionWidget::setTopicCompleter(const QString& topic) {
     if (!m_searching) {
         const QStringList& list = topic.split('/', QString::SkipEmptyParts);
         QString tempTopic;
-        if (!list.isEmpty()) {
+        if (!list.isEmpty())
             tempTopic = list.at(0);
-        } else
+        else
             tempTopic = topic;
 
         if (!m_topicList.contains(tempTopic)) {
@@ -962,7 +971,8 @@ void MQTTSubscriptionWidget::scrollToTopicTreeItem(const QString& rootName) {
         }
 
     if (topItemIdx >= 0)
-        ui.twTopics->scrollToItem(ui.twTopics->topLevelItem(topItemIdx), QAbstractItemView::ScrollHint::PositionAtTop);
+        ui.twTopics->scrollToItem(ui.twTopics->topLevelItem(topItemIdx),
+								  QAbstractItemView::ScrollHint::PositionAtTop);
 }
 
 /*!
@@ -980,7 +990,8 @@ void MQTTSubscriptionWidget::scrollToSubsriptionTreeItem(const QString& rootName
         }
 
     if (topItemIdx >= 0)
-        ui.twSubscriptions->scrollToItem(ui.twSubscriptions->topLevelItem(topItemIdx), QAbstractItemView::ScrollHint::PositionAtTop);
+        ui.twSubscriptions->scrollToItem(ui.twSubscriptions->topLevelItem(topItemIdx),
+										 QAbstractItemView::ScrollHint::PositionAtTop);
 }
 
 /*!
