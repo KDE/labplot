@@ -40,6 +40,12 @@ Copyright            : (C) 2017-2018 Alexander Semke (alexander.semke@web.de)
 #include <QSqlDatabase>
 #include <QtSql>
 
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+#include <KF5/KSyntaxHighlighting/SyntaxHighlighter>
+#include <KF5/KSyntaxHighlighting/Definition>
+#include <KF5/KSyntaxHighlighting/Theme>
+#endif
+
 /*!
    \class DatabaseManagerWidget
    \brief widget for managing database connections, embedded in \c DatabaseManagerDialog.
@@ -188,6 +194,17 @@ void DatabaseManagerWidget::driverChanged() {
 		const bool customConnection = ui.chkCustomConnection->isChecked();
 		ui.leDatabase->setEnabled(!customConnection);
 		ui.teCustomConnection->setVisible(customConnection);
+
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+		//syntax highlighting for custom ODBC string
+		if (!m_highlighter) {
+			m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teCustomConnection->document());
+			m_highlighter->setDefinition(m_repository.definitionForName("INI Files"));
+			m_highlighter->setTheme(  (palette().color(QPalette::Base).lightness() < 128)
+										? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+										: m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme) );
+		}
+#endif
 	} else {
 		ui.lHost->show();
 		ui.leHost->show();

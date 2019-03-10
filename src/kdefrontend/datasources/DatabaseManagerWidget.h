@@ -30,6 +30,13 @@
 
 #include "ui_databasemanagerwidget.h"
 
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+#include <repository.h>
+namespace KSyntaxHighlighting {
+	class SyntaxHighlighter;
+}
+#endif
+
 class DatabaseManagerWidget : public QWidget {
 	Q_OBJECT
 
@@ -61,6 +68,10 @@ private:
 	bool m_initializing{false};
 	QString m_configPath;
 	QString m_initConnName;
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter{nullptr};
+	KSyntaxHighlighting::Repository m_repository;
+#endif
 
 	QString uniqueName();
 	void loadConnection();
