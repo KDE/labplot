@@ -1730,48 +1730,39 @@ int AsciiFilterPrivate::prepareToRead(const QString& message) {
 	DEBUG("number of columns: " << firstLineStringList.size());
 	QDEBUG("first line: " << firstLineStringList);
 
-	// set range to read
-	if (endColumn == -1) {
-		if (headerEnabled || vectorNames.size() == 0)
-			endColumn = firstLineStringList.size(); // last column
-		else
-			//number of vector names provided in the import dialog (not more than the maximal number of columns in the file)
-			endColumn = qMin(vectorNames.size(), firstLineStringList.size());
-	}
+	//all columns are read plus the optional column for the index
+	m_actualCols = firstLineStringList.size() + int(createIndexEnabled);
 
-	if (endColumn < startColumn)
-		m_actualCols = 0;
-	else
-		m_actualCols = endColumn - startColumn + 1;
+	//column names:
+	//when reading the message strings for different topics, it's not possible to specify vector names
+	//since the different topics can have different content and different number of columns/vectors
+	//->we always set the vector names here to fixed values
+	vectorNames.clear();
+	columnModes.clear();
 
+	//add index column
 	if (createIndexEnabled) {
-		vectorNames.prepend(i18n("Index"));
-		m_actualCols++;
+		vectorNames << i18n("index");
+		columnModes << AbstractColumn::Integer;
 	}
 
-	// parse first data line to determine data type for each column
-	columnModes.resize(m_actualCols);
-	int col = 0;
-	if (createIndexEnabled) {
-		columnModes[0] = AbstractColumn::Integer;
-		col = 1;
-	}
-
-	for (auto& valueString : firstLineStringList) { // parse columns available in first data line
+	//parse the first data line to determine data type for each column
+	int i = 1;
+	for (auto& valueString : firstLineStringList) {
 		if (simplifyWhitespacesEnabled)
 			valueString = valueString.simplified();
 		if (removeQuotesEnabled)
 			valueString.remove(QRegExp("[\"\']"));
-		if (col == m_actualCols)
-			break;
-		columnModes[col++] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
+
+		vectorNames << i18n("value %1").arg(i);
+		columnModes << AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
+		++i;
 	}
 
 	m_actualStartRow = startRow;
 	m_actualRows = lines.size();
 
 	QDEBUG("column modes = " << columnModes);
-	DEBUG("start/end column: " << startColumn << ' ' << endColumn);
 	DEBUG("actual cols/rows (w/o header): " << m_actualCols << ' ' << m_actualRows);
 
 	return 0;

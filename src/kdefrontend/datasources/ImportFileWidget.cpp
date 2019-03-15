@@ -1048,6 +1048,11 @@ void ImportFileWidget::initOptionsWidget() {
 			m_asciiOptionsWidget->loadSettings();
 			ui.swOptions->addWidget(asciiw);
 		}
+
+		//for MQTT topics we don't allow to set the vector names since the different topics
+		//can have different number of columns
+		m_asciiOptionsWidget->showAsciiHeaderOptions(currentSourceType() != LiveDataSource::MQTT);
+
 		ui.swOptions->setCurrentWidget(m_asciiOptionsWidget->parentWidget());
 		break;
 	case AbstractFileFilter::Binary:
