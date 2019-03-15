@@ -58,7 +58,6 @@ MQTTSubscriptionWidget::MQTTSubscriptionWidget( QWidget* parent): QWidget(parent
 
     ui.setupUi(this);
 
-
     m_searchTimer->setInterval(10000);
     const int size = ui.leTopics->height();
     ui.lTopicSearch->setPixmap( QIcon::fromTheme(QLatin1String("go-next")).pixmap(size, size) );
@@ -104,6 +103,7 @@ MQTTSubscriptionWidget::MQTTSubscriptionWidget( QWidget* parent): QWidget(parent
     connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &MQTTSubscriptionWidget::scrollToSubsriptionTreeItem);
     connect(ui.twTopics, &QTreeWidget::itemDoubleClicked, this, &MQTTSubscriptionWidget::mqttAvailableTopicDoubleClicked);
     connect(ui.twSubscriptions, &QTreeWidget::itemDoubleClicked, this, &MQTTSubscriptionWidget::mqttSubscribedTopicDoubleClicked);
+	connect(ui.twSubscriptions, &QTreeWidget::currentItemChanged, this, &MQTTSubscriptionWidget::subscriptionChanged);
 
 	connect(ui.twTopics, &QTreeWidget::itemSelectionChanged, this, [=]() {
 		ui.bSubscribe->setEnabled(!ui.twTopics->selectedItems().isEmpty());
@@ -149,6 +149,10 @@ int MQTTSubscriptionWidget::topicCount() {
 
 void MQTTSubscriptionWidget::setTopicTreeText(const QString &text) {
     ui.twTopics->headerItem()->setText(0, text);
+}
+
+QTreeWidgetItem* MQTTSubscriptionWidget::currentItem() const {
+	return ui.twSubscriptions->currentItem();
 }
 
 void MQTTSubscriptionWidget::makeVisible(bool visible) {

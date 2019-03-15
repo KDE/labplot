@@ -52,12 +52,15 @@ public:
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace);
 	void write(const QString& fileName, AbstractDataSource*);
+
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> preview(QIODevice& device);
+
 	QString separator() const;
 
 #ifdef HAVE_MQTT
-	void MQTTPreview(QVector<QStringList>&, const QString&, const QString&);
+	int prepareToRead(const QString&);
+	QVector<QStringList> preview(const QString& message);
 	AbstractColumn::ColumnMode MQTTColumnMode() const;
 	QString MQTTColumnStatistics(const MQTTTopic*) const;
 	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);

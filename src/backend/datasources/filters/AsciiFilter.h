@@ -73,7 +73,7 @@ public:
 	void saveFilterSettings(const QString&) const override;
 
 #ifdef HAVE_MQTT
-	void MQTTPreview(QVector<QStringList>&, const QString&, const QString&);
+	QVector<QStringList> preview(const QString& message);
 	QString MQTTColumnStatistics(const MQTTTopic*) const;
 	AbstractColumn::ColumnMode MQTTColumnMode() const;
 	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*);

@@ -145,20 +145,18 @@ private:
 	QMqttClient* m_client{nullptr};
     QVector<QMqttSubscription*> m_mqttSubscriptions;
 	QTimer* m_connectTimeoutTimer;
-	QMap<QMqttTopicName, bool> m_messageArrived;
 	QMap<QMqttTopicName, QMqttMessage> m_lastMessage;
-	bool m_mqttReadyForPreview{false};
 	QVector<QString> m_subscribedTopicNames;
 	QVector<QString> m_addedTopics;
 	QString m_configPath;
 	bool m_initialisingMQTT{false};
-	bool m_connectionTimedOut{false};    
+	bool m_connectionTimedOut{false};
 	MQTTClient::MQTTWill m_willSettings;
     MQTTSubscriptionWidget* m_subscriptionWidget;
 
 public:
 	void saveMQTTSettings(MQTTClient*) const;
-	bool isMqttValid();    
+	bool isMqttValid();
 
 signals:
     void newTopic(const QString&);

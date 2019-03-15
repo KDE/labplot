@@ -361,6 +361,7 @@ void ImportFileWidget::initSlots() {
 	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription, this, &ImportFileWidget::mqttSubscribe);
 	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::MQTTUnsubscribeFromTopic, this, &ImportFileWidget::unsubscribeFromTopic);
 	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::enableWill, this, &ImportFileWidget::enableWill);
+	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::subscriptionChanged, this, &ImportFileWidget::refreshPreview);
 #endif
 }
 
@@ -814,15 +815,6 @@ void ImportFileWidget::unsubscribeFromTopic(const QString& topicName, QVector<QT
 			m_mqttSubscriptions.remove(i);
 			break;
 		}
-
-	m_mqttReadyForPreview = false;
-
-	QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
-	while (i.hasNext()) {
-		i.next();
-        if (MQTTSubscriptionWidget::checkTopicContains(topicName, i.key().name()))
-			m_messageArrived.remove(i.key());
-	}
 
 	QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
 	while (j.hasNext()) {
@@ -1295,23 +1287,15 @@ void ImportFileWidget::refreshPreview() {
 		}
 		case LiveDataSource::SourceType::MQTT: {
 #ifdef HAVE_MQTT
-			QDEBUG("Start MQTT preview, ready  = " << m_mqttReadyForPreview);
-			if (m_mqttReadyForPreview) {
-				filter->vectorNames().clear();
-				QMapIterator<QMqttTopicName, QMqttMessage> i(m_lastMessage);
-				while (i.hasNext()) {
-					i.next();
-					filter->MQTTPreview(importedStrings, QString(i.value().payload().data()), i.key().name() );
-					if (importedStrings.isEmpty())
-						break;
-				}
-
-				QMapIterator<QMqttTopicName, bool> j(m_messageArrived);
-				while (j.hasNext()) {
-					j.next();
-					m_messageArrived[j.key()] = false;
-				}
-				m_mqttReadyForPreview = false;
+			//show the preview for the currently selected topic
+			auto* item = m_subscriptionWidget->currentItem();
+			if (item && item->childCount() == 0) { //only preview if the lowest level (i.e. a topic) is selected
+				const QString& topicName = item->text(0);
+				auto i = m_lastMessage.find(topicName);
+				if (i != m_lastMessage.end())
+					importedStrings = filter->preview(i.value().payload().data());
+				else
+					importedStrings << QStringList{i18n("No data arrived yet for the selected topic")};
 			}
 #endif
 			break;
@@ -1830,7 +1814,6 @@ void ImportFileWidget::onMqttDisconnect() {
 	ui.bLWT->hide();
 
 	ui.cbConnection->setItemText(ui.cbConnection->currentIndex(), ui.cbConnection->currentText() + " " + i18n("(Disconnected)"));
-	m_mqttReadyForPreview = false;
 
 	emit subscriptionsChanged();
 	RESET_CURSOR;
@@ -1852,7 +1835,6 @@ void ImportFileWidget::mqttSubscribe(const QString& name, uint QoS) {
 		emit subscriptionsChanged();
 	}
 }
-
 
 /*!
  *\brief called when the client receives a message
@@ -1956,33 +1938,12 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqt
  */
 void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) {
 	QDEBUG("message received from: " << msg.topic().name());
-	if (!m_subscribedTopicNames.contains(msg.topic().name())) {
-		m_messageArrived[msg.topic()] = true;
+
+	if (!m_subscribedTopicNames.contains(msg.topic().name()))
 		m_subscribedTopicNames.push_back(msg.topic().name());
-	}
 
-	if (!m_messageArrived[msg.topic()])
-		m_messageArrived[msg.topic()] = true;
-
-	//updates the last message of the topic
+	//update the last message for the topic
 	m_lastMessage[msg.topic()] = msg;
-
-	//check if the client received a message from every subscribed topic, since the last time the preview was refreshed
-	bool check = true;
-	QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
-	while (i.hasNext()) {
-		i.next();
-		if (i.value() == false ) {
-			check = false;
-			break;
-		}
-	}
-
-	//if there is a message from every subscribed topic, we refresh the preview
-	if (check) {
-		m_mqttReadyForPreview = true;
-		refreshPreview();
-	}
 }
 
 /*!

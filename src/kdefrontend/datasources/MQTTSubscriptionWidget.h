@@ -53,16 +53,19 @@ public:
     int subscriptionCount();
     QTreeWidgetItem* topLevelTopic(int);
     QTreeWidgetItem* topLevelSubscription(int);
+	QTreeWidgetItem* currentItem() const;
     void addTopic(QTreeWidgetItem*);
     int topicCount();
     void setTopicTreeText(const QString&);
     void makeVisible(bool);
     void testSubscribe(QTreeWidgetItem*);
     void testUnsubscribe(QTreeWidgetItem*);
+
     static bool checkTopicContains(const QString&, const QString&);
     static void findSubscriptionLeafChildren(QVector<QTreeWidgetItem*>&, QTreeWidgetItem*);
 
 signals:
+	void subscriptionChanged();
     void makeSubscription(const QString& name, quint8 QoS);
     void MQTTUnsubscribeFromTopic(const QString&, QVector<QTreeWidgetItem*> children);
     void removeMQTTSubscription(const QString&);
@@ -83,6 +86,7 @@ private:
     void unsubscribeFromTopic(const QString&);
     void manageCommonLevelSubscriptions();
     void updateSubscriptionCompleter();
+
     static void addSubscriptionChildren(QTreeWidgetItem*, QTreeWidgetItem*);
     static void restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList& list, int level);
     static int checkCommonChildCount(int levelIdx, int level, QStringList& namelist, QTreeWidgetItem* currentItem);
@@ -101,9 +105,6 @@ private slots:
     void updateSubscriptionTree(const QVector<QString>&);
     void clearWidgets();
     void onDisconnect();
-
-
-
 #endif	// HAVE_MQTT
 };
 
