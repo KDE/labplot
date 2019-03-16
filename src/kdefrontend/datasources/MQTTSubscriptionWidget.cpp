@@ -40,7 +40,6 @@ Copyright            : (C) 2019 by Kovacs Ferencz (kferike98@gmail.com)
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 
-
 /*!
    \class MQTTSubscriptionWidget
    \brief Widget for managing topics and subscribing.
@@ -72,10 +71,13 @@ MQTTSubscriptionWidget::MQTTSubscriptionWidget( QWidget* parent): QWidget(parent
 	ui.bUnsubscribe->setEnabled(false);
 
     QString info = i18n("Enter the name of the topic to navigate to it.");
+	QString placeholder = i18n("Enter the name of the topic");
     ui.lTopicSearch->setToolTip(info);
     ui.leTopics->setToolTip(info);
+	ui.leTopics->setPlaceholderText(placeholder);
     ui.lSubscriptionSearch->setToolTip(info);
     ui.leSubscriptions->setToolTip(info);
+	ui.leSubscriptions->setPlaceholderText(placeholder);
 
     info = i18n("Set the Quality of Service (QoS) for the subscription to define the guarantee of the message delivery:"
                 "<ul>"
@@ -1020,4 +1022,3 @@ void MQTTSubscriptionWidget::onDisconnect() {
     delete m_subscriptionCompleter;
 }
 #endif
-
