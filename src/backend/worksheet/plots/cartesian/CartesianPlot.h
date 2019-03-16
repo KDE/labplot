@@ -62,7 +62,7 @@ public:
 	explicit CartesianPlot(const QString &name);
 	~CartesianPlot() override;
 
-	enum Scale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
+	enum Scale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleLog10Abs, ScaleLog2Abs, ScaleLnAbs, ScaleSqrt, ScaleX2};
 	enum Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
 	enum RangeFormat {Numeric, DateTime};
 	enum RangeType {RangeFree, RangeLast, RangeFirst};

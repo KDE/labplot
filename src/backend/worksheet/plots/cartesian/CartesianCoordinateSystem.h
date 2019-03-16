@@ -30,11 +30,11 @@
 #define CARTESIANCOORDINATESYSTEM_H
 
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/lib/Interval.h"
 
 #include <vector>
 
-class CartesianPlot;
 class CartesianCoordinateSystemPrivate;
 class CartesianCoordinateSystemSetScalePropertiesCmd;
 
@@ -44,11 +44,10 @@ public:
 
 	enum ScaleType {ScaleLinear, ScaleLog};
 
-	static CartesianScale *createScale(ScaleType type, const Interval<double> &interval, double a, double b, double c);
-	static CartesianScale *createLinearScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
+	static CartesianScale* createLinearScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
 		double logicalStart, double logicalEnd);
-	static CartesianScale *createLogScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
-		double logicalStart, double logicalEnd, double base);
+	static CartesianScale* createLogScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
+		double logicalStart, double logicalEnd, CartesianPlot::Scale);
 
 	virtual void getProperties(ScaleType *type = nullptr, Interval<double> *interval = nullptr,
 			double *a = nullptr, double *b = nullptr, double *c = nullptr) const;

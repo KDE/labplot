@@ -364,11 +364,17 @@ void CartesianPlotDock::retranslateUi() {
 	ui.cbXScaling->addItem( i18n("log(x)") );
 	ui.cbXScaling->addItem( i18n("log2(x)") );
 	ui.cbXScaling->addItem( i18n("ln(x)") );
+	ui.cbXScaling->addItem( i18n("log(abs(x))") );
+	ui.cbXScaling->addItem( i18n("log2(abs(x))") );
+	ui.cbXScaling->addItem( i18n("ln(abs(x))") );
 
 	ui.cbYScaling->addItem( i18n("linear") );
 	ui.cbYScaling->addItem( i18n("log(y)") );
 	ui.cbYScaling->addItem( i18n("log2(y)") );
 	ui.cbYScaling->addItem( i18n("ln(y)") );
+	ui.cbYScaling->addItem( i18n("log(abs(y))") );
+	ui.cbYScaling->addItem( i18n("log2(abs(y))") );
+	ui.cbYScaling->addItem( i18n("ln(abs(y))") );
 
 	//scale breakings
 	ui.cbXBreakStyle->addItem( i18n("Simple") );
