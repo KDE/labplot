@@ -172,8 +172,13 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.cbSourceType->addItem(QLatin1String("MQTT"));
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QLatin1String("MQTT_connections");
 
-	ui.swSubscriptions->addWidget(m_subscriptionWidget);
-	ui.swSubscriptions->setCurrentWidget(m_subscriptionWidget);
+	//add subscriptions widget
+	layout = new QHBoxLayout;
+	layout->setContentsMargins(0, 0, 0, 0);
+	layout->setSpacing(0);
+	layout->addWidget(m_subscriptionWidget);
+	ui.frameSubscriptions->setLayout(layout);
+
 	ui.bManageConnections->setIcon(QIcon::fromTheme(QLatin1String("network-server")));
 	ui.bManageConnections->setToolTip(i18n("Manage MQTT connections"));
 
@@ -761,14 +766,14 @@ void ImportFileWidget::setMQTTVisible(bool visible) {
 	//topics
 	if (ui.cbConnection->currentIndex() != -1 && visible) {
 		ui.lTopics->setVisible(true);
-		ui.swSubscriptions->setVisible(true);
+		ui.frameSubscriptions->setVisible(true);
 #ifdef HAVE_MQTT
 		m_subscriptionWidget->setVisible(true);
 		m_subscriptionWidget->makeVisible(true);
 #endif
 	} else {
 		ui.lTopics->setVisible(false);
-		ui.swSubscriptions->setVisible(false);
+		ui.frameSubscriptions->setVisible(false);
 #ifdef HAVE_MQTT
 		m_subscriptionWidget->setVisible(false);
 		m_subscriptionWidget->makeVisible(false);
@@ -1794,7 +1799,7 @@ void ImportFileWidget::mqttConnectionChanged() {
 void ImportFileWidget::onMqttConnect() {
 	if (m_client->error() == QMqttClient::NoError) {
 		m_connectTimeoutTimer->stop();
-		ui.swSubscriptions->setVisible(true);
+		ui.frameSubscriptions->setVisible(true);
 		m_subscriptionWidget->setVisible(true);
 		m_subscriptionWidget->makeVisible(true);
 
@@ -1814,7 +1819,7 @@ void ImportFileWidget::onMqttDisconnect() {
 	m_connectTimeoutTimer->stop();
 
 	ui.lTopics->hide();
-	ui.swSubscriptions->hide();
+	ui.frameSubscriptions->hide();
 	ui.lLWT->hide();
 	ui.bLWT->hide();
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>674</width>
-    <height>1593</height>
+    <width>633</width>
+    <height>1296</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -172,13 +172,6 @@
         </property>
        </widget>
       </item>
-      <item row="9" column="3">
-       <widget class="QPushButton" name="bLWT">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
       <item row="4" column="2" colspan="3">
        <widget class="QLineEdit" name="lePort"/>
       </item>
@@ -322,16 +315,21 @@
         </property>
        </widget>
       </item>
-      <item row="8" column="3" colspan="2">
-       <widget class="QStackedWidget" name="swSubscriptions">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+      <item row="8" column="2" colspan="3">
+       <widget class="QFrame" name="frameSubscriptions">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
         </property>
-        <widget class="QWidget" name="page_3"/>
-        <widget class="QWidget" name="page_4"/>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="2" colspan="2">
+       <widget class="QPushButton" name="bLWT">
+        <property name="text">
+         <string/>
+        </property>
        </widget>
       </item>
      </layout>
