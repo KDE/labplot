@@ -76,7 +76,7 @@ public:
 	QVector<QStringList> preview(const QString& message);
 	QString MQTTColumnStatistics(const MQTTTopic*) const;
 	AbstractColumn::ColumnMode MQTTColumnMode() const;
-	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*);
+	void readMQTTTopic(const QString& message, AbstractDataSource*);
 	void setPreparedForMQTT(bool, MQTTTopic*, const QString&);
 #endif
 
@@ -104,6 +104,8 @@ public:
 	bool removeQuotesEnabled() const;
 	void setCreateIndexEnabled(const bool);
 	bool createIndexEnabled() const;
+	void setCreateTimestampEnabled(const bool);
+	bool createTimestampEnabled() const;
 
 	void setVectorNames(const QString&);
 	QStringList vectorNames() const;

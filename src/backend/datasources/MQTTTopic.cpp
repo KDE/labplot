@@ -188,7 +188,7 @@ void MQTTTopic::read() {
 	while (!m_messagePuffer.isEmpty()) {
 		qDebug() << "Reading from topic " << m_topicName;
 		const QString tempMessage = m_messagePuffer.takeFirst();
-		m_filter->readMQTTTopic(tempMessage, m_topicName, this);
+		m_filter->readMQTTTopic(tempMessage, this);
 	}
 }
 

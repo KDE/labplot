@@ -4,7 +4,7 @@
     Description          : widget providing options for the import of ascii data
     --------------------------------------------------------------------
     Copyright            : (C) 2009-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2019 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -118,11 +118,13 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
 	connect(ui.chbHeader, &QCheckBox::stateChanged, this, &AsciiOptionsWidget::headerChanged);
 }
 
-void AsciiOptionsWidget::showAsciiHeaderOptions(bool b) {
-	DEBUG("AsciiOptionsWidget::showAsciiHeaderOptions(" << b << ")");
-	ui.chbHeader->setVisible(b);
-	ui.lVectorNames->setVisible(b);
-	ui.kleVectorNames->setVisible(b);
+void AsciiOptionsWidget::showAsciiHeaderOptions(bool visible) {
+	DEBUG("AsciiOptionsWidget::showAsciiHeaderOptions(" << visible << ")");
+	ui.chbHeader->setVisible(visible);
+	if (visible) {
+		ui.lVectorNames->setVisible(ui.chbHeader->isChecked());
+		ui.kleVectorNames->setVisible(ui.chbHeader->isChecked());
+	}
 }
 
 /*!
@@ -130,24 +132,19 @@ void AsciiOptionsWidget::showAsciiHeaderOptions(bool b) {
   Hides it otherwise.
 */
 void AsciiOptionsWidget::headerChanged(int state) {
-	DEBUG("AsciiOptionsWidget::headerChanged(" << state << ")");
-	if (state == Qt::Checked) {
-		ui.kleVectorNames->hide();
-		ui.lVectorNames->hide();
-	} else {
-		ui.kleVectorNames->show();
-		ui.lVectorNames->show();
-	}
+	bool visible = (state == Qt::Checked);
+	ui.kleVectorNames->setVisible(visible);
+	ui.lVectorNames->setVisible(visible);
 }
 
 void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
 	Q_ASSERT(filter);
-
 	filter->setCommentCharacter( ui.cbCommentCharacter->currentText() );
 	filter->setSeparatingCharacter( ui.cbSeparatingCharacter->currentText() );
 	filter->setNumberFormat( QLocale::Language(ui.cbNumberFormat->currentIndex()) );
 	filter->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
 	filter->setCreateIndexEnabled( ui.chbCreateIndex->isChecked() );
+	filter->setCreateTimestampEnabled( ui.chbCreateTimestamp->isChecked() );
 	filter->setSimplifyWhitespacesEnabled( ui.chbSimplifyWhitespaces->isChecked() );
 	filter->setNaNValueToZero( ui.chbConvertNaNToZero->isChecked() );
 	filter->setRemoveQuotesEnabled( ui.chbRemoveQuotes->isChecked() );
@@ -155,7 +152,6 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
 	filter->setVectorNames( ui.kleVectorNames->text() );
 	filter->setHeaderEnabled( ui.chbHeader->isChecked() );
 }
-
 
 void AsciiOptionsWidget::loadSettings() const {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportAscii");
@@ -166,6 +162,7 @@ void AsciiOptionsWidget::loadSettings() const {
 	ui.cbNumberFormat->setCurrentIndex(conf.readEntry("NumberFormat", (int)QLocale::AnyLanguage));
 	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
 	ui.chbCreateIndex->setChecked(conf.readEntry("CreateIndex", false));
+	ui.chbCreateTimestamp->setChecked(conf.readEntry("CreateTimestamp", true));
 	ui.chbSimplifyWhitespaces->setChecked(conf.readEntry("SimplifyWhitespaces", true));
 	ui.chbConvertNaNToZero->setChecked(conf.readEntry("ConvertNaNToZero", false));
 	ui.chbRemoveQuotes->setChecked(conf.readEntry("RemoveQuotes", false));
@@ -182,6 +179,7 @@ void AsciiOptionsWidget::saveSettings() {
 	conf.writeEntry("NumberFormat", ui.cbNumberFormat->currentIndex());
 	conf.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
 	conf.writeEntry("CreateIndex", ui.chbCreateIndex->isChecked());
+	conf.writeEntry("CreateTimestamp", ui.chbCreateTimestamp->isChecked());
 	conf.writeEntry("SimplifyWhitespaces", ui.chbSimplifyWhitespaces->isChecked());
 	conf.writeEntry("ConvertNaNToZero", ui.chbConvertNaNToZero->isChecked());
 	conf.writeEntry("RemoveQuotes", ui.chbRemoveQuotes->isChecked());

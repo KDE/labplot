@@ -63,31 +63,31 @@ public:
 	QVector<QStringList> preview(const QString& message);
 	AbstractColumn::ColumnMode MQTTColumnMode() const;
 	QString MQTTColumnStatistics(const MQTTTopic*) const;
-	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
-	int prepareMQTTTopicToRead(const QString& message,  const QString& topic);
+	void readMQTTTopic(const QString& message, AbstractDataSource*);
 	void setPreparedForMQTT(bool, MQTTTopic*, const QString&);
 #endif
 
 	const AsciiFilter* q;
 
-	QString commentCharacter;
-	QString separatingCharacter;
+	QString commentCharacter{'#'};
+	QString separatingCharacter{QStringLiteral("auto")};
 	QString dateTimeFormat;
-	QLocale::Language numberFormat;
-	bool autoModeEnabled;
-	bool headerEnabled;
-	bool skipEmptyParts;
-	bool simplifyWhitespacesEnabled;
-	double nanValue;
-	bool removeQuotesEnabled;
-	bool createIndexEnabled;
+	QLocale::Language numberFormat{QLocale::C};
+	bool autoModeEnabled{true};
+	bool headerEnabled{true};
+	bool skipEmptyParts{false};
+	bool simplifyWhitespacesEnabled{false};
+	double nanValue{NAN};
+	bool removeQuotesEnabled{false};
+	bool createIndexEnabled{false};
+	bool createTimestampEnabled{true};
 	QStringList vectorNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;
-	int startRow;
-	int endRow;
-	int startColumn;
-	int endColumn;
-	int mqttPreviewFirstEmptyColCount;
+	int startRow{1};
+	int endRow{-1};
+	int startColumn{1};
+	int endColumn{-1};
+	int mqttPreviewFirstEmptyColCount{0};
 
 	int isPrepared();
 
@@ -98,11 +98,11 @@ public:
 private:
 	static const unsigned int m_dataTypeLines = 10;	// maximum lines to read for determining data types
 	QString m_separator;
-	int m_actualStartRow;
-	int m_actualRows;
-	int m_actualCols;
-	int m_prepared;
-	int m_columnOffset; // indexes the "start column" in the datasource. Data will be imported starting from this column.
+	int m_actualStartRow{1};
+	int m_actualRows{0};
+	int m_actualCols{0};
+	int m_prepared{false};
+	int m_columnOffset{0}; // indexes the "start column" in the datasource. Data will be imported starting from this column.
 	QVector<void*> m_dataContainer; // pointers to the actual data containers
 };
 
