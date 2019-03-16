@@ -121,16 +121,16 @@ void ProjectExplorer::createActions() {
 	matchCompleteWordAction->setChecked(false);
 	connect(matchCompleteWordAction, &QAction::triggered, this, &ProjectExplorer::toggleFilterMatchCompleteWord);
 
-	expandTreeAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("Expand All"), this);
+	expandTreeAction = new QAction(QIcon::fromTheme(QLatin1String("expand-all")), i18n("Expand All"), this);
 	connect(expandTreeAction, &QAction::triggered, m_treeView, &QTreeView::expandAll);
 
-	expandSelectedTreeAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("Expand Selected"), this);
+	expandSelectedTreeAction = new QAction(QIcon::fromTheme(QLatin1String("expand-all")), i18n("Expand Selected"), this);
 	connect(expandSelectedTreeAction, &QAction::triggered, this, &ProjectExplorer::expandSelected);
 
-	collapseTreeAction = new QAction(i18n("Collapse All"), this);
+	collapseTreeAction = new QAction(QIcon::fromTheme(QLatin1String("collapse-all")), i18n("Collapse All"), this);
 	connect(collapseTreeAction, &QAction::triggered, m_treeView, &QTreeView::collapseAll);
 
-	collapseSelectedTreeAction = new QAction(i18n("Collapse Selected"), this);
+	collapseSelectedTreeAction = new QAction(QIcon::fromTheme(QLatin1String("collapse-all")), i18n("Collapse Selected"), this);
 	connect(collapseSelectedTreeAction, &QAction::triggered, this, &ProjectExplorer::collapseSelected);
 
 	deleteSelectedTreeAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete Selected"), this);
