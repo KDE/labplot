@@ -1046,7 +1046,7 @@ void ImportFileWidget::fileTypeChanged(int index) {
 void ImportFileWidget::initOptionsWidget() {
 	DEBUG("ImportFileWidget::initOptionsWidget for " << ENUM_TO_STRING(AbstractFileFilter, FileType, currentFileType()));
 	switch (currentFileType()) {
-	case AbstractFileFilter::Ascii:
+	case AbstractFileFilter::Ascii: {
 		if (!m_asciiOptionsWidget) {
 			QWidget* asciiw = new QWidget();
 			m_asciiOptionsWidget = std::unique_ptr<AsciiOptionsWidget>(new AsciiOptionsWidget(asciiw));
@@ -1056,10 +1056,13 @@ void ImportFileWidget::initOptionsWidget() {
 
 		//for MQTT topics we don't allow to set the vector names since the different topics
 		//can have different number of columns
-		m_asciiOptionsWidget->showAsciiHeaderOptions(currentSourceType() != LiveDataSource::MQTT);
+		bool isMQTT = (currentSourceType() == LiveDataSource::MQTT);
+		m_asciiOptionsWidget->showAsciiHeaderOptions(!isMQTT);
+		m_asciiOptionsWidget->showTimestampOptions(isMQTT);
 
 		ui.swOptions->setCurrentWidget(m_asciiOptionsWidget->parentWidget());
 		break;
+	}
 	case AbstractFileFilter::Binary:
 		if (!m_binaryOptionsWidget) {
 			QWidget* binaryw = new QWidget();

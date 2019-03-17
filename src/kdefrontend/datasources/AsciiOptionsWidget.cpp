@@ -127,6 +127,10 @@ void AsciiOptionsWidget::showAsciiHeaderOptions(bool visible) {
 	}
 }
 
+void AsciiOptionsWidget::showTimestampOptions(bool visible) {
+	ui.chbCreateTimestamp->setVisible(visible);
+}
+
 /*!
   Shows a text field for the vector names if the option "Use the first row..." was not selected.
   Hides it otherwise.
