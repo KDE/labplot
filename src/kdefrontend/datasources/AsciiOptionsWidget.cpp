@@ -122,8 +122,11 @@ void AsciiOptionsWidget::showAsciiHeaderOptions(bool visible) {
 	DEBUG("AsciiOptionsWidget::showAsciiHeaderOptions(" << visible << ")");
 	ui.chbHeader->setVisible(visible);
 	if (visible) {
-		ui.lVectorNames->setVisible(ui.chbHeader->isChecked());
-		ui.kleVectorNames->setVisible(ui.chbHeader->isChecked());
+		ui.lVectorNames->setVisible(!ui.chbHeader->isChecked());
+		ui.kleVectorNames->setVisible(!ui.chbHeader->isChecked());
+	} else {
+		ui.lVectorNames->setVisible(false);
+		ui.kleVectorNames->setVisible(false);
 	}
 }
 
@@ -136,7 +139,7 @@ void AsciiOptionsWidget::showTimestampOptions(bool visible) {
   Hides it otherwise.
 */
 void AsciiOptionsWidget::headerChanged(int state) {
-	bool visible = (state == Qt::Checked);
+	bool visible = (state != Qt::Checked);
 	ui.kleVectorNames->setVisible(visible);
 	ui.lVectorNames->setVisible(visible);
 }
