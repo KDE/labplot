@@ -580,9 +580,6 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 /////////////////////////////////////////////////////////////////
 
 	// parse first data line to determine data type for each column
-	if (!device.isSequential())
-		firstLineStringList = getLineString(device);
-
 	columnModes.resize(m_actualCols);
 	int col = 0;
 	if (createIndexEnabled) {
@@ -1149,6 +1146,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				DEBUG("	actual col = " << n);
 				if (n < lineStringList.size()) {
 					QString valueString = lineStringList.at(n);
+					if (removeQuotesEnabled)
+						valueString.remove(QLatin1Char('"'));
 					DEBUG("	value string = " << valueString.toStdString());
 
 					// set value depending on data type
@@ -1177,8 +1176,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 						break;
 					}
 					case AbstractColumn::Text:
-						if (removeQuotesEnabled)
-							valueString.remove(QLatin1Char('"'));
 						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = valueString;
 						break;
 					case AbstractColumn::Month:
@@ -1330,9 +1327,10 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			//column counting starts with 1, substract 1 as well as another 1 for the index column if required
 			int col = createIndexEnabled ? n + startColumn - 2: n + startColumn - 1;
 
-
 			if (col < lineStringList.size()) {
 				QString valueString = lineStringList.at(col);
+				if (removeQuotesEnabled)
+					valueString.remove(QLatin1Char('"'));
 
 				// set value depending on data type
 				switch (columnModes[n]) {
@@ -1354,8 +1352,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 					break;
 				}
 				case AbstractColumn::Text: {
-					if (removeQuotesEnabled)
-						valueString.remove(QLatin1Char('"'));
 					QVector<QString>* colData = static_cast<QVector<QString>*>(m_dataContainer[n]);
 					colData->operator[](currentRow) = valueString;
 					break;
@@ -1465,6 +1461,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 		for (int n = 0; n < lineStringList.size(); ++n) {
 			if (n < lineStringList.size()) {
 				QString valueString = lineStringList.at(n);
+				if (removeQuotesEnabled)
+					valueString.remove(QLatin1Char('"'));
 
 				switch (columnModes[n]) {
 				case AbstractColumn::Numeric: {
@@ -1485,8 +1483,6 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 					break;
 				}
 				case AbstractColumn::Text:
-					if (removeQuotesEnabled)
-						valueString.remove(QLatin1Char('"'));
 					lineString += valueString;
 					break;
 				case AbstractColumn::Month:	// never happens
@@ -1571,6 +1567,9 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 
 			if (col < lineStringList.size()) {
 				QString valueString = lineStringList.at(col);
+				if (removeQuotesEnabled)
+					valueString.remove(QLatin1Char('"'));
+
 				//DEBUG(" valueString = " << valueString.toStdString());
 				if (skipEmptyParts && !QString::compare(valueString, " "))	// handle left white spaces
 					continue;
@@ -1595,8 +1594,6 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 					break;
 				}
 				case AbstractColumn::Text:
-					if (removeQuotesEnabled)
-						valueString.remove(QLatin1Char('"'));
 					lineString += valueString;
 					break;
 				case AbstractColumn::Month:	// never happens
@@ -2034,6 +2031,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 	}
 
 	int newDataIdx = 0;
+	bool sampleSizeReached = false;
 	{
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE("AsciiLiveDataImportReadingFromFile: ");
