@@ -594,7 +594,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		if (simplifyWhitespacesEnabled)
 			valueString = valueString.simplified();
 		if (removeQuotesEnabled)
-			valueString.remove(QRegExp("[\"\']"));
+			valueString.remove(QLatin1Char('"'));
 		if (col == m_actualCols)
 			break;
 		columnModes[col++] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
@@ -612,7 +612,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			if (simplifyWhitespacesEnabled)
 				valueString = valueString.simplified();
 			if (removeQuotesEnabled)
-				valueString.remove(QRegExp("[\"\']"));
+				valueString.remove(QLatin1Char('"'));
 			if (col == m_actualCols)
 				break;
 			AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
@@ -1178,7 +1178,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 					}
 					case AbstractColumn::Text:
 						if (removeQuotesEnabled)
-							valueString.remove(QRegExp("[\"\']"));
+							valueString.remove(QLatin1Char('"'));
 						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = valueString;
 						break;
 					case AbstractColumn::Month:
@@ -1301,7 +1301,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
 		QString line = device.readLine();
 
-		line.remove(QRegExp("[\\n\\r]"));	// remove any newline
 		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
 
@@ -1356,7 +1355,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				}
 				case AbstractColumn::Text: {
 					if (removeQuotesEnabled)
-						valueString.remove(QRegExp("[\"\']"));
+						valueString.remove(QLatin1Char('"'));
 					QVector<QString>* colData = static_cast<QVector<QString>*>(m_dataContainer[n]);
 					colData->operator[](currentRow) = valueString;
 					break;
@@ -1487,7 +1486,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 				}
 				case AbstractColumn::Text:
 					if (removeQuotesEnabled)
-						valueString.remove(QRegExp("[\"\']"));
+						valueString.remove(QLatin1Char('"'));
 					lineString += valueString;
 					break;
 				case AbstractColumn::Month:	// never happens
@@ -1550,7 +1549,6 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
 		QString line = device.readLine();
 
-		line.remove(QRegExp("[\\n\\r]"));	// remove any newline
 		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
 
@@ -1598,7 +1596,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 				}
 				case AbstractColumn::Text:
 					if (removeQuotesEnabled)
-						valueString.remove(QRegExp("[\"\']"));
+						valueString.remove(QLatin1Char('"'));
 					lineString += valueString;
 					break;
 				case AbstractColumn::Month:	// never happens
@@ -1747,7 +1745,7 @@ int AsciiFilterPrivate::prepareToRead(const QString& message) {
 		if (simplifyWhitespacesEnabled)
 			valueString = valueString.simplified();
 		if (removeQuotesEnabled)
-			valueString.remove(QRegExp("[\"\']"));
+			valueString.remove(QLatin1Char('"'));
 
 		vectorNames << i18n("value %1").arg(i);
 		columnModes << AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
@@ -1826,7 +1824,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& message) {
 				}
 				case AbstractColumn::Text:
 					if (removeQuotesEnabled)
-						valueString.remove(QRegExp("[\"\']"));
+						valueString.remove(QLatin1Char('"'));
 					lineString += valueString;
 					break;
 				case AbstractColumn::Month:	// never happens
@@ -2036,7 +2034,6 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 	}
 
 	int newDataIdx = 0;
-	bool sampleSizeReached = false;
 	{
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE("AsciiLiveDataImportReadingFromFile: ");
@@ -2465,7 +2462,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 					}
 					case AbstractColumn::Text:
 						if (removeQuotesEnabled)
-							valueString.remove(QRegExp("[\"\']"));
+							valueString.remove(QLatin1Char('"'));
 						static_cast<QVector<QString>*>(m_dataContainer[col])->operator[](currentRow) = valueString;
 						break;
 					case AbstractColumn::Month:
