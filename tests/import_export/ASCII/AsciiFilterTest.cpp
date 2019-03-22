@@ -637,17 +637,17 @@ void AsciiFilterTest::testQuotedStrings00() {
 	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Integer);
 	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
 
-	QCOMPARE(spreadsheet.column(0)->textAt(0), "a");
+	QCOMPARE(spreadsheet.column(0)->textAt(0), QLatin1String("a"));
 	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1000);
 	QCOMPARE(spreadsheet.column(2)->integerAt(0), 201811);
 	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1.1);
 
-	QCOMPARE(spreadsheet.column(0)->textAt(1), "ab");
+	QCOMPARE(spreadsheet.column(0)->textAt(1), QLatin1String("ab"));
 	QCOMPARE(spreadsheet.column(1)->integerAt(1), 2000);
 	QCOMPARE(spreadsheet.column(2)->integerAt(1), 201812);
 	QCOMPARE(spreadsheet.column(3)->valueAt(1), 1.2);
 
-	QCOMPARE(spreadsheet.column(0)->textAt(2), "abc");
+	QCOMPARE(spreadsheet.column(0)->textAt(2), QLatin1String("abc"));
 	QCOMPARE(spreadsheet.column(1)->integerAt(2), 3000);
 	QCOMPARE(spreadsheet.column(2)->integerAt(2), 201901);
 	QCOMPARE(spreadsheet.column(3)->valueAt(2), 1.3);
@@ -682,17 +682,17 @@ void AsciiFilterTest::testQuotedStrings01() {
 	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
 
 	//values
-	QCOMPARE(spreadsheet.column(0)->textAt(0), "a");
+	QCOMPARE(spreadsheet.column(0)->textAt(0), QLatin1String("a"));
 	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1000);
 	QCOMPARE(spreadsheet.column(2)->integerAt(0), 201811);
 	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1.1);
 
-	QCOMPARE(spreadsheet.column(0)->textAt(1), "ab");
+	QCOMPARE(spreadsheet.column(0)->textAt(1), QLatin1String("ab"));
 	QCOMPARE(spreadsheet.column(1)->integerAt(1), 2000);
 	QCOMPARE(spreadsheet.column(2)->integerAt(1), 201812);
 	QCOMPARE(spreadsheet.column(3)->valueAt(1), 1.2);
 
-	QCOMPARE(spreadsheet.column(0)->textAt(2), "abc");
+	QCOMPARE(spreadsheet.column(0)->textAt(2), QLatin1String("abc"));
 	QCOMPARE(spreadsheet.column(1)->integerAt(2), 3000);
 	QCOMPARE(spreadsheet.column(2)->integerAt(2), 201901);
 	QCOMPARE(spreadsheet.column(3)->valueAt(2), 1.3);
@@ -718,7 +718,7 @@ void AsciiFilterTest::testQuotedStrings02() {
 	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Integer);
 	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
 
-	QCOMPARE(spreadsheet.column(0)->textAt(0), "a");
+	QCOMPARE(spreadsheet.column(0)->textAt(0), QLatin1String("a"));
 	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1000);
 	QCOMPARE(spreadsheet.column(2)->integerAt(0), 201811);
 	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1.1);
@@ -753,7 +753,7 @@ void AsciiFilterTest::testQuotedStrings03() {
 	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
 
 	//values
-	QCOMPARE(spreadsheet.column(0)->textAt(0), "a");
+	QCOMPARE(spreadsheet.column(0)->textAt(0), QLatin1String("a"));
 	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1000);
 	QCOMPARE(spreadsheet.column(2)->integerAt(0), 201811);
 	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1.1);
