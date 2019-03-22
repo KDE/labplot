@@ -71,6 +71,12 @@ private slots:
 
 	//different separators
 
+	//qouted strings
+	void testQuotedStrings00();
+	void testQuotedStrings01();
+	void testQuotedStrings02();
+	void testQuotedStrings03();
+
 	//different locales
 
 	//handling of NANs

@@ -329,7 +329,7 @@ void AsciiFilterTest::testHeader06() {
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
 	QCOMPARE(spreadsheet.rowCount(), 3);
-	QCOMPARE(spreadsheet.columnCount(), 2); //thee names were specified, but there're only two columns in the file -> we import only two columns
+	QCOMPARE(spreadsheet.columnCount(), 2); //three names were specified, but there're only two columns in the file -> we import only two columns
 	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
 }
@@ -500,7 +500,6 @@ void AsciiFilterTest::testColumnRange06() {
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
 }
 
-
 void AsciiFilterTest::testRowRange00() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
@@ -614,5 +613,150 @@ void AsciiFilterTest::testRowColumnRange00() {
 //#####################  handling of different separators ######################
 //##############################################################################
 
+
+//##############################################################################
+//#####################################  quoted strings ########################
+//##############################################################################
+void AsciiFilterTest::testQuotedStrings00() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "quoted_strings.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter(",");
+	filter.setHeaderEnabled(false);
+	filter.setRemoveQuotesEnabled(true);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//three rows and two columns to read
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 4);
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
+
+	QCOMPARE(spreadsheet.column(0)->textAt(0), "a");
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1000);
+	QCOMPARE(spreadsheet.column(2)->integerAt(0), 201811);
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1.1);
+
+	QCOMPARE(spreadsheet.column(0)->textAt(1), "ab");
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 2000);
+	QCOMPARE(spreadsheet.column(2)->integerAt(1), 201812);
+	QCOMPARE(spreadsheet.column(3)->valueAt(1), 1.2);
+
+	QCOMPARE(spreadsheet.column(0)->textAt(2), "abc");
+	QCOMPARE(spreadsheet.column(1)->integerAt(2), 3000);
+	QCOMPARE(spreadsheet.column(2)->integerAt(2), 201901);
+	QCOMPARE(spreadsheet.column(3)->valueAt(2), 1.3);
+}
+
+void AsciiFilterTest::testQuotedStrings01() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "quoted_strings_with_header.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter(",");
+	filter.setHeaderEnabled(true);
+	filter.setSimplifyWhitespacesEnabled(true);
+	filter.setRemoveQuotesEnabled(true);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//three rows and two columns to read
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 4);
+
+	//column names
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("col1"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("col2"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("col3"));
+	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("col4"));
+
+	//data types
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
+
+	//values
+	QCOMPARE(spreadsheet.column(0)->textAt(0), "a");
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1000);
+	QCOMPARE(spreadsheet.column(2)->integerAt(0), 201811);
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1.1);
+
+	QCOMPARE(spreadsheet.column(0)->textAt(1), "ab");
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 2000);
+	QCOMPARE(spreadsheet.column(2)->integerAt(1), 201812);
+	QCOMPARE(spreadsheet.column(3)->valueAt(1), 1.2);
+
+	QCOMPARE(spreadsheet.column(0)->textAt(2), "abc");
+	QCOMPARE(spreadsheet.column(1)->integerAt(2), 3000);
+	QCOMPARE(spreadsheet.column(2)->integerAt(2), 201901);
+	QCOMPARE(spreadsheet.column(3)->valueAt(2), 1.3);
+}
+
+void AsciiFilterTest::testQuotedStrings02() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "quoted_strings_one_line.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter(",");
+	filter.setHeaderEnabled(false);
+	filter.setRemoveQuotesEnabled(true);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//three rows and two columns to read
+	QCOMPARE(spreadsheet.rowCount(), 1);
+	QCOMPARE(spreadsheet.columnCount(), 4);
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
+
+	QCOMPARE(spreadsheet.column(0)->textAt(0), "a");
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1000);
+	QCOMPARE(spreadsheet.column(2)->integerAt(0), 201811);
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1.1);
+}
+
+void AsciiFilterTest::testQuotedStrings03() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "quoted_strings_one_line_with_header.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter(",");
+	filter.setHeaderEnabled(true);
+	filter.setSimplifyWhitespacesEnabled(true);
+	filter.setRemoveQuotesEnabled(true);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//three rows and two columns to read
+	QCOMPARE(spreadsheet.rowCount(), 1);
+	QCOMPARE(spreadsheet.columnCount(), 4);
+
+	//column names
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("col1"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("col2"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("col3"));
+	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("col4"));
+
+	//data types
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
+
+	//values
+	QCOMPARE(spreadsheet.column(0)->textAt(0), "a");
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1000);
+	QCOMPARE(spreadsheet.column(2)->integerAt(0), 201811);
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1.1);
+}
 
 QTEST_MAIN(AsciiFilterTest)

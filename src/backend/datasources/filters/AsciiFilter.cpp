@@ -501,8 +501,12 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 	DEBUG(" device position after first line and comments = " << device.pos());
 	firstLine.remove(QRegExp("[\\n\\r]"));	// remove any newline
-	if (simplifyWhitespacesEnabled)
-		firstLine = firstLine.simplified();
+	if (removeQuotesEnabled)
+		firstLine = firstLine.remove(QLatin1Char('"'));
+
+	//TODO: this doesn't work, the split below introduces whitespaces again
+// 	if (simplifyWhitespacesEnabled)
+// 		firstLine = firstLine.simplified();
 	DEBUG("First line: \'" << firstLine.toStdString() << '\'');
 
 	// determine separator and split first line
@@ -539,6 +543,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	DEBUG("headerEnabled: " << headerEnabled);
 
 	//optionally, remove potential spaces in the first line
+	//TODO: this part should be obsolete actually if we do firstLine = firstLine.simplified(); above...
 	if (simplifyWhitespacesEnabled) {
 		for (int i = 0; i < firstLineStringList.size(); ++i)
 			firstLineStringList[i] = firstLineStringList[i].simplified();
@@ -1303,11 +1308,14 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		QString line = device.readLine();
 
 		// remove any newline
-		line = line.remove('\n');
-		line = line.remove('\r');
+		line.remove(QLatin1Char('\n'));
+		line.remove(QLatin1Char('\r'));
 
 		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
+
+		if (removeQuotesEnabled)
+			line.remove(QLatin1Char('"'));
 
 		if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
 			continue;
@@ -1337,8 +1345,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 
 			if (col < lineStringList.size()) {
 				QString valueString = lineStringList.at(col);
-				if (removeQuotesEnabled)
-					valueString.remove(QLatin1Char('"'));
 
 				// set value depending on data type
 				switch (columnModes[n]) {
