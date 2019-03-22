@@ -580,6 +580,10 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 /////////////////////////////////////////////////////////////////
 
 	// parse first data line to determine data type for each column
+	// if the first line was already parsed as the header, read the next line
+	if (headerEnabled && !device.isSequential())
+		firstLineStringList = getLineString(device);
+
 	columnModes.resize(m_actualCols);
 	int col = 0;
 	if (createIndexEnabled) {
@@ -1298,6 +1302,10 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
 		QString line = device.readLine();
 
+		// remove any newline
+		line = line.remove('\n');
+		line = line.remove('\r');
+
 		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
 
@@ -1445,6 +1453,10 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 	for (int i = 0; i < linesToRead; ++i) {
 		QString line = newData.at(i);
 
+		// remove any newline
+		line = line.remove('\n');
+		line = line.remove('\r');
+
 		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
 
@@ -1544,6 +1556,10 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	DEBUG("	Generating preview for " << qMin(lines, m_actualRows)  << " lines");
 	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
 		QString line = device.readLine();
+
+		// remove any newline
+		line = line.remove('\n');
+		line = line.remove('\r');
 
 		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
