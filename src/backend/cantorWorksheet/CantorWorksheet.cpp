@@ -77,7 +77,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 		connect(m_session, SIGNAL(statusChanged(Cantor::Session::Status)), this, SIGNAL(statusChanged(Cantor::Session::Status)));
 
 		//variable model
-		m_variableModel = m_session->variableModel();
+		m_variableModel = m_session->variableDataModel();
 		connect(m_variableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(dataChanged(QModelIndex)));
 		connect(m_variableModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
 		connect(m_variableModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), this, SLOT(rowsAboutToBeRemoved(QModelIndex,int,int)));
@@ -105,7 +105,11 @@ void CantorWorksheet::dataChanged(const QModelIndex& index) {
 	const QString& name = m_variableModel->data(m_variableModel->index(index.row(), 0)).toString();
 	Column* col = child<Column>(name);
 	if (col) {
-		const QString& value = m_variableModel->data(m_variableModel->index(index.row(), 1)).toString();
+		// Cantor::DefaultVariableModel::DataRole == 257
+		QVariant dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1), 257);
+		if (dataValue.isNull())
+			dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1));
+		const QString& value = dataValue.toString();
 		auto* parser = new VariableParser(m_backendName, value);
 		if (parser->isParsed())
 			col->replaceValues(0, parser->values());
@@ -116,8 +120,11 @@ void CantorWorksheet::dataChanged(const QModelIndex& index) {
 void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int last) {
 	Q_UNUSED(parent)
 	for (int i = first; i <= last; ++i) {
-		const QString& name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
-		const QString& value = m_variableModel->data(m_variableModel->index(first, 1)).toString();
+		const QString& name = m_variableModel->data(m_variableModel->index(i, 0)).toString();
+		QVariant dataValue = m_variableModel->data(m_variableModel->index(i, 1), 257);
+		if (dataValue.isNull())
+			dataValue = m_variableModel->data(m_variableModel->index(i, 1));
+		const QString& value = dataValue.toString();
 		auto* parser = new VariableParser(m_backendName, value);
 		if (parser->isParsed()) {
 			Column* col = child<Column>(name);
