@@ -78,6 +78,7 @@ private:
 	bool init(QByteArray* content = nullptr);
 
 private slots:
+	void dataChanged(const QModelIndex&);
 	void rowsInserted(const QModelIndex & parent, int first, int last);
 	void rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last);
 	void modelReset();

@@ -78,6 +78,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 
 		//variable model
 		m_variableModel = m_session->variableModel();
+		connect(m_variableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(dataChanged(QModelIndex)));
 		connect(m_variableModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
 		connect(m_variableModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), this, SLOT(rowsAboutToBeRemoved(QModelIndex,int,int)));
 		connect(m_variableModel, SIGNAL(modelReset()), this, SLOT(modelReset()));
@@ -100,11 +101,23 @@ bool CantorWorksheet::init(QByteArray* content) {
 }
 
 //SLots
+void CantorWorksheet::dataChanged(const QModelIndex& index) {
+	const QString& name = m_variableModel->data(m_variableModel->index(index.row(), 0)).toString();
+	Column* col = child<Column>(name);
+	if (col) {
+		const QString& value = m_variableModel->data(m_variableModel->index(index.row(), 1)).toString();
+		auto* parser = new VariableParser(m_backendName, value);
+		if (parser->isParsed())
+			col->replaceValues(0, parser->values());
+	}
+
+}
+
 void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int last) {
 	Q_UNUSED(parent)
 	for (int i = first; i <= last; ++i) {
-		const QString name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
-		const QString value = m_variableModel->data(m_variableModel->index(first, 1)).toString();
+		const QString& name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
+		const QString& value = m_variableModel->data(m_variableModel->index(first, 1)).toString();
 		auto* parser = new VariableParser(m_backendName, value);
 		if (parser->isParsed()) {
 			Column* col = child<Column>(name);
@@ -144,20 +157,12 @@ void CantorWorksheet::modelReset() {
 
 void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last) {
 	Q_UNUSED(parent);
-	Q_UNUSED(first);
-	Q_UNUSED(last);
-	//TODO: Cantor removes rows from the model even when the variable was changed only.
-	//We don't want this behaviour since this removes the columns from the datasource in the curve.
-	//We need to fix/change this in Cantor.
-	return;
-
-// 	Q_UNUSED(parent)
-// 	for (int i = first; i <= last; ++i) {
-// 		const QString name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
-// 		Column* column = child<Column>(name);
-// 		if (column)
-// 			column->remove();
-// 	}
+	for (int i = first; i <= last; ++i) {
+		const QString& name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
+		Column* column = child<Column>(name);
+		if (column)
+			column->remove();
+	}
 }
 
 QList<Cantor::PanelPlugin*> CantorWorksheet::getPlugins() {
