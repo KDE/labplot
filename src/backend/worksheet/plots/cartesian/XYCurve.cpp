@@ -329,12 +329,14 @@ void XYCurve::setXColumn(const AbstractColumn* column) {
 		//emit xDataChanged() in order to notify the plot about the changes
 		emit xDataChanged();
 		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(xDataChanged()));
-
 			//update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, [=](){ d->recalcLogicalPoints(); });
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
 					this, &XYCurve::xColumnAboutToBeRemoved);
+
+			//after the curve was updated, emit the signal to update the plot ranges
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(xDataChanged()));
+
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -349,12 +351,14 @@ void XYCurve::setYColumn(const AbstractColumn* column) {
 		//emit yDataChanged() in order to notify the plot about the changes
 		emit yDataChanged();
 		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(yDataChanged()));
-
 			//update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, [=](){ d->recalcLogicalPoints(); });
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
 					this, &XYCurve::yColumnAboutToBeRemoved);
+
+			//after the curve was updated, emit the signal to update the plot ranges
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(yDataChanged()));
+
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -927,6 +931,7 @@ void XYCurvePrivate::retransform() {
  * copies the valid data points from the x- and y-columns into the internal container
  */
 void XYCurvePrivate::recalcLogicalPoints() {
+	DEBUG("XYCurvePrivate::recalcLogicalPoints()");
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::recalcLogicalPoints()");
 
 	symbolPointsLogical.clear();
@@ -1291,6 +1296,9 @@ void XYCurvePrivate::updateDropLines() {
 }
 
 void XYCurvePrivate::updateSymbols() {
+#ifdef PERFTRACE_CURVES
+	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateSymbols()");
+#endif
 	symbolsPath = QPainterPath();
 	if (symbolsStyle != Symbol::NoSymbols) {
 		QPainterPath path = Symbol::pathFromStyle(symbolsStyle);

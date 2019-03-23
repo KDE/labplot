@@ -2109,8 +2109,9 @@ void CartesianPlotPrivate::retransform() {
 }
 
 void CartesianPlotPrivate::retransformScales() {
-	PERFTRACE("CartesianPlotPrivate::retransformScales()");
+	DEBUG("CartesianPlotPrivate::retransformScales()");
 	DEBUG(" xmin/xmax = " << xMin << '/'<< xMax << ", ymin/ymax = " << yMin << '/' << yMax);
+	PERFTRACE("CartesianPlotPrivate::retransformScales()");
 
 	auto* plot = dynamic_cast<CartesianPlot*>(q);
 	QVector<CartesianScale*> scales;
