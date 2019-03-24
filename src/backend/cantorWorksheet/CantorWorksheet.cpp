@@ -77,7 +77,11 @@ bool CantorWorksheet::init(QByteArray* content) {
 		connect(m_session, SIGNAL(statusChanged(Cantor::Session::Status)), this, SIGNAL(statusChanged(Cantor::Session::Status)));
 
 		//variable model
+#ifndef OLD_CANTORLIBS_VERSION
 		m_variableModel = m_session->variableDataModel();
+#else
+		m_variableModel = m_session->variableModel();
+#endif
 		connect(m_variableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(dataChanged(QModelIndex)));
 		connect(m_variableModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
 		connect(m_variableModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), this, SLOT(rowsAboutToBeRemoved(QModelIndex,int,int)));
@@ -164,12 +168,20 @@ void CantorWorksheet::modelReset() {
 
 void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last) {
 	Q_UNUSED(parent);
+#ifndef OLD_CANTORLIBS_VERSION
 	for (int i = first; i <= last; ++i) {
 		const QString& name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
 		Column* column = child<Column>(name);
 		if (column)
 			column->remove();
 	}
+#else
+	Q_UNUSED(first);
+	Q_UNUSED(last);
+	//TODO: Old Cantor removes rows from the model even when the variable was changed only.
+	//We don't want this behaviour since this removes the columns from the datasource in the curve.
+	return;
+#endif
 }
 
 QList<Cantor::PanelPlugin*> CantorWorksheet::getPlugins() {
