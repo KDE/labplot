@@ -101,8 +101,8 @@ Source: "{#CraftRoot}\bin\libcantor_config.dll"; DestDir: "{app}"; Flags: ignore
 Source: "{#CraftRoot}\bin\libcantor_pythonbackend.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\plugins\libcantorpart.dll"; DestDir: "{app}\plugins"; Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\plugins\cantor\*"; DestDir: "{app}\plugins\cantor"; Flags: recursesubdirs ignoreversion
-Source: "{#CraftRoot}\bin\data\kxmlgui5\cantor\*"; DestDir: "{app}\cantor"; Flags: recursesubdirs ignoreversion
-Source: "{#CraftRoot}\bin\data\cantor\*"; DestDir: "{app}\cantor"; Flags: recursesubdirs ignoreversion
+Source: "{#CraftRoot}\bin\data\kxmlgui5\cantor\*"; DestDir: "{app}\data"; Flags: recursesubdirs ignoreversion
+Source: "{#CraftRoot}\bin\data\cantor\*"; DestDir: "{app}\data"; Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\bin\data\doc\HTML\en\cantor\*"; DestDir: "{app}\doc\HTML\en\cantor";Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\etc\xdg\cantor*"; DestDir: "{app}\etc\xdg"; Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\bin\data\metainfo\org.kde.cantor.appdata.xml"; DestDir: "{app}\data\metainfo"; Flags: ignoreversion
