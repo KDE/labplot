@@ -54,7 +54,17 @@
  * \brief Folder in a project
  */
 
-Folder::Folder(const QString &name) : AbstractAspect(name) {}
+Folder::Folder(const QString &name) : AbstractAspect(name) {
+
+	//when the child being removed is a LiveDataSource, stop reading from the source
+	connect(this, &AbstractAspect::aspectAboutToBeRemoved, this, [=](const AbstractAspect* aspect) {
+		const LiveDataSource* lds = dynamic_cast<const LiveDataSource*>(aspect);
+		if (lds)
+			const_cast<LiveDataSource*>(lds)->pauseReading();
+	} );
+
+
+}
 
 QIcon Folder::icon() const {
 	return QIcon::fromTheme("folder");
