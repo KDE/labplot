@@ -129,6 +129,7 @@ private:
 	QAction* action_sort_spreadsheet;
 	QAction* action_go_to_cell;
 	QAction* action_statistics_all_columns;
+	QAction* action_pivot_table;
 
 	//column related actions
 	QAction* action_insert_column_left;
@@ -204,6 +205,7 @@ private slots:
 	void goToNextColumn();
 	void goToPreviousColumn();
 	void goToCell();
+	void createPivotTable();
 	void sortSpreadsheet();
 	void sortDialog(QVector<Column*>);
 

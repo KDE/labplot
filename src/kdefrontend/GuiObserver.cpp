@@ -33,6 +33,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "backend/core/AbstractAspect.h"
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/matrix/Matrix.h"
+#include "backend/pivot/PivotTable.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -63,6 +64,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "kdefrontend/dockwidgets/ColumnDock.h"
 #include "kdefrontend/dockwidgets/LiveDataDock.h"
 #include "kdefrontend/dockwidgets/MatrixDock.h"
+#include "kdefrontend/dockwidgets/PivotTableDock.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
@@ -160,6 +162,18 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->spreadsheetDock->setSpreadsheets(list);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->spreadsheetDock);
+	} else if (className == QStringLiteral("PivotTable")) {
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Pivot Table"));
+
+		if (!m_mainWindow->pivotTableDock) {
+			m_mainWindow->pivotTableDock = new PivotTableDock(m_mainWindow->stackedWidget);
+			connect(m_mainWindow->pivotTableDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
+			m_mainWindow->stackedWidget->addWidget(m_mainWindow->pivotTableDock);
+		}
+
+		m_mainWindow->pivotTableDock->setPivotTable(static_cast<PivotTable*>(selectedAspects.first()));
+
+		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->pivotTableDock);
 	} else if (className == QStringLiteral("Column")) {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Column"));
 

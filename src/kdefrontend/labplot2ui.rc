@@ -41,6 +41,7 @@
 <Menu name="new"><text>&amp;New</text>
 	<Action name="new_workbook" />
 	<Action name="new_spreadsheet" />
+	<Action name="new_pivot_table" />
 	<Action name="new_matrix" />
 	<Action name="new_worksheet" />
 	<Action name="new_notes" />

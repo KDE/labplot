@@ -35,6 +35,7 @@
 #include "backend/core/Workbook.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
+#include "backend/pivot/PivotTable.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/LiveDataSource.h"
 #ifdef HAVE_LIBORIGIN
@@ -333,6 +334,11 @@ void MainWin::initActions() {
 	m_newMatrixAction->setWhatsThis(i18n("Creates a new matrix for data editing"));
 	actionCollection()->addAction("new_matrix", m_newMatrixAction);
 	connect(m_newMatrixAction, &QAction::triggered, this, &MainWin::newMatrix);
+
+	m_newPivotTableAction = new QAction(QIcon::fromTheme("labplot-spreadsheet-new"),i18n("Pivot Table"),this);
+	m_newPivotTableAction->setWhatsThis(i18n("Creates a new pivot table"));
+	actionCollection()->addAction("new_pivot_table", m_newPivotTableAction);
+	connect(m_newPivotTableAction, &QAction::triggered, this, &MainWin::newPivotTable);
 
 	m_newWorksheetAction = new QAction(QIcon::fromTheme("labplot-worksheet-new"),i18n("Worksheet"),this);
 // 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
@@ -1233,6 +1239,15 @@ void MainWin::newMatrix() {
 
 	this->addAspectToProject(matrix);
 }
+
+/*!
+	adds a new pivot table to the project.
+*/
+void MainWin::newPivotTable() {
+	PivotTable* pivotTable = new PivotTable(i18n("PivotTable"));
+	this->addAspectToProject(pivotTable);
+}
+
 
 /*!
 	adds a new Worksheet to the project.

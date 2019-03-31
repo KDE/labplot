@@ -42,6 +42,7 @@
 #include "backend/core/datatypes/String2DoubleFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
+#include "backend/pivot/PivotTable.h"
 
 #include <QKeyEvent>
 #include <QClipboard>
@@ -218,6 +219,7 @@ void SpreadsheetView::initActions() {
 	action_sort_spreadsheet = new QAction(QIcon::fromTheme("view-sort-ascending"), i18n("&Sort Spreadsheet"), this);
 	action_go_to_cell = new QAction(QIcon::fromTheme("go-jump"), i18n("&Go to Cell"), this);
 	action_statistics_all_columns = new QAction(QIcon::fromTheme("view-statistics"), i18n("Statisti&cs"), this );
+	action_pivot_table = new QAction(QIcon::fromTheme("table"), i18n("Pivot Table"), this);
 
 	// column related actions
 	action_insert_column_left = new QAction(QIcon::fromTheme("edit-table-insert-column-left"), i18n("Insert Column Left"), this);
@@ -495,6 +497,8 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu->addMenu(m_plotDataMenu);
 	m_spreadsheetMenu->addMenu(m_analyzePlotMenu);
 	m_spreadsheetMenu->addSeparator();
+	m_spreadsheetMenu->addAction(action_pivot_table);
+	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addMenu(m_selectionMenu);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_select_all);
@@ -553,6 +557,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_sort_spreadsheet, &QAction::triggered, this, &SpreadsheetView::sortSpreadsheet);
 	connect(action_go_to_cell, &QAction::triggered, this,
 			static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
+	connect(action_pivot_table, &QAction::triggered, this, &SpreadsheetView::createPivotTable);
 
 	connect(action_insert_column_left, &QAction::triggered, this, &SpreadsheetView::insertColumnLeft);
 	connect(action_insert_column_right, &QAction::triggered, this, &SpreadsheetView::insertColumnRight);
@@ -753,6 +758,13 @@ void SpreadsheetView::goToCell(int row, int col) {
 	QModelIndex index = m_model->index(row, col);
 	m_tableView->scrollTo(index);
 	m_tableView->setCurrentIndex(index);
+}
+
+void SpreadsheetView::createPivotTable() {
+	PivotTable* pivot = new PivotTable(i18n("Pivot Table for %1", m_spreadsheet->name()));
+	pivot->setDataSourceType(PivotTable::DataSourceSpreadsheet);
+	pivot->setDataSourceSpreadsheet(m_spreadsheet);
+	m_spreadsheet->parentAspect()->addChild(pivot);
 }
 
 void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to) {
