@@ -55,7 +55,7 @@ class XYConvolutionCurve;
 class XYCorrelationCurve;
 class KConfig;
 
-class CartesianPlot:public AbstractPlot {
+class CartesianPlot : public AbstractPlot {
 	Q_OBJECT
 
 public:

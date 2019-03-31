@@ -2646,7 +2646,10 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QGraphicsItem::hoverMoveEvent(event);
 }
 
-void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
+	Q_UNUSED(option)
+	Q_UNUSED(widget)
+
 	if (!isVisible())
 		return;
 

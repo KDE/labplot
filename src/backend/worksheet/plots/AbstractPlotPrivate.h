@@ -31,7 +31,8 @@
 
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
 
-class AbstractPlotPrivate:public WorksheetElementContainerPrivate {
+class AbstractPlotPrivate : public WorksheetElementContainerPrivate {
+
 public:
 	explicit AbstractPlotPrivate(AbstractPlot* owner);
 	~AbstractPlotPrivate() override = default;
