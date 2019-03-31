@@ -703,6 +703,8 @@ void AsciiFilterTest::testQuotedStrings02() {
 	AsciiFilter filter;
 	const QString fileName = m_dataDir + "quoted_strings_one_line.txt";
 
+	QCOMPARE(QFile::exists(fileName), true);
+
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
 	filter.setSeparatingCharacter(",");
 	filter.setHeaderEnabled(false);
