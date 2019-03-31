@@ -2053,7 +2053,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 	}
 
 	int newDataIdx = 0;
-	bool sampleSizeReached = false;
+	//TODO: bool sampleSizeReached = false;
 	{
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE("AsciiLiveDataImportReadingFromFile: ");
@@ -2067,7 +2067,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 				newLinesForSampleSizeNotTillEnd++;
 				//for Continuous reading and FromEnd we read sample rate number of lines if possible
 				if (newLinesForSampleSizeNotTillEnd == spreadsheet->mqttClient()->sampleSize()) {
-					sampleSizeReached = true;
+					//TODO: sampleSizeReached = true;
 					break;
 				}
 			}

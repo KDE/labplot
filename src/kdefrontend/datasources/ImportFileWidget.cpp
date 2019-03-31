@@ -1985,6 +1985,7 @@ void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 	case QMqttClient::InvalidProtocolVersion:
 	case QMqttClient::TransportInvalid:
 	case QMqttClient::ProtocolViolation:
+	case QMqttClient::Mqtt5SpecificError:
 		break;
 	default:
 		break;
