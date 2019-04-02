@@ -45,7 +45,7 @@ Copyright            : (C) 2009-2019 Alexander Semke (alexander.semke@web.de)
 #include <KFilterDev>
 #include <QDateTime>
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
 #include <QProcess>
 #include <QStandardPaths>
 #endif
