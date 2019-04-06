@@ -254,7 +254,6 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 		size_t lineCount = 0;
 		while (wc.waitForReadyRead())
 			lineCount = wc.readLine().split(' ')[0].toInt();
-		lineCount++;	// last line not counted
 		return lineCount;
 	}
 #endif
@@ -549,12 +548,15 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			firstLineStringList[i] = firstLineStringList[i].simplified();
 	}
 
+	//in GUI in AsciiOptionsWidget we start counting from 1, subtract 1 here to start from zero
+	m_actualStartRow = startRow - 1;
+
 	if (headerEnabled) {	// use first line to name vectors
 		vectorNames = firstLineStringList;
 		QDEBUG("vector names =" << vectorNames);
-		m_actualStartRow = startRow + 1;
-	} else
-		m_actualStartRow = startRow;
+		++m_actualStartRow;
+	}
+
 
 	// set range to read
 	if (endColumn == -1) {
@@ -1295,8 +1297,8 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		lines = m_actualRows;
 
 	//skip data lines, if required
-	DEBUG("	Skipping " << m_actualStartRow - 1 << " lines");
-	for (int i = 0; i < m_actualStartRow - 1; ++i)
+	DEBUG("	Skipping " << m_actualStartRow << " lines");
+	for (int i = 0; i < m_actualStartRow; ++i)
 		device.readLine();
 
 	DEBUG("	Reading " << qMin(lines, m_actualRows)  << " lines, " << m_actualCols << " columns");
@@ -1555,8 +1557,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	QDEBUG("	column names = " << vectorNames);
 
 	//skip data lines, if required
-	DEBUG("	Skipping " << m_actualStartRow - 1 << " lines");
-	for (int i = 0; i < m_actualStartRow - 1; ++i)
+	DEBUG("	Skipping " << m_actualStartRow << " lines");
+	for (int i = 0; i < m_actualStartRow; ++i)
 		device.readLine();
 
 	DEBUG("	Generating preview for " << qMin(lines, m_actualRows)  << " lines");
