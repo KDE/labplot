@@ -765,8 +765,9 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 //##############################################################################
 int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode importMode,
                                int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
-	DEBUG("Spreadsheet::prepareImport()");
-	DEBUG("	resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols);
+	DEBUG("Spreadsheet::prepareImport()")
+	DEBUG("	resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)
+	QDEBUG("	column name list = " << colNameList)
 	int columnOffset = 0;
 	setUndoAware(false);
 	if (m_model != nullptr)
@@ -848,6 +849,8 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 	returns column offset depending on import mode
 */
 int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols) {
+	DEBUG("Spreadsheet::resize()")
+	QDEBUG("	column name list = " << colNameList)
 	// name additional columns
 	for (int k = colNameList.size(); k < cols; k++ )
 		colNameList.append( "Column " + QString::number(k+1) );

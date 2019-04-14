@@ -1548,8 +1548,9 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 			QVector<AbstractColumn::ColumnMode> columnModes;
 			columnModes.resize(actualCols);
 
-			//TODO: use given names?
-			QStringList vectorNames;
+			// use current data set name (without path) for column name
+			QStringList vectorNames = {currentDataSetName.mid(currentDataSetName.lastIndexOf("/") + 1)};
+			QDEBUG("	vector names = " << vectorNames)
 
 			if (dataSource)
 				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
@@ -1733,8 +1734,12 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 			QVector<AbstractColumn::ColumnMode> columnModes;
 			columnModes.resize(actualCols);
 
-			//TODO: use given names?
+			// use current data set name (without path) append by "_" and column number for column names
 			QStringList vectorNames;
+			QString colName = currentDataSetName.mid(currentDataSetName.lastIndexOf("/") + 1);
+			for (int i = 0; i < actualCols; i++)
+				vectorNames << colName + QLatin1String("_") + QString::number(i + 1);
+			QDEBUG("	vector names = " << vectorNames)
 
 			if (dataSource)
 				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
@@ -1886,7 +1891,7 @@ void HDF5FilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 	DEBUG("HDF5Filter::readDataFromFile()");
 
 	if (currentDataSetName.isEmpty()) {
-		DEBUG("No data set selected");
+		DEBUG("WARNING: No data set selected");
 		return;
 	}
 
