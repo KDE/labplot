@@ -38,16 +38,17 @@ public:
 	VariableParser(QString name, QString value);
 	QVector<double> values();
 	bool isParsed();
-		
+
 private:
 	QString m_backendName;
 	QString m_string;
 	QVector<double> m_values;
 	bool m_parsed{false};
-		
+
 	void parseMaximaValues();
 	void parsePythonValues();
 	void parseRValues();
+	void parseOctaveValues();
 	void parseValues(const QStringList&);
 };
 

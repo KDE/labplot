@@ -48,6 +48,8 @@ VariableParser::VariableParser(QString name, QString value)
 		parseRValues();
 	else if (m_backendName.compare(QStringLiteral("Julia"), Qt::CaseInsensitive) == 0)
 		parsePythonValues();
+	else if (m_backendName.compare(QStringLiteral("Octave"), Qt::CaseInsensitive) == 0)
+		parseOctaveValues();
 }
 
 void VariableParser::parseMaximaValues() {
@@ -91,6 +93,22 @@ void VariableParser::parsePythonValues() {
 void VariableParser::parseRValues() {
 	m_string = m_string.trimmed();
 	const QStringList valueStringList = m_string.split(QStringLiteral(", "));
+	parseValues(valueStringList);
+}
+
+void VariableParser::parseOctaveValues() {
+	m_string = m_string.trimmed();
+
+	QStringList valueStringList;
+	const QStringList tempStringList = m_string.split(QLatin1Char('\n'));
+	for (const QString& values : tempStringList) {
+		//TODO: in newer version of Cantor the rows with "Columns..." were removed already.
+		//we can stop looking for this substring in some point in time later.
+		if (!values.isEmpty() && !values.trimmed().startsWith(QStringLiteral("Columns")))
+			valueStringList << values.split(QLatin1Char(' '));
+	}
+
+	valueStringList.removeAll(QStringLiteral(""));
 	parseValues(valueStringList);
 }
 
