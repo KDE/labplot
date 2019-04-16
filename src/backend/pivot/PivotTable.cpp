@@ -36,6 +36,8 @@
 #include <QIcon>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QSqlRecord>
+#include <QStandardItemModel>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -91,12 +93,28 @@ void PivotTable::setDataSourceSpreadsheet(Spreadsheet* spreadsheet) {
 		exec(new PivotTableSetDataSourceSpreadsheetCmd(d, spreadsheet, ki18n("%1: data source spreadsheet changed")));
 }
 
-void PivotTable::addToRowLabels(const QString& dimension) {
-	d->addToRowLabels(dimension);
+const QStringList& PivotTable::dimensions() const {
+	return d->dimensions;
 }
 
-void PivotTable::addToColumnLabels(const QString& dimension) {
-	d->addToColumnLabels(dimension);
+const QStringList& PivotTable::measures() const {
+	return d->measures;
+}
+
+const QStringList& PivotTable::rows() const {
+	return d->rows;
+}
+
+void PivotTable::addToRows(const QString& dimension) {
+	d->addToRows(dimension);
+}
+
+const QStringList& PivotTable::columns() const {
+	return d->columns;
+}
+
+void PivotTable::addToColumns(const QString& dimension) {
+	d->addToColumns(dimension);
 }
 
 bool PivotTable::exportView() const {
@@ -143,10 +161,10 @@ QIcon PivotTable::icon() const {
 //##############################################################################
 //######################  Private implementation ###############################
 //##############################################################################
-PivotTablePrivate::PivotTablePrivate(PivotTable* owner) : q(owner)
-	/*TODO: dataModel(new QAbstractItemModel),
-	horizontalHeaderModel(new QAbstractItemModel),
-	verticalHeaderModel(new QAbstractItemModel) */{
+PivotTablePrivate::PivotTablePrivate(PivotTable* owner) : q(owner),
+	dataModel(new QStandardItemModel),
+	horizontalHeaderModel(new QStandardItemModel),
+	verticalHeaderModel(new QStandardItemModel) {
 
 }
 
@@ -158,13 +176,13 @@ QString PivotTablePrivate::name() const {
 	return q->name();
 }
 
-void PivotTablePrivate::addToRowLabels(const QString& dimension) {
-	m_rowLabels << dimension;
+void PivotTablePrivate::addToRows(const QString& dimension) {
+	rows << dimension;
 	recalculate();
 }
 
-void PivotTablePrivate::addToColumnLabels(const QString& dimension) {
-	m_columnLabels << dimension;
+void PivotTablePrivate::addToColumns(const QString& dimension) {
+	columns << dimension;
 	recalculate();
 }
 
@@ -210,14 +228,14 @@ QStringList PivotTablePrivate::members(const QString& dimension, PivotTable::Sor
 
 void PivotTablePrivate::recalculate() {
 	//clear the previos result
-// 	horizontalHeaderModel->clear();
-// 	verticalHeaderModel->clear();
-// 	dataModel->clear();
+	horizontalHeaderModel->clear();
+	verticalHeaderModel->clear();
+	dataModel->clear();
 
 	if (dataSourceType == PivotTable::DataSourceSpreadsheet && !dataSourceSpreadsheet)
 		return;
 
-	if (m_rowLabels.isEmpty() && m_columnLabels.isEmpty()) {
+	if (rows.isEmpty() && columns.isEmpty() && !showTotals) {
 		//notify about the new result
 // 		emit q->changed();
 		return;
@@ -230,38 +248,48 @@ void PivotTablePrivate::recalculate() {
 
 	//construct the SQL statement string
 	QString query{"SELECT "};
-	QString dimensionString;
+	QString groupByString;
 
 	if (!showNulls) {
 		//if we don't need to show combinations with empty intersections, put everything into GROUP BY
-		if (!m_rowLabels.isEmpty())
-			dimensionString = m_rowLabels.join(',');
+		if (!rows.isEmpty())
+			groupByString = rows.join(',');
 
-		if (!m_columnLabels.isEmpty()) {
-			if (!dimensionString.isEmpty())
-				dimensionString += ',';
-			dimensionString = m_columnLabels.join(',');
+		if (!columns.isEmpty()) {
+			if (!groupByString.isEmpty())
+				groupByString += ',';
+			groupByString += columns.join(',');
 		}
 
-		query += dimensionString;
-		query += dimensionString + ", COUNT(*) FROM pivot GROUP BY " + dimensionString;
+		if (!groupByString.isEmpty()) {
+			query += groupByString;
+// 			if (showTotals)
+			query += ", COUNT(*) FROM pivot";
 
-		if (!sortDimension.isEmpty()) {
-			switch (sortType) {
-			case PivotTable::NoSort:
-				query += " ORDER BY " + sortDimension;
-				break;
-			case PivotTable::SortAscending:
-				query += " ORDER BY " + sortDimension + " ASC";
-				break;
-			case PivotTable::SortDescending:
-				query += " ORDER BY " + sortDimension + " DESC";
-				break;
+			query += " GROUP BY " + groupByString;
+
+			if (!sortDimension.isEmpty()) {
+				switch (sortType) {
+				case PivotTable::NoSort:
+					query += " ORDER BY " + sortDimension;
+					break;
+				case PivotTable::SortAscending:
+					query += " ORDER BY " + sortDimension + " ASC";
+					break;
+				case PivotTable::SortDescending:
+					query += " ORDER BY " + sortDimension + " DESC";
+					break;
+				}
 			}
+		} else {
+			//no dimensions selected, show totals only
+			query += " COUNT(*) FROM pivot";
 		}
 	} else {
 
 	}
+
+	QDEBUG(query);
 
 	//execute the query
 	QSqlQuery sqlQuery;
@@ -273,8 +301,48 @@ void PivotTablePrivate::recalculate() {
 	}
 
 	//copy the result into the models
+	int rowsCount = sqlQuery.size();
+	int columnsCount = sqlQuery.record().count();
+	int firstValueIndex = rows.size() + columns.size();
+	int valuesCount = columnsCount - firstValueIndex;
+	dataModel->setColumnCount(valuesCount);
+
+	if (rowsCount != -1)
+		dataModel->setRowCount(rowsCount);
+
+	DEBUG("nubmer of columns " << columnsCount);
+	DEBUG("number rows: " << rowsCount);
+	DEBUG("number values: " << valuesCount);
+	DEBUG("index of the first value column: " << firstValueIndex);
+	int row = 0;
     while (sqlQuery.next()) {
-		//TODO:
+		//add row fields to the vertical header model/
+
+		//add сolumn fields to the vertical header model
+
+		//add values to the data model
+		if (rows.isEmpty()) {
+			//everything on columns
+			for (int i = firstValueIndex; i < columnsCount; ++i) {
+				QString value = sqlQuery.value(i).toString();
+				if (rowsCount == -1)
+					dataModel->setRowCount(row + 1);
+				dataModel->setItem(row, i - firstValueIndex, new QStandardItem(value));
+			}
+		} else if (columns.isEmpty()) {
+			//everything on rows
+			for (int i = firstValueIndex; i < columnsCount; ++i) {
+				QString value = sqlQuery.value(i).toString();
+				if (rowsCount == -1)
+					dataModel->setRowCount(row + 1);
+				dataModel->setItem(0, i - firstValueIndex + row, new QStandardItem(value));
+			}
+
+		} else {
+			//TODO
+		}
+
+		++row;
     }
 
 	//notify about the new result
@@ -284,6 +352,13 @@ void PivotTablePrivate::recalculate() {
 
 
 void PivotTablePrivate::createDb() {
+	for (auto* col : dataSourceSpreadsheet->children<Column>()) {
+		if (col->isNumeric())
+			measures << col->name();
+		else
+			dimensions << col->name();
+	}
+
 	PERFTRACE("export spreadsheet to SQLite database");
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
@@ -296,10 +371,11 @@ void PivotTablePrivate::createDb() {
 		driver = QLatin1String("QSQLITE");
 
 	QSqlDatabase db = QSqlDatabase::addDatabase(driver);
+	db.open();
 
 	//create table
 	const int cols = dataSourceSpreadsheet->columnCount();
-	QString query = QLatin1String("create table ") + dataSourceSpreadsheet->name() + QLatin1String(" (");
+	QString query = QLatin1String("create table ") + QLatin1String("pivot") + QLatin1String(" (");
 	for (int i = 0; i < cols; ++i) {
 		Column* col = dataSourceSpreadsheet->column(i);
 		if (i != 0)
@@ -334,7 +410,7 @@ void PivotTablePrivate::createDb() {
 	{
 	PERFTRACE("Create the bulk insert statement");
 	q.exec(QLatin1String("BEGIN TRANSACTION;"));
-	query = "INSERT INTO '" + dataSourceSpreadsheet->name() + "' (";
+	query = "INSERT INTO '" + QLatin1String("pivot") + "' (";
 	for (int i = 0; i < cols; ++i) {
 		if (i != 0)
 			query += QLatin1String(", ");
@@ -352,7 +428,9 @@ void PivotTablePrivate::createDb() {
 			if (j != 0)
 				query += QLatin1String(", ");
 
-			query += QLatin1Char('\'') + col->asStringColumn()->textAt(i) + QLatin1Char('\'');
+			QString text = col->asStringColumn()->textAt(i);
+			text = text.replace("'", "''");
+			query += QLatin1Char('\'') + text + QLatin1Char('\'');
 		}
 		query += QLatin1String(")");
 	}
@@ -363,6 +441,7 @@ void PivotTablePrivate::createDb() {
 	if (!q.exec(query)) {
 		RESET_CURSOR;
 		KMessageBox::error(nullptr, i18n("Failed to insert values into the table."));
+		QDEBUG(query);
 		QDEBUG("bulk insert error " << q.lastError().databaseText());
 	} else
 		q.exec(QLatin1String("COMMIT TRANSACTION;"));

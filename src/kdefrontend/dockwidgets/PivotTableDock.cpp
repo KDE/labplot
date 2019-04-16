@@ -56,12 +56,29 @@ PivotTableDock::PivotTableDock(QWidget* parent) : QWidget(parent) {
 	ui.cbDataSourceType->addItem(i18n("Database"));
 
 	cbSpreadsheet = new TreeViewComboBox;
-	ui.gridLayout->addWidget(cbSpreadsheet, 5, 2, 1, 1);
+	ui.gridLayout->addWidget(cbSpreadsheet, 5, 3, 1, 4);
 
 	ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
 	ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "sql_connections";
 	readConnections();
+
+	auto* style = ui.bAddRow->style();
+	ui.bAddRow->setIcon(style->standardIcon(QStyle::SP_ArrowRight));
+	ui.bAddRow->setToolTip(i18n("Add the selected field to rows"));
+	ui.bRemoveRow->setIcon(style->standardIcon(QStyle::SP_ArrowLeft));
+	ui.bRemoveRow->setToolTip(i18n("Remove the selected field from rows"));
+
+	ui.bAddColumn->setIcon(style->standardIcon(QStyle::SP_ArrowRight));
+	ui.bAddColumn->setToolTip(i18n("Add the selected field to columns"));
+	ui.bRemoveColumn->setIcon(style->standardIcon(QStyle::SP_ArrowLeft));
+	ui.bRemoveColumn->setToolTip(i18n("Remove the selected field from columns"));
+
+	//add/remove buttons only enabled if something was selected
+	ui.bAddRow->setEnabled(false);
+	ui.bRemoveRow->setEnabled(false);
+	ui.bAddColumn->setEnabled(false);
+	ui.bRemoveColumn->setEnabled(false);
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &PivotTableDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &PivotTableDock::commentChanged);
@@ -74,6 +91,23 @@ PivotTableDock::PivotTableDock(QWidget* parent) : QWidget(parent) {
 	connect(ui.cbTable, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
 			this, &PivotTableDock::tableChanged);
 	connect(ui.bDatabaseManager, &QPushButton::clicked, this, &PivotTableDock::showDatabaseManager);
+
+	connect(ui.bAddRow,  &QPushButton::clicked, this, &PivotTableDock::addRow);
+	connect(ui.bRemoveRow, &QPushButton::clicked, this,&PivotTableDock::removeRow);
+	connect(ui.bAddColumn,  &QPushButton::clicked, this, &PivotTableDock::addColumn);
+	connect(ui.bRemoveColumn, &QPushButton::clicked, this,&PivotTableDock::removeColumn);
+
+	connect(ui.lwDimensions, &QListWidget::itemSelectionChanged, this, [=]() {
+		bool enabled = !ui.lwDimensions->selectedItems().isEmpty();
+		ui.bAddRow->setEnabled(enabled);
+		ui.bAddColumn->setEnabled(enabled);
+	});
+	connect(ui.lwRows, &QListWidget::itemSelectionChanged, this, [=]() {
+		ui.bRemoveRow->setEnabled(!ui.lwRows->selectedItems().isEmpty());
+	});
+	connect(ui.lwColumns, &QListWidget::itemSelectionChanged, this, [=]() {
+		ui.bRemoveColumn->setEnabled(!ui.lwColumns->selectedItems().isEmpty());
+	});
 }
 
 void PivotTableDock::setPivotTable(PivotTable* pivotTable) {
@@ -102,6 +136,14 @@ void PivotTableDock::setPivotTable(PivotTable* pivotTable) {
 		ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_pivotTable->dataSourceConnection()));
 
 	this->dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
+
+	//available dimensions and measures
+	ui.lwDimensions->clear();
+	for (auto dimension : m_pivotTable->dimensions())
+		ui.lwDimensions->addItem(new QListWidgetItem(QIcon::fromTheme("draw-text"), dimension));
+
+	for (auto measure : m_pivotTable->measures())
+		ui.lwDimensions->addItem(new QListWidgetItem(measure));
 
 	//undo functions
 	connect(m_pivotTable, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(pivotTableDescriptionChanged(const AbstractAspect*)));
@@ -149,6 +191,28 @@ void PivotTableDock::readConnections() {
 	KConfig config(m_configPath, KConfig::SimpleConfig);
 	for (const auto& name : config.groupList())
 		ui.cbConnection->addItem(name);
+}
+
+void PivotTableDock::addRow() {
+	QString name = ui.lwDimensions->currentItem()->text();
+	ui.lwRows->addItem(name);
+	ui.lwDimensions->takeItem(ui.lwDimensions->currentRow());
+	m_pivotTable->addToRows(name);
+}
+
+void PivotTableDock::removeRow() {
+	ui.lwRows->takeItem(ui.lwRows->currentRow());
+}
+
+void PivotTableDock::addColumn() {
+	QString name = ui.lwDimensions->currentItem()->text();
+	ui.lwColumns->addItem(name);
+	ui.lwDimensions->takeItem(ui.lwDimensions->currentRow());
+	m_pivotTable->addToColumns(name);
+}
+
+void PivotTableDock::removeColumn() {
+	ui.lwColumns->takeItem(ui.lwColumns->currentRow());
 }
 
 //*************************************************************

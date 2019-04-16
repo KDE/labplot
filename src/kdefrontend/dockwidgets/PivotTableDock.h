@@ -72,6 +72,11 @@ private slots:
 	//SLOTs for changes triggered in PivotTable
 	void pivotTableDescriptionChanged(const AbstractAspect*);
 
+	void addRow();
+	void removeRow();
+	void addColumn();
+	void removeColumn();
+
 	//save/load template
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);

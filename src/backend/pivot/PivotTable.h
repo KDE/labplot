@@ -58,8 +58,14 @@ public:
 	QAbstractItemModel* horizontalHeaderModel() const;
 	QAbstractItemModel* verticalHeaderModel() const;
 
-	void addToRowLabels(const QString&);
-	void addToColumnLabels(const QString&);
+	const QStringList& dimensions() const;
+	const QStringList& measures() const;
+
+	const QStringList& rows() const;
+	void addToRows(const QString&);
+
+	const QStringList& columns() const;
+	void addToColumns(const QString&);
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;

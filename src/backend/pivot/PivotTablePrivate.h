@@ -30,6 +30,7 @@
 #define PIVOTTABLEPRIVATE_H
 
 #include <backend/pivot/PivotTable.h>
+class QStandardItemModel;
 
 class PivotTablePrivate {
 public:
@@ -38,8 +39,8 @@ public:
 
 	QString name() const;
 
-	void addToRowLabels(const QString&);
-	void addToColumnLabels(const QString&);
+	void addToRows(const QString&);
+	void addToColumns(const QString&);
 
 	void recalculate();
 	void createDb();
@@ -51,20 +52,22 @@ public:
 	QString dataSourceConnection;
 	QString dataSourceTable;
 
-	QAbstractItemModel* dataModel{nullptr};
-	QAbstractItemModel* horizontalHeaderModel{nullptr};
-	QAbstractItemModel* verticalHeaderModel{nullptr};
+	QStandardItemModel* dataModel{nullptr};
+	QStandardItemModel* horizontalHeaderModel{nullptr};
+	QStandardItemModel* verticalHeaderModel{nullptr};
 
+	QStringList dimensions;
+	QStringList measures;
+	QStringList rows;
+	QStringList columns;
 	bool showNulls{false};
-	bool showTotals{false};
+	bool showTotals{true};
 	PivotTable::SortType sortType{PivotTable::NoSort};
 	PivotTable::AggregationType aggregationType{PivotTable::AggregationCount};
 	QString sortDimension;
 
 private:
 	bool m_dbCreated{false};
-	QStringList m_rowLabels;
-	QStringList m_columnLabels;
 // 	QMap<QString, QStringList> m_members;
 };
 
