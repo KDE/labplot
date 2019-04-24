@@ -4,8 +4,8 @@ add_executable (convolutiontest ConvolutionTest.cpp ../AnalysisTest.cpp ../../Co
 target_link_libraries(convolutiontest Qt5::Test)
 target_link_libraries(convolutiontest KF5::Archive KF5::XmlGui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
 
-IF (FFTW_FOUND)
-	target_link_libraries(convolutiontest ${FFTW_LIBRARIES})
+IF (FFTW3_FOUND)
+	target_link_libraries(convolutiontest ${FFTW3_LIBRARIES})
 ENDIF ()
 
 target_link_libraries(convolutiontest labplot2lib)

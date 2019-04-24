@@ -229,26 +229,13 @@ ENDIF ()
 
 ### FFTW (optional) #####################################
 IF (ENABLE_FFTW)
-FIND_LIBRARY (FFTW_LIBRARIES fftw3
-        PATHS
-        /usr/lib
-        /usr/local/lib
-)
-FIND_PATH (FFTW_INCLUDE_DIR fftw3.h
-	/usr/include
-	/usr/local/include
-)
-IF (FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
-	SET (FFTW_FOUND TRUE)
-ELSE ()
-	SET (FFTW_FOUND FALSE)
-ENDIF ()
-IF (FFTW_FOUND)
-	MESSAGE (STATUS "Found FFTW 3 Library: ${FFTW_INCLUDE_DIR} ${FFTW_LIBRARIES}")
-	add_definitions (-DHAVE_FFTW3)
-ELSE ()
-	MESSAGE (STATUS "FFTW 3 Library NOT FOUND")
-ENDIF ()
+	FIND_PACKAGE (FFTW3)
+	IF (FFTW3_FOUND)
+		MESSAGE (STATUS "Found FFTW 3 Library: ${FFTW3_INCLUDE_DIR} ${FFTW3_LIBRARIES}")
+		add_definitions (-DHAVE_FFTW3)
+	ELSE ()
+		MESSAGE (STATUS "FFTW 3 Library NOT FOUND")
+	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "FFTW 3 Library DISABLED")
 ENDIF ()
