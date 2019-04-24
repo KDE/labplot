@@ -262,22 +262,13 @@ ENDIF ()
 
 ### NETCDF (optional) #############################
 IF (ENABLE_NETCDF)
-FIND_LIBRARY (NETCDF_LIBRARY netcdf
-	PATHS
-	/usr/lib
-	/usr/local/lib
+FIND_PACKAGE(netCDF)
+SET_PACKAGE_PROPERTIES(netCDF PROPERTIES
+    DESCRIPTION "Interfaces for array-oriented data access"
+    URL "https://www.unidata.ucar.edu/software/netcdf/"
 )
-FIND_PATH (NETCDF_INCLUDE_DIR netcdf.h
-	/usr/include
-	/usr/local/include
-)
-IF (NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
-	SET (NETCDF_FOUND TRUE)
-ELSE ()
-	SET (NETCDF_FOUND FALSE)
-ENDIF ()
-IF (NETCDF_FOUND)
-	MESSAGE (STATUS "Found Network Common Data Format (NetCDF) Library: ${NETCDF_INCLUDE_DIR} ${NETCDF_LIBRARY}")
+IF (netCDF_FOUND)
+	MESSAGE (STATUS "Found Network Common Data Format (NetCDF) Library")
 	add_definitions (-DHAVE_NETCDF)
 ELSE ()
 	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library NOT FOUND")
