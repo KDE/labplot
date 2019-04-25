@@ -11,8 +11,8 @@ IF (KF5SyntaxHighlighting_FOUND)
 ENDIF ()
 #TODO: KF5::NewStuff
 
-IF (CANTOR_LIBS_FOUND)
-	target_link_libraries(projectimporttest ${CANTOR_LIBS} )
+IF (Cantor_FOUND)
+	target_link_libraries(projectimporttest Cantor::cantorlibs )
 ENDIF ()
 IF (HDF5_FOUND)
 	target_link_libraries(projectimporttest ${HDF5_C_LIBRARIES} )

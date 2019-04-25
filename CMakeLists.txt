@@ -200,27 +200,17 @@ ENDIF ()
 
 ### Cantorlibs (optional) ###############################
 IF (ENABLE_CANTOR)
-FIND_LIBRARY (CANTOR_LIBS cantorlibs)
-FIND_PATH (CANTOR_INCLUDE_DIR cantor/worksheetaccess.h
-	/usr/include
-	/usr/local/include
+FIND_PACKAGE (Cantor)
+SET_PACKAGE_PROPERTIES(Cantor PROPERTIES
+	URL "https://edu.kde.org/cantor/"
 )
-IF (CANTOR_LIBS AND CANTOR_INCLUDE_DIR AND KF5Service_FOUND AND KF5Parts_FOUND)
-	SET (CANTOR_LIBS_FOUND TRUE)
-	FIND_PATH (CANTOR_VERSION_FILE cantor/cantorlibs_version.h
-		/usr/include
-		/usr/local/include
-	)
-	IF (NOT CANTOR_VERSION_FILE)
+IF (Cantor_FOUND)
+	MESSAGE (STATUS "Found Cantor Library")
+	add_definitions (-DHAVE_CANTOR_LIBS)
+
+	IF (NOT ${Cantor_VERSION} VERSION_GREATER "0")
 		add_definitions (-DOLD_CANTORLIBS_VERSION)
 	ENDIF()
-ELSE ()
-	SET (CANTOR_LIBS_FOUND FALSE)
-	SET (CANTOR_LIBS "")
-ENDIF()
-IF (CANTOR_LIBS_FOUND)
-	MESSAGE (STATUS "Found Cantor Library: ${CANTOR_INCLUDE_DIR} ${CANTOR_LIBS}")
-	add_definitions (-DHAVE_CANTOR_LIBS)
 ELSE ()
 	MESSAGE (STATUS "Cantor Library NOT FOUND")
 ENDIF ()

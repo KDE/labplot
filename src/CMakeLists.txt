@@ -327,7 +327,7 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/datapicker/DatapickerImageView.cpp
 )
 
-IF (${CANTOR_LIBS_FOUND})
+IF (${Cantor_FOUND})
 	set(CANTOR_SOURCES
 		${KDEFRONTEND_DIR}/dockwidgets/CantorWorksheetDock.cpp
 		${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp
@@ -398,8 +398,8 @@ IF (KF5SyntaxHighlighting_FOUND)
 ENDIF ()
 #TODO: KF5::NewStuff
 
-IF (CANTOR_LIBS_FOUND)
-	target_link_libraries( labplot2lib ${CANTOR_LIBS} KF5::Service KF5::Parts)
+IF (Cantor_FOUND)
+	target_link_libraries( labplot2lib Cantor::cantorlibs KF5::Service KF5::Parts)
 ENDIF ()
 IF (HDF5_FOUND)
 	target_link_libraries( labplot2lib ${HDF5_LIBRARIES} )
