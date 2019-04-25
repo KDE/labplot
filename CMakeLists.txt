@@ -303,25 +303,13 @@ ENDIF ()
 
 ### FITS (optional) ###############################
 IF (ENABLE_FITS)
-FIND_LIBRARY (CFITSIO_LIBRARY cfitsio
-	PATHS
-	/usr/lib
-	/usr/local/lib
-	$ENV{CFITSIO}
-)
-FIND_PATH (CFITSIO_INCLUDE_DIR fitsio.h
-	/usr/include
-	/usr/include/cfitsio
-	/usr/local/include
-	$ENV{CFITSIO}
-)
-IF (CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
-        SET (CFITSIO_FOUND TRUE)
-ELSE ()
-        SET (CFITSIO_FOUND FALSE)
-ENDIF ()
+FIND_PACKAGE (CFitsio)
+SET_PACKAGE_PROPERTIES (CFitsio PROPERTIES
+	DESCRIPTION "FITS IO Library"
+	URL "http://heasarc.gsfc.nasa.gov/fitsio/fitsio.html"
+	PURPOSE "Support for the FITS (Flexible Image Transport System) data format.")
 IF (CFITSIO_FOUND)
-	MESSAGE (STATUS "Found Flexible Image Transport System Data Format (FITS) Library: ${CFITSIO_INCLUDE_DIR} ${CFITSIO_LIBRARY}")
+	MESSAGE (STATUS "Found Flexible Image Transport System Data Format (FITS) Library: ${CFITSIO_INCLUDE_DIR} ${CFITSIO_LIBRARIES}")
 	add_definitions (-DHAVE_FITS)
 	include_directories (${CFITSIO_INCLUDE_DIR})
 ELSE ()
