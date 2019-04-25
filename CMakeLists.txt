@@ -346,20 +346,7 @@ ENDIF ()
 
 ### LIBCERF (optional) #############################
 IF (ENABLE_LIBCERF)
-FIND_LIBRARY (LIBCERF_LIBRARY cerf
-	PATHS
-	/usr/lib
-	/usr/local/lib
-)
-FIND_PATH (LIBCERF_INCLUDE_DIR cerf.h
-	/usr/include
-	/usr/local/include
-)
-IF (LIBCERF_LIBRARY AND LIBCERF_INCLUDE_DIR)
-	SET (LIBCERF_FOUND TRUE)
-ELSE ()
-	SET (LIBCERF_FOUND FALSE)
-ENDIF ()
+FIND_PACKAGE (LIBCERF)
 IF (LIBCERF_FOUND)
 	MESSAGE (STATUS "Found libcerf Library: ${LIBCERF_INCLUDE_DIR} ${LIBCERF_LIBRARY}")
 	add_definitions (-DHAVE_LIBCERF)
