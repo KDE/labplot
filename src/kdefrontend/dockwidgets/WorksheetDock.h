@@ -81,6 +81,7 @@ private slots:
 	void fileNameChanged();
 
 	//"Layout"-tab
+	void layoutChanged(int);
 	void layoutTopMarginChanged(double);
 	void layoutBottomMarginChanged(double);
 	void layoutRightMarginChanged(double);
