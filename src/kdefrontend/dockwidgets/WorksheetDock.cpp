@@ -59,6 +59,14 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent) {
 
 	ui.leBackgroundFileName->setCompleter(new QCompleter(new QDirModel, this));
 
+	//Layout-tab
+	ui.chScaleContent->setToolTip(i18n("If checked, rescale the content of the worksheet on size changes. Otherwise resize the canvas only."));
+
+	ui.cbLayout->addItem(QIcon::fromTheme("labplot-editbreaklayout"), i18n("No Layout"));
+	ui.cbLayout->addItem(QIcon::fromTheme("labplot-editvlayout"), i18n("Vertical Layout"));
+	ui.cbLayout->addItem(QIcon::fromTheme("labplot-edithlayout"), i18n("Horizontal Layout"));
+	ui.cbLayout->addItem(QIcon::fromTheme("labplot-editgrid"), i18n("Grid Layout"));
+
 	//adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
@@ -70,13 +78,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent) {
 		layout->setVerticalSpacing(2);
 	}
 
-	ui.cbLayout->addItem(QIcon::fromTheme("labplot-editbreaklayout"), i18n("No Layout"));
-	ui.cbLayout->addItem(QIcon::fromTheme("labplot-editvlayout"), i18n("Vertical Layout"));
-	ui.cbLayout->addItem(QIcon::fromTheme("labplot-edithlayout"), i18n("Horizontal Layout"));
-	ui.cbLayout->addItem(QIcon::fromTheme("labplot-editgrid"), i18n("Grid Layout"));
-
 	//SLOTs
-
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &WorksheetDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &WorksheetDock::commentChanged);
@@ -570,6 +572,10 @@ void WorksheetDock::layoutChanged(int index) {
 	ui.sbLayoutVerticalSpacing->setEnabled(b);
 	ui.sbLayoutRowCount->setEnabled(b);
 	ui.sbLayoutColumnCount->setEnabled(b);
+
+	//show the "scale content" option if no layout active
+	ui.lScaleContent->setVisible(!b);
+	ui.chScaleContent->setVisible(!b);
 
 	if (b) {
 		//show grid specific settings if grid layout selected
