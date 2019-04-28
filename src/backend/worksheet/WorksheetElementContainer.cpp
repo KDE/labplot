@@ -237,13 +237,15 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 // 	if (q->isLoading())
 // 		return;
 
-	boundingRectangle = QRectF();
-	containerShape = QPainterPath();
-	QVector<WorksheetElement*> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach (const WorksheetElement* elem, childList)
-		boundingRectangle |= elem->graphicsItem()->mapRectToParent(elem->graphicsItem()->boundingRect());
-
+	//old logic calculating the bounding box as as the box covering all children.
+	//we might need this logic later once we implement something like selection of multiple plots, etc.
+// 	boundingRectangle = QRectF();
+// 	QVector<WorksheetElement*> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+// 	foreach (const WorksheetElement* elem, childList)
+// 		boundingRectangle |= elem->graphicsItem()->mapRectToParent(elem->graphicsItem()->boundingRect());
+//
 	float penWidth = 2.;
+	boundingRectangle = q->rect();
 	boundingRectangle = QRectF(-boundingRectangle.width()/2 - penWidth / 2, -boundingRectangle.height()/2 - penWidth / 2,
 				  boundingRectangle.width() + penWidth, boundingRectangle.height() + penWidth);
 
@@ -251,6 +253,7 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 	path.addRect(boundingRectangle);
 
 	//make the shape somewhat thicker then the hoveredPen to make the selection/hovering box more visible
+	containerShape = QPainterPath();
 	containerShape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), penWidth)));
 }
 
