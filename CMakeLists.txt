@@ -267,7 +267,6 @@ SET_PACKAGE_PROPERTIES(netCDF PROPERTIES
     URL "https://www.unidata.ucar.edu/software/netcdf/"
 )
 IF (netCDF_FOUND)
-	MESSAGE (STATUS "Found Network Common Data Format (NetCDF) Library")
 	add_definitions (-DHAVE_NETCDF)
 ELSE ()
 	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library NOT FOUND")
