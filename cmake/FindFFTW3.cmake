@@ -39,11 +39,15 @@ find_path(FFTW3_INCLUDE_DIR
     PATH_SUFFIXES fftw3
 )
 
+set(FFTW3_VERSION ${PC_FFTW3_VERSION})
+
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(FFTW3
     REQUIRED_VARS
         FFTW3_LIBRARIES
         FFTW3_INCLUDE_DIR
+    VERSION_VAR
+        FFTW3_VERSION
 )
 
 if(FFTW3_FOUND AND NOT TARGET FFTW3::FFTW3)
@@ -55,7 +59,7 @@ if(FFTW3_FOUND AND NOT TARGET FFTW3::FFTW3)
     )
 endif()
 
-mark_as_advanced(FFTW3_LIBRARIES FFTW3_INCLUDE_DIR)
+mark_as_advanced(FFTW3_LIBRARIES FFTW3_INCLUDE_DIR FFTW3_VERSUON)
 
 include(FeatureSummary)
 set_package_properties(FFTW3 PROPERTIES

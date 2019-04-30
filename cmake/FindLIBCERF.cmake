@@ -38,11 +38,15 @@ find_path(LIBCERF_INCLUDE_DIR
     HINTS ${PC_LIBCERF_INCLUDE_DIRS}
 )
 
+set(LIBCERF_VERSION ${PC_LIBCERF_VERSION})
+
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(LIBCERF
     REQUIRED_VARS
     LIBCERF_LIBRARY
         LIBCERF_INCLUDE_DIR
+    VERSION_VAR
+    LIBCERF_VERSION
 )
 
 if(LIBCERF_FOUND AND NOT TARGET libcerf::libcerf)
@@ -54,7 +58,7 @@ if(LIBCERF_FOUND AND NOT TARGET libcerf::libcerf)
     )
 endif()
 
-mark_as_advanced(LIBCERF_LIBRARIES LIBCERF_INCLUDE_DIR)
+mark_as_advanced(LIBCERF_LIBRARIES LIBCERF_INCLUDE_DIR LIBCERF_VERSION)
 
 include(FeatureSummary)
 set_package_properties(LIBCERF PROPERTIES
