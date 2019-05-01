@@ -667,6 +667,11 @@ QString WorksheetPrivate::name() const {
 	return q->name();
 }
 
+/*!
+ * called if the worksheet page (the actual size of worksheet's rectangular) was changed.
+ * if a layout is active, it is is updated - this adjusts the sizes of the elements in the layout to the new page size.
+ * if no layout is active and the option "scale content" is active, \c handleResize() is called to adjust zhe properties.
+ */
 void WorksheetPrivate::updatePageRect() {
 	QRectF oldRect = m_scene->sceneRect();
 	m_scene->setSceneRect(pageRect);

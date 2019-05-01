@@ -132,6 +132,13 @@ void WorksheetElementContainer::retransform() {
 	d->recalcShapeAndBoundingRect();
 }
 
+/*!
+ * called if the size of the worksheet page was changed and the content has to be adjusted/resized (\c pageResize = true)
+ * or if a new rectangular for the element container was set (\c pageResize = false).
+ * In the second case, \c WorksheetElement::handleResize() is called for every worksheet child to adjuste the content to the new size.
+ * In the first case, a new rectangular for the container is calculated and set first, which on the other hand, triggers the content adjustments
+ * in the container children.
+ */
 void WorksheetElementContainer::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 	DEBUG("WorksheetElementContainer::handleResize()");
 	Q_D(const WorksheetElementContainer);
@@ -141,11 +148,8 @@ void WorksheetElementContainer::handleResize(double horizontalRatio, double vert
 		rect.setHeight(d->rect.height()*verticalRatio);
 		setRect(rect);
 	} else {
-		//TODO
-// 		for (auto* elem : children<WorksheetElement>(IncludeHidden))
-// 			elem->handleResize(horizontalRatio, verticalRatio);
-
-// 		retransform();
+		for (auto* elem : children<WorksheetElement>(IncludeHidden))
+			elem->handleResize(horizontalRatio, verticalRatio);
 	}
 }
 

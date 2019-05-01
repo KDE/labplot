@@ -388,6 +388,9 @@ void CartesianPlot::initDefault(Type type) {
 
 	//all plot children are initialized -> set the geometry of the plot in scene coordinates.
 	d->rect = QRectF(x,y,w,h);
+	qDebug()<<"rect am Anfang " << d->rect;
+// 	setRect(QRectF(x,y,w,h));
+	d->retransform();
 }
 
 void CartesianPlot::initActions() {
@@ -842,13 +845,12 @@ public:
 	};
 
 	void redo() override {
-		QRectF tmp = m_private->rect;
-		//TODO:
-// 		const double horizontalRatio = m_rect.width() / m_private->rect.width();
-// 		const double verticalRatio = m_rect.height() / m_private->rect.height();
-// 		m_private->q->handleResize(horizontalRatio, verticalRatio, false);
-		m_private->rect = m_rect;
-		m_rect = tmp;
+		const double horizontalRatio = m_rect.width() / m_private->rect.width();
+		const double verticalRatio = m_rect.height() / m_private->rect.height();
+
+		qSwap(m_private->rect, m_rect);
+
+		m_private->q->handleResize(horizontalRatio, verticalRatio, false);
 		m_private->retransform();
 		emit m_private->q->rectChanged(m_private->rect);
 	};
