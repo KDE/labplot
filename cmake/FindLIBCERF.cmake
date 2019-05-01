@@ -62,6 +62,6 @@ mark_as_advanced(LIBCERF_LIBRARIES LIBCERF_INCLUDE_DIR LIBCERF_VERSION)
 
 include(FeatureSummary)
 set_package_properties(LIBCERF PROPERTIES
-    DESCRIPTION "efficient and accurate implementation of complex error functions, along with Dawson, Faddeeva, and Voigt functions"
+    DESCRIPTION "Efficient and accurate implementation of complex error functions, along with Dawson, Faddeeva, and Voigt functions"
     URL "https://jugit.fz-juelich.de/mlz/libcerf"
 )

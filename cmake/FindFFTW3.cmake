@@ -63,6 +63,6 @@ mark_as_advanced(FFTW3_LIBRARIES FFTW3_INCLUDE_DIR FFTW3_VERSUON)
 
 include(FeatureSummary)
 set_package_properties(FFTW3 PROPERTIES
-    DESCRIPTION "FFT library"
+    DESCRIPTION "Computing the Discrete Fourier Transform in one or more dimensions"
     URL "http://fftw.org/"
 )

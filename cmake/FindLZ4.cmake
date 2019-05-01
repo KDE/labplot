@@ -80,6 +80,6 @@ mark_as_advanced(LZ4_LIBRARY LZ4_INCLUDE_DIR LZ4_VERSION)
 
 include(FeatureSummary)
 set_package_properties(LZ4 PROPERTIES
-    DESCRIPTION "lossless compression algorithm"
+    DESCRIPTION "Lossless compression algorithm"
     URL "https://lz4.github.io/lz4/"
 )

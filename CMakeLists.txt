@@ -242,6 +242,10 @@ ENDIF ()
 ### HDF5 (optional) ##############################
 IF (ENABLE_HDF5)
 FIND_PACKAGE(HDF5 COMPONENTS C)
+SET_PACKAGE_PROPERTIES (HDF5 PROPERTIES
+	DESCRIPTION "Reading and writing self describing array data"
+	URL "https://www.hdfgroup.org/solutions/hdf5/"
+)
 IF (HDF5_FOUND)
 	add_definitions (-DHAVE_HDF5)
 	IF (HDF5_VERSION VERSION_GREATER "1.9")
@@ -321,6 +325,10 @@ ENDIF ()
 
 IF (ENABLE_ROOT)
 FIND_PACKAGE(ZLIB)
+SET_PACKAGE_PROPERTIES (ZLIB PROPERTIES
+	DESCRIPTION "General purpose compression library"
+	URL "https://www.zlib.net/"
+)
 FIND_PACKAGE(LZ4)
 IF (ZLIB_FOUND AND LZ4_FOUND)
 	MESSAGE (STATUS "Found ZIP libraries ZLIB and LZ4 (needed for ROOT importer)")
