@@ -34,6 +34,7 @@
 
 class CartesianPlot;
 class CartesianCoordinateSystem;
+class XYCurve;
 
 class XYCurvePrivate : public QGraphicsItem {
 public:
@@ -46,6 +47,7 @@ public:
 	void retransform();
 	void recalcLogicalPoints();
 	void updateLines();
+	void addLine(QPointF p0, QPointF p1, double &minY, double &maxY, bool &overlap, double minLogicalDiffX, int &pixelDiff);
 	void updateDropLines();
 	void updateSymbols();
 	void updateValues();

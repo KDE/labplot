@@ -253,11 +253,11 @@ QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPoi
 }
 
 /*!
-	Maps the points in logical coordinates from \c points and fills the \c visiblePoints with the points in logical coordinates restricted to the current intervals.
-	\param logicalPoints List of points in logical coordinates
-	\param scenePoints List for the points in scene coordinates
-	\param visiblePoints List for the logical coordinates restricted to the current region of the coordinate system
-	\param flags
+	Maps the points in logical coordinates from @p points and fills the @p visiblePoints with the points in logical coordinates restricted to the current intervals.
+	@param logicalPoints List of points in logical coordinates
+	@param scenePoints List for the points in scene coordinates
+	@param visiblePoints List for the logical coordinates restricted to the current region of the coordinate system
+	@param flags
  */
 void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logicalPoints,
 		QVector<QPointF>& scenePoints, std::vector<bool>& visiblePoints, MappingFlags flags) const {
@@ -289,6 +289,59 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 
 				const QPointF mappedPoint(x, y);
 				if (noPageClipping || rectContainsPoint(pageRect, mappedPoint)) {
+					scenePoints.append(mappedPoint);
+					visiblePoints[i].flip();
+				}
+			}
+		}
+	}
+}
+
+/*!
+	Maps the points in logical coordinates from \c points and fills the \c visiblePoints with the points in logical coordinates restricted to the current intervals.
+	If there are points, which lies on another the point will not be added a second time.
+	@param logicalPoints List of points in logical coordinates
+	@param scenePoints List for the points in scene coordinates
+	@param visiblePoints List for the logical coordinates restricted to the current region of the coordinate system
+	@param scenePointsUsed List of bools which scene point was already used
+ */
+void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, const QVector<QPointF>& logicalPoints,
+		QVector<QPointF>& scenePoints, std::vector<bool>& visiblePoints, QVector<QVector<bool>>& scenePointsUsed, double minLogicalDiffX, double minLogicalDiffY, MappingFlags flags) const {
+	const QRectF pageRect = d->plot->dataRect();
+	const bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
+
+	for (const auto* xScale : d->xScales) {
+		if (!xScale) continue;
+
+		for (const auto* yScale : d->yScales) {
+			if (!yScale) continue;
+
+			for (int i = startIndex; i <= endIndex; ++i) {
+				const QPointF& point = logicalPoints.at(i);
+
+				double x = point.x();
+				if (!xScale->contains(x))
+					continue;
+
+				if (!xScale->map(&x))
+					continue;
+
+				double y = point.y();
+				if (!yScale->contains(y))
+					continue;
+
+				if (!yScale->map(&y))
+					continue;
+
+				const QPointF mappedPoint(x, y);
+				if (noPageClipping || rectContainsPoint(pageRect, mappedPoint)) {
+
+					int indexX = (int)((mappedPoint.x() - d->plot->dataRect().x())*minLogicalDiffX);
+					int indexY = (int)((mappedPoint.y() - d->plot->dataRect().y())*minLogicalDiffY);
+					if (scenePointsUsed[indexX][indexY])
+						continue;
+
+					scenePointsUsed[indexX][indexY] = true;
 					scenePoints.append(mappedPoint);
 					visiblePoints[i].flip();
 				}
