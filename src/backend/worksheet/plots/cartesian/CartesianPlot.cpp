@@ -388,8 +388,6 @@ void CartesianPlot::initDefault(Type type) {
 
 	//all plot children are initialized -> set the geometry of the plot in scene coordinates.
 	d->rect = QRectF(x,y,w,h);
-	qDebug()<<"rect am Anfang " << d->rect;
-// 	setRect(QRectF(x,y,w,h));
 	d->retransform();
 }
 
@@ -1719,6 +1717,7 @@ bool CartesianPlot::scaleAutoX() {
 			d->xMin -= offset;
 			d->xMax += offset;
 		}
+		setAutoScaleX(true);
 		d->retransformScales();
 	}
 
@@ -1804,6 +1803,7 @@ bool CartesianPlot::scaleAutoY() {
 			d->yMin -= offset;
 			d->yMax += offset;
 		}
+		setAutoScaleY(true);
 		d->retransformScales();
 	}
 
@@ -1941,6 +1941,7 @@ bool CartesianPlot::scaleAuto() {
 				d->xMin -= offset;
 				d->xMax += offset;
 			}
+			setAutoScaleX(true);
 		}
 		if (updateY) {
 			if (d->yMax == d->yMin) {
@@ -1957,6 +1958,7 @@ bool CartesianPlot::scaleAuto() {
 				d->yMin -= offset;
 				d->yMax += offset;
 			}
+			setAutoScaleY(true);
 		}
 		d->retransformScales();
 	}
@@ -1967,6 +1969,10 @@ bool CartesianPlot::scaleAuto() {
 void CartesianPlot::zoomIn() {
 	Q_D(CartesianPlot);
 
+	setUndoAware(false);
+	setAutoScaleX(false);
+	setAutoScaleY(false);
+	setUndoAware(true);
 	double oldRange = (d->xMax - d->xMin);
 	double newRange = (d->xMax - d->xMin) / m_zoomFactor;
 	d->xMax = d->xMax + (newRange - oldRange) / 2;
@@ -1982,6 +1988,11 @@ void CartesianPlot::zoomIn() {
 
 void CartesianPlot::zoomOut() {
 	Q_D(CartesianPlot);
+
+	setUndoAware(false);
+	setAutoScaleX(false);
+	setAutoScaleY(false);
+	setUndoAware(true);
 	double oldRange = (d->xMax-d->xMin);
 	double newRange = (d->xMax-d->xMin)*m_zoomFactor;
 	d->xMax = d->xMax + (newRange-oldRange)/2;
@@ -1997,6 +2008,8 @@ void CartesianPlot::zoomOut() {
 
 void CartesianPlot::zoomInX() {
 	Q_D(CartesianPlot);
+
+	setAutoScaleX(false);
 	double oldRange = (d->xMax-d->xMin);
 	double newRange = (d->xMax-d->xMin)/m_zoomFactor;
 	d->xMax = d->xMax + (newRange-oldRange)/2;
@@ -2006,6 +2019,10 @@ void CartesianPlot::zoomInX() {
 
 void CartesianPlot::zoomOutX() {
 	Q_D(CartesianPlot);
+
+	setUndoAware(false);
+	setAutoScaleX(false);
+	setUndoAware(true);
 	double oldRange = (d->xMax-d->xMin);
 	double newRange = (d->xMax-d->xMin)*m_zoomFactor;
 	d->xMax = d->xMax + (newRange-oldRange)/2;
@@ -2015,6 +2032,10 @@ void CartesianPlot::zoomOutX() {
 
 void CartesianPlot::zoomInY() {
 	Q_D(CartesianPlot);
+
+	setUndoAware(false);
+	setAutoScaleY(false);
+	setUndoAware(true);
 	double oldRange = (d->yMax-d->yMin);
 	double newRange = (d->yMax-d->yMin)/m_zoomFactor;
 	d->yMax = d->yMax + (newRange-oldRange)/2;
@@ -2024,6 +2045,10 @@ void CartesianPlot::zoomInY() {
 
 void CartesianPlot::zoomOutY() {
 	Q_D(CartesianPlot);
+
+	setUndoAware(false);
+	setAutoScaleY(false);
+	setUndoAware(true);
 	double oldRange = (d->yMax-d->yMin);
 	double newRange = (d->yMax-d->yMin)*m_zoomFactor;
 	d->yMax = d->yMax + (newRange-oldRange)/2;
@@ -2033,6 +2058,10 @@ void CartesianPlot::zoomOutY() {
 
 void CartesianPlot::shiftLeftX() {
 	Q_D(CartesianPlot);
+
+	setUndoAware(false);
+	setAutoScaleX(false);
+	setUndoAware(true);
 	double offsetX = (d->xMax-d->xMin)*0.1;
 	d->xMax -= offsetX;
 	d->xMin -= offsetX;
@@ -2041,6 +2070,10 @@ void CartesianPlot::shiftLeftX() {
 
 void CartesianPlot::shiftRightX() {
 	Q_D(CartesianPlot);
+
+	setUndoAware(false);
+	setAutoScaleX(false);
+	setUndoAware(true);
 	double offsetX = (d->xMax-d->xMin)*0.1;
 	d->xMax += offsetX;
 	d->xMin += offsetX;
@@ -2049,6 +2082,10 @@ void CartesianPlot::shiftRightX() {
 
 void CartesianPlot::shiftUpY() {
 	Q_D(CartesianPlot);
+
+	setUndoAware(false);
+	setAutoScaleY(false);
+	setUndoAware(true);
 	double offsetY = (d->yMax-d->yMin)*0.1;
 	d->yMax += offsetY;
 	d->yMin += offsetY;
@@ -2057,6 +2094,10 @@ void CartesianPlot::shiftUpY() {
 
 void CartesianPlot::shiftDownY() {
 	Q_D(CartesianPlot);
+
+	setUndoAware(false);
+	setAutoScaleY(false);
+	setUndoAware(true);
 	double offsetY = (d->yMax-d->yMin)*0.1;
 	d->yMax -= offsetY;
 	d->yMin -= offsetY;
