@@ -843,7 +843,7 @@ void XYCurve::navigateTo() {
 //##############################################################################
 XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
-	setAcceptHoverEvents(true);
+	setAcceptHoverEvents(false);
 }
 
 QString XYCurvePrivate::name() const {
@@ -862,7 +862,11 @@ QPainterPath XYCurvePrivate::shape() const {
 }
 
 void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
+	if (q->activateCurve(event->pos())) {
+		q->createContextMenu()->exec(event->screenPos());
+		return;
+	}
+	QGraphicsItem::contextMenuEvent(event);
 }
 
 bool XYCurvePrivate::swapVisible(bool on) {
@@ -2357,6 +2361,232 @@ int XYCurve::indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Propert
 	return -1;
 }
 
+/*!
+ * \brief XYCurve::activateCurve
+ * Checks if the mousepos distance to the curve is less than @p pow(maxDist,2)
+ * \p mouseScenePos
+ * \p maxDist Maximum distance the point lies away from the curve
+ * \return Returns true if the distance is smaller than pow(maxDist,2).
+ */
+bool XYCurve::activateCurve(QPointF mouseScenePos, double maxDist) {
+	Q_D(XYCurve);
+	return d->activateCurve(mouseScenePos, maxDist);
+}
+
+bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
+	if (!isVisible())
+		return false;
+
+	int rowCount = 0;
+	if (lineType != XYCurve::LineType::NoLine)
+		rowCount = lines.count();
+	else if (symbolsStyle != Symbol::Style::NoSymbols)
+		rowCount = symbolPointsScene.count();
+	else
+		return false;
+
+	if (rowCount == 0)
+		return false;
+
+	if (maxDist < 0)
+		maxDist = linePen.width() < 10 ? 10: linePen.width();
+
+	double maxDistSquare = pow(maxDist,2);
+
+	int properties = q->xColumn()->properties();
+	if (properties == AbstractColumn::Properties::No) {
+		// assumption: points exist if no line. otherwise previously returned false
+		if (lineType == XYCurve::NoLine) {
+			QPointF curvePosPrevScene = symbolPointsScene[0];
+			QPointF curvePosScene = curvePosPrevScene;
+			for (int row =0; row < rowCount; row ++) {
+				if (pow(mouseScenePos.x() - curvePosScene.x(),2) + pow(mouseScenePos.y() - curvePosScene.y(),2) <= maxDistSquare)
+					return true;
+
+				curvePosPrevScene = curvePosScene;
+				curvePosScene = symbolPointsScene[row];
+			}
+		} else {
+			for (int row=0; row < rowCount; row++) {
+				QLineF line = lines[row];
+				if (pointLiesNearLine(line.p1(), line.p2(), mouseScenePos, maxDist))
+					return true;
+			}
+		}
+
+	} else if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
+			properties == AbstractColumn::Properties::MonotonicDecreasing) {
+
+		bool increase = true;
+		if (properties == AbstractColumn::Properties::MonotonicDecreasing)
+			increase = false;
+
+		double x = mouseScenePos.x()-maxDist;
+		int index = 0;
+
+		QPointF curvePosScene;
+		QPointF curvePosPrevScene;
+
+		if (lineType == XYCurve::NoLine) {
+			curvePosScene  = symbolPointsScene[index];
+			curvePosPrevScene = curvePosScene;
+			index = q->indexForX(x, symbolPointsScene, static_cast<AbstractColumn::Properties>(properties));
+		} else
+			index = q->indexForX(x, lines, static_cast<AbstractColumn::Properties>(properties));
+
+		if (index >= 1)
+			index --; // use one before so it is secured that I'm before point.x()
+
+		double xMaxSquare = mouseScenePos.x() + maxDist;
+		bool stop = false;
+		while (true) {
+			// assumption: points exist if no line. otherwise previously returned false
+			if (lineType == XYCurve::NoLine) {// check points only if no line otherwise check only the lines
+				if (curvePosScene.x() > xMaxSquare)
+					stop = true; // one more time if bigger
+				if (pow(mouseScenePos.x()- curvePosScene.x(),2)+pow(mouseScenePos.y()-curvePosScene.y(),2) <= maxDistSquare)
+					return true;
+			} else {
+				if (lines[index].p1().x() > xMaxSquare)
+					stop = true; // one more time if bigger
+
+				QLineF line = lines[index];
+				if (pointLiesNearLine(line.p1(), line.p2(), mouseScenePos, maxDist))
+					return true;
+			}
+
+			if (stop || (index >= rowCount-1 && increase) || (index <=0 && !increase))
+				break;
+
+			if (increase)
+				index++;
+			else
+				index--;
+
+			if (lineType == XYCurve::NoLine) {
+				curvePosPrevScene = curvePosScene;
+				curvePosScene = symbolPointsScene[index];
+			}
+		}
+	}
+
+	return false;
+}
+
+/*!
+ * \brief XYCurve::pointLiesNearLine
+ * Calculates if a point \p pos lies near than maxDist to the line created by the points \p p1 and \p p2
+ * https://stackoverflow.com/questions/11604680/point-laying-near-line
+ * \p p1 first point of the line
+ * \p p2 second point of the line
+ * \p pos Position to check
+ * \p maxDist Maximal distance away from the curve, which is valid
+ * \return Return true if point lies next to the line
+ */
+bool XYCurvePrivate::pointLiesNearLine(const QPointF p1, const QPointF p2, const QPointF pos, const double maxDist) const{
+	double dx12 = p2.x() - p1.x();
+	double dy12 = p2.y() - p1.y();
+	double vecLenght = sqrt(pow(dx12,2) + pow(dy12,2));
+
+	if (vecLenght == 0) {
+		if (pow(p1.x() - pos.x(), 2) + pow(p1.y()-pos.y(), 2) <= pow(maxDist, 2))
+			return true;
+		 return false;
+	}
+	QPointF unitvec(dx12/vecLenght,dy12/vecLenght);
+
+	double dx1m = pos.x() - p1.x();
+	double dy1m = pos.y() - p1.y();
+
+	double dist_segm = abs(dx1m*unitvec.y() - dy1m*unitvec.x());
+	double scalarProduct = dx1m*unitvec.x() + dy1m*unitvec.y();
+
+	if (scalarProduct > 0) {
+		if (scalarProduct < vecLenght && dist_segm < maxDist)
+			return true;
+	}
+	return false;
+}
+
+// TODO: curvePosScene.x() >= mouseScenePos.x() &&
+// curvePosPrevScene.x() < mouseScenePos.x()
+// dürfte eigentlich nicht drin sein
+bool XYCurvePrivate::pointLiesNearCurve(const QPointF mouseScenePos, const QPointF curvePosPrevScene, const QPointF curvePosScene, const int index, const double maxDist) const {
+	if (q->lineType() != XYCurve::LineType::NoLine &&
+			curvePosScene.x() >= mouseScenePos.x() &&
+			curvePosPrevScene.x() < mouseScenePos.x()) {
+
+		if (q->lineType() == XYCurve::LineType::Line) {
+			// point is not in the near of the point, but it can be in the near of the connection line of two points
+			if (pointLiesNearLine(curvePosPrevScene,curvePosScene, mouseScenePos, maxDist))
+				return true;
+		} else if (q->lineType() == XYCurve::LineType::StartHorizontal) {
+			QPointF tempPoint = curvePosPrevScene;
+			tempPoint.setX(curvePosScene.x());
+			if (pointLiesNearLine(curvePosPrevScene,tempPoint, mouseScenePos, maxDist))
+				return true;
+			if (pointLiesNearLine(tempPoint,curvePosScene, mouseScenePos, maxDist))
+				return true;
+		} else if (q->lineType() == XYCurve::LineType::StartVertical) {
+			QPointF tempPoint = curvePosPrevScene;
+			tempPoint.setY(curvePosScene.y());
+			if (pointLiesNearLine(curvePosPrevScene,tempPoint, mouseScenePos, maxDist))
+				return true;
+			if (pointLiesNearLine(tempPoint,curvePosScene, mouseScenePos, maxDist))
+				return true;
+		} else if (q->lineType() == XYCurve::LineType::MidpointHorizontal) {
+			QPointF tempPoint = curvePosPrevScene;
+			tempPoint.setX(curvePosPrevScene.x()+(curvePosScene.x()-curvePosPrevScene.x())/2);
+			if (pointLiesNearLine(curvePosPrevScene,tempPoint, mouseScenePos, maxDist))
+				return true;
+			QPointF tempPoint2(tempPoint.x(), curvePosScene.y());
+			if (pointLiesNearLine(tempPoint,tempPoint2, mouseScenePos, maxDist))
+				return true;
+
+			if (pointLiesNearLine(tempPoint2,curvePosScene, mouseScenePos, maxDist))
+				return true;
+		} else if (q->lineType() == XYCurve::LineType::MidpointVertical) {
+			QPointF tempPoint = curvePosPrevScene;
+			tempPoint.setY(curvePosPrevScene.y()+(curvePosScene.y()-curvePosPrevScene.y())/2);
+			if (pointLiesNearLine(curvePosPrevScene,tempPoint, mouseScenePos, maxDist))
+				return true;
+			QPointF tempPoint2(tempPoint.y(), curvePosScene.x());
+			if (pointLiesNearLine(tempPoint,tempPoint2, mouseScenePos, maxDist))
+				return true;
+
+			if (pointLiesNearLine(tempPoint2,curvePosScene, mouseScenePos, maxDist))
+				return true;
+		} else if (q->lineType() == XYCurve::LineType::SplineAkimaNatural ||
+				   q->lineType() == XYCurve::LineType::SplineCubicNatural ||
+				   q->lineType() == XYCurve::LineType::SplineAkimaPeriodic ||
+				   q->lineType() == XYCurve::LineType::SplineCubicPeriodic) {
+			for (int i=0; i < q->lineInterpolationPointsCount()+1; i++) {
+				QLineF line = lines[index*(q->lineInterpolationPointsCount()+1)+i];
+				QPointF p1 = line.p1(); //cSystem->mapLogicalToScene(line.p1());
+				QPointF p2 = line.p2(); //cSystem->mapLogicalToScene(line.p2());
+				if (pointLiesNearLine(p1, p2, mouseScenePos, maxDist))
+					return true;
+			}
+		} else {
+			// point is not in the near of the point, but it can be in the near of the connection line of two points
+			if (pointLiesNearLine(curvePosPrevScene,curvePosScene, mouseScenePos, maxDist))
+				return true;
+		}
+	}
+	return false;
+}
+
+/*!
+ * \brief XYCurve::setHover
+ * Will be called in CartesianPlot::hoverMoveEvent()
+ * See d->setHover(on) for more documentation
+ * \p on
+ */
+void XYCurve::setHover(bool on) {
+	Q_D(XYCurve);
+	d->setHover(on);
+}
+
 void XYCurvePrivate::updateErrorBars() {
 	errorBarsPath = QPainterPath();
 	if (xErrorType == XYCurve::NoError && yErrorType == XYCurve::NoError) {
@@ -2796,24 +3026,6 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 	}
 }
 
-void XYCurvePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	const auto* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
-	if (plot->mouseMode() == CartesianPlot::SelectionMode && !isSelected()) {
-		m_hovered = true;
-		emit q->hovered();
-		update();
-	}
-}
-
-void XYCurvePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	const auto* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
-	if (plot->mouseMode() == CartesianPlot::SelectionMode && m_hovered) {
-		m_hovered = false;
-		emit q->unhovered();
-		update();
-	}
-}
-
 void XYCurvePrivate::setPrinting(bool on) {
 	m_printing = on;
 }
@@ -2821,6 +3033,46 @@ void XYCurvePrivate::setPrinting(bool on) {
 void XYCurvePrivate::suppressRetransform(bool on) {
 	m_suppressRetransform = on;
 	m_suppressRecalc = on;
+}
+
+/*!
+ * \brief XYCurvePrivate::mousePressEvent
+ * checks with activateCurve, if the mousePress was in the near
+ * of the curve. If it was, the curve will be selected
+ * \p event
+ */
+void XYCurvePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+
+	if (plot->mouseMode() != CartesianPlot::MouseMode::SelectionMode) {
+		event->ignore();
+		return QGraphicsItem::mousePressEvent(event);
+	}
+
+	if(q->activateCurve(event->pos())){
+		setSelected(true);
+		return;
+	}
+
+	event->ignore();
+	setSelected(false);
+	QGraphicsItem::mousePressEvent(event);
+	return;
+}
+
+/*!
+ * \brief XYCurvePrivate::setHover
+ * Will be called from CartesianPlot::hoverMoveEvent which
+ * determines, which curve is hovered
+ * \p on
+ */
+void XYCurvePrivate::setHover(bool on) {
+
+	if(on == m_hovered)
+		return; // don't update if state not changed
+
+	m_hovered = on;
+	on ? emit q->hovered() : emit q->unhovered();
+	update();
 }
 
 //##############################################################################

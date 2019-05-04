@@ -2682,6 +2682,22 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y()).toString(yRangeDateTimeFormat);
 			update();
+        } else if (mouseMode == CartesianPlot::MouseMode::SelectionMode) {
+			// hover the nearest curve to the mousepointer
+			bool curve_hovered = false;
+			QVector<XYCurve*> curves = q->children<XYCurve>();
+			for (int i=curves.count() - 1; i >= 0; i--){ // because the last curve is above the other curves
+				if(curve_hovered){ // if a curve is already hovered, disable hover for the rest
+					curves[i]->setHover(false);
+					continue;
+				}
+				if(curves[i]->activateCurve(event->pos())){
+					curves[i]->setHover(true);
+					curve_hovered = true;
+					continue;
+				}
+				curves[i]->setHover(false);
+			}
 		}
 	}
 	q->info(info);

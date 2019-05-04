@@ -74,6 +74,9 @@ public:
 	int indexForX(double x, QVector<QPointF>& column, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
 	int indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
 
+	bool activateCurve(QPointF mouseScenePos, double maxDist = -1);
+	void setHover(bool on);
+
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
 	CLASS_D_ACCESSOR_DECL(QString, xColumnPath, XColumnPath)

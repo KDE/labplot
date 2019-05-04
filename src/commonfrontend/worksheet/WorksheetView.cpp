@@ -935,25 +935,6 @@ void WorksheetView::mousePressEvent(QMouseEvent* event) {
 		return;
 	}
 
-	//to select curves having overlapping bounding boxes we need to check whether the cursor
-	//is inside of item's shapes and not inside of the bounding boxes (Qt's default behaviour).
-	for (auto* item : items(event->pos())) {
-		if (!dynamic_cast<XYCurvePrivate*>(item))
-			continue;
-
-		if ( item->shape().contains(item->mapFromScene(mapToScene(event->pos()))) ) {
-			//deselect currently selected items
-			for (auto* selectedItem : scene()->selectedItems())
-				selectedItem->setSelected(false);
-
-			//select the item under the cursor and update the current selection
-			item->setSelected(true);
-			selectionChanged();
-
-			return;
-		}
-	}
-
 	// select the worksheet in the project explorer if the view was clicked
 	// and there is no selection currently. We need this for the case when
 	// there is a single worksheet in the project and we change from the project-node

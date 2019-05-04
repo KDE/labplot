@@ -59,6 +59,11 @@ public:
 	void setPrinting(bool);
 	void suppressRetransform(bool);
 
+	void setHover(bool on);
+	bool activateCurve(QPointF mouseScenePos, double maxDist);
+	bool pointLiesNearLine(const QPointF p1, const QPointF p2, const QPointF pos, const double maxDist) const;
+	bool pointLiesNearCurve(const QPointF mouseScenePos, const QPointF curvePosPrevScene, const QPointF curvePosScene, const int index, const double maxDist) const;
+
 	//data source
 	const AbstractColumn* xColumn;
 	const AbstractColumn* yColumn;
@@ -138,8 +143,7 @@ public:
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void drawSymbols(QPainter*);
