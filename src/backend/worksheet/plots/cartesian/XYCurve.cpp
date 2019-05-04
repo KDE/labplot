@@ -951,6 +951,10 @@ void XYCurvePrivate::retransform() {
 		startIndex= q->indexForX(xMin, symbolPointsLogical, static_cast<AbstractColumn::Properties>(columnProperties));
 		endIndex = q->indexForX(xMax, symbolPointsLogical, static_cast<AbstractColumn::Properties>(columnProperties));
 
+		if (startIndex < 0)
+			startIndex = 0;
+		if (endIndex < 0)
+			endIndex = 0;
 		if (startIndex > endIndex)
 			std::swap(startIndex, endIndex);
 
@@ -2040,7 +2044,7 @@ int XYCurve::indexForX(double x) const {
 		int lowerIndex = 0;
 		int higherIndex = rowCount - 1;
 
-		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount));
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount))+1;
 
 		if ((xColumnMode == AbstractColumn::ColumnMode::Numeric ||
 			 xColumnMode == AbstractColumn::ColumnMode::Integer)) {
@@ -2048,7 +2052,7 @@ int XYCurve::indexForX(double x) const {
 				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
 				double value = xColumn()->valueAt(index);
 
-				if (higherIndex - lowerIndex < 3) {
+				if (higherIndex - lowerIndex < 2) {
 					if (abs(xColumn()->valueAt(lowerIndex) - x) < abs(xColumn()->valueAt(higherIndex) - x))
 						index = lowerIndex;
 					else
@@ -2057,9 +2061,9 @@ int XYCurve::indexForX(double x) const {
 					return index;
 				}
 
-				if (value > x && increase)
+				if (value >= x && increase)
 					higherIndex = index;
-				else if (value > x && !increase)
+				else if (value >= x && !increase)
 					lowerIndex = index;
 				else if (value < x && increase)
 					lowerIndex = index;
@@ -2075,7 +2079,7 @@ int XYCurve::indexForX(double x) const {
 				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
 				qint64 value = xColumn()->dateTimeAt(index).toMSecsSinceEpoch();
 
-				if (higherIndex - lowerIndex < 3) {
+				if (higherIndex - lowerIndex < 2) {
 					if (abs(xColumn()->dateTimeAt(lowerIndex).toMSecsSinceEpoch() - xInt64) < abs(xColumn()->dateTimeAt(higherIndex).toMSecsSinceEpoch() - xInt64))
 						index = lowerIndex;
 					else
@@ -2171,13 +2175,13 @@ int XYCurve::indexForX(double x, QVector<double>& column, AbstractColumn::Proper
 		int lowerIndex = 0;
 		int higherIndex = rowCount-1;
 
-		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount));
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount))+1;
 
 		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
 			double value = column[index];
 
-			if (higherIndex - lowerIndex < 3) {
+			if (higherIndex - lowerIndex < 2) {
 				if (abs(column[lowerIndex] - x) < abs(column[higherIndex] - x))
 					index = lowerIndex;
 				else
@@ -2186,9 +2190,9 @@ int XYCurve::indexForX(double x, QVector<double>& column, AbstractColumn::Proper
 				return index;
 			}
 
-			if (value > x && increase)
+			if (value >= x && increase)
 				higherIndex = index;
-			else if (value > x && !increase)
+			else if (value >= x && !increase)
 				lowerIndex = index;
 			else if (value < x && increase)
 				lowerIndex = index;
@@ -2243,13 +2247,13 @@ int XYCurve::indexForX(double x, QVector<QPointF>& points, AbstractColumn::Prope
 		int lowerIndex = 0;
 		int higherIndex = rowCount - 1;
 
-		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount));
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount))+1;
 
 		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
 			double value = points[index].x();
 
-			if (higherIndex - lowerIndex < 3) {
+			if (higherIndex - lowerIndex < 2) {
 				if (abs(points[lowerIndex].x() - x) < abs(points[higherIndex].x() - x))
 					index = lowerIndex;
 				else
@@ -2258,9 +2262,9 @@ int XYCurve::indexForX(double x, QVector<QPointF>& points, AbstractColumn::Prope
 				return index;
 			}
 
-			if (value > x && increase)
+			if (value >= x && increase)
 				higherIndex = index;
-			else if (value > x && !increase)
+			else if (value >= x && !increase)
 				lowerIndex = index;
 			else if (value < x && increase)
 				lowerIndex = index;
@@ -2314,13 +2318,13 @@ int XYCurve::indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Propert
 		int lowerIndex = 0;
 		int higherIndex = rowCount-1;
 
-		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount));
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount))+1;
 
 		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
 			double value = lines[index].p1().x();
 
-			if (higherIndex - lowerIndex < 3) {
+			if (higherIndex - lowerIndex < 2) {
 				if (abs(lines[lowerIndex].p1().x() - x) < abs(lines[higherIndex].p1().x() - x))
 					index = lowerIndex;
 				else
@@ -2329,9 +2333,9 @@ int XYCurve::indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Propert
 				return index;
 			}
 
-			if (value > x && increase)
+			if (value >= x && increase)
 				higherIndex = index;
-			else if (value > x && !increase)
+			else if (value >= x && !increase)
 				lowerIndex = index;
 			else if (value < x && increase)
 				lowerIndex = index;
