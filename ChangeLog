@@ -1,3 +1,15 @@
+-----2.7-----
+New features:
+
+UX improvements:
+	* Improved the selection of curves in the plot that are near to or behind each other
+
+Performance:
+	* Increased the plotting speed for curves with many data points by removing points which are shown on the same pixel in the scene
+
+Bug fixes:
+	* Disable autoscale when zooming, otherwise wrong (= auto scaled) data region is shown after project save&open
+
 -----2.6-----
 New features:
 	* Histogram
