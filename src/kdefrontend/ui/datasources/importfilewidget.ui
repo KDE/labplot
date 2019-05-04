@@ -244,16 +244,6 @@
       <item row="3" column="2" colspan="3">
        <widget class="QComboBox" name="cbConnection"/>
       </item>
-      <item row="1" column="2" colspan="3">
-       <widget class="QLineEdit" name="leFileName">
-        <property name="toolTip">
-         <string>Specify the name of the file to import.</string>
-        </property>
-        <property name="clearButtonEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
       <item row="6" column="0">
        <widget class="QLabel" name="lBaudRate">
         <property name="text">
