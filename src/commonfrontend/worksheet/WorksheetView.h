@@ -114,7 +114,6 @@ private:
 	QTimeLine* m_fadeOutTimeLine{nullptr};
 	bool m_isClosing{false};
 	bool m_menusInitialized{false};
-	bool m_ctrlPressed{false};
 	int m_numScheduledScalings{0};
 
 	//Menus

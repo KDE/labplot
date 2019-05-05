@@ -885,7 +885,7 @@ void WorksheetView::resizeEvent(QResizeEvent *event) {
 
 void WorksheetView::wheelEvent(QWheelEvent* event) {
 	//https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
-	if (m_mouseMode == ZoomSelectionMode || m_ctrlPressed) {
+	if (m_mouseMode == ZoomSelectionMode || (QApplication::keyboardModifiers() & Qt::ControlModifier)) {
 		int numDegrees = event->delta() / 8;
 		int numSteps = numDegrees / 15; // see QWheelEvent documentation
 		zoom(numSteps);
@@ -1040,16 +1040,12 @@ void WorksheetView::keyPressEvent(QKeyEvent* event) {
 	if (event->matches(QKeySequence::Copy)) {
 		//add here copying of objects
 		exportToClipboard();
-	} else {
-		if (event->key() == Qt::Key_Control)
-			m_ctrlPressed = true;
 	}
 
 	QGraphicsView::keyPressEvent(event);
 }
 
 void WorksheetView::keyReleaseEvent(QKeyEvent* event) {
-	m_ctrlPressed = false;
 	QGraphicsView::keyReleaseEvent(event);
 }
 
