@@ -66,6 +66,7 @@ int main (int argc, char *argv[]) {
 	aboutData.addCredit(i18n("Yuri Chornoivan"), i18nc("@info:credit", "Help on many questions about the KDE-infrastructure and translation related topics"), "yurchor@ukr.net", nullptr);
 	aboutData.addCredit(i18n("Garvit Khatri"), i18nc("@info:credit", "Porting LabPlot2 to KF5 and Integration with Cantor"), "garvitdelhi@gmail.com", nullptr);
 	aboutData.addCredit(i18n("Christoph Roick"), i18nc("@info:credit", "Support import of ROOT (CERN) TH1 histograms"), "chrisito@gmx.de", nullptr);
+	aboutData.addCredit(i18n("Martin Marmsoler"), i18nc("@info:credit", "Improve many plot details"), "martin.marmsoler@gmail.com", nullptr);
 	aboutData.setOrganizationDomain(QByteArray("kde.org"));
 	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot2"));
 	KAboutData::setApplicationData(aboutData);

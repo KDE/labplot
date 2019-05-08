@@ -133,7 +133,7 @@ endif ()
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions (-DLVERSION=\"2.6.0\")
+add_definitions (-DLVERSION=\"2.7.0\")
 # add_definitions (-DLDEBUG='1')
 set(BUILD_SHARED_LIBS true)
 
