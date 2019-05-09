@@ -927,45 +927,47 @@ void XYCurvePrivate::retransform() {
 			PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform(), map logical points to scene coordinates");
 	#endif
 
-	float widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Inch);
-	float heightDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().height(), Worksheet::Inch);
-	int countPixelX = ceil(widthDatarectInch*QApplication::desktop()->physicalDpiX());
-	int countPixelY = ceil(heightDatarectInch*QApplication::desktop()->physicalDpiY());
+	if (!symbolPointsLogical.isEmpty()) {
+		float widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Inch);
+		float heightDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().height(), Worksheet::Inch);
+		int countPixelX = ceil(widthDatarectInch*QApplication::desktop()->physicalDpiX());
+		int countPixelY = ceil(heightDatarectInch*QApplication::desktop()->physicalDpiY());
 
-	double minLogicalDiffX = 1/(plot->dataRect().width()/countPixelX);
-	double minLogicalDiffY = 1/(plot->dataRect().height()/countPixelY);
-	QVector<QVector<bool>> scenePointsUsed;
-	// size of the datarect in pixels
-	scenePointsUsed.resize(countPixelX+1);
-	for (int i=0; i< countPixelX+1; i++) {
-		scenePointsUsed[i].resize(countPixelY+1);
+		double minLogicalDiffX = 1/(plot->dataRect().width()/countPixelX);
+		double minLogicalDiffY = 1/(plot->dataRect().height()/countPixelY);
+		QVector<QVector<bool>> scenePointsUsed;
+		// size of the datarect in pixels
+		scenePointsUsed.resize(countPixelX+1);
+		for (int i=0; i< countPixelX+1; i++)
+			scenePointsUsed[i].resize(countPixelY+1);
 
-	}
-	int columnProperties = xColumn->properties();
-	int startIndex;
-	int endIndex;
-	if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing ||
-		columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
-		double xMin = cSystem->mapSceneToLogical(plot->dataRect().topLeft()).x();
-		double xMax = cSystem->mapSceneToLogical(plot->dataRect().bottomRight()).x();
-		startIndex= q->indexForX(xMin, symbolPointsLogical, static_cast<AbstractColumn::Properties>(columnProperties));
-		endIndex = q->indexForX(xMax, symbolPointsLogical, static_cast<AbstractColumn::Properties>(columnProperties));
+		int columnProperties = xColumn->properties();
+		int startIndex;
+		int endIndex;
+		if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing ||
+			columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
+			double xMin = cSystem->mapSceneToLogical(plot->dataRect().topLeft()).x();
+			double xMax = cSystem->mapSceneToLogical(plot->dataRect().bottomRight()).x();
+			startIndex= q->indexForX(xMin, symbolPointsLogical, static_cast<AbstractColumn::Properties>(columnProperties));
+			endIndex = q->indexForX(xMax, symbolPointsLogical, static_cast<AbstractColumn::Properties>(columnProperties));
 
-		if (startIndex < 0)
+			if (startIndex > endIndex && startIndex >= 0 && endIndex >= 0)
+				std::swap(startIndex, endIndex);
+
+			if (startIndex < 0)
+				startIndex = 0;
+			if (endIndex < 0)
+				endIndex = symbolPointsLogical.size()-1;
+
+		} else {
 			startIndex = 0;
-		if (endIndex < 0)
-			endIndex = 0;
-		if (startIndex > endIndex)
-			std::swap(startIndex, endIndex);
+			endIndex = symbolPointsLogical.size()-1;
+		}
 
-	} else {
-		startIndex = 0;
-		endIndex = symbolPointsLogical.size()-1;
+		cSystem->mapLogicalToScene(startIndex, endIndex, symbolPointsLogical,
+								   symbolPointsScene, visiblePoints, scenePointsUsed,
+								   minLogicalDiffX, minLogicalDiffY);
 	}
-
-	cSystem->mapLogicalToScene(startIndex, endIndex, symbolPointsLogical,
-							   symbolPointsScene, visiblePoints, scenePointsUsed,
-							   minLogicalDiffX, minLogicalDiffY);
 	}
 	//} // (symbolsStyle != Symbol::NoSymbols || valuesType != XYCurve::NoValues )
 
