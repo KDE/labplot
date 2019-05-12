@@ -35,6 +35,8 @@ Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
 #include <QDebug>
 #include <QFileInfo>
+#include <QSet>
+#include <QStack>
 
 #ifdef HAVE_ZIP
 #include <lz4.h>
@@ -77,16 +79,16 @@ const QString ROOTFilter::currentObject() const {
 	return d->currentObject;
 }
 
-QStringList ROOTFilter::listHistograms(const QString& fileName) const {
+ROOTFilter::Directory ROOTFilter::listHistograms(const QString& fileName) const {
 	return d->listHistograms(fileName);
 }
 
-QStringList ROOTFilter::listTrees(const QString& fileName) const {
+ROOTFilter::Directory ROOTFilter::listTrees(const QString& fileName) const {
 	return d->listTrees(fileName);
 }
 
-QVector<QStringList> ROOTFilter::listLeaves(const QString& fileName, const QString& treeName) const {
-	return d->listLeaves(fileName, treeName);
+QVector<QStringList> ROOTFilter::listLeaves(const QString& fileName, qint64 pos) const {
+	return d->listLeaves(fileName, pos);
 }
 
 QVector<QStringList> ROOTFilter::previewCurrentObject(const QString& fileName, int first, int last) const {
@@ -181,18 +183,57 @@ bool ROOTFilter::load(XmlStreamReader* reader) {
 
 ROOTFilterPrivate::ROOTFilterPrivate() = default;
 
+ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QString& fileName, long int& pos)
+{
+	QStringList typeobject = currentObject.split(':');
+	if (typeobject.size() < 2)
+		return Invalid;
+
+	FileType type;
+	if (typeobject.first() == QStringLiteral("Hist"))
+		type = Hist;
+	else if (typeobject.first() == QStringLiteral("Tree"))
+		type = Tree;
+	else
+		return Invalid;
+
+	typeobject.removeFirst();
+	QStringList path = typeobject.join(':').split('/');
+	ROOTFilter::Directory dir = type == Hist ? listHistograms(fileName) : listTrees(fileName);
+	const ROOTFilter::Directory* node = &dir;
+	while (path.size() > 1) {
+		bool next = false;
+		for (const auto& child : node->children) {
+			if (child.name == path.first()) {
+				node = &child;
+				path.pop_front();
+				next = true;
+				break;
+			}
+		}
+		if (!next)
+			return Invalid;
+	}
+	for (const auto& child : node->content) {
+		if (child.first == path.first()) {
+			pos = child.second;
+			break;
+		}
+	}
+	return type;
+}
+
 void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource,
                                          AbstractFileFilter::ImportMode importMode) {
 	DEBUG("ROOTFilterPrivate::readDataFromFile()");
 
-	setFile(fileName);
-
-	QStringList typeobject = currentObject.split(':');
-	if (typeobject.size() < 2)
+	long int pos = 0;
+	auto type = currentObjectPosition(fileName, pos);
+	if (pos == 0)
 		return;
-	if (typeobject.first() == QStringLiteral("Hist")) {
-		typeobject.removeFirst();
-		auto bins = readHistogram(typeobject.join(':'));
+
+	if (type == Hist) {
+		auto bins = readHistogram(pos);
 		const int nbins = static_cast<int>(bins.size());
 
 		// skip underflow and overflow bins by default
@@ -244,10 +285,8 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		}
 
 		dataSource->finalizeImport(columnOffset, 0, columns.size() - 1, -1, QString(), importMode);
-	} else if (typeobject.first() == QStringLiteral("Tree")) {
-		typeobject.removeFirst();
-		const QString treeName = typeobject.join(':');
-		const int nentries = static_cast<int>(currentROOTData->treeEntries(treeName.toStdString()));
+	} else if (type == Tree) {
+		const int nentries = static_cast<int>(currentROOTData->treeEntries(pos));
 
 		int first = qMax(qAbs(startRow), 0);
 		int last = qMax(first - 1, qMin(endRow, nentries - 1));
@@ -285,7 +324,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 				leaf = l.at(1);
 
 			QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c++]);
-			auto data = readTree(treeName, l.first(), leaf, (int)element, last);
+			auto data = readTree(pos, l.first(), leaf, (int)element, last);
 			for (int i = first; i <= last; ++i)
 				container[i - first] = data[i];
 		}
@@ -299,33 +338,63 @@ void ROOTFilterPrivate::write(const QString& fileName, AbstractDataSource* dataS
 	Q_UNUSED(dataSource);
 }
 
-QStringList ROOTFilterPrivate::listHistograms(const QString& fileName) {
-	setFile(fileName);
+ROOTFilter::Directory ROOTFilterPrivate::listContent(const std::map<long int, ROOTData::Directory>& dataContent, std::string (ROOTData::*nameFunc)(long int))
+{
+	ROOTFilter::Directory dirs;
+	QHash<const std::remove_reference<decltype(dataContent)>::type::value_type*, ROOTFilter::Directory*> filledDirs;
+	for (const auto& path : dataContent) {
+		if (!path.second.content.empty()) {
+			QStack<decltype(filledDirs)::key_type> addpath;
+			auto pos = &path;
+			ROOTFilter::Directory* currentdir = &dirs;
+			while (true) {
+				auto it = filledDirs.find(pos);
+				if (it != filledDirs.end()) {
+					currentdir = it.value();
+					break;
+				}
 
-	QStringList histList;
-	for (const auto& hist : currentROOTData->listHistograms()) {
-		histList << QString::fromStdString(hist);
+				auto jt = dataContent.find(pos->second.parent);
+				if (jt != dataContent.end()) {
+					addpath.push(pos);
+					pos = &(*jt);
+				} else
+					break;
+			}
+			while (!addpath.empty()) {
+				auto pos = addpath.pop();
+				ROOTFilter::Directory dir;
+				dir.name = QString::fromStdString(pos->second.name);
+				currentdir->children << dir;
+				currentdir = &currentdir->children.last();
+				filledDirs[pos] = currentdir;
+			}
+			for (auto hist : path.second.content) {
+				auto name = ((*currentROOTData).*nameFunc)(hist);
+				if (!name.empty())
+					currentdir->content << qMakePair(QString::fromStdString(name), hist);
+			}
+		}
 	}
 
-	return histList;
+	return dirs;
 }
 
-QStringList ROOTFilterPrivate::listTrees(const QString& fileName) {
+ROOTFilter::Directory ROOTFilterPrivate::listHistograms(const QString& fileName) {
 	setFile(fileName);
-
-	QStringList treeList;
-	for (const auto& tree : currentROOTData->listTrees()) {
-		treeList << QString::fromStdString(tree);
-	}
-
-	return treeList;
+	return listContent(currentROOTData->listHistograms(), &ROOTData::histogramName);
 }
 
-QVector<QStringList> ROOTFilterPrivate::listLeaves(const QString& fileName, const QString& treeName) {
+ROOTFilter::Directory ROOTFilterPrivate::listTrees(const QString& fileName) {
+	setFile(fileName);
+	return listContent(currentROOTData->listTrees(), &ROOTData::treeName);
+}
+
+QVector<QStringList> ROOTFilterPrivate::listLeaves(const QString& fileName, quint64 pos) {
 	setFile(fileName);
 
 	QVector<QStringList> leafList;
-	for (const auto& leaf : currentROOTData->listLeaves(treeName.toStdString())) {
+	for (const auto& leaf : currentROOTData->listLeaves(pos)) {
 		leafList << QStringList(QString::fromStdString(leaf.branch));
 		if (leaf.branch != leaf.leaf)
 			leafList.last() << QString::fromStdString(leaf.leaf);
@@ -339,15 +408,13 @@ QVector<QStringList> ROOTFilterPrivate::listLeaves(const QString& fileName, cons
 QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& fileName, int first, int last) {
 	DEBUG("ROOTFilterPrivate::previewCurrentObject()");
 
-	setFile(fileName);
-
-	QStringList typeobject = currentObject.split(':');
-	if (typeobject.size() < 2)
+	long int pos = 0;
+	auto type = currentObjectPosition(fileName, pos);
+	if (pos == 0)
 		return QVector<QStringList>(1, QStringList());
 
-	if (typeobject.first() == QStringLiteral("Hist")) {
-		typeobject.removeFirst();
-		auto bins = readHistogram(typeobject.join(':'));
+	if (type == Hist) {
+		auto bins = readHistogram(pos);
 		const int nbins = static_cast<int>(bins.size());
 
 		last = qMin(nbins - 1, last);
@@ -381,10 +448,8 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 		}
 
 		return preview;
-	} else if (typeobject.first() == QStringLiteral("Tree")) {
-		typeobject.removeFirst();
-		const QString treeName = typeobject.join(':');
-		last = qMin(last, currentROOTData->treeEntries(treeName.toStdString()) - 1);
+	} else if (type == Tree) {
+		last = qMin(last, currentROOTData->treeEntries(pos) - 1);
 
 		QVector<QStringList> preview(qMax(last - first + 2, 1));
 		DEBUG("	reading " << preview.size() - 1 << " lines");
@@ -403,7 +468,7 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 			} else if (l.count() > 1)
 				leaf = l.at(1);
 
-			auto data = readTree(treeName, l.first(), leaf, (int)element, last);
+			auto data = readTree(pos, l.first(), leaf, (int)element, last);
 			for (int i = first; i <= last; ++i)
 				preview[i - first] << QString::number(data[i]);
 			if (!isArray || l.count() == 2)
@@ -418,28 +483,20 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 }
 
 int ROOTFilterPrivate::rowsInCurrentObject(const QString& fileName) {
-	setFile(fileName);
-
-	QStringList typeobject = currentObject.split(':');
-	if (typeobject.size() < 2)
+	long int pos = 0;
+	auto type = currentObjectPosition(fileName, pos);
+	if (pos == 0)
 		return 0;
-	if (typeobject.first() == QStringLiteral("Hist")) {
-		typeobject.removeFirst();
-		QStringList nameindex = typeobject.join(':').split(';');;
-		bool ok = nameindex.size() > 1;
-		int cycle = ok ? nameindex.last().toInt(&ok) : 1;
-		if (ok) {
-			nameindex.removeLast();
-		} else {
-			cycle = 1;
-		}
 
-		return currentROOTData->histogramBins(nameindex.join(';').toStdString(), cycle);
-	} else if (typeobject.first() == QStringLiteral("Tree")) {
-		typeobject.removeFirst();
-		return currentROOTData->treeEntries(typeobject.join(':').toStdString());
-	} else
-		return 0;
+	switch (type) {
+		case Hist:
+			return currentROOTData->histogramBins(pos);
+		case Tree:
+			return currentROOTData->treeEntries(pos);
+		case Invalid:
+		default:
+			return 0;
+	}
 }
 
 void ROOTFilterPrivate::setFile(const QString& fileName) {
@@ -463,21 +520,12 @@ void ROOTFilterPrivate::setFile(const QString& fileName) {
 	}
 }
 
-std::vector<ROOTData::BinPars> ROOTFilterPrivate::readHistogram(const QString& histName) {
-	QStringList nameindex = histName.split(';');
-	bool ok = nameindex.size() > 1;
-	int cycle = ok ? nameindex.last().toInt(&ok) : 1;
-	if (ok) {
-		nameindex.removeLast();
-	} else {
-		cycle = 1;
-	}
-
-	return currentROOTData->readHistogram(nameindex.join(';').toStdString(), cycle);
+std::vector<ROOTData::BinPars> ROOTFilterPrivate::readHistogram(quint64 pos) {
+	return currentROOTData->readHistogram(pos);
 }
 
-std::vector<double> ROOTFilterPrivate::readTree(const QString& treeName, const QString& branchName, const QString& leafName, int element, int last) {
-	return currentROOTData->listEntries<double>(treeName.toStdString(), branchName.toStdString(), leafName.toStdString(), element, last + 1);
+std::vector<double> ROOTFilterPrivate::readTree(quint64 pos, const QString& branchName, const QString& leafName, int element, int last) {
+	return currentROOTData->listEntries<double>(pos, branchName.toStdString(), leafName.toStdString(), element, last + 1);
 }
 
 
@@ -522,7 +570,7 @@ short Version(char*& buffer, size_t& count) {
 	// root/io/io/src/TBufferFile.cxx -> ReadVersion
 	count = read<unsigned int>(buffer);
 	short version = (count & 0x40000000) ? read<short>(buffer) : read<short>(buffer -= 4);
-	count = (count & 0x40000000) ? (count & ~0x40000000) - 2 : 2;
+	count = (count & 0x40000000) ? (count & ~0x40000000) - 2 : 0;
 	return version;
 }
 
@@ -593,6 +641,8 @@ ROOTData::ROOTData(const std::string& filename) : filename(filename) {
 
 	int fileVersion = read<int>(is);
 	long int pos = read<int>(is);
+	histdirs.emplace(pos, Directory{});
+	treedirs.emplace(pos, Directory{});
 	long int endpos = fileVersion < 1000000 ? read<int>(is) : read<long int>(is);
 
 	is.seekg(33);
@@ -614,7 +664,14 @@ ROOTData::ROOTData(const std::string& filename) : filename(filename) {
 		is.seekg(4, is.cur); // skip the date
 		size_t lkey = read<unsigned short int>(is);
 		short cycle = read<short>(is);
-		is.seekg(version > 1000 ? 16 : 8, is.cur); // skip seek positions
+		long int pseek;
+		if (version > 1000) {
+			is.seekg(8, is.cur);
+			pseek = read<long int>(is);
+		} else {
+			is.seekg(4, is.cur);
+			pseek = read<int>(is);
+		}
 		std::string cname(read<unsigned char>(is), 0);
 		is.read(&cname[0], cname.size());
 		std::string name(read<unsigned char>(is), 0);
@@ -633,6 +690,16 @@ ROOTData::ROOTData(const std::string& filename) : filename(filename) {
 			type = Basket;
 		else if (cname == "TList" && name == "StreamerInfo")
 			type = Streamer;
+		else if (cname == "TDirectory") {
+			auto it = histdirs.find(pseek);
+			if (it == histdirs.end())
+				it = histdirs.begin();
+			histdirs.emplace(pos, Directory{name, it->first});
+			it = treedirs.find(pseek);
+			if (it == treedirs.end())
+				it = treedirs.begin();
+			treedirs.emplace(pos, Directory{name, it->first});
+		}
 
 		if (type) {
 			if (type == Basket)
@@ -684,22 +751,35 @@ ROOTData::ROOTData(const std::string& filename) : filename(filename) {
 					break;
 				case Tree:
 				case NTuple: {
-					auto it = treekeys.find(name);
-					if (it != treekeys.end()) {
-						// TTrees may be written several times, only consider last cycle
-						if (buffer.cycle > it->second.cycle) {
-							it->second = buffer;
+					auto it = treedirs.find(pseek);
+					if (it == treedirs.end())
+						it = treedirs.begin();
+					bool keyreplaced = false;
+					for (auto & tpos : it->second.content) {
+						auto jt = treekeys.find(tpos);
+						if (jt != treekeys.end() && jt->second.name == buffer.name && jt->second.cycle < buffer.cycle) {
+							// override key with lower cylce number
+							tpos = pos;
+							treekeys.erase(jt);
+							keyreplaced = true;
+							break;
 						}
-					} else
-						treekeys.emplace(name, buffer);
+					}
+					if (!keyreplaced)
+						it->second.content.push_back(pos);
+					treekeys.emplace(pos, buffer);
 					break;
 				} case Streamer:
 					readStreamerInfo(buffer);
 					break;
-				case Double: case Float: case Int: case Short: case Byte:
-					histkeys.emplace(name + ';' + std::to_string(cycle), buffer);
+				case Double: case Float: case Int: case Short: case Byte: {
+					auto it = histdirs.find(pseek);
+					if (it == histdirs.end())
+						it = histdirs.begin();
+					it->second.content.push_back(pos);
+					histkeys.emplace(pos, buffer);
 					break;
-				case Invalid: case Long: case Bool: case CString:
+				} case Invalid: case Long: case Bool: case CString:
 					break;
 			}
 		}
@@ -786,16 +866,24 @@ void ROOTData::readNBins(ROOTData::KeyBuffer& kbuffer) {
 	}
 }
 
-std::vector<std::string> ROOTData::listHistograms() const {
-	std::vector<std::string> l;
-	for (auto& n : histkeys) {
-		l.emplace_back(n.first);
-	}
-	return l;
+std::string ROOTData::histogramName(long int pos)
+{
+	auto it = histkeys.find(pos);
+	if (it != histkeys.end())
+		return it->second.name + ';' + std::to_string(it->second.cycle);
+	return std::string();
 }
 
-std::vector<ROOTData::BinPars> ROOTData::readHistogram(const std::string& name, int cycle) {
-	auto it = histkeys.find(name + ';' + std::to_string(cycle));
+int ROOTData::histogramBins(long int pos)
+{
+	auto it = histkeys.find(pos);
+	if (it != histkeys.end())
+		return it->second.nrows;
+	return 0;
+}
+
+std::vector<ROOTData::BinPars> ROOTData::readHistogram(long int pos) {
+	auto it = histkeys.find(pos);
 	if (it == histkeys.end())
 		return std::vector<ROOTData::BinPars>();
 
@@ -875,18 +963,27 @@ void ROOTData::readNEntries(ROOTData::KeyBuffer& kbuffer) {
 	}
 }
 
-std::vector<std::string> ROOTData::listTrees() const {
-	std::vector<std::string> l;
-	for (auto& n : treekeys) {
-		l.emplace_back(n.first);
-	}
-	return l;
+std::string ROOTData::treeName(long int pos)
+{
+	auto it = treekeys.find(pos);
+	if (it != treekeys.end())
+		return it->second.name;
+	return std::string();
 }
 
-std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(const std::string& treename) const {
+int ROOTData::treeEntries(long int pos)
+{
+	auto it = treekeys.find(pos);
+	if (it != treekeys.end())
+		return it->second.nrows;
+	else
+		return 0;
+}
+
+std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(long int pos) const {
 	std::vector<LeafInfo> leaves;
 
-	auto it = treekeys.find(treename);
+	auto it = treekeys.find(pos);
 	if (it == treekeys.end())
 		return leaves;
 
@@ -963,10 +1060,10 @@ std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(const std::string& treename
 }
 
 template<class T>
-std::vector<T> ROOTData::listEntries(const std::string& treename, const std::string& branchname, const std::string& leafname, const size_t element, const size_t nentries) const {
+std::vector<T> ROOTData::listEntries(long int pos, const std::string& branchname, const std::string& leafname, const size_t element, const size_t nentries) const {
 	std::vector<T> entries;
 
-	auto it = treekeys.find(treename);
+	auto it = treekeys.find(pos);
 	if (it == treekeys.end())
 		return entries;
 
@@ -1078,7 +1175,7 @@ std::vector<T> ROOTData::listEntries(const std::string& treename, const std::str
 			advanceTo(buf = basketsbuf, streamerTBranch, "fBaskets", "fBasketSeek", counts);
 			auto readf = readType<T>(leaftype, leafsign);
 			for (int i = 0; i < fWriteBasket; ++i) {
-				size_t pos = read<long int>(buf);
+				long int pos = read<long int>(buf);
 				auto it = basketkeys.find(pos);
 				if (it != basketkeys.end()) {
 					std::string basketbuffer = data(it->second);

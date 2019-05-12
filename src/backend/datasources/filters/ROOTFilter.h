@@ -61,12 +61,20 @@ public:
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;
 
+	/// Internal directory structure in a ROOT file
+	struct Directory
+	{
+		QString name;
+		QVector<QPair<QString, quint64> > content;
+		QVector<Directory> children;
+	};
+
 	/// List names of histograms contained in ROOT file
-	QStringList listHistograms(const QString& fileName) const;
+	Directory listHistograms(const QString& fileName) const;
 	/// List names of trees contained in ROOT file
-	QStringList listTrees(const QString& fileName) const;
+	Directory listTrees(const QString& fileName) const;
 	/// List names of leaves contained in ROOT tree
-	QVector<QStringList> listLeaves(const QString& fileName, const QString& treeName) const;
+	QVector<QStringList> listLeaves(const QString& fileName, qint64 pos) const;
 
 	/// Set the current histograms, which is one out of listHistograms
 	void setCurrentObject(const QString&);
