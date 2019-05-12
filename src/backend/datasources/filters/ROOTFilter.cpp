@@ -576,7 +576,7 @@ short Version(char*& buffer, size_t& count) {
 	// root/io/io/src/TBufferFile.cxx -> ReadVersion
 	count = read<unsigned int>(buffer);
 	short version = (count & 0x40000000) ? read<short>(buffer) : read<short>(buffer -= 4);
-	count = (count & 0x40000000) ? (count & ~0x40000000) - 2 : 0;
+	count = (count & 0x40000000) ? (count & ~0x40000000) - 2 : 2;
 	return version;
 }
 
