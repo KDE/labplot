@@ -60,7 +60,9 @@
 */
 
 OriginProjectParser::OriginProjectParser() : ProjectParser() {
-	m_topLevelClasses << "Folder" << "Workbook" << "Spreadsheet" << "Matrix" << "Worksheet" << "Note";
+	m_topLevelClasses = {AspectType::Folder, AspectType::Workbook,
+	                     AspectType::Spreadsheet, AspectType::Matrix,
+	                     AspectType::Worksheet, AspectType::Note};
 }
 
 bool OriginProjectParser::isOriginProject(const QString& fileName) {

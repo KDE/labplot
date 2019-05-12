@@ -44,9 +44,9 @@
  * \brief Top-level container for DatapickerCurve and DatapickerImage.
  * \ingroup backend
  */
-Datapicker::Datapicker(const QString& name, const bool loading) : AbstractPart(name),
-	m_transform(new Transform()) {
-
+Datapicker::Datapicker(const QString& name, const bool loading)
+: AbstractPart(name, AspectType::Datapicker), m_transform(new Transform())
+{
 	connect(this, &Datapicker::aspectAdded, this, &Datapicker::handleAspectAdded);
 	connect(this, &Datapicker::aspectAboutToBeRemoved, this, &Datapicker::handleAspectAboutToBeRemoved);
 

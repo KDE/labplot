@@ -80,8 +80,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	m_cbAddTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	ui.gbImportTo->layout()->addWidget(m_cbAddTo);
 
-	QList<const char*> list;
-	list << "Folder";
+	QList<AspectType> list{AspectType::Folder};
 	m_cbAddTo->setTopLevelClasses(list);
 	m_aspectTreeModel->setSelectableAspects(list);
 	m_cbAddTo->setModel(m_aspectTreeModel);
@@ -303,9 +302,9 @@ void ImportProjectDialog::showTopLevelOnly(const QModelIndex& index) {
 	checks whether \c aspect is one of the allowed top level types
 */
 bool ImportProjectDialog::isTopLevel(const AbstractAspect* aspect) const {
-	foreach (const char* classString, m_projectParser->topLevelClasses()) {
-		if (aspect->inherits(classString))
-				return true;
+	foreach (AspectType type, m_projectParser->topLevelClasses()) {
+		if (aspect->inherits(type))
+			return true;
 	}
 	return false;
 }

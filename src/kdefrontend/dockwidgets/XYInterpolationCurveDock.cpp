@@ -203,18 +203,20 @@ void XYInterpolationCurveDock::initGeneralTab() {
 }
 
 void XYInterpolationCurveDock::setModel() {
-	QList<const char*>  list;
-	list<<"Folder"<<"Datapicker"<<"Worksheet"<<"CartesianPlot"<<"XYCurve";
+	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
+	                       AspectType::CartesianPlot, AspectType::XYCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
-	for (XYCurve* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
-	list.clear();
-	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
-		<<"LiveDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve"<<"CantorWorksheet";
+	list = {AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
+	        AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
+	        AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot,
+	        AspectType::XYFitCurve, AspectType::CantorWorksheet
+	       };
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 

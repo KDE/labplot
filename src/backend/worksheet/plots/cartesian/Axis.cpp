@@ -115,13 +115,13 @@ private:
  *  \ingroup worksheet
  */
 Axis::Axis(const QString& name, AxisOrientation orientation)
-		: WorksheetElement(name), d_ptr(new AxisPrivate(this)) {
+		: WorksheetElement(name, AspectType::Axis), d_ptr(new AxisPrivate(this)) {
 	d_ptr->orientation = orientation;
 	init();
 }
 
 Axis::Axis(const QString& name, AxisOrientation orientation, AxisPrivate* dd)
-		: WorksheetElement(name), d_ptr(dd) {
+		: WorksheetElement(name, AspectType::Axis), d_ptr(dd) {
 	d_ptr->orientation = orientation;
 	init();
 }

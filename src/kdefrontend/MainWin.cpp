@@ -1204,7 +1204,7 @@ void MainWin::newSpreadsheet() {
 	if (workbook) {
 		QModelIndex index = m_projectExplorer->currentIndex();
 		const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		if (!aspect->inherits("Folder")) {
+		if (!aspect->inherits(AspectType::Folder)) {
 			workbook->addChild(spreadsheet);
 			return;
 		}
@@ -1225,7 +1225,7 @@ void MainWin::newMatrix() {
 	if (workbook) {
 		QModelIndex index = m_projectExplorer->currentIndex();
 		const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		if (!aspect->inherits("Folder")) {
+		if (!aspect->inherits(AspectType::Folder)) {
 			workbook->addChild(matrix);
 			return;
 		}
@@ -1841,12 +1841,13 @@ void MainWin::importFileDialog(const QString& fileName) {
 	auto* dlg = new ImportFileDialog(this, false, fileName);
 
 	// select existing container
-	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook"))
-		dlg->setCurrentIndex( m_projectExplorer->currentIndex());
-	else if (m_currentAspect->inherits("Column")) {
-		if (m_currentAspect->parentAspect()->inherits("Spreadsheet"))
-			dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
-	}
+	if (m_currentAspect->inherits(AspectType::Spreadsheet) ||
+		m_currentAspect->inherits(AspectType::Matrix) ||
+		m_currentAspect->inherits(AspectType::Workbook))
+		dlg->setCurrentIndex(m_projectExplorer->currentIndex());
+	else if (m_currentAspect->inherits(AspectType::Column) &&
+             m_currentAspect->parentAspect()->inherits(AspectType::Spreadsheet))
+		dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 
 	if (dlg->exec() == QDialog::Accepted) {
 		dlg->importTo(statusBar());
@@ -1862,12 +1863,13 @@ void MainWin::importSqlDialog() {
 	auto* dlg = new ImportSQLDatabaseDialog(this);
 
 	// select existing container
-	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook"))
-		dlg->setCurrentIndex( m_projectExplorer->currentIndex());
-	else if (m_currentAspect->inherits("Column")) {
-		if (m_currentAspect->parentAspect()->inherits("Spreadsheet"))
-			dlg->setCurrentIndex( m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
-	}
+	if (m_currentAspect->inherits(AspectType::Spreadsheet) ||
+		m_currentAspect->inherits(AspectType::Matrix) ||
+		m_currentAspect->inherits(AspectType::Workbook))
+		dlg->setCurrentIndex(m_projectExplorer->currentIndex());
+	else if (m_currentAspect->inherits(AspectType::Column) &&
+             m_currentAspect->parentAspect()->inherits(AspectType::Spreadsheet))
+		dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 
 	if (dlg->exec() == QDialog::Accepted) {
 		dlg->importTo(statusBar());

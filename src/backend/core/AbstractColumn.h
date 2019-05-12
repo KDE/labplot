@@ -134,7 +134,7 @@ public:
 		double entropy;
 	};
 
-	explicit AbstractColumn(const QString& name);
+	AbstractColumn(const QString& name, AspectType type);
 	~AbstractColumn() override;
 
 	static QStringList dateFormats();	// supported date formats

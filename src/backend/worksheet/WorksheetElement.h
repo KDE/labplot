@@ -42,7 +42,7 @@ class WorksheetElement : public AbstractAspect {
 	Q_OBJECT
 
 public:
-	explicit WorksheetElement(const QString&);
+	WorksheetElement(const QString&, AspectType);
 	~WorksheetElement() override;
 
 	enum WorksheetElementName {NameCartesianPlot = 1};

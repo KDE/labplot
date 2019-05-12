@@ -38,7 +38,7 @@ class AbstractFilter : public AbstractAspect {
 	Q_OBJECT
 
 public:
-	explicit AbstractFilter(const QString& name) : AbstractAspect(name) {}
+	explicit AbstractFilter(const QString& name) : AbstractAspect(name, AspectType::AbstractFilter) {}
 	~AbstractFilter() override = default;
 
 	virtual int inputCount() const = 0;

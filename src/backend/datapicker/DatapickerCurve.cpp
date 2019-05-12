@@ -47,11 +47,15 @@
  * \ingroup backend
  */
 
-DatapickerCurve::DatapickerCurve(const QString &name) : AbstractAspect(name), d_ptr(new DatapickerCurvePrivate(this)) {
+DatapickerCurve::DatapickerCurve(const QString &name)
+	: AbstractAspect(name, AspectType::DatapickerCurve), d_ptr(new DatapickerCurvePrivate(this)) {
+
 	init();
 }
 
-DatapickerCurve::DatapickerCurve(const QString &name, DatapickerCurvePrivate *dd) : AbstractAspect(name), d_ptr(dd) {
+DatapickerCurve::DatapickerCurve(const QString &name, DatapickerCurvePrivate *dd)
+	: AbstractAspect(name, AspectType::DatapickerCurve), d_ptr(dd) {
+
 	init();
 }
 

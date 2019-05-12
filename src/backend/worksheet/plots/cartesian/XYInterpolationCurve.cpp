@@ -54,11 +54,11 @@ extern "C" {
 #include <QIcon>
 
 XYInterpolationCurve::XYInterpolationCurve(const QString& name)
-	: XYAnalysisCurve(name, new XYInterpolationCurvePrivate(this)) {
+	: XYAnalysisCurve(name, new XYInterpolationCurvePrivate(this), AspectType::XYInterpolationCurve) {
 }
 
 XYInterpolationCurve::XYInterpolationCurve(const QString& name, XYInterpolationCurvePrivate* dd)
-	: XYAnalysisCurve(name, dd) {
+	: XYAnalysisCurve(name, dd, AspectType::XYInterpolationCurve) {
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem

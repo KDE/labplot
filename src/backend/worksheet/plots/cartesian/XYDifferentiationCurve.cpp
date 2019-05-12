@@ -50,11 +50,11 @@ extern "C" {
 #include <QThreadPool>
 
 XYDifferentiationCurve::XYDifferentiationCurve(const QString& name)
-		: XYAnalysisCurve(name, new XYDifferentiationCurvePrivate(this)) {
+	: XYAnalysisCurve(name, new XYDifferentiationCurvePrivate(this), AspectType::XYDifferentiationCurve) {
 }
 
 XYDifferentiationCurve::XYDifferentiationCurve(const QString& name, XYDifferentiationCurvePrivate* dd)
-		: XYAnalysisCurve(name, dd) {
+	: XYAnalysisCurve(name, dd, AspectType::XYDifferentiationCurve) {
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem

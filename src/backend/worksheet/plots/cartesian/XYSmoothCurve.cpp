@@ -52,11 +52,11 @@ extern "C" {
 }
 
 XYSmoothCurve::XYSmoothCurve(const QString& name)
-	: XYAnalysisCurve(name, new XYSmoothCurvePrivate(this)) {
+	: XYAnalysisCurve(name, new XYSmoothCurvePrivate(this), AspectType::XYSmoothCurve) {
 }
 
 XYSmoothCurve::XYSmoothCurve(const QString& name, XYSmoothCurvePrivate* dd)
-	: XYAnalysisCurve(name, dd) {
+	: XYAnalysisCurve(name, dd, AspectType::XYSmoothCurve) {
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem

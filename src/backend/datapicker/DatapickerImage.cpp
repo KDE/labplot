@@ -56,7 +56,8 @@
  *
  * * \ingroup datapicker
  */
-DatapickerImage::DatapickerImage(const QString& name, bool loading) : AbstractPart(name),
+DatapickerImage::DatapickerImage(const QString& name, bool loading) :
+	AbstractPart(name, AspectType::DatapickerImage),
 	foregroundBins( new int[ImageEditor::colorAttributeMax(Foreground) + 1]),
 	hueBins( new int[ImageEditor::colorAttributeMax(Hue) + 1]),
 	saturationBins( new int[ImageEditor::colorAttributeMax(Saturation) + 1]),

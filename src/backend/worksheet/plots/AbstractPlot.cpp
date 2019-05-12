@@ -44,12 +44,15 @@
  *
  */
 
-AbstractPlot::AbstractPlot(const QString &name) : WorksheetElementContainer(name, new AbstractPlotPrivate(this)) {
+AbstractPlot::AbstractPlot(const QString &name, AspectType type)
+	: WorksheetElementContainer(name, new AbstractPlotPrivate(this), type) {
+
 	init();
 }
 
-AbstractPlot::AbstractPlot(const QString &name, AbstractPlotPrivate *dd)
-	: WorksheetElementContainer(name, dd) {
+AbstractPlot::AbstractPlot(const QString &name, AbstractPlotPrivate *dd, AspectType type)
+	: WorksheetElementContainer(name, dd, type) {
+
 	init();
 }
 

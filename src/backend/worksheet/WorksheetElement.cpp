@@ -42,7 +42,9 @@
  * \brief Base class for all Worksheet children.
  *
  */
-WorksheetElement::WorksheetElement(const QString &name) : AbstractAspect(name) {
+WorksheetElement::WorksheetElement(const QString &name, AspectType type)
+	: AbstractAspect(name, type) {
+
 	m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
 	m_moveBehindMenu = new QMenu(i18n("Move &behind"));
 	m_moveInFrontOfMenu = new QMenu(i18n("Move in &front of"));

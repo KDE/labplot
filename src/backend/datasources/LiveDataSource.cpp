@@ -62,7 +62,7 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
   \ingroup datasources
 */
-LiveDataSource::LiveDataSource(const QString& name, bool loading) : Spreadsheet(name, loading),
+LiveDataSource::LiveDataSource(const QString& name, bool loading) : Spreadsheet(name, loading, AspectType::LiveDataSource),
 	m_updateTimer(new QTimer(this)) {
 
 	initActions();

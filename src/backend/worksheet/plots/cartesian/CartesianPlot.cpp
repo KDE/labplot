@@ -80,11 +80,15 @@
  *
  *
  */
-CartesianPlot::CartesianPlot(const QString &name) : AbstractPlot(name, new CartesianPlotPrivate(this)) {
+CartesianPlot::CartesianPlot(const QString &name)
+	: AbstractPlot(name, new CartesianPlotPrivate(this), AspectType::CartesianPlot) {
+
 	init();
 }
 
-CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd) : AbstractPlot(name, dd) {
+CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd)
+	: AbstractPlot(name, dd, AspectType::CartesianPlot) {
+
 	init();
 }
 

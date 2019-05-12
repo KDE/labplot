@@ -201,9 +201,8 @@
 // start of AbstractAspect implementation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-AbstractAspect::AbstractAspect(const QString &name)
-	: d(new AbstractAspectPrivate(this, name))
-{
+AbstractAspect::AbstractAspect(const QString &name, AspectType type)
+	: m_type(type), d(new AbstractAspectPrivate(this, name)) {
 }
 
 AbstractAspect::~AbstractAspect() {
@@ -322,6 +321,18 @@ QMenu* AbstractAspect::createContextMenu() {
 	return menu;
 }
 
+AspectType AbstractAspect::type() const
+{
+	return m_type;
+}
+
+
+bool AbstractAspect::inherits(AspectType type) const
+{
+	return (static_cast<quint64>(m_type) & static_cast<quint64>(type)) == static_cast<quint64>(type);
+}
+
+
 /**
  * \brief Return my parent Aspect or 0 if I currently don't have one.
  */
@@ -339,11 +350,11 @@ void AbstractAspect::setParentAspect(AbstractAspect* parent) {
  * The returned folder may be the aspect itself if it inherits Folder.
  */
 Folder* AbstractAspect::folder() {
-	if (inherits("Folder")) return static_cast<Folder*>(this);
+	if (inherits(AspectType::Folder)) return static_cast<class Folder*>(this);
 	AbstractAspect* parent_aspect = parentAspect();
-	while (parent_aspect && !parent_aspect->inherits("Folder"))
+	while (parent_aspect && !parent_aspect->inherits(AspectType::Folder))
 		parent_aspect = parent_aspect->parentAspect();
-	return static_cast<Folder*>(parent_aspect);
+	return static_cast<class Folder*>(parent_aspect);
 }
 
 /**
@@ -509,14 +520,14 @@ void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 	endMacro();
 }
 
-QVector<AbstractAspect*> AbstractAspect::children(const char* className, ChildIndexFlags flags) {
+QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFlags flags) {
 	QVector<AbstractAspect*> result;
 	for (auto* child : children()) {
 		if (flags & IncludeHidden || !child->hidden()) {
-			if ( child->inherits(className) || !(flags & Compress)) {
+			if (child->inherits(type) || !(flags & Compress)) {
 				result << child;
 				if (flags & Recursive) {
-					result << child->children(className, flags);
+					result << child->children(type, flags);
 				}
 			}
 		}
@@ -751,10 +762,10 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	//e.g. axis of a plot was selected. Don't include parent aspects here that do not
 	//need to react on the selection of children: e.g. Folder or XYFitCurve with
 	//the child column for calculated residuals
-	if (aspect->parentAspect() != nullptr
-		&& !aspect->parentAspect()->inherits("Folder")
-		&& !aspect->parentAspect()->inherits("XYFitCurve")
-		&& !aspect->parentAspect()->inherits("CantorWorksheet"))
+	if (aspect->parentAspect()
+		&& !aspect->parentAspect()->inherits(AspectType::Folder)
+		&& !aspect->parentAspect()->inherits(AspectType::XYFitCurve)
+		&& !aspect->parentAspect()->inherits(AspectType::CantorWorksheet))
 		emit aspect->parentAspect()->selected(aspect);
 }
 
@@ -763,10 +774,10 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	//e.g. axis of a plot was selected. Don't include parent aspects here that do not
 	//need to react on the deselection of children: e.g. Folder or XYFitCurve with
 	//the child column for calculated residuals
-	if (aspect->parentAspect() != nullptr
-		&& !aspect->parentAspect()->inherits("Folder")
-		&& !aspect->parentAspect()->inherits("XYFitCurve")
-		&& !aspect->parentAspect()->inherits("CantorWorksheet"))
+	if (aspect->parentAspect()
+		&& !aspect->parentAspect()->inherits(AspectType::Folder)
+		&& !aspect->parentAspect()->inherits(AspectType::XYFitCurve)
+		&& !aspect->parentAspect()->inherits(AspectType::CantorWorksheet))
 		emit aspect->parentAspect()->deselected(aspect);
 }
 

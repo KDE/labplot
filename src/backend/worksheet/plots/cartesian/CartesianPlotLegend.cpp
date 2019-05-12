@@ -51,12 +51,14 @@
 #include <KLocalizedString>
 
 CartesianPlotLegend::CartesianPlotLegend(CartesianPlot* plot, const QString &name)
-		: WorksheetElement(name), d_ptr(new CartesianPlotLegendPrivate(this)), m_plot(plot) {
+		: WorksheetElement(name, AspectType::CartesianPlotLegend), d_ptr(new CartesianPlotLegendPrivate(this)), m_plot(plot) {
+
 	init();
 }
 
 CartesianPlotLegend::CartesianPlotLegend(CartesianPlot* plot, const QString &name, CartesianPlotLegendPrivate *dd)
-		: WorksheetElement(name), d_ptr(dd), m_plot(plot) {
+		: WorksheetElement(name, AspectType::CartesianPlotLegend), d_ptr(dd), m_plot(plot) {
+
 	init();
 }
 

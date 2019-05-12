@@ -64,7 +64,9 @@
   \ingroup backend
 */
 
-Spreadsheet::Spreadsheet(const QString& name, bool loading) : AbstractDataSource(name) {
+Spreadsheet::Spreadsheet(const QString& name, bool loading, AspectType type)
+	: AbstractDataSource(name, type) {
+
 	if (!loading)
 		init();
 }

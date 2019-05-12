@@ -82,7 +82,8 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent) : QComboBox(parent),
 	connect(m_lineEdit, &QLineEdit::textChanged, this, &TreeViewComboBox::filterChanged);
 }
 
-void TreeViewComboBox::setTopLevelClasses(const QList<const char*>& list) {
+void TreeViewComboBox::setTopLevelClasses(const QList<AspectType>& list)
+{
 	m_topLevelClasses = list;
 }
 
@@ -226,16 +227,9 @@ bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
 	checks whether \c aspect is one of the allowed top level types
 */
 bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
-	foreach (const char* classString, m_topLevelClasses) {
-		if (aspect->inherits(classString)) {
-			if ( strcmp(classString, "Spreadsheet") == 0 ) {
-				if (aspect->inherits("FileDataSource"))
-                    return true; //here
-				else
-					return true;
-			} else {
-				return true;
-			}
+	foreach (AspectType type, m_topLevelClasses) {
+		if (aspect->inherits(type)) {
+			return true;
 		}
 	}
 	return false;

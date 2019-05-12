@@ -102,7 +102,7 @@ public:
 	bool changed{false};
 };
 
-Project::Project() : Folder(i18n("Project")), d(new Private()) {
+Project::Project() : Folder(i18n("Project"), AspectType::Project), d(new Private()) {
 	//load default values for name, comment and author from config
 	KConfig config;
 	KConfigGroup group = config.group("Project");

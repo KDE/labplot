@@ -68,8 +68,10 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent) : QD
 	ui.teEquation->setMaximumHeight(QLineEdit().sizeHint().height()*2);
 	ui.teEquation->setFocus();
 
-	m_topLevelClasses<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column";
-	m_selectableClasses<<"Column";
+	m_topLevelClasses = {AspectType::Folder, AspectType::Workbook,
+	                     AspectType::Spreadsheet, AspectType::Column
+	                    };
+	m_selectableClasses = {AspectType::Column};
 
 // needed for buggy compiler
 #if __cplusplus < 201103L
@@ -129,7 +131,7 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 		const QStringList& columnPathes = m_columns.first()->formulaVariableColumnPathes();
 
 		//add all available variables and select the corresponding columns
-		const QVector<AbstractAspect*> cols = m_spreadsheet->project()->children("Column", AbstractAspect::Recursive);
+		const QVector<AbstractAspect*> cols = m_spreadsheet->project()->children(AspectType::Column, AbstractAspect::Recursive);
 		for (int i = 0; i < variableNames.size(); ++i) {
 			addVariable();
 			m_variableNames[i]->setText(variableNames.at(i));

@@ -44,12 +44,14 @@
 #include <KLocalizedString>
 
 XYEquationCurve::XYEquationCurve(const QString& name)
-		: XYCurve(name, new XYEquationCurvePrivate(this)) {
+	: XYCurve(name, new XYEquationCurvePrivate(this), AspectType::XYEquationCurve) {
+
 	init();
 }
 
 XYEquationCurve::XYEquationCurve(const QString& name, XYEquationCurvePrivate* dd)
-		: XYCurve(name, dd) {
+	: XYCurve(name, dd, AspectType::XYEquationCurve) {
+
 	init();
 }
 

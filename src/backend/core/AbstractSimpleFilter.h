@@ -85,7 +85,7 @@ class SimpleFilterColumn : public AbstractColumn {
 	Q_OBJECT
 
 public:
-	SimpleFilterColumn(AbstractSimpleFilter* owner) : AbstractColumn(owner->name()), m_owner(owner) {}
+	SimpleFilterColumn(AbstractSimpleFilter* owner) : AbstractColumn(owner->name(), AspectType::SimpleFilterColumn), m_owner(owner) {}
 
 	AbstractColumn::ColumnMode columnMode() const override;
 	int rowCount() const override { return m_owner->rowCount(); }

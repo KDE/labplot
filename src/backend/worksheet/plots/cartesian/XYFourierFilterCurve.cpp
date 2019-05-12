@@ -57,11 +57,11 @@ extern "C" {
 #include <QDebug>	// qWarning()
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
-	: XYAnalysisCurve(name, new XYFourierFilterCurvePrivate(this)) {
+	: XYAnalysisCurve(name, new XYFourierFilterCurvePrivate(this), AspectType::XYFourierFilterCurve) {
 }
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name, XYFourierFilterCurvePrivate* dd)
-	: XYAnalysisCurve(name, dd) {
+	: XYAnalysisCurve(name, dd, AspectType::XYFourierFilterCurve) {
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem

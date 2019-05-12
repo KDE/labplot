@@ -47,11 +47,11 @@
 #include <QThreadPool>
 
 XYDataReductionCurve::XYDataReductionCurve(const QString& name)
-		: XYAnalysisCurve(name, new XYDataReductionCurvePrivate(this)) {
+	: XYAnalysisCurve(name, new XYDataReductionCurvePrivate(this), AspectType::XYDataReductionCurve) {
 }
 
 XYDataReductionCurve::XYDataReductionCurve(const QString& name, XYDataReductionCurvePrivate* dd)
-		: XYAnalysisCurve(name, dd) {
+	: XYAnalysisCurve(name, dd, AspectType::XYDataReductionCurve) {
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem

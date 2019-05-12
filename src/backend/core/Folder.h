@@ -36,7 +36,7 @@ class Folder : public AbstractAspect {
 Q_OBJECT
 
 public:
-	explicit Folder(const QString& name);
+	explicit Folder(const QString& name, AspectType type = AspectType::Folder);
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;

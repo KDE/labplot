@@ -103,11 +103,9 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 	cbExistingWorksheets->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
 	gridLayout->addWidget(cbExistingWorksheets, 1, 1, 1, 1);
 
-	QList<const char*> list;
-	list<<"Folder"<<"Worksheet"<<"CartesianPlot";
+	QList<AspectType> list{AspectType::Folder, AspectType::Worksheet, AspectType::CartesianPlot};
 	cbExistingPlots->setTopLevelClasses(list);
-	list.clear();
-	list<<"CartesianPlot";
+	list = {AspectType::CartesianPlot};
 	m_plotsModel->setSelectableAspects(list);
 	cbExistingPlots->setModel(m_plotsModel);
 
@@ -118,11 +116,9 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 		cbExistingPlots->setCurrentModelIndex(m_plotsModel->modelIndexOfAspect(plot));
 	}
 
-	list.clear();
-	list<<"Folder"<<"Worksheet";
+	list = {AspectType::Folder, AspectType::Worksheet};
 	cbExistingWorksheets->setTopLevelClasses(list);
-	list.clear();
-	list<<"Worksheet";
+	list = {AspectType::Worksheet};
 	m_worksheetsModel->setSelectableAspects(list);
 	cbExistingWorksheets->setModel(m_worksheetsModel);
 

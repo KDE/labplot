@@ -54,7 +54,7 @@
  * \brief Folder in a project
  */
 
-Folder::Folder(const QString &name) : AbstractAspect(name) {
+Folder::Folder(const QString &name, AspectType type) : AbstractAspect(name, type) {
 
 	//when the child being removed is a LiveDataSource, stop reading from the source
 	connect(this, &AbstractAspect::aspectAboutToBeRemoved, this, [=](const AbstractAspect* aspect) {

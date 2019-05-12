@@ -1,4 +1,4 @@
-﻿
+
 /***************************************************************************
     File                 : XYFitCurve.cpp
     Project              : LabPlot
@@ -61,11 +61,11 @@ extern "C" {
 #include <QThreadPool>
 
 XYFitCurve::XYFitCurve(const QString& name)
-	: XYAnalysisCurve(name, new XYFitCurvePrivate(this)) {
+	: XYAnalysisCurve(name, new XYFitCurvePrivate(this), AspectType::XYFitCurve) {
 }
 
 XYFitCurve::XYFitCurve(const QString& name, XYFitCurvePrivate* dd)
-	: XYAnalysisCurve(name, dd) {
+	: XYAnalysisCurve(name, dd, AspectType::XYFitCurve) {
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem

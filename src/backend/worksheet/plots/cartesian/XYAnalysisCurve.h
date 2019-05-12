@@ -40,7 +40,7 @@ class XYAnalysisCurve : public XYCurve {
 public:
 	enum DataSourceType {DataSourceSpreadsheet, DataSourceCurve};
 
-	explicit XYAnalysisCurve(const QString&);
+	XYAnalysisCurve(const QString&, AspectType type);
 	~XYAnalysisCurve() override;
 
 	virtual void recalculate() = 0;
@@ -61,7 +61,7 @@ public:
 	typedef XYAnalysisCurvePrivate Private;
 
 protected:
-	XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd);
+	XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd, AspectType type);
 
 private:
 	Q_DECLARE_PRIVATE(XYAnalysisCurve)

@@ -205,8 +205,8 @@ void XYConvolutionCurveDock::initGeneralTab() {
 
 void XYConvolutionCurveDock::setModel() {
 	DEBUG("XYConvolutionCurveDock::setModel()");
-	QList<const char*> list;
-	list << "Folder" << "Datapicker" << "Worksheet" << "CartesianPlot" << "XYCurve";
+	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
+	                       AspectType::CartesianPlot, AspectType::XYCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
@@ -214,9 +214,10 @@ void XYConvolutionCurveDock::setModel() {
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
-	list.clear();
-	list << "Folder" << "Workbook" << "Datapicker" << "DatapickerCurve" << "Spreadsheet"
-		<< "LiveDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYConvolutionCurve";
+	list = {AspectType::Folder, AspectType::Workbook, AspectType::Datapicker, AspectType::DatapickerCurve,
+	        AspectType::Spreadsheet, AspectType::LiveDataSource, AspectType::Column,
+	        AspectType::Worksheet, AspectType::CartesianPlot, AspectType::XYConvolution
+	       };
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 	cbY2DataColumn->setTopLevelClasses(list);

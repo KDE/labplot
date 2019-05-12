@@ -67,8 +67,9 @@ extern "C" {
  * have a view as they are intended to be displayed inside a spreadsheet.
  */
 
-Column::Column(const QString& name, AbstractColumn::ColumnMode mode)
-	: AbstractColumn(name), d(new ColumnPrivate(this, mode)) {
+Column::Column(const QString& name, ColumnMode mode)
+	: AbstractColumn(name, AspectType::Column), d(new ColumnPrivate(this, mode)) {
+
 	init();
 }
 

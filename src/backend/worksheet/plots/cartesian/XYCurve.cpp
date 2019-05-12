@@ -64,11 +64,15 @@ extern "C" {
 #include <gsl/gsl_errno.h>
 }
 
-XYCurve::XYCurve(const QString &name) : WorksheetElement(name), d_ptr(new XYCurvePrivate(this)) {
+XYCurve::XYCurve(const QString &name, AspectType type)
+	: WorksheetElement(name, type), d_ptr(new XYCurvePrivate(this)) {
+
 	init();
 }
 
-XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd) : WorksheetElement(name), d_ptr(dd) {
+XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd, AspectType type)
+	: WorksheetElement(name, type), d_ptr(dd) {
+
 	init();
 }
 

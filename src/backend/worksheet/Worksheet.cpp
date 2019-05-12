@@ -60,7 +60,7 @@
  *
  * * \ingroup worksheet
  */
-Worksheet::Worksheet(const QString& name, bool loading) : AbstractPart(name), d(new WorksheetPrivate(this)) {
+Worksheet::Worksheet(const QString& name, bool loading) : AbstractPart(name, AspectType::Worksheet), d(new WorksheetPrivate(this)) {
 	connect(this, &Worksheet::aspectAdded, this, &Worksheet::handleAspectAdded);
 	connect(this, &Worksheet::aspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
 	connect(this, &Worksheet::aspectRemoved, this, &Worksheet::handleAspectRemoved);

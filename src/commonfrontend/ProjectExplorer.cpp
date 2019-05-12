@@ -372,7 +372,8 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 
 
 	//don't do anything for newly added data spreadsheets of data picker curves
-	if (aspect->inherits("Spreadsheet") && aspect->parentAspect()->inherits("DatapickerCurve"))
+	if (aspect->inherits(AspectType::Spreadsheet) &&
+	    aspect->parentAspect()->inherits(AspectType::DatapickerCurve))
 		return;
 
 	const AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
@@ -382,7 +383,7 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 	m_treeView->setExpanded(index, true);
 
 	// newly added columns are only expanded but not selected, return here
-	if ( aspect->inherits("Column") ) {
+	if (aspect->inherits(AspectType::Column)) {
 		m_treeView->setExpanded(tree_model->modelIndexOfAspect(aspect->parentAspect()), true);
 		return;
 	}
@@ -653,8 +654,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 		expanded.push_back(-1);
 
 	int row = 0;
-	QVector<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
-	for (const auto* aspect : aspects) {
+	for (const auto* aspect : m_project->children(AspectType::AbstractAspect, AbstractAspect::Recursive)) {
 		const QModelIndex& index = model->modelIndexOfAspect(aspect);
 
 		const auto* part = dynamic_cast<const AbstractPart*>(aspect);
@@ -714,7 +714,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
  */
 bool ProjectExplorer::load(XmlStreamReader* reader) {
 	const AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	const QVector<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
+	const auto aspects = m_project->children(AspectType::AbstractAspect, AbstractAspect::Recursive);
 
 	bool expandedItem = false;
 	bool selectedItem = false;

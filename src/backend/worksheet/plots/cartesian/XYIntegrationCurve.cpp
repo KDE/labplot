@@ -51,11 +51,11 @@ extern "C" {
 #include <QThreadPool>
 
 XYIntegrationCurve::XYIntegrationCurve(const QString& name)
-		: XYAnalysisCurve(name, new XYIntegrationCurvePrivate(this)) {
+	: XYAnalysisCurve(name, new XYIntegrationCurvePrivate(this), AspectType::XYIntegrationCurve) {
 }
 
 XYIntegrationCurve::XYIntegrationCurve(const QString& name, XYIntegrationCurvePrivate* dd)
-		: XYAnalysisCurve(name, dd) {
+	: XYAnalysisCurve(name, dd, AspectType::XYIntegrationCurve) {
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem

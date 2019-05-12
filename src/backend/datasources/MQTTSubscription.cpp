@@ -41,7 +41,7 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
   \ingroup datasources
 */
-MQTTSubscription::MQTTSubscription(const QString& name) : Folder(name),
+MQTTSubscription::MQTTSubscription(const QString& name) : Folder(name, AspectType::MQTTSubscription),
 	m_subscriptionName(name) {
 	qDebug() << "New MQTTSubscription: " << name;
 }

@@ -61,13 +61,15 @@ extern "C" {
 }
 
 Histogram::Histogram(const QString &name)
-	: WorksheetElement(name), d_ptr(new HistogramPrivate(this)) {
-		init();
+	: WorksheetElement(name, AspectType::Histogram), d_ptr(new HistogramPrivate(this)) {
+
+	init();
 }
 
 Histogram::Histogram(const QString &name, HistogramPrivate *dd)
-	: WorksheetElement(name), d_ptr(dd) {
-		init();
+	: WorksheetElement(name, AspectType::Histogram), d_ptr(dd) {
+
+	init();
 }
 
 void Histogram::init() {

@@ -48,14 +48,14 @@
  * worksheet elements. Such a container can be a plot or group of elements.
  */
 
-WorksheetElementContainer::WorksheetElementContainer(const QString& name)
-	: WorksheetElement(name), d_ptr(new WorksheetElementContainerPrivate(this)) {
+WorksheetElementContainer::WorksheetElementContainer(const QString& name, AspectType type)
+	: WorksheetElement(name, type), d_ptr(new WorksheetElementContainerPrivate(this)) {
 
 	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
 
-WorksheetElementContainer::WorksheetElementContainer(const QString& name, WorksheetElementContainerPrivate* dd)
-	: WorksheetElement(name), d_ptr(dd) {
+WorksheetElementContainer::WorksheetElementContainer(const QString& name, WorksheetElementContainerPrivate* dd, AspectType type)
+	: WorksheetElement(name, type), d_ptr(dd) {
 
 	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }

@@ -55,7 +55,7 @@ public:
 	enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
 	enum ErrorBarsType {ErrorBarsSimple, ErrorBarsWithEnds};
 
-	explicit XYCurve(const QString &name);
+	explicit XYCurve(const QString &name, AspectType type = AspectType::XYCurve);
 	~XYCurve() override;
 
 	void finalizeAdd() override;
@@ -165,7 +165,7 @@ private slots:
 	void navigateTo();
 
 protected:
-	XYCurve(const QString& name, XYCurvePrivate* dd);
+	XYCurve(const QString& name, XYCurvePrivate* dd, AspectType type);
 	XYCurvePrivate* const d_ptr;
 
 private:

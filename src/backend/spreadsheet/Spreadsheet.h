@@ -41,7 +41,7 @@ class Spreadsheet : public AbstractDataSource {
 	Q_OBJECT
 
 public:
-	explicit Spreadsheet(const QString& name, bool loading = false);
+	explicit Spreadsheet(const QString& name, bool loading = false, AspectType type = AspectType::Spreadsheet);
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;

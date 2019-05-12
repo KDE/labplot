@@ -36,6 +36,8 @@ class QGroupBox;
 class QLineEdit;
 class QTreeView;
 
+enum class AspectType : quint64;
+
 class TreeViewComboBox : public QComboBox {
 	Q_OBJECT
 
@@ -46,7 +48,7 @@ public:
 	void setCurrentModelIndex(const QModelIndex&);
 	QModelIndex currentModelIndex() const;
 
-	void setTopLevelClasses(const QList<const char *> &);
+	void setTopLevelClasses(const QList<AspectType>&);
 	void setHiddenAspects(const QList<const AbstractAspect*>&);
 
 	void showPopup() override;
@@ -57,7 +59,7 @@ private:
 	QGroupBox* m_groupBox;
 	QLineEdit* m_lineEdit;
 
-	QList<const char*> m_topLevelClasses;
+	QList<AspectType> m_topLevelClasses;
 	QList<const char*> m_selectableClasses;
 	QList<const AbstractAspect*> m_hiddenAspects;
 

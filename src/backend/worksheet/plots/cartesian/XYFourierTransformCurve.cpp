@@ -53,11 +53,11 @@ extern "C" {
 #include <QDebug>	// qWarning()
 
 XYFourierTransformCurve::XYFourierTransformCurve(const QString& name)
-	: XYAnalysisCurve(name, new XYFourierTransformCurvePrivate(this)) {
+	: XYAnalysisCurve(name, new XYFourierTransformCurvePrivate(this), AspectType::XYFourierTransformCurve) {
 }
 
 XYFourierTransformCurve::XYFourierTransformCurve(const QString& name, XYFourierTransformCurvePrivate* dd)
-	: XYAnalysisCurve(name, dd) {
+	: XYAnalysisCurve(name, dd, AspectType::XYFourierTransformCurve) {
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem

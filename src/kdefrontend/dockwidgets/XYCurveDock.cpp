@@ -469,9 +469,10 @@ void XYCurveDock::setModel() {
 	m_aspectTreeModel->enablePlottableColumnsOnly(true);
 	m_aspectTreeModel->enableShowPlotDesignation(true);
 
-	QList<const char*> list;
-	list << "Folder" << "Workbook" << "Datapicker" << "DatapickerCurve" << "Spreadsheet"
-		<< "LiveDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYFitCurve" << "CantorWorksheet";
+	QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
+	                       AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
+	                       AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot,
+	                       AspectType::XYFitCurve, AspectType::CantorWorksheet};
 
 	if (cbXColumn) {
 		cbXColumn->setTopLevelClasses(list);
@@ -483,8 +484,7 @@ void XYCurveDock::setModel() {
 	cbYErrorMinusColumn->setTopLevelClasses(list);
 	cbYErrorPlusColumn->setTopLevelClasses(list);
 
-	list.clear();
-	list << "Column" << "XYCurve";
+	list = {AspectType::Column, AspectType::XYCurve};
 	m_aspectTreeModel->setSelectableAspects(list);
 
 	if (cbXColumn) {

@@ -112,13 +112,15 @@ QVariant ErrorBarItem::itemChange(QGraphicsItem::GraphicsItemChange change, cons
  * of the predefined position flags (\ca HorizontalPosition, \ca VerticalPosition).
  */
 
-DatapickerPoint::DatapickerPoint(const QString& name) : AbstractAspect(name),
-	d_ptr(new DatapickerPointPrivate(this)) {
+DatapickerPoint::DatapickerPoint(const QString& name)
+	: AbstractAspect(name, AspectType::DatapickerPoint), d_ptr(new DatapickerPointPrivate(this)) {
 
 	init();
 }
 
-DatapickerPoint::DatapickerPoint(const QString& name, DatapickerPointPrivate *dd) : AbstractAspect(name), d_ptr(dd) {
+DatapickerPoint::DatapickerPoint(const QString& name, DatapickerPointPrivate *dd)
+	: AbstractAspect(name, AspectType::DatapickerPoint), d_ptr(dd) {
+
 	init();
 }
 

@@ -341,13 +341,11 @@ void AxisDock::init() {
 }
 
 void AxisDock::setModel() {
-	QList<const char*>  list;
-	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
+	QList<AspectType> list{AspectType::Folder, AspectType::Spreadsheet, AspectType::Column};
 	cbMajorTicksColumn->setTopLevelClasses(list);
 	cbMinorTicksColumn->setTopLevelClasses(list);
 
-	list.clear();
-	list<<"Column";
+	list = {AspectType::Column};
 	m_aspectTreeModel->setSelectableAspects(list);
 
 	cbMajorTicksColumn->setModel(m_aspectTreeModel);

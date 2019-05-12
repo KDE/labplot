@@ -40,6 +40,8 @@ class AspectTreeModel;
 class QPushButton;
 class QLineEdit;
 
+enum class AspectType : quint64;
+
 class FunctionValuesDialog : public QDialog {
 	Q_OBJECT
 
@@ -57,8 +59,8 @@ private:
 #else
 	std::unique_ptr<AspectTreeModel> m_aspectTreeModel;
 #endif
-	QList<const char*>  m_topLevelClasses;
-	QList<const char*>  m_selectableClasses;
+	QList<AspectType>  m_topLevelClasses;
+	QList<AspectType>  m_selectableClasses;
 
 	QList<QLineEdit*> m_variableNames;
 	QList<QLabel*> m_variableLabels;

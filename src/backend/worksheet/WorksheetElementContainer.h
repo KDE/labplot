@@ -38,7 +38,7 @@ class WorksheetElementContainer : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	explicit WorksheetElementContainer(const QString&);
+	WorksheetElementContainer(const QString&, AspectType);
 	~WorksheetElementContainer() override;
 
 	QGraphicsItem* graphicsItem() const override;
@@ -62,7 +62,7 @@ public slots:
 
 protected:
 	WorksheetElementContainerPrivate* const d_ptr;
-	WorksheetElementContainer(const QString&, WorksheetElementContainerPrivate*);
+	WorksheetElementContainer(const QString&, WorksheetElementContainerPrivate*, AspectType);
 
 protected slots:
 	virtual void handleAspectAdded(const AbstractAspect*);

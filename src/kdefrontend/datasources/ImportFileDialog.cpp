@@ -217,16 +217,16 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	QTime timer;
 	timer.start();
 
-	if (aspect->inherits("Matrix")) {
+	if (aspect->inherits(AspectType::Matrix)) {
 		DEBUG("ImportFileDialog::importTo(): to Matrix");
 		auto* matrix = qobject_cast<Matrix*>(aspect);
 		filter->readDataFromFile(fileName, matrix, mode);
-	} else if (aspect->inherits("Spreadsheet")) {
+	} else if (aspect->inherits(AspectType::Spreadsheet)) {
 		DEBUG("ImportFileDialog::importTo(): to Spreadsheet");
 		auto* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
 		DEBUG(" Calling filter->readDataFromFile() with spreadsheet " << spreadsheet);
 		filter->readDataFromFile(fileName, spreadsheet, mode);
-	} else if (aspect->inherits("Workbook")) {
+	} else if (aspect->inherits(AspectType::Workbook)) {
 		DEBUG("ImportFileDialog::importTo(): to Workbook");
 		auto* workbook = qobject_cast<Workbook*>(aspect);
 		QVector<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
@@ -275,9 +275,9 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					static_cast<ROOTFilter*>(filter)->setCurrentObject(names[i]);
 
 				int index = i + offset;
-				if (sheets[index]->inherits("Matrix"))
+				if (sheets[index]->inherits(AspectType::Matrix))
 					filter->readDataFromFile(fileName, qobject_cast<Matrix*>(sheets[index]));
-				else if (sheets[index]->inherits("Spreadsheet"))
+				else if (sheets[index]->inherits(AspectType::Spreadsheet))
 					filter->readDataFromFile(fileName, qobject_cast<Spreadsheet*>(sheets[index]));
 			}
 		} else { // single import file types
@@ -320,7 +320,7 @@ void ImportFileDialog::checkOnFitsTableToMatrix(const bool enable) {
 			return;
 		}
 
-		if (aspect->inherits("Matrix")) {
+		if (aspect->inherits(AspectType::Matrix)) {
 			okButton->setEnabled(enable);
 			if (enable)
 				okButton->setToolTip(i18n("Close the dialog and import the data."));

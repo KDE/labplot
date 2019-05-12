@@ -42,13 +42,15 @@
 
 #include <KLocalizedString>
 
-XYAnalysisCurve::XYAnalysisCurve(const QString& name)
-		: XYCurve(name, new XYAnalysisCurvePrivate(this)) {
+XYAnalysisCurve::XYAnalysisCurve(const QString& name, AspectType type)
+	: XYCurve(name, new XYAnalysisCurvePrivate(this), type) {
+
 	init();
 }
 
-XYAnalysisCurve::XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd)
-		: XYCurve(name, dd) {
+XYAnalysisCurve::XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd, AspectType type)
+	: XYCurve(name, dd, type) {
+
 	init();
 }
 

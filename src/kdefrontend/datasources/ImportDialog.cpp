@@ -96,12 +96,11 @@ void ImportDialog::setModel() {
 	cbAddTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	grid->addWidget(cbAddTo, 0, 1);
 
-	QList<const char*> list;
-	list << "Folder" << "Spreadsheet" << "Matrix"  << "Workbook";
+	QList<AspectType> list{AspectType::Folder, AspectType::Spreadsheet,
+	                AspectType::Matrix, AspectType::Workbook};
 	cbAddTo->setTopLevelClasses(list);
 
-	list.clear();
-	list << "Spreadsheet" << "Matrix" << "Workbook";
+	list.removeFirst(); // do not allow selection of Folders
 	m_aspectTreeModel->setSelectableAspects(list);
 
 	cbAddTo->setModel(m_aspectTreeModel);

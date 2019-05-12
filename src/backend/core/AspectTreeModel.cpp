@@ -86,7 +86,7 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 /*!
   \c list contains the class names of the aspects, that can be selected in the corresponding model view.
 */
-void AspectTreeModel::setSelectableAspects(QList<const char*> list) {
+void AspectTreeModel::setSelectableAspects(const QList<AspectType>& list) {
 	m_selectableAspects = list;
 }
 
@@ -273,8 +273,8 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const {
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 
 	if (!m_selectableAspects.isEmpty()) {
-		foreach (const char* classString, m_selectableAspects) {
-			if (aspect->inherits(classString)) {
+		for (AspectType type : m_selectableAspects) {
+			if (aspect->inherits(type)) {
 				result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 				if (index != this->index(0,0,QModelIndex()) &&  !m_filterString.isEmpty()) {
 					if (this->containsFilterString(aspect))
@@ -413,7 +413,7 @@ QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect* aspect, in
 QModelIndex AspectTreeModel::modelIndexOfAspect(const QString& path, int column) const {
 	//determine the aspect out of aspect path
 	AbstractAspect* aspect = nullptr;
-	auto children = m_root->children("AbstractAspect", AbstractAspect::Recursive);
+	auto children = m_root->children(AspectType::AbstractAspect, AbstractAspect::Recursive);
 	for (auto* child: children) {
 		if (child->path() == path) {
 			aspect = child;

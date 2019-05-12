@@ -35,7 +35,8 @@
  * \class ColumnStringIO
  * \brief String-IO interface of Column.
  */
-ColumnStringIO::ColumnStringIO(Column* owner) : AbstractColumn(QString()), m_owner(owner) {
+ColumnStringIO::ColumnStringIO(Column* owner)
+	: AbstractColumn(QString(), AspectType::ColumnStringIO), m_owner(owner) {
 }
 
 AbstractColumn::ColumnMode ColumnStringIO::columnMode() const {
