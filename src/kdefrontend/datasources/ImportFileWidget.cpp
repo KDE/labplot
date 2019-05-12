@@ -765,9 +765,10 @@ void ImportFileWidget::selectFile() {
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
 	QStringList urls = m_cbFileName->urls();
-	urls.append(path);
+	urls.insert(0, "file://"+path); // add type of path
 	m_cbFileName->setUrls(urls);
-	fileNameChanged(urls.last()); // why do I have to call this function seperately
+	m_cbFileName->setCurrentText(urls.first());
+	fileNameChanged(path); // why do I have to call this function seperately
 }
 
 /*!
