@@ -25,7 +25,7 @@ find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Svg
 	Widgets
 	Test
-        SerialPort
+	SerialPort
 )
 
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
@@ -38,6 +38,7 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	DocTools
 	I18n
 	IconThemes
+	KIO
 	TextWidgets
 	WidgetsAddons
 	XmlGui
