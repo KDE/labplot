@@ -381,25 +381,30 @@ ROOTFilter::Directory ROOTFilterPrivate::listContent(const std::map<long int, RO
 }
 
 ROOTFilter::Directory ROOTFilterPrivate::listHistograms(const QString& fileName) {
-	setFile(fileName);
-	return listContent(currentROOTData->listHistograms(), &ROOTData::histogramName);
+	if (setFile(fileName))
+		return listContent(currentROOTData->listHistograms(), &ROOTData::histogramName);
+	else
+		return ROOTFilter::Directory{};
 }
 
 ROOTFilter::Directory ROOTFilterPrivate::listTrees(const QString& fileName) {
-	setFile(fileName);
-	return listContent(currentROOTData->listTrees(), &ROOTData::treeName);
+	if (setFile(fileName))
+		return listContent(currentROOTData->listTrees(), &ROOTData::treeName);
+	else
+		return ROOTFilter::Directory{};
 }
 
 QVector<QStringList> ROOTFilterPrivate::listLeaves(const QString& fileName, quint64 pos) {
-	setFile(fileName);
-
 	QVector<QStringList> leafList;
-	for (const auto& leaf : currentROOTData->listLeaves(pos)) {
-		leafList << QStringList(QString::fromStdString(leaf.branch));
-		if (leaf.branch != leaf.leaf)
-			leafList.last() << QString::fromStdString(leaf.leaf);
-		if (leaf.elements > 1)
-			leafList.last() << QString("[%1]").arg(leaf.elements);
+
+	if (setFile(fileName)) {
+		for (const auto& leaf : currentROOTData->listLeaves(pos)) {
+			leafList << QStringList(QString::fromStdString(leaf.branch));
+			if (leaf.branch != leaf.leaf)
+				leafList.last() << QString::fromStdString(leaf.leaf);
+			if (leaf.elements > 1)
+				leafList.last() << QString("[%1]").arg(leaf.elements);
+		}
 	}
 
 	return leafList;
@@ -499,13 +504,13 @@ int ROOTFilterPrivate::rowsInCurrentObject(const QString& fileName) {
 	}
 }
 
-void ROOTFilterPrivate::setFile(const QString& fileName) {
+bool ROOTFilterPrivate::setFile(const QString& fileName) {
 	QFileInfo file(fileName);
 	if (!file.exists()) {
 		currentObject.clear();
 		columns.clear();
 		currentROOTData.reset();
-		return;
+		return false;
 	}
 
 	QDateTime modified = file.lastModified();
@@ -518,6 +523,7 @@ void ROOTFilterPrivate::setFile(const QString& fileName) {
 		currentFile.size = size;
 		currentROOTData.reset(new ROOTData(fileName.toStdString()));
 	}
+	return true;
 }
 
 std::vector<ROOTData::BinPars> ROOTFilterPrivate::readHistogram(quint64 pos) {

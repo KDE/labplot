@@ -307,7 +307,7 @@ private:
 	ROOTFilter::Directory listContent(const std::map<long int, ROOTData::Directory>& dataContent, std::string (ROOTData::*nameFunc)(long int));
 
 	/// Checks and updates the current ROOT file path
-	void setFile(const QString& fileName);
+	bool setFile(const QString& fileName);
 	/// Calls ReadHistogram from ROOTData
 	std::vector<ROOTData::BinPars> readHistogram(quint64 pos);
 	/// Calls listEntries from ROOTData
