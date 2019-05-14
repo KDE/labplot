@@ -324,8 +324,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		raiseDock(m_mainWindow->projectDock, m_mainWindow->stackedWidget);
 		m_mainWindow->projectDock->setProject(m_mainWindow->m_project);
 		break;
-#ifdef HAVE_CANTOR_LIBS
 	case AspectType::CantorWorksheet:
+#ifdef HAVE_CANTOR_LIBS
 		raiseDockConnect(m_mainWindow->cantorWorksheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 
 		{
@@ -336,30 +336,34 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "CAS Properties"));
 			m_mainWindow->cantorWorksheetDock->setCantorWorksheets(list);
 		}
-		break;
 #endif
+		break;
 	case AspectType::Note:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Notes"));
 		raiseDock(m_mainWindow->notesDock, m_mainWindow->stackedWidget);
 		m_mainWindow->notesDock->setNotesList(castList<Note>(selectedAspects));
 		break;
-#ifdef HAVE_MQTT
 	case AspectType::MQTTClient:
+#ifdef HAVE_MQTT
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "MQTT Data Source"));
 		raiseDock(m_mainWindow->m_liveDataDock, m_mainWindow->stackedWidget);
 		m_mainWindow->m_liveDataDock->setMQTTClient(static_cast<MQTTClient*>(selectedAspects.first()));
+#endif
 		break;
 	case AspectType::MQTTSubscription:
+#ifdef HAVE_MQTT
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "MQTT Data Source"));
 		raiseDock(m_mainWindow->m_liveDataDock, m_mainWindow->stackedWidget);
 		m_mainWindow->m_liveDataDock->setMQTTClient(static_cast<MQTTSubscription*>(selectedAspects.first())->mqttClient());
+#endif
 		break;
 	case AspectType::MQTTTopic:
+#ifdef HAVE_MQTT
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "MQTT Data Source"));
 		raiseDock(m_mainWindow->m_liveDataDock, m_mainWindow->stackedWidget);
 		m_mainWindow->m_liveDataDock->setMQTTClient(static_cast<MQTTTopic*>(selectedAspects.first())->mqttClient());
-		break;
 #endif
+		break;
 	case AspectType::LiveDataSource:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Live Data Source"));
 		raiseDock(m_mainWindow->m_liveDataDock, m_mainWindow->stackedWidget);
