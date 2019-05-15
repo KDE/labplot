@@ -39,7 +39,6 @@ OriginFile::OriginFile(const string& fileName)
 
 	if (!file.is_open())
 	{
-		cerr << endl << "liborigin: " << strerror(errno) << ": " << fileName.c_str() << endl;
 		ioError = errno;
 		return;
 	}
@@ -49,7 +48,6 @@ OriginFile::OriginFile(const string& fileName)
 	logfile = fopen("./opjfile.log", "w");
 	if (logfile == nullptr)
 	{
-		cerr << endl <<  "liborigin: " << strerror(errno) << ": opjfile.log" << endl;
 		ioError = errno;
 		return;
 	}

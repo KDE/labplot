@@ -743,7 +743,10 @@ void OriginAnyParser::readProjectTree() {
 	string pte_pre2 = readObjectAsString(pte_pre2_size);
 
 	// root element and children
-	unsigned int rootfolder = readFolderTree(projectTree.begin(), pte_depth);
+	unsigned int rootfolder = readFolderTree(
+		projectTree.insert(projectTree.begin(), ProjectNode("", ProjectNode::Folder)),
+		pte_depth
+	);
 	if (rootfolder > 0) {
 		LOG_PRINT(logfile, "Number of files at root: %d\n", rootfolder)
 	}
@@ -756,7 +759,7 @@ void OriginAnyParser::readProjectTree() {
 
 	// log info on project tree
 #ifdef GENERATE_CODE_FOR_LOG
-	outputProjectTree();
+	outputProjectTree(cout);
 #endif // GENERATE_CODE_FOR_LOG
 
 	return;
@@ -1543,6 +1546,7 @@ void OriginAnyParser::getAnnotationProperties(const string& anhd, unsigned int a
 		GET_SHORT(stmp, r.bottom)
 
 		unsigned char attach = anhd[0x28];
+		if (attach >= (unsigned char)Attach::End_) attach = Attach::Frame;
 		unsigned char border = anhd[0x29];
 
 		Color color = getColor(anhd.substr(0x33,4));
@@ -2835,7 +2839,6 @@ void OriginAnyParser::getColorMap(ColorMap& cmap, const string& cmapdata, unsign
 	// check we have enough data to fill the map
 	unsigned int minDataSize = cmoffset + 0x114 + (colorMapSize+2)*0x38;
 	if (minDataSize > cmapdatasz) {
-		cerr << "WARNING: Too few data while getting ColorMap. Needed: at least " << minDataSize << " bytes. Have: " << cmapdatasz << " bytes." << endl;
 		LOG_PRINT(logfile, "WARNING: Too few data while getting ColorMap. Needed: at least %d bytes. Have: %d bytes.\n", minDataSize, cmapdatasz)
 		return;
 	}
@@ -2988,15 +2991,15 @@ void OriginAnyParser::getProjectFolderProperties(tree<ProjectNode>::iterator cur
 	(*current_folder).modificationDate = doubleToPosixTime(modificationDate);
 }
 
-void OriginAnyParser::outputProjectTree() {
+void OriginAnyParser::outputProjectTree(std::ostream & out) {
 	size_t windowsCount = spreadSheets.size()+matrixes.size()+excels.size()+graphs.size()+notes.size();
 
-	cout << "Project has " << windowsCount << " windows." << endl;
-	cout << "Origin project Tree" << endl;
+	out << "Project has " << windowsCount << " windows." << endl;
+	out << "Origin project Tree" << endl;
 
 	char cdsz[21];
 	for (tree<ProjectNode>::iterator it = projectTree.begin(projectTree.begin()); it != projectTree.end(projectTree.begin()); ++it) {
 		strftime(cdsz, sizeof(cdsz), "%F %T", gmtime(&(*it).creationDate));
-		cout <<  string(projectTree.depth(it) - 1, ' ') <<  (*it).name.c_str() << "\t" << cdsz << endl;
+		out <<  string(projectTree.depth(it) - 1, ' ') <<  (*it).name.c_str() << "\t" << cdsz << endl;
 	}
 }
