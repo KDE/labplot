@@ -27,6 +27,7 @@
 #include "PivotTable.h"
 #include "PivotTablePrivate.h"
 #include "kdefrontend/pivot/PivotTableView.h"
+#include "kdefrontend/pivot/HierarchicalHeaderView.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -63,19 +64,17 @@ BASIC_D_READER_IMPL(PivotTable, Spreadsheet*, dataSourceSpreadsheet, dataSourceS
 CLASS_D_READER_IMPL(PivotTable, QString, dataSourceConnection, dataSourceConnection)
 CLASS_D_READER_IMPL(PivotTable, QString, dataSourceTable, dataSourceTable)
 
-// BASIC_SHARED_D_READER_IMPL(PivotTable, const QAbstractItemModel*, dataModel, dataModel)
-// BASIC_SHARED_D_READER_IMPL(PivotTable, const QAbstractItemModel*, horizontalHeaderModel, horizontalHeaderModel)
-// BASIC_SHARED_D_READER_IMPL(PivotTable, const QAbstractItemModel*, verticalHeaderModel, verticalHeaderModel)
 QAbstractItemModel* PivotTable::dataModel() const {
 	return d->dataModel;
 }
 
-QAbstractItemModel* PivotTable::horizontalHeaderModel() const {
-	return d->horizontalHeaderModel;
+void PivotTable::setHorizontalHeaderModel(QAbstractItemModel* model) const {
+	d->horizontalHeaderModel = dynamic_cast<HierarchicalHeaderModel*>(model);
+	qDebug()<<"model in set " << d->horizontalHeaderModel << "  " << model;
 }
 
-QAbstractItemModel* PivotTable::verticalHeaderModel() const {
-	return d->verticalHeaderModel;
+void PivotTable::setVerticalHeaderModel(QAbstractItemModel* model) const {
+	d->verticalHeaderModel = dynamic_cast<HierarchicalHeaderModel*>(model);
 }
 
 //##############################################################################
@@ -161,10 +160,12 @@ QIcon PivotTable::icon() const {
 //##############################################################################
 //######################  Private implementation ###############################
 //##############################################################################
-PivotTablePrivate::PivotTablePrivate(PivotTable* owner) : q(owner),
-	dataModel(new QStandardItemModel),
-	horizontalHeaderModel(new QStandardItemModel),
-	verticalHeaderModel(new QStandardItemModel) {
+PivotTablePrivate::PivotTablePrivate(PivotTable* owner) : q(owner)
+,
+	dataModel(new QStandardItemModel)
+// 	horizontalHeaderModel(new HierarchicalHeaderModel),
+// 	verticalHeaderModel(new HierarchicalHeaderModel)
+	{
 
 }
 
@@ -228,22 +229,23 @@ QStringList PivotTablePrivate::members(const QString& dimension, PivotTable::Sor
 
 void PivotTablePrivate::recalculate() {
 	//clear the previos result
+	dataModel->clear();
 	horizontalHeaderModel->clear();
 	verticalHeaderModel->clear();
-	dataModel->clear();
 
+	//nothing to do if no spreadsheet is set yet
 	if (dataSourceType == PivotTable::DataSourceSpreadsheet && !dataSourceSpreadsheet)
 		return;
 
 	if (rows.isEmpty() && columns.isEmpty() && !showTotals) {
 		//notify about the new result
-// 		emit q->changed();
+		emit q->changed();
 		return;
 	}
 
 	WAIT_CURSOR;
 
-	if (dataSourceType == PivotTable::DataSourceSpreadsheet && dataSourceSpreadsheet && !m_dbCreated)
+	if (dataSourceType == PivotTable::DataSourceSpreadsheet && !m_dbCreated)
 		createDb();
 
 	//construct the SQL statement string
@@ -283,7 +285,7 @@ void PivotTablePrivate::recalculate() {
 			}
 		} else {
 			//no dimensions selected, show totals only
-			query += " COUNT(*) FROM pivot";
+			query += "COUNT(*) FROM pivot";
 		}
 	} else {
 
@@ -296,7 +298,7 @@ void PivotTablePrivate::recalculate() {
 	if (!sqlQuery.exec(query)) {
 		RESET_CURSOR;
 		KMessageBox::error(nullptr, i18n("Failed to process the query.") + "\n" + sqlQuery.lastError().databaseText());
-// 		emit q->changed();
+		emit q->changed();
 		return;
 	}
 
@@ -305,51 +307,114 @@ void PivotTablePrivate::recalculate() {
 	int columnsCount = sqlQuery.record().count();
 	int firstValueIndex = rows.size() + columns.size();
 	int valuesCount = columnsCount - firstValueIndex;
-	dataModel->setColumnCount(valuesCount);
-
-	if (rowsCount != -1)
-		dataModel->setRowCount(rowsCount);
 
 	DEBUG("nubmer of columns " << columnsCount);
 	DEBUG("number rows: " << rowsCount);
 	DEBUG("number values: " << valuesCount);
 	DEBUG("index of the first value column: " << firstValueIndex);
+
+	qDebug()<<"model in recalculate " << horizontalHeaderModel;
+	if (!horizontalHeaderModel) {
+		RESET_CURSOR;
+		return;
+	}
+
+	//resize the hierarhical header models
+	if (columns.isEmpty() && rows.isEmpty()) {
+		//no labels provided, show the total count only
+
+		//vertical header
+		verticalHeaderModel->setColumnCount(0);
+		verticalHeaderModel->setRowCount(0);
+
+		//horizontal header
+		horizontalHeaderModel->setColumnCount(1);
+		horizontalHeaderModel->setRowCount(1);
+		horizontalHeaderModel->setData(horizontalHeaderModel->index(0, 0), "Totals", Qt::DisplayRole);
+	} if (columns.isEmpty()) {
+		//no column labels provided, we have:
+		//* all labels on rows
+		//   -> one column for the vertical header with the number of rows equal to the number of record sets in the result query
+		//* only values on columns
+		//   -> one row for the horizontal header with the number of columns equal to the number of values
+
+		//vertical header
+		verticalHeaderModel->setColumnCount(rows.count());
+
+		//horizontal header
+		horizontalHeaderModel->setColumnCount(valuesCount);
+		horizontalHeaderModel->setRowCount(1);
+
+		//TODO: only "Totals" value at the moment, needs to be extended later when we allow to add other values
+		horizontalHeaderModel->setData(horizontalHeaderModel->index(0, 0), "Totals", Qt::DisplayRole);
+	} else if (rows.isEmpty()) {
+		//no row labels provided, we have:
+		//* all labels on rows
+		//   -> one column for the vertical header with the number of rows equal to the number of record sets in the result query
+		//* only values on columns
+		//   -> one row for the horizontal header with the number of columns equal to the number of values
+
+		//vertical header
+
+		//horizontal header
+
+// 		for (int i = 0; i < columns.size(); ++i)
+// 			horizontalHeaderModel->setData(horizontalHeaderModel->index(0, i), columns.at(i), Qt::DisplayRole);
+
+	} else {
+		//TODO:
+	}
+
+	//handle the data model
+	dataModel->setColumnCount(valuesCount);
+
+	if (rowsCount != -1)
+		dataModel->setRowCount(rowsCount);
+
 	int row = 0;
-    while (sqlQuery.next()) {
-		//add row fields to the vertical header model/
 
-		//add сolumn fields to the vertical header model
+	//add values to the data models
+	if (columns.isEmpty() && rows.isEmpty()) {
 
-		//add values to the data model
-		if (rows.isEmpty()) {
-			//everything on columns
+	} else if (columns.isEmpty()) {
+		qDebug()<<"everything on rows";
+		while (sqlQuery.next()) {
+			qDebug()<<"row: " << row;
+			horizontalHeaderModel->setRowCount(row+1);
+			for (int i = 0; i < firstValueIndex; ++i) {
+				qDebug()<<"adding to the horizontal header " << sqlQuery.value(i);
+				horizontalHeaderModel->setData(horizontalHeaderModel->index(row, i), sqlQuery.value(i), Qt::DisplayRole);
+			}
+
+			//values
 			for (int i = firstValueIndex; i < columnsCount; ++i) {
 				QString value = sqlQuery.value(i).toString();
+				qDebug()<<"adding value " << value;
 				if (rowsCount == -1)
 					dataModel->setRowCount(row + 1);
 				dataModel->setItem(row, i - firstValueIndex, new QStandardItem(value));
 			}
-		} else if (columns.isEmpty()) {
-			//everything on rows
-			for (int i = firstValueIndex; i < columnsCount; ++i) {
-				QString value = sqlQuery.value(i).toString();
-				if (rowsCount == -1)
-					dataModel->setRowCount(row + 1);
-				dataModel->setItem(0, i - firstValueIndex + row, new QStandardItem(value));
-			}
 
-		} else {
-			//TODO
+			++row;
 		}
+	} else if (rows.isEmpty()) {
+		qDebug()<<"everything on columns";
+// 		for (int i = firstValueIndex; i < columnsCount; ++i) {
+// 			QString value = sqlQuery.value(i).toString();
+// 			if (rowsCount == -1)
+// 				dataModel->setRowCount(row + 1);
+// 			dataModel->setItem(0, i - firstValueIndex + row, new QStandardItem(value));
+// 		}
 
-		++row;
-    }
+	} else {
+		//TODO
+	}
+
 
 	//notify about the new result
-// 	emit q->changed();
+	emit q->changed();
 	RESET_CURSOR;
 }
-
 
 void PivotTablePrivate::createDb() {
 	for (auto* col : dataSourceSpreadsheet->children<Column>()) {
@@ -469,6 +534,7 @@ void PivotTable::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool PivotTable::load(XmlStreamReader* reader, bool preview) {
+	Q_UNUSED(preview);
 	if (!readBasicAttributes(reader))
 		return false;
 

@@ -80,6 +80,7 @@ public slots:
 	void createContextMenu(QMenu*);
 	void fillToolBar(QToolBar*);
 	void print(QPrinter*) const;
+	void changed();
 
 private slots:
 	void goToCell();

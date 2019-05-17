@@ -30,7 +30,9 @@
 #define PIVOTTABLEPRIVATE_H
 
 #include <backend/pivot/PivotTable.h>
+
 class QStandardItemModel;
+class HierarchicalHeaderModel;
 
 class PivotTablePrivate {
 public:
@@ -53,8 +55,8 @@ public:
 	QString dataSourceTable;
 
 	QStandardItemModel* dataModel{nullptr};
-	QStandardItemModel* horizontalHeaderModel{nullptr};
-	QStandardItemModel* verticalHeaderModel{nullptr};
+	HierarchicalHeaderModel* horizontalHeaderModel{nullptr};
+	HierarchicalHeaderModel* verticalHeaderModel{nullptr};
 
 	QStringList dimensions;
 	QStringList measures;

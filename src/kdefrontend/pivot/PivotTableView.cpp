@@ -27,6 +27,7 @@
  ***************************************************************************/
 
 #include "PivotTableView.h"
+#include "HierarchicalHeaderView.h"
 #include "backend/pivot/PivotTable.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
@@ -54,30 +55,44 @@
 PivotTableView::PivotTableView(PivotTable* pivotTable, bool readOnly) : QWidget(),
 	m_pivotTable(pivotTable),
 	m_tableView(new QTableView(this)),
+	m_horizontalHeader(new HierarchicalHeaderView(Qt::Horizontal, m_tableView)),
+	m_verticalHeader(new HierarchicalHeaderView(Qt::Vertical, m_tableView)),
 	m_readOnly(readOnly) {
 
 	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
 	layout->addWidget(m_tableView);
+
+	m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
 	if (m_readOnly)
 		m_tableView->setEditTriggers(QTableView::NoEditTriggers);
+
+	m_tableView->setHorizontalHeader(m_horizontalHeader);
+	m_horizontalHeader->setHighlightSections(true);
+	m_horizontalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+	m_tableView->setVerticalHeader(m_verticalHeader);
+	m_verticalHeader->setHighlightSections(true);
+	m_verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
 	init();
 }
 
-PivotTableView::~PivotTableView() {
-
-}
+PivotTableView::~PivotTableView() = default;
 
 void PivotTableView::init() {
 	initActions();
 	initMenus();
 
+	//models
+	//TODO: at the moment we keep the data model in m_pivotTable, the header models are kept in HierarchicalHeaderView.
+	//re-design this. Let's keep all the models in m_pivotTable and set them here for the views.
 	m_tableView->setModel(m_pivotTable->dataModel());
-	m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+	m_pivotTable->setHorizontalHeaderModel(m_horizontalHeader->hierarchicalModel());
+	m_pivotTable->setVerticalHeaderModel(m_verticalHeader->hierarchicalModel());
 
-	//hierarchical headers
-	//TODO:
+	connect(m_pivotTable, &PivotTable::changed, this, &PivotTableView::changed);
 }
 
 void PivotTableView::initActions() {
@@ -85,7 +100,6 @@ void PivotTableView::initActions() {
 }
 
 void PivotTableView::initMenus() {
-
 
 }
 
@@ -157,6 +171,10 @@ void PivotTableView::print(QPrinter* printer) const {
 	QPainter painter (printer);
 
 	RESET_CURSOR;
+}
+
+ void PivotTableView::changed() {
+
 }
 
 void PivotTableView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {

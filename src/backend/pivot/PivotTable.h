@@ -32,6 +32,7 @@
 #include "backend/lib/macros.h"
 
 class QAbstractItemModel;
+class HierarchicalHeaderModel;
 class PivotTableView;
 class PivotTablePrivate;
 class Spreadsheet;
@@ -51,12 +52,10 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, dataSourceConnection, DataSourceConnection)
 	CLASS_D_ACCESSOR_DECL(QString, dataSourceTable, DataSourceTable)
 
-// 	POINTER_D_ACCESSOR_DECL(const QAbstractItemModel, dataModel, dataModel)
-// 	POINTER_D_ACCESSOR_DECL(const QAbstractItemModel, horizontalHeaderModel, horizontalHeaderModel)
-// 	POINTER_D_ACCESSOR_DECL(const QAbstractItemModel, verticalHeaderModel, verticalHeaderModel)
 	QAbstractItemModel* dataModel() const;
-	QAbstractItemModel* horizontalHeaderModel() const;
-	QAbstractItemModel* verticalHeaderModel() const;
+	void setDataModel(QAbstractItemModel*) const;
+	void setHorizontalHeaderModel(QAbstractItemModel*) const;
+	void setVerticalHeaderModel(QAbstractItemModel*) const;
 
 	const QStringList& dimensions() const;
 	const QStringList& measures() const;
@@ -90,8 +89,8 @@ private:
 	friend class PivotTablePrivate;
 
 signals:
+	void changed();
 	void requestProjectContextMenu(QMenu*);
-
 	void dataSourceTypeChanged(PivotTable::DataSourceType);
 	void dataSourceSpreadsheetChanged(Spreadsheet*);
 };
