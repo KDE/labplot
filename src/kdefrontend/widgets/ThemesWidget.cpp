@@ -88,7 +88,6 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	const QColor& color = (palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
 	pen.setColor(color);
 	QPainter pa;
-	pa.setPen(pen);
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);

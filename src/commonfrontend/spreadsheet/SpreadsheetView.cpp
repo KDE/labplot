@@ -680,9 +680,7 @@ void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
 	if (!column)
 		return; //should never happen, since the sender is always a Column
 
-	const bool numeric = (column->columnMode() == AbstractColumn::Numeric) || (column->columnMode() == AbstractColumn::Integer);
-
-	if (numeric) {
+	if (column->isNumeric()) {
 		QAction* firstAction = menu->actions().at(1);
 		menu->insertMenu(firstAction, m_columnSetAsMenu);
 
