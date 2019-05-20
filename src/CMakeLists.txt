@@ -458,12 +458,13 @@ ELSE ()
 	# creates LABPLOT_SOURCE.ico/LABPLOT_SOURCE.icns
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LABPLOT_ICONS})
 ENDIF ()
-add_executable(labplot2 ${LABPLOT_SOURCE})
 
 # create LML_ICONS.icns on MACOSX
 IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 ENDIF ()
+
+add_executable(labplot2 ${LABPLOT_SOURCE})
 target_link_libraries(labplot2 labplot2lib)
 
 ############## installation ################################
