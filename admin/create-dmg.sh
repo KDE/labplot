@@ -49,13 +49,12 @@ cp -v kde/share/metainfo/org.kde.labplot2.appdata.xml $INPREFIX/share/appdata/
 cp -v kde/share/applications/org.kde.$NAME.desktop $INPREFIX/share/applications/
 
 # cantor
-# TODO: currently disabled
-#cp -v kde/Applications/KDE/cantor.app/Contents/MacOS/cantor $INPREFIX/MacOS
-#cp -v kde/Applications/KDE/cantor_scripteditor.app/Contents/MacOS/cantor_scripteditor $INPREFIX/MacOS
-#cp -vr kde/plugins/cantor $INPREFIX/PlugIns
-#cp -v kde/lib/libcantor_config.dylib $INPREFIX/Frameworks/
-#cp -v kde/lib/libcantor_pythonbackend.dylib $INPREFIX/Frameworks/
-#cp -v kde/lib/libcantorlibs.18.07.70.dylib $INPREFIX/Frameworks/libcantorlibs.18.dylib
+cp -v kde/Applications/cantor.app/Contents/MacOS/cantor $INPREFIX/MacOS
+cp -v kde/Applications/cantor_scripteditor.app/Contents/MacOS/cantor_scripteditor $INPREFIX/MacOS
+cp -vr kde/plugins/cantor $INPREFIX/PlugIns
+cp -v kde/lib/libcantor_config.dylib $INPREFIX/Frameworks/
+cp -v kde/lib/libcantor_pythonbackend.dylib $INPREFIX/Frameworks/
+cp -v kde/lib/libcantorlibs.19.07.70.dylib $INPREFIX/Frameworks/libcantorlibs.21.dylib
 
 # icons
 cp -vf kde/share/icontheme.rcc $INPREFIX/Resources/icontheme.rcc
