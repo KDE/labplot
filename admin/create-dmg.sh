@@ -9,7 +9,7 @@ set -e
 
 NAME=labplot2
 PNAME=LabPlot2
-VERSION=2.6.0
+VERSION=2.7.0
 PREFIX=kde/Applications
 INPREFIX=$PREFIX/$PNAME.app/Contents
 TMPDIR=LabPlot2
