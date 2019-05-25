@@ -54,7 +54,6 @@ cp -v kde/Applications/cantor_scripteditor.app/Contents/MacOS/cantor_scriptedito
 cp -vr kde/plugins/cantor $INPREFIX/PlugIns
 cp -v kde/lib/libcantor_config.dylib $INPREFIX/Frameworks/
 cp -v kde/lib/libcantor_pythonbackend.dylib $INPREFIX/Frameworks/
-cp -v kde/lib/libcantorlibs.19.07.70.dylib $INPREFIX/Frameworks/libcantorlibs.21.dylib
 
 # icons
 cp -vf kde/share/icontheme.rcc $INPREFIX/Resources/icontheme.rcc
