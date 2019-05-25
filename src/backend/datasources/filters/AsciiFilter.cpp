@@ -252,8 +252,11 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 		QProcess wc;
 		wc.start(QLatin1String("wc"), QStringList() << QLatin1String("-l") << fileName);
 		size_t lineCount = 0;
-		while (wc.waitForReadyRead())
-			lineCount = wc.readLine().split(' ')[0].toInt();
+		while (wc.waitForReadyRead()) {
+			QString line(wc.readLine());
+			// wc on macOS has leading spaces: use SkipEmptyParts
+			lineCount = line.split(' ', QString::SkipEmptyParts)[0].toInt();
+		}
 		return lineCount;
 	}
 #endif
