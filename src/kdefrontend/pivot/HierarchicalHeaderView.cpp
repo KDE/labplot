@@ -131,6 +131,14 @@ void HierarchicalHeaderModel::setColumnCount(int count) {
 	m_columnCount = count;
 }
 
+void HierarchicalHeaderModel::setSpan(int row, int column, int rowSpanCount, int columnSpanCount) {
+	QModelIndex index = this->index(row, column);
+	if (rowSpanCount > 0)
+		setData(index, rowSpanCount, ROW_SPAN_ROLE);
+	if (columnSpanCount)
+		setData(index, columnSpanCount, COLUMN_SPAN_ROLE);
+}
+
 int HierarchicalHeaderModel::rowCount(const QModelIndex& parent) const {
 	Q_UNUSED(parent);
 	return m_rowCount;
@@ -259,14 +267,6 @@ void HierarchicalHeaderView::setColumnWidth(int col, int colWidth) {
 
 	if (orientation() == Qt::Horizontal)
 		resizeSection(col, colWidth);
-}
-
-void HierarchicalHeaderView::setSpan(int row, int column, int rowSpanCount, int columnSpanCount) {
-	QModelIndex index = m_model->index(row, column);
-	if (rowSpanCount > 0)
-		m_model->setData(index, rowSpanCount, ROW_SPAN_ROLE);
-	if (columnSpanCount)
-		m_model->setData(index, columnSpanCount, COLUMN_SPAN_ROLE);
 }
 
 void HierarchicalHeaderView::setCellBackgroundColor(const QModelIndex& index, const QColor& color) {

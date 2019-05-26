@@ -55,8 +55,8 @@
 PivotTableView::PivotTableView(PivotTable* pivotTable, bool readOnly) : QWidget(),
 	m_pivotTable(pivotTable),
 	m_tableView(new QTableView(this)),
-	m_horizontalHeader(new HierarchicalHeaderView(Qt::Horizontal, m_tableView)),
-	m_verticalHeader(new HierarchicalHeaderView(Qt::Vertical, m_tableView)),
+	m_horizontalHeaderView(new HierarchicalHeaderView(Qt::Horizontal, m_tableView)),
+	m_verticalHeaderView(new HierarchicalHeaderView(Qt::Vertical, m_tableView)),
 	m_readOnly(readOnly) {
 
 	auto* layout = new QHBoxLayout(this);
@@ -68,13 +68,15 @@ PivotTableView::PivotTableView(PivotTable* pivotTable, bool readOnly) : QWidget(
 	if (m_readOnly)
 		m_tableView->setEditTriggers(QTableView::NoEditTriggers);
 
-	m_tableView->setHorizontalHeader(m_horizontalHeader);
-	m_horizontalHeader->setHighlightSections(true);
-	m_horizontalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+	m_tableView->setHorizontalHeader(m_horizontalHeaderView);
+	m_horizontalHeaderView->setHighlightSections(true);
+	m_horizontalHeaderView->setSectionResizeMode(QHeaderView::ResizeToContents);
+	m_horizontalHeaderView->setSectionsClickable(true);
 
-	m_tableView->setVerticalHeader(m_verticalHeader);
-	m_verticalHeader->setHighlightSections(true);
-	m_verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+	m_tableView->setVerticalHeader(m_verticalHeaderView);
+	m_verticalHeaderView->setHighlightSections(true);
+	m_verticalHeaderView->setSectionResizeMode(QHeaderView::ResizeToContents);
+	m_verticalHeaderView->setSectionsClickable(true);
 
 	init();
 }
@@ -89,8 +91,8 @@ void PivotTableView::init() {
 	//TODO: at the moment we keep the data model in m_pivotTable, the header models are kept in HierarchicalHeaderView.
 	//re-design this. Let's keep all the models in m_pivotTable and set them here for the views.
 	m_tableView->setModel(m_pivotTable->dataModel());
-	m_pivotTable->setHorizontalHeaderModel(m_horizontalHeader->hierarchicalModel());
-	m_pivotTable->setVerticalHeaderModel(m_verticalHeader->hierarchicalModel());
+	m_pivotTable->setHorizontalHeaderModel(m_horizontalHeaderView->hierarchicalModel());
+	m_pivotTable->setVerticalHeaderModel(m_verticalHeaderView->hierarchicalModel());
 
 	connect(m_pivotTable, &PivotTable::changed, this, &PivotTableView::changed);
 }

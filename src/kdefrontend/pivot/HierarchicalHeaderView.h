@@ -76,6 +76,7 @@ public:
 public:
 	void setRowCount(int);
 	void setColumnCount(int);
+	void setSpan(int row, int column, int rowSpanCount, int columnSpanCount);
 	QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 	int rowCount(const QModelIndex &parent=QModelIndex()) const override;
 	int columnCount(const QModelIndex &parent=QModelIndex()) const override;
@@ -100,7 +101,6 @@ public:
 	HierarchicalHeaderModel* hierarchicalModel() const;
 	void setRowHeight(int row, int height);
 	void setColumnWidth(int col, int width);
-	void setSpan(int row, int column, int rowSpanCount, int columnSpanCount);
 	void setCellBackgroundColor(const QModelIndex&, const QColor&);
 	void setCellForegroundColor(const QModelIndex&, const QColor&);
 

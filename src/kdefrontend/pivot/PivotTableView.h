@@ -72,8 +72,8 @@ private:
 
 	PivotTable* m_pivotTable;
 	QTableView* m_tableView;
-	HierarchicalHeaderView* m_horizontalHeader{nullptr};
-	HierarchicalHeaderView* m_verticalHeader{nullptr};
+	HierarchicalHeaderView* m_horizontalHeaderView{nullptr};
+	HierarchicalHeaderView* m_verticalHeaderView{nullptr};
 	bool m_readOnly{false};
 
 public slots:
