@@ -58,6 +58,8 @@ private:
 	void loadConfig(KConfig&);
 	void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
 	void readConnections();
+	void updateFields();
+	bool fieldSelected(const QString&);
 
 private slots:
 	//SLOTs for changes triggered in PivotTableDock

@@ -97,8 +97,8 @@ PivotTableDock::PivotTableDock(QWidget* parent) : QWidget(parent) {
 	connect(ui.bAddColumn,  &QPushButton::clicked, this, &PivotTableDock::addColumn);
 	connect(ui.bRemoveColumn, &QPushButton::clicked, this,&PivotTableDock::removeColumn);
 
-	connect(ui.lwDimensions, &QListWidget::itemSelectionChanged, this, [=]() {
-		bool enabled = !ui.lwDimensions->selectedItems().isEmpty();
+	connect(ui.lwFields, &QListWidget::itemSelectionChanged, this, [=]() {
+		bool enabled = !ui.lwFields->selectedItems().isEmpty();
 		ui.bAddRow->setEnabled(enabled);
 		ui.bAddColumn->setEnabled(enabled);
 	});
@@ -138,12 +138,12 @@ void PivotTableDock::setPivotTable(PivotTable* pivotTable) {
 	this->dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
 
 	//available dimensions and measures
-	ui.lwDimensions->clear();
+	ui.lwFields->clear();
 	for (auto dimension : m_pivotTable->dimensions())
-		ui.lwDimensions->addItem(new QListWidgetItem(QIcon::fromTheme("draw-text"), dimension));
+		ui.lwFields->addItem(new QListWidgetItem(QIcon::fromTheme("draw-text"), dimension));
 
 	for (auto measure : m_pivotTable->measures())
-		ui.lwDimensions->addItem(new QListWidgetItem(measure));
+		ui.lwFields->addItem(new QListWidgetItem(measure));
 
 	//undo functions
 	connect(m_pivotTable, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(pivotTableDescriptionChanged(const AbstractAspect*)));
@@ -194,25 +194,58 @@ void PivotTableDock::readConnections() {
 }
 
 void PivotTableDock::addRow() {
-	QString name = ui.lwDimensions->currentItem()->text();
+	QString name = ui.lwFields->currentItem()->text();
 	ui.lwRows->addItem(name);
-	ui.lwDimensions->takeItem(ui.lwDimensions->currentRow());
+	ui.lwFields->takeItem(ui.lwFields->currentRow());
 	m_pivotTable->addToRows(name);
 }
 
 void PivotTableDock::removeRow() {
 	ui.lwRows->takeItem(ui.lwRows->currentRow());
+	updateFields();
 }
 
 void PivotTableDock::addColumn() {
-	QString name = ui.lwDimensions->currentItem()->text();
+	QString name = ui.lwFields->currentItem()->text();
 	ui.lwColumns->addItem(name);
-	ui.lwDimensions->takeItem(ui.lwDimensions->currentRow());
+	ui.lwFields->takeItem(ui.lwFields->currentRow());
 	m_pivotTable->addToColumns(name);
 }
 
 void PivotTableDock::removeColumn() {
 	ui.lwColumns->takeItem(ui.lwColumns->currentRow());
+	updateFields();
+}
+
+/*!
+ * re-populates the content of the "Fields" list widget by adding the non-selected fields only.
+ * called when a selected field is removed from rows or columns.
+ */
+void PivotTableDock::updateFields() {
+	ui.lwFields->clear();
+	for (auto dimension : m_pivotTable->dimensions())
+		if (!fieldSelected(dimension))
+			ui.lwFields->addItem(new QListWidgetItem(QIcon::fromTheme("draw-text"), dimension));
+
+	for (auto measure : m_pivotTable->measures())
+		if (!fieldSelected(measure))
+			ui.lwFields->addItem(new QListWidgetItem(measure));
+}
+
+/*!
+ * return \c true if the field name \c field was selected among rows or columns,
+ * return \c false otherwise.
+ * */
+bool PivotTableDock::fieldSelected(const QString& field) {
+	for (int i = 0; i<ui.lwRows->count(); ++i)
+		if (ui.lwRows->item(i)->text() == field)
+			return true;
+
+	for (int i = 0; i<ui.lwColumns->count(); ++i)
+		if (ui.lwColumns->item(i)->text() == field)
+			return true;
+
+	return false;
 }
 
 //*************************************************************
@@ -254,14 +287,14 @@ void PivotTableDock::spreadsheetChanged(const QModelIndex& index) {
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
 
 	//clear the previos definiot of the data fields
-	ui.lwDimensions->clear();
+	ui.lwFields->clear();
 	//TODO:
 	//rows, columns, values
 
 	//show all spreadsheet columns as available dimensions
 	for (const auto* col : spreadsheet->children<Column>()) {
 		QListWidgetItem* item = new QListWidgetItem(col->icon(), col->name());
-		ui.lwDimensions->addItem(item);
+		ui.lwFields->addItem(item);
 	}
 
 	if (m_initializing)
@@ -351,7 +384,7 @@ void PivotTableDock::tableChanged() {
 	//show all attributes of the selected table
 // 	for (const auto* col : spreadsheet->children<Column>()) {
 // 		QListWidgetItem* item = new QListWidgetItem(col->icon(), col->name());
-// 		ui.lwDimensions->addItem(item);
+// 		ui.lwFields->addItem(item);
 // 	}
 
 	if (m_initializing)
