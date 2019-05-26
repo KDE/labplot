@@ -42,7 +42,10 @@ public:
 	QString name() const;
 
 	void addToRows(const QString&);
+	void removeFromRows(const QString&);
+
 	void addToColumns(const QString&);
+	void removeFromColumns(const QString&);
 
 	void recalculate();
 	void createDb();

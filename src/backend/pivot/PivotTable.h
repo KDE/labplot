@@ -62,9 +62,11 @@ public:
 
 	const QStringList& rows() const;
 	void addToRows(const QString&);
+	void removeFromRows(const QString&);
 
 	const QStringList& columns() const;
 	void addToColumns(const QString&);
+	void removeFromColumns(const QString&);
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;

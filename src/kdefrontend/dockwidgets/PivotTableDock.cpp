@@ -102,9 +102,13 @@ PivotTableDock::PivotTableDock(QWidget* parent) : QWidget(parent) {
 		ui.bAddRow->setEnabled(enabled);
 		ui.bAddColumn->setEnabled(enabled);
 	});
+
+	connect(ui.lwRows, &QListWidget::doubleClicked, this,&PivotTableDock::removeRow);
 	connect(ui.lwRows, &QListWidget::itemSelectionChanged, this, [=]() {
 		ui.bRemoveRow->setEnabled(!ui.lwRows->selectedItems().isEmpty());
 	});
+
+	connect(ui.lwColumns, &QListWidget::doubleClicked, this,&PivotTableDock::removeColumn);
 	connect(ui.lwColumns, &QListWidget::itemSelectionChanged, this, [=]() {
 		ui.bRemoveColumn->setEnabled(!ui.lwColumns->selectedItems().isEmpty());
 	});
@@ -193,27 +197,43 @@ void PivotTableDock::readConnections() {
 		ui.cbConnection->addItem(name);
 }
 
+/*!
+ * adds the selected field to the rows
+ */
 void PivotTableDock::addRow() {
-	QString name = ui.lwFields->currentItem()->text();
-	ui.lwRows->addItem(name);
+	QString field = ui.lwFields->currentItem()->text();
+	ui.lwRows->addItem(field);
 	ui.lwFields->takeItem(ui.lwFields->currentRow());
-	m_pivotTable->addToRows(name);
+	m_pivotTable->addToRows(field);
 }
 
+/*!
+ * removes the selected field from the rows
+ */
 void PivotTableDock::removeRow() {
+	const QString& field = ui.lwRows->currentItem()->text();
 	ui.lwRows->takeItem(ui.lwRows->currentRow());
+	m_pivotTable->removeFromRows(field);
 	updateFields();
 }
 
+/*!
+ * adds the selected field to the columns
+ */
 void PivotTableDock::addColumn() {
-	QString name = ui.lwFields->currentItem()->text();
-	ui.lwColumns->addItem(name);
+	QString field = ui.lwFields->currentItem()->text();
+	ui.lwColumns->addItem(field);
 	ui.lwFields->takeItem(ui.lwFields->currentRow());
-	m_pivotTable->addToColumns(name);
+	m_pivotTable->addToColumns(field);
 }
 
+/*!
+ * removes the selected field from the columns
+ */
 void PivotTableDock::removeColumn() {
+	const QString& field = ui.lwColumns->currentItem()->text();
 	ui.lwColumns->takeItem(ui.lwColumns->currentRow());
+	m_pivotTable->removeFromColumns(field);
 	updateFields();
 }
 

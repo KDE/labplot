@@ -104,8 +104,12 @@ const QStringList& PivotTable::rows() const {
 	return d->rows;
 }
 
-void PivotTable::addToRows(const QString& dimension) {
-	d->addToRows(dimension);
+void PivotTable::addToRows(const QString& field) {
+	d->addToRows(field);
+}
+
+void PivotTable::removeFromRows(const QString& field) {
+	d->removeFromRows(field);
 }
 
 const QStringList& PivotTable::columns() const {
@@ -114,6 +118,10 @@ const QStringList& PivotTable::columns() const {
 
 void PivotTable::addToColumns(const QString& dimension) {
 	d->addToColumns(dimension);
+}
+
+void PivotTable::removeFromColumns(const QString& field) {
+	d->removeFromColumns(field);
 }
 
 bool PivotTable::exportView() const {
@@ -177,13 +185,23 @@ QString PivotTablePrivate::name() const {
 	return q->name();
 }
 
-void PivotTablePrivate::addToRows(const QString& dimension) {
-	rows << dimension;
+void PivotTablePrivate::addToRows(const QString& field) {
+	rows << field;
+	recalculate();
+}
+
+void PivotTablePrivate::removeFromRows(const QString& field) {
+	rows.removeOne(field);
 	recalculate();
 }
 
 void PivotTablePrivate::addToColumns(const QString& dimension) {
 	columns << dimension;
+	recalculate();
+}
+
+void PivotTablePrivate::removeFromColumns(const QString& field) {
+	columns.removeOne(field);
 	recalculate();
 }
 
@@ -331,7 +349,7 @@ void PivotTablePrivate::recalculate() {
 		horizontalHeaderModel->setColumnCount(1);
 		horizontalHeaderModel->setRowCount(1);
 		horizontalHeaderModel->setData(horizontalHeaderModel->index(0, 0), "Totals", Qt::DisplayRole);
-	} if (columns.isEmpty()) {
+	} else if (columns.isEmpty()) {
 		//no column labels provided, we have:
 		//* all labels on rows
 		//   -> one column for the vertical header with the number of rows equal to the number of record sets in the result query
