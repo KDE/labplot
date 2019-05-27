@@ -46,6 +46,8 @@
 #include <KMessageBox>
 #include <KSharedConfig>
 
+#include <QDebug>
+
 /*!
 	\class PivotTableView
 	\brief View class for PivotTable
@@ -177,7 +179,21 @@ void PivotTableView::print(QPrinter* printer) const {
 
  void PivotTableView::changed() {
 
-}
+     qDebug() << "in PivotTableView::changed()";
+     HierarchicalHeaderModel* horizontalHeaderModel = static_cast<HierarchicalHeaderModel*>(m_horizontalHeaderView->hierarchicalModel());
+     HierarchicalHeaderModel* verticalHeaderModel = static_cast<HierarchicalHeaderModel*>(m_verticalHeaderView->hierarchicalModel());
+
+     horizontalHeaderModel->setOrientation(Qt::Horizontal);
+     verticalHeaderModel->setOrientation(Qt::Vertical);
+
+//     qDebug() << " setting size for horizontal header";
+//     qDebug() << " rows, cols = " << horizontalHeaderModel->rowCount() << ", " << horizontalHeaderModel->columnCount();
+     horizontalHeaderModel->setBaseSectionSize(m_horizontalHeaderView->getBaseSectionSize());
+
+//     qDebug() << "settign size for vertical header";
+//     qDebug() << " rows, cols = " << verticalHeaderModel->rowCount() << ", " << verticalHeaderModel->columnCount();
+     verticalHeaderModel->setBaseSectionSize(m_verticalHeaderView->getBaseSectionSize());
+ }
 
 void PivotTableView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
 	Q_UNUSED(exportHeader);

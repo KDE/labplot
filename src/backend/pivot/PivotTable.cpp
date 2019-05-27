@@ -45,6 +45,8 @@
 #include <KSharedConfig>
 #include <KMessageBox>
 
+#include <QDebug>
+
 /*!
   \class PivotTable
   \brief Aspect providing a pivot table.
@@ -257,7 +259,7 @@ void PivotTablePrivate::recalculate() {
 
 	if (rows.isEmpty() && columns.isEmpty() && !showTotals) {
 		//notify about the new result
-		emit q->changed();
+        emit q->changed();
 		return;
 	}
 
@@ -309,7 +311,9 @@ void PivotTablePrivate::recalculate() {
 
 	}
 
-	QDEBUG(query);
+    //QDEBUG(query);
+
+    qDebug()<<"query is " << query;
 
 	//execute the query
 	QSqlQuery sqlQuery;
@@ -326,10 +330,15 @@ void PivotTablePrivate::recalculate() {
 	int firstValueIndex = rows.size() + columns.size();
 	int valuesCount = columnsCount - firstValueIndex;
 
-	DEBUG("nubmer of columns " << columnsCount);
-	DEBUG("number rows: " << rowsCount);
-	DEBUG("number values: " << valuesCount);
-	DEBUG("index of the first value column: " << firstValueIndex);
+//	DEBUG("nubmer of columns " << columnsCount);
+//	DEBUG("number rows: " << rowsCount);
+//	DEBUG("number values: " << valuesCount);
+//	DEBUG("index of the first value column: " << firstValueIndex);
+
+    qDebug() << "number of columns " << columnsCount;
+    qDebug() << "number of rows" << rowsCount;
+    qDebug() << "number of values" << valuesCount;
+    qDebug() << "index of first value column " << firstValueIndex;
 
 	qDebug()<<"model in recalculate " << horizontalHeaderModel;
 	if (!horizontalHeaderModel) {
@@ -360,7 +369,7 @@ void PivotTablePrivate::recalculate() {
 		verticalHeaderModel->setColumnCount(rows.count());
 
 		//horizontal header
-		horizontalHeaderModel->setColumnCount(valuesCount);
+        horizontalHeaderModel->setColumnCount(valuesCount);
 		horizontalHeaderModel->setRowCount(1);
 
 		//TODO: only "Totals" value at the moment, needs to be extended later when we allow to add other values
@@ -398,10 +407,10 @@ void PivotTablePrivate::recalculate() {
 		qDebug()<<"everything on rows";
 		while (sqlQuery.next()) {
 			qDebug()<<"row: " << row;
-			horizontalHeaderModel->setRowCount(row+1);
+            verticalHeaderModel->setRowCount(row+1);
 			for (int i = 0; i < firstValueIndex; ++i) {
 				qDebug()<<"adding to the horizontal header " << sqlQuery.value(i);
-				horizontalHeaderModel->setData(horizontalHeaderModel->index(row, i), sqlQuery.value(i), Qt::DisplayRole);
+                verticalHeaderModel->setData(verticalHeaderModel->index(row, i), sqlQuery.value(i), Qt::DisplayRole);
 			}
 
 			//values
@@ -415,6 +424,8 @@ void PivotTablePrivate::recalculate() {
 
 			++row;
 		}
+        verticalHeaderModel->setSpan(0,0,0,rows.count());
+
 	} else if (rows.isEmpty()) {
 		qDebug()<<"everything on columns";
 // 		for (int i = firstValueIndex; i < columnsCount; ++i) {

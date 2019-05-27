@@ -32,10 +32,10 @@
 #include <QPair>
 
 enum eRbHeaderRole {
-	COLUMN_SPAN_ROLE = Qt::UserRole+1,
-	ROW_SPAN_ROLE,
-	COLUMN_SIZE_ROLE,
-	ROW_SIZE_ROLE,
+    COLUMN_SPAN_ROLE = Qt::UserRole+1,
+    ROW_SPAN_ROLE,
+    COLUMN_SIZE_ROLE,
+    ROW_SIZE_ROLE,
 };
 
 class HierarchicalHeaderItem {
@@ -65,6 +65,10 @@ private:
 	QHash<int,QVariant> role_datas;
 };
 
+/****************************************************************************************************
+ *
+ *                              MODEL DECLARATIONS
+ * *************************************************************************************************/
 
 class HierarchicalHeaderModel: public QAbstractTableModel {
 	Q_OBJECT
@@ -85,11 +89,22 @@ public:
 	Qt::ItemFlags flags(const QModelIndex &index) const override;
 	void clear();
 
+    void setBaseSectionSize(QSize size);
+    void setOrientation(Qt::Orientation orient);
 private:
 	int m_rowCount{0};
 	int m_columnCount{0};
 	HierarchicalHeaderItem* m_rootItem{nullptr};
+
+    int *maxWidthArr;
+    QSize baseSectionSize;
+    Qt::Orientation orientation;
 };
+
+/****************************************************************************************************
+ *
+ *                              VIEW DECLARATIONS
+ * *************************************************************************************************/
 
 class HierarchicalHeaderView : public QHeaderView {
 	Q_OBJECT
@@ -103,6 +118,9 @@ public:
 	void setColumnWidth(int col, int width);
 	void setCellBackgroundColor(const QModelIndex&, const QColor&);
 	void setCellForegroundColor(const QModelIndex&, const QColor&);
+
+    QSize getBaseSectionSize() const;
+    void setNewModel(HierarchicalHeaderModel* model);
 
 protected:
 	void mousePressEvent(QMouseEvent*) override;
@@ -124,6 +142,7 @@ signals:
 
 private:
 	HierarchicalHeaderModel* m_model{nullptr};
+    QSize baseSectionSize;
 };
 
 #endif
