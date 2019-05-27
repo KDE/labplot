@@ -405,16 +405,52 @@ void PivotTablePrivate::recalculate() {
 
 	} else if (columns.isEmpty()) {
 		qDebug()<<"everything on rows";
+        int* start_span = new int[firstValueIndex];
+        int* end_span = new int[firstValueIndex];
+        QString* last_value= new QString[firstValueIndex];
+
+        verticalHeaderModel->setRowCount(row+1);
+        for (int i = 0; i < firstValueIndex; ++i) {
+            start_span[i] = 1;
+            end_span[i] = 1;
+            last_value[i] = "";
+            verticalHeaderModel->setData(verticalHeaderModel->index(row, i), rows.at(i), Qt::DisplayRole);
+        }
+        row++;
+
+
 		while (sqlQuery.next()) {
 			qDebug()<<"row: " << row;
             verticalHeaderModel->setRowCount(row+1);
-			for (int i = 0; i < firstValueIndex; ++i) {
-				qDebug()<<"adding to the horizontal header " << sqlQuery.value(i);
-                verticalHeaderModel->setData(verticalHeaderModel->index(row, i), sqlQuery.value(i), Qt::DisplayRole);
+
+//            if(sqlQuery.value(0).toString() != last_value)
+//            {
+//                if(end_span > start_span)
+//                    verticalHeaderModel->setSpan(start_span,0,end_span-start_span,0);
+//                start_span = end_span;
+//                last_value = sqlQuery.value(0).toString();
+//            }
+//            end_span = end_span + 1;
+            bool parent_header_changed = false;
+            for (int i = 0; i < firstValueIndex; ++i) {
+                QString queryVal = sqlQuery.value(i).toString();
+                qDebug()<<"adding to the horizontal header " << query;
+
+                if(queryVal != last_value[i] || parent_header_changed)
+                {
+                    verticalHeaderModel->setData(verticalHeaderModel->index(row, i), queryVal, Qt::DisplayRole);
+
+                    if(end_span[i] > start_span[i]+1)
+                        verticalHeaderModel->setSpan(start_span[i],i,end_span[i]-start_span[i],0);
+                    start_span[i] = end_span[i];
+                    parent_header_changed = true;
+                 }
+                 last_value[i] = queryVal;
+                 end_span[i] = end_span[i] + 1;
 			}
 
 			//values
-			for (int i = firstValueIndex; i < columnsCount; ++i) {
+            for (int i = firstValueIndex; i < columnsCount; ++i) {
 				QString value = sqlQuery.value(i).toString();
 				qDebug()<<"adding value " << value;
 				if (rowsCount == -1)
@@ -424,7 +460,12 @@ void PivotTablePrivate::recalculate() {
 
 			++row;
 		}
-        verticalHeaderModel->setSpan(0,0,0,rows.count());
+        for(int i = 0; i < firstValueIndex; ++i){
+            if(end_span[i] > start_span[i]){
+                verticalHeaderModel->setSpan(start_span[i],i,end_span[i]-start_span[i],0);
+            }
+        }
+        verticalHeaderModel->setSpan(1,0,0,rows.count());
 
 	} else if (rows.isEmpty()) {
 		qDebug()<<"everything on columns";

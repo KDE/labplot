@@ -167,6 +167,7 @@ void HierarchicalHeaderModel::setRowCount(int count) {
 void HierarchicalHeaderModel::setColumnCount(int count) {
 	m_columnCount = count;
 
+    if(m_columnCount == 0) return;
     maxWidthArr = new int[m_columnCount];
     for(int col=0; col<m_columnCount; col++)
        maxWidthArr[col] = 50;
