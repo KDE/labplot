@@ -114,6 +114,7 @@ private:
 	QString m_undoViewEmptyLabel;
 	bool m_suppressCurrentSubWindowChangedEvent{false};
 	bool m_closing{false};
+	bool m_projectClosing{false};
 	bool m_autoSaveActive{false};
 	QTimer m_autoSaveTimer;
 	bool m_showMemoryInfo{true};

@@ -281,7 +281,7 @@ void MainWin::initGUI(const QString& fileName) {
 			newWorksheet();
 		} else if (load == 3) { //open last used project
 			if (!m_recentProjectsAction->urls().isEmpty()) {
-				QDEBUG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().first());
+				QDEBUG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().constFirst());
 				openRecentProject( m_recentProjectsAction->urls().constFirst() );
 			}
 		}
@@ -692,7 +692,7 @@ void MainWin::updateGUI() {
 	if (m_project->isLoading())
 		return;
 
-	if (m_closing)
+	if (m_closing || m_projectClosing)
 		return;
 
 	KXMLGUIFactory* factory = this->guiFactory();
@@ -1021,11 +1021,13 @@ bool MainWin::closeProject() {
 	if (warnModified())
 		return false;
 
+	m_projectClosing = true;
 	delete m_aspectTreeModel;
 	m_aspectTreeModel = nullptr;
 	delete m_project;
 	m_project = nullptr;
 	m_currentFileName.clear();
+	m_projectClosing = false;
 
 	//update the UI if we're just closing a project
 	//and not closing(quitting) the application
