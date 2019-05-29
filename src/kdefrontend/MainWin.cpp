@@ -37,6 +37,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/LiveDataSource.h"
+#include "backend/datasources/DatasetHandler.h"
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
@@ -65,6 +66,7 @@
 #include "commonfrontend/widgets/MemoryWidget.h"
 
 #include "kdefrontend/datasources/ImportFileDialog.h"
+#include "kdefrontend/datasources/ImportDatasetDialog.h"
 #include "kdefrontend/datasources/ImportProjectDialog.h"
 #include "kdefrontend/datasources/ImportSQLDatabaseDialog.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
@@ -360,6 +362,11 @@ void MainWin::initActions() {
 	actionCollection()->addAction("new_live_datasource", m_newLiveDataSourceAction);
 	connect(m_newLiveDataSourceAction, &QAction::triggered, this, &MainWin::newLiveDataSourceActionTriggered);
 
+	m_newDatasetAction = new QAction(QIcon::fromTheme("application-octet-stream"), i18n("Dataset"), this);
+	m_newDatasetAction->setWhatsThis(i18n("Imports data from an online dataset"));
+	actionCollection()->addAction("new_dataset_datasource", m_newDatasetAction);
+	connect(m_newDatasetAction, &QAction::triggered, this, &MainWin::newDatasetActionTriggered);
+
 	//Import/Export
 	m_importFileAction = new QAction(QIcon::fromTheme("document-import"), i18n("From File"), this);
 	actionCollection()->setDefaultShortcut(m_importFileAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
@@ -495,6 +502,7 @@ void MainWin::initMenus() {
 	m_newMenu->addAction(m_newDatapickerAction);
 	m_newMenu->addSeparator();
 	m_newMenu->addAction(m_newLiveDataSourceAction);
+	m_newMenu->addAction(m_newDatasetAction);
 
 	//import menu
 	m_importMenu = new QMenu(this);
@@ -1963,6 +1971,19 @@ void MainWin::newLiveDataSourceActionTriggered() {
 			dlg->importToLiveDataSource(dataSource, statusBar());
 			addAspectToProject(dataSource);
 		}
+	}
+	delete dlg;
+}
+
+/*!
+ * \brief adds a new dataset to the current project
+ */
+void MainWin::newDatasetActionTriggered() {
+	ImportDatasetDialog* dlg = new ImportDatasetDialog(this);
+	if (dlg->exec() == QDialog::Accepted) {
+			DatasetHandler* dataset = new DatasetHandler(i18n("Dataset%1", 1), false);
+			dlg->importToDataset(dataset, statusBar());
+			addAspectToProject(dataset);
 	}
 	delete dlg;
 }

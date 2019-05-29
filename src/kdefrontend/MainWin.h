@@ -138,6 +138,7 @@ private:
 	QAction* m_newMatrixAction;
 	QAction* m_newWorksheetAction;
 	QAction* m_newNotesAction;
+	QAction* m_newDatasetAction;
 	QAction* m_newLiveDataSourceAction;
 	QAction* m_newSqlDataSourceAction;
 	QAction* m_newScriptAction;
@@ -286,6 +287,7 @@ private slots:
 	void newDatapicker();
 	//TODO: void newScript();
 	void newLiveDataSourceActionTriggered();
+	void newDatasetActionTriggered();
 
 	void createContextMenu(QMenu*) const;
 	void createFolderContextMenu(const Folder*, QMenu*) const;

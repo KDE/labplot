@@ -1,0 +1,51 @@
+{
+  "categories": [
+    {
+      "category_name": "Statistics",
+      "subcategories": [
+        {
+          "subcategory_name": "Demographics",
+          "datasets": [
+            "bigcity"
+          ]
+        },
+        {
+          "subcategory_name": "Traffic",
+          "datasets": [
+            "amis"
+          ]
+        }
+      ]
+    },
+    {
+      "category_name": "Nature",
+      "subcategories": [
+        {
+          "subcategory_name": "Animals",
+          "datasets": [
+            "beaver",
+            "catsM"
+          ]
+        }
+      ]
+    },
+    {
+      "category_name": "Medicine",
+      "subcategories": [
+        {
+          "subcategory_name": "Oncology",
+          "datasets": [
+            "aml"
+          ]
+        },
+        {
+          "subcategory_name": "AIDS",
+          "datasets": [
+            "aids",
+            "cd4"
+          ]
+        }
+      ]
+    }
+  ]
+}
