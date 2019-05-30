@@ -43,6 +43,8 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/pivot/PivotTable.h"
+#include "backend/t_test/TTest.h"
+
 
 #include <QKeyEvent>
 #include <QClipboard>
@@ -220,6 +222,7 @@ void SpreadsheetView::initActions() {
 	action_go_to_cell = new QAction(QIcon::fromTheme("go-jump"), i18n("&Go to Cell"), this);
 	action_statistics_all_columns = new QAction(QIcon::fromTheme("view-statistics"), i18n("Statisti&cs"), this );
 	action_pivot_table = new QAction(QIcon::fromTheme("table"), i18n("Pivot Table"), this);
+    action_do_ttest = new QAction(i18n("T Test"), this);
 
 	// column related actions
 	action_insert_column_left = new QAction(QIcon::fromTheme("edit-table-insert-column-left"), i18n("Insert Column Left"), this);
@@ -471,6 +474,12 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addMenu(m_columnManipulateDataMenu);
 		m_columnMenu->addSeparator();
 
+        //for ttest statistics;
+        m_columnHypothesisTestingMenu = new QMenu("Hypothesis Testing",this);
+        m_columnHypothesisTestingMenu->addAction(action_do_ttest);
+        m_columnMenu->addMenu(m_columnHypothesisTestingMenu);
+        m_columnMenu->addSeparator();
+
 		m_columnSortMenu = new QMenu(i18n("Sort"), this);
 		m_columnSortMenu->setIcon(QIcon::fromTheme("view-sort-ascending"));
 		m_columnSortMenu->addAction(action_sort_asc_column);
@@ -558,6 +567,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_go_to_cell, &QAction::triggered, this,
 			static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
 	connect(action_pivot_table, &QAction::triggered, this, &SpreadsheetView::createPivotTable);
+    connect(action_do_ttest, &QAction::triggered, this, &SpreadsheetView::doTTest);
 
 	connect(action_insert_column_left, &QAction::triggered, this, &SpreadsheetView::insertColumnLeft);
 	connect(action_insert_column_right, &QAction::triggered, this, &SpreadsheetView::insertColumnRight);
@@ -764,8 +774,16 @@ void SpreadsheetView::createPivotTable() {
 	PivotTable* pivot = new PivotTable(i18n("Pivot Table for %1", m_spreadsheet->name()));
 	pivot->setDataSourceType(PivotTable::DataSourceSpreadsheet);
 	pivot->setDataSourceSpreadsheet(m_spreadsheet);
-	m_spreadsheet->parentAspect()->addChild(pivot);
+    m_spreadsheet->parentAspect()->addChild(pivot);
 }
+
+void SpreadsheetView::doTTest()
+{
+    TTest* ttest = new TTest(i18n("doing T Test for %1", m_spreadsheet->name()));
+    ttest->setColumns(this->selectedColumns());
+    ttest->performTwoSampleTest();
+}
+
 
 void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to) {
 	Q_UNUSED(index);

@@ -236,6 +236,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
 	${BACKEND_DIR}/matrix/MatrixModel.cpp
 	${BACKEND_DIR}/pivot/PivotTable.cpp
+        ${BACKEND_DIR}/t_test/TTest.cpp
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp

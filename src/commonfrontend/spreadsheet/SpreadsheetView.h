@@ -130,6 +130,7 @@ private:
 	QAction* action_go_to_cell;
 	QAction* action_statistics_all_columns;
 	QAction* action_pivot_table;
+    QAction* action_do_ttest;
 
 	//column related actions
 	QAction* action_insert_column_left;
@@ -192,6 +193,7 @@ private:
 	QMenu* m_spreadsheetMenu;
 	QMenu* m_plotDataMenu;
 	QMenu* m_analyzePlotMenu;
+    QMenu* m_columnHypothesisTestingMenu{nullptr};
 
 public slots:
 	void createContextMenu(QMenu*);
@@ -206,6 +208,7 @@ private slots:
 	void goToPreviousColumn();
 	void goToCell();
 	void createPivotTable();
+    void doTTest();
 	void sortSpreadsheet();
 	void sortDialog(QVector<Column*>);
 
