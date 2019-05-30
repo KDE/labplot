@@ -9,45 +9,45 @@
 #include <KLocalizedString>
 
 
-TTest::TTest(const QString &name){
+TTest::TTest(const QString &name) {
     Q_UNUSED(name);
 }
 
-void TTest::setDataSourceSpreadsheet(Spreadsheet *spreadsheet){
+void TTest::setDataSourceSpreadsheet(Spreadsheet *spreadsheet) {
     dataSourceSpreadsheet = spreadsheet;
 
     m_rowCount = dataSourceSpreadsheet->rowCount();
     m_columnCount = dataSourceSpreadsheet->columnCount();
-    QDEBUG("in ttest::setDataSourceSpreadsheet");
+    DEBUG("in ttest::setDataSourceSpreadsheet")
 
     // now finding the number of columns and rows;
-    QDEBUG("row count is " << m_rowCount);
-    QDEBUG("row count is " << m_columnCount);
-    QDEBUG("exiting ttest::setDataSourceSpreadsheet");
+    DEBUG("row count is " << m_rowCount)
+    DEBUG("row count is " << m_columnCount)
+    DEBUG("exiting ttest::setDataSourceSpreadsheet")
 }
 
-void TTest::setColumns(QVector<Column*> cols){
+void TTest::setColumns(QVector<Column*> cols) {
     m_columns = cols;
     return;
 }
 
-void TTest::performTwoSampleTest(){
+void TTest::performTwoSampleTest() {
     QMessageBox* msg_box = new QMessageBox();
     // checking for cols;
-    if(m_columns.size() != 2){
+    if (m_columns.size() != 2) {
         msg_box->setText(i18n("Inappropriate number of columns selected"));
         msg_box->exec();
         return;
     }
 
     bool modeOk = true;
-    for (int i = 0; i < 2; i++){
+    for (int i = 0; i < 2; i++) {
         if(m_columns[0]->columnMode() == AbstractColumn::Numeric || m_columns[i]->columnMode() == AbstractColumn::Integer)
             continue;
         modeOk = false;
     }
 
-    if(!modeOk){
+    if (!modeOk) {
         msg_box->setText(i18n("select only columns with numbers"));
         msg_box->exec();
         return;
@@ -59,12 +59,12 @@ void TTest::performTwoSampleTest(){
 
     for (int i = 0; i < 2; i++) {
         findStats(m_columns[i], n[i], sum[i], mean[i], std[i]);
-        QDEBUG("for " << i);
-        QDEBUG("n is "<<n[i]);
-        QDEBUG("mean is " << mean[i]);
-        QDEBUG("std is " << std[i]);
+        DEBUG("for " << i);
+        DEBUG("n is "<<n[i]);
+        DEBUG("mean is " << mean[i]);
+        DEBUG("std is " << std[i]);
 
-        if(n[i] < 1) {
+        if (n[i] < 1) {
             msg_box->setText(i18n("atleast one of selected column empty"));
             msg_box->exec();
             return;
@@ -115,6 +115,3 @@ void TTest::findStats(Column* column, int &count, double &sum, double &mean, dou
     std = qSqrt(std);
     return;
 }
-
-
-

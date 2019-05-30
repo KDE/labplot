@@ -7,7 +7,7 @@ class Spreadsheet;
 class QString;
 class Column;
 
-class TTest{
+class TTest {
 public:
     explicit TTest(const QString& name);
     void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
