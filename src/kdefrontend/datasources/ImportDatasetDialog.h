@@ -16,7 +16,7 @@ public:
     ~ImportDatasetDialog() override;
 
     QString selectedObject() const override;
-    void importToDataset(DatasetHandler*, QStatusBar*) const;
+	void importToDataset(DatasetHandler*, QStatusBar*) const;
 
     void importTo(QStatusBar*) const override;
 

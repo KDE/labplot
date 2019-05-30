@@ -36,10 +36,13 @@ Copyright            : (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
 #include "QDebug"
 #include "QTreeWidget"
 #include "backend/datasources/DatasetHandler.h"
+#include "QMessageBox"
+#include "QDir"
 
 ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
-	m_datasetCompleter(new QCompleter),
-	m_categoryCompleter(new QCompleter){
+	m_categoryCompleter(new QCompleter),
+	m_datasetCompleter(new QCompleter)
+{
 
 	ui.setupUi(this);
 	loadDatasetCategoriesFromJson();
@@ -57,13 +60,10 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 }
 
 ImportDatasetWidget::~ImportDatasetWidget() {
-	qDebug("delete 1");
 	if(m_categoryCompleter != nullptr)
 		delete m_categoryCompleter;
-	qDebug("delete 2");
 	if(m_datasetCompleter != nullptr)
 		delete m_datasetCompleter;
-	qDebug("fuck it");
 }
 
 void ImportDatasetWidget::loadDatasetCategoriesFromJson() {
@@ -192,8 +192,23 @@ QString ImportDatasetWidget::getSelectedDataset() {
 }
 
 void ImportDatasetWidget::loadDatasetToProcess(DatasetHandler* datasetHandler) {
-	QString filePath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "datasets/"+ getSelectedDataset() + ".json");
-	datasetHandler->processMetadata(filePath);
+	bool found = false;
+
+	for(QString base : QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)) {
+		QString filePath = base + QDir::separator() + "datasets" + QDir::separator() + getSelectedDataset() + ".json";
+
+		if(QFile::exists(filePath)) {
+			datasetHandler->processMetadata(filePath);
+			found = true;
+			break;
+		}
+		else
+			qDebug("File: %s doesn't exist", qPrintable(filePath));
+	}
+
+	if(!found) {
+		QMessageBox::critical(this, i18n("Can't locate file"), i18n("The metadata file for the choosen dataset can't be located"));
+	}
 }
 
 AbstractFileFilter* ImportDatasetWidget::currentFileFilter() const {

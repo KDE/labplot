@@ -31,6 +31,11 @@ Copyright	: (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
 #include "QString"
 #include "backend/spreadsheet/Spreadsheet.h"
 
+class QJsonDocument;
+class AsciiFilter;
+class QNetworkAccessManager;
+class QNetworkReply;
+
 class DatasetHandler : public Spreadsheet {
         Q_OBJECT
 
@@ -38,6 +43,29 @@ public:
         DatasetHandler(const QString& name, bool loading = false);
         ~DatasetHandler() override;
 		void processMetadata(const QString& path);
+
+private:
+		AsciiFilter* m_filter;
+		QJsonDocument*  m_document;
+		QNetworkAccessManager* m_downloadManager;
+		QNetworkReply* m_currentDownload;
+		QString m_fileName;
+
+		void loadJsonDocument(const QString& path);
+		void configureFilter();
+		void configureSpreadsheet();
+		void prepareForDataset();
+		void processDataset();
+		void doDownload(const QUrl &url);
+		bool isHttpRedirect(QNetworkReply *reply);
+		QString saveFileName(const QUrl &url);
+		bool saveToDisk(const QString &filename, QIODevice *data);
+
+private slots:
+		void downloadFinished(QNetworkReply *reply);
+
+signals:
+		void downloadCompleted();
 };
 
 #endif // DATASETHANDLER_H

@@ -42,7 +42,7 @@
           "subcategory_name": "AIDS",
           "datasets": [
             "aids",
-            "cd4"
+            "CD4"
           ]
         }
       ]

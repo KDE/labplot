@@ -1981,9 +1981,23 @@ void MainWin::newLiveDataSourceActionTriggered() {
 void MainWin::newDatasetActionTriggered() {
 	ImportDatasetDialog* dlg = new ImportDatasetDialog(this);
 	if (dlg->exec() == QDialog::Accepted) {
-			DatasetHandler* dataset = new DatasetHandler(i18n("Dataset%1", 1), false);
+			DatasetHandler* dataset = new DatasetHandler(i18n("Dataset%1", 1), false);			
 			dlg->importToDataset(dataset, statusBar());
-			addAspectToProject(dataset);
+
+			QTimer timer;
+			timer.setSingleShot(true);
+			QEventLoop loop;
+			connect(dataset,  &DatasetHandler::downloadCompleted, &loop, &QEventLoop::quit);
+			connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+			timer.start(1500);
+			loop.exec();
+
+			if(timer.isActive()){
+				timer.stop();
+				addAspectToProject(dataset);
+			}
+			else
+				delete dataset;
 	}
 	delete dlg;
 }
