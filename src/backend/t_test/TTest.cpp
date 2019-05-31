@@ -29,7 +29,10 @@
 #include "TTest.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
-//#include "commonfrontend/spreadsheet/SpreadsheetView.h"
+
+extern "C" {
+#include "backend/nsl/nsl_stats.h"
+}
 
 #include <QVector>
 #include <QMessageBox>
@@ -106,7 +109,11 @@ void TTest::performTwoSampleTest() {
     QDEBUG("sp is " << sp);
 
     double t = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
-    QString text = i18n("T value for test is %1",t);
+
+    // now finding p value from t value
+    double p_value = nsl_stats_tdist_p(t, df);
+
+    QString text = i18n("T value for test is %1 and\n p value is %2",t, p_value);
     msg_box->setText(text);
     msg_box->exec();
     return;
