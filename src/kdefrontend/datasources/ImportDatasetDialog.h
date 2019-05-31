@@ -13,19 +13,16 @@ class ImportDatasetDialog : public ImportDialog {
 
 public:
     explicit ImportDatasetDialog(MainWin*, const QString& fileName = QString());
-    ~ImportDatasetDialog() override;
-
+	~ImportDatasetDialog() override;
     QString selectedObject() const override;
 	void importToDataset(DatasetHandler*, QStatusBar*) const;
-
     void importTo(QStatusBar*) const override;
-
 
    private:
 	ImportDatasetWidget* m_importDatasetWidget;
 
 protected  slots:
-        void checkOkButton() override;
+		void checkOkButton() override;
 
 };
 

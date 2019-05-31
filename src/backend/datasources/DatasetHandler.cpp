@@ -193,7 +193,6 @@ QString DatasetHandler::saveFileName(const QUrl &url)
 	if (basename.isEmpty())
 		basename = "download";
 
-
 	QString baseDir = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first();
 	QString containingDir = ".labplot";
 	QString fileName = baseDir + QDir::separator() + containingDir + QDir::separator() + basename;
@@ -211,7 +210,6 @@ QString DatasetHandler::saveFileName(const QUrl &url)
 
 		fileName += QString::number(i);
 	}
-
 	return fileName;
 }
 

@@ -56,7 +56,6 @@ ImportDatasetDialog::ImportDatasetDialog(MainWin* parent, const QString& fileNam
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	setWindowTitle(i18nc("@title:window", "Add new Dataset"));
-	setWindowIcon(QIcon::fromTheme("document-import-database"));
 
 	create();
 

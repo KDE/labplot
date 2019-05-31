@@ -27,6 +27,7 @@ Copyright            : (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
  ***************************************************************************/
 
 #include "ImportDatasetWidget.h"
+#include "DatasetMetadataManagerDialog.h"
 #include "QJsonDocument"
 #include "QJsonArray"
 #include "QJsonObject"
@@ -43,8 +44,13 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	m_categoryCompleter(new QCompleter),
 	m_datasetCompleter(new QCompleter)
 {
-
+	QString baseDir = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first();
+	QString containingDir = ".labplot";
+	m_jsonDir=baseDir + QDir::separator() + containingDir + QDir::separator();
 	ui.setupUi(this);
+
+	if(!QFile(m_jsonDir + "DatasetCategories.json").exists())
+		downloadCategoryFile();
 	loadDatasetCategoriesFromJson();
 
 	ui.lwDatasets->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -54,6 +60,7 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	connect(ui.leSearchDatasets, &QLineEdit::textChanged, this, &ImportDatasetWidget::scrollToDatasetListItem);
 	connect(ui.leSearchCategories, &QLineEdit::textChanged, this, &ImportDatasetWidget::scrollToCategoryTreeItem);
 	connect(ui.bRefresh, &QPushButton::clicked, this, &ImportDatasetWidget::loadDatasetCategoriesFromJson);
+	connect(ui.bNewDataset, &QPushButton::clicked, this, &ImportDatasetWidget::showDatasetMetadataManager);
 	connect(ui.lwDatasets, &QListWidget::itemSelectionChanged, [this]() {
 		emit datasetSelected();
 	});
@@ -66,12 +73,17 @@ ImportDatasetWidget::~ImportDatasetWidget() {
 		delete m_datasetCompleter;
 }
 
+QString ImportDatasetWidget::locateCategoryJsonFile() {
+	qDebug() << "Locating category file" << QStandardPaths::locate(QStandardPaths::AppDataLocation, "datasets/DatasetCategories.json");
+	return QStandardPaths::locate(QStandardPaths::AppDataLocation, "datasets/DatasetCategories.json");
+}
+
 void ImportDatasetWidget::loadDatasetCategoriesFromJson() {
 	ui.lwDatasets->clear();
 	ui.twCategories->clear();
 	m_datasetsMap.clear();
 
-	QString filePath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "datasets/DatasetCategories.json");
+	QString filePath = m_jsonDir + "DatasetCategories.json";
 	QFile file(filePath);
 	if (file.open(QIODevice::ReadOnly)) {
 		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
@@ -188,25 +200,17 @@ QString ImportDatasetWidget::getSelectedDataset() {
 		return ui.lwDatasets->selectedItems().at(0)->text();
 	} else
 		return QString();
-
 }
 
 void ImportDatasetWidget::loadDatasetToProcess(DatasetHandler* datasetHandler) {
-	bool found = false;
+	QString fileName = getSelectedDataset() + ".json";
+	downloadDatasetFile(fileName);
 
-	for(QString base : QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)) {
-		QString filePath = base + QDir::separator() + "datasets" + QDir::separator() + getSelectedDataset() + ".json";
+	QString filePath = m_jsonDir + fileName;
 
-		if(QFile::exists(filePath)) {
-			datasetHandler->processMetadata(filePath);
-			found = true;
-			break;
-		}
-		else
-			qDebug("File: %s doesn't exist", qPrintable(filePath));
-	}
-
-	if(!found) {
+	if(QFile::exists(filePath)) {
+		datasetHandler->processMetadata(filePath);
+	} else  {
 		QMessageBox::critical(this, i18n("Can't locate file"), i18n("The metadata file for the choosen dataset can't be located"));
 	}
 }
@@ -214,3 +218,31 @@ void ImportDatasetWidget::loadDatasetToProcess(DatasetHandler* datasetHandler) {
 AbstractFileFilter* ImportDatasetWidget::currentFileFilter() const {
 	return m_currentFilter.get();
 }
+
+void ImportDatasetWidget::showDatasetMetadataManager() {
+
+	DatasetMetadataManagerDialog* dlg = new DatasetMetadataManagerDialog(this, m_datasetsMap);
+
+	if (dlg->exec() == QDialog::Accepted) {
+		//updateCategoryJson() -- will be implemented - TODO
+		QString pathToJson =  m_jsonDir + "DatasetCategories.json";
+		QString dirPath = QFileInfo(pathToJson).dir().absolutePath();
+		dlg->updateDocument(pathToJson);
+		dlg->createNewMetadata(dirPath);
+	}
+	delete dlg;
+}
+
+void ImportDatasetWidget::downloadCategoryFile() {
+	QString fileNameOld = QStandardPaths::locate(QStandardPaths::AppDataLocation, "datasets/DatasetCategories.json");
+	QString fileNameNew =m_jsonDir + "DatasetCategories.json";
+	QFile::copy(fileNameOld, fileNameNew);
+}
+
+void ImportDatasetWidget::downloadDatasetFile(const QString &datasetName) {
+	QString fileNameOld = QStandardPaths::locate(QStandardPaths::AppDataLocation, QString("datasets") + QDir::separator() + datasetName);
+	QString fileNameNew = m_jsonDir + datasetName;
+	QFile::copy(fileNameOld, fileNameNew);
+}
+
+

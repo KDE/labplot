@@ -26,6 +26,8 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerWidget.cpp
+    ${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerDialog.cpp
+    ${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/HDF5OptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FileInfoDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
@@ -115,6 +117,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/databasemanagerwidget.ui
+    ${KDEFRONTEND_DIR}/ui/datasources/datasetmetadatamanagerwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/hdf5optionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
     ${KDEFRONTEND_DIR}/ui/datasources/importdatasetwidget.ui

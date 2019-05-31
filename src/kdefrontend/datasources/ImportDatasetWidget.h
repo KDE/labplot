@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : ImportDatasetWidget.h
-    Project              : LabPlot
-    Description          : import online dataset widget
-    --------------------------------------------------------------------
-    Copyright            : (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
+	File                 : ImportDatasetWidget.h
+	Project              : LabPlot
+	Description          : import online dataset widget
+	--------------------------------------------------------------------
+	Copyright            : (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
 
  ***************************************************************************/
 
@@ -39,32 +39,37 @@
 class DatasetHandler;
 
 class ImportDatasetWidget : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit ImportDatasetWidget(QWidget* parent);
-    ~ImportDatasetWidget() override;
-    AbstractFileFilter* currentFileFilter() const ;
+	explicit ImportDatasetWidget(QWidget* parent);
+	~ImportDatasetWidget() override;
+	AbstractFileFilter* currentFileFilter() const ;
 	QString getSelectedDataset();
 	void loadDatasetToProcess(DatasetHandler* datasetHandler);
+	QString locateCategoryJsonFile();
 
 
 private:    
-    Ui::ImportDatasetWidget ui;
-    mutable std::unique_ptr<AbstractFileFilter> m_currentFilter;
+	Ui::ImportDatasetWidget ui;
+	mutable std::unique_ptr<AbstractFileFilter> m_currentFilter;
 	QMap<QString, QMap<QString, QVector<QString>>> m_datasetsMap;
 	QString m_selectedSubcategory;
 	QCompleter* m_categoryCompleter;
 	QCompleter* m_datasetCompleter;
+	QString m_jsonDir="";
 
+	void downloadCategoryFile();
+	void downloadDatasetFile(const QString&);
 	void updateDatasetCompleter();
 	void updateCategoryCompleter();
-    void loadDatasetCategoriesFromJson();
+	void loadDatasetCategoriesFromJson();
 	void listDatasetsForSubcategory(QTreeWidgetItem* item, int column);
 
 private slots:
 	void scrollToCategoryTreeItem(const QString& rootName);
 	void scrollToDatasetListItem(const QString& rootName);
+	void showDatasetMetadataManager();
 
 signals:
 	void datasetSelected();
