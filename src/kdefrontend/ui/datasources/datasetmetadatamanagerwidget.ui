@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DatasetMetadataManagerWidget</class>
+ <widget class="QWidget" name="DatasetMetadataManagerWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>457</width>
+    <height>469</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="lCategory">
+     <property name="text">
+      <string>Category</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QComboBox" name="cbSubcategory">
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lSubcategory">
+     <property name="text">
+      <string>Subcategory</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QLineEdit" name="leDownloadURL"/>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="lDescription">
+     <property name="text">
+      <string>Description</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="lDatasetName">
+     <property name="text">
+      <string>Full name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="lDownloadUrl">
+     <property name="text">
+      <string>Download URL</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLineEdit" name="leDatasetName"/>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QGroupBox" name="gFilter">
+     <property name="title">
+      <string>Filter Options</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lComment">
+        <property name="text">
+         <string>Comment character:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lSeparatingCharacter">
+        <property name="text">
+         <string>Separating string:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lNumberFormat">
+        <property name="text">
+         <string>Number format:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="lDateTimeFormat">
+        <property name="text">
+         <string>DateTime format:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1" colspan="2">
+       <widget class="QCheckBox" name="chbHeader">
+        <property name="text">
+         <string>Use the first row to name the vectors</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QCheckBox" name="chbCreateIndex">
+        <property name="text">
+         <string>Create index column</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QCheckBox" name="chbSimplifyWhitespaces">
+        <property name="toolTip">
+         <string>Removes the whitespaces from the start and the end, and replaces each sequence of internal whitespaces with a single space.</string>
+        </property>
+        <property name="text">
+         <string>Simplify whitespaces</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QCheckBox" name="chbSkipEmptyParts">
+        <property name="text">
+         <string>Skip empty parts</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QCheckBox" name="chbRemoveQuotes">
+        <property name="text">
+         <string>Remove quotes</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <widget class="KComboBox" name="cbCommentCharacter">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="2">
+       <widget class="KComboBox" name="cbSeparatingCharacter">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" colspan="2">
+       <widget class="QComboBox" name="cbNumberFormat"/>
+      </item>
+      <item row="3" column="1" colspan="2">
+       <widget class="KComboBox" name="cbDateTimeFormat">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="cbCategory">
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="lFileName">
+     <property name="text">
+      <string>Short name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="leFileName"/>
+   </item>
+   <item row="5" column="1">
+    <widget class="QTextEdit" name="teDescription"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
