@@ -46,6 +46,8 @@ public:
 	void setPathesToLoad(const QStringList&);
 	const QStringList& pathesToLoad() const;
 
+	bool isDraggable() const override;
+	QVector<AspectType> dropableOn() const override;
 	void processDropEvent(QDropEvent*) override;
 
 private:

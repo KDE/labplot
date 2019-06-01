@@ -84,6 +84,17 @@ QMenu* Folder::createContextMenu() {
 	return nullptr;
 }
 
+bool Folder::isDraggable() const {
+	if (dynamic_cast<const Project*>(this))
+		return false;
+	else
+		return true;
+}
+
+QVector<AspectType> Folder::dropableOn() const {
+	return QVector<AspectType>{AspectType::Folder, AspectType::Project};
+}
+
 void Folder::processDropEvent(QDropEvent* event) {
 	const QMimeData* mimeData = event->mimeData();
 	if (!mimeData)
@@ -95,13 +106,26 @@ void Folder::processDropEvent(QDropEvent* event) {
 	QDataStream stream(&data, QIODevice::ReadOnly);
 	stream >> vec;
 
-	//reparent AbstractPart objects only
+	//reparent AbstractPart and Folder objects only
+	AbstractAspect* lastMovedAspect{nullptr};
 	for (auto a : vec) {
 		auto* aspect = (AbstractAspect*)a;
 		auto* part = dynamic_cast<AbstractPart*>(aspect);
-		if (part)
+		if (part) {
 			part->reparent(this);
+			lastMovedAspect = part;
+		} else {
+			auto* folder = dynamic_cast<Folder*>(aspect);
+			if (folder) {
+				folder->reparent(this);
+				lastMovedAspect = folder;
+			}
+		}
 	}
+
+	//select the last moved aspect in the project explorer
+	if (lastMovedAspect)
+		lastMovedAspect->setSelected(true);
 }
 
 /**
@@ -263,7 +287,6 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 #endif
 #ifdef HAVE_MQTT
 	} else if (element_name == QLatin1String("MQTTClient")) {
-		qDebug()<<"Load MQTTClient";
 		MQTTClient* client = new MQTTClient(QString());
 		if (!client->load(reader, preview)) {
 			delete client;
