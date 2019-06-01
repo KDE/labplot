@@ -50,7 +50,9 @@ DatasetHandler::DatasetHandler(const QString& name, bool loading) :  Spreadsheet
 }
 
 DatasetHandler::~DatasetHandler(){
-
+	delete m_document;
+	delete m_downloadManager;
+	delete m_filter;
 }
 
 void DatasetHandler::processMetadata(const QString& path) {

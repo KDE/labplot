@@ -58,18 +58,24 @@ private:
 	QCompleter* m_categoryCompleter;
 	QCompleter* m_datasetCompleter;
 	QString m_jsonDir="";
+	bool m_loadingCategories;
+	QString m_selectedCategory;
 
 	void downloadCategoryFile();
 	void downloadDatasetFile(const QString&);
 	void updateDatasetCompleter();
 	void updateCategoryCompleter();
 	void loadDatasetCategoriesFromJson();
-	void listDatasetsForSubcategory(QTreeWidgetItem* item, int column);
+	void listDatasetsForSubcategory(QTreeWidgetItem* item);
+	void restoreSelectedSubcategory();
+	void highlightLocalMetadataFiles();
 
 private slots:
 	void scrollToCategoryTreeItem(const QString& rootName);
 	void scrollToDatasetListItem(const QString& rootName);
 	void showDatasetMetadataManager();
+	void refreshCategories();
+	void clearCache();
 
 signals:
 	void datasetSelected();
