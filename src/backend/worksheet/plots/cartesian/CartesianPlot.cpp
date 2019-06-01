@@ -780,7 +780,6 @@ void CartesianPlot::processDropEvent(QDropEvent* event) {
 		dataChanged();
 }
 
-
 bool CartesianPlot::isPanningActive() const {
 	Q_D(const CartesianPlot);
 	return d->panningStarted;

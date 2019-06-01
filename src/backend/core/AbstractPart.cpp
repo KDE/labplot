@@ -152,3 +152,11 @@ QMenu* AbstractPart::createContextMenu() {
 
 	return menu;
 }
+
+bool AbstractPart::isDraggable() const {
+	return true;
+}
+
+QVector<AspectType> AbstractPart::dropableOn() const {
+	return QVector<AspectType>{AspectType::Folder, AspectType::Project};
+}

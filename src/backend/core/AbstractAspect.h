@@ -34,14 +34,16 @@
 #include <QVector>
 
 class AbstractAspectPrivate;
+class Folder;
 class Project;
-class QUndoStack;
+class XmlStreamReader;
+
 class QDateTime;
-class QUndoCommand;
+class QDropEvent;
 class QIcon;
 class QMenu;
-class Folder;
-class XmlStreamReader;
+class QUndoCommand;
+class QUndoStack;
 class QXmlStreamWriter;
 
 /// Information about class inheritance
@@ -157,6 +159,10 @@ public:
 	void removeChild(AbstractAspect*);
 	void removeAllChildren();
 	virtual QVector<AbstractAspect*> dependsOn() const;
+
+	virtual bool isDraggable() const;
+	virtual QVector<AspectType> dropableOn() const;
+	virtual void processDropEvent(QDropEvent*) {};
 
 	template <class T> T* ancestor() const {
 		AbstractAspect* parent = parentAspect();

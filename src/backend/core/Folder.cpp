@@ -46,7 +46,9 @@
 #endif
 #include "backend/worksheet/Worksheet.h"
 
+#include <QDropEvent>
 #include <QIcon>
+#include <QMimeData>
 #include <KLocalizedString>
 
 /**
@@ -55,15 +57,12 @@
  */
 
 Folder::Folder(const QString &name, AspectType type) : AbstractAspect(name, type) {
-
 	//when the child being removed is a LiveDataSource, stop reading from the source
 	connect(this, &AbstractAspect::aspectAboutToBeRemoved, this, [=](const AbstractAspect* aspect) {
 		const LiveDataSource* lds = dynamic_cast<const LiveDataSource*>(aspect);
 		if (lds)
 			const_cast<LiveDataSource*>(lds)->pauseReading();
 	} );
-
-
 }
 
 QIcon Folder::icon() const {
@@ -83,6 +82,26 @@ QMenu* Folder::createContextMenu() {
 	)
 		return project()->createFolderContextMenu(this);
 	return nullptr;
+}
+
+void Folder::processDropEvent(QDropEvent* event) {
+	const QMimeData* mimeData = event->mimeData();
+	if (!mimeData)
+		return;
+
+	//deserialize the mime data to the vector of aspect pointers
+	QByteArray data = mimeData->data(QLatin1String("labplot-dnd"));
+	QVector<quintptr> vec;
+	QDataStream stream(&data, QIODevice::ReadOnly);
+	stream >> vec;
+
+	//reparent AbstractPart objects only
+	for (auto a : vec) {
+		auto* aspect = (AbstractAspect*)a;
+		auto* part = dynamic_cast<AbstractPart*>(aspect);
+		if (part)
+			part->reparent(this);
+	}
 }
 
 /**

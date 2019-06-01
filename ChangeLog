@@ -1,5 +1,6 @@
 -----2.7-----
 New features:
+	* Allow to move objects (drag&drop) to different folders in the project explorer
 
 UX improvements:
 	* Improved the selection of curves in the plot that are near to or behind each other

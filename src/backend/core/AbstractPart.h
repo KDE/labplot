@@ -51,6 +51,9 @@ public:
 	virtual bool printView() = 0;
 	virtual bool printPreview() const = 0;
 
+	bool isDraggable() const override;
+	QVector<AspectType> dropableOn() const override;
+
 private:
 	mutable PartMdiView* m_mdiWindow{nullptr};
 
