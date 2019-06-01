@@ -214,6 +214,15 @@ void Column::setColumnModeFast(AbstractColumn::ColumnMode mode) {
 	}
 }
 
+
+bool Column::isDraggable() const {
+	return true;
+}
+
+QVector<AspectType> Column::dropableOn() const {
+	return QVector<AspectType>{AspectType::CartesianPlot};
+}
+
 /**
  * \brief Copy another column of the same type
  *
@@ -708,7 +717,6 @@ int Column::integerAt(int row) const {
  * This is used e.g. in \c XYFitCurvePrivate::recalculate()
  */
 void Column::setChanged() {
-
     d->propertiesAvailable = false;
 
 	if (!m_suppressDataChangedSignal)
@@ -716,7 +724,6 @@ void Column::setChanged() {
 
 	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////

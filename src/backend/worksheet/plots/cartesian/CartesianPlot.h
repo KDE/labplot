@@ -106,7 +106,7 @@ public:
 	void navigate(NavigationOperation);
 	void setSuppressDataChangedSignal(bool);
 	const QList<QColor>& themeColorPalette() const;
-	void processDropEvent(QDropEvent*);
+	void processDropEvent(QDropEvent*) override;
 	bool isPanningActive() const;
 	void addLegend(CartesianPlotLegend*);
 

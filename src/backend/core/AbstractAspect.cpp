@@ -558,6 +558,14 @@ QVector<AbstractAspect*> AbstractAspect::dependsOn() const {
 	return aspects;
 }
 
+bool AbstractAspect::isDraggable() const {
+	return false;
+}
+
+QVector<AspectType> AbstractAspect::dropableOn() const {
+	return QVector<AspectType>();
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \name serialize/deserialize
 //@{

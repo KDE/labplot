@@ -283,8 +283,15 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 		auto* e = static_cast<QMouseEvent*>(event);
 		if (event->type() == QEvent::MouseButtonPress) {
 			if (e->button() == Qt::LeftButton) {
-				m_dragStartPos = e->globalPos();
-				m_dragStarted = false;
+				QModelIndex index = m_treeView->indexAt(e->pos());
+				if (!index.isValid())
+					return false;
+
+				auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+				if (aspect->isDraggable()) {
+					m_dragStartPos = e->globalPos();
+					m_dragStarted = false;
+				}
 			}
 		} else if (event->type() == QEvent::MouseMove) {
 			if ( !m_dragStarted && m_treeView->selectionModel()->selectedIndexes().size() > 0
@@ -312,8 +319,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 				drag->setMimeData(mimeData);
 				drag->exec();
 			}
-		}
-		else if (event->type() == QEvent::DragEnter) {
+		} else if (event->type() == QEvent::DragEnter) {
 			//ignore events not related to internal drags of columns etc., e.g. dropping of external files onto LabPlot
 			auto* dragEnterEvent = static_cast<QDragEnterEvent*>(event);
 			const QMimeData* mimeData = dragEnterEvent->mimeData();
@@ -329,15 +335,30 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 
 			event->setAccepted(true);
 		} else if (event->type() == QEvent::DragMove) {
-			// only accept drop events if we have a plot under the cursor where we can drop columns onto
-			auto* dragMoveEvent = static_cast<QDragMoveEvent*>(event);
+			auto* dragMoveEvent = static_cast<QDragEnterEvent*>(event);
+			const QMimeData* mimeData = dragMoveEvent->mimeData();
+
+			//determine the first aspect being dragged
+			QByteArray data = mimeData->data(QLatin1String("labplot-dnd"));
+			QVector<quintptr> vec;
+			QDataStream stream(&data, QIODevice::ReadOnly);
+			stream >> vec;
+			AbstractAspect* sourceAspect{nullptr};
+			if (!vec.isEmpty())
+				sourceAspect = (AbstractAspect*)vec.at(0);
+
+			if (!sourceAspect)
+				return false;
+
+			//determine the aspect under the cursor
 			QModelIndex index = m_treeView->indexAt(dragMoveEvent->pos());
 			if (!index.isValid())
 				return false;
 
-			auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-			const bool isPlot = (dynamic_cast<CartesianPlot*>(aspect) != nullptr);
-			event->setAccepted(isPlot);
+			//accept only the events when the aspect being dragged is dropable onto the aspect under the cursor
+			AbstractAspect* destinationAspect = static_cast<AbstractAspect*>(index.internalPointer());
+			bool accept = sourceAspect->dropableOn().indexOf(destinationAspect->type()) != -1;
+			event->setAccepted(accept);
 		} else if (event->type() == QEvent::Drop) {
 			auto* dropEvent = static_cast<QDropEvent*>(event);
 			QModelIndex index = m_treeView->indexAt(dropEvent->pos());
@@ -345,9 +366,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 				return false;
 
 			auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-			auto* plot = dynamic_cast<CartesianPlot*>(aspect);
-			if (plot != nullptr)
-				plot->processDropEvent(dropEvent);
+			aspect->processDropEvent(dropEvent);
 		}
 	}
 

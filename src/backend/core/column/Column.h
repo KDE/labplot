@@ -59,6 +59,9 @@ public:
 	void setColumnMode(AbstractColumn::ColumnMode) override;
 	void setColumnModeFast(AbstractColumn::ColumnMode);
 
+	bool isDraggable() const override;
+	QVector<AspectType> dropableOn() const override;
+
 	bool copy(const AbstractColumn*) override;
 	bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) override;
 

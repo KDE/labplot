@@ -46,6 +46,8 @@ public:
 	void setPathesToLoad(const QStringList&);
 	const QStringList& pathesToLoad() const;
 
+	void processDropEvent(QDropEvent*) override;
+
 private:
 	QStringList m_pathesToLoad;
 
