@@ -10,6 +10,7 @@ Performance:
 
 Bug fixes:
 	* Disable autoscale when zooming, otherwise wrong (= auto scaled) data region is shown after project save&open
+	* [macOS] fix determining number of lines of data files
 
 -----2.6-----
 New features:
