@@ -331,6 +331,5 @@ void ImportDatasetWidget::highlightLocalMetadataFiles() {
 			currentItem->setBackgroundColor(Qt::yellow);
 		else
 			currentItem->setBackgroundColor(Qt::white);
-
 	}
 }
