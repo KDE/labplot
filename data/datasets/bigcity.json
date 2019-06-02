@@ -1,0 +1,14 @@
+{
+  "name":"Population of U.S. Cities",
+  "download":"https://vincentarelbundock.github.io/Rdatasets/csv/boot/bigcity.csv",
+  "description": "The measurements are the population (in 1000's) of 49 U.S. cities in 1920 and 1930. The 49 cities are a random sample taken from the 196 largest cities in 1920. The city data frame consists of the first 10 observations in bigcity.",
+  "separator":",",
+  "comment_character": "#",
+  "create_index_column": false,
+  "skip_empty_parts": false,
+  "simplify_whitespaces": true,
+  "remove_quotes": true,
+  "use_first_row_for_vectorname": true,
+  "number_format":31,
+  "DateTime_format":"yyyy-MM-dd"
+}

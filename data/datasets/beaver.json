@@ -1,0 +1,14 @@
+{
+  "name":"Beaver Body Temperature Data ",
+  "download":"https://vincentarelbundock.github.io/Rdatasets/csv/boot/beaver.csv",
+  "description": "This data set is part of a long study into body temperature regulation in beavers. Four adult female beavers were live-trapped and had a temperature-sensitive radio transmitter surgically implanted. Readings were taken every 10 minutes. The location of the beaver was also recorded and her activity level was dichotomized by whether she was in the retreat or outside of it since high-intensity activities only occur outside of the retreat. ",
+  "separator":",",
+  "comment_character": "#",
+  "create_index_column": false,
+  "skip_empty_parts": false,
+  "simplify_whitespaces": true,
+  "remove_quotes": true,
+  "use_first_row_for_vectorname": true,
+  "number_format":31,
+  "DateTime_format":"yyyy-MM-dd"
+}
