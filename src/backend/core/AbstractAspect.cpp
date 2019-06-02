@@ -292,6 +292,7 @@ QIcon AbstractAspect::icon() const {
 QMenu* AbstractAspect::createContextMenu() {
 	QMenu* menu = new QMenu();
 	menu->addSection(this->name());
+
 	//TODO: activate this again when the functionality is implemented
 // 	menu->addAction( KStandardAction::cut(this) );
 // 	menu->addAction(KStandardAction::copy(this));
@@ -315,20 +316,19 @@ QMenu* AbstractAspect::createContextMenu() {
 
 	if(enabled) {
 		menu->addAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
-		menu->addAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this, SLOT(remove()));
+		if (type() != AspectType::Project)
+			menu->addAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this, SLOT(remove()));
 	}
 
 	return menu;
 }
 
-AspectType AbstractAspect::type() const
-{
+AspectType AbstractAspect::type() const {
 	return m_type;
 }
 
 
-bool AbstractAspect::inherits(AspectType type) const
-{
+bool AbstractAspect::inherits(AspectType type) const {
 	return (static_cast<quint64>(m_type) & static_cast<quint64>(type)) == static_cast<quint64>(type);
 }
 
@@ -516,8 +516,6 @@ void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 	exec(new AspectChildReparentCmd(parentAspect()->d, newParent->d, this, newIndex));
 	emit old_parent->aspectRemoved(old_parent, old_sibling, this);
 	emit aspectAdded(this);
-
-	endMacro();
 }
 
 QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFlags flags) {
