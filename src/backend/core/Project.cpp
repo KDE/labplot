@@ -149,8 +149,15 @@ QUndoStack* Project::undoStack() const {
 }
 
 QMenu* Project::createContextMenu() {
-	QMenu* menu = new QMenu(); // no remove action from AbstractAspect in the project context menu
+	QMenu* menu = AbstractAspect::createContextMenu();
+
+	//add close action
+	menu->addSeparator();
+	menu->addAction(QIcon::fromTheme(QLatin1String("document-close")), i18n("Close"), this, SIGNAL(closeRequested()));
+
+	//add the actions from MainWin
 	emit requestProjectContextMenu(menu);
+
 	return menu;
 }
 

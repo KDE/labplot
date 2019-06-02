@@ -933,6 +933,7 @@ bool MainWin::newProject() {
 	connect(m_project, &Project::requestProjectContextMenu, this, &MainWin::createContextMenu);
 	connect(m_project, &Project::requestFolderContextMenu, this, &MainWin::createFolderContextMenu);
 	connect(m_project, &Project::mdiWindowVisibilityChanged, this, &MainWin::updateMdiWindowVisibility);
+	connect(m_project, &Project::closeRequested, this, &MainWin::closeProject);
 
 	m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
 	setCaption(m_project->name());
@@ -1546,7 +1547,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 	return;
 }
 
-void MainWin::setMdiWindowVisibility(QAction * action) {
+void MainWin::setMdiWindowVisibility(QAction* action) {
 	m_project->setMdiWindowVisibility((Project::MdiWindowVisibility)(action->data().toInt()));
 }
 
@@ -1563,12 +1564,22 @@ void MainWin::handleShowSubWindowRequested() {
 	this is called on a right click on the root folder in the project explorer
 */
 void MainWin::createContextMenu(QMenu* menu) const {
-	menu->addMenu(m_newMenu);
+	QAction* firstAction = nullptr;
+	// if we're populating the context menu for the project explorer, then
+	//there're already actions available there. Skip the first title-action
+	//and insert the action at the beginning of the menu.
+	if (menu->actions().size()>1)
+		firstAction = menu->actions().at(1);
+
+	menu->insertMenu(firstAction, m_newMenu);
 
 	//The tabbed view collides with the visibility policy for the subwindows.
 	//Hide the menus for the visibility policy if the tabbed view is used.
-	if (m_mdiArea->viewMode() != QMdiArea::TabbedView)
-		menu->addMenu(m_visibilityMenu);
+	if (m_mdiArea->viewMode() != QMdiArea::TabbedView) {
+		menu->insertSeparator(firstAction);
+		menu->insertMenu(firstAction, m_visibilityMenu);
+		menu->insertSeparator(firstAction);
+	}
 }
 
 /*!

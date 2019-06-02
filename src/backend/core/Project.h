@@ -92,6 +92,7 @@ signals:
 	void changed();
 	void requestNavigateTo(const QString& path);
 	void loaded();
+	void closeRequested();
 
 private:
 	class Private;

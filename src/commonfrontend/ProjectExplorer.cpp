@@ -165,6 +165,12 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 		menu = aspect->createContextMenu();
 	} else {
 		menu = new QMenu();
+
+		QMenu* projectMenu = m_project->createContextMenu();
+		projectMenu->setTitle(m_project->name());
+		menu->addMenu(projectMenu);
+		menu->addSeparator();
+
 		if (items.size()/4 > 1) {
 			menu->addAction(expandSelectedTreeAction);
 			menu->addAction(collapseSelectedTreeAction);
