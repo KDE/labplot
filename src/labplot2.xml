@@ -20,7 +20,7 @@
     <comment xml:lang="pt_BR">Arquivo de projeto do LabPlot2</comment>
     <comment xml:lang="sk">Súbor projektu LabPlot2</comment>
     <comment xml:lang="sv">Labplot2 projektfil</comment>
-    <comment xml:lang="uk">файл проекту LabPlot2</comment>
+    <comment xml:lang="uk">файл проєкту LabPlot2</comment>
     <comment xml:lang="zh_TW">LabPlot2 專案檔</comment>
     <glob pattern="*.lml"/>
   </mime-type>
