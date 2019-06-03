@@ -41,6 +41,8 @@ Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
 #include "QJsonValue"
 #include "QFile"
 #include "QDir"
+#include "KConfigGroup"
+#include "KSharedConfig"
 
 DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) : QWidget(parent) {
 
@@ -73,10 +75,37 @@ DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, cons
 
 	connect(ui.cbCategory, &QComboBox::currentTextChanged, this, &DatasetMetadataManagerWidget::updateSubcategories);
 	connect(ui.bNewColumn, &QPushButton::clicked, this, &DatasetMetadataManagerWidget::addColumnDescription);
+
+	loadSettings();
 }
 
 DatasetMetadataManagerWidget::~DatasetMetadataManagerWidget() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "DatasetMetadataManagerWidget");
 
+	//filter settings
+	conf.writeEntry("Separator", ui.cbSeparatingCharacter->currentText());
+	conf.writeEntry("CommentChar", ui.cbCommentCharacter->currentText());
+	conf.writeEntry("NumberFormat", ui.cbNumberFormat->currentIndex());
+	conf.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
+	conf.writeEntry("create_index_column", ui.chbCreateIndex->isChecked());
+	conf.writeEntry("skip_empty_parts", ui.chbSkipEmptyParts->isChecked());
+	conf.writeEntry("simplify_whitespaces", ui.chbSimplifyWhitespaces->isChecked());
+	conf.writeEntry("remove_quotes", ui.chbRemoveQuotes->isChecked());
+	conf.writeEntry("use_first_row_for_vectorname", ui.chbHeader->isChecked());
+
+}
+
+void DatasetMetadataManagerWidget::loadSettings() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "DatasetMetadataManagerWidget");
+	ui.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentChar", "#"));
+	ui.cbSeparatingCharacter->setCurrentItem(conf.readEntry("Separator", "auto"));
+	ui.cbNumberFormat->setCurrentIndex(conf.readEntry("NumberFormat", (int)QLocale::AnyLanguage));
+	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
+	ui.chbCreateIndex->setChecked(conf.readEntry("create_index_column", false));
+	ui.chbSimplifyWhitespaces->setChecked(conf.readEntry("simplify_whitespaces", true));
+	ui.chbRemoveQuotes->setChecked(conf.readEntry("remove_quotes", false));
+	ui.chbSkipEmptyParts->setChecked(conf.readEntry("skip_empty_parts", false));
+	ui.chbHeader->setChecked(conf.readEntry("use_first_row_for_vectorname", true));
 }
 
 void DatasetMetadataManagerWidget::initCategories(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) {
