@@ -1,51 +1,114 @@
 {
-  "categories": [
-    {
-      "category_name": "Statistics",
-      "subcategories": [
+    "categories": [
         {
-          "subcategory_name": "Demographics",
-          "datasets": [
-            "bigcity"
-          ]
+            "category_name": "Statistics",
+            "subcategories": [
+                {
+                    "datasets": [
+                        "bigcity"
+                    ],
+                    "subcategory_name": "Demographics"
+                },
+                {
+                    "datasets": [
+                        "amis",
+                        "motor"
+                    ],
+                    "subcategory_name": "Traffic"
+                },
+                {
+                    "datasets": [
+                        "Arrests"
+                    ],
+                    "subcategory_name": "Crime"
+                }
+            ]
         },
         {
-          "subcategory_name": "Traffic",
-          "datasets": [
-            "amis"
-          ]
-        }
-      ]
-    },
-    {
-      "category_name": "Nature",
-      "subcategories": [
-        {
-          "subcategory_name": "Animals",
-          "datasets": [
-            "beaver",
-            "catsM"
-          ]
-        }
-      ]
-    },
-    {
-      "category_name": "Medicine",
-      "subcategories": [
-        {
-          "subcategory_name": "Oncology",
-          "datasets": [
-            "aml"
-          ]
+            "category_name": "Nature",
+            "subcategories": [
+                {
+                    "datasets": [
+                        "beaver",
+                        "catsM",
+                        "dogs",
+                        "ducks"
+                    ],
+                    "subcategory_name": "Animals"
+                },
+                {
+                    "datasets": [
+                        "darwin"
+                    ],
+                    "subcategory_name": "Plants"
+                },
+                {
+                    "datasets": [
+                        "manaus",
+                        "salinity"
+                    ],
+                    "subcategory_name": "Rivers"
+                }
+            ]
         },
         {
-          "subcategory_name": "AIDS",
-          "datasets": [
-            "aids",
-            "CD4"
-          ]
+            "category_name": "Medicine",
+            "subcategories": [
+                {
+                    "datasets": [
+                        "aml",
+                        "nodal",
+                        "remission"
+                    ],
+                    "subcategory_name": "Oncology"
+                },
+                {
+                    "datasets": [
+                        "aids",
+                        "CD4"
+                    ],
+                    "subcategory_name": "AIDS"
+                },
+                {
+                    "datasets": [
+                        "breslow"
+                    ],
+                    "subcategory_name": "Smoking"
+                },
+                {
+                    "datasets": [
+                        "calcium",
+                        "claridge",
+                        "frets",
+                        "paulsen",
+                        "urine"
+                    ],
+                    "subcategory_name": "Common"
+                },
+                {
+                    "datasets": [
+                        "neuro"
+                    ],
+                    "subcategory_name": "Neurology"
+                }
+            ]
+        },
+        {
+            "category_name": "Physics",
+            "subcategories": [
+                {
+                    "datasets": [
+                        "grav"
+                    ],
+                    "subcategory_name": "General"
+                },
+                {
+                    "datasets": [
+                        "tau"
+                    ],
+                    "subcategory_name": "Particle physics"
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }

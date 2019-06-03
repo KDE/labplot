@@ -1,0 +1,14 @@
+{
+    "DateTime_format": "yyyy-MM-dd",
+    "comment_character": "#",
+    "create_index_column": false,
+    "description": "Sections were prepared from the brain of adult guinea pigs. Spontaneous currents that flowed into individual brain cells were then recorded and the peak amplitude of each current measured. The aim of the experiment was to see if the current flow was quantal in nature (i.e. that it is not a single burst but instead is built up of many smaller bursts of current). If the current was indeed quantal then it would be expected that the distribution of the current amplitude would be multimodal with modes at regular intervals. The modes would be expected to decrease in magnitude for higher current amplitudes. ",
+    "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/paulsen.csv",
+    "name": "Neurotransmission in Guinea Pig Brains ",
+    "number_format": 0,
+    "remove_quotes": true,
+    "separator": ",",
+    "simplify_whitespaces": true,
+    "skip_empty_parts": false,
+    "use_first_row_for_vectorname": true
+}

@@ -1,0 +1,14 @@
+{
+    "DateTime_format": "yyyy-MM-dd",
+    "comment_character": "#",
+    "create_index_column": false,
+    "description": "The motor data frame has 94 rows and 4 columns. The rows are obtained by removing replicate values of time from the dataset mcycle. Two extra columns are added to allow for strata with a different residual variance in each stratum. ",
+    "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/motor.csv",
+    "name": "Data from a Simulated Motorcycle Accident",
+    "number_format": 0,
+    "remove_quotes": true,
+    "separator": ",",
+    "simplify_whitespaces": true,
+    "skip_empty_parts": false,
+    "use_first_row_for_vectorname": true
+}

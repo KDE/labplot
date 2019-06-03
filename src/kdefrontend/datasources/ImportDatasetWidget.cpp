@@ -261,6 +261,7 @@ void ImportDatasetWidget::showDatasetMetadataManager() {
 		QString dirPath = QFileInfo(pathToJson).dir().absolutePath();
 		dlg->updateDocument(pathToJson);
 		dlg->createNewMetadata(dirPath);
+		loadDatasetCategoriesFromJson();
 	}
 	delete dlg;
 }

@@ -267,6 +267,7 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& fileName) {
 
 			QJsonArray datasets;
 			datasets.append(QJsonValue(ui.leFileName->text()));
+			newSubcategory.insert("datasets", datasets);
 
 			subcategoryArray.append(newSubcategory);
 			newCategory.insert("subcategories", subcategoryArray);

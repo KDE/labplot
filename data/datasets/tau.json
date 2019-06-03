@@ -1,0 +1,14 @@
+{
+    "DateTime_format": "yyyy-MM-dd",
+    "comment_character": "#",
+    "create_index_column": false,
+    "description": "The tau particle is a heavy electron-like particle discovered in the 1970's by Martin Perl at the Stanford Linear Accelerator Center. Soon after its production the tau particle decays into various collections of more stable particles. About 86% of the time the decay involves just one charged particle. This rate has been measured independently 13 times. \nThe one-charged-particle event is made up of four major modes of decay as well as a collection of other events. The four main types of decay are denoted rho, pi, e and mu. These rates have been measured independently 6, 7, 14 and 19 times respectively. Due to physical constraints each experiment can only estimate the composite one-charged-particle decay rate or the rate of one of the major modes of decay. \nEach experiment consists of a major research project involving many years work. One of the goals of the experiments was to estimate the rate of decay due to events other than the four main modes of decay. These are uncertain events and so cannot themselves be observed directly. ",
+    "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/tau.csv",
+    "name": " Tau Particle Decay Modes ",
+    "number_format": 31,
+    "remove_quotes": true,
+    "separator": ",",
+    "simplify_whitespaces": true,
+    "skip_empty_parts": false,
+    "use_first_row_for_vectorname": true
+}

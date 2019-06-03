@@ -1,0 +1,14 @@
+{
+    "DateTime_format": "yyyy-MM-dd",
+    "comment_character": "#",
+    "create_index_column": false,
+    "description": "neuro is a matrix containing times of observed firing of a neuron in windows of 250ms either side of the application of a stimulus to a human subject. Each row of the matrix is a replication of the experiment and there were a total of 469 replicates. ",
+    "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/neuro.csv",
+    "name": "Neurophysiological Point Process Data ",
+    "number_format": 0,
+    "remove_quotes": true,
+    "separator": ",",
+    "simplify_whitespaces": true,
+    "skip_empty_parts": false,
+    "use_first_row_for_vectorname": true
+}

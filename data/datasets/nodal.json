@@ -1,0 +1,14 @@
+{
+    "DateTime_format": "yyyy-MM-dd",
+    "comment_character": "#",
+    "create_index_column": false,
+    "description": "The treatment strategy for a patient diagnosed with cancer of the prostate depend highly on whether the cancer has spread to the surrounding lymph nodes. It is common to operate on the patient to get samples from the nodes which can then be analysed under a microscope but clearly it would be preferable if an accurate assessment of nodal involvement could be made without surgery. \nFor a sample of 53 prostate cancer patients, a number of possible predictor variables were measured before surgery. The patients then had surgery to determine nodal involvement. It was required to see if nodal involvement could be accurately predicted from the predictor variables and which ones were most important. ",
+    "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/nodal.csv",
+    "name": "Nodal Involvement in Prostate Cancer",
+    "number_format": 0,
+    "remove_quotes": true,
+    "separator": ",",
+    "simplify_whitespaces": true,
+    "skip_empty_parts": false,
+    "use_first_row_for_vectorname": true
+}
