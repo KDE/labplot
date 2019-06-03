@@ -238,7 +238,7 @@ void ImportDatasetWidget::loadDatasetToProcess(DatasetHandler* datasetHandler) {
 	QString fileName = getSelectedDataset() + ".json";
 	downloadDatasetFile(fileName);
 
-	QString filePath = m_jsonDir + fileName;
+	QString filePath = m_jsonDir + m_selectedCategory + QDir::separator() + m_selectedSubcategory + QDir::separator() + fileName;
 
 	if(QFile::exists(filePath)) {
 		datasetHandler->processMetadata(filePath);
@@ -270,12 +270,32 @@ void ImportDatasetWidget::downloadCategoryFile() {
 	qDebug() << "Downloading category file";
 	QString fileNameOld = QStandardPaths::locate(QStandardPaths::AppDataLocation, "datasets/DatasetCategories.json");
 	QString fileNameNew =m_jsonDir + "DatasetCategories.json";
+
+	QString parentDir  = m_jsonDir.left(m_jsonDir.left(m_jsonDir.length() - 1).lastIndexOf(QDir::separator()));
+
+	if(!QDir(m_jsonDir).exists()) {
+		qDebug() << parentDir;
+		QDir(parentDir).mkdir(".labplot");
+	}
 	QFile::copy(fileNameOld, fileNameNew);
 }
 
 void ImportDatasetWidget::downloadDatasetFile(const QString &datasetName) {
 	QString fileNameOld = QStandardPaths::locate(QStandardPaths::AppDataLocation, QString("datasets") + QDir::separator() + datasetName);
-	QString fileNameNew = m_jsonDir + datasetName;
+	QString pathToNewFile = m_jsonDir + m_selectedCategory;
+
+	if(!QDir(m_jsonDir + m_selectedCategory).exists()) {
+		qDebug() <<m_jsonDir + m_selectedCategory;
+		QDir(m_jsonDir).mkdir(m_selectedCategory);
+	}
+
+	if(!QDir(pathToNewFile + QDir::separator() + m_selectedSubcategory).exists()) {
+		qDebug() <<pathToNewFile + QDir::separator() + m_selectedSubcategory;
+		QDir(pathToNewFile).mkdir(m_selectedSubcategory);
+	}
+
+	pathToNewFile = pathToNewFile + QDir::separator() + m_selectedSubcategory;
+	QString fileNameNew = pathToNewFile + QDir::separator() + datasetName;
 	QFile::copy(fileNameOld, fileNameNew);
 }
 

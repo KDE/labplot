@@ -40,7 +40,7 @@ class DatasetHandler : public Spreadsheet {
         Q_OBJECT
 
 public:
-        DatasetHandler(const QString& name, bool loading = false);
+		DatasetHandler(const QString& name, bool loading = false);
         ~DatasetHandler() override;
 		void processMetadata(const QString& path);
 
