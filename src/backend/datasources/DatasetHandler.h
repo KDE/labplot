@@ -37,38 +37,38 @@ class QNetworkAccessManager;
 class QNetworkReply;
 
 class DatasetHandler : public Spreadsheet {
-        Q_OBJECT
+	Q_OBJECT
 
 public:
-		DatasetHandler(const QString& name, bool loading = false);
-        ~DatasetHandler() override;
-		void processMetadata(const QString& path);
+	DatasetHandler(const QString& name, bool loading = false);
+	~DatasetHandler() override;
+	void processMetadata(const QString& path);
 
 private:
-		AsciiFilter* m_filter;
-		QJsonDocument*  m_document;
-		QNetworkAccessManager* m_downloadManager;
-		QNetworkReply* m_currentDownload;
-		QString m_fileName;
-		bool m_invalidMetadataFile{false};
+	AsciiFilter* m_filter;
+	QJsonDocument*  m_document;
+	QNetworkAccessManager* m_downloadManager;
+	QNetworkReply* m_currentDownload;
+	QString m_fileName;
+	bool m_invalidMetadataFile{false};
 
-		void loadJsonDocument(const QString& path);
-		void configureFilter();
-		void configureSpreadsheet();
-		void prepareForDataset();
-		void processDataset();
-		void doDownload(const QUrl &url);
-		bool isHttpRedirect(QNetworkReply *reply);
-		QString saveFileName(const QUrl &url);
-		bool saveToDisk(const QString &filename, QIODevice *data);
-		void markMetadataAsInvalid();
-		void configureColumns();
+	void loadJsonDocument(const QString& path);
+	void configureFilter();
+	void configureSpreadsheet();
+	void prepareForDataset();
+	void processDataset();
+	void doDownload(const QUrl &url);
+	bool isHttpRedirect(QNetworkReply *reply);
+	QString saveFileName(const QUrl &url);
+	bool saveToDisk(const QString &filename, QIODevice *data);
+	void markMetadataAsInvalid();
+	void configureColumns();
 
 private slots:
-		void downloadFinished(QNetworkReply *reply);
+	void downloadFinished(QNetworkReply *reply);
 
 signals:
-		void downloadCompleted();
+	void downloadCompleted();
 };
 
 #endif // DATASETHANDLER_H

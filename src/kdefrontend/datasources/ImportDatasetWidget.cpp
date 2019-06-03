@@ -344,9 +344,11 @@ void ImportDatasetWidget::clearCache() {
 }
 
 void ImportDatasetWidget::highlightLocalMetadataFiles() {
+	QString filePath = m_jsonDir + m_selectedCategory + QDir::separator() + m_selectedSubcategory + QDir::separator();
+
 	for(int i = 0 ; i < ui.lwDatasets->count(); ++i) {
 		QListWidgetItem* currentItem = ui.lwDatasets->item(i);
-		QFile file(m_jsonDir + currentItem->text() + ".json");
+		QFile file(filePath + currentItem->text() + ".json");
 
 		if(file.exists())
 			currentItem->setBackgroundColor(Qt::yellow);
