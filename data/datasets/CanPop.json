@@ -1,0 +1,17 @@
+{
+    "DateTime_format": "yyyy-MM-dd",
+    "column_description_0": "index",
+    "column_description_1": "census year. ",
+    "column_description_2": "Population, in millions ",
+    "comment_character": "#",
+    "create_index_column": false,
+    "description": "The CanPop data frame has 16 rows and 2 columns. Decennial time-series of Canadian population, 1851–2001. ",
+    "download": "https://vincentarelbundock.github.io/Rdatasets/csv/carData/CanPop.csv",
+    "name": "Canadian Population Data",
+    "number_format": 31,
+    "remove_quotes": true,
+    "separator": ",",
+    "simplify_whitespaces": true,
+    "skip_empty_parts": false,
+    "use_first_row_for_vectorname": true
+}

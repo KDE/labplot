@@ -50,6 +50,7 @@ private:
 		QNetworkAccessManager* m_downloadManager;
 		QNetworkReply* m_currentDownload;
 		QString m_fileName;
+		bool m_invalidMetadataFile{false};
 
 		void loadJsonDocument(const QString& path);
 		void configureFilter();
@@ -60,6 +61,8 @@ private:
 		bool isHttpRedirect(QNetworkReply *reply);
 		QString saveFileName(const QUrl &url);
 		bool saveToDisk(const QString &filename, QIODevice *data);
+		void markMetadataAsInvalid();
+		void configureColumns();
 
 private slots:
 		void downloadFinished(QNetworkReply *reply);

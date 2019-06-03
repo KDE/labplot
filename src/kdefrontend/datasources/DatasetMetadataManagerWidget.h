@@ -47,15 +47,17 @@ private:
     QStringList m_categoryList;
     QMap<QString, QStringList> m_subcategoryMap;
     QMap<QString, QStringList> m_datasetMap;
+	QStringList m_columnDescriptions;
 
     void initCategories(const QMap<QString, QMap<QString, QVector<QString>>>&);
     void initSubcategories(const QMap<QString, QMap<QString, QVector<QString>>>&);
     void initDatasets(const QMap<QString, QMap<QString, QVector<QString>>>&);
     bool checkFileName();
-    bool urlExists();
+	bool urlExists();
 
 private slots:
     void updateSubcategories(const QString&);
+	void addColumnDescription();
 
 signals:
     void checkOk();

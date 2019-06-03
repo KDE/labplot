@@ -77,38 +77,62 @@ void DatasetHandler::loadJsonDocument(const QString& path) {
 	}
 }
 
+void DatasetHandler::markMetadataAsInvalid() {
+	m_invalidMetadataFile = true;
+	QMessageBox::critical(0, "Invalid metadata file", "The metadata file for the choosen dataset is invalid!");
+}
+
 void DatasetHandler::configureFilter() {
 	qDebug("Configure filter");
 	if(m_document->isObject()) {
 		QJsonObject jsonObject = m_document->object();
 		if(jsonObject.contains("separator"))
 			m_filter->setSeparatingCharacter( jsonObject.value("separator").toString());
+		else
+			markMetadataAsInvalid();
 
 		if(jsonObject.contains("comment_character"))
 			m_filter->setCommentCharacter(jsonObject.value("comment_character").toString());
+		else
+			markMetadataAsInvalid();
 
 		if(jsonObject.contains("create_index_column"))
 			m_filter->setCreateIndexEnabled(jsonObject.value("create_index_column").toBool());
+		else
+			markMetadataAsInvalid();
 
 		if(jsonObject.contains("skip_empty_parts"))
 			m_filter->setSkipEmptyParts(jsonObject.value("skip_empty_parts").toBool());
+		else
+			markMetadataAsInvalid();
 
 		if(jsonObject.contains("simplify_whitespaces"))
 			m_filter->setSimplifyWhitespacesEnabled(jsonObject.value("simplify_whitespaces").toBool());
+		else
+			markMetadataAsInvalid();
 
 		if(jsonObject.contains("remove_quotes"))
 			m_filter->setRemoveQuotesEnabled(jsonObject.value("remove_quotes").toBool());
+		else
+			markMetadataAsInvalid();
 
 		if(jsonObject.contains("use_first_row_for_vectorname"))
 			m_filter->setHeaderEnabled(jsonObject.value("use_first_row_for_vectorname").toBool());
+		else
+			markMetadataAsInvalid();
 
 		if(jsonObject.contains("number_format"))
 			m_filter->setNumberFormat(QLocale::Language(jsonObject.value("number_format").toInt()));
+		else
+			markMetadataAsInvalid();
 
 		if(jsonObject.contains("DateTime_format"))
 			m_filter->setDateTimeFormat(jsonObject.value("DateTime_format").toString());
+		else
+			markMetadataAsInvalid();
+
 	} else {
-		qDebug("Invalid Json document");
+		markMetadataAsInvalid();
 	}
 }
 
@@ -118,11 +142,13 @@ void DatasetHandler::configureSpreadsheet() {
 		QJsonObject jsonObject = m_document->object();
 		if(jsonObject.contains("name"))
 			setName( jsonObject.value("name").toString());
+		else
+			markMetadataAsInvalid();
 
 		if(jsonObject.contains("description"))
 			setComment(jsonObject.value("description").toString());
 	} else {
-		qDebug("Invalid Json document");
+		markMetadataAsInvalid();
 	}
 }
 
@@ -141,7 +167,7 @@ void DatasetHandler::prepareForDataset() {
 		}
 
 	} else {
-		qDebug("Invalid Json document");
+		markMetadataAsInvalid();
 	}
 }
 
@@ -232,4 +258,19 @@ bool DatasetHandler::saveToDisk(const QString &filename, QIODevice *data) {
 
 void DatasetHandler::processDataset() {
 	m_filter->readDataFromFile(m_fileName, this);
+	configureColumns();
+}
+
+void DatasetHandler::configureColumns() {
+	if(m_document->isObject()) {
+		QJsonObject jsonObject = m_document->object();
+
+		int index = 0;
+		while(jsonObject.contains(i18n("column_description_%1", index)) && index < columnCount()) {
+			column(index)->setComment(jsonObject.value(i18n("column_description_%1", index)).toString());
+			index++;
+		}
+	} else {
+		qDebug("Invalid Json document");
+	}
 }

@@ -72,6 +72,7 @@ DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, cons
 	});
 
 	connect(ui.cbCategory, &QComboBox::currentTextChanged, this, &DatasetMetadataManagerWidget::updateSubcategories);
+	connect(ui.bNewColumn, &QPushButton::clicked, this, &DatasetMetadataManagerWidget::addColumnDescription);
 }
 
 DatasetMetadataManagerWidget::~DatasetMetadataManagerWidget() {
@@ -307,6 +308,10 @@ void DatasetMetadataManagerWidget::createNewMetadata(const QString& dirPath) {
 		rootObject.insert("remove_quotes", ui.chbRemoveQuotes->isChecked());
 		rootObject.insert("use_first_row_for_vectorname", ui.chbHeader->isChecked());
 
+		for(int i = 0; i < m_columnDescriptions.size(); i++) {
+			rootObject.insert(i18n("column_description_%1", i), m_columnDescriptions[i]);
+		}
+
 		QJsonDocument document;
 		document.setObject(rootObject);
 		qDebug() <<document.toJson();
@@ -315,4 +320,21 @@ void DatasetMetadataManagerWidget::createNewMetadata(const QString& dirPath) {
 	} else {
 		qDebug() <<"Couldn't create new metadata file" << file.errorString();;
 	}
+}
+
+void DatasetMetadataManagerWidget::addColumnDescription() {
+	QLabel* label = new QLabel();
+	label->setText(i18n("Description for column %1", m_columnDescriptions.size() + 1));
+	QLineEdit* lineEdit = new QLineEdit;
+
+	int layoutIndex = m_columnDescriptions.size() + 1;
+	ui.columnLayout->addWidget(label, layoutIndex, 0);
+	ui.columnLayout->addWidget(lineEdit, layoutIndex, 1);
+
+	connect(lineEdit, &QLineEdit::textChanged, [this, layoutIndex] (const QString& text) {
+		m_columnDescriptions[layoutIndex - 1] = text;
+		qDebug() << m_columnDescriptions;
+	});
+
+	m_columnDescriptions.append("");
 }

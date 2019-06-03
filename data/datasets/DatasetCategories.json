@@ -5,22 +5,16 @@
             "subcategories": [
                 {
                     "datasets": [
-                        "bigcity"
+                        "bigcity",
+                        "CanPop"
                     ],
                     "subcategory_name": "Demographics"
                 },
                 {
                     "datasets": [
-                        "amis",
-                        "motor"
+                        "amis"
                     ],
                     "subcategory_name": "Traffic"
-                },
-                {
-                    "datasets": [
-                        "Arrests"
-                    ],
-                    "subcategory_name": "Crime"
                 }
             ]
         },
@@ -44,8 +38,7 @@
                 },
                 {
                     "datasets": [
-                        "manaus",
-                        "salinity"
+                        "manaus"
                     ],
                     "subcategory_name": "Rivers"
                 }
@@ -56,9 +49,7 @@
             "subcategories": [
                 {
                     "datasets": [
-                        "aml",
-                        "nodal",
-                        "remission"
+                        "aml"
                     ],
                     "subcategory_name": "Oncology"
                 },
@@ -79,34 +70,9 @@
                     "datasets": [
                         "calcium",
                         "claridge",
-                        "frets",
-                        "paulsen",
-                        "urine"
+                        "frets"
                     ],
                     "subcategory_name": "Common"
-                },
-                {
-                    "datasets": [
-                        "neuro"
-                    ],
-                    "subcategory_name": "Neurology"
-                }
-            ]
-        },
-        {
-            "category_name": "Physics",
-            "subcategories": [
-                {
-                    "datasets": [
-                        "grav"
-                    ],
-                    "subcategory_name": "General"
-                },
-                {
-                    "datasets": [
-                        "tau"
-                    ],
-                    "subcategory_name": "Particle physics"
                 }
             ]
         }
