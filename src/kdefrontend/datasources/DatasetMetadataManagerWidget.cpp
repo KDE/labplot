@@ -317,7 +317,20 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& fileName) {
 }
 
 void DatasetMetadataManagerWidget::createNewMetadata(const QString& dirPath) {
-	QString fileName = dirPath + QDir::separator() + ui.leFileName->text() + ".json";
+	QString path = dirPath + QDir::separator() + ui.cbCategory->currentText() + QDir::separator();
+
+	if(!QDir(path).exists()) {
+		qDebug() <<path;
+		QDir(dirPath).mkdir(ui.cbCategory->currentText());
+	}
+
+	if(!QDir(path + ui.cbSubcategory->currentText()).exists()) {
+		qDebug() <<path + ui.cbSubcategory->currentText();
+		QDir(path).mkdir(ui.cbSubcategory->currentText());
+	}
+
+	path = path + ui.cbSubcategory->currentText() + QDir::separator();
+	QString fileName = path + ui.leFileName->text() + ".json";
 	qDebug() << "Creating " << fileName;
 
 	QFile file(fileName);

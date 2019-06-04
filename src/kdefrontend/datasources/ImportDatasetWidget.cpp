@@ -163,6 +163,11 @@ void ImportDatasetWidget::listDatasetsForSubcategory(QTreeWidgetItem *item) {
 			updateDatasetCompleter();
 			highlightLocalMetadataFiles();
 		}
+	} else {
+		if(item->text(0).compare(m_selectedCategory) != 0) {
+			ui.lwDatasets->clear();
+			item->setExpanded(true);
+		}
 	}
 }
 
@@ -329,11 +334,15 @@ void ImportDatasetWidget::clearCache() {
 	QDir dir(m_jsonDir);
 
 	if(dir.exists()) {
-		QStringList fileNameList = dir.entryList();
+		QStringList entryList = dir.entryList();
 
-		for(QString fileName : fileNameList) {
-			if(!fileName.startsWith("DatasetCategories")) {
-				dir.remove(fileName);
+		for(QString entry : entryList) {
+			if(!(entry.startsWith("DatasetCategories") || entry.startsWith("."))) {
+				QDir deleteDir(m_jsonDir + entry);
+				if(deleteDir.exists()) {
+					deleteDir.removeRecursively();
+					qDebug() << "Delete " << deleteDir.absolutePath();
+				}
 			}
 		}
 	} else {

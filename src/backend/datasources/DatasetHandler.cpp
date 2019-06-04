@@ -59,6 +59,9 @@ void DatasetHandler::processMetadata(const QString& path) {
 	qDebug("Start processing dataset...");
 	loadJsonDocument(path);
 
+	m_containingDir = path.left(path.lastIndexOf(QDir::separator()));
+	qDebug() << m_containingDir;
+
 	if(!m_document->isEmpty()) {
 		configureFilter();
 		configureSpreadsheet();
@@ -221,13 +224,7 @@ QString DatasetHandler::saveFileName(const QUrl &url)
 	if (basename.isEmpty())
 		basename = "download";
 
-	QString baseDir = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first();
-	QString containingDir = ".labplot";
-	QString fileName = baseDir + QDir::separator() + containingDir + QDir::separator() + basename;
-
-	if(!QDir(containingDir).exists()) {
-		QDir(baseDir).mkdir(containingDir);
-	}
+	QString fileName = m_containingDir + QDir::separator() + basename;
 
 	if (QFile::exists(fileName)) {
 		// already exists, don't overwrite

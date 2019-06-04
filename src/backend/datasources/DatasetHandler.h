@@ -51,6 +51,7 @@ private:
 	QNetworkReply* m_currentDownload;
 	QString m_fileName;
 	bool m_invalidMetadataFile{false};
+	QString m_containingDir;
 
 	void loadJsonDocument(const QString& path);
 	void configureFilter();
