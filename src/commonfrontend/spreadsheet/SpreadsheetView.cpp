@@ -43,7 +43,7 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/pivot/PivotTable.h"
-#include "backend/t_test/TTest.h"
+#include "backend/hypothesis_test/HypothesisTest.h"
 
 
 #include <QKeyEvent>
@@ -384,6 +384,10 @@ void SpreadsheetView::initMenus() {
 		m_selectionMenu->addAction(action_normalize_selection);
 	}
 
+    //for ttest statistics;
+    m_columnHypothesisTestingMenu = new QMenu("Hypothesis Testing",this);
+    m_columnHypothesisTestingMenu->addAction(action_do_ttest);
+
 	//plot data menu
 	m_plotDataMenu = new QMenu(i18n("Plot Data"), this);
 	m_plotDataMenu->addAction(action_plot_data_xycurve);
@@ -474,12 +478,6 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addMenu(m_columnManipulateDataMenu);
 		m_columnMenu->addSeparator();
 
-        //for ttest statistics;
-        m_columnHypothesisTestingMenu = new QMenu("Hypothesis Testing",this);
-        m_columnHypothesisTestingMenu->addAction(action_do_ttest);
-        m_columnMenu->addMenu(m_columnHypothesisTestingMenu);
-        m_columnMenu->addSeparator();
-
 		m_columnSortMenu = new QMenu(i18n("Sort"), this);
 		m_columnSortMenu->setIcon(QIcon::fromTheme("view-sort-ascending"));
 		m_columnSortMenu->addAction(action_sort_asc_column);
@@ -505,7 +503,8 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu = new QMenu(this);
 	m_spreadsheetMenu->addMenu(m_plotDataMenu);
 	m_spreadsheetMenu->addMenu(m_analyzePlotMenu);
-	m_spreadsheetMenu->addSeparator();
+    m_spreadsheetMenu->addMenu(m_columnHypothesisTestingMenu);
+    m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_pivot_table);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addMenu(m_selectionMenu);
@@ -779,9 +778,12 @@ void SpreadsheetView::createPivotTable() {
 
 void SpreadsheetView::doTTest()
 {
-    TTest* ttest = new TTest(i18n("doing T Test for %1", m_spreadsheet->name()));
-    ttest->setColumns(this->selectedColumns());
-    ttest->performTwoSampleTest();
+    HypothesisTest* htest = new HypothesisTest(i18n("T Test for %1", m_spreadsheet->name()));
+//    htest->setColumns(this->selectedColumns());
+//    htest->performTwoSampleTTest();
+    htest->setDataSourceType(HypothesisTest::DataSourceSpreadsheet);
+    htest->setDataSourceSpreadsheet(m_spreadsheet);
+    m_spreadsheet->parentAspect()->addChild(htest);
 }
 
 

@@ -40,6 +40,7 @@ class Worksheet;
 class Note;
 class Workbook;
 class Datapicker;
+class HypothesisTest;
 class Image;
 class Spreadsheet;
 class Matrix;
@@ -53,6 +54,7 @@ class BarChartPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
 class ColumnDock;
+class HypothesisTestDock;
 class LiveDataDock;
 class MatrixDock;
 class PivotTableDock;
@@ -134,6 +136,7 @@ private:
 	QAction* m_exportAction;
 	QAction* m_closeAction;
 	QAction* m_newFolderAction;
+    QAction* m_newHypothesisTestAction;
 	QAction* m_newWorkbookAction;
 	QAction* m_newSpreadsheetAction;
 	QAction* m_newMatrixAction;
@@ -192,6 +195,7 @@ private:
 	CartesianPlotDock* cartesianPlotDock{nullptr};
 	CartesianPlotLegendDock* cartesianPlotLegendDock{nullptr};
 	ColumnDock* columnDock{nullptr};
+    HypothesisTestDock* hypothesisTestDock{nullptr};
 	LiveDataDock* m_liveDataDock{nullptr};
 	MatrixDock* matrixDock{nullptr};
 	PivotTableDock* pivotTableDock{nullptr};
@@ -281,6 +285,7 @@ private slots:
 #endif
 
 	void newFolder();
+    void newHypothesisTest();
 	void newWorkbook();
 	void newSpreadsheet();
 	void newMatrix();

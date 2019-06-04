@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : TTest.h
+    File                 : HypothesisTestPrivate.h
     Project              : LabPlot
-    Description          : Doing T-Test on data provided
+    Description          : Private members of Hypothesis Test
     --------------------------------------------------------------------
-    Copyright            : (C) 2019 Alexander Semke(alexander.semke@web.de)
+    Copyright            : (C) 2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -26,30 +26,37 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TTEST_H
-#define TTEST_H
-#include <QVector>
+#ifndef HYPOTHESISTESTPRIVATE_H
+#define HYPOTHESISTESTPRIVATE_H
 
+#include <backend/hypothesis_test/HypothesisTest.h>
 
-class Spreadsheet;
-class QString;
-class Column;
-
-class TTest {
+class HypothesisTestPrivate {
 public:
-    explicit TTest(const QString& name);
-    void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
-    void setColumns(QVector<Column*> cols);
-    void performTwoSampleTest();
-private:
-//    double findMean(Column* col);
-//    double findStandardDeviation(Column* col, double mean);
-    void findStats(Column* column, int &count, double &sum, double &mean, double &std);
+        explicit HypothesisTestPrivate(HypothesisTest*);
+        virtual ~HypothesisTestPrivate();
 
-    Spreadsheet* dataSourceSpreadsheet{nullptr};
-    int m_rowCount{0};
-    int m_columnCount{0};
-    QVector<Column*> m_columns;
+        QString name() const;
+
+        HypothesisTest* const q;
+
+        HypothesisTest::DataSourceType dataSourceType{HypothesisTest::DataSourceSpreadsheet};
+        Spreadsheet* dataSourceSpreadsheet{nullptr};
+        
+        void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
+        void setColumns(QStringList cols);
+        QVector<Column*> m_columns;
+        
+        QStringList all_columns;
+
+        bool m_dbCreated{false};
+        int m_rowCount{0};
+        int m_columnCount{0};
+        
+        void performTwoSampleTTest();
+private:
+        void findStats(Column* column, int &count, double &sum, double &mean, double &std);
+// 	QMap<QString, QStringList> m_members;
 };
 
-#endif // TTEST_H
+#endif

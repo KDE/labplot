@@ -32,6 +32,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/datasources/LiveDataSource.h"
+#include "backend/hypothesis_test/HypothesisTest.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/pivot/PivotTable.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -62,6 +63,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
+#include "kdefrontend/dockwidgets/HypothesisTestDock.h"
 #include "kdefrontend/dockwidgets/LiveDataDock.h"
 #include "kdefrontend/dockwidgets/MatrixDock.h"
 #include "kdefrontend/dockwidgets/PivotTableDock.h"
@@ -174,7 +176,19 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->pivotTableDock->setPivotTable(static_cast<PivotTable*>(selectedAspects.first()));
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->pivotTableDock);
-	} else if (className == QStringLiteral("Column")) {
+    } else if (className == QStringLiteral("HypothesisTest")) {
+        m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Hypothesis Test"));
+
+        if (!m_mainWindow->hypothesisTestDock) {
+            m_mainWindow->hypothesisTestDock = new HypothesisTestDock(m_mainWindow->stackedWidget);
+            connect(m_mainWindow->hypothesisTestDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
+            m_mainWindow->stackedWidget->addWidget(m_mainWindow->hypothesisTestDock);
+        }
+
+        m_mainWindow->hypothesisTestDock->setHypothesisTest(static_cast<HypothesisTest*>(selectedAspects.first()));
+
+        m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->hypothesisTestDock);
+    } else if (className == QStringLiteral("Column")) {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Column"));
 
 		if (!m_mainWindow->columnDock) {

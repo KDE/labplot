@@ -176,7 +176,6 @@ PivotTablePrivate::PivotTablePrivate(PivotTable* owner) : q(owner)
 // 	horizontalHeaderModel(new HierarchicalHeaderModel),
 // 	verticalHeaderModel(new HierarchicalHeaderModel)
 	{
-
 }
 
 PivotTablePrivate::~PivotTablePrivate() {

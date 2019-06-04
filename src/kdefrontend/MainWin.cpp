@@ -33,6 +33,7 @@
 #include "backend/core/Folder.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Workbook.h"
+#include "backend/hypothesis_test/HypothesisTest.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/pivot/PivotTable.h"
@@ -322,6 +323,11 @@ void MainWin::initActions() {
 	m_newDatapickerAction->setWhatsThis(i18n("Creates a data picker for getting data from a picture"));
 	actionCollection()->addAction("new_datapicker", m_newDatapickerAction);
 	connect(m_newDatapickerAction, &QAction::triggered, this, &MainWin::newDatapicker);
+
+    m_newHypothesisTestAction = new QAction(QIcon::fromTheme("labplot-spreadsheet-new"),i18n("Hypothesis Test"),this);
+    m_newHypothesisTestAction->setWhatsThis(i18n("Creates windows for hypothesis testing"));
+    actionCollection()->addAction("new_hypothesis_test", m_newHypothesisTestAction);
+    connect(m_newHypothesisTestAction, &QAction::triggered, this, &MainWin::newHypothesisTest);
 
 	m_newSpreadsheetAction = new QAction(QIcon::fromTheme("labplot-spreadsheet-new"),i18n("Spreadsheet"),this);
 // 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
@@ -1198,6 +1204,15 @@ void MainWin::newDatapicker() {
 	Datapicker* datapicker = new Datapicker(i18n("Datapicker"));
 	this->addAspectToProject(datapicker);
 }
+
+/*!
+    adds a new Hypothesis Test window to the project.
+*/
+void MainWin::newHypothesisTest() {
+    HypothesisTest* hypothesisTest = new HypothesisTest(i18n("HypothesisTest"));
+    this->addAspectToProject(hypothesisTest);
+}
+
 /*!
 	adds a new Spreadsheet to the project.
 */

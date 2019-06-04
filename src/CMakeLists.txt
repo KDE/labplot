@@ -39,7 +39,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ROOTOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/MQTTErrorWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp
+        ${KDEFRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp
@@ -50,6 +50,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/HistogramDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CustomPointDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
+        ${KDEFRONTEND_DIR}/dockwidgets/HypothesisTestDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/LiveDataDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/MatrixDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/PivotTableDock.cpp
@@ -67,7 +68,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYFourierTransformCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYConvolutionCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYCorrelationCurveDock.cpp
-	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
+        ${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
 	${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
 	${KDEFRONTEND_DIR}/pivot/HierarchicalHeaderView.cpp
 	${KDEFRONTEND_DIR}/pivot/PivotTableView.cpp
@@ -125,7 +126,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/rootoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/mqtterrorwidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui
+        ${KDEFRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
@@ -134,6 +135,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/histogramdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
+        ${KDEFRONTEND_DIR}/ui/dockwidgets/hypothesistestdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/livedatadock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/notedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/matrixdock.ui
@@ -236,7 +238,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
 	${BACKEND_DIR}/matrix/MatrixModel.cpp
 	${BACKEND_DIR}/pivot/PivotTable.cpp
-        ${BACKEND_DIR}/t_test/TTest.cpp
+        ${BACKEND_DIR}/hypothesis_test/HypothesisTest.cpp
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
