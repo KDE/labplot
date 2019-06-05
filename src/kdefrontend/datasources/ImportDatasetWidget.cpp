@@ -279,12 +279,12 @@ void ImportDatasetWidget::showDatasetMetadataManager() {
 
 	/*KNS3::UploadDialog dialog("labplot2_datasets.knsrc", this);
 
-	QFile file(m_jsonDir + "DatasetCategories_backup.json");
-	qDebug() << "file " << m_jsonDir + "DatasetCategories_backup.json "<< file.exists();
+	QFile file(m_jsonDir + "DatasetCategories.json");
+	qDebug() << "file " << m_jsonDir + "DatasetCategories.json "<< file.exists();
 	qDebug() << "file can be opened: " << file.open(QIODevice::ReadOnly) << "  " << file.errorString();
 	file.close();
 
-	QUrl payloadFile ="file:" + m_jsonDir + "DatasetCategories_backup.json";
+	QUrl payloadFile ="file:" + m_jsonDir + "DatasetCategories.json";
 	QFile file2(payloadFile.toLocalFile());
 	qDebug() << "Local file: " << payloadFile.toLocalFile();
 		 if (!file2.open(QIODevice::ReadOnly)) {
@@ -294,7 +294,7 @@ void ImportDatasetWidget::showDatasetMetadataManager() {
 		 }
 	file2.close();
 
-	dialog.setUploadFile("file:" + m_jsonDir + "DatasetCategories_backup.json");
+	dialog.setUploadFile("file:" + m_jsonDir + "DatasetCategories.json");
 	qDebug("Upload file set!");
 	dialog.setUploadName("Dataset Categories");
 	qDebug() << "Upload name set: ";
