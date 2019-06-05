@@ -28,6 +28,7 @@
 
 #include "HypothesisTest.h"
 #include "HypothesisTestPrivate.h"
+#include "kdefrontend/hypothesis_test/HypothesisTestView.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
@@ -41,7 +42,8 @@ extern "C" {
 #include <QMessageBox>
 #include <QtMath>
 #include <KLocalizedString>
-
+#include <QStandardItemModel>
+#include <QLocale>
 
 HypothesisTest::HypothesisTest(const QString &name) : AbstractPart(name),
 d(new HypothesisTestPrivate(this)) {
@@ -49,6 +51,14 @@ d(new HypothesisTestPrivate(this)) {
 
 HypothesisTest::~HypothesisTest() {
     delete d;
+}
+
+QAbstractItemModel* HypothesisTest::dataModel() {
+    return d->dataModel;
+}
+
+QAbstractItemModel* HypothesisTest::horizontalHeaderModel() {
+    return d->horizontalHeaderModel;
 }
 
 void HypothesisTest::setDataSourceType(DataSourceType type) {
@@ -87,7 +97,9 @@ void HypothesisTest::performTwoSampleTTest() {
  *                      Private Implementations
  * ****************************************************************************/
 
-HypothesisTestPrivate::HypothesisTestPrivate(HypothesisTest* owner) : q(owner) {
+HypothesisTestPrivate::HypothesisTestPrivate(HypothesisTest* owner) : q(owner) ,
+    dataModel(new QStandardItemModel) ,
+    horizontalHeaderModel(new QStandardItemModel) {
 }
 
 HypothesisTestPrivate::~HypothesisTestPrivate() {
@@ -119,6 +131,9 @@ void HypothesisTestPrivate::setColumns(QStringList cols) {
 }
 
 void HypothesisTestPrivate::performTwoSampleTTest() {
+    dataModel->clear();
+//    horizontalHeaderModel->clear();
+
     QMessageBox* msg_box = new QMessageBox();
     // checking for cols;
     if (m_columns.size() != 2) {
@@ -147,7 +162,11 @@ void HypothesisTestPrivate::performTwoSampleTTest() {
         return;
     }
 
-    // use of three than two for human readiblity of code;
+    dataModel->setRowCount(1);
+    dataModel->setColumnCount(3);
+
+    horizontalHeaderModel->setColumnCount(3);
+
     int n[2];
     double sum[2], mean[2], std[2];
 
@@ -176,9 +195,24 @@ void HypothesisTestPrivate::performTwoSampleTTest() {
     // now finding p value from t value
     double p_value = nsl_stats_tdist_p(t, df);
 
-    QString text = i18n("T value for test is %1 and\n p value is %2",t, p_value);
-    msg_box->setText(text);
-    msg_box->exec();
+//    QString text = i18n("T value for test is %1 and\n p value is %2",t, p_value);
+//    msg_box->setText(text);
+//    msg_box->exec();
+
+    //setting dataModel
+    dataModel->setItem(0, 0, new QStandardItem(QString::number(t)));
+    dataModel->setItem(0, 1, new QStandardItem(QString::number(df)));
+    dataModel->setItem(0, 2, new QStandardItem(QString::number(p_value)));
+
+
+    //setting horizontal header model
+    horizontalHeaderModel->setHeaderData(0, Qt::Horizontal, "t value");
+    horizontalHeaderModel->setHeaderData(1, Qt::Horizontal, "dof");
+    horizontalHeaderModel->setHeaderData(2, Qt::Horizontal, "p value");
+
+//    horizontalHeaderModel->setItem(0, 0, new QStandardItem("T Value"));
+//    horizontalHeaderModel->setItem(0, 1, new QStandardItem("dof"));
+//    horizontalHeaderModel->setItem(0, 2, new QStandardItem("P value"));
     return;
 
 //    double t_value =
@@ -266,12 +300,11 @@ bool HypothesisTest::printPreview() const {
   called at all. Aspects must not depend on the existence of a view for their operation.
 */
 QWidget* HypothesisTest::view() const {
-//    if (!m_partView) {
-//        m_view = new PivotTableView(const_cast<PivotTable*>(this));
-//        m_partView = m_view;
-//    }
-//    return m_partView;
-    return new QWidget();
+    if (!m_partView) {
+        m_view = new HypothesisTestView(const_cast<HypothesisTest*>(this));
+        m_partView = m_view;
+    }
+    return m_partView;
 }
 
 /*!

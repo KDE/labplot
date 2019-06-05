@@ -27,7 +27,7 @@
       </property>
       <item>
        <property name="text">
-        <string>Two Sample Independent</string>
+        <string>Independent Sample T-Test</string>
        </property>
       </item>
      </item>

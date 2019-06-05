@@ -34,7 +34,9 @@
 #include "backend/lib/macros.h"
 
 class HypothesisTestPrivate;
+class HypothesisTestView;
 class Spreadsheet;
+class QAbstractItemModel;
 class QString;
 class Column;
 
@@ -47,6 +49,8 @@ public:
 
     enum DataSourceType {DataSourceSpreadsheet, DataSourceDatabase};
 
+    QAbstractItemModel* dataModel();
+    QAbstractItemModel *horizontalHeaderModel();
     void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
     void setColumns(QVector<Column*> cols);
     void setColumns(QStringList cols);
@@ -73,6 +77,7 @@ public:
 
 private:
     HypothesisTestPrivate* const d;
+    mutable HypothesisTestView* m_view{nullptr};
     friend class HypothesisTestPrivate;
 
 signals:

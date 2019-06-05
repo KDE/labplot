@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : HypothesisTestPrivate.h
+    File                 : PivotTableView.h
     Project              : LabPlot
-    Description          : Private members of Hypothesis Test
+    Description          : View class for PivotTable
     --------------------------------------------------------------------
     Copyright            : (C) 2019 by Alexander Semke (alexander.semke@web.de)
 
@@ -26,42 +26,62 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef HYPOTHESISTESTPRIVATE_H
-#define HYPOTHESISTESTPRIVATE_H
+#ifndef HYPOTHESISTESTVIEW_H
+#define HYPOTHESISTESTVIEW_H
 
-#include <backend/hypothesis_test/HypothesisTest.h>
+#include <QWidget>
 
-class QStandardItemModel;
+#include "backend/core/AbstractColumn.h"
+#include "backend/lib/IntervalAttribute.h"
 
-class HypothesisTestPrivate {
+class Column;
+class HypothesisTest;
+class HypothesisTestModel;
+class AbstractAspect;
+class QTableView;
+class QHeaderView;
+
+class QPrinter;
+class QMenu;
+class QToolBar;
+class QModelIndex;
+class QItemSelection;
+
+class HypothesisTestView : public QWidget {
+	Q_OBJECT
+
 public:
-        explicit HypothesisTestPrivate(HypothesisTest*);
-        virtual ~HypothesisTestPrivate();
+        explicit HypothesisTestView(HypothesisTest*);
+        ~HypothesisTestView() override;
 
-        QString name() const;
+	bool exportView();
+	bool printView();
+	bool printPreview();
 
-        HypothesisTest* const q;
-
-        HypothesisTest::DataSourceType dataSourceType{HypothesisTest::DataSourceSpreadsheet};
-        Spreadsheet* dataSourceSpreadsheet{nullptr};
-        
-        void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
-        void setColumns(QStringList cols);
-        QVector<Column*> m_columns;
-        
-        QStringList all_columns;
-
-        QStandardItemModel* dataModel{nullptr};
-        QStandardItemModel* horizontalHeaderModel{nullptr};
-
-        bool m_dbCreated{false};
-        int m_rowCount{0};
-        int m_columnCount{0};
-        
-        void performTwoSampleTTest();
 private:
-        void findStats(Column* column, int &count, double &sum, double &mean, double &std);
-// 	QMap<QString, QStringList> m_members;
+	void init();
+	void initActions();
+	void initMenus();
+	void connectActions();
+
+	void exportToFile(const QString&, const bool, const QString&, QLocale::Language) const;
+	void exportToLaTeX(const QString&, const bool exportHeaders,
+	                   const bool gridLines, const bool captions, const bool latexHeaders,
+	                   const bool skipEmptyRows,const bool exportEntire) const;
+
+        HypothesisTest* m_hypothesisTest;
+	QTableView* m_tableView;
+        QHeaderView* m_horizontalHeaderView;
+
+public slots:
+	void createContextMenu(QMenu*);
+	void fillToolBar(QToolBar*);
+	void print(QPrinter*) const;
+	void changed();
+
+private slots:
+	void goToCell();
+	void goToCell(int row, int col);
 };
 
 #endif

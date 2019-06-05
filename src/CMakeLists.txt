@@ -69,6 +69,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYConvolutionCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYCorrelationCurveDock.cpp
         ${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
+        ${KDEFRONTEND_DIR}/hypothesis_test/HypothesisTestView.cpp
 	${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
 	${KDEFRONTEND_DIR}/pivot/HierarchicalHeaderView.cpp
 	${KDEFRONTEND_DIR}/pivot/PivotTableView.cpp
