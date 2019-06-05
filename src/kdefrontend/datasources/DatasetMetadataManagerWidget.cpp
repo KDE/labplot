@@ -220,13 +220,47 @@ bool DatasetMetadataManagerWidget::checkDatasetName() {
 	return longNameOk;
 }
 
+bool DatasetMetadataManagerWidget::checkDescription() {
+	bool descriptionOk = !ui.teDescription->toPlainText().isEmpty();
+	if(!descriptionOk)	{
+		QPalette palette;
+		palette.setColor(QPalette::Base,Qt::red);
+		palette.setColor(QPalette::Text,Qt::black);
+		ui.teDescription->setPalette(palette);
+		ui.teDescription->setToolTip("Please fill this out!");
+	} else {
+		QPalette palette;
+		palette.setColor(QPalette::Base,Qt::white);
+		palette.setColor(QPalette::Text,Qt::black);
+		ui.teDescription->setPalette(palette);
+		ui.teDescription->setToolTip("");
+	}
+
+	return descriptionOk;
+}
+
+void DatasetMetadataManagerWidget::enableDatasetSettings(bool enable) {
+	ui.leFileName->setEnabled(enable);
+	ui.leFileName->setReadOnly(!enable);
+	ui.leDatasetName->setEnabled(enable);
+	ui.leDatasetName->setReadOnly(!enable);
+	ui.leDownloadURL->setEnabled(enable);
+	ui.leDownloadURL->setReadOnly(!enable);
+	ui.teDescription->setEnabled(enable);
+	ui.teDescription->setReadOnly(!enable);
+	ui.gbColumnDescriptions->setEnabled(enable);
+	ui.gbFilter->setEnabled(enable);
+}
+
 bool DatasetMetadataManagerWidget::checkDataValidity() {
 	bool fileNameOK = checkFileName();
 	bool urlOk = urlExists();
 	bool longNameOk = checkDatasetName();
-	bool descriptionOk = !ui.teDescription->toPlainText().isEmpty();
+	bool descriptionOk = checkDescription();
 	bool categoryOk = !ui.cbCategory->currentText().isEmpty();
 	bool subcategoryOk = !ui.cbSubcategory->currentText().isEmpty();
+
+	enableDatasetSettings(categoryOk && subcategoryOk);
 
 	return fileNameOK && urlOk && longNameOk && descriptionOk && subcategoryOk && categoryOk;
 }
@@ -236,6 +270,7 @@ void DatasetMetadataManagerWidget::updateSubcategories(const QString& category) 
 	if(m_categoryList.contains(category)) {
 		ui.cbSubcategory->addItems(m_subcategoryMap[category]);
 	}
+	emit checkOk();
 }
 
 void DatasetMetadataManagerWidget::updateDocument(const QString& fileName) {

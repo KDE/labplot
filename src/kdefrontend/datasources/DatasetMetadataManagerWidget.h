@@ -55,7 +55,9 @@ private:
     bool checkFileName();
 	bool urlExists();
 	bool checkDatasetName();
+	bool checkDescription();
 	void loadSettings();
+	void enableDatasetSettings(bool);
 
 private slots:
     void updateSubcategories(const QString&);
