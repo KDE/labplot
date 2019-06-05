@@ -33,7 +33,7 @@
 
 #include <QInputDialog>
 #include <QFile>
-#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QPainter>
 #include <QPrinter>
 #include <QPrintDialog>
@@ -61,16 +61,17 @@ HypothesisTestView::HypothesisTestView(HypothesisTest* hypothesisTest) : QWidget
     m_tableView(new QTableView(this)),
     m_horizontalHeaderView(new QHeaderView(Qt::Horizontal, m_tableView)) {
 
-	auto* layout = new QHBoxLayout(this);
+    auto* layout = new QVBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
 	layout->addWidget(m_tableView);
 
     m_horizontalHeaderView->setVisible(true);
     m_horizontalHeaderView->setEnabled(true);
     m_horizontalHeaderView->setSectionsClickable(true);
-	m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    m_tableView->setHorizontalHeader(m_horizontalHeaderView);
-	init();
+
+    m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+    init();
 }
 
 HypothesisTestView::~HypothesisTestView() = default;
