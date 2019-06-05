@@ -39,6 +39,12 @@ Copyright            : (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
 #include "backend/datasources/DatasetHandler.h"
 #include "QMessageBox"
 #include "QDir"
+#include <KLocalizedString>
+#include <KMessageBox>
+#include "KNS3/DownloadDialog"
+#include "KNewStuff3/KNS3/DownloadDialog"
+#include "KNS3/DownloadManager"
+#include "KNS3/UploadDialog"
 
 ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	m_categoryCompleter(new QCompleter),
@@ -46,7 +52,7 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	m_loadingCategories(false)
 {
 	QString baseDir = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first();
-	QString containingDir = ".labplot";
+	QString containingDir = "labplot_data";
 	m_jsonDir=baseDir + QDir::separator() + containingDir + QDir::separator();
 	ui.setupUi(this);
 
@@ -269,6 +275,31 @@ void ImportDatasetWidget::showDatasetMetadataManager() {
 		loadDatasetCategoriesFromJson();
 	}
 	delete dlg;
+
+
+	/*KNS3::UploadDialog dialog("labplot2_datasets.knsrc", this);
+
+	QFile file(m_jsonDir + "DatasetCategories_backup.json");
+	qDebug() << "file " << m_jsonDir + "DatasetCategories_backup.json "<< file.exists();
+	qDebug() << "file can be opened: " << file.open(QIODevice::ReadOnly) << "  " << file.errorString();
+	file.close();
+
+	QUrl payloadFile ="file:" + m_jsonDir + "DatasetCategories_backup.json";
+	QFile file2(payloadFile.toLocalFile());
+	qDebug() << "Local file: " << payloadFile.toLocalFile();
+		 if (!file2.open(QIODevice::ReadOnly)) {
+			 qDebug() << i18n("File not found: %1  ", payloadFile.url());
+		 } else {
+			 qDebug() << i18n("File found: %1  ", payloadFile.url());
+		 }
+	file2.close();
+
+	dialog.setUploadFile("file:" + m_jsonDir + "DatasetCategories_backup.json");
+	qDebug("Upload file set!");
+	dialog.setUploadName("Dataset Categories");
+	qDebug() << "Upload name set: ";
+
+	dialog.exec();*/
 }
 
 void ImportDatasetWidget::downloadCategoryFile() {
@@ -280,7 +311,7 @@ void ImportDatasetWidget::downloadCategoryFile() {
 
 	if(!QDir(m_jsonDir).exists()) {
 		qDebug() << parentDir;
-		QDir(parentDir).mkdir(".labplot");
+		QDir(parentDir).mkdir("labplot_data");
 	}
 	QFile::copy(fileNameOld, fileNameNew);
 }

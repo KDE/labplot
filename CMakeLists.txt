@@ -42,8 +42,9 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	TextWidgets
 	WidgetsAddons
 	XmlGui
+    NewStuffCore
+    NewStuff
 OPTIONAL_COMPONENTS
-	NewStuff
 	Service
 	Parts
 	SyntaxHighlighting

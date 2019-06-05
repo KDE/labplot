@@ -136,7 +136,8 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 	QRegularExpressionMatch match = re.match(fileName);
 	bool hasMatch = match.hasMatch();
 
-	if(!hasMatch) {
+	qDebug() << hasMatch;
+	if(!hasMatch || fileName.isEmpty()) {
 		qDebug("File name invalid");
 		QPalette palette;
 		palette.setColor(QPalette::Base,Qt::red);
@@ -168,11 +169,13 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 				found = true;
 			} else {
 				qDebug("Dataset not found");
-				QPalette palette;
-				palette.setColor(QPalette::Base,Qt::white);
-				palette.setColor(QPalette::Text,Qt::black);
-				ui.leFileName->setPalette(palette);
-				ui.leFileName->setToolTip("");
+				if(hasMatch) {
+					QPalette palette;
+					palette.setColor(QPalette::Base,Qt::white);
+					palette.setColor(QPalette::Text,Qt::black);
+					ui.leFileName->setPalette(palette);
+					ui.leFileName->setToolTip("");
+				}
 			}
 		}
 	}
@@ -180,28 +183,47 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 	return hasMatch && !found;
 }
 
-bool DatasetMetadataManagerWidget::urlExists() {
-	if(QUrl(ui.leDownloadURL->text()).isValid()) {
+bool DatasetMetadataManagerWidget::urlExists() {	
+	if(!QUrl(ui.leDownloadURL->text()).isValid() || ui.leDownloadURL->text().isEmpty())	{
+		QPalette palette;
+		palette.setColor(QPalette::Base,Qt::red);
+		palette.setColor(QPalette::Text,Qt::black);
+		ui.leDownloadURL->setPalette(palette);
+		ui.leDownloadURL->setToolTip("The URL is invalid!");
+	} else {
 		QPalette palette;
 		palette.setColor(QPalette::Base,Qt::white);
 		palette.setColor(QPalette::Text,Qt::black);
 		ui.leDownloadURL->setPalette(palette);
 		ui.leDownloadURL->setToolTip("");
 		return true;
-	} else {
+	}
+	return false;
+}
+
+bool DatasetMetadataManagerWidget::checkDatasetName() {
+	bool longNameOk = !ui.leDatasetName->text().isEmpty();
+	if(!longNameOk)	{
 		QPalette palette;
 		palette.setColor(QPalette::Base,Qt::red);
 		palette.setColor(QPalette::Text,Qt::black);
-		ui.leDownloadURL->setPalette(palette);
-		ui.leDownloadURL->setToolTip("The URL is invalid!");
+		ui.leDatasetName->setPalette(palette);
+		ui.leDatasetName->setToolTip("Please fill this out!");
+	} else {
+		QPalette palette;
+		palette.setColor(QPalette::Base,Qt::white);
+		palette.setColor(QPalette::Text,Qt::black);
+		ui.leDatasetName->setPalette(palette);
+		ui.leDatasetName->setToolTip("");
 	}
-	return false;
+
+	return longNameOk;
 }
 
 bool DatasetMetadataManagerWidget::checkDataValidity() {
 	bool fileNameOK = checkFileName();
 	bool urlOk = urlExists();
-	bool longNameOk = !ui.leDatasetName->text().isEmpty();
+	bool longNameOk = checkDatasetName();
 	bool descriptionOk = !ui.teDescription->toPlainText().isEmpty();
 	bool categoryOk = !ui.cbCategory->currentText().isEmpty();
 	bool subcategoryOk = !ui.cbSubcategory->currentText().isEmpty();

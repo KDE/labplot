@@ -39,7 +39,7 @@ Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
 DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) : QDialog(parent),
 	m_mainWidget(new DatasetMetadataManagerWidget(this, datasetMap))
 {
-	connect(m_mainWidget, &DatasetMetadataManagerWidget::checkOk, this, &DatasetMetadataManagerDialog::checkOkButton);
+	connect(m_mainWidget, &DatasetMetadataManagerWidget::checkOk, this, &DatasetMetadataManagerDialog::checkOkButton);	
 
 	setWindowTitle(i18nc("@title:window", "Dataset metadata manager"));
 
@@ -62,6 +62,8 @@ DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, cons
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else
 		resize(QSize(0, 0).expandedTo(minimumSize()));
+
+	checkOkButton();
 }
 
 DatasetMetadataManagerDialog::~DatasetMetadataManagerDialog() {

@@ -54,6 +54,7 @@ private:
     void initDatasets(const QMap<QString, QMap<QString, QVector<QString>>>&);
     bool checkFileName();
 	bool urlExists();
+	bool checkDatasetName();
 	void loadSettings();
 
 private slots:

@@ -386,6 +386,8 @@ target_link_libraries( labplot2lib
 	KF5::KIOWidgets
 	KF5::TextWidgets
 	KF5::XmlGui
+    KF5::NewStuff
+    KF5::NewStuffCore
 	Qt5::Svg
 	Qt5::Core
 	Qt5::Network
@@ -481,4 +483,5 @@ install( FILES ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico ${C
 install( PROGRAMS org.kde.labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
 install( FILES labplot2_themes.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
+install( FILES labplot2_datasets.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )
