@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : PivotTableView.cpp
+    File                 : HypothesisTestView.cpp
     Project              : LabPlot
-    Description          : View class for PivotTable
+    Description          : View class for Hypothesis Tests' Table
     --------------------------------------------------------------------
     Copyright            : (C) 2019 by Alexander Semke (alexander.semke@web.de)
 
@@ -33,6 +33,7 @@
 
 #include <QInputDialog>
 #include <QFile>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QPrinter>
@@ -40,7 +41,7 @@
 #include <QPrintPreviewDialog>
 #include <QTableView>
 #include <QHeaderView>
-#include <QStandardItemModel>
+#include <QLabel>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -59,18 +60,40 @@
 HypothesisTestView::HypothesisTestView(HypothesisTest* hypothesisTest) : QWidget(),
     m_hypothesisTest(hypothesisTest),
     m_tableView(new QTableView(this)),
-    m_horizontalHeaderView(new QHeaderView(Qt::Horizontal, m_tableView)) {
+    m_horizontalHeaderView(new QHeaderView(Qt::Horizontal, m_tableView)),
+    m_testName(new QLabel()) {
+
+    //setting alignments and fonts of testname label;
+    m_testName->setText(m_hypothesisTest->testName());
+//    m_testName->setAlignment(Qt::AlignCenter);
+    QFont font = m_testName->font();
+    font.setPointSize(15);
+    m_testName->setFont(font);
+
+    //setting properties for table view
+    m_tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+//    m_tableView->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+
+//    QHBoxLayout* tableLayout = new QHBoxLayout(m_tableView);
+//    m_tableView->setLayout(tableLayout);
+//    m_tableView->setLayout(Qt::ho)
 
     auto* layout = new QVBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
+    layout->addWidget(m_testName);
+    layout->addSpacing(5);
 	layout->addWidget(m_tableView);
+//    layout->setAlignment(m_testName, Qt::AlignHCenter);
+//    layout->setAlignment(m_tableView, Qt::AlignJustify);
+
 
     m_horizontalHeaderView->setVisible(true);
     m_horizontalHeaderView->setEnabled(true);
     m_horizontalHeaderView->setSectionsClickable(true);
 
     m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-
+    m_tableView->setHorizontalHeader(m_horizontalHeaderView);
+    m_tableView->verticalHeader()->setVisible(false);
     init();
 }
 
@@ -83,7 +106,7 @@ void HypothesisTestView::init() {
     m_tableView->setModel(m_hypothesisTest->dataModel());
     m_horizontalHeaderView->setModel(m_hypothesisTest->horizontalHeaderModel());
 
-//    connect(m_hypothesisTest, &HypothesisTest::changed, this, &HypothesisTestView::changed);
+    connect(m_hypothesisTest, &HypothesisTest::changed, this, &HypothesisTestView::changed);
 }
 
 void HypothesisTestView::initActions() {
@@ -165,7 +188,7 @@ void HypothesisTestView::print(QPrinter* printer) const {
 }
 
  void HypothesisTestView::changed() {
-
+    m_testName->setText(m_hypothesisTest->testName());
  }
 
 void HypothesisTestView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {

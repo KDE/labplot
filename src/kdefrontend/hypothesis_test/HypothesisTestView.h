@@ -46,6 +46,7 @@ class QMenu;
 class QToolBar;
 class QModelIndex;
 class QItemSelection;
+class QLabel;
 
 class HypothesisTestView : public QWidget {
 	Q_OBJECT
@@ -72,6 +73,7 @@ private:
         HypothesisTest* m_hypothesisTest;
 	QTableView* m_tableView;
         QHeaderView* m_horizontalHeaderView;
+        QLabel* m_testName;
 
 public slots:
 	void createContextMenu(QMenu*);

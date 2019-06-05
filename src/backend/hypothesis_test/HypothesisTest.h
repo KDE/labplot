@@ -51,6 +51,7 @@ public:
 
     QAbstractItemModel* dataModel();
     QAbstractItemModel *horizontalHeaderModel();
+    QString testName();
     void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
     void setColumns(QVector<Column*> cols);
     void setColumns(QStringList cols);

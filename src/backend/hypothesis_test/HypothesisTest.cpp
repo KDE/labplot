@@ -93,6 +93,10 @@ void HypothesisTest::performTwoSampleTTest() {
     d->performTwoSampleTTest();
 }
 
+QString HypothesisTest::testName() {
+    return d->m_currTestName;
+}
+
 /******************************************************************************
  *                      Private Implementations
  * ****************************************************************************/
@@ -132,7 +136,8 @@ void HypothesisTestPrivate::setColumns(QStringList cols) {
 
 void HypothesisTestPrivate::performTwoSampleTTest() {
     dataModel->clear();
-//    horizontalHeaderModel->clear();
+    horizontalHeaderModel->clear();
+    m_currTestName = i18n("Independent Two Sample T Test");
 
     QMessageBox* msg_box = new QMessageBox();
     // checking for cols;
@@ -178,7 +183,7 @@ void HypothesisTestPrivate::performTwoSampleTTest() {
         DEBUG("std is " << std[i]);
 
         if (n[i] < 1) {
-            msg_box->setText(i18n("atleast one of selected column empty"));
+            msg_box->setText(i18n("atleast one of selected column is empty"));
             msg_box->exec();
             return;
         }
@@ -210,13 +215,8 @@ void HypothesisTestPrivate::performTwoSampleTTest() {
     horizontalHeaderModel->setHeaderData(1, Qt::Horizontal, "dof");
     horizontalHeaderModel->setHeaderData(2, Qt::Horizontal, "p value");
 
-//    horizontalHeaderModel->setItem(0, 0, new QStandardItem("T Value"));
-//    horizontalHeaderModel->setItem(0, 1, new QStandardItem("dof"));
-//    horizontalHeaderModel->setItem(0, 2, new QStandardItem("P value"));
+    emit q->changed();
     return;
-
-//    double t_value =
-
 }
 
 void HypothesisTestPrivate::findStats(Column* column, int &count, double &sum, double &mean, double &std) {

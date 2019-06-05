@@ -57,7 +57,8 @@ public:
         bool m_dbCreated{false};
         int m_rowCount{0};
         int m_columnCount{0};
-        
+        QString m_currTestName{"Result Table"};
+
         void performTwoSampleTTest();
 private:
         void findStats(Column* column, int &count, double &sum, double &mean, double &std);
