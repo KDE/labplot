@@ -31,6 +31,7 @@
 #include "ColumnStringIO.h"
 #include "Column.h"
 #include "backend/core/datatypes/filter.h"
+#include "backend/gsl/ExpressionParser.h"
 
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode) :
 	m_column_mode(mode), m_owner(owner) {
@@ -885,10 +886,61 @@ QString ColumnPrivate::formula() const {
 /**
  * \brief Sets the formula used to generate column values
  */
-void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes) {
+void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& variableColumns) {
 	m_formula = formula;
 	m_formulaVariableNames = variableNames;
-	m_formulaVariableColumnPathes = variableColumnPathes;
+	m_formulaVariableColumns = variableColumns;
+
+	disconnect(m_owner, &Column::updateFormula, nullptr, nullptr);
+	QVector<Column*> columns;
+	for (auto column : variableColumns)
+		connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
+}
+
+const QStringList& ColumnPrivate::formulaVariableNames() const {
+	return m_formulaVariableNames;
+}
+
+const QVector<Column*>& ColumnPrivate::formulaVariableColumns() const {
+	return m_formulaVariableColumns;
+}
+
+/*!
+ * \sa FunctionValuesDialog::generate()
+ */
+void ColumnPrivate::updateFormula() {
+	//determine variable names and the data vectors of the specified columns
+	QVector<QVector<double>*> xVectors;
+	QVector<QVector<double>*> xNewVectors;
+
+	for (auto column : m_formulaVariableColumns) {
+		if (column->columnMode() == AbstractColumn::Integer) {
+			//convert integers to doubles first
+			auto* xVector = new QVector<double>(column->rowCount());
+			for (int i = 0; i<column->rowCount(); ++i)
+				xVector->operator[](i) = column->valueAt(i);
+
+			xNewVectors << xVector;
+			xVectors << xVector;
+		} else
+			xVectors << static_cast<QVector<double>* >(column->data());
+	}
+
+	//create new vector for storing the calculated values
+	//the vectors with the variable data can be smaller then the result vector. So, not all values in the result vector might get initialized.
+	//->"clean" the result vector first
+	QVector<double> new_data(rowCount());
+	for (auto& d : new_data)
+		d = NAN;
+
+	//evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
+	ExpressionParser* parser = ExpressionParser::getInstance();
+	parser->evaluateCartesian(m_formula, m_formulaVariableNames, xVectors, &new_data);
+	replaceValues(0, new_data);
+
+	//delete help vectors created for the conversion from int to double
+	for (auto* vector : xNewVectors)
+		delete vector;
 }
 
 /**
@@ -896,14 +948,6 @@ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variab
  */
 QString ColumnPrivate::formula(int row) const {
 	return m_formulas.value(row);
-}
-
-const QStringList& ColumnPrivate::formulaVariableNames() const {
-	return m_formulaVariableNames;
-}
-
-const QStringList& ColumnPrivate::formulaVariableColumnPathes() const {
-	return m_formulaVariableColumnPathes;
 }
 
 /**
