@@ -42,6 +42,7 @@ public:
     ~DatasetMetadataManagerDialog() override;
     void updateDocument(const QString& fileName);
     void createNewMetadata(const QString& dirPath);
+	QString getMetadataFilePath();
 
 private:
     DatasetMetadataManagerWidget* m_mainWidget;

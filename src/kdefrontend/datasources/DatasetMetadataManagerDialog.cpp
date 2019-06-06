@@ -84,3 +84,7 @@ void DatasetMetadataManagerDialog::updateDocument(const QString &fileName) {
 void DatasetMetadataManagerDialog::createNewMetadata(const QString& dirPath) {
 	m_mainWidget->createNewMetadata(dirPath);
 }
+
+QString DatasetMetadataManagerDialog::getMetadataFilePath() {
+	m_mainWidget->getMetadataFilePath();
+}

@@ -63,6 +63,8 @@ private:
 
 	void downloadCategoryFile();
 	void downloadDatasetFile(const QString&);
+	void uploadCategoryFile();
+	void uploadDatasetFile(const QString&);
 	void updateDatasetCompleter();
 	void updateCategoryCompleter();
 	void loadDatasetCategoriesFromJson();

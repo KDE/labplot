@@ -387,10 +387,10 @@ void DatasetMetadataManagerWidget::createNewMetadata(const QString& dirPath) {
 	}
 
 	path = path + ui.cbSubcategory->currentText() + QDir::separator();
-	QString fileName = path + ui.leFileName->text() + ".json";
-	qDebug() << "Creating " << fileName;
+	m_metadataFilePath = path + ui.leFileName->text() + ".json";
+	qDebug() << "Creating " << m_metadataFilePath;
 
-	QFile file(fileName);
+	QFile file(m_metadataFilePath);
 	if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
 		QJsonObject rootObject;
 
@@ -436,4 +436,8 @@ void DatasetMetadataManagerWidget::addColumnDescription() {
 	});
 
 	m_columnDescriptions.append("");
+}
+
+QString DatasetMetadataManagerWidget::getMetadataFilePath() {
+	return m_metadataFilePath;
 }

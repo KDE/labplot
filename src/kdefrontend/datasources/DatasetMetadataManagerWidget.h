@@ -41,6 +41,8 @@ public:
     bool checkDataValidity();
     void updateDocument(const QString& fileName);
     void createNewMetadata(const QString& dirPath);
+	QString getMetadataFilePath();
+
 
 private:
     Ui::DatasetMetadataManagerWidget ui;
@@ -48,6 +50,7 @@ private:
     QMap<QString, QStringList> m_subcategoryMap;
     QMap<QString, QStringList> m_datasetMap;
 	QStringList m_columnDescriptions;
+	QString m_metadataFilePath;
 
     void initCategories(const QMap<QString, QMap<QString, QVector<QString>>>&);
     void initSubcategories(const QMap<QString, QMap<QString, QVector<QString>>>&);

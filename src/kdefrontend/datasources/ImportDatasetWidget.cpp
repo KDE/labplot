@@ -267,39 +267,15 @@ void ImportDatasetWidget::showDatasetMetadataManager() {
 	DatasetMetadataManagerDialog* dlg = new DatasetMetadataManagerDialog(this, m_datasetsMap);
 
 	if (dlg->exec() == QDialog::Accepted) {
-		//updateCategoryJson() -- will be implemented - TODO
 		QString pathToJson =  m_jsonDir + "DatasetCategories.json";
 		QString dirPath = QFileInfo(pathToJson).dir().absolutePath();
 		dlg->updateDocument(pathToJson);
 		dlg->createNewMetadata(dirPath);
+		uploadCategoryFile();
+		uploadDatasetFile(dlg->getMetadataFilePath());
 		loadDatasetCategoriesFromJson();
 	}
-	delete dlg;
-
-
-	/*KNS3::UploadDialog dialog("labplot2_datasets.knsrc", this);
-
-	QFile file(m_jsonDir + "DatasetCategories.json");
-	qDebug() << "file " << m_jsonDir + "DatasetCategories.json "<< file.exists();
-	qDebug() << "file can be opened: " << file.open(QIODevice::ReadOnly) << "  " << file.errorString();
-	file.close();
-
-	QUrl payloadFile ="file:" + m_jsonDir + "DatasetCategories.json";
-	QFile file2(payloadFile.toLocalFile());
-	qDebug() << "Local file: " << payloadFile.toLocalFile();
-		 if (!file2.open(QIODevice::ReadOnly)) {
-			 qDebug() << i18n("File not found: %1  ", payloadFile.url());
-		 } else {
-			 qDebug() << i18n("File found: %1  ", payloadFile.url());
-		 }
-	file2.close();
-
-	dialog.setUploadFile("file:" + m_jsonDir + "DatasetCategories.json");
-	qDebug("Upload file set!");
-	dialog.setUploadName("Dataset Categories");
-	qDebug() << "Upload name set: ";
-
-	dialog.exec();*/
+	delete dlg;	
 }
 
 void ImportDatasetWidget::downloadCategoryFile() {
@@ -395,4 +371,56 @@ void ImportDatasetWidget::highlightLocalMetadataFiles() {
 		else
 			currentItem->setBackgroundColor(Qt::white);
 	}
+}
+
+void ImportDatasetWidget::uploadCategoryFile() {
+	/*KNS3::UploadDialog dialog("labplot2_datasets.knsrc", this);
+
+	QFile file(m_jsonDir + "DatasetCategories.json");
+	qDebug() << "file " << m_jsonDir + "DatasetCategories.json "<< file.exists();
+	qDebug() << "file can be opened: " << file.open(QIODevice::ReadOnly) << "  " << file.errorString();
+	file.close();
+
+	QUrl payloadFile ="file:" + m_jsonDir + "DatasetCategories.json";
+	QFile file2(payloadFile.toLocalFile());
+	qDebug() << "Local file: " << payloadFile.toLocalFile();
+		 if (!file2.open(QIODevice::ReadOnly)) {
+			 qDebug() << i18n("File not found: %1  ", payloadFile.url());
+		 } else {
+			 qDebug() << i18n("File found: %1  ", payloadFile.url());
+		 }
+	file2.close();
+
+	dialog.setUploadFile("file:" + m_jsonDir + "DatasetCategories.json");
+	qDebug("Upload file set!");
+	dialog.setUploadName("Dataset Categories");
+	qDebug() << "Upload name set: ";
+
+	dialog.exec();*/
+}
+
+void ImportDatasetWidget::uploadDatasetFile(const QString& filePath) {
+	/*KNS3::UploadDialog dialog("labplot2_datasets.knsrc", this);
+
+	QFile file(filePath);
+	qDebug() << filePath + "  " << file.exists();
+	qDebug() << "file can be opened: " << file.open(QIODevice::ReadOnly) << "  " << file.errorString();
+	file.close();
+
+	QUrl payloadFile ="file:" + filePath;
+	QFile file2(payloadFile.toLocalFile());
+	qDebug() << "Local file: " << payloadFile.toLocalFile();
+		 if (!file2.open(QIODevice::ReadOnly)) {
+			 qDebug() << i18n("File not found: %1  ", payloadFile.url());
+		 } else {
+			 qDebug() << i18n("File found: %1  ", payloadFile.url());
+		 }
+	file2.close();
+
+	dialog.setUploadFile("file:" + filePath);
+	qDebug("Upload file set!");
+	dialog.setUploadName("Dataset Categories");
+	qDebug() << "Upload name set: ";
+
+	dialog.exec();*/
 }
