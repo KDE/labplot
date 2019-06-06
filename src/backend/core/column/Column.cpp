@@ -330,15 +330,24 @@ const QStringList& Column::formulaVariableNames() const {
 	return d->formulaVariableNames();
 }
 
-const QStringList& Column::formulaVariableColumnPathes() const {
-	return d->formulaVariableColumnPathes();
+const QVector<Column*>& Column::formulaVariableColumns() const {
+	return d->formulaVariableColumns();
 }
 
 /**
  * \brief Sets the formula used to generate column values
  */
-void Column::setFormula(const QString& formula, const QStringList& variableNames, const QStringList& columnPathes) {
-	exec(new ColumnSetGlobalFormulaCmd(d, formula, variableNames, columnPathes));
+void Column::setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns) {
+	exec(new ColumnSetGlobalFormulaCmd(d, formula, variableNames, columns));
+}
+
+/*!
+ * in case the cell values are calculated via a global column formula,
+ * updates the values on data changes in all the dependent changes in the
+ * "variable columns".
+ */
+void Column::updateFormula() {
+	d->updateFormula();
 }
 
 /**
@@ -765,8 +774,8 @@ void Column::save(QXmlStreamWriter* writer) const {
 		writer->writeEndElement();
 
 		writer->writeStartElement("columnPathes");
-		for (const auto& path : formulaVariableColumnPathes())
-			writer->writeTextElement("path", path);
+		for (const auto col : formulaVariableColumns())
+			writer->writeTextElement("path", col->path());
 		writer->writeEndElement();
 
 		writer->writeEndElement();
@@ -981,7 +990,9 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 			}
 		}
 	}
-	setFormula(formula, variableNames, columnPathes);
+	//TODO:
+// 	setFormula(formula, variableNames, columnPathes);
+
 	return true;
 }
 

@@ -128,7 +128,7 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 		m_variableNames[0]->setText("x");
 	} else {
 		//formula and variables are available
-		const QStringList& columnPathes = m_columns.first()->formulaVariableColumnPathes();
+		const QVector<Column*>& variableColumns = m_columns.first()->formulaVariableColumns();
 
 		//add all available variables and select the corresponding columns
 		const QVector<AbstractAspect*> cols = m_spreadsheet->project()->children(AspectType::Column, AbstractAspect::Recursive);
@@ -136,9 +136,9 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 			addVariable();
 			m_variableNames[i]->setText(variableNames.at(i));
 
-			for (const auto* aspect : cols) {
-				if (aspect->path() == columnPathes.at(i)) {
-					const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
+			for (const auto* col : cols) {
+				if (col == variableColumns.at(i)) {
+					const auto* column = dynamic_cast<const AbstractColumn*>(col);
 					if (column)
 						m_variableDataColumns[i]->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
 					else
@@ -327,7 +327,7 @@ void FunctionValuesDialog::generate() {
 
 	//determine variable names and the data vectors of the specified columns
 	QStringList variableNames;
-	QStringList columnPathes;
+	QVector<Column*> columns;
 	QVector<QVector<double>*> xVectors;
 	QVector<QVector<double>*> xNewVectors;
 	int maxRowCount = m_spreadsheet->rowCount();
@@ -338,7 +338,7 @@ void FunctionValuesDialog::generate() {
 		Q_ASSERT(aspect);
 		auto* column = dynamic_cast<Column*>(aspect);
 		Q_ASSERT(column);
-		columnPathes << column->path();
+		columns << column;
 		if (column->columnMode() == AbstractColumn::Integer) {
 			//convert integers to doubles first
 			auto* xVector = new QVector<double>(column->rowCount());
@@ -375,7 +375,7 @@ void FunctionValuesDialog::generate() {
 		if (col->columnMode() != AbstractColumn::Numeric)
 			col->setColumnMode(AbstractColumn::Numeric);
 
-		col->setFormula(expression, variableNames, columnPathes);
+		col->setFormula(expression, variableNames, columns);
 		col->replaceValues(0, new_data);
 	}
 

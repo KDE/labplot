@@ -76,10 +76,10 @@ public:
 	AbstractSimpleFilter* outputFilter() const;
 	ColumnStringIO* asStringColumn() const;
 
-	void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
+	void setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns);
 	QString formula() const;
 	const QStringList& formulaVariableNames() const;
-	const QStringList& formulaVariableColumnPathes() const;
+	const QVector<Column*>& formulaVariableColumns() const;
 
 	QString formula(int) const  override;
 	QVector< Interval<int> > formulaIntervals() const override;
@@ -117,6 +117,9 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+
+public slots:
+	void updateFormula();
 
 private:
 	bool XmlReadInputFilter(XmlStreamReader*);
