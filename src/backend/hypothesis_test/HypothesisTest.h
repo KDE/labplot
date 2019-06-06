@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : HypothesisTest.h
     Project              : LabPlot
-    Description          : Doing T-Test on data provided
+    Description          : Doing Hypothesis-Test on data provided
     --------------------------------------------------------------------
     Copyright            : (C) 2019 Alexander Semke(alexander.semke@web.de)
 

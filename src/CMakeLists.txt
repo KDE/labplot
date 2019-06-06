@@ -10,6 +10,7 @@ set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 
 # do not process this file
 set_property(SOURCE gsl_parser.h PROPERTY SKIP_AUTOMOC ON)
+
 set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/GuiObserver.cpp
 	${KDEFRONTEND_DIR}/GuiTools.cpp
