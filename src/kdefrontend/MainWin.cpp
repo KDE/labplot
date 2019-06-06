@@ -324,7 +324,7 @@ void MainWin::initActions() {
 	actionCollection()->addAction("new_datapicker", m_newDatapickerAction);
 	connect(m_newDatapickerAction, &QAction::triggered, this, &MainWin::newDatapicker);
 
-    m_newHypothesisTestAction = new QAction(QIcon::fromTheme("labplot-spreadsheet-new"),i18n("Hypothesis Test"),this);
+    m_newHypothesisTestAction = new QAction(QIcon::fromTheme("labplot-spreadsheet-new"), i18n("Hypothesis Test"), this);
     m_newHypothesisTestAction->setWhatsThis(i18n("Creates windows for hypothesis testing"));
     actionCollection()->addAction("new_hypothesis_test", m_newHypothesisTestAction);
     connect(m_newHypothesisTestAction, &QAction::triggered, this, &MainWin::newHypothesisTest);

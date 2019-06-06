@@ -139,6 +139,9 @@ void HypothesisTestPrivate::performTwoSampleTTest() {
     horizontalHeaderModel->clear();
     m_currTestName = i18n("Independent Two Sample T Test");
 
+    DEBUG("performing two sample test :DEBUG MACRO");
+    qDebug() << "performing two sample test: qDebug()";
+
     QMessageBox* msg_box = new QMessageBox();
     // checking for cols;
     if (m_columns.size() != 2) {

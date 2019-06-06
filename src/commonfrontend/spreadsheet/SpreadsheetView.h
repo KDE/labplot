@@ -130,7 +130,7 @@ private:
 	QAction* action_go_to_cell;
 	QAction* action_statistics_all_columns;
 	QAction* action_pivot_table;
-    QAction* action_do_htest;
+    QAction* action_do_hypothesis_test;
 
 	//column related actions
 	QAction* action_insert_column_left;
@@ -207,7 +207,7 @@ private slots:
 	void goToPreviousColumn();
 	void goToCell();
 	void createPivotTable();
-    void doHTest();
+    void doHypothesisTest();
 	void sortSpreadsheet();
 	void sortDialog(QVector<Column*>);
 

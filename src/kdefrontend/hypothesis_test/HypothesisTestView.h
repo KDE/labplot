@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : PivotTableView.h
     Project              : LabPlot
-    Description          : View class for PivotTable
+    Description          : View class for Hypothesis Tests'
     --------------------------------------------------------------------
     Copyright            : (C) 2019 by Alexander Semke (alexander.semke@web.de)
 

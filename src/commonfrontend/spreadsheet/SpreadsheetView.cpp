@@ -222,7 +222,7 @@ void SpreadsheetView::initActions() {
 	action_go_to_cell = new QAction(QIcon::fromTheme("go-jump"), i18n("&Go to Cell"), this);
 	action_statistics_all_columns = new QAction(QIcon::fromTheme("view-statistics"), i18n("Statisti&cs"), this );
 	action_pivot_table = new QAction(QIcon::fromTheme("table"), i18n("Pivot Table"), this);
-    action_do_htest = new QAction(i18n("Hypothesis Test"), this);
+    action_do_hypothesis_test = new QAction(i18n("Hypothesis Test"), this);
 
 	// column related actions
 	action_insert_column_left = new QAction(QIcon::fromTheme("edit-table-insert-column-left"), i18n("Insert Column Left"), this);
@@ -499,7 +499,7 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu = new QMenu(this);
 	m_spreadsheetMenu->addMenu(m_plotDataMenu);
 	m_spreadsheetMenu->addMenu(m_analyzePlotMenu);
-    m_spreadsheetMenu->addAction(action_do_htest);
+    m_spreadsheetMenu->addAction(action_do_hypothesis_test);
     m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_pivot_table);
 	m_spreadsheetMenu->addSeparator();
@@ -562,7 +562,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_go_to_cell, &QAction::triggered, this,
 			static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
 	connect(action_pivot_table, &QAction::triggered, this, &SpreadsheetView::createPivotTable);
-    connect(action_do_htest, &QAction::triggered, this, &SpreadsheetView::doHTest);
+    connect(action_do_hypothesis_test, &QAction::triggered, this, &SpreadsheetView::doHypothesisTest);
 
 	connect(action_insert_column_left, &QAction::triggered, this, &SpreadsheetView::insertColumnLeft);
 	connect(action_insert_column_right, &QAction::triggered, this, &SpreadsheetView::insertColumnRight);
@@ -772,12 +772,12 @@ void SpreadsheetView::createPivotTable() {
     m_spreadsheet->parentAspect()->addChild(pivot);
 }
 
-void SpreadsheetView::doHTest()
+void SpreadsheetView::doHypothesisTest()
 {
-    HypothesisTest* htest = new HypothesisTest(i18n("Hypothesis Test for %1", m_spreadsheet->name()));
-    htest->setDataSourceType(HypothesisTest::DataSourceSpreadsheet);
-    htest->setDataSourceSpreadsheet(m_spreadsheet);
-    m_spreadsheet->parentAspect()->addChild(htest);
+    HypothesisTest* hypothesis_test = new HypothesisTest(i18n("Hypothesis Test for %1", m_spreadsheet->name()));
+    hypothesis_test->setDataSourceType(HypothesisTest::DataSourceSpreadsheet);
+    hypothesis_test->setDataSourceSpreadsheet(m_spreadsheet);
+    m_spreadsheet->parentAspect()->addChild(hypothesis_test);
 }
 
 
