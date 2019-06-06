@@ -334,6 +334,10 @@ const QVector<Column*>& Column::formulaVariableColumns() const {
 	return d->formulaVariableColumns();
 }
 
+const QStringList& Column::formulaVariableColumnPaths() const {
+	return d->formulaVariableColumnPaths();
+}
+
 /**
  * \brief Sets the formula used to generate column values
  */
@@ -990,8 +994,8 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 			}
 		}
 	}
-	//TODO:
-// 	setFormula(formula, variableNames, columnPathes);
+
+	d->setFormula(formula, variableNames, columnPathes);
 
 	return true;
 }

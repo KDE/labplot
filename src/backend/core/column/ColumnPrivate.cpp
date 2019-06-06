@@ -897,12 +897,27 @@ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variab
 		connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
 }
 
+/*!
+ * helper function used in \c Column::load() to set parameters read from the xml file.
+ * \param variableColumnPathes is used to restore the pointers to columns from pathes
+ * after the project was loaded in Project::load().
+ */
+ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPaths) {
+	m_formula = formula;
+	m_formulaVariableNames = variableNames;
+	m_formulaVariableColumnPaths = variableColumnPaths;
+}
+
 const QStringList& ColumnPrivate::formulaVariableNames() const {
 	return m_formulaVariableNames;
 }
 
 const QVector<Column*>& ColumnPrivate::formulaVariableColumns() const {
 	return m_formulaVariableColumns;
+}
+
+const QStringList& ColumnPrivate::formulaVariableColumnPaths() const {
+	return m_formulaVariableColumnPaths;
 }
 
 /*!

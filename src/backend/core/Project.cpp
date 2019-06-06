@@ -426,6 +426,23 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 				RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
 				RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
 			}
+
+			//if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
+			for (auto* col : columns) {
+				if (!col->formulaVariableColumnPaths().isEmpty()) {
+					QVector<Column*>& formulaVariableColumns = const_cast<QVector<Column*>&>(col->formulaVariableColumns());
+					for (auto path : col->formulaVariableColumnPaths()) {
+						for (Column* c : columns) {
+							if (!c) continue;
+							if (c->path() == path) {
+								formulaVariableColumns << c;
+								connect(c, &Column::dataChanged, col, &Column::updateFormula);
+								break;
+							}
+						}
+					}
+				}
+			}
 		} else  // no project element
 			reader->raiseError(i18n("no project element found"));
 	} else  // no start document

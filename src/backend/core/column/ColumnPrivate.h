@@ -79,7 +79,9 @@ public:
 	QString formula() const;
 	const QStringList& formulaVariableNames() const;
 	const QVector<Column*>& formulaVariableColumns() const;
+	const QStringList& formulaVariableColumnPaths() const;
 	void setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& variableColumns);
+	void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPaths);
 	void updateFormula();
 
 	//cell formulas
@@ -128,6 +130,7 @@ private:
 	QString m_formula;
 	QStringList m_formulaVariableNames;
 	QVector<Column*> m_formulaVariableColumns;
+	QStringList m_formulaVariableColumnPaths;
 	IntervalAttribute<QString> m_formulas;
 	AbstractColumn::PlotDesignation m_plot_designation{AbstractColumn::NoDesignation};
 	int m_width{0}; //column width in the view

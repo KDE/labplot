@@ -80,6 +80,7 @@ public:
 	QString formula() const;
 	const QStringList& formulaVariableNames() const;
 	const QVector<Column*>& formulaVariableColumns() const;
+	const QStringList& formulaVariableColumnPaths() const;
 
 	QString formula(int) const  override;
 	QVector< Interval<int> > formulaIntervals() const override;
