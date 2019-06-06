@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Hypothesis Tests'
     --------------------------------------------------------------------
-    Copyright            : (C) 2019 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
 
  ***************************************************************************/
 

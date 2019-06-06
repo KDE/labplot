@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Doing Hypothesis-Test on data provided
     --------------------------------------------------------------------
-    Copyright            : (C) 2019 Alexander Semke(alexander.semke@web.de)
+    Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
 
  ***************************************************************************/
 

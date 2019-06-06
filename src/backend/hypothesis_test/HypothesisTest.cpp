@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Doing Hypothesis-Test on data provided
     --------------------------------------------------------------------
-    Copyright            : (C) 2019 Alexander Semke(alexander.semke@web.de)
+    Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
 
  ***************************************************************************/
 
@@ -180,10 +180,10 @@ void HypothesisTestPrivate::performTwoSampleTTest() {
 
     for (int i = 0; i < 2; i++) {
         findStats(m_columns[i], n[i], sum[i], mean[i], std[i]);
-        DEBUG("for " << i);
-        DEBUG("n is "<<n[i]);
-        DEBUG("mean is " << mean[i]);
-        DEBUG("std is " << std[i]);
+        DEBUG( "for " << i);
+        DEBUG( "n is " << n[i]);
+        DEBUG( "mean is " << mean[i]);
+        DEBUG( "std is " << std[i]);
 
         if (n[i] < 1) {
             msg_box->setText(i18n("atleast one of selected column is empty"));
@@ -242,7 +242,7 @@ void HypothesisTestPrivate::findStats(Column* column, int &count, double &sum, d
 
     for (int i = 0; i < count; i++) {
         double row = column->valueAt(i);
-        std += qPow((row - mean),2);
+        std += qPow( (row - mean), 2);
     }
 
     if (count > 1)
