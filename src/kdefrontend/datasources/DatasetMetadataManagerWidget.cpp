@@ -43,6 +43,7 @@ Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
 #include "QDir"
 #include "KConfigGroup"
 #include "KSharedConfig"
+#include "QHBoxLayout"
 
 DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) : QWidget(parent) {
 
@@ -75,6 +76,7 @@ DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, cons
 
 	connect(ui.cbCategory, &QComboBox::currentTextChanged, this, &DatasetMetadataManagerWidget::updateSubcategories);
 	connect(ui.bNewColumn, &QPushButton::clicked, this, &DatasetMetadataManagerWidget::addColumnDescription);
+	connect(ui.bDelete, &QPushButton::clicked, this, &DatasetMetadataManagerWidget::removeColumnDescription);
 
 	loadSettings();
 }
@@ -123,9 +125,10 @@ void DatasetMetadataManagerWidget::initSubcategories(const QMap<QString, QMap<QS
 }
 
 void DatasetMetadataManagerWidget::initDatasets(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) {
-	for(auto i = datasetMap.begin(); i != datasetMap.end(); ++i) {
-		for(auto j = i.value().begin(); j != i.value().end(); ++j) {
-			m_datasetMap[j.key()] = j.value().toList();
+	for(auto category = datasetMap.begin(); category != datasetMap.end(); ++category) {
+		for(auto subcategory = category.value().begin(); subcategory != category.value().end(); ++subcategory) {
+			m_datasetMap[subcategory.key()] = subcategory.value().toList();
+			m_datasetList.append(subcategory.value().toList());
 		}
 	}
 }
@@ -155,35 +158,29 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 
 	bool found = false;
 
-	if(m_categoryList.contains(ui.cbCategory->currentText())) {
-		qDebug("Category found");
-		if(m_datasetMap.keys().contains(ui.cbSubcategory->currentText())) {
-			qDebug("Subcategory found");
-			if(m_datasetMap[ui.cbSubcategory->currentText()].contains(fileName)) {
-				qDebug("Dataset found");
-				QPalette palette;
-				palette.setColor(QPalette::Base,Qt::red);
-				palette.setColor(QPalette::Text,Qt::black);
-				ui.leFileName->setPalette(palette);
-				ui.leFileName->setToolTip("There already is a dataset with this name!");
-				found = true;
-			} else {
-				qDebug("Dataset not found");
-				if(hasMatch) {
-					QPalette palette;
-					palette.setColor(QPalette::Base,Qt::white);
-					palette.setColor(QPalette::Text,Qt::black);
-					ui.leFileName->setPalette(palette);
-					ui.leFileName->setToolTip("");
-				}
-			}
+	if(m_datasetList.contains(fileName)) {
+		qDebug("There already is a metadata file with this name");
+		QPalette palette;
+		palette.setColor(QPalette::Base,Qt::red);
+		palette.setColor(QPalette::Text,Qt::black);
+		ui.leFileName->setPalette(palette);
+		ui.leFileName->setToolTip("There already is a dataset metadata file with this name!");
+		found = true;
+	} else {
+		qDebug("Dataset metadata file name is unique");
+		if(hasMatch) {
+			QPalette palette;
+			palette.setColor(QPalette::Base,Qt::white);
+			palette.setColor(QPalette::Text,Qt::black);
+			ui.leFileName->setPalette(palette);
+			ui.leFileName->setToolTip("");
 		}
 	}
 
 	return hasMatch && !found;
 }
 
-bool DatasetMetadataManagerWidget::urlExists() {	
+bool DatasetMetadataManagerWidget::urlExists() {
 	if(!QUrl(ui.leDownloadURL->text()).isValid() || ui.leDownloadURL->text().isEmpty())	{
 		QPalette palette;
 		palette.setColor(QPalette::Base,Qt::red);
@@ -427,8 +424,9 @@ void DatasetMetadataManagerWidget::addColumnDescription() {
 	QLineEdit* lineEdit = new QLineEdit;
 
 	int layoutIndex = m_columnDescriptions.size() + 1;
+	qDebug() << "Layout index " << layoutIndex;
 	ui.columnLayout->addWidget(label, layoutIndex, 0);
-	ui.columnLayout->addWidget(lineEdit, layoutIndex, 1);
+	ui.columnLayout->addWidget(lineEdit, layoutIndex, 1, 1, -1);
 
 	connect(lineEdit, &QLineEdit::textChanged, [this, layoutIndex] (const QString& text) {
 		m_columnDescriptions[layoutIndex - 1] = text;
@@ -436,6 +434,23 @@ void DatasetMetadataManagerWidget::addColumnDescription() {
 	});
 
 	m_columnDescriptions.append("");
+}
+
+void DatasetMetadataManagerWidget::removeColumnDescription() {
+	int index = ui.columnLayout->count() - 1;
+
+	QLayoutItem *item;
+	if ((item = ui.columnLayout->takeAt(index)) != 0) {
+		delete item->widget();
+		delete item;
+	}
+
+	if ((item = ui.columnLayout->takeAt(index - 1)) != 0){
+		delete item->widget();
+		delete item;
+	}
+
+	m_columnDescriptions.removeLast();
 }
 
 QString DatasetMetadataManagerWidget::getMetadataFilePath() {

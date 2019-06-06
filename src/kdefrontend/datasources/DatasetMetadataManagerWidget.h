@@ -51,6 +51,7 @@ private:
     QMap<QString, QStringList> m_datasetMap;
 	QStringList m_columnDescriptions;
 	QString m_metadataFilePath;
+	QStringList m_datasetList;
 
     void initCategories(const QMap<QString, QMap<QString, QVector<QString>>>&);
     void initSubcategories(const QMap<QString, QMap<QString, QVector<QString>>>&);
@@ -65,6 +66,7 @@ private:
 private slots:
     void updateSubcategories(const QString&);
 	void addColumnDescription();
+	void removeColumnDescription();
 
 signals:
     void checkOk();
