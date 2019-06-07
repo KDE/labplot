@@ -214,7 +214,6 @@ void Column::setColumnModeFast(AbstractColumn::ColumnMode mode) {
 	}
 }
 
-
 bool Column::isDraggable() const {
 	return true;
 }
@@ -338,11 +337,16 @@ const QStringList& Column::formulaVariableColumnPaths() const {
 	return d->formulaVariableColumnPaths();
 }
 
+bool Column::formulaAutoUpdate() const {
+	return d->formulaAutoUpdate();
+}
+
 /**
  * \brief Sets the formula used to generate column values
  */
-void Column::setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns) {
-	exec(new ColumnSetGlobalFormulaCmd(d, formula, variableNames, columns));
+void Column::setFormula(const QString& formula, const QStringList& variableNames,
+						const QVector<Column*>& columns, bool autoUpdate) {
+	exec(new ColumnSetGlobalFormulaCmd(d, formula, variableNames, columns, autoUpdate));
 }
 
 /*!
@@ -770,6 +774,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 	//save the formula used to generate column values, if available
 	if (!formula().isEmpty() ) {
 		writer->writeStartElement("formula");
+		writer->writeAttribute("autoUpdate", QString::number(d->formulaAutoUpdate()));
 		writer->writeTextElement("text", formula());
 
 		writer->writeStartElement("variableNames");
@@ -973,6 +978,7 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 	QString formula;
 	QStringList variableNames;
 	QStringList columnPathes;
+	bool autoUpdate = reader->attributes().value("autoUpdate").toInt();
 	while (reader->readNext()) {
 		if (reader->isEndElement()) break;
 
@@ -995,7 +1001,7 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 		}
 	}
 
-	d->setFormula(formula, variableNames, columnPathes);
+	d->setFormula(formula, variableNames, columnPathes, autoUpdate);
 
 	return true;
 }

@@ -119,8 +119,11 @@ FunctionValuesDialog::~FunctionValuesDialog() {
 
 void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 	m_columns = columns;
+
+	//formula expression
 	ui.teEquation->setPlainText(m_columns.first()->formula());
 
+	//variables
 	const QStringList& variableNames = m_columns.first()->formulaVariableNames();
 	if (!variableNames.size()) {
 		//no formula was used for this column -> add the first variable "x"
@@ -149,6 +152,9 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 			}
 		}
 	}
+
+	//auto update
+	ui.chkAutoUpdate->setChecked(m_columns.first()->formulaAutoUpdate());
 
 	checkValues();
 }
@@ -371,11 +377,12 @@ void FunctionValuesDialog::generate() {
 	parser->evaluateCartesian(expression, variableNames, xVectors, &new_data);
 
 	//set the new values and store the expression, variable names and the used data columns
+	bool autoUpdate = (ui.chkAutoUpdate->checkState() == Qt::Checked);
 	for (auto* col : m_columns) {
 		if (col->columnMode() != AbstractColumn::Numeric)
 			col->setColumnMode(AbstractColumn::Numeric);
 
-		col->setFormula(expression, variableNames, columns);
+		col->setFormula(expression, variableNames, columns, autoUpdate);
 		col->replaceValues(0, new_data);
 	}
 
