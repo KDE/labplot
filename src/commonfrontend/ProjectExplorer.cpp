@@ -362,8 +362,10 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 				return false;
 
 			//accept only the events when the aspect being dragged is dropable onto the aspect under the cursor
+			//and the aspect under the cursor is not already the parent of the dragged aspect
 			AbstractAspect* destinationAspect = static_cast<AbstractAspect*>(index.internalPointer());
-			bool accept = sourceAspect->dropableOn().indexOf(destinationAspect->type()) != -1;
+			bool accept = sourceAspect->dropableOn().indexOf(destinationAspect->type()) != -1
+						&& sourceAspect->parentAspect() != destinationAspect;
 			event->setAccepted(accept);
 		} else if (event->type() == QEvent::Drop) {
 			auto* dropEvent = static_cast<QDropEvent*>(event);
