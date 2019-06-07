@@ -171,6 +171,8 @@ void ImportDatasetWidget::listDatasetsForSubcategory(QTreeWidgetItem *item) {
 		}
 	} else {
 		if(item->text(0).compare(m_selectedCategory) != 0) {
+			m_selectedCategory = item->text(0);
+			m_selectedSubcategory = "";
 			ui.lwDatasets->clear();
 			item->setExpanded(true);
 		}
