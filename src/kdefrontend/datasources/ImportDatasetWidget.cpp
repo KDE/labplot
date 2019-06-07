@@ -199,8 +199,12 @@ void ImportDatasetWidget::updateDatasetCompleter() {
 
 void ImportDatasetWidget::updateCategoryCompleter() {
 	QStringList categoryList;
-	for (int i = 0; i < ui.twCategories->topLevelItemCount(); ++i)
+	for (int i = 0; i < ui.twCategories->topLevelItemCount(); ++i) {
 		categoryList.append(ui.twCategories->topLevelItem(i)->text(0));
+		for(int j = 0; j < ui.twCategories->topLevelItem(i)->childCount(); ++j) {
+			categoryList.append(ui.twCategories->topLevelItem(i)->text(0) + ":" + ui.twCategories->topLevelItem(i)->child(j)->text(0));
+		}
+	}
 
 	if(m_categoryCompleter != nullptr)
 		delete m_categoryCompleter;
@@ -217,14 +221,33 @@ void ImportDatasetWidget::updateCategoryCompleter() {
 void ImportDatasetWidget::scrollToCategoryTreeItem(const QString& rootName) {
 	int topItemIdx = -1;
 	for (int i = 0; i < ui.twCategories->topLevelItemCount(); ++i)
-		if (ui.twCategories->topLevelItem(i)->text(0) == rootName) {
+		if (rootName.startsWith(ui.twCategories->topLevelItem(i)->text(0))) {
 			topItemIdx = i;
 			break;
 		}
 
-	if (topItemIdx >= 0)
-		ui.twCategories->scrollToItem(ui.twCategories->topLevelItem(topItemIdx),
-									  QAbstractItemView::ScrollHint::PositionAtTop);
+	if (topItemIdx >= 0) {
+		if(!rootName.contains(":")) {
+			ui.twCategories->scrollToItem(ui.twCategories->topLevelItem(topItemIdx),
+										  QAbstractItemView::ScrollHint::PositionAtTop);
+		} else {
+			int childIdx = -1;
+			for(int j = 0; j < ui.twCategories->topLevelItem(topItemIdx)->childCount(); ++j) {
+				if(rootName.endsWith(ui.twCategories->topLevelItem(topItemIdx)->child(j)->text(0))) {
+					childIdx = j;
+					break;
+				}
+			}
+
+			if(childIdx >= 0) {
+				ui.twCategories->scrollToItem(ui.twCategories->topLevelItem(topItemIdx)->child(childIdx),
+											  QAbstractItemView::ScrollHint::PositionAtTop);
+			} else {
+				ui.twCategories->scrollToItem(ui.twCategories->topLevelItem(topItemIdx),
+											  QAbstractItemView::ScrollHint::PositionAtTop);
+			}
+		}
+	}
 }
 
 void ImportDatasetWidget::scrollToDatasetListItem(const QString& rootName) {
@@ -277,7 +300,7 @@ void ImportDatasetWidget::showDatasetMetadataManager() {
 		uploadDatasetFile(dlg->getMetadataFilePath());
 		loadDatasetCategoriesFromJson();
 	}
-	delete dlg;	
+	delete dlg;
 }
 
 void ImportDatasetWidget::downloadCategoryFile() {
