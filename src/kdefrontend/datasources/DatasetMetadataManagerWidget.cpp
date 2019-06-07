@@ -135,7 +135,7 @@ void DatasetMetadataManagerWidget::initDatasets(const QMap<QString, QMap<QString
 
 bool DatasetMetadataManagerWidget::checkFileName() {
 	QString fileName = ui.leFileName->text();
-	QRegularExpression re("[\\w\\d-]+");
+	QRegularExpression re("^[\\w\\d-]+$");
 	QRegularExpressionMatch match = re.match(fileName);
 	bool hasMatch = match.hasMatch();
 
@@ -236,6 +236,32 @@ bool DatasetMetadataManagerWidget::checkDescription() {
 	return descriptionOk;
 }
 
+bool DatasetMetadataManagerWidget::checkCategories(QComboBox* comboBox) {
+	QString fileName = comboBox->currentText();
+	QRegularExpression re("^[\\w\\d]+$");
+	QRegularExpressionMatch match = re.match(fileName);
+	bool hasMatch = match.hasMatch();
+
+	qDebug() << hasMatch;
+	if(!hasMatch || fileName.isEmpty()) {
+		qDebug("categoty/subcategory name invalid");
+		QPalette palette;
+		palette.setColor(QPalette::Base,Qt::red);
+		palette.setColor(QPalette::Text,Qt::black);
+		comboBox->setPalette(palette);
+		comboBox->setToolTip("Invalid or empty name for a category/subcategory (only digits and letters)");
+	} else {
+		qDebug("categoty/subcategory name valid");
+		QPalette palette;
+		palette.setColor(QPalette::Base,Qt::white);
+		palette.setColor(QPalette::Text,Qt::black);
+		comboBox->setPalette(palette);
+		comboBox->setToolTip("");
+	}
+
+	return hasMatch;
+}
+
 void DatasetMetadataManagerWidget::enableDatasetSettings(bool enable) {
 	ui.leFileName->setEnabled(enable);
 	ui.leFileName->setReadOnly(!enable);
@@ -254,8 +280,8 @@ bool DatasetMetadataManagerWidget::checkDataValidity() {
 	bool urlOk = urlExists();
 	bool longNameOk = checkDatasetName();
 	bool descriptionOk = checkDescription();
-	bool categoryOk = !ui.cbCategory->currentText().isEmpty();
-	bool subcategoryOk = !ui.cbSubcategory->currentText().isEmpty();
+	bool categoryOk = checkCategories(ui.cbCategory);
+	bool subcategoryOk = checkCategories(ui.cbSubcategory);
 
 	enableDatasetSettings(categoryOk && subcategoryOk);
 

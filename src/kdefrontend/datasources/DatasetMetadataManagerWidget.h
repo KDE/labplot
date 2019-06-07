@@ -60,6 +60,7 @@ private:
 	bool urlExists();
 	bool checkDatasetName();
 	bool checkDescription();
+	bool checkCategories(QComboBox* comboBox);
 	void loadSettings();
 	void enableDatasetSettings(bool);
 
