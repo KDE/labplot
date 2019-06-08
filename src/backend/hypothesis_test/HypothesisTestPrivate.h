@@ -59,9 +59,12 @@ public:
         int m_columnCount{0};
         QString m_currTestName{"Result Table"};
 
-        void performTwoSampleTTest();
+        void performTwoSampleIndependetTest(QString test, bool equal_variance = true);
+        void performTwoSamplePairedTest(QString test);
+        void PerformOneSampleTest(QString test);
 private:
         void findStats(Column* column, int &count, double &sum, double &mean, double &std);
+        void findStatsPaired(Column *column1, Column *column2, int &count, double &sum, double &mean, double &std);
 // 	QMap<QString, QStringList> m_members;
 };
 

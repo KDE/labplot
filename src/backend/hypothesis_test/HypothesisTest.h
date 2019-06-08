@@ -56,6 +56,13 @@ public:
     void setColumns(QVector<Column*> cols);
     void setColumns(QStringList cols);
     void performTwoSampleTTest();
+    void performTwoSampleIndependetTTest(bool equal_variance);
+    void performTwoSamplePairedTTest();
+    void PerformOneSampleTTest();
+    void performTwoSampleIndependetZTest();
+    void performTwoSamplePairedZTest();
+    void PerformOneSampleZTest();
+
     DataSourceType dataSourceType() const;
 
 

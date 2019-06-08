@@ -62,7 +62,46 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
     ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
     m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "sql_connections";
-//    readConnections();
+
+
+
+
+    // making all test blocks invisible at starting.
+    ui.lIndependentVariable1->setVisible(false);
+    ui.cbCol1->setVisible(false);
+    ui.cbVariable2->setVisible(false);
+    ui.cbCol2->setVisible(false);
+    ui.chbEqualVariance->setVisible(false);
+    ui.chbEqualVariance->setChecked(true);
+    ui.pbPerformTest->setEnabled(false);
+    ui.rb_h1_one_tail_2->setVisible(false);
+    ui.rb_h1_one_tail_1->setVisible(false);
+    ui.rb_h1_two_tail->setVisible(false);
+    ui.rb_h0_one_tail_1->setVisible(false);
+    ui.rb_h0_one_tail_2->setVisible(false);
+    ui.rb_h0_two_tail->setVisible(false);
+    ui.l_h0->setVisible(false);
+    ui.l_h1->setVisible(false);
+
+    QString mu = QChar(0x3BC);
+    QString mu0 = mu+QChar(0x2092);
+
+    // radio button for null and alternate hypothesis
+    // for alternative hypothesis
+    // one_tail_1 is mu > mu0; one_tail_2 is mu < mu0; two_tail = mu != mu0;
+    ui.rb_h1_one_tail_1->setText(mu + " " + QChar(0x3E) + " " + mu0);
+    ui.rb_h1_one_tail_2->setText(mu + " " + QChar(0x3C) + " " + mu0);
+    ui.rb_h1_two_tail->setText(mu + " " + QChar(0x2260) + " " + mu0);
+
+    ui.rb_h0_one_tail_1->setText(mu + " " + QChar(0x2264) + " " + mu0);
+    ui.rb_h0_one_tail_2->setText(mu + " " + QChar(0x2265) + " " + mu0);
+    ui.rb_h0_two_tail->setText(mu + " " + QChar(0x3D) + " " + mu0);
+
+    ui.rb_h0_two_tail->setEnabled(false);
+    ui.rb_h0_one_tail_1->setEnabled(false);
+    ui.rb_h0_one_tail_2->setEnabled(false);
+
+    //    readConnections();
 
 //    auto* style = ui.bAddRow->style();
 //    ui.bAddRow->setIcon(style->standardIcon(QStyle::SP_ArrowRight));
@@ -117,7 +156,8 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 //        ui.bRemoveColumn->setEnabled(!ui.lwColumns->selectedItems().isEmpty());
 //    });
 
-    connect(ui.pbPerformTest, &QPushButton::clicked, this, &HypothesisTestDock::doTTest);
+    connect(ui.twTests, &QTreeWidget::itemClicked, this, &HypothesisTestDock::showHypothesisTest);
+    connect(ui.pbPerformTest, &QPushButton::clicked, this, &HypothesisTestDock::doHypothesisTest);
 }
 
 void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
@@ -174,8 +214,81 @@ void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
 //    m_initializing = false;
 }
 
-void HypothesisTestDock::doTTest()  {
+void HypothesisTestDock::showHypothesisTest(QTreeWidgetItem* item, int col) {
+    if(item->parent() != nullptr){
+            ttest = item->parent()->text(col) == "Student's T Test";
+            ztest = item->parent()->text(col) == "Z Test";
+    }
+
+    two_sample_independent = item->text(col) == "Two Sample Independent";
+    two_sample_paired = item->text(col) == "Two Sample Paired";
+    one_sample = item->text(col) == "One Sample";
+
+    ui.lIndependentVariable1->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.cbCol1->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.cbVariable2->setVisible(two_sample_independent || two_sample_paired);
+    ui.cbCol2->setVisible(two_sample_independent || two_sample_paired);
+    ui.chbEqualVariance->setVisible(ttest && two_sample_independent);
+    ui.chbEqualVariance->setChecked(true);
+    ui.pbPerformTest->setEnabled(two_sample_independent || two_sample_paired || one_sample);
+
+    ui.rb_h1_one_tail_2->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.rb_h1_one_tail_1->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.rb_h1_two_tail->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.rb_h0_one_tail_1->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.rb_h0_one_tail_2->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.rb_h0_two_tail->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.l_h0->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.l_h1->setVisible(two_sample_independent || two_sample_paired || one_sample);
+
+    ui.rb_h1_two_tail->setChecked(true);
+    ui.rb_h0_two_tail->setChecked(true);
+}
+
+void HypothesisTestDock::doHypothesisTest()  {
     QStringList cols;
+    if(ttest) {
+        if(two_sample_independent) {
+            cols << ui.cbCol1->currentText();
+            cols << ui.cbCol2->currentText();
+            m_hypothesisTest->setColumns(cols);
+            m_hypothesisTest->performTwoSampleIndependetTTest( ui.chbEqualVariance->isChecked());
+        }
+        else if(two_sample_paired) {
+            cols << ui.cbCol1->currentText();
+            cols << ui.cbCol2->currentText();
+            m_hypothesisTest->setColumns(cols);
+            m_hypothesisTest->performTwoSamplePairedTTest();
+        }
+        else if(one_sample){
+            cols << ui.cbCol1->currentText();
+            m_hypothesisTest->setColumns(cols);
+            m_hypothesisTest->PerformOneSampleTTest();
+        }
+    }
+    else if(ztest) {
+        if(two_sample_independent) {
+            cols << ui.cbCol1->currentText();
+            cols << ui.cbCol2->currentText();
+            m_hypothesisTest->setColumns(cols);
+            m_hypothesisTest->performTwoSampleIndependetZTest();
+        }
+        else if(two_sample_paired) {
+            cols << ui.cbCol1->currentText();
+            cols << ui.cbCol2->currentText();
+            m_hypothesisTest->setColumns(cols);
+            m_hypothesisTest->performTwoSamplePairedZTest();
+        }
+        else if(one_sample){
+            cols << ui.cbCol1->currentText();
+            m_hypothesisTest->setColumns(cols);
+            m_hypothesisTest->PerformOneSampleZTest();
+        }
+    }
+
+
+
+
     cols << ui.cbCol1->currentText();
     cols << ui.cbCol2->currentText();
     m_hypothesisTest->setColumns(cols);
@@ -478,3 +591,15 @@ void HypothesisTestDock::spreadsheetChanged(const QModelIndex& index) {
 //    Q_UNUSED(config);
 //}
 
+
+void HypothesisTestDock::on_rb_h1_one_tail_1_clicked() {
+    ui.rb_h0_one_tail_1->setChecked(true);
+}
+
+void HypothesisTestDock::on_rb_h1_one_tail_2_clicked() {
+    ui.rb_h0_one_tail_2->setChecked(true);
+}
+
+void HypothesisTestDock::on_rb_h1_two_tail_clicked() {
+    ui.rb_h0_two_tail->setChecked(true);
+}

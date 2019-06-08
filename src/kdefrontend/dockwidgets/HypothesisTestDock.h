@@ -47,6 +47,11 @@ public:
         void setHypothesisTest(HypothesisTest*);
 
 private slots:
+        void on_rb_h1_one_tail_1_clicked();
+        void on_rb_h1_one_tail_2_clicked();
+        void on_rb_h1_two_tail_clicked();
+
+private slots:
 
 private:
         Ui::HypothesisTestDock ui;
@@ -56,20 +61,27 @@ private:
 ////        AspectTreeModel* m_aspectTreeModel{nullptr};
         QSqlDatabase m_db;
         QString m_configPath;
-
+        QWidget* wid;
 //        void load();
 //        void loadConfig(KConfig&);
 //        void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
 //        void readConnections();
 //        void updateFields();
 //        bool fieldSelected(const QString&);
+        bool ttest{false};
+        bool ztest{false};
+        bool two_sample_independent{false};
+        bool two_sample_paired{false};
+        bool one_sample{false};
+
 
 private slots:
         //SLOTs for changes triggered in PivotTableDock
 //        void nameChanged();
 //        void commentChanged();
         void dataSourceTypeChanged(int);
-        void doTTest();
+        void doHypothesisTest();
+        void showHypothesisTest(QTreeWidgetItem* item, int col);
         void spreadsheetChanged(const QModelIndex&);
 //        void connectionChanged();
 //        void tableChanged();

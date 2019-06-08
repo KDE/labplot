@@ -90,8 +90,35 @@ HypothesisTest::DataSourceType HypothesisTest::dataSourceType() const {
 }
 
 void HypothesisTest::performTwoSampleTTest() {
-    d->performTwoSampleTTest();
+
 }
+
+void HypothesisTest::performTwoSampleIndependetTTest(bool equal_variance) {
+    d->performTwoSampleIndependetTest("ttest", equal_variance);
+}
+
+void HypothesisTest::performTwoSamplePairedTTest() {
+    d->performTwoSamplePairedTest("ttest");
+}
+
+void HypothesisTest::PerformOneSampleTTest() {
+    d->PerformOneSampleTest("ttest");
+}
+
+void HypothesisTest::performTwoSampleIndependetZTest() {
+    d->performTwoSampleIndependetTest("ztest");
+}
+
+void HypothesisTest::performTwoSamplePairedZTest() {
+    d->performTwoSamplePairedTest("ztest");
+}
+
+void HypothesisTest::PerformOneSampleZTest() {
+    d->PerformOneSampleTest("ztest");
+}
+
+
+
 
 QString HypothesisTest::testName() {
     return d->m_currTestName;
@@ -134,13 +161,16 @@ void HypothesisTestPrivate::setColumns(QStringList cols) {
     }
 }
 
-void HypothesisTestPrivate::performTwoSampleTTest() {
+void HypothesisTestPrivate::performTwoSampleIndependetTest(QString test, bool equal_variance) {
     dataModel->clear();
     horizontalHeaderModel->clear();
-    m_currTestName = i18n("Independent Two Sample T Test");
 
-    DEBUG("performing two sample test :DEBUG MACRO");
-    qDebug() << "performing two sample test: qDebug()";
+    if (test == "ttest")
+        m_currTestName = i18n("Two Sample Independent T Test");
+    if (test == "ztest")
+        m_currTestName = i18n("Two Sample Independent Z Test");
+
+    qDebug() << "performing two sample independent T test";
 
     QMessageBox* msg_box = new QMessageBox();
     // checking for cols;
@@ -170,20 +200,12 @@ void HypothesisTestPrivate::performTwoSampleTTest() {
         return;
     }
 
-    dataModel->setRowCount(1);
-    dataModel->setColumnCount(3);
-
-    horizontalHeaderModel->setColumnCount(3);
 
     int n[2];
     double sum[2], mean[2], std[2];
 
     for (int i = 0; i < 2; i++) {
         findStats(m_columns[i], n[i], sum[i], mean[i], std[i]);
-        DEBUG( "for " << i);
-        DEBUG( "n is " << n[i]);
-        DEBUG( "mean is " << mean[i]);
-        DEBUG( "std is " << std[i]);
 
         if (n[i] < 1) {
             msg_box->setText(i18n("atleast one of selected column is empty"));
@@ -191,34 +213,339 @@ void HypothesisTestPrivate::performTwoSampleTTest() {
             return;
         }
     }
-    int df = n[0] + n[1] - 2;
 
-    //Assuming equal variance
-    double sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
+    if (test == "ttest") {
 
-    QDEBUG("sp is " << sp);
+        dataModel->setRowCount(1);
+        dataModel->setColumnCount(3);
 
-    double t = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
+        horizontalHeaderModel->setColumnCount(3);
 
-    // now finding p value from t value
-    double p_value = nsl_stats_tdist_p(t, df);
+        double t;
+        int df;
+        if (equal_variance) {
+            df = n[0] + n[1] - 2;
 
-//    QString text = i18n("T value for test is %1 and\n p value is %2",t, p_value);
-//    msg_box->setText(text);
-//    msg_box->exec();
-
-    //setting dataModel
-    dataModel->setItem(0, 0, new QStandardItem(QString::number(t)));
-    dataModel->setItem(0, 1, new QStandardItem(QString::number(df)));
-    dataModel->setItem(0, 2, new QStandardItem(QString::number(p_value)));
+            //Assuming equal variance
+            double sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
 
 
-    //setting horizontal header model
-    horizontalHeaderModel->setHeaderData(0, Qt::Horizontal, "t value");
-    horizontalHeaderModel->setHeaderData(1, Qt::Horizontal, "dof");
-    horizontalHeaderModel->setHeaderData(2, Qt::Horizontal, "p value");
+            t = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
+        } else {
+            double temp;
+            temp = qPow( qPow(std[0], 2)/n[0] + qPow(std[1], 2)/n[1], 2);
+            temp = temp / ( (qPow( (qPow(std[0], 2)/n[0]), 2)/(n[0]-1)) + (qPow( (qPow(std[1], 2)/n[1]), 2)/(n[1]-1)));
+            df = qRound(temp);
 
-    emit q->changed();
+            t = (mean[0] - mean[1]) / (qSqrt( (qPow(std[0], 2)/n[0]) + (qPow(std[1], 2)/n[1])));
+        }
+
+        // now finding p value from t value
+        double p_value = nsl_stats_tdist_p(t, df);
+
+    //    QString text = i18n("T value for test is %1 and\n p value is %2",t, p_value);
+    //    msg_box->setText(text);
+    //    msg_box->exec();
+
+        //setting dataModel
+        dataModel->setItem(0, 0, new QStandardItem(QString::number(t)));
+        dataModel->setItem(0, 1, new QStandardItem(QString::number(df)));
+        dataModel->setItem(0, 2, new QStandardItem(QString::number(p_value)));
+
+
+        //setting horizontal header model
+        horizontalHeaderModel->setHeaderData(0, Qt::Horizontal, "t value");
+        horizontalHeaderModel->setHeaderData(1, Qt::Horizontal, "dof");
+        horizontalHeaderModel->setHeaderData(2, Qt::Horizontal, "p value");
+
+        emit q->changed();
+        return;
+    } else if(test == "ztest") {
+        dataModel->setRowCount(1);
+        dataModel->setColumnCount(2);
+
+        horizontalHeaderModel->setColumnCount(2);
+
+        int df = n[0] + n[1] - 2;
+
+        //Assuming equal variance
+        double sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
+
+        double z = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
+
+        // now finding p value from t value
+        double p_value = nsl_stats_tdist_p(z, df);
+
+    //    QString text = i18n("T value for test is %1 and\n p value is %2",t, p_value);
+    //    msg_box->setText(text);
+    //    msg_box->exec();
+
+        //setting dataModel
+        dataModel->setItem(0, 0, new QStandardItem(QString::number(z)));
+        dataModel->setItem(0, 1, new QStandardItem(QString::number(p_value)));
+
+
+        //setting horizontal header model
+        horizontalHeaderModel->setHeaderData(0, Qt::Horizontal, "z value");
+        horizontalHeaderModel->setHeaderData(1, Qt::Horizontal, "p value");
+
+        emit q->changed();
+        return;
+    }
+
+}
+
+void HypothesisTestPrivate::performTwoSamplePairedTest(QString test) {
+    dataModel->clear();
+    horizontalHeaderModel->clear();\
+    if (test == "ttest")
+        m_currTestName = i18n("Two Sample Paired T Test");
+    if (test == "ztest")
+        m_currTestName = i18n("Two Sample Paired Z Test");
+
+    qDebug() << "performing two sample paired t test";
+
+    QMessageBox* msg_box = new QMessageBox();
+    // checking for cols;
+    if (m_columns.size() != 2) {
+        msg_box->setText(i18n("Inappropriate number of columns selected"));
+        msg_box->exec();
+        return;
+    }
+
+    bool modeOk = true;
+    bool allColumnsValid = true;
+    for (int i = 0; i < 2; i++) {
+        if(m_columns[i]->columnMode() == AbstractColumn::Numeric || m_columns[i]->columnMode() == AbstractColumn::Integer)
+            continue;
+        modeOk = false;
+    }
+
+    if(!allColumnsValid) {
+        msg_box->setText(i18n("one of the selected columns is invalid"));
+        msg_box->exec();
+        return;
+    }
+
+    if (!modeOk) {
+        msg_box->setText(i18n("select only columns with numbers"));
+        msg_box->exec();
+        return;
+    }
+
+    int n;
+    double sum, mean, std;
+    findStatsPaired(m_columns[0], m_columns[1], n, sum, mean, std);
+
+    if (n == -1) {
+        msg_box->setText(i18n("both columns are having different sizes"));
+        msg_box->exec();
+        return;
+    }
+
+    if (n < 1) {
+        msg_box->setText(i18n("columns are empty"));
+        msg_box->exec();
+        return;
+    }
+
+    if (test == "ttest") {
+        dataModel->setRowCount(1);
+        dataModel->setColumnCount(3);
+
+        horizontalHeaderModel->setColumnCount(3);
+
+        double t = mean / (std/qSqrt(n));
+        int df = n - 1;
+
+        // now finding p value from t value
+        double p_value = nsl_stats_tdist_p(t, df);
+
+
+
+    //    QString text = i18n("T value for test is %1 and\n p value is %2",t, p_value);
+    //    msg_box->setText(text);
+    //    msg_box->exec();
+
+        //setting dataModel
+        dataModel->setItem(0, 0, new QStandardItem(QString::number(t)));
+        dataModel->setItem(0, 1, new QStandardItem(QString::number(df)));
+        dataModel->setItem(0, 2, new QStandardItem(QString::number(p_value)));
+
+
+        //setting horizontal header model
+        horizontalHeaderModel->setHeaderData(0, Qt::Horizontal, "t value");
+        horizontalHeaderModel->setHeaderData(1, Qt::Horizontal, "dof");
+        horizontalHeaderModel->setHeaderData(2, Qt::Horizontal, "p value");
+
+        emit q->changed();
+        return;
+    } else if (test == "ztest") {
+        dataModel->setRowCount(1);
+        dataModel->setColumnCount(2);
+
+        horizontalHeaderModel->setColumnCount(2);
+
+        double z = mean / (std/qSqrt(n));
+        int df = n - 1;
+
+        // now finding p value from t value
+        double p_value = nsl_stats_tdist_p(z, df);
+
+    //    QString text = i18n("T value for test is %1 and\n p value is %2",t, p_value);
+    //    msg_box->setText(text);
+    //    msg_box->exec();
+
+        //setting dataModel
+        dataModel->setItem(0, 0, new QStandardItem(QString::number(z)));
+        dataModel->setItem(0, 1, new QStandardItem(QString::number(p_value)));
+
+
+        //setting horizontal header model
+        horizontalHeaderModel->setHeaderData(0, Qt::Horizontal, "z value");
+        horizontalHeaderModel->setHeaderData(1, Qt::Horizontal, "p value");
+
+        emit q->changed();
+        return;
+    }
+}
+
+void HypothesisTestPrivate::PerformOneSampleTest(QString test) {
+    double population_mean = 0;
+    dataModel->clear();
+    horizontalHeaderModel->clear();
+    if (test == "ttest")
+        m_currTestName = i18n("One Sample T Test");
+    if (test == "ztest")
+        m_currTestName = i18n("One Sample Z Test");
+
+    qDebug() << "performing two sample paired t test";
+
+    QMessageBox* msg_box = new QMessageBox();
+    // checking for cols;
+    if (m_columns.size() != 1) {
+        msg_box->setText(i18n("Inappropriate number of columns selected"));
+        msg_box->exec();
+        return;
+    }
+
+    if ( !(m_columns[0]->columnMode() == AbstractColumn::Numeric || m_columns[0]->columnMode() == AbstractColumn::Integer)) {
+        msg_box->setText(i18n("select only columns with numbers"));
+        msg_box->exec();
+        return;
+    }
+
+    int n;
+    double sum, mean, std;
+    findStats(m_columns[0], n, sum, mean, std);
+
+    if (n < 1) {
+        msg_box->setText(i18n("column is empty"));
+        msg_box->exec();
+        return;
+    }
+
+    if (test == "ttest") {
+        dataModel->setRowCount(1);
+        dataModel->setColumnCount(3);
+
+        horizontalHeaderModel->setColumnCount(3);
+
+        double t = (mean - population_mean) / (std/qSqrt(n));
+        int df = n - 1;
+
+        // now finding p value from t value
+        double p_value = nsl_stats_tdist_p(t, df);
+
+    //    QString text = i18n("T value for test is %1 and\n p value is %2",t, p_value);
+    //    msg_box->setText(text);
+    //    msg_box->exec();
+
+        //setting dataModel
+        dataModel->setItem(0, 0, new QStandardItem(QString::number(t)));
+        dataModel->setItem(0, 1, new QStandardItem(QString::number(df)));
+        dataModel->setItem(0, 2, new QStandardItem(QString::number(p_value)));
+
+
+        //setting horizontal header model
+        horizontalHeaderModel->setHeaderData(0, Qt::Horizontal, "t value");
+        horizontalHeaderModel->setHeaderData(1, Qt::Horizontal, "dof");
+        horizontalHeaderModel->setHeaderData(2, Qt::Horizontal, "p value");
+
+        emit q->changed();
+        return;
+    } else if (test == "ztest") {
+        dataModel->setRowCount(1);
+        dataModel->setColumnCount(2);
+
+        horizontalHeaderModel->setColumnCount(2);
+
+        double z = (mean - population_mean) / (std/qSqrt(n));
+        int df = n - 1;
+
+        // now finding p value from t value
+        double p_value = nsl_stats_tdist_p(z, df);
+
+    //    QString text = i18n("T value for test is %1 and\n p value is %2",t, p_value);
+    //    msg_box->setText(text);
+    //    msg_box->exec();
+
+        //setting dataModel
+        dataModel->setItem(0, 0, new QStandardItem(QString::number(z)));
+        dataModel->setItem(0, 1, new QStandardItem(QString::number(p_value)));
+
+
+        //setting horizontal header model
+        horizontalHeaderModel->setHeaderData(0, Qt::Horizontal, "z value");
+        horizontalHeaderModel->setHeaderData(1, Qt::Horizontal, "p value");
+
+        emit q->changed();
+        return;
+    }
+}
+
+void HypothesisTestPrivate::findStatsPaired(Column* column1, Column* column2, int &count, double &sum, double &mean, double &std) {
+    sum = 0;
+    mean = 0;
+    std = 0;
+
+    int count1 = column1->rowCount();
+    int count2 = column2->rowCount();
+
+    count = qMin(count1, count2);
+    double row1, row2;
+    for (int i = 0; i < count; i++) {
+        row1 = column1->valueAt(i);
+        row2 = column2->valueAt(i);
+
+        if (std::isnan(row1) || std::isnan(row2)) {
+            if (std::isnan(row1) && std::isnan(row2))
+                count = i;
+            else {
+                count = -1;
+                return;
+            }
+            break;
+        }
+
+        sum += row1 - row2;
+    }
+
+    if (count < 1) return;
+    mean = sum/count;
+
+    double row;
+    for (int i = 0; i < count; i++) {
+        row1 = column1->valueAt(i);
+        row2 = column2->valueAt(i);
+        row = row1 - row2;
+        std += qPow( (row - mean), 2);
+    }
+
+    if (count > 1)
+        std = std / (count-1);
+
+    std = qSqrt(std);
     return;
 }
 
