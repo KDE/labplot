@@ -39,6 +39,7 @@ class Spreadsheet;
 class QAbstractItemModel;
 class QString;
 class Column;
+class QLayout;
 
 class HypothesisTest : public AbstractPart {
     Q_OBJECT
@@ -48,9 +49,13 @@ public:
     ~HypothesisTest() override;
 
     enum DataSourceType {DataSourceSpreadsheet, DataSourceDatabase};
+    enum TailType {TailPositive, TailNegative, TailTwo};
 
     QAbstractItemModel* dataModel();
-    QAbstractItemModel *horizontalHeaderModel();
+    QAbstractItemModel* horizontalHeaderModel();
+    QAbstractItemModel* verticalHeaderModel();
+    QAbstractItemModel* resultModel();
+
     QString testName();
     void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
     void setColumns(QVector<Column*> cols);
@@ -82,7 +87,8 @@ public:
 
     void setDataSourceType(DataSourceType type);
     QStringList allColumns();
-
+    void setTailType(TailType tailType);
+    TailType tailType();
 private:
     HypothesisTestPrivate* const d;
     mutable HypothesisTestView* m_view{nullptr};

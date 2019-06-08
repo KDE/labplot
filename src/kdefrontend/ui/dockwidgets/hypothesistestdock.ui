@@ -277,7 +277,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="cbCol2"/>
+         <widget class="QComboBox" name="cbCol1"/>
         </item>
        </layout>
       </item>
@@ -298,7 +298,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="cbCol1"/>
+         <widget class="QComboBox" name="cbCol2"/>
         </item>
        </layout>
       </item>

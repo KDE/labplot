@@ -249,8 +249,7 @@ void HypothesisTestDock::doHypothesisTest()  {
     QStringList cols;
     if(ttest) {
         if(two_sample_independent) {
-            cols << ui.cbCol1->currentText();
-            cols << ui.cbCol2->currentText();
+            cols << ui.cbCol1->currentText() << ui.cbCol2->currentText();
             m_hypothesisTest->setColumns(cols);
             m_hypothesisTest->performTwoSampleIndependetTTest( ui.chbEqualVariance->isChecked());
         }
@@ -285,9 +284,6 @@ void HypothesisTestDock::doHypothesisTest()  {
             m_hypothesisTest->PerformOneSampleZTest();
         }
     }
-
-
-
 
     cols << ui.cbCol1->currentText();
     cols << ui.cbCol2->currentText();
@@ -591,15 +587,21 @@ void HypothesisTestDock::spreadsheetChanged(const QModelIndex& index) {
 //    Q_UNUSED(config);
 //}
 
+//TODO: Rather than inbuilt slots use own decided slots for checked rather than clicked
 
+// for alternate hypothesis
+// one_tail_1 is mu > mu0; one_tail_2 is mu < mu0; two_tail = mu != mu0;
 void HypothesisTestDock::on_rb_h1_one_tail_1_clicked() {
     ui.rb_h0_one_tail_1->setChecked(true);
+    m_hypothesisTest->setTailType(HypothesisTest::TailPositive);
 }
 
 void HypothesisTestDock::on_rb_h1_one_tail_2_clicked() {
     ui.rb_h0_one_tail_2->setChecked(true);
+    m_hypothesisTest->setTailType(HypothesisTest::TailNegative);
 }
 
 void HypothesisTestDock::on_rb_h1_two_tail_clicked() {
     ui.rb_h0_two_tail->setChecked(true);
+    m_hypothesisTest->setTailType(HypothesisTest::TailTwo);
 }

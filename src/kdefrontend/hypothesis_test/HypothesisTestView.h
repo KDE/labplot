@@ -40,6 +40,7 @@ class HypothesisTestModel;
 class AbstractAspect;
 class QTableView;
 class QHeaderView;
+class QListView;
 
 class QPrinter;
 class QMenu;
@@ -70,10 +71,12 @@ private:
 	                   const bool gridLines, const bool captions, const bool latexHeaders,
 	                   const bool skipEmptyRows,const bool exportEntire) const;
 
-        HypothesisTest* m_hypothesisTest;
-	QTableView* m_tableView;
-        QHeaderView* m_horizontalHeaderView;
-        QLabel* m_testName;
+    HypothesisTest* m_hypothesisTest;
+    QTableView* m_tableView;
+    QHeaderView* m_horizontalHeaderView;
+    QHeaderView* m_verticalHeaderView;
+    QLabel* m_testName;
+    QListView* m_resultView;
 
 public slots:
 	void createContextMenu(QMenu*);

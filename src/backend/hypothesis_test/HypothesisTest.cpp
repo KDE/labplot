@@ -44,6 +44,8 @@ extern "C" {
 #include <KLocalizedString>
 #include <QStandardItemModel>
 #include <QLocale>
+#include <QLabel>
+#include <QLayout>
 
 HypothesisTest::HypothesisTest(const QString &name) : AbstractPart(name),
 d(new HypothesisTestPrivate(this)) {
@@ -61,6 +63,15 @@ QAbstractItemModel* HypothesisTest::horizontalHeaderModel() {
     return d->horizontalHeaderModel;
 }
 
+QAbstractItemModel* HypothesisTest::verticalHeaderModel() {
+    return d->verticalHeaderModel;
+}
+
+QAbstractItemModel* HypothesisTest::resultModel() {
+    return d->resultModel;
+}
+
+
 void HypothesisTest::setDataSourceType(DataSourceType type) {
     if (type != d->dataSourceType) {
         d->dataSourceType = type;
@@ -72,9 +83,16 @@ void HypothesisTest::setDataSourceSpreadsheet(Spreadsheet *spreadsheet) {
         d->setDataSourceSpreadsheet(spreadsheet);
 }
 
-QStringList HypothesisTest::allColumns()
-{
+QStringList HypothesisTest::allColumns() {
     return d->all_columns;
+}
+
+HypothesisTest::TailType HypothesisTest::tailType() {
+    return d->tail_type;
+}
+
+void HypothesisTest::setTailType(HypothesisTest::TailType tailType) {
+    d->tail_type = tailType;
 }
 
 void HypothesisTest::setColumns(QVector<Column*> cols) {
@@ -94,30 +112,28 @@ void HypothesisTest::performTwoSampleTTest() {
 }
 
 void HypothesisTest::performTwoSampleIndependetTTest(bool equal_variance) {
-    d->performTwoSampleIndependetTest("ttest", equal_variance);
+    d->performTwoSampleIndependetTest(HypothesisTestPrivate::TestT, equal_variance);
 }
 
 void HypothesisTest::performTwoSamplePairedTTest() {
-    d->performTwoSamplePairedTest("ttest");
+    d->performTwoSamplePairedTest(HypothesisTestPrivate::TestT);
 }
 
 void HypothesisTest::PerformOneSampleTTest() {
-    d->PerformOneSampleTest("ttest");
+    d->PerformOneSampleTest(HypothesisTestPrivate::TestT);
 }
 
 void HypothesisTest::performTwoSampleIndependetZTest() {
-    d->performTwoSampleIndependetTest("ztest");
+    d->performTwoSampleIndependetTest(HypothesisTestPrivate::TestZ);
 }
 
 void HypothesisTest::performTwoSamplePairedZTest() {
-    d->performTwoSamplePairedTest("ztest");
+    d->performTwoSamplePairedTest(HypothesisTestPrivate::TestZ);
 }
 
 void HypothesisTest::PerformOneSampleZTest() {
-    d->PerformOneSampleTest("ztest");
+    d->PerformOneSampleTest(HypothesisTestPrivate::TestZ);
 }
-
-
 
 
 QString HypothesisTest::testName() {
@@ -130,7 +146,9 @@ QString HypothesisTest::testName() {
 
 HypothesisTestPrivate::HypothesisTestPrivate(HypothesisTest* owner) : q(owner) ,
     dataModel(new QStandardItemModel) ,
-    horizontalHeaderModel(new QStandardItemModel) {
+    horizontalHeaderModel(new QStandardItemModel) ,
+    verticalHeaderModel(new QStandardItemModel) ,
+    resultModel(new QStandardItemModel) {
 }
 
 HypothesisTestPrivate::~HypothesisTestPrivate() {
@@ -155,22 +173,17 @@ void HypothesisTestPrivate::setColumns(QStringList cols) {
     for (QString col : cols) {
         if (col != "") {
             column = dataSourceSpreadsheet->column(col);
-//            qDebug() << "col is " << col;
             m_columns.append(column);
         }
     }
 }
 
-void HypothesisTestPrivate::performTwoSampleIndependetTest(QString test, bool equal_variance) {
+
+/**************************Two Sample Independent *************************************/
+
+void HypothesisTestPrivate::performTwoSampleIndependetTest(Test test, bool equal_variance) {
     dataModel->clear();
     horizontalHeaderModel->clear();
-
-    if (test == "ttest")
-        m_currTestName = i18n("Two Sample Independent T Test");
-    if (test == "ztest")
-        m_currTestName = i18n("Two Sample Independent Z Test");
-
-    qDebug() << "performing two sample independent T test";
 
     QMessageBox* msg_box = new QMessageBox();
     // checking for cols;
@@ -181,17 +194,10 @@ void HypothesisTestPrivate::performTwoSampleIndependetTest(QString test, bool eq
     }
 
     bool modeOk = true;
-    bool allColumnsValid = true;
     for (int i = 0; i < 2; i++) {
         if(m_columns[i]->columnMode() == AbstractColumn::Numeric || m_columns[i]->columnMode() == AbstractColumn::Integer)
             continue;
         modeOk = false;
-    }
-
-    if(!allColumnsValid) {
-        msg_box->setText(i18n("one of the selected columns is invalid"));
-        msg_box->exec();
-        return;
     }
 
     if (!modeOk) {
@@ -214,13 +220,28 @@ void HypothesisTestPrivate::performTwoSampleIndependetTest(QString test, bool eq
         }
     }
 
-    if (test == "ttest") {
 
-        dataModel->setRowCount(1);
-        dataModel->setColumnCount(3);
+    dataModel->setRowCount(2);
+    dataModel->setColumnCount(3);
+    horizontalHeaderModel->setColumnCount(3);
+    verticalHeaderModel->setRowCount(2);
 
-        horizontalHeaderModel->setColumnCount(3);
+    for (int i = 0; i < 2; i++) {
+        dataModel->setItem(i, 0, new QStandardItem(QString::number(n[i])));
+        dataModel->setItem(i, 1, new QStandardItem(QString::number(mean[i])));
+        dataModel->setItem(i, 2, new QStandardItem(QString::number(std[i])));
+    }
 
+    horizontalHeaderModel->setHeaderData(0, Qt::Horizontal, "N");
+    horizontalHeaderModel->setHeaderData(1, Qt::Horizontal, "Mean");
+    horizontalHeaderModel->setHeaderData(2, Qt::Horizontal, "StDev");
+
+//    qDebug() << " number of sections is " << verticalHeaderModel->cou
+    verticalHeaderModel->setHeaderData(0, Qt::Vertical, m_columns[0]->name());
+    verticalHeaderModel->setHeaderData(1, Qt::Vertical, m_columns[1]->name());
+
+    if (test == TestT) {
+        m_currTestName = i18n("Two Sample Independet T Test for %1 vs %2", m_columns[0]->name(), m_columns[1]->name());
         double t;
         int df;
         if (equal_variance) {
@@ -240,27 +261,46 @@ void HypothesisTestPrivate::performTwoSampleIndependetTest(QString test, bool eq
             t = (mean[0] - mean[1]) / (qSqrt( (qPow(std[0], 2)/n[0]) + (qPow(std[1], 2)/n[1])));
         }
 
-        // now finding p value from t value
-        double p_value = nsl_stats_tdist_p(t, df);
+        double p_value = 0;
+        if (tail_type == HypothesisTest::TailNegative)
+            p_value = nsl_stats_tdist_p(t, df);
+        else if (tail_type == HypothesisTest::TailPositive) {
+            t *= -1;
+            p_value = nsl_stats_tdist_p(t, df);
+        } else {
+            p_value = nsl_stats_tdist_p(t, df) + nsl_stats_tdist_p(-1*t, df);
+        }
 
-    //    QString text = i18n("T value for test is %1 and\n p value is %2",t, p_value);
-    //    msg_box->setText(text);
-    //    msg_box->exec();
+//        dataModel->setRowCount(1);
+//        dataModel->setColumnCount(3);
 
-        //setting dataModel
-        dataModel->setItem(0, 0, new QStandardItem(QString::number(t)));
-        dataModel->setItem(0, 1, new QStandardItem(QString::number(df)));
-        dataModel->setItem(0, 2, new QStandardItem(QString::number(p_value)));
+//        horizontalHeaderModel->setColumnCount(3);
+//        //setting dataModel
+//        dataModel->setItem(0, 0, new QStandardItem(QString::number(t)));
+//        dataModel->setItem(0, 1, new QStandardItem(QString::number(df)));
+//        dataModel->setItem(0, 2, new QStandardItem(QString::number(p_value)));
 
 
-        //setting horizontal header model
-        horizontalHeaderModel->setHeaderData(0, Qt::Horizontal, "t value");
-        horizontalHeaderModel->setHeaderData(1, Qt::Horizontal, "dof");
-        horizontalHeaderModel->setHeaderData(2, Qt::Horizontal, "p value");
+//        //setting horizontal header model
+//        horizontalHeaderModel->setHeaderData(0, Qt::Horizontal, "t value");
+//        horizontalHeaderModel->setHeaderData(1, Qt::Horizontal, "dof");
+//        horizontalHeaderModel->setHeaderData(2, Qt::Horizontal, "p value");
+
+        resultModel->setRowCount(2);
+        resultModel->setColumnCount(1);
+        resultModel->setItem(0, 0, new QStandardItem("Null Hypothesis is "));
+        resultModel->setItem(1, 0, new QStandardItem("T value is "));
+
+        resultModel->setData(resultModel->index(0, 0), "Null Hypothesis is ", Qt::DisplayRole);
+        resultModel->setData(resultModel->index(1, 0), "T value is ", Qt::DisplayRole);
+
+        resultModel->setData(resultModel->index(0, 0), "Message", Qt::ToolTipRole);
+        resultModel->setData(resultModel->index(0, 0), QIcon("open.xpm"), Qt::DecorationRole);
 
         emit q->changed();
         return;
-    } else if(test == "ztest") {
+    } else if (test == TestZ) {
+        m_currTestName = i18n("Two Sample Independent Z Test");
         dataModel->setRowCount(1);
         dataModel->setColumnCount(2);
 
@@ -273,8 +313,16 @@ void HypothesisTestPrivate::performTwoSampleIndependetTest(QString test, bool eq
 
         double z = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
 
+        double p_value = 0;
+        if (tail_type == HypothesisTest::TailNegative)
+            p_value = nsl_stats_tdist_p(z, df);
+        else if (tail_type == HypothesisTest::TailPositive) {
+            z *= -1;
+            p_value = nsl_stats_tdist_p(z, df);
+        } else {
+            p_value = nsl_stats_tdist_p(z, df) + nsl_stats_tdist_p(-1*z, df);
+        }
         // now finding p value from t value
-        double p_value = nsl_stats_tdist_p(z, df);
 
     //    QString text = i18n("T value for test is %1 and\n p value is %2",t, p_value);
     //    msg_box->setText(text);
@@ -295,15 +343,11 @@ void HypothesisTestPrivate::performTwoSampleIndependetTest(QString test, bool eq
 
 }
 
-void HypothesisTestPrivate::performTwoSamplePairedTest(QString test) {
-    dataModel->clear();
-    horizontalHeaderModel->clear();\
-    if (test == "ttest")
-        m_currTestName = i18n("Two Sample Paired T Test");
-    if (test == "ztest")
-        m_currTestName = i18n("Two Sample Paired Z Test");
+/********************************Two Sample Paired ***************************************/
 
-    qDebug() << "performing two sample paired t test";
+void HypothesisTestPrivate::performTwoSamplePairedTest(Test test) {
+    dataModel->clear();
+    horizontalHeaderModel->clear();
 
     QMessageBox* msg_box = new QMessageBox();
     // checking for cols;
@@ -314,18 +358,12 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(QString test) {
     }
 
     bool modeOk = true;
-    bool allColumnsValid = true;
     for (int i = 0; i < 2; i++) {
         if(m_columns[i]->columnMode() == AbstractColumn::Numeric || m_columns[i]->columnMode() == AbstractColumn::Integer)
             continue;
         modeOk = false;
     }
 
-    if(!allColumnsValid) {
-        msg_box->setText(i18n("one of the selected columns is invalid"));
-        msg_box->exec();
-        return;
-    }
 
     if (!modeOk) {
         msg_box->setText(i18n("select only columns with numbers"));
@@ -349,7 +387,8 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(QString test) {
         return;
     }
 
-    if (test == "ttest") {
+    if (test == TestT) {
+        m_currTestName = i18n("Two Sample Paired T Test");
         dataModel->setRowCount(1);
         dataModel->setColumnCount(3);
 
@@ -358,8 +397,15 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(QString test) {
         double t = mean / (std/qSqrt(n));
         int df = n - 1;
 
-        // now finding p value from t value
-        double p_value = nsl_stats_tdist_p(t, df);
+        double p_value = 0;
+        if (tail_type == HypothesisTest::TailNegative)
+            p_value = nsl_stats_tdist_p(t, df);
+        else if (tail_type == HypothesisTest::TailPositive) {
+            t *= -1;
+            p_value = nsl_stats_tdist_p(t, df);
+        } else {
+            p_value = nsl_stats_tdist_p(t, df) + nsl_stats_tdist_p(-1*t, df);
+        }
 
 
 
@@ -380,7 +426,8 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(QString test) {
 
         emit q->changed();
         return;
-    } else if (test == "ztest") {
+    } else if (test == TestZ) {
+        m_currTestName = i18n("Two Sample Paired Z Test");
         dataModel->setRowCount(1);
         dataModel->setColumnCount(2);
 
@@ -389,8 +436,18 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(QString test) {
         double z = mean / (std/qSqrt(n));
         int df = n - 1;
 
+        double p_value = 0;
+        if (tail_type == HypothesisTest::TailNegative)
+            p_value = nsl_stats_tdist_p(z, df);
+        else if (tail_type == HypothesisTest::TailPositive) {
+            z *= -1;
+            p_value = nsl_stats_tdist_p(z, df);
+        } else {
+            p_value = nsl_stats_tdist_p(z, df) + nsl_stats_tdist_p(-1*z, df);
+        }
+
+
         // now finding p value from t value
-        double p_value = nsl_stats_tdist_p(z, df);
 
     //    QString text = i18n("T value for test is %1 and\n p value is %2",t, p_value);
     //    msg_box->setText(text);
@@ -410,16 +467,12 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(QString test) {
     }
 }
 
-void HypothesisTestPrivate::PerformOneSampleTest(QString test) {
+/******************************** One Sample ***************************************/
+
+void HypothesisTestPrivate::PerformOneSampleTest(Test test) {
     double population_mean = 0;
     dataModel->clear();
     horizontalHeaderModel->clear();
-    if (test == "ttest")
-        m_currTestName = i18n("One Sample T Test");
-    if (test == "ztest")
-        m_currTestName = i18n("One Sample Z Test");
-
-    qDebug() << "performing two sample paired t test";
 
     QMessageBox* msg_box = new QMessageBox();
     // checking for cols;
@@ -445,7 +498,8 @@ void HypothesisTestPrivate::PerformOneSampleTest(QString test) {
         return;
     }
 
-    if (test == "ttest") {
+    if (test == TestT) {
+        m_currTestName = i18n("One Sample T Test");
         dataModel->setRowCount(1);
         dataModel->setColumnCount(3);
 
@@ -454,8 +508,17 @@ void HypothesisTestPrivate::PerformOneSampleTest(QString test) {
         double t = (mean - population_mean) / (std/qSqrt(n));
         int df = n - 1;
 
-        // now finding p value from t value
-        double p_value = nsl_stats_tdist_p(t, df);
+
+        double p_value = 0;
+        if (tail_type == HypothesisTest::TailNegative)
+            p_value = nsl_stats_tdist_p(t, df);
+        else if (tail_type == HypothesisTest::TailPositive) {
+            t *= -1;
+            p_value = nsl_stats_tdist_p(t, df);
+        } else {
+            p_value = nsl_stats_tdist_p(t, df) + nsl_stats_tdist_p(-1*t, df);
+        }
+
 
     //    QString text = i18n("T value for test is %1 and\n p value is %2",t, p_value);
     //    msg_box->setText(text);
@@ -474,7 +537,8 @@ void HypothesisTestPrivate::PerformOneSampleTest(QString test) {
 
         emit q->changed();
         return;
-    } else if (test == "ztest") {
+    } else if (test == TestZ) {
+        m_currTestName = i18n("One Sample Z Test");
         dataModel->setRowCount(1);
         dataModel->setColumnCount(2);
 
@@ -483,8 +547,16 @@ void HypothesisTestPrivate::PerformOneSampleTest(QString test) {
         double z = (mean - population_mean) / (std/qSqrt(n));
         int df = n - 1;
 
+        double p_value = 0;
+        if (tail_type == HypothesisTest::TailNegative)
+            p_value = nsl_stats_tdist_p(z, df);
+        else if (tail_type == HypothesisTest::TailPositive) {
+            z *= -1;
+            p_value = nsl_stats_tdist_p(z, df);
+        } else {
+            p_value = nsl_stats_tdist_p(z, df) + nsl_stats_tdist_p(-1*z, df);
+        }
         // now finding p value from t value
-        double p_value = nsl_stats_tdist_p(z, df);
 
     //    QString text = i18n("T value for test is %1 and\n p value is %2",t, p_value);
     //    msg_box->setText(text);

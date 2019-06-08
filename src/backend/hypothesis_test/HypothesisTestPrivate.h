@@ -35,9 +35,11 @@ class QStandardItemModel;
 
 class HypothesisTestPrivate {
 public:
+
         explicit HypothesisTestPrivate(HypothesisTest*);
         virtual ~HypothesisTestPrivate();
 
+        enum Test {TestT, TestZ};
         QString name() const;
 
         HypothesisTest* const q;
@@ -53,15 +55,20 @@ public:
 
         QStandardItemModel* dataModel{nullptr};
         QStandardItemModel* horizontalHeaderModel{nullptr};
+        QStandardItemModel* verticalHeaderModel{nullptr};
 
         bool m_dbCreated{false};
         int m_rowCount{0};
         int m_columnCount{0};
         QString m_currTestName{"Result Table"};
 
-        void performTwoSampleIndependetTest(QString test, bool equal_variance = true);
-        void performTwoSamplePairedTest(QString test);
-        void PerformOneSampleTest(QString test);
+        void performTwoSampleIndependetTest(Test test, bool equal_variance = true);
+        void performTwoSamplePairedTest(Test test);
+        void PerformOneSampleTest(Test test);
+
+        HypothesisTest::TailType tail_type;
+
+        QStandardItemModel* resultModel{nullptr};
 private:
         void findStats(Column* column, int &count, double &sum, double &mean, double &std);
         void findStatsPaired(Column *column1, Column *column2, int &count, double &sum, double &mean, double &std);
