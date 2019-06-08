@@ -1,5 +1,5 @@
 /***************************************************************************
-File                 : DatasetMetadataManagerWidget.cpp
+File                 : DatasetMetadataManagerWidget.h
 Project              : LabPlot
 Description          : widget for managing a metadata file of a dataset
 --------------------------------------------------------------------
@@ -31,17 +31,16 @@ Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
 
 #include "ui_datasetmetadatamanagerwidget.h"
 
-
 class DatasetMetadataManagerWidget : public QWidget {
     Q_OBJECT
 
 public:
     explicit DatasetMetadataManagerWidget(QWidget*, const QMap<QString, QMap<QString, QVector<QString>>>&);
-    ~DatasetMetadataManagerWidget() override;
+    virtual ~DatasetMetadataManagerWidget() override;
     bool checkDataValidity();
     void updateDocument(const QString& fileName);
     void createNewMetadata(const QString& dirPath);
-	QString getMetadataFilePath();
+    QString getMetadataFilePath() const;
 
 
 private:
@@ -49,25 +48,25 @@ private:
     QStringList m_categoryList;
     QMap<QString, QStringList> m_subcategoryMap;
     QMap<QString, QStringList> m_datasetMap;
-	QStringList m_columnDescriptions;
-	QString m_metadataFilePath;
-	QStringList m_datasetList;
+    QStringList m_columnDescriptions;
+    QString m_metadataFilePath;
+    QStringList m_datasetList;
 
     void initCategories(const QMap<QString, QMap<QString, QVector<QString>>>&);
     void initSubcategories(const QMap<QString, QMap<QString, QVector<QString>>>&);
     void initDatasets(const QMap<QString, QMap<QString, QVector<QString>>>&);
     bool checkFileName();
-	bool urlExists();
-	bool checkDatasetName();
-	bool checkDescription();
-	bool checkCategories(QComboBox* comboBox);
-	void loadSettings();
-	void enableDatasetSettings(bool);
+    bool urlExists();
+    bool checkDatasetName();
+    bool checkDescription();
+    bool checkCategories(QComboBox*);
+    void loadSettings();
+    void enableDatasetSettings(bool);
 
 private slots:
     void updateSubcategories(const QString&);
-	void addColumnDescription();
-	void removeColumnDescription();
+    void addColumnDescription();
+    void removeColumnDescription();
 
 signals:
     void checkOk();

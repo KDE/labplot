@@ -1,7 +1,7 @@
 /***************************************************************************
 File                 : DatasetMetadataManagerDialog.cpp
 Project              : LabPlot
-Description          : dialog for managing a metadata file of a dataset
+Description          : Dialog for managing a metadata file of a dataset
 --------------------------------------------------------------------
 Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
 
@@ -26,26 +26,28 @@ Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
  *                                                                         *
  ***************************************************************************/
 
-#include "DatasetMetadataManagerDialog.h"
-#include "DatasetMetadataManagerWidget.h"
-#include "KLocalizedString"
-#include "QDialogButtonBox"
-#include "KConfigGroup"
-#include "KSharedConfig"
-#include "KWindowConfig"
-#include "QWindow"
-#include "QPushButton"
+#include "src/kdefrontend/datasources/DatasetMetadataManagerDialog.h"
+#include "src/kdefrontend/datasources/DatasetMetadataManagerWidget.h"
+
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KSharedConfig>
+#include <KWindowConfig>
+#include <QDialogButtonBox>
+#include <QWindow>
+#include <QPushButton>
 
 DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) : QDialog(parent),
-	m_mainWidget(new DatasetMetadataManagerWidget(this, datasetMap))
-{
+    m_mainWidget(new DatasetMetadataManagerWidget(this, datasetMap)),
+    m_buttonBox(nullptr),
+    m_okButton(nullptr) {
 	connect(m_mainWidget, &DatasetMetadataManagerWidget::checkOk, this, &DatasetMetadataManagerDialog::checkOkButton);	
 
 	setWindowTitle(i18nc("@title:window", "Dataset metadata manager"));
 
 	m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-	okButton = m_buttonBox->button(QDialogButtonBox::Ok);
-	okButton->setEnabled(false);
+    m_okButton = m_buttonBox->button(QDialogButtonBox::Ok);
+    m_okButton->setEnabled(false);
 
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->addWidget(m_mainWidget);
@@ -74,10 +76,10 @@ DatasetMetadataManagerDialog::~DatasetMetadataManagerDialog() {
 
 void DatasetMetadataManagerDialog::checkOkButton() {
 	bool enable = m_mainWidget->checkDataValidity();
-	okButton->setEnabled(enable);
+    m_okButton->setEnabled(enable);
 }
 
-void DatasetMetadataManagerDialog::updateDocument(const QString &fileName) {
+void DatasetMetadataManagerDialog::updateDocument(const QString& fileName) {
 	m_mainWidget->updateDocument(fileName);
 }
 
@@ -85,6 +87,6 @@ void DatasetMetadataManagerDialog::createNewMetadata(const QString& dirPath) {
 	m_mainWidget->createNewMetadata(dirPath);
 }
 
-QString DatasetMetadataManagerDialog::getMetadataFilePath() {
+QString DatasetMetadataManagerDialog::getMetadataFilePath() const {
 	return m_mainWidget->getMetadataFilePath();
 }

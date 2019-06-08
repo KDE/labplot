@@ -28,7 +28,7 @@ Copyright	: (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
 #ifndef DATASETHANDLER_H
 #define DATASETHANDLER_H
 
-#include "QString"
+#include <QString>
 #include "backend/spreadsheet/Spreadsheet.h"
 
 class QJsonDocument;

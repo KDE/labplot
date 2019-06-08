@@ -1,7 +1,7 @@
 /***************************************************************************
-File                 : DatasetMetadataManagerDialog.cpp
+File                 : DatasetMetadataManagerDialog.h
 Project              : LabPlot
-Description          : dialog for managing a metadata file of a dataset
+Description          : Dialog for managing a metadata file of a dataset
 --------------------------------------------------------------------
 Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
 
@@ -39,15 +39,15 @@ class DatasetMetadataManagerDialog : public QDialog {
 
 public:
     explicit DatasetMetadataManagerDialog(QWidget*, const QMap<QString, QMap<QString, QVector<QString>>>&);
-    ~DatasetMetadataManagerDialog() override;
+    virtual ~DatasetMetadataManagerDialog() override;
     void updateDocument(const QString& fileName);
     void createNewMetadata(const QString& dirPath);
-	QString getMetadataFilePath();
+    QString getMetadataFilePath() const;
 
 private:
     DatasetMetadataManagerWidget* m_mainWidget;
     QDialogButtonBox* m_buttonBox;
-    QPushButton* okButton{nullptr};
+    QPushButton* m_okButton;
 
 protected  slots:
     void checkOkButton();
