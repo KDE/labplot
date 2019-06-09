@@ -160,6 +160,12 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 
     connect(ui.twTests, &QTreeWidget::itemClicked, this, &HypothesisTestDock::showHypothesisTest);
     connect(ui.pbPerformTest, &QPushButton::clicked, this, &HypothesisTestDock::doHypothesisTest);
+
+    //connecting null hypothesis and alternate hypothesis radio button
+    connect(ui.rb_h1_one_tail_1, &QRadioButton::toggled, this, &HypothesisTestDock::on_rb_h1_one_tail_1_toggled);
+    connect(ui.rb_h1_one_tail_2, &QRadioButton::toggled, this, &HypothesisTestDock::on_rb_h1_one_tail_2_toggled);
+    connect(ui.rb_h1_two_tail, &QRadioButton::toggled, this, &HypothesisTestDock::on_rb_h1_two_tail_toggled);
+
 }
 
 void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
@@ -244,7 +250,6 @@ void HypothesisTestDock::showHypothesisTest(QTreeWidgetItem* item, int col) {
     ui.l_h1->setVisible(two_sample_independent || two_sample_paired || one_sample);
 
     ui.rb_h1_two_tail->setChecked(true);
-    ui.rb_h0_two_tail->setChecked(true);
 }
 
 void HypothesisTestDock::doHypothesisTest()  {
@@ -593,17 +598,20 @@ void HypothesisTestDock::spreadsheetChanged(const QModelIndex& index) {
 
 // for alternate hypothesis
 // one_tail_1 is mu > mu0; one_tail_2 is mu < mu0; two_tail = mu != mu0;
-void HypothesisTestDock::on_rb_h1_one_tail_1_clicked() {
+void HypothesisTestDock::on_rb_h1_one_tail_1_toggled(bool checked) {
+    if (!checked) return;
     ui.rb_h0_one_tail_1->setChecked(true);
     m_hypothesisTest->setTailType(HypothesisTest::TailPositive);
 }
 
-void HypothesisTestDock::on_rb_h1_one_tail_2_clicked() {
+void HypothesisTestDock::on_rb_h1_one_tail_2_toggled(bool checked) {
+    if (!checked) return;
     ui.rb_h0_one_tail_2->setChecked(true);
     m_hypothesisTest->setTailType(HypothesisTest::TailNegative);
 }
 
-void HypothesisTestDock::on_rb_h1_two_tail_clicked() {
+void HypothesisTestDock::on_rb_h1_two_tail_toggled(bool checked) {
+    if (!checked) return;
     ui.rb_h0_two_tail->setChecked(true);
     m_hypothesisTest->setTailType(HypothesisTest::TailTwo);
 }
