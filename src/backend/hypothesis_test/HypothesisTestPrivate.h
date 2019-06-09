@@ -61,6 +61,9 @@ public:
         int m_rowCount{0};
         int m_columnCount{0};
         QString m_currTestName{"Result Table"};
+        double m_population_mean;
+        double m_significance_level;
+
 
         void performTwoSampleIndependetTest(Test test, bool equal_variance = true);
         void performTwoSamplePairedTest(Test test);

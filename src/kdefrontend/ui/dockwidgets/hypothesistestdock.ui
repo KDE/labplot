@@ -382,26 +382,58 @@
      <item>
       <widget class="QRadioButton" name="rb_h0_one_tail_1">
        <property name="text">
-        <string>RadioButton</string>
+        <string>mu &lt;= muo</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="rb_h0_one_tail_2">
        <property name="text">
-        <string>RadioButton</string>
+        <string>mu &gt;= muo</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="rb_h0_two_tail">
        <property name="text">
-        <string>RadioButton</string>
+        <string>mu == muo</string>
        </property>
       </widget>
      </item>
     </layout>
    </widget>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>730</y>
+     <width>217</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <widget class="QLabel" name="l_muo">
+      <property name="text">
+       <string>muo</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="le_muo"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="l_alpha">
+      <property name="text">
+       <string>alpha</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="le_alpha"/>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

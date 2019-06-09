@@ -89,6 +89,8 @@ public:
     QStringList allColumns();
     void setTailType(TailType tailType);
     TailType tailType();
+    void setPopulationMean(QVariant populationMean);
+    void setSignificanceLevel(QVariant alpha);
 private:
     HypothesisTestPrivate* const d;
     mutable HypothesisTestView* m_view{nullptr};

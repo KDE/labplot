@@ -61,7 +61,8 @@ private:
 ////        AspectTreeModel* m_aspectTreeModel{nullptr};
         QSqlDatabase m_db;
         QString m_configPath;
-        QWidget* wid;
+        double population_mean{0};
+        double significance_level{0.05};
 //        void load();
 //        void loadConfig(KConfig&);
 //        void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);

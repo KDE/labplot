@@ -103,6 +103,18 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     ui.rb_h0_one_tail_1->setEnabled(false);
     ui.rb_h0_one_tail_2->setEnabled(false);
 
+
+    // setting muo and alpha buttons
+    ui.l_muo->setText( i18n("%1", mu0));
+    ui.l_alpha->setText( i18n("%1", QChar(0x3B1)));
+    ui.le_muo->setText( i18n("%1", population_mean));
+    ui.le_alpha->setText( i18n("%1", significance_level));
+
+    ui.l_muo->setVisible(false);
+    ui.l_alpha->setVisible(false);
+    ui.le_muo->setVisible(false);
+    ui.le_alpha->setVisible(false);
+
     //    readConnections();
 
 //    auto* style = ui.bAddRow->style();
@@ -250,9 +262,22 @@ void HypothesisTestDock::showHypothesisTest(QTreeWidgetItem* item, int col) {
     ui.l_h1->setVisible(two_sample_independent || two_sample_paired || one_sample);
 
     ui.rb_h1_two_tail->setChecked(true);
+
+    ui.l_muo->setVisible(one_sample);
+    ui.le_muo->setVisible(one_sample);
+    ui.l_alpha->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.le_alpha->setVisible(two_sample_independent || two_sample_paired || one_sample);
+
+    ui.le_muo->setText( i18n("%1", population_mean));
+    ui.le_alpha->setText( i18n("%1", significance_level));
+
 }
 
 void HypothesisTestDock::doHypothesisTest()  {
+
+    m_hypothesisTest->setPopulationMean(ui.le_muo->text());
+    m_hypothesisTest->setSignificanceLevel(ui.le_alpha->text());
+
     QStringList cols;
     if(ttest) {
         if(two_sample_independent) {
