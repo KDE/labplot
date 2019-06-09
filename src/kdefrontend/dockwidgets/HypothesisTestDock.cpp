@@ -57,7 +57,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     ui.cbDataSourceType->addItem(i18n("Database"));
 
     cbSpreadsheet = new TreeViewComboBox;
-    ui.gridLayout->addWidget(cbSpreadsheet, 5, 3, 1, 4);
+    ui.gridLayout->addWidget(cbSpreadsheet, 1, 1);
 
     ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
     ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
