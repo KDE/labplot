@@ -89,13 +89,15 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     // radio button for null and alternate hypothesis
     // for alternative hypothesis
     // one_tail_1 is mu > mu0; one_tail_2 is mu < mu0; two_tail = mu != mu0;
-    ui.rb_h1_one_tail_1->setText(mu + " " + QChar(0x3E) + " " + mu0);
-    ui.rb_h1_one_tail_2->setText(mu + " " + QChar(0x3C) + " " + mu0);
-    ui.rb_h1_two_tail->setText(mu + " " + QChar(0x2260) + " " + mu0);
 
-    ui.rb_h0_one_tail_1->setText(mu + " " + QChar(0x2264) + " " + mu0);
-    ui.rb_h0_one_tail_2->setText(mu + " " + QChar(0x2265) + " " + mu0);
-    ui.rb_h0_two_tail->setText(mu + " " + QChar(0x3D) + " " + mu0);
+
+    ui.rb_h1_one_tail_1->setText( i18n("%1 %2 %3", mu, QChar(0x3E), mu0));
+    ui.rb_h1_one_tail_2->setText( i18n("%1 %2 %3", mu, QChar(0x3C), mu0));
+    ui.rb_h1_two_tail->setText( i18n("%1 %2 %3", mu, QChar(0x2260), mu0));
+
+    ui.rb_h0_one_tail_1->setText( i18n("%1 %2 %3", mu, QChar(0x2264), mu0));
+    ui.rb_h0_one_tail_2->setText( i18n("%1 %2 %3",mu, QChar(0x2265), mu0));
+    ui.rb_h0_two_tail->setText( i18n("%1 %2 %3", mu, QChar(0x3D), mu0));
 
     ui.rb_h0_two_tail->setEnabled(false);
     ui.rb_h0_one_tail_1->setEnabled(false);
