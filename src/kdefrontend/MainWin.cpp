@@ -296,6 +296,15 @@ void MainWin::initGUI(const QString& fileName) {
 		statusBar()->addPermanentWidget(m_memoryInfoWidget);
 	}
 
+	//load welcome screen
+	const bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
+	if(showWelcomeScreen) {
+		/* TODO:
+		 * m_welcomeScreen = new welcomeScreen();
+		 * setCentralWidget(m_welcomeScreen)
+		 */
+	}
+
 	updateGUIOnProjectChanges();
 }
 
@@ -1826,6 +1835,11 @@ void MainWin::handleSettingsChanges() {
 				m_memoryInfoWidget = nullptr;
 			}
 		}
+	}
+
+	bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
+	if(m_showWelcomeScreen != showWelcomeScreen) {
+		m_showWelcomeScreen = showWelcomeScreen;
 	}
 }
 
