@@ -66,10 +66,19 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 
 
 
+    // adding item to tests and testtype combo box;
+
+    ui.cbTest->addItem(i18n("T Test"));
+    ui.cbTest->addItem(i18n("Z Test"));
+
+    ui.cbTestType->addItem(i18n("Two Sample Independent"));
+    ui.cbTestType->addItem(i18n("Two Sample Paired"));
+    ui.cbTestType->addItem(i18n("One Sample"));
+
     // making all test blocks invisible at starting.
-    ui.lIndependentVariable1->setVisible(false);
+    ui.lCol1->setVisible(false);
     ui.cbCol1->setVisible(false);
-    ui.cbVariable2->setVisible(false);
+    ui.lCol2->setVisible(false);
     ui.cbCol2->setVisible(false);
     ui.chbEqualVariance->setVisible(false);
     ui.chbEqualVariance->setChecked(true);
@@ -170,7 +179,8 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 //        ui.bRemoveColumn->setEnabled(!ui.lwColumns->selectedItems().isEmpty());
 //    });
 
-    connect(ui.twTests, &QTreeWidget::itemClicked, this, &HypothesisTestDock::showHypothesisTest);
+
+    connect(ui.cbTestType, &QComboBox::currentTextChanged, this, &HypothesisTestDock::showHypothesisTest);
     connect(ui.pbPerformTest, &QPushButton::clicked, this, &HypothesisTestDock::doHypothesisTest);
 
     //connecting null hypothesis and alternate hypothesis radio button
@@ -178,6 +188,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     connect(ui.rb_h1_one_tail_2, &QRadioButton::toggled, this, &HypothesisTestDock::on_rb_h1_one_tail_2_toggled);
     connect(ui.rb_h1_two_tail, &QRadioButton::toggled, this, &HypothesisTestDock::on_rb_h1_two_tail_toggled);
 
+    connect(ui.cbCol1, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::col1IndexChanged);
 }
 
 void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
@@ -210,8 +221,10 @@ void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
     ui.cbCol1->clear();
     ui.cbCol2->clear();
     for (auto* col : m_hypothesisTest->dataSourceSpreadsheet()->children<Column>()) {
-        ui.cbCol1->addItem(col->name());
-        ui.cbCol2->addItem(col->name());
+        if (col->columnMode() == AbstractColumn::Integer || col->columnMode() == AbstractColumn::Numeric) {
+            ui.cbCol2->addItem(col->name());
+            ui.cbCol1->addItem(col->name());
+        }
     }
 
     this->dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
@@ -234,20 +247,18 @@ void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
 //    m_initializing = false;
 }
 
-void HypothesisTestDock::showHypothesisTest(QTreeWidgetItem* item, int col) {
-    if(item->parent() != nullptr){
-            ttest = item->parent()->text(col) == "Student's T Test";
-            ztest = item->parent()->text(col) == "Z Test";
-    }
+void HypothesisTestDock::showHypothesisTest() {
+    ttest = ui.cbTest->currentText() == "T Test";
+    ztest = ui.cbTest->currentText() == "Z Test";
 
-    two_sample_independent = item->text(col) == "Two Sample Independent";
-    two_sample_paired = item->text(col) == "Two Sample Paired";
-    one_sample = item->text(col) == "One Sample";
+    two_sample_independent = ui.cbTestType->currentText() == "Two Sample Independent";
+    two_sample_paired = ui.cbTestType->currentText() == "Two Sample Paired";
+    one_sample = ui.cbTestType->currentText() == "One Sample";
 
-    ui.lIndependentVariable1->setVisible(two_sample_independent || two_sample_paired || one_sample);
-    ui.cbCol1->setVisible(two_sample_independent || two_sample_paired || one_sample);
-    ui.cbVariable2->setVisible(two_sample_independent || two_sample_paired);
-    ui.cbCol2->setVisible(two_sample_independent || two_sample_paired);
+    ui.lCol1->setVisible(two_sample_independent || two_sample_paired);
+    ui.cbCol1->setVisible(two_sample_independent || two_sample_paired);
+    ui.lCol2->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.cbCol2->setVisible(two_sample_independent || two_sample_paired || one_sample);
     ui.chbEqualVariance->setVisible(ttest && two_sample_independent);
     ui.chbEqualVariance->setChecked(true);
     ui.pbPerformTest->setEnabled(two_sample_independent || two_sample_paired || one_sample);
@@ -271,6 +282,19 @@ void HypothesisTestDock::showHypothesisTest(QTreeWidgetItem* item, int col) {
     ui.le_muo->setText( i18n("%1", population_mean));
     ui.le_alpha->setText( i18n("%1", significance_level));
 
+    // setting whether to show text or not in col1:
+    if (two_sample_independent) {
+        ui.cbCol1->clear();
+        for (auto* col : m_hypothesisTest->dataSourceSpreadsheet()->children<Column>()) {
+            ui.cbCol1->addItem(col->name());
+        }
+    }else if (two_sample_paired) {
+        ui.cbCol1->clear();
+        for (auto* col : m_hypothesisTest->dataSourceSpreadsheet()->children<Column>()) {
+            if (col->columnMode() == AbstractColumn::Numeric || col->columnMode() == AbstractColumn::Integer)
+            ui.cbCol1->addItem(col->name());
+        }
+    }
 }
 
 void HypothesisTestDock::doHypothesisTest()  {
@@ -482,10 +506,30 @@ void HypothesisTestDock::spreadsheetChanged(const QModelIndex& index) {
     //show all spreadsheet columns as available dimensions
     for (const auto* col : spreadsheet->children<Column>()) {
         ui.cbCol1->addItem(col->name());
-        ui.cbCol2->addItem(col->name());
+        if (col->columnMode() == AbstractColumn::Integer || col->columnMode() == AbstractColumn::Numeric) {
+            ui.cbCol2->addItem(col->name());
+            ui.cbCol1->addItem(col->name());
+        } else if (two_sample_independent)
+            ui.cbCol1->addItem(col->name());
     }
 
     m_hypothesisTest->setDataSourceSpreadsheet(spreadsheet);
+}
+
+// currently no need of this slot
+void HypothesisTestDock::col1IndexChanged(int index) {
+    if (index < 0) return;
+
+    QString selected_text = ui.cbCol1->currentText();
+    Column* col1 = m_hypothesisTest->dataSourceSpreadsheet()->column(selected_text);
+
+    if (col1->columnMode() == AbstractColumn::Integer || col1->columnMode() == AbstractColumn::Numeric) {
+        ui.lCol2->setText("Independent Variable");
+    }
+    else {
+        ui.lCol2->setText("Dependent Variable");
+    }
+
 }
 
 

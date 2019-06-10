@@ -82,8 +82,9 @@ private slots:
 //        void commentChanged();
         void dataSourceTypeChanged(int);
         void doHypothesisTest();
-        void showHypothesisTest(QTreeWidgetItem* item, int col);
+        void showHypothesisTest();
         void spreadsheetChanged(const QModelIndex&);
+        void col1IndexChanged(int index);
 //        void connectionChanged();
 //        void tableChanged();
 //        void showDatabaseManager();

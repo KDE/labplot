@@ -203,27 +203,49 @@ void HypothesisTestPrivate::performTwoSampleIndependetTest(Test test, bool equal
         return;
     }
 
-    bool modeOk = true;
-    for (int i = 0; i < 2; i++) {
-        if(m_columns[i]->columnMode() == AbstractColumn::Numeric || m_columns[i]->columnMode() == AbstractColumn::Integer)
-            continue;
-        modeOk = false;
-    }
+    // not checking modes becuase columns are selected on the basis of modes;
+//    bool modeOk = true;
+//    for (int i = 0; i < 2; i++) {
+//        if(m_columns[i]->columnMode() == AbstractColumn::Numeric || m_columns[i]->columnMode() == AbstractColumn::Integer)
+//            continue;
+//        modeOk = false;
+//    }
 
-    if (!modeOk) {
-        msg_box->setText(i18n("select only columns with numbers"));
-        msg_box->exec();
-        return;
-    }
+//    if (!modeOk) {
+//        msg_box->setText(i18n("select only columns with numbers"));
+//        msg_box->exec();
+//        return;
+//    }
 
 
     int n[2];
     double sum[2], mean[2], std[2];
 
-    for (int i = 0; i < 2; i++) {
-        findStats(m_columns[i], n[i], sum[i], mean[i], std[i]);
+    QString col1_name = m_columns[0]->name();
+    QString col2_name = m_columns[1]->name();
 
-        if (n[i] < 1) {
+    if (m_columns[0]->columnMode() == AbstractColumn::Integer || m_columns[0]->columnMode() == AbstractColumn::Numeric) {
+        for (int i = 0; i < 2; i++) {
+            findStats(m_columns[i], n[i], sum[i], mean[i], std[i]);
+
+            if (n[i] < 1) {
+                msg_box->setText(i18n("atleast one of selected column is empty"));
+                msg_box->exec();
+                return;
+            }
+        }
+    }
+    else {
+        findStatsCategorical(n, sum, mean, std, col1_name, col2_name);
+        if (n[0] == -1) {
+            msg_box->setText(i18n("Unequal size between %1 and %2", col1_name, col2_name));
+            msg_box->exec();
+            return;
+        } else if(n[0] == -2) {
+            msg_box->setText(i18n("There are more than two categorical variables in %1", m_columns[0]->name()));
+            msg_box->exec();
+            return;
+        } else if (n[0] == 0) {
             msg_box->setText(i18n("atleast one of selected column is empty"));
             msg_box->exec();
             return;
@@ -246,11 +268,11 @@ void HypothesisTestPrivate::performTwoSampleIndependetTest(Test test, bool equal
     horizontalHeaderModel->setHeaderData(1, Qt::Horizontal, i18n("Mean"));
     horizontalHeaderModel->setHeaderData(2, Qt::Horizontal, i18n("StDev"));
 
-    verticalHeaderModel->setHeaderData(0, Qt::Vertical, m_columns[0]->name());
-    verticalHeaderModel->setHeaderData(1, Qt::Vertical, m_columns[1]->name());
+    verticalHeaderModel->setHeaderData(0, Qt::Vertical, col1_name);
+    verticalHeaderModel->setHeaderData(1, Qt::Vertical, col2_name);
 
     if (test == TestT) {
-        m_currTestName = i18n("Two Sample Independent T Test for %1 vs %2", m_columns[0]->name(), m_columns[1]->name());
+        m_currTestName = i18n("Two Sample Independent T Test for %1 vs %2", col1_name, col2_name);
         double t;
         int df;
         QString temp = "";
@@ -285,29 +307,29 @@ void HypothesisTestPrivate::performTwoSampleIndependetTest(Test test, bool equal
             case HypothesisTest::TailNegative:
                 p_value = nsl_stats_tdist_p(t, df);
 
-                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", m_columns[0]->name(), QChar(0x2265), m_columns[1]->name());
+                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2265), col2_name);
                 resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
 
-                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", m_columns[0]->name(), QChar(0x3C), m_columns[1]->name());
+                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3C), col2_name);
                 resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
                 break;
             case HypothesisTest::TailPositive:
                 t *= -1;
                 p_value = nsl_stats_tdist_p(t, df);
 
-                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", m_columns[0]->name(), QChar(0x2264), m_columns[1]->name());
+                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2264), col2_name);
                 resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
 
-                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", m_columns[0]->name(), QChar(0x3E), m_columns[1]->name());
+                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3E), col2_name);
                 resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
                 break;
             case HypothesisTest::TailTwo:
                 p_value = nsl_stats_tdist_p(t, df) + nsl_stats_tdist_p(-1*t, df);
 
-                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", m_columns[0]->name(), QChar(0x3D), m_columns[1]->name());
+                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3D), col2_name);
                 resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
 
-                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", m_columns[0]->name(), QChar(0x2260), m_columns[1]->name());
+                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2260), col2_name);
                 resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
                 break;
         }
@@ -332,7 +354,7 @@ void HypothesisTestPrivate::performTwoSampleIndependetTest(Test test, bool equal
         return;
     }
     else if (test == TestZ) {
-        m_currTestName = i18n("Two Sample Independent Z Test for %1 vs %2", m_columns[0]->name(), m_columns[1]->name());
+        m_currTestName = i18n("Two Sample Independent Z Test for %1 vs %2", col1_name, col2_name);
         double t;
         int df;
         QString temp = "";
@@ -352,29 +374,29 @@ void HypothesisTestPrivate::performTwoSampleIndependetTest(Test test, bool equal
             case HypothesisTest::TailNegative:
                 p_value = nsl_stats_tdist_p(t, df);
 
-                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", m_columns[0]->name(), QChar(0x2265), m_columns[1]->name());
+                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2265), col2_name);
                 resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
 
-                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", m_columns[0]->name(), QChar(0x3C), m_columns[1]->name());
+                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3C), col2_name);
                 resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
                 break;
             case HypothesisTest::TailPositive:
                 t *= -1;
                 p_value = nsl_stats_tdist_p(t, df);
 
-                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", m_columns[0]->name(), QChar(0x2264), m_columns[1]->name());
+                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2264), col2_name);
                 resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
 
-                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", m_columns[0]->name(), QChar(0x3E), m_columns[1]->name());
+                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3E), col2_name);
                 resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
                 break;
             case HypothesisTest::TailTwo:
                 p_value = nsl_stats_tdist_p(t, df) + nsl_stats_tdist_p(-1*t, df);
 
-                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", m_columns[0]->name(), QChar(0x3D), m_columns[1]->name());
+                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3D), col2_name);
                 resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
 
-                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", m_columns[0]->name(), QChar(0x2260), m_columns[1]->name());
+                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2260), col2_name);
                 resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
                 break;
         }
@@ -408,6 +430,7 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(Test test) {
     horizontalHeaderModel->clear();
     verticalHeaderModel->clear();
     resultModel->clear();
+
 
     QMessageBox* msg_box = new QMessageBox();
     // checking for cols;
@@ -849,6 +872,91 @@ void HypothesisTestPrivate::findStats(Column* column, int &count, double &sum, d
 }
 
 
+void HypothesisTestPrivate::findStatsCategorical(int n[], double sum[], double mean[], double std[], QString &col1_name, QString &col2_name) {
+
+    /* Error codes;
+    n[0] = -1  : unequal rows
+    n[0] = -2  : #categorical variables != 2;
+    */
+
+    // clearing the variables;
+    for (int i = 0; i < 2; i++) {
+        sum[i] = 0;
+        mean[i] = 0;
+        std[i] = 0;
+
+        n[i] = m_columns[0]->rowCount();
+    }
+
+    col1_name = "";
+    col2_name = "";
+    for (int i = 0; i < n[0]; i++) {
+        QString row1 = m_columns[0]->textAt(i);
+        double row2 = m_columns[1]->valueAt(i);
+
+        if (row1.isNull() || std::isnan(row2)) {
+            if (row1.isNull() && std::isnan(row2)) {
+                n[0] = i/2;
+                n[1] = i/2;
+                break;
+            } else {
+                n[0] = -1;
+                return;
+            }
+        }
+
+        if (row1 == col1_name) {
+            n[0]++;
+            sum[0] += row2;
+        } else if (row1 == col2_name) {
+            n[1]++;
+            sum[1] += row2;
+        } else if (col1_name == "") {
+            n[0]++;
+            sum[0] += row2;
+            col1_name = row1;
+        } else if (col2_name == "") {
+            n[1]++;
+            sum[1] += row2;
+            col2_name = row1;
+        }
+        else {
+            // this case occurs when there are more than two categorical variables in column 1
+            // sending error code of -1;
+            n[0] = -2;
+            return;
+        }
+    }
+
+    if (col1_name == "" || col2_name == "") {
+        n[0] = -2;
+        return;
+    }
+
+
+    mean[0] = sum[0]/n[0];
+    mean[1] = sum[1]/n[1];
+
+
+    for (int i = 0; i < n[0]*2; i++) {
+        QString row1 = m_columns[0]->textAt(i);
+        double row2 = m_columns[1]->valueAt(i);
+
+        if (row1 == col1_name) {
+            std[0] += qPow( (row2 - mean[0]), 2);
+        } else {
+            std[1] += qPow( (row2 - mean[1]), 2);
+        }
+    }
+
+    for (int i = 0; i < 2; i++) {
+        if (n[i] > 1)
+            std[i] = std[i] / (n[i] - 1);
+        std[i] = qSqrt(std[i]);
+    }
+
+    return;
+}
 /**********************************************************************************
  *                      virtual functions implementations
  * ********************************************************************************/

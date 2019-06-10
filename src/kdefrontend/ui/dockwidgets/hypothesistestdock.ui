@@ -36,7 +36,7 @@
    <property name="geometry">
     <rect>
      <x>490</x>
-     <y>620</y>
+     <y>500</y>
      <width>77</width>
      <height>23</height>
     </rect>
@@ -45,147 +45,11 @@
     <string>Do Test</string>
    </property>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>279</y>
-     <width>338</width>
-     <height>289</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout_4">
-    <item>
-     <widget class="QTreeWidget" name="twTests">
-      <column>
-       <property name="text">
-        <string>Tests</string>
-       </property>
-      </column>
-      <item>
-       <property name="text">
-        <string>Student's T Test</string>
-       </property>
-       <item>
-        <property name="text">
-         <string>Two Sample Independent</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Two Sample Paired</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>One Sample</string>
-        </property>
-       </item>
-      </item>
-      <item>
-       <property name="text">
-        <string>Z Test</string>
-       </property>
-       <item>
-        <property name="text">
-         <string>Two Sample Independent</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Two Sample Paired</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>One Sample</string>
-        </property>
-       </item>
-      </item>
-     </widget>
-    </item>
-    <item>
-     <spacer name="verticalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="hl_cols">
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="QLabel" name="lIndependentVariable1">
-          <property name="text">
-           <string>Independent Variable</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbCol1"/>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QComboBox" name="cbVariable2">
-          <item>
-           <property name="text">
-            <string>Independent Variable</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Dependent Variable</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbCol2"/>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="chbEqualVariance">
-      <property name="text">
-       <string>Equal Variance</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
   <widget class="QSplitter" name="splitter">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>600</y>
+     <y>480</y>
      <width>341</width>
      <height>106</height>
     </rect>
@@ -262,7 +126,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>730</y>
+     <y>610</y>
      <width>217</width>
      <height>81</height>
     </rect>
@@ -361,7 +225,7 @@
     <string>Data</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>15</x>
@@ -434,6 +298,123 @@
     </item>
     <item row="3" column="1">
      <widget class="QComboBox" name="cbTable"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>11</x>
+     <y>280</y>
+     <width>335</width>
+     <height>177</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>333</width>
+        <height>13</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lTest">
+        <property name="text">
+         <string>Test</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="lTestType">
+        <property name="text">
+         <string>Test type</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QComboBox" name="cbTest"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="cbTestType"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_3">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>60</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="hl_cols">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QLabel" name="lCol1">
+          <property name="text">
+           <string>Independent Variable</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cbCol1"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QLabel" name="lCol2">
+          <property name="text">
+           <string>Variable</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cbCol2"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>333</width>
+        <height>13</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="chbEqualVariance">
+      <property name="text">
+       <string>Equal Variance</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
