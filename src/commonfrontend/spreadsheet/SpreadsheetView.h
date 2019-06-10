@@ -94,6 +94,12 @@ private:
 	void exportToFits(const QString& path, const int exportTo, const bool commentsAsUnits) const;
 	void exportToSQLite(const QString& path) const;
 
+	void insertColumnsLeft(int);
+	void insertColumnsRight(int);
+
+	void insertRowsAbove(int);
+	void insertRowsBelow(int);
+
 	QTableView* m_tableView;
 	Spreadsheet* m_spreadsheet;
 	SpreadsheetItemDelegate* m_delegate;
@@ -133,6 +139,8 @@ private:
 	//column related actions
 	QAction* action_insert_column_left;
 	QAction* action_insert_column_right;
+	QAction* action_insert_columns_left;
+	QAction* action_insert_columns_right;
 	QAction* action_remove_columns;
 	QAction* action_clear_columns;
 	QAction* action_add_columns;
@@ -164,6 +172,8 @@ private:
 	//row related actions
 	QAction* action_insert_row_above;
 	QAction* action_insert_row_below;
+	QAction* action_insert_rows_above;
+	QAction* action_insert_rows_below;
 	QAction* action_remove_rows;
 	QAction* action_clear_rows;
 	QAction* action_statistics_rows;
@@ -227,11 +237,15 @@ private slots:
 
 	void insertRowAbove();
 	void insertRowBelow();
+	void insertRowsAbove();
+	void insertRowsBelow();
 	void removeSelectedRows();
 	void clearSelectedRows();
 
 	void insertColumnLeft();
 	void insertColumnRight();
+	void insertColumnsLeft();
+	void insertColumnsRight();
 	void removeSelectedColumns();
 	void clearSelectedColumns();
 

@@ -222,6 +222,8 @@ void SpreadsheetView::initActions() {
 	// column related actions
 	action_insert_column_left = new QAction(QIcon::fromTheme("edit-table-insert-column-left"), i18n("Insert Column Left"), this);
 	action_insert_column_right = new QAction(QIcon::fromTheme("edit-table-insert-column-right"), i18n("Insert Column Right"), this);
+	action_insert_columns_left = new QAction(QIcon::fromTheme("edit-table-insert-column-left"), i18n("Insert Multiple Columns Left"), this);
+	action_insert_columns_right = new QAction(QIcon::fromTheme("edit-table-insert-column-right"), i18n("Insert Multiple Columns Right"), this);
 	action_remove_columns = new QAction(QIcon::fromTheme("edit-table-delete-column"), i18n("Remove Selected Columns"), this);
 	action_clear_columns = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Selected Columns"), this);
 
@@ -280,6 +282,8 @@ void SpreadsheetView::initActions() {
 	// row related actions
 	action_insert_row_above = new QAction(QIcon::fromTheme("edit-table-insert-row-above") ,i18n("Insert Row Above"), this);
 	action_insert_row_below = new QAction(QIcon::fromTheme("edit-table-insert-row-below"), i18n("Insert Row Below"), this);
+	action_insert_rows_above = new QAction(QIcon::fromTheme("edit-table-insert-row-above") ,i18n("Insert Multiple Rows Above"), this);
+	action_insert_rows_below = new QAction(QIcon::fromTheme("edit-table-insert-row-below"), i18n("Insert Multiple Rows Below"), this);
 	action_remove_rows = new QAction(QIcon::fromTheme("edit-table-delete-row"), i18n("Remo&ve Selected Rows"), this);
 	action_clear_rows = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Selected Rows"), this);
 	action_statistics_rows = new QAction(QIcon::fromTheme("view-statistics"), i18n("Row Statisti&cs"), this);
@@ -481,6 +485,9 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addAction(action_insert_column_left);
 		m_columnMenu->addAction(action_insert_column_right);
 		m_columnMenu->addSeparator();
+		m_columnMenu->addAction(action_insert_columns_left);
+		m_columnMenu->addAction(action_insert_columns_right);
+		m_columnMenu->addSeparator();
 		m_columnMenu->addAction(action_remove_columns);
 		m_columnMenu->addAction(action_clear_columns);
 	}
@@ -523,6 +530,10 @@ void SpreadsheetView::initMenus() {
 		m_rowMenu->addAction(action_insert_row_below);
 		m_rowMenu->addSeparator();
 
+		m_rowMenu->addAction(action_insert_rows_above);
+		m_rowMenu->addAction(action_insert_rows_below);
+		m_rowMenu->addSeparator();
+
 		m_rowMenu->addAction(action_remove_rows);
 		m_rowMenu->addAction(action_clear_rows);
 	}
@@ -556,6 +567,8 @@ void SpreadsheetView::connectActions() {
 
 	connect(action_insert_column_left, &QAction::triggered, this, &SpreadsheetView::insertColumnLeft);
 	connect(action_insert_column_right, &QAction::triggered, this, &SpreadsheetView::insertColumnRight);
+	connect(action_insert_columns_left, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::insertColumnsLeft));
+	connect(action_insert_columns_right, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::insertColumnsRight));
 	connect(action_remove_columns, &QAction::triggered, this, &SpreadsheetView::removeSelectedColumns);
 	connect(action_clear_columns, &QAction::triggered, this, &SpreadsheetView::clearSelectedColumns);
 	connect(action_set_as_none, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
@@ -592,6 +605,8 @@ void SpreadsheetView::connectActions() {
 
 	connect(action_insert_row_above, &QAction::triggered, this, &SpreadsheetView::insertRowAbove);
 	connect(action_insert_row_below, &QAction::triggered, this, &SpreadsheetView::insertRowBelow);
+	connect(action_insert_rows_above, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::insertRowsAbove));
+	connect(action_insert_rows_below, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::insertRowsBelow));
 	connect(action_remove_rows, &QAction::triggered, this, &SpreadsheetView::removeSelectedRows);
 	connect(action_clear_rows, &QAction::triggered, this, &SpreadsheetView::clearSelectedRows);
 	connect(action_statistics_rows, &QAction::triggered, this, &SpreadsheetView::showRowStatistics);
@@ -1629,35 +1644,71 @@ void SpreadsheetView::sortSpreadsheet() {
   Insert an empty column left to the firt selected column
 */
 void SpreadsheetView::insertColumnLeft() {
-	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18n("%1: insert empty column", m_spreadsheet->name()));
+	insertColumnsLeft(1);
+}
 
-	Column* newCol = new Column("1", AbstractColumn::Numeric);
-	newCol->setPlotDesignation(AbstractColumn::Y);
+/*!
+  Insert multiple empty columns left to the firt selected column
+*/
+void SpreadsheetView::insertColumnsLeft() {
+	bool ok = false;
+	int count = QInputDialog::getInt(nullptr, i18n("Insert empty columns"), i18n("Enter the number of columns to insert"), 1/*value*/, 1/*min*/, 1000/*max*/, 1/*step*/, &ok);
+	if (!ok)
+		return;
+
+	insertColumnsLeft(count);
+}
+
+/*!
+ * private helper function doing the actual insertion of columns to the left
+ */
+void SpreadsheetView::insertColumnsLeft(int count) {
+	WAIT_CURSOR;
+	m_spreadsheet->beginMacro(i18np("%1: insert empty column",
+									"%1: insert empty columns",
+								 m_spreadsheet->name(),
+								 count
+							));
+
 	const int first = firstSelectedColumn();
 
 	if (first >= 0) {
 		//determine the first selected column
 		Column* firstCol = m_spreadsheet->child<Column>(first);
 
-		//resize the new column and insert it before the first selected column
-		newCol->insertRows(0, m_spreadsheet->rowCount());
-		m_spreadsheet->insertChildBefore(newCol, firstCol);
+		for (int i = 0; i < count; ++i) {
+			Column* newCol = new Column(QString::number(i + 1), AbstractColumn::Numeric);
+			newCol->setPlotDesignation(AbstractColumn::Y);
+
+			//resize the new column and insert it before the first selected column
+			newCol->insertRows(0, m_spreadsheet->rowCount());
+			m_spreadsheet->insertChildBefore(newCol, firstCol);
+		}
 	} else {
 		if (m_spreadsheet->columnCount()>0) {
 			//columns available but no columns selected -> prepend the new column at the very beginning
 			Column* firstCol = m_spreadsheet->child<Column>(0);
-			newCol->insertRows(0, m_spreadsheet->rowCount());
-			m_spreadsheet->insertChildBefore(newCol, firstCol);
+
+			for (int i = 0; i < count; ++i) {
+				Column* newCol = new Column(QString::number(i + 1), AbstractColumn::Numeric);
+				newCol->setPlotDesignation(AbstractColumn::Y);
+				newCol->insertRows(0, m_spreadsheet->rowCount());
+				m_spreadsheet->insertChildBefore(newCol, firstCol);
+			}
 		} else {
 			//no columns available anymore -> resize the spreadsheet and the new column to the default size
 			KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Spreadsheet"));
 			const int rows = group.readEntry(QLatin1String("RowCount"), 100);
 			m_spreadsheet->setRowCount(rows);
-			newCol->insertRows(0, rows);
 
-			//add/append a new column
-			m_spreadsheet->addChild(newCol);
+			for (int i = 0; i < count; ++i) {
+				Column* newCol = new Column(QString::number(i + 1), AbstractColumn::Numeric);
+				(i == 0) ? newCol->setPlotDesignation(AbstractColumn::X) : newCol->setPlotDesignation(AbstractColumn::Y);
+				newCol->insertRows(0, rows);
+
+				//add/append a new column
+				m_spreadsheet->addChild(newCol);
+			}
 		}
 	}
 
@@ -1669,39 +1720,81 @@ void SpreadsheetView::insertColumnLeft() {
   Insert an empty column right to the last selected column
 */
 void SpreadsheetView::insertColumnRight() {
-	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18n("%1: insert empty column", m_spreadsheet->name()));
+	insertColumnsRight(1);
+}
 
-	Column* newCol = new Column("1", AbstractColumn::Numeric);
-	newCol->setPlotDesignation(AbstractColumn::Y);
+/*!
+  Insert multiple empty columns right to the last selected column
+*/
+void SpreadsheetView::insertColumnsRight() {
+	bool ok = false;
+	int count = QInputDialog::getInt(nullptr, i18n("Insert empty columns"), i18n("Enter the number of columns to insert"), 1/*value*/, 1/*min*/, 1000/*max*/, 1/*step*/, &ok);
+	if (!ok)
+		return;
+
+	insertColumnsRight(count);
+}
+
+/*!
+ * private helper function doing the actual insertion of columns to the right
+ */
+void SpreadsheetView::insertColumnsRight(int count) {
+	WAIT_CURSOR;
+	m_spreadsheet->beginMacro(i18np("%1: insert empty column",
+									"%1: insert empty columns",
+									m_spreadsheet->name(),
+									count
+							));
+
 	const int last = lastSelectedColumn();
 
 	if (last >= 0) {
-		newCol->insertRows(0, m_spreadsheet->rowCount());
 		if (last < m_spreadsheet->columnCount() - 1) {
 			//determine the column next to the last selected column
 			Column* nextCol = m_spreadsheet->child<Column>(last + 1);
 
-			//insert the new column before the column next to the last selected column
-			m_spreadsheet->insertChildBefore(newCol, nextCol);
+			for (int i = 0; i < count; ++i) {
+				Column* newCol = new Column(QString::number(i+1), AbstractColumn::Numeric);
+				newCol->setPlotDesignation(AbstractColumn::Y);
+				newCol->insertRows(0, m_spreadsheet->rowCount());
+
+				//insert the new column before the column next to the last selected column
+				m_spreadsheet->insertChildBefore(newCol, nextCol);
+			}
 		} else {
-			//last column selected, no next column available -> add/append a new column
-			m_spreadsheet->addChild(newCol);
+			for (int i = 0; i < count; ++i) {
+				Column* newCol = new Column(QString::number(i+1), AbstractColumn::Numeric);
+				newCol->setPlotDesignation(AbstractColumn::Y);
+				newCol->insertRows(0, m_spreadsheet->rowCount());
+
+				//last column selected, no next column available -> add/append a new column
+				m_spreadsheet->addChild(newCol);
+			}
 		}
 	} else {
 		if (m_spreadsheet->columnCount()>0) {
-			//columns available but no columns selected -> append the new column at the very end
-			newCol->insertRows(0, m_spreadsheet->rowCount());
-			m_spreadsheet->addChild(newCol);
+			for (int i = 0; i < count; ++i) {
+				Column* newCol = new Column(QString::number(i+1), AbstractColumn::Numeric);
+				newCol->setPlotDesignation(AbstractColumn::Y);
+				newCol->insertRows(0, m_spreadsheet->rowCount());
+
+				//columns available but no columns selected -> append the new column at the very end
+				m_spreadsheet->addChild(newCol);
+			}
 		} else {
 			//no columns available anymore -> resize the spreadsheet and the new column to the default size
 			KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Spreadsheet"));
 			const int rows = group.readEntry(QLatin1String("RowCount"), 100);
-			newCol->insertRows(0, rows);
 			m_spreadsheet->setRowCount(rows);
 
-			 //add/append a new column
-			m_spreadsheet->addChild(newCol);
+			for (int i = 0; i < count; ++i) {
+				Column* newCol = new Column(QString::number(i+1), AbstractColumn::Numeric);
+				(i == 0) ? newCol->setPlotDesignation(AbstractColumn::X) : newCol->setPlotDesignation(AbstractColumn::Y);
+				newCol->insertRows(0, rows);
+
+				//add/append a new column
+				m_spreadsheet->addChild(newCol);
+			}
 		}
 	}
 
@@ -1859,7 +1952,6 @@ void SpreadsheetView::sortSelectedColumns() {
 	sortDialog(selectedColumns());
 }
 
-
 void SpreadsheetView::showAllColumnsStatistics() {
 	showColumnStatistics(true);
 }
@@ -1909,13 +2001,34 @@ void SpreadsheetView::showRowStatistics() {
   Insert an empty row above(=before) the first selected row
 */
 void SpreadsheetView::insertRowAbove() {
+	insertRowsAbove(1);
+}
+
+/*!
+  Insert multiple empty rows above(=before) the first selected row
+*/
+void SpreadsheetView::insertRowsAbove() {
+	bool ok = false;
+	int count = QInputDialog::getInt(nullptr, i18n("Insert multiple rows"), i18n("Enter the number of rows to insert"), 1/*value*/, 1/*min*/, 1000000/*max*/, 1/*step*/, &ok);
+	if (ok)
+		insertRowsAbove(count);
+}
+
+/*!
+ * private helper function doing the actual insertion of rows above
+ */
+void SpreadsheetView::insertRowsAbove(int count) {
 	int first = firstSelectedRow();
 	if (first < 0)
 		return;
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18n("%1: insert empty rows", m_spreadsheet->name()));
-	m_spreadsheet->insertRows(first, 1);
+	m_spreadsheet->beginMacro(i18np("%1: insert empty row",
+									"%1: insert empty rows",
+									m_spreadsheet->name(),
+									count
+							));
+	m_spreadsheet->insertRows(first, count);
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
@@ -1924,17 +2037,38 @@ void SpreadsheetView::insertRowAbove() {
   Insert an empty row below the last selected row
 */
 void SpreadsheetView::insertRowBelow() {
+	insertRowsBelow(1);
+}
+
+/*!
+  Insert an empty row below the last selected row
+*/
+void SpreadsheetView::insertRowsBelow() {
+	bool ok = false;
+	int count = QInputDialog::getInt(nullptr, i18n("Insert multiple rows"), i18n("Enter the number of rows to insert"), 1/*value*/, 1/*min*/, 1000000/*max*/, 1/*step*/, &ok);
+	if (ok)
+		insertRowsBelow(count);
+}
+
+/*!
+ * private helper function doing the actual insertion of rows below
+ */
+void SpreadsheetView::insertRowsBelow(int count) {
 	int last = lastSelectedRow();
 	if (last < 0)
 		return;
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18n("%1: insert empty rows", m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18np("%1: insert empty row",
+								   "%1: insert empty rows",
+									m_spreadsheet->name(),
+									count
+							));
 
-	if (last < m_spreadsheet->rowCount() -1)
-		m_spreadsheet->insertRows(last + 1, 1); //insert before the next to the last selected row
+	if (last < m_spreadsheet->rowCount() - 1)
+		m_spreadsheet->insertRows(last + 1, count); //insert before the next to the last selected row
 	else
-		m_spreadsheet->appendRow(); //append one row at the end
+		m_spreadsheet->appendRows(count); //append new rows at the end
 
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
