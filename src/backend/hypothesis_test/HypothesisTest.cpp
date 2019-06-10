@@ -119,8 +119,8 @@ void HypothesisTest::performTwoSampleTTest() {
 
 }
 
-void HypothesisTest::performTwoSampleIndependetTTest(bool equal_variance) {
-    d->performTwoSampleIndependetTest(HypothesisTestPrivate::TestT, equal_variance);
+void HypothesisTest::performTwoSampleIndependentTTest(bool equal_variance) {
+    d->performTwoSampleIndependentTest(HypothesisTestPrivate::TestT, equal_variance);
 }
 
 void HypothesisTest::performTwoSamplePairedTTest() {
@@ -131,8 +131,8 @@ void HypothesisTest::PerformOneSampleTTest() {
     d->PerformOneSampleTest(HypothesisTestPrivate::TestT);
 }
 
-void HypothesisTest::performTwoSampleIndependetZTest() {
-    d->performTwoSampleIndependetTest(HypothesisTestPrivate::TestZ);
+void HypothesisTest::performTwoSampleIndependentZTest() {
+    d->performTwoSampleIndependentTest(HypothesisTestPrivate::TestZ);
 }
 
 void HypothesisTest::performTwoSamplePairedZTest() {
@@ -189,7 +189,7 @@ void HypothesisTestPrivate::setColumns(QStringList cols) {
 
 /**************************Two Sample Independent *************************************/
 
-void HypothesisTestPrivate::performTwoSampleIndependetTest(Test test, bool equal_variance) {
+void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test, bool equal_variance) {
     dataModel->clear();
     horizontalHeaderModel->clear();
     verticalHeaderModel->clear();
@@ -238,7 +238,7 @@ void HypothesisTestPrivate::performTwoSampleIndependetTest(Test test, bool equal
     else {
         findStatsCategorical(n, sum, mean, std, col1_name, col2_name);
         if (n[0] == -1) {
-            msg_box->setText(i18n("Unequal size between %1 and %2", col1_name, col2_name));
+            msg_box->setText(i18n("Unequal size between %1 and %2", m_columns[0]->name(), m_columns[1]->name()));
             msg_box->exec();
             return;
         } else if(n[0] == -2) {
@@ -271,161 +271,152 @@ void HypothesisTestPrivate::performTwoSampleIndependetTest(Test test, bool equal
     verticalHeaderModel->setHeaderData(0, Qt::Vertical, col1_name);
     verticalHeaderModel->setHeaderData(1, Qt::Vertical, col2_name);
 
-    if (test == TestT) {
-        m_currTestName = i18n("Two Sample Independent T Test for %1 vs %2", col1_name, col2_name);
-        double t;
-        int df;
-        QString temp = "";
-        double p_value = 0;
+    switch (test) {
+        case TestT: {
+            m_currTestName = i18n("Two Sample Independent T Test for %1 vs %2", col1_name, col2_name);
+            double t;
+            int df;
+            QString temp = "";
+            double p_value = 0;
 
-        resultModel->setRowCount(9);
-        resultModel->setColumnCount(1);
+            resultModel->setRowCount(9);
+            resultModel->setColumnCount(1);
 
+            if (equal_variance) {
+                df = n[0] + n[1] - 2;
 
-        if (equal_variance) {
+                //Assuming equal variance
+                double sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
+                t = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
+
+                resultModel->setData(resultModel->index(8, 0), i18n("Assumption: Equal Variance between both populations"), Qt::DisplayRole);
+            } else {
+                double temp;
+                temp = qPow( qPow(std[0], 2)/n[0] + qPow(std[1], 2)/n[1], 2);
+                temp = temp / ( (qPow( (qPow(std[0], 2)/n[0]), 2)/(n[0]-1)) + (qPow( (qPow(std[1], 2)/n[1]), 2)/(n[1]-1)));
+                df = qRound(temp);
+
+                t = (mean[0] - mean[1]) / (qSqrt( (qPow(std[0], 2)/n[0]) + (qPow(std[1], 2)/n[1])));
+
+                resultModel->setData(resultModel->index(8, 0), i18n("Assumption: Non-Equal Variance between both populations"), Qt::DisplayRole);
+            }
+            switch (tail_type) {
+                case HypothesisTest::TailNegative:
+                    p_value = nsl_stats_tdist_p(t, df);
+
+                    temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2265), col2_name);
+                    resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
+
+                    temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3C), col2_name);
+                    resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
+                    break;
+                case HypothesisTest::TailPositive:
+                    t *= -1;
+                    p_value = nsl_stats_tdist_p(t, df);
+
+                    temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2264), col2_name);
+                    resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
+
+                    temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3E), col2_name);
+                    resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
+                    break;
+                case HypothesisTest::TailTwo:
+                    p_value = nsl_stats_tdist_p(t, df) + nsl_stats_tdist_p(-1*t, df);
+
+                    temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3D), col2_name);
+                    resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
+
+                    temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2260), col2_name);
+                    resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
+                    break;
+            }
+            resultModel->setData(resultModel->index(3, 0), i18n("T value is %1", t), Qt::DisplayRole);
+            resultModel->setData(resultModel->index(4, 0), i18n("P value is %1", p_value), Qt::DisplayRole);
+            resultModel->setData(resultModel->index(5, 0), i18n("DoF is %1", df), Qt::DisplayRole);
+            resultModel->setData(resultModel->index(6, 0), i18n("Significance level is %1", m_significance_level), Qt::DisplayRole);
+
+            if (p_value <= m_significance_level)
+                temp = i18n("We can safely reject Null Hypothesis for significance level %1", m_significance_level);
+            else
+                temp = i18n("There is a plausibility for Null Hypothesis to be true");
+
+            resultModel->setData(resultModel->index(4, 0), temp, Qt::ToolTipRole);
+        break;
+    } case TestZ: {
+           m_currTestName = i18n("Two Sample Independent T Test for %1 vs %2", col1_name, col2_name);
+           double t;
+           int df;
+           QString temp = "";
+           double p_value = 0;
+            m_currTestName = i18n("Two Sample Independent Z Test for %1 vs %2", col1_name, col2_name);
+
+            resultModel->setRowCount(8);
+            resultModel->setColumnCount(1);
+
             df = n[0] + n[1] - 2;
 
             //Assuming equal variance
             double sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
             t = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
 
-            resultModel->setData(resultModel->index(8, 0), i18n("Assumption: Equal Variance between both populations"), Qt::DisplayRole);
-        } else {
-            double temp;
-            temp = qPow( qPow(std[0], 2)/n[0] + qPow(std[1], 2)/n[1], 2);
-            temp = temp / ( (qPow( (qPow(std[0], 2)/n[0]), 2)/(n[0]-1)) + (qPow( (qPow(std[1], 2)/n[1]), 2)/(n[1]-1)));
-            df = qRound(temp);
 
-            t = (mean[0] - mean[1]) / (qSqrt( (qPow(std[0], 2)/n[0]) + (qPow(std[1], 2)/n[1])));
+            switch (tail_type) {
+                case HypothesisTest::TailNegative:
+                    p_value = nsl_stats_tdist_p(t, df);
 
-            resultModel->setData(resultModel->index(8, 0), i18n("Assumption: Non-Equal Variance between both populations"), Qt::DisplayRole);
+                    temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2265), col2_name);
+                    resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
+
+                    temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3C), col2_name);
+                    resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
+                    break;
+                case HypothesisTest::TailPositive:
+                    t *= -1;
+                    p_value = nsl_stats_tdist_p(t, df);
+
+                    temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2264), col2_name);
+                    resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
+
+                    temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3E), col2_name);
+                    resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
+                    break;
+                case HypothesisTest::TailTwo:
+                    p_value = nsl_stats_tdist_p(t, df) + nsl_stats_tdist_p(-1*t, df);
+
+                    temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3D), col2_name);
+                    resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
+
+                    temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2260), col2_name);
+                    resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
+                    break;
+            }
+
+
+            resultModel->setData(resultModel->index(3, 0), i18n("Z value is %1", t), Qt::DisplayRole);
+            resultModel->setData(resultModel->index(4, 0), i18n("P value is %1", p_value), Qt::DisplayRole);
+            resultModel->setData(resultModel->index(5, 0), i18n("Significance level is %1", m_significance_level), Qt::DisplayRole);
+
+            resultModel->setData(resultModel->index(7, 0), i18n("Assumption: Central Limit Theorem is Valid"), Qt::DisplayRole);
+
+            if (p_value <= m_significance_level)
+                temp = i18n("We can safely reject Null Hypothesis for significance level %1", m_significance_level);
+            else
+                temp = i18n("There is a plausibility for Null Hypothesis to be true");
+
+            // tool tips
+            resultModel->setData(resultModel->index(4, 0), temp, Qt::ToolTipRole);
+    //        resultModel->setData(resultModel->index(0, 0), QIcon("open.xpm"), Qt::DecorationRole);
+            break;
         }
-
-
-
-        switch (tail_type) {
-            case HypothesisTest::TailNegative:
-                p_value = nsl_stats_tdist_p(t, df);
-
-                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2265), col2_name);
-                resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
-
-                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3C), col2_name);
-                resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
-                break;
-            case HypothesisTest::TailPositive:
-                t *= -1;
-                p_value = nsl_stats_tdist_p(t, df);
-
-                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2264), col2_name);
-                resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
-
-                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3E), col2_name);
-                resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
-                break;
-            case HypothesisTest::TailTwo:
-                p_value = nsl_stats_tdist_p(t, df) + nsl_stats_tdist_p(-1*t, df);
-
-                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3D), col2_name);
-                resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
-
-                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2260), col2_name);
-                resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
-                break;
-        }
-
-
-        resultModel->setData(resultModel->index(3, 0), i18n("T value is %1", t), Qt::DisplayRole);
-        resultModel->setData(resultModel->index(4, 0), i18n("P value is %1", p_value), Qt::DisplayRole);
-        resultModel->setData(resultModel->index(5, 0), i18n("DoF is %1", df), Qt::DisplayRole);
-        resultModel->setData(resultModel->index(6, 0), i18n("Significance level is %1", m_significance_level), Qt::DisplayRole);
-
-
-        if (p_value <= m_significance_level)
-            temp = i18n("We can safely reject Null Hypothesis for significance level %1", m_significance_level);
-        else
-            temp = i18n("There is a plausibility for Null Hypothesis to be true");
-
-        // tool tips
-        resultModel->setData(resultModel->index(4, 0), temp, Qt::ToolTipRole);
-//        resultModel->setData(resultModel->index(0, 0), QIcon("open.xpm"), Qt::DecorationRole);
-
-        emit q->changed();
-        return;
     }
-    else if (test == TestZ) {
-        m_currTestName = i18n("Two Sample Independent Z Test for %1 vs %2", col1_name, col2_name);
-        double t;
-        int df;
-        QString temp = "";
-        double p_value = 0;
-
-        resultModel->setRowCount(8);
-        resultModel->setColumnCount(1);
-
-        df = n[0] + n[1] - 2;
-
-        //Assuming equal variance
-        double sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
-        t = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
-
-
-        switch (tail_type) {
-            case HypothesisTest::TailNegative:
-                p_value = nsl_stats_tdist_p(t, df);
-
-                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2265), col2_name);
-                resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
-
-                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3C), col2_name);
-                resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
-                break;
-            case HypothesisTest::TailPositive:
-                t *= -1;
-                p_value = nsl_stats_tdist_p(t, df);
-
-                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2264), col2_name);
-                resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
-
-                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3E), col2_name);
-                resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
-                break;
-            case HypothesisTest::TailTwo:
-                p_value = nsl_stats_tdist_p(t, df) + nsl_stats_tdist_p(-1*t, df);
-
-                temp = i18n("Null Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x3D), col2_name);
-                resultModel->setData(resultModel->index(0, 0), temp, Qt::DisplayRole);
-
-                temp = i18n("Alternate Hypothesis : Population mean of %1 %2 Population mean of %3", col1_name, QChar(0x2260), col2_name);
-                resultModel->setData(resultModel->index(1, 0), temp, Qt::DisplayRole);
-                break;
-        }
-
-
-        resultModel->setData(resultModel->index(3, 0), i18n("Z value is %1", t), Qt::DisplayRole);
-        resultModel->setData(resultModel->index(4, 0), i18n("P value is %1", p_value), Qt::DisplayRole);
-        resultModel->setData(resultModel->index(5, 0), i18n("Significance level is %1", m_significance_level), Qt::DisplayRole);
-
-        resultModel->setData(resultModel->index(7, 0), i18n("Assumption: Central Limit Theorem is Valid"), Qt::DisplayRole);
-
-        if (p_value <= m_significance_level)
-            temp = i18n("We can safely reject Null Hypothesis for significance level %1", m_significance_level);
-        else
-            temp = i18n("There is a plausibility for Null Hypothesis to be true");
-
-        // tool tips
-        resultModel->setData(resultModel->index(4, 0), temp, Qt::ToolTipRole);
-//        resultModel->setData(resultModel->index(0, 0), QIcon("open.xpm"), Qt::DecorationRole);
-
-        emit q->changed();
-        return;
-    }
+    emit q->changed();
+    return;
 
 }
 
 /********************************Two Sample Paired ***************************************/
 
-void HypothesisTestPrivate::performTwoSamplePairedTest(Test test) {
+void HypothesisTestPrivate::performTwoSamplePairedTest(TestType test) {
     dataModel->clear();
     horizontalHeaderModel->clear();
     verticalHeaderModel->clear();
@@ -621,7 +612,7 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(Test test) {
 
 /******************************** One Sample ***************************************/
 
-void HypothesisTestPrivate::PerformOneSampleTest(Test test) {
+void HypothesisTestPrivate::PerformOneSampleTest(TestType test) {
     dataModel->clear();
     horizontalHeaderModel->clear();
     verticalHeaderModel->clear();
@@ -884,20 +875,18 @@ void HypothesisTestPrivate::findStatsCategorical(int n[], double sum[], double m
         sum[i] = 0;
         mean[i] = 0;
         std[i] = 0;
-
-        n[i] = m_columns[0]->rowCount();
+        n[i] = 0;
     }
 
+    int count_temp = m_columns[0]->rowCount();
     col1_name = "";
     col2_name = "";
-    for (int i = 0; i < n[0]; i++) {
+    for (int i = 0; i < count_temp; i++) {
         QString row1 = m_columns[0]->textAt(i);
         double row2 = m_columns[1]->valueAt(i);
 
-        if (row1.isNull() || std::isnan(row2)) {
-            if (row1.isNull() && std::isnan(row2)) {
-                n[0] = i/2;
-                n[1] = i/2;
+        if (row1 == "" || std::isnan(row2)) {
+            if (row1 == "" && std::isnan(row2)) {
                 break;
             } else {
                 n[0] = -1;
@@ -938,7 +927,7 @@ void HypothesisTestPrivate::findStatsCategorical(int n[], double sum[], double m
     mean[1] = sum[1]/n[1];
 
 
-    for (int i = 0; i < n[0]*2; i++) {
+    for (int i = 0; i < n[0]+n[1]; i++) {
         QString row1 = m_columns[0]->textAt(i);
         double row2 = m_columns[1]->valueAt(i);
 

@@ -39,7 +39,7 @@ public:
         explicit HypothesisTestPrivate(HypothesisTest*);
         virtual ~HypothesisTestPrivate();
 
-        enum Test {TestT, TestZ};
+        enum TestType {TestT, TestZ};
         QString name() const;
 
         HypothesisTest* const q;
@@ -65,9 +65,9 @@ public:
         double m_significance_level;
 
 
-        void performTwoSampleIndependetTest(Test test, bool equal_variance = true);
-        void performTwoSamplePairedTest(Test test);
-        void PerformOneSampleTest(Test test);
+        void performTwoSampleIndependentTest(TestType test, bool equal_variance = true);
+        void performTwoSamplePairedTest(TestType test);
+        void PerformOneSampleTest(TestType test);
 
         HypothesisTest::TailType tail_type;
 

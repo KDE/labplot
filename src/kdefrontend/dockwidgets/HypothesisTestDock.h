@@ -47,9 +47,9 @@ public:
         void setHypothesisTest(HypothesisTest*);
 
 private slots:
-        void on_rb_h1_one_tail_1_toggled(bool checked);
-        void on_rb_h1_one_tail_2_toggled(bool checked);
-        void on_rb_h1_two_tail_toggled(bool checked);
+        void onRbH1OneTail1Toggled(bool checked);
+        void onRbH1OneTail2Toggled(bool checked);
+        void onRbH1TwoTailToggled(bool checked);
 
 private slots:
 

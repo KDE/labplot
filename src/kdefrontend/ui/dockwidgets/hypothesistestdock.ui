@@ -317,51 +317,6 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>14</x>
-     <y>371</y>
-     <width>341</width>
-     <height>50</height>
-    </rect>
-   </property>
-   <layout class="QGridLayout" name="gridLayout_3">
-    <item row="0" column="2">
-     <widget class="QLabel" name="lCol2">
-      <property name="text">
-       <string>Variable</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QComboBox" name="cbCol1"/>
-    </item>
-    <item row="1" column="2">
-     <widget class="QComboBox" name="cbCol2"/>
-    </item>
-    <item row="1" column="1">
-     <widget class="QComboBox" name="cbCol1Categorical"/>
-    </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="lCol1">
-      <property name="text">
-       <string>Independent Variable</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLabel" name="lCol1Categorical">
-      <property name="text">
-       <string>Independent Variable</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="">
-   <property name="geometry">
-    <rect>
      <x>13</x>
      <y>288</y>
      <width>341</width>
@@ -388,6 +343,51 @@
     </item>
     <item row="1" column="0">
      <widget class="QComboBox" name="cbTest"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>16</x>
+     <y>373</y>
+     <width>394</width>
+     <height>50</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_3">
+    <item row="0" column="0">
+     <widget class="QLabel" name="lCol1">
+      <property name="text">
+       <string>Independent Variable</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLabel" name="lCol1Categorical">
+      <property name="text">
+       <string>Independent Variable</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QLabel" name="lCol2">
+      <property name="text">
+       <string>Variable</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QComboBox" name="cbCol1"/>
+    </item>
+    <item row="1" column="1">
+     <widget class="QComboBox" name="cbCol1Categorical"/>
+    </item>
+    <item row="1" column="2">
+     <widget class="QComboBox" name="cbCol2"/>
     </item>
    </layout>
   </widget>

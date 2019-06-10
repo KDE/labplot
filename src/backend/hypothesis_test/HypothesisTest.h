@@ -61,10 +61,10 @@ public:
     void setColumns(QVector<Column*> cols);
     void setColumns(QStringList cols);
     void performTwoSampleTTest();
-    void performTwoSampleIndependetTTest(bool equal_variance);
+    void performTwoSampleIndependentTTest(bool equal_variance);
     void performTwoSamplePairedTTest();
     void PerformOneSampleTTest();
-    void performTwoSampleIndependetZTest();
+    void performTwoSampleIndependentZTest();
     void performTwoSamplePairedZTest();
     void PerformOneSampleZTest();
 

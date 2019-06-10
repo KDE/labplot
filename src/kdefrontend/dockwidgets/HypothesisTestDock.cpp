@@ -67,7 +67,6 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 
 
     // adding item to tests and testtype combo box;
-
     ui.cbTest->addItem(i18n("T Test"));
     ui.cbTest->addItem(i18n("Z Test"));
 
@@ -76,6 +75,8 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     ui.cbTestType->addItem(i18n("One Sample"));
 
     // making all test blocks invisible at starting.
+    ui.lCol1Categorical->setVisible(false);
+    ui.cbCol1Categorical->setVisible(false);
     ui.lCol1->setVisible(false);
     ui.cbCol1->setVisible(false);
     ui.lCol2->setVisible(false);
@@ -179,14 +180,16 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 //        ui.bRemoveColumn->setEnabled(!ui.lwColumns->selectedItems().isEmpty());
 //    });
 
-
-    connect(ui.cbTestType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::showHypothesisTest);
+    connect(ui.cbTest, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &HypothesisTestDock::showHypothesisTest);
+    connect(ui.cbTestType, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &HypothesisTestDock::showHypothesisTest);
+//    connect(ui.cbTest, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::showHypothesisTest);
+//    connect(ui.cbTestType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::showHypothesisTest);
     connect(ui.pbPerformTest, &QPushButton::clicked, this, &HypothesisTestDock::doHypothesisTest);
 
     //connecting null hypothesis and alternate hypothesis radio button
-    connect(ui.rb_h1_one_tail_1, &QRadioButton::toggled, this, &HypothesisTestDock::on_rb_h1_one_tail_1_toggled);
-    connect(ui.rb_h1_one_tail_2, &QRadioButton::toggled, this, &HypothesisTestDock::on_rb_h1_one_tail_2_toggled);
-    connect(ui.rb_h1_two_tail, &QRadioButton::toggled, this, &HypothesisTestDock::on_rb_h1_two_tail_toggled);
+    connect(ui.rb_h1_one_tail_1, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1OneTail1Toggled);
+    connect(ui.rb_h1_one_tail_2, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1OneTail2Toggled);
+    connect(ui.rb_h1_two_tail, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1TwoTailToggled);
 
     connect(ui.cbCol1Categorical, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::col1CatIndexChanged);
 }
@@ -299,7 +302,7 @@ void HypothesisTestDock::doHypothesisTest()  {
         if(two_sample_independent) {
             cols << ui.cbCol1Categorical->currentText() << ui.cbCol2->currentText();
             m_hypothesisTest->setColumns(cols);
-            m_hypothesisTest->performTwoSampleIndependetTTest( ui.chbEqualVariance->isChecked());
+            m_hypothesisTest->performTwoSampleIndependentTTest( ui.chbEqualVariance->isChecked());
         }
         else if(two_sample_paired) {
             cols << ui.cbCol1->currentText();
@@ -318,7 +321,7 @@ void HypothesisTestDock::doHypothesisTest()  {
             cols << ui.cbCol1Categorical->currentText();
             cols << ui.cbCol2->currentText();
             m_hypothesisTest->setColumns(cols);
-            m_hypothesisTest->performTwoSampleIndependetZTest();
+            m_hypothesisTest->performTwoSampleIndependentZTest();
         }
         else if(two_sample_paired) {
             cols << ui.cbCol1->currentText();
@@ -660,19 +663,19 @@ void HypothesisTestDock::col1CatIndexChanged(int index) {
 
 // for alternate hypothesis
 // one_tail_1 is mu > mu0; one_tail_2 is mu < mu0; two_tail = mu != mu0;
-void HypothesisTestDock::on_rb_h1_one_tail_1_toggled(bool checked) {
+void HypothesisTestDock::onRbH1OneTail1Toggled(bool checked) {
     if (!checked) return;
     ui.rb_h0_one_tail_1->setChecked(true);
     m_hypothesisTest->setTailType(HypothesisTest::TailPositive);
 }
 
-void HypothesisTestDock::on_rb_h1_one_tail_2_toggled(bool checked) {
+void HypothesisTestDock::onRbH1OneTail2Toggled(bool checked) {
     if (!checked) return;
     ui.rb_h0_one_tail_2->setChecked(true);
     m_hypothesisTest->setTailType(HypothesisTest::TailNegative);
 }
 
-void HypothesisTestDock::on_rb_h1_two_tail_toggled(bool checked) {
+void HypothesisTestDock::onRbH1TwoTailToggled(bool checked) {
     if (!checked) return;
     ui.rb_h0_two_tail->setChecked(true);
     m_hypothesisTest->setTailType(HypothesisTest::TailTwo);
