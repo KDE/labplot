@@ -64,6 +64,8 @@ public:
         double m_population_mean;
         double m_significance_level;
 
+        QString m_stats_table;
+
 
         void performTwoSampleIndependentTest(TestType test, bool equal_variance = true);
         void performTwoSamplePairedTest(TestType test);

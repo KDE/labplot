@@ -148,6 +148,10 @@ QString HypothesisTest::testName() {
     return d->m_currTestName;
 }
 
+QString HypothesisTest::statsTable() {
+    return d->m_stats_table;
+}
+
 /******************************************************************************
  *                      Private Implementations
  * ****************************************************************************/
@@ -156,7 +160,7 @@ HypothesisTestPrivate::HypothesisTestPrivate(HypothesisTest* owner) : q(owner) ,
     dataModel(new QStandardItemModel) ,
     horizontalHeaderModel(new QStandardItemModel) ,
     verticalHeaderModel(new QStandardItemModel) ,
-    resultModel(new QStandardItemModel) {
+    resultModel(new QStandardItemModel()){
 }
 
 HypothesisTestPrivate::~HypothesisTestPrivate() {
@@ -253,23 +257,52 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test, bool 
     }
 
 
-    dataModel->setRowCount(2);
-    dataModel->setColumnCount(3);
-    horizontalHeaderModel->setColumnCount(3);
-    verticalHeaderModel->setRowCount(2);
+    m_stats_table = i18n("<style type=text/css>"
+                         ".tg  {border-collapse:collapse;border-spacing:0;border-color:#aabcfe;margin:0px auto;}"
+                         ".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#669;background-color:#e8edff;}"
+                         ".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#039;background-color:#b9c9fe;}"
+                         ".tg .tg-phtq{background-color:#D2E4FC;border-color:inherit;text-align:left;vertical-align:top}"
+                         ".tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}"
+                         "</style>"
+                         "<table class=tg>"
+                         "  <tr>"
+                         "    <th class=tg-0pky></th>"
+                         "    <th class=tg-0pky>N</th>"
+                         "    <th class=tg-0pky>Mean</th>"
+                         "    <th class=tg-0pky>Std</th>"
+                         "  </tr>"
+                         "  <tr>"
+                         "    <td class=tg-phtq>%1</td>"
+                         "    <td class=tg-phtq>%2</td>"
+                         "    <td class=tg-phtq>%3</td>"
+                         "    <td class=tg-phtq>%4</td>"
+                         "  </tr>"
+                         "  <tr>"
+                         "    <td class=tg-0pky>%5</td>"
+                         "    <td class=tg-0pky>%6</td>"
+                         "    <td class=tg-0pky>%7</td>"
+                         "    <td class=tg-0pky>%8</td>"
+                         "  </tr>"
+                         "</table>", col1_name, n[0], mean[0], std[0], col2_name, n[1], mean[1], std[1]);
 
-    for (int i = 0; i < 2; i++) {
-        dataModel->setItem(i, 0, new QStandardItem(QString::number(n[i])));
-        dataModel->setItem(i, 1, new QStandardItem(QString::number(mean[i])));
-        dataModel->setItem(i, 2, new QStandardItem(QString::number(std[i])));
-    }
 
-    horizontalHeaderModel->setHeaderData(0, Qt::Horizontal, i18n("N"));
-    horizontalHeaderModel->setHeaderData(1, Qt::Horizontal, i18n("Mean"));
-    horizontalHeaderModel->setHeaderData(2, Qt::Horizontal, i18n("StDev"));
+//    dataModel->setRowCount(2);
+//    dataModel->setColumnCount(3);
+//    horizontalHeaderModel->setColumnCount(3);
+//    verticalHeaderModel->setRowCount(2);
 
-    verticalHeaderModel->setHeaderData(0, Qt::Vertical, col1_name);
-    verticalHeaderModel->setHeaderData(1, Qt::Vertical, col2_name);
+//    for (int i = 0; i < 2; i++) {
+//        dataModel->setItem(i, 0, new QStandardItem(QString::number(n[i])));
+//        dataModel->setItem(i, 1, new QStandardItem(QString::number(mean[i])));
+//        dataModel->setItem(i, 2, new QStandardItem(QString::number(std[i])));
+//    }
+
+//    horizontalHeaderModel->setHeaderData(0, Qt::Horizontal, i18n("N"));
+//    horizontalHeaderModel->setHeaderData(1, Qt::Horizontal, i18n("Mean"));
+//    horizontalHeaderModel->setHeaderData(2, Qt::Horizontal, i18n("StDev"));
+
+//    verticalHeaderModel->setHeaderData(0, Qt::Vertical, col1_name);
+//    verticalHeaderModel->setHeaderData(1, Qt::Vertical, col2_name);
 
     switch (test) {
         case TestT: {

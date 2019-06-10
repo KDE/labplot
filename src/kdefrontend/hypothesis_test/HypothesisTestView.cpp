@@ -64,6 +64,7 @@ HypothesisTestView::HypothesisTestView(HypothesisTest* hypothesisTest) : QWidget
     m_horizontalHeaderView(new QHeaderView(Qt::Horizontal, m_tableView)),
     m_verticalHeaderView(new QHeaderView(Qt::Vertical, m_tableView)),
     m_testName(new QLabel()),
+    m_statsTable(new QLabel()),
     m_resultView(new QListView(this)) {
 
     //setting alignments and fonts of testname label;
@@ -82,11 +83,13 @@ HypothesisTestView::HypothesisTestView(HypothesisTest* hypothesisTest) : QWidget
 //    m_tableView->setLayout(tableLayout);
 //    m_tableView->setLayout(Qt::ho)
 
+
     auto* layout = new QVBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
     layout->addWidget(m_testName);
     layout->addSpacing(5);
-	layout->addWidget(m_tableView);
+    layout->addWidget(m_statsTable);
+//	layout->addWidget(m_tableView);
     layout->addSpacing(20);
     layout->addWidget(m_resultView);
 //    layout->addLayout(m_hypothesisTest->resultLayout());
@@ -209,6 +212,7 @@ void HypothesisTestView::print(QPrinter* printer) const {
 
  void HypothesisTestView::changed() {
     m_testName->setText(m_hypothesisTest->testName());
+    m_statsTable->setText(m_hypothesisTest->statsTable());
  }
 
 void HypothesisTestView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {

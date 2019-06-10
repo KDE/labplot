@@ -76,6 +76,7 @@ private:
     QHeaderView* m_horizontalHeaderView;
     QHeaderView* m_verticalHeaderView;
     QLabel* m_testName;
+    QLabel* m_statsTable;
     QListView* m_resultView;
 
 public slots:

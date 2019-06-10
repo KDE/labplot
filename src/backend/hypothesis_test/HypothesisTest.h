@@ -57,6 +57,7 @@ public:
     QAbstractItemModel* resultModel();
 
     QString testName();
+    QString statsTable();
     void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
     void setColumns(QVector<Column*> cols);
     void setColumns(QStringList cols);
