@@ -94,14 +94,14 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(), m_workshee
 	m_gridSettings.style = WorksheetView::NoGrid;
 
 	//signal/slot connections
-	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
-	connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) );
-	connect(m_worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) );
-	connect(m_worksheet, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
-	connect(m_worksheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(aspectAboutToBeRemoved(const AbstractAspect*)));
-	connect(m_worksheet, SIGNAL(useViewSizeRequested()), this, SLOT(useViewSizeRequested()) );
-	connect(m_worksheet, SIGNAL(layoutChanged(Worksheet::Layout)), this, SLOT(layoutChanged(Worksheet::Layout)) );
-	connect(scene(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
+	connect(m_worksheet, &Worksheet::requestProjectContextMenu, this, &WorksheetView::createContextMenu);
+	connect(m_worksheet, &Worksheet::itemSelected, this, &WorksheetView::selectItem);
+	connect(m_worksheet, &Worksheet::itemDeselected, this, &WorksheetView::deselectItem);
+	connect(m_worksheet, &Worksheet::requestUpdate, this, &WorksheetView::updateBackground);
+	connect(m_worksheet, &Worksheet::aspectAboutToBeRemoved, this, &WorksheetView::aspectAboutToBeRemoved);
+	connect(m_worksheet, &Worksheet::useViewSizeRequested, this, &WorksheetView::useViewSizeRequested);
+	connect(m_worksheet, &Worksheet::layoutChanged, this, &WorksheetView::layoutChanged);
+	connect(scene(), &QGraphicsScene::selectionChanged, this, &WorksheetView::selectionChanged);
 
 	//resize the view to make the complete scene visible.
 	//no need to resize the view when the project is being opened,
@@ -132,17 +132,17 @@ void WorksheetView::initActions() {
 	selectAllAction = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this);
 	selectAllAction->setShortcut(Qt::CTRL+Qt::Key_A);
 	this->addAction(selectAllAction);
-	connect(selectAllAction, SIGNAL(triggered()), SLOT(selectAllElements()));
+	connect(selectAllAction, &QAction::triggered, this, &WorksheetView::selectAllElements);
 
 	deleteAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete"), this);
 	deleteAction->setShortcut(Qt::Key_Delete);
 	this->addAction(deleteAction);
-	connect(deleteAction, SIGNAL(triggered()), SLOT(deleteElement()));
+	connect(deleteAction, &QAction::triggered, this, &WorksheetView::deleteElement);
 
 	backspaceAction = new QAction(this);
 	backspaceAction->setShortcut(Qt::Key_Backspace);
 	this->addAction(backspaceAction);
-	connect(backspaceAction, SIGNAL(triggered()), SLOT(deleteElement()));
+	connect(backspaceAction, &QAction::triggered, this, &WorksheetView::deleteElement);
 
 	//Zoom actions
 	zoomInViewAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom In"), zoomActionGroup);
@@ -238,14 +238,14 @@ void WorksheetView::initActions() {
 	//check the action corresponding to the currently active layout in worksheet
 	this->layoutChanged(m_worksheet->layout());
 
-	connect(addNewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
-	connect(mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)));
-	connect(zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)));
-	connect(magnificationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(magnificationChanged(QAction*)));
-	connect(layoutActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeLayout(QAction*)));
-	connect(gridActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeGrid(QAction*)));
-	connect(snapToGridAction, SIGNAL(triggered()), this, SLOT(changeSnapToGrid()));
-	connect(showPresenterMode, SIGNAL(triggered()), this, SLOT(presenterMode()));
+	connect(addNewActionGroup, &QActionGroup::triggered, this, &WorksheetView::addNew);
+	connect(mouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::mouseModeChanged);
+	connect(zoomActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeZoom);
+	connect(magnificationActionGroup, &QActionGroup::triggered, this, &WorksheetView::magnificationChanged);
+	connect(layoutActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeLayout);
+	connect(gridActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeGrid);
+	connect(snapToGridAction, &QAction::triggered, this, &WorksheetView::changeSnapToGrid);
+	connect(showPresenterMode, &QAction::triggered, this, &WorksheetView::presenterMode);
 
 	//worksheet control actions
 	plotsLockedAction = new QAction(i18n("Non-interactive Plots"), this);
@@ -262,7 +262,7 @@ void WorksheetView::initActions() {
 	cartesianPlotApplyToAllAction = new QAction(i18n("All Plots"), cartesianPlotActionModeActionGroup);
 	cartesianPlotApplyToAllAction->setCheckable(true);
 	setCartesianPlotActionMode(m_worksheet->cartesianPlotActionMode());
-	connect(cartesianPlotActionModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotActionModeChanged(QAction*)));
+	connect(cartesianPlotActionModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotActionModeChanged);
 
 	auto* cartesianPlotMouseModeActionGroup = new QActionGroup(this);
 	cartesianPlotMouseModeActionGroup->setExclusive(true);
@@ -279,7 +279,7 @@ void WorksheetView::initActions() {
 	cartesianPlotZoomYSelectionModeAction = new QAction(QIcon::fromTheme("labplot-zoom-select-y"), i18n("Select y-region and Zoom In"), cartesianPlotMouseModeActionGroup);
 	cartesianPlotZoomYSelectionModeAction->setCheckable(true);
 
-	connect(cartesianPlotMouseModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotMouseModeChanged(QAction*)));
+	connect(cartesianPlotMouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotMouseModeChanged);
 
 	auto* cartesianPlotAddNewActionGroup = new QActionGroup(this);
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), cartesianPlotAddNewActionGroup);
@@ -330,7 +330,7 @@ void WorksheetView::initActions() {
 	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier Filter"), cartesianPlotAddNewActionGroup);
 	addFourierTransformAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-transform-curve"), i18n("Fourier Transform"), cartesianPlotAddNewActionGroup);
 
-	connect(cartesianPlotAddNewActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotAddNew(QAction*)));
+	connect(cartesianPlotAddNewActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotAddNew);
 
 	auto* cartesianPlotNavigationGroup = new QActionGroup(this);
 	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("Auto Scale"), cartesianPlotNavigationGroup);
@@ -360,7 +360,7 @@ void WorksheetView::initActions() {
 	shiftDownYAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("Shift Down Y"), cartesianPlotNavigationGroup);
 	shiftDownYAction->setData(CartesianPlot::ShiftDownY);
 
-	connect(cartesianPlotNavigationGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotNavigationChanged(QAction*)));
+	connect(cartesianPlotNavigationGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotNavigationChanged);
 
 	//set some default values
 	selectionModeAction->setChecked(true);
@@ -501,8 +501,8 @@ void WorksheetView::initMenus() {
 	//themes menu
 	m_themeMenu = new QMenu(i18n("Apply Theme"), this);
 	auto* themeWidget = new ThemesWidget(nullptr);
-	connect(themeWidget, SIGNAL(themeSelected(QString)), m_worksheet, SLOT(setTheme(QString)));
-	connect(themeWidget, SIGNAL(themeSelected(QString)), m_themeMenu, SLOT(close()));
+	connect(themeWidget, &ThemesWidget::themeSelected, m_worksheet, &Worksheet::setTheme);
+	connect(themeWidget, &ThemesWidget::themeSelected, m_themeMenu, &QMenu::close);
 
 	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(themeWidget);
@@ -901,8 +901,8 @@ void WorksheetView::zoom(int numSteps) {
 	auto* anim = new QTimeLine(350, this);
 	anim->setUpdateInterval(20);
 
-	connect(anim, SIGNAL (valueChanged(qreal)), SLOT (scalingTime()));
-	connect(anim, SIGNAL (finished()), SLOT (animFinished()));
+	connect(anim, &QTimeLine::valueChanged, this, &WorksheetView::scalingTime);
+	connect(anim, &QTimeLine::finished, this, &WorksheetView::animFinished);
 	anim->start();
 }
 
@@ -1214,7 +1214,7 @@ void WorksheetView::addNew(QAction* action) {
 	if (!m_fadeInTimeLine) {
 		m_fadeInTimeLine = new QTimeLine(1000, this);
 		m_fadeInTimeLine->setFrameRange(0, 100);
-		connect(m_fadeInTimeLine, SIGNAL(valueChanged(qreal)), this, SLOT(fadeIn(qreal)));
+		connect(m_fadeInTimeLine, &QTimeLine::valueChanged, this, &WorksheetView::fadeIn);
 	}
 
 	//if there is already an element fading in, stop the time line and show the element with the full opacity.
