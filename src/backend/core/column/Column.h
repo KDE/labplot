@@ -76,11 +76,13 @@ public:
 	AbstractSimpleFilter* outputFilter() const;
 	ColumnStringIO* asStringColumn() const;
 
-	void setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns);
+	void setFormula(const QString& formula, const QStringList& variableNames,
+					const QVector<Column*>& columns, bool autoUpdate);
 	QString formula() const;
 	const QStringList& formulaVariableNames() const;
 	const QVector<Column*>& formulaVariableColumns() const;
 	const QStringList& formulaVariableColumnPaths() const;
+	bool formulaAutoUpdate() const;
 
 	QString formula(int) const  override;
 	QVector< Interval<int> > formulaIntervals() const override;

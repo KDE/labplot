@@ -883,18 +883,28 @@ QString ColumnPrivate::formula() const {
 	return m_formula;
 }
 
+bool ColumnPrivate::formulaAutoUpdate() const {
+	return m_formulaAutoUpdate;
+}
+
 /**
  * \brief Sets the formula used to generate column values
  */
-void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& variableColumns) {
+void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames,
+							   const QVector<Column*>& variableColumns, bool autoUpdate) {
 	m_formula = formula;
 	m_formulaVariableNames = variableNames;
 	m_formulaVariableColumns = variableColumns;
+	m_formulaAutoUpdate = autoUpdate;
 
-	disconnect(m_owner, &Column::updateFormula, nullptr, nullptr);
-	QVector<Column*> columns;
-	for (auto column : variableColumns)
-		connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
+	//TODO: doesn't work
+	disconnect(m_owner, SLOT(updateFormula()));
+
+	if (autoUpdate) {
+		QVector<Column*> columns;
+		for (auto column : variableColumns)
+			connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
+	}
 }
 
 /*!
@@ -902,10 +912,12 @@ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variab
  * \param variableColumnPathes is used to restore the pointers to columns from pathes
  * after the project was loaded in Project::load().
  */
- void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPaths) {
+ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames,
+								const QStringList& variableColumnPaths, bool autoUpdate) {
 	m_formula = formula;
 	m_formulaVariableNames = variableNames;
 	m_formulaVariableColumnPaths = variableColumnPaths;
+	m_formulaAutoUpdate = autoUpdate;
 }
 
 const QStringList& ColumnPrivate::formulaVariableNames() const {
@@ -924,6 +936,11 @@ const QStringList& ColumnPrivate::formulaVariableColumnPaths() const {
  * \sa FunctionValuesDialog::generate()
  */
 void ColumnPrivate::updateFormula() {
+	//TODO: this check shouldn't be required, but the disconnect in
+	//ColumnPrivate::setFormula() doesn't seem to work
+	if (!m_formulaAutoUpdate)
+		return;
+
 	//determine variable names and the data vectors of the specified columns
 	QVector<QVector<double>*> xVectors;
 	QVector<QVector<double>*> xNewVectors;
