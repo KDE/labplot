@@ -84,7 +84,7 @@ private slots:
         void doHypothesisTest();
         void showHypothesisTest();
         void spreadsheetChanged(const QModelIndex&);
-        void col1IndexChanged(int index);
+        void col1CatIndexChanged(int index);
 //        void connectionChanged();
 //        void tableChanged();
 //        void showDatabaseManager();
