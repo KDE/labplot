@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : QMdiSubWindow wrapper for aspect views.
     --------------------------------------------------------------------
-    Copyright            : (C) 2013 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2019 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
@@ -53,6 +53,7 @@ PartMdiView::PartMdiView(AbstractPart* part) : QMdiSubWindow(nullptr), m_part(pa
 
 	connect(m_part, &AbstractPart::aspectDescriptionChanged, this, &PartMdiView::handleAspectDescriptionChanged);
 	connect(m_part, &AbstractPart::aspectAboutToBeRemoved, this, &PartMdiView::handleAspectAboutToBeRemoved);
+	connect(this, &QMdiSubWindow::windowStateChanged, this, &PartMdiView::windowStateChanged);
 }
 
 AbstractPart* PartMdiView::part() const {
@@ -76,4 +77,12 @@ void PartMdiView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 void PartMdiView::closeEvent(QCloseEvent *event) {
 	m_part->deleteView();
 	event->accept();
+}
+
+void PartMdiView::windowStateChanged(Qt::WindowStates oldState, Qt::WindowStates newState) {
+	Q_UNUSED(oldState);
+	if (newState.testFlag(Qt::WindowActive) || newState.testFlag(Qt::WindowMaximized))
+		m_part->registerShortcuts();
+	else
+		m_part->unregisterShortcuts();
 }

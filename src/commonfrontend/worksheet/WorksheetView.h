@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Worksheet view
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2019 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -70,9 +70,13 @@ public:
 	void setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode mode);
 	void setPlotLock(bool lock);
 
+	void registerShortcuts();
+	void unregisterShortcuts();
+
 private:
 	enum MouseMode {SelectionMode, NavigationMode, ZoomSelectionMode};
 
+	void initBasicActions();
 	void initActions();
 	void initMenus();
 	void processResize();

@@ -1211,6 +1211,14 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
+void Matrix::registerShortcuts() {
+	m_view->registerShortcuts();
+}
+
+void Matrix::unregisterShortcuts() {
+	m_view->unregisterShortcuts();
+}
+
 //##############################################################################
 //########################  Data Import  #######################################
 //##############################################################################

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2019 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016      by Fabian Kristof (fkristofszabolcs@gmail.com)
 
  ***************************************************************************/
@@ -2457,6 +2457,14 @@ void SpreadsheetView::print(QPrinter* printer) const {
 		}
 	}
 	RESET_CURSOR;
+}
+
+void SpreadsheetView::registerShortcuts() {
+	action_clear_selection ->setShortcut(QKeySequence::Delete);
+}
+
+void SpreadsheetView::unregisterShortcuts() {
+	action_clear_selection->setShortcut(QKeySequence());
 }
 
 void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {

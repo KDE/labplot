@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -80,6 +80,9 @@ public:
 	bool exportView();
 	bool printView();
 	bool printPreview();
+
+	void registerShortcuts();
+	void unregisterShortcuts();
 
 private:
 	void init();

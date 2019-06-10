@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Worksheet view
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2019 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016-2018 Stefan-Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -118,6 +118,33 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(), m_workshee
 	static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
 	static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
 	setTransform(QTransform::fromScale(hscale, vscale));
+
+	initBasicActions();
+}
+
+/*!
+ * initializes couple of actions that have shortcuts assigned in the constructor as opposed
+ * to other actions in initAction() that are create on demand only if the context menu is requested
+ */
+void WorksheetView::initBasicActions() {
+	selectAllAction = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this);
+	this->addAction(selectAllAction);
+	connect(selectAllAction, &QAction::triggered, this, &WorksheetView::selectAllElements);
+
+	deleteAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete"), this);
+	this->addAction(deleteAction);
+	connect(deleteAction, &QAction::triggered, this, &WorksheetView::deleteElement);
+
+	backspaceAction = new QAction(this);
+	this->addAction(backspaceAction);
+	connect(backspaceAction, &QAction::triggered, this, &WorksheetView::deleteElement);
+
+	//Zoom actions
+	zoomInViewAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom In"), this);
+
+	zoomOutViewAction = new QAction(QIcon::fromTheme("zoom-out"), i18n("Zoom Out"), this);
+
+	zoomOriginAction = new QAction(QIcon::fromTheme("zoom-original"), i18n("Original Size"), this);
 }
 
 void WorksheetView::initActions() {
@@ -129,30 +156,9 @@ void WorksheetView::initActions() {
 	gridActionGroup->setExclusive(true);
 	auto* magnificationActionGroup = new QActionGroup(this);
 
-	selectAllAction = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this);
-	selectAllAction->setShortcut(Qt::CTRL+Qt::Key_A);
-	this->addAction(selectAllAction);
-	connect(selectAllAction, &QAction::triggered, this, &WorksheetView::selectAllElements);
-
-	deleteAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete"), this);
-	deleteAction->setShortcut(Qt::Key_Delete);
-	this->addAction(deleteAction);
-	connect(deleteAction, &QAction::triggered, this, &WorksheetView::deleteElement);
-
-	backspaceAction = new QAction(this);
-	backspaceAction->setShortcut(Qt::Key_Backspace);
-	this->addAction(backspaceAction);
-	connect(backspaceAction, &QAction::triggered, this, &WorksheetView::deleteElement);
-
-	//Zoom actions
-	zoomInViewAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom In"), zoomActionGroup);
-	zoomInViewAction->setShortcut(Qt::CTRL+Qt::Key_Plus);
-
-	zoomOutViewAction = new QAction(QIcon::fromTheme("zoom-out"), i18n("Zoom Out"), zoomActionGroup);
-	zoomOutViewAction->setShortcut(Qt::CTRL+Qt::Key_Minus);
-
-	zoomOriginAction = new QAction(QIcon::fromTheme("zoom-original"), i18n("Original Size"), zoomActionGroup);
-	zoomOriginAction->setShortcut(Qt::CTRL+Qt::Key_1);
+	zoomActionGroup->addAction(zoomInViewAction);
+	zoomActionGroup->addAction(zoomOutViewAction);
+	zoomActionGroup->addAction(zoomOriginAction);
 
 	zoomFitPageHeightAction = new QAction(QIcon::fromTheme("zoom-fit-height"), i18n("Fit to Height"), zoomActionGroup);
 	zoomFitPageWidthAction = new QAction(QIcon::fromTheme("zoom-fit-width"), i18n("Fit to Width"), zoomActionGroup);
@@ -1717,6 +1723,23 @@ void WorksheetView::layoutChanged(Worksheet::Layout layout) {
 	}
 }
 
+void WorksheetView::registerShortcuts() {
+	selectAllAction->setShortcut(Qt::CTRL+Qt::Key_A);
+	deleteAction->setShortcut(Qt::Key_Delete);
+	backspaceAction->setShortcut(Qt::Key_Backspace);
+	zoomInViewAction->setShortcut(Qt::CTRL+Qt::Key_Plus);
+	zoomOutViewAction->setShortcut(Qt::CTRL+Qt::Key_Minus);
+	zoomOriginAction->setShortcut(Qt::CTRL+Qt::Key_1);
+}
+
+void WorksheetView::unregisterShortcuts() {
+	selectAllAction->setShortcut(QKeySequence());
+	deleteAction->setShortcut(QKeySequence());
+	backspaceAction->setShortcut(QKeySequence());
+	zoomInViewAction->setShortcut(QKeySequence());
+	zoomOutViewAction->setShortcut(QKeySequence());
+	zoomOriginAction->setShortcut(QKeySequence());
+}
 
 //##############################################################################
 //########################  SLOTs for cartesian plots   ########################
@@ -1893,4 +1916,3 @@ void WorksheetView::presenterMode() {
 	PresenterWidget* presenterWidget = new PresenterWidget(QPixmap::fromImage(image), m_worksheet->name());
 	presenterWidget->showFullScreen();
 }
-

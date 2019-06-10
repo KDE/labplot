@@ -4,7 +4,7 @@
     Description          : View class for Matrix
     --------------------------------------------------------------------
     Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2019 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -1522,3 +1522,10 @@ void MatrixView::exportToFits(const QString &fileName, const int exportTo) const
 	delete filter;
 }
 
+void MatrixView::registerShortcuts() {
+	action_clear_selection ->setShortcut(QKeySequence::Delete);
+}
+
+void MatrixView::unregisterShortcuts() {
+	action_clear_selection->setShortcut(QKeySequence());
+}
