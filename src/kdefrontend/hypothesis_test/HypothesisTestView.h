@@ -72,9 +72,6 @@ private:
 	                   const bool skipEmptyRows,const bool exportEntire) const;
 
     HypothesisTest* m_hypothesisTest;
-    QTableView* m_tableView;
-    QHeaderView* m_horizontalHeaderView;
-    QHeaderView* m_verticalHeaderView;
     QLabel* m_testName;
     QLabel* m_statsTable;
     QListView* m_resultView;
@@ -86,8 +83,6 @@ public slots:
 	void changed();
 
 private slots:
-	void goToCell();
-	void goToCell(int row, int col);
 };
 
 #endif

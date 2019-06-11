@@ -60,22 +60,17 @@
 
 HypothesisTestView::HypothesisTestView(HypothesisTest* hypothesisTest) : QWidget(),
     m_hypothesisTest(hypothesisTest),
-    m_tableView(new QTableView(this)),
-    m_horizontalHeaderView(new QHeaderView(Qt::Horizontal, m_tableView)),
-    m_verticalHeaderView(new QHeaderView(Qt::Vertical, m_tableView)),
     m_testName(new QLabel()),
     m_statsTable(new QLabel()),
     m_resultView(new QListView(this)) {
 
     //setting alignments and fonts of testname label;
     m_testName->setText(m_hypothesisTest->testName());
-//    m_testName->setAlignment(Qt::AlignCenter);
     QFont font = m_testName->font();
     font.setPointSize(15);
     m_testName->setFont(font);
 
     //setting properties for table view
-    m_tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_resultView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 //    m_tableView->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
@@ -96,19 +91,6 @@ HypothesisTestView::HypothesisTestView(HypothesisTest* hypothesisTest) : QWidget
 //    layout->setAlignment(m_testName, Qt::AlignHCenter);
 //    layout->setAlignment(m_tableView, Qt::AlignJustify);
 
-
-    m_horizontalHeaderView->setVisible(true);
-    m_horizontalHeaderView->setEnabled(true);
-    m_horizontalHeaderView->setSectionsClickable(true);
-
-    m_verticalHeaderView->setVisible(true);
-    m_verticalHeaderView->setEnabled(true);
-    m_verticalHeaderView->setSectionsClickable(true);
-
-    m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    m_tableView->setHorizontalHeader(m_horizontalHeaderView);
-    m_tableView->setVerticalHeader(m_verticalHeaderView);
-
     init();
 }
 
@@ -117,10 +99,6 @@ HypothesisTestView::~HypothesisTestView() = default;
 void HypothesisTestView::init() {
 	initActions();
 	initMenus();
-
-    m_tableView->setModel(m_hypothesisTest->dataModel());
-    m_horizontalHeaderView->setModel(m_hypothesisTest->horizontalHeaderModel());
-    m_verticalHeaderView->setModel(m_hypothesisTest->verticalHeaderModel());
 
     m_resultView->setModel(m_hypothesisTest->resultModel());
 
@@ -157,24 +135,6 @@ void HypothesisTestView::fillToolBar(QToolBar* toolBar) {
  */
 void HypothesisTestView::createContextMenu(QMenu* menu) {
 	Q_ASSERT(menu);
-}
-
-void HypothesisTestView::goToCell() {
-	bool ok;
-
-	int col = QInputDialog::getInt(nullptr, i18n("Go to Cell"), i18n("Enter column"), 1, 1, m_tableView->model()->columnCount(), 1, &ok);
-	if (!ok) return;
-
-	int row = QInputDialog::getInt(nullptr, i18n("Go to Cell"), i18n("Enter row"), 1, 1, m_tableView->model()->rowCount(), 1, &ok);
-	if (!ok) return;
-
-	goToCell(row-1, col-1);
-}
-
-void HypothesisTestView::goToCell(int row, int col) {
-	QModelIndex index = m_tableView->model()->index(row, col);
-	m_tableView->scrollTo(index);
-	m_tableView->setCurrentIndex(index);
 }
 
 bool HypothesisTestView::exportView() {
