@@ -52,6 +52,9 @@ DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, cons
 	initSubcategories(datasetMap);
 	initDatasets(datasetMap);
 
+	m_baseColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#5f5f5f") : QLatin1String("#ffffff");
+	m_textColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#ffffff") : QLatin1String("#000000");
+
 	ui.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
 	ui.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
 	ui.cbNumberFormat->addItems(AbstractFileFilter::numberFormats());
@@ -110,25 +113,25 @@ void DatasetMetadataManagerWidget::loadSettings() {
 }
 
 void DatasetMetadataManagerWidget::initCategories(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) {
-    m_categoryList = datasetMap.keys();
+	m_categoryList = datasetMap.keys();
 	ui.cbCategory->addItems(m_categoryList);
 }
 
 void DatasetMetadataManagerWidget::initSubcategories(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) {
-    for(auto i = datasetMap.begin(); i != datasetMap.end(); ++i) {
+	for(auto i = datasetMap.begin(); i != datasetMap.end(); ++i) {
 		m_subcategoryMap[i.key()] = i.value().keys();
 	}
 
 	QString selectedCategory = ui.cbCategory->currentText();
-    if (m_subcategoryMap.contains(selectedCategory))
-        ui.cbSubcategory->addItems(m_subcategoryMap[selectedCategory]);
+	if (m_subcategoryMap.contains(selectedCategory))
+		ui.cbSubcategory->addItems(m_subcategoryMap[selectedCategory]);
 }
 
 void DatasetMetadataManagerWidget::initDatasets(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) {
 	for(auto category = datasetMap.begin(); category != datasetMap.end(); ++category) {
-        const QMap<QString, QVector<QString>>& category_ = category.value();
+		const QMap<QString, QVector<QString>>& category_ = category.value();
 
-        for(auto subcategory = category_.begin(); subcategory != category_.end(); ++subcategory) {
+		for(auto subcategory = category_.begin(); subcategory != category_.end(); ++subcategory) {
 			m_datasetMap[subcategory.key()] = subcategory.value().toList();
 			m_datasetList.append(subcategory.value().toList());
 		}
@@ -136,24 +139,24 @@ void DatasetMetadataManagerWidget::initDatasets(const QMap<QString, QMap<QString
 }
 
 bool DatasetMetadataManagerWidget::checkFileName() {
-    const QString fileName = ui.leFileName->text();
-    const QRegularExpression re("^[\\w\\d-]+$");
-    const QRegularExpressionMatch match = re.match(fileName);
+	const QString fileName = ui.leFileName->text();
+	const QRegularExpression re("^[\\w\\d-]+$");
+	const QRegularExpressionMatch match = re.match(fileName);
 	bool hasMatch = match.hasMatch();
 
 	qDebug() << hasMatch;
 	if(!hasMatch || fileName.isEmpty()) {
 		qDebug("File name invalid");
 		QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        palette.setColor(QPalette::Text, Qt::black);
+		palette.setColor(QPalette::Base, Qt::red);
+		palette.setColor(QPalette::Text, Qt::black);
 		ui.leFileName->setPalette(palette);
 		ui.leFileName->setToolTip("Invalid name for a file (it can contain:digits, letters, -, _)");
 	} else {
 		qDebug("File name valid");
 		QPalette palette;
-        palette.setColor(QPalette::Base, Qt::white);
-        palette.setColor(QPalette::Text, Qt::black);
+		palette.setColor(QPalette::Base, m_baseColor);
+		palette.setColor(QPalette::Text, m_textColor);
 		ui.leFileName->setPalette(palette);
 		ui.leFileName->setToolTip("");
 	}
@@ -163,8 +166,8 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 	if(m_datasetList.contains(fileName)) {
 		qDebug("There already is a metadata file with this name");
 		QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        palette.setColor(QPalette::Text, Qt::black);
+		palette.setColor(QPalette::Base, Qt::red);
+		palette.setColor(QPalette::Text, Qt::black);
 		ui.leFileName->setPalette(palette);
 		ui.leFileName->setToolTip("There already is a dataset metadata file with this name!");
 		found = true;
@@ -172,8 +175,8 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 		qDebug("Dataset metadata file name is unique");
 		if(hasMatch) {
 			QPalette palette;
-            palette.setColor(QPalette::Base,  Qt::white);
-			palette.setColor(QPalette::Text,Qt::black);
+			palette.setColor(QPalette::Base, m_baseColor);
+			palette.setColor(QPalette::Text, m_textColor);
 			ui.leFileName->setPalette(palette);
 			ui.leFileName->setToolTip("");
 		}
@@ -183,54 +186,54 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 }
 
 bool DatasetMetadataManagerWidget::urlExists() {
-    const bool urlExists_ = (QUrl(ui.leDownloadURL->text()).isValid()) && !ui.leDownloadURL->text().isEmpty();
-    if(!urlExists_){
+	const bool urlExists_ = (QUrl(ui.leDownloadURL->text()).isValid()) && !ui.leDownloadURL->text().isEmpty();
+	if(!urlExists_){
 		QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        palette.setColor(QPalette::Text, Qt::black);
+		palette.setColor(QPalette::Base, Qt::red);
+		palette.setColor(QPalette::Text, Qt::black);
 		ui.leDownloadURL->setPalette(palette);
 		ui.leDownloadURL->setToolTip("The URL is invalid!");
 	} else {
 		QPalette palette;
-        palette.setColor(QPalette::Base, Qt::white);
-        palette.setColor(QPalette::Text, Qt::black);
+		palette.setColor(QPalette::Base, m_baseColor);
+		palette.setColor(QPalette::Text, m_textColor);;
 		ui.leDownloadURL->setPalette(palette);
 		ui.leDownloadURL->setToolTip("");
 	}
-    return urlExists_;
+	return urlExists_;
 }
 
 bool DatasetMetadataManagerWidget::checkDatasetName() {
-    const bool longNameOk = !ui.leDatasetName->text().isEmpty();
-    if(!longNameOk)	{
+	const bool longNameOk = !ui.leDatasetName->text().isEmpty();
+	if(!longNameOk)	{
 		QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        palette.setColor(QPalette::Text, Qt::black);
+		palette.setColor(QPalette::Base, Qt::red);
+		palette.setColor(QPalette::Text, Qt::black);
 		ui.leDatasetName->setPalette(palette);
 		ui.leDatasetName->setToolTip("Please fill this out!");
 	} else {
 		QPalette palette;
-        palette.setColor(QPalette::Base, Qt::white);
-        palette.setColor(QPalette::Text, Qt::black);
+		palette.setColor(QPalette::Base, m_baseColor);
+		palette.setColor(QPalette::Text, m_textColor);
 		ui.leDatasetName->setPalette(palette);
-        ui.leDatasetName->setToolTip("");
+		ui.leDatasetName->setToolTip("");
 	}
 
-    return longNameOk;
+	return longNameOk;
 }
 
 bool DatasetMetadataManagerWidget::checkDescription() {
-    const bool descriptionOk = !ui.teDescription->toPlainText().isEmpty();
-    if(!descriptionOk) {
+	const bool descriptionOk = !ui.teDescription->toPlainText().isEmpty();
+	if(!descriptionOk) {
 		QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        palette.setColor(QPalette::Text, Qt::black);
+		palette.setColor(QPalette::Base, Qt::red);
+		palette.setColor(QPalette::Text, Qt::black);
 		ui.teDescription->setPalette(palette);
 		ui.teDescription->setToolTip("Please fill this out!");
 	} else {
 		QPalette palette;
-        palette.setColor(QPalette::Base, Qt::white);
-        palette.setColor(QPalette::Text, Qt::black);
+		palette.setColor(QPalette::Base, m_baseColor);
+		palette.setColor(QPalette::Text, m_textColor);
 		ui.teDescription->setPalette(palette);
 		ui.teDescription->setToolTip("");
 	}
@@ -239,10 +242,10 @@ bool DatasetMetadataManagerWidget::checkDescription() {
 }
 
 bool DatasetMetadataManagerWidget::checkCategories(QComboBox* comboBox) {
-    const QString fileName = comboBox->currentText();
-    const QRegularExpression re("^[\\w\\d]+$");
-    const QRegularExpressionMatch match = re.match(fileName);
-    const bool hasMatch = match.hasMatch();
+	const QString fileName = comboBox->currentText();
+	const QRegularExpression re("^[\\w\\d]+$");
+	const QRegularExpressionMatch match = re.match(fileName);
+	const bool hasMatch = match.hasMatch();
 
 	qDebug() << hasMatch;
 	if(!hasMatch || fileName.isEmpty()) {
@@ -255,8 +258,8 @@ bool DatasetMetadataManagerWidget::checkCategories(QComboBox* comboBox) {
 	} else {
 		qDebug("categoty/subcategory name valid");
 		QPalette palette;
-		palette.setColor(QPalette::Base,Qt::white);
-		palette.setColor(QPalette::Text,Qt::black);
+		palette.setColor(QPalette::Base, m_baseColor);
+		palette.setColor(QPalette::Text, m_textColor);
 		comboBox->setPalette(palette);
 		comboBox->setToolTip("");
 	}
@@ -278,12 +281,12 @@ void DatasetMetadataManagerWidget::enableDatasetSettings(bool enable) {
 }
 
 bool DatasetMetadataManagerWidget::checkDataValidity() {
-    const bool fileNameOK = checkFileName();
-    const bool urlOk = urlExists();
-    const bool longNameOk = checkDatasetName();
-    const bool descriptionOk = checkDescription();
-    const bool categoryOk = checkCategories(ui.cbCategory);
-    const bool subcategoryOk = checkCategories(ui.cbSubcategory);
+	const bool fileNameOK = checkFileName();
+	const bool urlOk = urlExists();
+	const bool longNameOk = checkDatasetName();
+	const bool descriptionOk = checkDescription();
+	const bool categoryOk = checkCategories(ui.cbCategory);
+	const bool subcategoryOk = checkCategories(ui.cbSubcategory);
 
 	enableDatasetSettings(categoryOk && subcategoryOk);
 
@@ -304,8 +307,8 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& fileName) {
 	if (file.open(QIODevice::ReadWrite)) {
 		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
 		//qDebug() <<document.toJson();
-        QJsonObject rootObject = document.object();
-        QJsonValueRef categoryArrayRef = rootObject.find("categories").value();
+		QJsonObject rootObject = document.object();
+		QJsonValueRef categoryArrayRef = rootObject.find("categories").value();
 		QJsonArray categoryArray = categoryArrayRef.toArray();
 
 		bool foundCategory = false;
@@ -342,7 +345,7 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& fileName) {
 						subcategoryArrayRef = subcategoryArray;
 						categoryRef = currentCategory;
 						categoryArrayRef = categoryArray;
-                        document.setObject(rootObject);
+						document.setObject(rootObject);
 						break;
 					}
 				}
@@ -361,7 +364,7 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& fileName) {
 					subcategoryArrayRef = subcategoryArray;
 					categoryRef = currentCategory;
 					categoryArrayRef = categoryArray;
-                    document.setObject(rootObject);
+					document.setObject(rootObject);
 				}
 				break;
 			}
@@ -386,7 +389,7 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& fileName) {
 
 			categoryArray.append(newCategory);
 			categoryArrayRef = categoryArray;
-            document.setObject(rootObject);
+			document.setObject(rootObject);
 		}
 		qDebug() <<document.toJson();
 		file.close();
@@ -399,54 +402,54 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& fileName) {
 }
 
 void DatasetMetadataManagerWidget::createNewMetadata(const QString& dirPath) {
-    if (QDir(dirPath).exists())
-    {
-        QString path = dirPath + QDir::separator() + ui.cbCategory->currentText() + QDir::separator();
+	if (QDir(dirPath).exists())
+	{
+		QString path = dirPath + QDir::separator() + ui.cbCategory->currentText() + QDir::separator();
 
-        if(!QDir(path).exists()) {
-            qDebug() <<path;
-            QDir(dirPath).mkdir(ui.cbCategory->currentText());
-        }
+		if(!QDir(path).exists()) {
+			qDebug() <<path;
+			QDir(dirPath).mkdir(ui.cbCategory->currentText());
+		}
 
-        if(!QDir(path + ui.cbSubcategory->currentText()).exists()) {
-            qDebug() <<path + ui.cbSubcategory->currentText();
-            QDir(path).mkdir(ui.cbSubcategory->currentText());
-        }
+		if(!QDir(path + ui.cbSubcategory->currentText()).exists()) {
+			qDebug() <<path + ui.cbSubcategory->currentText();
+			QDir(path).mkdir(ui.cbSubcategory->currentText());
+		}
 
-        path = path + ui.cbSubcategory->currentText() + QDir::separator();
-        m_metadataFilePath = path + ui.leFileName->text() + ".json";
-        qDebug() << "Creating " << m_metadataFilePath;
+		path = path + ui.cbSubcategory->currentText() + QDir::separator();
+		m_metadataFilePath = path + ui.leFileName->text() + ".json";
+		qDebug() << "Creating " << m_metadataFilePath;
 
-        QFile file(m_metadataFilePath);
-        if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-            QJsonObject rootObject;
+		QFile file(m_metadataFilePath);
+		if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+			QJsonObject rootObject;
 
-            rootObject.insert("name", ui.leDatasetName->text());
-            rootObject.insert("download", ui.leDownloadURL->text());
-            rootObject.insert("description", ui.teDescription->toPlainText());
-            rootObject.insert("separator", ui.cbSeparatingCharacter->currentText());
-            rootObject.insert("comment_character", ui.cbCommentCharacter->currentText());
-            rootObject.insert("DateTime_format", ui.cbDateTimeFormat->currentText());
-            rootObject.insert("number_format", ui.cbNumberFormat->currentIndex());
-            rootObject.insert("create_index_column", ui.chbCreateIndex->isChecked());
-            rootObject.insert("skip_empty_parts", ui.chbSkipEmptyParts->isChecked());
-            rootObject.insert("simplify_whitespaces", ui.chbSimplifyWhitespaces->isChecked());
-            rootObject.insert("remove_quotes", ui.chbRemoveQuotes->isChecked());
-            rootObject.insert("use_first_row_for_vectorname", ui.chbHeader->isChecked());
+			rootObject.insert("name", ui.leDatasetName->text());
+			rootObject.insert("download", ui.leDownloadURL->text());
+			rootObject.insert("description", ui.teDescription->toPlainText());
+			rootObject.insert("separator", ui.cbSeparatingCharacter->currentText());
+			rootObject.insert("comment_character", ui.cbCommentCharacter->currentText());
+			rootObject.insert("DateTime_format", ui.cbDateTimeFormat->currentText());
+			rootObject.insert("number_format", ui.cbNumberFormat->currentIndex());
+			rootObject.insert("create_index_column", ui.chbCreateIndex->isChecked());
+			rootObject.insert("skip_empty_parts", ui.chbSkipEmptyParts->isChecked());
+			rootObject.insert("simplify_whitespaces", ui.chbSimplifyWhitespaces->isChecked());
+			rootObject.insert("remove_quotes", ui.chbRemoveQuotes->isChecked());
+			rootObject.insert("use_first_row_for_vectorname", ui.chbHeader->isChecked());
 
-            for(int i = 0; i < m_columnDescriptions.size(); ++i) {
-                rootObject.insert(i18n("column_description_%1", i), m_columnDescriptions[i]);
-            }
+			for(int i = 0; i < m_columnDescriptions.size(); ++i) {
+				rootObject.insert(i18n("column_description_%1", i), m_columnDescriptions[i]);
+			}
 
-            QJsonDocument document;
-            document.setObject(rootObject);
-            qDebug() <<document.toJson();
-            file.write(document.toJson());
-            file.close();
-        } else {
-            qDebug() <<"Couldn't create new metadata file" << file.errorString();;
-        }
-    }
+			QJsonDocument document;
+			document.setObject(rootObject);
+			qDebug() <<document.toJson();
+			file.write(document.toJson());
+			file.close();
+		} else {
+			qDebug() <<"Couldn't create new metadata file" << file.errorString();;
+		}
+	}
 }
 
 void DatasetMetadataManagerWidget::addColumnDescription() {
@@ -468,15 +471,15 @@ void DatasetMetadataManagerWidget::addColumnDescription() {
 }
 
 void DatasetMetadataManagerWidget::removeColumnDescription() {
-    const int index = ui.columnLayout->count() - 1;
+	const int index = ui.columnLayout->count() - 1;
 
 	QLayoutItem *item;
-    if ((item = ui.columnLayout->takeAt(index)) != nullptr) {
+	if ((item = ui.columnLayout->takeAt(index)) != nullptr) {
 		delete item->widget();
 		delete item;
 	}
 
-    if ((item = ui.columnLayout->takeAt(index - 1)) != nullptr){
+	if ((item = ui.columnLayout->takeAt(index - 1)) != nullptr){
 		delete item->widget();
 		delete item;
 	}

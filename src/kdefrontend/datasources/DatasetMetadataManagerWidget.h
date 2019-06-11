@@ -51,6 +51,9 @@ private:
     QStringList m_columnDescriptions;
     QString m_metadataFilePath;
     QStringList m_datasetList;
+	QString m_baseColor;
+	QString m_textColor;
+
 
     void initCategories(const QMap<QString, QMap<QString, QVector<QString>>>&);
     void initSubcategories(const QMap<QString, QMap<QString, QVector<QString>>>&);
