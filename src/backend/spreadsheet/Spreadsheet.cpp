@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2006-2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2006-2009 Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2012-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2019 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
@@ -761,6 +761,13 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 	return !reader->hasError();
 }
 
+void Spreadsheet::registerShortcuts() {
+	m_view->registerShortcuts();
+}
+
+void Spreadsheet::unregisterShortcuts() {
+	m_view->unregisterShortcuts();
+}
 
 //##############################################################################
 //########################  Data Import  #######################################

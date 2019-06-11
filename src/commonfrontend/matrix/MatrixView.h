@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Matrix
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2019 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
@@ -74,6 +74,10 @@ public:
                            const bool latexHeaders, const bool gridLines,
                            const bool entire, const bool captions) const;
 	void exportToFits(const QString& fileName, const int exportTo) const;
+
+	void registerShortcuts();
+	void unregisterShortcuts();
+
 public slots:
 	void createContextMenu(QMenu*) const;
 	void print(QPrinter*) const;

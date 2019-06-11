@@ -4,7 +4,7 @@
     Description          : Worksheet (2D visualization) part
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2019 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -107,6 +107,9 @@ public:
 
 	void setSuppressLayoutUpdate(bool);
 	void updateLayout();
+
+	void registerShortcuts() override;
+	void unregisterShortcuts() override;
 
 	typedef WorksheetPrivate Private;
 

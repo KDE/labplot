@@ -54,6 +54,10 @@ public:
 	bool isDraggable() const override;
 	QVector<AspectType> dropableOn() const override;
 
+	//TODO: move these functions to a new class AbstractPartView
+	virtual void registerShortcuts() {};
+	virtual void unregisterShortcuts() {};
+
 private:
 	mutable PartMdiView* m_mdiWindow{nullptr};
 

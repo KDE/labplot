@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : QMdiSubWindow wrapper for aspect views.
     --------------------------------------------------------------------
-    Copyright            : (C) 2013 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2019 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2007,2008 Knut Franke (knut.franke@gmx.de)
 
@@ -49,6 +49,7 @@ private:
 private slots:
 	void handleAspectDescriptionChanged(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
+	void windowStateChanged(Qt::WindowStates oldState, Qt::WindowStates newState);
 };
 
 #endif // ifndef PART_MDI_VIEW_H

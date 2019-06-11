@@ -4,7 +4,7 @@
     Description          : Worksheet
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2019 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -429,6 +429,14 @@ void Worksheet::setPlotsLocked(bool lock) {
 		plot->setLocked(lock);
 
 	project()->setChanged(true);
+}
+
+void Worksheet::registerShortcuts() {
+	m_view->registerShortcuts();
+}
+
+void Worksheet::unregisterShortcuts() {
+	m_view->unregisterShortcuts();
 }
 
 /* =============================== getter methods for general options ==================================== */
