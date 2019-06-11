@@ -41,10 +41,10 @@ Copyright	: (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 
-DatasetHandler::DatasetHandler(const QString& name, bool loading) :  Spreadsheet(name, loading),
-    m_filter(new AsciiFilter),
-    m_document(new QJsonDocument),
-    m_downloadManager(new QNetworkAccessManager) {
+DatasetHandler::DatasetHandler(Spreadsheet* spreadsheet) : m_spreadsheet(spreadsheet),
+	m_filter(new AsciiFilter),
+	m_document(new QJsonDocument),
+	m_downloadManager(new QNetworkAccessManager) {
 	connect(m_downloadManager, &QNetworkAccessManager::finished, this, &DatasetHandler::downloadFinished);
 	connect(this, &DatasetHandler::downloadCompleted, this, &DatasetHandler::processDataset);
 }
@@ -142,14 +142,14 @@ void DatasetHandler::configureFilter() {
 void DatasetHandler::configureSpreadsheet() {
 	qDebug("Conf spreadsheet");
 	if(m_document->isObject()) {
-        const QJsonObject& jsonObject = m_document->object();
+		const QJsonObject& jsonObject = m_document->object();
 		if(jsonObject.contains("name"))
-			setName( jsonObject.value("name").toString());
+		m_spreadsheet->setName( jsonObject.value("name").toString());
 		else
 			markMetadataAsInvalid();
 
 		if(jsonObject.contains("description"))
-			setComment(jsonObject.value("description").toString());
+			m_spreadsheet->setComment(jsonObject.value("description").toString());
 	} else {
 		markMetadataAsInvalid();
 	}
@@ -158,11 +158,11 @@ void DatasetHandler::configureSpreadsheet() {
 void DatasetHandler::prepareForDataset() {
 	qDebug("Start downloading dataset");
 	if(m_document->isObject()) {
-        const QJsonObject& jsonObject = m_document->object();
+		const QJsonObject& jsonObject = m_document->object();
 
 		if(jsonObject.contains("download")) {
-            const QString& url =  jsonObject.value("download").toString();
-            const QUrl downloadUrl = QUrl::fromEncoded(url.toLocal8Bit());
+			const QString& url =  jsonObject.value("download").toString();
+			const QUrl downloadUrl = QUrl::fromEncoded(url.toLocal8Bit());
 			doDownload(url);
 		}
 		else {
@@ -177,12 +177,12 @@ void DatasetHandler::prepareForDataset() {
 void DatasetHandler::doDownload(const QUrl& url) {
 	qDebug("Download request");
 	QNetworkRequest request(url);
-    m_currentDownload = m_downloadManager->get(request);
+	m_currentDownload = m_downloadManager->get(request);
 }
 
 void DatasetHandler::downloadFinished(QNetworkReply* reply) {
 	qDebug("Download finished");
-    const QUrl& url = reply->url();
+	const QUrl& url = reply->url();
 	if (reply->error()) {
 		qDebug("Download of %s failed: %s\n",
 			   url.toEncoded().constData(),
@@ -206,14 +206,14 @@ void DatasetHandler::downloadFinished(QNetworkReply* reply) {
 }
 
 bool DatasetHandler::isHttpRedirect(QNetworkReply* reply) {
-    const int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-    // TODO enum/defines for status codes ?
+	const int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+	// TODO enum/defines for status codes ?
 	return statusCode == 301 || statusCode == 302 || statusCode == 303
 			|| statusCode == 305 || statusCode == 307 || statusCode == 308;
 }
 
 QString DatasetHandler::saveFileName(const QUrl& url) {
-    const QString path = url.path();
+	const QString path = url.path();
 	QString basename = QFileInfo(path).fileName();
 
 	if (basename.isEmpty())
@@ -221,7 +221,7 @@ QString DatasetHandler::saveFileName(const QUrl& url) {
 
 	QString fileName = m_containingDir + QDir::separator() + basename;
 
-    if (QFile::exists(fileName)) {
+	if (QFile::exists(fileName)) {
 		// already exists, don't overwrite
 		int i = 0;
 		fileName += '.';
@@ -249,19 +249,19 @@ bool DatasetHandler::saveToDisk(const QString& filename, QIODevice* data) {
 }
 
 void DatasetHandler::processDataset() {
-	m_filter->readDataFromFile(m_fileName, this);
+	m_filter->readDataFromFile(m_fileName, m_spreadsheet);
 	configureColumns();
 }
 
 void DatasetHandler::configureColumns() {
 	if(m_document->isObject()) {
-        const QJsonObject jsonObject = m_document->object();
+		const QJsonObject jsonObject = m_document->object();
 
 		int index = 0;
-        const int columnsCount = columnCount();
-        while(jsonObject.contains(i18n("column_description_%1", index)) && (index < columnsCount)) {
-			column(index)->setComment(jsonObject.value(i18n("column_description_%1", index)).toString());
-            ++index;
+		const int columnsCount = m_spreadsheet->columnCount();
+		while(jsonObject.contains(i18n("column_description_%1", index)) && (index < columnsCount)) {
+			m_spreadsheet->column(index)->setComment(jsonObject.value(i18n("column_description_%1", index)).toString());
+			++index;
 		}
 	} else {
 		qDebug("Invalid Json document");

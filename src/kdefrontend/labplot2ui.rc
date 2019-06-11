@@ -49,7 +49,6 @@
 	<Action name="new_folder" />
 	<Separator/>
 	<Action name="new_live_datasource" />
-    <Action name="new_dataset_datasource" />
 	<Action name="new_database_datasource" />
 	<Separator/>
 	<Menu name="new_cas_worksheet"><text>&amp;CAS Worksheet</text>
@@ -59,7 +58,8 @@
 <Separator/>
 <Menu name="import"><text>Import</text>
 	<Action name="import_file" />
-	<Action name="import_sql" />
+	<Action name="import_sql" />    
+    <Action name="import_dataset_datasource" />
 	<Separator/>
 	<Action name="import_labplot" />
 	<Action name="import_opj" />

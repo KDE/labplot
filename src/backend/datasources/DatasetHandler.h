@@ -36,15 +36,16 @@ class AsciiFilter;
 class QNetworkAccessManager;
 class QNetworkReply;
 
-class DatasetHandler : public Spreadsheet {
+class DatasetHandler: public QObject{
 	Q_OBJECT
 
 public:
-	DatasetHandler(const QString& name, bool loading = false);
-	~DatasetHandler() override;
+	DatasetHandler(Spreadsheet* spreadsheet);
+	~DatasetHandler();
 	void processMetadata(const QString& path);
 
 private:
+	Spreadsheet* m_spreadsheet;
 	AsciiFilter* m_filter;
 	QJsonDocument*  m_document;
 	QNetworkAccessManager* m_downloadManager;

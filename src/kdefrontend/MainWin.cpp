@@ -371,9 +371,9 @@ void MainWin::initActions() {
 	actionCollection()->addAction("new_live_datasource", m_newLiveDataSourceAction);
 	connect(m_newLiveDataSourceAction, &QAction::triggered, this, &MainWin::newLiveDataSourceActionTriggered);
 
-	m_newDatasetAction = new QAction(QIcon::fromTheme("application-octet-stream"), i18n("Dataset"), this);
+	m_newDatasetAction = new QAction(QIcon::fromTheme("application-octet-stream"), i18n("From Dataset Collection"), this);
 	m_newDatasetAction->setWhatsThis(i18n("Imports data from an online dataset"));
-	actionCollection()->addAction("new_dataset_datasource", m_newDatasetAction);
+	actionCollection()->addAction("import_dataset_datasource", m_newDatasetAction);
 	connect(m_newDatasetAction, &QAction::triggered, this, &MainWin::newDatasetActionTriggered);
 
 	//Import/Export
@@ -511,13 +511,13 @@ void MainWin::initMenus() {
 	m_newMenu->addAction(m_newDatapickerAction);
 	m_newMenu->addSeparator();
 	m_newMenu->addAction(m_newLiveDataSourceAction);
-	m_newMenu->addAction(m_newDatasetAction);
 
 	//import menu
 	m_importMenu = new QMenu(this);
 	m_importMenu->setIcon(QIcon::fromTheme("document-import"));
 	m_importMenu ->addAction(m_importFileAction);
-	m_importMenu ->addAction(m_importSqlAction);
+	m_importMenu ->addAction(m_importSqlAction);	
+	m_newMenu->addAction(m_newDatasetAction);
 	m_importMenu->addSeparator();
 	m_importMenu->addAction(m_importLabPlotAction);
 #ifdef HAVE_LIBORIGIN
@@ -2006,7 +2006,8 @@ void MainWin::newLiveDataSourceActionTriggered() {
 void MainWin::newDatasetActionTriggered() {
 	ImportDatasetDialog* dlg = new ImportDatasetDialog(this);
 	if (dlg->exec() == QDialog::Accepted) {
-			DatasetHandler* dataset = new DatasetHandler(i18n("Dataset%1", 1), false);			
+			Spreadsheet* spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
+			DatasetHandler* dataset = new DatasetHandler(spreadsheet);
 			dlg->importToDataset(dataset, statusBar());
 
 			QTimer timer;
@@ -2019,7 +2020,8 @@ void MainWin::newDatasetActionTriggered() {
 
 			if(timer.isActive()){
 				timer.stop();
-				addAspectToProject(dataset);
+				addAspectToProject(spreadsheet);
+				delete dataset;
 			}
 			else
 				delete dataset;
