@@ -79,6 +79,8 @@ private:
         void findStatsPaired(Column *column1, Column *column2, int &count, double &sum, double &mean, double &std);
 
         void findStatsCategorical(int n[2], double sum[2], double mean[2], double std[2], QString &col1_name, QString &col2_name);
+
+        QString getHtmlTable(int row, int column, QVariant *row_major);
 // 	QMap<QString, QStringList> m_members;
 };
 

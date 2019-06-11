@@ -207,21 +207,6 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test, bool 
         return;
     }
 
-    // not checking modes becuase columns are selected on the basis of modes;
-//    bool modeOk = true;
-//    for (int i = 0; i < 2; i++) {
-//        if(m_columns[i]->columnMode() == AbstractColumn::Numeric || m_columns[i]->columnMode() == AbstractColumn::Integer)
-//            continue;
-//        modeOk = false;
-//    }
-
-//    if (!modeOk) {
-//        msg_box->setText(i18n("select only columns with numbers"));
-//        msg_box->exec();
-//        return;
-//    }
-
-
     int n[2];
     double sum[2], mean[2], std[2];
 
@@ -256,34 +241,8 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test, bool 
         }
     }
 
-
-    m_stats_table = i18n("<style type=text/css>"
-                         ".tg  {border-collapse:collapse;border-spacing:0;border:none;border-color:#ccc;}"
-                         ".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}"
-                         ".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}"
-                         ".tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}"
-                         ".tg .tg-btxf{background-color:#f9f9f9;border-color:inherit;text-align:left;vertical-align:top}"
-                         "</style>"
-                         "<table class=tg>"
-                         "  <tr>"
-                         "    <th class=tg-0pky></th>"
-                         "    <th class=tg-0pky>N</th>"
-                         "    <th class=tg-0pky>Mean</th>"
-                         "    <th class=tg-0pky>Std</th>"
-                         "  </tr>"
-                         "  <tr>"
-                         "    <td class=tg-btxf>%1</td>"
-                         "    <td class=tg-btxf>%2</td>"
-                         "    <td class=tg-btxf>%3</td>"
-                         "    <td class=tg-btxf>%4</td>"
-                         "  </tr>"
-                         "  <tr>"
-                         "    <td class=tg-0pky>%5</td>"
-                         "    <td class=tg-0pky>%6</td>"
-                         "    <td class=tg-0pky>%7</td>"
-                         "    <td class=tg-0pky>%8</td>"
-                         "  </tr>"
-                         "</table>", col1_name, n[0], mean[0], std[0], col2_name, n[1], mean[1], std[1]);
+    QVariant row_major[] = {"", "N", "Sum", "Mean", "Std", col1_name, n[0], sum[0], mean[0], std[0], col2_name, n[1], sum[1], mean[1], std[1]};
+    m_stats_table = getHtmlTable(3, 5, row_major);
 
     switch (test) {
         case TestT: {
@@ -475,28 +434,8 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(TestType test) {
         return;
     }
 
-   m_stats_table = i18n("<style type=text/css>"
-                       ".tg  {border-collapse:collapse;border-spacing:0;border:none;border-color:#ccc;}"
-                       ".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}"
-                       ".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}"
-                       ".tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}"
-                       ".tg .tg-btxf{background-color:#f9f9f9;border-color:inherit;text-align:left;vertical-align:top}"
-                       "</style>"
-                       "<table class=tg>"
-                       "  <tr>"
-                       "    <th class=tg-0pky></th>"
-                       "    <th class=tg-0pky>N</th>"
-                       "    <th class=tg-0pky>Mean</th>"
-                       "    <th class=tg-0pky>Std</th>"
-                       "  </tr>"
-                       "  <tr>"
-                       "    <td class=tg-btxf>%1</td>"
-                       "    <td class=tg-btxf>%2</td>"
-                       "    <td class=tg-btxf>%3</td>"
-                       "    <td class=tg-btxf>%4</td>"
-                       "  </tr>"
-                       "</table>", "Difference", n, mean, sum);
-
+    QVariant row_major[] = {"", "N", "Sum", "Mean", "Std", "difference", n, sum, mean, std};
+    m_stats_table = getHtmlTable(2, 5, row_major);
 
     if (test == TestT) {
         m_currTestName = i18n("Two Sample Paired T Test for %1 vs %2", m_columns[0]->name(), m_columns[1]->name());
@@ -663,27 +602,8 @@ void HypothesisTestPrivate::PerformOneSampleTest(TestType test) {
     }
 
 
-    m_stats_table = i18n("<style type=text/css>"
-                        ".tg  {border-collapse:collapse;border-spacing:0;border:none;border-color:#ccc;}"
-                        ".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}"
-                        ".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}"
-                        ".tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}"
-                        ".tg .tg-btxf{background-color:#f9f9f9;border-color:inherit;text-align:left;vertical-align:top}"
-                        "</style>"
-                        "<table class=tg>"
-                        "  <tr>"
-                        "    <th class=tg-0pky></th>"
-                        "    <th class=tg-0pky>N</th>"
-                        "    <th class=tg-0pky>Mean</th>"
-                        "    <th class=tg-0pky>Std</th>"
-                        "  </tr>"
-                        "  <tr>"
-                        "    <td class=tg-btxf>%1</td>"
-                        "    <td class=tg-btxf>%2</td>"
-                        "    <td class=tg-btxf>%3</td>"
-                        "    <td class=tg-btxf>%4</td>"
-                        "  </tr>"
-                        "</table>", m_columns[0]->name(), n, mean, sum);
+    QVariant row_major[] = {"", "N", "Sum", "Mean", "Std", m_columns[0]->name(), n, sum, mean, std};
+    m_stats_table = getHtmlTable(2, 5, row_major);
 
     if (test == TestT) {
         m_currTestName = i18n("One Sample T Test for %1", m_columns[0]->name());
@@ -971,6 +891,60 @@ void HypothesisTestPrivate::findStatsCategorical(int n[], double sum[], double m
     }
 
     return;
+}
+
+QString HypothesisTestPrivate::getHtmlTable(int row, int column, QVariant *row_major) {
+    if (row < 1 || column < 1)
+        return QString();
+
+    QString table = "";
+    table = "<style type=text/css>"
+            ".tg  {border-collapse:collapse;border-spacing:0;border:none;border-color:#ccc;}"
+            ".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}"
+            ".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}"
+            ".tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}"
+            ".tg .tg-btxf{background-color:#f9f9f9;border-color:inherit;text-align:left;vertical-align:top}"
+            "</style>"
+            "<table class=tg>"
+            "  <tr>";
+
+    QString bg = "tg-0pky";
+    bool pky = true;
+
+    QString element;
+    table += "  <tr>";
+    for (int j = 0; j < column; j++) {
+        element = row_major[j].toString();
+        table += i18n("    <th class=%1><b>%2</b></th>", bg, element);
+    }
+    table += "  </tr>";
+
+    if (pky)
+        bg = "tg-0pky";
+    else
+        bg = "tg-btxf";
+    pky = !pky;
+
+    for (int i = 1; i < row; i++) {
+        table += "  <tr>";
+
+        QString element = row_major[i*column].toString();
+        table += i18n("    <td class=%1><b>%2</b></td>", bg, element);
+        for (int j = 1; j < column; j++) {
+            QString element = row_major[i*column+j].toString();
+            table += i18n("    <td class=%1>%2</td>", bg, element);
+        }
+
+        table += "  </tr>";
+        if (pky)
+            bg = "tg-0pky";
+        else
+            bg = "tg-btxf";
+        pky = !pky;
+    }
+    table +=  "</table>";
+
+    return table;
 }
 /**********************************************************************************
  *                      virtual functions implementations

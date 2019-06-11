@@ -223,6 +223,7 @@ void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
     //clearing all cbCol*
     ui.cbCol1->clear();
     ui.cbCol2->clear();
+    ui.cbCol1Categorical->clear();
     for (auto* col : m_hypothesisTest->dataSourceSpreadsheet()->children<Column>()) {
         ui.cbCol1Categorical->addItem(col->name());
         if (col->columnMode() == AbstractColumn::Integer || col->columnMode() == AbstractColumn::Numeric) {
@@ -496,6 +497,7 @@ void HypothesisTestDock::spreadsheetChanged(const QModelIndex& index) {
     //clearing all cbCol*
     ui.cbCol1->clear();
     ui.cbCol2->clear();
+    ui.cbCol1Categorical->clear();
     for (auto* col : m_hypothesisTest->dataSourceSpreadsheet()->children<Column>()) {
         ui.cbCol1Categorical->addItem(col->name());
         if (col->columnMode() == AbstractColumn::Integer || col->columnMode() == AbstractColumn::Numeric) {

@@ -39,8 +39,6 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
-#include <QTableView>
-#include <QHeaderView>
 #include <QLabel>
 #include <QListView>
 
