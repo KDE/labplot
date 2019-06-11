@@ -65,6 +65,7 @@ public:
         double m_significance_level;
 
         QString m_stats_table;
+        QString m_summary_results;
 
 
         void performTwoSampleIndependentTest(TestType test, bool equal_variance = true);

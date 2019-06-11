@@ -36,7 +36,6 @@
 class HypothesisTestPrivate;
 class HypothesisTestView;
 class Spreadsheet;
-class QAbstractItemModel;
 class QString;
 class Column;
 class QLayout;
@@ -51,13 +50,10 @@ public:
     enum DataSourceType {DataSourceSpreadsheet, DataSourceDatabase};
     enum TailType {TailPositive, TailNegative, TailTwo};
 
-    QAbstractItemModel* dataModel();
-    QAbstractItemModel* horizontalHeaderModel();
-    QAbstractItemModel* verticalHeaderModel();
-    QAbstractItemModel* resultModel();
-
     QString testName();
     QString statsTable();
+    QString summaryResultText();
+
     void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
     void setColumns(QVector<Column*> cols);
     void setColumns(QStringList cols);

@@ -74,7 +74,7 @@ private:
     HypothesisTest* m_hypothesisTest;
     QLabel* m_testName;
     QLabel* m_statsTable;
-    QListView* m_resultView;
+    QLabel* m_summaryResults;
 
 public slots:
 	void createContextMenu(QMenu*);

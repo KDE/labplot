@@ -93,21 +93,20 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     ui.l_h0->setVisible(false);
     ui.l_h1->setVisible(false);
 
-    QString mu = QChar(0x3BC);
-    QString mu0 = mu+QChar(0x2092);
+    QString mu = UTF8_QSTRING("μ");
+    QString mu0 = UTF8_QSTRING("μₒ");
 
     // radio button for null and alternate hypothesis
-    // for alternative hypothesis
+    // for alternative hypothesis (h1)
     // one_tail_1 is mu > mu0; one_tail_2 is mu < mu0; two_tail = mu != mu0;
 
+    ui.rb_h1_one_tail_1->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING(">"), mu0));
+    ui.rb_h1_one_tail_2->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("<"), mu0));
+    ui.rb_h1_two_tail->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("≠"), mu0));
 
-    ui.rb_h1_one_tail_1->setText( i18n("%1 %2 %3", mu, QChar(0x3E), mu0));
-    ui.rb_h1_one_tail_2->setText( i18n("%1 %2 %3", mu, QChar(0x3C), mu0));
-    ui.rb_h1_two_tail->setText( i18n("%1 %2 %3", mu, QChar(0x2260), mu0));
-
-    ui.rb_h0_one_tail_1->setText( i18n("%1 %2 %3", mu, QChar(0x2264), mu0));
-    ui.rb_h0_one_tail_2->setText( i18n("%1 %2 %3",mu, QChar(0x2265), mu0));
-    ui.rb_h0_two_tail->setText( i18n("%1 %2 %3", mu, QChar(0x3D), mu0));
+    ui.rb_h0_one_tail_1->setText( i18n("%1 %2 %3",mu, UTF8_QSTRING("≤"), mu0));
+    ui.rb_h0_one_tail_2->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("≥"), mu0));
+    ui.rb_h0_two_tail->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("="), mu0));
 
     ui.rb_h0_two_tail->setEnabled(false);
     ui.rb_h0_one_tail_1->setEnabled(false);
@@ -116,7 +115,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 
     // setting muo and alpha buttons
     ui.l_muo->setText( i18n("%1", mu0));
-    ui.l_alpha->setText( i18n("%1", QChar(0x3B1)));
+    ui.l_alpha->setText( i18n("%1", UTF8_QSTRING("α")));
     ui.le_muo->setText( i18n("%1", population_mean));
     ui.le_alpha->setText( i18n("%1", significance_level));
 
@@ -218,7 +217,6 @@ void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
 //        setModelIndexFromAspect(cbSpreadsheet, m_hypothesisTest->dataSourceSpreadsheet());
 //    else
 //        ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_hypothesisTest->dataSourceConnection()));
-
 
     //clearing all cbCol*
     ui.cbCol1->clear();

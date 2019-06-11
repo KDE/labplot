@@ -35,8 +35,8 @@
   <widget class="QPushButton" name="pbPerformTest">
    <property name="geometry">
     <rect>
-     <x>490</x>
-     <y>500</y>
+     <x>280</x>
+     <y>630</y>
      <width>77</width>
      <height>23</height>
     </rect>
@@ -346,7 +346,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>16</x>

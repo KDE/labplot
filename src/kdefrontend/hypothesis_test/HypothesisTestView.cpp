@@ -60,34 +60,17 @@ HypothesisTestView::HypothesisTestView(HypothesisTest* hypothesisTest) : QWidget
     m_hypothesisTest(hypothesisTest),
     m_testName(new QLabel()),
     m_statsTable(new QLabel()),
-    m_resultView(new QListView(this)) {
+    m_summaryResults(new QLabel()){
 
     //setting alignments and fonts of testname label;
     m_testName->setText(m_hypothesisTest->testName());
-    QFont font = m_testName->font();
-    font.setPointSize(15);
-    m_testName->setFont(font);
-
-    //setting properties for table view
-    m_resultView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-//    m_tableView->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-
-//    QHBoxLayout* tableLayout = new QHBoxLayout(m_tableView);
-//    m_tableView->setLayout(tableLayout);
-//    m_tableView->setLayout(Qt::ho)
-
-
+//    QFont font = m_testName->font();
+//    font.setPointSize(15);
+//    m_testName->setFont(font);
     auto* layout = new QVBoxLayout(this);
-	layout->setContentsMargins(0,0,0,0);
     layout->addWidget(m_testName);
-    layout->addSpacing(5);
     layout->addWidget(m_statsTable);
-//	layout->addWidget(m_tableView);
-    layout->addSpacing(20);
-    layout->addWidget(m_resultView);
-//    layout->addLayout(m_hypothesisTest->resultLayout());
-//    layout->setAlignment(m_testName, Qt::AlignHCenter);
-//    layout->setAlignment(m_tableView, Qt::AlignJustify);
+    layout->addWidget(m_summaryResults);
 
     init();
 }
@@ -97,14 +80,6 @@ HypothesisTestView::~HypothesisTestView() = default;
 void HypothesisTestView::init() {
 	initActions();
 	initMenus();
-
-    m_resultView->setModel(m_hypothesisTest->resultModel());
-
-    // user cant select the text. so that he/she doesn't get the feel of list view
-    // and get the feel of text;
-    m_resultView->setSelectionMode(QAbstractItemView::NoSelection);
-    m_resultView->setFocusPolicy(Qt::NoFocus);
-
     connect(m_hypothesisTest, &HypothesisTest::changed, this, &HypothesisTestView::changed);
 }
 
@@ -171,6 +146,7 @@ void HypothesisTestView::print(QPrinter* printer) const {
  void HypothesisTestView::changed() {
     m_testName->setText(m_hypothesisTest->testName());
     m_statsTable->setText(m_hypothesisTest->statsTable());
+    m_summaryResults->setText(m_hypothesisTest->summaryResultText());
  }
 
 void HypothesisTestView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
