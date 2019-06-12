@@ -42,7 +42,6 @@ public:
     void createNewMetadata(const QString& dirPath);
     QString getMetadataFilePath() const;
 
-
 private:
     Ui::DatasetMetadataManagerWidget ui;
     QStringList m_categoryList;
@@ -53,7 +52,6 @@ private:
     QStringList m_datasetList;
 	QString m_baseColor;
 	QString m_textColor;
-
 
     void initCategories(const QMap<QString, QMap<QString, QVector<QString>>>&);
     void initSubcategories(const QMap<QString, QMap<QString, QVector<QString>>>&);

@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>RssNews.qml</file>
+        <file>NewsDelegate.qml</file>
+    </qresource>
+</RCC>

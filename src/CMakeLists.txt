@@ -281,6 +281,9 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datapicker/DatapickerCurve.cpp
 )
 
+# add the qml.qrc file
+qt5_add_resources(qml_QRC ${KDEFRONTEND_DIR}/qml.qrc)
+
 IF (ENABLE_LIBORIGIN)
 	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
 ENDIF ()
@@ -393,6 +396,9 @@ target_link_libraries( labplot2lib
 	Qt5::Network
 	Qt5::PrintSupport
 	Qt5::Sql
+    Qt5::Qml
+    Qt5::Quick
+    Qt5::QuickWidgets
 	${GSL_LIBRARIES}
 	${GSL_CBLAS_LIBRARIES} )
 
@@ -473,7 +479,7 @@ IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 ENDIF ()
 
-add_executable(labplot2 ${LABPLOT_SOURCE})
+add_executable(labplot2 ${LABPLOT_SOURCE} ${qml_QRC})
 target_link_libraries(labplot2 labplot2lib)
 
 ############## installation ################################
