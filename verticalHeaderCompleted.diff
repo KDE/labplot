@@ -1,0 +1,693 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 1c39d438f..0d00a555b 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -236,6 +236,7 @@ set(BACKEND_SOURCES
+ 	${BACKEND_DIR}/matrix/matrixcommands.cpp
+ 	${BACKEND_DIR}/matrix/MatrixModel.cpp
+ 	${BACKEND_DIR}/pivot/PivotTable.cpp
++        ${BACKEND_DIR}/t_test/TTest.cpp
+ 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
+ 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
+ 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
+diff --git a/src/backend/pivot/PivotTable.cpp b/src/backend/pivot/PivotTable.cpp
+index b9c66d8dd..c166da97a 100644
+--- a/src/backend/pivot/PivotTable.cpp
++++ b/src/backend/pivot/PivotTable.cpp
+@@ -45,6 +45,8 @@
+ #include <KSharedConfig>
+ #include <KMessageBox>
+ 
++#include <QDebug>
++
+ /*!
+   \class PivotTable
+   \brief Aspect providing a pivot table.
+@@ -257,7 +259,7 @@ void PivotTablePrivate::recalculate() {
+ 
+ 	if (rows.isEmpty() && columns.isEmpty() && !showTotals) {
+ 		//notify about the new result
+-		emit q->changed();
++        emit q->changed();
+ 		return;
+ 	}
+ 
+@@ -309,7 +311,9 @@ void PivotTablePrivate::recalculate() {
+ 
+ 	}
+ 
+-	QDEBUG(query);
++    //QDEBUG(query);
++
++    qDebug()<<"query is " << query;
+ 
+ 	//execute the query
+ 	QSqlQuery sqlQuery;
+@@ -326,10 +330,15 @@ void PivotTablePrivate::recalculate() {
+ 	int firstValueIndex = rows.size() + columns.size();
+ 	int valuesCount = columnsCount - firstValueIndex;
+ 
+-	DEBUG("nubmer of columns " << columnsCount);
+-	DEBUG("number rows: " << rowsCount);
+-	DEBUG("number values: " << valuesCount);
+-	DEBUG("index of the first value column: " << firstValueIndex);
++//	DEBUG("nubmer of columns " << columnsCount);
++//	DEBUG("number rows: " << rowsCount);
++//	DEBUG("number values: " << valuesCount);
++//	DEBUG("index of the first value column: " << firstValueIndex);
++
++    qDebug() << "number of columns " << columnsCount;
++    qDebug() << "number of rows" << rowsCount;
++    qDebug() << "number of values" << valuesCount;
++    qDebug() << "index of first value column " << firstValueIndex;
+ 
+ 	qDebug()<<"model in recalculate " << horizontalHeaderModel;
+ 	if (!horizontalHeaderModel) {
+@@ -360,7 +369,7 @@ void PivotTablePrivate::recalculate() {
+ 		verticalHeaderModel->setColumnCount(rows.count());
+ 
+ 		//horizontal header
+-		horizontalHeaderModel->setColumnCount(valuesCount);
++        horizontalHeaderModel->setColumnCount(valuesCount);
+ 		horizontalHeaderModel->setRowCount(1);
+ 
+ 		//TODO: only "Totals" value at the moment, needs to be extended later when we allow to add other values
+@@ -396,16 +405,52 @@ void PivotTablePrivate::recalculate() {
+ 
+ 	} else if (columns.isEmpty()) {
+ 		qDebug()<<"everything on rows";
++        int* start_span = new int[firstValueIndex];
++        int* end_span = new int[firstValueIndex];
++        QString* last_value= new QString[firstValueIndex];
++
++        verticalHeaderModel->setRowCount(row+1);
++        for (int i = 0; i < firstValueIndex; ++i) {
++            start_span[i] = 1;
++            end_span[i] = 1;
++            last_value[i] = "";
++            verticalHeaderModel->setData(verticalHeaderModel->index(row, i), rows.at(i), Qt::DisplayRole);
++        }
++        row++;
++
++
+ 		while (sqlQuery.next()) {
+ 			qDebug()<<"row: " << row;
+-			horizontalHeaderModel->setRowCount(row+1);
+-			for (int i = 0; i < firstValueIndex; ++i) {
+-				qDebug()<<"adding to the horizontal header " << sqlQuery.value(i);
+-				horizontalHeaderModel->setData(horizontalHeaderModel->index(row, i), sqlQuery.value(i), Qt::DisplayRole);
++            verticalHeaderModel->setRowCount(row+1);
++
++//            if(sqlQuery.value(0).toString() != last_value)
++//            {
++//                if(end_span > start_span)
++//                    verticalHeaderModel->setSpan(start_span,0,end_span-start_span,0);
++//                start_span = end_span;
++//                last_value = sqlQuery.value(0).toString();
++//            }
++//            end_span = end_span + 1;
++            bool parent_header_changed = false;
++            for (int i = 0; i < firstValueIndex; ++i) {
++                QString queryVal = sqlQuery.value(i).toString();
++                qDebug()<<"adding to the horizontal header " << query;
++
++                if(queryVal != last_value[i] || parent_header_changed)
++                {
++                    verticalHeaderModel->setData(verticalHeaderModel->index(row, i), queryVal, Qt::DisplayRole);
++
++                    if(end_span[i] > start_span[i]+1)
++                        verticalHeaderModel->setSpan(start_span[i],i,end_span[i]-start_span[i],0);
++                    start_span[i] = end_span[i];
++                    parent_header_changed = true;
++                 }
++                 last_value[i] = queryVal;
++                 end_span[i] = end_span[i] + 1;
+ 			}
+ 
+ 			//values
+-			for (int i = firstValueIndex; i < columnsCount; ++i) {
++            for (int i = firstValueIndex; i < columnsCount; ++i) {
+ 				QString value = sqlQuery.value(i).toString();
+ 				qDebug()<<"adding value " << value;
+ 				if (rowsCount == -1)
+@@ -415,6 +460,13 @@ void PivotTablePrivate::recalculate() {
+ 
+ 			++row;
+ 		}
++        for(int i = 0; i < firstValueIndex; ++i){
++            if(end_span[i] > start_span[i]){
++                verticalHeaderModel->setSpan(start_span[i],i,end_span[i]-start_span[i],0);
++            }
++        }
++        verticalHeaderModel->setSpan(1,0,0,rows.count());
++
+ 	} else if (rows.isEmpty()) {
+ 		qDebug()<<"everything on columns";
+ // 		for (int i = firstValueIndex; i < columnsCount; ++i) {
+diff --git a/src/backend/t_test/TTest.cpp b/src/backend/t_test/TTest.cpp
+new file mode 100644
+index 000000000..9bfb0cf25
+--- /dev/null
++++ b/src/backend/t_test/TTest.cpp
+@@ -0,0 +1,120 @@
++#include "TTest.h"
++#include "backend/spreadsheet/Spreadsheet.h"
++#include "backend/core/column/Column.h"
++//#include "commonfrontend/spreadsheet/SpreadsheetView.h"
++
++#include <QVector>
++#include <QMessageBox>
++#include <QtMath>
++#include <KLocalizedString>
++
++
++TTest::TTest(const QString &name){
++    Q_UNUSED(name);
++}
++
++void TTest::setDataSourceSpreadsheet(Spreadsheet *spreadsheet){
++    dataSourceSpreadsheet = spreadsheet;
++
++    m_rowCount = dataSourceSpreadsheet->rowCount();
++    m_columnCount = dataSourceSpreadsheet->columnCount();
++    QDEBUG("in ttest::setDataSourceSpreadsheet");
++
++    // now finding the number of columns and rows;
++    QDEBUG("row count is " << m_rowCount);
++    QDEBUG("row count is " << m_columnCount);
++    QDEBUG("exiting ttest::setDataSourceSpreadsheet");
++}
++
++void TTest::setColumns(QVector<Column*> cols){
++    m_columns = cols;
++    return;
++}
++
++void TTest::performTwoSampleTest(){
++    QMessageBox* msg_box = new QMessageBox();
++    // checking for cols;
++    if(m_columns.size() != 2){
++        msg_box->setText(i18n("Inappropriate number of columns selected"));
++        msg_box->exec();
++        return;
++    }
++
++    bool modeOk = true;
++    for (int i = 0; i < 2; i++){
++        if(m_columns[0]->columnMode() == AbstractColumn::Numeric || m_columns[i]->columnMode() == AbstractColumn::Integer)
++            continue;
++        modeOk = false;
++    }
++
++    if(!modeOk){
++        msg_box->setText(i18n("select only columns with numbers"));
++        msg_box->exec();
++        return;
++    }
++
++    // use of three than two for human readiblity of code;
++    int n[2];
++    double sum[2], mean[2], std[2];
++
++    for (int i = 0; i < 2; i++) {
++        findStats(m_columns[i], n[i], sum[i], mean[i], std[i]);
++        QDEBUG("for " << i);
++        QDEBUG("n is "<<n[i]);
++        QDEBUG("mean is " << mean[i]);
++        QDEBUG("std is " << std[i]);
++
++        if(n[i] < 1) {
++            msg_box->setText(i18n("atleast one of selected column empty"));
++            msg_box->exec();
++            return;
++        }
++    }
++    int df = n[0] + n[1] - 2;
++
++    //Assuming equal variance
++    double sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
++
++    QDEBUG("sp is " << sp);
++
++    double t = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
++    QString text = i18n("T value for test is %1",t);
++    msg_box->setText(text);
++    msg_box->exec();
++    return;
++
++//    double t_value =
++
++}
++
++void TTest::findStats(Column* column, int &count, double &sum, double &mean, double &std) {
++    sum = 0;
++    mean = 0;
++    std = 0;
++
++    count = column->rowCount();
++    for (int i = 0; i < count; i++) {
++        double row = column->valueAt(i);
++        if ( std::isnan(row)) {
++            count = i;
++            break;
++        }
++        sum += row;
++    }
++
++    if (count < 1) return;
++    mean = sum/count;
++
++    for (int i = 0; i < count; i++) {
++        double row = column->valueAt(i);
++        std += qPow((row - mean),2);
++    }
++
++    if (count > 1)
++        std = std / (count-1);
++    std = qSqrt(std);
++    return;
++}
++
++
++
+diff --git a/src/backend/t_test/TTest.h b/src/backend/t_test/TTest.h
+new file mode 100644
+index 000000000..7e888a27b
+--- /dev/null
++++ b/src/backend/t_test/TTest.h
+@@ -0,0 +1,27 @@
++#ifndef TTEST_H
++#define TTEST_H
++#include <QVector>
++
++
++class Spreadsheet;
++class QString;
++class Column;
++
++class TTest{
++public:
++    explicit TTest(const QString& name);
++    void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
++    void setColumns(QVector<Column*> cols);
++    void performTwoSampleTest();
++private:
++//    double findMean(Column* col);
++//    double findStandardDeviation(Column* col, double mean);
++    void findStats(Column* column, int &count, double &sum, double &mean, double &std);
++
++    Spreadsheet* dataSourceSpreadsheet{nullptr};
++    int m_rowCount{0};
++    int m_columnCount{0};
++    QVector<Column*> m_columns;
++};
++
++#endif // TTEST_H
+diff --git a/src/commonfrontend/spreadsheet/SpreadsheetView.cpp b/src/commonfrontend/spreadsheet/SpreadsheetView.cpp
+index ef0717c15..7a658653b 100644
+--- a/src/commonfrontend/spreadsheet/SpreadsheetView.cpp
++++ b/src/commonfrontend/spreadsheet/SpreadsheetView.cpp
+@@ -43,6 +43,8 @@
+ #include "backend/core/datatypes/DateTime2StringFilter.h"
+ #include "backend/core/datatypes/String2DateTimeFilter.h"
+ #include "backend/pivot/PivotTable.h"
++#include "backend/t_test/TTest.h"
++
+ 
+ #include <QKeyEvent>
+ #include <QClipboard>
+@@ -220,6 +222,7 @@ void SpreadsheetView::initActions() {
+ 	action_go_to_cell = new QAction(QIcon::fromTheme("go-jump"), i18n("&Go to Cell"), this);
+ 	action_statistics_all_columns = new QAction(QIcon::fromTheme("view-statistics"), i18n("Statisti&cs"), this );
+ 	action_pivot_table = new QAction(QIcon::fromTheme("table"), i18n("Pivot Table"), this);
++    action_do_ttest = new QAction(i18n("T Test"), this);
+ 
+ 	// column related actions
+ 	action_insert_column_left = new QAction(QIcon::fromTheme("edit-table-insert-column-left"), i18n("Insert Column Left"), this);
+@@ -471,6 +474,12 @@ void SpreadsheetView::initMenus() {
+ 		m_columnMenu->addMenu(m_columnManipulateDataMenu);
+ 		m_columnMenu->addSeparator();
+ 
++        //for ttest statistics;
++        m_columnHypothesisTestingMenu = new QMenu("Hypothesis Testing",this);
++        m_columnHypothesisTestingMenu->addAction(action_do_ttest);
++        m_columnMenu->addMenu(m_columnHypothesisTestingMenu);
++        m_columnMenu->addSeparator();
++
+ 		m_columnSortMenu = new QMenu(i18n("Sort"), this);
+ 		m_columnSortMenu->setIcon(QIcon::fromTheme("view-sort-ascending"));
+ 		m_columnSortMenu->addAction(action_sort_asc_column);
+@@ -558,6 +567,7 @@ void SpreadsheetView::connectActions() {
+ 	connect(action_go_to_cell, &QAction::triggered, this,
+ 			static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
+ 	connect(action_pivot_table, &QAction::triggered, this, &SpreadsheetView::createPivotTable);
++    connect(action_do_ttest, &QAction::triggered, this, &SpreadsheetView::doTTest);
+ 
+ 	connect(action_insert_column_left, &QAction::triggered, this, &SpreadsheetView::insertColumnLeft);
+ 	connect(action_insert_column_right, &QAction::triggered, this, &SpreadsheetView::insertColumnRight);
+@@ -764,9 +774,17 @@ void SpreadsheetView::createPivotTable() {
+ 	PivotTable* pivot = new PivotTable(i18n("Pivot Table for %1", m_spreadsheet->name()));
+ 	pivot->setDataSourceType(PivotTable::DataSourceSpreadsheet);
+ 	pivot->setDataSourceSpreadsheet(m_spreadsheet);
+-	m_spreadsheet->parentAspect()->addChild(pivot);
++    m_spreadsheet->parentAspect()->addChild(pivot);
+ }
+ 
++void SpreadsheetView::doTTest()
++{
++    TTest* ttest = new TTest(i18n("doing T Test for %1", m_spreadsheet->name()));
++    ttest->setColumns(this->selectedColumns());
++    ttest->performTwoSampleTest();
++}
++
++
+ void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to) {
+ 	Q_UNUSED(index);
+ 
+diff --git a/src/commonfrontend/spreadsheet/SpreadsheetView.h b/src/commonfrontend/spreadsheet/SpreadsheetView.h
+index b67df1252..eceb1c556 100644
+--- a/src/commonfrontend/spreadsheet/SpreadsheetView.h
++++ b/src/commonfrontend/spreadsheet/SpreadsheetView.h
+@@ -130,6 +130,7 @@ private:
+ 	QAction* action_go_to_cell;
+ 	QAction* action_statistics_all_columns;
+ 	QAction* action_pivot_table;
++    QAction* action_do_ttest;
+ 
+ 	//column related actions
+ 	QAction* action_insert_column_left;
+@@ -192,6 +193,7 @@ private:
+ 	QMenu* m_spreadsheetMenu;
+ 	QMenu* m_plotDataMenu;
+ 	QMenu* m_analyzePlotMenu;
++    QMenu* m_columnHypothesisTestingMenu{nullptr};
+ 
+ public slots:
+ 	void createContextMenu(QMenu*);
+@@ -206,6 +208,7 @@ private slots:
+ 	void goToPreviousColumn();
+ 	void goToCell();
+ 	void createPivotTable();
++    void doTTest();
+ 	void sortSpreadsheet();
+ 	void sortDialog(QVector<Column*>);
+ 
+diff --git a/src/kdefrontend/pivot/HierarchicalHeaderView.cpp b/src/kdefrontend/pivot/HierarchicalHeaderView.cpp
+index 09236b144..bc05ffcb1 100755
+--- a/src/kdefrontend/pivot/HierarchicalHeaderView.cpp
++++ b/src/kdefrontend/pivot/HierarchicalHeaderView.cpp
+@@ -29,6 +29,8 @@
+ #include <QVariant>
+ #include <qdrawutil.h>
+ 
++#include <QDebug>
++
+ HierarchicalHeaderItem::HierarchicalHeaderItem(HierarchicalHeaderItem* parent):
+ 	row_prop(0),column_prop(0),parent_item(parent) {
+ }
+@@ -48,13 +50,13 @@ HierarchicalHeaderItem* HierarchicalHeaderItem::insertChild(int row, int col) {
+ const HierarchicalHeaderItem* HierarchicalHeaderItem::child(int row,int col) const {
+ 	QHash<QPair<int,int>,HierarchicalHeaderItem*>::const_iterator itr = child_items.find(QPair<int,int>(row,col));
+ 	if (itr != child_items.end()) return itr.value();
+-	return 0;
++    return nullptr;
+ }
+ 
+ HierarchicalHeaderItem* HierarchicalHeaderItem::child(int row,int col) {
+ 	QHash<QPair<int,int>,HierarchicalHeaderItem*>::iterator itr = child_items.find(QPair<int,int>(row,col));
+ 	if (itr != child_items.end()) return itr.value();
+-	return 0;
++    return nullptr;
+ }
+ 
+ void HierarchicalHeaderItem::setText(const QString& text) {
+@@ -86,22 +88,58 @@ HierarchicalHeaderItem* HierarchicalHeaderItem::parent() {
+ void HierarchicalHeaderItem::clear() {
+ 	QList<HierarchicalHeaderItem*> items = child_items.values();
+ 	foreach (HierarchicalHeaderItem* item, child_items) {
+-		if (item) delete item;
++        if (item) {
++            delete item;
++        }
+ 	}
+ 	child_items.clear();
+ }
+ 
+-//###########
++/**********************************************************************************************
++ *                                    MODEL IMPLEMENTATION
++ *
++ * ********************************************************************************************/
+ HierarchicalHeaderModel::HierarchicalHeaderModel(QObject* parent) : QAbstractTableModel(parent),
+ 	m_rootItem(new HierarchicalHeaderItem()) {
+ }
+ HierarchicalHeaderModel::HierarchicalHeaderModel(int rows, int cols, QObject* parent) :
+ 	QAbstractTableModel(parent),m_rowCount(rows),m_columnCount(cols),m_rootItem(new HierarchicalHeaderItem()) {
++    maxWidthArr = new int[m_columnCount];
++       for(int col=0; col<m_columnCount; col++)
++           maxWidthArr[col] = 50;
+ }
+ 
+ HierarchicalHeaderModel::~HierarchicalHeaderModel() {
+ 	m_rootItem->clear();
+ 	delete m_rootItem;
++    delete maxWidthArr;
++}
++
++void HierarchicalHeaderModel::setBaseSectionSize(QSize size)
++{
++
++    baseSectionSize = size;
++
++    if(orientation == Qt::Vertical){
++        for (int row=0;row<m_rowCount;++row)
++            for (int col=0;col<m_columnCount;++col)
++            {
++                baseSectionSize.setWidth(maxWidthArr[col]);
++                this->setData(this->index(row,col),baseSectionSize,Qt::SizeHintRole);
++            }
++        return;
++    }
++
++    for (int row=0;row<m_rowCount;++row)
++        for (int col=0;col<m_columnCount;++col)
++        {
++            this->setData(this->index(row,col),baseSectionSize,Qt::SizeHintRole);
++        }
++}
++
++void HierarchicalHeaderModel::setOrientation(Qt::Orientation orient)
++{
++    orientation = orient;
+ }
+ 
+ QModelIndex HierarchicalHeaderModel::index(int row, int column, const QModelIndex & parent) const {
+@@ -115,7 +153,6 @@ QModelIndex HierarchicalHeaderModel::index(int row, int column, const QModelInde
+ 	if (!childItem) childItem = parentItem->insertChild(row,column);
+ 	return createIndex(row,column,childItem);
+ 
+-	return QModelIndex();
+ }
+ 
+ void HierarchicalHeaderModel::setRowCount(int count) {
+@@ -129,6 +166,11 @@ void HierarchicalHeaderModel::setRowCount(int count) {
+ 
+ void HierarchicalHeaderModel::setColumnCount(int count) {
+ 	m_columnCount = count;
++
++    if(m_columnCount == 0) return;
++    maxWidthArr = new int[m_columnCount];
++    for(int col=0; col<m_columnCount; col++)
++       maxWidthArr[col] = 50;
+ }
+ 
+ void HierarchicalHeaderModel::setSpan(int row, int column, int rowSpanCount, int columnSpanCount) {
+@@ -180,7 +222,18 @@ bool HierarchicalHeaderModel::setData(const QModelIndex & index, const QVariant
+ 					span = m_rowCount-row;
+ 				item->setData(span,ROW_SPAN_ROLE);
+ 			}
+-		} else
++        }
++        else if (role == Qt::DisplayRole || role == Qt::EditRole){
++            item->setData(value, role);
++            if(orientation == Qt::Vertical)
++            {
++                int width = value.toString().length()*10;
++                int col = index.column();
++                if(width > maxWidthArr[col])
++                    maxWidthArr[col] = width;
++            }
++         }
++        else
+ 			item->setData(value,role);
+ 
+ 		return true;
+@@ -195,9 +248,15 @@ Qt::ItemFlags HierarchicalHeaderModel::flags(const QModelIndex &index) const {
+ }
+ 
+ void HierarchicalHeaderModel::clear() {
++//    setRowCount(0);
++//    setColumnCount(0);
++//    m_rootItem->clear();
+ }
+ 
+-//#########################
++/**********************************************************************************************
++ *                                    VIEW IMPLEMENTATION
++ *
++ * ********************************************************************************************/
+ HierarchicalHeaderView::HierarchicalHeaderView(Qt::Orientation orientation, int rows, int columns, QWidget* parent):
+ 	QHeaderView(orientation,parent) {
+ 	QSize baseSectionSize;
+@@ -224,7 +283,6 @@ HierarchicalHeaderView::HierarchicalHeaderView(Qt::Orientation orientation, int
+ 
+ HierarchicalHeaderView::HierarchicalHeaderView(Qt::Orientation orientation, QWidget* parent):
+ 	QHeaderView(orientation,parent) {
+-	QSize baseSectionSize;
+ 	if (orientation == Qt::Horizontal) {
+ 		baseSectionSize.setWidth(defaultSectionSize());
+ 		baseSectionSize.setHeight(20);
+@@ -241,10 +299,24 @@ HierarchicalHeaderView::HierarchicalHeaderView(Qt::Orientation orientation, QWid
+ 
+ HierarchicalHeaderView::~HierarchicalHeaderView() = default;
+ 
++
++QSize HierarchicalHeaderView::getBaseSectionSize() const
++{
++    return baseSectionSize;
++}
++
++void HierarchicalHeaderView::setNewModel(HierarchicalHeaderModel* model)
++{
++    m_model = model;
++    setModel(m_model);
++}
++
+ HierarchicalHeaderModel* HierarchicalHeaderView::hierarchicalModel() const {
+ 	return m_model;
+ }
+ 
++
++
+ void HierarchicalHeaderView::setRowHeight(int row, int rowHeight) {
+ 	const int cols = m_model->columnCount();
+ 	for (int col = 0; col < cols; ++col) {
+@@ -584,7 +656,9 @@ int HierarchicalHeaderView::getSectionRange(QModelIndex& index, int* beginSectio
+ }
+ 
+ void HierarchicalHeaderView::onSectionResized(int logicalIndex,int oldSize,int newSize) {
+-	if (!m_model)
++    Q_UNUSED(oldSize);
++
++    if (!m_model)
+ 		return;
+ 
+ 	const int OTN = orientation();
+diff --git a/src/kdefrontend/pivot/HierarchicalHeaderView.h b/src/kdefrontend/pivot/HierarchicalHeaderView.h
+index 398c80805..abd18e06b 100755
+--- a/src/kdefrontend/pivot/HierarchicalHeaderView.h
++++ b/src/kdefrontend/pivot/HierarchicalHeaderView.h
+@@ -32,10 +32,10 @@
+ #include <QPair>
+ 
+ enum eRbHeaderRole {
+-	COLUMN_SPAN_ROLE = Qt::UserRole+1,
+-	ROW_SPAN_ROLE,
+-	COLUMN_SIZE_ROLE,
+-	ROW_SIZE_ROLE,
++    COLUMN_SPAN_ROLE = Qt::UserRole+1,
++    ROW_SPAN_ROLE,
++    COLUMN_SIZE_ROLE,
++    ROW_SIZE_ROLE,
+ };
+ 
+ class HierarchicalHeaderItem {
+@@ -65,6 +65,10 @@ private:
+ 	QHash<int,QVariant> role_datas;
+ };
+ 
++/****************************************************************************************************
++ *
++ *                              MODEL DECLARATIONS
++ * *************************************************************************************************/
+ 
+ class HierarchicalHeaderModel: public QAbstractTableModel {
+ 	Q_OBJECT
+@@ -85,12 +89,23 @@ public:
+ 	Qt::ItemFlags flags(const QModelIndex &index) const override;
+ 	void clear();
+ 
++    void setBaseSectionSize(QSize size);
++    void setOrientation(Qt::Orientation orient);
+ private:
+ 	int m_rowCount{0};
+ 	int m_columnCount{0};
+ 	HierarchicalHeaderItem* m_rootItem{nullptr};
++
++    int *maxWidthArr;
++    QSize baseSectionSize;
++    Qt::Orientation orientation;
+ };
+ 
++/****************************************************************************************************
++ *
++ *                              VIEW DECLARATIONS
++ * *************************************************************************************************/
++
+ class HierarchicalHeaderView : public QHeaderView {
+ 	Q_OBJECT
+ public:
+@@ -104,6 +119,9 @@ public:
+ 	void setCellBackgroundColor(const QModelIndex&, const QColor&);
+ 	void setCellForegroundColor(const QModelIndex&, const QColor&);
+ 
++    QSize getBaseSectionSize() const;
++    void setNewModel(HierarchicalHeaderModel* model);
++
+ protected:
+ 	void mousePressEvent(QMouseEvent*) override;
+ 	QModelIndex indexAt(const QPoint&) const override;
+@@ -124,6 +142,7 @@ signals:
+ 
+ private:
+ 	HierarchicalHeaderModel* m_model{nullptr};
++    QSize baseSectionSize;
+ };
+ 
+ #endif
+diff --git a/src/kdefrontend/pivot/PivotTableView.cpp b/src/kdefrontend/pivot/PivotTableView.cpp
+index 38cb37ce1..c6493c8ce 100644
+--- a/src/kdefrontend/pivot/PivotTableView.cpp
++++ b/src/kdefrontend/pivot/PivotTableView.cpp
+@@ -46,6 +46,8 @@
+ #include <KMessageBox>
+ #include <KSharedConfig>
+ 
++#include <QDebug>
++
+ /*!
+ 	\class PivotTableView
+ 	\brief View class for PivotTable
+@@ -177,7 +179,21 @@ void PivotTableView::print(QPrinter* printer) const {
+ 
+  void PivotTableView::changed() {
+ 
+-}
++     qDebug() << "in PivotTableView::changed()";
++     HierarchicalHeaderModel* horizontalHeaderModel = static_cast<HierarchicalHeaderModel*>(m_horizontalHeaderView->hierarchicalModel());
++     HierarchicalHeaderModel* verticalHeaderModel = static_cast<HierarchicalHeaderModel*>(m_verticalHeaderView->hierarchicalModel());
++
++     horizontalHeaderModel->setOrientation(Qt::Horizontal);
++     verticalHeaderModel->setOrientation(Qt::Vertical);
++
++//     qDebug() << " setting size for horizontal header";
++//     qDebug() << " rows, cols = " << horizontalHeaderModel->rowCount() << ", " << horizontalHeaderModel->columnCount();
++     horizontalHeaderModel->setBaseSectionSize(m_horizontalHeaderView->getBaseSectionSize());
++
++//     qDebug() << "settign size for vertical header";
++//     qDebug() << " rows, cols = " << verticalHeaderModel->rowCount() << ", " << verticalHeaderModel->columnCount();
++     verticalHeaderModel->setBaseSectionSize(m_verticalHeaderView->getBaseSectionSize());
++ }
+ 
+ void PivotTableView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
+ 	Q_UNUSED(exportHeader);

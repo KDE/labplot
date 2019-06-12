@@ -40,7 +40,7 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QLabel>
-#include <QListView>
+#include <QTextEdit>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -60,18 +60,14 @@ HypothesisTestView::HypothesisTestView(HypothesisTest* hypothesisTest) : QWidget
     m_hypothesisTest(hypothesisTest),
     m_testName(new QLabel()),
     m_statsTable(new QLabel()),
-    m_summaryResults(new QLabel()){
+    m_summaryResults(new QWidget()){
 
-    //setting alignments and fonts of testname label;
-    m_testName->setText(m_hypothesisTest->testName());
-//    QFont font = m_testName->font();
-//    font.setPointSize(15);
-//    m_testName->setFont(font);
+    m_summaryResults->setMouseTracking(true);
     auto* layout = new QVBoxLayout(this);
     layout->addWidget(m_testName);
     layout->addWidget(m_statsTable);
     layout->addWidget(m_summaryResults);
-
+    layout->addWidget(m_summaryResults);
     init();
 }
 
@@ -80,8 +76,19 @@ HypothesisTestView::~HypothesisTestView() = default;
 void HypothesisTestView::init() {
 	initActions();
 	initMenus();
+
+//    m_summaryResults->setStyleSheet("background-color:white; border: 0px; margin: 0px; padding 0px;qproperty-frame: false;");
+    QVBoxLayout* summary_layout = new QVBoxLayout(m_summaryResults);
+
+    for (int i = 0; i < 10; i++) {
+        m_resultLine[i] = new QLabel();
+        summary_layout->addWidget(m_resultLine[i]);
+    }
+
     connect(m_hypothesisTest, &HypothesisTest::changed, this, &HypothesisTestView::changed);
 }
+
+
 
 void HypothesisTestView::initActions() {
 
@@ -89,6 +96,20 @@ void HypothesisTestView::initActions() {
 
 void HypothesisTestView::initMenus() {
 
+}
+
+void HypothesisTestView::setResultLine(int index, QVariant data, Qt::ItemDataRole role) {
+    if (index < 0 || index >= 10) return;
+
+    if (role == Qt::DisplayRole)
+        m_resultLine[index]->setText(data.toString());
+    else if (role == Qt::ToolTipRole)
+        m_resultLine[index]->setToolTip(data.toString());
+}
+
+void HypothesisTestView::clearResult() {
+    for (int i = 0; i < 10; i++)
+        m_resultLine[i]->clear();
 }
 
 void HypothesisTestView::connectActions() {
@@ -146,7 +167,6 @@ void HypothesisTestView::print(QPrinter* printer) const {
  void HypothesisTestView::changed() {
     m_testName->setText(m_hypothesisTest->testName());
     m_statsTable->setText(m_hypothesisTest->statsTable());
-    m_summaryResults->setText(m_hypothesisTest->summaryResultText());
  }
 
 void HypothesisTestView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
@@ -174,5 +194,5 @@ void HypothesisTestView::exportToLaTeX(const QString & path, const bool exportHe
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
 		return;
 
-	PERFTRACE("export pivot table to latex");
+    PERFTRACE("export pivot table to latex");
 }

@@ -48,6 +48,8 @@ class QToolBar;
 class QModelIndex;
 class QItemSelection;
 class QLabel;
+class QTextEdit;
+class QLineEdit;
 
 class HypothesisTestView : public QWidget {
 	Q_OBJECT
@@ -74,7 +76,8 @@ private:
     HypothesisTest* m_hypothesisTest;
     QLabel* m_testName;
     QLabel* m_statsTable;
-    QLabel* m_summaryResults;
+    QWidget* m_summaryResults;
+    QLabel* m_resultLine[10];
 
 public slots:
 	void createContextMenu(QMenu*);
@@ -82,6 +85,8 @@ public slots:
 	void print(QPrinter*) const;
 	void changed();
 
+    void setResultLine(int index, QVariant data, Qt::ItemDataRole role = Qt::DisplayRole);
+    void clearResult();
 private slots:
 };
 

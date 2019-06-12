@@ -52,7 +52,6 @@ public:
 
     QString testName();
     QString statsTable();
-    QString summaryResultText();
 
     void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
     void setColumns(QVector<Column*> cols);
@@ -88,6 +87,8 @@ public:
     TailType tailType();
     void setPopulationMean(QVariant populationMean);
     void setSignificanceLevel(QVariant alpha);
+//    void setResultLine(int index, QVariant data, Qt::ItemDataRole role = Qt::DisplayRole);
+//    void clearResult();
 private:
     HypothesisTestPrivate* const d;
     mutable HypothesisTestView* m_view{nullptr};
