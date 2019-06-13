@@ -50,12 +50,20 @@ public:
     enum DataSourceType {DataSourceSpreadsheet, DataSourceDatabase};
     enum TailType {TailPositive, TailNegative, TailTwo};
 
+    void setDataSourceType(DataSourceType type);
+    DataSourceType dataSourceType() const;
+    void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
+
+    void setColumns(QVector<Column*> cols);
+    void setColumns(QStringList cols);
+    QStringList allColumns();
+    void setTailType(TailType tailType);
+    TailType tailType();
+    void setPopulationMean(QVariant populationMean);
+    void setSignificanceLevel(QVariant alpha);
     QString testName();
     QString statsTable();
 
-    void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
-    void setColumns(QVector<Column*> cols);
-    void setColumns(QStringList cols);
     void performTwoSampleTTest();
     void performTwoSampleIndependentTTest(bool equal_variance);
     void performTwoSamplePairedTTest();
@@ -63,10 +71,6 @@ public:
     void performTwoSampleIndependentZTest();
     void performTwoSamplePairedZTest();
     void PerformOneSampleZTest();
-
-    DataSourceType dataSourceType() const;
-
-
     //virtual methods
 //    QIcon icon() const override;
     QMenu* createContextMenu() override;
@@ -80,15 +84,6 @@ public:
     bool load(XmlStreamReader*, bool preview) override;
 
     Spreadsheet* dataSourceSpreadsheet() const;
-
-    void setDataSourceType(DataSourceType type);
-    QStringList allColumns();
-    void setTailType(TailType tailType);
-    TailType tailType();
-    void setPopulationMean(QVariant populationMean);
-    void setSignificanceLevel(QVariant alpha);
-//    void setResultLine(int index, QVariant data, Qt::ItemDataRole role = Qt::DisplayRole);
-//    void clearResult();
 private:
     HypothesisTestPrivate* const d;
     mutable HypothesisTestView* m_view{nullptr};

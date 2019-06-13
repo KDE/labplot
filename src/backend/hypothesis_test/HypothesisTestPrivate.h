@@ -40,22 +40,21 @@ public:
         virtual ~HypothesisTestPrivate();
 
         enum TestType {TestT, TestZ};
+        enum ErrorType {ErrorUnqualSize, ErrorNotTwoCategoricalVariables, ErrorEmptyColumn, NoError};
+
         QString name() const;
-
-        HypothesisTest* const q;
-
-        HypothesisTest::DataSourceType dataSourceType{HypothesisTest::DataSourceSpreadsheet};
-        Spreadsheet* dataSourceSpreadsheet{nullptr};
-        
         void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
         void setColumns(QStringList cols);
-        QVector<Column*> m_columns;
-        
-        QStringList all_columns;
+        void performTwoSampleIndependentTest(TestType test, bool equal_variance = true);
+        void performTwoSamplePairedTest(TestType test);
+        void PerformOneSampleTest(TestType test);
 
-        QStandardItemModel* dataModel{nullptr};
-        QStandardItemModel* horizontalHeaderModel{nullptr};
-        QStandardItemModel* verticalHeaderModel{nullptr};
+
+        HypothesisTest* const q;
+        HypothesisTest::DataSourceType dataSourceType{HypothesisTest::DataSourceSpreadsheet};
+        Spreadsheet* dataSourceSpreadsheet{nullptr};
+        QVector<Column*> m_columns;
+        QStringList all_columns;
 
         bool m_dbCreated{false};
         int m_rowCount{0};
@@ -63,28 +62,20 @@ public:
         QString m_currTestName{"Result Table"};
         double m_population_mean;
         double m_significance_level;
-
         QString m_stats_table;
-
-        void performTwoSampleIndependentTest(TestType test, bool equal_variance = true);
-        void performTwoSamplePairedTest(TestType test);
-        void PerformOneSampleTest(TestType test);
-
         HypothesisTest::TailType tail_type;
-
-        QStandardItemModel* resultModel{nullptr};
 private:
-        void findStats(Column* column, int &count, double &sum, double &mean, double &std);
-        void findStatsPaired(Column *column1, Column *column2, int &count, double &sum, double &mean, double &std);
-        void findStatsCategorical(int n[2], double sum[2], double mean[2], double std[2], QString &col1_name, QString &col2_name);
-        double getPValue(const TestType &test, double &value, const QString &col1_name, const QString &col2_name, const int df = 0);
+        ErrorType findStats(const Column* column,int &count, double &sum, double &mean, double &std);
+        ErrorType findStatsPaired(const Column *column1, const Column *column2, int &count, double &sum, double &mean, double &std);
+        ErrorType findStatsCategorical(const Column *column1, const Column *column2, int n[2], double sum[2], double mean[2], double std[2], QString &col1_name, QString &col2_name);
+
+        double getPValue(const TestType &test, double &value, const QString &col1_name, const QString &col2_name, const int df);
         QString getHtmlTable(int row, int column, QVariant *row_major);
+
+        void printLine(const int &index, const QString &msg, const QString &color = "black");
         void printError(const QString &error_msg);
         void clearGlobalVariables();
 
-
-        // 	QMap<QString, QStringList> m_members;
-        void printLine(const int &index, const QString &msg, const QString &color = "blue");
 };
 
 #endif

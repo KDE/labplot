@@ -39,6 +39,7 @@
 
 #include <QDir>
 #include <QSqlError>
+#include <QScrollArea>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -49,6 +50,8 @@
   \brief Provides a dock (widget) for hypothesis testing:
   \ingroup kdefrontend
 */
+
+//TOOD: Make this dock widget scrollable and automatic resizeable for different screens.
 
 HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     ui.setupUi(this);
@@ -84,14 +87,14 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     ui.chbEqualVariance->setVisible(false);
     ui.chbEqualVariance->setChecked(true);
     ui.pbPerformTest->setEnabled(false);
-    ui.rb_h1_one_tail_2->setVisible(false);
-    ui.rb_h1_one_tail_1->setVisible(false);
-    ui.rb_h1_two_tail->setVisible(false);
-    ui.rb_h0_one_tail_1->setVisible(false);
-    ui.rb_h0_one_tail_2->setVisible(false);
-    ui.rb_h0_two_tail->setVisible(false);
-    ui.l_h0->setVisible(false);
-    ui.l_h1->setVisible(false);
+    ui.rbH1OneTail2->setVisible(false);
+    ui.rbH1OneTail1->setVisible(false);
+    ui.rbH1TwoTail->setVisible(false);
+    ui.rbH0OneTail1->setVisible(false);
+    ui.rbH0OneTail2->setVisible(false);
+    ui.rbH0TwoTail->setVisible(false);
+    ui.lH0->setVisible(false);
+    ui.lH1->setVisible(false);
 
     QString mu = UTF8_QSTRING("μ");
     QString mu0 = UTF8_QSTRING("μₒ");
@@ -100,29 +103,29 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     // for alternative hypothesis (h1)
     // one_tail_1 is mu > mu0; one_tail_2 is mu < mu0; two_tail = mu != mu0;
 
-    ui.rb_h1_one_tail_1->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING(">"), mu0));
-    ui.rb_h1_one_tail_2->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("<"), mu0));
-    ui.rb_h1_two_tail->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("≠"), mu0));
+    ui.rbH1OneTail1->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING(">"), mu0));
+    ui.rbH1OneTail2->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("<"), mu0));
+    ui.rbH1TwoTail->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("≠"), mu0));
 
-    ui.rb_h0_one_tail_1->setText( i18n("%1 %2 %3",mu, UTF8_QSTRING("≤"), mu0));
-    ui.rb_h0_one_tail_2->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("≥"), mu0));
-    ui.rb_h0_two_tail->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("="), mu0));
+    ui.rbH0OneTail1->setText( i18n("%1 %2 %3",mu, UTF8_QSTRING("≤"), mu0));
+    ui.rbH0OneTail2->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("≥"), mu0));
+    ui.rbH0TwoTail->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("="), mu0));
 
-    ui.rb_h0_two_tail->setEnabled(false);
-    ui.rb_h0_one_tail_1->setEnabled(false);
-    ui.rb_h0_one_tail_2->setEnabled(false);
+    ui.rbH0TwoTail->setEnabled(false);
+    ui.rbH0OneTail1->setEnabled(false);
+    ui.rbH0OneTail2->setEnabled(false);
 
 
     // setting muo and alpha buttons
-    ui.l_muo->setText( i18n("%1", mu0));
-    ui.l_alpha->setText( i18n("%1", UTF8_QSTRING("α")));
-    ui.le_muo->setText( i18n("%1", population_mean));
-    ui.le_alpha->setText( i18n("%1", significance_level));
+    ui.lMuo->setText( i18n("%1", mu0));
+    ui.lAlpha->setText( i18n("%1", UTF8_QSTRING("α")));
+    ui.leMuo->setText( i18n("%1", population_mean));
+    ui.leAlpha->setText( i18n("%1", significance_level));
 
-    ui.l_muo->setVisible(false);
-    ui.l_alpha->setVisible(false);
-    ui.le_muo->setVisible(false);
-    ui.le_alpha->setVisible(false);
+    ui.lMuo->setVisible(false);
+    ui.lAlpha->setVisible(false);
+    ui.leMuo->setVisible(false);
+    ui.leAlpha->setVisible(false);
 
     //    readConnections();
 
@@ -186,9 +189,9 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     connect(ui.pbPerformTest, &QPushButton::clicked, this, &HypothesisTestDock::doHypothesisTest);
 
     //connecting null hypothesis and alternate hypothesis radio button
-    connect(ui.rb_h1_one_tail_1, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1OneTail1Toggled);
-    connect(ui.rb_h1_one_tail_2, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1OneTail2Toggled);
-    connect(ui.rb_h1_two_tail, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1TwoTailToggled);
+    connect(ui.rbH1OneTail1, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1OneTail1Toggled);
+    connect(ui.rbH1OneTail2, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1OneTail2Toggled);
+    connect(ui.rbH1TwoTail, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1TwoTailToggled);
 
     connect(ui.cbCol1Categorical, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::col1CatIndexChanged);
 }
@@ -268,33 +271,33 @@ void HypothesisTestDock::showHypothesisTest() {
     ui.chbEqualVariance->setChecked(true);
     ui.pbPerformTest->setEnabled(two_sample_independent || two_sample_paired || one_sample);
 
-    ui.rb_h1_one_tail_2->setVisible(two_sample_independent || two_sample_paired || one_sample);
-    ui.rb_h1_one_tail_1->setVisible(two_sample_independent || two_sample_paired || one_sample);
-    ui.rb_h1_two_tail->setVisible(two_sample_independent || two_sample_paired || one_sample);
-    ui.rb_h0_one_tail_1->setVisible(two_sample_independent || two_sample_paired || one_sample);
-    ui.rb_h0_one_tail_2->setVisible(two_sample_independent || two_sample_paired || one_sample);
-    ui.rb_h0_two_tail->setVisible(two_sample_independent || two_sample_paired || one_sample);
-    ui.l_h0->setVisible(two_sample_independent || two_sample_paired || one_sample);
-    ui.l_h1->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.rbH1OneTail2->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.rbH1OneTail1->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.rbH1TwoTail->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.rbH0OneTail1->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.rbH0OneTail2->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.rbH0TwoTail->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.lH0->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.lH1->setVisible(two_sample_independent || two_sample_paired || one_sample);
 
-    ui.rb_h1_two_tail->setChecked(true);
+    ui.rbH1TwoTail->setChecked(true);
 
-    ui.l_muo->setVisible(one_sample);
-    ui.le_muo->setVisible(one_sample);
-    ui.l_alpha->setVisible(two_sample_independent || two_sample_paired || one_sample);
-    ui.le_alpha->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.lMuo->setVisible(one_sample);
+    ui.leMuo->setVisible(one_sample);
+    ui.lAlpha->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.leAlpha->setVisible(two_sample_independent || two_sample_paired || one_sample);
 
-    ui.le_muo->setText( i18n("%1", population_mean));
-    ui.le_alpha->setText( i18n("%1", significance_level));
+    ui.leMuo->setText( i18n("%1", population_mean));
+    ui.leAlpha->setText( i18n("%1", significance_level));
 
     if (two_sample_independent)
-        ui.lCol2->setText("Independent Variable");
+        ui.lCol2->setText( i18n("Independent Variable"));
 }
 
 void HypothesisTestDock::doHypothesisTest()  {
 
-    m_hypothesisTest->setPopulationMean(ui.le_muo->text());
-    m_hypothesisTest->setSignificanceLevel(ui.le_alpha->text());
+    m_hypothesisTest->setPopulationMean(ui.leMuo->text());
+    m_hypothesisTest->setSignificanceLevel(ui.leAlpha->text());
 
     QStringList cols;
     if(ttest) {
@@ -334,11 +337,6 @@ void HypothesisTestDock::doHypothesisTest()  {
             m_hypothesisTest->PerformOneSampleZTest();
         }
     }
-
-    cols << ui.cbCol1->currentText();
-    cols << ui.cbCol2->currentText();
-    m_hypothesisTest->setColumns(cols);
-    m_hypothesisTest->performTwoSampleTTest();
 }
 
 //void HypothesisTestDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
@@ -512,7 +510,7 @@ void HypothesisTestDock::col1CatIndexChanged(int index) {
     if (index < 0) return;
 
     if (two_sample_paired) {
-        ui.lCol2->setText("Independent Variable");
+        ui.lCol2->setText( i18n("Independent Variable"));
         return;
     }
 
@@ -520,10 +518,10 @@ void HypothesisTestDock::col1CatIndexChanged(int index) {
     Column* col1 = m_hypothesisTest->dataSourceSpreadsheet()->column(selected_text);
 
     if (col1->columnMode() == AbstractColumn::Integer || col1->columnMode() == AbstractColumn::Numeric) {
-        ui.lCol2->setText("Independent Variable");
+        ui.lCol2->setText( i18n("Independent Variable"));
     }
     else {
-        ui.lCol2->setText("Dependent Variable");
+        ui.lCol2->setText( i18n("Dependent Variable"));
     }
 
 }
@@ -665,18 +663,18 @@ void HypothesisTestDock::col1CatIndexChanged(int index) {
 // one_tail_1 is mu > mu0; one_tail_2 is mu < mu0; two_tail = mu != mu0;
 void HypothesisTestDock::onRbH1OneTail1Toggled(bool checked) {
     if (!checked) return;
-    ui.rb_h0_one_tail_1->setChecked(true);
+    ui.rbH0OneTail1->setChecked(true);
     m_hypothesisTest->setTailType(HypothesisTest::TailPositive);
 }
 
 void HypothesisTestDock::onRbH1OneTail2Toggled(bool checked) {
     if (!checked) return;
-    ui.rb_h0_one_tail_2->setChecked(true);
+    ui.rbH0OneTail2->setChecked(true);
     m_hypothesisTest->setTailType(HypothesisTest::TailNegative);
 }
 
 void HypothesisTestDock::onRbH1TwoTailToggled(bool checked) {
     if (!checked) return;
-    ui.rb_h0_two_tail->setChecked(true);
+    ui.rbH0TwoTail->setChecked(true);
     m_hypothesisTest->setTailType(HypothesisTest::TailTwo);
 }

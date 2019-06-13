@@ -38,6 +38,7 @@ class AspectTreeModel;
 class HypothesisTest;
 class TreeViewComboBox;
 class KConfig;
+class QScrollArea;
 
 class HypothesisTestDock : public QWidget {
         Q_OBJECT
@@ -74,6 +75,7 @@ private:
         bool two_sample_independent{false};
         bool two_sample_paired{false};
         bool one_sample{false};
+        QScrollArea* scroll_dock;
 
 
 private slots:

@@ -35,8 +35,8 @@
   <widget class="QPushButton" name="pbPerformTest">
    <property name="geometry">
     <rect>
-     <x>220</x>
-     <y>440</y>
+     <x>280</x>
+     <y>710</y>
      <width>77</width>
      <height>23</height>
     </rect>
@@ -58,30 +58,30 @@
     <enum>Qt::Horizontal</enum>
    </property>
    <widget class="QWidget" name="layoutWidget">
-    <layout class="QVBoxLayout" name="vl_h1">
+    <layout class="QVBoxLayout" name="vlH1">
      <item>
-      <widget class="QLabel" name="l_h1">
+      <widget class="QLabel" name="lH1">
        <property name="text">
         <string>Alternate Hypothesis</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="rb_h1_one_tail_1">
+      <widget class="QRadioButton" name="rbH1OneTail1">
        <property name="text">
         <string>mu &gt; muo</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="rb_h1_one_tail_2">
+      <widget class="QRadioButton" name="rbH1OneTail2">
        <property name="text">
         <string>mu &lt; muo</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="rb_h1_two_tail">
+      <widget class="QRadioButton" name="rbH1TwoTail">
        <property name="text">
         <string>mu != muo</string>
        </property>
@@ -90,30 +90,30 @@
     </layout>
    </widget>
    <widget class="QWidget" name="layoutWidget">
-    <layout class="QVBoxLayout" name="vl_h0">
+    <layout class="QVBoxLayout" name="vlH0">
      <item>
-      <widget class="QLabel" name="l_h0">
+      <widget class="QLabel" name="lH0">
        <property name="text">
         <string>Null Hypothesis</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="rb_h0_one_tail_1">
+      <widget class="QRadioButton" name="rbH0OneTail1">
        <property name="text">
         <string>mu &lt;= muo</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="rb_h0_one_tail_2">
+      <widget class="QRadioButton" name="rbH0OneTail2">
        <property name="text">
         <string>mu &gt;= muo</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="rb_h0_two_tail">
+      <widget class="QRadioButton" name="rbH0TwoTail">
        <property name="text">
         <string>mu == muo</string>
        </property>
@@ -133,24 +133,24 @@
    </property>
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
-     <widget class="QLabel" name="l_muo">
+     <widget class="QLabel" name="lMuo">
       <property name="text">
        <string>muo</string>
       </property>
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QLineEdit" name="le_muo"/>
+     <widget class="QLineEdit" name="leMuo"/>
     </item>
     <item row="1" column="0">
-     <widget class="QLabel" name="l_alpha">
+     <widget class="QLabel" name="lAlpha">
       <property name="text">
        <string>alpha</string>
       </property>
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QLineEdit" name="le_alpha"/>
+     <widget class="QLineEdit" name="leAlpha"/>
     </item>
    </layout>
   </widget>
@@ -230,7 +230,7 @@
     <rect>
      <x>15</x>
      <y>116</y>
-     <width>561</width>
+     <width>531</width>
      <height>112</height>
     </rect>
    </property>
@@ -390,6 +390,19 @@
      <widget class="QComboBox" name="cbCol2"/>
     </item>
    </layout>
+  </widget>
+  <widget class="QScrollBar" name="verticalScrollBar">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>10</y>
+     <width>16</width>
+     <height>981</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
+   </property>
   </widget>
  </widget>
  <resources/>

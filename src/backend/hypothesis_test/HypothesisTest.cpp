@@ -61,13 +61,29 @@ void HypothesisTest::setDataSourceType(DataSourceType type) {
     }
 }
 
+HypothesisTest::DataSourceType HypothesisTest::dataSourceType() const {
+    return d->dataSourceType;
+}
+
 void HypothesisTest::setDataSourceSpreadsheet(Spreadsheet *spreadsheet) {
     if  (spreadsheet != d->dataSourceSpreadsheet)
         d->setDataSourceSpreadsheet(spreadsheet);
 }
 
+void HypothesisTest::setColumns(QVector<Column*> cols) {
+    d->m_columns = cols;
+}
+
+void HypothesisTest::setColumns(QStringList cols) {
+    return d->setColumns(cols);
+}
+
 QStringList HypothesisTest::allColumns() {
     return d->all_columns;
+}
+
+void HypothesisTest::setTailType(HypothesisTest::TailType tailType) {
+    d->tail_type = tailType;
 }
 
 HypothesisTest::TailType HypothesisTest::tailType() {
@@ -82,55 +98,6 @@ void HypothesisTest::setSignificanceLevel(QVariant alpha) {
     d->m_significance_level = alpha.toDouble();
 }
 
-void HypothesisTest::setTailType(HypothesisTest::TailType tailType) {
-    d->tail_type = tailType;
-}
-
-void HypothesisTest::setColumns(QVector<Column*> cols) {
-    d->m_columns = cols;
-}
-
-void HypothesisTest::setColumns(QStringList cols) {
-    return d->setColumns(cols);
-}
-
-HypothesisTest::DataSourceType HypothesisTest::dataSourceType() const {
-    return d->dataSourceType;
-}
-
-void HypothesisTest::performTwoSampleTTest() {
-
-}
-
-void HypothesisTest::performTwoSampleIndependentTTest(bool equal_variance) {
-    d->performTwoSampleIndependentTest(HypothesisTestPrivate::TestT, equal_variance);
-    d->m_currTestName = "<h1>Two Sample Independent T Test</h1>";
-}
-
-void HypothesisTest::performTwoSamplePairedTTest() {
-    d->performTwoSamplePairedTest(HypothesisTestPrivate::TestT);
-    d->m_currTestName = "<h1>Two Sample Paried T Test</h1>";
-}
-
-void HypothesisTest::PerformOneSampleTTest() {
-    d->PerformOneSampleTest(HypothesisTestPrivate::TestT);
-    d->m_currTestName = "<h1>One Sample T Test</h1>";
-}
-
-void HypothesisTest::performTwoSampleIndependentZTest() {
-    d->performTwoSampleIndependentTest(HypothesisTestPrivate::TestZ);
-    d->m_currTestName = "<h1>Two Sample Independent Z Test</h1>";
-}
-
-void HypothesisTest::performTwoSamplePairedZTest() {
-    d->performTwoSamplePairedTest(HypothesisTestPrivate::TestZ);
-    d->m_currTestName = "<h1>Two Sample Paired Z Test</h1>";
-}
-
-void HypothesisTest::PerformOneSampleZTest() {
-    d->PerformOneSampleTest(HypothesisTestPrivate::TestZ);
-    d->m_currTestName = "<h1>One Sample Z Test</h1>";
-}
 
 QString HypothesisTest::testName() {
     return d->m_currTestName;
@@ -140,16 +107,44 @@ QString HypothesisTest::statsTable() {
     return d->m_stats_table;
 }
 
+void HypothesisTest::performTwoSampleIndependentTTest(bool equal_variance) {
+    d->m_currTestName = "<h2>Two Sample Independent T Test</h2>";
+    d->performTwoSampleIndependentTest(HypothesisTestPrivate::TestT, equal_variance);
+}
+
+void HypothesisTest::performTwoSamplePairedTTest() {
+    d->m_currTestName = "<h2>Two Sample Paried T Test</h2>";
+    d->performTwoSamplePairedTest(HypothesisTestPrivate::TestT);
+}
+
+void HypothesisTest::PerformOneSampleTTest() {
+    d->m_currTestName = "<h2>One Sample T Test</h2>";
+    d->PerformOneSampleTest(HypothesisTestPrivate::TestT);
+}
+
+void HypothesisTest::performTwoSampleIndependentZTest() {
+    d->m_currTestName = "<h2>Two Sample Independent Z Test</h2>";
+    d->performTwoSampleIndependentTest(HypothesisTestPrivate::TestZ);
+}
+
+void HypothesisTest::performTwoSamplePairedZTest() {
+    d->m_currTestName = "<h2>Two Sample Paired Z Test</h2>";
+    d->performTwoSamplePairedTest(HypothesisTestPrivate::TestZ);
+}
+
+void HypothesisTest::PerformOneSampleZTest() {
+    d->m_currTestName = "<h2>One Sample Z Test</h2>";
+    d->PerformOneSampleTest(HypothesisTestPrivate::TestZ);
+}
+
+
+
 
 /******************************************************************************
  *                      Private Implementations
  * ****************************************************************************/
 
-HypothesisTestPrivate::HypothesisTestPrivate(HypothesisTest* owner) : q(owner) ,
-    dataModel(new QStandardItemModel) ,
-    horizontalHeaderModel(new QStandardItemModel) ,
-    verticalHeaderModel(new QStandardItemModel) ,
-    resultModel(new QStandardItemModel()){
+HypothesisTestPrivate::HypothesisTestPrivate(HypothesisTest* owner) : q(owner) {
 }
 
 HypothesisTestPrivate::~HypothesisTestPrivate() {
@@ -186,7 +181,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test, bool 
     QString test_name;
 
     double value;
-    int df;
+    int df = 0;
     double p_value = 0;
     clearGlobalVariables();
 
@@ -213,23 +208,29 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test, bool 
             }
         }
     } else {
-        findStatsCategorical(n, sum, mean, std, col1_name, col2_name);
-        if (n[0] == -1) {
-            printError( i18n("Unequal size between %1 and %2", m_columns[0]->name(), m_columns[1]->name()));
-            emit q->changed();
-            return;
-        } else if(n[0] == -2) {
-            printError( i18n("There are more than two categorical variables in %1", m_columns[0]->name()));
-            emit q->changed();
-            return;
-        } else if (n[0] == 0) {
-            printError("atleast one of selected column is empty");
-            emit q->changed();
-            return;
+        ErrorType error_code = findStatsCategorical(m_columns[0], m_columns[1], n, sum, mean, std, col1_name, col2_name);
+        switch (error_code) {
+            case ErrorUnqualSize: {
+                printError( i18n("Unequal size between Column %1 and Column %2", m_columns[0]->name(), m_columns[1]->name()));
+                emit q->changed();
+                return;
+            } case ErrorNotTwoCategoricalVariables: {
+                printError( i18n("Number of Categorical Variable in Column %1 is not equal to 2", m_columns[0]->name()));
+                emit q->changed();
+                return;
+            } case ErrorEmptyColumn: {
+                printError("At least one of selected column is empty");
+                emit q->changed();
+                return;
+            } case NoError:
+                break;
         }
     }
 
-    QVariant row_major[] = {"", "N", "Sum", "Mean", "Std", col1_name, n[0], sum[0], mean[0], std[0], col2_name, n[1], sum[1], mean[1], std[1]};
+    QVariant row_major[] = {"", "N", "Sum", "Mean", "Std",
+                            col1_name, n[0], sum[0], mean[0], std[0],
+                            col2_name, n[1], sum[1], mean[1], std[1]};
+
     m_stats_table = getHtmlTable(3, 5, row_major);
 
     switch (test) {
@@ -240,6 +241,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test, bool 
             df = n[0] + n[1] - 2;
             double sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
             value = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
+            printLine(9, "<b>Assumption:</b> Equal Variance b/w both population means");
         } else {
             double temp_val;
             temp_val = qPow( qPow(std[0], 2)/n[0] + qPow(std[1], 2)/n[1], 2);
@@ -247,6 +249,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test, bool 
             df = qRound(temp_val);
 
             value = (mean[0] - mean[1]) / (qSqrt( (qPow(std[0], 2)/n[0]) + (qPow(std[1], 2)/n[1])));
+            printLine(9, "<b>Assumption:</b> UnEqual Variance b/w both population means");
         }
         break;
     } case TestZ: {
@@ -258,7 +261,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test, bool 
     }        
     }
 
-    m_currTestName = i18n("<h1>Two Sample Independent %1 Test for %2 vs %3</h1>", test_name, col1_name, col2_name);
+    m_currTestName = i18n("<h2>Two Sample Independent %1 Test for %2 vs %3</h2>", test_name, col1_name, col2_name);
     p_value = getPValue(test, value, col1_name, col2_name, df);
 
     printLine(2, i18n("Significance level is %1", m_significance_level), "blue");
@@ -282,7 +285,7 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(TestType test) {
     int n;
     double sum, mean, std;
     double value;
-    int df;
+    int df = 0;
     double p_value = 0;
     clearGlobalVariables();
 
@@ -300,7 +303,23 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(TestType test) {
         }
     }
 
-    findStatsPaired(m_columns[0], m_columns[1], n, sum, mean, std);
+    ErrorType error_code = findStatsPaired(m_columns[0], m_columns[1], n, sum, mean, std);
+
+    switch (error_code) {
+        case ErrorUnqualSize: {
+            printError("both columns are having different sizes");
+            emit q->changed();
+            return;
+        } case ErrorEmptyColumn: {
+            printError("columns are empty");
+            emit q->changed();
+            return;
+        } case NoError:
+            break;
+        default:
+            emit q->changed();
+            return;
+    }
 
     if (n == -1) {
         printError("both columns are having different sizes");
@@ -314,7 +333,9 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(TestType test) {
         return;
     }
 
-    QVariant row_major[] = {"", "N", "Sum", "Mean", "Std", "difference", n, sum, mean, std};
+    QVariant row_major[] = {"", "N", "Sum", "Mean", "Std",
+                            "difference", n, sum, mean, std};
+
     m_stats_table = getHtmlTable(2, 5, row_major);
 
     switch (test) {
@@ -332,11 +353,11 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(TestType test) {
     }}
 
     p_value = getPValue(test, value, m_columns[0]->name(), i18n("%1",m_population_mean), df);
-    m_currTestName = i18n("<h1>One Sample %1 Test for %2 vs %3</h1>", test_name, m_columns[0]->name(), m_columns[1]->name());
+    m_currTestName = i18n("<h2>One Sample %1 Test for %2 vs %3</h2>", test_name, m_columns[0]->name(), m_columns[1]->name());
 
-    printLine(2, i18n("Significance level is %1 </p>", m_significance_level), "blue");
-    printLine(4, i18n("%1 Value is %2 </p>", test_name, value), "green");
-    printLine(5, i18n("P Value is %1 </p>", p_value), "green");
+    printLine(2, i18n("Significance level is %1 ", m_significance_level), "blue");
+    printLine(4, i18n("%1 Value is %2 ", test_name, value), "green");
+    printLine(5, i18n("P Value is %1 ", p_value), "green");
 
     if (p_value <= m_significance_level)
         q->m_view->setResultLine(5, i18n("We can safely reject Null Hypothesis for significance level %1", m_significance_level), Qt::ToolTipRole);
@@ -353,7 +374,7 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(TestType test) {
 void HypothesisTestPrivate::PerformOneSampleTest(TestType test) {
     QString test_name;
     double value;
-    int df;
+    int df = 0;
     double p_value = 0;
     clearGlobalVariables();
 
@@ -371,15 +392,24 @@ void HypothesisTestPrivate::PerformOneSampleTest(TestType test) {
 
     int n;
     double sum, mean, std;
-    findStats(m_columns[0], n, sum, mean, std);
+    ErrorType error_code = findStats(m_columns[0], n, sum, mean, std);
 
-    if (n < 1) {
-        printError("column is empty");
-        emit q->changed();
-        return;
+    switch (error_code) {
+        case ErrorUnqualSize: {
+            printError("column is empty");
+            emit q->changed();
+            return;
+        } case NoError:
+            break;
+        default: {
+            emit q->changed();
+            return;
+        }
     }
 
-    QVariant row_major[] = {"", "N", "Sum", "Mean", "Std", m_columns[0]->name(), n, sum, mean, std};
+    QVariant row_major[] = {"", "N", "Sum", "Mean", "Std",
+                            m_columns[0]->name(), n, sum, mean, std};
+
     m_stats_table = getHtmlTable(2, 5, row_major);
 
     switch (test) {
@@ -396,7 +426,7 @@ void HypothesisTestPrivate::PerformOneSampleTest(TestType test) {
     }}
 
     p_value = getPValue(test, value, m_columns[0]->name(), i18n("%1",m_population_mean), df);
-    m_currTestName = i18n("<h1>One Sample %1 Test for %2</h1>", test_name, m_columns[0]->name());
+    m_currTestName = i18n("<h2>One Sample %1 Test for %2</h2>", test_name, m_columns[0]->name());
 
     printLine(2, i18n("Significance level is %1", m_significance_level), "blue");
     printLine(4, i18n("%1 Value is %2", test_name, value), "green");
@@ -414,7 +444,37 @@ void HypothesisTestPrivate::PerformOneSampleTest(TestType test) {
 
 /***************************************Helper Functions*************************************/
 
-void HypothesisTestPrivate::findStatsPaired(Column* column1, Column* column2, int &count, double &sum, double &mean, double &std) {
+HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStats(const Column* column, int &count, double &sum, double &mean, double &std) {
+    sum = 0;
+    mean = 0;
+    std = 0;
+
+    count = column->rowCount();
+    for (int i = 0; i < count; i++) {
+        double row = column->valueAt(i);
+        if ( std::isnan(row)) {
+            count = i;
+            break;
+        }
+        sum += row;
+    }
+
+    if (count < 1) return HypothesisTestPrivate::ErrorEmptyColumn;
+    mean = sum/count;
+
+    for (int i = 0; i < count; i++) {
+        double row = column->valueAt(i);
+        std += qPow( (row - mean), 2);
+    }
+
+    if (count > 1)
+        std = std / (count-1);
+    std = qSqrt(std);
+
+    return HypothesisTestPrivate::NoError;
+}
+
+HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsPaired(const Column* column1, const Column* column2, int &count, double &sum, double &mean, double &std) {
     sum = 0;
     mean = 0;
     std = 0;
@@ -431,17 +491,17 @@ void HypothesisTestPrivate::findStatsPaired(Column* column1, Column* column2, in
         if (std::isnan(cell1) || std::isnan(cell2)) {
             if (std::isnan(cell1) && std::isnan(cell2))
                 count = i;
-            else {
-                count = -1;
-                return;
-            }
+            else
+                return HypothesisTestPrivate::ErrorUnqualSize;
             break;
         }
 
         sum += cell1 - cell2;
     }
 
-    if (count < 1) return;
+    if (count < 1)
+        return HypothesisTestPrivate::ErrorEmptyColumn;
+
     mean = sum/count;
 
     double row;
@@ -456,47 +516,14 @@ void HypothesisTestPrivate::findStatsPaired(Column* column1, Column* column2, in
         std = std / (count-1);
 
     std = qSqrt(std);
-    return;
+    return HypothesisTestPrivate::NoError;
 }
 
-void HypothesisTestPrivate::findStats(Column* column, int &count, double &sum, double &mean, double &std) {
-    sum = 0;
-    mean = 0;
-    std = 0;
+HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsCategorical(const Column *column1, const Column *column2, int n[], double sum[], double mean[], double std[], QString &col1_name, QString &col2_name) {
+    // clearing and initialising variables;
 
-    count = column->rowCount();
-    for (int i = 0; i < count; i++) {
-        double row = column->valueAt(i);
-        if ( std::isnan(row)) {
-            count = i;
-            break;
-        }
-        sum += row;
-    }
+    const Column* columns[] = {column1, column2};
 
-    if (count < 1) return;
-    mean = sum/count;
-
-    for (int i = 0; i < count; i++) {
-        double row = column->valueAt(i);
-        std += qPow( (row - mean), 2);
-    }
-
-    if (count > 1)
-        std = std / (count-1);
-    std = qSqrt(std);
-    return;
-}
-
-
-void HypothesisTestPrivate::findStatsCategorical(int n[], double sum[], double mean[], double std[], QString &col1_name, QString &col2_name) {
-
-    /* Error codes;
-    n[0] = -1  : unequal rows
-    n[0] = -2  : #categorical variables != 2;
-    */
-
-    // clearing the variables;
     for (int i = 0; i < 2; i++) {
         sum[i] = 0;
         mean[i] = 0;
@@ -504,20 +531,18 @@ void HypothesisTestPrivate::findStatsCategorical(int n[], double sum[], double m
         n[i] = 0;
     }
 
-    int count_temp = m_columns[0]->rowCount();
+    int count_temp = columns[0]->rowCount();
     col1_name = "";
     col2_name = "";
     for (int i = 0; i < count_temp; i++) {
-        QString name = m_columns[0]->textAt(i);
-        double value = m_columns[1]->valueAt(i);
+        QString name = columns[0]->textAt(i);
+        double value = columns[1]->valueAt(i);
 
-        if (name == "" || std::isnan(value)) {
-            if (name == "" && std::isnan(value))
+        if (name.isEmpty() || std::isnan(value)) {
+            if (name.isEmpty() && std::isnan(value))
                 break;
-            else {
-                n[0] = -1;
-                return;
-            }
+            else
+                return HypothesisTestPrivate::ErrorUnqualSize;
         }
 
         if (name == col1_name) {
@@ -526,27 +551,21 @@ void HypothesisTestPrivate::findStatsCategorical(int n[], double sum[], double m
         } else if (name == col2_name) {
             n[1]++;
             sum[1] += value;
-        } else if (col1_name == "") {
+        } else if (col1_name.isEmpty()) {
             n[0]++;
             sum[0] += value;
             col1_name = name;
-        } else if (col2_name == "") {
+        } else if (col2_name.isEmpty()) {
             n[1]++;
             sum[1] += value;
             col2_name = name;
         }
-        else {
-            // this case occurs when there are more than two categorical variables in column 1
-            // sending error code of -1;
-            n[0] = -2;
-            return;
-        }
+        else
+            return HypothesisTestPrivate::ErrorNotTwoCategoricalVariables;
     }
 
-    if (col1_name == "" || col2_name == "") {
-        n[0] = -2;
-        return;
-    }
+    if (col1_name.isEmpty() || col2_name.isEmpty())
+        return HypothesisTestPrivate::ErrorNotTwoCategoricalVariables;
 
 
     mean[0] = sum[0]/n[0];
@@ -554,14 +573,13 @@ void HypothesisTestPrivate::findStatsCategorical(int n[], double sum[], double m
 
 
     for (int i = 0; i < n[0]+n[1]; i++) {
-        QString name = m_columns[0]->textAt(i);
-        double value = m_columns[1]->valueAt(i);
+        QString name = columns[0]->textAt(i);
+        double value = columns[1]->valueAt(i);
 
         if (name == col1_name)
             std[0] += qPow( (value - mean[0]), 2);
-        else {
+        else
             std[1] += qPow( (value - mean[1]), 2);
-        }
     }
 
     for (int i = 0; i < 2; i++) {
@@ -570,31 +588,33 @@ void HypothesisTestPrivate::findStatsCategorical(int n[], double sum[], double m
         std[i] = qSqrt(std[i]);
     }
 
-    return;
+    return HypothesisTestPrivate::NoError;
 }
 
 
 double HypothesisTestPrivate::getPValue(const HypothesisTestPrivate::TestType &test, double &value, const QString &col1_name, const QString &col2_name, const int df) {
     double p_value = 0;
+
+    //TODO change ("⋖") symbol to ("<"), currently macro UTF8_QSTRING is not working properly if used "<" symbol;
     switch (test) {
     case TestT: {
         switch (tail_type) {
         case HypothesisTest::TailNegative:
             p_value = nsl_stats_tdist_p(value, df);
-            q->m_view->setResultLine(0, i18n("<p style=color:blue;>Null Hypothesis: Population mean of %1 %2 Population mean of %3 </p>", col1_name, UTF8_QSTRING("≥"), col2_name));
-            q->m_view->setResultLine(1, i18n("<p style=color:blue;>Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 </p>", col1_name, UTF8_QSTRING("⋖"), col2_name));
+            printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING("≥"), col2_name), "blue");
+            printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING("⋖"), col2_name), "blue");
             break;
         case HypothesisTest::TailPositive:
             value *= -1;
             p_value = nsl_stats_tdist_p(value, df);
-            q->m_view->setResultLine(0, i18n("<p style=color:blue;>Null Hypothesis: Population mean of %1 %2 Population mean of %3 </p>", col1_name, UTF8_QSTRING("≤"), col2_name));
-            q->m_view->setResultLine(1, i18n("<p style=color:blue;>Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 </p>", col1_name, UTF8_QSTRING(">"), col2_name));
+            printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING("≤"), col2_name), "blue");
+            printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING(">"), col2_name), "blue");
             break;
         case HypothesisTest::TailTwo:
             p_value = nsl_stats_tdist_p(value, df) + nsl_stats_tdist_p(-1*value, df);
 
-            q->m_view->setResultLine(0, i18n("<p style=color:blue;>Null Hypothesis: Population mean of %1 %2 Population mean of %3 </p>", col1_name, UTF8_QSTRING("="), col2_name));
-            q->m_view->setResultLine(1, i18n("<p style=color:blue;>Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 </p>", col1_name, UTF8_QSTRING("≠"), col2_name));
+            printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING("="), col2_name), "blue");
+            printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING("≠"), col2_name), "blue");
             break;
         }
         break;
@@ -602,25 +622,26 @@ double HypothesisTestPrivate::getPValue(const HypothesisTestPrivate::TestType &t
         switch (tail_type) {
         case HypothesisTest::TailNegative:
             p_value = nsl_stats_tdist_p(value, df);
-            q->m_view->setResultLine(0, i18n("<p style=color:blue;>Null Hypothesis: Population mean of %1 %2 Population mean of %3 </p>", col1_name, UTF8_QSTRING("≥"), col2_name));
-            q->m_view->setResultLine(1, i18n("<p style=color:blue;>Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 </p>", col1_name, UTF8_QSTRING("⋖"), col2_name));
+            printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING("≥"), col2_name), "blue");
+            printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING("⋖"), col2_name), "blue");
             break;
         case HypothesisTest::TailPositive:
             value *= -1;
             p_value = nsl_stats_tdist_p(value, df);
-            q->m_view->setResultLine(0, i18n("<p style=color:blue;>Null Hypothesis: Population mean of %1 %2 Population mean of %3 </p>", col1_name, UTF8_QSTRING("≤"), col2_name));
-            q->m_view->setResultLine(1, i18n("<p style=color:blue;>Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 </p>", col1_name, UTF8_QSTRING(">"), col2_name));
+            printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING("≤"), col2_name), "blue");
+            printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING(">"), col2_name), "blue");
             break;
         case HypothesisTest::TailTwo:
             p_value = nsl_stats_tdist_p(value, df) + nsl_stats_tdist_p(-1*value, df);
 
-            q->m_view->setResultLine(0, i18n("<p style=color:blue;>Null Hypothesis: Population mean of %1 %2 Population mean of %3 </p>", col1_name, UTF8_QSTRING("="), col2_name));
-            q->m_view->setResultLine(1, i18n("<p style=color:blue;>Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 </p>", col1_name, UTF8_QSTRING("≠"), col2_name));
+            printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING("="), col2_name), "blue");
+            printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING("≠"), col2_name), "blue");
             break;
         }
         break;
     }
     }
+
     if (p_value > 1)
         return 1;
     return p_value;
