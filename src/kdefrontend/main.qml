@@ -15,9 +15,10 @@ Rectangle {
     width: 1920
     height: 1080
     //title: qsTr("Hello World")
-    id: element
+    id: mainWindow
     property string initialUrl : "https://labplot.kde.org/2019/04/19/labplot-2-6-released/"
-    property alias element: element
+    property alias mainWindow: mainWindow
+    signal  recentProjectClicked(url path)
 
     GridLayout {
         property int spacing: 15
@@ -37,8 +38,8 @@ Rectangle {
 
         Frame {
             id: rectangle1
-            //width: element.width / 5
-            //height: element.height / 3
+            //width: mainWindow.width / 5
+            //height: mainWindow.height / 3
 
             Layout.minimumWidth: (parent.width / 5) -  5*gridLayout.spacing
             Layout.minimumHeight: parent.height/4 - 3*gridLayout.spacing
@@ -54,6 +55,7 @@ Rectangle {
             ColumnLayout {
                 id: columnLayout
                 anchors.fill: parent
+                spacing: 20
 
                 Label {
                     id: label
@@ -74,53 +76,43 @@ Rectangle {
 
                 ListView {
                     id: listView
-                    x: 0
-                    y: 0
-                    width: 110
-                    height: 160
+                    spacing: 10
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    model: ListModel {
-                        ListElement {
-                            name: "Grey"
-                            colorCode: "grey"
-                        }
-
-                        ListElement {
-                            name: "Red"
-                            colorCode: "red"
-                        }
-
-                        ListElement {
-                            name: "Blue"
-                            colorCode: "blue"
-                        }
-
-                        ListElement {
-                            name: "Green"
-                            colorCode: "green"
-                        }
-                    }
-                    delegate: Item {
-                        x: 5
-                        width: 80
-                        height: 40
-                        Row {
-                            id: row1
-                            Rectangle {
-                                width: 40
-                                height: 40
-                                color: colorCode
-                            }
-
-                            Text {
-                                text: name
-                                anchors.verticalCenter: parent.verticalCenter
+                    model: recentProjects
+                    delegate: Column {
+                        id: delegateItem
+                        property string fullUri : modelData
+                        width: delegateItem.ListView.view.width
+                        spacing: 2
+                        Rectangle {
+                            width: delegateItem.width
+                            height: 25
+                            Text{
+                                anchors.fill: parent
+                                font.pointSize: 14
+                                text: delegateItem.fullUri.substring(delegateItem.fullUri.lastIndexOf('/') +1, delegateItem.fullUri.length);
                                 font.bold: true
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
                             }
-                            spacing: 10
+
+                            MouseArea {
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                onEntered: {parent.color = '#fdffbf' }
+                                onExited: {parent.color = '#ffffff'}
+                                onClicked: {mainWindow.recentProjectClicked(delegateItem.fullUri)}
+                            }
+                        }
+
+                        Rectangle {
+                            height: 2
+                            width: delegateItem.width
+                            color: '#81827c'
                         }
                     }
+
                 }
             }
         }
@@ -129,8 +121,8 @@ Rectangle {
             id: rectangle2
             Layout.minimumWidth: (3*parent.width / 5) -  5*gridLayout.spacing
             Layout.minimumHeight: parent.height/4 - 3*gridLayout.spacing
-            // width: 3 * element.width / 5
-            //height: element.height / 3
+            // width: 3 * mainWindow.width / 5
+            //height: mainWindow.height / 3
             opacity: 1
             Layout.fillHeight: true
             Layout.fillWidth: true
@@ -168,8 +160,8 @@ Rectangle {
             Layout.minimumHeight: parent.height - 3*gridLayout.spacing
             Layout.preferredWidth: parent.width / 5
             Layout.preferredHeight: parent.height
-            // width: element.width / 5
-            //height: element.height
+            // width: mainWindow.width / 5
+            //height: mainWindow.height
             opacity: 1
             Layout.fillHeight: true
             Layout.fillWidth: true
@@ -201,8 +193,8 @@ Rectangle {
 
         Frame {
             id: rectangle4
-            //width: element.width / 5
-           // height: element.height / 3
+            //width: mainWindow.width / 5
+            // height: mainWindow.height / 3
             Layout.minimumWidth: (parent.width / 5) -  5*gridLayout.spacing
             Layout.minimumHeight: parent.height/4 - 3*gridLayout.spacing
             opacity: 1
@@ -281,8 +273,8 @@ Rectangle {
 
         Frame {
             id: rectangle5
-           // width: 3 * element.width / 5
-           // height: element.height / 3
+            // width: 3 * mainWindow.width / 5
+            // height: mainWindow.height / 3
             Layout.minimumWidth: (3*parent.width / 5) -  5*gridLayout.spacing
             Layout.minimumHeight: parent.height/4 - 3*gridLayout.spacing
             opacity: 1
@@ -519,8 +511,8 @@ Rectangle {
 
         Frame {
             id: rectangle
-           // width: 4 * element.width / 5
-           // height: element.height / 3
+            // width: 4 * mainWindow.width / 5
+            // height: mainWindow.height / 3
             Layout.minimumWidth: (4* parent.width / 5) -  5*gridLayout.spacing
             Layout.minimumHeight: 2 * parent.height/4 - 3*gridLayout.spacing
             opacity: 1

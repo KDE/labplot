@@ -92,6 +92,7 @@
 #include <QQuickItem>
 #include <QQuickView>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 
 #include <KActionCollection>
 #include <KConfigGroup>
@@ -305,13 +306,21 @@ void MainWin::initGUI(const QString& fileName) {
 	const bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
 	if(showWelcomeScreen) {
 
-		QQuickWidget *quickWidget = new QQuickWidget(this);
-		QUrl source("qrc:///main.qml");
-		quickWidget->setSource(source);
+		QList<QVariant> recentList;
+		for (QUrl url : m_recentProjectsAction->urls())
+			recentList.append(QVariant(url));
 
-		m_mdiArea->addSubWindow(quickWidget);
-		qDebug() << quickWidget->status();
-		qDebug() << quickWidget->errors();
+		QQuickWidget *quickWidget = new QQuickWidget(this);
+		QUrl source("qrc:///main.qml");		
+		QQmlContext *ctxt = quickWidget->rootContext();
+		QVariant variant(recentList);
+		ctxt->setContextProperty("recentProjects", variant);
+		quickWidget->setSource(source);
+		QObject *item = quickWidget->rootObject();
+
+		QObject::connect(item, SIGNAL(recentProjectClicked(QUrl)), this, SLOT(openRecentProject(QUrl)));
+
+		m_welcomeWindow = m_mdiArea->addSubWindow(quickWidget);
 	}
 
 	updateGUIOnProjectChanges();
@@ -1284,8 +1293,9 @@ void MainWin::newNotes() {
 	Otherwise returns \a 0.
 */
 Workbook* MainWin::activeWorkbook() const {
-	if(m_showWelcomeScreen && m_mdiArea->subWindowList().length() == 1)
+	if(m_welcomeWindow == m_mdiArea->currentSubWindow()) {
 		return nullptr;
+	}
 
 	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
 	if (!win)
@@ -1301,8 +1311,9 @@ Workbook* MainWin::activeWorkbook() const {
 	Otherwise returns \a 0.
 */
 Datapicker* MainWin::activeDatapicker() const {
-	if(m_showWelcomeScreen && m_mdiArea->subWindowList().length() == 1)
+	if(m_welcomeWindow == m_mdiArea->currentSubWindow()) {
 		return nullptr;
+	}
 
 	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
 	if (!win)
@@ -1319,8 +1330,9 @@ Datapicker* MainWin::activeDatapicker() const {
 	Otherwise returns \c 0.
 */
 Spreadsheet* MainWin::activeSpreadsheet() const {
-	if(m_showWelcomeScreen && m_mdiArea->subWindowList().length() == 1)
+	if(m_welcomeWindow == m_mdiArea->currentSubWindow()) {
 		return nullptr;
+	}
 
 	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
 	if (!win)
@@ -1354,8 +1366,9 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 	Otherwise returns \c 0.
 */
 Matrix* MainWin::activeMatrix() const {
-	if(m_showWelcomeScreen && m_mdiArea->subWindowList().length() == 1)
+	if(m_welcomeWindow == m_mdiArea->currentSubWindow()) {
 		return nullptr;
+	}
 
 	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
 	if (!win)
@@ -1384,12 +1397,13 @@ Matrix* MainWin::activeMatrix() const {
 	Otherwise returns \a 0.
 */
 Worksheet* MainWin::activeWorksheet() const {
-	if(m_showWelcomeScreen && m_mdiArea->subWindowList().length() == 1)
-		return nullptr;
-
 	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
 	if (!win)
 		return nullptr;
+
+	if(m_welcomeWindow == m_mdiArea->currentSubWindow()) {
+		return nullptr;
+	}
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);
