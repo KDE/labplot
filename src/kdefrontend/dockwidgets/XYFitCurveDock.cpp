@@ -437,6 +437,7 @@ void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
+	DEBUG("XYFitCurveDock::yErrorColumnChanged()")
 	if (m_initializing)
 		return;
 

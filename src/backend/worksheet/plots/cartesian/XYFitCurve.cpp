@@ -1628,15 +1628,18 @@ void XYFitCurvePrivate::recalculate() {
 			// only when inside given range
 			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
 				if (dataSourceType == XYAnalysisCurve::DataSourceCurve || (!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) {	// x-y
+					DEBUG("X-Y data")
 					xdataVector.append(tmpXDataColumn->valueAt(row));
 					ydataVector.append(tmpYDataColumn->valueAt(row));
 				} else if (!xErrorColumn && yErrorColumn) {	// x-y-dy
+					DEBUG("X-Y-DY data")
 					if (!std::isnan(yErrorColumn->valueAt(row))) {
 						xdataVector.append(tmpXDataColumn->valueAt(row));
 						ydataVector.append(tmpYDataColumn->valueAt(row));
 						yerrorVector.append(yErrorColumn->valueAt(row));
 					}
 				} else if (xErrorColumn && yErrorColumn) {	// x-y-dx-dy
+					DEBUG("X-Y-DX-DY data")
 					if (!std::isnan(xErrorColumn->valueAt(row)) && !std::isnan(yErrorColumn->valueAt(row))) {
 						xdataVector.append(tmpXDataColumn->valueAt(row));
 						ydataVector.append(tmpYDataColumn->valueAt(row));
@@ -1783,11 +1786,11 @@ void XYFitCurvePrivate::recalculate() {
 		DEBUG("Rerun fit with x errors");
 
 		unsigned int iter2 = 0;
-		double chi = 0, chiOld = 0;
+		double chisq = 0, chisqOld = 0;
 		double *fun = new double[n];
 		do {
 			iter2++;
-			chiOld = chi;
+			chisqOld = chisq;
 			//printf("iter2 = %d\n", iter2);
 
 			// calculate function from residuals
@@ -1864,7 +1867,7 @@ void XYFitCurvePrivate::recalculate() {
 			do {	// fit
 				iter++;
 				writeSolverState(s);
-				status = gsl_multifit_fdfsolver_iterate (s);
+				status = gsl_multifit_fdfsolver_iterate(s);
 				//printf ("status = %s\n", gsl_strerror (status));
 				if (status) {
 					DEBUG("iter " << iter << ", status = " << gsl_strerror(status));
@@ -1873,9 +1876,10 @@ void XYFitCurvePrivate::recalculate() {
 				status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
 			} while (status == GSL_CONTINUE && iter < maxIters);
 
-			chi = gsl_blas_dnrm2(s->f);
-			//printf("chi = %.12g (dchi = %g)\n", chi, fabs(chi-chiOld));
-		} while (iter2 < maxIters && fabs(chi-chiOld) > fitData.eps);
+			chisq = gsl_blas_dnrm2(s->f);
+			//TODO
+			printf("chisq = %.12g (dchisq = %g)\n", chisq, fabs(chisq-chisqOld));
+		} while (iter2 < maxIters && fabs(chisq-chisqOld) > fitData.eps);
 
 		delete[] fun;
 	}
@@ -1908,6 +1912,19 @@ void XYFitCurvePrivate::recalculate() {
 	//gsl_blas_dnrm2() - computes the Euclidian norm (||r||_2 = \sqrt {\sum r_i^2}) of the vector with the elements weight[i]*(Yi - y[i])
 	//gsl_blas_dasum() - computes the absolute sum \sum |r_i| of the elements of the vector with the elements weight[i]*(Yi - y[i])
 	fitResult.sse = gsl_pow_2(gsl_blas_dnrm2(s->f));
+	//TODO
+	DEBUG("gsl_blas_dnrm2(s->f) = " << gsl_blas_dnrm2(s->f))
+	DEBUG("sse = " << fitResult.sse)
+	double chisq2;
+	gsl_blas_ddot(s->f, s->f, &chisq2);
+	DEBUG("sse (new) = " << chisq2)
+	double chisq3=0.0;
+	for (int i = 0; i < n; i++) {
+		DEBUG("res[" << i << "] = " << gsl_vector_get(s->f, i))
+		chisq3 += gsl_pow_2(gsl_vector_get(s->f, i));
+	}
+	DEBUG("sse (calc) = " << chisq3)
+
 	if (fitResult.dof != 0) {
 		fitResult.rms = fitResult.sse/fitResult.dof;
 		fitResult.rsd = sqrt(fitResult.rms);

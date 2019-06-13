@@ -162,6 +162,7 @@ private:
 	QVector<QPointF> symbolPointsLogical;	//points in logical coordinates
 	QVector<QPointF> symbolPointsScene;	//points in scene coordinates
 	std::vector<bool> visiblePoints;	//vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
+	std::vector<int> validPointsIndicesLogical;	//vector of the size of symbolPointsLogical containing the original indices in the source columns for valid and non-masked values
 	QVector<QPointF> valuesPoints;
 	std::vector<bool> connectedPointsLogical;  //vector of the size of symbolPointsLogical with true for points connected with the consecutive point and
 												//false otherwise (don't connect because of a gap (NAN) in-between)

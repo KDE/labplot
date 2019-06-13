@@ -952,7 +952,7 @@ void XYCurvePrivate::retransform() {
 			columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
 			double xMin = cSystem->mapSceneToLogical(plot->dataRect().topLeft()).x();
 			double xMax = cSystem->mapSceneToLogical(plot->dataRect().bottomRight()).x();
-			startIndex= q->indexForX(xMin, symbolPointsLogical, static_cast<AbstractColumn::Properties>(columnProperties));
+			startIndex = q->indexForX(xMin, symbolPointsLogical, static_cast<AbstractColumn::Properties>(columnProperties));
 			endIndex = q->indexForX(xMax, symbolPointsLogical, static_cast<AbstractColumn::Properties>(columnProperties));
 
 			if (startIndex > endIndex && startIndex >= 0 && endIndex >= 0)
@@ -997,6 +997,7 @@ void XYCurvePrivate::recalcLogicalPoints() {
 
 	symbolPointsLogical.clear();
 	connectedPointsLogical.clear();
+	validPointsIndicesLogical.clear();
 	visiblePoints.clear();
 
 	if (!xColumn || !yColumn)
@@ -1041,6 +1042,7 @@ void XYCurvePrivate::recalcLogicalPoints() {
 			}
 			symbolPointsLogical.append(tempPoint);
 			connectedPointsLogical.push_back(true);
+			validPointsIndicesLogical.push_back(row);
 		} else {
 			if (!connectedPointsLogical.empty())
 				connectedPointsLogical[connectedPointsLogical.size()-1] = false;
@@ -1095,7 +1097,6 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 
 
 			if (p1.x() >= plot->xMin() && p1.x() <= plot->xMax()) { // x inside scene
-
 				if (minY == maxY) {
 					lines.append(QLineF(p0, p1)); // line from previous point to actual point
 				} else if (p0.y() == minY) { // draw vertical line
@@ -1120,10 +1121,8 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 				}
 			} else// x in scene
 				DEBUG("addLine: not in scene");
-
 		} else// overlap
 			lines.append(QLineF(p0,p1));
-
 	}
 }
 
@@ -1183,9 +1182,8 @@ void XYCurvePrivate::updateLines() {
 		startIndex= q->indexForX(xMin);
 		endIndex = q->indexForX(xMax);
 
-		if (startIndex > endIndex) {
+		if (startIndex > endIndex)
 			std::swap(startIndex, endIndex);
-		}
 
 		startIndex--; // use one value before
 		endIndex ++;
@@ -2645,19 +2643,21 @@ void XYCurvePrivate::updateErrorBars() {
 
 		const QPointF& point = symbolPointsLogical.at(i);
 
+		int index = validPointsIndicesLogical.at(i);
+
 		//error bars for x
 		if (xErrorType != XYCurve::NoError) {
 			//determine the values for the errors
-			if (xErrorPlusColumn && xErrorPlusColumn->isValid(i) && !xErrorPlusColumn->isMasked(i))
-				errorPlus = xErrorPlusColumn->valueAt(i);
+			if (xErrorPlusColumn && xErrorPlusColumn->isValid(index) && !xErrorPlusColumn->isMasked(index))
+				errorPlus = xErrorPlusColumn->valueAt(index);
 			else
 				errorPlus = 0;
 
 			if (xErrorType == XYCurve::SymmetricError)
 				errorMinus = errorPlus;
 			else {
-				if (xErrorMinusColumn && xErrorMinusColumn->isValid(i) && !xErrorMinusColumn->isMasked(i))
-					errorMinus = xErrorMinusColumn->valueAt(i);
+				if (xErrorMinusColumn && xErrorMinusColumn->isValid(index) && !xErrorMinusColumn->isMasked(index))
+					errorMinus = xErrorMinusColumn->valueAt(index);
 				else
 					errorMinus = 0;
 			}
@@ -2686,16 +2686,16 @@ void XYCurvePrivate::updateErrorBars() {
 		//error bars for y
 		if (yErrorType != XYCurve::NoError) {
 			//determine the values for the errors
-			if (yErrorPlusColumn && yErrorPlusColumn->isValid(i) && !yErrorPlusColumn->isMasked(i))
-				errorPlus = yErrorPlusColumn->valueAt(i);
+			if (yErrorPlusColumn && yErrorPlusColumn->isValid(index) && !yErrorPlusColumn->isMasked(index))
+				errorPlus = yErrorPlusColumn->valueAt(index);
 			else
 				errorPlus = 0;
 
 			if (yErrorType == XYCurve::SymmetricError)
 				errorMinus = errorPlus;
 			else {
-				if (yErrorMinusColumn && yErrorMinusColumn->isValid(i) && !yErrorMinusColumn->isMasked(i) )
-					errorMinus = yErrorMinusColumn->valueAt(i);
+				if (yErrorMinusColumn && yErrorMinusColumn->isValid(index) && !yErrorMinusColumn->isMasked(index) )
+					errorMinus = yErrorMinusColumn->valueAt(index);
 				else
 					errorMinus = 0;
 			}
@@ -2906,7 +2906,6 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 		}
 
 		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
-		return;
 	}
 }
 
@@ -3052,7 +3051,6 @@ void XYCurvePrivate::suppressRetransform(bool on) {
  * \p event
  */
 void XYCurvePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-
 	if (plot->mouseMode() != CartesianPlot::MouseMode::SelectionMode) {
 		event->ignore();
 		return QGraphicsItem::mousePressEvent(event);
@@ -3066,7 +3064,6 @@ void XYCurvePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	event->ignore();
 	setSelected(false);
 	QGraphicsItem::mousePressEvent(event);
-	return;
 }
 
 /*!
@@ -3076,7 +3073,6 @@ void XYCurvePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
  * \p on
  */
 void XYCurvePrivate::setHover(bool on) {
-
 	if(on == m_hovered)
 		return; // don't update if state not changed
 
