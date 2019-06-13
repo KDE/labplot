@@ -292,8 +292,10 @@ bool Project::load(const QString& filename, bool preview) {
 	setIsLoading(false);
 	if (rc == false) {
 		RESET_CURSOR;
-		QString msg_text = reader.errorString();
-		KMessageBox::error(nullptr, msg_text, i18n("Error when opening the project"));
+		QString msg = reader.errorString();
+		if (msg.isEmpty())
+			msg = i18n("Unknown error when opening the project %1.", filename);
+		KMessageBox::error(nullptr, msg, i18n("Error when opening the project"));
 		return false;
 	}
 
