@@ -1627,7 +1627,7 @@ void XYFitCurvePrivate::recalculate() {
 
 			// only when inside given range
 			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
-				if (dataSourceType == XYAnalysisCurve::DataSourceCurve || (!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) {	// x-y
+				if ((!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) {	// x-y
 					xdataVector.append(tmpXDataColumn->valueAt(row));
 					ydataVector.append(tmpYDataColumn->valueAt(row));
 				} else if (!xErrorColumn && yErrorColumn) {	// x-y-dy
