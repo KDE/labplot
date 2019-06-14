@@ -1628,18 +1628,15 @@ void XYFitCurvePrivate::recalculate() {
 			// only when inside given range
 			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
 				if (dataSourceType == XYAnalysisCurve::DataSourceCurve || (!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) {	// x-y
-					DEBUG("X-Y data")
 					xdataVector.append(tmpXDataColumn->valueAt(row));
 					ydataVector.append(tmpYDataColumn->valueAt(row));
 				} else if (!xErrorColumn && yErrorColumn) {	// x-y-dy
-					DEBUG("X-Y-DY data")
 					if (!std::isnan(yErrorColumn->valueAt(row))) {
 						xdataVector.append(tmpXDataColumn->valueAt(row));
 						ydataVector.append(tmpYDataColumn->valueAt(row));
 						yerrorVector.append(yErrorColumn->valueAt(row));
 					}
 				} else if (xErrorColumn && yErrorColumn) {	// x-y-dx-dy
-					DEBUG("X-Y-DX-DY data")
 					if (!std::isnan(xErrorColumn->valueAt(row)) && !std::isnan(yErrorColumn->valueAt(row))) {
 						xdataVector.append(tmpXDataColumn->valueAt(row));
 						ydataVector.append(tmpYDataColumn->valueAt(row));
@@ -1675,8 +1672,8 @@ void XYFitCurvePrivate::recalculate() {
 	double* ydata = ydataVector.data();
 	double* xerror = xerrorVector.data();	// size may be 0
 	double* yerror = yerrorVector.data();	// size may be 0
-	DEBUG("x errors: " << xerrorVector.size());
-	DEBUG("y errors: " << yerrorVector.size());
+	DEBUG("x error vector size: " << xerrorVector.size());
+	DEBUG("y error vector size: " << yerrorVector.size());
 	double* weight = new double[n];
 
 	for (size_t i = 0; i < n; i++)
@@ -1689,7 +1686,7 @@ void XYFitCurvePrivate::recalculate() {
 		break;
 	case nsl_fit_weight_instrumental:	// yerror are sigmas
 		for (int i = 0; i < (int)n; i++)
-			if (i < yerrorVector.size())
+			if (i < yerrorVector.size() && fabs(yerror[i]) > 0)
 				weight[i] = 1./gsl_pow_2(yerror[i]);
 		break;
 	case nsl_fit_weight_direct:		// yerror are weights
@@ -1699,15 +1696,15 @@ void XYFitCurvePrivate::recalculate() {
 		break;
 	case nsl_fit_weight_inverse:		// yerror are inverse weights
 		for (int i = 0; i < (int)n; i++)
-			if (i < yerrorVector.size())
+			if (i < yerrorVector.size() && fabs(yerror[i]) > 0)
 				weight[i] = 1./yerror[i];
 		break;
 	case nsl_fit_weight_statistical:
-		for (int i = 0; i < (int)n; i++)
+		for (int i = 0; i < (int)n; i++)	// TODO: what if ydata[i] == 0?
 			weight[i] = 1./ydata[i];
 		break;
 	case nsl_fit_weight_relative:
-		for (int i = 0; i < (int)n; i++)
+		for (int i = 0; i < (int)n; i++)	// TODO: what if ydata[i] == 0?
 			weight[i] = 1./gsl_pow_2(ydata[i]);
 		break;
 	}
@@ -1877,8 +1874,6 @@ void XYFitCurvePrivate::recalculate() {
 			} while (status == GSL_CONTINUE && iter < maxIters);
 
 			chisq = gsl_blas_dnrm2(s->f);
-			//TODO
-			printf("chisq = %.12g (dchisq = %g)\n", chisq, fabs(chisq-chisqOld));
 		} while (iter2 < maxIters && fabs(chisq-chisqOld) > fitData.eps);
 
 		delete[] fun;
@@ -1912,18 +1907,6 @@ void XYFitCurvePrivate::recalculate() {
 	//gsl_blas_dnrm2() - computes the Euclidian norm (||r||_2 = \sqrt {\sum r_i^2}) of the vector with the elements weight[i]*(Yi - y[i])
 	//gsl_blas_dasum() - computes the absolute sum \sum |r_i| of the elements of the vector with the elements weight[i]*(Yi - y[i])
 	fitResult.sse = gsl_pow_2(gsl_blas_dnrm2(s->f));
-	//TODO
-	DEBUG("gsl_blas_dnrm2(s->f) = " << gsl_blas_dnrm2(s->f))
-	DEBUG("sse = " << fitResult.sse)
-	double chisq2;
-	gsl_blas_ddot(s->f, s->f, &chisq2);
-	DEBUG("sse (new) = " << chisq2)
-	double chisq3=0.0;
-	for (int i = 0; i < n; i++) {
-		DEBUG("res[" << i << "] = " << gsl_vector_get(s->f, i))
-		chisq3 += gsl_pow_2(gsl_vector_get(s->f, i));
-	}
-	DEBUG("sse (calc) = " << chisq3)
 
 	if (fitResult.dof != 0) {
 		fitResult.rms = fitResult.sse/fitResult.dof;

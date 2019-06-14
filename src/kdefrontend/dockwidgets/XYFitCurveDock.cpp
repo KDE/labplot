@@ -396,7 +396,6 @@ void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	DEBUG("XYFitCurveDock::xDataColumnChanged()");
 	if (m_initializing)
 		return;
 
@@ -411,7 +410,6 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	DEBUG("XYFitCurveDock::yDataColumnChanged()");
 	if (m_initializing)
 		return;
 
@@ -437,7 +435,6 @@ void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
-	DEBUG("XYFitCurveDock::yErrorColumnChanged()")
 	if (m_initializing)
 		return;
 
@@ -1149,8 +1146,8 @@ void XYFitCurveDock::resultLogContextMenuRequest(QPoint pos) {
 	contextMenu->exec(uiGeneralTab.twLog->mapToGlobal(pos));
 }
 
-			 /*!
- * show the result and details of fit
+/*!
+ * show the result and details of the fit
  */
 void XYFitCurveDock::showFitResult() {
 	DEBUG("XYFitCurveDock::showFitResult()");
