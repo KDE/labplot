@@ -200,13 +200,12 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		//skip the current child aspect it is not in the list of aspects to be loaded
 		if (m_pathesToLoad.indexOf(childPath) == -1) {
 			 //skip to the end of the current element
-			if (reader->skipToEndElement())
+			if (!reader->skipToEndElement())
 				return false;
 
 			//skip to the end of the "child_asspect" element
-			if (reader->skipToEndElement())
+			if (!reader->skipToEndElement())
 				return false;
-
 			return true;
 		}
 	}
