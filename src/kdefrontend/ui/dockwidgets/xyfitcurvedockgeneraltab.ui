@@ -1157,7 +1157,10 @@
         <string>Opens a dialog to change advanced fit options</string>
        </property>
        <property name="layoutDirection">
-        <enum>Qt::RightToLeft</enum>
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string>Advanced</string>
        </property>
        <property name="icon">
         <iconset theme="configure">
