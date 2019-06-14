@@ -87,6 +87,7 @@ class QMdiArea;
 class QMdiSubWindow;
 class QToolButton;
 class KRecentFilesAction;
+class QQuickWidget;
 
 class MainWin : public KXmlGuiWindow {
 	Q_OBJECT
@@ -122,6 +123,7 @@ private:
 	MemoryWidget* m_memoryInfoWidget{nullptr};
 	Qt::WindowStates m_lastWindowState; //< last window state before switching to full screen mode
 	QMdiSubWindow* m_welcomeWindow{nullptr};
+	QQuickWidget* m_welcomeWidget{nullptr};
 
 	KRecentFilesAction* m_recentProjectsAction;
 	QAction* m_saveAction;
@@ -247,6 +249,8 @@ protected:
 
 private slots:
 	void initGUI(const QString&);
+	QQuickWidget* createWelcomeScreen();
+	void createMdiArea();
 	void updateGUI();
 	void updateGUIOnProjectChanges();
 	void undo();

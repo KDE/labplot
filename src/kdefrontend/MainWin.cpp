@@ -139,7 +139,10 @@ MainWin::~MainWin() {
 	KSharedConfig::openConfig()->sync();
 
 	if (m_project != nullptr) {
-		m_mdiArea->closeAllSubWindows();
+
+		if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr)
+			m_mdiArea->closeAllSubWindows();
+
 		disconnect(m_project, nullptr, this, nullptr);
 		delete m_project;
 	}
@@ -305,25 +308,79 @@ void MainWin::initGUI(const QString& fileName) {
 	//load welcome screen
 	const bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
 	if(showWelcomeScreen) {
-
-		QList<QVariant> recentList;
-		for (QUrl url : m_recentProjectsAction->urls())
-			recentList.append(QVariant(url));
-
-		QQuickWidget *quickWidget = new QQuickWidget(this);
-		QUrl source("qrc:///main.qml");		
-		QQmlContext *ctxt = quickWidget->rootContext();
-		QVariant variant(recentList);
-		ctxt->setContextProperty("recentProjects", variant);
-		quickWidget->setSource(source);
-		QObject *item = quickWidget->rootObject();
-
-		QObject::connect(item, SIGNAL(recentProjectClicked(QUrl)), this, SLOT(openRecentProject(QUrl)));
-
-		m_welcomeWindow = m_mdiArea->addSubWindow(quickWidget);
+		m_welcomeWidget = createWelcomeScreen();
+		setCentralWidget(m_welcomeWidget);
 	}
 
 	updateGUIOnProjectChanges();
+}
+
+QQuickWidget* MainWin::createWelcomeScreen() {
+	QList<QVariant> recentList;
+	for (QUrl url : m_recentProjectsAction->urls())
+		recentList.append(QVariant(url));
+
+	QQuickWidget* quickWidget = new QQuickWidget(this);
+	QUrl source("qrc:///main.qml");
+	QQmlContext *ctxt = quickWidget->rootContext();
+	QVariant variant(recentList);
+	ctxt->setContextProperty("recentProjects", variant);
+	quickWidget->setSource(source);
+	QObject *item = quickWidget->rootObject();
+
+	QObject::connect(item, SIGNAL(recentProjectClicked(QUrl)), this, SLOT(openRecentProject(QUrl)));
+
+	return quickWidget;
+}
+
+void MainWin::createMdiArea() {
+	m_mdiArea = new QMdiArea;
+	setCentralWidget(m_mdiArea);
+	connect(m_mdiArea, &QMdiArea::subWindowActivated, this, &MainWin::handleCurrentSubWindowChanged);
+
+	KConfigGroup group = KSharedConfig::openConfig()->group( "Settings_General" );
+	int viewMode = group.readEntry("ViewMode", 0);
+	if (viewMode == 1) {
+		m_mdiArea->setViewMode(QMdiArea::TabbedView);
+		int tabPosition = group.readEntry("TabPosition", 0);
+		m_mdiArea->setTabPosition(QTabWidget::TabPosition(tabPosition));
+		m_mdiArea->setTabsClosable(true);
+		m_mdiArea->setTabsMovable(true);
+		m_tileWindows->setVisible(false);
+		m_cascadeWindows->setVisible(false);
+	}
+
+	QAction* action  = new QAction(i18n("&Close"), this);
+	actionCollection()->setDefaultShortcut(action, QKeySequence::Close);
+	action->setStatusTip(i18n("Close the active window"));
+	actionCollection()->addAction("close window", action);
+	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::closeActiveSubWindow);
+
+	action = new QAction(i18n("Close &All"), this);
+	action->setStatusTip(i18n("Close all the windows"));
+	actionCollection()->addAction("close all windows", action);
+	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::closeAllSubWindows);
+
+	m_tileWindows = new QAction(i18n("&Tile"), this);
+	m_tileWindows->setStatusTip(i18n("Tile the windows"));
+	actionCollection()->addAction("tile windows", m_tileWindows);
+	connect(m_tileWindows, &QAction::triggered, m_mdiArea, &QMdiArea::tileSubWindows);
+
+	m_cascadeWindows = new QAction(i18n("&Cascade"), this);
+	m_cascadeWindows->setStatusTip(i18n("Cascade the windows"));
+	actionCollection()->addAction("cascade windows", m_cascadeWindows);
+	connect(m_cascadeWindows, &QAction::triggered, m_mdiArea, &QMdiArea::cascadeSubWindows);
+	action = new QAction(QIcon::fromTheme("go-next-view"), i18n("Ne&xt"), this);
+	actionCollection()->setDefaultShortcut(action, QKeySequence::NextChild);
+	action->setStatusTip(i18n("Move the focus to the next window"));
+	actionCollection()->addAction("next window", action);
+	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::activateNextSubWindow);
+
+	action = new QAction(QIcon::fromTheme("go-previous-view"), i18n("Pre&vious"), this);
+	actionCollection()->setDefaultShortcut(action, QKeySequence::PreviousChild);
+	action->setStatusTip(i18n("Move the focus to the previous window"));
+	actionCollection()->addAction("previous window", action);
+	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::activatePreviousSubWindow);
 }
 
 void MainWin::initActions() {
@@ -888,6 +945,11 @@ bool MainWin::newProject() {
 	if (!closeProject())
 		return false;
 
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
+		createMdiArea();
+		setCentralWidget(m_mdiArea);
+	}
+
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	if (m_project)
@@ -998,6 +1060,11 @@ void MainWin::openProject(const QString& filename) {
 		return;
 	}
 
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
+		createMdiArea();
+		setCentralWidget(m_mdiArea);
+	}
+
 	if (!newProject())
 		return;
 
@@ -1041,6 +1108,11 @@ void MainWin::openProject(const QString& filename) {
 }
 
 void MainWin::openRecentProject(const QUrl& url) {
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
+		createMdiArea();
+		setCentralWidget(m_mdiArea);
+	}
+
 	if (url.isLocalFile())	// fix for Windows
 		this->openProject(url.toLocalFile());
 	else
@@ -1053,6 +1125,11 @@ void MainWin::openRecentProject(const QUrl& url) {
 bool MainWin::closeProject() {
 	if (m_project == nullptr)
 		return true; //nothing to close
+
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr && m_showWelcomeScreen) {
+		m_welcomeWidget = createWelcomeScreen();
+		setCentralWidget(m_welcomeWidget);
+	}
 
 	if (warnModified())
 		return false;
@@ -1293,7 +1370,7 @@ void MainWin::newNotes() {
 	Otherwise returns \a 0.
 */
 Workbook* MainWin::activeWorkbook() const {
-	if(m_welcomeWindow == m_mdiArea->currentSubWindow()) {
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
 		return nullptr;
 	}
 
@@ -1311,7 +1388,7 @@ Workbook* MainWin::activeWorkbook() const {
 	Otherwise returns \a 0.
 */
 Datapicker* MainWin::activeDatapicker() const {
-	if(m_welcomeWindow == m_mdiArea->currentSubWindow()) {
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
 		return nullptr;
 	}
 
@@ -1330,7 +1407,7 @@ Datapicker* MainWin::activeDatapicker() const {
 	Otherwise returns \c 0.
 */
 Spreadsheet* MainWin::activeSpreadsheet() const {
-	if(m_welcomeWindow == m_mdiArea->currentSubWindow()) {
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
 		return nullptr;
 	}
 
@@ -1366,7 +1443,7 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 	Otherwise returns \c 0.
 */
 Matrix* MainWin::activeMatrix() const {
-	if(m_welcomeWindow == m_mdiArea->currentSubWindow()) {
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
 		return nullptr;
 	}
 
@@ -1401,7 +1478,7 @@ Worksheet* MainWin::activeWorksheet() const {
 	if (!win)
 		return nullptr;
 
-	if(m_welcomeWindow == m_mdiArea->currentSubWindow()) {
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
 		return nullptr;
 	}
 

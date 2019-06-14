@@ -37,7 +37,7 @@ Rectangle {
 
 
         Frame {
-            id: rectangle1
+            id: recentProjectsFrame
             //width: mainWindow.width / 5
             //height: mainWindow.height / 3
 
@@ -113,6 +113,7 @@ Rectangle {
                         }
                     }
 
+                    ScrollBar.vertical: ScrollBar { }
                 }
             }
         }
@@ -192,7 +193,7 @@ Rectangle {
         }
 
         Frame {
-            id: rectangle4
+            id: helpFrame
             //width: mainWindow.width / 5
             // height: mainWindow.height / 3
             Layout.minimumWidth: (parent.width / 5) -  5*gridLayout.spacing
@@ -208,10 +209,11 @@ Rectangle {
             ColumnLayout {
                 id: columnLayout2
                 anchors.fill: parent
+                spacing: 30
 
                 Label {
                     id: label3
-                    text: qsTr("Documentation")
+                    text: qsTr("Help")
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.pointSize: 25
@@ -226,45 +228,57 @@ Rectangle {
                     height: 160
                     Layout.fillHeight: true
                     Layout.fillWidth: true
+                    ScrollBar.vertical: ScrollBar { }
                     model: ListModel {
                         ListElement {
-                            name: "Grey"
-                            colorCode: "grey"
+                            name: "Documentation"
+                            link: "https://docs.kde.org/trunk5/en/extragear-edu/labplot2/index.html"
                         }
 
                         ListElement {
-                            name: "Red"
-                            colorCode: "red"
+                            name: "FAQ"
+                            link: "https://docs.kde.org/trunk5/en/extragear-edu/labplot2/faq.html"
                         }
 
                         ListElement {
-                            name: "Blue"
-                            colorCode: "blue"
+                            name: "Features"
+                            link: "https://labplot.kde.org/features/"
                         }
 
                         ListElement {
-                            name: "Green"
-                            colorCode: "green"
+                            name: "Support"
+                            link: "https://labplot.kde.org/support/"
                         }
                     }
-                    delegate: Item {
-                        x: 5
-                        width: 80
-                        height: 40
-                        Row {
+                    delegate: Rectangle {
+                        width: parent.width
+                        height: 25
+                        RowLayout {
                             id: row3
+                            width: parent.width
+                            Layout.fillHeight: true
+
                             Rectangle {
-                                width: 40
-                                height: 40
-                                color: colorCode
+                                anchors.verticalCenter: parent.verticalCenter
+                                width: 5
+                                height: 5
+                                color: "#7a7d82"
                             }
 
-                            Text {
+                            Label {
                                 text: name
-                                anchors.verticalCenter: parent.verticalCenter
                                 font.bold: true
+                                font.pixelSize: 18
                             }
                             spacing: 10
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onEntered: {parent.color = '#fdffbf' }
+                            onExited: {parent.color = '#ffffff'}
+                            onClicked: {Qt.openUrlExternally(link)}
                         }
                     }
                 }
