@@ -1679,6 +1679,17 @@ void XYFitCurvePrivate::recalculate() {
 	for (size_t i = 0; i < n; i++)
 		weight[i] = 1.;
 
+	// handle zero errors
+	const double minError = 1.e-99;		//smallest possible error value (as small as possible, but square must be > DBL_MIN)
+	for (int i = 0; i < xerrorVector.size(); i++) {
+		if (xerror[i] == 0)
+			xerror[i] = qMax(minError, fabs(xdata[i]) * 1.e-15);
+	}
+	for (int i = 0; i < yerrorVector.size(); i++) {
+		if (yerror[i] == 0)
+			yerror[i] = qMax(minError, fabs(ydata[i]) * 1.e-15);
+	}
+
 	switch (fitData.yWeightsType) {
 	case nsl_fit_weight_no:
 	case nsl_fit_weight_statistical_fit:
@@ -1686,7 +1697,7 @@ void XYFitCurvePrivate::recalculate() {
 		break;
 	case nsl_fit_weight_instrumental:	// yerror are sigmas
 		for (int i = 0; i < (int)n; i++)
-			if (i < yerrorVector.size() && fabs(yerror[i]) > 0)
+			if (i < yerrorVector.size())
 				weight[i] = 1./gsl_pow_2(yerror[i]);
 		break;
 	case nsl_fit_weight_direct:		// yerror are weights
@@ -1696,7 +1707,7 @@ void XYFitCurvePrivate::recalculate() {
 		break;
 	case nsl_fit_weight_inverse:		// yerror are inverse weights
 		for (int i = 0; i < (int)n; i++)
-			if (i < yerrorVector.size() && fabs(yerror[i]) > 0)
+			if (i < yerrorVector.size())
 				weight[i] = 1./yerror[i];
 		break;
 	case nsl_fit_weight_statistical:
