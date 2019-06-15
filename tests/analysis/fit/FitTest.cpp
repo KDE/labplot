@@ -2814,11 +2814,11 @@ void FitTest::testNonLinear_yerror_zero_bug408535() {
 	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 557.463875234563
 	FuzzyCompare(fitResult.paramValues.at(0), 557.463875234563, 1.e-9);
 	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 22.0490332546127, FreeBSD: 22.0490429285665
-	FuzzyCompare(fitResult.errorValues.at(0), 22.0490332546127, 1.e-7);
+	FuzzyCompare(fitResult.errorValues.at(0), 22.0490332546127, 1.e-6);
 	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: 468.319724706721
 	FuzzyCompare(fitResult.paramValues.at(1), 468.319724706721, 1.e-9);
 	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 26.5105791274139, FreeBSD: 26.510591238283
-	FuzzyCompare(fitResult.errorValues.at(1), 26.5105791274139, 1.e-7);
+	FuzzyCompare(fitResult.errorValues.at(1), 26.5105791274139, 1.e-6);
 
 	DEBUG(std::setprecision(15) << fitResult.rms);	// result: 1.96172656494138
 	FuzzyCompare(fitResult.rms, 1.96172656494138, 1.e-9);
