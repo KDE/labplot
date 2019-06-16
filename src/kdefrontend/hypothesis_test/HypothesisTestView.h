@@ -49,7 +49,6 @@ class QModelIndex;
 class QItemSelection;
 class QLabel;
 class QTextEdit;
-class QLineEdit;
 
 class HypothesisTestView : public QWidget {
 	Q_OBJECT
@@ -75,7 +74,7 @@ private:
 
     HypothesisTest* m_hypothesisTest;
     QLabel* m_testName;
-    QLabel* m_statsTable;
+    QTextEdit* m_statsTable;
     QWidget* m_summaryResults;
     QLabel* m_resultLine[10];
 

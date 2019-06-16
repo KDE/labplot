@@ -66,11 +66,11 @@ public:
         QString m_stats_table;
         HypothesisTest::TailType tail_type;
 private:
-        void countPartitions(const Column* column, int &np, int &total_rows);
+        void countPartitions(Column* column, int &np, int &total_rows);
 
         ErrorType findStats(const Column* column,int &count, double &sum, double &mean, double &std);
         ErrorType findStatsPaired(const Column *column1, const Column *column2, int &count, double &sum, double &mean, double &std);
-        ErrorType findStatsCategorical(const Column *column1, const Column *column2, int n[], double sum[], double mean[], double std[], QMap<QString,int> &col_name, const int &np, const int &total_rows);
+        ErrorType findStatsCategorical(Column *column1, Column *column2, int n[], double sum[], double mean[], double std[], QMap<QString,int> &col_name, const int &np, const int &total_rows);
 
         double getPValue(const TestType &test, double &value, const QString &col1_name, const QString &col2_name, const int df);
         QString getHtmlTable(int row, int column, QVariant *row_major);

@@ -483,7 +483,7 @@ void HypothesisTestPrivate::performLeveneTest(bool categorical_variable) {
     else
         countPartitions(m_columns[0], np, total_rows);
 
-    int *n = new int[np];
+        int *n = new int[np];
     double* sum = new double[np];
     double* mean = new double[np];
     double* std = new double[np];
@@ -502,31 +502,33 @@ void HypothesisTestPrivate::performLeveneTest(bool categorical_variable) {
             col_names[i] = m_columns[i]->name();
         }
     }
-//    else {
-//        QMap<QString, int> col_name_to_partition;
-//        ErrorType error_code = findStatsCategorical(m_columns[0], m_columns[1], n, sum, mean, std, col_name_to_partition, np, total_rows);
-//        switch (error_code) {
-//            case ErrorUnqualSize: {
-//                printError( i18n("Unequal size between Column %1 and Column %2", m_columns[0]->name(), m_columns[1]->name()));
-//                emit q->changed();
-//                return;
-//            }case ErrorEmptyColumn: {
-//                printError("At least one of selected column is empty");
-//                emit q->changed();
-//                return;
-//            } case NoError:
-//                break;
-//        }
+    else {
+        QMap<QString, int> col_name_to_partition;
+        ErrorType error_code = findStatsCategorical(m_columns[0], m_columns[1], n, sum, mean, std, col_name_to_partition, np, total_rows);
+        switch (error_code) {
+            case ErrorUnqualSize: {
+                printError( i18n("Unequal size between Column %1 and Column %2", m_columns[0]->name(), m_columns[1]->name()));
+                emit q->changed();
+                return;
+            }case ErrorEmptyColumn: {
+                printError("At least one of selected column is empty");
+                emit q->changed();
+                return;
+            } case NoError:
+                break;
+        }
 
-//        QMapIterator<QString, int> i(col_name_to_partition);
-//        while (i.hasNext()) {
-//            i.next();
-//            col_names[i.value()] = i.key();
-//        }
-//    }
+        QMapIterator<QString, int> i(col_name_to_partition);
+        while (i.hasNext()) {
+            i.next();
+            col_names[i.value()-1] = i.key();
+        }
+    }
 
     int row_count = np+1;
     int column_count = 5;
+
+    qDebug() << " row count is " << row_count;
 
     QVariant* row_major = new QVariant[row_count*column_count];
     // header data;
@@ -664,13 +666,18 @@ HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsPaired(const Co
     return HypothesisTestPrivate::NoError;
 }
 
-void HypothesisTestPrivate::countPartitions(const Column *column, int &np, int &total_rows) {
+void HypothesisTestPrivate::countPartitions(Column *column, int &np, int &total_rows) {
     total_rows = column->rowCount();
     np = 0;
     QString cell_value;
     QMap<QString, bool> discovered_categorical_var;
+
+    AbstractColumn::ColumnMode original_col_mode = column->columnMode();
+    column->setColumnMode(AbstractColumn::Text);
+
     for (int i = 0; i < total_rows; i++) {
-        cell_value = m_columns[0]->textAt(i);
+        cell_value = column->textAt(i);
+
         if (cell_value.isEmpty()) {
             total_rows = i;
             break;
@@ -682,23 +689,29 @@ void HypothesisTestPrivate::countPartitions(const Column *column, int &np, int &
         discovered_categorical_var[cell_value] = true;
         np++;
     }
+    column->setColumnMode(original_col_mode);
 }
 
-HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsCategorical(const Column *column1, const Column *column2, int n[], double sum[], double mean[], double std[], QMap<QString, int> &col_name, const int &np, const int &total_rows) {
-    const Column* columns[] = {column1, column2};
+HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsCategorical(Column *column1, Column *column2, int n[], double sum[], double mean[], double std[], QMap<QString, int> &col_name, const int &np, const int &total_rows) {
+    Column* columns[] = {column1, column2};
     for (int i = 0; i < np; i++) {
         n[i] = 0;
         sum[i] = 0;
         mean[i] = 0;
         std[i] = 0;
     }
+    AbstractColumn::ColumnMode original_col_mode = columns[0]->columnMode();
+    columns[0]->setColumnMode(AbstractColumn::Text);
 
     int partition_number = 1;
     for (int i = 0; i < total_rows; i++) {
         QString name = columns[0]->textAt(i);
+
+        name = columns[0]->textAt(i);
         double value = columns[1]->valueAt(i);
 
         if (std::isnan(value)) {
+            columns[0]->setColumnMode(original_col_mode);
             return HypothesisTestPrivate::ErrorUnqualSize;
         }
 
@@ -727,6 +740,7 @@ HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsCategorical(con
         std[i] = qSqrt(std[i]);
     }
 
+    columns[0]->setColumnMode(original_col_mode);
     return HypothesisTestPrivate::NoError;
 }
 

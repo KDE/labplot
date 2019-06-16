@@ -41,6 +41,7 @@
 #include <QPrintPreviewDialog>
 #include <QLabel>
 #include <QTextEdit>
+#include <QTextDocument>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -59,10 +60,11 @@
 HypothesisTestView::HypothesisTestView(HypothesisTest* hypothesisTest) : QWidget(),
     m_hypothesisTest(hypothesisTest),
     m_testName(new QLabel()),
-    m_statsTable(new QLabel()),
+    m_statsTable(new QTextEdit()),
     m_summaryResults(new QWidget()){
 
-    m_summaryResults->setMouseTracking(true);
+    m_statsTable->setReadOnly(true);
+
     auto* layout = new QVBoxLayout(this);
     layout->addWidget(m_testName);
     layout->addWidget(m_statsTable);
@@ -166,7 +168,7 @@ void HypothesisTestView::print(QPrinter* printer) const {
 
  void HypothesisTestView::changed() {
     m_testName->setText(m_hypothesisTest->testName());
-    m_statsTable->setText(m_hypothesisTest->statsTable());
+    m_statsTable->setHtml(m_hypothesisTest->statsTable());
  }
 
 void HypothesisTestView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
