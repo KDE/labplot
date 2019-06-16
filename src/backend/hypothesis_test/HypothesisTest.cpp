@@ -117,9 +117,9 @@ void HypothesisTest::performTwoSamplePairedTTest() {
     d->performTwoSamplePairedTest(HypothesisTestPrivate::TestT);
 }
 
-void HypothesisTest::PerformOneSampleTTest() {
+void HypothesisTest::performOneSampleTTest() {
     d->m_currTestName = "<h2>One Sample T Test</h2>";
-    d->PerformOneSampleTest(HypothesisTestPrivate::TestT);
+    d->performOneSampleTest(HypothesisTestPrivate::TestT);
 }
 
 void HypothesisTest::performTwoSampleIndependentZTest() {
@@ -132,13 +132,15 @@ void HypothesisTest::performTwoSamplePairedZTest() {
     d->performTwoSamplePairedTest(HypothesisTestPrivate::TestZ);
 }
 
-void HypothesisTest::PerformOneSampleZTest() {
+void HypothesisTest::performOneSampleZTest() {
     d->m_currTestName = "<h2>One Sample Z Test</h2>";
-    d->PerformOneSampleTest(HypothesisTestPrivate::TestZ);
+    d->performOneSampleTest(HypothesisTestPrivate::TestZ);
 }
 
-
-
+void HypothesisTest::performLeveneTest(bool categorical_variable) {
+    d->m_currTestName = "<h2>Levene Test for Equality of Variance</h2>";
+    d->performLeveneTest(categorical_variable);
+}
 
 /******************************************************************************
  *                      Private Implementations
@@ -208,22 +210,39 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test,bool c
             }
         }
     } else {
-        ErrorType error_code = findStatsCategorical(m_columns[0], m_columns[1], n, sum, mean, std, col1_name, col2_name);
+        QMap<QString, int> col_name;
+        int np;
+        int total_rows;
+
+        countPartitions(m_columns[0], np, total_rows);
+        if (np != 2) {
+            printError( i18n("Number of Categorical Variable in Column %1 is not equal to 2", m_columns[0]->name()));
+            emit q->changed();
+            return;
+        }
+
+        ErrorType error_code = findStatsCategorical(m_columns[0], m_columns[1], n, sum, mean, std, col_name, np, total_rows);
+
         switch (error_code) {
             case ErrorUnqualSize: {
                 printError( i18n("Unequal size between Column %1 and Column %2", m_columns[0]->name(), m_columns[1]->name()));
                 emit q->changed();
                 return;
-            } case ErrorNotTwoCategoricalVariables: {
-                printError( i18n("Number of Categorical Variable in Column %1 is not equal to 2", m_columns[0]->name()));
-                emit q->changed();
-                return;
-            } case ErrorEmptyColumn: {
+            }case ErrorEmptyColumn: {
                 printError("At least one of selected column is empty");
                 emit q->changed();
                 return;
             } case NoError:
                 break;
+        }
+
+        QMapIterator<QString, int> i(col_name);
+        while (i.hasNext()) {
+            i.next();
+            if (i.value() == 1)
+                col1_name = i.key();
+            else
+                col2_name = i.key();
         }
     }
 
@@ -371,7 +390,7 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(TestType test) {
 
 /******************************** One Sample ***************************************/
 
-void HypothesisTestPrivate::PerformOneSampleTest(TestType test) {
+void HypothesisTestPrivate::performOneSampleTest(TestType test) {
     QString test_name;
     double value;
     int df = 0;
@@ -442,6 +461,132 @@ void HypothesisTestPrivate::PerformOneSampleTest(TestType test) {
 
 }
 
+/**************************************Levene Test****************************************/
+void HypothesisTestPrivate::performLeveneTest(bool categorical_variable) {
+    QString test_name;
+    double f_value;
+    int df = 0;         // degree of freedom
+    double p_value = 0;
+    int np = 0;         // number of partitions
+    int total_rows = 0;
+    int total_count = 0;
+    clearGlobalVariables();
+
+    if (m_columns.size() != 2) {
+        printError("Inappropriate number of columns selected");
+        emit q->changed();
+        return;
+    }
+
+    if (!categorical_variable && (m_columns[0]->columnMode() == AbstractColumn::Integer || m_columns[0]->columnMode() == AbstractColumn::Numeric))
+        np = m_columns.size();
+    else
+        countPartitions(m_columns[0], np, total_rows);
+
+    int *n = new int[np];
+    double* sum = new double[np];
+    double* mean = new double[np];
+    double* std = new double[np];
+
+    QString* col_names = new QString[np];
+    if (!categorical_variable && (m_columns[0]->columnMode() == AbstractColumn::Integer || m_columns[0]->columnMode() == AbstractColumn::Numeric)) {
+        for (int i = 0; i < np; i++) {
+            findStats(m_columns[i], n[i], sum[i], mean[i], std[i]);
+            total_count += n[i];
+
+            if (n[i] < 1) {
+                printError("At least one of selected column is empty");
+                emit q->changed();
+                return;
+            }
+            col_names[i] = m_columns[i]->name();
+        }
+    }
+//    else {
+//        QMap<QString, int> col_name_to_partition;
+//        ErrorType error_code = findStatsCategorical(m_columns[0], m_columns[1], n, sum, mean, std, col_name_to_partition, np, total_rows);
+//        switch (error_code) {
+//            case ErrorUnqualSize: {
+//                printError( i18n("Unequal size between Column %1 and Column %2", m_columns[0]->name(), m_columns[1]->name()));
+//                emit q->changed();
+//                return;
+//            }case ErrorEmptyColumn: {
+//                printError("At least one of selected column is empty");
+//                emit q->changed();
+//                return;
+//            } case NoError:
+//                break;
+//        }
+
+//        QMapIterator<QString, int> i(col_name_to_partition);
+//        while (i.hasNext()) {
+//            i.next();
+//            col_names[i.value()] = i.key();
+//        }
+//    }
+
+    int row_count = np+1;
+    int column_count = 5;
+
+    QVariant* row_major = new QVariant[row_count*column_count];
+    // header data;
+    row_major[0] = ""; row_major[1] = "N"; row_major[2] = "Sum"; row_major[3] = "Mean"; row_major[4] = "Std";
+
+    // table data
+    for (int row_i = 1; row_i < row_count; row_i++) {
+        row_major[row_i*column_count] = col_names[row_i-1];
+        row_major[row_i*column_count + 1] = n[row_i-1];
+        row_major[row_i*column_count + 2] = sum[row_i-1];
+        row_major[row_i*column_count + 3] = mean[row_i-1];
+        row_major[row_i*column_count + 4] = std[row_i-1];
+
+    }
+    m_stats_table = getHtmlTable(row_count, column_count, row_major);
+
+////    switch (test) {
+////    case TestT: {
+////        test_name = "T";
+
+////        if (equal_variance) {
+////            df = n[0] + n[1] - 2;
+////            double sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
+////            value = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
+////            printLine(9, "<b>Assumption:</b> Equal Variance b/w both population means");
+////        } else {
+////            double temp_val;
+////            temp_val = qPow( qPow(std[0], 2)/n[0] + qPow(std[1], 2)/n[1], 2);
+////            temp_val = temp_val / ( (qPow( (qPow(std[0], 2)/n[0]), 2)/(n[0]-1)) + (qPow( (qPow(std[1], 2)/n[1]), 2)/(n[1]-1)));
+////            df = qRound(temp_val);
+
+////            value = (mean[0] - mean[1]) / (qSqrt( (qPow(std[0], 2)/n[0]) + (qPow(std[1], 2)/n[1])));
+////            printLine(9, "<b>Assumption:</b> UnEqual Variance b/w both population means");
+////        }
+////        break;
+////    } case TestZ: {
+////        test_name = "Z";
+////        df = n[0] + n[1] - 2;
+
+////        double sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
+////        value = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
+////    }
+////    }
+
+////    m_currTestName = i18n("<h2>Two Sample Independent %1 Test for %2 vs %3</h2>", test_name, col1_name, col2_name);
+////    p_value = getPValue(test, value, col1_name, col2_name, df);
+
+////    printLine(2, i18n("Significance level is %1", m_significance_level), "blue");
+////    printLine(4, i18n("%1 Value is %2 ", test_name, value), "green");
+////    printLine(5, i18n("P Value is %1 ", p_value), "green");
+////    printLine(6, i18n("Degree of Freedom is %1", df), "green");
+
+////    if (p_value <= m_significance_level)
+////        q->m_view->setResultLine(5, i18n("We can safely reject Null Hypothesis for significance level %1", m_significance_level), Qt::ToolTipRole);
+////    else
+////        q->m_view->setResultLine(5, i18n("There is a plausibility for Null Hypothesis to be true"), Qt::ToolTipRole);
+
+    emit q->changed();
+    return;
+}
 /***************************************Helper Functions*************************************/
 
 HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStats(const Column* column, int &count, double &sum, double &mean, double &std) {
@@ -519,70 +664,64 @@ HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsPaired(const Co
     return HypothesisTestPrivate::NoError;
 }
 
-HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsCategorical(const Column *column1, const Column *column2, int n[], double sum[], double mean[], double std[], QString &col1_name, QString &col2_name) {
-    // clearing and initialising variables;
+void HypothesisTestPrivate::countPartitions(const Column *column, int &np, int &total_rows) {
+    total_rows = column->rowCount();
+    np = 0;
+    QString cell_value;
+    QMap<QString, bool> discovered_categorical_var;
+    for (int i = 0; i < total_rows; i++) {
+        cell_value = m_columns[0]->textAt(i);
+        if (cell_value.isEmpty()) {
+            total_rows = i;
+            break;
+        }
 
+        if (discovered_categorical_var[cell_value])
+            continue;
+
+        discovered_categorical_var[cell_value] = true;
+        np++;
+    }
+}
+
+HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsCategorical(const Column *column1, const Column *column2, int n[], double sum[], double mean[], double std[], QMap<QString, int> &col_name, const int &np, const int &total_rows) {
     const Column* columns[] = {column1, column2};
-
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < np; i++) {
+        n[i] = 0;
         sum[i] = 0;
         mean[i] = 0;
         std[i] = 0;
-        n[i] = 0;
     }
 
-    int count_temp = columns[0]->rowCount();
-    col1_name = "";
-    col2_name = "";
-    for (int i = 0; i < count_temp; i++) {
+    int partition_number = 1;
+    for (int i = 0; i < total_rows; i++) {
         QString name = columns[0]->textAt(i);
         double value = columns[1]->valueAt(i);
 
-        if (name.isEmpty() || std::isnan(value)) {
-            if (name.isEmpty() && std::isnan(value))
-                break;
-            else
-                return HypothesisTestPrivate::ErrorUnqualSize;
+        if (std::isnan(value)) {
+            return HypothesisTestPrivate::ErrorUnqualSize;
         }
 
-        if (name == col1_name) {
-            n[0]++;
-            sum[0] += value;
-        } else if (name == col2_name) {
-            n[1]++;
-            sum[1] += value;
-        } else if (col1_name.isEmpty()) {
-            n[0]++;
-            sum[0] += value;
-            col1_name = name;
-        } else if (col2_name.isEmpty()) {
-            n[1]++;
-            sum[1] += value;
-            col2_name = name;
+        if (col_name[name] == 0) {
+            col_name[name] = partition_number;
+            partition_number++;
         }
-        else
-            return HypothesisTestPrivate::ErrorNotTwoCategoricalVariables;
+
+        n[col_name[name]-1]++;
+        sum[col_name[name]-1] += value;
     }
 
-    if (col1_name.isEmpty() || col2_name.isEmpty())
-        return HypothesisTestPrivate::ErrorNotTwoCategoricalVariables;
+    for (int i = 0; i < np; i++)
+        mean[i] = sum[i] / n[i];
 
-
-    mean[0] = sum[0]/n[0];
-    mean[1] = sum[1]/n[1];
-
-
-    for (int i = 0; i < n[0]+n[1]; i++) {
+    for (int i = 0; i < total_rows; i++) {
         QString name = columns[0]->textAt(i);
         double value = columns[1]->valueAt(i);
 
-        if (name == col1_name)
-            std[0] += qPow( (value - mean[0]), 2);
-        else
-            std[1] += qPow( (value - mean[1]), 2);
+        std[col_name[name]-1] += qPow( (value - mean[col_name[name]-1]), 2);
     }
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < np; i++) {
         if (n[i] > 1)
             std[i] = std[i] / (n[i] - 1);
         std[i] = qSqrt(std[i]);

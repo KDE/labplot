@@ -66,10 +66,12 @@ public:
 
     void performTwoSampleIndependentTTest(bool categorical_variable, bool equal_variance);
     void performTwoSamplePairedTTest();
-    void PerformOneSampleTTest();
+    void performOneSampleTTest();
     void performTwoSampleIndependentZTest();
     void performTwoSamplePairedZTest();
-    void PerformOneSampleZTest();
+    void performOneSampleZTest();
+
+    void performLeveneTest(bool categorical_variable);
     //virtual methods
 //    QIcon icon() const override;
     QMenu* createContextMenu() override;

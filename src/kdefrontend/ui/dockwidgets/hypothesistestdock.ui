@@ -408,13 +408,26 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>431</y>
-     <width>162</width>
-     <height>23</height>
+     <y>430</y>
+     <width>158</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="text">
     <string>Categorical Variable</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pbLeveneTest">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>430</y>
+     <width>121</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Levene's Test</string>
    </property>
   </widget>
  </widget>

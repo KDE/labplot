@@ -40,15 +40,16 @@ public:
         virtual ~HypothesisTestPrivate();
 
         enum TestType {TestT, TestZ};
-        enum ErrorType {ErrorUnqualSize, ErrorNotTwoCategoricalVariables, ErrorEmptyColumn, NoError};
+        enum ErrorType {ErrorUnqualSize, ErrorEmptyColumn, NoError};
 
         QString name() const;
         void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
         void setColumns(QStringList cols);
         void performTwoSampleIndependentTest(TestType test, bool categorical_variable = false, bool equal_variance = true);
         void performTwoSamplePairedTest(TestType test);
-        void PerformOneSampleTest(TestType test);
+        void performOneSampleTest(TestType test);
 
+        void performLeveneTest(bool categorical_variable);
 
         HypothesisTest* const q;
         HypothesisTest::DataSourceType dataSourceType{HypothesisTest::DataSourceSpreadsheet};
@@ -65,9 +66,11 @@ public:
         QString m_stats_table;
         HypothesisTest::TailType tail_type;
 private:
+        void countPartitions(const Column* column, int &np, int &total_rows);
+
         ErrorType findStats(const Column* column,int &count, double &sum, double &mean, double &std);
         ErrorType findStatsPaired(const Column *column1, const Column *column2, int &count, double &sum, double &mean, double &std);
-        ErrorType findStatsCategorical(const Column *column1, const Column *column2, int n[2], double sum[2], double mean[2], double std[2], QString &col1_name, QString &col2_name);
+        ErrorType findStatsCategorical(const Column *column1, const Column *column2, int n[], double sum[], double mean[], double std[], QMap<QString,int> &col_name, const int &np, const int &total_rows);
 
         double getPValue(const TestType &test, double &value, const QString &col1_name, const QString &col2_name, const int df);
         QString getHtmlTable(int row, int column, QVariant *row_major);

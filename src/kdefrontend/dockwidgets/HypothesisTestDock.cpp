@@ -187,6 +187,8 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 //    connect(ui.cbTest, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::showHypothesisTest);
 //    connect(ui.cbTestType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::showHypothesisTest);
     connect(ui.pbPerformTest, &QPushButton::clicked, this, &HypothesisTestDock::doHypothesisTest);
+    connect(ui.pbLeveneTest, &QPushButton::clicked, this, &HypothesisTestDock::performLeveneTest);
+
 
     //connecting null hypothesis and alternate hypothesis radio button
     connect(ui.rbH1OneTail1, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1OneTail1Toggled);
@@ -269,6 +271,7 @@ void HypothesisTestDock::showHypothesisTest() {
     ui.cbCol2->setVisible(two_sample_independent || two_sample_paired || one_sample);
     ui.chbEqualVariance->setVisible(ttest && two_sample_independent);
     ui.chbCategorical->setVisible(ttest && two_sample_independent);
+    ui.pbLeveneTest->setVisible(ttest && two_sample_independent);
     ui.chbEqualVariance->setChecked(true);
     ui.pbPerformTest->setEnabled(two_sample_independent || two_sample_paired || one_sample);
 
@@ -305,7 +308,7 @@ void HypothesisTestDock::doHypothesisTest()  {
         if(two_sample_independent) {
             cols << ui.cbCol1Categorical->currentText() << ui.cbCol2->currentText();
             m_hypothesisTest->setColumns(cols);
-            m_hypothesisTest->performTwoSampleIndependentTTest(ui.chbCategorical, ui.chbEqualVariance->isChecked());
+            m_hypothesisTest->performTwoSampleIndependentTTest(ui.chbCategorical->isChecked(), ui.chbEqualVariance->isChecked());
         }
         else if(two_sample_paired) {
             cols << ui.cbCol1->currentText();
@@ -316,7 +319,7 @@ void HypothesisTestDock::doHypothesisTest()  {
         else if(one_sample){
             cols << ui.cbCol1->currentText();
             m_hypothesisTest->setColumns(cols);
-            m_hypothesisTest->PerformOneSampleTTest();
+            m_hypothesisTest->performOneSampleTTest();
         }
     }
     else if(ztest) {
@@ -335,9 +338,19 @@ void HypothesisTestDock::doHypothesisTest()  {
         else if(one_sample){
             cols << ui.cbCol1->currentText();
             m_hypothesisTest->setColumns(cols);
-            m_hypothesisTest->PerformOneSampleZTest();
+            m_hypothesisTest->performOneSampleZTest();
         }
     }
+}
+
+void HypothesisTestDock::performLeveneTest()  {
+
+    QStringList cols;
+    cols << ui.cbCol1Categorical->currentText() << ui.cbCol2->currentText();
+    m_hypothesisTest->setColumns(cols);
+    m_hypothesisTest->setSignificanceLevel(ui.leAlpha->text());
+
+    m_hypothesisTest->performLeveneTest(ui.chbCategorical->isChecked());
 }
 
 //void HypothesisTestDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
