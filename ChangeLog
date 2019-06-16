@@ -17,6 +17,8 @@ Bug fixes:
 	* [macOS] fix determining number of lines of data files
 	* Bug 408530 - correctly show error bars for data source columns having NANs
 	* Bug 407847 - fixed the broken project import
+	* [data fitting] handle weighted fitting with zero errors correctly
+	* [data fitting] allow weighted fitting with data source from curve
 
 -----2.6-----
 New features:

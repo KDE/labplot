@@ -30,6 +30,7 @@
 # are found and actually in the target link interface.
 find_package(netCDF ${netCDF_FIND_VERSION} ${netCDF_FIND_REQUIRED} CONFIG QUIET)
 if(netCDF_FOUND)
+	MESSAGE (STATUS "Found netCDF: ${netCDF_INCLUDE_DIR}, ${netCDF_LIBRARIES} (found version \"${netCDF_VERSION}\")")
     return()
 endif()
 
