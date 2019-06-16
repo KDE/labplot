@@ -468,8 +468,8 @@ void HypothesisTestPrivate::performLeveneTest(bool categorical_variable) {
     int df = 0;         // degree of freedom
     double p_value = 0;
     int np = 0;         // number of partitions
+    int n = 0;
     int total_rows = 0;
-    int total_count = 0;
     clearGlobalVariables();
 
     if (m_columns.size() != 2) {
@@ -481,111 +481,209 @@ void HypothesisTestPrivate::performLeveneTest(bool categorical_variable) {
     if (!categorical_variable && (m_columns[0]->columnMode() == AbstractColumn::Integer || m_columns[0]->columnMode() == AbstractColumn::Numeric))
         np = m_columns.size();
     else
-        countPartitions(m_columns[0], np, total_rows);
+        countPartitions(m_columns[0], np, n);
 
-        int *n = new int[np];
-    double* sum = new double[np];
-    double* mean = new double[np];
-    double* std = new double[np];
+    if (np < 2) {
+        printError("select atleast two columns/ classes");
+        emit q->changed();
+        return;
+    }
+
+    double* yi_bar = new double[np];
+    double* zi_bar = new double[np];
+    double zi_bar_bar = 0;
+    double* ni = new double[np];
+
+    for (int i = 0; i < np; i++) {
+        yi_bar[i] = 0;
+        zi_bar[i] = 0;
+        ni[i] = 0;
+    }
 
     QString* col_names = new QString[np];
     if (!categorical_variable && (m_columns[0]->columnMode() == AbstractColumn::Integer || m_columns[0]->columnMode() == AbstractColumn::Numeric)) {
-        for (int i = 0; i < np; i++) {
-            findStats(m_columns[i], n[i], sum[i], mean[i], std[i]);
-            total_count += n[i];
+        total_rows = m_columns[0]->rowCount();
 
-            if (n[i] < 1) {
-                printError("At least one of selected column is empty");
-                emit q->changed();
-                return;
+        double value = 0;
+        for (int j = 0; j < total_rows; j++) {
+            int number_nan_cols = 0;
+            for (int i = 0; i < np; i++) {
+                value = m_columns[i]->valueAt(j);
+                if (std::isnan(value)) {
+                    number_nan_cols++;
+                    continue;
+                }
+                yi_bar[i] += value;
+                ni[i]++;
+                n++;
             }
-            col_names[i] = m_columns[i]->name();
+            if (number_nan_cols == np) {
+                total_rows = j;
+                break;
+            }
         }
+
+        for (int i = 0; i < np; i++) {
+            if (ni[i] > 0)
+                yi_bar[i] = yi_bar[i] / ni[i];
+        }
+
+        for (int j = 0; j < total_rows; j++) {
+            for (int i = 0; i < np; i++) {
+                value = m_columns[i]->valueAt(j);
+                if (!(std::isnan(value)))
+                    zi_bar[i] += abs(value - yi_bar[i]);
+            }
+        }
+
+        for (int i = 0; i < np; i++) {
+            zi_bar_bar += zi_bar[i];
+            if (ni[i] > 0)
+                zi_bar[i] = zi_bar[i] / ni[i];
+        }
+
+        zi_bar_bar = zi_bar_bar / n;
+
+        double numerator_value = 0;
+        double denominator_value = 0;
+
+        for (int j = 0; j < total_rows; j++) {
+            for (int i = 0; i < np; i++) {
+                value = m_columns[i]->valueAt(j);
+                if (!(std::isnan(value))) {
+                    double zij = abs(value - yi_bar[i]);
+                    denominator_value +=  qPow( (zij - zi_bar[i]), 2);
+                }
+            }
+        }
+
+        for (int i = 0; i < np; i++) {
+            col_names[i] = m_columns[i]->name();
+            numerator_value += ni[i]*qPow( (zi_bar[i]-zi_bar_bar), 2);
+        }
+
+        f_value = ((n - np) / (np - 1)) * (numerator_value / denominator_value);
+
+//        qDebug() << "n is " << n;
+//        qDebug() << "fvalue is " << f_value;
+//        qDebug() << "numerator is " << numerator_value;
+//        qDebug() << "denominator is " << denominator_value;
+
     }
     else {
-        QMap<QString, int> col_name_to_partition;
-        ErrorType error_code = findStatsCategorical(m_columns[0], m_columns[1], n, sum, mean, std, col_name_to_partition, np, total_rows);
-        switch (error_code) {
-            case ErrorUnqualSize: {
-                printError( i18n("Unequal size between Column %1 and Column %2", m_columns[0]->name(), m_columns[1]->name()));
-                emit q->changed();
-                return;
-            }case ErrorEmptyColumn: {
-                printError("At least one of selected column is empty");
-                emit q->changed();
-                return;
-            } case NoError:
+        QMap<QString, int> classname_to_index;
+
+        AbstractColumn::ColumnMode original_col_mode = m_columns[0]->columnMode();
+        m_columns[0]->setColumnMode(AbstractColumn::Text);
+
+        int partition_number = 1;
+        QString name;
+        double value;
+        int class_index;
+
+        for (int j = 0; j < n; j++) {
+            name = m_columns[0]->textAt(j);
+            value = m_columns[1]->valueAt(j);
+
+            if (std::isnan(value)) {
+                n = j;
                 break;
+            }
+
+            if (classname_to_index[name] == 0) {
+                classname_to_index[name] = partition_number;
+                partition_number++;
+            }
+
+            class_index = classname_to_index[name]-1;
+            ni[class_index]++;
+            yi_bar[class_index] += value;
         }
 
-        QMapIterator<QString, int> i(col_name_to_partition);
+        for (int i = 0; i < np; i++) {
+            if (ni[i] > 0)
+                yi_bar[i] = yi_bar[i] / ni[i];
+        }
+
+        for (int j = 0; j < n; j++) {
+            name = m_columns[0]->textAt(j);
+            value = m_columns[1]->valueAt(j);
+            class_index = classname_to_index[name] - 1;
+            zi_bar[class_index] += abs(value - yi_bar[class_index]);
+        }
+
+        for (int i = 0; i < np; i++) {
+            zi_bar_bar += zi_bar[i];
+            zi_bar[i] = zi_bar[i] / ni[i];
+        }
+
+        zi_bar_bar = zi_bar_bar / n;
+
+        double numerator_value = 0;
+        double denominator_value = 0;
+
+        for (int j = 0; j < n; j++) {
+            name = m_columns[0]->textAt(j);
+            value = m_columns[1]->valueAt(j);
+            class_index = classname_to_index[name] - 1;
+            double zij = abs(value - yi_bar[class_index]);
+            denominator_value +=  qPow( (zij - zi_bar[class_index]), 2);
+        }
+
+        for (int i = 0; i < np; i++)
+            numerator_value += ni[i]*qPow( (zi_bar[i]-zi_bar_bar), 2);
+
+        f_value = ((n - np) / (np - 1)) * (numerator_value / denominator_value);
+
+//        qDebug() << "n is " << n;
+//        qDebug() << "fvalue is " << f_value;
+//        qDebug() << "numerator is " << numerator_value;
+//        qDebug() << "denominator is " << denominator_value;
+
+        QMapIterator<QString, int> i(classname_to_index);
         while (i.hasNext()) {
             i.next();
             col_names[i.value()-1] = i.key();
         }
+        m_columns[0]->setColumnMode(original_col_mode);
     }
 
-    int row_count = np+1;
-    int column_count = 5;
+    df = n - np;
 
-    qDebug() << " row count is " << row_count;
+    int row_count = np+1;
+    int column_count = 4;
+
 
     QVariant* row_major = new QVariant[row_count*column_count];
     // header data;
-    row_major[0] = ""; row_major[1] = "N"; row_major[2] = "Sum"; row_major[3] = "Mean"; row_major[4] = "Std";
+    row_major[0] = ""; row_major[1] = "Ni"; row_major[2] = "Yi_bar"; row_major[3] = "Zi_bar";
 
     // table data
     for (int row_i = 1; row_i < row_count; row_i++) {
         row_major[row_i*column_count] = col_names[row_i-1];
-        row_major[row_i*column_count + 1] = n[row_i-1];
-        row_major[row_i*column_count + 2] = sum[row_i-1];
-        row_major[row_i*column_count + 3] = mean[row_i-1];
-        row_major[row_i*column_count + 4] = std[row_i-1];
+        row_major[row_i*column_count + 1] = ni[row_i-1];
+        row_major[row_i*column_count + 2] = yi_bar[row_i-1];
+        row_major[row_i*column_count + 3] = zi_bar[row_i-1];
 
     }
     m_stats_table = getHtmlTable(row_count, column_count, row_major);
 
-////    switch (test) {
-////    case TestT: {
-////        test_name = "T";
+    p_value = nsl_stats_fdist_p(f_value, static_cast<size_t>(np-1), df);
 
-////        if (equal_variance) {
-////            df = n[0] + n[1] - 2;
-////            double sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
-////            value = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
-////            printLine(9, "<b>Assumption:</b> Equal Variance b/w both population means");
-////        } else {
-////            double temp_val;
-////            temp_val = qPow( qPow(std[0], 2)/n[0] + qPow(std[1], 2)/n[1], 2);
-////            temp_val = temp_val / ( (qPow( (qPow(std[0], 2)/n[0]), 2)/(n[0]-1)) + (qPow( (qPow(std[1], 2)/n[1]), 2)/(n[1]-1)));
-////            df = qRound(temp_val);
+    printLine(0, "Null Hypothesis: Variance is equal between all classes", "blue");
+    printLine(1, "Alternate Hypothesis: Variance is not equal in at-least one pair of classes", "blue");
+    printLine(2, i18n("Significance level is %1", m_significance_level), "blue");
+    printLine(4, i18n("F Value is %1 ", f_value), "green");
+    printLine(5, i18n("P Value is %1 ", p_value), "green");
+    printLine(6, i18n("Degree of Freedom is %1", df), "green");
 
-////            value = (mean[0] - mean[1]) / (qSqrt( (qPow(std[0], 2)/n[0]) + (qPow(std[1], 2)/n[1])));
-////            printLine(9, "<b>Assumption:</b> UnEqual Variance b/w both population means");
-////        }
-////        break;
-////    } case TestZ: {
-////        test_name = "Z";
-////        df = n[0] + n[1] - 2;
-
-////        double sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
-////        value = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
-////    }
-////    }
-
-////    m_currTestName = i18n("<h2>Two Sample Independent %1 Test for %2 vs %3</h2>", test_name, col1_name, col2_name);
-////    p_value = getPValue(test, value, col1_name, col2_name, df);
-
-////    printLine(2, i18n("Significance level is %1", m_significance_level), "blue");
-////    printLine(4, i18n("%1 Value is %2 ", test_name, value), "green");
-////    printLine(5, i18n("P Value is %1 ", p_value), "green");
-////    printLine(6, i18n("Degree of Freedom is %1", df), "green");
-
-////    if (p_value <= m_significance_level)
-////        q->m_view->setResultLine(5, i18n("We can safely reject Null Hypothesis for significance level %1", m_significance_level), Qt::ToolTipRole);
-////    else
-////        q->m_view->setResultLine(5, i18n("There is a plausibility for Null Hypothesis to be true"), Qt::ToolTipRole);
-
+    if (p_value <= m_significance_level) {
+        q->m_view->setResultLine(5, i18n("We can safely reject Null Hypothesis for significance level %1", m_significance_level), Qt::ToolTipRole);
+        printLine(8, "Requirement for homogeneity is not met", "red");
+    } else {
+        q->m_view->setResultLine(5, i18n("There is a plausibility for Null Hypothesis to be true"), Qt::ToolTipRole);
+        printLine(8, "Requirement for homogeneity is met", "green");
+    }
     emit q->changed();
     return;
 }

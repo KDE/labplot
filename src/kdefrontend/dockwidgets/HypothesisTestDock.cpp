@@ -80,6 +80,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     // making all test blocks invisible at starting.
     ui.lCol1Categorical->setVisible(false);
     ui.cbCol1Categorical->setVisible(false);
+    ui.pbLeveneTest->setVisible(false);
     ui.lCol1->setVisible(false);
     ui.cbCol1->setVisible(false);
     ui.lCol2->setVisible(false);
