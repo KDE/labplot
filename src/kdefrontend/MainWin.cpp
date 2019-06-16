@@ -67,6 +67,7 @@
 
 #include "kdefrontend/datasources/ImportFileDialog.h"
 #include "kdefrontend/datasources/ImportDatasetDialog.h"
+#include "kdefrontend/datasources/ImportDatasetWidget.h"
 #include "kdefrontend/datasources/ImportProjectDialog.h"
 #include "kdefrontend/datasources/ImportSQLDatabaseDialog.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
@@ -74,6 +75,7 @@
 #include "kdefrontend/SettingsDialog.h"
 #include "kdefrontend/GuiObserver.h"
 #include "kdefrontend/widgets/FITSHeaderEditDialog.h"
+#include "DatasetModel.h"
 
 #include <QMdiArea>
 #include <QMenu>
@@ -322,9 +324,17 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 
 	QQuickWidget* quickWidget = new QQuickWidget(this);
 	QUrl source("qrc:///main.qml");
+	//qmlRegisterType<DatasetModel>("labplot.frontend.datasetmodel", 1, 0, "DatasetModel");
+
 	QQmlContext *ctxt = quickWidget->rootContext();
 	QVariant variant(recentList);
 	ctxt->setContextProperty("recentProjects", variant);
+	m_importDatasetWidget = new ImportDatasetWidget(nullptr);
+	m_importDatasetWidget->hide();
+	m_datasetModel = new DatasetModel(m_importDatasetWidget->getDatasetsMap());
+	ctxt->setContextProperty("datasetModel", m_datasetModel);
+	qDebug() << "Categories: " << m_datasetModel->categories();
+
 	quickWidget->setSource(source);
 	QObject *item = quickWidget->rootObject();
 

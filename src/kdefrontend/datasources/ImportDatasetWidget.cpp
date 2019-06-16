@@ -448,3 +448,7 @@ void ImportDatasetWidget::uploadDatasetFile(const QString& filePath) {
 
 	dialog.exec();*/
 }
+
+const QMap<QString, QMap<QString, QVector<QString>>>& ImportDatasetWidget::getDatasetsMap() {
+	return m_datasetsMap;
+}

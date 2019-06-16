@@ -46,9 +46,11 @@ public:
 	explicit ImportDatasetWidget(QWidget* parent);
 	~ImportDatasetWidget() override;
 	AbstractFileFilter* currentFileFilter() const ;
-        QString getSelectedDataset() const;
+	QString getSelectedDataset() const;
 	void loadDatasetToProcess(DatasetHandler* datasetHandler);
-        QString locateCategoryJsonFile() const;
+	QString locateCategoryJsonFile() const;
+	const QMap<QString, QMap<QString, QVector<QString>>>& getDatasetsMap();
+
 
 private:    
 	Ui::ImportDatasetWidget ui;
@@ -57,7 +59,7 @@ private:
 	QString m_selectedSubcategory;
 	QCompleter* m_categoryCompleter;
 	QCompleter* m_datasetCompleter;
-        QString m_jsonDir;
+	QString m_jsonDir;
 	bool m_loadingCategories;
 	QString m_selectedCategory;
 

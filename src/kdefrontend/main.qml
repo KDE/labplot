@@ -16,6 +16,7 @@ Rectangle {
     height: 1080
     //title: qsTr("Hello World")
     id: mainWindow
+    property string currentCategory: ''
     property string initialUrl : "https://labplot.kde.org/2019/04/19/labplot-2-6-released/"
     property alias mainWindow: mainWindow
     signal  recentProjectClicked(url path)
@@ -286,7 +287,8 @@ Rectangle {
         }
 
         Frame {
-            id: rectangle5
+            id: datasetFrame
+
             // width: 3 * mainWindow.width / 5
             // height: mainWindow.height / 3
             Layout.minimumWidth: (3*parent.width / 5) -  5*gridLayout.spacing
@@ -314,209 +316,153 @@ Rectangle {
 
                 RowLayout {
                     id: rowLayout
-                    width: 100
-                    height: 100
                     Layout.fillHeight: true
                     Layout.fillWidth: true
+                    spacing: 10
 
-                    ColumnLayout {
-                        id: columnLayout4
-                        width: 100
-                        height: 100
+                    ListView {
+                        id: categoryList
+                        Layout.minimumWidth: 150
+                        spacing: 10
                         Layout.fillHeight: true
-                        Layout.fillWidth: true
 
-                        Label {
-                            id: label5
-                            text: qsTr("Medicine")
-                            font.pointSize: 20
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                            Layout.fillWidth: true
-                        }
+                        ScrollBar.vertical: ScrollBar { }
+                        Component.onCompleted: console.log("Model: " +  datasetModel.categories())
+                        model: datasetModel.categories()
+                        delegate:Rectangle {
+                            width: parent.width
+                            height: 25
+                            id: categoryDelegate
+                            property string categoryName : modelData
+                            property bool selected: ListView.isCurrentItem
 
-                        ListView {
-                            id: listView3
-                            width: 110
-                            height: 160
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                            model: ListModel {
-                                ListElement {
-                                    name: "Grey"
-                                    colorCode: "grey"
+                            RowLayout {
+                                spacing: 5
+                                Layout.fillHeight: true
+                                Layout.fillWidth: true
+
+                                Rectangle {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: 5
+                                    height: 5
+                                    color: "#7a7d82"
                                 }
 
-                                ListElement {
-                                    name: "Red"
-                                    colorCode: "red"
-                                }
+                                Label {
+                                    verticalAlignment: Text.AlignVCenter
+                                    horizontalAlignment: Text.AlignHCenter
+                                    text: categoryDelegate.categoryName
+                                    font.bold: true
+                                    font.pixelSize: 18
+                                    color: selected ? "#d69f00" : "#000000"
+                                    scale: selected ? 1.15 : 1.0
+                                    Behavior on color { ColorAnimation { duration: 150 } }
+                                    Behavior on scale { PropertyAnimation { duration: 300 } }
 
-                                ListElement {
-                                    name: "Blue"
-                                    colorCode: "blue"
-                                }
-
-                                ListElement {
-                                    name: "Green"
-                                    colorCode: "green"
+                                    Component.onCompleted: console.log("Category name: " +  categoryDelegate.categoryName)
                                 }
                             }
-                            delegate: Item {
-                                x: 5
-                                width: 80
-                                height: 40
-                                Row {
-                                    id: row4
-                                    Rectangle {
-                                        width: 40
-                                        height: 40
-                                        color: colorCode
-                                    }
 
-                                    Text {
-                                        text: name
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        font.bold: true
-                                    }
-                                    spacing: 10
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    console.log("Category name: " +  categoryDelegate.categoryName + "Clicked")
+                                    categoryDelegate.ListView.view.currentIndex = index
+                                    if (mainWindow.currentCategory != categoryName)
+                                        mainWindow.currentCategory = categoryName
                                 }
                             }
                         }
                     }
 
-                    ColumnLayout {
-                        id: columnLayout5
-                        width: 100
-                        height: 100
+                    Rectangle {
                         Layout.fillHeight: true
-                        Layout.fillWidth: true
-
-                        Label {
-                            id: label6
-                            text: qsTr("Nature")
-                            Layout.fillWidth: true
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                            font.pointSize: 20
-                        }
-
-                        ListView {
-                            id: listView4
-                            x: 0
-                            y: 0
-                            width: 110
-                            height: 160
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                            model: ListModel {
-                                ListElement {
-                                    name: "Grey"
-                                    colorCode: "grey"
-                                }
-
-                                ListElement {
-                                    name: "Red"
-                                    colorCode: "red"
-                                }
-
-                                ListElement {
-                                    name: "Blue"
-                                    colorCode: "blue"
-                                }
-
-                                ListElement {
-                                    name: "Green"
-                                    colorCode: "green"
-                                }
-                            }
-                            delegate: Item {
-                                x: 5
-                                width: 80
-                                height: 40
-                                Row {
-                                    id: row5
-                                    Rectangle {
-                                        width: 40
-                                        height: 40
-                                        color: colorCode
-                                    }
-
-                                    Text {
-                                        text: name
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        font.bold: true
-                                    }
-                                    spacing: 10
-                                }
-                            }
-                        }
+                        width: 5
+                        color: "grey"
                     }
 
-                    ColumnLayout {
-                        id: columnLayout6
-                        width: 100
-                        height: 100
+                    ListView {
+                        id: subcategoryList
+                        spacing: 20
                         Layout.fillHeight: true
                         Layout.fillWidth: true
-
-                        Label {
-                            id: label7
-                            text: qsTr("Physics")
-                            horizontalAlignment: Text.AlignHCenter
-                            font.pointSize: 20
-                            Layout.fillWidth: true
-                        }
-
-                        ListView {
-                            id: listView5
-                            x: 0
-                            y: 0
-                            width: 110
-                            height: 160
+                        ScrollBar.horizontal: ScrollBar {}
+                        //ScrollBar.vertical: ScrollBar{}
+                        orientation: ListView.Horizontal
+                        clip: true
+                        model: datasetModel.subcategories(mainWindow.currentCategory)
+                        delegate: Rectangle {
+                            id: subcategoryDelegate
+                            width: 150
                             Layout.fillHeight: true
-                            Layout.fillWidth: true
-                            model: ListModel {
-                                ListElement {
-                                    name: "Grey"
-                                    colorCode: "grey"
-                                }
+                            property string subcategoryName: modelData
+                            property variant datasets : datasetModel.datasets(mainWindow.currentCategory, subcategoryName)
 
-                                ListElement {
-                                    name: "Red"
-                                    colorCode: "red"
-                                }
 
-                                ListElement {
-                                    name: "Blue"
-                                    colorCode: "blue"
-                                }
 
-                                ListElement {
-                                    name: "Green"
-                                    colorCode: "green"
-                                }
-                            }
-                            delegate: Item {
-                                x: 5
-                                width: 80
-                                height: 40
-                                Row {
-                                    id: row6
-                                    Rectangle {
-                                        width: 40
-                                        height: 40
-                                        color: colorCode
-                                    }
-
-                                    Text {
-                                        text: name
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        font.bold: true
-                                    }
+                                ColumnLayout {
                                     spacing: 10
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                    Rectangle {
+                                        Layout.fillWidth: true
+                                        height: 20
+
+                                        Text {
+                                            anchors.fill: parent
+                                            text: subcategoryDelegate.subcategoryName
+                                            font.bold: true
+                                            font.underline: false
+                                            font.pixelSize: 18
+
+                                            Component.onCompleted: console.log("Subcategory name: " +  subcategoryDelegate.subcategoryName)
+                                        }
+                                    }
+
+                                    Repeater {
+                                        model: subcategoryDelegate.datasets
+                                        id: subItemRepeater
+                                        delegate: Rectangle {
+                                            height: 20
+                                            width: 150
+                                            border.color: "black"
+                                            border.width: 2
+
+                                            Text {
+                                                anchors.verticalCenter: parent.verticalCenter
+                                                font.pixelSize: 16
+                                                text: modelData
+                                            }
+                                        }
+                                    }
+
+
+
+                                    /*ListView {
+                                    id: datasetList
+                                    spacing: 10
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
+                                    orientation: ListView.Vertical
+                                    ScrollBar.vertical: ScrollBar { }
+                                    model:
+                                    delegate: Rectangle {
+                                        id: datasetDelegate
+                                        //Layout.fillWidth: true
+                                        height: 20
+                                        property string datasetName: modelData
+
+                                        Text {
+                                            anchors.fill: parent
+                                            text: datasetDelegate.datasetName
+                                            font.pixelSize: 16
+
+                                            Component.onCompleted: console.log("Dataset name: " +  datasetDelegate.datasetName + "  " + datasetList.count)
+                                        }
+                                    }
+                                }*/
                                 }
-                            }
+
                         }
                     }
                 }
