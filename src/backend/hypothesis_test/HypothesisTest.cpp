@@ -335,9 +335,6 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(TestType test) {
             return;
         } case NoError:
             break;
-        default:
-            emit q->changed();
-            return;
     }
 
     if (n == -1) {
@@ -420,7 +417,7 @@ void HypothesisTestPrivate::performOneSampleTest(TestType test) {
             return;
         } case NoError:
             break;
-        default: {
+        case ErrorEmptyColumn: {
             emit q->changed();
             return;
         }
