@@ -281,6 +281,7 @@ private slots:
 	void settingsDialog();
 	void projectChanged();
 	void colorSchemeChanged(QAction*);
+	void openDatasetExample(QString, QString, QString);
 
 	//Cantor
 #ifdef HAVE_CANTOR_LIBS

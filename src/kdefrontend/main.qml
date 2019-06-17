@@ -17,9 +17,11 @@ Rectangle {
     //title: qsTr("Hello World")
     id: mainWindow
     property string currentCategory: ''
+    property string currentSubcategory: ''
     property string initialUrl : "https://labplot.kde.org/2019/04/19/labplot-2-6-released/"
     property alias mainWindow: mainWindow
     signal  recentProjectClicked(url path)
+    signal datasetClicked(string category, string subcategory, string dataset)
 
     GridLayout {
         property int spacing: 15
@@ -385,13 +387,62 @@ Rectangle {
                         id: subcategoryList
                         spacing: 20
                         Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        ScrollBar.horizontal: ScrollBar {}
-                        //ScrollBar.vertical: ScrollBar{}
-                        orientation: ListView.Horizontal
-                        clip: true
+                        //Layout.fillWidth: true
+                        width: 250
+                        //ScrollBar.horizontal: ScrollBar {}
+                        ScrollBar.vertical: ScrollBar{}
+                        //orientation: ListView.Horizontal
+                        //clip: true
                         model: datasetModel.subcategories(mainWindow.currentCategory)
                         delegate: Rectangle {
+                            width: parent.width
+                            height: 25
+                            id: subcategoryDelegate
+                            property string subcategoryName : modelData
+                            property bool selected: ListView.isCurrentItem
+
+                            RowLayout {
+                                spacing: 10
+                                Layout.fillHeight: true
+                                Layout.fillWidth: true
+
+                                Rectangle {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: 5
+                                    height: 5
+                                    color: "#7a7d82"
+                                }
+
+                                Label {
+                                    verticalAlignment: Text.AlignVCenter
+                                    horizontalAlignment: Text.AlignHCenter
+                                    text: subcategoryDelegate.subcategoryName
+                                    font.bold: true
+                                    font.pixelSize: 18
+                                    color: selected ? "#d69f00" : "#000000"
+                                    scale: selected ? 1.15 : 1.0
+                                    Behavior on color { ColorAnimation { duration: 150 } }
+                                    Behavior on scale { PropertyAnimation { duration: 300 } }
+
+                                    Component.onCompleted: {
+                                        console.log("Subcategory name: " +  subcategoryDelegate.subcategoryName)
+                                    }
+                                }
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    console.log("Subcategory name: " +  subcategoryDelegate.subcategoryName + "Clicked")
+                                    subcategoryDelegate.ListView.view.currentIndex = index
+                                    if (mainWindow.currentSubcategory != subcategoryName)
+                                        mainWindow.currentSubcategory = subcategoryName
+                                }
+                            }
+                        }
+
+
+                        /*Rectangle {
                             id: subcategoryDelegate
                             width: 150
                             Layout.fillHeight: true
@@ -434,11 +485,11 @@ Rectangle {
                                                 text: modelData
                                             }
                                         }
-                                    }
+                                    }*/
 
 
 
-                                    /*ListView {
+                        /*ListView {
                                     id: datasetList
                                     spacing: 10
                                     Layout.fillHeight: true
@@ -461,10 +512,89 @@ Rectangle {
                                         }
                                     }
                                 }*/
+                        /*}
+
+                }*/
+                    }
+
+                    Rectangle {
+                        Layout.fillHeight: true
+                        width: 5
+                        color: "grey"
+                    }
+
+                    GridView {
+                        id: datasetGrid
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        cellWidth: width/4
+                        cellHeight: 40
+
+                        model: datasetModel.datasets(mainWindow.currentCategory, mainWindow.currentSubcategory)
+
+                        delegate: Rectangle {
+                            id: datasetDelegate
+                            property string datasetName : modelData
+                            property bool selected: (index == GridView.currentIndex)
+                            //Layout.fillHeight: true
+                            //Layout.fillWidth: true
+                            //width: datasetText.paintedWidth + datasetBullet.width
+                            width: textWidth
+                            height: textHeight
+                            //border.color: 'black'
+                            //border.width: 2
+
+                            property int textWidth: 200
+                            property int textHeight: 40
+
+                            RowLayout {
+                                id: datasetRow
+                                spacing: 5
+                                Layout.fillHeight: true
+                                Layout.fillWidth: true
+
+                                Rectangle {
+                                    id: datasetBullet
+                                    width: 5
+                                    height: 5
+                                    color: "#7a7d82"
                                 }
 
+                                Label {
+                                    id: datasetText
+                                    verticalAlignment: Text.AlignVCenter
+                                    horizontalAlignment: Text.AlignHCenter
+                                    text: datasetDelegate.datasetName
+                                    font.bold: true
+                                    font.pixelSize: 18
+                                    color: selected ? "#d69f00" : "#000000"
+                                    scale: selected ? 1.15 : 1.0
+                                    Behavior on color { ColorAnimation { duration: 150 } }
+                                    Behavior on scale { PropertyAnimation { duration: 300 } }
+
+                                    Component.onCompleted: {
+                                        console.log("Dataset name: " +  datasetDelegate.datasetName)
+                                        datasetDelegate.textHeight = paintedHeight
+                                        datasetDelegate.textWidth = paintedWidth + datasetBullet.width + datasetRow.spacing
+                                    }
+                                }
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    console.log("Dataset name: " +  datasetDelegate.datasetName + "Clicked")
+                                    mainWindow.datasetClicked(mainWindow.currentCategory, mainWindow.currentSubcategory, datasetDelegate.datasetName)
+                                    /*subcategoryDelegate.ListView.view.currentIndex = index
+                                    if (mainWindow.currentSubcategory != subcategoryName)
+                                        mainWindow.currentSubcategory = subcategoryName*/
+                                }
+                            }
                         }
+
                     }
+
+
                 }
             }
         }

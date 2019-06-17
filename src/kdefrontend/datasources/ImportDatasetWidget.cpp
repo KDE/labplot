@@ -51,7 +51,7 @@ Copyright            : (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
 ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	m_categoryCompleter(new QCompleter),
 	m_datasetCompleter(new QCompleter),
-    m_loadingCategories(false) {
+	m_loadingCategories(false) {
 	const QString baseDir = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first();
 	QString containingDir = "labplot_data";
 	m_jsonDir = baseDir + QDir::separator() + containingDir + QDir::separator();
@@ -451,4 +451,37 @@ void ImportDatasetWidget::uploadDatasetFile(const QString& filePath) {
 
 const QMap<QString, QMap<QString, QVector<QString>>>& ImportDatasetWidget::getDatasetsMap() {
 	return m_datasetsMap;
+}
+
+void ImportDatasetWidget::setCategory(const QString &category) {
+	for(int i = 0; i < ui.twCategories->topLevelItemCount(); i++) {
+		if (ui.twCategories->topLevelItem(i)->text(0).compare(category) == 0) {
+			listDatasetsForSubcategory(ui.twCategories->topLevelItem(i));
+			break;
+		}
+	}
+}
+
+void ImportDatasetWidget::setSubcategory(const QString &subcategory) {
+	for(int i = 0; i < ui.twCategories->topLevelItemCount(); i++) {
+		if (ui.twCategories->topLevelItem(i)->text(0).compare(m_selectedCategory) == 0) {
+			QTreeWidgetItem* categoryItem = ui.twCategories->topLevelItem(i);
+			for(int j = 0; j <categoryItem->childCount(); j++) {
+				if(categoryItem->child(j)->text(0).compare(subcategory) == 0) {
+					listDatasetsForSubcategory(categoryItem->child(j));
+					break;
+				}
+			}
+			break;
+		}
+	}
+}
+
+void ImportDatasetWidget::setDataset(const QString &datasetName) {
+	for(int i = 0; i < ui.lwDatasets->count() ; i++) {
+		if(ui.lwDatasets->item(i)->text().compare(datasetName) == 0) {
+			ui.lwDatasets->item(i)->setSelected(true);
+			break;
+		}
+	}
 }

@@ -50,7 +50,9 @@ public:
 	void loadDatasetToProcess(DatasetHandler* datasetHandler);
 	QString locateCategoryJsonFile() const;
 	const QMap<QString, QMap<QString, QVector<QString>>>& getDatasetsMap();
-
+	void setCategory(const QString&);
+	void setSubcategory(const QString&);
+	void setDataset(const QString&);
 
 private:    
 	Ui::ImportDatasetWidget ui;
