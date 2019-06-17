@@ -87,17 +87,17 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
 
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbDataSourceCurve, 6, 4, 1, 4);
+	gridLayout->addWidget(cbDataSourceCurve, 5, 3, 1, 4);
 
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 7, 4, 1, 4);
+	gridLayout->addWidget(cbXDataColumn, 6, 3, 1, 4);
 
 	cbXErrorColumn = new TreeViewComboBox(generalTab);
 	cbXErrorColumn->setEnabled(false);
 	uiGeneralTab.hlXError->addWidget(cbXErrorColumn);
 
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 8, 4, 1, 4);
+	gridLayout->addWidget(cbYDataColumn, 7, 3, 1, 4);
 
 	cbYErrorColumn = new TreeViewComboBox(generalTab);
 	cbYErrorColumn->setEnabled(false);
@@ -116,8 +116,11 @@ void XYFitCurveDock::setupGeneral() {
 
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height() * 2);
 
-	fitParametersWidget = new FitParametersWidget(generalTab);
-	gridLayout->addWidget(fitParametersWidget, 21, 4, 1, 4);
+	fitParametersWidget = new FitParametersWidget(uiGeneralTab.frameParameters);
+	QVBoxLayout* l = new QVBoxLayout();
+	l->setContentsMargins(0, 0, 0, 0);
+	l->addWidget(fitParametersWidget);
+	uiGeneralTab.frameParameters->setLayout(l);
 
 	//use white background in the preview label
 	QPalette p;
@@ -208,7 +211,6 @@ void XYFitCurveDock::setupGeneral() {
 	connect(cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)));
 	connect(cbXErrorColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xErrorColumnChanged(QModelIndex)));
 	connect(cbYErrorColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yErrorColumnChanged(QModelIndex)));
-
 }
 
 /*
@@ -522,10 +524,10 @@ void XYFitCurveDock::showFitOptions(bool checked) {
 void XYFitCurveDock::showParameters(bool checked) {
 	if (checked) {
 		uiGeneralTab.lParameters->setIcon(QIcon::fromTheme("arrow-down"));
-		fitParametersWidget->show();
+		uiGeneralTab.frameParameters->show();
 	} else {
 		uiGeneralTab.lParameters->setIcon(QIcon::fromTheme("arrow-right"));
-		fitParametersWidget->hide();
+		uiGeneralTab.frameParameters->hide();
 	}
 }
 
