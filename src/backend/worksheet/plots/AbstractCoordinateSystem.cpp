@@ -88,7 +88,7 @@ AbstractCoordinateSystem::~AbstractCoordinateSystem() = default;
  * \return false if line is completely outside, otherwise true
  */
 
-float round(float value, int precision) {
+double round(double value, int precision) {
 	return int(value*pow(10, precision) + (value<0 ? -0.5 : 0.5))/pow(10, precision);
 }
 
@@ -200,18 +200,18 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, 
 
 //more intelligent comparison of floats,
 //taken from Knuth's "The art of computer programming"
-bool AbstractCoordinateSystem::approximatelyEqual(float a, float b, float epsilon) {
+bool AbstractCoordinateSystem::approximatelyEqual(double a, double b, double epsilon) {
 	return fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
 }
 
-bool AbstractCoordinateSystem::essentiallyEqual(float a, float b, float epsilon) {
+bool AbstractCoordinateSystem::essentiallyEqual(double a, double b, double epsilon) {
 	return fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * epsilon);
 }
 
-bool AbstractCoordinateSystem::definitelyGreaterThan(float a, float b, float epsilon) {
+bool AbstractCoordinateSystem::definitelyGreaterThan(double a, double b, double epsilon) {
 	return (a - b) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
 }
 
-bool AbstractCoordinateSystem::definitelyLessThan(float a, float b, float epsilon) {
+bool AbstractCoordinateSystem::definitelyLessThan(double a, double b, double epsilon) {
 	return (b - a) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
 }
