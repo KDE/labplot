@@ -81,6 +81,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     ui.lCol1Categorical->setVisible(false);
     ui.cbCol1Categorical->setVisible(false);
     ui.pbLeveneTest->setVisible(false);
+    ui.chbCategorical->setVisible(false);
     ui.lCol1->setVisible(false);
     ui.cbCol1->setVisible(false);
     ui.lCol2->setVisible(false);
@@ -196,7 +197,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     connect(ui.rbH1OneTail2, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1OneTail2Toggled);
     connect(ui.rbH1TwoTail, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1TwoTailToggled);
 
-    connect(ui.cbCol1Categorical, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::col1CatIndexChanged);
+    connect(ui.cbCol1Categorical, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::col1CatIndexChanged);
 }
 
 void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
@@ -484,7 +485,7 @@ void HypothesisTestDock::performLeveneTest()  {
 //}
 
 void HypothesisTestDock::dataSourceTypeChanged(int index) {
-    HypothesisTest::DataSourceType type = (HypothesisTest::DataSourceType)index;
+    HypothesisTest::DataSourceType type = static_cast<HypothesisTest::DataSourceType>(index);
     bool showDatabase = (type == HypothesisTest::DataSourceDatabase);
     ui.lSpreadsheet->setVisible(!showDatabase);
     cbSpreadsheet->setVisible(!showDatabase);
