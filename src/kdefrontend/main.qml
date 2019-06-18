@@ -324,9 +324,12 @@ Rectangle {
 
                     ListView {
                         id: categoryList
-                        Layout.minimumWidth: 150
+                        width: textWidth
+                        implicitWidth: textWidth
                         spacing: 10
                         Layout.fillHeight: true
+                        property int textWidth: 100
+
 
                         ScrollBar.vertical: ScrollBar { }
                         Component.onCompleted: console.log("Model: " +  datasetModel.categories())
@@ -339,11 +342,13 @@ Rectangle {
                             property bool selected: ListView.isCurrentItem
 
                             RowLayout {
-                                spacing: 5
+                                id: categoryRow
+                                spacing: 10
                                 Layout.fillHeight: true
                                 Layout.fillWidth: true
 
                                 Rectangle {
+                                    id: categoryBullet
                                     anchors.verticalCenter: parent.verticalCenter
                                     width: 5
                                     height: 5
@@ -351,6 +356,7 @@ Rectangle {
                                 }
 
                                 Label {
+                                    id: categoryLabel
                                     verticalAlignment: Text.AlignVCenter
                                     horizontalAlignment: Text.AlignHCenter
                                     text: categoryDelegate.categoryName
@@ -361,7 +367,18 @@ Rectangle {
                                     Behavior on color { ColorAnimation { duration: 150 } }
                                     Behavior on scale { PropertyAnimation { duration: 300 } }
 
-                                    Component.onCompleted: console.log("Category name: " +  categoryDelegate.categoryName)
+                                    Component.onCompleted:  {
+                                        console.log("Category name: " +  categoryDelegate.categoryName)
+                                        if(index == 0) {
+                                            mainWindow.currentCategory =  categoryDelegate.categoryName
+                                            categoryDelegate.ListView.view.currentIndex = index
+                                            console.log("Set current categ: " +   mainWindow.currentCategory)
+                                        }
+
+                                        console.log("Category size: " + (paintedWidth + categoryBullet.width + categoryRow.spacing))
+                                        if(categoryList.textWidth < paintedWidth + categoryBullet.width + categoryRow.spacing)
+                                            categoryList.textWidth = paintedWidth + categoryBullet.width + categoryRow.spacing
+                                    }
                                 }
                             }
 
@@ -372,6 +389,10 @@ Rectangle {
                                     categoryDelegate.ListView.view.currentIndex = index
                                     if (mainWindow.currentCategory != categoryName)
                                         mainWindow.currentCategory = categoryName
+
+                                    console.log("Category size: " + (categoryLabel.paintedWidth + categoryBullet.width + categoryRow.spacing))
+                                    if(categoryList.textWidth < categoryLabel.paintedWidth + categoryBullet.width + categoryRow.spacing)
+                                        categoryList.textWidth = categoryLabel.paintedWidth + categoryBullet.width + categoryRow.spacing
                                 }
                             }
                         }
@@ -388,11 +409,14 @@ Rectangle {
                         spacing: 20
                         Layout.fillHeight: true
                         //Layout.fillWidth: true
-                        width: 250
+                        width: textWidth
+                        implicitWidth: textWidth
                         //ScrollBar.horizontal: ScrollBar {}
                         ScrollBar.vertical: ScrollBar{}
                         //orientation: ListView.Horizontal
                         //clip: true
+                        property int textWidth: 100
+
                         model: datasetModel.subcategories(mainWindow.currentCategory)
                         delegate: Rectangle {
                             width: parent.width
@@ -402,11 +426,13 @@ Rectangle {
                             property bool selected: ListView.isCurrentItem
 
                             RowLayout {
+                                id: subcategoryRow
                                 spacing: 10
                                 Layout.fillHeight: true
                                 Layout.fillWidth: true
 
                                 Rectangle {
+                                    id: subcategoryBullet
                                     anchors.verticalCenter: parent.verticalCenter
                                     width: 5
                                     height: 5
@@ -426,6 +452,18 @@ Rectangle {
 
                                     Component.onCompleted: {
                                         console.log("Subcategory name: " +  subcategoryDelegate.subcategoryName)
+
+                                        if(index == 0) {
+                                            mainWindow.currentSubcategory = subcategoryDelegate.subcategoryName
+                                            subcategoryDelegate.ListView.view.currentIndex = index
+                                        }
+
+                                        console.log("Subcategory size: " + (paintedWidth + subcategoryBullet.width + subcategoryRow.spacing))
+
+                                        if(subcategoryList.textWidth < paintedWidth + subcategoryBullet.width + subcategoryRow.spacing) {
+                                            subcategoryList.textWidth = paintedWidth + subcategoryBullet.width + subcategoryRow.spacing
+                                            console.log("Subcategory size bigger, new value: " + subcategoryList.textWidth + " " + subcategoryList.width)
+                                        }
                                     }
                                 }
                             }
@@ -440,81 +478,6 @@ Rectangle {
                                 }
                             }
                         }
-
-
-                        /*Rectangle {
-                            id: subcategoryDelegate
-                            width: 150
-                            Layout.fillHeight: true
-                            property string subcategoryName: modelData
-                            property variant datasets : datasetModel.datasets(mainWindow.currentCategory, subcategoryName)
-
-
-
-                                ColumnLayout {
-                                    spacing: 10
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    Rectangle {
-                                        Layout.fillWidth: true
-                                        height: 20
-
-                                        Text {
-                                            anchors.fill: parent
-                                            text: subcategoryDelegate.subcategoryName
-                                            font.bold: true
-                                            font.underline: false
-                                            font.pixelSize: 18
-
-                                            Component.onCompleted: console.log("Subcategory name: " +  subcategoryDelegate.subcategoryName)
-                                        }
-                                    }
-
-                                    Repeater {
-                                        model: subcategoryDelegate.datasets
-                                        id: subItemRepeater
-                                        delegate: Rectangle {
-                                            height: 20
-                                            width: 150
-                                            border.color: "black"
-                                            border.width: 2
-
-                                            Text {
-                                                anchors.verticalCenter: parent.verticalCenter
-                                                font.pixelSize: 16
-                                                text: modelData
-                                            }
-                                        }
-                                    }*/
-
-
-
-                        /*ListView {
-                                    id: datasetList
-                                    spacing: 10
-                                    Layout.fillHeight: true
-                                    Layout.fillWidth: true
-                                    orientation: ListView.Vertical
-                                    ScrollBar.vertical: ScrollBar { }
-                                    model:
-                                    delegate: Rectangle {
-                                        id: datasetDelegate
-                                        //Layout.fillWidth: true
-                                        height: 20
-                                        property string datasetName: modelData
-
-                                        Text {
-                                            anchors.fill: parent
-                                            text: datasetDelegate.datasetName
-                                            font.pixelSize: 16
-
-                                            Component.onCompleted: console.log("Dataset name: " +  datasetDelegate.datasetName + "  " + datasetList.count)
-                                        }
-                                    }
-                                }*/
-                        /*}
-
-                }*/
                     }
 
                     Rectangle {
@@ -536,13 +499,8 @@ Rectangle {
                             id: datasetDelegate
                             property string datasetName : modelData
                             property bool selected: (index == GridView.currentIndex)
-                            //Layout.fillHeight: true
-                            //Layout.fillWidth: true
-                            //width: datasetText.paintedWidth + datasetBullet.width
                             width: textWidth
                             height: textHeight
-                            //border.color: 'black'
-                            //border.width: 2
 
                             property int textWidth: 200
                             property int textHeight: 40
@@ -585,16 +543,10 @@ Rectangle {
                                 onClicked: {
                                     console.log("Dataset name: " +  datasetDelegate.datasetName + "Clicked")
                                     mainWindow.datasetClicked(mainWindow.currentCategory, mainWindow.currentSubcategory, datasetDelegate.datasetName)
-                                    /*subcategoryDelegate.ListView.view.currentIndex = index
-                                    if (mainWindow.currentSubcategory != subcategoryName)
-                                        mainWindow.currentSubcategory = subcategoryName*/
                                 }
                             }
                         }
-
                     }
-
-
                 }
             }
         }
