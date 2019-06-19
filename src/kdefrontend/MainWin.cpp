@@ -322,6 +322,8 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	for (QUrl url : m_recentProjectsAction->urls())
 		recentList.append(QVariant(url));
 
+	//qmlRegisterUncreatableType<DatasetModel>("labplot.datasetmodel", 1, 0, "DatasetModel", "");
+
 	QQuickWidget* quickWidget = new QQuickWidget(this);
 	QUrl source("qrc:///main.qml");
 	//qmlRegisterType<DatasetModel>("labplot.frontend.datasetmodel", 1, 0, "DatasetModel");
@@ -329,9 +331,9 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	QQmlContext *ctxt = quickWidget->rootContext();
 	QVariant variant(recentList);
 	ctxt->setContextProperty("recentProjects", variant);
-	m_importDatasetWidget = new ImportDatasetWidget(nullptr);
-	m_importDatasetWidget->hide();
-	m_datasetModel = new DatasetModel(m_importDatasetWidget->getDatasetsMap());
+	//m_importDatasetWidget = new ImportDatasetWidget(nullptr);
+	//m_importDatasetWidget->hide();
+	m_datasetModel = new DatasetModel();
 	ctxt->setContextProperty("datasetModel", m_datasetModel);
 	qDebug() << "Categories: " << m_datasetModel->categories();
 
@@ -339,7 +341,8 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	QObject *item = quickWidget->rootObject();
 
 	QObject::connect(item, SIGNAL(recentProjectClicked(QUrl)), this, SLOT(openRecentProject(QUrl)));
-	QObject::connect(item, SIGNAL(datasetClicked(QString, QString, QString)), this, SLOT(openDatasetExample(QString, QString, QString)));
+	QObject::connect(item, SIGNAL(datasetClicked(QString, QString, QString)), m_datasetModel, SLOT(datasetClicked(QString, QString, QString)));
+	QObject::connect(item, SIGNAL(openDataset()), this, SLOT(openDatasetExample()));
 
 	return quickWidget;
 }
@@ -1969,33 +1972,9 @@ void MainWin::handleSettingsChanges() {
 	}
 }
 
-void MainWin::openDatasetExample(QString category, QString subcategory, QString datasetName) {
+void MainWin::openDatasetExample() {
 	newProject();
-
-	m_importDatasetWidget->setCategory(category);
-	m_importDatasetWidget->setSubcategory(subcategory);
-	m_importDatasetWidget->setDataset(datasetName);
-
-	Spreadsheet* spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
-	DatasetHandler* dataset = new DatasetHandler(spreadsheet);
-	m_importDatasetWidget->loadDatasetToProcess(dataset);
-
-	QTimer timer;
-	timer.setSingleShot(true);
-	QEventLoop loop;
-	connect(dataset,  &DatasetHandler::downloadCompleted, &loop, &QEventLoop::quit);
-	connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-	timer.start(1500);
-	loop.exec();
-
-	if(timer.isActive()){
-		timer.stop();
-		addAspectToProject(spreadsheet);
-		delete dataset;
-	}
-	else
-		delete dataset;
-
+	addAspectToProject(m_datasetModel->getConfiguredSpreadsheet());
 }
 
 /***************************************************************************************/

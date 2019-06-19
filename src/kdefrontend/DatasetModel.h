@@ -31,18 +31,34 @@
 #include <QMap>
 #include <QVariant>
 
+class ImportDatasetWidget;
+class DatasetHandler;
+class Spreadsheet;
+
 class DatasetModel : public QObject {
     Q_OBJECT
 
 public:
-    DatasetModel(const QMap<QString, QMap<QString, QVector<QString>>>& datasetsMap);
+	DatasetModel();
     ~DatasetModel();
 
     Q_INVOKABLE QVariant categories();
     Q_INVOKABLE QVariant subcategories(const QString&);
 	Q_INVOKABLE QVariant datasets(const QString&, const QString&);
+	Q_INVOKABLE QVariant datasetName();
+	Q_INVOKABLE QVariant datasetDescription();
+	Q_INVOKABLE QVariant datasetColumns();
+	Q_INVOKABLE QVariant datasetRows();
+
+	Spreadsheet* getConfiguredSpreadsheet();
+
+public slots:
+	void datasetClicked(QString category, QString subcategory, QString datasetName);
 
 private:
+	ImportDatasetWidget* m_datasetWidget{nullptr};
+	DatasetHandler* m_datasetHandler{nullptr};
+	Spreadsheet* m_spreadsheet{nullptr};
     QStringList m_categoryLists;
     QMap<QString, QStringList> m_subcategories;
     QMap<QString, QMap<QString, QStringList>> m_datasets;
@@ -50,6 +66,10 @@ private:
     void initCategories(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap);
     void initSubcategories(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap);
     void initDatasets(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap);
+
+	signals:
+	void datasetFound();
+	void datasetNotFound();
 
 };
 

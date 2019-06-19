@@ -9,6 +9,8 @@ import QtQuick.Layouts 1.3
 import QtWebView 1.1
 import QtWebEngine 1.8
 
+//import labplot.datasetmodel 1.0
+
 
 Rectangle {
     visible: true
@@ -22,6 +24,29 @@ Rectangle {
     property alias mainWindow: mainWindow
     signal  recentProjectClicked(url path)
     signal datasetClicked(string category, string subcategory, string dataset)
+    signal openDataset()
+
+
+
+    Connections {
+        target: datasetModel
+        onDatasetFound:{
+            datasetTitle.text = datasetModel.datasetName()
+            console.log("Title width: " + datasetTitle.width)
+            datasetDescription.text = datasetModel.datasetDescription()
+            console.log("Description width: " + datasetDescription.width)
+            console.log("Description height: " + datasetDescription.paintedHeight  + "  " + height)
+            datasetRows.text = datasetModel.datasetRows()
+            datasetColumns.text = datasetModel.datasetColumns()
+        }
+        onDatasetNotFound:{
+            datasetTitle.text = "-"
+            datasetDescription.text = "-"
+            datasetRows.text = "-"
+            datasetColumns.text = "-";
+        }
+    }
+
 
     GridLayout {
         property int spacing: 15
@@ -498,7 +523,7 @@ Rectangle {
                         delegate: Rectangle {
                             id: datasetDelegate
                             property string datasetName : modelData
-                            property bool selected: (index == GridView.currentIndex)
+                            property bool selected: (index == datasetGrid.currentIndex)
                             width: textWidth
                             height: textHeight
 
@@ -534,6 +559,12 @@ Rectangle {
                                         console.log("Dataset name: " +  datasetDelegate.datasetName)
                                         datasetDelegate.textHeight = paintedHeight
                                         datasetDelegate.textWidth = paintedWidth + datasetBullet.width + datasetRow.spacing
+
+                                        if(index == 0) {
+                                            console.log("index 0  " +  mainWindow.currentCategory +"   subcat:  " + mainWindow.currentSubcategory + " dtaset  " +datasetDelegate.datasetName);
+                                            datasetGrid.currentIndex = index
+                                            mainWindow.datasetClicked(mainWindow.currentCategory, mainWindow.currentSubcategory, datasetDelegate.datasetName)
+                                        }
                                     }
                                 }
                             }
@@ -541,10 +572,169 @@ Rectangle {
                             MouseArea {
                                 anchors.fill: parent
                                 onClicked: {
+                                    datasetGrid.currentIndex = index
                                     console.log("Dataset name: " +  datasetDelegate.datasetName + "Clicked")
                                     mainWindow.datasetClicked(mainWindow.currentCategory, mainWindow.currentSubcategory, datasetDelegate.datasetName)
                                 }
                             }
+
+                            Component.onCompleted: {
+                                console.log("current index: " +  datasetGrid.currentIndex + " index " + index)
+                            }
+                        }
+
+                        Component.onCompleted: {
+                            console.log("GridView completed")
+                        }
+                    }
+
+                    Rectangle {
+                        Layout.fillHeight: true
+                        width: 5
+                        color: "grey"
+                    }
+
+
+                    ScrollView {
+                        Layout.minimumWidth: datasetFrame.width / 5
+                        Layout.preferredWidth: datasetFrame.width / 5
+                        width: datasetFrame.width / 5
+                        Layout.fillHeight: true
+                        contentHeight: datasetDescriptionColumn.height
+                        clip: true
+                        ColumnLayout {
+                            id: datasetDescriptionColumn
+                            //anchors.fill: parent
+                            Layout.minimumWidth: datasetFrame.width / 5
+                            Layout.preferredWidth: datasetFrame.width / 5
+                            width: datasetFrame.width / 5
+                            //Layout.fillWidth: true
+                            //Layout.fillHeight: true
+                            spacing: 10
+                            //ScrollBar.vertical: ScrollBar{}
+
+                            /*ScrollBar {
+                                id: vbar
+                                hoverEnabled: true
+                                active: hovered || pressed
+                                orientation: Qt.Vertical
+                                //size: frame.height / content.height
+                                anchors.top: parent.top
+                                anchors.right: parent.right
+                                anchors.bottom: parent.bottom
+                            }*/
+
+                            Row {
+                                width: datasetDescriptionColumn.width
+                                spacing: 5
+                                Text {
+                                    id: datasetTitleLabel
+                                    text: "Full name: "
+                                    font.pixelSize: 14
+                                    font.bold: true
+                                }
+
+                                Text {
+                                    id: datasetTitle
+                                    //Layout.fillWidth: true
+                                    width: datasetDescriptionColumn.width - datasetTitleLabel.paintedWidth
+                                    text: "-"
+                                    wrapMode: Text.WordWrap
+                                    font.pixelSize: 14
+                                }
+                            }
+
+                            Row {
+                                width: parent.width
+                                height: Math.max(datasetDescription.textHeight, datasetDescriptionLabel.paintedHeight)
+                                spacing: 5
+                                Text {
+                                    id: datasetDescriptionLabel
+                                    text: "Description: "
+                                    font.pixelSize: 14
+                                    font.bold: true
+                                }
+                                Text {
+                                    id: datasetDescription
+                                    property double textHeight: paintedHeight
+
+                                    text: ""
+                                    width: datasetDescriptionColumn.width - datasetDescriptionLabel.paintedWidth
+                                    Layout.preferredWidth: datasetDescriptionColumn.width - datasetDescriptionLabel.paintedWidth
+                                    Layout.minimumWidth: datasetDescriptionColumn.width - datasetDescriptionLabel.paintedWidth
+                                    wrapMode: Text.WordWrap
+                                    font.pixelSize: 12
+
+                                    Component.onCompleted:{
+                                        console.log("First Description width: " + width +  " " + (datasetDescriptionColumn.width - datasetDescriptionLabel.paintedWidth))
+                                        console.log("First Description height: " + paintedHeight +  " " + parent.height)
+                                    }
+                                }
+                            }
+
+                            Row {
+                                width: parent.width
+                                spacing: 5
+                                Text {
+                                    id: datasetColumnsLabel
+                                    text: "Columns: "
+                                    font.pixelSize: 14
+                                    font.bold: true
+                                }
+                                Text {
+                                    id: datasetColumns
+                                    text: "-"
+                                    width: datasetDescriptionColumn.width - datasetColumnsLabel.paintedWidth
+                                    wrapMode: Text.WordWrap
+                                    font.pixelSize: 14
+                                }
+                            }
+
+                            Row {
+                                width: parent.width
+                                spacing: 5
+                                Text {
+                                    id: datasetRowsLabel
+                                    text: "Rows: "
+                                    font.pixelSize: 14
+                                    font.bold: true
+                                }
+                                Text {
+                                    id: datasetRows
+                                    text: "-"
+                                    width: datasetDescriptionColumn.width - datasetRowsLabel.paintedWidth
+                                    wrapMode: Text.WordWrap
+                                    font.pixelSize: 14
+                                }
+                            }
+
+                            Rectangle {
+                                width: datasetButtonText.paintedWidth + 10
+                                height: datasetButtonText.paintedHeight + 10
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                                //anchors.horizontalCenter: parent.horizontalCenter
+                                //border.color: 'black'
+                                //border.width: 3
+                                color:'#dfe3ee'
+
+                                Text {
+                                    id: datasetButtonText
+                                    text: "Open dataset"
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pixelSize: 14
+                                    font.bold: true
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        mainWindow.openDataset()
+                                    }
+                                }
+                            }
+
+                            Component.onCompleted: console.log("Width of last column: " + datasetFrame.width / 5 + "  " + width)
                         }
                     }
                 }

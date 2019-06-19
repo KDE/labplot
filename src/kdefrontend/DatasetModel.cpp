@@ -26,10 +26,16 @@
  ***************************************************************************/
 
 #include "DatasetModel.h"
+#include "kdefrontend/datasources/ImportDatasetWidget.h"
+#include "backend/datasources/DatasetHandler.h"
 
 #include <QVector>
+#include <QTimer>
 
-DatasetModel::DatasetModel(const QMap<QString, QMap<QString, QVector<QString>>>& datasetsMap) {
+DatasetModel::DatasetModel() {
+	m_datasetWidget = new ImportDatasetWidget(0);
+	m_datasetWidget->hide();
+	const QMap<QString, QMap<QString, QVector<QString>>> datasetsMap = m_datasetWidget->getDatasetsMap();
 	initCategories(datasetsMap);
 	initSubcategories(datasetsMap);
 	initDatasets(datasetsMap);
@@ -69,4 +75,57 @@ QVariant DatasetModel::subcategories(const QString& category) {
 
 QVariant DatasetModel::datasets(const QString& category, const QString& subcategory) {
 	return QVariant(m_datasets[category][subcategory]);
+}
+
+void DatasetModel::datasetClicked(QString category, QString subcategory, QString datasetName) {
+
+	m_datasetWidget->setCategory(category);
+	m_datasetWidget->setSubcategory(subcategory);
+	m_datasetWidget->setDataset(datasetName);
+
+	//m_spreadsheet->clear()
+
+	if(m_spreadsheet != nullptr)
+		delete m_spreadsheet;
+	m_spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
+
+	if(m_datasetHandler != nullptr)
+		delete m_datasetHandler;
+	m_datasetHandler = new DatasetHandler(m_spreadsheet);
+
+	m_datasetWidget->loadDatasetToProcess(m_datasetHandler);
+
+	QTimer timer;
+	timer.setSingleShot(true);
+	QEventLoop loop;
+	connect(m_datasetHandler,  &DatasetHandler::downloadCompleted, &loop, &QEventLoop::quit);
+	connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+	timer.start(1500);
+	loop.exec();
+
+	if(timer.isActive()){
+		timer.stop();
+		emit datasetFound();
+	}
+	else
+		emit datasetNotFound();
+}
+
+QVariant DatasetModel::datasetName() {
+	return QVariant(m_spreadsheet->name());
+}
+
+QVariant DatasetModel::datasetDescription() {
+	return QVariant(m_spreadsheet->comment());
+}
+
+QVariant DatasetModel::datasetColumns() {
+	return QVariant(m_spreadsheet->columnCount());
+}
+QVariant DatasetModel::datasetRows() {
+	return QVariant(m_spreadsheet->rowCount());
+}
+
+Spreadsheet* DatasetModel::getConfiguredSpreadsheet() {
+	return m_spreadsheet;
 }
