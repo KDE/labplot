@@ -19,6 +19,7 @@ Bug fixes:
 	* Bug 407847 - fixed the broken project import
 	* [data fitting] handle weighted fitting with zero errors correctly
 	* [data fitting] allow weighted fitting with data source from curve
+	* [data fitting] fix function for calculating bounded values
 
 -----2.6-----
 New features:
