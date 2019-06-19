@@ -73,7 +73,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent) {
 		if (!layout)
 			continue;
 
-		layout->setContentsMargins(2,2,2,2);
+		layout->setContentsMargins(2, 2, 2, 2);
 		layout->setHorizontalSpacing(2);
 		layout->setVerticalSpacing(2);
 	}
