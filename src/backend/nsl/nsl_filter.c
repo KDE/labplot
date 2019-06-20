@@ -46,13 +46,13 @@ double nsl_filter_gain_bessel(int n, double x) {
 	COMPLEX z0 = {0.0, 0.0};
 	COMPLEX z = {0.0, (const double)x};
 	double norm = cabs(nsl_sf_poly_reversed_bessel_theta(n, z));
+	COMPLEX value = nsl_sf_poly_reversed_bessel_theta(n, z0);
 	//TODO Debugging
 	printf("theta(n, z) = %g + I %g\n", creal(nsl_sf_poly_reversed_bessel_theta(n, z)), cimag(nsl_sf_poly_reversed_bessel_theta(n, z)));
 	printf("norm = %g\n", norm);
 	printf("theta(n, 0) = %g + I %g\n", creal(nsl_sf_poly_reversed_bessel_theta(n, z0)), cimag(nsl_sf_poly_reversed_bessel_theta(n, z0)));
 	printf("result = creal(value)/norm = %g\n", creal(value)/norm);
 
-	COMPLEX value = nsl_sf_poly_reversed_bessel_theta(n, z0);
 	return creal(value)/norm;
 #else
 	//TODO Debugging
