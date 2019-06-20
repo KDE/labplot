@@ -1055,19 +1055,75 @@ void XYCurvePrivate::recalcLogicalPoints() {
 /*!
  * Adds a line, which connects two points, but only if the don't lie on the same xAxis pixel.
  * If they lie on the same x pixel, draw a vertical line between the minimum and maximum y value. So all points are included
+ * This function is only valid for linear x Axis scale!
  * @param p0 first point
  * @param p1 second point
  * @param minY
  * @param maxY
  * @param overlap if at the previous call was an overlap between the previous two points
- * @param minLogicalDiffX
- * @param minLogicalDiffY
+ * @param minLogicalDiffX logical difference between two pixels
  * @param pixelDiff x pixel distance between two points
  */
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, double minLogicalDiffX, int& pixelDiff) {
-	pixelDiff = int(p0.x() * minLogicalDiffX) - int(p1.x() * minLogicalDiffX);
+	pixelDiff = (int)(p1.x() * minLogicalDiffX) - (int)(p0.x() * minLogicalDiffX);
+
+	addLine(p0, p1, minY, maxY, overlap, pixelDiff);
+}
+
+/*!
+ * Adds a line, which connects two points, but only if the don't lie on the same xAxis pixel.
+ * If they lie on the same x pixel, draw a vertical line between the minimum and maximum y value. So all points are included
+ * This function can be used for all axis scalings (log, sqrt, linear, ...). For the linear case use the above function, because it's optimized for the linear case
+ * @param p0 first point
+ * @param p1 second point
+ * @param minY
+ * @param maxY
+ * @param overlap if at the previous call was an overlap between the previous two points
+ * @param minLogicalDiffX logical difference between two pixels
+ * @param pixelDiff x pixel distance between two points
+ */
+void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff, int pixelCount) {
+
+	CartesianPlot::Scale scale = plot->xScale();
+	switch (scale) {
+	case CartesianPlot::Scale::ScaleLinear: {// implemented for completeness only
+		double minLogicalDiffX = 1/((plot->xMax()-plot->xMin())/pixelCount);
+		addLine(p0, p1, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
+		return;
+	} default:
+		// for nonlinear scaling the pixel distance must be calculated for every point pair
+		QPointF p0Scene = cSystem->mapLogicalToScene(p0, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+		QPointF p1Scene = cSystem->mapLogicalToScene(p1, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+
+		// if the point is not valid, don't create a line
+		//if (std::isnan(p0Scene.x()) || std::isnan(p0Scene.y()))
+		if ((p0Scene.x() == 0 && p0Scene.y() == 0) || (p1Scene.x() == 0 && p1Scene.y() == 0)) // no possibility to create line
+			return;
+
+		// using only the difference between the points is not sufficient, because p0 is updated always
+		// indipendent if new line added or not
+		int p0Pixel = (int)((p0Scene.x() - plot->dataRect().x()) / plot->dataRect().width() * pixelCount);
+		int p1Pixel = (int)((p1Scene.x() - plot->dataRect().x()) / plot->dataRect().width() * pixelCount);
+		pixelDiff = p1Pixel - p0Pixel;
+		addLine(p0, p1, minY, maxY, overlap, pixelDiff);
+		return;
+	}
+
+}
+
+/*!
+ * \brief XYCurvePrivate::addLine
+ * This function is part of the other two addLine() functions to not have two times the same code
+ * @param p0 first point
+ * @param p1 second point
+ * @param minY
+ * @param maxY
+ * @param overlap if at the previous call was an overlap between the previous two points
+ * @param pixelDiff x pixel distance between two points
+ */
+void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff) {
 	if (pixelDiff == 0) {
-		if (overlap) { // second and so on time pixel are same
+		if (overlap) { // second and so the x axis pixels are the same
 		  if (p0.y() > maxY)
 			maxY = p0.y();
 
@@ -1121,7 +1177,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 				}
 			} else// x in scene
 				DEBUG("addLine: not in scene");
-		} else// overlap
+		} else// no overlap
 			lines.append(QLineF(p0,p1));
 	}
 }
@@ -1129,6 +1185,8 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 /*!
   recalculates the painter path for the lines connecting the data points.
   Called each time when the type of this connection is changed.
+  At the moment also the points which are outside of the scene are added. This algorithm can be improved by letting away all
+  lines where both points are outside of the scene
 */
 void XYCurvePrivate::updateLines() {
 #ifdef PERFTRACE_CURVES
@@ -1155,20 +1213,20 @@ void XYCurvePrivate::updateLines() {
 	int countPixelX = ceil(widthDatarectInch*QApplication::desktop()->physicalDpiX());
 	int countPixelY = ceil(heightDatarectInch*QApplication::desktop()->physicalDpiY());
 
+	// only valid for linear scale
 	double minLogicalDiffX = 1/((plot->xMax()-plot->xMin())/countPixelX);
-	double minLogicalDiffY = 1/((plot->yMax()-plot->yMin())/countPixelY);
+	//double minLogicalDiffY = 1/((plot->yMax()-plot->yMin())/countPixelY); // not used
 
 	//calculate the lines connecting the data points
 	{
 #ifdef PERFTRACE_CURVES
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines(), calculate the lines connecting the data points");
 #endif
-	QPointF tempPoint1, tempPoint2;
-	QPointF curPoint, nextPoint;
+	QPointF tempPoint1, tempPoint2; // used as temporaryPoints to interpolate datapoints if the corresponding setting is set
 
 	int startIndex, endIndex;
 	bool overlap = false;
-	double maxY, minY;
+	double maxY, minY; // are initialized in add line()
 	int pixelDiff;
 	QPointF p0;
 	QPointF p1;
@@ -1207,9 +1265,23 @@ void XYCurvePrivate::updateLines() {
 		case XYCurve::NoLine:
 			break;
 		case XYCurve::Line: {
-			//startIndex+=0;
-			//endIndex = startIndex+3;
-			//QPointF entryPoint = symbolPointsLogical[startIndex];
+			for (int i = startIndex; i < endIndex; i++) {
+				if (!lineSkipGaps && !connectedPointsLogical[i])
+					continue;
+				p0 = symbolPointsLogical[i];
+				p1 = symbolPointsLogical[i+1];
+				if (lineIncreasingXOnly && (p1.x() < p0.x())) // when option set skip points
+					continue;
+				addLine(p0, p1, minY, maxY, overlap, pixelDiff, countPixelX);
+			}
+			// add last line
+			if (overlap) {
+				overlap = false;
+				lines.append(QLineF(p0, p1));
+			}
+			break;
+		}
+		case XYCurve::StartHorizontal: {
 			for (int i = startIndex; i < endIndex; i++) {
 				if (!lineSkipGaps && !connectedPointsLogical[i])
 					continue;
@@ -1217,99 +1289,95 @@ void XYCurvePrivate::updateLines() {
 				p1 = symbolPointsLogical[i+1];
 				if (lineIncreasingXOnly && (p1.x() < p0.x()))
 					continue;
-				addLine(p0, p1, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
+
+				tempPoint1 = QPointF(p1.x(), p0.y());
+				addLine(p0, tempPoint1, minY, maxY, overlap, pixelDiff, countPixelX);
+				addLine(tempPoint1, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 			}
 			// add last line
 			if (overlap) {
 				overlap = false;
-				addLine(p0,p1, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
-			}
-			break;
-		}
-		case XYCurve::StartHorizontal: {
-			for (int i = startIndex; i < endIndex; i++) {
-				if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
-				p0 = symbolPointsLogical[i];
-				p1 = symbolPointsLogical[i+1];
-				if (lineIncreasingXOnly && (p1.x() < p0.x())) continue;
-				curPoint = p0;
-				nextPoint = p1;
-				tempPoint1 = QPointF(nextPoint.x(), curPoint.y());
-				addLine(curPoint, tempPoint1, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
-				addLine(tempPoint1, nextPoint, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
-			}
-			// add last line
-			if (overlap) {
-				overlap = false;
-				addLine(tempPoint1,nextPoint, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
+				lines.append(QLineF(tempPoint1, p1));
 			}
 			break;
 		}
 		case XYCurve::StartVertical: {
 			for (int i = startIndex; i < endIndex; i++) {
-				if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
-				if (lineIncreasingXOnly && (symbolPointsLogical.at(i+1).x() < symbolPointsLogical.at(i).x())) continue;
-				curPoint = symbolPointsLogical.at(i);
-				nextPoint = symbolPointsLogical.at(i+1);
-				tempPoint1 = QPointF(curPoint.x(), nextPoint.y());
-				addLine(curPoint, tempPoint1, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
-				addLine(tempPoint1, nextPoint, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
+				if (!lineSkipGaps && !connectedPointsLogical[i])
+					continue;
+				p0 = symbolPointsLogical[i];
+				p1 = symbolPointsLogical[i+1];
+				if (lineIncreasingXOnly && (p1.x() < p0.x()))
+					continue;
+				tempPoint1 = QPointF(p0.x(), p1.y());
+				addLine(p0, tempPoint1, minY, maxY, overlap, pixelDiff, countPixelX);
+				addLine(tempPoint1, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 			}
 			// add last line
 			if (overlap) {
 				overlap = false;
-				addLine(tempPoint1,nextPoint, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
+				lines.append(QLineF(tempPoint1, p1));
 			}
 			break;
 		}
 		case XYCurve::MidpointHorizontal: {
 			for (int i = startIndex; i < endIndex; i++) {
-				if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
-				if (lineIncreasingXOnly && (symbolPointsLogical.at(i+1).x() < symbolPointsLogical.at(i).x())) continue;
-				curPoint = symbolPointsLogical.at(i);
-				nextPoint = symbolPointsLogical.at(i+1);
-				tempPoint1 = QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, curPoint.y());
-				tempPoint2 = QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, nextPoint.y());
-				addLine(curPoint, tempPoint1, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
-				addLine(tempPoint1, tempPoint2, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
-				addLine(tempPoint2, nextPoint, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
+				if (!lineSkipGaps && !connectedPointsLogical[i])
+					continue;
+
+				p0 = symbolPointsLogical[i];
+				p1 = symbolPointsLogical[i+1];
+				if (lineIncreasingXOnly && (p1.x() < p0.x()))
+					continue;
+				tempPoint1 = QPointF(p0.x() + (p1.x()-p0.x())/2, p0.y());
+				tempPoint2 = QPointF(p0.x() + (p1.x()-p0.x())/2, p1.y());
+				addLine(p0, tempPoint1, minY, maxY, overlap, pixelDiff, countPixelX);
+				addLine(tempPoint1, tempPoint2, minY, maxY, overlap, pixelDiff, countPixelX);
+				addLine(tempPoint2, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 			}
 			// add last line
 			if (overlap) {
 				overlap = false;
-				addLine(tempPoint2,nextPoint, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
+				lines.append(QLineF(tempPoint2, p1));
 			}
 			break;
 		}
 		case XYCurve::MidpointVertical: {
+			if (!symbolPointsLogical.isEmpty()) // assumption: if not empty till startIndex all points exist
+				p0 = symbolPointsLogical[startIndex];
 			for (int i = startIndex; i < endIndex; i++) {
-				if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
-				if (lineIncreasingXOnly && (symbolPointsLogical.at(i+1).x() < symbolPointsLogical.at(i).x())) continue;
-				curPoint = symbolPointsLogical.at(i);
-				nextPoint = symbolPointsLogical.at(i+1);
-				tempPoint1 = QPointF(curPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
-				tempPoint2 = QPointF(nextPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
-				addLine(curPoint, tempPoint1, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
-				addLine(tempPoint1, tempPoint2, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
-				addLine(tempPoint2, nextPoint, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
+				if (!lineSkipGaps && !connectedPointsLogical[i])
+					continue;
+
+				p0 = symbolPointsLogical[i];
+				p1 = symbolPointsLogical[i+1];
+				if (lineIncreasingXOnly && (p1.x() < p0.x()))
+					continue;
+				tempPoint1 = QPointF(p0.x(), p0.y() + (p1.y()-p0.y())/2);
+				tempPoint2 = QPointF(p1.x(), p0.y() + (p1.y()-p0.y())/2);
+				addLine(p0, tempPoint1, minY, maxY, overlap, pixelDiff, countPixelX);
+				addLine(tempPoint1, tempPoint2, minY, maxY, overlap, pixelDiff, countPixelX);
+				addLine(tempPoint2, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 			}
 			// add last line
 			if (overlap) {
 				overlap = false;
-				addLine(tempPoint2,nextPoint, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
+				lines.append(QLineF(tempPoint2, p1));
 			}
 			break;
 		}
 		case XYCurve::Segments2: {
 			int skip = 0;
 			for (int i = startIndex; i < endIndex; i++) {
+				p0 = symbolPointsLogical[i];
+				p1 = symbolPointsLogical[i+1];
 				if (skip != 1) {
 					if ( (!lineSkipGaps && !connectedPointsLogical[i])
-						|| (lineIncreasingXOnly && (symbolPointsLogical[i+1].x() < symbolPointsLogical[i].x())) ) {
+						|| (lineIncreasingXOnly && (p1.x() < p0.x())) ) {
 						skip = 0;
 						continue;
 					}
-					addLine(symbolPointsLogical[i], symbolPointsLogical[i+1], minY, maxY, overlap, minLogicalDiffY, pixelDiff);
+					addLine(p0, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 					skip++;
 				} else
 					skip = 0;
@@ -1317,7 +1385,7 @@ void XYCurvePrivate::updateLines() {
 			// add last line
 			if (overlap) {
 				overlap = false;
-				addLine(symbolPointsLogical[endIndex-1],symbolPointsLogical[endIndex], minY, maxY, overlap, minLogicalDiffX, pixelDiff);
+				lines.append(QLineF(symbolPointsLogical[endIndex-1], symbolPointsLogical[endIndex]));
 			}
 			break;
 		}
@@ -1325,12 +1393,14 @@ void XYCurvePrivate::updateLines() {
 			int skip = 0;
 			for (int i = startIndex; i < endIndex; i++) {
 				if (skip != 2) {
+					p0 = symbolPointsLogical[i];
+					p1 = symbolPointsLogical[i+1];
 					if ( (!lineSkipGaps && !connectedPointsLogical[i])
-						|| (lineIncreasingXOnly && (symbolPointsLogical[i+1].x() < symbolPointsLogical[i].x())) ) {
+						|| (lineIncreasingXOnly && (p1.x() < p0.x())) ) {
 						skip = 0;
 						continue;
 					}
-					addLine(symbolPointsLogical[i], symbolPointsLogical[i+1], minY, maxY, overlap, minLogicalDiffX, pixelDiff);
+					addLine(p0, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 					skip++;
 				} else
 					skip = 0;
@@ -1338,7 +1408,7 @@ void XYCurvePrivate::updateLines() {
 			// add last line
 			if (overlap) {
 				overlap = false;
-				addLine(symbolPointsLogical[endIndex-1],symbolPointsLogical[endIndex], minY, maxY, overlap, minLogicalDiffX, pixelDiff);
+				lines.append(QLineF(symbolPointsLogical[endIndex-1], symbolPointsLogical[endIndex]));
 			}
 			break;
 		}
@@ -1415,17 +1485,21 @@ void XYCurvePrivate::updateLines() {
 				}
 			}
 
-			for (unsigned int i = 0; i < xinterp.size() - 1; i++)
-				addLine(QPointF(xinterp[i],yinterp[i]), QPointF(xinterp[i+1], yinterp[i+1]), minY, maxY,
-						overlap, minLogicalDiffX, pixelDiff);
-			addLine(QPointF(xinterp[xinterp.size()-1], yinterp[yinterp.size()-1]), QPointF(x[count-1], y[count-1]),
-					minY, maxY, overlap, minLogicalDiffX, pixelDiff);
+			if (!xinterp.empty()) {
 
-			// add last line
-			if (overlap) {
-				overlap = false;
-				addLine(QPointF(xinterp[xinterp.size()-1], yinterp[yinterp.size()-1]), QPointF(x[count-1], y[count-1]),
-						minY, maxY, overlap, minLogicalDiffX, pixelDiff);
+				for (unsigned int i = 0; i < xinterp.size() - 1; i++) {
+					p0 = QPointF(xinterp[i], yinterp[i]);
+					p1 = QPointF(xinterp[i+1], yinterp[i+1]);
+					addLine(p0, p1, minY, maxY, overlap, pixelDiff, countPixelX);
+				}
+
+				addLine(QPointF(xinterp[xinterp.size()-1], yinterp[yinterp.size()-1]), QPointF(x[count-1], y[count-1]), minY, maxY, overlap, pixelDiff, countPixelX);
+
+				// add last line
+				if (overlap) {
+					overlap = false;
+					lines.append(QLineF(QPointF(xinterp[xinterp.size()-1], yinterp[yinterp.size()-1]), QPointF(x[count-1], y[count-1])));
+				}
 			}
 
 			delete[] x;
