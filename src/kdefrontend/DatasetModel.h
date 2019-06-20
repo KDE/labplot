@@ -30,6 +30,7 @@
 #include <QObject>
 #include <QMap>
 #include <QVariant>
+#include <memory>
 
 class ImportDatasetWidget;
 class DatasetHandler;
@@ -50,7 +51,7 @@ public:
 	Q_INVOKABLE QVariant datasetColumns();
 	Q_INVOKABLE QVariant datasetRows();
 
-	Spreadsheet* getConfiguredSpreadsheet();
+	Spreadsheet* releaseConfiguredSpreadsheet();
 
 public slots:
 	void datasetClicked(QString category, QString subcategory, QString datasetName);
@@ -58,7 +59,7 @@ public slots:
 private:
 	ImportDatasetWidget* m_datasetWidget{nullptr};
 	DatasetHandler* m_datasetHandler{nullptr};
-	Spreadsheet* m_spreadsheet{nullptr};
+	mutable std::unique_ptr<Spreadsheet> m_spreadsheet{nullptr};
     QStringList m_categoryLists;
     QMap<QString, QStringList> m_subcategories;
     QMap<QString, QMap<QString, QStringList>> m_datasets;
@@ -70,6 +71,7 @@ private:
 	signals:
 	void datasetFound();
 	void datasetNotFound();
+	void showFirstDataset();
 
 };
 

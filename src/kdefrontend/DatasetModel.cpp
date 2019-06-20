@@ -85,13 +85,13 @@ void DatasetModel::datasetClicked(QString category, QString subcategory, QString
 
 	//m_spreadsheet->clear()
 
-	if(m_spreadsheet != nullptr)
-		delete m_spreadsheet;
-	m_spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
+	//if(m_spreadsheet.get() != nullptr)
+		//delete m_spreadsheet.get();
+	m_spreadsheet.reset(new Spreadsheet(i18n("Dataset%1", 1)));
 
 	if(m_datasetHandler != nullptr)
 		delete m_datasetHandler;
-	m_datasetHandler = new DatasetHandler(m_spreadsheet);
+	m_datasetHandler = new DatasetHandler(m_spreadsheet.get());
 
 	m_datasetWidget->loadDatasetToProcess(m_datasetHandler);
 
@@ -126,6 +126,6 @@ QVariant DatasetModel::datasetRows() {
 	return QVariant(m_spreadsheet->rowCount());
 }
 
-Spreadsheet* DatasetModel::getConfiguredSpreadsheet() {
-	return m_spreadsheet;
+Spreadsheet* DatasetModel::releaseConfiguredSpreadsheet() {
+	return m_spreadsheet.release();
 }

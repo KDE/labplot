@@ -339,10 +339,12 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 
 	quickWidget->setSource(source);
 	QObject *item = quickWidget->rootObject();
-
+	qDebug() << "Start connecting welcome screen";
 	QObject::connect(item, SIGNAL(recentProjectClicked(QUrl)), this, SLOT(openRecentProject(QUrl)));
 	QObject::connect(item, SIGNAL(datasetClicked(QString, QString, QString)), m_datasetModel, SLOT(datasetClicked(QString, QString, QString)));
 	QObject::connect(item, SIGNAL(openDataset()), this, SLOT(openDatasetExample()));
+	qDebug() << "Finished connecting welcome screen";
+	m_datasetModel->showFirstDataset();
 
 	return quickWidget;
 }
@@ -1974,7 +1976,7 @@ void MainWin::handleSettingsChanges() {
 
 void MainWin::openDatasetExample() {
 	newProject();
-	addAspectToProject(m_datasetModel->getConfiguredSpreadsheet());
+	addAspectToProject(m_datasetModel->releaseConfiguredSpreadsheet());
 }
 
 /***************************************************************************************/

@@ -20,6 +20,7 @@ Rectangle {
     id: mainWindow
     property string currentCategory: ''
     property string currentSubcategory: ''
+    property string currentDataset: ''
     property string initialUrl : "https://labplot.kde.org/2019/04/19/labplot-2-6-released/"
     property alias mainWindow: mainWindow
     signal  recentProjectClicked(url path)
@@ -44,6 +45,9 @@ Rectangle {
             datasetDescription.text = "-"
             datasetRows.text = "-"
             datasetColumns.text = "-";
+        }
+        onShowFirstDataset:{
+            datasetClicked(mainWindow.currentCategory, mainWindow.currentSubcategory, mainWindow.currentDataset)
         }
     }
 
@@ -563,6 +567,7 @@ Rectangle {
                                         if(index == 0) {
                                             console.log("index 0  " +  mainWindow.currentCategory +"   subcat:  " + mainWindow.currentSubcategory + " dtaset  " +datasetDelegate.datasetName);
                                             datasetGrid.currentIndex = index
+                                            mainWindow.currentDataset = datasetDelegate.datasetName
                                             mainWindow.datasetClicked(mainWindow.currentCategory, mainWindow.currentSubcategory, datasetDelegate.datasetName)
                                         }
                                     }
@@ -574,6 +579,7 @@ Rectangle {
                                 onClicked: {
                                     datasetGrid.currentIndex = index
                                     console.log("Dataset name: " +  datasetDelegate.datasetName + "Clicked")
+                                    mainWindow.currentDataset = datasetDelegate.datasetName
                                     mainWindow.datasetClicked(mainWindow.currentCategory, mainWindow.currentSubcategory, datasetDelegate.datasetName)
                                 }
                             }
