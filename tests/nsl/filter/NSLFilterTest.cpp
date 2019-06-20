@@ -35,13 +35,13 @@ extern "C" {
 //#################  form test
 //##############################################################################
 
-const int N = 1002;
 
 void NSLFilterTest::testForm() {
-	double data[N];
+	const int N = 1000;
+	double data[N+2];
 
 	int i;
-	for (i = 0; i < N; i++)
+	for (i = 0; i < N+2; i++)
 		data[i] = 1.0;
 	
 	/*Bessel gain*/

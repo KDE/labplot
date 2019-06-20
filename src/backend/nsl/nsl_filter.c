@@ -53,6 +53,7 @@ double nsl_filter_gain_bessel(int n, double x) {
 #endif
 }
 
+/* size of data should be n+2 */
 int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_form form, int order, double cutindex, double bandwidth) {
 	if (cutindex < 0) {
 		printf("index for cutoff must be >= 0\n");
