@@ -36,9 +36,10 @@ extern "C" {
 //##############################################################################
 
 const int N = 1002;
-double data[N];
 
 void NSLFilterTest::testForm() {
+	double data[N];
+
 	int i;
 	for (i = 0; i < N; i++)
 		data[i] = 1.0;
