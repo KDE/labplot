@@ -27,7 +27,7 @@
  ***************************************************************************/
 
 #include <stdio.h>
-//#include <gsl/gsl_statistics_double.h>
+#include <gsl/gsl_statistics_double.h>
 #include "nsl_stats.h"
 
 int main() {
@@ -78,7 +78,7 @@ int main() {
 		printf("%d: %g %g %g %g %g %g %g |%g| %g %g %g %g %g %g\n", type, v0,v10,v20,v25,v30,v40,v50,med,v60,v70,v75,v80,v90,v100);
 	}
 
-/*	v0 = gsl_stats_quantile_from_sorted_data(data, 1, size, 0.0);
+	v0 = gsl_stats_quantile_from_sorted_data(data, 1, size, 0.0);
 	v10 = gsl_stats_quantile_from_sorted_data(data, 1, size, 0.1);
 	v20 = gsl_stats_quantile_from_sorted_data(data, 1, size, 0.2);
 	v25 = gsl_stats_quantile_from_sorted_data(data, 1, size, 0.25);
@@ -92,5 +92,4 @@ int main() {
 	v90 = gsl_stats_quantile_from_sorted_data(data, 1, size, 0.9);
 	v100 = gsl_stats_quantile_from_sorted_data(data, 1, size, 1.0);
 	printf("\nGSL: %g %g %g %g %g %g %g %g %g %g %g %g %g\n", v0,v10,v20,v25,v30,v40,v50,v60,v70,v75,v80,v90,v100);
-*/
 }

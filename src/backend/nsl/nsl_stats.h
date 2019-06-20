@@ -32,6 +32,7 @@
 #include <stdlib.h>
 
 /* estimation types of quantile (see https://en.wikipedia.org/wiki/Quantile) */
+#define NSL_STATS_QUANTILE_TYPE_COUNT 9
 typedef enum {nsl_stats_quantile_type1=1, nsl_stats_quantile_type2, nsl_stats_quantile_type3, nsl_stats_quantile_type4, 
 		nsl_stats_quantile_type5, nsl_stats_quantile_type6, nsl_stats_quantile_type7, nsl_stats_quantile_type8,
 		nsl_stats_quantile_type9} nsl_stats_quantile_type;
