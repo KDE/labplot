@@ -150,9 +150,8 @@ void CartesianPlot::init() {
 	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
 	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
 
-	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(childAdded(const AbstractAspect*)));
-	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-	        this, SLOT(childRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
+	connect(this, &AbstractAspect::aspectAdded, this, &CartesianPlot::childAdded);
+	connect(this, &AbstractAspect::aspectRemoved, this, &CartesianPlot::childRemoved);
 
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
@@ -426,25 +425,25 @@ void CartesianPlot::initActions() {
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), this);
 
-	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
-	connect(addHistogramAction,SIGNAL(triggered()), SLOT(addHistogram()));
-	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
-	connect(addDataReductionCurveAction, SIGNAL(triggered()), SLOT(addDataReductionCurve()));
-	connect(addDifferentiationCurveAction, SIGNAL(triggered()), SLOT(addDifferentiationCurve()));
-	connect(addIntegrationCurveAction, SIGNAL(triggered()), SLOT(addIntegrationCurve()));
-	connect(addInterpolationCurveAction, SIGNAL(triggered()), SLOT(addInterpolationCurve()));
-	connect(addSmoothCurveAction, SIGNAL(triggered()), SLOT(addSmoothCurve()));
-	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
-	connect(addFourierFilterCurveAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
-	connect(addFourierTransformCurveAction, SIGNAL(triggered()), SLOT(addFourierTransformCurve()));
-	connect(addConvolutionCurveAction, SIGNAL(triggered()), SLOT(addConvolutionCurve()));
-	connect(addCorrelationCurveAction, SIGNAL(triggered()), SLOT(addCorrelationCurve()));
+	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
+	connect(addHistogramAction,&QAction::triggered, this, &CartesianPlot::addHistogram);
+	connect(addEquationCurveAction, &QAction::triggered, this, &CartesianPlot::addEquationCurve);
+	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
+	connect(addDifferentiationCurveAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
+	connect(addIntegrationCurveAction, &QAction::triggered, this, &CartesianPlot::addIntegrationCurve);
+	connect(addInterpolationCurveAction, &QAction::triggered, this, &CartesianPlot::addInterpolationCurve);
+	connect(addSmoothCurveAction, &QAction::triggered, this, &CartesianPlot::addSmoothCurve);
+	connect(addFitCurveAction, &QAction::triggered, this, &CartesianPlot::addFitCurve);
+	connect(addFourierFilterCurveAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
+	connect(addFourierTransformCurveAction, &QAction::triggered, this, &CartesianPlot::addFourierTransformCurve);
+	connect(addConvolutionCurveAction, &QAction::triggered, this, &CartesianPlot::addConvolutionCurve);
+	connect(addCorrelationCurveAction, &QAction::triggered, this, &CartesianPlot::addCorrelationCurve);
 
-	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
-	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
-	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
-	connect(addTextLabelAction, SIGNAL(triggered()), SLOT(addTextLabel()));
-	connect(addCustomPointAction, SIGNAL(triggered()), SLOT(addCustomPoint()));
+	connect(addLegendAction, &QAction::triggered, this, static_cast<void (CartesianPlot::*)()>(&CartesianPlot::addLegend));
+	connect(addHorizontalAxisAction, &QAction::triggered, this, &CartesianPlot::addHorizontalAxis);
+	connect(addVerticalAxisAction, &QAction::triggered, this, &CartesianPlot::addVerticalAxis);
+	connect(addTextLabelAction, &QAction::triggered, this, &CartesianPlot::addTextLabel);
+	connect(addCustomPointAction, &QAction::triggered, this, &CartesianPlot::addCustomPoint);
 
 	//Analysis menu actions
 	addDataOperationAction = new QAction(i18n("Data Operation"), this);
@@ -502,16 +501,16 @@ void CartesianPlot::initActions() {
 
 	addFourierFilterAction = new QAction(i18n("Fourier Filter"), this);
 
-	connect(addDataReductionAction, SIGNAL(triggered()), SLOT(addDataReductionCurve()));
-	connect(addDifferentiationAction, SIGNAL(triggered()), SLOT(addDifferentiationCurve()));
-	connect(addIntegrationAction, SIGNAL(triggered()), SLOT(addIntegrationCurve()));
-	connect(addInterpolationAction, SIGNAL(triggered()), SLOT(addInterpolationCurve()));
-	connect(addSmoothAction, SIGNAL(triggered()), SLOT(addSmoothCurve()));
-	connect(addConvolutionAction, SIGNAL(triggered()), SLOT(addConvolutionCurve()));
-	connect(addCorrelationAction, SIGNAL(triggered()), SLOT(addCorrelationCurve()));
+	connect(addDataReductionAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
+	connect(addDifferentiationAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
+	connect(addIntegrationAction, &QAction::triggered, this, &CartesianPlot::addIntegrationCurve);
+	connect(addInterpolationAction, &QAction::triggered, this, &CartesianPlot::addInterpolationCurve);
+	connect(addSmoothAction, &QAction::triggered, this, &CartesianPlot::addSmoothCurve);
+	connect(addConvolutionAction, &QAction::triggered, this, &CartesianPlot::addConvolutionCurve);
+	connect(addCorrelationAction, &QAction::triggered, this, &CartesianPlot::addCorrelationCurve);
 	for (const auto& action : addFitAction)
-		connect(action, SIGNAL(triggered()), SLOT(addFitCurve()));
-	connect(addFourierFilterAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
+		connect(action, &QAction::triggered, this, &CartesianPlot::addFitCurve);
+	connect(addFourierFilterAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
 
 	//zoom/navigate actions
 	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("Auto Scale"), this);
@@ -528,24 +527,24 @@ void CartesianPlot::initActions() {
 	shiftUpYAction = new QAction(QIcon::fromTheme("labplot-shift-up-y"), i18n("Shift Up Y"), this);
 	shiftDownYAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("Shift Down Y"), this);
 
-	connect(scaleAutoAction, SIGNAL(triggered()), SLOT(scaleAuto()));
-	connect(scaleAutoXAction, SIGNAL(triggered()), SLOT(scaleAutoX()));
-	connect(scaleAutoYAction, SIGNAL(triggered()), SLOT(scaleAutoY()));
-	connect(zoomInAction, SIGNAL(triggered()), SLOT(zoomIn()));
-	connect(zoomOutAction, SIGNAL(triggered()), SLOT(zoomOut()));
-	connect(zoomInXAction, SIGNAL(triggered()), SLOT(zoomInX()));
-	connect(zoomOutXAction, SIGNAL(triggered()), SLOT(zoomOutX()));
-	connect(zoomInYAction, SIGNAL(triggered()), SLOT(zoomInY()));
-	connect(zoomOutYAction, SIGNAL(triggered()), SLOT(zoomOutY()));
-	connect(shiftLeftXAction, SIGNAL(triggered()), SLOT(shiftLeftX()));
-	connect(shiftRightXAction, SIGNAL(triggered()), SLOT(shiftRightX()));
-	connect(shiftUpYAction, SIGNAL(triggered()), SLOT(shiftUpY()));
-	connect(shiftDownYAction, SIGNAL(triggered()), SLOT(shiftDownY()));
+	connect(scaleAutoAction, &QAction::triggered, this, &CartesianPlot::scaleAuto);
+	connect(scaleAutoXAction, &QAction::triggered, this, &CartesianPlot::scaleAutoX);
+	connect(scaleAutoYAction, &QAction::triggered, this, &CartesianPlot::scaleAutoY);
+	connect(zoomInAction, &QAction::triggered, this, &CartesianPlot::zoomIn);
+	connect(zoomOutAction, &QAction::triggered, this, &CartesianPlot::zoomOut);
+	connect(zoomInXAction, &QAction::triggered, this, &CartesianPlot::zoomInX);
+	connect(zoomOutXAction, &QAction::triggered, this, &CartesianPlot::zoomOutX);
+	connect(zoomInYAction, &QAction::triggered, this, &CartesianPlot::zoomInY);
+	connect(zoomOutYAction, &QAction::triggered, this, &CartesianPlot::zoomOutY);
+	connect(shiftLeftXAction, &QAction::triggered, this, &CartesianPlot::shiftLeftX);
+	connect(shiftRightXAction, &QAction::triggered, this, &CartesianPlot::shiftRightX);
+	connect(shiftUpYAction, &QAction::triggered, this, &CartesianPlot::shiftUpY);
+	connect(shiftDownYAction, &QAction::triggered, this, &CartesianPlot::shiftDownY);
 
 	//visibility action
 	visibilityAction = new QAction(i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+	connect(visibilityAction, &QAction::triggered, this, &CartesianPlot::visibilityChanged);
 }
 
 void CartesianPlot::initMenus() {
@@ -638,8 +637,8 @@ void CartesianPlot::initMenus() {
 	//themes menu
 	themeMenu = new QMenu(i18n("Apply Theme"));
 	auto* themeWidget = new ThemesWidget(nullptr);
-	connect(themeWidget, SIGNAL(themeSelected(QString)), this, SLOT(loadTheme(QString)));
-	connect(themeWidget, SIGNAL(themeSelected(QString)), themeMenu, SLOT(close()));
+	connect(themeWidget, &ThemesWidget::themeSelected, this, &CartesianPlot::loadTheme);
+	connect(themeWidget, &ThemesWidget::themeSelected, themeMenu, &QMenu::close);
 
 	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(themeWidget);
@@ -1244,7 +1243,7 @@ void CartesianPlot::addFitCurve() {
 
 		curve->recalculate();
 
-		//add the child after the fit was calculated to notify so the dock widgets gets the fit results
+		//add the child after the fit was calculated so the dock widgets gets the fit results
 		//and call retransform() after this to calculate and to paint the data points of the fit-curve
 		this->addChild(curve);
 		curve->retransform();
@@ -1325,22 +1324,23 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	Q_D(CartesianPlot);
 	const auto* curve = qobject_cast<const XYCurve*>(child);
 	if (curve) {
-		connect(curve, SIGNAL(dataChanged()), this, SLOT(dataChanged()));
-		connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
-		connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
-		connect(curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged()));
+		connect(curve, &XYCurve::dataChanged, this, &CartesianPlot::dataChanged);
+		connect(curve, &XYCurve::xDataChanged, this, &CartesianPlot::xDataChanged);
+		connect(curve, &XYCurve::yDataChanged, this, &CartesianPlot::yDataChanged);
+		connect(curve, static_cast<void (XYCurve::*)(bool)>(&XYCurve::visibilityChanged),
+				this, &CartesianPlot::curveVisibilityChanged);
 
 		//update the legend on changes of the name, line and symbol styles
-		connect(curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(linePenChanged(QPen)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(lineOpacityChanged(qreal)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(symbolsStyleChanged(Symbol::Style)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(symbolsSizeChanged(qreal)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(symbolsRotationAngleChanged(qreal)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(symbolsOpacityChanged(qreal)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(symbolsBrushChanged(QBrush)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(symbolsPenChanged(QPen)), this, SLOT(updateLegend()));
+		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::lineTypeChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::linePenChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::lineOpacityChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::symbolsStyleChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::symbolsSizeChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::symbolsRotationAngleChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::symbolsOpacityChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::symbolsBrushChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::symbolsPenChanged, this, &CartesianPlot::updateLegend);
 
 		updateLegend();
 		d->curvesXMinMaxIsDirty = true;
