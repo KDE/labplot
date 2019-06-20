@@ -1,7 +1,4 @@
-all: nsl_stats_test nsl_filter_test nsl_filter_test_fftw nsl_geom_linesim_test nsl_geom_linesim_morse_test
-
-nsl_stats_test: nsl_stats_test.c nsl_stats.c
-	gcc -o $@ $^ -lm -lgsl -lgslcblas
+all: nsl_filter_test nsl_filter_test_fftw nsl_geom_linesim_test nsl_geom_linesim_morse_test
 
 nsl_filter_test: nsl_filter_test.c nsl_filter.c nsl_sf_poly.c
 	gcc -o $@ $^ -lm -lgsl -lgslcblas
@@ -13,4 +10,4 @@ nsl_geom_linesim_morse_test: nsl_geom_linesim_morse_test.c nsl_geom_linesim.c ns
 	gcc -O2 -o $@ $^ -lm -lgsl -lgslcblas
 
 clean:
-	rm -f nsl_stats_test nsl_dft_test nsl_dft_test_fftw nsl_filter_test nsl_filter_test_fftw nsl_geom_linesim_test nsl_geom_linesim_morse_test nsl_diff_test
+	rm -f nsl_dft_test nsl_dft_test_fftw nsl_filter_test nsl_filter_test_fftw nsl_geom_linesim_test nsl_geom_linesim_morse_test nsl_diff_test
