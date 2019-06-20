@@ -45,12 +45,14 @@ void NSLFilterTest::testForm() {
 		data[i] = 1.0;
 	
 	/*Bessel gain*/
-	double G = nsl_filter_gain_bessel(3, 1);
+	int n = 3;
+	double x = 1.;
+	double G = nsl_filter_gain_bessel(n, x);
 	printf("G = %.15g\n", G);
 	QCOMPARE(G, 0.901262652189164);
 
 	/* filter form */
-	nsl_filter_apply(data, N, nsl_filter_type_low_pass, nsl_filter_form_legendre, 2, 50, 2);
+/*TODO	nsl_filter_apply(data, N, nsl_filter_type_low_pass, nsl_filter_form_legendre, 2, 50, 2);
 	nsl_filter_apply(data, N, nsl_filter_type_high_pass, nsl_filter_form_legendre, 2, 50, 2);
 	nsl_filter_apply(data, N, nsl_filter_type_band_pass, nsl_filter_form_legendre, 2, 100, 50);
 	nsl_filter_apply(data, N, nsl_filter_type_band_reject, nsl_filter_form_legendre, 2, 100, 100);
@@ -58,21 +60,22 @@ void NSLFilterTest::testForm() {
 	nsl_filter_apply(data, N, nsl_filter_type_high_pass, nsl_filter_form_bessel, 2, 100, 100);
 	nsl_filter_apply(data, N, nsl_filter_type_band_pass, nsl_filter_form_bessel, 2, 100, 100);
 	nsl_filter_apply(data, N, nsl_filter_type_band_reject, nsl_filter_form_bessel, 2, 100, 100);
-
+*/
 	//for(i=0; i < N/2; i++)
 	//	printf("%d %g\n", i, data[2*i]);
 
 	/* all pass order,cut,bw */
-	nsl_filter_fourier(data, N, nsl_filter_type_high_pass, nsl_filter_form_ideal, 0, 0, 2);
+//TODO	nsl_filter_fourier(data, N, nsl_filter_type_high_pass, nsl_filter_form_ideal, 0, 0, 2);
 
 	/* filter tests */
-	nsl_filter_fourier(data, N, nsl_filter_type_low_pass, nsl_filter_form_ideal, 0, 3, 2);
+/*TODO	nsl_filter_fourier(data, N, nsl_filter_type_low_pass, nsl_filter_form_ideal, 0, 3, 2);
 	nsl_filter_fourier(data, N, nsl_filter_type_high_pass, nsl_filter_form_ideal, 0, 3, 2);
 	nsl_filter_fourier(data, N, nsl_filter_type_band_pass, nsl_filter_form_ideal, 0, 2, 2);
 	nsl_filter_fourier(data, N, nsl_filter_type_band_reject, nsl_filter_form_ideal, 0, 2, 2);
 	nsl_filter_fourier(data, N, nsl_filter_type_low_pass, nsl_filter_form_butterworth, 1, 2, 2);
 	nsl_filter_fourier(data, N, nsl_filter_type_high_pass, nsl_filter_form_butterworth, 1, 2, 2);
 	nsl_filter_fourier(data, N, nsl_filter_type_band_pass, nsl_filter_form_butterworth, 2, 2, 2);
+*/
 }
 
 //##############################################################################

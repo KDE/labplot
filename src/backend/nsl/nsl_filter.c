@@ -46,9 +46,21 @@ double nsl_filter_gain_bessel(int n, double x) {
 	COMPLEX z0 = {0.0, 0.0};
 	COMPLEX z = {0.0, (const double)x};
 	double norm = cabs(nsl_sf_poly_reversed_bessel_theta(n, z));
+	//TODO Debugging
+	printf("theta(n, z) = %g + I %g\n", creal(nsl_sf_poly_reversed_bessel_theta(n, z)), cimag(nsl_sf_poly_reversed_bessel_theta(n, z)));
+	printf("norm = %g\n", norm);
+	printf("theta(n, 0) = %g + I %g\n", creal(nsl_sf_poly_reversed_bessel_theta(n, z0)), cimag(nsl_sf_poly_reversed_bessel_theta(n, z0)));
+	printf("result = creal(value)/norm = %g\n", creal(value)/norm);
+
 	COMPLEX value = nsl_sf_poly_reversed_bessel_theta(n, z0);
 	return creal(value)/norm;
 #else
+	//TODO Debugging
+	printf("theta(n, z) = %g + I %g\n", creal(nsl_sf_poly_reversed_bessel_theta(n, I*x)), cimag(nsl_sf_poly_reversed_bessel_theta(n, I*x)));
+	printf("theta(n, 0) = %g + I %g\n", creal(nsl_sf_poly_reversed_bessel_theta(n, 0)), cimag(nsl_sf_poly_reversed_bessel_theta(n, 0)));
+	printf("norm = %g\n", cabs(nsl_sf_poly_reversed_bessel_theta(n, I*x)));
+	printf("result = theta(n, 0)/|theta(n, I*x)| = %g\n", creal(nsl_sf_poly_reversed_bessel_theta(n, 0))/cabs(nsl_sf_poly_reversed_bessel_theta(n, I*x)));
+
 	return nsl_sf_poly_reversed_bessel_theta(n, 0)/cabs(nsl_sf_poly_reversed_bessel_theta(n, I*x));
 #endif
 }

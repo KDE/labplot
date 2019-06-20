@@ -32,7 +32,7 @@ extern "C" {
 }
 
 //##############################################################################
-//#################  TODO test
+//#################  Quantile test
 //##############################################################################
 	
 const int N = 10;
@@ -55,6 +55,7 @@ void NSLStatsTest::testQuantile() {
 
 	int i, j;
 	for (i = 1;i <= NSL_STATS_QUANTILE_TYPE_COUNT; i++) {
+		printf("quantile type %d\n", i);
 		nsl_stats_quantile_type type = (nsl_stats_quantile_type)i;
 		for (j = 0;j < NQ; j++) {
 			double value = nsl_stats_quantile_sorted(data_sorted, 1, N, quantile[j], type);
@@ -64,6 +65,7 @@ void NSLStatsTest::testQuantile() {
 		QCOMPARE(nsl_stats_median_sorted(data_sorted, 1, N, type), result[i-1][NQ]);
 	}
 	for (i = 1;i <= NSL_STATS_QUANTILE_TYPE_COUNT; i++) {
+		printf("quantile type %d\n", i);
 		nsl_stats_quantile_type type = (nsl_stats_quantile_type)i;
 		for (j = 0;j < NQ; j++) {
 			double value = nsl_stats_quantile(data_unsorted, 1, N, quantile[j], type);
