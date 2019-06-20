@@ -1119,11 +1119,11 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff) {
 	if (pixelDiff == 0) {
 		if (overlap) { // second and so the x axis pixels are the same
-		  if (p0.y() > maxY)
-			maxY = p0.y();
+		  if (p1.y() > maxY)
+			maxY = p1.y();
 
-		  if (p0.y() < minY)
-			minY = p0.y();
+		  if (p1.y() < minY)
+			minY = p1.y();
 
 		} else { // first time pixel are same
 			if (p0.y() < p1.y()) {
@@ -1147,7 +1147,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 			  minY = p0.y();
 
 
-			if (p1.x() >= plot->xMin() && p1.x() <= plot->xMax()) { // x inside scene
+			if (1) { //p1.x() >= plot->xMin() && p1.x() <= plot->xMax()) { // x inside scene
 				if (minY == maxY) {
 					lines.append(QLineF(p0, p1)); // line from previous point to actual point
 				} else if (p0.y() == minY) { // draw vertical line
@@ -1227,13 +1227,13 @@ void XYCurvePrivate::updateLines() {
 	QPointF p1;
 
 	// find index for xMin and xMax to not loop throug all values
-	int columnProperties = q->xColumn()->properties();
+	AbstractColumn::Properties columnProperties = q->xColumn()->properties();
 	if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing ||
 		columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
 		double xMin = cSystem->mapSceneToLogical(plot->dataRect().topLeft()).x();
 		double xMax = cSystem->mapSceneToLogical(plot->dataRect().bottomRight()).x();
-		startIndex= q->indexForX(xMin);
-		endIndex = q->indexForX(xMax);
+		startIndex= q->indexForX(xMin, symbolPointsLogical, columnProperties);
+		endIndex = q->indexForX(xMax, symbolPointsLogical, columnProperties);
 
 		if (startIndex > endIndex)
 			std::swap(startIndex, endIndex);
@@ -1272,7 +1272,7 @@ void XYCurvePrivate::updateLines() {
 			// add last line
 			if (overlap) {
 				overlap = false;
-				lines.append(QLineF(p0, p1));
+				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
 			}
 			break;
 		}
@@ -1292,7 +1292,7 @@ void XYCurvePrivate::updateLines() {
 			// add last line
 			if (overlap) {
 				overlap = false;
-				lines.append(QLineF(tempPoint1, p1));
+				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
 			}
 			break;
 		}
@@ -1311,7 +1311,7 @@ void XYCurvePrivate::updateLines() {
 			// add last line
 			if (overlap) {
 				overlap = false;
-				lines.append(QLineF(tempPoint1, p1));
+				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
 			}
 			break;
 		}
@@ -1333,13 +1333,11 @@ void XYCurvePrivate::updateLines() {
 			// add last line
 			if (overlap) {
 				overlap = false;
-				lines.append(QLineF(tempPoint2, p1));
+				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
 			}
 			break;
 		}
 		case XYCurve::MidpointVertical: {
-			if (!symbolPointsLogical.isEmpty()) // assumption: if not empty till startIndex all points exist
-				p0 = symbolPointsLogical[startIndex];
 			for (int i = startIndex; i < endIndex; i++) {
 				if (!lineSkipGaps && !connectedPointsLogical[i])
 					continue;
@@ -1357,7 +1355,7 @@ void XYCurvePrivate::updateLines() {
 			// add last line
 			if (overlap) {
 				overlap = false;
-				lines.append(QLineF(tempPoint2, p1));
+				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
 			}
 			break;
 		}
@@ -1374,8 +1372,13 @@ void XYCurvePrivate::updateLines() {
 					}
 					addLine(p0, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 					skip++;
-				} else
+				} else {
 					skip = 0;
+					if (overlap) {
+						overlap = false;
+						lines.append(QLineF(QPointF(p0.x(), minY), QPointF(p0.x(), maxY)));
+					}
+				}
 			}
 			// add last line
 			if (overlap) {
@@ -1397,8 +1400,13 @@ void XYCurvePrivate::updateLines() {
 					}
 					addLine(p0, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 					skip++;
-				} else
+				} else {
 					skip = 0;
+					if (overlap) {
+						overlap = false;
+						lines.append(QLineF(QPointF(p0.x(), minY), QPointF(p0.x(), maxY)));
+					}
+				}
 			}
 			// add last line
 			if (overlap) {
@@ -2302,7 +2310,7 @@ int XYCurve::indexForX(double x, QVector<double>& column, AbstractColumn::Proper
 * @param x
 * @return -1 if index not found, otherwise the index
 */
-int XYCurve::indexForX(double x, QVector<QPointF>& points, AbstractColumn::Properties properties) const {
+int XYCurve::indexForX(const double x, const QVector<QPointF>& points, AbstractColumn::Properties properties) const {
 	int rowCount = points.count();
 
 	if (rowCount == 0)

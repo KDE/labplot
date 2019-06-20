@@ -1354,15 +1354,21 @@ void ColumnPrivate::updateProperties() {
 				// check monotonic increasing
 				if (value >= prevValue && monotonic_increasing < 0)
 					monotonic_increasing = 1;
-				else if (value < prevValue)
+				else if (value < prevValue || std::isnan(value)) {
 					monotonic_increasing = 0;
+					if (monotonic_decreasing == 0)
+						break;
+				}
 				// else: nothing
 
 				// check monotonic decreasing
 				if (value <= prevValue && monotonic_decreasing < 0)
 					monotonic_decreasing = 1;
-				else if (value > prevValue)
+				else if (value > prevValue || std::isnan(value)) {
 					monotonic_decreasing = 0;
+					if (monotonic_increasing == 0)
+						break;
+				}
 
 				prevValue = value;
 
