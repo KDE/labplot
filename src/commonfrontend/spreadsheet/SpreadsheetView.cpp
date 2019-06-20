@@ -416,7 +416,7 @@ void SpreadsheetView::initMenus() {
 	dataFitMenu->addAction(addFitAction.at(10));
 
 	//analyze and plot data menu
-	m_analyzePlotMenu = new QMenu(i18n("Analyze and Plot Data"));
+	m_analyzePlotMenu = new QMenu(i18n("Analyze and Plot Data"), this);
 	m_analyzePlotMenu->insertMenu(nullptr, dataManipulationMenu);
 	m_analyzePlotMenu->addSeparator();
 	m_analyzePlotMenu->addAction(addDifferentiationAction);
@@ -429,7 +429,7 @@ void SpreadsheetView::initMenus() {
 	m_analyzePlotMenu->addMenu(dataFitMenu);
 	m_columnMenu->addMenu(m_analyzePlotMenu);
 
-	m_columnSetAsMenu = new QMenu(i18n("Set Column As"));
+	m_columnSetAsMenu = new QMenu(i18n("Set Column As"), this);
 	m_columnMenu->addSeparator();
 	m_columnSetAsMenu->addAction(action_set_as_x);
 	m_columnSetAsMenu->addAction(action_set_as_y);
