@@ -83,6 +83,6 @@ void PartMdiView::windowStateChanged(Qt::WindowStates oldState, Qt::WindowStates
 	Q_UNUSED(oldState);
 	if (newState.testFlag(Qt::WindowActive) || newState.testFlag(Qt::WindowMaximized))
 		m_part->registerShortcuts();
-	else
+	else if (!newState.testFlag(Qt::WindowNoState))
 		m_part->unregisterShortcuts();
 }

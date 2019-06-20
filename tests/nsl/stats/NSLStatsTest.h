@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : nsl_fit_test.c
+    File                 : NSLStatsTest.h
     Project              : LabPlot
-    Description          : NSL (non)linear functions test
+    Description          : NSL Tests for statistical functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    Copyright            : (C) 2019 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -25,23 +24,19 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef NSLSTATSTEST_H
+#define NSLSTATSTEST_H
 
-#include <stdio.h>
-#include "nsl_fit.h"
+#include "../NSLTest.h"
 
-int main() {
-	const double data[]={-1000, -100, -10, -1, -.1, 0, .1, 1, 10, 100, 1000};
-	const int n=11;
-	int i;
-	for (i=0; i < n; i++) {
-		double x = nsl_fit_map_bound(data[i],-1,2);
-		printf("%g -> %g\n", data[i], x);
-	}
-	puts("");
+class NSLStatsTest : public NSLTest {
+	Q_OBJECT
 
-	const double data2[]={-1, -.99, -.5, 0, .49, .5, .51, 1, 1.5, 1.99, 2};
-	for (i=0; i < n; i++) {
-		double xb = nsl_fit_map_unbound(data2[i],-1,2);
-		printf("%g -> %g\n", data2[i], xb);
-	}
-}
+private slots:
+	void testQuantile();
+	// performance
+	//void testPerformance();
+private:
+	QString m_dataDir;
+};
+#endif

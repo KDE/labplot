@@ -1242,9 +1242,12 @@ void CartesianPlot::addFitCurve() {
 			curve->setYErrorColumn(curCurve->yErrorPlusColumn());
 		}
 
-		this->addChild(curve);
 		curve->recalculate();
-		emit curve->fitDataChanged(curve->fitData());
+
+		//add the child after the fit was calculated to notify so the dock widgets gets the fit results
+		//and call retransform() after this to calculate and to paint the data points of the fit-curve
+		this->addChild(curve);
+		curve->retransform();
 	} else {
 		beginMacro(i18n("%1: add fit curve", name()));
 		this->addChild(curve);

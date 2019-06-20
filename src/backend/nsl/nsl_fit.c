@@ -75,7 +75,7 @@ double nsl_fit_map_bound(double x, double min, double max) {
 	if (max == DBL_MAX)
 		return min - 1. + sqrt(x*x + 1.);
 
-	return min + sin(x + 1.) * (max - min)/2.;
+	return min + (sin(x) + 1.) * (max - min)/2.;
 
 	/* alternative transformation for closed bounds
 	return min + (max - min)/(1. + exp(-x));
