@@ -668,6 +668,34 @@
    <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>leName</tabstop>
+  <tabstop>leComment</tabstop>
+  <tabstop>cbSize</tabstop>
+  <tabstop>cbOrientation</tabstop>
+  <tabstop>sbWidth</tabstop>
+  <tabstop>sbHeight</tabstop>
+  <tabstop>chScaleContent</tabstop>
+  <tabstop>cbBackgroundType</tabstop>
+  <tabstop>leBackgroundFileName</tabstop>
+  <tabstop>bOpen</tabstop>
+  <tabstop>cbBackgroundColorStyle</tabstop>
+  <tabstop>cbBackgroundImageStyle</tabstop>
+  <tabstop>cbBackgroundBrushStyle</tabstop>
+  <tabstop>kcbBackgroundFirstColor</tabstop>
+  <tabstop>kcbBackgroundSecondColor</tabstop>
+  <tabstop>sbBackgroundOpacity</tabstop>
+  <tabstop>cbLayout</tabstop>
+  <tabstop>sbLayoutTopMargin</tabstop>
+  <tabstop>sbLayoutBottomMargin</tabstop>
+  <tabstop>sbLayoutLeftMargin</tabstop>
+  <tabstop>sbLayoutRightMargin</tabstop>
+  <tabstop>sbLayoutHorizontalSpacing</tabstop>
+  <tabstop>sbLayoutVerticalSpacing</tabstop>
+  <tabstop>sbLayoutRowCount</tabstop>
+  <tabstop>sbLayoutColumnCount</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
