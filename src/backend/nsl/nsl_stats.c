@@ -106,7 +106,7 @@ double nsl_stats_quantile_sorted(const double d[], size_t stride, size_t n, doub
 			return d[0];
 		else
 #ifdef _WIN32
-			return d[((int)(n*p)-1)*stride];
+			return d[((int)round(n*p)-1)*stride];
 #else
 			return d[(lrint(n*p)-1)*stride];
 #endif

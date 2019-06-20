@@ -27,6 +27,7 @@
  ***************************************************************************/
 
 #include "nsl_sf_poly.h"
+#include <stdio.h>	// debugging
 #include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_pow_int.h>
@@ -118,11 +119,19 @@ COMPLEX nsl_sf_poly_reversed_bessel_theta(int n, COMPLEX x) {
 		COMPLEX z = {(const double)(creal(x) + 1.0), (const double)cimag(x)};
 		return z;
 	}
-	double factor = 2 * n - 1;
 	COMPLEX z1 = nsl_sf_poly_bessel_y(n - 1, x);
 	COMPLEX z2 = nsl_sf_poly_bessel_y(n - 2, x);
 	double rex2 = creal(x)*creal(x) - cimag(x)*cimag(x);
-	double imx2 = 2.0*creal(x)*cimag(x);
+	double imx2 = 2.*creal(x)*cimag(x);
+	double factor = 2. * n - 1.;
+
+	// TODO Debugging
+	printf("theta(n-1, x) = %g + I %g\n", creal(z1), cimag(z1));
+	printf("theta(n-2, x) = %g + I %g\n", creal(z2), cimag(z2));
+	printf("factor = %g\n", factor);
+	printf("rex2 = %g\n", rex2);
+	printf("imx2 = %g\n", imx2);
+
 	COMPLEX z = {(const double)(factor * creal(z1) + rex2*creal(z2) - imx2*cimag(z2)), (const double)(factor * cimag(z1) + rex2*cimag(z2) + imx2*creal(z2))};
 	return z;
 #else
@@ -131,7 +140,12 @@ COMPLEX nsl_sf_poly_reversed_bessel_theta(int n, COMPLEX x) {
 	else if (n == 1)
 		return 1.0 + x;
 
-	return (2*n - 1) * nsl_sf_poly_reversed_bessel_theta(n - 1, x) + x * x * nsl_sf_poly_reversed_bessel_theta(n - 2, x);
+	// TODO Debugging
+	printf("theta(n-1, x) = %g + I %g\n", creal(nsl_sf_poly_reversed_bessel_theta(n - 1, x)), cimag(nsl_sf_poly_reversed_bessel_theta(n - 1, x)));
+	printf("theta(n-2, x) = %g + I %g\n", creal(nsl_sf_poly_reversed_bessel_theta(n - 2, x)), cimag(nsl_sf_poly_reversed_bessel_theta(n - 2, x)));
+	printf("x^2 = %g + I %g\n", creal(x*x), cimag(x*x));
+
+	return (2.*n - 1.) * nsl_sf_poly_reversed_bessel_theta(n - 1, x) + x * x * nsl_sf_poly_reversed_bessel_theta(n - 2, x);
 #endif
 }
 
