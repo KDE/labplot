@@ -71,6 +71,7 @@ private slots:
 
 signals:
 	void downloadCompleted();
+	void downloadProgress(int progress);
 };
 
 #endif // DATASETHANDLER_H

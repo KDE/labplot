@@ -82,20 +82,10 @@ QString ImportDatasetDialog::selectedObject() const {
 }
 
 void ImportDatasetDialog::importToDataset(DatasetHandler* datasetHandler, QStatusBar* statusBar) const {
-	m_importDatasetWidget->loadDatasetToProcess(datasetHandler);
-}
-
-void ImportDatasetDialog::checkOkButton() {
-	bool enable = (!m_importDatasetWidget->getSelectedDataset().isEmpty());
-	okButton->setEnabled(enable);
-}
-
-void ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
-	auto filter = m_importDatasetWidget->currentFileFilter();
 	//show a progress bar in the status bar
 	auto* progressBar = new QProgressBar();
 	progressBar->setRange(0, 100);
-	connect(filter, &AbstractFileFilter::completed, progressBar, &QProgressBar::setValue);
+	connect(datasetHandler, &DatasetHandler::downloadProgress, progressBar, &QProgressBar::setValue);
 
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
@@ -106,8 +96,19 @@ void ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
 	QTime timer;
 	timer.start();
 
+	m_importDatasetWidget->loadDatasetToProcess(datasetHandler);
+
 	statusBar->showMessage(i18n("Dataset imported in %1 seconds.", (float)timer.elapsed()/1000));
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
+}
+
+void ImportDatasetDialog::checkOkButton() {
+	bool enable = (!m_importDatasetWidget->getSelectedDataset().isEmpty());
+	okButton->setEnabled(enable);
+}
+
+void ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
+
 }
 

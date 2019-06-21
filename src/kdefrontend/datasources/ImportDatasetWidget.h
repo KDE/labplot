@@ -32,7 +32,6 @@
 
 #include "ui_importdatasetwidget.h"
 #include "QWidget"
-#include "backend/datasources/filters/AbstractFileFilter.h"
 #include "QMap"
 
 
@@ -45,7 +44,6 @@ class ImportDatasetWidget : public QWidget {
 public:
 	explicit ImportDatasetWidget(QWidget* parent);
 	~ImportDatasetWidget() override;
-	AbstractFileFilter* currentFileFilter() const ;
 	QString getSelectedDataset() const;
 	void loadDatasetToProcess(DatasetHandler* datasetHandler);
 	QString locateCategoryJsonFile() const;
@@ -56,7 +54,6 @@ public:
 
 private:    
 	Ui::ImportDatasetWidget ui;
-	mutable std::unique_ptr<AbstractFileFilter> m_currentFilter;
 	QMap<QString, QMap<QString, QVector<QString>>> m_datasetsMap;
 	QString m_selectedSubcategory;
 	QCompleter* m_categoryCompleter;

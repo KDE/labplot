@@ -144,7 +144,7 @@ void DatasetHandler::configureSpreadsheet() {
 	if(m_document->isObject()) {
 		const QJsonObject& jsonObject = m_document->object();
 		if(jsonObject.contains("name"))
-		m_spreadsheet->setName( jsonObject.value("name").toString());
+			m_spreadsheet->setName( jsonObject.value("name").toString());
 		else
 			markMetadataAsInvalid();
 
@@ -178,6 +178,15 @@ void DatasetHandler::doDownload(const QUrl& url) {
 	qDebug("Download request");
 	QNetworkRequest request(url);
 	m_currentDownload = m_downloadManager->get(request);
+	connect(m_currentDownload, &QNetworkReply::downloadProgress, [this] (qint64 bytesReceived, qint64 bytesTotal) {
+		double progress;
+		if (bytesTotal == -1)
+			progress = 0;
+		else
+			progress = 100 * ((double) bytesReceived / (double) bytesTotal);
+		qDebug() << "Progress: " << progress;
+		emit downloadProgress(progress);
+	});
 }
 
 void DatasetHandler::downloadFinished(QNetworkReply* reply) {

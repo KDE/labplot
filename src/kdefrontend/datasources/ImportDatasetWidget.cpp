@@ -285,10 +285,6 @@ void ImportDatasetWidget::loadDatasetToProcess(DatasetHandler* datasetHandler) {
 	}
 }
 
-AbstractFileFilter* ImportDatasetWidget::currentFileFilter() const {
-	return m_currentFilter.get();
-}
-
 void ImportDatasetWidget::showDatasetMetadataManager() {
 	DatasetMetadataManagerDialog* dlg = new DatasetMetadataManagerDialog(this, m_datasetsMap);
 
