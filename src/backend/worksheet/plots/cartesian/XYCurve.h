@@ -71,7 +71,7 @@ public:
 	QDateTime yDateTime(double x, bool &valueFound) const;
 	int indexForX(double x) const;
 	int indexForX(double x, QVector<double>& column, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
-	int indexForX(double x, QVector<QPointF>& column, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
+	int indexForX(const double x, const QVector<QPointF> &column, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
 	int indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
 
 	bool activateCurve(QPointF mouseScenePos, double maxDist = -1);

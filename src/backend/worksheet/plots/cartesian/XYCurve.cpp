@@ -1084,13 +1084,10 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
  */
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff, int pixelCount) {
 
-	CartesianPlot::Scale scale = plot->xScale();
-	switch (scale) {
-	case CartesianPlot::Scale::ScaleLinear: {// implemented for completeness only
+	if (plot->xScale() == CartesianPlot::Scale::ScaleLinear) { // implemented for completeness only
 		double minLogicalDiffX = 1/((plot->xMax()-plot->xMin())/pixelCount);
 		addLine(p0, p1, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
-		return;
-	} default:
+	} else {
 		// for nonlinear scaling the pixel distance must be calculated for every point pair
 		QPointF p0Scene = cSystem->mapLogicalToScene(p0, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 		QPointF p1Scene = cSystem->mapLogicalToScene(p1, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
@@ -1106,9 +1103,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 		int p1Pixel = (int)((p1Scene.x() - plot->dataRect().x()) / plot->dataRect().width() * pixelCount);
 		pixelDiff = p1Pixel - p0Pixel;
 		addLine(p0, p1, minY, maxY, overlap, pixelDiff);
-		return;
 	}
-
 }
 
 /*!
@@ -1124,11 +1119,11 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff) {
 	if (pixelDiff == 0) {
 		if (overlap) { // second and so the x axis pixels are the same
-		  if (p0.y() > maxY)
-			maxY = p0.y();
+		  if (p1.y() > maxY)
+			maxY = p1.y();
 
-		  if (p0.y() < minY)
-			minY = p0.y();
+		  if (p1.y() < minY)
+			minY = p1.y();
 
 		} else { // first time pixel are same
 			if (p0.y() < p1.y()) {
@@ -1152,7 +1147,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 			  minY = p0.y();
 
 
-			if (p1.x() >= plot->xMin() && p1.x() <= plot->xMax()) { // x inside scene
+			if (1) { //p1.x() >= plot->xMin() && p1.x() <= plot->xMax()) { // x inside scene
 				if (minY == maxY) {
 					lines.append(QLineF(p0, p1)); // line from previous point to actual point
 				} else if (p0.y() == minY) { // draw vertical line
@@ -1209,13 +1204,13 @@ void XYCurvePrivate::updateLines() {
 	}
 
 	float widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Inch);
-	float heightDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().height(), Worksheet::Inch);
+	//float heightDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().height(), Worksheet::Inch);	// unsed
 	int countPixelX = ceil(widthDatarectInch*QApplication::desktop()->physicalDpiX());
-	int countPixelY = ceil(heightDatarectInch*QApplication::desktop()->physicalDpiY());
+	//int countPixelY = ceil(heightDatarectInch*QApplication::desktop()->physicalDpiY());	// unused
 
 	// only valid for linear scale
-	double minLogicalDiffX = 1/((plot->xMax()-plot->xMin())/countPixelX);
-	//double minLogicalDiffY = 1/((plot->yMax()-plot->yMin())/countPixelY); // not used
+	//double minLogicalDiffX = 1/((plot->xMax()-plot->xMin())/countPixelX);	// unused
+	//double minLogicalDiffY = 1/((plot->yMax()-plot->yMin())/countPixelY); // unused
 
 	//calculate the lines connecting the data points
 	{
@@ -1232,13 +1227,13 @@ void XYCurvePrivate::updateLines() {
 	QPointF p1;
 
 	// find index for xMin and xMax to not loop throug all values
-	int columnProperties = q->xColumn()->properties();
+	AbstractColumn::Properties columnProperties = q->xColumn()->properties();
 	if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing ||
 		columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
 		double xMin = cSystem->mapSceneToLogical(plot->dataRect().topLeft()).x();
 		double xMax = cSystem->mapSceneToLogical(plot->dataRect().bottomRight()).x();
-		startIndex= q->indexForX(xMin);
-		endIndex = q->indexForX(xMax);
+		startIndex= q->indexForX(xMin, symbolPointsLogical, columnProperties);
+		endIndex = q->indexForX(xMax, symbolPointsLogical, columnProperties);
 
 		if (startIndex > endIndex)
 			std::swap(startIndex, endIndex);
@@ -1277,7 +1272,7 @@ void XYCurvePrivate::updateLines() {
 			// add last line
 			if (overlap) {
 				overlap = false;
-				lines.append(QLineF(p0, p1));
+				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
 			}
 			break;
 		}
@@ -1297,7 +1292,7 @@ void XYCurvePrivate::updateLines() {
 			// add last line
 			if (overlap) {
 				overlap = false;
-				lines.append(QLineF(tempPoint1, p1));
+				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
 			}
 			break;
 		}
@@ -1316,7 +1311,7 @@ void XYCurvePrivate::updateLines() {
 			// add last line
 			if (overlap) {
 				overlap = false;
-				lines.append(QLineF(tempPoint1, p1));
+				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
 			}
 			break;
 		}
@@ -1338,13 +1333,11 @@ void XYCurvePrivate::updateLines() {
 			// add last line
 			if (overlap) {
 				overlap = false;
-				lines.append(QLineF(tempPoint2, p1));
+				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
 			}
 			break;
 		}
 		case XYCurve::MidpointVertical: {
-			if (!symbolPointsLogical.isEmpty()) // assumption: if not empty till startIndex all points exist
-				p0 = symbolPointsLogical[startIndex];
 			for (int i = startIndex; i < endIndex; i++) {
 				if (!lineSkipGaps && !connectedPointsLogical[i])
 					continue;
@@ -1362,7 +1355,7 @@ void XYCurvePrivate::updateLines() {
 			// add last line
 			if (overlap) {
 				overlap = false;
-				lines.append(QLineF(tempPoint2, p1));
+				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
 			}
 			break;
 		}
@@ -1379,8 +1372,13 @@ void XYCurvePrivate::updateLines() {
 					}
 					addLine(p0, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 					skip++;
-				} else
+				} else {
 					skip = 0;
+					if (overlap) {
+						overlap = false;
+						lines.append(QLineF(QPointF(p0.x(), minY), QPointF(p0.x(), maxY)));
+					}
+				}
 			}
 			// add last line
 			if (overlap) {
@@ -1402,8 +1400,13 @@ void XYCurvePrivate::updateLines() {
 					}
 					addLine(p0, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 					skip++;
-				} else
+				} else {
 					skip = 0;
+					if (overlap) {
+						overlap = false;
+						lines.append(QLineF(QPointF(p0.x(), minY), QPointF(p0.x(), maxY)));
+					}
+				}
 			}
 			// add last line
 			if (overlap) {
@@ -2307,7 +2310,7 @@ int XYCurve::indexForX(double x, QVector<double>& column, AbstractColumn::Proper
 * @param x
 * @return -1 if index not found, otherwise the index
 */
-int XYCurve::indexForX(double x, QVector<QPointF>& points, AbstractColumn::Properties properties) const {
+int XYCurve::indexForX(const double x, const QVector<QPointF>& points, AbstractColumn::Properties properties) const {
 	int rowCount = points.count();
 
 	if (rowCount == 0)

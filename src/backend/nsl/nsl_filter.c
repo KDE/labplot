@@ -47,12 +47,14 @@ double nsl_filter_gain_bessel(int n, double x) {
 	COMPLEX z = {0.0, (const double)x};
 	double norm = cabs(nsl_sf_poly_reversed_bessel_theta(n, z));
 	COMPLEX value = nsl_sf_poly_reversed_bessel_theta(n, z0);
+
 	return creal(value)/norm;
 #else
 	return nsl_sf_poly_reversed_bessel_theta(n, 0)/cabs(nsl_sf_poly_reversed_bessel_theta(n, I*x));
 #endif
 }
 
+/* size of data should be n+2 */
 int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_form form, int order, double cutindex, double bandwidth) {
 	if (cutindex < 0) {
 		printf("index for cutoff must be >= 0\n");
