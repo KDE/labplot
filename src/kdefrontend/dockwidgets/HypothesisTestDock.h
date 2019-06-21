@@ -39,73 +39,81 @@ class HypothesisTest;
 class TreeViewComboBox;
 class KConfig;
 class QScrollArea;
+class QStandardItemModel;
 
 class HypothesisTestDock : public QWidget {
-        Q_OBJECT
+    Q_OBJECT
 
 public:
-        explicit HypothesisTestDock(QWidget*);
-        void setHypothesisTest(HypothesisTest*);
+    explicit HypothesisTestDock(QWidget*);
+    void setHypothesisTest(HypothesisTest*);
 
 private slots:
-        void onRbH1OneTail1Toggled(bool checked);
-        void onRbH1OneTail2Toggled(bool checked);
-        void onRbH1TwoTailToggled(bool checked);
+    void onRbH1OneTail1Toggled(bool checked);
+    void onRbH1OneTail2Toggled(bool checked);
+    void onRbH1TwoTailToggled(bool checked);
 
 private slots:
 
 private:
-        Ui::HypothesisTestDock ui;
-//        bool m_initializing{false};
-        TreeViewComboBox* cbSpreadsheet{nullptr};
-        HypothesisTest* m_hypothesisTest{nullptr};
-////        AspectTreeModel* m_aspectTreeModel{nullptr};
-        QSqlDatabase m_db;
-        QString m_configPath;
-        double population_mean{0};
-        double significance_level{0.05};
-//        void load();
-//        void loadConfig(KConfig&);
-//        void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
-//        void readConnections();
-//        void updateFields();
-//        bool fieldSelected(const QString&);
-        bool ttest{false};
-        bool ztest{false};
-        bool two_sample_independent{false};
-        bool two_sample_paired{false};
-        bool one_sample{false};
-        QScrollArea* scroll_dock;
+    Ui::HypothesisTestDock ui;
+    //        bool m_initializing{false};
+    TreeViewComboBox* cbSpreadsheet{nullptr};
+    HypothesisTest* m_hypothesisTest{nullptr};
+    ////        AspectTreeModel* m_aspectTreeModel{nullptr};
+    QSqlDatabase m_db;
+    QString m_configPath;
+    double population_mean{0};
+    double significance_level{0.05};
+    //        void load();
+    //        void loadConfig(KConfig&);
+    //        void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
+    //        void readConnections();
+    //        void updateFields();
+    //        bool fieldSelected(const QString&);
+    bool ttest{false};
+    bool ztest{false};
+    bool two_sample_independent{false};
+    bool two_sample_paired{false};
+    bool one_sample{false};
+    QScrollArea* scroll_dock;
 
+    void countPartitions(Column *column, int &np, int &total_rows);
+    void setColumnsComboBoxModel();
+
+    QStandardItemModel* all_cols_model{};
+    QStandardItemModel* multi_categorical_values_cols_model{};
+    QStandardItemModel* two_categorical_values_cols_model{};
+    QStandardItemModel* only_values_cols_model{};
 
 private slots:
-        //SLOTs for changes triggered in PivotTableDock
-//        void nameChanged();
-//        void commentChanged();
-        void dataSourceTypeChanged(int);
-        void showHypothesisTest();
-        void doHypothesisTest();
-        void performLeveneTest();
-        void spreadsheetChanged(const QModelIndex&);
-        void col1CatIndexChanged(int index);
-//        void connectionChanged();
-//        void tableChanged();
-//        void showDatabaseManager();
+    //SLOTs for changes triggered in PivotTableDock
+    //        void nameChanged();
+    //        void commentChanged();
+    void dataSourceTypeChanged(int);
+    void showHypothesisTest();
+    void doHypothesisTest();
+    void performLeveneTest();
+    void spreadsheetChanged(const QModelIndex&);
+    void col1IndexChanged(int index);
+    //        void connectionChanged();
+    //        void tableChanged();
+    //        void showDatabaseManager();
 
-//        //SLOTs for changes triggered in PivotTable
-//        void pivotTableDescriptionChanged(const AbstractAspect*);
+    //        //SLOTs for changes triggered in PivotTable
+    //        void pivotTableDescriptionChanged(const AbstractAspect*);
 
-//        void addRow();
-//        void removeRow();
-//        void addColumn();
-//        void removeColumn();
+    //        void addRow();
+    //        void removeRow();
+    //        void addColumn();
+    //        void removeColumn();
 
-//        //save/load template
-//        void loadConfigFromTemplate(KConfig&);
-//        void saveConfigAsTemplate(KConfig&);
+    //        //save/load template
+    //        void loadConfigFromTemplate(KConfig&);
+    //        void saveConfigAsTemplate(KConfig&);
 
 signals:
-//        void info(const QString&);
+    //        void info(const QString&);
 };
 
 #endif // PIVOTTABLEDOCK_H

@@ -1,4 +1,4 @@
-/***************************************************************************
+    /***************************************************************************
     File                 : HypothesisTest.cpp
     Project              : LabPlot
     Description          : Doing Hypothesis-Test on data provided
@@ -46,6 +46,7 @@ extern "C" {
 #include <QLocale>
 #include <QLabel>
 #include <QLayout>
+#include <gsl/gsl_cdf.h>
 
 HypothesisTest::HypothesisTest(const QString &name) : AbstractPart(name),
     d(new HypothesisTestPrivate(this)) {
@@ -185,6 +186,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test,bool c
     double value;
     int df = 0;
     double p_value = 0;
+    double sp = 0;
     clearGlobalVariables();
 
     if (m_columns.size() != 2) {
@@ -258,7 +260,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test,bool c
 
         if (equal_variance) {
             df = n[0] + n[1] - 2;
-            double sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
+            sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
             value = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
             printLine(9, "<b>Assumption:</b> Equal Variance b/w both population means");
         } else {
@@ -273,15 +275,14 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test,bool c
         break;
     } case TestZ: {
         test_name = "Z";
-        df = n[0] + n[1] - 2;
-
-        double sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
+        sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
         value = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
+        p_value = gsl_cdf_gaussian_P(value, sp);
     }        
     }
 
     m_currTestName = i18n("<h2>Two Sample Independent %1 Test for %2 vs %3</h2>", test_name, col1_name, col2_name);
-    p_value = getPValue(test, value, col1_name, col2_name, df);
+    p_value = getPValue(test, value, col1_name, col2_name, (mean[0] - mean[1]), sp, df);
 
     printLine(2, i18n("Significance level is %1", m_significance_level), "blue");
     printLine(4, i18n("%1 Value is %2 ", test_name, value), "green");
@@ -368,7 +369,7 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(TestType test) {
         break;
     }}
 
-    p_value = getPValue(test, value, m_columns[0]->name(), i18n("%1",m_population_mean), df);
+    p_value = getPValue(test, value, m_columns[0]->name(), i18n("%1",m_population_mean), mean, std, df);
     m_currTestName = i18n("<h2>One Sample %1 Test for %2 vs %3</h2>", test_name, m_columns[0]->name(), m_columns[1]->name());
 
     printLine(2, i18n("Significance level is %1 ", m_significance_level), "blue");
@@ -441,7 +442,7 @@ void HypothesisTestPrivate::performOneSampleTest(TestType test) {
         value = (mean - m_population_mean) / (std/qSqrt(n));
     }}
 
-    p_value = getPValue(test, value, m_columns[0]->name(), i18n("%1",m_population_mean), df);
+    p_value = getPValue(test, value, m_columns[0]->name(), i18n("%1",m_population_mean), mean - m_population_mean, std, df);
     m_currTestName = i18n("<h2>One Sample %1 Test for %2</h2>", test_name, m_columns[0]->name());
 
     printLine(2, i18n("Significance level is %1", m_significance_level), "blue");
@@ -581,7 +582,6 @@ void HypothesisTestPrivate::performLeveneTest(bool categorical_variable) {
         for (int j = 0; j < n; j++) {
             name = m_columns[0]->textAt(j);
             value = m_columns[1]->valueAt(j);
-
             if (std::isnan(value)) {
                 n = j;
                 break;
@@ -840,7 +840,7 @@ HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsCategorical(Col
 }
 
 
-double HypothesisTestPrivate::getPValue(const HypothesisTestPrivate::TestType &test, double &value, const QString &col1_name, const QString &col2_name, const int df) {
+double HypothesisTestPrivate::getPValue(const HypothesisTestPrivate::TestType &test, double &value, const QString &col1_name, const QString &col2_name, const double mean, const double sp, const int df) {
     double p_value = 0;
 
     //TODO change ("⋖") symbol to ("<"), currently macro UTF8_QSTRING is not working properly if used "<" symbol;
@@ -848,18 +848,18 @@ double HypothesisTestPrivate::getPValue(const HypothesisTestPrivate::TestType &t
     case TestT: {
         switch (tail_type) {
         case HypothesisTest::TailNegative:
-            p_value = nsl_stats_tdist_p(value, df);
+            p_value = gsl_cdf_tdist_P(value, df);
             printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING("≥"), col2_name), "blue");
             printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING("⋖"), col2_name), "blue");
             break;
         case HypothesisTest::TailPositive:
             value *= -1;
-            p_value = nsl_stats_tdist_p(value, df);
+            p_value = gsl_cdf_tdist_P(value, df);
             printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING("≤"), col2_name), "blue");
             printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING(">"), col2_name), "blue");
             break;
         case HypothesisTest::TailTwo:
-            p_value = nsl_stats_tdist_p(value, df) + nsl_stats_tdist_p(-1*value, df);
+            p_value = 2.*gsl_cdf_tdist_P(value, df);
 
             printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING("="), col2_name), "blue");
             printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING("≠"), col2_name), "blue");
@@ -869,19 +869,18 @@ double HypothesisTestPrivate::getPValue(const HypothesisTestPrivate::TestType &t
     } case TestZ: {
         switch (tail_type) {
         case HypothesisTest::TailNegative:
-            p_value = nsl_stats_tdist_p(value, df);
+            p_value = gsl_cdf_gaussian_P(value - mean, sp);
             printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING("≥"), col2_name), "blue");
             printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING("⋖"), col2_name), "blue");
             break;
         case HypothesisTest::TailPositive:
             value *= -1;
-            p_value = nsl_stats_tdist_p(value, df);
+            p_value = nsl_stats_tdist_p(value - mean, sp);
             printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING("≤"), col2_name), "blue");
             printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING(">"), col2_name), "blue");
             break;
         case HypothesisTest::TailTwo:
-            p_value = nsl_stats_tdist_p(value, df) + nsl_stats_tdist_p(-1*value, df);
-
+            p_value = 2.*gsl_cdf_gaussian_P(value - mean, sp);
             printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING("="), col2_name), "blue");
             printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING("≠"), col2_name), "blue");
             break;
