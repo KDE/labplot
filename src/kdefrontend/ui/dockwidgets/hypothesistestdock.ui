@@ -362,7 +362,7 @@
     <item row="0" column="1">
      <widget class="QLabel" name="lCol2">
       <property name="text">
-       <string>Variable</string>
+       <string>Independent Variable</string>
       </property>
      </widget>
     </item>

@@ -40,6 +40,7 @@ class TreeViewComboBox;
 class KConfig;
 class QScrollArea;
 class QStandardItemModel;
+class QStandardItem;
 
 class HypothesisTestDock : public QWidget {
     Q_OBJECT
@@ -76,21 +77,28 @@ private:
     bool two_sample_independent{false};
     bool two_sample_paired{false};
     bool one_sample{false};
+    bool anova{false};
+    bool one_way{false};
+    bool two_way{false};
     QScrollArea* scroll_dock;
 
     void countPartitions(Column *column, int &np, int &total_rows);
-    void setColumnsComboBoxModel();
+    void setColumnsComboBoxModel(Spreadsheet* spreadsheet);
+    void setColumnsComboBoxView();
 
-    QStandardItemModel* all_cols_model{};
-    QStandardItemModel* multi_categorical_values_cols_model{};
-    QStandardItemModel* two_categorical_values_cols_model{};
-    QStandardItemModel* only_values_cols_model{};
+    QStringList test_type_t_z{};
+    QStringList test_type_anova{};
+
+    QStringList only_values_cols;
+    QStringList two_categorical_cols;
+    QStringList more_than_two_categorical_cols;
 
 private slots:
     //SLOTs for changes triggered in PivotTableDock
     //        void nameChanged();
     //        void commentChanged();
     void dataSourceTypeChanged(int);
+    void showTestType();
     void showHypothesisTest();
     void doHypothesisTest();
     void performLeveneTest();

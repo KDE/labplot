@@ -56,11 +56,7 @@
 
 //TOOD: Make this dock widget scrollable and automatic resizeable for different screens.
 
-HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent),
-    all_cols_model(new QStandardItemModel(this)),
-    multi_categorical_values_cols_model(new QStandardItemModel(this)),
-    two_categorical_values_cols_model(new QStandardItemModel(this)),
-    only_values_cols_model(new QStandardItemModel(this)) {
+HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     ui.setupUi(this);
 
     ui.cbDataSourceType->addItem(i18n("Spreadsheet"));
@@ -73,16 +69,19 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent),
     ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
     m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "sql_connections";
 
-
-
-
     // adding item to tests and testtype combo box;
     ui.cbTest->addItem(i18n("T Test"));
     ui.cbTest->addItem(i18n("Z Test"));
+    ui.cbTest->addItem(i18n("Anova"));
 
-    ui.cbTestType->addItem(i18n("Two Sample Independent"));
-    ui.cbTestType->addItem(i18n("Two Sample Paired"));
-    ui.cbTestType->addItem(i18n("One Sample"));
+    test_type_t_z.append("Two Sample Independent");
+    test_type_t_z.append("Two Sample Paired");
+    test_type_t_z.append("One Sample");
+
+    test_type_anova.append("One Way");
+    test_type_anova.append("Two Way");
+
+    ui.cbTestType->setEnabled(false);
 
     // making all test blocks invisible at starting.
     ui.pbLeveneTest->setVisible(false);
@@ -189,7 +188,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent),
     //        ui.bRemoveColumn->setEnabled(!ui.lwColumns->selectedItems().isEmpty());
     //    });
 
-    connect(ui.cbTest, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &HypothesisTestDock::showHypothesisTest);
+    connect(ui.cbTest, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &HypothesisTestDock::showTestType);
     connect(ui.cbTestType, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &HypothesisTestDock::showHypothesisTest);
     //    connect(ui.cbTest, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::showHypothesisTest);
     //    connect(ui.cbTestType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::showHypothesisTest);
@@ -230,7 +229,7 @@ void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
     //    else
     //        ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_hypothesisTest->dataSourceConnection()));
 
-    setColumnsComboBoxModel();
+    setColumnsComboBoxModel(m_hypothesisTest->dataSourceSpreadsheet());
 
     this->dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
 
@@ -252,18 +251,32 @@ void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
     //    m_initializing = false;
 }
 
-void HypothesisTestDock::showHypothesisTest() {
+void HypothesisTestDock::showTestType() {
     ttest = ui.cbTest->currentText() == "T Test";
     ztest = ui.cbTest->currentText() == "Z Test";
+    anova = ui.cbTest->currentText() == "Anova";
+
+    ui.cbTestType->setEnabled(true);
+    ui.cbTestType->clear();
+
+    if (ttest || ztest)
+        ui.cbTestType->addItems(test_type_t_z);
+    if (anova)
+        ui.cbTestType->addItems(test_type_anova);
+}
+
+void HypothesisTestDock::showHypothesisTest() {
+    one_way = ui.cbTestType->currentText() == "One Way";
+    two_way = ui.cbTestType->currentText() == "Two Way";
 
     two_sample_independent = ui.cbTestType->currentText() == "Two Sample Independent";
     two_sample_paired = ui.cbTestType->currentText() == "Two Sample Paired";
     one_sample = ui.cbTestType->currentText() == "One Sample";
 
-    ui.lCol1->setVisible(two_sample_independent || two_sample_paired);
-    ui.cbCol1->setVisible(two_sample_independent || two_sample_paired);
-    ui.lCol2->setVisible(two_sample_independent || two_sample_paired || one_sample);
-    ui.cbCol2->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.lCol1->setVisible(anova || two_sample_independent || two_sample_paired);
+    ui.cbCol1->setVisible(anova || two_sample_independent || two_sample_paired);
+    ui.lCol2->setVisible(anova || two_sample_independent || two_sample_paired || one_sample);
+    ui.cbCol2->setVisible(anova || two_sample_independent || two_sample_paired || one_sample);
     ui.chbEqualVariance->setVisible(ttest && two_sample_independent);
     ui.chbCategorical->setVisible(ttest && two_sample_independent);
     ui.pbLeveneTest->setVisible(ttest && two_sample_independent);
@@ -289,22 +302,7 @@ void HypothesisTestDock::showHypothesisTest() {
     ui.leMuo->setText( i18n("%1", population_mean));
     ui.leAlpha->setText( i18n("%1", significance_level));
 
-    if (two_sample_independent)
-        ui.lCol2->setText( i18n("Independent Variable"));
-
-    if (two_sample_independent) {
-        ui.cbCol1->setModel(dynamic_cast<QAbstractItemModel*>(two_categorical_values_cols_model));
-        ui.cbCol2->setModel(dynamic_cast<QAbstractItemModel*>(only_values_cols_model));
-    }
-
-    if (two_sample_paired) {
-        ui.cbCol1->setModel(dynamic_cast<QAbstractItemModel*>(only_values_cols_model));
-        ui.cbCol2->setModel(dynamic_cast<QAbstractItemModel*>(only_values_cols_model));
-    }
-
-    if (one_sample)
-        ui.cbCol2->setModel(dynamic_cast<QAbstractItemModel*>(only_values_cols_model));
-
+    setColumnsComboBoxView();
 }
 
 void HypothesisTestDock::doHypothesisTest()  {
@@ -510,8 +508,7 @@ void HypothesisTestDock::dataSourceTypeChanged(int index) {
 void HypothesisTestDock::spreadsheetChanged(const QModelIndex& index) {
     auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
     Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
-
-    setColumnsComboBoxModel();
+    setColumnsComboBoxModel(spreadsheet);
     m_hypothesisTest->setDataSourceSpreadsheet(spreadsheet);
 }
 
@@ -574,7 +571,7 @@ void HypothesisTestDock::col1IndexChanged(int index) {
 //    if (DatabaseManagerWidget::isFileDB(driver)) {
 //        if (!QFile::exists(dbName)) {
 //            KMessageBox::error(this, i18n("Couldn't find the database file '%1'. Please check the connection settings.", dbName),
-//                                    i18n("Connection Failed"));
+//                               appendRow     i18n("Connection Failed"));
 //            return;
 //        } else
 //            m_db.setDatabaseName(dbName);
@@ -722,28 +719,45 @@ void HypothesisTestDock::countPartitions(Column *column, int &np, int &total_row
     column->setColumnMode(original_col_mode);
 }
 
-void HypothesisTestDock::setColumnsComboBoxModel() {
-    all_cols_model->clear();
-    multi_categorical_values_cols_model->clear();
-    two_categorical_values_cols_model->clear();
-    only_values_cols_model->clear();
+void HypothesisTestDock::setColumnsComboBoxModel(Spreadsheet* spreadsheet) {
+    only_values_cols.clear();
+    two_categorical_cols.clear();
+    more_than_two_categorical_cols.clear();
 
-    for (auto* col : m_hypothesisTest->dataSourceSpreadsheet()->children<Column>()) {
-        all_cols_model->appendRow(new QStandardItem(col->name()));
-
-        if (col->columnMode() == AbstractColumn::Integer || col->columnMode() == AbstractColumn::Numeric) {
-            only_values_cols_model->appendRow(new QStandardItem(col->name()));
-            multi_categorical_values_cols_model->appendRow(new QStandardItem(col->name()));
-            two_categorical_values_cols_model->appendRow(new QStandardItem(col->name()));
-        } else {
+    for (auto* col : spreadsheet->children<Column>()) {
+        if (col->columnMode() == AbstractColumn::Integer || col->columnMode() == AbstractColumn::Numeric)
+            only_values_cols.append(col->name());
+        else {
             int np = 0, n_rows = 0;
             countPartitions(col, np, n_rows);
             if (np == 1)
                 continue;
             else if (np == 2)
-                two_categorical_values_cols_model->appendRow(new QStandardItem(col->name()));
+                two_categorical_cols.append(col->name());
             else
-                multi_categorical_values_cols_model->appendRow(new QStandardItem(col->name()));
+                more_than_two_categorical_cols.append(col->name());
         }
+    }
+    setColumnsComboBoxView();
+}
+
+void HypothesisTestDock::setColumnsComboBoxView() {
+
+    ui.cbCol1->clear();
+    ui.cbCol2->clear();
+    if (two_sample_independent) {
+        ui.cbCol1->addItems(only_values_cols);
+        ui.cbCol1->addItems(two_categorical_cols);
+
+        ui.cbCol2->addItems(only_values_cols);
+    } else if (two_sample_paired) {
+        ui.cbCol1->addItems(only_values_cols);
+        ui.cbCol2->addItems(only_values_cols);
+    } else if (one_sample)
+        ui.cbCol1->addItems(only_values_cols);
+      else if (anova) {
+            ui.cbCol1->addItems(two_categorical_cols);
+            ui.cbCol1->addItems(more_than_two_categorical_cols);
+            ui.cbCol2->addItems(only_values_cols);
     }
 }
