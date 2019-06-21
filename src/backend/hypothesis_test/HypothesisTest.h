@@ -70,6 +70,7 @@ public:
     void performTwoSampleIndependentZTest();
     void performTwoSamplePairedZTest();
     void performOneSampleZTest();
+    void performOneWayAnova();
 
     void performLeveneTest(bool categorical_variable);
     //virtual methods

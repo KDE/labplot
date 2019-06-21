@@ -85,9 +85,10 @@ private:
     void countPartitions(Column *column, int &np, int &total_rows);
     void setColumnsComboBoxModel(Spreadsheet* spreadsheet);
     void setColumnsComboBoxView();
+    bool nonEmptySelectedColumns();
 
-    QStringList test_type_t_z{};
-    QStringList test_type_anova{};
+    QStringList test_type_t_z;
+    QStringList test_type_anova;
 
     QStringList only_values_cols;
     QStringList two_categorical_cols;

@@ -138,6 +138,11 @@ void HypothesisTest::performOneSampleZTest() {
     d->performOneSampleTest(HypothesisTestPrivate::TestZ);
 }
 
+void HypothesisTest::performOneWayAnova() {
+    d->m_currTestName = "<h2>One Way Anova</h2>";
+    d->performOneWayAnova();
+}
+
 void HypothesisTest::performLeveneTest(bool categorical_variable) {
     d->m_currTestName = "<h2>Levene Test for Equality of Variance</h2>";
     d->performLeveneTest(categorical_variable);
@@ -146,6 +151,8 @@ void HypothesisTest::performLeveneTest(bool categorical_variable) {
 /******************************************************************************
  *                      Private Implementations
  * ****************************************************************************/
+
+//TODO: round off numbers while printing
 
 HypothesisTestPrivate::HypothesisTestPrivate(HypothesisTest* owner) : q(owner) {
 }
@@ -457,6 +464,115 @@ void HypothesisTestPrivate::performOneSampleTest(TestType test) {
     emit q->changed();
     return;
 
+}
+
+/*************************************One Way Anova***************************************/
+void HypothesisTestPrivate::performOneWayAnova() {
+    // all standard variables and formulas are taken from this wikipedia page:
+    // https://en.wikipedia.org/wiki/One-way_analysis_of_variance
+
+    // b stands for b/w groups
+    // w stands for within groups
+    clearGlobalVariables();
+    int np, total_rows;
+    countPartitions(m_columns[0], np, total_rows);
+
+    int* ni = new int[np];
+    double* sum = new double[np];
+    double* mean = new double[np];
+    double* std = new double[np];
+    QString* col_names = new QString[np];
+
+    QMap<QString, int> classname_to_index;
+    findStatsCategorical(m_columns[0], m_columns[1], ni, sum, mean, std, classname_to_index, np, total_rows);
+
+    double y_bar = 0;
+    double s_b = 0;
+    int f_b = 0;
+    double ms_b = 0;
+    double s_w = 0;
+    int f_w = 0;
+    double ms_w = 0;
+    double f_value = 0;
+    double p_value = 0;
+
+    // now finding mean of each group;
+
+    for (int i = 0; i < np; i++)
+        y_bar += mean[i];
+    y_bar = y_bar / np;
+
+    for (int i = 0; i < np; i++) {
+        s_b += ni[i] * qPow( ( mean[i] - y_bar), 2);
+        if (ni[i] > 1)
+            s_w += qPow( std[i], 2)*(ni[i] - 1);
+        else
+            s_w += qPow( std[i], 2);
+        f_w += ni[i] - 1;
+    }
+
+    f_b = np - 1;
+    ms_b = s_b / f_b;
+
+    ms_w = s_w / f_w;
+    f_value = ms_b / ms_w;
+
+
+    p_value = nsl_stats_fdist_p(f_value, static_cast<size_t>(np-1), f_w);
+
+    QMapIterator<QString, int> i(classname_to_index);
+    while (i.hasNext()) {
+        i.next();
+        col_names[i.value()-1] = i.key();
+    }
+
+    // now printing the statistics and result;
+    int row_count = np + 1, column_count = 5;
+    QVariant* row_major = new QVariant[row_count*column_count];
+    // header data;
+    row_major[0] = ""; row_major[1] = "Ni"; row_major[2] = "Sum"; row_major[3] = "Mean"; row_major[4] = "Std";
+
+    // table data
+    for (int row_i = 1; row_i < row_count ; row_i++) {
+        row_major[row_i*column_count] = col_names[row_i - 1];
+        row_major[row_i*column_count + 1] = ni[row_i - 1];
+        row_major[row_i*column_count + 2] = sum[row_i - 1];
+        row_major[row_i*column_count + 3] = QString::number( mean[row_i - 1], 'f', 3);
+        row_major[row_i*column_count + 4] = QString::number( std[row_i - 1], 'f', 3);
+    }
+
+    m_stats_table = "<h3>Group Summary Statistics</h3>";
+
+    m_stats_table += getHtmlTable(row_count, column_count, row_major);
+
+    m_stats_table += getLine("");
+    m_stats_table += getLine("");
+    m_stats_table += "<h3>Grand Summary Statistics</h3>";
+    m_stats_table += getLine("");
+    m_stats_table += getLine(i18n("Overall Mean is %1", y_bar));
+
+    row_count = 4; column_count = 3;
+    row_major->clear();
+
+    row_major[0] = ""; row_major[1] = "Between Groups"; row_major[2] = "Within Groups";
+
+    int base_index = 0;
+    base_index = 1*column_count; row_major[base_index + 0] = "Sum of Squares"; row_major[base_index + 1] = s_b; row_major[base_index + 2] = s_w;
+    base_index = 2*column_count; row_major[base_index + 0] = "Degree of Freedom"; row_major[base_index + 1] = f_b; row_major[base_index + 2] = f_w;
+    base_index = 3*column_count; row_major[base_index + 0] = "Mean Square Value"; row_major[base_index + 1] = ms_b; row_major[base_index + 2] = ms_w;
+
+    m_stats_table += getHtmlTable(row_count, column_count, row_major);
+
+    printLine(1, i18n("F Value is %1", f_value), "blue");
+    printLine(2, i18n("P Value is %1 ", p_value), "green");
+
+    if (p_value <= m_significance_level)
+        q->m_view->setResultLine(2, i18n("We can safely reject Null Hypothesis for significance level %1", m_significance_level), Qt::ToolTipRole);
+    else
+        q->m_view->setResultLine(2, i18n("There is a plausibility for Null Hypothesis to be true"), Qt::ToolTipRole);
+
+    emit q->changed();
+    return;
 }
 
 /**************************************Levene Test****************************************/
@@ -948,9 +1064,13 @@ QString HypothesisTestPrivate::getHtmlTable(int row, int column, QVariant *row_m
     return table;
 }
 
+QString HypothesisTestPrivate::getLine(const QString &msg, const QString &color) {
+    return i18n("<p style=color:%1;>%2</p>", color, msg);
+}
+
 
 void HypothesisTestPrivate::printLine(const int &index, const QString &msg, const QString &color) {
-    q->m_view->setResultLine(index, i18n("<p style=color:%1;>%2</p>", color, msg));
+    q->m_view->setResultLine(index, getLine(msg, color));
     return;
 }
 

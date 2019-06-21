@@ -81,8 +81,6 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     test_type_anova.append("One Way");
     test_type_anova.append("Two Way");
 
-    ui.cbTestType->setEnabled(false);
-
     // making all test blocks invisible at starting.
     ui.pbLeveneTest->setVisible(false);
     ui.chbCategorical->setVisible(false);
@@ -256,13 +254,13 @@ void HypothesisTestDock::showTestType() {
     ztest = ui.cbTest->currentText() == "Z Test";
     anova = ui.cbTest->currentText() == "Anova";
 
-    ui.cbTestType->setEnabled(true);
     ui.cbTestType->clear();
 
     if (ttest || ztest)
         ui.cbTestType->addItems(test_type_t_z);
     if (anova)
         ui.cbTestType->addItems(test_type_anova);
+    showHypothesisTest();
 }
 
 void HypothesisTestDock::showHypothesisTest() {
@@ -279,9 +277,8 @@ void HypothesisTestDock::showHypothesisTest() {
     ui.cbCol2->setVisible(anova || two_sample_independent || two_sample_paired || one_sample);
     ui.chbEqualVariance->setVisible(ttest && two_sample_independent);
     ui.chbCategorical->setVisible(ttest && two_sample_independent);
-    ui.pbLeveneTest->setVisible(ttest && two_sample_independent);
+    ui.pbLeveneTest->setVisible(anova || (ttest && two_sample_independent));
     ui.chbEqualVariance->setChecked(true);
-    ui.pbPerformTest->setEnabled(two_sample_independent || two_sample_paired || one_sample);
 
     ui.rbH1OneTail2->setVisible(two_sample_independent || two_sample_paired || one_sample);
     ui.rbH1OneTail1->setVisible(two_sample_independent || two_sample_paired || one_sample);
@@ -296,13 +293,17 @@ void HypothesisTestDock::showHypothesisTest() {
 
     ui.lMuo->setVisible(one_sample);
     ui.leMuo->setVisible(one_sample);
-    ui.lAlpha->setVisible(two_sample_independent || two_sample_paired || one_sample);
-    ui.leAlpha->setVisible(two_sample_independent || two_sample_paired || one_sample);
+    ui.lAlpha->setVisible(anova || two_sample_independent || two_sample_paired || one_sample);
+    ui.leAlpha->setVisible(anova || two_sample_independent || two_sample_paired || one_sample);
 
     ui.leMuo->setText( i18n("%1", population_mean));
     ui.leAlpha->setText( i18n("%1", significance_level));
 
     setColumnsComboBoxView();
+
+    ui.pbPerformTest->setEnabled(nonEmptySelectedColumns() &&
+                                (anova ||
+                                 two_sample_independent || two_sample_paired || one_sample));
 }
 
 void HypothesisTestDock::doHypothesisTest()  {
@@ -346,6 +347,14 @@ void HypothesisTestDock::doHypothesisTest()  {
             cols << ui.cbCol1->currentText();
             m_hypothesisTest->setColumns(cols);
             m_hypothesisTest->performOneSampleZTest();
+        }
+    }
+    else if(anova) {
+        QStringList cols;
+        if(one_way) {
+            cols << ui.cbCol1->currentText() << ui.cbCol2->currentText();
+            m_hypothesisTest->setColumns(cols);
+            m_hypothesisTest->performOneWayAnova();
         }
     }
 }
@@ -730,7 +739,7 @@ void HypothesisTestDock::setColumnsComboBoxModel(Spreadsheet* spreadsheet) {
         else {
             int np = 0, n_rows = 0;
             countPartitions(col, np, n_rows);
-            if (np == 1)
+            if (np <= 1)
                 continue;
             else if (np == 2)
                 two_categorical_cols.append(col->name());
@@ -739,6 +748,7 @@ void HypothesisTestDock::setColumnsComboBoxModel(Spreadsheet* spreadsheet) {
         }
     }
     setColumnsComboBoxView();
+    showHypothesisTest();
 }
 
 void HypothesisTestDock::setColumnsComboBoxView() {
@@ -760,4 +770,12 @@ void HypothesisTestDock::setColumnsComboBoxView() {
             ui.cbCol1->addItems(more_than_two_categorical_cols);
             ui.cbCol2->addItems(only_values_cols);
     }
+}
+
+bool HypothesisTestDock::nonEmptySelectedColumns() {
+    if (ui.cbCol1->isVisible() && ui.cbCol1->count() < 1)
+        return false;
+    if (ui.cbCol2->isVisible() && ui.cbCol2->count() < 1)
+        return false;
+    return true;
 }

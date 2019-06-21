@@ -48,6 +48,7 @@ public:
         void performTwoSampleIndependentTest(TestType test, bool categorical_variable = false, bool equal_variance = true);
         void performTwoSamplePairedTest(TestType test);
         void performOneSampleTest(TestType test);
+        void performOneWayAnova();
 
         void performLeveneTest(bool categorical_variable);
 
@@ -75,6 +76,7 @@ private:
         double getPValue(const TestType &test, double &value, const QString &col1_name, const QString &col2_name, const double mean, const double sp, const int df);
         QString getHtmlTable(int row, int column, QVariant *row_major);
 
+        QString getLine(const QString &msg, const QString &color = "black");
         void printLine(const int &index, const QString &msg, const QString &color = "black");
         void printError(const QString &error_msg);
         void clearGlobalVariables();
