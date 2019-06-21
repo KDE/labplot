@@ -120,8 +120,8 @@ COMPLEX nsl_sf_poly_reversed_bessel_theta(int n, COMPLEX x) {
 		COMPLEX z = {(const double)(creal(x) + 1.0), (const double)cimag(x)};
 		return z;
 	}
-	COMPLEX z1 = nsl_sf_poly_bessel_y(n - 1, x);
-	COMPLEX z2 = nsl_sf_poly_bessel_y(n - 2, x);
+	COMPLEX z1 = nsl_sf_poly_bessel_theta(n - 1, x);
+	COMPLEX z2 = nsl_sf_poly_bessel_theta(n - 2, x);
 	double rex2 = creal(x)*creal(x) - cimag(x)*cimag(x);
 	double imx2 = 2.*creal(x)*cimag(x);
 	double factor = 2. * n - 1.;
