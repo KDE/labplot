@@ -31,6 +31,11 @@ extern "C" {
 #include "backend/nsl/nsl_geom_linesim.h"
 }
 
+void NSLGeomTest::initTestCase() {
+	const QString currentDir = __FILE__;
+	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
+}
+
 //##############################################################################
 //#################  line sim test
 //##############################################################################
@@ -189,8 +194,53 @@ void NSLGeomTest::testLineSim() {
 		QCOMPARE(index[i], result4[i]);
 }
 
+#define FILENAME "morse_code.dat"
+#define N 152000
+#define NOUT 15200
+
 void NSLGeomTest::testLineSimMorse() {
-	//TODO
+	const QString fileName = m_dataDir + "morse_code.dat";
+	FILE *file;
+	if((file = fopen(fileName.toLocal8Bit().constData(), "r")) == NULL) {
+		printf("ERROR reading %s. Giving up.\n", fileName.toLocal8Bit().constData());
+	}
+
+	double *xdata, *ydata;
+	size_t index[N], i;
+
+	xdata = (double *)malloc(N*sizeof(double));
+	ydata = (double *)malloc(N*sizeof(double));
+
+	for(i=0; i<N; i++)
+		fscanf(file,"%lf %lf", &xdata[i], &ydata[i]);
+
+	double atol = nsl_geom_linesim_clip_diag_perpoint(xdata, ydata, N);
+	printf("automatic tol clip_diag_perpoint = %.15g\n", atol);
+	QCOMPARE(atol, 0.999993446759985);
+	atol = nsl_geom_linesim_clip_area_perpoint(xdata, ydata, N);
+	printf("automatic tol clip_area_perpoint = %.15g\n", atol);
+	QCOMPARE(atol, 34.4653732526316);
+	atol = nsl_geom_linesim_avg_dist_perpoint(xdata, ydata, N);
+	printf("automatic tol avg_dist = %.15g\n", atol);
+	QCOMPARE(atol, 4.72091524721907);
+
+	printf("* simplification (Douglas Peucker variant) nout = %d\n", NOUT);
+
+//	struct timeval time1, time2;
+//	gettimeofday(&time1, NULL);
+	double tolout = nsl_geom_linesim_douglas_peucker_variant(xdata, ydata, N, NOUT, index);
+//	gettimeofday(&time2, NULL);
+//	printf("run time : %llu ms\n", 1000 * (time2.tv_sec - time1.tv_sec) + (time2.tv_usec - time1.tv_usec) / 1000);
+
+	double perr = nsl_geom_linesim_positional_squared_error(xdata, ydata, N, index);
+	double aerr = nsl_geom_linesim_area_error(xdata, ydata, N, index);
+	printf("maxtol = %.15g (pos. error = %.15g, area error = %.15g)\n", tolout, perr, aerr);
+	QCOMPARE(tolout, 11.5280857733246);
+	QCOMPARE(perr, 11.9586266895937);
+	QCOMPARE(aerr, 17.558046450762);
+
+	free(xdata);
+	free(ydata);
 }
 
 //##############################################################################

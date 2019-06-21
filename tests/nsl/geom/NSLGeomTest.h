@@ -33,6 +33,8 @@ class NSLGeomTest : public NSLTest {
 	Q_OBJECT
 
 private slots:
+	void initTestCase();
+
 	void testLineSim();
 	void testLineSimMorse();
 	// performance
