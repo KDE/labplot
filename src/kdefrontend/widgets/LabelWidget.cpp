@@ -115,6 +115,13 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	ui.cbBorderStyle->addItem(i18n("Dash dot line"));
 	ui.cbBorderStyle->addItem(i18n("Dash dot dot line"));
 
+	ui.kcbBackgroundColor->setAlphaChannelEnabled(true);
+	ui.kcbBackgroundColor->setColor(QColor(0,0,0, 0)); // transparent
+	ui.kcbFontColor->setAlphaChannelEnabled(true);
+	ui.kcbFontColor->setColor(QColor(255,255,255, 255)); // black
+	ui.kcbBorderColor->setAlphaChannelEnabled(true);
+	ui.kcbBorderColor->setColor(QColor(255,255,255, 255)); // black
+
 	//check whether the used latex compiler is available.
 	//Following logic is implemented (s.a. LabelWidget::teXUsedChanged()):
 	//1. in case latex was used to generate the text label in the stored project
@@ -134,37 +141,36 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 
 	//SLOTS
 	// text properties
-	connect(ui.tbTexUsed, SIGNAL(clicked(bool)), this, SLOT(teXUsedChanged(bool)) );
-	connect(ui.teLabel, SIGNAL(textChanged()), this, SLOT(textChanged()));
-	connect(ui.teLabel, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
-	        this, SLOT(charFormatChanged(QTextCharFormat)));
-	connect(ui.kcbFontColor, SIGNAL(changed(QColor)), this, SLOT(fontColorChanged(QColor)));
-	connect(ui.kcbBackgroundColor, SIGNAL(changed(QColor)), this, SLOT(backgroundColorChanged(QColor)));
-	connect(ui.tbFontBold, SIGNAL(clicked(bool)), this, SLOT(fontBoldChanged(bool)));
-	connect(ui.tbFontItalic, SIGNAL(clicked(bool)), this, SLOT(fontItalicChanged(bool)));
-	connect(ui.tbFontUnderline, SIGNAL(clicked(bool)), this, SLOT(fontUnderlineChanged(bool)));
-	connect(ui.tbFontStrikeOut, SIGNAL(clicked(bool)), this, SLOT(fontStrikeOutChanged(bool)));
-	connect(ui.tbFontSuperScript, SIGNAL(clicked(bool)), this, SLOT(fontSuperScriptChanged(bool)));
-	connect(ui.tbFontSubScript, SIGNAL(clicked(bool)), this, SLOT(fontSubScriptChanged(bool)));
-	connect(ui.tbSymbols, SIGNAL(clicked(bool)), this, SLOT(charMenu()));
-	connect(ui.tbDateTime, SIGNAL(clicked(bool)), this, SLOT(dateTimeMenu()));
-	connect(m_dateTimeMenu, SIGNAL(triggered(QAction*)), this, SLOT(insertDateTime(QAction*)) );
-	connect(ui.kfontRequester, SIGNAL(fontSelected(QFont)), this, SLOT(fontChanged(QFont)));
-	connect(ui.kfontRequesterTeX, SIGNAL(fontSelected(QFont)), this, SLOT(teXFontChanged(QFont)));
-	connect(ui.sbFontSize, SIGNAL(valueChanged(int)), this, SLOT(fontSizeChanged(int)) );
+	connect(ui.tbTexUsed, &QToolButton::clicked, this, &LabelWidget::teXUsedChanged );
+	connect(ui.teLabel, &ResizableTextEdit::textChanged, this, &LabelWidget::textChanged);
+	connect(ui.teLabel, &ResizableTextEdit::currentCharFormatChanged, this, &LabelWidget::charFormatChanged);
+	connect(ui.kcbFontColor, &KColorButton::changed, this, &LabelWidget::fontColorChanged);
+	connect(ui.kcbBackgroundColor, &KColorButton::changed, this, &LabelWidget::backgroundColorChanged);
+	connect(ui.tbFontBold, &QToolButton::clicked, this, &LabelWidget::fontBoldChanged);
+	connect(ui.tbFontItalic, &QToolButton::clicked, this, &LabelWidget::fontItalicChanged);
+	connect(ui.tbFontUnderline, &QToolButton::clicked, this, &LabelWidget::fontUnderlineChanged);
+	connect(ui.tbFontStrikeOut, &QToolButton::clicked, this, &LabelWidget::fontStrikeOutChanged);
+	connect(ui.tbFontSuperScript, &QToolButton::clicked, this, &LabelWidget::fontSuperScriptChanged);
+	connect(ui.tbFontSubScript, &QToolButton::clicked, this, &LabelWidget::fontSubScriptChanged);
+	connect(ui.tbSymbols, &QToolButton::clicked, this, &LabelWidget::charMenu);
+	connect(ui.tbDateTime, &QToolButton::clicked, this, &LabelWidget::dateTimeMenu);
+	connect(m_dateTimeMenu, &QMenu::triggered, this, &LabelWidget::insertDateTime );
+	connect(ui.kfontRequester, &KFontRequester::fontSelected, this, &LabelWidget::fontChanged);
+	connect(ui.kfontRequesterTeX, &KFontRequester::fontSelected, this, &LabelWidget::teXFontChanged);
+	connect(ui.sbFontSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::fontSizeChanged);
 
 	// geometry
-	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
-	connect( ui.cbPositionY, SIGNAL(currentIndexChanged(int)), this, SLOT(positionYChanged(int)) );
-	connect( ui.sbPositionX, SIGNAL(valueChanged(double)), this, SLOT(customPositionXChanged(double)) );
-	connect( ui.sbPositionY, SIGNAL(valueChanged(double)), this, SLOT(customPositionYChanged(double)) );
-	connect( ui.cbHorizontalAlignment, SIGNAL(currentIndexChanged(int)), this, SLOT(horizontalAlignmentChanged(int)) );
-	connect( ui.cbVerticalAlignment, SIGNAL(currentIndexChanged(int)), this, SLOT(verticalAlignmentChanged(int)) );
-	connect( ui.sbRotation, SIGNAL(valueChanged(int)), this, SLOT(rotationChanged(int)) );
-	connect( ui.sbOffsetX, SIGNAL(valueChanged(double)), this, SLOT(offsetXChanged(double)) );
-	connect( ui.sbOffsetY, SIGNAL(valueChanged(double)), this, SLOT(offsetYChanged(double)) );
+	connect( ui.cbPositionX, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::positionXChanged);
+	connect( ui.cbPositionY, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::positionYChanged);
+	connect( ui.sbPositionX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::customPositionXChanged);
+	connect( ui.sbPositionY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::customPositionYChanged);
+	connect( ui.cbHorizontalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::horizontalAlignmentChanged);
+	connect( ui.cbVerticalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::verticalAlignmentChanged);
+	connect( ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::rotationChanged);
+	connect( ui.sbOffsetX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetXChanged);
+	connect( ui.sbOffsetY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetYChanged);
 
-	connect( ui.chbVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect( ui.chbVisible, &QCheckBox::clicked, this, &LabelWidget::visibilityChanged);
 
 	//Border
 	connect(ui.cbBorderShape, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &LabelWidget::borderShapeChanged);
@@ -198,9 +204,9 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
 	m_labelsList.clear();
 	for (auto* axis : axes) {
 		m_labelsList.append(axis->title());
-		connect(axis, SIGNAL(titleOffsetXChanged(qreal)), this, SLOT(labelOffsetxChanged(qreal)) );
-		connect(axis, SIGNAL(titleOffsetYChanged(qreal)), this, SLOT(labelOffsetyChanged(qreal)) );
-		connect(axis->title(), SIGNAL(rotationAngleChanged(qreal)), this, SLOT(labelRotationAngleChanged(qreal)) );
+		connect(axis, &Axis::titleOffsetXChanged, this, &LabelWidget::labelOffsetxChanged);
+		connect(axis, &Axis::titleOffsetYChanged, this, &LabelWidget::labelOffsetyChanged );
+		connect(axis->title(), &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged );
 	}
 
 	m_axesList = axes;
@@ -211,24 +217,20 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
 }
 
 void LabelWidget::initConnections() const {
-	connect( m_label, SIGNAL(textWrapperChanged(TextLabel::TextWrapper)),
-	         this, SLOT(labelTextWrapperChanged(TextLabel::TextWrapper)) );
-	connect( m_label, SIGNAL(teXImageUpdated(bool)), this, SLOT(labelTeXImageUpdated(bool)) );
-	connect( m_label, SIGNAL(teXFontChanged(QFont)),
-	         this, SLOT(labelTeXFontChanged(QFont)) );
-	connect( m_label, SIGNAL(fontColorChanged(QColor)),
-	         this, SLOT(labelFontColorChanged(QColor)) );
-	connect( m_label, SIGNAL(positionChanged(TextLabel::PositionWrapper)),
-	         this, SLOT(labelPositionChanged(TextLabel::PositionWrapper)) );
-	connect( m_label, SIGNAL(horizontalAlignmentChanged(TextLabel::HorizontalAlignment)),
-	         this, SLOT(labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment)) );
-	connect( m_label, SIGNAL(verticalAlignmentChanged(TextLabel::VerticalAlignment)),
-	         this, SLOT(labelVerticalAlignmentChanged(TextLabel::VerticalAlignment)) );
-	connect( m_label, SIGNAL(rotationAngleChanged(qreal)), this, SLOT(labelRotationAngleChanged(qreal)) );
+	connect( m_label, &TextLabel::textWrapperChanged, this, &LabelWidget::labelTextWrapperChanged);
+	connect( m_label, &TextLabel::teXImageUpdated, this, &LabelWidget::labelTeXImageUpdated);
+	connect( m_label, &TextLabel::teXFontChanged, this, &LabelWidget::labelTeXFontChanged);
+	connect( m_label, &TextLabel::fontColorChanged, this, &LabelWidget::labelFontColorChanged);
+	connect (m_label, &TextLabel::backgroundColorChanged, this, &LabelWidget::labelBackgroundColorChanged);
+	connect( m_label, &TextLabel::positionChanged, this, &LabelWidget::labelPositionChanged);
+	connect( m_label, &TextLabel::horizontalAlignmentChanged, this, &LabelWidget::labelHorizontalAlignmentChanged);
+	connect( m_label, &TextLabel::verticalAlignmentChanged, this, &LabelWidget::labelVerticalAlignmentChanged);
+	connect( m_label, &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
 	connect(m_label, &TextLabel::borderShapeChanged, this, &LabelWidget::labelBorderShapeChanged);
 	connect(m_label, &TextLabel::borderPenChanged, this, &LabelWidget::labelBorderPenChanged);
 	connect(m_label, &TextLabel::borderOpacityChanged, this, &LabelWidget::labelBorderOpacityChanged);
-	connect( m_label, SIGNAL(visibleChanged(bool)), this, SLOT(labelVisibleChanged(bool)) );
+	connect( m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
+	connect( m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
 }
 
 /*!
@@ -303,11 +305,22 @@ void LabelWidget::textChanged() {
 			text = ui.teLabel->toHtml();
 
 		TextLabel::TextWrapper wrapper(text, false);
-		for (auto* label : m_labelsList)
+		for (auto* label : m_labelsList) {
 			label->setText(wrapper);
+			// Don't set FontColor, because the font color is already in the html code
+			// of the text. The font color is used to change the color for unformated
+			// text like from themes
+			// label->setFontColor(ui.kcbFontColor->color());
+			// label->setBackgroundColor(ui.kcbBackgroundColor->color());
+		}
 	}
 }
 
+/*!
+ * \brief LabelWidget::charFormatChanged
+ * \param format
+ * Used to update the colors, font,... in the color font widgets to show the style of the selected text
+ */
 void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
 	if (m_initializing)
 		return;
@@ -330,7 +343,12 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
 		ui.kcbFontColor->setColor(format.foreground().color());
 	else
 		ui.kcbFontColor->setColor(m_label->fontColor());
-	ui.kcbBackgroundColor->setColor(format.background().color());
+
+	if (format.background().color().isValid())
+		ui.kcbBackgroundColor->setColor(format.background().color());
+	else
+		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
+
 	ui.kfontRequester->setFont(format.font());
 
 	m_initializing = false;
@@ -351,6 +369,11 @@ void LabelWidget::teXUsedChanged(bool checked) {
 
 	ui.lFont->setVisible(!checked);
 	ui.kfontRequester->setVisible(!checked);
+
+	//TODO:
+	//for normal text we need to hide the background color because of QTBUG-25420
+	ui.kcbBackgroundColor->setVisible(checked);
+	ui.lBackgroundColor->setVisible(checked);
 
 	if (checked) {
 		//reset all applied formattings when switching from html to tex mode
@@ -421,26 +444,31 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 
 	//if no selection is done, apply the new color for the whole label,
 	//apply to the currently selected part of the text only otherwise
-	QTextCursor cursor = ui.teLabel->textCursor();
-	if (cursor.selection().isEmpty())
-		for (auto* label : m_labelsList)
-			label->setFontColor(color);
-	else
-		ui.teLabel->setTextColor(color);
+	QTextCursor c = ui.teLabel->textCursor();
+	if (c.selectedText().isEmpty())
+		ui.teLabel->selectAll();
+
+	ui.teLabel->setTextColor(color);
 }
 
 void LabelWidget::backgroundColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
+	QTextCursor c = ui.teLabel->textCursor();
+	if (c.selectedText().isEmpty())
+		ui.teLabel->selectAll();
+
 	ui.teLabel->setTextBackgroundColor(color);
-	for (auto* label : m_labelsList)
-		label->setBackgroundColor(color);
 }
 
 void LabelWidget::fontSizeChanged(int value) {
 	if (m_initializing)
 		return;
+
+	QTextCursor c = ui.teLabel->textCursor();
+	if (c.selectedText().isEmpty())
+		ui.teLabel->selectAll();
 
 	QFont font = m_label->teXFont();
 	font.setPointSize(value);
@@ -452,6 +480,10 @@ void LabelWidget::fontBoldChanged(bool checked) {
 	if (m_initializing)
 		return;
 
+	QTextCursor c = ui.teLabel->textCursor();
+	if (c.selectedText().isEmpty())
+		ui.teLabel->selectAll();
+
 	if (checked)
 		ui.teLabel->setFontWeight(QFont::Bold);
 	else
@@ -462,6 +494,10 @@ void LabelWidget::fontItalicChanged(bool checked) {
 	if (m_initializing)
 		return;
 
+	QTextCursor c = ui.teLabel->textCursor();
+	if (c.selectedText().isEmpty())
+		ui.teLabel->selectAll();
+
 	ui.teLabel->setFontItalic(checked);
 }
 
@@ -469,12 +505,20 @@ void LabelWidget::fontUnderlineChanged(bool checked) {
 	if (m_initializing)
 		return;
 
+	QTextCursor c = ui.teLabel->textCursor();
+	if (c.selectedText().isEmpty())
+		ui.teLabel->selectAll();
+
 	ui.teLabel->setFontUnderline(checked);
 }
 
 void LabelWidget::fontStrikeOutChanged(bool checked) {
 	if (m_initializing)
 		return;
+
+	QTextCursor c = ui.teLabel->textCursor();
+	if (c.selectedText().isEmpty())
+		ui.teLabel->selectAll();
 
 	QTextCharFormat format = ui.teLabel->currentCharFormat();
 	format.setFontStrikeOut(checked);
@@ -484,6 +528,10 @@ void LabelWidget::fontStrikeOutChanged(bool checked) {
 void LabelWidget::fontSuperScriptChanged(bool checked) {
 	if (m_initializing)
 		return;
+
+	QTextCursor c = ui.teLabel->textCursor();
+	if (c.selectedText().isEmpty())
+		ui.teLabel->selectAll();
 
 	QTextCharFormat format = ui.teLabel->currentCharFormat();
 	if (checked)
@@ -498,6 +546,10 @@ void LabelWidget::fontSubScriptChanged(bool checked) {
 	if (m_initializing)
 		return;
 
+	QTextCursor c = ui.teLabel->textCursor();
+	if (c.selectedText().isEmpty())
+		ui.teLabel->selectAll();
+
 	QTextCharFormat format = ui.teLabel->currentCharFormat();
 	if (checked)
 		format.setVerticalAlignment(QTextCharFormat::AlignSubScript);
@@ -511,11 +563,22 @@ void LabelWidget::fontChanged(const QFont& font) {
 	if (m_initializing)
 		return;
 
-	// underline and strike-out not included
-	ui.teLabel->setFontFamily(font.family());
-	ui.teLabel->setFontPointSize(font.pointSize());
-	ui.teLabel->setFontItalic(font.italic());
-	ui.teLabel->setFontWeight(font.weight());
+	QTextCursor c = ui.teLabel->textCursor();
+	if (c.selectedText().isEmpty())
+		ui.teLabel->selectAll();
+
+	// use format instead of using ui.teLabel->setFontFamily(font.family());
+	// because this calls after every command textChanged() which is inefficient
+	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	format.setFontFamily(font.family());
+	format.setFontPointSize(font.pointSize());
+	format.setFontItalic(font.italic());
+	format.setFontWeight(font.weight());
+	if (font.underline())
+		format.setUnderlineStyle(QTextCharFormat::UnderlineStyle::SingleUnderline);
+	if (font.strikeOut()) // anytime true. don't know why
+		format.setFontStrikeOut(font.strikeOut());
+	ui.teLabel->setCurrentCharFormat(format);
 }
 
 void LabelWidget::teXFontChanged(const QFont& font) {
@@ -804,6 +867,12 @@ void LabelWidget::labelPositionChanged(const TextLabel::PositionWrapper& positio
 	m_initializing = false;
 }
 
+void LabelWidget::labelBackgroundColorChanged(const QColor color) {
+	m_initializing = true;
+	ui.kcbBackgroundColor->setColor(color);
+	m_initializing = false;
+}
+
 void LabelWidget::labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment index) {
 	m_initializing = true;
 	ui.cbHorizontalAlignment->setCurrentIndex(index);
@@ -880,13 +949,17 @@ void LabelWidget::load() {
 	ui.tbTexUsed->setChecked( (bool) m_label->text().teXUsed );
 	if (m_label->text().teXUsed)
 		ui.teLabel->setText(m_label->text().text);
-	else
+	else {
 		ui.teLabel->setHtml(m_label->text().text);
+		ui.teLabel->selectAll(); // must be done to retrieve font
+		ui.kfontRequester->setFont(ui.teLabel->currentFont());
+	}
 
-	ui.kcbFontColor->setColor(m_label->fontColor());
-	ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
+	QTextCharFormat format = ui.teLabel->currentCharFormat(); // don't use colors from the textlabel, but
+	ui.kcbFontColor->setColor(format.foreground().color());
+	ui.kcbBackgroundColor->setColor(format.background().color());
 	this->teXUsedChanged(m_label->text().teXUsed);
-	ui.kfontRequesterTeX->setFont(m_label->teXFont());
+	ui.kfontRequesterTeX->setFont(format.font());
 	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
 
 	//move the cursor to the end and set the focus to the text editor
