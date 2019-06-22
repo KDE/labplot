@@ -766,8 +766,10 @@ void XYCurveDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAs
 //********** SLOTs for changes triggered in XYCurveDock ********
 //*************************************************************
 void XYCurveDock::retranslateUi() {
-	ui.lLineIncreasingXOnly->setToolTip(i18n("Connect data points only for strictly increasing values of X"));
-	ui.chkLineIncreasingXOnly->setToolTip(i18n("Connect data points only for strictly increasing values of X"));
+	ui.lLineSkipGaps->setToolTip(i18n("If checked, connect neighbour points with lines even if there are gaps (invalid of masked values) between them"));
+	ui.chkLineSkipGaps->setToolTip(i18n("If checked, connect neighbour points with lines even if there are gaps (invalid of masked values) between them"));
+	ui.lLineIncreasingXOnly->setToolTip(i18n("If checked, connect data points only for strictly increasing values of X"));
+	ui.chkLineIncreasingXOnly->setToolTip(i18n("If checked, connect data points only for strictly increasing values of X"));
 	//TODO:
 // 	uiGeneralTab.lName->setText(i18n("Name"));
 // 	uiGeneralTab.lComment->setText(i18n("Comment"));
