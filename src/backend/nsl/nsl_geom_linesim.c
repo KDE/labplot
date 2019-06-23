@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL geometry line simplification functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2019 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
