@@ -63,7 +63,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     ui.cbDataSourceType->addItem(i18n("Database"));
 
     cbSpreadsheet = new TreeViewComboBox;
-    ui.gridLayout->addWidget(cbSpreadsheet, 1, 1);
+    ui.gridLayout->addWidget(cbSpreadsheet, 5, 4, 1, 3);
 
     ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
     ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
@@ -82,23 +82,25 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     test_type_anova.append( i18n("Two Way"));
 
     // making all test blocks invisible at starting.
-    ui.pbLeveneTest->setVisible(false);
-    ui.chbCategorical->setVisible(false);
-    ui.lCol1->setVisible(false);
-    ui.cbCol1->setVisible(false);
-    ui.lCol2->setVisible(false);
-    ui.cbCol2->setVisible(false);
-    ui.chbEqualVariance->setVisible(false);
+    ui.pbLeveneTest->hide();
+    ui.lCategorical->hide();
+    ui.chbCategorical->hide();
+    ui.lCol1->hide();
+    ui.cbCol1->hide();
+    ui.lCol2->hide();
+    ui.cbCol2->hide();
+    ui.lEqualVariance->hide();
+    ui.chbEqualVariance->hide();
     ui.chbEqualVariance->setChecked(true);
     ui.pbPerformTest->setEnabled(false);
-    ui.rbH1OneTail2->setVisible(false);
-    ui.rbH1OneTail1->setVisible(false);
-    ui.rbH1TwoTail->setVisible(false);
-    ui.rbH0OneTail1->setVisible(false);
-    ui.rbH0OneTail2->setVisible(false);
-    ui.rbH0TwoTail->setVisible(false);
-    ui.lH0->setVisible(false);
-    ui.lH1->setVisible(false);
+    ui.rbH1OneTail2->hide();
+    ui.rbH1OneTail1->hide();
+    ui.rbH1TwoTail->hide();
+    ui.rbH0OneTail1->hide();
+    ui.rbH0OneTail2->hide();
+    ui.rbH0TwoTail->hide();
+    ui.lH0->hide();
+    ui.lH1->hide();
 
     QString mu = UTF8_QSTRING("μ");
     QString mu0 = UTF8_QSTRING("μₒ");
@@ -126,10 +128,13 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     ui.leMuo->setText( i18n("%1", population_mean));
     ui.leAlpha->setText( i18n("%1", significance_level));
 
-    ui.lMuo->setVisible(false);
-    ui.lAlpha->setVisible(false);
-    ui.leMuo->setVisible(false);
-    ui.leAlpha->setVisible(false);
+    ui.lMuo->hide();
+    ui.lAlpha->hide();
+    ui.leMuo->hide();
+    ui.leAlpha->hide();
+
+    ui.pbPerformTest->setIcon(QIcon::fromTheme("run-build"));
+
 
     //    readConnections();
 
@@ -203,50 +208,41 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 }
 
 void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
-    //    m_initializing = true;
+    m_initializing = true;
     m_hypothesisTest = HypothesisTest;
 
-    ////    m_aspectTreeModel = new AspectTreeModel(m_hypothesisTest->project());
+    m_aspectTreeModel = new AspectTreeModel(m_hypothesisTest->project());
 
-    //    QList<const char*> list;
-    //    list << "Folder" << "Workbook" << "Spreadsheet" << "LiveDataSource";
-    //    cbSpreadsheet->setTopLevelClasses(list);
+    QList<const char*> list;
+    list << "Folder" << "Workbook" << "Spreadsheet" << "LiveDataSource";
+    cbSpreadsheet->setTopLevelClasses(list);
 
-    //    list.clear();
-    //    list << "Spreadsheet" << "LiveDataSource";
-    ////    m_aspectTreeModel->setSelectableAspects(list);
+    list.clear();
+    list << "Spreadsheet" << "LiveDataSource";
+    m_aspectTreeModel->setSelectableAspects(list);
 
-    ////    cbSpreadsheet->setModel(m_aspectTreeModel);
+    cbSpreadsheet->setModel(m_aspectTreeModel);
 
     //show the properties
     ui.leName->setText(m_hypothesisTest->name());
     ui.leComment->setText(m_hypothesisTest->comment());
     ui.cbDataSourceType->setCurrentIndex(m_hypothesisTest->dataSourceType());
-    //    if (m_hypothesisTest->dataSourceType() == HypothesisTest::DataSourceSpreadsheet)
-    //        setModelIndexFromAspect(cbSpreadsheet, m_hypothesisTest->dataSourceSpreadsheet());
-    //    else
-    //        ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_hypothesisTest->dataSourceConnection()));
+    if (m_hypothesisTest->dataSourceType() == HypothesisTest::DataSourceSpreadsheet)
+        setModelIndexFromAspect(cbSpreadsheet, m_hypothesisTest->dataSourceSpreadsheet());
+//    else
+//        ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_hypothesisTest->dataSourceConnection()));
 
     setColumnsComboBoxModel(m_hypothesisTest->dataSourceSpreadsheet());
 
     this->dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
 
-    // setting rows and columns in combo box;
+    //setting rows and columns in combo box;
 
+    //undo functions
+    connect(m_hypothesisTest, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(hypothesisTestDescriptionChanged(const AbstractAspect*)));
+    //TODO:
 
-    //    //available dimensions and measures
-    //    ui.lwFields->clear();
-    //    for (auto dimension : m_hypothesisTest->dimensions())
-    //        ui.lwFields->addItem(new QListWidgetItem(QIcon::fromTheme("draw-text"), dimension));
-
-    //    for (auto measure : m_hypothesisTest->measures())
-    //        ui.lwFields->addItem(new QListWidgetItem(measure));
-
-    //    //undo functions
-    //    connect(m_hypothesisTest, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(hypothesisTestDescriptionChanged(const AbstractAspect*)));
-    //    //TODO:
-
-    //    m_initializing = false;
+    m_initializing = false;
 }
 
 void HypothesisTestDock::showTestType() {
@@ -275,7 +271,9 @@ void HypothesisTestDock::showHypothesisTest() {
     ui.cbCol1->setVisible(anova || two_sample_independent || two_sample_paired);
     ui.lCol2->setVisible(anova || two_sample_independent || two_sample_paired || one_sample);
     ui.cbCol2->setVisible(anova || two_sample_independent || two_sample_paired || one_sample);
+    ui.lEqualVariance->setVisible(ttest && two_sample_independent);
     ui.chbEqualVariance->setVisible(ttest && two_sample_independent);
+    ui.lCategorical->setVisible(ttest && two_sample_independent);
     ui.chbCategorical->setVisible(ttest && two_sample_independent);
     ui.pbLeveneTest->setVisible(anova || (ttest && two_sample_independent));
     ui.chbEqualVariance->setChecked(true);
@@ -368,12 +366,12 @@ void HypothesisTestDock::performLeveneTest()  {
     m_hypothesisTest->performLeveneTest(ui.chbCategorical->isChecked());
 }
 
-//void HypothesisTestDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
-//    if (aspect)
-//        cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(aspect));
-//    else
-//        cb->setCurrentModelIndex(QModelIndex());
-//}
+void HypothesisTestDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
+    if (aspect)
+        cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(aspect));
+    else
+        cb->setCurrentModelIndex(QModelIndex());
+}
 
 ///*!
 //    shows the database manager where the connections are created and edited.
@@ -508,8 +506,8 @@ void HypothesisTestDock::dataSourceTypeChanged(int index) {
     ui.lTable->setVisible(showDatabase);
     ui.cbTable->setVisible(showDatabase);
 
-    //    if (m_initializing)
-    //        return;
+    if (m_initializing)
+        return;
 
     m_hypothesisTest->setComment(ui.leComment->text());
 }
@@ -526,7 +524,7 @@ void HypothesisTestDock::col1IndexChanged(int index) {
     if (index < 0) return;
 
     if (two_sample_paired) {
-        ui.lCol2->setText( i18n("Independent Variable"));
+        ui.lCol2->setText( i18n("Independent Var. 2"));
         return;
     }
 
@@ -534,12 +532,12 @@ void HypothesisTestDock::col1IndexChanged(int index) {
     Column* col1 = m_hypothesisTest->dataSourceSpreadsheet()->column(selected_text);
 
     if (col1->columnMode() == AbstractColumn::Integer || col1->columnMode() == AbstractColumn::Numeric) {
-        ui.lCol2->setText( i18n("Independent Variable"));
+        ui.lCol2->setText( i18n("Independent Var. 2"));
         ui.chbCategorical->setChecked(false);
         ui.chbCategorical->setEnabled(true);
     }
     else {
-        ui.lCol2->setText( i18n("Dependent Variable"));
+        ui.lCol2->setText( i18n("Dependent Var. 1"));
         ui.chbCategorical->setChecked(true);
         ui.chbCategorical->setEnabled(false);
     }

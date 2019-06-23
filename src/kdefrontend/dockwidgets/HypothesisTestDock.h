@@ -58,17 +58,17 @@ private slots:
 
 private:
     Ui::HypothesisTestDock ui;
-    //        bool m_initializing{false};
+    bool m_initializing{false};
     TreeViewComboBox* cbSpreadsheet{nullptr};
     HypothesisTest* m_hypothesisTest{nullptr};
-    ////        AspectTreeModel* m_aspectTreeModel{nullptr};
+    AspectTreeModel* m_aspectTreeModel{nullptr};
     QSqlDatabase m_db;
     QString m_configPath;
     double population_mean{0};
     double significance_level{0.05};
     //        void load();
     //        void loadConfig(KConfig&);
-    //        void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
+    void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
     //        void readConnections();
     //        void updateFields();
     //        bool fieldSelected(const QString&);
