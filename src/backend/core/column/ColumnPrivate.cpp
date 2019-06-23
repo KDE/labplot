@@ -30,6 +30,7 @@
 #include "ColumnPrivate.h"
 #include "ColumnStringIO.h"
 #include "Column.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/datatypes/filter.h"
 #include "backend/gsl/ExpressionParser.h"
 
@@ -162,7 +163,7 @@ AbstractColumn::ColumnMode ColumnPrivate::columnMode() const {
  */
 void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	DEBUG("ColumnPrivate::setColumnMode() " << ENUM_TO_STRING(AbstractColumn, ColumnMode, m_column_mode)
-		<< " -> " << ENUM_TO_STRING(AbstractColumn, ColumnMode, mode));
+		<< " -> " << ENUM_TO_STRING(AbstractColumn, ColumnMode, mode))
 	if (mode == m_column_mode) return;
 
 	void* old_data = m_data;
@@ -897,13 +898,12 @@ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variab
 	m_formulaVariableColumns = variableColumns;
 	m_formulaAutoUpdate = autoUpdate;
 
-	//TODO: doesn't work
-	disconnect(m_owner, SLOT(updateFormula()));
+	for (auto connection: m_connectionsUpdateFormula)
+		disconnect(connection);
 
 	if (autoUpdate) {
-		QVector<Column*> columns;
 		for (auto column : variableColumns)
-			connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
+			m_connectionsUpdateFormula << connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
 	}
 }
 
@@ -936,14 +936,10 @@ const QStringList& ColumnPrivate::formulaVariableColumnPaths() const {
  * \sa FunctionValuesDialog::generate()
  */
 void ColumnPrivate::updateFormula() {
-	//TODO: this check shouldn't be required, but the disconnect in
-	//ColumnPrivate::setFormula() doesn't seem to work
-	if (!m_formulaAutoUpdate)
-		return;
-
 	//determine variable names and the data vectors of the specified columns
 	QVector<QVector<double>*> xVectors;
 	QVector<QVector<double>*> xNewVectors;
+	int maxRowCount = 0;
 
 	for (auto column : m_formulaVariableColumns) {
 		if (column->columnMode() == AbstractColumn::Integer) {
@@ -956,19 +952,34 @@ void ColumnPrivate::updateFormula() {
 			xVectors << xVector;
 		} else
 			xVectors << static_cast<QVector<double>* >(column->data());
+
+		if (column->rowCount() > maxRowCount)
+			maxRowCount = column->rowCount();
 	}
+
+	//resize the spreadsheet if one of the data vectors from
+	//other spreadsheet(s) has more elements than the parent spreadsheet
+	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(m_owner->parentAspect());
+	Q_ASSERT(spreadsheet);
+	if (spreadsheet->rowCount() < maxRowCount)
+		spreadsheet->setRowCount(maxRowCount);
 
 	//create new vector for storing the calculated values
 	//the vectors with the variable data can be smaller then the result vector. So, not all values in the result vector might get initialized.
 	//->"clean" the result vector first
-	QVector<double> new_data(rowCount());
-	for (auto& d : new_data)
-		d = NAN;
+	QVector<double> new_data(rowCount(), NAN);
 
 	//evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 	ExpressionParser* parser = ExpressionParser::getInstance();
 	parser->evaluateCartesian(m_formula, m_formulaVariableNames, xVectors, &new_data);
 	replaceValues(0, new_data);
+
+	// initialize remaining rows with NAN
+	int remainingRows = rowCount() - maxRowCount;
+	if (remainingRows > 0) {
+		QVector<double> emptyRows(remainingRows, NAN);
+		replaceValues(maxRowCount, emptyRows);
+	}
 
 	//delete help vectors created for the conversion from int to double
 	for (auto* vector : xNewVectors)

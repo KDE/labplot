@@ -139,6 +139,7 @@ private:
 	AbstractColumn::PlotDesignation m_plot_designation{AbstractColumn::NoDesignation};
 	int m_width{0}; //column width in the view
 	Column* m_owner;
+	QVector<QMetaObject::Connection> m_connectionsUpdateFormula;
 };
 
 #endif
