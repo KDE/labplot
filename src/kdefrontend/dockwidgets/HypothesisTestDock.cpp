@@ -74,12 +74,12 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     ui.cbTest->addItem(i18n("Z Test"));
     ui.cbTest->addItem(i18n("Anova"));
 
-    test_type_t_z.append("Two Sample Independent");
-    test_type_t_z.append("Two Sample Paired");
-    test_type_t_z.append("One Sample");
+    test_type_t_z.append( i18n( "Two Sample Independent"));
+    test_type_t_z.append( i18n("Two Sample Paired"));
+    test_type_t_z.append( i18n("One Sample"));
 
-    test_type_anova.append("One Way");
-    test_type_anova.append("Two Way");
+    test_type_anova.append( i18n("One Way"));
+    test_type_anova.append( i18n("Two Way"));
 
     // making all test blocks invisible at starting.
     ui.pbLeveneTest->setVisible(false);

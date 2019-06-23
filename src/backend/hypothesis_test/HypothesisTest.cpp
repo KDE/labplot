@@ -47,6 +47,7 @@ extern "C" {
 #include <QLabel>
 #include <QLayout>
 #include <gsl/gsl_cdf.h>
+#include <gsl/gsl_math.h>
 
 HypothesisTest::HypothesisTest(const QString &name) : AbstractPart(name),
     d(new HypothesisTestPrivate(this)) {
@@ -109,42 +110,42 @@ QString HypothesisTest::statsTable() {
 }
 
 void HypothesisTest::performTwoSampleIndependentTTest(bool categorical_variable, bool equal_variance) {
-    d->m_currTestName = "<h2>Two Sample Independent T Test</h2>";
+    d->m_currTestName = i18n( "<h2>Two Sample Independent T Test</h2>");
     d->performTwoSampleIndependentTest(HypothesisTestPrivate::TestT, categorical_variable, equal_variance);
 }
 
 void HypothesisTest::performTwoSamplePairedTTest() {
-    d->m_currTestName = "<h2>Two Sample Paried T Test</h2>";
+    d->m_currTestName = i18n( "<h2>Two Sample Paried T Test</h2>");
     d->performTwoSamplePairedTest(HypothesisTestPrivate::TestT);
 }
 
 void HypothesisTest::performOneSampleTTest() {
-    d->m_currTestName = "<h2>One Sample T Test</h2>";
+    d->m_currTestName = i18n( "<h2>One Sample T Test</h2>");
     d->performOneSampleTest(HypothesisTestPrivate::TestT);
 }
 
 void HypothesisTest::performTwoSampleIndependentZTest() {
-    d->m_currTestName = "<h2>Two Sample Independent Z Test</h2>";
+    d->m_currTestName = i18n( "<h2>Two Sample Independent Z Test</h2>");
     d->performTwoSampleIndependentTest(HypothesisTestPrivate::TestZ);
 }
 
 void HypothesisTest::performTwoSamplePairedZTest() {
-    d->m_currTestName = "<h2>Two Sample Paired Z Test</h2>";
+    d->m_currTestName = i18n( "<h2>Two Sample Paired Z Test</h2>");
     d->performTwoSamplePairedTest(HypothesisTestPrivate::TestZ);
 }
 
 void HypothesisTest::performOneSampleZTest() {
-    d->m_currTestName = "<h2>One Sample Z Test</h2>";
+    d->m_currTestName = i18n( "<h2>One Sample Z Test</h2>");
     d->performOneSampleTest(HypothesisTestPrivate::TestZ);
 }
 
 void HypothesisTest::performOneWayAnova() {
-    d->m_currTestName = "<h2>One Way Anova</h2>";
+    d->m_currTestName = i18n( "<h2>One Way Anova</h2>");
     d->performOneWayAnova();
 }
 
 void HypothesisTest::performLeveneTest(bool categorical_variable) {
-    d->m_currTestName = "<h2>Levene Test for Equality of Variance</h2>";
+    d->m_currTestName = i18n( "<h2>Levene Test for Equality of Variance</h2>");
     d->performLeveneTest(categorical_variable);
 }
 
@@ -267,28 +268,28 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test,bool c
 
         if (equal_variance) {
             df = n[0] + n[1] - 2;
-            sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
+            sp = qSqrt( ((n[0]-1)*gsl_pow_2(std[0]) + (n[1]-1)*gsl_pow_2(std[1]))/df);
             value = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
             printLine(9, "<b>Assumption:</b> Equal Variance b/w both population means");
         } else {
             double temp_val;
-            temp_val = qPow( qPow(std[0], 2)/n[0] + qPow(std[1], 2)/n[1], 2);
-            temp_val = temp_val / ( (qPow( (qPow(std[0], 2)/n[0]), 2)/(n[0]-1)) + (qPow( (qPow(std[1], 2)/n[1]), 2)/(n[1]-1)));
+            temp_val = gsl_pow_2( gsl_pow_2(std[0])/n[0] + gsl_pow_2(std[1])/n[1]);
+            temp_val = temp_val / ( (gsl_pow_2( (gsl_pow_2(std[0])/n[0]))/(n[0]-1)) + (gsl_pow_2( (gsl_pow_2(std[1])/n[1]))/(n[1]-1)));
             df = qRound(temp_val);
 
-            value = (mean[0] - mean[1]) / (qSqrt( (qPow(std[0], 2)/n[0]) + (qPow(std[1], 2)/n[1])));
+            value = (mean[0] - mean[1]) / (qSqrt( (gsl_pow_2(std[0])/n[0]) + (gsl_pow_2(std[1])/n[1])));
             printLine(9, "<b>Assumption:</b> UnEqual Variance b/w both population means");
         }
         break;
     } case TestZ: {
         test_name = "Z";
-        sp = qSqrt( ((n[0]-1)*qPow(std[0],2) + (n[1]-1)*qPow(std[1],2))/df);
+        sp = qSqrt( ((n[0]-1)*gsl_pow_2(std[0]) + (n[1]-1)*gsl_pow_2(std[1]))/df);
         value = (mean[0] - mean[1])/(sp*qSqrt(1.0/n[0] + 1.0/n[1]));
         p_value = gsl_cdf_gaussian_P(value, sp);
     }        
     }
 
-    m_currTestName = i18n("<h2>Two Sample Independent %1 Test for %2 vs %3</h2>", test_name, col1_name, col2_name);
+    m_currTestName = i18n( "<h2>Two Sample Independent %1 Test for %2 vs %3</h2>", test_name, col1_name, col2_name);
     p_value = getPValue(test, value, col1_name, col2_name, (mean[0] - mean[1]), sp, df);
 
     printLine(2, i18n("Significance level is %1", m_significance_level), "blue");
@@ -377,7 +378,7 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(TestType test) {
     }}
 
     p_value = getPValue(test, value, m_columns[0]->name(), i18n("%1",m_population_mean), mean, std, df);
-    m_currTestName = i18n("<h2>One Sample %1 Test for %2 vs %3</h2>", test_name, m_columns[0]->name(), m_columns[1]->name());
+    m_currTestName = i18n( "<h2>One Sample %1 Test for %2 vs %3</h2>", test_name, m_columns[0]->name(), m_columns[1]->name());
 
     printLine(2, i18n("Significance level is %1 ", m_significance_level), "blue");
     printLine(4, i18n("%1 Value is %2 ", test_name, value), "green");
@@ -450,7 +451,7 @@ void HypothesisTestPrivate::performOneSampleTest(TestType test) {
     }}
 
     p_value = getPValue(test, value, m_columns[0]->name(), i18n("%1",m_population_mean), mean - m_population_mean, std, df);
-    m_currTestName = i18n("<h2>One Sample %1 Test for %2</h2>", test_name, m_columns[0]->name());
+    m_currTestName = i18n( "<h2>One Sample %1 Test for %2</h2>", test_name, m_columns[0]->name());
 
     printLine(2, i18n("Significance level is %1", m_significance_level), "blue");
     printLine(4, i18n("%1 Value is %2", test_name, value), "green");
@@ -467,14 +468,13 @@ void HypothesisTestPrivate::performOneSampleTest(TestType test) {
 }
 
 /*************************************One Way Anova***************************************/
+// all standard variables and formulas are taken from this wikipedia page:
+// https://en.wikipedia.org/wiki/One-way_analysis_of_variance
+// b stands for b/w groups
+// w stands for within groups
 void HypothesisTestPrivate::performOneWayAnova() {
-    // all standard variables and formulas are taken from this wikipedia page:
-    // https://en.wikipedia.org/wiki/One-way_analysis_of_variance
-
-    // b stands for b/w groups
-    // w stands for within groups
     clearGlobalVariables();
-    int np, total_rows;
+    int np, total_rows;     // np is number of partition i.e., number of classes
     countPartitions(m_columns[0], np, total_rows);
 
     int* ni = new int[np];
@@ -486,13 +486,13 @@ void HypothesisTestPrivate::performOneWayAnova() {
     QMap<QString, int> classname_to_index;
     findStatsCategorical(m_columns[0], m_columns[1], ni, sum, mean, std, classname_to_index, np, total_rows);
 
-    double y_bar = 0;
-    double s_b = 0;
-    int f_b = 0;
-    double ms_b = 0;
-    double s_w = 0;
-    int f_w = 0;
-    double ms_w = 0;
+    double y_bar = 0;       // overall mean
+    double s_b = 0;         // sum of squares of (mean - overall_mean) between the groups
+    int f_b = 0;            // degree of freedom between the groups
+    double ms_b = 0;        // mean sum of squares between the groups
+    double s_w = 0;         // sum of squares of (value - mean of group) within the groups
+    int f_w = 0;            // degree of freedom within the group
+    double ms_w = 0;        // mean sum of squares within the groups
     double f_value = 0;
     double p_value = 0;
 
@@ -503,11 +503,11 @@ void HypothesisTestPrivate::performOneWayAnova() {
     y_bar = y_bar / np;
 
     for (int i = 0; i < np; i++) {
-        s_b += ni[i] * qPow( ( mean[i] - y_bar), 2);
+        s_b += ni[i] * gsl_pow_2( ( mean[i] - y_bar));
         if (ni[i] > 1)
-            s_w += qPow( std[i], 2)*(ni[i] - 1);
+            s_w += gsl_pow_2( std[i])*(ni[i] - 1);
         else
-            s_w += qPow( std[i], 2);
+            s_w += gsl_pow_2( std[i]);
         f_w += ni[i] - 1;
     }
 
@@ -541,13 +541,13 @@ void HypothesisTestPrivate::performOneWayAnova() {
         row_major[row_i*column_count + 4] = QString::number( std[row_i - 1], 'f', 3);
     }
 
-    m_stats_table = "<h3>Group Summary Statistics</h3>";
+    m_stats_table = i18n( "<h3>Group Summary Statistics</h3>");
 
     m_stats_table += getHtmlTable(row_count, column_count, row_major);
 
     m_stats_table += getLine("");
     m_stats_table += getLine("");
-    m_stats_table += "<h3>Grand Summary Statistics</h3>";
+    m_stats_table += i18n( "<h3>Grand Summary Statistics</h3>");
     m_stats_table += getLine("");
     m_stats_table += getLine(i18n("Overall Mean is %1", y_bar));
 
@@ -666,14 +666,14 @@ void HypothesisTestPrivate::performLeveneTest(bool categorical_variable) {
                 value = m_columns[i]->valueAt(j);
                 if (!(std::isnan(value))) {
                     double zij = abs(value - yi_bar[i]);
-                    denominator_value +=  qPow( (zij - zi_bar[i]), 2);
+                    denominator_value +=  gsl_pow_2( (zij - zi_bar[i]));
                 }
             }
         }
 
         for (int i = 0; i < np; i++) {
             col_names[i] = m_columns[i]->name();
-            numerator_value += ni[i]*qPow( (zi_bar[i]-zi_bar_bar), 2);
+            numerator_value += ni[i]*gsl_pow_2( (zi_bar[i]-zi_bar_bar));
         }
 
         f_value = ((n - np) / (np - 1)) * (numerator_value / denominator_value);
@@ -740,11 +740,11 @@ void HypothesisTestPrivate::performLeveneTest(bool categorical_variable) {
             value = m_columns[1]->valueAt(j);
             class_index = classname_to_index[name] - 1;
             double zij = abs(value - yi_bar[class_index]);
-            denominator_value +=  qPow( (zij - zi_bar[class_index]), 2);
+            denominator_value +=  gsl_pow_2( (zij - zi_bar[class_index]));
         }
 
         for (int i = 0; i < np; i++)
-            numerator_value += ni[i]*qPow( (zi_bar[i]-zi_bar_bar), 2);
+            numerator_value += ni[i]*gsl_pow_2( (zi_bar[i]-zi_bar_bar));
 
         f_value = ((n - np) / (np - 1)) * (numerator_value / denominator_value);
 
@@ -822,7 +822,7 @@ HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStats(const Column* 
 
     for (int i = 0; i < count; i++) {
         double row = column->valueAt(i);
-        std += qPow( (row - mean), 2);
+        std += gsl_pow_2( (row - mean));
     }
 
     if (count > 1)
@@ -867,7 +867,7 @@ HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsPaired(const Co
         cell1 = column1->valueAt(i);
         cell2 = column2->valueAt(i);
         row = cell1 - cell2;
-        std += qPow( (row - mean), 2);
+        std += gsl_pow_2( (row - mean));
     }
 
     if (count > 1)
@@ -942,7 +942,7 @@ HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsCategorical(Col
         QString name = columns[0]->textAt(i);
         double value = columns[1]->valueAt(i);
 
-        std[col_name[name]-1] += qPow( (value - mean[col_name[name]-1]), 2);
+        std[col_name[name]-1] += gsl_pow_2( (value - mean[col_name[name]-1]));
     }
 
     for (int i = 0; i < np; i++) {
