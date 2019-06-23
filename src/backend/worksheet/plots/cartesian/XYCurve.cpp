@@ -968,6 +968,7 @@ void XYCurvePrivate::retransform() {
 			endIndex = symbolPointsLogical.size()-1;
 		}
 
+		visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
 		cSystem->mapLogicalToScene(startIndex, endIndex, symbolPointsLogical,
 								   symbolPointsScene, visiblePoints, scenePointsUsed,
 								   minLogicalDiffX, minLogicalDiffY);

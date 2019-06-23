@@ -122,6 +122,7 @@ private slots:
 	void labelTeXImageUpdated(bool);
 	void labelTeXFontChanged(const QFont&);
 	void labelFontColorChanged(const QColor);
+	void labelBackgroundColorChanged(const QColor);
 	void labelPositionChanged(const TextLabel::PositionWrapper&);
 	void labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment);
 	void labelVerticalAlignmentChanged(TextLabel::VerticalAlignment);

@@ -29,9 +29,9 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
-#include "backend/gsl/ExpressionParser.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/gsl/ExpressionParser.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
@@ -159,6 +159,25 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 	checkValues();
 }
 
+bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
+
+	if (ExpressionParser::getInstance()->constants().indexOf(le->text()) != -1) {
+		le->setStyleSheet("QLineEdit{background: red;}");
+		le->setToolTip(i18n("Provided variable name is already reserved for a name of a constant. Please use another name."));
+		return false;
+	}
+
+	if (ExpressionParser::getInstance()->functions().indexOf(le->text()) != -1) {
+		le->setStyleSheet("QLineEdit{background: red;}");
+		le->setToolTip(i18n("Provided variable name is already reserved for a name of a function. Please use another name."));
+		return false;
+	}
+
+	le->setStyleSheet(QString());
+	le->setToolTip("");
+	return true;
+}
+
 /*!
 	check the user input and enables/disables the Ok-button depending on the correctness of the input
  */
@@ -177,6 +196,11 @@ void FunctionValuesDialog::checkValues() {
 		TreeViewComboBox* cb = m_variableDataColumns.at(i);
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
 		if (!aspect) {
+			m_okButton->setEnabled(false);
+			return;
+		}
+
+		if (!validVariableName(m_variableNames[i])) {
 			m_okButton->setEnabled(false);
 			return;
 		}
@@ -321,6 +345,7 @@ void FunctionValuesDialog::variableNameChanged() {
 
 	ui.lFunction->setText(text);
 	ui.teEquation->setVariables(vars);
+	checkValues();
 }
 
 void FunctionValuesDialog::generate() {
@@ -333,10 +358,7 @@ void FunctionValuesDialog::generate() {
 
 	//determine variable names and the data vectors of the specified columns
 	QStringList variableNames;
-	QVector<Column*> columns;
-	QVector<QVector<double>*> xVectors;
-	QVector<QVector<double>*> xNewVectors;
-	int maxRowCount = m_spreadsheet->rowCount();
+	QVector<Column*> variableColumns;
 	for (int i = 0; i < m_variableNames.size(); ++i) {
 		variableNames << m_variableNames.at(i)->text().simplified();
 
@@ -344,53 +366,21 @@ void FunctionValuesDialog::generate() {
 		Q_ASSERT(aspect);
 		auto* column = dynamic_cast<Column*>(aspect);
 		Q_ASSERT(column);
-		columns << column;
-		if (column->columnMode() == AbstractColumn::Integer) {
-			//convert integers to doubles first
-			auto* xVector = new QVector<double>(column->rowCount());
-			for (int i = 0; i<column->rowCount(); ++i)
-				xVector->operator[](i) = column->valueAt(i);
-
-			xNewVectors << xVector;
-			xVectors << xVector;
-		} else
-			xVectors << static_cast<QVector<double>* >(column->data());
-
-		if (column->rowCount() > maxRowCount)
-			maxRowCount = column->rowCount();
+		variableColumns << column;
 	}
 
-	//resize the spreadsheet if one of the data vectors from other spreadsheet(s) has more elements then the current spreadsheet.
-	if (m_spreadsheet->rowCount() < maxRowCount)
-		m_spreadsheet->setRowCount(maxRowCount);
-
-	//create new vector for storing the calculated values
-	//the vectors with the variable data can be smaller then the result vector. So, not all values in the result vector might get initialized.
-	//->"clean" the result vector first
-	QVector<double> new_data(maxRowCount);
-	for (auto& d : new_data)
-		d = NAN;
-
-	//evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
-	ExpressionParser* parser = ExpressionParser::getInstance();
-	const QString& expression = ui.teEquation->toPlainText();
-	parser->evaluateCartesian(expression, variableNames, xVectors, &new_data);
-
 	//set the new values and store the expression, variable names and the used data columns
+	const QString& expression = ui.teEquation->toPlainText();
 	bool autoUpdate = (ui.chkAutoUpdate->checkState() == Qt::Checked);
 	for (auto* col : m_columns) {
 		if (col->columnMode() != AbstractColumn::Numeric)
 			col->setColumnMode(AbstractColumn::Numeric);
 
-		col->setFormula(expression, variableNames, columns, autoUpdate);
-		col->replaceValues(0, new_data);
+		col->setFormula(expression, variableNames, variableColumns, autoUpdate);
+		col->updateFormula();
 	}
 
 	m_spreadsheet->endMacro();
-
-	//delete help vectors created for the conversion from int to double
-	for (auto* vector : xNewVectors)
-		delete vector;
 
 	RESET_CURSOR;
 }

@@ -5,6 +5,7 @@ New features:
 	* [spreadsheet] allow to insert multiple rows and columns in one step
 
 UX improvements:
+	* in the "Import Data" dialog show the history of the recently imported files
 	* Improved the selection of curves in the plot that are near to or behind each other
 	* BUG 408529 - Allow to use DEL to delete cells in spreadsheet and matrix
 	* BUG 408537 - Allow to insert multiple rows and columns in the spreadsheet in one step

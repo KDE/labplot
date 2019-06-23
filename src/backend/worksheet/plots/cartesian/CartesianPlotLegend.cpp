@@ -130,7 +130,7 @@ void CartesianPlotLegend::init() {
 void CartesianPlotLegend::initActions() {
 	visibilityAction = new QAction(i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &CartesianPlotLegend::visibilityChanged);
+	connect(visibilityAction, &QAction::triggered, this, &CartesianPlotLegend::visibilityChangedSlot);
 }
 
 QMenu* CartesianPlotLegend::createContextMenu() {

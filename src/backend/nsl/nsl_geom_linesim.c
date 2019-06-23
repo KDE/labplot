@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL geometry line simplification functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2019 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -170,107 +170,116 @@ size_t nsl_geom_linesim_douglas_peucker_auto(const double xdata[], const double 
 	return nsl_geom_linesim_douglas_peucker(xdata, ydata, n, tol, index);
 }
 
+/*
+ * Douglas-Peucker variant:
+ * The key of all egdes of the current simplified line is calculated and only the
+ * largest is added. This is repeated until nout is reached.
+ * */
 double nsl_geom_linesim_douglas_peucker_variant(const double xdata[], const double ydata[], const size_t n, const size_t nout, size_t index[]) {
 	size_t i;
-	if (nout >= n) {	/* all points */
+	if (nout >= n) {	/* use all points */
 		for (i = 0; i < n; i++)
 			index[i] = i;
 		return 0;
 	}
 
-	/* first and last point */
-	size_t ntmp = 0;
-	index[ntmp++] = 0;
-	index[ntmp++] = n-1;
+	/* set first and last point in index (other indizes not initialized) */
+	size_t ncount = 0;
+	index[ncount++] = 0;
+	index[ncount++] = n-1;
 
-	if (nout <= 2)	/* using first and last point */
-		return DBL_MAX;
+	if (nout <= 2)	/* use only first and last point (perp. dist is zero) */
+		return 0.0;
 
 	double *dist = (double *)malloc(n * sizeof(double));
 	if (dist == NULL) {
-		printf("nsl_geom_linesim_douglas_peucker_variant(): ERROR allocating memory for 'dist'!\n");
-		return 0;
+		/* printf("nsl_geom_linesim_douglas_peucker_variant(): ERROR allocating memory for 'dist'!\n"); */
+		return DBL_MAX;
 	}
 
 	double *maxdist = (double *)malloc(nout * sizeof(double));	/* max dist per edge */
 	if (maxdist == NULL) {
-		printf("nsl_geom_linesim_douglas_peucker_variant(): ERROR allocating memory for 'maxdist'!\n");
+		/* printf("nsl_geom_linesim_douglas_peucker_variant(): ERROR allocating memory for 'maxdist'!\n"); */
 		free(dist);
-		return 0;
+		return DBL_MAX;
 	}
+
 	for (i = 0; i < n; i++) {	/* initialize  dist */
 		dist[i] = nsl_geom_point_line_dist(xdata[0], ydata[0], xdata[n-1], ydata[n-1], xdata[i], ydata[i]);
-		/*printf("%zu: %g\n", i, dist[i]);*/
+		/* printf("nsl_geom_linesim_douglas_peucker_variant(): %zu dist = %g\n", i, dist[i]); */
 	}
 	for (i = 0; i < nout; i++)
 		maxdist[i] = 0;
 
 	double newmaxdist = 0;
-	while (ntmp < nout) {
-		size_t key = 0, v;
+	do {
+		/* printf("nsl_geom_linesim_douglas_peucker_variant(): NEXT ITERATION\n"); */
+		size_t key = 0;
 
 		/* find edge of maximum */
 		size_t maxindex;
-		nsl_stats_maximum(maxdist, ntmp, &maxindex);
-		/*printf("found edge of max at index %zu\n", maxindex);*/
+		nsl_stats_maximum(maxdist, ncount, &maxindex);
+		/* printf("nsl_geom_linesim_douglas_peucker_variant(): found edge with max dist at index %zu\n", maxindex); */
 		/*newmaxdist = nsl_stats_maximum(dist, n, &key);*/
 		newmaxdist = 0;
 		for (i = index[maxindex]+1; i < index[maxindex+1]; i++) {
-			/*printf("i=%zu\n", i);*/
+			/* printf("nsl_geom_linesim_douglas_peucker_variant(): iterate i=%zu\n", i); */
 			if (dist[i] > newmaxdist) {
 				newmaxdist = dist[i];
 				key = i;
 			}
 		}
 
-		/*printf("found key %zu (dist = %g)\n", key, newmaxdist);*/
-		ntmp++;
+		/* printf("nsl_geom_linesim_douglas_peucker_variant(): found key %zu (dist = %g)\n", key, newmaxdist); */
+		ncount++;
 		dist[key] = 0;
 
 		/* find index of previous key */
 		size_t previndex = 0;
 		while (index[previndex+1] < key)
 			previndex++;
-		/*printf("previndex = %zu (update key %zu - %zu)\n", previndex, index[previndex], index[previndex+1]);*/
+		/* printf("nsl_geom_linesim_douglas_peucker_variant(): previndex = %zu (update keys %zu - %zu)\n", previndex, index[previndex], index[previndex+1]); */
 
-		/* shift maxdist */
-		for (v = ntmp; v > previndex; v--)
-			maxdist[v] = maxdist[v-1];
-
+		size_t v;
+		/* printf("nsl_geom_linesim_douglas_peucker_variant(): ncount = %zu, previndex = %zu\n", ncount, previndex); */
 		/* update dist[]. no update on last key */
-		if (ntmp < nout) {
+		if (ncount < nout) {
+			/* shift maxdist */
+			for (v = ncount; v > previndex; v--)
+				maxdist[v] = maxdist[v-1];
+
 			double tmpmax = 0;
 			for (v = index[previndex]+1; v < key; v++) {
-				/*printf("%zu to %zu - %zu", v, index[previndex], key);*/
+				/* printf("nsl_geom_linesim_douglas_peucker_variant(): %zu in %zu - %zu", v, index[previndex], key); */
 				dist[v] = nsl_geom_point_line_dist(xdata[index[previndex]], ydata[index[previndex]], xdata[key], ydata[key],
 					xdata[v], ydata[v]);
 				if (dist[v] > tmpmax)
 					tmpmax = dist[v];
 
-				/*printf(" dist = %g\n", dist[v]);*/
+				/* printf(" dist = %g\n", dist[v]); */
 			}
 			maxdist[previndex] = tmpmax;
 
 			tmpmax = 0;
 			for (v = key+1; v < index[previndex+1]; v++) {
-				/*printf("%zu to %zu - %zu", v, key, index[previndex+1]);*/
+				/* printf("nsl_geom_linesim_douglas_peucker_variant(): %zu in %zu - %zu", v, key, index[previndex+1]); */
 				dist[v] = nsl_geom_point_line_dist(xdata[key], ydata[key], xdata[index[previndex+1]], ydata[index[previndex+1]],
 					xdata[v], ydata[v]);
 				if (dist[v] > tmpmax)
 					tmpmax = dist[v];
-				/*printf(" dist = %g\n", dist[v]);*/
+				/* printf(" dist = %g\n", dist[v]); */
 			}
 			maxdist[previndex+1] = tmpmax;
 		}
 
 		/* put into index array */
-		for (v = ntmp; v > previndex+1; v--)
+		for (v = ncount; v > previndex+1; v--)
 			index[v] = index[v-1];
 		index[previndex+1] = key;
-	}
+	} while (ncount < nout);
 
-	free(dist);
 	free(maxdist);
+	free(dist);
 
 	return newmaxdist;
 }

@@ -681,6 +681,9 @@ QString WorksheetPrivate::name() const {
  * if no layout is active and the option "scale content" is active, \c handleResize() is called to adjust zhe properties.
  */
 void WorksheetPrivate::updatePageRect() {
+	if (q->isLoading())
+		return;
+
 	QRectF oldRect = m_scene->sceneRect();
 	m_scene->setSceneRect(pageRect);
 

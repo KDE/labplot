@@ -52,8 +52,8 @@ public:
 
 	TextLabel::TextWrapper textWrapper;
 	QFont teXFont{"Computer Modern", 42};
-	QColor fontColor{Qt::black};
-	QColor backgroundColor{Qt::white};
+	QColor fontColor{Qt::black}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
+	QColor backgroundColor{Qt::white}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
 	QImage teXImage;
 	QFutureWatcher<QImage> teXImageFutureWatcher;
 	bool teXRenderSuccessful{false};
