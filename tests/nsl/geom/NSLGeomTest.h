@@ -35,6 +35,7 @@ class NSLGeomTest : public NSLTest {
 private slots:
 	void initTestCase();
 
+	void testDist();
 	void testLineSim();
 	void testLineSimMorse();
 	// performance

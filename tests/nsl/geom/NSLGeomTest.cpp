@@ -28,6 +28,7 @@
 #include "NSLGeomTest.h"
 
 extern "C" {
+#include "backend/nsl/nsl_geom.h"
 #include "backend/nsl/nsl_geom_linesim.h"
 }
 
@@ -39,6 +40,32 @@ void NSLGeomTest::initTestCase() {
 //##############################################################################
 //#################  line sim test
 //##############################################################################
+
+void NSLGeomTest::testDist() {
+	double dist = nsl_geom_point_point_dist(0, 0, 1 , 1);
+	QCOMPARE(dist, M_SQRT2);
+	dist = nsl_geom_point_point_dist(1, 2, 2 , 1);
+	QCOMPARE(dist, M_SQRT2);
+	dist = nsl_geom_point_point_dist(-1, -2, 2, 2);
+	QCOMPARE(dist, 5.);
+
+	//TODO:  nsl_geom_point_point_dist3
+
+	dist = nsl_geom_point_line_dist(0, 0, 1, 0, .5, 1);
+	QCOMPARE(dist, 1.);
+	dist = nsl_geom_point_line_dist(0, 0, 1, 0, 0, 1);
+	QCOMPARE(dist, 1.);
+	dist = nsl_geom_point_line_dist(0, 0, 1, 0, 1, 1);
+	QCOMPARE(dist, 1.);
+	dist = nsl_geom_point_line_dist(0, 0, 1, 1, 0, 1);
+	QCOMPARE(dist, M_SQRT1_2);
+	dist = nsl_geom_point_line_dist(0, 0, 1, 1, 1, 0);
+	QCOMPARE(dist, M_SQRT1_2);
+
+	//TODO: nsl_geom_point_line_dist_y
+	//TODO: nsl_geom_three_point_area
+
+}
 
 void NSLGeomTest::testLineSim() {
 	const double xdata[] = {1, 2, 2.5, 3, 4, 7, 9, 11, 13, 14};
@@ -69,7 +96,6 @@ void NSLGeomTest::testLineSim() {
 
 	for (i = 0; i < nout; i++)
 		QCOMPARE(index[i], result[i]);
-
 
 	const size_t no = 6;
 	printf("* Simplification (Douglas Peucker variant) nout = %zu\n", no);
@@ -199,6 +225,7 @@ void NSLGeomTest::testLineSim() {
 #define NOUT 15200
 
 void NSLGeomTest::testLineSimMorse() {
+
 	const QString fileName = m_dataDir + "morse_code.dat";
 	FILE *file;
 	if((file = fopen(fileName.toLocal8Bit().constData(), "r")) == NULL) {
@@ -226,6 +253,7 @@ void NSLGeomTest::testLineSimMorse() {
 
 	printf("* simplification (Douglas Peucker variant) nout = %d\n", NOUT);
 
+	// TODO: do performance test
 //	struct timeval time1, time2;
 //	gettimeofday(&time1, NULL);
 	double tolout = nsl_geom_linesim_douglas_peucker_variant(xdata, ydata, N, NOUT, index);
