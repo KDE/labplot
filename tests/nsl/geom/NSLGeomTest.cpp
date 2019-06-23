@@ -222,29 +222,31 @@ void NSLGeomTest::testLineSim() {
 		QCOMPARE(index[i], result4[i]);
 }
 
-#define FILENAME "morse_code.dat"
-#define N 152000
-#define NOUT 15200
-
 void NSLGeomTest::testLineSimMorse() {
+	printf("NSLGeomTest::testLineSimMorse()\n");
+
 	const QString fileName = m_dataDir + "morse_code.dat";
 	FILE *file;
 	if((file = fopen(fileName.toLocal8Bit().constData(), "r")) == NULL) {
 		printf("ERROR reading %s. Giving up.\n", fileName.toLocal8Bit().constData());
+		return;
 	}
 
-	double *xdata, *ydata;
-	size_t index[N], i;
+	const int N = 152000;
+	const int NOUT = 15200;
 
-	xdata = (double *)malloc(N*sizeof(double));
+	printf("NSLGeomTest::testLineSimMorse(): allocating space for reading data\n");
+	double* xdata = (double *)malloc(N*sizeof(double));
 	if (xdata == NULL)
 		return;
-	ydata = (double *)malloc(N*sizeof(double));
+	double* ydata = (double *)malloc(N*sizeof(double));
 	if (ydata == NULL) {
 		free(xdata);
 		return;
 	}
 
+	printf("NSLGeomTest::testLineSimMorse(): reading data from file\n");
+	size_t i;
 	for (i = 0; i < N; i++)
 		fscanf(file,"%lf %lf", &xdata[i], &ydata[i]);
 
@@ -261,6 +263,7 @@ void NSLGeomTest::testLineSimMorse() {
 	printf("* Simplification (Douglas Peucker variant) nout = %d\n", NOUT);
 
 	double tolout;
+	size_t index[N];
         QBENCHMARK {
 		tolout = nsl_geom_linesim_douglas_peucker_variant(xdata, ydata, N, NOUT, index);
 		QCOMPARE(tolout, 11.5280857733246);
