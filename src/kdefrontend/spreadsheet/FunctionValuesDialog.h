@@ -49,6 +49,7 @@ public:
 	explicit FunctionValuesDialog(Spreadsheet* s, QWidget* parent = nullptr);
 	~FunctionValuesDialog() override;
 	void setColumns(QVector<Column*>);
+	bool validVariableName(QLineEdit *le);
 
 private:
 	Ui::FunctionValuesWidget ui;

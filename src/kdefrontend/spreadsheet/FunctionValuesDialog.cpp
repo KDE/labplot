@@ -31,6 +31,7 @@
 #include "backend/core/Project.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/gsl/ExpressionParser.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
@@ -158,6 +159,25 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 	checkValues();
 }
 
+bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
+
+	if (ExpressionParser::getInstance()->constants().indexOf(le->text()) != -1) {
+		le->setStyleSheet("QLineEdit{background: red;}");
+		le->setToolTip(i18n("Provided variable name is already reserved for a name of a constant. Please use another name."));
+		return false;
+	}
+
+	if (ExpressionParser::getInstance()->functions().indexOf(le->text()) != -1) {
+		le->setStyleSheet("QLineEdit{background: red;}");
+		le->setToolTip(i18n("Provided variable name is already reserved for a name of a function. Please use another name."));
+		return false;
+	}
+
+	le->setStyleSheet(QString());
+	le->setToolTip("");
+	return true;
+}
+
 /*!
 	check the user input and enables/disables the Ok-button depending on the correctness of the input
  */
@@ -176,6 +196,11 @@ void FunctionValuesDialog::checkValues() {
 		TreeViewComboBox* cb = m_variableDataColumns.at(i);
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
 		if (!aspect) {
+			m_okButton->setEnabled(false);
+			return;
+		}
+
+		if (!validVariableName(m_variableNames[i])) {
 			m_okButton->setEnabled(false);
 			return;
 		}
@@ -320,6 +345,7 @@ void FunctionValuesDialog::variableNameChanged() {
 
 	ui.lFunction->setText(text);
 	ui.teEquation->setVariables(vars);
+	checkValues();
 }
 
 void FunctionValuesDialog::generate() {

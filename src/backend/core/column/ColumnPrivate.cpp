@@ -4,7 +4,7 @@
     Description          : Private data class of Column
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2019 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
@@ -901,9 +901,15 @@ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variab
 	for (auto connection: m_connectionsUpdateFormula)
 		disconnect(connection);
 
+	m_formulaVariableColumnPaths.clear();
+
 	if (autoUpdate) {
-		for (auto column : variableColumns)
+		for (auto column : variableColumns) {
+			m_formulaVariableColumnPaths << column->path();
 			m_connectionsUpdateFormula << connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &ColumnPrivate::formulaVariableColumnRemoved);
+			connect(column->parentAspect(), &AbstractAspect::aspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
+		}
 	}
 }
 
@@ -941,7 +947,13 @@ void ColumnPrivate::updateFormula() {
 	QVector<QVector<double>*> xNewVectors;
 	int maxRowCount = 0;
 
+	bool valid = true;
 	for (auto column : m_formulaVariableColumns) {
+		if (!column) {
+			valid = false;
+			break;
+		}
+
 		if (column->columnMode() == AbstractColumn::Integer) {
 			//convert integers to doubles first
 			auto* xVector = new QVector<double>(column->rowCount());
@@ -957,33 +969,57 @@ void ColumnPrivate::updateFormula() {
 			maxRowCount = column->rowCount();
 	}
 
-	//resize the spreadsheet if one of the data vectors from
-	//other spreadsheet(s) has more elements than the parent spreadsheet
-	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(m_owner->parentAspect());
-	Q_ASSERT(spreadsheet);
-	if (spreadsheet->rowCount() < maxRowCount)
-		spreadsheet->setRowCount(maxRowCount);
+	if (valid) {
+		//resize the spreadsheet if one of the data vectors from
+		//other spreadsheet(s) has more elements than the parent spreadsheet
+		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(m_owner->parentAspect());
+		Q_ASSERT(spreadsheet);
+		if (spreadsheet->rowCount() < maxRowCount)
+			spreadsheet->setRowCount(maxRowCount);
 
-	//create new vector for storing the calculated values
-	//the vectors with the variable data can be smaller then the result vector. So, not all values in the result vector might get initialized.
-	//->"clean" the result vector first
-	QVector<double> new_data(rowCount(), NAN);
+		//create new vector for storing the calculated values
+		//the vectors with the variable data can be smaller then the result vector. So, not all values in the result vector might get initialized.
+		//->"clean" the result vector first
+		QVector<double> new_data(rowCount(), NAN);
 
-	//evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
-	ExpressionParser* parser = ExpressionParser::getInstance();
-	parser->evaluateCartesian(m_formula, m_formulaVariableNames, xVectors, &new_data);
-	replaceValues(0, new_data);
+		//evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
+		ExpressionParser* parser = ExpressionParser::getInstance();
+		parser->evaluateCartesian(m_formula, m_formulaVariableNames, xVectors, &new_data);
+		replaceValues(0, new_data);
 
-	// initialize remaining rows with NAN
-	int remainingRows = rowCount() - maxRowCount;
-	if (remainingRows > 0) {
-		QVector<double> emptyRows(remainingRows, NAN);
-		replaceValues(maxRowCount, emptyRows);
+		// initialize remaining rows with NAN
+		int remainingRows = rowCount() - maxRowCount;
+		if (remainingRows > 0) {
+			QVector<double> emptyRows(remainingRows, NAN);
+			replaceValues(maxRowCount, emptyRows);
+		}
+	} else {
+		QVector<double> new_data(rowCount(), NAN);
+		replaceValues(0, new_data);
 	}
 
 	//delete help vectors created for the conversion from int to double
 	for (auto* vector : xNewVectors)
 		delete vector;
+}
+
+void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
+	const Column* column = dynamic_cast<const Column*>(aspect);
+	//TODO: why is const_cast requried here?!?
+	int index = m_formulaVariableColumns.indexOf(const_cast<Column*>(column));
+	if (index != -1) {
+		m_formulaVariableColumns[index] = nullptr;
+		updateFormula();
+	}
+}
+
+void ColumnPrivate::formulaVariableColumnAdded(const AbstractAspect* aspect) {
+	int index = m_formulaVariableColumnPaths.indexOf(aspect->path());
+	if (index != -1) {
+		const Column* column = dynamic_cast<const Column*>(aspect);
+		m_formulaVariableColumns[index] = const_cast<Column*>(column);
+		updateFormula();
+	}
 }
 
 /**
