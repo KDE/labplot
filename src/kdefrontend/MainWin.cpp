@@ -317,7 +317,21 @@ void MainWin::initGUI(const QString& fileName) {
 	updateGUIOnProjectChanges();
 }
 
+/**
+ * @brief Creates a new welcome screen to be set as central widget.
+ * @return
+ */
 QQuickWidget* MainWin::createWelcomeScreen() {
+	auto* mainToolBar = qobject_cast<QToolBar*>(factory()->container("main_toolbar", this));
+	mainToolBar->setVisible(false);
+	mainToolBar->setEnabled(false);
+	mainToolBar->hide();
+
+	KXMLGUIFactory* factory = this->guiFactory();
+	factory->container("main_toolbar", this)->hide();
+	factory->container("main_toolbar", this)->setEnabled(false);
+	factory->container("main_toolbar", this)->setVisible(false);
+
 	QList<QVariant> recentList;
 	for (QUrl url : m_recentProjectsAction->urls())
 		recentList.append(QVariant(url));
@@ -349,6 +363,9 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	return quickWidget;
 }
 
+/**
+ * @brief Creates a new MDI area, to replace the Welcome Screen as central widget
+ */
 void MainWin::createMdiArea() {
 	m_mdiArea = new QMdiArea;
 	setCentralWidget(m_mdiArea);
@@ -790,6 +807,17 @@ void MainWin::updateGUIOnProjectChanges() {
 	// undo/redo actions are disabled in both cases - when the project is closed or opened
 	m_undoAction->setEnabled(false);
 	m_redoAction->setEnabled(false);
+
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr)  {
+		auto* mainToolBar = qobject_cast<QToolBar*>(factory->container("main_toolbar", this));
+		mainToolBar->setVisible(false);
+		mainToolBar->setEnabled(false);
+		mainToolBar->hide();
+
+		factory->container("main_toolbar", this)->hide();
+		factory->container("main_toolbar", this)->setEnabled(false);
+		factory->container("main_toolbar", this)->setVisible(false);
+	}
 }
 
 /*
@@ -950,6 +978,17 @@ void MainWin::updateGUI() {
 	} else {
 		factory->container("datapicker", this)->setEnabled(false);
 		factory->container("datapicker_toolbar", this)->setVisible(false);
+	}
+
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr)  {
+		auto* mainToolBar = qobject_cast<QToolBar*>(factory->container("main_toolbar", this));
+		mainToolBar->setVisible(false);
+		mainToolBar->setEnabled(false);
+		mainToolBar->hide();
+
+		factory->container("main_toolbar", this)->hide();
+		factory->container("main_toolbar", this)->setEnabled(false);
+		factory->container("main_toolbar", this)->setVisible(false);
 	}
 }
 

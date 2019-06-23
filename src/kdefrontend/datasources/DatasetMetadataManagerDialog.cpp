@@ -37,17 +37,23 @@ Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
 #include <QWindow>
 #include <QPushButton>
 
+/*!
+	\class DatasetMetadataManagerDialog
+	\brief Dialog for adding a new dataset to LabPlot's current collection. Embeds \c DatasetMetadataManagerWidget and provides the standard buttons.
+
+	\ingroup kdefrontend
+ */
 DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) : QDialog(parent),
-    m_mainWidget(new DatasetMetadataManagerWidget(this, datasetMap)),
-    m_buttonBox(nullptr),
-    m_okButton(nullptr) {
-	connect(m_mainWidget, &DatasetMetadataManagerWidget::checkOk, this, &DatasetMetadataManagerDialog::checkOkButton);	
+	m_mainWidget(new DatasetMetadataManagerWidget(this, datasetMap)),
+	m_buttonBox(nullptr),
+	m_okButton(nullptr) {
+	connect(m_mainWidget, &DatasetMetadataManagerWidget::checkOk, this, &DatasetMetadataManagerDialog::checkOkButton);
 
 	setWindowTitle(i18nc("@title:window", "Dataset metadata manager"));
 
 	m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    m_okButton = m_buttonBox->button(QDialogButtonBox::Ok);
-    m_okButton->setEnabled(false);
+	m_okButton = m_buttonBox->button(QDialogButtonBox::Ok);
+	m_okButton->setEnabled(false);
 
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->addWidget(m_mainWidget);
@@ -74,19 +80,33 @@ DatasetMetadataManagerDialog::~DatasetMetadataManagerDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
+/**
+ * @brief Checks whether the OK button of the dialog can be pressed or not
+ */
 void DatasetMetadataManagerDialog::checkOkButton() {
 	bool enable = m_mainWidget->checkDataValidity();
-    m_okButton->setEnabled(enable);
+	m_okButton->setEnabled(enable);
 }
 
+/**
+ * @brief Triggers updating the metadata file containing the categories, subcategories and datasets.
+ * @param fileName the name of the metadata file (path)
+ */
 void DatasetMetadataManagerDialog::updateDocument(const QString& fileName) {
 	m_mainWidget->updateDocument(fileName);
 }
 
+/**
+ * @brief initiates creating a new metadata file for the new dataset.
+ * @param dirPath the path of the new file
+ */
 void DatasetMetadataManagerDialog::createNewMetadata(const QString& dirPath) {
 	m_mainWidget->createNewMetadata(dirPath);
 }
 
+/**
+ * @brief returns the path to the new metadata file of the new dataset.
+ */
 QString DatasetMetadataManagerDialog::getMetadataFilePath() const {
 	return m_mainWidget->getMetadataFilePath();
 }

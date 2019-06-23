@@ -46,6 +46,12 @@ Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
 #include <QTcpSocket>
 #include <QUrl>
 
+/*!
+	\class DatasetMetadataManagerWidget
+	\brief Widget for adding a new dataset to LabPlot's current collection.
+
+	\ingroup kdefrontend
+ */
 DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) : QWidget(parent) {
 	ui.setupUi(this);
 	initCategories(datasetMap);
@@ -99,6 +105,9 @@ DatasetMetadataManagerWidget::~DatasetMetadataManagerWidget() {
 	conf.writeEntry("use_first_row_for_vectorname", ui.chbHeader->isChecked());
 }
 
+/**
+ * @brief Loads the settings of the widget.
+ */
 void DatasetMetadataManagerWidget::loadSettings() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatasetMetadataManagerWidget");
 	ui.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentChar", "#"));
@@ -112,11 +121,19 @@ void DatasetMetadataManagerWidget::loadSettings() {
 	ui.chbHeader->setChecked(conf.readEntry("use_first_row_for_vectorname", true));
 }
 
+/**
+ * @brief Initializes the structure containing the categories.
+ * @param datasetMap the structure containing the categories, subcategories, datasets, obtained from ImportDatasetWidget.
+ */
 void DatasetMetadataManagerWidget::initCategories(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) {
 	m_categoryList = datasetMap.keys();
 	ui.cbCategory->addItems(m_categoryList);
 }
 
+/**
+ * @brief Initializes the structure containing the subcategories.
+ * @param datasetMap the structure containing the categories, subcategories, datasets, obtained from ImportDatasetWidget.
+ */
 void DatasetMetadataManagerWidget::initSubcategories(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) {
 	for(auto i = datasetMap.begin(); i != datasetMap.end(); ++i) {
 		m_subcategoryMap[i.key()] = i.value().keys();
@@ -127,6 +144,10 @@ void DatasetMetadataManagerWidget::initSubcategories(const QMap<QString, QMap<QS
 		ui.cbSubcategory->addItems(m_subcategoryMap[selectedCategory]);
 }
 
+/**
+ * @brief Initializes the structure containing the datasets.
+ * @param datasetMap the structure containing the categories, subcategories, datasets, obtained from ImportDatasetWidget.
+ */
 void DatasetMetadataManagerWidget::initDatasets(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) {
 	for(auto category = datasetMap.begin(); category != datasetMap.end(); ++category) {
 		const QMap<QString, QVector<QString>>& category_ = category.value();
@@ -138,10 +159,15 @@ void DatasetMetadataManagerWidget::initDatasets(const QMap<QString, QMap<QString
 	}
 }
 
+/**
+ * @brief Checks whether leFileName contains a valid file name.
+ */
 bool DatasetMetadataManagerWidget::checkFileName() {
 	const QString fileName = ui.leFileName->text();
 	const QRegularExpression re("^[\\w\\d-]+$");
 	const QRegularExpressionMatch match = re.match(fileName);
+
+	//check whether it contains only digits, letters, -, _ or not
 	bool hasMatch = match.hasMatch();
 
 	qDebug() << hasMatch;
@@ -161,6 +187,7 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 		ui.leFileName->setToolTip("");
 	}
 
+	//check whether there already is a file named like this or not.
 	bool found = false;
 
 	if(m_datasetList.contains(fileName)) {
@@ -185,6 +212,9 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 	return hasMatch && !found;
 }
 
+/**
+ * @brief Checks whether leDownloadURL contains a valid URL.
+ */
 bool DatasetMetadataManagerWidget::urlExists() {
 	const bool urlExists_ = (QUrl(ui.leDownloadURL->text()).isValid()) && !ui.leDownloadURL->text().isEmpty();
 	if(!urlExists_){
@@ -203,6 +233,9 @@ bool DatasetMetadataManagerWidget::urlExists() {
 	return urlExists_;
 }
 
+/**
+ * @brief Checks whether leDatasetName is empty or not.
+ */
 bool DatasetMetadataManagerWidget::checkDatasetName() {
 	const bool longNameOk = !ui.leDatasetName->text().isEmpty();
 	if(!longNameOk)	{
@@ -222,6 +255,9 @@ bool DatasetMetadataManagerWidget::checkDatasetName() {
 	return longNameOk;
 }
 
+/**
+ * @brief Checks whether teDescription is empty or not.
+ */
 bool DatasetMetadataManagerWidget::checkDescription() {
 	const bool descriptionOk = !ui.teDescription->toPlainText().isEmpty();
 	if(!descriptionOk) {
@@ -241,6 +277,9 @@ bool DatasetMetadataManagerWidget::checkDescription() {
 	return descriptionOk;
 }
 
+/**
+ * @brief Checks whether the given QComboBox's current text is empty or not.
+ */
 bool DatasetMetadataManagerWidget::checkCategories(QComboBox* comboBox) {
 	const QString fileName = comboBox->currentText();
 	const QRegularExpression re("^[\\w\\d]+$");
@@ -267,6 +306,9 @@ bool DatasetMetadataManagerWidget::checkCategories(QComboBox* comboBox) {
 	return hasMatch;
 }
 
+/**
+ * @brief Enables/disables the widget's components meant to configure the metadata file of the new dataset.
+ */
 void DatasetMetadataManagerWidget::enableDatasetSettings(bool enable) {
 	ui.leFileName->setEnabled(enable);
 	ui.leFileName->setReadOnly(!enable);
@@ -280,6 +322,9 @@ void DatasetMetadataManagerWidget::enableDatasetSettings(bool enable) {
 	ui.gbFilter->setEnabled(enable);
 }
 
+/**
+ * @brief Checks whether the introduced data is valid or not. Used by DatasetMetadataManagerDialog.
+ */
 bool DatasetMetadataManagerWidget::checkDataValidity() {
 	const bool fileNameOK = checkFileName();
 	const bool urlOk = urlExists();
@@ -293,6 +338,9 @@ bool DatasetMetadataManagerWidget::checkDataValidity() {
 	return fileNameOK && urlOk && longNameOk && descriptionOk && subcategoryOk && categoryOk;
 }
 
+/**
+ * @brief Updates content of cbSubcategory based on current category.
+ */
 void DatasetMetadataManagerWidget::updateSubcategories(const QString& category) {
 	ui.cbSubcategory->clear();
 	if(m_categoryList.contains(category)) {
@@ -301,6 +349,10 @@ void DatasetMetadataManagerWidget::updateSubcategories(const QString& category) 
 	emit checkOk();
 }
 
+/**
+ * @brief Updates the metadata file containing the categories, subcategories and datasets.
+ * @param fileName the name of the metadata file (path)
+ */
 void DatasetMetadataManagerWidget::updateDocument(const QString& fileName) {
 	qDebug() << "updating: " << fileName;
 	QFile file(fileName);
@@ -401,6 +453,10 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& fileName) {
 	}
 }
 
+/**
+ * @brief Creates a new metadata file for the new dataset based on the introduced data.
+ * @param dirPath the path of the new file
+ */
 void DatasetMetadataManagerWidget::createNewMetadata(const QString& dirPath) {
 	if (QDir(dirPath).exists())
 	{
@@ -452,6 +508,9 @@ void DatasetMetadataManagerWidget::createNewMetadata(const QString& dirPath) {
 	}
 }
 
+/**
+ * @brief Adds a new QLineEdit so the user can set a new column description.
+ */
 void DatasetMetadataManagerWidget::addColumnDescription() {
 	QLabel* label = new QLabel();
 	label->setText(i18n("Description for column %1", m_columnDescriptions.size() + 1));
@@ -470,6 +529,9 @@ void DatasetMetadataManagerWidget::addColumnDescription() {
 	m_columnDescriptions.append("");
 }
 
+/**
+ * @brief Removes the lastly added QLineEdit (used to set a column description).
+ */
 void DatasetMetadataManagerWidget::removeColumnDescription() {
 	const int index = ui.columnLayout->count() - 1;
 
@@ -487,6 +549,9 @@ void DatasetMetadataManagerWidget::removeColumnDescription() {
 	m_columnDescriptions.removeLast();
 }
 
+/**
+ * @brief returns the path to the new metadata file of the new dataset.
+ */
 QString DatasetMetadataManagerWidget::getMetadataFilePath() const {
 	return m_metadataFilePath;
 }

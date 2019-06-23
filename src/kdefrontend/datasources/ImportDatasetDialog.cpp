@@ -38,6 +38,12 @@
 #include "QStatusBar"
 #include "QDebug"
 
+/*!
+	\class ImportDatasetDialog
+	\brief Dialog for importing data from a dataset. Embeds \c ImportDatasetWidget and provides the standard buttons.
+
+	\ingroup kdefrontend
+ */
 ImportDatasetDialog::ImportDatasetDialog(MainWin* parent, const QString& fileName) : ImportDialog(parent),
 	m_importDatasetWidget(new ImportDatasetWidget(this)){
 
@@ -78,9 +84,12 @@ ImportDatasetDialog::~ImportDatasetDialog() {
 
 QString ImportDatasetDialog::selectedObject() const {
 	return QString();
-	//return m_importDatasetWidget->selectedObject();
 }
 
+
+/*!
+  triggers the import of a dataset's data
+*/
 void ImportDatasetDialog::importToDataset(DatasetHandler* datasetHandler, QStatusBar* statusBar) const {
 	//show a progress bar in the status bar
 	auto* progressBar = new QProgressBar();
@@ -103,12 +112,15 @@ void ImportDatasetDialog::importToDataset(DatasetHandler* datasetHandler, QStatu
 	statusBar->removeWidget(progressBar);
 }
 
+/**
+ * @brief Checks whether the OK button of the dialog can be pressed or not
+ */
 void ImportDatasetDialog::checkOkButton() {
 	bool enable = (!m_importDatasetWidget->getSelectedDataset().isEmpty());
 	okButton->setEnabled(enable);
 }
 
-void ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
 
+void ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
 }
 

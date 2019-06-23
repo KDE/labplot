@@ -48,6 +48,12 @@ Copyright            : (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
 #include <KNS3/DownloadManager>
 #include <KNS3/UploadDialog>
 
+/*!
+	\class ImportDatasetWidget
+	\brief Widget for importing data from a dataset.
+
+	\ingroup kdefrontend
+ */
 ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	m_categoryCompleter(new QCompleter),
 	m_datasetCompleter(new QCompleter),
@@ -84,13 +90,22 @@ ImportDatasetWidget::~ImportDatasetWidget() {
 		delete m_categoryCompleter;
 	if(m_datasetCompleter != nullptr)
 		delete m_datasetCompleter;
+
+	//TODO: Save selected state
 }
 
+/**
+ * @brief Locates in the file system the json metadata file that contains the list of categories and subcategories.
+ * @return The location of the file
+ */
 QString ImportDatasetWidget::locateCategoryJsonFile() const {
 	qDebug() << "Locating category file" << QStandardPaths::locate(QStandardPaths::AppDataLocation, "datasets/DatasetCategories.json");
 	return QStandardPaths::locate(QStandardPaths::AppDataLocation, "datasets/DatasetCategories.json");
 }
 
+/**
+ * @brief Processes the json metadata file that contains the list of categories and subcategories and their datasets.
+ */
 void ImportDatasetWidget::loadDatasetCategoriesFromJson() {
 	qDebug() << "loading Categories";
 
@@ -106,6 +121,7 @@ void ImportDatasetWidget::loadDatasetCategoriesFromJson() {
 		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
 		QJsonArray categoryArray = document.object().value("categories").toArray();
 
+		//processing categories
 		for(int i = 0 ; i < categoryArray.size(); ++i) {
 			const QJsonObject currentCategory = categoryArray[i].toObject();
 			const QString categoryName = currentCategory.value("category_name").toString();
@@ -113,15 +129,14 @@ void ImportDatasetWidget::loadDatasetCategoriesFromJson() {
 			const QJsonArray subcategories = currentCategory.value("subcategories").toArray();
 			ui.twCategories->addTopLevelItem(currentCategoryItem);
 
+			//processing subcategories
 			for(int j = 0; j < subcategories.size(); ++j) {
 				QJsonObject currentSubCategory = subcategories[j].toObject();
 				QString subcategoryName = currentSubCategory.value("subcategory_name").toString();
 				currentCategoryItem->addChild(new QTreeWidgetItem(QStringList(subcategoryName)));
 				const QJsonArray datasetArray = currentSubCategory.value("datasets").toArray();
 
-				// TODO remove?
-				QVector<QString> datasets;
-
+				//processing the datasets o the actual subcategory
 				for (const auto& dataset : datasetArray) {
 					m_datasetsMap[categoryName][subcategoryName].push_back(dataset.toString());
 				}
@@ -137,6 +152,9 @@ void ImportDatasetWidget::loadDatasetCategoriesFromJson() {
 	}
 }
 
+/**
+ * @brief Restores the lastly selected subcategory making it the selected QTreeWidgetItem and also lists the datasets belonigng to it/
+ */
 void ImportDatasetWidget::restoreSelectedSubcategory() {
 	if(m_datasetsMap.keys().contains(m_selectedCategory)) {
 		const QTreeWidgetItem* const categoryItem = ui.twCategories->findItems(m_selectedCategory, Qt::MatchExactly).first();
@@ -156,6 +174,10 @@ void ImportDatasetWidget::restoreSelectedSubcategory() {
 	}
 }
 
+/**
+ * @brief Populates lwDatasets with the datasets of the selected subcategory.
+ * @param item the selected subcategory
+ */
 void ImportDatasetWidget::listDatasetsForSubcategory(QTreeWidgetItem* item) {
 	if(item->childCount() == 0) {
 		if(m_selectedSubcategory.compare(item->text(0)) != 0) {
@@ -181,6 +203,9 @@ void ImportDatasetWidget::listDatasetsForSubcategory(QTreeWidgetItem* item) {
 	}
 }
 
+/**
+ * @brief Updates the completer used for searching among datasets.
+ */
 void ImportDatasetWidget::updateDatasetCompleter() {
 	QStringList datasetList;
 	for(int i = 0; i <ui.lwDatasets->count(); ++i) {
@@ -199,6 +224,9 @@ void ImportDatasetWidget::updateDatasetCompleter() {
 		ui.leSearchDatasets->setCompleter(nullptr);
 }
 
+/**
+ * @brief Updates the completer used for searching among categories and subcategories.
+ */
 void ImportDatasetWidget::updateCategoryCompleter() {
 	QStringList categoryList;
 	for (int i = 0; i < ui.twCategories->topLevelItemCount(); ++i) {
@@ -220,6 +248,10 @@ void ImportDatasetWidget::updateCategoryCompleter() {
 		ui.leSearchCategories->setCompleter(nullptr);
 }
 
+/**
+ * @brief Scrolls the twCategories to the given category or subcategory
+ * @param rootName the name of the category or category+subcategory
+ */
 void ImportDatasetWidget::scrollToCategoryTreeItem(const QString& rootName) {
 	int topItemIdx = -1;
 	for (int i = 0; i < ui.twCategories->topLevelItemCount(); ++i)
@@ -252,6 +284,10 @@ void ImportDatasetWidget::scrollToCategoryTreeItem(const QString& rootName) {
 	}
 }
 
+/**
+ * @brief Scrolls the lwDatasets to the given dataset name.
+ * @param rootName the name of the dataset
+ */
 void ImportDatasetWidget::scrollToDatasetListItem(const QString& rootName) {
 	int itemIdx = -1;
 	for (int i = 0; i < ui.lwDatasets->count(); ++i)
@@ -265,6 +301,9 @@ void ImportDatasetWidget::scrollToDatasetListItem(const QString& rootName) {
 									QAbstractItemView::ScrollHint::PositionAtTop);
 }
 
+/**
+ * @brief Returns the name of the selected dataset
+ */
 QString ImportDatasetWidget::getSelectedDataset() const {
 	if (ui.lwDatasets->selectedItems().count() > 0) {
 		return ui.lwDatasets->selectedItems().at(0)->text();
@@ -272,6 +311,10 @@ QString ImportDatasetWidget::getSelectedDataset() const {
 		return QString();
 }
 
+/**
+ * @brief Initiates the processing of the dataset's metadata file and of the dataset itself.
+ * @param datasetHandler the DatasetHanlder that downloads processes the dataset
+ */
 void ImportDatasetWidget::loadDatasetToProcess(DatasetHandler* datasetHandler) {
 	const QString fileName = getSelectedDataset() + QLatin1String(".json");
 	downloadDatasetFile(fileName);
@@ -285,6 +328,9 @@ void ImportDatasetWidget::loadDatasetToProcess(DatasetHandler* datasetHandler) {
 	}
 }
 
+/**
+ * @brief Opens the DatasetMetadataManagerDialog when the user wants to add a new dataset.
+ */
 void ImportDatasetWidget::showDatasetMetadataManager() {
 	DatasetMetadataManagerDialog* dlg = new DatasetMetadataManagerDialog(this, m_datasetsMap);
 
@@ -300,6 +346,9 @@ void ImportDatasetWidget::showDatasetMetadataManager() {
 	delete dlg;
 }
 
+/**
+ * @brief Places the metadata file containing the categories and subcategories into a specific directory.
+ */
 void ImportDatasetWidget::downloadCategoryFile() {
 	qDebug() << "Downloading category file";
 	const QString fileNameOld = QStandardPaths::locate(QStandardPaths::AppDataLocation, "datasets/DatasetCategories.json");
@@ -314,10 +363,15 @@ void ImportDatasetWidget::downloadCategoryFile() {
 	QFile::copy(fileNameOld, fileNameNew);
 }
 
+/**
+ * @brief Places the metadata file of the given dataset into a specific directory.
+ * @param datasetName the name of the dataset
+ */
 void ImportDatasetWidget::downloadDatasetFile(const QString& datasetName) {
 	const QString fileNameOld = QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String("datasets") + QDir::separator() + datasetName);
 	QString pathToNewFile = m_jsonDir + m_selectedCategory;
 
+	//Create directory structure based on category and subcategory name
 	if(!QDir(m_jsonDir + m_selectedCategory).exists()) {
 		qDebug() <<m_jsonDir + m_selectedCategory;
 		QDir(m_jsonDir).mkdir(m_selectedCategory);
@@ -333,6 +387,9 @@ void ImportDatasetWidget::downloadDatasetFile(const QString& datasetName) {
 	QFile::copy(fileNameOld, fileNameNew);
 }
 
+/**
+ * @brief Refreshes the categories, subcategories and datasets.
+ */
 void ImportDatasetWidget::refreshCategories() {
 	qDebug() << "Refresh categories";
 	QString fileNameNew = m_jsonDir + QLatin1String("DatasetCategories.json");
@@ -359,6 +416,9 @@ void ImportDatasetWidget::refreshCategories() {
 	loadDatasetCategoriesFromJson();
 }
 
+/**
+ * @brief Clears the content of the directory in which the download of metadata files was done.
+ */
 void ImportDatasetWidget::clearCache() {
 	QDir dir(m_jsonDir);
 
@@ -379,6 +439,9 @@ void ImportDatasetWidget::clearCache() {
 	highlightLocalMetadataFiles();
 }
 
+/**
+ * @brief Highlights the name of the locally available metadata files in lwDatasets.
+ */
 void ImportDatasetWidget::highlightLocalMetadataFiles() {
 	const QString filePath = m_jsonDir + m_selectedCategory + QDir::separator() + m_selectedSubcategory + QDir::separator();
 
@@ -393,6 +456,9 @@ void ImportDatasetWidget::highlightLocalMetadataFiles() {
 	}
 }
 
+/**
+ * @brief TODO: uploads the metadata file that contains the categories to store.kde.org -- Library doesn't work for indefinite time.
+ */
 void ImportDatasetWidget::uploadCategoryFile() {
 	/*KNS3::UploadDialog dialog("labplot2_datasets.knsrc", this);
 
@@ -419,6 +485,9 @@ void ImportDatasetWidget::uploadCategoryFile() {
 	dialog.exec();*/
 }
 
+/**
+ * @brief TODO: uploads the metadata file of a dataset to store.kde.org -- Library doesn't work for indefinite time.
+ */
 void ImportDatasetWidget::uploadDatasetFile(const QString& filePath) {
 	/*KNS3::UploadDialog dialog("labplot2_datasets.knsrc", this);
 
@@ -445,10 +514,18 @@ void ImportDatasetWidget::uploadDatasetFile(const QString& filePath) {
 	dialog.exec();*/
 }
 
+/**
+ * @brief Returns the structure containing the categories, subcategories and datasets.
+ * @return the structure containing the categories, subcategories and datasets
+ */
 const QMap<QString, QMap<QString, QVector<QString>>>& ImportDatasetWidget::getDatasetsMap() {
 	return m_datasetsMap;
 }
 
+/**
+ * @brief Sets the currently selected category
+ * @param category the name of the category
+ */
 void ImportDatasetWidget::setCategory(const QString &category) {
 	for(int i = 0; i < ui.twCategories->topLevelItemCount(); i++) {
 		if (ui.twCategories->topLevelItem(i)->text(0).compare(category) == 0) {
@@ -458,6 +535,10 @@ void ImportDatasetWidget::setCategory(const QString &category) {
 	}
 }
 
+/**
+ * @brief Sets the currently selected subcategory
+ * @param subcategory the name of the subcategory
+ */
 void ImportDatasetWidget::setSubcategory(const QString &subcategory) {
 	for(int i = 0; i < ui.twCategories->topLevelItemCount(); i++) {
 		if (ui.twCategories->topLevelItem(i)->text(0).compare(m_selectedCategory) == 0) {
@@ -473,6 +554,10 @@ void ImportDatasetWidget::setSubcategory(const QString &subcategory) {
 	}
 }
 
+/**
+ * @brief  Sets the currently selected dataset
+ * @param the currently selected dataset
+ */
 void ImportDatasetWidget::setDataset(const QString &datasetName) {
 	for(int i = 0; i < ui.lwDatasets->count() ; i++) {
 		if(ui.lwDatasets->item(i)->text().compare(datasetName) == 0) {
