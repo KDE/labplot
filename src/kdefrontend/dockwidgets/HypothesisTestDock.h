@@ -104,6 +104,7 @@ private slots:
     void doHypothesisTest();
     void performLeveneTest();
     void spreadsheetChanged(const QModelIndex&);
+    void changeCbCol2Label();
     void col1IndexChanged(int index);
     //        void connectionChanged();
     //        void tableChanged();

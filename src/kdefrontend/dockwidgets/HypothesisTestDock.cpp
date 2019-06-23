@@ -205,6 +205,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     connect(ui.rbH1TwoTail, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1TwoTailToggled);
 
     connect(ui.cbCol1, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::col1IndexChanged);
+    connect(ui.chbCategorical, &QCheckBox::stateChanged, this, &HypothesisTestDock::changeCbCol2Label);
 }
 
 void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
@@ -519,10 +520,7 @@ void HypothesisTestDock::spreadsheetChanged(const QModelIndex& index) {
     m_hypothesisTest->setDataSourceSpreadsheet(spreadsheet);
 }
 
-// currently no need of this slot
-void HypothesisTestDock::col1IndexChanged(int index) {
-    if (index < 0) return;
-
+void HypothesisTestDock::changeCbCol2Label() {
     if (two_sample_paired) {
         ui.lCol2->setText( i18n("Independent Var. 2"));
         return;
@@ -531,17 +529,23 @@ void HypothesisTestDock::col1IndexChanged(int index) {
     QString selected_text = ui.cbCol1->currentText();
     Column* col1 = m_hypothesisTest->dataSourceSpreadsheet()->column(selected_text);
 
-    if (col1->columnMode() == AbstractColumn::Integer || col1->columnMode() == AbstractColumn::Numeric) {
+    if (!ui.chbCategorical->isChecked() && (col1->columnMode() == AbstractColumn::Integer || col1->columnMode() == AbstractColumn::Numeric)) {
         ui.lCol2->setText( i18n("Independent Var. 2"));
         ui.chbCategorical->setChecked(false);
         ui.chbCategorical->setEnabled(true);
-    }
-    else {
+    } else {
         ui.lCol2->setText( i18n("Dependent Var. 1"));
+        if (!ui.chbCategorical->isChecked())
+            ui.chbCategorical->setEnabled(false);
+        else
+            ui.chbCategorical->setEnabled(true);
         ui.chbCategorical->setChecked(true);
-        ui.chbCategorical->setEnabled(false);
     }
+}
 
+void HypothesisTestDock::col1IndexChanged(int index) {
+    if (index < 0) return;
+    changeCbCol2Label();
 }
 
 

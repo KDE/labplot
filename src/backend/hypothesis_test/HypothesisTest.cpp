@@ -221,6 +221,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test,bool c
         }
     } else {
         QMap<QString, int> col_name;
+        QString base_col_name = "";
         int np;
         int total_rows;
 
@@ -230,6 +231,9 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test,bool c
             emit q->changed();
             return;
         }
+
+        if (m_columns[0]->columnMode() == AbstractColumn::Integer || m_columns[0]->columnMode() == AbstractColumn::Numeric)
+            base_col_name = m_columns[0]->name();
 
         ErrorType error_code = findStatsCategorical(m_columns[0], m_columns[1], n, sum, mean, std, col_name, np, total_rows);
 
@@ -250,9 +254,9 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test,bool c
         while (i.hasNext()) {
             i.next();
             if (i.value() == 1)
-                col1_name = i.key();
+                col1_name = base_col_name + " " + i.key();
             else
-                col2_name = i.key();
+                col2_name = base_col_name + " " + i.key();
         }
     }
 
@@ -484,6 +488,11 @@ void HypothesisTestPrivate::performOneWayAnova() {
     QString* col_names = new QString[np];
 
     QMap<QString, int> classname_to_index;
+    QString base_col_name = "";
+
+    if (m_columns[0]->columnMode() == AbstractColumn::Integer || m_columns[0]->columnMode() == AbstractColumn::Numeric)
+        base_col_name = m_columns[0]->name();
+
     findStatsCategorical(m_columns[0], m_columns[1], ni, sum, mean, std, classname_to_index, np, total_rows);
 
     double y_bar = 0;       // overall mean
@@ -523,7 +532,7 @@ void HypothesisTestPrivate::performOneWayAnova() {
     QMapIterator<QString, int> i(classname_to_index);
     while (i.hasNext()) {
         i.next();
-        col_names[i.value()-1] = i.key();
+        col_names[i.value()-1] = base_col_name + " " + i.key();
     }
 
     // now printing the statistics and result;
@@ -756,7 +765,7 @@ void HypothesisTestPrivate::performLeveneTest(bool categorical_variable) {
         QMapIterator<QString, int> i(classname_to_index);
         while (i.hasNext()) {
             i.next();
-            col_names[i.value()-1] = i.key();
+            col_names[i.value()-1] = m_columns[0]->name() + " " + i.key();
         }
         m_columns[0]->setColumnMode(original_col_mode);
     }
@@ -904,6 +913,7 @@ void HypothesisTestPrivate::countPartitions(Column *column, int &np, int &total_
 }
 
 HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsCategorical(Column *column1, Column *column2, int n[], double sum[], double mean[], double std[], QMap<QString, int> &col_name, const int &np, const int &total_rows) {
+
     Column* columns[] = {column1, column2};
     for (int i = 0; i < np; i++) {
         n[i] = 0;
@@ -917,8 +927,6 @@ HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsCategorical(Col
     int partition_number = 1;
     for (int i = 0; i < total_rows; i++) {
         QString name = columns[0]->textAt(i);
-
-        name = columns[0]->textAt(i);
         double value = columns[1]->valueAt(i);
 
         if (std::isnan(value)) {
@@ -952,6 +960,10 @@ HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsCategorical(Col
     }
 
     columns[0]->setColumnMode(original_col_mode);
+    if (columns[0]->columnMode() == AbstractColumn::Integer || columns[0]->columnMode() == AbstractColumn::Numeric) {
+
+    }
+
     return HypothesisTestPrivate::NoError;
 }
 
