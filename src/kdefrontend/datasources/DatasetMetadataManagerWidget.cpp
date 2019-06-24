@@ -216,7 +216,11 @@ bool DatasetMetadataManagerWidget::checkFileName() {
  * @brief Checks whether leDownloadURL contains a valid URL.
  */
 bool DatasetMetadataManagerWidget::urlExists() {
-	const bool urlExists_ = (QUrl(ui.leDownloadURL->text()).isValid()) && !ui.leDownloadURL->text().isEmpty();
+	const QRegularExpression re("^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$");
+	const QRegularExpressionMatch match = re.match(ui.leDownloadURL->text());
+	bool hasMatch = match.hasMatch();
+
+	const bool urlExists_ = hasMatch && !ui.leDownloadURL->text().isEmpty();
 	if(!urlExists_){
 		QPalette palette;
 		palette.setColor(QPalette::Base, Qt::red);

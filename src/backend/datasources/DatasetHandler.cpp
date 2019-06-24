@@ -41,6 +41,13 @@ Copyright	: (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 
+/*!
+  \class DatasetHandler
+  \brief Provides  functionality to process a metadata file of a dataset, configure a spreadsheet and filter based on it, download the dataset
+  and load it into the spreadsheet.
+
+  \ingroup datasources
+*/
 DatasetHandler::DatasetHandler(Spreadsheet* spreadsheet) : m_spreadsheet(spreadsheet),
 	m_filter(new AsciiFilter),
 	m_document(new QJsonDocument),
@@ -55,6 +62,10 @@ DatasetHandler::~DatasetHandler() {
 	delete m_filter;
 }
 
+/**
+ * @brief Initiates processing the metadata file,, located at the given path, belonging to a dataset.
+ * @param path the path to the metadata file
+ */
 void DatasetHandler::processMetadata(const QString& path) {
 	qDebug("Start processing dataset...");
 	loadJsonDocument(path);
@@ -69,6 +80,10 @@ void DatasetHandler::processMetadata(const QString& path) {
 	}
 }
 
+/**
+ * @brief Opens the json file at the given path and creates a QJsonDocument.
+ * @param path the path to the file
+ */
 void DatasetHandler::loadJsonDocument(const QString& path) {
 	qDebug("Load Json document for metadata");
 	QFile file(path);
@@ -80,11 +95,17 @@ void DatasetHandler::loadJsonDocument(const QString& path) {
 	}
 }
 
+/**
+ * @brief Marks the metadata file being invalid by setting the value of a flag, also pops up a messagebox.
+ */
 void DatasetHandler::markMetadataAsInvalid() {
 	m_invalidMetadataFile = true;
 	QMessageBox::critical(0, "Invalid metadata file", "The metadata file for the choosen dataset is invalid!");
 }
 
+/**
+ * @brief Configures the filter, that will be used later, based on the metadata file.
+ */
 void DatasetHandler::configureFilter() {
 	qDebug("Configure filter");
 	if(m_document->isObject()) {
@@ -139,6 +160,9 @@ void DatasetHandler::configureFilter() {
 	}
 }
 
+/**
+ * @brief Configures the spreadsheet based on the metadata file.
+ */
 void DatasetHandler::configureSpreadsheet() {
 	qDebug("Conf spreadsheet");
 	if(m_document->isObject()) {
@@ -155,6 +179,9 @@ void DatasetHandler::configureSpreadsheet() {
 	}
 }
 
+/**
+ * @brief Extracts the download URL of the dataset and initiates the process of download.
+ */
 void DatasetHandler::prepareForDataset() {
 	qDebug("Start downloading dataset");
 	if(m_document->isObject()) {
@@ -174,6 +201,10 @@ void DatasetHandler::prepareForDataset() {
 	}
 }
 
+/**
+ * @brief Starts the download of the dataset.
+ * @param url the download URL of the dataset
+ */
 void DatasetHandler::doDownload(const QUrl& url) {
 	qDebug("Download request");
 	QNetworkRequest request(url);
@@ -183,12 +214,15 @@ void DatasetHandler::doDownload(const QUrl& url) {
 		if (bytesTotal == -1)
 			progress = 0;
 		else
-			progress = 100 * ((double) bytesReceived / (double) bytesTotal);
+			progress = 100 * (static_cast<double>(bytesReceived) / static_cast<double>(bytesTotal));
 		qDebug() << "Progress: " << progress;
 		emit downloadProgress(progress);
 	});
 }
 
+/**
+ * @brief Called when the download of the dataset is finished.
+ */
 void DatasetHandler::downloadFinished(QNetworkReply* reply) {
 	qDebug("Download finished");
 	const QUrl& url = reply->url();
@@ -214,6 +248,9 @@ void DatasetHandler::downloadFinished(QNetworkReply* reply) {
 	reply->deleteLater();
 }
 
+/**
+ * @brief Checks whether the GET request was redirected or not.
+ */
 bool DatasetHandler::isHttpRedirect(QNetworkReply* reply) {
 	const int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 	// TODO enum/defines for status codes ?
@@ -221,6 +258,10 @@ bool DatasetHandler::isHttpRedirect(QNetworkReply* reply) {
 			|| statusCode == 305 || statusCode == 307 || statusCode == 308;
 }
 
+/**
+ * @brief Returns the name and path of the file that will contain the content of the reply (based on the URL).
+ * @param url
+ */
 QString DatasetHandler::saveFileName(const QUrl& url) {
 	const QString path = url.path();
 	QString basename = QFileInfo(path).fileName();
@@ -242,6 +283,9 @@ QString DatasetHandler::saveFileName(const QUrl& url) {
 	return fileName;
 }
 
+/**
+ * @brief Saves the content of the network reply to the given path under the given name.
+ */
 bool DatasetHandler::saveToDisk(const QString& filename, QIODevice* data) {
 	QFile file(filename);
 	if (!file.open(QIODevice::WriteOnly)) {
@@ -257,11 +301,17 @@ bool DatasetHandler::saveToDisk(const QString& filename, QIODevice* data) {
 	return true;
 }
 
+/**
+ * @brief Processes the downloaded dataset with the help of the already configured filter.
+ */
 void DatasetHandler::processDataset() {
 	m_filter->readDataFromFile(m_fileName, m_spreadsheet);
 	configureColumns();
 }
 
+/**
+ * @brief Configures the columns of the spreadsheet, based on the metadata file.
+ */
 void DatasetHandler::configureColumns() {
 	if(m_document->isObject()) {
 		const QJsonObject jsonObject = m_document->object();

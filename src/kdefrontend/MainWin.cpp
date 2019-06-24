@@ -307,14 +307,14 @@ void MainWin::initGUI(const QString& fileName) {
 		statusBar()->addPermanentWidget(m_memoryInfoWidget);
 	}
 
+	updateGUIOnProjectChanges();
+
 	//load welcome screen
 	const bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
 	if(showWelcomeScreen) {
 		m_welcomeWidget = createWelcomeScreen();
 		setCentralWidget(m_welcomeWidget);
-	}
-
-	updateGUIOnProjectChanges();
+	}	
 }
 
 /**
