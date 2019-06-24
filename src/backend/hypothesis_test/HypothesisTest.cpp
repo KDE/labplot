@@ -154,6 +154,8 @@ void HypothesisTest::performLeveneTest(bool categorical_variable) {
  * ****************************************************************************/
 
 //TODO: round off numbers while printing
+//TODO: backend of z test;
+
 
 HypothesisTestPrivate::HypothesisTestPrivate(HypothesisTest* owner) : q(owner) {
 }
@@ -195,7 +197,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test,bool c
     int df = 0;
     double p_value = 0;
     double sp = 0;
-    clearGlobalVariables();
+    clearTestView();
 
     if (m_columns.size() != 2) {
         printError("Inappropriate number of columns selected");
@@ -319,7 +321,7 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(TestType test) {
     double value;
     int df = 0;
     double p_value = 0;
-    clearGlobalVariables();
+    clearTestView();
 
     if (m_columns.size() != 2) {
         printError("Inappropriate number of columns selected");
@@ -338,16 +340,16 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(TestType test) {
     ErrorType error_code = findStatsPaired(m_columns[0], m_columns[1], n, sum, mean, std);
 
     switch (error_code) {
-        case ErrorUnqualSize: {
-            printError("both columns are having different sizes");
-            emit q->changed();
-            return;
-        } case ErrorEmptyColumn: {
-            printError("columns are empty");
-            emit q->changed();
-            return;
-        } case NoError:
-            break;
+    case ErrorUnqualSize: {
+        printError("both columns are having different sizes");
+        emit q->changed();
+        return;
+    } case ErrorEmptyColumn: {
+        printError("columns are empty");
+        emit q->changed();
+        return;
+    } case NoError:
+        break;
     }
 
     if (n == -1) {
@@ -405,7 +407,7 @@ void HypothesisTestPrivate::performOneSampleTest(TestType test) {
     double value;
     int df = 0;
     double p_value = 0;
-    clearGlobalVariables();
+    clearTestView();
 
     if (m_columns.size() != 1) {
         printError("Inappropriate number of columns selected");
@@ -477,7 +479,7 @@ void HypothesisTestPrivate::performOneSampleTest(TestType test) {
 // b stands for b/w groups
 // w stands for within groups
 void HypothesisTestPrivate::performOneWayAnova() {
-    clearGlobalVariables();
+    clearTestView();
     int np, total_rows;     // np is number of partition i.e., number of classes
     countPartitions(m_columns[0], np, total_rows);
 
@@ -585,6 +587,7 @@ void HypothesisTestPrivate::performOneWayAnova() {
 }
 
 /**************************************Levene Test****************************************/
+// TODO: Fix: Program crashes when n = np;
 void HypothesisTestPrivate::performLeveneTest(bool categorical_variable) {
     QString test_name;
     double f_value;
@@ -593,7 +596,7 @@ void HypothesisTestPrivate::performLeveneTest(bool categorical_variable) {
     int np = 0;         // number of partitions
     int n = 0;
     int total_rows = 0;
-    clearGlobalVariables();
+    clearTestView();
 
     if (m_columns.size() != 2) {
         printError("Inappropriate number of columns selected");
@@ -987,6 +990,9 @@ double HypothesisTestPrivate::getPValue(const HypothesisTestPrivate::TestType &t
             printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING(">"), col2_name), "blue");
             break;
         case HypothesisTest::TailTwo:
+            // TODO: check for correctness between:
+            //       p_value = 2*gsl_cdf_tdist_P(value, df) v/s
+            //       p_value = gsl_cdf_tdis_P(value, df) + gsl_cdf_tdis_P(-value, df);
             p_value = 2.*gsl_cdf_tdist_P(value, df);
 
             printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING("="), col2_name), "blue");
@@ -1092,7 +1098,7 @@ void HypothesisTestPrivate::printError(const QString &error_msg) {
 }
 
 
-void HypothesisTestPrivate::clearGlobalVariables() {
+void HypothesisTestPrivate::clearTestView() {
     m_stats_table = "";
     q->m_view->clearResult();
 }

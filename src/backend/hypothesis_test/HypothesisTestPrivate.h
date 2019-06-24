@@ -79,7 +79,7 @@ private:
         QString getLine(const QString &msg, const QString &color = "black");
         void printLine(const int &index, const QString &msg, const QString &color = "black");
         void printError(const QString &error_msg);
-        void clearGlobalVariables();
+        void clearTestView();
 
 };
 
