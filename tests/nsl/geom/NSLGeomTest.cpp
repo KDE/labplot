@@ -26,6 +26,7 @@
  ***************************************************************************/
 
 #include "NSLGeomTest.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 
 extern "C" {
 #include "backend/nsl/nsl_geom.h"
