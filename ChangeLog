@@ -21,6 +21,8 @@ Bug fixes:
 	* [data fitting] handle weighted fitting with zero errors correctly
 	* [data fitting] allow weighted fitting with data source from curve
 	* [data fitting] fix function for calculating bounded values
+	* [nsl] fix memory leak in line simplification (Douglas Peuker variant)
+	* [nsl] fix bug in calculating Bessel polynomials on Windows (used in Bessel filter)
 
 -----2.6-----
 New features:
