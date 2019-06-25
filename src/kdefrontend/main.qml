@@ -102,8 +102,8 @@ Rectangle {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.pointSize: 25
-                    Layout.fillHeight: false
                     Layout.fillWidth: true
+                    Layout.minimumHeight: paintedHeight
                 }
 
                 ListView {
@@ -111,6 +111,7 @@ Rectangle {
                     spacing: 10
                     Layout.fillHeight: true
                     Layout.fillWidth: true
+                    clip: true
                     model: recentProjects
                     delegate: Column {
                         id: delegateItem
@@ -119,14 +120,33 @@ Rectangle {
                         spacing: 2
                         Rectangle {
                             width: delegateItem.width
-                            height: 25
-                            Text{
+                            height: 50
+
+                            RowLayout {
                                 anchors.fill: parent
-                                font.pointSize: 14
-                                text: delegateItem.fullUri.substring(delegateItem.fullUri.lastIndexOf('/') +1, delegateItem.fullUri.length);
-                                font.bold: true
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignHCenter
+                                spacing: 10
+                                height: parent.height
+
+                                Image {
+                                    source: datasetModel.getProjectThumbnail(fullUri);
+                                    //height: sourceSize.height
+                                    //width: sourceSize.width
+                                    //Layout.alignment: Qt.AlignVCenter
+                                    //fillMode: Image.PreserveAspectFit
+
+                                    fillMode: Image.Stretch
+                                    sourceSize.width: 48
+                                    sourceSize.height: 60
+                                }
+
+                                Text{
+                                    Layout.fillWidth: true
+                                    font.pointSize: 14
+                                    text: delegateItem.fullUri.substring(delegateItem.fullUri.lastIndexOf('/') +1, delegateItem.fullUri.length);
+                                    font.bold: true
+                                    verticalAlignment: Text.AlignVCenter
+                                    horizontalAlignment: Text.AlignHCenter
+                                }
                             }
 
                             MouseArea {

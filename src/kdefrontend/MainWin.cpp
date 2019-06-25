@@ -1264,8 +1264,10 @@ bool MainWin::save(const QString& fileName) {
 	if (file->open(QIODevice::WriteOnly)) {
 		m_project->setFileName(fileName);
 
+		QPixmap thumbnail = centralWidget()->grab();
+
 		QXmlStreamWriter writer(file);
-		m_project->save(&writer);
+		m_project->save(thumbnail, &writer);
 		m_project->undoStack()->clear();
 		m_project->setChanged(false);
 		file->close();

@@ -31,6 +31,12 @@
 
 #include <QVector>
 #include <QTimer>
+#include <QFile>
+#include <QDebug>
+#include <QUrl>
+
+#include <KFilterDev>
+#include <KCompressionDevice>
 
 DatasetModel::DatasetModel() {
 	m_datasetWidget = new ImportDatasetWidget(0);
@@ -86,7 +92,7 @@ void DatasetModel::datasetClicked(QString category, QString subcategory, QString
 	//m_spreadsheet->clear()
 
 	//if(m_spreadsheet.get() != nullptr)
-		//delete m_spreadsheet.get();
+	//delete m_spreadsheet.get();
 	m_spreadsheet.reset(new Spreadsheet(i18n("Dataset%1", 1)));
 
 	if(m_datasetHandler != nullptr)
@@ -128,4 +134,59 @@ QVariant DatasetModel::datasetRows() {
 
 Spreadsheet* DatasetModel::releaseConfiguredSpreadsheet() {
 	return m_spreadsheet.release();
+}
+
+
+QVariant DatasetModel::getProjectThumbnail(const QUrl& url) {
+	QString filename;
+	if (url.isLocalFile())	// fix for Windows
+		filename = url.toLocalFile();
+	else
+		filename = url.path();
+
+	QIODevice* file;
+	// first try gzip compression, because projects can be gzipped and end with .lml
+	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive))
+		file = new KCompressionDevice(filename,KFilterDev::compressionTypeForMimeType("application/x-gzip"));
+	else	// opens filename using file ending
+		file = new KFilterDev(filename);
+
+	if (!file)
+		file = new QFile(filename);
+
+	if (!file->open(QIODevice::ReadOnly)) {
+		qDebug() << "Could not open file for reading.";
+		return QVariant();
+	}
+
+	char c;
+	bool rc = file->getChar(&c);
+	if (!rc) {
+		qDebug() << "The project file is empty.";
+		file->close();
+		delete file;
+		return false;
+	}
+	file->seek(0);
+
+	//parse XML
+	XmlStreamReader reader(file);
+
+	while (!(reader.isStartDocument() || reader.atEnd()))
+		reader.readNext();
+
+	if (!(reader.atEnd())) {
+		if (!reader.skipToNextTag())
+			return false;
+
+		if (reader.name() == "project") {
+			QString thumbnail = reader.attributes().value("thumbnail").toString();
+
+			thumbnail.prepend("data:image/jpg;base64,");
+			qDebug() << "Return thumbnail " <<thumbnail;
+			return QVariant(thumbnail);
+		}
+	}
+
+	return QVariant();
 }

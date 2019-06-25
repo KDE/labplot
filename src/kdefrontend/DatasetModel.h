@@ -50,6 +50,7 @@ public:
 	Q_INVOKABLE QVariant datasetDescription();
 	Q_INVOKABLE QVariant datasetColumns();
 	Q_INVOKABLE QVariant datasetRows();
+	Q_INVOKABLE QVariant getProjectThumbnail(const QUrl& url);
 
 	Spreadsheet* releaseConfiguredSpreadsheet();
 
