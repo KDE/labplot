@@ -227,8 +227,8 @@ void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
     ui.cbDataSourceType->setCurrentIndex(m_hypothesisTest->dataSourceType());
     if (m_hypothesisTest->dataSourceType() == HypothesisTest::DataSourceSpreadsheet)
         setModelIndexFromAspect(cbSpreadsheet, m_hypothesisTest->dataSourceSpreadsheet());
-//    else
-//        ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_hypothesisTest->dataSourceConnection()));
+    //    else
+    //        ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_hypothesisTest->dataSourceConnection()));
 
     setColumnsComboBoxModel(m_hypothesisTest->dataSourceSpreadsheet());
 
@@ -332,6 +332,8 @@ void HypothesisTestDock::doHypothesisTest()  {
             m_hypothesisTest->performOneSampleTTest();
             break;
         }
+        case Test::SubType::NoneSubType:
+            break;
         case Test::SubType::OneWay:
             break;
         case Test::SubType::TwoWay:
@@ -375,6 +377,14 @@ void HypothesisTestDock::doHypothesisTest()  {
             m_hypothesisTest->performOneWayAnova();
             break;
         case Test::SubType::TwoWay:
+            break;
+        case Test::SubType::NoneSubType:
+            break;
+        case Test::SubType::TwoSampleIndependent:
+            break;
+        case Test::SubType::TwoSamplePaired:
+            break;
+        case Test::SubType::OneSample:
             break;
         }
 
@@ -760,7 +770,7 @@ void HypothesisTestDock::countPartitions(Column *column, int &np, int &total_row
 void HypothesisTestDock::setColumnsComboBoxModel(Spreadsheet* spreadsheet) {
     only_values_cols.clear();
     two_categorical_cols.clear();
-    more_than_two_categorical_cols.clear();    
+    more_than_two_categorical_cols.clear();
 
     for (auto* col : spreadsheet->children<Column>()) {
         if (col->columnMode() == AbstractColumn::Integer || col->columnMode() == AbstractColumn::Numeric)
@@ -794,10 +804,10 @@ void HypothesisTestDock::setColumnsComboBoxView() {
         ui.cbCol2->addItems(only_values_cols);
     } else if (m_test.subtype & Test::SubType::OneSample)
         ui.cbCol1->addItems(only_values_cols);
-      else if (m_test.type & Test::Type::Anova) {
-            ui.cbCol1->addItems(two_categorical_cols);
-            ui.cbCol1->addItems(more_than_two_categorical_cols);
-            ui.cbCol2->addItems(only_values_cols);
+    else if (m_test.type & Test::Type::Anova) {
+        ui.cbCol1->addItems(two_categorical_cols);
+        ui.cbCol1->addItems(more_than_two_categorical_cols);
+        ui.cbCol2->addItems(only_values_cols);
     }
 }
 
