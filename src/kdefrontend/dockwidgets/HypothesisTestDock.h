@@ -41,6 +41,7 @@ class KConfig;
 class QScrollArea;
 class QStandardItemModel;
 class QStandardItem;
+class QComboBox;
 
 class HypothesisTestDock : public QWidget {
     Q_OBJECT
@@ -99,9 +100,9 @@ private:
     void setColumnsComboBoxView();
     bool nonEmptySelectedColumns();
 
-    QStringList only_values_cols;
-    QStringList two_categorical_cols;
-    QStringList more_than_two_categorical_cols;
+    QList<Column* > only_values_cols;
+    QList<Column* > two_categorical_cols;
+    QList<Column* > multi_categorical_cols;
 
 private slots:
     //SLOTs for changes triggered in PivotTableDock

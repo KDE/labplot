@@ -72,7 +72,7 @@ void HypothesisTest::setDataSourceSpreadsheet(Spreadsheet *spreadsheet) {
         d->setDataSourceSpreadsheet(spreadsheet);
 }
 
-void HypothesisTest::setColumns(QVector<Column*> cols) {
+void HypothesisTest::setColumns(const QVector<Column *>& cols) {
     d->m_columns = cols;
 }
 

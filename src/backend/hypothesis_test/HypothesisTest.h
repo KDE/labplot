@@ -54,7 +54,7 @@ public:
     DataSourceType dataSourceType() const;
     void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
 
-    void setColumns(QVector<Column*> cols);
+    void setColumns(const QVector<Column*>& cols);
     void setColumns(QStringList cols);
     QStringList allColumns();
     void setTailType(TailType tailType);

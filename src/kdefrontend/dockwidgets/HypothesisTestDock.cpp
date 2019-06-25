@@ -312,10 +312,12 @@ void HypothesisTestDock::doHypothesisTest()  {
     m_hypothesisTest->setPopulationMean(ui.leMuo->text());
     m_hypothesisTest->setSignificanceLevel(ui.leAlpha->text());
 
-    QStringList cols;
+    QVector<Column*> cols;
     switch (m_test.type) {
     case Test::Type::TTest: {
-        cols << ui.cbCol1->currentText() << ui.cbCol2->currentText();
+        cols << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
+        cols << reinterpret_cast<Column*>(ui.cbCol2->currentData().toLongLong());
+
         m_hypothesisTest->setColumns(cols);
 
         switch (m_test.subtype) {
@@ -326,7 +328,8 @@ void HypothesisTestDock::doHypothesisTest()  {
             m_hypothesisTest->performTwoSamplePairedTTest();
             break;
         case Test::SubType::OneSample: {
-            cols << ui.cbCol1->currentText();
+            cols.clear();
+            cols << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
             m_hypothesisTest->setColumns(cols);
             m_hypothesisTest->performOneSampleTTest();
             break;
@@ -341,7 +344,8 @@ void HypothesisTestDock::doHypothesisTest()  {
         break;
     }
     case Test::Type::ZTest: {
-        cols << ui.cbCol1->currentText() << ui.cbCol2->currentText();
+        cols << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
+        cols << reinterpret_cast<Column*>(ui.cbCol2->currentData().toLongLong());
         m_hypothesisTest->setColumns(cols);
 
         switch (m_test.subtype) {
@@ -352,7 +356,8 @@ void HypothesisTestDock::doHypothesisTest()  {
             m_hypothesisTest->performTwoSamplePairedZTest();
             break;
         case Test::SubType::OneSample: {
-            cols << ui.cbCol1->currentText();
+            cols.clear();
+            cols << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
             m_hypothesisTest->setColumns(cols);
             m_hypothesisTest->performOneSampleZTest();
             break;
@@ -368,7 +373,8 @@ void HypothesisTestDock::doHypothesisTest()  {
         break;
     }
     case Test::Type::Anova: {
-        cols << ui.cbCol1->currentText() << ui.cbCol2->currentText();
+        cols << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
+        cols << reinterpret_cast<Column*>(ui.cbCol2->currentData().toLongLong());
         m_hypothesisTest->setColumns(cols);
 
         switch (m_test.subtype) {
@@ -769,20 +775,21 @@ void HypothesisTestDock::countPartitions(Column *column, int &np, int &total_row
 void HypothesisTestDock::setColumnsComboBoxModel(Spreadsheet* spreadsheet) {
     only_values_cols.clear();
     two_categorical_cols.clear();
-    more_than_two_categorical_cols.clear();
+    multi_categorical_cols.clear();
 
     for (auto* col : spreadsheet->children<Column>()) {
         if (col->columnMode() == AbstractColumn::Integer || col->columnMode() == AbstractColumn::Numeric)
-            only_values_cols.append(col->name());
+            only_values_cols.append(col);
         else {
             int np = 0, n_rows = 0;
             countPartitions(col, np, n_rows);
             if (np <= 1)
                 continue;
             else if (np == 2)
-                two_categorical_cols.append(col->name());
-            else
-                more_than_two_categorical_cols.append(col->name());
+                two_categorical_cols.append(col);
+            else {
+                multi_categorical_cols.append(col);
+            }
         }
     }
     setColumnsComboBoxView();
@@ -793,20 +800,31 @@ void HypothesisTestDock::setColumnsComboBoxView() {
 
     ui.cbCol1->clear();
     ui.cbCol2->clear();
-    if (m_test.subtype & Test::SubType::TwoSampleIndependent) {
-        ui.cbCol1->addItems(only_values_cols);
-        ui.cbCol1->addItems(two_categorical_cols);
 
-        ui.cbCol2->addItems(only_values_cols);
+    QList<Column*>::iterator i;
+    if (m_test.subtype & Test::SubType::TwoSampleIndependent) {
+        for (i = only_values_cols.begin(); i != only_values_cols.end(); i++) {
+            ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+            ui.cbCol2->addItem( (*i)->name(), qint64(*i));
+        }
+        for (i = two_categorical_cols.begin(); i != two_categorical_cols.end(); i++)
+            ui.cbCol1->addItem( (*i)->name(), qint64(*i));
     } else if (m_test.subtype & Test::SubType::TwoSamplePaired) {
-        ui.cbCol1->addItems(only_values_cols);
-        ui.cbCol2->addItems(only_values_cols);
-    } else if (m_test.subtype & Test::SubType::OneSample)
-        ui.cbCol1->addItems(only_values_cols);
-    else if (m_test.type & Test::Type::Anova) {
-        ui.cbCol1->addItems(two_categorical_cols);
-        ui.cbCol1->addItems(more_than_two_categorical_cols);
-        ui.cbCol2->addItems(only_values_cols);
+        for (i = only_values_cols.begin(); i != only_values_cols.end(); i++) {
+            ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+            ui.cbCol2->addItem( (*i)->name(), qint64(*i));
+        }
+    } else if (m_test.subtype & Test::SubType::OneSample) {
+        for (i = only_values_cols.begin(); i != only_values_cols.end(); i++)
+            ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+    } else if (m_test.type & Test::Type::Anova) {
+        for (i = only_values_cols.begin(); i != only_values_cols.end(); i++)
+            ui.cbCol2->addItem( (*i)->name(), qint64(*i));
+
+        for (i = two_categorical_cols.begin(); i != two_categorical_cols.end(); i++)
+            ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+        for (i = multi_categorical_cols.begin(); i != multi_categorical_cols.end(); i++)
+            ui.cbCol1->addItem( (*i)->name(), qint64(*i));
     }
 }
 
