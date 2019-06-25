@@ -26,7 +26,6 @@
  ***************************************************************************/
 
 #include "NSLGeomTest.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 
 extern "C" {
 #include "backend/nsl/nsl_geom.h"
@@ -36,11 +35,6 @@ extern "C" {
 void NSLGeomTest::initTestCase() {
 	const QString currentDir = __FILE__;
 	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
-
-	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	//TODO: redesign/remove this
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 }
 
 //##############################################################################
@@ -230,6 +224,9 @@ void NSLGeomTest::testLineSim() {
 
 void NSLGeomTest::testLineSimMorse() {
 	printf("NSLGeomTest::testLineSimMorse()\n");
+#ifdef _MSC_VER	// crashes on Windows
+	return;
+#endif
 
 	const QString fileName = m_dataDir + "morse_code.dat";
 	FILE *file;
