@@ -27,7 +27,7 @@
  ***************************************************************************/
 
 #include "HypothesisTestView.h"
-#include "backend/hypothesis_test/HypothesisTest.h"
+#include "backend/hypothesisTest/HypothesisTest.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 

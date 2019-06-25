@@ -33,7 +33,7 @@
 #include "backend/core/Folder.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Workbook.h"
-#include "backend/hypothesis_test/HypothesisTest.h"
+#include "backend/hypothesisTest/HypothesisTest.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/pivot/PivotTable.h"

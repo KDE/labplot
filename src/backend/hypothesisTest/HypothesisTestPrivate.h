@@ -29,7 +29,7 @@
 #ifndef HYPOTHESISTESTPRIVATE_H
 #define HYPOTHESISTESTPRIVATE_H
 
-#include <backend/hypothesis_test/HypothesisTest.h>
+#include <backend/hypothesisTest/HypothesisTest.h>
 
 class QStandardItemModel;
 
@@ -66,21 +66,22 @@ public:
         double m_significance_level;
         QString m_stats_table;
         HypothesisTest::TailType tail_type;
+
 private:
-        void countPartitions(Column* column, int &np, int &total_rows);
+		bool isNumericOrInteger(Column* column);
 
-        ErrorType findStats(const Column* column,int &count, double &sum, double &mean, double &std);
-        ErrorType findStatsPaired(const Column *column1, const Column *column2, int &count, double &sum, double &mean, double &std);
-        ErrorType findStatsCategorical(Column *column1, Column *column2, int n[], double sum[], double mean[], double std[], QMap<QString, int> &col_name, const int &np, const int &total_rows);
+		void countPartitions(Column* column, int& np, int& total_rows);
+		ErrorType findStats(const Column* column,int& count, double& sum, double& mean, double& std);
+		ErrorType findStatsPaired(const Column* column1, const Column* column2, int& count, double& sum, double& mean, double& std);
+		ErrorType findStatsCategorical(Column* column1, Column* column2, int n[], double sum[], double mean[], double std[], QMap<QString, int>& col_name, const int& np, const int& total_rows);
 
-        double getPValue(const TestType &test, double &value, const QString &col1_name, const QString &col2_name, const double mean, const double sp, const int df);
-        QString getHtmlTable(int row, int column, QVariant *row_major);
+		double getPValue(const TestType& test, double& value, const QString& col1_name, const QString& col2_name, const double mean, const double sp, const int df);
+		QString getHtmlTable(int row, int column, QVariant* row_major);
 
-        QString getLine(const QString &msg, const QString &color = "black");
-        void printLine(const int &index, const QString &msg, const QString &color = "black");
-        void printError(const QString &error_msg);
+		QString getLine(const QString& msg, const QString& color = "black");
+		void printLine(const int& index, const QString& msg, const QString& color = "black");
+		void printError(const QString& error_msg);
         void clearTestView();
-
 };
 
 #endif

@@ -28,7 +28,6 @@
 
 #ifndef HYPOTHESISTEST_H
 #define HYPOTHESISTEST_H
-#include <QVector>
 
 #include "backend/core/AbstractPart.h"
 #include "backend/lib/macros.h"

@@ -43,7 +43,7 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/pivot/PivotTable.h"
-#include "backend/hypothesis_test/HypothesisTest.h"
+#include "backend/hypothesisTest/HypothesisTest.h"
 
 
 #include <QKeyEvent>

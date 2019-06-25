@@ -71,7 +71,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYConvolutionCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYCorrelationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
-	${KDEFRONTEND_DIR}/hypothesis_test/HypothesisTestView.cpp
+	${KDEFRONTEND_DIR}/hypothesisTest/HypothesisTestView.cpp
 	${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
 	${KDEFRONTEND_DIR}/pivot/HierarchicalHeaderView.cpp
 	${KDEFRONTEND_DIR}/pivot/PivotTableView.cpp
@@ -238,7 +238,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
 	${BACKEND_DIR}/datasources/projects/LabPlotProjectParser.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
-	${BACKEND_DIR}/hypothesis_test/HypothesisTest.cpp
+	${BACKEND_DIR}/hypothesisTest/HypothesisTest.cpp
 	${BACKEND_DIR}/matrix/Matrix.cpp
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
 	${BACKEND_DIR}/matrix/MatrixModel.cpp

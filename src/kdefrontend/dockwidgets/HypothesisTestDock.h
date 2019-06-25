@@ -29,7 +29,7 @@
 #ifndef HYPOTHESISTESTDOCK_H
 #define HYPOTHESISTESTDOCK_H
 
-#include "backend/hypothesis_test/HypothesisTest.h"
+#include "backend/hypothesisTest/HypothesisTest.h"
 #include "ui_hypothesistestdock.h"
 #include <QSqlDatabase>
 
