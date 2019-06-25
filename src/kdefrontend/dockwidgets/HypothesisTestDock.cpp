@@ -39,12 +39,12 @@
 
 #include <QDir>
 #include <QSqlError>
+#include <QScrollArea>
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KMessageBox>
 #include <QDebug>
-
  /*!
   \class HypothesisTestDock
   \brief Provides a dock (widget) for hypothesis testing:
@@ -59,12 +59,15 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     ui.cbDataSourceType->addItem(i18n("Spreadsheet"));
     ui.cbDataSourceType->addItem(i18n("Database"));
 
-    cbSpreadsheet = new TreeViewComboBox(this);
-    ui.gridLayout->addWidget(cbSpreadsheet, 5, 4, 1, 3);
+    cbSpreadsheet = new TreeViewComboBox;
+    ui.gridLayout->addWidget(cbSpreadsheet, 1, 1);
 
     ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
     ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
     m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "sql_connections";
+
+
+
 
     // adding item to tests and testtype combo box;
     ui.cbTest->addItem(i18n("T Test"));
@@ -81,11 +84,8 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     ui.cbCol1->setVisible(false);
     ui.lCol2->setVisible(false);
     ui.cbCol2->setVisible(false);
-
-	ui.lEqualVariance->hide();
     ui.chbEqualVariance->setVisible(false);
     ui.chbEqualVariance->setChecked(true);
-
     ui.pbPerformTest->setEnabled(false);
     ui.rbH1OneTail2->setVisible(false);
     ui.rbH1OneTail1->setVisible(false);
@@ -126,8 +126,6 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     ui.lAlpha->setVisible(false);
     ui.leMuo->setVisible(false);
     ui.leAlpha->setVisible(false);
-
-	ui.pbPerformTest->setIcon(QIcon::fromTheme("run-build"));
 
     //    readConnections();
 
@@ -269,11 +267,9 @@ void HypothesisTestDock::showHypothesisTest() {
     ui.cbCol1->setVisible(two_sample_paired);
     ui.lCol2->setVisible(two_sample_independent || two_sample_paired || one_sample);
     ui.cbCol2->setVisible(two_sample_independent || two_sample_paired || one_sample);
-
-	ui.lEqualVariance->setVisible(ttest && two_sample_independent);
     ui.chbEqualVariance->setVisible(ttest && two_sample_independent);
+    ui.chbCategorical->setVisible(ttest && two_sample_independent);
     ui.chbEqualVariance->setChecked(true);
-
     ui.pbPerformTest->setEnabled(two_sample_independent || two_sample_paired || one_sample);
 
     ui.rbH1OneTail2->setVisible(two_sample_independent || two_sample_paired || one_sample);
@@ -309,7 +305,7 @@ void HypothesisTestDock::doHypothesisTest()  {
         if(two_sample_independent) {
             cols << ui.cbCol1Categorical->currentText() << ui.cbCol2->currentText();
             m_hypothesisTest->setColumns(cols);
-            m_hypothesisTest->performTwoSampleIndependentTTest( ui.chbEqualVariance->isChecked());
+            m_hypothesisTest->performTwoSampleIndependentTTest(ui.chbCategorical, ui.chbEqualVariance->isChecked());
         }
         else if(two_sample_paired) {
             cols << ui.cbCol1->currentText();
@@ -524,9 +520,13 @@ void HypothesisTestDock::col1CatIndexChanged(int index) {
 
     if (col1->columnMode() == AbstractColumn::Integer || col1->columnMode() == AbstractColumn::Numeric) {
         ui.lCol2->setText( i18n("Independent Variable"));
+        ui.chbCategorical->setChecked(false);
+        ui.chbCategorical->setEnabled(true);
     }
     else {
         ui.lCol2->setText( i18n("Dependent Variable"));
+        ui.chbCategorical->setChecked(true);
+        ui.chbCategorical->setEnabled(false);
     }
 
 }

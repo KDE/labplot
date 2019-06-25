@@ -64,8 +64,7 @@ public:
     QString testName();
     QString statsTable();
 
-    void performTwoSampleTTest();
-    void performTwoSampleIndependentTTest(bool equal_variance);
+    void performTwoSampleIndependentTTest(bool categorical_variable, bool equal_variance);
     void performTwoSamplePairedTTest();
     void PerformOneSampleTTest();
     void performTwoSampleIndependentZTest();

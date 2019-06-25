@@ -107,9 +107,9 @@ QString HypothesisTest::statsTable() {
     return d->m_stats_table;
 }
 
-void HypothesisTest::performTwoSampleIndependentTTest(bool equal_variance) {
+void HypothesisTest::performTwoSampleIndependentTTest(bool categorical_variable, bool equal_variance) {
     d->m_currTestName = "<h2>Two Sample Independent T Test</h2>";
-    d->performTwoSampleIndependentTest(HypothesisTestPrivate::TestT, equal_variance);
+    d->performTwoSampleIndependentTest(HypothesisTestPrivate::TestT, categorical_variable, equal_variance);
 }
 
 void HypothesisTest::performTwoSamplePairedTTest() {
@@ -177,7 +177,7 @@ void HypothesisTestPrivate::setColumns(QStringList cols) {
 
 /**************************Two Sample Independent *************************************/
 
-void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test, bool equal_variance) {
+void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test,bool categorical_variable, bool equal_variance) {
     QString test_name;
 
     double value;
@@ -197,7 +197,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test, bool 
     QString col1_name = m_columns[0]->name();
     QString col2_name = m_columns[1]->name();
 
-    if (m_columns[0]->columnMode() == AbstractColumn::Integer || m_columns[0]->columnMode() == AbstractColumn::Numeric) {
+    if (!categorical_variable && (m_columns[0]->columnMode() == AbstractColumn::Integer || m_columns[0]->columnMode() == AbstractColumn::Numeric)) {
         for (int i = 0; i < 2; i++) {
             findStats(m_columns[i], n[i], sum[i], mean[i], std[i]);
 

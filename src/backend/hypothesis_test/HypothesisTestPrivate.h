@@ -45,7 +45,7 @@ public:
         QString name() const;
         void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
         void setColumns(QStringList cols);
-        void performTwoSampleIndependentTest(TestType test, bool equal_variance = true);
+        void performTwoSampleIndependentTest(TestType test, bool categorical_variable = false, bool equal_variance = true);
         void performTwoSamplePairedTest(TestType test);
         void PerformOneSampleTest(TestType test);
 
