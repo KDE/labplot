@@ -84,14 +84,6 @@ QStringList HypothesisTest::allColumns() {
 	return d->all_columns;
 }
 
-void HypothesisTest::setTailType(HypothesisTest::TailType tailType) {
-	d->tail_type = tailType;
-}
-
-HypothesisTest::TailType HypothesisTest::tailType() {
-	return d->tail_type;
-}
-
 void HypothesisTest::setPopulationMean(QVariant populationMean) {
 	d->m_population_mean = populationMean.toDouble();
 }
@@ -109,39 +101,33 @@ QString HypothesisTest::statsTable() {
 	return d->m_stats_table;
 }
 
-void HypothesisTest::performTwoSampleIndependentTTest(bool categorical_variable, bool equal_variance) {
-	d->m_currTestName = i18n( "<h2>Two Sample Independent T Test</h2>");
-	d->performTwoSampleIndependentTest(HypothesisTestPrivate::TestT, categorical_variable, equal_variance);
-}
-
-void HypothesisTest::performTwoSamplePairedTTest() {
-	d->m_currTestName = i18n( "<h2>Two Sample Paried T Test</h2>");
-	d->performTwoSamplePairedTest(HypothesisTestPrivate::TestT);
-}
-
-void HypothesisTest::performOneSampleTTest() {
-	d->m_currTestName = i18n( "<h2>One Sample T Test</h2>");
-	d->performOneSampleTest(HypothesisTestPrivate::TestT);
-}
-
-void HypothesisTest::performTwoSampleIndependentZTest() {
-	d->m_currTestName = i18n( "<h2>Two Sample Independent Z Test</h2>");
-	d->performTwoSampleIndependentTest(HypothesisTestPrivate::TestZ);
-}
-
-void HypothesisTest::performTwoSamplePairedZTest() {
-	d->m_currTestName = i18n( "<h2>Two Sample Paired Z Test</h2>");
-	d->performTwoSamplePairedTest(HypothesisTestPrivate::TestZ);
-}
-
-void HypothesisTest::performOneSampleZTest() {
-	d->m_currTestName = i18n( "<h2>One Sample Z Test</h2>");
-	d->performOneSampleTest(HypothesisTestPrivate::TestZ);
-}
-
-void HypothesisTest::performOneWayAnova() {
-	d->m_currTestName = i18n( "<h2>One Way Anova</h2>");
-	d->performOneWayAnova();
+void HypothesisTest::performTest(Test m_test, bool categorical_variable, bool equal_variance) {
+	d->tail_type = m_test.tail;
+	switch (m_test.subtype) {
+	case HypothesisTest::Test::SubType::TwoSampleIndependent: {
+		d->m_currTestName = i18n( "<h2>Two Sample Independent Test</h2>");
+		d->performTwoSampleIndependentTest(m_test.type, categorical_variable, equal_variance);
+		break;
+	}
+	case HypothesisTest::Test::SubType::TwoSamplePaired:
+		d->m_currTestName = i18n( "<h2>Two Sample Paired Test</h2>");
+		d->performTwoSamplePairedTest(m_test.type);
+		break;
+	case HypothesisTest::Test::SubType::OneSample: {
+		d->m_currTestName = i18n( "<h2>One Sample Test</h2>");
+		d->performOneSampleTest(m_test.type);
+		break;
+	}
+	case HypothesisTest::Test::SubType::OneWay: {
+		d->m_currTestName = i18n( "<h2>One Way Anova</h2>");
+		d->performOneWayAnova();
+		break;
+	}
+	case HypothesisTest::Test::SubType::TwoWay:
+		break;
+	case HypothesisTest::Test::SubType::NoneSubType:
+		break;
+	}
 }
 
 void HypothesisTest::performLeveneTest(bool categorical_variable) {
@@ -190,7 +176,7 @@ void HypothesisTestPrivate::setColumns(QStringList cols) {
 
 /**************************Two Sample Independent *************************************/
 
-void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test, bool categorical_variable, bool equal_variance) {
+void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test::Type test, bool categorical_variable, bool equal_variance) {
 	QString test_name;
 
 	double value;
@@ -269,7 +255,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test, bool 
 	m_stats_table = getHtmlTable(3, 5, row_major);
 
 	switch (test) {
-	case TestT: {
+	case HypothesisTest::Test::Type::TTest: {
 		test_name = "T";
 
 		if (equal_variance) {
@@ -289,27 +275,39 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test, bool 
 													(gsl_pow_2(std[1])/n[1])));
 			printLine(9, "<b>Assumption:</b> UnEqual Variance b/w both population means");
 		}
+
+		printLine(8, "<b>Assumption:</b> Both Populations approximately follow normal distribution");
 		break;
-	} case TestZ: {
+	}
+	case HypothesisTest::Test::Type::ZTest: {
 		test_name = "Z";
 		sp = qSqrt( ((n[0]-1) * gsl_pow_2(std[0]) + (n[1]-1) * gsl_pow_2(std[1])) / df);
 		value = (mean[0] - mean[1]) / (sp * qSqrt( 1.0 / n[0] + 1.0 / n[1]));
 		p_value = gsl_cdf_gaussian_P(value, sp);
 	}
+	case HypothesisTest::Test::Type::Anova:
+		break;
+	case HypothesisTest::Test::Type::NoneType:
+		break;
 	}
 
 	m_currTestName = i18n( "<h2>Two Sample Independent %1 Test for %2 vs %3</h2>", test_name, col1_name, col2_name);
 	p_value = getPValue(test, value, col1_name, col2_name, (mean[0] - mean[1]), sp, df);
 
 	printLine(2, i18n("Significance level is %1", m_significance_level), "blue");
+
 	printLine(4, i18n("%1 Value is %2 ", test_name, value), "green");
+	printTooltip(4, i18n("More is the |%1-value|, more safely we can reject the null hypothesis", test_name));
+
 	printLine(5, i18n("P Value is %1 ", p_value), "green");
+
 	printLine(6, i18n("Degree of Freedom is %1", df), "green");
+	printTooltip(6, i18n("Number of independent Pieces of information that went into calculating the estimate"));
 
 	if (p_value <= m_significance_level)
-		q->m_view->setResultLine(5, i18n("We can safely reject Null Hypothesis for significance level %1", m_significance_level), Qt::ToolTipRole);
+		printTooltip(5, i18n("We can safely reject Null Hypothesis for significance level %1", m_significance_level));
 	else
-		q->m_view->setResultLine(5, i18n("There is a plausibility for Null Hypothesis to be true"), Qt::ToolTipRole);
+		printTooltip(5, i18n("There is a plausibility for Null Hypothesis to be true"));
 
 	emit q->changed();
 	return;
@@ -317,7 +315,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(TestType test, bool 
 
 /********************************Two Sample Paired ***************************************/
 
-void HypothesisTestPrivate::performTwoSamplePairedTest(TestType test) {
+void HypothesisTestPrivate::performTwoSamplePairedTest(HypothesisTest::Test::Type test) {
 	QString test_name;
 	int n;
 	double sum, mean, std;
@@ -375,19 +373,24 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(TestType test) {
 	m_stats_table = getHtmlTable(2, 5, row_major);
 
 	switch (test) {
-	case TestT: {
+	case HypothesisTest::Test::Type::TTest: {
 		value = mean / (std / qSqrt(n));
 		df = n - 1;
 		test_name = "T";
 		printLine(6, i18n("Degree of Freedom is %1</p", df), "green");
 		break;
 	}
-	case TestZ: {
+	case HypothesisTest::Test::Type::ZTest: {
 		test_name = "Z";
 		value = mean / (std / qSqrt(n));
 		df = n - 1;
 		break;
 	}
+	case HypothesisTest::Test::Type::Anova:
+		break;
+	case HypothesisTest::Test::Type::NoneType:
+		break;
+
 	}
 
 	p_value = getPValue(test, value, m_columns[0]->name(), i18n("%1", m_population_mean), mean, std, df);
@@ -409,7 +412,7 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(TestType test) {
 
 /******************************** One Sample ***************************************/
 
-void HypothesisTestPrivate::performOneSampleTest(TestType test) {
+void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test) {
 	QString test_name;
 	double value;
 	int df = 0;
@@ -452,18 +455,22 @@ void HypothesisTestPrivate::performOneSampleTest(TestType test) {
 	m_stats_table = getHtmlTable(2, 5, row_major);
 
 	switch (test) {
-	case TestT: {
+	case HypothesisTest::Test::Type::TTest: {
 		test_name = "T";
 		value = (mean - m_population_mean) / (std / qSqrt(n));
 		df = n - 1;
 		printLine(6, i18n("Degree of Freedom is %1", df), "blue");
 		break;
 	}
-	case TestZ: {
+	case HypothesisTest::Test::Type::ZTest: {
 		test_name = "Z";
 		df = 0;
 		value = (mean - m_population_mean) / (std / qSqrt(n));
 	}
+	case HypothesisTest::Test::Type::Anova:
+		break;
+	case HypothesisTest::Test::Type::NoneType:
+		break;
 	}
 
 	p_value = getPValue(test, value, m_columns[0]->name(), i18n("%1",m_population_mean), mean - m_population_mean, std, df);
@@ -817,10 +824,10 @@ void HypothesisTestPrivate::performLeveneTest(bool categorical_variable) {
 	printLine(6, i18n("Degree of Freedom is %1", df), "green");
 
 	if (p_value <= m_significance_level) {
-		q->m_view->setResultLine(5, i18n("We can safely reject Null Hypothesis for significance level %1", m_significance_level), Qt::ToolTipRole);
+		printTooltip(5, i18n("We can safely reject Null Hypothesis for significance level %1", m_significance_level));
 		printLine(8, "Requirement for homogeneity is not met", "red");
 	} else {
-		q->m_view->setResultLine(5, i18n("There is a plausibility for Null Hypothesis to be true"), Qt::ToolTipRole);
+		printTooltip(5, i18n("There is a plausibility for Null Hypothesis to be true"));
 		printLine(8, "Requirement for homogeneity is met", "green");
 	}
 	emit q->changed();
@@ -997,51 +1004,62 @@ HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsCategorical(Col
 // TODO: check for correctness between: for TestZ with TailTwo
 //       p_value = 2*gsl_cdf_tdist_P(value, df) v/s
 //       p_value = gsl_cdf_tdis_P(value, df) + gsl_cdf_tdis_P(-value, df);
-double HypothesisTestPrivate::getPValue(const HypothesisTestPrivate::TestType& test, double& value, const QString& col1_name, const QString& col2_name, const double mean, const double sp, const int df) {
+double HypothesisTestPrivate::getPValue(const HypothesisTest::Test::Type& test, double& value, const QString& col1_name, const QString& col2_name, const double mean, const double sp, const int df) {
 	double p_value = 0;
 	switch (test) {
-	case TestT: {
+	case HypothesisTest::Test::Type::TTest: {
 		switch (tail_type) {
-		case HypothesisTest::TailNegative:
+		case HypothesisTest::Test::Tail::Negative: {
 			p_value = gsl_cdf_tdist_P(value, df);
 			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING("≥"), col2_name), "blue");
 			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING("⋖"), col2_name), "blue");
 			break;
-		case HypothesisTest::TailPositive:
+		}
+		case HypothesisTest::Test::Tail::Positive: {
 			value *= -1;
 			p_value = gsl_cdf_tdist_P(value, df);
 			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING("≤"), col2_name), "blue");
 			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING(">"), col2_name), "blue");
 			break;
-		case HypothesisTest::TailTwo:
+		}
+		case HypothesisTest::Test::Tail::Two: {
 			p_value = 2.*gsl_cdf_tdist_P(value, df);
 
 			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING("="), col2_name), "blue");
 			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1_name, UTF8_QSTRING("≠"), col2_name), "blue");
 			break;
 		}
+		}
 		break;
-	} case TestZ: {
+	}
+	case HypothesisTest::Test::Type::ZTest: {
 		switch (tail_type) {
-		case HypothesisTest::TailNegative:
+		case HypothesisTest::Test::Tail::Negative: {
 			p_value = gsl_cdf_gaussian_P(value - mean, sp);
 			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING("≥"), col2_name), "blue");
 			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING("⋖"), col2_name), "blue");
 			break;
-		case HypothesisTest::TailPositive:
+		}
+		case HypothesisTest::Test::Tail::Positive: {
 			value *= -1;
 			p_value = nsl_stats_tdist_p(value - mean, sp);
 			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING("≤"), col2_name), "blue");
 			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING(">"), col2_name), "blue");
 			break;
-		case HypothesisTest::TailTwo:
+		}
+		case HypothesisTest::Test::Tail::Two: {
 			p_value = 2.*gsl_cdf_gaussian_P(value - mean, sp);
 			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING("="), col2_name), "blue");
 			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1_name, UTF8_QSTRING("≠"), col2_name), "blue");
 			break;
 		}
+		}
 		break;
 	}
+	case HypothesisTest::Test::Type::Anova:
+		break;
+	case HypothesisTest::Test::Type::NoneType:
+		break;
 	}
 
 	if (p_value > 1)
@@ -1110,6 +1128,10 @@ QString HypothesisTestPrivate::getLine(const QString& msg, const QString& color)
 void HypothesisTestPrivate::printLine(const int& index, const QString& msg, const QString& color) {
 	q->m_view->setResultLine(index, getLine(msg, color));
 	return;
+}
+
+void HypothesisTestPrivate::printTooltip(const int &index, const QString &msg) {
+	q->m_view->setResultLine(index, i18n("%1", msg), Qt::ToolTipRole);
 }
 
 void HypothesisTestPrivate::printError(const QString& error_msg) {

@@ -46,8 +46,28 @@ public:
     explicit HypothesisTest(const QString& name);
     ~HypothesisTest() override;
 
+	struct Test {
+		enum Type {
+			NoneType  = 0,
+			TTest = 1 << 0,
+			ZTest = 1 << 1,
+			Anova = 1 << 2
+		};
+		enum SubType {
+			NoneSubType = 0,
+			TwoSampleIndependent    = 1 << 0,
+			TwoSamplePaired         = 1 << 1,
+			OneSample               = 1 << 2,
+			OneWay                  = 1 << 3,
+			TwoWay                  = 1 << 4
+		};
+		enum Tail {Positive, Negative, Two};
+		Type type = NoneType;
+		SubType subtype = NoneSubType;
+		Tail tail;
+	};
+
     enum DataSourceType {DataSourceSpreadsheet, DataSourceDatabase};
-    enum TailType {TailPositive, TailNegative, TailTwo};
 
     void setDataSourceType(DataSourceType type);
     DataSourceType dataSourceType() const;
@@ -56,23 +76,22 @@ public:
     void setColumns(const QVector<Column*>& cols);
     void setColumns(QStringList cols);
     QStringList allColumns();
-    void setTailType(TailType tailType);
-    TailType tailType();
     void setPopulationMean(QVariant populationMean);
     void setSignificanceLevel(QVariant alpha);
     QString testName();
     QString statsTable();
 
-    void performTwoSampleIndependentTTest(bool categorical_variable, bool equal_variance);
-    void performTwoSamplePairedTTest();
-    void performOneSampleTTest();
-    void performTwoSampleIndependentZTest();
-    void performTwoSamplePairedZTest();
-    void performOneSampleZTest();
-    void performOneWayAnova();
+	void performTest(Test m_test, bool categorical_variable, bool equal_variance);
+//	void performTwoSampleIndependentTTest(bool categorical_variable, bool equal_variance);
+//    void performTwoSamplePairedTTest();
+//    void performOneSampleTTest();
+//    void performTwoSampleIndependentZTest();
+//    void performTwoSamplePairedZTest();
+//    void performOneSampleZTest();
+//    void performOneWayAnova();
 
-    void performLeveneTest(bool categorical_variable);
-    //virtual methods
+	void performLeveneTest(bool categorical_variable);
+	//virtual methods
 //    QIcon icon() const override;
     QMenu* createContextMenu() override;
     QWidget* view() const override;
@@ -84,7 +103,7 @@ public:
     void save(QXmlStreamWriter*) const override;
     bool load(XmlStreamReader*, bool preview) override;
 
-    Spreadsheet* dataSourceSpreadsheet() const;
+	Spreadsheet* dataSourceSpreadsheet() const;
 private:
     HypothesisTestPrivate* const d;
     mutable HypothesisTestView* m_view{nullptr};

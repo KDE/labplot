@@ -47,25 +47,6 @@ class HypothesisTestDock : public QWidget {
     Q_OBJECT
 
 public:
-    struct Test {
-        enum Type {
-            NoneType  = 0,
-            TTest = 1 << 0,
-            ZTest = 1 << 1,
-            Anova = 1 << 2
-        };
-        enum SubType {
-            NoneSubType = 0,
-            TwoSampleIndependent    = 1 << 0,
-            TwoSamplePaired         = 1 << 1,
-            OneSample               = 1 << 2,
-            OneWay                  = 1 << 3,
-            TwoWay                  = 1 << 4
-        };
-        Type type = NoneType;
-        SubType subtype = NoneSubType;
-    };
-
     explicit HypothesisTestDock(QWidget*);
     void setHypothesisTest(HypothesisTest*);
 
@@ -92,7 +73,7 @@ private:
     //        void readConnections();
     //        void updateFields();
     //        bool fieldSelected(const QString&);
-    Test m_test;
+	HypothesisTest::Test m_test;
     QScrollArea* scroll_dock;
 
     void countPartitions(Column *column, int &np, int &total_rows);

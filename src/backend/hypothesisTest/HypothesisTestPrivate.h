@@ -35,37 +35,35 @@ class QStandardItemModel;
 
 class HypothesisTestPrivate {
 public:
-
         explicit HypothesisTestPrivate(HypothesisTest*);
         virtual ~HypothesisTestPrivate();
 
-        enum TestType {TestT, TestZ};
-        enum ErrorType {ErrorUnqualSize, ErrorEmptyColumn, NoError};
+		enum ErrorType {ErrorUnqualSize, ErrorEmptyColumn, NoError};
 
         QString name() const;
         void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
         void setColumns(QStringList cols);
-        void performTwoSampleIndependentTest(TestType test, bool categorical_variable = false, bool equal_variance = true);
-        void performTwoSamplePairedTest(TestType test);
-        void performOneSampleTest(TestType test);
+		void performTwoSampleIndependentTest(HypothesisTest::Test::Type test, bool categorical_variable = false, bool equal_variance = true);
+		void performTwoSamplePairedTest(HypothesisTest::Test::Type test);
+		void performOneSampleTest(HypothesisTest::Test::Type test);
         void performOneWayAnova();
 
         void performLeveneTest(bool categorical_variable);
 
-        HypothesisTest* const q;
+		HypothesisTest* const q;
         HypothesisTest::DataSourceType dataSourceType{HypothesisTest::DataSourceSpreadsheet};
         Spreadsheet* dataSourceSpreadsheet{nullptr};
         QVector<Column*> m_columns;
         QStringList all_columns;
 
-        bool m_dbCreated{false};
+		bool m_dbCreated{false};
         int m_rowCount{0};
         int m_columnCount{0};
         QString m_currTestName{"Result Table"};
         double m_population_mean;
         double m_significance_level;
         QString m_stats_table;
-        HypothesisTest::TailType tail_type;
+		HypothesisTest::Test::Tail tail_type;
 
 private:
 		bool isNumericOrInteger(Column* column);
@@ -75,11 +73,12 @@ private:
 		ErrorType findStatsPaired(const Column* column1, const Column* column2, int& count, double& sum, double& mean, double& std);
 		ErrorType findStatsCategorical(Column* column1, Column* column2, int n[], double sum[], double mean[], double std[], QMap<QString, int>& col_name, const int& np, const int& total_rows);
 
-		double getPValue(const TestType& test, double& value, const QString& col1_name, const QString& col2_name, const double mean, const double sp, const int df);
+		double getPValue(const HypothesisTest::Test::Type& test, double& value, const QString& col1_name, const QString& col2_name, const double mean, const double sp, const int df);
 		QString getHtmlTable(int row, int column, QVariant* row_major);
 
 		QString getLine(const QString& msg, const QString& color = "black");
 		void printLine(const int& index, const QString& msg, const QString& color = "black");
+		void printTooltip(const int& index, const QString& msg);
 		void printError(const QString& error_msg);
         void clearTestView();
 };
