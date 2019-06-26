@@ -30,15 +30,15 @@ Rectangle {
 
 
     Connections {
-        target: datasetModel
+        target: helper
         onDatasetFound:{
-            datasetTitle.text = datasetModel.datasetName()
+            datasetTitle.text = helper.datasetName()
             console.log("Title width: " + datasetTitle.width)
-            datasetDescription.text = datasetModel.datasetDescription()
+            datasetDescription.text = helper.datasetDescription()
             console.log("Description width: " + datasetDescription.width)
             console.log("Description height: " + datasetDescription.paintedHeight  + "  " + height)
-            datasetRows.text = datasetModel.datasetRows()
-            datasetColumns.text = datasetModel.datasetColumns()
+            datasetRows.text = helper.datasetRows()
+            datasetColumns.text = helper.datasetColumns()
         }
         onDatasetNotFound:{
             datasetTitle.text = "-"
@@ -128,12 +128,7 @@ Rectangle {
                                 height: parent.height
 
                                 Image {
-                                    source: datasetModel.getProjectThumbnail(fullUri);
-                                    //height: sourceSize.height
-                                    //width: sourceSize.width
-                                    //Layout.alignment: Qt.AlignVCenter
-                                    //fillMode: Image.PreserveAspectFit
-
+                                    source: helper.getProjectThumbnail(fullUri);
                                     fillMode: Image.Stretch
                                     sourceSize.width: 48
                                     sourceSize.height: 60

@@ -31,6 +31,8 @@ Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
 
 #include "ui_datasetmetadatamanagerwidget.h"
 
+class DatasetModel;
+
 class DatasetMetadataManagerWidget : public QWidget {
     Q_OBJECT
 
@@ -43,13 +45,10 @@ public:
     QString getMetadataFilePath() const;
 
 private:
-    Ui::DatasetMetadataManagerWidget ui;
-    QStringList m_categoryList;
-    QMap<QString, QStringList> m_subcategoryMap;
-    QMap<QString, QStringList> m_datasetMap;
+	Ui::DatasetMetadataManagerWidget ui;
+	DatasetModel* m_datasetModel;
     QStringList m_columnDescriptions;
-    QString m_metadataFilePath;
-    QStringList m_datasetList;
+	QString m_metadataFilePath;
 	QString m_baseColor;
 	QString m_textColor;
 

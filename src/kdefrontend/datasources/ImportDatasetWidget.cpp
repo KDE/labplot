@@ -29,6 +29,7 @@ Copyright            : (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
 #include "src/backend/datasources/DatasetHandler.h"
 #include "src/kdefrontend/datasources/ImportDatasetWidget.h"
 #include "src/kdefrontend/datasources/DatasetMetadataManagerDialog.h"
+#include "src/kdefrontend/DatasetModel.h"
 
 #include <QCompleter>
 #include <QJsonDocument>
@@ -143,6 +144,10 @@ void ImportDatasetWidget::loadDatasetCategoriesFromJson() {
 			}
 		}
 
+		if(m_datasetModel != nullptr)
+			delete m_datasetModel;
+
+		m_datasetModel = new DatasetModel(m_datasetsMap);
 		updateCategoryCompleter();
 		m_loadingCategories = false;
 		restoreSelectedSubcategory();
@@ -156,10 +161,10 @@ void ImportDatasetWidget::loadDatasetCategoriesFromJson() {
  * @brief Restores the lastly selected subcategory making it the selected QTreeWidgetItem and also lists the datasets belonigng to it/
  */
 void ImportDatasetWidget::restoreSelectedSubcategory() {
-	if(m_datasetsMap.keys().contains(m_selectedCategory)) {
+	if(m_datasetModel->categories().toStringList().contains(m_selectedCategory)) {
 		const QTreeWidgetItem* const categoryItem = ui.twCategories->findItems(m_selectedCategory, Qt::MatchExactly).first();
 
-		if(m_datasetsMap[m_selectedCategory].keys().contains(m_selectedSubcategory)) {
+		if(m_datasetModel->subcategories(m_selectedCategory).toStringList().contains(m_selectedSubcategory)) {
 			for(int i = 0; i < categoryItem->childCount(); ++i)	{
 				if(categoryItem->child(i)->text(0).compare(m_selectedSubcategory) == 0) {
 					QTreeWidgetItem* const subcategoryItem = categoryItem->child(i);
@@ -186,7 +191,7 @@ void ImportDatasetWidget::listDatasetsForSubcategory(QTreeWidgetItem* item) {
 			QString categoryName = item->parent()->text(0);
 
 			ui.lwDatasets->clear();
-			for(QString dataset :  m_datasetsMap[categoryName][m_selectedSubcategory]) {
+			for(QString dataset :  m_datasetModel->datasets(categoryName, m_selectedSubcategory).toStringList()) {
 				ui.lwDatasets->addItem(new QListWidgetItem(dataset));
 			}
 

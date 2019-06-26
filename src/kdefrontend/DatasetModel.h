@@ -3,7 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
-    Description          : Helper class for the welcome screen
+	Description          :  Wrapper class for datasets, and also for their categories and subcategories
  ***************************************************************************/
 
 /***************************************************************************
@@ -30,7 +30,6 @@
 #include <QObject>
 #include <QMap>
 #include <QVariant>
-#include <memory>
 
 class ImportDatasetWidget;
 class DatasetHandler;
@@ -40,40 +39,23 @@ class DatasetModel : public QObject {
     Q_OBJECT
 
 public:
-	DatasetModel();
+	DatasetModel(const QMap<QString, QMap<QString, QVector<QString>>>&);
     ~DatasetModel();
 
     Q_INVOKABLE QVariant categories();
     Q_INVOKABLE QVariant subcategories(const QString&);
-	Q_INVOKABLE QVariant datasets(const QString&, const QString&);
-	Q_INVOKABLE QVariant datasetName();
-	Q_INVOKABLE QVariant datasetDescription();
-	Q_INVOKABLE QVariant datasetColumns();
-	Q_INVOKABLE QVariant datasetRows();
-	Q_INVOKABLE QVariant getProjectThumbnail(const QUrl& url);
-
-	Spreadsheet* releaseConfiguredSpreadsheet();
-
-public slots:
-	void datasetClicked(QString category, QString subcategory, QString datasetName);
+	Q_INVOKABLE QVariant datasets(const QString&, const QString&);	
+	Q_INVOKABLE QVariant allDatasets();
 
 private:
-	ImportDatasetWidget* m_datasetWidget{nullptr};
-	DatasetHandler* m_datasetHandler{nullptr};
-	mutable std::unique_ptr<Spreadsheet> m_spreadsheet{nullptr};
     QStringList m_categoryLists;
     QMap<QString, QStringList> m_subcategories;
     QMap<QString, QMap<QString, QStringList>> m_datasets;
+	QStringList m_datasetList;
 
     void initCategories(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap);
     void initSubcategories(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap);
-    void initDatasets(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap);
-
-	signals:
-	void datasetFound();
-	void datasetNotFound();
-	void showFirstDataset();
-
+	void initDatasets(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap);
 };
 
 #endif //DATASETMODEL_H

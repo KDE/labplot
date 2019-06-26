@@ -27,6 +27,7 @@ Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
  ***************************************************************************/
 
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "src/kdefrontend/DatasetModel.h"
 #include "src/kdefrontend/datasources/DatasetMetadataManagerWidget.h"
 
 #include <KConfigGroup>
@@ -54,9 +55,7 @@ Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
  */
 DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) : QWidget(parent) {
 	ui.setupUi(this);
-	initCategories(datasetMap);
-	initSubcategories(datasetMap);
-	initDatasets(datasetMap);
+	m_datasetModel = new DatasetModel(datasetMap);
 
 	m_baseColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#5f5f5f") : QLatin1String("#ffffff");
 	m_textColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#ffffff") : QLatin1String("#000000");
@@ -122,44 +121,6 @@ void DatasetMetadataManagerWidget::loadSettings() {
 }
 
 /**
- * @brief Initializes the structure containing the categories.
- * @param datasetMap the structure containing the categories, subcategories, datasets, obtained from ImportDatasetWidget.
- */
-void DatasetMetadataManagerWidget::initCategories(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) {
-	m_categoryList = datasetMap.keys();
-	ui.cbCategory->addItems(m_categoryList);
-}
-
-/**
- * @brief Initializes the structure containing the subcategories.
- * @param datasetMap the structure containing the categories, subcategories, datasets, obtained from ImportDatasetWidget.
- */
-void DatasetMetadataManagerWidget::initSubcategories(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) {
-	for(auto i = datasetMap.begin(); i != datasetMap.end(); ++i) {
-		m_subcategoryMap[i.key()] = i.value().keys();
-	}
-
-	QString selectedCategory = ui.cbCategory->currentText();
-	if (m_subcategoryMap.contains(selectedCategory))
-		ui.cbSubcategory->addItems(m_subcategoryMap[selectedCategory]);
-}
-
-/**
- * @brief Initializes the structure containing the datasets.
- * @param datasetMap the structure containing the categories, subcategories, datasets, obtained from ImportDatasetWidget.
- */
-void DatasetMetadataManagerWidget::initDatasets(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) {
-	for(auto category = datasetMap.begin(); category != datasetMap.end(); ++category) {
-		const QMap<QString, QVector<QString>>& category_ = category.value();
-
-		for(auto subcategory = category_.begin(); subcategory != category_.end(); ++subcategory) {
-			m_datasetMap[subcategory.key()] = subcategory.value().toList();
-			m_datasetList.append(subcategory.value().toList());
-		}
-	}
-}
-
-/**
  * @brief Checks whether leFileName contains a valid file name.
  */
 bool DatasetMetadataManagerWidget::checkFileName() {
@@ -190,7 +151,7 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 	//check whether there already is a file named like this or not.
 	bool found = false;
 
-	if(m_datasetList.contains(fileName)) {
+	if(m_datasetModel->allDatasets().toStringList().contains(fileName)) {
 		qDebug("There already is a metadata file with this name");
 		QPalette palette;
 		palette.setColor(QPalette::Base, Qt::red);
@@ -347,8 +308,8 @@ bool DatasetMetadataManagerWidget::checkDataValidity() {
  */
 void DatasetMetadataManagerWidget::updateSubcategories(const QString& category) {
 	ui.cbSubcategory->clear();
-	if(m_categoryList.contains(category)) {
-		ui.cbSubcategory->addItems(m_subcategoryMap[category]);
+	if( m_datasetModel->categories().toStringList().contains(category)) {
+		ui.cbSubcategory->addItems(m_datasetModel->subcategories(category).toStringList());
 	}
 	emit checkOk();
 }

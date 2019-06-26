@@ -1,10 +1,9 @@
 /***************************************************************************
-File                 : DatasetMetadataManagerDialog.h
-Project              : LabPlot
-Description          : Dialog for managing a metadata file of a dataset
---------------------------------------------------------------------
-Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
-
+    File                 : WelcomeScreenHelper.h
+    Project              : LabPlot
+    --------------------------------------------------------------------
+    Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
+    Description          : Helper class for the welcome screen
  ***************************************************************************/
 
 /***************************************************************************
@@ -25,32 +24,49 @@ Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef WELCOMESCREENHELPER_H
+#define WELCOMESCREENHELPER_H
 
-#ifndef DATASETMETADATAMANAGERDIALOG_H
-#define DATASETMETADATAMANAGERDIALOG_H
+#include <QObject>
+#include <QMap>
+#include <QVariant>
+#include <memory>
 
-#include <QDialog>
+class ImportDatasetWidget;
+class DatasetHandler;
+class Spreadsheet;
+class DatasetModel;
 
-class QDialogButtonBox;
-class DatasetMetadataManagerWidget;
-
-class DatasetMetadataManagerDialog : public QDialog {
+class WelcomeScreenHelper:  public QObject {
     Q_OBJECT
 
 public:
-	explicit DatasetMetadataManagerDialog(QWidget*, const QMap<QString, QMap<QString, QVector<QString>>>&);
-    virtual ~DatasetMetadataManagerDialog() override;
-    void updateDocument(const QString& fileName);
-    void createNewMetadata(const QString& dirPath);
-    QString getMetadataFilePath() const;
+    WelcomeScreenHelper();
+    ~WelcomeScreenHelper();
+
+    Q_INVOKABLE QVariant datasetName();
+    Q_INVOKABLE QVariant datasetDescription();
+    Q_INVOKABLE QVariant datasetColumns();
+    Q_INVOKABLE QVariant datasetRows();
+    Q_INVOKABLE QVariant getProjectThumbnail(const QUrl& url);
+
+    Spreadsheet* releaseConfiguredSpreadsheet();
+    DatasetModel* getDatasetModel();
+
+public slots:
+    void datasetClicked(QString category, QString subcategory, QString datasetName);
 
 private:
-    DatasetMetadataManagerWidget* m_mainWidget;
-    QDialogButtonBox* m_buttonBox;
-    QPushButton* m_okButton;
+    DatasetModel* m_datasetModel{nullptr};
+    ImportDatasetWidget* m_datasetWidget{nullptr};
+    DatasetHandler* m_datasetHandler{nullptr};
+    mutable std::unique_ptr<Spreadsheet> m_spreadsheet{nullptr};
 
-protected  slots:
-    void checkOkButton();
+signals:
+    void datasetFound();
+    void datasetNotFound();
+    void showFirstDataset();
+
 
 };
-#endif // DATASETMETADATAMANAGERDIALOG_H
+#endif //WELCOMESCREENHELPER_H

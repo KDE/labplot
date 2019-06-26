@@ -23,6 +23,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/SettingsPage.h
 	${KDEFRONTEND_DIR}/TemplateHandler.cpp
 	${KDEFRONTEND_DIR}/ThemeHandler.cpp
+    ${KDEFRONTEND_DIR}/WelcomeScreenHelper.cpp
 	${KDEFRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerDialog.cpp

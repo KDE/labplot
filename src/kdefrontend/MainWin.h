@@ -88,7 +88,7 @@ class QMdiSubWindow;
 class QToolButton;
 class KRecentFilesAction;
 class QQuickWidget;
-class DatasetModel;
+class WelcomeScreenHelper;
 class ImportDatasetWidget;
 
 class MainWin : public KXmlGuiWindow {
@@ -126,7 +126,7 @@ private:
 	Qt::WindowStates m_lastWindowState; //< last window state before switching to full screen mode
 	QMdiSubWindow* m_welcomeWindow{nullptr};
 	QQuickWidget* m_welcomeWidget{nullptr};
-	DatasetModel* m_datasetModel{nullptr};
+	WelcomeScreenHelper* m_welcomeScreenHelper{nullptr};
 	ImportDatasetWidget* m_importDatasetWidget{nullptr};
 
 	KRecentFilesAction* m_recentProjectsAction;

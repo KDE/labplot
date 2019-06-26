@@ -76,6 +76,7 @@
 #include "kdefrontend/GuiObserver.h"
 #include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 #include "DatasetModel.h"
+#include "WelcomeScreenHelper.h"
 
 #include <QMdiArea>
 #include <QMenu>
@@ -347,18 +348,20 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	ctxt->setContextProperty("recentProjects", variant);
 	//m_importDatasetWidget = new ImportDatasetWidget(nullptr);
 	//m_importDatasetWidget->hide();
-	m_datasetModel = new DatasetModel();
-	ctxt->setContextProperty("datasetModel", m_datasetModel);
-	qDebug() << "Categories: " << m_datasetModel->categories();
+
+	m_welcomeScreenHelper = new WelcomeScreenHelper();
+	ctxt->setContextProperty("datasetModel", m_welcomeScreenHelper->getDatasetModel());
+	ctxt->setContextProperty("helper", m_welcomeScreenHelper);
+	qDebug() << "Categories: " << m_welcomeScreenHelper->getDatasetModel()->categories();
 
 	quickWidget->setSource(source);
 	QObject *item = quickWidget->rootObject();
 	qDebug() << "Start connecting welcome screen";
 	QObject::connect(item, SIGNAL(recentProjectClicked(QUrl)), this, SLOT(openRecentProject(QUrl)));
-	QObject::connect(item, SIGNAL(datasetClicked(QString, QString, QString)), m_datasetModel, SLOT(datasetClicked(QString, QString, QString)));
+	QObject::connect(item, SIGNAL(datasetClicked(QString, QString, QString)), m_welcomeScreenHelper, SLOT(datasetClicked(QString, QString, QString)));
 	QObject::connect(item, SIGNAL(openDataset()), this, SLOT(openDatasetExample()));
 	qDebug() << "Finished connecting welcome screen";
-	m_datasetModel->showFirstDataset();
+	m_welcomeScreenHelper->showFirstDataset();
 
 	return quickWidget;
 }
@@ -2017,7 +2020,7 @@ void MainWin::handleSettingsChanges() {
 
 void MainWin::openDatasetExample() {
 	newProject();
-	addAspectToProject(m_datasetModel->releaseConfiguredSpreadsheet());
+	addAspectToProject(m_welcomeScreenHelper->releaseConfiguredSpreadsheet());
 }
 
 /***************************************************************************************/

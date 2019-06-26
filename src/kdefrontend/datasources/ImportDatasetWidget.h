@@ -37,6 +37,7 @@
 
 class QCompleter;
 class DatasetHandler;
+class DatasetModel;
 
 class ImportDatasetWidget : public QWidget {
 	Q_OBJECT
@@ -61,6 +62,7 @@ private:
 	QString m_jsonDir;
 	bool m_loadingCategories;
 	QString m_selectedCategory;
+	DatasetModel* m_datasetModel{nullptr};
 
 	void downloadCategoryFile();
 	void downloadDatasetFile(const QString&);
