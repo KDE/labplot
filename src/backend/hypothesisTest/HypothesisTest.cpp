@@ -284,6 +284,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 		sp = qSqrt( ((n[0]-1) * gsl_pow_2(std[0]) + (n[1]-1) * gsl_pow_2(std[1])) / df);
 		value = (mean[0] - mean[1]) / (sp * qSqrt( 1.0 / n[0] + 1.0 / n[1]));
 		p_value = gsl_cdf_gaussian_P(value, sp);
+		break;
 	}
 	case HypothesisTest::Test::Type::Anova:
 		break;
@@ -466,6 +467,7 @@ void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test
 		test_name = "Z";
 		df = 0;
 		value = (mean - m_population_mean) / (std / qSqrt(n));
+		break;
 	}
 	case HypothesisTest::Test::Type::Anova:
 		break;
@@ -606,8 +608,8 @@ void HypothesisTestPrivate::performOneWayAnova() {
 
 /**************************************Levene Test****************************************/
 // TODO: Fix: Program crashes when n = np;
-// Some reference to local variables.
 
+// Some reference to local variables.
 // np = number of partitions
 // df = degree of fredom
 // total_rows = total number of rows in column
@@ -782,6 +784,11 @@ void HypothesisTestPrivate::performLeveneTest(bool categorical_variable) {
 
 		for (int i = 0; i < np; i++)
 			numerator_value += ni[i]*gsl_pow_2( (zi_bar[i]-zi_bar_bar));
+
+		if (denominator_value <= 0) {
+			printError( "number of data points is less or than equal to number of categorical variables");
+			return;
+		}
 
 		f_value = ((n - np) / (np - 1)) * (numerator_value / denominator_value);
 

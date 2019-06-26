@@ -649,13 +649,13 @@ void HypothesisTestDock::col1IndexChanged(int index) {
 void HypothesisTestDock::onRbH1OneTail1Toggled(bool checked) {
     if (!checked) return;
     ui.rbH0OneTail1->setChecked(true);
-	m_test.tail = HypothesisTest::Test::Tail::Negative;
+	m_test.tail = HypothesisTest::Test::Tail::Positive;
 }
 
 void HypothesisTestDock::onRbH1OneTail2Toggled(bool checked) {
     if (!checked) return;
     ui.rbH0OneTail2->setChecked(true);
-	m_test.tail = HypothesisTest::Test::Tail::Positive;
+	m_test.tail = HypothesisTest::Test::Tail::Negative;
 
 }
 
