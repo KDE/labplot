@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : HypothesisTest.h
-    Project              : LabPlot
-    Description          : Doing Hypothesis-Test on data provided
-    --------------------------------------------------------------------
-    Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
+	File                 : HypothesisTest.h
+	Project              : LabPlot
+	Description          : Doing Hypothesis-Test on data provided
+	--------------------------------------------------------------------
+	Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
 
  ***************************************************************************/
 
@@ -40,11 +40,11 @@ class Column;
 class QLayout;
 
 class HypothesisTest : public AbstractPart {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit HypothesisTest(const QString& name);
-    ~HypothesisTest() override;
+	explicit HypothesisTest(const QString& name);
+	~HypothesisTest() override;
 
 	struct Test {
 		enum Type {
@@ -67,53 +67,54 @@ public:
 		Tail tail;
 	};
 
-    enum DataSourceType {DataSourceSpreadsheet, DataSourceDatabase};
+	enum DataSourceType {DataSourceSpreadsheet, DataSourceDatabase};
 
-    void setDataSourceType(DataSourceType type);
-    DataSourceType dataSourceType() const;
-    void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
+	void setDataSourceType(DataSourceType type);
+	DataSourceType dataSourceType() const;
+	void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
 
-    void setColumns(const QVector<Column*>& cols);
-    void setColumns(QStringList cols);
-    QStringList allColumns();
-    void setPopulationMean(QVariant populationMean);
-    void setSignificanceLevel(QVariant alpha);
-    QString testName();
-    QString statsTable();
+	void setColumns(const QVector<Column*>& cols);
+	void setColumns(QStringList cols);
+	QStringList allColumns();
+	void setPopulationMean(QVariant populationMean);
+	void setSignificanceLevel(QVariant alpha);
+	QString testName();
+	QString statsTable();
 
-	void performTest(Test m_test, bool categorical_variable, bool equal_variance);
-//	void performTwoSampleIndependentTTest(bool categorical_variable, bool equal_variance);
-//    void performTwoSamplePairedTTest();
-//    void performOneSampleTTest();
-//    void performTwoSampleIndependentZTest();
-//    void performTwoSamplePairedZTest();
-//    void performOneSampleZTest();
-//    void performOneWayAnova();
+	void performTest(Test m_test, bool categoricalVariable, bool equalVariance);
+	//	void performTwoSampleIndependentTTest(bool categorical_variable, bool equal_variance);
+	//    void performTwoSamplePairedTTest();
+	//    void performOneSampleTTest();
+	//    void performTwoSampleIndependentZTest();
+	//    void performTwoSamplePairedZTest();
+	//    void performOneSampleZTest();
+	//    void performOneWayAnova();
 
 	void performLeveneTest(bool categorical_variable);
 	//virtual methods
-//    QIcon icon() const override;
-    QMenu* createContextMenu() override;
-    QWidget* view() const override;
+	//    QIcon icon() const override;
+	QMenu* createContextMenu() override;
+	QWidget* view() const override;
 
-    bool exportView() const override;
-    bool printView() override;
-    bool printPreview() const override;
+	bool exportView() const override;
+	bool printView() override;
+	bool printPreview() const override;
 
-    void save(QXmlStreamWriter*) const override;
-    bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
 	Spreadsheet* dataSourceSpreadsheet() const;
+
 private:
-    HypothesisTestPrivate* const d;
-    mutable HypothesisTestView* m_view{nullptr};
-    friend class HypothesisTestPrivate;
+	HypothesisTestPrivate* const d;
+	mutable HypothesisTestView* m_view{nullptr};
+	friend class HypothesisTestPrivate;
 
 signals:
-    void changed();
-    void requestProjectContextMenu(QMenu*);
-    void dataSourceTypeChanged(HypothesisTest::DataSourceType);
-    void dataSourceSpreadsheetChanged(Spreadsheet*);
+	void changed();
+	void requestProjectContextMenu(QMenu*);
+	void dataSourceTypeChanged(HypothesisTest::DataSourceType);
+	void dataSourceSpreadsheetChanged(Spreadsheet*);
 };
 
 #endif // HypothesisTest_H

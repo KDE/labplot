@@ -57,159 +57,169 @@
 //TOOD: Make this dock widget scrollable and automatic resizeable for different screens.
 
 HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
-    ui.setupUi(this);
+	ui.setupUi(this);
 
-    ui.cbDataSourceType->addItem(i18n("Spreadsheet"));
-    ui.cbDataSourceType->addItem(i18n("Database"));
+	ui.cbDataSourceType->addItem(i18n("Spreadsheet"));
+	ui.cbDataSourceType->addItem(i18n("Database"));
 
-    cbSpreadsheet = new TreeViewComboBox;
-    ui.gridLayout->addWidget(cbSpreadsheet, 5, 4, 1, 3);
+	cbSpreadsheet = new TreeViewComboBox;
+	ui.gridLayout->addWidget(cbSpreadsheet, 5, 4, 1, 3);
 
-    ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
-    ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
-    m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "sql_connections";
+	ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
+	ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
+	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "sql_connections";
 
-    // adding item to tests and testtype combo box;
+	// adding item to tests and testtype combo box;
 
 	ui.cbTest->addItem( i18n("T Test"), HypothesisTest::Test::Type::TTest);
 	ui.cbTest->addItem( i18n("Z Test"), HypothesisTest::Test::Type::ZTest);
 	ui.cbTest->addItem( i18n("ANOVA"), HypothesisTest::Test::Type::Anova);
 
-    // making all test blocks invisible at starting.
-    ui.pbLeveneTest->hide();
-    ui.lCategorical->hide();
-    ui.chbCategorical->hide();
-    ui.lCol1->hide();
-    ui.cbCol1->hide();
-    ui.lCol2->hide();
-    ui.cbCol2->hide();
-    ui.lEqualVariance->hide();
-    ui.chbEqualVariance->hide();
-    ui.chbEqualVariance->setChecked(true);
-    ui.pbPerformTest->setEnabled(false);
-    ui.rbH1OneTail2->hide();
-    ui.rbH1OneTail1->hide();
-    ui.rbH1TwoTail->hide();
-    ui.rbH0OneTail1->hide();
-    ui.rbH0OneTail2->hide();
-    ui.rbH0TwoTail->hide();
-    ui.lH0->hide();
-    ui.lH1->hide();
+	ui.lPopulationSigma->setText( UTF8_QSTRING("σ"));
 
-    QString mu = UTF8_QSTRING("μ");
-    QString mu0 = UTF8_QSTRING("μₒ");
+	// making all test blocks invisible at starting.
+	ui.pbLeveneTest->hide();
+	ui.lCategorical->hide();
+	ui.chbCategorical->hide();
+	ui.lCol1->hide();
+	ui.cbCol1->hide();
+	ui.lCol2->hide();
+	ui.cbCol2->hide();
+	ui.lEqualVariance->hide();
+	ui.chbEqualVariance->hide();
+	ui.chbEqualVariance->setChecked(true);
+	ui.lPopulationSigma->hide();
+	ui.lPopulationSigma->setToolTip( i18n("Sigma of Population <br/> <br/> "
+										  "Hint: Z-Test if preffered over T-Test if this is known"));
+	ui.chbPopulationSigma->hide();
+	ui.lePopulationSigma->hide();
+	ui.pbPerformTest->setEnabled(false);
+	ui.rbH1OneTail2->hide();
+	ui.rbH1OneTail1->hide();
+	ui.rbH1TwoTail->hide();
+	ui.rbH0OneTail1->hide();
+	ui.rbH0OneTail2->hide();
+	ui.rbH0TwoTail->hide();
+	ui.lH0->hide();
+	ui.lH1->hide();
 
-    // radio button for null and alternate hypothesis
-    // for alternative hypothesis (h1)
-    // one_tail_1 is mu > mu0; one_tail_2 is mu < mu0; two_tail = mu != mu0;
+	QString mu = UTF8_QSTRING("μ");
+	QString mu0 = UTF8_QSTRING("μₒ");
 
-    ui.rbH1OneTail1->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING(">"), mu0));
-    ui.rbH1OneTail2->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("<"), mu0));
-    ui.rbH1TwoTail->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("≠"), mu0));
+	// radio button for null and alternate hypothesis
+	// for alternative hypothesis (h1)
+	// one_tail_1 is mu > mu0; one_tail_2 is mu < mu0; two_tail = mu != mu0;
 
-    ui.rbH0OneTail1->setText( i18n("%1 %2 %3",mu, UTF8_QSTRING("≤"), mu0));
-    ui.rbH0OneTail2->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("≥"), mu0));
-    ui.rbH0TwoTail->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("="), mu0));
+	ui.rbH1OneTail1->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING(">"), mu0));
+	ui.rbH1OneTail2->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("<"), mu0));
+	ui.rbH1TwoTail->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("≠"), mu0));
 
-    ui.rbH0TwoTail->setEnabled(false);
-    ui.rbH0OneTail1->setEnabled(false);
-    ui.rbH0OneTail2->setEnabled(false);
+	ui.rbH0OneTail1->setText( i18n("%1 %2 %3",mu, UTF8_QSTRING("≤"), mu0));
+	ui.rbH0OneTail2->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("≥"), mu0));
+	ui.rbH0TwoTail->setText( i18n("%1 %2 %3", mu, UTF8_QSTRING("="), mu0));
+
+	ui.rbH0TwoTail->setEnabled(false);
+	ui.rbH0OneTail1->setEnabled(false);
+	ui.rbH0OneTail2->setEnabled(false);
 
 
-    // setting muo and alpha buttons
-    ui.lMuo->setText( i18n("%1", mu0));
-    ui.lAlpha->setText( i18n("%1", UTF8_QSTRING("α")));
-    ui.leMuo->setText( i18n("%1", population_mean));
-    ui.leAlpha->setText( i18n("%1", significance_level));
+	// setting muo and alpha buttons
+	ui.lMuo->setText( i18n("%1", mu0));
+	ui.lAlpha->setText( i18n("%1", UTF8_QSTRING("α")));
+	ui.leMuo->setText( i18n("%1", m_populationMean));
+	ui.leAlpha->setText( i18n("%1", m_significanceLevel));
 
-    ui.lMuo->hide();
-    ui.lAlpha->hide();
-    ui.leMuo->hide();
-    ui.leAlpha->hide();
+	ui.lMuo->hide();
+	ui.lMuo->setToolTip( i18n("Population Mean"));
+	ui.lAlpha->hide();
+	ui.lAlpha->setToolTip( i18n("Significance Level"));
+	ui.leMuo->hide();
+	ui.leAlpha->hide();
+	ui.pbPerformTest->setIcon(QIcon::fromTheme("run-build"));
 
-    ui.pbPerformTest->setIcon(QIcon::fromTheme("run-build"));
-
-    ui.leMuo->setText( i18n("%1", population_mean));
-    ui.leAlpha->setText( i18n("%1", significance_level));
+	ui.leMuo->setText( i18n("%1", m_populationMean));
+	ui.leAlpha->setText( i18n("%1", m_significanceLevel));
 	showTestType();
 
-    //    readConnections();
+	//    readConnections();
 
-    //    auto* style = ui.bAddRow->style();
-    //    ui.bAddRow->setIcon(style->standardIcon(QStyle::SP_ArrowRight));
-    //    ui.bAddRow->setToolTip(i18n("Add the selected field to rows"));
-    //    ui.bRemoveRow->setIcon(style->standardIcon(QStyle::SP_ArrowLeft));
-    //    ui.bRemoveRow->setToolTip(i18n("Remove the selected field from rows"));
+	//    auto* style = ui.bAddRow->style();
+	//    ui.bAddRow->setIcon(style->standardIcon(QStyle::SP_ArrowRight));
+	//    ui.bAddRow->setToolTip(i18n("Add the selected field to rows"));
+	//    ui.bRemoveRow->setIcon(style->standardIcon(QStyle::SP_ArrowLeft));
+	//    ui.bRemoveRow->setToolTip(i18n("Remove the selected field from rows"));
 
-    //    ui.bAddColumn->setIcon(style->standardIcon(QStyle::SP_ArrowRight));
-    //    ui.bAddColumn->setToolTip(i18n("Add the selected field to columns"));
-    //    ui.bRemoveColumn->setIcon(style->standardIcon(QStyle::SP_ArrowLeft));
-    //    ui.bRemoveColumn->setToolTip(i18n("Remove the selected field from columns"));
+	//    ui.bAddColumn->setIcon(style->standardIcon(QStyle::SP_ArrowRight));
+	//    ui.bAddColumn->setToolTip(i18n("Add the selected field to columns"));
+	//    ui.bRemoveColumn->setIcon(style->standardIcon(QStyle::SP_ArrowLeft));
+	//    ui.bRemoveColumn->setToolTip(i18n("Remove the selected field from columns"));
 
-    //    //add/remove buttons only enabled if something was selected
-    //    ui.bAddRow->setEnabled(false);
-    //    ui.bRemoveRow->setEnabled(false);
-    //    ui.bAddColumn->setEnabled(false);
-    //    ui.bRemoveColumn->setEnabled(false);
+	//    //add/remove buttons only enabled if something was selected
+	//    ui.bAddRow->setEnabled(false);
+	//    ui.bRemoveRow->setEnabled(false);
+	//    ui.bAddColumn->setEnabled(false);
+	//    ui.bRemoveColumn->setEnabled(false);
 
-    //    connect(ui.leName, &QLineEdit::textChanged, this, &HypothesisTestDock::nameChanged);
-    //    connect(ui.leComment, &QLineEdit::textChanged, this, &HypothesisTestDock::commentChanged);
-    connect(ui.cbDataSourceType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-            this, &HypothesisTestDock::dataSourceTypeChanged);
+	//    connect(ui.leName, &QLineEdit::textChanged, this, &HypothesisTestDock::nameChanged);
+	//    connect(ui.leComment, &QLineEdit::textChanged, this, &HypothesisTestDock::commentChanged);
+	connect(ui.cbDataSourceType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+	        this, &HypothesisTestDock::dataSourceTypeChanged);
 
-    connect(cbSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &HypothesisTestDock::spreadsheetChanged);
-    //    connect(ui.cbConnection, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-    //            this, &HypothesisTestDock::connectionChanged);
-    //    connect(ui.cbTable, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-    //            this, &HypothesisTestDock::tableChanged);
-    //    connect(ui.bDatabaseManager, &QPushButton::clicked, this, &HypothesisTestDock::showDatabaseManager);
+	connect(cbSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &HypothesisTestDock::spreadsheetChanged);
+	//    connect(ui.cbConnection, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+	//            this, &HypothesisTestDock::connectionChanged);
+	//    connect(ui.cbTable, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+	//            this, &HypothesisTestDock::tableChanged);
+	//    connect(ui.bDatabaseManager, &QPushButton::clicked, this, &HypothesisTestDock::showDatabaseManager);
 
-    //    connect(ui.bAddRow,  &QPushButton::clicked, this, &HypothesisTestDock::addRow);
-    //    connect(ui.bRemoveRow, &QPushButton::clicked, this,&HypothesisTestDock::removeRow);
-    //    connect(ui.bAddColumn,  &QPushButton::clicked, this, &HypothesisTestDock::addColumn);
-    //    connect(ui.bRemoveColumn, &QPushButton::clicked, this,&HypothesisTestDock::removeColumn);
+	//    connect(ui.bAddRow,  &QPushButton::clicked, this, &HypothesisTestDock::addRow);
+	//    connect(ui.bRemoveRow, &QPushButton::clicked, this,&HypothesisTestDock::removeRow);
+	//    connect(ui.bAddColumn,  &QPushButton::clicked, this, &HypothesisTestDock::addColumn);
+	//    connect(ui.bRemoveColumn, &QPushButton::clicked, this,&HypothesisTestDock::removeColumn);
 
-    //      connect(ui.cbCol1, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::doTTest);
-    //      connect(ui.cbCol2, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::doTTest);
+	//      connect(ui.cbCol1, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::doTTest);
+	//      connect(ui.cbCol2, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::doTTest);
 
-    //    connect(ui.lwFields, &QListWidget::itemSelectionChanged, this, [=]() {
-    //        bool enabled = !ui.lwFields->selectedItems().isEmpty();
-    //        ui.bAddRow->setEnabled(enabled);
-    //        ui.bAddColumn->setEnabled(enabled);
-    //    });
+	//    connect(ui.lwFields, &QListWidget::itemSelectionChanged, this, [=]() {
+	//        bool enabled = !ui.lwFields->selectedItems().isEmpty();
+	//        ui.bAddRow->setEnabled(enabled);
+	//        ui.bAddColumn->setEnabled(enabled);
+	//    });
 
-    //    connect(ui.lwRows, &QListWidget::doubleClicked, this,&HypothesisTestDock::removeRow);
-    //    connect(ui.lwRows, &QListWidget::itemSelectionChanged, this, [=]() {
-    //        ui.bRemoveRow->setEnabled(!ui.lwRows->selectedItems().isEmpty());
-    //    });
+	//    connect(ui.lwRows, &QListWidget::doubleClicked, this,&HypothesisTestDock::removeRow);
+	//    connect(ui.lwRows, &QListWidget::itemSelectionChanged, this, [=]() {
+	//        ui.bRemoveRow->setEnabled(!ui.lwRows->selectedItems().isEmpty());
+	//    });
 
-    //    connect(ui.lwColumns, &QListWidget::doubleClicked, this,&HypothesisTestDock::removeColumn);
-    //    connect(ui.lwColumns, &QListWidget::itemSelectionChanged, this, [=]() {
-    //        ui.bRemoveColumn->setEnabled(!ui.lwColumns->selectedItems().isEmpty());
-    //    });
+	//    connect(ui.lwColumns, &QListWidget::doubleClicked, this,&HypothesisTestDock::removeColumn);
+	//    connect(ui.lwColumns, &QListWidget::itemSelectionChanged, this, [=]() {
+	//        ui.bRemoveColumn->setEnabled(!ui.lwColumns->selectedItems().isEmpty());
+	//    });
 
-    connect(ui.cbTest, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &HypothesisTestDock::showTestType);
-    connect(ui.cbTestType, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &HypothesisTestDock::showHypothesisTest);
-    //    connect(ui.cbTest, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::showHypothesisTest);
-    //    connect(ui.cbTestType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::showHypothesisTest);
-    connect(ui.pbPerformTest, &QPushButton::clicked, this, &HypothesisTestDock::doHypothesisTest);
-    connect(ui.pbLeveneTest, &QPushButton::clicked, this, &HypothesisTestDock::performLeveneTest);
+	connect(ui.cbTest, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &HypothesisTestDock::showTestType);
+	connect(ui.cbTestType, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &HypothesisTestDock::showHypothesisTest);
+	//    connect(ui.cbTest, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::showHypothesisTest);
+	//    connect(ui.cbTestType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::showHypothesisTest);
+	connect(ui.pbPerformTest, &QPushButton::clicked, this, &HypothesisTestDock::doHypothesisTest);
+	connect(ui.pbLeveneTest, &QPushButton::clicked, this, &HypothesisTestDock::performLeveneTest);
 
 
-    //connecting null hypothesis and alternate hypothesis radio button
-    connect(ui.rbH1OneTail1, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1OneTail1Toggled);
-    connect(ui.rbH1OneTail2, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1OneTail2Toggled);
-    connect(ui.rbH1TwoTail, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1TwoTailToggled);
+	//connecting null hypothesis and alternate hypothesis radio button
+	connect(ui.rbH1OneTail1, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1OneTail1Toggled);
+	connect(ui.rbH1OneTail2, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1OneTail2Toggled);
+	connect(ui.rbH1TwoTail, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1TwoTailToggled);
 
-    connect(ui.cbCol1, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::col1IndexChanged);
-    connect(ui.chbCategorical, &QCheckBox::stateChanged, this, &HypothesisTestDock::changeCbCol2Label);
+	connect(ui.cbCol1, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::col1IndexChanged);
+	connect(ui.chbCategorical, &QCheckBox::stateChanged, this, &HypothesisTestDock::changeCbCol2Label);
+
+	connect(ui.chbPopulationSigma, &QCheckBox::stateChanged, this, &HypothesisTestDock::chbPopulationSigmaStateChanged);
 }
 
 void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
-    m_initializing = true;
-    m_hypothesisTest = HypothesisTest;
+	m_initializing = true;
+	m_hypothesisTest = HypothesisTest;
 
-    m_aspectTreeModel = new AspectTreeModel(m_hypothesisTest->project());
+	m_aspectTreeModel = new AspectTreeModel(m_hypothesisTest->project());
 
 	QList<AspectType> list{AspectType::Folder, AspectType::Workbook,
 	                       AspectType::Spreadsheet, AspectType::LiveDataSource};
@@ -218,99 +228,103 @@ void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
     list = {AspectType::Spreadsheet, AspectType::LiveDataSource};
     m_aspectTreeModel->setSelectableAspects(list);
 
-    cbSpreadsheet->setModel(m_aspectTreeModel);
+	cbSpreadsheet->setModel(m_aspectTreeModel);
 
-    //show the properties
-    ui.leName->setText(m_hypothesisTest->name());
-    ui.leComment->setText(m_hypothesisTest->comment());
-    ui.cbDataSourceType->setCurrentIndex(m_hypothesisTest->dataSourceType());
+	//show the properties
+	ui.leName->setText(m_hypothesisTest->name());
+	ui.leComment->setText(m_hypothesisTest->comment());
+	ui.cbDataSourceType->setCurrentIndex(m_hypothesisTest->dataSourceType());
 	if (m_hypothesisTest->dataSourceType() == HypothesisTest::DataSourceType::DataSourceSpreadsheet)
-        setModelIndexFromAspect(cbSpreadsheet, m_hypothesisTest->dataSourceSpreadsheet());
-    //    else
-    //        ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_hypothesisTest->dataSourceConnection()));
+		setModelIndexFromAspect(cbSpreadsheet, m_hypothesisTest->dataSourceSpreadsheet());
+	//    else
+	//        ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_hypothesisTest->dataSourceConnection()));
 
-    setColumnsComboBoxModel(m_hypothesisTest->dataSourceSpreadsheet());
+	setColumnsComboBoxModel(m_hypothesisTest->dataSourceSpreadsheet());
 
-    this->dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
+	this->dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
 
-    //setting rows and columns in combo box;
+	//setting rows and columns in combo box;
 
-    //undo functions
-    connect(m_hypothesisTest, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(hypothesisTestDescriptionChanged(const AbstractAspect*)));
-    //TODO:
+	//undo functions
+	connect(m_hypothesisTest, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(hypothesisTestDescriptionChanged(const AbstractAspect*)));
+	//TODO:
 
-    m_initializing = false;
+	m_initializing = false;
+	showTestType();
 }
 
 void HypothesisTestDock::showTestType() {
 	m_test.type = HypothesisTest::Test::Type(ui.cbTest->currentData().toInt());
 
-    ui.cbTestType->clear();
+	ui.cbTestType->clear();
 	if (m_test.type & (HypothesisTest::Test::Type::TTest | HypothesisTest::Test::Type::ZTest)) {
 		ui.cbTestType->addItem( i18n("Two Sample Independent"), HypothesisTest::Test::SubType::TwoSampleIndependent);
 		ui.cbTestType->addItem( i18n("Two Sample Paired"), HypothesisTest::Test::SubType::TwoSamplePaired);
 		ui.cbTestType->addItem( i18n("One Sample"), HypothesisTest::Test::SubType::OneSample);
-    }
-	else if (m_test.type & HypothesisTest::Test::Type::Anova) {
+	} else if (m_test.type & HypothesisTest::Test::Type::Anova) {
 		ui.cbTestType->addItem( i18n("One Way"), HypothesisTest::Test::SubType::OneWay);
 		ui.cbTestType->addItem( i18n("Two Way"), HypothesisTest::Test::SubType::TwoWay);
-    }
+	}
 
-    showHypothesisTest();
+	showHypothesisTest();
 }
 
 void HypothesisTestDock::showHypothesisTest() {
 	m_test.subtype = HypothesisTest::Test::SubType(ui.cbTestType->currentData().toInt());
 
-    ui.lCol1->show();
-    ui.cbCol1->show();
+	ui.lCol1->show();
+	ui.cbCol1->show();
 
 	ui.lCol2->setVisible(m_test.subtype & (~HypothesisTest::Test::SubType::OneSample));
-	ui.cbCol2->setVisible(m_test.subtype & (~HypothesisTest::Test::SubType::OneSample));
+	ui.cbCol2->setVisible(ui.lCol2->isVisible());
 
 	ui.lEqualVariance->setVisible( (m_test.type & HypothesisTest::Test::Type::TTest) &
-								   (m_test.subtype & HypothesisTest::Test::SubType::TwoSampleIndependent));
-	ui.chbEqualVariance->setVisible( (m_test.type & HypothesisTest::Test::Type::TTest) &
-									 (m_test.subtype & HypothesisTest::Test::SubType::TwoSampleIndependent));
+	                               (m_test.subtype & HypothesisTest::Test::SubType::TwoSampleIndependent));
+	ui.chbEqualVariance->setVisible( ui.lEqualVariance->isVisible());
 
 	ui.lCategorical->setVisible( (m_test.type & HypothesisTest::Test::Type::TTest) &
-								 (m_test.subtype & HypothesisTest::Test::SubType::TwoSampleIndependent));
-	ui.chbCategorical->setVisible( (m_test.type & HypothesisTest::Test::Type::TTest) &
-								   (m_test.subtype & HypothesisTest::Test::SubType::TwoSampleIndependent));
+	                             (m_test.subtype & HypothesisTest::Test::SubType::TwoSampleIndependent));
+	ui.chbCategorical->setVisible( ui.lCategorical->isVisible());
+	ui.chbEqualVariance->setChecked(true);
 
-	ui.pbLeveneTest->setVisible( (m_test.type & HypothesisTest::Test::Type::Anova) |
-								 ( (m_test.type & HypothesisTest::Test::Type::TTest) &
-								   (m_test.subtype & HypothesisTest::Test::SubType::TwoSampleIndependent)));
+	ui.lPopulationSigma->setVisible((m_test.type & (HypothesisTest::Test::Type::TTest |
+													HypothesisTest::Test::Type::ZTest)) &
+									 ~(setAllBits(m_test.subtype & HypothesisTest::Test::SubType::OneSample)));
 
-    ui.chbEqualVariance->setChecked(true);
+	ui.chbPopulationSigma->setVisible( ui.lPopulationSigma->isVisible());
+	ui.chbPopulationSigma->setChecked(false);
 
-	ui.lH1->setVisible( (m_test.type & ~HypothesisTest::Test::Type::Anova));
-	ui.rbH1OneTail1->setVisible( (m_test.type & ~HypothesisTest::Test::Type::Anova));
-	ui.rbH1OneTail2->setVisible( (m_test.type & ~HypothesisTest::Test::Type::Anova));
-	ui.rbH1TwoTail->setVisible( (m_test.type & ~HypothesisTest::Test::Type::Anova));
+	ui.pbLeveneTest->setVisible( (m_test.type & (HypothesisTest::Test::Type::Anova |
+												HypothesisTest::Test::Type::TTest)) &
+								   setAllBits(m_test.subtype & HypothesisTest::Test::SubType::TwoSampleIndependent));
 
-	ui.lH0->setVisible( (m_test.type & ~HypothesisTest::Test::Type::Anova));
-	ui.rbH0OneTail1->setVisible( (m_test.type & ~HypothesisTest::Test::Type::Anova));
-	ui.rbH0OneTail2->setVisible( (m_test.type & ~HypothesisTest::Test::Type::Anova));
-	ui.rbH0TwoTail->setVisible( (m_test.type & ~HypothesisTest::Test::Type::Anova));
+	ui.lH1->setVisible(m_test.type & ~HypothesisTest::Test::Type::Anova);
+	ui.rbH1OneTail1->setVisible(m_test.type & ~HypothesisTest::Test::Type::Anova);
+	ui.rbH1OneTail2->setVisible(m_test.type & ~HypothesisTest::Test::Type::Anova);
+	ui.rbH1TwoTail->setVisible(m_test.type & ~HypothesisTest::Test::Type::Anova);
 
-    ui.rbH1TwoTail->setChecked(true);
+	ui.lH0->setVisible(m_test.type & ~HypothesisTest::Test::Type::Anova);
+	ui.rbH0OneTail1->setVisible(m_test.type & ~HypothesisTest::Test::Type::Anova);
+	ui.rbH0OneTail2->setVisible(m_test.type & ~HypothesisTest::Test::Type::Anova);
+	ui.rbH0TwoTail->setVisible(m_test.type & ~HypothesisTest::Test::Type::Anova);
 
-	ui.lMuo->setVisible( (m_test.subtype & HypothesisTest::Test::SubType::OneSample));
-	ui.leMuo->setVisible( (m_test.subtype & HypothesisTest::Test::SubType::OneSample));
+	ui.rbH1TwoTail->setChecked(true);
 
-    ui.lAlpha->show();
-    ui.leAlpha->show();
+	ui.lMuo->setVisible(m_test.subtype & HypothesisTest::Test::SubType::OneSample);
+	ui.leMuo->setVisible(ui.lMuo->isVisible());
 
-    setColumnsComboBoxView();
+	ui.lAlpha->show();
+	ui.leAlpha->show();
 
-    ui.pbPerformTest->setEnabled(nonEmptySelectedColumns());
-    ui.pbLeveneTest->setEnabled(nonEmptySelectedColumns());
+	setColumnsComboBoxView();
+
+	ui.pbPerformTest->setEnabled(nonEmptySelectedColumns());
+	ui.pbLeveneTest->setEnabled(nonEmptySelectedColumns());
 }
 
 void HypothesisTestDock::doHypothesisTest()  {
-    m_hypothesisTest->setPopulationMean(ui.leMuo->text());
-    m_hypothesisTest->setSignificanceLevel(ui.leAlpha->text());
+	m_hypothesisTest->setPopulationMean(ui.leMuo->text());
+	m_hypothesisTest->setSignificanceLevel(ui.leAlpha->text());
 
 	QVector<Column*> cols;
 	cols << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
@@ -322,19 +336,19 @@ void HypothesisTestDock::doHypothesisTest()  {
 }
 
 void HypothesisTestDock::performLeveneTest()  {
-    QStringList cols;
-    cols << ui.cbCol1->currentText() << ui.cbCol2->currentText();
-    m_hypothesisTest->setColumns(cols);
-    m_hypothesisTest->setSignificanceLevel(ui.leAlpha->text());
+	QStringList cols;
+	cols << ui.cbCol1->currentText() << ui.cbCol2->currentText();
+	m_hypothesisTest->setColumns(cols);
+	m_hypothesisTest->setSignificanceLevel(ui.leAlpha->text());
 
-    m_hypothesisTest->performLeveneTest(ui.chbCategorical->isChecked());
+	m_hypothesisTest->performLeveneTest(ui.chbCategorical->isChecked());
 }
 
 void HypothesisTestDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
-    if (aspect)
-        cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(aspect));
-    else
-        cb->setCurrentModelIndex(QModelIndex());
+	if (aspect)
+		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(aspect));
+	else
+		cb->setCurrentModelIndex(QModelIndex());
 }
 
 ///*!
@@ -462,53 +476,60 @@ void HypothesisTestDock::setModelIndexFromAspect(TreeViewComboBox* cb, const Abs
 void HypothesisTestDock::dataSourceTypeChanged(int index) {
 	HypothesisTest::DataSourceType type = static_cast<HypothesisTest::DataSourceType>(index);
 	bool showDatabase = (type == HypothesisTest::DataSourceType::DataSourceDatabase);
-    ui.lSpreadsheet->setVisible(!showDatabase);
-    cbSpreadsheet->setVisible(!showDatabase);
-    ui.lConnection->setVisible(showDatabase);
-    ui.cbConnection->setVisible(showDatabase);
-    ui.bDatabaseManager->setVisible(showDatabase);
-    ui.lTable->setVisible(showDatabase);
-    ui.cbTable->setVisible(showDatabase);
+	ui.lSpreadsheet->setVisible(!showDatabase);
+	cbSpreadsheet->setVisible(!showDatabase);
+	ui.lConnection->setVisible(showDatabase);
+	ui.cbConnection->setVisible(showDatabase);
+	ui.bDatabaseManager->setVisible(showDatabase);
+	ui.lTable->setVisible(showDatabase);
+	ui.cbTable->setVisible(showDatabase);
 
-    if (m_initializing)
-        return;
+	if (m_initializing)
+		return;
 
-    m_hypothesisTest->setComment(ui.leComment->text());
+	m_hypothesisTest->setComment(ui.leComment->text());
 }
 
 void HypothesisTestDock::spreadsheetChanged(const QModelIndex& index) {
-    auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-    Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
-    setColumnsComboBoxModel(spreadsheet);
-    m_hypothesisTest->setDataSourceSpreadsheet(spreadsheet);
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
+	setColumnsComboBoxModel(spreadsheet);
+	m_hypothesisTest->setDataSourceSpreadsheet(spreadsheet);
 }
 
 void HypothesisTestDock::changeCbCol2Label() {
 	if ( (m_test.type & ~HypothesisTest::Test::Type::Anova) & (m_test.subtype & ~HypothesisTest::Test::SubType::TwoSampleIndependent)) {
-        ui.lCol2->setText( i18n("Independent Var. 2"));
-        return;
-    }
+		ui.lCol2->setText( i18n("Independent Var. 2"));
+		return;
+	}
 
-    QString selected_text = ui.cbCol1->currentText();
-    Column* col1 = m_hypothesisTest->dataSourceSpreadsheet()->column(selected_text);
+	QString selected_text = ui.cbCol1->currentText();
+	Column* col1 = m_hypothesisTest->dataSourceSpreadsheet()->column(selected_text);
 
-    if (!ui.chbCategorical->isChecked() && (col1->columnMode() == AbstractColumn::Integer || col1->columnMode() == AbstractColumn::Numeric)) {
-        ui.lCol2->setText( i18n("Independent Var. 2"));
-        ui.chbCategorical->setChecked(false);
-        ui.chbCategorical->setEnabled(true);
-    } else {
-        ui.lCol2->setText( i18n("Dependent Var. 1"));
-        if (!ui.chbCategorical->isChecked())
-            ui.chbCategorical->setEnabled(false);
-        else
-            ui.chbCategorical->setEnabled(true);
-        ui.chbCategorical->setChecked(true);
-    }
+	if (!ui.chbCategorical->isChecked() && (col1->columnMode() == AbstractColumn::Integer || col1->columnMode() == AbstractColumn::Numeric)) {
+		ui.lCol2->setText( i18n("Independent Var. 2"));
+		ui.chbCategorical->setChecked(false);
+		ui.chbCategorical->setEnabled(true);
+	} else {
+		ui.lCol2->setText( i18n("Dependent Var. 1"));
+		if (!ui.chbCategorical->isChecked())
+			ui.chbCategorical->setEnabled(false);
+		else
+			ui.chbCategorical->setEnabled(true);
+		ui.chbCategorical->setChecked(true);
+	}
+}
+
+void HypothesisTestDock::chbPopulationSigmaStateChanged() {
+	if (ui.chbPopulationSigma->isVisible() && ui.chbPopulationSigma->isChecked())
+		ui.lePopulationSigma->show();
+	else
+		ui.lePopulationSigma->hide();
 }
 
 void HypothesisTestDock::col1IndexChanged(int index) {
-    if (index < 0) return;
-    changeCbCol2Label();
+	if (index < 0) return;
+	changeCbCol2Label();
 }
 
 
@@ -647,21 +668,21 @@ void HypothesisTestDock::col1IndexChanged(int index) {
 // for alternate hypothesis
 // one_tail_1 is mu > mu0; one_tail_2 is mu < mu0; two_tail = mu != mu0;
 void HypothesisTestDock::onRbH1OneTail1Toggled(bool checked) {
-    if (!checked) return;
-    ui.rbH0OneTail1->setChecked(true);
+	if (!checked) return;
+	ui.rbH0OneTail1->setChecked(true);
 	m_test.tail = HypothesisTest::Test::Tail::Positive;
 }
 
 void HypothesisTestDock::onRbH1OneTail2Toggled(bool checked) {
-    if (!checked) return;
-    ui.rbH0OneTail2->setChecked(true);
+	if (!checked) return;
+	ui.rbH0OneTail2->setChecked(true);
 	m_test.tail = HypothesisTest::Test::Tail::Negative;
 
 }
 
 void HypothesisTestDock::onRbH1TwoTailToggled(bool checked) {
-    if (!checked) return;
-    ui.rbH0TwoTail->setChecked(true);
+	if (!checked) return;
+	ui.rbH0TwoTail->setChecked(true);
 	m_test.tail = HypothesisTest::Test::Tail::Two;
 }
 
@@ -669,91 +690,96 @@ void HypothesisTestDock::onRbH1TwoTailToggled(bool checked) {
 /**************************************Helper Functions********************************************/
 
 void HypothesisTestDock::countPartitions(Column *column, int &np, int &total_rows) {
-    total_rows = column->rowCount();
-    np = 0;
-    QString cell_value;
-    QMap<QString, bool> discovered_categorical_var;
+	total_rows = column->rowCount();
+	np = 0;
+	QString cell_value;
+	QMap<QString, bool> discovered_categorical_var;
 
-    AbstractColumn::ColumnMode original_col_mode = column->columnMode();
-    column->setColumnMode(AbstractColumn::Text);
+	AbstractColumn::ColumnMode original_col_mode = column->columnMode();
+	column->setColumnMode(AbstractColumn::Text);
 
-    for (int i = 0; i < total_rows; i++) {
-        cell_value = column->textAt(i);
+	for (int i = 0; i < total_rows; i++) {
+		cell_value = column->textAt(i);
 
-        if (cell_value.isEmpty()) {
-            total_rows = i;
-            break;
-        }
+		if (cell_value.isEmpty()) {
+			total_rows = i;
+			break;
+		}
 
-        if (discovered_categorical_var[cell_value])
-            continue;
+		if (discovered_categorical_var[cell_value])
+			continue;
 
-        discovered_categorical_var[cell_value] = true;
-        np++;
-    }
-    column->setColumnMode(original_col_mode);
+		discovered_categorical_var[cell_value] = true;
+		np++;
+	}
+	column->setColumnMode(original_col_mode);
 }
 
 void HypothesisTestDock::setColumnsComboBoxModel(Spreadsheet* spreadsheet) {
-    only_values_cols.clear();
-    two_categorical_cols.clear();
-    multi_categorical_cols.clear();
+	m_onlyValuesCols.clear();
+	m_twoCategoricalCols.clear();
+	m_multiCategoricalCols.clear();
 
-    for (auto* col : spreadsheet->children<Column>()) {
-        if (col->columnMode() == AbstractColumn::Integer || col->columnMode() == AbstractColumn::Numeric)
-            only_values_cols.append(col);
-        else {
-            int np = 0, n_rows = 0;
-            countPartitions(col, np, n_rows);
-            if (np <= 1)
-                continue;
-            else if (np == 2)
-                two_categorical_cols.append(col);
-            else {
-                multi_categorical_cols.append(col);
-            }
-        }
-    }
-    setColumnsComboBoxView();
-    showHypothesisTest();
+	for (auto* col : spreadsheet->children<Column>()) {
+		if (col->columnMode() == AbstractColumn::Integer || col->columnMode() == AbstractColumn::Numeric)
+			m_onlyValuesCols.append(col);
+		else {
+			int np = 0, n_rows = 0;
+			countPartitions(col, np, n_rows);
+			if (np <= 1)
+				continue;
+			else if (np == 2)
+				m_twoCategoricalCols.append(col);
+			else
+				m_multiCategoricalCols.append(col);
+		}
+	}
+	setColumnsComboBoxView();
+	showHypothesisTest();
 }
 
 void HypothesisTestDock::setColumnsComboBoxView() {
 
-    ui.cbCol1->clear();
-    ui.cbCol2->clear();
+	ui.cbCol1->clear();
+	ui.cbCol2->clear();
 
-    QList<Column*>::iterator i;
+	QList<Column*>::iterator i;
 	if (m_test.subtype & HypothesisTest::Test::SubType::TwoSampleIndependent) {
-        for (i = only_values_cols.begin(); i != only_values_cols.end(); i++) {
-            ui.cbCol1->addItem( (*i)->name(), qint64(*i));
-            ui.cbCol2->addItem( (*i)->name(), qint64(*i));
-        }
-        for (i = two_categorical_cols.begin(); i != two_categorical_cols.end(); i++)
-            ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+		for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++) {
+			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+			ui.cbCol2->addItem( (*i)->name(), qint64(*i));
+		}
+		for (i = m_twoCategoricalCols.begin(); i != m_twoCategoricalCols.end(); i++)
+			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
 	} else if (m_test.subtype & HypothesisTest::Test::SubType::TwoSamplePaired) {
-        for (i = only_values_cols.begin(); i != only_values_cols.end(); i++) {
-            ui.cbCol1->addItem( (*i)->name(), qint64(*i));
-            ui.cbCol2->addItem( (*i)->name(), qint64(*i));
-        }
+		for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++) {
+			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+			ui.cbCol2->addItem( (*i)->name(), qint64(*i));
+		}
 	} else if (m_test.subtype & HypothesisTest::Test::SubType::OneSample) {
-        for (i = only_values_cols.begin(); i != only_values_cols.end(); i++)
-            ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+		for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++)
+			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
 	} else if (m_test.type & HypothesisTest::Test::Type::Anova) {
-        for (i = only_values_cols.begin(); i != only_values_cols.end(); i++)
-            ui.cbCol2->addItem( (*i)->name(), qint64(*i));
+		for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++)
+			ui.cbCol2->addItem( (*i)->name(), qint64(*i));
 
-        for (i = two_categorical_cols.begin(); i != two_categorical_cols.end(); i++)
-            ui.cbCol1->addItem( (*i)->name(), qint64(*i));
-        for (i = multi_categorical_cols.begin(); i != multi_categorical_cols.end(); i++)
-            ui.cbCol1->addItem( (*i)->name(), qint64(*i));
-    }
+		for (i = m_twoCategoricalCols.begin(); i != m_twoCategoricalCols.end(); i++)
+			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+		for (i = m_multiCategoricalCols.begin(); i != m_multiCategoricalCols.end(); i++)
+			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+	}
 }
 
 bool HypothesisTestDock::nonEmptySelectedColumns() {
-    if (ui.cbCol1->isVisible() && ui.cbCol1->count() < 1)
-        return false;
-    if (ui.cbCol2->isVisible() && ui.cbCol2->count() < 1)
-        return false;
-    return true;
+	if (ui.cbCol1->isVisible() && ui.cbCol1->count() < 1)
+		return false;
+	if (ui.cbCol2->isVisible() && ui.cbCol2->count() < 1)
+		return false;
+	return true;
+}
+
+uint8_t HypothesisTestDock::setAllBits(const uint8_t& bits) {
+	if (!bits)
+		return 0;
+	return ~(bits & (bits-1));
 }
