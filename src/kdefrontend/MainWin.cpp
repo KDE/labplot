@@ -314,7 +314,7 @@ void MainWin::initGUI(const QString& fileName) {
 	const bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
 	if(showWelcomeScreen) {
 		m_welcomeWidget = createWelcomeScreen();
-		setCentralWidget(m_welcomeWidget);
+		setCentralWidget(m_welcomeWidget);		
 	}	
 }
 
@@ -323,6 +323,17 @@ void MainWin::initGUI(const QString& fileName) {
  * @return
  */
 QQuickWidget* MainWin::createWelcomeScreen() {
+	showMaximized();
+	setGeometry(
+		QStyle::alignedRect(
+			Qt::LeftToRight,
+			Qt::AlignCenter,
+			size(),
+			qApp->desktop()->availableGeometry()
+		)
+	);
+	layout()->setSizeConstraint(QLayout::SetFixedSize);
+
 	KToolBar* toolbar = toolBar();
 	if(toolbar != nullptr) {
 		toolbar->setVisible(false);
@@ -352,6 +363,7 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	qDebug() << "Categories: " << m_welcomeScreenHelper->getDatasetModel()->categories();
 
 	quickWidget->setSource(source);
+	quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	QObject *item = quickWidget->rootObject();
 	qDebug() << "Start connecting welcome screen";
 	QObject::connect(item, SIGNAL(recentProjectClicked(QUrl)), this, SLOT(openRecentProject(QUrl)));
@@ -367,6 +379,8 @@ QQuickWidget* MainWin::createWelcomeScreen() {
  * @brief Creates a new MDI area, to replace the Welcome Screen as central widget
  */
 void MainWin::createMdiArea() {
+	layout()->setSizeConstraint(QLayout::SetDefaultConstraint);
+
 	KToolBar* toolbar = toolBar();
 	if(toolbar != nullptr) {
 		toolbar->setVisible(true);
