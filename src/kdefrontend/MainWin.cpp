@@ -323,15 +323,12 @@ void MainWin::initGUI(const QString& fileName) {
  * @return
  */
 QQuickWidget* MainWin::createWelcomeScreen() {
-	auto* mainToolBar = qobject_cast<QToolBar*>(factory()->container("main_toolbar", this));
-	mainToolBar->setVisible(false);
-	mainToolBar->setEnabled(false);
-	mainToolBar->hide();
-
-	KXMLGUIFactory* factory = this->guiFactory();
-	factory->container("main_toolbar", this)->hide();
-	factory->container("main_toolbar", this)->setEnabled(false);
-	factory->container("main_toolbar", this)->setVisible(false);
+	KToolBar* toolbar = toolBar();
+	if(toolbar != nullptr) {
+		toolbar->setVisible(false);
+	} else {
+		qDebug() << "There is no toolbar to hide";
+	}
 
 	QList<QVariant> recentList;
 	for (QUrl url : m_recentProjectsAction->urls())
@@ -370,6 +367,13 @@ QQuickWidget* MainWin::createWelcomeScreen() {
  * @brief Creates a new MDI area, to replace the Welcome Screen as central widget
  */
 void MainWin::createMdiArea() {
+	KToolBar* toolbar = toolBar();
+	if(toolbar != nullptr) {
+		toolbar->setVisible(true);
+	} else {
+		qDebug() << "There is no toolbar to display";
+	}
+
 	m_mdiArea = new QMdiArea;
 	setCentralWidget(m_mdiArea);
 	connect(m_mdiArea, &QMdiArea::subWindowActivated, this, &MainWin::handleCurrentSubWindowChanged);
@@ -810,17 +814,6 @@ void MainWin::updateGUIOnProjectChanges() {
 	// undo/redo actions are disabled in both cases - when the project is closed or opened
 	m_undoAction->setEnabled(false);
 	m_redoAction->setEnabled(false);
-
-	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr)  {
-		auto* mainToolBar = qobject_cast<QToolBar*>(factory->container("main_toolbar", this));
-		mainToolBar->setVisible(false);
-		mainToolBar->setEnabled(false);
-		mainToolBar->hide();
-
-		factory->container("main_toolbar", this)->hide();
-		factory->container("main_toolbar", this)->setEnabled(false);
-		factory->container("main_toolbar", this)->setVisible(false);
-	}
 }
 
 /*
@@ -981,17 +974,6 @@ void MainWin::updateGUI() {
 	} else {
 		factory->container("datapicker", this)->setEnabled(false);
 		factory->container("datapicker_toolbar", this)->setVisible(false);
-	}
-
-	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr)  {
-		auto* mainToolBar = qobject_cast<QToolBar*>(factory->container("main_toolbar", this));
-		mainToolBar->setVisible(false);
-		mainToolBar->setEnabled(false);
-		mainToolBar->hide();
-
-		factory->container("main_toolbar", this)->hide();
-		factory->container("main_toolbar", this)->setEnabled(false);
-		factory->container("main_toolbar", this)->setVisible(false);
 	}
 }
 

@@ -65,7 +65,7 @@ WelcomeScreenHelper::~WelcomeScreenHelper() {
  * @param subcategory the subcategory the dataset belongs to
  * @param datasetName the name of the dataset
  */
-void WelcomeScreenHelper::datasetClicked(QString category, QString subcategory, QString datasetName) {
+void WelcomeScreenHelper::datasetClicked(const QString& category, const QString& subcategory, const QString& datasetName) {
 
 	m_datasetWidget->setCategory(category);
 	m_datasetWidget->setSubcategory(subcategory);

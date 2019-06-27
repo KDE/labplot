@@ -54,7 +54,7 @@ public:
     DatasetModel* getDatasetModel();
 
 public slots:
-    void datasetClicked(QString category, QString subcategory, QString datasetName);
+	void datasetClicked(const QString& category, const QString& subcategory, const QString& datasetName);
 
 private:
     DatasetModel* m_datasetModel{nullptr};
