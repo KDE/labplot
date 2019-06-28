@@ -120,6 +120,7 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+	void finalizeLoad();
 
 public slots:
 	void updateFormula();

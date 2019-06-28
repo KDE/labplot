@@ -947,6 +947,10 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	return !reader->error();
 }
 
+void Column::finalizeLoad() {
+	d->finalizeLoad();
+}
+
 /**
  * \brief Read XML input filter element
  */

@@ -914,6 +914,20 @@ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variab
 }
 
 /*!
+ * called after the import of the project was done and all columns were loaded in \sa Project::load()
+ * to establish the required slot-signal connections for the formula update
+ */
+void ColumnPrivate::finalizeLoad() {
+	if (m_formulaAutoUpdate) {
+		for (auto column : m_formulaVariableColumns) {
+			m_connectionsUpdateFormula << connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &ColumnPrivate::formulaVariableColumnRemoved);
+			connect(column->parentAspect(), &AbstractAspect::aspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
+		}
+	}
+}
+
+/*!
  * helper function used in \c Column::load() to set parameters read from the xml file.
  * \param variableColumnPathes is used to restore the pointers to columns from pathes
  * after the project was loaded in Project::load().
