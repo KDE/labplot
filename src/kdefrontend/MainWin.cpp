@@ -358,6 +358,8 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	//m_importDatasetWidget->hide();
 
 	m_welcomeScreenHelper = new WelcomeScreenHelper();
+	connect(m_welcomeScreenHelper, SIGNAL(openExampleProject(QString)), this, SLOT(openProject(const QString& )));
+
 	ctxt->setContextProperty("datasetModel", m_welcomeScreenHelper->getDatasetModel());
 	ctxt->setContextProperty("helper", m_welcomeScreenHelper);
 	qDebug() << "Categories: " << m_welcomeScreenHelper->getDatasetModel()->categories();
@@ -367,8 +369,9 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	QObject *item = quickWidget->rootObject();
 	qDebug() << "Start connecting welcome screen";
 	QObject::connect(item, SIGNAL(recentProjectClicked(QUrl)), this, SLOT(openRecentProject(QUrl)));
-	QObject::connect(item, SIGNAL(datasetClicked(QString, QString, QString)), m_welcomeScreenHelper, SLOT(datasetClicked(QString, QString, QString)));
+	QObject::connect(item, SIGNAL(datasetClicked(QString, QString, QString)), m_welcomeScreenHelper, SLOT(datasetClicked(const QString&, const QString&, const QString&)));
 	QObject::connect(item, SIGNAL(openDataset()), this, SLOT(openDatasetExample()));
+QObject::connect(item, SIGNAL(openExampleProject(QString)), m_welcomeScreenHelper, SLOT(exampleProjectClicked(const QString&)));
 	qDebug() << "Finished connecting welcome screen";
 	m_welcomeScreenHelper->showFirstDataset();
 

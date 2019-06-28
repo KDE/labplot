@@ -49,23 +49,34 @@ public:
     Q_INVOKABLE QVariant datasetColumns();
     Q_INVOKABLE QVariant datasetRows();
     Q_INVOKABLE QVariant getProjectThumbnail(const QUrl& url);
+	Q_INVOKABLE QVariant getExampleProjectThumbnail(const QString&);
+	Q_INVOKABLE QVariant getExampleProjects();
+	Q_INVOKABLE QVariant getExampleProjectTags(const QString&);
 
     Spreadsheet* releaseConfiguredSpreadsheet();
     DatasetModel* getDatasetModel();
 
 public slots:
 	void datasetClicked(const QString& category, const QString& subcategory, const QString& datasetName);
+	void exampleProjectClicked(const QString&);
 
 private:
     DatasetModel* m_datasetModel{nullptr};
     ImportDatasetWidget* m_datasetWidget{nullptr};
     DatasetHandler* m_datasetHandler{nullptr};
     mutable std::unique_ptr<Spreadsheet> m_spreadsheet{nullptr};
+	QStringList m_projectNameList;
+	QMap<QString,QStringList> m_tagMap;
+	QMap<QString,QStringList> m_datasetTag;
+	QMap<QString, QString> m_pathMap;
+
+	void processExampleProjects();
 
 signals:
     void datasetFound();
     void datasetNotFound();
     void showFirstDataset();
+	void openExampleProject(QString);
 
 
 };

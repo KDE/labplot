@@ -37,6 +37,11 @@
 
 #include <KFilterDev>
 #include <KCompressionDevice>
+#include <QStandardPaths>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QDir>
 
 
 /*!
@@ -51,6 +56,7 @@ WelcomeScreenHelper::WelcomeScreenHelper() {
 
 	m_datasetModel = new DatasetModel(m_datasetWidget->getDatasetsMap());
 
+	processExampleProjects();
 }
 
 WelcomeScreenHelper::~WelcomeScreenHelper() {
@@ -145,6 +151,7 @@ QVariant WelcomeScreenHelper::getProjectThumbnail(const QUrl& url) {
 	else
 		filename = url.path();
 
+	qDebug() << "Get thumbnail for: " << filename;
 	QIODevice* file;
 	// first try gzip compression, because projects can be gzipped and end with .lml
 	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive))
@@ -184,7 +191,7 @@ QVariant WelcomeScreenHelper::getProjectThumbnail(const QUrl& url) {
 			QString thumbnail = reader.attributes().value("thumbnail").toString();
 
 			thumbnail.prepend("data:image/jpg;base64,");
-			qDebug() << "Return thumbnail " <<thumbnail;
+			//qDebug() << "Return thumbnail " <<thumbnail;
 			return QVariant(thumbnail);
 		}
 	}
@@ -197,4 +204,80 @@ QVariant WelcomeScreenHelper::getProjectThumbnail(const QUrl& url) {
  */
 DatasetModel* WelcomeScreenHelper::getDatasetModel() {
 	return m_datasetModel;
+}
+
+void WelcomeScreenHelper::processExampleProjects() {
+
+	const QString filePath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "example_projects/example_projects.json");
+
+	qDebug() << "Locating example metadata file" << filePath;
+
+	QFile file(filePath);
+
+	if (file.open(QIODevice::ReadOnly)) {
+		qDebug()<< "Process examples";
+
+		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
+		qDebug() <<"Is array: " << document.isArray() << "  is object " << document.isObject();
+		QJsonArray exampleArray = document.array();
+
+		//processing examples
+		for(int i = 0 ; i < exampleArray.size(); ++i) {
+			const QJsonObject currentExample = exampleArray[i].toObject();
+
+			const QString exampleName = currentExample.value("name").toString();
+			qDebug()<< exampleName;
+			if(m_projectNameList.contains(exampleName)) {
+				qDebug() << "There is already an example file with this name";
+			} else {
+				qDebug()<< exampleName + "is a new name";
+				m_projectNameList.append(exampleName);
+				const QString exampleFile = currentExample.value("fileName").toString();
+				m_pathMap[exampleName] = exampleFile;
+
+				const QJsonArray tags = currentExample.value("tags").toArray();
+				//processing tags
+				qDebug()<< "Process tags";
+				for(int j = 0; j < tags.size(); ++j) {
+					QString tagName = tags[j].toString();
+					qDebug()<< "Process tag: " << tagName;
+					m_tagMap[tagName].append(exampleName);
+					m_datasetTag[exampleName].append(tagName);
+				}
+			}
+		}
+
+		file.close();
+	} else {
+		qDebug("Couldn't open dataset category file");
+	}
+}
+
+QVariant WelcomeScreenHelper::getExampleProjectThumbnail(const QString& exampleName) {
+	const QString filePath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "example_projects/" + m_pathMap[exampleName]);
+	qDebug() << "ExampleProjectThumbnail: " << filePath;
+	return getProjectThumbnail(filePath);
+}
+
+QVariant WelcomeScreenHelper::getExampleProjects() {
+	qDebug() << "ExampleProjects: " << m_projectNameList;
+	return QVariant(m_projectNameList);
+}
+
+QVariant WelcomeScreenHelper::getExampleProjectTags(const QString& exampleName) {
+	QString tags;
+	const QStringList& tagList = m_datasetTag[exampleName];
+
+	for(int i = 0; i < tagList.size(); i++) {
+		tags.append(tagList[i]);
+		if(i < tagList.size() - 1)
+			tags.append(", ");
+	}
+
+	return QVariant(tags);
+}
+
+void WelcomeScreenHelper::exampleProjectClicked(const QString& exampleName) {
+	QString path = QStandardPaths::locate(QStandardPaths::AppDataLocation, "example_projects/" + m_pathMap[exampleName]);
+	emit openExampleProject(path);
 }

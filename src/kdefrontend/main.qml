@@ -26,6 +26,7 @@ Rectangle {
     signal  recentProjectClicked(url path)
     signal datasetClicked(string category, string subcategory, string dataset)
     signal openDataset()
+    signal openExampleProject(string name)
 
 
 
@@ -179,26 +180,80 @@ Rectangle {
             Layout.row: 0
             Layout.column: 1
 
-            Label {
-                id: label1
-                text: qsTr("Examples")
-                styleColor: "#d41919"
-                anchors.right: parent.right
-                anchors.rightMargin: 0
-                anchors.left: parent.left
-                anchors.leftMargin: 0
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                font.pointSize: 25
-            }
+            ColumnLayout {
+                anchors.fill: parent
 
-            GridLayout {
-                id: gridLayout1
-                anchors.top: label1.bottom
-                anchors.topMargin: 0
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
+                Label {
+                    id: label1
+                    text: qsTr("Examples")
+                    styleColor: "#d41919"
+                    anchors.right: parent.right
+                    anchors.rightMargin: 0
+                    anchors.left: parent.left
+                    anchors.leftMargin: 0
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 25
+                    Layout.fillWidth: true;
+                }
+
+                GridView {
+                    id: exampleGrid
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    cellWidth: width/4
+                    cellHeight: 150
+                    ScrollBar.vertical: ScrollBar{}
+                    clip: true
+
+                    model: helper.getExampleProjects();
+                    delegate: Rectangle {
+                         id: exampleDelegate
+                         property string name : modelData
+                         width: exampleGrid.width
+                         height: exampleGrid.height
+
+                         MouseArea {
+                             anchors.fill: parent
+                             hoverEnabled: true
+                             //onEntered: {exampleDelegate.color = '#fdffbf'}
+                             //onExited: {exampleDelegate.color = '#ffffff'}
+                             onClicked: {mainWindow.openExampleProject(exampleDelegate.name)}
+                         }
+
+                        ColumnLayout {
+                            Layout.fillHeight: true
+                            //Layout.fillWidth: true
+                            spacing: 5
+                            Image {
+                                source: helper.getExampleProjectThumbnail(name)
+                                fillMode: Image.Stretch
+                                sourceSize.width: Math.min(100, exampleGrid.cellWidth)
+                                sourceSize.height: Math.min(100, exampleGrid.cellWidth)
+                                Layout.alignment: Qt.AlignHCenter
+                            }
+
+                            Text {
+                                wrapMode: Text.WordWrap
+                                text: exampleDelegate.name
+                                font.pixelSize: 14
+                                font.bold: true
+                                Layout.fillWidth: true
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+
+                            Text {
+                                wrapMode: Text.WordWrap
+                                text: helper.getExampleProjectTags(exampleDelegate.name)
+                                font.pixelSize: 12
+                                Layout.fillWidth: true
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+                        }
+                    }
+                }
             }
         }
 
