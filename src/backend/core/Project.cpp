@@ -243,7 +243,7 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	QByteArray bArray;
 	QBuffer buffer(&bArray);
 	buffer.open(QIODevice::WriteOnly);
-	QPixmap scaledThumbnail = thumbnail.scaled(512,512);
+	QPixmap scaledThumbnail = thumbnail.scaled(512,512, Qt::KeepAspectRatio);
 	scaledThumbnail.save(&buffer, "JPEG");
 	QString image = QString::fromLatin1(bArray.toBase64().data());
 	writer->writeAttribute("thumbnail", image);
