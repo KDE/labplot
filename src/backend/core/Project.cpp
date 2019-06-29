@@ -453,8 +453,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 							if (!c) continue;
 							if (c->path() == path) {
 								formulaVariableColumns << c;
-								if (col->formulaAutoUpdate())
-									connect(c, &Column::dataChanged, col, &Column::updateFormula);
+								col->finalizeLoad();
 								break;
 							}
 						}

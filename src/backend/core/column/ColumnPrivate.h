@@ -116,6 +116,8 @@ public:
 
 	void updateProperties();
 
+	void finalizeLoad();
+
 	mutable AbstractColumn::ColumnStatistics statistics;
 	bool statisticsAvailable{false}; //is 'statistics' already available or needs to be (re-)calculated?
 
