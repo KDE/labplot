@@ -167,9 +167,11 @@ Rectangle {
         }
 
         Frame {
-            id: rectangle2
+            id: exampleProjects
             Layout.minimumWidth: (3*parent.width / 5) -  5*gridLayout.spacing
             Layout.minimumHeight: parent.height/4 - 3*gridLayout.spacing
+            Layout.preferredWidth: (3*parent.width / 5)
+            Layout.preferredHeight: parent.height/4
             // width: 3 * mainWindow.width / 5
             //height: mainWindow.height / 3
             opacity: 1
@@ -197,6 +199,14 @@ Rectangle {
                     Layout.fillWidth: true;
                 }
 
+                TextField {
+                    id: searchText
+                    placeholderText: "Search among example projects"
+                    Layout.fillWidth: true;
+                    onTextChanged: {exampleGrid.model = helper.searchExampleProjects(searchText.text)}
+                    height: 25
+                }
+
                 GridView {
                     id: exampleGrid
                     Layout.fillHeight: true
@@ -208,18 +218,18 @@ Rectangle {
 
                     model: helper.getExampleProjects();
                     delegate: Rectangle {
-                         id: exampleDelegate
-                         property string name : modelData
-                         width: exampleGrid.width
-                         height: exampleGrid.height
+                        id: exampleDelegate
+                        property string name : modelData
+                        width: exampleGrid.width
+                        height: exampleGrid.height
 
-                         MouseArea {
-                             anchors.fill: parent
-                             hoverEnabled: true
-                             //onEntered: {exampleDelegate.color = '#fdffbf'}
-                             //onExited: {exampleDelegate.color = '#ffffff'}
-                             onClicked: {mainWindow.openExampleProject(exampleDelegate.name)}
-                         }
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            //onEntered: {exampleDelegate.color = '#fdffbf'}
+                            //onExited: {exampleDelegate.color = '#ffffff'}
+                            onClicked: {mainWindow.openExampleProject(exampleDelegate.name)}
+                        }
 
                         ColumnLayout {
                             Layout.fillHeight: true

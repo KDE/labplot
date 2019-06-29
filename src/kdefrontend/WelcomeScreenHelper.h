@@ -51,6 +51,7 @@ public:
     Q_INVOKABLE QVariant getProjectThumbnail(const QUrl& url);
 	Q_INVOKABLE QVariant getExampleProjectThumbnail(const QString&);
 	Q_INVOKABLE QVariant getExampleProjects();
+	Q_INVOKABLE QVariant searchExampleProjects(const QString& searchtext);
 	Q_INVOKABLE QVariant getExampleProjectTags(const QString&);
 
     Spreadsheet* releaseConfiguredSpreadsheet();

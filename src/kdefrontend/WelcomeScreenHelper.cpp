@@ -281,3 +281,22 @@ void WelcomeScreenHelper::exampleProjectClicked(const QString& exampleName) {
 	QString path = QStandardPaths::locate(QStandardPaths::AppDataLocation, "example_projects/" + m_pathMap[exampleName]);
 	emit openExampleProject(path);
 }
+
+QVariant WelcomeScreenHelper::searchExampleProjects(const QString& searchtext) {
+	QStringList results;
+	for(auto tag = m_tagMap.begin(); tag != m_tagMap.end(); tag++) {
+		if (tag.key().contains(searchtext)) {
+			for(QString example : tag.value()) {
+				if(!results.contains(example))
+					results.append(example);
+			}
+		}
+	}
+
+	for(QString example : m_projectNameList) {
+		if(example.contains(searchtext) && !results.contains(example))
+			results.append(example);
+	}
+
+	return QVariant(results);
+}
