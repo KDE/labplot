@@ -1183,13 +1183,15 @@ bool MainWin::closeProject() {
 	if (m_project == nullptr)
 		return true; //nothing to close
 
-	if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr && m_showWelcomeScreen) {
-		m_welcomeWidget = createWelcomeScreen();
-		setCentralWidget(m_welcomeWidget);
-	}
-
 	if (warnModified())
 		return false;
+
+	if(!m_closing) {
+		if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr && m_showWelcomeScreen) {
+			m_welcomeWidget = createWelcomeScreen();
+			setCentralWidget(m_welcomeWidget);
+		}
+	}
 
 	m_projectClosing = true;
 	delete m_aspectTreeModel;
