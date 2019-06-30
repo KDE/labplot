@@ -53,6 +53,7 @@
 #include <QMenu>
 #include <QThreadPool>
 #include <QUndoStack>
+#include <QBuffer>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -223,10 +224,8 @@ QString Project::supportedExtensions() {
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
-/**
- * \brief Save as XML
- */
-void Project::save(QXmlStreamWriter* writer) const {
+
+void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	//set the version and the modification time to the current values
 	d->version = LVERSION;
 	d->modificationTime = QDateTime::currentDateTime();
@@ -240,10 +239,26 @@ void Project::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("fileName", fileName());
 	writer->writeAttribute("modificationTime", modificationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
 	writer->writeAttribute("author", author());
+
+	QByteArray bArray;
+	QBuffer buffer(&bArray);
+	buffer.open(QIODevice::WriteOnly);
+	QPixmap scaledThumbnail = thumbnail.scaled(512,512, Qt::KeepAspectRatio);
+	scaledThumbnail.save(&buffer, "JPEG");
+	QString image = QString::fromLatin1(bArray.toBase64().data());
+	writer->writeAttribute("thumbnail", image);
+
 	writeBasicAttributes(writer);
 
 	writeCommentElement(writer);
 
+	save(writer);
+}
+
+/**
+ * \brief Save as XML
+ */
+void Project::save(QXmlStreamWriter* writer) const {
 	//save all children
 	for (auto* child : children<AbstractAspect>(IncludeHidden)) {
 		writer->writeStartElement("child_aspect");

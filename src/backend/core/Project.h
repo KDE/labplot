@@ -73,7 +73,7 @@ public:
 	bool hasChanged() const;
 	void navigateTo(const QString& path);
 
-	void save(QXmlStreamWriter*) const override;
+	void save(const QPixmap&, QXmlStreamWriter*) const;
 	bool load(XmlStreamReader*, bool preview) override;
 	bool load(const QString&, bool preview = false);
 
@@ -98,6 +98,7 @@ private:
 	class Private;
 	Private* d;
 	bool readProjectAttributes(XmlStreamReader*);
+	void save(QXmlStreamWriter*) const override;
 };
 
 #endif // ifndef PROJECT_H
