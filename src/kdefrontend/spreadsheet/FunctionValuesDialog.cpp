@@ -96,10 +96,10 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent) : QD
 	m_okButton->setText(i18n("&Generate"));
 	m_okButton->setToolTip(i18n("Generate function values"));
 
-	connect( ui.bAddVariable, SIGNAL(pressed()), this, SLOT(addVariable()) );
-	connect( ui.teEquation, SIGNAL(expressionChanged()), this, SLOT(checkValues()) );
-	connect( ui.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()) );
-	connect( ui.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()) );
+	connect(ui.bAddVariable, &QPushButton::pressed, this, &FunctionValuesDialog::addVariable);
+	connect(ui.teEquation, &ExpressionTextEdit::expressionChanged, this, &FunctionValuesDialog::checkValues);
+	connect(ui.tbConstants, &QToolButton::clicked, this, &FunctionValuesDialog::showConstants);
+	connect(ui.tbFunctions, &QToolButton::clicked, this, &FunctionValuesDialog::showFunctions);
 	connect(m_okButton, &QPushButton::clicked, this, &FunctionValuesDialog::generate);
 
 	//restore saved settings if available
@@ -139,16 +139,28 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 			addVariable();
 			m_variableNames[i]->setText(variableNames.at(i));
 
+			bool found = false;
 			for (const auto* col : cols) {
-				if (col == variableColumns.at(i)) {
-					const auto* column = dynamic_cast<const AbstractColumn*>(col);
-					if (column)
-						m_variableDataColumns[i]->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
-					else
-						m_variableDataColumns[i]->setCurrentModelIndex(QModelIndex());
+				if (col != variableColumns.at(i))
+					continue;
 
-					break;
+				const auto* column = dynamic_cast<const AbstractColumn*>(col);
+				if (column)
+					m_variableDataColumns[i]->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
+				else {
+					m_variableDataColumns[i]->setCurrentModelIndex(QModelIndex());
+					m_variableDataColumns[i]->setStyleSheet("QComboBox{background: red;}");
 				}
+
+				found = true;
+				break;
+			}
+
+			//for the current variable name no column is existing anymore (was deleted)
+			//->highlight the combobox red
+			if (!found) {
+				m_variableDataColumns[i]->setCurrentModelIndex(QModelIndex());
+				m_variableDataColumns[i]->setStyleSheet("QComboBox{background: red;}");
 			}
 		}
 	}
@@ -160,7 +172,6 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 }
 
 bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
-
 	if (ExpressionParser::getInstance()->constants().indexOf(le->text()) != -1) {
 		le->setStyleSheet("QLineEdit{background: red;}");
 		le->setToolTip(i18n("Provided variable name is already reserved for a name of a constant. Please use another name."));
@@ -220,9 +231,9 @@ void FunctionValuesDialog::checkValues() {
 void FunctionValuesDialog::showConstants() {
 	QMenu menu;
 	ConstantsWidget constants(&menu);
-	connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant(QString)));
-	connect(&constants, SIGNAL(constantSelected(QString)), &menu, SLOT(close()));
-	connect(&constants, SIGNAL(canceled()), &menu, SLOT(close()));
+	connect(&constants, &ConstantsWidget::constantSelected, this, &FunctionValuesDialog::insertConstant);
+	connect(&constants, &ConstantsWidget::constantSelected, &menu, &QMenu::close);
+	connect(&constants, &ConstantsWidget::canceled, &menu, &QMenu::close);
 
 	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&constants);
@@ -235,9 +246,9 @@ void FunctionValuesDialog::showConstants() {
 void FunctionValuesDialog::showFunctions() {
 	QMenu menu;
 	FunctionsWidget functions(&menu);
-	connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insertFunction(QString)));
-	connect(&functions, SIGNAL(functionSelected(QString)), &menu, SLOT(close()));
-	connect(&functions, SIGNAL(canceled()), &menu, SLOT(close()));
+	connect(&functions, &FunctionsWidget::functionSelected, this, &FunctionValuesDialog::insertFunction);
+	connect(&functions, &FunctionsWidget::functionSelected, &menu, &QMenu::close);
+	connect(&functions, &FunctionsWidget::canceled, &menu, &QMenu::close);
 
 	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&functions);
@@ -263,7 +274,7 @@ void FunctionValuesDialog::addVariable() {
 	//text field for the variable name
 	auto* le = new QLineEdit();
 	le->setMaximumWidth(30);
-	connect(le, SIGNAL(textChanged(QString)), this, SLOT(variableNameChanged()));
+	connect(le, &QLineEdit::textChanged, this, &FunctionValuesDialog::variableNameChanged);
 	layout->addWidget(le, row, 0, 1, 1);
 	m_variableNames << le;
 
@@ -275,7 +286,7 @@ void FunctionValuesDialog::addVariable() {
 	//combo box for the data column
 	auto* cb = new TreeViewComboBox();
 	cb->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
-	connect( cb, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkValues()) );
+	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &FunctionValuesDialog::variableColumnChanged);
 	layout->addWidget(cb, row, 2, 1, 1);
 	m_variableDataColumns << cb;
 
@@ -294,7 +305,7 @@ void FunctionValuesDialog::addVariable() {
 		b->setToolTip(i18n("Delete variable"));
 		layout->addWidget(b, row, 3, 1, 1);
 		m_variableDeleteButtons<<b;
-		connect(b, SIGNAL(pressed()), this, SLOT(deleteVariable()));
+		connect(b, &QToolButton::pressed, this, &FunctionValuesDialog::deleteVariable);
 	}
 
 	ui.lVariable->setText(i18n("Variables:"));
@@ -345,6 +356,22 @@ void FunctionValuesDialog::variableNameChanged() {
 
 	ui.lFunction->setText(text);
 	ui.teEquation->setVariables(vars);
+	checkValues();
+}
+
+/*!
+ * called if a new column was selected in the comboboxes for the variable columns.
+ */
+void FunctionValuesDialog::variableColumnChanged(const QModelIndex& index) {
+	//combobox was potentially red-highlighted because of a missing column
+	//remove the highlighting if we have a valid selection now
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	if (aspect) {
+		TreeViewComboBox* cb = dynamic_cast<TreeViewComboBox*>(QObject::sender());
+		if (cb)
+			cb->setStyleSheet("");
+	}
+
 	checkValues();
 }
 

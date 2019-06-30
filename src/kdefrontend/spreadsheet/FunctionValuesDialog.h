@@ -79,6 +79,7 @@ private slots:
 	void addVariable();
 	void deleteVariable();
 	void variableNameChanged();
+	void variableColumnChanged(const QModelIndex&);
 };
 
 #endif
