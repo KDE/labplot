@@ -84,6 +84,9 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	connect(ui.lwDatasets, &QListWidget::itemSelectionChanged, [this]() {
 		emit datasetSelected();
 	});
+	connect(ui.lwDatasets, &QListWidget::doubleClicked, [this]() {
+		emit datasetDoubleClicked();
+	});
 }
 
 ImportDatasetWidget::~ImportDatasetWidget() {

@@ -51,6 +51,11 @@ ImportDatasetDialog::ImportDatasetDialog(MainWin* parent, const QString& fileNam
 	vLayout->addWidget(m_importDatasetWidget);
 	qDebug("Add completed");
 	connect(m_importDatasetWidget, &ImportDatasetWidget::datasetSelected, this, &ImportDatasetDialog::checkOkButton);
+	connect(m_importDatasetWidget, &ImportDatasetWidget::datasetDoubleClicked, [this]() {
+		checkOkButton();
+		if(okButton->isEnabled())
+			accept();
+	});
 
 	//dialog buttons
 	QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |QDialogButtonBox::Cancel);

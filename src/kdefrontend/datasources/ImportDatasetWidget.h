@@ -84,6 +84,7 @@ private slots:
 
 signals:
 	void datasetSelected();
+	void datasetDoubleClicked();
 
 };
 
