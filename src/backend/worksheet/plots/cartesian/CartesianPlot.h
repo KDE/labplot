@@ -250,6 +250,7 @@ private slots:
 	void updateLegend();
 	void childAdded(const AbstractAspect*);
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+	void childHovered();
 
 	void xDataChanged();
 	void yDataChanged();
