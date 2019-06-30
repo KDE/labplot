@@ -37,7 +37,8 @@ class HypothesisTestView;
 class Spreadsheet;
 class QString;
 class Column;
-class QLayout;
+class QVBoxLayout;
+class QLabel;
 
 class HypothesisTest : public AbstractPart {
 	Q_OBJECT
@@ -72,6 +73,7 @@ public:
 	void setDataSourceType(DataSourceType type);
 	DataSourceType dataSourceType() const;
 	void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
+	Spreadsheet* dataSourceSpreadsheet() const;
 
 	void setColumns(const QVector<Column*>& cols);
 	void setColumns(QStringList cols);
@@ -91,6 +93,12 @@ public:
 	//    void performOneWayAnova();
 
 	void performLeveneTest(bool categorical_variable);
+
+	double statisticValue();
+	double pValue();
+
+	QVBoxLayout* summaryLayout();
+
 	//virtual methods
 	//    QIcon icon() const override;
 	QMenu* createContextMenu() override;
@@ -102,8 +110,6 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
-
-	Spreadsheet* dataSourceSpreadsheet() const;
 
 private:
 	HypothesisTestPrivate* const d;

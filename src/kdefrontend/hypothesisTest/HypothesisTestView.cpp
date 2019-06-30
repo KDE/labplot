@@ -60,8 +60,8 @@
 HypothesisTestView::HypothesisTestView(HypothesisTest* hypothesisTest) : QWidget(),
     m_hypothesisTest(hypothesisTest),
     m_testName(new QLabel()),
-    m_statsTable(new QTextEdit()),
-    m_summaryResults(new QWidget()){
+	m_statsTable(new QTextEdit()),
+	m_summaryResults(new QWidget()) {
 
     m_statsTable->setReadOnly(true);
 
@@ -80,17 +80,8 @@ void HypothesisTestView::init() {
 	initMenus();
 
 //    m_summaryResults->setStyleSheet("background-color:white; border: 0px; margin: 0px; padding 0px;qproperty-frame: false;");
-    QVBoxLayout* summary_layout = new QVBoxLayout(m_summaryResults);
-
-    for (int i = 0; i < 10; i++) {
-        m_resultLine[i] = new QLabel();
-        summary_layout->addWidget(m_resultLine[i]);
-    }
-
     connect(m_hypothesisTest, &HypothesisTest::changed, this, &HypothesisTestView::changed);
 }
-
-
 
 void HypothesisTestView::initActions() {
 
@@ -98,15 +89,6 @@ void HypothesisTestView::initActions() {
 
 void HypothesisTestView::initMenus() {
 
-}
-
-void HypothesisTestView::setResultLine(int index, QVariant data, Qt::ItemDataRole role) {
-    if (index < 0 || index >= 10) return;
-
-    if (role == Qt::DisplayRole)
-        m_resultLine[index]->setText(data.toString());
-    else if (role == Qt::ToolTipRole)
-        m_resultLine[index]->setToolTip(data.toString());
 }
 
 void HypothesisTestView::clearResult() {
@@ -169,6 +151,7 @@ void HypothesisTestView::print(QPrinter* printer) const {
  void HypothesisTestView::changed() {
     m_testName->setText(m_hypothesisTest->testName());
     m_statsTable->setHtml(m_hypothesisTest->statsTable());
+	m_summaryResults->setLayout(m_hypothesisTest->summaryLayout());
  }
 
 void HypothesisTestView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {

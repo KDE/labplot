@@ -55,6 +55,7 @@
 */
 
 //TOOD: Make this dock widget scrollable and automatic resizeable for different screens.
+//TODO: Better initalization: All widgets needs to be clicked in whole session atleast once.
 
 HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
@@ -336,11 +337,12 @@ void HypothesisTestDock::doHypothesisTest()  {
 }
 
 void HypothesisTestDock::performLeveneTest()  {
-	QStringList cols;
-	cols << ui.cbCol1->currentText() << ui.cbCol2->currentText();
+	QVector<Column*> cols;
+	cols << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
+	cols << reinterpret_cast<Column*>(ui.cbCol2->currentData().toLongLong());
 	m_hypothesisTest->setColumns(cols);
-	m_hypothesisTest->setSignificanceLevel(ui.leAlpha->text());
 
+	m_hypothesisTest->setSignificanceLevel(ui.leAlpha->text());
 	m_hypothesisTest->performLeveneTest(ui.chbCategorical->isChecked());
 }
 

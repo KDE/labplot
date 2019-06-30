@@ -75,7 +75,7 @@ private:
     HypothesisTest* m_hypothesisTest;
     QLabel* m_testName;
     QTextEdit* m_statsTable;
-    QWidget* m_summaryResults;
+	QWidget* m_summaryResults{nullptr};
     QLabel* m_resultLine[10];
 
 public slots:
@@ -83,8 +83,6 @@ public slots:
 	void fillToolBar(QToolBar*);
 	void print(QPrinter*) const;
 	void changed();
-
-    void setResultLine(int index, QVariant data, Qt::ItemDataRole role = Qt::DisplayRole);
     void clearResult();
 private slots:
 };

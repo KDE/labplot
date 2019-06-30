@@ -37,7 +37,8 @@
 #include <QStandardItemModel>
 #include <QLocale>
 #include <QLabel>
-#include <QLayout>
+#include <QVBoxLayout>
+#include <QWidget>
 #include <QDebug>
 #include <QtMath>
 #include <KLocalizedString>
@@ -127,11 +128,27 @@ void HypothesisTest::performTest(Test test, bool categoricalVariable, bool equal
 	case HypothesisTest::Test::SubType::NoneSubType:
 		break;
 	}
+
+	emit changed();
 }
 
 void HypothesisTest::performLeveneTest(bool categoricalVariable) {
 	d->currTestName = i18n( "<h2>Levene Test for Equality of Variance</h2>");
 	d->performLeveneTest(categoricalVariable);
+
+	emit changed();
+}
+
+double HypothesisTest::statisticValue() {
+	return d->statisticValue;
+}
+
+double HypothesisTest::pValue() {
+	return d->pValue;
+}
+
+QVBoxLayout* HypothesisTest::summaryLayout() {
+	return d->summaryLayout;
 }
 
 /******************************************************************************
@@ -142,7 +159,13 @@ void HypothesisTest::performLeveneTest(bool categoricalVariable) {
 //TODO: backend of z test;
 
 
-HypothesisTestPrivate::HypothesisTestPrivate(HypothesisTest* owner) : q(owner) {
+HypothesisTestPrivate::HypothesisTestPrivate(HypothesisTest* owner) : q(owner),
+	summaryLayout(new QVBoxLayout()) {
+
+	for (int i = 0; i < 10; i++) {
+		resultLine[i] = new QLabel();
+		summaryLayout->addWidget(resultLine[i]);
+	}
 }
 
 HypothesisTestPrivate::~HypothesisTestPrivate() {
@@ -180,7 +203,6 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 
 	if (columns.size() != 2) {
 		printError("Inappropriate number of columns selected");
-		emit q->changed();
 		return;
 	}
 
@@ -196,7 +218,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 
 			if (n[i] < 1) {
 				printError("At least one of selected column is empty");
-				emit q->changed();
+
 				return;
 			}
 		}
@@ -209,7 +231,6 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 		countPartitions(columns[0], np, totalRows);
 		if (np != 2) {
 			printError( i18n("Number of Categorical Variable in Column %1 is not equal to 2", columns[0]->name()));
-			emit q->changed();
 			return;
 		}
 
@@ -221,12 +242,11 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 		switch (errorCode) {
 		case ErrorUnqualSize: {
 			printError( i18n("Unequal size between Column %1 and Column %2", columns[0]->name(), columns[1]->name()));
-			emit q->changed();
 			return;
 		}
 		case ErrorEmptyColumn: {
 			printError("At least one of selected column is empty");
-			emit q->changed();
+
 			return;
 		}
 		case NoError:
@@ -253,8 +273,6 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 	QString testName;
 	int df = 0;
 	double sp = 0;
-	double value;
-	double pValue;
 
 	switch (test) {
 	case HypothesisTest::Test::Type::TTest: {
@@ -264,7 +282,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 			df = n[0] + n[1] - 2;
 			sp = qSqrt(((n[0]-1) * gsl_pow_2(std[0]) +
 					(n[1]-1) * gsl_pow_2(std[1]) ) / df );
-			value = (mean[0] - mean[1]) / (sp * qSqrt(1.0/n[0] + 1.0/n[1]));
+			statisticValue = (mean[0] - mean[1]) / (sp * qSqrt(1.0/n[0] + 1.0/n[1]));
 			printLine(9, "<b>Assumption:</b> Equal Variance b/w both population means");
 		} else {
 			double temp_val;
@@ -273,7 +291,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 					(gsl_pow_2( (gsl_pow_2(std[1]) / n[1]) ) / (n[1]-1)));
 			df = qRound(temp_val);
 
-			value = (mean[0] - mean[1]) / (qSqrt( (gsl_pow_2(std[0])/n[0]) +
+			statisticValue = (mean[0] - mean[1]) / (qSqrt( (gsl_pow_2(std[0])/n[0]) +
 					(gsl_pow_2(std[1])/n[1])));
 			printLine(9, "<b>Assumption:</b> UnEqual Variance b/w both population means");
 		}
@@ -284,8 +302,8 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 	case HypothesisTest::Test::Type::ZTest: {
 		testName = "Z";
 		sp = qSqrt( ((n[0]-1) * gsl_pow_2(std[0]) + (n[1]-1) * gsl_pow_2(std[1])) / df);
-		value = (mean[0] - mean[1]) / (sp * qSqrt( 1.0 / n[0] + 1.0 / n[1]));
-		pValue = gsl_cdf_gaussian_P(value, sp);
+		statisticValue = (mean[0] - mean[1]) / (sp * qSqrt( 1.0 / n[0] + 1.0 / n[1]));
+		pValue = gsl_cdf_gaussian_P(statisticValue, sp);
 		break;
 	}
 	case HypothesisTest::Test::Type::Anova:
@@ -295,11 +313,11 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 	}
 
 	currTestName = i18n( "<h2>Two Sample Independent %1 Test for %2 vs %3</h2>", testName, col1Name, col2Name);
-	pValue = getPValue(test, value, col1Name, col2Name, (mean[0] - mean[1]), sp, df);
+	pValue = getPValue(test, statisticValue, col1Name, col2Name, (mean[0] - mean[1]), sp, df);
 
 	printLine(2, i18n("Significance level is %1", significanceLevel), "blue");
 
-	printLine(4, i18n("%1 Value is %2 ", testName, value), "green");
+	printLine(4, i18n("%1 Value is %2 ", testName, statisticValue), "green");
 	printTooltip(4, i18n("More is the |%1-value|, more safely we can reject the null hypothesis", testName));
 
 	printLine(5, i18n("P Value is %1 ", pValue), "green");
@@ -311,32 +329,23 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 		printTooltip(5, i18n("We can safely reject Null Hypothesis for significance level %1", significanceLevel));
 	else
 		printTooltip(5, i18n("There is a plausibility for Null Hypothesis to be true"));
-
-	emit q->changed();
 	return;
 }
 
 /********************************Two Sample Paired ***************************************/
 
 void HypothesisTestPrivate::performTwoSamplePairedTest(HypothesisTest::Test::Type test) {
-	//	QString testName;
-	//	int n;
-	//	double sum, mean, std;
-	//	double value;
-	//	int df = 0;
-	//	double pValue = 0;
 	clearTestView();
 
 	if (columns.size() != 2) {
 		printError("Inappropriate number of columns selected");
-		emit q->changed();
+
 		return;
 	}
 
 	for (int i = 0; i < 2; i++) {
 		if ( !isNumericOrInteger(columns[0])) {
 			printError("select only columns with numbers");
-			emit q->changed();
 			return;
 		}
 	}
@@ -348,12 +357,12 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(HypothesisTest::Test::Typ
 	switch (errorCode) {
 	case ErrorUnqualSize: {
 		printError("both columns are having different sizes");
-		emit q->changed();
+
 		return;
 	}
 	case ErrorEmptyColumn: {
 		printError("columns are empty");
-		emit q->changed();
+
 		return;
 	}
 	case NoError:
@@ -362,13 +371,13 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(HypothesisTest::Test::Typ
 
 	if (n == -1) {
 		printError("both columns are having different sizes");
-		emit q->changed();
+
 		return;
 	}
 
 	if (n < 1) {
 		printError("columns are empty");
-		emit q->changed();
+
 		return;
 	}
 
@@ -379,13 +388,11 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(HypothesisTest::Test::Typ
 	statsTable = getHtmlTable(2, 5, rowMajor);
 
 	QString testName;
-	double value;
 	int df = 0;
-	double pValue = 0;
 
 	switch (test) {
 	case HypothesisTest::Test::Type::TTest: {
-		value = mean / (std / qSqrt(n));
+		statisticValue = mean / (std / qSqrt(n));
 		df = n - 1;
 		testName = "T";
 		printLine(6, i18n("Degree of Freedom is %1</p", df), "green");
@@ -393,7 +400,7 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(HypothesisTest::Test::Typ
 	}
 	case HypothesisTest::Test::Type::ZTest: {
 		testName = "Z";
-		value = mean / (std / qSqrt(n));
+		statisticValue = mean / (std / qSqrt(n));
 		df = n - 1;
 		break;
 	}
@@ -404,21 +411,19 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(HypothesisTest::Test::Typ
 
 	}
 
-	pValue = getPValue(test, value, columns[0]->name(), i18n("%1", populationMean), mean, std, df);
+	pValue = getPValue(test, statisticValue, columns[0]->name(), i18n("%1", populationMean), mean, std, df);
 	currTestName = i18n( "<h2>One Sample %1 Test for %2 vs %3</h2>", testName, columns[0]->name(), columns[1]->name());
 
 	printLine(2, i18n("Significance level is %1 ", significanceLevel), "blue");
-	printLine(4, i18n("%1 Value is %2 ", testName, value), "green");
+	printLine(4, i18n("%1 Value is %2 ", testName, statisticValue), "green");
 	printLine(5, i18n("P Value is %1 ", pValue), "green");
 
 	if (pValue <= significanceLevel)
-		q->m_view->setResultLine(5, i18n("We can safely reject Null Hypothesis for significance level %1", significanceLevel), Qt::ToolTipRole);
+		printTooltip(5, i18n("We can safely reject Null Hypothesis for significance level %1", significanceLevel));
 	else
-		q->m_view->setResultLine(5, i18n("There is a plausibility for Null Hypothesis to be true"), Qt::ToolTipRole);
+		printTooltip(5, i18n("There is a plausibility for Null Hypothesis to be true"));
 
-	emit q->changed();
 	return;
-
 }
 
 /******************************** One Sample ***************************************/
@@ -428,13 +433,13 @@ void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test
 
 	if (columns.size() != 1) {
 		printError("Inappropriate number of columns selected");
-		emit q->changed();
+
 		return;
 	}
 
 	if ( !isNumericOrInteger(columns[0])) {
 		printError("select only columns with numbers");
-		emit q->changed();
+
 		return;
 	}
 
@@ -445,13 +450,13 @@ void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test
 	switch (errorCode) {
 	case ErrorUnqualSize: {
 		printError("column is empty");
-		emit q->changed();
+
 		return;
 	}
 	case NoError:
 		break;
 	case ErrorEmptyColumn: {
-		emit q->changed();
+
 		return;
 	}
 	}
@@ -463,14 +468,12 @@ void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test
 	statsTable = getHtmlTable(2, 5, rowMajor);
 
 	QString testName;
-	double value;
 	int df = 0;
-	double pValue = 0;
 
 	switch (test) {
 	case HypothesisTest::Test::Type::TTest: {
 		testName = "T";
-		value = (mean - populationMean) / (std / qSqrt(n));
+		statisticValue = (mean - populationMean) / (std / qSqrt(n));
 		df = n - 1;
 		printLine(6, i18n("Degree of Freedom is %1", df), "blue");
 		break;
@@ -478,7 +481,7 @@ void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test
 	case HypothesisTest::Test::Type::ZTest: {
 		testName = "Z";
 		df = 0;
-		value = (mean - populationMean) / (std / qSqrt(n));
+		statisticValue = (mean - populationMean) / (std / qSqrt(n));
 		break;
 	}
 	case HypothesisTest::Test::Type::Anova:
@@ -487,21 +490,19 @@ void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test
 		break;
 	}
 
-	pValue = getPValue(test, value, columns[0]->name(), i18n("%1",populationMean), mean - populationMean, std, df);
+	pValue = getPValue(test, statisticValue, columns[0]->name(), i18n("%1",populationMean), mean - populationMean, std, df);
 	currTestName = i18n( "<h2>One Sample %1 Test for %2</h2>", testName, columns[0]->name());
 
 	printLine(2, i18n("Significance level is %1", significanceLevel), "blue");
-	printLine(4, i18n("%1 Value is %2", testName, value), "green");
+	printLine(4, i18n("%1 Value is %2", testName, statisticValue), "green");
 	printLine(5, i18n("P Value is %1", pValue), "green");
 
 	if (pValue <= significanceLevel)
-		q->m_view->setResultLine(5, i18n("We can safely reject Null Hypothesis for significance level %1", significanceLevel), Qt::ToolTipRole);
+		printTooltip(5, i18n("We can safely reject Null Hypothesis for significance level %1", significanceLevel));
 	else
-		q->m_view->setResultLine(5, i18n("There is a plausibility for Null Hypothesis to be true"), Qt::ToolTipRole);
+		printTooltip(5, i18n("There is a plausibility for Null Hypothesis to be true"));
 
-	emit q->changed();
 	return;
-
 }
 
 /*************************************One Way Anova***************************************/
@@ -537,7 +538,7 @@ void HypothesisTestPrivate::performOneWayAnova() {
 	int fW = 0;			// degree of freedom within the group
 	double msW = 0;		// mean sum of squares within the groups
 	double fValue = 0;
-	double pValue = 0;
+
 
 	// now finding mean of each group;
 
@@ -632,11 +633,10 @@ void HypothesisTestPrivate::performOneWayAnova() {
 	printLine(2, i18n("P Value is %1 ", pValue), "green");
 
 	if (pValue <= significanceLevel)
-		q->m_view->setResultLine(2, i18n("We can safely reject Null Hypothesis for significance level %1", significanceLevel), Qt::ToolTipRole);
+		printTooltip(2, i18n("We can safely reject Null Hypothesis for significance level %1", significanceLevel));
 	else
-		q->m_view->setResultLine(2, i18n("There is a plausibility for Null Hypothesis to be true"), Qt::ToolTipRole);
+		printTooltip(2, i18n("There is a plausibility for Null Hypothesis to be true"));
 
-	emit q->changed();
 	return;
 }
 
@@ -659,7 +659,6 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 
 	if (columns.size() != 2) {
 		printError("Inappropriate number of columns selected");
-		emit q->changed();
 		return;
 	}
 
@@ -673,7 +672,6 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 
 	if (np < 2) {
 		printError("select atleast two columns / classes");
-		emit q->changed();
 		return;
 	}
 
@@ -690,7 +688,7 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 
 	double fValue;
 	int df = 0;
-	double pValue = 0;
+
 	int totalRows = 0;
 
 	QString* colNames = new QString[np];
@@ -880,7 +878,6 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 		printLine(8, "Requirement for homogeneity is met", "green");
 	}
 
-	emit q->changed();
 	return;
 }
 
@@ -1055,7 +1052,7 @@ HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsCategorical(Col
 //       pValue = 2*gsl_cdf_tdist_P(value, df) v/s
 //       pValue = gsl_cdf_tdis_P(value, df) + gsl_cdf_tdis_P(-value, df);
 double HypothesisTestPrivate::getPValue(const HypothesisTest::Test::Type& test, double& value, const QString& col1Name, const QString& col2Name, const double mean, const double sp, const int df) {
-	double pValue = 0;
+
 	switch (test) {
 	case HypothesisTest::Test::Type::TTest: {
 		switch (tailType) {
@@ -1176,24 +1173,34 @@ QString HypothesisTestPrivate::getLine(const QString& msg, const QString& color)
 }
 
 void HypothesisTestPrivate::printLine(const int& index, const QString& msg, const QString& color) {
-	q->m_view->setResultLine(index, getLine(msg, color));
+	if (index < 0 || index >= 10)
+		return;
+
+	resultLine[index]->setText(getLine(msg, color));
 	return;
 }
 
 void HypothesisTestPrivate::printTooltip(const int &index, const QString &msg) {
-	q->m_view->setResultLine(index, i18n("%1", msg), Qt::ToolTipRole);
+	if (index < 0 || index >= 10)
+		return;
+
+	resultLine[index]->setToolTip(i18n("%1", msg));
 }
 
 void HypothesisTestPrivate::printError(const QString& errorMsg) {
 	printLine(0, errorMsg, "red");
-	emit q->changed();
 }
 
+void HypothesisTestPrivate::clearSummaryLayout() {
+	for (int i = 0; i < 10; i++)
+		resultLine[i]->clear();
+}
 
 void HypothesisTestPrivate::clearTestView() {
 	statsTable = "";
-	q->m_view->clearResult();
+	clearSummaryLayout();
 }
+
 
 /**********************************************************************************
  *                      virtual functions implementations

@@ -63,6 +63,11 @@ public:
 	double significanceLevel;
 	QString statsTable;
 	HypothesisTest::Test::Tail tailType;
+	double pValue{0};
+	double statisticValue{0};
+
+	QVBoxLayout* summaryLayout{nullptr};
+	QLabel* resultLine[10];
 
 private:
 	bool isNumericOrInteger(Column* column);
@@ -80,6 +85,8 @@ private:
 	void printTooltip(const int& index, const QString& msg);
 	void printError(const QString& errorMsg);
 	void clearTestView();
+
+	void clearSummaryLayout();
 
 	bool m_dbCreated{false};
 };
