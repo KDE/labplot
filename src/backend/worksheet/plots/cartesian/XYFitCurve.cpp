@@ -2323,6 +2323,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				delete column;
 				return false;
 			}
+			qDebug()<<"############################   reading column " << column->name();
 			if (column->name() == "x")
 				d->xColumn = column;
 			else if (column->name() == "y")
@@ -2388,6 +2389,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 		XYCurve::d_ptr->xColumn = d->xColumn;
 		XYCurve::d_ptr->yColumn = d->yColumn;
+
+		recalcLogicalPoints();
 	}
 
 	return true;
