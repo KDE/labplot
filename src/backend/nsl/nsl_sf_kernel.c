@@ -72,13 +72,13 @@ double nsl_sf_kernel_tricube(double u) {
 
 double nsl_sf_kernel_cosine(double u) {
 	if(fabs(u) <= 1.0)
-		return M_PI/4.*cos(M_PI/2.*u);
+		return M_PI_4*cos(M_PI_2*u);
 	return 0.0;
 }
 
 double nsl_sf_kernel_semicircle(double u) {
 	if(fabs(u) < 1.0)
-		return 2./M_PI*sqrt(1-gsl_pow_2(u));
+		return M_2_PI*sqrt(1-gsl_pow_2(u));
 	return 0.0;
 }
 
@@ -100,9 +100,9 @@ double nsl_sf_kernel_picard(double u) {
 }
 
 double nsl_sf_kernel_sigmoid(double u) {
-	return 1.0/M_PI/cosh(u);
+	return M_1_PI/cosh(u);
 }
 
 double nsl_sf_kernel_silverman(double u) {
-	return 1.0/2.0*exp(-fabs(u)/M_SQRT2)*sin(fabs(u)/M_SQRT2+M_PI/4.0);
+	return 1.0/2.0*exp(-fabs(u)/M_SQRT2)*sin(fabs(u)/M_SQRT2+M_PI_4);
 }
