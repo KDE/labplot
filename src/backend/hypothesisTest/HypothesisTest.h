@@ -83,7 +83,7 @@ public:
 	QString testName();
 	QString statsTable();
 
-	void performTest(Test m_test, bool categoricalVariable, bool equalVariance);
+	void performTest(Test m_test, bool categoricalVariable = true, bool equalVariance = true);
 	//	void performTwoSampleIndependentTTest(bool categorical_variable, bool equal_variance);
 	//    void performTwoSamplePairedTTest();
 	//    void performOneSampleTTest();

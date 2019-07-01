@@ -34,7 +34,13 @@ class TTestTest : public CommonTest {
 
 private slots:
 	// Two Sample Independent Test
-	void twoSampleIndependent();
 	void twoSampleIndependent_data();
+	void twoSampleIndependent();
+
+	void twoSamplePaired_data();
+	void twoSamplePaired();
+
+	void oneSample_data();
+	void oneSample();
 };
 #endif
