@@ -42,16 +42,11 @@ const char* nsl_filter_cutoff_unit_name[] = { i18n("Frequency"), i18n("Fraction"
 
 /* n - order, x = w/w0 */
 double nsl_filter_gain_bessel(int n, double x) {
-#ifdef _MSC_VER
-	COMPLEX z0 = {0.0, 0.0};
-	COMPLEX z = {0.0, (const double)x};
-	double norm = cabs(nsl_sf_poly_reversed_bessel_theta(n, z));
-	COMPLEX value = nsl_sf_poly_reversed_bessel_theta(n, z0);
-
-	return creal(value)/norm;
-#else
-	return nsl_sf_poly_reversed_bessel_theta(n, 0)/cabs(nsl_sf_poly_reversed_bessel_theta(n, I*x));
-#endif
+	gsl_complex z0 = gsl_complex_rect(0.0, 0.0);
+	gsl_complex z = gsl_complex_rect(0.0, x);
+	double norm = gsl_complex_abs(nsl_sf_poly_reversed_bessel_theta(n, z));
+	double value = GSL_REAL(nsl_sf_poly_reversed_bessel_theta(n, z0));
+	return value/norm;
 }
 
 /* size of data should be n+2 */

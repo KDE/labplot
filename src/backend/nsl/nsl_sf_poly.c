@@ -82,60 +82,26 @@ double nsl_sf_poly_optimal_legendre_L(int n, double x) {
  * https://en.wikipedia.org/wiki/Bessel_polynomials
  * using recursion
 */
-COMPLEX nsl_sf_poly_bessel_y(int n, COMPLEX x) {
-#ifdef _MSC_VER
-	if (n == 0) {
-		COMPLEX z = {1.0, 0.0};
-		return z;
-	} else if (n == 1) {
-		COMPLEX z = {(const double)(creal(x) + 1.0), (const double)cimag(x)};
-		return z;
-	}
-	double factor = 2 * n - 1;
-	COMPLEX z1 = nsl_sf_poly_bessel_y(n - 1, x);
-	COMPLEX z2 = nsl_sf_poly_bessel_y(n - 2, x);
-	COMPLEX z = {(const double)(factor * (creal(x)*creal(z1)-cimag(x)*cimag(z1)) + creal(z2)), (const double)(factor * (creal(x)*cimag(z1) - cimag(x)*creal(z1)) + cimag(z2))};
-	return z;
-#else
+gsl_complex nsl_sf_poly_bessel_y(int n, gsl_complex x) {
 	if (n == 0)
-		return 1.0;
-	else if (n == 1)
-		return 1.0 + x;
+		return gsl_complex_rect(1.0, 0.0);
+	if (n == 1)
+		return gsl_complex_add_real(x, 1.0);
 
-	return (2*n - 1) * x * nsl_sf_poly_bessel_y(n - 1, x) + nsl_sf_poly_bessel_y(n - 2, x);
-#endif
+	gsl_complex z1 = gsl_complex_mul(x, gsl_complex_mul_real(nsl_sf_poly_bessel_y(n - 1, x), 2.*n-1.));
+	gsl_complex z2 = nsl_sf_poly_bessel_y(n - 2, x);
+	return gsl_complex_add(z1, z2);
 }
 
-/*
- * https://en.wikipedia.org/wiki/Bessel_polynomials
- * using recursion
-*/
-COMPLEX nsl_sf_poly_reversed_bessel_theta(int n, COMPLEX x) {
-#ifdef _MSC_VER
-	if (n == 0) {
-		COMPLEX z = {1.0, 0.0};
-		return z;
-	} else if (n == 1) {
-		COMPLEX z = {(const double)(creal(x) + 1.0), (const double)cimag(x)};
-		return z;
-	}
-
-	COMPLEX z1 = nsl_sf_poly_reversed_bessel_theta(n - 1, x);
-	COMPLEX z2 = nsl_sf_poly_reversed_bessel_theta(n - 2, x);
-	double rex2 = creal(x)*creal(x) - cimag(x)*cimag(x);
-	double imx2 = 2.*creal(x)*cimag(x);
-	double factor = 2. * n - 1.;
-
-	COMPLEX z = {(const double)(factor * creal(z1) + rex2*creal(z2) - imx2*cimag(z2)), (const double)(factor * cimag(z1) + rex2*cimag(z2) + imx2*creal(z2))};
-	return z;
-#else
+gsl_complex nsl_sf_poly_reversed_bessel_theta(int n, gsl_complex x) {
 	if (n == 0)
-		return 1.0;
-	else if (n == 1)
-		return 1.0 + x;
+		return gsl_complex_rect(1.0, 0.0);
+	if (n == 1)
+		return gsl_complex_add_real(x, 1.0);
 
-	return (2.*n - 1.) * nsl_sf_poly_reversed_bessel_theta(n - 1, x) + x * x * nsl_sf_poly_reversed_bessel_theta(n - 2, x);
-#endif
+	gsl_complex z1 = gsl_complex_mul_real(nsl_sf_poly_reversed_bessel_theta(n - 1, x), 2.*n-1.);
+	gsl_complex z2 = gsl_complex_mul(gsl_complex_mul(x, x), nsl_sf_poly_reversed_bessel_theta(n - 2, x));
+	return gsl_complex_add(z1, z2);
 }
 
 /***************** interpolating polynomials *************/
