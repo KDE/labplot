@@ -157,18 +157,18 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	connect(m_dateTimeMenu, &QMenu::triggered, this, &LabelWidget::insertDateTime );
 	connect(ui.kfontRequester, &KFontRequester::fontSelected, this, &LabelWidget::fontChanged);
 	connect(ui.kfontRequesterTeX, &KFontRequester::fontSelected, this, &LabelWidget::teXFontChanged);
-	connect(ui.sbFontSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::fontSizeChanged);
+	connect(ui.sbFontSize, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &LabelWidget::fontSizeChanged);
 
 	// geometry
-	connect( ui.cbPositionX, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::positionXChanged);
-	connect( ui.cbPositionY, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::positionYChanged);
-	connect( ui.sbPositionX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::customPositionXChanged);
-	connect( ui.sbPositionY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::customPositionYChanged);
-	connect( ui.cbHorizontalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::horizontalAlignmentChanged);
-	connect( ui.cbVerticalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::verticalAlignmentChanged);
-	connect( ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::rotationChanged);
-	connect( ui.sbOffsetX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetXChanged);
-	connect( ui.sbOffsetY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetYChanged);
+	connect( ui.cbPositionX, static_cast<void (KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &LabelWidget::positionXChanged);
+	connect( ui.cbPositionY, static_cast<void (KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &LabelWidget::positionYChanged);
+	connect( ui.sbPositionX, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &LabelWidget::customPositionXChanged);
+	connect( ui.sbPositionY, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &LabelWidget::customPositionYChanged);
+	connect( ui.cbHorizontalAlignment, static_cast<void (KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &LabelWidget::horizontalAlignmentChanged);
+	connect( ui.cbVerticalAlignment, static_cast<void (KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &LabelWidget::verticalAlignmentChanged);
+	connect( ui.sbRotation, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &LabelWidget::rotationChanged);
+	connect( ui.sbOffsetX, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetXChanged);
+	connect( ui.sbOffsetY, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetYChanged);
 
 	connect( ui.chbVisible, &QCheckBox::clicked, this, &LabelWidget::visibilityChanged);
 
