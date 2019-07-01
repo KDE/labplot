@@ -1070,7 +1070,7 @@ double HypothesisTestPrivate::getPValue(const HypothesisTest::Test::Type& test, 
 			break;
 		}
 		case HypothesisTest::Test::Tail::Two: {
-			pValue = 2.*gsl_cdf_tdist_P(value, df);
+			pValue = 2.*gsl_cdf_tdist_P(-1*abs(value), df);
 
 			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("="), col2Name), "blue");
 			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("≠"), col2Name), "blue");

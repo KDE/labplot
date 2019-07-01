@@ -31,8 +31,6 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 
-//TODO: Change values of delta in fuzzy compare: That is causing the failure of tests
-
 void TTestTest::twoSampleIndependent_data() {
 	QTest::addColumn<QVector<double>>("col1Data");
 	QTest::addColumn<QVector<double>>("col2Data");
@@ -90,8 +88,8 @@ void TTestTest::twoSampleIndependent() {
 	qDebug() << "tValue_expected is " << tValue_expected;
 	qDebug() << "pValue_expected is: " << pValue_expected;
 
-	FuzzyCompare(tValue, tValue_expected, 0.1);
-	FuzzyCompare(pValue, pValue_expected, 0.1);
+	FuzzyCompare(tValue, tValue_expected, (0.01) / abs(tValue));
+	FuzzyCompare(pValue, pValue_expected, (0.01) / abs(pValue));
 }
 
 void TTestTest::twoSamplePaired_data() {
@@ -142,8 +140,8 @@ void TTestTest::twoSamplePaired() {
 	qDebug() << "tValue_expected is " << tValue_expected;
 	qDebug() << "pValue_expected is: " << pValue_expected;
 
-	FuzzyCompare(tValue, tValue_expected, 0.1);
-	FuzzyCompare(pValue, pValue_expected, 0.1);
+	FuzzyCompare(tValue, tValue_expected, (0.01) / abs(tValue));
+	FuzzyCompare(pValue, pValue_expected, (0.01) / abs(pValue));
 }
 
 void TTestTest::oneSample_data() {
@@ -194,8 +192,8 @@ void TTestTest::oneSample() {
 	qDebug() << "tValue_expected is " << tValue_expected;
 	qDebug() << "pValue_expected is: " << pValue_expected;
 
-	FuzzyCompare(tValue, tValue_expected, 0.1);
-	FuzzyCompare(pValue, pValue_expected, 0.1);
+	FuzzyCompare(tValue, tValue_expected, (0.01) / abs(tValue));
+	FuzzyCompare(pValue, pValue_expected, (0.01) / abs(pValue));
 }
 
 QTEST_MAIN(TTestTest)
