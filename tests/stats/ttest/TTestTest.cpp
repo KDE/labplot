@@ -37,6 +37,7 @@ void TTestTest::twoSampleIndependent_data() {
 	QTest::addColumn<double>("tValue_expected");
 	QTest::addColumn<double>("pValue_expected");
 
+	// First Sample
 	// This data set is taken from "JASP"
 	QVector<double> col1Data = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 	QVector<double> col2Data = {3, 1, 5, 4, 6, 4, 6, 2, 0, 5, 4, 5, 4, 3, 6, 6, 8, 5, 5, 4, 2, 5, 7, 5};
@@ -45,6 +46,7 @@ void TTestTest::twoSampleIndependent_data() {
 
 	QTest::newRow("invisible cloak") << col1Data << col2Data << tValue_expected << pValue_expected;
 
+	// Second Sample
 	// This data set is taken from "JASP"
 	col1Data = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	col2Data = {42, 46, 43, 10, 55, 17, 26, 60, 62, 53, 37, 42, 33, 37, 41, 42, 19, 55, 54, 28, 20, 48, 85, 24, 56, 43, 59, 58, 52, 71, 62, 43, 54, 49, 57, 61, 33, 44, 46, 67, 43, 49, 57, 53};
@@ -98,6 +100,7 @@ void TTestTest::twoSamplePaired_data() {
 	QTest::addColumn<double>("tValue_expected");
 	QTest::addColumn<double>("pValue_expected");
 
+	// First Sample
 	// This data set is taken from "JASP"
 	// DATA SET:: Moon and Aggression
 	QVector<double> col1Data = {3.33, 3.67, 2.67, 3.33, 3.33, 3.67, 4.67, 2.67, 6, 4.33, 3.33, 0.67, 1.33, 0.33, 2};
@@ -150,12 +153,10 @@ void TTestTest::oneSample_data() {
 	QTest::addColumn<double>("tValue_expected");
 	QTest::addColumn<double>("pValue_expected");
 
+	// First Sample
 	// This data set is taken from "JASP"
 	// DATA SET:: Weight Gain;
-
-	// weight before;
 	QVector<double> col1Data = {13.2, 8.58, 14.08, 8.58, 10.56, 14.74, 7.92, 13.2, 12.76, 5.72, 11.66, 7.04, 3.08, 15.62, 14.3, 5.5};
-	// weight after;
 	double populationMean = 16;
 	double tValue_expected = -5.823;
 	double pValue_expected = 0.001;
@@ -192,8 +193,8 @@ void TTestTest::oneSample() {
 	qDebug() << "tValue_expected is " << tValue_expected;
 	qDebug() << "pValue_expected is: " << pValue_expected;
 
-	FuzzyCompare(tValue, tValue_expected, (0.01) / abs(tValue));
-	FuzzyCompare(pValue, pValue_expected, (0.01) / abs(pValue));
+	FuzzyCompare(tValue, tValue_expected, (0.01) / fabs(tValue));
+	FuzzyCompare(pValue, pValue_expected, (0.01) / fabs(pValue));
 }
 
 QTEST_MAIN(TTestTest)

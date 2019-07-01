@@ -723,7 +723,7 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 			for (int i = 0; i < np; i++) {
 				value = columns[i]->valueAt(j);
 				if (!(std::isnan(value)))
-					ziBar[i] += abs(value - yiBar[i]);
+					ziBar[i] += fabs(value - yiBar[i]);
 			}
 		}
 
@@ -742,7 +742,7 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 			for (int i = 0; i < np; i++) {
 				value = columns[i]->valueAt(j);
 				if (!(std::isnan(value))) {
-					double zij = abs(value - yiBar[i]);
+					double zij = fabs(value - yiBar[i]);
 					denominatorValue += gsl_pow_2( (zij - ziBar[i]));
 				}
 			}
@@ -793,7 +793,7 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 			name = columns[0]->textAt(j);
 			value = columns[1]->valueAt(j);
 			classIndex = classnameToIndex[name] - 1;
-			ziBar[classIndex] += abs(value - yiBar[classIndex]);
+			ziBar[classIndex] += fabs(value - yiBar[classIndex]);
 		}
 
 		for (int i = 0; i < np; i++) {
@@ -810,7 +810,7 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 			name = columns[0]->textAt(j);
 			value = columns[1]->valueAt(j);
 			classIndex = classnameToIndex[name] - 1;
-			double zij = abs(value - yiBar[classIndex]);
+			double zij = fabs(value - yiBar[classIndex]);
 			denominatorValue +=  gsl_pow_2( (zij - ziBar[classIndex]));
 		}
 
@@ -1070,7 +1070,7 @@ double HypothesisTestPrivate::getPValue(const HypothesisTest::Test::Type& test, 
 			break;
 		}
 		case HypothesisTest::Test::Tail::Two: {
-			pValue = 2.*gsl_cdf_tdist_P(-1*abs(value), df);
+			pValue = 2.*gsl_cdf_tdist_P(-fabs(value), df);
 
 			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("="), col2Name), "blue");
 			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("≠"), col2Name), "blue");

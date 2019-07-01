@@ -56,6 +56,7 @@
 
 //TOOD: Make this dock widget scrollable and automatic resizeable for different screens.
 //TODO: Better initalization: All widgets needs to be clicked in whole session atleast once.
+//TODO: To add tooltips in docks for non obvious widgets.
 
 HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
@@ -86,6 +87,8 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 	ui.cbCol1->hide();
 	ui.lCol2->hide();
 	ui.cbCol2->hide();
+	ui.lCol3->hide();
+	ui.cbCol3->hide();
 	ui.lEqualVariance->hide();
 	ui.chbEqualVariance->hide();
 	ui.chbEqualVariance->setChecked(true);
@@ -275,6 +278,11 @@ void HypothesisTestDock::showHypothesisTest() {
 
 	ui.lCol1->show();
 	ui.cbCol1->show();
+
+	if ((m_test.type & HypothesisTest::Test::Type::Anova) &
+		(m_test.subtype & HypothesisTest::Test::SubType::OneWay))
+		ui.lCol1->setToolTip("Can only select with Data type: text");
+
 
 	ui.lCol2->setVisible(m_test.subtype & (~HypothesisTest::Test::SubType::OneSample));
 	ui.cbCol2->setVisible(ui.lCol2->isVisible());
@@ -740,6 +748,8 @@ void HypothesisTestDock::setColumnsComboBoxModel(Spreadsheet* spreadsheet) {
 	showHypothesisTest();
 }
 
+
+//TODO: change from if else to switch case:
 void HypothesisTestDock::setColumnsComboBoxView() {
 
 	ui.cbCol1->clear();
