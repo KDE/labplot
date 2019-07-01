@@ -593,7 +593,7 @@ bool MQTTConnectionManagerWidget::checkConnections() {
 
 		if (!allOk) {
 			connectionsOk = false;
-			ui.lwConnections->item(i)->setBackgroundColor(Qt::red);
+			ui.lwConnections->item(i)->setBackground(QBrush(Qt::red));
 		} else
 			ui.lwConnections->item(i)->setBackground(QBrush());
 	}

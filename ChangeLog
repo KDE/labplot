@@ -2,7 +2,7 @@
 New features:
 	* Allow to move objects (drag&drop) to different folders in the project explorer
 	* [spreadsheet] allow to insert multiple rows and columns in one step
-	* [spreadsheet] improvend the handling of calculated columns (values calculated via a formula):
+	* [spreadsheet] improved the handling of calculated columns (values calculated via a formula):
 		* Allow to automatically update the calculated column on data changes in the variable columns
 		* Invalidate the calculated column if one of the variable columns was deleted
 		* In "Functions Values" dialog highlight the variable column combobox red if the variable column was deleted in the project
