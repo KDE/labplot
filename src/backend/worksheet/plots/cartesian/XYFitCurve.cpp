@@ -2323,7 +2323,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				delete column;
 				return false;
 			}
-			qDebug()<<"############################   reading column " << column->name();
+			DEBUG("############################   reading column " << column->name().toStdString())
 			if (column->name() == "x")
 				d->xColumn = column;
 			else if (column->name() == "y")

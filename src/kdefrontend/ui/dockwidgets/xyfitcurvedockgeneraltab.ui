@@ -276,11 +276,11 @@
          <attribute name="horizontalHeaderCascadingSectionResizes">
           <bool>false</bool>
          </attribute>
-         <attribute name="horizontalHeaderMinimumSectionSize">
-          <number>15</number>
-         </attribute>
          <attribute name="horizontalHeaderDefaultSectionSize">
           <number>75</number>
+         </attribute>
+         <attribute name="horizontalHeaderMinimumSectionSize">
+          <number>15</number>
          </attribute>
          <attribute name="horizontalHeaderStretchLastSection">
           <bool>false</bool>
@@ -321,11 +321,11 @@
          <attribute name="horizontalHeaderCascadingSectionResizes">
           <bool>true</bool>
          </attribute>
-         <attribute name="horizontalHeaderMinimumSectionSize">
-          <number>50</number>
-         </attribute>
          <attribute name="horizontalHeaderDefaultSectionSize">
           <number>200</number>
+         </attribute>
+         <attribute name="horizontalHeaderMinimumSectionSize">
+          <number>50</number>
          </attribute>
          <attribute name="horizontalHeaderStretchLastSection">
           <bool>true</bool>
@@ -704,7 +704,8 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff>.</normaloff>.</iconset>
+       <normaloff/>
+      </iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -804,7 +805,8 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff>.</normaloff>.</iconset>
+       <normaloff/>
+      </iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -876,10 +878,12 @@
       <string>Weights</string>
      </property>
      <property name="icon">
-      <iconset theme="arrow-right">
-       <normaloff>../../../../../../.designer/backup</normaloff>../../../../../../.designer/backup</iconset>
+      <iconset theme="arrow-down"/>
      </property>
      <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
       <bool>true</bool>
      </property>
      <property name="toolButtonStyle">
@@ -918,7 +922,8 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff>.</normaloff>.</iconset>
+       <normaloff/>
+      </iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -975,7 +980,8 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff>.</normaloff>.</iconset>
+       <normaloff/>
+      </iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -1039,7 +1045,8 @@
      </property>
      <property name="icon">
       <iconset theme="configure">
-       <normaloff>.</normaloff>.</iconset>
+       <normaloff/>
+      </iconset>
      </property>
     </widget>
    </item>
@@ -1093,16 +1100,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
       <property name="spacing">
