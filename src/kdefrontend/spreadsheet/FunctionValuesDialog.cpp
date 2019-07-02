@@ -292,7 +292,20 @@ void FunctionValuesDialog::addVariable() {
 
 	cb->setTopLevelClasses(m_topLevelClasses);
 	cb->setModel(m_aspectTreeModel.get());
-	cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(m_spreadsheet->column(0)));
+
+	//don't allow to select columns to be calculated as variable columns (avoid circular dependencies)
+	QList<const AbstractAspect*> aspects;
+	for (auto* col : m_columns)
+		aspects << col;
+	cb->setHiddenAspects(aspects);
+
+	//for the variable column select the first non-selected column in the spreadsheet
+	for (auto* col : m_spreadsheet->children<Column>()) {
+		if (m_columns.indexOf(col) == -1) {
+			cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(col));
+			break;
+		}
+	}
 
 	//move the add-button to the next row
 	layout->removeWidget(ui.bAddVariable);

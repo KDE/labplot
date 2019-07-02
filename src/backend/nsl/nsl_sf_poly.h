@@ -31,6 +31,8 @@
 
 #include <stdlib.h>
 #include "nsl_complex.h"
+#include <gsl/gsl_complex.h>
+#include <gsl/gsl_complex_math.h>
 
 /* Chebychev T_n(x) */
 double nsl_sf_poly_chebyshev_T(int n, double x);
@@ -41,9 +43,9 @@ double nsl_sf_poly_chebyshev_U(int n, double x);
 double nsl_sf_poly_optimal_legendre_L(int n, double x);
 
 /* Bessel polynomials y_n(x) */
-COMPLEX nsl_sf_poly_bessel_y(int n, COMPLEX x);
+gsl_complex nsl_sf_poly_bessel_y(int n, gsl_complex x);
 /* reversed Bessel polynomials \theta_n(x) */
-COMPLEX nsl_sf_poly_reversed_bessel_theta(int n, COMPLEX x);
+gsl_complex nsl_sf_poly_reversed_bessel_theta(int n, gsl_complex x);
 
 /* interpolating polynomial (Lagrange) 
 	0 - zeroth order (1-point) integral (rectangle rule)

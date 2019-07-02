@@ -47,6 +47,12 @@ To compile LabPlot without optional dependencies even if they are present on the
 Note, by switching off these libraries the feature set of LabPlot will be reduced.
 
 ================================================================================
+To run the tests execute
+
+# cd build
+# make test
+
+================================================================================
 To install LabPlot execute
 
 # cd build

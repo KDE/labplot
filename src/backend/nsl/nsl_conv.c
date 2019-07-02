@@ -108,7 +108,7 @@ int nsl_conv_standard_kernel(double k[], size_t n, nsl_conv_kernel_type type) {
 		double s = n/5.;	/* relative width */
 		for (i = 0;i < n; i++) {
 			double x = i - (n-1.)/2.;
-			k[i] = 1./sqrt(2.*M_PI)/s * exp(-x*x/2./s/s);
+			k[i] = M_SQRT1_2/M_SQRTPI/s * exp(-x*x/2./s/s);
 		}
 		break;
 	}

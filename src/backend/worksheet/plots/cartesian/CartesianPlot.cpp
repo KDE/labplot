@@ -1396,6 +1396,10 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 			updateLegend();
 		}
+		// if an element is hovered, the curves which are handled manually in this class
+		// must be unhovered
+		const WorksheetElement* element = static_cast<const WorksheetElement*>(child);
+		connect(element, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
 	}
 
 	if (!isLoading()) {
@@ -1461,6 +1465,25 @@ void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAsp
 		const auto* curve = qobject_cast<const XYCurve*>(child);
 		if (curve)
 			updateLegend();
+	}
+}
+
+/*!
+ * \brief CartesianPlot::childHovered
+ * Unhover all curves, when another child is hovered. The hover handling for the curves is done in their parent (CartesianPlot),
+ * because the hover should set when the curve is hovered and not just the bounding rect (for more see hoverMoveEvent)
+ */
+void CartesianPlot::childHovered() {
+	Q_D(CartesianPlot);
+	bool curveSender = dynamic_cast<XYCurve*>(QObject::sender()) != nullptr;
+	if (!d->isSelected()) {
+		if (d->m_hovered)
+			d->m_hovered = false;
+		d->update();
+	}
+	if (!curveSender) {
+		for (auto curve: children<XYCurve>())
+			curve->setHover(false);
 	}
 }
 
@@ -2690,6 +2713,8 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			update();
         } else if (mouseMode == CartesianPlot::MouseMode::SelectionMode) {
 			// hover the nearest curve to the mousepointer
+			// hovering curves is implemented in the parent, because no ignoreEvent() exists
+			// for it. Checking all curves and hover the first
 			bool curve_hovered = false;
 			QVector<XYCurve*> curves = q->children<XYCurve>();
 			for (int i=curves.count() - 1; i >= 0; i--){ // because the last curve is above the other curves

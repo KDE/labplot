@@ -151,13 +151,12 @@ void XYFitCurveDock::setupGeneral() {
 	//don't allow word wrapping in the log-table for the multi-line iterations string
 	uiGeneralTab.twLog->setWordWrap(false);
 
-	// show these options per default
+	// show all options per default
 	showDataOptions(true);
 	showFitOptions(true);
+	showWeightsOptions(true);
 	showParameters(true);
 	showResults(true);
-	// hide these options per default
-	showWeightsOptions(false);
 
 	// context menus
 	uiGeneralTab.twParameters->setContextMenuPolicy(Qt::CustomContextMenu);
