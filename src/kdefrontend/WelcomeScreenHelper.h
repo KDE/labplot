@@ -53,6 +53,11 @@ public:
 	Q_INVOKABLE QVariant getExampleProjects();
 	Q_INVOKABLE QVariant searchExampleProjects(const QString& searchtext);
 	Q_INVOKABLE QVariant getExampleProjectTags(const QString&);
+	Q_INVOKABLE void setWidthScale(QString sectionID, double scale);
+	Q_INVOKABLE void setHeightScale(QString sectionID, double scale);
+	Q_INVOKABLE QVariant getWidthScale(QString sectionID);
+	Q_INVOKABLE QVariant getHeightScale(QString sectionID);
+
 
     Spreadsheet* releaseConfiguredSpreadsheet();
     DatasetModel* getDatasetModel();
@@ -70,6 +75,8 @@ private:
 	QMap<QString,QStringList> m_tagMap;
 	QMap<QString,QStringList> m_datasetTag;
 	QMap<QString, QString> m_pathMap;
+	QMap<QString, double> m_widthScale;
+	QMap<QString, double> m_heightScale;
 
 	void processExampleProjects();
 

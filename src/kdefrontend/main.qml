@@ -28,6 +28,10 @@ Rectangle {
     signal openDataset()
     signal openExampleProject(string name)
 
+    function saveSizeRatio() {
+
+    }
+
 
 
     Connections {
@@ -92,9 +96,9 @@ Rectangle {
                             recentProjectsFrame.width = 150
                             exampleProjects.width = mainWindow.width - newsSection.width - 150 - 4*mainWindow.spacing
                         }
-                        if(exampleProjects.width < 150) {
-                            exampleProjects.width = 150
-                            recentProjectsFrame.width = mainWindow.width - newsSection.width - 150 - 4*mainWindow.spacing
+                        if(exampleProjects.width < 300) {
+                            exampleProjects.width = 300
+                            recentProjectsFrame.width = mainWindow.width - newsSection.width - 300 - 4*mainWindow.spacing
                         }
 
                     }
@@ -172,6 +176,7 @@ Rectangle {
             ListView {
                 id: listView
                 spacing: 10
+                width: parent.width
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 clip: true
@@ -182,8 +187,9 @@ Rectangle {
                 model: recentProjects
                 delegate: Column {
                     id: delegateItem
+                    width: parent.width
+                    //width: delegateItem.ListView.view.width
                     property string fullUri : modelData
-                    width: delegateItem.ListView.view.width
                     property int textHeight: 100
                     onWidthChanged: {
                         console.log("recent project delegate width changed: " + width)
@@ -203,6 +209,7 @@ Rectangle {
                             spacing: 10
 
                             Image {
+                                id: helperImage
                                 source: helper.getProjectThumbnail(fullUri);
                                 fillMode: Image.Stretch
                                 sourceSize.width: 48
@@ -211,12 +218,17 @@ Rectangle {
                             }
 
                             Text{
+                                width: parent.width - helperImage.width - parent.spacing
+                                Layout.preferredWidth: parent.width - helperImage.width - parent.spacing
+                                Layout.minimumWidth: parent.width - helperImage.width - parent.spacing
                                 font.pointSize: 14
+                                minimumPointSize: 1
+                                fontSizeMode: Text.Fit
                                 text: delegateItem.fullUri.substring(delegateItem.fullUri.lastIndexOf('/') +1, delegateItem.fullUri.length);
                                 font.bold: true
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignHCenter
-                                wrapMode: Text.WordWrap
+                                //wrapMode: Text.WordWrap
                                 //height:paintedHeight
 
                                 onWidthChanged: {
@@ -300,14 +312,14 @@ Rectangle {
                         exampleProjects.width = exampleProjects.width + mouseX
                         datasetFrame.width = datasetFrame.width + mouseX
                         releaseSection.width = releaseSection.width + mouseX
-                        if(exampleProjects.width < 150
-                                || datasetFrame.width < 150){
+                        if(exampleProjects.width < 300
+                                || datasetFrame.width < 300){
 
 
-                            newsSection.width = mainWindow.width - Math.max(recentProjectsFrame.width, helpFrame.width) - 150 - 4*mainWindow.spacing
+                            newsSection.width = mainWindow.width - Math.max(recentProjectsFrame.width, helpFrame.width) - 300 - 4*mainWindow.spacing
                             exampleProjects.width = mainWindow.width - newsSection.width - recentProjectsFrame.width - 4*mainWindow.spacing
                             datasetFrame.width = mainWindow.width - newsSection.width - helpFrame.width - 4*mainWindow.spacing
-                            releaseSection.width = Math.max(recentProjectsFrame.width, helpFrame.width) + mainWindow.spacing + 150
+                            releaseSection.width = Math.max(recentProjectsFrame.width, helpFrame.width) + mainWindow.spacing + 300
 
                         }
                         if(newsSection.width < 150) {
@@ -393,9 +405,9 @@ Rectangle {
                             recentProjectsFrame.width = 150
                             exampleProjects.width = mainWindow.width - newsSection.width - 150 - 4*mainWindow.spacing
                         }
-                        if(exampleProjects.width < 150) {
-                            exampleProjects.width = 150
-                            recentProjectsFrame.width = mainWindow.width - newsSection.width - 150 - 4*mainWindow.spacing
+                        if(exampleProjects.width < 300) {
+                            exampleProjects.width = 300
+                            recentProjectsFrame.width = mainWindow.width - newsSection.width - 300 - 4*mainWindow.spacing
                         }
 
                     }
@@ -434,7 +446,7 @@ Rectangle {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 cellWidth: width/4
-                cellHeight: 150
+                cellHeight: Math.min(height*0.9, 160)
                 ScrollBar.vertical: ScrollBar{}
                 clip: true
 
@@ -442,8 +454,12 @@ Rectangle {
                 delegate: Rectangle {
                     id: exampleDelegate
                     property string name : modelData
-                    width: exampleGrid.width
-                    height: exampleGrid.height
+                    width: exampleGrid.cellWidth - 5
+                    height: exampleGrid.cellHeight - 5
+
+                    onHeightChanged: {
+                        console.log("Example rect height changed: " + height)
+                    }
 
                     MouseArea {
                         anchors.fill: parent
@@ -454,21 +470,34 @@ Rectangle {
                     }
 
                     ColumnLayout {
-                        Layout.fillHeight: true
+                        onHeightChanged: {
+                            console.log("Example column height changed: " + height)
+                        }
+                        anchors.fill: parent
+                        //Layout.fillHeight: true
                         //Layout.fillWidth: true
                         spacing: 5
                         Image {
+                            id: exampleImage
                             source: helper.getExampleProjectThumbnail(name)
                             fillMode: Image.Stretch
-                            sourceSize.width: Math.min(100, exampleGrid.cellWidth)
-                            sourceSize.height: Math.min(100, exampleGrid.cellWidth)
+                            sourceSize.width: Math.min(120, exampleDelegate.width)
+                            sourceSize.height: Math.min(100, exampleDelegate.height * 0.6)
                             Layout.alignment: Qt.AlignHCenter
                         }
 
                         Text {
+                            Layout.preferredWidth: parent.width
+                            Layout.minimumWidth: parent.width
+                            width: parent.width
+                            Layout.preferredHeight:  exampleDelegate.height  * 0.15
+                            Layout.minimumHeight:  exampleDelegate.height  * 0.15
+                            height: exampleDelegate.height * 0.15
                             wrapMode: Text.WordWrap
                             text: exampleDelegate.name
                             font.pixelSize: 14
+                            minimumPixelSize: 10
+                            fontSizeMode: Text.Fit
                             font.bold: true
                             Layout.fillWidth: true
                             verticalAlignment: Text.AlignVCenter
@@ -476,9 +505,17 @@ Rectangle {
                         }
 
                         Text {
+                            Layout.preferredWidth: parent.width
+                            Layout.minimumWidth: parent.width
+                            width: parent.width
+                            Layout.preferredHeight:  exampleDelegate.height  * 0.25
+                            Layout.minimumHeight:  exampleDelegate.height  * 0.25
+                            height: exampleDelegate.height * 0.25
                             wrapMode: Text.WordWrap
                             text: helper.getExampleProjectTags(exampleDelegate.name)
+                            minimumPixelSize: 6
                             font.pixelSize: 12
+                            fontSizeMode: Text.Fit
                             Layout.fillWidth: true
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter
@@ -530,12 +567,12 @@ Rectangle {
                         exampleProjects.width = exampleProjects.width + mouseX
                         datasetFrame.width = datasetFrame.width + mouseX
                         releaseSection.width = releaseSection.width + mouseX
-                        if(exampleProjects.width < 150
-                                || datasetFrame.width < 150){
-                            newsSection.width = mainWindow.width - Math.max(recentProjectsFrame.width, helpFrame.width) - 150 - 4*mainWindow.spacing
+                        if(exampleProjects.width < 300
+                                || datasetFrame.width < 300){
+                            newsSection.width = mainWindow.width - Math.max(recentProjectsFrame.width, helpFrame.width) - 300 - 4*mainWindow.spacing
                             exampleProjects.width = mainWindow.width - newsSection.width - recentProjectsFrame.width - 4*mainWindow.spacing
                             datasetFrame.width = mainWindow.width - newsSection.width - helpFrame.width - 4*mainWindow.spacing
-                            releaseSection.width = Math.max(recentProjectsFrame.width, helpFrame.width) + mainWindow.spacing + 150
+                            releaseSection.width = Math.max(recentProjectsFrame.width, helpFrame.width) + mainWindow.spacing + 300
 
                         }
                         if(newsSection.width < 150) {
@@ -727,10 +764,7 @@ Rectangle {
 
             ListView {
                 id: listView2
-                x: 0
-                y: 0
-                width: 110
-                height: 160
+                width: parent.width
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 clip: true
@@ -762,7 +796,8 @@ Rectangle {
                     RowLayout {
                         id: row3
                         width: parent.width
-                        Layout.fillHeight: true
+                        height: parent.height
+                        spacing: 10
 
                         Rectangle {
                             anchors.verticalCenter: parent.verticalCenter
@@ -772,12 +807,20 @@ Rectangle {
                         }
 
                         Label {
+                            height: parent.height
+                            width: parent.width - 5 - parent.spacing
+                            Layout.minimumWidth: parent.width - 5 - parent.spacing
+                            Layout.preferredWidth: parent.width - 5 - parent.spacing
                             text: name
                             font.bold: true
                             font.pixelSize: 18
-                            wrapMode: Text.WordWrap
+                            minimumPixelSize: 1
+                            fontSizeMode: Text.Fit
+
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            //wrapMode: Text.WordWrap
                         }
-                        spacing: 10
                     }
 
                     MouseArea {
@@ -835,14 +878,14 @@ Rectangle {
                         exampleProjects.width = exampleProjects.width + mouseX
                         datasetFrame.width = datasetFrame.width + mouseX
                         releaseSection.width = releaseSection.width + mouseX
-                        if(exampleProjects.width < 150
-                                || datasetFrame.width < 150){
+                        if(exampleProjects.width < 300
+                                || datasetFrame.width < 300){
 
 
-                            newsSection.width = mainWindow.width - Math.max(recentProjectsFrame.width, helpFrame.width) - 150 - 4*mainWindow.spacing
+                            newsSection.width = mainWindow.width - Math.max(recentProjectsFrame.width, helpFrame.width) - 300 - 4*mainWindow.spacing
                             exampleProjects.width = mainWindow.width - newsSection.width - recentProjectsFrame.width - 4*mainWindow.spacing
                             datasetFrame.width = mainWindow.width - newsSection.width - helpFrame.width - 4*mainWindow.spacing
-                            releaseSection.width = Math.max(recentProjectsFrame.width, helpFrame.width) + mainWindow.spacing + 150
+                            releaseSection.width = Math.max(recentProjectsFrame.width, helpFrame.width) + mainWindow.spacing + 300
 
                         }
                         if(newsSection.width < 150) {
@@ -982,31 +1025,43 @@ Rectangle {
             id: columnLayout3
             anchors.fill: parent
             clip: true
+            spacing: 20
 
             Label {
+                width: parent.width
+                height: 25
                 id: label4
                 text: qsTr("Start exploring data")
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 25
+                minimumPointSize: 1
+                fontSizeMode: Text.Fit
                 Layout.fillWidth: true
-                wrapMode: Text.WordWrap
+                Layout.minimumHeight: paintedHeight
+                //wrapMode: Text.WordWrap
             }
 
             RowLayout {
                 id: rowLayout
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+                Layout.preferredWidth: parent.width
+                Layout.minimumWidth: parent.width
                 spacing: 10
                 clip: true
+                property int separatorWidth: 5
 
                 ListView {
                     id: categoryList
-                    width: textWidth
-                    implicitWidth: textWidth
+                    Layout.preferredWidth: (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.15
+                    Layout.minimumWidth:  (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.15
+                    //width: textWidth
+                   // implicitWidth: textWidth
                     spacing: 10
                     Layout.fillHeight: true
                     property int textWidth: 100
+
                     clip: true
                     ScrollBar.vertical: ScrollBar { }
                     Component.onCompleted: console.log("Model: " +  datasetModel.categories())
@@ -1021,8 +1076,9 @@ Rectangle {
                         RowLayout {
                             id: categoryRow
                             spacing: 10
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
+                            //Layout.fillHeight: true
+                            //Layout.fillWidth: true
+                            anchors.fill: parent
 
                             Rectangle {
                                 id: categoryBullet
@@ -1033,13 +1089,20 @@ Rectangle {
                             }
 
                             Label {
+                                height: parent.height
+                                width: parent.width - 5 - categoryRow.spacing
+                                Layout.minimumWidth: parent.width - 5 - categoryRow.spacing
+                                Layout.preferredWidth: parent.width - 5 - categoryRow.spacing
+                                Layout.fillHeight: true
                                 id: categoryLabel
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignHCenter
                                 text: categoryDelegate.categoryName
                                 font.bold: true
-                                wrapMode: Text.WordWrap
+                                //wrapMode: Text.WordWrap
                                 font.pixelSize: 18
+                                minimumPixelSize: 1
+                                fontSizeMode: Text.Fit
                                 color: selected ? "#d69f00" : "#000000"
                                 scale: selected ? 1.15 : 1.0
                                 Behavior on color { ColorAnimation { duration: 150 } }
@@ -1084,11 +1147,13 @@ Rectangle {
 
                 ListView {
                     id: subcategoryList
-                    spacing: 20
+                    spacing: 10
                     Layout.fillHeight: true
                     //Layout.fillWidth: true
-                    width: textWidth
-                    implicitWidth: textWidth
+                    Layout.preferredWidth: (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.15
+                    Layout.minimumWidth:  (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.15
+                    //width: textWidth
+                    //implicitWidth: textWidth
                     ScrollBar.vertical: ScrollBar{}
                     clip: true
                     property int textWidth: 100
@@ -1104,8 +1169,9 @@ Rectangle {
                         RowLayout {
                             id: subcategoryRow
                             spacing: 10
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
+                            //Layout.fillHeight: true
+                            //Layout.fillWidth: true
+                            anchors.fill: parent
 
                             Rectangle {
                                 id: subcategoryBullet
@@ -1116,12 +1182,20 @@ Rectangle {
                             }
 
                             Label {
+                                height: parent.height
+                                width: parent.width - 5 - subcategoryRow.spacing
+                                Layout.minimumWidth: parent.width - 5 - subcategoryRow.spacing
+                                Layout.preferredWidth: parent.width - 5 - subcategoryRow.spacing
+                                Layout.fillHeight: true
+
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignHCenter
                                 text: subcategoryDelegate.subcategoryName
                                 wrapMode: Text.WordWrap
                                 font.bold: true
                                 font.pixelSize: 18
+                                minimumPixelSize: 1
+                                fontSizeMode: Text.Fit
                                 color: selected ? "#d69f00" : "#000000"
                                 scale: selected ? 1.15 : 1.0
                                 Behavior on color { ColorAnimation { duration: 150 } }
@@ -1166,10 +1240,12 @@ Rectangle {
                 GridView {
                     id: datasetGrid
                     Layout.fillHeight: true
-                    Layout.fillWidth: true
+                    Layout.preferredWidth: (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.4
+                    Layout.minimumWidth:  (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.4
                     cellWidth: width/4
                     cellHeight: 40
                     clip: true
+
 
                     model: datasetModel.datasets(mainWindow.currentCategory, mainWindow.currentSubcategory)
 
@@ -1177,7 +1253,7 @@ Rectangle {
                         id: datasetDelegate
                         property string datasetName : modelData
                         property bool selected: (index == datasetGrid.currentIndex)
-                        width: textWidth
+                        width: (datasetGrid.width - 30) / 4
                         height: textHeight
 
                         property int textWidth: 200
@@ -1185,9 +1261,8 @@ Rectangle {
 
                         RowLayout {
                             id: datasetRow
-                            spacing: 5
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
+                            spacing: 10
+                            anchors.fill: parent
 
                             Rectangle {
                                 id: datasetBullet
@@ -1198,12 +1273,22 @@ Rectangle {
 
                             Label {
                                 id: datasetText
+
+
+                                height: parent.height
+                                width: parent.width - 5 - datasetRow.spacing
+                                Layout.minimumWidth: parent.width - 5 - datasetRow.spacing
+                                Layout.preferredWidth: parent.width - 5 - datasetRow.spacing
+                                Layout.fillHeight: true
+
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignHCenter
                                 text: datasetDelegate.datasetName
                                 wrapMode: Text.WordWrap
                                 font.bold: true
                                 font.pixelSize: 18
+                                minimumPixelSize: 1
+                                fontSizeMode: Text.Fit
                                 color: selected ? "#d69f00" : "#000000"
                                 scale: selected ? 1.15 : 1.0
                                 Behavior on color { ColorAnimation { duration: 150 } }
@@ -1252,18 +1337,19 @@ Rectangle {
 
 
                 ScrollView {
-                    Layout.minimumWidth: datasetFrame.width / 5
-                    Layout.preferredWidth: datasetFrame.width / 5
-                    width: datasetFrame.width / 5
+                    id: scrollView
                     Layout.fillHeight: true
+                    Layout.preferredWidth: (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.3
+                    Layout.minimumWidth:  (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.3
+
                     contentHeight: datasetDescriptionColumn.height
                     clip: true
                     ColumnLayout {
                         id: datasetDescriptionColumn
                         //anchors.fill: parent
-                        Layout.minimumWidth: datasetFrame.width / 5
-                        Layout.preferredWidth: datasetFrame.width / 5
-                        width: datasetFrame.width / 5
+                        Layout.minimumWidth: scrollView.width // datasetFrame.width *0.3
+                        Layout.preferredWidth: scrollView.width //datasetFrame.width *0.3
+                        width: scrollView.width //datasetFrame.width *0.3
                         spacing: 10
 
                         Row {
@@ -1429,14 +1515,14 @@ Rectangle {
                         exampleProjects.width = exampleProjects.width + mouseX
                         datasetFrame.width = datasetFrame.width + mouseX
                         releaseSection.width = releaseSection.width + mouseX
-                        if(exampleProjects.width < 150
-                                || datasetFrame.width < 150){
+                        if(exampleProjects.width < 300
+                                || datasetFrame.width < 300){
 
 
-                            newsSection.width = mainWindow.width - Math.max(recentProjectsFrame.width, helpFrame.width) - 150 - 4*mainWindow.spacing
+                            newsSection.width = mainWindow.width - Math.max(recentProjectsFrame.width, helpFrame.width) - 300 - 4*mainWindow.spacing
                             exampleProjects.width = mainWindow.width - newsSection.width - recentProjectsFrame.width - 4*mainWindow.spacing
                             datasetFrame.width = mainWindow.width - newsSection.width - helpFrame.width - 4*mainWindow.spacing
-                            releaseSection.width = Math.max(recentProjectsFrame.width, helpFrame.width) + mainWindow.spacing + 150
+                            releaseSection.width = Math.max(recentProjectsFrame.width, helpFrame.width) + mainWindow.spacing + 300
 
                         }
                         if(newsSection.width < 150) {

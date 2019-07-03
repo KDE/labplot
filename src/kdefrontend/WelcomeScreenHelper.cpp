@@ -300,3 +300,19 @@ QVariant WelcomeScreenHelper::searchExampleProjects(const QString& searchtext) {
 
 	return QVariant(results);
 }
+
+void WelcomeScreenHelper::setWidthScale(QString sectionID, double scale) {
+	m_widthScale[sectionID] = scale;
+}
+
+void WelcomeScreenHelper::setHeightScale(QString sectionID, double scale) {
+	m_heightScale[sectionID] = scale;
+}
+
+QVariant WelcomeScreenHelper::getWidthScale(QString sectionID) {
+	return QVariant(m_widthScale[sectionID]);
+}
+
+QVariant WelcomeScreenHelper::getHeightScale(QString sectionID) {
+	return QVariant(m_heightScale[sectionID]);
+}
