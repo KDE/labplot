@@ -54,9 +54,8 @@
   \ingroup kdefrontend
 */
 
-//TOOD: Make this dock widget scrollable and automatic resizeable for different screens.
-//TODO: Better initalization: All widgets needs to be clicked in whole session atleast once.
 //TODO: To add tooltips in docks for non obvious widgets.
+//TODO: Add functionality for database along with spreadsheet.
 
 HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
@@ -73,7 +72,8 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 
 	// adding item to tests and testtype combo box;
 
-	ui.cbTest->addItem( i18n("T Test"), HypothesisTest::Test::Type::TTest);
+    ui.cbTest->addItem("");
+    ui.cbTest->addItem( i18n("T Test"), HypothesisTest::Test::Type::TTest);
 	ui.cbTest->addItem( i18n("Z Test"), HypothesisTest::Test::Type::ZTest);
 	ui.cbTest->addItem( i18n("ANOVA"), HypothesisTest::Test::Type::Anova);
 
@@ -143,7 +143,6 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 
 	ui.leMuo->setText( i18n("%1", m_populationMean));
 	ui.leAlpha->setText( i18n("%1", m_significanceLevel));
-	showTestType();
 
 	//    readConnections();
 
@@ -217,6 +216,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 	connect(ui.chbCategorical, &QCheckBox::stateChanged, this, &HypothesisTestDock::changeCbCol2Label);
 
 	connect(ui.chbPopulationSigma, &QCheckBox::stateChanged, this, &HypothesisTestDock::chbPopulationSigmaStateChanged);
+
 }
 
 void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
@@ -254,26 +254,36 @@ void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
 	//TODO:
 
 	m_initializing = false;
-	showTestType();
 }
 
 void HypothesisTestDock::showTestType() {
 	m_test.type = HypothesisTest::Test::Type(ui.cbTest->currentData().toInt());
 
+    if (ui.cbTest->itemText(0) == "")
+        ui.cbTest->removeItem(0);
+
 	ui.cbTestType->clear();
 	if (m_test.type & (HypothesisTest::Test::Type::TTest | HypothesisTest::Test::Type::ZTest)) {
+        ui.cbTestType->addItem("");
 		ui.cbTestType->addItem( i18n("Two Sample Independent"), HypothesisTest::Test::SubType::TwoSampleIndependent);
 		ui.cbTestType->addItem( i18n("Two Sample Paired"), HypothesisTest::Test::SubType::TwoSamplePaired);
 		ui.cbTestType->addItem( i18n("One Sample"), HypothesisTest::Test::SubType::OneSample);
 	} else if (m_test.type & HypothesisTest::Test::Type::Anova) {
+        ui.cbTestType->addItem("");
 		ui.cbTestType->addItem( i18n("One Way"), HypothesisTest::Test::SubType::OneWay);
 		ui.cbTestType->addItem( i18n("Two Way"), HypothesisTest::Test::SubType::TwoWay);
 	}
-
-	showHypothesisTest();
 }
 
 void HypothesisTestDock::showHypothesisTest() {
+
+    if (ui.cbTestType->itemText(0) == "")
+        ui.cbTestType->removeItem(0);
+
+    if (ui.cbTestType->count() == 0)
+		return;
+
+    QDEBUG( "in show hypothesis test");
 	m_test.subtype = HypothesisTest::Test::SubType(ui.cbTestType->currentData().toInt());
 
 	ui.lCol1->show();
@@ -282,7 +292,6 @@ void HypothesisTestDock::showHypothesisTest() {
 	if ((m_test.type & HypothesisTest::Test::Type::Anova) &
 		(m_test.subtype & HypothesisTest::Test::SubType::OneWay))
 		ui.lCol1->setToolTip("Can only select with Data type: text");
-
 
 	ui.lCol2->setVisible(m_test.subtype & (~HypothesisTest::Test::SubType::OneSample));
 	ui.cbCol2->setVisible(ui.lCol2->isVisible());
@@ -336,9 +345,15 @@ void HypothesisTestDock::doHypothesisTest()  {
 	m_hypothesisTest->setSignificanceLevel(ui.leAlpha->text());
 
 	QVector<Column*> cols;
+
+	if (ui.cbCol1->count() == 0)
+		return;
+
 	cols << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
 	if (m_test.subtype & (~HypothesisTest::Test::SubType::OneSample))
-		cols << reinterpret_cast<Column*>(ui.cbCol2->currentData().toLongLong());
+		if (ui.cbCol2->count() > 0)
+			cols << reinterpret_cast<Column*>(ui.cbCol2->currentData().toLongLong());
+
 	m_hypothesisTest->setColumns(cols);
 
 	m_hypothesisTest->performTest(m_test, ui.chbCategorical->isChecked(), ui.chbEqualVariance->isChecked());
@@ -346,6 +361,10 @@ void HypothesisTestDock::doHypothesisTest()  {
 
 void HypothesisTestDock::performLeveneTest()  {
 	QVector<Column*> cols;
+
+	if (ui.cbCol1->count() == 0 || ui.cbCol2->count() == 0)
+		return;
+
 	cols << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
 	cols << reinterpret_cast<Column*>(ui.cbCol2->currentData().toLongLong());
 	m_hypothesisTest->setColumns(cols);
@@ -512,6 +531,8 @@ void HypothesisTestDock::changeCbCol2Label() {
 		ui.lCol2->setText( i18n("Independent Var. 2"));
 		return;
 	}
+
+	if (ui.cbCol1->count() == 0) return;
 
 	QString selected_text = ui.cbCol1->currentText();
 	Column* col1 = m_hypothesisTest->dataSourceSpreadsheet()->column(selected_text);

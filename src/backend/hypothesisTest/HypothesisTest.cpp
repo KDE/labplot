@@ -39,7 +39,6 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <QDebug>
 #include <QtMath>
 #include <KLocalizedString>
 

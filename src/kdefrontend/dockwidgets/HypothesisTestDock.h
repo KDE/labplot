@@ -50,13 +50,6 @@ public:
 	explicit HypothesisTestDock(QWidget*);
 	void setHypothesisTest(HypothesisTest*);
 
-private slots:
-	void onRbH1OneTail1Toggled(bool checked);
-	void onRbH1OneTail2Toggled(bool checked);
-	void onRbH1TwoTailToggled(bool checked);
-
-private slots:
-
 private:
 	Ui::HypothesisTestDock ui;
 	bool m_initializing{false};
@@ -99,6 +92,10 @@ private slots:
 	void changeCbCol2Label();
 	void chbPopulationSigmaStateChanged();
 	void col1IndexChanged(int index);
+
+	void onRbH1OneTail1Toggled(bool checked);
+	void onRbH1OneTail2Toggled(bool checked);
+	void onRbH1TwoTailToggled(bool checked);
 	//        void connectionChanged();
 	//        void tableChanged();
 	//        void showDatabaseManager();

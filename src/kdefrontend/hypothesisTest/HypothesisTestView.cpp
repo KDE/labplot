@@ -48,8 +48,6 @@
 #include <KMessageBox>
 #include <KSharedConfig>
 
-#include <QDebug>
-
 /*!
     \class HypothesisTestView
     \brief View class for Hypothesis Test
