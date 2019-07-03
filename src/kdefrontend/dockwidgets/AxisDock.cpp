@@ -168,12 +168,19 @@ AxisDock::AxisDock(QWidget* parent) : QWidget(parent) {
 	connect( ui.sbMinorGridWidth, SIGNAL(valueChanged(double)), this, SLOT(minorGridWidthChanged(double)) );
 	connect( ui.sbMinorGridOpacity, SIGNAL(valueChanged(int)), this, SLOT(minorGridOpacityChanged(int)) );
 
+	//template handler
+	auto* frame = new QFrame(this);
+	auto* hlayout = new QHBoxLayout(frame);
+	hlayout->setContentsMargins(0, 11, 0, 11);
 
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::Axis);
-	ui.verticalLayout->addWidget(templateHandler);
+	hlayout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+	ui.verticalLayout->addWidget(frame);
+
 
 	init();
 }
