@@ -390,7 +390,7 @@ void MainWin::initActions() {
 	actionCollection()->addAction("export", m_exportAction);
 	connect(m_exportAction, &QAction::triggered, this, &MainWin::exportDialog);
 
-	m_editFitsFileAction = new QAction(i18n("FITS Metadata Editor"), this);
+	m_editFitsFileAction = new QAction(QIcon::fromTheme("editor"), i18n("FITS Metadata Editor"), this);
 	m_editFitsFileAction->setWhatsThis(i18n("Open editor to edit FITS meta data"));
 	actionCollection()->addAction("edit_fits", m_editFitsFileAction);
 	connect(m_editFitsFileAction, &QAction::triggered, this, &MainWin::editFitsFileDialog);
@@ -483,9 +483,13 @@ void MainWin::initActions() {
 }
 
 void MainWin::initMenus() {
-	//menu for adding new aspects
+	//menu in the main toolbar for adding new aspects
+	auto* menu = dynamic_cast<QMenu*>(factory()->container("new", this));
+	menu->setIcon(QIcon::fromTheme("window-new"));
+
+	//menu in the project explorr and in the toolbar for adding new aspects
 	m_newMenu = new QMenu(i18n("Add New"), this);
-	m_newMenu->setIcon(QIcon::fromTheme("document-new"));
+	m_newMenu->setIcon(QIcon::fromTheme("window-new"));
 	m_newMenu->addAction(m_newFolderAction);
 	m_newMenu->addAction(m_newWorkbookAction);
 	m_newMenu->addAction(m_newSpreadsheetAction);
