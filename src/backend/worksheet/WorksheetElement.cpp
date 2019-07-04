@@ -46,8 +46,11 @@ WorksheetElement::WorksheetElement(const QString &name, AspectType type)
 	: AbstractAspect(name, type) {
 
 	m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
+	m_drawingOrderMenu->setIcon(QIcon::fromTheme("layer-bottom"));
 	m_moveBehindMenu = new QMenu(i18n("Move &behind"));
+	m_moveBehindMenu->setIcon(QIcon::fromTheme("draw-arrow-down"));
 	m_moveInFrontOfMenu = new QMenu(i18n("Move in &front of"));
+	m_moveInFrontOfMenu->setIcon(QIcon::fromTheme("draw-arrow-up"));
 	m_drawingOrderMenu->addMenu(m_moveBehindMenu);
 	m_drawingOrderMenu->addMenu(m_moveInFrontOfMenu);
 
@@ -177,7 +180,7 @@ void WorksheetElement::prepareMoveBehindMenu() {
 		const WorksheetElement* elem = children.at(i);
 		//axes are always drawn on top of other elements, don't add them to the menu
 		if (!dynamic_cast<const Axis*>(elem)) {
-			QAction* action = m_moveBehindMenu->addAction(elem->name());
+			QAction* action = m_moveBehindMenu->addAction(elem->icon(), elem->name());
 			action->setData(i);
 		}
 	}
@@ -197,7 +200,7 @@ void WorksheetElement::prepareMoveInFrontOfMenu() {
 		const WorksheetElement* elem = children.at(i);
 		//axes are always drawn on top of other elements, don't add them to the menu
 		if (!dynamic_cast<const Axis*>(elem)) {
-			QAction* action = m_moveInFrontOfMenu->addAction(elem->name());
+			QAction* action = m_moveInFrontOfMenu->addAction(elem->icon(), elem->name());
 			action->setData(i);
 		}
 	}
