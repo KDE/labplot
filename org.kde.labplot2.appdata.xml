@@ -13,6 +13,7 @@
   <name xml:lang="el">LabPlot</name>
   <name xml:lang="en-GB">LabPlot</name>
   <name xml:lang="es">LabPlot</name>
+  <name xml:lang="eu">LabPlot</name>
   <name xml:lang="fi">LabPlot</name>
   <name xml:lang="fr">LabPlot</name>
   <name xml:lang="gl">LabPlot</name>
@@ -38,6 +39,7 @@
   <summary xml:lang="el">Το LabPlot είναι μια εφαρμογή του KDE για διαδραστική αναπαράσταση και ανάλυση επιστημονικών δεδομένων</summary>
   <summary xml:lang="en-GB">LabPlot is a KDE application for interactive graphing and analysis of scientific data</summary>
   <summary xml:lang="es">LabPlot es una aplicación de KDE para gráficos interactivos y análisis de datos científicos</summary>
+  <summary xml:lang="eu">LabPlot datu zientifikoak modu elkarreragilean grafikatu eta aztertzeko KDE aplikazio bat da</summary>
   <summary xml:lang="gl">LabPlot2 é un aplicativo de KDE para a xeración interactiva de gráficos e a análise de datos científicos</summary>
   <summary xml:lang="id">LabPlot adalah aplikasi KDE untuk penggrafikan interaktif dan analisis data ilmiah</summary>
   <summary xml:lang="it">LabPlot è un'applicazione di KDE per la grafica interattiva e per l'analisi dei dati scientifici</summary>
@@ -64,6 +66,7 @@
     <p xml:lang="el">Το LabPlot είναι μια KDE-εφαρμογή για διαδραστική αναπαράσταση και ανάλυση επιστημονικών δεδομένων.</p>
     <p xml:lang="en-GB">LabPlot is a KDE-application for interactive graphing and analysis of scientific data.</p>
     <p xml:lang="es">LabPlot es una aplicación de KDE para gráficos interactivos y análisis de datos científicos.</p>
+    <p xml:lang="eu">LabPlot datu zientifikoak modu elkarreragilean grafikatu eta aztertzeko KDE aplikazio bat da.</p>
     <p xml:lang="fi">LabPlot on KDE-sovellus tieteellisen datan vuorovaikutteiseen kuvaamiseen ja analysointiin</p>
     <p xml:lang="fr">LabPlot est une application KDE pour le tracé interactif de courbes et l'analyse de données scientifiques.</p>
     <p xml:lang="gl">LabPlot2 é un aplicativo de KDE para a xeración interactiva de gráficos e a análise de datos científicos.</p>
@@ -90,6 +93,7 @@
     <p xml:lang="el">Το LabPlot παρέχει έναν εύκολο τρόπο δημιουργίας, διαχείρισης και επεξεργασίας γραφικών παραστάσεων. Σας επιτρέπει να δημιουργείτε γραφικές παρασασεις με βάση δεδομένα από φύλλα εργασίας ή εισηγμένα από εξωτερικά αρχεία. Οι γραφικές παραστάσεις μπορούν να εξαχθούν σε διάφορους τύπους αποθήκευσης χρωματικής περίπλεξης ή διανυσματικών γραφικών.</p>
     <p xml:lang="en-GB">LabPlot provides an easy way to create, manage and edit plots. It allows you to produce plots based on data from a spreadsheet or on data imported from external files. Plots can be exported to several pixmap and vector graphic formats.</p>
     <p xml:lang="es">LabPlot proporciona un sencillo modo de crear, gestionar y editar gráficos. Le permite generar gráficos basados en datos obtenidos de una hoja de cálculo o importados de archivos externos. Los gráficos se pueden exportar a diversos formatos de imagen y vectoriales.</p>
+    <p xml:lang="eu">LabPlot-ek grafikoak sortu, kudeatu eta editatzeko era erraz bat eskaintzen du. Grafikoak sortzen uzten dizu kalkulu-orrietako datuekin edo kanpoko fitxategietatik inportatutako datuekin. Grafikoak hainbat pixel-mapa eta bektore grafiko formatutara esportatu daitezke.</p>
     <p xml:lang="fi">LabPlot tarjoaa helpon tavan luoda, hallita ja muokata kaavioita. Voit tuottaa kaavioita laskentataulukon tai muiden ulkoisten tiedostojen datasta. Kaavioita voi viedä eri bittikartta- ja vektorigrafiikkamuotoihin.</p>
     <p xml:lang="fr">LabPlot fournit une moyen facile de créer, gérer et éditer des courbes. Il vous permet de produire des courbes basées sur des données issues d'un tableur ou d'un fichier externe. Les courbes peuvent être exportées vers plusieurs format d'image matriciels ou vectoriels.</p>
     <p xml:lang="gl">LabPlot fornece unha forma doada de crear, xestionar e editar gráficos. Permítelle producir gráficos baseados en datos dunha folla de cálculo ou datos importados de ficheiros externos. Pode exportar os gráficos en distintos formatos de imaxe, de mapas de píxeles ou vectoriais.</p>
@@ -115,6 +119,7 @@
       <caption xml:lang="ca-valencia">Exemple d'ajust</caption>
       <caption xml:lang="en-GB">Fit example</caption>
       <caption xml:lang="es">Ejemplo de ajuste</caption>
+      <caption xml:lang="eu">Egokitzeko adibidea</caption>
       <caption xml:lang="gl">Exemplo de axuste.</caption>
       <caption xml:lang="id">Contoh pas</caption>
       <caption xml:lang="it">Adatta esempio</caption>
@@ -135,6 +140,7 @@
       <caption xml:lang="de">Mathematische Funktion</caption>
       <caption xml:lang="en-GB">Mathematical function</caption>
       <caption xml:lang="es">Función matemática</caption>
+      <caption xml:lang="eu">Funtzio matematikoa</caption>
       <caption xml:lang="gl">Función matemática.</caption>
       <caption xml:lang="id">Fungsi matematika</caption>
       <caption xml:lang="it">Funzioni matematica</caption>
@@ -154,6 +160,7 @@
       <caption xml:lang="de">CAS-Arbeitsblatt</caption>
       <caption xml:lang="en-GB">CAS worksheet</caption>
       <caption xml:lang="es">Hoja de trabajo CAS</caption>
+      <caption xml:lang="eu">CAS lan-orria</caption>
       <caption xml:lang="gl">Folla de traballo de CAS.</caption>
       <caption xml:lang="id">Lembar kerja CAS</caption>
       <caption xml:lang="it">Foglio di lavoro CAS</caption>
