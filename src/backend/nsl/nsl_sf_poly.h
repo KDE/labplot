@@ -30,7 +30,6 @@
 #define NSL_SF_POLY_H
 
 #include <stdlib.h>
-#include "nsl_complex.h"
 #include <gsl/gsl_complex.h>
 #include <gsl/gsl_complex_math.h>
 

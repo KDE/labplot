@@ -542,7 +542,7 @@ void CartesianPlot::initActions() {
 	connect(shiftDownYAction, &QAction::triggered, this, &CartesianPlot::shiftDownY);
 
 	//visibility action
-	visibilityAction = new QAction(i18n("Visible"), this);
+	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &CartesianPlot::visibilityChanged);
 }
@@ -551,6 +551,7 @@ void CartesianPlot::initMenus() {
 	initActions();
 
 	addNewMenu = new QMenu(i18n("Add New"));
+	addNewMenu->setIcon(QIcon::fromTheme("list-add"));
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addHistogramAction);
 	addNewMenu->addAction(addEquationCurveAction);
@@ -576,6 +577,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addCustomPointAction);
 
 	zoomMenu = new QMenu(i18n("Zoom"));
+	zoomMenu->setIcon(QIcon::fromTheme("zoom-draw"));
 	zoomMenu->addAction(scaleAutoAction);
 	zoomMenu->addAction(scaleAutoXAction);
 	zoomMenu->addAction(scaleAutoYAction);
@@ -636,6 +638,7 @@ void CartesianPlot::initMenus() {
 
 	//themes menu
 	themeMenu = new QMenu(i18n("Apply Theme"));
+	themeMenu->setIcon(QIcon::fromTheme("color-management"));
 	auto* themeWidget = new ThemesWidget(nullptr);
 	connect(themeWidget, &ThemesWidget::themeSelected, this, &CartesianPlot::loadTheme);
 	connect(themeWidget, &ThemesWidget::themeSelected, themeMenu, &QMenu::close);

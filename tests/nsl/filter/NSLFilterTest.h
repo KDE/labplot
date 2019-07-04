@@ -33,6 +33,8 @@ class NSLFilterTest : public NSLTest {
 	Q_OBJECT
 
 private slots:
+	void initTestCase();
+
 	void testForm();
 	// performance
 	//void testPerformance();

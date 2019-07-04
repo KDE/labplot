@@ -120,12 +120,18 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : QWidget(pare
 	connect( ui.sbLayoutVerticalSpacing, SIGNAL(valueChanged(double)), this, SLOT(layoutVerticalSpacingChanged(double)) );
 	connect( ui.sbLayoutColumnCount, SIGNAL(valueChanged(int)), this, SLOT(layoutColumnCountChanged(int)) );
 
-	auto templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlotLegend);
-	ui.verticalLayout->addWidget(templateHandler);
-	templateHandler->show();
+	//template handler
+	auto* frame = new QFrame(this);
+	auto* layout = new QHBoxLayout(frame);
+	layout->setContentsMargins(0, 11, 0, 11);
+
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlotLegend);
+	layout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+	ui.verticalLayout->addWidget(frame);
 
 	init();
 }

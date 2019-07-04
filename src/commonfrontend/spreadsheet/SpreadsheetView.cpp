@@ -360,10 +360,12 @@ void SpreadsheetView::initActions() {
 void SpreadsheetView::initMenus() {
 	//Selection menu
 	m_selectionMenu = new QMenu(i18n("Selection"), this);
+	m_selectionMenu->setIcon(QIcon::fromTheme("selection"));
 	QMenu* submenu = nullptr;
 
 	if (!m_readOnly) {
 		submenu = new QMenu(i18n("Fi&ll Selection With"), this);
+		submenu->setIcon(QIcon::fromTheme("select-rectangle"));
 		submenu->addAction(action_fill_sel_row_numbers);
 		submenu->addAction(action_fill_const);
 		m_selectionMenu->addMenu(submenu);

@@ -222,7 +222,7 @@ void Axis::init() {
  * For some ActionGroups the actual actions are created in \c GuiTool,
  */
 void Axis::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
+	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &Axis::visibilityChangedSlot);
 
@@ -231,10 +231,10 @@ void Axis::initActions() {
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, &QActionGroup::triggered, this, &Axis::orientationChangedSlot);
 
-	orientationHorizontalAction = new QAction(i18n("Horizontal"), orientationActionGroup);
+	orientationHorizontalAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("Horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
 
-	orientationVerticalAction = new QAction(i18n("Vertical"), orientationActionGroup);
+	orientationVerticalAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("Vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
 
 	//Line
@@ -255,15 +255,20 @@ void Axis::initMenus() {
 
 	//Orientation
 	orientationMenu = new QMenu(i18n("Orientation"));
+	orientationMenu->setIcon(QIcon::fromTheme("labplot-axis-horizontal"));
 	orientationMenu->addAction(orientationHorizontalAction);
 	orientationMenu->addAction(orientationVerticalAction);
 
 	//Line
 	lineMenu = new QMenu(i18n("Line"));
+	lineMenu->setIcon(QIcon::fromTheme("draw-line"));
 	lineStyleMenu = new QMenu(i18n("Style"), lineMenu);
+	lineStyleMenu->setIcon(QIcon::fromTheme("object-stroke-style"));
+	lineMenu->setIcon(QIcon::fromTheme("draw-line"));
 	lineMenu->addMenu( lineStyleMenu );
 
 	lineColorMenu = new QMenu(i18n("Color"), lineMenu);
+	lineColorMenu->setIcon(QIcon::fromTheme("fill-color"));
 	GuiTools::fillColorMenu( lineColorMenu, lineColorActionGroup );
 	lineMenu->addMenu( lineColorMenu );
 
@@ -358,7 +363,6 @@ void Axis::setSuppressRetransform(bool value) {
 }
 
 void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-// 	DEBUG("Axis::handleResize()");
 	Q_D(Axis);
 	Q_UNUSED(pageResize);
 

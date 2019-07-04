@@ -158,7 +158,7 @@ void XYCurve::init() {
 }
 
 void XYCurve::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
+	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered(bool)), this, SLOT(visibilityChanged()));
 

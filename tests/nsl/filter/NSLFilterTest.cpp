@@ -31,6 +31,11 @@ extern "C" {
 #include "backend/nsl/nsl_filter.h"
 }
 
+void NSLFilterTest::initTestCase() {
+	const QString currentDir = __FILE__;
+	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
+}
+
 //##############################################################################
 //#################  form test
 //##############################################################################

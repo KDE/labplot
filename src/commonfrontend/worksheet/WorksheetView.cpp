@@ -385,6 +385,7 @@ void WorksheetView::initMenus() {
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot4Action);
 
 	m_addNewMenu = new QMenu(i18n("Add New"), this);
+	m_addNewMenu->setIcon(QIcon::fromTheme("list-add"));
 	m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(QIcon::fromTheme("office-chart-line"));
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
@@ -413,6 +414,7 @@ void WorksheetView::initMenus() {
 	m_magnificationMenu->addAction(fiveTimesMagnificationAction);
 
 	m_layoutMenu = new QMenu(i18n("Layout"), this);
+	m_layoutMenu->setIcon(QIcon::fromTheme("labplot-editbreaklayout"));
 	m_layoutMenu->addAction(verticalLayoutAction);
 	m_layoutMenu->addAction(horizontalLayoutAction);
 	m_layoutMenu->addAction(gridLayoutAction);
@@ -435,6 +437,7 @@ void WorksheetView::initMenus() {
 // 	m_gridMenu->addAction(snapToGridAction);
 
 	m_cartesianPlotMenu = new QMenu(i18n("Cartesian Plot"), this);
+	m_cartesianPlotMenu->setIcon(QIcon::fromTheme("office-chart-line"));
 
 	m_cartesianPlotMouseModeMenu = new QMenu(i18n("Mouse Mode"), this);
 	m_cartesianPlotMouseModeMenu->setIcon(QIcon::fromTheme("input-mouse"));
@@ -445,6 +448,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotMouseModeMenu->addSeparator();
 
 	m_cartesianPlotAddNewMenu = new QMenu(i18n("Add New"), this);
+	m_cartesianPlotAddNewMenu->setIcon(QIcon::fromTheme("list-add"));
 	m_cartesianPlotAddNewMenu->addAction(addCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addHistogramAction);
 	m_cartesianPlotAddNewMenu->addAction(addEquationCurveAction);
@@ -488,6 +492,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotZoomMenu->addAction(shiftDownYAction);
 
 	m_cartesianPlotActionModeMenu = new QMenu(i18n("Apply Actions to"), this);
+	m_cartesianPlotActionModeMenu->setIcon(QIcon::fromTheme("dialog-ok-apply"));
 	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToSelectionAction);
 	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToAllAction);
 
@@ -506,6 +511,7 @@ void WorksheetView::initMenus() {
 
 	//themes menu
 	m_themeMenu = new QMenu(i18n("Apply Theme"), this);
+	m_themeMenu->setIcon(QIcon::fromTheme("color-management"));
 	auto* themeWidget = new ThemesWidget(nullptr);
 	connect(themeWidget, &ThemesWidget::themeSelected, m_worksheet, &Worksheet::setTheme);
 	connect(themeWidget, &ThemesWidget::themeSelected, m_themeMenu, &QMenu::close);

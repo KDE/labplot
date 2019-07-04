@@ -254,6 +254,7 @@ void MatrixView::connectActions() {
 void MatrixView::initMenus() {
 	//selection menu
 	m_selectionMenu = new QMenu(i18n("Selection"), this);
+	m_selectionMenu->setIcon(QIcon::fromTheme("selection"));
 	m_selectionMenu->addAction(action_cut_selection);
 	m_selectionMenu->addAction(action_copy_selection);
 	m_selectionMenu->addAction(action_paste_into_selection);
@@ -301,6 +302,7 @@ void MatrixView::initMenus() {
 	m_matrixMenu->addSeparator();
 
 	submenu = new QMenu(i18n("View"), this);
+	submenu->setIcon(QIcon::fromTheme("view-choose"));
 	submenu->addAction(action_data_view);
 	submenu->addAction(action_image_view);
 	m_matrixMenu->addMenu(submenu);
@@ -312,6 +314,7 @@ void MatrixView::initMenus() {
 	m_matrixMenu->addSeparator();
 
 	m_headerFormatMenu = new QMenu(i18n("Header Format"), this);
+	m_headerFormatMenu->setIcon(QIcon::fromTheme("format-border-style"));
 	m_headerFormatMenu->addAction(action_header_format_1);
 	m_headerFormatMenu->addAction(action_header_format_2);
 	m_headerFormatMenu->addAction(action_header_format_3);
