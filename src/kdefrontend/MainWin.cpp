@@ -141,10 +141,16 @@ MainWin::~MainWin() {
 	group.writeEntry("geometry", saveGeometry());
 	KSharedConfig::openConfig()->sync();
 
+	qDebug() << "Mainwin Destructor ";
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr && m_saveWelcomeScreen) {
+		qDebug() << "Destructor save welcome screen";
+		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
+	}
+
 	if (m_project != nullptr) {
 
 		if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr)
-			m_mdiArea->closeAllSubWindows();
+			m_mdiArea->closeAllSubWindows();		
 
 		disconnect(m_project, nullptr, this, nullptr);
 		delete m_project;
@@ -155,6 +161,9 @@ MainWin::~MainWin() {
 
 	if (m_guiObserver)
 		delete m_guiObserver;
+
+	if(m_welcomeScreenHelper)
+		delete m_welcomeScreenHelper;
 }
 
 void MainWin::showPresenter() {
@@ -311,8 +320,10 @@ void MainWin::initGUI(const QString& fileName) {
 	updateGUIOnProjectChanges();
 
 	//load welcome screen
-	const bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
-	if(showWelcomeScreen) {
+	m_showWelcomeScreen  = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
+	m_saveWelcomeScreen = group.readEntry<bool>(QLatin1String("SaveWelcomeScreen"), true);
+
+	if(m_showWelcomeScreen) {
 		m_welcomeWidget = createWelcomeScreen();
 		setCentralWidget(m_welcomeWidget);		
 	}	
@@ -360,6 +371,7 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	if(m_welcomeScreenHelper != nullptr)
 		delete m_welcomeScreenHelper;
 	m_welcomeScreenHelper = new WelcomeScreenHelper();
+	m_welcomeScreenHelper->setSaveLayout(m_saveWelcomeScreen);
 	connect(m_welcomeScreenHelper, SIGNAL(openExampleProject(QString)), this, SLOT(openProject(const QString& )));
 
 	ctxt->setContextProperty("datasetModel", m_welcomeScreenHelper->getDatasetModel());
@@ -380,6 +392,12 @@ QObject::connect(item, SIGNAL(openExampleProject(QString)), m_welcomeScreenHelpe
 	return quickWidget;
 }
 
+void MainWin::resetWelcomeScreen() {
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
+			QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "restoreOriginalLayout");
+	}
+}
+
 /**
  * @brief Creates a new MDI area, to replace the Welcome Screen as central widget
  */
@@ -393,8 +411,10 @@ void MainWin::createMdiArea() {
 		qDebug() << "There is no toolbar to display";
 	}
 
-	qDebug() << "Call saving welcome screen widget dimensions";
-	QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
+	if(m_showWelcomeScreen && m_saveWelcomeScreen) {
+		qDebug() << "Call saving welcome screen widget dimensions";
+		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
+	}
 
 	m_mdiArea = new QMdiArea;
 	setCentralWidget(m_mdiArea);
@@ -1973,22 +1993,24 @@ void MainWin::dropEvent(QDropEvent* event) {
 void MainWin::handleSettingsChanges() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group( "Settings_General" );
 
-	QMdiArea::ViewMode viewMode = QMdiArea::ViewMode(group.readEntry("ViewMode", 0));
-	if (m_mdiArea->viewMode() != viewMode) {
-		m_mdiArea->setViewMode(viewMode);
-		if (viewMode == QMdiArea::SubWindowView)
-			this->updateMdiWindowVisibility();
-	}
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr) {
+		QMdiArea::ViewMode viewMode = QMdiArea::ViewMode(group.readEntry("ViewMode", 0));
+		if (m_mdiArea->viewMode() != viewMode) {
+			m_mdiArea->setViewMode(viewMode);
+			if (viewMode == QMdiArea::SubWindowView)
+				this->updateMdiWindowVisibility();
+		}
 
-	if (m_mdiArea->viewMode() == QMdiArea::TabbedView) {
-		m_tileWindows->setVisible(false);
-		m_cascadeWindows->setVisible(false);
-		QTabWidget::TabPosition tabPosition = QTabWidget::TabPosition(group.readEntry("TabPosition", 0));
-		if (m_mdiArea->tabPosition() != tabPosition)
-			m_mdiArea->setTabPosition(tabPosition);
-	} else {
-		m_tileWindows->setVisible(true);
-		m_cascadeWindows->setVisible(true);
+		if (m_mdiArea->viewMode() == QMdiArea::TabbedView) {
+			m_tileWindows->setVisible(false);
+			m_cascadeWindows->setVisible(false);
+			QTabWidget::TabPosition tabPosition = QTabWidget::TabPosition(group.readEntry("TabPosition", 0));
+			if (m_mdiArea->tabPosition() != tabPosition)
+				m_mdiArea->setTabPosition(tabPosition);
+		} else {
+			m_tileWindows->setVisible(true);
+			m_cascadeWindows->setVisible(true);
+		}
 	}
 
 	//autosave
@@ -2025,6 +2047,11 @@ void MainWin::handleSettingsChanges() {
 	bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
 	if(m_showWelcomeScreen != showWelcomeScreen) {
 		m_showWelcomeScreen = showWelcomeScreen;
+	}
+
+	bool saveWelcomeScreen = group.readEntry<bool>(QLatin1String("SaveWelcomeScreen"), true);
+	if(m_saveWelcomeScreen != saveWelcomeScreen) {
+		m_saveWelcomeScreen = saveWelcomeScreen;
 	}
 }
 
@@ -2240,6 +2267,7 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 void MainWin::settingsDialog() {
 	auto* dlg = new SettingsDialog(this);
 	connect (dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
+	connect (dlg, &SettingsDialog::resetWelcomeScreen, this, &MainWin::resetWelcomeScreen);
 	dlg->exec();
 }
 

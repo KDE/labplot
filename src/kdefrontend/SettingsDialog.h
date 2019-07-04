@@ -55,6 +55,7 @@ private:
 
 signals:
 	void settingsChanged();
+	void resetWelcomeScreen();
 };
 
 #endif

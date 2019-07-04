@@ -61,6 +61,7 @@ public:
 
     Spreadsheet* releaseConfiguredSpreadsheet();
     DatasetModel* getDatasetModel();
+	void setSaveLayout(const bool);
 
 public slots:
 	void datasetClicked(const QString& category, const QString& subcategory, const QString& datasetName);
@@ -77,6 +78,7 @@ private:
 	QMap<QString, QString> m_pathMap;
 	QMap<QString, double> m_widthScale;
 	QMap<QString, double> m_heightScale;
+	bool m_saveLayout{true};
 
 	void processExampleProjects();
 	void loadConfig();

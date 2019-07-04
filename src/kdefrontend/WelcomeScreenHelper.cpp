@@ -357,15 +357,19 @@ void WelcomeScreenHelper::setHeightScale(QString sectionID, double scale) {
 }
 
 QVariant WelcomeScreenHelper::getWidthScale(QString sectionID) {
-	if(m_widthScale.keys().contains(sectionID))
+	if(m_widthScale.keys().contains(sectionID) && m_saveLayout)
 		return QVariant(m_widthScale[sectionID]);
 
 	return QVariant(-1);
 }
 
 QVariant WelcomeScreenHelper::getHeightScale(QString sectionID) {
-	if(m_heightScale.keys().contains(sectionID))
+	if(m_heightScale.keys().contains(sectionID) && m_saveLayout)
 		return QVariant(m_heightScale[sectionID]);
 
 	return QVariant(-1);;
+}
+
+void WelcomeScreenHelper::setSaveLayout(const bool save) {
+	m_saveLayout = save;
 }

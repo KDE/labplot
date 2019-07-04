@@ -122,6 +122,7 @@ private:
 	QTimer m_autoSaveTimer;
 	bool m_showMemoryInfo{true};
 	bool m_showWelcomeScreen{true};
+	bool m_saveWelcomeScreen{true};
 	MemoryWidget* m_memoryInfoWidget{nullptr};
 	Qt::WindowStates m_lastWindowState; //< last window state before switching to full screen mode
 	QMdiSubWindow* m_welcomeWindow{nullptr};
@@ -254,6 +255,7 @@ protected:
 private slots:
 	void initGUI(const QString&);
 	QQuickWidget* createWelcomeScreen();
+	void resetWelcomeScreen();
 	void createMdiArea();
 	void updateGUI();
 	void updateGUIOnProjectChanges();

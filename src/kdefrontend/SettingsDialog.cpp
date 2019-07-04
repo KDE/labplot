@@ -61,6 +61,7 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 	KPageWidgetItem* generalFrame = addPage(m_generalPage, i18n("General"));
 	generalFrame->setIcon(QIcon::fromTheme("system-run"));
 	connect(m_generalPage, &SettingsGeneralPage::settingsChanged, this, &SettingsDialog::changed);
+	connect(m_generalPage, &SettingsGeneralPage::resetWelcomeScreen, this, &SettingsDialog::resetWelcomeScreen);
 
 	m_worksheetPage = new SettingsWorksheetPage(this);
 	KPageWidgetItem* worksheetFrame = addPage(m_worksheetPage, i18n("Worksheet"));
