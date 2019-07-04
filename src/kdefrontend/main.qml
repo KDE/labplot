@@ -28,11 +28,37 @@ Rectangle {
     signal openDataset()
     signal openExampleProject(string name)
 
-    function saveSizeRatio() {
-
+    function restoreOriginalLayout() {
+        console.log("Restore widget dimensions")
+        recentProjectsFrame.width = mainWindow.width / 5 - 4*mainWindow.spacing
+        recentProjectsFrame.height = mainWindow.height / 4 - 4*mainWindow.spacing
+        exampleProjects.width = 3 * mainWindow.width / 5 - 4*mainWindow.spacing
+        exampleProjects.height = mainWindow.height / 4 - 4*mainWindow.spacing
+        newsSection.width = mainWindow.width / 5 - 4*mainWindow.spacing
+        newsSection.height = mainWindow.height- 4*mainWindow.spacing
+        helpFrame.width = mainWindow.width / 5 - 4*mainWindow.spacing
+        helpFrame.height = mainWindow.height / 4 - 4*mainWindow.spacing
+        datasetFrame.width = 3 * mainWindow.width / 5 - 4*mainWindow.spacing
+        datasetFrame.height = mainWindow.height / 4 - 4*mainWindow.spacing
+        releaseSection.width = 4 * mainWindow.width / 5 - 4*mainWindow.spacing
+        releaseSection.height = 2*mainWindow.height / 4 - 4*mainWindow.spacing
     }
 
-
+    function saveWidgetDimensions() {
+        console.log("Save welcome screen widget dimensions")
+        helper.setHeightScale(recentProjectsFrame.sectionName, recentProjectsFrame.height)
+        helper.setWidthScale(recentProjectsFrame.sectionName, recentProjectsFrame.width)
+        helper.setHeightScale(exampleProjects.sectionName, exampleProjects.height)
+        helper.setWidthScale(exampleProjects.sectionName, exampleProjects.width)
+        helper.setHeightScale(newsSection.sectionName, newsSection.height)
+        helper.setWidthScale(newsSection.sectionName, newsSection.width)
+        helper.setHeightScale(helpFrame.sectionName, helpFrame.height)
+        helper.setWidthScale(helpFrame.sectionName, helpFrame.width)
+        helper.setHeightScale(datasetFrame.sectionName, datasetFrame.height)
+        helper.setWidthScale(datasetFrame.sectionName, datasetFrame.width)
+        helper.setHeightScale(releaseSection.sectionName, releaseSection.height)
+        helper.setWidthScale(releaseSection.sectionName, releaseSection.width)
+    }
 
     Connections {
         target: helper
@@ -58,8 +84,9 @@ Rectangle {
 
     Frame {
         id: recentProjectsFrame
-        width: mainWindow.width / 5 - 4*mainWindow.spacing
-        height: mainWindow.height / 4 - 4*mainWindow.spacing
+        property string sectionName: "recentProjectsFrame"
+        width: helper.getWidthScale(sectionName) === -1 ? mainWindow.width / 5 - 4*mainWindow.spacing : helper.getWidthScale(sectionName)
+        height: helper.getHeightScale(sectionName) === -1 ? mainWindow.height / 4 - 4*mainWindow.spacing : helper.getHeightScale(sectionName)
         anchors.top: parent.top
         anchors.topMargin: mainWindow.spacing
         anchors.left: parent.left
@@ -67,6 +94,12 @@ Rectangle {
         visible: true
         opacity: 1
         padding: 5
+
+        Component.onCompleted: {
+            console.log("Recent projects saved iwdth " + helper.getWidthScale(sectionName) + "  height  " + helper.getHeightScale(sectionName))
+            if(helper.getWidthScale(sectionName) === -1 || helper.getHeightScale(sectionName) === -1)
+                mainWindow.restoreOriginalLayout()
+        }
 
         Rectangle {
             width: 3
@@ -274,8 +307,9 @@ Rectangle {
 
     Frame {
         id: exampleProjects
-        width: 3 * mainWindow.width / 5 - 4*mainWindow.spacing
-        height: mainWindow.height / 4 - 4*mainWindow.spacing
+        property string sectionName: "exampleProjects"
+        width: helper.getWidthScale(sectionName) === -1 ? 3 * mainWindow.width / 5 - 4*mainWindow.spacing : helper.getWidthScale(sectionName)
+        height: helper.getHeightScale(sectionName) === -1 ? mainWindow.height / 4 - 4*mainWindow.spacing : helper.getHeightScale(sectionName)
         anchors.top: parent.top
         anchors.topMargin: mainWindow.spacing
         anchors.left: recentProjectsFrame.right
@@ -285,6 +319,11 @@ Rectangle {
         visible: true
         opacity: 1
         padding: 5
+
+        Component.onCompleted: {
+            if(helper.getWidthScale(sectionName) === -1 || helper.getHeightScale(sectionName) === -1)
+                mainWindow.restoreOriginalLayout()
+        }
 
         Rectangle {
             width: 3
@@ -528,8 +567,9 @@ Rectangle {
 
     Frame {
         id: newsSection
-        width: mainWindow.width / 5 - 4*mainWindow.spacing
-        height: mainWindow.height- 4*mainWindow.spacing
+        property string sectionName: "newsSection"
+        width: helper.getWidthScale(sectionName) === -1 ? mainWindow.width / 5 - 4*mainWindow.spacing : helper.getWidthScale(sectionName)
+        height: helper.getHeightScale(sectionName) === -1 ? mainWindow.height- 4*mainWindow.spacing : helper.getHeightScale(sectionName)
         anchors.bottom: parent.bottom
         anchors.bottomMargin: mainWindow.spacing
         anchors.right: parent.right
@@ -540,6 +580,11 @@ Rectangle {
         opacity: 1
         padding: 5
         clip: true
+
+        Component.onCompleted: {
+            if(helper.getWidthScale(sectionName) === -1 || helper.getHeightScale(sectionName) === -1)
+                mainWindow.restoreOriginalLayout()
+        }
 
         Rectangle {
             width: 3
@@ -611,8 +656,9 @@ Rectangle {
 
     Frame {
         id: helpFrame
-        width: mainWindow.width / 5 - 4*mainWindow.spacing
-        height: mainWindow.height / 4 - 4*mainWindow.spacing
+        property string sectionName: "helpFrame"
+        width: helper.getWidthScale(sectionName) === -1 ? mainWindow.width / 5 - 4*mainWindow.spacing : helper.getWidthScale(sectionName)
+        height: helper.getHeightScale(sectionName) === -1 ? mainWindow.height / 4 - 4*mainWindow.spacing : helper.getHeightScale(sectionName)
         anchors.top: recentProjectsFrame.bottom
         anchors.topMargin: mainWindow.spacing
         anchors.left: parent.left
@@ -623,6 +669,11 @@ Rectangle {
         opacity: 1
         padding: 5
         clip: true
+
+        Component.onCompleted: {
+            if(helper.getWidthScale(sectionName) === -1 || helper.getHeightScale(sectionName) === -1)
+                mainWindow.restoreOriginalLayout()
+        }
 
         Rectangle {
             width: 3
@@ -837,8 +888,9 @@ Rectangle {
 
     Frame {
         id: datasetFrame
-        width: 3 * mainWindow.width / 5 - 4*mainWindow.spacing
-        height: mainWindow.height / 4 - 4*mainWindow.spacing
+        property string sectionName: "datasetFrame"
+        width: helper.getWidthScale(sectionName) === -1 ? 3 * mainWindow.width / 5 - 4*mainWindow.spacing : helper.getWidthScale(sectionName)
+        height: helper.getHeightScale(sectionName) === -1 ? mainWindow.height / 4 - 4*mainWindow.spacing : helper.getHeightScale(sectionName)
         anchors.top: exampleProjects.bottom
         anchors.topMargin: mainWindow.spacing
         anchors.left: helpFrame.right
@@ -851,6 +903,11 @@ Rectangle {
         opacity: 1
         padding: 5
         clip: true
+
+        Component.onCompleted: {
+            if(helper.getWidthScale(sectionName) === -1 || helper.getHeightScale(sectionName) === -1)
+                mainWindow.restoreOriginalLayout()
+        }
 
         Rectangle {
             width: 3
@@ -1057,7 +1114,7 @@ Rectangle {
                     Layout.preferredWidth: (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.15
                     Layout.minimumWidth:  (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.15
                     //width: textWidth
-                   // implicitWidth: textWidth
+                    // implicitWidth: textWidth
                     spacing: 10
                     Layout.fillHeight: true
                     property int textWidth: 100
@@ -1476,8 +1533,9 @@ Rectangle {
 
     Frame {
         id: releaseSection
-        width: 4 * mainWindow.width / 5 - 4*mainWindow.spacing
-        height: 2*mainWindow.height / 4 - 4*mainWindow.spacing
+        property string sectionName: "releaseSection"
+        width: helper.getWidthScale(sectionName) === -1? 4 * mainWindow.width / 5 - 4*mainWindow.spacing : helper.getWidthScale(sectionName)
+        height: helper.getHeightScale(sectionName) === -1 ? 2*mainWindow.height / 4 - 4*mainWindow.spacing : helper.getHeightScale(sectionName)
         anchors.left: parent.left
         anchors.leftMargin: mainWindow.spacing
         anchors.right: newsSection.left
@@ -1488,6 +1546,11 @@ Rectangle {
         opacity: 1
         padding: 5
         clip: true
+
+        Component.onCompleted: {
+            if(helper.getWidthScale(sectionName) === -1 || helper.getHeightScale(sectionName) === -1)
+                mainWindow.restoreOriginalLayout()
+        }
 
         Rectangle {
             width: 3

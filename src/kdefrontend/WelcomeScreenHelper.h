@@ -79,6 +79,7 @@ private:
 	QMap<QString, double> m_heightScale;
 
 	void processExampleProjects();
+	void loadConfig();
 
 signals:
     void datasetFound();

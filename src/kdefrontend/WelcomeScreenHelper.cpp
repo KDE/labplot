@@ -42,6 +42,8 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QDir>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
 
 /*!
@@ -56,11 +58,56 @@ WelcomeScreenHelper::WelcomeScreenHelper() {
 
 	m_datasetModel = new DatasetModel(m_datasetWidget->getDatasetsMap());
 
+	loadConfig();
+
 	processExampleProjects();
 }
 
 WelcomeScreenHelper::~WelcomeScreenHelper() {
+	//save width&height ratio values
+	KConfigGroup conf(KSharedConfig::openConfig(), "WelcomeScreenHelper");
 
+	int widthCount = m_widthScale.size();
+	conf.writeEntry("width_count", widthCount);
+	int currentWidthIndex = 0;
+
+	for(auto item = m_widthScale.begin(); item != m_widthScale.end() && currentWidthIndex < widthCount; item++) {
+		conf.writeEntry("widthName_" + QString::number(currentWidthIndex), item.key());
+		conf.writeEntry("widthValue_" + QString::number(currentWidthIndex), item.value());
+		currentWidthIndex++;
+	}
+
+	int heightCount = m_heightScale.size();
+	conf.writeEntry("height_count", widthCount);
+	int currentHeightIndex = 0;
+
+	for(auto item = m_heightScale.begin(); item != m_heightScale.end() && currentHeightIndex < heightCount; item++) {
+		conf.writeEntry("heightName_" + QString::number(currentHeightIndex), item.key());
+		conf.writeEntry("heightValue_" + QString::number(currentHeightIndex), item.value());
+		currentHeightIndex++;
+	}
+}
+
+void WelcomeScreenHelper::loadConfig() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "WelcomeScreenHelper");
+
+	int widthCount = conf.readEntry("width_count", -1);
+	for(int i = 0; i < widthCount; ++i) {
+		QString id = conf.readEntry("widthName_" + QString::number(i), "");
+		double value = conf.readEntry("widthValue_" + QString::number(i), -1);
+
+		if(!id.isEmpty() && value != -1)
+			m_widthScale[id] = value;
+	}
+
+	int heightCount = conf.readEntry("height_count", -1);
+	for(int i = 0; i < heightCount; ++i) {
+		QString id = conf.readEntry("heightName_" + QString::number(i), "");
+		double value = conf.readEntry("heightValue_" + QString::number(i), -1);
+
+		if(!id.isEmpty() && value != -1)
+			m_heightScale[id] = value;
+	}
 }
 
 /**
@@ -310,9 +357,15 @@ void WelcomeScreenHelper::setHeightScale(QString sectionID, double scale) {
 }
 
 QVariant WelcomeScreenHelper::getWidthScale(QString sectionID) {
-	return QVariant(m_widthScale[sectionID]);
+	if(m_widthScale.keys().contains(sectionID))
+		return QVariant(m_widthScale[sectionID]);
+
+	return QVariant(-1);
 }
 
 QVariant WelcomeScreenHelper::getHeightScale(QString sectionID) {
-	return QVariant(m_heightScale[sectionID]);
+	if(m_heightScale.keys().contains(sectionID))
+		return QVariant(m_heightScale[sectionID]);
+
+	return QVariant(-1);;
 }

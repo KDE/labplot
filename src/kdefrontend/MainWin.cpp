@@ -357,6 +357,8 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	//m_importDatasetWidget = new ImportDatasetWidget(nullptr);
 	//m_importDatasetWidget->hide();
 
+	if(m_welcomeScreenHelper != nullptr)
+		delete m_welcomeScreenHelper;
 	m_welcomeScreenHelper = new WelcomeScreenHelper();
 	connect(m_welcomeScreenHelper, SIGNAL(openExampleProject(QString)), this, SLOT(openProject(const QString& )));
 
@@ -390,6 +392,9 @@ void MainWin::createMdiArea() {
 	} else {
 		qDebug() << "There is no toolbar to display";
 	}
+
+	qDebug() << "Call saving welcome screen widget dimensions";
+	QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
 
 	m_mdiArea = new QMdiArea;
 	setCentralWidget(m_mdiArea);
