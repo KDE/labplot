@@ -31,7 +31,7 @@
   <name xml:lang="x-test">xxLabPlotxx</name>
   <name xml:lang="zh-CN">LabPlot</name>
   <name xml:lang="zh-TW">LabPlot</name>
-  <summary>LabPlot is a KDE application for interactive graphing and analysis of scientific data</summary>
+  <summary>Interactive graphing and analysis of scientific data</summary>
   <summary xml:lang="ca">El LabPlot és una aplicació KDE per a la representació interactiva de grafs i anàlisi de dades científiques</summary>
   <summary xml:lang="ca-valencia">El LabPlot és una aplicació KDE per a la representació interactiva de grafs i anàlisi de dades científiques</summary>
   <summary xml:lang="cs">LabPlot je aplikace KDE pro interaktivní vykreslování grafů a analýzu vědeckých dat</summary>
@@ -56,7 +56,7 @@
   <summary xml:lang="zh-CN">LabPlot 是一个交互式绘图和分析科学数据的 KDE 应用程序</summary>
   <description>
     <p>
-      LabPlot is a KDE-application for interactive graphing and analysis of scientific data.
+      LabPlot is an application for interactive graphing and analysis of scientific data.
     </p>
     <p xml:lang="bs">LabPlot je KDE-aplikacija za interaktivnu grafiku i analizu naučnih podataka.</p>
     <p xml:lang="ca">El LabPlot és una aplicació KDE per a la representació interactiva de grafs i anàlisi de dades científiques.</p>
@@ -110,7 +110,7 @@
     <p xml:lang="x-test">xxLabPlot provides an easy way to create, manage and edit plots. It allows you to produce plots based on data from a spreadsheet or on data imported from external files. Plots can be exported to several pixmap and vector graphic formats.xx</p>
     <p xml:lang="zh-CN">LabPlot 提供了一种方便地创建、 管理和编辑图表的方式。它允许您基于电子表格的数据或从外部文件导入的数据来绘制图表。图表可以导出到多种格式的位图或矢量图形。</p>
   </description>
-  <url type="homepage">http://labplot.kde.org/</url>
+  <url type="homepage">https://labplot.kde.org/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?product=LabPlot2&amp;format=guided</url>
   <screenshots>
     <screenshot type="default">
