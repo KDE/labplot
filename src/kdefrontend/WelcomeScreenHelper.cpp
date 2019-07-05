@@ -44,7 +44,8 @@
 #include <QDir>
 #include <KSharedConfig>
 #include <KConfigGroup>
-
+#include <QStyle>
+#include <QBuffer>
 
 /*!
 \class WelcomeScreenHelper
@@ -55,6 +56,11 @@
 WelcomeScreenHelper::WelcomeScreenHelper() {
 	m_datasetWidget = new ImportDatasetWidget(0);
 	m_datasetWidget->hide();
+	QIcon icon = QIcon::fromTheme("labplot-maximize");
+	m_maxIcon = icon.pixmap(icon.availableSizes().first());
+
+	icon = QIcon::fromTheme("labplot-minimize");
+	m_minIcon = icon.pixmap(icon.availableSizes().first());
 
 	m_datasetModel = new DatasetModel(m_datasetWidget->getDatasetsMap());
 
@@ -372,4 +378,26 @@ QVariant WelcomeScreenHelper::getHeightScale(QString sectionID) {
 
 void WelcomeScreenHelper::setSaveLayout(const bool save) {
 	m_saveLayout = save;
+}
+
+QVariant WelcomeScreenHelper::getMaxIcon() {
+	QByteArray bArray;
+	QBuffer buffer(&bArray);
+	buffer.open(QIODevice::WriteOnly);
+	m_maxIcon.save(&buffer, "PNG");
+	QString image = QString::fromLatin1(bArray.toBase64().data());
+	image.prepend("data:image/png;base64,");
+	qDebug() << "Max icon  " << image;
+	return QVariant(image);
+}
+
+QVariant WelcomeScreenHelper::getMinIcon() {
+	QByteArray bArray;
+	QBuffer buffer(&bArray);
+	buffer.open(QIODevice::WriteOnly);
+	m_minIcon.save(&buffer, "PNG");
+	QString image = QString::fromLatin1(bArray.toBase64().data());
+	image.prepend("data:image/png;base64,");
+	qDebug() << "Max icon  " << image;
+	return QVariant(image);
 }

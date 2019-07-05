@@ -31,6 +31,7 @@
 #include <QMap>
 #include <QVariant>
 #include <memory>
+#include <QPixmap>
 
 class ImportDatasetWidget;
 class DatasetHandler;
@@ -57,6 +58,8 @@ public:
 	Q_INVOKABLE void setHeightScale(QString sectionID, double scale);
 	Q_INVOKABLE QVariant getWidthScale(QString sectionID);
 	Q_INVOKABLE QVariant getHeightScale(QString sectionID);
+	Q_INVOKABLE QVariant getMaxIcon();
+	Q_INVOKABLE QVariant getMinIcon();
 
 
     Spreadsheet* releaseConfiguredSpreadsheet();
@@ -79,6 +82,8 @@ private:
 	QMap<QString, double> m_widthScale;
 	QMap<QString, double> m_heightScale;
 	bool m_saveLayout{true};
+	QPixmap m_maxIcon;
+	QPixmap m_minIcon;
 
 	void processExampleProjects();
 	void loadConfig();

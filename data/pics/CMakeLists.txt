@@ -20,6 +20,8 @@ sc-apps-labplot-json-array.svg
 sc-apps-labplot-json-object.svg
 sc-apps-labplot-matrix-new.svg
 sc-apps-labplot-matrix.svg
+sc-apps-labplot-maximize.svg
+sc-apps-labplot-minimize.svg
 sc-apps-labplot-MQTT.svg
 sc-apps-labplot-plot-axis-points.svg
 sc-apps-labplot-shift-down-y.svg

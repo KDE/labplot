@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>RssNews.qml</file>
         <file>NewsDelegate.qml</file>
+        <file>RecentProjects.qml</file>
     </qresource>
 </RCC>

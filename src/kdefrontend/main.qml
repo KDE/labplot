@@ -60,6 +60,36 @@ Rectangle {
         helper.setWidthScale(releaseSection.sectionName, releaseSection.width)
     }
 
+    function hideTiles() {
+        recentProjectsFrame.visible = false
+        recentProjectsFrame.z = 0
+        exampleProjects.visible = false
+        exampleProjects.z = 0
+        newsSection.visible = false
+        newsSection.z = 0
+        helpFrame.visible = false
+        helpFrame.z = 0
+        datasetFrame.visible = false
+        datasetFrame.z = 0
+        releaseSection.visible = false
+        releaseSection.z = 0
+    }
+
+    function showTiles() {
+        recentProjectsFrame.visible = true
+        recentProjectsFrame.z = 0
+        exampleProjects.visible = true
+        exampleProjects.z = 0
+        newsSection.visible = true
+        newsSection.z = 0
+        helpFrame.visible = true
+        helpFrame.z = 0
+        datasetFrame.visible = true
+        datasetFrame.z = 0
+        releaseSection.visible = true
+        releaseSection.z = 0
+    }
+
     Connections {
         target: helper
         onDatasetFound:{
@@ -94,6 +124,9 @@ Rectangle {
         visible: true
         opacity: 1
         padding: 5
+        property bool fullScreen: false
+        property double prevWidth: 0
+        property double prevHeight: 0
 
         Component.onCompleted: {
             console.log("Recent projects saved iwdth " + helper.getWidthScale(sectionName) + "  height  " + helper.getHeightScale(sectionName))
@@ -187,120 +220,95 @@ Rectangle {
             id: columnLayout
             anchors.fill: parent
             spacing: 20
+            clip: true
 
-            Label {
-                id: label
-                color: "#000000"
-                text: qsTr("Recent Projects")
-                styleColor: "#979191"
-                opacity: 1
-                visible: true
-                font.underline: false
-                font.italic: false
-                font.bold: false
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                font.pointSize: 25
+            RowLayout {
                 Layout.fillWidth: true
-                Layout.minimumHeight: paintedHeight
-                wrapMode: Text.WordWrap
+                Layout.minimumHeight: parent.height*0.2
+                Layout.preferredHeight: parent.height*0.2
+
+                Image {
+                    Layout.preferredHeight: Math.min(parent.height, parent.width) * 0.5
+                    Layout.minimumHeight: Math.min(parent.height, parent.width) * 0.5
+                    Layout.preferredWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.minimumWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.alignment: Qt.AlignVCenter
+
+                    source: recentProjectsFrame.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
+                    sourceSize.width: Math.min(parent.height, parent.width) * 0.5
+                    sourceSize.height: Math.min(parent.height, parent.width) * 0.5
+
+
+                    MouseArea {
+                        anchors.fill: parent
+
+                        onClicked: {
+                            if(!recentProjectsFrame.fullScreen) {
+                                hideTiles()
+                                recentProjectsFrame.prevWidth = recentProjectsFrame.width
+                                recentProjectsFrame.prevHeight = recentProjectsFrame.height
+                                recentProjectsFrame.visible = true
+                                recentProjectsFrame.z = 1
+                                recentProjectsFrame.anchors.fill = undefined
+                                recentProjectsFrame.anchors.right = undefined
+                                recentProjectsFrame.anchors.bottom = undefined
+                                recentProjectsFrame.anchors.centerIn = undefined
+                                recentProjectsFrame.anchors.top = undefined
+                                recentProjectsFrame.anchors.left = undefined
+                                recentProjectsFrame.width = mainWindow.width
+                                recentProjectsFrame.height = mainWindow.height
+                                recentProjectsFrame.anchors.fill = mainWindow
+                            } else {
+                                recentProjectsFrame.anchors.fill = undefined
+                                recentProjectsFrame.anchors.right = undefined
+                                recentProjectsFrame.anchors.bottom = undefined
+                                recentProjectsFrame.anchors.centerIn = undefined
+                                recentProjectsFrame.anchors.top = undefined
+                                recentProjectsFrame.anchors.left = undefined
+                                recentProjectsFrame.anchors.top = mainWindow.top
+                                recentProjectsFrame.anchors.topMargin = mainWindow.spacing
+                                recentProjectsFrame.anchors.left = mainWindow.left
+                                recentProjectsFrame.anchors.leftMargin = mainWindow.spacing
+                                recentProjectsFrame.width = recentProjectsFrame.prevWidth
+                                recentProjectsFrame.height = recentProjectsFrame.prevHeight
+
+                                showTiles();
+                            }
+
+                            recentProjectsFrame.fullScreen = !recentProjectsFrame.fullScreen
+                        }
+                    }
+                }
+
+
+                Label {
+                    id: label
+                    color: "#000000"
+                    text: qsTr("Recent Projects")
+                    styleColor: "#979191"
+                    opacity: 1
+                    visible: true
+                    font.underline: false
+                    font.italic: false
+                    font.bold: false
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 25
+                    minimumPointSize: 10
+                    fontSizeMode: Text.Fit
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    wrapMode: Text.WordWrap
+                }
             }
 
-            ListView {
-                id: listView
-                spacing: 10
-                width: parent.width
+            RecentProjects {id: recentProjectsList
+                model:recentProjects
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+                Layout.minimumHeight: parent.height*0.8
+                Layout.preferredHeight: parent.height*0.8
                 clip: true
-                onWidthChanged: {
-                    console.log("recent project width changed: " + width)
-                }
-
-                model: recentProjects
-                delegate: Column {
-                    id: delegateItem
-                    width: parent.width
-                    //width: delegateItem.ListView.view.width
-                    property string fullUri : modelData
-                    property int textHeight: 100
-                    onWidthChanged: {
-                        console.log("recent project delegate width changed: " + width)
-                    }
-
-                    spacing: 2
-                    Rectangle {
-                        width: delegateItem.width
-                        height: 50 //delegateItem.textHeight
-
-                        onWidthChanged: {
-                            console.log("recent project delegate child width changed: " + width)
-                        }
-
-                        RowLayout {
-                            anchors.fill: parent
-                            spacing: 10
-
-                            Image {
-                                id: helperImage
-                                source: helper.getProjectThumbnail(fullUri);
-                                fillMode: Image.Stretch
-                                sourceSize.width: 48
-                                sourceSize.height: 60
-
-                            }
-
-                            Text{
-                                width: parent.width - helperImage.width - parent.spacing
-                                Layout.preferredWidth: parent.width - helperImage.width - parent.spacing
-                                Layout.minimumWidth: parent.width - helperImage.width - parent.spacing
-                                font.pointSize: 14
-                                minimumPointSize: 1
-                                fontSizeMode: Text.Fit
-                                text: delegateItem.fullUri.substring(delegateItem.fullUri.lastIndexOf('/') +1, delegateItem.fullUri.length);
-                                font.bold: true
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignHCenter
-                                //wrapMode: Text.WordWrap
-                                //height:paintedHeight
-
-                                onWidthChanged: {
-                                    console.log("recent project text width changed: " + width)
-                                }
-
-                                onPaintedHeightChanged: {
-                                    if( delegateItem.textHeight <  Math.max(paintedHeight + 2 + 2, 64)) {
-                                        delegateItem.textHeight = Math.max(paintedHeight + 2 + 2, 64)
-                                        console.log("Text height for recent: "  + delegateItem.textHeight)
-                                    }
-                                }
-
-                                Component.onCompleted: {
-                                    if( delegateItem.textHeight <  Math.max(paintedHeight + 2 + 2, 64)) {
-                                        delegateItem.textHeight = Math.max(paintedHeight + 2 + 2, 64)
-                                        console.log("Text height for recent: "  + delegateItem.textHeight)
-                                    }
-                                }
-                            }
-                        }
-
-                        MouseArea {
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            onEntered: {parent.color = '#fdffbf' }
-                            onExited: {parent.color = '#ffffff'}
-                            onClicked: {mainWindow.recentProjectClicked(delegateItem.fullUri)}
-                        }
-                    }
-
-                    Rectangle {
-                        height: 2
-                        width: delegateItem.width
-                        color: '#81827c'
-                    }
-                }
-
-                ScrollBar.vertical: ScrollBar { }
             }
         }
     }
