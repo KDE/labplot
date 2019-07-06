@@ -109,7 +109,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent) : QD
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else
-		resize(QSize(0, 0).expandedTo(minimumSize()));
+		resize(QSize(300, 0).expandedTo(minimumSize()));
 }
 
 FunctionValuesDialog::~FunctionValuesDialog() {

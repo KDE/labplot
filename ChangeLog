@@ -7,6 +7,7 @@ New features:
 		* Invalidate the calculated column if one of the variable columns was deleted
 		* In "Functions Values" dialog highlight the variable column combobox red if the variable column was deleted in the project
 		* In "Functions Values" dialog don't allow to select columns to be calculated as variable columns (avoid circular dependencies)
+	* BUG 406805 - support für directory structures in ROOT files
 
 UX improvements:
 	* in the "Import Data" dialog show the history of the recently imported files
