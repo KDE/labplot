@@ -4,5 +4,7 @@
         <file>RssNews.qml</file>
         <file>NewsDelegate.qml</file>
         <file>RecentProjects.qml</file>
+        <file>ExampleGrid.qml</file>
+        <file>HelpList.qml</file>
     </qresource>
 </RCC>

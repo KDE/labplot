@@ -328,6 +328,10 @@ Rectangle {
         opacity: 1
         padding: 5
 
+        property bool fullScreen: false
+        property double prevWidth: 0
+        property double prevHeight: 0
+
         Component.onCompleted: {
             if(helper.getWidthScale(sectionName) === -1 || helper.getHeightScale(sectionName) === -1)
                 mainWindow.restoreOriginalLayout()
@@ -465,19 +469,81 @@ Rectangle {
         ColumnLayout {
             anchors.fill: parent
 
-            Label {
-                id: label1
-                text: qsTr("Examples")
-                styleColor: "#d41919"
-                anchors.right: parent.right
-                anchors.rightMargin: 0
-                anchors.left: parent.left
-                anchors.leftMargin: 0
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                font.pointSize: 25
-                Layout.fillWidth: true;
-                wrapMode: Text.WordWrap
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.minimumHeight: parent.height*0.2
+                Layout.preferredHeight: parent.height*0.2
+
+                Image {
+                    Layout.preferredHeight: Math.min(parent.height, parent.width) * 0.5
+                    Layout.minimumHeight: Math.min(parent.height, parent.width) * 0.5
+                    Layout.preferredWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.minimumWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.alignment: Qt.AlignVCenter
+
+                    source: exampleProjects.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
+                    sourceSize.width: Math.min(parent.height, parent.width) * 0.5
+                    sourceSize.height: Math.min(parent.height, parent.width) * 0.5
+
+
+                    MouseArea {
+                        anchors.fill: parent
+
+                        onClicked: {
+                            if(!exampleProjects.fullScreen) {
+                                hideTiles()
+                                exampleProjects.prevWidth = exampleProjects.width
+                                exampleProjects.prevHeight = exampleProjects.height
+                                exampleProjects.visible = true
+                                exampleProjects.z = 1
+                                exampleProjects.anchors.fill = undefined
+                                exampleProjects.anchors.right = undefined
+                                exampleProjects.anchors.bottom = undefined
+                                exampleProjects.anchors.centerIn = undefined
+                                exampleProjects.anchors.top = undefined
+                                exampleProjects.anchors.left = undefined
+
+                                exampleProjects.anchors.fill = mainWindow
+                            } else {
+                                exampleProjects.anchors.fill = undefined
+                                exampleProjects.anchors.right = undefined
+                                exampleProjects.anchors.bottom = undefined
+                                exampleProjects.anchors.centerIn = undefined
+                                exampleProjects.anchors.top = undefined
+                                exampleProjects.anchors.left = undefined
+
+                                exampleProjects.anchors.top = mainWindow.top
+                                exampleProjects.anchors.topMargin = mainWindow.spacing
+                                exampleProjects.anchors.left = recentProjectsFrame.right
+                                exampleProjects.anchors.leftMargin = mainWindow.spacing
+                                exampleProjects.anchors.right = newsSection.left
+                                exampleProjects.anchors.rightMargin = mainWindow.spacing
+                                exampleProjects.width = exampleProjects.prevWidth
+                                exampleProjects.height = exampleProjects.prevHeight
+
+                                showTiles();
+                            }
+
+                            exampleProjects.fullScreen = !exampleProjects.fullScreen
+                        }
+                    }
+                }
+
+
+                Label {
+                    id: label1
+                    text: qsTr("Examples")
+                    styleColor: "#d41919"
+                    anchors.right: parent.right
+                    anchors.rightMargin: 0
+                    anchors.left: parent.left
+                    anchors.leftMargin: 0
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 25
+                    Layout.fillWidth: true;
+                    wrapMode: Text.WordWrap
+                }
             }
 
             TextField {
@@ -488,87 +554,10 @@ Rectangle {
                 height: 25
             }
 
-            GridView {
+            ExampleGrid {
                 id: exampleGrid
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                cellWidth: width/4
-                cellHeight: Math.min(height*0.9, 160)
-                ScrollBar.vertical: ScrollBar{}
-                clip: true
-
-                model: helper.getExampleProjects();
-                delegate: Rectangle {
-                    id: exampleDelegate
-                    property string name : modelData
-                    width: exampleGrid.cellWidth - 5
-                    height: exampleGrid.cellHeight - 5
-
-                    onHeightChanged: {
-                        console.log("Example rect height changed: " + height)
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        //onEntered: {exampleDelegate.color = '#fdffbf'}
-                        //onExited: {exampleDelegate.color = '#ffffff'}
-                        onClicked: {mainWindow.openExampleProject(exampleDelegate.name)}
-                    }
-
-                    ColumnLayout {
-                        onHeightChanged: {
-                            console.log("Example column height changed: " + height)
-                        }
-                        anchors.fill: parent
-                        //Layout.fillHeight: true
-                        //Layout.fillWidth: true
-                        spacing: 5
-                        Image {
-                            id: exampleImage
-                            source: helper.getExampleProjectThumbnail(name)
-                            fillMode: Image.Stretch
-                            sourceSize.width: Math.min(120, exampleDelegate.width)
-                            sourceSize.height: Math.min(100, exampleDelegate.height * 0.6)
-                            Layout.alignment: Qt.AlignHCenter
-                        }
-
-                        Text {
-                            Layout.preferredWidth: parent.width
-                            Layout.minimumWidth: parent.width
-                            width: parent.width
-                            Layout.preferredHeight:  exampleDelegate.height  * 0.15
-                            Layout.minimumHeight:  exampleDelegate.height  * 0.15
-                            height: exampleDelegate.height * 0.15
-                            wrapMode: Text.WordWrap
-                            text: exampleDelegate.name
-                            font.pixelSize: 14
-                            minimumPixelSize: 10
-                            fontSizeMode: Text.Fit
-                            font.bold: true
-                            Layout.fillWidth: true
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-
-                        Text {
-                            Layout.preferredWidth: parent.width
-                            Layout.minimumWidth: parent.width
-                            width: parent.width
-                            Layout.preferredHeight:  exampleDelegate.height  * 0.25
-                            Layout.minimumHeight:  exampleDelegate.height  * 0.25
-                            height: exampleDelegate.height * 0.25
-                            wrapMode: Text.WordWrap
-                            text: helper.getExampleProjectTags(exampleDelegate.name)
-                            minimumPixelSize: 6
-                            font.pixelSize: 12
-                            fontSizeMode: Text.Fit
-                            Layout.fillWidth: true
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                    }
-                }
             }
         }
     }
@@ -588,6 +577,10 @@ Rectangle {
         opacity: 1
         padding: 5
         clip: true
+
+        property bool fullScreen: false
+        property double prevWidth: 0
+        property double prevHeight: 0
 
         Component.onCompleted: {
             if(helper.getWidthScale(sectionName) === -1 || helper.getHeightScale(sectionName) === -1)
@@ -643,18 +636,79 @@ Rectangle {
         ColumnLayout {
             anchors.fill: parent
 
-            Label {
-                id: label2
-                text: qsTr("News")
+            RowLayout {
                 Layout.fillWidth: true
-                anchors.rightMargin: 0
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.leftMargin: 0
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                font.pointSize: 25
-                wrapMode: Text.WordWrap
+                Layout.minimumHeight: parent.height*0.2
+                Layout.preferredHeight: parent.height*0.2
+
+                Image {
+                    Layout.preferredHeight: Math.min(parent.height, parent.width) * 0.5
+                    Layout.minimumHeight: Math.min(parent.height, parent.width) * 0.5
+                    Layout.preferredWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.minimumWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.alignment: Qt.AlignVCenter
+
+                    source: newsSection.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
+                    sourceSize.width: Math.min(parent.height, parent.width) * 0.5
+                    sourceSize.height: Math.min(parent.height, parent.width) * 0.5
+
+
+                    MouseArea {
+                        anchors.fill: parent
+
+                        onClicked: {
+                            if(!newsSection.fullScreen) {
+                                hideTiles()
+                                newsSection.prevWidth = newsSection.width
+                                newsSection.prevHeight = newsSection.height
+                                newsSection.visible = true
+                                newsSection.z = 1
+                                newsSection.anchors.fill = undefined
+                                newsSection.anchors.right = undefined
+                                newsSection.anchors.bottom = undefined
+                                newsSection.anchors.centerIn = undefined
+                                newsSection.anchors.top = undefined
+                                newsSection.anchors.left = undefined
+
+                                newsSection.anchors.fill = mainWindow
+                            } else {
+                                newsSection.anchors.fill = undefined
+                                newsSection.anchors.right = undefined
+                                newsSection.anchors.bottom = undefined
+                                newsSection.anchors.centerIn = undefined
+                                newsSection.anchors.top = undefined
+                                newsSection.anchors.left = undefined
+
+                                newsSection.anchors.top = mainWindow.top
+                                newsSection.anchors.topMargin = mainWindow.spacing
+                                newsSection.anchors.right = mainWindow.right
+                                newsSection.anchors.rightMargin = mainWindow.spacing
+                                newsSection.anchors.bottom = mainWindow.bottom
+                                newsSection.anchors.bottomMargin = mainWindow.spacing
+                                newsSection.width = newsSection.prevWidth
+                                newsSection.height = newsSection.prevHeight
+
+                                showTiles();
+                            }
+
+                            newsSection.fullScreen = !newsSection.fullScreen
+                        }
+                    }
+                }
+
+                Label {
+                    id: label2
+                    text: qsTr("News")
+                    Layout.fillWidth: true
+                    anchors.rightMargin: 0
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.leftMargin: 0
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 25
+                    wrapMode: Text.WordWrap
+                }
             }
 
             RssNews{id:newsFeed}
@@ -677,6 +731,10 @@ Rectangle {
         opacity: 1
         padding: 5
         clip: true
+
+        property bool fullScreen: false
+        property double prevWidth: 0
+        property double prevHeight: 0
 
         Component.onCompleted: {
             if(helper.getWidthScale(sectionName) === -1 || helper.getHeightScale(sectionName) === -1)
@@ -811,85 +869,83 @@ Rectangle {
             spacing: 20
             clip: true
 
-            Label {
-                id: label3
-                text: qsTr("Help")
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                font.pointSize: 25
+            RowLayout {
                 Layout.fillWidth: true
-                wrapMode: Text.WordWrap
+                Layout.minimumHeight: parent.height*0.2
+                Layout.preferredHeight: parent.height*0.2
+
+                Image {
+                    Layout.preferredHeight: Math.min(parent.height, parent.width) * 0.5
+                    Layout.minimumHeight: Math.min(parent.height, parent.width) * 0.5
+                    Layout.preferredWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.minimumWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.alignment: Qt.AlignVCenter
+
+                    source: helpFrame.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
+                    sourceSize.width: Math.min(parent.height, parent.width) * 0.5
+                    sourceSize.height: Math.min(parent.height, parent.width) * 0.5
+
+
+                    MouseArea {
+                        anchors.fill: parent
+
+                        onClicked: {
+                            if(!helpFrame.fullScreen) {
+                                hideTiles()
+                                helpFrame.prevWidth = helpFrame.width
+                                helpFrame.prevHeight = helpFrame.height
+                                helpFrame.visible = true
+                                helpFrame.z = 1
+                                helpFrame.anchors.fill = undefined
+                                helpFrame.anchors.right = undefined
+                                helpFrame.anchors.bottom = undefined
+                                helpFrame.anchors.centerIn = undefined
+                                helpFrame.anchors.top = undefined
+                                helpFrame.anchors.left = undefined
+
+                                helpFrame.anchors.fill = mainWindow
+                            } else {
+                                helpFrame.anchors.fill = undefined
+                                helpFrame.anchors.right = undefined
+                                helpFrame.anchors.bottom = undefined
+                                helpFrame.anchors.centerIn = undefined
+                                helpFrame.anchors.top = undefined
+                                helpFrame.anchors.left = undefined
+
+                                helpFrame.anchors.top = recentProjectsFrame.bottom
+                                helpFrame.anchors.topMargin = mainWindow.spacing
+                                helpFrame.anchors.left = mainWindow.left
+                                helpFrame.anchors.leftMargin = mainWindow.spacing
+                                helpFrame.anchors.bottom = releaseSection.top
+                                helpFrame.anchors.bottomMargin = mainWindow.spacing
+                                helpFrame.width = helpFrame.prevWidth
+                                helpFrame.height = helpFrame.prevHeight
+
+                                showTiles();
+                            }
+
+                            helpFrame.fullScreen = !helpFrame.fullScreen
+                        }
+                    }
+                }
+
+                Label {
+                    id: label3
+                    text: qsTr("Help")
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 25
+                    Layout.fillWidth: true
+                    wrapMode: Text.WordWrap
+                }
             }
 
-            ListView {
-                id: listView2
+            HelpList {
+                id: helpList
                 width: parent.width
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 clip: true
-                ScrollBar.vertical: ScrollBar { }
-                model: ListModel {
-                    ListElement {
-                        name: "Documentation"
-                        link: "https://docs.kde.org/trunk5/en/extragear-edu/labplot2/index.html"
-                    }
-
-                    ListElement {
-                        name: "FAQ"
-                        link: "https://docs.kde.org/trunk5/en/extragear-edu/labplot2/faq.html"
-                    }
-
-                    ListElement {
-                        name: "Features"
-                        link: "https://labplot.kde.org/features/"
-                    }
-
-                    ListElement {
-                        name: "Support"
-                        link: "https://labplot.kde.org/support/"
-                    }
-                }
-                delegate: Rectangle {
-                    width: parent.width
-                    height: 25
-                    RowLayout {
-                        id: row3
-                        width: parent.width
-                        height: parent.height
-                        spacing: 10
-
-                        Rectangle {
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: 5
-                            height: 5
-                            color: "#7a7d82"
-                        }
-
-                        Label {
-                            height: parent.height
-                            width: parent.width - 5 - parent.spacing
-                            Layout.minimumWidth: parent.width - 5 - parent.spacing
-                            Layout.preferredWidth: parent.width - 5 - parent.spacing
-                            text: name
-                            font.bold: true
-                            font.pixelSize: 18
-                            minimumPixelSize: 1
-                            fontSizeMode: Text.Fit
-
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                            //wrapMode: Text.WordWrap
-                        }
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onEntered: {parent.color = '#fdffbf' }
-                        onExited: {parent.color = '#ffffff'}
-                        onClicked: {Qt.openUrlExternally(link)}
-                    }
-                }
             }
         }
     }
@@ -911,6 +967,10 @@ Rectangle {
         opacity: 1
         padding: 5
         clip: true
+
+        property bool fullScreen: false
+        property double prevWidth: 0
+        property double prevHeight: 0
 
         Component.onCompleted: {
             if(helper.getWidthScale(sectionName) === -1 || helper.getHeightScale(sectionName) === -1)
@@ -1092,19 +1152,82 @@ Rectangle {
             clip: true
             spacing: 20
 
-            Label {
-                width: parent.width
-                height: 25
-                id: label4
-                text: qsTr("Start exploring data")
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                font.pointSize: 25
-                minimumPointSize: 1
-                fontSizeMode: Text.Fit
+            RowLayout {
                 Layout.fillWidth: true
-                Layout.minimumHeight: paintedHeight
-                //wrapMode: Text.WordWrap
+                Layout.minimumHeight: parent.height*0.2
+                Layout.preferredHeight: parent.height*0.2
+
+                Image {
+                    Layout.preferredHeight: Math.min(parent.height, parent.width) * 0.5
+                    Layout.minimumHeight: Math.min(parent.height, parent.width) * 0.5
+                    Layout.preferredWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.minimumWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.alignment: Qt.AlignVCenter
+
+                    source: datasetFrame.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
+                    sourceSize.width: Math.min(parent.height, parent.width) * 0.5
+                    sourceSize.height: Math.min(parent.height, parent.width) * 0.5
+
+
+                    MouseArea {
+                        anchors.fill: parent
+
+                        onClicked: {
+                            if(!datasetFrame.fullScreen) {
+                                hideTiles()
+                                datasetFrame.prevWidth = datasetFrame.width
+                                datasetFrame.prevHeight = datasetFrame.height
+                                datasetFrame.visible = true
+                                datasetFrame.z = 1
+                                datasetFrame.anchors.fill = undefined
+                                datasetFrame.anchors.right = undefined
+                                datasetFrame.anchors.bottom = undefined
+                                datasetFrame.anchors.centerIn = undefined
+                                datasetFrame.anchors.top = undefined
+                                datasetFrame.anchors.left = undefined
+
+                                datasetFrame.anchors.fill = mainWindow
+                            } else {
+                                datasetFrame.anchors.fill = undefined
+                                datasetFrame.anchors.right = undefined
+                                datasetFrame.anchors.bottom = undefined
+                                datasetFrame.anchors.centerIn = undefined
+                                datasetFrame.anchors.top = undefined
+                                datasetFrame.anchors.left = undefined
+
+                                datasetFrame.anchors.top = exampleProjects.bottom
+                                datasetFrame.anchors.topMargin = mainWindow.spacing
+                                datasetFrame.anchors.left = helpFrame.right
+                                datasetFrame.anchors.leftMargin = mainWindow.spacing
+                                datasetFrame.anchors.bottom = releaseSection.top
+                                datasetFrame.anchors.bottomMargin = mainWindow.spacing
+                                datasetFrame.anchors.right = newsSection.left
+                                datasetFrame.anchors.rightMargin = mainWindow.spacing
+                                datasetFrame.width = datasetFrame.prevWidth
+                                datasetFrame.height = datasetFrame.prevHeight
+
+                                showTiles();
+                            }
+
+                            datasetFrame.fullScreen = !datasetFrame.fullScreen
+                        }
+                    }
+                }
+
+                Label {
+                    width: parent.width
+                    height: 25
+                    id: label4
+                    text: qsTr("Start exploring data")
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 25
+                    minimumPointSize: 1
+                    fontSizeMode: Text.Fit
+                    Layout.fillWidth: true
+                    Layout.minimumHeight: paintedHeight
+                    //wrapMode: Text.WordWrap
+                }
             }
 
             RowLayout {
@@ -1555,6 +1678,11 @@ Rectangle {
         padding: 5
         clip: true
 
+        property bool fullScreen: false
+        property double prevWidth: 0
+        property double prevHeight: 0
+
+
         Component.onCompleted: {
             if(helper.getWidthScale(sectionName) === -1 || helper.getHeightScale(sectionName) === -1)
                 mainWindow.restoreOriginalLayout()
@@ -1651,14 +1779,77 @@ Rectangle {
         ColumnLayout {
             id: columnLayout7
             anchors.fill: parent
+            clip: true
 
-            Label {
-                id: label8
-                text: qsTr("What's new in this release")
-                horizontalAlignment: Text.AlignHCenter
-                font.pointSize: 30
+            RowLayout {
                 Layout.fillWidth: true
-                wrapMode: Text.WordWrap
+                Layout.minimumHeight: parent.height*0.2
+                Layout.preferredHeight: parent.height*0.2
+
+                Image {
+                    Layout.preferredHeight: Math.min(parent.height, parent.width) * 0.5
+                    Layout.minimumHeight: Math.min(parent.height, parent.width) * 0.5
+                    Layout.preferredWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.minimumWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.alignment: Qt.AlignVCenter
+
+                    source: releaseSection.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
+                    sourceSize.width: Math.min(parent.height, parent.width) * 0.5
+                    sourceSize.height: Math.min(parent.height, parent.width) * 0.5
+
+
+                    MouseArea {
+                        anchors.fill: parent
+
+                        onClicked: {
+                            if(!releaseSection.fullScreen) {
+                                hideTiles()
+                                releaseSection.prevWidth = releaseSection.width
+                                releaseSection.prevHeight = releaseSection.height
+                                releaseSection.visible = true
+                                releaseSection.z = 1
+                                releaseSection.anchors.fill = undefined
+                                releaseSection.anchors.right = undefined
+                                releaseSection.anchors.bottom = undefined
+                                releaseSection.anchors.centerIn = undefined
+                                releaseSection.anchors.top = undefined
+                                releaseSection.anchors.left = undefined
+
+                                releaseSection.anchors.fill = mainWindow
+                            } else {
+                                releaseSection.anchors.fill = undefined
+                                releaseSection.anchors.right = undefined
+                                releaseSection.anchors.bottom = undefined
+                                releaseSection.anchors.centerIn = undefined
+                                releaseSection.anchors.top = undefined
+                                releaseSection.anchors.left = undefined
+
+                                releaseSection.anchors.left = mainWindow.left
+                                releaseSection.anchors.leftMargin = mainWindow.spacing
+                                releaseSection.anchors.bottom = mainWindow.bottom
+                                releaseSection.anchors.bottomMargin = mainWindow.spacing
+                                releaseSection.anchors.right = newsSection.left
+                                releaseSection.anchors.rightMargin = mainWindow.spacing
+                                releaseSection.width = releaseSection.prevWidth
+                                releaseSection.height = releaseSection.prevHeight
+
+                                showTiles();
+                            }
+
+                            releaseSection.fullScreen = !releaseSection.fullScreen
+                        }
+                    }
+                }
+
+                Label {
+                    id: label8
+                    text: qsTr("What's new in this release")
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 30
+                    Layout.fillWidth: true
+                    wrapMode: Text.WordWrap
+                }
+
             }
 
             WebView {
