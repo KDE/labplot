@@ -224,19 +224,19 @@ Rectangle {
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.minimumHeight: parent.height*0.2
-                Layout.preferredHeight: parent.height*0.2
+                Layout.minimumHeight: Math.min(parent.height*0.2, 100)
+                Layout.preferredHeight: Math.min(parent.height*0.2, 100)
 
                 Image {
-                    Layout.preferredHeight: Math.min(parent.height, parent.width) * 0.5
-                    Layout.minimumHeight: Math.min(parent.height, parent.width) * 0.5
-                    Layout.preferredWidth: Math.min(parent.height, parent.width) * 0.5
-                    Layout.minimumWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.preferredHeight: recentProjectsFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumHeight: recentProjectsFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredWidth: recentProjectsFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumWidth: recentProjectsFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.alignment: Qt.AlignVCenter
 
                     source: recentProjectsFrame.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
-                    sourceSize.width: Math.min(parent.height, parent.width) * 0.5
-                    sourceSize.height: Math.min(parent.height, parent.width) * 0.5
+                    sourceSize.width: recentProjectsFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.height: recentProjectsFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
 
 
                     MouseArea {
@@ -293,7 +293,7 @@ Rectangle {
                     font.bold: false
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.pointSize: 25
+                    font.pointSize: recentProjectsFrame.fullScreen ? 60 : 24
                     minimumPointSize: 10
                     fontSizeMode: Text.Fit
                     Layout.fillWidth: true
@@ -325,6 +325,7 @@ Rectangle {
         anchors.right: newsSection.left
         anchors.rightMargin: mainWindow.spacing
         visible: true
+        clip: true
         opacity: 1
         padding: 5
 
@@ -468,22 +469,24 @@ Rectangle {
 
         ColumnLayout {
             anchors.fill: parent
+            clip: true
+            spacing: 5
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.minimumHeight: parent.height*0.2
-                Layout.preferredHeight: parent.height*0.2
+                Layout.minimumHeight: Math.min((parent.height - 25 - 2*parent.spacing)*0.2, 100)
+                Layout.preferredHeight: Math.min((parent.height - 25 - 2*parent.spacing)*0.2, 100)
 
                 Image {
-                    Layout.preferredHeight: Math.min(parent.height, parent.width) * 0.5
-                    Layout.minimumHeight: Math.min(parent.height, parent.width) * 0.5
-                    Layout.preferredWidth: Math.min(parent.height, parent.width) * 0.5
-                    Layout.minimumWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.preferredHeight: exampleProjects.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumHeight: exampleProjects.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredWidth: exampleProjects.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumWidth: exampleProjects.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.alignment: Qt.AlignVCenter
 
                     source: exampleProjects.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
-                    sourceSize.width: Math.min(parent.height, parent.width) * 0.5
-                    sourceSize.height: Math.min(parent.height, parent.width) * 0.5
+                    sourceSize.width: exampleProjects.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.height: exampleProjects.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
 
 
                     MouseArea {
@@ -534,14 +537,14 @@ Rectangle {
                     id: label1
                     text: qsTr("Examples")
                     styleColor: "#d41919"
-                    anchors.right: parent.right
-                    anchors.rightMargin: 0
-                    anchors.left: parent.left
-                    anchors.leftMargin: 0
+
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.pointSize: 25
-                    Layout.fillWidth: true;
+                    font.pointSize: exampleProjects.fullScreen ? 60 : 24
+                    minimumPointSize: 10
+                    fontSizeMode: Text.Fit
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                     wrapMode: Text.WordWrap
                 }
             }
@@ -552,12 +555,18 @@ Rectangle {
                 Layout.fillWidth: true;
                 onTextChanged: {exampleGrid.model = helper.searchExampleProjects(searchText.text)}
                 height: 25
+                Layout.minimumHeight: 25
+                Layout.preferredHeight: 25
             }
 
             ExampleGrid {
                 id: exampleGrid
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+                clip:true
+
+                Layout.minimumHeight: Math.max((parent.height - 25 - 2*parent.spacing)*0.8, parent.height - 25 - 100  - 2*parent.spacing)
+                Layout.preferredHeight: Math.max((parent.height - 25 - 2*parent.spacing)*0.8, parent.height - 25 - 100  - 2*parent.spacing)
             }
         }
     }
@@ -638,19 +647,19 @@ Rectangle {
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.minimumHeight: parent.height*0.2
-                Layout.preferredHeight: parent.height*0.2
+                Layout.minimumHeight: Math.min(parent.height*0.2, 100)
+                Layout.preferredHeight: Math.min(parent.height*0.2, 100)
 
                 Image {
-                    Layout.preferredHeight: Math.min(parent.height, parent.width) * 0.5
-                    Layout.minimumHeight: Math.min(parent.height, parent.width) * 0.5
-                    Layout.preferredWidth: Math.min(parent.height, parent.width) * 0.5
-                    Layout.minimumWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.preferredHeight: newsSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumHeight: newsSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredWidth: newsSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumWidth:newsSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.alignment: Qt.AlignVCenter
 
                     source: newsSection.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
-                    sourceSize.width: Math.min(parent.height, parent.width) * 0.5
-                    sourceSize.height: Math.min(parent.height, parent.width) * 0.5
+                    sourceSize.width: newsSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.height: newsSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
 
 
                     MouseArea {
@@ -699,19 +708,24 @@ Rectangle {
                 Label {
                     id: label2
                     text: qsTr("News")
-                    Layout.fillWidth: true
-                    anchors.rightMargin: 0
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.leftMargin: 0
+
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.pointSize: 25
+                    font.pointSize: newsSection.fullScreen ? 60 : 24
+                    minimumPointSize: 10
+                    fontSizeMode: Text.Fit
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                     wrapMode: Text.WordWrap
                 }
             }
 
-            RssNews{id:newsFeed}
+            RssNews{
+                id:newsFeed
+                Layout.fillHeight: true
+                Layout.minimumHeight: Math.min(parent.height * 0.8, parent.height - 100)
+            }
+
         }
 
     }
@@ -871,19 +885,19 @@ Rectangle {
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.minimumHeight: parent.height*0.2
-                Layout.preferredHeight: parent.height*0.2
+                Layout.minimumHeight: Math.min((parent.height - parent.spacing) *0.2, 100)
+                Layout.preferredHeight: Math.min((parent.height - parent.spacing) *0.2, 100)
 
                 Image {
-                    Layout.preferredHeight: Math.min(parent.height, parent.width) * 0.5
-                    Layout.minimumHeight: Math.min(parent.height, parent.width) * 0.5
-                    Layout.preferredWidth: Math.min(parent.height, parent.width) * 0.5
-                    Layout.minimumWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.preferredHeight: helpFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumHeight: helpFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredWidth: helpFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumWidth: helpFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.alignment: Qt.AlignVCenter
 
                     source: helpFrame.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
-                    sourceSize.width: Math.min(parent.height, parent.width) * 0.5
-                    sourceSize.height: Math.min(parent.height, parent.width) * 0.5
+                    sourceSize.width: helpFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.height: helpFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
 
 
                     MouseArea {
@@ -932,10 +946,14 @@ Rectangle {
                 Label {
                     id: label3
                     text: qsTr("Help")
+
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.pointSize: 25
+                    font.pointSize: helpFrame.fullScreen ? 60 : 24
+                    minimumPointSize: 10
+                    fontSizeMode: Text.Fit
                     Layout.fillWidth: true
+                    Layout.fillHeight: true
                     wrapMode: Text.WordWrap
                 }
             }
@@ -943,6 +961,7 @@ Rectangle {
             HelpList {
                 id: helpList
                 width: parent.width
+                Layout.minimumHeight: Math.max((parent.height - parent.spacing) *0.8, parent.height - parent.spacing - 100)
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 clip: true
@@ -1154,19 +1173,19 @@ Rectangle {
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.minimumHeight: parent.height*0.2
-                Layout.preferredHeight: parent.height*0.2
+                Layout.minimumHeight: Math.min((parent.height - parent.spacing) *0.2, 100)
+                Layout.preferredHeight: Math.min((parent.height - parent.spacing) *0.2, 100)
 
                 Image {
-                    Layout.preferredHeight: Math.min(parent.height, parent.width) * 0.5
-                    Layout.minimumHeight: Math.min(parent.height, parent.width) * 0.5
-                    Layout.preferredWidth: Math.min(parent.height, parent.width) * 0.5
-                    Layout.minimumWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.preferredHeight: datasetFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumHeight: datasetFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredWidth: datasetFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumWidth: datasetFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.alignment: Qt.AlignVCenter
 
                     source: datasetFrame.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
-                    sourceSize.width: Math.min(parent.height, parent.width) * 0.5
-                    sourceSize.height: Math.min(parent.height, parent.width) * 0.5
+                    sourceSize.width: datasetFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.height: datasetFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
 
 
                     MouseArea {
@@ -1215,24 +1234,24 @@ Rectangle {
                 }
 
                 Label {
-                    width: parent.width
-                    height: 25
                     id: label4
                     text: qsTr("Start exploring data")
+
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.pointSize: 25
-                    minimumPointSize: 1
+                    font.pointSize: datasetFrame.fullScreen ? 60 : 24
+                    minimumPointSize: 10
                     fontSizeMode: Text.Fit
                     Layout.fillWidth: true
-                    Layout.minimumHeight: paintedHeight
-                    //wrapMode: Text.WordWrap
+                    Layout.fillHeight: true
+                    wrapMode: Text.WordWrap
                 }
             }
 
             RowLayout {
                 id: rowLayout
                 Layout.fillHeight: true
+                Layout.minimumHeight: Math.max((parent.height - parent.spacing) *0.8, parent.height - parent.spacing - 100)
                 Layout.fillWidth: true
                 Layout.preferredWidth: parent.width
                 Layout.minimumWidth: parent.width
@@ -1780,22 +1799,23 @@ Rectangle {
             id: columnLayout7
             anchors.fill: parent
             clip: true
+            spacing: 10
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.minimumHeight: parent.height*0.2
-                Layout.preferredHeight: parent.height*0.2
+                Layout.minimumHeight: Math.min((parent.height - parent.spacing) *0.2, 100)
+                Layout.preferredHeight: Math.min((parent.height - parent.spacing) *0.2, 100)
 
                 Image {
-                    Layout.preferredHeight: Math.min(parent.height, parent.width) * 0.5
-                    Layout.minimumHeight: Math.min(parent.height, parent.width) * 0.5
-                    Layout.preferredWidth: Math.min(parent.height, parent.width) * 0.5
-                    Layout.minimumWidth: Math.min(parent.height, parent.width) * 0.5
+                    Layout.preferredHeight: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumHeight: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredWidth: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumWidth: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.alignment: Qt.AlignVCenter
 
                     source: releaseSection.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
-                    sourceSize.width: Math.min(parent.height, parent.width) * 0.5
-                    sourceSize.height: Math.min(parent.height, parent.width) * 0.5
+                    sourceSize.width: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.height: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
 
 
                     MouseArea {
@@ -1844,9 +1864,14 @@ Rectangle {
                 Label {
                     id: label8
                     text: qsTr("What's new in this release")
+
+                    verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.pointSize: 30
+                    font.pointSize:releaseSection.fullScreen ? 60 : 24
+                    minimumPointSize: 10
+                    fontSizeMode: Text.Fit
                     Layout.fillWidth: true
+                    Layout.fillHeight: true
                     wrapMode: Text.WordWrap
                 }
 
@@ -1855,6 +1880,8 @@ Rectangle {
             WebView {
                 id: webView
                 Layout.fillHeight: true
+                Layout.minimumHeight: Math.max((parent.height - parent.spacing) *0.8, parent.height - parent.spacing - 100)
+                Layout.preferredHeight: Math.max((parent.height - parent.spacing) *0.8, parent.height - parent.spacing - 100)
                 Layout.fillWidth: true
                 url: initialUrl
             }
