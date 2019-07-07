@@ -530,7 +530,7 @@ bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 	bool childVisible = false;
 	const int rows = index.model()->rowCount(index);
 	for (int i = 0; i < rows; i++) {
-		QModelIndex child = index.child(i, 0);
+		QModelIndex child = index.model()->index(i, 0, index);
 		auto* aspect =  static_cast<AbstractAspect*>(child.internalPointer());
 		bool visible;
 		if (text.isEmpty())

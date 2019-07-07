@@ -291,7 +291,7 @@ void ImportProjectDialog::refreshPreview() {
 void ImportProjectDialog::showTopLevelOnly(const QModelIndex& index) {
 	int rows = index.model()->rowCount(index);
 	for (int i = 0; i < rows; ++i) {
-		QModelIndex child = index.child(i, 0);
+		QModelIndex child = index.model()->index(i, 0, index);
 		showTopLevelOnly(child);
 		const auto* aspect = static_cast<const AbstractAspect*>(child.internalPointer());
 		ui.tvPreview->setRowHidden(i, index, !isTopLevel(aspect));

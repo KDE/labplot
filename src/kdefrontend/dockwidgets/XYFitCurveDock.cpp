@@ -1232,15 +1232,15 @@ void XYFitCurveDock::showFitResult() {
 			item = new QTableWidgetItem(QString::number(p, 'g', 3));
 			// color p values depending on value
 			if (p > 0.05)
-				item->setTextColor(QApplication::palette().color(QPalette::LinkVisited));
+				item->setForeground(QBrush(QApplication::palette().color(QPalette::LinkVisited)));
 			else if (p > 0.01)
-				item->setTextColor(Qt::darkGreen);
+				item->setForeground(QBrush(Qt::darkGreen));
 			else if (p > 0.001)
-				item->setTextColor(Qt::darkCyan);
+				item->setForeground(QBrush(Qt::darkCyan));
 			else if (p > 0.0001)
-				item->setTextColor(QApplication::palette().color(QPalette::Link));
+				item->setForeground(QBrush(QApplication::palette().color(QPalette::Link)));
 			else
-				item->setTextColor(QApplication::palette().color(QPalette::Highlight));
+				item->setForeground(QBrush(QApplication::palette().color(QPalette::Highlight)));
 			uiGeneralTab.twParameters->setItem(i, 5, item);
 
 			// Conf. interval
