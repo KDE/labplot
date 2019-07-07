@@ -29,14 +29,14 @@
 
 #ifndef SPREADSHEETDOCK_H
 #define SPREADSHEETDOCK_H
-
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_spreadsheetdock.h"
 
 class KConfig;
 class Spreadsheet;
 class AbstractAspect;
 
-class SpreadsheetDock : public QWidget {
+class SpreadsheetDock : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -47,14 +47,12 @@ private:
 	Ui::SpreadsheetDock ui;
 	QList<Spreadsheet*> m_spreadsheetList;
 	Spreadsheet* m_spreadsheet{nullptr};
-	bool m_initializing{false};
 
 	void load();
 	void loadConfig(KConfig&);
 
 private slots:
 	//SLOTs for changes triggered in SpreadsheetDock
-	void nameChanged();
 	void commentChanged();
 	void rowCountChanged(int);
 	void columnCountChanged(int);

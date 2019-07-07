@@ -213,27 +213,37 @@ QString AbstractAspect::name() const {
 	return d->m_name;
 }
 
-void AbstractAspect::setName(const QString &value) {
-	if (value.isEmpty()) {
-		setName(QLatin1String("1"));
-		return;
-	}
+/*!
+ * \brief AbstractAspect::setName
+ * sets the name of the abstract aspect
+ * \param value
+ * \param autoUnique
+ * \return returns, if the new name is valid or not
+ */
+bool AbstractAspect::setName(const QString &value, bool autoUnique) {
+	if (value.isEmpty())
+		return setName(QLatin1String("1"), autoUnique);
 
 	if (value == d->m_name)
-		return;
+		return true; // name not changed, but the name is valid
 
 	QString new_name;
 	if (d->m_parent) {
-		new_name = d->m_parent->uniqueNameFor(value);
+			new_name = d->m_parent->uniqueNameFor(value);
+
+		if (!autoUnique && new_name.compare(value) != 0) // value is not unique, so don't change name
+			return false; // this value is used in the dock to check if the name is valid
+
+
 		if (new_name != value)
 			info(i18n("Intended name \"%1\" was changed to \"%2\" in order to avoid name collision.", value, new_name));
-	} else {
+	} else
 		new_name = value;
-	}
 
 	exec(new PropertyChangeCommand<QString>(i18n("%1: rename to %2", d->m_name, new_name),
 				&d->m_name, new_name),
 			"aspectDescriptionAboutToChange", "aspectDescriptionChanged", Q_ARG(const AbstractAspect*,this));
+	return true;
 }
 
 QString AbstractAspect::comment() const {

@@ -263,7 +263,7 @@ private:
 	void connectChild(AbstractAspect*);
 
 public slots:
-	void setName(const QString&);
+	bool setName(const QString&, bool autoUnique = true);
 	void setComment(const QString&);
 	void remove();
 

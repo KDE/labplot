@@ -31,6 +31,7 @@
 
 #include "ui_axisdock.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include <KConfig>
 
 class AbstractAspect;
@@ -40,7 +41,7 @@ class AspectTreeModel;
 class AbstractColumn;
 class DateTimeSpinBox;
 
-class AxisDock : public QWidget{
+class AxisDock : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -59,7 +60,6 @@ private:
 	TreeViewComboBox* cbMajorTicksColumn;
 	TreeViewComboBox* cbMinorTicksColumn;
 	bool m_dataChanged{false};
-	bool m_initializing{false};
 
 	void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
@@ -79,8 +79,6 @@ private slots:
 
 	//SLOTs for changes triggered in AxisDock
 	//"General"-tab
-	void nameChanged();
-	void commentChanged();
 	void visibilityChanged(bool);
 	void orientationChanged(int);
 	void positionChanged(int);

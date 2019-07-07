@@ -68,6 +68,8 @@ XYIntegrationCurveDock::XYIntegrationCurveDock(QWidget* parent) : XYCurveDock(pa
 void XYIntegrationCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	m_leName = uiGeneralTab.leName;
+	m_leComment = uiGeneralTab.leComment;
 
 	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
@@ -216,19 +218,6 @@ void XYIntegrationCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
-void XYIntegrationCurveDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setName(uiGeneralTab.leName->text());
-}
-
-void XYIntegrationCurveDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setComment(uiGeneralTab.leComment->text());
-}
 
 void XYIntegrationCurveDock::dataSourceTypeChanged(int index) {
 	const auto type = (XYAnalysisCurve::DataSourceType)index;

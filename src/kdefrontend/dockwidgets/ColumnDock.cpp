@@ -47,8 +47,10 @@
   \ingroup kdefrontend
 */
 
-ColumnDock::ColumnDock(QWidget* parent) : QWidget(parent) {
+ColumnDock::ColumnDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &ColumnDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &ColumnDock::commentChanged);
@@ -64,6 +66,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	m_initializing = true;
 	m_columnsList = list;
 	m_column = list.first();
+	m_aspect = list.first();
 
 	//check whether we have non-editable columns (e.g. columns for residuals calculated in XYFitCurve)
 	bool nonEditable = false;
@@ -99,6 +102,8 @@ void ColumnDock::setColumns(QList<Column*> list) {
 		ui.leName->setText(QString());
 		ui.leComment->setText(QString());
 	}
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 
 	//show the properties of the first column
 	AbstractColumn::ColumnMode columnMode = m_column->columnMode();
@@ -239,20 +244,6 @@ void ColumnDock::retranslateUi() {
 	ui.cbPlotDesignation->addItem(i18n("Y-error +"));
 
 	m_initializing = false;
-}
-
-void ColumnDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_columnsList.first()->setName(ui.leName->text());
-}
-
-void ColumnDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_columnsList.first()->setComment(ui.leComment->text());
 }
 
 /*!

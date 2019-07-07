@@ -42,13 +42,15 @@ Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <QMenu>
 #endif
 
-LiveDataDock::LiveDataDock(QWidget* parent) : QWidget(parent)
+LiveDataDock::LiveDataDock(QWidget* parent) : BaseDock(parent)
 #ifdef HAVE_MQTT
     ,
     m_subscriptionWidget(new MQTTSubscriptionWidget(this))
 #endif
 {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	//leComment = // not available
 
 	ui.bUpdateNow->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
 
@@ -253,6 +255,8 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 	m_liveDataSource = nullptr; // prevent updates due to changes to input widgets
 
 	ui.leName->setText(source->name());
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 	const LiveDataSource::SourceType sourceType = source->sourceType();
 	const LiveDataSource::ReadingType readingType = source->readingType();
 	const LiveDataSource::UpdateType updateType = source->updateType();
@@ -367,12 +371,24 @@ void LiveDataDock::updateNow() {
 }
 
 void LiveDataDock::nameChanged(const QString& name) {
-	if (m_liveDataSource)
-		m_liveDataSource->setName(name);
+	if (m_liveDataSource) {
+		if (!m_liveDataSource->setName(name, false)) {
+			ui.leName->setStyleSheet("background:red;");
+			ui.leName->setToolTip(i18n("Please choose another name, because this is already in use."));
+			return;
+		}
+	}
 #ifdef HAVE_MQTT
-	else if (m_mqttClient)
-		m_mqttClient->setName(name);
+	else if (m_mqttClient) {
+		if (!m_mqttClient->setName(name, false)) {
+			ui.leName->setStyleSheet("background:red;");
+			ui.leName->setToolTip(i18n("Please choose another name, because this is already in use."));
+			return;
+		}
+	}
 #endif
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 }
 
 /*!

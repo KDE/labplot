@@ -33,6 +33,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "ui_cartesianplotdock.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 
 #include <KConfig>
 
@@ -41,7 +42,7 @@ class LabelWidget;
 class ThemeHandler;
 class KLocalizedString;
 
-class CartesianPlotDock : public QWidget {
+class CartesianPlotDock : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -54,7 +55,6 @@ private:
 	QList<CartesianPlot*> m_plotList;
 	CartesianPlot* m_plot{nullptr};
 	LabelWidget* labelWidget{nullptr};
-	bool m_initializing{false};
 	ThemeHandler* m_themeHandler;
 
 	void loadConfig(KConfig&);
@@ -65,8 +65,6 @@ private slots:
 
 	//SLOTs for changes triggered in CartesianPlotDock
 	//"General"-tab
-	void nameChanged();
-	void commentChanged();
 	void visibilityChanged(bool);
 	void geometryChanged();
 	void layoutChanged(Worksheet::Layout);

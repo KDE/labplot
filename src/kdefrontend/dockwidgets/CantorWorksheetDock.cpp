@@ -32,9 +32,11 @@
 #include <KParts/ReadWritePart>
 #include <QAction>
 
-CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent) {
+CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): BaseDock(parent) {
 	ui.setupUi(this);
 	ui.tabWidget->setMovable(true);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
 	//SLOTs
 	//General
@@ -48,10 +50,14 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 	m_initializing = true;
 	m_cantorworksheetlist = list;
 	m_worksheet = list.first();
+	m_aspect = list.first();
 
 	//show name/comment
 	ui.leName->setText(m_worksheet->name());
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 	ui.leComment->setText(m_worksheet->comment());
+
 
 	//show all available plugins
 	int k = 0;
@@ -89,20 +95,6 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 //**** SLOTs for changes triggered in CantorWorksheetDock *****
 //*************************************************************
 // "General"-tab
-void CantorWorksheetDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_worksheet->setName(ui.leName->text());
-}
-
-void CantorWorksheetDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_worksheet->setComment(ui.leComment->text());
-}
-
 void CantorWorksheetDock::evaluateWorksheet() {
 	m_worksheet->part()->action("evaluate_worksheet")->trigger();
 }

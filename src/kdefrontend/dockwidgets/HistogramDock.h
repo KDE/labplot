@@ -30,6 +30,7 @@
 #define HISTOGRAMDOCK_H
 
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_histogramdock.h"
 
 class Histogram;
@@ -37,7 +38,7 @@ class TreeViewComboBox;
 class AspectTreeModel;
 class Column;
 
-class HistogramDock : public QWidget {
+class HistogramDock : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -64,7 +65,6 @@ protected:
 	QList<Histogram*> m_curvesList;
 	Histogram* m_curve{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
-	bool m_initializing{false};
 
 	virtual void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
@@ -76,8 +76,6 @@ private slots:
 	//SLOTs for changes triggered in HistogramDock
 
 	//General-Tab
-	void nameChanged();
-	void commentChanged();
 	void dataColumnChanged(const QModelIndex&);
 	void visibilityChanged(bool);
 	void typeChanged(int);

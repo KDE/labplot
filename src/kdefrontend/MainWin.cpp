@@ -880,6 +880,7 @@ bool MainWin::newProject() {
 		m_visibilityAllAction->setChecked(true);
 
 	m_aspectTreeModel = new AspectTreeModel(m_project, this);
+	connect(m_aspectTreeModel, &AspectTreeModel::statusInfo, [=](const QString& text){ statusBar()->showMessage(text); });
 
 	//newProject is called for the first time, there is no project explorer yet
 	//-> initialize the project explorer,  the GUI-observer and the dock widgets.

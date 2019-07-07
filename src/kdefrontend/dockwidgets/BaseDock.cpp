@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : CantorWorksheetDock.h
-    Project              : LabPlot
-    Description          : widget for CantorWorksheet properties
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 Garvit Khatri (garvitdelhi@gmail.com)
+	File                 : BaseDock.cpp
+	Project              : LabPlot
+	Description          : Base Dock widget
+	--------------------------------------------------------------------
+	Copyright            : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
 
  ***************************************************************************/
 
@@ -25,43 +25,37 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef CANTORWORKSHEETDOCK_H
-#define CANTORWORKSHEETDOCK_H
 
-#include <QWidget>
-#include <QPair>
+#include "BaseDock.h"
+#include "backend/core/AbstractAspect.h"
 
-#include <cantor/panelplugin.h>
-#include "kdefrontend/dockwidgets/BaseDock.h"
-#include "ui_cantorworksheetdock.h"
+#include "klocalizedstring.h"
 
-class CantorWorksheet;
-class AbstractAspect;
+BaseDock::BaseDock(QWidget* parent) : QWidget(parent) {
 
-class CantorWorksheetDock : public BaseDock {
-	Q_OBJECT
+}
 
-public:
-	explicit CantorWorksheetDock(QWidget *parent);
-	void setCantorWorksheets(QList<CantorWorksheet*>);
+BaseDock::~BaseDock() {
 
-private:
-	Ui::CantorWorksheetDock ui;
-	QList< CantorWorksheet* > m_cantorworksheetlist;
-	CantorWorksheet* m_worksheet{nullptr};
-	QList<int> index;
+}
 
-private slots:
-	//SLOTs for changes triggered in WorksheetDock
-	//"General"-tab
-	void evaluateWorksheet();
-	void restartBackend();
+void BaseDock::nameChanged() {
+	if (m_initializing)
+		return;
 
-	//SLOTs for changes triggered in Worksheet
-	void worksheetDescriptionChanged(const AbstractAspect*);
-signals:
-	void info(const QString&);
+	if (!m_aspect->setName(m_leName->text(), false)) {
+		m_leName->setStyleSheet("background:red;");
+		m_leName->setToolTip(i18n("Please choose another name, because this is already in use."));
+		return;
+	}
 
-};
+	m_leName->setStyleSheet("");
+	m_leName->setToolTip("");
+}
 
-#endif // CANTORWORKSHEETDOCK_H
+void BaseDock::commentChanged() {
+	if (m_initializing)
+		return;
+
+	m_aspect->setComment(m_leComment->text());
+}

@@ -61,8 +61,10 @@
 
   \ingroup kdefrontend
 */
-HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent), cbDataColumn(new TreeViewComboBox) {
+HistogramDock::HistogramDock(QWidget* parent) : BaseDock(parent), cbDataColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
@@ -335,6 +337,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
+	m_aspect = list.first();
 	Q_ASSERT(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
@@ -369,6 +372,9 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 		ui.leName->setText(QString());
 		ui.leComment->setText(QString());
 	}
+
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 
 	//show the properties of the first curve
 	ui.cbType->setCurrentIndex(m_curve->type());
@@ -465,19 +471,6 @@ void HistogramDock::retranslateUi() {
 //*************************************************************
 
 // "General"-tab
-void HistogramDock::nameChanged() {
-	if (m_initializing)
-	return;
-
-	m_curve->setName(ui.leName->text());
-}
-void HistogramDock::commentChanged() {
-	if (m_initializing)
-	return;
-
-	m_curve->setComment(ui.leComment->text());
-}
-
 void HistogramDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;

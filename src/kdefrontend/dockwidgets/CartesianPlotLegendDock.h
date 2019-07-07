@@ -34,10 +34,11 @@
 #include "ui_cartesianplotlegenddock.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 
 class LabelWidget;
 
-class CartesianPlotLegendDock : public QWidget {
+class CartesianPlotLegendDock : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -51,7 +52,6 @@ private:
 	QList<CartesianPlotLegend*> m_legendList;
 	CartesianPlotLegend* m_legend{nullptr};
 	LabelWidget* labelWidget{nullptr};
-	bool m_initializing{false};
 
 	void load();
 	void loadConfig(KConfig&);
@@ -62,8 +62,6 @@ private slots:
 
 	//SLOTs for changes triggered in CartesianPlotLegendDock
 	//"General"-tab
-	void nameChanged();
-	void commentChanged();
 	void visibilityChanged(bool);
 	void labelFontChanged(const QFont&);
 	void labelColorChanged(const QColor&);

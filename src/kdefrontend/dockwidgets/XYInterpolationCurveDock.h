@@ -64,8 +64,6 @@ protected:
 private slots:
 	//SLOTs for changes triggered in XYInterpolationCurveDock
 	//general tab
-	void nameChanged();
-	void commentChanged();
 	void dataSourceTypeChanged(int);
 	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);

@@ -37,8 +37,10 @@
 #include <KConfig>
 #include <KConfigGroup>
 
-CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent) {
+CustomPointDock::CustomPointDock(QWidget *parent): BaseDock(parent) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
 	//Validators
 	ui.lePositionX->setValidator( new QDoubleValidator(ui.lePositionX) );
@@ -114,6 +116,7 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 	m_initializing = true;
 	m_pointsList = list;
 	m_point = list.first();
+	m_aspect = list.first();
 	Q_ASSERT(m_point);
 
 	//if there are more then one point in the list, disable the comment and name widgets in the tab "general"
@@ -132,6 +135,8 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 		ui.leName->setText(QString());
 		ui.leComment->setText(QString());
 	}
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 
 	//show the properties of the first custom point
 	this->load();
@@ -155,20 +160,6 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 //**** SLOTs for changes triggered in CustomPointDock ******
 //**********************************************************
 //"General"-tab
-void CustomPointDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_point->setName(ui.leName->text());
-}
-
-void CustomPointDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_point->setComment(ui.leComment->text());
-}
-
 void CustomPointDock::positionXChanged() {
 	if (m_initializing)
 		return;

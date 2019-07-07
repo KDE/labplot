@@ -66,6 +66,9 @@ XYEquationCurveDock::XYEquationCurveDock(QWidget *parent): XYCurveDock(parent) {
 void XYEquationCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	m_leName = uiGeneralTab.leName;
+	m_leComment = uiGeneralTab.leComment;
+
 	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 		gridLayout->setContentsMargins(2,2,2,2);
@@ -176,20 +179,6 @@ void XYEquationCurveDock::initGeneralTab() {
 //*************************************************************
 //**** SLOTs for changes triggered in XYEquationCurveDock *****
 //*************************************************************
-void XYEquationCurveDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setName(uiGeneralTab.leName->text());
-}
-
-void XYEquationCurveDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setComment(uiGeneralTab.leComment->text());
-}
-
 void XYEquationCurveDock::typeChanged(int index) {
 	const auto type = XYEquationCurve::EquationType(index);
 	if (type == XYEquationCurve::Cartesian) {

@@ -52,8 +52,10 @@
  \ingroup kdefrontend
 */
 
-AxisDock::AxisDock(QWidget* parent) : QWidget(parent) {
+AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -366,6 +368,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	m_initializing = true;
 	m_axesList = list;
 	m_axis = list.first();
+	m_aspect = list.first();
 	Q_ASSERT(m_axis != nullptr);
 	m_aspectTreeModel = new AspectTreeModel(m_axis->project());
 	this->setModel();
@@ -392,6 +395,8 @@ void AxisDock::setAxes(QList<Axis*> list) {
 		cbMajorTicksColumn->setCurrentModelIndex(QModelIndex());
 		cbMinorTicksColumn->setCurrentModelIndex(QModelIndex());
 	}
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 
 	//show the properties of the first axis
 	this->load();
@@ -470,20 +475,6 @@ void AxisDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColum
 //********** SLOTs for changes triggered in AxisDock **********
 //*************************************************************
 //"General"-tab
-void AxisDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_axis->setName(ui.leName->text());
-}
-
-void AxisDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_axis->setComment(ui.leComment->text());
-}
-
 void AxisDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;

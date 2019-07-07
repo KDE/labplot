@@ -94,6 +94,7 @@ signals:
 	void indexSelected(const QModelIndex&);
 	void indexDeselected(const QModelIndex&);
 	void hiddenAspectSelected(const AbstractAspect*);
+	void statusInfo(const QString&);
 };
 
 #endif // ifndef ASPECT_TREE_MODEL_H

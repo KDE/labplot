@@ -43,13 +43,14 @@ class MQTTSubscriptionWidget;
 
 #include "ui_livedatadock.h"
 #include "backend/datasources/LiveDataSource.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 
 class QTimer;
 class QTreeWidgetItem;
 class QString;
 class QCompleter;
 
-class LiveDataDock : public QWidget {
+class LiveDataDock : public BaseDock {
 	Q_OBJECT
 
 public:

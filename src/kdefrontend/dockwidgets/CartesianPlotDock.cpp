@@ -56,8 +56,10 @@
   \ingroup kdefrontend
 */
 
-CartesianPlotDock::CartesianPlotDock(QWidget* parent) : QWidget(parent) {
+CartesianPlotDock::CartesianPlotDock(QWidget *parent) : BaseDock(parent) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
 	//"General"-tab
 	auto* rangeButtonsGroup(new QButtonGroup);
@@ -257,6 +259,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	m_initializing = true;
 	m_plotList = list;
 	m_plot = list.first();
+	m_aspect = list.first();
 
 	QList<TextLabel*> labels;
 	for (auto* plot : list)
@@ -282,6 +285,9 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 		ui.leName->setText(QString());
 		ui.leComment->setText(QString());
 	}
+
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 
 	//show the properties of the first plot
 	this->load();
@@ -412,20 +418,6 @@ void CartesianPlotDock::retranslateUi() {
 }
 
 // "General"-tab
-void CartesianPlotDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_plot->setName(ui.leName->text());
-}
-
-void CartesianPlotDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_plot->setComment(ui.leComment->text());
-}
-
 void CartesianPlotDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
