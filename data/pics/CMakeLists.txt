@@ -10,12 +10,14 @@ sc-apps-labplot-auto-scale-x.svg
 sc-apps-labplot-auto-scale-y.svg
 sc-apps-labplot-axis-horizontal.svg
 sc-apps-labplot-axis-vertical.svg
+sc-apps-labplot-back.svg
 sc-apps-labplot-cursor-arrow.svg
 sc-apps-labplot-editbreaklayout.svg
 sc-apps-labplot-editgrid.svg
 sc-apps-labplot-edithlayout.svg
 sc-apps-labplot-editvlayout.svg
 sc-apps-labplot-format-text-symbol.svg
+sc-apps-labplot-forward.svg
 sc-apps-labplot-json-array.svg
 sc-apps-labplot-json-object.svg
 sc-apps-labplot-matrix-new.svg

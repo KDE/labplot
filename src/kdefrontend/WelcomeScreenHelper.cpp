@@ -401,3 +401,29 @@ QVariant WelcomeScreenHelper::getMinIcon() {
 	qDebug() << "Max icon  " << image;
 	return QVariant(image);
 }
+
+QVariant WelcomeScreenHelper::getBackIcon() {
+	QIcon icon = QIcon::fromTheme("labplot-back");
+	QPixmap pixmap = icon.pixmap(icon.availableSizes().first());
+	QByteArray bArray;
+	QBuffer buffer(&bArray);
+	buffer.open(QIODevice::WriteOnly);
+	pixmap.save(&buffer, "PNG");
+	QString image = QString::fromLatin1(bArray.toBase64().data());
+	image.prepend("data:image/png;base64,");
+	qDebug() << "Max icon  " << image;
+	return QVariant(image);
+}
+
+QVariant WelcomeScreenHelper::getForwardIcon() {
+	QIcon icon = QIcon::fromTheme("labplot-forward");
+	QPixmap pixmap = icon.pixmap(icon.availableSizes().first());
+	QByteArray bArray;
+	QBuffer buffer(&bArray);
+	buffer.open(QIODevice::WriteOnly);
+	pixmap.save(&buffer, "PNG");
+	QString image = QString::fromLatin1(bArray.toBase64().data());
+	image.prepend("data:image/png;base64,");
+	qDebug() << "Max icon  " << image;
+	return QVariant(image);
+}

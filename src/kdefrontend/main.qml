@@ -1842,6 +1842,44 @@ Rectangle {
                     }
                 }
 
+                Image {
+                    Layout.preferredHeight: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumHeight: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredWidth: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumWidth: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.alignment: Qt.AlignVCenter
+                    source: helper.getBackIcon()
+                    sourceSize.width: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.height: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+
+                    MouseArea {
+                        anchors.fill: parent
+
+                        onClicked: {
+                            releaseWebView.goBack()
+                        }
+                    }
+                }
+
+                Image {
+                    Layout.preferredHeight: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumHeight: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredWidth: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumWidth: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.alignment: Qt.AlignVCenter
+                    source: helper.getForwardIcon()
+                    sourceSize.width: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.height: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+
+                    MouseArea {
+                        anchors.fill: parent
+
+                        onClicked: {
+                            releaseWebView.goForward()
+                        }
+                    }
+                }
+
                 Label {
                     text: qsTr("What's new in this release")
 

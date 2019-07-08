@@ -60,6 +60,8 @@ public:
 	Q_INVOKABLE QVariant getHeightScale(QString sectionID);
 	Q_INVOKABLE QVariant getMaxIcon();
 	Q_INVOKABLE QVariant getMinIcon();
+	Q_INVOKABLE QVariant getBackIcon();
+	Q_INVOKABLE QVariant getForwardIcon();
 
 
     Spreadsheet* releaseConfiguredSpreadsheet();
