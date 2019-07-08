@@ -334,11 +334,8 @@ void MainWin::initGUI(const QString& fileName) {
  * @return
  */
 QQuickWidget* MainWin::createWelcomeScreen() {
-
-	//layout()->setSizeConstraint(QLayout::SetFixedSize);
 	showMaximized();
-	setFixedSize(qApp->desktop()->screen()->size());
-
+	setFixedSize(size());
 	setGeometry(
 		QStyle::alignedRect(
 			Qt::LeftToRight,
@@ -347,11 +344,6 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 			qApp->desktop()->availableGeometry()
 		)
 	);
-
-	qDebug()<< "Screen size" << qApp->desktop()->screen()->size();
-	qDebug()<<"Max size of main win " << maximumSize();
-
-	qDebug() << "ize of main win:  " << size();
 
 	KToolBar* toolbar = toolBar();
 	if(toolbar != nullptr) {

@@ -217,7 +217,6 @@ Rectangle {
         }
 
         ColumnLayout {
-            id: columnLayout
             anchors.fill: parent
             spacing: 20
             clip: true
@@ -282,7 +281,6 @@ Rectangle {
 
 
                 Label {
-                    id: label
                     color: "#000000"
                     text: qsTr("Recent Projects")
                     styleColor: "#979191"
@@ -302,7 +300,8 @@ Rectangle {
                 }
             }
 
-            RecentProjects {id: recentProjectsList
+            RecentProjects {
+                id: recentProjectsList
                 model:recentProjects
                 Layout.fillHeight: true
                 Layout.fillWidth: true
@@ -534,7 +533,6 @@ Rectangle {
 
 
                 Label {
-                    id: label1
                     text: qsTr("Examples")
                     styleColor: "#d41919"
 
@@ -878,7 +876,6 @@ Rectangle {
         }
 
         ColumnLayout {
-            id: columnLayout2
             anchors.fill: parent
             spacing: 20
             clip: true
@@ -944,7 +941,6 @@ Rectangle {
                 }
 
                 Label {
-                    id: label3
                     text: qsTr("Help")
 
                     verticalAlignment: Text.AlignVCenter
@@ -1127,7 +1123,6 @@ Rectangle {
             }
         }
 
-
         Rectangle {
             width: 3
             height: parent.height
@@ -1166,7 +1161,6 @@ Rectangle {
         }
 
         ColumnLayout {
-            id: columnLayout3
             anchors.fill: parent
             clip: true
             spacing: 20
@@ -1186,7 +1180,6 @@ Rectangle {
                     source: datasetFrame.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
                     sourceSize.width: datasetFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     sourceSize.height: datasetFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-
 
                     MouseArea {
                         anchors.fill: parent
@@ -1234,7 +1227,6 @@ Rectangle {
                 }
 
                 Label {
-                    id: label4
                     text: qsTr("Start exploring data")
 
                     verticalAlignment: Text.AlignVCenter
@@ -1249,7 +1241,7 @@ Rectangle {
             }
 
             RowLayout {
-                id: rowLayout
+                id: datasetSectionRow
                 Layout.fillHeight: true
                 Layout.minimumHeight: Math.max((parent.height - parent.spacing) *0.8, parent.height - parent.spacing - 100)
                 Layout.fillWidth: true
@@ -1261,8 +1253,8 @@ Rectangle {
 
                 ListView {
                     id: categoryList
-                    Layout.preferredWidth: (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.15
-                    Layout.minimumWidth:  (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.15
+                    Layout.preferredWidth: (parent.width - 3 * datasetSectionRow.separatorWidth - 6*datasetSectionRow.spacing) * 0.15
+                    Layout.minimumWidth:  (parent.width - 3 * datasetSectionRow.separatorWidth - 6*datasetSectionRow.spacing) * 0.15
                     //width: textWidth
                     // implicitWidth: textWidth
                     spacing: 10
@@ -1306,7 +1298,7 @@ Rectangle {
                                 horizontalAlignment: Text.AlignHCenter
                                 text: categoryDelegate.categoryName
                                 font.bold: true
-                                //wrapMode: Text.WordWrap
+                                wrapMode: Text.WordWrap
                                 font.pixelSize: 18
                                 minimumPixelSize: 1
                                 fontSizeMode: Text.Fit
@@ -1356,11 +1348,8 @@ Rectangle {
                     id: subcategoryList
                     spacing: 10
                     Layout.fillHeight: true
-                    //Layout.fillWidth: true
-                    Layout.preferredWidth: (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.15
-                    Layout.minimumWidth:  (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.15
-                    //width: textWidth
-                    //implicitWidth: textWidth
+                    Layout.preferredWidth: (parent.width - 3 * datasetSectionRow.separatorWidth - 6*datasetSectionRow.spacing) * 0.15
+                    Layout.minimumWidth:  (parent.width - 3 * datasetSectionRow.separatorWidth - 6*datasetSectionRow.spacing) * 0.15
                     ScrollBar.vertical: ScrollBar{}
                     clip: true
                     property int textWidth: 100
@@ -1376,8 +1365,6 @@ Rectangle {
                         RowLayout {
                             id: subcategoryRow
                             spacing: 10
-                            //Layout.fillHeight: true
-                            //Layout.fillWidth: true
                             anchors.fill: parent
 
                             Rectangle {
@@ -1447,8 +1434,8 @@ Rectangle {
                 GridView {
                     id: datasetGrid
                     Layout.fillHeight: true
-                    Layout.preferredWidth: (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.4
-                    Layout.minimumWidth:  (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.4
+                    Layout.preferredWidth: (parent.width - 3 * datasetSectionRow.separatorWidth - 6*datasetSectionRow.spacing) * 0.4
+                    Layout.minimumWidth:  (parent.width - 3 * datasetSectionRow.separatorWidth - 6*datasetSectionRow.spacing) * 0.4
                     cellWidth: width/4
                     cellHeight: 40
                     clip: true
@@ -1546,8 +1533,8 @@ Rectangle {
                 ScrollView {
                     id: scrollView
                     Layout.fillHeight: true
-                    Layout.preferredWidth: (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.3
-                    Layout.minimumWidth:  (parent.width - 3 * rowLayout.separatorWidth - 6*rowLayout.spacing) * 0.3
+                    Layout.preferredWidth: (parent.width - 3 * datasetSectionRow.separatorWidth - 6*datasetSectionRow.spacing) * 0.3
+                    Layout.minimumWidth:  (parent.width - 3 * datasetSectionRow.separatorWidth - 6*datasetSectionRow.spacing) * 0.3
 
                     contentHeight: datasetDescriptionColumn.height
                     clip: true
@@ -1651,9 +1638,6 @@ Rectangle {
                             width: datasetButtonText.paintedWidth + 10
                             height: datasetButtonText.paintedHeight + 10
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-                            //anchors.horizontalCenter: parent.horizontalCenter
-                            //border.color: 'black'
-                            //border.width: 3
                             color:'#dfe3ee'
 
                             Text {
@@ -1796,7 +1780,6 @@ Rectangle {
         }
 
         ColumnLayout {
-            id: columnLayout7
             anchors.fill: parent
             clip: true
             spacing: 10
@@ -1812,11 +1795,9 @@ Rectangle {
                     Layout.preferredWidth: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.minimumWidth: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.alignment: Qt.AlignVCenter
-
                     source: releaseSection.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
                     sourceSize.width: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     sourceSize.height: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-
 
                     MouseArea {
                         anchors.fill: parent
@@ -1862,7 +1843,6 @@ Rectangle {
                 }
 
                 Label {
-                    id: label8
                     text: qsTr("What's new in this release")
 
                     verticalAlignment: Text.AlignVCenter
@@ -1878,7 +1858,7 @@ Rectangle {
             }
 
             WebView {
-                id: webView
+                id: releaseWebView
                 Layout.fillHeight: true
                 Layout.minimumHeight: Math.max((parent.height - parent.spacing) *0.8, parent.height - parent.spacing - 100)
                 Layout.preferredHeight: Math.max((parent.height - parent.spacing) *0.8, parent.height - parent.spacing - 100)
