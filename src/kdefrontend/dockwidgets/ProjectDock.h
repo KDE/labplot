@@ -30,12 +30,13 @@
 #define PROJECTDOCK_H
 
 #include "ui_projectdock.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 
 class Project;
 class AbstractAspect;
 class KConfig;
 
-class ProjectDock: public QWidget {
+class ProjectDock: public BaseDock {
 	Q_OBJECT
 
 public:
@@ -45,20 +46,18 @@ public:
 private:
 	Ui::ProjectDock ui;
 	Project* m_project{nullptr};
-	bool m_initializing{false};
 
 private slots:
 	void retranslateUi();
 
-	void titleChanged(const QString&);
 	void authorChanged(const QString&);
-	void commentChanged();
 
 	//SLOTs for changes triggered in Project
 	void projectDescriptionChanged(const AbstractAspect*);
 
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
+	void commentChanged();
 };
 
 #endif // PROJECTDOCK_H

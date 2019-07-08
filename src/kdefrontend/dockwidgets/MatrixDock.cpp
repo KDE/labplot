@@ -40,8 +40,10 @@
 
   \ingroup kdefrontend
 */
-MatrixDock::MatrixDock(QWidget* parent): QWidget(parent) {
+MatrixDock::MatrixDock(QWidget* parent): BaseDock(parent) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
 	ui.cbFormat->addItem(i18n("Decimal"), QVariant('f'));
 	ui.cbFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
@@ -83,6 +85,7 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 	m_initializing = true;
 	m_matrixList = list;
 	m_matrix = list.first();
+	m_aspect = list.first();
 
 	if (list.size() == 1) {
 		ui.leName->setEnabled(true);
@@ -98,6 +101,8 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 		ui.leName->setText(QString());
 		ui.leComment->setText(QString());
 	}
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 
 	//show the properties of the first Matrix in the list, if there are >1 matrixs
 	this->load();
@@ -123,21 +128,6 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 //*************************************************************
 //****** SLOTs for changes triggered in MatrixDock *******
 //*************************************************************
-void MatrixDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_matrix->setName(ui.leName->text());
-}
-
-void MatrixDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_matrix->setComment(ui.leComment->text());
-}
-
-
 //mapping to the logical coordinates
 void MatrixDock::xStartChanged() {
 	if (m_initializing)

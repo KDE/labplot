@@ -61,6 +61,8 @@ XYFourierTransformCurveDock::XYFourierTransformCurveDock(QWidget *parent) : XYCu
 void XYFourierTransformCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	m_leName = uiGeneralTab.leName;
+	m_leComment = uiGeneralTab.leComment;
 
 	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
@@ -196,20 +198,6 @@ void XYFourierTransformCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
-void XYFourierTransformCurveDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setName(uiGeneralTab.leName->text());
-}
-
-void XYFourierTransformCurveDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setComment(uiGeneralTab.leComment->text());
-}
-
 void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;

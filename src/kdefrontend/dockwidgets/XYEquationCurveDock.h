@@ -52,8 +52,6 @@ private:
 
 private slots:
 	//SLOTs for changes triggered in XYCurveDock
-	void nameChanged();
-	void commentChanged();
 	void typeChanged(int);
 	void recalculateClicked();
 	void showConstants();

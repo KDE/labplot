@@ -33,6 +33,7 @@
 
 #include "ui_datapickerimagewidget.h"
 #include "backend/datapicker/DatapickerImage.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 
 class QxtSpanSlider;
 
@@ -56,7 +57,7 @@ private:
 	int m_range;
 };
 
-class DatapickerImageWidget : public QWidget {
+class DatapickerImageWidget : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -89,8 +90,6 @@ private:
 private slots:
 	//SLOTs for changes triggered in DatapickerImageWidget
 	//"General"-tab
-	void nameChanged();
-	void commentChanged();
 	void fileNameChanged();
 	void selectFile();
 	void plotImageTypeChanged(int);

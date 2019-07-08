@@ -61,7 +61,7 @@
   \ingroup kdefrontend
 */
 
-XYCurveDock::XYCurveDock(QWidget* parent) : QWidget(parent) {
+XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 
 	//Tab "Values"
@@ -198,6 +198,8 @@ XYCurveDock::~XYCurveDock() {
 void XYCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	m_leName = uiGeneralTab.leName;
+	m_leComment = uiGeneralTab.leComment;
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
@@ -510,6 +512,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
+	m_aspect = list.first();
 	Q_ASSERT(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
@@ -555,6 +558,9 @@ void XYCurveDock::initGeneralTab() {
 		uiGeneralTab.leName->setText(QString());
 		uiGeneralTab.leComment->setText(QString());
 	}
+
+	uiGeneralTab.leName->setStyleSheet("");
+	uiGeneralTab.leName->setToolTip("");
 
 	//show the properties of the first curve
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
@@ -783,21 +789,6 @@ void XYCurveDock::retranslateUi() {
 // 	uiGeneralTab.lYColumn->setText(i18n("y-data"));
 
 	//TODO updatePenStyles, updateBrushStyles for all comboboxes
-}
-
-// "General"-tab
-void XYCurveDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setName(uiGeneralTab.leName->text());
-}
-
-void XYCurveDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setComment(uiGeneralTab.leComment->text());
 }
 
 void XYCurveDock::xColumnChanged(const QModelIndex& index) {

@@ -60,8 +60,6 @@ protected:
 private slots:
 	//SLOTs for changes triggered in XYFourierTransformCurveDock
 	//general tab
-	void nameChanged();
-	void commentChanged();
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();

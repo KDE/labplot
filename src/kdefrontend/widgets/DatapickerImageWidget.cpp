@@ -123,8 +123,10 @@ void HistogramView::drawBackground(QPainter* painter, const QRectF& rect) {
 	painter->restore();
 }
 
-DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : QWidget(parent), m_image(nullptr) {
+DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent), m_image(nullptr) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
 	ui.leFileName->setClearButtonEnabled(true);
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
@@ -297,6 +299,7 @@ void DatapickerImageWidget::init() {
 void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 	m_imagesList = list;
 	m_image = list.first();
+	m_aspect = list.first();
 
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
@@ -368,20 +371,6 @@ void DatapickerImageWidget::handleWidgetActions() {
 //****** SLOTs for changes triggered in DatapickerImageWidget ********
 //**********************************************************
 //"General"-tab
-void DatapickerImageWidget::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_image->parentAspect()->setName(ui.leName->text());
-}
-
-void DatapickerImageWidget::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_image->parentAspect()->setComment(ui.leComment->text());
-}
-
 void DatapickerImageWidget::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatapickerImageWidget");
 	QString dir = conf.readEntry("LastImageDir", "");

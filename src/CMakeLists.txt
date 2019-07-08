@@ -45,10 +45,11 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ROOTOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/MQTTErrorWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/BaseDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/NoteDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
@@ -130,7 +131,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/rootoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/mqtterrorwidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui

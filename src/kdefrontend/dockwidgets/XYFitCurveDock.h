@@ -70,8 +70,6 @@ protected:
 private slots:
 	//SLOTs for changes triggered in XYFitCurveDock
 	//general tab
-	void nameChanged();
-	void commentChanged();
 	void dataSourceTypeChanged(int);
 	void dataSourceCurveChanged(const QModelIndex&);
 	void xWeightChanged(int);

@@ -388,10 +388,13 @@ bool AspectTreeModel::setData(const QModelIndex &index, const QVariant &value, i
 	if (!index.isValid() || role != Qt::EditRole) return false;
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	switch (index.column()) {
-	case 0:
-		aspect->setName(value.toString());
+	case 0: {
+		if (!aspect->setName(value.toString(), false)) {
+			emit statusInfo(i18n("The name \"%1\" is already in use. Choose another name.", value.toString()));
+			return false;
+		}
 		break;
-	case 3:
+	} case 3:
 		aspect->setComment(value.toString());
 		break;
 	default:

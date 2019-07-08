@@ -76,6 +76,9 @@ void XYFitCurveDock::setupGeneral() {
 	DEBUG("XYFitCurveDock::setupGeneral()");
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	m_leName = uiGeneralTab.leName;
+	m_leComment = uiGeneralTab.leComment;
+
 	auto* gridLayout = qobject_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 		gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -346,20 +349,6 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
-void XYFitCurveDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setName(uiGeneralTab.leName->text());
-}
-
-void XYFitCurveDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setComment(uiGeneralTab.leComment->text());
-}
-
 void XYFitCurveDock::dataSourceTypeChanged(int index) {
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
 	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
@@ -1243,15 +1232,15 @@ void XYFitCurveDock::showFitResult() {
 			item = new QTableWidgetItem(QString::number(p, 'g', 3));
 			// color p values depending on value
 			if (p > 0.05)
-				item->setTextColor(QApplication::palette().color(QPalette::LinkVisited));
+				item->setForeground(QBrush(QApplication::palette().color(QPalette::LinkVisited)));
 			else if (p > 0.01)
-				item->setTextColor(Qt::darkGreen);
+				item->setForeground(QBrush(Qt::darkGreen));
 			else if (p > 0.001)
-				item->setTextColor(Qt::darkCyan);
+				item->setForeground(QBrush(Qt::darkCyan));
 			else if (p > 0.0001)
-				item->setTextColor(QApplication::palette().color(QPalette::Link));
+				item->setForeground(QBrush(QApplication::palette().color(QPalette::Link)));
 			else
-				item->setTextColor(QApplication::palette().color(QPalette::Highlight));
+				item->setForeground(QBrush(QApplication::palette().color(QPalette::Highlight)));
 			uiGeneralTab.twParameters->setItem(i, 5, item);
 
 			// Conf. interval

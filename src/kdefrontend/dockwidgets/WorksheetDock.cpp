@@ -50,8 +50,10 @@
   \ingroup kdefrontend
 */
 
-WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent) {
+WorksheetDock::WorksheetDock(QWidget *parent): BaseDock(parent) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
 	//Background-tab
 	ui.cbBackgroundColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
@@ -154,6 +156,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	m_initializing = true;
 	m_worksheetList = list;
 	m_worksheet = list.first();
+	m_aspect = list.first();
 
 	//if there are more then one worksheet in the list, disable the name and comment field in the tab "general"
 	if (list.size() == 1) {
@@ -173,6 +176,8 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 		ui.leName->setText(QString());
 		ui.leComment->setText(QString());
 	}
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 
 	//show the properties of the first worksheet
 	this->load();
@@ -328,20 +333,6 @@ void WorksheetDock::retranslateUi() {
 }
 
 // "General"-tab
-void WorksheetDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_worksheet->setName(ui.leName->text());
-}
-
-void WorksheetDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_worksheet->setComment(ui.leComment->text());
-}
-
 void WorksheetDock::scaleContentChanged(bool scaled) {
 	if (m_initializing)
 		return;

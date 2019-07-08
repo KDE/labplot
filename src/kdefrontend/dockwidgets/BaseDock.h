@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : MatrixDock.h
-    Project              : LabPlot
-    Description          : widget for matrix properties
+    File             : BaseDock.h
+    Project          : LabPlot
+	Description      : Base dock widget
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
+	Copyright         : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
 
  ***************************************************************************/
 
@@ -26,67 +26,31 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MATRIXDOCK_H
-#define MATRIXDOCK_H
+#ifndef BASEDOCK
+#define BASEDOCK
 
-#include "backend/matrix/Matrix.h"
-#include "kdefrontend/dockwidgets/BaseDock.h"
-#include "ui_matrixdock.h"
+#include <QWidget>
+#include <QLineEdit>
 
-class Matrix;
-class KConfig;
+class AbstractAspect;
 
-class MatrixDock : public BaseDock {
+class BaseDock : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit MatrixDock(QWidget*);
-	void setMatrices(QList<Matrix*>);
+	BaseDock(QWidget* parent);
+	~BaseDock();
 
-private:
-	Ui::MatrixDock ui;
-	QList<Matrix*> m_matrixList;
-	Matrix* m_matrix{nullptr};
+protected:
+	bool m_initializing{false};
+	QLineEdit* m_leName{nullptr};
+	QLineEdit* m_leComment{nullptr};
+	AbstractAspect* m_aspect{nullptr};
+	QList<AbstractAspect*> m_aspects;
 
-	void load();
-	void loadConfig(KConfig&);
-
-private slots:
-	//SLOTs for changes triggered in MatrixDock
-
-	void rowCountChanged(int);
-	void columnCountChanged(int);
-
-	void xStartChanged();
-	void xEndChanged();
-	void yStartChanged();
-	void yEndChanged();
-
-	void numericFormatChanged(int);
-	void precisionChanged(int);
-	void headerFormatChanged(int);
-
-	//SLOTs for changes triggered in Matrix
-	void matrixDescriptionChanged(const AbstractAspect*);
-
-	void matrixXStartChanged(double);
-	void matrixXEndChanged(double);
-	void matrixYStartChanged(double);
-	void matrixYEndChanged(double);
-
-	void matrixRowCountChanged(int);
-	void matrixColumnCountChanged(int);
-
-	void matrixNumericFormatChanged(char);
-	void matrixPrecisionChanged(int);
-	void matrixHeaderFormatChanged(Matrix::HeaderFormat);
-
-	//save/load template
-	void loadConfigFromTemplate(KConfig&);
-	void saveConfigAsTemplate(KConfig&);
-
-signals:
-	void info(const QString&);
+protected slots:
+	void nameChanged();
+	void commentChanged();
 };
 
-#endif // MATRIXDOCK_H
+#endif

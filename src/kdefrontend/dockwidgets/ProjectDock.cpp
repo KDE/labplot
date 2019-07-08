@@ -40,11 +40,13 @@
   \ingroup kdefrontend
 */
 
-ProjectDock::ProjectDock(QWidget *parent): QWidget(parent) {
+ProjectDock::ProjectDock(QWidget *parent): BaseDock(parent) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	// leComment = ui.tbComment; // not a qlineedit
 
 	// SLOTS
-	connect(ui.leName, &QLineEdit::textChanged, this, &ProjectDock::titleChanged);
+	connect(ui.leName, &QLineEdit::textChanged, this, &ProjectDock::nameChanged);
 	connect(ui.leAuthor, &QLineEdit::textChanged, this, &ProjectDock::authorChanged);
 	connect(ui.tbComment, &QTextBrowser::textChanged, this, &ProjectDock::commentChanged);
 
@@ -60,7 +62,10 @@ ProjectDock::ProjectDock(QWidget *parent): QWidget(parent) {
 void ProjectDock::setProject(Project *project) {
 	m_initializing = true;
 	m_project = project;
+	m_aspect = project;
 	ui.leFileName->setText(project->fileName());
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 	ui.lVersion->setText(project->version());
 	ui.lCreated->setText(project->creationTime().toString());
 	ui.lModified->setText(project->modificationTime().toString());
@@ -78,13 +83,6 @@ void ProjectDock::setProject(Project *project) {
 //****************** SLOTS ********************************
 //************************************************************
 void ProjectDock::retranslateUi() {
-}
-
-void ProjectDock::titleChanged(const QString& title) {
-	if (m_initializing)
-		return;
-
-	m_project->setName(title);
 }
 
 void ProjectDock::authorChanged(const QString& author) {

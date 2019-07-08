@@ -29,21 +29,21 @@
 #define CUSTOMPOINTDOCK_H
 
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_custompointdock.h"
 
 class AbstractAspect;
 class CustomPoint;
 class KConfig;
 
-class CustomPointDock : public QWidget {
+class CustomPointDock : public BaseDock {
 	Q_OBJECT
 
 public:
-	explicit CustomPointDock(QWidget*);
+	explicit CustomPointDock(QWidget *);
 	void setPoints(QList<CustomPoint*>);
 
 private:
-	bool m_initializing;
 	Ui::CustomPointDock ui;
 	QList<CustomPoint*> m_pointsList;
 	CustomPoint* m_point{nullptr};
@@ -56,8 +56,6 @@ private slots:
 
 	//SLOTs for changes triggered in CustomPointDock
 	//General-Tab
-	void nameChanged();
-	void commentChanged();
 	void positionXChanged();
 	void positionYChanged();
 	void visibilityChanged(bool);

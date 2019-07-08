@@ -43,8 +43,10 @@
   \ingroup kdefrontend
 */
 
-SpreadsheetDock::SpreadsheetDock(QWidget* parent): QWidget(parent) {
+SpreadsheetDock::SpreadsheetDock(QWidget* parent): BaseDock(parent) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	//leComment = ui.teComment; // is not a lineedit
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &SpreadsheetDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &SpreadsheetDock::commentChanged);
@@ -67,6 +69,7 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 	m_initializing = true;
 	m_spreadsheetList = list;
 	m_spreadsheet = list.first();
+	m_aspect = list.first();
 
 	if (list.size() == 1) {
 		ui.leName->setEnabled(true);
@@ -82,6 +85,8 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 		ui.leName->setText(QString());
 		ui.teComment->setText(QString());
   	}
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 
 	//show the properties of the first Spreadsheet in the list
 	this->load();
@@ -99,13 +104,6 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 //*************************************************************
 //****** SLOTs for changes triggered in SpreadsheetDock *******
 //*************************************************************
-void SpreadsheetDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_spreadsheet->setName(ui.leName->text());
-}
-
 void SpreadsheetDock::commentChanged() {
 	if (m_initializing)
 		return;
