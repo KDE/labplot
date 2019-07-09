@@ -142,7 +142,7 @@ MainWin::~MainWin() {
 	KSharedConfig::openConfig()->sync();
 
 	qDebug() << "Mainwin Destructor ";
-	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr && m_saveWelcomeScreen) {
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
 		qDebug() << "Destructor save welcome screen";
 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
 	}
@@ -321,7 +321,6 @@ void MainWin::initGUI(const QString& fileName) {
 
 	//load welcome screen
 	m_showWelcomeScreen  = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
-	m_saveWelcomeScreen = group.readEntry<bool>(QLatin1String("SaveWelcomeScreen"), true);
 
 	if(m_showWelcomeScreen) {
 		m_welcomeWidget = createWelcomeScreen();
@@ -334,8 +333,9 @@ void MainWin::initGUI(const QString& fileName) {
  * @return
  */
 QQuickWidget* MainWin::createWelcomeScreen() {
-	showMaximized();
-	setFixedSize(size());
+	//showMaximized();
+	//QSize maxSize = qApp->primaryScreen()->availableSize();
+	setFixedSize(qApp->screens().first()->availableGeometry().size());
 	setGeometry(
 		QStyle::alignedRect(
 			Qt::LeftToRight,
@@ -344,6 +344,8 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 			qApp->desktop()->availableGeometry()
 		)
 	);
+
+	qDebug() << "Main win size  " << size();
 
 	KToolBar* toolbar = toolBar();
 	if(toolbar != nullptr) {
@@ -371,7 +373,6 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	if(m_welcomeScreenHelper != nullptr)
 		delete m_welcomeScreenHelper;
 	m_welcomeScreenHelper = new WelcomeScreenHelper();
-	m_welcomeScreenHelper->setSaveLayout(m_saveWelcomeScreen);
 	connect(m_welcomeScreenHelper, SIGNAL(openExampleProject(QString)), this, SLOT(openProject(const QString& )));
 
 	ctxt->setContextProperty("datasetModel", m_welcomeScreenHelper->getDatasetModel());
@@ -402,7 +403,9 @@ void MainWin::resetWelcomeScreen() {
  * @brief Creates a new MDI area, to replace the Welcome Screen as central widget
  */
 void MainWin::createMdiArea() {
-	layout()->setSizeConstraint(QLayout::SetDefaultConstraint);
+	//layout()->setSizeConstraint(QLayout::SetDefaultConstraint);
+	setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+	setMinimumSize(0,0);
 
 	KToolBar* toolbar = toolBar();
 	if(toolbar != nullptr) {
@@ -411,7 +414,7 @@ void MainWin::createMdiArea() {
 		qDebug() << "There is no toolbar to display";
 	}
 
-	if(m_showWelcomeScreen && m_saveWelcomeScreen) {
+	if(m_showWelcomeScreen) {
 		qDebug() << "Call saving welcome screen widget dimensions";
 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
 	}
@@ -2048,11 +2051,6 @@ void MainWin::handleSettingsChanges() {
 	bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
 	if(m_showWelcomeScreen != showWelcomeScreen) {
 		m_showWelcomeScreen = showWelcomeScreen;
-	}
-
-	bool saveWelcomeScreen = group.readEntry<bool>(QLatin1String("SaveWelcomeScreen"), true);
-	if(m_saveWelcomeScreen != saveWelcomeScreen) {
-		m_saveWelcomeScreen = saveWelcomeScreen;
 	}
 }
 

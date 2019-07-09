@@ -227,15 +227,15 @@ Rectangle {
                 Layout.preferredHeight: Math.min(parent.height*0.2, 100)
 
                 Image {
-                    Layout.preferredHeight: recentProjectsFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.minimumHeight: recentProjectsFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.preferredWidth: recentProjectsFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.minimumWidth: recentProjectsFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredHeight: recentProjectsFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumHeight: recentProjectsFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredWidth: recentProjectsFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumWidth: recentProjectsFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.alignment: Qt.AlignVCenter
 
                     source: recentProjectsFrame.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
-                    sourceSize.width: recentProjectsFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    sourceSize.height: recentProjectsFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.width: recentProjectsFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.height: recentProjectsFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
 
 
                     MouseArea {
@@ -477,15 +477,15 @@ Rectangle {
                 Layout.preferredHeight: Math.min((parent.height - 25 - 2*parent.spacing)*0.2, 100)
 
                 Image {
-                    Layout.preferredHeight: exampleProjects.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.minimumHeight: exampleProjects.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.preferredWidth: exampleProjects.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.minimumWidth: exampleProjects.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredHeight: exampleProjects.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumHeight: exampleProjects.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredWidth: exampleProjects.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumWidth: exampleProjects.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.alignment: Qt.AlignVCenter
 
                     source: exampleProjects.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
-                    sourceSize.width: exampleProjects.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    sourceSize.height: exampleProjects.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.width: exampleProjects.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.height: exampleProjects.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
 
 
                     MouseArea {
@@ -649,15 +649,15 @@ Rectangle {
                 Layout.preferredHeight: Math.min(parent.height*0.2, 100)
 
                 Image {
-                    Layout.preferredHeight: newsSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.minimumHeight: newsSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.preferredWidth: newsSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.minimumWidth:newsSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredHeight: newsSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumHeight: newsSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredWidth: newsSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumWidth:newsSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.alignment: Qt.AlignVCenter
 
                     source: newsSection.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
-                    sourceSize.width: newsSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    sourceSize.height: newsSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.width: newsSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.height: newsSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
 
 
                     MouseArea {
@@ -886,15 +886,15 @@ Rectangle {
                 Layout.preferredHeight: Math.min((parent.height - parent.spacing) *0.2, 100)
 
                 Image {
-                    Layout.preferredHeight: helpFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.minimumHeight: helpFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.preferredWidth: helpFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.minimumWidth: helpFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredHeight: helpFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumHeight: helpFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredWidth: helpFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumWidth: helpFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.alignment: Qt.AlignVCenter
 
                     source: helpFrame.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
-                    sourceSize.width: helpFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    sourceSize.height: helpFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.width: helpFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.height: helpFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
 
 
                     MouseArea {
@@ -1171,15 +1171,15 @@ Rectangle {
                 Layout.preferredHeight: Math.min((parent.height - parent.spacing) *0.2, 100)
 
                 Image {
-                    Layout.preferredHeight: datasetFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.minimumHeight: datasetFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.preferredWidth: datasetFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.minimumWidth: datasetFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredHeight: datasetFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumHeight: datasetFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredWidth: datasetFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumWidth: datasetFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.alignment: Qt.AlignVCenter
 
                     source: datasetFrame.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
-                    sourceSize.width: datasetFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    sourceSize.height: datasetFrame.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.width: datasetFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.height: datasetFrame.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
 
                     MouseArea {
                         anchors.fill: parent
@@ -1790,14 +1790,14 @@ Rectangle {
                 Layout.preferredHeight: Math.min((parent.height - parent.spacing) *0.2, 100)
 
                 Image {
-                    Layout.preferredHeight: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.minimumHeight: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.preferredWidth: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.minimumWidth: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredHeight: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumHeight: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredWidth: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumWidth: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.alignment: Qt.AlignVCenter
                     source: releaseSection.fullScreen ? helper.getMinIcon() : helper.getMaxIcon()
-                    sourceSize.width: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    sourceSize.height: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.width: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.height: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
 
                     MouseArea {
                         anchors.fill: parent
@@ -1843,14 +1843,14 @@ Rectangle {
                 }
 
                 Image {
-                    Layout.preferredHeight: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.minimumHeight: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.preferredWidth: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.minimumWidth: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredHeight: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumHeight: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredWidth: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumWidth: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.alignment: Qt.AlignVCenter
                     source: helper.getBackIcon()
-                    sourceSize.width: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    sourceSize.height: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.width: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.height: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
 
                     MouseArea {
                         anchors.fill: parent
@@ -1862,14 +1862,14 @@ Rectangle {
                 }
 
                 Image {
-                    Layout.preferredHeight: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.minimumHeight: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.preferredWidth: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    Layout.minimumWidth: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredHeight: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumHeight: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.preferredWidth: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    Layout.minimumWidth: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.alignment: Qt.AlignVCenter
                     source: helper.getForwardIcon()
-                    sourceSize.width: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
-                    sourceSize.height: releaseSection.fullScreen ? Math.min(parent.height, parent.width) * 0.5 : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.width: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
+                    sourceSize.height: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
 
                     MouseArea {
                         anchors.fill: parent

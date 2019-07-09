@@ -11,16 +11,6 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="5" column="5">
-    <widget class="QLabel" name="lAutoSaveInterval">
-     <property name="text">
-      <string>Interval:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="3" colspan="5">
-    <widget class="KComboBox" name="cbMdiVisibility"/>
-   </item>
    <item row="5" column="6">
     <widget class="QSpinBox" name="sbAutoSaveInterval">
      <property name="minimum">
@@ -31,20 +21,136 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2">
-    <widget class="QLabel" name="lMdiVisibility">
-     <property name="text">
-      <string>Sub-window visibility:</string>
+   <item row="5" column="4">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-    </widget>
-   </item>
-   <item row="1" column="3" colspan="5">
-    <widget class="KComboBox" name="cbInterface"/>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="lTabPosition">
      <property name="text">
       <string>Tab position:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="7">
+    <widget class="QPushButton" name="bResetWelcomeLayout">
+     <property name="text">
+      <string>Reset Layout</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>156</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="1">
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>13</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="lAutoSave">
+     <property name="text">
+      <string>Auto-Save:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="3">
+    <widget class="QCheckBox" name="chkWelcomeScreen">
+     <property name="text">
+      <string>Enabled</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="3" colspan="5">
+    <widget class="KComboBox" name="cbMdiVisibility"/>
+   </item>
+   <item row="5" column="7">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>327</width>
+       <height>17</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="5" column="5">
+    <widget class="QLabel" name="lAutoSaveInterval">
+     <property name="text">
+      <string>Interval:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3" colspan="5">
+    <widget class="KComboBox" name="cbLoadOnStart"/>
+   </item>
+   <item row="1" column="3" colspan="5">
+    <widget class="KComboBox" name="cbInterface"/>
+   </item>
+   <item row="6" column="3">
+    <widget class="QCheckBox" name="chkMemoryInfo">
+     <property name="text">
+      <string>Enabled</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="3" colspan="5">
+    <widget class="KComboBox" name="cbTabPosition"/>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="lWelcomeScreen">
+     <property name="text">
+      <string>Show welcome screen</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="3">
+    <widget class="QCheckBox" name="chkAutoSave">
+     <property name="text">
+      <string>Enabled</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="lMemoryInfo">
+     <property name="text">
+      <string>Show memory info:</string>
      </property>
     </widget>
    </item>
@@ -64,87 +170,12 @@
      </property>
     </spacer>
    </item>
-   <item row="9" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>156</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="5" column="4">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="2" column="3" colspan="5">
-    <widget class="KComboBox" name="cbTabPosition"/>
-   </item>
-   <item row="5" column="7">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>327</width>
-       <height>17</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="lMemoryInfo">
-     <property name="text">
-      <string>Show memory info:</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0">
     <widget class="QLabel" name="lInterface">
      <property name="text">
       <string>Interface:</string>
      </property>
     </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="lAutoSave">
-     <property name="text">
-      <string>Auto-Save:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <spacer name="verticalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>13</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label_3">
@@ -153,55 +184,10 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="3">
-    <widget class="QCheckBox" name="chkMemoryInfo">
+   <item row="3" column="0" colspan="2">
+    <widget class="QLabel" name="lMdiVisibility">
      <property name="text">
-      <string>Enabled</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="lWelcomeScreen">
-     <property name="text">
-      <string>Show welcome screen</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="3">
-    <widget class="QCheckBox" name="chkWelcomeScreen">
-     <property name="text">
-      <string>Enabled</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="3">
-    <widget class="QCheckBox" name="chkAutoSave">
-     <property name="text">
-      <string>Enabled</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="3" colspan="5">
-    <widget class="KComboBox" name="cbLoadOnStart"/>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="lSaveWelcomeLayout">
-     <property name="text">
-      <string>Save welcome screen's layout</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="3">
-    <widget class="QCheckBox" name="chkSaveWelcomeLayout">
-     <property name="text">
-      <string>Enabled</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="7">
-    <widget class="QPushButton" name="bResetWelcomeLayout">
-     <property name="text">
-      <string>Reset Layout</string>
+      <string>Sub-window visibility:</string>
      </property>
     </widget>
    </item>
