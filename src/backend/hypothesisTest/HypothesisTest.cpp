@@ -153,10 +153,8 @@ QVBoxLayout* HypothesisTest::summaryLayout() {
 /******************************************************************************
  *                      Private Implementations
  * ****************************************************************************/
-
-//TODO: round off numbers while printing
 //TODO: backend of z test;
-
+//TODO: add tooltip to tables. (currently it is not possible to use with QTextDocument);
 
 HypothesisTestPrivate::HypothesisTestPrivate(HypothesisTest* owner) : q(owner),
 	summaryLayout(new QVBoxLayout()) {
@@ -328,9 +326,9 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 	currTestName = i18n( "<h2>Two Sample Independent %1 Test for %2 vs %3</h2>", testName, col1Name, col2Name);
 	pValue = getPValue(test, statisticValue, col1Name, col2Name, (mean[0] - mean[1]), sp, df);
 
-	printLine(2, i18n("Significance level is %1", significanceLevel), "blue");
+	printLine(2, i18n("Significance level is %1", round(significanceLevel)), "blue");
 
-	printLine(4, i18n("%1 Value is %2 ", testName, statisticValue), "green");
+	printLine(4, i18n("%1 Value is %2 ", testName, round(statisticValue)), "green");
 	printTooltip(4, i18n("More is the |%1-value|, more safely we can reject the null hypothesis", testName));
 
 	printLine(5, i18n("P Value is %1 ", pValue), "green");
@@ -339,7 +337,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 	printTooltip(6, i18n("Number of independent Pieces of information that went into calculating the estimate"));
 
 	if (pValue <= significanceLevel)
-		printTooltip(5, i18n("We can safely reject Null Hypothesis for significance level %1", significanceLevel));
+		printTooltip(5, i18n("We can safely reject Null Hypothesis for significance level %1", round(significanceLevel)));
 	else
 		printTooltip(5, i18n("There is a plausibility for Null Hypothesis to be true"));
 	return;
@@ -421,8 +419,8 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(HypothesisTest::Test::Typ
 	pValue = getPValue(test, statisticValue, columns[0]->name(), i18n("%1", populationMean), mean, std, df);
 	currTestName = i18n( "<h2>One Sample %1 Test for %2 vs %3</h2>", testName, columns[0]->name(), columns[1]->name());
 
-	printLine(2, i18n("Significance level is %1 ", significanceLevel), "blue");
-	printLine(4, i18n("%1 Value is %2 ", testName, statisticValue), "green");
+	printLine(2, i18n("Significance level is %1 ", round(significanceLevel)), "blue");
+	printLine(4, i18n("%1 Value is %2 ", testName, round(statisticValue)), "green");
 	printLine(5, i18n("P Value is %1 ", pValue), "green");
 
 	if (pValue <= significanceLevel)
@@ -504,8 +502,8 @@ void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test
 	pValue = getPValue(test, statisticValue, columns[0]->name(), i18n("%1",populationMean), mean - populationMean, std, df);
 	currTestName = i18n( "<h2>One Sample %1 Test for %2</h2>", testName, columns[0]->name());
 
-	printLine(2, i18n("Significance level is %1", significanceLevel), "blue");
-	printLine(4, i18n("%1 Value is %2", testName, statisticValue), "green");
+	printLine(2, i18n("Significance level is %1", round(significanceLevel)), "blue");
+	printLine(4, i18n("%1 Value is %2", testName, round(statisticValue)), "green");
 	printLine(5, i18n("P Value is %1", pValue), "green");
 
 	if (pValue <= significanceLevel)
@@ -596,8 +594,8 @@ void HypothesisTestPrivate::performOneWayAnova() {
 		rowMajor[row_i*columnCount]		= colNames[row_i - 1];
 		rowMajor[row_i*columnCount + 1]	= ni[row_i - 1];
 		rowMajor[row_i*columnCount + 2]	= sum[row_i - 1];
-		rowMajor[row_i*columnCount + 3]	= QString::number( mean[row_i - 1], 'f', 3);
-		rowMajor[row_i*columnCount + 4]	= QString::number( std[row_i - 1], 'f', 3);
+		rowMajor[row_i*columnCount + 3]	= mean[row_i - 1];
+		rowMajor[row_i*columnCount + 4]	= std[row_i - 1];
 	}
 
 	statsTable = i18n( "<h3>Group Summary Statistics</h3>");
@@ -608,7 +606,7 @@ void HypothesisTestPrivate::performOneWayAnova() {
 	statsTable += getLine("");
 	statsTable += i18n( "<h3>Grand Summary Statistics</h3>");
 	statsTable += getLine("");
-	statsTable += getLine(i18n("Overall Mean is %1", yBar));
+	statsTable += getLine(i18n("Overall Mean is %1", round(yBar)));
 
 	rowCount = 4;
 	columnCount = 3;
@@ -640,7 +638,7 @@ void HypothesisTestPrivate::performOneWayAnova() {
 	delete[] std;
 	delete[] colNames;
 
-	printLine(1, i18n("F Value is %1", fValue), "blue");
+	printLine(1, i18n("F Value is %1", round(fValue)), "green");
 	printLine(2, i18n("P Value is %1 ", pValue), "green");
 
 	if (pValue <= significanceLevel)
@@ -888,8 +886,8 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 
 	printLine(0, "Null Hypothesis: Variance is equal between all classes", "blue");
 	printLine(1, "Alternate Hypothesis: Variance is not equal in at-least one pair of classes", "blue");
-	printLine(2, i18n("Significance level is %1", significanceLevel), "blue");
-	printLine(4, i18n("F Value is %1 ", fValue), "green");
+	printLine(2, i18n("Significance level is %1", round(significanceLevel)), "blue");
+	printLine(4, i18n("F Value is %1 ", round(fValue)), "green");
 	printLine(5, i18n("P Value is %1 ", pValue), "green");
 	printLine(6, i18n("Degree of Freedom is %1", df), "green");
 
@@ -905,6 +903,20 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 }
 
 /***************************************Helper Functions*************************************/
+
+QString HypothesisTestPrivate::round(QVariant number, int precision) {
+    if (number.userType() == QMetaType::Double || number.userType() == QMetaType::Float) {
+        double multiplierPrecision = qPow(10, precision);
+        int tempNum = number.toDouble()*multiplierPrecision*10;
+
+        if (tempNum % 10 < 5)
+            return QString::number((tempNum/10) / multiplierPrecision);
+        else
+            return QString::number((tempNum/10 + 1) / multiplierPrecision);
+    }
+    return number.toString();
+}
+
 
 bool HypothesisTestPrivate::isNumericOrInteger(Column* column) {
 	return (column->columnMode() == AbstractColumn::Numeric || column->columnMode() == AbstractColumn::Integer);
@@ -1172,10 +1184,10 @@ QString HypothesisTestPrivate::getHtmlTable(int row, int column, QVariant* rowMa
 	for (int i = 1; i < row; i++) {
 		table += "  <tr>";
 
-		QString element = rowMajor[i*column].toString();
+        QString element = round(rowMajor[i*column]);
 		table += i18n("    <td class=%1><b>%2</b></td>", bg, element);
 		for (int j = 1; j < column; j++) {
-			QString element = rowMajor[i*column+j].toString();
+            element = round(rowMajor[i*column+j]);
 			table += i18n("    <td class=%1>%2</td>", bg, element);
 		}
 
@@ -1236,7 +1248,6 @@ void HypothesisTest::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("hypothesisTest");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
-	//TODO:
 
 	writer->writeEndElement();
 }
@@ -1248,8 +1259,6 @@ bool HypothesisTest::load(XmlStreamReader* reader, bool preview) {
 	Q_UNUSED(preview);
 	if (!readBasicAttributes(reader))
 		return false;
-
-	//TODO:
 
 	return !reader->hasError();
 }
