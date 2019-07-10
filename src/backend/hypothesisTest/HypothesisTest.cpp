@@ -214,12 +214,14 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 	if (!categoricalVariable && isNumericOrInteger(columns[0])) {
 		for (int i = 0; i < 2; i++) {
 			findStats(columns[i], n[i], sum[i], mean[i], std[i]);
-
-			if (n[i] < 1) {
-				printError("At least one of selected column is empty");
-
-				return;
-			}
+            if (n[i] == 0) {
+                printError("Atleast two values should be there in every column");
+                return;
+            }
+            if (std[i] == 0) {
+                printError( i18n("Standard Deviation of atleast one column is equal to 0: last column is: %1", columns[i]->name()));
+                return;
+            }
 		}
 	} else {
 		QMap<QString, int> colName;
@@ -269,6 +271,17 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 
 	statsTable = getHtmlTable(3, 5, rowMajor);
 
+    for (int i = 0; i < 2; i++) {
+        if (n[i] == 0) {
+            printError("Atleast two values should be there in every column");
+            return;
+        }
+        if (std[i] == 0) {
+            printError( i18n("Standard Deviation of atleast one column is equal to 0: last column is: %1", columns[i]->name()));
+            return;
+        }
+    }
+
 	QString testName;
 	int df = 0;
 	double sp = 0;
@@ -279,6 +292,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 
 		if (equalVariance) {
 			df = n[0] + n[1] - 2;
+
 			sp = qSqrt(((n[0]-1) * gsl_pow_2(std[0]) +
 					(n[1]-1) * gsl_pow_2(std[1]) ) / df );
 			statisticValue = (mean[0] - mean[1]) / (sp * qSqrt(1.0/n[0] + 1.0/n[1]));
@@ -361,30 +375,24 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(HypothesisTest::Test::Typ
 	}
 	case ErrorEmptyColumn: {
 		printError("columns are empty");
-
 		return;
 	}
 	case NoError:
 		break;
 	}
 
-	if (n == -1) {
-		printError("both columns are having different sizes");
-
-		return;
-	}
-
-	if (n < 1) {
-		printError("columns are empty");
-
-		return;
-	}
 
 	QVariant rowMajor[] = {"", "N", "Sum", "Mean", "Std",
 						   "difference", n, sum, mean, std
 						  };
 
 	statsTable = getHtmlTable(2, 5, rowMajor);
+
+	if (std == 0) {
+	    printError("Standard deviation of the difference is 0");
+	    return;
+	}
+
 
 	QString testName;
 	int df = 0;
@@ -447,15 +455,13 @@ void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test
 	ErrorType errorCode = findStats(columns[0], n, sum, mean, std);
 
 	switch (errorCode) {
-	case ErrorUnqualSize: {
+	case ErrorEmptyColumn: {
 		printError("column is empty");
-
 		return;
 	}
 	case NoError:
 		break;
-	case ErrorEmptyColumn: {
-
+	case ErrorUnqualSize: {
 		return;
 	}
 	}
@@ -465,6 +471,12 @@ void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test
 						  };
 
 	statsTable = getHtmlTable(2, 5, rowMajor);
+
+	if (std == 0) {
+	    printError("Standard deviation is 0");
+	    return;
+	}
+
 
 	QString testName;
 	int df = 0;
@@ -640,8 +652,6 @@ void HypothesisTestPrivate::performOneWayAnova() {
 }
 
 /**************************************Levene Test****************************************/
-// TODO: Fix: Program crashes when n = np;
-
 // Some reference to local variables.
 // np = number of partitions
 // df = degree of fredom
@@ -670,7 +680,7 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 		countPartitions(columns[0], np, n);
 
 	if (np < 2) {
-		printError("select atleast two columns / classes");
+		printError("Select atleast two columns / classes");
 		return;
 	}
 
@@ -716,6 +726,10 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 		for (int i = 0; i < np; i++) {
 			if (ni[i] > 0)
 				yiBar[i] = yiBar[i] / ni[i];
+            else {
+                printError("One of the selected columns is empty");
+                return;
+            }
 		}
 
 		for (int j = 0; j < totalRows; j++) {
@@ -746,6 +760,12 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 				}
 			}
 		}
+
+
+        if (denominatorValue <= 0) {
+            printError( i18n("Denominator value is %1", denominatorValue));
+            return;
+        }
 
 		for (int i = 0; i < np; i++) {
 			colNames[i] = columns[i]->name();
@@ -786,6 +806,10 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 		for (int i = 0; i < np; i++) {
 			if (ni[i] > 0)
 				yiBar[i] = yiBar[i] / ni[i];
+            else {
+                printError("One of the selected columns is empty");
+                return;
+            }
 		}
 
 		for (int j = 0; j < n; j++) {
