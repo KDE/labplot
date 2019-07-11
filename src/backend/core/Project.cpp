@@ -558,14 +558,19 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 				if (!col->formulaVariableColumnPaths().isEmpty()) {
 					QVector<Column*>& formulaVariableColumns = const_cast<QVector<Column*>&>(col->formulaVariableColumns());
 					for (auto path : col->formulaVariableColumnPaths()) {
+						bool found = false;
 						for (Column* c : columns) {
 							if (!c) continue;
 							if (c->path() == path) {
 								formulaVariableColumns << c;
 								col->finalizeLoad();
+								found = true;
 								break;
 							}
 						}
+
+						if (!found)
+							formulaVariableColumns << nullptr;
 					}
 				}
 			}
