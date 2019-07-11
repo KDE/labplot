@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>807</width>
-    <height>710</height>
+    <width>696</width>
+    <height>591</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -23,48 +23,8 @@
       <string>Data</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="0">
-       <widget class="QLabel" name="lXColumn">
-        <property name="text">
-         <string>X-data:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <spacer name="horizontalSpacer_5">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>10</width>
-          <height>23</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="2">
-       <widget class="QComboBox" name="cbXColumn">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="3">
-       <widget class="Line" name="line">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="3">
-       <widget class="QScrollArea" name="scrollAreaYColumns">
+      <item row="0" column="0" colspan="2">
+       <widget class="QScrollArea" name="scrollAreaColumns">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -82,32 +42,20 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>767</width>
-           <height>323</height>
+           <width>668</width>
+           <height>124</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
           <item row="0" column="0">
-           <widget class="QLabel" name="lYColumn">
+           <widget class="QLabel" name="lXColumn">
             <property name="text">
-             <string>Y-data:</string>
+             <string>X-data:</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <spacer name="horizontalSpacer_6">
+           <spacer name="horizontalSpacer_5">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -123,6 +71,46 @@
            </spacer>
           </item>
           <item row="0" column="2">
+           <widget class="QComboBox" name="cbXColumn">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="3">
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="lYColumn">
+            <property name="text">
+             <string>Y-data:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <spacer name="horizontalSpacer_6">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>10</width>
+              <height>23</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="2">
            <widget class="QComboBox" name="cbYColumn">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
