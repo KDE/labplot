@@ -82,6 +82,7 @@ public:
 
 public slots:
 	void descriptionChanged(const AbstractAspect*);
+	void aspectAddedSlot(const AbstractAspect*);
 
 signals:
 	void requestSaveState(QXmlStreamWriter*) const;

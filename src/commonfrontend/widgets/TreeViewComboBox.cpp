@@ -38,6 +38,7 @@
 #include <QLineEdit>
 #include <QTreeView>
 #include <QVBoxLayout>
+#include <QStylePainter>
 
 #include <KLocalizedString>
 
@@ -76,6 +77,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent) : QComboBox(parent),
 
 	addItem(QString());
 	setCurrentIndex(0);
+	setEditText(m_lineEditText);
 
 	// signal activated() is platform dependent
 	connect(m_treeView, &QTreeView::pressed, this, &TreeViewComboBox::treeViewIndexActivated);
@@ -103,6 +105,8 @@ void TreeViewComboBox::setModel(QAbstractItemModel* model) {
 
 	//Expand the complete tree in order to see everything in the first popup.
 	m_treeView->expandAll();
+
+	setEditText(m_lineEditText);
 }
 
 /*!
@@ -132,15 +136,77 @@ void TreeViewComboBox::showPopup() {
 
 	QModelIndex root = m_treeView->model()->index(0,0);
 	showTopLevelOnly(root);
-
-	m_lineEdit->setText(QString());
 	m_groupBox->show();
 	m_groupBox->resize(this->width(), 250);
 	m_groupBox->move(mapToGlobal( this->rect().topLeft() ));
+
+	setEditText(m_lineEditText);
+}
+
+/*!
+	\reimp
+	TODO: why do I have to reimplement paintEvent. It should work
+	also without
+*/
+void TreeViewComboBox::paintEvent(QPaintEvent *)
+{
+	QStylePainter painter(this);
+	painter.setPen(palette().color(QPalette::Text));
+	// draw the combobox frame, focusrect and selected etc.
+	QStyleOptionComboBox opt;
+	initStyleOption(&opt);
+	opt.currentText = currentText(); // TODO: why it's not working when letting this away?
+	painter.drawComplexControl(QStyle::CC_ComboBox, opt);
+	// draw the icon and text
+	painter.drawControl(QStyle::CE_ComboBoxLabel, opt);
 }
 
 void TreeViewComboBox::hidePopup() {
 	m_groupBox->hide();
+}
+
+
+void TreeViewComboBox::useCurrentIndexText(const bool set) {
+	m_useCurrentIndexText = set;
+}
+
+/*!
+	\property QComboBox::currentText
+	\brief the current text
+	If the combo box is editable, the current text is the value displayed
+	by the line edit. Otherwise, it is the value of the current item or
+	an empty string if the combo box is empty or no current item is set.
+	The setter setCurrentText() simply calls setEditText() if the combo box is editable.
+	Otherwise, if there is a matching text in the list, currentIndex is set to the
+	corresponding index.
+	If m_useCurrentIndexText is false, the Text set with setText is used. The intention of displaying
+	this text is to show a text in the case of removed element.
+	\sa editable, setEditText()
+*/
+QString TreeViewComboBox::currentText() const {
+	if (lineEdit())
+		return lineEdit()->text();
+	else if (currentModelIndex().isValid() && m_useCurrentIndexText)
+		return itemText(currentIndex());
+	else if (!m_useCurrentIndexText)
+		return m_lineEditText;
+	else
+		return QString();
+}
+
+void TreeViewComboBox::setText(QString text) {
+	m_lineEditText = text;
+}
+
+void TreeViewComboBox::setInvalid(bool invalid, QString tooltip) {
+	if (invalid) {
+		setStyleSheet("background: red;");
+		setToolTip(tooltip);
+		return;
+	}
+
+	setToolTip("");
+	setStyleSheet("");
 }
 
 /*!

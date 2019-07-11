@@ -159,6 +159,11 @@ void XYConvolutionCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
+	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
+	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
+	checkColumnAvailability(cbY2DataColumn, analysisCurve->y2DataColumn(), analysisCurve->y2DataColumnPath());
+
 	//show the properties of the first curve
 	m_convolutionCurve = dynamic_cast<XYConvolutionCurve*>(m_curve);
 
@@ -326,6 +331,9 @@ void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			uiGeneralTab.sbMax->setValue(column->maximum());
 		}
 	}
+
+	cbXDataColumn->useCurrentIndexText(true);
+	cbXDataColumn->setInvalid(false);
 }
 
 void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -338,6 +346,9 @@ void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYConvolutionCurve*>(curve)->setYDataColumn(column);
+
+	cbYDataColumn->useCurrentIndexText(true);
+	cbYDataColumn->setInvalid(false);
 }
 
 void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
@@ -350,6 +361,9 @@ void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYConvolutionCurve*>(curve)->setY2DataColumn(column);
+
+	cbY2DataColumn->useCurrentIndexText(true);
+	cbY2DataColumn->setInvalid(false);
 }
 
 void XYConvolutionCurveDock::samplingIntervalChanged() {
@@ -526,6 +540,10 @@ void XYConvolutionCurveDock::enableRecalculate() const {
 	if (m_convolutionCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectY != nullptr);
+		if (aspectY) {
+			cbYDataColumn->useCurrentIndexText(true);
+			cbYDataColumn->setInvalid(false);
+		}
 	} else {
 		 hasSourceData = (m_convolutionCurve->dataSourceCurve() != nullptr);
 	}

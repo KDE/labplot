@@ -150,6 +150,10 @@ void XYSmoothCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
+	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
+	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
+
 	//show the properties of the first curve
 	m_smoothCurve = dynamic_cast<XYSmoothCurve*>(m_curve);
 
@@ -298,6 +302,9 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		uiGeneralTab.sbPoints->setMaximum((int)n);
 	}
 
+	cbXDataColumn->useCurrentIndexText(true);
+	cbXDataColumn->setInvalid(false);
+
 }
 
 void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -309,6 +316,9 @@ void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYSmoothCurve*>(curve)->setYDataColumn(column);
+
+	cbYDataColumn->useCurrentIndexText(true);
+	cbYDataColumn->setInvalid(false);
 }
 
 void XYSmoothCurveDock::autoRangeChanged() {
@@ -486,6 +496,14 @@ void XYSmoothCurveDock::enableRecalculate() const {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
+		if (aspectX) {
+			cbXDataColumn->useCurrentIndexText(true);
+			cbXDataColumn->setInvalid(false);
+		}
+		if (aspectY) {
+			cbYDataColumn->useCurrentIndexText(true);
+			cbYDataColumn->setInvalid(false);
+		}
 	} else {
 		 hasSourceData = (m_smoothCurve->dataSourceCurve() != nullptr);
 	}

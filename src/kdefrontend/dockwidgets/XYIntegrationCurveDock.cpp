@@ -137,6 +137,10 @@ void XYIntegrationCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
+	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
+	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
+
 	//show the properties of the first curve
 	m_integrationCurve = dynamic_cast<XYIntegrationCurve*>(m_curve);
 
@@ -277,6 +281,9 @@ void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		// disable integration methods that need more data points
 		this->updateSettings(column);
 	}
+
+	cbXDataColumn->useCurrentIndexText(true);
+	cbXDataColumn->setInvalid(false);
 }
 
 /*!
@@ -296,11 +303,16 @@ void XYIntegrationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
+	cbYDataColumn->hidePopup();
+
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYIntegrationCurve*>(curve)->setYDataColumn(column);
+
+	cbYDataColumn->useCurrentIndexText(true);
+	cbYDataColumn->setInvalid(false);
 }
 
 void XYIntegrationCurveDock::autoRangeChanged() {
@@ -394,6 +406,14 @@ void XYIntegrationCurveDock::enableRecalculate() const {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
+		if (aspectX) {
+			cbXDataColumn->useCurrentIndexText(true);
+			cbXDataColumn->setInvalid(false);
+		}
+		if (aspectY) {
+			cbYDataColumn->useCurrentIndexText(true);
+			cbYDataColumn->setInvalid(false);
+		}
 	} else {
 		 hasSourceData = (m_integrationCurve->dataSourceCurve() != nullptr);
 	}
