@@ -783,8 +783,8 @@ void Column::save(QXmlStreamWriter* writer) const {
 		writer->writeEndElement();
 
 		writer->writeStartElement("columnPathes");
-		for (const auto col : formulaVariableColumns())
-			writer->writeTextElement("path", col->path());
+		for (const auto path : formulaVariableColumnPaths())
+			writer->writeTextElement("path", path);
 		writer->writeEndElement();
 
 		writer->writeEndElement();

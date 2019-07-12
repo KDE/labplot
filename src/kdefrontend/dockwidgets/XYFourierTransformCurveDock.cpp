@@ -128,6 +128,10 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
+	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
+	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
+
 	//show the properties of the first curve
 	m_transformCurve = dynamic_cast<XYFourierTransformCurve*>(m_curve);
 
@@ -214,6 +218,9 @@ void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			uiGeneralTab.sbMax->setValue(column->maximum());
 		}
 	}
+
+	cbXDataColumn->useCurrentIndexText(true);
+	cbXDataColumn->setInvalid(false);
 }
 
 void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -225,6 +232,9 @@ void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setYDataColumn(column);
+
+	cbYDataColumn->useCurrentIndexText(true);
+	cbYDataColumn->setInvalid(false);
 }
 
 void XYFourierTransformCurveDock::autoRangeChanged() {
@@ -324,6 +334,14 @@ void XYFourierTransformCurveDock::enableRecalculate() const {
 	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 	bool data = (aspectX != nullptr && aspectY != nullptr);
+	if (aspectX) {
+		cbXDataColumn->useCurrentIndexText(true);
+		cbXDataColumn->setInvalid(false);
+	}
+	if (aspectY) {
+		cbYDataColumn->useCurrentIndexText(true);
+		cbYDataColumn->setInvalid(false);
+	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(data);
 }

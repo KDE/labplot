@@ -121,6 +121,7 @@ Project::Project() : Folder(i18n("Project"), AspectType::Project), d(new Private
 	d->changed = false;
 
 	connect(this, &Project::aspectDescriptionChanged,this, &Project::descriptionChanged);
+	connect(this, &Project::aspectAdded,this, &Project::aspectAddedSlot);
 }
 
 Project::~Project() {
@@ -192,19 +193,125 @@ void Project::setChanged(const bool value) {
 	d->changed = value;
 }
 
-bool Project ::hasChanged() const {
+bool Project::hasChanged() const {
 	return d->changed ;
 }
 
+/*!
+ * \brief Project::descriptionChanged
+ * \param column
+ */
 void Project::descriptionChanged(const AbstractAspect* aspect) {
 	if (isLoading())
 		return;
 
-	if (this != aspect)
+	if (this != aspect) {
+		const AbstractColumn* column = dynamic_cast<const AbstractColumn*>(aspect);
+		if (!column)
+			return;
+
+		// When the column is created, it gets a random name and is eventually not connected to any curve.
+		// When changing the name it can match a curve and should than be connected to the curve.
+		QVector<XYCurve*> curves = children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+		QString columnPath = column->path();
+
+		// setXColumnPath must not be set, because if curve->column matches column, there already exist a
+		// signal/slot connection between the curve and the column to update this. If they are not same,
+		// xColumnPath is set in setXColumn. Same for the yColumn.
+		for (auto* curve : curves) {
+			curve->setUndoAware(false);
+			auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
+			if (analysisCurve) {
+				if (analysisCurve->xDataColumnPath() == columnPath)
+					analysisCurve->setXDataColumn(column);
+				if (analysisCurve->yDataColumnPath() == columnPath)
+					analysisCurve->setYDataColumn(column);
+				if (analysisCurve->y2DataColumnPath() == columnPath)
+					analysisCurve->setY2DataColumn(column);
+
+				auto* fitCurve = dynamic_cast<XYFitCurve*>(curve);
+				if (fitCurve) {
+					if (fitCurve->xErrorColumnPath() == columnPath)
+						fitCurve->setXErrorColumn(column);
+					if (fitCurve->yErrorColumnPath() == columnPath)
+						fitCurve->setYErrorColumn(column);
+				}
+			} else {
+				if (curve->xColumnPath() == columnPath)
+					curve->setXColumn(column);
+				if (curve->yColumnPath() == columnPath)
+					curve->setYColumn(column);
+				if (curve->valuesColumnPath() == columnPath)
+					curve->setValuesColumn(column);
+				if (curve->xErrorPlusColumnPath() == columnPath)
+					curve->setXErrorPlusColumn(column);
+				if (curve->xErrorMinusColumnPath() == columnPath)
+					curve->setXErrorMinusColumn(column);
+				if (curve->yErrorPlusColumnPath() == columnPath)
+					curve->setYErrorPlusColumn(column);
+				if (curve->yErrorMinusColumnPath() == columnPath)
+					curve->setYErrorMinusColumn(column);
+			}
+			curve->setUndoAware(true);
+
+		}
 		return;
+	}
 
 	d->changed = true;
 	emit changed();
+}
+
+/*!
+ * \brief Project::aspectAddedSlot
+ * When adding new columns, these should be connected to the corresponding curves
+ * \param aspect
+ */
+void Project::aspectAddedSlot(const AbstractAspect* aspect) {
+	const AbstractColumn* column = dynamic_cast<const AbstractColumn*>(aspect);
+	if (!column)
+		return;
+
+	QVector<XYCurve*> curves = children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+	QString columnPath = column->path();
+
+	for (auto* curve : curves) {
+		curve->setUndoAware(false);
+		auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
+		if (analysisCurve) {
+			if (analysisCurve->xDataColumnPath() == columnPath)
+				analysisCurve->setXDataColumn(column);
+			if (analysisCurve->yDataColumnPath() == columnPath)
+				analysisCurve->setYDataColumn(column);
+			if (analysisCurve->y2DataColumnPath() == columnPath)
+				analysisCurve->setY2DataColumn(column);
+
+			auto* fitCurve = dynamic_cast<XYFitCurve*>(curve);
+			if (fitCurve) {
+				if (fitCurve->xErrorColumnPath() == columnPath)
+					fitCurve->setXErrorColumn(column);
+				if (fitCurve->yErrorColumnPath() == columnPath)
+					fitCurve->setYErrorColumn(column);
+			}
+		} else {
+			if (curve->xColumnPath() == columnPath)
+				curve->setXColumn(column);
+			if (curve->yColumnPath() == columnPath)
+				curve->setYColumn(column);
+			if (curve->valuesColumnPath() == columnPath)
+				curve->setValuesColumn(column);
+			if (curve->xErrorPlusColumnPath() == columnPath)
+				curve->setXErrorPlusColumn(column);
+			if (curve->xErrorMinusColumnPath() == columnPath)
+				curve->setXErrorMinusColumn(column);
+			if (curve->yErrorPlusColumnPath() == columnPath)
+				curve->setYErrorPlusColumn(column);
+			if (curve->yErrorMinusColumnPath() == columnPath)
+				curve->setYErrorMinusColumn(column);
+		}
+		curve->setUndoAware(true);
+	}
+
 }
 
 void Project::navigateTo(const QString& path) {
@@ -382,6 +489,8 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 			QVector<Column*> columns = children<Column>(AbstractAspect::Recursive);
 
 			//xy-curves
+			// cannot be removed by the column observer, because it does not react
+			// on curve changes
 			QVector<XYCurve*> curves = children<XYCurve>(AbstractAspect::Recursive);
 			for (auto* curve : curves) {
 				if (!curve) continue;
@@ -449,14 +558,19 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 				if (!col->formulaVariableColumnPaths().isEmpty()) {
 					QVector<Column*>& formulaVariableColumns = const_cast<QVector<Column*>&>(col->formulaVariableColumns());
 					for (auto path : col->formulaVariableColumnPaths()) {
+						bool found = false;
 						for (Column* c : columns) {
 							if (!c) continue;
 							if (c->path() == path) {
 								formulaVariableColumns << c;
 								col->finalizeLoad();
+								found = true;
 								break;
 							}
 						}
+
+						if (!found)
+							formulaVariableColumns << nullptr;
 					}
 				}
 			}

@@ -53,11 +53,19 @@ public:
 
 	void showPopup() override;
 	void hidePopup() override;
+	void setInvalid(bool invalid, QString tooltip = QString());
+
+	void useCurrentIndexText(const bool set);
+
+	QString currentText() const;
+	void setText(QString text);
 
 private:
 	QTreeView* m_treeView;
 	QGroupBox* m_groupBox;
 	QLineEdit* m_lineEdit;
+	QString m_lineEditText{""};
+	bool m_useCurrentIndexText{true};
 
 	QList<AspectType> m_topLevelClasses;
 	QList<const char*> m_selectableClasses;
@@ -68,6 +76,8 @@ private:
 	bool filter(const QModelIndex&, const QString&);
 	bool isTopLevel(const AbstractAspect*) const;
 	bool isHidden(const AbstractAspect*) const;
+
+	void paintEvent(QPaintEvent *) override;
 
 private slots:
 	void treeViewIndexActivated(const QModelIndex&);

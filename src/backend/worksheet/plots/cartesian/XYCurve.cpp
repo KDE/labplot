@@ -329,6 +329,7 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXColumn, const AbstractColumn*, xColumn, rec
 void XYCurve::setXColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xColumn) {
+		setXColumnPath(column->path());
 		exec(new XYCurveSetXColumnCmd(d, column, ki18n("%1: x-data source changed")));
 
 		//emit xDataChanged() in order to notify the plot about the changes
@@ -338,7 +339,7 @@ void XYCurve::setXColumn(const AbstractColumn* column) {
 			connect(column, &AbstractColumn::dataChanged, this, [=](){ d->recalcLogicalPoints(); });
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
 					this, &XYCurve::xColumnAboutToBeRemoved);
-
+			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYCurve::xColumnNameChanged);
 			//after the curve was updated, emit the signal to update the plot ranges
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(xDataChanged()));
 
@@ -351,6 +352,9 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYColumn, const AbstractColumn*, yColumn, rec
 void XYCurve::setYColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->yColumn) {
+		setYColumnPath(column->path());
+		// disconnect old column
+		disconnect(d->yColumn, &AbstractAspect::aspectDescriptionChanged, this, &XYCurve::yColumnNameChanged);
 		exec(new XYCurveSetYColumnCmd(d, column, ki18n("%1: y-data source changed")));
 
 		//emit yDataChanged() in order to notify the plot about the changes
@@ -360,6 +364,7 @@ void XYCurve::setYColumn(const AbstractColumn* column) {
 			connect(column, &AbstractColumn::dataChanged, this, [=](){ d->recalcLogicalPoints(); });
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
 					this, &XYCurve::yColumnAboutToBeRemoved);
+			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYCurve::yColumnNameChanged);
 
 			//after the curve was updated, emit the signal to update the plot ranges
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(yDataChanged()));
@@ -828,6 +833,16 @@ void XYCurve::yErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 		d->yErrorMinusColumn = nullptr;
 		d->updateErrorBars();
 	}
+}
+
+void XYCurve::xColumnNameChanged() {
+	Q_D(XYCurve);
+	setXColumnPath(d->xColumn->path());
+}
+
+void XYCurve::yColumnNameChanged() {
+	Q_D(XYCurve);
+	setYColumnPath(d->yColumn->path());
 }
 
 //##############################################################################

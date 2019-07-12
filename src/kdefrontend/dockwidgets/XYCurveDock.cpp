@@ -30,6 +30,8 @@
 #include "XYCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
@@ -559,8 +561,13 @@ void XYCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
-	uiGeneralTab.leName->setStyleSheet("");
-	uiGeneralTab.leName->setToolTip("");
+	checkColumnAvailability(cbXColumn, m_curve->xColumn(), m_curve->xColumnPath());
+	checkColumnAvailability(cbYColumn, m_curve->yColumn(), m_curve->yColumnPath());
+	checkColumnAvailability(cbValuesColumn, m_curve->valuesColumn(), m_curve->valuesColumnPath());
+	checkColumnAvailability(cbXErrorPlusColumn, m_curve->xErrorPlusColumn(), m_curve->xErrorPlusColumnPath());
+	checkColumnAvailability(cbXErrorMinusColumn, m_curve->xErrorMinusColumn(), m_curve->xErrorMinusColumnPath());
+	checkColumnAvailability(cbYErrorPlusColumn, m_curve->yErrorPlusColumn(), m_curve->yErrorPlusColumnPath());
+	checkColumnAvailability(cbYErrorMinusColumn, m_curve->yErrorMinusColumn(), m_curve->yErrorMinusColumnPath());
 
 	//show the properties of the first curve
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
@@ -724,6 +731,25 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 		ui.cbValuesFormat->setCurrentIndex(0);
 		ui.cbValuesFormat->setEditable(false);
 	}
+}
+
+void XYCurveDock::checkColumnAvailability(TreeViewComboBox* cb, const AbstractColumn* column, const QString columnPath) {
+
+	if (!cb)
+		return;// normally it shouldn't be called
+
+	if (columnPath.isEmpty())
+		return; // don't make the comboboxes red when initially created curves
+
+	if (column){
+		// current index text should be used
+		cb->useCurrentIndexText(true);
+		cb->setInvalid(false);
+	} else {
+		cb->useCurrentIndexText(false);
+		cb->setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", columnPath));
+	}
+	cb->setText(columnPath.split("/").last());
 }
 
 /*!
@@ -1738,12 +1764,16 @@ void XYCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 void XYCurveDock::curveXColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	this->setModelIndexFromAspect(cbXColumn, column);
+	cbXColumn->useCurrentIndexText(true);
+	cbXColumn->setInvalid(false);
 	m_initializing = false;
 }
 
 void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	this->setModelIndexFromAspect(cbYColumn, column);
+	cbYColumn->useCurrentIndexText(true);
+	cbYColumn->setInvalid(false);
 	m_initializing = false;
 }
 

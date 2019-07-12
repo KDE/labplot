@@ -148,6 +148,11 @@ void XYCorrelationCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
+	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
+	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
+	checkColumnAvailability(cbY2DataColumn, analysisCurve->y2DataColumn(), analysisCurve->y2DataColumnPath());
+
 	//show the properties of the first curve
 	m_correlationCurve = dynamic_cast<XYCorrelationCurve*>(m_curve);
 
@@ -302,6 +307,9 @@ void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			uiGeneralTab.sbMax->setValue(column->maximum());
 		}
 	}
+
+	cbXDataColumn->useCurrentIndexText(true);
+	cbXDataColumn->setInvalid(false);
 }
 
 void XYCorrelationCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -314,6 +322,9 @@ void XYCorrelationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYCorrelationCurve*>(curve)->setYDataColumn(column);
+
+	cbYDataColumn->useCurrentIndexText(true);
+	cbYDataColumn->setInvalid(false);
 }
 
 void XYCorrelationCurveDock::y2DataColumnChanged(const QModelIndex& index) {
@@ -326,6 +337,9 @@ void XYCorrelationCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYCorrelationCurve*>(curve)->setY2DataColumn(column);
+
+	cbY2DataColumn->useCurrentIndexText(true);
+	cbY2DataColumn->setInvalid(false);
 }
 
 void XYCorrelationCurveDock::samplingIntervalChanged() {
@@ -415,6 +429,14 @@ void XYCorrelationCurveDock::enableRecalculate() const {
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY2 = static_cast<AbstractAspect*>(cbY2DataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectY != nullptr && aspectY2 != nullptr);
+		if (aspectY) {
+			cbYDataColumn->useCurrentIndexText(true);
+			cbYDataColumn->setInvalid(false);
+		}
+		if (aspectY2) {
+			cbY2DataColumn->useCurrentIndexText(true);
+			cbY2DataColumn->setInvalid(false);
+		}
 	} else {
 		 hasSourceData = (m_correlationCurve->dataSourceCurve() != nullptr);
 	}

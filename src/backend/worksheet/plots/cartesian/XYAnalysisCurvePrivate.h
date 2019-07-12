@@ -33,6 +33,7 @@
 
 class XYAnalysisCurve;
 class Column;
+class AbstractColumn;
 
 class XYAnalysisCurvePrivate : public XYCurvePrivate {
 public:

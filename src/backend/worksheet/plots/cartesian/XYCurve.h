@@ -159,7 +159,8 @@ private slots:
 	void xErrorMinusColumnAboutToBeRemoved(const AbstractAspect*);
 	void yErrorPlusColumnAboutToBeRemoved(const AbstractAspect*);
 	void yErrorMinusColumnAboutToBeRemoved(const AbstractAspect*);
-
+	void xColumnNameChanged();
+	void yColumnNameChanged();
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChanged();
 	void navigateTo();

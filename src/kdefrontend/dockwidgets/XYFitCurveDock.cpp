@@ -239,6 +239,13 @@ void XYFitCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
+	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
+	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
+	auto* fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
+	checkColumnAvailability(cbXErrorColumn, fitCurve->xErrorColumn(), fitCurve->xErrorColumnPath());
+	checkColumnAvailability(cbYErrorColumn, fitCurve->yErrorColumn(), fitCurve->yErrorColumnPath());
+
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_fitCurve->dataSourceType());
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_fitCurve->dataSourceCurve());
@@ -397,6 +404,9 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	// set model dependent start values from new data
 	XYFitCurve::initStartValues(m_fitData, m_curve);
+
+	cbXDataColumn->useCurrentIndexText(true);
+	cbXDataColumn->setInvalid(false);
 }
 
 void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -411,6 +421,9 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	// set model dependent start values from new data
 	XYFitCurve::initStartValues(m_fitData, m_curve);
+
+	cbYDataColumn->useCurrentIndexText(true);
+	cbYDataColumn->setInvalid(false);
 }
 
 void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
@@ -422,6 +435,9 @@ void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setXErrorColumn(column);
+
+	cbXErrorColumn->useCurrentIndexText(true);
+	cbXErrorColumn->setInvalid(false);
 }
 
 void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
@@ -433,6 +449,9 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYErrorColumn(column);
+
+	cbYErrorColumn->useCurrentIndexText(true);
+	cbYErrorColumn->setInvalid(false);
 }
 
 ///////////////////////// fold/unfold options //////////////////////////////////////////////////
@@ -991,6 +1010,14 @@ void XYFitCurveDock::enableRecalculate() {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
+		if (aspectX) {
+			cbXDataColumn->useCurrentIndexText(true);
+			cbXDataColumn->setInvalid(false);
+		}
+		if (aspectY) {
+			cbYDataColumn->useCurrentIndexText(true);
+			cbYDataColumn->setInvalid(false);
+		}
 	} else {
 		hasSourceData = (m_fitCurve->dataSourceCurve() != nullptr);
 	}
