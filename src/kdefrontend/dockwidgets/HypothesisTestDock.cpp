@@ -351,7 +351,11 @@ void HypothesisTestDock::doHypothesisTest()  {
 		return;
 
 	cols << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
-	if (m_test.subtype & (~HypothesisTest::Test::SubType::OneSample))
+
+    if (m_test.subtype & HypothesisTest::Test::SubType::TwoWay)
+        cols << reinterpret_cast<Column*>(ui.cbCol3->currentData().toLongLong());
+
+    if (m_test.subtype & (~HypothesisTest::Test::SubType::OneSample))
 		if (ui.cbCol2->count() > 0)
 			cols << reinterpret_cast<Column*>(ui.cbCol2->currentData().toLongLong());
 

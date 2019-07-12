@@ -47,6 +47,7 @@ public:
 	void performTwoSamplePairedTest(HypothesisTest::Test::Type test);
 	void performOneSampleTest(HypothesisTest::Test::Type test);
 	void performOneWayAnova();
+    void performTwoWayAnova();
 
 	void performLeveneTest(bool categoricalVariable);
 

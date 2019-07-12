@@ -124,6 +124,7 @@ void HypothesisTest::performTest(Test test, bool categoricalVariable, bool equal
 	}
     case HypothesisTest::Test::SubType::TwoWay: {
         d->currTestName = "<h2>" + i18n("Two Way Anova") + "</h2>";
+        d->performTwoWayAnova();
         break;
     }
 	case HypothesisTest::Test::SubType::NoneSubType:
@@ -646,7 +647,100 @@ void HypothesisTestPrivate::performOneWayAnova() {
 	else
 		printTooltip(2, i18n("There is a plausibility for Null Hypothesis to be true"));
 
-	return;
+    return;
+}
+
+// all formulas and symbols are taken from: http://statweb.stanford.edu/~susan/courses/s141/exanova.pdf
+
+//TODO: suppress warning of variable length array are a C99 feature.
+void HypothesisTestPrivate::performTwoWayAnova() {
+    clearTestView();
+    int np_a, totalRows_a;
+    int np_b, totalRows_b;
+    countPartitions(columns[0], np_a, totalRows_a);
+    countPartitions(columns[1], np_b, totalRows_b);
+
+    double groupMean[np_a][np_b];
+    int replicates[np_a][np_b];
+
+    for (int i = 0; i < np_a; i++)
+        for (int j = 0; j < np_b; j++) {
+            groupMean[i][j] = 0;
+            replicates[i][j] = 0;
+        }
+
+    if (totalRows_a != totalRows_b) {
+        printError("There is missing data in atleast one of the rows");
+        return;
+    }
+
+    QMap<QString, int> catToNumber_a;
+    QMap<QString, int> catToNumber_b;
+
+    int partitionNumber_a = 1;
+    int partitionNumber_b = 1;
+    for (int i = 0; i < totalRows_a; i++) {
+        QString name_a = columns[0]->textAt(i);
+        QString name_b = columns[1]->textAt(i);
+        double value = columns[2]->valueAt(i);
+
+        if (catToNumber_a[name_a] == 0) {
+            catToNumber_a[name_a] = partitionNumber_a;
+            partitionNumber_a++;
+        }
+
+        if (catToNumber_b[name_b] == 0) {
+            catToNumber_b[name_b] = partitionNumber_b;
+            partitionNumber_b++;
+        }
+
+        groupMean[catToNumber_a[name_a] - 1][catToNumber_b[name_b] - 1] += value;
+        replicates[catToNumber_a[name_a] - 1][catToNumber_b[name_b] - 1] += 1;
+    }
+
+    for (int i = 0; i < np_a; i++)
+        for (int j = 0; j < np_b; j++) {
+            if (replicates[i][j] == 0) {
+                printError("have atleast once each combination of features");
+                return;
+            }
+            groupMean[i][j] /= replicates[i][j];
+        }
+
+    int rowCount = np_a + 1, columnCount = np_b + 1;
+    QVariant* rowMajor = new QVariant[rowCount*columnCount];
+
+    QString partitionNames_a[np_a];
+    QString partitionNames_b[np_b];
+
+    QMapIterator<QString, int> itr_a(catToNumber_a);
+    while (itr_a.hasNext()) {
+        itr_a.next();
+        partitionNames_a[itr_a.value()-1] = itr_a.key();
+    }
+
+    QMapIterator<QString, int> itr_b(catToNumber_b);
+    while (itr_b.hasNext()) {
+        itr_b.next();
+        partitionNames_b[itr_b.value()-1] = itr_b.key();
+    }
+
+    // header data;
+    rowMajor[0] = "group mean, </p> replicates";
+    for (int i = 1; i < np_b; i++)
+        rowMajor[i] = partitionNames_b[i];
+
+    // table data
+    for (int row_i = 1; row_i < rowCount ; row_i++) {
+        rowMajor[row_i*columnCount] = partitionNames_a[row_i - 1];
+        for (int col_i = 1; col_i < columnCount; col_i++)
+            rowMajor[row_i*columnCount + col_i] = round(groupMean[row_i - 1][col_i - 1]) + ", " + round(replicates[row_i - 1][col_i - 1]);
+    }
+
+    statsTable = "<h3>" + i18n("Contingency Table") + "</h3>";
+    statsTable += getHtmlTable(rowCount, columnCount, rowMajor);
+
+    return;
 }
 
 /**************************************Levene Test****************************************/
