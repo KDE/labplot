@@ -377,7 +377,7 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 
 	ctxt->setContextProperty("datasetModel", m_welcomeScreenHelper->getDatasetModel());
 	ctxt->setContextProperty("helper", m_welcomeScreenHelper);
-	qDebug() << "Categories: " << m_welcomeScreenHelper->getDatasetModel()->categories();
+	qDebug() << "Categories: " << m_welcomeScreenHelper->getDatasetModel()->allCategories();
 
 	quickWidget->setSource(source);
 	quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);

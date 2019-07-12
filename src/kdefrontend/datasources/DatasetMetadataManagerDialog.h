@@ -38,7 +38,7 @@ class DatasetMetadataManagerDialog : public QDialog {
     Q_OBJECT
 
 public:
-	explicit DatasetMetadataManagerDialog(QWidget*, const QMap<QString, QMap<QString, QVector<QString>>>&);
+	explicit DatasetMetadataManagerDialog(QWidget*, const QMap< QString, QMap<QString, QMap<QString, QVector<QString>>>>&);
     virtual ~DatasetMetadataManagerDialog() override;
     void updateDocument(const QString& fileName);
     void createNewMetadata(const QString& dirPath);

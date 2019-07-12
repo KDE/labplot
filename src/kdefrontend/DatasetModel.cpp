@@ -44,7 +44,8 @@
 
 \ingroup kdefrontend
 */
-DatasetModel::DatasetModel(const QMap<QString, QMap<QString, QVector<QString>>>& datasetsMap) {
+DatasetModel::DatasetModel(const QMap<QString, QMap<QString, QMap<QString, QVector<QString>>>>& datasetsMap) {
+	initCollections(datasetsMap);
 	initCategories(datasetsMap);
 	initSubcategories(datasetsMap);
 	initDatasets(datasetsMap);
@@ -54,32 +55,58 @@ DatasetModel::~DatasetModel() {
 
 }
 
+void DatasetModel::initCollections(const QMap<QString, QMap<QString, QMap<QString, QVector<QString> > > > & datasetMap) {
+	m_collectionList = datasetMap.keys();
+}
+
 /**
  * @brief Initializes the list of categories.
  */
-void DatasetModel::initCategories(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) {
-	m_categoryLists = datasetMap.keys();
+void DatasetModel::initCategories(const QMap<QString, QMap<QString, QMap<QString, QVector<QString> > > > & datasetMap) {
+	for(auto i = datasetMap.begin(); i != datasetMap.end(); ++i) {
+		m_categories[i.key()] = i.value().keys();
+
+		for(auto category : i.value().keys()) {
+			if(!m_allCategories.contains(category))
+				m_allCategories.append(category);
+		}
+	}
 }
 
 /**
  * @brief Initializes the list of subcategories.
  */
-void DatasetModel::initSubcategories(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) {
-	for(auto i = datasetMap.begin(); i != datasetMap.end(); ++i) {
-		m_subcategories[i.key()] = i.value().keys();
+void DatasetModel::initSubcategories(const QMap<QString, QMap<QString, QMap<QString, QVector<QString> > > > & datasetMap) {
+	for(auto collection = datasetMap.begin(); collection != datasetMap.end(); ++collection) {
+		const QMap<QString, QMap<QString, QVector<QString> > > collection_ = collection.value();
+
+		for(auto category = collection_.begin(); category != collection_.end(); category++) {
+			m_subcategories[collection.key()][category.key()] = category.value().keys();
+
+			for(auto subcategory: category.value().keys()) {
+				if(!m_allSubcategories[category.key()].contains(subcategory))
+					m_allSubcategories[category.key()].append(subcategory);
+			}
+		}
 	}
 }
 
 /**
  * @brief Initializes the list of datasets.
  */
-void DatasetModel::initDatasets(const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) {
-	for(auto category = datasetMap.begin(); category != datasetMap.end(); ++category) {
-		const QMap<QString, QVector<QString>>& category_ = category.value();
+void DatasetModel::initDatasets(const QMap<QString, QMap<QString, QMap<QString, QVector<QString> > > >& datasetMap) {
+	for(auto collection = datasetMap.begin(); collection != datasetMap.end(); ++collection) {
+		const QMap<QString, QMap<QString, QVector<QString> > > collection_ = collection.value();
 
-		for(auto subcategory = category_.begin(); subcategory != category_.end(); ++subcategory) {
-			m_datasets[category.key()][subcategory.key()] = subcategory.value().toList();
-			m_datasetList.append(subcategory.value().toList());
+		for(auto category = collection_.begin(); category != collection_.end(); category++) {
+			const QMap<QString, QVector<QString> >category_ = category.value();
+
+			for(auto subcategory = category_.begin(); subcategory != category_.end(); subcategory++) {
+				m_datasets[collection.key()][category.key()][subcategory.key()] = subcategory.value().toList();
+
+				m_allDatasets[category.key()][subcategory.key()].append(subcategory.value().toList());
+				m_datasetList.append(subcategory.value().toList());
+			}
 		}
 	}
 }
@@ -87,28 +114,56 @@ void DatasetModel::initDatasets(const QMap<QString, QMap<QString, QVector<QStrin
 /**
  * @brief Returns the list of categories.
  */
-QVariant DatasetModel::categories() {
-	return QVariant(m_categoryLists);
+QVariant DatasetModel::allCategories() {
+	return QVariant(m_allCategories);
 }
 
 /**
  * @brief Returns the list of subcategories of a given category.
  * @param category the category the subcategories of which will be returned
  */
-QVariant DatasetModel::subcategories(const QString& category) {
-	return QVariant(m_subcategories[category]);
+QVariant DatasetModel::allSubcategories(const QString& category) {
+	return QVariant(m_allSubcategories[category]);
 }
 
 /**
  * @brief Returns the list of datasets of a given category and subcategory.
  */
-QVariant DatasetModel::datasets(const QString& category, const QString& subcategory) {
-	return QVariant(m_datasets[category][subcategory]);
+QVariant DatasetModel::allDatasets(const QString& category, const QString& subcategory) {
+	return QVariant(m_allDatasets[category][subcategory]);
 }
 
 /**
  * @brief Returns the list of every dataset.
  */
-QVariant DatasetModel::allDatasets() {
+QVariant DatasetModel::allDatasetsList() {
 	return QVariant(m_datasetList);
+}
+
+QStringList DatasetModel::categories(const QString& collection) {
+	if(collection.compare("All") != 0) {
+		return m_categories[collection];
+	}else {
+		return allCategories().toStringList();
+	}
+}
+
+QStringList DatasetModel::subcategories(const QString& collection, const QString& category) {
+	if(collection.compare("All") != 0) {
+		return m_subcategories[collection][category];
+	} else {
+		return allSubcategories(category).toStringList();
+	}
+}
+
+QStringList DatasetModel::datasets(const QString& collection, const QString& category, const QString& subcategory) {
+	if(collection.compare("All") != 0) {
+		return m_datasets[collection][category][subcategory];
+	} else {
+		return allDatasets(category, subcategory).toStringList();
+	}
+}
+
+QStringList DatasetModel::collections() {
+	return m_collectionList;
 }

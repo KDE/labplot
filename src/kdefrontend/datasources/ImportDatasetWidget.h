@@ -48,34 +48,38 @@ public:
 	QString getSelectedDataset() const;
 	void loadDatasetToProcess(DatasetHandler* datasetHandler);
 	QString locateCategoryJsonFile() const;
-	const QMap<QString, QMap<QString, QVector<QString>>>& getDatasetsMap();
+	const QMap< QString, QMap<QString, QMap<QString, QVector<QString>>>>& getDatasetsMap();
+	void setCollection(const QString&);
 	void setCategory(const QString&);
 	void setSubcategory(const QString&);
 	void setDataset(const QString&);
 
 private:    
 	Ui::ImportDatasetWidget ui;
-	QMap<QString, QMap<QString, QVector<QString>>> m_datasetsMap;
+	QMap< QString, QMap<QString, QMap<QString, QVector<QString>>>> m_datasetsMap;
 	QString m_selectedSubcategory;
 	QCompleter* m_categoryCompleter;
 	QCompleter* m_datasetCompleter;
 	QString m_jsonDir;
 	bool m_loadingCategories;
 	QString m_selectedCategory;
+	QString m_selectedCollection;
 	DatasetModel* m_datasetModel{nullptr};
 
-	void downloadCategoryFile();
-	void downloadDatasetFile(const QString&);
+	void downloadCollectionsFile();
+	void downloadCollectionFile(const QString&);
 	void uploadCategoryFile();
 	void uploadDatasetFile(const QString&);
 	void updateDatasetCompleter();
 	void updateCategoryCompleter();
 	void loadDatasetCategoriesFromJson();
 	void listDatasetsForSubcategory(QTreeWidgetItem* item);
-	void restoreSelectedSubcategory();
+	void restoreSelectedSubcategory(const QString& collection);
 	void highlightLocalMetadataFiles();
+	QJsonObject loadDatasetObject();
 
 private slots:
+	void updateCategoryTree(const QString&);
 	void scrollToCategoryTreeItem(const QString& rootName);
 	void scrollToDatasetListItem(const QString& rootName);
 	void showDatasetMetadataManager();

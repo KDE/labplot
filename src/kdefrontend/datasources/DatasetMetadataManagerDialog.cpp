@@ -43,7 +43,7 @@ Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
 
 	\ingroup kdefrontend
  */
-DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) : QDialog(parent),
+DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, const QMap< QString, QMap<QString, QMap<QString, QVector<QString>>>>& datasetMap) : QDialog(parent),
 	m_mainWidget(new DatasetMetadataManagerWidget(this, datasetMap)),
 	m_buttonBox(nullptr),
 	m_okButton(nullptr) {

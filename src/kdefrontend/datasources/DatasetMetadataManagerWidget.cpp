@@ -53,12 +53,15 @@ Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
 
 	\ingroup kdefrontend
  */
-DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, const QMap<QString, QMap<QString, QVector<QString>>>& datasetMap) : QWidget(parent) {
+DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, const QMap< QString, QMap<QString, QMap<QString, QVector<QString>>>>& datasetMap) : QWidget(parent) {
 	ui.setupUi(this);
 	m_datasetModel = new DatasetModel(datasetMap);
 
 	m_baseColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#5f5f5f") : QLatin1String("#ffffff");
 	m_textColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#ffffff") : QLatin1String("#000000");
+
+	//ui.cbCategory->addItems(m_datasetModel->categories().toStringList());
+	//ui.cbSubcategory->addItems(m_datasetModel->subcategories(ui.cbCategory->currentText()).toStringList());
 
 	ui.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
 	ui.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
@@ -151,7 +154,7 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 	//check whether there already is a file named like this or not.
 	bool found = false;
 
-	if(m_datasetModel->allDatasets().toStringList().contains(fileName)) {
+	if(m_datasetModel->allDatasetsList().toStringList().contains(fileName)) {
 		qDebug("There already is a metadata file with this name");
 		QPalette palette;
 		palette.setColor(QPalette::Base, Qt::red);
@@ -308,9 +311,9 @@ bool DatasetMetadataManagerWidget::checkDataValidity() {
  */
 void DatasetMetadataManagerWidget::updateSubcategories(const QString& category) {
 	ui.cbSubcategory->clear();
-	if( m_datasetModel->categories().toStringList().contains(category)) {
+	/*if( m_datasetModel->categories().toStringList().contains(category)) {
 		ui.cbSubcategory->addItems(m_datasetModel->subcategories(category).toStringList());
-	}
+	}*/
 	emit checkOk();
 }
 

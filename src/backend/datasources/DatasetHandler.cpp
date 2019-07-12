@@ -50,14 +50,13 @@ Copyright	: (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
 */
 DatasetHandler::DatasetHandler(Spreadsheet* spreadsheet) : m_spreadsheet(spreadsheet),
 	m_filter(new AsciiFilter),
-	m_document(new QJsonDocument),
+	m_object(nullptr),
 	m_downloadManager(new QNetworkAccessManager) {
 	connect(m_downloadManager, &QNetworkAccessManager::finished, this, &DatasetHandler::downloadFinished);
 	connect(this, &DatasetHandler::downloadCompleted, this, &DatasetHandler::processDataset);
 }
 
 DatasetHandler::~DatasetHandler() {
-	delete m_document;
 	delete m_downloadManager;
 	delete m_filter;
 }
@@ -66,32 +65,17 @@ DatasetHandler::~DatasetHandler() {
  * @brief Initiates processing the metadata file,, located at the given path, belonging to a dataset.
  * @param path the path to the metadata file
  */
-void DatasetHandler::processMetadata(const QString& path) {
+void DatasetHandler::processMetadata(const QJsonObject& object, const QString& path) {
+	m_object = new QJsonObject(object);
 	qDebug("Start processing dataset...");
-	loadJsonDocument(path);
 
 	m_containingDir = path.left(path.lastIndexOf(QDir::separator()));
 	qDebug() << m_containingDir;
 
-	if(!m_document->isEmpty()) {
+	if(!m_object->isEmpty()) {
 		configureFilter();
 		configureSpreadsheet();
 		prepareForDataset();
-	}
-}
-
-/**
- * @brief Opens the json file at the given path and creates a QJsonDocument.
- * @param path the path to the file
- */
-void DatasetHandler::loadJsonDocument(const QString& path) {
-	qDebug("Load Json document for metadata");
-	QFile file(path);
-	if (file.open(QIODevice::ReadOnly)) {
-		m_document = new QJsonDocument(QJsonDocument::fromJson(file.readAll()));
-		file.close();
-	} else {
-		qDebug("Couldn't open dataset category file");
 	}
 }
 
@@ -108,54 +92,54 @@ void DatasetHandler::markMetadataAsInvalid() {
  */
 void DatasetHandler::configureFilter() {
 	qDebug("Configure filter");
-	if(m_document->isObject()) {
-		QJsonObject jsonObject = m_document->object();
-		if(jsonObject.contains("separator"))
-			m_filter->setSeparatingCharacter( jsonObject.value("separator").toString());
+	if(!m_object->isEmpty()) {
+		if(m_object->contains("separator"))
+			m_filter->setSeparatingCharacter(m_object->value("separator").toString());
 		else
 			markMetadataAsInvalid();
 
-		if(jsonObject.contains("comment_character"))
-			m_filter->setCommentCharacter(jsonObject.value("comment_character").toString());
+		if(m_object->contains("comment_character"))
+			m_filter->setCommentCharacter(m_object->value("comment_character").toString());
 		else
 			markMetadataAsInvalid();
 
-		if(jsonObject.contains("create_index_column"))
-			m_filter->setCreateIndexEnabled(jsonObject.value("create_index_column").toBool());
+		if(m_object->contains("create_index_column"))
+			m_filter->setCreateIndexEnabled(m_object->value("create_index_column").toBool());
 		else
 			markMetadataAsInvalid();
 
-		if(jsonObject.contains("skip_empty_parts"))
-			m_filter->setSkipEmptyParts(jsonObject.value("skip_empty_parts").toBool());
+		if(m_object->contains("skip_empty_parts"))
+			m_filter->setSkipEmptyParts(m_object->value("skip_empty_parts").toBool());
 		else
 			markMetadataAsInvalid();
 
-		if(jsonObject.contains("simplify_whitespaces"))
-			m_filter->setSimplifyWhitespacesEnabled(jsonObject.value("simplify_whitespaces").toBool());
+		if(m_object->contains("simplify_whitespaces"))
+			m_filter->setSimplifyWhitespacesEnabled(m_object->value("simplify_whitespaces").toBool());
 		else
 			markMetadataAsInvalid();
 
-		if(jsonObject.contains("remove_quotes"))
-			m_filter->setRemoveQuotesEnabled(jsonObject.value("remove_quotes").toBool());
+		if(m_object->contains("remove_quotes"))
+			m_filter->setRemoveQuotesEnabled(m_object->value("remove_quotes").toBool());
 		else
 			markMetadataAsInvalid();
 
-		if(jsonObject.contains("use_first_row_for_vectorname"))
-			m_filter->setHeaderEnabled(jsonObject.value("use_first_row_for_vectorname").toBool());
+		if(m_object->contains("use_first_row_for_vectorname"))
+			m_filter->setHeaderEnabled(m_object->value("use_first_row_for_vectorname").toBool());
 		else
 			markMetadataAsInvalid();
 
-		if(jsonObject.contains("number_format"))
-			m_filter->setNumberFormat(QLocale::Language(jsonObject.value("number_format").toInt()));
+		if(m_object->contains("number_format"))
+			m_filter->setNumberFormat(QLocale::Language(m_object->value("number_format").toInt()));
 		else
 			markMetadataAsInvalid();
 
-		if(jsonObject.contains("DateTime_format"))
-			m_filter->setDateTimeFormat(jsonObject.value("DateTime_format").toString());
+		if(m_object->contains("DateTime_format"))
+			m_filter->setDateTimeFormat(m_object->value("DateTime_format").toString());
 		else
 			markMetadataAsInvalid();
 
 	} else {
+		qDebug() << "Empty object";
 		markMetadataAsInvalid();
 	}
 }
@@ -165,15 +149,14 @@ void DatasetHandler::configureFilter() {
  */
 void DatasetHandler::configureSpreadsheet() {
 	qDebug("Conf spreadsheet");
-	if(m_document->isObject()) {
-		const QJsonObject& jsonObject = m_document->object();
-		if(jsonObject.contains("name"))
-			m_spreadsheet->setName( jsonObject.value("name").toString());
+	if(!m_object->isEmpty()) {
+		if(m_object->contains("name"))
+			m_spreadsheet->setName( m_object->value("name").toString());
 		else
 			markMetadataAsInvalid();
 
-		if(jsonObject.contains("description"))
-			m_spreadsheet->setComment(jsonObject.value("description").toString());
+		if(m_object->contains("description"))
+			m_spreadsheet->setComment(m_object->value("description").toString());
 	} else {
 		markMetadataAsInvalid();
 	}
@@ -184,11 +167,9 @@ void DatasetHandler::configureSpreadsheet() {
  */
 void DatasetHandler::prepareForDataset() {
 	qDebug("Start downloading dataset");
-	if(m_document->isObject()) {
-		const QJsonObject& jsonObject = m_document->object();
-
-		if(jsonObject.contains("download")) {
-			const QString& url =  jsonObject.value("download").toString();
+	if(!m_object->isEmpty()) {
+		if(m_object->contains("download")) {
+			const QString& url =  m_object->value("download").toString();
 			const QUrl downloadUrl = QUrl::fromEncoded(url.toLocal8Bit());
 			doDownload(url);
 		}
@@ -313,13 +294,11 @@ void DatasetHandler::processDataset() {
  * @brief Configures the columns of the spreadsheet, based on the metadata file.
  */
 void DatasetHandler::configureColumns() {
-	if(m_document->isObject()) {
-		const QJsonObject jsonObject = m_document->object();
-
+	if(!m_object->isEmpty()) {
 		int index = 0;
 		const int columnsCount = m_spreadsheet->columnCount();
-		while(jsonObject.contains(i18n("column_description_%1", index)) && (index < columnsCount)) {
-			m_spreadsheet->column(index)->setComment(jsonObject.value(i18n("column_description_%1", index)).toString());
+		while(m_object->contains(i18n("column_description_%1", index)) && (index < columnsCount)) {
+			m_spreadsheet->column(index)->setComment(m_object->value(i18n("column_description_%1", index)).toString());
 			++index;
 		}
 	} else {

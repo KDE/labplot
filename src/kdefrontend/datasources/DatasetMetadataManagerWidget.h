@@ -37,7 +37,7 @@ class DatasetMetadataManagerWidget : public QWidget {
     Q_OBJECT
 
 public:
-    explicit DatasetMetadataManagerWidget(QWidget*, const QMap<QString, QMap<QString, QVector<QString>>>&);
+	explicit DatasetMetadataManagerWidget(QWidget*, const QMap< QString, QMap<QString, QMap<QString, QVector<QString>>>>&);
     virtual ~DatasetMetadataManagerWidget() override;
     bool checkDataValidity();
     void updateDocument(const QString& fileName);

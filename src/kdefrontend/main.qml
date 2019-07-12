@@ -1263,8 +1263,8 @@ Rectangle {
 
                     clip: true
                     ScrollBar.vertical: ScrollBar { }
-                    Component.onCompleted: console.log("Model: " +  datasetModel.categories())
-                    model: datasetModel.categories()
+                    Component.onCompleted: console.log("Model: " +  datasetModel.allCategories())
+                    model: datasetModel.allCategories()
                     delegate:Rectangle {
                         width: parent.width
                         height: 25
@@ -1354,7 +1354,7 @@ Rectangle {
                     clip: true
                     property int textWidth: 100
 
-                    model: datasetModel.subcategories(mainWindow.currentCategory)
+                    model: datasetModel.allSubcategories(mainWindow.currentCategory)
                     delegate: Rectangle {
                         width: parent.width
                         height: 25
@@ -1441,7 +1441,7 @@ Rectangle {
                     clip: true
 
 
-                    model: datasetModel.datasets(mainWindow.currentCategory, mainWindow.currentSubcategory)
+                    model: datasetModel.allDatasets(mainWindow.currentCategory, mainWindow.currentSubcategory)
 
                     delegate: Rectangle {
                         id: datasetDelegate

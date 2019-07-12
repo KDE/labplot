@@ -31,7 +31,7 @@ Copyright	: (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
 #include <QString>
 #include "backend/spreadsheet/Spreadsheet.h"
 
-class QJsonDocument;
+class QJsonObject;
 class AsciiFilter;
 class QNetworkAccessManager;
 class QNetworkReply;
@@ -42,12 +42,12 @@ class DatasetHandler: public QObject{
 public:
 	DatasetHandler(Spreadsheet* spreadsheet);
 	~DatasetHandler();
-	void processMetadata(const QString& path);
+	void processMetadata(const QJsonObject& object, const QString& path);
 
 private:
 	Spreadsheet* m_spreadsheet;
 	AsciiFilter* m_filter;
-	QJsonDocument*  m_document;
+	QJsonObject*  m_object;
 	QNetworkAccessManager* m_downloadManager;
 	QNetworkReply* m_currentDownload;
 	QString m_fileName;
