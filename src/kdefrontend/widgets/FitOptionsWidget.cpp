@@ -35,7 +35,7 @@
 	\ingroup kdefrontend
  */
 FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData, XYFitCurve* fitCurve) : QWidget(parent),
-		m_fitData(fitData), m_fitCurve(fitCurve) {
+	m_fitData(fitData), m_fitCurve(fitCurve) {
 	ui.setupUi(this);
 	ui.pbApply->setIcon(QIcon::fromTheme("dialog-ok-apply"));
 	ui.pbCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
@@ -101,8 +101,12 @@ void FitOptionsWidget::autoRangeChanged() {
 		}
 
 		if (xDataColumn) {
-			ui.leMin->setText(QString::number(xDataColumn->minimum()));
-			ui.leMax->setText(QString::number(xDataColumn->maximum()));
+			const double xMin = xDataColumn->minimum();
+			const double xMax = xDataColumn->maximum();
+			ui.leMin->setText(QString::number(xMin));
+			ui.leMax->setText(QString::number(xMax));
+			m_fitData->fitRange.last() = xMax;
+			m_fitData->fitRange.first() = xMin;
 		}
 	} else {
 		ui.leMin->setEnabled(true);
@@ -129,15 +133,18 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 		}
 
 		if (xDataColumn) {
-			ui.leEvalMin->setText(QString::number(xDataColumn->minimum()));
-			ui.leEvalMax->setText(QString::number(xDataColumn->maximum()));
+			const double xMin = xDataColumn->minimum();
+			const double xMax = xDataColumn->maximum();
+			ui.leEvalMin->setText(QString::number(xMin));
+			ui.leEvalMax->setText(QString::number(xMax));
+			m_fitData->evalRange.last() = xMax;
+			m_fitData->evalRange.first() = xMin;
 		}
 	} else {
 		ui.leEvalMin->setEnabled(true);
 		ui.lEvalRange->setEnabled(true);
 		ui.leEvalMax->setEnabled(true);
 	}
-
 }
 
 void FitOptionsWidget::fitRangeMinChanged() {
@@ -174,6 +181,7 @@ void FitOptionsWidget::applyClicked() {
 	m_fitData->useResults = ui.cbUseResults->isChecked();
 	m_fitData->previewEnabled = ui.cbPreview->isChecked();
 
+	qDebug()<<"saving " << m_fitData->evalRange.first() << "  " << m_fitData->evalRange.last() ;
 	if (m_changed)
 		emit optionsChanged();
 
