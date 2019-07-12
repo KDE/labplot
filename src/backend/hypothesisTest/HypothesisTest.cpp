@@ -104,25 +104,28 @@ void HypothesisTest::performTest(Test test, bool categoricalVariable, bool equal
 	d->tailType = test.tail;
 	switch (test.subtype) {
 	case HypothesisTest::Test::SubType::TwoSampleIndependent: {
-		d->currTestName = i18n( "<h2>Two Sample Independent Test</h2>");
+        d->currTestName = "<h2>" + i18n("Two Sample Independent Test") + "</h2>";
 		d->performTwoSampleIndependentTest(test.type, categoricalVariable, equalVariance);
 		break;
 	}
 	case HypothesisTest::Test::SubType::TwoSamplePaired:
-		d->currTestName = i18n( "<h2>Two Sample Paired Test</h2>");
+        d->currTestName = "<h2>" + i18n("Two Sample Paired Test") + "</h2>";
 		d->performTwoSamplePairedTest(test.type);
 		break;
 	case HypothesisTest::Test::SubType::OneSample: {
-		d->currTestName = i18n( "<h2>One Sample Test</h2>");
+        d->currTestName = "<h2>" + i18n("One Sample Test") + "</h2>";
 		d->performOneSampleTest(test.type);
 		break;
 	}
 	case HypothesisTest::Test::SubType::OneWay: {
-		d->currTestName = i18n( "<h2>One Way Anova</h2>");
+        d->currTestName = "<h2>" + i18n("One Way Anova") + "</h2>";
 		d->performOneWayAnova();
 		break;
 	}
-	case HypothesisTest::Test::SubType::TwoWay:
+    case HypothesisTest::Test::SubType::TwoWay: {
+        d->currTestName = "<h2>" + i18n("Two Way Anova") + "</h2>";
+        break;
+    }
 	case HypothesisTest::Test::SubType::NoneSubType:
 		break;
 	}
@@ -131,7 +134,7 @@ void HypothesisTest::performTest(Test test, bool categoricalVariable, bool equal
 }
 
 void HypothesisTest::performLeveneTest(bool categoricalVariable) {
-	d->currTestName = i18n( "<h2>Levene Test for Equality of Variance</h2>");
+    d->currTestName = "<h2>" + i18n("Levene Test for Equality of Variance") + "</h2>";
 	d->performLeveneTest(categoricalVariable);
 
 	emit changed();
@@ -216,7 +219,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
                 return;
             }
             if (std[i] == 0) {
-                printError( i18n("Standard Deviation of atleast one column is equal to 0: last column is: %1", columns[i]->name()));
+                printError(i18n("Standard Deviation of atleast one column is equal to 0: last column is: %1", columns[i]->name()));
                 return;
             }
 		}
@@ -321,7 +324,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 		break;
 	}
 
-	currTestName = i18n( "<h2>Two Sample Independent %1 Test for %2 vs %3</h2>", testName, col1Name, col2Name);
+    currTestName = "<h2>" + i18n("Two Sample Independent %1 Test for %2 vs %3", testName, col1Name, col2Name) + "</h2>";
 	pValue = getPValue(test, statisticValue, col1Name, col2Name, (mean[0] - mean[1]), sp, df);
 
 	printLine(2, i18n("Significance level is %1", round(significanceLevel)), "blue");
@@ -415,7 +418,7 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(HypothesisTest::Test::Typ
 	}
 
 	pValue = getPValue(test, statisticValue, columns[0]->name(), i18n("%1", populationMean), mean, std, df);
-	currTestName = i18n( "<h2>One Sample %1 Test for %2 vs %3</h2>", testName, columns[0]->name(), columns[1]->name());
+    currTestName = "<h2>" + i18n("One Sample %1 Test for %2 vs %3", testName, columns[0]->name(), columns[1]->name()) + "</h2>";
 
 	printLine(2, i18n("Significance level is %1 ", round(significanceLevel)), "blue");
 	printLine(4, i18n("%1 Value is %2 ", testName, round(statisticValue)), "green");
@@ -497,7 +500,7 @@ void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test
 	}
 
 	pValue = getPValue(test, statisticValue, columns[0]->name(), i18n("%1",populationMean), mean - populationMean, std, df);
-	currTestName = i18n( "<h2>One Sample %1 Test for %2</h2>", testName, columns[0]->name());
+    currTestName = "<h2>" + i18n("One Sample %1 Test for %2", testName, columns[0]->name()) + "</h2>";
 
 	printLine(2, i18n("Significance level is %1", round(significanceLevel)), "blue");
 	printLine(4, i18n("%1 Value is %2", testName, round(statisticValue)), "green");
@@ -595,13 +598,13 @@ void HypothesisTestPrivate::performOneWayAnova() {
 		rowMajor[row_i*columnCount + 4]	= std[row_i - 1];
 	}
 
-	statsTable = i18n( "<h3>Group Summary Statistics</h3>");
+    statsTable = "<h3>" + i18n("Group Summary Statistics") + "</h3>";
 
 	statsTable += getHtmlTable(rowCount, columnCount, rowMajor);
 
 	statsTable += getLine("");
 	statsTable += getLine("");
-	statsTable += i18n( "<h3>Grand Summary Statistics</h3>");
+    statsTable += "<h3>" + i18n("Grand Summary Statistics") + "</h3>";
 	statsTable += getLine("");
 	statsTable += getLine(i18n("Overall Mean is %1", round(yBar)));
 
@@ -904,7 +907,7 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 QString HypothesisTestPrivate::round(QVariant number, int precision) {
     if (number.userType() == QMetaType::Double || number.userType() == QMetaType::Float) {
         double multiplierPrecision = qPow(10, precision);
-        int tempNum = number.toDouble()*multiplierPrecision*10;
+        int tempNum = int(number.toDouble()*multiplierPrecision*10);
 
         if (tempNum % 10 < 5)
             return QString::number((tempNum/10) / multiplierPrecision);
@@ -1167,7 +1170,7 @@ QString HypothesisTestPrivate::getHtmlTable(int row, int column, QVariant* rowMa
 	table += "  <tr>";
 	for (int j = 0; j < column; j++) {
 		element = rowMajor[j].toString();
-		table += i18n("    <th class=%1><b>%2</b></th>", bg, element);
+        table += "    <th class=" + bg + "><b>" + i18n("%1", element) + "</b></th>";
 	}
 	table += "  </tr>";
 
@@ -1181,10 +1184,10 @@ QString HypothesisTestPrivate::getHtmlTable(int row, int column, QVariant* rowMa
 		table += "  <tr>";
 
         QString element = round(rowMajor[i*column]);
-		table += i18n("    <td class=%1><b>%2</b></td>", bg, element);
+        table += "    <td class=" + bg + "><b>" + i18n("%1", element) + "</b></td>";
 		for (int j = 1; j < column; j++) {
             element = round(rowMajor[i*column+j]);
-			table += i18n("    <td class=%1>%2</td>", bg, element);
+            table += "    <td class=" + bg + ">" + i18n("%1", element) + "</td>";
 		}
 
 		table += "  </tr>";
@@ -1200,7 +1203,7 @@ QString HypothesisTestPrivate::getHtmlTable(int row, int column, QVariant* rowMa
 }
 
 QString HypothesisTestPrivate::getLine(const QString& msg, const QString& color) {
-	return i18n("<p style=color:%1;>%2</p>", color, msg);
+    return "<p style=color:" + color + ";>" + i18n("%1", msg) + "</p>";
 }
 
 void HypothesisTestPrivate::printLine(const int& index, const QString& msg, const QString& color) {
