@@ -38,6 +38,17 @@ public:
 	explicit HypothesisTestPrivate(HypothesisTest*);
 	virtual ~HypothesisTestPrivate();
 
+    struct Node {
+        QString data;
+        int spanCount;
+        int level;
+
+        QVector<Node*> children;
+        void addChild(Node* child) {
+            children.push_back(child);
+        }
+    };
+
 	enum ErrorType {ErrorUnqualSize, ErrorEmptyColumn, NoError};
 
 	QString name() const;
@@ -81,7 +92,10 @@ private:
 	ErrorType findStatsCategorical(Column* column1, Column* column2, int n[], double sum[], double mean[], double std[], QMap<QString, int>& colName, const int& np, const int& totalRows);
 
 	double getPValue(const HypothesisTest::Test::Type& test, double& value, const QString& col1Name, const QString& col2name, const double mean, const double sp, const int df);
-	QString getHtmlTable(int row, int column, QVariant* rowMajor);
+    int setSpanValues(Node* root, int& totalLevels);
+    QString getHtmlHeader(Node* root);
+    QString getHtmlTable2(int rowCount, int columnCount, Node* columnHeaderRoot, QVariant* rowMajor);
+    QString getHtmlTable(int row, int column, QVariant* rowMajor);
 
 	QString getLine(const QString& msg, const QString& color = "black");
 	void printLine(const int& index, const QString& msg, const QString& color = "black");

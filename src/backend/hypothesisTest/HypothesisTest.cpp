@@ -40,10 +40,14 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QtMath>
+#include <QQueue>
+
 #include <KLocalizedString>
 
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
+
+#include <math.h>
 
 extern "C" {
 #include "backend/nsl/nsl_stats.h"
@@ -650,6 +654,8 @@ void HypothesisTestPrivate::performOneWayAnova() {
     return;
 }
 
+/*************************************Two Way Anova***************************************/
+
 // all formulas and symbols are taken from: http://statweb.stanford.edu/~susan/courses/s141/exanova.pdf
 
 //TODO: suppress warning of variable length array are a C99 feature.
@@ -698,17 +704,20 @@ void HypothesisTestPrivate::performTwoWayAnova() {
         replicates[catToNumber_a[name_a] - 1][catToNumber_b[name_b] - 1] += 1;
     }
 
+    int replicate = replicates[0][0];
     for (int i = 0; i < np_a; i++)
         for (int j = 0; j < np_b; j++) {
             if (replicates[i][j] == 0) {
-                printError("have atleast once each combination of features");
+                printError("Dataset should have atleast one data value corresponding to each feature combination");
+                return;
+            }
+            if (replicates[i][j] != replicate) {
+                printError("Number of experiments perfomed for each combination of levels <br/>"
+                           "between Independet Var.1 and Independent Var.2 must be equal");
                 return;
             }
             groupMean[i][j] /= replicates[i][j];
         }
-
-    int rowCount = np_a + 1, columnCount = np_b + 1;
-    QVariant* rowMajor = new QVariant[rowCount*columnCount];
 
     QString partitionNames_a[np_a];
     QString partitionNames_b[np_b];
@@ -726,19 +735,36 @@ void HypothesisTestPrivate::performTwoWayAnova() {
     }
 
     // header data;
-    rowMajor[0] = "group mean, </p> replicates";
-    for (int i = 1; i < np_b; i++)
-        rowMajor[i] = partitionNames_b[i];
+    Node* columnHeaderRoot = new Node();
+
+    for (int i = 0; i < np_b; i++) {
+        Node* node = new Node();
+        node->data = partitionNames_b[i];
+
+        Node* childNodeMean = new Node();
+        childNodeMean->data = "Mean";
+        Node* childNodeReplicate = new Node();
+        childNodeReplicate->data = "Replicate";
+        node->addChild(childNodeMean);
+        node->addChild(childNodeReplicate);
+
+        columnHeaderRoot->addChild(node);
+    }
 
     // table data
-    for (int row_i = 1; row_i < rowCount ; row_i++) {
-        rowMajor[row_i*columnCount] = partitionNames_a[row_i - 1];
-        for (int col_i = 1; col_i < columnCount; col_i++)
-            rowMajor[row_i*columnCount + col_i] = round(groupMean[row_i - 1][col_i - 1]) + ", " + round(replicates[row_i - 1][col_i - 1]);
+    int rowCount = np_a, columnCount = np_b*2 + 1;
+    QVariant* rowMajor = new QVariant[rowCount*columnCount];
+
+    for (int row_i = 0; row_i < rowCount ; row_i++) {
+        rowMajor[row_i*columnCount] = partitionNames_a[row_i];
+        for (int col_i = 1; col_i < np_b + 1; col_i++) {
+            rowMajor[row_i*columnCount + 2*col_i-1] = round(groupMean[row_i][col_i-1]);
+            rowMajor[row_i*columnCount + 2*col_i] = round(replicates[row_i][col_i-1]);
+        }
     }
 
     statsTable = "<h3>" + i18n("Contingency Table") + "</h3>";
-    statsTable += getHtmlTable(rowCount, columnCount, rowMajor);
+    statsTable += getHtmlTable2(rowCount, columnCount, columnHeaderRoot, rowMajor);
 
     return;
 }
@@ -1008,7 +1034,7 @@ QString HypothesisTestPrivate::round(QVariant number, int precision) {
         else
             return QString::number((tempNum/10 + 1) / multiplierPrecision);
     }
-    return number.toString();
+    return i18n("%1", number.toString());
 }
 
 
@@ -1239,61 +1265,158 @@ double HypothesisTestPrivate::getPValue(const HypothesisTest::Test::Type& test, 
 
 	if (pValue > 1)
 		return 1;
-	return pValue;
+    return pValue;
 }
 
+int HypothesisTestPrivate::setSpanValues(HypothesisTestPrivate::Node* root, int& totalLevels) {
+    if (root == nullptr) {
+        totalLevels = 0;
+        return 0;
+    }
+
+    int val = 0;
+    int level = 0;
+    int maxLevel = 0;
+    for (int i = 0; i < root->children.size(); i++) {
+        val += setSpanValues(root->children[i], level);
+        maxLevel = std::max(level, maxLevel);
+    }
+
+    totalLevels = maxLevel + 1;
+    if (val == 0)
+        root->spanCount = 1;
+    else
+        root->spanCount = val;
+
+    return root->spanCount;
+
+}
+
+QString HypothesisTestPrivate::getHtmlHeader(HypothesisTestPrivate::Node *root) {
+    if (root == nullptr)
+        return QString();
+
+    QString header;
+
+    int totalLevels = 0;
+
+    setSpanValues(root, totalLevels);
+    totalLevels -= 1;
+
+    root->level = 0;
+    QQueue<Node*> nodeQueue;
+
+    for (int i = 0; i < root->children.size(); i++) {
+        Node* child = root->children[i];
+        child->level = 1;
+        nodeQueue.enqueue(child);
+    }
+
+    int prevLevel = 1;
+    header = "  <tr>";
+    header += "    <td rowspan=" + QString::number(totalLevels) + "></td>";
+
+    while(!nodeQueue.isEmpty()) {
+        Node* node = nodeQueue.dequeue();
+        int nodeLevel = node->level;
+
+        for (int i = 0; i < node->children.size(); i++) {
+            Node* child = node->children[i];
+            child->level = nodeLevel + 1;
+            nodeQueue.enqueue(child);
+        }
+
+        if (nodeLevel != prevLevel) {
+            prevLevel = nodeLevel;
+            header += "  </tr>";
+            header += "  <tr>";
+        }
+
+        header += "    <th colspan=" + QString::number(node->spanCount) + ">" + node->data + "</th>";
+    }
+    header += "  </tr>";
+    return header;
+}
+
+QString HypothesisTestPrivate::getHtmlTable2(int rowCount, int columnCount, Node* columnHeaderRoot, QVariant* rowMajor) {
+    if (rowCount < 1 || columnCount < 1)
+        return QString();
+
+    QString table;
+
+    table = "<style type=text/css>"
+            ".tg  {border-collapse:collapse;border-spacing:0;border:1px;border-color:#ccc;}"
+            ".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}"
+            ".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}"
+            "</style>"
+            "<table class=tg>";
+    table += getHtmlHeader(columnHeaderRoot);
+
+    for (int i = 0; i < rowCount; i++) {
+        table += "  <tr>";
+        table += "    <th>" + round(rowMajor[i*columnCount]) + "</th>";
+        for (int j = 1; j < columnCount; j++)
+            table += "    <td>" + round(rowMajor[i*columnCount + j]) + "</td>";
+        table += "  </tr>";
+    }
+
+    table += "</table>";
+    return table;
+}
+
+
 QString HypothesisTestPrivate::getHtmlTable(int row, int column, QVariant* rowMajor) {
-	if (row < 1 || column < 1)
+    if (rowCount < 1 || columnCount < 1)
 		return QString();
 
-	QString table;
-	table = "<style type=text/css>"
-			".tg  {border-collapse:collapse;border-spacing:0;border:none;border-color:#ccc;}"
-			".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}"
-			".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}"
-			".tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}"
-			".tg .tg-btxf{background-color:#f9f9f9;border-color:inherit;text-align:left;vertical-align:top}"
-			"</style>"
-			"<table class=tg>"
-			"  <tr>";
+    QString table;
+    table = "<style type=text/css>"
+            ".tg  {border-collapse:collapse;border-spacing:0;border:none;border-color:#ccc;}"
+            ".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}"
+            ".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}"
+            ".tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}"
+            ".tg .tg-btxf{background-color:#f9f9f9;border-color:inherit;text-align:left;vertical-align:top}"
+            "</style>"
+            "<table class=tg>"
+            "  <tr>";
 
-	QString bg = "tg-0pky";
-	bool pky = true;
+    QString bg = "tg-0pky";
+    bool pky = true;
 
-	QString element;
-	table += "  <tr>";
-	for (int j = 0; j < column; j++) {
-		element = rowMajor[j].toString();
+    QString element;
+    table += "  <tr>";
+    for (int j = 0; j < column; j++) {
+        element = rowMajor[j].toString();
         table += "    <th class=" + bg + "><b>" + i18n("%1", element) + "</b></th>";
-	}
-	table += "  </tr>";
+    }
+    table += "  </tr>";
 
-	if (pky)
-		bg = "tg-0pky";
-	else
-		bg = "tg-btxf";
-	pky = !pky;
+    if (pky)
+        bg = "tg-0pky";
+    else
+        bg = "tg-btxf";
+    pky = !pky;
 
-	for (int i = 1; i < row; i++) {
-		table += "  <tr>";
+    for (int i = 1; i < row; i++) {
+        table += "  <tr>";
 
         QString element = round(rowMajor[i*column]);
         table += "    <td class=" + bg + "><b>" + i18n("%1", element) + "</b></td>";
-		for (int j = 1; j < column; j++) {
+        for (int j = 1; j < column; j++) {
             element = round(rowMajor[i*column+j]);
             table += "    <td class=" + bg + ">" + i18n("%1", element) + "</td>";
-		}
+        }
 
-		table += "  </tr>";
-		if (pky)
-			bg = "tg-0pky";
-		else
-			bg = "tg-btxf";
-		pky = !pky;
-	}
-	table +=  "</table>";
+        table += "  </tr>";
+        if (pky)
+            bg = "tg-0pky";
+        else
+            bg = "tg-btxf";
+        pky = !pky;
+    }
+    table +=  "</table>";
 
-	return table;
+    return table;
 }
 
 QString HypothesisTestPrivate::getLine(const QString& msg, const QString& color) {
