@@ -34,7 +34,6 @@
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/datasources/DatabaseManagerDialog.h"
 #include "kdefrontend/datasources/DatabaseManagerWidget.h"
-//#include "kdefrontend/pivot/hypothesisTestView.h"
 #include "kdefrontend/TemplateHandler.h"
 
 #include <QDir>
@@ -288,6 +287,11 @@ void HypothesisTestDock::showHypothesisTest() {
 	ui.lCol2->setVisible(bool(m_test.subtype & (~HypothesisTest::Test::SubType::OneSample)));
 	ui.cbCol2->setVisible(bool(m_test.subtype & (~HypothesisTest::Test::SubType::OneSample)));
 
+    ui.lCol3->setVisible(bool(m_test.type & (HypothesisTest::Test::Anova) &
+                             setAllBits(m_test.subtype & HypothesisTest::Test::SubType::TwoWay)));
+    ui.cbCol3->setVisible(bool(m_test.type & (HypothesisTest::Test::Anova) &
+                               setAllBits(m_test.subtype & HypothesisTest::Test::SubType::TwoWay)));
+
 	ui.lEqualVariance->setVisible(bool( (m_test.type & HypothesisTest::Test::Type::TTest) &
 	                               (m_test.subtype & HypothesisTest::Test::SubType::TwoSampleIndependent)));
 	ui.chbEqualVariance->setVisible(bool( (m_test.type & HypothesisTest::Test::Type::TTest) &
@@ -307,10 +311,10 @@ void HypothesisTestDock::showHypothesisTest() {
                                                          HypothesisTest::Test::Type::ZTest)) &
                                          ~(setAllBits(m_test.subtype & HypothesisTest::Test::SubType::OneSample))));	ui.chbPopulationSigma->setChecked(false);
 
-
-	ui.pbLeveneTest->setVisible(bool((m_test.type & (HypothesisTest::Test::Type::Anova |
-												HypothesisTest::Test::Type::TTest)) &
-								   setAllBits(m_test.subtype & HypothesisTest::Test::SubType::TwoSampleIndependent)));
+    ui.pbLeveneTest->setVisible(bool((m_test.type & HypothesisTest::Test::Type::Anova &
+                                        setAllBits(m_test.subtype & HypothesisTest::Test::SubType::OneWay)) |
+                                    (HypothesisTest::Test::Type::TTest &
+                                        setAllBits(m_test.subtype & HypothesisTest::Test::SubType::TwoSampleIndependent))));
 
 	ui.lH1->setVisible(bool(m_test.type & ~HypothesisTest::Test::Type::Anova));
 	ui.rbH1OneTail1->setVisible(bool(m_test.type & ~HypothesisTest::Test::Type::Anova));
@@ -730,7 +734,6 @@ void HypothesisTestDock::onRbH1TwoTailToggled(bool checked) {
 
 
 /**************************************Helper Functions********************************************/
-
 void HypothesisTestDock::countPartitions(Column *column, int &np, int &total_rows) {
 	total_rows = column->rowCount();
 	np = 0;
@@ -786,32 +789,78 @@ void HypothesisTestDock::setColumnsComboBoxView() {
 
 	ui.cbCol1->clear();
 	ui.cbCol2->clear();
+    ui.cbCol3->clear();
 
 	QList<Column*>::iterator i;
-	if (m_test.subtype & HypothesisTest::Test::SubType::TwoSampleIndependent) {
-		for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++) {
-			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
-			ui.cbCol2->addItem( (*i)->name(), qint64(*i));
-		}
-		for (i = m_twoCategoricalCols.begin(); i != m_twoCategoricalCols.end(); i++)
-			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
-	} else if (m_test.subtype & HypothesisTest::Test::SubType::TwoSamplePaired) {
-		for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++) {
-			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
-			ui.cbCol2->addItem( (*i)->name(), qint64(*i));
-		}
-	} else if (m_test.subtype & HypothesisTest::Test::SubType::OneSample) {
-		for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++)
-			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
-	} else if (m_test.type & HypothesisTest::Test::Type::Anova) {
-		for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++)
-			ui.cbCol2->addItem( (*i)->name(), qint64(*i));
 
-		for (i = m_twoCategoricalCols.begin(); i != m_twoCategoricalCols.end(); i++)
-			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
-		for (i = m_multiCategoricalCols.begin(); i != m_multiCategoricalCols.end(); i++)
-			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
-	}
+    switch (m_test.type) {
+    case (HypothesisTest::Test::Type::ZTest):
+    case (HypothesisTest::Test::Type::TTest): {
+        switch (m_test.subtype) {
+        case (HypothesisTest::Test::SubType::TwoSampleIndependent): {
+            for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++) {
+                ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+                ui.cbCol2->addItem( (*i)->name(), qint64(*i));
+            }
+            for (i = m_twoCategoricalCols.begin(); i != m_twoCategoricalCols.end(); i++)
+                ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+            break;
+        }
+        case (HypothesisTest::Test::SubType::TwoSamplePaired): {
+            for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++) {
+                ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+                ui.cbCol2->addItem( (*i)->name(), qint64(*i));
+            }
+            break;
+        }
+        case (HypothesisTest::Test::SubType::OneSample): {
+            for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++)
+                ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+            break;
+        }
+        case HypothesisTest::Test::SubType::OneWay:
+        case HypothesisTest::Test::SubType::TwoWay:
+        case HypothesisTest::Test::SubType::NoneSubType:
+            break;
+        }
+        break;
+    }
+    case HypothesisTest::Test::Type::Anova: {
+        switch (m_test.subtype) {
+        case HypothesisTest::Test::SubType::OneWay: {
+        for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++)
+            ui.cbCol2->addItem( (*i)->name(), qint64(*i));
+        for (i = m_twoCategoricalCols.begin(); i != m_twoCategoricalCols.end(); i++)
+            ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+        for (i = m_multiCategoricalCols.begin(); i != m_multiCategoricalCols.end(); i++)
+            ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+            break;
+        }
+        case HypothesisTest::Test::SubType::TwoWay: {
+            for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++)
+                ui.cbCol2->addItem( (*i)->name(), qint64(*i));
+
+            for (i = m_twoCategoricalCols.begin(); i != m_twoCategoricalCols.end(); i++) {
+                ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+                ui.cbCol3->addItem( (*i)->name(), qint64(*i));
+            }
+            for (i = m_multiCategoricalCols.begin(); i != m_multiCategoricalCols.end(); i++) {
+                ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+                ui.cbCol3->addItem( (*i)->name(), qint64(*i));
+            }
+            break;
+        }
+        case HypothesisTest::Test::SubType::TwoSampleIndependent:
+        case HypothesisTest::Test::SubType::TwoSamplePaired:
+        case HypothesisTest::Test::SubType::OneSample:
+        case HypothesisTest::Test::SubType::NoneSubType:
+            break;
+        }
+        break;
+    }
+    case HypothesisTest::Test::Type::NoneType:
+        break;
+    }
 }
 
 bool HypothesisTestDock::nonEmptySelectedColumns() {

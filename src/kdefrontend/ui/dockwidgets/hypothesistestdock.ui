@@ -507,7 +507,7 @@
    <item row="15" column="0">
     <widget class="QLabel" name="lCol3">
      <property name="text">
-      <string>TextLabel</string>
+      <string>Independent Var. 2</string>
      </property>
     </widget>
    </item>

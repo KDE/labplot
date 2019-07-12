@@ -123,7 +123,6 @@ void HypothesisTest::performTest(Test test, bool categoricalVariable, bool equal
 		break;
 	}
 	case HypothesisTest::Test::SubType::TwoWay:
-		break;
 	case HypothesisTest::Test::SubType::NoneSubType:
 		break;
 	}
@@ -318,7 +317,6 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 		break;
 	}
 	case HypothesisTest::Test::Type::Anova:
-		break;
 	case HypothesisTest::Test::Type::NoneType:
 		break;
 	}
@@ -494,7 +492,6 @@ void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test
 		break;
 	}
 	case HypothesisTest::Test::Type::Anova:
-		break;
 	case HypothesisTest::Test::Type::NoneType:
 		break;
 	}
@@ -1139,7 +1136,6 @@ double HypothesisTestPrivate::getPValue(const HypothesisTest::Test::Type& test, 
 		break;
 	}
 	case HypothesisTest::Test::Type::Anova:
-		break;
 	case HypothesisTest::Test::Type::NoneType:
 		break;
 	}
