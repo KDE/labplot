@@ -554,7 +554,7 @@ void ImportDatasetWidget::refreshCategories() {
 		oldBackup.close();
 
 		if(existingCategoriesFile.rename(m_jsonDir + QLatin1String("DatasetCollections_backup.json")))
-			qDebug() << "Creating backup done";
+			qDebug() << "Creating backup done " << m_jsonDir + QLatin1String("DatasetCollections_backup.json");
 		else {
 			qDebug() << " Couldn't create backup because " << existingCategoriesFile.errorString();
 		}
@@ -585,17 +585,17 @@ void ImportDatasetWidget::refreshCategories() {
 				downloadCollectionFile(currentCollection + ".json");
 			}else {
 				qDebug() << "Creating backup for " << currentCollection;
-				QFile oldBackup(m_jsonDir + currentCollection + "_backup.json");
-				if(oldBackup.exists()) {
-					oldBackup.remove();
+				QFile oldBackupCollection(m_jsonDir + currentCollection + "_backup.json");
+				if(oldBackupCollection.exists()) {
+					oldBackupCollection.remove();
 					qDebug() << "Old backup removed";
 				}
-				oldBackup.close();
+				oldBackupCollection.close();
 
-				if(existingCategoriesFile.rename(m_jsonDir + currentCollection + "_backup.json"))
+				if(existingCollectionFile.rename(m_jsonDir + currentCollection + "_backup.json"))
 					qDebug() << "Creating backup done";
 				else {
-					qDebug() << " Couldn't create backup because " << existingCategoriesFile.errorString();
+					qDebug() << " Couldn't create backup because " << existingCollectionFile.errorString();
 				}
 
 				downloadCollectionFile(currentCollection + ".json");
