@@ -503,6 +503,8 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* yColumn = columnFromName(name);
+			if (yColumn == xColumn)
+				continue;
 
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
 			plot->initDefault(CartesianPlot::FourAxes);
