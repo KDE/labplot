@@ -952,6 +952,11 @@ void XYCurvePrivate::retransform() {
 		int countPixelX = ceil(widthDatarectInch*QApplication::desktop()->physicalDpiX());
 		int countPixelY = ceil(heightDatarectInch*QApplication::desktop()->physicalDpiY());
 
+		if (countPixelX <=0 || countPixelY <=0) {
+			RESET_CURSOR;
+			return;
+		}
+
 		double minLogicalDiffX = 1/(plot->dataRect().width()/countPixelX);
 		double minLogicalDiffY = 1/(plot->dataRect().height()/countPixelY);
 		QVector<QVector<bool>> scenePointsUsed;
