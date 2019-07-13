@@ -734,12 +734,15 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 }
 
 void XYCurveDock::checkColumnAvailability(TreeViewComboBox* cb, const AbstractColumn* column, const QString columnPath) {
-
 	if (!cb)
 		return;// normally it shouldn't be called
 
-	if (columnPath.isEmpty())
-		return; // don't make the comboboxes red when initially created curves
+	// don't make the comboboxes red for initially created curves
+	if (!column && columnPath.isEmpty()) {
+		cb->setText("");
+		cb->setInvalid(false);
+		return;
+	}
 
 	if (column){
 		// current index text should be used
