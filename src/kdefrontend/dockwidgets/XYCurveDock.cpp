@@ -792,7 +792,6 @@ void XYCurveDock::showValuesColumnFormat(const Column* column) {
 }
 
 void XYCurveDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
-	DEBUG("XYCurveDock::setModelIndexFromAspect()");
 	if (aspect)
 		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(aspect));
 	else

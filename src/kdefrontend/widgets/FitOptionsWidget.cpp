@@ -181,7 +181,6 @@ void FitOptionsWidget::applyClicked() {
 	m_fitData->useResults = ui.cbUseResults->isChecked();
 	m_fitData->previewEnabled = ui.cbPreview->isChecked();
 
-	DEBUG("saving " << m_fitData->evalRange.first() << "  " << m_fitData->evalRange.last())
 	if (m_changed)
 		emit optionsChanged();
 

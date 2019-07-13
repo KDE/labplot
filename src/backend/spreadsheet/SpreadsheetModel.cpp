@@ -187,7 +187,6 @@ int SpreadsheetModel::columnCount(const QModelIndex& parent) const {
 }
 
 bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, int role) {
-	QDEBUG("setting value " << value)
 	if (!index.isValid())
 		return false;
 
