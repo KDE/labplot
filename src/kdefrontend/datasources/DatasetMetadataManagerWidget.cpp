@@ -60,8 +60,9 @@ DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, cons
 	m_baseColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#5f5f5f") : QLatin1String("#ffffff");
 	m_textColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#ffffff") : QLatin1String("#000000");
 
-	//ui.cbCategory->addItems(m_datasetModel->categories().toStringList());
-	//ui.cbSubcategory->addItems(m_datasetModel->subcategories(ui.cbCategory->currentText()).toStringList());
+	ui.cbCollection->addItems(m_datasetModel->collections());
+	ui.cbCategory->addItems(m_datasetModel->categories(ui.cbCollection->currentText()));
+	ui.cbSubcategory->addItems(m_datasetModel->subcategories(ui.cbCollection->currentText(), ui.cbCategory->currentText()));
 
 	ui.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
 	ui.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
@@ -85,6 +86,7 @@ DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, cons
 		emit checkOk();
 	});
 
+	connect(ui.cbCollection, &QComboBox::currentTextChanged, this, &DatasetMetadataManagerWidget::updateCategories);
 	connect(ui.cbCategory, &QComboBox::currentTextChanged, this, &DatasetMetadataManagerWidget::updateSubcategories);
 	connect(ui.bNewColumn, &QPushButton::clicked, this, &DatasetMetadataManagerWidget::addColumnDescription);
 	connect(ui.bDelete, &QPushButton::clicked, this, &DatasetMetadataManagerWidget::removeColumnDescription);
@@ -300,10 +302,20 @@ bool DatasetMetadataManagerWidget::checkDataValidity() {
 	const bool descriptionOk = checkDescription();
 	const bool categoryOk = checkCategories(ui.cbCategory);
 	const bool subcategoryOk = checkCategories(ui.cbSubcategory);
+	const bool collectionOk = checkCategories(ui.cbCollection);
 
-	enableDatasetSettings(categoryOk && subcategoryOk);
+	enableDatasetSettings(categoryOk && subcategoryOk && collectionOk);
 
-	return fileNameOK && urlOk && longNameOk && descriptionOk && subcategoryOk && categoryOk;
+	return fileNameOK && urlOk && longNameOk && descriptionOk && subcategoryOk && categoryOk && collectionOk;
+}
+
+void DatasetMetadataManagerWidget::updateCategories(const QString& collection) {
+	ui.cbCategory->clear();
+	if( m_datasetModel->collections().contains(collection)) {
+		ui.cbCategory->addItems(m_datasetModel->categories(collection));
+	}
+
+	emit checkOk();
 }
 
 /**
@@ -311,9 +323,11 @@ bool DatasetMetadataManagerWidget::checkDataValidity() {
  */
 void DatasetMetadataManagerWidget::updateSubcategories(const QString& category) {
 	ui.cbSubcategory->clear();
-	/*if( m_datasetModel->categories().toStringList().contains(category)) {
-		ui.cbSubcategory->addItems(m_datasetModel->subcategories(category).toStringList());
-	}*/
+	const QString collection = ui.cbCollection->currentText();
+	if( m_datasetModel->categories(collection).contains(category)) {
+		ui.cbSubcategory->addItems(m_datasetModel->subcategories(collection, category));
+	}
+
 	emit checkOk();
 }
 
@@ -321,104 +335,181 @@ void DatasetMetadataManagerWidget::updateSubcategories(const QString& category) 
  * @brief Updates the metadata file containing the categories, subcategories and datasets.
  * @param fileName the name of the metadata file (path)
  */
-void DatasetMetadataManagerWidget::updateDocument(const QString& fileName) {
-	qDebug() << "updating: " << fileName;
-	QFile file(fileName);
-	if (file.open(QIODevice::ReadWrite)) {
-		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
-		//qDebug() <<document.toJson();
-		QJsonObject rootObject = document.object();
-		QJsonValueRef categoryArrayRef = rootObject.find("categories").value();
-		QJsonArray categoryArray = categoryArrayRef.toArray();
+void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
+	if(m_datasetModel->collections().contains(ui.cbCollection->currentText())) {
 
-		bool foundCategory = false;
-		for(int i = 0 ; i < categoryArray.size(); ++i) {
-			QJsonValueRef categoryRef = categoryArray[i];
-			QJsonObject currentCategory = categoryRef.toObject();
-			QString categoryName = currentCategory.value("category_name").toString();
-			qDebug() << "Category name: " << categoryName;
+		QString fileName = dirPath + ui.cbCollection->currentText() + ".json";
+		qDebug() << "updating: " << fileName;
+		QFile file(fileName);
+		if (file.open(QIODevice::ReadWrite)) {
+			QJsonDocument document = QJsonDocument::fromJson(file.readAll());
+			//qDebug() <<document.toJson();
+			QJsonObject rootObject = document.object();
+			QJsonValueRef categoryArrayRef = rootObject.find("categories").value();
+			QJsonArray categoryArray = categoryArrayRef.toArray();
 
-			if(categoryName.compare(ui.cbCategory->currentText()) == 0) {
-				foundCategory = true;
-				QJsonValueRef subcategoryArrayRef = currentCategory.find("subcategories").value();
-				QJsonArray subcategoryArray = subcategoryArrayRef.toArray();
-				qDebug() << "subcategoryArray: " << subcategoryArray.toVariantList();
+			bool foundCategory = false;
+			for(int i = 0 ; i < categoryArray.size(); ++i) {
+				QJsonValueRef categoryRef = categoryArray[i];
+				QJsonObject currentCategory = categoryRef.toObject();
+				QString categoryName = currentCategory.value("category_name").toString();
+				qDebug() << "Category name: " << categoryName;
 
-				bool subcategoryFound = false;
+				if(categoryName.compare(ui.cbCategory->currentText()) == 0) {
+					foundCategory = true;
+					QJsonValueRef subcategoryArrayRef = currentCategory.find("subcategories").value();
+					QJsonArray subcategoryArray = subcategoryArrayRef.toArray();
+					qDebug() << "subcategoryArray: " << subcategoryArray.toVariantList();
 
-				for(int j = 0; j < subcategoryArray.size(); ++j) {
-					QJsonValueRef subcategoryRef = subcategoryArray[j];
-					QJsonObject currentSubcategory = subcategoryRef.toObject();
-					QString subcategoryName = currentSubcategory.value("subcategory_name").toString();
-					qDebug() << "Subcat name: " << subcategoryName;
+					bool subcategoryFound = false;
 
-					if(subcategoryName.compare(ui.cbSubcategory->currentText()) == 0) {
-						subcategoryFound = true;
-						QJsonValueRef datasetsRef = currentSubcategory.find("datasets").value();
-						QJsonArray datasets = datasetsRef.toArray();
-						qDebug() <<"Datasets content: " << datasets.toVariantList();
+					for(int j = 0; j < subcategoryArray.size(); ++j) {
+						QJsonValueRef subcategoryRef = subcategoryArray[j];
+						QJsonObject currentSubcategory = subcategoryRef.toObject();
+						QString subcategoryName = currentSubcategory.value("subcategory_name").toString();
+						qDebug() << "Subcat name: " << subcategoryName;
 
-						datasets.append(QJsonValue(ui.leFileName->text()));
-						datasetsRef = datasets;
+						if(subcategoryName.compare(ui.cbSubcategory->currentText()) == 0) {
+							subcategoryFound = true;
+							QJsonValueRef datasetsRef = currentSubcategory.find("datasets").value();
+							QJsonArray datasets = datasetsRef.toArray();
+							qDebug() <<"Datasets content: " << datasets.toVariantList();
 
-						subcategoryRef = currentSubcategory;
+							datasets.append(createDatasetObject());
+							datasetsRef = datasets;
+
+							subcategoryRef = currentSubcategory;
+							subcategoryArrayRef = subcategoryArray;
+							categoryRef = currentCategory;
+							categoryArrayRef = categoryArray;
+							document.setObject(rootObject);
+							break;
+						}
+					}
+
+					if(!subcategoryFound) {
+						qDebug() << "Subcat not found";
+						QJsonObject newSubcategory;
+						newSubcategory.insert("subcategory_name", ui.cbSubcategory->currentText());
+
+						QJsonArray datasets;
+						datasets.append(createDatasetObject());
+
+						newSubcategory.insert("datasets", datasets);
+						subcategoryArray.append(newSubcategory);
+
 						subcategoryArrayRef = subcategoryArray;
 						categoryRef = currentCategory;
 						categoryArrayRef = categoryArray;
 						document.setObject(rootObject);
-						break;
 					}
+					break;
 				}
-
-				if(!subcategoryFound) {
-					qDebug() << "Subcat not found";
-					QJsonObject newSubcategory;
-					newSubcategory.insert("subcategory_name", ui.cbSubcategory->currentText());
-
-					QJsonArray datasets;
-					datasets.append(QJsonValue(ui.leFileName->text()));
-
-					newSubcategory.insert("datasets", datasets);
-					subcategoryArray.append(newSubcategory);
-
-					subcategoryArrayRef = subcategoryArray;
-					categoryRef = currentCategory;
-					categoryArrayRef = categoryArray;
-					document.setObject(rootObject);
-				}
-				break;
 			}
+
+			if(!foundCategory) {
+				qDebug() << "Cat not found";
+				QJsonObject newCategory;
+				newCategory.insert("category_name", ui.cbCategory->currentText());
+
+				QJsonArray subcategoryArray;
+
+				QJsonObject newSubcategory;
+				newSubcategory.insert("subcategory_name", ui.cbSubcategory->currentText());
+
+				QJsonArray datasets;
+				datasets.append(createDatasetObject());
+				newSubcategory.insert("datasets", datasets);
+
+				subcategoryArray.append(newSubcategory);
+				newCategory.insert("subcategories", subcategoryArray);
+
+				categoryArray.append(newCategory);
+				categoryArrayRef = categoryArray;
+				document.setObject(rootObject);
+			}
+			qDebug() <<document.toJson();
+			file.close();
+			file.open(QIODevice::ReadWrite | QIODevice::Truncate);
+			file.write(document.toJson());
+			file.close();
+		} else {
+			qDebug() << "Couldn't open dataset category file, because " << file.errorString();
 		}
-
-		if(!foundCategory) {
-			qDebug() << "Cat not found";
-			QJsonObject newCategory;
-			newCategory.insert("category_name", ui.cbCategory->currentText());
-
-			QJsonArray subcategoryArray;
-
-			QJsonObject newSubcategory;
-			newSubcategory.insert("subcategory_name", ui.cbSubcategory->currentText());
-
-			QJsonArray datasets;
-			datasets.append(QJsonValue(ui.leFileName->text()));
-			newSubcategory.insert("datasets", datasets);
-
-			subcategoryArray.append(newSubcategory);
-			newCategory.insert("subcategories", subcategoryArray);
-
-			categoryArray.append(newCategory);
-			categoryArrayRef = categoryArray;
-			document.setObject(rootObject);
-		}
-		qDebug() <<document.toJson();
-		file.close();
-		file.open(QIODevice::ReadWrite | QIODevice::Truncate);
-		file.write(document.toJson());
-		file.close();
 	} else {
-		qDebug() << "Couldn't open dataset category file, because " << file.errorString();
+		QString fileName = dirPath + "DatasetCollections.json";
+		qDebug() << "creating: " << fileName;
+		QFile file(fileName);
+		if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
+			QJsonArray collectionArray;
+
+			for(QString collection : m_datasetModel->collections())
+				collectionArray.append(collection);
+
+			collectionArray.append(ui.cbCollection->currentText());
+
+			QJsonDocument newDocument;
+			newDocument.setArray(collectionArray);
+			file.write(newDocument.toJson());
+			file.close();
+		}
+
+		QJsonObject rootObject;
+
+		rootObject.insert("collection_name", ui.cbCollection->currentText());
+
+		QJsonArray categoryArray;
+		QJsonObject newCategory;
+		newCategory.insert("category_name", ui.cbCategory->currentText());
+
+		QJsonArray subcategoryArray;
+
+		QJsonObject newSubcategory;
+		newSubcategory.insert("subcategory_name", ui.cbSubcategory->currentText());
+
+		QJsonArray datasets;
+		datasets.append(createDatasetObject());
+		newSubcategory.insert("datasets", datasets);
+
+		subcategoryArray.append(newSubcategory);
+		newCategory.insert("subcategories", subcategoryArray);
+		categoryArray.append(newCategory);
+		rootObject.insert("categories", categoryArray);
+
+		QJsonDocument document;
+		document.setObject(rootObject);
+		qDebug() <<document.toJson();
+
+		QFile collectionFile(dirPath + ui.cbCollection->currentText() + ".json");
+		if (collectionFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+			collectionFile.write(document.toJson());
+			collectionFile.close();
+		}
 	}
+}
+
+QJsonObject DatasetMetadataManagerWidget::createDatasetObject() {
+	QJsonObject rootObject;
+
+	rootObject.insert("filename", ui.leFileName->text());
+	rootObject.insert("name", ui.leDatasetName->text());
+	rootObject.insert("download", ui.leDownloadURL->text());
+	rootObject.insert("description", ui.teDescription->toPlainText());
+	rootObject.insert("separator", ui.cbSeparatingCharacter->currentText());
+	rootObject.insert("comment_character", ui.cbCommentCharacter->currentText());
+	rootObject.insert("DateTime_format", ui.cbDateTimeFormat->currentText());
+	rootObject.insert("number_format", ui.cbNumberFormat->currentIndex());
+	rootObject.insert("create_index_column", ui.chbCreateIndex->isChecked());
+	rootObject.insert("skip_empty_parts", ui.chbSkipEmptyParts->isChecked());
+	rootObject.insert("simplify_whitespaces", ui.chbSimplifyWhitespaces->isChecked());
+	rootObject.insert("remove_quotes", ui.chbRemoveQuotes->isChecked());
+	rootObject.insert("use_first_row_for_vectorname", ui.chbHeader->isChecked());
+
+	for(int i = 0; i < m_columnDescriptions.size(); ++i) {
+		rootObject.insert(i18n("column_description_%1", i), m_columnDescriptions[i]);
+	}
+
+	return rootObject;
 }
 
 /**

@@ -14,14 +14,63 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="1">
+   <item row="2" column="1">
     <widget class="QComboBox" name="cbSubcategory">
      <property name="editable">
       <bool>true</bool>
      </property>
     </widget>
    </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lCategory">
+     <property name="text">
+      <string>Category</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QTextEdit" name="teDescription"/>
+   </item>
    <item row="7" column="0" colspan="2">
+    <widget class="QGroupBox" name="gbColumnDescriptions">
+     <property name="title">
+      <string>Column Descriptions</string>
+     </property>
+     <layout class="QGridLayout" name="columnLayout">
+      <item row="0" column="1">
+       <widget class="QPushButton" name="bDelete">
+        <property name="text">
+         <string>Delete Description</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="bNewColumn">
+        <property name="text">
+         <string>Add new description</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QLineEdit" name="leDatasetName"/>
+   </item>
+   <item row="8" column="0" colspan="2">
     <widget class="QGroupBox" name="gbFilter">
      <property name="title">
       <string>Filter Options</string>
@@ -138,101 +187,66 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QComboBox" name="cbCategory">
-     <property name="editable">
-      <bool>true</bool>
-     </property>
-    </widget>
+   <item row="3" column="1">
+    <widget class="QLineEdit" name="leFileName"/>
    </item>
    <item row="3" column="0">
-    <widget class="QLabel" name="lDatasetName">
-     <property name="text">
-      <string>Full name</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="lDownloadUrl">
-     <property name="text">
-      <string>Download URL</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
     <widget class="QLabel" name="lFileName">
      <property name="text">
       <string>Short name</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item row="5" column="1">
     <widget class="QLineEdit" name="leDownloadURL"/>
    </item>
    <item row="5" column="0">
+    <widget class="QLabel" name="lDownloadUrl">
+     <property name="text">
+      <string>Download URL</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
     <widget class="QLabel" name="lDescription">
      <property name="text">
       <string>Description</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="lCategory">
-     <property name="text">
-      <string>Category</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
+   <item row="2" column="0">
     <widget class="QLabel" name="lSubcategory">
      <property name="text">
       <string>Subcategory</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
-    <widget class="QTextEdit" name="teDescription"/>
-   </item>
-   <item row="3" column="1">
-    <widget class="QLineEdit" name="leDatasetName"/>
-   </item>
-   <item row="2" column="1">
-    <widget class="QLineEdit" name="leFileName"/>
-   </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="QGroupBox" name="gbColumnDescriptions">
-     <property name="title">
-      <string>Column Descriptions</string>
+   <item row="1" column="1">
+    <widget class="QComboBox" name="cbCategory">
+     <property name="editable">
+      <bool>true</bool>
      </property>
-     <layout class="QGridLayout" name="columnLayout">
-      <item row="0" column="1">
-       <widget class="QPushButton" name="bDelete">
-        <property name="text">
-         <string>Delete Description</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QPushButton" name="bNewColumn">
-        <property name="text">
-         <string>Add new description</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="lDatasetName">
+     <property name="text">
+      <string>Full name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="lCollection">
+     <property name="text">
+      <string>Collection</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="cbCollection">
+     <property name="editable">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
   </layout>

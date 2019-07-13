@@ -64,7 +64,6 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	m_jsonDir = baseDir + QDir::separator() + containingDir + QDir::separator();
 	ui.setupUi(this);
 
-	ui.cbCollections->addItem("All");
 	if(!QFile(m_jsonDir + "DatasetCollections.json").exists())
 		downloadCollectionsFile();
 	loadDatasetCategoriesFromJson();
@@ -120,6 +119,8 @@ void ImportDatasetWidget::loadDatasetCategoriesFromJson() {
 
 	if (file.open(QIODevice::ReadOnly)) {
 		m_datasetsMap.clear();
+		ui.cbCollections->clear();
+		ui.cbCollections->addItem("All");
 
 		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
 		QJsonArray collections;
@@ -482,8 +483,8 @@ void ImportDatasetWidget::showDatasetMetadataManager() {
 	if (dlg->exec() == QDialog::Accepted) {
 		const QString pathToJson =  m_jsonDir + QLatin1String("DatasetCategories.json");
 		const QString dirPath = QFileInfo(pathToJson).dir().absolutePath();
-		dlg->updateDocument(pathToJson);
-		dlg->createNewMetadata(dirPath);
+		dlg->updateDocument(m_jsonDir);
+		//dlg->createNewMetadata(dirPath);
 		uploadCategoryFile();
 		uploadDatasetFile(dlg->getMetadataFilePath());
 		loadDatasetCategoriesFromJson();
@@ -638,7 +639,7 @@ void ImportDatasetWidget::highlightLocalMetadataFiles() {
 		QListWidgetItem* const currentItem = ui.lwDatasets->item(i);
 		bool found = false;
 		for(QString entry : dir.entryList()) {
-			if(entry.startsWith(currentItem->text())) {
+			if(entry.startsWith(currentItem->text()) && !entry.endsWith(".json")) {
 				found = true;
 				break;
 			}

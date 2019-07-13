@@ -62,8 +62,10 @@ private:
     bool checkCategories(QComboBox*);
     void loadSettings();
     void enableDatasetSettings(bool);
+	QJsonObject createDatasetObject();
 
 private slots:
+	void updateCategories(const QString&);
     void updateSubcategories(const QString&);
     void addColumnDescription();
     void removeColumnDescription();

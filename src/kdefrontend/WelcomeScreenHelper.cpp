@@ -126,6 +126,7 @@ void WelcomeScreenHelper::loadConfig() {
  */
 void WelcomeScreenHelper::datasetClicked(const QString& category, const QString& subcategory, const QString& datasetName) {
 
+	m_datasetWidget->setCollection("All");
 	m_datasetWidget->setCategory(category);
 	m_datasetWidget->setSubcategory(subcategory);
 	m_datasetWidget->setDataset(datasetName);
