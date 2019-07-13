@@ -51,13 +51,12 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	setSelectionMode(QAbstractItemView::SingleSelection);
 	setWordWrap(true);
 	setViewMode(QListWidget::IconMode);
-	setResizeMode(QListWidget::Adjust);
+	setResizeMode(QListWidget::Fixed);
 	setDragDropMode(QListView::NoDragDrop);
 
 	//make the icon 3x3cm big and show two of them in the height
 	int size = 3.0/2.54 * QApplication::desktop()->physicalDpiX();
 	setIconSize(QSize(size, size));
-	setMinimumSize(1.1*size, 2.1*size); //add some offset here to take care of potential scrollbars, etc. (not very precise...)
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	//show preview pixmaps
@@ -91,7 +90,7 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
-	pa.drawRect(5, 5, size-10, size-10);
+	pa.drawRect(2, 2, size - 4, size - 4);
 	pa.end();
 
 	auto* listItem = new QStandardItem();
@@ -108,6 +107,14 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 // 	mContentItemModel->appendRow(listItem);
 
 	setModel(mContentItemModel);
+
+	//resize the widget to show three items
+	QFont font;
+	QFontMetrics fm(font);
+	QSize widgetSize(size + qApp->style()->pixelMetric(QStyle::PM_ScrollBarExtent),
+					 3*(size + fm.height() + spacing())  + fm.height());
+	setMinimumSize(widgetSize);
+	setMaximumSize(widgetSize);
 
 	//SLOTS
 	connect(this, &ThemesWidget::clicked, this, &ThemesWidget::applyClicked);
