@@ -702,8 +702,8 @@ void WorksheetPrivate::updatePageRect() {
 					elem->setUndoAware(true);
 				}
 			} else {
-				for (auto* child : childElements)
-					child->handleResize(horizontalRatio, verticalRatio, true);
+// 				for (auto* child : childElements)
+// 					child->handleResize(horizontalRatio, verticalRatio, true);
 			}
 		}
 	}
