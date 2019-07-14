@@ -179,8 +179,8 @@ void HypothesisTestPrivate::setDataSourceSpreadsheet(Spreadsheet* spreadsheet) {
 	dataSourceSpreadsheet = spreadsheet;
 
 	//setting rows and columns count;
-	rowCount = dataSourceSpreadsheet->rowCount();
-	columnCount = dataSourceSpreadsheet->columnCount();
+//	rowCount = dataSourceSpreadsheet->rowCount();
+//	columnCount = dataSourceSpreadsheet->columnCount();
 
 	for (auto* col : dataSourceSpreadsheet->children<Column>())
 		allColumns << col->name();
@@ -659,6 +659,7 @@ void HypothesisTestPrivate::performOneWayAnova() {
 // all formulas and symbols are taken from: http://statweb.stanford.edu/~susan/courses/s141/exanova.pdf
 
 //TODO: suppress warning of variable length array are a C99 feature.
+//TODO: changed int mean to double mean;
 void HypothesisTestPrivate::performTwoWayAnova() {
     clearTestView();
     int np_a, totalRows_a;
@@ -719,6 +720,45 @@ void HypothesisTestPrivate::performTwoWayAnova() {
             groupMean[i][j] /= replicates[i][j];
         }
 
+    for (int i = 0; i < np_a; i++)
+        for (int j = 0; j < np_b; j++)
+            groupMean[i][j] = int(groupMean[i][j]);
+
+    double ss_within = 0;
+    for (int i = 0; i < totalRows_a; i++) {
+        QString name_a = columns[0]->textAt(i);
+        QString name_b = columns[1]->textAt(i);
+        double value = columns[2]->valueAt(i);
+
+        ss_within += gsl_pow_2(value - groupMean[catToNumber_a[name_a] - 1][catToNumber_b[name_b] - 1]);
+    }
+
+    int df_within = (replicate - 1) * np_a * np_b;
+    double ms_within = ss_within / df_within;
+
+    double mean_a[np_a];
+    double mean_b[np_b];
+    for (int i = 0; i < np_a; i++) {
+        for (int j = 0; j < np_b; j++) {
+            mean_a[i] += groupMean[i][j] / np_b;
+            mean_b[j] += groupMean[i][j] / np_a;
+        }
+    }
+
+    double mean = 0;
+    for (int i = 0; i < np_a; i++)
+        mean += mean_a[i] / np_a;
+
+    QDEBUG("ss_within is " << ss_within);
+    QDEBUG("df_within is " << df_within);
+    QDEBUG("ms_within is " << ms_within);
+
+    for (int i = 0; i < np_a; i++)
+        QDEBUG("mean_a is " << mean_a[i]);
+    for (int i = 0; i < np_b; i++)
+        QDEBUG("mean_b is " << mean_b[i]);
+
+
     QString partitionNames_a[np_a];
     QString partitionNames_b[np_b];
 
@@ -734,38 +774,41 @@ void HypothesisTestPrivate::performTwoWayAnova() {
         partitionNames_b[itr_b.value()-1] = itr_b.key();
     }
 
-    // header data;
-    Node* columnHeaderRoot = new Node();
+    // printing table;
+    // cell constructor structure; data, level, rowSpanCount, columnSpanCount, isHeader;
+    QList<Cell*> rowMajor;
+    rowMajor.append(new Cell("", 0, true, 2, 1));
+    for (int i = 0; i < np_b; i++)
+        rowMajor.append(new Cell(partitionNames_b[i], 0, true, 1, 2));
+    rowMajor.append(new Cell("Mean", 0, true, 2));
 
     for (int i = 0; i < np_b; i++) {
-        Node* node = new Node();
-        node->data = partitionNames_b[i];
-
-        Node* childNodeMean = new Node();
-        childNodeMean->data = "Mean";
-        Node* childNodeReplicate = new Node();
-        childNodeReplicate->data = "Replicate";
-        node->addChild(childNodeMean);
-        node->addChild(childNodeReplicate);
-
-        columnHeaderRoot->addChild(node);
+        rowMajor.append(new Cell("Mean", 1, true));
+        rowMajor.append(new Cell("Replicate", 1, true));
     }
 
-    // table data
-    int rowCount = np_a, columnCount = np_b*2 + 1;
-    QVariant* rowMajor = new QVariant[rowCount*columnCount];
-
-    for (int row_i = 0; row_i < rowCount ; row_i++) {
-        rowMajor[row_i*columnCount] = partitionNames_a[row_i];
-        for (int col_i = 1; col_i < np_b + 1; col_i++) {
-            rowMajor[row_i*columnCount + 2*col_i-1] = round(groupMean[row_i][col_i-1]);
-            rowMajor[row_i*columnCount + 2*col_i] = round(replicates[row_i][col_i-1]);
+    int level = 2;
+    for (int i = 0; i < np_a; i++) {
+        rowMajor.append(new Cell(partitionNames_a[i], level, true));
+        for (int j = 0; j < np_b; j++) {
+            rowMajor.append(new Cell(groupMean[i][j], level));
+            rowMajor.append(new Cell(replicates[i][j], level));
         }
+        rowMajor.append(new Cell(mean_a[i], level));
+        level++;
     }
+
+    rowMajor.append(new Cell("Mean", level, true));
+    for (int i = 0; i < np_b; i++)
+        rowMajor.append(new Cell(mean_b[i], level, false, 1, 2));
+    rowMajor.append(new Cell(mean, level));
 
     statsTable = "<h3>" + i18n("Contingency Table") + "</h3>";
-    statsTable += getHtmlTable2(rowCount, columnCount, columnHeaderRoot, rowMajor);
+    statsTable += getHtmlTable3(rowMajor);
 
+//    QDEBUG("");
+//    QDEBUG("");
+//    QDEBUG(statsTable);
     return;
 }
 
@@ -1366,7 +1409,7 @@ QString HypothesisTestPrivate::getHtmlTable2(int rowCount, int columnCount, Node
 
 
 QString HypothesisTestPrivate::getHtmlTable(int row, int column, QVariant* rowMajor) {
-    if (rowCount < 1 || columnCount < 1)
+    if (row < 1 || column < 1)
 		return QString();
 
     QString table;
@@ -1416,6 +1459,48 @@ QString HypothesisTestPrivate::getHtmlTable(int row, int column, QVariant* rowMa
     }
     table +=  "</table>";
 
+    return table;
+}
+
+QString HypothesisTestPrivate::getHtmlTable3(const QList<HypothesisTestPrivate::Cell*>& rowMajor) {
+    int rowMajorSize = rowMajor.size();
+
+    if (rowMajorSize == 0)
+        return QString();
+
+    QString table;
+    table = "<style type=text/css>"
+            ".tg  {border-collapse:collapse;border: 1px solid black;}"
+            ".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border: 1px solid black;overflow:hidden;word-break:normal;color:#333;background-color:#fff;}"
+            ".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border: 1px solid black;overflow:hidden;word-break:normal;color:#333;background-color:#f0f0f0;}"
+            "</style><table class=tg>";
+
+    table += "  <tr>";
+    int prevLevel = 0;
+    for (int i = 0; i < rowMajorSize; i++) {
+        Cell* currCell = rowMajor[i];
+        if (currCell->level != prevLevel) {
+            table += "  </tr>";
+            table += "  <tr>";
+            prevLevel = currCell->level;
+        }
+        QString cellStartTag = "<td ";
+        QString cellEndTag = "</td>";
+
+        if (currCell->isHeader) {
+            cellStartTag = "<th ";
+            cellEndTag = "</th>";
+        }
+
+        table += cellStartTag +
+                "rowspan=" + QString::number(currCell->rowSpanCount) +
+                " " +
+                "colspan=" + QString::number(currCell->columnSpanCount) +
+                ">" +
+                i18n("%1", currCell->data) +
+                cellEndTag;
+    }
+    table += "  <tr>";
     return table;
 }
 

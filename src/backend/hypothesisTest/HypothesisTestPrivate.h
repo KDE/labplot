@@ -49,6 +49,21 @@ public:
         }
     };
 
+    struct Cell {
+        QString data;
+        int level;
+        int rowSpanCount;
+        int columnSpanCount;
+        bool isHeader;
+        Cell(QVariant data = "", int level = 0, bool isHeader = false, int rowSpanCount = 1, int columnSpanCount = 1) {
+            this->data = data.toString();
+            this->level = level;
+            this->isHeader = isHeader;
+            this->rowSpanCount = rowSpanCount;
+            this->columnSpanCount = columnSpanCount;
+        }
+    };
+
 	enum ErrorType {ErrorUnqualSize, ErrorEmptyColumn, NoError};
 
 	QString name() const;
@@ -68,8 +83,8 @@ public:
 	QVector<Column*> columns;
 	QStringList allColumns;
 
-	int rowCount{0};
-	int columnCount{0};
+//	int rowCount{0};
+//	int columnCount{0};
 	QString currTestName{"Result Table"};
 	double populationMean;
 	double significanceLevel;
@@ -96,6 +111,8 @@ private:
     QString getHtmlHeader(Node* root);
     QString getHtmlTable2(int rowCount, int columnCount, Node* columnHeaderRoot, QVariant* rowMajor);
     QString getHtmlTable(int row, int column, QVariant* rowMajor);
+    QString getHtmlTable3(const QList<Cell*>& rowMajor);
+
 
 	QString getLine(const QString& msg, const QString& color = "black");
 	void printLine(const int& index, const QString& msg, const QString& color = "black");
