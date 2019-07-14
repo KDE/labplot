@@ -255,7 +255,6 @@ void ColumnDock::typeChanged(int index) {
 		return;
 
 	AbstractColumn::ColumnMode columnMode = (AbstractColumn::ColumnMode)ui.cbType->itemData(index).toInt();
-	int format_index = ui.cbFormat->currentIndex();
 
 	m_initializing = true;
 	this->updateFormatWidgets(columnMode);
@@ -268,7 +267,13 @@ void ColumnDock::typeChanged(int index) {
 				col->beginMacro(i18n("%1: change column type", col->name()));
 				col->setColumnMode(columnMode);
 				auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
-				filter->setNumericFormat(ui.cbFormat->itemData(format_index).toChar().toLatin1());
+
+				//TODO: using
+				//char format = ui.cbFormat->itemData(ui.cbFormat->currentIndex()).toChar().toLatin1();
+				//outside of the for-loop and
+				//filter->setNumericFormat(format);
+				//inseide the loop leads to wrong results when converting from integer to numeric -> 'f' is set instead of 'e'
+				filter->setNumericFormat(ui.cbFormat->itemData(ui.cbFormat->currentIndex()).toChar().toLatin1());
 				filter->setNumDigits(digits);
 				col->endMacro();
 			}
@@ -315,13 +320,13 @@ void ColumnDock::formatChanged(int index) {
 		return;
 
 	AbstractColumn::ColumnMode mode = (AbstractColumn::ColumnMode)ui.cbType->itemData(ui.cbType->currentIndex()).toInt();
-	int format_index = index;
 
 	switch (mode) {
 	case AbstractColumn::Numeric: {
+			char format = ui.cbFormat->itemData(index).toChar().toLatin1();
 			for (auto* col : m_columnsList) {
 				auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
-				filter->setNumericFormat(ui.cbFormat->itemData(format_index).toChar().toLatin1());
+				filter->setNumericFormat(format);
 			}
 			break;
 		}
@@ -331,7 +336,7 @@ void ColumnDock::formatChanged(int index) {
 	case AbstractColumn::Month:
 	case AbstractColumn::Day:
 	case AbstractColumn::DateTime: {
-			QString format = ui.cbFormat->itemData(ui.cbFormat->currentIndex()).toString();
+			QString format = ui.cbFormat->itemData(index).toString();
 			for (auto* col : m_columnsList) {
 				auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 				filter->setFormat(format);
