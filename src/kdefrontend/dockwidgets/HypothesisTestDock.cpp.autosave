@@ -218,7 +218,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
     ui.cbTest->setCurrentIndex(0);
     emit ui.cbTest->currentIndexChanged(0);
     ui.cbTestType->setCurrentIndex(0);
-    emit ui.cbTestType->currentIndexChanged(0);
+    emit ui.cbTestType->currentIndexChanged(0); 
 }
 
 void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
@@ -228,12 +228,13 @@ void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
 
 	m_aspectTreeModel = new AspectTreeModel(m_hypothesisTest->project());
 
-	QList<AspectType> list{AspectType::Folder, AspectType::Workbook,
-	                       AspectType::Spreadsheet, AspectType::LiveDataSource};
+	QList<const char*> list;
+	list << "Folder" << "Workbook" << "Spreadsheet" << "LiveDataSource";
 	cbSpreadsheet->setTopLevelClasses(list);
 
-    list = {AspectType::Spreadsheet, AspectType::LiveDataSource};
-    m_aspectTreeModel->setSelectableAspects(list);
+	list.clear();
+	list << "Spreadsheet" << "LiveDataSource";
+	m_aspectTreeModel->setSelectableAspects(list);
 
 	cbSpreadsheet->setModel(m_aspectTreeModel);
 
