@@ -399,7 +399,7 @@ void PivotTableDock::connectionChanged() {
 }
 
 void PivotTableDock::tableChanged() {
-	const QString& table = ui.cbTable->currentText();
+	//TODO const QString& table = ui.cbTable->currentText();
 
 	//show all attributes of the selected table
 // 	for (const auto* col : spreadsheet->children<Column>()) {
