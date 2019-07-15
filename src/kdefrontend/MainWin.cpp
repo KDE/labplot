@@ -335,7 +335,7 @@ void MainWin::initGUI(const QString& fileName) {
 QQuickWidget* MainWin::createWelcomeScreen() {
 	//showMaximized();
 	//QSize maxSize = qApp->primaryScreen()->availableSize();
-	setFixedSize(qApp->screens().first()->availableGeometry().size());
+	/*setFixedSize(qApp->screens().first()->availableGeometry().size());
 	setGeometry(
 		QStyle::alignedRect(
 			Qt::LeftToRight,
@@ -343,7 +343,8 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 			size(),
 			qApp->desktop()->availableGeometry()
 		)
-	);
+	);*/
+	setMinimumSize(700, 400);
 
 	qDebug() << "Main win size  " << size();
 

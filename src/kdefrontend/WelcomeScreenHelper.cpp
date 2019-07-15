@@ -77,9 +77,12 @@ WelcomeScreenHelper::~WelcomeScreenHelper() {
 	conf.writeEntry("width_count", widthCount);
 	int currentWidthIndex = 0;
 
+	qDebug() << "Destructor save width " << m_widthScale;
+
 	for(auto item = m_widthScale.begin(); item != m_widthScale.end() && currentWidthIndex < widthCount; item++) {
+		qDebug() << "Save width  "  << item.key() << item.value();
 		conf.writeEntry("widthName_" + QString::number(currentWidthIndex), item.key());
-		conf.writeEntry("widthValue_" + QString::number(currentWidthIndex), item.value());
+		conf.writeEntry("widthValue_" + QString::number(currentWidthIndex), QString::number(item.value()));
 		currentWidthIndex++;
 	}
 
@@ -87,9 +90,12 @@ WelcomeScreenHelper::~WelcomeScreenHelper() {
 	conf.writeEntry("height_count", widthCount);
 	int currentHeightIndex = 0;
 
+	qDebug() << "Destructor save height " << m_widthScale;
+
 	for(auto item = m_heightScale.begin(); item != m_heightScale.end() && currentHeightIndex < heightCount; item++) {
+		qDebug() << "Save height  "  << item.key() << item.value();
 		conf.writeEntry("heightName_" + QString::number(currentHeightIndex), item.key());
-		conf.writeEntry("heightValue_" + QString::number(currentHeightIndex), item.value());
+		conf.writeEntry("heightValue_" + QString::number(currentHeightIndex), QString::number(item.value()));
 		currentHeightIndex++;
 	}
 }
@@ -100,7 +106,9 @@ void WelcomeScreenHelper::loadConfig() {
 	int widthCount = conf.readEntry("width_count", -1);
 	for(int i = 0; i < widthCount; ++i) {
 		QString id = conf.readEntry("widthName_" + QString::number(i), "");
-		double value = conf.readEntry("widthValue_" + QString::number(i), -1);
+		double value = QString(conf.readEntry("widthValue_" + QString::number(i), "-1")).toDouble();
+
+		qDebug() << "Welcome screen helper load width: " << id << "  " << value;
 
 		if(!id.isEmpty() && value != -1)
 			m_widthScale[id] = value;
@@ -109,7 +117,10 @@ void WelcomeScreenHelper::loadConfig() {
 	int heightCount = conf.readEntry("height_count", -1);
 	for(int i = 0; i < heightCount; ++i) {
 		QString id = conf.readEntry("heightName_" + QString::number(i), "");
-		double value = conf.readEntry("heightValue_" + QString::number(i), -1);
+		double value = QString(conf.readEntry("heightValue_" + QString::number(i), "-1")).toDouble();
+
+
+		qDebug() << "Welcome screen helper load height: " << id << "  " << value;
 
 		if(!id.isEmpty() && value != -1)
 			m_heightScale[id] = value;
@@ -357,22 +368,32 @@ QVariant WelcomeScreenHelper::searchExampleProjects(const QString& searchtext) {
 
 void WelcomeScreenHelper::setWidthScale(QString sectionID, double scale) {
 	m_widthScale[sectionID] = scale;
+	qDebug() << "Width scale " << sectionID << "  " << scale;
 }
 
 void WelcomeScreenHelper::setHeightScale(QString sectionID, double scale) {
 	m_heightScale[sectionID] = scale;
+	qDebug() << "Height scale " << sectionID << "  " << scale;
 }
 
 QVariant WelcomeScreenHelper::getWidthScale(QString sectionID) {
-	if(m_widthScale.keys().contains(sectionID))
+	if(m_widthScale.keys().contains(sectionID)) {
+		qDebug() << "Width scale " << sectionID << "  " << m_widthScale[sectionID];
 		return QVariant(m_widthScale[sectionID]);
+	}
+
+	qDebug() << "Can't get " << sectionID;
 
 	return QVariant(-1);
 }
 
 QVariant WelcomeScreenHelper::getHeightScale(QString sectionID) {
-	if(m_heightScale.keys().contains(sectionID))
+	if(m_heightScale.keys().contains(sectionID)) {
+		qDebug() << "Height scale " << sectionID << "  " << m_heightScale[sectionID];
 		return QVariant(m_heightScale[sectionID]);
+	}
+
+	qDebug() << "Can't get " << sectionID;
 
 	return QVariant(-1);;
 }

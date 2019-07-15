@@ -30,34 +30,34 @@ Rectangle {
 
     function restoreOriginalLayout() {
         console.log("Restore widget dimensions")
-        recentProjectsFrame.width = mainWindow.width / 5 - 4*mainWindow.spacing
-        recentProjectsFrame.height = mainWindow.height / 4 - 4*mainWindow.spacing
-        exampleProjects.width = 3 * mainWindow.width / 5 - 4*mainWindow.spacing
-        exampleProjects.height = mainWindow.height / 4 - 4*mainWindow.spacing
-        newsSection.width = mainWindow.width / 5 - 4*mainWindow.spacing
-        newsSection.height = mainWindow.height- 4*mainWindow.spacing
-        helpFrame.width = mainWindow.width / 5 - 4*mainWindow.spacing
-        helpFrame.height = mainWindow.height / 4 - 4*mainWindow.spacing
-        datasetFrame.width = 3 * mainWindow.width / 5 - 4*mainWindow.spacing
-        datasetFrame.height = mainWindow.height / 4 - 4*mainWindow.spacing
-        releaseSection.width = 4 * mainWindow.width / 5 - 4*mainWindow.spacing
-        releaseSection.height = 2*mainWindow.height / 4 - 4*mainWindow.spacing
+        recentProjectsFrame.widthRate = (mainWindow.width / 5 - 4*mainWindow.spacing)/ mainWindow.width
+        recentProjectsFrame.heightRate = (mainWindow.height / 4 - 4*mainWindow.spacing)/ mainWindow.height
+        exampleProjects.widthRate = (3 * mainWindow.width / 5 - 4*mainWindow.spacing) / mainWindow.width
+        exampleProjects.heightRate =(mainWindow.height / 4 - 4*mainWindow.spacing) / mainWindow.height
+        newsSection.widthRate = (mainWindow.width / 5 - 4*mainWindow.spacing) / mainWindow.width
+        newsSection.heightRate = (mainWindow.height- 4*mainWindow.spacing) / mainWindow.height
+        helpFrame.widthRate = (mainWindow.width / 5 - 4*mainWindow.spacing) / mainWindow.width
+        helpFrame.heightRate = (mainWindow.height / 4 - 4*mainWindow.spacing) / mainWindow.height
+        datasetFrame.widthRate = (3 * mainWindow.width / 5 - 4*mainWindow.spacing) / mainWindow.width
+        datasetFrame.heightRate = (mainWindow.height / 4 - 4*mainWindow.spacing) / mainWindow.height
+        releaseSection.widthRate = (4 * mainWindow.width / 5 - 4*mainWindow.spacing) / mainWindow.width
+        releaseSection.heightRate = (2*mainWindow.height / 4 - 4*mainWindow.spacing) / mainWindow.height
     }
 
     function saveWidgetDimensions() {
         console.log("Save welcome screen widget dimensions")
-        helper.setHeightScale(recentProjectsFrame.sectionName, recentProjectsFrame.height)
-        helper.setWidthScale(recentProjectsFrame.sectionName, recentProjectsFrame.width)
-        helper.setHeightScale(exampleProjects.sectionName, exampleProjects.height)
-        helper.setWidthScale(exampleProjects.sectionName, exampleProjects.width)
-        helper.setHeightScale(newsSection.sectionName, newsSection.height)
-        helper.setWidthScale(newsSection.sectionName, newsSection.width)
-        helper.setHeightScale(helpFrame.sectionName, helpFrame.height)
-        helper.setWidthScale(helpFrame.sectionName, helpFrame.width)
-        helper.setHeightScale(datasetFrame.sectionName, datasetFrame.height)
-        helper.setWidthScale(datasetFrame.sectionName, datasetFrame.width)
-        helper.setHeightScale(releaseSection.sectionName, releaseSection.height)
-        helper.setWidthScale(releaseSection.sectionName, releaseSection.width)
+        helper.setHeightScale(recentProjectsFrame.sectionName, recentProjectsFrame.heightRate)
+        helper.setWidthScale(recentProjectsFrame.sectionName, recentProjectsFrame.widthRate)
+        helper.setHeightScale(exampleProjects.sectionName, exampleProjects.heightRate)
+        helper.setWidthScale(exampleProjects.sectionName, exampleProjects.widthRate)
+        helper.setHeightScale(newsSection.sectionName, newsSection.heightRate)
+        helper.setWidthScale(newsSection.sectionName, newsSection.widthRate)
+        helper.setHeightScale(helpFrame.sectionName, helpFrame.heightRate)
+        helper.setWidthScale(helpFrame.sectionName, helpFrame.widthRate)
+        helper.setHeightScale(datasetFrame.sectionName, datasetFrame.heightRate)
+        helper.setWidthScale(datasetFrame.sectionName, datasetFrame.widthRate)
+        helper.setHeightScale(releaseSection.sectionName, releaseSection.heightRate)
+        helper.setWidthScale(releaseSection.sectionName, releaseSection.widthRate)
     }
 
     function hideTiles() {
@@ -115,8 +115,10 @@ Rectangle {
     Frame {
         id: recentProjectsFrame
         property string sectionName: "recentProjectsFrame"
-        width: helper.getWidthScale(sectionName) === -1 ? mainWindow.width / 5 - 4*mainWindow.spacing : helper.getWidthScale(sectionName)
-        height: helper.getHeightScale(sectionName) === -1 ? mainWindow.height / 4 - 4*mainWindow.spacing : helper.getHeightScale(sectionName)
+        property double widthRate : helper.getWidthScale(sectionName) === -1 ? (mainWindow.width / 5 - 4*mainWindow.spacing) /  mainWindow.width : helper.getWidthScale(sectionName)
+        property double heightRate : helper.getHeightScale(sectionName) === -1 ? (mainWindow.height / 4 - 4*mainWindow.spacing) /  mainWindow.height : helper.getHeightScale(sectionName)
+        width: mainWindow.width * widthRate
+        height: mainWindow.height * heightRate
         anchors.top: parent.top
         anchors.topMargin: mainWindow.spacing
         anchors.left: parent.left
@@ -156,15 +158,15 @@ Rectangle {
                 drag{ target: parent; axis: Drag.XAxis;}
                 onMouseXChanged: {
                     if(drag.active){
-                        recentProjectsFrame.width = recentProjectsFrame.width + mouseX
-                        exampleProjects.width = exampleProjects.width - mouseX
+                        recentProjectsFrame.widthRate = (recentProjectsFrame.width + mouseX) / mainWindow.width
+                        exampleProjects.widthRate = (exampleProjects.width - mouseX) / mainWindow.width
                         if(recentProjectsFrame.width < 150){
-                            recentProjectsFrame.width = 150
-                            exampleProjects.width = mainWindow.width - newsSection.width - 150 - 4*mainWindow.spacing
+                            recentProjectsFrame.widthRate = 150 / mainWindow.width
+                            exampleProjects.widthRate = (mainWindow.width - newsSection.width - 150 - 4*mainWindow.spacing) / mainWindow.width
                         }
                         if(exampleProjects.width < 300) {
-                            exampleProjects.width = 300
-                            recentProjectsFrame.width = mainWindow.width - newsSection.width - 300 - 4*mainWindow.spacing
+                            exampleProjects.widthRate = 300 / mainWindow.width
+                            recentProjectsFrame.widthRate = (mainWindow.width - newsSection.width - 300 - 4*mainWindow.spacing) / mainWindow.width
                         }
 
                     }
@@ -194,21 +196,21 @@ Rectangle {
                 drag{ target: parent; axis: Drag.YAxis }
                 onMouseYChanged: {
                     if(drag.active){
-                        recentProjectsFrame.height = recentProjectsFrame.height + mouseY
-                        exampleProjects.height = exampleProjects.height + mouseY
-                        helpFrame.height = helpFrame.height - mouseY
-                        datasetFrame.height = datasetFrame.height - mouseY
+                        recentProjectsFrame.heightRate = (recentProjectsFrame.height + mouseY) / mainWindow.height
+                        exampleProjects.heightRate = (exampleProjects.height + mouseY) / mainWindow.height
+                        helpFrame.heightRate = (helpFrame.height - mouseY) / mainWindow.height
+                        datasetFrame.heightRate = (datasetFrame.height - mouseY) / mainWindow.height
                         if(recentProjectsFrame.height < 100 || exampleProjects.height < 100) {
-                            recentProjectsFrame.height = 100
-                            exampleProjects.height = 100
-                            helpFrame.height = mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing
-                            datasetFrame.height = mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing
+                            recentProjectsFrame.heightRate = 100 / mainWindow.height
+                            exampleProjects.heightRate = 100 / mainWindow.height
+                            helpFrame.heightRate = (mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing) / mainWindow.height
+                            datasetFrame.heightRate = (mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing) / mainWindow.height
                         }
                         if(helpFrame.height < 100 || datasetFrame.height < 100) {
-                            helpFrame.height = 100
-                            datasetFrame.height = 100
-                            recentProjectsFrame.height = mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing
-                            exampleProjects.height = mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing
+                            helpFrame.heightRate = 100 / mainWindow.height
+                            datasetFrame.heightRate = 100 / mainWindow.height
+                            recentProjectsFrame.heightRate = (mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing) / mainWindow.height
+                            exampleProjects.heightRate = (mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing) / mainWindow.height
                         }
                     }
                 }
@@ -244,8 +246,8 @@ Rectangle {
                         onClicked: {
                             if(!recentProjectsFrame.fullScreen) {
                                 hideTiles()
-                                recentProjectsFrame.prevWidth = recentProjectsFrame.width
-                                recentProjectsFrame.prevHeight = recentProjectsFrame.height
+                                recentProjectsFrame.prevWidth = recentProjectsFrame.widthRate
+                                recentProjectsFrame.prevHeight = recentProjectsFrame.heightRate
                                 recentProjectsFrame.visible = true
                                 recentProjectsFrame.z = 1
                                 recentProjectsFrame.anchors.fill = undefined
@@ -254,8 +256,8 @@ Rectangle {
                                 recentProjectsFrame.anchors.centerIn = undefined
                                 recentProjectsFrame.anchors.top = undefined
                                 recentProjectsFrame.anchors.left = undefined
-                                recentProjectsFrame.width = mainWindow.width
-                                recentProjectsFrame.height = mainWindow.height
+                                recentProjectsFrame.widthRate = 1
+                                recentProjectsFrame.heightRate = 1
                                 recentProjectsFrame.anchors.fill = mainWindow
                             } else {
                                 recentProjectsFrame.anchors.fill = undefined
@@ -268,8 +270,8 @@ Rectangle {
                                 recentProjectsFrame.anchors.topMargin = mainWindow.spacing
                                 recentProjectsFrame.anchors.left = mainWindow.left
                                 recentProjectsFrame.anchors.leftMargin = mainWindow.spacing
-                                recentProjectsFrame.width = recentProjectsFrame.prevWidth
-                                recentProjectsFrame.height = recentProjectsFrame.prevHeight
+                                recentProjectsFrame.widthRate = recentProjectsFrame.prevWidth
+                                recentProjectsFrame.heightRate = recentProjectsFrame.prevHeight
 
                                 showTiles();
                             }
@@ -315,8 +317,10 @@ Rectangle {
     Frame {
         id: exampleProjects
         property string sectionName: "exampleProjects"
-        width: helper.getWidthScale(sectionName) === -1 ? 3 * mainWindow.width / 5 - 4*mainWindow.spacing : helper.getWidthScale(sectionName)
-        height: helper.getHeightScale(sectionName) === -1 ? mainWindow.height / 4 - 4*mainWindow.spacing : helper.getHeightScale(sectionName)
+        property double widthRate : helper.getWidthScale(sectionName) === -1 ? (3 * mainWindow.width / 5 - 4*mainWindow.spacing) / mainWindow.width : helper.getWidthScale(sectionName)
+        property double heightRate : helper.getHeightScale(sectionName) === -1 ? (mainWindow.height / 4 - 4*mainWindow.spacing) / mainWindow.height : helper.getHeightScale(sectionName)
+        width: mainWindow.width * widthRate
+        height: mainWindow.height * heightRate
         anchors.top: parent.top
         anchors.topMargin: mainWindow.spacing
         anchors.left: recentProjectsFrame.right
@@ -359,25 +363,25 @@ Rectangle {
                 drag{ target: parent; axis: Drag.XAxis }
                 onMouseXChanged: {
                     if(drag.active){
-                        newsSection.width = newsSection.width - mouseX
-                        exampleProjects.width = exampleProjects.width + mouseX
-                        datasetFrame.width = datasetFrame.width + mouseX
-                        releaseSection.width = releaseSection.width + mouseX
+                        newsSection.widthRate = (newsSection.width - mouseX) / mainWindow.width
+                        exampleProjects.widthRate = (exampleProjects.width + mouseX) / mainWindow.width
+                        datasetFrame.widthRate = (datasetFrame.width + mouseX) / mainWindow.width
+                        releaseSection.widthRate = (releaseSection.width + mouseX) / mainWindow.width
                         if(exampleProjects.width < 300
                                 || datasetFrame.width < 300){
 
 
-                            newsSection.width = mainWindow.width - Math.max(recentProjectsFrame.width, helpFrame.width) - 300 - 4*mainWindow.spacing
-                            exampleProjects.width = mainWindow.width - newsSection.width - recentProjectsFrame.width - 4*mainWindow.spacing
-                            datasetFrame.width = mainWindow.width - newsSection.width - helpFrame.width - 4*mainWindow.spacing
-                            releaseSection.width = Math.max(recentProjectsFrame.width, helpFrame.width) + mainWindow.spacing + 300
+                            newsSection.widthRate = (mainWindow.width - Math.max(recentProjectsFrame.width, helpFrame.width) - 300 - 4*mainWindow.spacing) / mainWindow.width
+                            exampleProjects.widthRate = (mainWindow.width - newsSection.width - recentProjectsFrame.width - 4*mainWindow.spacing) / mainWindow.width
+                            datasetFrame.widthRate = (mainWindow.width - newsSection.width - helpFrame.width - 4*mainWindow.spacing) / mainWindow.width
+                            releaseSection.widthRate = (Math.max(recentProjectsFrame.width, helpFrame.width) + mainWindow.spacing + 300) / mainWindow.width
 
                         }
                         if(newsSection.width < 150) {
-                            newsSection.width = 150
-                            exampleProjects.width = mainWindow.width - recentProjectsFrame.width - 150 - 4*mainWindow.spacing
-                            datasetFrame.width = mainWindow.width - helpFrame.width - 150 - 4*mainWindow.spacing
-                            releaseSection.width = mainWindow.width - newsSection.width - 3*mainWindow.spacing
+                            newsSection.widthRate = 150 / mainWindow.width
+                            exampleProjects.widthRate = (mainWindow.width - recentProjectsFrame.width - 150 - 4*mainWindow.spacing) / mainWindow.width
+                            datasetFrame.widthRate =(mainWindow.width - helpFrame.width - 150 - 4*mainWindow.spacing) / mainWindow.width
+                            releaseSection.widthRate = (mainWindow.width - newsSection.width - 3*mainWindow.spacing) / mainWindow.width
                         }
 
                     }
@@ -407,21 +411,21 @@ Rectangle {
                 drag{ target: parent; axis: Drag.YAxis }
                 onMouseYChanged: {
                     if(drag.active){
-                        recentProjectsFrame.height = recentProjectsFrame.height + mouseY
-                        exampleProjects.height = exampleProjects.height + mouseY
-                        helpFrame.height = helpFrame.height - mouseY
-                        datasetFrame.height = datasetFrame.height - mouseY
+                        recentProjectsFrame.heightRate = (recentProjectsFrame.height + mouseY) / mainWindow.height
+                        exampleProjects.heightRate = (exampleProjects.height + mouseY) / mainWindow.height
+                        helpFrame.heightRate = (helpFrame.height - mouseY) / mainWindow.height
+                        datasetFrame.heightRate = (datasetFrame.height - mouseY) / mainWindow.height
                         if(recentProjectsFrame.height < 100 || exampleProjects.height < 100) {
-                            recentProjectsFrame.height = 100
-                            exampleProjects.height = 100
-                            helpFrame.height = mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing
-                            datasetFrame.height = mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing
+                            recentProjectsFrame.heightRate = 100 / mainWindow.height
+                            exampleProjects.heightRate = 100/ mainWindow.height
+                            helpFrame.heightRate = (mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing) / mainWindow.height
+                            datasetFrame.heightRate = (mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing) / mainWindow.height
                         }
                         if(helpFrame.height < 100 || datasetFrame.height < 100) {
-                            helpFrame.height = 100
-                            datasetFrame.height = 100
-                            recentProjectsFrame.height = mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing
-                            exampleProjects.height = mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing
+                            helpFrame.heightRate = 100 / mainWindow.height
+                            datasetFrame.heightRate = 100 / mainWindow.height
+                            recentProjectsFrame.heightRate = (mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing) / mainWindow.height
+                            exampleProjects.heightRate = (mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing)/ mainWindow.height
                         }
                     }
                 }
@@ -450,15 +454,15 @@ Rectangle {
                 drag{ target: parent; axis: Drag.XAxis }
                 onMouseXChanged: {
                     if(drag.active){
-                        exampleProjects.width = exampleProjects.width - mouseX
-                        recentProjectsFrame.width = recentProjectsFrame.width + mouseX
+                        exampleProjects.widthRate = (exampleProjects.width - mouseX)/ mainWindow.width
+                        recentProjectsFrame.widthRate = (recentProjectsFrame.width + mouseX) / mainWindow.width
                         if(recentProjectsFrame.width < 150){
-                            recentProjectsFrame.width = 150
-                            exampleProjects.width = mainWindow.width - newsSection.width - 150 - 4*mainWindow.spacing
+                            recentProjectsFrame.widthRate = 150 / mainWindow.width
+                            exampleProjects.widthRate = (mainWindow.width - newsSection.width - 150 - 4*mainWindow.spacing) / mainWindow.width
                         }
                         if(exampleProjects.width < 300) {
-                            exampleProjects.width = 300
-                            recentProjectsFrame.width = mainWindow.width - newsSection.width - 300 - 4*mainWindow.spacing
+                            exampleProjects.widthRate = 300/ mainWindow.width
+                            recentProjectsFrame.widthRate = (mainWindow.width - newsSection.width - 300 - 4*mainWindow.spacing) / mainWindow.width
                         }
 
                     }
@@ -494,8 +498,8 @@ Rectangle {
                         onClicked: {
                             if(!exampleProjects.fullScreen) {
                                 hideTiles()
-                                exampleProjects.prevWidth = exampleProjects.width
-                                exampleProjects.prevHeight = exampleProjects.height
+                                exampleProjects.prevWidth = exampleProjects.widthRate
+                                exampleProjects.prevHeight = exampleProjects.heightRate
                                 exampleProjects.visible = true
                                 exampleProjects.z = 1
                                 exampleProjects.anchors.fill = undefined
@@ -504,6 +508,9 @@ Rectangle {
                                 exampleProjects.anchors.centerIn = undefined
                                 exampleProjects.anchors.top = undefined
                                 exampleProjects.anchors.left = undefined
+
+                                exampleProjects.widthRate = 1
+                                exampleProjects.heightRate = 1
 
                                 exampleProjects.anchors.fill = mainWindow
                             } else {
@@ -520,8 +527,8 @@ Rectangle {
                                 exampleProjects.anchors.leftMargin = mainWindow.spacing
                                 exampleProjects.anchors.right = newsSection.left
                                 exampleProjects.anchors.rightMargin = mainWindow.spacing
-                                exampleProjects.width = exampleProjects.prevWidth
-                                exampleProjects.height = exampleProjects.prevHeight
+                                exampleProjects.widthRate = exampleProjects.prevWidth
+                                exampleProjects.heightRate = exampleProjects.prevHeight
 
                                 showTiles();
                             }
@@ -572,8 +579,11 @@ Rectangle {
     Frame {
         id: newsSection
         property string sectionName: "newsSection"
-        width: helper.getWidthScale(sectionName) === -1 ? mainWindow.width / 5 - 4*mainWindow.spacing : helper.getWidthScale(sectionName)
-        height: helper.getHeightScale(sectionName) === -1 ? mainWindow.height- 4*mainWindow.spacing : helper.getHeightScale(sectionName)
+        property double widthRate : helper.getWidthScale(sectionName) === -1 ? (mainWindow.width / 5 - 4*mainWindow.spacing) / mainWindow.width : helper.getWidthScale(sectionName)
+        property double heightRate : helper.getHeightScale(sectionName) === -1 ? (mainWindow.height- 4*mainWindow.spacing) / mainWindow.height : helper.getHeightScale(sectionName)
+        width: mainWindow.width * widthRate
+        height: mainWindow.height * heightRate
+
         anchors.bottom: parent.bottom
         anchors.bottomMargin: mainWindow.spacing
         anchors.right: parent.right
@@ -616,23 +626,23 @@ Rectangle {
                 drag{ target: parent; axis: Drag.XAxis }
                 onMouseXChanged: {
                     if(drag.active){
-                        newsSection.width = newsSection.width - mouseX
-                        exampleProjects.width = exampleProjects.width + mouseX
-                        datasetFrame.width = datasetFrame.width + mouseX
-                        releaseSection.width = releaseSection.width + mouseX
+                        newsSection.widthRate = (newsSection.width - mouseX) / mainWindow.width
+                        exampleProjects.widthRate = (exampleProjects.width + mouseX) / mainWindow.width
+                        datasetFrame.widthRate = (datasetFrame.width + mouseX) / mainWindow.width
+                        releaseSection.widthRate = (releaseSection.width + mouseX) / mainWindow.width
                         if(exampleProjects.width < 300
                                 || datasetFrame.width < 300){
-                            newsSection.width = mainWindow.width - Math.max(recentProjectsFrame.width, helpFrame.width) - 300 - 4*mainWindow.spacing
-                            exampleProjects.width = mainWindow.width - newsSection.width - recentProjectsFrame.width - 4*mainWindow.spacing
-                            datasetFrame.width = mainWindow.width - newsSection.width - helpFrame.width - 4*mainWindow.spacing
-                            releaseSection.width = Math.max(recentProjectsFrame.width, helpFrame.width) + mainWindow.spacing + 300
+                            newsSection.widthRate = (mainWindow.width - Math.max(recentProjectsFrame.width, helpFrame.width) - 300 - 4*mainWindow.spacing) / mainWindow.width
+                            exampleProjects.widthRate = (mainWindow.width - newsSection.width - recentProjectsFrame.width - 4*mainWindow.spacing)/ mainWindow.width
+                            datasetFrame.widthRate = (mainWindow.width - newsSection.width - helpFrame.width - 4*mainWindow.spacing) / mainWindow.width
+                            releaseSection.widthRate = (Math.max(recentProjectsFrame.width, helpFrame.width) + mainWindow.spacing + 300) / mainWindow.width
 
                         }
                         if(newsSection.width < 150) {
-                            newsSection.width = 150
-                            exampleProjects.width = mainWindow.width - recentProjectsFrame.width - 150 - 4*mainWindow.spacing
-                            datasetFrame.width = mainWindow.width - helpFrame.width - 150 - 4*mainWindow.spacing
-                            releaseSection.width = mainWindow.width - newsSection.width - 3*mainWindow.spacing
+                            newsSection.widthRate = 150 / mainWindow.width
+                            exampleProjects.widthRate = (mainWindow.width - recentProjectsFrame.width - 150 - 4*mainWindow.spacing) / mainWindow.width
+                            datasetFrame.widthRate = (mainWindow.width - helpFrame.width - 150 - 4*mainWindow.spacing) / mainWindow.width
+                            releaseSection.widthRate = (mainWindow.width - newsSection.width - 3*mainWindow.spacing) / mainWindow.width
                         }
 
                     }
@@ -666,8 +676,8 @@ Rectangle {
                         onClicked: {
                             if(!newsSection.fullScreen) {
                                 hideTiles()
-                                newsSection.prevWidth = newsSection.width
-                                newsSection.prevHeight = newsSection.height
+                                newsSection.prevWidth = newsSection.widthRate
+                                newsSection.prevHeight = newsSection.heightRate
                                 newsSection.visible = true
                                 newsSection.z = 1
                                 newsSection.anchors.fill = undefined
@@ -676,6 +686,10 @@ Rectangle {
                                 newsSection.anchors.centerIn = undefined
                                 newsSection.anchors.top = undefined
                                 newsSection.anchors.left = undefined
+
+
+                                newsSection.widthRate = 1
+                                newsSection.heightRate = 1
 
                                 newsSection.anchors.fill = mainWindow
                             } else {
@@ -692,8 +706,8 @@ Rectangle {
                                 newsSection.anchors.rightMargin = mainWindow.spacing
                                 newsSection.anchors.bottom = mainWindow.bottom
                                 newsSection.anchors.bottomMargin = mainWindow.spacing
-                                newsSection.width = newsSection.prevWidth
-                                newsSection.height = newsSection.prevHeight
+                                newsSection.widthRate = newsSection.prevWidth
+                                newsSection.heightRate = newsSection.prevHeight
 
                                 showTiles();
                             }
@@ -731,8 +745,11 @@ Rectangle {
     Frame {
         id: helpFrame
         property string sectionName: "helpFrame"
-        width: helper.getWidthScale(sectionName) === -1 ? mainWindow.width / 5 - 4*mainWindow.spacing : helper.getWidthScale(sectionName)
-        height: helper.getHeightScale(sectionName) === -1 ? mainWindow.height / 4 - 4*mainWindow.spacing : helper.getHeightScale(sectionName)
+        property double widthRate : helper.getWidthScale(sectionName) === -1 ? (mainWindow.width / 5 - 4*mainWindow.spacing) / mainWindow.width : helper.getWidthScale(sectionName)
+        property double heightRate : helper.getHeightScale(sectionName) === -1 ? (mainWindow.height / 4 - 4*mainWindow.spacing) / mainWindow.height : helper.getHeightScale(sectionName)
+        width: mainWindow.width * widthRate
+        height: mainWindow.height * heightRate
+
         anchors.top: recentProjectsFrame.bottom
         anchors.topMargin: mainWindow.spacing
         anchors.left: parent.left
@@ -775,15 +792,15 @@ Rectangle {
                 drag{ target: parent; axis: Drag.XAxis }
                 onMouseXChanged: {
                     if(drag.active){
-                        helpFrame.width = helpFrame.width + mouseX
-                        datasetFrame.width = datasetFrame.width - mouseX
+                        helpFrame.widthRate = (helpFrame.width + mouseX) / mainWindow.width
+                        datasetFrame.widthRate = (datasetFrame.width - mouseX) / mainWindow.width
                         if(helpFrame.width < 150){
-                            helpFrame.width = 150
-                            datasetFrame.width = mainWindow.width - newsSection.width - 150 - 4*mainWindow.spacing
+                            helpFrame.widthRate = 150 / mainWindow.width
+                            datasetFrame.widthRate = (mainWindow.width - newsSection.width - 150 - 4*mainWindow.spacing) / mainWindow.width
                         }
                         if(datasetFrame.width < 150) {
-                            datasetFrame.width = 150
-                            helpFrame.width = mainWindow.width - newsSection.width - 150 - 4*mainWindow.spacing
+                            datasetFrame.widthRate = 150 / mainWindow.width
+                            helpFrame.widthRate = (mainWindow.width - newsSection.width - 150 - 4*mainWindow.spacing) / mainWindow.width
                         }
                     }
                 }
@@ -813,18 +830,18 @@ Rectangle {
                 drag{ target: parent; axis: Drag.YAxis }
                 onMouseYChanged: {
                     if(drag.active){
-                        helpFrame.height = helpFrame.height + mouseY
-                        datasetFrame.height = datasetFrame.height + mouseY
-                        releaseSection.height = releaseSection.height - mouseY
+                        helpFrame.heightRate = (helpFrame.height + mouseY) / mainWindow.height
+                        datasetFrame.heightRate = (datasetFrame.height + mouseY) / mainWindow.height
+                        releaseSection.heightRate = (releaseSection.height - mouseY) / mainWindow.height
                         if(releaseSection.height < 100) {
-                            releaseSection.height = 100
-                            helpFrame.height = mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing
-                            datasetFrame.height = mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing
+                            releaseSection.heightRate = 100 / mainWindow.height
+                            helpFrame.heightRate = (mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing) / mainWindow.height
+                            datasetFrame.heightRate = (mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing) / mainWindow.height
                         }
                         if(helpFrame.height < 100 || datasetFrame.height < 100) {
-                            helpFrame.height = 100
-                            datasetFrame.height = 100
-                            releaseSection.height = mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing
+                            helpFrame.heightRate = 100 / mainWindow.height
+                            datasetFrame.heightRate = 100 / mainWindow.height
+                            releaseSection.heightRate = (mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing) / mainWindow.height
                         }
                     }
                 }
@@ -854,21 +871,21 @@ Rectangle {
                 drag{ target: parent; axis: Drag.YAxis }
                 onMouseYChanged: {
                     if(drag.active){
-                        recentProjectsFrame.height = recentProjectsFrame.height + mouseY
-                        exampleProjects.height = exampleProjects.height + mouseY
-                        helpFrame.height = helpFrame.height - mouseY
-                        datasetFrame.height = datasetFrame.height - mouseY
+                        recentProjectsFrame.heightRate = (recentProjectsFrame.height + mouseY) / mainWindow.height
+                        exampleProjects.heightRate =(exampleProjects.height + mouseY) / mainWindow.height
+                        helpFrame.heightRate = (helpFrame.height - mouseY)  / mainWindow.height
+                        datasetFrame.heightRate = (datasetFrame.height - mouseY) / mainWindow.height
                         if(recentProjectsFrame.height < 100 || exampleProjects.height < 100) {
-                            recentProjectsFrame.height = 100
-                            exampleProjects.height = 100
-                            helpFrame.height = mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing
-                            datasetFrame.height = mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing
+                            recentProjectsFrame.heightRate = 100 /  mainWindow.height
+                            exampleProjects.heightRate = 100/ mainWindow.height
+                            helpFrame.heightRate = (mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing)  / mainWindow.height
+                            datasetFrame.heightRate = (mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing) / mainWindow.height
                         }
                         if(helpFrame.height < 100 || datasetFrame.height < 100) {
-                            helpFrame.height = 100
-                            datasetFrame.height = 100
-                            recentProjectsFrame.height = mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing
-                            exampleProjects.height = mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing
+                            helpFrame.heightRate = 100 / mainWindow.height
+                            datasetFrame.heightRate = 100 / mainWindow.height
+                            recentProjectsFrame.heightRate = (mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing) /  mainWindow.height
+                            exampleProjects.heightRate = (mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing) / mainWindow.height
                         }
                     }
                 }
@@ -903,8 +920,8 @@ Rectangle {
                         onClicked: {
                             if(!helpFrame.fullScreen) {
                                 hideTiles()
-                                helpFrame.prevWidth = helpFrame.width
-                                helpFrame.prevHeight = helpFrame.height
+                                helpFrame.prevWidth = helpFrame.widthRate
+                                helpFrame.prevHeight = helpFrame.heightRate
                                 helpFrame.visible = true
                                 helpFrame.z = 1
                                 helpFrame.anchors.fill = undefined
@@ -914,6 +931,8 @@ Rectangle {
                                 helpFrame.anchors.top = undefined
                                 helpFrame.anchors.left = undefined
 
+                                helpFrame.heightRate = 1
+                                helpFrame.widthRate = 1
                                 helpFrame.anchors.fill = mainWindow
                             } else {
                                 helpFrame.anchors.fill = undefined
@@ -929,8 +948,8 @@ Rectangle {
                                 helpFrame.anchors.leftMargin = mainWindow.spacing
                                 helpFrame.anchors.bottom = releaseSection.top
                                 helpFrame.anchors.bottomMargin = mainWindow.spacing
-                                helpFrame.width = helpFrame.prevWidth
-                                helpFrame.height = helpFrame.prevHeight
+                                helpFrame.widthRate = helpFrame.prevWidth
+                                helpFrame.heightRate = helpFrame.prevHeight
 
                                 showTiles();
                             }
@@ -968,8 +987,11 @@ Rectangle {
     Frame {
         id: datasetFrame
         property string sectionName: "datasetFrame"
-        width: helper.getWidthScale(sectionName) === -1 ? 3 * mainWindow.width / 5 - 4*mainWindow.spacing : helper.getWidthScale(sectionName)
-        height: helper.getHeightScale(sectionName) === -1 ? mainWindow.height / 4 - 4*mainWindow.spacing : helper.getHeightScale(sectionName)
+        property double widthRate : helper.getWidthScale(sectionName) === -1 ? (3 * mainWindow.width / 5 - 4*mainWindow.spacing) / mainWindow.width : helper.getWidthScale(sectionName)
+        property double heightRate : helper.getHeightScale(sectionName) === -1 ? (mainWindow.height / 4 - 4*mainWindow.spacing) / mainWindow.height : helper.getHeightScale(sectionName)
+        width: mainWindow.width * widthRate
+        height: mainWindow.height * heightRate
+
         anchors.top: exampleProjects.bottom
         anchors.topMargin: mainWindow.spacing
         anchors.left: helpFrame.right
@@ -1014,25 +1036,25 @@ Rectangle {
                 drag{ target: parent; axis: Drag.XAxis }
                 onMouseXChanged: {
                     if(drag.active){
-                        newsSection.width = newsSection.width - mouseX
-                        exampleProjects.width = exampleProjects.width + mouseX
-                        datasetFrame.width = datasetFrame.width + mouseX
-                        releaseSection.width = releaseSection.width + mouseX
+                        newsSection.widthRate = (newsSection.width - mouseX) / mainWindow.width
+                        exampleProjects.widthRate = (exampleProjects.width + mouseX) / mainWindow.width
+                        datasetFrame.widthRate = (datasetFrame.width + mouseX) / mainWindow.width
+                        releaseSection.widthRate = (releaseSection.width + mouseX) / mainWindow.width
                         if(exampleProjects.width < 300
                                 || datasetFrame.width < 300){
 
 
-                            newsSection.width = mainWindow.width - Math.max(recentProjectsFrame.width, helpFrame.width) - 300 - 4*mainWindow.spacing
-                            exampleProjects.width = mainWindow.width - newsSection.width - recentProjectsFrame.width - 4*mainWindow.spacing
-                            datasetFrame.width = mainWindow.width - newsSection.width - helpFrame.width - 4*mainWindow.spacing
-                            releaseSection.width = Math.max(recentProjectsFrame.width, helpFrame.width) + mainWindow.spacing + 300
+                            newsSection.widthRate = (mainWindow.width - Math.max(recentProjectsFrame.width, helpFrame.width) - 300 - 4*mainWindow.spacing) / mainWindow.width
+                            exampleProjects.widthRate = (mainWindow.width - newsSection.width - recentProjectsFrame.width - 4*mainWindow.spacing)/ mainWindow.width
+                            datasetFrame.widthRate = (mainWindow.width - newsSection.width - helpFrame.width - 4*mainWindow.spacing) / mainWindow.width
+                            releaseSection.widthRate = (Math.max(recentProjectsFrame.width, helpFrame.width) + mainWindow.spacing + 300) / mainWindow.width
 
                         }
                         if(newsSection.width < 150) {
-                            newsSection.width = 150
-                            exampleProjects.width = mainWindow.width - recentProjectsFrame.width - 150 - 4*mainWindow.spacing
-                            datasetFrame.width = mainWindow.width - helpFrame.width - 150 - 4*mainWindow.spacing
-                            releaseSection.width = mainWindow.width - newsSection.width - 3*mainWindow.spacing
+                            newsSection.widthRate = 150 / mainWindow.width
+                            exampleProjects.widthRate = (mainWindow.width - recentProjectsFrame.width - 150 - 4*mainWindow.spacing)/ mainWindow.width
+                            datasetFrame.widthRate = (mainWindow.width - helpFrame.width - 150 - 4*mainWindow.spacing) / mainWindow.width
+                            releaseSection.widthRate = (mainWindow.width - newsSection.width - 3*mainWindow.spacing) / mainWindow.width
                         }
 
                     }
@@ -1062,18 +1084,18 @@ Rectangle {
                 drag{ target: parent; axis: Drag.YAxis }
                 onMouseYChanged: {
                     if(drag.active){
-                        helpFrame.height = helpFrame.height + mouseY
-                        datasetFrame.height = datasetFrame.height + mouseY
-                        releaseSection.height = releaseSection.height - mouseY
+                        helpFrame.heightRate = (helpFrame.height + mouseY) / mainWindow.height
+                        datasetFrame.heightRate = (datasetFrame.height + mouseY) / mainWindow.height
+                        releaseSection.heightRate = (releaseSection.height - mouseY) / mainWindow.height
                         if(releaseSection.height < 100) {
-                            releaseSection.height = 100
-                            helpFrame.height = mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing
-                            datasetFrame.height = mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing
+                            releaseSection.heightRate = 100 / mainWindow.height
+                            helpFrame.heightRate = (mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing) / mainWindow.height
+                            datasetFrame.heightRate = (mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing) / mainWindow.height
                         }
                         if(helpFrame.height < 100 || datasetFrame.height < 100) {
-                            helpFrame.height = 100
-                            datasetFrame.height = 100
-                            releaseSection.height = mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing
+                            helpFrame.heightRate = 100 / mainWindow.height
+                            datasetFrame.heightRate = 100 / mainWindow.height
+                            releaseSection.heightRate = (mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing) / mainWindow.height
                         }
                     }
                 }
@@ -1102,21 +1124,21 @@ Rectangle {
                 drag{ target: parent; axis: Drag.YAxis }
                 onMouseYChanged: {
                     if(drag.active){
-                        recentProjectsFrame.height = recentProjectsFrame.height + mouseY
-                        exampleProjects.height = exampleProjects.height + mouseY
-                        helpFrame.height = helpFrame.height - mouseY
-                        datasetFrame.height = datasetFrame.height - mouseY
+                        recentProjectsFrame.heightRate = (recentProjectsFrame.height + mouseY) / mainWindow.height
+                        exampleProjects.heightRate = (exampleProjects.height + mouseY) / mainWindow.height
+                        helpFrame.heightRate = (helpFrame.height - mouseY) / mainWindow.height
+                        datasetFrame.heightRate = (datasetFrame.height - mouseY) / mainWindow.height
                         if(recentProjectsFrame.height < 100 || exampleProjects.height < 100) {
-                            recentProjectsFrame.height = 100
-                            exampleProjects.height = 100
-                            helpFrame.height = mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing
-                            datasetFrame.height = mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing
+                            recentProjectsFrame.heightRate = 100 /  mainWindow.height
+                            exampleProjects.heightRate = 100 / mainWindow.height
+                            helpFrame.heightRate = (mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing) / mainWindow.height
+                            datasetFrame.heightRate = (mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing) / mainWindow.height
                         }
                         if(helpFrame.height < 100 || datasetFrame.height < 100) {
-                            helpFrame.height = 100
-                            datasetFrame.height = 100
-                            recentProjectsFrame.height = mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing
-                            exampleProjects.height = mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing
+                            helpFrame.heightRate = 100 / mainWindow.height
+                            datasetFrame.heightRate = 100 / mainWindow.height
+                            recentProjectsFrame.heightRate = (mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing) /  mainWindow.height
+                            exampleProjects.heightRate = (mainWindow.height - releaseSection.height - 100 - 4*mainWindow.spacing) / mainWindow.height
                         }
                     }
                 }
@@ -1145,15 +1167,15 @@ Rectangle {
                 drag{ target: parent; axis: Drag.XAxis }
                 onMouseXChanged: {
                     if(drag.active){
-                        helpFrame.width = helpFrame.width + mouseX
-                        datasetFrame.width = datasetFrame.width - mouseX
+                        helpFrame.widthRate = (helpFrame.width + mouseX) / mainWindow.width
+                        datasetFrame.widthRate = (datasetFrame.width - mouseX) / mainWindow.width
                         if(helpFrame.width < 150){
-                            helpFrame.width = 150
-                            datasetFrame.width = mainWindow.width - newsSection.width - 150 - 4*mainWindow.spacing
+                            helpFrame.widthRate = 150 / mainWindow.width
+                            datasetFrame.widthRate = (mainWindow.width - newsSection.width - 150 - 4*mainWindow.spacing) / mainWindow.width
                         }
                         if(datasetFrame.width < 150) {
-                            datasetFrame.width = 150
-                            helpFrame.width = mainWindow.width - newsSection.width - 150 - 4*mainWindow.spacing
+                            datasetFrame.widthRate = 150 / mainWindow.width
+                            helpFrame.widthRate = (mainWindow.width - newsSection.width - 150 - 4*mainWindow.spacing) / mainWindow.width
                         }
                     }
                 }
@@ -1187,8 +1209,8 @@ Rectangle {
                         onClicked: {
                             if(!datasetFrame.fullScreen) {
                                 hideTiles()
-                                datasetFrame.prevWidth = datasetFrame.width
-                                datasetFrame.prevHeight = datasetFrame.height
+                                datasetFrame.prevWidth = datasetFrame.widthRate
+                                datasetFrame.prevHeight = datasetFrame.heightRate
                                 datasetFrame.visible = true
                                 datasetFrame.z = 1
                                 datasetFrame.anchors.fill = undefined
@@ -1198,6 +1220,8 @@ Rectangle {
                                 datasetFrame.anchors.top = undefined
                                 datasetFrame.anchors.left = undefined
 
+                                datasetFrame.widthRate = 1
+                                datasetFrame.heightRate = 1
                                 datasetFrame.anchors.fill = mainWindow
                             } else {
                                 datasetFrame.anchors.fill = undefined
@@ -1215,8 +1239,8 @@ Rectangle {
                                 datasetFrame.anchors.bottomMargin = mainWindow.spacing
                                 datasetFrame.anchors.right = newsSection.left
                                 datasetFrame.anchors.rightMargin = mainWindow.spacing
-                                datasetFrame.width = datasetFrame.prevWidth
-                                datasetFrame.height = datasetFrame.prevHeight
+                                datasetFrame.widthRate = datasetFrame.prevWidth
+                                datasetFrame.heightRate = datasetFrame.prevHeight
 
                                 showTiles();
                             }
@@ -1668,8 +1692,11 @@ Rectangle {
     Frame {
         id: releaseSection
         property string sectionName: "releaseSection"
-        width: helper.getWidthScale(sectionName) === -1? 4 * mainWindow.width / 5 - 4*mainWindow.spacing : helper.getWidthScale(sectionName)
-        height: helper.getHeightScale(sectionName) === -1 ? 2*mainWindow.height / 4 - 4*mainWindow.spacing : helper.getHeightScale(sectionName)
+        property double widthRate : helper.getWidthScale(sectionName) === -1 ? (4 * mainWindow.width / 5 - 4*mainWindow.spacing) / mainWindow.width : helper.getWidthScale(sectionName)
+        property double heightRate : helper.getHeightScale(sectionName) === -1 ? (2*mainWindow.height / 4 - 4*mainWindow.spacing) / mainWindow.height : helper.getHeightScale(sectionName)
+        width: mainWindow.width * widthRate
+        height: mainWindow.height * heightRate
+
         anchors.left: parent.left
         anchors.leftMargin: mainWindow.spacing
         anchors.right: newsSection.left
@@ -1713,25 +1740,25 @@ Rectangle {
                 drag{ target: parent; axis: Drag.XAxis }
                 onMouseXChanged: {
                     if(drag.active){
-                        newsSection.width = newsSection.width - mouseX
-                        exampleProjects.width = exampleProjects.width + mouseX
-                        datasetFrame.width = datasetFrame.width + mouseX
-                        releaseSection.width = releaseSection.width + mouseX
+                        newsSection.widthRate = (newsSection.width - mouseX) / mainWindow.width
+                        exampleProjects.widthRate = (exampleProjects.width + mouseX) / mainWindow.width
+                        datasetFrame.widthRate = (datasetFrame.width + mouseX) / mainWindow.width
+                        releaseSection.widthRate = (releaseSection.width + mouseX) / mainWindow.width
                         if(exampleProjects.width < 300
                                 || datasetFrame.width < 300){
 
 
-                            newsSection.width = mainWindow.width - Math.max(recentProjectsFrame.width, helpFrame.width) - 300 - 4*mainWindow.spacing
-                            exampleProjects.width = mainWindow.width - newsSection.width - recentProjectsFrame.width - 4*mainWindow.spacing
-                            datasetFrame.width = mainWindow.width - newsSection.width - helpFrame.width - 4*mainWindow.spacing
-                            releaseSection.width = Math.max(recentProjectsFrame.width, helpFrame.width) + mainWindow.spacing + 300
+                            newsSection.widthRate = (mainWindow.width - Math.max(recentProjectsFrame.width, helpFrame.width) - 300 - 4*mainWindow.spacing) / mainWindow.width
+                            exampleProjects.widthRate = (mainWindow.width - newsSection.width - recentProjectsFrame.width - 4*mainWindow.spacing)  / mainWindow.width
+                            datasetFrame.widthRate = (mainWindow.width - newsSection.width - helpFrame.width - 4*mainWindow.spacing) / mainWindow.width
+                            releaseSection.widthRate = (Math.max(recentProjectsFrame.width, helpFrame.width) + mainWindow.spacing + 300) / mainWindow.width
 
                         }
                         if(newsSection.width < 150) {
-                            newsSection.width = 150
-                            exampleProjects.width = mainWindow.width - recentProjectsFrame.width - 150 - 4*mainWindow.spacing
-                            datasetFrame.width = mainWindow.width - helpFrame.width - 150 - 4*mainWindow.spacing
-                            releaseSection.width = mainWindow.width - newsSection.width - 3*mainWindow.spacing
+                            newsSection.width = 150 / mainWindow.width
+                            exampleProjects.widthRate = (mainWindow.width - recentProjectsFrame.width - 150 - 4*mainWindow.spacing)  / mainWindow.width
+                            datasetFrame.widthRate = (mainWindow.width - helpFrame.width - 150 - 4*mainWindow.spacing) / mainWindow.width
+                            releaseSection.widthRate = (mainWindow.width - newsSection.width - 3*mainWindow.spacing) / mainWindow.width
                         }
 
                     }
@@ -1761,18 +1788,18 @@ Rectangle {
                 drag{ target: parent; axis: Drag.YAxis }
                 onMouseYChanged: {
                     if(drag.active){
-                        helpFrame.height = helpFrame.height + mouseY
-                        datasetFrame.height = datasetFrame.height + mouseY
-                        releaseSection.height = releaseSection.height - mouseY
+                        helpFrame.heightRate = (helpFrame.height + mouseY) / mainWindow.height
+                        datasetFrame.heightRate = (datasetFrame.height + mouseY) / mainWindow.height
+                        releaseSection.heightRate = (releaseSection.height - mouseY) / mainWindow.height
                         if(releaseSection.height < 100) {
-                            releaseSection.height = 100
-                            helpFrame.height = mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing
-                            datasetFrame.height = mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing
+                            releaseSection.heightRate = 100 / mainWindow.height
+                            helpFrame.heightRate = (mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing)  / mainWindow.height
+                            datasetFrame.heightRate = (mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing) / mainWindow.height
                         }
                         if(helpFrame.height < 100 || datasetFrame.height < 100) {
-                            helpFrame.height = 100
-                            datasetFrame.height = 100
-                            releaseSection.height = mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing
+                            helpFrame.heightRate = 100 / mainWindow.height
+                            datasetFrame.heightRate = 100 / mainWindow.height
+                            releaseSection.heightRate = (mainWindow.height - recentProjectsFrame.height - 100 - 4*mainWindow.spacing) / mainWindow.height
                         }
                     }
                 }
@@ -1805,8 +1832,8 @@ Rectangle {
                         onClicked: {
                             if(!releaseSection.fullScreen) {
                                 hideTiles()
-                                releaseSection.prevWidth = releaseSection.width
-                                releaseSection.prevHeight = releaseSection.height
+                                releaseSection.prevWidth = releaseSection.widthRate
+                                releaseSection.prevHeight = releaseSection.heightRate
                                 releaseSection.visible = true
                                 releaseSection.z = 1
                                 releaseSection.anchors.fill = undefined
@@ -1816,6 +1843,8 @@ Rectangle {
                                 releaseSection.anchors.top = undefined
                                 releaseSection.anchors.left = undefined
 
+                                releaseSection.widthRate = 1
+                                releaseSection.heightRate = 1
                                 releaseSection.anchors.fill = mainWindow
                             } else {
                                 releaseSection.anchors.fill = undefined
@@ -1831,8 +1860,8 @@ Rectangle {
                                 releaseSection.anchors.bottomMargin = mainWindow.spacing
                                 releaseSection.anchors.right = newsSection.left
                                 releaseSection.anchors.rightMargin = mainWindow.spacing
-                                releaseSection.width = releaseSection.prevWidth
-                                releaseSection.height = releaseSection.prevHeight
+                                releaseSection.widthRate = releaseSection.prevWidth
+                                releaseSection.heightRate = releaseSection.prevHeight
 
                                 showTiles();
                             }

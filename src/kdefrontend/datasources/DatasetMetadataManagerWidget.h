@@ -40,8 +40,7 @@ public:
 	explicit DatasetMetadataManagerWidget(QWidget*, const QMap< QString, QMap<QString, QMap<QString, QVector<QString>>>>&);
     virtual ~DatasetMetadataManagerWidget() override;
     bool checkDataValidity();
-    void updateDocument(const QString& fileName);
-    void createNewMetadata(const QString& dirPath);
+	void updateDocument(const QString& fileName);
     QString getMetadataFilePath() const;
 
 private:

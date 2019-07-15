@@ -513,61 +513,6 @@ QJsonObject DatasetMetadataManagerWidget::createDatasetObject() {
 }
 
 /**
- * @brief Creates a new metadata file for the new dataset based on the introduced data.
- * @param dirPath the path of the new file
- */
-void DatasetMetadataManagerWidget::createNewMetadata(const QString& dirPath) {
-	if (QDir(dirPath).exists())
-	{
-		QString path = dirPath + QDir::separator() + ui.cbCategory->currentText() + QDir::separator();
-
-		if(!QDir(path).exists()) {
-			qDebug() <<path;
-			QDir(dirPath).mkdir(ui.cbCategory->currentText());
-		}
-
-		if(!QDir(path + ui.cbSubcategory->currentText()).exists()) {
-			qDebug() <<path + ui.cbSubcategory->currentText();
-			QDir(path).mkdir(ui.cbSubcategory->currentText());
-		}
-
-		path = path + ui.cbSubcategory->currentText() + QDir::separator();
-		m_metadataFilePath = path + ui.leFileName->text() + ".json";
-		qDebug() << "Creating " << m_metadataFilePath;
-
-		QFile file(m_metadataFilePath);
-		if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-			QJsonObject rootObject;
-
-			rootObject.insert("name", ui.leDatasetName->text());
-			rootObject.insert("download", ui.leDownloadURL->text());
-			rootObject.insert("description", ui.teDescription->toPlainText());
-			rootObject.insert("separator", ui.cbSeparatingCharacter->currentText());
-			rootObject.insert("comment_character", ui.cbCommentCharacter->currentText());
-			rootObject.insert("DateTime_format", ui.cbDateTimeFormat->currentText());
-			rootObject.insert("number_format", ui.cbNumberFormat->currentIndex());
-			rootObject.insert("create_index_column", ui.chbCreateIndex->isChecked());
-			rootObject.insert("skip_empty_parts", ui.chbSkipEmptyParts->isChecked());
-			rootObject.insert("simplify_whitespaces", ui.chbSimplifyWhitespaces->isChecked());
-			rootObject.insert("remove_quotes", ui.chbRemoveQuotes->isChecked());
-			rootObject.insert("use_first_row_for_vectorname", ui.chbHeader->isChecked());
-
-			for(int i = 0; i < m_columnDescriptions.size(); ++i) {
-				rootObject.insert(i18n("column_description_%1", i), m_columnDescriptions[i]);
-			}
-
-			QJsonDocument document;
-			document.setObject(rootObject);
-			qDebug() <<document.toJson();
-			file.write(document.toJson());
-			file.close();
-		} else {
-			qDebug() <<"Couldn't create new metadata file" << file.errorString();;
-		}
-	}
-}
-
-/**
  * @brief Adds a new QLineEdit so the user can set a new column description.
  */
 void DatasetMetadataManagerWidget::addColumnDescription() {

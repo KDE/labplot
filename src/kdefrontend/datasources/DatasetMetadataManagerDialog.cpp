@@ -97,14 +97,6 @@ void DatasetMetadataManagerDialog::updateDocument(const QString& fileName) {
 }
 
 /**
- * @brief initiates creating a new metadata file for the new dataset.
- * @param dirPath the path of the new file
- */
-void DatasetMetadataManagerDialog::createNewMetadata(const QString& dirPath) {
-	m_mainWidget->createNewMetadata(dirPath);
-}
-
-/**
  * @brief returns the path to the new metadata file of the new dataset.
  */
 QString DatasetMetadataManagerDialog::getMetadataFilePath() const {

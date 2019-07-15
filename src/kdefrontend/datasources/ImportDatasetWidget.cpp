@@ -484,7 +484,6 @@ void ImportDatasetWidget::showDatasetMetadataManager() {
 		const QString pathToJson =  m_jsonDir + QLatin1String("DatasetCategories.json");
 		const QString dirPath = QFileInfo(pathToJson).dir().absolutePath();
 		dlg->updateDocument(m_jsonDir);
-		//dlg->createNewMetadata(dirPath);
 		uploadCategoryFile();
 		uploadDatasetFile(dlg->getMetadataFilePath());
 		loadDatasetCategoriesFromJson();
