@@ -334,7 +334,8 @@ void MainWin::initGUI(const QString& fileName) {
  */
 QQuickWidget* MainWin::createWelcomeScreen() {
 	//showMaximized();
-	//QSize maxSize = qApp->primaryScreen()->availableSize();
+	QSize maxSize = qApp->primaryScreen()->availableSize();
+	resize(maxSize);
 	/*setFixedSize(qApp->screens().first()->availableGeometry().size());
 	setGeometry(
 		QStyle::alignedRect(

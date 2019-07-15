@@ -1,290 +1,848 @@
 {
-	"collection_name": "R_Datasets",
-	"categories": [{
-			"category_name": "Medicine",
-			"subcategories": [{
-					"datasets": [{
-						"filename": "aml",
-						"name": "Remission Times for Acute Myelogenous Leukaemia",
-						"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/bigcity.csv",
-						"description": "A clinical trial to evaluate the efficacy of maintenance chemotherapy for acute myelogenous leukaemia was conducted by Embury et al. (1977) at Stanford University. After reaching a stage of remission through treatment by chemotherapy, patients were randomized into two groups. The first group received maintenance chemotherapy and the second group did not. The aim of the study was to see if maintenance chemotherapy increased the length of the remission. The data here formed a preliminary analysis which was conducted in October 1974.",
-						"separator": ",",
-						"comment_character": "#",
-						"create_index_column": false,
-						"skip_empty_parts": false,
-						"simplify_whitespaces": true,
-						"remove_quotes": true,
-						"use_first_row_for_vectorname": true,
-						"number_format": 31,
-						"DateTime_format": "yyyy-MM-dd"
-					}],
-					"subcategory_name": "Oncology"
-				},
-				{
-					"datasets": [{
-							"filename": "aids",
-							"name": "Delay in AIDS Reporting in England and Wales",
-							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/aids.csv",
-							"description": "Although all cases of AIDS in England and Wales must be reported to the Communicable Disease Surveillance Centre, there is often a considerable delay between the time of diagnosis and the time that it is reported. In estimating the prevalence of AIDS, account must be taken of the unknown number of cases which have been diagnosed but not reported. The data set here records the reported cases of AIDS diagnosed from July 1983 and until the end of 1992. The data are cross-classified by the date of diagnosis and the time delay in the reporting of the cases. ",
-							"separator": ",",
-							"comment_character": "#",
-							"create_index_column": false,
-							"skip_empty_parts": false,
-							"simplify_whitespaces": true,
-							"remove_quotes": true,
-							"use_first_row_for_vectorname": true,
-							"number_format": 31,
-							"DateTime_format": "yyyy-MM-dd"
-						},
-						{
-							"filename": "CD4",
-							"name": "CD4 Counts for HIV-Positive Patients",
-							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/cd4.csv",
-							"description": "CD4 cells are carried in the blood as part of the human immune system. One of the effects of the HIV virus is that these cells die. The count of CD4 cells is used in determining the onset of full-blown AIDS in a patient. In this study of the effectiveness of a new anti-viral drug on HIV, 20 HIV-positive patients had their CD4 counts recorded and then were put on a course of treatment with this drug. After using the drug for one year, their CD4 counts were again recorded. The aim of the experiment was to show that patients taking the drug had increased CD4 counts which is not generally seen in HIV-positive patients.",
-							"separator": ",",
-							"comment_character": "#",
-							"create_index_column": false,
-							"skip_empty_parts": false,
-							"simplify_whitespaces": true,
-							"remove_quotes": true,
-							"use_first_row_for_vectorname": true,
-							"number_format": 31,
-							"DateTime_format": "yyyy-MM-dd"
-						}
-					],
-					"subcategory_name": "AIDS"
-				},
-				{
-					"datasets": [{
-						"filename": "breslow",
-						"DateTime_format": "yyyy-MM-dd",
-						"comment_character": "#",
-						"create_index_column": false,
-						"description": "In 1961 Doll and Hill sent out a questionnaire to all men on the British Medical Register enquiring about their smoking habits. Almost 70% of such men replied. Death certificates were obtained for medical practitioners and causes of death were assigned on the basis of these certificates. The breslow data set contains the person-years of observations and deaths from coronary artery disease accumulated during the first ten years of the study. ",
-						"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/breslow.csv",
-						"name": "Smoking Deaths Among Doctors ",
-						"number_format": 31,
-						"remove_quotes": true,
-						"separator": ",",
-						"simplify_whitespaces": true,
-						"skip_empty_parts": false,
-						"use_first_row_for_vectorname": true
-					}],
-					"subcategory_name": "Smoking"
-				},
-				{
-					"datasets": [{
-							"filename": "calcium",
-							"DateTime_format": "yyyy-MM-dd",
-							"comment_character": "#",
-							"create_index_column": false,
-							"description": "Howard Grimes from the Botany Department, North Carolina State University, conducted an experiment for biochemical analysis of intracellular storage and transport of calcium across plasma membrane. Cells were suspended in a solution of radioactive calcium for a certain length of time and then the amount of radioactive calcium that was absorbed by the cells was measured. The experiment was repeated independently with 9 different times of suspension each replicated 3 times. ",
-							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/calcium.csv",
-							"name": "Calcium Uptake Data ",
-							"number_format": 0,
-							"remove_quotes": true,
-							"separator": ",",
-							"simplify_whitespaces": true,
-							"skip_empty_parts": false,
-							"use_first_row_for_vectorname": true
-						},
-						{
-							"filename": "claridge",
-							"DateTime_format": "yyyy-MM-dd",
-							"comment_character": "#",
-							"create_index_column": false,
-							"description": "The data are from an experiment which was designed to look for a relationship between a certain genetic characteristic and handedness. The 37 subjects were women who had a son with mental retardation due to inheriting a defective X-chromosome. For each such mother a genetic measurement of their DNA was made. Larger values of this measurement are known to be linked to the defective gene and it was hypothesized that larger values might also be linked to a progressive shift away from right-handednesss. Each woman also filled in a questionnaire regarding which hand they used for various tasks. From these questionnaires a measure of hand preference was found for each mother. The scale of this measure goes from 1, indicating someone who always favours their right hand, to 8, indicating someone who always favours their left hand. Between these two extremes are people who favour one hand for some tasks and the other for other tasks. ",
-							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/claridge.csv",
-							"name": "Genetic Links to Left-handedness ",
-							"number_format": 0,
-							"remove_quotes": true,
-							"separator": ",",
-							"simplify_whitespaces": true,
-							"skip_empty_parts": false,
-							"use_first_row_for_vectorname": true
-						},
-						{
-							"filename": "frets",
-							"DateTime_format": "yyyy-MM-dd",
-							"comment_character": "#",
-							"create_index_column": false,
-							"description": "The data consist of measurements of the length and breadth of the heads of pairs of adult brothers in 25 randomly sampled families. All measurements are expressed in millimetres. ",
-							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/frets.csv",
-							"name": "Head Dimensions in Brothers ",
-							"number_format": 0,
-							"remove_quotes": true,
-							"separator": ",",
-							"simplify_whitespaces": true,
-							"skip_empty_parts": false,
-							"use_first_row_for_vectorname": true
-						}
-					],
-					"subcategory_name": "Common"
-				}
-			]
-		},
-		{
-			"category_name": "Nature",
-			"subcategories": [{
-					"datasets": [{
-							"filename": "beaver",
-							"name": "Beaver Body Temperature Data ",
-							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/beaver.csv",
-							"description": "This data set is part of a long study into body temperature regulation in beavers. Four adult female beavers were live-trapped and had a temperature-sensitive radio transmitter surgically implanted. Readings were taken every 10 minutes. The location of the beaver was also recorded and her activity level was dichotomized by whether she was in the retreat or outside of it since high-intensity activities only occur outside of the retreat. ",
-							"separator": ",",
-							"comment_character": "#",
-							"create_index_column": false,
-							"skip_empty_parts": false,
-							"simplify_whitespaces": true,
-							"remove_quotes": true,
-							"use_first_row_for_vectorname": true,
-							"number_format": 31,
-							"DateTime_format": "yyyy-MM-dd"
-						},
-						{
-							"filename": "catsM",
-							"name": "Weight Data for Domestic Cats",
-							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/catsM.csv",
-							"description": "144 adult (over 2kg in weight) cats used for experiments with the drug digitalis had their heart and body weight recorded. 47 of the cats were female and 97 were male. The catsM data frame consists of the data for the male cats. The full data are in dataset cats in package MASS.",
-							"separator": ",",
-							"comment_character": "#",
-							"create_index_column": false,
-							"skip_empty_parts": false,
-							"simplify_whitespaces": true,
-							"remove_quotes": true,
-							"use_first_row_for_vectorname": true,
-							"number_format": 31,
-							"DateTime_format": "yyyy-MM-dd"
-						},
-						{
-							"filename": "dogs",
-							"DateTime_format": "yyyy-MM-dd",
-							"comment_character": "#",
-							"create_index_column": false,
-							"description": "Data on the cardiac oxygen consumption and left ventricular pressure were gathered on 7 domestic dogs.",
-							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/dogs.csv",
-							"name": "Cardiac Data for Domestic Dogs ",
-							"number_format": 0,
-							"remove_quotes": true,
-							"separator": ",",
-							"simplify_whitespaces": true,
-							"skip_empty_parts": false,
-							"use_first_row_for_vectorname": true
-						},
-						{
-							"filename": "ducks",
-							"DateTime_format": "yyyy-MM-dd",
-							"comment_character": "#",
-							"create_index_column": false,
-							"description": "Each row of the data frame represents a male duck who is a second generation cross of mallard and pintail ducks. For 11 such ducks a behavioural and plumage index were calculated. These were measured on scales devised for this experiment which was to examine whether there was any link between which species the ducks resembled physically and which they resembled in behaviour. The scale for the physical appearance ranged from 0 (identical in appearance to a mallard) to 20 (identical to a pintail). The behavioural traits of the ducks were on a scale from 0 to 15 with lower numbers indicating closer to mallard-like in behaviour. ",
-							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/ducks.csv",
-							"name": "Behavioral and Plumage Characteristics of Hybrid Ducks ",
-							"number_format": 0,
-							"remove_quotes": true,
-							"separator": ",",
-							"simplify_whitespaces": true,
-							"skip_empty_parts": false,
-							"use_first_row_for_vectorname": true
-						}
-					],
-					"subcategory_name": "Animals"
-				},
-				{
-					"datasets": [{
-						"filename": "darwin",
-						"DateTime_format": "yyyy-MM-dd",
-						"comment_character": "#",
-						"create_index_column": false,
-						"description": "Charles Darwin conducted an experiment to examine the superiority of cross-fertilized plants over self-fertilized plants. 15 pairs of plants were used. Each pair consisted of one cross-fertilized plant and one self-fertilized plant which germinated at the same time and grew in the same pot. The plants were measured at a fixed time after planting and the difference in heights between the cross- and self-fertilized plants are recorded in eighths of an inch.",
-						"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/darwin.csv",
-						"name": "Darwin's Plant Height Differences ",
-						"number_format": 0,
-						"remove_quotes": true,
-						"separator": ",",
-						"simplify_whitespaces": true,
-						"skip_empty_parts": false,
-						"use_first_row_for_vectorname": true
-					}],
-					"subcategory_name": "Plants"
-				},
-				{
-					"datasets": [{
-						"filename": "manaus",
-						"DateTime_format": "yyyy-MM-dd",
-						"comment_character": "#",
-						"create_index_column": false,
-						"description": "The data values are monthly averages of the daily stages (heights) of the Rio Negro at Manaus. Manaus is 18km upstream from the confluence of the Rio Negro with the Amazon but because of the tiny slope of the water surface and the lower courses of its flatland affluents, they may be regarded as a good approximation of the water level in the Amazon at the confluence. The data here cover 90 years from January 1903 until December 1992. \nThe Manaus gauge is tied in with an arbitrary bench mark of 100m set in the steps of the Municipal Prefecture; gauge readings are usually referred to sea level, on the basis of a mark on the steps leading to the Parish Church (Matriz), which is assumed to lie at an altitude of 35.874 m according to observations made many years ago under the direction of Samuel Pereira, an engineer in charge of the Manaus Sanitation Committee Whereas such an altitude cannot, by any means, be considered to be a precise datum point, observations have been provisionally referred to it. The measurements are in metres. \n",
-						"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/manaus.csv",
-						"name": "Average Heights of the Rio Negro river at Manaus",
-						"number_format": 0,
-						"remove_quotes": true,
-						"separator": ",",
-						"simplify_whitespaces": true,
-						"skip_empty_parts": false,
-						"use_first_row_for_vectorname": true
-					}],
-					"subcategory_name": "Rivers"
-				}
-			]
-		},
-		{
-			"category_name": "Statistics",
-			"subcategories": [{
-					"datasets": [{
-							"filename": "bigcity",
-							"name": "Population of U.S. Cities",
-							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/bigcity.csv",
-							"description": "The measurements are the population (in 1000's) of 49 U.S. cities in 1920 and 1930. The 49 cities are a random sample taken from the 196 largest cities in 1920. The city data frame consists of the first 10 observations in bigcity.",
-							"separator": ",",
-							"comment_character": "#",
-							"create_index_column": false,
-							"skip_empty_parts": false,
-							"simplify_whitespaces": true,
-							"remove_quotes": true,
-							"use_first_row_for_vectorname": true,
-							"number_format": 31,
-							"DateTime_format": "yyyy-MM-dd"
-						},
-						{
-							"filename": "CanPop",
-							"DateTime_format": "yyyy-MM-dd",
-							"column_description_0": "index",
-							"column_description_1": "census year. ",
-							"column_description_2": "Population, in millions ",
-							"comment_character": "#",
-							"create_index_column": false,
-							"description": "The CanPop data frame has 16 rows and 2 columns. Decennial time-series of Canadian population, 1851–2001. ",
-							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/carData/CanPop.csv",
-							"name": "Canadian Population Data",
-							"number_format": 31,
-							"remove_quotes": true,
-							"separator": ",",
-							"simplify_whitespaces": true,
-							"skip_empty_parts": false,
-							"use_first_row_for_vectorname": true
-						}
-					],
-					"subcategory_name": "Demographics"
-				},
-				{
-					"datasets": [{
-						"filename": "amis",
-						"name": "Car Speeding and Warning Signs ",
-						"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/amis.csv",
-						"description": "In a study into the effect that warning signs have on speeding patterns, Cambridgeshire County Council considered 14 pairs of locations. The locations were paired to account for factors such as traffic volume and type of road. One site in each pair had a sign erected warning of the dangers of speeding and asking drivers to slow down. No action was taken at the second site. Three sets of measurements were taken at each site. Each set of measurements was nominally of the speeds of 100 cars but not all sites have exactly 100 measurements. These speed measurements were taken before the erection of the sign, shortly after the erection of the sign, and again after the sign had been in place for some time. ",
-						"separator": ",",
-						"comment_character": "#",
-						"create_index_column": false,
-						"skip_empty_parts": false,
-						"simplify_whitespaces": true,
-						"remove_quotes": true,
-						"use_first_row_for_vectorname": true,
-						"number_format": 31,
-						"DateTime_format": "yyyy-MM-dd"
-					}],
-					"subcategory_name": "Traffic"
-				}
-			]
-		}
-	]
+    "categories": [
+        {
+            "category_name": "Medicine",
+            "subcategories": [
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "A clinical trial to evaluate the efficacy of maintenance chemotherapy for acute myelogenous leukaemia was conducted by Embury et al. (1977) at Stanford University. After reaching a stage of remission through treatment by chemotherapy, patients were randomized into two groups. The first group received maintenance chemotherapy and the second group did not. The aim of the study was to see if maintenance chemotherapy increased the length of the remission. The data here formed a preliminary analysis which was conducted in October 1974.",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/bigcity.csv",
+                            "filename": "aml",
+                            "name": "Remission Times for Acute Myelogenous Leukaemia",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The data consist of measurements made on patients with malignant melanoma. Each patient had their tumour removed by surgery at the Department of Plastic Surgery, University Hospital of Odense, Denmark during the period 1962 to 1977. The surgery consisted of complete removal of the tumour together with about 2.5cm of the surrounding skin. Among the measurements taken were the thickness of the tumour and whether it was ulcerated or not. These are thought to be important prognostic variables in that patients with a thick and/or ulcerated tumour have an increased chance of death from melanoma. Patients were followed until the end of 1977. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/melanoma.csv",
+                            "filename": "melanoma",
+                            "name": " Survival from Malignant Melanoma ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The treatment strategy for a patient diagnosed with cancer of the prostate depend highly on whether the cancer has spread to the surrounding lymph nodes. It is common to operate on the patient to get samples from the nodes which can then be analysed under a microscope but clearly it would be preferable if an accurate assessment of nodal involvement could be made without surgery. \nFor a sample of 53 prostate cancer patients, a number of possible predictor variables were measured before surgery. The patients then had surgery to determine nodal involvement. It was required to see if nodal involvement could be accurately predicted from the predictor variables and which ones were most important. ",
+                            "download": "vincentarelbundock.github.io/Rdatasets/csv/boot/nodal.csv",
+                            "filename": "nodal",
+                            "name": "Nodal Involvement in Prostate Cancer ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The remission data frame has 27 rows and 3 columns.",
+                            "download": "vincentarelbundock.github.io/Rdatasets/csv/boot/remission.csv",
+                            "filename": "remission",
+                            "name": "Cancer Remission and Cell Activity ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Oncology"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Although all cases of AIDS in England and Wales must be reported to the Communicable Disease Surveillance Centre, there is often a considerable delay between the time of diagnosis and the time that it is reported. In estimating the prevalence of AIDS, account must be taken of the unknown number of cases which have been diagnosed but not reported. The data set here records the reported cases of AIDS diagnosed from July 1983 and until the end of 1992. The data are cross-classified by the date of diagnosis and the time delay in the reporting of the cases. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/aids.csv",
+                            "filename": "aids",
+                            "name": "Delay in AIDS Reporting in England and Wales",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "CD4 cells are carried in the blood as part of the human immune system. One of the effects of the HIV virus is that these cells die. The count of CD4 cells is used in determining the onset of full-blown AIDS in a patient. In this study of the effectiveness of a new anti-viral drug on HIV, 20 HIV-positive patients had their CD4 counts recorded and then were put on a course of treatment with this drug. After using the drug for one year, their CD4 counts were again recorded. The aim of the experiment was to show that patients taking the drug had increased CD4 counts which is not generally seen in HIV-positive patients.",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/cd4.csv",
+                            "filename": "CD4",
+                            "name": "CD4 Counts for HIV-Positive Patients",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "AIDS"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "In 1961 Doll and Hill sent out a questionnaire to all men on the British Medical Register enquiring about their smoking habits. Almost 70% of such men replied. Death certificates were obtained for medical practitioners and causes of death were assigned on the basis of these certificates. The breslow data set contains the person-years of observations and deaths from coronary artery disease accumulated during the first ten years of the study. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/breslow.csv",
+                            "filename": "breslow",
+                            "name": "Smoking Deaths Among Doctors ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The co.transfer data frame has 7 rows and 2 columns. Seven smokers with chickenpox had their levels of carbon monoxide transfer measured on entry to hospital and then again after 1 week. The main question being whether one week of hospitalization has changed the carbon monoxide transfer factor. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/co.transfer.csv",
+                            "filename": "co_transfer",
+                            "name": "Carbon Monoxide Transfer ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Smoking"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Howard Grimes from the Botany Department, North Carolina State University, conducted an experiment for biochemical analysis of intracellular storage and transport of calcium across plasma membrane. Cells were suspended in a solution of radioactive calcium for a certain length of time and then the amount of radioactive calcium that was absorbed by the cells was measured. The experiment was repeated independently with 9 different times of suspension each replicated 3 times. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/calcium.csv",
+                            "filename": "calcium",
+                            "name": "Calcium Uptake Data ",
+                            "number_format": 0,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The data are from an experiment which was designed to look for a relationship between a certain genetic characteristic and handedness. The 37 subjects were women who had a son with mental retardation due to inheriting a defective X-chromosome. For each such mother a genetic measurement of their DNA was made. Larger values of this measurement are known to be linked to the defective gene and it was hypothesized that larger values might also be linked to a progressive shift away from right-handednesss. Each woman also filled in a questionnaire regarding which hand they used for various tasks. From these questionnaires a measure of hand preference was found for each mother. The scale of this measure goes from 1, indicating someone who always favours their right hand, to 8, indicating someone who always favours their left hand. Between these two extremes are people who favour one hand for some tasks and the other for other tasks. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/claridge.csv",
+                            "filename": "claridge",
+                            "name": "Genetic Links to Left-handedness ",
+                            "number_format": 0,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The data consist of measurements of the length and breadth of the heads of pairs of adult brothers in 25 randomly sampled families. All measurements are expressed in millimetres. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/frets.csv",
+                            "filename": "frets",
+                            "name": "Head Dimensions in Brothers ",
+                            "number_format": 0,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The data gives the positions of the individual caveolae in a square region with sides of length 500 units. This grid was originally on a 2.65mum square of muscle fibre. The data are those points falling in the lower left hand quarter of the region used for the dataset caveolae.dat in the spatial package by B.D. Ripley (1994). ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/cav.csv",
+                            "filename": "cav",
+                            "name": "Position of Muscle Caveolae ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "79 urine specimens were analyzed in an effort to determine if certain physical characteristics of the urine might be related to the formation of calcium oxalate crystals. ",
+                            "download": "vincentarelbundock.github.io/Rdatasets/csv/boot/urine.csv",
+                            "filename": "urine",
+                            "name": "Urine Analysis Data ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Common"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Down's syndrome is a genetic disorder caused by an extra chromosome 21 or a part of chromosome 21 being translocated to another chromosome. The incidence of Down's syndrome is highly dependent on the mother's age and rises sharply after age 30. In the 1960's a large scale study of the effect of maternal age on the incidence of Down's syndrome was conducted at the British Columbia Health Surveillance Registry. These are the data which was collected in that study. \nMothers were classified by age. Most groups correspond to the age in years but the first group comprises all mothers with ages in the range 15-17 and the last is those with ages 46-49. No data for mothers over 50 or below 15 were collected. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/downs.bc.csv",
+                            "filename": "downs_bc",
+                            "name": " Incidence of Down's Syndrome in British Columbia\n",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Genetics"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "neuro is a matrix containing times of observed firing of a neuron in windows of 250ms either side of the application of a stimulus to a human subject. Each row of the matrix is a replication of the experiment and there were a total of 469 replicates. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/neuro.csv",
+                            "filename": "neuro",
+                            "name": "Neurophysiological Point Process Data ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Neurology"
+                }
+            ]
+        },
+        {
+            "category_name": "Nature",
+            "subcategories": [
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "This data set is part of a long study into body temperature regulation in beavers. Four adult female beavers were live-trapped and had a temperature-sensitive radio transmitter surgically implanted. Readings were taken every 10 minutes. The location of the beaver was also recorded and her activity level was dichotomized by whether she was in the retreat or outside of it since high-intensity activities only occur outside of the retreat. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/beaver.csv",
+                            "filename": "beaver",
+                            "name": "Beaver Body Temperature Data ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "144 adult (over 2kg in weight) cats used for experiments with the drug digitalis had their heart and body weight recorded. 47 of the cats were female and 97 were male. The catsM data frame consists of the data for the male cats. The full data are in dataset cats in package MASS.",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/catsM.csv",
+                            "filename": "catsM",
+                            "name": "Weight Data for Domestic Cats",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Data on the cardiac oxygen consumption and left ventricular pressure were gathered on 7 domestic dogs.",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/dogs.csv",
+                            "filename": "dogs",
+                            "name": "Cardiac Data for Domestic Dogs ",
+                            "number_format": 0,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Each row of the data frame represents a male duck who is a second generation cross of mallard and pintail ducks. For 11 such ducks a behavioural and plumage index were calculated. These were measured on scales devised for this experiment which was to examine whether there was any link between which species the ducks resembled physically and which they resembled in behaviour. The scale for the physical appearance ranged from 0 (identical in appearance to a mallard) to 20 (identical to a pintail). The behavioural traits of the ducks were on a scale from 0 to 15 with lower numbers indicating closer to mallard-like in behaviour. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/ducks.csv",
+                            "filename": "ducks",
+                            "name": "Behavioral and Plumage Characteristics of Hybrid Ducks ",
+                            "number_format": 0,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Sections were prepared from the brain of adult guinea pigs. Spontaneous currents that flowed into individual brain cells were then recorded and the peak amplitude of each current measured. The aim of the experiment was to see if the current flow was quantal in nature (i.e. that it is not a single burst but instead is built up of many smaller bursts of current). If the current was indeed quantal then it would be expected that the distribution of the current amplitude would be multimodal with modes at regular intervals. The modes would be expected to decrease in magnitude for higher current amplitudes. ",
+                            "download": "vincentarelbundock.github.io/Rdatasets/csv/boot/paulsen.csv",
+                            "filename": "paulsen",
+                            "name": " Neurotransmission in Guinea Pig Brains ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The data form a 3x4 factorial experiment, the factors being three poisons and four treatments. Each combination of the two factors was used for four animals, the allocation to animals having been completely randomized.",
+                            "download": "vincentarelbundock.github.io/Rdatasets/csv/boot/poisons.csv",
+                            "filename": "poisons",
+                            "name": "Animal Survival Times",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The data measured the survival percentages of batches of rats who were given varying doses of radiation. At each of 6 doses there were two or three replications of the experiment. ",
+                            "download": "vincentarelbundock.github.io/Rdatasets/csv/boot/survival.csv",
+                            "filename": "survival",
+                            "name": "Survival of Rats after Radiation Doses ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The data come from an aerial line transect survey of Southern Bluefin Tuna in the Great Australian Bight. An aircraft with two spotters on board flies randomly allocated line transects. Each school of tuna sighted is counted and its perpendicular distance from the transect measured. The survey was conducted in summer when tuna tend to stay on the surface. ",
+                            "download": "vincentarelbundock.github.io/Rdatasets/csv/boot/tuna.csv",
+                            "filename": "tuna",
+                            "name": " Tuna Sighting Data ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Animals"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Charles Darwin conducted an experiment to examine the superiority of cross-fertilized plants over self-fertilized plants. 15 pairs of plants were used. Each pair consisted of one cross-fertilized plant and one self-fertilized plant which germinated at the same time and grew in the same pot. The plants were measured at a fixed time after planting and the difference in heights between the cross- and self-fertilized plants are recorded in eighths of an inch.",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/darwin.csv",
+                            "filename": "darwin",
+                            "name": "Darwin's Plant Height Differences ",
+                            "number_format": 0,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The location of living bramble canes in a 9m square plot was recorded. We take 9m to be the unit of distance so that the plot can be thought of as a unit square. The bramble canes were also classified by their age. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/brambles.csv",
+                            "filename": "brambles",
+                            "name": "Spatial Location of Bramble Canes ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The cane data frame has 180 rows and 5 columns. The data frame represents a randomized block design with 45 varieties of sugar-cane and 4 blocks.",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/cane.csv",
+                            "filename": "cane",
+                            "name": "Sugar-cane Disease Data ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The number of balsam-fir seedlings in each quadrant of a grid of 50 five foot square quadrants were counted. The grid consisted of 5 rows of 10 quadrants in each row. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/fir.csv",
+                            "filename": "fir",
+                            "name": "Counts of Balsam-fir Seedlings ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Plants"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The data values are monthly averages of the daily stages (heights) of the Rio Negro at Manaus. Manaus is 18km upstream from the confluence of the Rio Negro with the Amazon but because of the tiny slope of the water surface and the lower courses of its flatland affluents, they may be regarded as a good approximation of the water level in the Amazon at the confluence. The data here cover 90 years from January 1903 until December 1992. \nThe Manaus gauge is tied in with an arbitrary bench mark of 100m set in the steps of the Municipal Prefecture; gauge readings are usually referred to sea level, on the basis of a mark on the steps leading to the Parish Church (Matriz), which is assumed to lie at an altitude of 35.874 m according to observations made many years ago under the direction of Samuel Pereira, an engineer in charge of the Manaus Sanitation Committee Whereas such an altitude cannot, by any means, be considered to be a precise datum point, observations have been provisionally referred to it. The measurements are in metres. \n",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/manaus.csv",
+                            "filename": "manaus",
+                            "name": "Average Heights of the Rio Negro river at Manaus",
+                            "number_format": 0,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Nitrofen is a herbicide that was used extensively for the control of broad-leaved and grass weeds in cereals and rice. Although it is relatively non-toxic to adult mammals, nitrofen is a significant tetragen and mutagen. It is also acutely toxic and reproductively toxic to cladoceran zooplankton. Nitrofen is no longer in commercial use in the U.S., having been the first pesticide to be withdrawn due to tetragenic effects. \nThe data here come from an experiment to measure the reproductive toxicity of nitrofen on a species of zooplankton (Ceriodaphnia dubia). 50 animals were randomized into batches of 10 and each batch was put in a solution with a measured concentration of nitrofen. Then the number of live offspring in each of the three broods to each animal was recorded. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/nitrofen.csv",
+                            "filename": "nitrofen",
+                            "name": "Toxicity of Nitrofen in Aquatic Systems ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Biweekly averages of the water salinity and river discharge in Pamlico Sound, North Carolina were recorded between the years 1972 and 1977. The data in this set consists only of those measurements in March, April and May. ",
+                            "download": "vincentarelbundock.github.io/Rdatasets/csv/boot/salinity.csv",
+                            "filename": "salinity",
+                            "name": "Water Salinity and River Discharge ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Rivers"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The data are the pole positions from a paleomagnetic study of New Caledonian laterites. ",
+                            "download": "vincentarelbundock.github.io/Rdatasets/csv/boot/polar.csv",
+                            "filename": "polar",
+                            "name": "Pole Positions of New Caledonian Laterites ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Geology"
+                }
+            ]
+        },
+        {
+            "category_name": "Statistics",
+            "subcategories": [
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The measurements are the population (in 1000's) of 49 U.S. cities in 1920 and 1930. The 49 cities are a random sample taken from the 196 largest cities in 1920. The city data frame consists of the first 10 observations in bigcity.",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/bigcity.csv",
+                            "filename": "bigcity",
+                            "name": "Population of U.S. Cities",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "column_description_0": "index",
+                            "column_description_1": "census year. ",
+                            "column_description_2": "Population, in millions ",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The CanPop data frame has 16 rows and 2 columns. Decennial time-series of Canadian population, 1851–2001. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/carData/CanPop.csv",
+                            "filename": "CanPop",
+                            "name": "Canadian Population Data",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Channing House is a retirement centre in Palo Alto, California. These data were collected between the opening of the house in 1964 until July 1, 1975. In that time 97 men and 365 women passed through the centre. For each of these, their age on entry and also on leaving or death was recorded. A large number of the observations were censored mainly due to the resident being alive on July 1, 1975 when the data was collected. Over the time of the study 130 women and 46 men died at Channing House. Differences between the survival of the sexes, taking age into account, was one of the primary concerns of this study. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/channing.csv",
+                            "filename": "channing",
+                            "name": " Channing House Data ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The measurements are the population (in 1000's) of 49 U.S. cities in 1920 and 1930. The 49 cities are a random sample taken from the 196 largest cities in 1920. The city data frame consists of the first 10 observations in bigcity. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/city.csv",
+                            "filename": "city",
+                            "name": "Population of U.S. Cities ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Demographics"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "In a study into the effect that warning signs have on speeding patterns, Cambridgeshire County Council considered 14 pairs of locations. The locations were paired to account for factors such as traffic volume and type of road. One site in each pair had a sign erected warning of the dangers of speeding and asking drivers to slow down. No action was taken at the second site. Three sets of measurements were taken at each site. Each set of measurements was nominally of the speeds of 100 cars but not all sites have exactly 100 measurements. These speed measurements were taken before the erection of the sign, shortly after the erection of the sign, and again after the sign had been in place for some time. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/amis.csv",
+                            "filename": "amis",
+                            "name": "Car Speeding and Warning Signs ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Proschan (1963) reported on the times between failures of the air-conditioning equipment in 10 Boeing 720 aircraft. The aircondit data frame contains the intervals for the ninth aircraft while aircondit7 contains those for the seventh aircraft. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/aircondit.csv",
+                            "filename": "aircondit",
+                            "name": "Failures of Air-conditioning Equipment ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Proschan (1963) reported on the times between failures of the air-conditioning equipment in 10 Boeing 720 aircraft. The aircondit data frame contains the intervals for the ninth aircraft while aircondit7 contains those for the seventh aircraft. \nBoth data frames have just one column. Note that the data have been sorted into increasing order. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/aircondit7.csv",
+                            "filename": "aircondit7",
+                            "name": "Failures of Air-conditioning Equipment ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The motor data frame has 94 rows and 4 columns. The rows are obtained by removing replicate values of time from the dataset mcycle. Two extra columns are added to allow for strata with a different residual variance in each stratum. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/motor.csv",
+                            "filename": "motor",
+                            "name": "Data from a Simulated Motorcycle Accident",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Traffic"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The excess return for the Acme Cleveland Corporation are recorded along with those for all stocks listed on the New York and American Stock Exchanges were recorded over a five year period. These excess returns are relative to the return on a risk-less investment such a U.S. Treasury bills. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/acme.csv",
+                            "filename": "acme",
+                            "name": "Monthly Excess Returns",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The data relate to the construction of 32 light water reactor (LWR) plants constructed in the U.S.A in the late 1960's and early 1970's. The data was collected with the aim of predicting the cost of construction of further LWR plants. 6 of the power plants had partial turnkey guarantees and it is possible that, for these plants, some manufacturers' subsidies may be hidden in the quoted capital costs. ",
+                            "download": "vincentarelbundock.github.io/Rdatasets/csv/boot/nuclear.csv",
+                            "filename": "nuclear",
+                            "name": " Nuclear Power Station Construction Data ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Each week that the market is open the Australian Wool Corporation set a floor price which determines their policy on intervention and is therefore a reflection of the overall price of wool for the week in question. Actual prices paid can vary considerably about the floor price. The series here is the log of the ratio between the price for fine grade wool and the floor price, each market week between July 1976 and Jun 1984. ",
+                            "download": "vincentarelbundock.github.io/Rdatasets/csv/boot/wool.csv",
+                            "filename": "wool",
+                            "name": " Australian Relative Wool Prices ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Economics"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The data are simulated successive observations from a process in equilibrium. The process is assumed to have specification limits (5.49, 5.79). ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/capability.csv",
+                            "filename": "capability",
+                            "name": "Simulated Manufacturing Process Data ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The cloth data frame has 32 rows and 2 columns. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/cloth.csv",
+                            "filename": "cloth",
+                            "name": "Number of Flaws in Cloth ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "This data frame gives the dates of 191 explosions in coal mines which resulted in 10 or more fatalities. The time span of the data is from March 15, 1851 until March 22 1962. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/coal.csv",
+                            "filename": "coal",
+                            "name": "Dates of Coal Mining Disasters ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Other"
+                }
+            ]
+        },
+        {
+            "category_name": "Physics",
+            "subcategories": [
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Between May 1934 and July 1935, the National Bureau of Standards in Washington D.C. conducted a series of experiments to estimate the acceleration due to gravity, g, at Washington. Each experiment produced a number of replicate estimates of g using the same methodology. Although the basic method remained the same for all experiments, that of the reversible pendulum, there were changes in configuration. \nThe gravity data frame contains the data from all eight experiments. The grav data frame contains the data from the experiments 7 and 8. The data are expressed as deviations from 980.000 in centimetres per second squared. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/grav.csv",
+                            "filename": "grav",
+                            "name": " Acceleration Due to Gravity ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Between May 1934 and July 1935, the National Bureau of Standards in Washington D.C. conducted a series of experiments to estimate the acceleration due to gravity, g, at Washington. Each experiment produced a number of replicate estimates of g using the same methodology. Although the basic method remained the same for all experiments, that of the reversible pendulum, there were changes in configuration. \nThe gravity data frame contains the data from all eight experiments. The grav data frame contains the data from the experiments 7 and 8. The data are expressed as deviations from 980.000 in centimetres per second squared. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/gravity.csv",
+                            "filename": "gravity",
+                            "name": "Acceleration Due to Gravity ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Mechanics"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "PET film is used in electrical insulation. In this accelerated life test the failure times for 44 samples in gas insulated transformers. 4 different voltage levels were used. ",
+                            "download": "https://vincentarelbundock.github.io/Rdatasets/doc/boot/hirose.html",
+                            "filename": "hirose",
+                            "name": " Failure Time of PET Film ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Electronics"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The tau particle is a heavy electron-like particle discovered in the 1970's by Martin Perl at the Stanford Linear Accelerator Center. Soon after its production the tau particle decays into various collections of more stable particles. About 86% of the time the decay involves just one charged particle. This rate has been measured independently 13 times. \nThe one-charged-particle event is made up of four major modes of decay as well as a collection of other events. The four main types of decay are denoted rho, pi, e and mu. These rates have been measured independently 6, 7, 14 and 19 times respectively. Due to physical constraints each experiment can only estimate the composite one-charged-particle decay rate or the rate of one of the major modes of decay. \nEach experiment consists of a major research project involving many years work. One of the goals of the experiments was to estimate the rate of decay due to events other than the four main modes of decay. These are uncertain events and so cannot themselves be observed directly. ",
+                            "download": "vincentarelbundock.github.io/Rdatasets/csv/boot/tau.csv",
+                            "filename": "tau",
+                            "name": " Tau Particle Decay Modes ",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Nuclear"
+                }
+            ]
+        }
+    ],
+    "collection_name": "R_Datasets"
 }
