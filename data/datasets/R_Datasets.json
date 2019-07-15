@@ -1,0 +1,290 @@
+{
+	"collection_name": "R_Datasets",
+	"categories": [{
+			"category_name": "Medicine",
+			"subcategories": [{
+					"datasets": [{
+						"filename": "aml",
+						"name": "Remission Times for Acute Myelogenous Leukaemia",
+						"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/bigcity.csv",
+						"description": "A clinical trial to evaluate the efficacy of maintenance chemotherapy for acute myelogenous leukaemia was conducted by Embury et al. (1977) at Stanford University. After reaching a stage of remission through treatment by chemotherapy, patients were randomized into two groups. The first group received maintenance chemotherapy and the second group did not. The aim of the study was to see if maintenance chemotherapy increased the length of the remission. The data here formed a preliminary analysis which was conducted in October 1974.",
+						"separator": ",",
+						"comment_character": "#",
+						"create_index_column": false,
+						"skip_empty_parts": false,
+						"simplify_whitespaces": true,
+						"remove_quotes": true,
+						"use_first_row_for_vectorname": true,
+						"number_format": 31,
+						"DateTime_format": "yyyy-MM-dd"
+					}],
+					"subcategory_name": "Oncology"
+				},
+				{
+					"datasets": [{
+							"filename": "aids",
+							"name": "Delay in AIDS Reporting in England and Wales",
+							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/aids.csv",
+							"description": "Although all cases of AIDS in England and Wales must be reported to the Communicable Disease Surveillance Centre, there is often a considerable delay between the time of diagnosis and the time that it is reported. In estimating the prevalence of AIDS, account must be taken of the unknown number of cases which have been diagnosed but not reported. The data set here records the reported cases of AIDS diagnosed from July 1983 and until the end of 1992. The data are cross-classified by the date of diagnosis and the time delay in the reporting of the cases. ",
+							"separator": ",",
+							"comment_character": "#",
+							"create_index_column": false,
+							"skip_empty_parts": false,
+							"simplify_whitespaces": true,
+							"remove_quotes": true,
+							"use_first_row_for_vectorname": true,
+							"number_format": 31,
+							"DateTime_format": "yyyy-MM-dd"
+						},
+						{
+							"filename": "CD4",
+							"name": "CD4 Counts for HIV-Positive Patients",
+							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/cd4.csv",
+							"description": "CD4 cells are carried in the blood as part of the human immune system. One of the effects of the HIV virus is that these cells die. The count of CD4 cells is used in determining the onset of full-blown AIDS in a patient. In this study of the effectiveness of a new anti-viral drug on HIV, 20 HIV-positive patients had their CD4 counts recorded and then were put on a course of treatment with this drug. After using the drug for one year, their CD4 counts were again recorded. The aim of the experiment was to show that patients taking the drug had increased CD4 counts which is not generally seen in HIV-positive patients.",
+							"separator": ",",
+							"comment_character": "#",
+							"create_index_column": false,
+							"skip_empty_parts": false,
+							"simplify_whitespaces": true,
+							"remove_quotes": true,
+							"use_first_row_for_vectorname": true,
+							"number_format": 31,
+							"DateTime_format": "yyyy-MM-dd"
+						}
+					],
+					"subcategory_name": "AIDS"
+				},
+				{
+					"datasets": [{
+						"filename": "breslow",
+						"DateTime_format": "yyyy-MM-dd",
+						"comment_character": "#",
+						"create_index_column": false,
+						"description": "In 1961 Doll and Hill sent out a questionnaire to all men on the British Medical Register enquiring about their smoking habits. Almost 70% of such men replied. Death certificates were obtained for medical practitioners and causes of death were assigned on the basis of these certificates. The breslow data set contains the person-years of observations and deaths from coronary artery disease accumulated during the first ten years of the study. ",
+						"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/breslow.csv",
+						"name": "Smoking Deaths Among Doctors ",
+						"number_format": 31,
+						"remove_quotes": true,
+						"separator": ",",
+						"simplify_whitespaces": true,
+						"skip_empty_parts": false,
+						"use_first_row_for_vectorname": true
+					}],
+					"subcategory_name": "Smoking"
+				},
+				{
+					"datasets": [{
+							"filename": "calcium",
+							"DateTime_format": "yyyy-MM-dd",
+							"comment_character": "#",
+							"create_index_column": false,
+							"description": "Howard Grimes from the Botany Department, North Carolina State University, conducted an experiment for biochemical analysis of intracellular storage and transport of calcium across plasma membrane. Cells were suspended in a solution of radioactive calcium for a certain length of time and then the amount of radioactive calcium that was absorbed by the cells was measured. The experiment was repeated independently with 9 different times of suspension each replicated 3 times. ",
+							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/calcium.csv",
+							"name": "Calcium Uptake Data ",
+							"number_format": 0,
+							"remove_quotes": true,
+							"separator": ",",
+							"simplify_whitespaces": true,
+							"skip_empty_parts": false,
+							"use_first_row_for_vectorname": true
+						},
+						{
+							"filename": "claridge",
+							"DateTime_format": "yyyy-MM-dd",
+							"comment_character": "#",
+							"create_index_column": false,
+							"description": "The data are from an experiment which was designed to look for a relationship between a certain genetic characteristic and handedness. The 37 subjects were women who had a son with mental retardation due to inheriting a defective X-chromosome. For each such mother a genetic measurement of their DNA was made. Larger values of this measurement are known to be linked to the defective gene and it was hypothesized that larger values might also be linked to a progressive shift away from right-handednesss. Each woman also filled in a questionnaire regarding which hand they used for various tasks. From these questionnaires a measure of hand preference was found for each mother. The scale of this measure goes from 1, indicating someone who always favours their right hand, to 8, indicating someone who always favours their left hand. Between these two extremes are people who favour one hand for some tasks and the other for other tasks. ",
+							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/claridge.csv",
+							"name": "Genetic Links to Left-handedness ",
+							"number_format": 0,
+							"remove_quotes": true,
+							"separator": ",",
+							"simplify_whitespaces": true,
+							"skip_empty_parts": false,
+							"use_first_row_for_vectorname": true
+						},
+						{
+							"filename": "frets",
+							"DateTime_format": "yyyy-MM-dd",
+							"comment_character": "#",
+							"create_index_column": false,
+							"description": "The data consist of measurements of the length and breadth of the heads of pairs of adult brothers in 25 randomly sampled families. All measurements are expressed in millimetres. ",
+							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/frets.csv",
+							"name": "Head Dimensions in Brothers ",
+							"number_format": 0,
+							"remove_quotes": true,
+							"separator": ",",
+							"simplify_whitespaces": true,
+							"skip_empty_parts": false,
+							"use_first_row_for_vectorname": true
+						}
+					],
+					"subcategory_name": "Common"
+				}
+			]
+		},
+		{
+			"category_name": "Nature",
+			"subcategories": [{
+					"datasets": [{
+							"filename": "beaver",
+							"name": "Beaver Body Temperature Data ",
+							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/beaver.csv",
+							"description": "This data set is part of a long study into body temperature regulation in beavers. Four adult female beavers were live-trapped and had a temperature-sensitive radio transmitter surgically implanted. Readings were taken every 10 minutes. The location of the beaver was also recorded and her activity level was dichotomized by whether she was in the retreat or outside of it since high-intensity activities only occur outside of the retreat. ",
+							"separator": ",",
+							"comment_character": "#",
+							"create_index_column": false,
+							"skip_empty_parts": false,
+							"simplify_whitespaces": true,
+							"remove_quotes": true,
+							"use_first_row_for_vectorname": true,
+							"number_format": 31,
+							"DateTime_format": "yyyy-MM-dd"
+						},
+						{
+							"filename": "catsM",
+							"name": "Weight Data for Domestic Cats",
+							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/catsM.csv",
+							"description": "144 adult (over 2kg in weight) cats used for experiments with the drug digitalis had their heart and body weight recorded. 47 of the cats were female and 97 were male. The catsM data frame consists of the data for the male cats. The full data are in dataset cats in package MASS.",
+							"separator": ",",
+							"comment_character": "#",
+							"create_index_column": false,
+							"skip_empty_parts": false,
+							"simplify_whitespaces": true,
+							"remove_quotes": true,
+							"use_first_row_for_vectorname": true,
+							"number_format": 31,
+							"DateTime_format": "yyyy-MM-dd"
+						},
+						{
+							"filename": "dogs",
+							"DateTime_format": "yyyy-MM-dd",
+							"comment_character": "#",
+							"create_index_column": false,
+							"description": "Data on the cardiac oxygen consumption and left ventricular pressure were gathered on 7 domestic dogs.",
+							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/dogs.csv",
+							"name": "Cardiac Data for Domestic Dogs ",
+							"number_format": 0,
+							"remove_quotes": true,
+							"separator": ",",
+							"simplify_whitespaces": true,
+							"skip_empty_parts": false,
+							"use_first_row_for_vectorname": true
+						},
+						{
+							"filename": "ducks",
+							"DateTime_format": "yyyy-MM-dd",
+							"comment_character": "#",
+							"create_index_column": false,
+							"description": "Each row of the data frame represents a male duck who is a second generation cross of mallard and pintail ducks. For 11 such ducks a behavioural and plumage index were calculated. These were measured on scales devised for this experiment which was to examine whether there was any link between which species the ducks resembled physically and which they resembled in behaviour. The scale for the physical appearance ranged from 0 (identical in appearance to a mallard) to 20 (identical to a pintail). The behavioural traits of the ducks were on a scale from 0 to 15 with lower numbers indicating closer to mallard-like in behaviour. ",
+							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/ducks.csv",
+							"name": "Behavioral and Plumage Characteristics of Hybrid Ducks ",
+							"number_format": 0,
+							"remove_quotes": true,
+							"separator": ",",
+							"simplify_whitespaces": true,
+							"skip_empty_parts": false,
+							"use_first_row_for_vectorname": true
+						}
+					],
+					"subcategory_name": "Animals"
+				},
+				{
+					"datasets": [{
+						"filename": "darwin",
+						"DateTime_format": "yyyy-MM-dd",
+						"comment_character": "#",
+						"create_index_column": false,
+						"description": "Charles Darwin conducted an experiment to examine the superiority of cross-fertilized plants over self-fertilized plants. 15 pairs of plants were used. Each pair consisted of one cross-fertilized plant and one self-fertilized plant which germinated at the same time and grew in the same pot. The plants were measured at a fixed time after planting and the difference in heights between the cross- and self-fertilized plants are recorded in eighths of an inch.",
+						"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/darwin.csv",
+						"name": "Darwin's Plant Height Differences ",
+						"number_format": 0,
+						"remove_quotes": true,
+						"separator": ",",
+						"simplify_whitespaces": true,
+						"skip_empty_parts": false,
+						"use_first_row_for_vectorname": true
+					}],
+					"subcategory_name": "Plants"
+				},
+				{
+					"datasets": [{
+						"filename": "manaus",
+						"DateTime_format": "yyyy-MM-dd",
+						"comment_character": "#",
+						"create_index_column": false,
+						"description": "The data values are monthly averages of the daily stages (heights) of the Rio Negro at Manaus. Manaus is 18km upstream from the confluence of the Rio Negro with the Amazon but because of the tiny slope of the water surface and the lower courses of its flatland affluents, they may be regarded as a good approximation of the water level in the Amazon at the confluence. The data here cover 90 years from January 1903 until December 1992. \nThe Manaus gauge is tied in with an arbitrary bench mark of 100m set in the steps of the Municipal Prefecture; gauge readings are usually referred to sea level, on the basis of a mark on the steps leading to the Parish Church (Matriz), which is assumed to lie at an altitude of 35.874 m according to observations made many years ago under the direction of Samuel Pereira, an engineer in charge of the Manaus Sanitation Committee Whereas such an altitude cannot, by any means, be considered to be a precise datum point, observations have been provisionally referred to it. The measurements are in metres. \n",
+						"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/manaus.csv",
+						"name": "Average Heights of the Rio Negro river at Manaus",
+						"number_format": 0,
+						"remove_quotes": true,
+						"separator": ",",
+						"simplify_whitespaces": true,
+						"skip_empty_parts": false,
+						"use_first_row_for_vectorname": true
+					}],
+					"subcategory_name": "Rivers"
+				}
+			]
+		},
+		{
+			"category_name": "Statistics",
+			"subcategories": [{
+					"datasets": [{
+							"filename": "bigcity",
+							"name": "Population of U.S. Cities",
+							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/bigcity.csv",
+							"description": "The measurements are the population (in 1000's) of 49 U.S. cities in 1920 and 1930. The 49 cities are a random sample taken from the 196 largest cities in 1920. The city data frame consists of the first 10 observations in bigcity.",
+							"separator": ",",
+							"comment_character": "#",
+							"create_index_column": false,
+							"skip_empty_parts": false,
+							"simplify_whitespaces": true,
+							"remove_quotes": true,
+							"use_first_row_for_vectorname": true,
+							"number_format": 31,
+							"DateTime_format": "yyyy-MM-dd"
+						},
+						{
+							"filename": "CanPop",
+							"DateTime_format": "yyyy-MM-dd",
+							"column_description_0": "index",
+							"column_description_1": "census year. ",
+							"column_description_2": "Population, in millions ",
+							"comment_character": "#",
+							"create_index_column": false,
+							"description": "The CanPop data frame has 16 rows and 2 columns. Decennial time-series of Canadian population, 1851–2001. ",
+							"download": "https://vincentarelbundock.github.io/Rdatasets/csv/carData/CanPop.csv",
+							"name": "Canadian Population Data",
+							"number_format": 31,
+							"remove_quotes": true,
+							"separator": ",",
+							"simplify_whitespaces": true,
+							"skip_empty_parts": false,
+							"use_first_row_for_vectorname": true
+						}
+					],
+					"subcategory_name": "Demographics"
+				},
+				{
+					"datasets": [{
+						"filename": "amis",
+						"name": "Car Speeding and Warning Signs ",
+						"download": "https://vincentarelbundock.github.io/Rdatasets/csv/boot/amis.csv",
+						"description": "In a study into the effect that warning signs have on speeding patterns, Cambridgeshire County Council considered 14 pairs of locations. The locations were paired to account for factors such as traffic volume and type of road. One site in each pair had a sign erected warning of the dangers of speeding and asking drivers to slow down. No action was taken at the second site. Three sets of measurements were taken at each site. Each set of measurements was nominally of the speeds of 100 cars but not all sites have exactly 100 measurements. These speed measurements were taken before the erection of the sign, shortly after the erection of the sign, and again after the sign had been in place for some time. ",
+						"separator": ",",
+						"comment_character": "#",
+						"create_index_column": false,
+						"skip_empty_parts": false,
+						"simplify_whitespaces": true,
+						"remove_quotes": true,
+						"use_first_row_for_vectorname": true,
+						"number_format": 31,
+						"DateTime_format": "yyyy-MM-dd"
+					}],
+					"subcategory_name": "Traffic"
+				}
+			]
+		}
+	]
+}

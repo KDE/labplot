@@ -1,0 +1,30 @@
+{
+  "collection_name": "StatSci_Datasets",
+  "categories": [
+    {
+      "category_name": "Medicine",
+      "subcategories": [
+        {
+          "datasets": [
+            {
+              "filename": "matui",
+              "name": "Position of Houses in a Japanese Farming Village",
+              "download": "http://www.statsci.org/data/general/matui.txt",
+              "description": "West of Tokyo lies a large alluvial plain, dotted by a network of farming villages. Matui (1968) analysed the position of the 911 houses making up one of those villages. The area studied was a rectangle, 3 km by 4 km. A grid was superimposed over a map of the village, dividing its 12 square kilometres into 1200 plots, each 100 metres on a side. The numbers of houses on each of those plots are recorded in a 30 by 40 matrix of data.",
+              "DateTime_format": "yyyy-MM-dd",
+              "comment_character": "#",
+              "create_index_column": false,
+              "number_format": 31,
+              "remove_quotes": true,
+              "separator": "SPACE",
+              "simplify_whitespaces": false,
+              "skip_empty_parts": false,
+              "use_first_row_for_vectorname": false
+            }
+          ],
+          "subcategory_name": "Oncology"
+        }
+      ]
+    }
+  ]
+}
