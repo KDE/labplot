@@ -52,6 +52,9 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(float, horizontalPadding, HorizontalPadding)
 	BASIC_D_ACCESSOR_DECL(float, verticalPadding, VerticalPadding)
+	BASIC_D_ACCESSOR_DECL(double, rightPadding, RightPadding)
+	BASIC_D_ACCESSOR_DECL(double, bottomPadding, BottomPadding)
+	BASIC_D_ACCESSOR_DECL(bool, symmetricPadding, SymmetricPadding)
 
 	typedef AbstractPlotPrivate Private;
 

@@ -79,8 +79,14 @@ private slots:
 signals:
 	friend class AbstractPlotSetHorizontalPaddingCmd;
 	friend class AbstractPlotSetVerticalPaddingCmd;
+	friend class AbstractPlotSetRightPaddingCmd;
+	friend class AbstractPlotSetBottomPaddingCmd;
+	friend class AbstractPlotSetSymmetricPaddingCmd;
 	void horizontalPaddingChanged(float);
 	void verticalPaddingChanged(float);
+	void rightPaddingChanged(double);
+	void bottomPaddingChanged(double);
+	void symmetricPaddingChanged(double);
 
 	void hovered();
 	void unhovered();

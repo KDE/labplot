@@ -149,6 +149,9 @@ void CartesianPlot::init() {
 	//offset between the plot area and the area defining the coordinate system, in scene units.
 	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
 	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
+	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
+	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
+	d->symmetricPadding = true;
 
 	connect(this, &AbstractAspect::aspectAdded, this, &CartesianPlot::childAdded);
 	connect(this, &AbstractAspect::aspectRemoved, this, &CartesianPlot::childRemoved);
@@ -2191,9 +2194,6 @@ void CartesianPlotPrivate::retransformScales() {
 	auto* plot = dynamic_cast<CartesianPlot*>(q);
 	QVector<CartesianScale*> scales;
 
-	//perform the mapping from the scene coordinates to the plot's coordinates here.
-	QRectF itemRect = mapRectFromScene(rect);
-
 	//check ranges for log-scales
 	if (xScale != CartesianPlot::ScaleLinear)
 		checkXRange();
@@ -2205,8 +2205,8 @@ void CartesianPlotPrivate::retransformScales() {
 	double sceneStart, sceneEnd, logicalStart, logicalEnd;
 
 	//create x-scales
-	int plotSceneStart = itemRect.x() + horizontalPadding;
-	int plotSceneEnd = itemRect.x() + itemRect.width() - horizontalPadding;
+	int plotSceneStart = dataRect.x();
+	int plotSceneEnd = dataRect.x() + dataRect.width();
 	if (!hasValidBreak) {
 		//no breaks available -> range goes from the plot beginning to the end of the plot
 		sceneStart = plotSceneStart;
@@ -2260,8 +2260,8 @@ void CartesianPlotPrivate::retransformScales() {
 
 	//create y-scales
 	scales.clear();
-	plotSceneStart = itemRect.y()+itemRect.height()-verticalPadding;
-	plotSceneEnd = itemRect.y()+verticalPadding;
+	plotSceneStart = dataRect.y() + dataRect.height();
+	plotSceneEnd = dataRect.y();
 	if (!hasValidBreak) {
 		//no breaks available -> range goes from the plot beginning to the end of the plot
 		sceneStart = plotSceneStart;
@@ -2392,10 +2392,28 @@ void CartesianPlotPrivate::retransformScales() {
  */
 void CartesianPlotPrivate::updateDataRect() {
 	dataRect = mapRectFromScene(rect);
-	dataRect.setX(dataRect.x() + horizontalPadding);
-	dataRect.setY(dataRect.y() + verticalPadding);
-	dataRect.setWidth(dataRect.width() - horizontalPadding);
-	dataRect.setHeight(dataRect.height() - verticalPadding);
+
+	double paddingLeft = horizontalPadding;
+	double paddingRight = rightPadding;
+	double paddingTop = verticalPadding;
+	double paddingBottom = bottomPadding;
+	if (symmetricPadding) {
+		paddingRight = horizontalPadding;
+		paddingBottom = verticalPadding;
+	}
+
+	dataRect.setX(dataRect.x() + paddingLeft);
+	dataRect.setY(dataRect.y() + paddingTop);
+
+	double newHeight = dataRect.height() - paddingBottom;
+	if (newHeight < 0)
+		newHeight = 0;
+	dataRect.setHeight(newHeight);
+
+	double newWidth = dataRect.width() - paddingRight;
+	if (newWidth < 0)
+		newWidth = 0;
+	dataRect.setWidth(newWidth);
 }
 
 void CartesianPlotPrivate::rangeChanged() {
