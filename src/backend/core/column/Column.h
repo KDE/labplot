@@ -82,6 +82,8 @@ public:
 	const QStringList& formulaVariableNames() const;
 	const QVector<Column*>& formulaVariableColumns() const;
 	const QStringList& formulaVariableColumnPaths() const;
+	void setformulVariableColumnsPath(int index, const QString path);
+	void setformulVariableColumn(int index, Column *column);
 	bool formulaAutoUpdate() const;
 
 	QString formula(int) const  override;

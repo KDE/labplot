@@ -903,9 +903,9 @@ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variab
 
 	m_formulaVariableColumnPaths.clear();
 
-	if (autoUpdate) {
-		for (auto column : variableColumns) {
-			m_formulaVariableColumnPaths << column->path();
+	for (auto column : variableColumns) {
+		m_formulaVariableColumnPaths << column->path();
+		if (autoUpdate) {
 			m_connectionsUpdateFormula << connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &ColumnPrivate::formulaVariableColumnRemoved);
 			connect(column->parentAspect(), &AbstractAspect::aspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
@@ -950,6 +950,14 @@ const QVector<Column*>& ColumnPrivate::formulaVariableColumns() const {
 
 const QStringList& ColumnPrivate::formulaVariableColumnPaths() const {
 	return m_formulaVariableColumnPaths;
+}
+
+void ColumnPrivate::setformulVariableColumnsPath(int index, QString path) {
+	m_formulaVariableColumnPaths[index] = path;
+}
+
+void ColumnPrivate::setformulVariableColumn(int index, Column* column) {
+	m_formulaVariableColumns[index] = column;
 }
 
 /*!
