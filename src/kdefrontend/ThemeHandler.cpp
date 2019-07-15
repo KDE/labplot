@@ -193,7 +193,6 @@ void ThemeHandler::showPanel() {
 	menu.addAction(widgetAction);
 
 	QPoint pos(-menu.sizeHint().width()+m_pbLoadTheme->width(),-menu.sizeHint().height());
-	menu.setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 	menu.exec(m_pbLoadTheme->mapToGlobal(pos));
 }
 

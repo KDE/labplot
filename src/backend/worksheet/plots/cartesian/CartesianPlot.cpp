@@ -848,12 +848,12 @@ public:
 	};
 
 	void redo() override {
-		const double horizontalRatio = m_rect.width() / m_private->rect.width();
-		const double verticalRatio = m_rect.height() / m_private->rect.height();
+// 		const double horizontalRatio = m_rect.width() / m_private->rect.width();
+// 		const double verticalRatio = m_rect.height() / m_private->rect.height();
 
 		qSwap(m_private->rect, m_rect);
 
-		m_private->q->handleResize(horizontalRatio, verticalRatio, false);
+// 		m_private->q->handleResize(horizontalRatio, verticalRatio, false);
 		m_private->retransform();
 		emit m_private->q->rectChanged(m_private->rect);
 	};

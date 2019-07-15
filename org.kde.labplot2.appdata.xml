@@ -35,6 +35,7 @@
   <summary xml:lang="ca">Representació interactiva de grafs i anàlisi de dades científiques</summary>
   <summary xml:lang="it">Grafica interattiva e analisi dei dati scientifici</summary>
   <summary xml:lang="nl">Interactief maken van grafieken en analyseren van wetenschappelijke gegevens</summary>
+  <summary xml:lang="pl">Interaktywne przestawianie graficzne i analizy danych naukowych</summary>
   <summary xml:lang="pt">Gráficos interactivos e análise de dados científicos</summary>
   <summary xml:lang="sv">Interaktiv diagramritning och analys av vetenskaplig data</summary>
   <summary xml:lang="uk">Інтерактивна побудова графіків та аналіз наукових даних</summary>
@@ -46,6 +47,7 @@
     <p xml:lang="ca">El LabPlot és una aplicació per a la representació interactiva de grafs i anàlisi de dades científiques.</p>
     <p xml:lang="it">LabPlot è un'applicazione per la grafica interattiva e per l'analisi dei dati scientifici.</p>
     <p xml:lang="nl">LabPlot2 is een toepassing voor het interactief maken van grafieken en het analyseren van wetenschappelijke gegevens.</p>
+    <p xml:lang="pl">LabPlot jest aplikacją do interaktywnego przestawiania graficznego i analizy danych naukowych.</p>
     <p xml:lang="pt">O LabPlot é uma aplicação para gráficos interactivos e para a análise de dados científicos.</p>
     <p xml:lang="sv">Labplot är ett program för interaktiv diagramritning och analys av vetenskaplig data.</p>
     <p xml:lang="uk">LabPlot — програма для інтерактивної побудови графіків та аналізу наукових даних.</p>
