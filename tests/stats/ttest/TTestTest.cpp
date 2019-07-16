@@ -82,8 +82,8 @@ void TTestTest::twoSampleIndependent() {
 	bool equalVariance = true;
 
 	tTest.performTest(test, categoricalVariable, equalVariance);
-	double tValue = tTest.statisticValue();
-	double pValue = tTest.pValue();
+    double tValue = tTest.statisticValue()[0];
+    double pValue = tTest.pValue()[0];
 
 	qDebug() << "tValue is " << tValue;
 	qDebug() << "pValue is: " << pValue;
@@ -135,8 +135,8 @@ void TTestTest::twoSamplePaired() {
 	test.tail = HypothesisTest::Test::Tail::Two;
 
 	tTest.performTest(test);
-	double tValue = tTest.statisticValue();
-	double pValue = tTest.pValue();
+    double tValue = tTest.statisticValue()[0];
+    double pValue = tTest.pValue()[0];
 
 	qDebug() << "tValue is " << tValue;
 	qDebug() << "pValue is: " << pValue;
@@ -185,8 +185,8 @@ void TTestTest::oneSample() {
 	test.tail = HypothesisTest::Test::Tail::Two;
 
 	tTest.performTest(test);
-	double tValue = tTest.statisticValue();
-	double pValue = tTest.pValue();
+    double tValue = tTest.statisticValue()[0];
+    double pValue = tTest.pValue()[0];
 
 	qDebug() << "tValue is " << tValue;
 	qDebug() << "pValue is: " << pValue;

@@ -94,8 +94,8 @@ public:
 
 	void performLeveneTest(bool categorical_variable);
 
-	double statisticValue();
-	double pValue();
+    QList<double> statisticValue();
+    QList<double> pValue();
 
 	QVBoxLayout* summaryLayout();
 

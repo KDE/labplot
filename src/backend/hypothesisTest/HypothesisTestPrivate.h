@@ -90,8 +90,8 @@ public:
 	double significanceLevel;
 	QString statsTable;
 	HypothesisTest::Test::Tail tailType;
-	double pValue{0};
-	double statisticValue{0};
+    QList<double> pValue;
+    QList<double> statisticValue;
 
 	QVBoxLayout* summaryLayout{nullptr};
 	QLabel* resultLine[10];
@@ -118,9 +118,6 @@ private:
 	void printLine(const int& index, const QString& msg, const QString& color = "black");
 	void printTooltip(const int& index, const QString& msg);
 	void printError(const QString& errorMsg);
-	void clearTestView();
-
-	void clearSummaryLayout();
 
 	bool m_dbCreated{false};
 };

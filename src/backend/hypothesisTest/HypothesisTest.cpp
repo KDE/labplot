@@ -47,8 +47,6 @@
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
 
-#include <math.h>
-
 extern "C" {
 #include "backend/nsl/nsl_stats.h"
 }
@@ -106,6 +104,12 @@ QString HypothesisTest::statsTable() {
 
 void HypothesisTest::performTest(Test test, bool categoricalVariable, bool equalVariance) {
 	d->tailType = test.tail;
+    d->pValue.clear();
+    d->statisticValue.clear();
+    d->statsTable = "";
+    for (int i = 0; i < 10; i++)
+        d->resultLine[i]->clear();
+
 	switch (test.subtype) {
 	case HypothesisTest::Test::SubType::TwoSampleIndependent: {
         d->currTestName = "<h2>" + i18n("Two Sample Independent Test") + "</h2>";
@@ -141,15 +145,14 @@ void HypothesisTest::performTest(Test test, bool categoricalVariable, bool equal
 void HypothesisTest::performLeveneTest(bool categoricalVariable) {
     d->currTestName = "<h2>" + i18n("Levene Test for Equality of Variance") + "</h2>";
 	d->performLeveneTest(categoricalVariable);
-
 	emit changed();
 }
 
-double HypothesisTest::statisticValue() {
+QList<double> HypothesisTest::statisticValue() {
 	return d->statisticValue;
 }
 
-double HypothesisTest::pValue() {
+QList<double> HypothesisTest::pValue() {
 	return d->pValue;
 }
 
@@ -203,8 +206,6 @@ void HypothesisTestPrivate::setColumns(QStringList cols) {
 /**************************Two Sample Independent *************************************/
 
 void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test::Type test, bool categoricalVariable, bool equalVariance) {
-	clearTestView();
-
 	if (columns.size() != 2) {
 		printError("Inappropriate number of columns selected");
 		return;
@@ -300,7 +301,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 
 			sp = qSqrt(((n[0]-1) * gsl_pow_2(std[0]) +
 					(n[1]-1) * gsl_pow_2(std[1]) ) / df );
-			statisticValue = (mean[0] - mean[1]) / (sp * qSqrt(1.0/n[0] + 1.0/n[1]));
+            statisticValue.append((mean[0] - mean[1]) / (sp * qSqrt(1.0/n[0] + 1.0/n[1])));
 			printLine(9, "<b>Assumption:</b> Equal Variance b/w both population means");
 		} else {
 			double temp_val;
@@ -309,8 +310,8 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 					(gsl_pow_2( (gsl_pow_2(std[1]) / n[1]) ) / (n[1]-1)));
 			df = qRound(temp_val);
 
-			statisticValue = (mean[0] - mean[1]) / (qSqrt( (gsl_pow_2(std[0])/n[0]) +
-					(gsl_pow_2(std[1])/n[1])));
+            statisticValue.append((mean[0] - mean[1]) / (qSqrt( (gsl_pow_2(std[0])/n[0]) +
+                    (gsl_pow_2(std[1])/n[1]))));
 			printLine(9, "<b>Assumption:</b> UnEqual Variance b/w both population means");
 		}
 
@@ -320,8 +321,8 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 	case HypothesisTest::Test::Type::ZTest: {
 		testName = "Z";
 		sp = qSqrt( ((n[0]-1) * gsl_pow_2(std[0]) + (n[1]-1) * gsl_pow_2(std[1])) / df);
-		statisticValue = (mean[0] - mean[1]) / (sp * qSqrt( 1.0 / n[0] + 1.0 / n[1]));
-		pValue = gsl_cdf_gaussian_P(statisticValue, sp);
+        statisticValue.append((mean[0] - mean[1]) / (sp * qSqrt( 1.0 / n[0] + 1.0 / n[1])));
+//        pValue.append(gsl_cdf_gaussian_P(statisticValue, sp));
 		break;
 	}
 	case HypothesisTest::Test::Type::Anova:
@@ -330,19 +331,19 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 	}
 
     currTestName = "<h2>" + i18n("Two Sample Independent %1 Test for %2 vs %3", testName, col1Name, col2Name) + "</h2>";
-	pValue = getPValue(test, statisticValue, col1Name, col2Name, (mean[0] - mean[1]), sp, df);
+    pValue.append(getPValue(test, statisticValue[0], col1Name, col2Name, (mean[0] - mean[1]), sp, df));
 
 	printLine(2, i18n("Significance level is %1", round(significanceLevel)), "blue");
 
-	printLine(4, i18n("%1 Value is %2 ", testName, round(statisticValue)), "green");
+    printLine(4, i18n("%1 Value is %2 ", testName, round(statisticValue[0])), "green");
 	printTooltip(4, i18n("More is the |%1-value|, more safely we can reject the null hypothesis", testName));
 
-	printLine(5, i18n("P Value is %1 ", pValue), "green");
+    printLine(5, i18n("P Value is %1 ", pValue[0]), "green");
 
 	printLine(6, i18n("Degree of Freedom is %1", df), "green");
 	printTooltip(6, i18n("Number of independent Pieces of information that went into calculating the estimate"));
 
-	if (pValue <= significanceLevel)
+    if (pValue[0] <= significanceLevel)
 		printTooltip(5, i18n("We can safely reject Null Hypothesis for significance level %1", round(significanceLevel)));
 	else
 		printTooltip(5, i18n("There is a plausibility for Null Hypothesis to be true"));
@@ -352,8 +353,6 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 /********************************Two Sample Paired ***************************************/
 
 void HypothesisTestPrivate::performTwoSamplePairedTest(HypothesisTest::Test::Type test) {
-	clearTestView();
-
 	if (columns.size() != 2) {
 		printError("Inappropriate number of columns selected");
 
@@ -403,7 +402,7 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(HypothesisTest::Test::Typ
 
 	switch (test) {
 	case HypothesisTest::Test::Type::TTest: {
-		statisticValue = mean / (std / qSqrt(n));
+        statisticValue[0] = mean / (std / qSqrt(n));
 		df = n - 1;
 		testName = "T";
 		printLine(6, i18n("Degree of Freedom is %1</p", df), "green");
@@ -411,7 +410,7 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(HypothesisTest::Test::Typ
 	}
 	case HypothesisTest::Test::Type::ZTest: {
 		testName = "Z";
-		statisticValue = mean / (std / qSqrt(n));
+        statisticValue[0] = mean / (std / qSqrt(n));
 		df = n - 1;
 		break;
 	}
@@ -422,14 +421,14 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(HypothesisTest::Test::Typ
 
 	}
 
-	pValue = getPValue(test, statisticValue, columns[0]->name(), i18n("%1", populationMean), mean, std, df);
+    pValue.append(getPValue(test, statisticValue[0], columns[0]->name(), i18n("%1", populationMean), mean, std, df));
     currTestName = "<h2>" + i18n("One Sample %1 Test for %2 vs %3", testName, columns[0]->name(), columns[1]->name()) + "</h2>";
 
 	printLine(2, i18n("Significance level is %1 ", round(significanceLevel)), "blue");
-	printLine(4, i18n("%1 Value is %2 ", testName, round(statisticValue)), "green");
-	printLine(5, i18n("P Value is %1 ", pValue), "green");
+    printLine(4, i18n("%1 Value is %2 ", testName, round(statisticValue[0])), "green");
+    printLine(5, i18n("P Value is %1 ", pValue[0]), "green");
 
-	if (pValue <= significanceLevel)
+    if (pValue[0] <= significanceLevel)
 		printTooltip(5, i18n("We can safely reject Null Hypothesis for significance level %1", significanceLevel));
 	else
 		printTooltip(5, i18n("There is a plausibility for Null Hypothesis to be true"));
@@ -440,8 +439,6 @@ void HypothesisTestPrivate::performTwoSamplePairedTest(HypothesisTest::Test::Typ
 /******************************** One Sample ***************************************/
 
 void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test) {
-	clearTestView();
-
 	if (columns.size() != 1) {
 		printError("Inappropriate number of columns selected");
 
@@ -488,7 +485,7 @@ void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test
 	switch (test) {
 	case HypothesisTest::Test::Type::TTest: {
 		testName = "T";
-		statisticValue = (mean - populationMean) / (std / qSqrt(n));
+        statisticValue.append((mean - populationMean) / (std / qSqrt(n)));
 		df = n - 1;
 		printLine(6, i18n("Degree of Freedom is %1", df), "blue");
 		break;
@@ -496,7 +493,7 @@ void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test
 	case HypothesisTest::Test::Type::ZTest: {
 		testName = "Z";
 		df = 0;
-		statisticValue = (mean - populationMean) / (std / qSqrt(n));
+        statisticValue.append((mean - populationMean) / (std / qSqrt(n)));
 		break;
 	}
 	case HypothesisTest::Test::Type::Anova:
@@ -504,14 +501,14 @@ void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test
 		break;
 	}
 
-	pValue = getPValue(test, statisticValue, columns[0]->name(), i18n("%1",populationMean), mean - populationMean, std, df);
+    pValue.append(getPValue(test, statisticValue[0], columns[0]->name(), i18n("%1",populationMean), mean - populationMean, std, df));
     currTestName = "<h2>" + i18n("One Sample %1 Test for %2", testName, columns[0]->name()) + "</h2>";
 
 	printLine(2, i18n("Significance level is %1", round(significanceLevel)), "blue");
-	printLine(4, i18n("%1 Value is %2", testName, round(statisticValue)), "green");
-	printLine(5, i18n("P Value is %1", pValue), "green");
+    printLine(4, i18n("%1 Value is %2", testName, round(statisticValue[0])), "green");
+    printLine(5, i18n("P Value is %1", pValue[0]), "green");
 
-	if (pValue <= significanceLevel)
+    if (pValue[0] <= significanceLevel)
 		printTooltip(5, i18n("We can safely reject Null Hypothesis for significance level %1", significanceLevel));
 	else
 		printTooltip(5, i18n("There is a plausibility for Null Hypothesis to be true"));
@@ -526,8 +523,7 @@ void HypothesisTestPrivate::performOneSampleTest(HypothesisTest::Test::Type test
 // w stands for within groups
 // np is number of partition i.e., number of classes
 void HypothesisTestPrivate::performOneWayAnova() {
-	clearTestView();
-	int np, totalRows;
+    int np, totalRows;
 	countPartitions(columns[0], np, totalRows);
 
 	int* ni = new int[np];
@@ -551,8 +547,6 @@ void HypothesisTestPrivate::performOneWayAnova() {
 	double sW = 0;			// sum of squares of (value - mean of group) within the groups
 	int fW = 0;			// degree of freedom within the group
 	double msW = 0;		// mean sum of squares within the groups
-	double fValue = 0;
-
 
 	// now finding mean of each group;
 
@@ -573,10 +567,10 @@ void HypothesisTestPrivate::performOneWayAnova() {
 	msB = sB / fB;
 
 	msW = sW / fW;
-	fValue = msB / msW;
+    statisticValue.append(msB / msW);
 
 
-	pValue = nsl_stats_fdist_p(fValue, static_cast<size_t>(np-1), fW);
+    pValue.append(nsl_stats_fdist_p(statisticValue[0], static_cast<size_t>(np-1), fW));
 
 	QMapIterator<QString, int> i(classnameToIndex);
 	while (i.hasNext()) {
@@ -643,10 +637,10 @@ void HypothesisTestPrivate::performOneWayAnova() {
 	delete[] std;
 	delete[] colNames;
 
-	printLine(1, i18n("F Value is %1", round(fValue)), "green");
-	printLine(2, i18n("P Value is %1 ", pValue), "green");
+    printLine(1, i18n("F Value is %1", round(statisticValue[0])), "green");
+    printLine(2, i18n("P Value is %1 ", pValue[0]), "green");
 
-	if (pValue <= significanceLevel)
+    if (pValue[0] <= significanceLevel)
 		printTooltip(2, i18n("We can safely reject Null Hypothesis for significance level %1", significanceLevel));
 	else
 		printTooltip(2, i18n("There is a plausibility for Null Hypothesis to be true"));
@@ -659,9 +653,9 @@ void HypothesisTestPrivate::performOneWayAnova() {
 // all formulas and symbols are taken from: http://statweb.stanford.edu/~susan/courses/s141/exanova.pdf
 
 //TODO: suppress warning of variable length array are a C99 feature.
-//TODO: changed int mean to double mean;
+//TODO: add assumptions verification option
+//TODO: add tail option (if needed)
 void HypothesisTestPrivate::performTwoWayAnova() {
-    clearTestView();
     int np_a, totalRows_a;
     int np_b, totalRows_b;
     countPartitions(columns[0], np_a, totalRows_a);
@@ -720,9 +714,9 @@ void HypothesisTestPrivate::performTwoWayAnova() {
             groupMean[i][j] /= replicates[i][j];
         }
 
-    for (int i = 0; i < np_a; i++)
-        for (int j = 0; j < np_b; j++)
-            groupMean[i][j] = int(groupMean[i][j]);
+//    for (int i = 0; i < np_a; i++)
+//        for (int j = 0; j < np_b; j++)
+//            groupMean[i][j] = int(groupMean[i][j]);
 
     double ss_within = 0;
     for (int i = 0; i < totalRows_a; i++) {
@@ -749,15 +743,32 @@ void HypothesisTestPrivate::performTwoWayAnova() {
     for (int i = 0; i < np_a; i++)
         mean += mean_a[i] / np_a;
 
-    QDEBUG("ss_within is " << ss_within);
-    QDEBUG("df_within is " << df_within);
-    QDEBUG("ms_within is " << ms_within);
+
+    double ss_a = 0;
+    for (int i = 0; i < np_a; i++)
+        ss_a += gsl_pow_2(mean_a[i] - mean);
+    ss_a *= replicate * np_b;
+
+    int df_a = np_a - 1;
+    double ms_a = ss_a / df_a;
+
+    double ss_b = 0;
+    for (int i = 0; i < np_b; i++)
+        ss_b += gsl_pow_2(mean_b[i] - mean);
+    ss_b *= replicate * np_a;
+
+    int df_b = np_b - 1;
+    double ms_b = ss_b / df_b;
+
+    double ss_interaction = 0;
 
     for (int i = 0; i < np_a; i++)
-        QDEBUG("mean_a is " << mean_a[i]);
-    for (int i = 0; i < np_b; i++)
-        QDEBUG("mean_b is " << mean_b[i]);
+        for (int j = 0; j < np_b; j++)
+            ss_interaction += gsl_pow_2(groupMean[i][j] - mean_a[i] - mean_b[j] + mean);
 
+    ss_interaction *= replicate;
+    int df_interaction = (np_a - 1) * (np_b - 1);
+    double ms_interaction = ss_interaction / df_interaction;
 
     QString partitionNames_a[np_a];
     QString partitionNames_b[np_b];
@@ -791,24 +802,79 @@ void HypothesisTestPrivate::performTwoWayAnova() {
     for (int i = 0; i < np_a; i++) {
         rowMajor.append(new Cell(partitionNames_a[i], level, true));
         for (int j = 0; j < np_b; j++) {
-            rowMajor.append(new Cell(groupMean[i][j], level));
+            rowMajor.append(new Cell(round(groupMean[i][j]), level));
             rowMajor.append(new Cell(replicates[i][j], level));
         }
-        rowMajor.append(new Cell(mean_a[i], level));
+        rowMajor.append(new Cell(round(mean_a[i]), level));
         level++;
     }
 
     rowMajor.append(new Cell("Mean", level, true));
     for (int i = 0; i < np_b; i++)
-        rowMajor.append(new Cell(mean_b[i], level, false, 1, 2));
-    rowMajor.append(new Cell(mean, level));
+        rowMajor.append(new Cell(round(mean_b[i]), level, false, 1, 2));
+    rowMajor.append(new Cell(round(mean), level));
 
     statsTable = "<h3>" + i18n("Contingency Table") + "</h3>";
     statsTable += getHtmlTable3(rowMajor);
 
-//    QDEBUG("");
-//    QDEBUG("");
-//    QDEBUG(statsTable);
+    statsTable += "</br>";
+    statsTable += "<h3>" + i18n("results table") + "</h3>";
+
+    rowMajor.clear();
+    level = 0;
+    rowMajor.append(new Cell("", level, true));
+    rowMajor.append(new Cell("SS", level, true));
+    rowMajor.append(new Cell("DF", level, true));
+    rowMajor.append(new Cell("MS", level, true));
+
+    level++;
+    rowMajor.append(new Cell(columns[0]->name(), level, true));
+    rowMajor.append(new Cell(round(ss_a), level));
+    rowMajor.append(new Cell(df_a, level));
+    rowMajor.append(new Cell(round(ms_a), level));
+
+    level++;
+    rowMajor.append(new Cell(columns[1]->name(), level, true));
+    rowMajor.append(new Cell(round(ss_b), level));
+    rowMajor.append(new Cell(df_b, level));
+    rowMajor.append(new Cell(round(ms_b), level));
+
+    level++;
+    rowMajor.append(new Cell("Interaction", level, true));
+    rowMajor.append(new Cell(round(ss_interaction), level));
+    rowMajor.append(new Cell(df_interaction, level));
+    rowMajor.append(new Cell(round(ms_interaction), level));
+
+    level++;
+    rowMajor.append(new Cell("Within", level, true));
+    rowMajor.append(new Cell(round(ss_within), level));
+    rowMajor.append(new Cell(df_within, level));
+    rowMajor.append(new Cell(round(ms_within), level));
+
+    statsTable += getHtmlTable3(rowMajor);
+
+    double fValue_a = ms_a / ms_within;
+    double fValue_b = ms_b / ms_within;
+    double fValue_interaction = ms_interaction / ms_within;
+
+    double pValue_a = nsl_stats_fdist_p(fValue_a, static_cast<size_t>(np_a - 1), df_a);
+    double pValue_b = nsl_stats_fdist_p(fValue_b, static_cast<size_t>(np_b - 1), df_b);
+
+    printLine(0, "F(df<sub>" + columns[0]->name() + "</sub>, df<sub>within</sub>) is " + round(fValue_a), "blue");
+    printLine(1, "F(df<sub>" + columns[1]->name() + "</sub>, df<sub>within</sub>) is " + round(fValue_b), "blue");
+    printLine(2, "F(df<sub>interaction</sub>, df<sub>within</sub>) is " + round(fValue_interaction), "blue");
+
+    printLine(4, "P(df<sub>" + columns[0]->name() + "</sub>, df<sub>within</sub>) is " + round(pValue_a), "blue");
+    printLine(5, "P(df<sub>" + columns[1]->name() + "</sub>, df<sub>within</sub>) is " + round(pValue_b), "blue");
+//    printLine(2, "P(df<sub>interaction</sub>, df<sub>within</sub>) is " + round(fValue_interaction), "blue");
+
+    statisticValue.append(fValue_a);
+    statisticValue.append(fValue_b);
+    statisticValue.append(fValue_interaction);
+
+    pValue.append(pValue_a);
+    pValue.append(pValue_b);
+
     return;
 }
 
@@ -825,8 +891,6 @@ void HypothesisTestPrivate::performTwoWayAnova() {
 // ziBarBar	= mean for all zij
 // ni			= number of elements in group i
 void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
-	clearTestView();
-
 	if (columns.size() != 2) {
 		printError("Inappropriate number of columns selected");
 		return;
@@ -1045,16 +1109,16 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 	delete[] ziBar;
 	delete[] ni;
 
-	pValue = nsl_stats_fdist_p(fValue, static_cast<size_t>(np-1), df);
+    pValue.append(nsl_stats_fdist_p(fValue, static_cast<size_t>(np-1), df));
 
 	printLine(0, "Null Hypothesis: Variance is equal between all classes", "blue");
 	printLine(1, "Alternate Hypothesis: Variance is not equal in at-least one pair of classes", "blue");
 	printLine(2, i18n("Significance level is %1", round(significanceLevel)), "blue");
 	printLine(4, i18n("F Value is %1 ", round(fValue)), "green");
-	printLine(5, i18n("P Value is %1 ", pValue), "green");
+    printLine(5, i18n("P Value is %1 ", pValue[0]), "green");
 	printLine(6, i18n("Degree of Freedom is %1", df), "green");
 
-	if (pValue <= significanceLevel) {
+    if (pValue[0] <= significanceLevel) {
 		printTooltip(5, i18n("We can safely reject Null Hypothesis for significance level %1", significanceLevel));
 		printLine(8, "Requirement for homogeneity is not met", "red");
 	} else {
@@ -1062,6 +1126,7 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 		printLine(8, "Requirement for homogeneity is met", "green");
 	}
 
+    statisticValue.append(fValue);
 	return;
 }
 
@@ -1247,28 +1312,28 @@ HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsCategorical(Col
 
 //TODO change ("⋖") symbol to ("<"), currently macro UTF8_QSTRING is not working properly if used "<" symbol;
 // TODO: check for correctness between: for TestZ with TailTwo
-//       pValue = 2*gsl_cdf_tdist_P(value, df) v/s
-//       pValue = gsl_cdf_tdis_P(value, df) + gsl_cdf_tdis_P(-value, df);
+//       pValue.append(2*gsl_cdf_tdist_P(value, df) v/s
+//       pValue.append(gsl_cdf_tdis_P(value, df) + gsl_cdf_tdis_P(-value, df);
 double HypothesisTestPrivate::getPValue(const HypothesisTest::Test::Type& test, double& value, const QString& col1Name, const QString& col2Name, const double mean, const double sp, const int df) {
 
 	switch (test) {
 	case HypothesisTest::Test::Type::TTest: {
 		switch (tailType) {
 		case HypothesisTest::Test::Tail::Negative: {
-			pValue = gsl_cdf_tdist_P(value, df);
+            pValue.append(gsl_cdf_tdist_P(value, df));
 			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("≥"), col2Name), "blue");
 			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("⋖"), col2Name), "blue");
 			break;
 		}
 		case HypothesisTest::Test::Tail::Positive: {
 			value *= -1;
-			pValue = gsl_cdf_tdist_P(value, df);
+            pValue.append(gsl_cdf_tdist_P(value, df));
 			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("≤"), col2Name), "blue");
 			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING(">"), col2Name), "blue");
 			break;
 		}
 		case HypothesisTest::Test::Tail::Two: {
-			pValue = 2.*gsl_cdf_tdist_P(-fabs(value), df);
+            pValue.append(2.*gsl_cdf_tdist_P(-fabs(value), df));
 
 			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("="), col2Name), "blue");
 			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("≠"), col2Name), "blue");
@@ -1280,20 +1345,20 @@ double HypothesisTestPrivate::getPValue(const HypothesisTest::Test::Type& test, 
 	case HypothesisTest::Test::Type::ZTest: {
 		switch (tailType) {
 		case HypothesisTest::Test::Tail::Negative: {
-			pValue = gsl_cdf_gaussian_P(value - mean, sp);
+            pValue.append(gsl_cdf_gaussian_P(value - mean, sp));
 			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("≥"), col2Name), "blue");
 			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("⋖"), col2Name), "blue");
 			break;
 		}
 		case HypothesisTest::Test::Tail::Positive: {
 			value *= -1;
-			pValue = nsl_stats_tdist_p(value - mean, sp);
+            pValue.append(nsl_stats_tdist_p(value - mean, sp));
 			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("≤"), col2Name), "blue");
 			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING(">"), col2Name), "blue");
 			break;
 		}
 		case HypothesisTest::Test::Tail::Two: {
-			pValue = 2.*gsl_cdf_gaussian_P(value - mean, sp);
+            pValue.append(2.*gsl_cdf_gaussian_P(value - mean, sp));
 			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("="), col2Name), "blue");
 			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("≠"), col2Name), "blue");
 			break;
@@ -1306,9 +1371,9 @@ double HypothesisTestPrivate::getPValue(const HypothesisTest::Test::Type& test, 
 		break;
 	}
 
-	if (pValue > 1)
+    if (pValue[0] > 1)
 		return 1;
-    return pValue;
+    return pValue[0];
 }
 
 int HypothesisTestPrivate::setSpanValues(HypothesisTestPrivate::Node* root, int& totalLevels) {
@@ -1473,7 +1538,9 @@ QString HypothesisTestPrivate::getHtmlTable3(const QList<HypothesisTestPrivate::
             ".tg  {border-collapse:collapse;border: 1px solid black;}"
             ".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border: 1px solid black;overflow:hidden;word-break:normal;color:#333;background-color:#fff;}"
             ".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border: 1px solid black;overflow:hidden;word-break:normal;color:#333;background-color:#f0f0f0;}"
-            "</style><table class=tg>";
+            "</style>";
+
+    table += "<table class=tg>";
 
     table += "  <tr>";
     int prevLevel = 0;
@@ -1501,6 +1568,7 @@ QString HypothesisTestPrivate::getHtmlTable3(const QList<HypothesisTestPrivate::
                 cellEndTag;
     }
     table += "  <tr>";
+    table += "</table>";
     return table;
 }
 
@@ -1525,16 +1593,6 @@ void HypothesisTestPrivate::printTooltip(const int &index, const QString &msg) {
 
 void HypothesisTestPrivate::printError(const QString& errorMsg) {
 	printLine(0, errorMsg, "red");
-}
-
-void HypothesisTestPrivate::clearSummaryLayout() {
-	for (int i = 0; i < 10; i++)
-		resultLine[i]->clear();
-}
-
-void HypothesisTestPrivate::clearTestView() {
-	statsTable = "";
-	clearSummaryLayout();
 }
 
 
