@@ -337,6 +337,14 @@ const QStringList& Column::formulaVariableColumnPaths() const {
 	return d->formulaVariableColumnPaths();
 }
 
+void Column::setformulVariableColumnsPath(int index, const QString path) {
+	d->setformulVariableColumnsPath(index, path);
+}
+
+void Column::setformulVariableColumn(int index, Column* column) {
+	d->setformulVariableColumn(index, column);
+}
+
 bool Column::formulaAutoUpdate() const {
 	return d->formulaAutoUpdate();
 }

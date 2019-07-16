@@ -255,6 +255,15 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 			curve->setUndoAware(true);
 
 		}
+
+		QVector<Column*> columns = children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+		for (auto* tempColumn : columns) {
+			const QVector<Column*> formulaVariableColumns = tempColumn->formulaVariableColumns();
+			for (int i = 0; i < formulaVariableColumns.count(); i++) {
+				if (formulaVariableColumns[i] == column)
+					tempColumn->setformulVariableColumnsPath(i, columnPath);
+			}
+		}
 		return;
 	}
 
@@ -310,6 +319,14 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 				curve->setYErrorMinusColumn(column);
 		}
 		curve->setUndoAware(true);
+	}
+	QVector<Column*> columns = children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (auto* tempColumn : columns) {
+		const QStringList formulaVariableColumnPaths = tempColumn->formulaVariableColumnPaths();
+		for (int i = 0; i < formulaVariableColumnPaths.count(); i++) {
+			if (formulaVariableColumnPaths[i] == column->path())
+				tempColumn->setformulVariableColumn(i, const_cast<Column*>(static_cast<const Column*>(column)));
+		}
 	}
 
 }

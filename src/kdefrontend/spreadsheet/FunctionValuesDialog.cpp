@@ -132,6 +132,7 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 	} else {
 		//formula and variables are available
 		const QVector<Column*>& variableColumns = m_columns.first()->formulaVariableColumns();
+		const QStringList columnPaths = m_columns.first()->formulaVariableColumnPaths();
 
 		//add all available variables and select the corresponding columns
 		const QVector<AbstractAspect*> cols = m_spreadsheet->project()->children(AspectType::Column, AbstractAspect::Recursive);
@@ -147,10 +148,11 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 				const auto* column = dynamic_cast<const AbstractColumn*>(col);
 				if (column)
 					m_variableDataColumns[i]->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
-				else {
+				else
 					m_variableDataColumns[i]->setCurrentModelIndex(QModelIndex());
-					m_variableDataColumns[i]->setStyleSheet("QComboBox{background: red;}");
-				}
+
+				m_variableDataColumns[i]->useCurrentIndexText(true);
+				m_variableDataColumns[i]->setInvalid(false);
 
 				found = true;
 				break;
@@ -160,7 +162,9 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 			//->highlight the combobox red
 			if (!found) {
 				m_variableDataColumns[i]->setCurrentModelIndex(QModelIndex());
-				m_variableDataColumns[i]->setStyleSheet("QComboBox{background: red;}");
+				m_variableDataColumns[i]->useCurrentIndexText(false);
+				m_variableDataColumns[i]->setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", columnPaths[i]));
+				m_variableDataColumns[i]->setText(columnPaths[i].split("/").last());
 			}
 		}
 	}

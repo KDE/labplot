@@ -123,8 +123,11 @@ private slots:
 	void borderWidthChanged(double);
 	void borderCornerRadiusChanged(double);
 	void borderOpacityChanged(int);
+	void symmetricPaddingChanged(bool);
 	void horizontalPaddingChanged(double);
+	void rightPaddingChanged(double);
 	void verticalPaddingChanged(double);
+	void bottomPaddingChanged(double);
 
 	//SLOTs for changes triggered in CartesianPlot
 	//general
@@ -169,6 +172,9 @@ private slots:
 	void plotBorderOpacityChanged(float);
 	void plotHorizontalPaddingChanged(float);
 	void plotVerticalPaddingChanged(float);
+	void plotRightPaddingChanged(double);
+	void plotBottomPaddingChanged(double);
+	void plotSymmetricPaddingChanged(bool);
 
 	//save/load template
 	void loadConfigFromTemplate(KConfig&);

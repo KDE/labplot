@@ -80,6 +80,8 @@ public:
 	const QStringList& formulaVariableNames() const;
 	const QVector<Column*>& formulaVariableColumns() const;
 	const QStringList& formulaVariableColumnPaths() const;
+	void setformulVariableColumnsPath(int index, QString path);
+	void setformulVariableColumn(int index, Column *column);
 	bool formulaAutoUpdate() const;
 	void setFormula(const QString& formula, const QStringList& variableNames,
 					const QVector<Column*>& variableColumns, bool autoUpdate);
