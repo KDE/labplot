@@ -82,6 +82,7 @@ public:
 	void setSignificanceLevel(QVariant alpha);
 	QString testName();
 	QString statsTable();
+    QMap<QString, QString>* tooltips();
 
 	void performTest(Test m_test, bool categoricalVariable = true, bool equalVariance = true);
 	//	void performTwoSampleIndependentTTest(bool categorical_variable, bool equal_variance);

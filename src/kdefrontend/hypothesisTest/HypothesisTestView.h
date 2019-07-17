@@ -49,6 +49,7 @@ class QModelIndex;
 class QItemSelection;
 class QLabel;
 class QTextEdit;
+class QTextCursor;
 
 class HypothesisTestView : public QWidget {
 	Q_OBJECT
@@ -83,6 +84,7 @@ public slots:
 	void fillToolBar(QToolBar*);
 	void print(QPrinter*) const;
 	void changed();
+    void cursorPositionChanged();
     void clearResult();
 private slots:
 };

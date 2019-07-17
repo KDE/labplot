@@ -99,7 +99,11 @@ QString HypothesisTest::testName() {
 }
 
 QString HypothesisTest::statsTable() {
-	return d->statsTable;
+    return d->statsTable;
+}
+
+QMap<QString, QString>* HypothesisTest::tooltips() {
+    return d->tooltips;
 }
 
 void HypothesisTest::performTest(Test test, bool categoricalVariable, bool equalVariance) {
@@ -107,6 +111,7 @@ void HypothesisTest::performTest(Test test, bool categoricalVariable, bool equal
     d->pValue.clear();
     d->statisticValue.clear();
     d->statsTable = "";
+    d->tooltips->clear();
     for (int i = 0; i < 10; i++)
         d->resultLine[i]->clear();
 
@@ -167,7 +172,8 @@ QVBoxLayout* HypothesisTest::summaryLayout() {
 //TODO: add tooltip to tables. (currently it is not possible to use with QTextDocument);
 
 HypothesisTestPrivate::HypothesisTestPrivate(HypothesisTest* owner) : q(owner),
-	summaryLayout(new QVBoxLayout()) {
+    summaryLayout(new QVBoxLayout()),
+    tooltips(new QMap<QString, QString>){
 
 	for (int i = 0; i < 10; i++) {
 		resultLine[i] = new QLabel();
@@ -788,10 +794,10 @@ void HypothesisTestPrivate::performTwoWayAnova() {
     // printing table;
     // cell constructor structure; data, level, rowSpanCount, columnSpanCount, isHeader;
     QList<Cell*> rowMajor;
-    rowMajor.append(new Cell("", 0, true, 2, 1));
+    rowMajor.append(new Cell("", 0, true, "", 2, 1));
     for (int i = 0; i < np_b; i++)
-        rowMajor.append(new Cell(partitionNames_b[i], 0, true, 1, 2));
-    rowMajor.append(new Cell("Mean", 0, true, 2));
+        rowMajor.append(new Cell(partitionNames_b[i], 0, true, "", 1, 2));
+    rowMajor.append(new Cell("Mean", 0, true, "", 2));
 
     for (int i = 0; i < np_b; i++) {
         rowMajor.append(new Cell("Mean", 1, true));
@@ -811,7 +817,7 @@ void HypothesisTestPrivate::performTwoWayAnova() {
 
     rowMajor.append(new Cell("Mean", level, true));
     for (int i = 0; i < np_b; i++)
-        rowMajor.append(new Cell(round(mean_b[i]), level, false, 1, 2));
+        rowMajor.append(new Cell(round(mean_b[i]), level, false, "", 1, 2));
     rowMajor.append(new Cell(round(mean), level));
 
     statsTable = "<h3>" + i18n("Contingency Table") + "</h3>";
@@ -824,7 +830,7 @@ void HypothesisTestPrivate::performTwoWayAnova() {
     level = 0;
     rowMajor.append(new Cell("", level, true));
     rowMajor.append(new Cell("SS", level, true));
-    rowMajor.append(new Cell("DF", level, true));
+    rowMajor.append(new Cell("DF", level, true, "degree of freedom"));
     rowMajor.append(new Cell("MS", level, true));
 
     level++;
@@ -1528,6 +1534,7 @@ QString HypothesisTestPrivate::getHtmlTable(int row, int column, QVariant* rowMa
 }
 
 QString HypothesisTestPrivate::getHtmlTable3(const QList<HypothesisTestPrivate::Cell*>& rowMajor) {
+    tooltips->clear();
     int rowMajorSize = rowMajor.size();
 
     if (rowMajorSize == 0)
@@ -1566,6 +1573,9 @@ QString HypothesisTestPrivate::getHtmlTable3(const QList<HypothesisTestPrivate::
                 ">" +
                 i18n("%1", currCell->data) +
                 cellEndTag;
+
+        if (!currCell->tooltip.isEmpty())
+            tooltips->insert(currCell->data, currCell->tooltip);
     }
     table += "  <tr>";
     table += "</table>";

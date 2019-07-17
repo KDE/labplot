@@ -41,7 +41,7 @@
 #include <QPrintPreviewDialog>
 #include <QLabel>
 #include <QTextEdit>
-#include <QTextDocument>
+#include <QToolTip>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -58,7 +58,7 @@
 HypothesisTestView::HypothesisTestView(HypothesisTest* hypothesisTest) : QWidget(),
     m_hypothesisTest(hypothesisTest),
     m_testName(new QLabel()),
-	m_statsTable(new QTextEdit()),
+    m_statsTable(new QTextEdit()),
 	m_summaryResults(new QWidget()) {
 
     m_statsTable->setReadOnly(true);
@@ -77,8 +77,11 @@ void HypothesisTestView::init() {
 	initActions();
 	initMenus();
 
+    m_statsTable->setMouseTracking(true);
+
 //    m_summaryResults->setStyleSheet("background-color:white; border: 0px; margin: 0px; padding 0px;qproperty-frame: false;");
     connect(m_hypothesisTest, &HypothesisTest::changed, this, &HypothesisTestView::changed);
+    connect(m_statsTable, &QTextEdit::cursorPositionChanged, this, &HypothesisTestView::cursorPositionChanged);
 }
 
 void HypothesisTestView::initActions() {
@@ -149,7 +152,20 @@ void HypothesisTestView::print(QPrinter* printer) const {
  void HypothesisTestView::changed() {
     m_testName->setText(m_hypothesisTest->testName());
     m_statsTable->setHtml(m_hypothesisTest->statsTable());
-	m_summaryResults->setLayout(m_hypothesisTest->summaryLayout());
+    m_summaryResults->setLayout(m_hypothesisTest->summaryLayout());
+ }
+
+ void HypothesisTestView::cursorPositionChanged() {
+     QTextCursor cursor = m_statsTable->textCursor();
+     cursor.select(QTextCursor::WordUnderCursor);
+     QMap<QString, QString>* tooltips = m_hypothesisTest->tooltips();
+     if (!cursor.selectedText().isEmpty())
+       QToolTip::showText(QCursor::pos(),
+                                QString("%1 %2")
+                                .arg(cursor.selectedText())
+                                .arg(tooltips->value(cursor.selectedText())));
+     else
+       QToolTip::hideText();
  }
 
 void HypothesisTestView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
