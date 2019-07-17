@@ -2837,6 +2837,9 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "yRangeFormat", QString::number(d->yRangeFormat) );
 	writer->writeAttribute( "horizontalPadding", QString::number(d->horizontalPadding) );
 	writer->writeAttribute( "verticalPadding", QString::number(d->verticalPadding) );
+	writer->writeAttribute( "rightPadding", QString::number(d->rightPadding) );
+	writer->writeAttribute( "bottomPadding", QString::number(d->bottomPadding) );
+	writer->writeAttribute( "symmetricPadding", QString::number(d->symmetricPadding));
 	writer->writeEndElement();
 
 	//x-scale breaks
@@ -2981,6 +2984,9 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 			READ_DOUBLE_VALUE("verticalPadding", verticalPadding);
+			READ_DOUBLE_VALUE("rightPadding", rightPadding);
+			READ_DOUBLE_VALUE("bottomPadding", bottomPadding);
+			READ_INT_VALUE("symmetricPadding", symmetricPadding, bool);
 		} else if (!preview && reader->name() == "xRangeBreaks") {
 			//delete default rang break
 			d->xRangeBreaks.list.clear();
