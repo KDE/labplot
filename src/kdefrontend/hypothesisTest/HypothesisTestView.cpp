@@ -158,12 +158,11 @@ void HypothesisTestView::print(QPrinter* printer) const {
  void HypothesisTestView::cursorPositionChanged() {
      QTextCursor cursor = m_statsTable->textCursor();
      cursor.select(QTextCursor::WordUnderCursor);
-     QMap<QString, QString>* tooltips = m_hypothesisTest->tooltips();
+     QMap<QString, QString> tooltips = m_hypothesisTest->tooltips();
      if (!cursor.selectedText().isEmpty())
        QToolTip::showText(QCursor::pos(),
-                                QString("%1 %2")
-                                .arg(cursor.selectedText())
-                                .arg(tooltips->value(cursor.selectedText())));
+                                QString("%1")
+                                .arg(tooltips.value(cursor.selectedText())));
      else
        QToolTip::hideText();
  }

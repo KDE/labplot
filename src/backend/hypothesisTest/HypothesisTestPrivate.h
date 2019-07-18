@@ -76,6 +76,7 @@ public:
     void performOneSampleTest(HypothesisTest::Test::Type test);
     void performOneWayAnova();
     void performTwoWayAnova();
+    void performSpearmanCorrelation();
 
     void performLeveneTest(bool categoricalVariable);
 
@@ -97,7 +98,7 @@ public:
 
     QVBoxLayout* summaryLayout{nullptr};
     QLabel* resultLine[10];
-    QMap<QString, QString>* tooltips;
+    QMap<QString, QString> tooltips;
 
 private:
     bool isNumericOrInteger(Column* column);

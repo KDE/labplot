@@ -271,7 +271,7 @@ void HypothesisTestDock::showTestType() {
 	} else if (m_test.type & HypothesisTest::Test::Type::Anova) {
 		ui.cbTestType->addItem( i18n("One Way"), HypothesisTest::Test::SubType::OneWay);
 		ui.cbTestType->addItem( i18n("Two Way"), HypothesisTest::Test::SubType::TwoWay);
-	}
+    }
 }
 
 void HypothesisTestDock::showHypothesisTest() {

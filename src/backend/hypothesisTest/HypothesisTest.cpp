@@ -52,7 +52,7 @@ extern "C" {
 }
 
 HypothesisTest::HypothesisTest(const QString &name) : AbstractPart(name),
-	d(new HypothesisTestPrivate(this)) {
+    d(new HypothesisTestPrivate(this)) {
 }
 
 HypothesisTest::~HypothesisTest() {
@@ -102,7 +102,7 @@ QString HypothesisTest::statsTable() {
     return d->statsTable;
 }
 
-QMap<QString, QString>* HypothesisTest::tooltips() {
+QMap<QString, QString> HypothesisTest::tooltips() {
     return d->tooltips;
 }
 
@@ -111,7 +111,7 @@ void HypothesisTest::performTest(Test test, bool categoricalVariable, bool equal
     d->pValue.clear();
     d->statisticValue.clear();
     d->statsTable = "";
-    d->tooltips->clear();
+    d->tooltips.clear();
     for (int i = 0; i < 10; i++)
         d->resultLine[i]->clear();
 
@@ -144,7 +144,7 @@ void HypothesisTest::performTest(Test test, bool categoricalVariable, bool equal
 		break;
 	}
 
-	emit changed();
+    emit changed();
 }
 
 void HypothesisTest::performLeveneTest(bool categoricalVariable) {
@@ -172,8 +172,7 @@ QVBoxLayout* HypothesisTest::summaryLayout() {
 //TODO: add tooltip to tables. (currently it is not possible to use with QTextDocument);
 
 HypothesisTestPrivate::HypothesisTestPrivate(HypothesisTest* owner) : q(owner),
-    summaryLayout(new QVBoxLayout()),
-    tooltips(new QMap<QString, QString>){
+    summaryLayout(new QVBoxLayout()) {
 
 	for (int i = 0; i < 10; i++) {
 		resultLine[i] = new QLabel();
@@ -305,7 +304,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 		if (equalVariance) {
 			df = n[0] + n[1] - 2;
 
-			sp = qSqrt(((n[0]-1) * gsl_pow_2(std[0]) +
+            sp = qSqrt(((n[0]-1) * gsl_pow_2(std[0]) +
 					(n[1]-1) * gsl_pow_2(std[1]) ) / df );
             statisticValue.append((mean[0] - mean[1]) / (sp * qSqrt(1.0/n[0] + 1.0/n[1])));
 			printLine(9, "<b>Assumption:</b> Equal Variance b/w both population means");
@@ -326,7 +325,7 @@ void HypothesisTestPrivate::performTwoSampleIndependentTest(HypothesisTest::Test
 	}
 	case HypothesisTest::Test::Type::ZTest: {
 		testName = "Z";
-		sp = qSqrt( ((n[0]-1) * gsl_pow_2(std[0]) + (n[1]-1) * gsl_pow_2(std[1])) / df);
+        sp = qSqrt( ((n[0]-1) * gsl_pow_2(std[0]) + (n[1]-1) * gsl_pow_2(std[1])) / df);
         statisticValue.append((mean[0] - mean[1]) / (sp * qSqrt( 1.0 / n[0] + 1.0 / n[1])));
 //        pValue.append(gsl_cdf_gaussian_P(statisticValue, sp));
 		break;
@@ -1136,6 +1135,72 @@ void HypothesisTestPrivate::performLeveneTest(bool categoricalVariable) {
 	return;
 }
 
+/**************************************Spearman Correlation Test*****************************/
+
+// N: Number of observations
+
+//TODO: add functionality where col1 contains categorical variables.
+void HypothesisTestPrivate::performSpearmanCorrelation() {
+    int N = columns[0]->rowCount();
+
+    QString col1Name = columns[0]->name();
+    QString col2Name = columns[1]->name();
+
+    currTestName = i18n("Pearson r Correlation Test between %1 and %2", col1Name, col2Name);
+    double sumXY = 0;
+    double sumX = 0;
+    double sumY = 0;
+    double sumXSq = 0;
+    double sumYSq = 0;
+    for (int i = 0; i < N; i++) {
+        double valueCol1 = columns[0]->valueAt(i);
+        double valueCol2 = columns[1]->valueAt(i);
+
+        if (std::isnan(valueCol1) || std::isnan(valueCol2)) {
+            if (std::isnan(valueCol1) && std::isnan(valueCol2)) {
+                N = i;
+                break;
+            }
+            printError(i18n("Number of values in %1 and %2 are not equal", col1Name, col2Name));
+            return;
+        }
+
+        sumXY += valueCol1 * valueCol2;
+        sumX += valueCol1;
+        sumY += valueCol2;
+        sumXSq += gsl_pow_2(valueCol1);
+        sumYSq += gsl_pow_2(valueCol2);
+    }
+
+    QList<Cell*> rowMajor;
+    int level = 0;
+    rowMajor.append(new Cell("", level, true));
+    rowMajor.append(new Cell("N", level, true, "Total Number of Observations"));
+    rowMajor.append(new Cell("Sum " + col1Name, level, true, "Sum of Values in " + col1Name));
+    rowMajor.append(new Cell("Sum " + col1Name + "<sup>2</sup>", level, true, "Sum of Square of Values in " + col1Name));
+    rowMajor.append(new Cell("Sum " + col2Name, level, true, "Sum of Values in " + col2Name));
+    rowMajor.append(new Cell("Sum " + col2Name + "<sup>2</sup>", level, true, "Sum of Square of Values in " + col2Name));
+    rowMajor.append(new Cell("Sum " + col1Name + "x" + col2Name, level, true, "Sum of product of paired scores"));
+
+    level++;
+    rowMajor.append(new Cell("Results", level, true));
+    rowMajor.append(new Cell(N, level));
+    rowMajor.append(new Cell(sumX, level));
+    rowMajor.append(new Cell(sumXSq, level));
+    rowMajor.append(new Cell(sumY, level));
+    rowMajor.append(new Cell(sumYSq, level));
+    rowMajor.append(new Cell(sumXY, level));
+
+    statsTable = "<h3> " + i18n("Statistic Table") + "</h3>";
+    statsTable += getHtmlTable3(rowMajor);
+
+    statisticValue.append((N * sumXY - sumX * sumY) /
+                            qSqrt((N * sumXSq - gsl_pow_2(sumX)) *
+                                    (N * sumYSq - gsl_pow_2(sumY))));
+
+    printLine(0, "Correlation Value is " + round(statisticValue[0]), "blue");
+}
+
 /***************************************Helper Functions*************************************/
 
 QString HypothesisTestPrivate::round(QVariant number, int precision) {
@@ -1183,7 +1248,7 @@ HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStats(const Column* 
 
 	if (count > 1)
 		std = std / (count-1);
-	std = qSqrt(std);
+    std = qSqrt(std);
 
 	return HypothesisTestPrivate::NoError;
 }
@@ -1229,7 +1294,7 @@ HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsPaired(const Co
 	if (count > 1)
 		std = std / (count-1);
 
-	std = qSqrt(std);
+    std = qSqrt(std);
 	return HypothesisTestPrivate::NoError;
 }
 
@@ -1304,7 +1369,7 @@ HypothesisTestPrivate::ErrorType HypothesisTestPrivate::findStatsCategorical(Col
 	for (int i = 0; i < np; i++) {
 		if (n[i] > 1)
 			std[i] = std[i] / (n[i] - 1);
-		std[i] = qSqrt(std[i]);
+        std[i] = qSqrt(std[i]);
 	}
 
 	columns[0]->setColumnMode(originalColMode);
@@ -1378,7 +1443,7 @@ double HypothesisTestPrivate::getPValue(const HypothesisTest::Test::Type& test, 
 	}
 
     if (pValue[0] > 1)
-		return 1;
+        return 1;
     return pValue[0];
 }
 
@@ -1534,7 +1599,7 @@ QString HypothesisTestPrivate::getHtmlTable(int row, int column, QVariant* rowMa
 }
 
 QString HypothesisTestPrivate::getHtmlTable3(const QList<HypothesisTestPrivate::Cell*>& rowMajor) {
-    tooltips->clear();
+    tooltips.clear();
     int rowMajorSize = rowMajor.size();
 
     if (rowMajorSize == 0)
@@ -1575,7 +1640,7 @@ QString HypothesisTestPrivate::getHtmlTable3(const QList<HypothesisTestPrivate::
                 cellEndTag;
 
         if (!currCell->tooltip.isEmpty())
-            tooltips->insert(currCell->data, currCell->tooltip);
+            tooltips.insert(currCell->data, currCell->tooltip);
     }
     table += "  <tr>";
     table += "</table>";

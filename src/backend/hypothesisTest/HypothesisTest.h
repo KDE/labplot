@@ -47,26 +47,27 @@ public:
 	explicit HypothesisTest(const QString& name);
 	~HypothesisTest() override;
 
-	struct Test {
-		enum Type {
-			NoneType  = 0,
-			TTest = 1 << 0,
-			ZTest = 1 << 1,
-			Anova = 1 << 2
-		};
-		enum SubType {
-			NoneSubType = 0,
-			TwoSampleIndependent    = 1 << 0,
-			TwoSamplePaired         = 1 << 1,
-			OneSample               = 1 << 2,
-			OneWay                  = 1 << 3,
-			TwoWay                  = 1 << 4
-		};
-		enum Tail {Positive, Negative, Two};
-		Type type = NoneType;
-		SubType subtype = NoneSubType;
-		Tail tail;
-	};
+    struct Test {
+        enum Type {
+            NoneType  = 0,
+            TTest = 1 << 0,
+            ZTest = 1 << 1,
+            Anova = 1 << 2
+        };
+        enum SubType {
+            NoneSubType = 0,
+            TwoSampleIndependent    = 1 << 0,
+            TwoSamplePaired         = 1 << 1,
+            OneSample               = 1 << 2,
+            OneWay                  = 1 << 3,
+            TwoWay                  = 1 << 4
+        };
+        enum Tail {Positive, Negative, Two};
+        Type type = NoneType;
+        SubType subtype = NoneSubType;
+        Correlation correlation = NoneCorrelation;
+        Tail tail;
+    };
 
 	enum DataSourceType {DataSourceSpreadsheet, DataSourceDatabase};
 
@@ -82,16 +83,9 @@ public:
 	void setSignificanceLevel(QVariant alpha);
 	QString testName();
 	QString statsTable();
-    QMap<QString, QString>* tooltips();
+    QMap<QString, QString> tooltips();
 
 	void performTest(Test m_test, bool categoricalVariable = true, bool equalVariance = true);
-	//	void performTwoSampleIndependentTTest(bool categorical_variable, bool equal_variance);
-	//    void performTwoSamplePairedTTest();
-	//    void performOneSampleTTest();
-	//    void performTwoSampleIndependentZTest();
-	//    void performTwoSamplePairedZTest();
-	//    void performOneSampleZTest();
-	//    void performOneWayAnova();
 
 	void performLeveneTest(bool categorical_variable);
 
