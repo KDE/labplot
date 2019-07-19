@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : PivotTableView.h
+    File                 : GeneralTestView.h
     Project              : LabPlot
     Description          : View class for Hypothesis Tests'
     --------------------------------------------------------------------
@@ -37,18 +37,11 @@
 class Column;
 class GeneralTest;
 class AbstractAspect;
-class QTableView;
-class QHeaderView;
-class QListView;
 
 class QPrinter;
-class QMenu;
 class QToolBar;
-class QModelIndex;
-class QItemSelection;
 class QLabel;
 class QTextEdit;
-class QTextCursor;
 
 class GeneralTestView : public QWidget {
     Q_OBJECT
@@ -61,7 +54,7 @@ public:
     bool printView();
     bool printPreview();
 
-private:
+protected:
     void init();
     void initActions();
     void initMenus();
@@ -85,7 +78,7 @@ public slots:
     void changed();
     void cursorPositionChanged();
     void clearResult();
-private slots:
+protected slots:
 };
 
 #endif

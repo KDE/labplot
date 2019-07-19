@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : PivotTableView.h
+    File                 : HypothesisTestView.h
     Project              : LabPlot
     Description          : View class for Hypothesis Tests'
     --------------------------------------------------------------------
@@ -29,63 +29,23 @@
 #ifndef HYPOTHESISTESTVIEW_H
 #define HYPOTHESISTESTVIEW_H
 
-#include <QWidget>
-
+#include "GeneralTestView.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/IntervalAttribute.h"
 
-class Column;
 class HypothesisTest;
-class HypothesisTestModel;
-class AbstractAspect;
-class QTableView;
-class QHeaderView;
-class QListView;
 
-class QPrinter;
-class QMenu;
-class QToolBar;
-class QModelIndex;
-class QItemSelection;
-class QLabel;
-class QTextEdit;
-class QTextCursor;
-
-class HypothesisTestView : public QWidget {
+class HypothesisTestView : public GeneralTestView {
     Q_OBJECT
 
 public:
-        explicit HypothesisTestView(HypothesisTest*);
-        ~HypothesisTestView() override;
-
-    bool exportView();
-    bool printView();
-    bool printPreview();
+    explicit HypothesisTestView(HypothesisTest*);
+    ~HypothesisTestView() override;
 
 private:
-    void init();
-    void initActions();
-    void initMenus();
-    void connectActions();
-
-    void exportToFile(const QString&, const bool, const QString&, QLocale::Language) const;
-    void exportToLaTeX(const QString&, const bool exportHeaders,
-                       const bool gridLines, const bool captions, const bool latexHeaders,
-                       const bool skipEmptyRows,const bool exportEntire) const;
-
     HypothesisTest* m_hypothesisTest;
-    QLabel* m_testName;
-    QTextEdit* m_statsTable;
-    QWidget* m_summaryResults{nullptr};
-    QLabel* m_resultLine[10];
 
 public slots:
-    void createContextMenu(QMenu*);
-    void fillToolBar(QToolBar*);
-    void print(QPrinter*) const;
-    void changed();
-    void cursorPositionChanged();
-    void clearResult();
 private slots:
 };
 

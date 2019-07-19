@@ -31,9 +31,7 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 
-#include <QInputDialog>
 #include <QFile>
-#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QPrinter>
@@ -43,10 +41,7 @@
 #include <QTextEdit>
 #include <QToolTip>
 
-#include <KConfigGroup>
 #include <KLocalizedString>
-#include <KMessageBox>
-#include <KSharedConfig>
 
 /*!
     \class GeneralTestView
@@ -59,7 +54,7 @@ GeneralTestView::GeneralTestView(GeneralTest* GeneralTest) : QWidget(),
     m_GeneralTest(GeneralTest),
     m_testName(new QLabel()),
     m_statsTable(new QTextEdit()),
-	m_summaryResults(new QWidget()) {
+    m_summaryResults(new QWidget()) {
 
     m_statsTable->setReadOnly(true);
 
@@ -74,12 +69,11 @@ GeneralTestView::GeneralTestView(GeneralTest* GeneralTest) : QWidget(),
 GeneralTestView::~GeneralTestView() = default;
 
 void GeneralTestView::init() {
-	initActions();
-	initMenus();
+    initActions();
+    initMenus();
 
     m_statsTable->setMouseTracking(true);
-
-//    m_summaryResults->setStyleSheet("background-color:white; border: 0px; margin: 0px; padding 0px;qproperty-frame: false;");
+    //    m_summaryResults->setStyleSheet("background-color:white; border: 0px; margin: 0px; padding 0px;qproperty-frame: false;");
     connect(m_GeneralTest, &GeneralTest::changed, this, &GeneralTestView::changed);
     connect(m_statsTable, &QTextEdit::cursorPositionChanged, this, &GeneralTestView::cursorPositionChanged);
 }
@@ -102,7 +96,7 @@ void GeneralTestView::connectActions() {
 }
 
 void GeneralTestView::fillToolBar(QToolBar* toolBar) {
-	Q_UNUSED(toolBar);
+    Q_UNUSED(toolBar);
 }
 
 /*!
@@ -113,84 +107,83 @@ void GeneralTestView::fillToolBar(QToolBar* toolBar) {
  *   - as a part of the pivot table context menu in project explorer
  */
 void GeneralTestView::createContextMenu(QMenu* menu) {
-	Q_ASSERT(menu);
+    Q_ASSERT(menu);
 }
 
 bool GeneralTestView::exportView() {
-	return true;
+    return true;
 }
 
 bool GeneralTestView::printView() {
-	QPrinter printer;
-	auto* dlg = new QPrintDialog(&printer, this);
-	dlg->setWindowTitle(i18nc("@title:window", "Print Spreadsheet"));
+    QPrinter printer;
+    auto* dlg = new QPrintDialog(&printer, this);
+    dlg->setWindowTitle(i18nc("@title:window", "Print Spreadsheet"));
 
-	bool ret;
-	if ((ret = dlg->exec()) == QDialog::Accepted) {
-		print(&printer);
-	}
-	delete dlg;
-	return ret;
+    bool ret;
+    if ((ret = dlg->exec()) == QDialog::Accepted) {
+        print(&printer);
+    }
+    delete dlg;
+    return ret;
 }
 
 bool GeneralTestView::printPreview() {
-	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(this);
+    QPrintPreviewDialog* dlg = new QPrintPreviewDialog(this);
     connect(dlg, &QPrintPreviewDialog::paintRequested, this, &GeneralTestView::print);
-	return dlg->exec();
+    return dlg->exec();
 }
 
 /*!
   prints the complete spreadsheet to \c printer.
  */
 void GeneralTestView::print(QPrinter* printer) const {
-	WAIT_CURSOR;
-	QPainter painter (printer);
-
-	RESET_CURSOR;
+    WAIT_CURSOR;
+    QPainter painter (printer);
+    RESET_CURSOR;
 }
 
- void GeneralTestView::changed() {
+void GeneralTestView::changed() {
     m_testName->setText(m_GeneralTest->testName());
     m_statsTable->setHtml(m_GeneralTest->statsTable());
     m_summaryResults->setLayout(m_GeneralTest->summaryLayout());
- }
+}
 
- void GeneralTestView::cursorPositionChanged() {
-     QTextCursor cursor = m_statsTable->textCursor();
-     cursor.select(QTextCursor::WordUnderCursor);
-     QMap<QString, QString> tooltips = m_GeneralTest->tooltips();
-     if (!cursor.selectedText().isEmpty())
-       QToolTip::showText(QCursor::pos(),
-                                QString("%1")
-                                .arg(tooltips.value(cursor.selectedText())));
-     else
-       QToolTip::hideText();
- }
+void GeneralTestView::cursorPositionChanged() {
+    QTextCursor cursor = m_statsTable->textCursor();
+    cursor.select(QTextCursor::WordUnderCursor);
+    QMap<QString, QString> tooltips = m_GeneralTest->tooltips();
+    if (!cursor.selectedText().isEmpty())
+        QToolTip::showText(QCursor::pos(),
+                           QString("%1")
+                           .arg(tooltips.value(cursor.selectedText())));
+    else
+        QToolTip::hideText();
+}
 
 void GeneralTestView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
-	Q_UNUSED(exportHeader);
-	Q_UNUSED(separator);
-	Q_UNUSED(language);
-	QFile file(path);
-	if (!file.open(QFile::WriteOnly | QFile::Truncate))
-		return;
+    Q_UNUSED(exportHeader);
+    Q_UNUSED(separator);
+    Q_UNUSED(language);
+    QFile file(path);
+    if (!file.open(QFile::WriteOnly | QFile::Truncate))
+        return;
 
-	PERFTRACE("export pivot table to file");
+    PERFTRACE("export pivot table to file");
 
 }
 
 void GeneralTestView::exportToLaTeX(const QString & path, const bool exportHeaders,
                                     const bool gridLines, const bool captions, const bool latexHeaders,
                                     const bool skipEmptyRows, const bool exportEntire) const {
-	Q_UNUSED(exportHeaders);
-	Q_UNUSED(gridLines);
-	Q_UNUSED(captions);
-	Q_UNUSED(latexHeaders);
-	Q_UNUSED(skipEmptyRows);
-	Q_UNUSED(exportEntire);
-	QFile file(path);
-	if (!file.open(QFile::WriteOnly | QFile::Truncate))
-		return;
+    Q_UNUSED(exportHeaders);
+    Q_UNUSED(gridLines);
+    Q_UNUSED(captions);
+    Q_UNUSED(latexHeaders);
+    Q_UNUSED(skipEmptyRows);
+    Q_UNUSED(exportEntire);
+    QFile file(path);
+    if (!file.open(QFile::WriteOnly | QFile::Truncate))
+        return;
 
     PERFTRACE("export pivot table to latex");
 }

@@ -106,6 +106,13 @@ void HypothesisTest::performTest(Test test, bool categoricalVariable, bool equal
 }
 
 void HypothesisTest::performLeveneTest(bool categoricalVariable) {
+    m_pValue.clear();
+    m_statisticValue.clear();
+    m_statsTable = "";
+    m_tooltips.clear();
+    for (int i = 0; i < 10; i++)
+        m_resultLine[i]->clear();
+
     m_currTestName = "<h2>" + i18n("Levene Test for Equality of Variance") + "</h2>";
     m_performLeveneTest(categoricalVariable);
     emit changed();
@@ -876,7 +883,8 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
             if (ni[i] > 0)
                 yiBar[i] = yiBar[i] / ni[i];
             else {
-                printError("One of the selected m_columns is empty");
+                printError("One of the selected m_columns is empty <br/> "
+                           "or have choosen Independent Var.1 wrongly");
                 return;
             }
         }
@@ -956,7 +964,8 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
             if (ni[i] > 0)
                 yiBar[i] = yiBar[i] / ni[i];
             else {
-                printError("One of the selected m_columns is empty");
+                printError("One of the selected m_columns is empty <br/> "
+                           "or have choosen Independent Var.1 wrongly");
                 m_columns[0]->setColumnMode(originalColMode);
                 return;
             }
