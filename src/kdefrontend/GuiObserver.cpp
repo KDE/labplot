@@ -32,7 +32,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/datasources/LiveDataSource.h"
-#include "backend/hypothesisTest/HypothesisTest.h"
+#include "backend/generalTest/HypothesisTest.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/pivot/PivotTable.h"
 #include "backend/spreadsheet/Spreadsheet.h"

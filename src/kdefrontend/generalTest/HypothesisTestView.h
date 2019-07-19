@@ -52,38 +52,38 @@ class QTextEdit;
 class QTextCursor;
 
 class HypothesisTestView : public QWidget {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
         explicit HypothesisTestView(HypothesisTest*);
         ~HypothesisTestView() override;
 
-	bool exportView();
-	bool printView();
-	bool printPreview();
+    bool exportView();
+    bool printView();
+    bool printPreview();
 
 private:
-	void init();
-	void initActions();
-	void initMenus();
-	void connectActions();
+    void init();
+    void initActions();
+    void initMenus();
+    void connectActions();
 
-	void exportToFile(const QString&, const bool, const QString&, QLocale::Language) const;
-	void exportToLaTeX(const QString&, const bool exportHeaders,
-	                   const bool gridLines, const bool captions, const bool latexHeaders,
-	                   const bool skipEmptyRows,const bool exportEntire) const;
+    void exportToFile(const QString&, const bool, const QString&, QLocale::Language) const;
+    void exportToLaTeX(const QString&, const bool exportHeaders,
+                       const bool gridLines, const bool captions, const bool latexHeaders,
+                       const bool skipEmptyRows,const bool exportEntire) const;
 
     HypothesisTest* m_hypothesisTest;
     QLabel* m_testName;
     QTextEdit* m_statsTable;
-	QWidget* m_summaryResults{nullptr};
+    QWidget* m_summaryResults{nullptr};
     QLabel* m_resultLine[10];
 
 public slots:
-	void createContextMenu(QMenu*);
-	void fillToolBar(QToolBar*);
-	void print(QPrinter*) const;
-	void changed();
+    void createContextMenu(QMenu*);
+    void fillToolBar(QToolBar*);
+    void print(QPrinter*) const;
+    void changed();
     void cursorPositionChanged();
     void clearResult();
 private slots:

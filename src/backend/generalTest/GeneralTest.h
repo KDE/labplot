@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : HypothesisTestPrivate.h
+    File                 : GeneralTest.h
     Project              : LabPlot
-    Description          : Private members of Hypothesis Test
+    Description          : Doing Hypothesis-Test on data provided
     --------------------------------------------------------------------
     Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
 
@@ -26,28 +26,27 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef HYPOTHESISTESTPRIVATE_H
-#define HYPOTHESISTESTPRIVATE_H
+#ifndef GENERALTEST_H
+#define GENERALTEST_H
 
-#include <backend/hypothesisTest/HypothesisTest.h>
+#include "backend/core/AbstractPart.h"
+#include "backend/lib/macros.h"
 
-class QStandardItemModel;
+class HypothesisTestView;
+class Spreadsheet;
+class QString;
+class Column;
+class QVBoxLayout;
+class QLabel;
 
-class HypothesisTestPrivate {
+class GeneralTest : public AbstractPart {
+    Q_OBJECT
+
 public:
-    explicit HypothesisTestPrivate(HypothesisTest*);
-    virtual ~HypothesisTestPrivate();
+    explicit GeneralTest(const QString& name);
+    ~GeneralTest() override;
 
-    struct Node {
-        QString data;
-        int spanCount;
-        int level;
-
-        QVector<Node*> children;
-        void addChild(Node* child) {
-            children.push_back(child);
-        }
-    };
+    enum DataSourceType {DataSourceSpreadsheet, DataSourceDatabase};
 
     struct Cell {
         QString data;
@@ -68,41 +67,52 @@ public:
 
     enum ErrorType {ErrorUnqualSize, ErrorEmptyColumn, NoError};
 
-    QString name() const;
+    void setDataSourceType(DataSourceType type);
+    DataSourceType dataSourceType() const;
     void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
+    Spreadsheet* dataSourceSpreadsheet() const;
+
+    void setColumns(const QVector<Column*>& cols);
     void setColumns(QStringList cols);
-    void performTwoSampleIndependentTest(HypothesisTest::Test::Type test, bool categoricalVariable = false, bool equalVariance = true);
-    void performTwoSamplePairedTest(HypothesisTest::Test::Type test);
-    void performOneSampleTest(HypothesisTest::Test::Type test);
-    void performOneWayAnova();
-    void performTwoWayAnova();
-    void performSpearmanCorrelation();
+    QStringList allColumns();
+    QString testName();
+    QString statsTable();
+    QMap<QString, QString> tooltips();
 
-    void performLeveneTest(bool categoricalVariable);
+    QVBoxLayout* summaryLayout();
 
-    HypothesisTest* const q;
-    HypothesisTest::DataSourceType dataSourceType{HypothesisTest::DataSourceSpreadsheet};
-    Spreadsheet* dataSourceSpreadsheet{nullptr};
-    QVector<Column*> columns;
-    QStringList allColumns;
+    //virtual methods
+    //    QIcon icon() const override;
+    QMenu* createContextMenu() override;
+//    QWidget* view() const override;
 
-//	int rowCount{0};
-//	int columnCount{0};
-    QString currTestName{"Result Table"};
-    double populationMean;
-    double significanceLevel;
-    QString statsTable;
-    HypothesisTest::Test::Tail tailType;
-    QList<double> pValue;
-    QList<double> statisticValue;
+    bool exportView() const override;
+    bool printView() override;
+    bool printPreview() const override;
 
-    QVBoxLayout* summaryLayout{nullptr};
-    QLabel* resultLine[10];
-    QMap<QString, QString> tooltips;
+    void save(QXmlStreamWriter*) const override;
+    bool load(XmlStreamReader*, bool preview) override;
 
-private:
+signals:
+    void changed();
+    void requestProjectContextMenu(QMenu*);
+    void dataSourceTypeChanged(GeneralTest::DataSourceType);
+    void dataSourceSpreadsheetChanged(Spreadsheet*);
+
+protected:
+    DataSourceType m_dataSourceType{GeneralTest::DataSourceSpreadsheet};
+    Spreadsheet* m_dataSourceSpreadsheet{nullptr};
+    QVector<Column*> m_columns;
+    QStringList m_allColumns;
+
+    QString m_currTestName{"Result Table"};
+    QString m_statsTable;
+
+    QVBoxLayout* m_summaryLayout{nullptr};
+    QLabel* m_resultLine[10];
+    QMap<QString, QString> m_tooltips;
+
     bool isNumericOrInteger(Column* column);
-
     QString round(QVariant number, int precision = 3);
 
     void countPartitions(Column* column, int& np, int& totalRows);
@@ -110,13 +120,8 @@ private:
     ErrorType findStatsPaired(const Column* column1, const Column* column2, int& count, double& sum, double& mean, double& std);
     ErrorType findStatsCategorical(Column* column1, Column* column2, int n[], double sum[], double mean[], double std[], QMap<QString, int>& colName, const int& np, const int& totalRows);
 
-    double getPValue(const HypothesisTest::Test::Type& test, double& value, const QString& col1Name, const QString& col2name, const double mean, const double sp, const int df);
-    int setSpanValues(Node* root, int& totalLevels);
-    QString getHtmlHeader(Node* root);
-    QString getHtmlTable2(int rowCount, int columnCount, Node* columnHeaderRoot, QVariant* rowMajor);
     QString getHtmlTable(int row, int column, QVariant* rowMajor);
     QString getHtmlTable3(const QList<Cell*>& rowMajor);
-
 
     QString getLine(const QString& msg, const QString& color = "black");
     void printLine(const int& index, const QString& msg, const QString& color = "black");
@@ -124,6 +129,7 @@ private:
     void printError(const QString& errorMsg);
 
     bool m_dbCreated{false};
+    mutable HypothesisTestView* m_view{nullptr};
 };
 
-#endif
+#endif // GeneralTest_H

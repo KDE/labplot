@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : HypothesisTestView.cpp
+    File                 : GeneralTestView.cpp
     Project              : LabPlot
     Description          : View class for Hypothesis Tests' Table
     --------------------------------------------------------------------
@@ -26,8 +26,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "HypothesisTestView.h"
-#include "backend/hypothesisTest/HypothesisTest.h"
+#include "GeneralTestView.h"
+#include "backend/generalTest/GeneralTest.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 
@@ -49,14 +49,14 @@
 #include <KSharedConfig>
 
 /*!
-    \class HypothesisTestView
+    \class GeneralTestView
     \brief View class for Hypothesis Test
 
     \ingroup kdefrontend
  */
 
-HypothesisTestView::HypothesisTestView(HypothesisTest* hypothesisTest) : QWidget(),
-    m_hypothesisTest(hypothesisTest),
+GeneralTestView::GeneralTestView(GeneralTest* GeneralTest) : QWidget(),
+    m_GeneralTest(GeneralTest),
     m_testName(new QLabel()),
     m_statsTable(new QTextEdit()),
 	m_summaryResults(new QWidget()) {
@@ -71,37 +71,37 @@ HypothesisTestView::HypothesisTestView(HypothesisTest* hypothesisTest) : QWidget
     init();
 }
 
-HypothesisTestView::~HypothesisTestView() = default;
+GeneralTestView::~GeneralTestView() = default;
 
-void HypothesisTestView::init() {
+void GeneralTestView::init() {
 	initActions();
 	initMenus();
 
     m_statsTable->setMouseTracking(true);
 
 //    m_summaryResults->setStyleSheet("background-color:white; border: 0px; margin: 0px; padding 0px;qproperty-frame: false;");
-    connect(m_hypothesisTest, &HypothesisTest::changed, this, &HypothesisTestView::changed);
-    connect(m_statsTable, &QTextEdit::cursorPositionChanged, this, &HypothesisTestView::cursorPositionChanged);
+    connect(m_GeneralTest, &GeneralTest::changed, this, &GeneralTestView::changed);
+    connect(m_statsTable, &QTextEdit::cursorPositionChanged, this, &GeneralTestView::cursorPositionChanged);
 }
 
-void HypothesisTestView::initActions() {
-
-}
-
-void HypothesisTestView::initMenus() {
+void GeneralTestView::initActions() {
 
 }
 
-void HypothesisTestView::clearResult() {
+void GeneralTestView::initMenus() {
+
+}
+
+void GeneralTestView::clearResult() {
     for (int i = 0; i < 10; i++)
         m_resultLine[i]->clear();
 }
 
-void HypothesisTestView::connectActions() {
+void GeneralTestView::connectActions() {
 
 }
 
-void HypothesisTestView::fillToolBar(QToolBar* toolBar) {
+void GeneralTestView::fillToolBar(QToolBar* toolBar) {
 	Q_UNUSED(toolBar);
 }
 
@@ -112,15 +112,15 @@ void HypothesisTestView::fillToolBar(QToolBar* toolBar) {
  *   - as the "pivot table menu" in the main menu-bar (called form MainWin)
  *   - as a part of the pivot table context menu in project explorer
  */
-void HypothesisTestView::createContextMenu(QMenu* menu) {
+void GeneralTestView::createContextMenu(QMenu* menu) {
 	Q_ASSERT(menu);
 }
 
-bool HypothesisTestView::exportView() {
+bool GeneralTestView::exportView() {
 	return true;
 }
 
-bool HypothesisTestView::printView() {
+bool GeneralTestView::printView() {
 	QPrinter printer;
 	auto* dlg = new QPrintDialog(&printer, this);
 	dlg->setWindowTitle(i18nc("@title:window", "Print Spreadsheet"));
@@ -133,32 +133,32 @@ bool HypothesisTestView::printView() {
 	return ret;
 }
 
-bool HypothesisTestView::printPreview() {
+bool GeneralTestView::printPreview() {
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(this);
-    connect(dlg, &QPrintPreviewDialog::paintRequested, this, &HypothesisTestView::print);
+    connect(dlg, &QPrintPreviewDialog::paintRequested, this, &GeneralTestView::print);
 	return dlg->exec();
 }
 
 /*!
   prints the complete spreadsheet to \c printer.
  */
-void HypothesisTestView::print(QPrinter* printer) const {
+void GeneralTestView::print(QPrinter* printer) const {
 	WAIT_CURSOR;
 	QPainter painter (printer);
 
 	RESET_CURSOR;
 }
 
- void HypothesisTestView::changed() {
-    m_testName->setText(m_hypothesisTest->testName());
-    m_statsTable->setHtml(m_hypothesisTest->statsTable());
-    m_summaryResults->setLayout(m_hypothesisTest->summaryLayout());
+ void GeneralTestView::changed() {
+    m_testName->setText(m_GeneralTest->testName());
+    m_statsTable->setHtml(m_GeneralTest->statsTable());
+    m_summaryResults->setLayout(m_GeneralTest->summaryLayout());
  }
 
- void HypothesisTestView::cursorPositionChanged() {
+ void GeneralTestView::cursorPositionChanged() {
      QTextCursor cursor = m_statsTable->textCursor();
      cursor.select(QTextCursor::WordUnderCursor);
-     QMap<QString, QString> tooltips = m_hypothesisTest->tooltips();
+     QMap<QString, QString> tooltips = m_GeneralTest->tooltips();
      if (!cursor.selectedText().isEmpty())
        QToolTip::showText(QCursor::pos(),
                                 QString("%1")
@@ -167,7 +167,7 @@ void HypothesisTestView::print(QPrinter* printer) const {
        QToolTip::hideText();
  }
 
-void HypothesisTestView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
+void GeneralTestView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
 	Q_UNUSED(exportHeader);
 	Q_UNUSED(separator);
 	Q_UNUSED(language);
@@ -179,7 +179,7 @@ void HypothesisTestView::exportToFile(const QString& path, const bool exportHead
 
 }
 
-void HypothesisTestView::exportToLaTeX(const QString & path, const bool exportHeaders,
+void GeneralTestView::exportToLaTeX(const QString & path, const bool exportHeaders,
                                     const bool gridLines, const bool captions, const bool latexHeaders,
                                     const bool skipEmptyRows, const bool exportEntire) const {
 	Q_UNUSED(exportHeaders);

@@ -43,7 +43,7 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/pivot/PivotTable.h"
-#include "backend/hypothesisTest/HypothesisTest.h"
+#include "backend/generalTest/HypothesisTest.h"
 
 
 #include <QKeyEvent>
@@ -789,10 +789,16 @@ void SpreadsheetView::createPivotTable() {
 
 void SpreadsheetView::doHypothesisTest()
 {
+    QDEBUG("in do hypothesis test");
     HypothesisTest* hypothesis_test = new HypothesisTest(i18n("Hypothesis Test for %1", m_spreadsheet->name()));
+    QDEBUG("created object");
     hypothesis_test->setDataSourceType(HypothesisTest::DataSourceSpreadsheet);
+    QDEBUG("data source type set");
     hypothesis_test->setDataSourceSpreadsheet(m_spreadsheet);
+    QDEBUG("added spreadsheet");
+    QDEBUG(hypothesis_test->name());
     m_spreadsheet->parentAspect()->addChild(hypothesis_test);
+    QDEBUG("out of do hypothesis test");
 }
 
 

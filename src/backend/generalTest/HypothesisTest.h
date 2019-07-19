@@ -30,9 +30,9 @@
 #define HYPOTHESISTEST_H
 
 #include "backend/core/AbstractPart.h"
+#include "GeneralTest.h"
 #include "backend/lib/macros.h"
 
-class HypothesisTestPrivate;
 class HypothesisTestView;
 class Spreadsheet;
 class QString;
@@ -40,7 +40,7 @@ class Column;
 class QVBoxLayout;
 class QLabel;
 
-class HypothesisTest : public AbstractPart {
+class HypothesisTest : public GeneralTest {
 	Q_OBJECT
 
 public:
@@ -65,57 +65,36 @@ public:
         enum Tail {Positive, Negative, Two};
         Type type = NoneType;
         SubType subtype = NoneSubType;
-        Correlation correlation = NoneCorrelation;
         Tail tail;
     };
 
-	enum DataSourceType {DataSourceSpreadsheet, DataSourceDatabase};
-
-	void setDataSourceType(DataSourceType type);
-	DataSourceType dataSourceType() const;
-	void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
-	Spreadsheet* dataSourceSpreadsheet() const;
-
-	void setColumns(const QVector<Column*>& cols);
-	void setColumns(QStringList cols);
-	QStringList allColumns();
 	void setPopulationMean(QVariant populationMean);
 	void setSignificanceLevel(QVariant alpha);
-	QString testName();
-	QString statsTable();
-    QMap<QString, QString> tooltips();
 
-	void performTest(Test m_test, bool categoricalVariable = true, bool equalVariance = true);
-
-	void performLeveneTest(bool categorical_variable);
+    void performTest(Test m_test, bool categoricalVariable = true, bool equalVariance = true);
+    void performLeveneTest(bool categoricalVariable);
 
     QList<double> statisticValue();
     QList<double> pValue();
-
-	QVBoxLayout* summaryLayout();
-
-	//virtual methods
-	//    QIcon icon() const override;
-	QMenu* createContextMenu() override;
-	QWidget* view() const override;
-
-	bool exportView() const override;
-	bool printView() override;
-	bool printPreview() const override;
-
-	void save(QXmlStreamWriter*) const override;
-	bool load(XmlStreamReader*, bool preview) override;
+    QWidget* view() const override;
 
 private:
-	HypothesisTestPrivate* const d;
-	mutable HypothesisTestView* m_view{nullptr};
-	friend class HypothesisTestPrivate;
+    void performTwoSampleIndependentTest(HypothesisTest::Test::Type test, bool categoricalVariable = false, bool equalVariance = true);
+    void performTwoSamplePairedTest(HypothesisTest::Test::Type test);
+    void performOneSampleTest(HypothesisTest::Test::Type test);
+    void performOneWayAnova();
+    void performTwoWayAnova();
+    void m_performLeveneTest(bool categoricalVariable);
 
-signals:
-	void changed();
-	void requestProjectContextMenu(QMenu*);
-	void dataSourceTypeChanged(HypothesisTest::DataSourceType);
-	void dataSourceSpreadsheetChanged(Spreadsheet*);
+    double getPValue(const HypothesisTest::Test::Type& test, double& value,
+                     const QString& col1Name, const QString& col2name,
+                     const double mean, const double sp, const int df);
+
+    double m_populationMean;
+    double m_significanceLevel;
+    HypothesisTest::Test::Tail m_tailType;
+    QList<double> m_pValue;
+    QList<double> m_statisticValue;
 };
 
 #endif // HypothesisTest_H

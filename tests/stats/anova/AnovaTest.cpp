@@ -26,7 +26,7 @@
  ***************************************************************************/
 
 #include "AnovaTest.h"
-#include "backend/hypothesisTest/HypothesisTest.h"
+#include "backend/generalTest/HypothesisTest.h"
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"

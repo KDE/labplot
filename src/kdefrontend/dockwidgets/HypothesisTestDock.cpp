@@ -373,7 +373,7 @@ void HypothesisTestDock::performLeveneTest()  {
 
 	cols << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
 	cols << reinterpret_cast<Column*>(ui.cbCol2->currentData().toLongLong());
-	m_hypothesisTest->setColumns(cols);
+    m_hypothesisTest->setColumns(cols);
 
 	m_hypothesisTest->setSignificanceLevel(ui.leAlpha->text());
 	m_hypothesisTest->performLeveneTest(ui.chbCategorical->isChecked());
