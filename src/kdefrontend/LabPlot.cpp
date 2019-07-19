@@ -56,7 +56,7 @@ int main (int argc, char *argv[]) {
 	KLocalizedString::setApplicationDomain("labplot2");
 	KCrash::initialize();
 
-	KAboutData aboutData( QStringLiteral("labplot2"), QString("labplot2"),
+	KAboutData aboutData( QStringLiteral("labplot2"), QString("LabPlot"),
 		LVERSION, i18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
 		KAboutLicense::GPL,i18n("(c) 2007-2019"), QString(), QStringLiteral("https://labplot.kde.org"));
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), "stefan.gerlach@uni.kn", nullptr);
