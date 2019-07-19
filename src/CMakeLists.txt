@@ -49,6 +49,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/NoteDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/CorrelationCoefficientDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/HistogramDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/HypothesisTestDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CustomPointDock.cpp
@@ -71,8 +72,9 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYConvolutionCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYCorrelationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
+        ${KDEFRONTEND_DIR}/generalTest/CorrelationCoefficientView.cpp
+	${KDEFRONTEND_DIR}/generalTest/GeneralTestView.cpp		
         ${KDEFRONTEND_DIR}/generalTest/HypothesisTestView.cpp
-	${KDEFRONTEND_DIR}/generalTest/GeneralTestView.cpp	
 	${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
 	${KDEFRONTEND_DIR}/pivot/HierarchicalHeaderView.cpp
 	${KDEFRONTEND_DIR}/pivot/PivotTableView.cpp
@@ -140,6 +142,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/histogramdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/correlationcoefficientdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/hypothesistestdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/livedatadock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/notedock.ui
@@ -239,8 +242,9 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
 	${BACKEND_DIR}/datasources/projects/LabPlotProjectParser.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
-	${BACKEND_DIR}/generalTest/HypothesisTest.cpp
+	${BACKEND_DIR}/generalTest/CorrelationCoefficient.cpp
 	${BACKEND_DIR}/generalTest/GeneralTest.cpp
+	${BACKEND_DIR}/generalTest/HypothesisTest.cpp
 	${BACKEND_DIR}/matrix/Matrix.cpp
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
 	${BACKEND_DIR}/matrix/MatrixModel.cpp

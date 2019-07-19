@@ -50,7 +50,7 @@ extern "C" {
 #include "backend/nsl/nsl_stats.h"
 }
 
-HypothesisTest::HypothesisTest(const QString &name) : GeneralTest (name) {
+HypothesisTest::HypothesisTest(const QString &name) : GeneralTest (name, AspectType::HypothesisTest) {
 }
 
 HypothesisTest::~HypothesisTest() {
@@ -155,7 +155,7 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
                 printError("Atleast two values should be there in every column");
                 return;
             }
-            if (std[i] == 0) {
+            if (std[i] <= 0) {
                 printError(i18n("Standard Deviation of atleast one column is equal to 0: last column is: %1", m_columns[i]->name()));
                 return;
             }
@@ -213,7 +213,7 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
             printError("Atleast two values should be there in every column");
             return;
         }
-        if (std[i] == 0) {
+        if (std[i] <= 0) {
             printError( i18n("Standard Deviation of atleast one column is equal to 0: last column is: %1", m_columns[i]->name()));
             return;
         }
@@ -322,7 +322,7 @@ void HypothesisTest::performTwoSamplePairedTest(HypothesisTest::Test::Type test)
 
     m_statsTable = getHtmlTable(2, 5, rowMajor);
 
-    if (std == 0) {
+    if (std <= 0) {
         printError("Standard deviation of the difference is 0");
         return;
     }
@@ -404,7 +404,7 @@ void HypothesisTest::performOneSampleTest(HypothesisTest::Test::Type test) {
 
     m_statsTable = getHtmlTable(2, 5, rowMajor);
 
-    if (std == 0) {
+    if (std <= 0) {
         printError("Standard deviation is 0");
         return;
     }
@@ -645,10 +645,6 @@ void HypothesisTest::performTwoWayAnova() {
             groupMean[i][j] /= replicates[i][j];
         }
 
-    //    for (int i = 0; i < np_a; i++)
-    //        for (int j = 0; j < np_b; j++)
-    //            groupMean[i][j] = int(groupMean[i][j]);
-
     double ss_within = 0;
     for (int i = 0; i < totalRows_a; i++) {
         QString name_a = m_columns[0]->textAt(i);
@@ -661,8 +657,8 @@ void HypothesisTest::performTwoWayAnova() {
     int df_within = (replicate - 1) * np_a * np_b;
     double ms_within = ss_within / df_within;
 
-    double mean_a[np_a];
-    double mean_b[np_b];
+    double* mean_a = new double[np_a];
+    double* mean_b = new double[np_b];
     for (int i = 0; i < np_a; i++) {
         for (int j = 0; j < np_b; j++) {
             mean_a[i] += groupMean[i][j] / np_b;
@@ -701,8 +697,8 @@ void HypothesisTest::performTwoWayAnova() {
     int df_interaction = (np_a - 1) * (np_b - 1);
     double ms_interaction = ss_interaction / df_interaction;
 
-    QString partitionNames_a[np_a];
-    QString partitionNames_b[np_b];
+    QString* partitionNames_a = new QString[np_a];
+    QString* partitionNames_b = new QString[np_b];
 
     QMapIterator<QString, int> itr_a(catToNumber_a);
     while (itr_a.hasNext()) {
@@ -805,6 +801,11 @@ void HypothesisTest::performTwoWayAnova() {
 
     m_pValue.append(m_pValue_a);
     m_pValue.append(m_pValue_b);
+
+    delete[] mean_a;
+    delete[] mean_b;
+    delete[] partitionNames_a;
+    delete[] partitionNames_b;
 
     return;
 }

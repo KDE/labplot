@@ -98,6 +98,7 @@ enum class AspectType : quint64 {
 		Worksheet = 0x0420020,
 		PivotTable = 0x0420040,
 		HypothesisTest = 0x0420080,
+        CorrelationCoefficient = 0x0420100,
 
 	AbstractColumn = 0x1000000,
 		Column = 0x1000001,

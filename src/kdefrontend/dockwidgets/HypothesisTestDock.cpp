@@ -865,6 +865,8 @@ bool HypothesisTestDock::nonEmptySelectedColumns() {
 		return false;
 	if (ui.cbCol2->isVisible() && ui.cbCol2->count() < 1)
 		return false;
+    if (ui.cbCol3->isVisible() && ui.cbCol3->count() < 1)
+        return false;
 	return true;
 }
 

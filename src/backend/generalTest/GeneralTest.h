@@ -32,7 +32,7 @@
 #include "backend/core/AbstractPart.h"
 #include "backend/lib/macros.h"
 
-class HypothesisTestView;
+class GeneralTestView;
 class Spreadsheet;
 class QString;
 class Column;
@@ -43,7 +43,7 @@ class GeneralTest : public AbstractPart {
     Q_OBJECT
 
 public:
-    explicit GeneralTest(const QString& name);
+    explicit GeneralTest(const QString& name, const AspectType& type);
     ~GeneralTest() override;
 
     enum DataSourceType {DataSourceSpreadsheet, DataSourceDatabase};
@@ -129,7 +129,7 @@ protected:
     void printError(const QString& errorMsg);
 
     bool m_dbCreated{false};
-    mutable HypothesisTestView* m_view{nullptr};
+    mutable GeneralTestView* m_view{nullptr};
 };
 
 #endif // GeneralTest_H

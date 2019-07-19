@@ -44,7 +44,7 @@
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/pivot/PivotTable.h"
 #include "backend/generalTest/HypothesisTest.h"
-
+#include "backend/generalTest/CorrelationCoefficient.h"
 
 #include <QKeyEvent>
 #include <QClipboard>
@@ -223,6 +223,7 @@ void SpreadsheetView::initActions() {
 	action_statistics_all_columns = new QAction(QIcon::fromTheme("view-statistics"), i18n("Statisti&cs"), this );
 	action_pivot_table = new QAction(QIcon::fromTheme("table"), i18n("Pivot Table"), this);
     action_do_hypothesis_test = new QAction(i18n("Hypothesis Test"), this);
+    action_find_correlation_coefficient = new QAction(i18n("Correlation Coefficient"), this);
 
 	// column related actions
 	action_insert_column_left = new QAction(QIcon::fromTheme("edit-table-insert-column-left"), i18n("Insert Column Left"), this);
@@ -509,6 +510,7 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu->addMenu(m_plotDataMenu);
 	m_spreadsheetMenu->addMenu(m_analyzePlotMenu);
     m_spreadsheetMenu->addAction(action_do_hypothesis_test);
+    m_spreadsheetMenu->addAction(action_find_correlation_coefficient);
     m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_pivot_table);
 	m_spreadsheetMenu->addSeparator();
@@ -576,6 +578,7 @@ void SpreadsheetView::connectActions() {
 			static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
 	connect(action_pivot_table, &QAction::triggered, this, &SpreadsheetView::createPivotTable);
     connect(action_do_hypothesis_test, &QAction::triggered, this, &SpreadsheetView::doHypothesisTest);
+    connect(action_find_correlation_coefficient, &QAction::triggered, this, &SpreadsheetView::findCorrelationCoefficient);
 
 	connect(action_insert_column_left, &QAction::triggered, this, &SpreadsheetView::insertColumnLeft);
 	connect(action_insert_column_right, &QAction::triggered, this, &SpreadsheetView::insertColumnRight);
@@ -787,20 +790,20 @@ void SpreadsheetView::createPivotTable() {
     m_spreadsheet->parentAspect()->addChild(pivot);
 }
 
-void SpreadsheetView::doHypothesisTest()
-{
-    QDEBUG("in do hypothesis test");
+void SpreadsheetView::doHypothesisTest() {
     HypothesisTest* hypothesis_test = new HypothesisTest(i18n("Hypothesis Test for %1", m_spreadsheet->name()));
-    QDEBUG("created object");
     hypothesis_test->setDataSourceType(HypothesisTest::DataSourceSpreadsheet);
-    QDEBUG("data source type set");
     hypothesis_test->setDataSourceSpreadsheet(m_spreadsheet);
-    QDEBUG("added spreadsheet");
-    QDEBUG(hypothesis_test->name());
     m_spreadsheet->parentAspect()->addChild(hypothesis_test);
-    QDEBUG("out of do hypothesis test");
 }
 
+
+void SpreadsheetView::findCorrelationCoefficient() {
+    CorrelationCoefficient* correlation_coefficient = new CorrelationCoefficient(i18n("Correlation Coefficient for %1", m_spreadsheet->name()));
+    correlation_coefficient->setDataSourceType(CorrelationCoefficient::DataSourceSpreadsheet);
+    correlation_coefficient->setDataSourceSpreadsheet(m_spreadsheet);
+    m_spreadsheet->parentAspect()->addChild(correlation_coefficient);
+}
 
 void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to) {
 	Q_UNUSED(index);

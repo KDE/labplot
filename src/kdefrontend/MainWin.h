@@ -41,6 +41,7 @@ class Note;
 class Workbook;
 class Datapicker;
 class HypothesisTest;
+class CorrelationCoefficient;
 class Image;
 class Spreadsheet;
 class Matrix;
@@ -56,6 +57,7 @@ class CartesianPlotLegendDock;
 class CustomPointDock;
 class ColumnDock;
 class HypothesisTestDock;
+class CorrelationCoefficientDock;
 class LiveDataDock;
 class MatrixDock;
 class PivotTableDock;
@@ -141,6 +143,7 @@ private:
 	QAction* m_closeAction;
 	QAction* m_newFolderAction;
     QAction* m_newHypothesisTestAction;
+    QAction* m_newCorrelationCoefficientAction;
 	QAction* m_newWorkbookAction;
 	QAction* m_newSpreadsheetAction;
 	QAction* m_newMatrixAction;
@@ -202,6 +205,7 @@ private:
 	CartesianPlotLegendDock* cartesianPlotLegendDock{nullptr};
 	ColumnDock* columnDock{nullptr};
     HypothesisTestDock* hypothesisTestDock{nullptr};
+    CorrelationCoefficientDock* correlationCoefficientDock{nullptr};
 	LiveDataDock* m_liveDataDock{nullptr};
 	MatrixDock* matrixDock{nullptr};
 	PivotTableDock* pivotTableDock{nullptr};
@@ -293,6 +297,7 @@ private slots:
 
 	void newFolder();
     void newHypothesisTest();
+    void newCorrelationCoefficient();
 	void newWorkbook();
 	void newSpreadsheet();
 	void newMatrix();

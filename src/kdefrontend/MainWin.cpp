@@ -34,6 +34,7 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Workbook.h"
 #include "backend/generalTest/HypothesisTest.h"
+#include "backend/generalTest/CorrelationCoefficient.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/pivot/PivotTable.h"
@@ -349,10 +350,15 @@ void MainWin::initActions() {
 	actionCollection()->addAction("new_datapicker", m_newDatapickerAction);
 	connect(m_newDatapickerAction, &QAction::triggered, this, &MainWin::newDatapicker);
 
-    m_newHypothesisTestAction = new QAction(QIcon::fromTheme("labplot-spreadsheet-new"), i18n("Hypothesis Test"), this);
+    m_newHypothesisTestAction = new QAction(QIcon::fromTheme("labplot-spreadsheet-new"), i18n("Hypothesis Test 2"), this);
     m_newHypothesisTestAction->setWhatsThis(i18n("Creates windows for hypothesis testing"));
     actionCollection()->addAction("new_hypothesis_test", m_newHypothesisTestAction);
     connect(m_newHypothesisTestAction, &QAction::triggered, this, &MainWin::newHypothesisTest);
+
+    m_newCorrelationCoefficientAction = new QAction(QIcon::fromTheme("labplot-spreadsheet-new"), i18n("Correlation Coefficient"), this);
+    m_newCorrelationCoefficientAction->setWhatsThis(i18n("Creates windows for finding Correlation Coefficient"));
+    actionCollection()->addAction("new_correlation_coeffient", m_newCorrelationCoefficientAction);
+    connect(m_newCorrelationCoefficientAction, &QAction::triggered, this, &MainWin::newCorrelationCoefficient);
 
 	m_newSpreadsheetAction = new QAction(QIcon::fromTheme("labplot-spreadsheet-new"),i18n("Spreadsheet"),this);
 // 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
@@ -1250,6 +1256,14 @@ void MainWin::newDatapicker() {
 void MainWin::newHypothesisTest() {
     HypothesisTest* hypothesisTest = new HypothesisTest(i18n("HypothesisTest"));
     this->addAspectToProject(hypothesisTest);
+}
+
+/*!
+    adds a new Correlation Coefficient window to the project.
+*/
+void MainWin::newCorrelationCoefficient() {
+    CorrelationCoefficient* correlationCoefficient = new CorrelationCoefficient(i18n("CorrelationCoefficient"));
+    this->addAspectToProject(correlationCoefficient);
 }
 
 /*!

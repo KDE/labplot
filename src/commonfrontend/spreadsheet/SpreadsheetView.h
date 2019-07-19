@@ -140,6 +140,7 @@ private:
 	QAction* action_statistics_all_columns;
 	QAction* action_pivot_table;
     QAction* action_do_hypothesis_test;
+    QAction* action_find_correlation_coefficient;
 
 	//column related actions
 	QAction* action_insert_column_left;
@@ -221,6 +222,7 @@ private slots:
 	void goToCell();
 	void createPivotTable();
     void doHypothesisTest();
+    void findCorrelationCoefficient();
 	void sortSpreadsheet();
 	void sortDialog(QVector<Column*>);
 
