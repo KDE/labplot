@@ -77,7 +77,7 @@ bool Double2StringFilter::load(XmlStreamReader* reader, bool preview) {
 		if (ok)
 			setNumDigits(digits);
 
-		if (format_str.size() != 1)
+		if (format_str.size() >= 1)
 			setNumericFormat(format_str.at(0).toLatin1());
 	} else
 		return false;
