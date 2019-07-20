@@ -1171,16 +1171,15 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 						bool isNumber;
 						const double value = locale.toDouble(valueString, &isNumber);
 						static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : nanValue);
-						qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<double>*>(m_dataContainer[n])->size();
+// 						qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<double>*>(m_dataContainer[n])->size();
 						break;
 					}
 					case AbstractColumn::Integer: {
 						DEBUG("	Integer");
 						bool isNumber;
 						const int value = locale.toInt(valueString, &isNumber);
-						DEBUG("	container size = " << m_dataContainer.size() << ", current row = " << currentRow);
 						static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : 0);
-						qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
+// 						qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
 
 						break;
 					}

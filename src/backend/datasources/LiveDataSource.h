@@ -168,6 +168,7 @@ private:
 	bool m_fileLinked{false};
 	bool m_paused{false};
 	bool m_prepared{false};
+	bool m_reading{false};
 
 	int m_sampleSize{1};
 	int m_keepNValues{0};	// number of values to keep (0 - all)

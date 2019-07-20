@@ -469,6 +469,11 @@ void LiveDataSource::read() {
 	if (!m_filter)
 		return;
 
+	if (m_reading)
+		return;
+
+	m_reading = true;
+
 	//initialize the device (file, socket, serial port) when calling this function for the first time
 	if (!m_prepared) {
 		DEBUG("	Preparing device: update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
@@ -592,6 +597,8 @@ void LiveDataSource::read() {
 	case MQTT:
 		break;
 	}
+
+	m_reading = false;
 }
 
 /*!
@@ -956,6 +963,9 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 	//read the content of the file if it was only linked
 	if (m_fileLinked && QFile::exists(m_fileName))
 		this->read();
+
+	if (m_fileWatched)
+		watch();
 
 	return !reader->hasError();
 }
