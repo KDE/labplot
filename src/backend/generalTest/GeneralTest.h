@@ -112,10 +112,21 @@ protected:
     QLabel* m_resultLine[10];
     QMap<QString, QString> m_tooltips;
 
-    bool isNumericOrInteger(Column* column);
+    bool isNumericOrInteger(const Column* column);
     QString round(QVariant number, int precision = 3);
 
+    int findCount(const Column* column);
+    double findSum(const Column* column, int N = -1);
+    double findSumSq(const Column* column, int N = -1);
+    double findMean(const Column* column, int N = -1);
+    double findStd(const Column* column, int N, double mean);
+    double findStd(const Column* column, int N = -1);
+
     void countPartitions(Column* column, int& np, int& totalRows);
+
+
+//    double findSumProducts(const Column* columns[], int N = -1);
+
     ErrorType findStats(const Column* column,int& count, double& sum, double& mean, double& std);
     ErrorType findStatsPaired(const Column* column1, const Column* column2, int& count, double& sum, double& mean, double& std);
     ErrorType findStatsCategorical(Column* column1, Column* column2, int n[], double sum[], double mean[], double std[], QMap<QString, int>& colName, const int& np, const int& totalRows);

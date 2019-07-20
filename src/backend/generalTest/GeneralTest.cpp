@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
     File                 : GeneralTest.cpp
     Project              : LabPlot
     Description          : Doing Hypothesis-Test on data provided
@@ -128,38 +128,111 @@ QString GeneralTest::round(QVariant number, int precision) {
 }
 
 
-bool GeneralTest::isNumericOrInteger(Column* column) {
+bool GeneralTest::isNumericOrInteger(const Column* column) {
     return (column->columnMode() == AbstractColumn::Numeric || column->columnMode() == AbstractColumn::Integer);
 }
 
-GeneralTest::ErrorType GeneralTest::findStats(const Column* column, int& count, double& sum, double& mean, double& std) {
-    sum = 0;
-    mean = 0;
-    std = 0;
 
-    count = column->rowCount();
-    for (int i = 0; i < count; i++) {
-        double row = column->valueAt(i);
-        if ( std::isnan(row)) {
-            count = i;
-            break;
-        }
-        sum += row;
+int GeneralTest::findCount(const Column *column) {
+    int N = column->rowCount();
+    switch (column->columnMode()) {
+    case (AbstractColumn::Numeric):
+    case (AbstractColumn::Integer): {
+        for (int i = 0; i < N; i++)
+            if (std::isnan(column->valueAt(i))) {
+                N = i;
+                break;
+            }
+        break;
     }
+    case (AbstractColumn::Month):
+    case (AbstractColumn::Day):
+    case (AbstractColumn::Text): {
+        for (int i = 0; i < N; i++)
+            if (column->textAt(i).isEmpty()) {
+                N = i;
+                break;
+            }
+        break;
+    }
+    case (AbstractColumn::DateTime):
+        break;
+    }
+    return N;
+}
 
-    if (count < 1)
-        return GeneralTest::ErrorEmptyColumn;
+double GeneralTest::findSum(const Column *column, int N) {
+    if (!isNumericOrInteger(column))
+        return 0;
 
-    mean = sum / count;
+    if (N < 0)
+        N = findCount(column);
 
-    for (int i = 0; i < count; i++) {
+    double sum = 0;
+    for (int i = 0; i < N; i++)
+        sum += column->valueAt(i);
+    return sum;
+}
+
+double GeneralTest::findSumSq(const Column *column, int N) {
+    if (!isNumericOrInteger(column))
+        return 0;
+
+    if (N < 0)
+        N = findCount(column);
+
+    double sumSq = 0;
+    for (int i = 0; i < N; i++)
+        sumSq += gsl_pow_2(column->valueAt(i));
+    return sumSq;
+}
+
+double GeneralTest::findMean(const Column *column, int N) {
+    if (!isNumericOrInteger(column))
+        return 0;
+
+    if (N < 0)
+        N = findCount(column);
+
+    double sum = findSum(column, N);
+    return sum / N;
+}
+
+double GeneralTest::findStd(const Column *column, int N, double mean) {
+    if (!isNumericOrInteger(column))
+        return 0;
+
+    double std = 0;
+    for (int i = 0; i < N; i++) {
         double row = column->valueAt(i);
         std += gsl_pow_2( (row - mean));
     }
 
-    if (count > 1)
-        std = std / (count-1);
+    if (N > 1)
+        std = std / (N-1);
     std = sqrt(std);
+    return std;
+}
+
+double GeneralTest::findStd(const Column *column, int N) {
+    if (!isNumericOrInteger(column))
+        return 0;
+
+    if (N < 0)
+        N = findCount(column);
+
+    double mean = findMean(column, N);
+    return findStd(column, N, mean);
+}
+
+GeneralTest::ErrorType GeneralTest::findStats(const Column* column, int& count, double& sum, double& mean, double& std) {
+    count = findCount(column);
+    sum = findSum(column, count);
+    mean = findMean(column, count);
+    std = findStd(column, count, mean);
+
+    if (count < 1)
+        return GeneralTest::ErrorEmptyColumn;
 
     return GeneralTest::NoError;
 }

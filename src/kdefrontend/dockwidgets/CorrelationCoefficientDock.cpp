@@ -193,6 +193,8 @@ void CorrelationCoefficientDock::doCorrelationCoefficient()  {
         return;
 
     cols << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
+    cols << reinterpret_cast<Column*>(ui.cbCol2->currentData().toLongLong());
+    m_CorrelationCoefficient->setColumns(cols);
 
     switch(m_test) {
     case (CorrelationCoefficient::Test::Pearson): {

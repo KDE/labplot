@@ -44,8 +44,8 @@
 
 #include <KLocalizedString>
 
-#include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
+#include <gsl/gsl_statistics.h>
 
 extern "C" {
 #include "backend/nsl/nsl_stats.h"
@@ -94,8 +94,86 @@ double CorrelationCoefficient::correlationValue() {
  * ************************************************************************************************************************/
 
 /*********************************************Pearson r ******************************************************************/
+// variables:
+//  N           = total number of observations
+//  sumColx     = sum of values in colx
+//  sumSqColx   = sum of square of values in colx
+//  sumColxColy = sum of product of values in colx and coly
+
+//TODO: support for col1 is categorical.
+//TODO: add symbols in stats table header.
 void CorrelationCoefficient::performPearson(bool categoricalVariable) {
-    Q_UNUSED(categoricalVariable);
+    if (m_columns.count() != 2) {
+        printError("Select only 2 columns ");
+        return;
+    }
+
+    if (categoricalVariable) {
+        printLine(1, "currently categorical variable not supported", "blue");
+        return;
+    }
+
+    QString col1Name = m_columns[0]->name();
+    QString col2Name = m_columns[1]->name();
+
+
+    if (!isNumericOrInteger(m_columns[1])) {
+        printError("Column " + col2Name + " should contain only numeric or interger values");
+    }
+
+
+    int N = findCount(m_columns[0]);
+    if (N != findCount(m_columns[1])) {
+        printError("Number of data values in Column: " + col1Name + "and Column: " + col2Name + "are not equal");
+        return;
+    }
+
+    double sumCol1 = findSum(m_columns[0], N);
+    double sumCol2 = findSum(m_columns[1], N);
+    double sumSqCol1 = findSumSq(m_columns[0], N);
+    double sumSqCol2 = findSumSq(m_columns[1], N);
+
+    double sumCol12 = 0;
+
+    for (int i = 0; i < N; i++)
+        sumCol12 += m_columns[0]->valueAt(i) *
+                    m_columns[1]->valueAt(i);
+
+    // printing table;
+    // cell constructor structure; data, level, rowSpanCount, m_columnspanCount, isHeader;
+    QList<Cell*> rowMajor;
+    int level = 0;
+
+    // horizontal header
+    rowMajor.append(new Cell("", level, true));
+    rowMajor.append(new Cell("N", level, true, "Total Number of Observations"));
+    rowMajor.append(new Cell("Sigma", level, true, "Sum of Scores in each column"));
+    rowMajor.append(new Cell("Sigma x2", level, true, "Sum of Squares of scores in each column"));
+    rowMajor.append(new Cell("Sigma xy", level, true, "Sum of Squares of scores in each column"));
+
+    //data with vertical header.
+    level++;
+    rowMajor.append(new Cell(col1Name, level, true));
+    rowMajor.append(new Cell(N, level));
+    rowMajor.append(new Cell(sumCol1, level));
+    rowMajor.append(new Cell(sumSqCol1, level));
+
+    rowMajor.append(new Cell(sumCol12, level, false, "", 2, 1));
+
+    level++;
+    rowMajor.append(new Cell(col2Name, level, true));
+    rowMajor.append(new Cell(N, level));
+    rowMajor.append(new Cell(sumCol2, level));
+    rowMajor.append(new Cell(sumSqCol2, level));
+
+    m_statsTable += getHtmlTable3(rowMajor);
+
+
+    m_correlationValue = (N * sumCol12 - sumCol1*sumCol2) /
+                        sqrt((N * sumSqCol1 - gsl_pow_2(sumCol1)) *
+                             (N * sumSqCol2 - gsl_pow_2(sumCol2)));
+
+    printLine(0, QString("Correlation Value is %1").arg(m_correlationValue), "green");
 
 }
 
