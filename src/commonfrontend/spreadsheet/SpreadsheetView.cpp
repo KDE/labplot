@@ -2462,7 +2462,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 }
 
 void SpreadsheetView::registerShortcuts() {
-	action_clear_selection ->setShortcut(QKeySequence::Delete);
+	action_clear_selection->setShortcut(QKeySequence::Delete);
 }
 
 void SpreadsheetView::unregisterShortcuts() {

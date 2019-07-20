@@ -31,8 +31,9 @@
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/aspectcommands.h"
 #include "backend/core/Project.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/datapicker/DatapickerCurve.h"
+#include "backend/datasources/LiveDataSource.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/PropertyChangeCommand.h"
@@ -310,13 +311,15 @@ QMenu* AbstractAspect::createContextMenu() {
 // 	menu->addSeparator();
 
 	//don't allow to rename and delete
-	//1. data spreadsheets of datapicker curves
-	//2. columns in data spreadsheets of datapicker curves
-	//1. Mqtt subscriptions
-	//2. Mqtt topics
-	//3. Columns in Mqtt topics
+	// - data spreadsheets of datapicker curves
+	// - columns in data spreadsheets of datapicker curves
+	// - columns in live-data source
+	// - Mqtt subscriptions
+	// - Mqtt topics
+	// - Columns in Mqtt topics
 	bool enabled = !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DatapickerCurve*>(this->parentAspect()))
 		&& !(dynamic_cast<const Column*>(this) && this->parentAspect()->parentAspect() && dynamic_cast<const DatapickerCurve*>(this->parentAspect()->parentAspect()))
+		&& !(dynamic_cast<const Column*>(this) && dynamic_cast<const LiveDataSource*>(this->parentAspect()))
 #ifdef HAVE_MQTT
 		&& !dynamic_cast<const MQTTSubscription*>(this)
 		&& !dynamic_cast<const MQTTTopic*>(this)

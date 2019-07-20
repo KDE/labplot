@@ -202,7 +202,7 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 
 	//if the previous MQTTClient's host name was different from the current one we have to disconnect some slots
 	//and clear the tree widgets
-	else if (m_previousMQTTClient->clientHostName() != client->clientHostName()) {        
+	else if (m_previousMQTTClient->clientHostName() != client->clientHostName()) {
         disconnect(m_updateSubscriptionConn);
 		disconnect(m_previousHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 		connect(m_previousHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
@@ -333,14 +333,14 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 	else
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-#ifdef HAVE_MQTT
 	ui.lTopics->hide();
 	ui.bLWT->hide();
 	ui.lLWT->hide();
 	ui.bWillUpdateNow->hide();
-	ui.swSubscriptions->setVisible(false);
-	m_subscriptionWidget->setVisible(false);
-	m_subscriptionWidget->makeVisible(false);
+	ui.swSubscriptions->hide();
+#ifdef HAVE_MQTT
+	m_subscriptionWidget->hide();
+	m_subscriptionWidget->hide();
 #endif
 	m_liveDataSource = source; // updates may be applied from now on
 }
