@@ -889,7 +889,10 @@ CartesianPlot* WorksheetView::plotAt(QPoint pos) const {
 //##############################################################################
 //####################################  Events   ###############################
 //##############################################################################
-void WorksheetView::resizeEvent(QResizeEvent *event) {
+void WorksheetView::resizeEvent(QResizeEvent* event) {
+	if (m_isClosing)
+		return;
+
 	if (m_worksheet->useViewSize())
 		this->processResize();
 
