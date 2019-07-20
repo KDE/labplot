@@ -1822,9 +1822,14 @@ void XYCurvePrivate::updateFilling() {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 			fillLines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
-		fillLines = cSystem->mapLogicalToScene(fillLines);
 
 		//no lines available (no points), nothing to do
+		if (fillLines.isEmpty())
+			return;
+
+		fillLines = cSystem->mapLogicalToScene(fillLines);
+
+		//no lines available (no points) after mapping, nothing to do
 		if (fillLines.isEmpty())
 			return;
 	}
