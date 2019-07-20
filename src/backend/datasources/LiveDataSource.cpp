@@ -110,8 +110,10 @@ void LiveDataSource::initActions() {
 }
 
 QWidget* LiveDataSource::view() const {
-	if (!m_partView)
-		m_partView = new SpreadsheetView(const_cast<LiveDataSource*>(this), true);
+	if (!m_partView) {
+		m_view = new SpreadsheetView(const_cast<LiveDataSource*>(this), true);
+		m_partView = m_view;
+	}
 	return m_partView;
 }
 
@@ -120,7 +122,7 @@ QWidget* LiveDataSource::view() const {
  */
 QStringList LiveDataSource::availablePorts() {
 	QStringList ports;
-	qDebug() << "available ports count:" << QSerialPortInfo::availablePorts().size();
+// 	qDebug() << "available ports count:" << QSerialPortInfo::availablePorts().size();
 
 	for (const QSerialPortInfo& sp : QSerialPortInfo::availablePorts()) {
 		ports.append(sp.portName());

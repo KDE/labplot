@@ -108,8 +108,10 @@ public slots:
 
 private:
 	void init();
-	mutable SpreadsheetView* m_view{nullptr};
 	SpreadsheetModel* m_model{nullptr};
+
+protected:
+	mutable SpreadsheetView* m_view{nullptr};
 
 private slots:
 	void childSelected(const AbstractAspect*) override;

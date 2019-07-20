@@ -91,7 +91,7 @@ void Spreadsheet::setModel(SpreadsheetModel* model) {
 	m_model = model;
 }
 
-SpreadsheetModel * Spreadsheet::model() {
+SpreadsheetModel* Spreadsheet::model() {
 	return m_model;
 }
 
