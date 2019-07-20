@@ -70,7 +70,7 @@ void HypothesisTest::performTest(Test test, bool categoricalVariable, bool equal
     m_statisticValue.clear();
     m_statsTable = "";
     m_tooltips.clear();
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < RESULTLINESCOUNT; i++)
         m_resultLine[i]->clear();
 
     switch (test.subtype) {
@@ -110,7 +110,7 @@ void HypothesisTest::performLeveneTest(bool categoricalVariable) {
     m_statisticValue.clear();
     m_statsTable = "";
     m_tooltips.clear();
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < RESULTLINESCOUNT; i++)
         m_resultLine[i]->clear();
 
     m_currTestName = "<h2>" + i18n("Levene Test for Equality of Variance") + "</h2>";

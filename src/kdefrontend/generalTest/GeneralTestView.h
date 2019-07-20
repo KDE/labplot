@@ -43,6 +43,8 @@ class QToolBar;
 class QLabel;
 class QTextEdit;
 
+#define RESULTLINESCOUNT 10
+
 class GeneralTestView : public QWidget {
     Q_OBJECT
 
@@ -69,7 +71,7 @@ protected:
     QLabel* m_testName;
     QTextEdit* m_statsTable;
     QWidget* m_summaryResults{nullptr};
-    QLabel* m_resultLine[10];
+    QLabel* m_resultLine[RESULTLINESCOUNT];
 
 public slots:
     void createContextMenu(QMenu*);
