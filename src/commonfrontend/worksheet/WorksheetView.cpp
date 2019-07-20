@@ -40,10 +40,11 @@
 #include "backend/lib/trace.h"
 
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QMdiArea>
 #include <QMenu>
 #include <QToolBar>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QWheelEvent>
 #include <QPrinter>
 #include <QSvgGenerator>
@@ -1013,7 +1014,7 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 		const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
 
 		const QRectF copyRect(pos.x() - size/(2*magnificationFactor), pos.y() - size/(2*magnificationFactor), size/magnificationFactor, size/magnificationFactor);
-		QPixmap px = QPixmap::grabWidget(this, mapFromScene(copyRect).boundingRect());
+		QPixmap px = grab(mapFromScene(copyRect).boundingRect());
 		px = px.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
 		//draw the bounding rect
@@ -1900,10 +1901,7 @@ void WorksheetView::presenterMode() {
 	h *= QApplication::desktop()->physicalDpiY()/25.4;
 
 	QRectF targetRect(0, 0, w, h);
-
-	QDesktopWidget* const dw = QApplication::desktop();
-	const int primaryScreenIdx = dw->primaryScreen();
-	const QRectF& screenSize = dw->availableGeometry(primaryScreenIdx);
+	const QRectF& screenSize = QGuiApplication::primaryScreen()->availableGeometry();;
 
 	if (targetRect.width() > screenSize.width() || ((targetRect.height() > screenSize.height()))) {
 		const double ratio = qMin(screenSize.width() / targetRect.width(), screenSize.height() / targetRect.height());
