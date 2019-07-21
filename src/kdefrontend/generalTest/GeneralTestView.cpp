@@ -40,6 +40,7 @@
 #include <QLabel>
 #include <QTextEdit>
 #include <QToolTip>
+#include <QSpacerItem>
 
 #include <KLocalizedString>
 
@@ -51,7 +52,7 @@
  */
 
 GeneralTestView::GeneralTestView(GeneralTest* GeneralTest) : QWidget(),
-    m_GeneralTest(GeneralTest),
+    m_generalTest(GeneralTest),
     m_testName(new QLabel()),
     m_statsTable(new QTextEdit()),
     m_summaryResults(new QWidget()) {
@@ -62,7 +63,7 @@ GeneralTestView::GeneralTestView(GeneralTest* GeneralTest) : QWidget(),
     layout->addWidget(m_testName);
     layout->addWidget(m_statsTable);
     layout->addWidget(m_summaryResults);
-    layout->addWidget(m_summaryResults);
+    layout->addStretch(1);
     init();
 }
 
@@ -74,7 +75,7 @@ void GeneralTestView::init() {
 
     m_statsTable->setMouseTracking(true);
     //    m_summaryResults->setStyleSheet("background-color:white; border: 0px; margin: 0px; padding 0px;qproperty-frame: false;");
-    connect(m_GeneralTest, &GeneralTest::changed, this, &GeneralTestView::changed);
+    connect(m_generalTest, &GeneralTest::changed, this, &GeneralTestView::changed);
     connect(m_statsTable, &QTextEdit::cursorPositionChanged, this, &GeneralTestView::cursorPositionChanged);
 }
 
@@ -143,15 +144,22 @@ void GeneralTestView::print(QPrinter* printer) const {
 }
 
 void GeneralTestView::changed() {
-    m_testName->setText(m_GeneralTest->testName());
-    m_statsTable->setHtml(m_GeneralTest->statsTable());
-    m_summaryResults->setLayout(m_GeneralTest->summaryLayout());
+    m_testName->setText(m_generalTest->testName());
+
+    if (m_generalTest->statsTable().isEmpty())
+        m_statsTable->hide();
+    else {
+        m_statsTable->setHtml(m_generalTest->statsTable());
+        m_statsTable->show();
+    }
+
+    m_summaryResults->setLayout(m_generalTest->summaryLayout());
 }
 
 void GeneralTestView::cursorPositionChanged() {
     QTextCursor cursor = m_statsTable->textCursor();
     cursor.select(QTextCursor::WordUnderCursor);
-    QMap<QString, QString> tooltips = m_GeneralTest->tooltips();
+    QMap<QString, QString> tooltips = m_generalTest->tooltips();
     if (!cursor.selectedText().isEmpty())
         QToolTip::showText(QCursor::pos(),
                            QString("%1")

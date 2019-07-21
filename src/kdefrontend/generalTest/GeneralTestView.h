@@ -67,7 +67,7 @@ protected:
                        const bool gridLines, const bool captions, const bool latexHeaders,
                        const bool skipEmptyRows,const bool exportEntire) const;
 
-    GeneralTest* m_GeneralTest;
+    GeneralTest* m_generalTest;
     QLabel* m_testName;
     QTextEdit* m_statsTable;
     QWidget* m_summaryResults{nullptr};
