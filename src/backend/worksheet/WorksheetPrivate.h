@@ -37,6 +37,7 @@ class QBrush;
 class Worksheet;
 class WorksheetElementContainer;
 class QGraphicsScene;
+class TreeModel;
 
 class WorksheetPrivate {
 public:
@@ -66,6 +67,7 @@ public:
 
 	Worksheet::Layout layout{Worksheet::VerticalLayout};
 	bool suppressLayoutUpdate{false};
+	bool suppressCursorPosChanged{false};
 	float layoutTopMargin{0.0};
 	float layoutBottomMargin{0.0};
 	float layoutLeftMargin{0.0};
@@ -76,7 +78,19 @@ public:
 	int layoutRowCount{2};
 	QString theme;
 	bool plotsLocked{false};
+	bool updateCompleteCursorModel{true};
 	Worksheet::CartesianPlotActionMode cartesianPlotActionMode{Worksheet::CartesianPlotActionMode::ApplyActionToSelection};
+	Worksheet::CartesianPlotActionMode cartesianPlotCursorMode{Worksheet::CartesianPlotActionMode::ApplyActionToAll};
+
+	enum TreeModelColumn {
+		PLOTNAME = 0,
+		SIGNALNAME = 0,
+		CURSOR0,
+		CURSOR1,
+		CURSORDIFF
+	};
+
+	TreeModel* cursorData{nullptr};
 };
 
 #endif

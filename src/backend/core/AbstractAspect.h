@@ -146,6 +146,7 @@ public:
 
 	//functions related to the handling of the tree-like project structure
 	AbstractAspect* parentAspect() const;
+	AbstractAspect* parent(AspectType type) const;
 	void setParentAspect(AbstractAspect*);
 	Folder* folder();
 	bool isDescendantOf(AbstractAspect* other);

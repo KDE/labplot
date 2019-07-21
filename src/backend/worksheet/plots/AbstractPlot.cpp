@@ -119,14 +119,14 @@ STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetRightPadding, double, rightPadding, ret
 void AbstractPlot::setRightPadding(double padding) {
 	Q_D(AbstractPlot);
 	if (padding != d->rightPadding)
-		exec(new AbstractPlotSetRightPaddingCmd(d, padding, ki18n("%1: set horizontal padding")));
+		exec(new AbstractPlotSetRightPaddingCmd(d, padding, ki18n("%1: set right padding")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetBottomPadding, double, bottomPadding, retransform)
 void AbstractPlot::setBottomPadding(double padding) {
 	Q_D(AbstractPlot);
 	if (padding != d->bottomPadding)
-		exec(new AbstractPlotSetBottomPaddingCmd(d, padding, ki18n("%1: set vertical padding")));
+		exec(new AbstractPlotSetBottomPaddingCmd(d, padding, ki18n("%1: set bottom padding")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetSymmetricPadding, bool, symmetricPadding, retransform)

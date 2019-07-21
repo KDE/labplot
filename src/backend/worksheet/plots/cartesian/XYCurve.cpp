@@ -2089,6 +2089,10 @@ int XYCurve::calculateMaxSteps (unsigned int value) {
  * @return
  */
 double XYCurve::y(double x, bool &valueFound) const {
+	if (!yColumn()) {
+		valueFound = false;
+		return NAN;
+	}
 
     AbstractColumn::ColumnMode yColumnMode = yColumn()->columnMode();
 	int index = indexForX(x);
@@ -2163,7 +2167,7 @@ int XYCurve::indexForX(double x) const {
 				double value = xColumn()->valueAt(index);
 
 				if (higherIndex - lowerIndex < 2) {
-					if (abs(xColumn()->valueAt(lowerIndex) - x) < abs(xColumn()->valueAt(higherIndex) - x))
+					if (qAbs(xColumn()->valueAt(lowerIndex) - x) < qAbs(xColumn()->valueAt(higherIndex) - x))
 						index = lowerIndex;
 					else
 						index = higherIndex;
@@ -2217,6 +2221,7 @@ int XYCurve::indexForX(double x) const {
 			return -1;
 	} else {
 		// naiv way
+		int index = 0;
 		if ((xColumnMode == AbstractColumn::ColumnMode::Numeric ||
 			 xColumnMode == AbstractColumn::ColumnMode::Integer)) {
 			for (int row = 0; row < rowCount; row++) {
@@ -2225,21 +2230,18 @@ int XYCurve::indexForX(double x) const {
 						prevValue = xColumn()->valueAt(row);
 
 					double value = xColumn()->valueAt(row);
-					if (abs(value - x) <= abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
-						if (row < rowCount - 1)
+					if (qAbs(value - x) <= qAbs(prevValue - x)) { // <= prevents also that row - 1 become < 0
 							prevValue = value;
-						else {
-							return row;
-						}
-					}else{
-						return row-1;
+							index = row;
 					}
 				}
 			}
+			return index;
 		} else if ((xColumnMode == AbstractColumn::ColumnMode::DateTime ||
 					xColumnMode == AbstractColumn::ColumnMode::Month ||
 					xColumnMode == AbstractColumn::ColumnMode::Day)) {
 			qint64 xInt64 = static_cast<qint64>(x);
+			int index = 0;
 			for (int row = 0; row < rowCount; row++) {
 				if (xColumn()->isValid(row)) {
 					if (row == 0)
@@ -2247,16 +2249,12 @@ int XYCurve::indexForX(double x) const {
 
 					qint64 value = xColumn()->dateTimeAt(row).toMSecsSinceEpoch();
 					if (abs(value - xInt64) <= abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
-						if (row < rowCount - 1)
 							prevValueDateTime = value;
-						else
-							return row;
-					} else {
-						return row - 1;
+							index = row;
 					}
 				}
 			}
-
+			return index;
 		}
 	}
 	return -1;
@@ -2292,7 +2290,7 @@ int XYCurve::indexForX(double x, QVector<double>& column, AbstractColumn::Proper
 			double value = column[index];
 
 			if (higherIndex - lowerIndex < 2) {
-				if (abs(column[lowerIndex] - x) < abs(column[higherIndex] - x))
+				if (qAbs(column[lowerIndex] - x) < qAbs(column[higherIndex] - x))
 					index = lowerIndex;
 				else
 					index = higherIndex;
@@ -2316,19 +2314,17 @@ int XYCurve::indexForX(double x, QVector<double>& column, AbstractColumn::Proper
 	} else {
 		// AbstractColumn::Properties::No
 		// naiv way
+		int index = 0;
 		prevValue = column[0];
 		for (int row = 0; row < rowCount; row++) {
 
 			double value = column[row];
-			if (abs(value - x) <= abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
-				if (row < rowCount - 1)
+			if (qAbs(value - x) <= qAbs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
 					prevValue = value;
-				else
-					return row;
-			} else {
-				return row - 1;
+					index = row;
 			}
 		}
+		return index;
 	}
 	return -1;
 }
@@ -2364,7 +2360,7 @@ int XYCurve::indexForX(const double x, const QVector<QPointF>& points, AbstractC
 			double value = points[index].x();
 
 			if (higherIndex - lowerIndex < 2) {
-				if (abs(points[lowerIndex].x() - x) < abs(points[higherIndex].x() - x))
+				if (qAbs(points[lowerIndex].x() - x) < qAbs(points[higherIndex].x() - x))
 					index = lowerIndex;
 				else
 					index = higherIndex;
@@ -2389,18 +2385,16 @@ int XYCurve::indexForX(const double x, const QVector<QPointF>& points, AbstractC
 		// AbstractColumn::Properties::No
 		// naiv way
 		prevValue = points[0].x();
+		int index = 0;
 		for (int row = 0; row < rowCount; row++) {
 
 			double value = points[row].x();
-			if (abs(value - x) <= abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
-				if (row < rowCount - 1)
+			if (qAbs(value - x) <= qAbs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
 					prevValue = value;
-				else
-					return row;
-			} else {
-				return row - 1;
+					index = row;
 			}
 		}
+		return index;
 	}
 	return -1;
 }
@@ -2435,7 +2429,7 @@ int XYCurve::indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Propert
 			double value = lines[index].p1().x();
 
 			if (higherIndex - lowerIndex < 2) {
-				if (abs(lines[lowerIndex].p1().x() - x) < abs(lines[higherIndex].p1().x() - x))
+				if (qAbs(lines[lowerIndex].p1().x() - x) < qAbs(lines[higherIndex].p1().x() - x))
 					index = lowerIndex;
 				else
 					index = higherIndex;
@@ -2459,18 +2453,16 @@ int XYCurve::indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Propert
 	} else {
 		// AbstractColumn::Properties::No
 		// naiv way
+		int index = 0;
 		prevValue = lines[0].p1().x();
 		for (int row = 0; row < rowCount; row++) {
 			double value = lines[row].p1().x();
-			if (abs(value - x) <= abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
-				if (row < rowCount - 1)
-					prevValue = value;
-				else
-					return row;
-			} else {
-				return row - 1;
+			if (qAbs(value - x) <= qAbs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+				prevValue = value;
+				index = row;
 			}
 		}
+		return index;
 	}
 	return -1;
 }
@@ -2612,7 +2604,7 @@ bool XYCurvePrivate::pointLiesNearLine(const QPointF p1, const QPointF p2, const
 	double dx1m = pos.x() - p1.x();
 	double dy1m = pos.y() - p1.y();
 
-	double dist_segm = abs(dx1m*unitvec.y() - dy1m*unitvec.x());
+	double dist_segm = qAbs(dx1m*unitvec.y() - dy1m*unitvec.x());
 	double scalarProduct = dx1m*unitvec.x() + dy1m*unitvec.y();
 
 	if (scalarProduct > 0) {

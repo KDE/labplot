@@ -43,6 +43,8 @@ public:
 		DefaultMapping = 0x00,
 		SuppressPageClipping = 0x01,
 		MarkGaps = 0x02,
+		Limit = 0x04, // set limits, when point crosses the limits
+		SuppressPageClippingY = 0x08,
 	};
 	Q_DECLARE_FLAGS(MappingFlags, MappingFlag)
 

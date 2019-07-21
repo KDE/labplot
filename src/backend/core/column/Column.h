@@ -66,6 +66,7 @@ public:
 	bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) override;
 
 	AbstractColumn::PlotDesignation plotDesignation() const override;
+	QString plotDesignationString() const override;
 	void setPlotDesignation(AbstractColumn::PlotDesignation) override;
 
 	bool isReadOnly() const override;

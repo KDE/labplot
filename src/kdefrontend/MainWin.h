@@ -45,6 +45,7 @@ class Spreadsheet;
 class Matrix;
 class GuiObserver;
 class AxisDock;
+class CursorDock;
 class NoteDock;
 class CartesianPlotDock;
 class HistogramDock;
@@ -73,6 +74,7 @@ class LabelWidget;
 class DatapickerImageWidget;
 class DatapickerCurveWidget;
 class MemoryWidget;
+class CartesianPlot;
 
 #ifdef HAVE_CANTOR_LIBS
 class CantorWorksheet;
@@ -87,6 +89,7 @@ class QMdiArea;
 class QMdiSubWindow;
 class QToolButton;
 class KRecentFilesAction;
+class TreeModel;
 
 class MainWin : public KXmlGuiWindow {
 	Q_OBJECT
@@ -186,6 +189,8 @@ private:
 	//Docks
 	QStackedWidget* stackedWidget;
 	AxisDock* axisDock{nullptr};
+	QDockWidget* cursorDock{nullptr};
+	CursorDock* cursorWidget{nullptr};
 	NoteDock* notesDock{nullptr};
 	CartesianPlotDock* cartesianPlotDock{nullptr};
 	CartesianPlotLegendDock* cartesianPlotLegendDock{nullptr};
@@ -241,7 +246,8 @@ protected:
 	void closeEvent(QCloseEvent*) override;
 	void dragEnterEvent(QDragEnterEvent*) override;
 	void dropEvent(QDropEvent*) override;
-
+public slots:
+	void showCursorDock(TreeModel* model, QVector<CartesianPlot *> plots);
 private slots:
 	void initGUI(const QString&);
 	void updateGUI();

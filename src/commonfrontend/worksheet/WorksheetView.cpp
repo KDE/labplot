@@ -271,6 +271,17 @@ void WorksheetView::initActions() {
 	setCartesianPlotActionMode(m_worksheet->cartesianPlotActionMode());
 	connect(cartesianPlotActionModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotActionModeChanged);
 
+	// cursor apply to all/selected
+	auto* cartesianPlotActionCursorGroup = new QActionGroup(this);
+	cartesianPlotActionCursorGroup->setExclusive(true);
+	cartesianPlotApplyToSelectionCursor = new QAction(i18n("Selected Plots"), cartesianPlotActionCursorGroup);
+	cartesianPlotApplyToSelectionCursor->setCheckable(true);
+	cartesianPlotApplyToAllCursor = new QAction(i18n("All Plots"), cartesianPlotActionCursorGroup);
+	cartesianPlotApplyToAllCursor->setCheckable(true);
+	setCartesianPlotCursorMode(m_worksheet->cartesianPlotCursorMode());
+	connect(cartesianPlotActionCursorGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotCursorModeChanged(QAction*)));
+
+
 	auto* cartesianPlotMouseModeActionGroup = new QActionGroup(this);
 	cartesianPlotMouseModeActionGroup->setExclusive(true);
 	cartesianPlotSelectionModeAction = new QAction(QIcon::fromTheme("labplot-cursor-arrow"), i18n("Select and Edit"), cartesianPlotMouseModeActionGroup);
@@ -286,7 +297,11 @@ void WorksheetView::initActions() {
 	cartesianPlotZoomYSelectionModeAction = new QAction(QIcon::fromTheme("labplot-zoom-select-y"), i18n("Select y-region and Zoom In"), cartesianPlotMouseModeActionGroup);
 	cartesianPlotZoomYSelectionModeAction->setCheckable(true);
 
-	connect(cartesianPlotMouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotMouseModeChanged);
+	// TODO: change ICON
+	cartesianPlotCursorModeAction = new QAction(QIcon::fromTheme("labplot-cursor"),i18n("Cursor"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotCursorModeAction->setCheckable(true);
+
+	connect(cartesianPlotMouseModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotMouseModeChanged(QAction*)));
 
 	auto* cartesianPlotAddNewActionGroup = new QActionGroup(this);
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), cartesianPlotAddNewActionGroup);
@@ -447,6 +462,8 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotZoomXSelectionModeAction);
 	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotZoomYSelectionModeAction);
 	m_cartesianPlotMouseModeMenu->addSeparator();
+    m_cartesianPlotMouseModeMenu->addAction(cartesianPlotCursorModeAction);
+    m_cartesianPlotMouseModeMenu->addSeparator();
 
 	m_cartesianPlotAddNewMenu = new QMenu(i18n("Add New"), this);
 	m_cartesianPlotAddNewMenu->setIcon(QIcon::fromTheme("list-add"));
@@ -497,11 +514,16 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToSelectionAction);
 	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToAllAction);
 
+	m_cartesianPlotCursorModeMenu = new QMenu(i18n("Apply Cursor to"), this);
+	m_cartesianPlotCursorModeMenu->addAction(cartesianPlotApplyToSelectionCursor);
+	m_cartesianPlotCursorModeMenu->addAction(cartesianPlotApplyToAllCursor);
+
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotMouseModeMenu);
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotAddNewMenu);
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotZoomMenu);
 	m_cartesianPlotMenu->addSeparator();
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotActionModeMenu);
+	m_cartesianPlotMenu->addMenu(m_cartesianPlotCursorModeMenu);
 	m_cartesianPlotMenu->addAction(plotsLockedAction);
 
 	// Data manipulation menu
@@ -618,6 +640,7 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(cartesianPlotZoomSelectionModeAction);
 	toolBar->addAction(cartesianPlotZoomXSelectionModeAction);
 	toolBar->addAction(cartesianPlotZoomYSelectionModeAction);
+	toolBar->addAction(cartesianPlotCursorModeAction);
 	toolBar->addSeparator();
 	toolBar->addAction(addCurveAction);
 	toolBar->addAction(addHistogramAction);
@@ -653,6 +676,7 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(shiftRightXAction);
 	toolBar->addAction(shiftUpYAction);
 	toolBar->addAction(shiftDownYAction);
+    toolBar->addSeparator();
 
 	handleCartesianPlotActions();
 }
@@ -670,6 +694,13 @@ void WorksheetView::setCartesianPlotActionMode(Worksheet::CartesianPlotActionMod
 		cartesianPlotApplyToAllAction->setChecked(true);
 	else
 		cartesianPlotApplyToSelectionAction->setChecked(true);
+}
+
+void WorksheetView::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mode) {
+	if (mode == Worksheet::CartesianPlotActionMode::ApplyActionToAll)
+		cartesianPlotApplyToAllCursor->setChecked(true);
+	else
+		cartesianPlotApplyToSelectionCursor->setChecked(true);
 }
 
 void WorksheetView::setPlotLock(bool lock) {
@@ -1516,6 +1547,7 @@ void WorksheetView::handleCartesianPlotActions() {
 	cartesianPlotZoomSelectionModeAction->setEnabled(plot);
 	cartesianPlotZoomXSelectionModeAction->setEnabled(plot);
 	cartesianPlotZoomYSelectionModeAction->setEnabled(plot);
+	cartesianPlotCursorModeAction->setEnabled(plot);
 
 	addCurveAction->setEnabled(plot);
 	addHistogramAction->setEnabled(plot);
@@ -1763,6 +1795,15 @@ void WorksheetView::cartesianPlotActionModeChanged(QAction* action) {
 	handleCartesianPlotActions();
 }
 
+void WorksheetView::cartesianPlotCursorModeChanged(QAction* action) {
+	if (action == cartesianPlotApplyToSelectionCursor)
+		m_worksheet->setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
+	else
+		m_worksheet->setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode::ApplyActionToAll);
+
+	handleCartesianPlotActions();
+}
+
 void WorksheetView::plotsLockedActionChanged(bool checked) {
 	m_worksheet->setPlotsLocked(checked);
 }
@@ -1776,6 +1817,8 @@ void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
 		m_cartesianPlotMouseMode = CartesianPlot::ZoomXSelectionMode;
 	else if (action == cartesianPlotZoomYSelectionModeAction)
 		m_cartesianPlotMouseMode = CartesianPlot::ZoomYSelectionMode;
+	else if (action == cartesianPlotCursorModeAction)
+        m_cartesianPlotMouseMode = CartesianPlot::Cursor;
 
 	for (auto* plot : m_worksheet->children<CartesianPlot>() )
 		plot->setMouseMode(m_cartesianPlotMouseMode);
@@ -1883,6 +1926,10 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 		for (auto* plot : m_worksheet->children<CartesianPlot>() )
 			plot->navigate(op);
 	}
+}
+
+Worksheet::CartesianPlotActionMode WorksheetView::getCartesianPlotActionMode(){
+	return m_worksheet->cartesianPlotActionMode();
 }
 
 void WorksheetView::presenterMode() {

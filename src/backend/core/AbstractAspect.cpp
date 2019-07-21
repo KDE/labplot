@@ -345,6 +345,19 @@ bool AbstractAspect::inherits(AspectType type) const {
 	return (static_cast<quint64>(m_type) & static_cast<quint64>(type)) == static_cast<quint64>(type);
 }
 
+/**
+ * \brief In the parent-child hierarchy, return the first parent of type \param type or null pointer if there is none.
+ */
+AbstractAspect* AbstractAspect::parent(AspectType type) const {
+	AbstractAspect* parent = parentAspect();
+	if (!parent)
+		return nullptr;
+
+	if (parent->inherits(type))
+		return parent;
+
+	return parent->parent(type);
+}
 
 /**
  * \brief Return my parent Aspect or 0 if I currently don't have one.

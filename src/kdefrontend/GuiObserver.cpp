@@ -58,6 +58,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "kdefrontend/MainWin.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
 #include "kdefrontend/dockwidgets/NoteDock.h"
+#include "kdefrontend/dockwidgets/CursorDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
@@ -171,6 +172,27 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		return;
 	}
 
+	// update cursor dock
+	AbstractAspect* parent = selectedAspects[0]->parent(AspectType::Worksheet);
+	if (selectedAspects[0]->inherits(AspectType::Worksheet)) {
+		Worksheet* worksheet = static_cast<Worksheet *>(selectedAspects[0]);
+
+		if (m_mainWindow->cursorWidget) {
+			m_mainWindow->cursorWidget->setCursorTreeViewModel(worksheet->cursorModel());
+			QVector<CartesianPlot*> plots = worksheet->children<CartesianPlot>();
+			if (!plots.isEmpty())
+				m_mainWindow->cursorWidget->setPlots(plots);
+		}
+	} else if (parent) {
+		if (m_mainWindow->cursorWidget) {
+			Worksheet* worksheet = static_cast<Worksheet *>(parent);
+			QVector<CartesianPlot*> plots = worksheet->children<CartesianPlot>();
+			m_mainWindow->cursorWidget->setCursorTreeViewModel(worksheet->cursorModel());
+			m_mainWindow->cursorWidget->setPlots(plots);
+		}
+
+	}
+
 	const AspectType type = selectedAspects.front()->type();
 
 	// Check, whether objects of different types were selected.
@@ -198,17 +220,22 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		raiseDockConnect(m_mainWindow->matrixDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->matrixDock->setMatrices(castList<Matrix>(selectedAspects));
 		break;
-	case AspectType::Worksheet:
+	case AspectType::Worksheet: {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Worksheet"));
+		if (!m_mainWindow->worksheetDock) {
+			m_mainWindow->worksheetDock = new WorksheetDock(m_mainWindow->stackedWidget);
+			connect(m_mainWindow->worksheetDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
+			m_mainWindow->stackedWidget->addWidget(m_mainWindow->worksheetDock);
+		}
 		raiseDockConnect(m_mainWindow->worksheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->worksheetDock->setWorksheets(castList<Worksheet>(selectedAspects));
 		break;
-	case AspectType::CartesianPlot:
+	} case AspectType::CartesianPlot: {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Cartesian Plot"));
 		raiseDockConnect(m_mainWindow->cartesianPlotDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->cartesianPlotDock->setPlots(castList<CartesianPlot>(selectedAspects));
 		break;
-	case AspectType::CartesianPlotLegend:
+	} case AspectType::CartesianPlotLegend:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Legend"));
 		raiseDockConnect(m_mainWindow->cartesianPlotLegendDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->cartesianPlotLegendDock->setLegends(castList<CartesianPlotLegend>(selectedAspects));
