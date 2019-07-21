@@ -362,3 +362,7 @@ endif()
 install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 feature_summary(WHAT ALL)
 
+find_package(KF5I18n CONFIG REQUIRED)
+ki18n_install(po)
+find_package(KF5DocTools CONFIG REQUIRED)
+kdoctools_install(po)
