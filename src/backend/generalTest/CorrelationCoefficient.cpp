@@ -46,6 +46,7 @@
 
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
+#include <algorithm>
 
 extern "C" {
 #include "backend/nsl/nsl_stats.h"
@@ -60,7 +61,7 @@ CorrelationCoefficient::~CorrelationCoefficient() {
 void CorrelationCoefficient::performTest(Test test, bool categoricalVariable) {
     m_statsTable = "";
     m_tooltips.clear();
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < RESULTLINESCOUNT; i++)
         m_resultLine[i]->clear();
 
     switch (test) {
@@ -70,7 +71,7 @@ void CorrelationCoefficient::performTest(Test test, bool categoricalVariable) {
         break;
     }
     case CorrelationCoefficient::Test::Kendall:
-        m_currTestName = "<h2>" + i18n("Kendall's Correlation Test") + "</h2>";
+        m_currTestName = "<h2>" + i18n("Kendall's Rank Correlation Test") + "</h2>";
         performKendall();
         break;
     case CorrelationCoefficient::Test::Spearman: {
@@ -94,6 +95,8 @@ double CorrelationCoefficient::correlationValue() {
  * ************************************************************************************************************************/
 
 /*********************************************Pearson r ******************************************************************/
+//Formulaes are taken from https://www.statisticssolutions.com/correlation-pearson-kendall-spearman/
+
 // variables:
 //  N           = total number of observations
 //  sumColx     = sum of values in colx
@@ -102,6 +105,9 @@ double CorrelationCoefficient::correlationValue() {
 
 //TODO: support for col1 is categorical.
 //TODO: add symbols in stats table header.
+//TODO: add automatic test
+//TODO: add tooltip for correlation value result
+//TODO: find p value
 void CorrelationCoefficient::performPearson(bool categoricalVariable) {
     if (m_columns.count() != 2) {
         printError("Select only 2 columns ");
@@ -173,12 +179,87 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
                         sqrt((N * sumSqCol1 - gsl_pow_2(sumCol1)) *
                              (N * sumSqCol2 - gsl_pow_2(sumCol2)));
 
-    printLine(0, QString("Correlation Value is %1").arg(m_correlationValue), "green");
+    printLine(0, QString("Correlation Value is %1").arg(round(m_correlationValue)), "green");
 
 }
 
 /***********************************************Kendall ******************************************************************/
+// used knight algorithm for fast performance O(nlogn) rather than O(n2)
+// http://adereth.github.io/blog/2013/10/30/efficiently-computing-kendalls-tau/
+
+// TODO: Change date format type to original for numeric type;
+// TODO: add tooltips.
+// TODO: Compute tauB for ties.
+// TODO: find P Value from Z Value
 void CorrelationCoefficient::performKendall() {
+    if (m_columns.count() != 2) {
+        printError("Select only 2 columns ");
+        return;
+    }
+
+    QString col1Name = m_columns[0]->name();
+    QString col2Name = m_columns[1]->name();
+
+    int N = findCount(m_columns[0]);
+    if (N != findCount(m_columns[1])) {
+        printError("Number of data values in Column: " + col1Name + "and Column: " + col2Name + "are not equal");
+        return;
+    }
+
+    int col2Ranks[N];
+    if (isNumericOrInteger(m_columns[0]) || isNumericOrInteger(m_columns[1])) {
+        if (isNumericOrInteger(m_columns[0]) && isNumericOrInteger(m_columns[1])) {
+            for (int i = 0; i < N; i++)
+                col2Ranks[int(m_columns[0]->valueAt(i)) - 1] = int(m_columns[1]->valueAt(i));
+        } else {
+            printError(QString("Ranking System should be same for both Column: %1 and Column: %2 <br/>"
+                               "Hint: Check for data types of columns").arg(col1Name).arg(col2Name));
+            return;
+        }
+    } else {
+        AbstractColumn::ColumnMode origCol1Mode = m_columns[0]->columnMode();
+        AbstractColumn::ColumnMode origCol2Mode = m_columns[1]->columnMode();
+
+        m_columns[0]->setColumnMode(AbstractColumn::Text);
+        m_columns[1]->setColumnMode(AbstractColumn::Text);
+
+        QMap<QString, int> ValueToRank;
+
+        for (int i = 0; i < N; i++) {
+            if (ValueToRank[m_columns[0]->textAt(i)] != 0) {
+                printError("Currently ties are not supported");
+                m_columns[0]->setColumnMode(origCol1Mode);
+                m_columns[1]->setColumnMode(origCol2Mode);
+                return;
+            }
+            ValueToRank[m_columns[0]->textAt(i)] = i + 1;
+        }
+
+        for (int i = 0; i < N; i++)
+            col2Ranks[i] = ValueToRank[m_columns[1]->textAt(i)];
+
+        m_columns[0]->setColumnMode(origCol1Mode);
+        m_columns[1]->setColumnMode(origCol2Mode);
+    }
+
+    int nPossiblePairs = (N * (N - 1)) / 2;
+
+    int nDiscordant = findDiscordants(col2Ranks, 0, N - 1);
+    int nCorcordant = nPossiblePairs - nDiscordant;
+
+    double tauA = double(nCorcordant - nDiscordant) / nPossiblePairs;
+
+    double zA = (3 * (nCorcordant - nDiscordant)) /
+                sqrt(N * (N- 1) * (2 * N + 5) / 2);
+
+    printLine(0 , QString("Number of Discordants are %1").arg(nDiscordant), "green");
+    printLine(1 , QString("Number of Concordant are %1").arg(nCorcordant), "green");
+
+    printLine(2 , QString("Tau a is %1").arg(round(tauA)), "green");
+    printLine(3 , QString("Z Value is %1").arg(round(zA)), "green");
+
+    m_correlationValue = tauA;
+    return;
 
 }
 
@@ -187,7 +268,56 @@ void CorrelationCoefficient::performSpearman() {
 
 }
 
-// Virtual functions
+/***********************************************Helper Functions******************************************************************/
+
+int CorrelationCoefficient::findDiscordants(int *ranks, int start, int end) {
+    if (start >= end)
+        return 0;
+
+    int mid = (start + end) / 2;
+
+    int leftDiscordants = findDiscordants(ranks, start, mid);
+    int rightDiscordants = findDiscordants(ranks, mid + 1, end);
+
+    int len = end - start + 1;
+    int leftLen = mid - start + 1;
+    int rightLen = end - mid;
+    int leftLenRemain = leftLen;
+
+    int leftRanks[leftLen];
+    int rightRanks[rightLen];
+
+    for (int i = 0; i < leftLen; i++)
+        leftRanks[i] = ranks[start + i];
+
+    for (int i = leftLen; i < leftLen + rightLen; i++)
+        rightRanks[i - leftLen] = ranks[start + i];
+
+    int mergeDiscordants = 0;
+    int i = 0, j = 0, k =0;
+    while (i < len) {
+        if (j >= leftLen) {
+            ranks[start + i] = rightRanks[k];
+            k++;
+        } else if (k >= rightLen) {
+            ranks[start + i] = leftRanks[j];
+            j++;
+        } else if (leftRanks[j] < rightRanks[k]) {
+            ranks[start + i] = leftRanks[j];
+            j++;
+            leftLenRemain--;
+        } else if (leftRanks[j] > rightRanks[k]) {
+            ranks[start + i] = rightRanks[k];
+            mergeDiscordants += leftLenRemain;
+            k++;
+        }
+        i++;
+    }
+    return leftDiscordants + rightDiscordants + mergeDiscordants;
+}
+
+/***********************************************Virtual Functions******************************************************************/
+
 QWidget* CorrelationCoefficient::view() const {
     if (!m_partView) {
         m_view = new CorrelationCoefficientView(const_cast<CorrelationCoefficient*>(this));

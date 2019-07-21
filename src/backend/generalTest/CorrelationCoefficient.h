@@ -61,6 +61,8 @@ private:
     void performKendall();
     void performSpearman();
 
+    int findDiscordants(int* ranks, int start, int end);
+
     double m_correlationValue;
 };
 

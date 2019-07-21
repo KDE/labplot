@@ -55,7 +55,7 @@ private:
     Ui::CorrelationCoefficientDock ui;
     bool m_initializing{false};
     TreeViewComboBox* cbSpreadsheet{nullptr};
-    CorrelationCoefficient* m_CorrelationCoefficient{nullptr};
+    CorrelationCoefficient* m_correlationCoefficient{nullptr};
     AspectTreeModel* m_aspectTreeModel{nullptr};
     QSqlDatabase m_db;
     QString m_configPath;
@@ -81,7 +81,7 @@ private slots:
     //        void commentChanged();
     void dataSourceTypeChanged(int);
     void showCorrelationCoefficient();
-    void doCorrelationCoefficient();
+    void findCorrelationCoefficient();
     void spreadsheetChanged(const QModelIndex&);
     void col1IndexChanged(int index);
     void changeCbCol2Label();
