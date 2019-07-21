@@ -15,6 +15,7 @@ UX improvements:
 	* Improved the selection of curves in the plot that are near to or behind each other
 	* BUG 408529 - Allow to use DEL to delete cells in spreadsheet and matrix
 	* BUG 408537 - Allow to insert multiple rows and columns in the spreadsheet in one step
+	* Added translations to Windows and macOS packages
 
 Performance:
 	* Increased the plotting speed for curves with many data points by removing points which are shown on the same pixel in the scene
