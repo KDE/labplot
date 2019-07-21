@@ -76,6 +76,16 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	ui.tbDateTime->setIcon( QIcon::fromTheme(QLatin1String("chronometer")) );
 	ui.tbTexUsed->setIcon( QIcon::fromTheme(QLatin1String("labplot-TeX-logo")) );
 
+	ui.tbFontBold->setToolTip(i18n("Bold"));
+	ui.tbFontItalic->setToolTip(i18n("Italic"));
+	ui.tbFontUnderline->setToolTip(i18n("Underline"));
+	ui.tbFontStrikeOut->setToolTip(i18n("Strike Out"));
+	ui.tbFontSuperScript->setToolTip(i18n("Super Script"));
+	ui.tbFontSubScript->setToolTip(i18n("Sub-Script"));
+	ui.tbSymbols->setToolTip(i18n("Insert Symbol"));
+	ui.tbDateTime->setToolTip(i18n("Insert Date/Time"));
+	ui.tbTexUsed->setToolTip(i18n("Switch to TeX mode"));
+
 	//Positioning and alignment
 	ui.cbPositionX->addItem(i18n("Left"));
 	ui.cbPositionX->addItem(i18n("Center"));
@@ -376,6 +386,8 @@ void LabelWidget::teXUsedChanged(bool checked) {
 	ui.lBackgroundColor->setVisible(checked);
 
 	if (checked) {
+		ui.tbTexUsed->setToolTip(i18n("Switch to TeX mode"));
+
 		//reset all applied formattings when switching from html to tex mode
 		QTextCursor cursor = ui.teLabel->textCursor();
 		int position = cursor.position();
@@ -406,6 +418,8 @@ void LabelWidget::teXUsedChanged(bool checked) {
 		ui.kcbFontColor->setColor(m_label->fontColor());
 		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
 	} else {
+		ui.tbTexUsed->setToolTip(i18n("Switch to text mode"));
+
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 		m_highlighter->setDocument(nullptr);
 #endif
@@ -424,10 +438,8 @@ void LabelWidget::teXUsedChanged(bool checked) {
 	if (!m_teXEnabled && !checked) {
 		ui.tbTexUsed->setEnabled(false);
 		ui.tbTexUsed->setToolTip(i18n("LaTeX typesetting not possible. Please check the settings."));
-	} else {
+	} else
 		ui.tbTexUsed->setEnabled(true);
-		ui.tbTexUsed->setToolTip(QString());
-	}
 
 	if (m_initializing)
 		return;
