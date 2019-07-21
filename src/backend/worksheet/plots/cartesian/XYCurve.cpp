@@ -1805,8 +1805,11 @@ void XYCurvePrivate::updateFilling() {
 
 	fillPolygons.clear();
 
-	//don't try to calculate the filling polygons if no filling was enabled or the nubmer of visible points on the scene is too high
-	if (fillingPosition == XYCurve::NoFilling || symbolPointsScene.size()>1000) {
+	//don't try to calculate the filling polygons if
+	// - no filling was enabled
+	// - the nubmer of visible points on the scene is too high
+	// - no scene points available, everything outside of the plot region or no scene points calculated yet
+	if (fillingPosition == XYCurve::NoFilling || symbolPointsScene.size()>1000 || symbolPointsScene.isEmpty()) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
