@@ -62,6 +62,11 @@ cp -vf kde/share/icontheme.rcc $INPREFIX/Resources/icontheme.rcc
 cp -v labplot/admin/Info.plist $INPREFIX
 cp -v /Applications/KDE/labplot2.app/Contents/Resources/{LABPLOT_ICONS.icns,LML_ICONS.icns} $INPREFIX/Resources
 
+# translation
+cd kde
+cp -vf --parents share/locale/*/LC_MESSAGES/labplot2.mo $INPREFIX/
+cd ..
+
 ### TODO
 # package icon
 # share/doc
