@@ -15,6 +15,8 @@ INPREFIX=$PREFIX/$PNAME.app/Contents
 TMPDIR=LabPlot2
 SIGNATURE="Stefan Gerlach"
 
+GCP=/opt/local/libexec/gnubin/cp
+
 #########################################
 
 echo "CLEAN UP"
@@ -64,7 +66,7 @@ cp -v /Applications/KDE/labplot2.app/Contents/Resources/{LABPLOT_ICONS.icns,LML_
 
 # translation
 cd kde
-cp -vf --parents share/locale/*/LC_MESSAGES/labplot2.mo $INPREFIX/
+$GCP -vf --parents share/locale/*/LC_MESSAGES/labplot2.mo $INPREFIX/
 cd ..
 
 ### TODO
