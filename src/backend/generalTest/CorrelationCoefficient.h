@@ -63,6 +63,9 @@ private:
 
     int findDiscordants(int* ranks, int start, int end);
 
+    void convertToRanks(const Column* col, int N, QMap<double, int> &ranks);
+    void convertToRanks(const Column* col, QMap<double, int> &ranks);
+
     double m_correlationValue;
 };
 

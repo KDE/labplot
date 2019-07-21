@@ -178,8 +178,8 @@ void CorrelationCoefficientDock::showCorrelationCoefficient() {
     ui.lCol2->show();
     ui.cbCol2->show();
 
-    ui.lCategorical->show();
-    ui.chbCategorical->show();
+    ui.lCategorical->setVisible(bool(m_test & CorrelationCoefficient::Test::Pearson));
+    ui.chbCategorical->setVisible(bool(m_test & CorrelationCoefficient::Test::Pearson));
 
 	setColumnsComboBoxView();
 
@@ -369,7 +369,9 @@ void CorrelationCoefficientDock::changeCbCol2Label() {
     QString selected_text = ui.cbCol1->currentText();
     Column* col1 = m_correlationCoefficient->dataSourceSpreadsheet()->column(selected_text);
 
-    if (!ui.chbCategorical->isChecked() && (col1->columnMode() == AbstractColumn::Integer || col1->columnMode() == AbstractColumn::Numeric)) {
+    if (bool(m_test & (CorrelationCoefficient::Test::Kendall | CorrelationCoefficient::Test::Spearman)) ||
+            (!ui.chbCategorical->isChecked() &&
+             (col1->columnMode() == AbstractColumn::Integer || col1->columnMode() == AbstractColumn::Numeric))) {
         ui.lCol2->setText( i18n("Independent Var. 2"));
         ui.chbCategorical->setChecked(false);
         ui.chbCategorical->setEnabled(true);

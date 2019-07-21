@@ -75,7 +75,7 @@ void CorrelationCoefficient::performTest(Test test, bool categoricalVariable) {
         performKendall();
         break;
     case CorrelationCoefficient::Test::Spearman: {
-        m_currTestName = "<h2>" + i18n("Spearman Correlation Test") + "</h2>";
+        m_currTestName = "<h2>" + i18n("Spearman Correlation Coefficient Test") + "</h2>";
         performSpearman();
         break;
     }
@@ -184,7 +184,7 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 }
 
 /***********************************************Kendall ******************************************************************/
-// used knight algorithm for fast performance O(nlogn) rather than O(n2)
+// used knight algorithm for fast performance O(nlogn) rather than O(n^2)
 // http://adereth.github.io/blog/2013/10/30/efficiently-computing-kendalls-tau/
 
 // TODO: Change date format type to original for numeric type;
@@ -264,8 +264,74 @@ void CorrelationCoefficient::performKendall() {
 }
 
 /***********************************************Spearman ******************************************************************/
-void CorrelationCoefficient::performSpearman() {
+// All formulaes and symbols are taken from : https://www.statisticshowto.datasciencecentral.com/spearman-rank-correlation-definition-calculate/
 
+void CorrelationCoefficient::performSpearman() {
+    if (m_columns.count() != 2) {
+        printError("Select only 2 columns ");
+        return;
+    }
+
+    QString col1Name = m_columns[0]->name();
+    QString col2Name = m_columns[1]->name();
+
+    int N = findCount(m_columns[0]);
+    if (N != findCount(m_columns[1])) {
+        printError("Number of data values in Column: " + col1Name + "and Column: " + col2Name + "are not equal");
+        return;
+    }
+
+    QMap<double, int> col1Ranks;
+    convertToRanks(m_columns[0], N, col1Ranks);
+
+    QMap<double, int> col2Ranks;
+    convertToRanks(m_columns[1], N, col2Ranks);
+
+    double ranksCol1Mean = 0;
+    double ranksCol2Mean = 0;
+
+//    QString ranks1 = "";
+//    QString ranks2 = "";
+    for (int i = 0; i < N; i++) {
+        ranksCol1Mean += col1Ranks[int(m_columns[0]->valueAt(i))];
+        ranksCol2Mean += col2Ranks[int(m_columns[1]->valueAt(i))];
+
+//        ranks1 += ", " + QString::number(col1Ranks[m_columns[0]->valueAt(i)]);
+//        ranks2 += ", " + QString::number(col2Ranks[m_columns[1]->valueAt(i)]);
+    }
+
+    ranksCol1Mean = ranksCol1Mean / N;
+    ranksCol2Mean = ranksCol2Mean / N;
+
+    //QDEBUG("ranks 1 and ranks2 are " );
+    //QDEBUG(ranks1);
+    //QDEBUG(ranks2);
+
+    //QDEBUG("Mean ranks are " << ranksCol1Mean << ranksCol2Mean);
+
+    double s12 = 0;
+    double s1 = 0;
+    double s2 = 0;
+
+    for (int i = 0; i < N; i++) {
+        double centeredRank_1 = col1Ranks[int(m_columns[0]->valueAt(i))] - ranksCol1Mean;
+        double centeredRank_2 = col2Ranks[int(m_columns[1]->valueAt(i))] - ranksCol2Mean;
+
+        s12 += centeredRank_1 * centeredRank_2;
+
+        s1 += gsl_pow_2(centeredRank_1);
+        s2 += gsl_pow_2(centeredRank_2);
+    }
+
+    s12 = s12 / N;
+    s1 = s1 / N;
+    s2 = s2 / N;
+
+    //QDEBUG("s12, s1, s2 are " << s12 << " " << s1 << " " << s2);
+
+    m_correlationValue = s12 / std::sqrt(s1 * s2);
+
+    printLine(0, QString("Spearman Rank Correlation value is %1").arg(m_correlationValue), "green");
 }
 
 /***********************************************Helper Functions******************************************************************/
@@ -314,6 +380,32 @@ int CorrelationCoefficient::findDiscordants(int *ranks, int start, int end) {
         i++;
     }
     return leftDiscordants + rightDiscordants + mergeDiscordants;
+}
+
+void CorrelationCoefficient::convertToRanks(const Column* col, int N, QMap<double, int> &ranks) {
+    if (!isNumericOrInteger(col))
+        return;
+
+    //QDEBUG("in convert to ranks");
+    double* sortedList = new double[N];
+    for (int i = 0; i < N; i++)
+        sortedList[i] = col->valueAt(i);
+
+    std::sort(sortedList, sortedList + N, std::greater<double>());
+
+//    QString debug_sortedList = "";
+    ranks.clear();
+    for (int i = 0; i < N; i++) {
+        ranks[sortedList[i]] = i + 1;
+//        debug_sortedList += ", " + QString::number(sortedList[i]);
+    }
+
+    //QDEBUG("sorted list is " << debug_sortedList);
+    delete[] sortedList;
+}
+
+void CorrelationCoefficient::convertToRanks(const Column* col, QMap<double, int> &ranks) {
+    convertToRanks(col, findCount(col), ranks);
 }
 
 /***********************************************Virtual Functions******************************************************************/
