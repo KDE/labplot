@@ -75,8 +75,7 @@ void CursorDock::setPlots(QVector<CartesianPlot*> list) {
 	m_initializing = false;
 }
 
-CursorDock::~CursorDock()
-{
+CursorDock::~CursorDock() {
 	delete ui;
 }
 
@@ -117,7 +116,7 @@ void CursorDock::plotCursor0EnableChanged(bool enable) {
 	ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSOR0, !enable);
 	if (!enable)
 		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, !enable);
-	else if(ui->cbCursor1en->isChecked())
+	else if (ui->cbCursor1en->isChecked())
 		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, !enable);
 	m_initializing = false;
 }
@@ -128,7 +127,7 @@ void CursorDock::plotCursor1EnableChanged(bool enable) {
 	ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSOR1, !enable);
 	if (!enable)
 		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, !enable);
-	else if(ui->cbCursor0en->isChecked())
+	else if (ui->cbCursor0en->isChecked())
 		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, !enable);
 	m_initializing = false;
 }

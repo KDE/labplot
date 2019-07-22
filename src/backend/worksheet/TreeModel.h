@@ -36,8 +36,7 @@ Copyright            : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
  * \brief The TreeItem class
  * Item in the treemodel
  */
-class TreeItem
-{
+class TreeItem {
 public:
     explicit TreeItem(const QVector<QVariant> &data, TreeItem *parent = 0);
     ~TreeItem();
@@ -66,13 +65,11 @@ private:
  * \brief The TreeModel class
  * This is an abstract treemodel which can be used by a treeview
  */
-class TreeModel : public QAbstractItemModel
-{
+class TreeModel : public QAbstractItemModel {
     Q_OBJECT
 
 public:
-    TreeModel(const QStringList &headers,
-              QObject *parent = nullptr);
+    TreeModel(const QStringList &headers, QObject *parent = nullptr);
     ~TreeModel();
     QVariant treeData(const int row, const int column, const QModelIndex &parent = QModelIndex(), const int role = Qt::EditRole);
     QVariant data(const QModelIndex &index, int role) const override;

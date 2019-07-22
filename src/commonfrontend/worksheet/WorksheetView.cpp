@@ -462,8 +462,8 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotZoomXSelectionModeAction);
 	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotZoomYSelectionModeAction);
 	m_cartesianPlotMouseModeMenu->addSeparator();
-    m_cartesianPlotMouseModeMenu->addAction(cartesianPlotCursorModeAction);
-    m_cartesianPlotMouseModeMenu->addSeparator();
+	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotCursorModeAction);
+	m_cartesianPlotMouseModeMenu->addSeparator();
 
 	m_cartesianPlotAddNewMenu = new QMenu(i18n("Add New"), this);
 	m_cartesianPlotAddNewMenu->setIcon(QIcon::fromTheme("list-add"));
@@ -676,7 +676,7 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(shiftRightXAction);
 	toolBar->addAction(shiftUpYAction);
 	toolBar->addAction(shiftDownYAction);
-    toolBar->addSeparator();
+	toolBar->addSeparator();
 
 	handleCartesianPlotActions();
 }
@@ -1305,9 +1305,8 @@ void WorksheetView::deleteElement() {
 	if (m_selectedItems.isEmpty())
 		return;
 
-	int rc = KMessageBox::warningYesNo( this,
-	                                    i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
-	                                    i18np("Delete selected object", "Delete selected objects", m_selectedItems.size()));
+	int rc = KMessageBox::warningYesNo( this, i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
+				i18np("Delete selected object", "Delete selected objects", m_selectedItems.size()));
 
 	if (rc == KMessageBox::No)
 		return;
@@ -1818,7 +1817,7 @@ void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
 	else if (action == cartesianPlotZoomYSelectionModeAction)
 		m_cartesianPlotMouseMode = CartesianPlot::ZoomYSelectionMode;
 	else if (action == cartesianPlotCursorModeAction)
-        m_cartesianPlotMouseMode = CartesianPlot::Cursor;
+		m_cartesianPlotMouseMode = CartesianPlot::Cursor;
 
 	for (auto* plot : m_worksheet->children<CartesianPlot>() )
 		plot->setMouseMode(m_cartesianPlotMouseMode);
@@ -1928,7 +1927,7 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 	}
 }
 
-Worksheet::CartesianPlotActionMode WorksheetView::getCartesianPlotActionMode(){
+Worksheet::CartesianPlotActionMode WorksheetView::getCartesianPlotActionMode() {
 	return m_worksheet->cartesianPlotActionMode();
 }
 

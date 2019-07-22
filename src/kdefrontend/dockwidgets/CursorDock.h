@@ -41,8 +41,7 @@ class TreeModel;
  * \brief The CursorDock class
  * This class represents the data from the cursors from the cartesian plots in a treeview
  */
-class CursorDock : public QWidget
-{
+class CursorDock : public QWidget {
 	Q_OBJECT
 
 public:

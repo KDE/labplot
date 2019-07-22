@@ -45,7 +45,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/BaseDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/CursorDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/CursorDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/NoteDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
@@ -128,7 +128,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/cursordock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/cursordock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotlegenddock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/histogramdock.ui
@@ -243,7 +243,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/Worksheet.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementContainer.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementGroup.cpp
-    ${BACKEND_DIR}/worksheet/TreeModel.cpp
+	${BACKEND_DIR}/worksheet/TreeModel.cpp
 	${BACKEND_DIR}/worksheet/plots/AbstractPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/plots/PlotArea.cpp

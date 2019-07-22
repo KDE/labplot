@@ -244,7 +244,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	d->m_scene->addItem(item);
 
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(aspect);
-	if(plot){
+	if (plot) {
 		connect(plot, &CartesianPlot::mouseMoveCursorModeSignal, this, &Worksheet::cartesianPlotmouseMoveCursorMode);
 		connect(plot, &CartesianPlot::mouseMoveZoomSelectionModeSignal, this, &Worksheet::cartesianPlotmouseMoveZoomSelectionMode);
 		connect(plot, &CartesianPlot::mousePressCursorModeSignal, this, &Worksheet::cartesianPlotmousePressCursorMode);
@@ -413,7 +413,7 @@ void Worksheet::setIsClosing() {
  * \brief Worksheet::getPlotCount
  * \return number of CartesianPlot's in the Worksheet
  */
-int Worksheet::getPlotCount(){
+int Worksheet::getPlotCount() {
 	return children<CartesianPlot>().length();
 }
 
@@ -422,9 +422,9 @@ int Worksheet::getPlotCount(){
  * \param index Number of plot which shoud be returned
  * \return Pointer to the CartesianPlot which was searched with index
  */
-WorksheetElement *Worksheet::getPlot(int index){
+WorksheetElement *Worksheet::getPlot(int index) {
 	QVector<CartesianPlot*> cartesianPlots = children<CartesianPlot>();
-	if(cartesianPlots.length()-1 >= index)
+	if (cartesianPlots.length()-1 >= index)
 		return cartesianPlots[index];
 	return nullptr;
 }
@@ -733,12 +733,12 @@ void Worksheet::setTheme(const QString& theme) {
 	}
 }
 
-void Worksheet::cartesianPlotmousePressZoomSelectionMode(QPointF logicPos){
-	if(cartesianPlotActionMode() == Worksheet::ApplyActionToAll){
+void Worksheet::cartesianPlotmousePressZoomSelectionMode(QPointF logicPos) {
+	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
 		QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-		for (auto* child : childElements){
+		for (auto* child : childElements) {
 			CartesianPlot* plot = dynamic_cast<CartesianPlot*>(child);
-			if(plot)
+			if (plot)
 				plot->mousePressZoomSelectionMode(logicPos);
 		}
 		return;
@@ -747,12 +747,12 @@ void Worksheet::cartesianPlotmousePressZoomSelectionMode(QPointF logicPos){
 	plot->mousePressZoomSelectionMode(logicPos);
 }
 
-void Worksheet::cartesianPlotmouseReleaseZoomSelectionMode(){
-	if(cartesianPlotActionMode() == Worksheet::ApplyActionToAll){
+void Worksheet::cartesianPlotmouseReleaseZoomSelectionMode() {
+	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
 		QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-		for (auto* child : childElements){
+		for (auto* child : childElements) {
 			CartesianPlot* plot = dynamic_cast<CartesianPlot*>(child);
-			if(plot)
+			if (plot)
 				plot->mouseReleaseZoomSelectionMode();
 		}
 		return;
@@ -761,12 +761,12 @@ void Worksheet::cartesianPlotmouseReleaseZoomSelectionMode(){
 	plot->mouseReleaseZoomSelectionMode();
 }
 
-void Worksheet::cartesianPlotmousePressCursorMode(int cursorNumber, QPointF logicPos){
-	if(cartesianPlotCursorMode() == Worksheet::ApplyActionToAll){
+void Worksheet::cartesianPlotmousePressCursorMode(int cursorNumber, QPointF logicPos) {
+	if (cartesianPlotCursorMode() == Worksheet::ApplyActionToAll) {
 		QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-		for (auto* child : childElements){
+		for (auto* child : childElements) {
 			CartesianPlot* plot = dynamic_cast<CartesianPlot*>(child);
-			if(plot)
+			if (plot)
 				plot->mousePressCursorMode(cursorNumber, logicPos);
 		}
 	} else {
@@ -778,12 +778,12 @@ void Worksheet::cartesianPlotmousePressCursorMode(int cursorNumber, QPointF logi
 	cursorPosChanged(cursorNumber, logicPos.x());
 }
 
-void Worksheet::cartesianPlotmouseMoveZoomSelectionMode(QPointF logicPos){
-	if(cartesianPlotActionMode() == Worksheet::ApplyActionToAll){
+void Worksheet::cartesianPlotmouseMoveZoomSelectionMode(QPointF logicPos) {
+	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
 		QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-		for (auto* child : childElements){
+		for (auto* child : childElements) {
 			CartesianPlot* plot = dynamic_cast<CartesianPlot*>(child);
-			if(plot)
+			if (plot)
 				plot->mouseMoveZoomSelectionMode(logicPos);
 		}
 		return;
@@ -793,11 +793,11 @@ void Worksheet::cartesianPlotmouseMoveZoomSelectionMode(QPointF logicPos){
 }
 
 void Worksheet::cartesianPlotmouseHoverZoomSelectionMode(QPointF logicPos) {
-	if(cartesianPlotActionMode() == Worksheet::ApplyActionToAll){
+	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
 		QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-		for (auto* child : childElements){
+		for (auto* child : childElements) {
 			CartesianPlot* plot = dynamic_cast<CartesianPlot*>(child);
-			if(plot)
+			if (plot)
 				plot->mouseHoverZoomSelectionMode(logicPos);
 		}
 		return;
@@ -806,12 +806,12 @@ void Worksheet::cartesianPlotmouseHoverZoomSelectionMode(QPointF logicPos) {
 	plot->mouseHoverZoomSelectionMode(logicPos);
 }
 
-void Worksheet::cartesianPlotmouseMoveCursorMode(int cursorNumber, QPointF logicPos){
+void Worksheet::cartesianPlotmouseMoveCursorMode(int cursorNumber, QPointF logicPos) {
 	if (cartesianPlotCursorMode() == Worksheet::ApplyActionToAll) {
 		QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-        for (auto* child : childElements) {
+		for (auto* child : childElements) {
 			CartesianPlot* plot = dynamic_cast<CartesianPlot*>(child);
-            if (plot)
+			if (plot)
 				plot->mouseMoveCursorMode(cursorNumber, logicPos);
 		}
 	} else {
@@ -829,8 +829,7 @@ void Worksheet::cartesianPlotmouseMoveCursorMode(int cursorNumber, QPointF logic
  * It is assumed, that the plots/curves are in the same order than receiving from
  * the children() function. It's not checked if the names are the same
  */
-void Worksheet::cursorPosChanged(int cursorNumber, double xPos){
-
+void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 	if (d->suppressCursorPosChanged)
 		return;
 	TreeModel* treeModel = cursorModel();
@@ -839,7 +838,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos){
 
 	// if ApplyActionToSelection, each plot has it's own x value
 	int rowPlot = 0;
-	if(cartesianPlotCursorMode() == Worksheet::ApplyActionToAll){
+	if (cartesianPlotCursorMode() == Worksheet::ApplyActionToAll) {
 		// x values
 		rowPlot = 1;
 		QModelIndex xName = treeModel->index(0, WorksheetPrivate::TreeModelColumn::SIGNALNAME);
@@ -847,12 +846,10 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos){
 		double valueCursor[2];
 		for (int i = 0; i < 2; i++) { // need both cursors to calculate diff
 			valueCursor[i] = sender->cursorPos(i);
-			treeModel->setTreeData(QVariant(valueCursor[i]), 0,
-								   WorksheetPrivate::TreeModelColumn::CURSOR0+i);
+			treeModel->setTreeData(QVariant(valueCursor[i]), 0, WorksheetPrivate::TreeModelColumn::CURSOR0+i);
 
 		}
-		treeModel->setTreeData(QVariant(valueCursor[1] - valueCursor[0]), 0,
-								WorksheetPrivate::TreeModelColumn::CURSORDIFF);
+		treeModel->setTreeData(QVariant(valueCursor[1] - valueCursor[0]), 0, WorksheetPrivate::TreeModelColumn::CURSORDIFF);
 
 		// y values
 		for (int i = 0; i < getPlotCount(); i++) { // i=0 is the x Axis
@@ -861,8 +858,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos){
 			if (!plot || !plot->isVisible())
 				continue;
 
-			QModelIndex plotIndex = treeModel->index(rowPlot,
-													 WorksheetPrivate::TreeModelColumn::PLOTNAME);
+			QModelIndex plotIndex = treeModel->index(rowPlot, WorksheetPrivate::TreeModelColumn::PLOTNAME);
 
 			// curves
 			int rowCurve = 0;
@@ -876,19 +872,13 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos){
 
 				double value = curve->y(xPos, valueFound);
 				if (cursorNumber == 0) {
-					treeModel->setTreeData(QVariant(value), rowCurve,
-										   WorksheetPrivate::TreeModelColumn::CURSOR0, plotIndex);
-					double valueCursor1 = treeModel->treeData(rowCurve,
-															  WorksheetPrivate::TreeModelColumn::CURSOR1, plotIndex).toDouble();
-					treeModel->setTreeData(QVariant(valueCursor1 - value), rowCurve,
-										   WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotIndex);
+					treeModel->setTreeData(QVariant(value), rowCurve, WorksheetPrivate::TreeModelColumn::CURSOR0, plotIndex);
+					double valueCursor1 = treeModel->treeData(rowCurve, WorksheetPrivate::TreeModelColumn::CURSOR1, plotIndex).toDouble();
+					treeModel->setTreeData(QVariant(valueCursor1 - value), rowCurve, WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotIndex);
 				} else {
-					treeModel->setTreeData(QVariant(value), rowCurve,
-										   WorksheetPrivate::TreeModelColumn::CURSOR1, plotIndex);
-					double valueCursor0 = treeModel->treeData(rowCurve,
-															  WorksheetPrivate::TreeModelColumn::CURSOR0, plotIndex).toDouble();
-					treeModel->setTreeData(QVariant(value - valueCursor0), rowCurve,
-										   WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotIndex);
+					treeModel->setTreeData(QVariant(value), rowCurve, WorksheetPrivate::TreeModelColumn::CURSOR1, plotIndex);
+					double valueCursor0 = treeModel->treeData(rowCurve, WorksheetPrivate::TreeModelColumn::CURSOR0, plotIndex).toDouble();
+					treeModel->setTreeData(QVariant(value - valueCursor0), rowCurve, WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotIndex);
 				}
 				rowCurve++;
 			}
@@ -903,16 +893,13 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos){
 				continue;
 
 			// x values (first row always exist)
-			treeModel->setTreeData(QVariant("X"), 0,
-								   WorksheetPrivate::TreeModelColumn::SIGNALNAME, plotIndex);
+			treeModel->setTreeData(QVariant("X"), 0, WorksheetPrivate::TreeModelColumn::SIGNALNAME, plotIndex);
 			double valueCursor[2];
 			for (int i = 0; i < 2; i++) { // need both cursors to calculate diff
 				valueCursor[i] = sender->cursorPos(i);
-				treeModel->setTreeData(QVariant(valueCursor[i]), 0,
-									   WorksheetPrivate::TreeModelColumn::CURSOR0+i, plotIndex);
+				treeModel->setTreeData(QVariant(valueCursor[i]), 0, WorksheetPrivate::TreeModelColumn::CURSOR0+i, plotIndex);
 			}
-			treeModel->setTreeData(QVariant(valueCursor[1]-valueCursor[0]), 0,
-									WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotIndex);
+			treeModel->setTreeData(QVariant(valueCursor[1]-valueCursor[0]), 0, WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotIndex);
 
 			// y values
 			int rowCurve = 1; // first is x value
@@ -927,23 +914,16 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos){
 
 				double value = curve->y(xPos, valueFound);
 				if (cursorNumber == 0) {
-					treeModel->setTreeData(QVariant(value), rowCurve,
-										   WorksheetPrivate::TreeModelColumn::CURSOR0, plotIndex);
-					double valueCursor1 = treeModel->treeData(rowCurve,
-															  WorksheetPrivate::TreeModelColumn::CURSOR1, plotIndex).toDouble();
-					treeModel->setTreeData(QVariant(valueCursor1 - value), rowCurve,
-										   WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotIndex);
+					treeModel->setTreeData(QVariant(value), rowCurve, WorksheetPrivate::TreeModelColumn::CURSOR0, plotIndex);
+					double valueCursor1 = treeModel->treeData(rowCurve, WorksheetPrivate::TreeModelColumn::CURSOR1, plotIndex).toDouble();
+					treeModel->setTreeData(QVariant(valueCursor1 - value), rowCurve, WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotIndex);
 				} else {
-					treeModel->setTreeData(QVariant(value), rowCurve,
-										   WorksheetPrivate::TreeModelColumn::CURSOR1, plotIndex);
-					double valueCursor0 = treeModel->treeData(rowCurve,
-															  WorksheetPrivate::TreeModelColumn::CURSOR0, plotIndex).toDouble();
-					treeModel->setTreeData(QVariant(value - valueCursor0), rowCurve,
-										   WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotIndex);
+					treeModel->setTreeData(QVariant(value), rowCurve, WorksheetPrivate::TreeModelColumn::CURSOR1, plotIndex);
+					double valueCursor0 = treeModel->treeData(rowCurve, WorksheetPrivate::TreeModelColumn::CURSOR0, plotIndex).toDouble();
+					treeModel->setTreeData(QVariant(value - valueCursor0), rowCurve, WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotIndex);
 				}
 				rowCurve++;
 			}
-
 		}
 	}
 }
@@ -1002,20 +982,16 @@ void Worksheet::curveDataChanged(const XYCurve* curve) {
 			if (plot->getCurve(j)->name().compare(curve->name()) != 0)
 				continue;
 
-			treeModel->setTreeData(QVariant(curve->name()), j,
-								   WorksheetPrivate::TreeModelColumn::SIGNALNAME, plotIndex);
+			treeModel->setTreeData(QVariant(curve->name()), j, WorksheetPrivate::TreeModelColumn::SIGNALNAME, plotIndex);
 
 			bool valueFound;
 			double valueCursor0 = curve->y(plot->cursorPos(0), valueFound);
-			treeModel->setTreeData(QVariant(valueCursor0), j,
-								   WorksheetPrivate::TreeModelColumn::CURSOR0, plotIndex);
+			treeModel->setTreeData(QVariant(valueCursor0), j, WorksheetPrivate::TreeModelColumn::CURSOR0, plotIndex);
 
 			double valueCursor1 = curve->y(plot->cursorPos(1), valueFound);
-			treeModel->setTreeData(QVariant(valueCursor1), j,
-								   WorksheetPrivate::TreeModelColumn::CURSOR1, plotIndex);
+			treeModel->setTreeData(QVariant(valueCursor1), j, WorksheetPrivate::TreeModelColumn::CURSOR1, plotIndex);
 
-			treeModel->setTreeData(QVariant(valueCursor1-valueCursor0), j,
-								   WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotIndex);
+			treeModel->setTreeData(QVariant(valueCursor1-valueCursor0), j, WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotIndex);
 			break;
 		}
 		break;
@@ -1043,21 +1019,17 @@ void Worksheet::curveAdded(const XYCurve* curve) {
 
 			treeModel->insertRow(j, plotIndex);
 
-			QModelIndex curveIndex = treeModel->index(j, WorksheetPrivate::TreeModelColumn::SIGNALNAME,
-													  plotIndex);
+			QModelIndex curveIndex = treeModel->index(j, WorksheetPrivate::TreeModelColumn::SIGNALNAME, plotIndex);
 			treeModel->setData(curveIndex, QVariant(curve->name()));
 
 			bool valueFound;
 			double valueCursor0 = curve->y(plot->cursorPos(0), valueFound);
-			treeModel->setTreeData(QVariant(valueCursor0), j,
-								   WorksheetPrivate::TreeModelColumn::CURSOR0, plotIndex);
+			treeModel->setTreeData(QVariant(valueCursor0), j, WorksheetPrivate::TreeModelColumn::CURSOR0, plotIndex);
 
 			double valueCursor1 = curve->y(plot->cursorPos(1), valueFound);
-			treeModel->setTreeData(QVariant(valueCursor1), j,
-								   WorksheetPrivate::TreeModelColumn::CURSOR1, plotIndex);
+			treeModel->setTreeData(QVariant(valueCursor1), j, WorksheetPrivate::TreeModelColumn::CURSOR1, plotIndex);
 
-			treeModel->setTreeData(QVariant(valueCursor1-valueCursor0), j,
-								   WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotIndex);
+			treeModel->setTreeData(QVariant(valueCursor1-valueCursor0), j, WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotIndex);
 			break;
 		}
 		break;
@@ -1080,8 +1052,7 @@ void Worksheet::curveRemoved(const XYCurve* curve) {
 
 		int curveCount = treeModel->rowCount(plotIndex);
 		for (int j = 0; j < curveCount; j++) {
-			QModelIndex curveIndex = treeModel->index(j, WorksheetPrivate::TreeModelColumn::SIGNALNAME,
-													  plotIndex);
+			QModelIndex curveIndex = treeModel->index(j, WorksheetPrivate::TreeModelColumn::SIGNALNAME, plotIndex);
 
 			if (curveIndex.data().toString().compare(curve->name()) != 0)
 				continue;
@@ -1236,7 +1207,7 @@ void Worksheet::updateCompleteCursorTreeModel() {
 //##############################################################################
 WorksheetPrivate::WorksheetPrivate(Worksheet* owner) : q(owner), m_scene(new QGraphicsScene()) {
 	QStringList headers = {i18n("Plot/Curve"), "V1", "V2", "V2-V1"};
-    cursorData = new TreeModel(headers, nullptr);
+	cursorData = new TreeModel(headers, nullptr);
 }
 
 QString WorksheetPrivate::name() const {
@@ -1574,10 +1545,10 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 		d->updateLayout();
 	}
 
-    // when creating a new CartesianPlot, this plot sends, that new XYCurves where added,
-    // but after creating the CartesianPlot, the CartesianPlot will be added to the Worksheet,
-    // where all connections to the signals will be made. So no update will be done automatically
-    updateCompleteCursorTreeModel();
+	// when creating a new CartesianPlot, this plot sends, that new XYCurves where added,
+	// but after creating the CartesianPlot, the CartesianPlot will be added to the Worksheet,
+	// where all connections to the signals will be made. So no update will be done automatically
+	updateCompleteCursorTreeModel();
 	return true;
 }
 
