@@ -514,7 +514,7 @@ void XYCurveDock::setModel() {
 			path += QString("\t ")+m_curve->xColumn()->plotDesignationString();
 			cbXColumn->setInvalid(false);
 		} else
-			cbXColumn->setInvalid(true, i18n("The column")+ " \""+ m_curve->xColumnPath() + "\"\n"+ i18n("is not available. If a new column at this path is created, it is linked to this curve. If you wanna hold this column, don't change anything in this combobox."));
+			cbXColumn->setInvalid(true, i18n("The column \"%1\" is not available. If a new column at this path is created, it is linked to this curve. If you wanna hold this column, don't change anything in this combobox.", m_curve->xColumnPath()));
 		cbXColumn->setText(path);
 
 		path = m_curve->yColumnPath().split("/").last();
@@ -522,7 +522,7 @@ void XYCurveDock::setModel() {
 			path += QString("\t ")+m_curve->yColumn()->plotDesignationString();
 			cbYColumn->setInvalid(false);
 		} else
-			cbYColumn->setInvalid(true, i18n("The column")+ " \""+ m_curve->xColumnPath() + "\"\n"+ i18n("is not available. If a new column at this path is created, it is linked to this curve. If you wanna hold this column, don't change anything in this combobox."));
+			cbYColumn->setInvalid(true, i18n("The column \"%1\" is not available. If a new column at this path is created, it is linked to this curve. If you wanna hold this column, don't change anything in this combobox.", m_curve->xColumnPath()));
 		cbYColumn->setText(path);
 	}
 }
