@@ -1576,14 +1576,14 @@ void AxisPrivate::retransformTickLabelPositions() {
 		if ((orientation == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric) ||
 				(orientation == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric)) {
 			if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
-				width = fm.width(tickLabelStrings.at(i));
+				width = fm.boundingRect(tickLabelStrings.at(i)).width();
 			} else {
 				td.setHtml(tickLabelStrings.at(i));
 				width = td.size().width();
 				height = td.size().height();
 			}
 		} else { // Datetime
-			width = fm.width(tickLabelStrings.at(i));
+			width = fm.boundingRect(tickLabelStrings.at(i)).width();
 		}
 
 		double diffx = cosinus * width;

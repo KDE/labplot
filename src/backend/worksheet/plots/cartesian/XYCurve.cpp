@@ -1760,7 +1760,7 @@ void XYCurvePrivate::updateValues() {
 	qreal h = fm.ascent();
 
 	for (int i = 0; i < valuesStrings.size(); i++) {
-		w = fm.width(valuesStrings.at(i));
+		w = fm.boundingRect(valuesStrings.at(i)).width();
 		switch (valuesPosition) {
 		case XYCurve::ValuesAbove:
 			tempPoint.setX( symbolPointsScene.at(i).x() - w/2);

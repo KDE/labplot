@@ -1163,7 +1163,7 @@ void HistogramPrivate::updateValues() {
 	switch (valuesPosition) {
 	case Histogram::ValuesAbove:
 		for (int i = 0; i < valuesStrings.size(); i++) {
-			w = fm.width(valuesStrings.at(i));
+			w = fm.boundingRect(valuesStrings.at(i)).width();
 			tempPoint.setX( pointsScene.at(i).x() -w/2);
 			tempPoint.setY( pointsScene.at(i).y() - valuesDistance );
 			valuesPoints.append(tempPoint);
@@ -1171,7 +1171,7 @@ void HistogramPrivate::updateValues() {
 		break;
 	case Histogram::ValuesUnder:
 		for (int i = 0; i < valuesStrings.size(); i++) {
-			w = fm.width(valuesStrings.at(i));
+			w = fm.boundingRect(valuesStrings.at(i)).width();
 			tempPoint.setX( pointsScene.at(i).x() -w/2);
 			tempPoint.setY( pointsScene.at(i).y() + valuesDistance + h/2);
 			valuesPoints.append(tempPoint);
@@ -1179,7 +1179,7 @@ void HistogramPrivate::updateValues() {
 		break;
 	case Histogram::ValuesLeft:
 		for (int i = 0; i < valuesStrings.size(); i++) {
-			w = fm.width(valuesStrings.at(i));
+			w = fm.boundingRect(valuesStrings.at(i)).width();
 			tempPoint.setX( pointsScene.at(i).x() - valuesDistance - w - 1);
 			tempPoint.setY( pointsScene.at(i).y());
 			valuesPoints.append(tempPoint);
