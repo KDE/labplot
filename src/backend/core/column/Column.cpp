@@ -108,7 +108,7 @@ QMenu* Column::createContextMenu() {
 	//TODO: we don't need to add anything from the view for MQTTTopic columns.
 	//at the moment it's ok to check to the null pointer for firstAction here.
 	//later, once we have some actions in the menu also for MQTT topics we'll
-	//need to explicitely to dynamic_cast for MQTTTopic
+	//need to explicitly to dynamic_cast for MQTTTopic
 	if (firstAction)
 		emit requestProjectContextMenu(menu);
 

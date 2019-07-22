@@ -105,7 +105,7 @@ public:
 	int endRow() const;
 
 	/**
-	 * @brief Set the colums of the object to be read
+	 * @brief Set the columns of the object to be read
 	 *
 	 * For histograms the following are available: center, low, content, error
 	 */

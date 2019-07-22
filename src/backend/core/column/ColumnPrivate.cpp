@@ -1359,7 +1359,7 @@ void ColumnPrivate::replaceInteger(int first, const QVector<int>& new_values) {
 
 /*!
  * Updates the properties. Will be called, when data in the column changed.
- * The properies will be used to speed up some algorithms.
+ * The properties will be used to speed up some algorithms.
  * See where variable properties will be used.
  */
 void ColumnPrivate::updateProperties() {

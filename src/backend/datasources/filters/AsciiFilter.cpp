@@ -1344,7 +1344,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				continue;
 			}
 
-			//column counting starts with 1, substract 1 as well as another 1 for the index column if required
+			//column counting starts with 1, subtract 1 as well as another 1 for the index column if required
 			int col = createIndexEnabled ? n + startColumn - 2: n + startColumn - 1;
 
 			if (col < lineStringList.size()) {
@@ -1588,7 +1588,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 				continue;
 			}
 
-			//column counting starts with 1, substract 1 as well as another 1 for the index column if required
+			//column counting starts with 1, subtract 1 as well as another 1 for the index column if required
 			int col = createIndexEnabled ? n + startColumn - 2: n + startColumn - 1;
 
 			if (col < lineStringList.size()) {

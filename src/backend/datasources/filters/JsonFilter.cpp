@@ -555,7 +555,7 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 	int rowOffset = startRow - 1;
 	int colOffset = (int)createIndexEnabled + (int)importObjectNames;
 	DEBUG("reading " << m_actualRows << " lines");
-	DEBUG("reading " << m_actualCols << " colums");
+	DEBUG("reading " << m_actualCols << " columns");
 
 	for (int i = 0; i < m_actualRows; ++i) {
 		if (createIndexEnabled)

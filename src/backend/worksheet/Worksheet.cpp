@@ -419,7 +419,7 @@ int Worksheet::getPlotCount() {
 
 /*!
  * \brief Worksheet::getPlot
- * \param index Number of plot which shoud be returned
+ * \param index Number of plot which should be returned
  * \return Pointer to the CartesianPlot which was searched with index
  */
 WorksheetElement *Worksheet::getPlot(int index) {
