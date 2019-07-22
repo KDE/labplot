@@ -280,7 +280,9 @@ void ImportProjectDialog::refreshPreview() {
 		showTopLevelOnly(root);
 	}
 
-	//extand the tree to show all available top-level objects and adjust the header sizes
+	//select the first top-level node and
+	//expand the tree to show all available top-level objects and adjust the header sizes
+	ui.tvPreview->setCurrentIndex(ui.tvPreview->model()->index(0,0));
 	ui.tvPreview->expandAll();
 	ui.tvPreview->header()->resizeSections(QHeaderView::ResizeToContents);
 }

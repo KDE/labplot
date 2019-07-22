@@ -46,6 +46,7 @@ public:
 	AbstractColumn* output(int port) override;
 	const AbstractColumn * output(int port) const override;
 	virtual AbstractColumn::PlotDesignation plotDesignation() const;
+	virtual QString plotDesignationString() const;
 	virtual AbstractColumn::ColumnMode columnMode() const;
 	virtual QString textAt(int row) const;
 	virtual QDate dateAt(int row) const;
@@ -90,6 +91,7 @@ public:
 	AbstractColumn::ColumnMode columnMode() const override;
 	int rowCount() const override { return m_owner->rowCount(); }
 	AbstractColumn::PlotDesignation plotDesignation() const override { return m_owner->plotDesignation(); }
+	QString plotDesignationString() const override { return m_owner->plotDesignationString(); }
 	QString textAt(int row) const override;
 	QDate dateAt(int row) const override;
 	QTime timeAt(int row) const override;

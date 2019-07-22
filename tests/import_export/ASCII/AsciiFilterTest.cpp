@@ -542,7 +542,7 @@ void AsciiFilterTest::testRowRange01() {
 	filter.setEndRow(10);
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
-	//end row larger than the the number of available rows, three rows to read
+	//end row larger than the number of available rows, three rows to read
 	QCOMPARE(spreadsheet.rowCount(), 3);
 	QCOMPARE(spreadsheet.columnCount(), 3);
 

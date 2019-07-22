@@ -6,6 +6,7 @@ Description          : Dock widget for live data properties
 Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
 Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2017-2019 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
 /***************************************************************************
@@ -27,12 +28,13 @@ Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 *                                                                         *
 ***************************************************************************/
 #include "LiveDataDock.h"
-#include <KLocalizedString>
 #include <QCompleter>
-#include <QString>
+#include <QFile>
+#include <QStandardItemModel>
 #include <QTimer>
 #include <QTreeWidgetItem>
-#include <QStandardItemModel>
+
+#include <KLocalizedString>
 
 #ifdef HAVE_MQTT
 #include "kdefrontend/widgets/MQTTWillSettingsWidget.h"
@@ -44,8 +46,8 @@ Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
 LiveDataDock::LiveDataDock(QWidget* parent) : BaseDock(parent)
 #ifdef HAVE_MQTT
-    ,
-    m_subscriptionWidget(new MQTTSubscriptionWidget(this))
+	,
+	m_subscriptionWidget(new MQTTSubscriptionWidget(this))
 #endif
 {
 	ui.setupUi(this);
@@ -65,21 +67,21 @@ LiveDataDock::LiveDataDock(QWidget* parent) : BaseDock(parent)
 	connect(ui.cbReadingType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::readingTypeChanged);
 
 #ifdef HAVE_MQTT
-    connect(ui.bWillUpdateNow, &QPushButton::clicked, this, &LiveDataDock::willUpdateNow);
-    connect(ui.bLWT, &QPushButton::clicked, this, &LiveDataDock::showWillSettings);
-    connect(m_subscriptionWidget, &MQTTSubscriptionWidget::enableWill, this, &LiveDataDock::enableWill);
+	connect(ui.bWillUpdateNow, &QPushButton::clicked, this, &LiveDataDock::willUpdateNow);
+	connect(ui.bLWT, &QPushButton::clicked, this, &LiveDataDock::showWillSettings);
+	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::enableWill, this, &LiveDataDock::enableWill);
 
-    ui.swSubscriptions->addWidget(m_subscriptionWidget);
-    ui.swSubscriptions->setCurrentWidget(m_subscriptionWidget);
+	ui.swSubscriptions->addWidget(m_subscriptionWidget);
+	ui.swSubscriptions->setCurrentWidget(m_subscriptionWidget);
 
 	ui.bLWT->setToolTip(i18n("Manage MQTT connection's will settings"));
 	ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
 
-    QString info = i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed.");
+	QString info = i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed.");
 	ui.lLWT->setToolTip(info);
 	ui.bLWT->setToolTip(info);
 	ui.bLWT->setEnabled(false);
-    ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
+	ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
 #endif
 }
 
@@ -88,7 +90,7 @@ LiveDataDock::~LiveDataDock() {
 	for (auto & host : m_hosts)
 		delete host.client;
 
-    delete m_subscriptionWidget;
+	delete m_subscriptionWidget;
 }
 #else
 LiveDataDock::~LiveDataDock() = default;
@@ -146,10 +148,10 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 	m_mqttClient = client; // updates may be applied from now on
 
 	//show MQTT connected options
-    ui.lTopics->show();
-    ui.swSubscriptions->setVisible(true);
-    m_subscriptionWidget->setVisible(true);
-    m_subscriptionWidget->makeVisible(true);
+	ui.lTopics->show();
+	ui.swSubscriptions->setVisible(true);
+	m_subscriptionWidget->setVisible(true);
+	m_subscriptionWidget->makeVisible(true);
 	ui.lLWT->show();
 	ui.bLWT->show();
 
@@ -166,10 +168,10 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 		connect(m_currentHost->client, &QMqttClient::connected, this, &LiveDataDock::onMQTTConnect);
 		connect(m_currentHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 
-        connect(m_subscriptionWidget, &MQTTSubscriptionWidget::reparentTopic, client, &MQTTClient::reparentTopic);
-        connect(m_subscriptionWidget, &MQTTSubscriptionWidget::addBeforeRemoveSubscription, client, &MQTTClient::addBeforeRemoveSubscription);
-        connect(m_subscriptionWidget, &MQTTSubscriptionWidget::removeMQTTSubscription, client, &MQTTClient::removeMQTTSubscription);
-        connect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription, client, &MQTTClient::addMQTTSubscription);
+		connect(m_subscriptionWidget, &MQTTSubscriptionWidget::reparentTopic, client, &MQTTClient::reparentTopic);
+		connect(m_subscriptionWidget, &MQTTSubscriptionWidget::addBeforeRemoveSubscription, client, &MQTTClient::addBeforeRemoveSubscription);
+		connect(m_subscriptionWidget, &MQTTSubscriptionWidget::removeMQTTSubscription, client, &MQTTClient::removeMQTTSubscription);
+		connect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription, client, &MQTTClient::addMQTTSubscription);
 
 
 		m_currentHost->client->setHostname(id.first);
@@ -189,50 +191,52 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 		++m_currentHost->count;
 	}
 
-    if (m_previousMQTTClient == nullptr) {
-       m_updateSubscriptionConn = connect(client, &MQTTClient::MQTTSubscribed, [this]() {emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());});
+	if (m_previousMQTTClient == nullptr) {
+		m_updateSubscriptionConn = connect(client, &MQTTClient::MQTTSubscribed, [this]() {
+			emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
+		});
 
 		//Fill the subscription tree(useful if the MQTTClient was loaded)
 		QVector<QString> topics = client->topicNames();
-		for (const auto& topic : topics) {
+		for (const auto& topic : topics)
 			addTopicToTree(topic);
-		}
-        emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
+		emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 	}
 
 	//if the previous MQTTClient's host name was different from the current one we have to disconnect some slots
 	//and clear the tree widgets
-	else if (m_previousMQTTClient->clientHostName() != client->clientHostName()) {        
-        disconnect(m_updateSubscriptionConn);
+	else if (m_previousMQTTClient->clientHostName() != client->clientHostName()) {
+		disconnect(m_updateSubscriptionConn);
 		disconnect(m_previousHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 		connect(m_previousHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
 
 		disconnect(m_currentHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
 
-        disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::reparentTopic, m_previousMQTTClient, &MQTTClient::reparentTopic);
-        disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::addBeforeRemoveSubscription, m_previousMQTTClient, &MQTTClient::addBeforeRemoveSubscription);
-        disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::removeMQTTSubscription, m_previousMQTTClient, &MQTTClient::removeMQTTSubscription);
-        disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription,  m_previousMQTTClient, &MQTTClient::addMQTTSubscription);
+		disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::reparentTopic, m_previousMQTTClient, &MQTTClient::reparentTopic);
+		disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::addBeforeRemoveSubscription, m_previousMQTTClient, &MQTTClient::addBeforeRemoveSubscription);
+		disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::removeMQTTSubscription, m_previousMQTTClient, &MQTTClient::removeMQTTSubscription);
+		disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription,  m_previousMQTTClient, &MQTTClient::addMQTTSubscription);
 
-        m_previousHost->topicList = m_subscriptionWidget->getTopicList();
-        m_subscriptionWidget->setTopicList(m_currentHost->topicList);
+		m_previousHost->topicList = m_subscriptionWidget->getTopicList();
+		m_subscriptionWidget->setTopicList(m_currentHost->topicList);
 
-        emit MQTTClearTopics();
+		emit MQTTClearTopics();
 		//repopulating the tree widget with the already known topics of the client
-		for (int i = 0; i < m_currentHost->addedTopics.size(); ++i) {
+		for (int i = 0; i < m_currentHost->addedTopics.size(); ++i)
 			addTopicToTree(m_currentHost->addedTopics.at(i));
-		}
 
-        //fill subscriptions tree widget
-        emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
+		//fill subscriptions tree widget
+		emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 
-        m_updateSubscriptionConn = connect(client, &MQTTClient::MQTTSubscribed, [this]() {emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());});
+		m_updateSubscriptionConn = connect(client, &MQTTClient::MQTTSubscribed, [this]() {
+			emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
+		});
 		connect(m_currentHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 
-        connect(m_subscriptionWidget, &MQTTSubscriptionWidget::reparentTopic, client, &MQTTClient::reparentTopic);
-        connect(m_subscriptionWidget, &MQTTSubscriptionWidget::addBeforeRemoveSubscription, client, &MQTTClient::addBeforeRemoveSubscription);
-        connect(m_subscriptionWidget, &MQTTSubscriptionWidget::removeMQTTSubscription, client, &MQTTClient::removeMQTTSubscription);
-        connect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription, client, &MQTTClient::addMQTTSubscription);
+		connect(m_subscriptionWidget, &MQTTSubscriptionWidget::reparentTopic, client, &MQTTClient::reparentTopic);
+		connect(m_subscriptionWidget, &MQTTSubscriptionWidget::addBeforeRemoveSubscription, client, &MQTTClient::addBeforeRemoveSubscription);
+		connect(m_subscriptionWidget, &MQTTSubscriptionWidget::removeMQTTSubscription, client, &MQTTClient::removeMQTTSubscription);
+		connect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription, client, &MQTTClient::addMQTTSubscription);
 	}
 
 	if (client->willUpdateType() == MQTTClient::OnClick && client->MQTTWillUse())
@@ -267,7 +271,11 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 
 	switch (sourceType) {
 	case LiveDataSource::FileOrPipe:
-        ui.leSourceInfo->setText(source->fileName());
+		ui.leSourceInfo->setText(source->fileName());
+		if (QFile::exists(source->fileName()))
+			ui.leSourceInfo->setStyleSheet(QString());
+		else
+			ui.leSourceInfo->setStyleSheet("QLineEdit{background:red;}");
 		break;
 	case LiveDataSource::NetworkTcpSocket:
 	case LiveDataSource::NetworkUdpSocket:
@@ -317,7 +325,7 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 	}
 
 	if (((sourceType == LiveDataSource::FileOrPipe || sourceType == LiveDataSource::NetworkUdpSocket) &&
-	     (readingType == LiveDataSource::ContinuousFixed || readingType == LiveDataSource::FromEnd)))
+	        (readingType == LiveDataSource::ContinuousFixed || readingType == LiveDataSource::FromEnd)))
 		ui.sbSampleSize->setValue(source->sampleSize());
 	else {
 		ui.lSampleSize->hide();
@@ -328,19 +336,19 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 	model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
 	item = model->item(LiveDataSource::NewData);
 	if (sourceType == LiveDataSource::NetworkTcpSocket || sourceType == LiveDataSource::NetworkUdpSocket ||
-	    sourceType == LiveDataSource::SerialPort)
+	        sourceType == LiveDataSource::SerialPort)
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	else
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-#ifdef HAVE_MQTT
 	ui.lTopics->hide();
 	ui.bLWT->hide();
 	ui.lLWT->hide();
 	ui.bWillUpdateNow->hide();
-	ui.swSubscriptions->setVisible(false);
-	m_subscriptionWidget->setVisible(false);
-	m_subscriptionWidget->makeVisible(false);
+	ui.swSubscriptions->hide();
+#ifdef HAVE_MQTT
+	m_subscriptionWidget->hide();
+	m_subscriptionWidget->hide();
 #endif
 	m_liveDataSource = source; // updates may be applied from now on
 }
@@ -402,20 +410,20 @@ void LiveDataDock::updateTypeChanged(int idx) {
 
 		switch (updateType) {
 		case LiveDataSource::TimeInterval: {
-			ui.lUpdateInterval->show();
-			ui.sbUpdateInterval->show();
-			const LiveDataSource::SourceType s = m_liveDataSource->sourceType();
-			const LiveDataSource::ReadingType r = m_liveDataSource->readingType();
-			const bool showSampleSize = ((s == LiveDataSource::FileOrPipe || s == LiveDataSource::NetworkUdpSocket) &&
-			                             (r == LiveDataSource::ContinuousFixed || r == LiveDataSource::FromEnd));
-			ui.lSampleSize->setVisible(showSampleSize);
-			ui.sbSampleSize->setVisible(showSampleSize);
+				ui.lUpdateInterval->show();
+				ui.sbUpdateInterval->show();
+				const LiveDataSource::SourceType s = m_liveDataSource->sourceType();
+				const LiveDataSource::ReadingType r = m_liveDataSource->readingType();
+				const bool showSampleSize = ((s == LiveDataSource::FileOrPipe || s == LiveDataSource::NetworkUdpSocket) &&
+				                             (r == LiveDataSource::ContinuousFixed || r == LiveDataSource::FromEnd));
+				ui.lSampleSize->setVisible(showSampleSize);
+				ui.sbSampleSize->setVisible(showSampleSize);
 
-			m_liveDataSource->setUpdateType(updateType);
-			m_liveDataSource->setUpdateInterval(ui.sbUpdateInterval->value());
-			m_liveDataSource->setFileWatched(false);
-			break;
-		}
+				m_liveDataSource->setUpdateType(updateType);
+				m_liveDataSource->setUpdateInterval(ui.sbUpdateInterval->value());
+				m_liveDataSource->setFileWatched(false);
+				break;
+			}
 		case LiveDataSource::NewData:
 			ui.lUpdateInterval->hide();
 			ui.sbUpdateInterval->hide();
@@ -458,8 +466,8 @@ void LiveDataDock::readingTypeChanged(int idx) {
 		const LiveDataSource::UpdateType updateType = m_liveDataSource->updateType();
 
 		if (sourceType == LiveDataSource::NetworkTcpSocket || sourceType == LiveDataSource::LocalSocket || sourceType == LiveDataSource::SerialPort
-				|| type == LiveDataSource::TillEnd || type == LiveDataSource::WholeFile
-				|| updateType == LiveDataSource::NewData) {
+		        || type == LiveDataSource::TillEnd || type == LiveDataSource::WholeFile
+		        || updateType == LiveDataSource::NewData) {
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 		} else {
@@ -592,11 +600,10 @@ void LiveDataDock::willQoSChanged(int QoS) {
  * \param state the state of the will retain chechbox
  */
 void LiveDataDock::willRetainChanged(bool useWillRetainMessages) {
-	if (useWillRetainMessages) {
+	if (useWillRetainMessages)
 		m_mqttClient->setWillRetain(true);
-	} else {
+	else
 		m_mqttClient->setWillRetain(false);
-	}
 }
 
 /*!
@@ -724,8 +731,8 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 			QTreeWidgetItem* currentItem;
 			//check whether the first level of the topic can be found in twTopics
 			int topItemIdx = -1;
-            for (int i = 0; i < m_subscriptionWidget->topicCount(); ++i) {
-                if (m_subscriptionWidget->topLevelTopic(i)->text(0) == list.at(0)) {
+			for (int i = 0; i < m_subscriptionWidget->topicCount(); ++i) {
+				if (m_subscriptionWidget->topLevelTopic(i)->text(0) == list.at(0)) {
 					topItemIdx = i;
 					break;
 				}
@@ -733,7 +740,7 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 			//if not we simply add every level of the topic to the tree
 			if ( topItemIdx < 0) {
 				currentItem = new QTreeWidgetItem(name);
-                m_subscriptionWidget->addTopic(currentItem);
+				m_subscriptionWidget->addTopic(currentItem);
 				for (int i = 1; i < list.size(); ++i) {
 					name.clear();
 					name.append(list.at(i));
@@ -744,7 +751,7 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 			//otherwise we search for the first level that isn't part of the tree,
 			//then add every level of the topic to the tree from that certain level
 			else {
-                currentItem = m_subscriptionWidget->topLevelTopic(topItemIdx);
+				currentItem = m_subscriptionWidget->topLevelTopic(topItemIdx);
 				int listIdx = 1;
 				for (; listIdx < list.size(); ++listIdx) {
 					QTreeWidgetItem* childItem = nullptr;
@@ -772,18 +779,17 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 				}
 			}
 		}
-	}
-	else {
+	} else {
 		rootName = topicName;
 		name.append(topicName);
-        m_subscriptionWidget->addTopic(new QTreeWidgetItem(name));
+		m_subscriptionWidget->addTopic(new QTreeWidgetItem(name));
 	}
 
 	//if a subscribed topic contains the new topic, we have to update twSubscriptions
-    for (int i = 0; i < m_subscriptionWidget->subscriptionCount(); ++i) {
-        QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split('/', QString::SkipEmptyParts);
+	for (int i = 0; i < m_subscriptionWidget->subscriptionCount(); ++i) {
+		QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split('/', QString::SkipEmptyParts);
 		if (rootName == subscriptionName[0]) {
-            emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
+			emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 			break;
 		}
 	}
@@ -830,7 +836,7 @@ void LiveDataDock::removeClient(const QString& hostname, quint16 port) {
 	}
 
 	if (m_mqttClient->clientHostName() == hostname) {
-        emit MQTTClearTopics();
+		emit MQTTClearTopics();
 		m_mqttClient = nullptr;
 	}
 
@@ -845,9 +851,9 @@ void LiveDataDock::removeClient(const QString& hostname, quint16 port) {
 bool LiveDataDock::testSubscribe(const QString& topic) {
 	QStringList topicList = topic.split('/', QString::SkipEmptyParts);
 	QTreeWidgetItem* currentItem = nullptr;
-    for (int i = 0; i < m_subscriptionWidget->topicCount(); ++i) {
-        if (m_subscriptionWidget->topLevelTopic(i)->text(0) == topicList[0]) {
-            currentItem = m_subscriptionWidget->topLevelTopic(i);
+	for (int i = 0; i < m_subscriptionWidget->topicCount(); ++i) {
+		if (m_subscriptionWidget->topLevelTopic(i)->text(0) == topicList[0]) {
+			currentItem = m_subscriptionWidget->topLevelTopic(i);
 			break;
 		}
 	}
@@ -869,7 +875,7 @@ bool LiveDataDock::testSubscribe(const QString& topic) {
 	} else
 		return false;
 
-    m_subscriptionWidget->testSubscribe(currentItem);
+	m_subscriptionWidget->testSubscribe(currentItem);
 	return true;
 }
 
@@ -879,9 +885,9 @@ bool LiveDataDock::testSubscribe(const QString& topic) {
  */
 bool LiveDataDock::testUnsubscribe(const QString& topic) {
 	QTreeWidgetItem* currentItem = nullptr;
-    for (int i = 0; i < m_subscriptionWidget->subscriptionCount(); ++i) {
-        if (MQTTSubscriptionWidget::checkTopicContains(m_subscriptionWidget->topLevelSubscription(i)->text(0), topic)) {
-            currentItem = m_subscriptionWidget->topLevelSubscription(i);
+	for (int i = 0; i < m_subscriptionWidget->subscriptionCount(); ++i) {
+		if (MQTTSubscriptionWidget::checkTopicContains(m_subscriptionWidget->topLevelSubscription(i)->text(0), topic)) {
+			currentItem = m_subscriptionWidget->topLevelSubscription(i);
 			break;
 		}
 	}
@@ -889,12 +895,12 @@ bool LiveDataDock::testUnsubscribe(const QString& topic) {
 	if (currentItem) {
 		do {
 			if (topic == currentItem->text(0)) {
-                 m_subscriptionWidget->testUnsubscribe(currentItem);
+				m_subscriptionWidget->testUnsubscribe(currentItem);
 				return true;
 			} else {
 				for (int i = 0; i < currentItem->childCount(); ++i) {
 					qDebug()<<currentItem->child(i)->text(0)<<" "<<topic;
-                    if (MQTTSubscriptionWidget::checkTopicContains(currentItem->child(i)->text(0), topic)) {
+					if (MQTTSubscriptionWidget::checkTopicContains(currentItem->child(i)->text(0), topic)) {
 						currentItem = currentItem->child(i);
 						break;
 					} else if (i == currentItem->childCount() - 1)
@@ -935,11 +941,10 @@ void LiveDataDock::showWillSettings() {
 }
 
 void LiveDataDock::enableWill(bool enable) {
-    if(enable) {
-        if(!ui.bLWT->isEnabled())
-            ui.bLWT->setEnabled(enable);
-    } else {
-        ui.bLWT->setEnabled(enable);
-    }
+	if(enable) {
+		if(!ui.bLWT->isEnabled())
+			ui.bLWT->setEnabled(enable);
+	} else
+		ui.bLWT->setEnabled(enable);
 }
 #endif

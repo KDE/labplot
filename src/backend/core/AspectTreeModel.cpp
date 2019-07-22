@@ -193,41 +193,8 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 				else if (m_nonEmptyNumericColumnsOnly && !column->hasValues())
 					name = i18n("%1   (no values)", name);
 
-				if (m_showPlotDesignation) {
-					QString designation;
-					switch (column->plotDesignation()) {
-					case AbstractColumn::NoDesignation:
-						break;
-					case AbstractColumn::X:
-						designation = QLatin1String(" [X]");
-						break;
-					case AbstractColumn::Y:
-						designation = QLatin1String(" [Y]");
-						break;
-					case AbstractColumn::Z:
-						designation = QLatin1String(" [Z]");
-						break;
-					case AbstractColumn::XError:
-						designation = QLatin1String(" [") + i18n("X-error") + QLatin1Char(']');
-						break;
-					case AbstractColumn::XErrorPlus:
-						designation = QLatin1String(" [") + i18n("X-error +") + QLatin1Char(']');
-						break;
-					case AbstractColumn::XErrorMinus:
-						designation = QLatin1String(" [") + i18n("X-error -") + QLatin1Char(']');
-						break;
-					case AbstractColumn::YError:
-						designation = QLatin1String(" [") + i18n("Y-error") + QLatin1Char(']');
-						break;
-					case AbstractColumn::YErrorPlus:
-						designation = QLatin1String(" [") + i18n("Y-error +") + QLatin1Char(']');
-						break;
-					case AbstractColumn::YErrorMinus:
-						designation = QLatin1String(" [") + i18n("Y-error -") + QLatin1Char(']');
-						break;
-					}
-					name += QLatin1Char('\t') + designation;
-				}
+				if (m_showPlotDesignation)
+					name += QLatin1Char('\t') + " " + column->plotDesignationString();
 
 				return name;
 			} else

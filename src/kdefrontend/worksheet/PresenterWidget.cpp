@@ -27,12 +27,12 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "PresenterWidget.h"
 #include "SlidingPanel.h"
 
+#include <QApplication>
 #include <QKeyEvent>
 #include <QLabel>
-#include <QDesktopWidget>
-#include <QApplication>
-#include <QTimeLine>
 #include <QPushButton>
+#include <QScreen>
+#include <QTimeLine>
 
 #include <KLocalizedString>
 
@@ -43,9 +43,7 @@ PresenterWidget::PresenterWidget(const QPixmap &pixmap, const QString& worksheet
 	m_imageLabel->setPixmap(pixmap);
 	m_imageLabel->adjustSize();
 
-	QDesktopWidget* const dw = QApplication::desktop();
-	const int primaryScreenIdx = dw->primaryScreen();
-	const QRect& screenSize = dw->availableGeometry(primaryScreenIdx);
+	const QRect& screenSize = QGuiApplication::primaryScreen()->availableGeometry();
 
 	const int moveRight = (screenSize.width() - m_imageLabel->width()) / 2.0;
 	const int moveDown = (screenSize.height() - m_imageLabel->height()) / 2.0;

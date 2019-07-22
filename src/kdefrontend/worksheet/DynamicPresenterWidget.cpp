@@ -29,13 +29,13 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "SlidingPanel.h"
 
 #include <QKeyEvent>
-#include <QDesktopWidget>
-#include <QTimeLine>
 #include <QPushButton>
+#include <QScreen>
+#include <QTimeLine>
 
 #include <KLocalizedString>
 
-DynamicPresenterWidget::DynamicPresenterWidget(Worksheet *worksheet, QWidget *parent) : QWidget(parent),
+DynamicPresenterWidget::DynamicPresenterWidget(Worksheet* worksheet, QWidget* parent) : QWidget(parent),
 	m_view(new WorksheetView(worksheet)), m_timeLine(new QTimeLine(600)) {
 
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -48,9 +48,7 @@ DynamicPresenterWidget::DynamicPresenterWidget(Worksheet *worksheet, QWidget *pa
 	m_view->fitInView(m_view->sceneRect(), Qt::KeepAspectRatio);
 	m_view->adjustSize();
 
-	QDesktopWidget* const dw = QApplication::desktop();
-	const int primaryScreenIdx = dw->primaryScreen();
-	const QRect& screenSize = dw->availableGeometry(primaryScreenIdx);
+	const QRect& screenSize = QGuiApplication::primaryScreen()->availableGeometry();
 
 	const int moveRight = (screenSize.width() - m_view->width()) / 2.0;
 	const int moveDown = (screenSize.height() - m_view->height()) / 2.0;

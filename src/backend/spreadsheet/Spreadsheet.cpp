@@ -91,7 +91,7 @@ void Spreadsheet::setModel(SpreadsheetModel* model) {
 	m_model = model;
 }
 
-SpreadsheetModel * Spreadsheet::model() {
+SpreadsheetModel* Spreadsheet::model() {
 	return m_model;
 }
 
@@ -762,11 +762,14 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 }
 
 void Spreadsheet::registerShortcuts() {
-	m_view->registerShortcuts();
+	//TODO: when we create a live-data source we don't have the view here yet. why?
+	if (m_view)
+		m_view->registerShortcuts();
 }
 
 void Spreadsheet::unregisterShortcuts() {
-	m_view->unregisterShortcuts();
+	if (m_view)
+		m_view->unregisterShortcuts();
 }
 
 //##############################################################################

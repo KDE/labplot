@@ -47,6 +47,8 @@
 #include "backend/datapicker/Datapicker.h"
 #include "backend/note/Note.h"
 #include "backend/lib/macros.h"
+#include "backend/worksheet/TreeModel.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
@@ -70,6 +72,7 @@
 #include "kdefrontend/datasources/ImportDatasetWidget.h"
 #include "kdefrontend/datasources/ImportProjectDialog.h"
 #include "kdefrontend/datasources/ImportSQLDatabaseDialog.h"
+#include <kdefrontend/dockwidgets/CursorDock.h>
 #include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/HistoryDialog.h"
 #include "kdefrontend/SettingsDialog.h"
@@ -187,6 +190,28 @@ void MainWin::showPresenter() {
 
 AspectTreeModel* MainWin::model() const {
 	return m_aspectTreeModel;
+}
+
+/*!
+ * Show cursor dock and set the treeview model
+ * @param model
+ */
+void MainWin::showCursorDock(TreeModel* model, QVector<CartesianPlot*> plots) {
+	if (!cursorDock) {
+		cursorDock = new QDockWidget(i18n("Cursor"), this);
+		cursorWidget = new CursorDock(cursorDock);
+		cursorDock->setWidget(cursorWidget);
+		cursorDock->setFloating(true);
+
+		// does not work. Don't understand why
+//		if (m_propertiesDock)
+//			tabifyDockWidget(cursorDock, m_propertiesDock);
+//		else
+			addDockWidget(Qt::DockWidgetArea::AllDockWidgetAreas, cursorDock);
+	}
+	cursorWidget->setCursorTreeViewModel(model);
+	cursorWidget->setPlots(plots);
+	cursorDock->show();
 }
 
 Project* MainWin::project() const {
@@ -1238,6 +1263,10 @@ bool MainWin::closeProject() {
 			m_autoSaveTimer.stop();
 	}
 
+	removeDockWidget(cursorDock);
+	delete cursorDock;
+	cursorDock = nullptr;
+	cursorWidget = nullptr; // is deleted, because it's the cild of cursorDock
 	return true;
 }
 
@@ -1643,6 +1672,10 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 		connect(part, &AbstractPart::printPreviewRequested, this, &MainWin::printPreview);
 		connect(part, &AbstractPart::showRequested, this, &MainWin::handleShowSubWindowRequested);
 	}
+
+	const auto* worksheet = dynamic_cast<const Worksheet*>(aspect);
+	if (worksheet)
+		connect(worksheet, &Worksheet::showCursorDock, this, &MainWin::showCursorDock);
 }
 
 void MainWin::handleAspectRemoved(const AbstractAspect* parent,const AbstractAspect* before,const AbstractAspect* aspect) {

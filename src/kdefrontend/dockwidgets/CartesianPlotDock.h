@@ -129,6 +129,11 @@ private slots:
 	void verticalPaddingChanged(double);
 	void bottomPaddingChanged(double);
 
+	// "Cursor"-tab
+	void cursorLineWidthChanged(int width);
+	void cursorLineColorChanged(QColor color);
+	void cursorLineStyleChanged(int index);
+
 	//SLOTs for changes triggered in CartesianPlot
 	//general
 	void plotDescriptionChanged(const AbstractAspect*);
@@ -175,6 +180,9 @@ private slots:
 	void plotRightPaddingChanged(double);
 	void plotBottomPaddingChanged(double);
 	void plotSymmetricPaddingChanged(bool);
+
+	// Cursor
+	void plotCursorPenChanged(QPen);
 
 	//save/load template
 	void loadConfigFromTemplate(KConfig&);

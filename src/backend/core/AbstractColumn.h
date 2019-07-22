@@ -148,6 +148,7 @@ public:
 	virtual ColumnMode columnMode() const = 0;
 	virtual void setColumnMode(AbstractColumn::ColumnMode);
 	virtual PlotDesignation plotDesignation() const = 0;
+	virtual QString plotDesignationString() const = 0;
 	virtual void setPlotDesignation(AbstractColumn::PlotDesignation);
 	bool isNumeric() const;
 	bool isPlottable() const;

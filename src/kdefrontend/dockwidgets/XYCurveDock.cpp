@@ -210,9 +210,11 @@ void XYCurveDock::setupGeneral() {
 	auto* gridLayout = qobject_cast<QGridLayout*>(generalTab->layout());
 
 	cbXColumn = new TreeViewComboBox(generalTab);
+	cbXColumn->useCurrentIndexText(false);
 	gridLayout->addWidget(cbXColumn, 2, 2, 1, 1);
 
 	cbYColumn = new TreeViewComboBox(generalTab);
+	cbYColumn->useCurrentIndexText(false);
 	gridLayout->addWidget(cbYColumn, 3, 2, 1, 1);
 
 	//General
@@ -505,6 +507,24 @@ void XYCurveDock::setModel() {
 	cbXErrorPlusColumn->setModel(m_aspectTreeModel);
 	cbYErrorMinusColumn->setModel(m_aspectTreeModel);
 	cbYErrorPlusColumn->setModel(m_aspectTreeModel);
+
+	if (cbXColumn) {
+		QString path = m_curve->xColumnPath().split("/").last();
+		if (m_curve->xColumn()) {
+			path += QString("\t ")+m_curve->xColumn()->plotDesignationString();
+			cbXColumn->setInvalid(false);
+		} else
+			cbXColumn->setInvalid(true, i18n("The column \"%1\" is not available. If a new column at this path is created, it is linked to this curve. If you wanna hold this column, don't change anything in this combobox.", m_curve->xColumnPath()));
+		cbXColumn->setText(path);
+
+		path = m_curve->yColumnPath().split("/").last();
+		if (m_curve->yColumn()) {
+			path += QString("\t ")+m_curve->yColumn()->plotDesignationString();
+			cbYColumn->setInvalid(false);
+		} else
+			cbYColumn->setInvalid(true, i18n("The column \"%1\" is not available. If a new column at this path is created, it is linked to this curve. If you wanna hold this column, don't change anything in this combobox.", m_curve->xColumnPath()));
+		cbYColumn->setText(path);
+	}
 }
 
 /*!
@@ -744,7 +764,7 @@ void XYCurveDock::checkColumnAvailability(TreeViewComboBox* cb, const AbstractCo
 		return;
 	}
 
-	if (column){
+	if (column) {
 		// current index text should be used
 		cb->useCurrentIndexText(true);
 		cb->setInvalid(false);

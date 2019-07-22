@@ -56,6 +56,7 @@ public:
 	void setModel(AspectTreeModel*);
 	void setProject(Project*);
 	QModelIndex currentIndex() const;
+	void updateSelectedAspects();
 
 private:
 	void createActions();

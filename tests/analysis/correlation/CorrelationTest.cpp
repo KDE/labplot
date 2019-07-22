@@ -933,9 +933,9 @@ void CorrelationTest::testPerformance() {
 	// data
 	QVector<double> yData, y2Data;
 #ifdef HAVE_FFTW3
-	const int N = 5e6;
+	const int N = 1e6;
 #else	// GSL is much slower
-	const int N = 8.5e4;
+	const int N = 5e4;
 #endif
 	for (int i = 0;  i < N; i++) {
 		yData.append(i % 100);

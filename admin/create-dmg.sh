@@ -15,6 +15,8 @@ INPREFIX=$PREFIX/$PNAME.app/Contents
 TMPDIR=LabPlot2
 SIGNATURE="Stefan Gerlach"
 
+GCP=/opt/local/libexec/gnubin/cp
+
 #########################################
 
 echo "CLEAN UP"
@@ -61,6 +63,11 @@ cp -vf kde/share/icontheme.rcc $INPREFIX/Resources/icontheme.rcc
 # misc
 cp -v labplot/admin/Info.plist $INPREFIX
 cp -v /Applications/KDE/labplot2.app/Contents/Resources/{LABPLOT_ICONS.icns,LML_ICONS.icns} $INPREFIX/Resources
+
+# translation
+cd kde
+$GCP -vf --parents share/locale/*/LC_MESSAGES/labplot2.mo ../$INPREFIX/
+cd ..
 
 ### TODO
 # package icon

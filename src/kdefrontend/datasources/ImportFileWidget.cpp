@@ -768,7 +768,7 @@ void ImportFileWidget::selectFile() {
 	urls.insert(0, "file://"+path); // add type of path
 	m_cbFileName->setUrls(urls);
 	m_cbFileName->setCurrentText(urls.first());
-	fileNameChanged(path); // why do I have to call this function seperately
+	fileNameChanged(path); // why do I have to call this function separately
 }
 
 /*!
@@ -1873,7 +1873,7 @@ void ImportFileWidget::mqttSubscribe(const QString& name, uint QoS) {
  */
 void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqttTopicName& topic) {
 	Q_UNUSED(message);
-// 	qDebug()<<"recieved " << topic.name();
+// 	qDebug()<<"received " << topic.name();
 	if (m_addedTopics.contains(topic.name()))
 		return;
 

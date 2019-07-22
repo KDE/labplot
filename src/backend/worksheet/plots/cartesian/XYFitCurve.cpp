@@ -2009,7 +2009,8 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 		tmpXDataColumn = xDataColumn;
 	} else {
 		DEBUG("	curve columns as data source");
-		tmpXDataColumn = dataSourceCurve->xColumn();
+		if (dataSourceCurve)
+			tmpXDataColumn = dataSourceCurve->xColumn();
 	}
 
 	if (!tmpXDataColumn) {

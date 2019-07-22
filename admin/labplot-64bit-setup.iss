@@ -137,6 +137,9 @@ Source: "{#CraftRoot}\bin\data\metainfo\org.kde.labplot2.appdata.xml"; DestDir: 
 Source: "{#CraftRoot}\bin\data\applications\org.kde.labplot2.desktop"; DestDir: "{app}\data\applications"; Flags: ignoreversion
 ; Source: "{#CraftRoot}\labplot\labplot2.cmd"; DestDir: "{app}";Flags: ignoreversion
 
+; locale (data\locale\*\LC_MESSAGES\labplot2.mo)
+Source: "{#CraftRoot}\bin\data\locale\labplot2.mo"; DestDir: "{app}\data\locale"; Flags: recursesubdirs ignoreversion
+
 ; icon theme
 Source: "{#CraftRoot}\bin\data\icontheme.rcc"; DestDir: "{app}\data";Flags: ignoreversion
 ; oxygen icons

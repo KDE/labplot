@@ -62,19 +62,21 @@ public:
 		double opacity;
 	};
 
+	enum MouseMode {SelectionMode, NavigationMode, ZoomSelectionMode};
+
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
 	void exportToClipboard();
 	void setIsClosing();
 	void setIsBeingPresented(bool presenting);
 	void setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode mode);
+	void setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mode);
 	void setPlotLock(bool lock);
 
+	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode();
 	void registerShortcuts();
 	void unregisterShortcuts();
-
 private:
-	enum MouseMode {SelectionMode, NavigationMode, ZoomSelectionMode};
 
 	void initBasicActions();
 	void initActions();
@@ -103,7 +105,6 @@ private:
 
 	Worksheet* m_worksheet;
 	MouseMode m_mouseMode{SelectionMode};
-	Worksheet::CartesianPlotActionMode m_cartesianPlotActionMode{Worksheet::CartesianPlotActionMode::ApplyActionToSelection};
 	CartesianPlot::MouseMode m_cartesianPlotMouseMode{CartesianPlot::SelectionMode};
 	bool m_selectionBandIsShown{false};
 	QPoint m_selectionStart;
@@ -134,6 +135,7 @@ private:
 	QMenu* m_cartesianPlotAddNewMenu{nullptr};
 	QMenu* m_cartesianPlotZoomMenu{nullptr};
 	QMenu* m_cartesianPlotActionModeMenu{nullptr};
+	QMenu* m_cartesianPlotCursorModeMenu{nullptr};
 	QMenu* m_dataManipulationMenu{nullptr};
 
 	QToolButton* tbNewCartesianPlot{nullptr};
@@ -191,10 +193,13 @@ private:
 	//Actions for cartesian plots
 	QAction* cartesianPlotApplyToSelectionAction;
 	QAction* cartesianPlotApplyToAllAction;
+	QAction* cartesianPlotApplyToAllCursor;
+	QAction* cartesianPlotApplyToSelectionCursor;
 	QAction* cartesianPlotSelectionModeAction;
 	QAction* cartesianPlotZoomSelectionModeAction;
 	QAction* cartesianPlotZoomXSelectionModeAction;
 	QAction* cartesianPlotZoomYSelectionModeAction;
+	QAction* cartesianPlotCursorModeAction;
 
 	QAction* addCurveAction;
 	QAction* addHistogramAction;
@@ -281,6 +286,7 @@ private slots:
 
 	//SLOTs for cartesian plots
 	void cartesianPlotActionModeChanged(QAction*);
+	void cartesianPlotCursorModeChanged(QAction*);
 	void cartesianPlotMouseModeChanged(QAction*);
 	void cartesianPlotNavigationChanged(QAction*);
 	void cartesianPlotAddNew(QAction*);
