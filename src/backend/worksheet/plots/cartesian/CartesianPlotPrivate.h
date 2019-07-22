@@ -32,6 +32,7 @@
 #include "CartesianPlot.h"
 #include "CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
+#include <QStaticText>
 
 #include <QGraphicsSceneMouseEvent>
 
@@ -115,6 +116,9 @@ private:
 	QPointF m_selectionEnd;
 	QLineF m_selectionStartLine;
 	QPointF m_panningStart;
+
+	QStaticText m_cursor0Text{"1"};
+	QStaticText m_cursor1Text{"2"};
 };
 
 #endif
