@@ -4,7 +4,7 @@ A collection of numerical and statistics functions extending the GNU Scientific 
 NSL is currently part of LabPlot but may be a separate library in the future if the API is not changing anymore.
 NSL is written in plain C.
 
-Compile tests with "make".
+Tests can be found in labplot/tests/nsl/
 
 Some releated links:
 

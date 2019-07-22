@@ -37,8 +37,10 @@
 
 #include <cmath>
 
-DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent) : QWidget(parent) {
+DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
 	ui.cbXErrorType->addItem(i18n("No Error"));
 	ui.cbXErrorType->addItem(i18n("Symmetric"));
@@ -115,6 +117,7 @@ void DatapickerCurveWidget::setCurves(QList<DatapickerCurve*> list) {
 
 	m_curveList = list;
 	m_curve = list.first();
+	m_aspect = list.first();
 
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
@@ -169,20 +172,6 @@ void DatapickerCurveWidget::hideErrorBarWidgets(bool on) {
 //**** SLOTs for changes triggered in DatapickerCurveWidget ***
 //*************************************************************
 //"General"-tab
-void DatapickerCurveWidget::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setName(ui.leName->text());
-}
-
-void DatapickerCurveWidget::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setComment(ui.leComment->text());
-}
-
 void DatapickerCurveWidget::xErrorTypeChanged(int index) {
 	if ( DatapickerCurve::ErrorType(index) != DatapickerCurve::NoError
 		|| m_curve->curveErrorTypes().y != DatapickerCurve::NoError )

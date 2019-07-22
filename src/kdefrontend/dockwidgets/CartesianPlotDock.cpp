@@ -56,8 +56,10 @@
   \ingroup kdefrontend
 */
 
-CartesianPlotDock::CartesianPlotDock(QWidget* parent) : QWidget(parent) {
+CartesianPlotDock::CartesianPlotDock(QWidget *parent) : BaseDock(parent) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
 	//"General"-tab
 	auto* rangeButtonsGroup(new QButtonGroup);
@@ -95,6 +97,12 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : QWidget(parent) {
 		layout->setHorizontalSpacing(2);
 		layout->setVerticalSpacing(2);
 	}
+
+	// "Cursor"-tab
+	QStringList list = {i18n("NoPen"), i18n("SolidLine"), i18n("DashLine"), i18n("DotLine"), i18n("DashDotLine"), i18n("DashDotDotLine")};
+	ui.cbCursorLineStyle->clear();
+	for (int i = 0; i < list.count(); i++)
+		ui.cbCursorLineStyle->addItem(list[i], i);
 
 	//Validators
 	ui.leRangeFirst->setValidator( new QIntValidator(ui.leRangeFirst) );
@@ -175,10 +183,20 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : QWidget(parent) {
 	//Padding
 	connect( ui.sbPaddingHorizontal, SIGNAL(valueChanged(double)), this, SLOT(horizontalPaddingChanged(double)) );
 	connect( ui.sbPaddingVertical, SIGNAL(valueChanged(double)), this, SLOT(verticalPaddingChanged(double)) );
+	connect( ui.sbPaddingRight, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::rightPaddingChanged);
+	connect( ui.sbPaddingBottom, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::bottomPaddingChanged);
+	connect( ui.cbPaddingSymmetric, &QCheckBox::toggled, this, &CartesianPlotDock::symmetricPaddingChanged);
 
+	// Cursor
+	connect(ui.sbCursorLineWidth, SIGNAL(valueChanged(int)), this, SLOT(cursorLineWidthChanged(int)));
+	//connect(ui.sbCursorLineWidth, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::cursorLineWidthChanged);
+	connect(ui.kcbCursorLineColor, &KColorButton::changed, this, &CartesianPlotDock::cursorLineColorChanged);
+	//connect(ui.cbCursorLineStyle, qOverload<int>(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::cursorLineStyleChanged);
+	connect(ui.cbCursorLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(cursorLineStyleChanged(int)));
 	//theme and template handlers
 	auto* frame = new QFrame(this);
 	auto* layout = new QHBoxLayout(frame);
+	layout->setContentsMargins(0, 11, 0, 11);
 
 	m_themeHandler = new ThemeHandler(this);
 	layout->addWidget(m_themeHandler);
@@ -256,6 +274,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	m_initializing = true;
 	m_plotList = list;
 	m_plot = list.first();
+	m_aspect = list.first();
 
 	QList<TextLabel*> labels;
 	for (auto* plot : list)
@@ -281,6 +300,22 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 		ui.leName->setText(QString());
 		ui.leComment->setText(QString());
 	}
+
+	bool symmectric = m_plot->symmetricPadding();
+	ui.lPaddingHorizontalRight->setVisible(!symmectric);
+	ui.sbPaddingRight->setVisible(!symmectric);
+	ui.lPaddingVerticalDown->setVisible(!symmectric);
+	ui.sbPaddingBottom->setVisible(!symmectric);
+	if (symmectric) {
+		ui.lPaddingHorizontal->setText(i18n("Horizontal"));
+		ui.lPaddingVertical->setText(i18n("Vertical"));
+	} else {
+		ui.lPaddingHorizontal->setText(i18n("Left"));
+		ui.lPaddingVertical->setText(i18n("Top"));
+	}
+
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 
 	//show the properties of the first plot
 	this->load();
@@ -340,6 +375,9 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect( m_plot->plotArea(), SIGNAL(borderOpacityChanged(float)), this, SLOT(plotBorderOpacityChanged(float)) );
 	connect( m_plot, SIGNAL(horizontalPaddingChanged(float)), this, SLOT(plotHorizontalPaddingChanged(float)) );
 	connect( m_plot, SIGNAL(verticalPaddingChanged(float)), this, SLOT(plotVerticalPaddingChanged(float)) );
+	connect(m_plot, &CartesianPlot::rightPaddingChanged, this, &CartesianPlotDock::plotRightPaddingChanged);
+	connect(m_plot, &CartesianPlot::bottomPaddingChanged, this, &CartesianPlotDock::plotBottomPaddingChanged);
+	connect(m_plot, &CartesianPlot::symmetricPaddingChanged, this, &CartesianPlotDock::plotSymmetricPaddingChanged);
 
 	m_initializing = false;
 }
@@ -411,20 +449,6 @@ void CartesianPlotDock::retranslateUi() {
 }
 
 // "General"-tab
-void CartesianPlotDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_plot->setName(ui.leName->text());
-}
-
-void CartesianPlotDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_plot->setComment(ui.leComment->text());
-}
-
 void CartesianPlotDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
@@ -1148,19 +1172,51 @@ void CartesianPlotDock::borderOpacityChanged(int value) {
 		plot->plotArea()->setBorderOpacity(opacity);
 }
 
+void CartesianPlotDock::symmetricPaddingChanged(bool checked) {
+	if (m_initializing)
+		return;
+
+	ui.lPaddingHorizontalRight->setVisible(!checked);
+	ui.sbPaddingRight->setVisible(!checked);
+	ui.lPaddingVerticalDown->setVisible(!checked);
+	ui.sbPaddingBottom->setVisible(!checked);
+
+	if (checked) {
+		ui.lPaddingHorizontal->setText(i18n("Horizontal"));
+		ui.lPaddingVertical->setText(i18n("Vertical"));
+	} else {
+		ui.lPaddingHorizontal->setText(i18n("Left"));
+		ui.lPaddingVertical->setText(i18n("Top"));
+	}
+
+	for (auto* plot : m_plotList)
+		plot->setSymmetricPadding(checked);
+
+	if (checked) {
+		rightPaddingChanged(ui.sbPaddingHorizontal->value());
+		bottomPaddingChanged(ui.sbPaddingVertical->value());
+	}
+}
+
 void CartesianPlotDock::horizontalPaddingChanged(double value) {
 	if (m_initializing)
 		return;
 	double padding = Worksheet::convertToSceneUnits(value, Worksheet::Centimeter);
-	for (auto* plot : m_plotList) {
-		if (plot->rect().width() > 2*padding) {
+	for (auto* plot : m_plotList)
 			plot->setHorizontalPadding(padding);
-		} else { // preventing that padding is bigger than the size of the plot
-			m_initializing = true;
-			ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(plot->horizontalPadding(), Worksheet::Centimeter));
-			m_initializing = false;
-		}
+
+	if (m_plot->symmetricPadding()) {
+		for (auto* plot: m_plotList)
+			plot->setRightPadding(padding);
 	}
+}
+
+void CartesianPlotDock::rightPaddingChanged(double value) {
+	if (m_initializing)
+		return;
+	double padding = Worksheet::convertToSceneUnits(value, Worksheet::Centimeter);
+	for (auto* plot : m_plotList)
+		plot->setRightPadding(padding);
 }
 
 void CartesianPlotDock::verticalPaddingChanged(double value) {
@@ -1169,15 +1225,57 @@ void CartesianPlotDock::verticalPaddingChanged(double value) {
 
 	// TODO: find better solution (set spinbox range). When plot->rect().width() does change?
 	double padding = Worksheet::convertToSceneUnits(value, Worksheet::Centimeter);
-	for (auto* plot : m_plotList) {
-		if (plot->rect().height() > 2 * padding) {
-			plot->setVerticalPadding(padding);
-		} else { // preventing that padding is bigger than the size of the plot
-			m_initializing = true;
-			ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(plot->verticalPadding(), Worksheet::Centimeter));
-			m_initializing = false;
-		}
+	for (auto* plot : m_plotList)
+		plot->setVerticalPadding(padding);
+
+	if (m_plot->symmetricPadding()) {
+		for (auto* plot: m_plotList)
+			plot->setBottomPadding(padding);
 	}
+}
+
+void CartesianPlotDock::bottomPaddingChanged(double value) {
+	if (m_initializing)
+		return;
+	double padding = Worksheet::convertToSceneUnits(value, Worksheet::Centimeter);
+	for (auto* plot : m_plotList)
+		plot->setBottomPadding(padding);
+}
+
+void CartesianPlotDock::cursorLineWidthChanged(int width) {
+    if (m_initializing)
+        return;
+
+    for (auto* plot : m_plotList) {
+        QPen pen = plot->cursorPen();
+        pen.setWidth(width);
+        plot->setCursorPen(pen);
+    }
+}
+
+void CartesianPlotDock::cursorLineColorChanged(QColor color) {
+    if (m_initializing)
+        return;
+
+    for (auto* plot : m_plotList) {
+        QPen pen = plot->cursorPen();
+        pen.setColor(color);
+        plot->setCursorPen(pen);
+    }
+}
+
+void CartesianPlotDock::cursorLineStyleChanged(int index) {
+    if (m_initializing)
+        return;
+
+    if (index > 5)
+        return;
+
+    for (auto* plot : m_plotList) {
+        QPen pen = plot->cursorPen();
+        pen.setStyle(static_cast<Qt::PenStyle>(index));
+        plot->setCursorPen(pen);
+    }
 }
 
 //*************************************************************
@@ -1409,6 +1507,32 @@ void CartesianPlotDock::plotVerticalPaddingChanged(float value) {
 	m_initializing = false;
 }
 
+void CartesianPlotDock::plotRightPaddingChanged(double value) {
+	m_initializing = true;
+	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotBottomPaddingChanged(double value) {
+	m_initializing = true;
+	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotSymmetricPaddingChanged(bool symmetric) {
+	m_initializing = true;
+	ui.cbPaddingSymmetric->setChecked(symmetric);
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotCursorPenChanged(QPen pen) {
+    m_initializing = true;
+    ui.sbCursorLineWidth->setValue(pen.width());
+    ui.kcbCursorLineColor->setColor(pen.color());
+    ui.cbCursorLineStyle->setCurrentIndex(pen.style());
+    m_initializing = false;
+}
+
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
@@ -1522,6 +1646,9 @@ void CartesianPlotDock::load() {
 	//Padding
 	ui.sbPaddingHorizontal->setValue( Worksheet::convertFromSceneUnits(m_plot->horizontalPadding(), Worksheet::Centimeter) );
 	ui.sbPaddingVertical->setValue( Worksheet::convertFromSceneUnits(m_plot->verticalPadding(), Worksheet::Centimeter) );
+	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(m_plot->rightPadding(), Worksheet::Centimeter));
+	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(m_plot->bottomPadding(), Worksheet::Centimeter));
+	ui.cbPaddingSymmetric->setChecked(m_plot->symmetricPadding());
 
 	//Border
 	ui.kcbBorderColor->setColor( m_plot->plotArea()->borderPen().color() );
@@ -1530,6 +1657,12 @@ void CartesianPlotDock::load() {
 	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderCornerRadius(), Worksheet::Centimeter) );
 	ui.sbBorderOpacity->setValue( round(m_plot->plotArea()->borderOpacity()*100) );
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
+
+	// Cursor
+	QPen pen = m_plot->cursorPen();
+	ui.cbCursorLineStyle->setCurrentIndex(pen.style());
+	ui.kcbCursorLineColor->setColor(pen.color());
+	ui.sbCursorLineWidth->setValue(pen.width());
 }
 
 void CartesianPlotDock::loadConfig(KConfig& config) {
@@ -1558,6 +1691,9 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	ui.sbBackgroundOpacity->setValue( round(group.readEntry("BackgroundOpacity", m_plot->plotArea()->backgroundOpacity())*100.0) );
 	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(group.readEntry("HorizontalPadding", m_plot->horizontalPadding()), Worksheet::Centimeter));
 	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(group.readEntry("VerticalPadding", m_plot->verticalPadding()), Worksheet::Centimeter));
+	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("RightPadding", m_plot->rightPadding()), Worksheet::Centimeter));
+	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BottomPadding", m_plot->bottomPadding()), Worksheet::Centimeter));
+	ui.cbPaddingSymmetric->setChecked(group.readEntry("SymmetricPadding", m_plot->symmetricPadding()));
 
 	//Border-tab
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_plot->plotArea()->borderPen().color()) );
@@ -1596,6 +1732,9 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value()/100.0);
 	group.writeEntry("HorizontalPadding", Worksheet::convertToSceneUnits(ui.sbPaddingHorizontal->value(), Worksheet::Centimeter));
 	group.writeEntry("VerticalPadding", Worksheet::convertToSceneUnits(ui.sbPaddingVertical->value(), Worksheet::Centimeter));
+	group.writeEntry("RightPadding", Worksheet::convertToSceneUnits(ui.sbPaddingRight->value(), Worksheet::Centimeter));
+	group.writeEntry("BottomPadding", Worksheet::convertToSceneUnits(ui.sbPaddingBottom->value(), Worksheet::Centimeter));
+	group.writeEntry("SymmetricPadding", ui.cbPaddingSymmetric->isChecked());
 
 	//Border
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());

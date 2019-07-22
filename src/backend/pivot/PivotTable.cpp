@@ -53,7 +53,7 @@
 
   \ingroup backend
 */
-PivotTable::PivotTable(const QString& name, bool loading) : AbstractPart(name),
+PivotTable::PivotTable(const QString& name, bool loading) : AbstractPart(name, AspectType::PivotTable),
 	d(new PivotTablePrivate(this)) {
 	Q_UNUSED(loading)
 }

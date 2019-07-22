@@ -55,7 +55,7 @@ class XYConvolutionCurve;
 class XYCorrelationCurve;
 class KConfig;
 
-class CartesianPlot:public AbstractPlot {
+class CartesianPlot : public AbstractPlot {
 	Q_OBJECT
 
 public:
@@ -67,7 +67,7 @@ public:
 	enum RangeFormat {Numeric, DateTime};
 	enum RangeType {RangeFree, RangeLast, RangeFirst};
 	enum RangeBreakStyle {RangeBreakSimple, RangeBreakVertical, RangeBreakSloped};
-	enum MouseMode {SelectionMode, ZoomSelectionMode, ZoomXSelectionMode, ZoomYSelectionMode};
+	enum MouseMode {SelectionMode, ZoomSelectionMode, ZoomXSelectionMode, ZoomYSelectionMode, Cursor};
 	enum NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
 	                          ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY
 	                         };
@@ -106,14 +106,23 @@ public:
 	void navigate(NavigationOperation);
 	void setSuppressDataChangedSignal(bool);
 	const QList<QColor>& themeColorPalette() const;
-	void processDropEvent(QDropEvent*);
+	void processDropEvent(QDropEvent*) override;
 	bool isPanningActive() const;
 	void addLegend(CartesianPlotLegend*);
+	int curveCount();
+	const XYCurve* getCurve(int index);
+	double cursorPos(int cursorNumber);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 	void saveTheme(KConfig& config);
+	void mousePressZoomSelectionMode(QPointF logicPos);
+	void mousePressCursorMode(int cursorNumber, QPointF logicPos);
+	void mouseMoveZoomSelectionMode(QPointF logicPos);
+	void mouseMoveCursorMode(int cursorNumber, QPointF logicPos);
+	void mouseReleaseZoomSelectionMode();
+        void mouseHoverZoomSelectionMode(QPointF logicPos);
 
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, xRangeFormat, XRangeFormat)
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, yRangeFormat, YRangeFormat)
@@ -134,6 +143,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, yRangeBreakingEnabled, YRangeBreakingEnabled)
 	CLASS_D_ACCESSOR_DECL(RangeBreaks, xRangeBreaks, XRangeBreaks)
 	CLASS_D_ACCESSOR_DECL(RangeBreaks, yRangeBreaks, YRangeBreaks)
+	CLASS_D_ACCESSOR_DECL(QPen, cursorPen, CursorPen);
+	CLASS_D_ACCESSOR_DECL(bool, cursor0Enable, Cursor0Enable);
+	CLASS_D_ACCESSOR_DECL(bool, cursor1Enable, Cursor1Enable);
 
 	QString theme() const;
 
@@ -191,6 +203,7 @@ private:
 	QAction* shiftRightXAction;
 	QAction* shiftUpYAction;
 	QAction* shiftDownYAction;
+	QAction* cursorAction;
 
 	//analysis menu actions
 	QAction* addDataOperationAction;
@@ -244,16 +257,21 @@ public slots:
 	void shiftRightX();
 	void shiftUpY();
 	void shiftDownY();
+	void cursor();
 	void dataChanged();
+
+	void curveLinePenChanged(QPen);
 
 private slots:
 	void updateLegend();
 	void childAdded(const AbstractAspect*);
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+	void childHovered();
 
 	void xDataChanged();
 	void yDataChanged();
 	void curveVisibilityChanged();
+
 
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChanged();
@@ -282,6 +300,23 @@ signals:
 	void yRangeBreakingEnabledChanged(bool);
 	void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 	void themeChanged(const QString&);
+	void mousePressZoomSelectionModeSignal(QPointF logicPos);
+	void mousePressCursorModeSignal(int cursorNumber, QPointF logicPos);
+	void mouseMoveZoomSelectionModeSignal(QPointF logicPos);
+	void mouseMoveCursorModeSignal(int cursorNumber, QPointF logicPos);
+	void mouseReleaseCursorModeSignal();
+	void mouseReleaseZoomSelectionModeSignal();
+        void mouseHoverZoomSelectionModeSignal(QPointF logicalPoint);
+	void cursorPosChanged(int cursorNumber, double xPos);
+	void curveAdded(const XYCurve*);
+	void curveRemoved(const XYCurve*);
+	void curveLinePenChanged(QPen, QString curveName);
+	void cursorPenChanged(QPen);
+	void curveDataChanged(const XYCurve*);
+	void curveVisibilityChangedSignal();
+	void mouseModeChanged();
+	void cursor0EnableChanged(bool enable);
+	void cursor1EnableChanged(bool enable);
 };
 
 #endif

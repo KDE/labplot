@@ -61,13 +61,15 @@
  */
 
 
-TextLabel::TextLabel(const QString& name, Type type) : WorksheetElement(name),
-		d_ptr(new TextLabelPrivate(this)), m_type(type) {
+TextLabel::TextLabel(const QString& name, Type type)
+	: WorksheetElement(name, AspectType::TextLabel), d_ptr(new TextLabelPrivate(this)), m_type(type) {
+
 	init();
 }
 
-TextLabel::TextLabel(const QString &name, TextLabelPrivate *dd, Type type) : WorksheetElement(name),
-		d_ptr(dd), m_type(type) {
+TextLabel::TextLabel(const QString &name, TextLabelPrivate *dd, Type type)
+	: WorksheetElement(name, AspectType::TextLabel), d_ptr(dd), m_type(type) {
+
 	init();
 }
 

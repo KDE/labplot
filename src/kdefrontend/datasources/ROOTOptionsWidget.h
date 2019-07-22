@@ -30,8 +30,8 @@ Copyright            : (C) 2018 Christoph Roick (chrisito@gmx.de)
 
 #include "ui_rootoptionswidget.h"
 
-class ROOTFilter;
 class ImportFileWidget;
+class ROOTFilter;
 
 /// Widget providing options for the import of ROOT data
 class ROOTOptionsWidget : public QWidget {
@@ -55,7 +55,7 @@ private:
 	Ui::ROOTOptionsWidget ui;
 	QTreeWidgetItem* histItem;
 	QTreeWidgetItem* treeItem;
-	QHash<QString, QVector<QStringList> > leaves;
+	QHash<QStringList, QVector<QStringList> > leaves;
 
 	ImportFileWidget* m_fileWidget;
 	bool histselected = false;

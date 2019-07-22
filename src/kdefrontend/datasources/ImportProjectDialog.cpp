@@ -80,8 +80,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	m_cbAddTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	ui.gbImportTo->layout()->addWidget(m_cbAddTo);
 
-	QList<const char*> list;
-	list << "Folder";
+	QList<AspectType> list{AspectType::Folder};
 	m_cbAddTo->setTopLevelClasses(list);
 	m_aspectTreeModel->setSelectableAspects(list);
 	m_cbAddTo->setModel(m_aspectTreeModel);
@@ -281,7 +280,9 @@ void ImportProjectDialog::refreshPreview() {
 		showTopLevelOnly(root);
 	}
 
-	//extand the tree to show all available top-level objects and adjust the header sizes
+	//select the first top-level node and
+	//expand the tree to show all available top-level objects and adjust the header sizes
+	ui.tvPreview->setCurrentIndex(ui.tvPreview->model()->index(0,0));
 	ui.tvPreview->expandAll();
 	ui.tvPreview->header()->resizeSections(QHeaderView::ResizeToContents);
 }
@@ -292,7 +293,7 @@ void ImportProjectDialog::refreshPreview() {
 void ImportProjectDialog::showTopLevelOnly(const QModelIndex& index) {
 	int rows = index.model()->rowCount(index);
 	for (int i = 0; i < rows; ++i) {
-		QModelIndex child = index.child(i, 0);
+		QModelIndex child = index.model()->index(i, 0, index);
 		showTopLevelOnly(child);
 		const auto* aspect = static_cast<const AbstractAspect*>(child.internalPointer());
 		ui.tvPreview->setRowHidden(i, index, !isTopLevel(aspect));
@@ -303,9 +304,9 @@ void ImportProjectDialog::showTopLevelOnly(const QModelIndex& index) {
 	checks whether \c aspect is one of the allowed top level types
 */
 bool ImportProjectDialog::isTopLevel(const AbstractAspect* aspect) const {
-	foreach (const char* classString, m_projectParser->topLevelClasses()) {
-		if (aspect->inherits(classString))
-				return true;
+	foreach (AspectType type, m_projectParser->topLevelClasses()) {
+		if (aspect->inherits(type))
+			return true;
 	}
 	return false;
 }

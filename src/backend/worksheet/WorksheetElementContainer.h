@@ -38,7 +38,7 @@ class WorksheetElementContainer : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	explicit WorksheetElementContainer(const QString&);
+	WorksheetElementContainer(const QString&, AspectType);
 	~WorksheetElementContainer() override;
 
 	QGraphicsItem* graphicsItem() const override;
@@ -51,18 +51,18 @@ public:
 	QRectF rect() const;
 	virtual void setRect(const QRectF&) = 0;
 	virtual void prepareGeometryChange();
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) override;
 
 	typedef WorksheetElementContainerPrivate Private;
 
 public slots:
 	void retransform() override;
-	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) override;
 	void childHovered();
 	void childUnhovered();
 
 protected:
 	WorksheetElementContainerPrivate* const d_ptr;
-	WorksheetElementContainer(const QString&, WorksheetElementContainerPrivate*);
+	WorksheetElementContainer(const QString&, WorksheetElementContainerPrivate*, AspectType);
 
 protected slots:
 	virtual void handleAspectAdded(const AbstractAspect*);

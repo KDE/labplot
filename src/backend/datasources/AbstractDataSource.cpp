@@ -37,7 +37,8 @@ Copyright		: (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 \ingroup datasources
 */
 
-AbstractDataSource::AbstractDataSource(const QString& name) : AbstractPart(name) {
+AbstractDataSource::AbstractDataSource(const QString& name, AspectType type)
+	: AbstractPart(name, type) {
 }
 
 void AbstractDataSource::clear() {

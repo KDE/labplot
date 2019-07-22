@@ -42,7 +42,7 @@ class WorksheetElement : public AbstractAspect {
 	Q_OBJECT
 
 public:
-	explicit WorksheetElement(const QString&);
+	WorksheetElement(const QString&, AspectType);
 	~WorksheetElement() override;
 
 	enum WorksheetElementName {NameCartesianPlot = 1};
@@ -79,8 +79,14 @@ private slots:
 signals:
 	friend class AbstractPlotSetHorizontalPaddingCmd;
 	friend class AbstractPlotSetVerticalPaddingCmd;
+	friend class AbstractPlotSetRightPaddingCmd;
+	friend class AbstractPlotSetBottomPaddingCmd;
+	friend class AbstractPlotSetSymmetricPaddingCmd;
 	void horizontalPaddingChanged(float);
 	void verticalPaddingChanged(float);
+	void rightPaddingChanged(double);
+	void bottomPaddingChanged(double);
+	void symmetricPaddingChanged(double);
 
 	void hovered();
 	void unhovered();

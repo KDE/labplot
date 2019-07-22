@@ -60,6 +60,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "kdefrontend/MainWin.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
 #include "kdefrontend/dockwidgets/NoteDock.h"
+#include "kdefrontend/dockwidgets/CursorDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
@@ -106,14 +107,56 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
   \ingroup kdefrontend
 */
 
-GuiObserver::GuiObserver(MainWin* mainWin) {
-	connect(mainWin->m_projectExplorer, SIGNAL(selectedAspectsChanged(QList<AbstractAspect*>&)),
-	        this, SLOT(selectedAspectsChanged(QList<AbstractAspect*>&)) );
-	connect(mainWin->m_projectExplorer, SIGNAL(hiddenAspectSelected(const AbstractAspect*)),
-	        this, SLOT(hiddenAspectSelected(const AbstractAspect*)) );
-	m_mainWindow = mainWin;
+namespace GuiObserverHelper
+{
+
+template<class T>
+bool raiseDock(T*& dock, QStackedWidget* parent)
+{
+	const bool generated = !dock;
+	if (generated) {
+		dock = new T(parent);
+		parent->addWidget(dock);
+	}
+	parent->setCurrentWidget(dock);
+
+	return generated;
 }
 
+template<class T>
+void raiseDockConnect(T*& dock, QStatusBar* statusBar, QStackedWidget* parent)
+{
+	if (raiseDock(dock, parent))
+		QObject::connect(dock, &T::info, [=](const QString& text){ statusBar->showMessage(text); });
+}
+
+template<class T>
+void raiseDockSetupConnect(T*& dock, QStatusBar* statusBar, QStackedWidget* parent)
+{
+	if (raiseDock(dock, parent)) {
+		dock->setupGeneral();
+		QObject::connect(dock, &T::info, [=](const QString& text){ statusBar->showMessage(text); });
+	}
+}
+
+template<class R>
+QList<R*> castList(QList<AbstractAspect*>& selectedAspects)
+{
+	QList<R*> list;
+	for (auto* aspect : selectedAspects)
+		list << static_cast<R*>(aspect);
+	return list;
+}
+
+}
+
+using namespace GuiObserverHelper;
+
+GuiObserver::GuiObserver(MainWin* mainWin) {
+	connect(mainWin->m_projectExplorer, &ProjectExplorer::selectedAspectsChanged, this, &GuiObserver::selectedAspectsChanged);
+	connect(mainWin->m_projectExplorer, &ProjectExplorer::hiddenAspectSelected, this, &GuiObserver::hiddenAspectSelected);
+	m_mainWindow = mainWin;
+}
 
 /*!
   called on selection changes in the project explorer.
@@ -133,38 +176,45 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		return;
 	}
 
-	QString prevClassName, className;
+	// update cursor dock
+	AbstractAspect* parent = selectedAspects[0]->parent(AspectType::Worksheet);
+	if (selectedAspects[0]->inherits(AspectType::Worksheet)) {
+		Worksheet* worksheet = static_cast<Worksheet *>(selectedAspects[0]);
 
-	//check, whether objects of different types where selected
-	//don't show any dock widgets in this case.
+		if (m_mainWindow->cursorWidget) {
+			m_mainWindow->cursorWidget->setCursorTreeViewModel(worksheet->cursorModel());
+			QVector<CartesianPlot*> plots = worksheet->children<CartesianPlot>();
+			if (!plots.isEmpty())
+				m_mainWindow->cursorWidget->setPlots(plots);
+		}
+	} else if (parent) {
+		if (m_mainWindow->cursorWidget) {
+			Worksheet* worksheet = static_cast<Worksheet *>(parent);
+			QVector<CartesianPlot*> plots = worksheet->children<CartesianPlot>();
+			m_mainWindow->cursorWidget->setCursorTreeViewModel(worksheet->cursorModel());
+			m_mainWindow->cursorWidget->setPlots(plots);
+		}
+
+	}
+
+	const AspectType type = selectedAspects.front()->type();
+
+	// Check, whether objects of different types were selected.
+	// Don't show any dock widgets in this case.
 	for (auto* aspect : selectedAspects) {
-		className = aspect->metaObject()->className();
-		if (className != prevClassName && !prevClassName.isEmpty()) {
+		if (aspect->type() != type) {
 			clearDock();
 			return;
 		}
-		prevClassName = className;
 	}
 
-	if (m_mainWindow->stackedWidget->currentWidget())
-		m_mainWindow->stackedWidget->currentWidget()->show();
-
-	if (className == QStringLiteral("Spreadsheet")) {
+	switch (type) {
+	case AspectType::Spreadsheet:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Spreadsheet"));
-
-		if (!m_mainWindow->spreadsheetDock) {
-			m_mainWindow->spreadsheetDock = new SpreadsheetDock(m_mainWindow->stackedWidget);
-			connect(m_mainWindow->spreadsheetDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->spreadsheetDock);
-		}
-
-		QList<Spreadsheet*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<Spreadsheet *>(aspect);
-		m_mainWindow->spreadsheetDock->setSpreadsheets(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->spreadsheetDock);
-	} else if (className == QStringLiteral("PivotTable")) {
+		raiseDockConnect(m_mainWindow->spreadsheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->spreadsheetDock->setSpreadsheets(castList<Spreadsheet>(selectedAspects));
+		break;
+	case AspectType::PivotTable:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Pivot Table"));
 
 		if (!m_mainWindow->pivotTableDock) {
@@ -176,468 +226,226 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->pivotTableDock->setPivotTable(static_cast<PivotTable*>(selectedAspects.first()));
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->pivotTableDock);
-    } else if (className == QStringLiteral("HypothesisTest")) {
-        m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Hypothesis Test"));
+		break;
+	case AspectType::HypothesisTest:
+        	m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Hypothesis Test"));
+		if (!m_mainWindow->hypothesisTestDock) {
+			m_mainWindow->hypothesisTestDock = new HypothesisTestDock(m_mainWindow->stackedWidget);
+			connect(m_mainWindow->hypothesisTestDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
+			m_mainWindow->stackedWidget->addWidget(m_mainWindow->hypothesisTestDock);
+		}
+		m_mainWindow->hypothesisTestDock->setHypothesisTest(static_cast<HypothesisTest*>(selectedAspects.first()));
 
-        if (!m_mainWindow->hypothesisTestDock) {
-            m_mainWindow->hypothesisTestDock = new HypothesisTestDock(m_mainWindow->stackedWidget);
-            connect(m_mainWindow->hypothesisTestDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-            m_mainWindow->stackedWidget->addWidget(m_mainWindow->hypothesisTestDock);
-        }
-
-        m_mainWindow->hypothesisTestDock->setHypothesisTest(static_cast<HypothesisTest*>(selectedAspects.first()));
-
-        m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->hypothesisTestDock);
-    } else if (className == QStringLiteral("Column")) {
+		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->hypothesisTestDock);
+		break;
+	case AspectType::Column:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Column"));
-
-		if (!m_mainWindow->columnDock) {
-			m_mainWindow->columnDock = new ColumnDock(m_mainWindow->stackedWidget);
-			connect(m_mainWindow->columnDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->columnDock);
-		}
-
-		QList<Column*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<Column *>(aspect);
-		m_mainWindow->columnDock->setColumns(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->columnDock);
-	} else if (className == QStringLiteral("Matrix")) {
+		raiseDockConnect(m_mainWindow->columnDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->columnDock->setColumns(castList<Column>(selectedAspects));
+		break;
+	case AspectType::Matrix:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Matrix"));
-
-		if (!m_mainWindow->matrixDock) {
-			m_mainWindow->matrixDock = new MatrixDock(m_mainWindow->stackedWidget);
-			connect(m_mainWindow->matrixDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->matrixDock);
-		}
-
-		QList<Matrix*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<Matrix*>(aspect);
-		m_mainWindow->matrixDock->setMatrices(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->matrixDock);
-	} else if (className == QStringLiteral("Worksheet")) {
+		raiseDockConnect(m_mainWindow->matrixDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->matrixDock->setMatrices(castList<Matrix>(selectedAspects));
+		break;
+	case AspectType::Worksheet: {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Worksheet"));
-
 		if (!m_mainWindow->worksheetDock) {
 			m_mainWindow->worksheetDock = new WorksheetDock(m_mainWindow->stackedWidget);
 			connect(m_mainWindow->worksheetDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
 			m_mainWindow->stackedWidget->addWidget(m_mainWindow->worksheetDock);
 		}
-
-		QList<Worksheet*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<Worksheet *>(aspect);
-		m_mainWindow->worksheetDock->setWorksheets(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->worksheetDock);
-	} else if (className == QStringLiteral("CartesianPlot")) {
+		raiseDockConnect(m_mainWindow->worksheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->worksheetDock->setWorksheets(castList<Worksheet>(selectedAspects));
+		break;
+	} case AspectType::CartesianPlot: {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Cartesian Plot"));
-
-		if (!m_mainWindow->cartesianPlotDock) {
-			m_mainWindow->cartesianPlotDock = new CartesianPlotDock(m_mainWindow->stackedWidget);
-			connect(m_mainWindow->cartesianPlotDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->cartesianPlotDock);
-		}
-
-		QList<CartesianPlot*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<CartesianPlot *>(aspect);
-		m_mainWindow->cartesianPlotDock->setPlots(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->cartesianPlotDock);
-	} else if (className == QStringLiteral("CartesianPlotLegend")) {
+		raiseDockConnect(m_mainWindow->cartesianPlotDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->cartesianPlotDock->setPlots(castList<CartesianPlot>(selectedAspects));
+		break;
+	} case AspectType::CartesianPlotLegend:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Legend"));
-
-		if (!m_mainWindow->cartesianPlotLegendDock) {
-			m_mainWindow->cartesianPlotLegendDock = new CartesianPlotLegendDock(m_mainWindow->stackedWidget);
-			connect(m_mainWindow->cartesianPlotLegendDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->cartesianPlotLegendDock);
-		}
-
-		QList<CartesianPlotLegend*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<CartesianPlotLegend*>(aspect);
-		m_mainWindow->cartesianPlotLegendDock->setLegends(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->cartesianPlotLegendDock);
-	} else if (className == QStringLiteral("Axis")) {
+		raiseDockConnect(m_mainWindow->cartesianPlotLegendDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->cartesianPlotLegendDock->setLegends(castList<CartesianPlotLegend>(selectedAspects));
+		break;
+	case AspectType::Axis:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Axis"));
-
-		if (!m_mainWindow->axisDock) {
-			m_mainWindow->axisDock = new AxisDock(m_mainWindow->stackedWidget);
-			connect(m_mainWindow->axisDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->axisDock);
-		}
-
-		QList<Axis*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<Axis *>(aspect);
-		m_mainWindow->axisDock->setAxes(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->axisDock);
-	} else if (className == QStringLiteral("XYCurve")) {
+		raiseDockConnect(m_mainWindow->axisDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->axisDock->setAxes(castList<Axis>(selectedAspects));
+		break;
+	case AspectType::XYCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "xy-Curve"));
-
-		if (!m_mainWindow->xyCurveDock) {
-			m_mainWindow->xyCurveDock = new XYCurveDock(m_mainWindow->stackedWidget);
-			m_mainWindow->xyCurveDock->setupGeneral();
-			connect(m_mainWindow->xyCurveDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xyCurveDock);
-		}
-
-		QList<XYCurve*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<XYCurve *>(aspect);
-		m_mainWindow->xyCurveDock->setCurves(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyCurveDock);
-	} else if (className == QStringLiteral("XYEquationCurve")) {
+		raiseDockSetupConnect(m_mainWindow->xyCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->xyCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::XYEquationCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "xy-Equation"));
-
-		if (!m_mainWindow->xyEquationCurveDock) {
-			m_mainWindow->xyEquationCurveDock = new XYEquationCurveDock(m_mainWindow->stackedWidget);
-			m_mainWindow->xyEquationCurveDock->setupGeneral();
-			connect(m_mainWindow->xyEquationCurveDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xyEquationCurveDock);
-		}
-
-		QList<XYCurve*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<XYCurve *>(aspect);
-		m_mainWindow->xyEquationCurveDock->setCurves(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyEquationCurveDock);
-	} else if (className == QStringLiteral("XYDataReductionCurve")) {
+		raiseDockSetupConnect(m_mainWindow->xyEquationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->xyEquationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::XYDataReductionCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Data Reduction"));
 
 		if (!m_mainWindow->xyDataReductionCurveDock) {
 			m_mainWindow->xyDataReductionCurveDock = new XYDataReductionCurveDock(m_mainWindow->stackedWidget, m_mainWindow->statusBar());
 			m_mainWindow->xyDataReductionCurveDock->setupGeneral();
-			connect(m_mainWindow->xyDataReductionCurveDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
+			connect(m_mainWindow->xyDataReductionCurveDock, &XYDataReductionCurveDock::info,
+			        [&](const QString& text){ m_mainWindow->statusBar()->showMessage(text); });
 			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xyDataReductionCurveDock);
 		}
 
-		QList<XYCurve*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<XYCurve*>(aspect);
-		m_mainWindow->xyDataReductionCurveDock->setCurves(list);
+		m_mainWindow->xyDataReductionCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyDataReductionCurveDock);
-	} else if (className == QStringLiteral("XYDifferentiationCurve")) {
+		break;
+	case AspectType::XYDifferentiationCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Differentiation"));
-
-		if (!m_mainWindow->xyDifferentiationCurveDock) {
-			m_mainWindow->xyDifferentiationCurveDock = new XYDifferentiationCurveDock(m_mainWindow->stackedWidget);
-			m_mainWindow->xyDifferentiationCurveDock->setupGeneral();
-			connect(m_mainWindow->xyDifferentiationCurveDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xyDifferentiationCurveDock);
-		}
-
-		QList<XYCurve*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<XYCurve*>(aspect);
-		m_mainWindow->xyDifferentiationCurveDock->setCurves(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyDifferentiationCurveDock);
-	} else if (className == QStringLiteral("XYIntegrationCurve")) {
+		raiseDockSetupConnect(m_mainWindow->xyDifferentiationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->xyDifferentiationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::XYIntegrationCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Integration"));
-
-		if (!m_mainWindow->xyIntegrationCurveDock) {
-			m_mainWindow->xyIntegrationCurveDock = new XYIntegrationCurveDock(m_mainWindow->stackedWidget);
-			m_mainWindow->xyIntegrationCurveDock->setupGeneral();
-			connect(m_mainWindow->xyIntegrationCurveDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xyIntegrationCurveDock);
-		}
-
-		QList<XYCurve*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<XYCurve*>(aspect);
-		m_mainWindow->xyIntegrationCurveDock->setCurves(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyIntegrationCurveDock);
-	} else if (className == QStringLiteral("XYInterpolationCurve")) {
+		raiseDockSetupConnect(m_mainWindow->xyIntegrationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->xyIntegrationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::XYInterpolationCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Interpolation"));
-
-		if (!m_mainWindow->xyInterpolationCurveDock) {
-			m_mainWindow->xyInterpolationCurveDock = new XYInterpolationCurveDock(m_mainWindow->stackedWidget);
-			m_mainWindow->xyInterpolationCurveDock->setupGeneral();
-			connect(m_mainWindow->xyInterpolationCurveDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xyInterpolationCurveDock);
-		}
-
-		QList<XYCurve*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<XYCurve*>(aspect);
-		m_mainWindow->xyInterpolationCurveDock->setCurves(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyInterpolationCurveDock);
-	} else if (className == QStringLiteral("XYSmoothCurve")) {
+		raiseDockSetupConnect(m_mainWindow->xyInterpolationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->xyInterpolationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::XYSmoothCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Smoothing"));
-
-		if (!m_mainWindow->xySmoothCurveDock) {
-			m_mainWindow->xySmoothCurveDock = new XYSmoothCurveDock(m_mainWindow->stackedWidget);
-			m_mainWindow->xySmoothCurveDock->setupGeneral();
-			connect(m_mainWindow->xySmoothCurveDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xySmoothCurveDock);
-		}
-
-		QList<XYCurve*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<XYCurve*>(aspect);
-		m_mainWindow->xySmoothCurveDock->setCurves(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xySmoothCurveDock);
-	} else if (className == QStringLiteral("XYFitCurve")) {
+		raiseDockSetupConnect(m_mainWindow->xySmoothCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->xySmoothCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::XYFitCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Fit"));
-
-		if (!m_mainWindow->xyFitCurveDock) {
-			m_mainWindow->xyFitCurveDock = new XYFitCurveDock(m_mainWindow->stackedWidget);
-			m_mainWindow->xyFitCurveDock->setupGeneral();
-			connect(m_mainWindow->xyFitCurveDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xyFitCurveDock);
-		}
-
-		QList<XYCurve*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<XYCurve*>(aspect);
-		m_mainWindow->xyFitCurveDock->setCurves(list);
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyFitCurveDock);
-	} else if (className == QStringLiteral("XYFourierTransformCurve")) {
+		raiseDockSetupConnect(m_mainWindow->xyFitCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->xyFitCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::XYFourierTransformCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Fourier Transform"));
-
-		if (!m_mainWindow->xyFourierTransformCurveDock) {
-			m_mainWindow->xyFourierTransformCurveDock = new XYFourierTransformCurveDock(m_mainWindow->stackedWidget);
-			m_mainWindow->xyFourierTransformCurveDock->setupGeneral();
-			connect(m_mainWindow->xyFourierTransformCurveDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xyFourierTransformCurveDock);
-		}
-
-		QList<XYCurve*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<XYCurve*>(aspect);
-
-		m_mainWindow->xyFourierTransformCurveDock->setCurves(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyFourierTransformCurveDock);
-	} else if (className == QStringLiteral("XYFourierFilterCurve")) {
+		raiseDockSetupConnect(m_mainWindow->xyFourierTransformCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->xyFourierTransformCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::XYFourierFilterCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Fourier Filter"));
-
-		if (!m_mainWindow->xyFourierFilterCurveDock) {
-			m_mainWindow->xyFourierFilterCurveDock = new XYFourierFilterCurveDock(m_mainWindow->stackedWidget);
-			m_mainWindow->xyFourierFilterCurveDock->setupGeneral();
-			connect(m_mainWindow->xyFourierFilterCurveDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xyFourierFilterCurveDock);
-		}
-
-		QList<XYCurve*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<XYCurve*>(aspect);
-		m_mainWindow->xyFourierFilterCurveDock->setCurves(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyFourierFilterCurveDock);
-	} else if (className == QStringLiteral("XYConvolutionCurve")) {
+		raiseDockSetupConnect(m_mainWindow->xyFourierFilterCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->xyFourierFilterCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::XYConvolution:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Convolution/Deconvolution"));
-
-		if (!m_mainWindow->xyConvolutionCurveDock) {
-			m_mainWindow->xyConvolutionCurveDock = new XYConvolutionCurveDock(m_mainWindow->stackedWidget);
-			m_mainWindow->xyConvolutionCurveDock->setupGeneral();
-			connect(m_mainWindow->xyConvolutionCurveDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xyConvolutionCurveDock);
-		}
-
-		QList<XYCurve*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<XYCurve*>(aspect);
-		m_mainWindow->xyConvolutionCurveDock->setCurves(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyConvolutionCurveDock);
-	} else if (className == QStringLiteral("XYCorrelationCurve")) {
+		raiseDockSetupConnect(m_mainWindow->xyConvolutionCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->xyConvolutionCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::XYCorrelationCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Auto-/Cross-Correlation"));
-
-		if (!m_mainWindow->xyCorrelationCurveDock) {
-			m_mainWindow->xyCorrelationCurveDock = new XYCorrelationCurveDock(m_mainWindow->stackedWidget);
-			m_mainWindow->xyCorrelationCurveDock->setupGeneral();
-			connect(m_mainWindow->xyCorrelationCurveDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xyCorrelationCurveDock);
-		}
-
-		QList<XYCurve*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<XYCurve*>(aspect);
-		m_mainWindow->xyCorrelationCurveDock->setCurves(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyCorrelationCurveDock);
-	} else if (className == QStringLiteral("Histogram")) {
+		raiseDockSetupConnect(m_mainWindow->xyCorrelationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->xyCorrelationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::Histogram:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Histogram Properties"));
-
-		if (!m_mainWindow->histogramDock) {
-			m_mainWindow->histogramDock = new HistogramDock(m_mainWindow->stackedWidget);
-			connect(m_mainWindow->histogramDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->histogramDock);
-		}
-
-		QList<Histogram*> list;
-		for (auto* aspect : selectedAspects)
-			list<<qobject_cast<Histogram *>(aspect);
-		m_mainWindow->histogramDock->setCurves(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->histogramDock);
-	} else if (className == QStringLiteral("TextLabel")) {
+		raiseDockConnect(m_mainWindow->histogramDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->histogramDock->setCurves(castList<Histogram>(selectedAspects));
+		break;
+	case AspectType::TextLabel:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Text Label"));
-
-		if (!m_mainWindow->textLabelDock) {
-			m_mainWindow->textLabelDock = new LabelWidget(m_mainWindow->stackedWidget);
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->textLabelDock);
-		}
-
-		QList<TextLabel*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<TextLabel*>(aspect);
-		m_mainWindow->textLabelDock->setLabels(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->textLabelDock);
-	} else if (className == QStringLiteral("CustomPoint")) {
+		raiseDock(m_mainWindow->textLabelDock, m_mainWindow->stackedWidget);
+		m_mainWindow->textLabelDock->setLabels(castList<TextLabel>(selectedAspects));
+		break;
+	case AspectType::CustomPoint:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Custom Point"));
-
-		if (!m_mainWindow->customPointDock) {
-			m_mainWindow->customPointDock = new CustomPointDock(m_mainWindow->stackedWidget);
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->customPointDock);
-		}
-
-		QList<CustomPoint*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<CustomPoint*>(aspect);
-		m_mainWindow->customPointDock->setPoints(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->customPointDock);
-	} else if (className == QStringLiteral("DatapickerCurve")) {
+		raiseDock(m_mainWindow->customPointDock, m_mainWindow->stackedWidget);
+		m_mainWindow->customPointDock->setPoints(castList<CustomPoint>(selectedAspects));
+		break;
+	case AspectType::DatapickerCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Datapicker Curve"));
-
-		if (!m_mainWindow->datapickerCurveDock) {
-			m_mainWindow->datapickerCurveDock = new DatapickerCurveWidget(m_mainWindow->stackedWidget);
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->datapickerCurveDock);
-		}
-
-		QList<DatapickerCurve*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<DatapickerCurve*>(aspect);
-		m_mainWindow->datapickerCurveDock->setCurves(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->datapickerCurveDock);
-	} else if (className == QStringLiteral("Datapicker")) {
+		raiseDock(m_mainWindow->datapickerCurveDock, m_mainWindow->stackedWidget);
+		m_mainWindow->datapickerCurveDock->setCurves(castList<DatapickerCurve>(selectedAspects));
+		break;
+	case AspectType::Datapicker:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Datapicker"));
+		raiseDock(m_mainWindow->datapickerImageDock, m_mainWindow->stackedWidget);
 
-		if (!m_mainWindow->datapickerImageDock) {
-			m_mainWindow->datapickerImageDock = new DatapickerImageWidget(m_mainWindow->stackedWidget);
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->datapickerImageDock);
+		{
+			QList<DatapickerImage*> list;
+			for (auto* aspect : selectedAspects)
+				list << qobject_cast<Datapicker*>(aspect)->image();
+			m_mainWindow->datapickerImageDock->setImages(list);
 		}
-
-		QList<DatapickerImage*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<Datapicker*>(aspect)->image();
-		m_mainWindow->datapickerImageDock->setImages(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->datapickerImageDock);
-	} else if (className == QStringLiteral("Project")) {
+		break;
+	case AspectType::Project:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Project"));
-
-		if (!m_mainWindow->projectDock) {
-			m_mainWindow->projectDock = new ProjectDock(m_mainWindow->stackedWidget);
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->projectDock);
-		}
-
+		raiseDock(m_mainWindow->projectDock, m_mainWindow->stackedWidget);
 		m_mainWindow->projectDock->setProject(m_mainWindow->m_project);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->projectDock);
-	} else if (className == QStringLiteral("CantorWorksheet")) {
+		break;
+	case AspectType::CantorWorksheet:
 #ifdef HAVE_CANTOR_LIBS
-		if (!m_mainWindow->cantorWorksheetDock) {
-			m_mainWindow->cantorWorksheetDock = new CantorWorksheetDock(m_mainWindow->stackedWidget);
-			connect(m_mainWindow->cantorWorksheetDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->cantorWorksheetDock);
+		raiseDockConnect(m_mainWindow->cantorWorksheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+
+		{
+			QList<CantorWorksheet*> list = castList<CantorWorksheet>(selectedAspects);
+			if (list.size() == 1)
+				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Properties", list.first()->backendName()));
+			else
+				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "CAS Properties"));
+			m_mainWindow->cantorWorksheetDock->setCantorWorksheets(list);
 		}
-
-		QList<CantorWorksheet*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<CantorWorksheet *>(aspect);
-		if (list.size() == 1)
-			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Properties", list.first()->backendName()));
-		else
-			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "CAS Properties"));
-		m_mainWindow->cantorWorksheetDock->setCantorWorksheets(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->cantorWorksheetDock);
 #endif
-	} else if (className == QStringLiteral("Notes")) {
+		break;
+	case AspectType::Note:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Notes"));
-
-		if (!m_mainWindow->notesDock) {
-			m_mainWindow->notesDock = new NoteDock(m_mainWindow->stackedWidget);
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->notesDock);
-		}
-
-		QList<Note*> list;
-		for (auto* aspect : selectedAspects)
-			list << qobject_cast<Note*>(aspect);
-		m_mainWindow->notesDock->setNotesList(list);
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->notesDock);
-	}
+		raiseDock(m_mainWindow->notesDock, m_mainWindow->stackedWidget);
+		m_mainWindow->notesDock->setNotesList(castList<Note>(selectedAspects));
+		break;
+	case AspectType::MQTTClient:
 #ifdef HAVE_MQTT
-	else if (className == QStringLiteral("MQTTClient")) {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("MQTT Data Source"));
-
-		if (!m_mainWindow->m_liveDataDock) {
-			qDebug()<<"new live data dock";
-			m_mainWindow->m_liveDataDock = new LiveDataDock(m_mainWindow->stackedWidget);
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->m_liveDataDock);
-		}
-
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "MQTT Data Source"));
+		raiseDock(m_mainWindow->m_liveDataDock, m_mainWindow->stackedWidget);
 		m_mainWindow->m_liveDataDock->setMQTTClient(static_cast<MQTTClient*>(selectedAspects.first()));
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
-	} else if (className == QStringLiteral("MQTTSubscription")) {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("MQTT Data Source"));
-
-		if (!m_mainWindow->m_liveDataDock) {
-			qDebug()<<"new live data dock";
-			m_mainWindow->m_liveDataDock = new LiveDataDock(m_mainWindow->stackedWidget);
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->m_liveDataDock);
-		}
-
-		m_mainWindow->m_liveDataDock->setMQTTClient(static_cast<MQTTSubscription*>(selectedAspects.first())->mqttClient());
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
-	} else if (className == QStringLiteral("MQTTTopic")) {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("MQTT Data Source"));
-
-		if (!m_mainWindow->m_liveDataDock) {
-			m_mainWindow->m_liveDataDock = new LiveDataDock(m_mainWindow->stackedWidget);
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->m_liveDataDock);
-		}
-
-		m_mainWindow->m_liveDataDock->setMQTTClient(static_cast<MQTTTopic*>(selectedAspects.first())->mqttClient());
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
-	}
 #endif
-	else if (className == QStringLiteral("LiveDataSource")) {
+		break;
+	case AspectType::MQTTSubscription:
+#ifdef HAVE_MQTT
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "MQTT Data Source"));
+		raiseDock(m_mainWindow->m_liveDataDock, m_mainWindow->stackedWidget);
+		m_mainWindow->m_liveDataDock->setMQTTClient(static_cast<MQTTSubscription*>(selectedAspects.first())->mqttClient());
+#endif
+		break;
+	case AspectType::MQTTTopic:
+#ifdef HAVE_MQTT
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "MQTT Data Source"));
+		raiseDock(m_mainWindow->m_liveDataDock, m_mainWindow->stackedWidget);
+		m_mainWindow->m_liveDataDock->setMQTTClient(static_cast<MQTTTopic*>(selectedAspects.first())->mqttClient());
+#endif
+		break;
+	case AspectType::LiveDataSource:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Live Data Source"));
-
-		if (!m_mainWindow->m_liveDataDock) {
-			m_mainWindow->m_liveDataDock = new LiveDataDock(m_mainWindow->stackedWidget);
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->m_liveDataDock);
-		}
-
+		raiseDock(m_mainWindow->m_liveDataDock, m_mainWindow->stackedWidget);
 		m_mainWindow->m_liveDataDock->setLiveDataSource(static_cast<LiveDataSource*>(selectedAspects.first()));
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
-	} else {
+		break;
+	case AspectType::AbstractAspect:
+	case AspectType::AbstractColumn:
+	case AspectType::AbstractDataSource:
+	case AspectType::AbstractFilter:
+	case AspectType::AbstractPart:
+	case AspectType::AbstractPlot:
+	case AspectType::ColumnStringIO:
+	case AspectType::DatapickerImage:
+	case AspectType::DatapickerPoint:
+	case AspectType::Folder:
+	case AspectType::PlotArea:
+	case AspectType::SimpleFilterColumn:
+	case AspectType::Workbook:
+	case AspectType::WorksheetElement:
+	case AspectType::WorksheetElementContainer:
+	case AspectType::WorksheetElementGroup:
+	case AspectType::XYAnalysisCurve:
 		clearDock();
+		return;
 	}
+
+	m_mainWindow->stackedWidget->currentWidget()->show();
 }
 
 /*!
@@ -650,25 +458,30 @@ void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect) const {
 	if (!parent)
 		return;
 
-	QString className = parent->metaObject()->className();
-	if (className == QStringLiteral("Axis")) {
+	switch (static_cast<quint64>(parent->type())) {  // cast the enum to turn off warnings about unhandled cases
+	case static_cast<quint64>(AspectType::Axis):
 		if (!m_mainWindow->axisDock) {
 			m_mainWindow->axisDock = new AxisDock(m_mainWindow->stackedWidget);
 			m_mainWindow->stackedWidget->addWidget(m_mainWindow->axisDock);
 		}
 		m_mainWindow->axisDock->activateTitleTab();
-	} else if (className == QStringLiteral("CartesianPlot")) {
+		break;
+	case static_cast<quint64>(AspectType::CartesianPlot):
 		if (!m_mainWindow->cartesianPlotDock) {
 			m_mainWindow->cartesianPlotDock = new CartesianPlotDock(m_mainWindow->stackedWidget);
 			m_mainWindow->stackedWidget->addWidget(m_mainWindow->cartesianPlotDock);
 		}
 		m_mainWindow->cartesianPlotDock->activateTitleTab();
-	} else if (className == QStringLiteral("CartesianPlotLegend")) {
+		break;
+	case static_cast<quint64>(AspectType::CartesianPlotLegend):
 		if (!m_mainWindow->cartesianPlotLegendDock) {
 			m_mainWindow->cartesianPlotLegendDock = new CartesianPlotLegendDock(m_mainWindow->stackedWidget);
 			m_mainWindow->stackedWidget->addWidget(m_mainWindow->cartesianPlotLegendDock);
 		}
 		m_mainWindow->cartesianPlotLegendDock->activateTitleTab();
+		break;
+	default:
+		break;
 	}
 }
 

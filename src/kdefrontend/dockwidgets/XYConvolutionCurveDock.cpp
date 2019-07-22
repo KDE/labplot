@@ -69,6 +69,8 @@ void XYConvolutionCurveDock::setupGeneral() {
 	DEBUG("XYConvolutionCurveDock::setupGeneral()");
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	m_leName = uiGeneralTab.leName;
+	m_leComment = uiGeneralTab.leComment;
 
 	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
@@ -157,6 +159,11 @@ void XYConvolutionCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
+	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
+	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
+	checkColumnAvailability(cbY2DataColumn, analysisCurve->y2DataColumn(), analysisCurve->y2DataColumnPath());
+
 	//show the properties of the first curve
 	m_convolutionCurve = dynamic_cast<XYConvolutionCurve*>(m_curve);
 
@@ -205,8 +212,8 @@ void XYConvolutionCurveDock::initGeneralTab() {
 
 void XYConvolutionCurveDock::setModel() {
 	DEBUG("XYConvolutionCurveDock::setModel()");
-	QList<const char*> list;
-	list << "Folder" << "Datapicker" << "Worksheet" << "CartesianPlot" << "XYCurve";
+	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
+	                       AspectType::CartesianPlot, AspectType::XYCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
@@ -214,9 +221,10 @@ void XYConvolutionCurveDock::setModel() {
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
-	list.clear();
-	list << "Folder" << "Workbook" << "Datapicker" << "DatapickerCurve" << "Spreadsheet"
-		<< "LiveDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYConvolutionCurve";
+	list = {AspectType::Folder, AspectType::Workbook, AspectType::Datapicker, AspectType::DatapickerCurve,
+	        AspectType::Spreadsheet, AspectType::LiveDataSource, AspectType::Column,
+	        AspectType::Worksheet, AspectType::CartesianPlot, AspectType::XYConvolution
+	       };
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 	cbY2DataColumn->setTopLevelClasses(list);
@@ -253,20 +261,6 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 //**** SLOTs for changes triggered in XYConvolutionCurveDock **
 //*************************************************************
-void XYConvolutionCurveDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setName(uiGeneralTab.leName->text());
-}
-
-void XYConvolutionCurveDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setComment(uiGeneralTab.leComment->text());
-}
-
 void XYConvolutionCurveDock::dataSourceTypeChanged(int index) {
 	auto type = (XYAnalysisCurve::DataSourceType)index;
 	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
@@ -337,6 +331,9 @@ void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			uiGeneralTab.sbMax->setValue(column->maximum());
 		}
 	}
+
+	cbXDataColumn->useCurrentIndexText(true);
+	cbXDataColumn->setInvalid(false);
 }
 
 void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -349,6 +346,9 @@ void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYConvolutionCurve*>(curve)->setYDataColumn(column);
+
+	cbYDataColumn->useCurrentIndexText(true);
+	cbYDataColumn->setInvalid(false);
 }
 
 void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
@@ -361,6 +361,9 @@ void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYConvolutionCurve*>(curve)->setY2DataColumn(column);
+
+	cbY2DataColumn->useCurrentIndexText(true);
+	cbY2DataColumn->setInvalid(false);
 }
 
 void XYConvolutionCurveDock::samplingIntervalChanged() {
@@ -537,6 +540,10 @@ void XYConvolutionCurveDock::enableRecalculate() const {
 	if (m_convolutionCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectY != nullptr);
+		if (aspectY) {
+			cbYDataColumn->useCurrentIndexText(true);
+			cbYDataColumn->setInvalid(false);
+		}
 	} else {
 		 hasSourceData = (m_convolutionCurve->dataSourceCurve() != nullptr);
 	}

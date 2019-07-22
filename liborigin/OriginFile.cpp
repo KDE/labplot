@@ -39,7 +39,6 @@ OriginFile::OriginFile(const string& fileName)
 
 	if (!file.is_open())
 	{
-		cerr << endl << "liborigin: " << strerror(errno) << ": " << fileName.c_str() << endl;
 		ioError = errno;
 		return;
 	}
@@ -49,7 +48,6 @@ OriginFile::OriginFile(const string& fileName)
 	logfile = fopen("./opjfile.log", "w");
 	if (logfile == nullptr)
 	{
-		cerr << endl <<  "liborigin: " << strerror(errno) << ": opjfile.log" << endl;
 		ioError = errno;
 		return;
 	}
@@ -136,11 +134,14 @@ OriginFile::OriginFile(const string& fileName)
 	} else if (buildVersion < 3331) { // 2019.0 (9.6.0.172) SR0 3330
 		fileVersion = 960;
 		newFileVersion = 20190;
+	} else if (buildVersion < 3360) { // 2019b.0 (9.6.5.169) SR0 3359
+		fileVersion = 965;
+		newFileVersion = 20195;
 	} else {
-		// > 2019SR0
-		fileVersion = 961;
-		newFileVersion = 20191;
-		LOG_PRINT(logfile, "Found project version 2019.1 (9.6.1) or newer\n")
+		// > 2019bSR0
+		fileVersion = 966;
+		newFileVersion = 20196;
+		LOG_PRINT(logfile, "Found project version 2019b.1 (9.6.6) or newer\n")
 	}
 
 	if (newFileVersion == 0) {

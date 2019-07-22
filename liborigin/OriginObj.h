@@ -67,7 +67,7 @@ namespace Origin
 	enum DayOfWeekFormat {DAY_DDD = 0, DAY_DDDD = 1, DAY_LETTER = 2};
 
 	enum NumericDisplayType {DefaultDecimalDigits = 0, DecimalPlaces = 1, SignificantDigits = 2};
-	enum Attach {Frame = 0, Page = 1, Scale = 2};
+	enum Attach {Frame = 0, Page = 1, Scale = 2, End_};
 	enum BorderType {BlackLine = 0, Shadow = 1, DarkMarble = 2, WhiteOut = 3, BlackOut = 4, None = -1};
 	enum FillPattern {NoFill = 0, BDiagDense = 1, BDiagMedium = 2, BDiagSparse = 3, FDiagDense = 4, FDiagMedium = 5, FDiagSparse = 6,
 		DiagCrossDense = 7, DiagCrossMedium = 8, DiagCrossSparse = 9, HorizontalDense = 10, HorizontalMedium = 11, HorizontalSparse = 12,
@@ -342,6 +342,7 @@ namespace Origin
 		,	width(8)
 		,	index(_index)
 		,	view(DataView)
+		,	colorMap()
 		{coordinates.push_back(10.0);coordinates.push_back(10.0);coordinates.push_back(1.0);coordinates.push_back(1.0);};
 	};
 
@@ -891,9 +892,11 @@ namespace Origin
 		GraphLayer()
 		:	backgroundColor({Color::Regular, {Color::White}})
 		,	borderType(BlackLine)
+		,	xAxis(), yAxis(), zAxis()
 		,	histogramBin(0.5)
 		,	histogramBegin(0.0)
 		,	histogramEnd(10.0)
+		,	colorMap()
 		,	xAngle(0)
 		,	yAngle(0)
 		,	zAngle(0)

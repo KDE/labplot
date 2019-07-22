@@ -67,6 +67,8 @@ XYDataReductionCurveDock::XYDataReductionCurveDock(QWidget* parent, QStatusBar* 
 void XYDataReductionCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	m_leName = uiGeneralTab.leName;
+	m_leComment = uiGeneralTab.leComment;
 
 	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
@@ -140,6 +142,10 @@ void XYDataReductionCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
+	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
+	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
+
 	//show the properties of the first curve
 	m_dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(m_curve);
 
@@ -184,8 +190,8 @@ void XYDataReductionCurveDock::initGeneralTab() {
 }
 
 void XYDataReductionCurveDock::setModel() {
-	QList<const char*>  list;
-	list<<"Folder"<<"Datapicker"<<"Worksheet"<<"CartesianPlot"<<"XYCurve";
+	QList<AspectType>  list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
+	                        AspectType::CartesianPlot, AspectType::XYCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
@@ -193,9 +199,11 @@ void XYDataReductionCurveDock::setModel() {
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
-	list.clear();
-	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
-	    <<"LiveDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
+	list = {AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
+	        AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
+	        AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot,
+	        AspectType::XYFitCurve
+	       };
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -229,20 +237,6 @@ void XYDataReductionCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
-void XYDataReductionCurveDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setName(uiGeneralTab.leName->text());
-}
-
-void XYDataReductionCurveDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setComment(uiGeneralTab.leComment->text());
-}
-
 void XYDataReductionCurveDock::dataSourceTypeChanged(int index) {
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
 	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
@@ -298,6 +292,9 @@ void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		uiGeneralTab.sbMax->setValue(column->maximum());
 	}
 
+	cbXDataColumn->useCurrentIndexText(true);
+	cbXDataColumn->setInvalid(false);
+
 	updateTolerance();
 	updateTolerance2();
 }
@@ -311,6 +308,9 @@ void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYDataReductionCurve*>(curve)->setYDataColumn(column);
+
+	cbYDataColumn->useCurrentIndexText(true);
+	cbYDataColumn->setInvalid(false);
 
 	updateTolerance();
 	updateTolerance2();
@@ -599,6 +599,14 @@ void XYDataReductionCurveDock::enableRecalculate() const {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
+		if (aspectX) {
+			cbXDataColumn->useCurrentIndexText(true);
+			cbXDataColumn->setInvalid(false);
+		}
+		if (aspectY) {
+			cbYDataColumn->useCurrentIndexText(true);
+			cbYDataColumn->setInvalid(false);
+		}
 	} else {
 		 hasSourceData = (m_dataReductionCurve->dataSourceCurve() != nullptr);
 	}

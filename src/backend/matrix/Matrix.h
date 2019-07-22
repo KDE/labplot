@@ -110,6 +110,9 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
+	void registerShortcuts() override;
+	void unregisterShortcuts() override;
+
 	int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
 		int rows, int cols, QStringList colNameList, QVector<AbstractColumn::ColumnMode>) override;
 	void finalizeImport(int columnOffset, int startColumn, int endColumn, int numRows,

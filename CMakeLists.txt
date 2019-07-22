@@ -14,7 +14,7 @@ set(KF5_MIN_VERSION "5.16.0")
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
 find_package(ECM 1.3.0 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 # build type: "release", "debug", "debugfull"
 string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
@@ -25,7 +25,7 @@ find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Svg
 	Widgets
 	Test
-        SerialPort
+	SerialPort
 )
 
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
@@ -38,6 +38,7 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	DocTools
 	I18n
 	IconThemes
+	KIO
 	TextWidgets
 	WidgetsAddons
 	XmlGui
@@ -133,7 +134,7 @@ endif ()
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions (-DLVERSION=\"2.6.0\")
+add_definitions (-DLVERSION=\"2.7.0\")
 # add_definitions (-DLDEBUG='1')
 set(BUILD_SHARED_LIBS true)
 
@@ -199,27 +200,17 @@ ENDIF ()
 
 ### Cantorlibs (optional) ###############################
 IF (ENABLE_CANTOR)
-FIND_LIBRARY (CANTOR_LIBS cantorlibs)
-FIND_PATH (CANTOR_INCLUDE_DIR cantor/worksheetaccess.h
-	/usr/include
-	/usr/local/include
+FIND_PACKAGE (Cantor)
+SET_PACKAGE_PROPERTIES(Cantor PROPERTIES
+	URL "https://edu.kde.org/cantor/"
 )
-IF (CANTOR_LIBS AND CANTOR_INCLUDE_DIR AND KF5Service_FOUND AND KF5Parts_FOUND)
-	SET (CANTOR_LIBS_FOUND TRUE)
-	FIND_PATH (CANTOR_VERSION_FILE cantor/cantorlibs_version.h
-		/usr/include
-		/usr/local/include
-	)
-	IF (NOT CANTOR_VERSION_FILE)
+IF (Cantor_FOUND)
+	MESSAGE (STATUS "Found Cantor Library")
+	add_definitions (-DHAVE_CANTOR_LIBS)
+
+	IF (NOT ${Cantor_VERSION} VERSION_GREATER "0")
 		add_definitions (-DOLD_CANTORLIBS_VERSION)
 	ENDIF()
-ELSE ()
-	SET (CANTOR_LIBS_FOUND FALSE)
-	SET (CANTOR_LIBS "")
-ENDIF()
-IF (CANTOR_LIBS_FOUND)
-	MESSAGE (STATUS "Found Cantor Library: ${CANTOR_INCLUDE_DIR} ${CANTOR_LIBS}")
-	add_definitions (-DHAVE_CANTOR_LIBS)
 ELSE ()
 	MESSAGE (STATUS "Cantor Library NOT FOUND")
 ENDIF ()
@@ -229,26 +220,12 @@ ENDIF ()
 
 ### FFTW (optional) #####################################
 IF (ENABLE_FFTW)
-FIND_LIBRARY (FFTW_LIBRARIES fftw3
-        PATHS
-        /usr/lib
-        /usr/local/lib
-)
-FIND_PATH (FFTW_INCLUDE_DIR fftw3.h
-	/usr/include
-	/usr/local/include
-)
-IF (FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
-	SET (FFTW_FOUND TRUE)
-ELSE ()
-	SET (FFTW_FOUND FALSE)
-ENDIF ()
-IF (FFTW_FOUND)
-	MESSAGE (STATUS "Found FFTW 3 Library: ${FFTW_INCLUDE_DIR} ${FFTW_LIBRARIES}")
-	add_definitions (-DHAVE_FFTW3)
-ELSE ()
-	MESSAGE (STATUS "FFTW 3 Library NOT FOUND")
-ENDIF ()
+	FIND_PACKAGE (FFTW3)
+	IF (FFTW3_FOUND)
+		add_definitions (-DHAVE_FFTW3)
+	ELSE ()
+		MESSAGE (STATUS "FFTW 3 Library NOT FOUND")
+	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "FFTW 3 Library DISABLED")
 ENDIF ()
@@ -256,12 +233,17 @@ ENDIF ()
 ### HDF5 (optional) ##############################
 IF (ENABLE_HDF5)
 FIND_PACKAGE(HDF5 COMPONENTS C)
+SET_PACKAGE_PROPERTIES (HDF5 PROPERTIES
+	DESCRIPTION "Reading and writing self describing array data"
+	URL "https://www.hdfgroup.org/solutions/hdf5/"
+)
 IF (HDF5_FOUND)
 	add_definitions (-DHAVE_HDF5)
 	IF (HDF5_VERSION VERSION_GREATER "1.9")
 		add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_0)
 	ENDIF ()
 	IF (HDF5_VERSION VERSION_GREATER "1.10.0.1")
+		add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_0)
 		add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_1)
 	ENDIF ()
 	include_directories (${HDF5_INCLUDE_DIRS})
@@ -274,22 +256,12 @@ ENDIF ()
 
 ### NETCDF (optional) #############################
 IF (ENABLE_NETCDF)
-FIND_LIBRARY (NETCDF_LIBRARY netcdf
-	PATHS
-	/usr/lib
-	/usr/local/lib
+FIND_PACKAGE(netCDF)
+SET_PACKAGE_PROPERTIES(netCDF PROPERTIES
+    DESCRIPTION "Interfaces for array-oriented data access"
+    URL "https://www.unidata.ucar.edu/software/netcdf/"
 )
-FIND_PATH (NETCDF_INCLUDE_DIR netcdf.h
-	/usr/include
-	/usr/local/include
-)
-IF (NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
-	SET (NETCDF_FOUND TRUE)
-ELSE ()
-	SET (NETCDF_FOUND FALSE)
-ENDIF ()
-IF (NETCDF_FOUND)
-	MESSAGE (STATUS "Found Network Common Data Format (NetCDF) Library: ${NETCDF_INCLUDE_DIR} ${NETCDF_LIBRARY}")
+IF (netCDF_FOUND)
 	add_definitions (-DHAVE_NETCDF)
 ELSE ()
 	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library NOT FOUND")
@@ -315,25 +287,12 @@ ENDIF ()
 
 ### FITS (optional) ###############################
 IF (ENABLE_FITS)
-FIND_LIBRARY (CFITSIO_LIBRARY cfitsio
-	PATHS
-	/usr/lib
-	/usr/local/lib
-	$ENV{CFITSIO}
-)
-FIND_PATH (CFITSIO_INCLUDE_DIR fitsio.h
-	/usr/include
-	/usr/include/cfitsio
-	/usr/local/include
-	$ENV{CFITSIO}
-)
-IF (CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
-        SET (CFITSIO_FOUND TRUE)
-ELSE ()
-        SET (CFITSIO_FOUND FALSE)
-ENDIF ()
+FIND_PACKAGE (CFitsio)
+SET_PACKAGE_PROPERTIES (CFitsio PROPERTIES
+	DESCRIPTION "FITS IO Library"
+	URL "http://heasarc.gsfc.nasa.gov/fitsio/fitsio.html"
+	PURPOSE "Support for the FITS (Flexible Image Transport System) data format.")
 IF (CFITSIO_FOUND)
-	MESSAGE (STATUS "Found Flexible Image Transport System Data Format (FITS) Library: ${CFITSIO_INCLUDE_DIR} ${CFITSIO_LIBRARY}")
 	add_definitions (-DHAVE_FITS)
 	include_directories (${CFITSIO_INCLUDE_DIR})
 ELSE ()
@@ -345,22 +304,8 @@ ENDIF ()
 
 ### LIBCERF (optional) #############################
 IF (ENABLE_LIBCERF)
-FIND_LIBRARY (LIBCERF_LIBRARY cerf
-	PATHS
-	/usr/lib
-	/usr/local/lib
-)
-FIND_PATH (LIBCERF_INCLUDE_DIR cerf.h
-	/usr/include
-	/usr/local/include
-)
-IF (LIBCERF_LIBRARY AND LIBCERF_INCLUDE_DIR)
-	SET (LIBCERF_FOUND TRUE)
-ELSE ()
-	SET (LIBCERF_FOUND FALSE)
-ENDIF ()
+FIND_PACKAGE (LIBCERF)
 IF (LIBCERF_FOUND)
-	MESSAGE (STATUS "Found libcerf Library: ${LIBCERF_INCLUDE_DIR} ${LIBCERF_LIBRARY}")
 	add_definitions (-DHAVE_LIBCERF)
 ELSE ()
 	MESSAGE (STATUS "libcerf library NOT FOUND")
@@ -371,33 +316,11 @@ ENDIF ()
 
 IF (ENABLE_ROOT)
 FIND_PACKAGE(ZLIB)
-FIND_LIBRARY(LZ4_LIBRARY lz4
-	PATHS
-	/usr/lib
-	/usr/local/lib
+SET_PACKAGE_PROPERTIES (ZLIB PROPERTIES
+	DESCRIPTION "General purpose compression library"
+	URL "https://www.zlib.net/"
 )
-FIND_PATH (LZ4_INCLUDE_DIR lz4.h
-	/usr/include
-	/usr/local/include
-)
-IF (LZ4_LIBRARY AND LZ4_INCLUDE_DIR)
-	IF (EXISTS "${LZ4_INCLUDE_DIR}/lz4.h")
-		file(STRINGS "${LZ4_INCLUDE_DIR}/lz4.h" LZ4_VERSION_MAJOR REGEX "^#define LZ4_VERSION_MAJOR.*")
-		file(STRINGS "${LZ4_INCLUDE_DIR}/lz4.h" LZ4_VERSION_MINOR REGEX "^#define LZ4_VERSION_MINOR.*")
-		file(STRINGS "${LZ4_INCLUDE_DIR}/lz4.h" LZ4_VERSION_RELEASE REGEX "^#define LZ4_VERSION_RELEASE.*")
-		string(REGEX REPLACE ".*[ ].*([0-9]+).*$" "\\1" LZ4_VERSION_MAJOR "${LZ4_VERSION_MAJOR}")
-		string(REGEX REPLACE ".*[ ].*([0-9]+).*$" "\\1" LZ4_VERSION_MINOR "${LZ4_VERSION_MINOR}")
-		string(REGEX REPLACE ".*[ ].*([0-9]+).*$" "\\1" LZ4_VERSION_RELEASE "${LZ4_VERSION_RELEASE}")
-
-		MESSAGE (STATUS "Found LZ4 library: ${LZ4_INCLUDE_DIR} ${LZ4_LIBRARY} (found version \"${LZ4_VERSION_MAJOR}.${LZ4_VERSION_MINOR}.${LZ4_VERSION_RELEASE}\")")
-	ELSE ()
-		MESSAGE (STATUS "Found LZ4 library: ${LZ4_INCLUDE_DIR} ${LZ4_LIBRARY} (version unknown)")
-	ENDIF ()
-	SET (LZ4_FOUND TRUE)
-ELSE ()
-	MESSAGE (STATUS "LZ4 library NOT FOUND")
-	SET (LZ4_FOUND FALSE)
-ENDIF ()
+FIND_PACKAGE(LZ4)
 IF (ZLIB_FOUND AND LZ4_FOUND)
 	MESSAGE (STATUS "Found ZIP libraries ZLIB and LZ4 (needed for ROOT importer)")
 	add_definitions (-DHAVE_ZIP)
@@ -439,3 +362,7 @@ endif()
 install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 feature_summary(WHAT ALL)
 
+find_package(KF5I18n CONFIG REQUIRED)
+ki18n_install(po)
+find_package(KF5DocTools CONFIG REQUIRED)
+kdoctools_install(po)

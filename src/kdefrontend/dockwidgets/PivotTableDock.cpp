@@ -120,12 +120,12 @@ void PivotTableDock::setPivotTable(PivotTable* pivotTable) {
 
 	m_aspectTreeModel = new AspectTreeModel(m_pivotTable->project());
 
-	QList<const char*> list;
-	list << "Folder" << "Workbook" << "Spreadsheet" << "LiveDataSource";
+	QList<AspectType> list{AspectType::Folder, AspectType::Workbook,
+	                       AspectType::Spreadsheet, AspectType::LiveDataSource};
 	cbSpreadsheet->setTopLevelClasses(list);
 
-	list.clear();
-	list << "Spreadsheet" << "LiveDataSource";
+	list = {AspectType::Spreadsheet, AspectType::LiveDataSource};
+	m_aspectTreeModel->setSelectableAspects(list);
 	m_aspectTreeModel->setSelectableAspects(list);
 
 	cbSpreadsheet->setModel(m_aspectTreeModel);

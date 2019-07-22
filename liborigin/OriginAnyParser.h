@@ -68,7 +68,7 @@ protected:
 	void getZcolorsMap(ColorMap&, const string&, unsigned int);
 	void getProjectLeafProperties(tree<ProjectNode>::iterator, const string&, unsigned int);
 	void getProjectFolderProperties(tree<ProjectNode>::iterator, const string&, unsigned int);
-	void outputProjectTree();
+	void outputProjectTree(std::ostream &);
 
 	inline time_t doubleToPosixTime(double jdt)
 	{

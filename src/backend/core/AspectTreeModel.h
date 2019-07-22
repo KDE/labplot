@@ -32,6 +32,7 @@
 
 #include <QAbstractItemModel>
 
+enum class AspectType : quint64;
 class AbstractAspect;
 
 class AspectTreeModel : public QAbstractItemModel {
@@ -48,7 +49,7 @@ public:
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 	bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 	Qt::ItemFlags flags(const QModelIndex &index) const override;
-	void setSelectableAspects(QList<const char*>);
+	void setSelectableAspects(const QList<AspectType>&);
 	QModelIndex modelIndexOfAspect(const AbstractAspect*, int column=0) const;
 	QModelIndex modelIndexOfAspect(const QString& path, int column=0) const;
 
@@ -81,7 +82,7 @@ private:
 	bool m_numericColumnsOnly{false};
 	bool m_nonEmptyNumericColumnsOnly{false};
 	bool m_showPlotDesignation{false};
-	QList<const char*> m_selectableAspects;
+	QList<AspectType> m_selectableAspects;
 
 	QString m_filterString;
 	Qt::CaseSensitivity m_filterCaseSensitivity{Qt::CaseInsensitive};
@@ -93,6 +94,7 @@ signals:
 	void indexSelected(const QModelIndex&);
 	void indexDeselected(const QModelIndex&);
 	void hiddenAspectSelected(const AbstractAspect*);
+	void statusInfo(const QString&);
 };
 
 #endif // ifndef ASPECT_TREE_MODEL_H

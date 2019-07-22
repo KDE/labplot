@@ -42,7 +42,7 @@ class AbstractPlot : public WorksheetElementContainer {
 	Q_OBJECT
 
 public:
-	explicit AbstractPlot(const QString &name);
+	AbstractPlot(const QString &name, AspectType type);
 	~AbstractPlot() override= default;
 
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
@@ -52,11 +52,14 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(float, horizontalPadding, HorizontalPadding)
 	BASIC_D_ACCESSOR_DECL(float, verticalPadding, VerticalPadding)
+	BASIC_D_ACCESSOR_DECL(double, rightPadding, RightPadding)
+	BASIC_D_ACCESSOR_DECL(double, bottomPadding, BottomPadding)
+	BASIC_D_ACCESSOR_DECL(bool, symmetricPadding, SymmetricPadding)
 
 	typedef AbstractPlotPrivate Private;
 
 protected:
-	AbstractPlot(const QString&, AbstractPlotPrivate*);
+	AbstractPlot(const QString&, AbstractPlotPrivate*, AspectType);
 	AbstractCoordinateSystem* m_coordinateSystem{nullptr};
 	PlotArea* m_plotArea{nullptr};
 	TextLabel* m_title{nullptr};

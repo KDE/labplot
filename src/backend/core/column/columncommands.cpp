@@ -648,8 +648,15 @@ void ColumnClearCmd::undo() {
  * \class ColumSetGlobalFormulaCmd
  * \brief Set the formula for the entire column (global formula)
  ** ***************************************************************************/
-ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col, QString formula, QStringList variableNames, QStringList variableColumns)
-	: QUndoCommand(), m_col(col), m_newFormula(std::move(formula)), m_newVariableNames(std::move(variableNames)), m_newVariableColumnPathes(std::move(variableColumns)) {
+ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col, QString formula, QStringList variableNames,
+													 QVector<Column*> variableColumns, bool autoUpdate)
+	: QUndoCommand(),
+	m_col(col),
+	m_newFormula(std::move(formula)),
+	m_newVariableNames(std::move(variableNames)),
+	m_newVariableColumns(std::move(variableColumns)),
+	m_newAutoUpdate(autoUpdate)
+{
 	setText(i18n("%1: set formula", col->name()));
 }
 
@@ -657,15 +664,16 @@ void ColumnSetGlobalFormulaCmd::redo() {
 	if (!m_copied) {
 		m_formula = m_col->formula();
 		m_variableNames = m_col->formulaVariableNames();
-		m_variableColumnPathes = m_col->formulaVariableColumnPathes();
+		m_variableColumns = m_col->formulaVariableColumns();
+		m_autoUpdate = m_col->formulaAutoUpdate();
 		m_copied = true;
 	}
 
-	m_col->setFormula(m_newFormula, m_newVariableNames, m_newVariableColumnPathes);
+	m_col->setFormula(m_newFormula, m_newVariableNames, m_newVariableColumns, m_newAutoUpdate);
 }
 
 void ColumnSetGlobalFormulaCmd::undo() {
-	m_col->setFormula(m_formula, m_variableNames, m_variableColumnPathes);
+	m_col->setFormula(m_formula, m_variableNames, m_variableColumns, m_newAutoUpdate);
 }
 
 

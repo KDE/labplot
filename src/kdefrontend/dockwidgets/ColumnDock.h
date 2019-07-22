@@ -31,11 +31,12 @@
 #define COLUMNDOCK_H
 
 #include "backend/core/column/Column.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_columndock.h"
 
 template <class T> class QList;
 
-class ColumnDock : public QWidget {
+class ColumnDock : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -46,7 +47,6 @@ private:
 	Ui::ColumnDock ui;
 	QList<Column*> m_columnsList;
 	Column* m_column{nullptr};
-	bool m_initializing{false};
 
 	void updateTypeWidgets(AbstractColumn::ColumnMode);
 	void updateFormatWidgets(AbstractColumn::ColumnMode);
@@ -54,8 +54,6 @@ private:
 private slots:
 	void retranslateUi();
 
-	void nameChanged();
-	void commentChanged();
 	void typeChanged(int);
 	void formatChanged(int);
 	void precisionChanged(int);

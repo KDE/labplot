@@ -39,6 +39,7 @@ public:
 	explicit ColumnStringIO(Column* owner);
 	AbstractColumn::ColumnMode columnMode() const override;
 	AbstractColumn::PlotDesignation plotDesignation() const override;
+	QString plotDesignationString() const override;
 	int rowCount() const override;
 	QString textAt(int) const override;
 	void setTextAt(int, const QString&) override;

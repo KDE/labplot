@@ -41,7 +41,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-Note::Note(const QString& name) : AbstractPart(name) {
+Note::Note(const QString& name) : AbstractPart(name, AspectType::Note) {
 	KConfig config;
 	KConfigGroup group = config.group("Notes");
 

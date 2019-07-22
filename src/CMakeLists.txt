@@ -39,11 +39,13 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ROOTOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/MQTTErrorWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/BaseDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/CursorDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/NoteDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
@@ -127,10 +129,11 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/rootoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/mqtterrorwidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/cursordock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotlegenddock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/histogramdock.ui
@@ -249,6 +252,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/Worksheet.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementContainer.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementGroup.cpp
+	${BACKEND_DIR}/worksheet/TreeModel.cpp
 	${BACKEND_DIR}/worksheet/plots/AbstractPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/plots/PlotArea.cpp
@@ -336,7 +340,7 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/datapicker/DatapickerImageView.cpp
 )
 
-IF (${CANTOR_LIBS_FOUND})
+IF (${Cantor_FOUND})
 	set(CANTOR_SOURCES
 		${KDEFRONTEND_DIR}/dockwidgets/CantorWorksheetDock.cpp
 		${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp
@@ -383,6 +387,9 @@ target_link_libraries( labplot2lib
 	KF5::Crash
 	KF5::I18n
 	KF5::IconThemes
+	KF5::KIOCore
+	KF5::KIOFileWidgets
+	KF5::KIOWidgets
 	KF5::TextWidgets
 	KF5::XmlGui
 	Qt5::Svg
@@ -404,20 +411,20 @@ IF (KF5SyntaxHighlighting_FOUND)
 ENDIF ()
 #TODO: KF5::NewStuff
 
-IF (CANTOR_LIBS_FOUND)
-	target_link_libraries( labplot2lib ${CANTOR_LIBS} KF5::Service KF5::Parts)
+IF (Cantor_FOUND)
+	target_link_libraries( labplot2lib Cantor::cantorlibs KF5::Service KF5::Parts)
 ENDIF ()
 IF (HDF5_FOUND)
 	target_link_libraries( labplot2lib ${HDF5_LIBRARIES} )
 ENDIF ()
-IF (FFTW_FOUND)
-	target_link_libraries( labplot2lib ${FFTW_LIBRARIES} )
+IF (FFTW3_FOUND)
+	target_link_libraries( labplot2lib ${FFTW3_LIBRARIES} )
 ENDIF ()
-IF (NETCDF_FOUND)
-	target_link_libraries( labplot2lib ${NETCDF_LIBRARY} )
+IF (netCDF_FOUND)
+	target_link_libraries( labplot2lib netcdf )
 ENDIF ()
 IF (CFITSIO_FOUND)
-	target_link_libraries( labplot2lib ${CFITSIO_LIBRARY} )
+	target_link_libraries( labplot2lib ${CFITSIO_LIBRARIES} )
 ENDIF ()
 IF (LIBCERF_FOUND)
 	target_link_libraries( labplot2lib ${LIBCERF_LIBRARY} )
@@ -464,12 +471,13 @@ ELSE ()
 	# creates LABPLOT_SOURCE.ico/LABPLOT_SOURCE.icns
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LABPLOT_ICONS})
 ENDIF ()
-add_executable(labplot2 ${LABPLOT_SOURCE})
 
 # create LML_ICONS.icns on MACOSX
 IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 ENDIF ()
+
+add_executable(labplot2 ${LABPLOT_SOURCE})
 target_link_libraries(labplot2 labplot2lib)
 
 ############## installation ################################

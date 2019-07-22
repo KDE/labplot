@@ -44,13 +44,15 @@
  * \ingroup worksheet
  */
 
-PlotArea::PlotArea(const QString &name) : WorksheetElement(name),
+PlotArea::PlotArea(const QString &name) : WorksheetElement(name, AspectType::PlotArea),
 	d_ptr(new PlotAreaPrivate(this)) {
+
 	init();
 }
 
 PlotArea::PlotArea(const QString &name, PlotAreaPrivate *dd)
-	: WorksheetElement(name), d_ptr(dd) {
+	: WorksheetElement(name, AspectType::PlotArea), d_ptr(dd) {
+
 	init();
 }
 

@@ -69,6 +69,8 @@ void XYCorrelationCurveDock::setupGeneral() {
 	DEBUG("XYCorrelationCurveDock::setupGeneral()");
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	m_leName = uiGeneralTab.leName;
+	m_leComment = uiGeneralTab.leComment;
 
 	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
@@ -146,6 +148,11 @@ void XYCorrelationCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
+	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
+	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
+	checkColumnAvailability(cbY2DataColumn, analysisCurve->y2DataColumn(), analysisCurve->y2DataColumnPath());
+
 	//show the properties of the first curve
 	m_correlationCurve = dynamic_cast<XYCorrelationCurve*>(m_curve);
 
@@ -188,8 +195,8 @@ void XYCorrelationCurveDock::initGeneralTab() {
 
 void XYCorrelationCurveDock::setModel() {
 	DEBUG("XYCorrelationCurveDock::setModel()");
-	QList<const char*> list;
-	list << "Folder" << "Datapicker" << "Worksheet" << "CartesianPlot" << "XYCurve";
+	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
+	                       AspectType::CartesianPlot, AspectType::XYCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
@@ -197,9 +204,10 @@ void XYCorrelationCurveDock::setModel() {
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
-	list.clear();
-	list << "Folder" << "Workbook" << "Datapicker" << "DatapickerCurve" << "Spreadsheet"
-		<< "LiveDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYCorrelationCurve";
+	list = {AspectType::Folder, AspectType::Workbook, AspectType::Datapicker, AspectType::DatapickerCurve,
+	        AspectType::Spreadsheet, AspectType::LiveDataSource, AspectType::Column,
+	        AspectType::Worksheet, AspectType::CartesianPlot, AspectType::XYCorrelationCurve
+	       };
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 	cbY2DataColumn->setTopLevelClasses(list);
@@ -236,20 +244,6 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 //**** SLOTs for changes triggered in XYCorrelationCurveDock **
 //*************************************************************
-void XYCorrelationCurveDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setName(uiGeneralTab.leName->text());
-}
-
-void XYCorrelationCurveDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setComment(uiGeneralTab.leComment->text());
-}
-
 void XYCorrelationCurveDock::dataSourceTypeChanged(int index) {
 	auto type = (XYAnalysisCurve::DataSourceType)index;
 	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
@@ -313,6 +307,9 @@ void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			uiGeneralTab.sbMax->setValue(column->maximum());
 		}
 	}
+
+	cbXDataColumn->useCurrentIndexText(true);
+	cbXDataColumn->setInvalid(false);
 }
 
 void XYCorrelationCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -325,6 +322,9 @@ void XYCorrelationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYCorrelationCurve*>(curve)->setYDataColumn(column);
+
+	cbYDataColumn->useCurrentIndexText(true);
+	cbYDataColumn->setInvalid(false);
 }
 
 void XYCorrelationCurveDock::y2DataColumnChanged(const QModelIndex& index) {
@@ -337,6 +337,9 @@ void XYCorrelationCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYCorrelationCurve*>(curve)->setY2DataColumn(column);
+
+	cbY2DataColumn->useCurrentIndexText(true);
+	cbY2DataColumn->setInvalid(false);
 }
 
 void XYCorrelationCurveDock::samplingIntervalChanged() {
@@ -426,6 +429,14 @@ void XYCorrelationCurveDock::enableRecalculate() const {
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY2 = static_cast<AbstractAspect*>(cbY2DataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectY != nullptr && aspectY2 != nullptr);
+		if (aspectY) {
+			cbYDataColumn->useCurrentIndexText(true);
+			cbYDataColumn->setInvalid(false);
+		}
+		if (aspectY2) {
+			cbY2DataColumn->useCurrentIndexText(true);
+			cbY2DataColumn->setInvalid(false);
+		}
 	} else {
 		 hasSourceData = (m_correlationCurve->dataSourceCurve() != nullptr);
 	}

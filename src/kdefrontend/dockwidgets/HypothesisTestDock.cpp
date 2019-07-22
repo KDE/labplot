@@ -211,12 +211,11 @@ void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
 
     m_aspectTreeModel = new AspectTreeModel(m_hypothesisTest->project());
 
-    QList<const char*> list;
-    list << "Folder" << "Workbook" << "Spreadsheet" << "LiveDataSource";
-    cbSpreadsheet->setTopLevelClasses(list);
+	QList<AspectType> list{AspectType::Folder, AspectType::Workbook,
+	                       AspectType::Spreadsheet, AspectType::LiveDataSource};
+	cbSpreadsheet->setTopLevelClasses(list);
 
-    list.clear();
-    list << "Spreadsheet" << "LiveDataSource";
+    list = {AspectType::Spreadsheet, AspectType::LiveDataSource};
     m_aspectTreeModel->setSelectableAspects(list);
 
     cbSpreadsheet->setModel(m_aspectTreeModel);

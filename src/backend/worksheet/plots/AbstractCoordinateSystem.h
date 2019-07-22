@@ -43,6 +43,8 @@ public:
 		DefaultMapping = 0x00,
 		SuppressPageClipping = 0x01,
 		MarkGaps = 0x02,
+		Limit = 0x04, // set limits, when point crosses the limits
+		SuppressPageClippingY = 0x08,
 	};
 	Q_DECLARE_FLAGS(MappingFlags, MappingFlag)
 
@@ -76,10 +78,10 @@ public:
 
 	//static members
 	static bool clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult = nullptr);
-	static bool approximatelyEqual(float a, float b, float epsilon=0.0000001);
-	static bool essentiallyEqual(float a, float b, float epsilon=0.0000001);
-	static bool definitelyGreaterThan(float a, float b, float epsilon=0.0000001);
-	static bool definitelyLessThan(float a, float b, float epsilon=0.0000001);
+	static bool approximatelyEqual(double a, double b, double epsilon=0.0000001);
+	static bool essentiallyEqual(double a, double b, double epsilon=0.0000001);
+	static bool definitelyGreaterThan(double a, double b, double epsilon=0.0000001);
+	static bool definitelyLessThan(double a, double b, double epsilon=0.0000001);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractCoordinateSystem::MappingFlags)

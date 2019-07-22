@@ -4,7 +4,7 @@
     Description          : Worksheet (2D visualization) part
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2019 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -38,6 +38,9 @@ class QRectF;
 
 class WorksheetPrivate;
 class WorksheetView;
+class TreeModel;
+class XYCurve;
+class CartesianPlot;
 
 class Worksheet : public AbstractPart {
 	Q_OBJECT
@@ -79,8 +82,16 @@ public:
 
 	CartesianPlotActionMode cartesianPlotActionMode();
 	void setCartesianPlotActionMode(CartesianPlotActionMode mode);
+	CartesianPlotActionMode cartesianPlotCursorMode();
+	void setCartesianPlotCursorMode(CartesianPlotActionMode mode);
 	void setPlotsLocked(bool);
 	bool plotsLocked();
+	int getPlotCount();
+	WorksheetElement* getPlot(int index);
+	TreeModel* cursorModel();
+
+	void cursorModelPlotAdded(QString name);
+	void cursorModelPlotRemoved(QString name);
 
 	BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
 	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
@@ -108,10 +119,28 @@ public:
 	void setSuppressLayoutUpdate(bool);
 	void updateLayout();
 
+	void registerShortcuts() override;
+	void unregisterShortcuts() override;
+
 	typedef WorksheetPrivate Private;
 
 public slots:
 	void setTheme(const QString&);
+	void cartesianPlotmousePressZoomSelectionMode(QPointF logicPos);
+	void cartesianPlotmousePressCursorMode(int cursorNumber, QPointF logicPos);
+	void cartesianPlotmouseMoveZoomSelectionMode(QPointF logicPos);
+	void cartesianPlotmouseMoveCursorMode(int cursorNumber, QPointF logicPos);
+	void cartesianPlotmouseReleaseZoomSelectionMode();
+	void cartesianPlotmouseHoverZoomSelectionMode(QPointF logicPos);
+	void cartesianPlotmouseModeChanged();
+
+	// slots needed by the cursor
+	void updateCurveBackground(QPen pen, QString curveName);
+	void updateCompleteCursorTreeModel();
+	void cursorPosChanged(int cursorNumber, double xPos);
+	void curveAdded(const XYCurve* curve);
+	void curveRemoved(const XYCurve* curve);
+	void curveDataChanged(const XYCurve* curve);
 
 private:
 	void init();
@@ -157,6 +186,7 @@ private:
 	void layoutRowCountChanged(int);
 	void layoutColumnCountChanged(int);
 	void themeChanged(const QString&);
+	void showCursorDock(TreeModel*, QVector<CartesianPlot*>);
 };
 
 #endif

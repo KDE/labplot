@@ -28,12 +28,13 @@
  ***************************************************************************/
 
 #include "backend/core/AbstractPart.h"
-#include "commonfrontend/core/PartMdiView.h"
 #include "backend/core/Workbook.h"
 #include "backend/datapicker/Datapicker.h"
+#include "backend/datapicker/DatapickerCurve.h"
+#include "backend/datasources/LiveDataSource.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/datapicker/DatapickerCurve.h"
+#include "commonfrontend/core/PartMdiView.h"
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTTopic.h"
 #endif
@@ -47,7 +48,8 @@
  * \class AbstractPart
  * \brief Base class of Aspects with MDI windows as views (AspectParts).
  */
-AbstractPart::AbstractPart(const QString& name) : AbstractAspect(name) {
+AbstractPart::AbstractPart(const QString& name, AspectType type)
+	: AbstractAspect(name, type) {
 }
 
 AbstractPart::~AbstractPart() {
@@ -112,8 +114,9 @@ QMenu* AbstractPart::createContextMenu() {
 
 	if (m_mdiWindow) {
 		if ( (dynamic_cast<Spreadsheet*>(this) || dynamic_cast<Matrix*>(this))
+			&& !dynamic_cast<const LiveDataSource*>(this)
 #ifdef HAVE_MQTT
-		&& !dynamic_cast<const MQTTTopic*>(this)
+			&& !dynamic_cast<const MQTTTopic*>(this)
 #endif
 		) {
 			QMenu* subMenu = new QMenu(i18n("Import Data"), menu);
@@ -150,4 +153,12 @@ QMenu* AbstractPart::createContextMenu() {
 	}
 
 	return menu;
+}
+
+bool AbstractPart::isDraggable() const {
+	return true;
+}
+
+QVector<AspectType> AbstractPart::dropableOn() const {
+	return QVector<AspectType>{AspectType::Folder, AspectType::Project};
 }

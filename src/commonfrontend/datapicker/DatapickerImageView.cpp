@@ -476,7 +476,7 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 		//copy the part of the view to be shown magnified
 		const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
 		const QRectF copyRect(pos.x() - size/(2*magnificationFactor), pos.y() - size/(2*magnificationFactor), size/magnificationFactor, size/magnificationFactor);
-		QPixmap px = QPixmap::grabWidget(this, mapFromScene(copyRect).boundingRect());
+		QPixmap px = grab(mapFromScene(copyRect).boundingRect());
 		px = px.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
 		//draw the bounding rect

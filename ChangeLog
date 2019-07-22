@@ -1,3 +1,36 @@
+-----2.7-----
+New features:
+	* Allow to move objects (drag&drop) to different folders in the project explorer
+	* [spreadsheet] allow to insert multiple rows and columns in one step
+	* [spreadsheet] improved the handling of calculated columns (values calculated via a formula):
+		* Allow to automatically update the calculated column on data changes in the variable columns
+		* Invalidate the calculated column if one of the variable columns was deleted
+		* In "Functions Values" dialog highlight the variable column combobox red if the variable column was deleted in the project
+		* In "Functions Values" dialog don't allow to select columns to be calculated as variable columns (avoid circular dependencies)
+	* BUG 406805 - support für directory structures in ROOT files
+	* Automatically update curves if a data column deleted before was re-added again (during the import or manually)
+
+UX improvements:
+	* in the "Import Data" dialog show the history of the recently imported files
+	* Improved the selection of curves in the plot that are near to or behind each other
+	* BUG 408529 - Allow to use DEL to delete cells in spreadsheet and matrix
+	* BUG 408537 - Allow to insert multiple rows and columns in the spreadsheet in one step
+	* Added translations to Windows and macOS packages
+
+Performance:
+	* Increased the plotting speed for curves with many data points by removing points which are shown on the same pixel in the scene
+
+Bug fixes:
+	* Disable autoscale when zooming, otherwise wrong (= auto scaled) data region is shown after project save&open
+	* [macOS] fix determining number of lines of data files
+	* Bug 408530 - correctly show error bars for data source columns having NANs
+	* Bug 407847 - fixed the broken project import
+	* [data fitting] handle weighted fitting with zero errors correctly
+	* [data fitting] allow weighted fitting with data source from curve
+	* [data fitting] fix function for calculating bounded values
+	* [nsl] fix memory leak in line simplification (Douglas Peuker variant)
+	* [nsl] fix bug in calculating Bessel polynomials on Windows (used in Bessel filter)
+
 -----2.6-----
 New features:
 	* Histogram

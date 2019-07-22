@@ -45,7 +45,7 @@ Copyright            : (C) 2009-2019 Alexander Semke (alexander.semke@web.de)
 #include <KFilterDev>
 #include <QDateTime>
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
 #include <QProcess>
 #include <QStandardPaths>
 #endif
@@ -246,15 +246,17 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 // 		return -1;
 
 	size_t lineCount = 0;
-#ifdef Q_OS_LINUX
-	//on linux use wc, if available, which is much faster than counting lines in the file
+#if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
+	//on linux and BSD use wc, if available, which is much faster than counting lines in the file
 	if (device.compressionType() == KCompressionDevice::None && !QStandardPaths::findExecutable(QLatin1String("wc")).isEmpty()) {
 		QProcess wc;
 		wc.start(QLatin1String("wc"), QStringList() << QLatin1String("-l") << fileName);
 		size_t lineCount = 0;
-		while (wc.waitForReadyRead())
-			lineCount = wc.readLine().split(' ')[0].toInt();
-		lineCount++;	// last line not counted
+		while (wc.waitForReadyRead()) {
+			QString line(wc.readLine());
+			// wc on macOS has leading spaces: use SkipEmptyParts
+			lineCount = line.split(' ', QString::SkipEmptyParts)[0].toInt();
+		}
 		return lineCount;
 	}
 #endif
@@ -549,12 +551,15 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			firstLineStringList[i] = firstLineStringList[i].simplified();
 	}
 
+	//in GUI in AsciiOptionsWidget we start counting from 1, subtract 1 here to start from zero
+	m_actualStartRow = startRow - 1;
+
 	if (headerEnabled) {	// use first line to name vectors
 		vectorNames = firstLineStringList;
 		QDEBUG("vector names =" << vectorNames);
-		m_actualStartRow = startRow + 1;
-	} else
-		m_actualStartRow = startRow;
+		++m_actualStartRow;
+	}
+
 
 	// set range to read
 	if (endColumn == -1) {
@@ -1166,16 +1171,15 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 						bool isNumber;
 						const double value = locale.toDouble(valueString, &isNumber);
 						static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : nanValue);
-						qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<double>*>(m_dataContainer[n])->size();
+// 						qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<double>*>(m_dataContainer[n])->size();
 						break;
 					}
 					case AbstractColumn::Integer: {
 						DEBUG("	Integer");
 						bool isNumber;
 						const int value = locale.toInt(valueString, &isNumber);
-						DEBUG("	container size = " << m_dataContainer.size() << ", current row = " << currentRow);
 						static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : 0);
-						qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
+// 						qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
 
 						break;
 					}
@@ -1295,8 +1299,8 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		lines = m_actualRows;
 
 	//skip data lines, if required
-	DEBUG("	Skipping " << m_actualStartRow - 1 << " lines");
-	for (int i = 0; i < m_actualStartRow - 1; ++i)
+	DEBUG("	Skipping " << m_actualStartRow << " lines");
+	for (int i = 0; i < m_actualStartRow; ++i)
 		device.readLine();
 
 	DEBUG("	Reading " << qMin(lines, m_actualRows)  << " lines, " << m_actualCols << " columns");
@@ -1340,7 +1344,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				continue;
 			}
 
-			//column counting starts with 1, substract 1 as well as another 1 for the index column if required
+			//column counting starts with 1, subtract 1 as well as another 1 for the index column if required
 			int col = createIndexEnabled ? n + startColumn - 2: n + startColumn - 1;
 
 			if (col < lineStringList.size()) {
@@ -1555,8 +1559,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	QDEBUG("	column names = " << vectorNames);
 
 	//skip data lines, if required
-	DEBUG("	Skipping " << m_actualStartRow - 1 << " lines");
-	for (int i = 0; i < m_actualStartRow - 1; ++i)
+	DEBUG("	Skipping " << m_actualStartRow << " lines");
+	for (int i = 0; i < m_actualStartRow; ++i)
 		device.readLine();
 
 	DEBUG("	Generating preview for " << qMin(lines, m_actualRows)  << " lines");
@@ -1584,7 +1588,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 				continue;
 			}
 
-			//column counting starts with 1, substract 1 as well as another 1 for the index column if required
+			//column counting starts with 1, subtract 1 as well as another 1 for the index column if required
 			int col = createIndexEnabled ? n + startColumn - 2: n + startColumn - 1;
 
 			if (col < lineStringList.size()) {
@@ -2053,7 +2057,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 	}
 
 	int newDataIdx = 0;
-	bool sampleSizeReached = false;
+	//TODO: bool sampleSizeReached = false;
 	{
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE("AsciiLiveDataImportReadingFromFile: ");
@@ -2067,7 +2071,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 				newLinesForSampleSizeNotTillEnd++;
 				//for Continuous reading and FromEnd we read sample rate number of lines if possible
 				if (newLinesForSampleSizeNotTillEnd == spreadsheet->mqttClient()->sampleSize()) {
-					sampleSizeReached = true;
+					//TODO: sampleSizeReached = true;
 					break;
 				}
 			}

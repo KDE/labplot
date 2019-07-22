@@ -30,6 +30,8 @@
 #include "XYCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
@@ -61,7 +63,7 @@
   \ingroup kdefrontend
 */
 
-XYCurveDock::XYCurveDock(QWidget* parent) : QWidget(parent) {
+XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 
 	//Tab "Values"
@@ -174,12 +176,17 @@ XYCurveDock::XYCurveDock(QWidget* parent) : QWidget(parent) {
 	connect( ui.sbErrorBarsOpacity, SIGNAL(valueChanged(int)), this, SLOT(errorBarsOpacityChanged(int)) );
 
 	//template handler
+	auto* frame = new QFrame(this);
+	auto* layout = new QHBoxLayout(frame);
+	layout->setContentsMargins(0, 11, 0, 11);
+
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::XYCurve);
-	ui.verticalLayout->addWidget(templateHandler);
-	templateHandler->show();
+	layout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+	ui.verticalLayout->addWidget(frame);
 
 	retranslateUi();
 	init();
@@ -193,6 +200,8 @@ XYCurveDock::~XYCurveDock() {
 void XYCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	m_leName = uiGeneralTab.leName;
+	m_leComment = uiGeneralTab.leComment;
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
@@ -201,9 +210,11 @@ void XYCurveDock::setupGeneral() {
 	auto* gridLayout = qobject_cast<QGridLayout*>(generalTab->layout());
 
 	cbXColumn = new TreeViewComboBox(generalTab);
+	cbXColumn->useCurrentIndexText(false);
 	gridLayout->addWidget(cbXColumn, 2, 2, 1, 1);
 
 	cbYColumn = new TreeViewComboBox(generalTab);
+	cbYColumn->useCurrentIndexText(false);
 	gridLayout->addWidget(cbYColumn, 3, 2, 1, 1);
 
 	//General
@@ -469,9 +480,10 @@ void XYCurveDock::setModel() {
 	m_aspectTreeModel->enablePlottableColumnsOnly(true);
 	m_aspectTreeModel->enableShowPlotDesignation(true);
 
-	QList<const char*> list;
-	list << "Folder" << "Workbook" << "Datapicker" << "DatapickerCurve" << "Spreadsheet"
-		<< "LiveDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYFitCurve" << "CantorWorksheet";
+	QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
+	                       AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
+	                       AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot,
+	                       AspectType::XYFitCurve, AspectType::CantorWorksheet};
 
 	if (cbXColumn) {
 		cbXColumn->setTopLevelClasses(list);
@@ -483,8 +495,7 @@ void XYCurveDock::setModel() {
 	cbYErrorMinusColumn->setTopLevelClasses(list);
 	cbYErrorPlusColumn->setTopLevelClasses(list);
 
-	list.clear();
-	list << "Column" << "XYCurve";
+	list = {AspectType::Column, AspectType::XYCurve};
 	m_aspectTreeModel->setSelectableAspects(list);
 
 	if (cbXColumn) {
@@ -496,6 +507,24 @@ void XYCurveDock::setModel() {
 	cbXErrorPlusColumn->setModel(m_aspectTreeModel);
 	cbYErrorMinusColumn->setModel(m_aspectTreeModel);
 	cbYErrorPlusColumn->setModel(m_aspectTreeModel);
+
+	if (cbXColumn) {
+		QString path = m_curve->xColumnPath().split("/").last();
+		if (m_curve->xColumn()) {
+			path += QString("\t ")+m_curve->xColumn()->plotDesignationString();
+			cbXColumn->setInvalid(false);
+		} else
+			cbXColumn->setInvalid(true, i18n("The column \"%1\" is not available. If a new column at this path is created, it is linked to this curve. If you wanna hold this column, don't change anything in this combobox.", m_curve->xColumnPath()));
+		cbXColumn->setText(path);
+
+		path = m_curve->yColumnPath().split("/").last();
+		if (m_curve->yColumn()) {
+			path += QString("\t ")+m_curve->yColumn()->plotDesignationString();
+			cbYColumn->setInvalid(false);
+		} else
+			cbYColumn->setInvalid(true, i18n("The column \"%1\" is not available. If a new column at this path is created, it is linked to this curve. If you wanna hold this column, don't change anything in this combobox.", m_curve->xColumnPath()));
+		cbYColumn->setText(path);
+	}
 }
 
 /*!
@@ -505,6 +534,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
+	m_aspect = list.first();
 	Q_ASSERT(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
@@ -550,6 +580,14 @@ void XYCurveDock::initGeneralTab() {
 		uiGeneralTab.leName->setText(QString());
 		uiGeneralTab.leComment->setText(QString());
 	}
+
+	checkColumnAvailability(cbXColumn, m_curve->xColumn(), m_curve->xColumnPath());
+	checkColumnAvailability(cbYColumn, m_curve->yColumn(), m_curve->yColumnPath());
+	checkColumnAvailability(cbValuesColumn, m_curve->valuesColumn(), m_curve->valuesColumnPath());
+	checkColumnAvailability(cbXErrorPlusColumn, m_curve->xErrorPlusColumn(), m_curve->xErrorPlusColumnPath());
+	checkColumnAvailability(cbXErrorMinusColumn, m_curve->xErrorMinusColumn(), m_curve->xErrorMinusColumnPath());
+	checkColumnAvailability(cbYErrorPlusColumn, m_curve->yErrorPlusColumn(), m_curve->yErrorPlusColumnPath());
+	checkColumnAvailability(cbYErrorMinusColumn, m_curve->yErrorMinusColumn(), m_curve->yErrorMinusColumnPath());
 
 	//show the properties of the first curve
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
@@ -715,6 +753,28 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 	}
 }
 
+void XYCurveDock::checkColumnAvailability(TreeViewComboBox* cb, const AbstractColumn* column, const QString columnPath) {
+	if (!cb)
+		return;// normally it shouldn't be called
+
+	// don't make the comboboxes red for initially created curves
+	if (!column && columnPath.isEmpty()) {
+		cb->setText("");
+		cb->setInvalid(false);
+		return;
+	}
+
+	if (column) {
+		// current index text should be used
+		cb->useCurrentIndexText(true);
+		cb->setInvalid(false);
+	} else {
+		cb->useCurrentIndexText(false);
+		cb->setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", columnPath));
+	}
+	cb->setText(columnPath.split("/").last());
+}
+
 /*!
   shows the formatting properties of the column \c column.
   Called, when a new column for the values was selected - either by changing the type of the values (none, x, y, etc.) or
@@ -755,7 +815,6 @@ void XYCurveDock::showValuesColumnFormat(const Column* column) {
 }
 
 void XYCurveDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
-	DEBUG("XYCurveDock::setModelIndexFromAspect()");
 	if (aspect)
 		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(aspect));
 	else
@@ -766,8 +825,10 @@ void XYCurveDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAs
 //********** SLOTs for changes triggered in XYCurveDock ********
 //*************************************************************
 void XYCurveDock::retranslateUi() {
-	ui.lLineIncreasingXOnly->setToolTip(i18n("Connect data points only for strictly increasing values of X"));
-	ui.chkLineIncreasingXOnly->setToolTip(i18n("Connect data points only for strictly increasing values of X"));
+	ui.lLineSkipGaps->setToolTip(i18n("If checked, connect neighbour points with lines even if there are gaps (invalid or masked values) between them"));
+	ui.chkLineSkipGaps->setToolTip(i18n("If checked, connect neighbour points with lines even if there are gaps (invalid or masked values) between them"));
+	ui.lLineIncreasingXOnly->setToolTip(i18n("If checked, connect data points only for strictly increasing values of X"));
+	ui.chkLineIncreasingXOnly->setToolTip(i18n("If checked, connect data points only for strictly increasing values of X"));
 	//TODO:
 // 	uiGeneralTab.lName->setText(i18n("Name"));
 // 	uiGeneralTab.lComment->setText(i18n("Comment"));
@@ -776,21 +837,6 @@ void XYCurveDock::retranslateUi() {
 // 	uiGeneralTab.lYColumn->setText(i18n("y-data"));
 
 	//TODO updatePenStyles, updateBrushStyles for all comboboxes
-}
-
-// "General"-tab
-void XYCurveDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setName(uiGeneralTab.leName->text());
-}
-
-void XYCurveDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setComment(uiGeneralTab.leComment->text());
 }
 
 void XYCurveDock::xColumnChanged(const QModelIndex& index) {
@@ -1740,12 +1786,16 @@ void XYCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 void XYCurveDock::curveXColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	this->setModelIndexFromAspect(cbXColumn, column);
+	cbXColumn->useCurrentIndexText(true);
+	cbXColumn->setInvalid(false);
 	m_initializing = false;
 }
 
 void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	this->setModelIndexFromAspect(cbYColumn, column);
+	cbYColumn->useCurrentIndexText(true);
+	cbYColumn->setInvalid(false);
 	m_initializing = false;
 }
 

@@ -45,8 +45,8 @@ public:
 	explicit Column(const QString& name, AbstractColumn::ColumnMode = AbstractColumn::Numeric);
 	// template constructor for all supported data types (AbstractColumn::ColumnMode) must be defined in header
 	template <typename T>
-	explicit Column(const QString& name, QVector<T> data, AbstractColumn::ColumnMode mode = AbstractColumn::Numeric)
-		: AbstractColumn(name), d(new ColumnPrivate(this, mode, new QVector<T>(data))) {
+	Column(const QString& name, QVector<T> data, AbstractColumn::ColumnMode mode = AbstractColumn::Numeric)
+		: AbstractColumn(name, AspectType::Column), d(new ColumnPrivate(this, mode, new QVector<T>(data))) {
 		init();
 	}
 	void init();
@@ -59,10 +59,14 @@ public:
 	void setColumnMode(AbstractColumn::ColumnMode) override;
 	void setColumnModeFast(AbstractColumn::ColumnMode);
 
+	bool isDraggable() const override;
+	QVector<AspectType> dropableOn() const override;
+
 	bool copy(const AbstractColumn*) override;
 	bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) override;
 
 	AbstractColumn::PlotDesignation plotDesignation() const override;
+	QString plotDesignationString() const override;
 	void setPlotDesignation(AbstractColumn::PlotDesignation) override;
 
 	bool isReadOnly() const override;
@@ -73,10 +77,15 @@ public:
 	AbstractSimpleFilter* outputFilter() const;
 	ColumnStringIO* asStringColumn() const;
 
-	void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
+	void setFormula(const QString& formula, const QStringList& variableNames,
+					const QVector<Column*>& columns, bool autoUpdate);
 	QString formula() const;
 	const QStringList& formulaVariableNames() const;
-	const QStringList& formulaVariableColumnPathes() const;
+	const QVector<Column*>& formulaVariableColumns() const;
+	const QStringList& formulaVariableColumnPaths() const;
+	void setformulVariableColumnsPath(int index, const QString path);
+	void setformulVariableColumn(int index, Column *column);
+	bool formulaAutoUpdate() const;
 
 	QString formula(int) const  override;
 	QVector< Interval<int> > formulaIntervals() const override;
@@ -114,6 +123,10 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+	void finalizeLoad();
+
+public slots:
+	void updateFormula();
 
 private:
 	bool XmlReadInputFilter(XmlStreamReader*);

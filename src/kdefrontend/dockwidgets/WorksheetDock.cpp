@@ -50,8 +50,10 @@
   \ingroup kdefrontend
 */
 
-WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent) {
+WorksheetDock::WorksheetDock(QWidget *parent): BaseDock(parent) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
 	//Background-tab
 	ui.cbBackgroundColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
@@ -59,19 +61,26 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent) {
 
 	ui.leBackgroundFileName->setCompleter(new QCompleter(new QDirModel, this));
 
+	//Layout-tab
+	ui.chScaleContent->setToolTip(i18n("If checked, rescale the content of the worksheet on size changes. Otherwise resize the canvas only."));
+
+	ui.cbLayout->addItem(QIcon::fromTheme("labplot-editbreaklayout"), i18n("No Layout"));
+	ui.cbLayout->addItem(QIcon::fromTheme("labplot-editvlayout"), i18n("Vertical Layout"));
+	ui.cbLayout->addItem(QIcon::fromTheme("labplot-edithlayout"), i18n("Horizontal Layout"));
+	ui.cbLayout->addItem(QIcon::fromTheme("labplot-editgrid"), i18n("Grid Layout"));
+
 	//adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
 
-		layout->setContentsMargins(2,2,2,2);
+		layout->setContentsMargins(2, 2, 2, 2);
 		layout->setHorizontalSpacing(2);
 		layout->setVerticalSpacing(2);
 	}
 
 	//SLOTs
-
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &WorksheetDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &WorksheetDock::commentChanged);
@@ -102,6 +111,8 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent) {
 			this, &WorksheetDock::backgroundOpacityChanged);
 
 	//Layout
+	connect(ui.cbLayout, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			 this, &WorksheetDock::layoutChanged);
 	connect( ui.chScaleContent, &QCheckBox::clicked, this, &WorksheetDock::scaleContentChanged);
 	connect( ui.sbLayoutTopMargin, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
 			 this, &WorksheetDock::layoutTopMarginChanged);
@@ -123,6 +134,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent) {
 	//theme and template handlers
 	auto* frame = new QFrame(this);
 	auto* layout = new QHBoxLayout(frame);
+	layout->setContentsMargins(0, 11, 0, 11);
 
 	m_themeHandler = new ThemeHandler(this);
 	layout->addWidget(m_themeHandler);
@@ -144,6 +156,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	m_initializing = true;
 	m_worksheetList = list;
 	m_worksheet = list.first();
+	m_aspect = list.first();
 
 	//if there are more then one worksheet in the list, disable the name and comment field in the tab "general"
 	if (list.size() == 1) {
@@ -163,6 +176,8 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 		ui.leName->setText(QString());
 		ui.leComment->setText(QString());
 	}
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 
 	//show the properties of the first worksheet
 	this->load();
@@ -318,20 +333,6 @@ void WorksheetDock::retranslateUi() {
 }
 
 // "General"-tab
-void WorksheetDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_worksheet->setName(ui.leName->text());
-}
-
-void WorksheetDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_worksheet->setComment(ui.leComment->text());
-}
-
 void WorksheetDock::scaleContentChanged(bool scaled) {
 	if (m_initializing)
 		return;
@@ -551,6 +552,47 @@ void WorksheetDock::backgroundOpacityChanged(int value) {
 }
 
 //"Layout"-tab
+void WorksheetDock::layoutChanged(int index) {
+	Worksheet::Layout layout = (Worksheet::Layout)index;
+
+	bool b = (layout != Worksheet::NoLayout);
+	ui.sbLayoutTopMargin->setEnabled(b);
+	ui.sbLayoutBottomMargin->setEnabled(b);
+	ui.sbLayoutLeftMargin->setEnabled(b);
+	ui.sbLayoutRightMargin->setEnabled(b);
+	ui.sbLayoutHorizontalSpacing->setEnabled(b);
+	ui.sbLayoutVerticalSpacing->setEnabled(b);
+	ui.sbLayoutRowCount->setEnabled(b);
+	ui.sbLayoutColumnCount->setEnabled(b);
+
+	//show the "scale content" option if no layout active
+	ui.lScaleContent->setVisible(!b);
+	ui.chScaleContent->setVisible(!b);
+
+	if (b) {
+		//show grid specific settings if grid layout selected
+		bool grid = (layout == Worksheet::GridLayout);
+		ui.lGrid->setVisible(grid);
+		ui.lRowCount->setVisible(grid);
+		ui.sbLayoutRowCount->setVisible(grid);
+		ui.lColumnCount->setVisible(grid);
+		ui.sbLayoutColumnCount->setVisible(grid);
+	} else {
+		//no layout selected, hide grid specific settings that were potentially shown before
+		ui.lGrid->setVisible(false);
+		ui.lRowCount->setVisible(false);
+		ui.sbLayoutRowCount->setVisible(false);
+		ui.lColumnCount->setVisible(false);
+		ui.sbLayoutColumnCount->setVisible(false);
+	}
+
+	if (m_initializing)
+		return;
+
+	for (auto* worksheet : m_worksheetList)
+		worksheet->setLayout(layout);
+}
+
 void WorksheetDock::layoutTopMarginChanged(double margin) {
 	if (m_initializing)
 		return;
@@ -737,30 +779,9 @@ void WorksheetDock::worksheetBackgroundOpacityChanged(float opacity) {
 }
 
 void WorksheetDock::worksheetLayoutChanged(Worksheet::Layout layout) {
-	bool b = (layout != Worksheet::NoLayout);
-	ui.sbLayoutTopMargin->setEnabled(b);
-	ui.sbLayoutBottomMargin->setEnabled(b);
-	ui.sbLayoutLeftMargin->setEnabled(b);
-	ui.sbLayoutRightMargin->setEnabled(b);
-	ui.sbLayoutHorizontalSpacing->setEnabled(b);
-	ui.sbLayoutVerticalSpacing->setEnabled(b);
-	ui.sbLayoutRowCount->setEnabled(b);
-	ui.sbLayoutColumnCount->setEnabled(b);
-
-	if (b) {
-		bool grid = (layout == Worksheet::GridLayout);
-		ui.lGrid->setVisible(grid);
-		ui.lRowCount->setVisible(grid);
-		ui.sbLayoutRowCount->setVisible(grid);
-		ui.lColumnCount->setVisible(grid);
-		ui.sbLayoutColumnCount->setVisible(grid);
-	} else {
-		ui.lGrid->setVisible(true);
-		ui.lRowCount->setVisible(true);
-		ui.sbLayoutRowCount->setVisible(true);
-		ui.lColumnCount->setVisible(true);
-		ui.sbLayoutColumnCount->setVisible(true);
-	}
+	m_initializing = true;
+	ui.cbLayout->setCurrentIndex(layout);
+	m_initializing = false;
 }
 
 void WorksheetDock::worksheetLayoutTopMarginChanged(float value) {
@@ -838,6 +859,7 @@ void WorksheetDock::load() {
 		ui.leBackgroundFileName->setStyleSheet(QString());
 
 	// Layout
+	ui.cbLayout->setCurrentIndex( (int) m_worksheet->layout() );
 	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), Worksheet::Centimeter) );
 	ui.sbLayoutBottomMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutBottomMargin(), Worksheet::Centimeter) );
 	ui.sbLayoutLeftMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutLeftMargin(), Worksheet::Centimeter) );

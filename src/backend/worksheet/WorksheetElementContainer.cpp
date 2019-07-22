@@ -48,14 +48,14 @@
  * worksheet elements. Such a container can be a plot or group of elements.
  */
 
-WorksheetElementContainer::WorksheetElementContainer(const QString& name)
-	: WorksheetElement(name), d_ptr(new WorksheetElementContainerPrivate(this)) {
+WorksheetElementContainer::WorksheetElementContainer(const QString& name, AspectType type)
+	: WorksheetElement(name, type), d_ptr(new WorksheetElementContainerPrivate(this)) {
 
 	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
 
-WorksheetElementContainer::WorksheetElementContainer(const QString& name, WorksheetElementContainerPrivate* dd)
-	: WorksheetElement(name), d_ptr(dd) {
+WorksheetElementContainer::WorksheetElementContainer(const QString& name, WorksheetElementContainerPrivate* dd, AspectType type)
+	: WorksheetElement(name, type), d_ptr(dd) {
 
 	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
@@ -132,6 +132,13 @@ void WorksheetElementContainer::retransform() {
 	d->recalcShapeAndBoundingRect();
 }
 
+/*!
+ * called if the size of the worksheet page was changed and the content has to be adjusted/resized (\c pageResize = true)
+ * or if a new rectangular for the element container was set (\c pageResize = false).
+ * In the second case, \c WorksheetElement::handleResize() is called for every worksheet child to adjuste the content to the new size.
+ * In the first case, a new rectangular for the container is calculated and set first, which on the other hand, triggers the content adjustments
+ * in the container children.
+ */
 void WorksheetElementContainer::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 	DEBUG("WorksheetElementContainer::handleResize()");
 	Q_D(const WorksheetElementContainer);
@@ -141,11 +148,8 @@ void WorksheetElementContainer::handleResize(double horizontalRatio, double vert
 		rect.setHeight(d->rect.height()*verticalRatio);
 		setRect(rect);
 	} else {
-		//TODO
 // 		for (auto* elem : children<WorksheetElement>(IncludeHidden))
 // 			elem->handleResize(horizontalRatio, verticalRatio);
-
-// 		retransform();
 	}
 }
 
@@ -237,13 +241,15 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 // 	if (q->isLoading())
 // 		return;
 
-	boundingRectangle = QRectF();
-	containerShape = QPainterPath();
-	QVector<WorksheetElement*> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach (const WorksheetElement* elem, childList)
-		boundingRectangle |= elem->graphicsItem()->mapRectToParent(elem->graphicsItem()->boundingRect());
-
+	//old logic calculating the bounding box as as the box covering all children.
+	//we might need this logic later once we implement something like selection of multiple plots, etc.
+// 	boundingRectangle = QRectF();
+// 	QVector<WorksheetElement*> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+// 	foreach (const WorksheetElement* elem, childList)
+// 		boundingRectangle |= elem->graphicsItem()->mapRectToParent(elem->graphicsItem()->boundingRect());
+//
 	float penWidth = 2.;
+	boundingRectangle = q->rect();
 	boundingRectangle = QRectF(-boundingRectangle.width()/2 - penWidth / 2, -boundingRectangle.height()/2 - penWidth / 2,
 				  boundingRectangle.width() + penWidth, boundingRectangle.height() + penWidth);
 
@@ -251,6 +257,7 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 	path.addRect(boundingRectangle);
 
 	//make the shape somewhat thicker then the hoveredPen to make the selection/hovering box more visible
+	containerShape = QPainterPath();
 	containerShape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), penWidth)));
 }
 

@@ -164,7 +164,7 @@ class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Privat
 	public: \
 		class_name ## cmd_name ## Cmd(class_name::Private *target, value_type newValue, const KLocalizedString &description) \
 			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {} \
-		virtual void finalize() { m_target->finalize_method(); } \
+		virtual void finalize() override { m_target->finalize_method(); } \
 };
 
 // setter class with finalize() and signal emitting.

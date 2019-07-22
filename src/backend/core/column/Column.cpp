@@ -67,8 +67,9 @@ extern "C" {
  * have a view as they are intended to be displayed inside a spreadsheet.
  */
 
-Column::Column(const QString& name, AbstractColumn::ColumnMode mode)
-	: AbstractColumn(name), d(new ColumnPrivate(this, mode)) {
+Column::Column(const QString& name, ColumnMode mode)
+	: AbstractColumn(name, AspectType::Column), d(new ColumnPrivate(this, mode)) {
+
 	init();
 }
 
@@ -107,7 +108,7 @@ QMenu* Column::createContextMenu() {
 	//TODO: we don't need to add anything from the view for MQTTTopic columns.
 	//at the moment it's ok to check to the null pointer for firstAction here.
 	//later, once we have some actions in the menu also for MQTT topics we'll
-	//need to explicitely to dynamic_cast for MQTTTopic
+	//need to explicitly to dynamic_cast for MQTTTopic
 	if (firstAction)
 		emit requestProjectContextMenu(menu);
 
@@ -211,6 +212,14 @@ void Column::setColumnModeFast(AbstractColumn::ColumnMode mode) {
 		addChildFast(d->outputFilter());
 		d->outputFilter()->input(0, this);
 	}
+}
+
+bool Column::isDraggable() const {
+	return true;
+}
+
+QVector<AspectType> Column::dropableOn() const {
+	return QVector<AspectType>{AspectType::CartesianPlot};
 }
 
 /**
@@ -320,15 +329,41 @@ const QStringList& Column::formulaVariableNames() const {
 	return d->formulaVariableNames();
 }
 
-const QStringList& Column::formulaVariableColumnPathes() const {
-	return d->formulaVariableColumnPathes();
+const QVector<Column*>& Column::formulaVariableColumns() const {
+	return d->formulaVariableColumns();
+}
+
+const QStringList& Column::formulaVariableColumnPaths() const {
+	return d->formulaVariableColumnPaths();
+}
+
+void Column::setformulVariableColumnsPath(int index, const QString path) {
+	d->setformulVariableColumnsPath(index, path);
+}
+
+void Column::setformulVariableColumn(int index, Column* column) {
+	d->setformulVariableColumn(index, column);
+}
+
+bool Column::formulaAutoUpdate() const {
+	return d->formulaAutoUpdate();
 }
 
 /**
  * \brief Sets the formula used to generate column values
  */
-void Column::setFormula(const QString& formula, const QStringList& variableNames, const QStringList& columnPathes) {
-	exec(new ColumnSetGlobalFormulaCmd(d, formula, variableNames, columnPathes));
+void Column::setFormula(const QString& formula, const QStringList& variableNames,
+						const QVector<Column*>& columns, bool autoUpdate) {
+	exec(new ColumnSetGlobalFormulaCmd(d, formula, variableNames, columns, autoUpdate));
+}
+
+/*!
+ * in case the cell values are calculated via a global column formula,
+ * updates the values on data changes in all the dependent changes in the
+ * "variable columns".
+ */
+void Column::updateFormula() {
+	d->updateFormula();
 }
 
 /**
@@ -707,7 +742,6 @@ int Column::integerAt(int row) const {
  * This is used e.g. in \c XYFitCurvePrivate::recalculate()
  */
 void Column::setChanged() {
-
     d->propertiesAvailable = false;
 
 	if (!m_suppressDataChangedSignal)
@@ -715,7 +749,6 @@ void Column::setChanged() {
 
 	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -749,6 +782,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 	//save the formula used to generate column values, if available
 	if (!formula().isEmpty() ) {
 		writer->writeStartElement("formula");
+		writer->writeAttribute("autoUpdate", QString::number(d->formulaAutoUpdate()));
 		writer->writeTextElement("text", formula());
 
 		writer->writeStartElement("variableNames");
@@ -757,7 +791,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 		writer->writeEndElement();
 
 		writer->writeStartElement("columnPathes");
-		for (const auto& path : formulaVariableColumnPathes())
+		for (const auto path : formulaVariableColumnPaths())
 			writer->writeTextElement("path", path);
 		writer->writeEndElement();
 
@@ -921,6 +955,10 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	return !reader->error();
 }
 
+void Column::finalizeLoad() {
+	d->finalizeLoad();
+}
+
 /**
  * \brief Read XML input filter element
  */
@@ -952,6 +990,7 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 	QString formula;
 	QStringList variableNames;
 	QStringList columnPathes;
+	bool autoUpdate = reader->attributes().value("autoUpdate").toInt();
 	while (reader->readNext()) {
 		if (reader->isEndElement()) break;
 
@@ -973,7 +1012,9 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 			}
 		}
 	}
-	setFormula(formula, variableNames, columnPathes);
+
+	d->setFormula(formula, variableNames, columnPathes, autoUpdate);
+
 	return true;
 }
 
@@ -1085,6 +1126,33 @@ int Column::rowCount() const {
  */
 AbstractColumn::PlotDesignation Column::plotDesignation() const {
 	return d->plotDesignation();
+}
+
+QString Column::plotDesignationString() const {
+	switch (plotDesignation()) {
+	case AbstractColumn::NoDesignation:
+		return QString("");
+	case AbstractColumn::X:
+		return QLatin1String("[X]");
+	case AbstractColumn::Y:
+		return QLatin1String("[Y]");
+	case AbstractColumn::Z:
+		return QLatin1String("[Z]");
+	case AbstractColumn::XError:
+		return QLatin1String("[") + i18n("X-error") + QLatin1Char(']');
+	case AbstractColumn::XErrorPlus:
+		return QLatin1String("[") + i18n("X-error +") + QLatin1Char(']');
+	case AbstractColumn::XErrorMinus:
+		return QLatin1String("[") + i18n("X-error -") + QLatin1Char(']');
+	case AbstractColumn::YError:
+		return QLatin1String("[") + i18n("Y-error") + QLatin1Char(']');
+	case AbstractColumn::YErrorPlus:
+		return QLatin1String("[") + i18n("Y-error +") + QLatin1Char(']');
+	case AbstractColumn::YErrorMinus:
+		return QLatin1String("[") + i18n("Y-error -") + QLatin1Char(']');
+	}
+
+	return QString("");
 }
 
 AbstractSimpleFilter* Column::outputFilter() const {

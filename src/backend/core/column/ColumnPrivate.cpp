@@ -4,7 +4,7 @@
     Description          : Private data class of Column
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2019 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
@@ -30,7 +30,9 @@
 #include "ColumnPrivate.h"
 #include "ColumnStringIO.h"
 #include "Column.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/datatypes/filter.h"
+#include "backend/gsl/ExpressionParser.h"
 
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode) :
 	m_column_mode(mode), m_owner(owner) {
@@ -161,7 +163,7 @@ AbstractColumn::ColumnMode ColumnPrivate::columnMode() const {
  */
 void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	DEBUG("ColumnPrivate::setColumnMode() " << ENUM_TO_STRING(AbstractColumn, ColumnMode, m_column_mode)
-		<< " -> " << ENUM_TO_STRING(AbstractColumn, ColumnMode, mode));
+		<< " -> " << ENUM_TO_STRING(AbstractColumn, ColumnMode, mode))
 	if (mode == m_column_mode) return;
 
 	void* old_data = m_data;
@@ -882,13 +884,164 @@ QString ColumnPrivate::formula() const {
 	return m_formula;
 }
 
+bool ColumnPrivate::formulaAutoUpdate() const {
+	return m_formulaAutoUpdate;
+}
+
 /**
  * \brief Sets the formula used to generate column values
  */
-void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes) {
+void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames,
+							   const QVector<Column*>& variableColumns, bool autoUpdate) {
 	m_formula = formula;
 	m_formulaVariableNames = variableNames;
-	m_formulaVariableColumnPathes = variableColumnPathes;
+	m_formulaVariableColumns = variableColumns;
+	m_formulaAutoUpdate = autoUpdate;
+
+	for (auto connection: m_connectionsUpdateFormula)
+		disconnect(connection);
+
+	m_formulaVariableColumnPaths.clear();
+
+	for (auto column : variableColumns) {
+		m_formulaVariableColumnPaths << column->path();
+		if (autoUpdate) {
+			m_connectionsUpdateFormula << connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &ColumnPrivate::formulaVariableColumnRemoved);
+			connect(column->parentAspect(), &AbstractAspect::aspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
+		}
+	}
+}
+
+/*!
+ * called after the import of the project was done and all columns were loaded in \sa Project::load()
+ * to establish the required slot-signal connections for the formula update
+ */
+void ColumnPrivate::finalizeLoad() {
+	if (m_formulaAutoUpdate) {
+		for (auto column : m_formulaVariableColumns) {
+			m_connectionsUpdateFormula << connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &ColumnPrivate::formulaVariableColumnRemoved);
+			connect(column->parentAspect(), &AbstractAspect::aspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
+		}
+	}
+}
+
+/*!
+ * helper function used in \c Column::load() to set parameters read from the xml file.
+ * \param variableColumnPathes is used to restore the pointers to columns from pathes
+ * after the project was loaded in Project::load().
+ */
+ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames,
+								const QStringList& variableColumnPaths, bool autoUpdate) {
+	m_formula = formula;
+	m_formulaVariableNames = variableNames;
+	m_formulaVariableColumnPaths = variableColumnPaths;
+	m_formulaAutoUpdate = autoUpdate;
+}
+
+const QStringList& ColumnPrivate::formulaVariableNames() const {
+	return m_formulaVariableNames;
+}
+
+const QVector<Column*>& ColumnPrivate::formulaVariableColumns() const {
+	return m_formulaVariableColumns;
+}
+
+const QStringList& ColumnPrivate::formulaVariableColumnPaths() const {
+	return m_formulaVariableColumnPaths;
+}
+
+void ColumnPrivate::setformulVariableColumnsPath(int index, QString path) {
+	m_formulaVariableColumnPaths[index] = path;
+}
+
+void ColumnPrivate::setformulVariableColumn(int index, Column* column) {
+	m_formulaVariableColumns[index] = column;
+}
+
+/*!
+ * \sa FunctionValuesDialog::generate()
+ */
+void ColumnPrivate::updateFormula() {
+	//determine variable names and the data vectors of the specified columns
+	QVector<QVector<double>*> xVectors;
+	QVector<QVector<double>*> xNewVectors;
+	int maxRowCount = 0;
+
+	bool valid = true;
+	for (auto column : m_formulaVariableColumns) {
+		if (!column) {
+			valid = false;
+			break;
+		}
+
+		if (column->columnMode() == AbstractColumn::Integer) {
+			//convert integers to doubles first
+			auto* xVector = new QVector<double>(column->rowCount());
+			for (int i = 0; i<column->rowCount(); ++i)
+				xVector->operator[](i) = column->valueAt(i);
+
+			xNewVectors << xVector;
+			xVectors << xVector;
+		} else
+			xVectors << static_cast<QVector<double>* >(column->data());
+
+		if (column->rowCount() > maxRowCount)
+			maxRowCount = column->rowCount();
+	}
+
+	if (valid) {
+		//resize the spreadsheet if one of the data vectors from
+		//other spreadsheet(s) has more elements than the parent spreadsheet
+		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(m_owner->parentAspect());
+		Q_ASSERT(spreadsheet);
+		if (spreadsheet->rowCount() < maxRowCount)
+			spreadsheet->setRowCount(maxRowCount);
+
+		//create new vector for storing the calculated values
+		//the vectors with the variable data can be smaller then the result vector. So, not all values in the result vector might get initialized.
+		//->"clean" the result vector first
+		QVector<double> new_data(rowCount(), NAN);
+
+		//evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
+		ExpressionParser* parser = ExpressionParser::getInstance();
+		parser->evaluateCartesian(m_formula, m_formulaVariableNames, xVectors, &new_data);
+		replaceValues(0, new_data);
+
+		// initialize remaining rows with NAN
+		int remainingRows = rowCount() - maxRowCount;
+		if (remainingRows > 0) {
+			QVector<double> emptyRows(remainingRows, NAN);
+			replaceValues(maxRowCount, emptyRows);
+		}
+	} else {
+		QVector<double> new_data(rowCount(), NAN);
+		replaceValues(0, new_data);
+	}
+
+	//delete help vectors created for the conversion from int to double
+	for (auto* vector : xNewVectors)
+		delete vector;
+}
+
+void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
+	const Column* column = dynamic_cast<const Column*>(aspect);
+	//TODO: why is const_cast requried here?!?
+	int index = m_formulaVariableColumns.indexOf(const_cast<Column*>(column));
+	if (index != -1) {
+		m_formulaVariableColumns[index] = nullptr;
+		updateFormula();
+	}
+}
+
+void ColumnPrivate::formulaVariableColumnAdded(const AbstractAspect* aspect) {
+	int index = m_formulaVariableColumnPaths.indexOf(aspect->path());
+	if (index != -1) {
+		const Column* column = dynamic_cast<const Column*>(aspect);
+		m_formulaVariableColumns[index] = const_cast<Column*>(column);
+		updateFormula();
+	}
 }
 
 /**
@@ -896,14 +1049,6 @@ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variab
  */
 QString ColumnPrivate::formula(int row) const {
 	return m_formulas.value(row);
-}
-
-const QStringList& ColumnPrivate::formulaVariableNames() const {
-	return m_formulaVariableNames;
-}
-
-const QStringList& ColumnPrivate::formulaVariableColumnPathes() const {
-	return m_formulaVariableColumnPathes;
 }
 
 /**
@@ -1214,7 +1359,7 @@ void ColumnPrivate::replaceInteger(int first, const QVector<int>& new_values) {
 
 /*!
  * Updates the properties. Will be called, when data in the column changed.
- * The properies will be used to speed up some algorithms.
+ * The properties will be used to speed up some algorithms.
  * See where variable properties will be used.
  */
 void ColumnPrivate::updateProperties() {
@@ -1278,15 +1423,21 @@ void ColumnPrivate::updateProperties() {
 				// check monotonic increasing
 				if (value >= prevValue && monotonic_increasing < 0)
 					monotonic_increasing = 1;
-				else if (value < prevValue)
+				else if (value < prevValue || std::isnan(value)) {
 					monotonic_increasing = 0;
+					if (monotonic_decreasing == 0)
+						break;
+				}
 				// else: nothing
 
 				// check monotonic decreasing
 				if (value <= prevValue && monotonic_decreasing < 0)
 					monotonic_decreasing = 1;
-				else if (value > prevValue)
+				else if (value > prevValue || std::isnan(value)) {
 					monotonic_decreasing = 0;
+					if (monotonic_increasing == 0)
+						break;
+				}
 
 				prevValue = value;
 

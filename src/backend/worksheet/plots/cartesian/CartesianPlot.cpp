@@ -70,6 +70,8 @@
 #include <QPainter>
 #include <QWidgetAction>
 
+#include <cmath>
+
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -80,11 +82,15 @@
  *
  *
  */
-CartesianPlot::CartesianPlot(const QString &name) : AbstractPlot(name, new CartesianPlotPrivate(this)) {
+CartesianPlot::CartesianPlot(const QString &name)
+	: AbstractPlot(name, new CartesianPlotPrivate(this), AspectType::CartesianPlot) {
+
 	init();
 }
 
-CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd) : AbstractPlot(name, dd) {
+CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd)
+	: AbstractPlot(name, dd, AspectType::CartesianPlot) {
+
 	init();
 }
 
@@ -145,10 +151,12 @@ void CartesianPlot::init() {
 	//offset between the plot area and the area defining the coordinate system, in scene units.
 	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
 	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
+	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
+	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
+	d->symmetricPadding = true;
 
-	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(childAdded(const AbstractAspect*)));
-	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-	        this, SLOT(childRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
+	connect(this, &AbstractAspect::aspectAdded, this, &CartesianPlot::childAdded);
+	connect(this, &AbstractAspect::aspectRemoved, this, &CartesianPlot::childRemoved);
 
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
@@ -388,6 +396,7 @@ void CartesianPlot::initDefault(Type type) {
 
 	//all plot children are initialized -> set the geometry of the plot in scene coordinates.
 	d->rect = QRectF(x,y,w,h);
+	d->retransform();
 }
 
 void CartesianPlot::initActions() {
@@ -421,25 +430,25 @@ void CartesianPlot::initActions() {
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), this);
 
-	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
-	connect(addHistogramAction,SIGNAL(triggered()), SLOT(addHistogram()));
-	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
-	connect(addDataReductionCurveAction, SIGNAL(triggered()), SLOT(addDataReductionCurve()));
-	connect(addDifferentiationCurveAction, SIGNAL(triggered()), SLOT(addDifferentiationCurve()));
-	connect(addIntegrationCurveAction, SIGNAL(triggered()), SLOT(addIntegrationCurve()));
-	connect(addInterpolationCurveAction, SIGNAL(triggered()), SLOT(addInterpolationCurve()));
-	connect(addSmoothCurveAction, SIGNAL(triggered()), SLOT(addSmoothCurve()));
-	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
-	connect(addFourierFilterCurveAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
-	connect(addFourierTransformCurveAction, SIGNAL(triggered()), SLOT(addFourierTransformCurve()));
-	connect(addConvolutionCurveAction, SIGNAL(triggered()), SLOT(addConvolutionCurve()));
-	connect(addCorrelationCurveAction, SIGNAL(triggered()), SLOT(addCorrelationCurve()));
+	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
+	connect(addHistogramAction,&QAction::triggered, this, &CartesianPlot::addHistogram);
+	connect(addEquationCurveAction, &QAction::triggered, this, &CartesianPlot::addEquationCurve);
+	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
+	connect(addDifferentiationCurveAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
+	connect(addIntegrationCurveAction, &QAction::triggered, this, &CartesianPlot::addIntegrationCurve);
+	connect(addInterpolationCurveAction, &QAction::triggered, this, &CartesianPlot::addInterpolationCurve);
+	connect(addSmoothCurveAction, &QAction::triggered, this, &CartesianPlot::addSmoothCurve);
+	connect(addFitCurveAction, &QAction::triggered, this, &CartesianPlot::addFitCurve);
+	connect(addFourierFilterCurveAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
+	connect(addFourierTransformCurveAction, &QAction::triggered, this, &CartesianPlot::addFourierTransformCurve);
+	connect(addConvolutionCurveAction, &QAction::triggered, this, &CartesianPlot::addConvolutionCurve);
+	connect(addCorrelationCurveAction, &QAction::triggered, this, &CartesianPlot::addCorrelationCurve);
 
-	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
-	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
-	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
-	connect(addTextLabelAction, SIGNAL(triggered()), SLOT(addTextLabel()));
-	connect(addCustomPointAction, SIGNAL(triggered()), SLOT(addCustomPoint()));
+	connect(addLegendAction, &QAction::triggered, this, static_cast<void (CartesianPlot::*)()>(&CartesianPlot::addLegend));
+	connect(addHorizontalAxisAction, &QAction::triggered, this, &CartesianPlot::addHorizontalAxis);
+	connect(addVerticalAxisAction, &QAction::triggered, this, &CartesianPlot::addVerticalAxis);
+	connect(addTextLabelAction, &QAction::triggered, this, &CartesianPlot::addTextLabel);
+	connect(addCustomPointAction, &QAction::triggered, this, &CartesianPlot::addCustomPoint);
 
 	//Analysis menu actions
 	addDataOperationAction = new QAction(i18n("Data Operation"), this);
@@ -497,16 +506,16 @@ void CartesianPlot::initActions() {
 
 	addFourierFilterAction = new QAction(i18n("Fourier Filter"), this);
 
-	connect(addDataReductionAction, SIGNAL(triggered()), SLOT(addDataReductionCurve()));
-	connect(addDifferentiationAction, SIGNAL(triggered()), SLOT(addDifferentiationCurve()));
-	connect(addIntegrationAction, SIGNAL(triggered()), SLOT(addIntegrationCurve()));
-	connect(addInterpolationAction, SIGNAL(triggered()), SLOT(addInterpolationCurve()));
-	connect(addSmoothAction, SIGNAL(triggered()), SLOT(addSmoothCurve()));
-	connect(addConvolutionAction, SIGNAL(triggered()), SLOT(addConvolutionCurve()));
-	connect(addCorrelationAction, SIGNAL(triggered()), SLOT(addCorrelationCurve()));
+	connect(addDataReductionAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
+	connect(addDifferentiationAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
+	connect(addIntegrationAction, &QAction::triggered, this, &CartesianPlot::addIntegrationCurve);
+	connect(addInterpolationAction, &QAction::triggered, this, &CartesianPlot::addInterpolationCurve);
+	connect(addSmoothAction, &QAction::triggered, this, &CartesianPlot::addSmoothCurve);
+	connect(addConvolutionAction, &QAction::triggered, this, &CartesianPlot::addConvolutionCurve);
+	connect(addCorrelationAction, &QAction::triggered, this, &CartesianPlot::addCorrelationCurve);
 	for (const auto& action : addFitAction)
-		connect(action, SIGNAL(triggered()), SLOT(addFitCurve()));
-	connect(addFourierFilterAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
+		connect(action, &QAction::triggered, this, &CartesianPlot::addFitCurve);
+	connect(addFourierFilterAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
 
 	//zoom/navigate actions
 	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("Auto Scale"), this);
@@ -522,31 +531,34 @@ void CartesianPlot::initActions() {
 	shiftRightXAction = new QAction(QIcon::fromTheme("labplot-shift-right-x"), i18n("Shift Right X"), this);
 	shiftUpYAction = new QAction(QIcon::fromTheme("labplot-shift-up-y"), i18n("Shift Up Y"), this);
 	shiftDownYAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("Shift Down Y"), this);
+	cursorAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("Cursor"), this); // TODO: change icon
 
-	connect(scaleAutoAction, SIGNAL(triggered()), SLOT(scaleAuto()));
-	connect(scaleAutoXAction, SIGNAL(triggered()), SLOT(scaleAutoX()));
-	connect(scaleAutoYAction, SIGNAL(triggered()), SLOT(scaleAutoY()));
-	connect(zoomInAction, SIGNAL(triggered()), SLOT(zoomIn()));
-	connect(zoomOutAction, SIGNAL(triggered()), SLOT(zoomOut()));
-	connect(zoomInXAction, SIGNAL(triggered()), SLOT(zoomInX()));
-	connect(zoomOutXAction, SIGNAL(triggered()), SLOT(zoomOutX()));
-	connect(zoomInYAction, SIGNAL(triggered()), SLOT(zoomInY()));
-	connect(zoomOutYAction, SIGNAL(triggered()), SLOT(zoomOutY()));
-	connect(shiftLeftXAction, SIGNAL(triggered()), SLOT(shiftLeftX()));
-	connect(shiftRightXAction, SIGNAL(triggered()), SLOT(shiftRightX()));
-	connect(shiftUpYAction, SIGNAL(triggered()), SLOT(shiftUpY()));
-	connect(shiftDownYAction, SIGNAL(triggered()), SLOT(shiftDownY()));
+	connect(scaleAutoAction, &QAction::triggered, this, &CartesianPlot::scaleAuto);
+	connect(scaleAutoXAction, &QAction::triggered, this, &CartesianPlot::scaleAutoX);
+	connect(scaleAutoYAction, &QAction::triggered, this, &CartesianPlot::scaleAutoY);
+	connect(zoomInAction, &QAction::triggered, this, &CartesianPlot::zoomIn);
+	connect(zoomOutAction, &QAction::triggered, this, &CartesianPlot::zoomOut);
+	connect(zoomInXAction, &QAction::triggered, this, &CartesianPlot::zoomInX);
+	connect(zoomOutXAction, &QAction::triggered, this, &CartesianPlot::zoomOutX);
+	connect(zoomInYAction, &QAction::triggered, this, &CartesianPlot::zoomInY);
+	connect(zoomOutYAction, &QAction::triggered, this, &CartesianPlot::zoomOutY);
+	connect(shiftLeftXAction, &QAction::triggered, this, &CartesianPlot::shiftLeftX);
+	connect(shiftRightXAction, &QAction::triggered, this, &CartesianPlot::shiftRightX);
+	connect(shiftUpYAction, &QAction::triggered, this, &CartesianPlot::shiftUpY);
+	connect(shiftDownYAction, &QAction::triggered, this, &CartesianPlot::shiftDownY);
+	connect(cursorAction, &QAction::triggered, this, &CartesianPlot::cursor);
 
 	//visibility action
-	visibilityAction = new QAction(i18n("Visible"), this);
+	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+	connect(visibilityAction, &QAction::triggered, this, &CartesianPlot::visibilityChanged);
 }
 
 void CartesianPlot::initMenus() {
 	initActions();
 
 	addNewMenu = new QMenu(i18n("Add New"));
+	addNewMenu->setIcon(QIcon::fromTheme("list-add"));
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addHistogramAction);
 	addNewMenu->addAction(addEquationCurveAction);
@@ -572,6 +584,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addCustomPointAction);
 
 	zoomMenu = new QMenu(i18n("Zoom"));
+	zoomMenu->setIcon(QIcon::fromTheme("zoom-draw"));
 	zoomMenu->addAction(scaleAutoAction);
 	zoomMenu->addAction(scaleAutoXAction);
 	zoomMenu->addAction(scaleAutoYAction);
@@ -632,9 +645,10 @@ void CartesianPlot::initMenus() {
 
 	//themes menu
 	themeMenu = new QMenu(i18n("Apply Theme"));
+	themeMenu->setIcon(QIcon::fromTheme("color-management"));
 	auto* themeWidget = new ThemesWidget(nullptr);
-	connect(themeWidget, SIGNAL(themeSelected(QString)), this, SLOT(loadTheme(QString)));
-	connect(themeWidget, SIGNAL(themeSelected(QString)), themeMenu, SLOT(close()));
+	connect(themeWidget, &ThemesWidget::themeSelected, this, &CartesianPlot::loadTheme);
+	connect(themeWidget, &ThemesWidget::themeSelected, themeMenu, &QMenu::close);
 
 	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(themeWidget);
@@ -775,7 +789,6 @@ void CartesianPlot::processDropEvent(QDropEvent* event) {
 		dataChanged();
 }
 
-
 bool CartesianPlot::isPanningActive() const {
 	Q_D(const CartesianPlot);
 	return d->panningStarted;
@@ -803,6 +816,9 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::Scale, yScale, yScale)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, yRangeBreakingEnabled, yRangeBreakingEnabled)
 CLASS_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, yRangeBreaks, yRangeBreaks)
 
+CLASS_SHARED_D_READER_IMPL(CartesianPlot, QPen, cursorPen, cursorPen);
+CLASS_SHARED_D_READER_IMPL(CartesianPlot, bool, cursor0Enable, cursor0Enable);
+CLASS_SHARED_D_READER_IMPL(CartesianPlot, bool, cursor1Enable, cursor1Enable);
 CLASS_SHARED_D_READER_IMPL(CartesianPlot, QString, theme, theme)
 
 /*!
@@ -842,13 +858,12 @@ public:
 	};
 
 	void redo() override {
-		QRectF tmp = m_private->rect;
-		//TODO:
 // 		const double horizontalRatio = m_rect.width() / m_private->rect.width();
 // 		const double verticalRatio = m_rect.height() / m_private->rect.height();
+
+		qSwap(m_private->rect, m_rect);
+
 // 		m_private->q->handleResize(horizontalRatio, verticalRatio, false);
-		m_private->rect = m_rect;
-		m_rect = tmp;
 		m_private->retransform();
 		emit m_private->q->rectChanged(m_private->rect);
 	};
@@ -1056,6 +1071,37 @@ void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, ki18n("%1: y-range breaks changed")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetCursorPen, QPen, cursorPen, update)
+void CartesianPlot::setCursorPen(const QPen &pen) {
+	Q_D(CartesianPlot);
+	if (pen != d->cursorPen)
+		exec(new CartesianPlotSetCursorPenCmd(d, pen, ki18n("%1: y-range breaks changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetCursor0Enable, bool, cursor0Enable, updateCursor)
+void CartesianPlot::setCursor0Enable(const bool &enable) {
+	Q_D(CartesianPlot);
+	if (enable != d->cursor0Enable) {
+		if (std::isnan(d->cursor0Pos.x())) { // if never set, set initial position
+			d->cursor0Pos.setX(d->cSystem->mapSceneToLogical(QPointF(0,0)).x());
+			mousePressCursorModeSignal(0, d->cursor0Pos); // simulate mousePress to update values in the cursor dock
+		}
+		exec(new CartesianPlotSetCursor0EnableCmd(d, enable, ki18n("%1: Cursor0 enable")));
+	}
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetCursor1Enable, bool, cursor1Enable, updateCursor)
+void CartesianPlot::setCursor1Enable(const bool &enable) {
+	Q_D(CartesianPlot);
+	if (enable != d->cursor1Enable) {
+		if (std::isnan(d->cursor1Pos.x())) { // if never set, set initial position
+			d->cursor1Pos.setX(d->cSystem->mapSceneToLogical(QPointF(0,0)).x());
+			mousePressCursorModeSignal(1, d->cursor0Pos); // simulate mousePress to update values in the cursor dock
+		}
+		exec(new CartesianPlotSetCursor1EnableCmd(d, enable, ki18n("%1: Cursor1 enable")));
+	}
+}
+
 STD_SETTER_CMD_IMPL_S(CartesianPlot, SetTheme, QString, theme)
 void CartesianPlot::setTheme(const QString& theme) {
 	Q_D(CartesianPlot);
@@ -1239,9 +1285,12 @@ void CartesianPlot::addFitCurve() {
 			curve->setYErrorColumn(curCurve->yErrorPlusColumn());
 		}
 
-		this->addChild(curve);
 		curve->recalculate();
-		emit curve->fitDataChanged(curve->fitData());
+
+		//add the child after the fit was calculated so the dock widgets gets the fit results
+		//and call retransform() after this to calculate and to paint the data points of the fit-curve
+		this->addChild(curve);
+		curve->retransform();
 	} else {
 		beginMacro(i18n("%1: add fit curve", name()));
 		this->addChild(curve);
@@ -1315,26 +1364,44 @@ void CartesianPlot::addCustomPoint() {
 	this->addChild(point);
 }
 
+int CartesianPlot::curveCount(){
+	return children<XYCurve>().length();
+}
+
+const XYCurve* CartesianPlot::getCurve(int index){
+	return children<XYCurve>()[index];
+}
+
+double CartesianPlot::cursorPos(int cursorNumber) {
+	Q_D(CartesianPlot);
+	if (cursorNumber == 0)
+		return d->cursor0Pos.x();
+	else
+		return d->cursor1Pos.x();
+}
+
 void CartesianPlot::childAdded(const AbstractAspect* child) {
 	Q_D(CartesianPlot);
 	const auto* curve = qobject_cast<const XYCurve*>(child);
 	if (curve) {
-		connect(curve, SIGNAL(dataChanged()), this, SLOT(dataChanged()));
-		connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
-		connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
-		connect(curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged()));
+		connect(curve, &XYCurve::dataChanged, this, &CartesianPlot::dataChanged);
+		connect(curve, &XYCurve::xDataChanged, this, &CartesianPlot::xDataChanged);
+		connect(curve, &XYCurve::yDataChanged, this, &CartesianPlot::yDataChanged);
+		connect(curve, static_cast<void (XYCurve::*)(bool)>(&XYCurve::visibilityChanged),
+				this, &CartesianPlot::curveVisibilityChanged);
 
 		//update the legend on changes of the name, line and symbol styles
-		connect(curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(linePenChanged(QPen)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(lineOpacityChanged(qreal)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(symbolsStyleChanged(Symbol::Style)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(symbolsSizeChanged(qreal)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(symbolsRotationAngleChanged(qreal)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(symbolsOpacityChanged(qreal)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(symbolsBrushChanged(QBrush)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(symbolsPenChanged(QPen)), this, SLOT(updateLegend()));
+		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::lineTypeChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::linePenChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::lineOpacityChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::symbolsStyleChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::symbolsSizeChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::symbolsRotationAngleChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::symbolsOpacityChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::symbolsBrushChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::symbolsPenChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, SIGNAL(linePenChanged(QPen)), this, SIGNAL(curveLinePenChanged(QPen))); // feed forward linePenChanged, because Worksheet needs because CursorDock must be updated too
 
 		updateLegend();
 		d->curvesXMinMaxIsDirty = true;
@@ -1382,6 +1449,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 				}
 			}
 		}
+		emit curveAdded(curve);
+
 	} else {
 		const auto* hist = qobject_cast<const Histogram*>(child);
 		if (hist) {
@@ -1390,6 +1459,10 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 			updateLegend();
 		}
+		// if an element is hovered, the curves which are handled manually in this class
+		// must be unhovered
+		const WorksheetElement* element = static_cast<const WorksheetElement*>(child);
+		connect(element, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
 	}
 
 	if (!isLoading()) {
@@ -1453,8 +1526,29 @@ void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAsp
 		m_legend = nullptr;
 	} else {
 		const auto* curve = qobject_cast<const XYCurve*>(child);
-		if (curve)
+		if (curve) {
 			updateLegend();
+			emit curveRemoved(curve);
+		}
+	}
+}
+
+/*!
+ * \brief CartesianPlot::childHovered
+ * Unhover all curves, when another child is hovered. The hover handling for the curves is done in their parent (CartesianPlot),
+ * because the hover should set when the curve is hovered and not just the bounding rect (for more see hoverMoveEvent)
+ */
+void CartesianPlot::childHovered() {
+	Q_D(CartesianPlot);
+	bool curveSender = dynamic_cast<XYCurve*>(QObject::sender()) != nullptr;
+	if (!d->isSelected()) {
+		if (d->m_hovered)
+			d->m_hovered = false;
+		d->update();
+	}
+	if (!curveSender) {
+		for (auto curve: children<XYCurve>())
+			curve->setHover(false);
 	}
 }
 
@@ -1545,6 +1639,7 @@ void CartesianPlot::xDataChanged() {
 			setUndoAware(true);
 		}
 	}
+	emit curveDataChanged(dynamic_cast<XYCurve*>(QObject::sender()));
 }
 
 /*!
@@ -1588,6 +1683,7 @@ void CartesianPlot::yDataChanged() {
 			setUndoAware(true);
 		}
 	}
+	emit curveDataChanged(dynamic_cast<XYCurve*>(QObject::sender()));
 }
 
 void CartesianPlot::curveVisibilityChanged() {
@@ -1601,6 +1697,13 @@ void CartesianPlot::curveVisibilityChanged() {
 		this->scaleAutoX();
 	else if (d->autoScaleY)
 		this->scaleAutoY();
+
+	emit curveVisibilityChangedSignal();
+}
+
+void CartesianPlot::curveLinePenChanged(QPen pen) {
+	const auto* curve = qobject_cast<const XYCurve*>(QObject::sender());
+	emit curveLinePenChanged(pen, curve->name());
 }
 
 void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
@@ -1630,6 +1733,8 @@ void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
 		} else   //zoom m_selection
 			graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 	}
+
+	emit mouseModeChanged();
 }
 
 void CartesianPlot::setLocked(bool locked) {
@@ -1717,6 +1822,7 @@ bool CartesianPlot::scaleAutoX() {
 			d->xMin -= offset;
 			d->xMax += offset;
 		}
+		setAutoScaleX(true);
 		d->retransformScales();
 	}
 
@@ -1802,6 +1908,7 @@ bool CartesianPlot::scaleAutoY() {
 			d->yMin -= offset;
 			d->yMax += offset;
 		}
+		setAutoScaleY(true);
 		d->retransformScales();
 	}
 
@@ -1939,6 +2046,7 @@ bool CartesianPlot::scaleAuto() {
 				d->xMin -= offset;
 				d->xMax += offset;
 			}
+			setAutoScaleX(true);
 		}
 		if (updateY) {
 			if (d->yMax == d->yMin) {
@@ -1955,6 +2063,7 @@ bool CartesianPlot::scaleAuto() {
 				d->yMin -= offset;
 				d->yMax += offset;
 			}
+			setAutoScaleY(true);
 		}
 		d->retransformScales();
 	}
@@ -1965,6 +2074,10 @@ bool CartesianPlot::scaleAuto() {
 void CartesianPlot::zoomIn() {
 	Q_D(CartesianPlot);
 
+	setUndoAware(false);
+	setAutoScaleX(false);
+	setAutoScaleY(false);
+	setUndoAware(true);
 	double oldRange = (d->xMax - d->xMin);
 	double newRange = (d->xMax - d->xMin) / m_zoomFactor;
 	d->xMax = d->xMax + (newRange - oldRange) / 2;
@@ -1980,6 +2093,11 @@ void CartesianPlot::zoomIn() {
 
 void CartesianPlot::zoomOut() {
 	Q_D(CartesianPlot);
+
+	setUndoAware(false);
+	setAutoScaleX(false);
+	setAutoScaleY(false);
+	setUndoAware(true);
 	double oldRange = (d->xMax-d->xMin);
 	double newRange = (d->xMax-d->xMin)*m_zoomFactor;
 	d->xMax = d->xMax + (newRange-oldRange)/2;
@@ -1995,6 +2113,8 @@ void CartesianPlot::zoomOut() {
 
 void CartesianPlot::zoomInX() {
 	Q_D(CartesianPlot);
+
+	setAutoScaleX(false);
 	double oldRange = (d->xMax-d->xMin);
 	double newRange = (d->xMax-d->xMin)/m_zoomFactor;
 	d->xMax = d->xMax + (newRange-oldRange)/2;
@@ -2004,6 +2124,10 @@ void CartesianPlot::zoomInX() {
 
 void CartesianPlot::zoomOutX() {
 	Q_D(CartesianPlot);
+
+	setUndoAware(false);
+	setAutoScaleX(false);
+	setUndoAware(true);
 	double oldRange = (d->xMax-d->xMin);
 	double newRange = (d->xMax-d->xMin)*m_zoomFactor;
 	d->xMax = d->xMax + (newRange-oldRange)/2;
@@ -2013,6 +2137,10 @@ void CartesianPlot::zoomOutX() {
 
 void CartesianPlot::zoomInY() {
 	Q_D(CartesianPlot);
+
+	setUndoAware(false);
+	setAutoScaleY(false);
+	setUndoAware(true);
 	double oldRange = (d->yMax-d->yMin);
 	double newRange = (d->yMax-d->yMin)/m_zoomFactor;
 	d->yMax = d->yMax + (newRange-oldRange)/2;
@@ -2022,6 +2150,10 @@ void CartesianPlot::zoomInY() {
 
 void CartesianPlot::zoomOutY() {
 	Q_D(CartesianPlot);
+
+	setUndoAware(false);
+	setAutoScaleY(false);
+	setUndoAware(true);
 	double oldRange = (d->yMax-d->yMin);
 	double newRange = (d->yMax-d->yMin)*m_zoomFactor;
 	d->yMax = d->yMax + (newRange-oldRange)/2;
@@ -2031,6 +2163,10 @@ void CartesianPlot::zoomOutY() {
 
 void CartesianPlot::shiftLeftX() {
 	Q_D(CartesianPlot);
+
+	setUndoAware(false);
+	setAutoScaleX(false);
+	setUndoAware(true);
 	double offsetX = (d->xMax-d->xMin)*0.1;
 	d->xMax -= offsetX;
 	d->xMin -= offsetX;
@@ -2039,6 +2175,10 @@ void CartesianPlot::shiftLeftX() {
 
 void CartesianPlot::shiftRightX() {
 	Q_D(CartesianPlot);
+
+	setUndoAware(false);
+	setAutoScaleX(false);
+	setUndoAware(true);
 	double offsetX = (d->xMax-d->xMin)*0.1;
 	d->xMax += offsetX;
 	d->xMin += offsetX;
@@ -2047,6 +2187,10 @@ void CartesianPlot::shiftRightX() {
 
 void CartesianPlot::shiftUpY() {
 	Q_D(CartesianPlot);
+
+	setUndoAware(false);
+	setAutoScaleY(false);
+	setUndoAware(true);
 	double offsetY = (d->yMax-d->yMin)*0.1;
 	d->yMax += offsetY;
 	d->yMin += offsetY;
@@ -2055,10 +2199,46 @@ void CartesianPlot::shiftUpY() {
 
 void CartesianPlot::shiftDownY() {
 	Q_D(CartesianPlot);
+
+	setUndoAware(false);
+	setAutoScaleY(false);
+	setUndoAware(true);
 	double offsetY = (d->yMax-d->yMin)*0.1;
 	d->yMax -= offsetY;
 	d->yMin -= offsetY;
 	d->retransformScales();
+}
+
+void CartesianPlot::cursor() {
+	Q_D(CartesianPlot);
+	d->retransformScales();
+}
+
+void CartesianPlot::mousePressZoomSelectionMode(QPointF logicPos) {
+	Q_D(CartesianPlot);
+	d->mousePressZoomSelectionMode(logicPos);
+}
+void CartesianPlot::mousePressCursorMode(int cursorNumber, QPointF logicPos) {
+	Q_D(CartesianPlot);
+	d->mousePressCursorMode(cursorNumber, logicPos);
+}
+void CartesianPlot::mouseMoveZoomSelectionMode(QPointF logicPos) {
+	Q_D(CartesianPlot);
+	d->mouseMoveZoomSelectionMode(logicPos);
+}
+void CartesianPlot::mouseMoveCursorMode(int cursorNumber, QPointF logicPos) {
+	Q_D(CartesianPlot);
+	d->mouseMoveCursorMode(cursorNumber, logicPos);
+}
+
+void CartesianPlot::mouseReleaseZoomSelectionMode() {
+	Q_D(CartesianPlot);
+	d->mouseReleaseZoomSelectionMode();
+}
+
+void CartesianPlot::mouseHoverZoomSelectionMode(QPointF logicPos) {
+	Q_D(CartesianPlot);
+	d->mouseHoverZoomSelectionMode(logicPos);
 }
 
 //##############################################################################
@@ -2116,9 +2296,6 @@ void CartesianPlotPrivate::retransformScales() {
 	auto* plot = dynamic_cast<CartesianPlot*>(q);
 	QVector<CartesianScale*> scales;
 
-	//perform the mapping from the scene coordinates to the plot's coordinates here.
-	QRectF itemRect = mapRectFromScene(rect);
-
 	//check ranges for log-scales
 	if (xScale != CartesianPlot::ScaleLinear)
 		checkXRange();
@@ -2130,8 +2307,8 @@ void CartesianPlotPrivate::retransformScales() {
 	double sceneStart, sceneEnd, logicalStart, logicalEnd;
 
 	//create x-scales
-	int plotSceneStart = itemRect.x() + horizontalPadding;
-	int plotSceneEnd = itemRect.x() + itemRect.width() - horizontalPadding;
+	int plotSceneStart = dataRect.x();
+	int plotSceneEnd = dataRect.x() + dataRect.width();
 	if (!hasValidBreak) {
 		//no breaks available -> range goes from the plot beginning to the end of the plot
 		sceneStart = plotSceneStart;
@@ -2185,8 +2362,8 @@ void CartesianPlotPrivate::retransformScales() {
 
 	//create y-scales
 	scales.clear();
-	plotSceneStart = itemRect.y()+itemRect.height()-verticalPadding;
-	plotSceneEnd = itemRect.y()+verticalPadding;
+	plotSceneStart = dataRect.y() + dataRect.height();
+	plotSceneEnd = dataRect.y();
 	if (!hasValidBreak) {
 		//no breaks available -> range goes from the plot beginning to the end of the plot
 		sceneStart = plotSceneStart;
@@ -2317,10 +2494,28 @@ void CartesianPlotPrivate::retransformScales() {
  */
 void CartesianPlotPrivate::updateDataRect() {
 	dataRect = mapRectFromScene(rect);
-	dataRect.setX(dataRect.x() + horizontalPadding);
-	dataRect.setY(dataRect.y() + verticalPadding);
-	dataRect.setWidth(dataRect.width() - horizontalPadding);
-	dataRect.setHeight(dataRect.height() - verticalPadding);
+
+	double paddingLeft = horizontalPadding;
+	double paddingRight = rightPadding;
+	double paddingTop = verticalPadding;
+	double paddingBottom = bottomPadding;
+	if (symmetricPadding) {
+		paddingRight = horizontalPadding;
+		paddingBottom = verticalPadding;
+	}
+
+	dataRect.setX(dataRect.x() + paddingLeft);
+	dataRect.setY(dataRect.y() + paddingTop);
+
+	double newHeight = dataRect.height() - paddingBottom;
+	if (newHeight < 0)
+		newHeight = 0;
+	dataRect.setHeight(newHeight);
+
+	double newWidth = dataRect.width() - paddingRight;
+	if (newWidth < 0)
+		newWidth = 0;
+	dataRect.setWidth(newWidth);
 }
 
 void CartesianPlotPrivate::rangeChanged() {
@@ -2416,21 +2611,42 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 //##############################################################################
 void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 	if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
+		emit q->mousePressZoomSelectionModeSignal(cSystem->mapSceneToLogical(event->pos()));
 
 		if (mouseMode == CartesianPlot::ZoomSelectionMode)
 			m_selectionStart = event->pos();
 		else if (mouseMode == CartesianPlot::ZoomXSelectionMode) {
 			m_selectionStart.setX(event->pos().x());
-			m_selectionStart.setY(dataRect.height()/2);
+			m_selectionStart.setY(dataRect.y());
 		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode) {
-			m_selectionStart.setX(-dataRect.width()/2);
+			m_selectionStart.setX(dataRect.x());
 			m_selectionStart.setY(event->pos().y());
 		}
 
 		m_selectionEnd = m_selectionStart;
 		m_selectionBandIsShown = true;
+	} else if (mouseMode == CartesianPlot::Cursor) {
+		QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
+		double cursorPenWidth2 = cursorPen.width()/2;
+		if (cursorPenWidth2 < 10)
+			cursorPenWidth2 = 10;
+		if (cursor0Enable && qAbs(event->pos().x()-cSystem->mapLogicalToScene(QPointF(cursor0Pos.x(),yMin)).x()) < cursorPenWidth2) {
+			selectedCursor = 0;
+		} else if (cursor1Enable && qAbs(event->pos().x()-cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(),yMin)).x()) < cursorPenWidth2) {
+			selectedCursor = 1;
+		} else if (QApplication::keyboardModifiers() & Qt::ControlModifier){
+			cursor1Enable = true;
+			selectedCursor = 1;
+			emit q->cursor1EnableChanged(cursor1Enable);
+		} else {
+			cursor0Enable = true;
+			selectedCursor = 0;
+			emit q->cursor0EnableChanged(cursor0Enable);
+		}
+		emit q->mousePressCursorModeSignal(selectedCursor, logicalPos);
+
 	} else {
-		if (!locked && dataRect.contains(event->pos()) ){
+		if (!locked && dataRect.contains(event->pos())) {
 			panningStarted = true;
 			m_panningStart = event->pos();
 			setCursor(Qt::ClosedHandCursor);
@@ -2439,7 +2655,59 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 	}
 }
 
+void CartesianPlotPrivate::mousePressZoomSelectionMode(QPointF logicalPos) {
+	if (mouseMode == CartesianPlot::ZoomSelectionMode) {
+
+		if (logicalPos.x() < xMin)
+			logicalPos.setX(xMin);
+
+		if (logicalPos.x() > xMax)
+			logicalPos.setX(xMax);
+
+		if (logicalPos.y() < yMin)
+			logicalPos.setY(yMin);
+
+		if (logicalPos.y() > yMax)
+			logicalPos.setY(yMax);
+
+		m_selectionStart = cSystem->mapLogicalToScene(logicalPos, CartesianCoordinateSystem::SuppressPageClipping);
+
+	} else if (mouseMode == CartesianPlot::ZoomXSelectionMode) {
+		logicalPos.setY(yMin); // must be done, because the other plots can have other ranges, value must be in the scenes
+		m_selectionStart.setX(cSystem->mapLogicalToScene(logicalPos, CartesianCoordinateSystem::SuppressPageClipping).x());
+		m_selectionStart.setY(dataRect.height()/2);
+	} else if (mouseMode == CartesianPlot::ZoomYSelectionMode) {
+		logicalPos.setX(xMin); // must be done, because the other plots can have other ranges, value must be in the scenes
+		m_selectionStart.setX(-dataRect.width()/2);
+		m_selectionStart.setY(cSystem->mapLogicalToScene(logicalPos, CartesianCoordinateSystem::SuppressPageClipping).y());
+	}
+	m_selectionEnd = m_selectionStart;
+	m_selectionBandIsShown = true;
+}
+
+void CartesianPlotPrivate::mousePressCursorMode(int cursorNumber, QPointF logicalPos) {
+
+	cursorNumber == 0 ? cursor0Enable = true : cursor1Enable = true;
+
+	QPointF p1(logicalPos.x(), yMin);
+	QPointF p2(logicalPos.x(), yMax);
+
+	if (cursorNumber == 0) {
+		cursor0Pos.setX(logicalPos.x());
+		cursor0Pos.setY(0);
+	} else {
+		cursor1Pos.setX(logicalPos.x());
+		cursor1Pos.setY(0);
+	}
+	update();
+}
+
+void CartesianPlotPrivate::updateCursor() {
+	update();
+}
+
 void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+
 	if (mouseMode == CartesianPlot::SelectionMode) {
 		if (panningStarted && dataRect.contains(event->pos()) ) {
 			//don't retransform on small mouse movement deltas
@@ -2466,46 +2734,78 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			q->info(QString());
 			return;
 		}
+		emit q->mouseMoveZoomSelectionModeSignal(cSystem->mapSceneToLogical(event->pos(), CartesianCoordinateSystem::MappingFlag::Limit));
 
-		QString info;
-		QPointF logicalStart = cSystem->mapSceneToLogical(m_selectionStart);
-		if (mouseMode == CartesianPlot::ZoomSelectionMode) {
-			m_selectionEnd = event->pos();
-			QPointF logicalEnd = cSystem->mapSceneToLogical(m_selectionEnd);
-			if (xRangeFormat == CartesianPlot::Numeric)
-				 info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
-			else
-				info = i18n("from x=%1 to x=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
-													QDateTime::fromMSecsSinceEpoch(logicalEnd.x()).toString(xRangeDateTimeFormat));
-
-			info += QLatin1String(", ");
-			if (yRangeFormat == CartesianPlot::Numeric)
-				 info += QString::fromUtf8("Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
-			else
-				info += i18n("from y=%1 to y=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
-													QDateTime::fromMSecsSinceEpoch(logicalEnd.y()).toString(xRangeDateTimeFormat));
-		} else if (mouseMode == CartesianPlot::ZoomXSelectionMode) {
-			m_selectionEnd.setX(event->pos().x());
-			m_selectionEnd.setY(-dataRect.height()/2);
-			QPointF logicalEnd = cSystem->mapSceneToLogical(m_selectionEnd);
-			if (xRangeFormat == CartesianPlot::Numeric)
-				 info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
-			else
-				info = i18n("from x=%1 to x=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
-													QDateTime::fromMSecsSinceEpoch(logicalEnd.x()).toString(xRangeDateTimeFormat));
-		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode) {
-			m_selectionEnd.setX(dataRect.width()/2);
-			m_selectionEnd.setY(event->pos().y());
-			QPointF logicalEnd = cSystem->mapSceneToLogical(m_selectionEnd);
-			if (yRangeFormat == CartesianPlot::Numeric)
-				 info = QString::fromUtf8("Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
-			else
-				info = i18n("from y=%1 to y=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
-													QDateTime::fromMSecsSinceEpoch(logicalEnd.y()).toString(xRangeDateTimeFormat));
+	} else if (mouseMode == CartesianPlot::Cursor) {
+		QGraphicsItem::mouseMoveEvent(event);
+		if (!boundingRect().contains(event->pos())) {
+			q->info(i18n("Not inside of the bounding rect"));
+			return;
 		}
-		q->info(info);
-		update();
+		QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
+
+		// updating treeview data and cursor position
+		// updatign cursor position is done in Worksheet, because
+		// multiple plots must be updated
+		emit q->mouseMoveCursorModeSignal(selectedCursor, logicalPos);
 	}
+}
+
+void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos) {
+	QString info;
+	QPointF logicalStart = cSystem->mapSceneToLogical(m_selectionStart, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+	if (mouseMode == CartesianPlot::ZoomSelectionMode) {
+		m_selectionEnd = cSystem->mapLogicalToScene(logicalPos, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+		QPointF logicalEnd = logicalPos;
+		if (xRangeFormat == CartesianPlot::Numeric)
+			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
+		else
+			info = i18n("from x=%1 to x=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
+						QDateTime::fromMSecsSinceEpoch(logicalEnd.x()).toString(xRangeDateTimeFormat));
+
+		info += QLatin1String(", ");
+		if (yRangeFormat == CartesianPlot::Numeric)
+			info += QString::fromUtf8("Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
+		else
+			info += i18n("from y=%1 to y=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
+						 QDateTime::fromMSecsSinceEpoch(logicalEnd.y()).toString(xRangeDateTimeFormat));
+	} else if (mouseMode == CartesianPlot::ZoomXSelectionMode) {
+		logicalPos.setY(yMin); // must be done, because the other plots can have other ranges, value must be in the scenes
+		m_selectionEnd.setX(cSystem->mapLogicalToScene(logicalPos, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping).x());//event->pos().x());
+		m_selectionEnd.setY(-dataRect.height()/2);
+		QPointF logicalEnd = cSystem->mapSceneToLogical(m_selectionEnd);
+		if (xRangeFormat == CartesianPlot::Numeric)
+			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
+		else
+			info = i18n("from x=%1 to x=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
+						QDateTime::fromMSecsSinceEpoch(logicalEnd.x()).toString(xRangeDateTimeFormat));
+	} else if (mouseMode == CartesianPlot::ZoomYSelectionMode) {
+		m_selectionEnd.setX(dataRect.width()/2);
+		logicalPos.setX(xMin); // must be done, because the other plots can have other ranges, value must be in the scenes
+		m_selectionEnd.setY(cSystem->mapLogicalToScene(logicalPos, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping).y());//event->pos().y());
+		QPointF logicalEnd = cSystem->mapSceneToLogical(m_selectionEnd);
+		if (yRangeFormat == CartesianPlot::Numeric)
+			info = QString::fromUtf8("Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
+		else
+			info = i18n("from y=%1 to y=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
+						QDateTime::fromMSecsSinceEpoch(logicalEnd.y()).toString(xRangeDateTimeFormat));
+	}
+	q->info(info);
+	update();
+}
+
+void CartesianPlotPrivate::mouseMoveCursorMode(int cursorNumber, QPointF logicalPos) {
+
+	QPointF p1(logicalPos.x(), 0);
+	cursorNumber == 0 ? cursor0Pos = p1 : cursor1Pos = p1;
+
+	QString info;
+	if (xRangeFormat == CartesianPlot::Numeric)
+		info = QString::fromUtf8("x=") + QString::number(logicalPos.x());
+	else
+		info = i18n("x=%1", QDateTime::fromMSecsSinceEpoch(logicalPos.x()).toString(xRangeDateTimeFormat));
+	q->info(info);
+	update();
 }
 
 void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
@@ -2533,34 +2833,38 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
 		QGraphicsItem::mouseReleaseEvent(event);
 	} else if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
-		//don't zoom if very small region was selected, avoid occasional/unwanted zooming
-		if ( qAbs(m_selectionEnd.x()-m_selectionStart.x()) < 20 || qAbs(m_selectionEnd.y()-m_selectionStart.y()) < 20 ) {
-			m_selectionBandIsShown = false;
-			return;
-		}
-
-		//determine the new plot ranges
-		QPointF logicalZoomStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::SuppressPageClipping);
-		QPointF logicalZoomEnd = cSystem->mapSceneToLogical(m_selectionEnd, AbstractCoordinateSystem::SuppressPageClipping);
-		if (m_selectionEnd.x() > m_selectionStart.x()) {
-			xMin = logicalZoomStart.x();
-			xMax = logicalZoomEnd.x();
-		} else {
-			xMin = logicalZoomEnd.x();
-			xMax = logicalZoomStart.x();
-		}
-
-		if (m_selectionEnd.y() > m_selectionStart.y()) {
-			yMin = logicalZoomEnd.y();
-			yMax = logicalZoomStart.y();
-		} else {
-			yMin = logicalZoomStart.y();
-			yMax = logicalZoomEnd.y();
-		}
-
-		m_selectionBandIsShown = false;
-		retransformScales();
+		emit q->mouseReleaseZoomSelectionModeSignal();
 	}
+}
+
+void CartesianPlotPrivate::mouseReleaseZoomSelectionMode() {
+	//don't zoom if very small region was selected, avoid occasional/unwanted zooming
+	if ( qAbs(m_selectionEnd.x()-m_selectionStart.x()) < 20 || qAbs(m_selectionEnd.y()-m_selectionStart.y()) < 20 ) {
+		m_selectionBandIsShown = false;
+		return;
+	}
+
+	//determine the new plot ranges
+	QPointF logicalZoomStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::SuppressPageClipping);
+	QPointF logicalZoomEnd = cSystem->mapSceneToLogical(m_selectionEnd, AbstractCoordinateSystem::SuppressPageClipping);
+	if (m_selectionEnd.x() > m_selectionStart.x()) {
+		xMin = logicalZoomStart.x();
+		xMax = logicalZoomEnd.x();
+	} else {
+		xMin = logicalZoomEnd.x();
+		xMax = logicalZoomStart.x();
+	}
+
+	if (m_selectionEnd.y() > m_selectionStart.y()) {
+		yMin = logicalZoomEnd.y();
+		yMax = logicalZoomStart.y();
+	} else {
+		yMin = logicalZoomStart.y();
+		yMax = logicalZoomEnd.y();
+	}
+
+	m_selectionBandIsShown = false;
+	retransformScales();
 }
 
 void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
@@ -2617,27 +2921,55 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 				info += QString::number(logicalPoint.y());
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y()).toString(yRangeDateTimeFormat);
+			emit q->mouseHoverZoomSelectionModeSignal(logicalPoint);
 		} else if (mouseMode == CartesianPlot::ZoomXSelectionMode && !m_selectionBandIsShown) {
-			QPointF p1(logicalPoint.x(), yMin);
-			QPointF p2(logicalPoint.x(), yMax);
-			m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1));
-			m_selectionStartLine.setP2(cSystem->mapLogicalToScene(p2));
 			info = "x=";
 			if (xRangeFormat == CartesianPlot::Numeric)
 				 info += QString::number(logicalPoint.x());
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x()).toString(xRangeDateTimeFormat);
-			update();
-		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode && !m_selectionBandIsShown) {
-			QPointF p1(xMin, logicalPoint.y());
-			QPointF p2(xMax, logicalPoint.y());
-			m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1));
-			m_selectionStartLine.setP2(cSystem->mapLogicalToScene(p2));
+			emit q->mouseHoverZoomSelectionModeSignal(logicalPoint);
+		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode && !m_selectionBandIsShown) {	
 			info = "y=";
 			if (yRangeFormat == CartesianPlot::Numeric)
 				info += QString::number(logicalPoint.y());
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y()).toString(yRangeDateTimeFormat);
+			emit q->mouseHoverZoomSelectionModeSignal(logicalPoint);
+		} else if (mouseMode == CartesianPlot::MouseMode::SelectionMode) {
+			// hover the nearest curve to the mousepointer
+			// hovering curves is implemented in the parent, because no ignoreEvent() exists
+			// for it. Checking all curves and hover the first
+			bool curve_hovered = false;
+			QVector<XYCurve*> curves = q->children<XYCurve>();
+			for (int i=curves.count() - 1; i >= 0; i--){ // because the last curve is above the other curves
+				if (curve_hovered){ // if a curve is already hovered, disable hover for the rest
+					curves[i]->setHover(false);
+					continue;
+				}
+				if (curves[i]->activateCurve(event->pos())){
+					curves[i]->setHover(true);
+					curve_hovered = true;
+					continue;
+				}
+				curves[i]->setHover(false);
+			}
+		} else if (mouseMode == CartesianPlot::Cursor){
+			info = "x=";
+			if (yRangeFormat == CartesianPlot::Numeric)
+				info += QString::number(logicalPoint.x());
+			else
+				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x()).toString(xRangeDateTimeFormat);
+
+			double cursorPenWidth2 = cursorPen.width()/2;
+			if (cursorPenWidth2 < 10)
+				cursorPenWidth2 = 10;
+			if ((cursor0Enable && qAbs(point.x()-cSystem->mapLogicalToScene(QPointF(cursor0Pos.x(),yMin)).x()) < cursorPenWidth2) ||
+					(cursor1Enable && qAbs(point.x()-cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(),yMin)).x()) < cursorPenWidth2))
+				setCursor(Qt::SizeHorCursor);
+			else
+				setCursor(Qt::ArrowCursor);
+
 			update();
 		}
 	}
@@ -2646,13 +2978,63 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QGraphicsItem::hoverMoveEvent(event);
 }
 
-void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+void CartesianPlotPrivate::mouseHoverZoomSelectionMode(QPointF logicPos) {
+	if (mouseMode == CartesianPlot::ZoomSelectionMode && !m_selectionBandIsShown) {
+
+	} else if (mouseMode == CartesianPlot::ZoomXSelectionMode && !m_selectionBandIsShown) {
+		QPointF p1(logicPos.x(), yMin);
+		QPointF p2(logicPos.x(), yMax);
+		m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1, CartesianCoordinateSystem::MappingFlag::Limit));
+		m_selectionStartLine.setP2(cSystem->mapLogicalToScene(p2, CartesianCoordinateSystem::MappingFlag::Limit));
+	} else if (mouseMode == CartesianPlot::ZoomYSelectionMode && !m_selectionBandIsShown) {
+		QPointF p1(xMin, logicPos.y());
+		QPointF p2(xMax, logicPos.y());
+		m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1, CartesianCoordinateSystem::MappingFlag::Limit));
+		m_selectionStartLine.setP2(cSystem->mapLogicalToScene(p2, CartesianCoordinateSystem::MappingFlag::Limit));
+	}
+
+	update(); // because if previous another selection mode was selected, the lines must be deleted
+}
+
+void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
+	Q_UNUSED(option)
+	Q_UNUSED(widget)
+
 	if (!isVisible())
 		return;
 
+	if (!m_printing) {
+		painter->save();
+
+		painter->setPen(cursorPen);
+		QFont font = painter->font();
+		font.setPointSize(font.pointSize() * 4);
+		painter->setFont(font);
+
+		if (cursor0Enable && cSystem->mapLogicalToScene(cursor0Pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClippingY) != QPointF(0, 0)) {
+			QPointF p1(cursor0Pos.x(), yMin);
+			p1 = cSystem->mapLogicalToScene(p1);
+			QPointF p2(cursor0Pos.x(), yMax);
+			p2 = cSystem->mapLogicalToScene(p2);
+			painter->drawLine(p1, p2);
+			painter->drawText(p2, "1");
+		}
+
+		if (cursor1Enable && cSystem->mapLogicalToScene(cursor0Pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClippingY) != QPointF(0, 0)) {
+			QPointF p1(cursor1Pos.x(), yMin);
+			p1 = cSystem->mapLogicalToScene(p1);
+			QPointF p2(cursor1Pos.x(), yMax);
+			p2 = cSystem->mapLogicalToScene(p2);
+			painter->drawText(p2, "2");
+			painter->drawLine(p1,p2);
+		}
+
+		painter->restore();
+	}
+
 	painter->setPen(QPen(Qt::black, 3));
 	if ((mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode)
-	        && (!m_selectionBandIsShown))
+			&& (!m_selectionBandIsShown))
 		painter->drawLine(m_selectionStartLine);
 
 	if (m_selectionBandIsShown) {
@@ -2665,7 +3047,20 @@ void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsIt
 		painter->restore();
 	}
 
-	WorksheetElementContainerPrivate::paint(painter, option, widget);
+	float penWidth = 6.;
+	QRectF rect = q->m_plotArea->graphicsItem()->boundingRect();
+	rect = QRectF(-rect.width()/2 - penWidth / 2, -rect.height()/2 - penWidth / 2,
+				  rect.width() + penWidth, rect.height() + penWidth);
+
+	if (m_hovered && !isSelected() && !m_printing) {
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth, Qt::SolidLine));
+		painter->drawRect(rect);
+	}
+
+	if (isSelected() && !m_printing) {
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth, Qt::SolidLine));
+		painter->drawRect(rect);
+	}
 }
 
 //##############################################################################
@@ -2687,6 +3082,10 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeEndElement();
 	}
 
+	//cursor
+	writer->writeStartElement( "cursor" );
+	WRITE_QPEN(d->cursorPen);
+	writer->writeEndElement();
 	//geometry
 	writer->writeStartElement( "geometry" );
 	writer->writeAttribute( "x", QString::number(d->rect.x()) );
@@ -2710,6 +3109,9 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "yRangeFormat", QString::number(d->yRangeFormat) );
 	writer->writeAttribute( "horizontalPadding", QString::number(d->horizontalPadding) );
 	writer->writeAttribute( "verticalPadding", QString::number(d->verticalPadding) );
+	writer->writeAttribute( "rightPadding", QString::number(d->rightPadding) );
+	writer->writeAttribute( "bottomPadding", QString::number(d->bottomPadding) );
+	writer->writeAttribute( "symmetricPadding", QString::number(d->symmetricPadding));
 	writer->writeEndElement();
 
 	//x-scale breaks
@@ -2776,6 +3178,17 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "theme") {
 			attribs = reader->attributes();
 			d->theme = attribs.value("name").toString();
+		} else if (!preview && reader->name() == "cursor") {
+			attribs = reader->attributes();
+			QPen pen;
+			pen.setWidth(attribs.value("width").toInt());
+			pen.setStyle(static_cast<Qt::PenStyle>(attribs.value("style").toInt()));
+			QColor color;
+			color.setRed(attribs.value("color_r").toInt());
+			color.setGreen(attribs.value("color_g").toInt());
+			color.setBlue(attribs.value("color_b").toInt());
+			pen.setColor(color);
+			d->cursorPen = pen;
 		} else if (!preview && reader->name() == "geometry") {
 			attribs = reader->attributes();
 
@@ -2854,6 +3267,9 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 			READ_DOUBLE_VALUE("verticalPadding", verticalPadding);
+			READ_DOUBLE_VALUE("rightPadding", rightPadding);
+			READ_DOUBLE_VALUE("bottomPadding", bottomPadding);
+			READ_INT_VALUE("symmetricPadding", symmetricPadding, bool);
 		} else if (!preview && reader->name() == "xRangeBreaks") {
 			//delete default rang break
 			d->xRangeBreaks.list.clear();

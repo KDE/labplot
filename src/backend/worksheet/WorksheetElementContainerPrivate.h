@@ -36,6 +36,7 @@ class QGraphicsSceneContextMenuEvent;
 class WorksheetElementContainer;
 
 class WorksheetElementContainerPrivate : public QGraphicsItem {
+
 public:
 	explicit WorksheetElementContainerPrivate(WorksheetElementContainer*);
 	~WorksheetElementContainerPrivate() override= default;

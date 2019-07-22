@@ -165,6 +165,12 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 		menu = aspect->createContextMenu();
 	} else {
 		menu = new QMenu();
+
+		QMenu* projectMenu = m_project->createContextMenu();
+		projectMenu->setTitle(m_project->name());
+		menu->addMenu(projectMenu);
+		menu->addSeparator();
+
 		if (items.size()/4 > 1) {
 			menu->addAction(expandSelectedTreeAction);
 			menu->addAction(collapseSelectedTreeAction);
@@ -283,8 +289,15 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 		auto* e = static_cast<QMouseEvent*>(event);
 		if (event->type() == QEvent::MouseButtonPress) {
 			if (e->button() == Qt::LeftButton) {
-				m_dragStartPos = e->globalPos();
-				m_dragStarted = false;
+				QModelIndex index = m_treeView->indexAt(e->pos());
+				if (!index.isValid())
+					return false;
+
+				auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+				if (aspect->isDraggable()) {
+					m_dragStartPos = e->globalPos();
+					m_dragStarted = false;
+				}
 			}
 		} else if (event->type() == QEvent::MouseMove) {
 			if ( !m_dragStarted && m_treeView->selectionModel()->selectedIndexes().size() > 0
@@ -312,8 +325,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 				drag->setMimeData(mimeData);
 				drag->exec();
 			}
-		}
-		else if (event->type() == QEvent::DragEnter) {
+		} else if (event->type() == QEvent::DragEnter) {
 			//ignore events not related to internal drags of columns etc., e.g. dropping of external files onto LabPlot
 			auto* dragEnterEvent = static_cast<QDragEnterEvent*>(event);
 			const QMimeData* mimeData = dragEnterEvent->mimeData();
@@ -329,15 +341,32 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 
 			event->setAccepted(true);
 		} else if (event->type() == QEvent::DragMove) {
-			// only accept drop events if we have a plot under the cursor where we can drop columns onto
-			auto* dragMoveEvent = static_cast<QDragMoveEvent*>(event);
+			auto* dragMoveEvent = static_cast<QDragEnterEvent*>(event);
+			const QMimeData* mimeData = dragMoveEvent->mimeData();
+
+			//determine the first aspect being dragged
+			QByteArray data = mimeData->data(QLatin1String("labplot-dnd"));
+			QVector<quintptr> vec;
+			QDataStream stream(&data, QIODevice::ReadOnly);
+			stream >> vec;
+			AbstractAspect* sourceAspect{nullptr};
+			if (!vec.isEmpty())
+				sourceAspect = (AbstractAspect*)vec.at(0);
+
+			if (!sourceAspect)
+				return false;
+
+			//determine the aspect under the cursor
 			QModelIndex index = m_treeView->indexAt(dragMoveEvent->pos());
 			if (!index.isValid())
 				return false;
 
-			auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-			const bool isPlot = (dynamic_cast<CartesianPlot*>(aspect) != nullptr);
-			event->setAccepted(isPlot);
+			//accept only the events when the aspect being dragged is dropable onto the aspect under the cursor
+			//and the aspect under the cursor is not already the parent of the dragged aspect
+			AbstractAspect* destinationAspect = static_cast<AbstractAspect*>(index.internalPointer());
+			bool accept = sourceAspect->dropableOn().indexOf(destinationAspect->type()) != -1
+						&& sourceAspect->parentAspect() != destinationAspect;
+			event->setAccepted(accept);
 		} else if (event->type() == QEvent::Drop) {
 			auto* dropEvent = static_cast<QDropEvent*>(event);
 			QModelIndex index = m_treeView->indexAt(dropEvent->pos());
@@ -345,9 +374,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 				return false;
 
 			auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-			auto* plot = dynamic_cast<CartesianPlot*>(aspect);
-			if (plot != nullptr)
-				plot->processDropEvent(dropEvent);
+			aspect->processDropEvent(dropEvent);
 		}
 	}
 
@@ -372,7 +399,8 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 
 
 	//don't do anything for newly added data spreadsheets of data picker curves
-	if (aspect->inherits("Spreadsheet") && aspect->parentAspect()->inherits("DatapickerCurve"))
+	if (aspect->inherits(AspectType::Spreadsheet) &&
+	    aspect->parentAspect()->inherits(AspectType::DatapickerCurve))
 		return;
 
 	const AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
@@ -382,7 +410,7 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 	m_treeView->setExpanded(index, true);
 
 	// newly added columns are only expanded but not selected, return here
-	if ( aspect->inherits("Column") ) {
+	if (aspect->inherits(AspectType::Column)) {
 		m_treeView->setExpanded(tree_model->modelIndexOfAspect(aspect->parentAspect()), true);
 		return;
 	}
@@ -502,7 +530,7 @@ bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 	bool childVisible = false;
 	const int rows = index.model()->rowCount(index);
 	for (int i = 0; i < rows; i++) {
-		QModelIndex child = index.child(i, 0);
+		QModelIndex child = index.model()->index(i, 0, index);
 		auto* aspect =  static_cast<AbstractAspect*>(child.internalPointer());
 		bool visible;
 		if (text.isEmpty())
@@ -592,6 +620,19 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	emit selectedAspectsChanged(selectedAspects);
 }
 
+/*!
+ * Used to udpate the cursor Dock
+ */
+void ProjectExplorer::updateSelectedAspects() {
+	QModelIndexList items = m_treeView->selectionModel()->selectedRows();
+	QList<AbstractAspect*> selectedAspects;
+	for (const QModelIndex& index : items) {
+		selectedAspects << static_cast<AbstractAspect*>(index.internalPointer());
+	}
+
+	emit selectedAspectsChanged(selectedAspects);
+}
+
 void ProjectExplorer::expandSelected() {
 	const QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
 	for (const auto& index : items)
@@ -653,8 +694,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 		expanded.push_back(-1);
 
 	int row = 0;
-	QVector<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
-	for (const auto* aspect : aspects) {
+	for (const auto* aspect : m_project->children(AspectType::AbstractAspect, AbstractAspect::Recursive)) {
 		const QModelIndex& index = model->modelIndexOfAspect(aspect);
 
 		const auto* part = dynamic_cast<const AbstractPart*>(aspect);
@@ -714,7 +754,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
  */
 bool ProjectExplorer::load(XmlStreamReader* reader) {
 	const AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	const QVector<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
+	const auto aspects = m_project->children(AspectType::AbstractAspect, AbstractAspect::Recursive);
 
 	bool expandedItem = false;
 	bool selectedItem = false;

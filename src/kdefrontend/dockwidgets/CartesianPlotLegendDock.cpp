@@ -48,8 +48,10 @@
 
   \ingroup kdefrontend
 */
-CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : QWidget(parent) {
+CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
 	//"Title"-tab
 	auto hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -120,12 +122,18 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : QWidget(pare
 	connect( ui.sbLayoutVerticalSpacing, SIGNAL(valueChanged(double)), this, SLOT(layoutVerticalSpacingChanged(double)) );
 	connect( ui.sbLayoutColumnCount, SIGNAL(valueChanged(int)), this, SLOT(layoutColumnCountChanged(int)) );
 
-	auto templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlotLegend);
-	ui.verticalLayout->addWidget(templateHandler);
-	templateHandler->show();
+	//template handler
+	auto* frame = new QFrame(this);
+	auto* layout = new QHBoxLayout(frame);
+	layout->setContentsMargins(0, 11, 0, 11);
+
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlotLegend);
+	layout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+	ui.verticalLayout->addWidget(frame);
 
 	init();
 }
@@ -137,8 +145,8 @@ void CartesianPlotLegendDock::init() {
 void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	m_initializing = true;
 	m_legendList = list;
-
 	m_legend = list.first();
+	m_aspect = list.first();
 
 	//if there is more then one legend in the list, disable the tab "general"
 	if (list.size() == 1) {
@@ -158,6 +166,8 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 		ui.leName->setText(QString());
 		ui.leComment->setText(QString());
 	}
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 
 	//show the properties of the first curve
 	this->load();
@@ -262,20 +272,6 @@ void CartesianPlotLegendDock::retranslateUi() {
 }
 
 // "General"-tab
-void CartesianPlotLegendDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_legend->setName(ui.leName->text());
-}
-
-void CartesianPlotLegendDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_legend->setComment(ui.leComment->text());
-}
-
 void CartesianPlotLegendDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;

@@ -1,4 +1,4 @@
-﻿
+
 /***************************************************************************
     File                 : XYFitCurve.cpp
     Project              : LabPlot
@@ -61,11 +61,11 @@ extern "C" {
 #include <QThreadPool>
 
 XYFitCurve::XYFitCurve(const QString& name)
-	: XYAnalysisCurve(name, new XYFitCurvePrivate(this)) {
+	: XYAnalysisCurve(name, new XYFitCurvePrivate(this), AspectType::XYFitCurve) {
 }
 
 XYFitCurve::XYFitCurve(const QString& name, XYFitCurvePrivate* dd)
-	: XYAnalysisCurve(name, dd) {
+	: XYAnalysisCurve(name, dd, AspectType::XYFitCurve) {
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -1627,7 +1627,7 @@ void XYFitCurvePrivate::recalculate() {
 
 			// only when inside given range
 			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
-				if (dataSourceType == XYAnalysisCurve::DataSourceCurve || (!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) {	// x-y
+				if ((!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) {	// x-y
 					xdataVector.append(tmpXDataColumn->valueAt(row));
 					ydataVector.append(tmpYDataColumn->valueAt(row));
 				} else if (!xErrorColumn && yErrorColumn) {	// x-y-dy
@@ -1672,12 +1672,14 @@ void XYFitCurvePrivate::recalculate() {
 	double* ydata = ydataVector.data();
 	double* xerror = xerrorVector.data();	// size may be 0
 	double* yerror = yerrorVector.data();	// size may be 0
-	DEBUG("x errors: " << xerrorVector.size());
-	DEBUG("y errors: " << yerrorVector.size());
+	DEBUG("x error vector size: " << xerrorVector.size());
+	DEBUG("y error vector size: " << yerrorVector.size());
 	double* weight = new double[n];
 
 	for (size_t i = 0; i < n; i++)
 		weight[i] = 1.;
+
+	const double minError = 1.e-199;	// minimum error for weighting
 
 	switch (fitData.yWeightsType) {
 	case nsl_fit_weight_no:
@@ -1687,7 +1689,7 @@ void XYFitCurvePrivate::recalculate() {
 	case nsl_fit_weight_instrumental:	// yerror are sigmas
 		for (int i = 0; i < (int)n; i++)
 			if (i < yerrorVector.size())
-				weight[i] = 1./gsl_pow_2(yerror[i]);
+				weight[i] = 1./gsl_pow_2(qMax(yerror[i], qMax(sqrt(minError), fabs(ydata[i]) * 1.e-15)));
 		break;
 	case nsl_fit_weight_direct:		// yerror are weights
 		for (int i = 0; i < (int)n; i++)
@@ -1697,15 +1699,15 @@ void XYFitCurvePrivate::recalculate() {
 	case nsl_fit_weight_inverse:		// yerror are inverse weights
 		for (int i = 0; i < (int)n; i++)
 			if (i < yerrorVector.size())
-				weight[i] = 1./yerror[i];
+				weight[i] = 1./qMax(yerror[i], qMax(minError, fabs(ydata[i]) * 1.e-15));
 		break;
 	case nsl_fit_weight_statistical:
 		for (int i = 0; i < (int)n; i++)
-			weight[i] = 1./ydata[i];
+			weight[i] = 1./qMax(ydata[i], minError);
 		break;
 	case nsl_fit_weight_relative:
 		for (int i = 0; i < (int)n; i++)
-			weight[i] = 1./gsl_pow_2(ydata[i]);
+			weight[i] = 1./qMax(gsl_pow_2(ydata[i]), minError);
 		break;
 	}
 
@@ -1783,11 +1785,11 @@ void XYFitCurvePrivate::recalculate() {
 		DEBUG("Rerun fit with x errors");
 
 		unsigned int iter2 = 0;
-		double chi = 0, chiOld = 0;
+		double chisq = 0, chisqOld = 0;
 		double *fun = new double[n];
 		do {
 			iter2++;
-			chiOld = chi;
+			chisqOld = chisq;
 			//printf("iter2 = %d\n", iter2);
 
 			// calculate function from residuals
@@ -1810,7 +1812,7 @@ void XYFitCurvePrivate::recalculate() {
 				case nsl_fit_weight_no:
 					break;
 				case nsl_fit_weight_direct:	// xerror = w_x
-					sigmasq = df*df/xerror[i];
+					sigmasq = df*df/qMax(xerror[i], minError);
 					break;
 				case nsl_fit_weight_instrumental:	// xerror = s_x
 					sigmasq = df*df*xerror[i]*xerror[i];
@@ -1834,7 +1836,7 @@ void XYFitCurvePrivate::recalculate() {
 					case nsl_fit_weight_no:
 						break;
 					case nsl_fit_weight_direct:	// yerror = w_y
-						sigmasq += 1./yerror[i];
+						sigmasq += 1./qMax(yerror[i], minError);
 						break;
 					case nsl_fit_weight_instrumental:	// yerror = s_y
 						sigmasq += yerror[i]*yerror[i];
@@ -1855,7 +1857,7 @@ void XYFitCurvePrivate::recalculate() {
 				}
 
 				//printf ("sigma[%d] = %g\n", i, sqrt(sigmasq));
-				weight[i] = 1./sigmasq;
+				weight[i] = 1./qMax(sigmasq, minError);
 			}
 
 			// update weights
@@ -1864,7 +1866,7 @@ void XYFitCurvePrivate::recalculate() {
 			do {	// fit
 				iter++;
 				writeSolverState(s);
-				status = gsl_multifit_fdfsolver_iterate (s);
+				status = gsl_multifit_fdfsolver_iterate(s);
 				//printf ("status = %s\n", gsl_strerror (status));
 				if (status) {
 					DEBUG("iter " << iter << ", status = " << gsl_strerror(status));
@@ -1873,9 +1875,8 @@ void XYFitCurvePrivate::recalculate() {
 				status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
 			} while (status == GSL_CONTINUE && iter < maxIters);
 
-			chi = gsl_blas_dnrm2(s->f);
-			//printf("chi = %.12g (dchi = %g)\n", chi, fabs(chi-chiOld));
-		} while (iter2 < maxIters && fabs(chi-chiOld) > fitData.eps);
+			chisq = gsl_blas_dnrm2(s->f);
+		} while (iter2 < maxIters && fabs(chisq-chisqOld) > fitData.eps);
 
 		delete[] fun;
 	}
@@ -1908,6 +1909,7 @@ void XYFitCurvePrivate::recalculate() {
 	//gsl_blas_dnrm2() - computes the Euclidian norm (||r||_2 = \sqrt {\sum r_i^2}) of the vector with the elements weight[i]*(Yi - y[i])
 	//gsl_blas_dasum() - computes the absolute sum \sum |r_i| of the elements of the vector with the elements weight[i]*(Yi - y[i])
 	fitResult.sse = gsl_pow_2(gsl_blas_dnrm2(s->f));
+
 	if (fitResult.dof != 0) {
 		fitResult.rms = fitResult.sse/fitResult.dof;
 		fitResult.rsd = sqrt(fitResult.rms);
@@ -2007,7 +2009,8 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 		tmpXDataColumn = xDataColumn;
 	} else {
 		DEBUG("	curve columns as data source");
-		tmpXDataColumn = dataSourceCurve->xColumn();
+		if (dataSourceCurve)
+			tmpXDataColumn = dataSourceCurve->xColumn();
 	}
 
 	if (!tmpXDataColumn) {
@@ -2321,6 +2324,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				delete column;
 				return false;
 			}
+			DEBUG("############################   reading column " << column->name().toStdString())
 			if (column->name() == "x")
 				d->xColumn = column;
 			else if (column->name() == "y")
@@ -2386,6 +2390,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 		XYCurve::d_ptr->xColumn = d->xColumn;
 		XYCurve::d_ptr->yColumn = d->yColumn;
+
+		recalcLogicalPoints();
 	}
 
 	return true;

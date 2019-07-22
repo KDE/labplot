@@ -103,11 +103,9 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 	cbExistingWorksheets->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
 	gridLayout->addWidget(cbExistingWorksheets, 1, 1, 1, 1);
 
-	QList<const char*> list;
-	list<<"Folder"<<"Worksheet"<<"CartesianPlot";
+	QList<AspectType> list{AspectType::Folder, AspectType::Worksheet, AspectType::CartesianPlot};
 	cbExistingPlots->setTopLevelClasses(list);
-	list.clear();
-	list<<"CartesianPlot";
+	list = {AspectType::CartesianPlot};
 	m_plotsModel->setSelectableAspects(list);
 	cbExistingPlots->setModel(m_plotsModel);
 
@@ -118,11 +116,9 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 		cbExistingPlots->setCurrentModelIndex(m_plotsModel->modelIndexOfAspect(plot));
 	}
 
-	list.clear();
-	list<<"Folder"<<"Worksheet";
+	list = {AspectType::Folder, AspectType::Worksheet};
 	cbExistingWorksheets->setTopLevelClasses(list);
-	list.clear();
-	list<<"Worksheet";
+	list = {AspectType::Worksheet};
 	m_worksheetsModel->setSelectableAspects(list);
 	cbExistingWorksheets->setModel(m_worksheetsModel);
 
@@ -132,6 +128,16 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 		const auto* worksheet = worksheets.first();
 		cbExistingWorksheets->setCurrentModelIndex(m_worksheetsModel->modelIndexOfAspect(worksheet));
 	}
+
+	//in the grid layout of the scroll area we have on default one row for the x-column,
+	//one row for the separating line and one line for the y-column.
+	//set the height of this default conente as the minimal size of the scroll area.
+	gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
+	int height = 2*ui->cbXColumn->height() + ui->line->height()
+				+ 2*gridLayout->verticalSpacing()
+				+ gridLayout->contentsMargins().top()
+				+ gridLayout->contentsMargins().bottom();
+	ui->scrollAreaColumns->setMinimumSize(0, height);
 
 	//hide the check box for creation of original data, only shown if analysis curves are to be created
 	ui->chkCreateDataCurve->setVisible(false);
@@ -258,7 +264,7 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 
 	//ui-widget only has one combobox for the y-data -> add additional comboboxes dynamically if required
 	if (m_columns.size()>2) {
-		auto* gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaYColumns->widget()->layout());
+		auto* gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
 		for (int i = 2; i < m_columns.size(); ++i) {
 			QLabel* label = new QLabel(i18n("Y-data"));
 			auto* comboBox = new QComboBox();
@@ -320,7 +326,7 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 		ui->rbCurvePlacement1->setChecked(true);
 		ui->gbCurvePlacement->hide();
 		ui->gbPlotPlacement->setTitle(i18n("Add Histogram to"));
-		ui->scrollAreaYColumns->hide();
+		ui->scrollAreaColumns->hide();
 	} else {
 		ui->gbCurvePlacement->setTitle(i18n("Histogram Placement"));
 		ui->rbCurvePlacement1->setText(i18n("All histograms in one plot"));
@@ -334,7 +340,7 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 		ui->cbYColumn->setCurrentIndex(1);
 
 		//add a ComboBox for every further column to be plotted
-		auto* gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaYColumns->widget()->layout());
+		auto* gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
 		for (int i = 2; i < m_columns.size(); ++i) {
 			auto* label = new QLabel(i18n("Data"));
 			auto* comboBox = new QComboBox();
@@ -497,6 +503,8 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* yColumn = columnFromName(name);
+			if (yColumn == xColumn)
+				continue;
 
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
 			plot->initDefault(CartesianPlot::FourAxes);

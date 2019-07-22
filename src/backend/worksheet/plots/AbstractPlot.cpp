@@ -44,12 +44,15 @@
  *
  */
 
-AbstractPlot::AbstractPlot(const QString &name) : WorksheetElementContainer(name, new AbstractPlotPrivate(this)) {
+AbstractPlot::AbstractPlot(const QString &name, AspectType type)
+	: WorksheetElementContainer(name, new AbstractPlotPrivate(this), type) {
+
 	init();
 }
 
-AbstractPlot::AbstractPlot(const QString &name, AbstractPlotPrivate *dd)
-	: WorksheetElementContainer(name, dd) {
+AbstractPlot::AbstractPlot(const QString &name, AbstractPlotPrivate *dd, AspectType type)
+	: WorksheetElementContainer(name, dd, type) {
+
 	init();
 }
 
@@ -74,6 +77,8 @@ TextLabel* AbstractPlot::title() {
 }
 
 void AbstractPlot::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
+	if (isLoading())
+		return;
 	DEBUG("AbstractPlot::handleResize()");
 	Q_D(AbstractPlot);
 
@@ -91,6 +96,9 @@ void AbstractPlot::handleResize(double horizontalRatio, double verticalRatio, bo
 
 BASIC_SHARED_D_READER_IMPL(AbstractPlot, float, horizontalPadding, horizontalPadding)
 BASIC_SHARED_D_READER_IMPL(AbstractPlot, float, verticalPadding, verticalPadding)
+BASIC_SHARED_D_READER_IMPL(AbstractPlot, double, rightPadding, rightPadding)
+BASIC_SHARED_D_READER_IMPL(AbstractPlot, double, bottomPadding, bottomPadding)
+BASIC_SHARED_D_READER_IMPL(AbstractPlot, bool, symmetricPadding, symmetricPadding)
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetHorizontalPadding, float, horizontalPadding, retransform)
@@ -105,6 +113,27 @@ void AbstractPlot::setVerticalPadding(float padding) {
 	Q_D(AbstractPlot);
 	if (padding != d->verticalPadding)
 		exec(new AbstractPlotSetVerticalPaddingCmd(d, padding, ki18n("%1: set vertical padding")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetRightPadding, double, rightPadding, retransform)
+void AbstractPlot::setRightPadding(double padding) {
+	Q_D(AbstractPlot);
+	if (padding != d->rightPadding)
+		exec(new AbstractPlotSetRightPaddingCmd(d, padding, ki18n("%1: set right padding")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetBottomPadding, double, bottomPadding, retransform)
+void AbstractPlot::setBottomPadding(double padding) {
+	Q_D(AbstractPlot);
+	if (padding != d->bottomPadding)
+		exec(new AbstractPlotSetBottomPaddingCmd(d, padding, ki18n("%1: set bottom padding")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetSymmetricPadding, bool, symmetricPadding, retransform)
+void AbstractPlot::setSymmetricPadding(bool symmetric) {
+	Q_D(AbstractPlot);
+	if (symmetric != d->symmetricPadding)
+		exec(new AbstractPlotSetSymmetricPaddingCmd(d, symmetric, ki18n("%1: set horizontal padding")));
 }
 
 //################################################################

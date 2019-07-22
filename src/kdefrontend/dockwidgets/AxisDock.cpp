@@ -52,8 +52,10 @@
  \ingroup kdefrontend
 */
 
-AxisDock::AxisDock(QWidget* parent) : QWidget(parent) {
+AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -168,12 +170,19 @@ AxisDock::AxisDock(QWidget* parent) : QWidget(parent) {
 	connect( ui.sbMinorGridWidth, SIGNAL(valueChanged(double)), this, SLOT(minorGridWidthChanged(double)) );
 	connect( ui.sbMinorGridOpacity, SIGNAL(valueChanged(int)), this, SLOT(minorGridOpacityChanged(int)) );
 
+	//template handler
+	auto* frame = new QFrame(this);
+	auto* hlayout = new QHBoxLayout(frame);
+	hlayout->setContentsMargins(0, 11, 0, 11);
 
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::Axis);
-	ui.verticalLayout->addWidget(templateHandler);
+	hlayout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+	ui.verticalLayout->addWidget(frame);
+
 
 	init();
 }
@@ -341,13 +350,11 @@ void AxisDock::init() {
 }
 
 void AxisDock::setModel() {
-	QList<const char*>  list;
-	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
+	QList<AspectType> list{AspectType::Folder, AspectType::Spreadsheet, AspectType::Column};
 	cbMajorTicksColumn->setTopLevelClasses(list);
 	cbMinorTicksColumn->setTopLevelClasses(list);
 
-	list.clear();
-	list<<"Column";
+	list = {AspectType::Column};
 	m_aspectTreeModel->setSelectableAspects(list);
 
 	cbMajorTicksColumn->setModel(m_aspectTreeModel);
@@ -361,6 +368,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	m_initializing = true;
 	m_axesList = list;
 	m_axis = list.first();
+	m_aspect = list.first();
 	Q_ASSERT(m_axis != nullptr);
 	m_aspectTreeModel = new AspectTreeModel(m_axis->project());
 	this->setModel();
@@ -387,6 +395,8 @@ void AxisDock::setAxes(QList<Axis*> list) {
 		cbMajorTicksColumn->setCurrentModelIndex(QModelIndex());
 		cbMinorTicksColumn->setCurrentModelIndex(QModelIndex());
 	}
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 
 	//show the properties of the first axis
 	this->load();
@@ -465,20 +475,6 @@ void AxisDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColum
 //********** SLOTs for changes triggered in AxisDock **********
 //*************************************************************
 //"General"-tab
-void AxisDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_axis->setName(ui.leName->text());
-}
-
-void AxisDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_axis->setComment(ui.leComment->text());
-}
-
 void AxisDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;

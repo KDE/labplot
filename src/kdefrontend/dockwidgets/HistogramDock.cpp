@@ -61,8 +61,10 @@
 
   \ingroup kdefrontend
 */
-HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent), cbDataColumn(new TreeViewComboBox) {
+HistogramDock::HistogramDock(QWidget* parent) : BaseDock(parent), cbDataColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
@@ -166,12 +168,17 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent), cbDataColumn(ne
 	connect( ui.sbErrorBarsOpacity, SIGNAL(valueChanged(int)), this, SLOT(errorBarsOpacityChanged(int)) );
 
 	//template handler
+	auto* frame = new QFrame(this);
+	auto* layout = new QHBoxLayout(frame);
+	layout->setContentsMargins(0, 11, 0, 11);
+
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::Histogram);
-	ui.verticalLayout->addWidget(templateHandler);
-	templateHandler->show();
+	layout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+	ui.verticalLayout->addWidget(frame);
 
 	retranslateUi();
 	init();
@@ -311,15 +318,15 @@ void HistogramDock::setModel() {
 	m_aspectTreeModel->enablePlottableColumnsOnly(true);
 	m_aspectTreeModel->enableShowPlotDesignation(true);
 
-	QList<const char*> list;
-	list << "Folder" << "Workbook" << "Datapicker" << "DatapickerCurve" << "Spreadsheet"
-		<< "LiveDataSource" << "Column" << "Worksheet" << "CartesianPlot" << "XYFitCurve" << "CantorWorksheet";
+	QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
+	                       AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
+	                       AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot,
+	                       AspectType::XYFitCurve, AspectType::CantorWorksheet};
 
 	cbDataColumn->setTopLevelClasses(list);
 	cbValuesColumn->setTopLevelClasses(list);
 
-	list.clear();
-	list << "Column";
+	list = {AspectType::Column};
 	m_aspectTreeModel->setSelectableAspects(list);
 
 	cbDataColumn->setModel(m_aspectTreeModel);
@@ -330,6 +337,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
+	m_aspect = list.first();
 	Q_ASSERT(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
@@ -364,6 +372,9 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 		ui.leName->setText(QString());
 		ui.leComment->setText(QString());
 	}
+
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 
 	//show the properties of the first curve
 	ui.cbType->setCurrentIndex(m_curve->type());
@@ -460,19 +471,6 @@ void HistogramDock::retranslateUi() {
 //*************************************************************
 
 // "General"-tab
-void HistogramDock::nameChanged() {
-	if (m_initializing)
-	return;
-
-	m_curve->setName(ui.leName->text());
-}
-void HistogramDock::commentChanged() {
-	if (m_initializing)
-	return;
-
-	m_curve->setComment(ui.leComment->text());
-}
-
 void HistogramDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;

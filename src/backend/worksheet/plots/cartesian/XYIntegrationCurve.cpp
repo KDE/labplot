@@ -51,11 +51,11 @@ extern "C" {
 #include <QThreadPool>
 
 XYIntegrationCurve::XYIntegrationCurve(const QString& name)
-		: XYAnalysisCurve(name, new XYIntegrationCurvePrivate(this)) {
+	: XYAnalysisCurve(name, new XYIntegrationCurvePrivate(this), AspectType::XYIntegrationCurve) {
 }
 
 XYIntegrationCurve::XYIntegrationCurve(const QString& name, XYIntegrationCurvePrivate* dd)
-		: XYAnalysisCurve(name, dd) {
+	: XYAnalysisCurve(name, dd, AspectType::XYIntegrationCurve) {
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -350,10 +350,10 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 		d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
 		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
 
-		setUndoAware(false);
 		XYCurve::d_ptr->xColumn = d->xColumn;
 		XYCurve::d_ptr->yColumn = d->yColumn;
-		setUndoAware(true);
+
+		recalcLogicalPoints();
 	}
 
 	return true;

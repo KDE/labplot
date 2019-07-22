@@ -4,7 +4,7 @@
     Description          : Private data class of Column
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2013-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2019 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -35,7 +35,7 @@
 
 class Column;
 
-class ColumnPrivate : QObject {
+class ColumnPrivate : public QObject {
 	Q_OBJECT
 
 public:
@@ -75,10 +75,21 @@ public:
 	IntervalAttribute<QString> formulaAttribute() const;
 	void replaceFormulas(const IntervalAttribute<QString>& formulas);
 
+	//global formula defined for the whole column
 	QString formula() const;
 	const QStringList& formulaVariableNames() const;
-	const QStringList& formulaVariableColumnPathes() const;
-	void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
+	const QVector<Column*>& formulaVariableColumns() const;
+	const QStringList& formulaVariableColumnPaths() const;
+	void setformulVariableColumnsPath(int index, QString path);
+	void setformulVariableColumn(int index, Column *column);
+	bool formulaAutoUpdate() const;
+	void setFormula(const QString& formula, const QStringList& variableNames,
+					const QVector<Column*>& variableColumns, bool autoUpdate);
+	void setFormula(const QString& formula, const QStringList& variableNames,
+					const QStringList& variableColumnPaths, bool autoUpdate);
+	void updateFormula();
+
+	//cell formulas
 	QString formula(int row) const;
 	QVector< Interval<int> > formulaIntervals() const;
 	void setFormula(Interval<int> i, QString formula);
@@ -107,6 +118,8 @@ public:
 
 	void updateProperties();
 
+	void finalizeLoad();
+
 	mutable AbstractColumn::ColumnStatistics statistics;
 	bool statisticsAvailable{false}; //is 'statistics' already available or needs to be (re-)calculated?
 
@@ -115,6 +128,7 @@ public:
 
 	mutable bool propertiesAvailable{false}; //is 'properties' already available (true) or needs to be (re-)calculated (false)?
 	mutable AbstractColumn::Properties properties{AbstractColumn::Properties::No}; // declares the properties of the curve (monotonic increasing/decreasing ...). Speed up algorithms
+
 private:
 	AbstractColumn::ColumnMode m_column_mode;	// type of column data
 	void* m_data;	//pointer to the data container (QVector<T>)
@@ -122,11 +136,18 @@ private:
 	AbstractSimpleFilter* m_output_filter;	//output filter for data type -> string conversion
 	QString m_formula;
 	QStringList m_formulaVariableNames;
-	QStringList m_formulaVariableColumnPathes;
+	QVector<Column*> m_formulaVariableColumns;
+	QStringList m_formulaVariableColumnPaths;
+	bool m_formulaAutoUpdate{false};
 	IntervalAttribute<QString> m_formulas;
 	AbstractColumn::PlotDesignation m_plot_designation{AbstractColumn::NoDesignation};
 	int m_width{0}; //column width in the view
 	Column* m_owner;
+	QVector<QMetaObject::Connection> m_connectionsUpdateFormula;
+
+private slots:
+	void formulaVariableColumnRemoved(const AbstractAspect*);
+	void formulaVariableColumnAdded(const AbstractAspect*);
 };
 
 #endif

@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2006-2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2006-2009 Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2012-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2019 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
@@ -64,7 +64,9 @@
   \ingroup backend
 */
 
-Spreadsheet::Spreadsheet(const QString& name, bool loading) : AbstractDataSource(name) {
+Spreadsheet::Spreadsheet(const QString& name, bool loading, AspectType type)
+	: AbstractDataSource(name, type) {
+
 	if (!loading)
 		init();
 }
@@ -89,7 +91,7 @@ void Spreadsheet::setModel(SpreadsheetModel* model) {
 	m_model = model;
 }
 
-SpreadsheetModel * Spreadsheet::model() {
+SpreadsheetModel* Spreadsheet::model() {
 	return m_model;
 }
 
@@ -759,14 +761,25 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 	return !reader->hasError();
 }
 
+void Spreadsheet::registerShortcuts() {
+	//TODO: when we create a live-data source we don't have the view here yet. why?
+	if (m_view)
+		m_view->registerShortcuts();
+}
+
+void Spreadsheet::unregisterShortcuts() {
+	if (m_view)
+		m_view->unregisterShortcuts();
+}
 
 //##############################################################################
 //########################  Data Import  #######################################
 //##############################################################################
 int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode importMode,
                                int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
-	DEBUG("Spreadsheet::prepareImport()");
-	DEBUG("	resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols);
+	DEBUG("Spreadsheet::prepareImport()")
+	DEBUG("	resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)
+	QDEBUG("	column name list = " << colNameList)
 	int columnOffset = 0;
 	setUndoAware(false);
 	if (m_model != nullptr)
@@ -848,6 +861,8 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 	returns column offset depending on import mode
 */
 int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols) {
+	DEBUG("Spreadsheet::resize()")
+	QDEBUG("	column name list = " << colNameList)
 	// name additional columns
 	for (int k = colNameList.size(); k < cols; k++ )
 		colNameList.append( "Column " + QString::number(k+1) );

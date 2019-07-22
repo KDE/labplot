@@ -67,6 +67,8 @@ XYDifferentiationCurveDock::XYDifferentiationCurveDock(QWidget* parent) : XYCurv
 void XYDifferentiationCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	m_leName = uiGeneralTab.leName;
+	m_leComment = uiGeneralTab.leComment;
 
 	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
@@ -134,6 +136,10 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
+	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
+	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
+
 	//show the properties of the first curve
 	m_differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(m_curve);
 
@@ -169,8 +175,8 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 }
 
 void XYDifferentiationCurveDock::setModel() {
-	QList<const char*> list;
-	list<<"Folder"<<"Datapicker"<<"Worksheet"<<"CartesianPlot"<<"XYCurve";
+	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
+	                       AspectType::CartesianPlot, AspectType::XYCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
@@ -178,9 +184,10 @@ void XYDifferentiationCurveDock::setModel() {
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
-	list.clear();
-	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
-		<<"LiveDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
+	list = {AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
+	        AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
+	        AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot, AspectType::XYFitCurve
+	       };
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -214,20 +221,6 @@ void XYDifferentiationCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
-void XYDifferentiationCurveDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setName(uiGeneralTab.leName->text());
-}
-
-void XYDifferentiationCurveDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setComment(uiGeneralTab.leComment->text());
-}
-
 void XYDifferentiationCurveDock::dataSourceTypeChanged(int index) {
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
 	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
@@ -282,6 +275,9 @@ void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
+
+	cbXDataColumn->useCurrentIndexText(true);
+	cbXDataColumn->setInvalid(false);
 }
 
 void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -293,6 +289,9 @@ void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYDifferentiationCurve*>(curve)->setYDataColumn(column);
+
+	cbYDataColumn->useCurrentIndexText(true);
+	cbYDataColumn->setInvalid(false);
 }
 
 /*!
@@ -490,6 +489,14 @@ void XYDifferentiationCurveDock::enableRecalculate() const {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
+		if (aspectX) {
+			cbXDataColumn->useCurrentIndexText(true);
+			cbXDataColumn->setInvalid(false);
+		}
+		if (aspectY) {
+			cbYDataColumn->useCurrentIndexText(true);
+			cbYDataColumn->setInvalid(false);
+		}
 	} else {
 		 hasSourceData = (m_differentiationCurve->dataSourceCurve() != nullptr);
 	}

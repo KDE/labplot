@@ -7,6 +7,9 @@ It is based on the code at
 	http://sourceforge.net/projects/liborigin
 	http://soft.proindependent.com/liborigin2
 
+Additionally, some fixes were applied to silence UBSan warnings caused by
+uninitialised POD struct members.
+
 AUTHORS:  Knut Franke, Miquel Garriga, Stefan Gerlach, Alex Kargovsky, Russell Standish, Ion Vasilief
 
 DEPENDENCIES: tree.hh (included) http://tree.phi-sci.com/

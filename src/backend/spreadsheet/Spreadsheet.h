@@ -41,7 +41,7 @@ class Spreadsheet : public AbstractDataSource {
 	Q_OBJECT
 
 public:
-	explicit Spreadsheet(const QString& name, bool loading = false);
+	explicit Spreadsheet(const QString& name, bool loading = false, AspectType type = AspectType::Spreadsheet);
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
@@ -80,6 +80,9 @@ public:
 	void emitRowCountChanged() { emit rowCountChanged(rowCount()); }
 	void emitColumnCountChanged() { emit columnCountChanged(columnCount()); }
 
+	void registerShortcuts() override;
+	void unregisterShortcuts() override;
+
 	//data import
 	int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
 		int rows, int cols, QStringList colNameList, QVector<AbstractColumn::ColumnMode>) override;
@@ -105,8 +108,10 @@ public slots:
 
 private:
 	void init();
-	mutable SpreadsheetView* m_view{nullptr};
 	SpreadsheetModel* m_model{nullptr};
+
+protected:
+	mutable SpreadsheetView* m_view{nullptr};
 
 private slots:
 	void childSelected(const AbstractAspect*) override;

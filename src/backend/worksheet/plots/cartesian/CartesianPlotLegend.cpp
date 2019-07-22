@@ -51,12 +51,14 @@
 #include <KLocalizedString>
 
 CartesianPlotLegend::CartesianPlotLegend(CartesianPlot* plot, const QString &name)
-		: WorksheetElement(name), d_ptr(new CartesianPlotLegendPrivate(this)), m_plot(plot) {
+		: WorksheetElement(name, AspectType::CartesianPlotLegend), d_ptr(new CartesianPlotLegendPrivate(this)), m_plot(plot) {
+
 	init();
 }
 
 CartesianPlotLegend::CartesianPlotLegend(CartesianPlot* plot, const QString &name, CartesianPlotLegendPrivate *dd)
-		: WorksheetElement(name), d_ptr(dd), m_plot(plot) {
+		: WorksheetElement(name, AspectType::CartesianPlotLegend), d_ptr(dd), m_plot(plot) {
+
 	init();
 }
 
@@ -126,9 +128,9 @@ void CartesianPlotLegend::init() {
 }
 
 void CartesianPlotLegend::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
+	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &CartesianPlotLegend::visibilityChanged);
+	connect(visibilityAction, &QAction::triggered, this, &CartesianPlotLegend::visibilityChangedSlot);
 }
 
 QMenu* CartesianPlotLegend::createContextMenu() {

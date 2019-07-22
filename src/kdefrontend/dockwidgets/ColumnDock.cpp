@@ -47,8 +47,10 @@
   \ingroup kdefrontend
 */
 
-ColumnDock::ColumnDock(QWidget* parent) : QWidget(parent) {
+ColumnDock::ColumnDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &ColumnDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &ColumnDock::commentChanged);
@@ -64,6 +66,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	m_initializing = true;
 	m_columnsList = list;
 	m_column = list.first();
+	m_aspect = list.first();
 
 	//check whether we have non-editable columns (e.g. columns for residuals calculated in XYFitCurve)
 	bool nonEditable = false;
@@ -99,6 +102,8 @@ void ColumnDock::setColumns(QList<Column*> list) {
 		ui.leName->setText(QString());
 		ui.leComment->setText(QString());
 	}
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 
 	//show the properties of the first column
 	AbstractColumn::ColumnMode columnMode = m_column->columnMode();
@@ -241,20 +246,6 @@ void ColumnDock::retranslateUi() {
 	m_initializing = false;
 }
 
-void ColumnDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_columnsList.first()->setName(ui.leName->text());
-}
-
-void ColumnDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_columnsList.first()->setComment(ui.leComment->text());
-}
-
 /*!
   called when the type (column mode - numeric, text etc.) of the column was changed.
 */
@@ -264,7 +255,6 @@ void ColumnDock::typeChanged(int index) {
 		return;
 
 	AbstractColumn::ColumnMode columnMode = (AbstractColumn::ColumnMode)ui.cbType->itemData(index).toInt();
-	int format_index = ui.cbFormat->currentIndex();
 
 	m_initializing = true;
 	this->updateFormatWidgets(columnMode);
@@ -277,7 +267,13 @@ void ColumnDock::typeChanged(int index) {
 				col->beginMacro(i18n("%1: change column type", col->name()));
 				col->setColumnMode(columnMode);
 				auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
-				filter->setNumericFormat(ui.cbFormat->itemData(format_index).toChar().toLatin1());
+
+				//TODO: using
+				//char format = ui.cbFormat->itemData(ui.cbFormat->currentIndex()).toChar().toLatin1();
+				//outside of the for-loop and
+				//filter->setNumericFormat(format);
+				//inseide the loop leads to wrong results when converting from integer to numeric -> 'f' is set instead of 'e'
+				filter->setNumericFormat(ui.cbFormat->itemData(ui.cbFormat->currentIndex()).toChar().toLatin1());
 				filter->setNumDigits(digits);
 				col->endMacro();
 			}
@@ -324,13 +320,13 @@ void ColumnDock::formatChanged(int index) {
 		return;
 
 	AbstractColumn::ColumnMode mode = (AbstractColumn::ColumnMode)ui.cbType->itemData(ui.cbType->currentIndex()).toInt();
-	int format_index = index;
 
 	switch (mode) {
 	case AbstractColumn::Numeric: {
+			char format = ui.cbFormat->itemData(index).toChar().toLatin1();
 			for (auto* col : m_columnsList) {
 				auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
-				filter->setNumericFormat(ui.cbFormat->itemData(format_index).toChar().toLatin1());
+				filter->setNumericFormat(format);
 			}
 			break;
 		}
@@ -340,7 +336,7 @@ void ColumnDock::formatChanged(int index) {
 	case AbstractColumn::Month:
 	case AbstractColumn::Day:
 	case AbstractColumn::DateTime: {
-			QString format = ui.cbFormat->itemData(ui.cbFormat->currentIndex()).toString();
+			QString format = ui.cbFormat->itemData(index).toString();
 			for (auto* col : m_columnsList) {
 				auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 				filter->setFormat(format);

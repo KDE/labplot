@@ -73,7 +73,7 @@ public:
 	bool hasChanged() const;
 	void navigateTo(const QString& path);
 
-	void save(QXmlStreamWriter*) const override;
+	void save(const QPixmap&, QXmlStreamWriter*) const;
 	bool load(XmlStreamReader*, bool preview) override;
 	bool load(const QString&, bool preview = false);
 
@@ -82,6 +82,7 @@ public:
 
 public slots:
 	void descriptionChanged(const AbstractAspect*);
+	void aspectAddedSlot(const AbstractAspect*);
 
 signals:
 	void requestSaveState(QXmlStreamWriter*) const;
@@ -92,11 +93,13 @@ signals:
 	void changed();
 	void requestNavigateTo(const QString& path);
 	void loaded();
+	void closeRequested();
 
 private:
 	class Private;
 	Private* d;
 	bool readProjectAttributes(XmlStreamReader*);
+	void save(QXmlStreamWriter*) const override;
 };
 
 #endif // ifndef PROJECT_H

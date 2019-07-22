@@ -46,7 +46,9 @@
 #endif
 #include "backend/worksheet/Worksheet.h"
 
+#include <QDropEvent>
 #include <QIcon>
+#include <QMimeData>
 #include <KLocalizedString>
 
 /**
@@ -54,16 +56,13 @@
  * \brief Folder in a project
  */
 
-Folder::Folder(const QString &name) : AbstractAspect(name) {
-
+Folder::Folder(const QString &name, AspectType type) : AbstractAspect(name, type) {
 	//when the child being removed is a LiveDataSource, stop reading from the source
 	connect(this, &AbstractAspect::aspectAboutToBeRemoved, this, [=](const AbstractAspect* aspect) {
 		const LiveDataSource* lds = dynamic_cast<const LiveDataSource*>(aspect);
 		if (lds)
 			const_cast<LiveDataSource*>(lds)->pauseReading();
 	} );
-
-
 }
 
 QIcon Folder::icon() const {
@@ -83,6 +82,50 @@ QMenu* Folder::createContextMenu() {
 	)
 		return project()->createFolderContextMenu(this);
 	return nullptr;
+}
+
+bool Folder::isDraggable() const {
+	if (dynamic_cast<const Project*>(this))
+		return false;
+	else
+		return true;
+}
+
+QVector<AspectType> Folder::dropableOn() const {
+	return QVector<AspectType>{AspectType::Folder, AspectType::Project};
+}
+
+void Folder::processDropEvent(QDropEvent* event) {
+	const QMimeData* mimeData = event->mimeData();
+	if (!mimeData)
+		return;
+
+	//deserialize the mime data to the vector of aspect pointers
+	QByteArray data = mimeData->data(QLatin1String("labplot-dnd"));
+	QVector<quintptr> vec;
+	QDataStream stream(&data, QIODevice::ReadOnly);
+	stream >> vec;
+
+	//reparent AbstractPart and Folder objects only
+	AbstractAspect* lastMovedAspect{nullptr};
+	for (auto a : vec) {
+		auto* aspect = (AbstractAspect*)a;
+		auto* part = dynamic_cast<AbstractPart*>(aspect);
+		if (part) {
+			part->reparent(this);
+			lastMovedAspect = part;
+		} else {
+			auto* folder = dynamic_cast<Folder*>(aspect);
+			if (folder) {
+				folder->reparent(this);
+				lastMovedAspect = folder;
+			}
+		}
+	}
+
+	//select the last moved aspect in the project explorer
+	if (lastMovedAspect)
+		lastMovedAspect->setSelected(true);
 }
 
 /**
@@ -157,13 +200,12 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		//skip the current child aspect it is not in the list of aspects to be loaded
 		if (m_pathesToLoad.indexOf(childPath) == -1) {
 			 //skip to the end of the current element
-			if (reader->skipToEndElement())
+			if (!reader->skipToEndElement())
 				return false;
 
 			//skip to the end of the "child_asspect" element
-			if (reader->skipToEndElement())
+			if (!reader->skipToEndElement())
 				return false;
-
 			return true;
 		}
 	}
@@ -244,7 +286,6 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 #endif
 #ifdef HAVE_MQTT
 	} else if (element_name == QLatin1String("MQTTClient")) {
-		qDebug()<<"Load MQTTClient";
 		MQTTClient* client = new MQTTClient(QString());
 		if (!client->load(reader, preview)) {
 			delete client;

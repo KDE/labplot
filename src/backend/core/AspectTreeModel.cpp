@@ -86,7 +86,7 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 /*!
   \c list contains the class names of the aspects, that can be selected in the corresponding model view.
 */
-void AspectTreeModel::setSelectableAspects(QList<const char*> list) {
+void AspectTreeModel::setSelectableAspects(const QList<AspectType>& list) {
 	m_selectableAspects = list;
 }
 
@@ -193,41 +193,8 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 				else if (m_nonEmptyNumericColumnsOnly && !column->hasValues())
 					name = i18n("%1   (no values)", name);
 
-				if (m_showPlotDesignation) {
-					QString designation;
-					switch (column->plotDesignation()) {
-					case AbstractColumn::NoDesignation:
-						break;
-					case AbstractColumn::X:
-						designation = QLatin1String(" [X]");
-						break;
-					case AbstractColumn::Y:
-						designation = QLatin1String(" [Y]");
-						break;
-					case AbstractColumn::Z:
-						designation = QLatin1String(" [Z]");
-						break;
-					case AbstractColumn::XError:
-						designation = QLatin1String(" [") + i18n("X-error") + QLatin1Char(']');
-						break;
-					case AbstractColumn::XErrorPlus:
-						designation = QLatin1String(" [") + i18n("X-error +") + QLatin1Char(']');
-						break;
-					case AbstractColumn::XErrorMinus:
-						designation = QLatin1String(" [") + i18n("X-error -") + QLatin1Char(']');
-						break;
-					case AbstractColumn::YError:
-						designation = QLatin1String(" [") + i18n("Y-error") + QLatin1Char(']');
-						break;
-					case AbstractColumn::YErrorPlus:
-						designation = QLatin1String(" [") + i18n("Y-error +") + QLatin1Char(']');
-						break;
-					case AbstractColumn::YErrorMinus:
-						designation = QLatin1String(" [") + i18n("Y-error -") + QLatin1Char(']');
-						break;
-					}
-					name += QLatin1Char('\t') + designation;
-				}
+				if (m_showPlotDesignation)
+					name += QLatin1Char('\t') + " " + column->plotDesignationString();
 
 				return name;
 			} else
@@ -273,8 +240,8 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const {
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 
 	if (!m_selectableAspects.isEmpty()) {
-		foreach (const char* classString, m_selectableAspects) {
-			if (aspect->inherits(classString)) {
+		for (AspectType type : m_selectableAspects) {
+			if (aspect->inherits(type)) {
 				result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 				if (index != this->index(0,0,QModelIndex()) &&  !m_filterString.isEmpty()) {
 					if (this->containsFilterString(aspect))
@@ -388,10 +355,13 @@ bool AspectTreeModel::setData(const QModelIndex &index, const QVariant &value, i
 	if (!index.isValid() || role != Qt::EditRole) return false;
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	switch (index.column()) {
-	case 0:
-		aspect->setName(value.toString());
+	case 0: {
+		if (!aspect->setName(value.toString(), false)) {
+			emit statusInfo(i18n("The name \"%1\" is already in use. Choose another name.", value.toString()));
+			return false;
+		}
 		break;
-	case 3:
+	} case 3:
 		aspect->setComment(value.toString());
 		break;
 	default:
@@ -413,7 +383,7 @@ QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect* aspect, in
 QModelIndex AspectTreeModel::modelIndexOfAspect(const QString& path, int column) const {
 	//determine the aspect out of aspect path
 	AbstractAspect* aspect = nullptr;
-	auto children = m_root->children("AbstractAspect", AbstractAspect::Recursive);
+	auto children = m_root->children(AspectType::AbstractAspect, AbstractAspect::Recursive);
 	for (auto* child: children) {
 		if (child->path() == path) {
 			aspect = child;

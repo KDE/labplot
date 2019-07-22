@@ -62,7 +62,7 @@ const QString& ProjectParser::projectFileName() const {
 	return m_projectFileName;
 }
 
-QList<const char*> ProjectParser::topLevelClasses() const {
+QList<AspectType> ProjectParser::topLevelClasses() const {
 	return m_topLevelClasses;
 }
 
@@ -91,7 +91,12 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 	//import the selected objects into a temporary project
 	auto* project = new Project();
 	project->setPathesToLoad(selectedPathes);
-	load(project, false);
+	bool rc = load(project, false);
+	if (!rc) {
+		delete project;
+		QDEBUG("Import of " + m_projectFileName + " failed.");
+		return;
+	}
 
 	//determine the first child of the last top level child in the list of the imported objects
 	//we want to navigate to in the project explorer after the import

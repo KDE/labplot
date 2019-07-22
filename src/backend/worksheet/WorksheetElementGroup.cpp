@@ -37,12 +37,12 @@
  *
  */
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name) 
-	: WorksheetElementContainer(name) {
+WorksheetElementGroup::WorksheetElementGroup(const QString &name)
+	: WorksheetElementContainer(name, AspectType::WorksheetElementGroup) {
 }
 
 WorksheetElementGroup::WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd) 
-	: WorksheetElementContainer(name, dd) {
+	: WorksheetElementContainer(name, dd, AspectType::WorksheetElementGroup) {
 }
 
 WorksheetElementGroup::~WorksheetElementGroup() = default;

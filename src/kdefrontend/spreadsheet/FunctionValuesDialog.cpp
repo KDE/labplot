@@ -29,9 +29,9 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
-#include "backend/gsl/ExpressionParser.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/gsl/ExpressionParser.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
@@ -68,8 +68,10 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent) : QD
 	ui.teEquation->setMaximumHeight(QLineEdit().sizeHint().height()*2);
 	ui.teEquation->setFocus();
 
-	m_topLevelClasses<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column";
-	m_selectableClasses<<"Column";
+	m_topLevelClasses = {AspectType::Folder, AspectType::Workbook,
+	                     AspectType::Spreadsheet, AspectType::Column
+	                    };
+	m_selectableClasses = {AspectType::Column};
 
 // needed for buggy compiler
 #if __cplusplus < 201103L
@@ -94,10 +96,10 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent) : QD
 	m_okButton->setText(i18n("&Generate"));
 	m_okButton->setToolTip(i18n("Generate function values"));
 
-	connect( ui.bAddVariable, SIGNAL(pressed()), this, SLOT(addVariable()) );
-	connect( ui.teEquation, SIGNAL(expressionChanged()), this, SLOT(checkValues()) );
-	connect( ui.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()) );
-	connect( ui.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()) );
+	connect(ui.bAddVariable, &QPushButton::pressed, this, &FunctionValuesDialog::addVariable);
+	connect(ui.teEquation, &ExpressionTextEdit::expressionChanged, this, &FunctionValuesDialog::checkValues);
+	connect(ui.tbConstants, &QToolButton::clicked, this, &FunctionValuesDialog::showConstants);
+	connect(ui.tbFunctions, &QToolButton::clicked, this, &FunctionValuesDialog::showFunctions);
 	connect(m_okButton, &QPushButton::clicked, this, &FunctionValuesDialog::generate);
 
 	//restore saved settings if available
@@ -107,7 +109,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent) : QD
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else
-		resize(QSize(0, 0).expandedTo(minimumSize()));
+		resize(QSize(300, 0).expandedTo(minimumSize()));
 }
 
 FunctionValuesDialog::~FunctionValuesDialog() {
@@ -117,8 +119,11 @@ FunctionValuesDialog::~FunctionValuesDialog() {
 
 void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 	m_columns = columns;
+
+	//formula expression
 	ui.teEquation->setPlainText(m_columns.first()->formula());
 
+	//variables
 	const QStringList& variableNames = m_columns.first()->formulaVariableNames();
 	if (!variableNames.size()) {
 		//no formula was used for this column -> add the first variable "x"
@@ -126,29 +131,66 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 		m_variableNames[0]->setText("x");
 	} else {
 		//formula and variables are available
-		const QStringList& columnPathes = m_columns.first()->formulaVariableColumnPathes();
+		const QVector<Column*>& variableColumns = m_columns.first()->formulaVariableColumns();
+		const QStringList columnPaths = m_columns.first()->formulaVariableColumnPaths();
 
 		//add all available variables and select the corresponding columns
-		const QVector<AbstractAspect*> cols = m_spreadsheet->project()->children("Column", AbstractAspect::Recursive);
+		const QVector<AbstractAspect*> cols = m_spreadsheet->project()->children(AspectType::Column, AbstractAspect::Recursive);
 		for (int i = 0; i < variableNames.size(); ++i) {
 			addVariable();
 			m_variableNames[i]->setText(variableNames.at(i));
 
-			for (const auto* aspect : cols) {
-				if (aspect->path() == columnPathes.at(i)) {
-					const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
-					if (column)
-						m_variableDataColumns[i]->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
-					else
-						m_variableDataColumns[i]->setCurrentModelIndex(QModelIndex());
+			bool found = false;
+			for (const auto* col : cols) {
+				if (col != variableColumns.at(i))
+					continue;
 
-					break;
-				}
+				const auto* column = dynamic_cast<const AbstractColumn*>(col);
+				if (column)
+					m_variableDataColumns[i]->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
+				else
+					m_variableDataColumns[i]->setCurrentModelIndex(QModelIndex());
+
+				m_variableDataColumns[i]->useCurrentIndexText(true);
+				m_variableDataColumns[i]->setInvalid(false);
+
+				found = true;
+				break;
+			}
+
+			//for the current variable name no column is existing anymore (was deleted)
+			//->highlight the combobox red
+			if (!found) {
+				m_variableDataColumns[i]->setCurrentModelIndex(QModelIndex());
+				m_variableDataColumns[i]->useCurrentIndexText(false);
+				m_variableDataColumns[i]->setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", columnPaths[i]));
+				m_variableDataColumns[i]->setText(columnPaths[i].split("/").last());
 			}
 		}
 	}
 
+	//auto update
+	ui.chkAutoUpdate->setChecked(m_columns.first()->formulaAutoUpdate());
+
 	checkValues();
+}
+
+bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
+	if (ExpressionParser::getInstance()->constants().indexOf(le->text()) != -1) {
+		le->setStyleSheet("QLineEdit{background: red;}");
+		le->setToolTip(i18n("Provided variable name is already reserved for a name of a constant. Please use another name."));
+		return false;
+	}
+
+	if (ExpressionParser::getInstance()->functions().indexOf(le->text()) != -1) {
+		le->setStyleSheet("QLineEdit{background: red;}");
+		le->setToolTip(i18n("Provided variable name is already reserved for a name of a function. Please use another name."));
+		return false;
+	}
+
+	le->setStyleSheet(QString());
+	le->setToolTip("");
+	return true;
 }
 
 /*!
@@ -172,6 +214,11 @@ void FunctionValuesDialog::checkValues() {
 			m_okButton->setEnabled(false);
 			return;
 		}
+
+		if (!validVariableName(m_variableNames[i])) {
+			m_okButton->setEnabled(false);
+			return;
+		}
 /*		Column* column = dynamic_cast<Column*>(aspect);
 		DEBUG("row count = " << (static_cast<QVector<double>* >(column->data()))->size());
 		if (!column || column->rowCount() < 1) {
@@ -188,9 +235,9 @@ void FunctionValuesDialog::checkValues() {
 void FunctionValuesDialog::showConstants() {
 	QMenu menu;
 	ConstantsWidget constants(&menu);
-	connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant(QString)));
-	connect(&constants, SIGNAL(constantSelected(QString)), &menu, SLOT(close()));
-	connect(&constants, SIGNAL(canceled()), &menu, SLOT(close()));
+	connect(&constants, &ConstantsWidget::constantSelected, this, &FunctionValuesDialog::insertConstant);
+	connect(&constants, &ConstantsWidget::constantSelected, &menu, &QMenu::close);
+	connect(&constants, &ConstantsWidget::canceled, &menu, &QMenu::close);
 
 	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&constants);
@@ -203,9 +250,9 @@ void FunctionValuesDialog::showConstants() {
 void FunctionValuesDialog::showFunctions() {
 	QMenu menu;
 	FunctionsWidget functions(&menu);
-	connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insertFunction(QString)));
-	connect(&functions, SIGNAL(functionSelected(QString)), &menu, SLOT(close()));
-	connect(&functions, SIGNAL(canceled()), &menu, SLOT(close()));
+	connect(&functions, &FunctionsWidget::functionSelected, this, &FunctionValuesDialog::insertFunction);
+	connect(&functions, &FunctionsWidget::functionSelected, &menu, &QMenu::close);
+	connect(&functions, &FunctionsWidget::canceled, &menu, &QMenu::close);
 
 	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&functions);
@@ -231,7 +278,7 @@ void FunctionValuesDialog::addVariable() {
 	//text field for the variable name
 	auto* le = new QLineEdit();
 	le->setMaximumWidth(30);
-	connect(le, SIGNAL(textChanged(QString)), this, SLOT(variableNameChanged()));
+	connect(le, &QLineEdit::textChanged, this, &FunctionValuesDialog::variableNameChanged);
 	layout->addWidget(le, row, 0, 1, 1);
 	m_variableNames << le;
 
@@ -243,13 +290,26 @@ void FunctionValuesDialog::addVariable() {
 	//combo box for the data column
 	auto* cb = new TreeViewComboBox();
 	cb->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
-	connect( cb, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkValues()) );
+	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &FunctionValuesDialog::variableColumnChanged);
 	layout->addWidget(cb, row, 2, 1, 1);
 	m_variableDataColumns << cb;
 
 	cb->setTopLevelClasses(m_topLevelClasses);
 	cb->setModel(m_aspectTreeModel.get());
-	cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(m_spreadsheet->column(0)));
+
+	//don't allow to select columns to be calculated as variable columns (avoid circular dependencies)
+	QList<const AbstractAspect*> aspects;
+	for (auto* col : m_columns)
+		aspects << col;
+	cb->setHiddenAspects(aspects);
+
+	//for the variable column select the first non-selected column in the spreadsheet
+	for (auto* col : m_spreadsheet->children<Column>()) {
+		if (m_columns.indexOf(col) == -1) {
+			cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(col));
+			break;
+		}
+	}
 
 	//move the add-button to the next row
 	layout->removeWidget(ui.bAddVariable);
@@ -262,7 +322,7 @@ void FunctionValuesDialog::addVariable() {
 		b->setToolTip(i18n("Delete variable"));
 		layout->addWidget(b, row, 3, 1, 1);
 		m_variableDeleteButtons<<b;
-		connect(b, SIGNAL(pressed()), this, SLOT(deleteVariable()));
+		connect(b, &QToolButton::pressed, this, &FunctionValuesDialog::deleteVariable);
 	}
 
 	ui.lVariable->setText(i18n("Variables:"));
@@ -313,6 +373,23 @@ void FunctionValuesDialog::variableNameChanged() {
 
 	ui.lFunction->setText(text);
 	ui.teEquation->setVariables(vars);
+	checkValues();
+}
+
+/*!
+ * called if a new column was selected in the comboboxes for the variable columns.
+ */
+void FunctionValuesDialog::variableColumnChanged(const QModelIndex& index) {
+	//combobox was potentially red-highlighted because of a missing column
+	//remove the highlighting if we have a valid selection now
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	if (aspect) {
+		TreeViewComboBox* cb = dynamic_cast<TreeViewComboBox*>(QObject::sender());
+		if (cb)
+			cb->setStyleSheet("");
+	}
+
+	checkValues();
 }
 
 void FunctionValuesDialog::generate() {
@@ -325,10 +402,7 @@ void FunctionValuesDialog::generate() {
 
 	//determine variable names and the data vectors of the specified columns
 	QStringList variableNames;
-	QStringList columnPathes;
-	QVector<QVector<double>*> xVectors;
-	QVector<QVector<double>*> xNewVectors;
-	int maxRowCount = m_spreadsheet->rowCount();
+	QVector<Column*> variableColumns;
 	for (int i = 0; i < m_variableNames.size(); ++i) {
 		variableNames << m_variableNames.at(i)->text().simplified();
 
@@ -336,52 +410,21 @@ void FunctionValuesDialog::generate() {
 		Q_ASSERT(aspect);
 		auto* column = dynamic_cast<Column*>(aspect);
 		Q_ASSERT(column);
-		columnPathes << column->path();
-		if (column->columnMode() == AbstractColumn::Integer) {
-			//convert integers to doubles first
-			auto* xVector = new QVector<double>(column->rowCount());
-			for (int i = 0; i<column->rowCount(); ++i)
-				xVector->operator[](i) = column->valueAt(i);
-
-			xNewVectors << xVector;
-			xVectors << xVector;
-		} else
-			xVectors << static_cast<QVector<double>* >(column->data());
-
-		if (column->rowCount() > maxRowCount)
-			maxRowCount = column->rowCount();
+		variableColumns << column;
 	}
 
-	//resize the spreadsheet if one of the data vectors from other spreadsheet(s) has more elements then the current spreadsheet.
-	if (m_spreadsheet->rowCount() < maxRowCount)
-		m_spreadsheet->setRowCount(maxRowCount);
-
-	//create new vector for storing the calculated values
-	//the vectors with the variable data can be smaller then the result vector. So, not all values in the result vector might get initialized.
-	//->"clean" the result vector first
-	QVector<double> new_data(maxRowCount);
-	for (auto& d : new_data)
-		d = NAN;
-
-	//evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
-	ExpressionParser* parser = ExpressionParser::getInstance();
-	const QString& expression = ui.teEquation->toPlainText();
-	parser->evaluateCartesian(expression, variableNames, xVectors, &new_data);
-
 	//set the new values and store the expression, variable names and the used data columns
+	const QString& expression = ui.teEquation->toPlainText();
+	bool autoUpdate = (ui.chkAutoUpdate->checkState() == Qt::Checked);
 	for (auto* col : m_columns) {
 		if (col->columnMode() != AbstractColumn::Numeric)
 			col->setColumnMode(AbstractColumn::Numeric);
 
-		col->setFormula(expression, variableNames, columnPathes);
-		col->replaceValues(0, new_data);
+		col->setFormula(expression, variableNames, variableColumns, autoUpdate);
+		col->updateFormula();
 	}
 
 	m_spreadsheet->endMacro();
-
-	//delete help vectors created for the conversion from int to double
-	for (auto* vector : xNewVectors)
-		delete vector;
 
 	RESET_CURSOR;
 }

@@ -252,7 +252,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	q.prepare(currentQuery(true));
 	q.setForwardOnly(true);
 	q.exec();
-	if (!q.isActive() || !q.next()) { // check if query was succesful and got to first record
+	if (!q.isActive() || !q.next()) { // check if query was successful and got to first record
 		RESET_CURSOR;
 		if (!q.lastError().databaseText().isEmpty())
 			KMessageBox::error(this, q.lastError().databaseText(), i18n("Unable to Execute Query"));

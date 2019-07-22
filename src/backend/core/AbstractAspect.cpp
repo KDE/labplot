@@ -31,8 +31,9 @@
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/aspectcommands.h"
 #include "backend/core/Project.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/datapicker/DatapickerCurve.h"
+#include "backend/datasources/LiveDataSource.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/PropertyChangeCommand.h"
@@ -201,9 +202,8 @@
 // start of AbstractAspect implementation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-AbstractAspect::AbstractAspect(const QString &name)
-	: d(new AbstractAspectPrivate(this, name))
-{
+AbstractAspect::AbstractAspect(const QString &name, AspectType type)
+	: m_type(type), d(new AbstractAspectPrivate(this, name)) {
 }
 
 AbstractAspect::~AbstractAspect() {
@@ -214,27 +214,37 @@ QString AbstractAspect::name() const {
 	return d->m_name;
 }
 
-void AbstractAspect::setName(const QString &value) {
-	if (value.isEmpty()) {
-		setName(QLatin1String("1"));
-		return;
-	}
+/*!
+ * \brief AbstractAspect::setName
+ * sets the name of the abstract aspect
+ * \param value
+ * \param autoUnique
+ * \return returns, if the new name is valid or not
+ */
+bool AbstractAspect::setName(const QString &value, bool autoUnique) {
+	if (value.isEmpty())
+		return setName(QLatin1String("1"), autoUnique);
 
 	if (value == d->m_name)
-		return;
+		return true; // name not changed, but the name is valid
 
 	QString new_name;
 	if (d->m_parent) {
-		new_name = d->m_parent->uniqueNameFor(value);
+			new_name = d->m_parent->uniqueNameFor(value);
+
+		if (!autoUnique && new_name.compare(value) != 0) // value is not unique, so don't change name
+			return false; // this value is used in the dock to check if the name is valid
+
+
 		if (new_name != value)
 			info(i18n("Intended name \"%1\" was changed to \"%2\" in order to avoid name collision.", value, new_name));
-	} else {
+	} else
 		new_name = value;
-	}
 
 	exec(new PropertyChangeCommand<QString>(i18n("%1: rename to %2", d->m_name, new_name),
 				&d->m_name, new_name),
 			"aspectDescriptionAboutToChange", "aspectDescriptionChanged", Q_ARG(const AbstractAspect*,this));
+	return true;
 }
 
 QString AbstractAspect::comment() const {
@@ -293,6 +303,7 @@ QIcon AbstractAspect::icon() const {
 QMenu* AbstractAspect::createContextMenu() {
 	QMenu* menu = new QMenu();
 	menu->addSection(this->name());
+
 	//TODO: activate this again when the functionality is implemented
 // 	menu->addAction( KStandardAction::cut(this) );
 // 	menu->addAction(KStandardAction::copy(this));
@@ -300,13 +311,15 @@ QMenu* AbstractAspect::createContextMenu() {
 // 	menu->addSeparator();
 
 	//don't allow to rename and delete
-	//1. data spreadsheets of datapicker curves
-	//2. columns in data spreadsheets of datapicker curves
-	//1. Mqtt subscriptions
-	//2. Mqtt topics
-	//3. Columns in Mqtt topics
+	// - data spreadsheets of datapicker curves
+	// - columns in data spreadsheets of datapicker curves
+	// - columns in live-data source
+	// - Mqtt subscriptions
+	// - Mqtt topics
+	// - Columns in Mqtt topics
 	bool enabled = !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DatapickerCurve*>(this->parentAspect()))
 		&& !(dynamic_cast<const Column*>(this) && this->parentAspect()->parentAspect() && dynamic_cast<const DatapickerCurve*>(this->parentAspect()->parentAspect()))
+		&& !(dynamic_cast<const Column*>(this) && dynamic_cast<const LiveDataSource*>(this->parentAspect()))
 #ifdef HAVE_MQTT
 		&& !dynamic_cast<const MQTTSubscription*>(this)
 		&& !dynamic_cast<const MQTTTopic*>(this)
@@ -316,10 +329,34 @@ QMenu* AbstractAspect::createContextMenu() {
 
 	if(enabled) {
 		menu->addAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
-		menu->addAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this, SLOT(remove()));
+		if (type() != AspectType::Project)
+			menu->addAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this, SLOT(remove()));
 	}
 
 	return menu;
+}
+
+AspectType AbstractAspect::type() const {
+	return m_type;
+}
+
+
+bool AbstractAspect::inherits(AspectType type) const {
+	return (static_cast<quint64>(m_type) & static_cast<quint64>(type)) == static_cast<quint64>(type);
+}
+
+/**
+ * \brief In the parent-child hierarchy, return the first parent of type \param type or null pointer if there is none.
+ */
+AbstractAspect* AbstractAspect::parent(AspectType type) const {
+	AbstractAspect* parent = parentAspect();
+	if (!parent)
+		return nullptr;
+
+	if (parent->inherits(type))
+		return parent;
+
+	return parent->parent(type);
 }
 
 /**
@@ -339,11 +376,11 @@ void AbstractAspect::setParentAspect(AbstractAspect* parent) {
  * The returned folder may be the aspect itself if it inherits Folder.
  */
 Folder* AbstractAspect::folder() {
-	if (inherits("Folder")) return static_cast<Folder*>(this);
+	if (inherits(AspectType::Folder)) return static_cast<class Folder*>(this);
 	AbstractAspect* parent_aspect = parentAspect();
-	while (parent_aspect && !parent_aspect->inherits("Folder"))
+	while (parent_aspect && !parent_aspect->inherits(AspectType::Folder))
 		parent_aspect = parent_aspect->parentAspect();
-	return static_cast<Folder*>(parent_aspect);
+	return static_cast<class Folder*>(parent_aspect);
 }
 
 /**
@@ -505,18 +542,16 @@ void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 	exec(new AspectChildReparentCmd(parentAspect()->d, newParent->d, this, newIndex));
 	emit old_parent->aspectRemoved(old_parent, old_sibling, this);
 	emit aspectAdded(this);
-
-	endMacro();
 }
 
-QVector<AbstractAspect*> AbstractAspect::children(const char* className, ChildIndexFlags flags) {
+QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFlags flags) {
 	QVector<AbstractAspect*> result;
 	for (auto* child : children()) {
 		if (flags & IncludeHidden || !child->hidden()) {
-			if ( child->inherits(className) || !(flags & Compress)) {
+			if (child->inherits(type) || !(flags & Compress)) {
 				result << child;
 				if (flags & Recursive) {
-					result << child->children(className, flags);
+					result << child->children(type, flags);
 				}
 			}
 		}
@@ -545,6 +580,14 @@ QVector<AbstractAspect*> AbstractAspect::dependsOn() const {
 		aspects << parentAspect() << parentAspect()->dependsOn();
 
 	return aspects;
+}
+
+bool AbstractAspect::isDraggable() const {
+	return false;
+}
+
+QVector<AspectType> AbstractAspect::dropableOn() const {
+	return QVector<AspectType>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -751,10 +794,10 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	//e.g. axis of a plot was selected. Don't include parent aspects here that do not
 	//need to react on the selection of children: e.g. Folder or XYFitCurve with
 	//the child column for calculated residuals
-	if (aspect->parentAspect() != nullptr
-		&& !aspect->parentAspect()->inherits("Folder")
-		&& !aspect->parentAspect()->inherits("XYFitCurve")
-		&& !aspect->parentAspect()->inherits("CantorWorksheet"))
+	if (aspect->parentAspect()
+		&& !aspect->parentAspect()->inherits(AspectType::Folder)
+		&& !aspect->parentAspect()->inherits(AspectType::XYFitCurve)
+		&& !aspect->parentAspect()->inherits(AspectType::CantorWorksheet))
 		emit aspect->parentAspect()->selected(aspect);
 }
 
@@ -763,10 +806,10 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	//e.g. axis of a plot was selected. Don't include parent aspects here that do not
 	//need to react on the deselection of children: e.g. Folder or XYFitCurve with
 	//the child column for calculated residuals
-	if (aspect->parentAspect() != nullptr
-		&& !aspect->parentAspect()->inherits("Folder")
-		&& !aspect->parentAspect()->inherits("XYFitCurve")
-		&& !aspect->parentAspect()->inherits("CantorWorksheet"))
+	if (aspect->parentAspect()
+		&& !aspect->parentAspect()->inherits(AspectType::Folder)
+		&& !aspect->parentAspect()->inherits(AspectType::XYFitCurve)
+		&& !aspect->parentAspect()->inherits(AspectType::CantorWorksheet))
 		emit aspect->parentAspect()->deselected(aspect);
 }
 

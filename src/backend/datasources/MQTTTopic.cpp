@@ -47,7 +47,8 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
   \ingroup datasources
 */
-MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool loading) : Spreadsheet(name, loading),
+MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool loading) :
+	Spreadsheet(name, loading, AspectType::MQTTTopic),
 	m_topicName(name),
 	m_MQTTClient(subscription->mqttClient()),
 	m_filter(new AsciiFilter) {

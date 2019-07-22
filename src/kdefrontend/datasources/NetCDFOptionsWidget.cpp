@@ -29,6 +29,8 @@ Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/lib/macros.h"
 
+#include <KUrlComboBox>
+
  /*!
 	\class NetCDFOptionsWidget
 	\brief Widget providing options for the import of NetCDF data
@@ -87,7 +89,7 @@ void NetCDFOptionsWidget::netcdfTreeWidgetSelectionChanged() {
 	else if (item->data(1, Qt::DisplayRole).toString().contains("attribute")) {
 		// reads attributes (only for preview)
 		auto filter = static_cast<NetCDFFilter*>(m_fileWidget->currentFileFilter());
-		QString fileName = m_fileWidget->ui.leFileName->text();
+		QString fileName = m_fileWidget->m_cbFileName->currentText();
 		QString name = item->data(0, Qt::DisplayRole).toString();
 		QString varName = item->data(1, Qt::DisplayRole).toString().split(' ')[0];
 		QDEBUG("name =" << name << "varName =" << varName);

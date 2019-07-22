@@ -60,7 +60,9 @@
 */
 
 OriginProjectParser::OriginProjectParser() : ProjectParser() {
-	m_topLevelClasses << "Folder" << "Workbook" << "Spreadsheet" << "Matrix" << "Worksheet" << "Note";
+	m_topLevelClasses = {AspectType::Folder, AspectType::Workbook,
+	                     AspectType::Spreadsheet, AspectType::Matrix,
+	                     AspectType::Worksheet, AspectType::Note};
 }
 
 bool OriginProjectParser::isOriginProject(const QString& fileName) {
@@ -73,11 +75,12 @@ void OriginProjectParser::setImportUnusedObjects(bool importUnusedObjects) {
 }
 
 bool OriginProjectParser::hasUnusedObjects() {
-	if (m_originFile)
-		delete m_originFile;
 	m_originFile = new OriginFile((const char*)m_projectFileName.toLocal8Bit());
-	if (!m_originFile->parse())
+	if (!m_originFile->parse()) {
+		delete m_originFile;
+		m_originFile = nullptr;
 		return false;
+	}
 
 	for (unsigned int i = 0; i < m_originFile->spreadCount(); i++) {
 		const Origin::SpreadSheet& spread = m_originFile->spread(i);
@@ -95,6 +98,8 @@ bool OriginProjectParser::hasUnusedObjects() {
 			return true;
 	}
 
+	delete m_originFile;
+	m_originFile = nullptr;
 	return false;
 }
 
@@ -160,13 +165,14 @@ unsigned int OriginProjectParser::findNoteByName(const QString& name) {
 //##############################################################################
 bool OriginProjectParser::load(Project* project, bool preview) {
 	DEBUG("OriginProjectParser::load()");
-	//read and parse the m_originFile-file
-	if (m_originFile)
-		delete m_originFile;
 
+	//read and parse the m_originFile-file
 	m_originFile = new OriginFile((const char*)m_projectFileName.toLocal8Bit());
-	if (!m_originFile->parse())
+	if (!m_originFile->parse()) {
+		delete m_originFile;
+		m_originFile = nullptr;
 		return false;
+	}
 
 	//Origin project tree and the iterator pointing to the root node
 	const tree<Origin::ProjectNode>* projectTree = m_originFile->project();
@@ -255,6 +261,10 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 
 	emit project->loaded();
 	project->setIsLoading(false);
+
+	delete m_originFile;
+	m_originFile = nullptr;
+
 	return true;
 }
 

@@ -36,7 +36,7 @@ class Folder : public AbstractAspect {
 Q_OBJECT
 
 public:
-	explicit Folder(const QString& name);
+	explicit Folder(const QString& name, AspectType type = AspectType::Folder);
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
@@ -45,6 +45,10 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void setPathesToLoad(const QStringList&);
 	const QStringList& pathesToLoad() const;
+
+	bool isDraggable() const override;
+	QVector<AspectType> dropableOn() const override;
+	void processDropEvent(QDropEvent*) override;
 
 private:
 	QStringList m_pathesToLoad;

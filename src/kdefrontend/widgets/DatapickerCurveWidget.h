@@ -32,9 +32,10 @@
 
 #include "ui_datapickercurvewidget.h"
 #include "backend/datapicker/DatapickerCurve.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 
 
-class DatapickerCurveWidget : public QWidget {
+class DatapickerCurveWidget : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -57,8 +58,6 @@ private:
 
 private slots:
 	//SLOTs for changes triggered in DatapickerCurveDock
-	void nameChanged();
-	void commentChanged();
 	void updateSymbolWidgets();
 	void xErrorTypeChanged(int);
 	void yErrorTypeChanged(int);

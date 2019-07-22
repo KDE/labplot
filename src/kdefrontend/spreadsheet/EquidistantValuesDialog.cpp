@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dialog for generating equidistant numbers
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -32,8 +32,11 @@
 
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QWindow>
 
 #include <KLocalizedString>
+#include <KSharedConfig>
+#include <KWindowConfig>
 
 /*!
 	\class EquidistantValuesDialog
@@ -45,22 +48,27 @@
 EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent) : QDialog(parent), m_spreadsheet(s) {
 	setWindowTitle(i18nc("@title:window", "Equidistant Values"));
 
-	ui.setupUi(this);
-	setAttribute(Qt::WA_DeleteOnClose);
-	ui.cbType->addItem(i18n("Number"));
-	ui.cbType->addItem(i18n("Increment"));
+	QWidget* mainWidget = new QWidget(this);
+	ui.setupUi(mainWidget);
+	auto* layout = new QVBoxLayout(this);
 
-	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-
-	ui.gridLayout->addWidget(btnBox);
-	m_okButton = btnBox->button(QDialogButtonBox::Ok);
-
-	connect(btnBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &EquidistantValuesDialog::close);
-	connect(btnBox, &QDialogButtonBox::accepted, this, &EquidistantValuesDialog::accept);
-	connect(btnBox, &QDialogButtonBox::rejected, this, &EquidistantValuesDialog::reject);
-
+	QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	ui.gridLayout->addWidget(buttonBox);
+	m_okButton = buttonBox->button(QDialogButtonBox::Ok);
 	m_okButton->setText(i18n("&Generate"));
 	m_okButton->setToolTip(i18n("Generate equidistant values"));
+
+	connect(buttonBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &EquidistantValuesDialog::close);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &EquidistantValuesDialog::accept);
+	connect(buttonBox, &QDialogButtonBox::rejected, this, &EquidistantValuesDialog::reject);
+
+	layout->addWidget(mainWidget);
+	layout->addWidget(buttonBox);
+	setLayout(layout);
+	setAttribute(Qt::WA_DeleteOnClose);
+
+	ui.cbType->addItem(i18n("Number"));
+	ui.cbType->addItem(i18n("Increment"));
 
 	ui.leFrom->setClearButtonEnabled(true);
 	ui.leTo->setClearButtonEnabled(true);
@@ -86,7 +94,20 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	//generated data the  default
 	this->typeChanged(0);
 
-	resize( QSize(300,0).expandedTo(minimumSize()) );
+	//restore saved settings if available
+	create(); // ensure there's a window created
+	KConfigGroup conf(KSharedConfig::openConfig(), "EquidistantValuesDialog");
+	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(300, 0).expandedTo(minimumSize()));
+}
+
+EquidistantValuesDialog::~EquidistantValuesDialog() {
+	//save current settings
+	KConfigGroup conf(KSharedConfig::openConfig(), "EquidistantValuesDialog");
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {

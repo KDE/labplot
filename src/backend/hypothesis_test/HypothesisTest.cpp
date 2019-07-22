@@ -49,7 +49,7 @@ extern "C" {
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
 
-HypothesisTest::HypothesisTest(const QString &name) : AbstractPart(name),
+HypothesisTest::HypothesisTest(const QString &name) : AbstractPart(name, AspectType::HypothesisTest),
     d(new HypothesisTestPrivate(this)) {
 }
 

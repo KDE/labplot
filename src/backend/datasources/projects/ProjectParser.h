@@ -35,6 +35,8 @@ class QString;
 class Folder;
 class Project;
 
+enum class AspectType : quint64;
+
 class ProjectParser : public QObject {
 	Q_OBJECT
 
@@ -48,14 +50,14 @@ public:
 	QAbstractItemModel* model();
 	void importTo(Folder*, const QStringList&);
 
-	QList<const char*> topLevelClasses() const ;
+	QList<AspectType> topLevelClasses() const ;
 
 protected:
 	virtual bool load(Project*, bool preview) = 0;
 
 	QString m_projectFileName;
 	Project* m_project{nullptr};
-	QList<const char*>  m_topLevelClasses;
+	QList<AspectType>  m_topLevelClasses;
 
 private:
 	void moveFolder(Folder* targetParentFolder, Folder* sourceChildFolderToMove) const;

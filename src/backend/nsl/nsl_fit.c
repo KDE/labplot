@@ -75,7 +75,7 @@ double nsl_fit_map_bound(double x, double min, double max) {
 	if (max == DBL_MAX)
 		return min - 1. + sqrt(x*x + 1.);
 
-	return min + sin(x + 1.) * (max - min)/2.;
+	return min + (sin(x) + 1.) * (max - min)/2.;
 
 	/* alternative transformation for closed bounds
 	return min + (max - min)/(1. + exp(-x));
@@ -164,7 +164,7 @@ double nsl_fit_model_fourier_param_deriv(unsigned int param, unsigned int degree
 
 /* peak */
 double nsl_fit_model_gaussian_param_deriv(unsigned int param, double x, double A, double s, double mu, double weight) {
-	double s2 = s*s, norm = sqrt(weight)/sqrt(2.*M_PI)/s, efactor = exp(-(x-mu)*(x-mu)/(2.*s2));
+	double s2 = s*s, norm = sqrt(weight)/M_SQRT2/M_SQRTPI/s, efactor = exp(-(x-mu)*(x-mu)/(2.*s2));
 
 	if (param == 0)
 		return norm * efactor;
@@ -228,7 +228,7 @@ double nsl_fit_model_voigt_param_deriv(unsigned int param, double x, double a, d
 //		return a*sqrt(weight)*g/M_PI/(s*s*s) + norm*sqrt(2.*M_PI)*v * (y*y+mu*mu-s*s) - norm/s*im_w*2.*g*y;
 		return a/(s*s*s)*sqrt(weight)*(g/M_PI + v*(y*y -g*g -s*s) + im_w*2.*g*y/s);
 	if (param == 3)
-		return -a*sqrt(weight)/M_PI/(s*s) + norm*sqrt(2.*M_PI)*s*v*g + im_w;
+		return -a*sqrt(weight)/M_PI/(s*s) + norm*M_SQRT2*M_SQRTPI*s*v*g + im_w;
 #endif
 
 	return 0;
@@ -300,9 +300,9 @@ double nsl_fit_model_erf_param_deriv(unsigned int param, double x, double A, dou
 	if (param == 0)
 		return norm/2. * gsl_sf_erf(y);
 	if (param == 1)
-		return -A/sqrt(2.*M_PI)/s * norm * exp(-y*y);
+		return -A/M_SQRT2/M_SQRTPI/s * norm * exp(-y*y);
 	if (param == 2)
-		return -A/sqrt(M_PI)/s * norm * y*exp(-y*y);
+		return -A/M_SQRTPI/s * norm * y*exp(-y*y);
 
 	return 0;
 }
@@ -343,7 +343,7 @@ double nsl_fit_model_gudermann_param_deriv(unsigned int param, double x, double 
 double nsl_fit_model_gaussian_tail_param_deriv(unsigned int param, double x, double A, double s, double a, double mu, double weight) {
 	if (x < a)
 		return 0;
-	double s2 = s*s, N = erfc(a/s/M_SQRT2)/2., norm = sqrt(weight)/sqrt(2.*M_PI)/s/N, efactor = exp(-(x-mu)*(x-mu)/(2.*s2));
+	double s2 = s*s, N = erfc(a/s/M_SQRT2)/2., norm = sqrt(weight)/M_SQRT2/M_SQRTPI/s/N, efactor = exp(-(x-mu)*(x-mu)/(2.*s2));
 
 	if (param == 0)
 		return norm * efactor;
@@ -397,7 +397,7 @@ double nsl_fit_model_exp_pow_param_deriv(unsigned int param, double x, double a,
 	return 0;
 }
 double nsl_fit_model_maxwell_param_deriv(unsigned int param, double x, double a, double s, double weight) {
-	double s2 = s*s, s3 = s*s2, norm = sqrt(weight)*sqrt(2./M_PI)/s3, x2 = x*x, efactor = exp(-x2/2./s2);
+	double s2 = s*s, s3 = s*s2, norm = sqrt(weight)*M_SQRT2/M_SQRTPI/s3, x2 = x*x, efactor = exp(-x2/2./s2);
 
 	if (param == 0)
 		return norm * x2 * efactor;
@@ -417,7 +417,7 @@ double nsl_fit_model_poisson_param_deriv(unsigned int param, double x, double A,
 	return 0;
 }
 double nsl_fit_model_lognormal_param_deriv(unsigned int param, double x, double A, double s, double mu, double weight) {
-	double norm = sqrt(weight)/sqrt(2.*M_PI)/(x*s), y = log(x)-mu, efactor = exp(-(y/s)*(y/s)/2.);
+	double norm = sqrt(weight)/M_SQRT2/M_SQRTPI/(x*s), y = log(x)-mu, efactor = exp(-(y/s)*(y/s)/2.);
 
 	if (param == 0)
 		return norm * efactor;
@@ -507,7 +507,7 @@ double nsl_fit_model_students_t_param_deriv(unsigned int param, double x, double
 	if (param == 0)
 		return sqrt(weight) * gsl_ran_tdist_pdf(x, n);
 	if (param == 1)
-		return sqrt(weight) * A * gsl_sf_gamma((n+1.)/2.)/2./pow(n, 1.5)/sqrt(M_PI)/gsl_sf_gamma(n/2.) * pow(1.+x*x/n, - (n+3.)/2.)
+		return sqrt(weight) * A * gsl_sf_gamma((n+1.)/2.)/2./pow(n, 1.5)/M_SQRTPI/gsl_sf_gamma(n/2.) * pow(1.+x*x/n, - (n+3.)/2.)
 			* (x*x - 1. - (n+x*x)*log1p(x*x/n)  + (n+x*x)*(gsl_sf_psi((n+1.)/2.) - gsl_sf_psi(n/2.)) ) ;
 
 	return 0;
@@ -673,14 +673,14 @@ double nsl_fit_model_logarithmic_param_deriv(unsigned int param, double k, doubl
 	return 0;
 }
 double nsl_fit_model_sech_dist_param_deriv(unsigned int param, double x, double A, double s, double mu, double weight) {
-	double norm = sqrt(weight)/2./s, y = M_PI/2.*(x-mu)/s;
+	double norm = sqrt(weight)/2./s, y = M_PI_2*(x-mu)/s;
 
 	if (param == 0)
 		return norm * 1./cosh(y);
 	if (param == 1)
 		return -A/s * norm * (y*tanh(y)+1.)/cosh(y);
 	if (param == 2)
-		return A*M_PI/2./s * norm * tanh(y)/cosh(y);
+		return A*M_PI_2/s * norm * tanh(y)/cosh(y);
 
 	return 0;
 }

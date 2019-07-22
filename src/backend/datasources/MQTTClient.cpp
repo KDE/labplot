@@ -63,7 +63,7 @@ It manages the MQTTSubscriptions, and the MQTTTopics.
 
   \ingroup datasources
 */
-MQTTClient::MQTTClient(const QString& name) : Folder(name),
+MQTTClient::MQTTClient(const QString& name) : Folder(name, AspectType::MQTTClient),
 	m_updateTimer(new QTimer(this)),
 	m_client(new QMqttClient(this)),
 	m_willTimer(new QTimer(this)) {

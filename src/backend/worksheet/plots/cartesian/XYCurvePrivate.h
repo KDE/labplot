@@ -34,6 +34,7 @@
 
 class CartesianPlot;
 class CartesianCoordinateSystem;
+class XYCurve;
 
 class XYCurvePrivate : public QGraphicsItem {
 public:
@@ -46,6 +47,9 @@ public:
 	void retransform();
 	void recalcLogicalPoints();
 	void updateLines();
+	void addLine(QPointF p0, QPointF p1, double &minY, double &maxY, bool &overlap, double minLogicalDiffX, int &pixelDiff); // for linear scale
+	void addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff, int pixelCount); // for nonlinear x Axis scale
+	void addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff);
 	void updateDropLines();
 	void updateSymbols();
 	void updateValues();
@@ -56,6 +60,11 @@ public:
 	void updatePixmap();
 	void setPrinting(bool);
 	void suppressRetransform(bool);
+
+	void setHover(bool on);
+	bool activateCurve(QPointF mouseScenePos, double maxDist);
+	bool pointLiesNearLine(const QPointF p1, const QPointF p2, const QPointF pos, const double maxDist) const;
+	bool pointLiesNearCurve(const QPointF mouseScenePos, const QPointF curvePosPrevScene, const QPointF curvePosScene, const int index, const double maxDist) const;
 
 	//data source
 	const AbstractColumn* xColumn;
@@ -136,8 +145,7 @@ public:
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void drawSymbols(QPainter*);
@@ -156,6 +164,7 @@ private:
 	QVector<QPointF> symbolPointsLogical;	//points in logical coordinates
 	QVector<QPointF> symbolPointsScene;	//points in scene coordinates
 	std::vector<bool> visiblePoints;	//vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
+	std::vector<int> validPointsIndicesLogical;	//vector of the size of symbolPointsLogical containing the original indices in the source columns for valid and non-masked values
 	QVector<QPointF> valuesPoints;
 	std::vector<bool> connectedPointsLogical;  //vector of the size of symbolPointsLogical with true for points connected with the consecutive point and
 												//false otherwise (don't connect because of a gap (NAN) in-between)

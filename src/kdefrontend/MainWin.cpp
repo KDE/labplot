@@ -48,6 +48,8 @@
 #include "backend/datapicker/Datapicker.h"
 #include "backend/note/Note.h"
 #include "backend/lib/macros.h"
+#include "backend/worksheet/TreeModel.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
@@ -69,6 +71,7 @@
 #include "kdefrontend/datasources/ImportFileDialog.h"
 #include "kdefrontend/datasources/ImportProjectDialog.h"
 #include "kdefrontend/datasources/ImportSQLDatabaseDialog.h"
+#include <kdefrontend/dockwidgets/CursorDock.h>
 #include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/HistoryDialog.h"
 #include "kdefrontend/SettingsDialog.h"
@@ -166,6 +169,28 @@ void MainWin::showPresenter() {
 
 AspectTreeModel* MainWin::model() const {
 	return m_aspectTreeModel;
+}
+
+/*!
+ * Show cursor dock and set the treeview model
+ * @param model
+ */
+void MainWin::showCursorDock(TreeModel* model, QVector<CartesianPlot*> plots) {
+	if (!cursorDock) {
+		cursorDock = new QDockWidget(i18n("Cursor"), this);
+		cursorWidget = new CursorDock(cursorDock);
+		cursorDock->setWidget(cursorWidget);
+		cursorDock->setFloating(true);
+
+		// does not work. Don't understand why
+//		if (m_propertiesDock)
+//			tabifyDockWidget(cursorDock, m_propertiesDock);
+//		else
+			addDockWidget(Qt::DockWidgetArea::AllDockWidgetAreas, cursorDock);
+	}
+	cursorWidget->setCursorTreeViewModel(model);
+	cursorWidget->setPlots(plots);
+	cursorDock->show();
 }
 
 Project* MainWin::project() const {
@@ -283,7 +308,7 @@ void MainWin::initGUI(const QString& fileName) {
 			newWorksheet();
 		} else if (load == 3) { //open last used project
 			if (!m_recentProjectsAction->urls().isEmpty()) {
-				QDEBUG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().first());
+				QDEBUG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().constFirst());
 				openRecentProject( m_recentProjectsAction->urls().constFirst() );
 			}
 		}
@@ -402,7 +427,7 @@ void MainWin::initActions() {
 	actionCollection()->addAction("export", m_exportAction);
 	connect(m_exportAction, &QAction::triggered, this, &MainWin::exportDialog);
 
-	m_editFitsFileAction = new QAction(i18n("FITS Metadata Editor"), this);
+	m_editFitsFileAction = new QAction(QIcon::fromTheme("editor"), i18n("FITS Metadata Editor"), this);
 	m_editFitsFileAction->setWhatsThis(i18n("Open editor to edit FITS meta data"));
 	actionCollection()->addAction("edit_fits", m_editFitsFileAction);
 	connect(m_editFitsFileAction, &QAction::triggered, this, &MainWin::editFitsFileDialog);
@@ -495,9 +520,13 @@ void MainWin::initActions() {
 }
 
 void MainWin::initMenus() {
-	//menu for adding new aspects
+	//menu in the main toolbar for adding new aspects
+	auto* menu = dynamic_cast<QMenu*>(factory()->container("new", this));
+	menu->setIcon(QIcon::fromTheme("window-new"));
+
+	//menu in the project explorr and in the toolbar for adding new aspects
 	m_newMenu = new QMenu(i18n("Add New"), this);
-	m_newMenu->setIcon(QIcon::fromTheme("document-new"));
+	m_newMenu->setIcon(QIcon::fromTheme("window-new"));
 	m_newMenu->addAction(m_newFolderAction);
 	m_newMenu->addAction(m_newWorkbookAction);
 	m_newMenu->addAction(m_newSpreadsheetAction);
@@ -521,7 +550,7 @@ void MainWin::initMenus() {
 
 #ifdef HAVE_CANTOR_LIBS
 	m_newMenu->addSeparator();
-	m_newCantorWorksheetMenu = new QMenu(i18n("CAS Worksheet"));
+	m_newCantorWorksheetMenu = new QMenu(i18n("CAS Worksheet"), this);
 	m_newCantorWorksheetMenu->setIcon(QIcon::fromTheme("archive-insert"));
 
 	//"Adding Cantor backends to menue and context menu"
@@ -704,7 +733,7 @@ void MainWin::updateGUI() {
 	if (m_project->isLoading())
 		return;
 
-	if (m_closing)
+	if (m_closing || m_projectClosing)
 		return;
 
 	KXMLGUIFactory* factory = this->guiFactory();
@@ -888,6 +917,7 @@ bool MainWin::newProject() {
 		m_visibilityAllAction->setChecked(true);
 
 	m_aspectTreeModel = new AspectTreeModel(m_project, this);
+	connect(m_aspectTreeModel, &AspectTreeModel::statusInfo, [=](const QString& text){ statusBar()->showMessage(text); });
 
 	//newProject is called for the first time, there is no project explorer yet
 	//-> initialize the project explorer,  the GUI-observer and the dock widgets.
@@ -937,6 +967,7 @@ bool MainWin::newProject() {
 	connect(m_project, &Project::requestProjectContextMenu, this, &MainWin::createContextMenu);
 	connect(m_project, &Project::requestFolderContextMenu, this, &MainWin::createFolderContextMenu);
 	connect(m_project, &Project::mdiWindowVisibilityChanged, this, &MainWin::updateMdiWindowVisibility);
+	connect(m_project, &Project::closeRequested, this, &MainWin::closeProject);
 
 	m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
 	setCaption(m_project->name());
@@ -1033,11 +1064,13 @@ bool MainWin::closeProject() {
 	if (warnModified())
 		return false;
 
+	m_projectClosing = true;
 	delete m_aspectTreeModel;
 	m_aspectTreeModel = nullptr;
 	delete m_project;
 	m_project = nullptr;
 	m_currentFileName.clear();
+	m_projectClosing = false;
 
 	//update the UI if we're just closing a project
 	//and not closing(quitting) the application
@@ -1052,6 +1085,10 @@ bool MainWin::closeProject() {
 			m_autoSaveTimer.stop();
 	}
 
+	removeDockWidget(cursorDock);
+	delete cursorDock;
+	cursorDock = nullptr;
+	cursorWidget = nullptr; // is deleted, because it's the cild of cursorDock
 	return true;
 }
 
@@ -1106,8 +1143,10 @@ bool MainWin::save(const QString& fileName) {
 	if (file->open(QIODevice::WriteOnly)) {
 		m_project->setFileName(fileName);
 
+		QPixmap thumbnail = centralWidget()->grab();
+
 		QXmlStreamWriter writer(file);
-		m_project->save(&writer);
+		m_project->save(thumbnail, &writer);
 		m_project->undoStack()->clear();
 		m_project->setChanged(false);
 		file->close();
@@ -1225,7 +1264,7 @@ void MainWin::newSpreadsheet() {
 	if (workbook) {
 		QModelIndex index = m_projectExplorer->currentIndex();
 		const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		if (!aspect->inherits("Folder")) {
+		if (!aspect->inherits(AspectType::Folder)) {
 			workbook->addChild(spreadsheet);
 			return;
 		}
@@ -1246,7 +1285,7 @@ void MainWin::newMatrix() {
 	if (workbook) {
 		QModelIndex index = m_projectExplorer->currentIndex();
 		const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		if (!aspect->inherits("Folder")) {
+		if (!aspect->inherits(AspectType::Folder)) {
 			workbook->addChild(matrix);
 			return;
 		}
@@ -1453,6 +1492,10 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 		connect(part, &AbstractPart::printPreviewRequested, this, &MainWin::printPreview);
 		connect(part, &AbstractPart::showRequested, this, &MainWin::handleShowSubWindowRequested);
 	}
+
+	const auto* worksheet = dynamic_cast<const Worksheet*>(aspect);
+	if (worksheet)
+		connect(worksheet, &Worksheet::showCursorDock, this, &MainWin::showCursorDock);
 }
 
 void MainWin::handleAspectRemoved(const AbstractAspect* parent,const AbstractAspect* before,const AbstractAspect* aspect) {
@@ -1566,7 +1609,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 	return;
 }
 
-void MainWin::setMdiWindowVisibility(QAction * action) {
+void MainWin::setMdiWindowVisibility(QAction* action) {
 	m_project->setMdiWindowVisibility((Project::MdiWindowVisibility)(action->data().toInt()));
 }
 
@@ -1583,12 +1626,22 @@ void MainWin::handleShowSubWindowRequested() {
 	this is called on a right click on the root folder in the project explorer
 */
 void MainWin::createContextMenu(QMenu* menu) const {
-	menu->addMenu(m_newMenu);
+	QAction* firstAction = nullptr;
+	// if we're populating the context menu for the project explorer, then
+	//there're already actions available there. Skip the first title-action
+	//and insert the action at the beginning of the menu.
+	if (menu->actions().size()>1)
+		firstAction = menu->actions().at(1);
+
+	menu->insertMenu(firstAction, m_newMenu);
 
 	//The tabbed view collides with the visibility policy for the subwindows.
 	//Hide the menus for the visibility policy if the tabbed view is used.
-	if (m_mdiArea->viewMode() != QMdiArea::TabbedView)
-		menu->addMenu(m_visibilityMenu);
+	if (m_mdiArea->viewMode() != QMdiArea::TabbedView) {
+		menu->insertSeparator(firstAction);
+		menu->insertMenu(firstAction, m_visibilityMenu);
+		menu->insertSeparator(firstAction);
+	}
 }
 
 /*!
@@ -1871,12 +1924,13 @@ void MainWin::importFileDialog(const QString& fileName) {
 	auto* dlg = new ImportFileDialog(this, false, fileName);
 
 	// select existing container
-	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook"))
-		dlg->setCurrentIndex( m_projectExplorer->currentIndex());
-	else if (m_currentAspect->inherits("Column")) {
-		if (m_currentAspect->parentAspect()->inherits("Spreadsheet"))
-			dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
-	}
+	if (m_currentAspect->inherits(AspectType::Spreadsheet) ||
+		m_currentAspect->inherits(AspectType::Matrix) ||
+		m_currentAspect->inherits(AspectType::Workbook))
+		dlg->setCurrentIndex(m_projectExplorer->currentIndex());
+	else if (m_currentAspect->inherits(AspectType::Column) &&
+             m_currentAspect->parentAspect()->inherits(AspectType::Spreadsheet))
+		dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 
 	if (dlg->exec() == QDialog::Accepted) {
 		dlg->importTo(statusBar());
@@ -1892,12 +1946,13 @@ void MainWin::importSqlDialog() {
 	auto* dlg = new ImportSQLDatabaseDialog(this);
 
 	// select existing container
-	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook"))
-		dlg->setCurrentIndex( m_projectExplorer->currentIndex());
-	else if (m_currentAspect->inherits("Column")) {
-		if (m_currentAspect->parentAspect()->inherits("Spreadsheet"))
-			dlg->setCurrentIndex( m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
-	}
+	if (m_currentAspect->inherits(AspectType::Spreadsheet) ||
+		m_currentAspect->inherits(AspectType::Matrix) ||
+		m_currentAspect->inherits(AspectType::Workbook))
+		dlg->setCurrentIndex(m_projectExplorer->currentIndex());
+	else if (m_currentAspect->inherits(AspectType::Column) &&
+             m_currentAspect->parentAspect()->inherits(AspectType::Spreadsheet))
+		dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 
 	if (dlg->exec() == QDialog::Accepted) {
 		dlg->importTo(statusBar());

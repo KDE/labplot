@@ -37,7 +37,7 @@ class AbstractPart : public AbstractAspect {
 Q_OBJECT
 
 public:
-	explicit AbstractPart(const QString &name);
+	AbstractPart(const QString &name, AspectType type);
 	~AbstractPart() override;
 
 	virtual QWidget* view() const = 0;
@@ -50,6 +50,13 @@ public:
 	virtual bool exportView() const = 0;
 	virtual bool printView() = 0;
 	virtual bool printPreview() const = 0;
+
+	bool isDraggable() const override;
+	QVector<AspectType> dropableOn() const override;
+
+	//TODO: move these functions to a new class AbstractPartView
+	virtual void registerShortcuts() {};
+	virtual void unregisterShortcuts() {};
 
 private:
 	mutable PartMdiView* m_mdiWindow{nullptr};

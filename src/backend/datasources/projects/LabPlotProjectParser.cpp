@@ -37,7 +37,10 @@
 */
 
 LabPlotProjectParser::LabPlotProjectParser() : ProjectParser() {
-	m_topLevelClasses<<"Folder"<<"Workbook"<<"Spreadsheet"<<"Matrix"<<"Worksheet"<<"CantorWorksheet"<<"Datapicker"<<"LiveDataSource";
+	m_topLevelClasses = {AspectType::Folder, AspectType::Workbook,
+	                     AspectType::Spreadsheet, AspectType::Matrix,
+	                     AspectType::Worksheet, AspectType::CantorWorksheet,
+	                     AspectType::Datapicker, AspectType::LiveDataSource};
 }
 
 bool LabPlotProjectParser::load(Project* project, bool preview) {

@@ -45,6 +45,13 @@ public:
 	void rangeChanged();
 	void xRangeFormatChanged();
 	void yRangeFormatChanged();
+	void mouseMoveZoomSelectionMode(QPointF logicalPos);
+	void mouseMoveCursorMode(int cursorNumber, QPointF logicalPos);
+	void mouseReleaseZoomSelectionMode();
+	void mouseHoverZoomSelectionMode(QPointF logicPos);
+	void mousePressZoomSelectionMode(QPointF logicalPos);
+	void mousePressCursorMode(int cursorNumber, QPointF logicalPos);
+	void updateCursor();
 
 	QRectF dataRect;
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeFree};
@@ -75,6 +82,17 @@ public:
 	bool suppressRetransform{false};
 	bool panningStarted{false};
 	bool locked{false};
+	// Cursor
+	bool cursor0Enable{false};
+	int selectedCursor{0};
+	QPointF cursor0Pos{QPointF(NAN, NAN)};
+	bool cursor1Enable{false};
+	QPointF cursor1Pos{QPointF(NAN, NAN)};
+	QPen cursorPen{QPen(Qt::red, 5, Qt::SolidLine)};
+
+signals:
+	void mousePressZoomSelectionModeSignal(QPointF logicalPos);
+	void mousePressCursorModeSignal(QPointF logicalPos);
 
 private:
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;

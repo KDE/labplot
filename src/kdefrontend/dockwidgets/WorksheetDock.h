@@ -32,13 +32,14 @@
 
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_worksheetdock.h"
 
 class AbstractAspect;
 class ThemeHandler;
 class Worksheet;
 
-class WorksheetDock : public QWidget {
+class WorksheetDock : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -49,7 +50,6 @@ private:
 	Ui::WorksheetDock ui;
 	QList<Worksheet*> m_worksheetList;
 	Worksheet* m_worksheet{nullptr};
-	bool m_initializing;
 	ThemeHandler* m_themeHandler;
 
 	void updatePaperSize();
@@ -62,8 +62,6 @@ private slots:
 
 	//SLOTs for changes triggered in WorksheetDock
 	//"General"-tab
-	void nameChanged();
-	void commentChanged();
 	void scaleContentChanged(bool);
 	void sizeChanged(int);
 	void sizeChanged();
@@ -81,6 +79,7 @@ private slots:
 	void fileNameChanged();
 
 	//"Layout"-tab
+	void layoutChanged(int);
 	void layoutTopMarginChanged(double);
 	void layoutBottomMarginChanged(double);
 	void layoutRightMarginChanged(double);

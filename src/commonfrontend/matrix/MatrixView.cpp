@@ -4,7 +4,7 @@
     Description          : View class for Matrix
     --------------------------------------------------------------------
     Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2019 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -254,6 +254,7 @@ void MatrixView::connectActions() {
 void MatrixView::initMenus() {
 	//selection menu
 	m_selectionMenu = new QMenu(i18n("Selection"), this);
+	m_selectionMenu->setIcon(QIcon::fromTheme("selection"));
 	m_selectionMenu->addAction(action_cut_selection);
 	m_selectionMenu->addAction(action_copy_selection);
 	m_selectionMenu->addAction(action_paste_into_selection);
@@ -301,6 +302,7 @@ void MatrixView::initMenus() {
 	m_matrixMenu->addSeparator();
 
 	submenu = new QMenu(i18n("View"), this);
+	submenu->setIcon(QIcon::fromTheme("view-choose"));
 	submenu->addAction(action_data_view);
 	submenu->addAction(action_image_view);
 	m_matrixMenu->addMenu(submenu);
@@ -312,6 +314,7 @@ void MatrixView::initMenus() {
 	m_matrixMenu->addSeparator();
 
 	m_headerFormatMenu = new QMenu(i18n("Header Format"), this);
+	m_headerFormatMenu->setIcon(QIcon::fromTheme("format-border-style"));
 	m_headerFormatMenu->addAction(action_header_format_1);
 	m_headerFormatMenu->addAction(action_header_format_2);
 	m_headerFormatMenu->addAction(action_header_format_3);
@@ -1522,3 +1525,10 @@ void MatrixView::exportToFits(const QString &fileName, const int exportTo) const
 	delete filter;
 }
 
+void MatrixView::registerShortcuts() {
+	action_clear_selection ->setShortcut(QKeySequence::Delete);
+}
+
+void MatrixView::unregisterShortcuts() {
+	action_clear_selection->setShortcut(QKeySequence());
+}

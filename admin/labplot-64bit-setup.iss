@@ -1,5 +1,5 @@
 #define MyAppName "LabPlot2"
-#define MyAppVersion "2.6.0"
+#define MyAppVersion "2.7.0"
 #define MyAppPublisher "Stefan Gerlach"
 #define MyAppURL "https://labplot.kde.org"
 #define MyAppExeName "labplot2.exe"
@@ -47,7 +47,9 @@ Source: "{#CraftRoot}\bin\liblzma-5.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libintl-8.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\iconv.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libeay32.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "{#CraftRoot}\bin\ssleay32.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libfreetype-6.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libpng15.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "{#CraftRoot}\bin\ssleay32.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libssl-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libcrypto-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
 ;Source: "{#CraftRoot}\bin\libdbus-1-3.dll"; DestDir: "{app}";Flags: ignoreversion
@@ -56,6 +58,7 @@ Source: "{#CraftRoot}\bin\libkdewin.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5Archive.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5Attica.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5Auth.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libKF5AuthCore.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5Bookmarks.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5Codecs.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5Completion.dll"; DestDir: "{app}";Flags: ignoreversion
@@ -110,11 +113,12 @@ Source: "{#CraftRoot}\bin\data\applications\org.kde.cantor.desktop"; DestDir: "{
 Source: "{#CraftRoot}\bin\data\config.kcfg\*"; DestDir: "{app}\data\config.kcfg"; Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\bin\data\icons\hicolor\48x48\apps\*"; DestDir: "{app}\data\icons\hicolor\48x48\apps\"; Flags: recursesubdirs ignoreversion
 ; misc
-Source: "{#CraftRoot}\bin\libfftw3.dll"; DestDir: "{app}"; DestName: "libfftw3-3.dll"; Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libfftw3.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\netcdf.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\hdf5_hl.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\hdf5.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#CraftRoot}\bin\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CraftRoot}\bin\zlib.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CraftRoot}\bin\szip.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\liblz4.so.1.8.3.dll"; DestDir: "{app}"; DestName: "liblz4.dll"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libmysql.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libpq.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -132,6 +136,9 @@ Source: "{#CraftRoot}\bin\data\labplot2\splash.png"; DestDir: "{app}"; Flags: ig
 Source: "{#CraftRoot}\bin\data\metainfo\org.kde.labplot2.appdata.xml"; DestDir: "{app}\data\metainfo"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\data\applications\org.kde.labplot2.desktop"; DestDir: "{app}\data\applications"; Flags: ignoreversion
 ; Source: "{#CraftRoot}\labplot\labplot2.cmd"; DestDir: "{app}";Flags: ignoreversion
+
+; locale (data\locale\*\LC_MESSAGES\labplot2.mo)
+Source: "{#CraftRoot}\bin\data\locale\labplot2.mo"; DestDir: "{app}\data\locale"; Flags: recursesubdirs ignoreversion
 
 ; icon theme
 Source: "{#CraftRoot}\bin\data\icontheme.rcc"; DestDir: "{app}\data";Flags: ignoreversion

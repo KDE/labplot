@@ -54,11 +54,11 @@ extern "C" {
 #include <QIcon>
 
 XYInterpolationCurve::XYInterpolationCurve(const QString& name)
-	: XYAnalysisCurve(name, new XYInterpolationCurvePrivate(this)) {
+	: XYAnalysisCurve(name, new XYInterpolationCurvePrivate(this), AspectType::XYInterpolationCurve) {
 }
 
 XYInterpolationCurve::XYInterpolationCurve(const QString& name, XYInterpolationCurvePrivate* dd)
-	: XYAnalysisCurve(name, dd) {
+	: XYAnalysisCurve(name, dd, AspectType::XYInterpolationCurve) {
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -543,10 +543,10 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 		d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
 		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
 
-		setUndoAware(false);
 		XYCurve::d_ptr->xColumn = d->xColumn;
 		XYCurve::d_ptr->yColumn = d->yColumn;
-		setUndoAware(true);
+
+		recalcLogicalPoints();
 	}
 
 	return true;

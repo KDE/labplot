@@ -34,11 +34,13 @@
 #include <KLocalizedString>
 #include <KConfig>
 
-NoteDock::NoteDock(QWidget *parent) : QWidget(parent) {
+NoteDock::NoteDock(QWidget *parent) : BaseDock(parent) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_leComment = ui.leComment;
 
-	connect(ui.leName, &QLineEdit::textChanged, this, [this]() { nameChanged(ui.leName->text()); });
-	connect(ui.leComment, &QLineEdit::textChanged, this, [this]() { commentChanged(ui.leComment->text()); });
+	connect(ui.leName, &QLineEdit::textChanged, this, &NoteDock::nameChanged);
+	connect(ui.leComment, &QLineEdit::textChanged, this, &NoteDock::commentChanged);
 
 	connect(ui.kcbBgColor, &KColorButton::changed, this, &NoteDock::backgroundColorChanged);
 	connect(ui.kcbTextColor, &KColorButton::changed, this, &NoteDock::textColorChanged);
@@ -54,9 +56,12 @@ NoteDock::NoteDock(QWidget *parent) : QWidget(parent) {
 void NoteDock::setNotesList(QList< Note* > list) {
 	m_notesList = list;
 	m_notes = list.first();
+	m_aspect = list.first();
 
 	m_initializing = true;
 	ui.leName->setText(m_notes->name());
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
 	ui.kcbBgColor->setColor(m_notes->backgroundColor());
 	ui.kcbTextColor->setColor(m_notes->textColor());
 	ui.kfrTextFont->setFont(m_notes->textFont());
@@ -66,20 +71,6 @@ void NoteDock::setNotesList(QList< Note* > list) {
 //*************************************************************
 //********** SLOTs for changes triggered in NoteDock **********
 //*************************************************************
-void NoteDock::nameChanged(const QString& name) {
-	if (m_initializing)
-		return;
-
-	m_notes->setName(name);
-}
-
-void NoteDock::commentChanged(const QString& name) {
-	if (m_initializing)
-		return;
-
-	m_notes->setComment(name);
-}
-
 void NoteDock::backgroundColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;

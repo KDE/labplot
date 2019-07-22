@@ -41,7 +41,7 @@
  * \brief Top-level container for Spreadsheet and Matrix.
  * \ingroup backend
  */
-Workbook::Workbook(const QString& name) : AbstractPart(name) {
+Workbook::Workbook(const QString& name) : AbstractPart(name, AspectType::Workbook) {
 }
 
 QIcon Workbook::icon() const {

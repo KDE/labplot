@@ -75,6 +75,7 @@ MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* cli
 	case QMqttClient::InvalidProtocolVersion:
 	case QMqttClient::TransportInvalid:
 	case QMqttClient::ProtocolViolation:
+	case QMqttClient::Mqtt5SpecificError:
 		close = true;
 		break;
 	default:
@@ -120,6 +121,7 @@ void MQTTErrorWidget::tryToReconnect() {
 	case QMqttClient::ServerUnavailable:
 	case QMqttClient::UnknownError:
 	case QMqttClient::ProtocolViolation:
+	case QMqttClient::Mqtt5SpecificError:
 		break;
 	default:
 		break;

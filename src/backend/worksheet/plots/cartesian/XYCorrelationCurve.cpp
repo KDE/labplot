@@ -49,11 +49,11 @@ extern "C" {
 }
 
 XYCorrelationCurve::XYCorrelationCurve(const QString& name)
-		: XYAnalysisCurve(name, new XYCorrelationCurvePrivate(this)) {
+	: XYAnalysisCurve(name, new XYCorrelationCurvePrivate(this), AspectType::XYCorrelationCurve) {
 }
 
 XYCorrelationCurve::XYCorrelationCurve(const QString& name, XYCorrelationCurvePrivate* dd)
-		: XYAnalysisCurve(name, dd) {
+	: XYAnalysisCurve(name, dd, AspectType::XYCorrelationCurve) {
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -362,10 +362,10 @@ bool XYCorrelationCurve::load(XmlStreamReader* reader, bool preview) {
 		d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
 		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
 
-		setUndoAware(false);
 		XYCurve::d_ptr->xColumn = d->xColumn;
 		XYCurve::d_ptr->yColumn = d->yColumn;
-		setUndoAware(true);
+
+		recalcLogicalPoints();
 	}
 
 	return true;

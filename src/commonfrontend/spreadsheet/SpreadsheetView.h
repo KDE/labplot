@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -81,6 +81,9 @@ public:
 	bool printView();
 	bool printPreview();
 
+	void registerShortcuts();
+	void unregisterShortcuts();
+
 private:
 	void init();
 	void initActions();
@@ -93,6 +96,12 @@ private:
 	                   const bool skipEmptyRows,const bool exportEntire) const;
 	void exportToFits(const QString& path, const int exportTo, const bool commentsAsUnits) const;
 	void exportToSQLite(const QString& path) const;
+
+	void insertColumnsLeft(int);
+	void insertColumnsRight(int);
+
+	void insertRowsAbove(int);
+	void insertRowsBelow(int);
 
 	QTableView* m_tableView;
 	Spreadsheet* m_spreadsheet;
@@ -135,6 +144,8 @@ private:
 	//column related actions
 	QAction* action_insert_column_left;
 	QAction* action_insert_column_right;
+	QAction* action_insert_columns_left;
+	QAction* action_insert_columns_right;
 	QAction* action_remove_columns;
 	QAction* action_clear_columns;
 	QAction* action_add_columns;
@@ -166,6 +177,8 @@ private:
 	//row related actions
 	QAction* action_insert_row_above;
 	QAction* action_insert_row_below;
+	QAction* action_insert_rows_above;
+	QAction* action_insert_rows_below;
 	QAction* action_remove_rows;
 	QAction* action_clear_rows;
 	QAction* action_statistics_rows;
@@ -231,11 +244,15 @@ private slots:
 
 	void insertRowAbove();
 	void insertRowBelow();
+	void insertRowsAbove();
+	void insertRowsBelow();
 	void removeSelectedRows();
 	void clearSelectedRows();
 
 	void insertColumnLeft();
 	void insertColumnRight();
+	void insertColumnsLeft();
+	void insertColumnsRight();
 	void removeSelectedColumns();
 	void clearSelectedColumns();
 

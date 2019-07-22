@@ -56,6 +56,7 @@ class QCompleter;
 class QTimer;
 class QTreeWidgetItem;
 class QStringList;
+class KUrlComboBox;
 
 class ImportFileWidget : public QWidget {
 	Q_OBJECT
@@ -103,7 +104,8 @@ private:
 
 	mutable std::unique_ptr<AbstractFileFilter> m_currentFilter;
 
-	QTableWidget* m_twPreview;
+	QTableWidget* m_twPreview{nullptr};
+	KUrlComboBox* m_cbFileName{nullptr};
 	const QString& m_fileName;
 	bool m_fileEmpty{false};
 	bool m_liveDataSource;

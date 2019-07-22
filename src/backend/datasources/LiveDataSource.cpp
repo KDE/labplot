@@ -3,7 +3,7 @@ File		: LiveDataSource.cpp
 Project		: LabPlot
 Description	: Represents live data source
 --------------------------------------------------------------------
-Copyright	: (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
+Copyright	: (C) 2009-2019 Alexander Semke (alexander.semke@web.de)
 Copyright	: (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
@@ -34,26 +34,23 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/filters/BinaryFilter.h"
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/core/Project.h"
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
-
-#include <QFileInfo>
+#include <QAction>
 #include <QDateTime>
-#include <QProcess>
 #include <QDir>
-#include <QMenu>
+#include <QFileInfo>
 #include <QFileSystemWatcher>
-#include <QFile>
-#include <QTimer>
+#include <QIcon>
+#include <QMenu>
 #include <QMessageBox>
-
+#include <QProcess>
+#include <QTimer>
 #include <QSerialPortInfo>
 #include <QTcpSocket>
 #include <QUdpSocket>
 
-#include <QIcon>
-#include <QAction>
 #include <KLocalizedString>
 
 /*!
@@ -62,7 +59,7 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
   \ingroup datasources
 */
-LiveDataSource::LiveDataSource(const QString& name, bool loading) : Spreadsheet(name, loading),
+LiveDataSource::LiveDataSource(const QString& name, bool loading) : Spreadsheet(name, loading, AspectType::LiveDataSource),
 	m_updateTimer(new QTimer(this)) {
 
 	initActions();
@@ -113,8 +110,10 @@ void LiveDataSource::initActions() {
 }
 
 QWidget* LiveDataSource::view() const {
-	if (!m_partView)
-		m_partView = new SpreadsheetView(const_cast<LiveDataSource*>(this), true);
+	if (!m_partView) {
+		m_view = new SpreadsheetView(const_cast<LiveDataSource*>(this), true);
+		m_partView = m_view;
+	}
 	return m_partView;
 }
 
@@ -123,7 +122,7 @@ QWidget* LiveDataSource::view() const {
  */
 QStringList LiveDataSource::availablePorts() {
 	QStringList ports;
-	qDebug() << "available ports count:" << QSerialPortInfo::availablePorts().size();
+// 	qDebug() << "available ports count:" << QSerialPortInfo::availablePorts().size();
 
 	for (const QSerialPortInfo& sp : QSerialPortInfo::availablePorts()) {
 		ports.append(sp.portName());
@@ -470,6 +469,11 @@ void LiveDataSource::read() {
 	if (!m_filter)
 		return;
 
+	if (m_reading)
+		return;
+
+	m_reading = true;
+
 	//initialize the device (file, socket, serial port) when calling this function for the first time
 	if (!m_prepared) {
 		DEBUG("	Preparing device: update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
@@ -593,6 +597,8 @@ void LiveDataSource::read() {
 	case MQTT:
 		break;
 	}
+
+	m_reading = false;
 }
 
 /*!
@@ -955,8 +961,11 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 	}
 
 	//read the content of the file if it was only linked
-	if (m_fileLinked)
+	if (m_fileLinked && QFile::exists(m_fileName))
 		this->read();
+
+	if (m_fileWatched)
+		watch();
 
 	return !reader->hasError();
 }

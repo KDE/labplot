@@ -57,11 +57,11 @@ extern "C" {
 #include <QDebug>	// qWarning()
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
-	: XYAnalysisCurve(name, new XYFourierFilterCurvePrivate(this)) {
+	: XYAnalysisCurve(name, new XYFourierFilterCurvePrivate(this), AspectType::XYFourierFilterCurve) {
 }
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name, XYFourierFilterCurvePrivate* dd)
-	: XYAnalysisCurve(name, dd) {
+	: XYAnalysisCurve(name, dd, AspectType::XYFourierFilterCurve) {
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -387,12 +387,11 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 		d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
 		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
 
-		setUndoAware(false);
 		XYCurve::d_ptr->xColumn = d->xColumn;
 		XYCurve::d_ptr->yColumn = d->yColumn;
-		setUndoAware(true);
-	} else
-		qWarning()<<"	d->xColumn == NULL!";
+
+		recalcLogicalPoints();
+	}
 
 	return true;
 }

@@ -30,6 +30,7 @@
 #ifndef XYCURVEDOCK_H
 #define XYCURVEDOCK_H
 
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
@@ -40,8 +41,9 @@
 class TreeViewComboBox;
 class AspectTreeModel;
 class Column;
+class QLineEdit;
 
-class XYCurveDock : public QWidget {
+class XYCurveDock : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -50,6 +52,7 @@ public:
 
 	void setCurves(QList<XYCurve*>);
 	virtual void setupGeneral();
+	void checkColumnAvailability(TreeViewComboBox*, const AbstractColumn *column, const QString columnPath);
 
 private:
 	virtual void initGeneralTab();
@@ -75,7 +78,6 @@ protected:
 	void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
 
 	Ui::XYCurveDock ui;
-	bool m_initializing;
 	QList<XYCurve*> m_curvesList;
 	XYCurve* m_curve{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
@@ -85,8 +87,6 @@ private slots:
 	void retranslateUi();
 
 	//SLOTs for changes triggered in XYCurveDock
-	void nameChanged();
-	void commentChanged();
 	void xColumnChanged(const QModelIndex&);
 	void yColumnChanged(const QModelIndex&);
 	void visibilityChanged(bool);

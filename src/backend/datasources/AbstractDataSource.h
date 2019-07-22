@@ -39,7 +39,7 @@ class AbstractDataSource : public AbstractPart {
 	Q_OBJECT
 
 public:
-	explicit AbstractDataSource(const QString& name);
+	AbstractDataSource(const QString& name, AspectType type);
 	~AbstractDataSource() override = default;
 
 	void clear();

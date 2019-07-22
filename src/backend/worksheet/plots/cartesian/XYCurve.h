@@ -55,7 +55,7 @@ public:
 	enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
 	enum ErrorBarsType {ErrorBarsSimple, ErrorBarsWithEnds};
 
-	explicit XYCurve(const QString &name);
+	explicit XYCurve(const QString &name, AspectType type = AspectType::XYCurve);
 	~XYCurve() override;
 
 	void finalizeAdd() override;
@@ -71,8 +71,11 @@ public:
 	QDateTime yDateTime(double x, bool &valueFound) const;
 	int indexForX(double x) const;
 	int indexForX(double x, QVector<double>& column, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
-	int indexForX(double x, QVector<QPointF>& column, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
+	int indexForX(const double x, const QVector<QPointF> &column, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
 	int indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
+
+	bool activateCurve(QPointF mouseScenePos, double maxDist = -1);
+	void setHover(bool on);
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
@@ -156,13 +159,14 @@ private slots:
 	void xErrorMinusColumnAboutToBeRemoved(const AbstractAspect*);
 	void yErrorPlusColumnAboutToBeRemoved(const AbstractAspect*);
 	void yErrorMinusColumnAboutToBeRemoved(const AbstractAspect*);
-
+	void xColumnNameChanged();
+	void yColumnNameChanged();
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChanged();
 	void navigateTo();
 
 protected:
-	XYCurve(const QString& name, XYCurvePrivate* dd);
+	XYCurve(const QString& name, XYCurvePrivate* dd, AspectType type);
 	XYCurvePrivate* const d_ptr;
 
 private:

@@ -70,12 +70,12 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 // 	horizontalLayout->addWidget(pbSaveTheme);
 // 	pbSaveTheme->setText(i18n("Save Theme"));
 
-/*
-	pbPublishTheme = new QPushButton(this);
-	horizontalLayout->addWidget(pbPublishTheme);
-	pbPublishTheme->setText("Publish Theme");
-	pbPublishTheme->setEnabled(false);
-*/
+	/*
+		pbPublishTheme = new QPushButton(this);
+		horizontalLayout->addWidget(pbPublishTheme);
+		pbPublishTheme->setText("Publish Theme");
+		pbPublishTheme->setEnabled(false);
+	*/
 
 	connect(m_pbLoadTheme, &QPushButton::clicked, this, &ThemeHandler::showPanel);
 // 	connect( pbSaveTheme, SIGNAL(clicked()), this, SLOT(saveMenu()));
@@ -103,7 +103,9 @@ QStringList ThemeHandler::themeList() {
 			themes.append(it.next());
 	}
 
-	DEBUG("	first theme path: " << themes.first().toStdString());
+	if (!themes.isEmpty())
+		DEBUG("	first theme path: " << themes.first().toStdString());
+
 	return themes;
 }
 
@@ -120,8 +122,11 @@ QStringList ThemeHandler::themes() {
 		themes.append(fileinfo.fileName().split('.').at(0));
 	}
 
-	DEBUG("	first theme: " << themes.first().toStdString());
-	QDEBUG("	themes = " << themes);
+	if (!themes.isEmpty()) {
+		DEBUG("	first theme: " << themes.first().toStdString());
+		QDEBUG("	themes = " << themes);
+	}
+
 	return themes;
 }
 
@@ -188,7 +193,6 @@ void ThemeHandler::showPanel() {
 	menu.addAction(widgetAction);
 
 	QPoint pos(-menu.sizeHint().width()+m_pbLoadTheme->width(),-menu.sizeHint().height());
-	menu.setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 	menu.exec(m_pbLoadTheme->mapToGlobal(pos));
 }
 

@@ -31,11 +31,12 @@
 
 #include <QWidget>
 #include "backend/note/Note.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_notedock.h"
 
 class KConfig;
 
-class NoteDock : public QWidget {
+class NoteDock : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -44,15 +45,12 @@ public:
 
 private:
 	Ui::NoteDock ui;
-	bool m_initializing{false};
 	Note* m_notes{nullptr};
 	QList<Note*> m_notesList;
 
 	void init();
 
 private slots:
-	void nameChanged(const QString&);
-	void commentChanged(const QString&);
 	void backgroundColorChanged(const QColor&);
 	void textColorChanged(const QColor&);
 	void textFontChanged(const QFont&);

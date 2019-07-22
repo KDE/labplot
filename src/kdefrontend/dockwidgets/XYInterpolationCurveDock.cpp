@@ -70,6 +70,8 @@ XYInterpolationCurveDock::XYInterpolationCurveDock(QWidget* parent): XYCurveDock
 void XYInterpolationCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	m_leName = uiGeneralTab.leName;
+	m_leComment = uiGeneralTab.leComment;
 
 	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
@@ -157,6 +159,10 @@ void XYInterpolationCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
+	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
+	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
+
 	//show the properties of the first curve
 	m_interpolationCurve = dynamic_cast<XYInterpolationCurve*>(m_curve);
 	Q_ASSERT(m_interpolationCurve);
@@ -203,18 +209,20 @@ void XYInterpolationCurveDock::initGeneralTab() {
 }
 
 void XYInterpolationCurveDock::setModel() {
-	QList<const char*>  list;
-	list<<"Folder"<<"Datapicker"<<"Worksheet"<<"CartesianPlot"<<"XYCurve";
+	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
+	                       AspectType::CartesianPlot, AspectType::XYCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
-	for (XYCurve* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
-	list.clear();
-	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
-		<<"LiveDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve"<<"CantorWorksheet";
+	list = {AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
+	        AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
+	        AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot,
+	        AspectType::XYFitCurve, AspectType::CantorWorksheet
+	       };
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -248,20 +256,6 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
-void XYInterpolationCurveDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setName(uiGeneralTab.leName->text());
-}
-
-void XYInterpolationCurveDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setComment(uiGeneralTab.leComment->text());
-}
-
 void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
 	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
@@ -317,6 +311,9 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	for (XYCurve* curve: m_curvesList)
 		dynamic_cast<XYInterpolationCurve*>(curve)->setXDataColumn(column);
+
+	cbXDataColumn->useCurrentIndexText(true);
+	cbXDataColumn->setInvalid(false);
 }
 
 void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
@@ -409,6 +406,9 @@ void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	for (XYCurve* curve: m_curvesList)
 		dynamic_cast<XYInterpolationCurve*>(curve)->setYDataColumn(column);
+
+	cbYDataColumn->useCurrentIndexText(true);
+	cbYDataColumn->setInvalid(false);
 }
 
 void XYInterpolationCurveDock::autoRangeChanged() {
@@ -633,6 +633,14 @@ void XYInterpolationCurveDock::enableRecalculate() const {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
+		if (aspectX) {
+			cbXDataColumn->useCurrentIndexText(true);
+			cbXDataColumn->setInvalid(false);
+		}
+		if (aspectY) {
+			cbYDataColumn->useCurrentIndexText(true);
+			cbYDataColumn->setInvalid(false);
+		}
 	} else {
 		 hasSourceData = (m_interpolationCurve->dataSourceCurve() != nullptr);
 	}

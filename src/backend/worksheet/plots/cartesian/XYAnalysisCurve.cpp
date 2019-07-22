@@ -42,13 +42,15 @@
 
 #include <KLocalizedString>
 
-XYAnalysisCurve::XYAnalysisCurve(const QString& name)
-		: XYCurve(name, new XYAnalysisCurvePrivate(this)) {
+XYAnalysisCurve::XYAnalysisCurve(const QString& name, AspectType type)
+	: XYCurve(name, new XYAnalysisCurvePrivate(this), type) {
+
 	init();
 }
 
-XYAnalysisCurve::XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd)
-		: XYCurve(name, dd) {
+XYAnalysisCurve::XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd, AspectType type)
+	: XYCurve(name, dd, type) {
+
 	init();
 }
 
@@ -74,9 +76,9 @@ const QString& XYAnalysisCurve::dataSourceCurvePath() const {
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const AbstractColumn*, xDataColumn, xDataColumn)
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const AbstractColumn*, yDataColumn, yDataColumn)
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const AbstractColumn*, y2DataColumn, y2DataColumn)
-const QString& XYAnalysisCurve::xDataColumnPath() const { Q_D(const XYAnalysisCurve); return d->xDataColumnPath; }
-const QString& XYAnalysisCurve::yDataColumnPath() const { Q_D(const XYAnalysisCurve); return d->yDataColumnPath; }
-const QString& XYAnalysisCurve::y2DataColumnPath() const { Q_D(const XYAnalysisCurve); return d->y2DataColumnPath; }
+CLASS_SHARED_D_READER_IMPL(XYAnalysisCurve, QString, xDataColumnPath, xDataColumnPath)
+CLASS_SHARED_D_READER_IMPL(XYAnalysisCurve, QString, yDataColumnPath, yDataColumnPath)
+CLASS_SHARED_D_READER_IMPL(XYAnalysisCurve, QString, y2DataColumnPath, y2DataColumnPath)
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
@@ -113,10 +115,14 @@ void XYAnalysisCurve::setXDataColumn(const AbstractColumn* column) {
 	DEBUG("XYAnalysisCurve::setXDataColumn()");
 	Q_D(XYAnalysisCurve);
 	if (column != d->xDataColumn) {
+		setXDataColumnPath(column->path());
 		exec(new XYAnalysisCurveSetXDataColumnCmd(d, column, ki18n("%1: assign x-data")));
 		handleSourceDataChanged();
 		if (column) {
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
+					this, &XYAnalysisCurve::xDataColumnAboutToBeRemoved);
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
+			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::xDataColumnNameChanged);
 			//TODO disconnect on undo
 		}
 	}
@@ -127,10 +133,14 @@ void XYAnalysisCurve::setYDataColumn(const AbstractColumn* column) {
 	DEBUG("XYAnalysisCurve::setYDataColumn()");
 	Q_D(XYAnalysisCurve);
 	if (column != d->yDataColumn) {
+		setYDataColumnPath(column->path());
 		exec(new XYAnalysisCurveSetYDataColumnCmd(d, column, ki18n("%1: assign y-data")));
 		handleSourceDataChanged();
 		if (column) {
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
+					this, &XYAnalysisCurve::yDataColumnAboutToBeRemoved);
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
+			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::yDataColumnNameChanged);
 			//TODO disconnect on undo
 		}
 	}
@@ -141,13 +151,32 @@ void XYAnalysisCurve::setY2DataColumn(const AbstractColumn* column) {
 	DEBUG("XYAnalysisCurve::setY2DataColumn()");
 	Q_D(XYAnalysisCurve);
 	if (column != d->y2DataColumn) {
+		setY2DataColumnPath(column->path());
 		exec(new XYAnalysisCurveSetY2DataColumnCmd(d, column, ki18n("%1: assign second y-data")));
 		handleSourceDataChanged();
 		if (column) {
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
+					this, &XYAnalysisCurve::y2DataColumnAboutToBeRemoved);
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
+			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::y2DataColumnNameChanged);
 			//TODO disconnect on undo
 		}
 	}
+}
+
+void XYAnalysisCurve::setXDataColumnPath(const QString& path) {
+	Q_D(XYAnalysisCurve);
+	d->xDataColumnPath = path;
+}
+
+void XYAnalysisCurve::setYDataColumnPath(const QString& path) {
+	Q_D(XYAnalysisCurve);
+	d->yDataColumnPath = path;
+}
+
+void XYAnalysisCurve::setY2DataColumnPath(const QString& path) {
+	Q_D(XYAnalysisCurve);
+	d->y2DataColumnPath = path;
 }
 
 //##############################################################################
@@ -157,6 +186,45 @@ void XYAnalysisCurve::handleSourceDataChanged() {
 	Q_D(XYAnalysisCurve);
 	d->sourceDataChangedSinceLastRecalc = true;
 	emit sourceDataChanged();
+}
+
+void XYAnalysisCurve::xDataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(XYAnalysisCurve);
+	if (aspect == d->xDataColumn) {
+		d->xDataColumn = nullptr;
+		d->retransform();
+	}
+}
+
+void XYAnalysisCurve::yDataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(XYAnalysisCurve);
+	if (aspect == d->yDataColumn) {
+		d->yDataColumn = nullptr;
+		d->retransform();
+	}
+}
+
+void XYAnalysisCurve::y2DataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(XYAnalysisCurve);
+	if (aspect == d->y2DataColumn) {
+		d->y2DataColumn = nullptr;
+		d->retransform();
+	}
+}
+
+void XYAnalysisCurve::xDataColumnNameChanged() {
+	Q_D(XYAnalysisCurve);
+	setXDataColumnPath(d->xDataColumn->path());
+}
+
+void XYAnalysisCurve::yDataColumnNameChanged() {
+	Q_D(XYAnalysisCurve);
+	setYDataColumnPath(d->yDataColumn->path());
+}
+
+void XYAnalysisCurve::y2DataColumnNameChanged() {
+	Q_D(XYAnalysisCurve);
+	setYDataColumnPath(d->y2DataColumn->path());
 }
 
 //##############################################################################

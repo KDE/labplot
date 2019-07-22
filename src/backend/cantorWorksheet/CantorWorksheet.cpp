@@ -46,8 +46,8 @@
 #include <cantor/panelplugin.h>
 #include <cantor/worksheetaccess.h>
 
-CantorWorksheet::CantorWorksheet(const QString &name, bool loading) : AbstractPart(name),
-	m_backendName(name)  {
+CantorWorksheet::CantorWorksheet(const QString &name, bool loading)
+	: AbstractPart(name, AspectType::CantorWorksheet), m_backendName(name) {
 
 	if (!loading)
 		init();

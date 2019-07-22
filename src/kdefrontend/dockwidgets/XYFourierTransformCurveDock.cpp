@@ -61,6 +61,8 @@ XYFourierTransformCurveDock::XYFourierTransformCurveDock(QWidget *parent) : XYCu
 void XYFourierTransformCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	m_leName = uiGeneralTab.leName;
+	m_leComment = uiGeneralTab.leComment;
 
 	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
@@ -126,6 +128,10 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
+	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
+	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
+
 	//show the properties of the first curve
 	m_transformCurve = dynamic_cast<XYFourierTransformCurve*>(m_curve);
 
@@ -162,9 +168,10 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 }
 
 void XYFourierTransformCurveDock::setModel() {
-	QList<const char*>  list;
-	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
-		<<"LiveDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve"<<"CantorWorksheet";
+	QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
+	                       AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
+	                       AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot,
+	                       AspectType::XYFitCurve, AspectType::CantorWorksheet};
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -195,20 +202,6 @@ void XYFourierTransformCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
-void XYFourierTransformCurveDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setName(uiGeneralTab.leName->text());
-}
-
-void XYFourierTransformCurveDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setComment(uiGeneralTab.leComment->text());
-}
-
 void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
@@ -225,6 +218,9 @@ void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			uiGeneralTab.sbMax->setValue(column->maximum());
 		}
 	}
+
+	cbXDataColumn->useCurrentIndexText(true);
+	cbXDataColumn->setInvalid(false);
 }
 
 void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -236,6 +232,9 @@ void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setYDataColumn(column);
+
+	cbYDataColumn->useCurrentIndexText(true);
+	cbYDataColumn->setInvalid(false);
 }
 
 void XYFourierTransformCurveDock::autoRangeChanged() {
@@ -335,6 +334,14 @@ void XYFourierTransformCurveDock::enableRecalculate() const {
 	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 	bool data = (aspectX != nullptr && aspectY != nullptr);
+	if (aspectX) {
+		cbXDataColumn->useCurrentIndexText(true);
+		cbXDataColumn->setInvalid(false);
+	}
+	if (aspectY) {
+		cbYDataColumn->useCurrentIndexText(true);
+		cbYDataColumn->setInvalid(false);
+	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(data);
 }

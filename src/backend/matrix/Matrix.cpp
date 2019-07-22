@@ -59,7 +59,7 @@
 	\ingroup backend
 */
 Matrix::Matrix(int rows, int cols, const QString& name, const AbstractColumn::ColumnMode mode)
-	: AbstractDataSource(name), d(new MatrixPrivate(this, mode)) {
+	: AbstractDataSource(name, AspectType::Matrix), d(new MatrixPrivate(this, mode)) {
 
 	//set initial number of rows and columns
 	appendColumns(cols);
@@ -69,7 +69,7 @@ Matrix::Matrix(int rows, int cols, const QString& name, const AbstractColumn::Co
 }
 
 Matrix::Matrix(const QString& name, bool loading, const AbstractColumn::ColumnMode mode)
-	: AbstractDataSource(name), d(new MatrixPrivate(this, mode)) {
+	: AbstractDataSource(name, AspectType::Matrix), d(new MatrixPrivate(this, mode)) {
 
 	if (!loading)
 		init();
@@ -1209,6 +1209,14 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 	}
 
 	return true;
+}
+
+void Matrix::registerShortcuts() {
+	m_view->registerShortcuts();
+}
+
+void Matrix::unregisterShortcuts() {
+	m_view->unregisterShortcuts();
 }
 
 //##############################################################################

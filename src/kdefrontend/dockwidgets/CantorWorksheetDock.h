@@ -32,12 +32,13 @@
 #include <QPair>
 
 #include <cantor/panelplugin.h>
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_cantorworksheetdock.h"
 
 class CantorWorksheet;
 class AbstractAspect;
 
-class CantorWorksheetDock : public QWidget {
+class CantorWorksheetDock : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -49,13 +50,10 @@ private:
 	QList< CantorWorksheet* > m_cantorworksheetlist;
 	CantorWorksheet* m_worksheet{nullptr};
 	QList<int> index;
-	bool m_initializing{false};
 
 private slots:
 	//SLOTs for changes triggered in WorksheetDock
 	//"General"-tab
-	void nameChanged();
-	void commentChanged();
 	void evaluateWorksheet();
 	void restartBackend();
 
