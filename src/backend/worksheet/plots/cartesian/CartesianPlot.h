@@ -260,6 +260,8 @@ public slots:
 	void cursor();
 	void dataChanged();
 
+	void curveLinePenChanged(QPen);
+
 private slots:
 	void updateLegend();
 	void childAdded(const AbstractAspect*);
@@ -270,7 +272,6 @@ private slots:
 	void yDataChanged();
 	void curveVisibilityChanged();
 
-	void curveLinePenChanged(QPen);
 
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChanged();

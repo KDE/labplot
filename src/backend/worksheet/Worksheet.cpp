@@ -251,13 +251,12 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		connect(plot, &CartesianPlot::mousePressZoomSelectionModeSignal, this, &Worksheet::cartesianPlotmousePressZoomSelectionMode);
 		connect(plot, &CartesianPlot::mouseReleaseZoomSelectionModeSignal, this, &Worksheet::cartesianPlotmouseReleaseZoomSelectionMode);
 		connect(plot, &CartesianPlot::mouseHoverZoomSelectionModeSignal, this, &Worksheet::cartesianPlotmouseHoverZoomSelectionMode);
-        connect(plot, &CartesianPlot::curveRemoved, this, &Worksheet::curveRemoved);
-        connect(plot, &CartesianPlot::curveAdded, this, &Worksheet::curveAdded);
+		connect(plot, &CartesianPlot::curveRemoved, this, &Worksheet::curveRemoved);
+		connect(plot, &CartesianPlot::curveAdded, this, &Worksheet::curveAdded);
 		connect(plot, &CartesianPlot::visibleChanged, this, &Worksheet::updateCompleteCursorTreeModel);
 		connect(plot, &CartesianPlot::curveVisibilityChangedSignal, this, &Worksheet::updateCompleteCursorTreeModel);
-        connect(plot, &CartesianPlot::curveDataChanged, this, &Worksheet::curveDataChanged);
-        connect(plot, &CartesianPlot::curveDataChanged, this, &Worksheet::curveDataChanged);
-		connect(plot, QOverload<QPen, QString>::of(&CartesianPlot::curveLinePenChanged), this, &Worksheet::updateCurveBackground);
+		connect(plot, &CartesianPlot::curveDataChanged, this, &Worksheet::curveDataChanged);
+		connect(plot, static_cast<void (CartesianPlot::*)(QPen, QString)>(&CartesianPlot::curveLinePenChanged), this, &Worksheet::updateCurveBackground);
 		connect(plot, &CartesianPlot::mouseModeChanged, this, &Worksheet::cartesianPlotmouseModeChanged);
 		auto* p = const_cast<CartesianPlot*>(plot);
 		p->setLocked(d->plotsLocked);

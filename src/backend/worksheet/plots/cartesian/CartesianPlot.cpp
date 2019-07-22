@@ -1401,7 +1401,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::symbolsOpacityChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::symbolsBrushChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::symbolsPenChanged, this, &CartesianPlot::updateLegend);
-        connect(curve, SIGNAL(linePenChanged(QPen)), this, SIGNAL(curveLinePenChanged(QPen))); // feed forward linePenChanged, because Worksheet needs because CursorDock must be updated too
+		connect(curve, SIGNAL(linePenChanged(QPen)), this, SIGNAL(curveLinePenChanged(QPen))); // feed forward linePenChanged, because Worksheet needs because CursorDock must be updated too
 
 		updateLegend();
 		d->curvesXMinMaxIsDirty = true;
