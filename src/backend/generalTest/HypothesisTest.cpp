@@ -118,11 +118,11 @@ void HypothesisTest::performLeveneTest(bool categoricalVariable) {
     emit changed();
 }
 
-QList<double> HypothesisTest::statisticValue() {
+QList<double>& HypothesisTest::statisticValue(){
     return m_statisticValue;
 }
 
-QList<double> HypothesisTest::pValue() {
+QList<double>& HypothesisTest::pValue(){
     return m_pValue;
 }
 

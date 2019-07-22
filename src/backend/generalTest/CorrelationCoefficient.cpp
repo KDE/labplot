@@ -59,8 +59,13 @@ CorrelationCoefficient::~CorrelationCoefficient() {
 }
 
 void CorrelationCoefficient::performTest(Test test, bool categoricalVariable) {
+    //QDEBUG("in perform test");
+
     m_statsTable = "";
     m_tooltips.clear();
+    m_correlationValue = 0;
+    m_statisticValue.clear();
+    m_pValue.clear();
     for (int i = 0; i < RESULTLINESCOUNT; i++)
         m_resultLine[i]->clear();
 
@@ -85,10 +90,17 @@ void CorrelationCoefficient::performTest(Test test, bool categoricalVariable) {
 }
 
 
-double CorrelationCoefficient::correlationValue() {
+double CorrelationCoefficient::correlationValue() const{
     return m_correlationValue;
 }
 
+QList<double> CorrelationCoefficient::statisticValue() const{
+    return m_statisticValue;
+}
+
+QList<double> CorrelationCoefficient::pValue() const{
+    return m_pValue;
+}
 
 /***************************************************************************************************************************
  *                                        Private Implementations
@@ -104,11 +116,12 @@ double CorrelationCoefficient::correlationValue() {
 //  sumColxColy = sum of product of values in colx and coly
 
 //TODO: support for col1 is categorical.
-//TODO: add symbols in stats table header.
 //TODO: add automatic test
 //TODO: add tooltip for correlation value result
 //TODO: find p value
 void CorrelationCoefficient::performPearson(bool categoricalVariable) {
+
+    //QDEBUG("in pearson");
     if (m_columns.count() != 2) {
         printError("Select only 2 columns ");
         return;
@@ -151,11 +164,13 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
     int level = 0;
 
     // horizontal header
+    QString sigma = UTF8_QSTRING("Σ");
     rowMajor.append(new Cell("", level, true));
+
     rowMajor.append(new Cell("N", level, true, "Total Number of Observations"));
-    rowMajor.append(new Cell("Sigma", level, true, "Sum of Scores in each column"));
-    rowMajor.append(new Cell("Sigma x2", level, true, "Sum of Squares of scores in each column"));
-    rowMajor.append(new Cell("Sigma xy", level, true, "Sum of Squares of scores in each column"));
+    rowMajor.append(new Cell(QString(sigma + "Scores"), level, true, "Sum of Scores in each column"));
+    rowMajor.append(new Cell(QString(sigma + "Scores<sup>2</sup>"), level, true, "Sum of Squares of scores in each column"));
+    rowMajor.append(new Cell(QString(sigma + "(" + UTF8_QSTRING("∏") + "Scores)"), level, true, "Sum of product of scores of both columns"));
 
     //data with vertical header.
     level++;
@@ -247,18 +262,17 @@ void CorrelationCoefficient::performKendall() {
     int nDiscordant = findDiscordants(col2Ranks, 0, N - 1);
     int nCorcordant = nPossiblePairs - nDiscordant;
 
-    double tauA = double(nCorcordant - nDiscordant) / nPossiblePairs;
+    double m_correlationValue = double(nCorcordant - nDiscordant) / nPossiblePairs;
 
-    double zA = (3 * (nCorcordant - nDiscordant)) /
-                sqrt(N * (N- 1) * (2 * N + 5) / 2);
+    m_statisticValue.append((3 * (nCorcordant - nDiscordant)) /
+                sqrt(N * (N- 1) * (2 * N + 5) / 2));
 
     printLine(0 , QString("Number of Discordants are %1").arg(nDiscordant), "green");
     printLine(1 , QString("Number of Concordant are %1").arg(nCorcordant), "green");
 
-    printLine(2 , QString("Tau a is %1").arg(round(tauA)), "green");
-    printLine(3 , QString("Z Value is %1").arg(round(zA)), "green");
+    printLine(2 , QString("Tau a is %1").arg(round(m_correlationValue)), "green");
+    printLine(3 , QString("Z Value is %1").arg(round(m_statisticValue[0])), "green");
 
-    m_correlationValue = tauA;
     return;
 
 }

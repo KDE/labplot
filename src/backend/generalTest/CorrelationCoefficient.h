@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
         File                 : CorrelationCoefficient.h
         Project              : LabPlot
         Description          : Finding Correlation Coefficient on data provided
@@ -52,7 +52,11 @@ public:
         Kendall,
         Spearman
     };
-    double correlationValue();
+
+    double correlationValue() const;
+    QList<double> statisticValue() const;
+    QList<double> pValue() const;
+
     QWidget* view() const override;
 
     void performTest(Test m_test, bool categoricalVariable = true);
@@ -67,6 +71,8 @@ private:
     void convertToRanks(const Column* col, QMap<double, int> &ranks);
 
     double m_correlationValue;
+    QList<double> m_statisticValue;
+    QList<double> m_pValue;
 };
 
 #endif // CORRELATIONCOEFFICIENT_H

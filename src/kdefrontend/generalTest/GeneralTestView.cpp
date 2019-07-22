@@ -158,7 +158,7 @@ void GeneralTestView::changed() {
 
 void GeneralTestView::cursorPositionChanged() {
     QTextCursor cursor = m_statsTable->textCursor();
-    cursor.select(QTextCursor::WordUnderCursor);
+    cursor.select(QTextCursor::LineUnderCursor);
     QMap<QString, QString> tooltips = m_generalTest->tooltips();
     if (!cursor.selectedText().isEmpty())
         QToolTip::showText(QCursor::pos(),

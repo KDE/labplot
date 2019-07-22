@@ -74,8 +74,8 @@ public:
     void performTest(Test m_test, bool categoricalVariable = true, bool equalVariance = true);
     void performLeveneTest(bool categoricalVariable);
 
-    QList<double> statisticValue();
-    QList<double> pValue();
+    QList<double>& statisticValue();
+    QList<double>& pValue();
     QWidget* view() const override;
 
 private:
