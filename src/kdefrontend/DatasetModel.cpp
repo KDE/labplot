@@ -55,6 +55,9 @@ DatasetModel::~DatasetModel() {
 
 }
 
+/**
+ * @brief Initializes the list of collections.
+ */
 void DatasetModel::initCollections(const QMap<QString, QMap<QString, QMap<QString, QVector<QString> > > > & datasetMap) {
 	m_collectionList = datasetMap.keys();
 }
@@ -140,6 +143,9 @@ QVariant DatasetModel::allDatasetsList() {
 	return QVariant(m_datasetList);
 }
 
+/**
+ * @brief Returns the list of categories for a given collection
+ */
 QStringList DatasetModel::categories(const QString& collection) {
 	if(collection.compare("All") != 0) {
 		return m_categories[collection];
@@ -148,6 +154,9 @@ QStringList DatasetModel::categories(const QString& collection) {
 	}
 }
 
+/**
+ * @brief  Returns the list of subcategories of a given collection and category.
+ */
 QStringList DatasetModel::subcategories(const QString& collection, const QString& category) {
 	if(collection.compare("All") != 0) {
 		return m_subcategories[collection][category];
@@ -156,6 +165,9 @@ QStringList DatasetModel::subcategories(const QString& collection, const QString
 	}
 }
 
+/**
+ * @brief Returns the list of datasets of a given collection, category and subcategory.
+ */
 QStringList DatasetModel::datasets(const QString& collection, const QString& category, const QString& subcategory) {
 	if(collection.compare("All") != 0) {
 		return m_datasets[collection][category][subcategory];
@@ -164,6 +176,9 @@ QStringList DatasetModel::datasets(const QString& collection, const QString& cat
 	}
 }
 
+/**
+ * @brief Returns the list of every collection.
+ */
 QStringList DatasetModel::collections() {
 	return m_collectionList;
 }

@@ -309,6 +309,9 @@ bool DatasetMetadataManagerWidget::checkDataValidity() {
 	return fileNameOK && urlOk && longNameOk && descriptionOk && subcategoryOk && categoryOk && collectionOk;
 }
 
+/**
+ * @brief Updates content of cbCategory based on current collection.
+ */
 void DatasetMetadataManagerWidget::updateCategories(const QString& collection) {
 	ui.cbCategory->clear();
 	if( m_datasetModel->collections().contains(collection)) {
@@ -488,6 +491,9 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
 	}
 }
 
+/**
+ * @brief Creates and returns a QJsonObject based on the given settings of the widget, this will be part of the collection's metadata file
+ */
 QJsonObject DatasetMetadataManagerWidget::createDatasetObject() {
 	QJsonObject rootObject;
 

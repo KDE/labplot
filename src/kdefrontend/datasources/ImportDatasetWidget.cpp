@@ -400,6 +400,9 @@ void ImportDatasetWidget::loadDatasetToProcess(DatasetHandler* datasetHandler) {
 	}
 }
 
+/**
+ * @brief Returns the QJsonObject associated with the currently selected dataset.
+ */
 QJsonObject ImportDatasetWidget::loadDatasetObject() {
 	QString filePath = m_jsonDir + "DatasetCollections.json";
 	QFile file(filePath);
@@ -515,22 +518,6 @@ void ImportDatasetWidget::downloadCollectionsFile() {
 void ImportDatasetWidget::downloadCollectionFile(const QString& collectionName) {
 	const QString fileNameOld = QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String("datasets") + QDir::separator() + collectionName);
 	const QString fileNameNew =m_jsonDir + collectionName;
-
-	/*QString pathToNewFile = m_jsonDir + m_selectedCategory;
-
-	//Create directory structure based on category and subcategory name
-	if(!QDir(m_jsonDir + m_selectedCategory).exists()) {
-		qDebug() <<m_jsonDir + m_selectedCategory;
-		QDir(m_jsonDir).mkdir(m_selectedCategory);
-	}
-
-	if(!QDir(pathToNewFile + QDir::separator() + m_selectedSubcategory).exists()) {
-		qDebug() <<pathToNewFile + QDir::separator() + m_selectedSubcategory;
-		QDir(pathToNewFile).mkdir(m_selectedSubcategory);
-	}
-
-	pathToNewFile = pathToNewFile + QDir::separator() + m_selectedSubcategory;
-	const QString fileNameNew = pathToNewFile + QDir::separator() + datasetName;*/
 
 	QFile::copy(fileNameOld, fileNameNew);
 }

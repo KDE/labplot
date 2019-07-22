@@ -333,19 +333,10 @@ void MainWin::initGUI(const QString& fileName) {
  * @return
  */
 QQuickWidget* MainWin::createWelcomeScreen() {
-	//showMaximized();
 	QSize maxSize = qApp->primaryScreen()->availableSize();
 	resize(maxSize);
-	/*setFixedSize(qApp->screens().first()->availableGeometry().size());
-	setGeometry(
-		QStyle::alignedRect(
-			Qt::LeftToRight,
-			Qt::AlignCenter,
-			size(),
-			qApp->desktop()->availableGeometry()
-		)
-	);*/
 	setMinimumSize(700, 400);
+	showMaximized();
 
 	qDebug() << "Main win size  " << size();
 
@@ -360,17 +351,12 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	for (QUrl url : m_recentProjectsAction->urls())
 		recentList.append(QVariant(url));
 
-	//qmlRegisterUncreatableType<DatasetModel>("labplot.datasetmodel", 1, 0, "DatasetModel", "");
-
 	QQuickWidget* quickWidget = new QQuickWidget(this);
 	QUrl source("qrc:///main.qml");
-	//qmlRegisterType<DatasetModel>("labplot.frontend.datasetmodel", 1, 0, "DatasetModel");
 
 	QQmlContext *ctxt = quickWidget->rootContext();
 	QVariant variant(recentList);
 	ctxt->setContextProperty("recentProjects", variant);
-	//m_importDatasetWidget = new ImportDatasetWidget(nullptr);
-	//m_importDatasetWidget->hide();
 
 	if(m_welcomeScreenHelper != nullptr)
 		delete m_welcomeScreenHelper;
@@ -388,13 +374,16 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	QObject::connect(item, SIGNAL(recentProjectClicked(QUrl)), this, SLOT(openRecentProject(QUrl)));
 	QObject::connect(item, SIGNAL(datasetClicked(QString, QString, QString)), m_welcomeScreenHelper, SLOT(datasetClicked(const QString&, const QString&, const QString&)));
 	QObject::connect(item, SIGNAL(openDataset()), this, SLOT(openDatasetExample()));
-QObject::connect(item, SIGNAL(openExampleProject(QString)), m_welcomeScreenHelper, SLOT(exampleProjectClicked(const QString&)));
+	QObject::connect(item, SIGNAL(openExampleProject(QString)), m_welcomeScreenHelper, SLOT(exampleProjectClicked(const QString&)));
 	qDebug() << "Finished connecting welcome screen";
 	m_welcomeScreenHelper->showFirstDataset();
 
 	return quickWidget;
 }
 
+/**
+ * @brief Initiates resetting the layout of the welcome screen
+ */
 void MainWin::resetWelcomeScreen() {
 	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
 			QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "restoreOriginalLayout");
