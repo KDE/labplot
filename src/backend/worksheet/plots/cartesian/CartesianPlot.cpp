@@ -2739,7 +2739,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	} else if (mouseMode == CartesianPlot::Cursor) {
 		QGraphicsItem::mouseMoveEvent(event);
 		if (!boundingRect().contains(event->pos())) {
-			q->info(i18n("Not inside  of the bounding rect"));
+			q->info(i18n("Not inside of the bounding rect"));
 			return;
 		}
 		QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
