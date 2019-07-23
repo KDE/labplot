@@ -52,7 +52,7 @@ extern "C" {
 #include "backend/nsl/nsl_stats.h"
 }
 
-CorrelationCoefficient::CorrelationCoefficient(const QString &name) : GeneralTest (name, AspectType::CorrelationCoefficient) {
+CorrelationCoefficient::CorrelationCoefficient(const QString& name) : GeneralTest(name, AspectType::CorrelationCoefficient) {
 }
 
 CorrelationCoefficient::~CorrelationCoefficient() {

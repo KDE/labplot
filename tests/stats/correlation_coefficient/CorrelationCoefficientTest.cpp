@@ -138,9 +138,11 @@ void CorrelationCoefficientTest::kendallCoefficient_data() {
     col2Texts = {"A", "B", "D", "C", "F", "E", "H", "G", "J", "I", "L", "K"};
     col1Values = {};
     col2Values = {};
+    isDouble = false;
 
     correlationValue_expected = 0.84848484848;
-    zValue_expected = 3.84676339286;
+    zValue_expected = 3.84006269541
+;
 
     QTest::newRow("Sample 2") << col1Values << col2Values << col1Texts << col2Texts << isDouble << correlationValue_expected << zValue_expected;
 }

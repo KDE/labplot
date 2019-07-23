@@ -35,7 +35,7 @@ class HypothesisTest : public GeneralTest {
 	Q_OBJECT
 
 public:
-	explicit HypothesisTest(const QString& name);
+        explicit HypothesisTest(const QString& name);
 	~HypothesisTest() override;
 
     struct Test {

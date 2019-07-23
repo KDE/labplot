@@ -50,14 +50,14 @@ extern "C" {
 #include "backend/nsl/nsl_stats.h"
 }
 
-HypothesisTest::HypothesisTest(const QString &name) : GeneralTest (name, AspectType::HypothesisTest) {
+HypothesisTest::HypothesisTest(const QString &name) : GeneralTest(name, AspectType::HypothesisTest) {
 }
 
 HypothesisTest::~HypothesisTest() {
 }
 
-void HypothesisTest::setPopulationMean(QVariant m_populationMean) {
-    m_populationMean = m_populationMean.toDouble();
+void HypothesisTest::setPopulationMean(QVariant populationMean) {
+    m_populationMean = populationMean.toDouble();
 }
 
 void HypothesisTest::setSignificanceLevel(QVariant alpha) {
@@ -155,7 +155,7 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
                 printError("At least two values should be there in every column");
                 return;
             }
-            if (gsl_fcmp(std[i], 0., 1.e-16)) {
+            if (std[i] == 0.0) {
                 printError(i18n("Standard Deviation of at least one column is equal to 0: last column is: %1", m_columns[i]->name()));
                 return;
             }
@@ -213,7 +213,7 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
             printError("At least two values should be there in every column");
             return;
         }
-        if (gsl_fcmp(std[i], 0., 1.e-16)) {
+        if (std[i] == 0.0) {
             printError( i18n("Standard Deviation of at least one column is equal to 0: last column is: %1", m_columns[i]->name()));
             return;
         }
@@ -322,7 +322,7 @@ void HypothesisTest::performTwoSamplePairedTest(HypothesisTest::Test::Type test)
 
     m_statsTable = getHtmlTable(2, 5, rowMajor);
 
-    if (gsl_fcmp(std, 0., 1.e-16)) {
+    if (std == 0.0) {
         printError("Standard deviation of the difference is 0");
         return;
     }
@@ -404,7 +404,7 @@ void HypothesisTest::performOneSampleTest(HypothesisTest::Test::Type test) {
 
     m_statsTable = getHtmlTable(2, 5, rowMajor);
 
-    if (gsl_fcmp(std, 0., 1.e-16)) {
+    if (std == 0.0) {
         printError("Standard deviation is 0");
         return;
     }
@@ -920,7 +920,7 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
         }
 
 
-        if (gsl_fcmp(denominatorValue, 0. ,1.e-16)) {
+        if (denominatorValue == 0.0) {
             printError( i18n("Denominator value is %1", denominatorValue));
             return;
         }
@@ -1000,7 +1000,7 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
         for (int i = 0; i < np; i++)
             numberatorValue += ni[i]*gsl_pow_2( (ziBar[i]-ziBarBar));
 
-        if (gsl_fcmp(denominatorValue, 0., 1.e-16)) {
+        if (denominatorValue == 0.0) {
             printError( "number of data points is less or than equal to number of categorical variables");
             m_columns[0]->setColumnMode(originalColMode);
             return;

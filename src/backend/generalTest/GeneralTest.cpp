@@ -49,7 +49,8 @@ extern "C" {
 #include "backend/nsl/nsl_stats.h"
 }
 
-GeneralTest::GeneralTest(const QString &name, const AspectType& type) : AbstractPart(name, type),
+
+GeneralTest::GeneralTest(const QString& name, const AspectType& type) : AbstractPart(name, type),
     m_summaryLayout(new QVBoxLayout()) {
 
     for (int i = 0; i < 10; i++) {

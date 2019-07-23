@@ -31,6 +31,8 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 
+//TODO: Decrease relative errors and increase more floating points for expected values.
+
 void TTestTest::twoSampleIndependent_data() {
 	QTest::addColumn<QVector<double>>("col1Data");
 	QTest::addColumn<QVector<double>>("col2Data");
