@@ -517,7 +517,7 @@ void CartesianPlotLegendPrivate::retransform() {
 				if (!curve->isVisible())
 					continue;
 
-				w = fm.width(curve->name());
+				w = fm.boundingRect(curve->name()).width();
 				if (w>maxTextWidth)
 					maxTextWidth = w;
 			}
