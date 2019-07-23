@@ -29,16 +29,7 @@
 #ifndef HYPOTHESISTEST_H
 #define HYPOTHESISTEST_H
 
-#include "backend/core/AbstractPart.h"
 #include "GeneralTest.h"
-#include "backend/lib/macros.h"
-
-class HypothesisTestView;
-class Spreadsheet;
-class QString;
-class Column;
-class QVBoxLayout;
-class QLabel;
 
 class HypothesisTest : public GeneralTest {
 	Q_OBJECT

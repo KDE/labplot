@@ -152,11 +152,11 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
         for (int i = 0; i < 2; i++) {
             findStats(m_columns[i], n[i], sum[i], mean[i], std[i]);
             if (n[i] == 0) {
-                printError("Atleast two values should be there in every column");
+                printError("At least two values should be there in every column");
                 return;
             }
-            if (std[i] <= 0) {
-                printError(i18n("Standard Deviation of atleast one column is equal to 0: last column is: %1", m_columns[i]->name()));
+            if (gsl_fcmp(std[i], 0., 1.e-16)) {
+                printError(i18n("Standard Deviation of at least one column is equal to 0: last column is: %1", m_columns[i]->name()));
                 return;
             }
         }
@@ -210,11 +210,11 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
 
     for (int i = 0; i < 2; i++) {
         if (n[i] == 0) {
-            printError("Atleast two values should be there in every column");
+            printError("At least two values should be there in every column");
             return;
         }
-        if (std[i] <= 0) {
-            printError( i18n("Standard Deviation of atleast one column is equal to 0: last column is: %1", m_columns[i]->name()));
+        if (gsl_fcmp(std[i], 0., 1.e-16)) {
+            printError( i18n("Standard Deviation of at least one column is equal to 0: last column is: %1", m_columns[i]->name()));
             return;
         }
     }
@@ -322,7 +322,7 @@ void HypothesisTest::performTwoSamplePairedTest(HypothesisTest::Test::Type test)
 
     m_statsTable = getHtmlTable(2, 5, rowMajor);
 
-    if (std <= 0) {
+    if (gsl_fcmp(std, 0., 1.e-16)) {
         printError("Standard deviation of the difference is 0");
         return;
     }
@@ -404,7 +404,7 @@ void HypothesisTest::performOneSampleTest(HypothesisTest::Test::Type test) {
 
     m_statsTable = getHtmlTable(2, 5, rowMajor);
 
-    if (std <= 0) {
+    if (gsl_fcmp(std, 0., 1.e-16)) {
         printError("Standard deviation is 0");
         return;
     }
@@ -602,7 +602,7 @@ void HypothesisTest::performTwoWayAnova() {
         }
 
     if (totalRows_a != totalRows_b) {
-        printError("There is missing data in atleast one of the rows");
+        printError("There is missing data in at least one of the rows");
         return;
     }
 
@@ -634,7 +634,7 @@ void HypothesisTest::performTwoWayAnova() {
     for (int i = 0; i < np_a; i++)
         for (int j = 0; j < np_b; j++) {
             if (replicates[i][j] == 0) {
-                printError("Dataset should have atleast one data value corresponding to each feature combination");
+                printError("Dataset should have at least one data value corresponding to each feature combination");
                 return;
             }
             if (replicates[i][j] != replicate) {
@@ -837,7 +837,7 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
         countPartitions(m_columns[0], np, n);
 
     if (np < 2) {
-        printError("Select atleast two m_columns / classes");
+        printError("Select at least two m_columns / classes");
         return;
     }
 
@@ -920,7 +920,7 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
         }
 
 
-        if (denominatorValue <= 0) {
+        if (gsl_fcmp(denominatorValue, 0. ,1.e-16)) {
             printError( i18n("Denominator value is %1", denominatorValue));
             return;
         }
@@ -1000,7 +1000,7 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
         for (int i = 0; i < np; i++)
             numberatorValue += ni[i]*gsl_pow_2( (ziBar[i]-ziBarBar));
 
-        if (denominatorValue <= 0) {
+        if (gsl_fcmp(denominatorValue, 0., 1.e-16)) {
             printError( "number of data points is less or than equal to number of categorical variables");
             m_columns[0]->setColumnMode(originalColMode);
             return;

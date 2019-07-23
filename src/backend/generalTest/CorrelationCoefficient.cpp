@@ -207,6 +207,8 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 // TODO: Compute tauB for ties.
 // TODO: find P Value from Z Value
 void CorrelationCoefficient::performKendall() {
+    QDEBUG("in perform kendall")
+
     if (m_columns.count() != 2) {
         printError("Select only 2 columns ");
         return;
@@ -218,6 +220,7 @@ void CorrelationCoefficient::performKendall() {
     int N = findCount(m_columns[0]);
     if (N != findCount(m_columns[1])) {
         printError("Number of data values in Column: " + col1Name + "and Column: " + col2Name + "are not equal");
+        QDEBUG("unequal number of rows")
         return;
     }
 
@@ -229,6 +232,7 @@ void CorrelationCoefficient::performKendall() {
         } else {
             printError(QString("Ranking System should be same for both Column: %1 and Column: %2 <br/>"
                                "Hint: Check for data types of columns").arg(col1Name).arg(col2Name));
+            QDEBUG("ranking system not same")
             return;
         }
     } else {
@@ -262,7 +266,7 @@ void CorrelationCoefficient::performKendall() {
     int nDiscordant = findDiscordants(col2Ranks, 0, N - 1);
     int nCorcordant = nPossiblePairs - nDiscordant;
 
-    double m_correlationValue = double(nCorcordant - nDiscordant) / nPossiblePairs;
+    m_correlationValue = double(nCorcordant - nDiscordant) / nPossiblePairs;
 
     m_statisticValue.append((3 * (nCorcordant - nDiscordant)) /
                 sqrt(N * (N- 1) * (2 * N + 5) / 2));

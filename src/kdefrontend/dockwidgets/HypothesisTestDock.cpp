@@ -861,11 +861,9 @@ void HypothesisTestDock::setColumnsComboBoxView() {
 }
 
 bool HypothesisTestDock::nonEmptySelectedColumns() {
-	if (ui.cbCol1->isVisible() && ui.cbCol1->count() < 1)
-		return false;
-	if (ui.cbCol2->isVisible() && ui.cbCol2->count() < 1)
-		return false;
-    if (ui.cbCol3->isVisible() && ui.cbCol3->count() < 1)
+    if ((ui.cbCol1->isVisible() && ui.cbCol1->count() < 1) ||
+        (ui.cbCol2->isVisible() && ui.cbCol2->count() < 1) ||
+        (ui.cbCol3->isVisible() && ui.cbCol3->count() < 1))
         return false;
 	return true;
 }

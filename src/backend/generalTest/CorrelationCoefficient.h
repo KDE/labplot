@@ -29,16 +29,9 @@
 #ifndef CORRELATIONCOEFFICIENT_H
 #define CORRELATIONCOEFFICIENT_H
 
-#include "backend/core/AbstractPart.h"
 #include "GeneralTest.h"
-#include "backend/lib/macros.h"
 
 class CorrelationCoefficientView;
-class Spreadsheet;
-class QString;
-class Column;
-class QVBoxLayout;
-class QLabel;
 
 class CorrelationCoefficient : public GeneralTest {
     Q_OBJECT
@@ -59,7 +52,7 @@ public:
 
     QWidget* view() const override;
 
-    void performTest(Test m_test, bool categoricalVariable = true);
+    void performTest(Test m_test, bool categoricalVariable = false);
 private:
     void performPearson(bool categoricalVariable);
     void performKendall();
