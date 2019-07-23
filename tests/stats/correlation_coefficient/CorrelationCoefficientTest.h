@@ -30,10 +30,16 @@
 #include <../../CommonTest.h>
 
 class CorrelationCoefficientTest : public CommonTest {
-	Q_OBJECT
+    Q_OBJECT
 
 private slots:
-        void pearsonCoefficient_data();
-        void pearsonCoefficient();
+    void pearsonCoefficient_data();
+    void pearsonCoefficient();
+
+    void kendallCoefficient_data();
+    void kendallCoefficient();
+
+    void spearmanCoefficient_data();
+    void spearmanCoefficient();
 };
 #endif // CORRELATIONCOEFFICIENTTEST_H
