@@ -2913,7 +2913,9 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QString info;
 	if (dataRect.contains(point)) {
 		QPointF logicalPoint = cSystem->mapSceneToLogical(point);
-		if (mouseMode == CartesianPlot::ZoomSelectionMode && !m_selectionBandIsShown) {
+
+		if ((mouseMode == CartesianPlot::ZoomSelectionMode) ||
+			mouseMode == CartesianPlot::SelectionMode) {
 			info = "x=";
 			if (xRangeFormat == CartesianPlot::Numeric)
 				 info += QString::number(logicalPoint.x());
@@ -2925,6 +2927,9 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 				info += QString::number(logicalPoint.y());
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y()).toString(yRangeDateTimeFormat);
+		}
+
+		if (mouseMode == CartesianPlot::ZoomSelectionMode && !m_selectionBandIsShown) {
 			emit q->mouseHoverZoomSelectionModeSignal(logicalPoint);
 		} else if (mouseMode == CartesianPlot::ZoomXSelectionMode && !m_selectionBandIsShown) {
 			info = "x=";
