@@ -46,7 +46,6 @@
 #include "backend/datapicker/Datapicker.h"
 #include "backend/note/Note.h"
 #include "backend/lib/macros.h"
-#include "backend/worksheet/TreeModel.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #ifdef HAVE_MQTT
@@ -167,28 +166,6 @@ void MainWin::showPresenter() {
 
 AspectTreeModel* MainWin::model() const {
 	return m_aspectTreeModel;
-}
-
-/*!
- * Show cursor dock and set the treeview model
- * @param model
- */
-void MainWin::showCursorDock(TreeModel* model, QVector<CartesianPlot*> plots) {
-	if (!cursorDock) {
-		cursorDock = new QDockWidget(i18n("Cursor"), this);
-		cursorWidget = new CursorDock(cursorDock);
-		cursorDock->setWidget(cursorWidget);
-		cursorDock->setFloating(true);
-
-		// does not work. Don't understand why
-//		if (m_propertiesDock)
-//			tabifyDockWidget(cursorDock, m_propertiesDock);
-//		else
-			addDockWidget(Qt::DockWidgetArea::AllDockWidgetAreas, cursorDock);
-	}
-	cursorWidget->setCursorTreeViewModel(model);
-	cursorWidget->setPlots(plots);
-	cursorDock->show();
 }
 
 Project* MainWin::project() const {
@@ -1461,13 +1438,14 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 		connect(part, &AbstractPart::printRequested, this, &MainWin::print);
 		connect(part, &AbstractPart::printPreviewRequested, this, &MainWin::printPreview);
 		connect(part, &AbstractPart::showRequested, this, &MainWin::handleShowSubWindowRequested);
-	}
 
-	const auto* worksheet = dynamic_cast<const Worksheet*>(aspect);
-	if (worksheet)
-		connect(worksheet, &Worksheet::showCursorDock, this, &MainWin::showCursorDock);
+		const auto* worksheet = dynamic_cast<const Worksheet*>(aspect);
+		if (worksheet)
+			connect(worksheet, &Worksheet::cartesianPlotMouseModeChanged, this, &MainWin::cartesianPlotMouseModeChanged);
+	}
 }
 
+// void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode
 void MainWin::handleAspectRemoved(const AbstractAspect* parent,const AbstractAspect* before,const AbstractAspect* aspect) {
 	Q_UNUSED(before);
 	Q_UNUSED(aspect);
@@ -1763,6 +1741,39 @@ void MainWin::projectExplorerDockVisibilityChanged(bool visible) {
 
 void MainWin::propertiesDockVisibilityChanged(bool visible) {
 	m_togglePropertiesDockAction->setChecked(visible);
+}
+
+void MainWin::cursorDockVisibilityChanged(bool visible) {
+	//if the cursor dock was closed, switch to the "Select and Edit" mouse mode
+	if (!visible) {
+		auto* worksheet = activeWorksheet();
+		//TODO:
+	}
+}
+
+void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode mode) {
+	if (mode != CartesianPlot::Cursor) {
+		if (cursorDock)
+			cursorDock->hide();
+	} else {
+		if (!cursorDock) {
+			cursorDock = new QDockWidget(i18n("Cursor"), this);
+			cursorWidget = new CursorDock(cursorDock);
+			cursorDock->setWidget(cursorWidget);
+			connect(cursorDock, &QDockWidget::visibilityChanged, this, &MainWin::cursorDockVisibilityChanged);
+	// 		cursorDock->setFloating(true);
+
+			// does not work. Don't understand why
+	//		if (m_propertiesDock)
+	//			tabifyDockWidget(cursorDock, m_propertiesDock);
+	//		else
+				addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, cursorDock);
+		}
+
+		auto* worksheet = static_cast<Worksheet*>(QObject::sender());
+		cursorWidget->setWorksheet(worksheet);
+		cursorDock->show();
+	}
 }
 
 void MainWin::toggleFullScreen() {

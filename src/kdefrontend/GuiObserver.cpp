@@ -175,22 +175,15 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 	// update cursor dock
 	AbstractAspect* parent = selectedAspects[0]->parent(AspectType::Worksheet);
 	if (selectedAspects[0]->inherits(AspectType::Worksheet)) {
-		Worksheet* worksheet = static_cast<Worksheet *>(selectedAspects[0]);
-
 		if (m_mainWindow->cursorWidget) {
-			m_mainWindow->cursorWidget->setCursorTreeViewModel(worksheet->cursorModel());
-			QVector<CartesianPlot*> plots = worksheet->children<CartesianPlot>();
-			if (!plots.isEmpty())
-				m_mainWindow->cursorWidget->setPlots(plots);
+			Worksheet* worksheet = static_cast<Worksheet*>(selectedAspects[0]);
+			m_mainWindow->cursorWidget->setWorksheet(worksheet);
 		}
 	} else if (parent) {
 		if (m_mainWindow->cursorWidget) {
-			Worksheet* worksheet = static_cast<Worksheet *>(parent);
-			QVector<CartesianPlot*> plots = worksheet->children<CartesianPlot>();
-			m_mainWindow->cursorWidget->setCursorTreeViewModel(worksheet->cursorModel());
-			m_mainWindow->cursorWidget->setPlots(plots);
+			Worksheet* worksheet = static_cast<Worksheet*>(parent);
+			m_mainWindow->cursorWidget->setWorksheet(worksheet);
 		}
-
 	}
 
 	const AspectType type = selectedAspects.front()->type();

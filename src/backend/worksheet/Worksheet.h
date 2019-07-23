@@ -31,6 +31,7 @@
 
 #include "backend/core/AbstractPart.h"
 #include "backend/worksheet/plots/PlotArea.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 class QGraphicsItem;
 class QGraphicsScene;
@@ -126,13 +127,13 @@ public:
 
 public slots:
 	void setTheme(const QString&);
-	void cartesianPlotmousePressZoomSelectionMode(QPointF logicPos);
-	void cartesianPlotmousePressCursorMode(int cursorNumber, QPointF logicPos);
-	void cartesianPlotmouseMoveZoomSelectionMode(QPointF logicPos);
-	void cartesianPlotmouseMoveCursorMode(int cursorNumber, QPointF logicPos);
-	void cartesianPlotmouseReleaseZoomSelectionMode();
-	void cartesianPlotmouseHoverZoomSelectionMode(QPointF logicPos);
-	void cartesianPlotmouseModeChanged();
+	void cartesianPlotMousePressZoomSelectionMode(QPointF logicPos);
+	void cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logicPos);
+	void cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos);
+	void cartesianPlotMouseMoveCursorMode(int cursorNumber, QPointF logicPos);
+	void cartesianPlotMouseReleaseZoomSelectionMode();
+	void cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos);
+	void cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode);
 
 	// slots needed by the cursor
 	void updateCurveBackground(QPen pen, QString curveName);
@@ -151,7 +152,7 @@ private:
 	mutable WorksheetView* m_view{nullptr};
 	friend class WorksheetPrivate;
 
-	private slots:
+private slots:
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
@@ -159,12 +160,13 @@ private:
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;
 
-	signals:
+signals:
 	void requestProjectContextMenu(QMenu*);
 	void itemSelected(QGraphicsItem*);
 	void itemDeselected(QGraphicsItem*);
 	void requestUpdate();
 	void useViewSizeRequested();
+	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
 
 	void backgroundTypeChanged(PlotArea::BackgroundType);
 	void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);

@@ -1734,7 +1734,7 @@ void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
 			graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 	}
 
-	emit mouseModeChanged();
+	emit mouseModeChanged(mouseMode);
 }
 
 void CartesianPlot::setLocked(bool locked) {
@@ -2933,7 +2933,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x()).toString(xRangeDateTimeFormat);
 			emit q->mouseHoverZoomSelectionModeSignal(logicalPoint);
-		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode && !m_selectionBandIsShown) {	
+		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode && !m_selectionBandIsShown) {
 			info = "y=";
 			if (yRangeFormat == CartesianPlot::Numeric)
 				info += QString::number(logicalPoint.y());

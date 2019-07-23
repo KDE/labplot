@@ -34,10 +34,7 @@ Copyright            : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/TreeModel.h"
 
-CursorDock::CursorDock(QWidget *parent) :
-	QWidget(parent),
-	ui(new Ui::CursorDock)
-{
+CursorDock::CursorDock(QWidget* parent) : QWidget(parent), ui(new Ui::CursorDock) {
 	ui->setupUi(this);
 	ui->tvCursorData->setModel(nullptr);
 
@@ -48,10 +45,12 @@ CursorDock::CursorDock(QWidget *parent) :
 	connect(ui->cbCursor1en, &QCheckBox::clicked, this, &CursorDock::cursor1EnableChanged);
 }
 
-void CursorDock::setPlots(QVector<CartesianPlot*> list) {
+void CursorDock::setWorksheet(Worksheet* worksheet) {
 	m_initializing = true;
-	m_plotList = list;
-	m_plot = list.first();
+
+	ui->tvCursorData->setModel(worksheet->cursorModel());
+	m_plotList = worksheet->children<CartesianPlot>();
+	m_plot = m_plotList.first();
 
 	bool cursor0Enabled = m_plot->cursor0Enable();
 	bool cursor1Enabled = m_plot->cursor1Enable();
@@ -85,10 +84,6 @@ void CursorDock::collapseAll() {
 
 void CursorDock::expandAll() {
 	ui->tvCursorData->expandAll();
-}
-
-void CursorDock::setCursorTreeViewModel(TreeModel* model) {
-	ui->tvCursorData->setModel(model);
 }
 
 void CursorDock::cursor0EnableChanged(bool enable) {
@@ -131,4 +126,3 @@ void CursorDock::plotCursor1EnableChanged(bool enable) {
 		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, !enable);
 	m_initializing = false;
 }
-
