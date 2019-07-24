@@ -489,7 +489,7 @@ void MainWin::initMenus() {
 	auto* menu = dynamic_cast<QMenu*>(factory()->container("new", this));
 	menu->setIcon(QIcon::fromTheme("window-new"));
 
-	//menu in the project explorr and in the toolbar for adding new aspects
+	//menu in the project explorer and in the toolbar for adding new aspects
 	m_newMenu = new QMenu(i18n("Add New"), this);
 	m_newMenu->setIcon(QIcon::fromTheme("window-new"));
 	m_newMenu->addAction(m_newFolderAction);
