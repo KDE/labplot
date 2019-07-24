@@ -2728,6 +2728,12 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			xMin += deltaX;
 			yMax += deltaY;
 			yMin += deltaY;
+
+			q->setUndoAware(false);
+			q->setAutoScaleX(false);
+			q->setAutoScaleY(false);
+			q->setUndoAware(true);
+
 			retransformScales();
 			m_panningStart = event->pos();
 		} else
