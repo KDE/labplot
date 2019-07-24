@@ -44,7 +44,7 @@
 #include <QSvgGenerator>
 #include <QImage>
 #include <QToolButton>
-#include <QApplication>
+#include <QTimeLine>
 
 #include <KLocalizedString>
 
@@ -313,17 +313,6 @@ void DatapickerImageView::drawBackground(QPainter* painter, const QRectF& rect) 
 	if (!scene_rect.contains(rect))
 		painter->fillRect(rect, Qt::lightGray);
 
-	//shadow
-	int shadowSize = scene_rect.width()*0.02;
-	QRectF rightShadowRect(scene_rect.right(), scene_rect.top() + shadowSize,
-				shadowSize, scene_rect.height());
-	QRectF bottomShadowRect(scene_rect.left() + shadowSize, scene_rect.bottom(),
-				scene_rect.width(), shadowSize);
-
-	painter->fillRect(rightShadowRect.intersected(rect), Qt::darkGray);
-	painter->fillRect(bottomShadowRect.intersected(rect), Qt::darkGray);
-
-
 	// canvas
 	if (m_image->isLoaded) {
 		if (m_image->plotImageType() == DatapickerImage::OriginalImage) {
@@ -347,15 +336,40 @@ void DatapickerImageView::drawBackground(QPainter* painter, const QRectF& rect) 
 //##############################################################################
 //####################################  Events   ###############################
 //##############################################################################
-void DatapickerImageView::wheelEvent(QWheelEvent *event) {
-	if (m_mouseMode == ZoomSelectionMode) {
-		if (event->delta() > 0)
-			scale(1.2, 1.2);
-		else if (event->delta() < 0)
-			scale(1.0/1.2, 1.0/1.2);
-	} else {
+void DatapickerImageView::wheelEvent(QWheelEvent* event) {
+	//https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
+	if (m_mouseMode == ZoomSelectionMode || (QApplication::keyboardModifiers() & Qt::ControlModifier)) {
+		int numDegrees = event->delta() / 8;
+		int numSteps = numDegrees / 15; // see QWheelEvent documentation
+		zoom(numSteps);
+	} else
 		QGraphicsView::wheelEvent(event);
-	}
+}
+
+void DatapickerImageView::zoom(int numSteps) {
+	m_numScheduledScalings += numSteps;
+	if (m_numScheduledScalings * numSteps < 0) // if user moved the wheel in another direction, we reset previously scheduled scalings
+		m_numScheduledScalings = numSteps;
+
+	auto* anim = new QTimeLine(350, this);
+	anim->setUpdateInterval(20);
+
+	connect(anim, &QTimeLine::valueChanged, this, &DatapickerImageView::scalingTime);
+	connect(anim, &QTimeLine::finished, this, &DatapickerImageView::animFinished);
+	anim->start();
+}
+
+void DatapickerImageView::scalingTime() {
+	qreal factor = 1.0 + qreal(m_numScheduledScalings) / 300.0;
+	scale(factor, factor);
+}
+
+void DatapickerImageView::animFinished() {
+	if (m_numScheduledScalings > 0)
+		m_numScheduledScalings--;
+	else
+		m_numScheduledScalings++;
+	sender()->~QObject();
 }
 
 void DatapickerImageView::mousePressEvent(QMouseEvent* event) {
@@ -521,11 +535,11 @@ void DatapickerImageView::changePointsType(QAction* action) {
 }
 
 void DatapickerImageView::changeZoom(QAction* action) {
-	if (action == zoomInViewAction) {
-		scale(1.2, 1.2);
-	} else if (action == zoomOutViewAction) {
-		scale(1.0/1.2, 1.0/1.2);
-	} else if (action == zoomOriginAction) {
+	if (action == zoomInViewAction)
+		zoom(1);
+	else if (action == zoomOutViewAction)
+		zoom(-1);
+	else if (action == zoomOriginAction) {
 		static const float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
 		static const float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
 		setTransform(QTransform::fromScale(hscale, vscale));
