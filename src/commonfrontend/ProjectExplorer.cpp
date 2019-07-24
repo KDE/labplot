@@ -43,7 +43,6 @@
 #include <QMenu>
 #include <QMimeData>
 #include <QPushButton>
-#include <QSignalMapper>
 #include <QTreeView>
 #include <QVBoxLayout>
 
@@ -226,7 +225,6 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 	//create action for showing/hiding the columns in the tree.
 	//this is done here since the number of columns is  not available in createActions() yet.
 	if (list_showColumnActions.size() == 0) {
-		showColumnsSignalMapper = new QSignalMapper(this);
 		for (int i = 0; i < m_treeView->model()->columnCount(); i++) {
 			QAction* showColumnAction =  new QAction(treeModel->headerData(i, Qt::Horizontal).toString(), this);
 			showColumnAction->setCheckable(true);
@@ -234,12 +232,8 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 			list_showColumnActions.append(showColumnAction);
 
 			connect(showColumnAction, &QAction::triggered,
-					showColumnsSignalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-
-			showColumnsSignalMapper->setMapping(showColumnAction, i);
+					this, [=] { ProjectExplorer::toggleColumn(i); });
 		}
-		connect(showColumnsSignalMapper, static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped),
-				this, &ProjectExplorer::toggleColumn);
 	} else {
 		for (int i = 0; i < list_showColumnActions.size(); ++i) {
 			if (!list_showColumnActions.at(i)->isChecked())
