@@ -183,7 +183,6 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 
 	ui.verticalLayout->addWidget(frame);
 
-
 	init();
 }
 
@@ -331,6 +330,8 @@ void AxisDock::init() {
 	GuiTools::updatePenStyles(ui.cbLineStyle, QColor(Qt::black));
 	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, QColor(Qt::black));
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, QColor(Qt::black));
+	GuiTools::updatePenStyles(ui.cbMajorGridStyle, QColor(Qt::black));
+	GuiTools::updatePenStyles(ui.cbMinorGridStyle, QColor(Qt::black));
 
 	//labels
 	ui.cbLabelsPosition->addItem(i18n("No labels"));
@@ -524,9 +525,8 @@ void AxisDock::orientationChanged(int index) {
 		if (posIndex > 1)
 			posIndex += 2;
 		axisPosition = Axis::AxisPosition(posIndex);
-	} else {
+	} else
 		axisPosition = Axis::AxisPosition(posIndex+2);
-	}
 
 	//labels position
 	posIndex = ui.cbLabelsPosition->currentIndex();
@@ -564,9 +564,8 @@ void AxisDock::positionChanged(int index) {
 		if (index>1)
 			index += 2;
 		position = Axis::AxisPosition(index);
-	} else {
+	} else
 		position = Axis::AxisPosition(index+2);
-	}
 
 	for (auto* axis : m_axesList)
 		axis->setPosition(position);
