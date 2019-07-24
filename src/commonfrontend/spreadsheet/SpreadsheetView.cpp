@@ -1239,6 +1239,13 @@ void SpreadsheetView::pasteIntoSelection() {
 			input_col_count = cellTexts.at(i).count();
 	}
 
+	//independent of the current default locale, set the locale to C
+	//if we have point as the decimal separator in the text to be copied
+	QLocale::Language lang = QLocale::AnyLanguage;
+	if (input_str.indexOf(QChar('.')) != -1)
+		lang = QLocale::C;
+	QLocale locale(lang);
+
 	if ( (first_col == -1 || first_row == -1) || (last_row == first_row && last_col == first_col) ) {
 		// if there is no selection or only one cell selected, the
 		// selection will be expanded to the needed size from the current cell
@@ -1266,7 +1273,7 @@ void SpreadsheetView::pasteIntoSelection() {
 					}
 				}
 				const AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(nonEmptyValue,
-														QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"), QLocale::AnyLanguage);
+														QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"), lang);
 				Column* new_col = new Column(QString::number(curCol), mode);
 				new_col->setPlotDesignation(AbstractColumn::Y);
 				new_col->insertRows(0, m_spreadsheet->rowCount());
@@ -1284,7 +1291,6 @@ void SpreadsheetView::pasteIntoSelection() {
 
 	const int rows = last_row - first_row + 1;
 	const int cols = last_col - first_col + 1;
-	QLocale locale;
 	for (int c = 0; c < cols && c < input_col_count; c++) {
 		Column* col = m_spreadsheet->column(first_col + c);
 		col->setSuppressDataChangedSignal(true);
