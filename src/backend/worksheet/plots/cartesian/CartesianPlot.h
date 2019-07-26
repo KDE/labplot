@@ -161,6 +161,9 @@ private:
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
 
+	void calculateCurvesXMinMax();
+	void calculateCurvesYMinMax();
+
 	CartesianPlotLegend* m_legend{nullptr};
 	double m_zoomFactor{1.2};
 	QList<QColor> m_themeColorPalette;
@@ -271,7 +274,6 @@ private slots:
 	void xDataChanged();
 	void yDataChanged();
 	void curveVisibilityChanged();
-
 
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChanged();

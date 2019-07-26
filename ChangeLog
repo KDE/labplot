@@ -9,6 +9,7 @@ New features:
 		* In "Functions Values" dialog don't allow to select columns to be calculated as variable columns (avoid circular dependencies)
 	* BUG 406805 - support für directory structures in ROOT files
 	* Automatically update curves if a data column deleted before was re-added again (during the import or manually)
+	* When auto-scaling in the plot take also the error bars into account, if available
 
 UX improvements:
 	* in the "Import Data" dialog show the history of the recently imported files
