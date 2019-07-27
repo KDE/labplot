@@ -163,6 +163,9 @@ void CartesianPlot::init() {
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
+
+	//theme is not set at this point, initialize the color palette with default colors
+	this->setColorPalette(KConfig());
 }
 
 /*!
