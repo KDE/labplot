@@ -56,6 +56,10 @@ PartMdiView::PartMdiView(AbstractPart* part) : QMdiSubWindow(nullptr), m_part(pa
 	connect(this, &QMdiSubWindow::windowStateChanged, this, &PartMdiView::windowStateChanged);
 }
 
+PartMdiView::~PartMdiView() {
+	m_closing = true;
+}
+
 AbstractPart* PartMdiView::part() const {
 	return m_part;
 }
@@ -81,8 +85,12 @@ void PartMdiView::closeEvent(QCloseEvent *event) {
 
 void PartMdiView::windowStateChanged(Qt::WindowStates oldState, Qt::WindowStates newState) {
 	Q_UNUSED(oldState);
+
+	if (m_closing)
+		return;
+
 	if (newState.testFlag(Qt::WindowActive) || newState.testFlag(Qt::WindowMaximized))
 		m_part->registerShortcuts();
-	else if (!newState.testFlag(Qt::WindowNoState))
+	else
 		m_part->unregisterShortcuts();
 }
