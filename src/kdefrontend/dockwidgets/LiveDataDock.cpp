@@ -421,7 +421,6 @@ void LiveDataDock::updateTypeChanged(int idx) {
 
 				m_liveDataSource->setUpdateType(updateType);
 				m_liveDataSource->setUpdateInterval(ui.sbUpdateInterval->value());
-				m_liveDataSource->setFileWatched(false);
 				break;
 			}
 		case LiveDataSource::NewData:
@@ -430,7 +429,6 @@ void LiveDataDock::updateTypeChanged(int idx) {
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 
-			m_liveDataSource->setFileWatched(true);
 			m_liveDataSource->setUpdateType(updateType);
 		}
 	}

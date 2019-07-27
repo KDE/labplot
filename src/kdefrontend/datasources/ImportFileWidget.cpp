@@ -486,18 +486,6 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	source->setFilter(m_currentFilter.release()); // pass ownership of the filter to the LiveDataSource
 
 	source->setSourceType(sourceType);
-	source->setReadingType(readingType);
-
-	if (updateType == LiveDataSource::UpdateType::TimeInterval)
-		source->setUpdateInterval(ui.sbUpdateInterval->value());
-	else
-		source->setFileWatched(true);
-
-	source->setKeepNValues(ui.sbKeepNValues->value());
-	source->setUpdateType(updateType);
-
-	if (readingType != LiveDataSource::ReadingType::TillEnd)
-		source->setSampleSize(ui.sbSampleSize->value());
 
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
@@ -523,6 +511,16 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	default:
 		break;
 	}
+
+	//reading options
+	source->setReadingType(readingType);
+	source->setKeepNValues(ui.sbKeepNValues->value());
+	source->setUpdateType(updateType);
+	if (updateType == LiveDataSource::UpdateType::TimeInterval)
+		source->setUpdateInterval(ui.sbUpdateInterval->value());
+
+	if (readingType != LiveDataSource::ReadingType::TillEnd)
+		source->setSampleSize(ui.sbSampleSize->value());
 }
 
 #ifdef HAVE_MQTT

@@ -78,8 +78,6 @@ public:
 	explicit LiveDataSource(const QString& name, bool loading = false);
 	~LiveDataSource() override;
 
-	void ready();
-
 	static QStringList supportedBaudRates();
 	static QStringList availablePorts();
 
@@ -124,9 +122,6 @@ public:
 	void setKeepLastValues(bool);
 	bool keepLastValues() const;
 
-	void setFileWatched(bool);
-	bool isFileWatched() const;
-
 	void setFileLinked(bool);
 	bool isFileLinked() const;
 
@@ -155,7 +150,6 @@ public:
 
 private:
 	void initActions();
-	void watch();
 
 	QString m_fileName;
 	QString m_serialPortName;
@@ -169,7 +163,7 @@ private:
 
 	bool m_fileWatched{false};
 	bool m_fileLinked{false};
-	bool m_useRelativePath{false};
+	bool m_relativePath{false};
 	bool m_paused{false};
 	bool m_prepared{false};
 	bool m_reading{false};
@@ -193,18 +187,12 @@ private:
 	QUdpSocket* m_udpSocket{nullptr};
 	QSerialPort* m_serialPort{nullptr};
 	QIODevice* m_device{nullptr};
-
-	QAction* m_reloadAction;
-	QAction* m_toggleLinkAction;
-	QAction* m_showEditorAction;
-	QAction* m_showSpreadsheetAction;
-	QAction* m_plotDataAction;
+	QAction* m_plotDataAction{nullptr};
 
 public slots:
 	void read();
 
 private slots:
-	void watchToggled();
 	void linkToggled();
 	void plotData();
 

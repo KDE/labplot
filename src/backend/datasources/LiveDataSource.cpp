@@ -81,30 +81,7 @@ LiveDataSource::~LiveDataSource() {
 	delete m_updateTimer;
 }
 
-/*!
- * depending on the update type, periodically or on data changes, starts the timer or activates the file watchers, respectively.
- */
-void LiveDataSource::ready() {
-	DEBUG("LiveDataSource::ready() update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType) << ", interval = " << m_updateInterval);
-	switch (m_updateType) {
-	case TimeInterval:
-		m_updateTimer->start(m_updateInterval);
-		DEBUG("STARTED TIMER. REMAINING TIME = " << m_updateTimer->remainingTime());
-		break;
-	case NewData:
-		DEBUG("STARTING WATCHER");
-		watch();
-	}
-}
-
 void LiveDataSource::initActions() {
-	m_reloadAction = new QAction(QIcon::fromTheme("view-refresh"), i18n("Reload"), this);
-	connect(m_reloadAction, &QAction::triggered, this, &LiveDataSource::read);
-
-	m_toggleLinkAction = new QAction(i18n("Link the file"), this);
-	m_toggleLinkAction->setCheckable(true);
-	connect(m_toggleLinkAction, &QAction::triggered, this, &LiveDataSource::linkToggled);
-
 	m_plotDataAction = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot data"), this);
 	connect(m_plotDataAction, &QAction::triggered, this, &LiveDataSource::plotData);
 }
@@ -169,7 +146,7 @@ void LiveDataSource::continueReading() {
 	case TimeInterval:
 		m_updateTimer->start(m_updateInterval);
 		break;
-	case  NewData:
+	case NewData:
 		connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
 	}
 }
@@ -223,18 +200,6 @@ void LiveDataSource::setFilter(AbstractFileFilter* f) {
 
 AbstractFileFilter* LiveDataSource::filter() const {
 	return m_filter;
-}
-
-/*!
-  sets whether the file should be watched or not.
-  In the first case the data source will be automatically updated on file changes.
-*/
-void LiveDataSource::setFileWatched(bool b) {
-	m_fileWatched = b;
-}
-
-bool LiveDataSource::isFileWatched() const {
-	return m_fileWatched;
 }
 
 /*!
@@ -355,14 +320,27 @@ void LiveDataSource::setUpdateType(UpdateType updatetype) {
 	switch (updatetype) {
 	case NewData:
 		m_updateTimer->stop();
-		if (m_fileSystemWatcher == nullptr)
-			watch();
-		else
+
+		if (!m_fileSystemWatcher) {
+			m_fileSystemWatcher = new QFileSystemWatcher;
+
+			//connect to file changes to read the new data
 			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
+
+			//connect to file changes to re-add the file path again - need to cope with deletion of files in text editors which
+			//on save create a new file in the temp folder first and then swap with the original one.
+			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, [=]() {m_fileSystemWatcher->addPath(m_fileName);});
+		}
+
+		if (!m_fileSystemWatcher->files().contains(m_fileName))
+			m_fileSystemWatcher->addPath(m_fileName);
+
 		break;
 	case TimeInterval:
-		if (m_fileSystemWatcher)
+		if (m_fileSystemWatcher) {
+			m_fileSystemWatcher->removePath(m_fileName);
 			disconnect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
+		}
 	}
 	m_updateType = updatetype;
 }
@@ -400,11 +378,11 @@ bool LiveDataSource::isFileLinked() const {
 }
 
 void LiveDataSource::setUseRelativePath(bool b) {
-	m_useRelativePath = b;
+	m_relativePath = b;
 }
 
 bool LiveDataSource::useRelativePath() const {
-	return m_useRelativePath;
+	return m_relativePath;
 }
 
 QIcon LiveDataSource::icon() const {
@@ -451,16 +429,6 @@ QMenu* LiveDataSource::createContextMenu() {
 
 	menu->insertAction(firstAction, m_plotDataAction);
 	menu->insertSeparator(firstAction);
-
-	//TODO: doesn't always make sense...
-// 	if (!m_fileWatched)
-// 		menu->insertAction(firstAction, m_reloadAction);
-//
-// 	m_toggleWatchAction->setChecked(m_fileWatched);
-// 	menu->insertAction(firstAction, m_toggleWatchAction);
-//
-// 	m_toggleLinkAction->setChecked(m_fileLinked);
-// 	menu->insertAction(firstAction, m_toggleLinkAction);
 
 	return menu;
 }
@@ -717,43 +685,9 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 	}
 }
 
-void LiveDataSource::watchToggled() {
-	m_fileWatched = !m_fileWatched;
-	watch();
-	project()->setChanged(true);
-}
-
 void LiveDataSource::linkToggled() {
 	m_fileLinked = !m_fileLinked;
 	project()->setChanged(true);
-}
-
-/*!
- * Watch the file upon reading for changes if required
- * uses m_fileName for FileOrPipe and LocalSocket
- */
-void LiveDataSource::watch() {
-	DEBUG("LiveDataSource::watch() file name = " << m_fileName.toStdString());
-	if (m_fileWatched) {
-		DEBUG("	file is watched");
-		if (!m_fileSystemWatcher) {
-			m_fileSystemWatcher = new QFileSystemWatcher;
-
-			//connect to file changes to read the new data
-			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
-
-			//connect to file changes to re-add the file path again - need to cope with deletion of files in text editors which
-			//on save create a new file in the temp folder first and then swap with the original one.
-			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, [=]() {m_fileSystemWatcher->addPath(m_fileName);});
-		}
-
-		if (!m_fileSystemWatcher->files().contains(m_fileName))
-			m_fileSystemWatcher->addPath(m_fileName);
-	} else {
-		DEBUG("	file is not watched");
-		if (m_fileSystemWatcher)
-			m_fileSystemWatcher->removePath(m_fileName);
-	}
 }
 
 void LiveDataSource::plotData() {
@@ -774,10 +708,34 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 
 	//general
 	writer->writeStartElement("general");
-	writer->writeAttribute("fileName", m_fileName);
-	writer->writeAttribute("fileType", QString::number(m_fileType));
-	writer->writeAttribute("fileWatched", QString::number(m_fileWatched));
-	writer->writeAttribute("fileLinked", QString::number(m_fileLinked));
+
+
+	switch (m_sourceType) {
+	case FileOrPipe:
+		writer->writeAttribute("fileName", m_fileName);
+		writer->writeAttribute("fileType", QString::number(m_fileType));
+		writer->writeAttribute("fileWatched", QString::number(m_fileWatched));
+		writer->writeAttribute("fileLinked", QString::number(m_fileLinked));
+		if (m_fileLinked)
+			writer->writeAttribute("relativePath", QString::number(m_relativePath));
+		break;
+	case SerialPort:
+		writer->writeAttribute("baudRate", QString::number(m_baudRate));
+		writer->writeAttribute("serialPortName", m_serialPortName);
+		break;
+	case NetworkTcpSocket:
+	case NetworkUdpSocket:
+		writer->writeAttribute("host", m_host);
+		writer->writeAttribute("port", QString::number(m_port));
+		break;
+	case LocalSocket:
+		break;
+	case MQTT:
+		break;
+	default:
+		break;
+	}
+
 	writer->writeAttribute("updateType", QString::number(m_updateType));
 	writer->writeAttribute("readingType", QString::number(m_readingType));
 	writer->writeAttribute("sourceType", QString::number(m_sourceType));
@@ -788,29 +746,7 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 
 	if (m_readingType != TillEnd)
 		writer->writeAttribute("sampleSize", QString::number(m_sampleSize));
-
-	switch (m_sourceType) {
-	case SerialPort:
-		writer->writeAttribute("baudRate", QString::number(m_baudRate));
-		writer->writeAttribute("serialPortName", m_serialPortName);
-
-		break;
-	case NetworkTcpSocket:
-	case NetworkUdpSocket:
-		writer->writeAttribute("host", m_host);
-		writer->writeAttribute("port", QString::number(m_port));
-		break;
-	case FileOrPipe:
-		break;
-	case LocalSocket:
-		break;
-	case MQTT:
-		break;
-	default:
-		break;
-	}
-
-	writer->writeEndElement();
+	writer->writeEndElement(); //general
 
 	//filter
 	m_filter->save(writer);
@@ -860,12 +796,6 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("fileType").toString());
 			else
 				m_fileType = (AbstractFileFilter::FileType)str.toInt();
-
-			str = attribs.value("fileWatched").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("fileWatched").toString());
-			else
-				m_fileWatched = str.toInt();
 
 			str = attribs.value("fileLinked").toString();
 			if (str.isEmpty())
@@ -972,8 +902,8 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 	if (m_fileLinked && QFile::exists(m_fileName))
 		this->read();
 
-	if (m_fileWatched)
-		watch();
+	//call setUpdateType() to start watching the file for changes, is required
+	setUpdateType(m_updateType);
 
 	return !reader->hasError();
 }
