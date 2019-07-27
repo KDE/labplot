@@ -26,6 +26,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "SortDialog.h"
+#include "backend/core/column/Column.h"
 
 #include <QPushButton>
 
@@ -76,11 +77,9 @@ SortDialog::~SortDialog() {
 }
 
 void SortDialog::sortColumns() {
-	Column* leading;
+	Column* leading{nullptr};
 	if (ui.cbSorting->currentIndex() == Together)
 		leading = m_columns.at(ui.cbColumns->currentIndex());
-	else
-		leading = nullptr;
 
 	emit sort(leading, m_columns, ui.cbOrdering->currentIndex() == Ascending);
 }

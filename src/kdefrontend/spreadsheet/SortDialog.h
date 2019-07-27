@@ -28,9 +28,9 @@
 #ifndef SORTDIALOG_H
 #define SORTDIALOG_H
 
-#include "backend/core/column/Column.h"
 #include <ui_sortdialogwidget.h>
 #include <QDialog>
+class Column;
 
 class SortDialog : public QDialog {
 	Q_OBJECT

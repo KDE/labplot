@@ -2132,6 +2132,22 @@ void SpreadsheetView::clearSelectedCells() {
 	int last = lastSelectedRow();
 	if (first < 0) return;
 
+	//don't try to clear values if the selected cells don't have any values at all
+	bool empty = true;
+	for (auto* column : selectedColumns()) {
+		for (int row = last; row >= first; row--) {
+			if (column->isValid(row)) {
+				empty = false;
+				break;
+			}
+		}
+		if (!empty)
+			break;
+	}
+
+	if (empty)
+		return;
+
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: clear selected cells", m_spreadsheet->name()));
 	for (auto* column : selectedColumns()) {
