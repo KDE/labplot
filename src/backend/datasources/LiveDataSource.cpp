@@ -399,6 +399,14 @@ bool LiveDataSource::isFileLinked() const {
 	return m_fileLinked;
 }
 
+void LiveDataSource::setUseRelativePath(bool b) {
+	m_useRelativePath = b;
+}
+
+bool LiveDataSource::useRelativePath() const {
+	return m_useRelativePath;
+}
+
 QIcon LiveDataSource::icon() const {
 	QIcon icon;
 

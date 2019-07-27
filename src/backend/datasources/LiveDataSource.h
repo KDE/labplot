@@ -130,6 +130,9 @@ public:
 	void setFileLinked(bool);
 	bool isFileLinked() const;
 
+	void setUseRelativePath(bool);
+	bool useRelativePath() const;
+
 	void setFileName(const QString&);
 	QString fileName() const;
 
@@ -166,6 +169,7 @@ private:
 
 	bool m_fileWatched{false};
 	bool m_fileLinked{false};
+	bool m_useRelativePath{false};
 	bool m_paused{false};
 	bool m_prepared{false};
 	bool m_reading{false};
