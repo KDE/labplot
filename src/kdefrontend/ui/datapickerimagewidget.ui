@@ -137,7 +137,7 @@
         </widget>
        </item>
        <item row="5" column="5">
-        <widget class="KComboBox" name="cbGraphType">
+        <widget class="QComboBox" name="cbGraphType">
          <property name="toolTip">
           <string/>
          </property>
@@ -670,7 +670,7 @@
         </spacer>
        </item>
        <item row="1" column="2">
-        <widget class="KComboBox" name="cbSymbolStyle">
+        <widget class="QComboBox" name="cbSymbolStyle">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -806,7 +806,7 @@
         </widget>
        </item>
        <item row="7" column="2">
-        <widget class="KComboBox" name="cbSymbolFillingStyle"/>
+        <widget class="QComboBox" name="cbSymbolFillingStyle"/>
        </item>
        <item row="8" column="0">
         <widget class="QLabel" name="lSymbolFillingColor">
@@ -862,7 +862,7 @@
         </widget>
        </item>
        <item row="11" column="2">
-        <widget class="KComboBox" name="cbSymbolBorderStyle"/>
+        <widget class="QComboBox" name="cbSymbolBorderStyle"/>
        </item>
        <item row="12" column="0">
         <widget class="QLabel" name="lSymbolBorderColor">
@@ -951,7 +951,7 @@
         <widget class="QWidget" name="whIntensity" native="true"/>
        </item>
        <item row="0" column="2">
-        <widget class="KComboBox" name="cbPlotImageType">
+        <widget class="QComboBox" name="cbPlotImageType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -1067,12 +1067,6 @@
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
   </customwidget>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>leFileName</tabstop>
   <tabstop>bOpen</tabstop>
