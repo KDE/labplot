@@ -73,7 +73,6 @@ private:
 
 	DatapickerImage* m_image;
 	QList<DatapickerImage*> m_imagesList;
-	bool m_initializing;
 
 	QxtSpanSlider* ssIntensity;
 	QxtSpanSlider* ssForeground;

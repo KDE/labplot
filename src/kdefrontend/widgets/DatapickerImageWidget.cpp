@@ -4,7 +4,7 @@
     Description          : widget for datapicker properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015-2016 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -297,6 +297,7 @@ void DatapickerImageWidget::init() {
 }
 
 void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
+	m_initializing = true;
 	m_imagesList = list;
 	m_image = list.first();
 	m_aspect = list.first();
@@ -321,6 +322,7 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 	initConnections();
 	handleWidgetActions();
 	updateSymbolWidgets();
+	m_initializing = false;
 }
 
 void DatapickerImageWidget::initConnections() {
