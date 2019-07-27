@@ -1067,6 +1067,7 @@
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
   </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>leFileName</tabstop>
   <tabstop>bOpen</tabstop>
