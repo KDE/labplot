@@ -31,8 +31,8 @@
 
 #include "backend/core/AbstractPart.h"
 #include "backend/lib/macros.h"
+#include "kdefrontend/generalTest/GeneralTestView.h"
 
-class GeneralTestView;
 class Spreadsheet;
 class QString;
 class Column;
@@ -105,11 +105,11 @@ protected:
     QVector<Column*> m_columns;
     QStringList m_allColumns;
 
-    QString m_currTestName{"Result Table"};
+    QString m_currTestName;
     QString m_statsTable;
 
     QVBoxLayout* m_summaryLayout{nullptr};
-    QLabel* m_resultLine[10];
+    QLabel* m_resultLine[RESULTLINESCOUNT];
     QMap<QString, QString> m_tooltips;
 
     bool isNumericOrInteger(const Column* column);

@@ -116,7 +116,6 @@ QList<double> CorrelationCoefficient::pValue() const{
 //  sumColxColy = sum of product of values in colx and coly
 
 //TODO: support for col1 is categorical.
-//TODO: add automatic test
 //TODO: add tooltip for correlation value result
 //TODO: find p value
 void CorrelationCoefficient::performPearson(bool categoricalVariable) {

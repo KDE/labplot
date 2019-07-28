@@ -53,13 +53,17 @@ extern "C" {
 GeneralTest::GeneralTest(const QString& name, const AspectType& type) : AbstractPart(name, type),
     m_summaryLayout(new QVBoxLayout()) {
 
-    for (int i = 0; i < 10; i++) {
+    m_currTestName = i18n("Result Table");
+    for (int i = 0; i < RESULTLINESCOUNT; i++) {
         m_resultLine[i] = new QLabel();
         m_summaryLayout->addWidget(m_resultLine[i]);
     }
 }
 
 GeneralTest::~GeneralTest() {
+    delete m_summaryLayout;
+    for (int i = 0; i < RESULTLINESCOUNT; i++)
+        delete m_resultLine[i];
 }
 
 void GeneralTest::setDataSourceType(DataSourceType type) {
@@ -103,7 +107,7 @@ void GeneralTest::setColumns(QStringList cols) {
             m_columns.append(column);
         }
     }
-    delete[] column;
+    delete column;
 }
 
 void GeneralTest::setColumns(const QVector<Column *> &cols) {

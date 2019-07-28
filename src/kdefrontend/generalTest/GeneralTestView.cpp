@@ -67,7 +67,12 @@ GeneralTestView::GeneralTestView(GeneralTest* GeneralTest) : QWidget(),
     init();
 }
 
-GeneralTestView::~GeneralTestView() = default;
+GeneralTestView::~GeneralTestView() {
+    delete m_generalTest;
+    delete m_testName;
+    delete m_statsTable;
+    delete m_summaryResults;
+}
 
 void GeneralTestView::init() {
     initActions();
