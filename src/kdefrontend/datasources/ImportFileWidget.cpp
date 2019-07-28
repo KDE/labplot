@@ -281,7 +281,6 @@ void ImportFileWidget::loadSettings() {
 	initSlots();
 
 	//update the status of the widgets
-	ui.chbRelativePath->setVisible(ui.chbLinkFile->checkState() == Qt::Checked);
 	fileTypeChanged(fileType);
 	sourceTypeChanged(currentSourceType());
 	readingTypeChanged(ui.cbReadingType->currentIndex());
@@ -374,7 +373,6 @@ void ImportFileWidget::initSlots() {
 	        this, &ImportFileWidget::readingTypeChanged);
 	connect(ui.cbFilter, static_cast<void (KComboBox::*) (int)>(&KComboBox::activated), this, &ImportFileWidget::filterChanged);
 	connect(ui.bRefreshPreview, &QPushButton::clicked, this, &ImportFileWidget::refreshPreview);
-	connect(ui.chbLinkFile, &QCheckBox::stateChanged, [this](int state) { ui.chbRelativePath->setVisible((state == Qt::Checked));});
 
 #ifdef HAVE_MQTT
 	connect(ui.cbConnection, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnectionChanged);
@@ -1574,8 +1572,9 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		m_cbFileName->show();
 		ui.bFileInfo->show();
 		ui.bOpen->show();
+		ui.lRelativePath->show();
+		ui.chbRelativePath->show();
 		ui.chbLinkFile->show();
-		ui.chbRelativePath->setVisible(ui.chbLinkFile->checkState() == Qt::Checked);
 
 		//option for sample size are available for "continuously fixed" and "from end" reading options
 		if (ui.cbReadingType->currentIndex() < 2) {
@@ -1625,8 +1624,9 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		m_cbFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
-		ui.chbLinkFile->hide();
+		ui.lRelativePath->hide();
 		ui.chbRelativePath->hide();
+		ui.chbLinkFile->hide();
 
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
@@ -1641,11 +1641,13 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	case LiveDataSource::SourceType::LocalSocket:
 		ui.lFileName->show();
 		m_cbFileName->show();
+		ui.bFileInfo->hide();
 		ui.bOpen->show();
+		ui.lRelativePath->hide();
+		ui.chbRelativePath->hide();
+
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
-
-		ui.bFileInfo->hide();
 		ui.cbBaudRate->hide();
 		ui.lBaudRate->hide();
 		ui.lHost->hide();
@@ -1655,7 +1657,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
 		ui.chbLinkFile->hide();
-		ui.chbRelativePath->hide();
 
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
@@ -1679,12 +1680,14 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.leHost->hide();
 		ui.lePort->hide();
 		ui.lPort->hide();
+
 		ui.lFileName->hide();
 		m_cbFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
-		ui.chbLinkFile->hide();
+		ui.lRelativePath->hide();
 		ui.chbRelativePath->hide();
+		ui.chbLinkFile->hide();
 
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
@@ -1726,8 +1729,9 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		m_cbFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
+		ui.lRelativePath->hide();
+		ui.chbRelativePath()->hide();
 		ui.chbLinkFile->hide();
-		ui.chbRelativePath->hide();
 
 		setMQTTVisible(true);
 

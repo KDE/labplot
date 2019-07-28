@@ -147,6 +147,7 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+	void finalizeLoad();
 
 private:
 	void initActions();
@@ -193,9 +194,7 @@ public slots:
 	void read();
 
 private slots:
-	void linkToggled();
 	void plotData();
-
 	void readyRead();
 
 	void localSocketError(QLocalSocket::LocalSocketError);

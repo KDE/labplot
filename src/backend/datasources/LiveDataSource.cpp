@@ -685,11 +685,6 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 	}
 }
 
-void LiveDataSource::linkToggled() {
-	m_fileLinked = !m_fileLinked;
-	project()->setChanged(true);
-}
-
 void LiveDataSource::plotData() {
 	auto* dlg = new PlotDataDialog(this);
 	dlg->exec();
@@ -709,15 +704,19 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 	//general
 	writer->writeStartElement("general");
 
-
 	switch (m_sourceType) {
 	case FileOrPipe:
-		writer->writeAttribute("fileName", m_fileName);
 		writer->writeAttribute("fileType", QString::number(m_fileType));
-		writer->writeAttribute("fileWatched", QString::number(m_fileWatched));
 		writer->writeAttribute("fileLinked", QString::number(m_fileLinked));
-		if (m_fileLinked)
-			writer->writeAttribute("relativePath", QString::number(m_relativePath));
+		writer->writeAttribute("relativePath", QString::number(m_relativePath));
+		if (m_relativePath) {
+			//convert from the absolute to the relative path and save it
+			const Project* p = const_cast<LiveDataSource*>(this)->project();
+			QFileInfo fi(p->fileName());
+			writer->writeAttribute("fileName", fi.dir().relativeFilePath(m_fileName));
+		}else
+			writer->writeAttribute("fileName", m_fileName);
+
 		break;
 	case SerialPort:
 		writer->writeAttribute("baudRate", QString::number(m_baudRate));
@@ -802,6 +801,12 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("fileLinked").toString());
 			else
 				m_fileLinked = str.toInt();
+
+			str = attribs.value("relativePath").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("relativePath").toString());
+			else
+				m_relativePath = str.toInt();
 
 			str = attribs.value("updateType").toString();
 			if (str.isEmpty())
@@ -898,12 +903,20 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
+	return !reader->hasError();
+}
+
+void LiveDataSource::finalizeLoad() {
+	//convert from the relative path saved in the project file to the absolute file to work with
+	if (m_relativePath) {
+		QFileInfo fi(project()->fileName());
+		m_fileName = fi.dir().absoluteFilePath(m_fileName);
+	}
+
 	//read the content of the file if it was only linked
 	if (m_fileLinked && QFile::exists(m_fileName))
 		this->read();
 
 	//call setUpdateType() to start watching the file for changes, is required
 	setUpdateType(m_updateType);
-
-	return !reader->hasError();
 }

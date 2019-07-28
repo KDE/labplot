@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>706</width>
-    <height>1377</height>
+    <height>1406</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -44,37 +44,7 @@
       <string>Data Source</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="5" column="2" colspan="3">
-       <widget class="QComboBox" name="cbSerialPort"/>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="lConnections">
-        <property name="text">
-         <string>Connection:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="2" colspan="3">
-       <widget class="QComboBox" name="cbBaudRate"/>
-      </item>
-      <item row="13" column="0">
-       <widget class="QLabel" name="lField">
-        <property name="text">
-         <string>Field:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="lSerialPort">
-        <property name="text">
-         <string>Port:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="13" column="2" colspan="3">
+      <item row="14" column="2" colspan="3">
        <widget class="QTreeView" name="tvJson">
         <property name="editTriggers">
          <set>QAbstractItemView::NoEditTriggers</set>
@@ -91,36 +61,101 @@
        </widget>
       </item>
       <item row="9" column="0">
-       <widget class="QLabel" name="lLWT">
+       <widget class="QLabel" name="lTopics">
         <property name="text">
-         <string>LWT:</string>
+         <string>Topics:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
         </property>
        </widget>
       </item>
-      <item row="2" column="2" colspan="3">
-       <widget class="QLineEdit" name="leHost"/>
+      <item row="5" column="2" colspan="3">
+       <widget class="QLineEdit" name="lePort"/>
       </item>
-      <item row="3" column="7">
-       <widget class="QPushButton" name="bManageConnections">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="2" colspan="3">
+      <item row="12" column="2" colspan="3">
        <widget class="KComboBox" name="cbFileType">
         <property name="enabled">
          <bool>false</bool>
         </property>
        </widget>
       </item>
-      <item row="12" column="2" colspan="3">
+      <item row="1" column="0">
+       <widget class="QLabel" name="lFileName">
+        <property name="text">
+         <string>Name:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5" colspan="2">
+       <widget class="QPushButton" name="bOpen">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string> Select the file to import</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="5">
+       <widget class="QPushButton" name="bSaveFilter">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="toolTip">
+         <string>Save the current filter settings</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="2" colspan="3">
+       <widget class="QComboBox" name="cbSerialPort"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="lConnections">
+        <property name="text">
+         <string>Connection:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="4">
+       <spacer name="spacerWillMessage">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>0</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="13" column="6" colspan="2">
+       <widget class="QPushButton" name="bManageFilters">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>Manage filters</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="2" colspan="3">
        <widget class="KComboBox" name="cbFilter">
         <property name="enabled">
          <bool>false</bool>
@@ -130,6 +165,54 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lSourceType">
+        <property name="text">
+         <string>Source:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="lPort">
+        <property name="text">
+         <string>Port:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="2" colspan="2">
+       <widget class="QPushButton" name="bLWT">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2" colspan="3">
+       <widget class="QComboBox" name="cbConnection"/>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="lSerialPort">
+        <property name="text">
+         <string>Port:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="0">
+       <widget class="QLabel" name="lFilter">
+        <property name="text">
+         <string>Filter:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="0">
+       <widget class="QLabel" name="lField">
+        <property name="text">
+         <string>Field:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
         </property>
        </widget>
       </item>
@@ -152,41 +235,21 @@
         </property>
        </widget>
       </item>
-      <item row="12" column="6" colspan="2">
-       <widget class="QPushButton" name="bManageFilters">
-        <property name="enabled">
-         <bool>false</bool>
+      <item row="9" column="2" colspan="3">
+       <widget class="QFrame" name="frameSubscriptions">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
         </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Manage filters</string>
-        </property>
-        <property name="text">
-         <string/>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
         </property>
        </widget>
       </item>
-      <item row="4" column="2" colspan="3">
-       <widget class="QLineEdit" name="lePort"/>
+      <item row="3" column="2" colspan="3">
+       <widget class="QLineEdit" name="leHost"/>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="lSourceType">
-        <property name="text">
-         <string>Source:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="lPort">
-        <property name="text">
-         <string>Port:</string>
-        </property>
-       </widget>
+      <item row="7" column="2" colspan="3">
+       <widget class="QComboBox" name="cbBaudRate"/>
       </item>
       <item row="0" column="2" colspan="3">
        <widget class="QComboBox" name="cbSourceType">
@@ -217,111 +280,41 @@
         </item>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="lHost">
-        <property name="text">
-         <string>Host:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="5" colspan="2">
-       <widget class="QPushButton" name="bOpen">
+      <item row="4" column="7">
+       <widget class="QPushButton" name="bManageConnections">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="toolTip">
-         <string> Select the file to import</string>
-        </property>
         <property name="text">
          <string/>
         </property>
        </widget>
       </item>
-      <item row="3" column="2" colspan="3">
-       <widget class="QComboBox" name="cbConnection"/>
-      </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="lBaudRate">
+      <item row="3" column="0">
+       <widget class="QLabel" name="lHost">
         <property name="text">
-         <string>Baud rate:</string>
+         <string>Host:</string>
         </property>
        </widget>
       </item>
-      <item row="11" column="0">
+      <item row="10" column="0">
+       <widget class="QLabel" name="lLWT">
+        <property name="text">
+         <string>LWT:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="0">
        <widget class="QLabel" name="lFileType">
         <property name="text">
          <string>Type:</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="lFileName">
-        <property name="text">
-         <string>Name:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="12" column="5">
-       <widget class="QPushButton" name="bSaveFilter">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="toolTip">
-         <string>Save the current filter settings</string>
-        </property>
-       </widget>
-      </item>
-      <item row="12" column="0">
-       <widget class="QLabel" name="lFilter">
-        <property name="text">
-         <string>Filter:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="4">
-       <spacer name="spacerWillMessage">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>0</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="8" column="0">
-       <widget class="QLabel" name="lTopics">
-        <property name="text">
-         <string>Topics:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="2" colspan="3">
-       <widget class="QFrame" name="frameSubscriptions">
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="2" colspan="2">
-       <widget class="QPushButton" name="bLWT">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="1">
+      <item row="12" column="1">
        <spacer name="hsName">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -336,6 +329,27 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="lBaudRate">
+        <property name="text">
+         <string>Baud rate:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QCheckBox" name="chbRelativePath">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lRelativePath">
+        <property name="text">
+         <string>Relative Path:</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -814,13 +828,6 @@
         </property>
         <property name="checked">
          <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="0" colspan="2">
-       <widget class="QCheckBox" name="chbRelativePath">
-        <property name="text">
-         <string>Relative path</string>
         </property>
        </widget>
       </item>

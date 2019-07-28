@@ -977,10 +977,12 @@ void MainWin::openProject(const QString& filename) {
 	QElapsedTimer timer;
 	timer.start();
 	bool rc = false;
-	if (Project::isLabPlotProject(filename))
+	if (Project::isLabPlotProject(filename)) {
+		qDebug()<<"openning project " << filename;
+		m_project->setFileName(filename);
 		rc = m_project->load(filename);
 #ifdef HAVE_LIBORIGIN
-	else if (OriginProjectParser::isOriginProject(filename)) {
+	} else if (OriginProjectParser::isOriginProject(filename)) {
 		OriginProjectParser parser;
 		parser.setProjectFileName(filename);
 		parser.importTo(m_project, QStringList()); //TODO: add return code
@@ -995,7 +997,6 @@ void MainWin::openProject(const QString& filename) {
 	}
 
 	m_currentFileName = filename;
-	m_project->setFileName(filename);
 	m_project->undoStack()->clear();
 	m_undoViewEmptyLabel = i18n("%1: opened", m_project->name());
 	m_recentProjectsAction->addUrl( QUrl(filename) );
@@ -1111,6 +1112,7 @@ bool MainWin::save(const QString& fileName) {
 		QPixmap thumbnail = centralWidget()->grab();
 
 		QXmlStreamWriter writer(file);
+		m_project->setFileName(fileName);
 		m_project->save(thumbnail, &writer);
 		m_project->undoStack()->clear();
 		m_project->setChanged(false);
@@ -1746,7 +1748,7 @@ void MainWin::propertiesDockVisibilityChanged(bool visible) {
 void MainWin::cursorDockVisibilityChanged(bool visible) {
 	//if the cursor dock was closed, switch to the "Select and Edit" mouse mode
 	if (!visible) {
-		auto* worksheet = activeWorksheet();
+// 		auto* worksheet = activeWorksheet();
 		//TODO:
 	}
 }

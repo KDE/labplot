@@ -597,6 +597,13 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		reader->raiseError(i18n("no valid XML document found"));
 
 	if (!preview) {
+		//LiveDataSource - call finalizeLoad() to replace relative with absolute paths if required
+		QVector<LiveDataSource*> sources = children<LiveDataSource>(AbstractAspect::Recursive);
+		for (auto* source : sources) {
+			if (!source) continue;
+			source->finalizeLoad();
+		}
+
 		for (auto* plot : children<WorksheetElementContainer>(AbstractAspect::Recursive)) {
 			plot->setIsLoading(false);
 			plot->retransform();
@@ -609,14 +616,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 
 bool Project::readProjectAttributes(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs = reader->attributes();
-	QString str = attribs.value(reader->namespaceUri().toString(), "fileName").toString();
-	if (str.isEmpty()) {
-		reader->raiseError(i18n("Project file name missing."));
-		return false;
-	}
-	d->fileName = str;
-
-	str = attribs.value(reader->namespaceUri().toString(), "modificationTime").toString();
+	QString str = attribs.value(reader->namespaceUri().toString(), "modificationTime").toString();
 	QDateTime modificationTime = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
 	if (str.isEmpty() || !modificationTime.isValid()) {
 		reader->raiseWarning(i18n("Invalid project modification time. Using current time."));
@@ -624,8 +624,7 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 	} else
 		d->modificationTime = modificationTime;
 
-	str = attribs.value(reader->namespaceUri().toString(), "author").toString();
-	d->author = str;
+	d->author = attribs.value(reader->namespaceUri().toString(), "author").toString();
 
 	return true;
 }

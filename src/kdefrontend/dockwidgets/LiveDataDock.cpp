@@ -254,8 +254,8 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 #ifdef HAVE_MQTT
 	m_mqttClient = nullptr;
 #endif
-	if (m_liveDataSource == source)
-		return;
+// 	if (m_liveDataSource == source)
+// 		return;
 	m_liveDataSource = nullptr; // prevent updates due to changes to input widgets
 
 	ui.leName->setText(source->name());
