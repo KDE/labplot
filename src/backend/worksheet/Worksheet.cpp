@@ -1177,19 +1177,13 @@ void Worksheet::updateCompleteCursorTreeModel() {
 				cursorValue[k] = curve->y(xPos,valueFound);
 			}
 			treeModel->insertRows(rowCurve, 1, plotName);
-			QModelIndex backgroundColor = treeModel->index(rowCurve, 0, plotName);
 			QColor curveColor = curve->linePen().color();
 			curveColor.setAlpha(50);
-			treeModel->setData(backgroundColor, QVariant(curveColor), Qt::BackgroundRole);
-			QModelIndex signalName = treeModel->index(rowCurve, WorksheetPrivate::TreeModelColumn::SIGNALNAME, plotName);
-			treeModel->setData(signalName, QVariant(curve->name()));
-			QModelIndex signalCursor0 = treeModel->index(rowCurve, WorksheetPrivate::TreeModelColumn::CURSOR0, plotName);
-			treeModel->setData(signalCursor0, QVariant(cursorValue[0]));
-			QModelIndex signalCursor2 = treeModel->index(rowCurve, WorksheetPrivate::TreeModelColumn::CURSOR1, plotName);
-			treeModel->setData(signalCursor2, QVariant(cursorValue[1]));
-			QModelIndex differenceValues = treeModel->index(rowCurve, WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotName);
-			treeModel->setData(differenceValues, QVariant(cursorValue[1]-cursorValue[0]));
-
+			treeModel->setTreeData(QVariant(curveColor), rowCurve, 0, plotName, Qt::BackgroundRole);
+			treeModel->setTreeData(QVariant(curve->name()), rowCurve, WorksheetPrivate::TreeModelColumn::SIGNALNAME, plotName);
+			treeModel->setTreeData(QVariant(cursorValue[0]), rowCurve, WorksheetPrivate::TreeModelColumn::CURSOR0, plotName);
+			treeModel->setTreeData(QVariant(cursorValue[1]), rowCurve, WorksheetPrivate::TreeModelColumn::CURSOR1, plotName);
+			treeModel->setTreeData(QVariant(cursorValue[1]-cursorValue[0]), rowCurve, WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotName);
 			rowCurve++;
 		}
 		rowPlot++;
@@ -1539,10 +1533,6 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 		d->updateLayout();
 	}
 
-	// when creating a new CartesianPlot, this plot sends, that new XYCurves where added,
-	// but after creating the CartesianPlot, the CartesianPlot will be added to the Worksheet,
-	// where all connections to the signals will be made. So no update will be done automatically
-	updateCompleteCursorTreeModel();
 	return true;
 }
 

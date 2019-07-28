@@ -65,6 +65,7 @@ private:
 	bool m_initializing{false};
 	QVector<CartesianPlot*> m_plotList;
 	CartesianPlot* m_plot{nullptr};
+	QList<QMetaObject::Connection> selectedPlotsConnection;
 };
 
 #endif // CURSORDOCK_H

@@ -68,8 +68,13 @@ void CursorDock::setWorksheet(Worksheet* worksheet) {
 
 	ui->tvCursorData->expandAll();
 
-	connect(m_plot, &CartesianPlot::cursor0EnableChanged, this, &CursorDock::plotCursor0EnableChanged);
-	connect(m_plot, &CartesianPlot::cursor1EnableChanged, this, &CursorDock::plotCursor1EnableChanged);
+	// connect all plots as a workaround to not be able to know which plot is selected
+	for (auto connection: selectedPlotsConnection)
+		disconnect(connection);
+	for (auto* plot : m_plotList) {
+		selectedPlotsConnection << connect(plot, &CartesianPlot::cursor0EnableChanged, this, &CursorDock::plotCursor0EnableChanged);
+		selectedPlotsConnection << connect(plot, &CartesianPlot::cursor1EnableChanged, this, &CursorDock::plotCursor1EnableChanged);
+	}
 
 	m_initializing = false;
 }

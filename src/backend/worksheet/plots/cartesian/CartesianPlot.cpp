@@ -3097,6 +3097,8 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			QPointF textPos = p2;
 			textPos.setX(p2.x() - m_cursor0Text.size().width()/2);
 			textPos.setY(p2.y() - m_cursor0Text.size().height());
+			if (textPos.y() < boundingRect().y())
+				textPos.setY(boundingRect().y());
 			painter->drawStaticText(textPos, m_cursor0Text);
 		}
 
@@ -3105,8 +3107,11 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			QPointF p2 = cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(),yMax));
 			painter->drawLine(p1,p2);
 			QPointF textPos = p2;
+			// TODO: Moving this stuff into other function to not calculate it every time
 			textPos.setX(p2.x() - m_cursor1Text.size().width()/2);
 			textPos.setY(p2.y() - m_cursor1Text.size().height());
+			if (textPos.y() < boundingRect().y())
+				textPos.setY(boundingRect().y());
 			painter->drawStaticText(textPos, m_cursor1Text);
 		}
 
