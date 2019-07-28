@@ -311,7 +311,11 @@ void MainWin::initActions() {
 	m_saveAsAction = KStandardAction::saveAs(this, SLOT(saveProjectAs()),actionCollection());
 	m_printAction = KStandardAction::print(this, SLOT(print()),actionCollection());
 	m_printPreviewAction = KStandardAction::printPreview(this, SLOT(printPreview()),actionCollection());
-	KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
+
+    //TODO: on Mac OS when going full-screen we get a crash because of an stack-overflow
+#ifndef Q_OS_MAC
+    KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
+#endif
 
 	//New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
 	m_newWorkbookAction = new QAction(QIcon::fromTheme("labplot-workbook-new"),i18n("Workbook"),this);
