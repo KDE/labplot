@@ -3057,6 +3057,14 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QGraphicsItem::hoverMoveEvent(event);
 }
 
+void CartesianPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
+	QVector<XYCurve*> curves = q->children<XYCurve>();
+	for (auto* curve : curves)
+		curve->setHover(false);
+
+	QGraphicsItem::hoverLeaveEvent(event);
+}
+
 void CartesianPlotPrivate::mouseHoverZoomSelectionMode(QPointF logicPos) {
 	if (mouseMode == CartesianPlot::ZoomSelectionMode && !m_selectionBandIsShown) {
 
