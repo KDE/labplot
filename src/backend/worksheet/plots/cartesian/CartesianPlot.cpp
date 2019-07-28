@@ -3062,6 +3062,7 @@ void CartesianPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
 	for (auto* curve : curves)
 		curve->setHover(false);
 
+	m_hovered = false;
 	QGraphicsItem::hoverLeaveEvent(event);
 }
 
