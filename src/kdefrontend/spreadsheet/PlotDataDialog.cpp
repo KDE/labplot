@@ -256,6 +256,14 @@ void PlotDataDialog::processColumns() {
 		processColumnsForHistogram(columnNames);
 		break;
 	}
+
+	//resize the scroll area to show five ComboBoxes at maximum without showing the scroll bars
+	int size = m_columnComboBoxes.size() >=5 ? 5 : m_columnComboBoxes.size();
+	int height = size * ui->cbXColumn->height();
+	QGridLayout* layout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
+	if (layout)
+		height += (3 + (size - 1))*layout->verticalSpacing();
+	ui->scrollAreaColumns->setMinimumSize(ui->scrollAreaColumns->width(), height);
 }
 
 void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, const QString& xColumnName) {
