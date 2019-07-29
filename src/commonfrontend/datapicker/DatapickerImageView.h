@@ -78,6 +78,7 @@ private:
 	QPoint m_selectionEnd;
 	int magnificationFactor{0};
 	float m_rotationAngle{0.0};
+	int m_numScheduledScalings{0};
 
 	//Menus
 	QMenu* m_zoomMenu;
@@ -135,6 +136,10 @@ private slots:
 	void updateBackground();
 	void addCurve();
 	void changeRotationAngle();
+
+	void zoom(int);
+	void scalingTime();
+	void animFinished();
 
 signals:
 	void statusInfo(const QString&);

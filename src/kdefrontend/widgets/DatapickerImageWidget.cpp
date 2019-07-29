@@ -4,7 +4,7 @@
     Description          : widget for datapicker properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015-2016 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -211,60 +211,81 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 	editTabLayout->addWidget(gvForeground, 10, 2);
 	gvForeground->setScalePixmap(valueFile);
 
-	connect( ssIntensity, SIGNAL(spanChanged(int,int)), gvIntensity, SLOT(setSpan(int,int)) );
-	connect( ssForeground, SIGNAL(spanChanged(int,int)), gvForeground, SLOT(setSpan(int,int)) );
-	connect( ssHue, SIGNAL(spanChanged(int,int)), gvHue, SLOT(setSpan(int,int)) );
-	connect( ssSaturation, SIGNAL(spanChanged(int,int)), gvSaturation, SLOT(setSpan(int,int)) );
-	connect( ssValue, SIGNAL(spanChanged(int,int)), gvValue, SLOT(setSpan(int,int)) );
-
 	//SLOTS
 	//general
 	connect(ui.leName, &QLineEdit::textChanged, this, &DatapickerImageWidget::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &DatapickerImageWidget::commentChanged);
-	connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
-	connect( ui.leFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
-	connect( ui.leFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged()) );
+	connect(ui.bOpen, &QPushButton::clicked, this, &DatapickerImageWidget::selectFile);
+	connect(ui.leFileName, &QLineEdit::returnPressed, this, &DatapickerImageWidget::fileNameChanged);
+	connect(ui.leFileName, &QLineEdit::textChanged, this, &DatapickerImageWidget::fileNameChanged);
 
 	// edit image
-	connect( ui.cbPlotImageType, SIGNAL(currentIndexChanged(int)), this, SLOT(plotImageTypeChanged(int)) );
-	connect( ui.sbRotation, SIGNAL(valueChanged(double)), this, SLOT(rotationChanged(double)) );
-	connect( ssIntensity, SIGNAL(spanChanged(int,int)), this, SLOT(intensitySpanChanged(int,int)) );
-	connect( ssForeground, SIGNAL(spanChanged(int,int)), this, SLOT(foregroundSpanChanged(int,int)) );
-	connect( ssHue, SIGNAL(spanChanged(int,int)), this, SLOT(hueSpanChanged(int,int)) );
-	connect( ssSaturation, SIGNAL(spanChanged(int,int)), this, SLOT(saturationSpanChanged(int,int)) );
-	connect( ssValue, SIGNAL(spanChanged(int,int)), this, SLOT(valueSpanChanged(int,int)) );
-	connect( ui.sbMinSegmentLength, SIGNAL(valueChanged(int)), this, SLOT(minSegmentLengthChanged(int)) );
-	connect( ui.sbPointSeparation, SIGNAL(valueChanged(int)), this, SLOT(pointSeparationChanged(int)) );
+	connect(ui.cbPlotImageType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &DatapickerImageWidget::plotImageTypeChanged);
+	connect(ui.sbRotation, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &DatapickerImageWidget::rotationChanged);
+	connect(ssIntensity, &QxtSpanSlider::spanChanged, this, &DatapickerImageWidget::intensitySpanChanged);
+	connect(ssIntensity, &QxtSpanSlider::spanChanged, gvIntensity, &HistogramView::setSpan);
+	connect(ssForeground, &QxtSpanSlider::spanChanged, this, &DatapickerImageWidget::foregroundSpanChanged);
+	connect(ssForeground, &QxtSpanSlider::spanChanged, gvForeground, &HistogramView::setSpan );
+	connect(ssHue, &QxtSpanSlider::spanChanged, this, &DatapickerImageWidget::hueSpanChanged);
+	connect(ssHue, &QxtSpanSlider::spanChanged, gvHue, &HistogramView::setSpan );
+	connect(ssSaturation, &QxtSpanSlider::spanChanged, this, &DatapickerImageWidget::saturationSpanChanged);
+	connect(ssSaturation, &QxtSpanSlider::spanChanged, gvSaturation, &HistogramView::setSpan );
+	connect(ssValue, &QxtSpanSlider::spanChanged, this, &DatapickerImageWidget::valueSpanChanged);
+	connect(ssValue, &QxtSpanSlider::spanChanged, gvValue, &HistogramView::setSpan );
+	connect(ui.sbMinSegmentLength, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+			this, &DatapickerImageWidget::minSegmentLengthChanged);
+	connect(ui.sbPointSeparation, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+			this, &DatapickerImageWidget::pointSeparationChanged);
 
 	//axis point
-	connect( ui.cbGraphType, SIGNAL(currentIndexChanged(int)), this, SLOT(graphTypeChanged()) );
-	connect( ui.sbTernaryScale, SIGNAL(valueChanged(double)), this, SLOT(ternaryScaleChanged(double)) );
-	connect( ui.sbPositionX1, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
-	connect( ui.sbPositionY1, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
-	connect( ui.sbPositionX2, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
-	connect( ui.sbPositionY2, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
-	connect( ui.sbPositionX3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
-	connect( ui.sbPositionY3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
-	connect( ui.sbPositionZ1, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
-	connect( ui.sbPositionZ2, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
-	connect( ui.sbPositionZ3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+	connect(ui.cbGraphType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &DatapickerImageWidget::graphTypeChanged);
+	connect(ui.sbTernaryScale, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &DatapickerImageWidget::ternaryScaleChanged);
+	connect(ui.sbPositionX1, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionY1, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionX2, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionY2, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionX3, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionY3, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionZ1, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionZ2, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionZ3, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &DatapickerImageWidget::logicalPositionChanged);
 
 	//SYMBOL
-	connect( ui.cbSymbolStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(pointsStyleChanged(int)) );
-	connect( ui.sbSymbolSize, SIGNAL(valueChanged(double)), this, SLOT(pointsSizeChanged(double)) );
-	connect( ui.sbSymbolRotation, SIGNAL(valueChanged(int)), this, SLOT(pointsRotationChanged(int)) );
-	connect( ui.sbSymbolOpacity, SIGNAL(valueChanged(int)), this, SLOT(pointsOpacityChanged(int)) );
+	connect(ui.cbSymbolStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &DatapickerImageWidget::pointsStyleChanged);
+	connect(ui.sbSymbolSize, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &DatapickerImageWidget::pointsSizeChanged);
+	connect(ui.sbSymbolRotation,static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+			this, &DatapickerImageWidget::pointsRotationChanged);
+	connect(ui.sbSymbolOpacity, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+			this, &DatapickerImageWidget::pointsOpacityChanged);
 
 	//Filling
-	connect( ui.cbSymbolFillingStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(pointsFillingStyleChanged(int)) );
-	connect( ui.kcbSymbolFillingColor, SIGNAL(changed(QColor)), this, SLOT(pointsFillingColorChanged(QColor)) );
+	connect(ui.cbSymbolFillingStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &DatapickerImageWidget::pointsFillingStyleChanged);
+	connect(ui.kcbSymbolFillingColor, &KColorButton::changed, this, &DatapickerImageWidget::pointsFillingColorChanged);
 
 	//border
-	connect( ui.cbSymbolBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(pointsBorderStyleChanged(int)) );
-	connect( ui.kcbSymbolBorderColor, SIGNAL(changed(QColor)), this, SLOT(pointsBorderColorChanged(QColor)) );
-	connect( ui.sbSymbolBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(pointsBorderWidthChanged(double)) );
+	connect(ui.cbSymbolBorderStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &DatapickerImageWidget::pointsBorderStyleChanged);
+	connect(ui.kcbSymbolBorderColor, &KColorButton::changed, this, &DatapickerImageWidget::pointsBorderColorChanged);
+	connect(ui.sbSymbolBorderWidth, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &DatapickerImageWidget::pointsBorderWidthChanged);
 
-	connect( ui.chbSymbolVisible, SIGNAL(clicked(bool)), this, SLOT(pointsVisibilityChanged(bool)) );
+	connect(ui.chbSymbolVisible, &QCheckBox::clicked, this, &DatapickerImageWidget::pointsVisibilityChanged);
 
 	init();
 }
@@ -297,6 +318,7 @@ void DatapickerImageWidget::init() {
 }
 
 void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
+	m_initializing = true;
 	m_imagesList = list;
 	m_image = list.first();
 	m_aspect = list.first();
@@ -321,25 +343,25 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 	initConnections();
 	handleWidgetActions();
 	updateSymbolWidgets();
+	m_initializing = false;
 }
 
 void DatapickerImageWidget::initConnections() {
-	connect( m_image->parentAspect(), SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(imageDescriptionChanged(const AbstractAspect*)));
-	connect( m_image, SIGNAL(fileNameChanged(QString)), this, SLOT(imageFileNameChanged(QString)) );
-	connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(imageRotationAngleChanged(float)) );
-	connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-			 this,SLOT(updateSymbolWidgets()) );
-	connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(updateSymbolWidgets()) );
-	connect( m_image, SIGNAL(axisPointsChanged(DatapickerImage::ReferencePoints)), this, SLOT(imageAxisPointsChanged(DatapickerImage::ReferencePoints)) );
-	connect( m_image, SIGNAL(settingsChanged(DatapickerImage::EditorSettings)), this, SLOT(imageEditorSettingsChanged(DatapickerImage::EditorSettings)) );
-	connect( m_image, SIGNAL(minSegmentLengthChanged(int)), this, SLOT(imageMinSegmentLengthChanged(int)) );
-	connect( m_image, SIGNAL(pointStyleChanged(Symbol::Style)), this, SLOT(symbolStyleChanged(Symbol::Style)));
-	connect( m_image, SIGNAL(pointSizeChanged(qreal)), this, SLOT(symbolSizeChanged(qreal)));
-	connect( m_image, SIGNAL(pointRotationAngleChanged(qreal)), this, SLOT(symbolRotationAngleChanged(qreal)));
-	connect( m_image, SIGNAL(pointOpacityChanged(qreal)), this, SLOT(symbolOpacityChanged(qreal)));
-	connect( m_image, SIGNAL(pointBrushChanged(QBrush)), this, SLOT(symbolBrushChanged(QBrush)) );
-	connect( m_image, SIGNAL(pointPenChanged(QPen)), this, SLOT(symbolPenChanged(QPen)) );
-	connect( m_image, SIGNAL(pointVisibilityChanged(bool)), this, SLOT(symbolVisibleChanged(bool)) );
+	connect(m_image->parentAspect(), &AbstractAspect::aspectDescriptionChanged, this, &DatapickerImageWidget::imageDescriptionChanged);
+	connect(m_image, &DatapickerImage::fileNameChanged, this, &DatapickerImageWidget::imageFileNameChanged);
+	connect(m_image, &DatapickerImage::rotationAngleChanged, this, &DatapickerImageWidget::imageRotationAngleChanged);
+	connect(m_image, &AbstractAspect::aspectRemoved, this, &DatapickerImageWidget::updateSymbolWidgets);
+	connect(m_image, &AbstractAspect::aspectAdded, this, &DatapickerImageWidget::updateSymbolWidgets);
+	connect(m_image, &DatapickerImage::axisPointsChanged, this, &DatapickerImageWidget::imageAxisPointsChanged);
+	connect(m_image, &DatapickerImage::settingsChanged, this, &DatapickerImageWidget::imageEditorSettingsChanged);
+	connect(m_image, &DatapickerImage::minSegmentLengthChanged, this, &DatapickerImageWidget::imageMinSegmentLengthChanged);
+	connect(m_image, &DatapickerImage::pointStyleChanged, this, &DatapickerImageWidget::symbolStyleChanged);
+	connect(m_image, &DatapickerImage::pointSizeChanged, this, &DatapickerImageWidget::symbolSizeChanged);
+	connect(m_image, &DatapickerImage::pointRotationAngleChanged, this, &DatapickerImageWidget::symbolRotationAngleChanged);
+	connect(m_image, &DatapickerImage::pointOpacityChanged, this, &DatapickerImageWidget::symbolOpacityChanged);
+	connect(m_image, &DatapickerImage::pointBrushChanged, this, &DatapickerImageWidget::symbolBrushChanged);
+	connect(m_image, &DatapickerImage::pointPenChanged, this, &DatapickerImageWidget::symbolPenChanged);
+	connect(m_image, &DatapickerImage::pointVisibilityChanged, this, &DatapickerImageWidget::symbolVisibleChanged);
 }
 
 void DatapickerImageWidget::handleWidgetActions() {
@@ -404,6 +426,11 @@ void DatapickerImageWidget::fileNameChanged() {
 	handleWidgetActions();
 
 	QString fileName = ui.leFileName->text();
+	if (!fileName.isEmpty() && !QFile::exists(fileName))
+		ui.leFileName->setStyleSheet("QLineEdit{background:red;}");
+	else
+		ui.leFileName->setStyleSheet(QString());
+
 	for (auto* image : m_imagesList)
 		image->setFileName(fileName);
 }
@@ -825,6 +852,13 @@ void DatapickerImageWidget::load() {
 
 	m_initializing = true;
 	ui.leFileName->setText( m_image->fileName() );
+
+	//highlight the text field for the background image red if an image is used and cannot be found
+	if (!m_image->fileName().isEmpty() && !QFile::exists(m_image->fileName()))
+		ui.leFileName->setStyleSheet("QLineEdit{background:red;}");
+	else
+		ui.leFileName->setStyleSheet(QString());
+
 	ui.cbGraphType->setCurrentIndex((int) m_image->axisPoints().type);
 	ui.sbTernaryScale->setValue(m_image->axisPoints().ternaryScale);
 	ui.sbPositionX1->setValue(m_image->axisPoints().logicalPos[0].x());

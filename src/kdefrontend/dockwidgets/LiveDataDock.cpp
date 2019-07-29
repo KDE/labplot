@@ -254,8 +254,8 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 #ifdef HAVE_MQTT
 	m_mqttClient = nullptr;
 #endif
-	if (m_liveDataSource == source)
-		return;
+// 	if (m_liveDataSource == source)
+// 		return;
 	m_liveDataSource = nullptr; // prevent updates due to changes to input widgets
 
 	ui.leName->setText(source->name());
@@ -421,7 +421,6 @@ void LiveDataDock::updateTypeChanged(int idx) {
 
 				m_liveDataSource->setUpdateType(updateType);
 				m_liveDataSource->setUpdateInterval(ui.sbUpdateInterval->value());
-				m_liveDataSource->setFileWatched(false);
 				break;
 			}
 		case LiveDataSource::NewData:
@@ -430,7 +429,6 @@ void LiveDataDock::updateTypeChanged(int idx) {
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 
-			m_liveDataSource->setFileWatched(true);
 			m_liveDataSource->setUpdateType(updateType);
 		}
 	}

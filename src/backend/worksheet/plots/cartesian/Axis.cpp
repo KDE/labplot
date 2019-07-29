@@ -828,7 +828,7 @@ void Axis::setMajorGridPen(const QPen& pen) {
 		exec(new AxisSetMajorGridPenCmd(d, pen, ki18n("%1: set major grid style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorGridOpacity, qreal, majorGridOpacity, update);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorGridOpacity, qreal, majorGridOpacity, updateGrid);
 void Axis::setMajorGridOpacity(qreal opacity) {
 	Q_D(Axis);
 	if (opacity != d->majorGridOpacity)
@@ -843,7 +843,7 @@ void Axis::setMinorGridPen(const QPen& pen) {
 		exec(new AxisSetMinorGridPenCmd(d, pen, ki18n("%1: set minor grid style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorGridOpacity, qreal, minorGridOpacity, update);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorGridOpacity, qreal, minorGridOpacity, updateGrid);
 void Axis::setMinorGridOpacity(qreal opacity) {
 	Q_D(Axis);
 	if (opacity != d->minorGridOpacity)
@@ -1818,6 +1818,16 @@ void AxisPrivate::retransformMinorGrid() {
 	}
 
 	recalcShapeAndBoundingRect();
+}
+
+/*!
+ * called when the opacity of the grid was changes, update the grid graphics item
+ */
+//TODO: this function is only needed for loaded projects where update() doesn't seem to be enough
+//and we have to call gridItem->update() explicitely.
+//This is not required for newly created plots/axes. Why is this difference?
+void AxisPrivate::updateGrid() {
+	gridItem->update();
 }
 
 void AxisPrivate::recalcShapeAndBoundingRect() {

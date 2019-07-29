@@ -34,8 +34,8 @@ Copyright            : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
 namespace Ui {
 class CursorDock;
 }
+class Worksheet;
 class CartesianPlot;
-class TreeModel;
 
 /*!
  * \brief The CursorDock class
@@ -45,25 +45,27 @@ class CursorDock : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit CursorDock(QWidget *parent = nullptr);
+	explicit CursorDock(QWidget* parent = nullptr);
 	~CursorDock();
-	void setCursorTreeViewModel(TreeModel* model);
-	void setPlots(QVector<CartesianPlot*>);
+	void setWorksheet(Worksheet*);
+
 public slots:
-	void plotCursor0EnableChanged(bool enable);
-	void plotCursor1EnableChanged(bool enable);
+	void plotCursor0EnableChanged(bool);
+	void plotCursor1EnableChanged(bool);
+
 private:
 	void collapseAll();
 	void expandAll();
-	void cursor0EnableChanged(bool enable);
-	void cursor1EnableChanged(bool enable);
+	void cursor0EnableChanged(bool);
+	void cursor1EnableChanged(bool);
 
-	Ui::CursorDock *ui;
+	Ui::CursorDock* ui;
 
 private:
 	bool m_initializing{false};
 	QVector<CartesianPlot*> m_plotList;
 	CartesianPlot* m_plot{nullptr};
+	QList<QMetaObject::Connection> selectedPlotsConnection;
 };
 
 #endif // CURSORDOCK_H

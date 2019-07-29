@@ -103,7 +103,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	connect(m_bNewFolder, SIGNAL(clicked()), this, SLOT(newFolder()));
 	connect(ui.chbUnusedObjects, &QCheckBox::stateChanged, this, &ImportProjectDialog::refreshPreview);
 	connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+	connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	QString title;
 	switch (m_projectType) {
@@ -122,6 +122,19 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	//dialog title and icon
 	setWindowTitle(title);
 	setWindowIcon(QIcon::fromTheme("document-import"));
+
+	//"What's this?" texts
+    QString info = i18n("Specify the file where the project content has to be imported from.");
+	ui.leFileName->setWhatsThis(info);
+
+    info = i18n("Select one or several objects to be imported into the current project.\n"
+	            "Note, all children of the selected objects as well as all the dependent objects will be automatically selected.\n"
+	            "To import the whole project, select the top-level project node."
+	           );
+	ui.tvPreview->setWhatsThis(info);
+
+    info = i18n("Specify the target folder in the current project where the selected objects have to be imported into.");
+	m_cbAddTo->setWhatsThis(info);
 
 	//restore saved settings if available
 	create(); // ensure there's a window created
@@ -210,8 +223,8 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 
 	if (!existingPathes.isEmpty()) {
 		QString msg = i18np("The object listed below already exists in target folder and will be overwritten:",
-							"The objects listed below already exist in target folder and will be overwritten:",
-							existingPathes.size());
+		                    "The objects listed below already exist in target folder and will be overwritten:",
+		                    existingPathes.size());
 		msg += '\n';
 		for (const auto& path : existingPathes)
 			msg += '\n' + path.right(path.length() - path.indexOf('/') - 1); //strip away the name of the root folder "Project"
@@ -272,7 +285,7 @@ void ImportProjectDialog::refreshPreview() {
 	ui.tvPreview->setModel(m_projectParser->model());
 
 	connect(ui.tvPreview->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-			this, SLOT(selectionChanged(QItemSelection,QItemSelection)) );
+	        this, SLOT(selectionChanged(QItemSelection,QItemSelection)) );
 
 	//show top-level containers only
 	if (ui.tvPreview->model()) {

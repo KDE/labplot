@@ -28,6 +28,8 @@
 #ifndef MAINWIN_H
 #define MAINWIN_H
 
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+
 #include <KXmlGuiWindow>
 #include <QTimer>
 
@@ -256,8 +258,7 @@ protected:
 	void closeEvent(QCloseEvent*) override;
 	void dragEnterEvent(QDragEnterEvent*) override;
 	void dropEvent(QDropEvent*) override;
-public slots:
-	void showCursorDock(TreeModel* model, QVector<CartesianPlot *> plots);
+
 private slots:
 	void initGUI(const QString&);
 	QQuickWidget* createWelcomeScreen();
@@ -326,6 +327,9 @@ private slots:
 	void toggleFullScreen();
 	void projectExplorerDockVisibilityChanged(bool);
 	void propertiesDockVisibilityChanged(bool);
+	void cursorDockVisibilityChanged(bool);
+
+	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
 };
 
 #endif

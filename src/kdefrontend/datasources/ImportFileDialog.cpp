@@ -166,7 +166,6 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
-	source->ready();
 }
 
 #ifdef HAVE_MQTT

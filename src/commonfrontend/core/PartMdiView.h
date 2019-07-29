@@ -40,11 +40,13 @@ class PartMdiView : public QMdiSubWindow {
 
 public:
 	explicit PartMdiView(AbstractPart* part);
+	~PartMdiView() override;
 	AbstractPart* part() const;
 
 private:
 	void closeEvent(QCloseEvent*) override;
 	AbstractPart* m_part;
+	bool m_closing{false};
 
 private slots:
 	void handleAspectDescriptionChanged(const AbstractAspect*);

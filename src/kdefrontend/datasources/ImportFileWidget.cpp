@@ -134,6 +134,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 
 		ui.tabWidget->removeTab(2);
 
+		ui.chbLinkFile->setToolTip(i18n("If this option is checked, only the link to the file is stored in the project file but not its content."));
+		ui.chbRelativePath->setToolTip(i18n("If this option is checked, the relative path of the file (relative to project's folder) will be saved."));
+
 #ifdef HAVE_MQTT
 		m_connectTimeoutTimer->setInterval(6000);
 #endif
@@ -250,6 +253,8 @@ void ImportFileWidget::loadSettings() {
 	ui.lePort->setText(conf.readEntry("Port",""));
 	ui.sbSampleSize->setValue(conf.readEntry("SampleSize").toInt());
 	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
+	ui.chbLinkFile->setCheckState((Qt::CheckState)conf.readEntry("LinkFile").toInt());
+	ui.chbRelativePath->setCheckState((Qt::CheckState)conf.readEntry("RelativePath").toInt());
 
 #ifdef HAVE_MQTT
 	//read available MQTT connections
@@ -311,6 +316,8 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("Host", ui.leHost->text());
 	conf.writeEntry("Port", ui.lePort->text());
 	conf.writeEntry("UpdateInterval", ui.sbUpdateInterval->value());
+	conf.writeEntry("LinkFile", (int)ui.chbLinkFile->checkState());
+	conf.writeEntry("RelativePath", (int)ui.chbRelativePath->checkState());
 
 #ifdef HAVE_MQTT
 
@@ -477,23 +484,12 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	source->setFilter(m_currentFilter.release()); // pass ownership of the filter to the LiveDataSource
 
 	source->setSourceType(sourceType);
-	source->setReadingType(readingType);
-
-	if (updateType == LiveDataSource::UpdateType::TimeInterval)
-		source->setUpdateInterval(ui.sbUpdateInterval->value());
-	else
-		source->setFileWatched(true);
-
-	source->setKeepNValues(ui.sbKeepNValues->value());
-	source->setUpdateType(updateType);
-
-	if (readingType != LiveDataSource::ReadingType::TillEnd)
-		source->setSampleSize(ui.sbSampleSize->value());
 
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
 		source->setFileName(fileName());
 		source->setFileLinked(ui.chbLinkFile->isChecked());
+		source->setUseRelativePath(ui.chbRelativePath->isChecked());
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
 		source->setFileName(fileName());
@@ -513,6 +509,16 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	default:
 		break;
 	}
+
+	//reading options
+	source->setReadingType(readingType);
+	source->setKeepNValues(ui.sbKeepNValues->value());
+	source->setUpdateType(updateType);
+	if (updateType == LiveDataSource::UpdateType::TimeInterval)
+		source->setUpdateInterval(ui.sbUpdateInterval->value());
+
+	if (readingType != LiveDataSource::ReadingType::TillEnd)
+		source->setSampleSize(ui.sbSampleSize->value());
 }
 
 #ifdef HAVE_MQTT
@@ -1566,6 +1572,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		m_cbFileName->show();
 		ui.bFileInfo->show();
 		ui.bOpen->show();
+		ui.lRelativePath->show();
+		ui.chbRelativePath->show();
 		ui.chbLinkFile->show();
 
 		//option for sample size are available for "continuously fixed" and "from end" reading options
@@ -1616,6 +1624,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		m_cbFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
+		ui.lRelativePath->hide();
+		ui.chbRelativePath->hide();
 		ui.chbLinkFile->hide();
 
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
@@ -1631,11 +1641,13 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	case LiveDataSource::SourceType::LocalSocket:
 		ui.lFileName->show();
 		m_cbFileName->show();
+		ui.bFileInfo->hide();
 		ui.bOpen->show();
+		ui.lRelativePath->hide();
+		ui.chbRelativePath->hide();
+
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
-
-		ui.bFileInfo->hide();
 		ui.cbBaudRate->hide();
 		ui.lBaudRate->hide();
 		ui.lHost->hide();
@@ -1668,10 +1680,13 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.leHost->hide();
 		ui.lePort->hide();
 		ui.lPort->hide();
+
 		ui.lFileName->hide();
 		m_cbFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
+		ui.lRelativePath->hide();
+		ui.chbRelativePath->hide();
 		ui.chbLinkFile->hide();
 
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
@@ -1714,6 +1729,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		m_cbFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
+		ui.lRelativePath->hide();
+		ui.chbRelativePath()->hide();
 		ui.chbLinkFile->hide();
 
 		setMQTTVisible(true);

@@ -47,7 +47,6 @@
 #include "backend/datapicker/Datapicker.h"
 #include "backend/note/Note.h"
 #include "backend/lib/macros.h"
-#include "backend/worksheet/TreeModel.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #ifdef HAVE_MQTT
@@ -190,28 +189,6 @@ void MainWin::showPresenter() {
 
 AspectTreeModel* MainWin::model() const {
 	return m_aspectTreeModel;
-}
-
-/*!
- * Show cursor dock and set the treeview model
- * @param model
- */
-void MainWin::showCursorDock(TreeModel* model, QVector<CartesianPlot*> plots) {
-	if (!cursorDock) {
-		cursorDock = new QDockWidget(i18n("Cursor"), this);
-		cursorWidget = new CursorDock(cursorDock);
-		cursorDock->setWidget(cursorWidget);
-		cursorDock->setFloating(true);
-
-		// does not work. Don't understand why
-//		if (m_propertiesDock)
-//			tabifyDockWidget(cursorDock, m_propertiesDock);
-//		else
-			addDockWidget(Qt::DockWidgetArea::AllDockWidgetAreas, cursorDock);
-	}
-	cursorWidget->setCursorTreeViewModel(model);
-	cursorWidget->setPlots(plots);
-	cursorDock->show();
 }
 
 Project* MainWin::project() const {
@@ -496,7 +473,11 @@ void MainWin::initActions() {
 	m_saveAsAction = KStandardAction::saveAs(this, SLOT(saveProjectAs()),actionCollection());
 	m_printAction = KStandardAction::print(this, SLOT(print()),actionCollection());
 	m_printPreviewAction = KStandardAction::printPreview(this, SLOT(printPreview()),actionCollection());
-	KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
+
+    //TODO: on Mac OS when going full-screen we get a crash because of an stack-overflow
+#ifndef Q_OS_MAC
+    KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
+#endif
 
 	//New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
 	m_newWorkbookAction = new QAction(QIcon::fromTheme("labplot-workbook-new"),i18n("Workbook"),this);
@@ -679,7 +660,7 @@ void MainWin::initMenus() {
 	auto* menu = dynamic_cast<QMenu*>(factory()->container("new", this));
 	menu->setIcon(QIcon::fromTheme("window-new"));
 
-	//menu in the project explorr and in the toolbar for adding new aspects
+	//menu in the project explorer and in the toolbar for adding new aspects
 	m_newMenu = new QMenu(i18n("Add New"), this);
 	m_newMenu->setIcon(QIcon::fromTheme("window-new"));
 	m_newMenu->addAction(m_newFolderAction);
@@ -1178,10 +1159,12 @@ void MainWin::openProject(const QString& filename) {
 	QElapsedTimer timer;
 	timer.start();
 	bool rc = false;
-	if (Project::isLabPlotProject(filename))
+	if (Project::isLabPlotProject(filename)) {
+		qDebug()<<"openning project " << filename;
+		m_project->setFileName(filename);
 		rc = m_project->load(filename);
 #ifdef HAVE_LIBORIGIN
-	else if (OriginProjectParser::isOriginProject(filename)) {
+	} else if (OriginProjectParser::isOriginProject(filename)) {
 		OriginProjectParser parser;
 		parser.setProjectFileName(filename);
 		parser.importTo(m_project, QStringList()); //TODO: add return code
@@ -1196,7 +1179,6 @@ void MainWin::openProject(const QString& filename) {
 	}
 
 	m_currentFileName = filename;
-	m_project->setFileName(filename);
 	m_project->undoStack()->clear();
 	m_undoViewEmptyLabel = i18n("%1: opened", m_project->name());
 	m_recentProjectsAction->addUrl( QUrl(filename) );
@@ -1324,6 +1306,7 @@ bool MainWin::save(const QString& fileName) {
 		QPixmap thumbnail = centralWidget()->grab();
 
 		QXmlStreamWriter writer(file);
+		m_project->setFileName(fileName);
 		m_project->save(thumbnail, &writer);
 		m_project->undoStack()->clear();
 		m_project->setChanged(false);
@@ -1671,13 +1654,14 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 		connect(part, &AbstractPart::printRequested, this, &MainWin::print);
 		connect(part, &AbstractPart::printPreviewRequested, this, &MainWin::printPreview);
 		connect(part, &AbstractPart::showRequested, this, &MainWin::handleShowSubWindowRequested);
-	}
 
-	const auto* worksheet = dynamic_cast<const Worksheet*>(aspect);
-	if (worksheet)
-		connect(worksheet, &Worksheet::showCursorDock, this, &MainWin::showCursorDock);
+		const auto* worksheet = dynamic_cast<const Worksheet*>(aspect);
+		if (worksheet)
+			connect(worksheet, &Worksheet::cartesianPlotMouseModeChanged, this, &MainWin::cartesianPlotMouseModeChanged);
+	}
 }
 
+// void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode
 void MainWin::handleAspectRemoved(const AbstractAspect* parent,const AbstractAspect* before,const AbstractAspect* aspect) {
 	Q_UNUSED(before);
 	Q_UNUSED(aspect);
@@ -1973,6 +1957,39 @@ void MainWin::projectExplorerDockVisibilityChanged(bool visible) {
 
 void MainWin::propertiesDockVisibilityChanged(bool visible) {
 	m_togglePropertiesDockAction->setChecked(visible);
+}
+
+void MainWin::cursorDockVisibilityChanged(bool visible) {
+	//if the cursor dock was closed, switch to the "Select and Edit" mouse mode
+	if (!visible) {
+// 		auto* worksheet = activeWorksheet();
+		//TODO:
+	}
+}
+
+void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode mode) {
+	if (mode != CartesianPlot::Cursor) {
+		if (cursorDock)
+			cursorDock->hide();
+	} else {
+		if (!cursorDock) {
+			cursorDock = new QDockWidget(i18n("Cursor"), this);
+			cursorWidget = new CursorDock(cursorDock);
+			cursorDock->setWidget(cursorWidget);
+			connect(cursorDock, &QDockWidget::visibilityChanged, this, &MainWin::cursorDockVisibilityChanged);
+	// 		cursorDock->setFloating(true);
+
+			// does not work. Don't understand why
+	//		if (m_propertiesDock)
+	//			tabifyDockWidget(cursorDock, m_propertiesDock);
+	//		else
+				addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, cursorDock);
+		}
+
+		auto* worksheet = static_cast<Worksheet*>(QObject::sender());
+		cursorWidget->setWorksheet(worksheet);
+		cursorDock->show();
+	}
 }
 
 void MainWin::toggleFullScreen() {

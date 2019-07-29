@@ -122,7 +122,7 @@ public:
 	void mouseMoveZoomSelectionMode(QPointF logicPos);
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicPos);
 	void mouseReleaseZoomSelectionMode();
-        void mouseHoverZoomSelectionMode(QPointF logicPos);
+	void mouseHoverZoomSelectionMode(QPointF logicPos);
 
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, xRangeFormat, XRangeFormat)
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, yRangeFormat, YRangeFormat)
@@ -160,6 +160,9 @@ private:
 	void initMenus();
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
+
+	void calculateCurvesXMinMax();
+	void calculateCurvesYMinMax();
 
 	CartesianPlotLegend* m_legend{nullptr};
 	double m_zoomFactor{1.2};
@@ -272,7 +275,6 @@ private slots:
 	void yDataChanged();
 	void curveVisibilityChanged();
 
-
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChanged();
 	void loadTheme(const QString&);
@@ -306,7 +308,7 @@ signals:
 	void mouseMoveCursorModeSignal(int cursorNumber, QPointF logicPos);
 	void mouseReleaseCursorModeSignal();
 	void mouseReleaseZoomSelectionModeSignal();
-        void mouseHoverZoomSelectionModeSignal(QPointF logicalPoint);
+	void mouseHoverZoomSelectionModeSignal(QPointF logicalPoint);
 	void cursorPosChanged(int cursorNumber, double xPos);
 	void curveAdded(const XYCurve*);
 	void curveRemoved(const XYCurve*);
@@ -314,7 +316,7 @@ signals:
 	void cursorPenChanged(QPen);
 	void curveDataChanged(const XYCurve*);
 	void curveVisibilityChangedSignal();
-	void mouseModeChanged();
+	void mouseModeChanged(MouseMode);
 	void cursor0EnableChanged(bool enable);
 	void cursor1EnableChanged(bool enable);
 };

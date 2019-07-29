@@ -497,106 +497,113 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 					}
 				}
 			}
-
-			//wait until all columns are decoded from base64-encoded data
-			QThreadPool::globalInstance()->waitForDone();
-
-			//everything is read now.
-			//restore the pointer to the data sets (columns) in xy-curves etc.
-			QVector<Column*> columns = children<Column>(AbstractAspect::Recursive);
-
-			//xy-curves
-			// cannot be removed by the column observer, because it does not react
-			// on curve changes
-			QVector<XYCurve*> curves = children<XYCurve>(AbstractAspect::Recursive);
-			for (auto* curve : curves) {
-				if (!curve) continue;
-				curve->suppressRetransform(true);
-
-				auto* equationCurve = dynamic_cast<XYEquationCurve*>(curve);
-				auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
-				if (equationCurve) {
-					//curves defined by a mathematical equations recalculate their own columns on load again.
-					if (!preview)
-						equationCurve->recalculate();
-				} else if (analysisCurve) {
-					RESTORE_COLUMN_POINTER(analysisCurve, xDataColumn, XDataColumn);
-					RESTORE_COLUMN_POINTER(analysisCurve, yDataColumn, YDataColumn);
-					RESTORE_COLUMN_POINTER(analysisCurve, y2DataColumn, Y2DataColumn);
-					auto* fitCurve = dynamic_cast<XYFitCurve*>(curve);
-					if (fitCurve) {
-						RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
-						RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);
-					}
-				} else {
-					RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
-					RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
-					RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
-					RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
-					RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
-					RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
-					RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
-				}
-				if (dynamic_cast<XYAnalysisCurve*>(curve))
-					RESTORE_POINTER(dynamic_cast<XYAnalysisCurve*>(curve), dataSourceCurve, DataSourceCurve, XYCurve, curves);
-
-				curve->suppressRetransform(false);
-			}
-
-			//axes
-			QVector<Axis*> axes = children<Axis>(AbstractAspect::Recursive);
-			for (auto* axis : axes) {
-				if (!axis) continue;
-				RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
-				RESTORE_COLUMN_POINTER(axis, minorTicksColumn, MinorTicksColumn);
-			}
-
-			//histograms
-			QVector<Histogram*> hists = children<Histogram>(AbstractAspect::Recursive);
-			for (auto* hist : hists) {
-				if (!hist) continue;
-				RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
-			}
-
-			//data picker curves
-			QVector<DatapickerCurve*> dataPickerCurves = children<DatapickerCurve>(AbstractAspect::Recursive);
-			for (auto* dataPickerCurve : dataPickerCurves) {
-				if (!dataPickerCurve) continue;
-				RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
-				RESTORE_COLUMN_POINTER(dataPickerCurve, posYColumn, PosYColumn);
-				RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaXColumn, PlusDeltaXColumn);
-				RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaXColumn, MinusDeltaXColumn);
-				RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
-				RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
-			}
-
-			//if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
-			for (auto* col : columns) {
-				if (!col->formulaVariableColumnPaths().isEmpty()) {
-					QVector<Column*>& formulaVariableColumns = const_cast<QVector<Column*>&>(col->formulaVariableColumns());
-					for (auto path : col->formulaVariableColumnPaths()) {
-						bool found = false;
-						for (Column* c : columns) {
-							if (!c) continue;
-							if (c->path() == path) {
-								formulaVariableColumns << c;
-								col->finalizeLoad();
-								found = true;
-								break;
-							}
-						}
-
-						if (!found)
-							formulaVariableColumns << nullptr;
-					}
-				}
-			}
 		} else  // no project element
 			reader->raiseError(i18n("no project element found"));
 	} else  // no start document
 		reader->raiseError(i18n("no valid XML document found"));
 
 	if (!preview) {
+		//wait until all columns are decoded from base64-encoded data
+		QThreadPool::globalInstance()->waitForDone();
+
+		//everything is read now.
+		//restore the pointer to the data sets (columns) in xy-curves etc.
+		QVector<Column*> columns = children<Column>(AbstractAspect::Recursive);
+
+		//xy-curves
+		// cannot be removed by the column observer, because it does not react
+		// on curve changes
+		QVector<XYCurve*> curves = children<XYCurve>(AbstractAspect::Recursive);
+		for (auto* curve : curves) {
+			if (!curve) continue;
+			curve->suppressRetransform(true);
+
+			auto* equationCurve = dynamic_cast<XYEquationCurve*>(curve);
+			auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
+			if (equationCurve) {
+				//curves defined by a mathematical equations recalculate their own columns on load again.
+				if (!preview)
+					equationCurve->recalculate();
+			} else if (analysisCurve) {
+				RESTORE_COLUMN_POINTER(analysisCurve, xDataColumn, XDataColumn);
+				RESTORE_COLUMN_POINTER(analysisCurve, yDataColumn, YDataColumn);
+				RESTORE_COLUMN_POINTER(analysisCurve, y2DataColumn, Y2DataColumn);
+				auto* fitCurve = dynamic_cast<XYFitCurve*>(curve);
+				if (fitCurve) {
+					RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
+					RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);
+				}
+			} else {
+				RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
+				RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
+				RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
+				RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
+				RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
+				RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
+				RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
+			}
+			if (dynamic_cast<XYAnalysisCurve*>(curve))
+				RESTORE_POINTER(dynamic_cast<XYAnalysisCurve*>(curve), dataSourceCurve, DataSourceCurve, XYCurve, curves);
+
+			curve->suppressRetransform(false);
+		}
+
+		//axes
+		QVector<Axis*> axes = children<Axis>(AbstractAspect::Recursive);
+		for (auto* axis : axes) {
+			if (!axis) continue;
+			RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
+			RESTORE_COLUMN_POINTER(axis, minorTicksColumn, MinorTicksColumn);
+		}
+
+		//histograms
+		QVector<Histogram*> hists = children<Histogram>(AbstractAspect::Recursive);
+		for (auto* hist : hists) {
+			if (!hist) continue;
+			RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
+		}
+
+		//data picker curves
+		QVector<DatapickerCurve*> dataPickerCurves = children<DatapickerCurve>(AbstractAspect::Recursive);
+		for (auto* dataPickerCurve : dataPickerCurves) {
+			if (!dataPickerCurve) continue;
+			RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
+			RESTORE_COLUMN_POINTER(dataPickerCurve, posYColumn, PosYColumn);
+			RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaXColumn, PlusDeltaXColumn);
+			RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaXColumn, MinusDeltaXColumn);
+			RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
+			RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
+		}
+
+		//if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
+		for (auto* col : columns) {
+			if (!col->formulaVariableColumnPaths().isEmpty()) {
+				QVector<Column*>& formulaVariableColumns = const_cast<QVector<Column*>&>(col->formulaVariableColumns());
+				for (auto path : col->formulaVariableColumnPaths()) {
+					bool found = false;
+					for (Column* c : columns) {
+						if (!c) continue;
+						if (c->path() == path) {
+							formulaVariableColumns << c;
+							col->finalizeLoad();
+							found = true;
+							break;
+						}
+					}
+
+					if (!found)
+						formulaVariableColumns << nullptr;
+				}
+			}
+		}
+
+		//LiveDataSource - call finalizeLoad() to replace relative with absolute paths if required
+		QVector<LiveDataSource*> sources = children<LiveDataSource>(AbstractAspect::Recursive);
+		for (auto* source : sources) {
+			if (!source) continue;
+			source->finalizeLoad();
+		}
+
 		for (auto* plot : children<WorksheetElementContainer>(AbstractAspect::Recursive)) {
 			plot->setIsLoading(false);
 			plot->retransform();
@@ -609,14 +616,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 
 bool Project::readProjectAttributes(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs = reader->attributes();
-	QString str = attribs.value(reader->namespaceUri().toString(), "fileName").toString();
-	if (str.isEmpty()) {
-		reader->raiseError(i18n("Project file name missing."));
-		return false;
-	}
-	d->fileName = str;
-
-	str = attribs.value(reader->namespaceUri().toString(), "modificationTime").toString();
+	QString str = attribs.value(reader->namespaceUri().toString(), "modificationTime").toString();
 	QDateTime modificationTime = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
 	if (str.isEmpty() || !modificationTime.isValid()) {
 		reader->raiseWarning(i18n("Invalid project modification time. Using current time."));
@@ -624,8 +624,7 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 	} else
 		d->modificationTime = modificationTime;
 
-	str = attribs.value(reader->namespaceUri().toString(), "author").toString();
-	d->author = str;
+	d->author = attribs.value(reader->namespaceUri().toString(), "author").toString();
 
 	return true;
 }

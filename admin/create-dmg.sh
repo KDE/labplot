@@ -67,6 +67,8 @@ cp -v /Applications/KDE/labplot2.app/Contents/Resources/{LABPLOT_ICONS.icns,LML_
 # translation
 cd kde
 $GCP -vf --parents share/locale/*/LC_MESSAGES/labplot2.mo ../$INPREFIX/
+$GCP -vf --parents share/locale/*/LC_MESSAGES/kconfigwidgets5.mo ../$INPREFIX/
+$GCP -vf --parents share/locale/*/LC_MESSAGES/kxmlgui5.mo ../$INPREFIX/
 cd ..
 
 ### TODO

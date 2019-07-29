@@ -57,6 +57,7 @@ public:
 	void retransformTickLabelStrings();
 	void retransformMinorGrid();
 	void retransformMajorGrid();
+	void updateGrid();
 	bool swapVisible(bool);
 	void recalcShapeAndBoundingRect();
 	void setPrinting(bool);

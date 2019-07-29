@@ -4,7 +4,7 @@
     Description          : Worksheet for Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -572,17 +572,8 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "axisPoint") {
 			attribs = reader->attributes();
 
-			str = attribs.value("graphType").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("graphType").toString());
-			else
-				d->axisPoints.type = DatapickerImage::GraphType(str.toInt());
-
-			str = attribs.value("ternaryScale").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("ternaryScale").toString());
-			else
-				d->axisPoints.ternaryScale = str.toDouble();
+			READ_INT_VALUE("graphType", axisPoints.type, DatapickerImage::GraphType);
+			READ_INT_VALUE("ternaryScale", axisPoints.ternaryScale, int);
 
 			str = attribs.value("axisPointLogicalX1").toString();
 			if (str.isEmpty())
@@ -677,123 +668,28 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "editorSettings") {
 			attribs = reader->attributes();
 
-			str = attribs.value("plotImageType").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("plotImageType").toString());
-			else
-				d->plotImageType = DatapickerImage::PlotImageType(str.toInt());
-
-			str = attribs.value("rotationAngle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("rotationAngle").toString());
-			else
-				d->rotationAngle = str.toFloat();
-
-			str = attribs.value("minSegmentLength").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("minSegmentLength").toString());
-			else
-				d->minSegmentLength = str.toInt();
-
-			str = attribs.value("pointSeparation").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("pointSeparation").toString());
-			else
-				d->pointSeparation = str.toInt();
-
-			str = attribs.value("foregroundThresholdHigh").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("foregroundThresholdHigh").toString());
-			else
-				d->settings.foregroundThresholdHigh = str.toInt();
-
-			str = attribs.value("foregroundThresholdLow").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("foregroundThresholdLow").toString());
-			else
-				d->settings.foregroundThresholdLow = str.toInt();
-
-			str = attribs.value("hueThresholdHigh").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("hueThresholdHigh").toString());
-			else
-				d->settings.hueThresholdHigh = str.toInt();
-
-			str = attribs.value("hueThresholdLow").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("hueThresholdLow").toString());
-			else
-				d->settings.hueThresholdLow = str.toInt();
-
-			str = attribs.value("intensityThresholdHigh").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("intensityThresholdHigh").toString());
-			else
-				d->settings.intensityThresholdHigh = str.toInt();
-
-			str = attribs.value("intensityThresholdLow").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("intensityThresholdLow").toString());
-			else
-				d->settings.intensityThresholdLow = str.toInt();
-
-			str = attribs.value("saturationThresholdHigh").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("saturationThresholdHigh").toString());
-			else
-				d->settings.saturationThresholdHigh = str.toInt();
-
-			str = attribs.value("saturationThresholdLow").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("saturationThresholdLow").toString());
-			else
-				d->settings.saturationThresholdLow = str.toInt();
-
-			str = attribs.value("valueThresholdHigh").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("valueThresholdHigh").toString());
-			else
-				d->settings.valueThresholdHigh = str.toInt();
-
-			str = attribs.value("valueThresholdLow").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("valueThresholdLow").toString());
-			else
-				d->settings.valueThresholdLow = str.toInt();
-
+			READ_INT_VALUE("plotImageType", plotImageType, DatapickerImage::PlotImageType);
+			READ_DOUBLE_VALUE("rotationAngle", rotationAngle);
+			READ_INT_VALUE("minSegmentLength", minSegmentLength, int);
+			READ_INT_VALUE("pointSeparation", pointSeparation, int);
+			READ_INT_VALUE("foregroundThresholdHigh", settings.foregroundThresholdHigh, int);
+			READ_INT_VALUE("foregroundThresholdLow", settings.foregroundThresholdLow, int);
+			READ_INT_VALUE("hueThresholdHigh", settings.hueThresholdHigh, int);
+			READ_INT_VALUE("hueThresholdLow", settings.hueThresholdLow, int);
+			READ_INT_VALUE("intensityThresholdHigh", settings.intensityThresholdHigh, int);
+			READ_INT_VALUE("intensityThresholdLow", settings.intensityThresholdLow, int);
+			READ_INT_VALUE("saturationThresholdHigh", settings.saturationThresholdHigh, int);
+			READ_INT_VALUE("saturationThresholdLow", settings.saturationThresholdLow, int);
+			READ_INT_VALUE("valueThresholdHigh", settings.valueThresholdHigh, int);
+			READ_INT_VALUE("valueThresholdLow", settings.valueThresholdLow, int);
 		} else if (!preview && reader->name() == "symbolProperties") {
 			attribs = reader->attributes();
 
-			str = attribs.value("pointRotationAngle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("pointRotationAngle").toString());
-			else
-				d->pointRotationAngle = str.toFloat();
-
-			str = attribs.value("pointOpacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("pointOpacity").toString());
-			else
-				d->pointOpacity = str.toFloat();
-
-			str = attribs.value("pointSize").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("pointSize").toString());
-			else
-				d->pointSize = str.toFloat();
-
-			str = attribs.value("pointStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("pointStyle").toString());
-			else
-				d->pointStyle = (Symbol::Style)str.toInt();
-
-			str = attribs.value("pointVisibility").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("pointVisibility").toString());
-			else
-				d->pointVisibility = (bool)str.toInt();
-
+			READ_DOUBLE_VALUE("pointRotationAngle", pointRotationAngle);
+			READ_DOUBLE_VALUE("pointOpacity", pointOpacity);
+			READ_DOUBLE_VALUE("pointSize", pointSize);
+			READ_INT_VALUE("pointStyle", pointStyle, Symbol::Style);
+			READ_INT_VALUE("pointVisibility", pointVisibility, bool);
 			READ_QBRUSH(d->pointBrush);
 			READ_QPEN(d->pointPen);
 		} else if (reader->name() == "datapickerPoint") {

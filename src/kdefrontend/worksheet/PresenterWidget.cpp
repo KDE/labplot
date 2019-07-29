@@ -34,8 +34,6 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QScreen>
 #include <QTimeLine>
 
-#include <KLocalizedString>
-
 PresenterWidget::PresenterWidget(const QPixmap &pixmap, const QString& worksheetName, QWidget *parent) : QWidget(parent),
 	m_imageLabel(new QLabel(this)), m_timeLine(new QTimeLine(600)) {
 
@@ -53,9 +51,6 @@ PresenterWidget::PresenterWidget(const QPixmap &pixmap, const QString& worksheet
 	qApp->installEventFilter(this);
 	connect(m_timeLine, &QTimeLine::valueChanged, m_panel, &SlidingPanel::movePanel);
 	connect(m_panel->quitButton(), &QPushButton::clicked, this, &PresenterWidget::close);
-
-	slideUp();
-	setFocus();
 }
 
 PresenterWidget::~PresenterWidget() {

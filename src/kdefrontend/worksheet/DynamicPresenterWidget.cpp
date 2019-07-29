@@ -33,8 +33,6 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QScreen>
 #include <QTimeLine>
 
-#include <KLocalizedString>
-
 DynamicPresenterWidget::DynamicPresenterWidget(Worksheet* worksheet, QWidget* parent) : QWidget(parent),
 	m_view(new WorksheetView(worksheet)), m_timeLine(new QTimeLine(600)) {
 
@@ -60,8 +58,6 @@ DynamicPresenterWidget::DynamicPresenterWidget(Worksheet* worksheet, QWidget* pa
 	connect(m_timeLine, &QTimeLine::valueChanged, m_panel, &SlidingPanel::movePanel);
 	connect(m_panel->quitButton(), &QPushButton::clicked, this, &DynamicPresenterWidget::close);
 	grabMouse();
-
-	slideUp();
 }
 
 DynamicPresenterWidget::~DynamicPresenterWidget() {
