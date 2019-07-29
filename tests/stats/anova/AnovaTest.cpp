@@ -49,10 +49,10 @@ void AnovaTest::oneWayAnova_data() {
                                 5, 8, 12, 19, 8, 15, 21, 28, 26, 27, -10, 6, 4, 3, 0, 4, 9, -5, 7, 13,
                                 38, 20, 20, 28, 11, 17, 15, 27, 24, 23, 28, 26, 34, 32, 24, 29, 30, 24, 34, 23,
                                 -5, -12, -15, -4, -2, -6, -2, -7, -10, -15, -13, -16, -23, -22, -9, -18, -17, -15, -14, -15};
-    double fValue_expected = 33.1289;
+    double fValue_expected = 33.1288915411;
     double pValue_expected = 0;
 
-    QTest::newRow("socscistatistics") << col1Data << col2Data << fValue_expected << pValue_expected;
+    QTest::newRow("First Sample") << col1Data << col2Data << fValue_expected << pValue_expected;
 }
 
 void AnovaTest::oneWayAnova() {
@@ -91,8 +91,8 @@ void AnovaTest::oneWayAnova() {
     QDEBUG("fValue_expected is " << fValue_expected);
     QDEBUG("pValue_expected is: " << pValue_expected);
 
-    FuzzyCompare(fValue, fValue_expected, 0.1);
-    FuzzyCompare(pValue, pValue_expected, 0.1);
+    FuzzyCompare(fValue, fValue_expected, 1.e-5);
+    FuzzyCompare(pValue, pValue_expected, 1.e-5);
 }
 
 void AnovaTest::twoWayAnova_data() {
@@ -110,9 +110,9 @@ void AnovaTest::twoWayAnova_data() {
     QVector<QString> col1Data = {"Super", "Super", "Super", "Super", "Super", "Super", "Super", "Super", "Super", "Super", "Super", "Super", "Best", "Best", "Best", "Best", "Best", "Best", "Best", "Best", "Best", "Best", "Best", "Best"};
     QVector<QString> col2Data = {"cold", "cold", "cold", "cold", "warm", "warm", "warm", "warm", "hot", "hot", "hot", "hot", "cold", "cold", "cold", "cold", "warm", "warm", "warm", "warm", "hot", "hot", "hot", "hot"};
     QVector<double> col3Data = {4, 5, 6, 5, 7, 9, 8, 12, 10, 12, 11, 9, 6, 6, 4, 4, 13, 15, 12, 12, 12, 13, 10, 13};
-    double fCol1Value_expected =  9.8108;
-    double fCol2Value_expected = 48.7297;
-    double fInteractionValue_expected = 3.9730;
+    double fCol1Value_expected =  9.80885214008;
+    double fCol2Value_expected = 48.7193579767;
+    double fInteractionValue_expected = 3.97227626459;
     double pCol1Value_expected =  0.005758;
     double pCol2Value_expected = 5.44e-08;
 //    double pInteractionValue_expected =  0.037224;
@@ -173,11 +173,11 @@ void AnovaTest::twoWayAnova() {
     QDEBUG("pCol2Value is " << pCol2Value);
     QDEBUG("pCol2Value_expected is " << pCol2Value_expected);
 
-    FuzzyCompare(fCol1Value, fCol1Value_expected, 0.1);
-    FuzzyCompare(fCol2Value, fCol2Value_expected, 0.1);
-    FuzzyCompare(fInteractionValue, fInteractionValue_expected, 0.1);
-    FuzzyCompare(pCol1Value, pCol1Value_expected, 0.1);
-    FuzzyCompare(pCol2Value, pCol2Value_expected, 0.1);
+    FuzzyCompare(fCol1Value, fCol1Value_expected, 1.e-5);
+    FuzzyCompare(fCol2Value, fCol2Value_expected, 1.e-5);
+    FuzzyCompare(fInteractionValue, fInteractionValue_expected, 1.e-5);
+    FuzzyCompare(pCol1Value, pCol1Value_expected, 1.e-5);
+    FuzzyCompare(pCol2Value, pCol2Value_expected, 1.e-5);
 }
 
 QTEST_MAIN(AnovaTest)
