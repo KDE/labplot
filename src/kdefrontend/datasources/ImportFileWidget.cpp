@@ -1730,7 +1730,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
 		ui.lRelativePath->hide();
-		ui.chbRelativePath()->hide();
+		ui.chbRelativePath->hide();
 		ui.chbLinkFile->hide();
 
 		setMQTTVisible(true);

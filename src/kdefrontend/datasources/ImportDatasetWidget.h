@@ -65,7 +65,9 @@ private:
 	QString m_selectedCategory;
 	QString m_selectedCollection;
 	DatasetModel* m_datasetModel{nullptr};
+	bool m_showDetails{false};
 
+	QString validCollectionName(const QString& collection);
 	void downloadCollectionsFile();
 	void downloadCollectionFile(const QString&);
 	void uploadCategoryFile();
@@ -77,6 +79,8 @@ private:
 	void restoreSelectedSubcategory(const QString& collection);
 	void highlightLocalMetadataFiles();
 	QJsonObject loadDatasetObject();
+	void updateDetails();
+	void showDetails(bool show);
 
 private slots:
 	void updateCategoryTree(const QString&);

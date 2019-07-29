@@ -1,6 +1,5 @@
-import QtQuick 2.12
 import QtQuick.Window 2.12
-import QtQuick 2.4
+import QtQuick 2.6
 import QtQuick.Controls 2.3
 import QtQuick.Scene2D 2.9
 import QtQuick.Controls.Universal 2.0

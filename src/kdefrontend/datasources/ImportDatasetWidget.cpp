@@ -71,6 +71,8 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	ui.lwDatasets->setSelectionMode(QAbstractItemView::SingleSelection);
 	ui.twCategories->setSelectionMode(QAbstractItemView::SingleSelection);
 
+	showDetails(m_showDetails);
+
 	connect(ui.cbCollections, &QComboBox::currentTextChanged, this, &ImportDatasetWidget::updateCategoryTree);
 	connect(ui.twCategories, &QTreeWidget::itemDoubleClicked, this, &ImportDatasetWidget::listDatasetsForSubcategory);
 	connect(ui.twCategories, &QTreeWidget::itemSelectionChanged, [this] {
@@ -84,9 +86,23 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	connect(ui.bNewDataset, &QPushButton::clicked, this, &ImportDatasetWidget::showDatasetMetadataManager);
 	connect(ui.lwDatasets, &QListWidget::itemSelectionChanged, [this]() {
 		emit datasetSelected();
+		if(m_showDetails)
+			updateDetails();
 	});
 	connect(ui.lwDatasets, &QListWidget::doubleClicked, [this]() {
 		emit datasetDoubleClicked();
+	});
+
+	connect(ui.bShowDetails, &QPushButton::clicked, [this]() {
+		m_showDetails = !m_showDetails;
+
+		if(m_showDetails) {
+			ui.bShowDetails->setText("Hide details");
+		} else {
+			ui.bShowDetails->setText("Show details");
+		}
+
+		showDetails(m_showDetails);
 	});
 }
 
@@ -120,7 +136,7 @@ void ImportDatasetWidget::loadDatasetCategoriesFromJson() {
 	if (file.open(QIODevice::ReadOnly)) {
 		m_datasetsMap.clear();
 		ui.cbCollections->clear();
-		ui.cbCollections->addItem("All");
+		//ui.cbCollections->addItem(QString("All (" + QString(m_datasetModel->allDatasetsList().toStringList().size()) + ")"));
 
 		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
 		QJsonArray collections;
@@ -133,7 +149,7 @@ void ImportDatasetWidget::loadDatasetCategoriesFromJson() {
 
 		for (int collectionIndex = 0; collectionIndex < collections.size(); collectionIndex++) {
 			const QString currentCollection = collections[collectionIndex].toString();
-			ui.cbCollections->addItem(currentCollection);
+			//ui.cbCollections->addItem(currentCollection + " (" + QString(m_datasetModel->datasetCount(currentCollection)) + ")");
 
 			if(!QFile(m_jsonDir + currentCollection + ".json").exists())
 				downloadCollectionFile(currentCollection + ".json");
@@ -184,6 +200,12 @@ void ImportDatasetWidget::loadDatasetCategoriesFromJson() {
 		if(m_datasetModel != nullptr)
 			delete m_datasetModel;
 		m_datasetModel = new DatasetModel(m_datasetsMap);
+
+		ui.cbCollections->addItem(QString("All (" + QString::number(m_datasetModel->allDatasetsList().toStringList().size()) + ")"));
+		for(QString collection : m_datasetModel->collections()) {
+			ui.cbCollections->addItem(collection + " (" + QString::number(m_datasetModel->datasetCount(collection)) + ")");
+		}
+
 		updateCategoryTree(ui.cbCollections->currentText());
 		restoreSelectedSubcategory(ui.cbCollections->currentText());
 		file.close();
@@ -192,7 +214,14 @@ void ImportDatasetWidget::loadDatasetCategoriesFromJson() {
 	}
 }
 
-void ImportDatasetWidget::updateCategoryTree(const QString& collection) {
+QString ImportDatasetWidget::validCollectionName(const QString &collection) {
+	int index = collection.lastIndexOf(" (");
+	QString collectionName = collection.left(index);
+	return collectionName;
+}
+
+void ImportDatasetWidget::updateCategoryTree(const QString& collectionName) {
+	QString collection = validCollectionName(collectionName);
 	m_loadingCategories = true;
 	ui.lwDatasets->clear();
 	ui.twCategories->clear();
@@ -225,7 +254,8 @@ void ImportDatasetWidget::updateCategoryTree(const QString& collection) {
 /**
  * @brief Restores the lastly selected subcategory making it the selected QTreeWidgetItem and also lists the datasets belonigng to it/
  */
-void ImportDatasetWidget::restoreSelectedSubcategory(const QString& collection) {
+void ImportDatasetWidget::restoreSelectedSubcategory(const QString& collectionName) {
+	QString collection = validCollectionName(collectionName);
 	if(m_datasetModel->categories(collection).contains(m_selectedCategory)) {
 		const QTreeWidgetItem* const categoryItem = ui.twCategories->findItems(m_selectedCategory, Qt::MatchExactly).first();
 
@@ -705,7 +735,7 @@ const QMap< QString, QMap<QString, QMap<QString, QVector<QString>>>>& ImportData
 }
 
 void ImportDatasetWidget::setCollection(const QString& collection) {
-	ui.cbCollections->setCurrentText(collection);
+	ui.cbCollections->setCurrentText(collection + " (" + QString(m_datasetModel->datasetCount(collection)) + ")");
 }
 
 /**
@@ -751,4 +781,23 @@ void ImportDatasetWidget::setDataset(const QString &datasetName) {
 			break;
 		}
 	}
+}
+
+void ImportDatasetWidget::updateDetails() {
+	if(!getSelectedDataset().isEmpty()) {
+		QJsonObject datasetObject = loadDatasetObject();
+		ui.lFullName->setText(datasetObject.value("name").toString());
+		ui.lDescription->setText(datasetObject.value("description").toString());
+	} else {
+		ui.lFullName->setText("-");
+		ui.lDescription->setText("-");
+	}
+}
+
+void ImportDatasetWidget::showDetails(bool show) {
+	ui.saDetails->setEnabled(show);
+	ui.saDetails->setVisible(show);
+
+	if(show)
+		updateDetails();
 }

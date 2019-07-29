@@ -176,6 +176,28 @@ QStringList DatasetModel::datasets(const QString& collection, const QString& cat
 	}
 }
 
+int DatasetModel::datasetCount(const QString& collection) {
+	int count = 0;
+	for(const QString& category: categories(collection)) {
+		for(const QString& subcategory: subcategories(collection, category))	{
+			count += datasets(collection, category, subcategory).size();
+		}
+	}
+	return count;
+}
+
+int DatasetModel::datasetCount(const QString& collection, const QString& category) {
+	int count = 0;
+	for(const QString& subcategory: subcategories(collection, category))	{
+		count += datasets(collection, category, subcategory).size();
+	}
+	return count;
+}
+
+int DatasetModel::datasetCount(const QString& collection, const QString& category, const QString& subcategory) {
+	return datasets(collection, category, subcategory).size();
+}
+
 /**
  * @brief Returns the list of every collection.
  */

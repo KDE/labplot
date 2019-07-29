@@ -46,6 +46,9 @@ public:
 	QStringList categories(const QString&);
 	QStringList subcategories(const QString&, const QString&);
 	QStringList datasets(const QString&, const QString&, const QString&);
+	int datasetCount(const QString& collection);
+	int datasetCount(const QString& collection, const QString& category);
+	int datasetCount(const QString& collection, const QString& category, const QString& subcategory);
 
 	Q_INVOKABLE QVariant allCategories();
 	Q_INVOKABLE QVariant allSubcategories(const QString&);
