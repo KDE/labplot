@@ -1668,6 +1668,15 @@ void XYFitCurvePrivate::recalculate() {
 		return;
 	}
 
+	if (fitData.model.simplified().isEmpty()) {
+		fitResult.available = true;
+		fitResult.valid = false;
+		fitResult.status = i18n("Fit model not specified.");
+		emit q->dataChanged();
+		sourceDataChangedSinceLastRecalc = false;
+		return;
+	}
+
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 	double* xerror = xerrorVector.data();	// size may be 0
@@ -2024,6 +2033,13 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 
 	if (!xVector || !yVector) {
 		DEBUG(" xVector or yVector not defined!");
+		recalcLogicalPoints();
+		emit q->dataChanged();
+		return;
+	}
+
+	if (fitData.model.simplified().isEmpty()) {
+		DEBUG(" no fit-model specified.");
 		recalcLogicalPoints();
 		emit q->dataChanged();
 		return;

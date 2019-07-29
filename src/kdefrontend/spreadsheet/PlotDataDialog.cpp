@@ -629,7 +629,8 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 			analysisCurve->suppressRetransform(true);
 			analysisCurve->setXDataColumn(xColumn);
 			analysisCurve->setYDataColumn(yColumn);
-			analysisCurve->recalculate();
+			if (m_analysisAction != FitCustom) //no custom fit-model set yet, no need to recalculate
+				analysisCurve->recalculate();
 			analysisCurve->suppressRetransform(false);
 			plot->addChild(analysisCurve);
 		}
