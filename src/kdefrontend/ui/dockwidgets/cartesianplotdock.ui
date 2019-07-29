@@ -1343,7 +1343,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Stlye:</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
