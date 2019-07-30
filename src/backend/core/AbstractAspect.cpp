@@ -532,16 +532,13 @@ void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 	Q_ASSERT(newIndex >= 0 && newIndex <= max_index);
 
 	AbstractAspect* old_parent = parentAspect();
-	int old_index = old_parent->indexOfChild<AbstractAspect>(this, IncludeHidden);
-	auto* old_sibling = old_parent->child<AbstractAspect>(old_index+1, IncludeHidden);
-	auto* new_sibling = newParent->child<AbstractAspect>(newIndex, IncludeHidden);
+// 	int old_index = old_parent->indexOfChild<AbstractAspect>(this, IncludeHidden);
+// 	auto* old_sibling = old_parent->child<AbstractAspect>(old_index+1, IncludeHidden);
+// 	auto* new_sibling = newParent->child<AbstractAspect>(newIndex, IncludeHidden);
 
-	//TODO check/test this!
-	emit aspectAboutToBeRemoved(this);
-	emit newParent->aspectAboutToBeAdded(newParent, new_sibling, this);
+// 	emit newParent->aspectAboutToBeAdded(newParent, new_sibling, this);
 	exec(new AspectChildReparentCmd(parentAspect()->d, newParent->d, this, newIndex));
-	emit old_parent->aspectRemoved(old_parent, old_sibling, this);
-	emit aspectAdded(this);
+// 	emit old_parent->aspectRemoved(old_parent, old_sibling, this);
 }
 
 QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFlags flags) {
