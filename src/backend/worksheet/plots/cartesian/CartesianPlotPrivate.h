@@ -112,6 +112,7 @@ private:
 		double sceneStart, double sceneEnd,
 		double logicalStart, double logicalEnd);
 
+	bool m_insideDataRect{false};
 	bool m_selectionBandIsShown{false};
 	QPointF m_selectionStart;
 	QPointF m_selectionEnd;
