@@ -17582,6 +17582,21 @@
                             "simplify_whitespaces": false,
                             "skip_empty_parts": false,
                             "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The data give 29 consecutive measurements on the inner diameter of a landing gear triunion. Each value given here is the average of four original observations.",
+                            "download": "http://www.statsci.org/data/general/diameter.txt",
+                            "filename": "diameter",
+                            "name": "Inner Diameter of Landing Gear Triunion",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": "TAB",
+                            "simplify_whitespaces": false,
+                            "skip_empty_parts": true,
+                            "use_first_row_for_vectorname": true
                         }
                     ],
                     "subcategory_name": "Technology"

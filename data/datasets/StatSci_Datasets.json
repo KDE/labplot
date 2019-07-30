@@ -1,30 +1,190 @@
 {
-  "collection_name": "StatSci_Datasets",
-  "categories": [
-    {
-      "category_name": "Medicine",
-      "subcategories": [
+    "categories": [
         {
-          "datasets": [
-            {
-              "filename": "matui",
-              "name": "Position of Houses in a Japanese Farming Village",
-              "download": "http://www.statsci.org/data/general/matui.txt",
-              "description": "West of Tokyo lies a large alluvial plain, dotted by a network of farming villages. Matui (1968) analysed the position of the 911 houses making up one of those villages. The area studied was a rectangle, 3 km by 4 km. A grid was superimposed over a map of the village, dividing its 12 square kilometres into 1200 plots, each 100 metres on a side. The numbers of houses on each of those plots are recorded in a 30 by 40 matrix of data.",
-              "DateTime_format": "yyyy-MM-dd",
-              "comment_character": "#",
-              "create_index_column": false,
-              "number_format": 31,
-              "remove_quotes": true,
-              "separator": "SPACE",
-              "simplify_whitespaces": false,
-              "skip_empty_parts": false,
-              "use_first_row_for_vectorname": false
-            }
-          ],
-          "subcategory_name": "Oncology"
+            "category_name": "Medicine",
+            "subcategories": [
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "West of Tokyo lies a large alluvial plain, dotted by a network of farming villages. Matui (1968) analysed the position of the 911 houses making up one of those villages. The area studied was a rectangle, 3 km by 4 km. A grid was superimposed over a map of the village, dividing its 12 square kilometres into 1200 plots, each 100 metres on a side. The numbers of houses on each of those plots are recorded in a 30 by 40 matrix of data.",
+                            "download": "http://www.statsci.org/data/general/matui.txt",
+                            "filename": "matui",
+                            "name": "Position of Houses in a Japanese Farming Village",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": "SPACE",
+                            "simplify_whitespaces": false,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": false
+                        }
+                    ],
+                    "subcategory_name": "Oncology"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The data gives the time between 800 successive pulses along a nerve fibre. There are 799 observations rounded to the nearest half in units of 1/50 second. ",
+                            "download": "http://www.statsci.org/data/general/nerve.txt",
+                            "filename": "nerve",
+                            "name": "Time between Nerve Pulses",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": "auto",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": false
+                        }
+                    ],
+                    "subcategory_name": "Neurology"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Students in an introductory statistics class (MS212 taught by Professor John Eccleston and Dr Richard Wilson at The University of Queensland) participated in a simple experiment. The students took their own pulse rate. They were then asked to flip a coin. If the coin came up heads, they were to run in place for one minute. Otherwise they sat for one minute. Then everyone took their pulse again. The pulse rates and other physiological and lifestyle data are given in the data. \nFive class groups between 1993 and 1998 participated in the experiment. The lecturer, Richard Wilson, was concerned that some students would choose the less strenuous option of sitting rather than running even if their coin came up heads, so in the years 1995-1998 a different method of random assignment was used. In these years, data forms were handed out to the class before the experiment. The forms were pre-assigned to either running or non-running and there were an equal number of each. In 1995 and 1998 not all of the forms were returned so the numbers running and sitting was still not entirely controlled.",
+                            "download": "http://www.statsci.org/data/oz/ms212.txt",
+                            "filename": "ms212",
+                            "name": "Pulse Rates before and after Exercise",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": "TAB",
+                            "simplify_whitespaces": false,
+                            "skip_empty_parts": true,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Cardiology"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "How difficult is it to maintain your balance while concentrating? It is more difficult when you are older? Nine elderly (6 men and 3 women) and eight young men were subjects in an experiment. Each subject stood barefoot on a \"force platform\" and was asked to maintain a stable upright position and to react as quickly as possible to an unpredictable noise by pressing a hand held button. The noise came randomly and the subject concentrated on reacting as quickly as possible. The platform automatically measured how much each subject swayed in millimetres in both the forward/backward and the side-to-side directions.",
+                            "download": "http://www.statsci.org/data/general/balaconc.txt",
+                            "filename": "balaconc",
+                            "name": "Maintaining Balance while Concentrating",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": "TAB",
+                            "simplify_whitespaces": false,
+                            "skip_empty_parts": true,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Common"
+                }
+            ]
+        },
+        {
+            "category_name": "Nature",
+            "subcategories": [
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Daily rainfall (in millimetres) was recorded over a 47-year period in Turramurra, Sydney, Australia. For each year, the wettest day was identified (that having the greatest rainfall). The data show the rainfall recorded for the 47 annual maxima.",
+                            "download": "http://www.statsci.org/data/oz/sydrain.txt",
+                            "filename": "sydrain",
+                            "name": "Annual Maximums of Daily Rainfall in Sydney",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": "auto",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Weather"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The ocean swell produces spectacular eruptions of water through a hole in the cliff at Kiama, about 120km south of Sydney, known as the Blowhole. The times at which 65 successive eruptions occurred from 1340 hours on 12 July 1998 were observed using a digital watch. \nJim Irish writes \nAnyone who has visited the Blowhole more than once knows that the rate and volume of eruptions varies. This variation occurs at several timescales. We might expect that part is explained by the tides, so that eruptions are more frequent and spectacular when the tide is very high, and eruptions obviously depend on the presence of a large ocean swell generated by prolonged strong winds over the ocean well offshore from Kiama. Hence, any stochastic model fitted to data observed over a short period of time is only applicable to that period, and perhaps a few hours either side of the observations. But we might infer from the model fitted to those data that a similar model applies more generally. ",
+                            "download": "http://www.statsci.org/data/oz/kiama.txt",
+                            "filename": "kiama",
+                            "name": "Kiama Blowhole Eruptions",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": "auto",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The data records the length of rivers in the South Island of New Zealand. The lengths are given in kilometres. The second variable, FlowsInto, indicates whether the river flows into the Pacific Ocean (0) or the Tasman Sea (1). A map of the island's rivers is included here.",
+                            "download": "http://www.statsci.org/data/oz/nzrivers.txt",
+                            "filename": "nzrivers",
+                            "name": "Length of New Zealand Rivers",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": "TAB",
+                            "simplify_whitespaces": false,
+                            "skip_empty_parts": true,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Waters"
+                }
+            ]
+        },
+        {
+            "category_name": "Statistics",
+            "subcategories": [
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The data give the year of founding for 40 New Zealand wineries.",
+                            "download": "http://www.statsci.org/data/oz/wineries.txt",
+                            "filename": "wineries",
+                            "name": "Founding Dates of NZ Wineries",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": "auto",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The data give the selling price at auction of 32 antique grandfather clocks. Also recorded is the age of the clock and the number of people who made a bid. ",
+                            "download": "http://www.statsci.org/data/general/auction.txt",
+                            "filename": "auction",
+                            "name": "Selling Price of Antique Grandfather Clocks",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": "TAB",
+                            "simplify_whitespaces": false,
+                            "skip_empty_parts": true,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Economics"
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ],
+    "collection_name": "StatSci_Datasets"
 }

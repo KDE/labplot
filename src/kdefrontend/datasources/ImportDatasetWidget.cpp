@@ -70,6 +70,8 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 
 	ui.lwDatasets->setSelectionMode(QAbstractItemView::SingleSelection);
 	ui.twCategories->setSelectionMode(QAbstractItemView::SingleSelection);
+	ui.lDescription->setWordWrap(true);
+	ui.lFullName->setWordWrap(true);
 
 	showDetails(m_showDetails);
 
@@ -421,7 +423,7 @@ void ImportDatasetWidget::loadDatasetToProcess(DatasetHandler* datasetHandler) {
 	QString filePath = m_jsonDir;// + m_selectedCategory + QDir::separator() + m_selectedSubcategory + QDir::separator();
 
 	QJsonObject datasetObject = loadDatasetObject();
-	qDebug()<<"Dataset object" << datasetObject;
+	//qDebug()<<"Dataset object" << datasetObject;
 
 	if(!datasetObject.isEmpty()) {
 		datasetHandler->processMetadata(datasetObject, filePath);
@@ -459,7 +461,7 @@ QJsonObject ImportDatasetWidget::loadDatasetObject() {
 				if (collectionFile.open(QIODevice::ReadOnly)) {
 					QJsonDocument collectionDocument = QJsonDocument::fromJson(collectionFile.readAll());
 					QJsonObject collectionObject;
-					qDebug() << "Collection document: " << collectionDocument;
+					//qDebug() << "Collection document: " << collectionDocument;
 					if(collectionDocument.isObject()) {
 						collectionObject = collectionDocument.object();
 					} else {
