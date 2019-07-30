@@ -53,6 +53,8 @@
 FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 	m_textEditWidget.setReadOnly(true);
 	m_textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
+	m_textEditWidget.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	m_textEditWidget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	auto* layout = new QVBoxLayout(this);
 	layout->addWidget(&m_textEditWidget);
@@ -99,6 +101,11 @@ void FileInfoDialog::setFiles(QStringList& files) {
 	}
 
 	m_textEditWidget.document()->setHtml(infoString);
+
+	//resize to fit the content
+	QSize size = m_textEditWidget.document()->size().toSize();
+	m_textEditWidget.setMinimumSize(size.width() + m_textEditWidget.contentsMargins().left() + m_textEditWidget.contentsMargins().right(),
+									size.height() + m_textEditWidget.contentsMargins().top() + m_textEditWidget.contentsMargins().bottom());
 }
 
 /*!
