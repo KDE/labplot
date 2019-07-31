@@ -116,7 +116,7 @@ void Folder::processDropEvent(QDropEvent* event) {
 			lastMovedAspect = part;
 		} else {
 			auto* folder = dynamic_cast<Folder*>(aspect);
-			if (folder) {
+			if (folder && folder != this) {
 				folder->reparent(this);
 				lastMovedAspect = folder;
 			}

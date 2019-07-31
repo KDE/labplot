@@ -107,15 +107,19 @@ public:
 
 	// calling redo transfers ownership of m_child to the new parent aspect
 	void redo() override {
+		emit m_child->aspectAboutToBeRemoved(m_child);
 		m_index = m_target->removeChild(m_child);
 		m_new_parent->insertChild(m_new_index, m_child);
+		emit m_child->aspectAdded(m_child);
 	}
 
 	// calling undo transfers ownership of m_child back to its previous parent aspect
 	void undo() override {
 		Q_ASSERT(m_index != -1);
+		emit m_child->aspectAboutToBeRemoved(m_child);
 		m_new_parent->removeChild(m_child);
 		m_target->insertChild(m_index, m_child);
+		emit m_child->aspectAdded(m_child);
 	}
 
 protected:

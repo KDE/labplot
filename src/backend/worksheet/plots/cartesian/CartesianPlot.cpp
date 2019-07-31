@@ -2982,6 +2982,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QPointF point = event->pos();
 	QString info;
 	if (dataRect.contains(point)) {
+		m_insideDataRect = true;
 		QPointF logicalPoint = cSystem->mapSceneToLogical(point);
 
 		if ((mouseMode == CartesianPlot::ZoomSelectionMode) ||
@@ -3051,6 +3052,9 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 
 			update();
 		}
+	} else {
+		m_insideDataRect = false;
+		update();
 	}
 	q->info(info);
 
@@ -3129,7 +3133,7 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 	painter->setPen(QPen(Qt::black, 3));
 	if ((mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode)
-			&& (!m_selectionBandIsShown))
+			&& (!m_selectionBandIsShown) && m_insideDataRect)
 		painter->drawLine(m_selectionStartLine);
 
 	if (m_selectionBandIsShown) {
