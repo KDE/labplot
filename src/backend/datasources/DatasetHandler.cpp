@@ -245,21 +245,27 @@ bool DatasetHandler::isHttpRedirect(QNetworkReply* reply) {
  */
 QString DatasetHandler::saveFileName(const QUrl& url) {
 	const QString path = url.path();
-	QString basename = QFileInfo(path).fileName();
+
+	//get the extension of the downloaded file
+	const QString downloadFileName = QFileInfo(path).fileName();
+	int lastIndex = downloadFileName.lastIndexOf(".");
+	const QString fileExtension = lastIndex >= 0 ?  downloadFileName.right(downloadFileName.length() - lastIndex) : "";
+
+	QString basename = m_object->value("filename").toString() + fileExtension;
 
 	if (basename.isEmpty())
 		basename = "download";
 
 	QString fileName = m_containingDir + QDir::separator() + basename;
-
+	QFileInfo fileInfo (fileName);
 	if (QFile::exists(fileName)) {
-		// already exists, don't overwrite
-		int i = 0;
-		fileName += '.';
-		while (QFile::exists(fileName + QString::number(i)))
-			++i;
 
-		fileName += QString::number(i);
+		if(fileInfo.lastModified().addDays(1) < QDateTime::currentDateTime()){
+			QFile removeFile (fileName);
+			removeFile.remove();
+		} else {
+			qDebug() << "Dataset file already exists, no need to download it again";
+		}
 	}
 	return fileName;
 }
