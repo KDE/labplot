@@ -118,11 +118,11 @@ void HypothesisTest::performLeveneTest(bool categoricalVariable) {
     emit changed();
 }
 
-QList<double>& HypothesisTest::statisticValue(){
+QList<double>& HypothesisTest::statisticValue() {
     return m_statisticValue;
 }
 
-QList<double>& HypothesisTest::pValue(){
+QList<double>& HypothesisTest::pValue() {
     return m_pValue;
 }
 
@@ -219,9 +219,7 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
         }
     }
 
-    double stdSq[2];
-    stdSq[0] = gsl_pow_2(std[0]);
-    stdSq[1] = gsl_pow_2(std[1]);
+    double stdSq[2] = {gsl_pow_2(std[0]), gsl_pow_2(std[1])};
 
     QString testName;
     int df = 0;
@@ -234,20 +232,18 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
         if (equalVariance) {
             df = n[0] + n[1] - 2;
 
-            spSq = ((n[0]-1) * stdSq[0] +
-                    (n[1]-1) * stdSq[1] ) / df;
+            spSq = ((n[0]-1) * stdSq[0] + (n[1]-1) * stdSq[1] ) / df;
             QDEBUG("equal variance : spSq is " << spSq);
             m_statisticValue.append((mean[0] - mean[1]) / sqrt(spSq / n[0] + spSq / n[1]));
             printLine(9, "<b>Assumption:</b> Equal Variance b/w both population means");
         } else {
             double temp_val;
-            temp_val = gsl_pow_2( gsl_pow_2(std[0]) / n[0] + gsl_pow_2(std[1]) / n[1]);
-            temp_val = temp_val / ( (gsl_pow_2( (gsl_pow_2(std[0]) / n[0]) ) / (n[0]-1)) +
-                    (gsl_pow_2( (gsl_pow_2(std[1]) / n[1]) ) / (n[1]-1)));
+            temp_val = gsl_pow_2( stdSq[0] / n[0] + stdSq[1] / n[1]);
+            temp_val /= ( (gsl_pow_2( (stdSq[0] / n[0]) ) / (n[0]-1)) +
+                    (gsl_pow_2( (stdSq[1] / n[1]) ) / (n[1]-1)));
             df = qRound(temp_val);
 
-            m_statisticValue.append((mean[0] - mean[1]) / (sqrt( (gsl_pow_2(std[0])/n[0]) +
-                    (gsl_pow_2(std[1])/n[1]))));
+            m_statisticValue.append((mean[0] - mean[1]) / (sqrt( (stdSq[0]/n[0]) + (stdSq[1]/n[1]))));
             printLine(9, "<b>Assumption:</b> UnEqual Variance b/w both population means");
         }
 
@@ -256,7 +252,7 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
     }
     case HypothesisTest::Test::Type::ZTest: {
         testName = "Z";
-        spSq = ((n[0]-1) * gsl_pow_2(std[0]) + (n[1]-1) * gsl_pow_2(std[1])) / df;
+        spSq = ((n[0]-1) * stdSq[0] + (n[1]-1) * stdSq[1]) / df;
         m_statisticValue.append((mean[0] - mean[1]) / sqrt(spSq / n[0] + spSq / n[1]));
         //        m_pValue.append(gsl_cdf_gaussian_P(m_statisticValue, sp));
         break;
@@ -296,7 +292,7 @@ void HypothesisTest::performTwoSamplePairedTest(HypothesisTest::Test::Type test)
     }
 
     for (int i = 0; i < 2; i++) {
-        if ( !m_columns[0]->isNumeric()) {
+        if (!m_columns[0]->isNumeric()) {
             printError("select only m_columns with numbers");
             return;
         }

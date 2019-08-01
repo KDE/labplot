@@ -116,6 +116,7 @@ void GeneralTest::setColumns(const QVector<Column *> &cols) {
 *                                 Protected functions implementations [Helper Functions]
 ********************************************************************************************************************/
 
+//TODO: we should implement or use a general round method
 QString GeneralTest::round(QVariant number, int precision) {
     if (number.userType() == QMetaType::Double || number.userType() == QMetaType::Float) {
         double multiplierPrecision = gsl_pow_int(10, precision);
@@ -129,7 +130,7 @@ QString GeneralTest::round(QVariant number, int precision) {
     return i18n("%1", number.toString());
 }
 
-
+//TODO: Doesn't Column already have a function for this?
 int GeneralTest::findCount(const Column *column) {
     int N = column->rowCount();
     switch (column->columnMode()) {
@@ -158,6 +159,7 @@ int GeneralTest::findCount(const Column *column) {
     return N;
 }
 
+// TODO: put into Column
 double GeneralTest::findSum(const Column *column, int N) {
     if (!column->isNumeric())
         return 0;
@@ -171,6 +173,7 @@ double GeneralTest::findSum(const Column *column, int N) {
     return sum;
 }
 
+// TODO: put into Column
 double GeneralTest::findSumSq(const Column *column, int N) {
     if (!column->isNumeric())
         return 0;
@@ -184,6 +187,7 @@ double GeneralTest::findSumSq(const Column *column, int N) {
     return sumSq;
 }
 
+// TODO: put into Column
 double GeneralTest::findMean(const Column *column, int N) {
     if (!column->isNumeric())
         return 0;
@@ -195,6 +199,7 @@ double GeneralTest::findMean(const Column *column, int N) {
     return sum / N;
 }
 
+// TODO: put into Column
 double GeneralTest::findStd(const Column *column, int N, double mean) {
     if (!column->isNumeric())
         return 0;
@@ -211,6 +216,7 @@ double GeneralTest::findStd(const Column *column, int N, double mean) {
     return std;
 }
 
+// TODO: put into Column
 double GeneralTest::findStd(const Column *column, int N) {
     if (!column->isNumeric())
         return 0;

@@ -218,7 +218,7 @@ void CorrelationCoefficient::performKendall() {
 
     QVector<int> col2Ranks(N);
     if (m_columns[0]->isNumeric()) {
-        if (m_columns[0]->isNumeric() && m_columns[1]->isNumeric()) {
+        if (m_columns[1]->isNumeric()) {
             for (int i = 0; i < N; i++)
                 col2Ranks[int(m_columns[0]->valueAt(i)) - 1] = int(m_columns[1]->valueAt(i));
         } else {
@@ -325,7 +325,7 @@ void CorrelationCoefficient::performSpearman() {
     s1 = s1 / N;
     s2 = s2 / N;
 
-    m_correlationValue = s12 / std::sqrt(s1 * s2);
+    m_correlationValue = s12 / sqrt(s1 * s2);
 
     printLine(0, QString("Spearman Rank Correlation value is %1").arg(m_correlationValue), "green");
 }
