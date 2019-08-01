@@ -157,6 +157,7 @@ void CartesianPlot::init() {
 
 	connect(this, &AbstractAspect::aspectAdded, this, &CartesianPlot::childAdded);
 	connect(this, &AbstractAspect::aspectRemoved, this, &CartesianPlot::childRemoved);
+	connect(this, &AbstractAspect::deselected, this, &CartesianPlot::deselected);
 
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
@@ -2313,6 +2314,10 @@ void CartesianPlot::visibilityChanged() {
 	this->setVisible(!d->isVisible());
 }
 
+void CartesianPlot::deselected() {
+	setMouseMode(MouseMode::SelectionMode);
+}
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
@@ -2668,6 +2673,9 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 		newRect.setWidth(w);
 		newRect.setHeight(h);
 		emit q->rectChanged(newRect);
+	} else if (change == QGraphicsItem::ItemSelectedChange) {
+		if (!value.toBool() || q->mouseMode() != CartesianPlot::MouseMode::SelectionMode)
+			q->setMouseMode(CartesianPlot::MouseMode::SelectionMode);
 	}
 	return QGraphicsItem::itemChange(change, value);
 }
@@ -2719,8 +2727,8 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 			m_panningStart = event->pos();
 			setCursor(Qt::ClosedHandCursor);
 		}
-		QGraphicsItem::mousePressEvent(event);
 	}
+	QGraphicsItem::mousePressEvent(event);
 }
 
 void CartesianPlotPrivate::mousePressZoomSelectionMode(QPointF logicalPos) {
@@ -3071,6 +3079,10 @@ void CartesianPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
 }
 
 void CartesianPlotPrivate::mouseHoverZoomSelectionMode(QPointF logicPos) {
+
+	if (!isSelected())
+		return;
+
 	if (mouseMode == CartesianPlot::ZoomSelectionMode && !m_selectionBandIsShown) {
 
 	} else if (mouseMode == CartesianPlot::ZoomXSelectionMode && !m_selectionBandIsShown) {

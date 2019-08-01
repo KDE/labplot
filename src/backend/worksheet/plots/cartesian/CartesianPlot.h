@@ -278,6 +278,7 @@ private slots:
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChanged();
 	void loadTheme(const QString&);
+	void deselected();
 
 protected:
 	CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
