@@ -1808,6 +1808,9 @@ void WorksheetView::plotsLockedActionChanged(bool checked) {
 }
 
 void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
+	if (m_suppressMouseModeChange)
+		return;
+
 	if (action == cartesianPlotSelectionModeAction)
 		m_cartesianPlotMouseMode = CartesianPlot::SelectionMode;
 	else if (action == cartesianPlotZoomSelectionModeAction)
@@ -1821,6 +1824,24 @@ void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
 
 	for (auto* plot : m_worksheet->children<CartesianPlot>() )
 		plot->setMouseMode(m_cartesianPlotMouseMode);
+}
+
+void WorksheetView::cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode mouseMode) {
+	if (!m_menusInitialized)
+		return;
+
+	m_suppressMouseModeChange = true;
+	if (mouseMode == CartesianPlot::MouseMode::SelectionMode)
+		cartesianPlotSelectionModeAction->setChecked(true);
+	else if (mouseMode == CartesianPlot::MouseMode::ZoomSelectionMode)
+		cartesianPlotZoomSelectionModeAction->setChecked(true);
+	else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelectionMode)
+		cartesianPlotZoomXSelectionModeAction->setChecked(true);
+	else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelectionMode)
+		cartesianPlotZoomYSelectionModeAction->setChecked(true);
+	else if (mouseMode == CartesianPlot::MouseMode::Cursor)
+		cartesianPlotCursorModeAction->setChecked(true);
+	m_suppressMouseModeChange = false;
 }
 
 void WorksheetView::cartesianPlotAddNew(QAction* action) {
