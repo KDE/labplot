@@ -1824,7 +1824,7 @@ void AxisPrivate::retransformMinorGrid() {
  * called when the opacity of the grid was changes, update the grid graphics item
  */
 //TODO: this function is only needed for loaded projects where update() doesn't seem to be enough
-//and we have to call gridItem->update() explicitely.
+//and we have to call gridItem->update() explicitly.
 //This is not required for newly created plots/axes. Why is this difference?
 void AxisPrivate::updateGrid() {
 	gridItem->update();

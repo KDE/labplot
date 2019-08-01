@@ -49,7 +49,7 @@ void NSLFitTest::testBounds() {
 		QCOMPARE(x, result_bound[i]);
 	}
 
-	for (i = 0; i < N; i++) {
+	for (i = 0; i < N; ++i) {
 		double x = nsl_fit_map_unbound(data_bound[i], -1, 2);
 //		printf("%g -> %.15g\n", data_bound[i], x);
 		QCOMPARE(x, result_unbound[i]);

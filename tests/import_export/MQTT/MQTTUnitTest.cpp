@@ -66,7 +66,7 @@ void MQTTUnitTest::testContainFalse() {
 
 		while(!in.atEnd()) {
 			QString line = in.readLine();
-			QStringList topics = line.split(" ", QString::SkipEmptyParts);
+			QStringList topics = line.split(' ', QString::SkipEmptyParts);
 			QCOMPARE(client->checkTopicContains(topics[0], topics[1]), false);
 		}
 

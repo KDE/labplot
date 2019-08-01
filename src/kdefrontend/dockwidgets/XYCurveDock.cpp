@@ -509,7 +509,7 @@ void XYCurveDock::setModel() {
 	cbYErrorPlusColumn->setModel(m_aspectTreeModel);
 
 	if (cbXColumn) {
-		QString path = m_curve->xColumnPath().split("/").last();
+		QString path = m_curve->xColumnPath().split('/').last();
 		if (m_curve->xColumn()) {
 			path += QString("\t ")+m_curve->xColumn()->plotDesignationString();
 			cbXColumn->setInvalid(false);
@@ -517,7 +517,7 @@ void XYCurveDock::setModel() {
 			cbXColumn->setInvalid(true, i18n("The column \"%1\" is not available. If a new column at this path is created, it is linked to this curve. If you wanna hold this column, don't change anything in this combobox.", m_curve->xColumnPath()));
 		cbXColumn->setText(path);
 
-		path = m_curve->yColumnPath().split("/").last();
+		path = m_curve->yColumnPath().split('/').last();
 		if (m_curve->yColumn()) {
 			path += QString("\t ")+m_curve->yColumn()->plotDesignationString();
 			cbYColumn->setInvalid(false);
@@ -772,7 +772,7 @@ void XYCurveDock::checkColumnAvailability(TreeViewComboBox* cb, const AbstractCo
 		cb->useCurrentIndexText(false);
 		cb->setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", columnPath));
 	}
-	cb->setText(columnPath.split("/").last());
+	cb->setText(columnPath.split('/').last());
 }
 
 /*!

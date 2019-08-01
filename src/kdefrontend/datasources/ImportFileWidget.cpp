@@ -1861,7 +1861,7 @@ void ImportFileWidget::onMqttDisconnect() {
 	ui.lLWT->hide();
 	ui.bLWT->hide();
 
-	ui.cbConnection->setItemText(ui.cbConnection->currentIndex(), ui.cbConnection->currentText() + " " + i18n("(Disconnected)"));
+	ui.cbConnection->setItemText(ui.cbConnection->currentIndex(), ui.cbConnection->currentText() + ' ' + i18n("(Disconnected)"));
 
 	emit subscriptionsChanged();
 	RESET_CURSOR;

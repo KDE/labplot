@@ -2918,7 +2918,7 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 	QSqlQuery q;
 	if (!q.exec(query)) {
 		RESET_CURSOR;
-		KMessageBox::error(nullptr, i18n("Failed to create table in the SQLite database %1.", path) + "\n" + q.lastError().databaseText());
+		KMessageBox::error(nullptr, i18n("Failed to create table in the SQLite database %1.", path) + '\n' + q.lastError().databaseText());
 		db.close();
 		return;
 	}

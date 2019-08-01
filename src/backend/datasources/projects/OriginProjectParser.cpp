@@ -2071,7 +2071,7 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	line = replaceSpecialChars(line);
 
 	// replace tabs	(not really supported)
-	line.replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+	line.replace('\t', "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 
 	//Lookbehind conditions are not supported - so need to reverse string
 	QRegExp rx("\\)[^\\)\\(]*\\((?!\\s*[buig\\+\\-]\\s*\\\\)");
