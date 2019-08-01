@@ -148,7 +148,7 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
     QString col1Name = m_columns[0]->name();
     QString col2Name = m_columns[1]->name();
 
-    if (!categoricalVariable && isNumericOrInteger(m_columns[0])) {
+    if (!categoricalVariable && m_columns[0]->isNumeric()) {
         for (int i = 0; i < 2; i++) {
             findStats(m_columns[i], n[i], sum[i], mean[i], std[i]);
             if (n[i] == 0) {
@@ -172,7 +172,7 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
             return;
         }
 
-        if (isNumericOrInteger(m_columns[0]))
+        if (m_columns[0]->isNumeric())
             baseColName = m_columns[0]->name();
 
         ErrorType errorCode = findStatsCategorical(m_columns[0], m_columns[1], n, sum, mean, std, colName, np, totalRows);
@@ -219,9 +219,13 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
         }
     }
 
+    double stdSq[2];
+    stdSq[0] = gsl_pow_2(std[0]);
+    stdSq[1] = gsl_pow_2(std[1]);
+
     QString testName;
     int df = 0;
-    double sp = 0;
+    double spSq = 0;
 
     switch (test) {
     case HypothesisTest::Test::Type::TTest: {
@@ -230,9 +234,10 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
         if (equalVariance) {
             df = n[0] + n[1] - 2;
 
-            sp = qSqrt(((n[0]-1) * gsl_pow_2(std[0]) +
-                    (n[1]-1) * gsl_pow_2(std[1]) ) / df );
-            m_statisticValue.append((mean[0] - mean[1]) / (sp * qSqrt(1.0/n[0] + 1.0/n[1])));
+            spSq = ((n[0]-1) * stdSq[0] +
+                    (n[1]-1) * stdSq[1] ) / df;
+            QDEBUG("equal variance : spSq is " << spSq);
+            m_statisticValue.append((mean[0] - mean[1]) / sqrt(spSq / n[0] + spSq / n[1]));
             printLine(9, "<b>Assumption:</b> Equal Variance b/w both population means");
         } else {
             double temp_val;
@@ -241,7 +246,7 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
                     (gsl_pow_2( (gsl_pow_2(std[1]) / n[1]) ) / (n[1]-1)));
             df = qRound(temp_val);
 
-            m_statisticValue.append((mean[0] - mean[1]) / (qSqrt( (gsl_pow_2(std[0])/n[0]) +
+            m_statisticValue.append((mean[0] - mean[1]) / (sqrt( (gsl_pow_2(std[0])/n[0]) +
                     (gsl_pow_2(std[1])/n[1]))));
             printLine(9, "<b>Assumption:</b> UnEqual Variance b/w both population means");
         }
@@ -251,8 +256,8 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
     }
     case HypothesisTest::Test::Type::ZTest: {
         testName = "Z";
-        sp = qSqrt( ((n[0]-1) * gsl_pow_2(std[0]) + (n[1]-1) * gsl_pow_2(std[1])) / df);
-        m_statisticValue.append((mean[0] - mean[1]) / (sp * qSqrt( 1.0 / n[0] + 1.0 / n[1])));
+        spSq = ((n[0]-1) * gsl_pow_2(std[0]) + (n[1]-1) * gsl_pow_2(std[1])) / df;
+        m_statisticValue.append((mean[0] - mean[1]) / sqrt(spSq / n[0] + spSq / n[1]));
         //        m_pValue.append(gsl_cdf_gaussian_P(m_statisticValue, sp));
         break;
     }
@@ -262,7 +267,7 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
     }
 
     m_currTestName = "<h2>" + i18n("Two Sample Independent %1 Test for %2 vs %3", testName, col1Name, col2Name) + "</h2>";
-    m_pValue.append(getPValue(test, m_statisticValue[0], col1Name, col2Name, (mean[0] - mean[1]), sp, df));
+    m_pValue.append(getPValue(test, m_statisticValue[0], col1Name, col2Name, (mean[0] - mean[1]), sqrt(spSq), df));
 
     printLine(2, i18n("Significance level is %1", round(m_significanceLevel)), "blue");
 
@@ -291,7 +296,7 @@ void HypothesisTest::performTwoSamplePairedTest(HypothesisTest::Test::Type test)
     }
 
     for (int i = 0; i < 2; i++) {
-        if ( !isNumericOrInteger(m_columns[0])) {
+        if ( !m_columns[0]->isNumeric()) {
             printError("select only m_columns with numbers");
             return;
         }
@@ -333,7 +338,7 @@ void HypothesisTest::performTwoSamplePairedTest(HypothesisTest::Test::Type test)
 
     switch (test) {
     case HypothesisTest::Test::Type::TTest: {
-        m_statisticValue[0] = mean / (std / qSqrt(n));
+        m_statisticValue[0] = mean / (std / sqrt(n));
         df = n - 1;
         testName = "T";
         printLine(6, i18n("Degree of Freedom is %1</p", df), "green");
@@ -341,7 +346,7 @@ void HypothesisTest::performTwoSamplePairedTest(HypothesisTest::Test::Type test)
     }
     case HypothesisTest::Test::Type::ZTest: {
         testName = "Z";
-        m_statisticValue[0] = mean / (std / qSqrt(n));
+        m_statisticValue[0] = mean / (std / sqrt(n));
         df = n - 1;
         break;
     }
@@ -376,7 +381,7 @@ void HypothesisTest::performOneSampleTest(HypothesisTest::Test::Type test) {
         return;
     }
 
-    if ( !isNumericOrInteger(m_columns[0])) {
+    if ( !m_columns[0]->isNumeric()) {
         printError("select only m_columns with numbers");
 
         return;
@@ -416,7 +421,7 @@ void HypothesisTest::performOneSampleTest(HypothesisTest::Test::Type test) {
     switch (test) {
     case HypothesisTest::Test::Type::TTest: {
         testName = "T";
-        m_statisticValue.append((mean - m_populationMean) / (std / qSqrt(n)));
+        m_statisticValue.append((mean - m_populationMean) / (std / sqrt(n)));
         df = n - 1;
         printLine(6, i18n("Degree of Freedom is %1", df), "blue");
         break;
@@ -424,7 +429,7 @@ void HypothesisTest::performOneSampleTest(HypothesisTest::Test::Type test) {
     case HypothesisTest::Test::Type::ZTest: {
         testName = "Z";
         df = 0;
-        m_statisticValue.append((mean - m_populationMean) / (std / qSqrt(n)));
+        m_statisticValue.append((mean - m_populationMean) / (std / sqrt(n)));
         break;
     }
     case HypothesisTest::Test::Type::Anova:
@@ -466,7 +471,7 @@ void HypothesisTest::performOneWayAnova() {
     QMap<QString, int> classnameToIndex;
     QString baseColName;
 
-    if (isNumericOrInteger(m_columns[0]))
+    if (m_columns[0]->isNumeric())
         baseColName = m_columns[0]->name();
 
     findStatsCategorical(m_columns[0], m_columns[1], ni, sum, mean, std, classnameToIndex, np, totalRows);
@@ -592,8 +597,8 @@ void HypothesisTest::performTwoWayAnova() {
     countPartitions(m_columns[0], np_a, totalRows_a);
     countPartitions(m_columns[1], np_b, totalRows_b);
 
-    double groupMean[np_a][np_b];
-    int replicates[np_a][np_b];
+    QVector<QVector<double>> groupMean(np_a, QVector<double>(np_b));
+    QVector<QVector<int>> replicates(np_a, QVector<int>(np_b));
 
     for (int i = 0; i < np_a; i++)
         for (int j = 0; j < np_b; j++) {
@@ -831,7 +836,7 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
     int np = 0;
     int n = 0;
 
-    if (!categoricalVariable && isNumericOrInteger(m_columns[0]))
+    if (!categoricalVariable && m_columns[0]->isNumeric())
         np = m_columns.size();
     else
         countPartitions(m_columns[0], np, n);
@@ -858,7 +863,7 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
     int totalRows = 0;
 
     QString* colNames = new QString[np];
-    if (!categoricalVariable && isNumericOrInteger(m_columns[0])) {
+    if (!categoricalVariable && m_columns[0]->isNumeric()) {
         totalRows = m_columns[0]->rowCount();
 
         double value = 0;

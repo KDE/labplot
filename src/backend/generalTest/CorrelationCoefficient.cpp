@@ -59,8 +59,6 @@ CorrelationCoefficient::~CorrelationCoefficient() {
 }
 
 void CorrelationCoefficient::performTest(Test test, bool categoricalVariable) {
-    //QDEBUG("in perform test");
-
     m_statsTable = "";
     m_tooltips.clear();
     m_correlationValue = 0;
@@ -119,8 +117,6 @@ QList<double> CorrelationCoefficient::pValue() const{
 //TODO: add tooltip for correlation value result
 //TODO: find p value
 void CorrelationCoefficient::performPearson(bool categoricalVariable) {
-
-    //QDEBUG("in pearson");
     if (m_columns.count() != 2) {
         printError("Select only 2 columns ");
         return;
@@ -135,7 +131,7 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
     QString col2Name = m_columns[1]->name();
 
 
-    if (!isNumericOrInteger(m_columns[1])) {
+    if (!m_columns[1]->isNumeric()) {
         printError("Column " + col2Name + " should contain only numeric or interger values");
     }
 
@@ -206,8 +202,6 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 // TODO: Compute tauB for ties.
 // TODO: find P Value from Z Value
 void CorrelationCoefficient::performKendall() {
-    QDEBUG("in perform kendall")
-
     if (m_columns.count() != 2) {
         printError("Select only 2 columns ");
         return;
@@ -219,19 +213,17 @@ void CorrelationCoefficient::performKendall() {
     int N = findCount(m_columns[0]);
     if (N != findCount(m_columns[1])) {
         printError("Number of data values in Column: " + col1Name + "and Column: " + col2Name + "are not equal");
-        QDEBUG("unequal number of rows")
         return;
     }
 
-    int col2Ranks[N];
-    if (isNumericOrInteger(m_columns[0]) || isNumericOrInteger(m_columns[1])) {
-        if (isNumericOrInteger(m_columns[0]) && isNumericOrInteger(m_columns[1])) {
+    QVector<int> col2Ranks(N);
+    if (m_columns[0]->isNumeric()) {
+        if (m_columns[0]->isNumeric() && m_columns[1]->isNumeric()) {
             for (int i = 0; i < N; i++)
                 col2Ranks[int(m_columns[0]->valueAt(i)) - 1] = int(m_columns[1]->valueAt(i));
         } else {
             printError(QString("Ranking System should be same for both Column: %1 and Column: %2 <br/>"
                                "Hint: Check for data types of columns").arg(col1Name).arg(col2Name));
-            QDEBUG("ranking system not same")
             return;
         }
     } else {
@@ -262,7 +254,7 @@ void CorrelationCoefficient::performKendall() {
 
     int nPossiblePairs = (N * (N - 1)) / 2;
 
-    int nDiscordant = findDiscordants(col2Ranks, 0, N - 1);
+    int nDiscordant = findDiscordants(col2Ranks.data(), 0, N - 1);
     int nCorcordant = nPossiblePairs - nDiscordant;
 
     m_correlationValue = double(nCorcordant - nDiscordant) / nPossiblePairs;
@@ -307,24 +299,13 @@ void CorrelationCoefficient::performSpearman() {
     double ranksCol1Mean = 0;
     double ranksCol2Mean = 0;
 
-//    QString ranks1 = "";
-//    QString ranks2 = "";
     for (int i = 0; i < N; i++) {
         ranksCol1Mean += col1Ranks[int(m_columns[0]->valueAt(i))];
         ranksCol2Mean += col2Ranks[int(m_columns[1]->valueAt(i))];
-
-//        ranks1 += ", " + QString::number(col1Ranks[m_columns[0]->valueAt(i)]);
-//        ranks2 += ", " + QString::number(col2Ranks[m_columns[1]->valueAt(i)]);
     }
 
     ranksCol1Mean = ranksCol1Mean / N;
     ranksCol2Mean = ranksCol2Mean / N;
-
-    //QDEBUG("ranks 1 and ranks2 are " );
-    //QDEBUG(ranks1);
-    //QDEBUG(ranks2);
-
-    //QDEBUG("Mean ranks are " << ranksCol1Mean << ranksCol2Mean);
 
     double s12 = 0;
     double s1 = 0;
@@ -343,8 +324,6 @@ void CorrelationCoefficient::performSpearman() {
     s12 = s12 / N;
     s1 = s1 / N;
     s2 = s2 / N;
-
-    //QDEBUG("s12, s1, s2 are " << s12 << " " << s1 << " " << s2);
 
     m_correlationValue = s12 / std::sqrt(s1 * s2);
 
@@ -367,8 +346,8 @@ int CorrelationCoefficient::findDiscordants(int *ranks, int start, int end) {
     int rightLen = end - mid;
     int leftLenRemain = leftLen;
 
-    int leftRanks[leftLen];
-    int rightRanks[rightLen];
+    QVector<int> leftRanks(leftLen);
+    QVector<int> rightRanks(rightLen);
 
     for (int i = 0; i < leftLen; i++)
         leftRanks[i] = ranks[start + i];
@@ -400,24 +379,20 @@ int CorrelationCoefficient::findDiscordants(int *ranks, int start, int end) {
 }
 
 void CorrelationCoefficient::convertToRanks(const Column* col, int N, QMap<double, int> &ranks) {
-    if (!isNumericOrInteger(col))
+    if (col->isNumeric())
         return;
 
-    //QDEBUG("in convert to ranks");
     double* sortedList = new double[N];
     for (int i = 0; i < N; i++)
         sortedList[i] = col->valueAt(i);
 
     std::sort(sortedList, sortedList + N, std::greater<double>());
 
-//    QString debug_sortedList = "";
     ranks.clear();
     for (int i = 0; i < N; i++) {
         ranks[sortedList[i]] = i + 1;
-//        debug_sortedList += ", " + QString::number(sortedList[i]);
     }
 
-    //QDEBUG("sorted list is " << debug_sortedList);
     delete[] sortedList;
 }
 

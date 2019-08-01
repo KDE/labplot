@@ -112,7 +112,6 @@ protected:
     QLabel* m_resultLine[RESULTLINESCOUNT];
     QMap<QString, QString> m_tooltips;
 
-    bool isNumericOrInteger(const Column* column);
     QString round(QVariant number, int precision = 3);
 
     int findCount(const Column* column);

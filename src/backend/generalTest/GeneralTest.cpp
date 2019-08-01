@@ -61,9 +61,6 @@ GeneralTest::GeneralTest(const QString& name, const AspectType& type) : Abstract
 }
 
 GeneralTest::~GeneralTest() {
-    delete m_summaryLayout;
-    for (int i = 0; i < RESULTLINESCOUNT; i++)
-        delete m_resultLine[i];
 }
 
 void GeneralTest::setDataSourceType(DataSourceType type) {
@@ -133,11 +130,6 @@ QString GeneralTest::round(QVariant number, int precision) {
 }
 
 
-bool GeneralTest::isNumericOrInteger(const Column* column) {
-    return (column->columnMode() == AbstractColumn::Numeric || column->columnMode() == AbstractColumn::Integer);
-}
-
-
 int GeneralTest::findCount(const Column *column) {
     int N = column->rowCount();
     switch (column->columnMode()) {
@@ -167,7 +159,7 @@ int GeneralTest::findCount(const Column *column) {
 }
 
 double GeneralTest::findSum(const Column *column, int N) {
-    if (!isNumericOrInteger(column))
+    if (!column->isNumeric())
         return 0;
 
     if (N < 0)
@@ -180,7 +172,7 @@ double GeneralTest::findSum(const Column *column, int N) {
 }
 
 double GeneralTest::findSumSq(const Column *column, int N) {
-    if (!isNumericOrInteger(column))
+    if (!column->isNumeric())
         return 0;
 
     if (N < 0)
@@ -193,7 +185,7 @@ double GeneralTest::findSumSq(const Column *column, int N) {
 }
 
 double GeneralTest::findMean(const Column *column, int N) {
-    if (!isNumericOrInteger(column))
+    if (!column->isNumeric())
         return 0;
 
     if (N < 0)
@@ -204,7 +196,7 @@ double GeneralTest::findMean(const Column *column, int N) {
 }
 
 double GeneralTest::findStd(const Column *column, int N, double mean) {
-    if (!isNumericOrInteger(column))
+    if (!column->isNumeric())
         return 0;
 
     double std = 0;
@@ -220,7 +212,7 @@ double GeneralTest::findStd(const Column *column, int N, double mean) {
 }
 
 double GeneralTest::findStd(const Column *column, int N) {
-    if (!isNumericOrInteger(column))
+    if (!column->isNumeric())
         return 0;
 
     if (N < 0)
@@ -362,7 +354,7 @@ GeneralTest::ErrorType GeneralTest::findStatsCategorical(Column* column1, Column
     }
 
     columns[0]->setColumnMode(originalColMode);
-    if (isNumericOrInteger(columns[0])) {
+    if (columns[0]->isNumeric()) {
 
     }
 
