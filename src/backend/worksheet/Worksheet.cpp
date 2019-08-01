@@ -175,6 +175,7 @@ QWidget* Worksheet::view() const {
 		m_view = new WorksheetView(const_cast<Worksheet*>(this));
 		m_partView = m_view;
 		connect(m_view, &WorksheetView::statusInfo, this, &Worksheet::statusInfo);
+		connect(this, &Worksheet::cartesianPlotMouseModeChanged, m_view, &WorksheetView::cartesianPlotMouseModeChangedSlot);
 	}
 	return m_partView;
 }

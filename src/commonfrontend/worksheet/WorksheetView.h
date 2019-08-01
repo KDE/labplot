@@ -120,6 +120,7 @@ private:
 	bool m_isClosing{false};
 	bool m_menusInitialized{false};
 	int m_numScheduledScalings{0};
+	bool m_suppressMouseModeChange{false};
 
 	//Menus
 	QMenu* m_addNewMenu{nullptr};
@@ -256,6 +257,7 @@ public slots:
 	void print(QPrinter*);
 	void selectItem(QGraphicsItem*);
 	void presenterMode();
+	void cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode mouseMode); // from cartesian Plot
 
 private slots:
 	void addNew(QAction*);
