@@ -2138,7 +2138,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());
 	group.writeEntry("LineColor", ui.kcbLineColor->color());
 	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(), Worksheet::Point));
-	group.writeEntry("LineOpacity", ui.sbLineOpacity->value()/100);
+	group.writeEntry("LineOpacity", ui.sbLineOpacity->value()/100.);
 
 	//Major ticks
 	group.writeEntry("MajorTicksDirection", ui.cbMajorTicksDirection->currentIndex());
@@ -2152,7 +2152,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("MajorTicksColor", ui.kcbMajorTicksColor->color());
 	group.writeEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(ui.sbMajorTicksWidth->value(),Worksheet::Point));
 	group.writeEntry("MajorTicksLength", Worksheet::convertToSceneUnits(ui.sbMajorTicksLength->value(),Worksheet::Point));
-	group.writeEntry("MajorTicksOpacity", ui.sbMajorTicksOpacity->value()/100);
+	group.writeEntry("MajorTicksOpacity", ui.sbMajorTicksOpacity->value()/100.);
 
 	//Minor ticks
 	group.writeEntry("MinorTicksDirection", ui.cbMinorTicksDirection->currentIndex());
@@ -2166,7 +2166,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("MinorTicksColor", ui.kcbMinorTicksColor->color());
 	group.writeEntry("MinorTicksWidth", Worksheet::convertFromSceneUnits(ui.sbMinorTicksWidth->value(),Worksheet::Point));
 	group.writeEntry("MinorTicksLength", Worksheet::convertFromSceneUnits(ui.sbMinorTicksLength->value(),Worksheet::Point));
-	group.writeEntry("MinorTicksOpacity", ui.sbMinorTicksOpacity->value()/100);
+	group.writeEntry("MinorTicksOpacity", ui.sbMinorTicksOpacity->value()/100.);
 
 	//Extra ticks
 	// TODO
@@ -2182,17 +2182,17 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("LabelsFontColor", ui.kcbLabelsFontColor->color());
 	group.writeEntry("LabelsPrefix", ui.leLabelsPrefix->text());
 	group.writeEntry("LabelsSuffix", ui.leLabelsSuffix->text());
-	group.writeEntry("LabelsOpacity", ui.sbLabelsOpacity->value()/100);
+	group.writeEntry("LabelsOpacity", ui.sbLabelsOpacity->value()/100.);
 
 	//Grid
 	group.writeEntry("MajorGridStyle", ui.cbMajorGridStyle->currentIndex());
 	group.writeEntry("MajorGridColor", ui.kcbMajorGridColor->color());
 	group.writeEntry("MajorGridWidth", Worksheet::convertToSceneUnits(ui.sbMajorGridWidth->value(), Worksheet::Point));
-	group.writeEntry("MajorGridOpacity", ui.sbMajorGridOpacity->value()/100);
+	group.writeEntry("MajorGridOpacity", ui.sbMajorGridOpacity->value()/100.);
 
 	group.writeEntry("MinorGridStyle", ui.cbMinorGridStyle->currentIndex());
 	group.writeEntry("MinorGridColor", ui.kcbMinorGridColor->color());
 	group.writeEntry("MinorGridWidth", Worksheet::convertToSceneUnits(ui.sbMinorGridWidth->value(), Worksheet::Point));
-	group.writeEntry("MinorGridOpacity", ui.sbMinorGridOpacity->value()/100);
+	group.writeEntry("MinorGridOpacity", ui.sbMinorGridOpacity->value()/100.);
 	config.sync();
 }

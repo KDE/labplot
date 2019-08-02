@@ -212,7 +212,7 @@ void Axis::init() {
 
 	//minor grid
 	d->minorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MinorGridStyle", (int) Qt::NoPen) );
-	d->minorGridPen.setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)) );
+	d->minorGridPen.setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)) );
 	d->minorGridPen.setWidthF( group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
 	d->minorGridOpacity = group.readEntry("MinorGridOpacity", 1.0);
 }
