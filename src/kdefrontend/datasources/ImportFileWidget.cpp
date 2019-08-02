@@ -776,9 +776,13 @@ void ImportFileWidget::selectFile() {
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
 	QStringList urls = m_cbFileName->urls();
+	QDEBUG("	urls = " << urls)
 	urls.insert(0, "file://" + path); // add type of path
+	QDEBUG("	urls = " << urls)
 	m_cbFileName->setUrls(urls);
 	m_cbFileName->setCurrentText(urls.first());
+	DEBUG("	urls.first() = " << urls.first().toStdString())
+	DEBUG("	cb text = " << m_cbFileName->currentText().toStdString())
 	fileNameChanged(path); // why do I have to call this function separately
 }
 
