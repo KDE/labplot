@@ -352,6 +352,7 @@ void ImportFileDialog::checkOkButton() {
 	}
 
 	QString fileName = m_importFileWidget->fileName();
+	DEBUG("	file name = " << fileName.toStdString())
 #ifndef HAVE_WINDOWS
 	if (!fileName.isEmpty() && fileName.at(0) != QDir::separator())
 		fileName = QDir::homePath() + QDir::separator() + fileName;
@@ -360,7 +361,7 @@ void ImportFileDialog::checkOkButton() {
 	DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, m_importFileWidget->currentSourceType()));
 	switch (m_importFileWidget->currentSourceType()) {
 	case LiveDataSource::SourceType::FileOrPipe: {
-		DEBUG("fileName = " << fileName.toUtf8().constData());
+		DEBUG("	fileName = " << fileName.toUtf8().constData());
 		const bool enable = QFile::exists(fileName);
 		okButton->setEnabled(enable);
 		if (enable)

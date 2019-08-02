@@ -409,6 +409,7 @@ void ImportFileWidget::showOptions(bool b) {
 }
 
 QString ImportFileWidget::fileName() const {
+	DEBUG("ImportFileWidget::fileName() : " << m_cbFileName->currentText().toStdString())
 	return m_cbFileName->currentText();
 }
 
@@ -1222,13 +1223,14 @@ void ImportFileWidget::refreshPreview() {
 	WAIT_CURSOR;
 
 	QString tempFileName = fileName();
+	DEBUG("	temp file name = " << tempFileName.toStdString());
 	QString fileName = absolutePath(tempFileName);
 	AbstractFileFilter::FileType fileType = currentFileType();
 	LiveDataSource::SourceType sourceType = currentSourceType();
 	int lines = ui.sbPreviewLines->value();
 
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
-		DEBUG("refreshPreview(): file name = " << fileName.toStdString());
+		DEBUG("	file name = " << fileName.toStdString());
 
 	// generic table widget
 	if (fileType == AbstractFileFilter::Ascii || fileType == AbstractFileFilter::Binary
