@@ -69,7 +69,7 @@ class TreeModel : public QAbstractItemModel {
     Q_OBJECT
 
 public:
-    TreeModel(const QStringList &headers, QObject *parent = nullptr);
+    explicit TreeModel(const QStringList &headers, QObject *parent = nullptr);
     ~TreeModel();
     QVariant treeData(const int row, const int column, const QModelIndex &parent = QModelIndex(), const int role = Qt::EditRole);
     QVariant data(const QModelIndex &index, int role) const override;

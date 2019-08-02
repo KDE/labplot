@@ -164,7 +164,7 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 				m_variableDataColumns[i]->setCurrentModelIndex(QModelIndex());
 				m_variableDataColumns[i]->useCurrentIndexText(false);
 				m_variableDataColumns[i]->setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", columnPaths[i]));
-				m_variableDataColumns[i]->setText(columnPaths[i].split("/").last());
+				m_variableDataColumns[i]->setText(columnPaths[i].split('/').last());
 			}
 		}
 	}

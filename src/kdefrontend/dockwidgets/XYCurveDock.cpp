@@ -509,7 +509,7 @@ void XYCurveDock::setModel() {
 	cbYErrorPlusColumn->setModel(m_aspectTreeModel);
 
 	if (cbXColumn) {
-		QString path = m_curve->xColumnPath().split("/").last();
+		QString path = m_curve->xColumnPath().split('/').last();
 		if (m_curve->xColumn()) {
 			path += QString("\t ")+m_curve->xColumn()->plotDesignationString();
 			cbXColumn->setInvalid(false);
@@ -517,7 +517,7 @@ void XYCurveDock::setModel() {
 			cbXColumn->setInvalid(true, i18n("The column \"%1\" is not available. If a new column at this path is created, it is linked to this curve. If you wanna hold this column, don't change anything in this combobox.", m_curve->xColumnPath()));
 		cbXColumn->setText(path);
 
-		path = m_curve->yColumnPath().split("/").last();
+		path = m_curve->yColumnPath().split('/').last();
 		if (m_curve->yColumn()) {
 			path += QString("\t ")+m_curve->yColumn()->plotDesignationString();
 			cbYColumn->setInvalid(false);
@@ -772,7 +772,7 @@ void XYCurveDock::checkColumnAvailability(TreeViewComboBox* cb, const AbstractCo
 		cb->useCurrentIndexText(false);
 		cb->setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", columnPath));
 	}
-	cb->setText(columnPath.split("/").last());
+	cb->setText(columnPath.split('/').last());
 }
 
 /*!
@@ -2241,20 +2241,20 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());
 	group.writeEntry("LineColor", ui.kcbLineColor->color());
 	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(),Worksheet::Point) );
-	group.writeEntry("LineOpacity", ui.sbLineOpacity->value()/100 );
+	group.writeEntry("LineOpacity", ui.sbLineOpacity->value()/100.0);
 
 	//Drop Line
 	group.writeEntry("DropLineType", ui.cbDropLineType->currentIndex());
 	group.writeEntry("DropLineStyle", ui.cbDropLineStyle->currentIndex());
 	group.writeEntry("DropLineColor", ui.kcbDropLineColor->color());
 	group.writeEntry("DropLineWidth", Worksheet::convertToSceneUnits(ui.sbDropLineWidth->value(),Worksheet::Point) );
-	group.writeEntry("DropLineOpacity", ui.sbDropLineOpacity->value()/100 );
+	group.writeEntry("DropLineOpacity", ui.sbDropLineOpacity->value()/100.0);
 
 	//Symbol (TODO: character)
 	group.writeEntry("SymbolStyle", ui.cbSymbolStyle->currentIndex());
 	group.writeEntry("SymbolSize", Worksheet::convertToSceneUnits(ui.sbSymbolSize->value(),Worksheet::Point));
 	group.writeEntry("SymbolRotation", ui.sbSymbolRotation->value());
-	group.writeEntry("SymbolOpacity", ui.sbSymbolOpacity->value()/100 );
+	group.writeEntry("SymbolOpacity", ui.sbSymbolOpacity->value()/100.0);
 	group.writeEntry("SymbolFillingStyle", ui.cbSymbolFillingStyle->currentIndex());
 	group.writeEntry("SymbolFillingColor", ui.kcbSymbolFillingColor->color());
 	group.writeEntry("SymbolBorderStyle", ui.cbSymbolBorderStyle->currentIndex());
@@ -2266,7 +2266,7 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("ValuesPosition", ui.cbValuesPosition->currentIndex());
 	group.writeEntry("ValuesDistance", Worksheet::convertToSceneUnits(ui.sbValuesDistance->value(),Worksheet::Point));
 	group.writeEntry("ValuesRotation", ui.sbValuesRotation->value());
-	group.writeEntry("ValuesOpacity", ui.sbValuesOpacity->value()/100);
+	group.writeEntry("ValuesOpacity", ui.sbValuesOpacity->value()/100.0);
 	group.writeEntry("ValuesPrefix", ui.leValuesPrefix->text());
 	group.writeEntry("ValuesSuffix", ui.leValuesSuffix->text());
 	group.writeEntry("ValuesFont", ui.kfrValuesFont->font());
@@ -2291,7 +2291,7 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("ErrorBarsStyle", ui.cbErrorBarsStyle->currentIndex());
 	group.writeEntry("ErrorBarsColor", ui.kcbErrorBarsColor->color());
 	group.writeEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(ui.sbErrorBarsWidth->value(),Worksheet::Point) );
-	group.writeEntry("ErrorBarsOpacity", ui.sbErrorBarsOpacity->value()/100 );
+	group.writeEntry("ErrorBarsOpacity", ui.sbErrorBarsOpacity->value()/100.0);
 
 	config.sync();
 }

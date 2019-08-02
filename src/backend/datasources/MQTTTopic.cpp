@@ -284,7 +284,7 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 			for (int i = 0; i < pufferSize; ++i) {
 				str = attribs.value("message"+QString::number(i)).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'message"+QString::number(i)+"'"));
+					reader->raiseWarning(attributeWarning.arg("'message"+QString::number(i)+'\''));
 				else
 					m_messagePuffer.push_back(str);
 			}

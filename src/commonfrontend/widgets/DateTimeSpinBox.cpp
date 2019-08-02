@@ -85,12 +85,12 @@ void DateTimeSpinBox::stepBy(int steps) {
  * Write value to lineEdit of the spinbox
  */
 void DateTimeSpinBox::writeValue() {
-	lineEdit()->setText(QString::number(m_year) + "." +
-						QString("%1").arg(m_month, 2, 10, QLatin1Char('0')) + "." +
-						QString("%1").arg(m_day, 2, 10, QLatin1Char('0')) + " " +
-						QString("%1").arg(m_hour, 2, 10, QLatin1Char('0')) + ":" +
-						QString("%1").arg(m_minute, 2, 10, QLatin1Char('0')) + ":" +
-						QString("%1").arg(m_second, 2, 10, QLatin1Char('0')) + "." +
+	lineEdit()->setText(QString::number(m_year) + '.' +
+						QString("%1").arg(m_month, 2, 10, QLatin1Char('0')) + QLatin1Char('.') +
+						QString("%1").arg(m_day, 2, 10, QLatin1Char('0')) + QLatin1Char(' ') +
+						QString("%1").arg(m_hour, 2, 10, QLatin1Char('0')) + QLatin1Char(':') +
+						QString("%1").arg(m_minute, 2, 10, QLatin1Char('0')) + QLatin1Char(':') +
+						QString("%1").arg(m_second, 2, 10, QLatin1Char('0')) + QLatin1Char('.') +
 						QString("%1").arg(m_millisecond, 3, 10, QLatin1Char('0')));
 	emit valueChanged();
 }
