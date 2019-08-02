@@ -913,12 +913,12 @@ void WorksheetDock::loadConfig(KConfig& config) {
 	ui.sbBackgroundOpacity->setValue( qRound(group.readEntry("BackgroundOpacity", m_worksheet->backgroundOpacity())*100) );
 
 	// Layout
-	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin", Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), Worksheet::Centimeter)) );
-	ui.sbLayoutBottomMargin->setValue(group.readEntry("LayoutBottomMargin", Worksheet::convertFromSceneUnits(m_worksheet->layoutBottomMargin(), Worksheet::Centimeter)) );
-	ui.sbLayoutLeftMargin->setValue(group.readEntry("LayoutLeftMargin", Worksheet::convertFromSceneUnits(m_worksheet->layoutLeftMargin(), Worksheet::Centimeter)) );
-	ui.sbLayoutRightMargin->setValue(group.readEntry("LayoutRightMargin", Worksheet::convertFromSceneUnits(m_worksheet->layoutRightMargin(), Worksheet::Centimeter)) );
-	ui.sbLayoutHorizontalSpacing->setValue(group.readEntry("LayoutHorizontalSpacing", Worksheet::convertFromSceneUnits(m_worksheet->layoutHorizontalSpacing(), Worksheet::Centimeter)) );
-	ui.sbLayoutVerticalSpacing->setValue(group.readEntry("LayoutVerticalSpacing", Worksheet::convertFromSceneUnits(m_worksheet->layoutVerticalSpacing(), Worksheet::Centimeter)) );
+	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutTopMargin", m_worksheet->layoutTopMargin()), Worksheet::Centimeter) );
+	ui.sbLayoutBottomMargin->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutBottomMargin", m_worksheet->layoutBottomMargin()), Worksheet::Centimeter) );
+	ui.sbLayoutLeftMargin->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutLeftMargin", m_worksheet->layoutLeftMargin()), Worksheet::Centimeter) );
+	ui.sbLayoutRightMargin->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutRightMargin", m_worksheet->layoutRightMargin()), Worksheet::Centimeter) );
+	ui.sbLayoutHorizontalSpacing->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutHorizontalSpacing", m_worksheet->layoutHorizontalSpacing()), Worksheet::Centimeter) );
+	ui.sbLayoutVerticalSpacing->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutVerticalSpacing", m_worksheet->layoutVerticalSpacing()), Worksheet::Centimeter) );
 
 	ui.sbLayoutRowCount->setValue(group.readEntry("LayoutRowCount", m_worksheet->layoutRowCount()));
 	ui.sbLayoutColumnCount->setValue(group.readEntry("LayoutColumnCount", m_worksheet->layoutColumnCount()));
