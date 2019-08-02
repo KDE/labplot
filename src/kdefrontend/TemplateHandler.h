@@ -4,7 +4,7 @@
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
     Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-    Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -46,8 +46,9 @@ public:
 private:
 	void retranslateUi();
 
+	QString m_dirName;
 	ClassName m_className;
-	QList<QString> m_dirNames;
+	QList<QString> m_subDirNames;
 
 	QToolButton* m_tbLoad;
 	QToolButton* m_tbSave;

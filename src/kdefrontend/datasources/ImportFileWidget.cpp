@@ -416,7 +416,7 @@ QString ImportFileWidget::selectedObject() const {
 	const QString& path = fileName();
 
 	//determine the file name only
-	QString name = path.right(path.length() - path.lastIndexOf(QDir::separator()) - 1);
+	QString name = path.right(path.length() - path.lastIndexOf('/') - 1);
 
 	//strip away the extension if available
 	if (name.indexOf('.') != -1)
@@ -753,13 +753,17 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	opens a file dialog and lets the user select the file data source.
 */
 void ImportFileWidget::selectFile() {
+	DEBUG("ImportFileWidget::selectFile()")
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("ImportFileWidget"));
 	const QString& dir = conf.readEntry(QLatin1String("LastDir"), "");
 	const QString& path = QFileDialog::getOpenFileName(this, i18n("Select the File Data Source"), dir);
+	DEBUG("	dir = " << dir.toStdString())
+	DEBUG("	path = " << path.toStdString())
 	if (path.isEmpty())	//cancel was clicked in the file-dialog
 		return;
 
-	int pos = path.lastIndexOf(QDir::separator());
+	int pos = path.lastIndexOf('/');
+	DEBUG("	separator pos = " << pos);
 	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir != dir)
@@ -771,7 +775,7 @@ void ImportFileWidget::selectFile() {
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
 	QStringList urls = m_cbFileName->urls();
-	urls.insert(0, "file://"+path); // add type of path
+	urls.insert(0, "file://" + path); // add type of path
 	m_cbFileName->setUrls(urls);
 	m_cbFileName->setCurrentText(urls.first());
 	fileNameChanged(path); // why do I have to call this function separately
@@ -887,10 +891,12 @@ QString absolutePath(const QString& fileName) {
 	and activates the corresponding options.
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
-	DEBUG("ImportFileWidget::fileNameChanged()");
+	DEBUG("ImportFileWidget::fileNameChanged()")
+	DEBUG("	file name = " << name.toStdString())
 	const QString fileName = absolutePath(name);
 
 	bool fileExists = QFile::exists(fileName);
+	DEBUG("	file exists = " << fileExists)
 	if (fileExists)
 		m_cbFileName->setStyleSheet(QString());
 	else

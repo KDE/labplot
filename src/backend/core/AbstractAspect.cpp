@@ -531,7 +531,7 @@ void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 		newIndex = max_index;
 	Q_ASSERT(newIndex >= 0 && newIndex <= max_index);
 
-	AbstractAspect* old_parent = parentAspect();
+//	AbstractAspect* old_parent = parentAspect();
 // 	int old_index = old_parent->indexOfChild<AbstractAspect>(this, IncludeHidden);
 // 	auto* old_sibling = old_parent->child<AbstractAspect>(old_index+1, IncludeHidden);
 // 	auto* new_sibling = newParent->child<AbstractAspect>(newIndex, IncludeHidden);
