@@ -39,7 +39,7 @@
  */
 
 HypothesisTestView::HypothesisTestView(HypothesisTest* hypothesisTest) : GeneralTestView (static_cast<GeneralTest*>(hypothesisTest)),
-    m_hypothesisTest(hypothesisTest) {
+	m_hypothesisTest(hypothesisTest) {
 }
 
 HypothesisTestView::~HypothesisTestView() = default;

@@ -36,14 +36,14 @@
 class CorrelationCoefficient;
 
 class CorrelationCoefficientView : public GeneralTestView {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit CorrelationCoefficientView(CorrelationCoefficient*);
-    ~CorrelationCoefficientView() override;
+	explicit CorrelationCoefficientView(CorrelationCoefficient*);
+	~CorrelationCoefficientView() override;
 
 private:
-    CorrelationCoefficient* m_CorrelationCoefficient;
+	CorrelationCoefficient* m_CorrelationCoefficient;
 
 public slots:
 private slots:

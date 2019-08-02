@@ -36,14 +36,14 @@
 class HypothesisTest;
 
 class HypothesisTestView : public GeneralTestView {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit HypothesisTestView(HypothesisTest*);
-    ~HypothesisTestView() override;
+	explicit HypothesisTestView(HypothesisTest*);
+	~HypothesisTestView() override;
 
 private:
-    HypothesisTest* m_hypothesisTest;
+	HypothesisTest* m_hypothesisTest;
 
 public slots:
 private slots:

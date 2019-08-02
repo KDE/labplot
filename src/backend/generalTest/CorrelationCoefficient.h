@@ -34,38 +34,38 @@
 class CorrelationCoefficientView;
 
 class CorrelationCoefficient : public GeneralTest {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit CorrelationCoefficient(const QString& name);
-    ~CorrelationCoefficient() override;
+	explicit CorrelationCoefficient(const QString& name);
+	~CorrelationCoefficient() override;
 
-    enum Test{
-        Pearson,
-        Kendall,
-        Spearman
-    };
+	enum Test {
+		Pearson,
+		Kendall,
+		Spearman
+	};
 
-    double correlationValue() const;
-    QList<double> statisticValue() const;
-    QList<double> pValue() const;
+	double correlationValue() const;
+	QList<double> statisticValue() const;
+	QList<double> pValue() const;
 
-    QWidget* view() const override;
+	QWidget* view() const override;
 
-    void performTest(Test m_test, bool categoricalVariable = false);
+	void performTest(Test m_test, bool categoricalVariable = false);
 private:
-    void performPearson(bool categoricalVariable);
-    void performKendall();
-    void performSpearman();
+	void performPearson(bool categoricalVariable);
+	void performKendall();
+	void performSpearman();
 
-    int findDiscordants(int* ranks, int start, int end);
+	int findDiscordants(int* ranks, int start, int end);
 
-    void convertToRanks(const Column* col, int N, QMap<double, int> &ranks);
-    void convertToRanks(const Column* col, QMap<double, int> &ranks);
+	void convertToRanks(const Column* col, int N, QMap<double, int> &ranks);
+	void convertToRanks(const Column* col, QMap<double, int> &ranks);
 
-    double m_correlationValue;
-    QList<double> m_statisticValue;
-    QList<double> m_pValue;
+	double m_correlationValue;
+	QList<double> m_statisticValue;
+	QList<double> m_pValue;
 };
 
 #endif // CORRELATIONCOEFFICIENT_H

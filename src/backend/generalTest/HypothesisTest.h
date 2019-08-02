@@ -35,57 +35,57 @@ class HypothesisTest : public GeneralTest {
 	Q_OBJECT
 
 public:
-        explicit HypothesisTest(const QString& name);
+	explicit HypothesisTest(const QString& name);
 	~HypothesisTest() override;
 
-    struct Test {
-        enum Type {
-            NoneType  = 0,
-            TTest = 1 << 0,
-            ZTest = 1 << 1,
-            Anova = 1 << 2
-        };
-        enum SubType {
-            NoneSubType = 0,
-            TwoSampleIndependent    = 1 << 0,
-            TwoSamplePaired         = 1 << 1,
-            OneSample               = 1 << 2,
-            OneWay                  = 1 << 3,
-            TwoWay                  = 1 << 4
-        };
-        enum Tail {Positive, Negative, Two};
-        Type type = NoneType;
-        SubType subtype = NoneSubType;
-        Tail tail;
-    };
+	struct Test {
+		enum Type {
+			NoneType  = 0,
+			TTest = 1 << 0,
+			ZTest = 1 << 1,
+			Anova = 1 << 2
+		};
+		enum SubType {
+			NoneSubType = 0,
+			TwoSampleIndependent    = 1 << 0,
+			TwoSamplePaired         = 1 << 1,
+			OneSample               = 1 << 2,
+			OneWay                  = 1 << 3,
+			TwoWay                  = 1 << 4
+		};
+		enum Tail {Positive, Negative, Two};
+		Type type = NoneType;
+		SubType subtype = NoneSubType;
+		Tail tail;
+	};
 
 	void setPopulationMean(QVariant populationMean);
 	void setSignificanceLevel(QVariant alpha);
 
-    void performTest(Test m_test, bool categoricalVariable = true, bool equalVariance = true);
-    void performLeveneTest(bool categoricalVariable);
+	void performTest(Test m_test, bool categoricalVariable = true, bool equalVariance = true);
+	void performLeveneTest(bool categoricalVariable);
 
-    QList<double>& statisticValue();
-    QList<double>& pValue();
-    QWidget* view() const override;
+	QList<double>& statisticValue();
+	QList<double>& pValue();
+	QWidget* view() const override;
 
 private:
-    void performTwoSampleIndependentTest(HypothesisTest::Test::Type test, bool categoricalVariable = false, bool equalVariance = true);
-    void performTwoSamplePairedTest(HypothesisTest::Test::Type test);
-    void performOneSampleTest(HypothesisTest::Test::Type test);
-    void performOneWayAnova();
-    void performTwoWayAnova();
-    void m_performLeveneTest(bool categoricalVariable);
+	void performTwoSampleIndependentTest(HypothesisTest::Test::Type test, bool categoricalVariable = false, bool equalVariance = true);
+	void performTwoSamplePairedTest(HypothesisTest::Test::Type test);
+	void performOneSampleTest(HypothesisTest::Test::Type test);
+	void performOneWayAnova();
+	void performTwoWayAnova();
+	void m_performLeveneTest(bool categoricalVariable);
 
-    double getPValue(const HypothesisTest::Test::Type& test, double& value,
-                     const QString& col1Name, const QString& col2name,
-                     const double mean, const double sp, const int df);
+	double getPValue(const HypothesisTest::Test::Type& test, double& value,
+	                 const QString& col1Name, const QString& col2name,
+	                 const double mean, const double sp, const int df);
 
-    double m_populationMean;
-    double m_significanceLevel;
-    HypothesisTest::Test::Tail m_tailType;
-    QList<double> m_pValue;
-    QList<double> m_statisticValue;
+	double m_populationMean;
+	double m_significanceLevel;
+	HypothesisTest::Test::Tail m_tailType;
+	QList<double> m_pValue;
+	QList<double> m_statisticValue;
 };
 
 #endif // HypothesisTest_H
