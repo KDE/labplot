@@ -891,10 +891,12 @@ QString absolutePath(const QString& fileName) {
 	and activates the corresponding options.
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
-	DEBUG("ImportFileWidget::fileNameChanged()");
+	DEBUG("ImportFileWidget::fileNameChanged()")
+	DEBUG("	file name = " << name.toStdString())
 	const QString fileName = absolutePath(name);
 
 	bool fileExists = QFile::exists(fileName);
+	DEBUG("	file exists = " << fileExists)
 	if (fileExists)
 		m_cbFileName->setStyleSheet(QString());
 	else
