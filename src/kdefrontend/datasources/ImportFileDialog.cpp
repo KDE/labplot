@@ -352,7 +352,6 @@ void ImportFileDialog::checkOkButton() {
 	}
 
 	QString fileName = m_importFileWidget->fileName();
-	DEBUG("	file name = " << fileName.toStdString())
 #ifndef HAVE_WINDOWS
 	if (!fileName.isEmpty() && fileName.at(0) != QDir::separator())
 		fileName = QDir::homePath() + QDir::separator() + fileName;

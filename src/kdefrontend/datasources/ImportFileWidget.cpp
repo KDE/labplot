@@ -764,7 +764,6 @@ void ImportFileWidget::selectFile() {
 		return;
 
 	int pos = path.lastIndexOf('/');
-	DEBUG("	separator pos = " << pos);
 	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir != dir)
@@ -776,14 +775,10 @@ void ImportFileWidget::selectFile() {
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
 	QStringList urls = m_cbFileName->urls();
-	QDEBUG("	urls = " << urls)
-	//urls.insert(0, "file://" + path); // add type of path
 	urls.insert(0, QUrl::fromLocalFile(path).url()); // add type of path
-	QDEBUG("	urls = " << urls)
 	m_cbFileName->setUrls(urls);
 	m_cbFileName->setCurrentText(urls.first());
-	DEBUG("	urls.first() = " << urls.first().toStdString())
-	DEBUG("	cb text = " << m_cbFileName->currentText().toStdString())
+	DEBUG("	combobox text = " << m_cbFileName->currentText().toStdString())
 	fileNameChanged(path); // why do I have to call this function separately
 }
 
@@ -897,12 +892,10 @@ QString absolutePath(const QString& fileName) {
 	and activates the corresponding options.
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
-	DEBUG("ImportFileWidget::fileNameChanged()")
-	DEBUG("	file name = " << name.toStdString())
+	DEBUG("ImportFileWidget::fileNameChanged() : " << name.toStdString())
 	const QString fileName = absolutePath(name);
 
 	bool fileExists = QFile::exists(fileName);
-	DEBUG("	file exists = " << fileExists)
 	if (fileExists)
 		m_cbFileName->setStyleSheet(QString());
 	else
@@ -1228,7 +1221,6 @@ void ImportFileWidget::refreshPreview() {
 	WAIT_CURSOR;
 
 	QString tempFileName = fileName();
-	DEBUG("	temp file name = " << tempFileName.toStdString());
 	QString fileName = absolutePath(tempFileName);
 	AbstractFileFilter::FileType fileType = currentFileType();
 	LiveDataSource::SourceType sourceType = currentSourceType();
