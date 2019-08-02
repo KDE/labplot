@@ -777,7 +777,8 @@ void ImportFileWidget::selectFile() {
 
 	QStringList urls = m_cbFileName->urls();
 	QDEBUG("	urls = " << urls)
-	urls.insert(0, "file://" + path); // add type of path
+	//urls.insert(0, "file://" + path); // add type of path
+	urls.insert(0, QUrl::fromLocalFile(path).url()); // add type of path
 	QDEBUG("	urls = " << urls)
 	m_cbFileName->setUrls(urls);
 	m_cbFileName->setCurrentText(urls.first());
