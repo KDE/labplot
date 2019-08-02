@@ -416,7 +416,7 @@ QString ImportFileWidget::selectedObject() const {
 	const QString& path = fileName();
 
 	//determine the file name only
-	QString name = path.right(path.length() - path.lastIndexOf(QDir::separator()) - 1);
+	QString name = path.right(path.length() - path.lastIndexOf('/') - 1);
 
 	//strip away the extension if available
 	if (name.indexOf('.') != -1)
@@ -762,9 +762,8 @@ void ImportFileWidget::selectFile() {
 	if (path.isEmpty())	//cancel was clicked in the file-dialog
 		return;
 
-	int pos = path.lastIndexOf(QDir::separator());
-	DEBUG("	QDir::separator() = " << QString(QDir::separator()).toStdString());
-	DEBUG("	seperator pos = " << pos);
+	int pos = path.lastIndexOf('/');
+	DEBUG("	separator pos = " << pos);
 	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir != dir)
@@ -776,7 +775,7 @@ void ImportFileWidget::selectFile() {
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
 	QStringList urls = m_cbFileName->urls();
-	urls.insert(0, "file://"+path); // add type of path
+	urls.insert(0, "file://" + path); // add type of path
 	m_cbFileName->setUrls(urls);
 	m_cbFileName->setCurrentText(urls.first());
 	fileNameChanged(path); // why do I have to call this function separately
