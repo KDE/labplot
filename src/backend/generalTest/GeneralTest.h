@@ -40,106 +40,106 @@ class QVBoxLayout;
 class QLabel;
 
 class GeneralTest : public AbstractPart {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit GeneralTest(const QString& name, const AspectType& type);
-    ~GeneralTest() override;
+	explicit GeneralTest(const QString& name, const AspectType& type);
+	~GeneralTest() override;
 
-    enum DataSourceType {DataSourceSpreadsheet, DataSourceDatabase};
+	enum DataSourceType {DataSourceSpreadsheet, DataSourceDatabase};
 
-    struct Cell {
-        QString data;
-        int level;
-        bool isHeader;
-        QString tooltip;
-        int rowSpanCount;
-        int columnSpanCount;
-        Cell(QVariant data = "", int level = 0, bool isHeader = false, QString tooltip = "", int rowSpanCount = 1, int columnSpanCount = 1) {
-            this->data = data.toString();
-            this->level = level;
-            this->isHeader = isHeader;
-            this->tooltip = tooltip;
-            this->rowSpanCount = rowSpanCount;
-            this->columnSpanCount = columnSpanCount;
-        }
-    };
+	struct Cell {
+		QString data;
+		int level;
+		bool isHeader;
+		QString tooltip;
+		int rowSpanCount;
+		int columnSpanCount;
+		Cell(QVariant data = "", int level = 0, bool isHeader = false, QString tooltip = "", int rowSpanCount = 1, int columnSpanCount = 1) {
+			this->data = data.toString();
+			this->level = level;
+			this->isHeader = isHeader;
+			this->tooltip = tooltip;
+			this->rowSpanCount = rowSpanCount;
+			this->columnSpanCount = columnSpanCount;
+		}
+	};
 
-    enum ErrorType {ErrorUnqualSize, ErrorEmptyColumn, NoError};
+	enum ErrorType {ErrorUnqualSize, ErrorEmptyColumn, NoError};
 
-    void setDataSourceType(DataSourceType type);
-    DataSourceType dataSourceType() const;
-    void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
-    Spreadsheet* dataSourceSpreadsheet() const;
+	void setDataSourceType(DataSourceType type);
+	DataSourceType dataSourceType() const;
+	void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
+	Spreadsheet* dataSourceSpreadsheet() const;
 
-    void setColumns(const QVector<Column*>& cols);
-    void setColumns(QStringList cols);
-    QStringList allColumns();
-    QString testName();
-    QString statsTable();
-    QMap<QString, QString> tooltips();
+	void setColumns(const QVector<Column*>& cols);
+	void setColumns(QStringList cols);
+	QStringList allColumns();
+	QString testName();
+	QString statsTable();
+	QMap<QString, QString> tooltips();
 
-    QVBoxLayout* summaryLayout();
+	QVBoxLayout* summaryLayout();
 
-    //virtual methods
-    //    QIcon icon() const override;
-    QMenu* createContextMenu() override;
+	//virtual methods
+	//    QIcon icon() const override;
+	QMenu* createContextMenu() override;
 //    QWidget* view() const override;
 
-    bool exportView() const override;
-    bool printView() override;
-    bool printPreview() const override;
+	bool exportView() const override;
+	bool printView() override;
+	bool printPreview() const override;
 
-    void save(QXmlStreamWriter*) const override;
-    bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
 signals:
-    void changed();
-    void requestProjectContextMenu(QMenu*);
-    void dataSourceTypeChanged(GeneralTest::DataSourceType);
-    void dataSourceSpreadsheetChanged(Spreadsheet*);
+	void changed();
+	void requestProjectContextMenu(QMenu*);
+	void dataSourceTypeChanged(GeneralTest::DataSourceType);
+	void dataSourceSpreadsheetChanged(Spreadsheet*);
 
 protected:
-    DataSourceType m_dataSourceType{GeneralTest::DataSourceSpreadsheet};
-    Spreadsheet* m_dataSourceSpreadsheet{nullptr};
-    QVector<Column*> m_columns;
-    QStringList m_allColumns;
+	DataSourceType m_dataSourceType{GeneralTest::DataSourceSpreadsheet};
+	Spreadsheet* m_dataSourceSpreadsheet{nullptr};
+	QVector<Column*> m_columns;
+	QStringList m_allColumns;
 
-    QString m_currTestName;
-    QString m_statsTable;
+	QString m_currTestName;
+	QString m_statsTable;
 
-    QVBoxLayout* m_summaryLayout{nullptr};
-    QLabel* m_resultLine[RESULTLINESCOUNT];
-    QMap<QString, QString> m_tooltips;
+	QVBoxLayout* m_summaryLayout{nullptr};
+	QLabel* m_resultLine[RESULTLINESCOUNT];
+	QMap<QString, QString> m_tooltips;
 
-    QString round(QVariant number, int precision = 3);
+	QString round(QVariant number, int precision = 3);
 
-    int findCount(const Column* column);
-    double findSum(const Column* column, int N = -1);
-    double findSumSq(const Column* column, int N = -1);
-    double findMean(const Column* column, int N = -1);
-    double findStd(const Column* column, int N, double mean);
-    double findStd(const Column* column, int N = -1);
+	int findCount(const Column* column);
+	double findSum(const Column* column, int N = -1);
+	double findSumSq(const Column* column, int N = -1);
+	double findMean(const Column* column, int N = -1);
+	double findStd(const Column* column, int N, double mean);
+	double findStd(const Column* column, int N = -1);
 
-    void countPartitions(Column* column, int& np, int& totalRows);
+	void countPartitions(Column* column, int& np, int& totalRows);
 
 
 //    double findSumProducts(const Column* columns[], int N = -1);
 
-    ErrorType findStats(const Column* column,int& count, double& sum, double& mean, double& std);
-    ErrorType findStatsPaired(const Column* column1, const Column* column2, int& count, double& sum, double& mean, double& std);
-    ErrorType findStatsCategorical(Column* column1, Column* column2, int n[], double sum[], double mean[], double std[], QMap<QString, int>& colName, const int& np, const int& totalRows);
+	ErrorType findStats(const Column* column,int& count, double& sum, double& mean, double& std);
+	ErrorType findStatsPaired(const Column* column1, const Column* column2, int& count, double& sum, double& mean, double& std);
+	ErrorType findStatsCategorical(Column* column1, Column* column2, int n[], double sum[], double mean[], double std[], QMap<QString, int>& colName, const int& np, const int& totalRows);
 
-    QString getHtmlTable(int row, int column, QVariant* rowMajor);
-    QString getHtmlTable3(const QList<Cell*>& rowMajor);
+	QString getHtmlTable(int row, int column, QVariant* rowMajor);
+	QString getHtmlTable3(const QList<Cell*>& rowMajor);
 
-    QString getLine(const QString& msg, const QString& color = "black");
-    void printLine(const int& index, const QString& msg, const QString& color = "black");
-    void printTooltip(const int& index, const QString& msg);
-    void printError(const QString& errorMsg);
+	QString getLine(const QString& msg, const QString& color = "black");
+	void printLine(const int& index, const QString& msg, const QString& color = "black");
+	void printTooltip(const int& index, const QString& msg);
+	void printError(const QString& errorMsg);
 
-    bool m_dbCreated{false};
-    mutable GeneralTestView* m_view{nullptr};
+	bool m_dbCreated{false};
+	mutable GeneralTestView* m_view{nullptr};
 };
 
 #endif // GeneralTest_H

@@ -45,61 +45,61 @@ class TreeViewComboBox;
 //class QComboBox;
 
 class CorrelationCoefficientDock : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit CorrelationCoefficientDock(QWidget*);
-    void setCorrelationCoefficient(CorrelationCoefficient*);
+	explicit CorrelationCoefficientDock(QWidget*);
+	void setCorrelationCoefficient(CorrelationCoefficient*);
 
 private:
-    Ui::CorrelationCoefficientDock ui;
-    bool m_initializing{false};
-    TreeViewComboBox* cbSpreadsheet{nullptr};
-    CorrelationCoefficient* m_correlationCoefficient{nullptr};
-    AspectTreeModel* m_aspectTreeModel{nullptr};
-    QSqlDatabase m_db;
-    QString m_configPath;
-    //        void load();
-    //        void loadConfig(KConfig&);
-    void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
-    //        void readConnections();
-    //        void updateFields();
-    //        bool fieldSelected(const QString&);
-    CorrelationCoefficient::Test m_test;
-    void countPartitions(Column *column, int &np, int &total_rows);
+	Ui::CorrelationCoefficientDock ui;
+	bool m_initializing{false};
+	TreeViewComboBox* cbSpreadsheet{nullptr};
+	CorrelationCoefficient* m_correlationCoefficient{nullptr};
+	AspectTreeModel* m_aspectTreeModel{nullptr};
+	QSqlDatabase m_db;
+	QString m_configPath;
+	//        void load();
+	//        void loadConfig(KConfig&);
+	void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
+	//        void readConnections();
+	//        void updateFields();
+	//        bool fieldSelected(const QString&);
+	CorrelationCoefficient::Test m_test;
+	void countPartitions(Column *column, int &np, int &total_rows);
 
-    void setColumnsComboBoxModel(Spreadsheet* spreadsheet);
-    void setColumnsComboBoxView();
-    bool nonEmptySelectedColumns();
+	void setColumnsComboBoxModel(Spreadsheet* spreadsheet);
+	void setColumnsComboBoxView();
+	bool nonEmptySelectedColumns();
 
-    QList<Column* > m_onlyValuesCols;
-    QList<Column* > m_twoCategoricalCols;
-    QList<Column* > m_multiCategoricalCols;
+	QList<Column* > m_onlyValuesCols;
+	QList<Column* > m_twoCategoricalCols;
+	QList<Column* > m_multiCategoricalCols;
 private slots:
-    //SLOTs for changes triggered in PivotTableDock
-    //        void nameChanged();
-    //        void commentChanged();
-    void dataSourceTypeChanged(int);
-    void showCorrelationCoefficient();
-    void findCorrelationCoefficient();
-    void spreadsheetChanged(const QModelIndex&);
-    void col1IndexChanged(int index);
-    void changeCbCol2Label();
+	//SLOTs for changes triggered in PivotTableDock
+	//        void nameChanged();
+	//        void commentChanged();
+	void dataSourceTypeChanged(int);
+	void showCorrelationCoefficient();
+	void findCorrelationCoefficient();
+	void spreadsheetChanged(const QModelIndex&);
+	void col1IndexChanged(int index);
+	void changeCbCol2Label();
 
 
-    //        void connectionChanged();
-    //        void tableChanged();
-    //        void showDatabaseManager();
+	//        void connectionChanged();
+	//        void tableChanged();
+	//        void showDatabaseManager();
 
-    //        //SLOTs for changes triggered in PivotTable
-    void CorrelationCoefficientDescriptionChanged(const AbstractAspect*);
+	//        //SLOTs for changes triggered in PivotTable
+	void CorrelationCoefficientDescriptionChanged(const AbstractAspect*);
 
-    //        //save/load template
-    //        void loadConfigFromTemplate(KConfig&);
-    //        void saveConfigAsTemplate(KConfig&);
+	//        //save/load template
+	//        void loadConfigFromTemplate(KConfig&);
+	//        void saveConfigAsTemplate(KConfig&);
 
 signals:
-    //        void info(const QString&);
+	//        void info(const QString&);
 };
 
 #endif // CORRELATIONCOEFFICIENTDOCK_H

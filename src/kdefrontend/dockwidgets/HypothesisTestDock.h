@@ -101,7 +101,7 @@ private slots:
 	//        void showDatabaseManager();
 
 	//        //SLOTs for changes triggered in PivotTable
-    void hypothesisTestDescriptionChanged(const AbstractAspect*);
+	void hypothesisTestDescriptionChanged(const AbstractAspect*);
 
 	//        void addRow();
 	//        void removeRow();

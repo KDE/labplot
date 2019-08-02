@@ -46,40 +46,40 @@ class QTextEdit;
 #define RESULTLINESCOUNT 10
 
 class GeneralTestView : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit GeneralTestView(GeneralTest*);
-    ~GeneralTestView() override;
+	explicit GeneralTestView(GeneralTest*);
+	~GeneralTestView() override;
 
-    bool exportView();
-    bool printView();
-    bool printPreview();
+	bool exportView();
+	bool printView();
+	bool printPreview();
 
 protected:
-    void init();
-    void initActions();
-    void initMenus();
-    void connectActions();
+	void init();
+	void initActions();
+	void initMenus();
+	void connectActions();
 
-    void exportToFile(const QString&, const bool, const QString&, QLocale::Language) const;
-    void exportToLaTeX(const QString&, const bool exportHeaders,
-                       const bool gridLines, const bool captions, const bool latexHeaders,
-                       const bool skipEmptyRows,const bool exportEntire) const;
+	void exportToFile(const QString&, const bool, const QString&, QLocale::Language) const;
+	void exportToLaTeX(const QString&, const bool exportHeaders,
+	                   const bool gridLines, const bool captions, const bool latexHeaders,
+	                   const bool skipEmptyRows,const bool exportEntire) const;
 
-    GeneralTest* m_generalTest;
-    QLabel* m_testName;
-    QTextEdit* m_statsTable;
-    QWidget* m_summaryResults{nullptr};
-    QLabel* m_resultLine[RESULTLINESCOUNT];
+	GeneralTest* m_generalTest;
+	QLabel* m_testName;
+	QTextEdit* m_statsTable;
+	QWidget* m_summaryResults{nullptr};
+	QLabel* m_resultLine[RESULTLINESCOUNT];
 
 public slots:
-    void createContextMenu(QMenu*);
-    void fillToolBar(QToolBar*);
-    void print(QPrinter*) const;
-    void changed();
-    void cursorPositionChanged();
-    void clearResult();
+	void createContextMenu(QMenu*);
+	void fillToolBar(QToolBar*);
+	void print(QPrinter*) const;
+	void changed();
+	void cursorPositionChanged();
+	void clearResult();
 protected slots:
 };
 

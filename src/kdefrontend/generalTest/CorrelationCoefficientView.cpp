@@ -39,7 +39,7 @@
  */
 
 CorrelationCoefficientView::CorrelationCoefficientView(CorrelationCoefficient* CorrelationCoefficient) : GeneralTestView (static_cast<GeneralTest*>(CorrelationCoefficient)),
-    m_CorrelationCoefficient(CorrelationCoefficient) {
+	m_CorrelationCoefficient(CorrelationCoefficient) {
 }
 
 CorrelationCoefficientView::~CorrelationCoefficientView() = default;

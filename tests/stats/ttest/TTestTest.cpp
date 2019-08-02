@@ -43,8 +43,8 @@ void TTestTest::twoSampleIndependent_data() {
 	// This data set is taken from "JASP"
 	QVector<double> col1Data = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 	QVector<double> col2Data = {3, 1, 5, 4, 6, 4, 6, 2, 0, 5, 4, 5, 4, 3, 6, 6, 8, 5, 5, 4, 2, 5, 7, 5};
-    double tValue_expected = -1.71345710765;
-    double pValue_expected = 0.100686;
+	double tValue_expected = -1.71345710765;
+	double pValue_expected = 0.100686;
 
 	QTest::newRow("invisible cloak") << col1Data << col2Data << tValue_expected << pValue_expected;
 
@@ -52,8 +52,8 @@ void TTestTest::twoSampleIndependent_data() {
 	// This data set is taken from "JASP"
 	col1Data = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	col2Data = {42, 46, 43, 10, 55, 17, 26, 60, 62, 53, 37, 42, 33, 37, 41, 42, 19, 55, 54, 28, 20, 48, 85, 24, 56, 43, 59, 58, 52, 71, 62, 43, 54, 49, 57, 61, 33, 44, 46, 67, 43, 49, 57, 53};
-    tValue_expected = -2.2665512460934725;
-    pValue_expected = 0.028629483;
+	tValue_expected = -2.2665512460934725;
+	pValue_expected = 0.028629483;
 	QTest::newRow("directed control activities") << col1Data << col2Data << tValue_expected << pValue_expected;
 }
 
@@ -84,16 +84,16 @@ void TTestTest::twoSampleIndependent() {
 	bool equalVariance = true;
 
 	tTest.performTest(test, categoricalVariable, equalVariance);
-    double tValue = tTest.statisticValue()[0];
-    double pValue = tTest.pValue()[0];
+	double tValue = tTest.statisticValue()[0];
+	double pValue = tTest.pValue()[0];
 
 	qDebug() << "tValue is " << tValue;
 	qDebug() << "pValue is: " << pValue;
 	qDebug() << "tValue_expected is " << tValue_expected;
 	qDebug() << "pValue_expected is: " << pValue_expected;
 
-    FuzzyCompare(tValue, tValue_expected, 1.e-5);
-    FuzzyCompare(pValue, pValue_expected, 1.e-5);
+	FuzzyCompare(tValue, tValue_expected, 1.e-5);
+	FuzzyCompare(pValue, pValue_expected, 1.e-5);
 }
 
 void TTestTest::twoSamplePaired_data() {
@@ -107,8 +107,8 @@ void TTestTest::twoSamplePaired_data() {
 	// DATA SET:: Moon and Aggression
 	QVector<double> col1Data = {3.33, 3.67, 2.67, 3.33, 3.33, 3.67, 4.67, 2.67, 6, 4.33, 3.33, 0.67, 1.33, 0.33, 2};
 	QVector<double> col2Data = {0.27, 0.59, 0.32, 0.19, 1.26, 0.11, 0.3, 0.4, 1.59, 0.6, 0.65, 0.69, 1.26, 0.23, 0.38};
-    double tValue_expected = 6.451788554;
-    double pValue_expected = 1.51815e-05;
+	double tValue_expected = 6.451788554;
+	double pValue_expected = 1.51815e-05;
 
 	QTest::newRow("Moon and Aggression") << col1Data << col2Data << tValue_expected << pValue_expected;
 }
@@ -137,16 +137,16 @@ void TTestTest::twoSamplePaired() {
 	test.tail = HypothesisTest::Test::Tail::Two;
 
 	tTest.performTest(test);
-    double tValue = tTest.statisticValue()[0];
-    double pValue = tTest.pValue()[0];
+	double tValue = tTest.statisticValue()[0];
+	double pValue = tTest.pValue()[0];
 
 	qDebug() << "tValue is " << tValue;
 	qDebug() << "pValue is: " << pValue;
 	qDebug() << "tValue_expected is " << tValue_expected;
 	qDebug() << "pValue_expected is: " << pValue_expected;
 
-    FuzzyCompare(tValue, tValue_expected, 1.e-5);
-    FuzzyCompare(pValue, pValue_expected, 1.e-5);
+	FuzzyCompare(tValue, tValue_expected, 1.e-5);
+	FuzzyCompare(pValue, pValue_expected, 1.e-5);
 }
 
 void TTestTest::oneSample_data() {
@@ -160,8 +160,8 @@ void TTestTest::oneSample_data() {
 	// DATA SET:: Weight Gain;
 	QVector<double> col1Data = {13.2, 8.58, 14.08, 8.58, 10.56, 14.74, 7.92, 13.2, 12.76, 5.72, 11.66, 7.04, 3.08, 15.62, 14.3, 5.5};
 	double populationMean = 16;
-    double tValue_expected =  -5.823250303;
-    double pValue_expected = 3.35479e-05;
+	double tValue_expected =  -5.823250303;
+	double pValue_expected = 3.35479e-05;
 	QTest::newRow("weight gain") << col1Data << populationMean << tValue_expected << pValue_expected;
 }
 
@@ -187,16 +187,16 @@ void TTestTest::oneSample() {
 	test.tail = HypothesisTest::Test::Tail::Two;
 
 	tTest.performTest(test);
-    double tValue = tTest.statisticValue()[0];
-    double pValue = tTest.pValue()[0];
+	double tValue = tTest.statisticValue()[0];
+	double pValue = tTest.pValue()[0];
 
 	qDebug() << "tValue is " << tValue;
 	qDebug() << "pValue is: " << pValue;
 	qDebug() << "tValue_expected is " << tValue_expected;
 	qDebug() << "pValue_expected is: " << pValue_expected;
 
-    FuzzyCompare(tValue, tValue_expected, 1.e-5);
-    FuzzyCompare(pValue, pValue_expected, 1.e-5);
+	FuzzyCompare(tValue, tValue_expected, 1.e-5);
+	FuzzyCompare(pValue, pValue_expected, 1.e-5);
 }
 
 QTEST_MAIN(TTestTest)
