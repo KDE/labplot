@@ -753,13 +753,18 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	opens a file dialog and lets the user select the file data source.
 */
 void ImportFileWidget::selectFile() {
+	DEBUG("ImportFileWidget::selectFile()")
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("ImportFileWidget"));
 	const QString& dir = conf.readEntry(QLatin1String("LastDir"), "");
 	const QString& path = QFileDialog::getOpenFileName(this, i18n("Select the File Data Source"), dir);
+	DEBUG("	dir = " << dir.toStdString())
+	DEBUG("	path = " << path.toStdString())
 	if (path.isEmpty())	//cancel was clicked in the file-dialog
 		return;
 
 	int pos = path.lastIndexOf(QDir::separator());
+	DEBUG("	QDir::separator() = " << QString(QDir::separator()).toStdString());
+	DEBUG("	seperator pos = " << pos);
 	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir != dir)
