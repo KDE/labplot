@@ -59,7 +59,16 @@ GeneralTestView::GeneralTestView(GeneralTest* GeneralTest) : QWidget(),
 
 	m_statsTable->setReadOnly(true);
 
+	m_testName->setStyleSheet("background-color: white");
+	m_statsTable->setStyleSheet("background-color: white");
+	m_summaryResults->setStyleSheet("QToolTip { color: black; background-color: yellow; border: 0px; }");
+
+	m_testName->hide();
+	m_statsTable->hide();
+	m_summaryResults->hide();
+
 	auto* layout = new QVBoxLayout(this);
+
 	layout->addWidget(m_testName);
 	layout->addWidget(m_statsTable);
 	layout->addWidget(m_summaryResults);
@@ -75,7 +84,6 @@ void GeneralTestView::init() {
 	initMenus();
 
 	m_statsTable->setMouseTracking(true);
-	//    m_summaryResults->setStyleSheet("background-color:white; border: 0px; margin: 0px; padding 0px;qproperty-frame: false;");
 	connect(m_generalTest, &GeneralTest::changed, this, &GeneralTestView::changed);
 	connect(m_statsTable, &QTextEdit::cursorPositionChanged, this, &GeneralTestView::cursorPositionChanged);
 }
@@ -145,6 +153,9 @@ void GeneralTestView::print(QPrinter* printer) const {
 
 void GeneralTestView::changed() {
 	m_testName->setText(m_generalTest->testName());
+
+	m_testName->show();
+	m_summaryResults->show();
 
 	if (m_generalTest->statsTable().isEmpty())
 		m_statsTable->hide();
