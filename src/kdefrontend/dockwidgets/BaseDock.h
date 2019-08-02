@@ -38,7 +38,7 @@ class BaseDock : public QWidget {
 	Q_OBJECT
 
 public:
-	BaseDock(QWidget* parent);
+	explicit BaseDock(QWidget* parent);
 	~BaseDock();
 
 protected:
