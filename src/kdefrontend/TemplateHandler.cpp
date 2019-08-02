@@ -4,7 +4,7 @@
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
     Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni.kn)
-    Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -30,6 +30,7 @@
 #include "TemplateHandler.h"
 
 #include <QFileInfo>
+#include <QDir>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
@@ -99,13 +100,23 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 
 	m_className = name;
 
+	//folder where config files will be stored in object specific sub-folders:
+	//Linux    - ~/.local/share/labplot2/templates/
+	//Mac      - //TODO
+	//Windows  - C:/Users/<USER>/AppData/Roaming/labplot2/templates/
+	m_dirName = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/templates/");
+
 	//synchronize this with the ordering in TemplateHandler::ClassName
-	m_dirNames <<"spreadsheet"<<"matrix"<<"worksheet"<<"cartesianplot"<<"cartesianplotlegend"<<"xycurve"<<"axis"<<"custompoint"<<"histogram";
+	enum ClassName {Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, Histogram, XYCurve, Axis, CustomPoint};
+	m_subDirNames <<"spreadsheet"<<"matrix"<<"worksheet"<<"cartesianplot"
+				<<"cartesianplotlegend"<<"histogram"<<"xycurve"<<"axis"<<"custompoint";
 
 	this->retranslateUi();
 
 	//disable the load-button if no templates are available yet
-	QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/" + m_dirNames.at(m_className) + "/*");
+	QStringList list = QDir(m_dirName + m_subDirNames.at(m_className)).entryList();
+	list.removeAll(QLatin1String("."));
+	list.removeAll(QLatin1String(".."));
 	m_tbLoad->setEnabled(list.size());
 
 	//TODO: implement copy&paste of properties and activate copy- and paste-buttons again
@@ -126,13 +137,15 @@ void TemplateHandler::retranslateUi() {
 //##############################################################################
 void TemplateHandler::loadMenu() {
 	QMenu menu;
-	menu.addSection(i18n("Load From"));
+	menu.addSection(i18n("Load From Template"));
 
-	QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/" + m_dirNames.at(m_className) + "/*");
+	QStringList list = QDir(m_dirName + m_subDirNames.at(m_className)).entryList();
+	list.removeAll(QLatin1String("."));
+	list.removeAll(QLatin1String(".."));
 	for (int i = 0; i < list.size(); ++i) {
-			QFileInfo fileinfo(list.at(i));
-			QAction* action = menu.addAction(fileinfo.fileName());
-			action->setData(QVariant(list.at(i)));
+		QFileInfo fileinfo(list.at(i));
+		QAction* action = menu.addAction(QIcon::fromTheme(QLatin1String("document-edit")), fileinfo.fileName());
+		action->setData(fileinfo.fileName());
 	}
 	connect(&menu, &QMenu::triggered, this, &TemplateHandler::loadMenuSelected);
 
@@ -141,20 +154,22 @@ void TemplateHandler::loadMenu() {
 }
 
 void TemplateHandler::loadMenuSelected(QAction* action) {
-	KConfig config(action->data().toString(), KConfig::SimpleConfig);
+	QString configFile = m_dirName + m_subDirNames.at(m_className) + '/' + action->data().toString();
+	KConfig config(configFile, KConfig::SimpleConfig);
 	emit loadConfigRequested(config);
-
 	emit info( i18n("Template \"%1\" was loaded.", action->text().remove('&')) );
 }
 
 void TemplateHandler::saveMenu() {
 	QMenu menu;
-	menu.addSection(i18n("Save As"));
+	menu.addSection(i18n("Save As Template"));
 
-	QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/"+ m_dirNames.at(m_className) + "/*");
+	QStringList list = QDir(m_dirName + m_subDirNames.at(m_className)).entryList();
+	list.removeAll(QLatin1String("."));
+	list.removeAll(QLatin1String(".."));
 	for (int i = 0; i < list.size(); ++i) {
 			QFileInfo fileinfo(list.at(i));
-			QAction* action = menu.addAction(fileinfo.fileName());
+			QAction* action = menu.addAction(QIcon::fromTheme(QLatin1String("document-edit")), fileinfo.fileName());
 			menu.addAction(action);
 			action->setShortcut(QKeySequence());
 	}
@@ -174,6 +189,8 @@ void TemplateHandler::saveMenu() {
 	connect(leFilename, &QLineEdit::returnPressed, &menu, &QMenu::close);
 
 	widgetAction->setDefaultWidget(frame);
+	if (menu.actions().size() > 1)
+		menu.addSeparator();
 	menu.addAction(widgetAction);
 
 	QPoint pos(-menu.sizeHint().width()+m_tbSave->width(),-menu.sizeHint().height());
@@ -188,13 +205,13 @@ void TemplateHandler::saveMenu() {
  * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
 void TemplateHandler::saveNewSelected(const QString& filename) {
-	KConfig config(QStandardPaths::locate(QStandardPaths::ApplicationsLocation, "templates") + '/' + m_dirNames.at(m_className) + '/' + filename, KConfig::SimpleConfig);
+	QString path = m_dirName + m_subDirNames.at(m_className) + '/' + filename;
+	KConfig config(path, KConfig::SimpleConfig);
 	emit saveConfigRequested(config);
+	emit info( i18n("New template \"%1\" was saved.", filename) );
 
 	//we have at least one saved template now -> enable the load button
 	m_tbLoad->setEnabled(true);
-
-	emit info( i18n("New template \"%1\" was saved.", filename) );
 }
 
 /*!
@@ -204,7 +221,6 @@ void TemplateHandler::saveNewSelected(const QString& filename) {
 void TemplateHandler::saveMenuSelected(QAction* action) {
 	KConfig config(action->data().toString()+'/'+action->text(), KConfig::SimpleConfig);
 	emit saveConfigRequested(config);
-
 	emit info( i18n("Template \"%1\" was saved.", action->text()) );
 }
 
@@ -215,6 +231,5 @@ void TemplateHandler::saveMenuSelected(QAction* action) {
 void TemplateHandler::saveDefaults() {
 	KConfig config;
 	emit saveConfigRequested(config);
-
 	emit info( i18n("New default template was saved.") );
 }
