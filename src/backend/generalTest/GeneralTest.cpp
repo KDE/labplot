@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : GeneralTest.cpp
-    Project              : LabPlot
-    Description          : Doing Hypothesis-Test on data provided
-    --------------------------------------------------------------------
-    Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
+	File                 : GeneralTest.cpp
+	Project              : LabPlot
+	Description          : Doing Hypothesis-Test on data provided
+	--------------------------------------------------------------------
+	Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
 
  ***************************************************************************/
 
@@ -136,23 +136,23 @@ int GeneralTest::findCount(const Column *column) {
 	switch (column->columnMode()) {
 	case (AbstractColumn::Numeric):
 	case (AbstractColumn::Integer): {
-			for (int i = 0; i < N; i++)
-				if (std::isnan(column->valueAt(i))) {
-					N = i;
-					break;
-				}
-			break;
-		}
+		for (int i = 0; i < N; i++)
+			if (std::isnan(column->valueAt(i))) {
+				N = i;
+				break;
+			}
+		break;
+	}
 	case (AbstractColumn::Month):
 	case (AbstractColumn::Day):
 	case (AbstractColumn::Text): {
-			for (int i = 0; i < N; i++)
-				if (column->textAt(i).isEmpty()) {
-					N = i;
-					break;
-				}
-			break;
-		}
+		for (int i = 0; i < N; i++)
+			if (column->textAt(i).isEmpty()) {
+				N = i;
+				break;
+			}
+		break;
+	}
 	case (AbstractColumn::DateTime):
 		break;
 	}
@@ -373,14 +373,14 @@ QString GeneralTest::getHtmlTable(int row, int column, QVariant* rowMajor) {
 
 	QString table;
 	table = "<style type=text/css>"
-	        ".tg  {border-collapse:collapse;border-spacing:0;border:none;border-color:#ccc;}"
-	        ".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}"
-	        ".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}"
-	        ".tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}"
-	        ".tg .tg-btxf{background-color:#f9f9f9;border-color:inherit;text-align:left;vertical-align:top}"
-	        "</style>"
-	        "<table class=tg>"
-	        "  <tr>";
+			".tg  {border-collapse:collapse;border-spacing:0;border:none;border-color:#ccc;}"
+			".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}"
+			".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}"
+			".tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}"
+			".tg .tg-btxf{background-color:#f9f9f9;border-color:inherit;text-align:left;vertical-align:top}"
+			"</style>"
+			"<table class=tg>"
+			"  <tr>";
 
 	QString bg = "tg-0pky";
 	bool pky = true;
@@ -430,10 +430,10 @@ QString GeneralTest::getHtmlTable3(const QList<GeneralTest::Cell*>& rowMajor) {
 
 	QString table;
 	table = "<style type=text/css>"
-	        ".tg  {border-collapse:collapse;border: 1px solid black;}"
-	        ".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border: 1px solid black;overflow:hidden;word-break:normal;color:#333;background-color:#fff;}"
-	        ".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border: 1px solid black;overflow:hidden;word-break:normal;color:#333;background-color:#f0f0f0;}"
-	        "</style>";
+			".tg  {border-collapse:collapse;border: 1px solid black;}"
+			".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border: 1px solid black;overflow:hidden;word-break:normal;color:#333;background-color:#fff;}"
+			".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border: 1px solid black;overflow:hidden;word-break:normal;color:#333;background-color:#f0f0f0;}"
+			"</style>";
 
 	table += "<table class=tg>";
 
@@ -455,12 +455,12 @@ QString GeneralTest::getHtmlTable3(const QList<GeneralTest::Cell*>& rowMajor) {
 		}
 
 		table += cellStartTag +
-		         "rowspan=" + QString::number(currCell->rowSpanCount) +
-		         " " +
-		         "colspan=" + QString::number(currCell->columnSpanCount) +
-		         ">" +
-		         i18n("%1", currCell->data) +
-		         cellEndTag;
+				"rowspan=" + QString::number(currCell->rowSpanCount) +
+				" " +
+				"colspan=" + QString::number(currCell->columnSpanCount) +
+				">" +
+				i18n("%1", currCell->data) +
+				cellEndTag;
 
 		if (!currCell->tooltip.isEmpty())
 			m_tooltips.insert(currCell->data, currCell->tooltip);

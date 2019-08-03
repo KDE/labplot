@@ -58,7 +58,7 @@ CorrelationCoefficient::CorrelationCoefficient(const QString& name) : GeneralTes
 CorrelationCoefficient::~CorrelationCoefficient() {
 }
 
-void CorrelationCoefficient::performTest(Test test, bool categoricalVariable) {
+void CorrelationCoefficient::performTest(int test, bool categoricalVariable) {
 	m_statsTable = "";
 	m_tooltips.clear();
 	m_correlationValue = 0;
@@ -67,21 +67,27 @@ void CorrelationCoefficient::performTest(Test test, bool categoricalVariable) {
 	for (int i = 0; i < RESULTLINESCOUNT; i++)
 		m_resultLine[i]->clear();
 
-	switch (test) {
-	case CorrelationCoefficient::Test::Pearson: {
+	switch (testType(test)) {
+	case CorrelationCoefficient::Pearson: {
 		m_currTestName = "<h2>" + i18n("Pearson's r Correlation Test") + "</h2>";
 		performPearson(categoricalVariable);
 		break;
 	}
-	case CorrelationCoefficient::Test::Kendall:
+	case CorrelationCoefficient::Kendall:
 		m_currTestName = "<h2>" + i18n("Kendall's Rank Correlation Test") + "</h2>";
 		performKendall();
 		break;
-	case CorrelationCoefficient::Test::Spearman: {
+	case CorrelationCoefficient::Spearman: {
 		m_currTestName = "<h2>" + i18n("Spearman Correlation Coefficient Test") + "</h2>";
 		performSpearman();
 		break;
 	}
+	case CorrelationCoefficient::ChiSquare:
+		switch (testSubtype(test)) {
+		case CorrelationCoefficient::IndependenceTest:
+			break;
+		}
+		break;
 	}
 
 	emit changed();
@@ -328,7 +334,20 @@ void CorrelationCoefficient::performSpearman() {
 	printLine(0, QString("Spearman Rank Correlation value is %1").arg(m_correlationValue), "green");
 }
 
+/***********************************************Chi Square Test for Indpendence******************************************************************/
+
+void CorrelationCoefficient::chiSquareIndpendence() {
+}
+
 /***********************************************Helper Functions******************************************************************/
+
+int CorrelationCoefficient::testType(int test) {
+	return test & 0x0F;
+}
+
+int CorrelationCoefficient::testSubtype(int test) {
+	return test & 0xF0;
+}
 
 int CorrelationCoefficient::findDiscordants(int *ranks, int start, int end) {
 	if (start >= end)

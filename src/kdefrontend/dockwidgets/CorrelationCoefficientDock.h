@@ -65,12 +65,15 @@ private:
 	//        void readConnections();
 	//        void updateFields();
 	//        bool fieldSelected(const QString&);
-	CorrelationCoefficient::Test m_test;
+	int m_test;
 	void countPartitions(Column *column, int &np, int &total_rows);
 
 	void setColumnsComboBoxModel(Spreadsheet* spreadsheet);
 	void setColumnsComboBoxView();
 	bool nonEmptySelectedColumns();
+
+	int testType(int test);
+	int testSubType(int test);
 
 	QList<Column* > m_onlyValuesCols;
 	QList<Column* > m_twoCategoricalCols;
@@ -80,6 +83,7 @@ private slots:
 	//        void nameChanged();
 	//        void commentChanged();
 	void dataSourceTypeChanged(int);
+	void showTestType();
 	void showCorrelationCoefficient();
 	void findCorrelationCoefficient();
 	void spreadsheetChanged(const QModelIndex&);
@@ -101,5 +105,4 @@ private slots:
 signals:
 	//        void info(const QString&);
 };
-
 #endif // CORRELATIONCOEFFICIENTDOCK_H

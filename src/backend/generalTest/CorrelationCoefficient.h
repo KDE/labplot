@@ -40,10 +40,14 @@ public:
 	explicit CorrelationCoefficient(const QString& name);
 	~CorrelationCoefficient() override;
 
-	enum Test {
-		Pearson,
-		Kendall,
-		Spearman
+	enum Test{
+	//Type
+		Pearson = 0x01,
+		Spearman = 0x02,
+		Kendall = 0x04,
+		ChiSquare = 0x08,
+	//Subtype
+		IndependenceTest = 0x10
 	};
 
 	double correlationValue() const;
@@ -52,11 +56,17 @@ public:
 
 	QWidget* view() const override;
 
-	void performTest(Test m_test, bool categoricalVariable = false);
+	void performTest(int m_test, bool categoricalVariable = false);
 private:
 	void performPearson(bool categoricalVariable);
 	void performKendall();
 	void performSpearman();
+
+	void chiSquareIndpendence();
+
+
+	int testType(int test);
+	int testSubtype(int test);
 
 	int findDiscordants(int* ranks, int start, int end);
 

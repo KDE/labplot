@@ -68,10 +68,13 @@ CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : QWidge
 	ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "sql_connections";
 
-	ui.cbTest->addItem( i18n("Pearson r"), CorrelationCoefficient::Test::Pearson);
-	ui.cbTest->addItem( i18n("Kendall"), CorrelationCoefficient::Test::Kendall);
-	ui.cbTest->addItem( i18n("Spearman"), CorrelationCoefficient::Test::Spearman);
+	ui.cbTest->addItem( i18n("Pearson r"), CorrelationCoefficient::Pearson);
+	ui.cbTest->addItem( i18n("Kendall"), CorrelationCoefficient::Kendall);
+	ui.cbTest->addItem( i18n("Spearman"), CorrelationCoefficient::Spearman);
+	ui.cbTest->addItem( i18n("Chi Square"), CorrelationCoefficient::ChiSquare);
 
+	ui.lTestType->hide();
+	ui.cbTestType->hide();
 	// adding item to tests and testtype combo box;
 	// making all test blocks invisible at starting.
 	ui.lCategorical->hide();
@@ -80,6 +83,8 @@ CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : QWidge
 	ui.cbCol1->hide();
 	ui.lCol2->hide();
 	ui.cbCol2->hide();
+	ui.lAlpha->hide();
+	ui.leAlpha->hide();
 	ui.pbPerformTest->setEnabled(false);
 	ui.pbPerformTest->setIcon(QIcon::fromTheme("run-build"));
 
@@ -118,7 +123,8 @@ CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : QWidge
 	//        ui.bRemoveColumn->setEnabled(!ui.lwColumns->selectedItems().isEmpty());
 	//    });
 
-	connect(ui.cbTest, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CorrelationCoefficientDock::showCorrelationCoefficient);
+	connect(ui.cbTest, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CorrelationCoefficientDock::showTestType);
+	connect(ui.cbTestType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CorrelationCoefficientDock::showCorrelationCoefficient);
 	connect(ui.chbCategorical, &QCheckBox::stateChanged, this, &CorrelationCoefficientDock::changeCbCol2Label);
 
 	connect(ui.pbPerformTest, &QPushButton::clicked, this, &CorrelationCoefficientDock::findCorrelationCoefficient);
@@ -126,6 +132,9 @@ CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : QWidge
 
 	ui.cbTest->setCurrentIndex(0);
 	emit ui.cbTest->currentIndexChanged(0);
+
+	ui.cbTestType->setCurrentIndex(0);
+	emit ui.cbTestType->currentIndexChanged(0);
 }
 
 void CorrelationCoefficientDock::setCorrelationCoefficient(CorrelationCoefficient* CorrelationCoefficient) {
@@ -165,12 +174,31 @@ void CorrelationCoefficientDock::setCorrelationCoefficient(CorrelationCoefficien
 
 }
 
-
-void CorrelationCoefficientDock::showCorrelationCoefficient() {
+void CorrelationCoefficientDock::showTestType() {
 	if (ui.cbTest->count() == 0)
 		return;
 
-	m_test = CorrelationCoefficient::Test(ui.cbTest->currentData().toInt());
+	m_test = ui.cbTest->currentData().toInt();
+
+	switch (m_test) {
+	case CorrelationCoefficient::ChiSquare:
+		ui.lTestType->show();
+		ui.cbTestType->show();
+		ui.cbTestType->addItem( i18n("Test for Independence"), CorrelationCoefficient::IndependenceTest);
+		break;
+	case CorrelationCoefficient::Pearson:
+	case CorrelationCoefficient::Spearman:
+	case CorrelationCoefficient::Kendall:
+	case CorrelationCoefficient::IndependenceTest:
+		ui.lTestType->hide();
+		ui.cbTestType->hide();
+		showCorrelationCoefficient();
+		break;
+	}
+}
+
+void CorrelationCoefficientDock::showCorrelationCoefficient() {
+	m_test |= ui.cbTestType->currentData().toInt();
 
 	ui.lCol1->show();
 	ui.cbCol1->show();
@@ -178,8 +206,11 @@ void CorrelationCoefficientDock::showCorrelationCoefficient() {
 	ui.lCol2->show();
 	ui.cbCol2->show();
 
-	ui.lCategorical->setVisible(bool(m_test & CorrelationCoefficient::Test::Pearson));
-	ui.chbCategorical->setVisible(bool(m_test & CorrelationCoefficient::Test::Pearson));
+	ui.lCategorical->setVisible(testType(m_test) == CorrelationCoefficient::Pearson);
+	ui.chbCategorical->setVisible(testType(m_test) == CorrelationCoefficient::Pearson);
+
+	ui.lAlpha->setVisible(m_test == (CorrelationCoefficient::ChiSquare | CorrelationCoefficient::IndependenceTest));
+	ui.leAlpha->setVisible(m_test == (CorrelationCoefficient::ChiSquare | CorrelationCoefficient::IndependenceTest));
 
 	setColumnsComboBoxView();
 
@@ -369,9 +400,8 @@ void CorrelationCoefficientDock::changeCbCol2Label() {
 	QString selected_text = ui.cbCol1->currentText();
 	Column* col1 = m_correlationCoefficient->dataSourceSpreadsheet()->column(selected_text);
 
-	if (bool(m_test & (CorrelationCoefficient::Test::Kendall | CorrelationCoefficient::Test::Spearman)) ||
-	        (!ui.chbCategorical->isChecked() &&
-	         (col1->columnMode() == AbstractColumn::Integer || col1->columnMode() == AbstractColumn::Numeric))) {
+	if (m_test == (CorrelationCoefficient::Kendall | CorrelationCoefficient::Spearman) ||
+			(!ui.chbCategorical->isChecked() && col1->isNumeric())) {
 		ui.lCol2->setText( i18n("Independent Var. 2"));
 		ui.chbCategorical->setChecked(false);
 		ui.chbCategorical->setEnabled(true);
@@ -416,7 +446,7 @@ void CorrelationCoefficientDock::setColumnsComboBoxModel(Spreadsheet* spreadshee
 	m_multiCategoricalCols.clear();
 
 	for (auto* col : spreadsheet->children<Column>()) {
-		if (col->columnMode() == AbstractColumn::Integer || col->columnMode() == AbstractColumn::Numeric)
+		if (col->isNumeric())
 			m_onlyValuesCols.append(col);
 		else {
 			int np = 0, n_rows = 0;
@@ -441,21 +471,43 @@ void CorrelationCoefficientDock::setColumnsComboBoxView() {
 
 	QList<Column*>::iterator i;
 
-	switch (m_test) {
-	case (CorrelationCoefficient::Test::Pearson): {
-			for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++) {
-				ui.cbCol1->addItem( (*i)->name(), qint64(*i));
-				ui.cbCol2->addItem( (*i)->name(), qint64(*i));
-			}
-			for (i = m_twoCategoricalCols.begin(); i != m_twoCategoricalCols.end(); i++)
-				ui.cbCol1->addItem( (*i)->name(), qint64(*i));
-			break;
+	switch (testType(m_test)) {
+	case (CorrelationCoefficient::Pearson): {
+		for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++) {
+			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+			ui.cbCol2->addItem( (*i)->name(), qint64(*i));
 		}
-	case CorrelationCoefficient::Test::Kendall: {
-			for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++) {
-				ui.cbCol1->addItem( (*i)->name(), qint64(*i));
-				ui.cbCol2->addItem( (*i)->name(), qint64(*i));
-			}
+		for (i = m_twoCategoricalCols.begin(); i != m_twoCategoricalCols.end(); i++)
+			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+		break;
+	}
+	case CorrelationCoefficient::Kendall: {
+		for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++) {
+			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+			ui.cbCol2->addItem( (*i)->name(), qint64(*i));
+		}
+		for (i = m_twoCategoricalCols.begin(); i != m_twoCategoricalCols.end(); i++) {
+			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+			ui.cbCol2->addItem( (*i)->name(), qint64(*i));
+		}
+		for (i = m_multiCategoricalCols.begin(); i != m_multiCategoricalCols.end(); i++) {
+			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+			ui.cbCol2->addItem( (*i)->name(), qint64(*i));
+		}
+		break;
+	}
+	case CorrelationCoefficient::Spearman: {
+		for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++) {
+			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+			ui.cbCol2->addItem( (*i)->name(), qint64(*i));
+		}
+		for (i = m_twoCategoricalCols.begin(); i != m_twoCategoricalCols.end(); i++)
+			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
+		break;
+	}
+	case CorrelationCoefficient::ChiSquare: {
+		switch (testSubType(m_test)) {
+		case CorrelationCoefficient::IndependenceTest:
 			for (i = m_twoCategoricalCols.begin(); i != m_twoCategoricalCols.end(); i++) {
 				ui.cbCol1->addItem( (*i)->name(), qint64(*i));
 				ui.cbCol2->addItem( (*i)->name(), qint64(*i));
@@ -466,23 +518,24 @@ void CorrelationCoefficientDock::setColumnsComboBoxView() {
 			}
 			break;
 		}
-	case CorrelationCoefficient::Test::Spearman: {
-			for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++) {
-				ui.cbCol1->addItem( (*i)->name(), qint64(*i));
-				ui.cbCol2->addItem( (*i)->name(), qint64(*i));
-			}
-			for (i = m_twoCategoricalCols.begin(); i != m_twoCategoricalCols.end(); i++)
-				ui.cbCol1->addItem( (*i)->name(), qint64(*i));
-			break;
-		}
+		break;
+	}
 	}
 }
 
 bool CorrelationCoefficientDock::nonEmptySelectedColumns() {
 	if ((ui.cbCol1->isVisible() && ui.cbCol1->count() < 1) ||
-	        (ui.cbCol2->isVisible() && ui.cbCol2->count() < 1))
+			(ui.cbCol2->isVisible() && ui.cbCol2->count() < 1))
 		return false;
 	return true;
+}
+
+int CorrelationCoefficientDock::testType(int test) {
+	return test & 0x0F;
+}
+
+int CorrelationCoefficientDock::testSubType(int test) {
+	return test & 0xF0;
 }
 
 void CorrelationCoefficientDock::countPartitions(Column *column, int &np, int &total_rows) {
