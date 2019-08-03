@@ -360,7 +360,7 @@ void ImportFileDialog::checkOkButton() {
 	DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, m_importFileWidget->currentSourceType()));
 	switch (m_importFileWidget->currentSourceType()) {
 	case LiveDataSource::SourceType::FileOrPipe: {
-		DEBUG("fileName = " << fileName.toUtf8().constData());
+		DEBUG("	fileName = " << fileName.toUtf8().constData());
 		const bool enable = QFile::exists(fileName);
 		okButton->setEnabled(enable);
 		if (enable)
