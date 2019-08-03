@@ -96,7 +96,7 @@ void CorrelationCoefficientTest::pearsonCoefficient() {
 	correlationCoefficientTest.performTest(test, categoricalVariable);
 
 	double correlationValue = correlationCoefficientTest.correlationValue();
-	double zValue = correlationCoefficientTest.statisticValue()[0];
+	double zValue = 0;
 
 	QDEBUG("Correlation Value is " << correlationValue);
 	QDEBUG("Correlation Value Expected is " << correlationValue_expected);
