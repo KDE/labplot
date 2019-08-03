@@ -115,16 +115,17 @@ void XYAnalysisCurve::setXDataColumn(const AbstractColumn* column) {
 	DEBUG("XYAnalysisCurve::setXDataColumn()");
 	Q_D(XYAnalysisCurve);
 	if (column != d->xDataColumn) {
-		setXDataColumnPath(column->path());
 		exec(new XYAnalysisCurveSetXDataColumnCmd(d, column, ki18n("%1: assign x-data")));
 		handleSourceDataChanged();
 		if (column) {
+			setXDataColumnPath(column->path());
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
 					this, &XYAnalysisCurve::xDataColumnAboutToBeRemoved);
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::xDataColumnNameChanged);
 			//TODO disconnect on undo
-		}
+		} else
+			setXDataColumnPath("");
 	}
 }
 
@@ -133,16 +134,17 @@ void XYAnalysisCurve::setYDataColumn(const AbstractColumn* column) {
 	DEBUG("XYAnalysisCurve::setYDataColumn()");
 	Q_D(XYAnalysisCurve);
 	if (column != d->yDataColumn) {
-		setYDataColumnPath(column->path());
 		exec(new XYAnalysisCurveSetYDataColumnCmd(d, column, ki18n("%1: assign y-data")));
 		handleSourceDataChanged();
 		if (column) {
+			setYDataColumnPath(column->path());
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
 					this, &XYAnalysisCurve::yDataColumnAboutToBeRemoved);
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::yDataColumnNameChanged);
 			//TODO disconnect on undo
-		}
+		} else
+			setXDataColumnPath("");
 	}
 }
 
@@ -151,16 +153,17 @@ void XYAnalysisCurve::setY2DataColumn(const AbstractColumn* column) {
 	DEBUG("XYAnalysisCurve::setY2DataColumn()");
 	Q_D(XYAnalysisCurve);
 	if (column != d->y2DataColumn) {
-		setY2DataColumnPath(column->path());
 		exec(new XYAnalysisCurveSetY2DataColumnCmd(d, column, ki18n("%1: assign second y-data")));
 		handleSourceDataChanged();
 		if (column) {
+			setY2DataColumnPath(column->path());
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
 					this, &XYAnalysisCurve::y2DataColumnAboutToBeRemoved);
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::y2DataColumnNameChanged);
 			//TODO disconnect on undo
-		}
+		} else
+			setXDataColumnPath("");
 	}
 }
 

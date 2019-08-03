@@ -114,9 +114,9 @@ void CantorWorksheet::dataChanged(const QModelIndex& index) {
 		if (dataValue.isNull())
 			dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1));
 		const QString& value = dataValue.toString();
-		auto* parser = new VariableParser(m_backendName, value);
-		if (parser->isParsed())
-			col->replaceValues(0, parser->values());
+		VariableParser parser(m_backendName, value);
+		if (parser.isParsed())
+			col->replaceValues(0, parser.values());
 	}
 
 }
@@ -129,13 +129,13 @@ void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int las
 		if (dataValue.isNull())
 			dataValue = m_variableModel->data(m_variableModel->index(i, 1));
 		const QString& value = dataValue.toString();
-		auto* parser = new VariableParser(m_backendName, value);
-		if (parser->isParsed()) {
+		VariableParser parser(m_backendName, value);
+		if (parser.isParsed()) {
 			Column* col = child<Column>(name);
 			if (col) {
-				col->replaceValues(0, parser->values());
+				col->replaceValues(0, parser.values());
 			} else {
-				col = new Column(name, parser->values());
+				col = new Column(name, parser.values());
 				col->setUndoAware(false);
 				addChild(col);
 
@@ -150,8 +150,6 @@ void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int las
 			if (col)
 				removeChild(col);
 		}
-
-		delete(parser);
 	}
 
 	project()->setChanged(true);

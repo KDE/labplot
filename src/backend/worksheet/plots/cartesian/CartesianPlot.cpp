@@ -2703,9 +2703,9 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 	} else if (mouseMode == CartesianPlot::Cursor) {
 		setCursor(Qt::SizeHorCursor);
 		QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
-		double cursorPenWidth2 = cursorPen.width()/2;
-		if (cursorPenWidth2 < 10)
-			cursorPenWidth2 = 10;
+		double cursorPenWidth2 = cursorPen.width()/2.;
+		if (cursorPenWidth2 < 10.)
+			cursorPenWidth2 = 10.;
 		if (cursor0Enable && qAbs(event->pos().x()-cSystem->mapLogicalToScene(QPointF(cursor0Pos.x(),yMin)).x()) < cursorPenWidth2) {
 			selectedCursor = 0;
 		} else if (cursor1Enable && qAbs(event->pos().x()-cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(),yMin)).x()) < cursorPenWidth2) {
@@ -3049,9 +3049,9 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x()).toString(xRangeDateTimeFormat);
 
-			double cursorPenWidth2 = cursorPen.width()/2;
-			if (cursorPenWidth2 < 10)
-				cursorPenWidth2 = 10;
+			double cursorPenWidth2 = cursorPen.width()/2.;
+			if (cursorPenWidth2 < 10.)
+				cursorPenWidth2 = 10.;
 			if ((cursor0Enable && qAbs(point.x()-cSystem->mapLogicalToScene(QPointF(cursor0Pos.x(),yMin)).x()) < cursorPenWidth2) ||
 					(cursor1Enable && qAbs(point.x()-cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(),yMin)).x()) < cursorPenWidth2))
 				setCursor(Qt::SizeHorCursor);
