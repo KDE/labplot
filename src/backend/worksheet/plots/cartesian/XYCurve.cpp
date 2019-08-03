@@ -329,12 +329,13 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXColumn, const AbstractColumn*, xColumn, rec
 void XYCurve::setXColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xColumn) {
-		setXColumnPath(column->path());
 		exec(new XYCurveSetXColumnCmd(d, column, ki18n("%1: x-data source changed")));
 
 		//emit xDataChanged() in order to notify the plot about the changes
 		emit xDataChanged();
 		if (column) {
+			setXColumnPath(column->path());
+
 			//update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, [=](){ d->recalcLogicalPoints(); });
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
@@ -344,7 +345,8 @@ void XYCurve::setXColumn(const AbstractColumn* column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(xDataChanged()));
 
 			//TODO: add disconnect in the undo-function
-		}
+		} else
+			setXColumnPath("");
 	}
 }
 
@@ -352,7 +354,6 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYColumn, const AbstractColumn*, yColumn, rec
 void XYCurve::setYColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->yColumn) {
-		setYColumnPath(column->path());
 		// disconnect old column
 		disconnect(d->yColumn, &AbstractAspect::aspectDescriptionChanged, this, &XYCurve::yColumnNameChanged);
 		exec(new XYCurveSetYColumnCmd(d, column, ki18n("%1: y-data source changed")));
@@ -360,6 +361,8 @@ void XYCurve::setYColumn(const AbstractColumn* column) {
 		//emit yDataChanged() in order to notify the plot about the changes
 		emit yDataChanged();
 		if (column) {
+			setYColumnPath(column->path());
+
 			//update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, [=](){ d->recalcLogicalPoints(); });
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
@@ -370,7 +373,8 @@ void XYCurve::setYColumn(const AbstractColumn* column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(yDataChanged()));
 
 			//TODO: add disconnect in the undo-function
-		}
+		} else
+			setXColumnPath("");
 	}
 }
 
