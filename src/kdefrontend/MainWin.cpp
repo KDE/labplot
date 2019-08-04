@@ -1911,12 +1911,12 @@ void MainWin::importFileDialog(const QString& fileName) {
 	auto* dlg = new ImportFileDialog(this, false, fileName);
 
 	// select existing container
-	if (m_currentAspect->inherits(AspectType::Spreadsheet) ||
-		m_currentAspect->inherits(AspectType::Matrix) ||
-		m_currentAspect->inherits(AspectType::Workbook))
+	if (m_currentAspect->type() == AspectType::Spreadsheet ||
+		m_currentAspect->type() == AspectType::Matrix ||
+		m_currentAspect->type() == AspectType::Workbook)
 		dlg->setCurrentIndex(m_projectExplorer->currentIndex());
-	else if (m_currentAspect->inherits(AspectType::Column) &&
-             m_currentAspect->parentAspect()->inherits(AspectType::Spreadsheet))
+	else if (m_currentAspect->type() == AspectType::Column &&
+             m_currentAspect->parentAspect()->type() == AspectType::Spreadsheet)
 		dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 
 	if (dlg->exec() == QDialog::Accepted) {
@@ -1933,13 +1933,14 @@ void MainWin::importSqlDialog() {
 	auto* dlg = new ImportSQLDatabaseDialog(this);
 
 	// select existing container
-	if (m_currentAspect->inherits(AspectType::Spreadsheet) ||
-		m_currentAspect->inherits(AspectType::Matrix) ||
-		m_currentAspect->inherits(AspectType::Workbook))
+	if (m_currentAspect->type() == AspectType::Spreadsheet ||
+		m_currentAspect->type() == AspectType::Matrix ||
+		m_currentAspect->type() == AspectType::Workbook)
 		dlg->setCurrentIndex(m_projectExplorer->currentIndex());
-	else if (m_currentAspect->inherits(AspectType::Column) &&
-             m_currentAspect->parentAspect()->inherits(AspectType::Spreadsheet))
+	else if (m_currentAspect->type() == AspectType::Column &&
+             m_currentAspect->parentAspect()->type() == AspectType::Spreadsheet)
 		dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
+
 
 	if (dlg->exec() == QDialog::Accepted) {
 		dlg->importTo(statusBar());
