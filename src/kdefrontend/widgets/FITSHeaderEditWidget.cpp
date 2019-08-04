@@ -416,6 +416,9 @@ void FITSHeaderEditWidget::removeKeyword() {
 void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem *item) {
 	if (!m_initializingTable) {
 		const int row = item->row();
+		if (row < 0)
+			return;
+
 		int idx;
 		bool fromNewKeyword = false;
 		if (row > m_extensionData[m_seletedExtension].keywords.size()-1) {

@@ -50,7 +50,7 @@ public:
 
 private:
 	ColumnPrivate* m_col;
-	AbstractColumn::ColumnMode m_old_mode;
+	AbstractColumn::ColumnMode m_old_mode{AbstractColumn::Numeric};
 	AbstractColumn::ColumnMode m_mode;
 	void* m_old_data{nullptr};
 	void* m_new_data{nullptr};
@@ -138,7 +138,7 @@ public:
 private:
 	ColumnPrivate* m_col;
 	AbstractColumn::PlotDesignation m_new_pd;
-	AbstractColumn::PlotDesignation m_old_pd;
+	AbstractColumn::PlotDesignation m_old_pd{AbstractColumn::X};
 };
 
 class ColumnClearCmd : public QUndoCommand {

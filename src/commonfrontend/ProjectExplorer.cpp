@@ -798,7 +798,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 			QModelIndex index;
 			if (row == -1)
 				index = model->modelIndexOfAspect(m_project); //-1 corresponds to the project-item (s.a. ProjectExplorer::save())
-			else if (row >= aspects.size())
+			else if (row >= aspects.size() || row < 0 /* checking for <0 to protect against wrong values in the XML */)
 				continue;
 			else
 				index = model->modelIndexOfAspect(aspects.at(row));
