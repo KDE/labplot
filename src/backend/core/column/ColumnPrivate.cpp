@@ -712,8 +712,10 @@ int ColumnPrivate::rowCount() const {
  */
 void ColumnPrivate::resizeTo(int new_size) {
 	int old_size = rowCount();
+	if (new_size == old_size)
+		return;
+
 	DEBUG("ColumnPrivate::resizeTo() " << old_size << " -> " << new_size);
-	if (new_size == old_size) return;
 
 	switch (m_column_mode) {
 	case AbstractColumn::Numeric: {

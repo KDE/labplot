@@ -792,7 +792,6 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 			viewItem = false;
 			currentItem = true;
 		} else if (reader->name() == "row") {
-			attribs = reader->attributes();
 			row = reader->readElementText().toInt();
 
 			QModelIndex index;
@@ -816,6 +815,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 				emit currentAspectChanged(part);
 
+				attribs = reader->attributes();
 				str = attribs.value("state").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.subs("state").toString());
