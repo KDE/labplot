@@ -174,9 +174,9 @@ HistogramDock::HistogramDock(QWidget* parent) : BaseDock(parent), cbDataColumn(n
 
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::Histogram);
 	layout->addWidget(templateHandler);
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &HistogramDock::loadConfigFromTemplate);
+	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &HistogramDock::saveConfigAsTemplate);
+	connect(templateHandler, &TemplateHandler::info, this, &HistogramDock::info);
 
 	ui.verticalLayout->addWidget(frame);
 
@@ -392,7 +392,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 
 	//Slots
 	//General-tab
-	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	connect(m_curve, &Histogram::aspectDescriptionChanged, this, &HistogramDock::curveDescriptionChanged);
 	connect(m_curve, &Histogram::dataColumnChanged, this, &HistogramDock::curveDataColumnChanged);
 	connect(m_curve, &Histogram::typeChanged, this, &HistogramDock::curveTypeChanged);
 	connect(m_curve, &Histogram::orientationChanged, this, &HistogramDock::curveOrientationChanged);
@@ -402,48 +402,48 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	connect(m_curve, &Histogram::autoBinRangesChanged, this, &HistogramDock::curveAutoBinRangesChanged);
 	connect(m_curve, &Histogram::binRangesMinChanged, this, &HistogramDock::curveBinRangesMinChanged);
 	connect(m_curve, &Histogram::binRangesMaxChanged, this, &HistogramDock::curveBinRangesMaxChanged);
-	connect(m_curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged(bool)));
+	connect(m_curve, &Histogram::visibilityChanged, this, &HistogramDock::curveVisibilityChanged);
 
 	//Line-tab
-	connect(m_curve, SIGNAL(linePenChanged(QPen)), this, SLOT(curveLinePenChanged(QPen)));
-	connect(m_curve, SIGNAL(lineOpacityChanged(qreal)), this, SLOT(curveLineOpacityChanged(qreal)));
+	connect(m_curve, &Histogram::linePenChanged, this, &HistogramDock::curveLinePenChanged);
+	connect(m_curve, &Histogram::lineOpacityChanged, this, &HistogramDock::curveLineOpacityChanged);
 
 	//Symbol-Tab
-	connect(m_curve, SIGNAL(symbolsStyleChanged(Symbol::Style)), this, SLOT(curveSymbolsStyleChanged(Symbol::Style)));
-	connect(m_curve, SIGNAL(symbolsSizeChanged(qreal)), this, SLOT(curveSymbolsSizeChanged(qreal)));
-	connect(m_curve, SIGNAL(symbolsRotationAngleChanged(qreal)), this, SLOT(curveSymbolsRotationAngleChanged(qreal)));
-	connect(m_curve, SIGNAL(symbolsOpacityChanged(qreal)), this, SLOT(curveSymbolsOpacityChanged(qreal)));
-	connect(m_curve, SIGNAL(symbolsBrushChanged(QBrush)), this, SLOT(curveSymbolsBrushChanged(QBrush)));
-	connect(m_curve, SIGNAL(symbolsPenChanged(QPen)), this, SLOT(curveSymbolsPenChanged(QPen)));
+	connect(m_curve, &Histogram::symbolsStyleChanged, this, &HistogramDock::curveSymbolsStyleChanged);
+	connect(m_curve, &Histogram::symbolsSizeChanged, this, &HistogramDock::curveSymbolsSizeChanged);
+	connect(m_curve, &Histogram::symbolsRotationAngleChanged, this, &HistogramDock::curveSymbolsRotationAngleChanged);
+	connect(m_curve, &Histogram::symbolsOpacityChanged, this, &HistogramDock::curveSymbolsOpacityChanged);
+	connect(m_curve, &Histogram::symbolsBrushChanged, this, &HistogramDock::curveSymbolsBrushChanged);
+	connect(m_curve, &Histogram::symbolsPenChanged, this, &HistogramDock::curveSymbolsPenChanged);
 
 	//Values-Tab
-	connect(m_curve, SIGNAL(valuesTypeChanged(Histogram::ValuesType)), this, SLOT(curveValuesTypeChanged(Histogram::ValuesType)));
-	connect(m_curve, SIGNAL(valuesColumnChanged(const AbstractColumn*)), this, SLOT(curveValuesColumnChanged(const AbstractColumn*)));
-	connect(m_curve, SIGNAL(valuesPositionChanged(Histogram::ValuesPosition)), this, SLOT(curveValuesPositionChanged(Histogram::ValuesPosition)));
-	connect(m_curve, SIGNAL(valuesDistanceChanged(qreal)), this, SLOT(curveValuesDistanceChanged(qreal)));
-	connect(m_curve, SIGNAL(valuesOpacityChanged(qreal)), this, SLOT(curveValuesOpacityChanged(qreal)));
-	connect(m_curve, SIGNAL(valuesRotationAngleChanged(qreal)), this, SLOT(curveValuesRotationAngleChanged(qreal)));
-	connect(m_curve, SIGNAL(valuesPrefixChanged(QString)), this, SLOT(curveValuesPrefixChanged(QString)));
-	connect(m_curve, SIGNAL(valuesSuffixChanged(QString)), this, SLOT(curveValuesSuffixChanged(QString)));
-	connect(m_curve, SIGNAL(valuesFontChanged(QFont)), this, SLOT(curveValuesFontChanged(QFont)));
-	connect(m_curve, SIGNAL(valuesColorChanged(QColor)), this, SLOT(curveValuesColorChanged(QColor)));
+	connect(m_curve, &Histogram::valuesTypeChanged, this, &HistogramDock::curveValuesTypeChanged);
+	connect(m_curve, &Histogram::valuesColumnChanged, this, &HistogramDock::curveValuesColumnChanged);
+	connect(m_curve, &Histogram::valuesPositionChanged, this, &HistogramDock::curveValuesPositionChanged);
+	connect(m_curve, &Histogram::valuesDistanceChanged, this, &HistogramDock::curveValuesDistanceChanged);
+	connect(m_curve, &Histogram::valuesOpacityChanged, this, &HistogramDock::curveValuesOpacityChanged);
+	connect(m_curve, &Histogram::valuesRotationAngleChanged, this, &HistogramDock::curveValuesRotationAngleChanged);
+	connect(m_curve, &Histogram::valuesPrefixChanged, this, &HistogramDock::curveValuesPrefixChanged);
+	connect(m_curve, &Histogram::valuesSuffixChanged, this, &HistogramDock::curveValuesSuffixChanged);
+	connect(m_curve, &Histogram::valuesFontChanged, this, &HistogramDock::curveValuesFontChanged);
+	connect(m_curve, &Histogram::valuesColorChanged, this, &HistogramDock::curveValuesColorChanged);
 
 	//Filling-Tab
-	connect( m_curve, SIGNAL(fillingTypeChanged(PlotArea::BackgroundType)), this, SLOT(curveFillingTypeChanged(PlotArea::BackgroundType)) );
-	connect( m_curve, SIGNAL(fillingColorStyleChanged(PlotArea::BackgroundColorStyle)), this, SLOT(curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle)) );
-	connect( m_curve, SIGNAL(fillingImageStyleChanged(PlotArea::BackgroundImageStyle)), this, SLOT(curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle)) );
-	connect( m_curve, SIGNAL(fillingBrushStyleChanged(Qt::BrushStyle)), this, SLOT(curveFillingBrushStyleChanged(Qt::BrushStyle)) );
-	connect( m_curve, SIGNAL(fillingFirstColorChanged(QColor&)), this, SLOT(curveFillingFirstColorChanged(QColor&)) );
-	connect( m_curve, SIGNAL(fillingSecondColorChanged(QColor&)), this, SLOT(curveFillingSecondColorChanged(QColor&)) );
-	connect( m_curve, SIGNAL(fillingFileNameChanged(QString&)), this, SLOT(curveFillingFileNameChanged(QString&)) );
-	connect( m_curve, SIGNAL(fillingOpacityChanged(float)), this, SLOT(curveFillingOpacityChanged(float)) );
+	connect( m_curve, &Histogram::fillingTypeChanged, this, &HistogramDock::curveFillingTypeChanged);
+	connect( m_curve, &Histogram::fillingColorStyleChanged, this, &HistogramDock::curveFillingColorStyleChanged);
+	connect( m_curve, &Histogram::fillingImageStyleChanged, this, &HistogramDock::curveFillingImageStyleChanged);
+	connect( m_curve, &Histogram::fillingBrushStyleChanged, this, &HistogramDock::curveFillingBrushStyleChanged);
+	connect( m_curve, &Histogram::fillingFirstColorChanged, this, &HistogramDock::curveFillingFirstColorChanged);
+	connect( m_curve, &Histogram::fillingSecondColorChanged, this, &HistogramDock::curveFillingSecondColorChanged);
+	connect( m_curve, &Histogram::fillingFileNameChanged, this, &HistogramDock::curveFillingFileNameChanged);
+	connect( m_curve, &Histogram::fillingOpacityChanged, this, &HistogramDock::curveFillingOpacityChanged);
 
 	//"Error bars"-Tab
-	connect(m_curve, SIGNAL(errorTypeChanged(Histogram::ErrorType)), this, SLOT(curveErrorTypeChanged(Histogram::ErrorType)));
-	connect(m_curve, SIGNAL(errorBarsCapSizeChanged(qreal)), this, SLOT(curveErrorBarsCapSizeChanged(qreal)));
-	connect(m_curve, SIGNAL(errorBarsTypeChanged(XYCurve::ErrorBarsType)), this, SLOT(curveErrorBarsTypeChanged(XYCurve::ErrorBarsType)));
-	connect(m_curve, SIGNAL(errorBarsPenChanged(QPen)), this, SLOT(curveErrorBarsPenChanged(QPen)));
-	connect(m_curve, SIGNAL(errorBarsOpacityChanged(qreal)), this, SLOT(curveErrorBarsOpacityChanged(qreal)));
+	connect(m_curve, &Histogram::errorTypeChanged, this, &HistogramDock::curveErrorTypeChanged);
+	connect(m_curve, &Histogram::errorBarsCapSizeChanged, this, &HistogramDock::curveErrorBarsCapSizeChanged);
+	connect(m_curve, &Histogram::errorBarsTypeChanged, this, &HistogramDock::curveErrorBarsTypeChanged);
+	connect(m_curve, &Histogram::errorBarsPenChanged, this, &HistogramDock::curveErrorBarsPenChanged);
+	connect(m_curve, &Histogram::errorBarsOpacityChanged, this, &HistogramDock::curveErrorBarsOpacityChanged);
 
 	m_initializing = false;
 }
