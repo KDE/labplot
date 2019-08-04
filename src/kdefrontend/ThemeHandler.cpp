@@ -138,9 +138,11 @@ const QString ThemeHandler::themeFilePath(const QString& name) {
 	QStringList themePaths = themeList();
 
 	for (int i = 0; i < themePaths.size(); ++i) {
-		if (themePaths.at(i).indexOf(name) != -1) {
-			DEBUG("	theme \"" << name.toStdString() << "\" path: " << themePaths.at(i).toStdString());
-			return themePaths.at(i);
+		const QString& path = themePaths.at(i);
+		const QString& fileName = QFileInfo(path).fileName();
+		if (fileName == name) {
+			DEBUG("	theme \"" << name.toStdString() << "\" path: " << path.toStdString());
+			return path;
 		}
 	}
 
