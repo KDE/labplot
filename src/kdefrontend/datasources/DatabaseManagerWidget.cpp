@@ -38,7 +38,7 @@ Copyright            : (C) 2017-2018 Alexander Semke (alexander.semke@web.de)
 #include <QFileDialog>
 #include <QTimer>
 #include <QSqlDatabase>
-#include <QtSql>
+#include <QSqlError>
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KF5/KSyntaxHighlighting/SyntaxHighlighter>

@@ -33,6 +33,12 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/lib/macros.h"
 
+#include <QTimer>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QStandardItem>
+
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -43,9 +49,6 @@
 #include <KF5/KSyntaxHighlighting/Definition>
 #include <KF5/KSyntaxHighlighting/Theme>
 #endif
-
-#include <QtSql>
-#include <QStandardItem>
 
 ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);

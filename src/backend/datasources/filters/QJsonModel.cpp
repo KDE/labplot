@@ -164,7 +164,7 @@ bool QJsonModel::loadJson(const QByteArray& json) {
 		return loadJson(doc);
 	else {
 		QMessageBox::critical(0, i18n("Failed to load JSON document"),
-							  i18n("Failed to load JSON document. Error: %1").arg(error.errorString()));
+							  i18n("Failed to load JSON document. Error: %1.", error.errorString()));
 		return false;
 	}
 
