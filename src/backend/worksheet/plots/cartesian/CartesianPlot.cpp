@@ -2986,6 +2986,15 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 	}
 }
 
+void CartesianPlotPrivate::keyPressEvent(QKeyEvent * event) {
+	if (event->key() == Qt::Key_Escape) {
+		setCursor(Qt::ArrowCursor);
+		q->setMouseMode(CartesianPlot::MouseMode::SelectionMode);
+		m_selectionBandIsShown = false;
+	}
+	QGraphicsItem::keyPressEvent(event);
+}
+
 void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QPointF point = event->pos();
 	QString info;

@@ -101,6 +101,7 @@ private:
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
 	void wheelEvent(QGraphicsSceneWheelEvent*) override;
+	void keyPressEvent(QKeyEvent*) override;
 	void hoverMoveEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
