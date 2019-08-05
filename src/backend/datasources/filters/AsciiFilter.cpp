@@ -440,7 +440,7 @@ QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
 			DEBUG("WARNING in AsciiFilterPrivate::getLineString(): device cannot 'readLine()' but using it anyway.");
 //			line = device.readAll();
 		line = device.readLine();
-	} while (line.startsWith(commentCharacter));
+	} while (!commentCharacter.isEmpty() && line.startsWith(commentCharacter));
 
 	line.remove(QRegExp("[\\n\\r]"));	// remove any newline
 	if (simplifyWhitespacesEnabled)
@@ -499,7 +499,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		}
 
 		firstLine = device.readLine();
-	} while (firstLine.startsWith(commentCharacter));
+	} while (!commentCharacter.isEmpty() && firstLine.startsWith(commentCharacter));
 
 	DEBUG(" device position after first line and comments = " << device.pos());
 	firstLine.remove(QRegExp("[\\n\\r]"));	// remove any newline
@@ -1137,7 +1137,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			if (simplifyWhitespacesEnabled)
 				line = line.simplified();
 
-			if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
+			if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
 				continue;
 
 			QStringList lineStringList;
@@ -1321,7 +1321,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		if (removeQuotesEnabled)
 			line.remove(QLatin1Char('"'));
 
-		if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
+		if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
 			continue;
 
 		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
@@ -1470,7 +1470,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
 
-		if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
+		if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
 			continue;
 
 		QLocale locale(numberFormat);
@@ -1574,7 +1574,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
 
-		if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
+		if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
 			continue;
 
 		const QStringList& lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
@@ -1802,7 +1802,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& message) {
 		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
 
-		if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
+		if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
 			continue;
 
 		const QStringList& lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
@@ -2437,7 +2437,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 			if (simplifyWhitespacesEnabled)
 				line = line.simplified();
 
-			if (line.isEmpty() || line.startsWith(commentCharacter))
+			if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter)))
 				continue;
 
 			//add index if required
