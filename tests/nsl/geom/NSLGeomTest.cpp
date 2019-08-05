@@ -239,27 +239,21 @@ void NSLGeomTest::testLineSimMorse() {
 	const int NOUT = 15200;
 
 	printf("NSLGeomTest::testLineSimMorse(): allocating space for reading data\n");
-	double* xdata = (double *)malloc(N*sizeof(double));
-	if (xdata == NULL)
-		return;
-	double* ydata = (double *)malloc(N*sizeof(double));
-	if (ydata == NULL) {
-		free(xdata);
-		return;
-	}
+	QScopedArrayPointer<double> xdata(new double[N]);
+	QScopedArrayPointer<double> ydata(new double[N]);
 
 	printf("NSLGeomTest::testLineSimMorse(): reading data from file\n");
 	size_t i;
 	for (i = 0; i < N; i++)
 		fscanf(file,"%lf %lf", &xdata[i], &ydata[i]);
 
-	double atol = nsl_geom_linesim_clip_diag_perpoint(xdata, ydata, N);
+	double atol = nsl_geom_linesim_clip_diag_perpoint(xdata.data(), ydata.data(), N);
 	printf("automatic tol clip_diag_perpoint = %.15g\n", atol);
 	QCOMPARE(atol, 0.999993446759985);
-	atol = nsl_geom_linesim_clip_area_perpoint(xdata, ydata, N);
+	atol = nsl_geom_linesim_clip_area_perpoint(xdata.data(), ydata.data(), N);
 	printf("automatic tol clip_area_perpoint = %.15g\n", atol);
 	QCOMPARE(atol, 34.4653732526316);
-	atol = nsl_geom_linesim_avg_dist_perpoint(xdata, ydata, N);
+	atol = nsl_geom_linesim_avg_dist_perpoint(xdata.data(), ydata.data(), N);
 	printf("automatic tol avg_dist = %.15g\n", atol);
 	QCOMPARE(atol, 4.72091524721907);
 
@@ -268,18 +262,15 @@ void NSLGeomTest::testLineSimMorse() {
 	double tolout;
 	size_t index[N];
         QBENCHMARK {
-		tolout = nsl_geom_linesim_douglas_peucker_variant(xdata, ydata, N, NOUT, index);
+		tolout = nsl_geom_linesim_douglas_peucker_variant(xdata.data(), ydata.data(), N, NOUT, index);
 		QCOMPARE(tolout, 11.5280857733246);
         }
 
-	double perr = nsl_geom_linesim_positional_squared_error(xdata, ydata, N, index);
-	double aerr = nsl_geom_linesim_area_error(xdata, ydata, N, index);
+	double perr = nsl_geom_linesim_positional_squared_error(xdata.data(), ydata.data(), N, index);
+	double aerr = nsl_geom_linesim_area_error(xdata.data(), ydata.data(), N, index);
 	printf("maxtol = %.15g (pos. error = %.15g, area error = %.15g)\n", tolout, perr, aerr);
 	QCOMPARE(perr, 11.9586266895937);
 	QCOMPARE(aerr, 17.558046450762);
-
-	free(xdata);
-	free(ydata);
 }
 
 //##############################################################################

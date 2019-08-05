@@ -91,15 +91,15 @@ int nsl_diff_first_deriv_second_order(const double *x, double *y, const size_t n
 			for (j=0; j < 3; j++)
 				xdata[j]=x[j], ydata[j]=y[j];
 			dy = nsl_sf_poly_interp_lagrange_2_deriv(x[0], xdata, ydata);
-		} else if (i == n-1) {
-			/* 3-point backward */
-			y[i] = nsl_sf_poly_interp_lagrange_2_deriv(x[i], xdata, ydata);
-			y[i-1] = oldy;
-		} else {
+		} else if (i < n-1) {
 			/* 3-point center */
 			for (j=0; j < 3; j++)
 				xdata[j]=x[i-1+j], ydata[j]=y[i-1+j];
 			dy = nsl_sf_poly_interp_lagrange_2_deriv(x[i], xdata, ydata);
+		} else if (i == n-1) {
+			/* 3-point backward */
+			y[i] = nsl_sf_poly_interp_lagrange_2_deriv(x[i], xdata, ydata);
+			y[i-1] = oldy;
 		}
 
 		if (i > 1)

@@ -143,11 +143,14 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	}
 
 	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
+	Q_ASSERT(analysisCurve);
+
 	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
 	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
 
 	//show the properties of the first curve
 	m_dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(m_curve);
+	Q_ASSERT(m_dataReductionCurve);
 
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_dataReductionCurve->dataSourceType());
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());

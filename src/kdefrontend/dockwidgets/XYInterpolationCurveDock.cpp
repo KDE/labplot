@@ -160,6 +160,8 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	}
 
 	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
+	Q_ASSERT(analysisCurve);
+
 	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
 	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
 
