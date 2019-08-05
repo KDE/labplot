@@ -194,7 +194,7 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 					name = i18n("%1   (no values)", name);
 
 				if (m_showPlotDesignation)
-					name += QLatin1Char('\t') + " " + column->plotDesignationString();
+					name += QLatin1Char('\t') + column->plotDesignationString();
 
 				return name;
 			} else

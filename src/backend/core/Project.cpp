@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Represents a LabPlot project.
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2019 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke@gmx.de)
  ***************************************************************************/
@@ -34,14 +34,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
-#include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
-#include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
-#include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
-#include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
-#include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
-#include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
-#include "backend/worksheet/plots/cartesian/XYFourierTransformCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/datapicker/DatapickerCurve.h"
 #ifdef HAVE_MQTT
@@ -506,6 +499,15 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		//wait until all columns are decoded from base64-encoded data
 		QThreadPool::globalInstance()->waitForDone();
 
+		//LiveDataSource:
+		//call finalizeLoad() to replace relative with absolute paths if required
+		//and to create columns during the initial read
+		QVector<LiveDataSource*> sources = children<LiveDataSource>(AbstractAspect::Recursive);
+		for (auto* source : sources) {
+			if (!source) continue;
+			source->finalizeLoad();
+		}
+
 		//everything is read now.
 		//restore the pointer to the data sets (columns) in xy-curves etc.
 		QVector<Column*> columns = children<Column>(AbstractAspect::Recursive);
@@ -541,6 +543,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 				RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
 				RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
 				RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
+				qDebug()<<"curve columns " << curve->xColumn() << "  " << curve->yColumn();
 			}
 			if (dynamic_cast<XYAnalysisCurve*>(curve))
 				RESTORE_POINTER(dynamic_cast<XYAnalysisCurve*>(curve), dataSourceCurve, DataSourceCurve, XYCurve, curves);
@@ -597,17 +600,43 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 			}
 		}
 
-		//LiveDataSource - call finalizeLoad() to replace relative with absolute paths if required
-		QVector<LiveDataSource*> sources = children<LiveDataSource>(AbstractAspect::Recursive);
-		for (auto* source : sources) {
-			if (!source) continue;
-			source->finalizeLoad();
-		}
-
-		for (auto* plot : children<WorksheetElementContainer>(AbstractAspect::Recursive)) {
+		//all data was read in spreadsheets:
+		//call CartesianPlot::retransform() to retransform the plots
+		for (auto* plot : children<CartesianPlot>(AbstractAspect::Recursive)) {
 			plot->setIsLoading(false);
 			plot->retransform();
 		}
+
+		//all data was read in live-data sources:
+		//call CartesianPlot::dataChanged() to notify affected plots about the new data.
+		//this needs to be done here since in LiveDataSource::finalizeImport() called above
+		//where the data is read the column pointers are not restored yes in curves.
+		QVector<CartesianPlot*> plots;
+		for (auto* source : sources) {
+			for (int n = 0; n < source->columnCount(); ++n) {
+				Column* column = source->column(n);
+
+				//determine the plots where the column is consumed
+				for (const auto* curve : curves) {
+					if (curve->xColumn() == column || curve->yColumn() == column) {
+						auto* plot = dynamic_cast<CartesianPlot*>(curve->parentAspect());
+						if (plots.indexOf(plot) == -1) {
+							plots << plot;
+							plot->setSuppressDataChangedSignal(true);
+						}
+					}
+				}
+
+				column->setChanged();
+			}
+		}
+
+		//loop over all affected plots and retransform them
+		for (auto* plot : plots) {
+			plot->setSuppressDataChangedSignal(true);
+			plot->dataChanged();
+		}
+
 	}
 
 	emit loaded();

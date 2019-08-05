@@ -26,6 +26,7 @@
  ***************************************************************************/
 
 #include "NSLDiffTest.h"
+#include <QScopedArrayPointer>
 
 extern "C" {
 #include "backend/nsl/nsl_diff.h"
@@ -152,53 +153,44 @@ void NSLDiffTest::testSixth_order1() {
 
 void NSLDiffTest::testPerformance_first() {
 	const int NN = 1e6;
-	double* xdata = new double[NN];
-	double* ydata = new double[NN];
+	QScopedArrayPointer<double> xdata(new double[NN]);
+	QScopedArrayPointer<double> ydata(new double[NN]);
 
 	for (int i = 0;  i < NN; i++)
 		xdata[i] = ydata[i] = (double)i;
 
 	QBENCHMARK {
-		int status = nsl_diff_first_deriv(xdata, ydata, NN, 2);
+		int status = nsl_diff_first_deriv(xdata.data(), ydata.data(), NN, 2);
 		QCOMPARE(status, 0);
 	}
-
-	delete[] xdata;
-	delete[] ydata;
 }
 
 void NSLDiffTest::testPerformance_second() {
 	const int NN = 1e6;
-	double* xdata = new double[NN];
-	double* ydata = new double[NN];
+	QScopedArrayPointer<double> xdata(new double[NN]);
+	QScopedArrayPointer<double> ydata(new double[NN]);
 
 	for (int i = 0;  i < NN; i++)
 		xdata[i] = ydata[i] = (double)i;
 
 	QBENCHMARK {
-		int status = nsl_diff_second_deriv(xdata, ydata, NN, 2);
+		int status = nsl_diff_second_deriv(xdata.data(), ydata.data(), NN, 2);
 		QCOMPARE(status, 0);
 	}
-
-	delete[] xdata;
-	delete[] ydata;
 }
 
 void NSLDiffTest::testPerformance_third() {
 	const int NN = 1e6;
-	double* xdata = new double[NN];
-	double* ydata = new double[NN];
+	QScopedArrayPointer<double> xdata(new double[NN]);
+	QScopedArrayPointer<double> ydata(new double[NN]);
 
 	for (int i = 0;  i < NN; i++)
 		xdata[i] = ydata[i] = (double)i;
 	
 	QBENCHMARK {
-		int status = nsl_diff_third_deriv(xdata, ydata, NN, 2);
+		int status = nsl_diff_third_deriv(xdata.data(), ydata.data(), NN, 2);
 		QCOMPARE(status, 0);
 	}
-
-	delete[] xdata;
-	delete[] ydata;
 }
 
 QTEST_MAIN(NSLDiffTest)

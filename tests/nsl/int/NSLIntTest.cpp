@@ -94,8 +94,8 @@ void NSLIntTest::test4Point_integral() {
 
 void NSLIntTest::testPerformanceRectangle() {
 	const size_t n = 1e6;
-	double* xdata = new double[n];
-	double* ydata = new double[n];
+	QScopedArrayPointer<double> xdata(new double[n]);
+	QScopedArrayPointer<double> ydata(new double[n]);
 
 	for (size_t i = 0;  i < n; i++)
 		xdata[i] = (double)i;
@@ -103,19 +103,16 @@ void NSLIntTest::testPerformanceRectangle() {
 	QBENCHMARK {
 		for (size_t i = 0;  i < n; i++)
 			ydata[i] = 1.;
-		int status = nsl_int_rectangle(xdata, ydata, n, 0);
+		int status = nsl_int_rectangle(xdata.data(), ydata.data(), n, 0);
 		QCOMPARE(status, 0);
 	}
 	QCOMPARE(ydata[n - 1], (double)(n - 1));
-
-	delete[] xdata;
-	delete[] ydata;
 }
 
 void NSLIntTest::testPerformanceTrapezoid() {
 	const int n = 1e6;
-	double* xdata = new double[n];
-	double* ydata = new double[n];
+	QScopedArrayPointer<double> xdata(new double[n]);
+	QScopedArrayPointer<double> ydata(new double[n]);
 
 	for (int i = 0;  i < n; i++)
 		xdata[i] = (double)i;
@@ -123,19 +120,16 @@ void NSLIntTest::testPerformanceTrapezoid() {
 	QBENCHMARK {
 		for (int i = 0;  i < n; i++)
 			ydata[i] = 1.;
-		int status = nsl_int_trapezoid(xdata, ydata, n, 0);
+		int status = nsl_int_trapezoid(xdata.data(), ydata.data(), n, 0);
 		QCOMPARE(status, 0);
 	}
 	QCOMPARE(ydata[n - 1], (double)(n - 1));
-
-	delete[] xdata;
-	delete[] ydata;
 }
 
 void NSLIntTest::testPerformance3Point() {
 	const int n = 1e6;
-	double* xdata = new double[n];
-	double* ydata = new double[n];
+	QScopedArrayPointer<double> xdata(new double[n]);
+	QScopedArrayPointer<double> ydata(new double[n]);
 
 	for (int i = 0;  i < n; i++)
 		xdata[i] = (double)i;
@@ -144,19 +138,16 @@ void NSLIntTest::testPerformance3Point() {
 	QBENCHMARK {
 		for (int i = 0;  i < n; i++)
 			ydata[i] = 1.;
-		np = (int)nsl_int_simpson(xdata, ydata, n, 0);
+		np = (int)nsl_int_simpson(xdata.data(), ydata.data(), n, 0);
 		QCOMPARE(np, n/2 + 1);
 	}
 	QCOMPARE(ydata[np - 1], (double)(n - 1));
-
-	delete[] xdata;
-	delete[] ydata;
 }
 
 void NSLIntTest::testPerformance4Point() {
 	const int n = 1e6;
-	double* xdata = new double[n];
-	double* ydata = new double[n];
+	QScopedArrayPointer<double> xdata(new double[n]);
+	QScopedArrayPointer<double> ydata(new double[n]);
 
 	for (int i = 0;  i < n; i++)
 		xdata[i] = (double)i;
@@ -165,16 +156,13 @@ void NSLIntTest::testPerformance4Point() {
 	QBENCHMARK {
 		for (int i = 0;  i < n; i++)
 			ydata[i] = 1.;
-		np = (int)nsl_int_simpson_3_8(xdata, ydata, n, 0);
+		np = (int)nsl_int_simpson_3_8(xdata.data(), ydata.data(), n, 0);
 		QCOMPARE(np, n/3 + 1);
 	}
 
 	//TODO:
 	//QCOMPARE(ydata[np - 1], (double)(n - 1));
 	printf("%.15g %.15g\n", ydata[np - 1], (double)(n-1));
-
-	delete[] xdata;
-	delete[] ydata;
 }
 
 QTEST_MAIN(NSLIntTest)

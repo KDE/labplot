@@ -131,9 +131,9 @@ public:
 
 private:
 	AbstractColumn::ColumnMode m_column_mode;	// type of column data
-	void* m_data;	//pointer to the data container (QVector<T>)
-	AbstractSimpleFilter* m_input_filter;	//input filter for string -> data type conversion
-	AbstractSimpleFilter* m_output_filter;	//output filter for data type -> string conversion
+	void* m_data{nullptr};	//pointer to the data container (QVector<T>)
+	AbstractSimpleFilter* m_input_filter{nullptr};	//input filter for string -> data type conversion
+	AbstractSimpleFilter* m_output_filter{nullptr};	//output filter for data type -> string conversion
 	QString m_formula;
 	QStringList m_formulaVariableNames;
 	QVector<Column*> m_formulaVariableColumns;
@@ -142,7 +142,7 @@ private:
 	IntervalAttribute<QString> m_formulas;
 	AbstractColumn::PlotDesignation m_plot_designation{AbstractColumn::NoDesignation};
 	int m_width{0}; //column width in the view
-	Column* m_owner;
+	Column* m_owner{nullptr};
 	QVector<QMetaObject::Connection> m_connectionsUpdateFormula;
 
 private slots:

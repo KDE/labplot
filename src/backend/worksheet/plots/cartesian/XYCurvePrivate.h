@@ -67,8 +67,8 @@ public:
 	bool pointLiesNearCurve(const QPointF mouseScenePos, const QPointF curvePosPrevScene, const QPointF curvePosScene, const int index, const double maxDist) const;
 
 	//data source
-	const AbstractColumn* xColumn;
-	const AbstractColumn* yColumn;
+	const AbstractColumn* xColumn{nullptr};
+	const AbstractColumn* yColumn{nullptr};
 	QString dataSourceCurvePath;
 	QString xColumnPath;
 	QString yColumnPath;
@@ -97,7 +97,7 @@ public:
 
 	//values
 	XYCurve::ValuesType valuesType;
-	const AbstractColumn* valuesColumn;
+	const AbstractColumn* valuesColumn{nullptr};
 	QString valuesColumnPath;
 	XYCurve::ValuesPosition valuesPosition;
 	qreal valuesDistance;
@@ -121,15 +121,15 @@ public:
 
 	//error bars
 	XYCurve::ErrorType xErrorType;
-	const AbstractColumn* xErrorPlusColumn;
+	const AbstractColumn* xErrorPlusColumn{nullptr};
 	QString xErrorPlusColumnPath;
-	const AbstractColumn* xErrorMinusColumn;
+	const AbstractColumn* xErrorMinusColumn{nullptr};
 	QString xErrorMinusColumnPath;
 
 	XYCurve::ErrorType yErrorType;
-	const AbstractColumn* yErrorPlusColumn;
+	const AbstractColumn* yErrorPlusColumn{nullptr};
 	QString yErrorPlusColumnPath;
-	const AbstractColumn* yErrorMinusColumn;
+	const AbstractColumn* yErrorMinusColumn{nullptr};
 	QString yErrorMinusColumnPath;
 
 	XYCurve::ErrorBarsType errorBarsType;

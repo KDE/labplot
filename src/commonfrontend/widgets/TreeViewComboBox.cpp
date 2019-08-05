@@ -293,10 +293,9 @@ bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
 	checks whether \c aspect is one of the allowed top level types
 */
 bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
-	foreach (AspectType type, m_topLevelClasses) {
-		if (aspect->inherits(type)) {
+	for (AspectType type : m_topLevelClasses) {
+		if (aspect->type() == type)
 			return true;
-		}
 	}
 	return false;
 }

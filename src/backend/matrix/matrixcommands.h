@@ -221,10 +221,10 @@ private:
 	double m_new_x2;
 	double m_new_y1;
 	double m_new_y2;
-	double m_old_x1;
-	double m_old_x2;
-	double m_old_y1;
-	double m_old_y2;
+	double m_old_x1{-1};
+	double m_old_x2{-1};
+	double m_old_y1{-1};
+	double m_old_y2{-1};
 };
 
 //! Set matrix formula

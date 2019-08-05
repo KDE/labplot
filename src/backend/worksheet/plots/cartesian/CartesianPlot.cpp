@@ -1411,7 +1411,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::symbolsOpacityChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::symbolsBrushChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::symbolsPenChanged, this, &CartesianPlot::updateLegend);
-		connect(curve, SIGNAL(linePenChanged(QPen)), this, SIGNAL(curveLinePenChanged(QPen))); // feed forward linePenChanged, because Worksheet needs because CursorDock must be updated too
 
 		updateLegend();
 		d->curvesXMinMaxIsDirty = true;
@@ -1595,9 +1594,8 @@ void CartesianPlot::dataChanged() {
 			if (hist)
 				hist->retransform();
 			else {
-				//no sender available, the function was called in CartesianPlot::dataChanged()
-				//via plot->dataChaged() in the file filter (live data source got new data)
-				//-> retransform all available curves since we don't know which curves are affected.
+				//no sender available, the function was called directly in the file filter (live data source got new data)
+				//or in Project::load() -> retransform all available curves since we don't know which curves are affected.
 				//TODO: this logic can be very expensive
 				for (auto* c : children<XYCurve>()) {
 					c->recalcLogicalPoints();
@@ -2984,6 +2982,15 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 			if (zoomY) q->zoomOutY();
 		}
 	}
+}
+
+void CartesianPlotPrivate::keyPressEvent(QKeyEvent * event) {
+	if (event->key() == Qt::Key_Escape) {
+		setCursor(Qt::ArrowCursor);
+		q->setMouseMode(CartesianPlot::MouseMode::SelectionMode);
+		m_selectionBandIsShown = false;
+	}
+	QGraphicsItem::keyPressEvent(event);
 }
 
 void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {

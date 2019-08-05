@@ -376,63 +376,58 @@ void NSLSmoothTest::testSG_mode_periodic() {
 const int nn = 1e6;
 
 void NSLSmoothTest::testPerformance_interp() {
-	double* data = new double[nn];
+	QScopedArrayPointer<double> data(new double[nn]);
 
 	QBENCHMARK {
 		for (int i = 0;  i < nn; i++)
 			data[i] = i;
-		int status = nsl_smooth_savgol(data, nn, m, order, nsl_smooth_pad_interp);
+		int status = nsl_smooth_savgol(data.data(), nn, m, order, nsl_smooth_pad_interp);
 		QCOMPARE(status, 0);
 	}
-	delete[] data;
 }
 
 void NSLSmoothTest::testPerformance_mirror() {
-	double* data = new double[nn];
+	QScopedArrayPointer<double> data(new double[nn]);
 
 	QBENCHMARK {
 		for (int i = 0;  i < nn; i++)
 			data[i] = i;
-		int status = nsl_smooth_savgol(data, nn, m, order, nsl_smooth_pad_mirror);
+		int status = nsl_smooth_savgol(data.data(), nn, m, order, nsl_smooth_pad_mirror);
 		QCOMPARE(status, 0);
 	}
-	delete[] data;
 }
 
 void NSLSmoothTest::testPerformance_nearest() {
-	double* data = new double[nn];
+	QScopedArrayPointer<double> data(new double[nn]);
 
 	QBENCHMARK {
 		for (int i = 0;  i < nn; i++)
 			data[i] = i;
-		int status = nsl_smooth_savgol(data, nn, m, order, nsl_smooth_pad_nearest);
+		int status = nsl_smooth_savgol(data.data(), nn, m, order, nsl_smooth_pad_nearest);
 		QCOMPARE(status, 0);
 	}
-	delete[] data;
 }
 
 void NSLSmoothTest::testPerformance_constant() {
-	double* data = new double[nn];
+	QScopedArrayPointer<double> data(new double[nn]);
 
 	QBENCHMARK {
 		for (int i = 0;  i < nn; i++)
 			data[i] = i;
-		int status = nsl_smooth_savgol(data, nn, m, order, nsl_smooth_pad_constant);
+		int status = nsl_smooth_savgol(data.data(), nn, m, order, nsl_smooth_pad_constant);
 		QCOMPARE(status, 0);
 	}
-	delete[] data;
 }
 
 void NSLSmoothTest::testPerformance_periodic() {
-	double* data = new double[nn];
+	QScopedArrayPointer<double> data(new double[nn]);
 
 	QBENCHMARK {
 		for (int i = 0;  i < nn; i++)
 			data[i] = i;
-		int status = nsl_smooth_savgol(data, nn, m, order, nsl_smooth_pad_periodic);
+		int status = nsl_smooth_savgol(data.data(), nn, m, order, nsl_smooth_pad_periodic);
 		QCOMPARE(status, 0);
 	}
-	delete[] data;
 }
 
 QTEST_MAIN(NSLSmoothTest)
