@@ -11,42 +11,119 @@ MyTextEdit::MyTextEdit(QWidget* parent) : QTextEdit(parent) {
 	m_avlIntervalTree.insert(187, 196, "Detergent");
 	m_avlIntervalTree.insert(163, 176, "result table");
 	m_avlIntervalTree.insert(33, 37, "Mean");
+
+	QString str = "We must be <tooltip><data>this is data</data><tip>This is tip</tip></tooltip>, very <b>very bold</b>"
+				  "hi all <tooltip><data>data without tip</data></tooltip> and"
+				  "this is <tooltip><tip>tip without data</tip></tooltip> and "
+				  "this is <tooltip>without both</tooltip>";
+	QString startToolTip = "<tooltip>";
+	QString endToolTip = "</tooltip>";
+	QString startData = "<data>";
+	QString endData = "</data>";
+	QString startTip = "<tip>";
+	QString endTip = "</tip>";
+
+	int i_startToolTip = 0;
+	int i_endToolTip = 0;
+	int i_startData = 0;
+	int i_endData = 0;
+	int i_startTip = 0;
+	int i_endTip = 0;
+
+	QString tip;
+	QString data;
+	while ((i_startToolTip = str.indexOf(startToolTip, i_startToolTip)) != -1) {
+		i_endToolTip = str.indexOf(endToolTip, i_startToolTip);
+
+		if (i_endToolTip != -1) {
+			i_startData = str.indexOf(startData, i_startToolTip);
+			i_endData = str.indexOf(endData, i_startToolTip);
+
+			if (i_startData != -1 && i_endData != -1 &&
+					i_startData < i_endToolTip && i_endData < i_endToolTip)
+				data = str.mid(i_startData + startData.size(), i_endData - i_startData - startData.size());
+			else {
+				data = "";
+				i_endData = i_startToolTip + startToolTip.size();
+			}
+
+			i_startTip = str.indexOf(startTip, i_endData);
+			i_endTip = str.indexOf(endTip, i_endData);
+
+			if (i_startTip != -1 && i_endTip != -1 &&
+					i_startTip < i_endToolTip && i_endTip < i_endToolTip)
+				tip = str.mid(i_startTip + startTip.size(), i_endTip - i_startTip - startTip.size());
+			else
+				tip = "";
+
+			str.replace(i_startToolTip, i_endToolTip - i_startToolTip + endToolTip.size(), "");
+		}
+	}
 }
 
 bool MyTextEdit::event(QEvent *e) {
-	if (e->type() == QEvent::ToolTip) {
+	if (e->type() == QEvent::ToolTip || e->type() == QEvent::WhatsThis) {
 		QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
-//		QDEBUG("pos is " << helpEvent->pos());
 		QTextCursor textCursor = this->cursorForPosition(helpEvent->pos());
-//		QDEBUG("text cursor1 for event is " << textCursor.position());
-
 		QString tooltip = m_avlIntervalTree.toolTip(textCursor.position());
-//		QDEBUG("tooltip is " << tooltip);
 		if (!tooltip.isEmpty())
 			QToolTip::showText(helpEvent->globalPos(), tooltip);
 		else
 			QToolTip::hideText();
-		//		int index = itemAt(helpEvent->pos());
-		//		if (index != -1) {
-		//			QToolTip::showText(helpEvent->globalPos(), shapeItems[index].toolTip());
-		//		} else {
-		//			QToolTip::hideText();
-		//			e->ignore();
-		//		}
 		return true;
 	}
 	return 	inherited::event(e);
-	//	return QWidget::event(e);
 }
 
-//int MyTextEdit::itemAt(const QPoint &pos) {
-////	for (int i = shapeItems.size() - 1; i >= 0; --i) {
-////		const ShapeItem &item = shapeItems[i];
-////		if (item.path().contains(pos - item.position()))
-////			return i;
-////	}
-//	return -1;
-//}
+void MyTextEdit::setHtml(QString text) {
+	QString startToolTip = "<tooltip>";
+	QString endToolTip = "</tooltip>";
+	QString startData = "<data>";
+	QString endData = "</data>";
+	QString startTip = "<tip>";
+	QString endTip = "</tip>";
+
+	int i_startToolTip = 0;
+	int i_endToolTip = 0;
+	int i_startData = 0;
+	int i_endData = 0;
+	int i_startTip = 0;
+	int i_endTip = 0;
+
+	QString tip;
+	QString data;
+	while ((i_startToolTip = text.indexOf(startToolTip, i_startToolTip)) != -1) {
+		i_endToolTip = text.indexOf(endToolTip, i_startToolTip);
+
+		if (i_endToolTip != -1) {
+			i_startData = text.indexOf(startData, i_startToolTip);
+			i_endData = text.indexOf(endData, i_startToolTip);
+
+			if (i_startData != -1 && i_endData != -1 &&
+					i_startData < i_endToolTip && i_endData < i_endToolTip)
+				data = text.mid(i_startData + startData.size(), i_endData - i_startData - startData.size());
+			else {
+				data = "";
+				i_endData = i_startToolTip + startToolTip.size();
+			}
+
+			i_startTip = text.indexOf(startTip, i_endData);
+			i_endTip = text.indexOf(endTip, i_endData);
+
+			if (i_startTip != -1 && i_endTip != -1 &&
+					i_startTip < i_endToolTip && i_endTip < i_endToolTip)
+				tip = text.mid(i_startTip + startTip.size(), i_endTip - i_startTip - startTip.size());
+			else
+				tip = "";
+			text.replace(i_startToolTip, i_endToolTip - i_startToolTip + endToolTip.size(), "");
+
+		}
+	}
+	return inherited::setHtml(text);
+}
+
+
+
 /*********************************** Implementation of AvlIntervalTree *******************************************/
 
 

@@ -39,6 +39,7 @@ public:
     typedef QTextEdit inherited;
     explicit MyTextEdit(QWidget* parent = nullptr);
     //    int itemAt(const QPoint &pos);
+    void setHtml(QString text);
 
 protected slots:
     bool event(QEvent *e);
