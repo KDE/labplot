@@ -43,7 +43,7 @@
 #include <QTextCharFormat>
 #include <QTextDocument>
 #include <QTextCursor>
-#include <QtConcurrentRun>
+#include <QtConcurrent/QtConcurrentRun>
 
 #include <QIcon>
 #include <KConfig>
