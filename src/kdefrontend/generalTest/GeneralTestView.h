@@ -41,7 +41,7 @@ class AbstractAspect;
 class QPrinter;
 class QToolBar;
 class QLabel;
-class QTextEdit;
+class MyTextEdit;
 
 #define RESULTLINESCOUNT 10
 
@@ -69,7 +69,7 @@ protected:
 
 	GeneralTest* m_generalTest;
 	QLabel* m_testName;
-	QTextEdit* m_statsTable;
+	MyTextEdit* m_statsTable;
 	QWidget* m_summaryResults{nullptr};
 	QLabel* m_resultLine[RESULTLINESCOUNT];
 
