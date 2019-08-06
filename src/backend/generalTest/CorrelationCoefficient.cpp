@@ -60,7 +60,6 @@ CorrelationCoefficient::~CorrelationCoefficient() {
 
 void CorrelationCoefficient::performTest(int test, bool categoricalVariable) {
 	m_statsTable = "";
-	m_tooltips.clear();
 	m_correlationValue = 0;
 	m_statisticValue.clear();
 	m_pValue.clear();

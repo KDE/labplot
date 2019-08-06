@@ -69,7 +69,6 @@ void HypothesisTest::performTest(Test test, bool categoricalVariable, bool equal
 	m_pValue.clear();
 	m_statisticValue.clear();
 	m_statsTable = "";
-	m_tooltips.clear();
 	for (int i = 0; i < RESULTLINESCOUNT; i++)
 		m_resultLine[i]->clear();
 
@@ -109,7 +108,6 @@ void HypothesisTest::performLeveneTest(bool categoricalVariable) {
 	m_pValue.clear();
 	m_statisticValue.clear();
 	m_statsTable = "";
-	m_tooltips.clear();
 	for (int i = 0; i < RESULTLINESCOUNT; i++)
 		m_resultLine[i]->clear();
 

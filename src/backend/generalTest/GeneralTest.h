@@ -77,7 +77,6 @@ public:
 	QStringList allColumns();
 	QString testName();
 	QString statsTable();
-	QMap<QString, QString> tooltips();
 
 	QVBoxLayout* summaryLayout();
 
@@ -110,7 +109,6 @@ protected:
 
 	QVBoxLayout* m_summaryLayout{nullptr};
 	QLabel* m_resultLine[RESULTLINESCOUNT];
-	QMap<QString, QString> m_tooltips;
 
 	QString round(QVariant number, int precision = 3);
 

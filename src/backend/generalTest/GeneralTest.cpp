@@ -86,10 +86,6 @@ QString GeneralTest::statsTable() {
 	return m_statsTable;
 }
 
-QMap<QString, QString> GeneralTest::tooltips() {
-	return m_tooltips;
-}
-
 QVBoxLayout* GeneralTest::summaryLayout() {
 	return m_summaryLayout;
 }
@@ -422,11 +418,17 @@ QString GeneralTest::getHtmlTable(int row, int column, QVariant* rowMajor) {
 }
 
 QString GeneralTest::getHtmlTable3(const QList<GeneralTest::Cell*>& rowMajor) {
-	m_tooltips.clear();
 	int rowMajorSize = rowMajor.size();
 
 	if (rowMajorSize == 0)
 		return QString();
+
+	QString startToolTip = "[tooltip]";
+	QString endToolTip = "[/tooltip]";
+	QString startData = "[data]";
+	QString endData = "[/data]";
+	QString startTip = "[tip]";
+	QString endTip = "[/tip]";
 
 	QString table;
 	table = "<style type=text/css>"
@@ -454,16 +456,21 @@ QString GeneralTest::getHtmlTable3(const QList<GeneralTest::Cell*>& rowMajor) {
 			cellEndTag = "</th>";
 		}
 
+		QString cellData = i18n("%1", currCell->data);
+
+		if (!currCell->tooltip.isEmpty())
+			cellData = startToolTip+
+						startData+cellData+endData+
+						startTip+i18n("%1", currCell->tooltip)+endTip+
+					   endToolTip;
+
 		table += cellStartTag +
 				"rowspan=" + QString::number(currCell->rowSpanCount) +
 				" " +
 				"colspan=" + QString::number(currCell->columnSpanCount) +
 				">" +
-				i18n("%1", currCell->data) +
+				cellData +
 				cellEndTag;
-
-		if (!currCell->tooltip.isEmpty())
-			m_tooltips.insert(currCell->data, currCell->tooltip);
 	}
 	table += "  <tr>";
 	table += "</table>";

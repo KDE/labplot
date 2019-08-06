@@ -1,3 +1,31 @@
+/***************************************************************************
+	File                 : MyTextEdit.cpp
+	Project              : LabPlot
+	Description          : Derived class of QTextEdit to add ToolTip Functionality
+	--------------------------------------------------------------------
+	Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
+
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *  This program is free software; you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation; either version 2 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the Free Software           *
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
+ *   Boston, MA  02110-1301  USA                                           *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "backend/generalTest/MyTextEdit.h"
 #include "backend/lib/macros.h"
 
@@ -6,66 +34,20 @@
 #include <QToolTip>
 
 MyTextEdit::MyTextEdit(QWidget* parent) : QTextEdit(parent) {
-	m_avlIntervalTree.insert(19, 23, "Cold");
-	m_avlIntervalTree.insert(243, 254, "Interaction");
-	m_avlIntervalTree.insert(187, 196, "Detergent");
-	m_avlIntervalTree.insert(163, 176, "result table");
-	m_avlIntervalTree.insert(33, 37, "Mean");
-
-	QString str = "We must be <tooltip><data>this is data</data><tip>This is tip</tip></tooltip>, very <b>very bold</b>"
-				  "hi all <tooltip><data>data without tip</data></tooltip> and"
-				  "this is <tooltip><tip>tip without data</tip></tooltip> and "
-				  "this is <tooltip>without both</tooltip>";
-	QString startToolTip = "<tooltip>";
-	QString endToolTip = "</tooltip>";
-	QString startData = "<data>";
-	QString endData = "</data>";
-	QString startTip = "<tip>";
-	QString endTip = "</tip>";
-
-	int i_startToolTip = 0;
-	int i_endToolTip = 0;
-	int i_startData = 0;
-	int i_endData = 0;
-	int i_startTip = 0;
-	int i_endTip = 0;
-
-	QString tip;
-	QString data;
-	while ((i_startToolTip = str.indexOf(startToolTip, i_startToolTip)) != -1) {
-		i_endToolTip = str.indexOf(endToolTip, i_startToolTip);
-
-		if (i_endToolTip != -1) {
-			i_startData = str.indexOf(startData, i_startToolTip);
-			i_endData = str.indexOf(endData, i_startToolTip);
-
-			if (i_startData != -1 && i_endData != -1 &&
-					i_startData < i_endToolTip && i_endData < i_endToolTip)
-				data = str.mid(i_startData + startData.size(), i_endData - i_startData - startData.size());
-			else {
-				data = "";
-				i_endData = i_startToolTip + startToolTip.size();
-			}
-
-			i_startTip = str.indexOf(startTip, i_endData);
-			i_endTip = str.indexOf(endTip, i_endData);
-
-			if (i_startTip != -1 && i_endTip != -1 &&
-					i_startTip < i_endToolTip && i_endTip < i_endToolTip)
-				tip = str.mid(i_startTip + startTip.size(), i_endTip - i_startTip - startTip.size());
-			else
-				tip = "";
-
-			str.replace(i_startToolTip, i_endToolTip - i_startToolTip + endToolTip.size(), "");
-		}
-	}
 }
 
 bool MyTextEdit::event(QEvent *e) {
 	if (e->type() == QEvent::ToolTip || e->type() == QEvent::WhatsThis) {
 		QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
 		QTextCursor textCursor = this->cursorForPosition(helpEvent->pos());
+		QTextCursor origCursor = textCursor;
+
 		QString tooltip = m_avlIntervalTree.toolTip(textCursor.position());
+
+		this->setTextCursor(origCursor);
+
+//		QDEBUG("cursor pos is " << textCursor.position());
+//		QDEBUG("tooltip is " << tooltip);
 		if (!tooltip.isEmpty())
 			QToolTip::showText(helpEvent->globalPos(), tooltip);
 		else
@@ -76,12 +58,20 @@ bool MyTextEdit::event(QEvent *e) {
 }
 
 void MyTextEdit::setHtml(QString text) {
-	QString startToolTip = "<tooltip>";
-	QString endToolTip = "</tooltip>";
-	QString startData = "<data>";
-	QString endData = "</data>";
-	QString startTip = "<tip>";
-	QString endTip = "</tip>";
+	inherited::setHtml(text);
+	QString plainText = this->toPlainText();
+	extractToolTips(plainText, true);
+	extractToolTips(text, false);
+	return inherited::setHtml(text);
+}
+
+void MyTextEdit::extractToolTips(QString &text, bool insert) {
+	QString startToolTip = "[tooltip]";
+	QString endToolTip = "[/tooltip]";
+	QString startData = "[data]";
+	QString endData = "[/data]";
+	QString startTip = "[tip]";
+	QString endTip = "[/tip]";
 
 	int i_startToolTip = 0;
 	int i_endToolTip = 0;
@@ -115,14 +105,18 @@ void MyTextEdit::setHtml(QString text) {
 				tip = text.mid(i_startTip + startTip.size(), i_endTip - i_startTip - startTip.size());
 			else
 				tip = "";
-			text.replace(i_startToolTip, i_endToolTip - i_startToolTip + endToolTip.size(), "");
+			text.replace(i_startToolTip, i_endToolTip - i_startToolTip + endToolTip.size(), data);
 
+			if (insert) {
+//				QDEBUG("data is " << data);
+//				QDEBUG("low is " << i_startToolTip);
+//				QDEBUG("high is " << i_startToolTip + data.size());
+				m_avlIntervalTree.insert(i_startToolTip, i_startToolTip + data.size(), tip);
+			}
+			i_startToolTip += data.size();
 		}
 	}
-	return inherited::setHtml(text);
 }
-
-
 
 /*********************************** Implementation of AvlIntervalTree *******************************************/
 

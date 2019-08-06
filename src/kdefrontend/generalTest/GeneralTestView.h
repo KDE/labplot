@@ -78,7 +78,6 @@ public slots:
 	void fillToolBar(QToolBar*);
 	void print(QPrinter*) const;
 	void changed();
-	void cursorPositionChanged();
 	void clearResult();
 protected slots:
 };

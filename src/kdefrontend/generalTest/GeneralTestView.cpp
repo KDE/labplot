@@ -86,7 +86,6 @@ void GeneralTestView::init() {
 
 	m_statsTable->setMouseTracking(true);
 	connect(m_generalTest, &GeneralTest::changed, this, &GeneralTestView::changed);
-	connect(m_statsTable, &MyTextEdit::cursorPositionChanged, this, &GeneralTestView::cursorPositionChanged);
 }
 
 void GeneralTestView::initActions() {
@@ -166,27 +165,6 @@ void GeneralTestView::changed() {
 	}
 
 	m_summaryResults->setLayout(m_generalTest->summaryLayout());
-}
-
-void GeneralTestView::cursorPositionChanged() {
-	QFontMetrics fm = m_statsTable->fontMetrics();
-
-	QSize size = fm.size(Qt::TextWordWrap, "hi");
-
-//	QDEBUG("top left is " << m_statsTable->rect().topLeft());
-	QTextCursor textCursor = m_statsTable->textCursor();
-	QCursor cursor = m_statsTable->cursor();
-	QDEBUG("cursor pos is " << cursor.pos());
-	QDEBUG("text cursor pos is " << textCursor.position());
-
-//	cursor.select(QTextCursor::LineUnderCursor);
-//	QMap<QString, QString> tooltips = m_generalTest->tooltips();
-//	if (!cursor.selectedText().isEmpty())
-//		QToolTip::showText(QCursor::pos(),
-//		                   QString("%1")
-//		                   .arg(tooltips.value(cursor.selectedText())));
-//	else
-//		QToolTip::hideText();
 }
 
 void GeneralTestView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
