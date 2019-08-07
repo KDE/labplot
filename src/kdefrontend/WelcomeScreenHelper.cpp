@@ -65,7 +65,6 @@ WelcomeScreenHelper::WelcomeScreenHelper() {
 	m_datasetModel = new DatasetModel(m_datasetWidget->getDatasetsMap());
 
 	loadConfig();
-
 	processExampleProjects();
 }
 
@@ -77,10 +76,7 @@ WelcomeScreenHelper::~WelcomeScreenHelper() {
 	conf.writeEntry("width_count", widthCount);
 	int currentWidthIndex = 0;
 
-	qDebug() << "Destructor save width " << m_widthScale;
-
 	for(auto item = m_widthScale.begin(); item != m_widthScale.end() && currentWidthIndex < widthCount; item++) {
-		qDebug() << "Save width  "  << item.key() << item.value();
 		conf.writeEntry("widthName_" + QString::number(currentWidthIndex), item.key());
 		conf.writeEntry("widthValue_" + QString::number(currentWidthIndex), QString::number(item.value()));
 		currentWidthIndex++;
@@ -90,8 +86,6 @@ WelcomeScreenHelper::~WelcomeScreenHelper() {
 	conf.writeEntry("height_count", widthCount);
 	int currentHeightIndex = 0;
 
-	qDebug() << "Destructor save height " << m_widthScale;
-
 	for(auto item = m_heightScale.begin(); item != m_heightScale.end() && currentHeightIndex < heightCount; item++) {
 		qDebug() << "Save height  "  << item.key() << item.value();
 		conf.writeEntry("heightName_" + QString::number(currentHeightIndex), item.key());
@@ -100,6 +94,9 @@ WelcomeScreenHelper::~WelcomeScreenHelper() {
 	}
 }
 
+/**
+ * @brief Loads the saved configuration
+ */
 void WelcomeScreenHelper::loadConfig() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "WelcomeScreenHelper");
 
@@ -107,8 +104,6 @@ void WelcomeScreenHelper::loadConfig() {
 	for(int i = 0; i < widthCount; ++i) {
 		QString id = conf.readEntry("widthName_" + QString::number(i), "");
 		double value = QString(conf.readEntry("widthValue_" + QString::number(i), "-1")).toDouble();
-
-		qDebug() << "Welcome screen helper load width: " << id << "  " << value;
 
 		if(!id.isEmpty() && value != -1)
 			m_widthScale[id] = value;
@@ -118,9 +113,6 @@ void WelcomeScreenHelper::loadConfig() {
 	for(int i = 0; i < heightCount; ++i) {
 		QString id = conf.readEntry("heightName_" + QString::number(i), "");
 		double value = QString(conf.readEntry("heightValue_" + QString::number(i), "-1")).toDouble();
-
-
-		qDebug() << "Welcome screen helper load height: " << id << "  " << value;
 
 		if(!id.isEmpty() && value != -1)
 			m_heightScale[id] = value;
@@ -141,11 +133,6 @@ void WelcomeScreenHelper::datasetClicked(const QString& category, const QString&
 	m_datasetWidget->setCategory(category);
 	m_datasetWidget->setSubcategory(subcategory);
 	m_datasetWidget->setDataset(datasetName);
-
-	//m_spreadsheet->clear()
-
-	//if(m_spreadsheet.get() != nullptr)
-	//delete m_spreadsheet.get();
 	m_spreadsheet.reset(new Spreadsheet(i18n("Dataset%1", 1)));
 
 	if(m_datasetHandler != nullptr)
@@ -216,7 +203,6 @@ QVariant WelcomeScreenHelper::getProjectThumbnail(const QUrl& url) {
 	else
 		filename = url.path();
 
-	qDebug() << "Get thumbnail for: " << filename;
 	QIODevice* file;
 	// first try gzip compression, because projects can be gzipped and end with .lml
 	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive))
@@ -244,7 +230,6 @@ QVariant WelcomeScreenHelper::getProjectThumbnail(const QUrl& url) {
 
 	//parse XML
 	XmlStreamReader reader(file);
-
 	while (!(reader.isStartDocument() || reader.atEnd()))
 		reader.readNext();
 
@@ -256,11 +241,9 @@ QVariant WelcomeScreenHelper::getProjectThumbnail(const QUrl& url) {
 			QString thumbnail = reader.attributes().value("thumbnail").toString();
 
 			thumbnail.prepend("data:image/jpg;base64,");
-			//qDebug() << "Return thumbnail " <<thumbnail;
 			return QVariant(thumbnail);
 		}
 	}
-
 	return QVariant();
 }
 
@@ -271,19 +254,16 @@ DatasetModel* WelcomeScreenHelper::getDatasetModel() {
 	return m_datasetModel;
 }
 
+/**
+ * @brief Processes metadata file containing example projects.
+ */
 void WelcomeScreenHelper::processExampleProjects() {
 
 	const QString filePath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "example_projects/example_projects.json");
-
-	qDebug() << "Locating example metadata file" << filePath;
-
 	QFile file(filePath);
 
 	if (file.open(QIODevice::ReadOnly)) {
-		qDebug()<< "Process examples";
-
 		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
-		qDebug() <<"Is array: " << document.isArray() << "  is object " << document.isObject();
 		QJsonArray exampleArray = document.array();
 
 		//processing examples
@@ -291,21 +271,17 @@ void WelcomeScreenHelper::processExampleProjects() {
 			const QJsonObject currentExample = exampleArray[i].toObject();
 
 			const QString exampleName = currentExample.value("name").toString();
-			qDebug()<< exampleName;
 			if(m_projectNameList.contains(exampleName)) {
 				qDebug() << "There is already an example file with this name";
 			} else {
-				qDebug()<< exampleName + "is a new name";
 				m_projectNameList.append(exampleName);
 				const QString exampleFile = currentExample.value("fileName").toString();
 				m_pathMap[exampleName] = exampleFile;
 
-				const QJsonArray tags = currentExample.value("tags").toArray();
 				//processing tags
-				qDebug()<< "Process tags";
+				const QJsonArray tags = currentExample.value("tags").toArray();
 				for(int j = 0; j < tags.size(); ++j) {
 					QString tagName = tags[j].toString();
-					qDebug()<< "Process tag: " << tagName;
 					m_tagMap[tagName].append(exampleName);
 					m_datasetTag[exampleName].append(tagName);
 				}
@@ -318,17 +294,24 @@ void WelcomeScreenHelper::processExampleProjects() {
 	}
 }
 
+/**
+ * @brief Returns in string format the thumbnail for the given example file
+ */
 QVariant WelcomeScreenHelper::getExampleProjectThumbnail(const QString& exampleName) {
 	const QString filePath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "example_projects/" + m_pathMap[exampleName]);
-	qDebug() << "ExampleProjectThumbnail: " << filePath;
 	return getProjectThumbnail(filePath);
 }
 
+/**
+ * @brief Returns the list of example projects.
+ */
 QVariant WelcomeScreenHelper::getExampleProjects() {
-	qDebug() << "ExampleProjects: " << m_projectNameList;
 	return QVariant(m_projectNameList);
 }
 
+/**
+ * @brief Returns the tags of the given example project.
+ */
 QVariant WelcomeScreenHelper::getExampleProjectTags(const QString& exampleName) {
 	QString tags;
 	const QStringList& tagList = m_datasetTag[exampleName];
@@ -342,13 +325,24 @@ QVariant WelcomeScreenHelper::getExampleProjectTags(const QString& exampleName) 
 	return QVariant(tags);
 }
 
+/**
+ * @brief Handles an example project being clicked in the welcome screen.
+ * @param exampleName the name of the clicked example project
+ */
 void WelcomeScreenHelper::exampleProjectClicked(const QString& exampleName) {
 	QString path = QStandardPaths::locate(QStandardPaths::AppDataLocation, "example_projects/" + m_pathMap[exampleName]);
 	emit openExampleProject(path);
 }
 
+/**
+ * @brief Searches among the example projects based on the text introduce in the search bar of the welcome screen.
+ * @param searchtext - the text based on which we'll have to search
+ * @return Returns the results
+ */
 QVariant WelcomeScreenHelper::searchExampleProjects(const QString& searchtext) {
 	QStringList results;
+
+	//search based on tags
 	for(auto tag = m_tagMap.begin(); tag != m_tagMap.end(); tag++) {
 		if (tag.key().contains(searchtext)) {
 			for(QString example : tag.value()) {
@@ -358,6 +352,7 @@ QVariant WelcomeScreenHelper::searchExampleProjects(const QString& searchtext) {
 		}
 	}
 
+	//search based on name
 	for(QString example : m_projectNameList) {
 		if(example.contains(searchtext) && !results.contains(example))
 			results.append(example);
@@ -366,38 +361,45 @@ QVariant WelcomeScreenHelper::searchExampleProjects(const QString& searchtext) {
 	return QVariant(results);
 }
 
+/**
+ * @brief Sets the width scale for the given section, which will be saved.
+ */
 void WelcomeScreenHelper::setWidthScale(QString sectionID, double scale) {
 	m_widthScale[sectionID] = scale;
-	qDebug() << "Width scale " << sectionID << "  " << scale;
 }
 
+/**
+ * @brief Sets the height scale for the given section, which will be saved.
+ */
 void WelcomeScreenHelper::setHeightScale(QString sectionID, double scale) {
 	m_heightScale[sectionID] = scale;
-	qDebug() << "Height scale " << sectionID << "  " << scale;
 }
 
+/**
+ * @brief Returns the width scale for the given section.
+ */
 QVariant WelcomeScreenHelper::getWidthScale(QString sectionID) {
 	if(m_widthScale.keys().contains(sectionID)) {
-		qDebug() << "Width scale " << sectionID << "  " << m_widthScale[sectionID];
 		return QVariant(m_widthScale[sectionID]);
 	}
-
-	qDebug() << "Can't get " << sectionID;
 
 	return QVariant(-1);
 }
 
+/**
+ * @brief Returns the height scale for the given section.
+ */
 QVariant WelcomeScreenHelper::getHeightScale(QString sectionID) {
 	if(m_heightScale.keys().contains(sectionID)) {
-		qDebug() << "Height scale " << sectionID << "  " << m_heightScale[sectionID];
 		return QVariant(m_heightScale[sectionID]);
 	}
-
-	qDebug() << "Can't get " << sectionID;
 
 	return QVariant(-1);;
 }
 
+/**
+ * @brief Returns the maximize icon.
+ */
 QVariant WelcomeScreenHelper::getMaxIcon() {
 	QByteArray bArray;
 	QBuffer buffer(&bArray);
@@ -405,10 +407,12 @@ QVariant WelcomeScreenHelper::getMaxIcon() {
 	m_maxIcon.save(&buffer, "PNG");
 	QString image = QString::fromLatin1(bArray.toBase64().data());
 	image.prepend("data:image/png;base64,");
-	qDebug() << "Max icon  " << image;
 	return QVariant(image);
 }
 
+/**
+ * @brief Returns the minimize icon.
+ */
 QVariant WelcomeScreenHelper::getMinIcon() {
 	QByteArray bArray;
 	QBuffer buffer(&bArray);
@@ -416,10 +420,12 @@ QVariant WelcomeScreenHelper::getMinIcon() {
 	m_minIcon.save(&buffer, "PNG");
 	QString image = QString::fromLatin1(bArray.toBase64().data());
 	image.prepend("data:image/png;base64,");
-	qDebug() << "Max icon  " << image;
 	return QVariant(image);
 }
 
+/**
+ * @brief Returns the go-back icon.
+ */
 QVariant WelcomeScreenHelper::getBackIcon() {
 	QIcon icon = QIcon::fromTheme("labplot-back");
 	QPixmap pixmap = icon.pixmap(icon.availableSizes().first());
@@ -429,10 +435,12 @@ QVariant WelcomeScreenHelper::getBackIcon() {
 	pixmap.save(&buffer, "PNG");
 	QString image = QString::fromLatin1(bArray.toBase64().data());
 	image.prepend("data:image/png;base64,");
-	qDebug() << "Max icon  " << image;
 	return QVariant(image);
 }
 
+/**
+ * @brief Returns the go-forward icon.
+ */
 QVariant WelcomeScreenHelper::getForwardIcon() {
 	QIcon icon = QIcon::fromTheme("labplot-forward");
 	QPixmap pixmap = icon.pixmap(icon.availableSizes().first());
@@ -442,6 +450,5 @@ QVariant WelcomeScreenHelper::getForwardIcon() {
 	pixmap.save(&buffer, "PNG");
 	QString image = QString::fromLatin1(bArray.toBase64().data());
 	image.prepend("data:image/png;base64,");
-	qDebug() << "Max icon  " << image;
 	return QVariant(image);
 }

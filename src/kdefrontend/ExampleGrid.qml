@@ -19,10 +19,6 @@ GridView {
         width: exampleGrid.cellWidth - 5
         height: exampleGrid.cellHeight - 5
 
-        onHeightChanged: {
-            console.log("Example rect height changed: " + height)
-        }
-
         MouseArea {
             anchors.fill: parent
             hoverEnabled: true
@@ -32,9 +28,6 @@ GridView {
         }
 
         ColumnLayout {
-            onHeightChanged: {
-                console.log("Example column height changed: " + height)
-            }
             anchors.fill: parent
             //Layout.fillHeight: true
             //Layout.fillWidth: true

@@ -332,15 +332,12 @@ void MainWin::initGUI(const QString& fileName) {
 
 /**
  * @brief Creates a new welcome screen to be set as central widget.
- * @return
  */
 QQuickWidget* MainWin::createWelcomeScreen() {
 	QSize maxSize = qApp->primaryScreen()->availableSize();
 	resize(maxSize);
 	setMinimumSize(700, 400);
 	showMaximized();
-
-	qDebug() << "Main win size  " << size();
 
 	KToolBar* toolbar = toolBar();
 	if(toolbar != nullptr) {
@@ -353,31 +350,32 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	for (QUrl url : m_recentProjectsAction->urls())
 		recentList.append(QVariant(url));
 
+	//Set the source qml
 	QQuickWidget* quickWidget = new QQuickWidget(this);
 	QUrl source("qrc:///main.qml");
 
+	//Set ocntext property
 	QQmlContext *ctxt = quickWidget->rootContext();
 	QVariant variant(recentList);
 	ctxt->setContextProperty("recentProjects", variant);
+	ctxt->setContextProperty("datasetModel", m_welcomeScreenHelper->getDatasetModel());
+	ctxt->setContextProperty("helper", m_welcomeScreenHelper);
 
+	//Create helper object
 	if(m_welcomeScreenHelper != nullptr)
 		delete m_welcomeScreenHelper;
 	m_welcomeScreenHelper = new WelcomeScreenHelper();
-	connect(m_welcomeScreenHelper, SIGNAL(openExampleProject(QString)), this, SLOT(openProject(const QString& )));
-
-	ctxt->setContextProperty("datasetModel", m_welcomeScreenHelper->getDatasetModel());
-	ctxt->setContextProperty("helper", m_welcomeScreenHelper);
-	qDebug() << "Categories: " << m_welcomeScreenHelper->getDatasetModel()->allCategories();
+	connect(m_welcomeScreenHelper, SIGNAL(openExampleProject(QString)), this, SLOT(openProject(const QString& )));	
 
 	quickWidget->setSource(source);
 	quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	QObject *item = quickWidget->rootObject();
-	qDebug() << "Start connecting welcome screen";
+
+	//connect qml's signals
 	QObject::connect(item, SIGNAL(recentProjectClicked(QUrl)), this, SLOT(openRecentProject(QUrl)));
 	QObject::connect(item, SIGNAL(datasetClicked(QString, QString, QString)), m_welcomeScreenHelper, SLOT(datasetClicked(const QString&, const QString&, const QString&)));
 	QObject::connect(item, SIGNAL(openDataset()), this, SLOT(openDatasetExample()));
 	QObject::connect(item, SIGNAL(openExampleProject(QString)), m_welcomeScreenHelper, SLOT(exampleProjectClicked(const QString&)));
-	qDebug() << "Finished connecting welcome screen";
 	m_welcomeScreenHelper->showFirstDataset();
 
 	return quickWidget;
@@ -396,7 +394,6 @@ void MainWin::resetWelcomeScreen() {
  * @brief Creates a new MDI area, to replace the Welcome Screen as central widget
  */
 void MainWin::createMdiArea() {
-	//layout()->setSizeConstraint(QLayout::SetDefaultConstraint);
 	setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
 	setMinimumSize(0,0);
 
@@ -407,6 +404,7 @@ void MainWin::createMdiArea() {
 		qDebug() << "There is no toolbar to display";
 	}
 
+	//Save welcome screen's dimensions.
 	if(m_showWelcomeScreen) {
 		qDebug() << "Call saving welcome screen widget dimensions";
 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");

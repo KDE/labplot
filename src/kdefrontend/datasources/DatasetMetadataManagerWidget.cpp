@@ -98,15 +98,15 @@ DatasetMetadataManagerWidget::~DatasetMetadataManagerWidget() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatasetMetadataManagerWidget");
 
 	//filter settings
-	conf.writeEntry("Separator", ui.cbSeparatingCharacter->currentText());
-	conf.writeEntry("CommentChar", ui.cbCommentCharacter->currentText());
-	conf.writeEntry("NumberFormat", ui.cbNumberFormat->currentIndex());
-	conf.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
-	conf.writeEntry("create_index_column", ui.chbCreateIndex->isChecked());
-	conf.writeEntry("skip_empty_parts", ui.chbSkipEmptyParts->isChecked());
-	conf.writeEntry("simplify_whitespaces", ui.chbSimplifyWhitespaces->isChecked());
-	conf.writeEntry("remove_quotes", ui.chbRemoveQuotes->isChecked());
-	conf.writeEntry("use_first_row_for_vectorname", ui.chbHeader->isChecked());
+	conf.writeEntry("separator", ui.cbSeparatingCharacter->currentText());
+	conf.writeEntry("commentChar", ui.cbCommentCharacter->currentText());
+	conf.writeEntry("numberFormat", ui.cbNumberFormat->currentIndex());
+	conf.writeEntry("dateTimeFormat", ui.cbDateTimeFormat->currentText());
+	conf.writeEntry("createIndexColumn", ui.chbCreateIndex->isChecked());
+	conf.writeEntry("skipEmptyParts", ui.chbSkipEmptyParts->isChecked());
+	conf.writeEntry("simplifyWhitespaces", ui.chbSimplifyWhitespaces->isChecked());
+	conf.writeEntry("removeQuotes", ui.chbRemoveQuotes->isChecked());
+	conf.writeEntry("useFirstRowForVectorName", ui.chbHeader->isChecked());
 }
 
 /**
@@ -114,15 +114,15 @@ DatasetMetadataManagerWidget::~DatasetMetadataManagerWidget() {
  */
 void DatasetMetadataManagerWidget::loadSettings() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatasetMetadataManagerWidget");
-	ui.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentChar", "#"));
-	ui.cbSeparatingCharacter->setCurrentItem(conf.readEntry("Separator", "auto"));
-	ui.cbNumberFormat->setCurrentIndex(conf.readEntry("NumberFormat", (int)QLocale::AnyLanguage));
-	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
-	ui.chbCreateIndex->setChecked(conf.readEntry("create_index_column", false));
-	ui.chbSimplifyWhitespaces->setChecked(conf.readEntry("simplify_whitespaces", true));
-	ui.chbRemoveQuotes->setChecked(conf.readEntry("remove_quotes", false));
-	ui.chbSkipEmptyParts->setChecked(conf.readEntry("skip_empty_parts", false));
-	ui.chbHeader->setChecked(conf.readEntry("use_first_row_for_vectorname", true));
+	ui.cbCommentCharacter->setCurrentItem(conf.readEntry("commentChar", "#"));
+	ui.cbSeparatingCharacter->setCurrentItem(conf.readEntry("separator", "auto"));
+	ui.cbNumberFormat->setCurrentIndex(conf.readEntry("numberFormat", (int)QLocale::AnyLanguage));
+	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("dateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
+	ui.chbCreateIndex->setChecked(conf.readEntry("createIndexColumn", false));
+	ui.chbSimplifyWhitespaces->setChecked(conf.readEntry("simplifyWhitespaces", true));
+	ui.chbRemoveQuotes->setChecked(conf.readEntry("removeQuotes", false));
+	ui.chbSkipEmptyParts->setChecked(conf.readEntry("skipEmptyParts", false));
+	ui.chbHeader->setChecked(conf.readEntry("useFirstRowForVectorName", true));
 }
 
 /**
@@ -130,13 +130,12 @@ void DatasetMetadataManagerWidget::loadSettings() {
  */
 bool DatasetMetadataManagerWidget::checkFileName() {
 	const QString fileName = ui.leFileName->text();
-	const QRegularExpression re("^[\\w\\d-]+$");
-	const QRegularExpressionMatch match = re.match(fileName);
 
 	//check whether it contains only digits, letters, -, _ or not
+	const QRegularExpression re("^[\\w\\d-]+$");
+	const QRegularExpressionMatch match = re.match(fileName);
 	bool hasMatch = match.hasMatch();
 
-	qDebug() << hasMatch;
 	if(!hasMatch || fileName.isEmpty()) {
 		qDebug("File name invalid");
 		QPalette palette;
@@ -145,7 +144,6 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 		ui.leFileName->setPalette(palette);
 		ui.leFileName->setToolTip("Invalid name for a file (it can contain:digits, letters, -, _)");
 	} else {
-		qDebug("File name valid");
 		QPalette palette;
 		palette.setColor(QPalette::Base, m_baseColor);
 		palette.setColor(QPalette::Text, m_textColor);
@@ -165,7 +163,6 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 		ui.leFileName->setToolTip("There already is a dataset metadata file with this name!");
 		found = true;
 	} else {
-		qDebug("Dataset metadata file name is unique");
 		if(hasMatch) {
 			QPalette palette;
 			palette.setColor(QPalette::Base, m_baseColor);
@@ -182,12 +179,14 @@ bool DatasetMetadataManagerWidget::checkFileName() {
  * @brief Checks whether leDownloadURL contains a valid URL.
  */
 bool DatasetMetadataManagerWidget::urlExists() {
+
+	//Check whether the given url is acceptable syntactically
 	const QRegularExpression re("^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$");
 	const QRegularExpressionMatch match = re.match(ui.leDownloadURL->text());
 	bool hasMatch = match.hasMatch();
+	const bool urlExists = hasMatch && !ui.leDownloadURL->text().isEmpty();
 
-	const bool urlExists_ = hasMatch && !ui.leDownloadURL->text().isEmpty();
-	if(!urlExists_){
+	if(!urlExists){
 		QPalette palette;
 		palette.setColor(QPalette::Base, Qt::red);
 		palette.setColor(QPalette::Text, Qt::black);
@@ -200,7 +199,7 @@ bool DatasetMetadataManagerWidget::urlExists() {
 		ui.leDownloadURL->setPalette(palette);
 		ui.leDownloadURL->setToolTip("");
 	}
-	return urlExists_;
+	return urlExists;
 }
 
 /**
@@ -251,6 +250,7 @@ bool DatasetMetadataManagerWidget::checkDescription() {
  * @brief Checks whether the given QComboBox's current text is empty or not.
  */
 bool DatasetMetadataManagerWidget::checkCategories(QComboBox* comboBox) {
+	//Check whether it is a word or not (might contain digits)
 	const QString fileName = comboBox->currentText();
 	const QRegularExpression re("^[\\w\\d]+$");
 	const QRegularExpressionMatch match = re.match(fileName);
@@ -314,9 +314,8 @@ bool DatasetMetadataManagerWidget::checkDataValidity() {
  */
 void DatasetMetadataManagerWidget::updateCategories(const QString& collection) {
 	ui.cbCategory->clear();
-	if( m_datasetModel->collections().contains(collection)) {
+	if( m_datasetModel->collections().contains(collection))
 		ui.cbCategory->addItems(m_datasetModel->categories(collection));
-	}
 
 	emit checkOk();
 }
@@ -327,9 +326,8 @@ void DatasetMetadataManagerWidget::updateCategories(const QString& collection) {
 void DatasetMetadataManagerWidget::updateSubcategories(const QString& category) {
 	ui.cbSubcategory->clear();
 	const QString collection = ui.cbCollection->currentText();
-	if( m_datasetModel->categories(collection).contains(category)) {
+	if( m_datasetModel->categories(collection).contains(category))
 		ui.cbSubcategory->addItems(m_datasetModel->subcategories(collection, category));
-	}
 
 	emit checkOk();
 }
@@ -339,18 +337,18 @@ void DatasetMetadataManagerWidget::updateSubcategories(const QString& category) 
  * @param fileName the name of the metadata file (path)
  */
 void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
+	//Check whether the current collection already exists, if yes update it
 	if(m_datasetModel->collections().contains(ui.cbCollection->currentText())) {
-
 		QString fileName = dirPath + ui.cbCollection->currentText() + ".json";
-		qDebug() << "updating: " << fileName;
+		qDebug() << "Updating: " << fileName;
 		QFile file(fileName);
 		if (file.open(QIODevice::ReadWrite)) {
 			QJsonDocument document = QJsonDocument::fromJson(file.readAll());
-			//qDebug() <<document.toJson();
 			QJsonObject rootObject = document.object();
 			QJsonValueRef categoryArrayRef = rootObject.find("categories").value();
 			QJsonArray categoryArray = categoryArrayRef.toArray();
 
+			//Check whether the current category already exists
 			bool foundCategory = false;
 			for(int i = 0 ; i < categoryArray.size(); ++i) {
 				QJsonValueRef categoryRef = categoryArray[i];
@@ -358,20 +356,22 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
 				QString categoryName = currentCategory.value("category_name").toString();
 				qDebug() << "Category name: " << categoryName;
 
+				//If we find the category we have to update that QJsonObject
 				if(categoryName.compare(ui.cbCategory->currentText()) == 0) {
 					foundCategory = true;
 					QJsonValueRef subcategoryArrayRef = currentCategory.find("subcategories").value();
 					QJsonArray subcategoryArray = subcategoryArrayRef.toArray();
 					qDebug() << "subcategoryArray: " << subcategoryArray.toVariantList();
 
+					//Check whether the current subcategory already exists
 					bool subcategoryFound = false;
-
 					for(int j = 0; j < subcategoryArray.size(); ++j) {
 						QJsonValueRef subcategoryRef = subcategoryArray[j];
 						QJsonObject currentSubcategory = subcategoryRef.toObject();
 						QString subcategoryName = currentSubcategory.value("subcategory_name").toString();
 						qDebug() << "Subcat name: " << subcategoryName;
 
+						//If we find the subcategory we have to update that QJsonObject
 						if(subcategoryName.compare(ui.cbSubcategory->currentText()) == 0) {
 							subcategoryFound = true;
 							QJsonValueRef datasetsRef = currentSubcategory.find("datasets").value();
@@ -390,6 +390,7 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
 						}
 					}
 
+					//If we didn't find the subcategory, we have to create it
 					if(!subcategoryFound) {
 						qDebug() << "Subcat not found";
 						QJsonObject newSubcategory;
@@ -410,6 +411,7 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
 				}
 			}
 
+			//If we didn't find the category, we have to create it
 			if(!foundCategory) {
 				qDebug() << "Cat not found";
 				QJsonObject newCategory;
@@ -439,7 +441,9 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
 		} else {
 			qDebug() << "Couldn't open dataset category file, because " << file.errorString();
 		}
-	} else {
+	}
+	//If the collection doesn't exist we have to create a new json file for it.
+	else {
 		QString fileName = dirPath + "DatasetCollections.json";
 		qDebug() << "creating: " << fileName;
 		QFile file(fileName);
@@ -496,7 +500,6 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
  */
 QJsonObject DatasetMetadataManagerWidget::createDatasetObject() {
 	QJsonObject rootObject;
-
 	rootObject.insert("filename", ui.leFileName->text());
 	rootObject.insert("name", ui.leDatasetName->text());
 	rootObject.insert("download", ui.leDownloadURL->text());
@@ -511,9 +514,8 @@ QJsonObject DatasetMetadataManagerWidget::createDatasetObject() {
 	rootObject.insert("remove_quotes", ui.chbRemoveQuotes->isChecked());
 	rootObject.insert("use_first_row_for_vectorname", ui.chbHeader->isChecked());
 
-	for(int i = 0; i < m_columnDescriptions.size(); ++i) {
+	for(int i = 0; i < m_columnDescriptions.size(); ++i)
 		rootObject.insert(i18n("column_description_%1", i), m_columnDescriptions[i]);
-	}
 
 	return rootObject;
 }

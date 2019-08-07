@@ -68,8 +68,9 @@ DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, cons
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
-	} else
+	} else {
 		resize(QSize(0, 0).expandedTo(minimumSize()));
+	}
 
 	checkOkButton();
 }

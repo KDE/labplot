@@ -147,35 +147,35 @@ QVariant DatasetModel::allDatasetsList() {
  * @brief Returns the list of categories for a given collection
  */
 QStringList DatasetModel::categories(const QString& collection) {
-	if(collection.compare("All") != 0) {
+	if(collection.compare("All") != 0)
 		return m_categories[collection];
-	}else {
+	else
 		return allCategories().toStringList();
-	}
 }
 
 /**
  * @brief  Returns the list of subcategories of a given collection and category.
  */
 QStringList DatasetModel::subcategories(const QString& collection, const QString& category) {
-	if(collection.compare("All") != 0) {
+	if(collection.compare("All") != 0)
 		return m_subcategories[collection][category];
-	} else {
+	else
 		return allSubcategories(category).toStringList();
-	}
 }
 
 /**
  * @brief Returns the list of datasets of a given collection, category and subcategory.
  */
 QStringList DatasetModel::datasets(const QString& collection, const QString& category, const QString& subcategory) {
-	if(collection.compare("All") != 0) {
+	if(collection.compare("All") != 0)
 		return m_datasets[collection][category][subcategory];
-	} else {
+	else
 		return allDatasets(category, subcategory).toStringList();
-	}
 }
 
+/**
+ * @brief Returns the number of datasets belonging to the given collection
+ */
 int DatasetModel::datasetCount(const QString& collection) {
 	int count = 0;
 	for(const QString& category: categories(collection)) {
@@ -186,6 +186,9 @@ int DatasetModel::datasetCount(const QString& collection) {
 	return count;
 }
 
+/**
+ * @brief Returns the number of datasets belonging to the given collection and category
+ */
 int DatasetModel::datasetCount(const QString& collection, const QString& category) {
 	int count = 0;
 	for(const QString& subcategory: subcategories(collection, category))	{
@@ -194,6 +197,9 @@ int DatasetModel::datasetCount(const QString& collection, const QString& categor
 	return count;
 }
 
+/**
+ * @brief Returns the number of datasets belonging to the given collection, category and subcategory
+ */
 int DatasetModel::datasetCount(const QString& collection, const QString& category, const QString& subcategory) {
 	return datasets(collection, category, subcategory).size();
 }

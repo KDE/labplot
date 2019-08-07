@@ -93,10 +93,7 @@ Rectangle {
         target: helper
         onDatasetFound:{
             datasetTitle.text = helper.datasetName()
-            console.log("Title width: " + datasetTitle.width)
             datasetDescription.text = helper.datasetDescription()
-            console.log("Description width: " + datasetDescription.width)
-            console.log("Description height: " + datasetDescription.paintedHeight  + "  " + height)
             datasetRows.text = helper.datasetRows()
             datasetColumns.text = helper.datasetColumns()
         }
@@ -130,7 +127,6 @@ Rectangle {
         property double prevHeight: 0
 
         Component.onCompleted: {
-            console.log("Recent projects saved iwdth " + helper.getWidthScale(sectionName) + "  height  " + helper.getHeightScale(sectionName))
             if(helper.getWidthScale(sectionName) === -1 || helper.getHeightScale(sectionName) === -1)
                 mainWindow.restoreOriginalLayout()
         }
@@ -1278,15 +1274,12 @@ Rectangle {
                     id: categoryList
                     Layout.preferredWidth: (parent.width - 3 * datasetSectionRow.separatorWidth - 6*datasetSectionRow.spacing) * 0.15
                     Layout.minimumWidth:  (parent.width - 3 * datasetSectionRow.separatorWidth - 6*datasetSectionRow.spacing) * 0.15
-                    //width: textWidth
-                    // implicitWidth: textWidth
                     spacing: 10
                     Layout.fillHeight: true
                     property int textWidth: 100
 
                     clip: true
                     ScrollBar.vertical: ScrollBar { }
-                    Component.onCompleted: console.log("Model: " +  datasetModel.allCategories())
                     model: datasetModel.allCategories()
                     delegate:Rectangle {
                         width: parent.width
@@ -1298,8 +1291,6 @@ Rectangle {
                         RowLayout {
                             id: categoryRow
                             spacing: 10
-                            //Layout.fillHeight: true
-                            //Layout.fillWidth: true
                             anchors.fill: parent
 
                             Rectangle {
@@ -1331,14 +1322,11 @@ Rectangle {
                                 Behavior on scale { PropertyAnimation { duration: 300 } }
 
                                 Component.onCompleted:  {
-                                    console.log("Category name: " +  categoryDelegate.categoryName)
                                     if(index == 0) {
                                         mainWindow.currentCategory =  categoryDelegate.categoryName
                                         categoryDelegate.ListView.view.currentIndex = index
-                                        console.log("Set current categ: " +   mainWindow.currentCategory)
                                     }
 
-                                    console.log("Category size: " + (paintedWidth + categoryBullet.width + categoryRow.spacing))
                                     if(categoryList.textWidth < paintedWidth + categoryBullet.width + categoryRow.spacing)
                                         categoryList.textWidth = paintedWidth + categoryBullet.width + categoryRow.spacing
                                 }
@@ -1348,12 +1336,10 @@ Rectangle {
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
-                                console.log("Category name: " +  categoryDelegate.categoryName + "Clicked")
                                 categoryDelegate.ListView.view.currentIndex = index
                                 if (mainWindow.currentCategory != categoryName)
                                     mainWindow.currentCategory = categoryName
 
-                                console.log("Category size: " + (categoryLabel.paintedWidth + categoryBullet.width + categoryRow.spacing))
                                 if(categoryList.textWidth < categoryLabel.paintedWidth + categoryBullet.width + categoryRow.spacing)
                                     categoryList.textWidth = categoryLabel.paintedWidth + categoryBullet.width + categoryRow.spacing
                             }
@@ -1419,18 +1405,13 @@ Rectangle {
                                 Behavior on scale { PropertyAnimation { duration: 300 } }
 
                                 Component.onCompleted: {
-                                    console.log("Subcategory name: " +  subcategoryDelegate.subcategoryName)
-
                                     if(index == 0) {
                                         mainWindow.currentSubcategory = subcategoryDelegate.subcategoryName
                                         subcategoryDelegate.ListView.view.currentIndex = index
                                     }
 
-                                    console.log("Subcategory size: " + (paintedWidth + subcategoryBullet.width + subcategoryRow.spacing))
-
                                     if(subcategoryList.textWidth < paintedWidth + subcategoryBullet.width + subcategoryRow.spacing) {
                                         subcategoryList.textWidth = paintedWidth + subcategoryBullet.width + subcategoryRow.spacing
-                                        console.log("Subcategory size bigger, new value: " + subcategoryList.textWidth + " " + subcategoryList.width)
                                     }
                                 }
                             }
@@ -1512,12 +1493,10 @@ Rectangle {
                                 Behavior on scale { PropertyAnimation { duration: 300 } }
 
                                 Component.onCompleted: {
-                                    console.log("Dataset name: " +  datasetDelegate.datasetName)
                                     datasetDelegate.textHeight = paintedHeight
                                     datasetDelegate.textWidth = paintedWidth + datasetBullet.width + datasetRow.spacing
 
                                     if(index == 0) {
-                                        console.log("index 0  " +  mainWindow.currentCategory +"   subcat:  " + mainWindow.currentSubcategory + " dtaset  " +datasetDelegate.datasetName);
                                         datasetGrid.currentIndex = index
                                         mainWindow.currentDataset = datasetDelegate.datasetName
                                         mainWindow.datasetClicked(mainWindow.currentCategory, mainWindow.currentSubcategory, datasetDelegate.datasetName)
@@ -1535,14 +1514,6 @@ Rectangle {
                                 mainWindow.datasetClicked(mainWindow.currentCategory, mainWindow.currentSubcategory, datasetDelegate.datasetName)
                             }
                         }
-
-                        Component.onCompleted: {
-                            console.log("current index: " +  datasetGrid.currentIndex + " index " + index)
-                        }
-                    }
-
-                    Component.onCompleted: {
-                        console.log("GridView completed")
                     }
                 }
 
@@ -1563,10 +1534,9 @@ Rectangle {
                     clip: true
                     ColumnLayout {
                         id: datasetDescriptionColumn
-                        //anchors.fill: parent
-                        Layout.minimumWidth: scrollView.width // datasetFrame.width *0.3
-                        Layout.preferredWidth: scrollView.width //datasetFrame.width *0.3
-                        width: scrollView.width //datasetFrame.width *0.3
+                        Layout.minimumWidth: scrollView.width
+                        Layout.preferredWidth: scrollView.width
+                        width: scrollView.width
                         spacing: 10
 
                         Row {
@@ -1611,11 +1581,6 @@ Rectangle {
                                 Layout.minimumWidth: datasetDescriptionColumn.width - datasetDescriptionLabel.paintedWidth
                                 wrapMode: Text.WordWrap
                                 font.pixelSize: 12
-
-                                Component.onCompleted:{
-                                    console.log("First Description width: " + width +  " " + (datasetDescriptionColumn.width - datasetDescriptionLabel.paintedWidth))
-                                    console.log("First Description height: " + paintedHeight +  " " + parent.height)
-                                }
                             }
                         }
 
@@ -1680,8 +1645,6 @@ Rectangle {
                                 }
                             }
                         }
-
-                        Component.onCompleted: console.log("Width of last column: " + datasetFrame.width / 5 + "  " + width)
                     }
                 }
             }

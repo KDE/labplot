@@ -47,9 +47,7 @@
 ImportDatasetDialog::ImportDatasetDialog(MainWin* parent, const QString& fileName) : ImportDialog(parent),
 	m_importDatasetWidget(new ImportDatasetWidget(this)){
 
-	qDebug("add dataset widget");
 	vLayout->addWidget(m_importDatasetWidget);
-	qDebug("Add completed");
 	connect(m_importDatasetWidget, &ImportDatasetWidget::datasetSelected, this, &ImportDatasetDialog::checkOkButton);
 	connect(m_importDatasetWidget, &ImportDatasetWidget::datasetDoubleClicked, [this]() {
 		checkOkButton();
@@ -67,7 +65,6 @@ ImportDatasetDialog::ImportDatasetDialog(MainWin* parent, const QString& fileNam
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	setWindowTitle(i18nc("@title:window", "Add new Dataset"));
-
 	create();
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
@@ -76,8 +73,9 @@ ImportDatasetDialog::ImportDatasetDialog(MainWin* parent, const QString& fileNam
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size());
-	} else
+	} else {
 		resize(QSize(0, 0).expandedTo(minimumSize()));
+	}
 
 	checkOkButton();
 }
@@ -90,7 +88,6 @@ ImportDatasetDialog::~ImportDatasetDialog() {
 QString ImportDatasetDialog::selectedObject() const {
 	return QString();
 }
-
 
 /*!
   triggers the import of a dataset's data
@@ -112,7 +109,7 @@ void ImportDatasetDialog::importToDataset(DatasetHandler* datasetHandler, QStatu
 
 	m_importDatasetWidget->loadDatasetToProcess(datasetHandler);
 
-	statusBar->showMessage(i18n("Dataset imported in %1 seconds.", (float)timer.elapsed()/1000));
+	statusBar->showMessage(i18n("Dataset imported in %1 seconds.", static_cast<float>(timer.elapsed()/1000)));
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
 }
@@ -124,7 +121,6 @@ void ImportDatasetDialog::checkOkButton() {
 	bool enable = (!m_importDatasetWidget->getSelectedDataset().isEmpty());
 	okButton->setEnabled(enable);
 }
-
 
 void ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
 }

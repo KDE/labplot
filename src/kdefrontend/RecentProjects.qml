@@ -11,9 +11,6 @@ ListView {
     Layout.fillHeight: true
     Layout.fillWidth: true
     clip: true
-    onWidthChanged: {
-        console.log("recent project width changed: " + width)
-    }
 
     model: recentProjects
     delegate: Column {
@@ -22,18 +19,11 @@ ListView {
         //width: delegateItem.ListView.view.width
         property string fullUri : modelData
         property int textHeight: 100
-        onWidthChanged: {
-            console.log("recent project delegate width changed: " + width)
-        }
 
         spacing: 2
         Rectangle {
             width: delegateItem.width
             height: 50 //delegateItem.textHeight
-
-            onWidthChanged: {
-                console.log("recent project delegate child width changed: " + width)
-            }
 
             RowLayout {
                 anchors.fill: parent
@@ -45,7 +35,6 @@ ListView {
                     fillMode: Image.Stretch
                     sourceSize.width: 48
                     sourceSize.height: 60
-
                 }
 
                 Text{
@@ -59,24 +48,16 @@ ListView {
                     font.bold: true
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    //wrapMode: Text.WordWrap
-                    //height:paintedHeight
-
-                    onWidthChanged: {
-                        console.log("recent project text width changed: " + width)
-                    }
 
                     onPaintedHeightChanged: {
                         if( delegateItem.textHeight <  Math.max(paintedHeight + 2 + 2, 64)) {
                             delegateItem.textHeight = Math.max(paintedHeight + 2 + 2, 64)
-                            console.log("Text height for recent: "  + delegateItem.textHeight)
                         }
                     }
 
                     Component.onCompleted: {
                         if( delegateItem.textHeight <  Math.max(paintedHeight + 2 + 2, 64)) {
                             delegateItem.textHeight = Math.max(paintedHeight + 2 + 2, 64)
-                            console.log("Text height for recent: "  + delegateItem.textHeight)
                         }
                     }
                 }
