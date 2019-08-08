@@ -587,7 +587,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addCustomPointAction);
 
-	zoomMenu = new QMenu(i18n("Zoom"));
+	zoomMenu = new QMenu(i18n("Zoom/Navigate"));
 	zoomMenu->setIcon(QIcon::fromTheme("zoom-draw"));
 	zoomMenu->addAction(scaleAutoAction);
 	zoomMenu->addAction(scaleAutoXAction);
@@ -668,14 +668,16 @@ QMenu* CartesianPlot::createContextMenu() {
 	QMenu* menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1);
 
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
 
 	menu->insertMenu(firstAction, addNewMenu);
+	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, zoomMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, themeMenu);
 	menu->insertSeparator(firstAction);
+
+	visibilityAction->setChecked(isVisible());
+	menu->insertAction(firstAction, visibilityAction);
 
 	return menu;
 }

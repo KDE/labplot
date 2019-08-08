@@ -220,6 +220,7 @@ private:
 	QAction* addHorizontalAxisAction;
 	QAction* addVerticalAxisAction;
 	QAction* addLegendAction;
+	QAction* addPlotTextLabelAction;
 	QAction* addCustomPointAction;
 
 	QAction* scaleAutoXAction;
