@@ -98,7 +98,7 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly) : QWid
 		m_tableView->setEditTriggers(QTableView::NoEditTriggers);
 	init();
 
-	//resize the view to show alls columns and the first 50 rows.
+	//resize the view to show alls columns and the first150 rows.
 	//no need to resize the view when the project is being opened,
 	//all views will be resized to the stored values at the end
 	if (!m_spreadsheet->isLoading()) {
@@ -107,10 +107,10 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly) : QWid
 		for (int i = 0; i < m_horizontalHeader->count(); ++i)
 			w += m_horizontalHeader->sectionSize(i);
 
-		if (m_tableView->verticalHeader()->count() > 50 || m_tableView->verticalHeader()->count() < 10)
-			h += m_tableView->verticalHeader()->sectionSize(0)*50;
-		else
+		if (m_tableView->verticalHeader()->count() <= 10)
 			h += m_tableView->verticalHeader()->sectionSize(0)*m_tableView->verticalHeader()->count();
+		else
+			h += m_tableView->verticalHeader()->sectionSize(0)*11;
 
 		resize(w+50, h);
 	}
