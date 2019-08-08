@@ -119,14 +119,8 @@ void ColumnDock::setColumns(QList<Column*> list) {
 		connect(m_column->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &ColumnDock::columnPrecisionChanged);
 		connect(m_column, &AbstractColumn::plotDesignationChanged, this, &ColumnDock::columnPlotDesignationChanged);
 	} else {
-		//disable widgets if we have at least one non-editable column
+		//don't allow to change the column type at least one non-editable column
 		ui.cbType->setEnabled(false);
-		ui.lFormat->hide();
-		ui.cbFormat->hide();
-		ui.lPrecision->hide();
-		ui.sbPrecision->hide();
-		ui.lPlotDesignation->hide();
-		ui.cbPlotDesignation->hide();
 	}
 
 	m_initializing = false;
