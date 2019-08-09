@@ -627,17 +627,17 @@ void LabelWidget::dateTimeMenu() {
 	m_dateTimeMenu->addSeparator()->setText(i18n("Date"));
 	m_dateTimeMenu->addAction( date.toString(Qt::TextDate) );
 	m_dateTimeMenu->addAction( date.toString(Qt::ISODate) );
-	m_dateTimeMenu->addAction( date.toString(Qt::TextDate) );
 	m_dateTimeMenu->addAction( date.toString(Qt::SystemLocaleShortDate) );
 	m_dateTimeMenu->addAction( date.toString(Qt::SystemLocaleLongDate) );
+	m_dateTimeMenu->addAction( date.toString(Qt::RFC2822Date) );
 
 	QDateTime time = QDateTime::currentDateTime();
 	m_dateTimeMenu->addSeparator()->setText(i18n("Date and Time"));
 	m_dateTimeMenu->addAction( time.toString(Qt::TextDate) );
 	m_dateTimeMenu->addAction( time.toString(Qt::ISODate) );
-	m_dateTimeMenu->addAction( time.toString(Qt::TextDate) );
 	m_dateTimeMenu->addAction( time.toString(Qt::SystemLocaleShortDate) );
 	m_dateTimeMenu->addAction( time.toString(Qt::SystemLocaleLongDate) );
+	m_dateTimeMenu->addAction( time.toString(Qt::RFC2822Date) );
 
 	m_dateTimeMenu->exec( mapToGlobal(ui.tbDateTime->rect().bottomLeft()));
 }

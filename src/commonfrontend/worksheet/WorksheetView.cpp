@@ -329,6 +329,7 @@ void WorksheetView::initActions() {
 	addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("Legend"), cartesianPlotAddNewActionGroup);
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("Horizontal Axis"), cartesianPlotAddNewActionGroup);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("Vertical Axis"), cartesianPlotAddNewActionGroup);
+	addPlotTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), cartesianPlotAddNewActionGroup);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), cartesianPlotAddNewActionGroup);
 
 	// Analysis menu
@@ -487,6 +488,10 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotAddNewMenu->addSeparator();
 	m_cartesianPlotAddNewMenu->addAction(addHorizontalAxisAction);
 	m_cartesianPlotAddNewMenu->addAction(addVerticalAxisAction);
+	m_cartesianPlotAddNewMenu->addSeparator();
+	m_cartesianPlotAddNewMenu->addAction(addPlotTextLabelAction);
+	m_cartesianPlotAddNewMenu->addSeparator();
+	m_cartesianPlotAddNewMenu->addAction(addCustomPointAction);
 
 	m_cartesianPlotZoomMenu = new QMenu(i18n("Zoom/Navigate"), this);
 	m_cartesianPlotZoomMenu->setIcon(QIcon::fromTheme("zoom-draw"));
@@ -518,12 +523,14 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotCursorModeMenu->addAction(cartesianPlotApplyToSelectionCursor);
 	m_cartesianPlotCursorModeMenu->addAction(cartesianPlotApplyToAllCursor);
 
-	m_cartesianPlotMenu->addMenu(m_cartesianPlotMouseModeMenu);
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotAddNewMenu);
+	m_cartesianPlotMenu->addSeparator();
+	m_cartesianPlotMenu->addMenu(m_cartesianPlotMouseModeMenu);
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotZoomMenu);
 	m_cartesianPlotMenu->addSeparator();
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotActionModeMenu);
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotCursorModeMenu);
+	m_cartesianPlotMenu->addSeparator();
 	m_cartesianPlotMenu->addAction(plotsLockedAction);
 
 	// Data manipulation menu
@@ -662,6 +669,8 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addSeparator();
 	toolBar->addAction(addHorizontalAxisAction);
 	toolBar->addAction(addVerticalAxisAction);
+	toolBar->addSeparator();
+	toolBar->addAction(addPlotTextLabelAction);
 	toolBar->addSeparator();
 	toolBar->addAction(scaleAutoAction);
 	toolBar->addAction(scaleAutoXAction);
@@ -1566,6 +1575,8 @@ void WorksheetView::handleCartesianPlotActions() {
 	addHorizontalAxisAction->setEnabled(plot);
 	addVerticalAxisAction->setEnabled(plot);
 	addLegendAction->setEnabled(plot);
+	addCustomPointAction->setEnabled(plot);
+	addPlotTextLabelAction->setEnabled(plot);
 
 	scaleAutoXAction->setEnabled(plot);
 	scaleAutoYAction->setEnabled(plot);
@@ -1910,6 +1921,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addHorizontalAxis();
 	else if (action == addVerticalAxisAction)
 		plot->addVerticalAxis();
+	else if (action == addPlotTextLabelAction)
+		plot->addTextLabel();
 	else if (action == addCustomPointAction)
 		plot->addCustomPoint();
 // analysis actions
