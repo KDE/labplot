@@ -98,7 +98,7 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly) : QWid
 		m_tableView->setEditTriggers(QTableView::NoEditTriggers);
 	init();
 
-	//resize the view to show alls columns and the first150 rows.
+	//resize the view to show alls columns and the first 10 rows.
 	//no need to resize the view when the project is being opened,
 	//all views will be resized to the stored values at the end
 	if (!m_spreadsheet->isLoading()) {
