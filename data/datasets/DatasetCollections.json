@@ -1,4 +1,6 @@
 [
-	"StatSci_Datasets",
-	"R_Datasets"
+    "R_Datasets",
+    "StatSci_Datasets",
+    "Socrata",
+    "Test"
 ]

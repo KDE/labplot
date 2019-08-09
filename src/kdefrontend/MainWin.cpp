@@ -358,14 +358,15 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	QQmlContext *ctxt = quickWidget->rootContext();
 	QVariant variant(recentList);
 	ctxt->setContextProperty("recentProjects", variant);
-	ctxt->setContextProperty("datasetModel", m_welcomeScreenHelper->getDatasetModel());
-	ctxt->setContextProperty("helper", m_welcomeScreenHelper);
 
 	//Create helper object
 	if(m_welcomeScreenHelper != nullptr)
 		delete m_welcomeScreenHelper;
 	m_welcomeScreenHelper = new WelcomeScreenHelper();
 	connect(m_welcomeScreenHelper, SIGNAL(openExampleProject(QString)), this, SLOT(openProject(const QString& )));	
+
+	ctxt->setContextProperty("datasetModel", m_welcomeScreenHelper->getDatasetModel());
+	ctxt->setContextProperty("helper", m_welcomeScreenHelper);
 
 	quickWidget->setSource(source);
 	quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);

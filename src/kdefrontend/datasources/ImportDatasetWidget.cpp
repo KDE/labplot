@@ -819,3 +819,15 @@ void ImportDatasetWidget::showDetails(bool show) {
 	if(show)
 		updateDetails();
 }
+
+void ImportDatasetWidget::processTest(const QString& category, const QString& subcategory, const QString& dataset, DatasetHandler* datasetHandler) {
+	m_selectedCollection = "Test";
+	m_selectedCategory = category;
+	m_selectedSubcategory = subcategory;
+	ui.lwDatasets->clear();
+	ui.lwDatasets->addItems(m_datasetModel->testDatasets(category, subcategory));
+	setDataset(dataset);
+
+	loadDatasetToProcess(datasetHandler);
+}
+

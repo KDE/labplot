@@ -53,6 +53,7 @@ public:
 	void setCategory(const QString&);
 	void setSubcategory(const QString&);
 	void setDataset(const QString&);
+	void processTest(const QString& category, const QString& subcategory, const QString& dataset, DatasetHandler* datasetHandler);
 
 private:    
 	Ui::ImportDatasetWidget ui;
