@@ -243,18 +243,18 @@ void ImportFileWidget::loadSettings() {
 
 
 	//live data related settings
-	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate").toInt());
-	ui.cbReadingType->setCurrentIndex(conf.readEntry("ReadingType").toInt());
+	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate", 13)); // index for bautrate 19200b/s
+	ui.cbReadingType->setCurrentIndex(conf.readEntry("ReadingType", (int)LiveDataSource::WholeFile));
 	ui.cbSerialPort->setCurrentIndex(conf.readEntry("SerialPort").toInt());
-	ui.cbUpdateType->setCurrentIndex(conf.readEntry("UpdateType").toInt());
+	ui.cbUpdateType->setCurrentIndex(conf.readEntry("UpdateType", (int)LiveDataSource::NewData));
 	updateTypeChanged(ui.cbUpdateType->currentIndex());
 	ui.leHost->setText(conf.readEntry("Host",""));
-	ui.sbKeepNValues->setValue(conf.readEntry("KeepNValues").toInt());
+	ui.sbKeepNValues->setValue(conf.readEntry("KeepNValues", 0)); // keep all values
 	ui.lePort->setText(conf.readEntry("Port",""));
-	ui.sbSampleSize->setValue(conf.readEntry("SampleSize").toInt());
-	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
-	ui.chbLinkFile->setCheckState((Qt::CheckState)conf.readEntry("LinkFile").toInt());
-	ui.chbRelativePath->setCheckState((Qt::CheckState)conf.readEntry("RelativePath").toInt());
+	ui.sbSampleSize->setValue(conf.readEntry("SampleSize", 1));
+	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval", 1000));
+	ui.chbLinkFile->setCheckState((Qt::CheckState)conf.readEntry("LinkFile", (int)Qt::CheckState::Unchecked));
+	ui.chbRelativePath->setCheckState((Qt::CheckState)conf.readEntry("RelativePath", (int)Qt::CheckState::Unchecked));
 
 #ifdef HAVE_MQTT
 	//read available MQTT connections
