@@ -162,7 +162,9 @@ public:
 	virtual void clear();
 
 	virtual double maximum(int count = 0) const;
+	virtual double maximum(int startIndex, int endIndex) const;
 	virtual double minimum(int count = 0) const;
+	virtual double minimum(int startIndex, int endIndex) const;
 
 	bool isValid(int row) const;
 

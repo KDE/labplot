@@ -712,8 +712,14 @@ QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
 }
 
 void CartesianPlot::navigate(CartesianPlot::NavigationOperation op) {
-	if (op == ScaleAuto) scaleAuto();
-	else if (op == ScaleAutoX) scaleAutoX();
+	Q_D(CartesianPlot);
+	if (op == ScaleAuto) {
+		if (d->curvesXMinMaxIsDirty || d->curvesYMinMaxIsDirty) {
+			d->curvesXMinMaxIsDirty = true;
+			d->curvesYMinMaxIsDirty = true;
+		}
+		scaleAuto();
+	} else if (op == ScaleAutoX) scaleAutoX();
 	else if (op == ScaleAutoY) scaleAutoY();
 	else if (op == ZoomIn) zoomIn();
 	else if (op == ZoomOut) zoomOut();
@@ -970,15 +976,23 @@ void CartesianPlot::setAutoScaleX(bool autoScaleX) {
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXMin, double, xMin, retransformScales)
 void CartesianPlot::setXMin(double xMin) {
 	Q_D(CartesianPlot);
-	if (xMin != d->xMin && xMin != -INFINITY && xMin != INFINITY)
+	if (xMin != d->xMin && xMin != -INFINITY && xMin != INFINITY) {
+		d->curvesYMinMaxIsDirty = true;
 		exec(new CartesianPlotSetXMinCmd(d, xMin, ki18n("%1: set min x")));
+		if (d->autoScaleY)
+			scaleAutoY();
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXMax, double, xMax, retransformScales)
 void CartesianPlot::setXMax(double xMax) {
 	Q_D(CartesianPlot);
-	if (xMax != d->xMax && xMax != -INFINITY && xMax != INFINITY)
+	if (xMax != d->xMax && xMax != -INFINITY && xMax != INFINITY) {
+		d->curvesYMinMaxIsDirty = true;
 		exec(new CartesianPlotSetXMaxCmd(d, xMax, ki18n("%1: set max x")));
+		if (d->autoScaleY)
+			scaleAutoY();
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXScale, CartesianPlot::Scale, xScale, retransformScales)
@@ -1046,15 +1060,23 @@ void CartesianPlot::setAutoScaleY(bool autoScaleY) {
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYMin, double, yMin, retransformScales)
 void CartesianPlot::setYMin(double yMin) {
 	Q_D(CartesianPlot);
-	if (yMin != d->yMin)
+	if (yMin != d->yMin) {
+		d->curvesXMinMaxIsDirty = true;
 		exec(new CartesianPlotSetYMinCmd(d, yMin, ki18n("%1: set min y")));
+		if (d->autoScaleX)
+			scaleAutoX();
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYMax, double, yMax, retransformScales)
 void CartesianPlot::setYMax(double yMax) {
 	Q_D(CartesianPlot);
-	if (yMax != d->yMax)
+	if (yMax != d->yMax) {
+		d->curvesXMinMaxIsDirty = true;
 		exec(new CartesianPlotSetYMaxCmd(d, yMax, ki18n("%1: set max y")));
+		if (d->autoScaleX)
+			scaleAutoX();
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYScale, CartesianPlot::Scale, yScale, retransformScales)
@@ -1757,7 +1779,64 @@ void CartesianPlot::setLocked(bool locked) {
 bool CartesianPlot::scaleAutoX() {
 	Q_D(CartesianPlot);
 	if (d->curvesXMinMaxIsDirty) {
-		calculateCurvesXMinMax();
+		calculateCurvesXMinMax(false);
+
+		//loop over all histograms and determine the maximum and minimum x-values
+		for (const auto* curve : this->children<const Histogram>()) {
+			if (!curve->isVisible())
+				continue;
+			if (!curve->dataColumn())
+				continue;
+
+			const double min = curve->getXMinimum();
+			if (min < d->curvesXMin)
+				d->curvesXMin = min;
+
+			const double max = curve->getXMaximum();
+			if (max > d->curvesXMax)
+				d->curvesXMax = max;
+		}
+
+		// do it at the end, because it must be from the real min/max values
+		double errorBarsCapSize = -1;
+		for (auto* curve : this->children<const XYCurve>()) {
+			if (curve->yErrorType() != XYCurve::ErrorType::NoError) {
+				errorBarsCapSize = qMax(errorBarsCapSize, curve->errorBarsCapSize());
+			}
+		}
+
+		if (errorBarsCapSize > 0) {
+			// must be done, because retransformScales uses xMin/xMax
+			if (d->curvesXMin != d->xMin && d->curvesXMin != INFINITY)
+				d->xMin = d->curvesXMin;
+
+			if (d->curvesXMax != d->xMax && d->curvesXMax != -INFINITY)
+				d->xMax = d->curvesXMax;
+			// When the previous scale is completely different. The mapTo functions scale with wrong values. To prevent
+			// this a rescale must be done.
+			// The errorBarsCapSize is in Scene coordinates. So this value must be transformed into a logical value. Due
+			// to nonlinear scalings it cannot only be multiplied with a scaling factor and depends on the position of the
+			// column value
+			// dirty hack: call setIsLoading(true) to suppress the call of retransform() in retransformScales() since a
+			// retransform is already done at the end of this function
+			setIsLoading(true);
+			d->retransformScales();
+			setIsLoading(false);
+			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMin, 0), AbstractCoordinateSystem::SuppressPageClipping);
+			point.setX(point.x() - errorBarsCapSize);
+			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
+			// Problem is, when the scaling is not linear (for example log(x)) and the minimum is 0. In this
+			// case mapLogicalToScene returns (0,0) which is smaller than the curves minimum
+			if (point.x() < d->curvesXMin)
+				d->curvesXMin = point.x();
+
+			point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMax, 0), AbstractCoordinateSystem::SuppressPageClipping);
+			point.setX(point.x() + errorBarsCapSize);
+			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
+			if (point.x() > d->curvesXMax)
+				d->curvesXMax = point.x();
+		}
+		d->curvesYMinMaxIsDirty = true;
 		d->curvesXMinMaxIsDirty = false;
 	}
 
@@ -1798,7 +1877,53 @@ bool CartesianPlot::scaleAutoY() {
 	Q_D(CartesianPlot);
 
 	if (d->curvesYMinMaxIsDirty) {
-		calculateCurvesYMinMax();
+		calculateCurvesYMinMax(false); // loop over all curves
+
+		//loop over all histograms and determine the maximum y-value
+		for (const auto* curve : this->children<const Histogram>()) {
+			if (!curve->isVisible())
+				continue;
+
+			const double min = curve->getYMinimum();
+			if (d->curvesYMin > min)
+				d->curvesYMin = min;
+
+			const double max = curve->getYMaximum();
+			if (max > d->curvesYMax)
+				d->curvesYMax = max;
+		}
+
+		// do it at the end, because it must be from the real min/max values
+		double errorBarsCapSize = -1;
+		for (auto* curve : this->children<const XYCurve>()) {
+			if (curve->xErrorType() != XYCurve::ErrorType::NoError) {
+				errorBarsCapSize = qMax(errorBarsCapSize, curve->errorBarsCapSize());
+			}
+		}
+
+		if (errorBarsCapSize > 0) {
+			if (d->curvesYMin != d->yMin && d->curvesYMin != INFINITY)
+				d->yMin = d->curvesYMin;
+
+			if (d->curvesYMax != d->yMax && d->curvesYMax != -INFINITY)
+				d->yMax = d->curvesYMax;
+			setIsLoading(true);
+			d->retransformScales();
+			setIsLoading(false);
+			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(0, d->curvesYMin), AbstractCoordinateSystem::SuppressPageClipping);
+			point.setY(point.y() + errorBarsCapSize);
+			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
+			if (point.y() < d->curvesYMin)
+				d->curvesYMin = point.y();
+
+			point = coordinateSystem()->mapLogicalToScene(QPointF(0, d->curvesYMax), AbstractCoordinateSystem::SuppressPageClipping);
+			point.setY(point.y() - errorBarsCapSize);
+			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
+			if (point.y() > d->curvesYMax)
+				d->curvesYMax = point.y();
+		}
+
+		d->curvesXMinMaxIsDirty = true;
 		d->curvesYMinMaxIsDirty = false;
 	}
 
@@ -1840,11 +1965,67 @@ bool CartesianPlot::scaleAuto() {
 
 	if (d->curvesXMinMaxIsDirty) {
 		calculateCurvesXMinMax();
+		double errorBarsCapSize = -1;
+		for (auto* curve : this->children<const XYCurve>()) {
+			if (curve->yErrorType() != XYCurve::ErrorType::NoError) {
+				errorBarsCapSize = qMax(errorBarsCapSize, curve->errorBarsCapSize());
+			}
+		}
+
+		if (errorBarsCapSize > 0) {
+			if (d->curvesXMin != d->xMin && d->curvesXMin != INFINITY)
+				d->xMin = d->curvesXMin;
+
+			if (d->curvesXMax != d->xMax && d->curvesXMax != -INFINITY)
+				d->xMax = d->curvesXMax;
+			setIsLoading(true);
+			d->retransformScales();
+			setIsLoading(false);
+			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMin, 0), AbstractCoordinateSystem::SuppressPageClipping);
+			point.setX(point.x() - errorBarsCapSize);
+			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
+			if (point.x() < d->curvesXMin)
+				d->curvesXMin = point.x();
+
+			point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMax, 0), AbstractCoordinateSystem::SuppressPageClipping);
+			point.setX(point.x() + errorBarsCapSize);
+			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
+			if (point.x() > d->curvesXMax)
+				d->curvesXMax = point.x();
+		}
 		d->curvesXMinMaxIsDirty = false;
 	}
 
 	if (d->curvesYMinMaxIsDirty) {
 		calculateCurvesYMinMax();
+		double errorBarsCapSize = -1;
+		for (auto* curve : this->children<const XYCurve>()) {
+			if (curve->xErrorType() != XYCurve::ErrorType::NoError) {
+				errorBarsCapSize = qMax(errorBarsCapSize, curve->errorBarsCapSize());
+			}
+		}
+
+		if (errorBarsCapSize > 0) {
+			if (d->curvesYMin != d->yMin && d->curvesYMin != INFINITY)
+				d->yMin = d->curvesYMin;
+
+			if (d->curvesYMax != d->yMax && d->curvesYMax != -INFINITY)
+				d->yMax = d->curvesYMax;
+			setIsLoading(true);
+			d->retransformScales();
+			setIsLoading(false);
+			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(0, d->curvesYMin), AbstractCoordinateSystem::SuppressPageClipping);
+			point.setY(point.y() + errorBarsCapSize);
+			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
+			if (point.y() < d->curvesYMin)
+				d->curvesYMin = point.y();
+
+			point = coordinateSystem()->mapLogicalToScene(QPointF(0, d->curvesYMax), AbstractCoordinateSystem::SuppressPageClipping);
+			point.setY(point.y() - errorBarsCapSize);
+			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
+			if (point.y() > d->curvesYMax)
+				d->curvesYMax = point.x();
+		}
 		d->curvesYMinMaxIsDirty = false;
 	}
 
@@ -1912,20 +2093,12 @@ bool CartesianPlot::scaleAuto() {
 	return (updateX || updateY);
 }
 
-void CartesianPlot::calculateCurvesXMinMax() {
+/*!
+ * Calculates and sets curves y min and max. This function does not respect the range
+ * of the y axis
+ */
+void CartesianPlot::calculateCurvesXMinMax(bool completeRange) {
 	Q_D(CartesianPlot);
-	int count = 0;
-	switch (d->rangeType) {
-	case CartesianPlot::RangeFree:
-		count = 0;
-		break;
-	case CartesianPlot::RangeLast:
-		count = -d->rangeLastValues;
-		break;
-	case CartesianPlot::RangeFirst:
-		count = d->rangeFirstValues;
-		break;
-	}
 
 	d->curvesXMin = INFINITY;
 	d->curvesXMax = -INFINITY;
@@ -1939,73 +2112,40 @@ void CartesianPlot::calculateCurvesXMinMax() {
 		if (!xColumn)
 			continue;
 
-		double min = xColumn->minimum(count);
+		double min = d->curvesXMin;
+		double max = d->curvesXMax;
+
+		int start =0;
+		int end = 0;
+		if (d->rangeType == CartesianPlot::RangeFree && curve->yColumn()
+				&& !completeRange) {
+			start = curve->indexForX(yMin(), curve->yColumn());
+			end = curve->indexForX(yMax(), curve->yColumn());
+			if (end < curve->yColumn()->rowCount())
+				end ++;
+		} else {
+			switch (d->rangeType) {
+			case CartesianPlot::RangeFree:
+				start = 0;
+				end = xColumn->rowCount();
+				break;
+			case CartesianPlot::RangeLast:
+				start = xColumn->rowCount() - d->rangeLastValues;
+				end = xColumn->rowCount();
+				break;
+			case CartesianPlot::RangeFirst:
+				start = 0;
+				end = d->rangeFirstValues;
+				break;
+			}
+		}
+
+		curve->minMaxX(start, end, min, max, true);
 		if (min < d->curvesXMin)
 			d->curvesXMin = min;
 
-		double max = xColumn->maximum(count);
 		if (max > d->curvesXMax)
 			d->curvesXMax = max;
-
-		//take error bars into account
-		auto xErrorType = curve->xErrorType();
-		if (xErrorType != XYCurve::NoError) {
-			//consider error bars only if error columns are set
-			auto* xErrorPlusColumn = curve->xErrorPlusColumn();
-			auto* xErrorMinusColumn = curve->xErrorMinusColumn();
-			if ( (xErrorType == XYCurve::SymmetricError && xErrorPlusColumn)
-				|| (xErrorType == XYCurve::AsymmetricError && (xErrorPlusColumn || xErrorMinusColumn)) ) {
-
-				int start =0;
-				int end = 0;
-				switch (d->rangeType) {
-				case CartesianPlot::RangeFree:
-					start = 0;
-					end = xColumn->rowCount();
-					break;
-				case CartesianPlot::RangeLast:
-					start = xColumn->rowCount() - d->rangeLastValues;
-					end = xColumn->rowCount();
-					break;
-				case CartesianPlot::RangeFirst:
-					start = 0;
-					end = d->rangeFirstValues;
-					break;
-				}
-				for (int i = start; i < end; ++i) {
-					if (!xColumn->isValid(i) || xColumn->isMasked(i))
-						continue;
-
-					if ( (xErrorPlusColumn && i >= xErrorPlusColumn->rowCount())
-						|| (xErrorMinusColumn && i >= xErrorMinusColumn->rowCount()) )
-						continue;
-
-					//determine the values for the errors
-					double errorPlus, errorMinus;
-					if (xErrorPlusColumn && xErrorPlusColumn->isValid(i) && !xErrorPlusColumn->isMasked(i))
-						errorPlus = xErrorPlusColumn->valueAt(i);
-					else
-						errorPlus = 0;
-
-					if (xErrorType == XYCurve::SymmetricError)
-						errorMinus = errorPlus;
-					else {
-						if (xErrorMinusColumn && xErrorMinusColumn->isValid(i) && !xErrorMinusColumn->isMasked(i))
-							errorMinus = xErrorMinusColumn->valueAt(i);
-						else
-							errorMinus = 0;
-					}
-
-					min = xColumn->valueAt(i) - errorMinus;
-					if (min < d->curvesXMin)
-						d->curvesXMin = min;
-
-					max = xColumn->valueAt(i) + errorPlus;
-					if (max > d->curvesXMax)
-						d->curvesXMax = max;
-				}
-			}
-		}
 	}
 
 	//loop over all histograms and determine the maximum and minimum x-values
@@ -2025,23 +2165,19 @@ void CartesianPlot::calculateCurvesXMinMax() {
 	}
 }
 
-void CartesianPlot::calculateCurvesYMinMax() {
+/*!
+ * Calculates and sets curves y min and max. This function does not respect the range
+ * of the x axis
+ */
+void CartesianPlot::calculateCurvesYMinMax(bool completeRange) {
 	Q_D(CartesianPlot);
-	int count = 0;
-	switch (d->rangeType) {
-	case CartesianPlot::RangeFree:
-		count = 0;
-		break;
-	case CartesianPlot::RangeLast:
-		count = -d->rangeLastValues;
-		break;
-	case CartesianPlot::RangeFirst:
-		count = d->rangeFirstValues;
-		break;
-	}
 
 	d->curvesYMin = INFINITY;
 	d->curvesYMax = -INFINITY;
+
+	double min = d->curvesYMin;
+	double max = d->curvesYMax;
+
 
 	//loop over all xy-curves and determine the maximum and minimum y-values
 	for (const auto* curve : this->children<const XYCurve>()) {
@@ -2052,26 +2188,16 @@ void CartesianPlot::calculateCurvesYMinMax() {
 		if (!yColumn)
 			continue;
 
-		double min = curve->yColumn()->minimum(count);
-		if (min < d->curvesYMin)
-			d->curvesYMin = min;
-
-		double max = curve->yColumn()->maximum(count);
-		if (max > d->curvesYMax)
-			d->curvesYMax = max;
-
-		//take error bars into account
-		auto yErrorType = curve->yErrorType();
-		if (yErrorType != XYCurve::NoError) {
-			//consider error bars only if error columns are set
-			auto* yErrorPlusColumn = curve->yErrorPlusColumn();
-			auto* yErrorMinusColumn = curve->yErrorMinusColumn();
-			if ( (yErrorType == XYCurve::SymmetricError && yErrorPlusColumn)
-				|| (yErrorType == XYCurve::AsymmetricError && (yErrorPlusColumn || yErrorMinusColumn)) ) {
-
-				int start =0;
-				int end = 0;
-				switch (d->rangeType) {
+		int start =0;
+		int end = 0;
+		if (d->rangeType == CartesianPlot::RangeFree && curve->xColumn() &&
+				!completeRange) {
+			start = curve->indexForX(xMin(), curve->xColumn());
+			end = curve->indexForX(xMax(), curve->xColumn());
+			if (end < curve->xColumn()->rowCount())
+				end ++; // because minMaxY excludes indexMax
+		} else {
+			switch (d->rangeType) {
 				case CartesianPlot::RangeFree:
 					start = 0;
 					end = yColumn->rowCount();
@@ -2084,41 +2210,16 @@ void CartesianPlot::calculateCurvesYMinMax() {
 					start = 0;
 					end = d->rangeFirstValues;
 					break;
-				}
-				for (int i = start; i < end; ++i) {
-					if (!yColumn->isValid(i) || yColumn->isMasked(i))
-						continue;
-
-					if ( (yErrorPlusColumn && i >= yErrorPlusColumn->rowCount())
-						|| (yErrorMinusColumn && i >= yErrorMinusColumn->rowCount()) )
-						continue;
-
-					//determine the values for the errors
-					double errorPlus, errorMinus;
-					if (yErrorPlusColumn && yErrorPlusColumn->isValid(i) && !yErrorPlusColumn->isMasked(i))
-						errorPlus = yErrorPlusColumn->valueAt(i);
-					else
-						errorPlus = 0;
-
-					if (yErrorType == XYCurve::SymmetricError)
-						errorMinus = errorPlus;
-					else {
-						if (yErrorMinusColumn && yErrorMinusColumn->isValid(i) && !yErrorMinusColumn->isMasked(i))
-							errorMinus = yErrorMinusColumn->valueAt(i);
-						else
-							errorMinus = 0;
-					}
-
-					min = yColumn->valueAt(i) - errorMinus;
-					if (min < d->curvesYMin)
-						d->curvesYMin = min;
-
-					max = yColumn->valueAt(i) + errorPlus;
-					if (max > d->curvesYMax)
-						d->curvesYMax = max;
-				}
 			}
 		}
+
+		curve->minMaxY(start, end, min, max, true);
+
+		if (min < d->curvesYMin)
+			d->curvesYMin = min;
+
+		if (max > d->curvesYMax)
+			d->curvesYMax = max;
 	}
 
 	//loop over all histograms and determine the maximum y-value
@@ -2145,6 +2246,8 @@ void CartesianPlot::zoomIn() {
 	setAutoScaleX(false);
 	setAutoScaleY(false);
 	setUndoAware(true);
+	d->curvesXMinMaxIsDirty = true;
+	d->curvesYMinMaxIsDirty = true;
 	double oldRange = (d->xMax - d->xMin);
 	double newRange = (d->xMax - d->xMin) / m_zoomFactor;
 	d->xMax = d->xMax + (newRange - oldRange) / 2;
@@ -2165,6 +2268,8 @@ void CartesianPlot::zoomOut() {
 	setAutoScaleX(false);
 	setAutoScaleY(false);
 	setUndoAware(true);
+	d->curvesXMinMaxIsDirty = true;
+	d->curvesYMinMaxIsDirty = true;
 	double oldRange = (d->xMax-d->xMin);
 	double newRange = (d->xMax-d->xMin)*m_zoomFactor;
 	d->xMax = d->xMax + (newRange-oldRange)/2;
@@ -2181,11 +2286,19 @@ void CartesianPlot::zoomOut() {
 void CartesianPlot::zoomInX() {
 	Q_D(CartesianPlot);
 
+	setUndoAware(false);
 	setAutoScaleX(false);
+	setUndoAware(true);
+	d->curvesYMinMaxIsDirty = true;
 	double oldRange = (d->xMax-d->xMin);
 	double newRange = (d->xMax-d->xMin)/m_zoomFactor;
 	d->xMax = d->xMax + (newRange-oldRange)/2;
 	d->xMin = d->xMin - (newRange-oldRange)/2;
+
+	if (d->autoScaleY) {
+		autoScaleY();
+		return;
+	}
 	d->retransformScales();
 }
 
@@ -2195,10 +2308,16 @@ void CartesianPlot::zoomOutX() {
 	setUndoAware(false);
 	setAutoScaleX(false);
 	setUndoAware(true);
+	d->curvesYMinMaxIsDirty = true;
 	double oldRange = (d->xMax-d->xMin);
 	double newRange = (d->xMax-d->xMin)*m_zoomFactor;
 	d->xMax = d->xMax + (newRange-oldRange)/2;
 	d->xMin = d->xMin - (newRange-oldRange)/2;
+
+	if (d->autoScaleY) {
+		autoScaleY();
+		return;
+	}
 	d->retransformScales();
 }
 
@@ -2208,10 +2327,16 @@ void CartesianPlot::zoomInY() {
 	setUndoAware(false);
 	setAutoScaleY(false);
 	setUndoAware(true);
+	d->curvesYMinMaxIsDirty = true;
 	double oldRange = (d->yMax-d->yMin);
 	double newRange = (d->yMax-d->yMin)/m_zoomFactor;
 	d->yMax = d->yMax + (newRange-oldRange)/2;
 	d->yMin = d->yMin - (newRange-oldRange)/2;
+
+	if (d->autoScaleX) {
+		autoScaleX();
+		return;
+	}
 	d->retransformScales();
 }
 
@@ -2221,10 +2346,17 @@ void CartesianPlot::zoomOutY() {
 	setUndoAware(false);
 	setAutoScaleY(false);
 	setUndoAware(true);
+	d->curvesYMinMaxIsDirty = true;
 	double oldRange = (d->yMax-d->yMin);
 	double newRange = (d->yMax-d->yMin)*m_zoomFactor;
 	d->yMax = d->yMax + (newRange-oldRange)/2;
 	d->yMin = d->yMin - (newRange-oldRange)/2;
+
+	if (d->autoScaleX) {
+		autoScaleX();
+		return;
+	}
+
 	d->retransformScales();
 }
 
@@ -2234,9 +2366,16 @@ void CartesianPlot::shiftLeftX() {
 	setUndoAware(false);
 	setAutoScaleX(false);
 	setUndoAware(true);
+	d->curvesYMinMaxIsDirty = true;
 	double offsetX = (d->xMax-d->xMin)*0.1;
 	d->xMax -= offsetX;
 	d->xMin -= offsetX;
+
+	if (d->autoScaleY) {
+		scaleAutoY();
+		return;
+	}
+
 	d->retransformScales();
 }
 
@@ -2246,9 +2385,16 @@ void CartesianPlot::shiftRightX() {
 	setUndoAware(false);
 	setAutoScaleX(false);
 	setUndoAware(true);
+	d->curvesYMinMaxIsDirty = true;
 	double offsetX = (d->xMax-d->xMin)*0.1;
 	d->xMax += offsetX;
 	d->xMin += offsetX;
+
+	if (d->autoScaleY) {
+		scaleAutoY();
+		return;
+	}
+
 	d->retransformScales();
 }
 
@@ -2258,9 +2404,16 @@ void CartesianPlot::shiftUpY() {
 	setUndoAware(false);
 	setAutoScaleY(false);
 	setUndoAware(true);
+	d->curvesXMinMaxIsDirty = true;
 	double offsetY = (d->yMax-d->yMin)*0.1;
 	d->yMax += offsetY;
 	d->yMin += offsetY;
+
+	if (d->autoScaleX) {
+		scaleAutoX();
+		return;
+	}
+
 	d->retransformScales();
 }
 
@@ -2270,9 +2423,16 @@ void CartesianPlot::shiftDownY() {
 	setUndoAware(false);
 	setAutoScaleY(false);
 	setUndoAware(true);
+	d->curvesXMinMaxIsDirty = true;
 	double offsetY = (d->yMax-d->yMin)*0.1;
 	d->yMax -= offsetY;
 	d->yMin -= offsetY;
+
+	if (d->autoScaleX) {
+		scaleAutoX();
+		return;
+	}
+
 	d->retransformScales();
 }
 
@@ -2918,6 +3078,7 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode() {
 		m_selectionBandIsShown = false;
 		return;
 	}
+	bool retransformPlot = true;
 
 	//determine the new plot ranges
 	QPointF logicalZoomStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::SuppressPageClipping);
@@ -2938,8 +3099,31 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode() {
 		yMax = logicalZoomEnd.y();
 	}
 
+	if (mouseMode == CartesianPlot::ZoomSelectionMode) {
+		curvesXMinMaxIsDirty = true;
+		curvesYMinMaxIsDirty = true;
+		q->setAutoScaleX(false);
+		q->setAutoScaleY(false);
+	} else if (mouseMode == CartesianPlot::ZoomXSelectionMode) {
+		curvesYMinMaxIsDirty = true;
+		q->setAutoScaleX(false);
+		if (q->autoScaleY()) {
+			retransformPlot = false;
+			q->scaleAutoY();
+		}
+	} else if (mouseMode == CartesianPlot::ZoomYSelectionMode) {
+		curvesXMinMaxIsDirty = true;
+		q->setAutoScaleY(false);
+		if (q->autoScaleX()) {
+			retransformPlot = false;
+			q->scaleAutoX();
+		}
+	}
+
+	if (retransformPlot)
+		retransformScales();
+
 	m_selectionBandIsShown = false;
-	retransformScales();
 }
 
 void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {

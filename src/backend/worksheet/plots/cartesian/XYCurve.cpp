@@ -2140,12 +2140,16 @@ QDateTime XYCurve::yDateTime(double x, bool &valueFound) const {
 * @return -1 if index not found, otherwise the index
 */
 int XYCurve::indexForX(double x) const {
-	int rowCount = xColumn()->rowCount();
+	return indexForX(x, xColumn());
+}
+
+int XYCurve::indexForX(double x, const AbstractColumn* column) const {
+	int rowCount = column->rowCount();
 
 	double prevValue = 0;
 	qint64 prevValueDateTime = 0;
-	AbstractColumn::ColumnMode xColumnMode = xColumn()->columnMode();
-	int properties = xColumn()->properties();
+	AbstractColumn::ColumnMode xColumnMode = column->columnMode();
+	int properties = column->properties();
 	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
 			properties == AbstractColumn::Properties::MonotonicDecreasing) {
 		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
@@ -2160,10 +2164,10 @@ int XYCurve::indexForX(double x) const {
 			 xColumnMode == AbstractColumn::ColumnMode::Integer)) {
 			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
-				double value = xColumn()->valueAt(index);
+				double value = column->valueAt(index);
 
 				if (higherIndex - lowerIndex < 2) {
-					if (qAbs(xColumn()->valueAt(lowerIndex) - x) < qAbs(xColumn()->valueAt(higherIndex) - x))
+					if (qAbs(column->valueAt(lowerIndex) - x) < qAbs(column->valueAt(higherIndex) - x))
 						index = lowerIndex;
 					else
 						index = higherIndex;
@@ -2171,11 +2175,11 @@ int XYCurve::indexForX(double x) const {
 					return index;
 				}
 
-				if (value >= x && increase)
+				if (value > x && increase)
 					higherIndex = index;
 				else if (value >= x && !increase)
 					lowerIndex = index;
-				else if (value < x && increase)
+				else if (value <= x && increase)
 					lowerIndex = index;
 				else if (value < x && !increase)
 					higherIndex = index;
@@ -2187,10 +2191,10 @@ int XYCurve::indexForX(double x) const {
 			qint64 xInt64 = static_cast<qint64>(x);
 			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
-				qint64 value = xColumn()->dateTimeAt(index).toMSecsSinceEpoch();
+				qint64 value = column->dateTimeAt(index).toMSecsSinceEpoch();
 
 				if (higherIndex - lowerIndex < 2) {
-					if (abs(xColumn()->dateTimeAt(lowerIndex).toMSecsSinceEpoch() - xInt64) < abs(xColumn()->dateTimeAt(higherIndex).toMSecsSinceEpoch() - xInt64))
+					if (abs(column->dateTimeAt(lowerIndex).toMSecsSinceEpoch() - xInt64) < abs(column->dateTimeAt(higherIndex).toMSecsSinceEpoch() - xInt64))
 						index = lowerIndex;
 					else
 						index = higherIndex;
@@ -2200,9 +2204,9 @@ int XYCurve::indexForX(double x) const {
 
 				if (value > xInt64 && increase)
 					higherIndex = index;
-				else if (value > xInt64 && !increase)
+				else if (value >= xInt64 && !increase)
 					lowerIndex = index;
-				else if (value < xInt64 && increase)
+				else if (value <= xInt64 && increase)
 					lowerIndex = index;
 				else if (value < xInt64 && !increase)
 					higherIndex = index;
@@ -2221,12 +2225,13 @@ int XYCurve::indexForX(double x) const {
 		if ((xColumnMode == AbstractColumn::ColumnMode::Numeric ||
 			 xColumnMode == AbstractColumn::ColumnMode::Integer)) {
 			for (int row = 0; row < rowCount; row++) {
-				if (xColumn()->isValid(row)) {
+				if (column->isValid(row)) {
 					if (row == 0)
-						prevValue = xColumn()->valueAt(row);
+						prevValue = column->valueAt(row);
 
 					double value = xColumn()->valueAt(row);
-					if (qAbs(value - x) <= qAbs(prevValue - x)) { // <= prevents also that row - 1 become < 0
+					if (abs(value - x) <= abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
+						if (row < rowCount - 1)
 							prevValue = value;
 							index = row;
 					}
@@ -2239,11 +2244,11 @@ int XYCurve::indexForX(double x) const {
 			qint64 xInt64 = static_cast<qint64>(x);
 			int index = 0;
 			for (int row = 0; row < rowCount; row++) {
-				if (xColumn()->isValid(row)) {
+				if (column->isValid(row)) {
 					if (row == 0)
-						prevValueDateTime = xColumn()->dateTimeAt(row).toMSecsSinceEpoch();
+						prevValueDateTime = column->dateTimeAt(row).toMSecsSinceEpoch();
 
-					qint64 value = xColumn()->dateTimeAt(row).toMSecsSinceEpoch();
+					qint64 value = column->dateTimeAt(row).toMSecsSinceEpoch();
 					if (abs(value - xInt64) <= abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
 							prevValueDateTime = value;
 							index = row;
@@ -2294,11 +2299,11 @@ int XYCurve::indexForX(double x, QVector<double>& column, AbstractColumn::Proper
 				return index;
 			}
 
-			if (value >= x && increase)
+			if (value > x && increase)
 				higherIndex = index;
 			else if (value >= x && !increase)
 				lowerIndex = index;
-			else if (value < x && increase)
+			else if (value <= x && increase)
 				lowerIndex = index;
 			else if (value < x && !increase)
 				higherIndex = index;
@@ -2364,11 +2369,11 @@ int XYCurve::indexForX(const double x, const QVector<QPointF>& points, AbstractC
 				return index;
 			}
 
-			if (value >= x && increase)
+			if (value > x && increase)
 				higherIndex = index;
 			else if (value >= x && !increase)
 				lowerIndex = index;
-			else if (value < x && increase)
+			else if (value <= x && increase)
 				lowerIndex = index;
 			else if (value < x && !increase)
 				higherIndex = index;
@@ -2433,11 +2438,11 @@ int XYCurve::indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Propert
 				return index;
 			}
 
-			if (value >= x && increase)
+			if (value > x && increase)
 				higherIndex = index;
 			else if (value >= x && !increase)
 				lowerIndex = index;
-			else if (value < x && increase)
+			else if (value <= x && increase)
 				lowerIndex = index;
 			else if (value < x && !increase)
 				higherIndex = index;
@@ -2461,6 +2466,100 @@ int XYCurve::indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Propert
 		return index;
 	}
 	return -1;
+}
+
+bool XYCurve::minMaxY(int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars) const {
+	return minMax(yColumn(), yErrorType(), yErrorPlusColumn(), yErrorMinusColumn(), indexMin, indexMax, yMin, yMax, includeErrorBars);
+}
+
+bool XYCurve::minMaxX(int indexMin, int indexMax, double& xMin, double& xMax, bool includeErrorBars) const {
+	return minMax(xColumn(), xErrorType(), xErrorPlusColumn(), xErrorMinusColumn(), indexMin, indexMax, xMin, xMax, includeErrorBars);
+}
+
+/*!
+ * Calculates the minimum \p min and maximum \p max of a curve with optionally respecting the error bars
+ * \p indexMax is not included
+ * \p column
+ * \p errorType
+ * \p errorPlusColumn
+ * \p errorMinusColumn
+ * \p indexMin
+ * \p indexMax
+ * \p min
+ * \p max
+ * \ includeErrorBars If true respect the error bars in the min/max calculation
+ */
+bool XYCurve::minMax(const AbstractColumn* column, const ErrorType errorType, const AbstractColumn* errorPlusColumn, const AbstractColumn* errorMinusColumn, int indexMin, int indexMax, double& min, double& max, bool includeErrorBars) const {
+	if (!includeErrorBars || errorType == XYCurve::NoError) {
+		min = column->minimum(indexMin, indexMax);
+		max = column->maximum(indexMin, indexMax);
+		return true;
+	}
+
+	if (column->rowCount() == 0)
+		return false;
+
+	min = INFINITY;
+	max = -INFINITY;
+
+	for (int i = indexMin; i < indexMax; ++i) {
+		if (!column->isValid(i) || column->isMasked(i))
+			continue;
+
+		if ( (errorPlusColumn && i >= errorPlusColumn->rowCount())
+			|| (errorMinusColumn && i >= errorMinusColumn->rowCount()) )
+			continue;
+
+		//determine the values for the errors
+		double errorPlus, errorMinus;
+		if (errorPlusColumn && errorPlusColumn->isValid(i) && !errorPlusColumn->isMasked(i))
+			if (errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Numeric ||
+					errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Integer)
+				errorPlus = errorPlusColumn->valueAt(i);
+			else if (errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::DateTime ||
+					 errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Month ||
+					 errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Day)
+				errorPlus = errorPlusColumn->dateTimeAt(i).toMSecsSinceEpoch();
+			else
+				return false;
+		else
+			errorPlus = 0;
+
+		if (errorType == XYCurve::SymmetricError)
+			errorMinus = errorPlus;
+		else {
+			if (errorMinusColumn && errorMinusColumn->isValid(i) && !errorMinusColumn->isMasked(i))
+				if (errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Numeric ||
+					errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Integer)
+					errorMinus = errorMinusColumn->valueAt(i);
+				else if (errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::DateTime ||
+						 errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Month ||
+						 errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Day)
+					errorMinus = errorMinusColumn->dateTimeAt(i).toMSecsSinceEpoch();
+				else
+					return false;
+			else
+				errorMinus = 0;
+		}
+
+		double value;
+		if (column->columnMode() == AbstractColumn::ColumnMode::Numeric ||
+			column->columnMode() == AbstractColumn::ColumnMode::Integer)
+			value = column->valueAt(i);
+		else if (column->columnMode() == AbstractColumn::ColumnMode::DateTime ||
+				 column->columnMode() == AbstractColumn::ColumnMode::Month ||
+				 column->columnMode() == AbstractColumn::ColumnMode::Day) {
+			value = column->dateTimeAt(i).toMSecsSinceEpoch();
+		} else
+			return false;
+
+		if (value - errorMinus < min)
+			min = value - errorMinus;
+
+		if (value + errorPlus > max)
+			max = value + errorPlus;
+	}
+	return true;
 }
 
 /*!

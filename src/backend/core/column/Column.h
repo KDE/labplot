@@ -116,7 +116,9 @@ public:
 	Properties properties() const override;
 
 	double maximum(int count = 0) const override;
+	double maximum(int startIndex, int endIndex) const override;
 	double minimum(int count = 0) const override;
+	double minimum(int startIndex, int endIndex) const override;
 
 	void setChanged();
 	void setSuppressDataChangedSignal(const bool);
