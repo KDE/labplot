@@ -1261,10 +1261,9 @@ void SpreadsheetView::pasteIntoSelection() {
 		last_row = first_row + input_row_count -1;
 		last_col = first_col + input_col_count -1;
 		const int columnCount = m_spreadsheet->columnCount();
-
 		//if the target columns that are already available don't have any values yet,
 		//convert their mode to the mode of the data to be pasted
-		for (int c = first_col; c < last_col && c < columnCount; ++c) {
+		for (int c = first_col; c <= last_col && c < columnCount; ++c) {
 			Column* col = m_spreadsheet->column(c);
 			if (col->hasValues() )
 				continue;
@@ -1318,7 +1317,7 @@ void SpreadsheetView::pasteIntoSelection() {
 		Column* col = m_spreadsheet->column(first_col + c);
 		col->setSuppressDataChangedSignal(true);
 		if (col->columnMode() == AbstractColumn::Numeric) {
-			if (rows == m_spreadsheet->rowCount() && rows == cellTexts.size()) {
+			if (rows == m_spreadsheet->rowCount() && rows <= cellTexts.size()) {
 				QVector<double> new_data(rows);
 				for (int r = 0; r < rows; ++r)
 					new_data[r] = locale.toDouble(cellTexts.at(r).at(c));
@@ -1330,6 +1329,22 @@ void SpreadsheetView::pasteIntoSelection() {
 							col->setValueAt(first_row + r, locale.toDouble(cellTexts.at(r).at(c)));
 						else
 							col->setValueAt(first_row + r, std::numeric_limits<double>::quiet_NaN());
+					}
+				}
+			}
+		} else if (col->columnMode() == AbstractColumn::Integer) {
+			if (rows == m_spreadsheet->rowCount() && rows <= cellTexts.size()) {
+				QVector<int> new_data(rows);
+				for (int r = 0; r < rows; ++r)
+					new_data[r] = locale.toInt(cellTexts.at(r).at(c));
+				col->replaceInteger(0, new_data);
+			} else {
+				for (int r = 0; r < rows && r < input_row_count; r++) {
+					if ( isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count()) ) {
+						if (!cellTexts.at(r).at(c).isEmpty())
+							col->setIntegerAt(first_row + r, locale.toInt(cellTexts.at(r).at(c)));
+						else
+							col->setIntegerAt(first_row + r, 0);
 					}
 				}
 			}
