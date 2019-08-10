@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : AnovaTest.cpp
+	File                 : AnovaTest.cpp
 	Project              : LabPlot
 	Description          : Tests for data correlation
 	--------------------------------------------------------------------
@@ -39,18 +39,18 @@ void AnovaTest::oneWayAnova_data() {
 
 	// First Sample
 	QVector<QString> col1Data = {"1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1",
-	                             "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2",
-	                             "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3",
-	                             "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4",
-	                             "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5"
-	                            };
+								 "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2",
+								 "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3",
+								 "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4",
+								 "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5"
+								};
 
 	QVector<double> col2Data = {1, 43, 15, 40, 8, 17, 30, 34, 34, 26, 1, 7, 22, 30, 40, 15, 20, 9, 14, 15,
-	                            6, 30, 15, 30, 12, 17, 21, 23, 20, 27, -19, -18, -8, -6, -6, -9, -17, -12, -11, -6,
-	                            5, 8, 12, 19, 8, 15, 21, 28, 26, 27, -10, 6, 4, 3, 0, 4, 9, -5, 7, 13,
-	                            38, 20, 20, 28, 11, 17, 15, 27, 24, 23, 28, 26, 34, 32, 24, 29, 30, 24, 34, 23,
-	                            -5, -12, -15, -4, -2, -6, -2, -7, -10, -15, -13, -16, -23, -22, -9, -18, -17, -15, -14, -15
-	                           };
+								6, 30, 15, 30, 12, 17, 21, 23, 20, 27, -19, -18, -8, -6, -6, -9, -17, -12, -11, -6,
+								5, 8, 12, 19, 8, 15, 21, 28, 26, 27, -10, 6, 4, 3, 0, 4, 9, -5, 7, 13,
+								38, 20, 20, 28, 11, 17, 15, 27, 24, 23, 28, 26, 34, 32, 24, 29, 30, 24, 34, 23,
+								-5, -12, -15, -4, -2, -6, -2, -7, -10, -15, -13, -16, -23, -22, -9, -18, -17, -15, -14, -15
+							   };
 	double fValue_expected = 33.1288915411;
 	double pValue_expected = 0;
 
@@ -75,10 +75,10 @@ void AnovaTest::oneWayAnova() {
 	HypothesisTest anovaTest("One Way Anova");
 	anovaTest.setColumns(cols);
 
-	HypothesisTest::Test test;
-	test.type = HypothesisTest::Test::Type::Anova;
-	test.subtype = HypothesisTest::Test::SubType::OneWay;
-	test.tail = HypothesisTest::Test::Tail::Two;
+	int test;
+	test = HypothesisTest::Anova;
+	test |= HypothesisTest::OneWay;
+	anovaTest.setTail(HypothesisTest::Two);
 
 	bool categoricalVariable = true;
 	bool equalVariance = true;
@@ -117,11 +117,11 @@ void AnovaTest::twoWayAnova_data() {
 	double fInteractionValue_expected = 3.97227626459;
 	double pCol1Value_expected =  0.005758;
 	double pCol2Value_expected = 5.44e-08;
-//    double pInteractionValue_expected =  0.037224;
+	//    double pInteractionValue_expected =  0.037224;
 
 	QTest::newRow("detergent vs temperature") << col1Data << col2Data << col3Data <<
-	        fCol1Value_expected << fCol2Value_expected << fInteractionValue_expected <<
-	        pCol1Value_expected << pCol2Value_expected;
+												 fCol1Value_expected << fCol2Value_expected << fInteractionValue_expected <<
+												 pCol1Value_expected << pCol2Value_expected;
 }
 
 //TODO: check for pValue. In document probabilty is Pr(>F)
@@ -149,10 +149,10 @@ void AnovaTest::twoWayAnova() {
 	HypothesisTest anovaTest("Two Way Anova");
 	anovaTest.setColumns(cols);
 
-	HypothesisTest::Test test;
-	test.type = HypothesisTest::Test::Type::Anova;
-	test.subtype = HypothesisTest::Test::SubType::TwoWay;
-	test.tail = HypothesisTest::Test::Tail::Two;
+	int test;
+	test = HypothesisTest::Anova;
+	test |= HypothesisTest::TwoWay;
+	anovaTest.setTail(HypothesisTest::Two);
 
 	anovaTest.performTest(test);
 	double fCol1Value = anovaTest.statisticValue()[0];

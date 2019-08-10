@@ -110,6 +110,9 @@ protected:
 	QVBoxLayout* m_summaryLayout{nullptr};
 	QLabel* m_resultLine[RESULTLINESCOUNT];
 
+	int testType(int test);
+	int testSubtype(int test);
+
 	QString round(QVariant number, int precision = 3);
 
 	int findCount(const Column* column);

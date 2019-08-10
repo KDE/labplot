@@ -38,52 +38,48 @@ public:
 	explicit HypothesisTest(const QString& name);
 	~HypothesisTest() override;
 
-	struct Test {
-		enum Type {
-			NoneType  = 0,
-			TTest = 1 << 0,
-			ZTest = 1 << 1,
-			Anova = 1 << 2
-		};
-		enum SubType {
-			NoneSubType = 0,
-			TwoSampleIndependent    = 1 << 0,
-			TwoSamplePaired         = 1 << 1,
-			OneSample               = 1 << 2,
-			OneWay                  = 1 << 3,
-			TwoWay                  = 1 << 4
-		};
-		enum Tail {Positive, Negative, Two};
-		Type type = NoneType;
-		SubType subtype = NoneSubType;
-		Tail tail;
+	enum Test {
+		// Type
+			TTest = 0x01,
+			ZTest = 0x02,
+			Anova = 0x03,
+		// SubType
+			TwoSampleIndependent = 0x10,
+			TwoSamplePaired = 0x20,
+			OneSample = 0x30,
+			OneWay = 0x40,
+			TwoWay = 0x50
 	};
+	enum Tail {Positive, Negative, Two};
 
 	void setPopulationMean(QVariant populationMean);
 	void setSignificanceLevel(QVariant alpha);
+	void setTail(Tail tail);
 
-	void performTest(Test m_test, bool categoricalVariable = true, bool equalVariance = true);
+	void performTest(int test, bool categoricalVariable = true, bool equalVariance = true);
 	void performLeveneTest(bool categoricalVariable);
 
 	QList<double>& statisticValue();
 	QList<double>& pValue();
 	QWidget* view() const override;
 
+	double myTest;
+
 private:
-	void performTwoSampleIndependentTest(HypothesisTest::Test::Type test, bool categoricalVariable = false, bool equalVariance = true);
-	void performTwoSamplePairedTest(HypothesisTest::Test::Type test);
-	void performOneSampleTest(HypothesisTest::Test::Type test);
+	void performTwoSampleIndependentTest(int test, bool categoricalVariable = false, bool equalVariance = true);
+	void performTwoSamplePairedTest(int test);
+	void performOneSampleTest(int test);
 	void performOneWayAnova();
 	void performTwoWayAnova();
 	void m_performLeveneTest(bool categoricalVariable);
 
-	double getPValue(const HypothesisTest::Test::Type& test, double& value,
+	double getPValue(const int &test, double& value,
 	                 const QString& col1Name, const QString& col2name,
 	                 const double mean, const double sp, const int df);
 
 	double m_populationMean;
 	double m_significanceLevel;
-	HypothesisTest::Test::Tail m_tailType;
+	Tail m_tail;
 	QList<double> m_pValue;
 	QList<double> m_statisticValue;
 };

@@ -340,14 +340,6 @@ void CorrelationCoefficient::chiSquareIndpendence() {
 
 /***********************************************Helper Functions******************************************************************/
 
-int CorrelationCoefficient::testType(int test) {
-	return test & 0x0F;
-}
-
-int CorrelationCoefficient::testSubtype(int test) {
-	return test & 0xF0;
-}
-
 int CorrelationCoefficient::findDiscordants(int *ranks, int start, int end) {
 	if (start >= end)
 		return 0;

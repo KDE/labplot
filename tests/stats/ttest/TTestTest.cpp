@@ -75,10 +75,10 @@ void TTestTest::twoSampleIndependent() {
 	HypothesisTest tTest("Two Sample Independent");
 	tTest.setColumns(cols);
 
-	HypothesisTest::Test test;
-	test.type = HypothesisTest::Test::Type::TTest;
-	test.subtype = HypothesisTest::Test::SubType::TwoSampleIndependent;
-	test.tail = HypothesisTest::Test::Tail::Two;
+	int test;
+	test = HypothesisTest::TTest;
+	test |= HypothesisTest::TwoSampleIndependent;
+	tTest.setTail(HypothesisTest::Two);
 
 	bool categoricalVariable = true;
 	bool equalVariance = true;
@@ -131,10 +131,10 @@ void TTestTest::twoSamplePaired() {
 	HypothesisTest tTest("Two Sample Paried");
 	tTest.setColumns(cols);
 
-	HypothesisTest::Test test;
-	test.type = HypothesisTest::Test::Type::TTest;
-	test.subtype = HypothesisTest::Test::SubType::TwoSamplePaired;
-	test.tail = HypothesisTest::Test::Tail::Two;
+	int test;
+	test = HypothesisTest::TTest;
+	test |= HypothesisTest::TwoSamplePaired;
+	tTest.setTail(HypothesisTest::Two);
 
 	tTest.performTest(test);
 	double tValue = tTest.statisticValue()[0];
@@ -181,10 +181,10 @@ void TTestTest::oneSample() {
 	tTest.setColumns(cols);
 	tTest.setPopulationMean(populationMean);
 
-	HypothesisTest::Test test;
-	test.type = HypothesisTest::Test::Type::TTest;
-	test.subtype = HypothesisTest::Test::SubType::OneSample;
-	test.tail = HypothesisTest::Test::Tail::Two;
+	int test;
+	test = HypothesisTest::TTest;
+	test |= HypothesisTest::OneSample;
+	tTest.setTail(HypothesisTest::Two);
 
 	tTest.performTest(test);
 	double tValue = tTest.statisticValue()[0];

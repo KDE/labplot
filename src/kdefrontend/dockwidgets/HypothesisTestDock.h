@@ -66,14 +66,17 @@ private:
 	//        void readConnections();
 	//        void updateFields();
 	//        bool fieldSelected(const QString&);
-	HypothesisTest::Test m_test;
+	int m_test;
+	HypothesisTest::Tail m_tail;
 	QScrollArea* scrollDock;
 
 	void countPartitions(Column *column, int &np, int &total_rows);
 	void setColumnsComboBoxModel(Spreadsheet* spreadsheet);
 	void setColumnsComboBoxView();
 	bool nonEmptySelectedColumns();
-	std::uint8_t setAllBits(const std::uint8_t& bits);
+
+	int testType(int test);
+	int testSubtype(int test);
 
 	QList<Column* > m_onlyValuesCols;
 	QList<Column* > m_twoCategoricalCols;

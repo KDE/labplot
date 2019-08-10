@@ -64,41 +64,42 @@ void HypothesisTest::setSignificanceLevel(QVariant alpha) {
 	m_significanceLevel = alpha.toDouble();
 }
 
-void HypothesisTest::performTest(Test test, bool categoricalVariable, bool equalVariance) {
-	m_tailType = test.tail;
+void HypothesisTest::setTail(Tail tail) {
+	m_tail = tail;
+}
+
+void HypothesisTest::performTest(int test, bool categoricalVariable, bool equalVariance) {
 	m_pValue.clear();
 	m_statisticValue.clear();
 	m_statsTable = "";
 	for (int i = 0; i < RESULTLINESCOUNT; i++)
 		m_resultLine[i]->clear();
 
-	switch (test.subtype) {
-	case HypothesisTest::Test::SubType::TwoSampleIndependent: {
-			m_currTestName = "<h2>" + i18n("Two Sample Independent Test") + "</h2>";
-			performTwoSampleIndependentTest(test.type, categoricalVariable, equalVariance);
-			break;
-		}
-	case HypothesisTest::Test::SubType::TwoSamplePaired:
+	switch (testSubtype(test)) {
+	case TwoSampleIndependent: {
+		m_currTestName = "<h2>" + i18n("Two Sample Independent Test") + "</h2>";
+		performTwoSampleIndependentTest(testType(test), categoricalVariable, equalVariance);
+		break;
+	}
+	case TwoSamplePaired:
 		m_currTestName = "<h2>" + i18n("Two Sample Paired Test") + "</h2>";
-		performTwoSamplePairedTest(test.type);
+		performTwoSamplePairedTest(testType(test));
 		break;
-	case HypothesisTest::Test::SubType::OneSample: {
-			m_currTestName = "<h2>" + i18n("One Sample Test") + "</h2>";
-			performOneSampleTest(test.type);
-			break;
-		}
-	case HypothesisTest::Test::SubType::OneWay: {
-			m_currTestName = "<h2>" + i18n("One Way Anova") + "</h2>";
-			performOneWayAnova();
-			break;
-		}
-	case HypothesisTest::Test::SubType::TwoWay: {
-			m_currTestName = "<h2>" + i18n("Two Way Anova") + "</h2>";
-			performTwoWayAnova();
-			break;
-		}
-	case HypothesisTest::Test::SubType::NoneSubType:
+	case OneSample: {
+		m_currTestName = "<h2>" + i18n("One Sample Test") + "</h2>";
+		performOneSampleTest(testType(test));
 		break;
+	}
+	case OneWay: {
+		m_currTestName = "<h2>" + i18n("One Way Anova") + "</h2>";
+		performOneWayAnova();
+		break;
+	}
+	case TwoWay: {
+		m_currTestName = "<h2>" + i18n("Two Way Anova") + "</h2>";
+		performTwoWayAnova();
+		break;
+	}
 	}
 
 	emit changed();
@@ -128,13 +129,12 @@ QList<double>& HypothesisTest::pValue() {
  *                      Private Implementations
  * ****************************************************************************/
 //TODO: backend of z test;
-//TODO: add tooltip to tables. (currently it is not possible to use with QTextDocument);
 //TODO: use https://www.gnu.org/software/gsl/doc/html/statistics.html for basic statistic calculations
 
 
 /**************************Two Sample Independent *************************************/
 
-void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type test, bool categoricalVariable, bool equalVariance) {
+void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalVariable, bool equalVariance) {
 	if (m_columns.size() != 2) {
 		printError("Inappropriate number of m_columns selected");
 		return;
@@ -177,14 +177,13 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
 
 		switch (errorCode) {
 		case ErrorUnqualSize: {
-				printError( i18n("Unequal size between Column %1 and Column %2", m_columns[0]->name(), m_columns[1]->name()));
-				return;
-			}
+			printError( i18n("Unequal size between Column %1 and Column %2", m_columns[0]->name(), m_columns[1]->name()));
+			return;
+		}
 		case ErrorEmptyColumn: {
-				printError("At least one of selected column is empty");
-
-				return;
-			}
+			printError("At least one of selected column is empty");
+			return;
+		}
 		case NoError:
 			break;
 		}
@@ -200,9 +199,9 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
 	}
 
 	QVariant rowMajor[] = {"", "N", "Sum", "Mean", "Std",
-	                       col1Name, n[0], sum[0], mean[0], std[0],
-	                       col2Name, n[1], sum[1], mean[1], std[1]
-	                      };
+						   col1Name, n[0], sum[0], mean[0], std[0],
+						   col2Name, n[1], sum[1], mean[1], std[1]
+						  };
 
 	m_statsTable = getHtmlTable(3, 5, rowMajor);
 
@@ -225,43 +224,40 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
 	int df = 0;
 	double spSq = 0;
 
-	switch (test) {
-	case HypothesisTest::Test::Type::TTest: {
-			testName = "T";
+	switch (testType(test)) {
+	case TTest: {
+		testName = "T";
 
-			if (equalVariance) {
-				df = n[0] + n[1] - 2;
+		if (equalVariance) {
+			df = n[0] + n[1] - 2;
 
-				spSq = ((n[0]-1) * stdSq[0] +
-				        (n[1]-1) * stdSq[1] ) / df;
-				QDEBUG("equal variance : spSq is " << spSq);
-				m_statisticValue.append((mean[0] - mean[1]) / sqrt(spSq / n[0] + spSq / n[1]));
-				printLine(9, "<b>Assumption:</b> Equal Variance b/w both population means");
-			} else {
-				double temp_val;
-				temp_val = gsl_pow_2( gsl_pow_2(std[0]) / n[0] + gsl_pow_2(std[1]) / n[1]);
-				temp_val = temp_val / ( (gsl_pow_2( (gsl_pow_2(std[0]) / n[0]) ) / (n[0]-1)) +
-				                        (gsl_pow_2( (gsl_pow_2(std[1]) / n[1]) ) / (n[1]-1)));
-				df = qRound(temp_val);
-
-				m_statisticValue.append((mean[0] - mean[1]) / (sqrt( (gsl_pow_2(std[0])/n[0]) +
-				                        (gsl_pow_2(std[1])/n[1]))));
-				printLine(9, "<b>Assumption:</b> UnEqual Variance b/w both population means");
-			}
-
-			printLine(8, "<b>Assumption:</b> Both Populations approximately follow normal distribution");
-			break;
-		}
-	case HypothesisTest::Test::Type::ZTest: {
-			testName = "Z";
-			spSq = ((n[0]-1) * gsl_pow_2(std[0]) + (n[1]-1) * gsl_pow_2(std[1])) / df;
+			spSq = ((n[0]-1) * stdSq[0] +
+					(n[1]-1) * stdSq[1] ) / df;
+			//				QDEBUG("equal variance : spSq is " << spSq);
 			m_statisticValue.append((mean[0] - mean[1]) / sqrt(spSq / n[0] + spSq / n[1]));
-			//        m_pValue.append(gsl_cdf_gaussian_P(m_statisticValue, sp));
-			break;
+			printLine(9, "<b>Assumption:</b> Equal Variance b/w both population means");
+		} else {
+			double temp_val;
+			temp_val = gsl_pow_2( gsl_pow_2(std[0]) / n[0] + gsl_pow_2(std[1]) / n[1]);
+			temp_val = temp_val / ( (gsl_pow_2( (gsl_pow_2(std[0]) / n[0]) ) / (n[0]-1)) +
+					(gsl_pow_2( (gsl_pow_2(std[1]) / n[1]) ) / (n[1]-1)));
+			df = qRound(temp_val);
+
+			m_statisticValue.append((mean[0] - mean[1]) / (sqrt( (gsl_pow_2(std[0])/n[0]) +
+					(gsl_pow_2(std[1])/n[1]))));
+			printLine(9, "<b>Assumption:</b> UnEqual Variance b/w both population means");
 		}
-	case HypothesisTest::Test::Type::Anova:
-	case HypothesisTest::Test::Type::NoneType:
+
+		printLine(8, "<b>Assumption:</b> Both Populations approximately follow normal distribution");
 		break;
+	}
+	case ZTest: {
+		testName = "Z";
+		spSq = ((n[0]-1) * gsl_pow_2(std[0]) + (n[1]-1) * gsl_pow_2(std[1])) / df;
+		m_statisticValue.append((mean[0] - mean[1]) / sqrt(spSq / n[0] + spSq / n[1]));
+		//        m_pValue.append(gsl_cdf_gaussian_P(m_statisticValue, sp));
+		break;
+	}
 	}
 
 	m_currTestName = "<h2>" + i18n("Two Sample Independent %1 Test for %2 vs %3", testName, col1Name, col2Name) + "</h2>";
@@ -286,7 +282,7 @@ void HypothesisTest::performTwoSampleIndependentTest(HypothesisTest::Test::Type 
 
 /********************************Two Sample Paired ***************************************/
 
-void HypothesisTest::performTwoSamplePairedTest(HypothesisTest::Test::Type test) {
+void HypothesisTest::performTwoSamplePairedTest(int test) {
 	if (m_columns.size() != 2) {
 		printError("Inappropriate number of m_columns selected");
 
@@ -306,21 +302,21 @@ void HypothesisTest::performTwoSamplePairedTest(HypothesisTest::Test::Type test)
 
 	switch (errorCode) {
 	case ErrorUnqualSize: {
-			printError("both m_columns are having different sizes");
+		printError("both m_columns are having different sizes");
 
-			return;
-		}
+		return;
+	}
 	case ErrorEmptyColumn: {
-			printError("m_columns are empty");
-			return;
-		}
+		printError("m_columns are empty");
+		return;
+	}
 	case NoError:
 		break;
 	}
 
 	QVariant rowMajor[] = {"", "N", "Sum", "Mean", "Std",
-	                       "difference", n, sum, mean, std
-	                      };
+						   "difference", n, sum, mean, std
+						  };
 
 	m_statsTable = getHtmlTable(2, 5, rowMajor);
 
@@ -334,24 +330,19 @@ void HypothesisTest::performTwoSamplePairedTest(HypothesisTest::Test::Type test)
 	int df = 0;
 
 	switch (test) {
-	case HypothesisTest::Test::Type::TTest: {
-			m_statisticValue[0] = mean / (std / sqrt(n));
-			df = n - 1;
-			testName = "T";
-			printLine(6, i18n("Degree of Freedom is %1</p", df), "green");
-			break;
-		}
-	case HypothesisTest::Test::Type::ZTest: {
-			testName = "Z";
-			m_statisticValue[0] = mean / (std / sqrt(n));
-			df = n - 1;
-			break;
-		}
-	case HypothesisTest::Test::Type::Anova:
+	case TTest: {
+		m_statisticValue[0] = mean / (std / sqrt(n));
+		df = n - 1;
+		testName = "T";
+		printLine(6, i18n("Degree of Freedom is %1</p", df), "green");
 		break;
-	case HypothesisTest::Test::Type::NoneType:
+	}
+	case ZTest: {
+		testName = "Z";
+		m_statisticValue[0] = mean / (std / sqrt(n));
+		df = n - 1;
 		break;
-
+	}
 	}
 
 	m_pValue.append(getPValue(test, m_statisticValue[0], m_columns[0]->name(), i18n("%1", m_populationMean), mean, std, df));
@@ -371,16 +362,14 @@ void HypothesisTest::performTwoSamplePairedTest(HypothesisTest::Test::Type test)
 
 /******************************** One Sample ***************************************/
 
-void HypothesisTest::performOneSampleTest(HypothesisTest::Test::Type test) {
+void HypothesisTest::performOneSampleTest(int test) {
 	if (m_columns.size() != 1) {
 		printError("Inappropriate number of m_columns selected");
-
 		return;
 	}
 
 	if ( !m_columns[0]->isNumeric()) {
 		printError("select only m_columns with numbers");
-
 		return;
 	}
 
@@ -390,19 +379,19 @@ void HypothesisTest::performOneSampleTest(HypothesisTest::Test::Type test) {
 
 	switch (errorCode) {
 	case ErrorEmptyColumn: {
-			printError("column is empty");
-			return;
-		}
+		printError("column is empty");
+		return;
+	}
 	case NoError:
 		break;
 	case ErrorUnqualSize: {
-			return;
-		}
+		return;
+	}
 	}
 
 	QVariant rowMajor[] = {"", "N", "Sum", "Mean", "Std",
-	                       m_columns[0]->name(), n, sum, mean, std
-	                      };
+						   m_columns[0]->name(), n, sum, mean, std
+						  };
 
 	m_statsTable = getHtmlTable(2, 5, rowMajor);
 
@@ -411,27 +400,23 @@ void HypothesisTest::performOneSampleTest(HypothesisTest::Test::Type test) {
 		return;
 	}
 
-
 	QString testName;
 	int df = 0;
 
 	switch (test) {
-	case HypothesisTest::Test::Type::TTest: {
-			testName = "T";
-			m_statisticValue.append((mean - m_populationMean) / (std / sqrt(n)));
-			df = n - 1;
-			printLine(6, i18n("Degree of Freedom is %1", df), "blue");
-			break;
-		}
-	case HypothesisTest::Test::Type::ZTest: {
-			testName = "Z";
-			df = 0;
-			m_statisticValue.append((mean - m_populationMean) / (std / sqrt(n)));
-			break;
-		}
-	case HypothesisTest::Test::Type::Anova:
-	case HypothesisTest::Test::Type::NoneType:
+	case TTest: {
+		testName = "T";
+		m_statisticValue.append((mean - m_populationMean) / (std / sqrt(n)));
+		df = n - 1;
+		printLine(6, i18n("Degree of Freedom is %1", df), "blue");
 		break;
+	}
+	case ZTest: {
+		testName = "Z";
+		df = 0;
+		m_statisticValue.append((mean - m_populationMean) / (std / sqrt(n)));
+		break;
+	}
 	}
 
 	m_pValue.append(getPValue(test, m_statisticValue[0], m_columns[0]->name(), i18n("%1",m_populationMean), mean - m_populationMean, std, df));
@@ -641,7 +626,7 @@ void HypothesisTest::performTwoWayAnova() {
 			}
 			if (replicates[i][j] != replicate) {
 				printError("Number of experiments perfomed for each combination of levels <br/>"
-				           "between Independet Var.1 and Independent Var.2 must be equal");
+						   "between Independet Var.1 and Independent Var.2 must be equal");
 				return;
 			}
 			groupMean[i][j] /= replicates[i][j];
@@ -887,7 +872,7 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 				yiBar[i] = yiBar[i] / ni[i];
 			else {
 				printError("One of the selected m_columns is empty <br/> "
-				           "or have choosen Independent Var.1 wrongly");
+						   "or have choosen Independent Var.1 wrongly");
 				return;
 			}
 		}
@@ -968,7 +953,7 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 				yiBar[i] = yiBar[i] / ni[i];
 			else {
 				printError("One of the selected m_columns is empty <br/> "
-				           "or have choosen Independent Var.1 wrongly");
+						   "or have choosen Independent Var.1 wrongly");
 				m_columns[0]->setColumnMode(originalColMode);
 				return;
 			}
@@ -1073,61 +1058,58 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 // TODO: check for correctness between: for TestZ with TailTwo
 //       m_pValue.append(2*gsl_cdf_tdist_P(value, df) v/s
 //       m_pValue.append(gsl_cdf_tdis_P(value, df) + gsl_cdf_tdis_P(-value, df);
-double HypothesisTest::getPValue(const HypothesisTest::Test::Type& test, double& value, const QString& col1Name, const QString& col2Name, const double mean, const double sp, const int df) {
+double HypothesisTest::getPValue(const int& test, double& value, const QString& col1Name, const QString& col2Name, const double mean, const double sp, const int df) {
 
 	switch (test) {
-	case HypothesisTest::Test::Type::TTest: {
-			switch (m_tailType) {
-			case HypothesisTest::Test::Tail::Negative: {
-					m_pValue.append(gsl_cdf_tdist_P(value, df));
-					printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("≥"), col2Name), "blue");
-					printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("⋖"), col2Name), "blue");
-					break;
-				}
-			case HypothesisTest::Test::Tail::Positive: {
-					value *= -1;
-					m_pValue.append(gsl_cdf_tdist_P(value, df));
-					printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("≤"), col2Name), "blue");
-					printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING(">"), col2Name), "blue");
-					break;
-				}
-			case HypothesisTest::Test::Tail::Two: {
-					m_pValue.append(2.*gsl_cdf_tdist_P(-fabs(value), df));
+	case TTest: {
+		switch (m_tail) {
+		case Negative: {
+			m_pValue.append(gsl_cdf_tdist_P(value, df));
+			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("≥"), col2Name), "blue");
+			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("⋖"), col2Name), "blue");
+			break;
+		}
+		case Positive: {
+			value *= -1;
+			m_pValue.append(gsl_cdf_tdist_P(value, df));
+			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("≤"), col2Name), "blue");
+			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING(">"), col2Name), "blue");
+			break;
+		}
+		case Two: {
+			m_pValue.append(2.*gsl_cdf_tdist_P(-fabs(value), df));
 
-					printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("="), col2Name), "blue");
-					printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("≠"), col2Name), "blue");
-					break;
-				}
-			}
+			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("="), col2Name), "blue");
+			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("≠"), col2Name), "blue");
 			break;
 		}
-	case HypothesisTest::Test::Type::ZTest: {
-			switch (m_tailType) {
-			case HypothesisTest::Test::Tail::Negative: {
-					m_pValue.append(gsl_cdf_gaussian_P(value - mean, sp));
-					printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("≥"), col2Name), "blue");
-					printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("⋖"), col2Name), "blue");
-					break;
-				}
-			case HypothesisTest::Test::Tail::Positive: {
-					value *= -1;
-					m_pValue.append(nsl_stats_tdist_p(value - mean, sp));
-					printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("≤"), col2Name), "blue");
-					printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING(">"), col2Name), "blue");
-					break;
-				}
-			case HypothesisTest::Test::Tail::Two: {
-					m_pValue.append(2.*gsl_cdf_gaussian_P(value - mean, sp));
-					printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("="), col2Name), "blue");
-					printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("≠"), col2Name), "blue");
-					break;
-				}
-			}
-			break;
 		}
-	case HypothesisTest::Test::Type::Anova:
-	case HypothesisTest::Test::Type::NoneType:
 		break;
+	}
+	case ZTest: {
+		switch (m_tail) {
+		case Negative: {
+			m_pValue.append(gsl_cdf_gaussian_P(value - mean, sp));
+			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("≥"), col2Name), "blue");
+			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("⋖"), col2Name), "blue");
+			break;
+		}
+		case Positive: {
+			value *= -1;
+			m_pValue.append(nsl_stats_tdist_p(value - mean, sp));
+			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("≤"), col2Name), "blue");
+			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING(">"), col2Name), "blue");
+			break;
+		}
+		case Two: {
+			m_pValue.append(2.*gsl_cdf_gaussian_P(value - mean, sp));
+			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("="), col2Name), "blue");
+			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("≠"), col2Name), "blue");
+			break;
+		}
+		}
+		break;
+	}
 	}
 
 	if (m_pValue[0] > 1)

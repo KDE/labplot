@@ -111,6 +111,13 @@ void GeneralTest::setColumns(const QVector<Column *> &cols) {
 /********************************************************************************************************************
 *                                 Protected functions implementations [Helper Functions]
 ********************************************************************************************************************/
+int GeneralTest::testType(int test) {
+	return test & 0x0F;
+}
+
+int GeneralTest::testSubtype(int test) {
+	return test & 0xF0;
+}
 
 //TODO: we should implement or use a general round method
 QString GeneralTest::round(QVariant number, int precision) {
