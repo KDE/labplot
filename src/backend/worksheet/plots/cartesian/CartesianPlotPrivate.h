@@ -53,6 +53,7 @@ public:
 	void mousePressZoomSelectionMode(QPointF logicalPos);
 	void mousePressCursorMode(int cursorNumber, QPointF logicalPos);
 	void updateCursor();
+	void setZoomSelectionBandShow(bool show);
 
 	QRectF dataRect;
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeFree};

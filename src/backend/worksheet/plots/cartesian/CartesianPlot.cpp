@@ -1724,6 +1724,8 @@ void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
 
 	QList<QGraphicsItem*> items = d->childItems();
 	if (d->mouseMode == CartesianPlot::SelectionMode) {
+		d->setZoomSelectionBandShow(false);
+		d->setCursor(Qt::ArrowCursor);
 		for (auto* item : items)
 			item->setFlag(QGraphicsItem::ItemStacksBehindParent, false);
 	} else {
@@ -2685,22 +2687,9 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 //##############################################################################
 void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
-	if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
+	if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode)
 		emit q->mousePressZoomSelectionModeSignal(cSystem->mapSceneToLogical(event->pos()));
-
-		if (mouseMode == CartesianPlot::ZoomSelectionMode)
-			m_selectionStart = event->pos();
-		else if (mouseMode == CartesianPlot::ZoomXSelectionMode) {
-			m_selectionStart.setX(event->pos().x());
-			m_selectionStart.setY(dataRect.y());
-		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode) {
-			m_selectionStart.setX(dataRect.x());
-			m_selectionStart.setY(event->pos().y());
-		}
-
-		m_selectionEnd = m_selectionStart;
-		m_selectionBandIsShown = true;
-	} else if (mouseMode == CartesianPlot::Cursor) {
+	else if (mouseMode == CartesianPlot::Cursor) {
 		setCursor(Qt::SizeHorCursor);
 		QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
 		double cursorPenWidth2 = cursorPen.width()/2.;
@@ -2780,6 +2769,10 @@ void CartesianPlotPrivate::mousePressCursorMode(int cursorNumber, QPointF logica
 
 void CartesianPlotPrivate::updateCursor() {
 	update();
+}
+
+void CartesianPlotPrivate::setZoomSelectionBandShow(bool show) {
+	m_selectionBandIsShown = show;
 }
 
 void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
