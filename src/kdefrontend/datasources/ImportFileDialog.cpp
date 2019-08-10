@@ -102,7 +102,6 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
 	if (conf.exists()) {
 		m_showOptions = conf.readEntry("ShowOptions", false);
-		m_showOptions ? m_optionsButton->setText(i18n("Hide Options")) : m_optionsButton->setText(i18n("Show Options"));
 		m_importFileWidget->showOptions(m_showOptions);
 
 		//do the signal-slot connections after all settings were loaded in import file widget and check the OK button after this
@@ -118,12 +117,14 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 		connect(m_importFileWidget, &ImportFileWidget::subscriptionsChanged, this, &ImportFileDialog::checkOkButton);
 		connect(m_importFileWidget, &ImportFileWidget::checkFileType, this, &ImportFileDialog::checkOkButton);
 #endif
-		connect(m_optionsButton, &QPushButton::clicked, this, &ImportFileDialog::toggleOptions);
 
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else
 		resize(QSize(0, 0).expandedTo(minimumSize()));
+
+	m_showOptions ? m_optionsButton->setText(i18n("Hide Options")) : m_optionsButton->setText(i18n("Show Options"));
+	connect(m_optionsButton, &QPushButton::clicked, this, &ImportFileDialog::toggleOptions);
 
 	checkOkButton();
 }
