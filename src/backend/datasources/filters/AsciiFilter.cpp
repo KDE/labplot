@@ -443,11 +443,13 @@ QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
 	} while (!commentCharacter.isEmpty() && line.startsWith(commentCharacter));
 
 	line.remove(QRegExp("[\\n\\r]"));	// remove any newline
-	if (simplifyWhitespacesEnabled)
-		line = line.simplified();
 	DEBUG("data line : \'" << line.toStdString() << '\'');
 	QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 	//TODO: remove quotes here?
+	if (simplifyWhitespacesEnabled) {
+		for (int i = 0; i < lineStringList.size(); ++i)
+			lineStringList[i] = lineStringList[i].simplified();
+	}
 	QDEBUG("data line, parsed: " << lineStringList);
 
 	return lineStringList;
@@ -1133,10 +1135,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				}
 			}
 
-			DEBUG("	Line bytes: " << line.size() << " line: " << line.toStdString());
-			if (simplifyWhitespacesEnabled)
-				line = line.simplified();
-
 			if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
 				continue;
 
@@ -1147,6 +1145,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			else
 				lineStringList << line;
 			QDEBUG("	line = " << lineStringList << ", separator = \'" << m_separator << "\'");
+
+			DEBUG("	Line bytes: " << line.size() << " line: " << line.toStdString());
+			if (simplifyWhitespacesEnabled) {
+				for (int i = 0; i < lineStringList.size(); ++i)
+					lineStringList[i] = lineStringList[i].simplified();
+			}
 
 			if (createIndexEnabled) {
 				if (spreadsheet->keepNValues() == 0)
@@ -1315,9 +1319,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		line.remove(QLatin1Char('\n'));
 		line.remove(QLatin1Char('\r'));
 
-		if (simplifyWhitespacesEnabled)
-			line = line.simplified();
-
 		if (removeQuotesEnabled)
 			line.remove(QLatin1Char('"'));
 
@@ -1325,6 +1326,11 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			continue;
 
 		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
+		DEBUG("	Line bytes: " << line.size() << " line: " << line.toStdString());
+		if (simplifyWhitespacesEnabled) {
+			for (int i = 0; i < lineStringList.size(); ++i)
+				lineStringList[i] = lineStringList[i].simplified();
+		}
 
 		// remove left white spaces
 		if (skipEmptyParts) {
@@ -1571,14 +1577,17 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 		line = line.remove('\n');
 		line = line.remove('\r');
 
-		if (simplifyWhitespacesEnabled)
-			line = line.simplified();
-
 		if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
 			continue;
 
-		const QStringList& lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
+		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 		QDEBUG(" line = " << lineStringList);
+
+		DEBUG("	Line bytes: " << line.size() << " line: " << line.toStdString());
+		if (simplifyWhitespacesEnabled) {
+			for (int i = 0; i < lineStringList.size(); ++i)
+				lineStringList[i] = lineStringList[i].simplified();
+		}
 
 		QStringList lineString;
 		for (int n = 0; n < m_actualCols; ++n) {

@@ -161,8 +161,8 @@ private:
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
 
-	void calculateCurvesXMinMax();
-	void calculateCurvesYMinMax();
+	void calculateCurvesXMinMax(bool completeRange = true);
+	void calculateCurvesYMinMax(bool completeRange = true);
 
 	CartesianPlotLegend* m_legend{nullptr};
 	double m_zoomFactor{1.2};

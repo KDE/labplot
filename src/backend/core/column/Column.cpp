@@ -1224,7 +1224,6 @@ double Column::minimum(int count) const {
 	if (count == 0 && d->statisticsAvailable)
 		min = const_cast<Column*>(this)->statistics().minimum;
 	else {
-		ColumnMode mode = columnMode();
 		int start, end;
 
 		if (count == 0) {
@@ -1237,48 +1236,74 @@ double Column::minimum(int count) const {
 			start = qMax(rowCount() + count, 0);
 			end = rowCount();
 		}
+		return minimum(start, end);
+	}
 
-		switch (mode) {
-		case Numeric: {
-			auto* vec = static_cast<QVector<double>*>(data());
-			for (int row = start; row < end; ++row) {
-				const double val = vec->at(row);
-				if (std::isnan(val))
-					continue;
+	return min;
+}
 
-				if (val < min)
-					min = val;
-			}
-			break;
+/*!
+ * \brief Column::minimum
+ * Calculates the minimum value in the column between the \p startIndex and \p endIndex, endIndex is excluded.
+ * If startIndex is greater than endIndex the indices are swapped
+ * \p startIndex
+ * \p endIndex
+ */
+double Column::minimum(int startIndex, int endIndex) const {
+	double min = INFINITY;
+
+	if (rowCount() == 0)
+		return min;
+
+	if (startIndex > endIndex && startIndex >= 0 && endIndex >= 0)
+		std::swap(startIndex, endIndex);
+
+	startIndex = qMax(startIndex, 0);
+	endIndex = qMax(endIndex, 0);
+
+	startIndex = qMin(startIndex, rowCount() - 1);
+	endIndex = qMin(endIndex, rowCount() - 1);
+
+	ColumnMode mode = columnMode();
+	switch (mode) {
+	case Numeric: {
+		auto* vec = static_cast<QVector<double>*>(data());
+		for (int row = startIndex; row < endIndex; ++row) {
+			const double val = vec->at(row);
+			if (std::isnan(val))
+				continue;
+
+			if (val < min)
+				min = val;
 		}
-		case Integer: {
-			auto* vec = static_cast<QVector<int>*>(data());
-			for (int row = start; row < end; ++row) {
-				const int val = vec->at(row);
+		break;
+	}
+	case Integer: {
+		auto* vec = static_cast<QVector<int>*>(data());
+		for (int row = startIndex; row < endIndex; ++row) {
+			const int val = vec->at(row);
 
-				if (val < min)
-					min = val;
-			}
-			break;
+			if (val < min)
+				min = val;
 		}
-		case Text:
-			break;
-		case DateTime: {
-			auto* vec = static_cast<QVector<QDateTime>*>(data());
-			for (int row = start; row < end; ++row) {
-				const qint64 val = vec->at(row).toMSecsSinceEpoch();
+		break;
+	}
+	case Text:
+		break;
+	case DateTime: {
+		auto* vec = static_cast<QVector<QDateTime>*>(data());
+		for (int row = startIndex; row < endIndex; ++row) {
+			const qint64 val = vec->at(row).toMSecsSinceEpoch();
 
-				if (val < min)
-					min = val;
-			}
-			break;
+			if (val < min)
+				min = val;
 		}
-		case Day:
-		case Month:
-		default:
-			break;
-		}
-
+		break;
+	}
+	case Day:
+	case Month:
+	default:
+		break;
 	}
 
 	return min;
@@ -1296,7 +1321,6 @@ double Column::maximum(int count) const {
 	if (count == 0 && d->statisticsAvailable)
 		max = const_cast<Column*>(this)->statistics().maximum;
 	else {
-		ColumnMode mode = columnMode();
 		int start, end;
 
 		if (count == 0) {
@@ -1309,48 +1333,74 @@ double Column::maximum(int count) const {
 			start = qMax(rowCount() + count, 0);
 			end = rowCount();
 		}
+		return maximum(start, end);
+	}
 
-		switch (mode) {
-		case Numeric: {
-			auto* vec = static_cast<QVector<double>*>(data());
-			for (int row = start; row < end; ++row) {
-				const double val = vec->at(row);
-				if (std::isnan(val))
-					continue;
+	return max;
+}
 
-				if (val > max)
-					max = val;
-			}
-			break;
+/*!
+ * \brief Column::maximum
+ * Calculates the maximum value in the column between the \p startIndex and \p endIndex.
+ * If startIndex is greater than endIndex the indices are swapped
+ * \p startIndex
+ * \p endIndex
+ */
+double Column::maximum(int startIndex, int endIndex) const {
+	double max = -INFINITY;
+	if (rowCount() == 0)
+		return max;
+
+	ColumnMode mode = columnMode();
+
+	if (startIndex > endIndex && startIndex >= 0 && endIndex >= 0)
+		std::swap(startIndex, endIndex);
+
+	startIndex = qMax(startIndex, 0);
+	endIndex = qMax(endIndex, 0);
+
+	startIndex = qMin(startIndex, rowCount() - 1);
+	endIndex = qMin(endIndex, rowCount() - 1);
+
+	switch (mode) {
+	case Numeric: {
+		auto* vec = static_cast<QVector<double>*>(data());
+		for (int row = startIndex; row < endIndex; ++row) {
+			const double val = vec->at(row);
+			if (std::isnan(val))
+				continue;
+
+			if (val > max)
+				max = val;
 		}
-		case Integer: {
-			auto* vec = static_cast<QVector<int>*>(data());
-			for (int row = start; row < end; ++row) {
-				const int val = vec->at(row);
+		break;
+	}
+	case Integer: {
+		auto* vec = static_cast<QVector<int>*>(data());
+		for (int row = startIndex; row < endIndex; ++row) {
+			const int val = vec->at(row);
 
-				if (val > max)
-					max = val;
-			}
-			break;
+			if (val > max)
+				max = val;
 		}
-		case Text:
-			break;
-		case DateTime: {
-			auto* vec = static_cast<QVector<QDateTime>*>(data());
-			for (int row = start; row < end; ++row) {
-				const qint64 val = vec->at(row).toMSecsSinceEpoch();
+		break;
+	}
+	case Text:
+		break;
+	case DateTime: {
+		auto* vec = static_cast<QVector<QDateTime>*>(data());
+		for (int row = startIndex; row < endIndex; ++row) {
+			const qint64 val = vec->at(row).toMSecsSinceEpoch();
 
-				if (val > max)
-					max = val;
-			}
-			break;
+			if (val > max)
+				max = val;
 		}
-		case Day:
-		case Month:
-		default:
-			break;
-		}
-
+		break;
+	}
+	case Day:
+	case Month:
+	default:
+		break;
 	}
 
 	return max;

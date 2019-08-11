@@ -178,6 +178,40 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	if (gridLayout)
 		gridLayout->addWidget(m_cbFileName, 1, 2, 1, 3);
 
+
+	//tooltips
+	QString info = i18n("Specify how the data source has to be processed on every read:"
+					   "<ul>"
+					   "<li>Continuosly fixed - fixed amount of samples is processed starting from the beginning of the newly recieved data.</li>"
+					   "<li>From End - fixed amount of samples is processed starting from the end of the newly recieved data.</li>"
+					   "<li>Till the End - all newly recieved data is processed.</li>"
+					   "<li>Whole file - on every read the whole file is re-read completely and processed. Only available for \"File Or Named Pipe\" data sources.</li>"
+					   "</ul>");
+	ui.lReadingType->setToolTip(info);
+	ui.cbReadingType->setToolTip(info);
+
+	info = i18n("Number of samples (lines) to be processed on every read.\n"
+				"Only needs to be specified for the reading modi \"Continiously Fixed\" and \"From End\".");
+	ui.lSampleSize->setToolTip(info);
+	ui.sbSampleSize->setToolTip(info);
+
+	info = i18n("Specify when and how frequently the data source needs to be read:"
+				"<ul>"
+				"<li>Periodically - the data source is read periodically with user specified time intervall.</li>"
+				"<li>On New Data - the data source is read when new data arrives.</li>"
+				"</ul>");
+	ui.lUpdateType->setToolTip(info);
+	ui.cbUpdateType->setToolTip(info);
+
+	info = i18n("Specify how frequently the data source has to be read.");
+	ui.lUpdateInterval->setToolTip(info);
+	ui.sbUpdateInterval->setToolTip(info);
+
+	info = i18n("Specify how many samples need to be kept in memory after reading.\n"
+				"Use \"All\" if all data has to be kept.");
+	ui.lKeepLastValues->setToolTip(info);
+	ui.sbKeepNValues->setToolTip(info);
+
 #ifdef HAVE_MQTT
 	ui.cbSourceType->addItem(QLatin1String("MQTT"));
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QLatin1String("MQTT_connections");
@@ -243,18 +277,18 @@ void ImportFileWidget::loadSettings() {
 
 
 	//live data related settings
-	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate").toInt());
-	ui.cbReadingType->setCurrentIndex(conf.readEntry("ReadingType").toInt());
+	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate", 13)); // index for bautrate 19200b/s
+	ui.cbReadingType->setCurrentIndex(conf.readEntry("ReadingType", (int)LiveDataSource::WholeFile));
 	ui.cbSerialPort->setCurrentIndex(conf.readEntry("SerialPort").toInt());
-	ui.cbUpdateType->setCurrentIndex(conf.readEntry("UpdateType").toInt());
+	ui.cbUpdateType->setCurrentIndex(conf.readEntry("UpdateType", (int)LiveDataSource::NewData));
 	updateTypeChanged(ui.cbUpdateType->currentIndex());
 	ui.leHost->setText(conf.readEntry("Host",""));
-	ui.sbKeepNValues->setValue(conf.readEntry("KeepNValues").toInt());
+	ui.sbKeepNValues->setValue(conf.readEntry("KeepNValues", 0)); // keep all values
 	ui.lePort->setText(conf.readEntry("Port",""));
-	ui.sbSampleSize->setValue(conf.readEntry("SampleSize").toInt());
-	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
-	ui.chbLinkFile->setCheckState((Qt::CheckState)conf.readEntry("LinkFile").toInt());
-	ui.chbRelativePath->setCheckState((Qt::CheckState)conf.readEntry("RelativePath").toInt());
+	ui.sbSampleSize->setValue(conf.readEntry("SampleSize", 1));
+	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval", 1000));
+	ui.chbLinkFile->setCheckState((Qt::CheckState)conf.readEntry("LinkFile", (int)Qt::CheckState::Unchecked));
+	ui.chbRelativePath->setCheckState((Qt::CheckState)conf.readEntry("RelativePath", (int)Qt::CheckState::Unchecked));
 
 #ifdef HAVE_MQTT
 	//read available MQTT connections

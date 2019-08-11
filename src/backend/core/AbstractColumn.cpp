@@ -555,8 +555,20 @@ double AbstractColumn::minimum(int count) const {
 	return -INFINITY;
 }
 
+double AbstractColumn::minimum(int startIndex, int endIndex) const {
+	Q_UNUSED(startIndex);
+	Q_UNUSED(endIndex);
+	return -INFINITY;
+}
+
 double AbstractColumn::maximum(int count) const {
 	Q_UNUSED(count);
+	return INFINITY;
+}
+
+double AbstractColumn::maximum(int startIndex, int endIndex) const {
+	Q_UNUSED(startIndex);
+	Q_UNUSED(endIndex);
 	return INFINITY;
 }
 
