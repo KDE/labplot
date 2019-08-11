@@ -140,7 +140,8 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 	ui->scrollAreaColumns->setMinimumSize(0, height);
 
 	//hide the check box for creation of original data, only shown if analysis curves are to be created
-	ui->chkCreateDataCurve->setVisible(false);
+	ui->spacer->changeSize(0, 0);
+	ui->chkCreateDataCurve->hide();
 
 	//SIGNALs/SLOTs
 	connect(buttonBox, &QDialogButtonBox::accepted, this, [=]() { hide();  plot(); });
@@ -196,7 +197,8 @@ PlotDataDialog::~PlotDataDialog() {
 void PlotDataDialog::setAnalysisAction(AnalysisAction action) {
 	m_analysisAction = action;
 	m_analysisMode = true;
-	ui->chkCreateDataCurve->setVisible(true);
+	ui->spacer->changeSize(0, 40);
+	ui->chkCreateDataCurve->show();
 }
 
 void PlotDataDialog::processColumns() {
@@ -320,6 +322,7 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) {
 	ui->gbData->setTitle(i18n("Histogram Data"));
 	ui->line->hide();
+	ui->spacer->changeSize(0, 0);
 	ui->chkCreateDataCurve->hide();
 
 	//use the already available cbXColumn combo box
