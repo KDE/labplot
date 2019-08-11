@@ -95,8 +95,8 @@ void XYEquationCurveDock::setupGeneral() {
 
 	uiGeneralTab.teEquation2->setExpressionType(XYEquationCurve::Parametric);
 
-	uiGeneralTab.teEquation1->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
-	uiGeneralTab.teEquation2->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
+// 	uiGeneralTab.teEquation1->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
+// 	uiGeneralTab.teEquation2->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
 	uiGeneralTab.teMin->setMaximumHeight(uiGeneralTab.leName->sizeHint().height());
 	uiGeneralTab.teMax->setMaximumHeight(uiGeneralTab.leName->sizeHint().height());
 
