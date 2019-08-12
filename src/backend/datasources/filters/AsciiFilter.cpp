@@ -370,7 +370,7 @@ void AsciiFilter::setNaNValueToZero(bool b) {
 	if (b)
 		d->nanValue = 0;
 	else
-		d->nanValue = NAN;
+		d->nanValue = std::numeric_limits<double>::quiet_NaN();
 }
 bool AsciiFilter::NaNValueToZeroEnabled() const {
 	return (d->nanValue == 0);
@@ -522,13 +522,10 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 		if (!firstLineStringList.isEmpty()) {
 			int length1 = firstLineStringList.at(0).length();
-			if (firstLineStringList.size() > 1) {
-				int pos2 = firstLine.indexOf(firstLineStringList.at(1), length1);
-				m_separator = firstLine.mid(length1, pos2 - length1);
-			} else {
-				//old: separator = line.right(line.length() - length1);
+			if (firstLineStringList.size() > 1)
+				m_separator = firstLine.mid(length1, 1);
+			else
 				m_separator = ' ';
-			}
 		}
 	} else {	// use given separator
 		// replace symbolic "TAB" with '\t'
