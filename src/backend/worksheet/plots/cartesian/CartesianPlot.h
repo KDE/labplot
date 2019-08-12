@@ -108,6 +108,9 @@ public:
 	const QList<QColor>& themeColorPalette() const;
 	void processDropEvent(QDropEvent*) override;
 	bool isPanningActive() const;
+	bool isHovered() const;
+	bool isPrinted() const;
+	bool isSelected() const;
 	void addLegend(CartesianPlotLegend*);
 	int curveCount();
 	const XYCurve* getCurve(int index);

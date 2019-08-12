@@ -199,7 +199,7 @@ void AsciiFilterTest::testSparseFile03() {
 	filter.setSeparatingCharacter(",");
 	filter.setNaNValueToZero(true);
 	filter.setSimplifyWhitespacesEnabled(true);
-	filter.setSkipEmptyParts(true);
+	filter.setSkipEmptyParts(false);
 	filter.setHeaderEnabled(true);
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 

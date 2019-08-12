@@ -272,7 +272,7 @@ void FunctionValuesDialog::insertConstant(const QString& str) {
 }
 
 void FunctionValuesDialog::addVariable() {
-	auto* layout = dynamic_cast<QGridLayout*>(ui.frameVariables->layout());
+	auto* layout = ui.gridLayoutVariables;
 	int row = m_variableNames.size();
 
 	//text field for the variable name

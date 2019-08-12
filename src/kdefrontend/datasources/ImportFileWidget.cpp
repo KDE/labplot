@@ -182,22 +182,22 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	//tooltips
 	QString info = i18n("Specify how the data source has to be processed on every read:"
 					   "<ul>"
-					   "<li>Continuosly fixed - fixed amount of samples is processed starting from the beginning of the newly recieved data.</li>"
-					   "<li>From End - fixed amount of samples is processed starting from the end of the newly recieved data.</li>"
-					   "<li>Till the End - all newly recieved data is processed.</li>"
+					   "<li>Continuously fixed - fixed amount of samples is processed starting from the beginning of the newly received data.</li>"
+					   "<li>From End - fixed amount of samples is processed starting from the end of the newly received data.</li>"
+					   "<li>Till the End - all newly received data is processed.</li>"
 					   "<li>Whole file - on every read the whole file is re-read completely and processed. Only available for \"File Or Named Pipe\" data sources.</li>"
 					   "</ul>");
 	ui.lReadingType->setToolTip(info);
 	ui.cbReadingType->setToolTip(info);
 
 	info = i18n("Number of samples (lines) to be processed on every read.\n"
-				"Only needs to be specified for the reading modi \"Continiously Fixed\" and \"From End\".");
+				"Only needs to be specified for the reading mode \"Continuously Fixed\" and \"From End\".");
 	ui.lSampleSize->setToolTip(info);
 	ui.sbSampleSize->setToolTip(info);
 
 	info = i18n("Specify when and how frequently the data source needs to be read:"
 				"<ul>"
-				"<li>Periodically - the data source is read periodically with user specified time intervall.</li>"
+				"<li>Periodically - the data source is read periodically with user specified time interval.</li>"
 				"<li>On New Data - the data source is read when new data arrives.</li>"
 				"</ul>");
 	ui.lUpdateType->setToolTip(info);
