@@ -530,7 +530,7 @@ void HypothesisTestDock::spreadsheetChanged(const QModelIndex& index) {
 
 void HypothesisTestDock::changeCbCol2Label() {
 	//QDEBUG("in changeCbCol2Label");
-	if (testType(m_test) != HypothesisTest::Anova ||
+	if (testType(m_test) != HypothesisTest::Anova &&
 			testSubtype(m_test) != HypothesisTest::TwoSampleIndependent) {
 		ui.lCol2->setText( i18n("Independent Var. 2"));
 		return;

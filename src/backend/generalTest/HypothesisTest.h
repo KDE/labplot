@@ -75,7 +75,9 @@ private:
 
 	double getPValue(const int &test, double& value,
 	                 const QString& col1Name, const QString& col2name,
-	                 const double mean, const double sp, const int df);
+					 const int df);
+
+	QString getPValueTooltip(const double& pValue);
 
 	double m_populationMean;
 	double m_significanceLevel;

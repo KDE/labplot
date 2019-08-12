@@ -72,8 +72,10 @@ void HypothesisTest::performTest(int test, bool categoricalVariable, bool equalV
 	m_pValue.clear();
 	m_statisticValue.clear();
 	m_statsTable = "";
-	for (int i = 0; i < RESULTLINESCOUNT; i++)
+	for (int i = 0; i < RESULTLINESCOUNT; i++) {
 		m_resultLine[i]->clear();
+		m_resultLine[i]->setToolTip(QString());
+	}
 
 	switch (testSubtype(test)) {
 	case TwoSampleIndependent: {
@@ -109,8 +111,10 @@ void HypothesisTest::performLeveneTest(bool categoricalVariable) {
 	m_pValue.clear();
 	m_statisticValue.clear();
 	m_statsTable = "";
-	for (int i = 0; i < RESULTLINESCOUNT; i++)
+	for (int i = 0; i < RESULTLINESCOUNT; i++) {
 		m_resultLine[i]->clear();
+		m_resultLine[i]->setToolTip(QString());
+	}
 
 	m_currTestName = "<h2>" + i18n("Levene Test for Equality of Variance") + "</h2>";
 	m_performLeveneTest(categoricalVariable);
@@ -216,9 +220,7 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 		}
 	}
 
-	double stdSq[2];
-	stdSq[0] = gsl_pow_2(std[0]);
-	stdSq[1] = gsl_pow_2(std[1]);
+	double stdSq[2] = {gsl_pow_2(std[0]), gsl_pow_2(std[1])};
 
 	QString testName;
 	int df = 0;
@@ -253,15 +255,16 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 	}
 	case ZTest: {
 		testName = "Z";
-		spSq = ((n[0]-1) * gsl_pow_2(std[0]) + (n[1]-1) * gsl_pow_2(std[1])) / df;
-		m_statisticValue.append((mean[0] - mean[1]) / sqrt(spSq / n[0] + spSq / n[1]));
-		//        m_pValue.append(gsl_cdf_gaussian_P(m_statisticValue, sp));
+		spSq = stdSq[0] / n[0] + stdSq[1] / n[1];
+
+		double zValue = (mean[0] - mean[1]) / sqrt(spSq);
+		m_statisticValue.append(zValue);
 		break;
 	}
 	}
 
 	m_currTestName = "<h2>" + i18n("Two Sample Independent %1 Test for %2 vs %3", testName, col1Name, col2Name) + "</h2>";
-	m_pValue.append(getPValue(test, m_statisticValue[0], col1Name, col2Name, (mean[0] - mean[1]), sqrt(spSq), df));
+	m_pValue.append(getPValue(test, m_statisticValue[0], col1Name, col2Name, df));
 
 	printLine(2, i18n("Significance level is %1", round(m_significanceLevel)), "blue");
 
@@ -273,10 +276,7 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 	printLine(6, i18n("Degree of Freedom is %1", df), "green");
 	printTooltip(6, i18n("Number of independent Pieces of information that went into calculating the estimate"));
 
-	if (m_pValue[0] <= m_significanceLevel)
-		printTooltip(5, i18n("We can safely reject Null Hypothesis for significance level %1", round(m_significanceLevel)));
-	else
-		printTooltip(5, i18n("There is a plausibility for Null Hypothesis to be true"));
+	printTooltip(5, getPValueTooltip(m_pValue[0]));
 	return;
 }
 
@@ -345,18 +345,14 @@ void HypothesisTest::performTwoSamplePairedTest(int test) {
 	}
 	}
 
-	m_pValue.append(getPValue(test, m_statisticValue[0], m_columns[0]->name(), i18n("%1", m_populationMean), mean, std, df));
+	m_pValue.append(getPValue(test, m_statisticValue[0], m_columns[0]->name(), i18n("%1", m_populationMean), df));
 	m_currTestName = "<h2>" + i18n("One Sample %1 Test for %2 vs %3", testName, m_columns[0]->name(), m_columns[1]->name()) + "</h2>";
 
 	printLine(2, i18n("Significance level is %1 ", round(m_significanceLevel)), "blue");
 	printLine(4, i18n("%1 Value is %2 ", testName, round(m_statisticValue[0])), "green");
 	printLine(5, i18n("P Value is %1 ", m_pValue[0]), "green");
 
-	if (m_pValue[0] <= m_significanceLevel)
-		printTooltip(5, i18n("We can safely reject Null Hypothesis for significance level %1", m_significanceLevel));
-	else
-		printTooltip(5, i18n("There is a plausibility for Null Hypothesis to be true"));
-
+	printTooltip(5, getPValueTooltip(m_pValue[0]));
 	return;
 }
 
@@ -419,18 +415,14 @@ void HypothesisTest::performOneSampleTest(int test) {
 	}
 	}
 
-	m_pValue.append(getPValue(test, m_statisticValue[0], m_columns[0]->name(), i18n("%1",m_populationMean), mean - m_populationMean, std, df));
+	m_pValue.append(getPValue(test, m_statisticValue[0], m_columns[0]->name(), i18n("%1",m_populationMean), df));
 	m_currTestName = "<h2>" + i18n("One Sample %1 Test for %2", testName, m_columns[0]->name()) + "</h2>";
 
 	printLine(2, i18n("Significance level is %1", round(m_significanceLevel)), "blue");
 	printLine(4, i18n("%1 Value is %2", testName, round(m_statisticValue[0])), "green");
 	printLine(5, i18n("P Value is %1", m_pValue[0]), "green");
 
-	if (m_pValue[0] <= m_significanceLevel)
-		printTooltip(5, i18n("We can safely reject Null Hypothesis for significance level %1", m_significanceLevel));
-	else
-		printTooltip(5, i18n("There is a plausibility for Null Hypothesis to be true"));
-
+	printTooltip(5, getPValueTooltip(m_pValue[0]));
 	return;
 }
 
@@ -558,11 +550,7 @@ void HypothesisTest::performOneWayAnova() {
 	printLine(1, i18n("F Value is %1", round(m_statisticValue[0])), "green");
 	printLine(2, i18n("P Value is %1 ", m_pValue[0]), "green");
 
-	if (m_pValue[0] <= m_significanceLevel)
-		printTooltip(2, i18n("We can safely reject Null Hypothesis for significance level %1", m_significanceLevel));
-	else
-		printTooltip(2, i18n("There is a plausibility for Null Hypothesis to be true"));
-
+	printTooltip(2, getPValueTooltip(m_pValue[0]));
 	return;
 }
 
@@ -1041,80 +1029,85 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 	printLine(5, i18n("P Value is %1 ", m_pValue[0]), "green");
 	printLine(6, i18n("Degree of Freedom is %1", df), "green");
 
-	if (m_pValue[0] <= m_significanceLevel) {
-		printTooltip(5, i18n("We can safely reject Null Hypothesis for significance level %1", m_significanceLevel));
+	printTooltip(5, getPValueTooltip(m_pValue[0]));
+
+	if (m_pValue[0] <= m_significanceLevel)
 		printLine(8, "Requirement for homogeneity is not met", "red");
-	} else {
-		printTooltip(5, i18n("There is a plausibility for Null Hypothesis to be true"));
+	else
 		printLine(8, "Requirement for homogeneity is met", "green");
-	}
 
 	m_statisticValue.append(fValue);
 	return;
 }
 
-
 //TODO change ("⋖") symbol to ("<"), currently macro UTF8_QSTRING is not working properly if used "<" symbol;
 // TODO: check for correctness between: for TestZ with TailTwo
 //       m_pValue.append(2*gsl_cdf_tdist_P(value, df) v/s
 //       m_pValue.append(gsl_cdf_tdis_P(value, df) + gsl_cdf_tdis_P(-value, df);
-double HypothesisTest::getPValue(const int& test, double& value, const QString& col1Name, const QString& col2Name, const double mean, const double sp, const int df) {
+double HypothesisTest::getPValue(const int& test, double& value, const QString& col1Name, const QString& col2Name, const int df) {
+	double pValue = 0;
 
-	switch (test) {
+	QString nullHypothesisSign;
+	QString alternateHypothesisSign;
+
+	switch (testType(test)) {
 	case TTest: {
 		switch (m_tail) {
-		case Negative: {
-			m_pValue.append(gsl_cdf_tdist_P(value, df));
-			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("≥"), col2Name), "blue");
-			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("⋖"), col2Name), "blue");
+		case Negative:
+			pValue = gsl_cdf_tdist_P(value, df);
+			nullHypothesisSign = UTF8_QSTRING("≥");
+			alternateHypothesisSign = UTF8_QSTRING("⋖");
 			break;
-		}
-		case Positive: {
+		case Positive:
 			value *= -1;
-			m_pValue.append(gsl_cdf_tdist_P(value, df));
-			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("≤"), col2Name), "blue");
-			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING(">"), col2Name), "blue");
+			pValue = gsl_cdf_tdist_P(value, df);
+			nullHypothesisSign = UTF8_QSTRING("≤");
+			alternateHypothesisSign = UTF8_QSTRING(">");
 			break;
-		}
-		case Two: {
-			m_pValue.append(2.*gsl_cdf_tdist_P(-fabs(value), df));
-
-			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("="), col2Name), "blue");
-			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3", col1Name, UTF8_QSTRING("≠"), col2Name), "blue");
+		case Two:
+			pValue = 2.*gsl_cdf_tdist_P(-fabs(value), df);
+			nullHypothesisSign = UTF8_QSTRING("=");
+			alternateHypothesisSign = UTF8_QSTRING("≠");
 			break;
-		}
 		}
 		break;
 	}
 	case ZTest: {
 		switch (m_tail) {
-		case Negative: {
-			m_pValue.append(gsl_cdf_gaussian_P(value - mean, sp));
-			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("≥"), col2Name), "blue");
-			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("⋖"), col2Name), "blue");
+		case Negative:
+			pValue = gsl_cdf_ugaussian_P(value);
+			nullHypothesisSign = UTF8_QSTRING("≥");
+			alternateHypothesisSign = UTF8_QSTRING("⋖");
 			break;
-		}
-		case Positive: {
+		case Positive:
 			value *= -1;
-			m_pValue.append(nsl_stats_tdist_p(value - mean, sp));
-			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("≤"), col2Name), "blue");
-			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING(">"), col2Name), "blue");
+			pValue = gsl_cdf_ugaussian_P(value);
+			nullHypothesisSign = UTF8_QSTRING("≤");
+			alternateHypothesisSign = UTF8_QSTRING(">");
 			break;
-		}
-		case Two: {
-			m_pValue.append(2.*gsl_cdf_gaussian_P(value - mean, sp));
-			printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("="), col2Name), "blue");
-			printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, UTF8_QSTRING("≠"), col2Name), "blue");
+		case Two:
+			pValue = 2*gsl_cdf_ugaussian_P(-fabs(value));
+			nullHypothesisSign = UTF8_QSTRING("=");
+			alternateHypothesisSign = UTF8_QSTRING("≠");
 			break;
-		}
 		}
 		break;
 	}
 	}
 
-	if (m_pValue[0] > 1)
+	printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, nullHypothesisSign, col2Name), "blue");
+	printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, alternateHypothesisSign, col2Name), "blue");
+
+	if (pValue > 1)
 		return 1;
-	return m_pValue[0];
+	return pValue;
+}
+
+QString HypothesisTest::getPValueTooltip(const double &pValue) {
+	if (pValue <= m_significanceLevel)
+		return i18n("We can safely reject Null Hypothesis for significance level %1", round(m_significanceLevel));
+
+	return i18n("There is a plausibility for Null Hypothesis to be true");
 }
 
 // Virtual functions

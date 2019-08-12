@@ -124,7 +124,6 @@ protected:
 
 	void countPartitions(Column* column, int& np, int& totalRows);
 
-
 //    double findSumProducts(const Column* columns[], int N = -1);
 
 	GeneralErrorType findStats(const Column* column,int& count, double& sum, double& mean, double& std);
