@@ -139,7 +139,7 @@ void CartesianPlot::init() {
 	//Provide in the UI the possibility to choose between "exact" or 0% offset, 2%, 5% and 10% for the auto fit option
 	d->autoScaleOffsetFactor = 0.0f;
 
-	m_plotArea = new PlotArea(name() + " plot area");
+	m_plotArea = new PlotArea(name() + " plot area", this);
 	addChildFast(m_plotArea);
 
 	//Plot title
@@ -804,6 +804,20 @@ void CartesianPlot::processDropEvent(QDropEvent* event) {
 bool CartesianPlot::isPanningActive() const {
 	Q_D(const CartesianPlot);
 	return d->panningStarted;
+}
+
+bool CartesianPlot::isHovered() const {
+	Q_D(const CartesianPlot);
+	return d->m_hovered;
+}
+bool CartesianPlot::isPrinted() const {
+	Q_D(const CartesianPlot);
+	return d->m_printing;
+}
+
+bool CartesianPlot::isSelected() const {
+	Q_D(const CartesianPlot);
+	return d->isSelected();
 }
 
 //##############################################################################
@@ -3362,21 +3376,6 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 		painter->setOpacity(0.2);
 		painter->drawRect(QRectF(selectionStart, selectionEnd));
 		painter->restore();
-	}
-
-	float penWidth = 6.;
-	QRectF rect = q->m_plotArea->graphicsItem()->boundingRect();
-	rect = QRectF(-rect.width()/2 - penWidth / 2, -rect.height()/2 - penWidth / 2,
-				  rect.width() + penWidth, rect.height() + penWidth);
-
-	if (m_hovered && !isSelected() && !m_printing) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth, Qt::SolidLine));
-		painter->drawRect(rect);
-	}
-
-	if (isSelected() && !m_printing) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth, Qt::SolidLine));
-		painter->drawRect(rect);
 	}
 }
 

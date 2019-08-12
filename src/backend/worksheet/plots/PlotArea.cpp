@@ -26,6 +26,7 @@
  ***************************************************************************/
 
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/PlotAreaPrivate.h"
 #include "backend/lib/commandtemplates.h"
@@ -33,6 +34,7 @@
 #include "backend/lib/macros.h"
 
 #include <QPainter>
+#include <QPalette>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -44,14 +46,17 @@
  * \ingroup worksheet
  */
 
-PlotArea::PlotArea(const QString &name) : WorksheetElement(name, AspectType::PlotArea),
-	d_ptr(new PlotAreaPrivate(this)) {
+PlotArea::PlotArea(const QString &name, CartesianPlot* parent) : WorksheetElement(name, AspectType::PlotArea),
+	d_ptr(new PlotAreaPrivate(this)),
+	m_parent(parent) {
 
 	init();
 }
 
-PlotArea::PlotArea(const QString &name, PlotAreaPrivate *dd)
-	: WorksheetElement(name, AspectType::PlotArea), d_ptr(dd) {
+PlotArea::PlotArea(const QString &name, CartesianPlot* parent, PlotAreaPrivate *dd)
+	: WorksheetElement(name, AspectType::PlotArea),
+	  m_parent(parent),
+	  d_ptr(dd) {
 
 	init();
 }
@@ -101,6 +106,18 @@ void PlotArea::setVisible(bool on) {
 bool PlotArea::isVisible() const {
 	Q_D(const PlotArea);
 	return d->isVisible();
+}
+
+bool PlotArea::isHovered() const {
+	return m_parent->isHovered();
+}
+
+bool PlotArea::isPrinted() const {
+	return m_parent->isPrinted();
+}
+
+bool PlotArea::isSelected() const {
+	return m_parent->isSelected();
 }
 
 void PlotArea::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
@@ -379,7 +396,7 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 		painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 
 	//draw the border
-	if (borderPen.style() != Qt::NoPen) {
+	if (borderPen.style() != Qt::NoPen && !q->isHovered() && !isSelected()) {
 		painter->setPen(borderPen);
 		painter->setBrush(Qt::NoBrush);
 		painter->setOpacity(borderOpacity);
@@ -388,6 +405,23 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 		else
 			painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 	}
+
+	double penWidth = 6.;
+	QRectF rect = boundingRect();
+	rect = QRectF(-rect.width()/2 + penWidth / 2, -rect.height()/2 + penWidth / 2,
+				  rect.width() - penWidth, rect.height() - penWidth);
+
+	if (q->isHovered() && !q->isSelected() && !q->isPrinted()) {
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth, Qt::SolidLine));
+		painter->drawRect(rect);
+	}
+
+	if (q->isSelected() && !q->isPrinted()) {
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth, Qt::SolidLine));
+		painter->drawRect(rect);
+	}
+
+
 // 	DEBUG("PlotAreaPrivate::paint() DONE");
 }
 
