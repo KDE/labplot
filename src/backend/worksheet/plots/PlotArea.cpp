@@ -55,8 +55,8 @@ PlotArea::PlotArea(const QString &name, CartesianPlot* parent) : WorksheetElemen
 
 PlotArea::PlotArea(const QString &name, CartesianPlot* parent, PlotAreaPrivate *dd)
 	: WorksheetElement(name, AspectType::PlotArea),
-	  m_parent(parent),
-	  d_ptr(dd) {
+	  d_ptr(dd),
+	  m_parent(parent) {
 
 	init();
 }

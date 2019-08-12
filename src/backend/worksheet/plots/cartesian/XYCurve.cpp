@@ -2231,9 +2231,10 @@ int XYCurve::indexForX(double x, const AbstractColumn* column) const {
 
 					double value = xColumn()->valueAt(row);
 					if (abs(value - x) <= abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
-						if (row < rowCount - 1)
+						if (row < rowCount - 1) {
 							prevValue = value;
 							index = row;
+						}
 					}
 				}
 			}
@@ -2250,8 +2251,8 @@ int XYCurve::indexForX(double x, const AbstractColumn* column) const {
 
 					qint64 value = column->dateTimeAt(row).toMSecsSinceEpoch();
 					if (abs(value - xInt64) <= abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
-							prevValueDateTime = value;
-							index = row;
+						prevValueDateTime = value;
+						index = row;
 					}
 				}
 			}
