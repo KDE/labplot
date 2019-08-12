@@ -20,6 +20,7 @@ UX improvements:
 	* BUG 408537 - Allow to insert multiple rows and columns in the spreadsheet in one step
 	* Added translations to Windows and macOS packages
 	* Allow to stop the current selection in the plot with ESC
+	* BUG 410855 - Seed the random number generator with the current time in order not to generate repetitive numbers in the spreadsheet.
 
 Performance:
 	* Increased the plotting speed for curves with many data points by removing points which are shown on the same pixel in the scene
