@@ -67,7 +67,7 @@ private:
 	//        void updateFields();
 	//        bool fieldSelected(const QString&);
 	int m_test;
-	HypothesisTest::Tail m_tail;
+	HypothesisTest::HypothesisTailType m_tail;
 	QScrollArea* scrollDock;
 
 	void countPartitions(Column *column, int &np, int &total_rows);

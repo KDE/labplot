@@ -158,33 +158,33 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 				m_columns[1]->valueAt(i);
 
 	// printing table;
-	// cell constructor structure; data, level, rowSpanCount, m_columnspanCount, isHeader;
-	QList<Cell*> rowMajor;
+	// HtmlCell constructor structure; data, level, rowSpanCount, m_columnspanCount, isHeader;
+	QList<HtmlCell*> rowMajor;
 	int level = 0;
 
 	// horizontal header
 	QString sigma = UTF8_QSTRING("Σ");
-	rowMajor.append(new Cell("", level, true));
+	rowMajor.append(new HtmlCell("", level, true));
 
-	rowMajor.append(new Cell("N", level, true, "Total Number of Observations"));
-	rowMajor.append(new Cell(QString(sigma + "Scores"), level, true, "Sum of Scores in each column"));
-	rowMajor.append(new Cell(QString(sigma + "Scores<sup>2</sup>"), level, true, "Sum of Squares of scores in each column"));
-	rowMajor.append(new Cell(QString(sigma + "(" + UTF8_QSTRING("∏") + "Scores)"), level, true, "Sum of product of scores of both columns"));
+	rowMajor.append(new HtmlCell("N", level, true, "Total Number of Observations"));
+	rowMajor.append(new HtmlCell(QString(sigma + "Scores"), level, true, "Sum of Scores in each column"));
+	rowMajor.append(new HtmlCell(QString(sigma + "Scores<sup>2</sup>"), level, true, "Sum of Squares of scores in each column"));
+	rowMajor.append(new HtmlCell(QString(sigma + "(" + UTF8_QSTRING("∏") + "Scores)"), level, true, "Sum of product of scores of both columns"));
 
 	//data with vertical header.
 	level++;
-	rowMajor.append(new Cell(col1Name, level, true));
-	rowMajor.append(new Cell(N, level));
-	rowMajor.append(new Cell(sumCol1, level));
-	rowMajor.append(new Cell(sumSqCol1, level));
+	rowMajor.append(new HtmlCell(col1Name, level, true));
+	rowMajor.append(new HtmlCell(N, level));
+	rowMajor.append(new HtmlCell(sumCol1, level));
+	rowMajor.append(new HtmlCell(sumSqCol1, level));
 
-	rowMajor.append(new Cell(sumCol12, level, false, "", 2, 1));
+	rowMajor.append(new HtmlCell(sumCol12, level, false, "", 2, 1));
 
 	level++;
-	rowMajor.append(new Cell(col2Name, level, true));
-	rowMajor.append(new Cell(N, level));
-	rowMajor.append(new Cell(sumCol2, level));
-	rowMajor.append(new Cell(sumSqCol2, level));
+	rowMajor.append(new HtmlCell(col2Name, level, true));
+	rowMajor.append(new HtmlCell(N, level));
+	rowMajor.append(new HtmlCell(sumCol2, level));
+	rowMajor.append(new HtmlCell(sumSqCol2, level));
 
 	m_statsTable += getHtmlTable3(rowMajor);
 
@@ -307,8 +307,8 @@ void CorrelationCoefficient::performSpearman() {
 		ranksCol2Mean += col2Ranks[int(m_columns[1]->valueAt(i))];
 	}
 
-	ranksCol1Mean = ranksCol1Mean / N;
-	ranksCol2Mean = ranksCol2Mean / N;
+	ranksCol1Mean /= N;
+	ranksCol2Mean /= N;
 
 	double s12 = 0;
 	double s1 = 0;
@@ -324,9 +324,9 @@ void CorrelationCoefficient::performSpearman() {
 		s2 += gsl_pow_2(centeredRank_2);
 	}
 
-	s12 = s12 / N;
-	s1 = s1 / N;
-	s2 = s2 / N;
+	s12 /= N;
+	s1 /= N;
+	s2 /= N;
 
 	m_correlationValue = s12 / std::sqrt(s1 * s2);
 

@@ -38,7 +38,7 @@ public:
 	explicit HypothesisTest(const QString& name);
 	~HypothesisTest() override;
 
-	enum Test {
+	enum HypothesisTestType {
 		// Type
 			TTest = 0x01,
 			ZTest = 0x02,
@@ -50,11 +50,11 @@ public:
 			OneWay = 0x40,
 			TwoWay = 0x50
 	};
-	enum Tail {Positive, Negative, Two};
+	enum HypothesisTailType {Positive, Negative, Two};
 
 	void setPopulationMean(QVariant populationMean);
 	void setSignificanceLevel(QVariant alpha);
-	void setTail(Tail tail);
+	void setTail(HypothesisTailType tail);
 
 	void performTest(int test, bool categoricalVariable = true, bool equalVariance = true);
 	void performLeveneTest(bool categoricalVariable);
@@ -79,7 +79,7 @@ private:
 
 	double m_populationMean;
 	double m_significanceLevel;
-	Tail m_tail;
+	HypothesisTailType m_tail;
 	QList<double> m_pValue;
 	QList<double> m_statisticValue;
 };

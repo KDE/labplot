@@ -40,7 +40,7 @@ public:
 	explicit CorrelationCoefficient(const QString& name);
 	~CorrelationCoefficient() override;
 
-	enum Test{
+	enum CorrelationTestType{
 	//Type
 		Pearson = 0x01,
 		Spearman = 0x02,

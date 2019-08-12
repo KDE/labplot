@@ -48,14 +48,14 @@ public:
 
 	enum DataSourceType {DataSourceSpreadsheet, DataSourceDatabase};
 
-	struct Cell {
+	struct HtmlCell {
 		QString data;
 		int level;
 		bool isHeader;
 		QString tooltip;
 		int rowSpanCount;
 		int columnSpanCount;
-		Cell(QVariant data = "", int level = 0, bool isHeader = false, QString tooltip = "", int rowSpanCount = 1, int columnSpanCount = 1) {
+		HtmlCell(QVariant data = "", int level = 0, bool isHeader = false, QString tooltip = "", int rowSpanCount = 1, int columnSpanCount = 1) {
 			this->data = data.toString();
 			this->level = level;
 			this->isHeader = isHeader;
@@ -65,7 +65,7 @@ public:
 		}
 	};
 
-	enum ErrorType {ErrorUnqualSize, ErrorEmptyColumn, NoError};
+	enum GeneralErrorType {ErrorUnqualSize, ErrorEmptyColumn, NoError};
 
 	void setDataSourceType(DataSourceType type);
 	DataSourceType dataSourceType() const;
@@ -127,12 +127,12 @@ protected:
 
 //    double findSumProducts(const Column* columns[], int N = -1);
 
-	ErrorType findStats(const Column* column,int& count, double& sum, double& mean, double& std);
-	ErrorType findStatsPaired(const Column* column1, const Column* column2, int& count, double& sum, double& mean, double& std);
-	ErrorType findStatsCategorical(Column* column1, Column* column2, int n[], double sum[], double mean[], double std[], QMap<QString, int>& colName, const int& np, const int& totalRows);
+	GeneralErrorType findStats(const Column* column,int& count, double& sum, double& mean, double& std);
+	GeneralErrorType findStatsPaired(const Column* column1, const Column* column2, int& count, double& sum, double& mean, double& std);
+	GeneralErrorType findStatsCategorical(Column* column1, Column* column2, int n[], double sum[], double mean[], double std[], QMap<QString, int>& colName, const int& np, const int& totalRows);
 
 	QString getHtmlTable(int row, int column, QVariant* rowMajor);
-	QString getHtmlTable3(const QList<Cell*>& rowMajor);
+	QString getHtmlTable3(const QList<HtmlCell*>& rowMajor);
 
 	QString getLine(const QString& msg, const QString& color = "black");
 	void printLine(const int& index, const QString& msg, const QString& color = "black");

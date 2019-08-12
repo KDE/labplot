@@ -64,7 +64,7 @@ void HypothesisTest::setSignificanceLevel(QVariant alpha) {
 	m_significanceLevel = alpha.toDouble();
 }
 
-void HypothesisTest::setTail(Tail tail) {
+void HypothesisTest::setTail(HypothesisTailType tail) {
 	m_tail = tail;
 }
 
@@ -173,7 +173,7 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 		if (m_columns[0]->isNumeric())
 			baseColName = m_columns[0]->name();
 
-		ErrorType errorCode = findStatsCategorical(m_columns[0], m_columns[1], n, sum, mean, std, colName, np, totalRows);
+		GeneralErrorType errorCode = findStatsCategorical(m_columns[0], m_columns[1], n, sum, mean, std, colName, np, totalRows);
 
 		switch (errorCode) {
 		case ErrorUnqualSize: {
@@ -188,13 +188,13 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 			break;
 		}
 
-		QMapIterator<QString, int> i(colName);
-		while (i.hasNext()) {
-			i.next();
-			if (i.value() == 1)
-				col1Name = baseColName + " " + i.key();
+		QMapIterator<QString, int> iter(colName);
+		while (iter.hasNext()) {
+			iter.next();
+			if (iter.value() == 1)
+				col1Name = baseColName + " " + iter.key();
 			else
-				col2Name = baseColName + " " + i.key();
+				col2Name = baseColName + " " + iter.key();
 		}
 	}
 
@@ -298,7 +298,7 @@ void HypothesisTest::performTwoSamplePairedTest(int test) {
 
 	int n;
 	double sum, mean, std;
-	ErrorType errorCode = findStatsPaired(m_columns[0], m_columns[1], n, sum, mean, std);
+	GeneralErrorType errorCode = findStatsPaired(m_columns[0], m_columns[1], n, sum, mean, std);
 
 	switch (errorCode) {
 	case ErrorUnqualSize: {
@@ -375,7 +375,7 @@ void HypothesisTest::performOneSampleTest(int test) {
 
 	int n;
 	double sum, mean, std;
-	ErrorType errorCode = findStats(m_columns[0], n, sum, mean, std);
+	GeneralErrorType errorCode = findStats(m_columns[0], n, sum, mean, std);
 
 	switch (errorCode) {
 	case ErrorEmptyColumn: {
@@ -470,14 +470,14 @@ void HypothesisTest::performOneWayAnova() {
 
 	for (int i = 0; i < np; i++)
 		yBar += mean[i];
-	yBar = yBar / np;
+	yBar /= np;
 
 	for (int i = 0; i < np; i++) {
-		sB += ni[i] * gsl_pow_2( ( mean[i] - yBar));
+		sB += ni[i] * gsl_pow_2(mean[i] - yBar);
 		if (ni[i] > 1)
-			sW += gsl_pow_2( std[i])*(ni[i] - 1);
+			sW += gsl_pow_2(std[i])*(ni[i] - 1);
 		else
-			sW += gsl_pow_2( std[i]);
+			sW += gsl_pow_2(std[i]);
 		fW += ni[i] - 1;
 	}
 
@@ -700,33 +700,33 @@ void HypothesisTest::performTwoWayAnova() {
 	}
 
 	// printing table;
-	// cell constructor structure; data, level, rowSpanCount, m_columnspanCount, isHeader;
-	QList<Cell*> rowMajor;
-	rowMajor.append(new Cell("", 0, true, "", 2, 1));
+	// HtmlCell constructor structure; data, level, rowSpanCount, m_columnspanCount, isHeader;
+	QList<HtmlCell*> rowMajor;
+	rowMajor.append(new HtmlCell("", 0, true, "", 2, 1));
 	for (int i = 0; i < np_b; i++)
-		rowMajor.append(new Cell(partitionNames_b[i], 0, true, "", 1, 2));
-	rowMajor.append(new Cell("Mean", 0, true, "", 2));
+		rowMajor.append(new HtmlCell(partitionNames_b[i], 0, true, "", 1, 2));
+	rowMajor.append(new HtmlCell("Mean", 0, true, "", 2));
 
 	for (int i = 0; i < np_b; i++) {
-		rowMajor.append(new Cell("Mean", 1, true));
-		rowMajor.append(new Cell("Replicate", 1, true));
+		rowMajor.append(new HtmlCell("Mean", 1, true));
+		rowMajor.append(new HtmlCell("Replicate", 1, true));
 	}
 
 	int level = 2;
 	for (int i = 0; i < np_a; i++) {
-		rowMajor.append(new Cell(partitionNames_a[i], level, true));
+		rowMajor.append(new HtmlCell(partitionNames_a[i], level, true));
 		for (int j = 0; j < np_b; j++) {
-			rowMajor.append(new Cell(round(groupMean[i][j]), level));
-			rowMajor.append(new Cell(replicates[i][j], level));
+			rowMajor.append(new HtmlCell(round(groupMean[i][j]), level));
+			rowMajor.append(new HtmlCell(replicates[i][j], level));
 		}
-		rowMajor.append(new Cell(round(mean_a[i]), level));
+		rowMajor.append(new HtmlCell(round(mean_a[i]), level));
 		level++;
 	}
 
-	rowMajor.append(new Cell("Mean", level, true));
+	rowMajor.append(new HtmlCell("Mean", level, true));
 	for (int i = 0; i < np_b; i++)
-		rowMajor.append(new Cell(round(mean_b[i]), level, false, "", 1, 2));
-	rowMajor.append(new Cell(round(mean), level));
+		rowMajor.append(new HtmlCell(round(mean_b[i]), level, false, "", 1, 2));
+	rowMajor.append(new HtmlCell(round(mean), level));
 
 	m_statsTable = "<h3>" + i18n("Contingency Table") + "</h3>";
 	m_statsTable += getHtmlTable3(rowMajor);
@@ -736,34 +736,34 @@ void HypothesisTest::performTwoWayAnova() {
 
 	rowMajor.clear();
 	level = 0;
-	rowMajor.append(new Cell("", level, true));
-	rowMajor.append(new Cell("SS", level, true));
-	rowMajor.append(new Cell("DF", level, true, "degree of freedom"));
-	rowMajor.append(new Cell("MS", level, true));
+	rowMajor.append(new HtmlCell("", level, true));
+	rowMajor.append(new HtmlCell("SS", level, true));
+	rowMajor.append(new HtmlCell("DF", level, true, "degree of freedom"));
+	rowMajor.append(new HtmlCell("MS", level, true));
 
 	level++;
-	rowMajor.append(new Cell(m_columns[0]->name(), level, true));
-	rowMajor.append(new Cell(round(ss_a), level));
-	rowMajor.append(new Cell(df_a, level));
-	rowMajor.append(new Cell(round(ms_a), level));
+	rowMajor.append(new HtmlCell(m_columns[0]->name(), level, true));
+	rowMajor.append(new HtmlCell(round(ss_a), level));
+	rowMajor.append(new HtmlCell(df_a, level));
+	rowMajor.append(new HtmlCell(round(ms_a), level));
 
 	level++;
-	rowMajor.append(new Cell(m_columns[1]->name(), level, true));
-	rowMajor.append(new Cell(round(ss_b), level));
-	rowMajor.append(new Cell(df_b, level));
-	rowMajor.append(new Cell(round(ms_b), level));
+	rowMajor.append(new HtmlCell(m_columns[1]->name(), level, true));
+	rowMajor.append(new HtmlCell(round(ss_b), level));
+	rowMajor.append(new HtmlCell(df_b, level));
+	rowMajor.append(new HtmlCell(round(ms_b), level));
 
 	level++;
-	rowMajor.append(new Cell("Interaction", level, true));
-	rowMajor.append(new Cell(round(ss_interaction), level));
-	rowMajor.append(new Cell(df_interaction, level));
-	rowMajor.append(new Cell(round(ms_interaction), level));
+	rowMajor.append(new HtmlCell("Interaction", level, true));
+	rowMajor.append(new HtmlCell(round(ss_interaction), level));
+	rowMajor.append(new HtmlCell(df_interaction, level));
+	rowMajor.append(new HtmlCell(round(ms_interaction), level));
 
 	level++;
-	rowMajor.append(new Cell("Within", level, true));
-	rowMajor.append(new Cell(round(ss_within), level));
-	rowMajor.append(new Cell(df_within, level));
-	rowMajor.append(new Cell(round(ms_within), level));
+	rowMajor.append(new HtmlCell("Within", level, true));
+	rowMajor.append(new HtmlCell(round(ss_within), level));
+	rowMajor.append(new HtmlCell(df_within, level));
+	rowMajor.append(new HtmlCell(round(ms_within), level));
 
 	m_statsTable += getHtmlTable3(rowMajor);
 
@@ -869,7 +869,7 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 
 		for (int i = 0; i < np; i++) {
 			if (ni[i] > 0)
-				yiBar[i] = yiBar[i] / ni[i];
+				yiBar[i] /= ni[i];
 			else {
 				printError("One of the selected m_columns is empty <br/> "
 						   "or have choosen Independent Var.1 wrongly");
@@ -888,10 +888,10 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 		for (int i = 0; i < np; i++) {
 			ziBarBar += ziBar[i];
 			if (ni[i] > 0)
-				ziBar[i] = ziBar[i] / ni[i];
+				ziBar[i] /= ni[i];
 		}
 
-		ziBarBar = ziBarBar / n;
+		ziBarBar /= n;
 
 		double numberatorValue = 0;
 		double denominatorValue = 0;
@@ -950,7 +950,7 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 
 		for (int i = 0; i < np; i++) {
 			if (ni[i] > 0)
-				yiBar[i] = yiBar[i] / ni[i];
+				yiBar[i] /= ni[i];
 			else {
 				printError("One of the selected m_columns is empty <br/> "
 						   "or have choosen Independent Var.1 wrongly");
@@ -968,10 +968,10 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 
 		for (int i = 0; i < np; i++) {
 			ziBarBar += ziBar[i];
-			ziBar[i] = ziBar[i] / ni[i];
+			ziBar[i] /= ni[i];
 		}
 
-		ziBarBar = ziBarBar / n;
+		ziBarBar /= n;
 
 		double numberatorValue = 0;
 		double denominatorValue = 0;

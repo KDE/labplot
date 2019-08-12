@@ -210,7 +210,7 @@ double GeneralTest::findStd(const Column *column, int N, double mean) {
 	double std = 0;
 	for (int i = 0; i < N; i++) {
 		double row = column->valueAt(i);
-		std += gsl_pow_2( (row - mean));
+		std += gsl_pow_2(row - mean);
 	}
 
 	if (N > 1)
@@ -231,7 +231,7 @@ double GeneralTest::findStd(const Column *column, int N) {
 	return findStd(column, N, mean);
 }
 
-GeneralTest::ErrorType GeneralTest::findStats(const Column* column, int& count, double& sum, double& mean, double& std) {
+GeneralTest::GeneralErrorType GeneralTest::findStats(const Column* column, int& count, double& sum, double& mean, double& std) {
 	count = findCount(column);
 	sum = findSum(column, count);
 	mean = findMean(column, count);
@@ -243,7 +243,7 @@ GeneralTest::ErrorType GeneralTest::findStats(const Column* column, int& count, 
 	return GeneralTest::NoError;
 }
 
-GeneralTest::ErrorType GeneralTest::findStatsPaired(const Column* column1, const Column* column2, int& count, double& sum, double& mean, double& std) {
+GeneralTest::GeneralErrorType GeneralTest::findStatsPaired(const Column* column1, const Column* column2, int& count, double& sum, double& mean, double& std) {
 	sum = 0;
 	mean = 0;
 	std = 0;
@@ -252,20 +252,20 @@ GeneralTest::ErrorType GeneralTest::findStatsPaired(const Column* column1, const
 	int count2 = column2->rowCount();
 
 	count = qMin(count1, count2);
-	double cell1, cell2;
+	double HtmlCell1, HtmlCell2;
 	for (int i = 0; i < count; i++) {
-		cell1 = column1->valueAt(i);
-		cell2 = column2->valueAt(i);
+		HtmlCell1 = column1->valueAt(i);
+		HtmlCell2 = column2->valueAt(i);
 
-		if (std::isnan(cell1) || std::isnan(cell2)) {
-			if (std::isnan(cell1) && std::isnan(cell2))
+		if (std::isnan(HtmlCell1) || std::isnan(HtmlCell2)) {
+			if (std::isnan(HtmlCell1) && std::isnan(HtmlCell2))
 				count = i;
 			else
 				return GeneralTest::ErrorUnqualSize;
 			break;
 		}
 
-		sum += cell1 - cell2;
+		sum += HtmlCell1 - HtmlCell2;
 	}
 
 	if (count < 1)
@@ -275,9 +275,9 @@ GeneralTest::ErrorType GeneralTest::findStatsPaired(const Column* column1, const
 
 	double row;
 	for (int i = 0; i < count; i++) {
-		cell1 = column1->valueAt(i);
-		cell2 = column2->valueAt(i);
-		row = cell1 - cell2;
+		HtmlCell1 = column1->valueAt(i);
+		HtmlCell2 = column2->valueAt(i);
+		row = HtmlCell1 - HtmlCell2;
 		std += gsl_pow_2( (row - mean));
 	}
 
@@ -291,30 +291,30 @@ GeneralTest::ErrorType GeneralTest::findStatsPaired(const Column* column1, const
 void GeneralTest::countPartitions(Column* column, int& np, int& totalRows) {
 	totalRows = column->rowCount();
 	np = 0;
-	QString cellValue;
+	QString HtmlCellValue;
 	QMap<QString, bool> discoveredCategoricalVar;
 
 	AbstractColumn::ColumnMode originalColMode = column->columnMode();
 	column->setColumnMode(AbstractColumn::Text);
 
 	for (int i = 0; i < totalRows; i++) {
-		cellValue = column->textAt(i);
+		HtmlCellValue = column->textAt(i);
 
-		if (cellValue.isEmpty()) {
+		if (HtmlCellValue.isEmpty()) {
 			totalRows = i;
 			break;
 		}
 
-		if (discoveredCategoricalVar[cellValue])
+		if (discoveredCategoricalVar[HtmlCellValue])
 			continue;
 
-		discoveredCategoricalVar[cellValue] = true;
+		discoveredCategoricalVar[HtmlCellValue] = true;
 		np++;
 	}
 	column->setColumnMode(originalColMode);
 }
 
-GeneralTest::ErrorType GeneralTest::findStatsCategorical(Column* column1, Column* column2, int n[], double sum[], double mean[], double std[], QMap<QString, int>& colName, const int& np, const int& totalRows) {
+GeneralTest::GeneralErrorType GeneralTest::findStatsCategorical(Column* column1, Column* column2, int n[], double sum[], double mean[], double std[], QMap<QString, int>& colName, const int& np, const int& totalRows) {
 	Column* columns[] = {column1, column2};
 
 	for (int i = 0; i < np; i++) {
@@ -424,7 +424,7 @@ QString GeneralTest::getHtmlTable(int row, int column, QVariant* rowMajor) {
 	return table;
 }
 
-QString GeneralTest::getHtmlTable3(const QList<GeneralTest::Cell*>& rowMajor) {
+QString GeneralTest::getHtmlTable3(const QList<GeneralTest::HtmlCell*>& rowMajor) {
 	int rowMajorSize = rowMajor.size();
 
 	if (rowMajorSize == 0)
@@ -449,35 +449,35 @@ QString GeneralTest::getHtmlTable3(const QList<GeneralTest::Cell*>& rowMajor) {
 	table += "  <tr>";
 	int prevLevel = 0;
 	for (int i = 0; i < rowMajorSize; i++) {
-		Cell* currCell = rowMajor[i];
-		if (currCell->level != prevLevel) {
+		HtmlCell* currHtmlCell = rowMajor[i];
+		if (currHtmlCell->level != prevLevel) {
 			table += "  </tr>";
 			table += "  <tr>";
-			prevLevel = currCell->level;
+			prevLevel = currHtmlCell->level;
 		}
-		QString cellStartTag = "<td ";
-		QString cellEndTag = "</td>";
+		QString HtmlCellStartTag = "<td ";
+		QString HtmlCellEndTag = "</td>";
 
-		if (currCell->isHeader) {
-			cellStartTag = "<th ";
-			cellEndTag = "</th>";
+		if (currHtmlCell->isHeader) {
+			HtmlCellStartTag = "<th ";
+			HtmlCellEndTag = "</th>";
 		}
 
-		QString cellData = i18n("%1", currCell->data);
+		QString HtmlCellData = i18n("%1", currHtmlCell->data);
 
-		if (!currCell->tooltip.isEmpty())
-			cellData = startToolTip+
-						startData+cellData+endData+
-						startTip+i18n("%1", currCell->tooltip)+endTip+
+		if (!currHtmlCell->tooltip.isEmpty())
+			HtmlCellData = startToolTip+
+						startData+HtmlCellData+endData+
+						startTip+i18n("%1", currHtmlCell->tooltip)+endTip+
 					   endToolTip;
 
-		table += cellStartTag +
-				"rowspan=" + QString::number(currCell->rowSpanCount) +
+		table += HtmlCellStartTag +
+				"rowspan=" + QString::number(currHtmlCell->rowSpanCount) +
 				" " +
-				"colspan=" + QString::number(currCell->columnSpanCount) +
+				"colspan=" + QString::number(currHtmlCell->columnSpanCount) +
 				">" +
-				cellData +
-				cellEndTag;
+				HtmlCellData +
+				HtmlCellEndTag;
 	}
 	table += "  <tr>";
 	table += "</table>";

@@ -45,7 +45,7 @@ void CorrelationCoefficientTest::pearsonCoefficient_data() {
 	double correlationValue_expected = 0.96619424909;
 	double zValue_expected = 0.;
 
-	QTest::newRow("Sample 1") << col1Data << col2Data << correlationValue_expected << zValue_expected;
+	QTest::newRow("First Sample") << col1Data << col2Data << correlationValue_expected << zValue_expected;
 
 	// Second Sample
 	// This sample is taken from:
@@ -56,7 +56,7 @@ void CorrelationCoefficientTest::pearsonCoefficient_data() {
 	correlationValue_expected = 0.52980897305;
 	zValue_expected = 0.;
 
-	QTest::newRow("Sample 2") << col1Data << col2Data << correlationValue_expected << zValue_expected;
+	QTest::newRow("Second Sample") << col1Data << col2Data << correlationValue_expected << zValue_expected;
 
 	// Third Sample
 	// This sample is taken from:
@@ -88,8 +88,8 @@ void CorrelationCoefficientTest::pearsonCoefficient() {
 	CorrelationCoefficient correlationCoefficientTest("Pearson's R");
 	correlationCoefficientTest.setColumns(cols);
 
-	CorrelationCoefficient::Test test;
-	test = CorrelationCoefficient::Test::Pearson;
+	CorrelationCoefficient::CorrelationTestType test;
+	test = CorrelationCoefficient::Pearson;
 
 	bool categoricalVariable = false;
 
@@ -129,7 +129,7 @@ void CorrelationCoefficientTest::kendallCoefficient_data() {
 	double correlationValue_expected = 0.51111114025116;
 	double zValue_expected = 2.05718265659;
 
-	QTest::newRow("Sample 1") << col1Values << col2Values << col1Texts << col2Texts << isDouble << correlationValue_expected << zValue_expected;
+	QTest::newRow("First Sample") << col1Values << col2Values << col1Texts << col2Texts << isDouble << correlationValue_expected << zValue_expected;
 
 	// Second Sample
 	// This sample is taken from:
@@ -144,7 +144,7 @@ void CorrelationCoefficientTest::kendallCoefficient_data() {
 	zValue_expected = 3.84006269541
 	                  ;
 
-	QTest::newRow("Sample 2") << col1Values << col2Values << col1Texts << col2Texts << isDouble << correlationValue_expected << zValue_expected;
+	QTest::newRow("Second Sample") << col1Values << col2Values << col1Texts << col2Texts << isDouble << correlationValue_expected << zValue_expected;
 }
 
 void CorrelationCoefficientTest::kendallCoefficient() {
@@ -179,8 +179,8 @@ void CorrelationCoefficientTest::kendallCoefficient() {
 	CorrelationCoefficient correlationCoefficientTest("Kendall's Tau");
 	correlationCoefficientTest.setColumns(cols);
 
-	CorrelationCoefficient::Test test;
-	test = CorrelationCoefficient::Test::Kendall;
+	CorrelationCoefficient::CorrelationTestType test;
+	test = CorrelationCoefficient::CorrelationTestType::Kendall;
 
 	bool categoricalVariable = false;
 	correlationCoefficientTest.performTest(test, categoricalVariable);
@@ -210,7 +210,7 @@ void CorrelationCoefficientTest::spearmanCoefficient_data() {
 
 	double correlationValue_expected = 0.67272727272;
 
-	QTest::newRow("Sample 1") << col1Data << col2Data << correlationValue_expected;
+	QTest::newRow("First Sample") << col1Data << col2Data << correlationValue_expected;
 
 	// Second Sample
 	// This sample is taken from:
@@ -220,7 +220,7 @@ void CorrelationCoefficientTest::spearmanCoefficient_data() {
 
 	correlationValue_expected = -0.17575757575;
 
-	QTest::newRow("Sample 2") << col1Data << col2Data << correlationValue_expected;
+	QTest::newRow("Second Sample") << col1Data << col2Data << correlationValue_expected;
 
 }
 
@@ -241,8 +241,8 @@ void CorrelationCoefficientTest::spearmanCoefficient() {
 	CorrelationCoefficient correlationCoefficientTest("Spearman Rank");
 	correlationCoefficientTest.setColumns(cols);
 
-	CorrelationCoefficient::Test test;
-	test = CorrelationCoefficient::Test::Spearman;
+	CorrelationCoefficient::CorrelationTestType test;
+	test = CorrelationCoefficient::Spearman;
 
 	bool categoricalVariable = false;
 

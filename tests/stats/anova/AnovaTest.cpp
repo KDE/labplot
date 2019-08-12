@@ -119,7 +119,7 @@ void AnovaTest::twoWayAnova_data() {
 	double pCol2Value_expected = 5.44e-08;
 	//    double pInteractionValue_expected =  0.037224;
 
-	QTest::newRow("detergent vs temperature") << col1Data << col2Data << col3Data <<
+	QTest::newRow("First Sample") << col1Data << col2Data << col3Data <<
 												 fCol1Value_expected << fCol2Value_expected << fInteractionValue_expected <<
 												 pCol1Value_expected << pCol2Value_expected;
 }
