@@ -54,6 +54,7 @@ public:
 	void setSubcategory(const QString&);
 	void setDataset(const QString&);
 	void processTest(const QString& category, const QString& subcategory, const QString& dataset, DatasetHandler* datasetHandler);
+	const QString getJsonDir();
 
 private:    
 	Ui::ImportDatasetWidget ui;

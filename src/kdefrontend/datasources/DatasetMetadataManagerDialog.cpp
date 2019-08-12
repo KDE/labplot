@@ -103,3 +103,52 @@ void DatasetMetadataManagerDialog::updateDocument(const QString& fileName) {
 QString DatasetMetadataManagerDialog::getMetadataFilePath() const {
 	return m_mainWidget->getMetadataFilePath();
 }
+
+/**
+ * @brief Sets the collection name in the DatasetMetadataManagerWidget
+ */
+void DatasetMetadataManagerDialog::setCollection(const QString& collection) {
+	m_mainWidget->setCollection(collection);
+}
+
+/**
+ * @brief Sets the category name in the DatasetMetadataManagerWidget
+ */
+void DatasetMetadataManagerDialog::setCategory(const QString& category) {
+	m_mainWidget->setCategory(category);
+}
+
+/**
+ * @brief Sets the subcategory name in the DatasetMetadataManagerWidget
+ */
+void DatasetMetadataManagerDialog::setSubcategory(const QString& subcategory) {
+	m_mainWidget->setSubcategory(subcategory);
+}
+
+/**
+ * @brief Sets the short name of the dataset in the DatasetMetadataManagerWidget
+ */
+void DatasetMetadataManagerDialog::setShortName(const QString& name) {
+	m_mainWidget->setShortName(name);
+}
+
+/**
+ * @brief Sets the full name of the dataset in the DatasetMetadataManagerWidget
+ */
+void DatasetMetadataManagerDialog::setFullName(const QString& name) {
+	m_mainWidget->setFullName(name);
+}
+
+/**
+ * @brief Sets the text of the description in the DatasetMetadataManagerWidget
+ */
+void DatasetMetadataManagerDialog::setDescription(const QString& description) {
+	m_mainWidget->setDescription(description);
+}
+
+/**
+ * @brief Sets the download url in the DatasetMetadataManagerWidget
+ */
+void DatasetMetadataManagerDialog::setURL(const QString& url) {
+	m_mainWidget->setURL(url);
+}

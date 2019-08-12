@@ -825,9 +825,14 @@ void ImportDatasetWidget::processTest(const QString& category, const QString& su
 	m_selectedCategory = category;
 	m_selectedSubcategory = subcategory;
 	ui.lwDatasets->clear();
-	ui.lwDatasets->addItems(m_datasetModel->testDatasets(category, subcategory));
+	ui.lwDatasets->addItems(m_datasetModel->allDatasets(category, subcategory).toStringList());
 	setDataset(dataset);
 
 	loadDatasetToProcess(datasetHandler);
 }
+
+const QString ImportDatasetWidget::getJsonDir()  {
+	return m_jsonDir;
+}
+
 

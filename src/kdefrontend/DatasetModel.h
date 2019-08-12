@@ -46,10 +46,6 @@ public:
 	QStringList categories(const QString&);
 	QStringList subcategories(const QString&, const QString&);
 	QStringList datasets(const QString&, const QString&, const QString&);
-	QStringList testCategories();
-	QStringList testSubcategories(const QString&);
-	QStringList testDatasets(const QString&, const QString&);
-	QStringList allTestDatasets();
 	int datasetCount(const QString& collection);
 	int datasetCount(const QString& collection, const QString& category);
 	int datasetCount(const QString& collection, const QString& category, const QString& subcategory);
@@ -68,12 +64,6 @@ private:
 	QMap<QString, QMap<QString, QStringList>> m_subcategories;
 	QMap<QString,QMap<QString, QMap<QString, QStringList>>> m_datasets;
 	QStringList m_datasetList;
-
-	QStringList m_testAllDatasets;
-	QStringList m_testCategories;
-	QMap<QString, QStringList> m_testSubcategories;
-	QMap<QString, QMap<QString, QStringList>> m_testDatasets;
-
 
 	void initCollections(const QMap<QString, QMap<QString, QMap<QString, QVector<QString>>>>&);
 	void initCategories(const QMap<QString, QMap<QString, QMap<QString, QVector<QString>>>>& datasetMap);

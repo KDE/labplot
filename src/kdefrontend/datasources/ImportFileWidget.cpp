@@ -226,7 +226,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.bManageConnections->setIcon(QIcon::fromTheme(QLatin1String("network-server")));
 	ui.bManageConnections->setToolTip(i18n("Manage MQTT connections"));
 
-	QString info = i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed.");
+	info = i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed.");
 	ui.lLWT->setToolTip(info);
 	ui.bLWT->setToolTip(info);
 	ui.bLWT->setEnabled(false);

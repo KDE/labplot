@@ -43,6 +43,14 @@ public:
 	void updateDocument(const QString& fileName);
     QString getMetadataFilePath() const;
 
+	void setCollection(const QString&);
+	void setCategory(const QString&);
+	void setSubcategory(const QString&);
+	void setShortName(const QString&);
+	void setFullName(const QString&);
+	void setDescription(const QString&);
+	void setURL(const QString&);
+
 private:
     DatasetMetadataManagerWidget* m_mainWidget;
     QDialogButtonBox* m_buttonBox;

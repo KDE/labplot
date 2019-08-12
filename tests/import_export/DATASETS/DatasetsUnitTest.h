@@ -36,14 +36,28 @@ class DatasetsUnitTest : public QObject {
 private slots:
 	void initTestCase();
 
+	//Test processing metadata files.
 	void testCategories();
 	void testSubcategories();
 	void testDatasets();
 
+	//Test processing and downloading dataset
 	void testProcessDataset();
 
+	//Test adding new datasets to the existing collection
+	void testNewCollection();
+	void testNewCategory();
+	void testNewSubcategory();
+	void testNewDataset();
 
-private:
+
+
+private:	
+	void copyFiles();
+	void removeFiles();
+
+	QString m_dataDir;
+	QString m_jsonDir;
 };
 
 #endif
