@@ -740,7 +740,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			spreadsheet->setRowCount(keepNValues);
 			m_actualRows = keepNValues;
 		}
-
 		m_dataContainer.resize(m_actualCols);
 
 		DEBUG("	data source resized to col: " << m_actualCols);
@@ -935,23 +934,22 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				linesToRead = qMin(spreadsheet->sampleSize(), newLinesTillEnd);
 			}
 		}
-		DEBUG("	actual rows = " << m_actualRows);
 
 		if (linesToRead == 0)
 			return 0;
-	} else {	// not prepared
+	} else	// not prepared
 		linesToRead = newLinesTillEnd;
-		if (headerEnabled)
-			--m_actualRows;
-	}
-	DEBUG("	lines to read = " << linesToRead);
 
-	if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe || spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkUdpSocket) {
-		if (m_actualRows < linesToRead) {
-			DEBUG("	SET lines to read to " << m_actualRows);
-			linesToRead = m_actualRows;
-		}
-	}
+	DEBUG("	lines to read = " << linesToRead);
+	DEBUG("	actual rows (w/o header) = " << m_actualRows);
+
+	//TODO
+// 	if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe || spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkUdpSocket) {
+// 		if (m_actualRows < linesToRead) {
+// 			DEBUG("	SET lines to read to " << m_actualRows);
+// 			linesToRead = m_actualRows;
+// 		}
+// 	}
 
 	//new rows/resize columns if we don't have a fixed size
 	//TODO if the user changes this value..m_resizedToFixedSize..setResizedToFixedSize
