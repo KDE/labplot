@@ -60,6 +60,11 @@ cp -v kde/lib/libcantor_pythonbackend.dylib $INPREFIX/Frameworks/
 # icons
 cp -vf kde/share/icontheme.rcc $INPREFIX/Resources/icontheme.rcc
 
+# TODO: locale?
+
+# kcharselect data
+cp -v kde/share/kf5/kcharselect/kcharselect-data $INPREFIX/Resources/
+
 # misc
 cp -v labplot/admin/Info.plist $INPREFIX
 cp -v /Applications/KDE/labplot2.app/Contents/Resources/{LABPLOT_ICONS.icns,LML_ICONS.icns} $INPREFIX/Resources
