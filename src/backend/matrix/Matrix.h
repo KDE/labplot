@@ -115,7 +115,7 @@ public:
 
 	int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
 		int rows, int cols, QStringList colNameList, QVector<AbstractColumn::ColumnMode>) override;
-	void finalizeImport(int columnOffset, int startColumn, int endColumn, int numRows,
+	void finalizeImport(int columnOffset, int startColumn, int endColumn,
 		const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 
 	typedef MatrixPrivate Private;

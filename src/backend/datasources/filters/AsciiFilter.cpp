@@ -644,7 +644,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 	const int actualEndRow = (endRow == -1 || endRow > m_actualRows) ? m_actualRows : endRow;
 	if (actualEndRow > m_actualStartRow)
-		m_actualRows = actualEndRow - m_actualStartRow + 1;
+		m_actualRows = actualEndRow - m_actualStartRow;
 	else
 		m_actualRows = 0;
 
@@ -716,6 +716,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				vectorNames << i18n("Value");
 			}
 			QDEBUG("	vector names = " << vectorNames);
+			break;
 		case LiveDataSource::SourceType::MQTT:
 			break;
 		}
@@ -723,8 +724,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		// prepare import for spreadsheet
 		spreadsheet->setUndoAware(false);
 		spreadsheet->resize(AbstractFileFilter::Replace, vectorNames, m_actualCols);
-		DEBUG("	data source resized to col: " << m_actualCols);
-		DEBUG("	data source rowCount: " << spreadsheet->rowCount());
 
 		//columns in a file data source don't have any manual changes.
 		//make the available columns undo unaware and suppress the "data changed" signal.
@@ -743,6 +742,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		}
 
 		m_dataContainer.resize(m_actualCols);
+
+		DEBUG("	data source resized to col: " << m_actualCols);
+		DEBUG("	data source rowCount: " << spreadsheet->rowCount());
 
 		DEBUG("	Setting data ..");
 		for (int n = 0; n < m_actualCols; ++n) {
@@ -841,6 +843,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				//TODO: check serial port
 				case LiveDataSource::SourceType::SerialPort:
 					newData[newDataIdx++] = device.read(device.bytesAvailable());
+					break;
 				case LiveDataSource::SourceType::MQTT:
 					break;
 				}
@@ -859,6 +862,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				//TODO: check serial port
 				case LiveDataSource::SourceType::SerialPort:
 					newData.push_back(device.read(device.bytesAvailable()));
+					break;
 				case LiveDataSource::SourceType::MQTT:
 					break;
 				}
@@ -1407,7 +1411,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	}
 	DEBUG("	Read " << currentRow << " lines");
 
-	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, currentRow, dateTimeFormat, importMode);
+	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
 }
 
 /*!

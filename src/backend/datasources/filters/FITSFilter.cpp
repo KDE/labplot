@@ -380,7 +380,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		delete[] data;
 
 		if (dataSource)
-			dataSource->finalizeImport(columnOffset, 1, actualCols, lines, QString(), importMode);
+			dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), importMode);
 
 		fits_close_file(m_fitsFile, &status);
 
@@ -603,7 +603,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		}
 
 		if (!noDataSource)
-			dataSource->finalizeImport(columnOffset, 1, actualCols, lines, QString(), importMode);
+			dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), importMode);
 
 		fits_close_file(m_fitsFile, &status);
 		return dataStrings;

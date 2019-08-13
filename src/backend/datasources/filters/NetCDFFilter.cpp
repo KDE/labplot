@@ -936,7 +936,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 	handleError(m_status, "nc_close");
 
 	if (dataSource)
-		dataSource->finalizeImport(columnOffset, 1, actualCols, -1, QString(), mode);
+		dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), mode);
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)

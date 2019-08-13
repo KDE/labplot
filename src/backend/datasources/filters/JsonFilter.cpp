@@ -622,7 +622,7 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 	if (importObjectNames)
 		spreadsheet->column(m_columnOffset + (int)createIndexEnabled)->setPlotDesignation(Column::X);
 
-	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, m_actualRows, dateTimeFormat, importMode);
+	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
 }
 
 /*!

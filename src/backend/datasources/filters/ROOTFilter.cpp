@@ -284,7 +284,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 			++c;
 		}
 
-		dataSource->finalizeImport(columnOffset, 0, columns.size() - 1, -1, QString(), importMode);
+		dataSource->finalizeImport(columnOffset, 0, columns.size() - 1, QString(), importMode);
 	} else if (type == Tree) {
 		const int nentries = static_cast<int>(currentROOTData->treeEntries(pos));
 
@@ -329,7 +329,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 				container[i - first] = data[i];
 		}
 
-		dataSource->finalizeImport(columnOffset, 0, columns.size() - 1, -1, QString(), importMode);
+		dataSource->finalizeImport(columnOffset, 0, columns.size() - 1, QString(), importMode);
     }
 }
 
