@@ -1411,6 +1411,13 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	}
 	DEBUG("	Read " << currentRow << " lines");
 
+	//we might have skipped empty lines above. shrink the spreadsheet if the number of read lines (=currentRow)
+	//is smaller than the initial size of the spreadsheet (=m_actualRows).
+	//TODO: should also be relevant for Matrix
+	auto* s = dynamic_cast<Spreadsheet*>(dataSource);
+	if (s && currentRow != m_actualRows && importMode == AbstractFileFilter::Replace)
+		s->setRowCount(currentRow);
+
 	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
 }
 
