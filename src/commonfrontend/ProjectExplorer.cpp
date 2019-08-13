@@ -247,7 +247,7 @@ void ProjectExplorer::setProject(Project* project) {
 	connect(project, &Project::requestSaveState, this, &ProjectExplorer::save);
 	connect(project, &Project::requestLoadState, this, &ProjectExplorer::load);
 	connect(project, &Project::requestNavigateTo, this, &ProjectExplorer::navigateTo);
-	connect(project, &Project::loaded, this, &ProjectExplorer::resizeHeader);
+	connect(project, &Project::loaded, this, &ProjectExplorer::projectLoaded);
 	m_project = project;
 
 	//for newly created projects, resize the header to fit the size of the header section names.
@@ -378,6 +378,17 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
+/*!
+ * called after the project was loaded.
+ * resize the header of the view to adjust to the content
+ * and re-select the currently selected object to show
+ * its final properties in the dock widget after in Project::load() all
+ * pointers were restored, relative paths replaced by absolute, etc.
+ */
+void ProjectExplorer::projectLoaded() {
+	resizeHeader();
+	selectionChanged(m_treeView->selectionModel()->selection(), QItemSelection());
+}
 
 /*!
   expand the aspect \c aspect (the tree index corresponding to it) in the tree view
