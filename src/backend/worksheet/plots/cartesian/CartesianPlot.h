@@ -250,6 +250,7 @@ public slots:
 	void addLegend();
 	void addTextLabel();
 	void addCustomPoint();
+	void scaleAutoTriggered();
 	bool scaleAuto();
 	bool scaleAutoX();
 	bool scaleAutoY();

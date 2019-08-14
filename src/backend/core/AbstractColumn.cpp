@@ -572,6 +572,19 @@ double AbstractColumn::maximum(int startIndex, int endIndex) const {
 	return INFINITY;
 }
 
+bool AbstractColumn::indicesMinMax(double v1, double v2, int& start, int& end)  const {
+	Q_UNUSED(v1)
+	Q_UNUSED(v2)
+	Q_UNUSED(start)
+	Q_UNUSED(end)
+	return false;
+}
+
+int AbstractColumn::indexForValue(double x) const {
+	Q_UNUSED(x)
+	return 0;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //@}
 ////////////////////////////////////////////////////////////////////////////////////////////////////

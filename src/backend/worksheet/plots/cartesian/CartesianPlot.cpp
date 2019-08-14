@@ -537,9 +537,9 @@ void CartesianPlot::initActions() {
 	shiftDownYAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("Shift Down Y"), this);
 	cursorAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("Cursor"), this); // TODO: change icon
 
-	connect(scaleAutoAction, &QAction::triggered, this, &CartesianPlot::scaleAuto);
-	connect(scaleAutoXAction, &QAction::triggered, this, &CartesianPlot::scaleAutoX);
-	connect(scaleAutoYAction, &QAction::triggered, this, &CartesianPlot::scaleAutoY);
+	connect(scaleAutoAction, &QAction::triggered, this, &CartesianPlot::scaleAutoTriggered);
+	connect(scaleAutoXAction, &QAction::triggered, this, &CartesianPlot::scaleAutoTriggered);
+	connect(scaleAutoYAction, &QAction::triggered, this, &CartesianPlot::scaleAutoTriggered);
 	connect(zoomInAction, &QAction::triggered, this, &CartesianPlot::zoomIn);
 	connect(zoomOutAction, &QAction::triggered, this, &CartesianPlot::zoomOut);
 	connect(zoomInXAction, &QAction::triggered, this, &CartesianPlot::zoomInX);
@@ -719,8 +719,8 @@ void CartesianPlot::navigate(CartesianPlot::NavigationOperation op) {
 			d->curvesYMinMaxIsDirty = true;
 		}
 		scaleAuto();
-	} else if (op == ScaleAutoX) scaleAutoX();
-	else if (op == ScaleAutoY) scaleAutoY();
+	} else if (op == ScaleAutoX) setAutoScaleX(true);
+	else if (op == ScaleAutoY) setAutoScaleY(true);
 	else if (op == ZoomIn) zoomIn();
 	else if (op == ZoomOut) zoomOut();
 	else if (op == ZoomInX) zoomInX();
@@ -1615,11 +1615,11 @@ void CartesianPlot::dataChanged() {
 	d->curvesYMinMaxIsDirty = true;
 	bool updated = false;
 	if (d->autoScaleX && d->autoScaleY)
-		updated = this->scaleAuto();
+		updated = scaleAuto();
 	else if (d->autoScaleX)
-		updated = this->scaleAutoX();
+		updated = scaleAutoX();
 	else if (d->autoScaleY)
-		updated = this->scaleAutoY();
+		updated = scaleAutoY();
 
 	if (!updated || !QObject::sender()) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
@@ -1881,7 +1881,6 @@ bool CartesianPlot::scaleAutoX() {
 			d->xMin -= offset;
 			d->xMax += offset;
 		}
-		setAutoScaleX(true);
 		d->retransformScales();
 	}
 
@@ -1967,11 +1966,23 @@ bool CartesianPlot::scaleAutoY() {
 			d->yMin -= offset;
 			d->yMax += offset;
 		}
-		setAutoScaleY(true);
 		d->retransformScales();
 	}
 
 	return update;
+}
+
+void CartesianPlot::scaleAutoTriggered() {
+	QAction* action = dynamic_cast<QAction*>(QObject::sender());
+	if (!action)
+		return;
+
+	if (action == scaleAutoAction)
+		scaleAuto();
+	else if (action == scaleAutoXAction)
+		setAutoScaleX(true);
+	else if (action == scaleAutoYAction)
+		setAutoScaleY(true);
 }
 
 bool CartesianPlot::scaleAuto() {
@@ -2134,8 +2145,7 @@ void CartesianPlot::calculateCurvesXMinMax(bool completeRange) {
 		int end = 0;
 		if (d->rangeType == CartesianPlot::RangeFree && curve->yColumn()
 				&& !completeRange) {
-			start = curve->indexForX(yMin(), curve->yColumn());
-			end = curve->indexForX(yMax(), curve->yColumn());
+			curve->yColumn()->indicesMinMax(yMin(), yMax(), start, end);
 			if (end < curve->yColumn()->rowCount())
 				end ++;
 		} else {
@@ -2207,8 +2217,7 @@ void CartesianPlot::calculateCurvesYMinMax(bool completeRange) {
 		int end = 0;
 		if (d->rangeType == CartesianPlot::RangeFree && curve->xColumn() &&
 				!completeRange) {
-			start = curve->indexForX(xMin(), curve->xColumn());
-			end = curve->indexForX(xMax(), curve->xColumn());
+			curve->xColumn()->indicesMinMax(xMin(), xMax(), start, end);
 			if (end < curve->xColumn()->rowCount())
 				end ++; // because minMaxY excludes indexMax
 		} else {
@@ -2310,10 +2319,9 @@ void CartesianPlot::zoomInX() {
 	d->xMax = d->xMax + (newRange-oldRange)/2;
 	d->xMin = d->xMin - (newRange-oldRange)/2;
 
-	if (d->autoScaleY) {
-		autoScaleY();
+	if (d->autoScaleY && autoScaleY())
 		return;
-	}
+
 	d->retransformScales();
 }
 
@@ -2329,10 +2337,9 @@ void CartesianPlot::zoomOutX() {
 	d->xMax = d->xMax + (newRange-oldRange)/2;
 	d->xMin = d->xMin - (newRange-oldRange)/2;
 
-	if (d->autoScaleY) {
-		autoScaleY();
+	if (d->autoScaleY && autoScaleY())
 		return;
-	}
+
 	d->retransformScales();
 }
 
@@ -2348,10 +2355,8 @@ void CartesianPlot::zoomInY() {
 	d->yMax = d->yMax + (newRange-oldRange)/2;
 	d->yMin = d->yMin - (newRange-oldRange)/2;
 
-	if (d->autoScaleX) {
-		autoScaleX();
+	if (d->autoScaleX && autoScaleX())
 		return;
-	}
 	d->retransformScales();
 }
 
@@ -2367,10 +2372,8 @@ void CartesianPlot::zoomOutY() {
 	d->yMax = d->yMax + (newRange-oldRange)/2;
 	d->yMin = d->yMin - (newRange-oldRange)/2;
 
-	if (d->autoScaleX) {
-		autoScaleX();
+	if (d->autoScaleX && autoScaleX())
 		return;
-	}
 
 	d->retransformScales();
 }
@@ -2386,10 +2389,8 @@ void CartesianPlot::shiftLeftX() {
 	d->xMax -= offsetX;
 	d->xMin -= offsetX;
 
-	if (d->autoScaleY) {
-		scaleAutoY();
+	if (d->autoScaleY && scaleAutoY())
 		return;
-	}
 
 	d->retransformScales();
 }
@@ -2405,10 +2406,8 @@ void CartesianPlot::shiftRightX() {
 	d->xMax += offsetX;
 	d->xMin += offsetX;
 
-	if (d->autoScaleY) {
-		scaleAutoY();
+	if (d->autoScaleY && scaleAutoY())
 		return;
-	}
 
 	d->retransformScales();
 }
@@ -2424,10 +2423,8 @@ void CartesianPlot::shiftUpY() {
 	d->yMax += offsetY;
 	d->yMin += offsetY;
 
-	if (d->autoScaleX) {
-		scaleAutoX();
+	if (d->autoScaleX && scaleAutoX())
 		return;
-	}
 
 	d->retransformScales();
 }
@@ -2443,10 +2440,8 @@ void CartesianPlot::shiftDownY() {
 	d->yMax -= offsetY;
 	d->yMin -= offsetY;
 
-	if (d->autoScaleX) {
-		scaleAutoX();
+	if (d->autoScaleX && scaleAutoX())
 		return;
-	}
 
 	d->retransformScales();
 }
@@ -3122,17 +3117,13 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode() {
 	} else if (mouseMode == CartesianPlot::ZoomXSelectionMode) {
 		curvesYMinMaxIsDirty = true;
 		q->setAutoScaleX(false);
-		if (q->autoScaleY()) {
+		if (q->autoScaleY() && q->scaleAutoY())
 			retransformPlot = false;
-			q->scaleAutoY();
-		}
 	} else if (mouseMode == CartesianPlot::ZoomYSelectionMode) {
 		curvesXMinMaxIsDirty = true;
 		q->setAutoScaleY(false);
-		if (q->autoScaleX()) {
+		if (q->autoScaleX() && q->scaleAutoX())
 			retransformPlot = false;
-			q->scaleAutoX();
-		}
 	}
 
 	if (retransformPlot)

@@ -119,6 +119,12 @@ public:
 	double maximum(int startIndex, int endIndex) const override;
 	double minimum(int count = 0) const override;
 	double minimum(int startIndex, int endIndex) const override;
+	static int calculateMaxSteps(unsigned int value);
+	static int indexForValue(double x, QVector<double>& column, Properties properties = Properties::No);
+	static int indexForValue(const double x, const QVector<QPointF> &column, Properties properties = Properties::No);
+	static int indexForValue(double x, QVector<QLineF>& lines, Properties properties = Properties::No);
+	int indexForValue(double x) const override;
+	bool indicesMinMax(double v1, double v2, int& start, int& end) const override;
 
 	void setChanged();
 	void setSuppressDataChangedSignal(const bool);
