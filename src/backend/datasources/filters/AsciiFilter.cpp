@@ -370,7 +370,7 @@ void AsciiFilter::setNaNValueToZero(bool b) {
 	if (b)
 		d->nanValue = 0;
 	else
-		d->nanValue = NAN;
+		d->nanValue = std::numeric_limits<double>::quiet_NaN();
 }
 bool AsciiFilter::NaNValueToZeroEnabled() const {
 	return (d->nanValue == 0);
@@ -522,13 +522,10 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 		if (!firstLineStringList.isEmpty()) {
 			int length1 = firstLineStringList.at(0).length();
-			if (firstLineStringList.size() > 1) {
-				int pos2 = firstLine.indexOf(firstLineStringList.at(1), length1);
-				m_separator = firstLine.mid(length1, pos2 - length1);
-			} else {
-				//old: separator = line.right(line.length() - length1);
+			if (firstLineStringList.size() > 1)
+				m_separator = firstLine.mid(length1, 1);
+			else
 				m_separator = ' ';
-			}
 		}
 	} else {	// use given separator
 		// replace symbolic "TAB" with '\t'
@@ -647,7 +644,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 	const int actualEndRow = (endRow == -1 || endRow > m_actualRows) ? m_actualRows : endRow;
 	if (actualEndRow > m_actualStartRow)
-		m_actualRows = actualEndRow - m_actualStartRow + 1;
+		m_actualRows = actualEndRow - m_actualStartRow;
 	else
 		m_actualRows = 0;
 
@@ -719,6 +716,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				vectorNames << i18n("Value");
 			}
 			QDEBUG("	vector names = " << vectorNames);
+			break;
 		case LiveDataSource::SourceType::MQTT:
 			break;
 		}
@@ -726,8 +724,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		// prepare import for spreadsheet
 		spreadsheet->setUndoAware(false);
 		spreadsheet->resize(AbstractFileFilter::Replace, vectorNames, m_actualCols);
-		DEBUG("	data source resized to col: " << m_actualCols);
-		DEBUG("	data source rowCount: " << spreadsheet->rowCount());
 
 		//columns in a file data source don't have any manual changes.
 		//make the available columns undo unaware and suppress the "data changed" signal.
@@ -744,8 +740,10 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			spreadsheet->setRowCount(keepNValues);
 			m_actualRows = keepNValues;
 		}
-
 		m_dataContainer.resize(m_actualCols);
+
+		DEBUG("	data source resized to col: " << m_actualCols);
+		DEBUG("	data source rowCount: " << spreadsheet->rowCount());
 
 		DEBUG("	Setting data ..");
 		for (int n = 0; n < m_actualCols; ++n) {
@@ -844,6 +842,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				//TODO: check serial port
 				case LiveDataSource::SourceType::SerialPort:
 					newData[newDataIdx++] = device.read(device.bytesAvailable());
+					break;
 				case LiveDataSource::SourceType::MQTT:
 					break;
 				}
@@ -862,6 +861,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				//TODO: check serial port
 				case LiveDataSource::SourceType::SerialPort:
 					newData.push_back(device.read(device.bytesAvailable()));
+					break;
 				case LiveDataSource::SourceType::MQTT:
 					break;
 				}
@@ -934,23 +934,22 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				linesToRead = qMin(spreadsheet->sampleSize(), newLinesTillEnd);
 			}
 		}
-		DEBUG("	actual rows = " << m_actualRows);
 
 		if (linesToRead == 0)
 			return 0;
-	} else {	// not prepared
+	} else	// not prepared
 		linesToRead = newLinesTillEnd;
-		if (headerEnabled)
-			--m_actualRows;
-	}
-	DEBUG("	lines to read = " << linesToRead);
 
-	if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe || spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkUdpSocket) {
-		if (m_actualRows < linesToRead) {
-			DEBUG("	SET lines to read to " << m_actualRows);
-			linesToRead = m_actualRows;
-		}
-	}
+	DEBUG("	lines to read = " << linesToRead);
+	DEBUG("	actual rows (w/o header) = " << m_actualRows);
+
+	//TODO
+// 	if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe || spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkUdpSocket) {
+// 		if (m_actualRows < linesToRead) {
+// 			DEBUG("	SET lines to read to " << m_actualRows);
+// 			linesToRead = m_actualRows;
+// 		}
+// 	}
 
 	//new rows/resize columns if we don't have a fixed size
 	//TODO if the user changes this value..m_resizedToFixedSize..setResizedToFixedSize
@@ -1410,7 +1409,14 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	}
 	DEBUG("	Read " << currentRow << " lines");
 
-	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, currentRow, dateTimeFormat, importMode);
+	//we might have skipped empty lines above. shrink the spreadsheet if the number of read lines (=currentRow)
+	//is smaller than the initial size of the spreadsheet (=m_actualRows).
+	//TODO: should also be relevant for Matrix
+	auto* s = dynamic_cast<Spreadsheet*>(dataSource);
+	if (s && currentRow != m_actualRows && importMode == AbstractFileFilter::Replace)
+		s->setRowCount(currentRow);
+
+	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
 }
 
 /*!

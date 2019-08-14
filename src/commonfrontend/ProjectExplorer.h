@@ -88,6 +88,7 @@ private:
 	QPushButton* bFilterOptions;
 
 private slots:
+	void projectLoaded();
 	void aspectAdded(const AbstractAspect*);
 	void toggleColumn(int);
 	void showAllColumns();

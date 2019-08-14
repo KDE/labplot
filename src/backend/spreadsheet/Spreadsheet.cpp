@@ -913,14 +913,8 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	return columnOffset;
 }
 
-void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColumn, int numRows, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
+void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
 	DEBUG("Spreadsheet::finalizeImport()");
-
-	// shrink the spreadsheet if needed
-	if (numRows > 0 && numRows != rowCount()) {
-		if (importMode == AbstractFileFilter::Replace)
-			setRowCount(numRows);
-	}
 
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();

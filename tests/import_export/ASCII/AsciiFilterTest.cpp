@@ -217,17 +217,17 @@ void AsciiFilterTest::testSparseFile03() {
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
 	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
 	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
-	QCOMPARE(spreadsheet.column(0)->integerAt(3), 3);
+	QCOMPARE(spreadsheet.column(0)->integerAt(3), 0);
 
  	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.);
-	QCOMPARE(spreadsheet.column(1)->valueAt(1), 2.);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 0.);
 	QCOMPARE(spreadsheet.column(1)->valueAt(2), 1.);
 	QCOMPARE(spreadsheet.column(1)->valueAt(3), 0.);
 
 	QCOMPARE(spreadsheet.column(2)->valueAt(0), 2.);
-	QCOMPARE(spreadsheet.column(2)->valueAt(1), 0.);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 2.);
 	QCOMPARE(spreadsheet.column(2)->valueAt(2), 0.);
-	QCOMPARE(spreadsheet.column(2)->valueAt(3), 0.);
+	QCOMPARE(spreadsheet.column(2)->valueAt(3), 3.);
 }
 
 //##############################################################################

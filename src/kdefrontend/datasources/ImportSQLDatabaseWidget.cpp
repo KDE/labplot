@@ -410,7 +410,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	} while (q.next());
 	DEBUG("	Read " << row << " rows");
 
-	dataSource->finalizeImport(columnOffset, 1, m_cols, row, dateTimeFormat, importMode);
+	dataSource->finalizeImport(columnOffset, 1, m_cols, dateTimeFormat, importMode);
 	RESET_CURSOR;
 }
 
