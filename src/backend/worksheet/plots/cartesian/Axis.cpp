@@ -733,13 +733,14 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsFormat, Axis::LabelsFormat, labelsFormat,
 void Axis::setLabelsFormat(LabelsFormat labelsFormat) {
 	Q_D(Axis);
 	if (labelsFormat != d->labelsFormat) {
-		exec(new AxisSetLabelsFormatCmd(d, labelsFormat, ki18n("%1: set labels format")));
 
 		//TODO: this part is not undo/redo-aware
-		if (d->labelsFormatAutoChanged && labelsFormat == Axis::FormatDecimal)
+		if (labelsFormat == Axis::FormatDecimal)
 			d->labelsFormatDecimalOverruled = true;
 		else
 			d->labelsFormatDecimalOverruled = false;
+
+		exec(new AxisSetLabelsFormatCmd(d, labelsFormat, ki18n("%1: set labels format")));
 	}
 }
 
