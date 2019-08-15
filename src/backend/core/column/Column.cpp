@@ -115,6 +115,7 @@ QMenu* Column::createContextMenu() {
 	//"Used in" menu containing all curves where the column is used
 	QMenu* usedInMenu = new QMenu(i18n("Used in"));
 	usedInMenu->setIcon(QIcon::fromTheme("go-next-view"));
+	usedInMenu->addSection(i18n("Curves"));
 
 	//remove previously added actions
 	for (auto* action : m_usedInActionGroup->actions())
@@ -141,6 +142,20 @@ QMenu* Column::createContextMenu() {
 			usedInMenu->addAction(action);
 		}
 	}
+
+	//add calculated columns where the column is used in formula variables
+	usedInMenu->addSection(i18n("Calculated Columns"));
+	QVector<Column*> columns = project()->children<Column>(AbstractAspect::Recursive);
+	const QString& path = this->path();
+	for (const auto* column : columns) {
+		auto paths = column->formulaVariableColumnPaths();
+		if (paths.indexOf(path) != -1) {
+			QAction* action = new QAction(column->icon(), column->name(), m_usedInActionGroup);
+			action->setData(column->path());
+			usedInMenu->addAction(action);
+		}
+	}
+
 
 	if (firstAction)
 		menu->insertSeparator(firstAction);
