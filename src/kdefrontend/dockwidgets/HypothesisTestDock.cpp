@@ -81,6 +81,8 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 	ui.pbLeveneTest->hide();
 	ui.lCategorical->hide();
 	ui.chbCategorical->hide();
+	ui.lCalculateStats->hide();
+	ui.chbCalculateStats->hide();
 	ui.lCol1->hide();
 	ui.cbCol1->hide();
 	ui.lCol2->hide();
@@ -211,6 +213,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 	connect(ui.rbH1TwoTail, &QRadioButton::toggled, this, &HypothesisTestDock::onRbH1TwoTailToggled);
 
 	connect(ui.cbCol1, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::col1IndexChanged);
+	connect(ui.chbCalculateStats, &QCheckBox::stateChanged, this, &HypothesisTestDock::chbCalculateStatsStateChanged);
 	connect(ui.chbCategorical, &QCheckBox::stateChanged, this, &HypothesisTestDock::changeCbCol2Label);
 
 	connect(ui.chbPopulationSigma, &QCheckBox::stateChanged, this, &HypothesisTestDock::chbPopulationSigmaStateChanged);
@@ -292,6 +295,10 @@ void HypothesisTestDock::showHypothesisTest() {
 	ui.lCol3->setVisible(m_test == (HypothesisTest::Anova | HypothesisTest::TwoWay));
 	ui.cbCol3->setVisible(m_test == (HypothesisTest::Anova | HypothesisTest::TwoWay));
 
+	ui.lCalculateStats->show();
+	ui.chbCalculateStats->show();
+	ui.chbCalculateStats->setChecked(true);
+
 	ui.lEqualVariance->setVisible(m_test == (HypothesisTest::TTest | HypothesisTest::TwoSampleIndependent));
 	ui.chbEqualVariance->setVisible(m_test == (HypothesisTest::TTest | HypothesisTest::TwoSampleIndependent));
 	ui.chbEqualVariance->setChecked(true);
@@ -355,7 +362,10 @@ void HypothesisTestDock::doHypothesisTest()  {
 
 	m_hypothesisTest->setColumns(cols);
 
-	m_hypothesisTest->performTest(m_test, ui.chbCategorical->isChecked(), ui.chbEqualVariance->isChecked());
+	m_hypothesisTest->performTest(m_test,
+								  ui.chbCategorical->isChecked(),
+								  ui.chbEqualVariance->isChecked(),
+								  ui.chbCalculateStats->isChecked());
 }
 
 void HypothesisTestDock::performLeveneTest()  {
@@ -565,6 +575,24 @@ void HypothesisTestDock::chbPopulationSigmaStateChanged() {
 void HypothesisTestDock::col1IndexChanged(int index) {
 	if (index < 0) return;
 	changeCbCol2Label();
+}
+
+void HypothesisTestDock::chbCalculateStatsStateChanged() {
+	if (!ui.chbCalculateStats->isChecked()) {
+		ui.lVariables->hide();
+		ui.lCol1->hide();
+		ui.cbCol1->hide();
+		ui.lCol2->hide();
+		ui.cbCol2->hide();
+		ui.lCol3->hide();
+		ui.cbCol3->hide();
+	} else {
+		ui.lVariables->show();
+		showHypothesisTest();
+	}
+
+	if (m_hypothesisTest != nullptr)
+		m_hypothesisTest->initInputStatsTable(m_test, ui.chbCalculateStats->isChecked());
 }
 
 

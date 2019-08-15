@@ -95,6 +95,7 @@ private slots:
 	void changeCbCol2Label();
 	void chbPopulationSigmaStateChanged();
 	void col1IndexChanged(int index);
+	void chbCalculateStatsStateChanged();
 
 	void onRbH1OneTail1Toggled(bool checked);
 	void onRbH1OneTail2Toggled(bool checked);

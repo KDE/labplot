@@ -77,6 +77,8 @@ CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : QWidge
 	ui.cbTestType->hide();
 	// adding item to tests and testtype combo box;
 	// making all test blocks invisible at starting.
+	ui.lStatsFromSpreadsheet->hide();
+	ui.chbStatsFromSpreadsheet->hide();
 	ui.lCategorical->hide();
 	ui.chbCategorical->hide();
 	ui.lCol1->hide();
@@ -126,13 +128,13 @@ CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : QWidge
 	connect(ui.cbTest, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CorrelationCoefficientDock::showTestType);
 	connect(ui.cbTestType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CorrelationCoefficientDock::showCorrelationCoefficient);
 	connect(ui.chbCategorical, &QCheckBox::stateChanged, this, &CorrelationCoefficientDock::changeCbCol2Label);
+	connect(ui.chbStatsFromSpreadsheet, &QCheckBox::stateChanged, this, &CorrelationCoefficientDock::chbColumnStatisticsStateChanged);
 
 	connect(ui.pbPerformTest, &QPushButton::clicked, this, &CorrelationCoefficientDock::findCorrelationCoefficient);
 	connect(ui.cbCol1, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CorrelationCoefficientDock::col1IndexChanged);
 
 	ui.cbTest->setCurrentIndex(0);
 	emit ui.cbTest->currentIndexChanged(0);
-
 	ui.cbTestType->setCurrentIndex(0);
 	emit ui.cbTestType->currentIndexChanged(0);
 }
@@ -180,6 +182,7 @@ void CorrelationCoefficientDock::showTestType() {
 
 	m_test = ui.cbTest->currentData().toInt();
 
+	ui.cbTestType->clear();
 	switch (m_test) {
 	case CorrelationCoefficient::ChiSquare:
 		ui.lTestType->show();
@@ -205,6 +208,10 @@ void CorrelationCoefficientDock::showCorrelationCoefficient() {
 
 	ui.lCol2->show();
 	ui.cbCol2->show();
+
+	ui.lStatsFromSpreadsheet->setVisible(testType(m_test) == CorrelationCoefficient::ChiSquare);
+	ui.chbStatsFromSpreadsheet->setVisible(testType(m_test) == CorrelationCoefficient::ChiSquare);
+	ui.chbStatsFromSpreadsheet->setChecked(true);
 
 	ui.lCategorical->setVisible(testType(m_test) == CorrelationCoefficient::Pearson);
 	ui.chbCategorical->setVisible(testType(m_test) == CorrelationCoefficient::Pearson);
@@ -413,6 +420,16 @@ void CorrelationCoefficientDock::changeCbCol2Label() {
 			ui.chbCategorical->setEnabled(true);
 		ui.chbCategorical->setChecked(true);
 	}
+}
+
+void CorrelationCoefficientDock::chbColumnStatisticsStateChanged() {
+	bool chbChecked = ui.chbStatsFromSpreadsheet->isChecked();
+
+	ui.lVariables->setVisible(chbChecked);
+	ui.lCol1->setVisible(chbChecked);
+	ui.cbCol1->setVisible(chbChecked);
+	ui.lCol2->setVisible(chbChecked);
+	ui.cbCol2->setVisible(chbChecked);
 }
 
 ////*************************************************************

@@ -41,6 +41,7 @@
 #include <QWidget>
 #include <QtMath>
 #include <QQueue>
+#include <QTableView>
 
 #include <KLocalizedString>
 
@@ -58,11 +59,13 @@ CorrelationCoefficient::CorrelationCoefficient(const QString& name) : GeneralTes
 CorrelationCoefficient::~CorrelationCoefficient() {
 }
 
-void CorrelationCoefficient::performTest(int test, bool categoricalVariable) {
+void CorrelationCoefficient::performTest(int test, bool categoricalVariable, bool calculateStats) {
 	m_statsTable = "";
 	m_correlationValue = 0;
 	m_statisticValue.clear();
 	m_pValue.clear();
+	m_inputStatsTableModel->clear();
+
 	for (int i = 0; i < RESULTLINESCOUNT; i++)
 		m_resultLine[i]->clear();
 
@@ -84,6 +87,7 @@ void CorrelationCoefficient::performTest(int test, bool categoricalVariable) {
 	case CorrelationCoefficient::ChiSquare:
 		switch (testSubtype(test)) {
 		case CorrelationCoefficient::IndependenceTest:
+			performChiSquareIndpendence(calculateStats);
 			break;
 		}
 		break;
@@ -335,7 +339,8 @@ void CorrelationCoefficient::performSpearman() {
 
 /***********************************************Chi Square Test for Indpendence******************************************************************/
 
-void CorrelationCoefficient::chiSquareIndpendence() {
+void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
+	Q_UNUSED(calculateStats);
 }
 
 /***********************************************Helper Functions******************************************************************/

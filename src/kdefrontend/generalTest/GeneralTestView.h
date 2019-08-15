@@ -42,6 +42,7 @@ class QPrinter;
 class QToolBar;
 class QLabel;
 class MyTextEdit;
+class QTableView;
 
 #define RESULTLINESCOUNT 10
 
@@ -73,6 +74,8 @@ protected:
 	QWidget* m_summaryResults{nullptr};
 	QLabel* m_resultLine[RESULTLINESCOUNT];
 
+	QTableView* m_inputStatsTable;
+	QLabel* m_labelInputStatsTable;
 public slots:
 	void createContextMenu(QMenu*);
 	void fillToolBar(QToolBar*);

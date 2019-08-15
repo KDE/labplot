@@ -32,14 +32,9 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 
-//#include <QVector>
-//#include <QStandardItemModel>
-//#include <QLocale>
 #include <QLabel>
 #include <QVBoxLayout>
-//#include <QWidget>
-//#include <QtMath>
-//#include <QQueue>
+#include <QStandardItemModel>
 
 #include <KLocalizedString>
 
@@ -51,9 +46,9 @@ extern "C" {
 
 
 GeneralTest::GeneralTest(const QString& name, const AspectType& type) : AbstractPart(name, type),
-	m_summaryLayout(new QVBoxLayout()) {
+	m_summaryLayout(new QVBoxLayout()),
+	m_inputStatsTableModel(new QStandardItemModel) {
 
-	m_currTestName = i18n("Result Table");
 	for (int i = 0; i < RESULTLINESCOUNT; i++) {
 		m_resultLine[i] = new QLabel();
 		m_summaryLayout->addWidget(m_resultLine[i]);
@@ -88,6 +83,10 @@ QString GeneralTest::statsTable() {
 
 QVBoxLayout* GeneralTest::summaryLayout() {
 	return m_summaryLayout;
+}
+
+QAbstractItemModel* GeneralTest::inputStatsTableModel() {
+	return m_inputStatsTableModel;
 }
 
 

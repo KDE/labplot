@@ -32,14 +32,11 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 
-#include <QVector>
 #include <QStandardItemModel>
-#include <QLocale>
 #include <QLabel>
+#include <QTableView>
 #include <QVBoxLayout>
-#include <QWidget>
-#include <QtMath>
-#include <QQueue>
+#include <QCheckBox>
 
 #include <KLocalizedString>
 
@@ -68,7 +65,7 @@ void HypothesisTest::setTail(HypothesisTailType tail) {
 	m_tail = tail;
 }
 
-void HypothesisTest::performTest(int test, bool categoricalVariable, bool equalVariance) {
+void HypothesisTest::performTest(int test, bool categoricalVariable, bool equalVariance, bool calculateStats) {
 	m_pValue.clear();
 	m_statisticValue.clear();
 	m_statsTable = "";
@@ -77,10 +74,13 @@ void HypothesisTest::performTest(int test, bool categoricalVariable, bool equalV
 		m_resultLine[i]->setToolTip(QString());
 	}
 
+	if (calculateStats)
+		m_inputStatsTableModel->clear();
+
 	switch (testSubtype(test)) {
 	case TwoSampleIndependent: {
 		m_currTestName = "<h2>" + i18n("Two Sample Independent Test") + "</h2>";
-		performTwoSampleIndependentTest(testType(test), categoricalVariable, equalVariance);
+		performTwoSampleIndependentTest(testType(test), categoricalVariable, equalVariance, calculateStats);
 		break;
 	}
 	case TwoSamplePaired:
@@ -121,6 +121,29 @@ void HypothesisTest::performLeveneTest(bool categoricalVariable) {
 	emit changed();
 }
 
+void HypothesisTest::initInputStatsTable(int test, bool calculateStats) {
+	m_inputStatsTableModel->clear();
+
+	if (!calculateStats) {
+		switch (testSubtype(test)) {
+		case TwoSampleIndependent: {
+			m_inputStatsTableModel->setRowCount(2);
+			m_inputStatsTableModel->setColumnCount(4);
+			m_inputStatsTableModel->setHorizontalHeaderLabels(
+			{i18n("N"), i18n("Sum"), i18n("Mean"), i18n("Standard Deviation")});
+			break;
+		}
+		case TwoSamplePaired:
+		case OneSample:
+		case OneWay:
+		case TwoWay:
+			break;
+		}
+	}
+
+	emit changed();
+}
+
 QList<double>& HypothesisTest::statisticValue() {
 	return m_statisticValue;
 }
@@ -135,70 +158,91 @@ QList<double>& HypothesisTest::pValue() {
 //TODO: backend of z test;
 //TODO: use https://www.gnu.org/software/gsl/doc/html/statistics.html for basic statistic calculations
 
-
 /**************************Two Sample Independent *************************************/
-
-void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalVariable, bool equalVariance) {
-	if (m_columns.size() != 2) {
-		printError("Inappropriate number of m_columns selected");
-		return;
-	}
-
+// program is crashing on some input.
+void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalVariable, bool equalVariance, bool calculateStats) {
 	int n[2];
 	double sum[2], mean[2], std[2];
+	QString col1Name;
+	QString col2Name;
 
-	QString col1Name = m_columns[0]->name();
-	QString col2Name = m_columns[1]->name();
+	if (!calculateStats) {
+		QString textValue;
+		QDEBUG("m_inputStatsTable row and column count " << m_inputStatsTableModel->rowCount() << m_inputStatsTableModel->columnCount());
 
-	if (!categoricalVariable && m_columns[0]->isNumeric()) {
 		for (int i = 0; i < 2; i++) {
-			findStats(m_columns[i], n[i], sum[i], mean[i], std[i]);
-			if (n[i] == 0) {
-				printError("At least two values should be there in every column");
-				return;
-			}
-			if (std[i] == 0.0) {
-				printError(i18n("Standard Deviation of at least one column is equal to 0: last column is: %1", m_columns[i]->name()));
-				return;
-			}
+			n[i] = m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 0)).toInt();
+			sum[i] = m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 1)).toDouble();
+			mean[i] = m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 2)).toDouble();
+			std[i] = m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 3)).toDouble();
+
+			if (sum[i] == 0.0)
+				sum[i] = mean[i] * n[i];
+			if (mean[i] == 0.0 && n[i] > 0)
+				mean[i] = sum[i] / n[i];
+
+			col1Name = "1";
+			col2Name = "2";
 		}
 	} else {
-		QMap<QString, int> colName;
-		QString baseColName;
-		int np;
-		int totalRows;
-
-		countPartitions(m_columns[0], np, totalRows);
-		if (np != 2) {
-			printError( i18n("Number of Categorical Variable in Column %1 is not equal to 2", m_columns[0]->name()));
+		if (m_columns.size() != 2) {
+			printError("Inappropriate number of m_columns selected");
 			return;
 		}
 
-		if (m_columns[0]->isNumeric())
-			baseColName = m_columns[0]->name();
+		col1Name = m_columns[0]->name();
+		col2Name = m_columns[1]->name();
 
-		GeneralErrorType errorCode = findStatsCategorical(m_columns[0], m_columns[1], n, sum, mean, std, colName, np, totalRows);
+		if (!categoricalVariable && m_columns[0]->isNumeric()) {
+			for (int i = 0; i < 2; i++) {
+				findStats(m_columns[i], n[i], sum[i], mean[i], std[i]);
+				if (n[i] == 0) {
+					printError("At least two values should be there in every column");
+					return;
+				}
+				if (std[i] == 0.0) {
+					printError(i18n("Standard Deviation of at least one column is equal to 0: last column is: %1", m_columns[i]->name()));
+					return;
+				}
+			}
+		} else {
+			QMap<QString, int> colName;
+			QString baseColName;
+			int np;
+			int totalRows;
 
-		switch (errorCode) {
-		case ErrorUnqualSize: {
-			printError( i18n("Unequal size between Column %1 and Column %2", m_columns[0]->name(), m_columns[1]->name()));
-			return;
-		}
-		case ErrorEmptyColumn: {
-			printError("At least one of selected column is empty");
-			return;
-		}
-		case NoError:
-			break;
-		}
+			countPartitions(m_columns[0], np, totalRows);
+			if (np != 2) {
+				printError( i18n("Number of Categorical Variable in Column %1 is not equal to 2", m_columns[0]->name()));
+				return;
+			}
 
-		QMapIterator<QString, int> iter(colName);
-		while (iter.hasNext()) {
-			iter.next();
-			if (iter.value() == 1)
-				col1Name = baseColName + " " + iter.key();
-			else
-				col2Name = baseColName + " " + iter.key();
+			if (m_columns[0]->isNumeric())
+				baseColName = m_columns[0]->name();
+
+			GeneralErrorType errorCode = findStatsCategorical(m_columns[0], m_columns[1], n, sum, mean, std, colName, np, totalRows);
+
+			switch (errorCode) {
+			case ErrorUnqualSize: {
+				printError( i18n("Unequal size between Column %1 and Column %2", m_columns[0]->name(), m_columns[1]->name()));
+				return;
+			}
+			case ErrorEmptyColumn: {
+				printError("At least one of selected column is empty");
+				return;
+			}
+			case NoError:
+				break;
+			}
+
+			QMapIterator<QString, int> iter(colName);
+			while (iter.hasNext()) {
+				iter.next();
+				if (iter.value() == 1)
+					col1Name = baseColName + " " + iter.key();
+				else
+					col2Name = baseColName + " " + iter.key();
+			}
 		}
 	}
 
@@ -211,7 +255,10 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 
 	for (int i = 0; i < 2; i++) {
 		if (n[i] == 0) {
-			printError("At least two values should be there in every column");
+			if (calculateStats)
+				printError("At least two values should be there in every column");
+			else
+				printError("In Statistic Table you filled above, value of N for every row should be > 0");
 			return;
 		}
 		if (std[i] == 0.0) {
@@ -250,6 +297,9 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 			printLine(9, "<b>Assumption:</b> UnEqual Variance b/w both population means");
 		}
 
+		printLine(6, i18n("Degree of Freedom is %1", df), "green");
+		printTooltip(6, i18n("Number of independent Pieces of information that went into calculating the estimate"));
+
 		printLine(8, "<b>Assumption:</b> Both Populations approximately follow normal distribution");
 		break;
 	}
@@ -272,11 +322,8 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 	printTooltip(4, i18n("More is the |%1-value|, more safely we can reject the null hypothesis", testName));
 
 	printLine(5, i18n("P Value is %1 ", m_pValue[0]), "green");
-
-	printLine(6, i18n("Degree of Freedom is %1", df), "green");
-	printTooltip(6, i18n("Number of independent Pieces of information that went into calculating the estimate"));
-
 	printTooltip(5, getPValueTooltip(m_pValue[0]));
+
 	return;
 }
 

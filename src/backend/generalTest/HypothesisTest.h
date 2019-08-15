@@ -56,8 +56,9 @@ public:
 	void setSignificanceLevel(QVariant alpha);
 	void setTail(HypothesisTailType tail);
 
-	void performTest(int test, bool categoricalVariable = true, bool equalVariance = true);
+	void performTest(int test, bool categoricalVariable = true, bool equalVariance = true, bool calculateStats = true);
 	void performLeveneTest(bool categoricalVariable);
+	void initInputStatsTable(int test, bool calculateStats);
 
 	QList<double>& statisticValue();
 	QList<double>& pValue();
@@ -66,7 +67,7 @@ public:
 	double myTest;
 
 private:
-	void performTwoSampleIndependentTest(int test, bool categoricalVariable = false, bool equalVariance = true);
+	void performTwoSampleIndependentTest(int test, bool categoricalVariable = false, bool equalVariance = true, bool calculateStats = true);
 	void performTwoSamplePairedTest(int test);
 	void performOneSampleTest(int test);
 	void performOneWayAnova();

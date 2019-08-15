@@ -56,13 +56,13 @@ public:
 
 	QWidget* view() const override;
 
-	void performTest(int test, bool categoricalVariable = false);
+	void performTest(int test, bool categoricalVariable = false, bool calculateStats = true);
 private:
 	void performPearson(bool categoricalVariable);
 	void performKendall();
 	void performSpearman();
 
-	void chiSquareIndpendence();
+	void performChiSquareIndpendence(bool calculateStats);
 
 	int findDiscordants(int* ranks, int start, int end);
 
