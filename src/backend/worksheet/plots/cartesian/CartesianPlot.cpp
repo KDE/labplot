@@ -409,22 +409,17 @@ void CartesianPlot::initActions() {
 	addHistogramAction = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), this);
 	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical Equation"), this);
 // no icons yet
-	addDataReductionCurveAction = new QAction(i18n("xy-curve from a Data Reduction"), this);
-	addDifferentiationCurveAction = new QAction(i18n("xy-curve from a Differentiation"), this);
-	addIntegrationCurveAction = new QAction(i18n("xy-curve from an Integration"), this);
-	addInterpolationCurveAction = new QAction(i18n("xy-curve from an Interpolation"), this);
-	addSmoothCurveAction = new QAction(i18n("xy-curve from a Smooth"), this);
-	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a Fit to Data"), this);
-	addFourierFilterCurveAction = new QAction(i18n("xy-curve from a Fourier Filter"), this);
-	addFourierTransformCurveAction = new QAction(i18n("xy-curve from a Fourier Transform"), this);
-	addConvolutionCurveAction = new QAction(i18n("xy-curve from a (De-)Convolution"), this);
-	addCorrelationCurveAction = new QAction(i18n("xy-curve from a Auto-/Cross-Correlation"), this);
-//	addInterpolationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), this);
-//	addSmoothCurveAction = new QAction(QIcon::fromTheme("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), this);
-//	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
-//	addFourierTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_transform-curve"), i18n("xy-curve from a Fourier transform"), this);
-//	addConvolutionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-convolution-curve"), i18n("xy-curve from a (de-)convolution"), this);
-//	addCorrelationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-correlation-curve"), i18n("xy-curve from a auto-/cross-correlation"), this);
+	addDataReductionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Data Reduction"), this);
+	addDifferentiationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Differentiation"), this);
+	addIntegrationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Integration"), this);
+	addInterpolationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("Interpolation"), this);
+	addSmoothCurveAction = new QAction(QIcon::fromTheme("labplot-xy-smoothing-curve"), i18n("Smooth"), this);
+	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit"), this);
+	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier Filter"), this);
+	addFourierTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-transform-curve"), i18n("Fourier Transform"), this);
+	addConvolutionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"),i18n("(De-)Convolution"), this);
+	addCorrelationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"),i18n("Auto-/Cross-Correlation"), this);
+
 	addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("Legend"), this);
 	if (children<CartesianPlotLegend>().size()>0)
 		addLegendAction->setEnabled(false);	//only one legend is allowed -> disable the action
@@ -455,14 +450,14 @@ void CartesianPlot::initActions() {
 	connect(addCustomPointAction, &QAction::triggered, this, &CartesianPlot::addCustomPoint);
 
 	//Analysis menu actions
-	addDataOperationAction = new QAction(i18n("Data Operation"), this);
-	addDataReductionAction = new QAction(i18n("Reduce Data"), this);
-	addDifferentiationAction = new QAction(i18n("Differentiate"), this);
-	addIntegrationAction = new QAction(i18n("Integrate"), this);
-	addInterpolationAction = new QAction(i18n("Interpolate"), this);
-	addSmoothAction = new QAction(i18n("Smooth"), this);
-	addConvolutionAction = new QAction(i18n("Convolute/Deconvolute"), this);
-	addCorrelationAction = new QAction(i18n("Auto-/Cross-Correlation"), this);
+// 	addDataOperationAction = new QAction(i18n("Data Operation"), this);
+	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Data Reduction"), this);
+	addDifferentiationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Differentiate"), this);
+	addIntegrationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Integrate"), this);
+	addInterpolationAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("Interpolate"), this);
+	addSmoothAction = new QAction(QIcon::fromTheme("labplot-xy-smoothing-curve"), i18n("Smooth"), this);
+	addConvolutionAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Convolute/Deconvolute"), this);
+	addCorrelationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Auto-/Cross-Correlation"), this);
 
 	QAction* fitAction = new QAction(i18n("Linear"), this);
 	fitAction->setData(PlotDataDialog::FitLinear);
@@ -508,7 +503,8 @@ void CartesianPlot::initActions() {
 	fitAction->setData(PlotDataDialog::FitCustom);
 	addFitAction.append(fitAction);
 
-	addFourierFilterAction = new QAction(i18n("Fourier Filter"), this);
+	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier Filter"), this);
+	addFourierTransformAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-transform-curve"), i18n("Fourier Transform"), this);
 
 	connect(addDataReductionAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
 	connect(addDifferentiationAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
@@ -520,6 +516,7 @@ void CartesianPlot::initActions() {
 	for (const auto& action : addFitAction)
 		connect(action, &QAction::triggered, this, &CartesianPlot::addFitCurve);
 	connect(addFourierFilterAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
+	connect(addFourierTransformAction, &QAction::triggered, this, &CartesianPlot::addFourierTransformCurve);
 
 	//zoom/navigate actions
 	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("Auto Scale"), this);
@@ -567,16 +564,25 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addHistogramAction);
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addSeparator();
-	addNewMenu->addAction(addDataReductionCurveAction);
-	addNewMenu->addAction(addDifferentiationCurveAction);
-	addNewMenu->addAction(addIntegrationCurveAction);
-	addNewMenu->addAction(addInterpolationCurveAction);
-	addNewMenu->addAction(addSmoothCurveAction);
-	addNewMenu->addAction(addFitCurveAction);
-	addNewMenu->addAction(addFourierFilterCurveAction);
-	addNewMenu->addAction(addFourierTransformCurveAction);
-	addNewMenu->addAction(addConvolutionCurveAction);
-	addNewMenu->addAction(addCorrelationCurveAction);
+
+	addNewAnalysisMenu = new QMenu(i18n("Analysis Curve"));
+	addNewAnalysisMenu->addAction(addFitCurveAction);
+	addNewAnalysisMenu->addSeparator();
+	addNewAnalysisMenu->addAction(addDifferentiationCurveAction);
+	addNewAnalysisMenu->addAction(addIntegrationCurveAction);
+	addNewAnalysisMenu->addSeparator();
+	addNewAnalysisMenu->addAction(addInterpolationCurveAction);
+	addNewAnalysisMenu->addAction(addSmoothCurveAction);
+	addNewAnalysisMenu->addSeparator();
+	addNewAnalysisMenu->addAction(addFourierFilterCurveAction);
+	addNewAnalysisMenu->addAction(addFourierTransformCurveAction);
+	addNewAnalysisMenu->addSeparator();
+	addNewAnalysisMenu->addAction(addConvolutionCurveAction);
+	addNewAnalysisMenu->addAction(addCorrelationCurveAction);
+	addNewAnalysisMenu->addSeparator();
+	addNewAnalysisMenu->addAction(addDataReductionCurveAction);
+	addNewMenu->addMenu(addNewAnalysisMenu);
+
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addLegendAction);
 	addNewMenu->addSeparator();
@@ -609,10 +615,10 @@ void CartesianPlot::initMenus() {
 	zoomMenu->addAction(shiftDownYAction);
 
 	// Data manipulation menu
-	QMenu* dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
-	dataManipulationMenu->setIcon(QIcon::fromTheme("zoom-draw"));
-	dataManipulationMenu->addAction(addDataOperationAction);
-	dataManipulationMenu->addAction(addDataReductionAction);
+// 	QMenu* dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
+// 	dataManipulationMenu->setIcon(QIcon::fromTheme("zoom-draw"));
+// 	dataManipulationMenu->addAction(addDataOperationAction);
+// 	dataManipulationMenu->addAction(addDataReductionAction);
 
 	// Data fit menu
 	QMenu* dataFitMenu = new QMenu(i18n("Fit"));
@@ -634,18 +640,22 @@ void CartesianPlot::initMenus() {
 
 	//analysis menu
 	dataAnalysisMenu = new QMenu(i18n("Analysis"));
-	dataAnalysisMenu->insertMenu(nullptr, dataManipulationMenu);
+	dataAnalysisMenu->addMenu(dataFitMenu);
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addDifferentiationAction);
 	dataAnalysisMenu->addAction(addIntegrationAction);
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addInterpolationAction);
 	dataAnalysisMenu->addAction(addSmoothAction);
+	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addFourierFilterAction);
+	dataAnalysisMenu->addAction(addFourierTransformAction);
+	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addConvolutionAction);
 	dataAnalysisMenu->addAction(addCorrelationAction);
 	dataAnalysisMenu->addSeparator();
-	dataAnalysisMenu->addMenu(dataFitMenu);
+// 	dataAnalysisMenu->insertMenu(nullptr, dataManipulationMenu);
+	dataAnalysisMenu->addAction(addDataReductionAction);
 
 	//themes menu
 	themeMenu = new QMenu(i18n("Apply Theme"));

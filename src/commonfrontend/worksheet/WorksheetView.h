@@ -134,6 +134,7 @@ private:
 	QMenu* m_cartesianPlotMenu{nullptr};
 	QMenu* m_cartesianPlotMouseModeMenu{nullptr};
 	QMenu* m_cartesianPlotAddNewMenu{nullptr};
+	QMenu* m_cartesianPlotAddNewAnalysisMenu{nullptr};
 	QMenu* m_cartesianPlotZoomMenu{nullptr};
 	QMenu* m_cartesianPlotActionModeMenu{nullptr};
 	QMenu* m_cartesianPlotCursorModeMenu{nullptr};

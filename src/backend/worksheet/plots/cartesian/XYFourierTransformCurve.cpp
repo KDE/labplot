@@ -73,7 +73,7 @@ void XYFourierTransformCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYFourierTransformCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-fourier_transform-curve");
+	return QIcon::fromTheme("labplot-xy-fourier-transform-curve");
 }
 
 //##############################################################################
