@@ -433,6 +433,9 @@ void ProjectExplorer::navigateTo(const QString& path) {
 }
 
 void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous) {
+	if (m_project->isLoading())
+		return;
+
 	Q_UNUSED(previous);
 	emit currentAspectChanged(static_cast<AbstractAspect*>(current.internalPointer()));
 }

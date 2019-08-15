@@ -220,10 +220,12 @@ private:
 	QAction* addSmoothAction;
 	QVector <QAction *> addFitAction;
 	QAction* addFourierFilterAction;
+	QAction* addFourierTransformAction;
 	QAction* addConvolutionAction;
 	QAction* addCorrelationAction;
 
 	QMenu* addNewMenu{nullptr};
+	QMenu* addNewAnalysisMenu{nullptr};
 	QMenu* zoomMenu{nullptr};
 	QMenu* dataAnalysisMenu{nullptr};
 	QMenu* themeMenu{nullptr};
@@ -250,6 +252,7 @@ public slots:
 	void addLegend();
 	void addTextLabel();
 	void addCustomPoint();
+	void scaleAutoTriggered();
 	bool scaleAuto();
 	bool scaleAutoX();
 	bool scaleAutoY();

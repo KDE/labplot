@@ -66,14 +66,8 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
-	static int calculateMaxSteps(unsigned int value);
 	double y(double x, bool &valueFound) const;
 	QDateTime yDateTime(double x, bool &valueFound) const;
-	int indexForX(double x) const;
-	int indexForX(double x, const AbstractColumn *column) const;
-	int indexForX(double x, QVector<double>& column, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
-	int indexForX(const double x, const QVector<QPointF> &column, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
-	int indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
 	bool minMax(const AbstractColumn *column, const ErrorType errorType, const AbstractColumn *errorPlusColumn, const AbstractColumn *errorMinusColumn, int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars) const;
 	bool minMaxX(int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars = true) const;
 	bool minMaxY(int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars = true) const;

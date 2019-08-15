@@ -115,6 +115,7 @@ QMenu* Column::createContextMenu() {
 	//"Used in" menu containing all curves where the column is used
 	QMenu* usedInMenu = new QMenu(i18n("Used in"));
 	usedInMenu->setIcon(QIcon::fromTheme("go-next-view"));
+	usedInMenu->addSection(i18n("Curves"));
 
 	//remove previously added actions
 	for (auto* action : m_usedInActionGroup->actions())
@@ -141,6 +142,20 @@ QMenu* Column::createContextMenu() {
 			usedInMenu->addAction(action);
 		}
 	}
+
+	//add calculated columns where the column is used in formula variables
+	usedInMenu->addSection(i18n("Calculated Columns"));
+	QVector<Column*> columns = project()->children<Column>(AbstractAspect::Recursive);
+	const QString& path = this->path();
+	for (const auto* column : columns) {
+		auto paths = column->formulaVariableColumnPaths();
+		if (paths.indexOf(path) != -1) {
+			QAction* action = new QAction(column->icon(), column->name(), m_usedInActionGroup);
+			action->setData(column->path());
+			usedInMenu->addAction(action);
+		}
+	}
+
 
 	if (firstAction)
 		menu->insertSeparator(firstAction);
@@ -1264,46 +1279,71 @@ double Column::minimum(int startIndex, int endIndex) const {
 	startIndex = qMin(startIndex, rowCount() - 1);
 	endIndex = qMin(endIndex, rowCount() - 1);
 
+	int foundIndex = 0;
+
 	ColumnMode mode = columnMode();
+	Properties property = properties();
+	if (property == Properties::No) {
+		switch (mode) {
+		case Numeric: {
+			auto* vec = static_cast<QVector<double>*>(data());
+			for (int row = startIndex; row < endIndex; ++row) {
+				const double val = vec->at(row);
+				if (std::isnan(val))
+					continue;
+
+				if (val < min)
+					min = val;
+			}
+			break;
+		}
+		case Integer: {
+			auto* vec = static_cast<QVector<int>*>(data());
+			for (int row = startIndex; row < endIndex; ++row) {
+				const int val = vec->at(row);
+
+				if (val < min)
+					min = val;
+			}
+			break;
+		}
+		case Text:
+			break;
+		case DateTime: {
+			auto* vec = static_cast<QVector<QDateTime>*>(data());
+			for (int row = startIndex; row < endIndex; ++row) {
+				const qint64 val = vec->at(row).toMSecsSinceEpoch();
+
+				if (val < min)
+					min = val;
+			}
+			break;
+		}
+		case Day:
+		case Month:
+		default:
+			break;
+		}
+		return min;
+	}
+
+	// use the properties knowledge to determine maximum faster
+	if (property == Properties::Constant || property == Properties::MonotonicIncreasing)
+		foundIndex = 0;
+	else if (property == Properties::MonotonicDecreasing)
+		foundIndex = endIndex;
+
 	switch (mode) {
-	case Numeric: {
-		auto* vec = static_cast<QVector<double>*>(data());
-		for (int row = startIndex; row < endIndex; ++row) {
-			const double val = vec->at(row);
-			if (std::isnan(val))
-				continue;
-
-			if (val < min)
-				min = val;
-		}
-		break;
-	}
-	case Integer: {
-		auto* vec = static_cast<QVector<int>*>(data());
-		for (int row = startIndex; row < endIndex; ++row) {
-			const int val = vec->at(row);
-
-			if (val < min)
-				min = val;
-		}
-		break;
-	}
-	case Text:
-		break;
-	case DateTime: {
-		auto* vec = static_cast<QVector<QDateTime>*>(data());
-		for (int row = startIndex; row < endIndex; ++row) {
-			const qint64 val = vec->at(row).toMSecsSinceEpoch();
-
-			if (val < min)
-				min = val;
-		}
-		break;
-	}
-	case Day:
-	case Month:
-	default:
-		break;
+		case Numeric:
+		case Integer:
+			return valueAt(foundIndex);
+		case DateTime:
+		case Month:
+		case Day:
+			return dateTimeAt(foundIndex).toMSecsSinceEpoch();
+		case Text:
+		default:
+			break;
 	}
 
 	return min;
@@ -1351,8 +1391,6 @@ double Column::maximum(int startIndex, int endIndex) const {
 	if (rowCount() == 0)
 		return max;
 
-	ColumnMode mode = columnMode();
-
 	if (startIndex > endIndex && startIndex >= 0 && endIndex >= 0)
 		std::swap(startIndex, endIndex);
 
@@ -1361,47 +1399,538 @@ double Column::maximum(int startIndex, int endIndex) const {
 
 	startIndex = qMin(startIndex, rowCount() - 1);
 	endIndex = qMin(endIndex, rowCount() - 1);
+	int foundIndex = 0;
+
+	ColumnMode mode = columnMode();
+	Properties property = properties();
+	if (property == Properties::No) {
+		switch (mode) {
+		case Numeric: {
+			auto* vec = static_cast<QVector<double>*>(data());
+			for (int row = startIndex; row < endIndex; ++row) {
+				const double val = vec->at(row);
+				if (std::isnan(val))
+					continue;
+
+				if (val > max)
+					max = val;
+			}
+			break;
+		}
+		case Integer: {
+			auto* vec = static_cast<QVector<int>*>(data());
+			for (int row = startIndex; row < endIndex; ++row) {
+				const int val = vec->at(row);
+
+				if (val > max)
+					max = val;
+			}
+			break;
+		}
+		case Text:
+			break;
+		case DateTime: {
+			auto* vec = static_cast<QVector<QDateTime>*>(data());
+			for (int row = startIndex; row < endIndex; ++row) {
+				const qint64 val = vec->at(row).toMSecsSinceEpoch();
+
+				if (val > max)
+					max = val;
+			}
+			break;
+		}
+		case Day:
+		case Month:
+		default:
+			break;
+		}
+		return max;
+	}
+
+	// use the properties knowledge to determine maximum faster
+	if (property == Properties::Constant || property == Properties::MonotonicDecreasing)
+		foundIndex = 0;
+	else if (property == Properties::MonotonicIncreasing)
+		foundIndex = endIndex;
 
 	switch (mode) {
-	case Numeric: {
-		auto* vec = static_cast<QVector<double>*>(data());
-		for (int row = startIndex; row < endIndex; ++row) {
-			const double val = vec->at(row);
-			if (std::isnan(val))
-				continue;
-
-			if (val > max)
-				max = val;
-		}
-		break;
+		case Numeric:
+		case Integer:
+			return valueAt(foundIndex);
+		case DateTime:
+		case Month:
+		case Day:
+			return dateTimeAt(foundIndex).toMSecsSinceEpoch();
+		case Text:
+		default:
+			break;
 	}
-	case Integer: {
-		auto* vec = static_cast<QVector<int>*>(data());
-		for (int row = startIndex; row < endIndex; ++row) {
-			const int val = vec->at(row);
-
-			if (val > max)
-				max = val;
-		}
-		break;
-	}
-	case Text:
-		break;
-	case DateTime: {
-		auto* vec = static_cast<QVector<QDateTime>*>(data());
-		for (int row = startIndex; row < endIndex; ++row) {
-			const qint64 val = vec->at(row).toMSecsSinceEpoch();
-
-			if (val > max)
-				max = val;
-		}
-		break;
-	}
-	case Day:
-	case Month:
-	default:
-		break;
-	}
-
 	return max;
+}
+
+/*!
+ * calculates log2(x)+1 for an integer value.
+ * Used in y(double x) to calculate the maximum steps
+ * source: https://stackoverflow.com/questions/11376288/fast-computing-of-log2-for-64-bit-integers
+ * source: http://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
+ * @param value
+ * @return returns calculated value
+ */
+// TODO: testing if it is faster than calculating log2.
+int Column::calculateMaxSteps (unsigned int value) {
+	const signed char LogTable256[256] = {
+		-1,0,1,1,2,2,2,2,3,3,3,3,3,3,3,3,
+		4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
+		5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
+		5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
+		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7
+	};
+
+	unsigned int r;     // r will be lg(v)
+	unsigned int t, tt; // temporaries
+	if ((tt = value >> 16))
+		r = (t = tt >> 8) ? 24 + LogTable256[t] : 16 + LogTable256[tt];
+	else
+		r = (t = value >> 8) ? 8 + LogTable256[t] : LogTable256[value];
+
+	return r+1;
+}
+
+/*!
+* Find index which corresponds to a @p x . In a vector of values
+* When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+* @param x
+* @return -1 if index not found, otherwise the index
+*/
+int Column::indexForValue(double x, QVector<double>& column, Properties properties) {
+	int rowCount = column.count();
+	if (rowCount == 0)
+		return -1;
+
+	double prevValue = 0;
+	//qint64 prevValueDateTime = 0;
+	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
+			properties == AbstractColumn::Properties::MonotonicDecreasing) {
+		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
+		bool increase = true;
+		if(properties == AbstractColumn::Properties::MonotonicDecreasing)
+			increase = false;
+
+		int lowerIndex = 0;
+		int higherIndex = rowCount-1;
+
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount))+1;
+
+		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
+			double value = column[index];
+
+			if (higherIndex - lowerIndex < 2) {
+				if (qAbs(column[lowerIndex] - x) < qAbs(column[higherIndex] - x))
+					index = lowerIndex;
+				else
+					index = higherIndex;
+
+				return index;
+			}
+
+			if (value > x && increase)
+				higherIndex = index;
+			else if (value >= x && !increase)
+				lowerIndex = index;
+			else if (value <= x && increase)
+				lowerIndex = index;
+			else if (value < x && !increase)
+				higherIndex = index;
+
+		}
+
+	} else if (properties == AbstractColumn::Properties::Constant) {
+		return 0;
+	} else {
+		// AbstractColumn::Properties::No
+		// naiv way
+		int index = 0;
+		prevValue = column[0];
+		for (int row = 0; row < rowCount; row++) {
+
+			double value = column[row];
+			if (qAbs(value - x) <= qAbs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+					prevValue = value;
+					index = row;
+			}
+		}
+		return index;
+	}
+	return -1;
+}
+
+/*!
+* Find index which corresponds to a @p x . In a vector of values
+* When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+* @param x
+* @return -1 if index not found, otherwise the index
+*/
+int Column::indexForValue(const double x, const QVector<QPointF>& points, Properties properties) {
+	int rowCount = points.count();
+
+	if (rowCount == 0)
+		return -1;
+
+	double prevValue = 0;
+	//qint64 prevValueDateTime = 0;
+	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
+			properties == AbstractColumn::Properties::MonotonicDecreasing) {
+		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
+		bool increase = true;
+		if(properties == AbstractColumn::Properties::MonotonicDecreasing)
+			increase = false;
+
+		int lowerIndex = 0;
+		int higherIndex = rowCount - 1;
+
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount))+1;
+
+		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
+			double value = points[index].x();
+
+			if (higherIndex - lowerIndex < 2) {
+				if (qAbs(points[lowerIndex].x() - x) < qAbs(points[higherIndex].x() - x))
+					index = lowerIndex;
+				else
+					index = higherIndex;
+
+				return index;
+			}
+
+			if (value > x && increase)
+				higherIndex = index;
+			else if (value >= x && !increase)
+				lowerIndex = index;
+			else if (value <= x && increase)
+				lowerIndex = index;
+			else if (value < x && !increase)
+				higherIndex = index;
+
+		}
+
+	} else if (properties == AbstractColumn::Properties::Constant) {
+		return 0;
+	} else {
+		// AbstractColumn::Properties::No
+		// naiv way
+		prevValue = points[0].x();
+		int index = 0;
+		for (int row = 0; row < rowCount; row++) {
+
+			double value = points[row].x();
+			if (qAbs(value - x) <= qAbs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+					prevValue = value;
+					index = row;
+			}
+		}
+		return index;
+	}
+	return -1;
+}
+
+/*!
+* Find index which corresponds to a @p x . In a vector of values
+* When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+* @param x
+* @return -1 if index not found, otherwise the index
+*/
+int Column::indexForValue(double x, QVector<QLineF>& lines, Properties properties) {
+	int rowCount = lines.count();
+	if (rowCount == 0)
+		return -1;
+	// use only p1 to find index
+	double prevValue = 0;
+	//qint64 prevValueDateTime = 0;
+	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
+			properties == AbstractColumn::Properties::MonotonicDecreasing) {
+		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
+		bool increase = true;
+		if(properties == AbstractColumn::Properties::MonotonicDecreasing)
+			increase = false;
+
+		int lowerIndex = 0;
+		int higherIndex = rowCount-1;
+
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount))+1;
+
+		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
+			double value = lines[index].p1().x();
+
+			if (higherIndex - lowerIndex < 2) {
+				if (qAbs(lines[lowerIndex].p1().x() - x) < qAbs(lines[higherIndex].p1().x() - x))
+					index = lowerIndex;
+				else
+					index = higherIndex;
+
+				return index;
+			}
+
+			if (value > x && increase)
+				higherIndex = index;
+			else if (value >= x && !increase)
+				lowerIndex = index;
+			else if (value <= x && increase)
+				lowerIndex = index;
+			else if (value < x && !increase)
+				higherIndex = index;
+
+		}
+
+	} else if (properties == AbstractColumn::Properties::Constant) {
+		return 0;
+	} else {
+		// AbstractColumn::Properties::No
+		// naiv way
+		int index = 0;
+		prevValue = lines[0].p1().x();
+		for (int row = 0; row < rowCount; row++) {
+			double value = lines[row].p1().x();
+			if (qAbs(value - x) <= qAbs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+				prevValue = value;
+				index = row;
+			}
+		}
+		return index;
+	}
+	return -1;
+}
+
+int Column::indexForValue(double x) const {
+
+	double prevValue = 0;
+	qint64 prevValueDateTime = 0;
+	AbstractColumn::ColumnMode mode = columnMode();
+	int property = properties();
+	if (property == AbstractColumn::Properties::MonotonicIncreasing ||
+			property == AbstractColumn::Properties::MonotonicDecreasing) {
+		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
+		bool increase = (property != AbstractColumn::Properties::MonotonicDecreasing);
+
+		int lowerIndex = 0;
+		int higherIndex = rowCount() - 1;
+
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount()))+1;
+
+		if ((mode == AbstractColumn::ColumnMode::Numeric ||
+			 mode == AbstractColumn::ColumnMode::Integer)) {
+			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
+				double value = valueAt(index);
+
+				if (higherIndex - lowerIndex < 2) {
+					if (qAbs(valueAt(lowerIndex) - x) < qAbs(valueAt(higherIndex) - x))
+						index = lowerIndex;
+					else
+						index = higherIndex;
+
+					return index;
+				}
+
+				if (value > x && increase)
+					higherIndex = index;
+				else if (value >= x && !increase)
+					lowerIndex = index;
+				else if (value <= x && increase)
+					lowerIndex = index;
+				else if (value < x && !increase)
+					higherIndex = index;
+
+			}
+		} else if ((mode == AbstractColumn::ColumnMode::DateTime ||
+					mode == AbstractColumn::ColumnMode::Month ||
+					mode == AbstractColumn::ColumnMode::Day)) {
+			qint64 xInt64 = static_cast<qint64>(x);
+			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
+				qint64 value = dateTimeAt(index).toMSecsSinceEpoch();
+
+				if (higherIndex - lowerIndex < 2) {
+					if (abs(dateTimeAt(lowerIndex).toMSecsSinceEpoch() - xInt64) < abs(dateTimeAt(higherIndex).toMSecsSinceEpoch() - xInt64))
+						index = lowerIndex;
+					else
+						index = higherIndex;
+
+					return index;
+				}
+
+				if (value > xInt64 && increase)
+					higherIndex = index;
+				else if (value >= xInt64 && !increase)
+					lowerIndex = index;
+				else if (value <= xInt64 && increase)
+					lowerIndex = index;
+				else if (value < xInt64 && !increase)
+					higherIndex = index;
+
+			}
+		}
+
+	} else if (property == AbstractColumn::Properties::Constant) {
+		if (rowCount() > 0)
+			return 0;
+		else
+			return -1;
+	} else {
+		// naiv way
+		int index = 0;
+		if ((mode == AbstractColumn::ColumnMode::Numeric ||
+			 mode == AbstractColumn::ColumnMode::Integer)) {
+			for (int row = 0; row < rowCount(); row++) {
+				if (isValid(row)) {
+					if (row == 0)
+						prevValue = valueAt(row);
+
+					double value = valueAt(row);
+					if (abs(value - x) <= abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
+						if (row < rowCount() - 1) {
+							prevValue = value;
+							index = row;
+						}
+					}
+				}
+			}
+			return index;
+		} else if ((mode == AbstractColumn::ColumnMode::DateTime ||
+					mode == AbstractColumn::ColumnMode::Month ||
+					mode == AbstractColumn::ColumnMode::Day)) {
+			qint64 xInt64 = static_cast<qint64>(x);
+			int index = 0;
+			for (int row = 0; row < rowCount(); row++) {
+				if (isValid(row)) {
+					if (row == 0)
+						prevValueDateTime = dateTimeAt(row).toMSecsSinceEpoch();
+
+					qint64 value = dateTimeAt(row).toMSecsSinceEpoch();
+					if (abs(value - xInt64) <= abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
+						prevValueDateTime = value;
+						index = row;
+					}
+				}
+			}
+			return index;
+		}
+	}
+	return -1;
+}
+
+/*!
+ * Finds the minimal and maximal index which are between v1 and v2
+ * \brief Column::indicesForX
+ * \param x1
+ * \param x2
+ * \param start
+ * \param end
+ * \return
+ */
+bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
+
+	start = -1;
+	end = -1;
+	if (rowCount() == 0)
+		return false;
+
+	// Assumption: v1 is always the smaller value
+	if (v1 > v2)
+		qSwap(v1, v2);
+
+	Properties property = properties();
+	if (property == Properties::MonotonicIncreasing ||
+		property == Properties::MonotonicDecreasing) {
+		start = indexForValue(v1);
+		end = indexForValue(v2);
+
+		switch (columnMode()) {
+			case Integer:
+			case Numeric: {
+			if (start > 0 && valueAt(start -1) <= v2 && valueAt(start -1) >= v1)
+				start--;
+			if (end < rowCount() - 1 && valueAt(end + 1) <= v2 && valueAt(end + 1) >= v1)
+				end++;
+
+			break;
+			}
+			case DateTime:
+			case Month:
+			case Day: {
+				qint64 v1int64 = v1;
+				qint64 v2int64 = v2;
+				qint64 value;
+				if (start > 0) {
+					value = dateTimeAt(start -1).toMSecsSinceEpoch();
+					if (value <= v2int64 && value >= v1int64)
+						start--;
+				}
+
+				if (end > rowCount() - 1) {
+					value = dateTimeAt(end + 1).toMSecsSinceEpoch();
+					if (value <= v2int64 && value >= v1int64)
+						end++;
+				}
+				break;
+			}
+			case Text:
+				return false;
+		}
+		return true;
+	} else if (property == Properties::Constant) {
+		start = 0;
+		end = rowCount() - 1;
+		return true;
+	}
+
+	switch (columnMode()) {
+		case Integer:
+		case Numeric: {
+			double value;
+			for (int i = 0; i < rowCount(); i++) {
+				value = valueAt(i);
+				if (value <= v2 && value >= v1) {
+					end = i;
+					if (start < 0)
+						start = i;
+				}
+
+			}
+			break;
+		}
+		case DateTime:
+		case Month:
+		case Day: {
+			qint64 value;
+			qint64 v2int64 = v2;
+			qint64 v1int64 = v2;
+			for (int i = 0; i < rowCount(); i++) {
+				value = dateTimeAt(i).toMSecsSinceEpoch();
+				if (value <= v2int64 && value >= v1int64) {
+					end = i;
+					if (start < 0)
+						start = i;
+				}
+			}
+			break;
+		}
+		case Text:
+			return false;
+
+	}
+	return true;
 }

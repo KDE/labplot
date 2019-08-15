@@ -77,7 +77,7 @@ void XYFourierFilterCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYFourierFilterCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-fourier_filter-curve");
+	return QIcon::fromTheme("labplot-xy-fourier-filter-curve");
 }
 
 //##############################################################################

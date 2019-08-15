@@ -70,7 +70,7 @@ void XYDifferentiationCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYDifferentiationCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-differentiation-curve");
+	return QIcon::fromTheme("labplot-xy-curve");
 }
 
 //##############################################################################
