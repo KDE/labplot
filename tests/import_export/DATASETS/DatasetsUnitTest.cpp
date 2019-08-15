@@ -140,7 +140,11 @@ void DatasetsUnitTest::testProcessDataset() {
 
 	Spreadsheet* spreadsheet = new Spreadsheet("test");
 	DatasetHandler* datasetHandler = new DatasetHandler(spreadsheet);
-	importWidget->processTest("Test_Cat", "Test_Subcat", "test1", datasetHandler);
+	importWidget->setCollection("Test");
+	importWidget->setCategory("Test_Cat");
+	importWidget->setSubcategory("Test_Subcat");
+	importWidget->setDataset("test1");
+	importWidget->loadDatasetToProcess(datasetHandler);
 
 	QTimer timer;
 	timer.setSingleShot(true);

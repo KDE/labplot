@@ -25,9 +25,12 @@ Row {
 
     ListView {
         id: list
-        anchors.fill: parent
-
+        //anchors.fill: parent
         //anchors.top: isPortrait ? categories.bottom : window.top
+
+        width: parent.width
+        height: parent.height
+
         clip: true
         model: feedModel
         footer: footerText

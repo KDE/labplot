@@ -87,7 +87,6 @@ WelcomeScreenHelper::~WelcomeScreenHelper() {
 	int currentHeightIndex = 0;
 
 	for(auto item = m_heightScale.begin(); item != m_heightScale.end() && currentHeightIndex < heightCount; item++) {
-		qDebug() << "Save height  "  << item.key() << item.value();
 		conf.writeEntry("heightName_" + QString::number(currentHeightIndex), item.key());
 		conf.writeEntry("heightValue_" + QString::number(currentHeightIndex), QString::number(item.value()));
 		currentHeightIndex++;
@@ -128,7 +127,6 @@ void WelcomeScreenHelper::loadConfig() {
  * @param datasetName the name of the dataset
  */
 void WelcomeScreenHelper::datasetClicked(const QString& category, const QString& subcategory, const QString& datasetName) {
-
 	m_datasetWidget->setCollection("All");
 	m_datasetWidget->setCategory(category);
 	m_datasetWidget->setSubcategory(subcategory);

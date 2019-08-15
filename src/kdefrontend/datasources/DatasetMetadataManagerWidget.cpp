@@ -107,6 +107,9 @@ DatasetMetadataManagerWidget::~DatasetMetadataManagerWidget() {
 	conf.writeEntry("simplifyWhitespaces", ui.chbSimplifyWhitespaces->isChecked());
 	conf.writeEntry("removeQuotes", ui.chbRemoveQuotes->isChecked());
 	conf.writeEntry("useFirstRowForVectorName", ui.chbHeader->isChecked());
+	conf.writeEntry("collection", ui.cbCollection->currentText());
+	conf.writeEntry("category", ui.cbCategory->currentText());
+	conf.writeEntry("subcategory", ui.cbSubcategory->currentText());
 }
 
 /**
@@ -123,6 +126,9 @@ void DatasetMetadataManagerWidget::loadSettings() {
 	ui.chbRemoveQuotes->setChecked(conf.readEntry("removeQuotes", false));
 	ui.chbSkipEmptyParts->setChecked(conf.readEntry("skipEmptyParts", false));
 	ui.chbHeader->setChecked(conf.readEntry("useFirstRowForVectorName", true));
+	ui.cbCollection->setCurrentText(conf.readEntry("collection", ""));
+	ui.cbCategory->setCurrentText(conf.readEntry("category", ""));
+	ui.cbSubcategory->setCurrentText(conf.readEntry("subcategory", ""));
 }
 
 /**

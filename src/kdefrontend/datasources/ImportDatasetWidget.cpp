@@ -115,8 +115,6 @@ ImportDatasetWidget::~ImportDatasetWidget() {
 		delete m_categoryCompleter;
 	if(m_datasetCompleter != nullptr)
 		delete m_datasetCompleter;
-
-	//TODO: Save selected state
 }
 
 /**
@@ -820,17 +818,9 @@ void ImportDatasetWidget::showDetails(bool show) {
 		updateDetails();
 }
 
-void ImportDatasetWidget::processTest(const QString& category, const QString& subcategory, const QString& dataset, DatasetHandler* datasetHandler) {
-	m_selectedCollection = "Test";
-	m_selectedCategory = category;
-	m_selectedSubcategory = subcategory;
-	ui.lwDatasets->clear();
-	ui.lwDatasets->addItems(m_datasetModel->allDatasets(category, subcategory).toStringList());
-	setDataset(dataset);
-
-	loadDatasetToProcess(datasetHandler);
-}
-
+/**
+ * @brief Returns the directory in which the metadata json files are locating.
+ */
 const QString ImportDatasetWidget::getJsonDir()  {
 	return m_jsonDir;
 }

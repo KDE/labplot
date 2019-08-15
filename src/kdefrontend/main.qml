@@ -1,6 +1,6 @@
 import QtQuick.Window 2.12
 import QtQuick 2.6
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.4
 import QtQuick.Scene2D 2.9
 import QtQuick.Controls.Universal 2.0
 import QtQuick.Extras 1.4
@@ -1295,7 +1295,7 @@ Rectangle {
 
                             Rectangle {
                                 id: categoryBullet
-                                anchors.verticalCenter: parent.verticalCenter
+                                Layout.alignment: Qt.AlignVCenter
                                 width: 5
                                 height: 5
                                 color: "#7a7d82"
@@ -1378,7 +1378,7 @@ Rectangle {
 
                             Rectangle {
                                 id: subcategoryBullet
-                                anchors.verticalCenter: parent.verticalCenter
+                                Layout.alignment: Qt.AlignVCenter
                                 width: 5
                                 height: 5
                                 color: "#7a7d82"

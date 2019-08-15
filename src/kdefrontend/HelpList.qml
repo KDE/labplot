@@ -41,7 +41,7 @@ ListView {
                         spacing: 10
 
                         Rectangle {
-                            anchors.verticalCenter: parent.verticalCenter
+                            Layout.alignment: Qt.AlignVCenter
                             width: 5
                             height: 5
                             color: "#7a7d82"
