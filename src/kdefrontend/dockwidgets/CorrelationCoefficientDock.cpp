@@ -73,12 +73,20 @@ CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : QWidge
 	ui.cbTest->addItem( i18n("Spearman"), CorrelationCoefficient::Spearman);
 	ui.cbTest->addItem( i18n("Chi Square"), CorrelationCoefficient::ChiSquare);
 
+	ui.leNRows->setText("2");
+	ui.leNColumns->setText("2");
+
+	ui.leNRows->setValidator(new QIntValidator(this));
+	ui.leNColumns->setValidator(new QIntValidator(this));
+
 	ui.lTestType->hide();
 	ui.cbTestType->hide();
-	// adding item to tests and testtype combo box;
-	// making all test blocks invisible at starting.
-	ui.lStatsFromSpreadsheet->hide();
-	ui.chbStatsFromSpreadsheet->hide();
+	ui.lCalculateStats->hide();
+	ui.chbCalculateStats->hide();
+	ui.lNRows->hide();
+	ui.leNRows->hide();
+	ui.lNColumns->hide();
+	ui.leNColumns->hide();
 	ui.lCategorical->hide();
 	ui.chbCategorical->hide();
 	ui.lCol1->hide();
@@ -128,7 +136,9 @@ CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : QWidge
 	connect(ui.cbTest, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CorrelationCoefficientDock::showTestType);
 	connect(ui.cbTestType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CorrelationCoefficientDock::showCorrelationCoefficient);
 	connect(ui.chbCategorical, &QCheckBox::stateChanged, this, &CorrelationCoefficientDock::changeCbCol2Label);
-	connect(ui.chbStatsFromSpreadsheet, &QCheckBox::stateChanged, this, &CorrelationCoefficientDock::chbColumnStatisticsStateChanged);
+	connect(ui.chbCalculateStats, &QCheckBox::stateChanged, this, &CorrelationCoefficientDock::chbColumnStatsStateChanged);
+	connect(ui.leNRows, &QLineEdit::textChanged, this, &CorrelationCoefficientDock::leNRowsChanged);
+	connect(ui.leNColumns, &QLineEdit::textChanged, this, &CorrelationCoefficientDock::leNColumnsChanged);
 
 	connect(ui.pbPerformTest, &QPushButton::clicked, this, &CorrelationCoefficientDock::findCorrelationCoefficient);
 	connect(ui.cbCol1, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CorrelationCoefficientDock::col1IndexChanged);
@@ -203,25 +213,13 @@ void CorrelationCoefficientDock::showTestType() {
 void CorrelationCoefficientDock::showCorrelationCoefficient() {
 	m_test |= ui.cbTestType->currentData().toInt();
 
-	ui.lCol1->show();
-	ui.cbCol1->show();
+	ui.lCalculateStats->setVisible(testType(m_test) == CorrelationCoefficient::ChiSquare);
+	ui.chbCalculateStats->setVisible(testType(m_test) == CorrelationCoefficient::ChiSquare);
 
-	ui.lCol2->show();
-	ui.cbCol2->show();
+	if (testType(m_test) != CorrelationCoefficient::ChiSquare)
+		ui.chbCalculateStats->setChecked(true);
 
-	ui.lStatsFromSpreadsheet->setVisible(testType(m_test) == CorrelationCoefficient::ChiSquare);
-	ui.chbStatsFromSpreadsheet->setVisible(testType(m_test) == CorrelationCoefficient::ChiSquare);
-	ui.chbStatsFromSpreadsheet->setChecked(true);
-
-	ui.lCategorical->setVisible(testType(m_test) == CorrelationCoefficient::Pearson);
-	ui.chbCategorical->setVisible(testType(m_test) == CorrelationCoefficient::Pearson);
-
-	ui.lAlpha->setVisible(m_test == (CorrelationCoefficient::ChiSquare | CorrelationCoefficient::IndependenceTest));
-	ui.leAlpha->setVisible(m_test == (CorrelationCoefficient::ChiSquare | CorrelationCoefficient::IndependenceTest));
-
-	setColumnsComboBoxView();
-
-	ui.pbPerformTest->setEnabled(nonEmptySelectedColumns());
+	chbColumnStatsStateChanged();
 }
 
 void CorrelationCoefficientDock::findCorrelationCoefficient()  {
@@ -422,14 +420,42 @@ void CorrelationCoefficientDock::changeCbCol2Label() {
 	}
 }
 
-void CorrelationCoefficientDock::chbColumnStatisticsStateChanged() {
-	bool chbChecked = ui.chbStatsFromSpreadsheet->isChecked();
+void CorrelationCoefficientDock::chbColumnStatsStateChanged() {
+	bool chbChecked = ui.chbCalculateStats->isChecked();
 
 	ui.lVariables->setVisible(chbChecked);
 	ui.lCol1->setVisible(chbChecked);
 	ui.cbCol1->setVisible(chbChecked);
 	ui.lCol2->setVisible(chbChecked);
 	ui.cbCol2->setVisible(chbChecked);
+
+	ui.lCategorical->setVisible(chbChecked && testType(m_test) == CorrelationCoefficient::Pearson);
+	ui.chbCategorical->setVisible(chbChecked && testType(m_test) == CorrelationCoefficient::Pearson);
+
+	ui.lNRows->setVisible(!chbChecked);
+	ui.leNRows->setVisible(!chbChecked);
+
+	ui.lNColumns->setVisible(!chbChecked);
+	ui.leNColumns->setVisible(!chbChecked);
+
+	if (chbChecked) {
+		setColumnsComboBoxView();
+		ui.pbPerformTest->setEnabled(nonEmptySelectedColumns());
+	} else
+		ui.pbPerformTest->setEnabled(true);
+
+	if (m_correlationCoefficient != nullptr)
+		m_correlationCoefficient->initInputStatsTable(m_test, chbChecked, ui.leNRows->text().toInt(), ui.leNColumns->text().toInt());
+}
+
+void CorrelationCoefficientDock::leNRowsChanged() {
+	if (m_correlationCoefficient != nullptr)
+		m_correlationCoefficient->setInputStatsTableNRows(ui.leNRows->text().toInt());
+}
+
+void CorrelationCoefficientDock::leNColumnsChanged() {
+	if (m_correlationCoefficient != nullptr)
+		m_correlationCoefficient->setInputStatsTableNCols(ui.leNColumns->text().toInt());
 }
 
 ////*************************************************************

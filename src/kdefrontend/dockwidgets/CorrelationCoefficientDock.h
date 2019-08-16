@@ -89,7 +89,9 @@ private slots:
 	void spreadsheetChanged(const QModelIndex&);
 	void col1IndexChanged(int index);
 	void changeCbCol2Label();
-	void chbColumnStatisticsStateChanged();
+	void chbColumnStatsStateChanged();
+	void leNRowsChanged();
+	void leNColumnsChanged();
 
 
 	//        void connectionChanged();

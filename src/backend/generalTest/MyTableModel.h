@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : HypothesisTestView.cpp
+    File                 : MyTableModel.h
     Project              : LabPlot
-    Description          : View class for Hypothesis Tests' Table
+    Description          : Derived class of QStandardItemModel
     --------------------------------------------------------------------
     Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
 
@@ -26,23 +26,19 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "HypothesisTestView.h"
-#include "backend/generalTest/HypothesisTest.h"
-#include "backend/lib/macros.h"
-#include "backend/lib/trace.h"
+#ifndef MYTABLEMODEL_H
+#define MYTABLEMODEL_H
 
-#include <QHeaderView>
-#include <QTableView>
-/*!
-    \class HypothesisTestView
-    \brief View class for Hypothesis Test
+#include <QStandardItemModel>
 
-    \ingroup kdefrontend
- */
+class MyTableModel : public QStandardItemModel {
+    Q_OBJECT
 
-HypothesisTestView::HypothesisTestView(HypothesisTest* hypothesisTest) : GeneralTestView (static_cast<GeneralTest*>(hypothesisTest)),
-	m_hypothesisTest(hypothesisTest) {
-}
+public:
+    typedef QStandardItemModel inherited;
+    explicit MyTableModel(QObject* parent = nullptr);
 
-HypothesisTestView::~HypothesisTestView() = default;
-
+public slots:
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+};
+#endif // MYTABLEMODEL_H

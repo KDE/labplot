@@ -97,12 +97,11 @@ void GeneralTestView::init() {
 	initActions();
 	initMenus();
 
-	QHeaderView* horizontalHeaderView =  m_inputStatsTable->horizontalHeader();
-	horizontalHeaderView->setSectionResizeMode(QHeaderView::ResizeToContents);
-	horizontalHeaderView->setSectionsClickable(true);
-	horizontalHeaderView->setStyleSheet("backgroud-color: red");
-
 	m_inputStatsTable->setModel(m_generalTest->inputStatsTableModel());
+
+	m_inputStatsTable->horizontalHeader()->setVisible(false);
+	m_inputStatsTable->verticalHeader()->setVisible(false);
+	m_inputStatsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
 	m_statsTable->setMouseTracking(true);
 	connect(m_generalTest, &GeneralTest::changed, this, &GeneralTestView::changed);

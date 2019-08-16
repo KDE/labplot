@@ -245,6 +245,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/generalTest/CorrelationCoefficient.cpp
 	${BACKEND_DIR}/generalTest/GeneralTest.cpp
 	${BACKEND_DIR}/generalTest/HypothesisTest.cpp
+	${BACKEND_DIR}/generalTest/MyTableModel.cpp
 	${BACKEND_DIR}/generalTest/MyTextEdit.cpp
 	${BACKEND_DIR}/matrix/Matrix.cpp
 	${BACKEND_DIR}/matrix/matrixcommands.cpp

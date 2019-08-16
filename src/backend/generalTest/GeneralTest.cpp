@@ -32,6 +32,8 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 
+#include "backend/generalTest/MyTableModel.h"
+
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QStandardItemModel>
@@ -47,7 +49,7 @@ extern "C" {
 
 GeneralTest::GeneralTest(const QString& name, const AspectType& type) : AbstractPart(name, type),
 	m_summaryLayout(new QVBoxLayout()),
-	m_inputStatsTableModel(new QStandardItemModel) {
+	m_inputStatsTableModel(new MyTableModel()) {
 
 	for (int i = 0; i < RESULTLINESCOUNT; i++) {
 		m_resultLine[i] = new QLabel();

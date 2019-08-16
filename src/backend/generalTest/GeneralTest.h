@@ -38,8 +38,8 @@ class QString;
 class Column;
 class QVBoxLayout;
 class QLabel;
-class QStandardItemModel;
 class QAbstractItemModel;
+class MyTableModel;
 
 class GeneralTest : public AbstractPart {
 	Q_OBJECT
@@ -113,7 +113,7 @@ protected:
 	QVBoxLayout* m_summaryLayout{nullptr};
 	QLabel* m_resultLine[RESULTLINESCOUNT];
 
-	QStandardItemModel* m_inputStatsTableModel;
+	MyTableModel* m_inputStatsTableModel;
 
 	int testType(int test);
 	int testSubtype(int test);

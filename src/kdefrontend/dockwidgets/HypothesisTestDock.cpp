@@ -77,6 +77,8 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 
 	ui.lPopulationSigma->setText( UTF8_QSTRING("σ"));
 
+	ui.chbCalculateStats->setChecked(true);
+
 	// making all test blocks invisible at starting.
 	ui.pbLeveneTest->hide();
 	ui.lCategorical->hide();
@@ -286,26 +288,12 @@ void HypothesisTestDock::showHypothesisTest() {
 
 	m_test |= ui.cbTestType->currentData().toInt();
 
-	ui.lCol1->show();
-	ui.cbCol1->show();
-
-	ui.lCol2->setVisible(testSubtype(m_test) != HypothesisTest::OneSample);
-	ui.cbCol2->setVisible(testSubtype(m_test) != HypothesisTest::OneSample);
-
-	ui.lCol3->setVisible(m_test == (HypothesisTest::Anova | HypothesisTest::TwoWay));
-	ui.cbCol3->setVisible(m_test == (HypothesisTest::Anova | HypothesisTest::TwoWay));
 
 	ui.lCalculateStats->show();
 	ui.chbCalculateStats->show();
-	ui.chbCalculateStats->setChecked(true);
 
 	ui.lEqualVariance->setVisible(m_test == (HypothesisTest::TTest | HypothesisTest::TwoSampleIndependent));
 	ui.chbEqualVariance->setVisible(m_test == (HypothesisTest::TTest | HypothesisTest::TwoSampleIndependent));
-	ui.chbEqualVariance->setChecked(true);
-
-	ui.lCategorical->setVisible(m_test == (HypothesisTest::TTest | HypothesisTest::TwoSampleIndependent));
-	ui.chbCategorical->setVisible(m_test == (HypothesisTest::TTest | HypothesisTest::TwoSampleIndependent));
-
 
 	ui.lPopulationSigma->setVisible(m_test == (HypothesisTest::TTest | HypothesisTest::OneSample) ||
 									m_test == (HypothesisTest::ZTest | HypothesisTest::OneSample));
@@ -578,18 +566,20 @@ void HypothesisTestDock::col1IndexChanged(int index) {
 }
 
 void HypothesisTestDock::chbCalculateStatsStateChanged() {
-	if (!ui.chbCalculateStats->isChecked()) {
-		ui.lVariables->hide();
-		ui.lCol1->hide();
-		ui.cbCol1->hide();
-		ui.lCol2->hide();
-		ui.cbCol2->hide();
-		ui.lCol3->hide();
-		ui.cbCol3->hide();
-	} else {
-		ui.lVariables->show();
-		showHypothesisTest();
-	}
+	bool calculateStats = ui.chbCalculateStats->isChecked();
+
+	ui.lVariables->setVisible(calculateStats);
+	ui.lCol1->setVisible(calculateStats);
+	ui.cbCol1->setVisible(calculateStats);
+
+	ui.lCol2->setVisible(calculateStats && testSubtype(m_test) != HypothesisTest::OneSample);
+	ui.cbCol2->setVisible(calculateStats && testSubtype(m_test) != HypothesisTest::OneSample);
+
+	ui.lCol3->setVisible(calculateStats && m_test == (HypothesisTest::Anova | HypothesisTest::TwoWay));
+	ui.cbCol3->setVisible(calculateStats && m_test == (HypothesisTest::Anova | HypothesisTest::TwoWay));
+
+	ui.lCategorical->setVisible(calculateStats && m_test == (HypothesisTest::TTest | HypothesisTest::TwoSampleIndependent));
+	ui.chbCategorical->setVisible(calculateStats && m_test == (HypothesisTest::TTest | HypothesisTest::TwoSampleIndependent));
 
 	if (m_hypothesisTest != nullptr)
 		m_hypothesisTest->initInputStatsTable(m_test, ui.chbCalculateStats->isChecked());

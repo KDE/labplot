@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : HypothesisTestView.cpp
-    Project              : LabPlot
-    Description          : View class for Hypothesis Tests' Table
-    --------------------------------------------------------------------
-    Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
+	File                 : MyTableModel.cpp
+	Project              : LabPlot
+	Description          : Derived class of QStandardItemModel
+	--------------------------------------------------------------------
+	Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
 
  ***************************************************************************/
 
@@ -26,23 +26,33 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "HypothesisTestView.h"
-#include "backend/generalTest/HypothesisTest.h"
-#include "backend/lib/macros.h"
-#include "backend/lib/trace.h"
+#include "backend/generalTest/MyTableModel.h"
 
-#include <QHeaderView>
-#include <QTableView>
-/*!
-    \class HypothesisTestView
-    \brief View class for Hypothesis Test
+#include <QStandardItemModel>
 
-    \ingroup kdefrontend
- */
-
-HypothesisTestView::HypothesisTestView(HypothesisTest* hypothesisTest) : GeneralTestView (static_cast<GeneralTest*>(hypothesisTest)),
-	m_hypothesisTest(hypothesisTest) {
+MyTableModel::MyTableModel(QObject* parent) : QStandardItemModel(parent) {
 }
 
-HypothesisTestView::~HypothesisTestView() = default;
+QVariant MyTableModel::data(const QModelIndex &index, int role) const {
+	if (role == Qt::FontRole && (index.column() == 0 || index.row() == 0)) {
+		QFont font;
+		font.setBold(true);
+		return font;
+	} else if (role == Qt::ForegroundRole) {
+		if (index.row() == 0)
+			return QColor(Qt::white);
+		if (index.column() == 0)
+			return QColor(Qt::black);
+	}
+	else if (role == Qt::BackgroundRole) {
+		if (index.row() == 0)
+			return QColor(0x008b8b);
+		if (index.column() == 0)
+			return QColor(Qt::cyan);
+	}
+
+	return inherited::data(index, role);
+}
+
+
 

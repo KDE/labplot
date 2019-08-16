@@ -57,6 +57,10 @@ public:
 	QWidget* view() const override;
 
 	void performTest(int test, bool categoricalVariable = false, bool calculateStats = true);
+	void initInputStatsTable(int test, bool calculateStats, int nRows, int nColumns);
+	void setInputStatsTableNRows(int nRows);
+	void setInputStatsTableNCols(int nColumns);
+
 private:
 	void performPearson(bool categoricalVariable);
 	void performKendall();

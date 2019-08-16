@@ -33,6 +33,8 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 
+#include "backend/generalTest/MyTableModel.h"
+
 #include <QVector>
 #include <QStandardItemModel>
 #include <QLocale>
@@ -96,6 +98,25 @@ void CorrelationCoefficient::performTest(int test, bool categoricalVariable, boo
 	emit changed();
 }
 
+void CorrelationCoefficient::initInputStatsTable(int test, bool calculateStats, int nRows, int nColumns) {
+	m_inputStatsTableModel->clear();
+
+	if (!calculateStats) {
+		if (testSubtype(test) == IndependenceTest) {
+			m_inputStatsTableModel->setRowCount(nRows + 1);
+			m_inputStatsTableModel->setColumnCount(nColumns + 1);
+		}
+	}
+
+	for (int i = 1; i < nRows + 1; i++)
+		m_inputStatsTableModel->setData(m_inputStatsTableModel->index(i, 0), i18n("Row %1", i));
+
+	for (int i = 1; i < nColumns + 1; i++)
+		m_inputStatsTableModel->setData(m_inputStatsTableModel->index(0, i), i18n("Column %1", i));
+
+	emit changed();
+}
+
 
 double CorrelationCoefficient::correlationValue() const {
 	return m_correlationValue;
@@ -107,6 +128,22 @@ QList<double> CorrelationCoefficient::statisticValue() const {
 
 QList<double> CorrelationCoefficient::pValue() const {
 	return m_pValue;
+}
+
+void CorrelationCoefficient::setInputStatsTableNRows(int nRows) {
+	int nRows_old = m_inputStatsTableModel->rowCount();
+	m_inputStatsTableModel->setRowCount(nRows + 1);
+
+	for (int i = nRows_old; i < nRows + 1; i++)
+		m_inputStatsTableModel->setData(m_inputStatsTableModel->index(i, 0), i18n("Row %1", i));
+}
+
+void CorrelationCoefficient::setInputStatsTableNCols(int nColumns) {
+	int nColumns_old = m_inputStatsTableModel->columnCount();
+	m_inputStatsTableModel->setColumnCount(nColumns + 1);
+
+	for (int i = nColumns_old; i < nColumns + 1; i++)
+		m_inputStatsTableModel->setData(m_inputStatsTableModel->index(0, i), i18n("Column %1", i));
 }
 
 /***************************************************************************************************************************

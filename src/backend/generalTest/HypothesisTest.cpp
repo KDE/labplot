@@ -32,6 +32,8 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 
+#include "backend/generalTest/MyTableModel.h"
+
 #include <QStandardItemModel>
 #include <QLabel>
 #include <QTableView>
@@ -126,10 +128,19 @@ void HypothesisTest::initInputStatsTable(int test, bool calculateStats) {
 
 	if (!calculateStats) {
 		if (testSubtype(test) == TwoSampleIndependent) {
-			m_inputStatsTableModel->setRowCount(2);
-			m_inputStatsTableModel->setColumnCount(4);
-			m_inputStatsTableModel->setHorizontalHeaderLabels(
-			{i18n("N"), i18n("Sum"), i18n("Mean"), i18n("Standard Deviation")});
+			m_inputStatsTableModel->setRowCount(3);
+			m_inputStatsTableModel->setColumnCount(5);
+
+			m_inputStatsTableModel->setData(m_inputStatsTableModel->index(0, 1), i18n("N"));
+			m_inputStatsTableModel->setData(m_inputStatsTableModel->index(0, 2), i18n("Sum"));
+			m_inputStatsTableModel->setData(m_inputStatsTableModel->index(0, 3), i18n("Mean"));
+			m_inputStatsTableModel->setData(m_inputStatsTableModel->index(0, 4), i18n("Standard Deviation"));
+
+			for (int i = 1; i < 5; i++)
+				m_inputStatsTableModel->item(0, i)->setEditable(false);
+
+			m_inputStatsTableModel->setData(m_inputStatsTableModel->index(1, 0), i18n("Row 1"));
+			m_inputStatsTableModel->setData(m_inputStatsTableModel->index(2, 0), i18n("Row 2"));
 		}
 	}
 
@@ -162,20 +173,20 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 		QString textValue;
 		QDEBUG("m_inputStatsTable row and column count " << m_inputStatsTableModel->rowCount() << m_inputStatsTableModel->columnCount());
 
-		for (int i = 0; i < 2; i++) {
-			n[i] = m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 0)).toInt();
-			sum[i] = m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 1)).toDouble();
-			mean[i] = m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 2)).toDouble();
-			std[i] = m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 3)).toDouble();
+		for (int i = 1; i < 3; i++) {
+			n[i - 1] = m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 1)).toInt();
+			sum[i - 1] = m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 2)).toDouble();
+			mean[i - 1] = m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 3)).toDouble();
+			std[i - 1] = m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 4)).toDouble();
 
 			if (sum[i] == 0.0)
 				sum[i] = mean[i] * n[i];
+
 			if (mean[i] == 0.0 && n[i] > 0)
 				mean[i] = sum[i] / n[i];
-
-			col1Name = "1";
-			col2Name = "2";
 		}
+		col1Name = m_inputStatsTableModel->data(m_inputStatsTableModel->index(1, 0)).toString();
+		col2Name = m_inputStatsTableModel->data(m_inputStatsTableModel->index(2, 0)).toString();
 	} else {
 		if (m_columns.size() != 2) {
 			printError("Inappropriate number of m_columns selected");

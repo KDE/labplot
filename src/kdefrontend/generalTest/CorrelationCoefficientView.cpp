@@ -31,9 +31,11 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 
+#include <QTableView>
+#include <QHeaderView>
 /*!
     \class CorrelationCoefficientView
-    \brief View class for Hypothesis Test
+	\brief View class for Correlation Coefficient Test
 
     \ingroup kdefrontend
  */
