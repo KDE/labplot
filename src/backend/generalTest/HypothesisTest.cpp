@@ -125,19 +125,11 @@ void HypothesisTest::initInputStatsTable(int test, bool calculateStats) {
 	m_inputStatsTableModel->clear();
 
 	if (!calculateStats) {
-		switch (testSubtype(test)) {
-		case TwoSampleIndependent: {
+		if (testSubtype(test) == TwoSampleIndependent) {
 			m_inputStatsTableModel->setRowCount(2);
 			m_inputStatsTableModel->setColumnCount(4);
 			m_inputStatsTableModel->setHorizontalHeaderLabels(
 			{i18n("N"), i18n("Sum"), i18n("Mean"), i18n("Standard Deviation")});
-			break;
-		}
-		case TwoSamplePaired:
-		case OneSample:
-		case OneWay:
-		case TwoWay:
-			break;
 		}
 	}
 

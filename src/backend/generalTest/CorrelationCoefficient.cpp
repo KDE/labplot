@@ -339,6 +339,7 @@ void CorrelationCoefficient::performSpearman() {
 
 /***********************************************Chi Square Test for Indpendence******************************************************************/
 
+// TODO: Implement this function
 void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 	Q_UNUSED(calculateStats);
 }
