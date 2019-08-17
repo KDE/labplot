@@ -96,11 +96,11 @@ DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView
 
 	//signal/slot connections
 	//for general actions
-	connect( m_image, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)) );
-	connect( m_image, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
-	connect( m_image, SIGNAL(requestUpdateActions()), this, SLOT(handleImageActions()) );
-	connect( m_datapicker, SIGNAL(requestUpdateActions()), this, SLOT(handleImageActions()) );
-	connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(changeRotationAngle()) );
+	connect(m_image, &DatapickerImage::requestProjectContextMenu, this, &DatapickerImageView::createContextMenu);
+	connect(m_image, &DatapickerImage::requestUpdate, this, &DatapickerImageView::updateBackground);
+	connect(m_image, &DatapickerImage::requestUpdateActions, this, &DatapickerImageView::handleImageActions);
+	connect(m_datapicker, &Datapicker::requestUpdateActions, this, &DatapickerImageView::handleImageActions);
+	connect(m_image, &DatapickerImage::rotationAngleChanged, this, &DatapickerImageView::changeRotationAngle);
 
 	//resize the view to make the complete scene visible.
 	//no need to resize the view when the project is being opened,
@@ -192,12 +192,12 @@ void DatapickerImageView::initActions() {
 	fiveTimesMagnificationAction = new QAction(QIcon::fromTheme("labplot-5x-zoom"), i18n("5x Magnification"), magnificationActionGroup);
 	fiveTimesMagnificationAction->setCheckable(true);
 
-	connect( mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)) );
-	connect( zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)) );
-	connect( plotPointsTypeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changePointsType(QAction*)) );
-	connect( addCurveAction, SIGNAL(triggered()), this, SLOT(addCurve()) );
-	connect( navigationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeSelectedItemsPosition(QAction*)) );
-	connect( magnificationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(magnificationChanged(QAction*)) );
+	connect(mouseModeActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::mouseModeChanged);
+	connect(zoomActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::changeZoom);
+	connect(plotPointsTypeActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::changePointsType);
+	connect(addCurveAction, &QAction::triggered, this, &DatapickerImageView::addCurve);
+	connect(navigationActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::changeSelectedItemsPosition);
+	connect(magnificationActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::magnificationChanged);
 
 	//set some default values
 	currentZoomAction = zoomInViewAction;

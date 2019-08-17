@@ -2,8 +2,8 @@
     File                 : SpreadsheetDock.cpp
     Project              : LabPlot
     Description          : widget for spreadsheet properties
-    --------------------------------------------------------------------
-    Copyright            : (C) 2010-2015 by Alexander Semke (alexander.semke@web.de)
+	--------------------------------------------------------------------
+	Copyright            : (C) 2010-2019 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -29,8 +29,10 @@
 
 #include "SpreadsheetDock.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "backend/datapicker/DatapickerCurve.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "kdefrontend/TemplateHandler.h"
+
 #include <QDir>
 #include <KLocalizedString>
 #include <KConfigGroup>
@@ -43,7 +45,7 @@
   \ingroup kdefrontend
 */
 
-SpreadsheetDock::SpreadsheetDock(QWidget* parent): BaseDock(parent) {
+SpreadsheetDock::SpreadsheetDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	//leComment = ui.teComment; // is not a lineedit
@@ -71,6 +73,16 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 	m_spreadsheet = list.first();
 	m_aspect = list.first();
 
+
+	//check whether we have non-editable columns:
+	bool nonEditable = false;
+	for (auto* s : m_spreadsheetList) {
+		if (dynamic_cast<DatapickerCurve*>(s->parentAspect())) {
+			nonEditable = true;
+			break;
+		}
+	}
+
 	if (list.size() == 1) {
 		ui.leName->setEnabled(true);
 		ui.teComment->setEnabled(true);
@@ -84,7 +96,7 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 
 		ui.leName->setText(QString());
 		ui.teComment->setText(QString());
-  	}
+	}
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
 
@@ -92,11 +104,19 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 	this->load();
 
 	// undo functions
-	connect(m_spreadsheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
-			this, SLOT(spreadsheetDescriptionChanged(const AbstractAspect*)));
-	connect(m_spreadsheet, SIGNAL(rowCountChanged(int)),this, SLOT(spreadsheetRowCountChanged(int)));
-	connect(m_spreadsheet, SIGNAL(columnCountChanged(int)),this, SLOT(spreadsheetColumnCountChanged(int)));
+	connect(m_spreadsheet, &AbstractAspect::aspectDescriptionChanged, this, &SpreadsheetDock::spreadsheetDescriptionChanged);
+	connect(m_spreadsheet, &Spreadsheet::rowCountChanged, this, &SpreadsheetDock::spreadsheetRowCountChanged);
+	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, &SpreadsheetDock::spreadsheetColumnCountChanged);
 	//TODO: show comments
+
+	ui.lDimensions->setVisible(!nonEditable);
+	ui.lRowCount->setVisible(!nonEditable);
+	ui.sbRowCount->setVisible(!nonEditable);
+	ui.lColumnCount->setVisible(!nonEditable);
+	ui.sbColumnCount->setVisible(!nonEditable);
+	ui.lFormat->setVisible(!nonEditable);
+	ui.lShowComments->setVisible(!nonEditable);
+	ui.cbShowComments->setVisible(!nonEditable);
 
 	m_initializing = false;
 }
