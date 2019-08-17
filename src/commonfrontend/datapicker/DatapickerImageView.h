@@ -54,7 +54,7 @@ public:
 	void exportToFile(const QString&, const WorksheetView::ExportFormat, const int);
 
 private:
-	enum MouseMode {SelectAndEditMode, NavigationMode, ZoomSelectionMode, SelectAndMoveMode};
+	enum MouseMode {SelectAndEditMode, NavigationMode, ZoomSelectionMode};
 
 	void initActions();
 	void initMenus();
@@ -88,7 +88,9 @@ private:
 	QMenu* m_magnificationMenu;
 
 	QToolButton* tbZoom{nullptr};
-	QAction* currentZoomAction;
+	QToolButton* tbMagnification{nullptr};
+	QAction* currentZoomAction{nullptr};
+	QAction* currentMagnificationAction{nullptr};
 
 	//Actions
 	QAction* zoomInViewAction;
@@ -106,7 +108,6 @@ private:
 	QAction* navigationModeAction;
 	QAction* zoomSelectionModeAction;
 	QAction* selectAndEditModeAction;
-	QAction* selectAndMoveModeAction;
 
 	QActionGroup* navigationActionGroup;
 	QAction* shiftLeftAction;

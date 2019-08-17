@@ -643,6 +643,7 @@ void WorksheetView::fillToolBar(QToolBar* toolBar) {
 	toolBar->addAction(selectionModeAction);
 	toolBar->addAction(navigationModeAction);
 	toolBar->addAction(zoomSelectionModeAction);
+	toolBar->addSeparator();
 	tbZoom = new QToolButton(toolBar);
 	tbZoom->setPopupMode(QToolButton::MenuButtonPopup);
 	tbZoom->setMenu(m_zoomMenu);
