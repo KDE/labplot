@@ -420,7 +420,7 @@ void PlotDataDialog::plot() {
 		if (dynamic_cast<DatapickerCurve*>(parent))
 			parent = parent->parentAspect()->parentAspect();
 #ifdef HAVE_MQTT
-		else if (dynamic_cast<MQQTTopic*>(m_spreadsheet))
+		else if (dynamic_cast<MQTTTopic*>(m_spreadsheet))
 			parent = m_spreadsheet->project();
 #endif
 		parent->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
