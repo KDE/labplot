@@ -30,6 +30,7 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
+#include "backend/datapicker/DatapickerCurve.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
@@ -416,10 +417,11 @@ void PlotDataDialog::plot() {
 	} else {
 		//add curves to a new plot(s) in a new worksheet
 		AbstractAspect* parent = m_spreadsheet->parentAspect();
+		if (dynamic_cast<DatapickerCurve*>(parent))
+			parent = parent->parentAspect()->parentAspect();
 #ifdef HAVE_MQTT
-		MQTTTopic* topic = qobject_cast<MQTTTopic*>(m_spreadsheet);
-		if (topic != nullptr)
-			parent = qobject_cast<AbstractAspect*>(m_spreadsheet->project());
+		else if (dynamic_cast<MQQTTopic*>(m_spreadsheet))
+			parent = m_spreadsheet->project();
 #endif
 		parent->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
 		Worksheet* worksheet = new Worksheet(i18n("Plot data from %1", m_spreadsheet->name()));
