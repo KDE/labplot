@@ -101,6 +101,22 @@ DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView
 	connect( m_image, SIGNAL(requestUpdateActions()), this, SLOT(handleImageActions()) );
 	connect( m_datapicker, SIGNAL(requestUpdateActions()), this, SLOT(handleImageActions()) );
 	connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(changeRotationAngle()) );
+
+	//resize the view to make the complete scene visible.
+	//no need to resize the view when the project is being opened,
+	//all views will be resized to the stored values at the end
+	if (!m_image->isLoading()) {
+		float w = Worksheet::convertFromSceneUnits(sceneRect().width(), Worksheet::Inch);
+		float h = Worksheet::convertFromSceneUnits(sceneRect().height(), Worksheet::Inch);
+		w *= QApplication::desktop()->physicalDpiX();
+		h *= QApplication::desktop()->physicalDpiY();
+		resize(w*1.1, h*1.1);
+	}
+
+	//rescale to the original size
+	static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
+	static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
+	setTransform(QTransform::fromScale(hscale, vscale));
 }
 
 DatapickerImageView::~DatapickerImageView() {
