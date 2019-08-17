@@ -64,8 +64,6 @@ public:
 	QList<double>& pValue();
 	QWidget* view() const override;
 
-	double myTest;
-
 private:
 	void performTwoSampleIndependentTest(int test, bool categoricalVariable = false, bool equalVariance = true, bool calculateStats = true);
 	void performTwoSamplePairedTest(int test);

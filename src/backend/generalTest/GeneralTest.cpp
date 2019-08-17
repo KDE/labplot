@@ -535,6 +535,20 @@ bool GeneralTest::load(XmlStreamReader* reader, bool preview) {
 	return !reader->hasError();
 }
 
+void GeneralTest::clearInputStatsTable() {
+//	int rowCount = m_inputStatsTableModel->rowCount();
+//	int columnCount = m_inputStatsTableModel->columnCount();
+
+	QList<QStandardItem *> horizontalHeader = m_inputStatsTableModel->takeRow(0);
+	QList<QStandardItem *> verticalHeader = m_inputStatsTableModel->takeColumn(0);
+
+	m_inputStatsTableModel->clear();
+	m_inputStatsTableModel->appendRow(horizontalHeader);
+
+	verticalHeader.push_front(m_inputStatsTableModel->takeColumn(0)[0]);
+	m_inputStatsTableModel->insertColumn(0, verticalHeader);
+}
+
 Spreadsheet *GeneralTest::dataSourceSpreadsheet() const {
 	return m_dataSourceSpreadsheet;
 }
