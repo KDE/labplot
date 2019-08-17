@@ -77,6 +77,7 @@ void SpreadsheetModel::suppressSignals(bool value) {
 	//update the headers after all the data was added to the model
 	//and we start listening to signals again
 	if (!m_suppressSignals) {
+		m_spreadsheet->emitColumnCountChanged();
 		updateVerticalHeader();
 		updateHorizontalHeader();
 	}
@@ -287,7 +288,8 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
 	//endInsertColumns();
 	endResetModel();
 
-	m_spreadsheet->emitColumnCountChanged();
+	if (!m_suppressSignals)
+		m_spreadsheet->emitColumnCountChanged();
 }
 
 void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
