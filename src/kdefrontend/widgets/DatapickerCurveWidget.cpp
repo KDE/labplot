@@ -4,7 +4,7 @@
     Description          : widget for datapicker properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2019 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -50,32 +50,50 @@ DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent) : BaseDock(parent)
 	ui.cbYErrorType->addItem(i18n("Symmetric"));
 	ui.cbYErrorType->addItem(i18n("Asymmetric"));
 
+	QString info = i18n("Specify whether the data points have errors and of which type.\n"
+						"Note, changing this type is not possible once at least one point was read.");
+	ui.lXErrorType->setToolTip(info);
+	ui.cbXErrorType->setToolTip(info);
+	ui.lYErrorType->setToolTip(info);
+	ui.cbYErrorType->setToolTip(info);
+
 	connect(ui.leName, &QLineEdit::textChanged, this, &DatapickerCurveWidget::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &DatapickerCurveWidget::commentChanged);
-	connect( ui.cbXErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(xErrorTypeChanged(int)) );
-	connect( ui.cbYErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(yErrorTypeChanged(int)) );
+	connect(ui.cbXErrorType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &DatapickerCurveWidget::xErrorTypeChanged);
+	connect(ui.cbYErrorType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &DatapickerCurveWidget::yErrorTypeChanged);
 
 	//symbol
-	connect( ui.cbStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(styleChanged(int)) );
-	connect( ui.sbSize, SIGNAL(valueChanged(double)), this, SLOT(sizeChanged(double)) );
-	connect( ui.sbRotation, SIGNAL(valueChanged(int)), this, SLOT(rotationChanged(int)) );
-	connect( ui.sbOpacity, SIGNAL(valueChanged(int)), this, SLOT(opacityChanged(int)) );
+	connect(ui.cbStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &DatapickerCurveWidget::styleChanged);
+	connect(ui.sbSize, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &DatapickerCurveWidget::sizeChanged);
+	connect(ui.sbRotation, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged),
+			this, &DatapickerCurveWidget::rotationChanged);
+	connect(ui.sbOpacity, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged),
+			this, &DatapickerCurveWidget::opacityChanged);
 
 	//Filling
-	connect( ui.cbFillingStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingStyleChanged(int)) );
-	connect( ui.kcbFillingColor, SIGNAL(changed(QColor)), this, SLOT(fillingColorChanged(QColor)) );
+	connect(ui.cbFillingStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &DatapickerCurveWidget::fillingStyleChanged);
+	connect(ui.kcbFillingColor, &KColorButton::changed, this, &DatapickerCurveWidget::fillingColorChanged);
 
 	//border
-	connect( ui.cbBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(borderStyleChanged(int)) );
-	connect( ui.kcbBorderColor, SIGNAL(changed(QColor)), this, SLOT(borderColorChanged(QColor)) );
-	connect( ui.sbBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(borderWidthChanged(double)) );
+	connect(ui.cbBorderStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &DatapickerCurveWidget::borderStyleChanged);
+	connect(ui.kcbBorderColor, &KColorButton::changed, this, &DatapickerCurveWidget::borderColorChanged);
+	connect(ui.sbBorderWidth, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &DatapickerCurveWidget::borderWidthChanged);
 
-	connect( ui.chbVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect(ui.chbVisible, &QCheckBox::clicked, this, &DatapickerCurveWidget::visibilityChanged);
 
 	//error bar
-	connect( ui.cbErrorBarFillingStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(errorBarFillingStyleChanged(int)) );
-	connect( ui.kcbErrorBarFillingColor, SIGNAL(changed(QColor)), this, SLOT(errorBarFillingColorChanged(QColor)) );
-	connect( ui.sbErrorBarSize, SIGNAL(valueChanged(double)), this, SLOT(errorBarSizeChanged(double)) );
+	connect(ui.cbErrorBarFillingStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &DatapickerCurveWidget::errorBarFillingStyleChanged);
+	connect(ui.kcbErrorBarFillingColor, &KColorButton::changed, this, &DatapickerCurveWidget::errorBarFillingColorChanged);
+	connect(ui.sbErrorBarSize, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &DatapickerCurveWidget::errorBarSizeChanged);
 
 	init();
 	hideErrorBarWidgets(true);
@@ -136,26 +154,21 @@ void DatapickerCurveWidget::setCurves(QList<DatapickerCurve*> list) {
 	}
 
 	load();
-	initConnections();
 	updateSymbolWidgets();
-}
 
-void DatapickerCurveWidget::initConnections() {
-	connect( m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect( m_curve, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-		 this, SLOT(updateSymbolWidgets()) );
-	connect( m_curve, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(updateSymbolWidgets()) );
-	connect( m_curve, SIGNAL(curveErrorTypesChanged(DatapickerCurve::Errors)), this, SLOT(curveErrorsChanged(DatapickerCurve::Errors)) );
-	connect( m_curve, SIGNAL(pointStyleChanged(Symbol::Style)), this, SLOT(symbolStyleChanged(Symbol::Style)));
-	connect( m_curve, SIGNAL(pointSizeChanged(qreal)), this, SLOT(symbolSizeChanged(qreal)));
-	connect( m_curve, SIGNAL(pointRotationAngleChanged(qreal)), this, SLOT(symbolRotationAngleChanged(qreal)));
-	connect( m_curve, SIGNAL(pointOpacityChanged(qreal)), this, SLOT(symbolOpacityChanged(qreal)));
-	connect( m_curve, SIGNAL(pointBrushChanged(QBrush)), this, SLOT(symbolBrushChanged(QBrush)) );
-	connect( m_curve, SIGNAL(pointPenChanged(QPen)), this, SLOT(symbolPenChanged(QPen)) );
-	connect( m_curve, SIGNAL(pointVisibilityChanged(bool)), this, SLOT(symbolVisibleChanged(bool)) );
-	connect( m_curve, SIGNAL(pointErrorBarBrushChanged(QBrush)), this, SLOT(symbolErrorBarBrushChanged(QBrush)) );
-	connect( m_curve, SIGNAL(pointErrorBarSizeChanged(qreal)), this, SLOT(symbolErrorBarSizeChanged(qreal)) );
-
+	connect(m_curve, &AbstractAspect::aspectDescriptionChanged,this, &DatapickerCurveWidget::curveDescriptionChanged);
+	connect(m_curve, &AbstractAspect::aspectRemoved,this, &DatapickerCurveWidget::updateSymbolWidgets);
+	connect(m_curve, &AbstractAspect::aspectAdded, this, &DatapickerCurveWidget::updateSymbolWidgets);
+	connect(m_curve, &DatapickerCurve::curveErrorTypesChanged, this, &DatapickerCurveWidget::curveErrorsChanged);
+	connect(m_curve, &DatapickerCurve::pointStyleChanged, this, &DatapickerCurveWidget::symbolStyleChanged);
+	connect(m_curve, &DatapickerCurve::pointSizeChanged, this, &DatapickerCurveWidget::symbolSizeChanged);
+	connect(m_curve, &DatapickerCurve::pointRotationAngleChanged, this, &DatapickerCurveWidget::symbolRotationAngleChanged);
+	connect(m_curve, &DatapickerCurve::pointOpacityChanged, this, &DatapickerCurveWidget::symbolOpacityChanged);
+	connect(m_curve, &DatapickerCurve::pointBrushChanged, this, &DatapickerCurveWidget::symbolBrushChanged);
+	connect(m_curve, &DatapickerCurve::pointPenChanged, this, &DatapickerCurveWidget::symbolPenChanged);
+	connect(m_curve, &DatapickerCurve::pointVisibilityChanged, this, &DatapickerCurveWidget::symbolVisibleChanged);
+	connect(m_curve, &DatapickerCurve::pointErrorBarBrushChanged, this, &DatapickerCurveWidget::symbolErrorBarBrushChanged);
+	connect(m_curve, &DatapickerCurve::pointErrorBarSizeChanged, this, &DatapickerCurveWidget::symbolErrorBarSizeChanged);
 }
 
 void DatapickerCurveWidget::hideErrorBarWidgets(bool on) {
@@ -290,7 +303,6 @@ void DatapickerCurveWidget::errorBarFillingStyleChanged(int index) {
 		brush.setStyle(brushStyle);
 		curve->setPointErrorBarBrush(brush);
 	}
-
 }
 
 void DatapickerCurveWidget::fillingColorChanged(const QColor& color) {

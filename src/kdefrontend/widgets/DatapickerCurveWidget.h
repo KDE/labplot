@@ -48,7 +48,6 @@ public:
 private:
 	Ui::DatapickerCurveWidget ui;
 	void init();
-	void initConnections();
 	void hideErrorBarWidgets(bool);
 
 	DatapickerCurve* m_curve{nullptr};
