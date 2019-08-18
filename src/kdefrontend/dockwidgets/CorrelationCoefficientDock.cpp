@@ -139,6 +139,7 @@ CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : QWidge
 	connect(ui.chbCalculateStats, &QCheckBox::stateChanged, this, &CorrelationCoefficientDock::chbColumnStatsStateChanged);
 	connect(ui.leNRows, &QLineEdit::textChanged, this, &CorrelationCoefficientDock::leNRowsChanged);
 	connect(ui.leNColumns, &QLineEdit::textChanged, this, &CorrelationCoefficientDock::leNColumnsChanged);
+	connect(ui.pbExportToSpreadsheet, &QPushButton::clicked, this, &CorrelationCoefficientDock::exportStatsTableToSpreadsheet);
 
 	connect(ui.pbPerformTest, &QPushButton::clicked, this, &CorrelationCoefficientDock::findCorrelationCoefficient);
 	connect(ui.cbCol1, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CorrelationCoefficientDock::col1IndexChanged);
@@ -437,6 +438,7 @@ void CorrelationCoefficientDock::chbColumnStatsStateChanged() {
 
 	ui.lNColumns->setVisible(!chbChecked);
 	ui.leNColumns->setVisible(!chbChecked);
+	ui.pbExportToSpreadsheet->setVisible(!chbChecked);
 
 	if (chbChecked) {
 		setColumnsComboBoxView();
@@ -456,6 +458,11 @@ void CorrelationCoefficientDock::leNRowsChanged() {
 void CorrelationCoefficientDock::leNColumnsChanged() {
 	if (m_correlationCoefficient != nullptr)
 		m_correlationCoefficient->setInputStatsTableNCols(ui.leNColumns->text().toInt());
+}
+
+void CorrelationCoefficientDock::exportStatsTableToSpreadsheet() {
+	if (ui.chbCalculateStats->isVisible() && !ui.chbCalculateStats->isChecked())
+		m_correlationCoefficient->exportStatTableToSpreadsheet();
 }
 
 ////*************************************************************

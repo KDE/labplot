@@ -60,6 +60,7 @@ public:
 	void initInputStatsTable(int test, bool calculateStats, int nRows, int nColumns);
 	void setInputStatsTableNRows(int nRows);
 	void setInputStatsTableNCols(int nColumns);
+	void exportStatTableToSpreadsheet();
 
 private:
 	void performPearson(bool categoricalVariable);

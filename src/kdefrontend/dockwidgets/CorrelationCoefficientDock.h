@@ -92,6 +92,7 @@ private slots:
 	void chbColumnStatsStateChanged();
 	void leNRowsChanged();
 	void leNColumnsChanged();
+	void exportStatsTableToSpreadsheet();
 
 
 	//        void connectionChanged();

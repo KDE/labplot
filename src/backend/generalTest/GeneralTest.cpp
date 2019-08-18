@@ -553,7 +553,6 @@ Spreadsheet *GeneralTest::dataSourceSpreadsheet() const {
 	return m_dataSourceSpreadsheet;
 }
 
-
 bool GeneralTest::exportView() const {
 	return true;
 }

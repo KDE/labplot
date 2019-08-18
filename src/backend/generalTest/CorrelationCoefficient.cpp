@@ -144,6 +144,44 @@ void CorrelationCoefficient::setInputStatsTableNCols(int nColumns) {
 		m_inputStatsTableModel->setData(m_inputStatsTableModel->index(0, i), i18n("Column %1", i));
 }
 
+void CorrelationCoefficient::exportStatTableToSpreadsheet() {
+	if (m_dataSourceSpreadsheet == nullptr)
+		return;
+
+	int rowCount = m_inputStatsTableModel->rowCount();
+	int columnCount = m_inputStatsTableModel->columnCount();
+
+	int spreadsheetColCount = m_dataSourceSpreadsheet->columnCount();
+
+	m_dataSourceSpreadsheet->insertColumns(spreadsheetColCount, 3);
+
+	Column* col1 = m_dataSourceSpreadsheet->column(spreadsheetColCount);
+	Column* col2 = m_dataSourceSpreadsheet->column(spreadsheetColCount + 1);
+	Column* col3 = m_dataSourceSpreadsheet->column(spreadsheetColCount + 2);
+
+	col1->setName("Independent Var. 1");
+	col2->setName("Independent Var. 2");
+	col3->setName("Data Values");
+
+	col1->setColumnMode(AbstractColumn::Text);
+	col2->setColumnMode(AbstractColumn::Text);
+	col3->setColumnMode(AbstractColumn::Numeric);
+
+	int index = 0;
+	for (int i = 1; i < rowCount; i++)
+		for (int j = 1; j < columnCount; j++) {
+			col1->setTextAt(index, m_inputStatsTableModel->data(
+								m_inputStatsTableModel->index(i, 0)).toString());
+
+			col2->setTextAt(index, m_inputStatsTableModel->data(
+								m_inputStatsTableModel->index(0, j)).toString());
+
+			col3->setValueAt(index, m_inputStatsTableModel->data(
+								m_inputStatsTableModel->index(i, j)).toDouble());
+			index++;
+		}
+}
+
 /***************************************************************************************************************************
  *                                        Private Implementations
  * ************************************************************************************************************************/
