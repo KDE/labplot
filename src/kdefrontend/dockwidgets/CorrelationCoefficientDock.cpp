@@ -225,14 +225,14 @@ void CorrelationCoefficientDock::showCorrelationCoefficient() {
 void CorrelationCoefficientDock::findCorrelationCoefficient()  {
 	QVector<Column*> cols;
 
-	if (ui.cbCol1->count() == 0)
+	if (ui.chbCategorical->isChecked() && ui.cbCol1->count() == 0)
 		return;
 
 	cols << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
 	cols << reinterpret_cast<Column*>(ui.cbCol2->currentData().toLongLong());
 
 	m_correlationCoefficient->setColumns(cols);
-	m_correlationCoefficient->performTest(m_test, ui.chbCategorical->isChecked());
+	m_correlationCoefficient->performTest(m_test, ui.chbCategorical->isChecked(), ui.chbCalculateStats->isChecked());
 }
 
 void CorrelationCoefficientDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {

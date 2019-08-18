@@ -442,7 +442,7 @@ QString GeneralTest::getHtmlTable3(const QList<GeneralTest::HtmlCell*>& rowMajor
 	table = "<style type=text/css>"
 			".tg  {border-collapse:collapse;border: 1px solid black;}"
 			".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border: 1px solid black;overflow:hidden;word-break:normal;color:#333;background-color:#fff;}"
-			".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border: 1px solid black;overflow:hidden;word-break:normal;color:#333;background-color:#f0f0f0;}"
+			".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:bold;padding:10px 5px;border: 1px solid black;overflow:hidden;word-break:normal;color:#333;background-color:#f0f0f0;}"
 			"</style>";
 
 	table += "<table class=tg>";
