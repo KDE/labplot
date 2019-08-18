@@ -75,8 +75,8 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode) :
 
 	connect(m_output_filter, &AbstractSimpleFilter::formatChanged, m_owner, &Column::handleFormatChange);
 
-	m_input_filter->setName("InputFilter");
-	m_output_filter->setName("OutputFilter");
+	//m_input_filter->setName("InputFilter");
+	//m_output_filter->setName("OutputFilter");
 }
 
 /**
@@ -124,8 +124,8 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, voi
 		break;
 	}
 
-	m_input_filter->setName("InputFilter");
-	m_output_filter->setName("OutputFilter");
+	//m_input_filter->setName("InputFilter");
+	//m_output_filter->setName("OutputFilter");
 }
 
 ColumnPrivate::~ColumnPrivate() {
@@ -382,8 +382,8 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 
 	m_column_mode = mode;
 
-	new_in_filter->setName("InputFilter");
-	new_out_filter->setName("OutputFilter");
+	//new_in_filter->setName("InputFilter");
+	//new_out_filter->setName("OutputFilter");
 	m_input_filter = new_in_filter;
 	m_output_filter = new_out_filter;
 	m_input_filter->input(0, m_owner->m_string_io);
@@ -438,8 +438,8 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data,
 	m_column_mode = mode;
 	m_data = data;
 
-	in_filter->setName("InputFilter");
-	out_filter->setName("OutputFilter");
+	//in_filter->setName("InputFilter");
+	//out_filter->setName("OutputFilter");
 	m_input_filter = in_filter;
 	m_output_filter = out_filter;
 	m_input_filter->input(0, m_owner->m_string_io);

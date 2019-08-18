@@ -143,8 +143,8 @@ private:
 	QToolButton* tbNewCartesianPlot{nullptr};
 	QToolButton* tbZoom{nullptr};
 	QToolButton* tbMagnification{nullptr};
-	QAction* currentZoomAction;
-	QAction* currentMagnificationAction;
+	QAction* currentZoomAction{nullptr};
+	QAction* currentMagnificationAction{nullptr};
 
 	//Actions
 	QAction* selectAllAction;

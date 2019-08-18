@@ -2,7 +2,7 @@
     File                 : ColumnDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2011-2019 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : widget for column properties
 
@@ -35,6 +35,7 @@
 #include "backend/core/datatypes/String2DoubleFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
+#include "backend/datapicker/DatapickerCurve.h"
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
@@ -68,12 +69,15 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	m_column = list.first();
 	m_aspect = list.first();
 
-	//check whether we have non-editable columns (e.g. columns for residuals calculated in XYFitCurve)
+	//check whether we have non-editable columns:
+	//1. columns in a LiveDataSource
+	//2. columns in the spreadsheet of a datapicker curve
+	//3. columns for residuals calculated in XYFitCurve)
 	bool nonEditable = false;
 	for (auto* col : m_columnsList) {
 		auto* s = dynamic_cast<Spreadsheet*>(col->parentAspect());
 		if (s) {
-			if (dynamic_cast<LiveDataSource*>(s)) {
+			if (dynamic_cast<LiveDataSource*>(s) || dynamic_cast<DatapickerCurve*>(s->parentAspect())) {
 				nonEditable = true;
 				break;
 			}
@@ -111,17 +115,15 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	this->updateTypeWidgets(columnMode);
 	ui.cbPlotDesignation->setCurrentIndex( int(m_column->plotDesignation()) );
 
-	if (!nonEditable) {
-		// slots
-		connect(m_column, &AbstractColumn::aspectDescriptionChanged, this, &ColumnDock::columnDescriptionChanged);
-		connect(m_column, &AbstractColumn::modeChanged, this, &ColumnDock::columnModeChanged);
-		connect(m_column->outputFilter(), &AbstractSimpleFilter::formatChanged, this, &ColumnDock::columnFormatChanged);
-		connect(m_column->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &ColumnDock::columnPrecisionChanged);
-		connect(m_column, &AbstractColumn::plotDesignationChanged, this, &ColumnDock::columnPlotDesignationChanged);
-	} else {
-		//don't allow to change the column type at least one non-editable column
-		ui.cbType->setEnabled(false);
-	}
+	// slots
+	connect(m_column, &AbstractColumn::aspectDescriptionChanged, this, &ColumnDock::columnDescriptionChanged);
+	connect(m_column, &AbstractColumn::modeChanged, this, &ColumnDock::columnModeChanged);
+	connect(m_column->outputFilter(), &AbstractSimpleFilter::formatChanged, this, &ColumnDock::columnFormatChanged);
+	connect(m_column->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &ColumnDock::columnPrecisionChanged);
+	connect(m_column, &AbstractColumn::plotDesignationChanged, this, &ColumnDock::columnPlotDesignationChanged);
+
+	//don't allow to change the column type at least one non-editable column
+	ui.cbType->setEnabled(!nonEditable);
 
 	m_initializing = false;
 }

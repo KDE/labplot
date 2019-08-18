@@ -83,12 +83,18 @@ DatapickerImage::~DatapickerImage() {
 void DatapickerImage::init() {
 	KConfig config;
 	KConfigGroup group = config.group( "DatapickerImage" );
+
+	//general properties
 	d->fileName = group.readEntry("FileName", QString());
 	d->rotationAngle = group.readEntry("RotationAngle", 0.0);
 	d->minSegmentLength = group.readEntry("MinSegmentLength", 30);
 	d->pointSeparation = group.readEntry("PointSeparation", 30);
 	d->axisPoints.type = (DatapickerImage::GraphType) group.readEntry("GraphType", (int) DatapickerImage::Cartesian);
 	d->axisPoints.ternaryScale = group.readEntry("TernaryScale", 1);
+	d->plotPointsType = (DatapickerImage::PointsType) group.readEntry("PlotPointsType", (int) DatapickerImage::AxisPoints);
+
+	//edit image settings
+	d->plotImageType = DatapickerImage::OriginalImage;
 	d->settings.foregroundThresholdHigh = group.readEntry("ForegroundThresholdHigh", 90);
 	d->settings.foregroundThresholdLow = group.readEntry("ForegroundThresholdLow", 30);
 	d->settings.hueThresholdHigh = group.readEntry("HueThresholdHigh", 360);
@@ -99,9 +105,8 @@ void DatapickerImage::init() {
 	d->settings.saturationThresholdLow = group.readEntry("SaturationThresholdLow", 30);
 	d->settings.valueThresholdHigh = group.readEntry("ValueThresholdHigh", 90);
 	d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", 30);
-	d->plotPointsType = (DatapickerImage::PointsType) group.readEntry("PlotPointsType", (int) DatapickerImage::AxisPoints);
-	d->plotImageType = DatapickerImage::OriginalImage;
-	// point properties
+
+	// reference point symbol properties
 	d->pointStyle = (Symbol::Style)group.readEntry("PointStyle", (int)Symbol::Cross);
 	d->pointSize = group.readEntry("Size", Worksheet::convertToSceneUnits(7, Worksheet::Point));
 	d->pointRotationAngle = group.readEntry("Rotation", 0.0);
@@ -375,7 +380,7 @@ void DatapickerImage::setPointSeparation(const int value) {
 //######################  Private implementation ###############################
 //##############################################################################
 DatapickerImagePrivate::DatapickerImagePrivate(DatapickerImage *owner) : q(owner),
-	pageRect(0, 0, 1500, 1500),
+	pageRect(0, 0, 1000, 1000),
 	m_scene(new QGraphicsScene(pageRect)) {
 }
 

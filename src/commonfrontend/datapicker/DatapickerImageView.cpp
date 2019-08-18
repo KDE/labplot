@@ -96,11 +96,27 @@ DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView
 
 	//signal/slot connections
 	//for general actions
-	connect( m_image, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)) );
-	connect( m_image, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
-	connect( m_image, SIGNAL(requestUpdateActions()), this, SLOT(handleImageActions()) );
-	connect( m_datapicker, SIGNAL(requestUpdateActions()), this, SLOT(handleImageActions()) );
-	connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(changeRotationAngle()) );
+	connect(m_image, &DatapickerImage::requestProjectContextMenu, this, &DatapickerImageView::createContextMenu);
+	connect(m_image, &DatapickerImage::requestUpdate, this, &DatapickerImageView::updateBackground);
+	connect(m_image, &DatapickerImage::requestUpdateActions, this, &DatapickerImageView::handleImageActions);
+	connect(m_datapicker, &Datapicker::requestUpdateActions, this, &DatapickerImageView::handleImageActions);
+	connect(m_image, &DatapickerImage::rotationAngleChanged, this, &DatapickerImageView::changeRotationAngle);
+
+	//resize the view to make the complete scene visible.
+	//no need to resize the view when the project is being opened,
+	//all views will be resized to the stored values at the end
+	if (!m_image->isLoading()) {
+		float w = Worksheet::convertFromSceneUnits(sceneRect().width(), Worksheet::Inch);
+		float h = Worksheet::convertFromSceneUnits(sceneRect().height(), Worksheet::Inch);
+		w *= QApplication::desktop()->physicalDpiX();
+		h *= QApplication::desktop()->physicalDpiY();
+		resize(w*1.1, h*1.1);
+	}
+
+	//rescale to the original size
+	static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
+	static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
+	setTransform(QTransform::fromScale(hscale, vscale));
 }
 
 DatapickerImageView::~DatapickerImageView() {
@@ -136,9 +152,6 @@ void DatapickerImageView::initActions() {
 
 	zoomSelectionModeAction = new QAction(QIcon::fromTheme("page-zoom"), i18n("Select and Zoom"), mouseModeActionGroup);
 	zoomSelectionModeAction->setCheckable(true);
-
-	selectAndMoveModeAction = new QAction(QIcon::fromTheme("labplot-cursor-arrow"), i18n("Select and Move"), mouseModeActionGroup);
-	selectAndMoveModeAction->setCheckable(true);
 
 	setAxisPointsAction = new QAction(QIcon::fromTheme("labplot-plot-axis-points"), i18n("Set Axis Points"), plotPointsTypeActionGroup);
 	setAxisPointsAction->setCheckable(true);
@@ -179,12 +192,16 @@ void DatapickerImageView::initActions() {
 	fiveTimesMagnificationAction = new QAction(QIcon::fromTheme("labplot-5x-zoom"), i18n("5x Magnification"), magnificationActionGroup);
 	fiveTimesMagnificationAction->setCheckable(true);
 
-	connect( mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)) );
-	connect( zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)) );
-	connect( plotPointsTypeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changePointsType(QAction*)) );
-	connect( addCurveAction, SIGNAL(triggered()), this, SLOT(addCurve()) );
-	connect( navigationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeSelectedItemsPosition(QAction*)) );
-	connect( magnificationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(magnificationChanged(QAction*)) );
+	connect(mouseModeActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::mouseModeChanged);
+	connect(zoomActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::changeZoom);
+	connect(plotPointsTypeActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::changePointsType);
+	connect(addCurveAction, &QAction::triggered, this, &DatapickerImageView::addCurve);
+	connect(navigationActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::changeSelectedItemsPosition);
+	connect(magnificationActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::magnificationChanged);
+
+	//set some default values
+	currentZoomAction = zoomInViewAction;
+	currentMagnificationAction = noMagnificationAction;
 }
 
 void DatapickerImageView::initMenus() {
@@ -193,7 +210,6 @@ void DatapickerImageView::initMenus() {
 	m_viewMouseModeMenu->addAction(selectAndEditModeAction);
 	m_viewMouseModeMenu->addAction(navigationModeAction);
 	m_viewMouseModeMenu->addAction(zoomSelectionModeAction);
-	m_viewMouseModeMenu->addAction(selectAndMoveModeAction);
 
 	m_viewImageMenu = new QMenu(i18n("Data Entry Mode"), this);
 	m_viewImageMenu->addAction(setAxisPointsAction);
@@ -215,7 +231,7 @@ void DatapickerImageView::initMenus() {
 	m_navigationMenu->addAction(shiftDownAction);
 
 	m_magnificationMenu = new QMenu(i18n("Magnification"), this);
-	m_magnificationMenu->setIcon(QIcon::fromTheme("labplot-zoom"));
+	m_magnificationMenu->setIcon(QIcon::fromTheme("zoom-in"));
 	m_magnificationMenu->addAction(noMagnificationAction);
 	m_magnificationMenu->addAction(twoTimesMagnificationAction);
 	m_magnificationMenu->addAction(threeTimesMagnificationAction);
@@ -262,13 +278,6 @@ void DatapickerImageView::fillToolBar(QToolBar* toolBar) {
 	toolBar->addAction(addCurveAction);
 
 	toolBar->addSeparator();
-	toolBar->addAction(noMagnificationAction);
-	toolBar->addAction(twoTimesMagnificationAction);
-	toolBar->addAction(threeTimesMagnificationAction);
-	toolBar->addAction(fourTimesMagnificationAction);
-	toolBar->addAction(fiveTimesMagnificationAction);
-
-	toolBar->addSeparator();
 	toolBar->addAction(shiftRightAction);
 	toolBar->addAction(shiftLeftAction);
 	toolBar->addAction(shiftUpAction);
@@ -278,13 +287,19 @@ void DatapickerImageView::fillToolBar(QToolBar* toolBar) {
 	toolBar->addAction(selectAndEditModeAction);
 	toolBar->addAction(navigationModeAction);
 	toolBar->addAction(zoomSelectionModeAction);
-	toolBar->addAction(selectAndMoveModeAction);
 
 	tbZoom = new QToolButton(toolBar);
 	tbZoom->setPopupMode(QToolButton::MenuButtonPopup);
 	tbZoom->setMenu(m_zoomMenu);
 	tbZoom->setDefaultAction(currentZoomAction);
+	toolBar->addSeparator();
 	toolBar->addWidget(tbZoom);
+
+	tbMagnification = new QToolButton(toolBar);
+	tbMagnification->setPopupMode(QToolButton::MenuButtonPopup);
+	tbMagnification->setMenu(m_magnificationMenu);
+	tbMagnification->setDefaultAction(currentMagnificationAction);
+	toolBar->addWidget(tbMagnification);
 }
 
 void DatapickerImageView::setScene(QGraphicsScene* scene) {
@@ -621,14 +636,9 @@ void DatapickerImageView::mouseModeChanged(QAction* action) {
 		setInteractive(false);
 		setDragMode(QGraphicsView::ScrollHandDrag);
 		m_image->setSegmentsHoverEvent(false);
-	} else if (action == zoomSelectionModeAction) {
+	} else {
 		m_mouseMode = ZoomSelectionMode;
 		setInteractive(false);
-		setDragMode(QGraphicsView::NoDrag);
-		m_image->setSegmentsHoverEvent(false);
-	} else {
-		m_mouseMode = SelectAndMoveMode;
-		setInteractive(true);
 		setDragMode(QGraphicsView::NoDrag);
 		m_image->setSegmentsHoverEvent(false);
 	}

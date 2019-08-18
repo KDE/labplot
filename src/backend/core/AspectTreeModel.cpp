@@ -220,7 +220,7 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 	case Qt::DecorationRole:
 		return index.column() == 0 ? aspect->icon() : QIcon();
 	case Qt::ForegroundRole: {
-			const WorksheetElement* we = qobject_cast<WorksheetElement*>(aspect);
+			const WorksheetElement* we = dynamic_cast<WorksheetElement*>(aspect);
 			if (we) {
 				if (!we->isVisible())
 					return QVariant(  QApplication::palette().color(QPalette::Disabled,QPalette::Text ) );
@@ -440,7 +440,7 @@ bool AspectTreeModel::containsFilterString(const AbstractAspect* aspect) const {
 //#################################  SLOTS  ####################################
 //##############################################################################
 void AspectTreeModel::renameRequestedSlot() {
-	auto* aspect = qobject_cast<AbstractAspect*>(QObject::sender());
+	auto* aspect = dynamic_cast<AbstractAspect*>(QObject::sender());
 	if (aspect)
 		emit renameRequested(modelIndexOfAspect(aspect));
 }

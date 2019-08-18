@@ -422,7 +422,7 @@ void WorksheetView::initMenus() {
 	m_zoomMenu->addAction(zoomFitSelectionAction);
 
 	m_magnificationMenu = new QMenu(i18n("Magnification"), this);
-	m_magnificationMenu->setIcon(QIcon::fromTheme("labplot-zoom"));
+	m_magnificationMenu->setIcon(QIcon::fromTheme("zoom-in"));
 	m_magnificationMenu->addAction(noMagnificationAction);
 	m_magnificationMenu->addAction(twoTimesMagnificationAction);
 	m_magnificationMenu->addAction(threeTimesMagnificationAction);
@@ -643,6 +643,7 @@ void WorksheetView::fillToolBar(QToolBar* toolBar) {
 	toolBar->addAction(selectionModeAction);
 	toolBar->addAction(navigationModeAction);
 	toolBar->addAction(zoomSelectionModeAction);
+	toolBar->addSeparator();
 	tbZoom = new QToolButton(toolBar);
 	tbZoom->setPopupMode(QToolButton::MenuButtonPopup);
 	tbZoom->setMenu(m_zoomMenu);
