@@ -412,7 +412,7 @@ void CorrelationCoefficient::performSpearman() {
 
 /***********************************************Chi Square Test for Indpendence******************************************************************/
 
-// TODO: Implement this function when data is given in spreadsheet:
+// TODO: Find P value from chi square test statistic:
 void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 	int rowCount;
 	int columnCount;
@@ -422,13 +422,15 @@ void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 	int overallTotal = 0;
 	QVector<QVector<int>> observedValues;
 
+	QStringList horizontalHeader;
+	QStringList verticalHeader;
+
 	if (!calculateStats) {
 		rowCount = m_inputStatsTableModel->rowCount() - 1;
 		columnCount = m_inputStatsTableModel->columnCount() - 1;
 
 		sumRows.resize(rowCount);
 		sumColumns.resize(columnCount);
-
 		observedValues.resize(rowCount);
 
 		for (int i = 1; i <= rowCount; i++) {
@@ -441,9 +443,63 @@ void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 				observedValues[i - 1][j - 1] = cellValue;
 			}
 		}
+
+		for (int i = 0; i < columnCount + 1; i++)
+			horizontalHeader.append(m_inputStatsTableModel->data(m_inputStatsTableModel->index(0, i)).toString());
+
+		for (int i = 0; i < rowCount + 1; i++)
+			verticalHeader.append(m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 0)).toString());
 	} else {
-		printError("Missing Feature: Can't calculate Statistics from Spreadsheet for now:");
-		return;
+		if (m_columns.count() != 3) {
+			printError("Select only 3 columns ");
+			return;
+		}
+
+		int nRows = findCount(m_columns[0]);
+
+		rowCount = 0;
+		columnCount = 0;
+
+		horizontalHeader.append(QString());
+		verticalHeader.append(QString());
+
+		QMap<QString, int> independentVar1;
+		QMap<QString, int> independentVar2;
+		for (int i = 0; i < nRows; i++) {
+			QString cell1Text = m_columns[0]->textAt(i);
+			QString cell2Text = m_columns[1]->textAt(i);
+
+			if (independentVar1[cell1Text] == 0) {
+				independentVar1[cell1Text] = ++columnCount;
+				horizontalHeader.append(cell1Text);
+			}
+
+			if (independentVar2[cell2Text] == 0) {
+				independentVar2[cell2Text] = ++rowCount;
+				verticalHeader.append(cell2Text);
+			}
+		}
+
+		sumRows.resize(rowCount);
+		sumColumns.resize(columnCount);
+		observedValues.resize(rowCount);
+		for (int i = 0; i < rowCount; i++)
+			observedValues[i].resize(columnCount);
+
+
+		for (int i = 0; i < nRows; i++) {
+			QString cell1Text = m_columns[0]->textAt(i);
+			QString cell2Text = m_columns[1]->textAt(i);
+			int cellValue = int(m_columns[2]->valueAt(i));
+
+			int partition1Number = independentVar1[cell1Text] - 1;
+			int partition2Number = independentVar2[cell2Text] - 1;
+
+			sumRows[partition1Number] += cellValue;
+			sumColumns[partition2Number] += cellValue;
+			overallTotal += cellValue;
+			observedValues[partition1Number][partition2Number] = cellValue;
+		}
 	}
 
 	if (overallTotal == 0)
@@ -460,14 +516,14 @@ void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 	int level = 0;
 	// horizontal header
 	for (int i = 0; i < columnCount + 1; i++)
-		rowMajor.append(new HtmlCell(m_inputStatsTableModel->data(m_inputStatsTableModel->index(0, i)).toString(), level, true));
+		rowMajor.append(new HtmlCell(horizontalHeader[i], level, true));
 
 	rowMajor.append(new HtmlCell("Total", level, true));
 
 	//data with vertical header.
 	for (int i = 1; i < rowCount + 1; i++) {
 		level++;
-		rowMajor.append(new HtmlCell(m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 0)).toString(), level, true));
+		rowMajor.append(new HtmlCell(verticalHeader[i], level, true));
 		for (int j = 0; j < columnCount; j++)
 			rowMajor.append(new HtmlCell(round(observedValues[i - 1][j]), level));
 
@@ -489,14 +545,14 @@ void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 	level = 0;
 	// horizontal header
 	for (int i = 0; i < columnCount + 1; i++)
-		rowMajor.append(new HtmlCell(m_inputStatsTableModel->data(m_inputStatsTableModel->index(0, i)).toString(), level, true));
+		rowMajor.append(new HtmlCell(horizontalHeader[i], level, true));
 
 	rowMajor.append(new HtmlCell("Total", level, true));
 
 	//data with vertical header.
 	for (int i = 1; i < rowCount + 1; i++) {
 		level++;
-		rowMajor.append(new HtmlCell(m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 0)).toString(), level, true));
+		rowMajor.append(new HtmlCell(verticalHeader[i], level, true));
 		for (int j = 0; j < columnCount; j++)
 			rowMajor.append(new HtmlCell(round(expectedValues[i - 1][j]), level));
 
