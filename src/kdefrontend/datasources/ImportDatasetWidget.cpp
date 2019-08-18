@@ -87,6 +87,7 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	connect(ui.bClearCache, &QPushButton::clicked, this, &ImportDatasetWidget::clearCache);
 	connect(ui.leSearchCategories, &QLineEdit::textChanged, this, &ImportDatasetWidget::scrollToCategoryTreeItem);
 	connect(ui.bRefresh, &QPushButton::clicked, this, &ImportDatasetWidget::refreshCategories);
+	connect(ui.bRestore, &QPushButton::clicked, this, &ImportDatasetWidget::restoreBackup);
 	connect(ui.bNewDataset, &QPushButton::clicked, this, &ImportDatasetWidget::showDatasetMetadataManager);
 	connect(ui.lwDatasets, &QListWidget::itemSelectionChanged, [this]() {
 		emit datasetSelected();
@@ -232,7 +233,9 @@ void ImportDatasetWidget::updateCategoryTree(const QString& collectionName) {
 
 	//Go through every category that was previously processed.
 	for(auto category : categories) {
-		QTreeWidgetItem* const currentCategoryItem = new QTreeWidgetItem(QStringList(category));
+		QStringList categoryList(category);
+		categoryList.append(QString::number(m_datasetModel->datasetCount(collection, category)));
+		QTreeWidgetItem* const currentCategoryItem = new QTreeWidgetItem(categoryList);
 		ui.twCategories->addTopLevelItem(currentCategoryItem);
 
 		QStringList subcategories = (collection.compare("All") == 0) ?
@@ -240,7 +243,10 @@ void ImportDatasetWidget::updateCategoryTree(const QString& collectionName) {
 
 		//Go through every subcategory of the current category, that was previously processed.
 		for(auto subcategory : subcategories) {
-			currentCategoryItem->addChild(new QTreeWidgetItem(QStringList(subcategory)));
+			QStringList subcategoryList(subcategory);
+			subcategoryList.append(QString::number(m_datasetModel->datasetCount(collection, category, subcategory)));
+
+			currentCategoryItem->addChild(new QTreeWidgetItem(QStringList(subcategoryList)));
 		}
 	}
 
@@ -533,7 +539,7 @@ void ImportDatasetWidget::showDatasetMetadataManager() {
 }
 
 /**
- * @brief Places the metadata file containing the categories and subcategories into a specific directory.
+ * @brief Places the metadata file containing the list of collections into a specific directory.
  */
 void ImportDatasetWidget::downloadCollectionsFile() {
 	const QString fileNameOld = QStandardPaths::locate(QStandardPaths::AppDataLocation, "datasets/DatasetCollections.json");
@@ -563,91 +569,154 @@ void ImportDatasetWidget::downloadCollectionFile(const QString& collectionName) 
  * @brief Refreshes the categories, subcategories and datasets.
  */
 void ImportDatasetWidget::refreshCategories() {
-	QString fileNameNew = m_jsonDir + QLatin1String("DatasetCollections.json");
+	QMessageBox::StandardButton reply;
+	reply = QMessageBox::question(this, "Refresh metadata files",
+								  "Are you sure to refresh all of the metadata files? (every change will be removed, but a backup will be created)", QMessageBox::Yes|QMessageBox::No);
 
-	QFile existingCategoriesFile(fileNameNew);
-	if(existingCategoriesFile.exists()) {
+	if(reply == QMessageBox::Yes) {
+		QString fileNameNew = m_jsonDir + QLatin1String("DatasetCollections.json");
 
-		//Delete old backup
-		QFile oldBackup(m_jsonDir + QLatin1String("DatasetCollections_backup.json"));
-		if(oldBackup.exists()) {
-			oldBackup.remove();
-		}
-		oldBackup.close();
+		QFile existingCategoriesFile(fileNameNew);
+		if(existingCategoriesFile.exists()) {
 
-		//Create new backup
-		if(!existingCategoriesFile.rename(m_jsonDir + QLatin1String("DatasetCollections_backup.json")))
-			qDebug() << " Couldn't create backup because " << existingCategoriesFile.errorString();
-	}
-
-	//Obtain the new file
-	downloadCollectionsFile();
-
-	QString filePath = m_jsonDir + "DatasetCollections.json";
-	QFile file(filePath);
-
-	if (file.open(QIODevice::ReadOnly)) {
-		m_datasetsMap.clear();
-
-		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
-		QJsonArray collections;
-		if(document.isArray())
-			collections = document.array();
-		else {
-			qDebug()<< "The DatasetCollections.json file is invalid";
-			return;
-		}
-
-		//Go trough every collection's metadata file
-		for (int collectionIndex = 0; collectionIndex < collections.size(); collectionIndex++) {
-			const QString currentCollection = collections[collectionIndex].toString();
-
-			QFile existingCollectionFile(m_jsonDir + currentCollection + ".json");
-			//we copy the file to the data location if it doesn't exist
-			if(!existingCollectionFile.exists()) {
-				downloadCollectionFile(currentCollection + ".json");
+			//Delete old backup
+			QFile oldBackup(m_jsonDir + QLatin1String("DatasetCollections_backup.json"));
+			if(oldBackup.exists()) {
+				oldBackup.remove();
 			}
-			//otherwise we have to create a backup first
+			oldBackup.close();
+
+			//Create new backup
+			if(!existingCategoriesFile.rename(m_jsonDir + QLatin1String("DatasetCollections_backup.json")))
+				qDebug() << " Couldn't create backup because " << existingCategoriesFile.errorString();
+		}
+
+		//Obtain the new file
+		downloadCollectionsFile();
+
+		QString filePath = m_jsonDir + "DatasetCollections.json";
+		QFile file(filePath);
+
+		if (file.open(QIODevice::ReadOnly)) {
+			m_datasetsMap.clear();
+
+			QJsonDocument document = QJsonDocument::fromJson(file.readAll());
+			QJsonArray collections;
+			if(document.isArray())
+				collections = document.array();
 			else {
-				QFile oldBackupCollection(m_jsonDir + currentCollection + "_backup.json");
-				if(oldBackupCollection.exists()) {
-					oldBackupCollection.remove();
+				qDebug()<< "The DatasetCollections.json file is invalid";
+				return;
+			}
+
+			//Go trough every collection's metadata file
+			for (int collectionIndex = 0; collectionIndex < collections.size(); collectionIndex++) {
+				const QString currentCollection = collections[collectionIndex].toString();
+
+				QFile existingCollectionFile(m_jsonDir + currentCollection + ".json");
+				//we copy the file to the data location if it doesn't exist
+				if(!existingCollectionFile.exists()) {
+					downloadCollectionFile(currentCollection + ".json");
 				}
-				oldBackupCollection.close();
+				//otherwise we have to create a backup first
+				else {
+					QFile oldBackupCollection(m_jsonDir + currentCollection + "_backup.json");
+					if(oldBackupCollection.exists()) {
+						oldBackupCollection.remove();
+					}
+					oldBackupCollection.close();
 
-				if(!existingCollectionFile.rename(m_jsonDir + currentCollection + "_backup.json"))
-					qDebug() << " Couldn't create backup because " << existingCollectionFile.errorString();
+					if(!existingCollectionFile.rename(m_jsonDir + currentCollection + "_backup.json"))
+						qDebug() << " Couldn't create backup because " << existingCollectionFile.errorString();
 
-				downloadCollectionFile(currentCollection + ".json");
+					downloadCollectionFile(currentCollection + ".json");
+				}
 			}
 		}
-	}
 
-	//process the "refreshed" files and update the widget accordingly
-	loadDatasetCategoriesFromJson();
+		//process the "refreshed" files and update the widget accordingly
+		loadDatasetCategoriesFromJson();
+	}
+}
+
+void ImportDatasetWidget::restoreBackup() {
+	QMessageBox::StandardButton reply;
+	reply = QMessageBox::question(this, "Restore backup", "Are you sure to restore the backup metadata files?", QMessageBox::Yes|QMessageBox::No);
+
+	if(reply == QMessageBox::Yes) {
+		//Restore the collection list first
+		QFile backup(m_jsonDir + QLatin1String("DatasetCollections_backup.json"));
+		if(backup.exists()) {
+			QFile deleteFile(m_jsonDir + QLatin1String("DatasetCollections.json"));
+			deleteFile.remove();
+
+			if(!backup.rename(m_jsonDir + QLatin1String("DatasetCollections.json"))) {
+				qDebug() << " Couldn't create backup because " << backup.errorString();
+				downloadCollectionsFile();
+			}
+		}
+
+		QString filePath = m_jsonDir + "DatasetCollections.json";
+		QFile file(filePath);
+		if (file.open(QIODevice::ReadOnly)) {
+			m_datasetsMap.clear();
+			QJsonDocument document = QJsonDocument::fromJson(file.readAll());
+			QJsonArray collections;
+			if(document.isArray())
+				collections = document.array();
+			else {
+				qDebug()<< "The DatasetCollections.json file is invalid";
+				return;
+			}
+
+			//Restore every collection's metadata file
+			for (int collectionIndex = 0; collectionIndex < collections.size(); collectionIndex++) {
+				const QString currentCollection = collections[collectionIndex].toString();
+
+				QFile backupCollection(m_jsonDir + currentCollection + "_backup.json");
+				if(backupCollection.exists()) {
+					QFile collectionFile(m_jsonDir + currentCollection + ".json");
+					collectionFile.remove();
+
+					if(!backupCollection.rename(m_jsonDir + currentCollection + ".json")) {
+						qDebug() << " Couldn't create backup because " << backupCollection.errorString();
+						downloadCollectionFile(currentCollection + ".json");
+					}
+				}
+			}
+		}
+
+		//process the restored files and update the widget accordingly
+		loadDatasetCategoriesFromJson();
+	}
 }
 
 /**
  * @brief Clears the content of the directory in which the download of metadata files was done.
  */
 void ImportDatasetWidget::clearCache() {
-	QDir dir(m_jsonDir);
+	QMessageBox::StandardButton reply;
+	reply = QMessageBox::question(this, "Clear cache", "Are you sure to remove every downloaded dataset?", QMessageBox::Yes|QMessageBox::No);
 
-	if(dir.exists()) {
-		for(const auto& entry : dir.entryList()) {
-			//delete every file that isn't potentially a metadata file
-			if(!(entry.endsWith(QLatin1String(".json")) || entry.startsWith(QLatin1Char('.')))) {
-				QFile deleteFile (m_jsonDir + entry);
-				if(deleteFile.exists()) {
-					deleteFile.remove();
+	if(reply == QMessageBox::Yes) {
+		QDir dir(m_jsonDir);
+
+		if(dir.exists()) {
+			for(const auto& entry : dir.entryList()) {
+				//delete every file that isn't potentially a metadata file
+				if(!(entry.endsWith(QLatin1String(".json")) || entry.startsWith(QLatin1Char('.')))) {
+					QFile deleteFile (m_jsonDir + entry);
+					if(deleteFile.exists()) {
+						deleteFile.remove();
+					}
 				}
 			}
+		} else {
+			qDebug("Couldn't clear cache, containing folder doesn't exist!");
 		}
-	} else {
-		qDebug("Couldn't clear cache, containing folder doesn't exist!");
-	}
 
-	highlightLocalMetadataFiles();
+		highlightLocalMetadataFiles();
+	}
 }
 
 /**

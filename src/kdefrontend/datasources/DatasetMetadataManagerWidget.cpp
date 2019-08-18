@@ -126,9 +126,18 @@ void DatasetMetadataManagerWidget::loadSettings() {
 	ui.chbRemoveQuotes->setChecked(conf.readEntry("removeQuotes", false));
 	ui.chbSkipEmptyParts->setChecked(conf.readEntry("skipEmptyParts", false));
 	ui.chbHeader->setChecked(conf.readEntry("useFirstRowForVectorName", true));
-	ui.cbCollection->setCurrentText(conf.readEntry("collection", ""));
-	ui.cbCategory->setCurrentText(conf.readEntry("category", ""));
-	ui.cbSubcategory->setCurrentText(conf.readEntry("subcategory", ""));
+
+	QString lastCollection = conf.readEntry("collection", "");
+	if(m_datasetModel->collections().contains(lastCollection))
+		ui.cbCollection->setCurrentText(lastCollection);
+
+	QString lastCategory = conf.readEntry("category", "");
+	if(m_datasetModel->categories(ui.cbCollection->currentText()).contains(lastCategory))
+		ui.cbCategory->setCurrentText(lastCategory);
+
+	QString lastSubcategory = conf.readEntry("subcategory", "");
+	if(m_datasetModel->subcategories(ui.cbCollection->currentText(), ui.cbCategory->currentText()).contains(lastSubcategory))
+		ui.cbSubcategory->setCurrentText(lastSubcategory);
 }
 
 /**

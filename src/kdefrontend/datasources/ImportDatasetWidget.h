@@ -91,6 +91,7 @@ private slots:
 	void showDatasetMetadataManager();
 	void refreshCategories();
 	void clearCache();
+	void restoreBackup();
 
 signals:
 	void datasetSelected();

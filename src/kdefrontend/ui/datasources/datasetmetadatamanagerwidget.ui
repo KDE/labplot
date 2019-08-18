@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>457</width>
-    <height>567</height>
+    <height>575</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -258,6 +258,26 @@
    <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>cbCollection</tabstop>
+  <tabstop>cbCategory</tabstop>
+  <tabstop>cbSubcategory</tabstop>
+  <tabstop>leFileName</tabstop>
+  <tabstop>leDatasetName</tabstop>
+  <tabstop>leDownloadURL</tabstop>
+  <tabstop>teDescription</tabstop>
+  <tabstop>bNewColumn</tabstop>
+  <tabstop>bDelete</tabstop>
+  <tabstop>cbCommentCharacter</tabstop>
+  <tabstop>cbSeparatingCharacter</tabstop>
+  <tabstop>cbNumberFormat</tabstop>
+  <tabstop>cbDateTimeFormat</tabstop>
+  <tabstop>chbCreateIndex</tabstop>
+  <tabstop>chbSimplifyWhitespaces</tabstop>
+  <tabstop>chbSkipEmptyParts</tabstop>
+  <tabstop>chbRemoveQuotes</tabstop>
+  <tabstop>chbHeader</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
