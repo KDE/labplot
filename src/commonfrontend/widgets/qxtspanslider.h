@@ -37,69 +37,66 @@
 
 class QxtSpanSliderPrivate;
 
-class QxtSpanSlider : public QSlider
-{
-    Q_OBJECT
-    QXT_DECLARE_PRIVATE(QxtSpanSlider)
-    Q_PROPERTY(int lowerValue READ lowerValue WRITE setLowerValue)
-    Q_PROPERTY(int upperValue READ upperValue WRITE setUpperValue)
-    Q_PROPERTY(int lowerPosition READ lowerPosition WRITE setLowerPosition)
-    Q_PROPERTY(int upperPosition READ upperPosition WRITE setUpperPosition)
-    Q_PROPERTY(HandleMovementMode handleMovementMode READ handleMovementMode WRITE setHandleMovementMode)
-    Q_ENUMS(HandleMovementMode)
+class QxtSpanSlider : public QSlider {
+	Q_OBJECT
+	QXT_DECLARE_PRIVATE(QxtSpanSlider)
+	Q_PROPERTY(int lowerValue READ lowerValue WRITE setLowerValue)
+	Q_PROPERTY(int upperValue READ upperValue WRITE setUpperValue)
+	Q_PROPERTY(int lowerPosition READ lowerPosition WRITE setLowerPosition)
+	Q_PROPERTY(int upperPosition READ upperPosition WRITE setUpperPosition)
+	Q_PROPERTY(HandleMovementMode handleMovementMode READ handleMovementMode WRITE setHandleMovementMode)
+	Q_ENUMS(HandleMovementMode)
 
 public:
-    explicit QxtSpanSlider(QWidget* parent = nullptr);
-    explicit QxtSpanSlider(Qt::Orientation orientation, QWidget* parent = nullptr);
-    ~QxtSpanSlider() override;
+	explicit QxtSpanSlider(QWidget* parent = nullptr);
+	explicit QxtSpanSlider(Qt::Orientation orientation, QWidget* parent = nullptr);
+	~QxtSpanSlider() override;
 
-    enum HandleMovementMode
-    {
-        FreeMovement,
-        NoCrossing,
-        NoOverlapping
-    };
+	enum HandleMovementMode {
+		FreeMovement,
+		NoCrossing,
+		NoOverlapping
+	};
 
-    enum SpanHandle
-    {
-        NoHandle,
-        LowerHandle,
-        UpperHandle
-    };
+	enum SpanHandle {
+		NoHandle,
+		LowerHandle,
+		UpperHandle
+	};
 
-    HandleMovementMode handleMovementMode() const;
-    void setHandleMovementMode(HandleMovementMode mode);
+	HandleMovementMode handleMovementMode() const;
+	void setHandleMovementMode(HandleMovementMode mode);
 
-    int lowerValue() const;
-    int upperValue() const;
+	int lowerValue() const;
+	int upperValue() const;
 
-    int lowerPosition() const;
-    int upperPosition() const;
+	int lowerPosition() const;
+	int upperPosition() const;
 
 public Q_SLOTS:
-    void setLowerValue(int lower);
-    void setUpperValue(int upper);
-    void setSpan(int lower, int upper);
+	void setLowerValue(int lower);
+	void setUpperValue(int upper);
+	void setSpan(int lower, int upper);
 
-    void setLowerPosition(int lower);
-    void setUpperPosition(int upper);
+	void setLowerPosition(int lower);
+	void setUpperPosition(int upper);
 
 Q_SIGNALS:
-    void spanChanged(int lower, int upper);
-    void lowerValueChanged(int lower);
-    void upperValueChanged(int upper);
+	void spanChanged(int lower, int upper);
+	void lowerValueChanged(int lower);
+	void upperValueChanged(int upper);
 
-    void lowerPositionChanged(int lower);
-    void upperPositionChanged(int upper);
+	void lowerPositionChanged(int lower);
+	void upperPositionChanged(int upper);
 
-    void sliderPressed(QxtSpanSlider::SpanHandle handle);
+	void sliderPressed(QxtSpanSlider::SpanHandle handle);
 
 protected:
-    void keyPressEvent(QKeyEvent* event) override;
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseMoveEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event) override;
-    void paintEvent(QPaintEvent* event) override;
+	void keyPressEvent(QKeyEvent* event) override;
+	void mousePressEvent(QMouseEvent* event) override;
+	void mouseMoveEvent(QMouseEvent* event) override;
+	void mouseReleaseEvent(QMouseEvent* event) override;
+	void paintEvent(QPaintEvent* event) override;
 };
 
 #endif // QXTSPANSLIDER_H
