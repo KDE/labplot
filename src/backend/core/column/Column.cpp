@@ -1220,7 +1220,7 @@ void Column::handleFormatChange() {
 
 	emit aspectDescriptionChanged(this); // the icon for the type changed
 	if (!m_suppressDataChangedSignal)
-		emit dataChanged(this); // all cells must be repainted
+		emit formatChanged(this); // all cells must be repainted
 
 	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;

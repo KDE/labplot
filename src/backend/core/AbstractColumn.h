@@ -208,6 +208,7 @@ signals:
 	void modeChanged(const AbstractColumn* source);
 	void dataAboutToChange(const AbstractColumn* source);
 	void dataChanged(const AbstractColumn* source);
+	void formatChanged(const AbstractColumn* source);
 	void rowsAboutToBeInserted(const AbstractColumn* source, int before, int count);
 	void rowsInserted(const AbstractColumn* source, int before, int count);
 	void rowsAboutToBeRemoved(const AbstractColumn* source, int first, int count);

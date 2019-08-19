@@ -60,7 +60,7 @@
 #else
 #    define QXT_CORE_EXPORT
 #endif // BUILD_QXT_CORE
- 
+
 #if !defined(QXT_STATIC) && !defined(QXT_DOXYGEN_RUN)
 #    if defined(BUILD_QXT_GUI)
 #        define QXT_GUI_EXPORT Q_DECL_EXPORT
@@ -70,7 +70,7 @@
 #else
 #    define QXT_GUI_EXPORT
 #endif // BUILD_QXT_GUI
- 
+
 #if !defined(QXT_STATIC) && !defined(QXT_DOXYGEN_RUN)
 #    if defined(BUILD_QXT_NETWORK)
 #        define QXT_NETWORK_EXPORT Q_DECL_EXPORT
@@ -80,7 +80,7 @@
 #else
 #    define QXT_NETWORK_EXPORT
 #endif // BUILD_QXT_NETWORK
- 
+
 #if !defined(QXT_STATIC) && !defined(QXT_DOXYGEN_RUN)
 #    if defined(BUILD_QXT_SQL)
 #        define QXT_SQL_EXPORT Q_DECL_EXPORT
@@ -90,7 +90,7 @@
 #else
 #    define QXT_SQL_EXPORT
 #endif // BUILD_QXT_SQL
- 
+
 #if !defined(QXT_STATIC) && !defined(QXT_DOXYGEN_RUN)
 #    if defined(BUILD_QXT_WEB)
 #        define QXT_WEB_EXPORT Q_DECL_EXPORT
@@ -100,7 +100,7 @@
 #else
 #    define QXT_WEB_EXPORT
 #endif // BUILD_QXT_WEB
- 
+
 #if !defined(QXT_STATIC) && !defined(QXT_DOXYGEN_RUN)
 #    if defined(BUILD_QXT_BERKELEY)
 #        define QXT_BERKELEY_EXPORT Q_DECL_EXPORT
@@ -158,76 +158,64 @@ QXT_CORE_EXPORT const char* qxtVersion();
 #define QXT_P(PUB) PUB& p = qxt_p()
 
 template <typename PUB>
-class QxtPrivate
-{
+class QxtPrivate {
 public:
-    virtual ~QxtPrivate()
-    = default;
-    inline void QXT_setPublic(PUB* pub)
-    {
-        qxt_p_ptr = pub;
-    }
+	virtual ~QxtPrivate()
+	    = default;
+	inline void QXT_setPublic(PUB* pub) {
+		qxt_p_ptr = pub;
+	}
 
 protected:
-    inline PUB& qxt_p()
-    {
-        return *qxt_p_ptr;
-    }
-    inline const PUB& qxt_p() const
-    {
-        return *qxt_p_ptr;
-    }
-    inline PUB* qxt_ptr()
-    {
-        return qxt_p_ptr;
-    }
-    inline const PUB* qxt_ptr() const
-    {
-        return qxt_p_ptr;
-    }
+	inline PUB& qxt_p() {
+		return *qxt_p_ptr;
+	}
+	inline const PUB& qxt_p() const {
+		return *qxt_p_ptr;
+	}
+	inline PUB* qxt_ptr() {
+		return qxt_p_ptr;
+	}
+	inline const PUB* qxt_ptr() const {
+		return qxt_p_ptr;
+	}
 
 private:
-    PUB* qxt_p_ptr;
+	PUB* qxt_p_ptr;
 };
 
 template <typename PUB, typename PVT>
-class QxtPrivateInterface
-{
-    friend class QxtPrivate<PUB>;
+class QxtPrivateInterface {
+	friend class QxtPrivate<PUB>;
 public:
-    QxtPrivateInterface()
-    {
-        pvt = new PVT;
-    }
-    ~QxtPrivateInterface()
-    {
-        delete pvt;
-    }
+	QxtPrivateInterface() {
+		pvt = new PVT;
+	}
+	~QxtPrivateInterface() {
+		delete pvt;
+	}
 
-    inline void setPublic(PUB* pub)
-    {
-        pvt->QXT_setPublic(pub);
-    }
-    inline PVT& operator()()
-    {
-        return *static_cast<PVT*>(pvt);
-    }
-    inline const PVT& operator()() const
-    {
-        return *static_cast<PVT*>(pvt);
-    }
-    inline PVT * operator->()
-    {
-	return static_cast<PVT*>(pvt);
-    }
-    inline const PVT * operator->() const
-    {
-	return static_cast<PVT*>(pvt);
-    }
+	inline void setPublic(PUB* pub) {
+		pvt->QXT_setPublic(pub);
+	}
+	inline PVT& operator()() {
+		return *static_cast<PVT*>(pvt);
+	}
+	inline const PVT& operator()() const {
+		return *static_cast<PVT*>(pvt);
+	}
+	inline PVT * operator->() {
+		return static_cast<PVT*>(pvt);
+	}
+	inline const PVT * operator->() const {
+		return static_cast<PVT*>(pvt);
+	}
 private:
-    QxtPrivateInterface(const QxtPrivateInterface&) { }
-    QxtPrivateInterface& operator=(const QxtPrivateInterface& i) { return i; }
-    QxtPrivate<PUB>* pvt;
+	QxtPrivateInterface(const QxtPrivateInterface&) { }
+	QxtPrivateInterface& operator=(const QxtPrivateInterface& i) {
+		return i;
+	}
+	QxtPrivate<PUB>* pvt;
 };
 
 #endif // QXT_GLOBAL

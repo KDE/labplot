@@ -182,9 +182,9 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 	ui.cbPlotImageType->addItem(i18n("Original Image"));
 	ui.cbPlotImageType->addItem(i18n("Processed Image"));
 
-	QString valueFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "labplot2/pics/colorchooser/colorchooser_value.xpm");
-	QString hueFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "labplot2/pics/colorchooser/colorchooser_hue.xpm");
-	QString saturationFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "labplot2/pics/colorchooser/colorchooser_saturation.xpm");
+	QString valueFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/colorchooser/colorchooser_value.xpm");
+	QString hueFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/colorchooser/colorchooser_hue.xpm");
+	QString saturationFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/colorchooser/colorchooser_saturation.xpm");
 
 	gvHue = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Hue));
 	gvHue->setToolTip(i18n("Select the range for the hue.\nEverything outside of this range will be set to white."));
