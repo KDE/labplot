@@ -24,7 +24,11 @@ GridView {
             hoverEnabled: true
             //onEntered: {exampleDelegate.color = '#fdffbf'}
             //onExited: {exampleDelegate.color = '#ffffff'}
-            onClicked: {mainWindow.openExampleProject(exampleDelegate.name)}
+            onClicked: {
+                if(exampleProjects.fullScreen)
+                    exampleProjects.minimize()
+                mainWindow.openExampleProject(exampleDelegate.name)
+            }
         }
 
         ColumnLayout {

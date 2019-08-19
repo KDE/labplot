@@ -68,7 +68,11 @@ ListView {
                 hoverEnabled: true
                 onEntered: {parent.color = '#fdffbf' }
                 onExited: {parent.color = '#ffffff'}
-                onClicked: {mainWindow.recentProjectClicked(delegateItem.fullUri)}
+                onClicked: {
+                    if(recentProjectsFrame.fullScreen)
+                        recentProjectsFrame.minimize()
+                    mainWindow.recentProjectClicked(delegateItem.fullUri)
+                }
             }
         }
 

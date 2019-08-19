@@ -131,6 +131,40 @@ Rectangle {
                 mainWindow.restoreOriginalLayout()
         }
 
+        function maximize() {
+            hideTiles()
+            recentProjectsFrame.prevWidth = recentProjectsFrame.widthRate
+            recentProjectsFrame.prevHeight = recentProjectsFrame.heightRate
+            recentProjectsFrame.visible = true
+            recentProjectsFrame.z = 1
+            recentProjectsFrame.anchors.fill = undefined
+            recentProjectsFrame.anchors.right = undefined
+            recentProjectsFrame.anchors.bottom = undefined
+            recentProjectsFrame.anchors.centerIn = undefined
+            recentProjectsFrame.anchors.top = undefined
+            recentProjectsFrame.anchors.left = undefined
+            recentProjectsFrame.widthRate = 1
+            recentProjectsFrame.heightRate = 1
+            recentProjectsFrame.anchors.fill = mainWindow
+        }
+        function minimize() {
+            recentProjectsFrame.anchors.fill = undefined
+            recentProjectsFrame.anchors.right = undefined
+            recentProjectsFrame.anchors.bottom = undefined
+            recentProjectsFrame.anchors.centerIn = undefined
+            recentProjectsFrame.anchors.top = undefined
+            recentProjectsFrame.anchors.left = undefined
+            recentProjectsFrame.anchors.top = mainWindow.top
+            recentProjectsFrame.anchors.topMargin = mainWindow.spacing
+            recentProjectsFrame.anchors.left = mainWindow.left
+            recentProjectsFrame.anchors.leftMargin = mainWindow.spacing
+            recentProjectsFrame.widthRate = recentProjectsFrame.prevWidth
+            recentProjectsFrame.heightRate = recentProjectsFrame.prevHeight
+
+            showTiles();
+        }
+
+
         Rectangle {
             width: 3
             height: parent.height
@@ -240,35 +274,9 @@ Rectangle {
 
                         onClicked: {
                             if(!recentProjectsFrame.fullScreen) {
-                                hideTiles()
-                                recentProjectsFrame.prevWidth = recentProjectsFrame.widthRate
-                                recentProjectsFrame.prevHeight = recentProjectsFrame.heightRate
-                                recentProjectsFrame.visible = true
-                                recentProjectsFrame.z = 1
-                                recentProjectsFrame.anchors.fill = undefined
-                                recentProjectsFrame.anchors.right = undefined
-                                recentProjectsFrame.anchors.bottom = undefined
-                                recentProjectsFrame.anchors.centerIn = undefined
-                                recentProjectsFrame.anchors.top = undefined
-                                recentProjectsFrame.anchors.left = undefined
-                                recentProjectsFrame.widthRate = 1
-                                recentProjectsFrame.heightRate = 1
-                                recentProjectsFrame.anchors.fill = mainWindow
+                                recentProjectsFrame.maximize()
                             } else {
-                                recentProjectsFrame.anchors.fill = undefined
-                                recentProjectsFrame.anchors.right = undefined
-                                recentProjectsFrame.anchors.bottom = undefined
-                                recentProjectsFrame.anchors.centerIn = undefined
-                                recentProjectsFrame.anchors.top = undefined
-                                recentProjectsFrame.anchors.left = undefined
-                                recentProjectsFrame.anchors.top = mainWindow.top
-                                recentProjectsFrame.anchors.topMargin = mainWindow.spacing
-                                recentProjectsFrame.anchors.left = mainWindow.left
-                                recentProjectsFrame.anchors.leftMargin = mainWindow.spacing
-                                recentProjectsFrame.widthRate = recentProjectsFrame.prevWidth
-                                recentProjectsFrame.heightRate = recentProjectsFrame.prevHeight
-
-                                showTiles();
+                                recentProjectsFrame.minimize()
                             }
 
                             recentProjectsFrame.fullScreen = !recentProjectsFrame.fullScreen
@@ -334,6 +342,45 @@ Rectangle {
         Component.onCompleted: {
             if(helper.getWidthScale(sectionName) === -1 || helper.getHeightScale(sectionName) === -1)
                 mainWindow.restoreOriginalLayout()
+        }
+
+        function maximize() {
+            hideTiles()
+            exampleProjects.prevWidth = exampleProjects.widthRate
+            exampleProjects.prevHeight = exampleProjects.heightRate
+            exampleProjects.visible = true
+            exampleProjects.z = 1
+            exampleProjects.anchors.fill = undefined
+            exampleProjects.anchors.right = undefined
+            exampleProjects.anchors.bottom = undefined
+            exampleProjects.anchors.centerIn = undefined
+            exampleProjects.anchors.top = undefined
+            exampleProjects.anchors.left = undefined
+
+            exampleProjects.widthRate = 1
+            exampleProjects.heightRate = 1
+
+            exampleProjects.anchors.fill = mainWindow
+        }
+
+        function minimize() {
+            exampleProjects.anchors.fill = undefined
+            exampleProjects.anchors.right = undefined
+            exampleProjects.anchors.bottom = undefined
+            exampleProjects.anchors.centerIn = undefined
+            exampleProjects.anchors.top = undefined
+            exampleProjects.anchors.left = undefined
+
+            exampleProjects.anchors.top = mainWindow.top
+            exampleProjects.anchors.topMargin = mainWindow.spacing
+            exampleProjects.anchors.left = recentProjectsFrame.right
+            exampleProjects.anchors.leftMargin = mainWindow.spacing
+            exampleProjects.anchors.right = newsSection.left
+            exampleProjects.anchors.rightMargin = mainWindow.spacing
+            exampleProjects.widthRate = exampleProjects.prevWidth
+            exampleProjects.heightRate = exampleProjects.prevHeight
+
+            showTiles();
         }
 
         Rectangle {
@@ -492,40 +539,9 @@ Rectangle {
 
                         onClicked: {
                             if(!exampleProjects.fullScreen) {
-                                hideTiles()
-                                exampleProjects.prevWidth = exampleProjects.widthRate
-                                exampleProjects.prevHeight = exampleProjects.heightRate
-                                exampleProjects.visible = true
-                                exampleProjects.z = 1
-                                exampleProjects.anchors.fill = undefined
-                                exampleProjects.anchors.right = undefined
-                                exampleProjects.anchors.bottom = undefined
-                                exampleProjects.anchors.centerIn = undefined
-                                exampleProjects.anchors.top = undefined
-                                exampleProjects.anchors.left = undefined
-
-                                exampleProjects.widthRate = 1
-                                exampleProjects.heightRate = 1
-
-                                exampleProjects.anchors.fill = mainWindow
+                                exampleProjects.maximize()
                             } else {
-                                exampleProjects.anchors.fill = undefined
-                                exampleProjects.anchors.right = undefined
-                                exampleProjects.anchors.bottom = undefined
-                                exampleProjects.anchors.centerIn = undefined
-                                exampleProjects.anchors.top = undefined
-                                exampleProjects.anchors.left = undefined
-
-                                exampleProjects.anchors.top = mainWindow.top
-                                exampleProjects.anchors.topMargin = mainWindow.spacing
-                                exampleProjects.anchors.left = recentProjectsFrame.right
-                                exampleProjects.anchors.leftMargin = mainWindow.spacing
-                                exampleProjects.anchors.right = newsSection.left
-                                exampleProjects.anchors.rightMargin = mainWindow.spacing
-                                exampleProjects.widthRate = exampleProjects.prevWidth
-                                exampleProjects.heightRate = exampleProjects.prevHeight
-
-                                showTiles();
+                                exampleProjects.minimize()
                             }
 
                             exampleProjects.fullScreen = !exampleProjects.fullScreen
@@ -1000,6 +1016,46 @@ Rectangle {
         padding: 5
         clip: true
 
+        function maximize() {
+            hideTiles()
+            datasetFrame.prevWidth = datasetFrame.widthRate
+            datasetFrame.prevHeight = datasetFrame.heightRate
+            datasetFrame.visible = true
+            datasetFrame.z = 1
+            datasetFrame.anchors.fill = undefined
+            datasetFrame.anchors.right = undefined
+            datasetFrame.anchors.bottom = undefined
+            datasetFrame.anchors.centerIn = undefined
+            datasetFrame.anchors.top = undefined
+            datasetFrame.anchors.left = undefined
+
+            datasetFrame.widthRate = 1
+            datasetFrame.heightRate = 1
+            datasetFrame.anchors.fill = mainWindow
+        }
+
+        function minimize() {
+            datasetFrame.anchors.fill = undefined
+            datasetFrame.anchors.right = undefined
+            datasetFrame.anchors.bottom = undefined
+            datasetFrame.anchors.centerIn = undefined
+            datasetFrame.anchors.top = undefined
+            datasetFrame.anchors.left = undefined
+
+            datasetFrame.anchors.top = exampleProjects.bottom
+            datasetFrame.anchors.topMargin = mainWindow.spacing
+            datasetFrame.anchors.left = helpFrame.right
+            datasetFrame.anchors.leftMargin = mainWindow.spacing
+            datasetFrame.anchors.bottom = releaseSection.top
+            datasetFrame.anchors.bottomMargin = mainWindow.spacing
+            datasetFrame.anchors.right = newsSection.left
+            datasetFrame.anchors.rightMargin = mainWindow.spacing
+            datasetFrame.widthRate = datasetFrame.prevWidth
+            datasetFrame.heightRate = datasetFrame.prevHeight
+
+            showTiles();
+        }
+
         property bool fullScreen: false
         property double prevWidth: 0
         property double prevHeight: 0
@@ -1203,41 +1259,9 @@ Rectangle {
 
                         onClicked: {
                             if(!datasetFrame.fullScreen) {
-                                hideTiles()
-                                datasetFrame.prevWidth = datasetFrame.widthRate
-                                datasetFrame.prevHeight = datasetFrame.heightRate
-                                datasetFrame.visible = true
-                                datasetFrame.z = 1
-                                datasetFrame.anchors.fill = undefined
-                                datasetFrame.anchors.right = undefined
-                                datasetFrame.anchors.bottom = undefined
-                                datasetFrame.anchors.centerIn = undefined
-                                datasetFrame.anchors.top = undefined
-                                datasetFrame.anchors.left = undefined
-
-                                datasetFrame.widthRate = 1
-                                datasetFrame.heightRate = 1
-                                datasetFrame.anchors.fill = mainWindow
+                                datasetFrame.maximize()
                             } else {
-                                datasetFrame.anchors.fill = undefined
-                                datasetFrame.anchors.right = undefined
-                                datasetFrame.anchors.bottom = undefined
-                                datasetFrame.anchors.centerIn = undefined
-                                datasetFrame.anchors.top = undefined
-                                datasetFrame.anchors.left = undefined
-
-                                datasetFrame.anchors.top = exampleProjects.bottom
-                                datasetFrame.anchors.topMargin = mainWindow.spacing
-                                datasetFrame.anchors.left = helpFrame.right
-                                datasetFrame.anchors.leftMargin = mainWindow.spacing
-                                datasetFrame.anchors.bottom = releaseSection.top
-                                datasetFrame.anchors.bottomMargin = mainWindow.spacing
-                                datasetFrame.anchors.right = newsSection.left
-                                datasetFrame.anchors.rightMargin = mainWindow.spacing
-                                datasetFrame.widthRate = datasetFrame.prevWidth
-                                datasetFrame.heightRate = datasetFrame.prevHeight
-
-                                showTiles();
+                                datasetFrame.minimize()
                             }
 
                             datasetFrame.fullScreen = !datasetFrame.fullScreen
@@ -1508,6 +1532,8 @@ Rectangle {
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
+                                if(datasetFrame.fullScreen)
+                                    datasetFrame.minimize()
                                 datasetGrid.currentIndex = index
                                 console.log("Dataset name: " +  datasetDelegate.datasetName + "Clicked")
                                 mainWindow.currentDataset = datasetDelegate.datasetName

@@ -255,11 +255,11 @@
   <tabstop>lwDatasets</tabstop>
   <tabstop>leSearchDatasets</tabstop>
   <tabstop>bShowDetails</tabstop>
+  <tabstop>saDetails</tabstop>
   <tabstop>bRefresh</tabstop>
   <tabstop>bRestore</tabstop>
   <tabstop>bNewDataset</tabstop>
   <tabstop>bClearCache</tabstop>
-  <tabstop>saDetails</tabstop>
  </tabstops>
  <resources/>
  <connections/>
