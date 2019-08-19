@@ -277,6 +277,7 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
 	connect(col, &Column::plotDesignationChanged, this, &SpreadsheetModel::handlePlotDesignationChange);
 	connect(col, &Column::modeChanged, this, &SpreadsheetModel::handleDataChange);
 	connect(col, &Column::dataChanged, this, &SpreadsheetModel::handleDataChange);
+	connect(col, &Column::formatChanged, this, &SpreadsheetModel::handleDataChange);
 	connect(col, &Column::modeChanged, this, &SpreadsheetModel::handleModeChange);
 	connect(col, &Column::rowsInserted, this, &SpreadsheetModel::handleRowsInserted);
 	connect(col, &Column::rowsRemoved, this, &SpreadsheetModel::handleRowsRemoved);
