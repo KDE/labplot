@@ -286,8 +286,7 @@ void HypothesisTestDock::showHypothesisTest() {
 	if (ui.cbTestType->count() == 0)
 		return;
 
-	m_test |= ui.cbTestType->currentData().toInt();
-
+	m_test = testType(m_test) | ui.cbTestType->currentData().toInt();
 
 	ui.lCalculateStats->show();
 	ui.chbCalculateStats->show();
@@ -323,6 +322,7 @@ void HypothesisTestDock::showHypothesisTest() {
 	ui.leAlpha->show();
 
 	setColumnsComboBoxView();
+	chbCalculateStatsStateChanged();
 
 	ui.pbPerformTest->setEnabled(nonEmptySelectedColumns());
 	ui.pbLeveneTest->setEnabled(nonEmptySelectedColumns());

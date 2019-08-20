@@ -211,7 +211,7 @@ void CorrelationCoefficientDock::showTestType() {
 }
 
 void CorrelationCoefficientDock::showCorrelationCoefficient() {
-	m_test |= ui.cbTestType->currentData().toInt();
+	m_test = testType(m_test) | ui.cbTestType->currentData().toInt();
 
 	ui.lCalculateStats->setVisible(testType(m_test) == CorrelationCoefficient::ChiSquare);
 	ui.chbCalculateStats->setVisible(testType(m_test) == CorrelationCoefficient::ChiSquare);
