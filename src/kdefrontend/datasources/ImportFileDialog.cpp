@@ -254,7 +254,13 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 			// add additional spreadsheets
 			for (int i = start; i < nrNames; ++i) {
-				auto* spreadsheet = new Spreadsheet(names.at(i));
+				QString sheetName = names.at(i);
+
+				//HDF5 variable names containt the whole path, remove it and keep the name only
+				if (fileType == AbstractFileFilter::HDF5)
+					sheetName = names[i].mid(names[i].lastIndexOf("/") + 1);
+
+				auto* spreadsheet = new Spreadsheet(sheetName);
 				if (mode == AbstractFileFilter::Prepend && !sheets.isEmpty())
 					workbook->insertChildBefore(spreadsheet, sheets[0]);
 				else
