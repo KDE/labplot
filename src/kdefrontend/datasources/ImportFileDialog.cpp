@@ -255,7 +255,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			// add additional spreadsheets
 			for (int i = start; i < nrNames; ++i) {
 				auto* spreadsheet = new Spreadsheet(names.at(i));
-				if (mode == AbstractFileFilter::Prepend)
+				if (mode == AbstractFileFilter::Prepend && !sheets.isEmpty())
 					workbook->insertChildBefore(spreadsheet, sheets[0]);
 				else
 					workbook->addChildFast(spreadsheet);
