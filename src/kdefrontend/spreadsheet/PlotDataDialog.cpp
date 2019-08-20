@@ -368,6 +368,9 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 void PlotDataDialog::plot() {
 	DEBUG("PlotDataDialog::plot()");
 	WAIT_CURSOR;
+	m_spreadsheet->project()->setSuppressAspectAddedSignal(true);
+	m_lastAddedCurve = nullptr;
+
 	if (ui->rbPlotPlacement1->isChecked()) {
 		//add curves to an existing plot
 		auto* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
@@ -462,6 +465,11 @@ void PlotDataDialog::plot() {
 
 		parent->endMacro();
 	}
+
+	//select the parent plot of the last added curve in the project explorer
+	m_spreadsheet->project()->setSuppressAspectAddedSignal(false);
+	if (m_lastAddedCurve)
+		m_spreadsheet->project()->requestNavigateTo(m_lastAddedCurve->parentAspect()->path());
 	RESET_CURSOR;
 }
 
@@ -476,7 +484,7 @@ Column* PlotDataDialog::columnFromName(const QString& name) const {
 /*!
  * * for the selected columns in this dialog, creates a curve in the already existing plot \c plot.
  */
-void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
+void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	switch (m_plotType) {
 	case PlotXYCurve: {
@@ -505,7 +513,7 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
 /*!
  * for the selected columns in this dialog, creates a plot and a curve in the already existing worksheet \c worksheet.
  */
-void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
+void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	worksheet->setSuppressLayoutUpdate(true);
 
@@ -572,7 +580,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 /*!
  * helper function that does the actual creation of the curve and adding it as child to the \c plot.
  */
-void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot* plot) const {
+void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot* plot) {
 	DEBUG("PlotDataDialog::addCurve()");
 	if (!m_analysisMode) {
 		auto* curve = new XYCurve(name);
@@ -581,6 +589,7 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 		curve->setYColumn(yColumn);
 		curve->suppressRetransform(false);
 		plot->addChild(curve);
+		m_lastAddedCurve = curve;
 	} else {
 		bool createDataCurve = ui->chkCreateDataCurve->isChecked();
 		XYCurve* curve = nullptr;
@@ -591,6 +600,7 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 			curve->setYColumn(yColumn);
 			curve->suppressRetransform(false);
 			plot->addChild(curve);
+			m_lastAddedCurve = curve;
 		}
 
 		XYAnalysisCurve* analysisCurve = nullptr;
@@ -638,16 +648,18 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 				analysisCurve->recalculate();
 			analysisCurve->suppressRetransform(false);
 			plot->addChild(analysisCurve);
+			m_lastAddedCurve = analysisCurve;
 		}
 	}
 }
 
-void PlotDataDialog::addHistogram(const QString& name, Column* column, CartesianPlot* plot) const {
+void PlotDataDialog::addHistogram(const QString& name, Column* column, CartesianPlot* plot) {
 	auto* hist = new Histogram(name);
 	plot->addChild(hist);
 // 	hist->suppressRetransform(true);
 	hist->setDataColumn(column);
 // 	hist->suppressRetransform(false);
+	m_lastAddedCurve = hist;
 }
 
 //################################################################

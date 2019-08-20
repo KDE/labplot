@@ -73,6 +73,9 @@ public:
 	bool hasChanged() const;
 	void navigateTo(const QString& path);
 
+	void setSuppressAspectAddedSignal(bool);
+	bool aspectAddedSignalSuppressed() const;
+
 	void save(const QPixmap&, QXmlStreamWriter*) const;
 	bool load(XmlStreamReader*, bool preview) override;
 	bool load(const QString&, bool preview = false);
