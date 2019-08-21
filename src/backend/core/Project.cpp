@@ -94,6 +94,7 @@ public:
 	QString author;
 	QDateTime modificationTime;
 	bool changed{false};
+	bool aspectAddedSignalSuppressed{false};
 };
 
 Project::Project() : Folder(i18n("Project"), AspectType::Project), d(new Private()) {
@@ -184,6 +185,14 @@ void Project::setChanged(const bool value) {
 		emit changed();
 
 	d->changed = value;
+}
+
+void Project::setSuppressAspectAddedSignal(bool value) {
+	d->aspectAddedSignalSuppressed = value;
+}
+
+bool Project::aspectAddedSignalSuppressed() const {
+	return d->aspectAddedSignalSuppressed;
 }
 
 bool Project::hasChanged() const {

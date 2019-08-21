@@ -229,6 +229,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	} else if (aspect->inherits(AspectType::Workbook)) {
 		DEBUG("ImportFileDialog::importTo(): to Workbook");
 		auto* workbook = qobject_cast<Workbook*>(aspect);
+		workbook->setUndoAware(false);
 		QVector<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
 
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
@@ -251,13 +252,19 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			if (mode == AbstractFileFilter::Replace) // add only missing sheets (from offset to nrNames)
 				start = offset;
 
-			// add additional sheets
+			// add additional spreadsheets
 			for (int i = start; i < nrNames; ++i) {
-				Spreadsheet *spreadsheet = new Spreadsheet(i18n("Spreadsheet"));
-				if (mode == AbstractFileFilter::Prepend)
+				QString sheetName = names.at(i);
+
+				//HDF5 variable names containt the whole path, remove it and keep the name only
+				if (fileType == AbstractFileFilter::HDF5)
+					sheetName = names[i].mid(names[i].lastIndexOf("/") + 1);
+
+				auto* spreadsheet = new Spreadsheet(sheetName);
+				if (mode == AbstractFileFilter::Prepend && !sheets.isEmpty())
 					workbook->insertChildBefore(spreadsheet, sheets[0]);
 				else
-					workbook->addChild(spreadsheet);
+					workbook->addChildFast(spreadsheet);
 			}
 
 			// start at offset for append, else at 0
@@ -275,22 +282,20 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					static_cast<ROOTFilter*>(filter)->setCurrentObject(names[i]);
 
 				int index = i + offset;
-				if (sheets[index]->inherits(AspectType::Matrix))
-					filter->readDataFromFile(fileName, qobject_cast<Matrix*>(sheets[index]));
-				else if (sheets[index]->inherits(AspectType::Spreadsheet))
-					filter->readDataFromFile(fileName, qobject_cast<Spreadsheet*>(sheets[index]));
+				filter->readDataFromFile(fileName, qobject_cast<Spreadsheet*>(sheets[index]));
 			}
+
+			workbook->setUndoAware(true);
 		} else { // single import file types
 			// use active spreadsheet/matrix if present, else new spreadsheet
-			Spreadsheet* spreadsheet = workbook->currentSpreadsheet();
-			Matrix* matrix = workbook->currentMatrix();
-			if (spreadsheet)
-				filter->readDataFromFile(fileName, spreadsheet, mode);
-			else if (matrix)
-				filter->readDataFromFile(fileName, matrix, mode);
+			auto* sheet = workbook->currentSpreadsheet();
+			if (sheet)
+				filter->readDataFromFile(fileName, sheet, mode);
 			else {
-				spreadsheet = new Spreadsheet(i18n("Spreadsheet"));
+				workbook->setUndoAware(true);
+				auto* spreadsheet = new Spreadsheet(fileName);
 				workbook->addChild(spreadsheet);
+				workbook->setUndoAware(false);
 				filter->readDataFromFile(fileName, spreadsheet, mode);
 			}
 		}

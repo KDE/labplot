@@ -395,7 +395,7 @@ void ProjectExplorer::projectLoaded() {
   and makes it visible and selected. Called when a new aspect is added to the project.
  */
 void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
-	if (m_project->isLoading())
+	if (m_project->isLoading() ||m_project->aspectAddedSignalSuppressed())
 		return;
 
 	//don't do anything if hidden aspects were added

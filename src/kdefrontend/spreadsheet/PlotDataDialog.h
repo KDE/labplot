@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dialog for generating plots for the spreadsheet data
     --------------------------------------------------------------------
-    Copyright            : (C) 2017 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2017-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -35,6 +35,7 @@ namespace Ui {
 #include <QDialog>
 
 class QComboBox;
+class AbstractAspect;
 class AspectTreeModel;
 class CartesianPlot;
 class Column;
@@ -70,14 +71,15 @@ private:
 	PlotType m_plotType;
 	AnalysisAction m_analysisAction{Differentiation};
 	bool m_analysisMode{false};
+	AbstractAspect* m_lastAddedCurve{nullptr};
 
 	void processColumns();
 	void processColumnsForXYCurve(const QStringList& columnNames, const QString& xColumnName);
 	void processColumnsForHistogram(const QStringList&);
-	void addCurvesToPlot(CartesianPlot*) const;
-	void addCurvesToPlots(Worksheet*) const;
-	void addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot*) const;
-	void addHistogram(const QString& name, Column* column, CartesianPlot*) const;
+	void addCurvesToPlot(CartesianPlot*);
+	void addCurvesToPlots(Worksheet*);
+	void addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot*);
+	void addHistogram(const QString& name, Column* column, CartesianPlot*);
 	Column* columnFromName(const QString&) const;
 
 protected  slots:

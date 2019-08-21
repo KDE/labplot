@@ -257,8 +257,9 @@ void ExportWorksheetDialog::formatChanged(int index) {
 	ui->leFileName->setText(path);
 
 	// show resolution option for png format
-	ui->lResolution->setVisible(index == 3);
-	ui->cbResolution->setVisible(index == 3);
+	bool visible = (index == 2);
+	ui->lResolution->setVisible(visible);
+	ui->cbResolution->setVisible(visible);
 }
 
 void ExportWorksheetDialog::fileNameChanged(const QString& name) {
