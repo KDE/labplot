@@ -46,6 +46,7 @@
  */
 ImportDatasetDialog::ImportDatasetDialog(MainWin* parent, const QString& fileName) : ImportDialog(parent),
 	m_importDatasetWidget(new ImportDatasetWidget(this)){
+	Q_UNUSED(fileName);
 
 	vLayout->addWidget(m_importDatasetWidget);
 	connect(m_importDatasetWidget, &ImportDatasetWidget::datasetSelected, this, &ImportDatasetDialog::checkOkButton);
@@ -123,5 +124,6 @@ void ImportDatasetDialog::checkOkButton() {
 }
 
 void ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
+	Q_UNUSED(statusBar);
 }
 

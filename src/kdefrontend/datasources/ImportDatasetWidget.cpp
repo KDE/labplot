@@ -775,6 +775,7 @@ void ImportDatasetWidget::uploadCategoryFile() {
  * @brief TODO: uploads the metadata file of a dataset to store.kde.org -- Library doesn't work for indefinite time.
  */
 void ImportDatasetWidget::uploadDatasetFile(const QString& filePath) {
+	Q_UNUSED(filePath);
 	/*KNS3::UploadDialog dialog("labplot2_datasets.knsrc", this);
 
 	QFile file(filePath);

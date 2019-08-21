@@ -45,6 +45,25 @@ Rectangle {
 
     function saveWidgetDimensions() {
         console.log("Save welcome screen widget dimensions")
+
+        if(recentProjectsFrame.fullScreen)
+            recentProjectsFrame.minimize()
+
+        if(exampleProjects.fullScreen)
+            exampleProjects.minimize()
+
+        if(newsSection.fullScreen)
+            newsSection.minimize()
+
+        if(helpFrame.fullScreen)
+            helpFrame.minimize()
+
+        if(datasetFrame.fullScreen)
+            datasetFrame.minimize()
+
+        if(releaseSection.fullScreen)
+            releaseSection.minimize()
+
         helper.setHeightScale(recentProjectsFrame.sectionName, recentProjectsFrame.heightRate)
         helper.setWidthScale(recentProjectsFrame.sectionName, recentProjectsFrame.widthRate)
         helper.setHeightScale(exampleProjects.sectionName, exampleProjects.heightRate)
@@ -615,6 +634,44 @@ Rectangle {
                 mainWindow.restoreOriginalLayout()
         }
 
+        function maximize() {
+            hideTiles()
+            newsSection.prevWidth = newsSection.widthRate
+            newsSection.prevHeight = newsSection.heightRate
+            newsSection.visible = true
+            newsSection.z = 1
+            newsSection.anchors.fill = undefined
+            newsSection.anchors.right = undefined
+            newsSection.anchors.bottom = undefined
+            newsSection.anchors.centerIn = undefined
+            newsSection.anchors.top = undefined
+            newsSection.anchors.left = undefined
+            newsSection.widthRate = 1
+            newsSection.heightRate = 1
+
+            newsSection.anchors.fill = mainWindow
+        }
+
+        function minimize() {
+            newsSection.anchors.fill = undefined
+            newsSection.anchors.right = undefined
+            newsSection.anchors.bottom = undefined
+            newsSection.anchors.centerIn = undefined
+            newsSection.anchors.top = undefined
+            newsSection.anchors.left = undefined
+
+            newsSection.anchors.top = mainWindow.top
+            newsSection.anchors.topMargin = mainWindow.spacing
+            newsSection.anchors.right = mainWindow.right
+            newsSection.anchors.rightMargin = mainWindow.spacing
+            newsSection.anchors.bottom = mainWindow.bottom
+            newsSection.anchors.bottomMargin = mainWindow.spacing
+            newsSection.widthRate = newsSection.prevWidth
+            newsSection.heightRate = newsSection.prevHeight
+
+            showTiles();
+        }
+
         Rectangle {
             width: 3
             height: parent.height
@@ -686,41 +743,9 @@ Rectangle {
 
                         onClicked: {
                             if(!newsSection.fullScreen) {
-                                hideTiles()
-                                newsSection.prevWidth = newsSection.widthRate
-                                newsSection.prevHeight = newsSection.heightRate
-                                newsSection.visible = true
-                                newsSection.z = 1
-                                newsSection.anchors.fill = undefined
-                                newsSection.anchors.right = undefined
-                                newsSection.anchors.bottom = undefined
-                                newsSection.anchors.centerIn = undefined
-                                newsSection.anchors.top = undefined
-                                newsSection.anchors.left = undefined
-
-
-                                newsSection.widthRate = 1
-                                newsSection.heightRate = 1
-
-                                newsSection.anchors.fill = mainWindow
+                                newsSection.maximize()
                             } else {
-                                newsSection.anchors.fill = undefined
-                                newsSection.anchors.right = undefined
-                                newsSection.anchors.bottom = undefined
-                                newsSection.anchors.centerIn = undefined
-                                newsSection.anchors.top = undefined
-                                newsSection.anchors.left = undefined
-
-                                newsSection.anchors.top = mainWindow.top
-                                newsSection.anchors.topMargin = mainWindow.spacing
-                                newsSection.anchors.right = mainWindow.right
-                                newsSection.anchors.rightMargin = mainWindow.spacing
-                                newsSection.anchors.bottom = mainWindow.bottom
-                                newsSection.anchors.bottomMargin = mainWindow.spacing
-                                newsSection.widthRate = newsSection.prevWidth
-                                newsSection.heightRate = newsSection.prevHeight
-
-                                showTiles();
+                                newsSection.minimize()
                             }
 
                             newsSection.fullScreen = !newsSection.fullScreen
@@ -779,6 +804,44 @@ Rectangle {
         Component.onCompleted: {
             if(helper.getWidthScale(sectionName) === -1 || helper.getHeightScale(sectionName) === -1)
                 mainWindow.restoreOriginalLayout()
+        }
+
+        function maximize() {
+            hideTiles()
+            helpFrame.prevWidth = helpFrame.widthRate
+            helpFrame.prevHeight = helpFrame.heightRate
+            helpFrame.visible = true
+            helpFrame.z = 1
+            helpFrame.anchors.fill = undefined
+            helpFrame.anchors.right = undefined
+            helpFrame.anchors.bottom = undefined
+            helpFrame.anchors.centerIn = undefined
+            helpFrame.anchors.top = undefined
+            helpFrame.anchors.left = undefined
+
+            helpFrame.heightRate = 1
+            helpFrame.widthRate = 1
+            helpFrame.anchors.fill = mainWindow
+        }
+
+        function minimize(){
+            helpFrame.anchors.fill = undefined
+            helpFrame.anchors.right = undefined
+            helpFrame.anchors.bottom = undefined
+            helpFrame.anchors.centerIn = undefined
+            helpFrame.anchors.top = undefined
+            helpFrame.anchors.left = undefined
+
+            helpFrame.anchors.top = recentProjectsFrame.bottom
+            helpFrame.anchors.topMargin = mainWindow.spacing
+            helpFrame.anchors.left = mainWindow.left
+            helpFrame.anchors.leftMargin = mainWindow.spacing
+            helpFrame.anchors.bottom = releaseSection.top
+            helpFrame.anchors.bottomMargin = mainWindow.spacing
+            helpFrame.widthRate = helpFrame.prevWidth
+            helpFrame.heightRate = helpFrame.prevHeight
+
+            showTiles();
         }
 
         Rectangle {
@@ -930,39 +993,9 @@ Rectangle {
 
                         onClicked: {
                             if(!helpFrame.fullScreen) {
-                                hideTiles()
-                                helpFrame.prevWidth = helpFrame.widthRate
-                                helpFrame.prevHeight = helpFrame.heightRate
-                                helpFrame.visible = true
-                                helpFrame.z = 1
-                                helpFrame.anchors.fill = undefined
-                                helpFrame.anchors.right = undefined
-                                helpFrame.anchors.bottom = undefined
-                                helpFrame.anchors.centerIn = undefined
-                                helpFrame.anchors.top = undefined
-                                helpFrame.anchors.left = undefined
-
-                                helpFrame.heightRate = 1
-                                helpFrame.widthRate = 1
-                                helpFrame.anchors.fill = mainWindow
+                                helpFrame.maximize()
                             } else {
-                                helpFrame.anchors.fill = undefined
-                                helpFrame.anchors.right = undefined
-                                helpFrame.anchors.bottom = undefined
-                                helpFrame.anchors.centerIn = undefined
-                                helpFrame.anchors.top = undefined
-                                helpFrame.anchors.left = undefined
-
-                                helpFrame.anchors.top = recentProjectsFrame.bottom
-                                helpFrame.anchors.topMargin = mainWindow.spacing
-                                helpFrame.anchors.left = mainWindow.left
-                                helpFrame.anchors.leftMargin = mainWindow.spacing
-                                helpFrame.anchors.bottom = releaseSection.top
-                                helpFrame.anchors.bottomMargin = mainWindow.spacing
-                                helpFrame.widthRate = helpFrame.prevWidth
-                                helpFrame.heightRate = helpFrame.prevHeight
-
-                                showTiles();
+                                helpFrame.minimize()
                             }
 
                             helpFrame.fullScreen = !helpFrame.fullScreen
@@ -1700,6 +1733,56 @@ Rectangle {
         property double prevWidth: 0
         property double prevHeight: 0
 
+        function maximize() {
+            hideTiles()
+            releaseSection.prevWidth = releaseSection.widthRate
+            releaseSection.prevHeight = releaseSection.heightRate
+            releaseSection.visible = true
+            releaseSection.z = 1
+            releaseSection.anchors.fill = undefined
+            releaseSection.anchors.right = undefined
+            releaseSection.anchors.bottom = undefined
+            releaseSection.anchors.centerIn = undefined
+            releaseSection.anchors.top = undefined
+            releaseSection.anchors.left = undefined
+
+            releaseSection.widthRate = 1
+            releaseSection.heightRate = 1
+            releaseSection.anchors.fill = mainWindow
+        }
+
+        function minimize() {
+            releaseSection.anchors.fill = undefined
+            releaseSection.anchors.right = undefined
+            releaseSection.anchors.bottom = undefined
+            releaseSection.anchors.centerIn = undefined
+            releaseSection.anchors.top = undefined
+            releaseSection.anchors.left = undefined
+
+            releaseSection.anchors.left = mainWindow.left
+            releaseSection.anchors.leftMargin = mainWindow.spacing
+            releaseSection.anchors.bottom = mainWindow.bottom
+            releaseSection.anchors.bottomMargin = mainWindow.spacing
+            releaseSection.anchors.right = newsSection.left
+            releaseSection.anchors.rightMargin = mainWindow.spacing
+            releaseSection.widthRate = releaseSection.prevWidth
+            releaseSection.heightRate = releaseSection.prevHeight
+
+            showTiles();
+        }
+
+        function updateIcons() {
+            if(releaseWebView.canGoBack)
+                backIcon.opacity = 1
+            else
+                backIcon.opacity = 0.5
+
+            if(releaseWebView.canGoForward)
+                forwardIcon.opacity = 1
+            else
+                forwardIcon.opacity = 0.5
+        }
+
 
         Component.onCompleted: {
             if(helper.getWidthScale(sectionName) === -1 || helper.getHeightScale(sectionName) === -1)
@@ -1819,39 +1902,9 @@ Rectangle {
 
                         onClicked: {
                             if(!releaseSection.fullScreen) {
-                                hideTiles()
-                                releaseSection.prevWidth = releaseSection.widthRate
-                                releaseSection.prevHeight = releaseSection.heightRate
-                                releaseSection.visible = true
-                                releaseSection.z = 1
-                                releaseSection.anchors.fill = undefined
-                                releaseSection.anchors.right = undefined
-                                releaseSection.anchors.bottom = undefined
-                                releaseSection.anchors.centerIn = undefined
-                                releaseSection.anchors.top = undefined
-                                releaseSection.anchors.left = undefined
-
-                                releaseSection.widthRate = 1
-                                releaseSection.heightRate = 1
-                                releaseSection.anchors.fill = mainWindow
+                                releaseSection.maximize()
                             } else {
-                                releaseSection.anchors.fill = undefined
-                                releaseSection.anchors.right = undefined
-                                releaseSection.anchors.bottom = undefined
-                                releaseSection.anchors.centerIn = undefined
-                                releaseSection.anchors.top = undefined
-                                releaseSection.anchors.left = undefined
-
-                                releaseSection.anchors.left = mainWindow.left
-                                releaseSection.anchors.leftMargin = mainWindow.spacing
-                                releaseSection.anchors.bottom = mainWindow.bottom
-                                releaseSection.anchors.bottomMargin = mainWindow.spacing
-                                releaseSection.anchors.right = newsSection.left
-                                releaseSection.anchors.rightMargin = mainWindow.spacing
-                                releaseSection.widthRate = releaseSection.prevWidth
-                                releaseSection.heightRate = releaseSection.prevHeight
-
-                                showTiles();
+                                releaseSection.minimize()
                             }
 
                             releaseSection.fullScreen = !releaseSection.fullScreen
@@ -1860,6 +1913,7 @@ Rectangle {
                 }
 
                 Image {
+                    id: backIcon
                     Layout.preferredHeight: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.minimumHeight: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.preferredWidth: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
@@ -1879,6 +1933,7 @@ Rectangle {
                 }
 
                 Image {
+                    id: forwardIcon
                     Layout.preferredHeight: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.minimumHeight: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
                     Layout.preferredWidth: releaseSection.fullScreen ?Math.min(Math.min(parent.height, parent.width) * 0.5, 35) : Math.min(Math.min(parent.height, parent.width) * 0.5, 25)
@@ -1919,6 +1974,18 @@ Rectangle {
                 Layout.preferredHeight: Math.max((parent.height - parent.spacing) *0.8, parent.height - parent.spacing - 100)
                 Layout.fillWidth: true
                 url: initialUrl
+
+                Component.onCompleted: {
+                    releaseSection.updateIcons()
+                }
+
+                onCanGoBackChanged: {
+                    releaseSection.updateIcons()
+                }
+
+                onCanGoForwardChanged: {
+                    releaseSection.updateIcons()
+                }
             }
         }
     }
