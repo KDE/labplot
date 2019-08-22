@@ -1114,6 +1114,32 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	action_sort_spreadsheet->setEnabled(cellsAvail);
 	action_go_to_cell->setEnabled(cellsAvail);
 	action_statistics_all_columns->setEnabled(cellsAvail);
+
+	//deactivate mask/unmask actions if there are no unmasked/masked cells
+	//in the current selection
+	QModelIndexList indexes = m_tableView->selectionModel()->selectedIndexes();
+	bool hasMasked = false;
+	bool hasUnmasked = false;
+	for (auto index : indexes) {
+		int row = index.row();
+		int col = index.column();
+		if (m_spreadsheet->column(col)->isMasked(row)) {
+			hasMasked = true;
+			break;
+		}
+	}
+
+	for (auto index : indexes) {
+		int row = index.row();
+		int col = index.column();
+		if (!m_spreadsheet->column(col)->isMasked(row)) {
+			hasUnmasked = true;
+			break;
+		}
+	}
+
+	action_mask_selection->setEnabled(hasUnmasked);
+	action_unmask_selection->setEnabled(hasMasked);
 }
 
 bool SpreadsheetView::formulaModeActive() const {
