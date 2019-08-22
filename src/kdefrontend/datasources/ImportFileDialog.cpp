@@ -249,14 +249,30 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			//TODO: think about importing multiple sets into one sheet
 
 			int start = 0;	// add nrNames sheets (0 to nrNames)
-			if (mode == AbstractFileFilter::Replace) // add only missing sheets (from offset to nrNames)
+
+			//in replace mode add only missing sheets (from offset to nrNames)
+			//and rename the already available sheets
+			if (mode == AbstractFileFilter::Replace) {
 				start = offset;
+
+				//rename the available sheets
+				for (int i = 0; i < offset; ++i) {
+					//HDF5 variable names contain the whole path, remove it and keep the name only
+					QString sheetName = names.at(i);
+					if (fileType == AbstractFileFilter::HDF5)
+						sheetName = names[i].mid(names[i].lastIndexOf("/") + 1);
+
+					auto* sheet = sheets.at(i);
+					sheet->setUndoAware(false);
+					sheet->setName(sheetName);
+					sheet->setUndoAware(true);
+				}
+			}
 
 			// add additional spreadsheets
 			for (int i = start; i < nrNames; ++i) {
+				//HDF5 variable names contain the whole path, remove it and keep the name only
 				QString sheetName = names.at(i);
-
-				//HDF5 variable names containt the whole path, remove it and keep the name only
 				if (fileType == AbstractFileFilter::HDF5)
 					sheetName = names[i].mid(names[i].lastIndexOf("/") + 1);
 
