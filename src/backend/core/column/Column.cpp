@@ -36,6 +36,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 
@@ -121,8 +122,11 @@ QMenu* Column::createContextMenu() {
 	for (auto* action : m_usedInActionGroup->actions())
 		m_usedInActionGroup->removeAction(action);
 
+	Project* project = this->project();
+
 	//add curves where the column is currently in use
-	QVector<XYCurve*> curves = project()->children<XYCurve>(AbstractAspect::Recursive);
+	usedInMenu->addSection(i18n("XY-Curves"));
+	auto curves = project->children<XYCurve>(AbstractAspect::Recursive);
 	for (const auto* curve : curves) {
 		bool used = false;
 
@@ -143,9 +147,21 @@ QMenu* Column::createContextMenu() {
 		}
 	}
 
+	//add histograms where the column is used
+	usedInMenu->addSection(i18n("Histograms"));
+	auto hists = project->children<Histogram>(AbstractAspect::Recursive);
+	for (const auto* hist : hists) {
+		bool used = (hist->dataColumn() == this);
+		if (used) {
+			QAction* action = new QAction(hist->icon(), hist->name(), m_usedInActionGroup);
+			action->setData(hist->path());
+			usedInMenu->addAction(action);
+		}
+	}
+
 	//add calculated columns where the column is used in formula variables
 	usedInMenu->addSection(i18n("Calculated Columns"));
-	QVector<Column*> columns = project()->children<Column>(AbstractAspect::Recursive);
+	QVector<Column*> columns = project->children<Column>(AbstractAspect::Recursive);
 	const QString& path = this->path();
 	for (const auto* column : columns) {
 		auto paths = column->formulaVariableColumnPaths();

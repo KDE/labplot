@@ -291,7 +291,7 @@ void SpreadsheetView::initActions() {
 	//plot data action
 	action_plot_data_xycurve = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-Curve"), this);
 	action_plot_data_xycurve->setData(PlotDataDialog::PlotXYCurve);
-	action_plot_data_histogram = new QAction(QIcon::fromTheme("labplot-histogram"), i18n("Histogram"), this);
+	action_plot_data_histogram = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), this);
 	action_plot_data_histogram->setData(PlotDataDialog::PlotHistogram);
 
 	//Analyze and plot menu actions
