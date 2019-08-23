@@ -149,8 +149,8 @@ void QxtSpanSliderPrivate::drawHandle(QStylePainter* painter, QxtSpanSlider::Spa
 
 void QxtSpanSliderPrivate::triggerAction(QAbstractSlider::SliderAction action, bool main) {
 	int value = 0;
-	bool no = false;
-	bool up = false;
+	bool update = true;
+	bool isUpperHandle = false;
 	const int min = qxt_p().minimum();
 	const int max = qxt_p().maximum();
 	const QxtSpanSlider::SpanHandle altControl = (mainControl == QxtSpanSlider::LowerHandle ? QxtSpanSlider::UpperHandle : QxtSpanSlider::LowerHandle);
@@ -161,63 +161,66 @@ void QxtSpanSliderPrivate::triggerAction(QAbstractSlider::SliderAction action, b
 	case QAbstractSlider::SliderSingleStepAdd:
 		if ((main && mainControl == QxtSpanSlider::UpperHandle) || (!main && altControl == QxtSpanSlider::UpperHandle)) {
 			value = qBound(min, upper + qxt_p().singleStep(), max);
-			up = true;
-			break;
+			isUpperHandle = true;
+		} else {
+			value = qBound(min, lower + qxt_p().singleStep(), max);
 		}
-		value = qBound(min, lower + qxt_p().singleStep(), max);
 		break;
 	case QAbstractSlider::SliderSingleStepSub:
 		if ((main && mainControl == QxtSpanSlider::UpperHandle) || (!main && altControl == QxtSpanSlider::UpperHandle)) {
 			value = qBound(min, upper - qxt_p().singleStep(), max);
-			up = true;
-			break;
+			isUpperHandle = true;
+		} else {
+			value = qBound(min, lower - qxt_p().singleStep(), max);
 		}
-		value = qBound(min, lower - qxt_p().singleStep(), max);
 		break;
 	case QAbstractSlider::SliderToMinimum:
 		value = min;
 		if ((main && mainControl == QxtSpanSlider::UpperHandle) || (!main && altControl == QxtSpanSlider::UpperHandle))
-			up = true;
+			isUpperHandle = true;
 		break;
 	case QAbstractSlider::SliderToMaximum:
 		value = max;
 		if ((main && mainControl == QxtSpanSlider::UpperHandle) || (!main && altControl == QxtSpanSlider::UpperHandle))
-			up = true;
+			isUpperHandle = true;
 		break;
 	case QAbstractSlider::SliderMove:
-		if ((main && mainControl == QxtSpanSlider::UpperHandle) || (!main && altControl == QxtSpanSlider::UpperHandle))
-			up = true;
+		// This is handled not here, but in QxtSpanSlider::mouseMoveEvent
+		// so update not needed
+		update = false;
 		break;
 	case QAbstractSlider::SliderNoAction:
-		no = true;
+		update = false;
 		break;
 	case QAbstractSlider::SliderPageStepAdd:
 	case QAbstractSlider::SliderPageStepSub:
 		break;
 	}
 
-	if (!no && !up) {
-		if (movement == QxtSpanSlider::NoCrossing)
-			value = qMin(value, upper);
-		else if (movement == QxtSpanSlider::NoOverlapping)
-			value = qMin(value, upper - 1);
+	if (update) {
+		if ( isUpperHandle ) {
+			if (movement == QxtSpanSlider::NoCrossing)
+				value = qMin(value, upper);
+			else if (movement == QxtSpanSlider::NoOverlapping)
+				value = qMin(value, upper - 1);
 
-		if (movement == QxtSpanSlider::FreeMovement && value > upper) {
-			swapControls();
-			qxt_p().setUpperPosition(value);
-		} else
-			qxt_p().setLowerPosition(value);
-	} else if (!no) {
-		if (movement == QxtSpanSlider::NoCrossing)
-			value = qMax(value, lower);
-		else if (movement == QxtSpanSlider::NoOverlapping)
-			value = qMax(value, lower + 1);
+			if (movement == QxtSpanSlider::FreeMovement && value < lower) {
+				swapControls();
+				qxt_p().setLowerPosition(value);
+			} else
+				qxt_p().setUpperPosition(value);
+		} else {
+			if (movement == QxtSpanSlider::NoCrossing)
+				value = qMax(value, lower);
+			else if (movement == QxtSpanSlider::NoOverlapping)
+				value = qMax(value, lower + 1);
 
-		if (movement == QxtSpanSlider::FreeMovement && value < lower) {
-			swapControls();
-			qxt_p().setLowerPosition(value);
-		} else
-			qxt_p().setUpperPosition(value);
+			if (movement == QxtSpanSlider::FreeMovement && value > upper) {
+				swapControls();
+				qxt_p().setUpperPosition(value);
+			} else
+				qxt_p().setLowerPosition(value);
+		}
 	}
 
 	blockTracking = false;
