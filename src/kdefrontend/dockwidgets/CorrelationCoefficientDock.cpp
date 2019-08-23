@@ -434,8 +434,8 @@ void CorrelationCoefficientDock::chbColumnStatsStateChanged() {
 	ui.cbCol1->setVisible(chbChecked);
 	ui.lCol2->setVisible(chbChecked);
 	ui.cbCol2->setVisible(chbChecked);
-	ui.lCol3->setVisible(chbChecked);
-	ui.cbCol3->setVisible(chbChecked);
+	ui.lCol3->setVisible(chbChecked && testType(m_test) == CorrelationCoefficient::ChiSquare);
+	ui.cbCol3->setVisible(chbChecked && testType(m_test) == CorrelationCoefficient::ChiSquare);
 
 	ui.lCategorical->setVisible(chbChecked && testType(m_test) == CorrelationCoefficient::Pearson);
 	ui.chbCategorical->setVisible(chbChecked && testType(m_test) == CorrelationCoefficient::Pearson);
