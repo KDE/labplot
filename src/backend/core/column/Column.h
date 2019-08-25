@@ -35,6 +35,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/core/column/ColumnPrivate.h"
 
+class CartesianPlot;
 class ColumnStringIO;
 class QActionGroup;
 
@@ -128,6 +129,8 @@ public:
 
 	void setChanged();
 	void setSuppressDataChangedSignal(const bool);
+
+	void addUsedInPlots(QVector<CartesianPlot*>&);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

@@ -36,6 +36,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
@@ -191,6 +192,33 @@ void Column::navigateTo(QAction* action) {
  */
 void Column::setSuppressDataChangedSignal(bool b) {
 	m_suppressDataChangedSignal = b;
+}
+
+void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
+	const Project* project = this->project();
+	QVector<const XYCurve*> curves = project->children<const XYCurve>(AbstractAspect::Recursive);
+
+	//determine the plots where the column is consumed
+	for (const auto* curve : curves) {
+		if (curve->xColumn() == this || curve->yColumn() == this
+			|| (curve->xErrorType() == XYCurve::SymmetricError && curve->xErrorPlusColumn() == this)
+			|| (curve->xErrorType() == XYCurve::AsymmetricError && (curve->xErrorPlusColumn() == this ||curve->xErrorMinusColumn() == this))
+			|| (curve->yErrorType() == XYCurve::SymmetricError && curve->yErrorPlusColumn() == this)
+			|| (curve->yErrorType() == XYCurve::AsymmetricError && (curve->yErrorPlusColumn() == this ||curve->yErrorMinusColumn() == this)) ) {
+			auto* plot = dynamic_cast<CartesianPlot*>(curve->parentAspect());
+			if (plots.indexOf(plot) == -1)
+				plots << plot;
+		}
+	}
+
+	QVector<const Histogram*> hists = project->children<const Histogram>(AbstractAspect::Recursive);
+	for (const auto* hist : hists) {
+		if (hist->dataColumn() == this ) {
+			auto* plot = dynamic_cast<CartesianPlot*>(hist->parentAspect());
+			if (plots.indexOf(plot) == -1)
+				plots << plot;
+		}
+	}
 }
 
 /**

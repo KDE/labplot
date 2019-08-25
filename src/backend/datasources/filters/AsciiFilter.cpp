@@ -1232,27 +1232,20 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	if (m_prepared) {
 		//notify all affected columns and plots about the changes
 		PERFTRACE("AsciiLiveDataImport, notify affected columns and plots");
-		const Project* project = spreadsheet->project();
-		QVector<const XYCurve*> curves = project->children<const XYCurve>(AbstractAspect::Recursive);
+
+		//determine the dependent plots
 		QVector<CartesianPlot*> plots;
-		for (int n = 0; n < m_actualCols; ++n) {
-			Column* column = spreadsheet->column(n);
+		for (int n = 0; n < m_actualCols; ++n)
+			spreadsheet->column(n)->addUsedInPlots(plots);
 
-			//determine the plots where the column is consumed
-			for (const auto* curve : curves) {
-				if (curve->xColumn() == column || curve->yColumn() == column) {
-					auto* plot = dynamic_cast<CartesianPlot*>(curve->parentAspect());
-					if (plots.indexOf(plot) == -1) {
-						plots << plot;
-						plot->setSuppressDataChangedSignal(true);
-					}
-				}
-			}
+		//supress retransform in the dependent plots
+		for (auto* plot : plots)
+			plot->setSuppressDataChangedSignal(true);
 
-			column->setChanged();
-		}
+		for (int n = 0; n < m_actualCols; ++n)
+			spreadsheet->column(n)->setChanged();
 
-		//loop over all affected plots and retransform them
+		//retransform the dependent plots
 		for (auto* plot : plots) {
 			plot->setSuppressDataChangedSignal(false);
 			plot->dataChanged();
