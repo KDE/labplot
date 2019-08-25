@@ -639,6 +639,9 @@ void ImportDatasetWidget::refreshCategories() {
 	}
 }
 
+/**
+ * @brief Restores the saved metadata files.  Revokes the effect of refreshCategories().
+ */
 void ImportDatasetWidget::restoreBackup() {
 	QMessageBox::StandardButton reply;
 	reply = QMessageBox::question(this, "Restore backup", "Are you sure to restore the backup metadata files?", QMessageBox::Yes|QMessageBox::No);
