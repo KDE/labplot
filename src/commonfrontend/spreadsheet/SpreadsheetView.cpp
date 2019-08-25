@@ -28,6 +28,7 @@
  ***************************************************************************/
 
 #include "SpreadsheetView.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/spreadsheet/SpreadsheetItemDelegate.h"
@@ -1400,11 +1401,29 @@ void SpreadsheetView::maskSelection() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: mask selected cells", m_spreadsheet->name()));
+
+	QVector<CartesianPlot*> plots;
+	//determine the dependent plots
+	for (auto* column : selectedColumns())
+		column->addUsedInPlots(plots);
+
+	//supress retransform in the dependent plots
+	for (auto* plot : plots)
+		plot->setSuppressDataChangedSignal(true);
+
+	//mask the selected cells
 	for (auto* column : selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(column);
 		for (int row = first; row <= last; row++)
 			if (isCellSelected(row, col)) column->setMasked(row);
 	}
+
+	//retransform the dependent plots
+	for (auto* plot : plots) {
+		plot->setSuppressDataChangedSignal(false);
+		plot->dataChanged();
+	}
+
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
@@ -1416,11 +1435,29 @@ void SpreadsheetView::unmaskSelection() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: unmask selected cells", m_spreadsheet->name()));
+
+	QVector<CartesianPlot*> plots;
+	//determine the dependent plots
+	for (auto* column : selectedColumns())
+		column->addUsedInPlots(plots);
+
+	//supress retransform in the dependent plots
+	for (auto* plot : plots)
+		plot->setSuppressDataChangedSignal(true);
+
+	//unmask the selected cells
 	for (auto* column : selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(column);
 		for (int row = first; row <= last; row++)
 			if (isCellSelected(row, col)) column->setMasked(row, false);
 	}
+
+	//retransform the dependent plots
+	for (auto* plot : plots) {
+		plot->setSuppressDataChangedSignal(false);
+		plot->dataChanged();
+	}
+
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
