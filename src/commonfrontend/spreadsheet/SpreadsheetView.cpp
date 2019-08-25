@@ -28,6 +28,7 @@
  ***************************************************************************/
 
 #include "SpreadsheetView.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/spreadsheet/SpreadsheetItemDelegate.h"
@@ -291,7 +292,7 @@ void SpreadsheetView::initActions() {
 	//plot data action
 	action_plot_data_xycurve = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-Curve"), this);
 	action_plot_data_xycurve->setData(PlotDataDialog::PlotXYCurve);
-	action_plot_data_histogram = new QAction(QIcon::fromTheme("labplot-histogram"), i18n("Histogram"), this);
+	action_plot_data_histogram = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), this);
 	action_plot_data_histogram->setData(PlotDataDialog::PlotHistogram);
 
 	//Analyze and plot menu actions
@@ -1114,6 +1115,32 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	action_sort_spreadsheet->setEnabled(cellsAvail);
 	action_go_to_cell->setEnabled(cellsAvail);
 	action_statistics_all_columns->setEnabled(cellsAvail);
+
+	//deactivate mask/unmask actions if there are no unmasked/masked cells
+	//in the current selection
+	QModelIndexList indexes = m_tableView->selectionModel()->selectedIndexes();
+	bool hasMasked = false;
+	bool hasUnmasked = false;
+	for (auto index : indexes) {
+		int row = index.row();
+		int col = index.column();
+		if (m_spreadsheet->column(col)->isMasked(row)) {
+			hasMasked = true;
+			break;
+		}
+	}
+
+	for (auto index : indexes) {
+		int row = index.row();
+		int col = index.column();
+		if (!m_spreadsheet->column(col)->isMasked(row)) {
+			hasUnmasked = true;
+			break;
+		}
+	}
+
+	action_mask_selection->setEnabled(hasUnmasked);
+	action_unmask_selection->setEnabled(hasMasked);
 }
 
 bool SpreadsheetView::formulaModeActive() const {
@@ -1374,11 +1401,29 @@ void SpreadsheetView::maskSelection() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: mask selected cells", m_spreadsheet->name()));
+
+	QVector<CartesianPlot*> plots;
+	//determine the dependent plots
+	for (auto* column : selectedColumns())
+		column->addUsedInPlots(plots);
+
+	//supress retransform in the dependent plots
+	for (auto* plot : plots)
+		plot->setSuppressDataChangedSignal(true);
+
+	//mask the selected cells
 	for (auto* column : selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(column);
 		for (int row = first; row <= last; row++)
 			if (isCellSelected(row, col)) column->setMasked(row);
 	}
+
+	//retransform the dependent plots
+	for (auto* plot : plots) {
+		plot->setSuppressDataChangedSignal(false);
+		plot->dataChanged();
+	}
+
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
@@ -1390,11 +1435,29 @@ void SpreadsheetView::unmaskSelection() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: unmask selected cells", m_spreadsheet->name()));
+
+	QVector<CartesianPlot*> plots;
+	//determine the dependent plots
+	for (auto* column : selectedColumns())
+		column->addUsedInPlots(plots);
+
+	//supress retransform in the dependent plots
+	for (auto* plot : plots)
+		plot->setSuppressDataChangedSignal(true);
+
+	//unmask the selected cells
 	for (auto* column : selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(column);
 		for (int row = first; row <= last; row++)
 			if (isCellSelected(row, col)) column->setMasked(row, false);
 	}
+
+	//retransform the dependent plots
+	for (auto* plot : plots) {
+		plot->setSuppressDataChangedSignal(false);
+		plot->dataChanged();
+	}
+
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }

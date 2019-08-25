@@ -264,8 +264,11 @@ void PlotDataDialog::processColumns() {
 	int size = m_columnComboBoxes.size() >=5 ? 5 : m_columnComboBoxes.size();
 	int height = size * ui->cbXColumn->height();
 	QGridLayout* layout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
-	if (layout)
-		height += (3 + (size - 1))*layout->verticalSpacing();
+	if (layout) {
+		height += (size + 1)*layout->verticalSpacing();
+		if (m_plotType == PlotXYCurve)
+			height += layout->verticalSpacing(); //one more spacing for the separating line
+	}
 	ui->scrollAreaColumns->setMinimumSize(ui->scrollAreaColumns->width(), height);
 }
 
@@ -338,7 +341,6 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 		ui->rbCurvePlacement1->setChecked(true);
 		ui->gbCurvePlacement->hide();
 		ui->gbPlotPlacement->setTitle(i18n("Add Histogram to"));
-		ui->scrollAreaColumns->hide();
 	} else {
 		ui->gbCurvePlacement->setTitle(i18n("Histogram Placement"));
 		ui->rbCurvePlacement1->setText(i18n("All histograms in one plot"));
