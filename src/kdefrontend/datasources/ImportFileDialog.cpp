@@ -255,6 +255,14 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			if (mode == AbstractFileFilter::Replace) {
 				start = offset;
 
+				// if there are more available spreadsheets, than needed,
+				// delete the unneeded spreadsheets
+				if (offset > nrNames) {
+					for (int i = nrNames; i < offset; i++)
+						sheets[i]->remove();
+					offset = nrNames;
+				}
+
 				//rename the available sheets
 				for (int i = 0; i < offset; ++i) {
 					//HDF5 variable names contain the whole path, remove it and keep the name only
