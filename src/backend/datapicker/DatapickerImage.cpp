@@ -480,7 +480,7 @@ void DatapickerImagePrivate::updateFileName() {
 void DatapickerImage::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement( "datapickerImage" );
 	writeBasicAttributes(writer);
-	writeCommentElement(writer);
+
 	//general properties
 	writer->writeStartElement( "general" );
 	writer->writeAttribute( "fileName", d->fileName );
@@ -560,9 +560,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
-			if (!readCommentElement(reader)) return false;
-		} else if (!preview && reader->name() == "general") {
+		if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
 			str = attribs.value("fileName").toString();
