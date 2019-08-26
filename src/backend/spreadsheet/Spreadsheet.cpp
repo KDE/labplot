@@ -33,6 +33,7 @@
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
 #include <QIcon>
@@ -916,6 +917,19 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
 	DEBUG("Spreadsheet::finalizeImport()");
 
+	//determine the dependent plots
+	QVector<CartesianPlot*> plots;
+	if (importMode == AbstractFileFilter::Replace) {
+		for (int n = startColumn; n <= endColumn; n++) {
+			Column* column = this->column(columnOffset + n - startColumn);
+			column->addUsedInPlots(plots);
+		}
+
+		//supress retransform in the dependent plots
+		for (auto* plot : plots)
+			plot->setSuppressDataChangedSignal(true);
+	}
+
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();
 	for (int n = startColumn; n <= endColumn; n++) {
@@ -950,6 +964,14 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 		if (importMode == AbstractFileFilter::Replace) {
 			column->setSuppressDataChangedSignal(false);
 			column->setChanged();
+		}
+	}
+
+	if (importMode == AbstractFileFilter::Replace) {
+		//retransform the dependent plots
+		for (auto* plot : plots) {
+			plot->setSuppressDataChangedSignal(false);
+			plot->dataChanged();
 		}
 	}
 
