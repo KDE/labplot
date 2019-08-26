@@ -321,7 +321,7 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 	m_initializing = true;
 	m_imagesList = list;
 	m_image = list.first();
-	m_aspect = list.first();
+	m_aspect = list.first()->parentAspect();
 
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);

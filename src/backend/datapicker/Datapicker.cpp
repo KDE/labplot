@@ -356,7 +356,10 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "datapickerImage") {
+		if (reader->name() == "comment") {
+			if (!readCommentElement(reader))
+				return false;
+		} else if (reader->name() == "datapickerImage") {
 			DatapickerImage* plot = new DatapickerImage(i18n("Plot"), true);
 			if (!plot->load(reader, preview)) {
 				delete plot;
