@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : GeneralTestView.cpp
-    Project              : LabPlot
-    Description          : View class for Hypothesis Tests' Table
-    --------------------------------------------------------------------
-    Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
+	File                 : GeneralTestView.cpp
+	Project              : LabPlot
+	Description          : View class for Hypothesis Tests' Table
+	--------------------------------------------------------------------
+	Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
 
  ***************************************************************************/
 
@@ -41,14 +41,16 @@
 #include <QLabel>
 #include <QTableView>
 #include <QHeaderView>
+#include <QPushButton>
+#include <QStandardItemModel>
 
 #include <KLocalizedString>
 
 /*!
-    \class GeneralTestView
-    \brief View class for Hypothesis Test
+	\class GeneralTestView
+	\brief View class for Hypothesis Test
 
-    \ingroup kdefrontend
+	\ingroup kdefrontend
  */
 
 GeneralTestView::GeneralTestView(GeneralTest* GeneralTest) : QWidget(),
@@ -56,33 +58,39 @@ GeneralTestView::GeneralTestView(GeneralTest* GeneralTest) : QWidget(),
 	m_testName(new QLabel()),
 	m_statsTable(new MyTextEdit()),
 	m_summaryResults(new QWidget()),
+	m_inputStatsWidget(new QWidget()),
+	m_labelInputStatsTable(new QLabel()),
 	m_inputStatsTable(new QTableView()),
-	m_labelInputStatsTable(new QLabel()) {
+	m_clearInputStats(new QPushButton()) {
+
+	QVBoxLayout * inputStatsLayout = new QVBoxLayout(m_inputStatsWidget);
+	inputStatsLayout->addWidget(m_labelInputStatsTable);
+	inputStatsLayout->addWidget(m_inputStatsTable);
+	inputStatsLayout->addWidget(m_clearInputStats);
 
 	m_statsTable->setReadOnly(true);
 
 	m_testName->setStyleSheet("background-color: white");
 	m_statsTable->setStyleSheet("background-color: white");
 	m_summaryResults->setStyleSheet("QToolTip { color: black; background-color: yellow; border: 0px; }");
-	m_inputStatsTable->setStyleSheet("background-color: white");
-	m_labelInputStatsTable->setStyleSheet("backgroud-color: white");
+	m_inputStatsWidget->setStyleSheet("background-color: white");
 
 	m_testName->hide();
 	m_statsTable->hide();
 	m_summaryResults->hide();
-	m_inputStatsTable->hide();
+	m_inputStatsWidget->hide();
 
 	auto* layout = new QVBoxLayout(this);
 
 	m_labelInputStatsTable->setText("<h3>" + i18n("Statistic Table"));
 	m_labelInputStatsTable->setToolTip(i18n("Fill this table with pre-calculated statistic value and then press recalculate") +
-									 "<br><br>" +
-									 i18n("You can leave one or more columns empty if you feel they are not useful") +
-									 "</h3>");
-	m_labelInputStatsTable->hide();
+									   "<br><br>" +
+									   i18n("You can leave one or more columns empty if you feel they are not useful") +
+									   "</h3>");
+	m_clearInputStats->setText(i18n("Clear"));
+	m_clearInputStats->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 
-	layout->addWidget(m_labelInputStatsTable);
-	layout->addWidget(m_inputStatsTable);
+	layout->addWidget(m_inputStatsWidget);
 	layout->addWidget(m_testName);
 	layout->addWidget(m_statsTable);
 	layout->addWidget(m_summaryResults);
@@ -105,6 +113,7 @@ void GeneralTestView::init() {
 
 	m_statsTable->setMouseTracking(true);
 	connect(m_generalTest, &GeneralTest::changed, this, &GeneralTestView::changed);
+	connect(m_clearInputStats, &QPushButton::clicked, m_generalTest, &GeneralTest::clearInputStatsTable);
 }
 
 void GeneralTestView::initActions() {
@@ -186,14 +195,10 @@ void GeneralTestView::changed() {
 	m_summaryResults->setLayout(m_generalTest->summaryLayout());
 
 	if (m_inputStatsTable->model()->rowCount() > 0 &&
-			m_inputStatsTable->model()->columnCount() > 0) {
-		m_inputStatsTable->show();
-		m_labelInputStatsTable->show();
-	}
-	else {
-		m_inputStatsTable->hide();
-		m_labelInputStatsTable->hide();
-	}
+			m_inputStatsTable->model()->columnCount() > 0)
+		m_inputStatsWidget->show();
+	else
+		m_inputStatsWidget->hide();
 }
 
 void GeneralTestView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
@@ -209,8 +214,8 @@ void GeneralTestView::exportToFile(const QString& path, const bool exportHeader,
 }
 
 void GeneralTestView::exportToLaTeX(const QString & path, const bool exportHeaders,
-                                    const bool gridLines, const bool captions, const bool latexHeaders,
-                                    const bool skipEmptyRows, const bool exportEntire) const {
+									const bool gridLines, const bool captions, const bool latexHeaders,
+									const bool skipEmptyRows, const bool exportEntire) const {
 	Q_UNUSED(exportHeaders);
 	Q_UNUSED(gridLines);
 	Q_UNUSED(captions);

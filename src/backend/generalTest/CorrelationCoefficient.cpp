@@ -66,7 +66,6 @@ void CorrelationCoefficient::performTest(int test, bool categoricalVariable, boo
 	m_correlationValue = 0;
 	m_statisticValue.clear();
 	m_pValue.clear();
-	m_inputStatsTableModel->clear();
 
 	for (int i = 0; i < RESULTLINESCOUNT; i++)
 		m_resultLine[i]->clear();
@@ -87,10 +86,9 @@ void CorrelationCoefficient::performTest(int test, bool categoricalVariable, boo
 		break;
 	}
 	case CorrelationCoefficient::ChiSquare:
-		switch (testSubtype(test)) {
-		case CorrelationCoefficient::IndependenceTest:
+		if (testSubtype(test) == CorrelationCoefficient::IndependenceTest) {
+			m_currTestName = "<h2>" + i18n("Chi Square Independence Test") + "</h2>";
 			performChiSquareIndpendence(calculateStats);
-			break;
 		}
 		break;
 	}
@@ -144,6 +142,44 @@ void CorrelationCoefficient::setInputStatsTableNCols(int nColumns) {
 
 	for (int i = nColumns_old; i < nColumns + 1; i++)
 		m_inputStatsTableModel->setData(m_inputStatsTableModel->index(0, i), i18n("Column %1", i));
+}
+
+void CorrelationCoefficient::exportStatTableToSpreadsheet() {
+	if (m_dataSourceSpreadsheet == nullptr)
+		return;
+
+	int rowCount = m_inputStatsTableModel->rowCount();
+	int columnCount = m_inputStatsTableModel->columnCount();
+
+	int spreadsheetColCount = m_dataSourceSpreadsheet->columnCount();
+
+	m_dataSourceSpreadsheet->insertColumns(spreadsheetColCount, 3);
+
+	Column* col1 = m_dataSourceSpreadsheet->column(spreadsheetColCount);
+	Column* col2 = m_dataSourceSpreadsheet->column(spreadsheetColCount + 1);
+	Column* col3 = m_dataSourceSpreadsheet->column(spreadsheetColCount + 2);
+
+	col1->setName("Independent Var. 1");
+	col2->setName("Independent Var. 2");
+	col3->setName("Data Values");
+
+	col1->setColumnMode(AbstractColumn::Text);
+	col2->setColumnMode(AbstractColumn::Text);
+	col3->setColumnMode(AbstractColumn::Numeric);
+
+	int index = 0;
+	for (int i = 1; i < rowCount; i++)
+		for (int j = 1; j < columnCount; j++) {
+			col1->setTextAt(index, m_inputStatsTableModel->data(
+								m_inputStatsTableModel->index(i, 0)).toString());
+
+			col2->setTextAt(index, m_inputStatsTableModel->data(
+								m_inputStatsTableModel->index(0, j)).toString());
+
+			col3->setValueAt(index, m_inputStatsTableModel->data(
+								m_inputStatsTableModel->index(i, j)).toDouble());
+			index++;
+		}
 }
 
 /***************************************************************************************************************************
@@ -376,9 +412,172 @@ void CorrelationCoefficient::performSpearman() {
 
 /***********************************************Chi Square Test for Indpendence******************************************************************/
 
-// TODO: Implement this function
+// TODO: Find P value from chi square test statistic:
 void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
-	Q_UNUSED(calculateStats);
+	int rowCount;
+	int columnCount;
+
+	QVector<double> sumRows;
+	QVector<double> sumColumns;
+	int overallTotal = 0;
+	QVector<QVector<int>> observedValues;
+
+	QStringList horizontalHeader;
+	QStringList verticalHeader;
+
+	if (!calculateStats) {
+		rowCount = m_inputStatsTableModel->rowCount() - 1;
+		columnCount = m_inputStatsTableModel->columnCount() - 1;
+
+		sumRows.resize(rowCount);
+		sumColumns.resize(columnCount);
+		observedValues.resize(rowCount);
+
+		for (int i = 1; i <= rowCount; i++) {
+			observedValues[i - 1].resize(columnCount);
+			for (int j = 1; j <= columnCount; j++) {
+				int cellValue = m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, j)).toInt();
+				sumRows[i - 1] += cellValue;
+				sumColumns[j - 1] += cellValue;
+				overallTotal += cellValue;
+				observedValues[i - 1][j - 1] = cellValue;
+			}
+		}
+
+		for (int i = 0; i < columnCount + 1; i++)
+			horizontalHeader.append(m_inputStatsTableModel->data(m_inputStatsTableModel->index(0, i)).toString());
+
+		for (int i = 0; i < rowCount + 1; i++)
+			verticalHeader.append(m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 0)).toString());
+	} else {
+		if (m_columns.count() != 3) {
+			printError("Select only 3 columns ");
+			return;
+		}
+
+		int nRows = findCount(m_columns[0]);
+
+		rowCount = 0;
+		columnCount = 0;
+
+		horizontalHeader.append(QString());
+		verticalHeader.append(QString());
+
+		QMap<QString, int> independentVar1;
+		QMap<QString, int> independentVar2;
+		for (int i = 0; i < nRows; i++) {
+			QString cell1Text = m_columns[0]->textAt(i);
+			QString cell2Text = m_columns[1]->textAt(i);
+
+			if (independentVar1[cell1Text] == 0) {
+				independentVar1[cell1Text] = ++columnCount;
+				horizontalHeader.append(cell1Text);
+			}
+
+			if (independentVar2[cell2Text] == 0) {
+				independentVar2[cell2Text] = ++rowCount;
+				verticalHeader.append(cell2Text);
+			}
+		}
+
+		sumRows.resize(rowCount);
+		sumColumns.resize(columnCount);
+		observedValues.resize(rowCount);
+		for (int i = 0; i < rowCount; i++)
+			observedValues[i].resize(columnCount);
+
+
+		for (int i = 0; i < nRows; i++) {
+			QString cell1Text = m_columns[0]->textAt(i);
+			QString cell2Text = m_columns[1]->textAt(i);
+			int cellValue = int(m_columns[2]->valueAt(i));
+
+			int partition1Number = independentVar1[cell1Text] - 1;
+			int partition2Number = independentVar2[cell2Text] - 1;
+
+			sumRows[partition1Number] += cellValue;
+			sumColumns[partition2Number] += cellValue;
+			overallTotal += cellValue;
+			observedValues[partition1Number][partition2Number] = cellValue;
+		}
+	}
+
+	if (overallTotal == 0)
+		printError("Enter some data: All columns are empty");
+
+	QVector<QVector<double>> expectedValues(rowCount, QVector<double>(columnCount));
+
+	for (int i = 0; i < rowCount; i++)
+		for (int j = 0; j < columnCount; j++)
+			expectedValues[i][j] = (double(sumRows[i]) * double(sumColumns[j])) / overallTotal;
+
+	m_statsTable += "<h3>" + i18n("Observed Value Table") + "</h3>";
+	QList<HtmlCell*> rowMajor;
+	int level = 0;
+	// horizontal header
+	for (int i = 0; i < columnCount + 1; i++)
+		rowMajor.append(new HtmlCell(horizontalHeader[i], level, true));
+
+	rowMajor.append(new HtmlCell("Total", level, true));
+
+	//data with vertical header.
+	for (int i = 1; i < rowCount + 1; i++) {
+		level++;
+		rowMajor.append(new HtmlCell(verticalHeader[i], level, true));
+		for (int j = 0; j < columnCount; j++)
+			rowMajor.append(new HtmlCell(round(observedValues[i - 1][j]), level));
+
+		rowMajor.append(new HtmlCell(round(sumRows[i - 1]), level));
+	}
+
+	level++;
+	rowMajor.append(new HtmlCell("Total", level, true));
+	for (int i = 0; i < columnCount; i++)
+		rowMajor.append(new HtmlCell(round(sumColumns[i]), level));
+
+	rowMajor.append(new HtmlCell(round(overallTotal), level));
+	m_statsTable += getHtmlTable3(rowMajor);
+
+	m_statsTable += "<br>";
+
+	m_statsTable += "<h3>" + i18n("Expected Value Table") + "</h3>";
+	rowMajor.clear();
+	level = 0;
+	// horizontal header
+	for (int i = 0; i < columnCount + 1; i++)
+		rowMajor.append(new HtmlCell(horizontalHeader[i], level, true));
+
+	rowMajor.append(new HtmlCell("Total", level, true));
+
+	//data with vertical header.
+	for (int i = 1; i < rowCount + 1; i++) {
+		level++;
+		rowMajor.append(new HtmlCell(verticalHeader[i], level, true));
+		for (int j = 0; j < columnCount; j++)
+			rowMajor.append(new HtmlCell(round(expectedValues[i - 1][j]), level));
+
+		rowMajor.append(new HtmlCell(round(sumRows[i - 1]), level));
+	}
+
+	level++;
+	rowMajor.append(new HtmlCell("Total", level, true));
+	for (int i = 0; i < columnCount; i++)
+		rowMajor.append(new HtmlCell(round(sumColumns[i]), level));
+
+	rowMajor.append(new HtmlCell(round(overallTotal), level));
+
+	m_statsTable += getHtmlTable3(rowMajor);
+
+	double chiSquareVal = 0;
+	// finding chi-square value;
+	for (int i = 0; i < rowCount; i++)
+		for (int j = 0; j < columnCount; j++)
+			chiSquareVal += gsl_pow_2(observedValues[i][j] - expectedValues[i][j]) / expectedValues[i][j];
+
+	m_statisticValue.append(chiSquareVal);
+	int df = (rowCount - 1) * (columnCount - 1);
+	printLine(0, "Degree of Freedom is " + QString::number(df), "blue");
+	printLine(1, "Chi Square Statistic Value is " + round(chiSquareVal), "green");
 }
 
 /***********************************************Helper Functions******************************************************************/

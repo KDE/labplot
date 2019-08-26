@@ -95,6 +95,9 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
+public slots:
+	void clearInputStatsTable();
+
 signals:
 	void changed();
 	void requestProjectContextMenu(QMenu*);
