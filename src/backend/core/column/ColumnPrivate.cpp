@@ -1400,6 +1400,15 @@ void ColumnPrivate::updateProperties() {
 	qint64 valueDateTime;
 
 	for (int row = 1; row < rowCount(); row++) {
+		if (!m_owner->isValid(row) || m_owner->isMasked(row)) {
+			// if there is one nonvalid or masked value, the propertie is No, because
+			// otherwise it's difficult to find the correct index in indexForValue().
+			// You don't know if you should increase the index or decrease it when
+			// you hit an invalid value
+			properties = AbstractColumn::Properties::No;
+			propertiesAvailable = true;
+			return;
+		}
 
 		if (m_column_mode == AbstractColumn::Integer) {
 			valueInt = integerAt(row);

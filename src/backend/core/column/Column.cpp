@@ -90,6 +90,7 @@ void Column::init() {
 
 	m_usedInActionGroup = new QActionGroup(this);
 	connect(m_usedInActionGroup, &QActionGroup::triggered, this, &Column::navigateTo);
+	connect(this, &AbstractColumn::maskingChanged, this, [=]{d->propertiesAvailable = false;});
 }
 
 Column::~Column() {
@@ -1328,10 +1329,15 @@ double Column::minimum(int startIndex, int endIndex) const {
 	ColumnMode mode = columnMode();
 	Properties property = properties();
 	if (property == Properties::No) {
+		// skipping values is only in Properties::No needed, because
+		// when there are invalid values the property must be Properties::No
 		switch (mode) {
 		case Numeric: {
 			auto* vec = static_cast<QVector<double>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
+				if (!isValid(row) || isMasked(row))
+					continue;
+
 				const double val = vec->at(row);
 				if (std::isnan(val))
 					continue;
@@ -1344,6 +1350,9 @@ double Column::minimum(int startIndex, int endIndex) const {
 		case Integer: {
 			auto* vec = static_cast<QVector<int>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
+				if (!isValid(row) || isMasked(row))
+					continue;
+
 				const int val = vec->at(row);
 
 				if (val < min)
@@ -1356,6 +1365,9 @@ double Column::minimum(int startIndex, int endIndex) const {
 		case DateTime: {
 			auto* vec = static_cast<QVector<QDateTime>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
+				if (!isValid(row) || isMasked(row))
+					continue;
+
 				const qint64 val = vec->at(row).toMSecsSinceEpoch();
 
 				if (val < min)
@@ -1839,16 +1851,16 @@ int Column::indexForValue(double x) const {
 		if ((mode == AbstractColumn::ColumnMode::Numeric ||
 			 mode == AbstractColumn::ColumnMode::Integer)) {
 			for (int row = 0; row < rowCount(); row++) {
-				if (isValid(row)) {
-					if (row == 0)
-						prevValue = valueAt(row);
+				if (!isValid(row) || isMasked(row))
+					continue;
+				if (row == 0)
+					prevValue = valueAt(row);
 
-					double value = valueAt(row);
-					if (abs(value - x) <= abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
-						if (row < rowCount() - 1) {
-							prevValue = value;
-							index = row;
-						}
+				double value = valueAt(row);
+				if (abs(value - x) <= abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
+					if (row < rowCount() - 1) {
+						prevValue = value;
+						index = row;
 					}
 				}
 			}
@@ -1859,15 +1871,16 @@ int Column::indexForValue(double x) const {
 			qint64 xInt64 = static_cast<qint64>(x);
 			int index = 0;
 			for (int row = 0; row < rowCount(); row++) {
-				if (isValid(row)) {
-					if (row == 0)
-						prevValueDateTime = dateTimeAt(row).toMSecsSinceEpoch();
+				if (!isValid(row) || isMasked(row))
+					continue;
 
-					qint64 value = dateTimeAt(row).toMSecsSinceEpoch();
-					if (abs(value - xInt64) <= abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
-						prevValueDateTime = value;
-						index = row;
-					}
+				if (row == 0)
+					prevValueDateTime = dateTimeAt(row).toMSecsSinceEpoch();
+
+				qint64 value = dateTimeAt(row).toMSecsSinceEpoch();
+				if (abs(value - xInt64) <= abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
+					prevValueDateTime = value;
+					index = row;
 				}
 			}
 			return index;
@@ -1940,12 +1953,14 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 		end = rowCount() - 1;
 		return true;
 	}
-
+	// property == Properties::No
 	switch (columnMode()) {
 		case Integer:
 		case Numeric: {
 			double value;
 			for (int i = 0; i < rowCount(); i++) {
+				if (!isValid(i) || isMasked(i))
+					continue;
 				value = valueAt(i);
 				if (value <= v2 && value >= v1) {
 					end = i;
@@ -1963,6 +1978,8 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 			qint64 v2int64 = v2;
 			qint64 v1int64 = v2;
 			for (int i = 0; i < rowCount(); i++) {
+				if (!isValid(i) || isMasked(i))
+					continue;
 				value = dateTimeAt(i).toMSecsSinceEpoch();
 				if (value <= v2int64 && value >= v1int64) {
 					end = i;
