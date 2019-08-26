@@ -2865,6 +2865,17 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 //##############################################################################
 //##################################  Events  ##################################
 //##############################################################################
+
+/*!
+ * \brief CartesianPlotPrivate::mousePressEvent
+ * In this function only basic stuff is done. The mousePressEvent is forwarded to the Worksheet, which
+ * has access to all cartesian plots and can apply the changes to all plots if the option "applyToAll"
+ * is set. The worksheet calls then the corresponding mousepressZoomMode/CursorMode function in this class
+ * This is done for mousePress, mouseMove and mouseRelease event
+ * This function sends a signal with the logical position, because this is the only value which is the same
+ * in all plots. Using the scene coordinates is not possible
+ * \param event
+ */
 void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
 	if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode)

@@ -201,6 +201,8 @@ bool Project::hasChanged() const {
 
 /*!
  * \brief Project::descriptionChanged
+ * This function is called, when an object changes its name. When a column changed its name and wasn't connected before to the curve/column(formula) then
+ * this is done in this function
  * \param column
  */
 void Project::descriptionChanged(const AbstractAspect* aspect) {
@@ -260,10 +262,10 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 
 		QVector<Column*> columns = children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 		for (auto* tempColumn : columns) {
-			const QVector<Column*> formulaVariableColumns = tempColumn->formulaVariableColumns();
-			for (int i = 0; i < formulaVariableColumns.count(); i++) {
-				if (formulaVariableColumns[i] == column)
-					tempColumn->setformulVariableColumnsPath(i, columnPath);
+			const QStringList formulaVariableColumnsPath = tempColumn->formulaVariableColumnPaths();
+			for (int i = 0; i < formulaVariableColumnsPath.count(); i++) {
+				if (formulaVariableColumnsPath[i] == columnPath)
+					tempColumn->setformulVariableColumn(i, const_cast<Column*>(static_cast<const Column*>(column)));
 			}
 		}
 		return;
