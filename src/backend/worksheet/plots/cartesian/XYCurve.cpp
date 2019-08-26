@@ -2046,12 +2046,12 @@ void XYCurvePrivate::updateFilling() {
  * @return
  */
 double XYCurve::y(double x, bool &valueFound) const {
-	if (!yColumn()) {
+	if (!yColumn() || !xColumn()) {
 		valueFound = false;
 		return NAN;
 	}
 
-    AbstractColumn::ColumnMode yColumnMode = yColumn()->columnMode();
+	AbstractColumn::ColumnMode yColumnMode = yColumn()->columnMode();
 	int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
@@ -2076,7 +2076,10 @@ double XYCurve::y(double x, bool &valueFound) const {
 * @return Return found value
 */
 QDateTime XYCurve::yDateTime(double x, bool &valueFound) const {
-
+	if (!yColumn() || !xColumn()) {
+		valueFound = false;
+		return QDateTime();
+	}
    AbstractColumn::ColumnMode yColumnMode = yColumn()->columnMode();
    int index = xColumn()->indexForValue(x);
    if (index < 0) {
@@ -2485,18 +2488,18 @@ void XYCurvePrivate::updateErrorBars() {
 			switch (errorBarsType) {
 			case XYCurve::ErrorBarsSimple:
 				lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
-				                    QPointF(point.x()+errorPlus, point.y())));
+									QPointF(point.x()+errorPlus, point.y())));
 				break;
 			case XYCurve::ErrorBarsWithEnds:
 				lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
-				                    QPointF(point.x()+errorPlus, point.y())));
+									QPointF(point.x()+errorPlus, point.y())));
 				if (errorMinus != 0) {
 					lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()-capSizeX),
-					                    QPointF(point.x()-errorMinus, point.y()+capSizeX)));
+										QPointF(point.x()-errorMinus, point.y()+capSizeX)));
 				}
 				if (errorPlus != 0) {
 					lines.append(QLineF(QPointF(point.x()+errorPlus, point.y()-capSizeX),
-					                    QPointF(point.x()+errorPlus, point.y()+capSizeX)));
+										QPointF(point.x()+errorPlus, point.y()+capSizeX)));
 				}
 				break;
 			}
@@ -2523,17 +2526,17 @@ void XYCurvePrivate::updateErrorBars() {
 			switch (errorBarsType) {
 			case XYCurve::ErrorBarsSimple:
 				lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
-				                    QPointF(point.x(), point.y()+errorPlus)));
+									QPointF(point.x(), point.y()+errorPlus)));
 				break;
 			case XYCurve::ErrorBarsWithEnds:
 				lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
-				                    QPointF(point.x(), point.y()+errorPlus)));
+									QPointF(point.x(), point.y()+errorPlus)));
 				if (errorMinus != 0)
 					lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()-errorMinus),
-					                    QPointF(point.x()+capSizeY, point.y()-errorMinus)));
+										QPointF(point.x()+capSizeY, point.y()-errorMinus)));
 				if (errorPlus != 0)
 					lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()+errorPlus),
-					                    QPointF(point.x()+capSizeY, point.y()+errorPlus)));
+										QPointF(point.x()+capSizeY, point.y()+errorPlus)));
 				break;
 			}
 		}
@@ -2699,10 +2702,10 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	if (m_hovered && !isSelected() && !m_printing) {
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
-                        QPainter p(&pix);
-                        p.setCompositionMode(QPainter::CompositionMode_SourceIn);	// source (shadow) pixels merged with the alpha channel of the destination (m_pixmap)
-                        p.fillRect(pix.rect(), QApplication::palette().color(QPalette::Shadow));
-                        p.end();
+			QPainter p(&pix);
+			p.setCompositionMode(QPainter::CompositionMode_SourceIn);	// source (shadow) pixels merged with the alpha channel of the destination (m_pixmap)
+			p.fillRect(pix.rect(), QApplication::palette().color(QPalette::Shadow));
+			p.end();
 
 			m_hoverEffectImage = ImageTools::blurred(pix.toImage(), m_pixmap.rect(), 5);
 			m_hoverEffectImageIsDirty = false;
@@ -2715,10 +2718,10 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	if (isSelected() && !m_printing) {
 		if (m_selectionEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
-                        QPainter p(&pix);
-                        p.setCompositionMode(QPainter::CompositionMode_SourceIn);
-                        p.fillRect(pix.rect(), QApplication::palette().color(QPalette::Highlight));
-                        p.end();
+			QPainter p(&pix);
+			p.setCompositionMode(QPainter::CompositionMode_SourceIn);
+			p.fillRect(pix.rect(), QApplication::palette().color(QPalette::Highlight));
+			p.end();
 
 			m_selectionEffectImage = ImageTools::blurred(pix.toImage(), m_pixmap.rect(), 5);
 			m_selectionEffectImageIsDirty = false;

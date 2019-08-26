@@ -1714,7 +1714,7 @@ void CartesianPlot::yDataChanged() {
 	d->curvesYMinMaxIsDirty = true;
 	bool updated = false;
 	if (d->autoScaleY)
-		this->scaleAutoY();
+		updated = this->scaleAutoY();
 
 	if (!updated) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
