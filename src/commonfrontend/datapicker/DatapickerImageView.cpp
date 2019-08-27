@@ -582,7 +582,7 @@ void DatapickerImageView::changePointsType(QAction* action) {
 	else if (action == selectSegmentAction)
 		m_image->setPlotPointsType(DatapickerImage::SegmentPoints);
 
-		currentPlotPointsTypeAction = action;
+	currentPlotPointsTypeAction = action;
 }
 
 void DatapickerImageView::changeZoom(QAction* action) {
