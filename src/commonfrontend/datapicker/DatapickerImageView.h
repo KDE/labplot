@@ -61,6 +61,7 @@ private:
 	void drawForeground(QPainter*, const QRectF&) override;
 	void drawBackground(QPainter*, const QRectF&) override;
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect);
+	void updateMagnificationWindow();
 
 	//events
 	void contextMenuEvent(QContextMenuEvent*) override;

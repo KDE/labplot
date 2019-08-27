@@ -426,6 +426,9 @@ void DatapickerImageView::mousePressEvent(QMouseEvent* event) {
 		} else if ( m_image->plotPointsType() == DatapickerImage::CurvePoints && m_datapicker->activeCurve() ) {
 			m_datapicker->addNewPoint(eventPos, m_datapicker->activeCurve());
 		}
+
+		if (m_image->m_magnificationWindow->isVisible())
+			updateMagnificationWindow();
 	}
 
 	// make sure the datapicker (or its currently active curve) is selected in the project explorer if the view was clicked.
@@ -516,33 +519,38 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 			m_image->m_magnificationWindow->setZValue(std::numeric_limits<int>::max());
 		}
 
-		m_image->m_magnificationWindow->setVisible(false);
-
-		//copy the part of the view to be shown magnified
-		const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
-		const QRectF copyRect(pos.x() - size/(2*magnificationFactor), pos.y() - size/(2*magnificationFactor), size/magnificationFactor, size/magnificationFactor);
-		QPixmap px = grab(mapFromScene(copyRect).boundingRect());
-		px = px.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
-		//draw the bounding rect
-		QPainter painter(&px);
-		const QPen pen = QPen(Qt::lightGray, 2/transform().m11());
-		painter.setPen(pen);
-		QRect rect = px.rect();
-		rect.setWidth(rect.width()-pen.widthF()/2);
-		rect.setHeight(rect.height()-pen.widthF()/2);
-		painter.drawRect(rect);
-
-		//set the pixmap
-		m_image->m_magnificationWindow->setPixmap(px);
-		m_image->m_magnificationWindow->setPos(pos.x()- px.width()/2, pos.y()- px.height()/2);
-
-		m_image->m_magnificationWindow->setVisible(true);
+		updateMagnificationWindow();
 	} else if (m_image->m_magnificationWindow) {
 		m_image->m_magnificationWindow->setVisible(false);
 	}
 
 	QGraphicsView::mouseMoveEvent(event);
+}
+
+void DatapickerImageView::updateMagnificationWindow() {
+	m_image->m_magnificationWindow->setVisible(false);
+	QPointF pos = mapToScene(mapFromGlobal(QCursor::pos()));
+
+	//copy the part of the view to be shown magnified
+	const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
+	const QRectF copyRect(pos.x() - size/(2*magnificationFactor), pos.y() - size/(2*magnificationFactor), size/magnificationFactor, size/magnificationFactor);
+	QPixmap px = grab(mapFromScene(copyRect).boundingRect());
+	px = px.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+	//draw the bounding rect
+	QPainter painter(&px);
+	const QPen pen = QPen(Qt::lightGray, 2/transform().m11());
+	painter.setPen(pen);
+	QRect rect = px.rect();
+	rect.setWidth(rect.width()-pen.widthF()/2);
+	rect.setHeight(rect.height()-pen.widthF()/2);
+	painter.drawRect(rect);
+
+	//set the pixmap
+	m_image->m_magnificationWindow->setPixmap(px);
+	m_image->m_magnificationWindow->setPos(pos.x()- px.width()/2, pos.y()- px.height()/2);
+
+	m_image->m_magnificationWindow->setVisible(true);
 }
 
 void DatapickerImageView::contextMenuEvent(QContextMenuEvent* e) {
@@ -651,6 +659,8 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 	}
 
 	m_image->endMacro();
+	if (m_image->m_magnificationWindow->isVisible())
+		updateMagnificationWindow();
 }
 
 void DatapickerImageView::mouseModeChanged(QAction* action) {
