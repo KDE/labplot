@@ -351,6 +351,9 @@ void DatapickerImage::setPrinting(bool on) const {
 }
 
 void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
+	if (d->plotPointsType == pointsType)
+		return;
+
 	d->plotPointsType = pointsType;
 
 	if (pointsType == DatapickerImage::AxisPoints) {
@@ -566,12 +569,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			str = attribs.value("fileName").toString();
 			d->fileName = str;
 
-			str = attribs.value("plotPointsType").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("plotPointsType").toString());
-			else
-				d->plotPointsType = DatapickerImage::PointsType(str.toInt());
-
+			READ_INT_VALUE("plotPointsType", plotPointsType, DatapickerImage::PointsType);
 		} else if (!preview && reader->name() == "axisPoint") {
 			attribs = reader->attributes();
 

@@ -37,6 +37,7 @@
 #include <limits>
 
 #include <QMenu>
+#include <QMessageBox>
 #include <QToolBar>
 #include <QDesktopWidget>
 #include <QWheelEvent>
@@ -192,16 +193,31 @@ void DatapickerImageView::initActions() {
 	fiveTimesMagnificationAction = new QAction(QIcon::fromTheme("labplot-5x-zoom"), i18n("5x Magnification"), magnificationActionGroup);
 	fiveTimesMagnificationAction->setCheckable(true);
 
+	//set some default values
+	currentZoomAction = zoomInViewAction;
+	currentMagnificationAction = noMagnificationAction;
+
+	switch(m_image->plotPointsType()) {
+	case DatapickerImage::AxisPoints:
+		currentPlotPointsTypeAction = setAxisPointsAction;
+		setAxisPointsAction->setChecked(true);
+		break;
+	case DatapickerImage::CurvePoints:
+		currentPlotPointsTypeAction = setCurvePointsAction;
+		setCurvePointsAction->setChecked(true);
+		break;
+	case DatapickerImage::SegmentPoints:
+		currentPlotPointsTypeAction = selectSegmentAction;
+		selectSegmentAction->setChecked(true);
+	}
+
+	//signal-slot connections
 	connect(mouseModeActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::mouseModeChanged);
 	connect(zoomActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::changeZoom);
 	connect(plotPointsTypeActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::changePointsType);
 	connect(addCurveAction, &QAction::triggered, this, &DatapickerImageView::addCurve);
 	connect(navigationActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::changeSelectedItemsPosition);
 	connect(magnificationActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::magnificationChanged);
-
-	//set some default values
-	currentZoomAction = zoomInViewAction;
-	currentMagnificationAction = noMagnificationAction;
 }
 
 void DatapickerImageView::initMenus() {
@@ -541,12 +557,24 @@ void DatapickerImageView::contextMenuEvent(QContextMenuEvent* e) {
 //####################################  SLOTs   ###############################
 //##############################################################################
 void DatapickerImageView::changePointsType(QAction* action) {
-	if (action == setAxisPointsAction)
+	if (action == setAxisPointsAction) {
+		int count = m_image->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
+		if (count) {
+			auto button = QMessageBox::question(this, i18n("Remove existing reference points?"),
+												i18n("All available reference points will be removed. Do you want to continue?"));
+			if (button != QMessageBox::Yes) {
+				currentPlotPointsTypeAction->setChecked(true);
+				return;
+			}
+		}
+
 		m_image->setPlotPointsType(DatapickerImage::AxisPoints);
-	else if (action == setCurvePointsAction)
+	} else if (action == setCurvePointsAction)
 		m_image->setPlotPointsType(DatapickerImage::CurvePoints);
 	else if (action == selectSegmentAction)
 		m_image->setPlotPointsType(DatapickerImage::SegmentPoints);
+
+		currentPlotPointsTypeAction = action;
 }
 
 void DatapickerImageView::changeZoom(QAction* action) {
@@ -696,11 +724,6 @@ void DatapickerImageView::handleImageActions() {
 			addCurveAction->setEnabled(false);
 			setCurvePointsAction->setEnabled(false);
 			selectSegmentAction->setEnabled(false);
-			if (m_image->plotPointsType() != DatapickerImage::AxisPoints) {
-				m_image->setUndoAware(false);
-				m_image->setPlotPointsType(DatapickerImage::AxisPoints);
-				m_image->setUndoAware(true);
-			}
 		}
 	} else {
 		navigationActionGroup->setEnabled(false);

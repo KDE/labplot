@@ -431,7 +431,6 @@ void DatapickerPoint::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement( "datapickerPoint" );
 	writeBasicAttributes(writer);
-	writeCommentElement(writer);
 
 	//geometry
 	writer->writeStartElement( "geometry" );
@@ -439,16 +438,21 @@ void DatapickerPoint::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "y", QString::number(d->position.y()) );
 	writer->writeEndElement();
 
-	writer->writeStartElement( "errorBar" );
-	writer->writeAttribute( "plusDeltaXPos_x", QString::number(d->plusDeltaXPos.x()) );
-	writer->writeAttribute( "plusDeltaXPos_y", QString::number(d->plusDeltaXPos.y()) );
-	writer->writeAttribute( "minusDeltaXPos_x", QString::number(d->minusDeltaXPos.x()) );
-	writer->writeAttribute( "minusDeltaXPos_y", QString::number(d->minusDeltaXPos.y()) );
-	writer->writeAttribute( "plusDeltaYPos_x", QString::number(d->plusDeltaYPos.x()) );
-	writer->writeAttribute( "plusDeltaYPos_y", QString::number(d->plusDeltaYPos.y()) );
-	writer->writeAttribute( "minusDeltaYPos_x", QString::number(d->minusDeltaYPos.x()) );
-	writer->writeAttribute( "minusDeltaYPos_y", QString::number(d->minusDeltaYPos.y()) );
-	writer->writeEndElement();
+	auto* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
+	if (curve && (curve->curveErrorTypes().x != DatapickerCurve::NoError
+		|| curve->curveErrorTypes().y != DatapickerCurve::NoError)) {
+
+		writer->writeStartElement( "errorBar" );
+		writer->writeAttribute( "plusDeltaXPos_x", QString::number(d->plusDeltaXPos.x()) );
+		writer->writeAttribute( "plusDeltaXPos_y", QString::number(d->plusDeltaXPos.y()) );
+		writer->writeAttribute( "minusDeltaXPos_x", QString::number(d->minusDeltaXPos.x()) );
+		writer->writeAttribute( "minusDeltaXPos_y", QString::number(d->minusDeltaXPos.y()) );
+		writer->writeAttribute( "plusDeltaYPos_x", QString::number(d->plusDeltaYPos.x()) );
+		writer->writeAttribute( "plusDeltaYPos_y", QString::number(d->plusDeltaYPos.y()) );
+		writer->writeAttribute( "minusDeltaYPos_x", QString::number(d->minusDeltaYPos.x()) );
+		writer->writeAttribute( "minusDeltaYPos_y", QString::number(d->minusDeltaYPos.y()) );
+		writer->writeEndElement();
+	}
 
 	writer->writeEndElement(); // close "DatapickerPoint" section
 }
@@ -472,9 +476,7 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
-			if (!readCommentElement(reader)) return false;
-		} else if (!preview && reader->name() == "geometry") {
+		if (!preview && reader->name() == "geometry") {
 			attribs = reader->attributes();
 
 			str = attribs.value("x").toString();

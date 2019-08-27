@@ -91,6 +91,7 @@ private:
 	QToolButton* tbMagnification{nullptr};
 	QAction* currentZoomAction{nullptr};
 	QAction* currentMagnificationAction{nullptr};
+	QAction* currentPlotPointsTypeAction{nullptr};
 
 	//Actions
 	QAction* zoomInViewAction;
