@@ -36,6 +36,7 @@
   <summary xml:lang="de">Interaktiven Erstellung von Grafiken und Analyse wissenschaftlicher Daten</summary>
   <summary xml:lang="en-GB">Interactive graphing and analysis of scientific data</summary>
   <summary xml:lang="eu">Datu zientifikoak modu elkarreragilean grafikatu eta aztertu</summary>
+  <summary xml:lang="fr">Tracé interactif de courbes et analyse de données scientifiques</summary>
   <summary xml:lang="id">Penggrafikan yang interaktif dan analisis data ilmiah</summary>
   <summary xml:lang="it">Grafica interattiva e analisi dei dati scientifici</summary>
   <summary xml:lang="nl">Interactief maken van grafieken en analyseren van wetenschappelijke gegevens</summary>
@@ -53,6 +54,7 @@
     <p xml:lang="de">LabPlot ist eine Anwendung zur interaktiven Erstellung von Grafiken und Analyse wissenschaftlicher Daten.</p>
     <p xml:lang="en-GB">LabPlot is an application for interactive graphing and analysis of scientific data.</p>
     <p xml:lang="eu">LabPlot datu zientifikoak modu elkarreragilean grafikatzeko eta aztertzeko aplikazio bat da.</p>
+    <p xml:lang="fr">LabPlot est une application pour le tracé interactif de courbes et l'analyse de données scientifiques.</p>
     <p xml:lang="id">LabPlot adalah sebuah aplikasi untuk penggrafikan interaktif dan analisis data ilmiah.</p>
     <p xml:lang="it">LabPlot è un'applicazione per la grafica interattiva e per l'analisi dei dati scientifici.</p>
     <p xml:lang="nl">LabPlot2 is een toepassing voor het interactief maken van grafieken en het analyseren van wetenschappelijke gegevens.</p>
@@ -99,6 +101,7 @@
       <caption xml:lang="en-GB">Fit example</caption>
       <caption xml:lang="es">Ejemplo de ajuste</caption>
       <caption xml:lang="eu">Egokitzeko adibidea</caption>
+      <caption xml:lang="fr">Exemple d'ajustement</caption>
       <caption xml:lang="gl">Exemplo de axuste.</caption>
       <caption xml:lang="id">Contoh pas</caption>
       <caption xml:lang="it">Adatta esempio</caption>
@@ -120,6 +123,7 @@
       <caption xml:lang="en-GB">Mathematical function</caption>
       <caption xml:lang="es">Función matemática</caption>
       <caption xml:lang="eu">Funtzio matematikoa</caption>
+      <caption xml:lang="fr">Fonction mathématique</caption>
       <caption xml:lang="gl">Función matemática.</caption>
       <caption xml:lang="id">Fungsi matematika</caption>
       <caption xml:lang="it">Funzioni matematica</caption>
@@ -140,6 +144,7 @@
       <caption xml:lang="en-GB">CAS worksheet</caption>
       <caption xml:lang="es">Hoja de trabajo CAS</caption>
       <caption xml:lang="eu">CAS lan-orria</caption>
+      <caption xml:lang="fr">Feuille de travail CAS</caption>
       <caption xml:lang="gl">Folla de traballo de CAS.</caption>
       <caption xml:lang="id">Lembar kerja CAS</caption>
       <caption xml:lang="it">Foglio di lavoro CAS</caption>
