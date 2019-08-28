@@ -34,6 +34,7 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/macrosXYCurve.h"
 #include "backend/core/AbstractColumn.h"
 
 #include <QFont>
@@ -45,6 +46,13 @@ class XYCurve: public WorksheetElement {
 	Q_OBJECT
 
 public:
+	friend class XYCurveSetXColumnCmd;
+	friend class XYCurveSetYColumnCmd;
+	friend class XYCurveSetXErrorPlusColumnCmd;
+	friend class XYCurveSetXErrorMinusColumnCmd;
+	friend class XYCurveSetYErrorPlusColumnCmd;
+	friend class XYCurveSetYErrorMinusColumnCmd;
+	friend class XYCurveSetValuesColumnCmd;
 	enum LineType {NoLine, Line, StartHorizontal, StartVertical, MidpointHorizontal, MidpointVertical, Segments2, Segments3,
 	               SplineCubicNatural, SplineCubicPeriodic, SplineAkimaNatural, SplineAkimaPeriodic
 	              };
@@ -99,7 +107,7 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
-	const QString& valuesColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(QString, valuesColumnPath, ValuesColumnPath)
 	BASIC_D_ACCESSOR_DECL(ValuesPosition, valuesPosition, ValuesPosition)
 	BASIC_D_ACCESSOR_DECL(qreal, valuesDistance, ValuesDistance)
 	BASIC_D_ACCESSOR_DECL(qreal, valuesRotationAngle, ValuesRotationAngle)
@@ -121,14 +129,15 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(ErrorType, xErrorType, XErrorType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorPlusColumn, XErrorPlusColumn)
-	const QString& xErrorPlusColumnPath() const;
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorMinusColumn, XErrorMinusColumn)
-	const QString& xErrorMinusColumnPath() const;
 	BASIC_D_ACCESSOR_DECL(ErrorType, yErrorType, YErrorType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorPlusColumn, YErrorPlusColumn)
-	const QString& yErrorPlusColumnPath() const;
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorMinusColumn, YErrorMinusColumn)
-	const QString& yErrorMinusColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(QString, xErrorPlusColumnPath, XErrorPlusColumnPath)
+	CLASS_D_ACCESSOR_DECL(QString, xErrorMinusColumnPath, XErrorMinusColumnPath)
+	CLASS_D_ACCESSOR_DECL(QString, yErrorPlusColumnPath, YErrorPlusColumnPath)
+	CLASS_D_ACCESSOR_DECL(QString, yErrorMinusColumnPath, YErrorMinusColumnPath)
+
 	BASIC_D_ACCESSOR_DECL(ErrorBarsType, errorBarsType, ErrorBarsType)
 	BASIC_D_ACCESSOR_DECL(qreal, errorBarsCapSize, ErrorBarsCapSize)
 	CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
@@ -158,6 +167,11 @@ private slots:
 	void yErrorMinusColumnAboutToBeRemoved(const AbstractAspect*);
 	void xColumnNameChanged();
 	void yColumnNameChanged();
+	void xErrorPlusColumnNameChanged();
+	void xErrorMinusColumnNameChanged();
+	void yErrorPlusColumnNameChanged();
+	void yErrorMinusColumnNameChanged();
+	void valuesColumnNameChanged();
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChanged();
 	void navigateTo();
@@ -170,6 +184,13 @@ private:
 	Q_DECLARE_PRIVATE(XYCurve)
 	void init();
 	void initActions();
+	XYCURVE_COLUMN_CONNECT(x)
+	XYCURVE_COLUMN_CONNECT(y)
+	XYCURVE_COLUMN_CONNECT(xErrorPlus)
+	XYCURVE_COLUMN_CONNECT(xErrorMinus)
+	XYCURVE_COLUMN_CONNECT(yErrorPlus)
+	XYCURVE_COLUMN_CONNECT(yErrorMinus)
+	XYCURVE_COLUMN_CONNECT(values)
 
 	QAction* visibilityAction{nullptr};
 	QAction* navigateToAction{nullptr};
@@ -180,6 +201,11 @@ signals:
 	void dataChanged(); //emitted when the actual curve data to be plotted was changed to re-adjust the plot
 	void xDataChanged();
 	void yDataChanged();
+	void xErrorPlusDataChanged();
+	void xErrorMinusDataChanged();
+	void yErrorPlusDataChanged();
+	void yErrorMinusDataChanged();
+	void valuesDataChanged();
 	void visibilityChanged(bool);
 
 	void xColumnChanged(const AbstractColumn*);

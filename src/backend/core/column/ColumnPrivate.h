@@ -145,6 +145,9 @@ private:
 	Column* m_owner{nullptr};
 	QVector<QMetaObject::Connection> m_connectionsUpdateFormula;
 
+private:
+	void connectFormulaColumn(const AbstractColumn* column);
+
 private slots:
 	void formulaVariableColumnRemoved(const AbstractAspect*);
 	void formulaVariableColumnAdded(const AbstractAspect*);

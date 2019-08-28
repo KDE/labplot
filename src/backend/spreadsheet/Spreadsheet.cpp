@@ -904,10 +904,17 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 
 		//rename the columns that are already available and suppress the dataChanged signal for them
 		for (int i = 0; i < childCount<Column>(); i++) {
-			if (mode == AbstractFileFilter::Replace)
+			if (mode == AbstractFileFilter::Replace) {
 				child<Column>(i)->setSuppressDataChangedSignal(true);
+				emit child<Column>(i)->reset(child<Column>(i));
+			}
 
 			child<Column>(i)->setName(colNameList.at(i));
+			// Force aspectDescriptionChanged is send, because otherwise the column
+			// will not connected again to the curves (project.cpp, descriptionChanged)
+			// it is not that expensive to call it twice (first time in setName, but
+			// only if the name changed)
+			child<Column>(i)->aspectDescriptionChanged(child<Column>(i));
 		}
 	}
 

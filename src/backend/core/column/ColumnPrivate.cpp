@@ -907,11 +907,8 @@ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variab
 
 	for (auto column : variableColumns) {
 		m_formulaVariableColumnPaths << column->path();
-		if (autoUpdate) {
-			m_connectionsUpdateFormula << connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &ColumnPrivate::formulaVariableColumnRemoved);
-			connect(column->parentAspect(), &AbstractAspect::aspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
-		}
+		if (autoUpdate)
+			connectFormulaColumn(column);
 	}
 }
 
@@ -921,12 +918,21 @@ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variab
  */
 void ColumnPrivate::finalizeLoad() {
 	if (m_formulaAutoUpdate) {
-		for (auto column : m_formulaVariableColumns) {
-			m_connectionsUpdateFormula << connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &ColumnPrivate::formulaVariableColumnRemoved);
-			connect(column->parentAspect(), &AbstractAspect::aspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
-		}
+		for (auto column : m_formulaVariableColumns)
+			connectFormulaColumn(column);
 	}
+}
+
+/*!
+ * \brief ColumnPrivate::connectFormulaColumn
+ * This function is used to connect the columns to the needed slots for updating formulas
+ * \param column
+ */
+void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
+	m_connectionsUpdateFormula << connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
+	connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &ColumnPrivate::formulaVariableColumnRemoved);
+	connect(column, &AbstractColumn::reset, this, &ColumnPrivate::formulaVariableColumnRemoved);
+	connect(column->parentAspect(), &AbstractAspect::aspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
 }
 
 /*!
@@ -959,7 +965,10 @@ void ColumnPrivate::setformulVariableColumnsPath(int index, QString path) {
 }
 
 void ColumnPrivate::setformulVariableColumn(int index, Column* column) {
+	if (m_formulaVariableColumns[index]) // if there exists already a valid column, disconnect it first
+		disconnect(m_formulaVariableColumns[index], nullptr, this, nullptr);
 	m_formulaVariableColumns[index] = column;
+	connectFormulaColumn(column);
 }
 
 /*!
@@ -1029,6 +1038,7 @@ void ColumnPrivate::updateFormula() {
 
 void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
 	const Column* column = dynamic_cast<const Column*>(aspect);
+	disconnect(column, nullptr, this, nullptr);
 	//TODO: why is const_cast requried here?!?
 	int index = m_formulaVariableColumns.indexOf(const_cast<Column*>(column));
 	if (index != -1) {

@@ -216,6 +216,7 @@ signals:
 	void maskingAboutToChange(const AbstractColumn* source);
 	void maskingChanged(const AbstractColumn* source);
 	void aboutToBeDestroyed(const AbstractColumn* source);
+	void reset(const AbstractColumn* source); // this signal is emitted when the column is reused for another purpose. The curves must know that and disconnect all connections
 
 protected:
 	bool XmlReadMask(XmlStreamReader*);

@@ -256,9 +256,8 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, symbolsPen, symbolsPen)
 //values
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesType, valuesType, valuesType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, valuesColumn, valuesColumn)
-const QString& XYCurve::valuesColumnPath() const {
-	return d_ptr->valuesColumnPath;
-}
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesColumnPath, valuesColumnPath)
+
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesPosition, valuesPosition, valuesPosition)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesDistance, valuesDistance)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesRotationAngle, valuesRotationAngle)
@@ -282,23 +281,15 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, fillingOpacity, fillingOpacity)
 //error bars
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, xErrorType, xErrorType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xErrorPlusColumn, xErrorPlusColumn)
-const QString& XYCurve::xErrorPlusColumnPath() const {
-	return d_ptr->xErrorPlusColumnPath;
-}
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xErrorMinusColumn, xErrorMinusColumn)
-const QString& XYCurve::xErrorMinusColumnPath() const {
-	return d_ptr->xErrorMinusColumnPath;
-}
-
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, yErrorType, yErrorType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yErrorPlusColumn, yErrorPlusColumn)
-const QString& XYCurve::yErrorPlusColumnPath() const {
-	return d_ptr->yErrorPlusColumnPath;
-}
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yErrorMinusColumn, yErrorMinusColumn)
-const QString& XYCurve::yErrorMinusColumnPath() const {
-	return d_ptr->yErrorMinusColumnPath;
-}
+
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, xErrorPlusColumnPath, xErrorPlusColumnPath)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, xErrorMinusColumnPath, xErrorMinusColumnPath)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, yErrorPlusColumnPath, yErrorPlusColumnPath)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, yErrorMinusColumnPath, yErrorMinusColumnPath)
 
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsCapSize, errorBarsCapSize)
@@ -317,57 +308,22 @@ bool XYCurve::isSourceDataChangedSinceLastRecalc() const {
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXColumn, const AbstractColumn*, xColumn, recalcLogicalPoints)
+
+// 1) add XYCurveSetXColumnCmd as friend class to XYCurve
+// 2) add XYCURVE_COLUMN_CONNECT(x) as private method to XYCurve
+// 3) define all missing slots
+XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(X, x, recalcLogicalPoints)
 void XYCurve::setXColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
-	if (column != d->xColumn) {
+	if (column != d->xColumn)
 		exec(new XYCurveSetXColumnCmd(d, column, ki18n("%1: x-data source changed")));
-
-		//emit xDataChanged() in order to notify the plot about the changes
-		emit xDataChanged();
-		if (column) {
-			setXColumnPath(column->path());
-
-			//update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, [=](){ d->recalcLogicalPoints(); });
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &XYCurve::xColumnAboutToBeRemoved);
-			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYCurve::xColumnNameChanged);
-			//after the curve was updated, emit the signal to update the plot ranges
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(xDataChanged()));
-
-			//TODO: add disconnect in the undo-function
-		} else
-			setXColumnPath("");
-	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYColumn, const AbstractColumn*, yColumn, recalcLogicalPoints)
+XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(Y, y, recalcLogicalPoints)
 void XYCurve::setYColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
-	if (column != d->yColumn) {
-		// disconnect old column
-		disconnect(d->yColumn, &AbstractAspect::aspectDescriptionChanged, this, &XYCurve::yColumnNameChanged);
+	if (column != d->yColumn)
 		exec(new XYCurveSetYColumnCmd(d, column, ki18n("%1: y-data source changed")));
-
-		//emit yDataChanged() in order to notify the plot about the changes
-		emit yDataChanged();
-		if (column) {
-			setYColumnPath(column->path());
-
-			//update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, [=](){ d->recalcLogicalPoints(); });
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &XYCurve::yColumnAboutToBeRemoved);
-			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYCurve::yColumnNameChanged);
-
-			//after the curve was updated, emit the signal to update the plot ranges
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(yDataChanged()));
-
-			//TODO: add disconnect in the undo-function
-		} else
-			setXColumnPath("");
-	}
 }
 
 void XYCurve::setXColumnPath(const QString& path) {
@@ -496,17 +452,19 @@ void XYCurve::setValuesType(XYCurve::ValuesType type) {
 		exec(new XYCurveSetValuesTypeCmd(d, type, ki18n("%1: set values type")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesColumn, const AbstractColumn*, valuesColumn, updateValues)
+XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(Values, values, updateValues)
 void XYCurve::setValuesColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->valuesColumn) {
 		exec(new XYCurveSetValuesColumnCmd(d, column, ki18n("%1: set values column")));
-		if (column) {
+		if (column)
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateValues()));
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &XYCurve::aspectAboutToBeRemoved);
-		}
 	}
+}
+
+void XYCurve::setValuesColumnPath(const QString& path) {
+	Q_D(XYCurve);
+	d->valuesColumnPath = path;
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesPosition, XYCurve::ValuesPosition, valuesPosition, updateValues)
@@ -639,30 +597,34 @@ void XYCurve::setXErrorType(ErrorType type) {
 		exec(new XYCurveSetXErrorTypeCmd(d, type, ki18n("%1: x-error type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXErrorPlusColumn, const AbstractColumn*, xErrorPlusColumn, updateErrorBars)
+XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(XErrorPlus, xErrorPlus, updateErrorBars)
 void XYCurve::setXErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xErrorPlusColumn) {
 		exec(new XYCurveSetXErrorPlusColumnCmd(d, column, ki18n("%1: set x-error column")));
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &XYCurve::xErrorPlusColumnAboutToBeRemoved);
-		}
+		if (column)
+			connect(column, &AbstractColumn::dataChanged, this, &XYCurve::updateErrorBars);
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXErrorMinusColumn, const AbstractColumn*, xErrorMinusColumn, updateErrorBars)
+void XYCurve::setXErrorPlusColumnPath(const QString& path) {
+	Q_D(XYCurve);
+	d->xErrorPlusColumnPath = path;
+}
+
+XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(XErrorMinus, xErrorMinus, updateErrorBars)
 void XYCurve::setXErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xErrorMinusColumn) {
 		exec(new XYCurveSetXErrorMinusColumnCmd(d, column, ki18n("%1: set x-error column")));
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &XYCurve::xErrorMinusColumnAboutToBeRemoved);
-		}
+		if (column)
+			connect(column, &AbstractColumn::dataChanged, this, &XYCurve::updateErrorBars);
 	}
+}
+
+void XYCurve::setXErrorMinusColumnPath(const QString& path) {
+	Q_D(XYCurve);
+	d->xErrorMinusColumnPath = path;
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYErrorType, XYCurve::ErrorType, yErrorType, updateErrorBars)
@@ -672,30 +634,34 @@ void XYCurve::setYErrorType(ErrorType type) {
 		exec(new XYCurveSetYErrorTypeCmd(d, type, ki18n("%1: y-error type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYErrorPlusColumn, const AbstractColumn*, yErrorPlusColumn, updateErrorBars)
+XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(YErrorPlus, yErrorPlus, updateErrorBars)
 void XYCurve::setYErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->yErrorPlusColumn) {
 		exec(new XYCurveSetYErrorPlusColumnCmd(d, column, ki18n("%1: set y-error column")));
-		if (column) {
+		if (column)
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &XYCurve::yErrorPlusColumnAboutToBeRemoved);
-		}
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYErrorMinusColumn, const AbstractColumn*, yErrorMinusColumn, updateErrorBars)
+void XYCurve::setYErrorPlusColumnPath(const QString& path) {
+	Q_D(XYCurve);
+	d->yErrorPlusColumnPath = path;
+}
+
+XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(YErrorMinus, yErrorMinus, updateErrorBars)
 void XYCurve::setYErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->yErrorMinusColumn) {
 		exec(new XYCurveSetYErrorMinusColumnCmd(d, column, ki18n("%1: set y-error column")));
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &XYCurve::yErrorMinusColumnAboutToBeRemoved);
-		}
+		if (column)
+			connect(column, &AbstractColumn::dataChanged, this, &XYCurve::updateErrorBars);
 	}
+}
+
+void XYCurve::setYErrorMinusColumnPath(const QString& path) {
+	Q_D(XYCurve);
+	d->yErrorMinusColumnPath = path;
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetErrorBarsCapSize, qreal, errorBarsCapSize, updateErrorBars)
@@ -778,6 +744,7 @@ void XYCurve::handleResize(double horizontalRatio, double verticalRatio, bool pa
 void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
 	if (aspect == d->xColumn) {
+		disconnect(aspect, nullptr, this, nullptr);
 		d->xColumn = nullptr;
 		d->retransform();
 	}
@@ -786,6 +753,7 @@ void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 void XYCurve::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
 	if (aspect == d->yColumn) {
+		disconnect(aspect, nullptr, this, nullptr);
 		d->yColumn = nullptr;
 		d->retransform();
 	}
@@ -794,6 +762,7 @@ void XYCurve::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 void XYCurve::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
 	if (aspect == d->valuesColumn) {
+		disconnect(aspect, nullptr, this, nullptr);
 		d->valuesColumn = nullptr;
 		d->updateValues();
 	}
@@ -802,6 +771,7 @@ void XYCurve::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 void XYCurve::xErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
 	if (aspect == d->xErrorPlusColumn) {
+		disconnect(aspect, nullptr, this, nullptr);
 		d->xErrorPlusColumn = nullptr;
 		d->updateErrorBars();
 	}
@@ -810,6 +780,7 @@ void XYCurve::xErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 void XYCurve::xErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
 	if (aspect == d->xErrorMinusColumn) {
+		disconnect(aspect, nullptr, this, nullptr);
 		d->xErrorMinusColumn = nullptr;
 		d->updateErrorBars();
 	}
@@ -818,6 +789,7 @@ void XYCurve::xErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 void XYCurve::yErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
 	if (aspect == d->yErrorPlusColumn) {
+		disconnect(aspect, nullptr, this, nullptr);
 		d->yErrorPlusColumn = nullptr;
 		d->updateErrorBars();
 	}
@@ -826,6 +798,7 @@ void XYCurve::yErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 void XYCurve::yErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
 	if (aspect == d->yErrorMinusColumn) {
+		disconnect(aspect, nullptr, this, nullptr);
 		d->yErrorMinusColumn = nullptr;
 		d->updateErrorBars();
 	}
@@ -839,6 +812,31 @@ void XYCurve::xColumnNameChanged() {
 void XYCurve::yColumnNameChanged() {
 	Q_D(XYCurve);
 	setYColumnPath(d->yColumn->path());
+}
+
+void XYCurve::xErrorPlusColumnNameChanged() {
+	Q_D(XYCurve);
+	setXErrorPlusColumnPath(d->xErrorPlusColumn->path());
+}
+
+void XYCurve::xErrorMinusColumnNameChanged() {
+	Q_D(XYCurve);
+	setXErrorMinusColumnPath(d->xErrorMinusColumn->path());
+}
+
+void XYCurve::yErrorPlusColumnNameChanged() {
+	Q_D(XYCurve);
+	setYErrorPlusColumnPath(d->yErrorPlusColumn->path());
+}
+
+void XYCurve::yErrorMinusColumnNameChanged() {
+	Q_D(XYCurve);
+	setYErrorMinusColumnPath(d->yErrorMinusColumn->path());
+}
+
+void XYCurve::valuesColumnNameChanged() {
+	Q_D(XYCurve);
+	setValuesColumnPath(d->valuesColumn->path());
 }
 
 //##############################################################################
