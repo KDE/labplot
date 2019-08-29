@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
     File                 : XYCurve.cpp
     Project              : LabPlot
     Description          : A xy-curve
@@ -741,9 +741,28 @@ void XYCurve::handleResize(double horizontalRatio, double verticalRatio, bool pa
 	setValuesFont(font);
 }
 
+/*!
+ * returns \c true if the aspect being removed \c removedAspect is equal to \c column
+ * or to one of its parents. returns \c false otherwise.
+ */
+bool XYCurve::columnRemoved(const AbstractColumn* column, const AbstractAspect* removedAspect) const {
+	bool removed = (removedAspect == column);
+	if (!removed) {
+		auto* parent = column->parentAspect();
+		while (parent) {
+			if (parent == removedAspect) {
+				removed = true;
+				break;
+			}
+			parent = parent->parentAspect();
+		}
+	}
+	return removed;
+}
+
 void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (aspect == d->xColumn) {
+	if (columnRemoved(d->xColumn, aspect)) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->xColumn = nullptr;
 		d->retransform();
@@ -752,7 +771,7 @@ void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (aspect == d->yColumn) {
+	if (columnRemoved(d->yColumn, aspect)) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->yColumn = nullptr;
 		d->retransform();
@@ -761,7 +780,7 @@ void XYCurve::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (aspect == d->valuesColumn) {
+	if (columnRemoved(d->valuesColumn, aspect)) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->valuesColumn = nullptr;
 		d->updateValues();
@@ -770,7 +789,7 @@ void XYCurve::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::xErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (aspect == d->xErrorPlusColumn) {
+	if (columnRemoved(d->xErrorPlusColumn, aspect)) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->xErrorPlusColumn = nullptr;
 		d->updateErrorBars();
@@ -779,7 +798,7 @@ void XYCurve::xErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::xErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (aspect == d->xErrorMinusColumn) {
+	if (columnRemoved(d->xErrorMinusColumn, aspect)) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->xErrorMinusColumn = nullptr;
 		d->updateErrorBars();
@@ -788,7 +807,7 @@ void XYCurve::xErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::yErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (aspect == d->yErrorPlusColumn) {
+	if (columnRemoved(d->yErrorPlusColumn, aspect)) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->yErrorPlusColumn = nullptr;
 		d->updateErrorBars();
@@ -797,7 +816,7 @@ void XYCurve::yErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::yErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (aspect == d->yErrorMinusColumn) {
+	if (columnRemoved(d->yErrorMinusColumn, aspect)) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->yErrorMinusColumn = nullptr;
 		d->updateErrorBars();

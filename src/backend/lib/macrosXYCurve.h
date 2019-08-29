@@ -44,16 +44,20 @@ class AbstractColumn;
   \param column_prefix columnnames should have always the same style. For example xColumn -> column_prefix = x, xErrorPlusColumn -> column_prefix = xErrorPlus
   */
 #define XYCURVE_COLUMN_CONNECT(column_prefix) \
-        void columnConnect ## column_prefix ## Column(const AbstractColumn* column) { \
-		connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, \
-				this, &XYCurve::column_prefix ## ColumnAboutToBeRemoved); \
-		/* When the column is reused with different name, the curve should be informed to disconnect */ \
-		connect(column, &AbstractColumn::reset, this, &XYCurve::column_prefix ## ColumnAboutToBeRemoved); \
-		connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYCurve::column_prefix ## ColumnNameChanged); \
-		/* after the curve was updated, emit the signal to update the plot ranges */ \
-		connect(column, &AbstractColumn::dataChanged, this, &XYCurve::recalcLogicalPoints); /* must be before DataChanged*/ \
-		connect(column, &AbstractColumn::dataChanged, this, &XYCurve::column_prefix ## DataChanged);\
-	}
+void columnConnect ## column_prefix ## Column(const AbstractColumn* column) { \
+	connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &XYCurve::column_prefix ## ColumnAboutToBeRemoved); \
+	auto* parent = column->parentAspect(); \
+	while (parent) { \
+		connect(parent, &AbstractAspect::aspectAboutToBeRemoved, this, &XYCurve::column_prefix ## ColumnAboutToBeRemoved); \
+		parent = parent->parentAspect(); \
+	} \
+	/* When the column is reused with different name, the curve should be informed to disconnect */ \
+	connect(column, &AbstractColumn::reset, this, &XYCurve::column_prefix ## ColumnAboutToBeRemoved); \
+	connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYCurve::column_prefix ## ColumnNameChanged); \
+	/* after the curve was updated, emit the signal to update the plot ranges */ \
+	connect(column, &AbstractColumn::dataChanged, this, &XYCurve::recalcLogicalPoints); /* must be before DataChanged*/ \
+	connect(column, &AbstractColumn::dataChanged, this, &XYCurve::column_prefix ## DataChanged);\
+}
 
 #define XYCURVE_COLUMN_CONNECT_CALL(curve, column, column_prefix) \
 	curve->columnConnect ## column_prefix ## Column(column); \
@@ -67,9 +71,9 @@ class AbstractColumn;
 class XYCurve ## Set ## cmd_name ## ColumnCmd: public StandardSetterCmd<XYCurve::Private, const AbstractColumn*> { \
 public: \
 	XYCurve ## Set ## cmd_name ## ColumnCmd(XYCurve::Private *target, const AbstractColumn* newValue, const KLocalizedString &description) \
-		: m_private(target), \
-		  m_column(newValue), \
-		  StandardSetterCmd<XYCurve::Private, const AbstractColumn*>(target, &XYCurve::Private::prefix ## Column, newValue, description) \
+		: StandardSetterCmd<XYCurve::Private, const AbstractColumn*>(target, &XYCurve::Private::prefix ## Column, newValue, description), \
+		m_private(target), \
+		m_column(newValue) \
 		  {} \
 		virtual void finalize() override { m_target->finalize_method(); emit m_target->q->prefix ## ColumnChanged(m_target->*m_field); } \
 		void redo() override { \
