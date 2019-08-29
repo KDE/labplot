@@ -659,7 +659,7 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 	}
 
 	m_image->endMacro();
-	if (m_image->m_magnificationWindow->isVisible())
+	if (m_image->m_magnificationWindow && m_image->m_magnificationWindow->isVisible())
 		updateMagnificationWindow();
 }
 

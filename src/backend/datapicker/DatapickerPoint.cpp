@@ -40,9 +40,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-QPen DatapickerPoint::selectedPen = QPen(Qt::darkBlue, 3, Qt::SolidLine);
-float DatapickerPoint::selectedOpacity = 0.3f;
-
 /**
  * \class ErrorBarItem
  * \brief A customizable error-bar for DatapickerPoint.
@@ -389,6 +386,7 @@ void DatapickerPointPrivate::recalcShapeAndBoundingRect() {
 	transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
 	itemShape = QPainterPath();
 	itemShape.addRect(transformedBoundingRectangle);
+	itemShape = WorksheetElement::shapeFromPath(itemShape, pen);
 }
 
 void DatapickerPointPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
@@ -412,8 +410,10 @@ void DatapickerPointPrivate::paint(QPainter *painter, const QStyleOptionGraphics
 	painter->restore();
 
 	if (isSelected() && !m_printing) {
-		painter->setPen(q->selectedPen);
-		painter->setOpacity(q->selectedOpacity);
+		//TODO: move the initialization of QPen to a parent class later so we don't
+		//need to create it in every paint() call.
+#		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 1, Qt::SolidLine));
+		painter->setOpacity(1.0f);
 		painter->drawPath(itemShape);
 	}
 }

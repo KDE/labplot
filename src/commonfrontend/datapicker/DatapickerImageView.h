@@ -30,24 +30,23 @@
 
 #include "commonfrontend/worksheet/WorksheetView.h"
 
-class QMenu;
-class QToolBar;
-class QToolButton;
-class QWheelEvent;
-
 class AbstractAspect;
 class DatapickerImage;
 class Datapicker;
 class Transform;
-class QActionGroup;
 
+class QActionGroup;
+class QMenu;
 class QPrinter;
+class QToolBar;
+class QToolButton;
+class QWheelEvent;
 
 class DatapickerImageView : public QGraphicsView {
 	Q_OBJECT
 
 public:
-	explicit DatapickerImageView(DatapickerImage* image);
+	explicit DatapickerImageView(DatapickerImage*);
 	~DatapickerImageView() override;
 
 	void setScene(QGraphicsScene*);
@@ -60,7 +59,7 @@ private:
 	void initMenus();
 	void drawForeground(QPainter*, const QRectF&) override;
 	void drawBackground(QPainter*, const QRectF&) override;
-	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect);
+	void exportPaint(QPainter*, const QRectF& targetRect, const QRectF& sourceRect);
 	void updateMagnificationWindow();
 
 	//events
