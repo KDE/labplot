@@ -91,7 +91,6 @@ void DatapickerImage::init() {
 	d->pointSeparation = group.readEntry("PointSeparation", 30);
 	d->axisPoints.type = (DatapickerImage::GraphType) group.readEntry("GraphType", (int) DatapickerImage::Cartesian);
 	d->axisPoints.ternaryScale = group.readEntry("TernaryScale", 1);
-	d->plotPointsType = (DatapickerImage::PointsType) group.readEntry("PlotPointsType", (int) DatapickerImage::AxisPoints);
 
 	//edit image settings
 	d->plotImageType = DatapickerImage::OriginalImage;

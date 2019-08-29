@@ -427,7 +427,7 @@ void DatapickerImageView::mousePressEvent(QMouseEvent* event) {
 			m_datapicker->addNewPoint(eventPos, m_datapicker->activeCurve());
 		}
 
-		if (m_image->m_magnificationWindow->isVisible())
+		if (m_image->m_magnificationWindow && m_image->m_magnificationWindow->isVisible())
 			updateMagnificationWindow();
 	}
 
@@ -701,6 +701,9 @@ void DatapickerImageView::addCurve() {
 	curve->addDatasheet(m_image->axisPoints().type);
 	m_datapicker->addChild(curve);
 	m_datapicker->endMacro();
+
+	setCurvePointsAction->setChecked(true);
+	changePointsType(setCurvePointsAction);
 }
 
 void DatapickerImageView::changeRotationAngle() {
