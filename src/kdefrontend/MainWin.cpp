@@ -736,25 +736,18 @@ void MainWin::updateGUI() {
 	//Handle the Worksheet-object
 	Worksheet* w = this->activeWorksheet();
 	if (w != nullptr) {
-		//enable worksheet related menus
-		factory->container("worksheet", this)->setEnabled(true);
-		factory->container("analysis", this)->setEnabled(true);
-//TODO 		factory->container("drawing", this)->setEnabled(true);
-
-		//disable spreadsheet and matrix related menus
-		factory->container("spreadsheet", this)->setEnabled(false);
-		factory->container("matrix", this)->setEnabled(false);
-
 		//populate worksheet menu
 		auto* view = qobject_cast<WorksheetView*>(w->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container("worksheet", this));
 		menu->clear();
 		view->createContextMenu(menu);
+		menu->setEnabled(true);
 
 		//populate analysis menu
 		menu = qobject_cast<QMenu*>(factory->container("analysis", this));
 		menu->clear();
 		view->createAnalysisMenu(menu);
+		menu->setEnabled(true);
 
 		//populate worksheet-toolbar
 		auto* toolbar = qobject_cast<QToolBar*>(factory->container("worksheet_toolbar", this));
@@ -774,6 +767,7 @@ void MainWin::updateGUI() {
 		factory->container("spreadsheet_toolbar", this)->setVisible(false);
 	} else {
 		factory->container("worksheet", this)->setEnabled(false);
+		factory->container("worksheet_toolbar", this)->setVisible(false);
 		factory->container("analysis", this)->setEnabled(false);
 //		factory->container("drawing", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->setEnabled(false);
@@ -783,14 +777,12 @@ void MainWin::updateGUI() {
 	//Handle the Spreadsheet-object
 	const  auto* spreadsheet = this->activeSpreadsheet();
 	if (spreadsheet) {
-		//enable spreadsheet related menus
-		factory->container("spreadsheet", this)->setEnabled(true);
-
 		//populate spreadsheet-menu
 		auto* view = qobject_cast<SpreadsheetView*>(spreadsheet->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container("spreadsheet", this));
 		menu->clear();
 		view->createContextMenu(menu);
+		menu->setEnabled(true);
 
 		//populate spreadsheet-toolbar
 		auto* toolbar = qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
@@ -800,31 +792,30 @@ void MainWin::updateGUI() {
 		toolbar->setEnabled(true);
 	} else {
 		factory->container("spreadsheet", this)->setEnabled(false);
-		factory->container("spreadsheet_toolbar", this)->setEnabled(false);
+		factory->container("spreadsheet_toolbar", this)->setVisible(false);
 	}
 
 	//Handle the Matrix-object
 	const  Matrix* matrix = this->activeMatrix();
 	if (matrix) {
-		factory->container("matrix", this)->setEnabled(true);
-
 		//populate matrix-menu
 		auto* view = qobject_cast<MatrixView*>(matrix->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container("matrix", this));
 		menu->clear();
 		view->createContextMenu(menu);
+		menu->setEnabled(true);
 	} else
 		factory->container("matrix", this)->setEnabled(false);
 
 #ifdef HAVE_CANTOR_LIBS
 	CantorWorksheet* cantorworksheet = this->activeCantorWorksheet();
 	if (cantorworksheet) {
-		// enable Cantor Worksheet related menus
-		factory->container("cas_worksheet", this)->setEnabled(true);
 		auto* view = qobject_cast<CantorWorksheetView*>(cantorworksheet->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container("cas_worksheet", this));
 		menu->clear();
 		view->createContextMenu(menu);
+		menu->setEnabled(true);
+
 		auto* toolbar = qobject_cast<QToolBar*>(factory->container("cas_worksheet_toolbar", this));
 		toolbar->setVisible(true);
 		toolbar->clear();
@@ -838,12 +829,12 @@ void MainWin::updateGUI() {
 
 	const Datapicker* datapicker = this->activeDatapicker();
 	if (datapicker) {
-		factory->container("datapicker", this)->setEnabled(true);
 		//populate datapicker-menu
 		auto* view = qobject_cast<DatapickerView*>(datapicker->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container("datapicker", this));
 		menu->clear();
 		view->createContextMenu(menu);
+		menu->setEnabled(true);
 
 		//populate spreadsheet-toolbar
 		auto* toolbar = qobject_cast<QToolBar*>(factory->container("datapicker_toolbar", this));
