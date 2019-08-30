@@ -141,6 +141,7 @@ void TreeViewComboBox::showPopup() {
 	m_groupBox->move(mapToGlobal( this->rect().topLeft() ));
 
 	setEditText(m_lineEditText);
+	m_lineEdit->setText(""); //delete the previous search string
 }
 
 /*!
