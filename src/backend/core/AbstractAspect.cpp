@@ -541,7 +541,7 @@ void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 // 	emit old_parent->aspectRemoved(old_parent, old_sibling, this);
 }
 
-QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFlags flags) {
+QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFlags flags) const {
 	QVector<AbstractAspect*> result;
 	for (auto* child : children()) {
 		if (flags & IncludeHidden || !child->hidden()) {

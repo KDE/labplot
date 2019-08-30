@@ -83,8 +83,8 @@ void Worksheet::init() {
 	d->useViewSize = group.readEntry("UseViewSize", false);
 	d->pageRect.setX(0);
 	d->pageRect.setY(0);
-	d->pageRect.setWidth(group.readEntry("Width", 1500));
-	d->pageRect.setHeight(group.readEntry("Height", 1500));
+	d->pageRect.setWidth(group.readEntry("Width", 1000));
+	d->pageRect.setHeight(group.readEntry("Height", 1000));
 	d->m_scene->setSceneRect(d->pageRect);
 
 	//background
