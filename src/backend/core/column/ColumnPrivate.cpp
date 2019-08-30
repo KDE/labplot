@@ -929,6 +929,9 @@ void ColumnPrivate::finalizeLoad() {
  * \param column
  */
 void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
+	if (!column)
+		return;
+
 	m_connectionsUpdateFormula << connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
 	connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &ColumnPrivate::formulaVariableColumnRemoved);
 	connect(column, &AbstractColumn::reset, this, &ColumnPrivate::formulaVariableColumnRemoved);
@@ -945,6 +948,7 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 	m_formula = formula;
 	m_formulaVariableNames = variableNames;
 	m_formulaVariableColumnPaths = variableColumnPaths;
+	m_formulaVariableColumns.resize(variableColumnPaths.length());
 	m_formulaAutoUpdate = autoUpdate;
 }
 
