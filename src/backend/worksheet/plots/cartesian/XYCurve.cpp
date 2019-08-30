@@ -746,6 +746,17 @@ void XYCurve::handleResize(double horizontalRatio, double verticalRatio, bool pa
  * or to one of its parents. returns \c false otherwise.
  */
 bool XYCurve::columnRemoved(const AbstractColumn* column, const AbstractAspect* removedAspect) const {
+	// TODO: BAD HACK.
+	// In macrosXYCurve.h every parent of the column is connected to the function aspectAboutToBeRemoved().
+	// When a column is removed, the function aspectAboutToBeRemoved is called and the column pointer is set to nullptr.
+	// However, when a child of the parent is removed, the parent calls the aspectAboutToBeRemoved() again, but
+	// the column was already disconnected.
+	// Better solution would be to emit aspectAboutToBeRemoved() for every column when their parents are removed.
+	// At the moment this signal is only emitted when the column is deleted directly and not when its parent is deleted.
+	// Once this is done, the connection of all parents to the aspectAboutToBeRemoved() signal can be removed.
+	if (!column)
+		return false;
+
 	bool removed = (removedAspect == column);
 	if (!removed) {
 		auto* parent = column->parentAspect();
