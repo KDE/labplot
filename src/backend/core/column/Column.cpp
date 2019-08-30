@@ -423,6 +423,9 @@ void Column::setFormula(const QString& formula, const QStringList& variableNames
  * "variable columns".
  */
 void Column::updateFormula() {
+	d->statisticsAvailable = false;
+	d->hasValuesAvailable = false;
+	d->propertiesAvailable = false;
 	d->updateFormula();
 }
 
@@ -464,6 +467,7 @@ void Column::clearFormulas() {
 void Column::setTextAt(int row, const QString& new_value) {
 	DEBUG("Column::setTextAt()");
 	d->statisticsAvailable = false;
+	d->hasValuesAvailable = false;
 	d->propertiesAvailable = false;
 	exec(new ColumnSetTextCmd(d, row, new_value));
 }
@@ -477,6 +481,7 @@ void Column::replaceTexts(int first, const QVector<QString>& new_values) {
 	DEBUG("Column::replaceTexts()");
 	if (!new_values.isEmpty()) { //TODO: do we really need this check?
 		d->statisticsAvailable = false;
+		d->hasValuesAvailable = false;
 		d->propertiesAvailable = false;
 		exec(new ColumnReplaceTextsCmd(d, first, new_values));
 	}
@@ -488,8 +493,6 @@ void Column::replaceTexts(int first, const QVector<QString>& new_values) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::setDateAt(int row, QDate new_value) {
-	d->statisticsAvailable = false;
-	d->propertiesAvailable = false;
 	setDateTimeAt(row, QDateTime(new_value, timeAt(row)));
 }
 
@@ -499,8 +502,6 @@ void Column::setDateAt(int row, QDate new_value) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::setTimeAt(int row, QTime new_value) {
-	d->statisticsAvailable = false;
-	d->propertiesAvailable = false;
 	setDateTimeAt(row, QDateTime(dateAt(row), new_value));
 }
 
@@ -511,6 +512,7 @@ void Column::setTimeAt(int row, QTime new_value) {
  */
 void Column::setDateTimeAt(int row, const QDateTime& new_value) {
 	d->statisticsAvailable = false;
+	d->hasValuesAvailable = false;
 	d->propertiesAvailable = false;
 	exec(new ColumnSetDateTimeCmd(d, row, new_value));
 }
@@ -523,6 +525,7 @@ void Column::setDateTimeAt(int row, const QDateTime& new_value) {
 void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 	if (!new_values.isEmpty()) {
 		d->statisticsAvailable = false;
+		d->hasValuesAvailable = false;
 		d->propertiesAvailable = false;
 		exec(new ColumnReplaceDateTimesCmd(d, first, new_values));
 	}
