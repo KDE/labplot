@@ -1388,7 +1388,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 
 	// use the properties knowledge to determine maximum faster
 	if (property == Properties::Constant || property == Properties::MonotonicIncreasing)
-		foundIndex = 0;
+		foundIndex = startIndex;
 	else if (property == Properties::MonotonicDecreasing)
 		foundIndex = endIndex;
 
@@ -1508,7 +1508,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 
 	// use the properties knowledge to determine maximum faster
 	if (property == Properties::Constant || property == Properties::MonotonicDecreasing)
-		foundIndex = 0;
+		foundIndex = startIndex;
 	else if (property == Properties::MonotonicIncreasing)
 		foundIndex = endIndex;
 
