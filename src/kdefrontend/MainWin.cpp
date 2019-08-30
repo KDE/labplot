@@ -86,6 +86,7 @@
 #include <QElapsedTimer>
 #include <QHash>
 #include <QStatusBar>
+#include <QTemporaryFile>
 #include <QTimeLine>
 
 #include <KActionCollection>
@@ -1097,17 +1098,25 @@ bool MainWin::saveProjectAs() {
  * auxiliary function that does the actual saving of the project
  */
 bool MainWin::save(const QString& fileName) {
+	QTemporaryFile tempFile(QLatin1String("labplot_save_XXXXXX"));
+	if (!tempFile.open()) {
+		KMessageBox::error(this, i18n("Couldn't open the temporary file for writing."));
+		return false;
+	}
+
 	WAIT_CURSOR;
+	const QString& tempFileName = tempFile.fileName();
+
 	// use file ending to find out how to compress file
 	QIODevice* file;
 	// if ending is .lml, do gzip compression anyway
 	if (fileName.endsWith(QLatin1String(".lml")))
-		file = new KCompressionDevice(fileName, KCompressionDevice::GZip);
+		file = new KCompressionDevice(tempFileName, KCompressionDevice::GZip);
 	else
-		file = new KFilterDev(fileName);
+		file = new KFilterDev(tempFileName);
 
 	if (file == nullptr)
-		file = new QFile(fileName);
+		file = new QFile(tempFileName);
 
 	bool ok;
 	if (file->open(QIODevice::WriteOnly)) {
@@ -1122,23 +1131,36 @@ bool MainWin::save(const QString& fileName) {
 		m_project->setChanged(false);
 		file->close();
 
-		setCaption(m_project->name());
-		statusBar()->showMessage(i18n("Project saved"));
-		m_saveAction->setEnabled(false);
-		m_recentProjectsAction->addUrl( QUrl(fileName) );
-		ok = true;
+		//move the temp file to the actual target file
+		QDir dir;
+		if (QFile::exists(fileName))
+			dir.remove(fileName);
 
-		//if the project dock is visible, refresh the shown content
-		//(version and modification time might have been changed)
-		if (stackedWidget->currentWidget() == projectDock)
-			projectDock->setProject(m_project);
+		bool rc = dir.rename(tempFileName, fileName);
+		if (rc) {
+			setCaption(m_project->name());
+			statusBar()->showMessage(i18n("Project saved"));
+			m_saveAction->setEnabled(false);
+			m_recentProjectsAction->addUrl( QUrl(fileName) );
+			ok = true;
 
-		//we have a file name now
-		// -> auto save can be activated now if not happened yet
-		if (m_autoSaveActive && !m_autoSaveTimer.isActive())
-			m_autoSaveTimer.start();
+			//if the project dock is visible, refresh the shown content
+			//(version and modification time might have been changed)
+			if (stackedWidget->currentWidget() == projectDock)
+				projectDock->setProject(m_project);
+
+			//we have a file name now
+			// -> auto save can be activated now if not happened yet
+			if (m_autoSaveActive && !m_autoSaveTimer.isActive())
+				m_autoSaveTimer.start();
+		} else {
+			RESET_CURSOR;
+			KMessageBox::error(this, i18n("Couldn't save the file '%1'.", fileName));
+			ok = false;
+		}
 	} else {
-		KMessageBox::error(this, i18n("Sorry. Could not open file for writing."));
+		RESET_CURSOR;
+		KMessageBox::error(this, i18n("Couldn't open the file '%1' for writing.", fileName));
 		ok = false;
 	}
 
