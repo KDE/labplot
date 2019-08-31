@@ -4,6 +4,7 @@
     Description          : Graphic Item for coordinate points of Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+	Copyright            : (C) 2015-2019 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -54,6 +55,7 @@ ErrorBarItem::ErrorBarItem(DatapickerPoint* parent, const ErrorBarType& type) :
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	initRect();
+	setAcceptHoverEvents(true);
 }
 
 void ErrorBarItem::initRect() {
@@ -88,6 +90,17 @@ void ErrorBarItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		m_parentItem->setMinusDeltaYPos(pos());
 
 	QGraphicsItem::mouseReleaseEvent(event);
+}
+
+void ErrorBarItem::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
+	if (m_type == PlusDeltaX ||m_type == MinusDeltaX)
+		setCursor(Qt::SizeHorCursor);
+	else
+		setCursor(Qt::SizeVerCursor);
+}
+
+void ErrorBarItem::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
+	setCursor(Qt::CrossCursor);
 }
 
 QVariant ErrorBarItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
