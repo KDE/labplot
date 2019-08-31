@@ -53,7 +53,8 @@ public:
 	void exportToFile(const QString&, const WorksheetView::ExportFormat, const int);
 
 private:
-	enum MouseMode {SelectAndEditMode, NavigationMode, ZoomSelectionMode};
+	enum MouseMode {SelectAndEditMode, NavigationMode, ZoomSelectionMode,
+					ReferencePointsEntryMode, CurvePointsEntryMode, CurveSegmentsEntryMode};
 
 	void initActions();
 	void initMenus();
@@ -133,7 +134,6 @@ private slots:
 	void magnificationChanged(QAction*);
 	void changeZoom(QAction*);
 	void changeSelectedItemsPosition(QAction*);
-	void changePointsType(QAction*);
 	void handleImageActions();
 	void updateBackground();
 	void addCurve();
