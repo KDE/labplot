@@ -78,7 +78,6 @@ DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView
 
 	initActions();
 	initMenus();
-	selectAndEditModeAction->setChecked(true);
 	m_image->setSegmentsHoverEvent(true);
 	setInteractive(true);
 
@@ -144,10 +143,6 @@ void DatapickerImageView::initActions() {
 	zoomFitPageWidthAction = new QAction(QIcon::fromTheme("zoom-fit-width"), i18n("Fit to Width"), zoomActionGroup);
 
 	// Mouse mode actions
-	selectAndEditModeAction = new QAction(QIcon::fromTheme("labplot-cursor-arrow"), i18n("Select and Edit"), mouseModeActionGroup);
-	selectAndEditModeAction->setCheckable(true);
-	selectAndEditModeAction->setData(SelectAndEditMode);
-
 	navigationModeAction = new QAction(QIcon::fromTheme("input-mouse"), i18n("Navigate"), mouseModeActionGroup);
 	navigationModeAction->setCheckable(true);
 	navigationModeAction->setData(NavigationMode);
@@ -230,13 +225,12 @@ void DatapickerImageView::initActions() {
 void DatapickerImageView::initMenus() {
 	m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"), this);
 	m_viewMouseModeMenu->setIcon(QIcon::fromTheme("input-mouse"));
-	m_viewMouseModeMenu->addAction(selectAndEditModeAction);
-	m_viewMouseModeMenu->addAction(navigationModeAction);
-	m_viewMouseModeMenu->addAction(zoomSelectionModeAction);
-	m_viewMouseModeMenu->addSeparator();
 	m_viewMouseModeMenu->addAction(setAxisPointsAction);
 	m_viewMouseModeMenu->addAction(setCurvePointsAction);
 	m_viewMouseModeMenu->addAction(selectSegmentAction);
+	m_viewMouseModeMenu->addSeparator();
+	m_viewMouseModeMenu->addAction(navigationModeAction);
+	m_viewMouseModeMenu->addAction(zoomSelectionModeAction);
 
 	m_zoomMenu = new QMenu(i18n("Zoom View"), this);
 	m_zoomMenu->setIcon(QIcon::fromTheme("zoom-draw"));
@@ -293,7 +287,6 @@ void DatapickerImageView::fillToolBar(QToolBar* toolBar) {
 	toolBar->addAction(setAxisPointsAction);
 	toolBar->addAction(setCurvePointsAction);
 	toolBar->addAction(selectSegmentAction);
-	toolBar->addAction(selectAndEditModeAction);
 	toolBar->addAction(navigationModeAction);
 	toolBar->addAction(zoomSelectionModeAction);
 
@@ -422,7 +415,18 @@ void DatapickerImageView::mousePressEvent(QMouseEvent* event) {
 	QPointF eventPos = mapToScene(event->pos());
 	bool entryMode = (m_mouseMode == ReferencePointsEntryMode
 					  || m_mouseMode == CurvePointsEntryMode || m_mouseMode == CurveSegmentsEntryMode);
-	if (entryMode && m_image->isLoaded && sceneRect().contains(eventPos)) {
+
+	//check whether there is a point item under the cursor
+	bool pointsUnderCursor = false;
+	auto items = this->items(event->pos());
+	for (auto* item : items) {
+		if (item != m_image->m_magnificationWindow) {
+			pointsUnderCursor = true;
+			break;
+		}
+	}
+
+	if (entryMode && !pointsUnderCursor && m_image->isLoaded && sceneRect().contains(eventPos)) {
 		if ( m_image->plotPointsType() == DatapickerImage::AxisPoints ) {
 			int childCount = m_image->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
 			if (childCount < 3)
@@ -464,6 +468,27 @@ void DatapickerImageView::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
+	bool entryMode = (m_mouseMode == ReferencePointsEntryMode
+					  || m_mouseMode == CurvePointsEntryMode || m_mouseMode == CurveSegmentsEntryMode);
+
+	//check whether there is a point item under the cursor
+	bool pointsUnderCursor = false;
+	auto items = this->items(event->pos());
+	for (auto* item : items) {
+		if (item != m_image->m_magnificationWindow) {
+			pointsUnderCursor = true;
+			break;
+		}
+	}
+
+	if (!pointsUnderCursor) {
+		if (entryMode)
+			setCursor(Qt::CrossCursor);
+	} else {
+		if (m_mouseMode != NavigationMode)
+			setCursor(Qt::ArrowCursor);
+	}
+
 	//show the selection band
 	if (m_selectionBandIsShown) {
 		QRect rect = QRect(m_selectionStart, m_selectionEnd).normalized();
@@ -504,7 +529,7 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 	}
 
 	//show the magnification window
-	if ( magnificationFactor && m_mouseMode == SelectAndEditMode && m_image->isLoaded && sceneRect().contains(pos)
+	if ( magnificationFactor && m_image->isLoaded && sceneRect().contains(pos)
 		&& m_image->plotPointsType() != DatapickerImage::SegmentPoints ) {
 
 		if (!m_image->m_magnificationWindow) {
@@ -562,12 +587,7 @@ void DatapickerImageView::contextMenuEvent(QContextMenuEvent* e) {
 void DatapickerImageView::mouseModeChanged(QAction* action) {
 	m_mouseMode = (DatapickerImageView::MouseMode)action->data().toInt();
 
-	if (action == selectAndEditModeAction) {
-		setInteractive(true);
-		setDragMode(QGraphicsView::NoDrag);
-		m_image->setSegmentsHoverEvent(true);
-		setCursor(Qt::ArrowCursor);
-	} else if (action == navigationModeAction) {
+	if (action == navigationModeAction) {
 		setInteractive(false);
 		setDragMode(QGraphicsView::ScrollHandDrag);
 		m_image->setSegmentsHoverEvent(false);

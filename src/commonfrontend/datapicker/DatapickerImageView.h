@@ -53,7 +53,7 @@ public:
 	void exportToFile(const QString&, const WorksheetView::ExportFormat, const int);
 
 private:
-	enum MouseMode {SelectAndEditMode, NavigationMode, ZoomSelectionMode,
+	enum MouseMode {NavigationMode, ZoomSelectionMode,
 					ReferencePointsEntryMode, CurvePointsEntryMode, CurveSegmentsEntryMode};
 
 	void initActions();
@@ -73,7 +73,7 @@ private:
 	DatapickerImage* m_image;
 	Datapicker* m_datapicker;
 	Transform* m_transform;
-	MouseMode m_mouseMode{SelectAndEditMode};
+	MouseMode m_mouseMode{ReferencePointsEntryMode};
 	bool m_selectionBandIsShown{false};
 	QPoint m_selectionStart;
 	QPoint m_selectionEnd;
@@ -109,7 +109,6 @@ private:
 
 	QAction* navigationModeAction;
 	QAction* zoomSelectionModeAction;
-	QAction* selectAndEditModeAction;
 
 	QActionGroup* navigationActionGroup;
 	QAction* shiftLeftAction;
