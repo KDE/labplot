@@ -41,8 +41,6 @@ public:
 	enum ErrorBarType {PlusDeltaX, MinusDeltaX, PlusDeltaY, MinusDeltaY};
 
 	explicit ErrorBarItem(DatapickerPoint* parent = nullptr, const ErrorBarType& type = PlusDeltaX);
-
-	QVariant itemChange(GraphicsItemChange, const QVariant &value) override;
 	void setRectSize(const qreal);
 
 public slots:
@@ -53,6 +51,7 @@ private:
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	QVariant itemChange(GraphicsItemChange, const QVariant &value) override;
 
 	QGraphicsLineItem* barLineItem;
 	QRectF m_rect;

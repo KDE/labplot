@@ -106,7 +106,14 @@ void ErrorBarItem::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 QVariant ErrorBarItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
 	if (change == QGraphicsItem::ItemPositionChange) {
 		QPointF newPos = value.toPointF();
-		barLineItem->setLine(0, 0, newPos.x(), newPos.y());
+		if (m_type == PlusDeltaX || m_type == MinusDeltaX) {
+			newPos.setY(0);
+			barLineItem->setLine(0, 0, newPos.x(), 0);
+		} else {
+			newPos.setX(0);
+			barLineItem->setLine(0, 0, 0, newPos.y());
+		}
+		return QGraphicsRectItem::itemChange(change, newPos);
 	}
 
 	return QGraphicsRectItem::itemChange(change, value);
@@ -215,6 +222,7 @@ CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPointF, plusDeltaXPos, plusDeltaXPo
 CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPointF, minusDeltaXPos, minusDeltaXPos)
 CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPointF, plusDeltaYPos, plusDeltaYPos)
 CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPointF, minusDeltaYPos, minusDeltaYPos)
+
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPosition, QPointF, position, retransform)
 void DatapickerPoint::setPosition(const QPointF& pos) {
@@ -304,6 +312,7 @@ void DatapickerPoint::setPrinting(bool on) {
 //####################### Private implementation ###############################
 //##############################################################################
 DatapickerPointPrivate::DatapickerPointPrivate(DatapickerPoint* owner) : q(owner) {
+	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(true);
@@ -402,7 +411,15 @@ void DatapickerPointPrivate::recalcShapeAndBoundingRect() {
 	itemShape = WorksheetElement::shapeFromPath(itemShape, pen);
 }
 
-void DatapickerPointPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+QVariant DatapickerPointPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
+	if (change == QGraphicsItem::ItemPositionChange) {
+		QPointF newPos = value.toPointF();
+		q->setPosition(newPos);
+	}
+
+	return QGraphicsItem::itemChange(change, value);
+}
+void DatapickerPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 

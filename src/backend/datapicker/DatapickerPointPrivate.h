@@ -70,6 +70,7 @@ public:
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+	QVariant itemChange(GraphicsItemChange, const QVariant &value) override;
 };
 
 #endif
