@@ -481,13 +481,10 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 		}
 	}
 
-	if (!pointsUnderCursor) {
-		if (entryMode)
-			setCursor(Qt::CrossCursor);
-	} else {
-		if (m_mouseMode != NavigationMode)
-			setCursor(Qt::ArrowCursor);
-	}
+	if (!pointsUnderCursor && entryMode)
+		setCursor(Qt::CrossCursor);
+	else if (m_mouseMode != NavigationMode)
+		setCursor(Qt::ArrowCursor);
 
 	//show the selection band
 	if (m_selectionBandIsShown) {
@@ -591,17 +588,14 @@ void DatapickerImageView::mouseModeChanged(QAction* action) {
 		setInteractive(false);
 		setDragMode(QGraphicsView::ScrollHandDrag);
 		m_image->setSegmentsHoverEvent(false);
-		setCursor(Qt::ArrowCursor);
 	} else if (action == zoomSelectionModeAction){
 		setInteractive(false);
 		setDragMode(QGraphicsView::NoDrag);
 		m_image->setSegmentsHoverEvent(false);
-		setCursor(Qt::ArrowCursor);
 	} else {
 		setInteractive(true);
 		setDragMode(QGraphicsView::NoDrag);
 		m_image->setSegmentsHoverEvent(true);
-		setCursor(Qt::CrossCursor);
 
 		if (currentPlotPointsTypeAction != action) {
 			if (action == setAxisPointsAction) {

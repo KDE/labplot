@@ -229,12 +229,9 @@ void Datapicker::setSelectedInView(const bool b) {
 
 void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
 	QVector<DatapickerPoint*> childPoints = parentAspect->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-	if (childPoints.isEmpty())
-		beginMacro(i18n("%1: add new point", parentAspect->name()));
-	else
-		beginMacro(i18n("%1: add new point %2", parentAspect->name(), childPoints.count()));
+	beginMacro(i18n("%1: add new point", parentAspect->name()));
 
-	auto* newPoint = new DatapickerPoint(i18n("%1 Point", parentAspect->name()));
+	auto* newPoint = new DatapickerPoint(i18n("Point %1", childPoints.count()));
 	newPoint->setPosition(pos);
 	newPoint->setHidden(true);
 	parentAspect->addChild(newPoint);
