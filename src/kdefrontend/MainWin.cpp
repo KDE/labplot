@@ -1340,24 +1340,12 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 	Otherwise returns \c 0.
 */
 Matrix* MainWin::activeMatrix() const {
-	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
-	if (!win)
+	if (!m_currentAspect)
 		return nullptr;
 
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-	Q_ASSERT(part);
 	Matrix* matrix = nullptr;
-	const auto* workbook = dynamic_cast<Workbook*>(part);
-	if (workbook) {
-		matrix = workbook->currentMatrix();
-		if (!matrix) {
-			//potentially, the matrix was not selected in workbook yet since the selection in project explorer
-			//arrives in workbook's slot later than in this function
-			//->check whether we have a matrix currently selected in the project explorer
-			matrix = dynamic_cast<Matrix*>(m_currentAspect);
-		}
-	} else
-		matrix = dynamic_cast<Matrix*>(part);
+	if (m_currentAspect->type() == AspectType::Matrix)
+		matrix = dynamic_cast<Matrix*>(m_currentAspect);
 
 	return matrix;
 }
