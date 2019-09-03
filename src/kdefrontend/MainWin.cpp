@@ -974,7 +974,6 @@ void MainWin::openProject(const QString& filename) {
 	timer.start();
 	bool rc = false;
 	if (Project::isLabPlotProject(filename)) {
-		qDebug()<<"openning project " << filename;
 		m_project->setFileName(filename);
 		rc = m_project->load(filename);
 #ifdef HAVE_LIBORIGIN
@@ -1487,7 +1486,7 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
 void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect) {
 	if (!aspect)
 		aspect = m_project; // should never happen, just in case
-	qDebug()<<"handleCurrentAspectChanged" << aspect->name();
+
 	m_suppressCurrentSubWindowChangedEvent = true;
 	if (aspect->folder() != m_currentFolder) {
 		m_currentFolder = aspect->folder();
@@ -1504,7 +1503,6 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect) {
 }
 
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
-	qDebug()<<"activate sub window for aspect";
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
 		//for LiveDataSource we currently don't show any view
