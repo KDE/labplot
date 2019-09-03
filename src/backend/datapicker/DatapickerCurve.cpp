@@ -125,6 +125,7 @@ Column* DatapickerCurve::appendColumn(const QString& name) {
 	Column* col = new Column(i18n("Column"), AbstractColumn::Numeric);
 	col->insertRows(0, m_datasheet->rowCount());
 	col->setName(name);
+	col->setUndoAware(false);
 	m_datasheet->addChild(col);
 
 	return col;
@@ -204,14 +205,18 @@ void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 		yLabel = QLatin1String("log(y)");
 	}
 
-	if (type == DatapickerImage::Ternary)
+	if (type == DatapickerImage::Ternary) {
 		d->posZColumn = appendColumn(i18n("c"));
+		d->posZColumn->setUndoAware(false);
+	}
 
 	d->posXColumn = m_datasheet->column(0);
 	d->posXColumn->setName(xLabel);
+	d->posXColumn->setUndoAware(false);
 
 	d->posYColumn = m_datasheet->column(1);
 	d->posYColumn->setName(yLabel);
+	d->posYColumn->setUndoAware(false);
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetCurveErrorTypes, DatapickerCurve::Errors, curveErrorTypes)

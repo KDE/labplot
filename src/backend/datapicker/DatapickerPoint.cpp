@@ -411,14 +411,11 @@ void DatapickerPointPrivate::recalcShapeAndBoundingRect() {
 	itemShape = WorksheetElement::shapeFromPath(itemShape, pen);
 }
 
-QVariant DatapickerPointPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
-	if (change == QGraphicsItem::ItemPositionChange) {
-		QPointF newPos = value.toPointF();
-		q->setPosition(newPos);
-	}
-
-	return QGraphicsItem::itemChange(change, value);
+void DatapickerPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	q->setPosition(pos());
+	QGraphicsItem::mouseReleaseEvent(event);
 }
+
 void DatapickerPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
