@@ -1319,28 +1319,18 @@ Datapicker* MainWin::activeDatapicker() const {
 	Otherwise returns \c 0.
 */
 Spreadsheet* MainWin::activeSpreadsheet() const {
-	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
-	if (!win)
+	if (!m_currentAspect)
 		return nullptr;
 
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-	Q_ASSERT(part);
 	Spreadsheet* spreadsheet = nullptr;
-	const auto* workbook = dynamic_cast<const Workbook*>(part);
-	if (workbook) {
-		spreadsheet = workbook->currentSpreadsheet();
-		if (!spreadsheet) {
-			//potentially, the spreadsheet was not selected in workbook yet since the selection in project explorer
-			//arrives in workbook's slot later than in this function
-			//->check whether we have a spreadsheet or one of its columns currently selected in the project explorer
-			spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
-			if (!spreadsheet) {
-				if (m_currentAspect->parentAspect())
-					spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parentAspect());
-			}
-		}
-	} else
-		spreadsheet = dynamic_cast<Spreadsheet*>(part);
+	if (m_currentAspect->type() == AspectType::Spreadsheet)
+		spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
+	else {
+		//check whether one of spreadsheet columns is selected and determine the spreadsheet
+		auto* parent = m_currentAspect->parentAspect();
+		if (parent && parent->type() == AspectType::Spreadsheet)
+			spreadsheet = dynamic_cast<Spreadsheet*>(parent);
+	}
 
 	return spreadsheet;
 }
@@ -1497,7 +1487,7 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
 void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect) {
 	if (!aspect)
 		aspect = m_project; // should never happen, just in case
-
+	qDebug()<<"handleCurrentAspectChanged" << aspect->name();
 	m_suppressCurrentSubWindowChangedEvent = true;
 	if (aspect->folder() != m_currentFolder) {
 		m_currentFolder = aspect->folder();
@@ -1514,6 +1504,7 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect) {
 }
 
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
+	qDebug()<<"activate sub window for aspect";
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
 		//for LiveDataSource we currently don't show any view
