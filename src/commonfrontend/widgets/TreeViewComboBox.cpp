@@ -142,6 +142,7 @@ void TreeViewComboBox::showPopup() {
 
 	setEditText(m_lineEditText);
 	m_lineEdit->setText(""); //delete the previous search string
+	m_lineEdit->setFocus();
 }
 
 /*!
