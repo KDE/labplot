@@ -102,7 +102,8 @@ SpreadsheetModel* Spreadsheet::model() {
 */
 QWidget* Spreadsheet::view() const {
 	if (!m_partView) {
-		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this));
+		bool readOnly = (this->parentAspect()->type() == AspectType::DatapickerCurve);
+		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this), readOnly);
 		m_partView = m_view;
 	}
 	return m_partView;
