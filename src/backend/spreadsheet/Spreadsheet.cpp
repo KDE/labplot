@@ -927,14 +927,8 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 
 	//determine the dependent plots
 	QVector<CartesianPlot*> plots;
-	DEBUG("column count: " << this->columnCount());
-	DEBUG("column offset: " << columnOffset);
-	DEBUG("start column: " << startColumn);
-	DEBUG("end column: " << endColumn);
-
 	if (importMode == AbstractFileFilter::Replace) {
 		for (int n = startColumn; n <= endColumn; n++) {
-			DEBUG("n: " << n);
 			Column* column = this->column(columnOffset + n - startColumn);
 			column->addUsedInPlots(plots);
 		}

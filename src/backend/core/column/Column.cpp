@@ -197,6 +197,9 @@ void Column::setSuppressDataChangedSignal(bool b) {
 
 void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
 	const Project* project = this->project();
+
+	//when executing tests we don't create any project,
+	//add a null-pointer check for tests here.
 	if (!project)
 		return;
 
