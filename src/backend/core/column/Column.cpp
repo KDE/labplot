@@ -197,6 +197,9 @@ void Column::setSuppressDataChangedSignal(bool b) {
 
 void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
 	const Project* project = this->project();
+	if (!project)
+		return;
+
 	QVector<const XYCurve*> curves = project->children<const XYCurve>(AbstractAspect::Recursive);
 
 	//determine the plots where the column is consumed
