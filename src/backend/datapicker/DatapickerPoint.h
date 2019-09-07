@@ -50,7 +50,6 @@ private:
 	void initRect();
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	QVariant itemChange(GraphicsItemChange, const QVariant &value) override;
 
 	QGraphicsLineItem* barLineItem;

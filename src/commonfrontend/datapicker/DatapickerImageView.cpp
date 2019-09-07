@@ -468,24 +468,6 @@ void DatapickerImageView::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
-	bool entryMode = (m_mouseMode == ReferencePointsEntryMode
-					  || m_mouseMode == CurvePointsEntryMode || m_mouseMode == CurveSegmentsEntryMode);
-
-	//check whether there is a point item under the cursor
-	bool pointsUnderCursor = false;
-	auto items = this->items(event->pos());
-	for (auto* item : items) {
-		if (item != m_image->m_magnificationWindow) {
-			pointsUnderCursor = true;
-			break;
-		}
-	}
-
-	if (!pointsUnderCursor && entryMode)
-		setCursor(Qt::CrossCursor);
-	else if (m_mouseMode != NavigationMode)
-		setCursor(Qt::ArrowCursor);
-
 	//show the selection band
 	if (m_selectionBandIsShown) {
 		QRect rect = QRect(m_selectionStart, m_selectionEnd).normalized();
@@ -592,10 +574,12 @@ void DatapickerImageView::mouseModeChanged(QAction* action) {
 		setInteractive(false);
 		setDragMode(QGraphicsView::NoDrag);
 		m_image->setSegmentsHoverEvent(false);
+		setCursor(Qt::ArrowCursor);
 	} else {
 		setInteractive(true);
 		setDragMode(QGraphicsView::NoDrag);
 		m_image->setSegmentsHoverEvent(true);
+		setCursor(Qt::CrossCursor);
 
 		if (currentPlotPointsTypeAction != action) {
 			if (action == setAxisPointsAction) {

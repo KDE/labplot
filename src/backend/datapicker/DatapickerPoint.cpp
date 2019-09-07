@@ -99,10 +99,6 @@ void ErrorBarItem::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 		setCursor(Qt::SizeVerCursor);
 }
 
-void ErrorBarItem::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	setCursor(Qt::CrossCursor);
-}
-
 QVariant ErrorBarItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
 	if (change == QGraphicsItem::ItemPositionChange) {
 		QPointF newPos = value.toPointF();
@@ -414,6 +410,14 @@ void DatapickerPointPrivate::recalcShapeAndBoundingRect() {
 void DatapickerPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	q->setPosition(pos());
 	QGraphicsItem::mouseReleaseEvent(event);
+}
+
+void DatapickerPointPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
+	setCursor(Qt::ArrowCursor);
+}
+
+void DatapickerPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
+	setCursor(Qt::CrossCursor);
 }
 
 void DatapickerPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
