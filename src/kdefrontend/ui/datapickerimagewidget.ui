@@ -1069,21 +1069,36 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>leName</tabstop>
+  <tabstop>leComment</tabstop>
   <tabstop>leFileName</tabstop>
   <tabstop>bOpen</tabstop>
   <tabstop>cbGraphType</tabstop>
+  <tabstop>sbRotation</tabstop>
   <tabstop>sbPositionX1</tabstop>
   <tabstop>sbPositionY1</tabstop>
+  <tabstop>sbPositionZ1</tabstop>
   <tabstop>sbPositionX2</tabstop>
   <tabstop>sbPositionY2</tabstop>
+  <tabstop>sbPositionZ2</tabstop>
   <tabstop>sbPositionX3</tabstop>
   <tabstop>sbPositionY3</tabstop>
+  <tabstop>sbPositionZ3</tabstop>
+  <tabstop>sbTernaryScale</tabstop>
+  <tabstop>sbMinSegmentLength</tabstop>
+  <tabstop>sbPointSeparation</tabstop>
+  <tabstop>sbSymbolBorderWidth</tabstop>
+  <tabstop>sbSymbolRotation</tabstop>
+  <tabstop>cbSymbolStyle</tabstop>
+  <tabstop>sbSymbolOpacity</tabstop>
+  <tabstop>chbSymbolVisible</tabstop>
+  <tabstop>cbSymbolFillingStyle</tabstop>
   <tabstop>cbPlotImageType</tabstop>
-  <tabstop>lIntensity</tabstop>
-  <tabstop>lForeground</tabstop>
-  <tabstop>lHue</tabstop>
-  <tabstop>lSaturation</tabstop>
-  <tabstop>lValue</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>kcbSymbolFillingColor</tabstop>
+  <tabstop>sbSymbolSize</tabstop>
+  <tabstop>cbSymbolBorderStyle</tabstop>
+  <tabstop>kcbSymbolBorderColor</tabstop>
  </tabstops>
  <resources/>
  <connections/>
