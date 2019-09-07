@@ -263,10 +263,9 @@ bool TreeModel::removeColumns(int position, int columns, const QModelIndex &pare
 
 bool TreeModel::removeRows(int position, int rows, const QModelIndex &parent) {
 	TreeItem *parentItem = getItem(parent);
-	bool success = true;
 
 	beginRemoveRows(parent, position, position + rows - 1);
-	success = parentItem->removeChildren(position, rows);
+	bool success = parentItem->removeChildren(position, rows);
 	endRemoveRows();
 
 	return success;

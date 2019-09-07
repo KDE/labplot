@@ -837,10 +837,9 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 	auto* sender = dynamic_cast<CartesianPlot*>(QObject::sender());
 
 	// if ApplyActionToSelection, each plot has it's own x value
-	int rowPlot = 0;
 	if (cartesianPlotCursorMode() == Worksheet::ApplyActionToAll) {
 		// x values
-		rowPlot = 1;
+		int rowPlot = 1;
 		QModelIndex xName = treeModel->index(0, WorksheetPrivate::TreeModelColumn::SIGNALNAME);
 		treeModel->setData(xName, QVariant("X"));
 		double valueCursor[2];
@@ -1113,12 +1112,9 @@ void Worksheet::updateCompleteCursorTreeModel() {
 	if (plotCount < 1)
 		return;
 
-	int rowPlot = 0;
-
 	if (cartesianPlotCursorMode() == Worksheet::CartesianPlotActionMode::ApplyActionToAll) {
 		// 1 because of the X data
 		treeModel->insertRows(0, 1); //, treeModel->index(0,0)); // add empty rows. Then they become filled
-		rowPlot = 1;
 
 		// set X data
 		QModelIndex xName = treeModel->index(0, WorksheetPrivate::TreeModelColumn::SIGNALNAME);
@@ -1195,7 +1191,6 @@ void Worksheet::updateCompleteCursorTreeModel() {
 			treeModel->setTreeData(QVariant(cursorValue[1]-cursorValue[0]), rowCurve, WorksheetPrivate::TreeModelColumn::CURSORDIFF, plotName);
 			rowCurve++;
 		}
-		rowPlot++;
 	}
 }
 

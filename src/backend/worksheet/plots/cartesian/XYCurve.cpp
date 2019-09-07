@@ -1263,13 +1263,7 @@ void XYCurvePrivate::updateLines() {
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines(), calculate the lines connecting the data points");
 #endif
 	QPointF tempPoint1, tempPoint2; // used as temporaryPoints to interpolate datapoints if the corresponding setting is set
-
 	int startIndex, endIndex;
-	bool overlap = false;
-	double maxY, minY; // are initialized in add line()
-	int pixelDiff;
-	QPointF p0;
-	QPointF p1;
 
 	// find index for xMin and xMax to not loop throug all values
 	AbstractColumn::Properties columnProperties = q->xColumn()->properties();
@@ -1301,6 +1295,12 @@ void XYCurvePrivate::updateLines() {
 		tempPoint2 = QPointF(plot->xMin(), plot->yMax());
 		lines.append(QLineF(tempPoint1, tempPoint2));
 	} else {
+		bool overlap = false;
+		double maxY, minY; // are initialized in add line()
+		int pixelDiff;
+		QPointF p0;
+		QPointF p1;
+
 		switch (lineType) {
 		case XYCurve::NoLine:
 			break;
@@ -1522,12 +1522,11 @@ void XYCurvePrivate::updateLines() {
 			for (unsigned int i = 0; i < count - 1; i++) {
 				const double x1 = x[i];
 				const double x2 = x[i+1];
-				double xi, yi;
 				const double step = fabs(x2 - x1)/(lineInterpolationPointsCount + 1);
 
 				for (int i=0; i < (lineInterpolationPointsCount + 1); i++) {
-					xi = x1+i*step;
-					yi = gsl_spline_eval(spline, xi, acc);
+					double xi = x1+i*step;
+					double yi = gsl_spline_eval(spline, xi, acc);
 					xinterp.push_back(xi);
 					yinterp.push_back(yi);
 				}

@@ -1878,7 +1878,6 @@ int Column::indexForValue(double x) const {
 					mode == AbstractColumn::ColumnMode::Month ||
 					mode == AbstractColumn::ColumnMode::Day)) {
 			qint64 xInt64 = static_cast<qint64>(x);
-			int index = 0;
 			for (int row = 0; row < rowCount(); row++) {
 				if (!isValid(row) || isMasked(row))
 					continue;

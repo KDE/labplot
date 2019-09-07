@@ -1954,8 +1954,8 @@ int AxisDock::determineDecimals(double diff) {
  * \return
  */
 double AxisDock::determineStep(double diff, int decimal) {
-	double ten = 1;
 	if (decimal == 0) {
+		double ten = 1;
 		for (unsigned int i = 1; i < 1000000000; i++) {
 			if (diff/ten <= 10) {
 				return ten/10; // use one decimal before
