@@ -1026,6 +1026,7 @@ bool MainWin::closeProject() {
 		return false;
 
 	m_projectClosing = true;
+	statusBar()->clearMessage();
 	delete m_aspectTreeModel;
 	m_aspectTreeModel = nullptr;
 	delete m_project;
@@ -1185,7 +1186,7 @@ void MainWin::print() {
 	if (part->printView())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
 	else
-		statusBar()->showMessage(QString());
+		statusBar()->clearMessage();
 }
 
 void MainWin::printPreview() {
@@ -1198,7 +1199,7 @@ void MainWin::printPreview() {
 	if (part->printPreview())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
 	else
-		statusBar()->showMessage(QString());
+		statusBar()->clearMessage();
 }
 
 /**************************************************************************************/
