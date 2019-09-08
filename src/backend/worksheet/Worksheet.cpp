@@ -736,44 +736,34 @@ void Worksheet::setTheme(const QString& theme) {
 
 void Worksheet::cartesianPlotMousePressZoomSelectionMode(QPointF logicPos) {
 	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
-		QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-		for (auto* child : childElements) {
-			CartesianPlot* plot = dynamic_cast<CartesianPlot*>(child);
-			if (plot)
-				plot->mousePressZoomSelectionMode(logicPos);
-		}
-		return;
+		auto plots = children<CartesianPlot>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+		for (auto* plot : plots)
+			plot->mousePressZoomSelectionMode(logicPos);
+	} else {
+		CartesianPlot* plot = static_cast<CartesianPlot*>(QObject::sender());
+		plot->mousePressZoomSelectionMode(logicPos);
 	}
-	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(QObject::sender());
-	plot->mousePressZoomSelectionMode(logicPos);
 }
 
 void Worksheet::cartesianPlotMouseReleaseZoomSelectionMode() {
 	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
-		QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-		for (auto* child : childElements) {
-			CartesianPlot* plot = dynamic_cast<CartesianPlot*>(child);
-			if (plot)
-				plot->mouseReleaseZoomSelectionMode();
-		}
-		return;
+		auto plots = children<CartesianPlot>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+		for (auto* plot : plots)
+			plot->mouseReleaseZoomSelectionMode();
+	} else {
+		CartesianPlot* plot = static_cast<CartesianPlot*>(QObject::sender());
+		plot->mouseReleaseZoomSelectionMode();
 	}
-	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(QObject::sender());
-	plot->mouseReleaseZoomSelectionMode();
 }
 
 void Worksheet::cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logicPos) {
 	if (cartesianPlotCursorMode() == Worksheet::ApplyActionToAll) {
-		QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-		for (auto* child : childElements) {
-			CartesianPlot* plot = dynamic_cast<CartesianPlot*>(child);
-			if (plot)
-				plot->mousePressCursorMode(cursorNumber, logicPos);
-		}
-	} else {
-		CartesianPlot* plot = dynamic_cast<CartesianPlot*>(QObject::sender());
-		if (plot)
+		auto plots = children<CartesianPlot>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+		for (auto* plot : plots)
 			plot->mousePressCursorMode(cursorNumber, logicPos);
+	} else {
+		CartesianPlot* plot = static_cast<CartesianPlot*>(QObject::sender());
+		plot->mousePressCursorMode(cursorNumber, logicPos);
 	}
 
 	cursorPosChanged(cursorNumber, logicPos.x());
@@ -781,56 +771,44 @@ void Worksheet::cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logi
 
 void Worksheet::cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos) {
 	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
-		QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-		for (auto* child : childElements) {
-			CartesianPlot* plot = dynamic_cast<CartesianPlot*>(child);
-			if (plot)
-				plot->mouseMoveZoomSelectionMode(logicPos);
-		}
-		return;
+		QVector<CartesianPlot*> plots = children<CartesianPlot>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+		for (auto* plot : plots)
+			plot->mouseMoveZoomSelectionMode(logicPos);
+	} else {
+		CartesianPlot* plot = static_cast<CartesianPlot*>(QObject::sender());
+		plot->mouseMoveZoomSelectionMode(logicPos);
 	}
-	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(QObject::sender());
-	plot->mouseMoveZoomSelectionMode(logicPos);
 }
 
 void Worksheet::cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos) {
 	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
-		QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-		for (auto* child : childElements) {
-			CartesianPlot* plot = dynamic_cast<CartesianPlot*>(child);
-			if (plot)
-				plot->mouseHoverZoomSelectionMode(logicPos);
-		}
-		return;
+		auto plots = children<CartesianPlot>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+		for (auto* plot : plots)
+			plot->mouseHoverZoomSelectionMode(logicPos);
+	} else {
+		CartesianPlot* plot = static_cast<CartesianPlot*>(QObject::sender());
+		plot->mouseHoverZoomSelectionMode(logicPos);
 	}
-	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(QObject::sender());
-	plot->mouseHoverZoomSelectionMode(logicPos);
 }
 
 void Worksheet::cartesianPlotMouseHoverOutsideDataRect() {
 	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
-		QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-		for (auto* child : childElements) {
-			CartesianPlot* plot = dynamic_cast<CartesianPlot*>(child);
-			if (plot)
-				plot->mouseHoverOutsideDataRect();
-		}
-		return;
+		auto plots = children<CartesianPlot>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+		for (auto* plot : plots)
+			plot->mouseHoverOutsideDataRect();
+	} else {
+		CartesianPlot* plot = static_cast<CartesianPlot*>(QObject::sender());
+		plot->mouseHoverOutsideDataRect();
 	}
-	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(QObject::sender());
-	plot->mouseHoverOutsideDataRect();
 }
 
 void Worksheet::cartesianPlotMouseMoveCursorMode(int cursorNumber, QPointF logicPos) {
 	if (cartesianPlotCursorMode() == Worksheet::ApplyActionToAll) {
-		QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-		for (auto* child : childElements) {
-			CartesianPlot* plot = dynamic_cast<CartesianPlot*>(child);
-			if (plot)
-				plot->mouseMoveCursorMode(cursorNumber, logicPos);
-		}
+		auto plots = children<CartesianPlot>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+		for (auto* plot : plots)
+			plot->mouseMoveCursorMode(cursorNumber, logicPos);
 	} else {
-		CartesianPlot* plot = dynamic_cast<CartesianPlot*>(QObject::sender());
+		CartesianPlot* plot = static_cast<CartesianPlot*>(QObject::sender());
 		plot->mouseMoveCursorMode(cursorNumber, logicPos);
 	}
 
