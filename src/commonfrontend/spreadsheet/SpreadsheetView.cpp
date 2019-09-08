@@ -700,6 +700,11 @@ void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
 
 	if (column->isNumeric()) {
 		QAction* firstAction = menu->actions().at(1);
+		//TODO: add these menues and syncronize the behavior with the context menu creation
+		//on the spreadsheet header in eventFilter(),
+// 		menu->insertMenu(firstAction, m_plotDataMenu);
+// 		menu->insertMenu(firstAction, m_analyzePlotMenu);
+// 		menu->insertSeparator(firstAction);
 		menu->insertMenu(firstAction, m_columnSetAsMenu);
 
 		const bool hasValues = column->hasValues();
@@ -720,10 +725,7 @@ void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
 			m_columnGenerateDataMenu->setEnabled(hasCells);
 
 			//in case no valid numerical values are available, deactivate the actions that only make sense in the presence of values
-			action_reverse_columns->setEnabled(hasValues);
-			action_drop_values->setEnabled(hasValues);
-			action_mask_values->setEnabled(hasValues);
-			action_normalize_columns->setEnabled(hasValues);
+			m_columnManipulateDataMenu->setEnabled(hasValues);
 			m_columnSortMenu->setEnabled(hasValues);
 		}
 
