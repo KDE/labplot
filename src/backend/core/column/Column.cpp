@@ -1473,6 +1473,8 @@ double Column::maximum(int startIndex, int endIndex) const {
 		case Numeric: {
 			auto* vec = static_cast<QVector<double>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
+				if (!isValid(row) || isMasked(row))
+					continue;
 				const double val = vec->at(row);
 				if (std::isnan(val))
 					continue;
@@ -1485,6 +1487,8 @@ double Column::maximum(int startIndex, int endIndex) const {
 		case Integer: {
 			auto* vec = static_cast<QVector<int>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
+				if (!isValid(row) || isMasked(row))
+					continue;
 				const int val = vec->at(row);
 
 				if (val > max)
@@ -1497,6 +1501,8 @@ double Column::maximum(int startIndex, int endIndex) const {
 		case DateTime: {
 			auto* vec = static_cast<QVector<QDateTime>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
+				if (!isValid(row) || isMasked(row))
+					continue;
 				const qint64 val = vec->at(row).toMSecsSinceEpoch();
 
 				if (val > max)

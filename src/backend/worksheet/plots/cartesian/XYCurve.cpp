@@ -2125,15 +2125,16 @@ QDateTime XYCurve::yDateTime(double x, bool &valueFound) const {
 }
 
 bool XYCurve::minMaxY(int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars) const {
-	return minMax(yColumn(), yErrorType(), yErrorPlusColumn(), yErrorMinusColumn(), indexMin, indexMax, yMin, yMax, includeErrorBars);
+	return minMax(yColumn(), xColumn(), yErrorType(), yErrorPlusColumn(), yErrorMinusColumn(), indexMin, indexMax, yMin, yMax, includeErrorBars);
 }
 
 bool XYCurve::minMaxX(int indexMin, int indexMax, double& xMin, double& xMax, bool includeErrorBars) const {
-	return minMax(xColumn(), xErrorType(), xErrorPlusColumn(), xErrorMinusColumn(), indexMin, indexMax, xMin, xMax, includeErrorBars);
+	return minMax(xColumn(), yColumn(), xErrorType(), xErrorPlusColumn(), xErrorMinusColumn(), indexMin, indexMax, xMin, xMax, includeErrorBars);
 }
 
 /*!
  * Calculates the minimum \p min and maximum \p max of a curve with optionally respecting the error bars
+ * This function does not check if the values are out of range
  * \p indexMax is not included
  * \p column
  * \p errorType
@@ -2145,21 +2146,24 @@ bool XYCurve::minMaxX(int indexMin, int indexMax, double& xMin, double& xMax, bo
  * \p max
  * \ includeErrorBars If true respect the error bars in the min/max calculation
  */
-bool XYCurve::minMax(const AbstractColumn* column, const ErrorType errorType, const AbstractColumn* errorPlusColumn, const AbstractColumn* errorMinusColumn, int indexMin, int indexMax, double& min, double& max, bool includeErrorBars) const {
-	if (!includeErrorBars || errorType == XYCurve::NoError) {
-		min = column->minimum(indexMin, indexMax);
-		max = column->maximum(indexMin, indexMax);
+bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column2, const ErrorType errorType, const AbstractColumn* errorPlusColumn, const AbstractColumn* errorMinusColumn, int indexMin, int indexMax, double& min, double& max, bool includeErrorBars) const {
+	// when property is greater than 1 there is a benefit in finding minimum and maximum
+	// for property == 0 it must be iterated over all values so it does not matter if this function or the below one is used
+	// if the property of the second column is greater 0 means, that all values are valid and not masked
+	if ((!includeErrorBars || errorType == XYCurve::NoError) && column1->properties() > 0 && column2 && column2->properties() > 0) {
+		min = column1->minimum(indexMin, indexMax);
+		max = column1->maximum(indexMin, indexMax);
 		return true;
 	}
 
-	if (column->rowCount() == 0)
+	if (column1->rowCount() == 0)
 		return false;
 
 	min = INFINITY;
 	max = -INFINITY;
 
 	for (int i = indexMin; i < indexMax; ++i) {
-		if (!column->isValid(i) || column->isMasked(i))
+		if (!column1->isValid(i) || column1->isMasked(i) || (column2 && (!column2->isValid(i) || column2->isMasked(i))))
 			continue;
 
 		if ( (errorPlusColumn && i >= errorPlusColumn->rowCount())
@@ -2199,13 +2203,13 @@ bool XYCurve::minMax(const AbstractColumn* column, const ErrorType errorType, co
 		}
 
 		double value;
-		if (column->columnMode() == AbstractColumn::ColumnMode::Numeric ||
-			column->columnMode() == AbstractColumn::ColumnMode::Integer)
-			value = column->valueAt(i);
-		else if (column->columnMode() == AbstractColumn::ColumnMode::DateTime ||
-				 column->columnMode() == AbstractColumn::ColumnMode::Month ||
-				 column->columnMode() == AbstractColumn::ColumnMode::Day) {
-			value = column->dateTimeAt(i).toMSecsSinceEpoch();
+		if (column1->columnMode() == AbstractColumn::ColumnMode::Numeric ||
+			column1->columnMode() == AbstractColumn::ColumnMode::Integer)
+			value = column1->valueAt(i);
+		else if (column1->columnMode() == AbstractColumn::ColumnMode::DateTime ||
+				 column1->columnMode() == AbstractColumn::ColumnMode::Month ||
+				 column1->columnMode() == AbstractColumn::ColumnMode::Day) {
+			value = column1->dateTimeAt(i).toMSecsSinceEpoch();
 		} else
 			return false;
 

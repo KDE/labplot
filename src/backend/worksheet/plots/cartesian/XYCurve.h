@@ -76,7 +76,7 @@ public:
 	void saveThemeConfig(const KConfig&) override;
 	double y(double x, bool &valueFound) const;
 	QDateTime yDateTime(double x, bool &valueFound) const;
-	bool minMax(const AbstractColumn *column, const ErrorType errorType, const AbstractColumn *errorPlusColumn, const AbstractColumn *errorMinusColumn, int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars) const;
+	bool minMax(const AbstractColumn *column1, const AbstractColumn *column2, const ErrorType errorType, const AbstractColumn *errorPlusColumn, const AbstractColumn *errorMinusColumn, int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars) const;
 	bool minMaxX(int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars = true) const;
 	bool minMaxY(int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars = true) const;
 	bool activateCurve(QPointF mouseScenePos, double maxDist = -1);
