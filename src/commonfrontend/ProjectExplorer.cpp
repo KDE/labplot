@@ -345,7 +345,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			stream >> vec;
 			AbstractAspect* sourceAspect{nullptr};
 			if (!vec.isEmpty())
-				sourceAspect = (AbstractAspect*)vec.at(0);
+				sourceAspect = reinterpret_cast<AbstractAspect*>(vec.at(0));
 
 			if (!sourceAspect)
 				return false;
