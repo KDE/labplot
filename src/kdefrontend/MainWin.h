@@ -228,17 +228,12 @@ private:
 // 	void toggleShowWidget(QWidget* widget, bool showToRight);
 // 	void toggleHideWidget(QWidget* widget, bool hideToLeft);
 
-	Workbook* activeWorkbook() const;
 	Spreadsheet* activeSpreadsheet() const;
-	Matrix* activeMatrix() const;
-	Worksheet* activeWorksheet() const;
-	Datapicker* activeDatapicker() const;
 
 	//Cantor
 #ifdef HAVE_CANTOR_LIBS
 	QMenu* m_newCantorWorksheetMenu;
 	CantorWorksheetDock* cantorWorksheetDock{nullptr};
-	CantorWorksheet* activeCantorWorksheet() const;
 #endif
 
 	friend class GuiObserver;

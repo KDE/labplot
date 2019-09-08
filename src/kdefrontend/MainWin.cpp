@@ -147,7 +147,7 @@ MainWin::~MainWin() {
 }
 
 void MainWin::showPresenter() {
-	Worksheet* w = activeWorksheet();
+	const Worksheet* w = dynamic_cast<Worksheet*>(m_currentAspect);
 	if (w) {
 		auto* view = dynamic_cast<WorksheetView*>(w->view());
 		view->presenterMode();
@@ -732,10 +732,9 @@ void MainWin::updateGUI() {
 		return;
 	}
 
-
 	//Handle the Worksheet-object
-	Worksheet* w = this->activeWorksheet();
-	if (w != nullptr) {
+	const Worksheet* w = dynamic_cast<Worksheet*>(m_currentAspect);
+	if (w) {
 		//populate worksheet menu
 		auto* view = qobject_cast<WorksheetView*>(w->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container("worksheet", this));
@@ -775,7 +774,7 @@ void MainWin::updateGUI() {
 	}
 
 	//Handle the Spreadsheet-object
-	const  auto* spreadsheet = this->activeSpreadsheet();
+	const auto* spreadsheet = this->activeSpreadsheet();
 	if (spreadsheet) {
 		//populate spreadsheet-menu
 		auto* view = qobject_cast<SpreadsheetView*>(spreadsheet->view());
@@ -796,7 +795,7 @@ void MainWin::updateGUI() {
 	}
 
 	//Handle the Matrix-object
-	const  Matrix* matrix = this->activeMatrix();
+	const  Matrix* matrix = dynamic_cast<Matrix*>(m_currentAspect);
 	if (matrix) {
 		//populate matrix-menu
 		auto* view = qobject_cast<MatrixView*>(matrix->view());
@@ -808,7 +807,7 @@ void MainWin::updateGUI() {
 		factory->container("matrix", this)->setEnabled(false);
 
 #ifdef HAVE_CANTOR_LIBS
-	CantorWorksheet* cantorworksheet = this->activeCantorWorksheet();
+	const CantorWorksheet* cantorworksheet = dynamic_cast<CantorWorksheet*>(m_currentAspect);
 	if (cantorworksheet) {
 		auto* view = qobject_cast<CantorWorksheetView*>(cantorworksheet->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container("cas_worksheet", this));
@@ -827,7 +826,7 @@ void MainWin::updateGUI() {
 	}
 #endif
 
-	const Datapicker* datapicker = this->activeDatapicker();
+	const Datapicker* datapicker = dynamic_cast<Datapicker*>(m_currentAspect);
 	if (datapicker) {
 		//populate datapicker-menu
 		auto* view = qobject_cast<DatapickerView*>(datapicker->view());
@@ -1235,7 +1234,7 @@ void MainWin::newSpreadsheet() {
 
 	//if the current active window is a workbook and no folder/project is selected in the project explorer,
 	//add the new spreadsheet to the workbook
-	Workbook* workbook = activeWorkbook();
+	Workbook* workbook = dynamic_cast<Workbook*>(m_currentAspect);
 	if (workbook) {
 		QModelIndex index = m_projectExplorer->currentIndex();
 		const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
@@ -1256,7 +1255,7 @@ void MainWin::newMatrix() {
 
 	//if the current active window is a workbook and no folder/project is selected in the project explorer,
 	//add the new matrix to the workbook
-	Workbook* workbook = activeWorkbook();
+	Workbook* workbook = dynamic_cast<Workbook*>(m_currentAspect);
 	if (workbook) {
 		QModelIndex index = m_projectExplorer->currentIndex();
 		const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
@@ -1286,34 +1285,6 @@ void MainWin::newNotes() {
 }
 
 /*!
-	returns a pointer to a Workbook-object, if the currently active Mdi-Subwindow is \a WorkbookView.
-	Otherwise returns \a 0.
-*/
-Workbook* MainWin::activeWorkbook() const {
-	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
-	if (!win)
-		return nullptr;
-
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-	Q_ASSERT(part);
-	return dynamic_cast<Workbook*>(part);
-}
-
-/*!
-	returns a pointer to a Datapicker-object, if the currently active Mdi-Subwindow is \a DatapickerView.
-	Otherwise returns \a 0.
-*/
-Datapicker* MainWin::activeDatapicker() const {
-	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
-	if (!win)
-		return nullptr;
-
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-	Q_ASSERT(part);
-	return dynamic_cast<Datapicker*>(part);
-}
-
-/*!
 	returns a pointer to a \c Spreadsheet object, if the currently active Mdi-Subwindow
 	or if the currently selected tab in a \c WorkbookView is a \c SpreadsheetView
 	Otherwise returns \c 0.
@@ -1335,36 +1306,6 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 	return spreadsheet;
 }
 
-/*!
-	returns a pointer to a \c Matrix object, if the currently active Mdi-Subwindow
-	or if the currently selected tab in a \c WorkbookView is a \c MatrixView
-	Otherwise returns \c 0.
-*/
-Matrix* MainWin::activeMatrix() const {
-	if (!m_currentAspect)
-		return nullptr;
-
-	Matrix* matrix = nullptr;
-	if (m_currentAspect->type() == AspectType::Matrix)
-		matrix = dynamic_cast<Matrix*>(m_currentAspect);
-
-	return matrix;
-}
-
-/*!
-	returns a pointer to a Worksheet-object, if the currently active Mdi-Subwindow is \a WorksheetView
-	Otherwise returns \a 0.
-*/
-Worksheet* MainWin::activeWorksheet() const {
-	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
-	if (!win)
-		return nullptr;
-
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-	Q_ASSERT(part);
-	return dynamic_cast<Worksheet*>(part);
-}
-
 #ifdef HAVE_CANTOR_LIBS
 /*
     adds a new Cantor Spreadsheet to the project.
@@ -1375,19 +1316,6 @@ void MainWin::newCantorWorksheet(QAction* action) {
 }
 
 /********************************************************************************/
-/*!
-    returns a pointer to a CantorWorksheet-object, if the currently active Mdi-Subwindow is \a CantorWorksheetView
-    Otherwise returns \a 0.
-*/
-CantorWorksheet* MainWin::activeCantorWorksheet() const {
-	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
-	if (!win)
-		return nullptr;
-
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-	Q_ASSERT(part);
-	return dynamic_cast<CantorWorksheet*>(part);
-}
 #endif
 
 /*!
