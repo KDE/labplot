@@ -616,7 +616,7 @@ void FITSHeaderEditWidget::closeFile() {
 		delete current;
 
 		enableButtonAddUnit();
-		emit changed(true);
+		emit changed(false);
 	}
 }
 void FITSHeaderEditWidget::enableButtonAddUnit() {
