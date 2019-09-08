@@ -224,33 +224,6 @@ DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
 	return d->plotImageType;
 }
 
-void DatapickerImage::initSceneParameters() {
-	setRotationAngle(0.0);
-	setminSegmentLength(30);
-	setPointSeparation(30);
-
-	ReferencePoints axisPoints = d->axisPoints;
-	axisPoints.ternaryScale = 1;
-	axisPoints.type = DatapickerImage::Cartesian;
-	setAxisPoints(axisPoints);
-
-	EditorSettings settings;
-	settings.foregroundThresholdHigh = 90;
-	settings.foregroundThresholdLow = 30;
-	settings.hueThresholdHigh = 360;
-	settings.hueThresholdLow = 0;
-	settings.intensityThresholdHigh = 100;
-	settings.intensityThresholdLow = 20;
-	settings.saturationThresholdHigh = 100;
-	settings.saturationThresholdLow = 30;
-	settings.valueThresholdHigh = 90;
-	settings.valueThresholdLow = 30;
-	setSettings(settings);
-
-	DatapickerImage::PointsType plotPointsType = DatapickerImage::AxisPoints;
-	setPlotPointsType(plotPointsType);
-}
-
 /* =============================== getter methods for background options ================================= */
 CLASS_D_READER_IMPL(DatapickerImage, QString, fileName, fileName)
 CLASS_D_READER_IMPL(DatapickerImage, DatapickerImage::ReferencePoints, axisPoints, axisPoints)
@@ -454,10 +427,8 @@ void DatapickerImagePrivate::updateFileName() {
 	const QString& address = fileName.trimmed();
 
 	if (!address.isEmpty()) {
-		if (uploadImage(address)) {
-			q->initSceneParameters();
+		if (uploadImage(address))
 			fileName = address;
-		}
 	} else {
 		//hide segments if they are visible
 		q->m_segments->setSegmentsVisible(false);

@@ -46,10 +46,10 @@ public:
 	QGraphicsScene* m_scene;
 	float rotationAngle{0.0};
 	QString fileName;
-	int pointSeparation{0};
-	int minSegmentLength{0};
+	int pointSeparation{30};
+	int minSegmentLength{30};
 
-	qreal pointRotationAngle;
+	qreal pointRotationAngle{0.0};
 	Symbol::Style pointStyle;
 	QBrush pointBrush;
 	QPen pointPen;
