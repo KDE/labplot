@@ -187,7 +187,7 @@ template <typename T>
 class MatrixSetCellValueCmd : public QUndoCommand {
 public:
 	MatrixSetCellValueCmd(MatrixPrivate* private_obj, int row, int col, T value, QUndoCommand* parent = nullptr)
-			: QUndoCommand(parent), m_private_obj(private_obj), m_row(row), m_col(col), m_value(value) {
+			: QUndoCommand(parent), m_private_obj(private_obj), m_row(row), m_col(col), m_value(value), m_old_value(value) {
 		// remark: don't use many QString::arg() calls in ctors of commands that might be called often,
 		// they use a lot of execution time
 		setText(i18n("%1: set cell value", m_private_obj->name()));

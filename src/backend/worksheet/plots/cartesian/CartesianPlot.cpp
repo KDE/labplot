@@ -2060,7 +2060,7 @@ bool CartesianPlot::scaleAuto() {
 			point.setY(point.y() - errorBarsCapSize);
 			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
 			if (point.y() > d->curvesYMax)
-				d->curvesYMax = point.x();
+				d->curvesYMax = point.y();
 		}
 		d->curvesYMinMaxIsDirty = false;
 	}
