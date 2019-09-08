@@ -1584,16 +1584,6 @@ void XYFitCurvePrivate::recalculate() {
 		return;
 	}
 
-	//check column sizes
-	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
-		fitResult.available = true;
-		fitResult.valid = false;
-		fitResult.status = i18n("Number of x and y data points must be equal.");
-		emit q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
-
 	if (yErrorColumn) {
 		if (yErrorColumn->rowCount() < tmpXDataColumn->rowCount()) {
 			fitResult.available = true;
@@ -1620,32 +1610,34 @@ void XYFitCurvePrivate::recalculate() {
 	}
 	DEBUG("fit range = " << xmin << " .. " << xmax);
 
-	for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
+	int rowCount = qMin(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
+	for (int row = 0; row < rowCount; ++row) {
 		//only copy those data where _all_ values (for x and y and errors, if given) are valid
-		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
-			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
+		if (std::isnan(tmpXDataColumn->valueAt(row)) || std::isnan(tmpYDataColumn->valueAt(row))
+			|| tmpXDataColumn->isMasked(row) || tmpYDataColumn->isMasked(row))
+			continue;
 
-			// only when inside given range
-			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
-				if ((!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) {	// x-y
+		// only when inside given range
+		if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+			if ((!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) {	// x-y
+				xdataVector.append(tmpXDataColumn->valueAt(row));
+				ydataVector.append(tmpYDataColumn->valueAt(row));
+			} else if (!xErrorColumn && yErrorColumn) {	// x-y-dy
+				if (!std::isnan(yErrorColumn->valueAt(row))) {
 					xdataVector.append(tmpXDataColumn->valueAt(row));
 					ydataVector.append(tmpYDataColumn->valueAt(row));
-				} else if (!xErrorColumn && yErrorColumn) {	// x-y-dy
-					if (!std::isnan(yErrorColumn->valueAt(row))) {
-						xdataVector.append(tmpXDataColumn->valueAt(row));
-						ydataVector.append(tmpYDataColumn->valueAt(row));
-						yerrorVector.append(yErrorColumn->valueAt(row));
-					}
-				} else if (xErrorColumn && yErrorColumn) {	// x-y-dx-dy
-					if (!std::isnan(xErrorColumn->valueAt(row)) && !std::isnan(yErrorColumn->valueAt(row))) {
-						xdataVector.append(tmpXDataColumn->valueAt(row));
-						ydataVector.append(tmpYDataColumn->valueAt(row));
-						xerrorVector.append(xErrorColumn->valueAt(row));
-						yerrorVector.append(yErrorColumn->valueAt(row));
-					}
+					yerrorVector.append(yErrorColumn->valueAt(row));
+				}
+			} else if (xErrorColumn && yErrorColumn) {	// x-y-dx-dy
+				if (!std::isnan(xErrorColumn->valueAt(row)) && !std::isnan(yErrorColumn->valueAt(row))) {
+					xdataVector.append(tmpXDataColumn->valueAt(row));
+					ydataVector.append(tmpYDataColumn->valueAt(row));
+					xerrorVector.append(xErrorColumn->valueAt(row));
+					yerrorVector.append(yErrorColumn->valueAt(row));
 				}
 			}
 		}
+
 	}
 	//number of data points to fit
 	const size_t n = xdataVector.size();
