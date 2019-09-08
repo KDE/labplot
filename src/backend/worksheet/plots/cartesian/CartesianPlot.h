@@ -126,6 +126,7 @@ public:
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicPos);
 	void mouseReleaseZoomSelectionMode();
 	void mouseHoverZoomSelectionMode(QPointF logicPos);
+	void mouseHoverOutsideDataRect();
 
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, xRangeFormat, XRangeFormat)
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, yRangeFormat, YRangeFormat)
@@ -284,7 +285,6 @@ private slots:
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChanged();
 	void loadTheme(const QString&);
-	void deselected();
 
 protected:
 	CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
@@ -316,6 +316,7 @@ signals:
 	void mouseReleaseCursorModeSignal();
 	void mouseReleaseZoomSelectionModeSignal();
 	void mouseHoverZoomSelectionModeSignal(QPointF logicalPoint);
+	void mouseHoverOutsideDataRectSignal();
 	void cursorPosChanged(int cursorNumber, double xPos);
 	void curveAdded(const XYCurve*);
 	void curveRemoved(const XYCurve*);

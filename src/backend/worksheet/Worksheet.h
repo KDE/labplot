@@ -133,6 +133,7 @@ public slots:
 	void cartesianPlotMouseMoveCursorMode(int cursorNumber, QPointF logicPos);
 	void cartesianPlotMouseReleaseZoomSelectionMode();
 	void cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos);
+	void cartesianPlotMouseHoverOutsideDataRect();
 	void cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode);
 
 	// slots needed by the cursor

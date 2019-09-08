@@ -1939,6 +1939,15 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 		for (auto* plot : m_worksheet->children<CartesianPlot>() ) {
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
 				plot->navigate(op);
+			else {
+				// check if one of the plots childrend is selected. Do the operation there too.
+				for (auto* child : plot->children<WorksheetElement>()) {
+					if (m_selectedItems.indexOf(child->graphicsItem()) != -1) {
+						plot->navigate(op);
+						break;
+					}
+				}
+			}
 		}
 	} else {
 		for (auto* plot : m_worksheet->children<CartesianPlot>() )

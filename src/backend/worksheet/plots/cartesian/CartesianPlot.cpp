@@ -157,7 +157,6 @@ void CartesianPlot::init() {
 
 	connect(this, &AbstractAspect::aspectAdded, this, &CartesianPlot::childAdded);
 	connect(this, &AbstractAspect::aspectRemoved, this, &CartesianPlot::childRemoved);
-	connect(this, &AbstractAspect::deselected, this, &CartesianPlot::deselected);
 
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
@@ -724,7 +723,7 @@ QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
 void CartesianPlot::navigate(CartesianPlot::NavigationOperation op) {
 	Q_D(CartesianPlot);
 	if (op == ScaleAuto) {
-		if (d->curvesXMinMaxIsDirty || d->curvesYMinMaxIsDirty) {
+		if (d->curvesXMinMaxIsDirty || d->curvesYMinMaxIsDirty || !autoScaleX() || !autoScaleY()) {
 			d->curvesXMinMaxIsDirty = true;
 			d->curvesYMinMaxIsDirty = true;
 		}
@@ -2488,16 +2487,17 @@ void CartesianPlot::mouseHoverZoomSelectionMode(QPointF logicPos) {
 	d->mouseHoverZoomSelectionMode(logicPos);
 }
 
+void CartesianPlot::mouseHoverOutsideDataRect() {
+	Q_D(CartesianPlot);
+	d->mouseHoverOutsideDataRect();
+}
+
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
 void CartesianPlot::visibilityChanged() {
 	Q_D(CartesianPlot);
 	this->setVisible(!d->isVisible());
-}
-
-void CartesianPlot::deselected() {
-	setMouseMode(MouseMode::SelectionMode);
 }
 
 //#####################################################################
@@ -2855,9 +2855,6 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 		newRect.setWidth(w);
 		newRect.setHeight(h);
 		emit q->rectChanged(newRect);
-	} else if (change == QGraphicsItem::ItemSelectedChange) {
-		if (!value.toBool() || q->mouseMode() != CartesianPlot::MouseMode::SelectionMode)
-			q->setMouseMode(CartesianPlot::MouseMode::SelectionMode);
 	}
 	return QGraphicsItem::itemChange(change, value);
 }
@@ -3203,7 +3200,6 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QPointF point = event->pos();
 	QString info;
 	if (dataRect.contains(point)) {
-		m_insideDataRect = true;
 		QPointF logicalPoint = cSystem->mapSceneToLogical(point);
 
 		if ((mouseMode == CartesianPlot::ZoomSelectionMode) ||
@@ -3273,13 +3269,17 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 
 			update();
 		}
-	} else {
-		m_insideDataRect = false;
-		update();
-	}
+	} else
+		emit q->mouseHoverOutsideDataRectSignal();
+
 	q->info(info);
 
 	QGraphicsItem::hoverMoveEvent(event);
+}
+
+void CartesianPlotPrivate::mouseHoverOutsideDataRect() {
+	m_insideDataRect = false;
+	update();
 }
 
 void CartesianPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
@@ -3293,8 +3293,7 @@ void CartesianPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
 
 void CartesianPlotPrivate::mouseHoverZoomSelectionMode(QPointF logicPos) {
 
-	if (!isSelected())
-		return;
+	m_insideDataRect = true;
 
 	if (mouseMode == CartesianPlot::ZoomSelectionMode && !m_selectionBandIsShown) {
 
@@ -3309,7 +3308,6 @@ void CartesianPlotPrivate::mouseHoverZoomSelectionMode(QPointF logicPos) {
 		m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1, CartesianCoordinateSystem::MappingFlag::Limit));
 		m_selectionStartLine.setP2(cSystem->mapLogicalToScene(p2, CartesianCoordinateSystem::MappingFlag::Limit));
 	}
-
 	update(); // because if previous another selection mode was selected, the lines must be deleted
 }
 

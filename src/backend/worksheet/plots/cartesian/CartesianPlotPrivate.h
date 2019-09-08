@@ -50,6 +50,7 @@ public:
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicalPos);
 	void mouseReleaseZoomSelectionMode();
 	void mouseHoverZoomSelectionMode(QPointF logicPos);
+	void mouseHoverOutsideDataRect();
 	void mousePressZoomSelectionMode(QPointF logicalPos);
 	void mousePressCursorMode(int cursorNumber, QPointF logicalPos);
 	void updateCursor();

@@ -252,6 +252,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		connect(plot, &CartesianPlot::mousePressZoomSelectionModeSignal, this, &Worksheet::cartesianPlotMousePressZoomSelectionMode);
 		connect(plot, &CartesianPlot::mouseReleaseZoomSelectionModeSignal, this, &Worksheet::cartesianPlotMouseReleaseZoomSelectionMode);
 		connect(plot, &CartesianPlot::mouseHoverZoomSelectionModeSignal, this, &Worksheet::cartesianPlotMouseHoverZoomSelectionMode);
+		connect(plot, &CartesianPlot::mouseHoverOutsideDataRectSignal, this, &Worksheet::cartesianPlotMouseHoverOutsideDataRect);
 		connect(plot, &CartesianPlot::curveRemoved, this, &Worksheet::curveRemoved);
 		connect(plot, &CartesianPlot::curveAdded, this, &Worksheet::curveAdded);
 		connect(plot, &CartesianPlot::visibleChanged, this, &Worksheet::updateCompleteCursorTreeModel);
@@ -804,6 +805,20 @@ void Worksheet::cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos) {
 	}
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(QObject::sender());
 	plot->mouseHoverZoomSelectionMode(logicPos);
+}
+
+void Worksheet::cartesianPlotMouseHoverOutsideDataRect() {
+	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
+		QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+		for (auto* child : childElements) {
+			CartesianPlot* plot = dynamic_cast<CartesianPlot*>(child);
+			if (plot)
+				plot->mouseHoverOutsideDataRect();
+		}
+		return;
+	}
+	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(QObject::sender());
+	plot->mouseHoverOutsideDataRect();
 }
 
 void Worksheet::cartesianPlotMouseMoveCursorMode(int cursorNumber, QPointF logicPos) {
