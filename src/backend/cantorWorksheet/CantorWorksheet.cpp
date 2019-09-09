@@ -272,7 +272,6 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
-	QString str;
 	bool rc = false;
 
 	while (!reader->atEnd()) {
@@ -290,12 +289,12 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			m_backendName = attribs.value("backend_name").toString().trimmed();
-			if (str.isEmpty())
+			if (m_backendName.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("backend_name").toString());
 		} else if (!preview && reader->name() == "worksheet") {
 			attribs = reader->attributes();
 
-			str = attribs.value("content").toString().trimmed();
+			QString str = attribs.value("content").toString().trimmed();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("content").toString());
 
