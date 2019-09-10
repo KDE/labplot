@@ -180,7 +180,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	KConfig config(m_configPath, KConfig::SimpleConfig);
 	KConfigGroup group = config.group(ui.cbConnection->currentText());
 
-	//close and remove the previos connection, if available
+	//close and remove the previous connection, if available
 	if (m_db.isOpen()) {
 		m_db.close();
 		QSqlDatabase::removeDatabase(m_db.driverName());

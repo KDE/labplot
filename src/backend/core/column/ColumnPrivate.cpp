@@ -1043,7 +1043,7 @@ void ColumnPrivate::updateFormula() {
 void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
 	const Column* column = dynamic_cast<const Column*>(aspect);
 	disconnect(column, nullptr, this, nullptr);
-	//TODO: why is const_cast requried here?!?
+	//TODO: why is const_cast required here?!?
 	int index = m_formulaVariableColumns.indexOf(const_cast<Column*>(column));
 	if (index != -1) {
 		m_formulaVariableColumns[index] = nullptr;
@@ -1415,7 +1415,7 @@ void ColumnPrivate::updateProperties() {
 
 	for (int row = 1; row < rowCount(); row++) {
 		if (!m_owner->isValid(row) || m_owner->isMasked(row)) {
-			// if there is one nonvalid or masked value, the propertie is No, because
+			// if there is one invalid or masked value, the property is No, because
 			// otherwise it's difficult to find the correct index in indexForValue().
 			// You don't know if you should increase the index or decrease it when
 			// you hit an invalid value

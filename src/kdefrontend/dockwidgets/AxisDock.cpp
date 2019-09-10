@@ -516,7 +516,7 @@ void AxisDock::orientationChanged(int index) {
 	if (m_initializing)
 		return;
 
-	//depending on the current orientation we need to update axis possition and labels position
+	//depending on the current orientation we need to update axis position and labels position
 
 	//axis position, map from the current index in the combobox to the enum value in Axis::AxisPosition
 	Axis::AxisPosition axisPosition;

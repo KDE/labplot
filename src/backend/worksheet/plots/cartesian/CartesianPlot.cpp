@@ -2735,7 +2735,7 @@ void CartesianPlotPrivate::retransformScales() {
 // 			}
 		}
 	}
-	// call retransform() on the parent to trigger the update of all axes and curvesю
+	// call retransform() on the parent to trigger the update of all axes and curves.
 	//no need to do this on load since all plots are retransformed again after the project is loaded.
 	if (!q->isLoading())
 		q->retransform();

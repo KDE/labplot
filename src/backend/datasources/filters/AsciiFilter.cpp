@@ -1238,7 +1238,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		for (int n = 0; n < m_actualCols; ++n)
 			spreadsheet->column(n)->addUsedInPlots(plots);
 
-		//supress retransform in the dependent plots
+		//suppress retransform in the dependent plots
 		for (auto* plot : plots)
 			plot->setSuppressDataChangedSignal(true);
 
@@ -1778,7 +1778,7 @@ int AsciiFilterPrivate::prepareToRead(const QString& message) {
 		if (removeQuotesEnabled)
 			valueString.remove(QLatin1Char('"'));
 
-		vectorNames << i18n("value %1").arg(i);
+		vectorNames << i18n("value %1", i);
 		columnModes << AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 		++i;
 	}

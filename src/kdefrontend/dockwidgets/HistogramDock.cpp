@@ -224,7 +224,7 @@ void HistogramDock::init() {
 	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
 
 	QPainter pa;
-	//TODO size of the icon depending on the actuall height of the combobox?
+	//TODO size of the icon depending on the actual height of the combobox?
 	int iconSize = 20;
 	QPixmap pm(iconSize, iconSize);
 	ui.cbSymbolStyle->setIconSize(QSize(iconSize, iconSize));

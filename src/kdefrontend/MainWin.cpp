@@ -523,7 +523,7 @@ void MainWin::initMenus() {
 	m_newCantorWorksheetMenu = new QMenu(i18n("CAS Worksheet"), this);
 	m_newCantorWorksheetMenu->setIcon(QIcon::fromTheme("archive-insert"));
 
-	//"Adding Cantor backends to menue and context menu"
+	//"Adding Cantor backends to menu and context menu"
 	QStringList m_availableBackend = Cantor::Backend::listAvailableBackends();
 	if (m_availableBackend.count() > 0) {
 		unplugActionList(QLatin1String("backends_list"));

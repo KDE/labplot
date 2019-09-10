@@ -105,7 +105,7 @@ Project::Project() : Folder(i18n("Project"), AspectType::Project), d(new Private
 	d->author = group.readEntry("Author", QString());
 
 	//we don't have direct access to the members name and comment
-	//->temporaly disable the undo stack and call the setters
+	//->temporary disable the undo stack and call the setters
 	setUndoAware(false);
 	setIsLoading(true);
 	setName(group.readEntry("Name", i18n("Project")));

@@ -602,7 +602,7 @@ QVector<AspectType> AbstractAspect::dropableOn() const {
  * \brief Load from XML
  *
  * XmlStreamReader supports errors as well as warnings. If only
- * warnings (non-critial errors) occur, this function must return
+ * warnings (non-critical errors) occur, this function must return
  * the reader at the end element corresponding to the current
  * element at the time the function was called.
  *

@@ -933,7 +933,7 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 			column->addUsedInPlots(plots);
 		}
 
-		//supress retransform in the dependent plots
+		//suppress retransform in the dependent plots
 		for (auto* plot : plots)
 			plot->setSuppressDataChangedSignal(true);
 	}

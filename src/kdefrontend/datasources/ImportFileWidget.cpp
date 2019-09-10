@@ -997,7 +997,7 @@ void ImportFileWidget::manageFilters() {
 
 /*!
 	Depending on the selected file type, activates the corresponding options in the data portion tab
-	and populates the combobox with the available pre-defined fllter settings for the selected type.
+	and populates the combobox with the available pre-defined filter settings for the selected type.
 */
 void ImportFileWidget::fileTypeChanged(int index) {
 	Q_UNUSED(index);

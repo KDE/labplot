@@ -107,7 +107,7 @@ private slots:
 	void ternaryScaleChanged(double);
 	void logicalPositionChanged();
 
-	//symbol propeties
+	//symbol properties
 	void pointsStyleChanged(int);
 	void pointsSizeChanged(double);
 	void pointsRotationChanged(int);

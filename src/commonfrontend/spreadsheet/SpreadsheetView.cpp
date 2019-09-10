@@ -700,7 +700,7 @@ void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
 
 	if (column->isNumeric()) {
 		QAction* firstAction = menu->actions().at(1);
-		//TODO: add these menues and syncronize the behavior with the context menu creation
+		//TODO: add these menus and synchronize the behavior with the context menu creation
 		//on the spreadsheet header in eventFilter(),
 // 		menu->insertMenu(firstAction, m_plotDataMenu);
 // 		menu->insertMenu(firstAction, m_analyzePlotMenu);
@@ -1409,7 +1409,7 @@ void SpreadsheetView::maskSelection() {
 	for (auto* column : selectedColumns())
 		column->addUsedInPlots(plots);
 
-	//supress retransform in the dependent plots
+	//suppress retransform in the dependent plots
 	for (auto* plot : plots)
 		plot->setSuppressDataChangedSignal(true);
 
@@ -1443,7 +1443,7 @@ void SpreadsheetView::unmaskSelection() {
 	for (auto* column : selectedColumns())
 		column->addUsedInPlots(plots);
 
-	//supress retransform in the dependent plots
+	//suppress retransform in the dependent plots
 	for (auto* plot : plots)
 		plot->setSuppressDataChangedSignal(true);
 
@@ -1752,7 +1752,7 @@ void SpreadsheetView::sortSpreadsheet() {
 }
 
 /*!
-  Insert an empty column left to the firt selected column
+  Insert an empty column left to the first selected column
 */
 void SpreadsheetView::insertColumnLeft() {
 	insertColumnsLeft(1);

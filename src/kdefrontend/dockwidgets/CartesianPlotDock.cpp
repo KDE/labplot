@@ -301,12 +301,12 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 		ui.leComment->setText(QString());
 	}
 
-	bool symmectric = m_plot->symmetricPadding();
-	ui.lPaddingHorizontalRight->setVisible(!symmectric);
-	ui.sbPaddingRight->setVisible(!symmectric);
-	ui.lPaddingVerticalDown->setVisible(!symmectric);
-	ui.sbPaddingBottom->setVisible(!symmectric);
-	if (symmectric) {
+	bool symmetric = m_plot->symmetricPadding();
+	ui.lPaddingHorizontalRight->setVisible(!symmetric);
+	ui.sbPaddingRight->setVisible(!symmetric);
+	ui.lPaddingVerticalDown->setVisible(!symmetric);
+	ui.sbPaddingBottom->setVisible(!symmetric);
+	if (symmetric) {
 		ui.lPaddingHorizontal->setText(i18n("Horizontal"));
 		ui.lPaddingVertical->setText(i18n("Vertical"));
 	} else {

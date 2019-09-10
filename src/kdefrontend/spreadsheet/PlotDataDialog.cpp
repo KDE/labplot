@@ -132,7 +132,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 
 	//in the grid layout of the scroll area we have on default one row for the x-column,
 	//one row for the separating line and one line for the y-column.
-	//set the height of this default conente as the minimal size of the scroll area.
+	//set the height of this default content as the minimal size of the scroll area.
 	gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
 	int height = 2*ui->cbXColumn->height() + ui->line->height()
 				+ 2*gridLayout->verticalSpacing()
