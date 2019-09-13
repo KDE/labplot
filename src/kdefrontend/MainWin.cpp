@@ -827,6 +827,11 @@ void MainWin::updateGUI() {
 #endif
 
 	const Datapicker* datapicker = dynamic_cast<Datapicker*>(m_currentAspect);
+	if (!datapicker) {
+		if (m_currentAspect->type() == AspectType::DatapickerCurve)
+			datapicker = dynamic_cast<Datapicker*>(m_currentAspect->parentAspect());
+	}
+
 	if (datapicker) {
 		//populate datapicker-menu
 		auto* view = qobject_cast<DatapickerView*>(datapicker->view());
