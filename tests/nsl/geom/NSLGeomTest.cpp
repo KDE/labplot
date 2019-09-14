@@ -244,8 +244,13 @@ void NSLGeomTest::testLineSimMorse() {
 
 	printf("NSLGeomTest::testLineSimMorse(): reading data from file\n");
 	size_t i;
-	for (i = 0; i < N; i++)
-		fscanf(file,"%lf %lf", &xdata[i], &ydata[i]);
+	for (i = 0; i < N; i++) {
+		int num = fscanf(file,"%lf %lf", &xdata[i], &ydata[i]);
+		if (num != 2) {	// failed to read two values
+			printf("ERROR reading data\n");
+			return;
+		}
+	}
 
 	double atol = nsl_geom_linesim_clip_diag_perpoint(xdata.data(), ydata.data(), N);
 	printf("automatic tol clip_diag_perpoint = %.15g\n", atol);
