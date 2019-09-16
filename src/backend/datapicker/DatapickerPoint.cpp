@@ -444,7 +444,6 @@ void DatapickerPointPrivate::paint(QPainter* painter, const QStyleOptionGraphics
 		//TODO: move the initialization of QPen to a parent class later so we don't
 		//need to create it in every paint() call.
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 1, Qt::SolidLine));
-		painter->setOpacity(1.0f);
 		painter->drawPath(itemShape);
 	}
 }
