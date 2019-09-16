@@ -399,6 +399,8 @@ void DatapickerImageWidget::selectFile() {
 	QString formats;
 	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
+		if (f == QLatin1String("*.svg"))
+			continue;
 		formats.isEmpty() ? formats += f : formats += " " + f;
 	}
 	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));

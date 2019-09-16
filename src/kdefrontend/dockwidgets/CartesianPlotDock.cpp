@@ -1070,6 +1070,8 @@ void CartesianPlotDock::selectFile() {
 	QString formats;
 	for (const auto& format : QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
+		if (f == QLatin1String("*.svg"))
+			continue;
 		formats.isEmpty() ? formats += f : formats += ' ' + f;
 	}
 
