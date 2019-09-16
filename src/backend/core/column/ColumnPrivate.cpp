@@ -41,7 +41,7 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode) :
 	switch (mode) {
 	case AbstractColumn::Numeric:
 		m_input_filter = new String2DoubleFilter();
-		m_output_filter = new Double2StringFilter();
+		m_output_filter = new Double2StringFilter('g');
 		m_data = new QVector<double>();
 		break;
 	case AbstractColumn::Integer:
