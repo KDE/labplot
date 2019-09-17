@@ -63,7 +63,8 @@ cp -vf kde/share/icontheme.rcc $INPREFIX/Resources/icontheme.rcc
 # TODO: locale?
 
 # kcharselect data
-cp -v kde/share/kf5/kcharselect/kcharselect-data $INPREFIX/Resources/
+mkdir -p $INPREFIX/Resources/kf5/kcharselect
+cp -v kde/share/kf5/kcharselect/kcharselect-data $INPREFIX/Resources/kf5/kcharselect/
 
 # misc
 cp -v labplot/admin/Info.plist $INPREFIX
