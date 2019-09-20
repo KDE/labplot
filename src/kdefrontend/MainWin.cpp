@@ -1128,12 +1128,12 @@ bool MainWin::save(const QString& fileName) {
 		m_project->setChanged(false);
 		file->close();
 
-		//move the temp file to the actual target file
-		QDir dir;
+		// target file must not exist
 		if (QFile::exists(fileName))
-			dir.remove(fileName);
+			QFile::remove(fileName);
 
-		bool rc = dir.rename(tempFileName, fileName);
+		// do not rename temp file. Qt still holds a handle (which fails renaming on Windows) and deletes it
+		bool rc = QFile::copy(tempFileName, fileName);
 		if (rc) {
 			setCaption(m_project->name());
 			statusBar()->showMessage(i18n("Project saved"));
