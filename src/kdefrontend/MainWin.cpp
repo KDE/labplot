@@ -1093,7 +1093,7 @@ bool MainWin::saveProjectAs() {
  * auxiliary function that does the actual saving of the project
  */
 bool MainWin::save(const QString& fileName) {
-	QTemporaryFile tempFile(QLatin1String("labplot_save_XXXXXX"));
+	QTemporaryFile tempFile(QDir::tempPath() + "/" + QLatin1String("labplot_save_XXXXXX"));
 	if (!tempFile.open()) {
 		KMessageBox::error(this, i18n("Couldn't open the temporary file for writing."));
 		return false;
@@ -1101,6 +1101,8 @@ bool MainWin::save(const QString& fileName) {
 
 	WAIT_CURSOR;
 	const QString& tempFileName = tempFile.fileName();
+	DEBUG("Using temporary file " << tempFileName.toStdString())
+	tempFile.close();
 
 	// use file ending to find out how to compress file
 	QIODevice* file;
