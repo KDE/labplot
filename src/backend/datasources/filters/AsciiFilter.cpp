@@ -468,27 +468,12 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		return 1;
 
 /////////////////////////////////////////////////////////////////
-	// Find first data line (ignoring comment lines)
-	DEBUG("	Skipping " << startRow - 1 << " lines");
-	for (int i = 0; i < startRow - 1; ++i) {
-		QString line;
-		if (!device.canReadLine())
-			DEBUG("WARNING in AsciiFilterPrivate::prepareDeviceToRead(): device cannot 'readLine()' but using it anyway.");
-		line = device.readLine();
-		DEBUG("	line = " << line.toStdString());
-
-		if (device.atEnd()) {
-			if (device.isSequential())
-				break;
-			else
-				return 1;
-		}
-	}
-
 	// Parse the first line:
 	// Determine the number of columns, create the columns and use (if selected) the first row to name them
 	QString firstLine;
-	do {	// skip comment lines
+
+	// skip the comment lines first
+	do {
 		if (!device.canReadLine())
 			DEBUG("WARNING in AsciiFilterPrivate::prepareDeviceToRead(): device cannot 'readLine()' but using it anyway.");
 
@@ -502,6 +487,24 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 		firstLine = device.readLine();
 	} while (!commentCharacter.isEmpty() && firstLine.startsWith(commentCharacter));
+
+	// navigate to the line where we asked to start reading from
+	DEBUG("	Skipping " << startRow - 1 << " lines");
+	for (int i = 0; i < startRow - 1; ++i) {
+		if (!device.canReadLine())
+			DEBUG("WARNING in AsciiFilterPrivate::prepareDeviceToRead(): device cannot 'readLine()' but using it anyway.");
+
+		if (device.atEnd()) {
+			DEBUG("device at end! Giving up.");
+			if (device.isSequential())
+				break;
+			else
+				return 1;
+		}
+
+		firstLine = device.readLine();
+		DEBUG("	line = " << firstLine.toStdString());
+	}
 
 	DEBUG(" device position after first line and comments = " << device.pos());
 	firstLine.remove(QRegExp("[\\n\\r]"));	// remove any newline

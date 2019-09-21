@@ -82,6 +82,7 @@ private slots:
 	//handling of NANs
 
 	//automatically skip comments
+	void testComments00();
 
 private:
 	QString m_dataDir;
