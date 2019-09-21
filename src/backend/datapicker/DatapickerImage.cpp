@@ -279,7 +279,6 @@ void DatapickerImage::setPointStyle(Symbol::Style newStyle) {
 		exec(new DatapickerImageSetPointStyleCmd(d, newStyle, ki18n("%1: set point's style")));
 }
 
-
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointSize, qreal, pointSize, retransform)
 void DatapickerImage::setPointSize(qreal value) {
 	if (!qFuzzyCompare(1 + value, 1 + d->pointSize))

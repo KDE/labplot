@@ -4,7 +4,7 @@
     Description          : Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2019 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -246,7 +246,7 @@ void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
 		m_image->setAxisPoints(points);
 	} else if (datapickerCurve) {
 		newPoint->initErrorBar(datapickerCurve->curveErrorTypes());
-		datapickerCurve->updateData(newPoint);
+		datapickerCurve->updatePoint(newPoint);
 	}
 
 	endMacro();
@@ -265,8 +265,8 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const auto* curve = qobject_cast<const DatapickerCurve*>(aspect);
 	if (curve) {
 		//clear scene
-		QVector<DatapickerPoint*> childPoints = curve->children<DatapickerPoint>(IncludeHidden);
-		for (auto* point : childPoints)
+		auto points = curve->children<DatapickerPoint>(IncludeHidden);
+		for (auto* point : points)
 			handleChildAspectAboutToBeRemoved(point);
 
 		if (curve == m_activeCurve) {
@@ -285,15 +285,16 @@ void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
 	if (addedPoint)
 		handleChildAspectAdded(addedPoint);
 	else if (curve) {
-		QVector<DatapickerPoint*> childPoints = curve->children<DatapickerPoint>(IncludeHidden);
-		for (auto* point : childPoints)
+		connect(m_image, &DatapickerImage::axisPointsChanged, curve, &DatapickerCurve::updatePoints);
+		auto points = curve->children<DatapickerPoint>(IncludeHidden);
+		for (auto* point : points)
 			handleChildAspectAdded(point);
 	} else
 		return;
 
 	qreal zVal = 0;
-	QVector<DatapickerPoint*> childPoints = m_image->children<DatapickerPoint>(IncludeHidden);
-	for (auto* point : childPoints)
+	auto points = m_image->children<DatapickerPoint>(IncludeHidden);
+	for (auto* point : points)
 		point->graphicsItem()->setZValue(zVal++);
 
 	for (const auto* curve : children<DatapickerCurve>()) {

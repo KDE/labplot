@@ -37,7 +37,7 @@ public:
 	QString name() const;
 	void retransform();
 	virtual void recalcShapeAndBoundingRect();
-	void updateData();
+	void updatePoint();
 	void updatePropeties();
 	void retransformErrorBar();
 

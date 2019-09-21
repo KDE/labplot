@@ -227,7 +227,7 @@ void DatapickerPoint::setPosition(const QPointF& pos) {
 		exec(new DatapickerPointSetPositionCmd(d, pos, ki18n("%1: set position")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaXPos, QPointF, plusDeltaXPos, updateData)
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaXPos, QPointF, plusDeltaXPos, updatePoint)
 void DatapickerPoint::setPlusDeltaXPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->plusDeltaXPos) {
@@ -245,7 +245,7 @@ void DatapickerPoint::setPlusDeltaXPos(const QPointF& pos) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaXPos, QPointF, minusDeltaXPos, updateData)
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaXPos, QPointF, minusDeltaXPos, updatePoint)
 void DatapickerPoint::setMinusDeltaXPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->minusDeltaXPos) {
@@ -263,7 +263,7 @@ void DatapickerPoint::setMinusDeltaXPos(const QPointF& pos) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaYPos, QPointF, plusDeltaYPos, updateData)
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaYPos, QPointF, plusDeltaYPos, updatePoint)
 void DatapickerPoint::setPlusDeltaYPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->plusDeltaYPos) {
@@ -281,7 +281,7 @@ void DatapickerPoint::setPlusDeltaYPos(const QPointF& pos) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaYPos, QPointF, minusDeltaYPos, updateData)
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaYPos, QPointF, minusDeltaYPos, updatePoint)
 void DatapickerPoint::setMinusDeltaYPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->minusDeltaYPos) {
@@ -328,7 +328,7 @@ void DatapickerPointPrivate::retransform() {
 	boundingRectangle = path.boundingRect();
 	recalcShapeAndBoundingRect();
 	retransformErrorBar();
-	updateData();
+	updatePoint();
 }
 
 /*!
@@ -347,10 +347,10 @@ void DatapickerPointPrivate::retransformErrorBar() {
 /*!
   update datasheet on any change in position of Datapicker-Point or it's error-bar.
 */
-void DatapickerPointPrivate::updateData() {
+void DatapickerPointPrivate::updatePoint() {
 	auto* curve = dynamic_cast<DatapickerCurve*>(q->parentAspect());
 	if (curve)
-		curve->updateData(q);
+		curve->updatePoint(q);
 }
 
 void DatapickerPointPrivate::updatePropeties() {
