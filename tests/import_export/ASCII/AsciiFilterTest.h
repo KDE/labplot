@@ -83,6 +83,7 @@ private slots:
 
 	//automatically skip comments
 	void testComments00();
+	void testComments01();
 
 private:
 	QString m_dataDir;

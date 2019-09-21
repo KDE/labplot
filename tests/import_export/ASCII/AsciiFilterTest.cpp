@@ -772,7 +772,29 @@ void AsciiFilterTest::testComments00() {
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
 	filter.setSeparatingCharacter(",");
-	filter.setStartRow(2);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	QCOMPARE(spreadsheet.columnCount(), 2);
+
+	//data types
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+
+	//values
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.1);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 2.2);
+}
+
+void AsciiFilterTest::testComments01() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "multi_line_comment_with_empty_lines.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter(",");
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
 	QCOMPARE(spreadsheet.columnCount(), 2);

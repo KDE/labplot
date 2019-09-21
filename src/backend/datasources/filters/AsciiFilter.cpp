@@ -473,20 +473,22 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	QString firstLine;
 
 	// skip the comment lines first
-	do {
-		if (!device.canReadLine())
-			DEBUG("WARNING in AsciiFilterPrivate::prepareDeviceToRead(): device cannot 'readLine()' but using it anyway.");
+	if (!commentCharacter.isEmpty()) {
+		do {
+			if (!device.canReadLine())
+				DEBUG("WARNING in AsciiFilterPrivate::prepareDeviceToRead(): device cannot 'readLine()' but using it anyway.");
 
-		if (device.atEnd()) {
-			DEBUG("device at end! Giving up.");
-			if (device.isSequential())
-				break;
-			else
-				return 1;
-		}
+			if (device.atEnd()) {
+				DEBUG("device at end! Giving up.");
+				if (device.isSequential())
+					break;
+				else
+					return 1;
+			}
 
-		firstLine = device.readLine();
-	} while (!commentCharacter.isEmpty() && firstLine.startsWith(commentCharacter));
+			firstLine = device.readLine();
+		} while (firstLine.startsWith(commentCharacter) || firstLine.simplified().isEmpty());
+	}
 
 	// navigate to the line where we asked to start reading from
 	DEBUG("	Skipping " << startRow - 1 << " lines");
