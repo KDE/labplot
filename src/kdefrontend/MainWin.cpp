@@ -734,6 +734,8 @@ void MainWin::updateGUI() {
 
 	//Handle the Worksheet-object
 	const Worksheet* w = dynamic_cast<Worksheet*>(m_currentAspect);
+	if (!w)
+		w = dynamic_cast<Worksheet*>(m_currentAspect->parent(AspectType::Worksheet));
 	if (w) {
 		//populate worksheet menu
 		auto* view = qobject_cast<WorksheetView*>(w->view());
@@ -775,6 +777,8 @@ void MainWin::updateGUI() {
 
 	//Handle the Spreadsheet-object
 	const auto* spreadsheet = this->activeSpreadsheet();
+	if (!spreadsheet)
+		spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parent(AspectType::Spreadsheet));
 	if (spreadsheet) {
 		//populate spreadsheet-menu
 		auto* view = qobject_cast<SpreadsheetView*>(spreadsheet->view());
@@ -796,6 +800,8 @@ void MainWin::updateGUI() {
 
 	//Handle the Matrix-object
 	const  Matrix* matrix = dynamic_cast<Matrix*>(m_currentAspect);
+	if (!matrix)
+		matrix = dynamic_cast<Matrix*>(m_currentAspect->parent(AspectType::Matrix));
 	if (matrix) {
 		//populate matrix-menu
 		auto* view = qobject_cast<MatrixView*>(matrix->view());
@@ -808,6 +814,8 @@ void MainWin::updateGUI() {
 
 #ifdef HAVE_CANTOR_LIBS
 	const CantorWorksheet* cantorworksheet = dynamic_cast<CantorWorksheet*>(m_currentAspect);
+	if (!cantorworksheet)
+		cantorworksheet = dynamic_cast<CantorWorksheet*>(m_currentAspect->parent(AspectType::CantorWorksheet));
 	if (cantorworksheet) {
 		auto* view = qobject_cast<CantorWorksheetView*>(cantorworksheet->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container("cas_worksheet", this));
@@ -827,6 +835,8 @@ void MainWin::updateGUI() {
 #endif
 
 	const Datapicker* datapicker = dynamic_cast<Datapicker*>(m_currentAspect);
+	if (!datapicker)
+		datapicker = dynamic_cast<Datapicker*>(m_currentAspect->parent(AspectType::Datapicker));
 	if (!datapicker) {
 		if (m_currentAspect->type() == AspectType::DatapickerCurve)
 			datapicker = dynamic_cast<Datapicker*>(m_currentAspect->parentAspect());
