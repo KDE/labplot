@@ -605,7 +605,11 @@ void LabelWidget::teXFontChanged(const QFont& font) {
 void LabelWidget::charMenu() {
 	QMenu menu;
 	KCharSelect selection(this, nullptr, KCharSelect::SearchLine | KCharSelect::CharacterTable | KCharSelect::BlockCombos | KCharSelect::HistoryButtons);
-	selection.setCurrentFont(ui.teLabel->currentFont());
+	QFont font = ui.teLabel->currentFont();
+	// use the system default size, otherwise the symbols might be hard to read
+	// if the current label font size is too small
+	font.setPointSize(QFont().pointSize());
+	selection.setCurrentFont(font);
 	connect(&selection, SIGNAL(charSelected(QChar)), this, SLOT(insertChar(QChar)));
 	connect(&selection, SIGNAL(charSelected(QChar)), &menu, SLOT(close()));
 
