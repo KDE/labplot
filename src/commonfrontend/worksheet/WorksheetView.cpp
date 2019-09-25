@@ -389,10 +389,13 @@ void WorksheetView::initActions() {
 	handleCartesianPlotActions();
 	currentZoomAction = zoomInViewAction;
 	currentMagnificationAction = noMagnificationAction;
+
+	m_actionsInitialized = true;
 }
 
 void WorksheetView::initMenus() {
-	initActions();
+	if (!m_actionsInitialized)
+		initActions();
 
 	m_addNewCartesianPlotMenu = new QMenu(i18n("xy-plot"), this);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot1Action);
@@ -1156,6 +1159,9 @@ void WorksheetView::dropEvent(QDropEvent* event) {
 //####################################  SLOTs   ################################
 //##############################################################################
 void WorksheetView::useViewSizeRequested() {
+	if (!m_actionsInitialized)
+		initActions();
+
 	if (m_worksheet->useViewSize()) {
 		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

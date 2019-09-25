@@ -76,8 +76,8 @@ public:
 	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode();
 	void registerShortcuts();
 	void unregisterShortcuts();
-private:
 
+private:
 	void initBasicActions();
 	void initActions();
 	void initMenus();
@@ -118,6 +118,7 @@ private:
 	QTimeLine* m_fadeInTimeLine{nullptr};
 	QTimeLine* m_fadeOutTimeLine{nullptr};
 	bool m_isClosing{false};
+	bool m_actionsInitialized{false};
 	bool m_menusInitialized{false};
 	int m_numScheduledScalings{0};
 	bool m_suppressMouseModeChange{false};
@@ -147,109 +148,109 @@ private:
 	QAction* currentMagnificationAction{nullptr};
 
 	//Actions
-	QAction* selectAllAction;
-	QAction* deleteAction;
-	QAction* backspaceAction;
+	QAction* selectAllAction{nullptr};
+	QAction* deleteAction{nullptr};
+	QAction* backspaceAction{nullptr};
 
-	QAction* zoomInViewAction;
-	QAction* zoomOutViewAction;
-	QAction* zoomOriginAction;
-	QAction* zoomFitPageHeightAction;
-	QAction* zoomFitPageWidthAction;
-	QAction* zoomFitSelectionAction;
+	QAction* zoomInViewAction{nullptr};
+	QAction* zoomOutViewAction{nullptr};
+	QAction* zoomOriginAction{nullptr};
+	QAction* zoomFitPageHeightAction{nullptr};
+	QAction* zoomFitPageWidthAction{nullptr};
+	QAction* zoomFitSelectionAction{nullptr};
 
-	QAction* navigationModeAction;
-	QAction* zoomSelectionModeAction;
-	QAction* selectionModeAction;
+	QAction* navigationModeAction{nullptr};
+	QAction* zoomSelectionModeAction{nullptr};
+	QAction* selectionModeAction{nullptr};
 
-	QAction* addCartesianPlot1Action;
-	QAction* addCartesianPlot2Action;
-	QAction* addCartesianPlot3Action;
-	QAction* addCartesianPlot4Action;
-	QAction* addTextLabelAction;
-	QAction* addHistogram;
-	QAction* addBarChartPlot;
+	QAction* addCartesianPlot1Action{nullptr};
+	QAction* addCartesianPlot2Action{nullptr};
+	QAction* addCartesianPlot3Action{nullptr};
+	QAction* addCartesianPlot4Action{nullptr};
+	QAction* addTextLabelAction{nullptr};
+	QAction* addHistogram{nullptr};
+	QAction* addBarChartPlot{nullptr};
 
-	QAction* verticalLayoutAction;
-	QAction* horizontalLayoutAction;
-	QAction* gridLayoutAction;
-	QAction* breakLayoutAction;
+	QAction* verticalLayoutAction{nullptr};
+	QAction* horizontalLayoutAction{nullptr};
+	QAction* gridLayoutAction{nullptr};
+	QAction* breakLayoutAction{nullptr};
 
-	QAction* noGridAction;
-	QAction* denseLineGridAction;
-	QAction* sparseLineGridAction;
-	QAction* denseDotGridAction;
-	QAction* sparseDotGridAction;
-	QAction* customGridAction;
-	QAction* snapToGridAction;
+	QAction* noGridAction{nullptr};
+	QAction* denseLineGridAction{nullptr};
+	QAction* sparseLineGridAction{nullptr};
+	QAction* denseDotGridAction{nullptr};
+	QAction* sparseDotGridAction{nullptr};
+	QAction* customGridAction{nullptr};
+	QAction* snapToGridAction{nullptr};
 
-	QAction* noMagnificationAction;
-	QAction* twoTimesMagnificationAction;
-	QAction* threeTimesMagnificationAction;
-	QAction* fourTimesMagnificationAction;
-	QAction* fiveTimesMagnificationAction;
+	QAction* noMagnificationAction{nullptr};
+	QAction* twoTimesMagnificationAction{nullptr};
+	QAction* threeTimesMagnificationAction{nullptr};
+	QAction* fourTimesMagnificationAction{nullptr};
+	QAction* fiveTimesMagnificationAction{nullptr};
 
-	QAction* plotsLockedAction;
-	QAction* showPresenterMode;
+	QAction* plotsLockedAction{nullptr};
+	QAction* showPresenterMode{nullptr};
 
 	//Actions for cartesian plots
-	QAction* cartesianPlotApplyToSelectionAction;
-	QAction* cartesianPlotApplyToAllAction;
-	QAction* cartesianPlotApplyToAllCursor;
-	QAction* cartesianPlotApplyToSelectionCursor;
-	QAction* cartesianPlotSelectionModeAction;
-	QAction* cartesianPlotZoomSelectionModeAction;
-	QAction* cartesianPlotZoomXSelectionModeAction;
-	QAction* cartesianPlotZoomYSelectionModeAction;
-	QAction* cartesianPlotCursorModeAction;
+	QAction* cartesianPlotApplyToSelectionAction{nullptr};
+	QAction* cartesianPlotApplyToAllAction{nullptr};
+	QAction* cartesianPlotApplyToAllCursor{nullptr};
+	QAction* cartesianPlotApplyToSelectionCursor{nullptr};
+	QAction* cartesianPlotSelectionModeAction{nullptr};
+	QAction* cartesianPlotZoomSelectionModeAction{nullptr};
+	QAction* cartesianPlotZoomXSelectionModeAction{nullptr};
+	QAction* cartesianPlotZoomYSelectionModeAction{nullptr};
+	QAction* cartesianPlotCursorModeAction{nullptr};
 
-	QAction* addCurveAction;
-	QAction* addHistogramAction;
-	QAction* addEquationCurveAction;
-	QAction* addDataOperationCurveAction;
-	QAction* addDataReductionCurveAction;
-	QAction* addDifferentiationCurveAction;
-	QAction* addIntegrationCurveAction;
-	QAction* addInterpolationCurveAction;
-	QAction* addSmoothCurveAction;
-	QAction* addFitCurveAction;
-	QAction* addFourierFilterCurveAction;
-	QAction* addFourierTransformCurveAction;
-	QAction* addConvolutionCurveAction;
-	QAction* addCorrelationCurveAction;
+	QAction* addCurveAction{nullptr};
+	QAction* addHistogramAction{nullptr};
+	QAction* addEquationCurveAction{nullptr};
+	QAction* addDataOperationCurveAction{nullptr};
+	QAction* addDataReductionCurveAction{nullptr};
+	QAction* addDifferentiationCurveAction{nullptr};
+	QAction* addIntegrationCurveAction{nullptr};
+	QAction* addInterpolationCurveAction{nullptr};
+	QAction* addSmoothCurveAction{nullptr};
+	QAction* addFitCurveAction{nullptr};
+	QAction* addFourierFilterCurveAction{nullptr};
+	QAction* addFourierTransformCurveAction{nullptr};
+	QAction* addConvolutionCurveAction{nullptr};
+	QAction* addCorrelationCurveAction{nullptr};
 
-	QAction* addHorizontalAxisAction;
-	QAction* addVerticalAxisAction;
-	QAction* addLegendAction;
-	QAction* addPlotTextLabelAction;
-	QAction* addCustomPointAction;
+	QAction* addHorizontalAxisAction{nullptr};
+	QAction* addVerticalAxisAction{nullptr};
+	QAction* addLegendAction{nullptr};
+	QAction* addPlotTextLabelAction{nullptr};
+	QAction* addCustomPointAction{nullptr};
 
-	QAction* scaleAutoXAction;
-	QAction* scaleAutoYAction;
-	QAction* scaleAutoAction;
-	QAction* zoomInAction;
-	QAction* zoomOutAction;
-	QAction* zoomInXAction;
-	QAction* zoomOutXAction;
-	QAction* zoomInYAction;
-	QAction* zoomOutYAction;
-	QAction* shiftLeftXAction;
-	QAction* shiftRightXAction;
-	QAction* shiftUpYAction;
-	QAction* shiftDownYAction;
+	QAction* scaleAutoXAction{nullptr};
+	QAction* scaleAutoYAction{nullptr};
+	QAction* scaleAutoAction{nullptr};
+	QAction* zoomInAction{nullptr};
+	QAction* zoomOutAction{nullptr};
+	QAction* zoomInXAction{nullptr};
+	QAction* zoomOutXAction{nullptr};
+	QAction* zoomInYAction{nullptr};
+	QAction* zoomOutYAction{nullptr};
+	QAction* shiftLeftXAction{nullptr};
+	QAction* shiftRightXAction{nullptr};
+	QAction* shiftUpYAction{nullptr};
+	QAction* shiftDownYAction{nullptr};
 
 	// Analysis menu
-	QAction* addDataOperationAction;
-	QAction* addDataReductionAction;
-	QAction* addDifferentiationAction;
-	QAction* addIntegrationAction;
-	QAction* addInterpolationAction;
-	QAction* addSmoothAction;
-	QAction* addFitAction;
-	QAction* addFourierFilterAction;
-	QAction* addFourierTransformAction;
-	QAction* addConvolutionAction;
-	QAction* addCorrelationAction;
+	QAction* addDataOperationAction{nullptr};
+	QAction* addDataReductionAction{nullptr};
+	QAction* addDifferentiationAction{nullptr};
+	QAction* addIntegrationAction{nullptr};
+	QAction* addInterpolationAction{nullptr};
+	QAction* addSmoothAction{nullptr};
+	QAction* addFitAction{nullptr};
+	QAction* addFourierFilterAction{nullptr};
+	QAction* addFourierTransformAction{nullptr};
+	QAction* addConvolutionAction{nullptr};
+	QAction* addCorrelationAction{nullptr};
 
 public slots:
 	void createContextMenu(QMenu*);
