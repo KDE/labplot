@@ -647,7 +647,7 @@ void LabelWidget::dateTimeMenu() {
 		m_dateTimeMenu->addAction( time.toString(Qt::SystemLocaleLongDate) );
 		m_dateTimeMenu->addAction( time.toString(Qt::RFC2822Date) );
 	} else {
-		//aplication language was changed:
+		//application language was changed:
 		//determine the currently used language and use QLocale::toString()
 		//to get the strings translated into the currently used language
 		QSettings settings (configFile, QSettings::IniFormat);
