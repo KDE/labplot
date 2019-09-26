@@ -49,6 +49,7 @@ void CursorDock::setWorksheet(Worksheet* worksheet) {
 	m_initializing = true;
 
 	ui->tvCursorData->setModel(worksheet->cursorModel());
+	ui->tvCursorData->resizeColumnToContents(0);
 	m_plotList = worksheet->children<CartesianPlot>();
 	m_plot = m_plotList.first();
 

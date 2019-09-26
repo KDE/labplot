@@ -1191,7 +1191,7 @@ void Worksheet::updateCompleteCursorTreeModel() {
 //######################  Private implementation ###############################
 //##############################################################################
 WorksheetPrivate::WorksheetPrivate(Worksheet* owner) : q(owner), m_scene(new QGraphicsScene()) {
-	QStringList headers = {i18n("Plot/Curve"), "V1", "V2", "V2-V1"};
+	QStringList headers = {i18n("Curves"), "V1", "V2", "V2-V1"};
 	cursorData = new TreeModel(headers, nullptr);
 }
 
