@@ -8,7 +8,9 @@ fi
 
 cd $BUILDDIR
 
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
+#cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
+# disable Cantor support since 19.08.1 crashes LP in Cantor::Backend::AvailableBackends()
+cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_CANTOR=OFF -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
 #cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
 # cmake -DCMAKE_BUILD_TYPE=DebugFull -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
 
