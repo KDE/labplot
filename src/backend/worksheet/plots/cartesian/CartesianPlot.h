@@ -210,7 +210,6 @@ private:
 	QAction* shiftRightXAction;
 	QAction* shiftUpYAction;
 	QAction* shiftDownYAction;
-	QAction* cursorAction;
 
 	//analysis menu actions
 	QAction* addDataOperationAction;
@@ -219,7 +218,7 @@ private:
 	QAction* addIntegrationAction;
 	QAction* addInterpolationAction;
 	QAction* addSmoothAction;
-	QVector <QAction *> addFitAction;
+	QVector <QAction*> addFitAction;
 	QAction* addFourierFilterAction;
 	QAction* addFourierTransformAction;
 	QAction* addConvolutionAction;

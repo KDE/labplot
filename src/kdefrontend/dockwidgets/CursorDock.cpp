@@ -38,6 +38,12 @@ CursorDock::CursorDock(QWidget* parent) : QWidget(parent), ui(new Ui::CursorDock
 	ui->setupUi(this);
 	ui->tvCursorData->setModel(nullptr);
 
+	ui->bCollapseAll->setIcon(QIcon::fromTheme(QLatin1String("collapse-all")));
+	ui->bExpandAll->setIcon(QIcon::fromTheme(QLatin1String("expand-all")));
+
+	ui->bCollapseAll->setToolTip(i18n("Collapse all curves"));
+	ui->bExpandAll->setToolTip(i18n("Expand all curves"));
+
 	connect(ui->bCollapseAll, &QPushButton::clicked, this, &CursorDock::collapseAll);
 	connect(ui->bExpandAll, &QPushButton::clicked, this, &CursorDock::expandAll);
 

@@ -531,7 +531,6 @@ void CartesianPlot::initActions() {
 	shiftRightXAction = new QAction(QIcon::fromTheme("labplot-shift-right-x"), i18n("Shift Right X"), this);
 	shiftUpYAction = new QAction(QIcon::fromTheme("labplot-shift-up-y"), i18n("Shift Up Y"), this);
 	shiftDownYAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("Shift Down Y"), this);
-	cursorAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("Cursor"), this); // TODO: change icon
 
 	connect(scaleAutoAction, &QAction::triggered, this, &CartesianPlot::scaleAutoTriggered);
 	connect(scaleAutoXAction, &QAction::triggered, this, &CartesianPlot::scaleAutoTriggered);
@@ -546,7 +545,6 @@ void CartesianPlot::initActions() {
 	connect(shiftRightXAction, &QAction::triggered, this, &CartesianPlot::shiftRightX);
 	connect(shiftUpYAction, &QAction::triggered, this, &CartesianPlot::shiftUpY);
 	connect(shiftDownYAction, &QAction::triggered, this, &CartesianPlot::shiftDownY);
-	connect(cursorAction, &QAction::triggered, this, &CartesianPlot::cursor);
 
 	//visibility action
 	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);

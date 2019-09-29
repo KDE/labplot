@@ -281,7 +281,6 @@ void WorksheetView::initActions() {
 	setCartesianPlotCursorMode(m_worksheet->cartesianPlotCursorMode());
 	connect(cartesianPlotActionCursorGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotCursorModeChanged(QAction*)));
 
-
 	auto* cartesianPlotMouseModeActionGroup = new QActionGroup(this);
 	cartesianPlotMouseModeActionGroup->setExclusive(true);
 	cartesianPlotSelectionModeAction = new QAction(QIcon::fromTheme("labplot-cursor-arrow"), i18n("Select and Edit"), cartesianPlotMouseModeActionGroup);
@@ -298,7 +297,7 @@ void WorksheetView::initActions() {
 	cartesianPlotZoomYSelectionModeAction->setCheckable(true);
 
 	// TODO: change ICON
-	cartesianPlotCursorModeAction = new QAction(QIcon::fromTheme("labplot-cursor"),i18n("Cursor"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotCursorModeAction = new QAction(QIcon::fromTheme("debug-execute-from-cursor"), i18n("Cursor"), cartesianPlotMouseModeActionGroup);
 	cartesianPlotCursorModeAction->setCheckable(true);
 
 	connect(cartesianPlotMouseModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotMouseModeChanged(QAction*)));
