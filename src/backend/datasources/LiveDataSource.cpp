@@ -697,7 +697,7 @@ void LiveDataSource::plotData() {
   Saves as XML.
  */
 void LiveDataSource::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("LiveDataSource");
+	writer->writeStartElement("liveDataSource");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
@@ -756,7 +756,7 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 			col->save(writer);
 	}
 
-	writer->writeEndElement(); // "LiveDataSource"
+	writer->writeEndElement(); // "liveDataSource"
 }
 
 /*!
@@ -772,7 +772,8 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "LiveDataSource")
+		if (reader->isEndElement()
+			&& (reader->name() == "liveDataSource" || reader->name() == "LiveDataSource")) //TODO: remove "LiveDataSources" in couple of releases
 			break;
 
 		if (!reader->isStartElement())
