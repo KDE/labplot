@@ -70,6 +70,7 @@
 #include <QPainter>
 #include <QWidgetAction>
 
+#include <array>
 #include <cmath>
 
 #include <KConfig>
