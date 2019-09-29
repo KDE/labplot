@@ -106,7 +106,7 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 // 	listItem->setData("file_download_theme", Qt::UserRole);
 // 	mContentItemModel->appendRow(listItem);
 
-	setModel(mContentItemModel);
+	QListView::setModel(mContentItemModel);
 
 	//resize the widget to show three items
 	QFont font;
