@@ -45,6 +45,7 @@ extern "C" {
 #include <gsl/gsl_sort.h>
 }
 
+#include <array>
 #include <QFont>
 #include <QFontMetrics>
 #include <QIcon>
