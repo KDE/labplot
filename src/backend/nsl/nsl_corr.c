@@ -138,6 +138,10 @@ int nsl_corr_fft_type(double s[], size_t n, double r[], size_t m, nsl_corr_type_
 #ifdef HAVE_FFTW3
 int nsl_corr_fft_FFTW(double s[], double r[], size_t n, double out[]) {
 	size_t i;
+
+	if (n == 0)
+		return -1;
+
 	const size_t size = 2*(n/2+1);
 	double* in = (double*)malloc(size*sizeof(double));
 	fftw_plan rpf = fftw_plan_dft_r2c_1d(n, in, (fftw_complex*)in, FFTW_ESTIMATE);

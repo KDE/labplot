@@ -256,6 +256,7 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 	}
 	double hit_rate;
 	status = H5Fget_mdc_hit_rate(file, &hit_rate);
+	Q_UNUSED(status);
 	info += i18n("Metadata cache hit rate: %1", QString::number(hit_rate));
 	info += QLatin1String("<br>");
 	//TODO: herr_t H5Fget_mdc_image_info(hid_t file_id, haddr_t *image_addr, hsize_t *image_len)
@@ -647,6 +648,9 @@ template <typename T>
 QVector<QStringList> HDF5FilterPrivate::readHDF5Data2D(hid_t dataset, hid_t type, int rows, int cols, int lines, QVector<void*>& dataPointer) {
 	DEBUG("readHDF5Data2D() rows = " << rows << ", cols =" << cols << ", lines =" << lines);
 	QVector<QStringList> dataStrings;
+
+	if (rows == 0 || cols == 0)
+		return dataStrings;
 
 	T** data = (T**) malloc(rows*sizeof(T*));
 	data[0] = (T*) malloc(cols*rows*sizeof(T));

@@ -315,6 +315,7 @@ void DropValuesDialog::maskValues() const {
 		task->run();
 		//TODO: writing to the undo-stack in Column::setMasked() is not tread-safe -> redesign
 // 		QThreadPool::globalInstance()->start(task);
+		delete task;
 	}
 
 	//wait until all columns were processed

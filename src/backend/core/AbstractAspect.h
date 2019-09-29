@@ -184,7 +184,7 @@ public:
 				if (i)
 					result << i;
 
-				if (flags & Recursive)
+				if (child && flags & Recursive)
 					result << child->template children<T>(flags);
 			}
 		}
