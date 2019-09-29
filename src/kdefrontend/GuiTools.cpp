@@ -30,6 +30,7 @@
 #include "GuiTools.h"
 #include <KI18n/KLocalizedString>
 
+#include <array>
 #include <QApplication>
 #include <QComboBox>
 #include <QMenu>
