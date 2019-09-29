@@ -1516,7 +1516,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		}
 		// if an element is hovered, the curves which are handled manually in this class
 		// must be unhovered
-		const WorksheetElement* element = static_cast<const WorksheetElement*>(child);
+		const auto* element = static_cast<const WorksheetElement*>(child);
 		connect(element, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
 	}
 

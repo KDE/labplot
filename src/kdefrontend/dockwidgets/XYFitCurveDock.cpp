@@ -118,7 +118,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height() * 2);
 
 	fitParametersWidget = new FitParametersWidget(uiGeneralTab.frameParameters);
-	QVBoxLayout* l = new QVBoxLayout();
+	auto* l = new QVBoxLayout();
 	l->setContentsMargins(0, 0, 0, 0);
 	l->addWidget(fitParametersWidget);
 	uiGeneralTab.frameParameters->setLayout(l);

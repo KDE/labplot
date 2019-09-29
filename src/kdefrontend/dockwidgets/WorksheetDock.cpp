@@ -553,7 +553,7 @@ void WorksheetDock::backgroundOpacityChanged(int value) {
 
 //"Layout"-tab
 void WorksheetDock::layoutChanged(int index) {
-	Worksheet::Layout layout = (Worksheet::Layout)index;
+	auto layout = (Worksheet::Layout)index;
 
 	bool b = (layout != Worksheet::NoLayout);
 	ui.sbLayoutTopMargin->setEnabled(b);

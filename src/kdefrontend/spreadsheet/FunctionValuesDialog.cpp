@@ -382,9 +382,9 @@ void FunctionValuesDialog::variableNameChanged() {
 void FunctionValuesDialog::variableColumnChanged(const QModelIndex& index) {
 	//combobox was potentially red-highlighted because of a missing column
 	//remove the highlighting if we have a valid selection now
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	if (aspect) {
-		TreeViewComboBox* cb = dynamic_cast<TreeViewComboBox*>(QObject::sender());
+		auto* cb = dynamic_cast<TreeViewComboBox*>(QObject::sender());
 		if (cb)
 			cb->setStyleSheet("");
 	}

@@ -406,7 +406,7 @@ void LiveDataDock::nameChanged(const QString& name) {
 void LiveDataDock::updateTypeChanged(int idx) {
 	if (m_liveDataSource)  {
 		DEBUG("LiveDataDock::updateTypeChanged()");
-		const LiveDataSource::UpdateType updateType = static_cast<LiveDataSource::UpdateType>(idx);
+		const auto updateType = static_cast<LiveDataSource::UpdateType>(idx);
 
 		switch (updateType) {
 		case LiveDataSource::TimeInterval: {

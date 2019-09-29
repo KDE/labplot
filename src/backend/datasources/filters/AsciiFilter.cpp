@@ -1373,7 +1373,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 					break;
 				}
 				case AbstractColumn::Text: {
-					QVector<QString>* colData = static_cast<QVector<QString>*>(m_dataContainer[n]);
+					auto* colData = static_cast<QVector<QString>*>(m_dataContainer[n]);
 					colData->operator[](currentRow) = valueString;
 					break;
 				}

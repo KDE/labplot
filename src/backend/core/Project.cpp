@@ -210,7 +210,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 		return;
 
 	if (this != aspect) {
-		const AbstractColumn* column = dynamic_cast<const AbstractColumn*>(aspect);
+		const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
 		if (!column)
 			return;
 
@@ -287,7 +287,7 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	for (auto child : _children)
 		columns.append(static_cast<const AbstractColumn*>(child));
 
-	const AbstractColumn* column = dynamic_cast<const AbstractColumn*>(aspect);
+	const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
 	if (column)
 		columns.append(column);
 
@@ -603,7 +603,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		//if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
 		for (auto* col : columns) {
 			if (!col->formulaVariableColumnPaths().isEmpty()) {
-				QVector<Column*>& formulaVariableColumns = const_cast<QVector<Column*>&>(col->formulaVariableColumns());
+				auto& formulaVariableColumns = const_cast<QVector<Column*>&>(col->formulaVariableColumns());
 				formulaVariableColumns.resize(col->formulaVariableColumnPaths().length());
 
 				for (int i = 0; i < col->formulaVariableColumnPaths().length(); i++) {

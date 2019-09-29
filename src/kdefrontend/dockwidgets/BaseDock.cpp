@@ -31,13 +31,9 @@
 
 #include "klocalizedstring.h"
 
-BaseDock::BaseDock(QWidget* parent) : QWidget(parent) {
+BaseDock::BaseDock(QWidget* parent) : QWidget(parent) {}
 
-}
-
-BaseDock::~BaseDock() {
-
-}
+BaseDock::~BaseDock() = default;
 
 void BaseDock::nameChanged() {
 	if (m_initializing)

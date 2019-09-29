@@ -263,7 +263,7 @@ void PlotDataDialog::processColumns() {
 	//resize the scroll area to show five ComboBoxes at maximum without showing the scroll bars
 	int size = m_columnComboBoxes.size() >=5 ? 5 : m_columnComboBoxes.size();
 	int height = size * ui->cbXColumn->height();
-	QGridLayout* layout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
+	auto* layout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
 	if (layout) {
 		height += (size + 1)*layout->verticalSpacing();
 		if (m_plotType == PlotXYCurve)

@@ -230,7 +230,7 @@ void NSLGeomTest::testLineSimMorse() {
 
 	const QString fileName = m_dataDir + "morse_code.dat";
 	FILE *file;
-	if((file = fopen(fileName.toLocal8Bit().constData(), "r")) == NULL) {
+	if((file = fopen(fileName.toLocal8Bit().constData(), "r")) == nullptr) {
 		printf("ERROR reading %s. Giving up.\n", fileName.toLocal8Bit().constData());
 		return;
 	}
