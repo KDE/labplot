@@ -3905,7 +3905,7 @@ void CartesianPlot::setColorPalette(const KConfig& config) {
 		QColor c;
 
 		//3 factors to create shades from theme's palette
-		float fac[3] = {0.25f,0.45f,0.65f};
+		std::array<float, 3> fac = {0.25f, 0.45f, 0.65f};
 
 		//Generate 15 lighter shades
 		for (int i = 0; i < 5; i++) {

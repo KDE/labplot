@@ -93,7 +93,7 @@ QStringList BinaryFilter::dataTypes() {
 returns the size of the predefined data types
 */
 int BinaryFilter::dataSize(BinaryFilter::DataType type) {
-	int sizes[] = {1,2,4,8,1,2,4,8,4,8};
+	std::array<int, 10> sizes = {1,2,4,8,1,2,4,8,4,8};
 
 	return sizes[(int)type];
 }

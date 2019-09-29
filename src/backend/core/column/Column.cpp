@@ -1549,7 +1549,7 @@ double Column::maximum(int startIndex, int endIndex) const {
  */
 // TODO: testing if it is faster than calculating log2.
 int Column::calculateMaxSteps (unsigned int value) {
-	const signed char LogTable256[256] = {
+	const std::array<signed char, 256> LogTable256 = {
 		-1,0,1,1,2,2,2,2,3,3,3,3,3,3,3,3,
 		4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
 		5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
