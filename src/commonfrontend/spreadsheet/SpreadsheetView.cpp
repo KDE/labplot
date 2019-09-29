@@ -2476,7 +2476,6 @@ void SpreadsheetView::print(QPrinter* printer) const {
 	const int cols = m_spreadsheet->columnCount();
 	int height = margin;
 	const int vertHeaderWidth = vHeader->width();
-	int right = margin + vertHeaderWidth;
 
 	int columnsPerTable = 0;
 	int headerStringWidth = 0;
@@ -2505,7 +2504,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 		tablesCount++;
 	//Paint the horizontal header first
 	for (int table = 0; table < tablesCount; ++table) {
-		right = margin + vertHeaderWidth;
+		int right = margin + vertHeaderWidth;
 
 		painter.setFont(hHeader->font());
 		QString headerString = m_tableView->model()->headerData(0, Qt::Horizontal).toString();

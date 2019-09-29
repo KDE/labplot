@@ -1315,10 +1315,9 @@ void XYCurvePrivate::updateLines() {
 				addLine(p0, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 			}
 			// add last line
-			if (overlap) {
-				overlap = false;
+			if (overlap)
 				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
-			}
+
 			break;
 		}
 		case XYCurve::StartHorizontal: {
@@ -1335,10 +1334,9 @@ void XYCurvePrivate::updateLines() {
 				addLine(tempPoint1, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 			}
 			// add last line
-			if (overlap) {
-				overlap = false;
+			if (overlap)
 				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
-			}
+
 			break;
 		}
 		case XYCurve::StartVertical: {
@@ -1354,10 +1352,9 @@ void XYCurvePrivate::updateLines() {
 				addLine(tempPoint1, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 			}
 			// add last line
-			if (overlap) {
-				overlap = false;
+			if (overlap)
 				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
-			}
+
 			break;
 		}
 		case XYCurve::MidpointHorizontal: {
@@ -1376,10 +1373,9 @@ void XYCurvePrivate::updateLines() {
 				addLine(tempPoint2, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 			}
 			// add last line
-			if (overlap) {
-				overlap = false;
+			if (overlap)
 				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
-			}
+
 			break;
 		}
 		case XYCurve::MidpointVertical: {
@@ -1398,10 +1394,9 @@ void XYCurvePrivate::updateLines() {
 				addLine(tempPoint2, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 			}
 			// add last line
-			if (overlap) {
-				overlap = false;
+			if (overlap)
 				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
-			}
+
 			break;
 		}
 		case XYCurve::Segments2: {
@@ -1426,10 +1421,9 @@ void XYCurvePrivate::updateLines() {
 				}
 			}
 			// add last line
-			if (overlap) {
-				overlap = false;
+			if (overlap)
 				lines.append(QLineF(symbolPointsLogical[endIndex-1], symbolPointsLogical[endIndex]));
-			}
+
 			break;
 		}
 		case XYCurve::Segments3: {
@@ -1454,10 +1448,9 @@ void XYCurvePrivate::updateLines() {
 				}
 			}
 			// add last line
-			if (overlap) {
-				overlap = false;
+			if (overlap)
 				lines.append(QLineF(symbolPointsLogical[endIndex-1], symbolPointsLogical[endIndex]));
-			}
+
 			break;
 		}
 		case XYCurve::SplineCubicNatural:
@@ -1543,10 +1536,8 @@ void XYCurvePrivate::updateLines() {
 				addLine(QPointF(xinterp[xinterp.size()-1], yinterp[yinterp.size()-1]), QPointF(x[count-1], y[count-1]), minY, maxY, overlap, pixelDiff, countPixelX);
 
 				// add last line
-				if (overlap) {
-					overlap = false;
+				if (overlap)
 					lines.append(QLineF(QPointF(xinterp[xinterp.size()-1], yinterp[yinterp.size()-1]), QPointF(x[count-1], y[count-1])));
-				}
 			}
 
 			delete[] x;

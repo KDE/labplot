@@ -1449,7 +1449,7 @@ void ImportFileWidget::refreshPreview() {
 		importedStrings = filter->previewCurrentObject(
 		                      fileName,
 		                      m_rootOptionsWidget->startRow(),
-		                      qMin(m_rootOptionsWidget->startRow() + m_rootOptionsWidget->lines() - 1,
+		                      qMin(m_rootOptionsWidget->startRow() + lines - 1,
 		                           m_rootOptionsWidget->endRow())
 		                  );
 		tmpTableWidget = m_rootOptionsWidget->previewWidget();
