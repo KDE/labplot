@@ -33,6 +33,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include <QDataStream>
 #include <KLocalizedString>
 #include <KFilterDev>
+#include <array>
 #include <cmath>
 
 /*!
