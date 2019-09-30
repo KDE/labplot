@@ -45,7 +45,6 @@
 #include <QStackedWidget>
 #include <QTableView>
 #include <QKeyEvent>
-#include <QShortcut>
 #include <QMenu>
 #include <QPainter>
 #include <QPrinter>
@@ -133,7 +132,7 @@ void MatrixView::init() {
 	connect(m_model, SIGNAL(changed()), this, SLOT(matrixDataChanged()));
 
 	//keyboard shortcuts
-	QShortcut* sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Matrix: select all")), m_tableView);
+	sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Matrix: select all")), m_tableView);
 	connect(sel_all, SIGNAL(activated()), m_tableView, SLOT(selectAll()));
 
 	//TODO: add shortcuts for copy&paste,

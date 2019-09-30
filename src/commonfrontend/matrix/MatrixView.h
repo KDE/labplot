@@ -32,6 +32,7 @@
 
 #include <QWidget>
 #include <QList>
+#include <QShortcut>
 #include "backend/datasources/filters/FITSFilter.h"
 #include "kdefrontend/widgets/FITSHeaderEditWidget.h"
 
@@ -149,6 +150,8 @@ private:
 	QMenu* m_rowMenu;
 	QMenu* m_matrixMenu;
 	QMenu* m_headerFormatMenu;
+
+	QShortcut* sel_all;
 
 private slots:
 	void goToCell();

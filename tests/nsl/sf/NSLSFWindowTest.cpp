@@ -72,6 +72,7 @@ void NSLSFWindowTest::testPerformance_triangle() {
 	QBENCHMARK {
 		nsl_sf_apply_window(data, N, nsl_sf_window_triangle);
 	}
+	delete [] data;
 }
 
 void NSLSFWindowTest::testPerformance_welch() {
@@ -81,6 +82,7 @@ void NSLSFWindowTest::testPerformance_welch() {
 	QBENCHMARK {
 		nsl_sf_apply_window(data, N, nsl_sf_window_welch);
 	}
+	delete [] data;
 }
 
 void NSLSFWindowTest::testPerformance_flat_top() {
@@ -90,6 +92,7 @@ void NSLSFWindowTest::testPerformance_flat_top() {
 	QBENCHMARK {
 		nsl_sf_apply_window(data, N, nsl_sf_window_flat_top);
 	}
+	delete [] data;
 }
 
 QTEST_MAIN(NSLSFWindowTest)

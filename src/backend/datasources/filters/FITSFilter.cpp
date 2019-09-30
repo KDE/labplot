@@ -939,6 +939,8 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 						printError(status);
 						status = 0;
 						fits_close_file(m_fitsFile, &status);
+
+						delete[] columnNumeric;
 						return;
 					}
 				}
@@ -1531,8 +1533,10 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 	for (const QString& ext : imageExtensions) {
 		QTreeWidgetItem* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << ext);
 		if (ext == i18n("Primary header")) {
-			if (checkPrimary && naxis == 0)
+			if (checkPrimary && naxis == 0) {
+				delete treeItem;
 				continue;
+			}
 		}
 		imageExtensionItem->addChild(treeItem);
 	}
