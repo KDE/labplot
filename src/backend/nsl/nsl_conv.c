@@ -309,6 +309,7 @@ int nsl_conv_fft_FFTW(double s[], double r[], size_t n, nsl_conv_direction_type 
 	fftw_execute_dft_r2c(rpf, s, (fftw_complex*)s);
 	fftw_execute_dft_r2c(rpf, r, (fftw_complex*)r);
 	fftw_destroy_plan(rpf);
+	free(in);
 
 	// multiply/divide
 	if (dir == nsl_conv_direction_forward) {
@@ -335,6 +336,7 @@ int nsl_conv_fft_FFTW(double s[], double r[], size_t n, nsl_conv_direction_type 
 	// back transform
 	double* o = (double*)malloc(size*sizeof(double));
 	fftw_plan rpb = fftw_plan_dft_c2r_1d(n, (fftw_complex*)o, o, FFTW_ESTIMATE);
+
 	fftw_execute_dft_c2r(rpb, (fftw_complex*)s, s);
 	fftw_destroy_plan(rpb);
 
@@ -342,6 +344,7 @@ int nsl_conv_fft_FFTW(double s[], double r[], size_t n, nsl_conv_direction_type 
 		size_t index = (i + wi) % n;
 		out[i] = s[index]/n;
 	}
+	free(o);
 
 	return 0;
 }
