@@ -90,77 +90,90 @@ void ProjectImportTest::testOrigin01() {
 	//first child of the root folder, spreadsheet "Book3"
 	auto* aspect = project.child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Book3"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Book3"));
 	QCOMPARE(dynamic_cast<Spreadsheet*>(aspect) != nullptr, true);
 
 
 	//first child of the root folder, folder "Folder" -> import into a Folder
 	aspect = project.child<AbstractAspect>(1);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Folder"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Folder"));
 	QCOMPARE(dynamic_cast<Folder*>(aspect) != nullptr, true);
 
 	//first child of "Folder", workbook "Book2" with two sheets -> import into a Workbook with two Spreadsheets
 	aspect = project.child<AbstractAspect>(1)->child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Book2"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Book2"));
 	QCOMPARE(dynamic_cast<Workbook*>(aspect) != nullptr, true);
 
 	aspect = project.child<AbstractAspect>(1)->child<AbstractAspect>(0)->child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Sheet1"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Sheet1"));
 	QCOMPARE(dynamic_cast<Spreadsheet*>(aspect) != nullptr, true);
 
 	aspect = project.child<AbstractAspect>(1)->child<AbstractAspect>(0)->child<AbstractAspect>(1);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Sheet2"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Sheet2"));
 	QCOMPARE(dynamic_cast<Spreadsheet*>(aspect) != nullptr, true);
 
 	//second child of "Folder", matrixbook "MBook" with two matrix sheets -> import into a Workbook with two Matrices
 	aspect = project.child<AbstractAspect>(1)->child<AbstractAspect>(1);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("MBook2"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("MBook2"));
 	QCOMPARE(dynamic_cast<Workbook*>(aspect) != nullptr, true);
 
 	aspect = project.child<AbstractAspect>(1)->child<AbstractAspect>(1)->child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("MSheet1"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("MSheet1"));
 	QCOMPARE(dynamic_cast<Matrix*>(aspect) != nullptr, true);
 
 	aspect = project.child<AbstractAspect>(1)->child<AbstractAspect>(1)->child<AbstractAspect>(1);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("MSheet2"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("MSheet2"));
 	QCOMPARE(dynamic_cast<Matrix*>(aspect) != nullptr, true);
 
 
 	//second child of the root folder, folder "Folder1" -> import into a Folder
 	aspect = project.child<AbstractAspect>(2);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Folder1"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Folder1"));
 	QCOMPARE(dynamic_cast<Folder*>(aspect) != nullptr, true);
 
 	//first child of "Folder1", matrix "MBook1"
 	aspect = project.child<AbstractAspect>(2)->child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("MBook1"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("MBook1"));
 	QCOMPARE(dynamic_cast<Matrix*>(aspect) != nullptr, true);
 
 	//second child of "Folder1", workbook "Book1" with on sheet -> import into a Spreadsheet
 	aspect = project.child<AbstractAspect>(2)->child<AbstractAspect>(1);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Book1"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Book1"));
 	QCOMPARE(dynamic_cast<Spreadsheet*>(aspect) != nullptr, true);
 
 	//second child of "Folder1", workbook "Book4" with on sheet -> import into a Spreadsheet
 	aspect = project.child<AbstractAspect>(2)->child<AbstractAspect>(2);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Book4"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Book4"));
 	QCOMPARE(dynamic_cast<Spreadsheet*>(aspect) != nullptr, true);
 
 	//third child of "Folder1", graph "Graph"-> import into a Worksheet
 	aspect = project.child<AbstractAspect>(2)->child<AbstractAspect>(3);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Graph2"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Graph2"));
 	QCOMPARE(dynamic_cast<Worksheet*>(aspect) != nullptr, true);
 	//TODO: check the created plot in the worksheet
 
@@ -187,14 +200,17 @@ void ProjectImportTest::testOrigin02() {
 	//first child of the root folder, folder "Folder1" -> import into a Folder
 	auto* aspect = project.child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Folder1"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Folder1"));
 	QCOMPARE(dynamic_cast<Folder*>(aspect) != nullptr, true);
-	QCOMPARE(aspect->childCount<AbstractAspect>(), 1);
+	if (aspect != nullptr)
+		QCOMPARE(aspect->childCount<AbstractAspect>(), 1);
 
 	//first child of "Folder", workbook "Book" with one sheet -> import into a Spreadsheet
 	aspect = project.child<AbstractAspect>(0)->child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Book1"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Book1"));
 	QCOMPARE(dynamic_cast<Spreadsheet*>(aspect) != nullptr, true);
 }
 
@@ -216,14 +232,17 @@ void ProjectImportTest::testOrigin03() {
 	//first child of the root folder, folder "Folder1" -> import into a Folder
 	auto* aspect = project.child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Folder1"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Folder1"));
 	QCOMPARE(dynamic_cast<Folder*>(aspect) != nullptr, true);
-	QCOMPARE(aspect->childCount<AbstractAspect>(), 1);
+	if (aspect != nullptr)
+		QCOMPARE(aspect->childCount<AbstractAspect>(), 1);
 
 	//first child of "Folder", workbook "Book1" with one sheet -> import into a Spreadsheet
 	aspect = project.child<AbstractAspect>(0)->child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Book1"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Book1"));
 	QCOMPARE(dynamic_cast<Spreadsheet*>(aspect) != nullptr, true);
 
 
@@ -235,21 +254,25 @@ void ProjectImportTest::testOrigin03() {
 	//the first child should still be available in the project -> check it
 	aspect = project.child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Folder1"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Folder1"));
 	QCOMPARE(dynamic_cast<Folder*>(aspect) != nullptr, true);
 
 	aspect = project.child<AbstractAspect>(0)->child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Book1"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Book1"));
 	QCOMPARE(dynamic_cast<Spreadsheet*>(aspect) != nullptr, true);
 
 	//check the second child, workbook "Book4" with one sheet -> import into a Spreadsheet
 	aspect = project.child<AbstractAspect>(0)->child<AbstractAspect>(1);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Book4"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Book4"));
 	QCOMPARE(dynamic_cast<Spreadsheet*>(aspect) != nullptr, true);
 
-	QCOMPARE(aspect->childCount<AbstractAspect>(), 2);
+	if (aspect != nullptr)
+		QCOMPARE(aspect->childCount<AbstractAspect>(), 2);
 }
 
 /*
@@ -270,15 +293,18 @@ void ProjectImportTest::testOrigin04() {
 	//first child of folder "Folder1", workbook "Book1" with one sheet -> import into a spreadsheet
 	auto* aspect = project.child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Folder1"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Folder1"));
 	aspect = project.child<AbstractAspect>(0)->child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Book1"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Book1"));
 	auto* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
 	QCOMPARE(spreadsheet != nullptr, true);
 
 	//the (0,0)-cell has the value 1.0
-	QCOMPARE(spreadsheet->column(0)->valueAt(0), 1.0);
+	if (spreadsheet != nullptr)
+		QCOMPARE(spreadsheet->column(0)->valueAt(0), 1.0);
 
 	//set the value to 5.0
 	spreadsheet->column(0)->setValueAt(0, 5.0);
@@ -290,10 +316,12 @@ void ProjectImportTest::testOrigin04() {
 	//check the folder structure and the value of the (0,0)-cell again
 	aspect = project.child<AbstractAspect>(0)->child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Book1"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Book1"));
 	spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
 	QCOMPARE(spreadsheet != nullptr, true);
-	QCOMPARE(spreadsheet->column(0)->valueAt(0), 1.0);
+	if (spreadsheet != nullptr)
+		QCOMPARE(spreadsheet->column(0)->valueAt(0), 1.0);
 }
 
 void ProjectImportTest::testOriginTextNumericColumns() {
@@ -308,15 +336,18 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	//first child of folder "Folder1", workbook "Book1" with one sheet -> import into a spreadsheet
 	auto* aspect = project.child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Folder1"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Folder1"));
 	aspect = project.child<AbstractAspect>(0)->child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Book1"));
+	if (aspect != nullptr)
+		QCOMPARE(aspect->name(), QLatin1String("Book1"));
 	auto* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
 	QCOMPARE(spreadsheet != nullptr, true);
 
 	//check the values in the imported columns
-	QCOMPARE(spreadsheet->columnCount(), 6);
+	if (spreadsheet != nullptr)
+		QCOMPARE(spreadsheet->columnCount(), 6);
 
 	//1st column, Origin::TextNumeric:
 	//first non-empty value is numerical, column is set to Numeric, empty or text values in the column a set to NAN
