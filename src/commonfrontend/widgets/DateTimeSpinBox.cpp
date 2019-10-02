@@ -34,7 +34,7 @@
 
 DateTimeSpinBox::DateTimeSpinBox(QWidget* parent) : QAbstractSpinBox(parent) {
 	lineEdit()->setText("0000.00.00 00:00:00.001");
-	stepEnabled();
+	DateTimeSpinBox::stepEnabled();
 
 	m_regularExpressionValidator = new QRegularExpressionValidator();
 
