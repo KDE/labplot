@@ -218,9 +218,6 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="decimals">
-            <number>2</number>
-           </property>
            <property name="minimum">
             <double>-9999.000000000000000</double>
            </property>

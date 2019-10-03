@@ -480,6 +480,7 @@ void DatapickerImageWidget::ternaryScaleChanged(double value) {
 }
 
 void DatapickerImageWidget::logicalPositionChanged() {
+	DEBUG("DatapickerImageWidget::logicalPositionChanged() m_initializing = " << m_initializing)
 	if (m_initializing)
 		return;
 
@@ -754,10 +755,13 @@ void DatapickerImageWidget::imageRotationAngleChanged(float angle) {
 }
 
 void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::ReferencePoints& axisPoints) {
+	DEBUG("DatapickerImageWidget::imageAxisPointsChanged()")
 	m_initializing = true;
 	ui.cbGraphType->setCurrentIndex((int) axisPoints.type);
 	ui.sbTernaryScale->setValue(axisPoints.ternaryScale);
-	ui.sbPositionX1->setValue(axisPoints.logicalPos[0].x());
+	// this breaks the double spin boxes by setting the value just changed
+	// is there any case where axisPoints.logicalPos is really changed outside the position double spin boxes?
+	/* ui.sbPositionX1->setValue(axisPoints.logicalPos[0].x());
 	ui.sbPositionY1->setValue(axisPoints.logicalPos[0].y());
 	ui.sbPositionX2->setValue(axisPoints.logicalPos[1].x());
 	ui.sbPositionY2->setValue(axisPoints.logicalPos[1].y());
@@ -766,6 +770,7 @@ void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::Refere
 	ui.sbPositionZ1->setValue(axisPoints.logicalPos[0].z());
 	ui.sbPositionZ2->setValue(axisPoints.logicalPos[1].z());
 	ui.sbPositionZ3->setValue(axisPoints.logicalPos[2].z());
+	*/
 	m_initializing = false;
 }
 
