@@ -37,9 +37,7 @@ private slots:
 
 	void testDist();
 	void testLineSim();
-#ifndef _MSC_VER	// crashes on Windows
 	void testLineSimMorse();
-#endif
 	// performance
 	//void testPerformance();
 private:

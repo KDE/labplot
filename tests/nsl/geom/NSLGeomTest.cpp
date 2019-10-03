@@ -222,7 +222,9 @@ void NSLGeomTest::testLineSim() {
 		QCOMPARE(index[i], result4[i]);
 }
 
-#ifndef _MSC_VER	// crashes on Windows
+#ifdef _MSC_VER	// crashes on Windows
+void NSLGeomTest::testLineSimMorse() {}
+#else
 void NSLGeomTest::testLineSimMorse() {
 	printf("NSLGeomTest::testLineSimMorse()\n");
 
