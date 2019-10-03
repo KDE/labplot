@@ -222,11 +222,9 @@ void NSLGeomTest::testLineSim() {
 		QCOMPARE(index[i], result4[i]);
 }
 
+#ifndef _MSC_VER	// crashes on Windows
 void NSLGeomTest::testLineSimMorse() {
 	printf("NSLGeomTest::testLineSimMorse()\n");
-#ifdef _MSC_VER	// crashes on Windows
-	return;
-#endif
 
 	const QString fileName = m_dataDir + "morse_code.dat";
 	FILE *file;
@@ -277,6 +275,7 @@ void NSLGeomTest::testLineSimMorse() {
 	QCOMPARE(perr, 11.9586266895937);
 	QCOMPARE(aerr, 17.558046450762);
 }
+#endif
 
 //##############################################################################
 //#################  performance
