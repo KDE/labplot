@@ -338,6 +338,8 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 	if (m_columns.size() == 1) {
 		//one column provided, only one histogram is possible
 		//-> hide the curve placement options and the scroll areas for further columns
+		ui->lYColumn->hide();
+		ui->cbYColumn->hide();
 		ui->rbCurvePlacement1->setChecked(true);
 		ui->gbCurvePlacement->hide();
 		ui->gbPlotPlacement->setTitle(i18n("Add Histogram to"));
