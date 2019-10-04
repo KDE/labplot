@@ -613,13 +613,15 @@ const Column::ColumnStatistics& Column::statistics() const {
 }
 
 void Column::calculateStatistics() const {
+	if ( (columnMode() != AbstractColumn::Numeric)
+		&& (columnMode() != AbstractColumn::Integer) )
+		return;
+
 	d->statistics = ColumnStatistics();
 	ColumnStatistics& statistics = d->statistics;
 
-	// TODO: support other data types?
-	auto* rowValues = reinterpret_cast<QVector<double>*>(data());
-
-	size_t notNanCount = 0;
+	int rowValuesSize = 0;
+	int notNanCount = 0;
 	double val;
 	double columnSum = 0.0;
 	double columnProduct = 1.0;
@@ -629,26 +631,57 @@ void Column::calculateStatistics() const {
 	statistics.maximum = -INFINITY;
 	QMap<double, int> frequencyOfValues;
 	QVector<double> rowData;
-	rowData.reserve(rowValues->size());
-	for (int row = 0; row < rowValues->size(); ++row) {
-		val = rowValues->value(row);
-		if (std::isnan(val) || isMasked(row))
-			continue;
 
-		if (val < statistics.minimum)
-			statistics.minimum = val;
-		if (val > statistics.maximum)
-			statistics.maximum = val;
-		columnSum+= val;
-		columnSumNeg += (1.0 / val);
-		columnSumSquare += pow(val, 2.0);
-		columnProduct *= val;
-		if (frequencyOfValues.contains(val))
-			frequencyOfValues.operator [](val)++;
-		else
-			frequencyOfValues.insert(val, 1);
-		++notNanCount;
-		rowData.push_back(val);
+	if (columnMode() == AbstractColumn::Numeric) {
+		auto* rowValues = reinterpret_cast<QVector<double>*>(data());
+		rowValuesSize = rowValues->size();
+		rowData.reserve(rowValuesSize);
+
+		for (int row = 0; row < rowValuesSize; ++row) {
+			val = rowValues->value(row);
+			if (std::isnan(val) || isMasked(row))
+				continue;
+
+			if (val < statistics.minimum)
+				statistics.minimum = val;
+			if (val > statistics.maximum)
+				statistics.maximum = val;
+			columnSum += val;
+			columnSumNeg += (1.0 / val);
+			columnSumSquare += pow(val, 2.0);
+			columnProduct *= val;
+			if (frequencyOfValues.contains(val))
+				frequencyOfValues.operator [](val)++;
+			else
+				frequencyOfValues.insert(val, 1);
+			++notNanCount;
+			rowData.push_back(val);
+		}
+	} else if (columnMode() == AbstractColumn::Integer) {
+		//TODO: code duplication because of the reinterpret_cast...
+		auto* rowValues = reinterpret_cast<QVector<int>*>(data());
+		rowValuesSize = rowValues->size();
+		rowData.reserve(rowValuesSize);
+		for (int row = 0; row < rowValuesSize; ++row) {
+			val = rowValues->value(row);
+			if (std::isnan(val) || isMasked(row))
+				continue;
+
+			if (val < statistics.minimum)
+				statistics.minimum = val;
+			if (val > statistics.maximum)
+				statistics.maximum = val;
+			columnSum += val;
+			columnSumNeg += (1.0 / val);
+			columnSumSquare += pow(val, 2.0);
+			columnProduct *= val;
+			if (frequencyOfValues.contains(val))
+				frequencyOfValues.operator [](val)++;
+			else
+				frequencyOfValues.insert(val, 1);
+			++notNanCount;
+			rowData.push_back(val);
+		}
 	}
 
 	if (notNanCount == 0) {
@@ -656,7 +689,7 @@ void Column::calculateStatistics() const {
 		return;
 	}
 
-	if (rowData.size() < rowValues->size())
+	if (rowData.size() < rowValuesSize)
 		rowData.squeeze();
 
 	statistics.arithmeticMean = columnSum / notNanCount;
@@ -677,20 +710,16 @@ void Column::calculateStatistics() const {
 	absoluteMedianList.reserve((int)notNanCount);
 	absoluteMedianList.resize((int)notNanCount);
 
-	int idx = 0;
-	for (int row = 0; row < rowValues->size(); ++row) {
-		val = rowValues->value(row);
-		if (std::isnan(val) || isMasked(row) )
-			continue;
+	for (int row = 0; row < notNanCount; ++row) {
+		val = rowData.value(row);
 		columnSumVariance += pow(val - statistics.arithmeticMean, 2.0);
 
 		sumForCentralMoment_r3 += pow(val - statistics.arithmeticMean, 3.0);
 		sumForCentralMoment_r4 += pow(val - statistics.arithmeticMean, 4.0);
 		columnSumMeanDeviation += fabs( val - statistics.arithmeticMean );
 
-		absoluteMedianList[idx] = fabs(val - statistics.median);
-		columnSumMedianDeviation += absoluteMedianList[idx];
-		idx++;
+		absoluteMedianList[row] = fabs(val - statistics.median);
+		columnSumMedianDeviation += absoluteMedianList[row];
 	}
 
 	statistics.meanDeviationAroundMedian = columnSumMedianDeviation / notNanCount;
