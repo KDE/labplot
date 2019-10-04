@@ -1261,7 +1261,13 @@ void SpreadsheetView::pasteIntoSelection() {
 
 	QString input_str = QString(mime_data->data("text/plain")).trimmed();
 	QVector<QStringList> cellTexts;
-	QStringList input_rows(input_str.split(QLatin1Char('\n')));
+	QString separator;
+	if (input_str.indexOf(QLatin1String("\r\n")) != -1)
+		separator = QLatin1String("\r\n");
+	else
+		separator = QLatin1Char('\n');
+
+	QStringList input_rows(input_str.split(separator));
 	input_row_count = input_rows.count();
 	input_col_count = 0;
 	for (int i = 0; i < input_row_count; i++) {
