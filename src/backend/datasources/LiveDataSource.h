@@ -45,7 +45,6 @@ class QFileSystemWatcher;
 class QAction;
 class QTcpSocket;
 class QUdpSocket;
-class QFile;
 
 class LiveDataSource : public Spreadsheet {
 	Q_OBJECT
@@ -153,6 +152,7 @@ private:
 	void initActions();
 
 	QString m_fileName;
+	QString m_dirName;
 	QString m_serialPortName;
 	QString m_localSocketName;
 	QString m_host;
@@ -168,6 +168,7 @@ private:
 	bool m_paused{false};
 	bool m_prepared{false};
 	bool m_reading{false};
+	bool m_pending{false};
 
 	int m_sampleSize{1};
 	int m_keepNValues{0};	// number of values to keep (0 - all)
@@ -180,9 +181,9 @@ private:
 	AbstractFileFilter* m_filter{nullptr};
 
 	QTimer* m_updateTimer;
+	QTimer* m_watchTimer;
 	QFileSystemWatcher* m_fileSystemWatcher{nullptr};
 
-	QFile* m_file{nullptr};
 	QLocalSocket* m_localSocket{nullptr};
 	QTcpSocket* m_tcpSocket{nullptr};
 	QUdpSocket* m_udpSocket{nullptr};
@@ -192,6 +193,7 @@ private:
 
 public slots:
 	void read();
+	void readOnUpdate();
 
 private slots:
 	void plotData();
