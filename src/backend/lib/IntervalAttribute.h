@@ -168,15 +168,6 @@ public:
 
 	QVector< Interval<int> > intervals() const { return m_intervals; }
 	QVector<T> values() const { return m_values; }
-	IntervalAttribute<T>& operator=(const IntervalAttribute<T>& other) {
-		m_intervals.clear();
-		m_values.clear();
-		foreach( Interval<int> iv, other.intervals())
-			m_intervals.append(iv);
-		foreach( T value, other.values())
-			m_values.append(value);
-		return *this;
-	}
 
 private:
 	QVector<T> m_values;
@@ -189,13 +180,6 @@ template<> class IntervalAttribute<bool>
 	public:
 		IntervalAttribute<bool>() {}
 		IntervalAttribute<bool>(const QVector< Interval<int> >& intervals) : m_intervals(intervals) {}
-		IntervalAttribute<bool>& operator=(const IntervalAttribute<bool>& other)
-		{
-			m_intervals.clear();
-			foreach(const Interval<int>& iv, other.intervals())
-				m_intervals.append(iv);
-			return *this;
-		}
 
 		void setValue(const Interval<int>& i, bool value=true)
 		{
