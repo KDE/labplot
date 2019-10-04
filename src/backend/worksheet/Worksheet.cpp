@@ -253,6 +253,8 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		connect(plot, &CartesianPlot::mouseReleaseZoomSelectionModeSignal, this, &Worksheet::cartesianPlotMouseReleaseZoomSelectionMode);
 		connect(plot, &CartesianPlot::mouseHoverZoomSelectionModeSignal, this, &Worksheet::cartesianPlotMouseHoverZoomSelectionMode);
 		connect(plot, &CartesianPlot::mouseHoverOutsideDataRectSignal, this, &Worksheet::cartesianPlotMouseHoverOutsideDataRect);
+		connect(plot, &CartesianPlot::aspectDescriptionChanged, this, &Worksheet::updateCompleteCursorTreeModel);
+		connect(plot, &CartesianPlot::curveNameChanged, this, &Worksheet::updateCompleteCursorTreeModel);
 		connect(plot, &CartesianPlot::curveRemoved, this, &Worksheet::curveRemoved);
 		connect(plot, &CartesianPlot::curveAdded, this, &Worksheet::curveAdded);
 		connect(plot, &CartesianPlot::visibleChanged, this, &Worksheet::updateCompleteCursorTreeModel);
@@ -921,11 +923,12 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 }
 
 void Worksheet::cursorModelPlotAdded(QString name) {
-	TreeModel* treeModel = cursorModel();
-	int rowCount = treeModel->rowCount();
-	// add plot at the end
-	treeModel->insertRows(rowCount, 1); // add empty rows. Then they become filled
-	treeModel->setTreeData(QVariant(name), rowCount, WorksheetPrivate::TreeModelColumn::PLOTNAME); // rowCount instead of rowCount -1 because first row is the x value
+//	TreeModel* treeModel = cursorModel();
+//	int rowCount = treeModel->rowCount();
+//	// add plot at the end
+//	treeModel->insertRows(rowCount, 1); // add empty rows. Then they become filled
+//	treeModel->setTreeData(QVariant(name), rowCount, WorksheetPrivate::TreeModelColumn::PLOTNAME); // rowCount instead of rowCount -1 because first row is the x value
+	updateCompleteCursorTreeModel();
 }
 
 void Worksheet::cursorModelPlotRemoved(QString name) {
@@ -1138,6 +1141,7 @@ void Worksheet::updateCompleteCursorTreeModel() {
 		// add new entry for the plot
 		treeModel->insertRows(treeModel->rowCount(), 1); //, treeModel->index(0, 0));
 
+		// add plot name and X row if needed
 		if (cartesianPlotCursorMode() == Worksheet::CartesianPlotActionMode::ApplyActionToAll) {
 			plotName = treeModel->index(i + 1, WorksheetPrivate::TreeModelColumn::PLOTNAME); // plus one because first row are the x values
 			treeModel->setData(plotName, QVariant(plot->name()));
