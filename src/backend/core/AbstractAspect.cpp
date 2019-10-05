@@ -274,10 +274,9 @@ bool AbstractAspect::hidden() const {
  * \brief Set "hidden" property, i.e. whether to exclude this aspect from being shown in the explorer.
  */
 void AbstractAspect::setHidden(bool value) {
-    if (value == d->m_hidden) return;
-    exec(new PropertyChangeCommand<bool>(i18n("%1: change hidden status", d->m_name),
-				 &d->m_hidden, value),
-			"aspectHiddenAboutToChange", "aspectHiddenChanged", Q_ARG(const AbstractAspect*,this));
+    if (value == d->m_hidden)
+		return;
+	d->m_hidden = value;
 }
 
 void AbstractAspect::setIsLoading(bool load) {

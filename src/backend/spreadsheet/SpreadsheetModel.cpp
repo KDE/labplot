@@ -60,7 +60,6 @@ SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet) : QAbstractItemMode
 	updateVerticalHeader();
 	updateHorizontalHeader();
 
-	connect(m_spreadsheet, &Spreadsheet::aspectAboutToBeAdded, this, &SpreadsheetModel::handleAspectAboutToBeAdded);
 	connect(m_spreadsheet, &Spreadsheet::aspectAdded, this, &SpreadsheetModel::handleAspectAdded);
 	connect(m_spreadsheet, &Spreadsheet::aspectAboutToBeRemoved, this, &SpreadsheetModel::handleAspectAboutToBeRemoved);
 	connect(m_spreadsheet, &Spreadsheet::aspectRemoved, this, &SpreadsheetModel::handleAspectRemoved);
@@ -85,6 +84,8 @@ void SpreadsheetModel::suppressSignals(bool value) {
 		m_spreadsheet->emitColumnCountChanged();
 		updateVerticalHeader();
 		updateHorizontalHeader();
+		beginResetModel();
+		endResetModel();
 	}
 }
 
@@ -255,29 +256,11 @@ bool SpreadsheetModel::hasChildren(const QModelIndex& parent) const {
 	return false;
 }
 
-void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* new_child) {
-	if (m_suppressSignals)
-		return;
-
-	const Column* col = dynamic_cast<const Column*>(new_child);
-
-	if (!col || parent != static_cast<AbstractAspect*>(m_spreadsheet))
-		return;
-
-	//TODO: breaks undo/redo
-	Q_UNUSED(before);
-// 	int index = before ? m_spreadsheet->indexOfChild<Column>(before) : 0;
-	//beginInsertColumns(QModelIndex(), index, index);
-}
-
 void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
 	const Column* col = dynamic_cast<const Column*>(aspect);
 
 	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
-
-	updateVerticalHeader();
-	updateHorizontalHeader();
 
 	connect(col, &Column::plotDesignationChanged, this, &SpreadsheetModel::handlePlotDesignationChange);
 	connect(col, &Column::modeChanged, this, &SpreadsheetModel::handleDataChange);
@@ -289,14 +272,18 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
 	connect(col, &Column::maskingChanged, this, &SpreadsheetModel::handleDataChange);
 	connect(col->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &SpreadsheetModel::handleDigitsChange);
 
-	beginResetModel();
-	//TODO: breaks undo/redo
-	//endInsertColumns();
-	endResetModel();
+	if (!m_suppressSignals) {
+		updateVerticalHeader();
+		updateHorizontalHeader();
 
-	m_columnCount = m_spreadsheet->columnCount();
-	if (!m_suppressSignals)
+		beginResetModel();
+		//TODO: breaks undo/redo
+		//endInsertColumns();
+		endResetModel();
+
+		m_columnCount = m_spreadsheet->columnCount();
 		m_spreadsheet->emitColumnCountChanged();
+	}
 }
 
 void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {

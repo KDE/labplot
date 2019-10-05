@@ -130,7 +130,7 @@
  */
 AbstractSimpleFilter::AbstractSimpleFilter()
 	: AbstractFilter("SimpleFilter"), m_output_column(new SimpleFilterColumn(this)) {
-	addChild(m_output_column);
+	addChildFast(m_output_column);
 }
 
 /**
