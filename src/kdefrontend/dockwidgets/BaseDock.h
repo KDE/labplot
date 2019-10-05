@@ -34,6 +34,20 @@
 
 class AbstractAspect;
 
+struct Lock {
+	inline Lock(bool& variable)
+		: variable(variable = true){
+	}
+
+	inline ~Lock(){
+		variable = false;
+	}
+
+private:
+	bool& variable;
+};
+
+
 class BaseDock : public QWidget {
 	Q_OBJECT
 

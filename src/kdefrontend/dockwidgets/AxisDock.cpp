@@ -632,6 +632,7 @@ void AxisDock::startChanged() {
 		}
 	}
 
+	const Lock lock(m_initializing);
 	for (auto* axis : m_axesList)
 		axis->setStart(value);
 }
@@ -641,6 +642,7 @@ void AxisDock::endChanged() {
 		return;
 
 	double value = ui.leEnd->text().toDouble();
+	const Lock lock(m_initializing);
 	for (auto* axis : m_axesList)
 		axis->setEnd(value);
 }
@@ -668,6 +670,7 @@ void AxisDock::zeroOffsetChanged() {
 		return;
 
 	double offset = ui.leZeroOffset->text().toDouble();
+	const Lock lock(m_initializing);
 	for (auto* axis : m_axesList)
 		axis->setZeroOffset(offset);
 }
@@ -677,9 +680,11 @@ void AxisDock::scalingFactorChanged() {
 		return;
 
 	double scalingFactor = ui.leScalingFactor->text().toDouble();
-	if (scalingFactor != 0.0)
+	if (scalingFactor != 0.0) {
+		const Lock lock(m_initializing);
 		for (auto* axis : m_axesList)
 			axis->setScalingFactor(scalingFactor);
+	}
 }
 
 // "Line"-tab
@@ -1524,7 +1529,9 @@ void AxisDock::axisAutoScaleChanged(bool on) {
 }
 
 void AxisDock::axisStartChanged(double value) {
-	m_initializing = true;
+	if (m_initializing) return;
+	const Lock lock(m_initializing);
+
 	ui.leStart->setText( QString::number(value) );
 	ui.dateTimeEditStart->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 
@@ -1533,11 +1540,12 @@ void AxisDock::axisStartChanged(double value) {
 	int decimal = determineDecimals(diff);
 	ui.sbMajorTicksIncrementNumeric->setDecimals(decimal);
 	ui.sbMajorTicksIncrementNumeric->setSingleStep(determineStep(diff, decimal));
-	m_initializing = false;
 }
 
 void AxisDock::axisEndChanged(double value) {
-	m_initializing = true;
+	if (m_initializing) return;
+	const Lock lock(m_initializing);
+
 	ui.leEnd->setText( QString::number(value) );
 	ui.dateTimeEditEnd->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 	ui.sbMajorTicksIncrementNumeric->setSingleStep(floor(m_axis->end() - m_axis->start())/10);
@@ -1547,19 +1555,18 @@ void AxisDock::axisEndChanged(double value) {
 	int decimal = determineDecimals(diff);
 	ui.sbMajorTicksIncrementNumeric->setDecimals(decimal);
 	ui.sbMajorTicksIncrementNumeric->setSingleStep(determineStep(diff, decimal));
-	m_initializing = false;
 }
 
 void AxisDock::axisZeroOffsetChanged(qreal value) {
-	m_initializing = true;
+	if (m_initializing) return;
+	const Lock lock(m_initializing);
 	ui.leZeroOffset->setText( QString::number(value) );
-	m_initializing = false;
 }
 
 void AxisDock::axisScalingFactorChanged(qreal value) {
-	m_initializing = true;
+	if (m_initializing) return;
+	const Lock lock(m_initializing);
 	ui.leScalingFactor->setText( QString::number(value) );
-	m_initializing = false;
 }
 
 //line
