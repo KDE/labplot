@@ -93,6 +93,8 @@ private:
 	QStringList m_horizontal_header_data;
 	int m_defaultHeaderHeight;
 	bool m_suppressSignals{false};
+	int m_rowCount{0};
+	int m_columnCount{0};
 };
 
 #endif
