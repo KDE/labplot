@@ -48,7 +48,7 @@ public:
 	int endRow{-1};
 
 private:
-	QVector<void*> m_dataContainer; // pointers to the actual data containers
+	std::vector<void*> m_dataContainer; // pointers to the actual data containers
 };
 
 #endif

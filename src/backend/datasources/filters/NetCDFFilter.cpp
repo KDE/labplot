@@ -683,7 +683,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 
 	int actualRows = 0, actualCols = 0;
 	int columnOffset = 0;
-	QVector<void*> dataContainer;
+	std::vector<void*> dataContainer;
 	switch (ndims) {
 	case 0: {
 		DEBUG("	zero dimensions");

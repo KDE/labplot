@@ -412,7 +412,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	if (createIndexEnabled)
 		m_actualCols++;
 
-	QVector<void*> dataContainer;
+	std::vector<void*> dataContainer;
 	int columnOffset = 0;
 
 	//TODO: support other modes

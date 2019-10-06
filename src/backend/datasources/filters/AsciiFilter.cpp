@@ -1359,7 +1359,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				valueString = lineStringList.at(col);
 
 				// set value depending on data type
-				switch (columnModes[n]) {
+				switch (columnModes.at(n)) {
 				case AbstractColumn::Numeric: {
 					bool isNumber;
 					const double value = locale.toDouble(valueString, &isNumber);
@@ -1387,7 +1387,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 					break;
 				}
 			} else {	// missing columns in this line
-				switch (columnModes[n]) {
+				switch (columnModes.at(n)) {
 				case AbstractColumn::Numeric:
 					static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = nanValue;
 					break;

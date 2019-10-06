@@ -183,7 +183,7 @@ void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 
 	//make sure we have enough columns in the data source.
 	int columnOffset = 0;
-	QVector<void*> dataContainer;
+	std::vector<void*> dataContainer;
 
 	//TODO: support other modes
 	QVector<AbstractColumn::ColumnMode> columnModes;

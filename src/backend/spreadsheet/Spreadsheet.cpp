@@ -777,7 +777,7 @@ void Spreadsheet::unregisterShortcuts() {
 //##############################################################################
 //########################  Data Import  #######################################
 //##############################################################################
-int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode importMode,
+int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter::ImportMode importMode,
                                int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
 	DEBUG("Spreadsheet::prepareImport()")
 	DEBUG("	resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)

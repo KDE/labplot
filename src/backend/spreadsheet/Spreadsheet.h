@@ -84,7 +84,7 @@ public:
 	void unregisterShortcuts() override;
 
 	//data import
-	int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
+	int prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter::ImportMode,
 		int rows, int cols, QStringList colNameList, QVector<AbstractColumn::ColumnMode>) override;
 	void finalizeImport(int columnOffset, int startColumn , int endColumn,
 		const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
