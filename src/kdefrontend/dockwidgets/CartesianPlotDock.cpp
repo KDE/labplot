@@ -543,6 +543,7 @@ void CartesianPlotDock::xMinChanged(const QString& value) {
 	if (m_initializing)
 		return;
 
+	const Lock lock(m_initializing);
 	const float min = value.toDouble();
 	for (auto* plot : m_plotList)
 		plot->setXMin(min);
@@ -552,6 +553,7 @@ void CartesianPlotDock::xMaxChanged(const QString& value) {
 	if (m_initializing)
 		return;
 
+	const Lock lock(m_initializing);
 	const float max = value.toDouble();
 	for (auto* plot : m_plotList)
 		plot->setXMax(max);
@@ -626,6 +628,7 @@ void CartesianPlotDock::yMinChanged(const QString& value) {
 	if (m_initializing)
 		return;
 
+	const Lock lock(m_initializing);
 	const float min = value.toDouble();
 	for (auto* plot : m_plotList)
 		plot->setYMin(min);
@@ -635,6 +638,7 @@ void CartesianPlotDock::yMaxChanged(const QString& value) {
 	if (m_initializing)
 		return;
 
+	const Lock lock(m_initializing);
 	const float max = value.toDouble();
 	for (auto* plot : m_plotList)
 		plot->setYMax(max);
@@ -1340,17 +1344,17 @@ void CartesianPlotDock::plotXAutoScaleChanged(bool value) {
 }
 
 void CartesianPlotDock::plotXMinChanged(double value) {
-	m_initializing = true;
+	if (m_initializing)return;
+	const Lock lock(m_initializing);
 	ui.leXMin->setText( QString::number(value) );
 	ui.dateTimeEditXMin->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotXMaxChanged(double value) {
-	m_initializing = true;
+	if (m_initializing)return;
+	const Lock lock(m_initializing);
 	ui.leXMax->setText( QString::number(value) );
 	ui.dateTimeEditXMax->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotXScaleChanged(int scale) {
@@ -1372,17 +1376,17 @@ void CartesianPlotDock::plotYAutoScaleChanged(bool value) {
 }
 
 void CartesianPlotDock::plotYMinChanged(double value) {
-	m_initializing = true;
+	if (m_initializing)return;
+	const Lock lock(m_initializing);
 	ui.leYMin->setText( QString::number(value) );
 	ui.dateTimeEditYMin->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotYMaxChanged(double value) {
-	m_initializing = true;
+	if (m_initializing)return;
+	const Lock lock(m_initializing);
 	ui.leYMax->setText( QString::number(value) );
 	ui.dateTimeEditYMax->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotYScaleChanged(int scale) {
