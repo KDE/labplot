@@ -511,15 +511,17 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 		break;
 	}
 	case AbstractColumn::Text: {
+		auto* vec = static_cast<QVector<QString>*>(m_data);
 		for (int i = 0; i < num_rows; ++i)
-			static_cast<QVector<QString>*>(m_data)->replace(i, other->textAt(i));
+			vec->replace(i, other->textAt(i));
 		break;
 	}
 	case AbstractColumn::DateTime:
 	case AbstractColumn::Month:
 	case AbstractColumn::Day: {
+		auto* vec = static_cast<QVector<QDateTime>*>(m_data);
 		for (int i = 0; i < num_rows; ++i)
-			static_cast<QVector<QDateTime>*>(m_data)->replace(i, other->dateTimeAt(i));
+			vec->replace(i, other->dateTimeAt(i));
 		break;
 	}
 	}

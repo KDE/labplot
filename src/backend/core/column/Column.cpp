@@ -85,8 +85,8 @@ void Column::init() {
 	d->outputFilter()->input(0, this);
 	d->inputFilter()->setHidden(true);
 	d->outputFilter()->setHidden(true);
-	addChild(d->inputFilter());
-	addChild(d->outputFilter());
+	addChildFast(d->inputFilter());
+	addChildFast(d->outputFilter());
 	m_suppressDataChangedSignal = false;
 
 	m_usedInActionGroup = new QActionGroup(this);
