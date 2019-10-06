@@ -1309,8 +1309,13 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	if (qMin(lines, m_actualRows) == 0 || m_actualCols == 0)
 		return;
 
+	QString line;
+	QString valueString;
+	//Don't put the definition QStringList lineStringList outside of the for-loop,
+	//the compile doesn't seem to omptimize the desctructor of QList well enough in this case.
+
 	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
-		QString line = device.readLine();
+		line = device.readLine();
 
 		// remove any newline
 		line.remove(QLatin1Char('\n'));
@@ -1323,7 +1328,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			continue;
 
 		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-		DEBUG("	Line bytes: " << line.size() << " line: " << line.toStdString());
+// 		DEBUG("	Line bytes: " << line.size() << " line: " << line.toStdString());
 		if (simplifyWhitespacesEnabled) {
 			for (int i = 0; i < lineStringList.size(); ++i)
 				lineStringList[i] = lineStringList[i].simplified();
@@ -1332,7 +1337,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		// remove left white spaces
 		if (skipEmptyParts) {
 			for (int n = 0; n < lineStringList.size(); ++n) {
-				QString valueString = lineStringList.at(n);
+				valueString = lineStringList.at(n);
 				if (!QString::compare(valueString, " ")) {
 					lineStringList.removeAt(n);
 					n--;
@@ -1351,7 +1356,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			int col = createIndexEnabled ? n + startColumn - 2: n + startColumn - 1;
 
 			if (col < lineStringList.size()) {
-				QString valueString = lineStringList.at(col);
+				valueString = lineStringList.at(col);
 
 				// set value depending on data type
 				switch (columnModes[n]) {
@@ -1470,8 +1475,11 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 		columnModes[col++] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 	}
 
+	QString line;
+	QLocale locale(numberFormat);
+	QStringList lineString;
 	for (int i = 0; i < linesToRead; ++i) {
-		QString line = newData.at(i);
+		line = newData.at(i);
 
 		// remove any newline
 		line = line.remove('\n');
@@ -1483,13 +1491,10 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 		if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
 			continue;
 
-		QLocale locale(numberFormat);
-
 		QStringList lineStringList = line.split(' ', QString::SkipEmptyParts);
 		if (createIndexEnabled)
 			lineStringList.prepend(QString::number(i + 1));
 
-		QStringList lineString;
 		for (int n = 0; n < lineStringList.size(); ++n) {
 			if (n < lineStringList.size()) {
 				QString valueString = lineStringList.at(n);
@@ -1574,8 +1579,9 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 		device.readLine();
 
 	DEBUG("	Generating preview for " << qMin(lines, m_actualRows)  << " lines");
+	QString line;
 	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
-		QString line = device.readLine();
+		line = device.readLine();
 
 		// remove any newline
 		line = line.remove('\n');
