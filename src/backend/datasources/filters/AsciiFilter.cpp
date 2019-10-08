@@ -1312,7 +1312,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	QString line;
 	QString valueString;
 	//Don't put the definition QStringList lineStringList outside of the for-loop,
-	//the compiler doesn't seem to omptimize the desctructor of QList well enough in this case.
+	//the compiler doesn't seem to optimize the destructor of QList well enough in this case.
 
 	lines = qMin(lines, m_actualRows);
 	int progressIndex = 0;
