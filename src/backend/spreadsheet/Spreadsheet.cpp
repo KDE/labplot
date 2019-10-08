@@ -813,7 +813,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 		Column* column = this->child<Column>(columnOffset+n);
 		DEBUG(" column " << n << " columnMode = " << columnMode[n]);
-		column->setColumnMode(columnMode[n]);
+		column->setColumnModeFast(columnMode[n]);
 
 		//in the most cases the first imported column is meant to be used as x-data.
 		//Other columns provide mostly y-data or errors.

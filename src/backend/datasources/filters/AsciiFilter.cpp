@@ -1312,9 +1312,13 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	QString line;
 	QString valueString;
 	//Don't put the definition QStringList lineStringList outside of the for-loop,
-	//the compile doesn't seem to omptimize the desctructor of QList well enough in this case.
+	//the compiler doesn't seem to omptimize the desctructor of QList well enough in this case.
 
-	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
+	lines = qMin(lines, m_actualRows);
+	int progressIndex = 0;
+	const float progressInterval = 0.01*lines; //update on every 1% only
+
+	for (int i = 0; i < lines; ++i) {
 		line = device.readLine();
 
 		// remove any newline
@@ -1408,7 +1412,16 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		}
 
 		currentRow++;
-		emit q->completed(100 * currentRow/m_actualRows);
+
+		//ask to update the progress bar only if we have more than 1000 lines
+		//only in 1% steps
+		progressIndex++;
+		if (lines > 1000 && progressIndex > progressInterval) {
+			emit q->completed(100 * currentRow/lines);
+			progressIndex = 0;
+			QApplication::processEvents(QEventLoop::AllEvents, 0);
+		}
+
 	}
 	DEBUG("	Read " << currentRow << " lines");
 
