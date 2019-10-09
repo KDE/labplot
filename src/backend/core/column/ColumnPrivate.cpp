@@ -1429,41 +1429,58 @@ void ColumnPrivate::updateProperties() {
 		if (m_column_mode == AbstractColumn::Integer) {
 			valueInt = integerAt(row);
 
-			// check monotonic increasing
-			if (valueInt >= prevValueInt && monotonic_increasing < 0)
-				monotonic_increasing = 1;
-			else if (valueInt < prevValueInt && monotonic_increasing >= 0)
-				monotonic_increasing = 0;
-			// else: nothing
-
-			// check monotonic decreasing
-			if (valueInt <= prevValueInt && monotonic_decreasing < 0)
-				monotonic_decreasing = 1;
-			else if (valueInt > prevValueInt && monotonic_decreasing >= 0)
+			if (valueInt > prevValueInt) {
 				monotonic_decreasing = 0;
+				if (monotonic_increasing < 0)
+					monotonic_increasing = 1;
+				else if (monotonic_increasing == 0)
+					break; // when nor increasing, nor decreasing, break
+
+			} else if (valueInt < prevValueInt) {
+				monotonic_increasing = 0;
+				if (monotonic_decreasing < 0)
+					monotonic_decreasing = 1;
+				else if (monotonic_decreasing == 0)
+					break; // when nor increasing, nor decreasing, break
+
+			} else {
+				if (monotonic_increasing < 0 && monotonic_decreasing < 0) {
+					monotonic_decreasing = 1;
+					monotonic_increasing = 1;
+				}
+			}
+
 
 			prevValueInt = valueInt;
 
 			} else if (m_column_mode == AbstractColumn::Numeric) {
 				value = valueAt(row);
 
-				// check monotonic increasing
-				if (value >= prevValue && monotonic_increasing < 0)
-					monotonic_increasing = 1;
-				else if (value < prevValue || std::isnan(value)) {
+				if (std::isnan(value)) {
 					monotonic_increasing = 0;
-					if (monotonic_decreasing == 0)
-						break;
-				}
-				// else: nothing
-
-				// check monotonic decreasing
-				if (value <= prevValue && monotonic_decreasing < 0)
-					monotonic_decreasing = 1;
-				else if (value > prevValue || std::isnan(value)) {
 					monotonic_decreasing = 0;
-					if (monotonic_increasing == 0)
-						break;
+					break;
+				}
+
+				if (value > prevValue) {
+					monotonic_decreasing = 0;
+					if (monotonic_increasing < 0)
+						monotonic_increasing = 1;
+					else if (monotonic_increasing == 0)
+						break; // when nor increasing, nor decreasing, break
+
+				} else if (value < prevValue) {
+					monotonic_increasing = 0;
+					if (monotonic_decreasing < 0)
+						monotonic_decreasing = 1;
+					else if (monotonic_decreasing == 0)
+						break; // when nor increasing, nor decreasing, break
+
+				} else {
+					if (monotonic_increasing < 0 && monotonic_decreasing < 0) {
+						monotonic_decreasing = 1;
+						monotonic_increasing = 1;
+					}
 				}
 
 				prevValue = value;
@@ -1474,18 +1491,26 @@ void ColumnPrivate::updateProperties() {
 
 				valueDateTime = dateTimeAt(row).toMSecsSinceEpoch();
 
-				// check monotonic increasing
-				if (valueDateTime >= prevValueDatetime && monotonic_increasing < 0)
-					monotonic_increasing = 1;
-				else if (valueDateTime < prevValueDatetime)
-					monotonic_increasing = 0;
-				// else: nothing
-
-				// check monotonic decreasing
-				if (valueDateTime <= prevValueDatetime && monotonic_decreasing < 0)
-					monotonic_decreasing = 1;
-				else if (valueDateTime > prevValueDatetime)
+				if (valueDateTime > prevValueDatetime) {
 					monotonic_decreasing = 0;
+					if (monotonic_increasing < 0)
+						monotonic_increasing = 1;
+					else if (monotonic_increasing == 0)
+						break; // when nor increasing, nor decreasing, break
+
+				} else if (valueDateTime < prevValueDatetime) {
+					monotonic_increasing = 0;
+					if (monotonic_decreasing < 0)
+						monotonic_decreasing = 1;
+					else if (monotonic_decreasing == 0)
+						break; // when nor increasing, nor decreasing, break
+
+				} else {
+					if (monotonic_increasing < 0 && monotonic_decreasing < 0) {
+						monotonic_decreasing = 1;
+						monotonic_increasing = 1;
+					}
+				}
 
 				prevValueDatetime = valueDateTime;
 			}
