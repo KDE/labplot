@@ -923,6 +923,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 }
 
 void Worksheet::cursorModelPlotAdded(QString name) {
+	Q_UNUSED(name);
 //	TreeModel* treeModel = cursorModel();
 //	int rowCount = treeModel->rowCount();
 //	// add plot at the end
