@@ -1101,9 +1101,13 @@ void Worksheet::updateCurveBackground(QPen pen, QString curveName) {
  * If the plot or the curve are not available, the plot/curve is not in the treemodel!
  */
 void Worksheet::updateCompleteCursorTreeModel() {
+	if (isLoading())
+		return;
+
 	TreeModel* treeModel = cursorModel();
 
-	treeModel->removeRows(0,treeModel->rowCount()); // remove all data
+	if (treeModel->rowCount() > 0)
+		treeModel->removeRows(0, treeModel->rowCount()); // remove all data
 
 	int plotCount = getPlotCount();
 	if (plotCount < 1)
@@ -1533,6 +1537,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 	if (!preview) {
 		d->m_scene->setSceneRect(rect);
 		d->updateLayout();
+		updateCompleteCursorTreeModel();
 	}
 
 	return true;
