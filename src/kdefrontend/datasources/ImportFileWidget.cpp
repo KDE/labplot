@@ -960,10 +960,19 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 				if (ui.cbFileType->currentIndex() != i) {
 					ui.cbFileType->setCurrentIndex(i); // will call the slot fileTypeChanged which updates content and preview
 
+					//automatically set the comma separator if a csv file was selected
+					if (fileType == AbstractFileFilter::Ascii && name.endsWith(QLatin1String("csv"), Qt::CaseInsensitive))
+						m_asciiOptionsWidget->setSeparatingCharacter(QLatin1Char(','));
+
 					emit fileNameChanged();
 					return;
 				} else {
 					initOptionsWidget();
+
+					//automatically set the comma separator if a csv file was selected
+					if (fileType == AbstractFileFilter::Ascii && name.endsWith(QLatin1String("csv"), Qt::CaseInsensitive))
+						m_asciiOptionsWidget->setSeparatingCharacter(QLatin1Char(','));
+
 					updateContent(fileName);
 					break;
 				}
