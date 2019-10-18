@@ -119,6 +119,7 @@ int main (int argc, char *argv[]) {
 	QStringList appdatapaths = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
 	QDEBUG("AppDataLocation paths = " << appdatapaths);
 	QDEBUG("Icon theme search paths = " << QIcon::themeSearchPaths());
+	QDEBUG("Library search paths = " << QCoreApplication::libraryPaths());
 
 	// needed in order to have the signals triggered by SignallingUndoCommand
 	//TODO: redesign/remove this
