@@ -655,17 +655,6 @@ void QxtSpanSlider::paintEvent(QPaintEvent* event) {
 	qxt_d().drawSpan(&painter, spanRect);
 
 	// handles
-	switch (qxt_d().lastPressed) {
-	case QxtSpanSlider::NoHandle:
-		break;
-	case QxtSpanSlider::LowerHandle:
-		qxt_d().drawHandle(&painter, QxtSpanSlider::UpperHandle);
-		qxt_d().drawHandle(&painter, QxtSpanSlider::LowerHandle);
-		break;
-	case QxtSpanSlider::UpperHandle:
-	default:
-		qxt_d().drawHandle(&painter, QxtSpanSlider::LowerHandle);
-		qxt_d().drawHandle(&painter, QxtSpanSlider::UpperHandle);
-		break;
-	}
+	qxt_d().drawHandle(&painter, QxtSpanSlider::UpperHandle);
+	qxt_d().drawHandle(&painter, QxtSpanSlider::LowerHandle);
 }

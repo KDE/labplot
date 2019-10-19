@@ -180,7 +180,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	KConfig config(m_configPath, KConfig::SimpleConfig);
 	KConfigGroup group = config.group(ui.cbConnection->currentText());
 
-	//close and remove the previos connection, if available
+	//close and remove the previous connection, if available
 	if (m_db.isOpen()) {
 		m_db.close();
 		QSqlDatabase::removeDatabase(m_db.driverName());
@@ -364,7 +364,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 
 	// pointers to the actual data containers
 	//columnOffset indexes the "start column" in the datasource. Data will be imported starting from this column.
-	QVector<void*> dataContainer;
+	std::vector<void*> dataContainer;
 	int columnOffset = dataSource->prepareImport(dataContainer, importMode, rows, m_cols, m_columnNames, m_columnModes);
 
 	//number and DateTime formatting

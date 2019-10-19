@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
     File                 : XYCurve.cpp
     Project              : LabPlot
     Description          : A xy-curve
@@ -256,9 +256,8 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, symbolsPen, symbolsPen)
 //values
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesType, valuesType, valuesType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, valuesColumn, valuesColumn)
-const QString& XYCurve::valuesColumnPath() const {
-	return d_ptr->valuesColumnPath;
-}
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesColumnPath, valuesColumnPath)
+
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesPosition, valuesPosition, valuesPosition)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesDistance, valuesDistance)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesRotationAngle, valuesRotationAngle)
@@ -282,23 +281,15 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, fillingOpacity, fillingOpacity)
 //error bars
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, xErrorType, xErrorType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xErrorPlusColumn, xErrorPlusColumn)
-const QString& XYCurve::xErrorPlusColumnPath() const {
-	return d_ptr->xErrorPlusColumnPath;
-}
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xErrorMinusColumn, xErrorMinusColumn)
-const QString& XYCurve::xErrorMinusColumnPath() const {
-	return d_ptr->xErrorMinusColumnPath;
-}
-
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, yErrorType, yErrorType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yErrorPlusColumn, yErrorPlusColumn)
-const QString& XYCurve::yErrorPlusColumnPath() const {
-	return d_ptr->yErrorPlusColumnPath;
-}
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yErrorMinusColumn, yErrorMinusColumn)
-const QString& XYCurve::yErrorMinusColumnPath() const {
-	return d_ptr->yErrorMinusColumnPath;
-}
+
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, xErrorPlusColumnPath, xErrorPlusColumnPath)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, xErrorMinusColumnPath, xErrorMinusColumnPath)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, yErrorPlusColumnPath, yErrorPlusColumnPath)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, yErrorMinusColumnPath, yErrorMinusColumnPath)
 
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsCapSize, errorBarsCapSize)
@@ -317,57 +308,22 @@ bool XYCurve::isSourceDataChangedSinceLastRecalc() const {
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXColumn, const AbstractColumn*, xColumn, recalcLogicalPoints)
+
+// 1) add XYCurveSetXColumnCmd as friend class to XYCurve
+// 2) add XYCURVE_COLUMN_CONNECT(x) as private method to XYCurve
+// 3) define all missing slots
+XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(X, x, recalcLogicalPoints)
 void XYCurve::setXColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
-	if (column != d->xColumn) {
+	if (column != d->xColumn)
 		exec(new XYCurveSetXColumnCmd(d, column, ki18n("%1: x-data source changed")));
-
-		//emit xDataChanged() in order to notify the plot about the changes
-		emit xDataChanged();
-		if (column) {
-			setXColumnPath(column->path());
-
-			//update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, [=](){ d->recalcLogicalPoints(); });
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &XYCurve::xColumnAboutToBeRemoved);
-			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYCurve::xColumnNameChanged);
-			//after the curve was updated, emit the signal to update the plot ranges
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(xDataChanged()));
-
-			//TODO: add disconnect in the undo-function
-		} else
-			setXColumnPath("");
-	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYColumn, const AbstractColumn*, yColumn, recalcLogicalPoints)
+XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(Y, y, recalcLogicalPoints)
 void XYCurve::setYColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
-	if (column != d->yColumn) {
-		// disconnect old column
-		disconnect(d->yColumn, &AbstractAspect::aspectDescriptionChanged, this, &XYCurve::yColumnNameChanged);
+	if (column != d->yColumn)
 		exec(new XYCurveSetYColumnCmd(d, column, ki18n("%1: y-data source changed")));
-
-		//emit yDataChanged() in order to notify the plot about the changes
-		emit yDataChanged();
-		if (column) {
-			setYColumnPath(column->path());
-
-			//update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, [=](){ d->recalcLogicalPoints(); });
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &XYCurve::yColumnAboutToBeRemoved);
-			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYCurve::yColumnNameChanged);
-
-			//after the curve was updated, emit the signal to update the plot ranges
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(yDataChanged()));
-
-			//TODO: add disconnect in the undo-function
-		} else
-			setXColumnPath("");
-	}
 }
 
 void XYCurve::setXColumnPath(const QString& path) {
@@ -496,17 +452,19 @@ void XYCurve::setValuesType(XYCurve::ValuesType type) {
 		exec(new XYCurveSetValuesTypeCmd(d, type, ki18n("%1: set values type")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesColumn, const AbstractColumn*, valuesColumn, updateValues)
+XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(Values, values, updateValues)
 void XYCurve::setValuesColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->valuesColumn) {
 		exec(new XYCurveSetValuesColumnCmd(d, column, ki18n("%1: set values column")));
-		if (column) {
+		if (column)
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateValues()));
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &XYCurve::aspectAboutToBeRemoved);
-		}
 	}
+}
+
+void XYCurve::setValuesColumnPath(const QString& path) {
+	Q_D(XYCurve);
+	d->valuesColumnPath = path;
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesPosition, XYCurve::ValuesPosition, valuesPosition, updateValues)
@@ -639,30 +597,34 @@ void XYCurve::setXErrorType(ErrorType type) {
 		exec(new XYCurveSetXErrorTypeCmd(d, type, ki18n("%1: x-error type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXErrorPlusColumn, const AbstractColumn*, xErrorPlusColumn, updateErrorBars)
+XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(XErrorPlus, xErrorPlus, updateErrorBars)
 void XYCurve::setXErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xErrorPlusColumn) {
 		exec(new XYCurveSetXErrorPlusColumnCmd(d, column, ki18n("%1: set x-error column")));
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &XYCurve::xErrorPlusColumnAboutToBeRemoved);
-		}
+		if (column)
+			connect(column, &AbstractColumn::dataChanged, this, &XYCurve::updateErrorBars);
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXErrorMinusColumn, const AbstractColumn*, xErrorMinusColumn, updateErrorBars)
+void XYCurve::setXErrorPlusColumnPath(const QString& path) {
+	Q_D(XYCurve);
+	d->xErrorPlusColumnPath = path;
+}
+
+XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(XErrorMinus, xErrorMinus, updateErrorBars)
 void XYCurve::setXErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xErrorMinusColumn) {
 		exec(new XYCurveSetXErrorMinusColumnCmd(d, column, ki18n("%1: set x-error column")));
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &XYCurve::xErrorMinusColumnAboutToBeRemoved);
-		}
+		if (column)
+			connect(column, &AbstractColumn::dataChanged, this, &XYCurve::updateErrorBars);
 	}
+}
+
+void XYCurve::setXErrorMinusColumnPath(const QString& path) {
+	Q_D(XYCurve);
+	d->xErrorMinusColumnPath = path;
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYErrorType, XYCurve::ErrorType, yErrorType, updateErrorBars)
@@ -672,30 +634,34 @@ void XYCurve::setYErrorType(ErrorType type) {
 		exec(new XYCurveSetYErrorTypeCmd(d, type, ki18n("%1: y-error type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYErrorPlusColumn, const AbstractColumn*, yErrorPlusColumn, updateErrorBars)
+XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(YErrorPlus, yErrorPlus, updateErrorBars)
 void XYCurve::setYErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->yErrorPlusColumn) {
 		exec(new XYCurveSetYErrorPlusColumnCmd(d, column, ki18n("%1: set y-error column")));
-		if (column) {
+		if (column)
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &XYCurve::yErrorPlusColumnAboutToBeRemoved);
-		}
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYErrorMinusColumn, const AbstractColumn*, yErrorMinusColumn, updateErrorBars)
+void XYCurve::setYErrorPlusColumnPath(const QString& path) {
+	Q_D(XYCurve);
+	d->yErrorPlusColumnPath = path;
+}
+
+XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(YErrorMinus, yErrorMinus, updateErrorBars)
 void XYCurve::setYErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->yErrorMinusColumn) {
 		exec(new XYCurveSetYErrorMinusColumnCmd(d, column, ki18n("%1: set y-error column")));
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &XYCurve::yErrorMinusColumnAboutToBeRemoved);
-		}
+		if (column)
+			connect(column, &AbstractColumn::dataChanged, this, &XYCurve::updateErrorBars);
 	}
+}
+
+void XYCurve::setYErrorMinusColumnPath(const QString& path) {
+	Q_D(XYCurve);
+	d->yErrorMinusColumnPath = path;
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetErrorBarsCapSize, qreal, errorBarsCapSize, updateErrorBars)
@@ -775,9 +741,40 @@ void XYCurve::handleResize(double horizontalRatio, double verticalRatio, bool pa
 	setValuesFont(font);
 }
 
+/*!
+ * returns \c true if the aspect being removed \c removedAspect is equal to \c column
+ * or to one of its parents. returns \c false otherwise.
+ */
+bool XYCurve::columnRemoved(const AbstractColumn* column, const AbstractAspect* removedAspect) const {
+	// TODO: BAD HACK.
+	// In macrosXYCurve.h every parent of the column is connected to the function aspectAboutToBeRemoved().
+	// When a column is removed, the function aspectAboutToBeRemoved is called and the column pointer is set to nullptr.
+	// However, when a child of the parent is removed, the parent calls the aspectAboutToBeRemoved() again, but
+	// the column was already disconnected.
+	// Better solution would be to emit aspectAboutToBeRemoved() for every column when their parents are removed.
+	// At the moment this signal is only emitted when the column is deleted directly and not when its parent is deleted.
+	// Once this is done, the connection of all parents to the aspectAboutToBeRemoved() signal can be removed.
+	if (!column)
+		return false;
+
+	bool removed = (removedAspect == column);
+	if (!removed) {
+		auto* parent = column->parentAspect();
+		while (parent) {
+			if (parent == removedAspect) {
+				removed = true;
+				break;
+			}
+			parent = parent->parentAspect();
+		}
+	}
+	return removed;
+}
+
 void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (aspect == d->xColumn) {
+	if (columnRemoved(d->xColumn, aspect)) {
+		disconnect(aspect, nullptr, this, nullptr);
 		d->xColumn = nullptr;
 		d->retransform();
 	}
@@ -785,7 +782,8 @@ void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (aspect == d->yColumn) {
+	if (columnRemoved(d->yColumn, aspect)) {
+		disconnect(aspect, nullptr, this, nullptr);
 		d->yColumn = nullptr;
 		d->retransform();
 	}
@@ -793,7 +791,8 @@ void XYCurve::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (aspect == d->valuesColumn) {
+	if (columnRemoved(d->valuesColumn, aspect)) {
+		disconnect(aspect, nullptr, this, nullptr);
 		d->valuesColumn = nullptr;
 		d->updateValues();
 	}
@@ -801,7 +800,8 @@ void XYCurve::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::xErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (aspect == d->xErrorPlusColumn) {
+	if (columnRemoved(d->xErrorPlusColumn, aspect)) {
+		disconnect(aspect, nullptr, this, nullptr);
 		d->xErrorPlusColumn = nullptr;
 		d->updateErrorBars();
 	}
@@ -809,7 +809,8 @@ void XYCurve::xErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::xErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (aspect == d->xErrorMinusColumn) {
+	if (columnRemoved(d->xErrorMinusColumn, aspect)) {
+		disconnect(aspect, nullptr, this, nullptr);
 		d->xErrorMinusColumn = nullptr;
 		d->updateErrorBars();
 	}
@@ -817,7 +818,8 @@ void XYCurve::xErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::yErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (aspect == d->yErrorPlusColumn) {
+	if (columnRemoved(d->yErrorPlusColumn, aspect)) {
+		disconnect(aspect, nullptr, this, nullptr);
 		d->yErrorPlusColumn = nullptr;
 		d->updateErrorBars();
 	}
@@ -825,7 +827,8 @@ void XYCurve::yErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::yErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (aspect == d->yErrorMinusColumn) {
+	if (columnRemoved(d->yErrorMinusColumn, aspect)) {
+		disconnect(aspect, nullptr, this, nullptr);
 		d->yErrorMinusColumn = nullptr;
 		d->updateErrorBars();
 	}
@@ -839,6 +842,31 @@ void XYCurve::xColumnNameChanged() {
 void XYCurve::yColumnNameChanged() {
 	Q_D(XYCurve);
 	setYColumnPath(d->yColumn->path());
+}
+
+void XYCurve::xErrorPlusColumnNameChanged() {
+	Q_D(XYCurve);
+	setXErrorPlusColumnPath(d->xErrorPlusColumn->path());
+}
+
+void XYCurve::xErrorMinusColumnNameChanged() {
+	Q_D(XYCurve);
+	setXErrorMinusColumnPath(d->xErrorMinusColumn->path());
+}
+
+void XYCurve::yErrorPlusColumnNameChanged() {
+	Q_D(XYCurve);
+	setYErrorPlusColumnPath(d->yErrorPlusColumn->path());
+}
+
+void XYCurve::yErrorMinusColumnNameChanged() {
+	Q_D(XYCurve);
+	setYErrorMinusColumnPath(d->yErrorMinusColumn->path());
+}
+
+void XYCurve::valuesColumnNameChanged() {
+	Q_D(XYCurve);
+	setValuesColumnPath(d->valuesColumn->path());
 }
 
 //##############################################################################
@@ -1164,7 +1192,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 			  minY = p0.y();
 
 
-			if (1) { //p1.x() >= plot->xMin() && p1.x() <= plot->xMax()) { // x inside scene
+			if (true) { //p1.x() >= plot->xMin() && p1.x() <= plot->xMax()) { // x inside scene
 				if (minY == maxY) {
 					lines.append(QLineF(p0, p1)); // line from previous point to actual point
 				} else if (p0.y() == minY) { // draw vertical line
@@ -1235,13 +1263,7 @@ void XYCurvePrivate::updateLines() {
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines(), calculate the lines connecting the data points");
 #endif
 	QPointF tempPoint1, tempPoint2; // used as temporaryPoints to interpolate datapoints if the corresponding setting is set
-
 	int startIndex, endIndex;
-	bool overlap = false;
-	double maxY, minY; // are initialized in add line()
-	int pixelDiff;
-	QPointF p0;
-	QPointF p1;
 
 	// find index for xMin and xMax to not loop throug all values
 	AbstractColumn::Properties columnProperties = q->xColumn()->properties();
@@ -1273,6 +1295,12 @@ void XYCurvePrivate::updateLines() {
 		tempPoint2 = QPointF(plot->xMin(), plot->yMax());
 		lines.append(QLineF(tempPoint1, tempPoint2));
 	} else {
+		bool overlap = false;
+		double maxY, minY; // are initialized in add line()
+		int pixelDiff;
+		QPointF p0;
+		QPointF p1;
+
 		switch (lineType) {
 		case XYCurve::NoLine:
 			break;
@@ -1287,10 +1315,9 @@ void XYCurvePrivate::updateLines() {
 				addLine(p0, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 			}
 			// add last line
-			if (overlap) {
-				overlap = false;
+			if (overlap)
 				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
-			}
+
 			break;
 		}
 		case XYCurve::StartHorizontal: {
@@ -1307,10 +1334,9 @@ void XYCurvePrivate::updateLines() {
 				addLine(tempPoint1, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 			}
 			// add last line
-			if (overlap) {
-				overlap = false;
+			if (overlap)
 				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
-			}
+
 			break;
 		}
 		case XYCurve::StartVertical: {
@@ -1326,10 +1352,9 @@ void XYCurvePrivate::updateLines() {
 				addLine(tempPoint1, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 			}
 			// add last line
-			if (overlap) {
-				overlap = false;
+			if (overlap)
 				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
-			}
+
 			break;
 		}
 		case XYCurve::MidpointHorizontal: {
@@ -1348,10 +1373,9 @@ void XYCurvePrivate::updateLines() {
 				addLine(tempPoint2, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 			}
 			// add last line
-			if (overlap) {
-				overlap = false;
+			if (overlap)
 				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
-			}
+
 			break;
 		}
 		case XYCurve::MidpointVertical: {
@@ -1370,10 +1394,9 @@ void XYCurvePrivate::updateLines() {
 				addLine(tempPoint2, p1, minY, maxY, overlap, pixelDiff, countPixelX);
 			}
 			// add last line
-			if (overlap) {
-				overlap = false;
+			if (overlap)
 				lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
-			}
+
 			break;
 		}
 		case XYCurve::Segments2: {
@@ -1398,10 +1421,9 @@ void XYCurvePrivate::updateLines() {
 				}
 			}
 			// add last line
-			if (overlap) {
-				overlap = false;
+			if (overlap)
 				lines.append(QLineF(symbolPointsLogical[endIndex-1], symbolPointsLogical[endIndex]));
-			}
+
 			break;
 		}
 		case XYCurve::Segments3: {
@@ -1426,10 +1448,9 @@ void XYCurvePrivate::updateLines() {
 				}
 			}
 			// add last line
-			if (overlap) {
-				overlap = false;
+			if (overlap)
 				lines.append(QLineF(symbolPointsLogical[endIndex-1], symbolPointsLogical[endIndex]));
-			}
+
 			break;
 		}
 		case XYCurve::SplineCubicNatural:
@@ -1494,12 +1515,11 @@ void XYCurvePrivate::updateLines() {
 			for (unsigned int i = 0; i < count - 1; i++) {
 				const double x1 = x[i];
 				const double x2 = x[i+1];
-				double xi, yi;
 				const double step = fabs(x2 - x1)/(lineInterpolationPointsCount + 1);
 
 				for (int i=0; i < (lineInterpolationPointsCount + 1); i++) {
-					xi = x1+i*step;
-					yi = gsl_spline_eval(spline, xi, acc);
+					double xi = x1+i*step;
+					double yi = gsl_spline_eval(spline, xi, acc);
 					xinterp.push_back(xi);
 					yinterp.push_back(yi);
 				}
@@ -1516,10 +1536,8 @@ void XYCurvePrivate::updateLines() {
 				addLine(QPointF(xinterp[xinterp.size()-1], yinterp[yinterp.size()-1]), QPointF(x[count-1], y[count-1]), minY, maxY, overlap, pixelDiff, countPixelX);
 
 				// add last line
-				if (overlap) {
-					overlap = false;
+				if (overlap)
 					lines.append(QLineF(QPointF(xinterp[xinterp.size()-1], yinterp[yinterp.size()-1]), QPointF(x[count-1], y[count-1])));
-				}
 			}
 
 			delete[] x;
@@ -2046,12 +2064,12 @@ void XYCurvePrivate::updateFilling() {
  * @return
  */
 double XYCurve::y(double x, bool &valueFound) const {
-	if (!yColumn()) {
+	if (!yColumn() || !xColumn()) {
 		valueFound = false;
 		return NAN;
 	}
 
-    AbstractColumn::ColumnMode yColumnMode = yColumn()->columnMode();
+	AbstractColumn::ColumnMode yColumnMode = yColumn()->columnMode();
 	int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
@@ -2076,7 +2094,10 @@ double XYCurve::y(double x, bool &valueFound) const {
 * @return Return found value
 */
 QDateTime XYCurve::yDateTime(double x, bool &valueFound) const {
-
+	if (!yColumn() || !xColumn()) {
+		valueFound = false;
+		return QDateTime();
+	}
    AbstractColumn::ColumnMode yColumnMode = yColumn()->columnMode();
    int index = xColumn()->indexForValue(x);
    if (index < 0) {
@@ -2095,15 +2116,16 @@ QDateTime XYCurve::yDateTime(double x, bool &valueFound) const {
 }
 
 bool XYCurve::minMaxY(int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars) const {
-	return minMax(yColumn(), yErrorType(), yErrorPlusColumn(), yErrorMinusColumn(), indexMin, indexMax, yMin, yMax, includeErrorBars);
+	return minMax(yColumn(), xColumn(), yErrorType(), yErrorPlusColumn(), yErrorMinusColumn(), indexMin, indexMax, yMin, yMax, includeErrorBars);
 }
 
 bool XYCurve::minMaxX(int indexMin, int indexMax, double& xMin, double& xMax, bool includeErrorBars) const {
-	return minMax(xColumn(), xErrorType(), xErrorPlusColumn(), xErrorMinusColumn(), indexMin, indexMax, xMin, xMax, includeErrorBars);
+	return minMax(xColumn(), yColumn(), xErrorType(), xErrorPlusColumn(), xErrorMinusColumn(), indexMin, indexMax, xMin, xMax, includeErrorBars);
 }
 
 /*!
  * Calculates the minimum \p min and maximum \p max of a curve with optionally respecting the error bars
+ * This function does not check if the values are out of range
  * \p indexMax is not included
  * \p column
  * \p errorType
@@ -2115,21 +2137,24 @@ bool XYCurve::minMaxX(int indexMin, int indexMax, double& xMin, double& xMax, bo
  * \p max
  * \ includeErrorBars If true respect the error bars in the min/max calculation
  */
-bool XYCurve::minMax(const AbstractColumn* column, const ErrorType errorType, const AbstractColumn* errorPlusColumn, const AbstractColumn* errorMinusColumn, int indexMin, int indexMax, double& min, double& max, bool includeErrorBars) const {
-	if (!includeErrorBars || errorType == XYCurve::NoError) {
-		min = column->minimum(indexMin, indexMax);
-		max = column->maximum(indexMin, indexMax);
+bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column2, const ErrorType errorType, const AbstractColumn* errorPlusColumn, const AbstractColumn* errorMinusColumn, int indexMin, int indexMax, double& min, double& max, bool includeErrorBars) const {
+	// when property is greater than 1 there is a benefit in finding minimum and maximum
+	// for property == 0 it must be iterated over all values so it does not matter if this function or the below one is used
+	// if the property of the second column is greater 0 means, that all values are valid and not masked
+	if ((!includeErrorBars || errorType == XYCurve::NoError) && column1->properties() > 0 && column2 && column2->properties() > 0) {
+		min = column1->minimum(indexMin, indexMax);
+		max = column1->maximum(indexMin, indexMax);
 		return true;
 	}
 
-	if (column->rowCount() == 0)
+	if (column1->rowCount() == 0)
 		return false;
 
 	min = INFINITY;
 	max = -INFINITY;
 
 	for (int i = indexMin; i < indexMax; ++i) {
-		if (!column->isValid(i) || column->isMasked(i))
+		if (!column1->isValid(i) || column1->isMasked(i) || (column2 && (!column2->isValid(i) || column2->isMasked(i))))
 			continue;
 
 		if ( (errorPlusColumn && i >= errorPlusColumn->rowCount())
@@ -2169,13 +2194,13 @@ bool XYCurve::minMax(const AbstractColumn* column, const ErrorType errorType, co
 		}
 
 		double value;
-		if (column->columnMode() == AbstractColumn::ColumnMode::Numeric ||
-			column->columnMode() == AbstractColumn::ColumnMode::Integer)
-			value = column->valueAt(i);
-		else if (column->columnMode() == AbstractColumn::ColumnMode::DateTime ||
-				 column->columnMode() == AbstractColumn::ColumnMode::Month ||
-				 column->columnMode() == AbstractColumn::ColumnMode::Day) {
-			value = column->dateTimeAt(i).toMSecsSinceEpoch();
+		if (column1->columnMode() == AbstractColumn::ColumnMode::Numeric ||
+			column1->columnMode() == AbstractColumn::ColumnMode::Integer)
+			value = column1->valueAt(i);
+		else if (column1->columnMode() == AbstractColumn::ColumnMode::DateTime ||
+				 column1->columnMode() == AbstractColumn::ColumnMode::Month ||
+				 column1->columnMode() == AbstractColumn::ColumnMode::Day) {
+			value = column1->dateTimeAt(i).toMSecsSinceEpoch();
 		} else
 			return false;
 
@@ -2485,18 +2510,18 @@ void XYCurvePrivate::updateErrorBars() {
 			switch (errorBarsType) {
 			case XYCurve::ErrorBarsSimple:
 				lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
-				                    QPointF(point.x()+errorPlus, point.y())));
+									QPointF(point.x()+errorPlus, point.y())));
 				break;
 			case XYCurve::ErrorBarsWithEnds:
 				lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
-				                    QPointF(point.x()+errorPlus, point.y())));
+									QPointF(point.x()+errorPlus, point.y())));
 				if (errorMinus != 0) {
 					lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()-capSizeX),
-					                    QPointF(point.x()-errorMinus, point.y()+capSizeX)));
+										QPointF(point.x()-errorMinus, point.y()+capSizeX)));
 				}
 				if (errorPlus != 0) {
 					lines.append(QLineF(QPointF(point.x()+errorPlus, point.y()-capSizeX),
-					                    QPointF(point.x()+errorPlus, point.y()+capSizeX)));
+										QPointF(point.x()+errorPlus, point.y()+capSizeX)));
 				}
 				break;
 			}
@@ -2523,17 +2548,17 @@ void XYCurvePrivate::updateErrorBars() {
 			switch (errorBarsType) {
 			case XYCurve::ErrorBarsSimple:
 				lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
-				                    QPointF(point.x(), point.y()+errorPlus)));
+									QPointF(point.x(), point.y()+errorPlus)));
 				break;
 			case XYCurve::ErrorBarsWithEnds:
 				lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
-				                    QPointF(point.x(), point.y()+errorPlus)));
+									QPointF(point.x(), point.y()+errorPlus)));
 				if (errorMinus != 0)
 					lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()-errorMinus),
-					                    QPointF(point.x()+capSizeY, point.y()-errorMinus)));
+										QPointF(point.x()+capSizeY, point.y()-errorMinus)));
 				if (errorPlus != 0)
 					lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()+errorPlus),
-					                    QPointF(point.x()+capSizeY, point.y()+errorPlus)));
+										QPointF(point.x()+capSizeY, point.y()+errorPlus)));
 				break;
 			}
 		}
@@ -2699,10 +2724,10 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	if (m_hovered && !isSelected() && !m_printing) {
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
-                        QPainter p(&pix);
-                        p.setCompositionMode(QPainter::CompositionMode_SourceIn);	// source (shadow) pixels merged with the alpha channel of the destination (m_pixmap)
-                        p.fillRect(pix.rect(), QApplication::palette().color(QPalette::Shadow));
-                        p.end();
+			QPainter p(&pix);
+			p.setCompositionMode(QPainter::CompositionMode_SourceIn);	// source (shadow) pixels merged with the alpha channel of the destination (m_pixmap)
+			p.fillRect(pix.rect(), QApplication::palette().color(QPalette::Shadow));
+			p.end();
 
 			m_hoverEffectImage = ImageTools::blurred(pix.toImage(), m_pixmap.rect(), 5);
 			m_hoverEffectImageIsDirty = false;
@@ -2715,10 +2740,10 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	if (isSelected() && !m_printing) {
 		if (m_selectionEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
-                        QPainter p(&pix);
-                        p.setCompositionMode(QPainter::CompositionMode_SourceIn);
-                        p.fillRect(pix.rect(), QApplication::palette().color(QPalette::Highlight));
-                        p.end();
+			QPainter p(&pix);
+			p.setCompositionMode(QPainter::CompositionMode_SourceIn);
+			p.fillRect(pix.rect(), QApplication::palette().color(QPalette::Highlight));
+			p.end();
 
 			m_selectionEffectImage = ImageTools::blurred(pix.toImage(), m_pixmap.rect(), 5);
 			m_selectionEffectImageIsDirty = false;

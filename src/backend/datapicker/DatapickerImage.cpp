@@ -91,7 +91,6 @@ void DatapickerImage::init() {
 	d->pointSeparation = group.readEntry("PointSeparation", 30);
 	d->axisPoints.type = (DatapickerImage::GraphType) group.readEntry("GraphType", (int) DatapickerImage::Cartesian);
 	d->axisPoints.ternaryScale = group.readEntry("TernaryScale", 1);
-	d->plotPointsType = (DatapickerImage::PointsType) group.readEntry("PlotPointsType", (int) DatapickerImage::AxisPoints);
 
 	//edit image settings
 	d->plotImageType = DatapickerImage::OriginalImage;
@@ -225,33 +224,6 @@ DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
 	return d->plotImageType;
 }
 
-void DatapickerImage::initSceneParameters() {
-	setRotationAngle(0.0);
-	setminSegmentLength(30);
-	setPointSeparation(30);
-
-	ReferencePoints axisPoints = d->axisPoints;
-	axisPoints.ternaryScale = 1;
-	axisPoints.type = DatapickerImage::Cartesian;
-	setAxisPoints(axisPoints);
-
-	EditorSettings settings;
-	settings.foregroundThresholdHigh = 90;
-	settings.foregroundThresholdLow = 30;
-	settings.hueThresholdHigh = 360;
-	settings.hueThresholdLow = 0;
-	settings.intensityThresholdHigh = 100;
-	settings.intensityThresholdLow = 20;
-	settings.saturationThresholdHigh = 100;
-	settings.saturationThresholdLow = 30;
-	settings.valueThresholdHigh = 90;
-	settings.valueThresholdLow = 30;
-	setSettings(settings);
-
-	DatapickerImage::PointsType plotPointsType = DatapickerImage::AxisPoints;
-	setPlotPointsType(plotPointsType);
-}
-
 /* =============================== getter methods for background options ================================= */
 CLASS_D_READER_IMPL(DatapickerImage, QString, fileName, fileName)
 CLASS_D_READER_IMPL(DatapickerImage, DatapickerImage::ReferencePoints, axisPoints, axisPoints)
@@ -307,7 +279,6 @@ void DatapickerImage::setPointStyle(Symbol::Style newStyle) {
 		exec(new DatapickerImageSetPointStyleCmd(d, newStyle, ki18n("%1: set point's style")));
 }
 
-
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointSize, qreal, pointSize, retransform)
 void DatapickerImage::setPointSize(qreal value) {
 	if (!qFuzzyCompare(1 + value, 1 + d->pointSize))
@@ -351,6 +322,9 @@ void DatapickerImage::setPrinting(bool on) const {
 }
 
 void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
+	if (d->plotPointsType == pointsType)
+		return;
+
 	d->plotPointsType = pointsType;
 
 	if (pointsType == DatapickerImage::AxisPoints) {
@@ -452,10 +426,8 @@ void DatapickerImagePrivate::updateFileName() {
 	const QString& address = fileName.trimmed();
 
 	if (!address.isEmpty()) {
-		if (uploadImage(address)) {
-			q->initSceneParameters();
+		if (uploadImage(address))
 			fileName = address;
-		}
 	} else {
 		//hide segments if they are visible
 		q->m_segments->setSegmentsVisible(false);
@@ -480,7 +452,7 @@ void DatapickerImagePrivate::updateFileName() {
 void DatapickerImage::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement( "datapickerImage" );
 	writeBasicAttributes(writer);
-	writeCommentElement(writer);
+
 	//general properties
 	writer->writeStartElement( "general" );
 	writer->writeAttribute( "fileName", d->fileName );
@@ -560,20 +532,13 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
-			if (!readCommentElement(reader)) return false;
-		} else if (!preview && reader->name() == "general") {
+		if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
 			str = attribs.value("fileName").toString();
 			d->fileName = str;
 
-			str = attribs.value("plotPointsType").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("plotPointsType").toString());
-			else
-				d->plotPointsType = DatapickerImage::PointsType(str.toInt());
-
+			READ_INT_VALUE("plotPointsType", plotPointsType, DatapickerImage::PointsType);
 		} else if (!preview && reader->name() == "axisPoint") {
 			attribs = reader->attributes();
 

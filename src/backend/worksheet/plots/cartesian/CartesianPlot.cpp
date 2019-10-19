@@ -70,6 +70,7 @@
 #include <QPainter>
 #include <QWidgetAction>
 
+#include <array>
 #include <cmath>
 
 #include <KConfig>
@@ -157,7 +158,6 @@ void CartesianPlot::init() {
 
 	connect(this, &AbstractAspect::aspectAdded, this, &CartesianPlot::childAdded);
 	connect(this, &AbstractAspect::aspectRemoved, this, &CartesianPlot::childRemoved);
-	connect(this, &AbstractAspect::deselected, this, &CartesianPlot::deselected);
 
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
@@ -532,7 +532,6 @@ void CartesianPlot::initActions() {
 	shiftRightXAction = new QAction(QIcon::fromTheme("labplot-shift-right-x"), i18n("Shift Right X"), this);
 	shiftUpYAction = new QAction(QIcon::fromTheme("labplot-shift-up-y"), i18n("Shift Up Y"), this);
 	shiftDownYAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("Shift Down Y"), this);
-	cursorAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("Cursor"), this); // TODO: change icon
 
 	connect(scaleAutoAction, &QAction::triggered, this, &CartesianPlot::scaleAutoTriggered);
 	connect(scaleAutoXAction, &QAction::triggered, this, &CartesianPlot::scaleAutoTriggered);
@@ -547,7 +546,6 @@ void CartesianPlot::initActions() {
 	connect(shiftRightXAction, &QAction::triggered, this, &CartesianPlot::shiftRightX);
 	connect(shiftUpYAction, &QAction::triggered, this, &CartesianPlot::shiftUpY);
 	connect(shiftDownYAction, &QAction::triggered, this, &CartesianPlot::shiftDownY);
-	connect(cursorAction, &QAction::triggered, this, &CartesianPlot::cursor);
 
 	//visibility action
 	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
@@ -724,7 +722,7 @@ QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
 void CartesianPlot::navigate(CartesianPlot::NavigationOperation op) {
 	Q_D(CartesianPlot);
 	if (op == ScaleAuto) {
-		if (d->curvesXMinMaxIsDirty || d->curvesYMinMaxIsDirty) {
+		if (d->curvesXMinMaxIsDirty || d->curvesYMinMaxIsDirty || !autoScaleX() || !autoScaleY()) {
 			d->curvesXMinMaxIsDirty = true;
 			d->curvesYMinMaxIsDirty = true;
 		}
@@ -1148,7 +1146,7 @@ void CartesianPlot::setCursor1Enable(const bool &enable) {
 	if (enable != d->cursor1Enable) {
 		if (std::isnan(d->cursor1Pos.x())) { // if never set, set initial position
 			d->cursor1Pos.setX(d->cSystem->mapSceneToLogical(QPointF(0,0)).x());
-			mousePressCursorModeSignal(1, d->cursor0Pos); // simulate mousePress to update values in the cursor dock
+			mousePressCursorModeSignal(1, d->cursor1Pos); // simulate mousePress to update values in the cursor dock
 		}
 		exec(new CartesianPlotSetCursor1EnableCmd(d, enable, ki18n("%1: Cursor1 enable")));
 	}
@@ -1450,6 +1448,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 		//update the legend on changes of the name, line and symbol styles
 		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::curveNameChanged);
 		connect(curve, &XYCurve::lineTypeChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::linePenChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::linePenChanged, this, static_cast<void (CartesianPlot::*)(QPen)>(&CartesianPlot::curveLinePenChanged));
@@ -1519,7 +1518,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		}
 		// if an element is hovered, the curves which are handled manually in this class
 		// must be unhovered
-		const WorksheetElement* element = static_cast<const WorksheetElement*>(child);
+		const auto* element = static_cast<const WorksheetElement*>(child);
 		connect(element, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
 	}
 
@@ -1714,7 +1713,7 @@ void CartesianPlot::yDataChanged() {
 	d->curvesYMinMaxIsDirty = true;
 	bool updated = false;
 	if (d->autoScaleY)
-		this->scaleAutoY();
+		updated = this->scaleAutoY();
 
 	if (!updated) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
@@ -2060,7 +2059,7 @@ bool CartesianPlot::scaleAuto() {
 			point.setY(point.y() - errorBarsCapSize);
 			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
 			if (point.y() > d->curvesYMax)
-				d->curvesYMax = point.x();
+				d->curvesYMax = point.y();
 		}
 		d->curvesYMinMaxIsDirty = false;
 	}
@@ -2488,16 +2487,17 @@ void CartesianPlot::mouseHoverZoomSelectionMode(QPointF logicPos) {
 	d->mouseHoverZoomSelectionMode(logicPos);
 }
 
+void CartesianPlot::mouseHoverOutsideDataRect() {
+	Q_D(CartesianPlot);
+	d->mouseHoverOutsideDataRect();
+}
+
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
 void CartesianPlot::visibilityChanged() {
 	Q_D(CartesianPlot);
 	this->setVisible(!d->isVisible());
-}
-
-void CartesianPlot::deselected() {
-	setMouseMode(MouseMode::SelectionMode);
 }
 
 //#####################################################################
@@ -2735,7 +2735,7 @@ void CartesianPlotPrivate::retransformScales() {
 // 			}
 		}
 	}
-	// call retransform() on the parent to trigger the update of all axes and curvesю
+	// call retransform() on the parent to trigger the update of all axes and curves.
 	//no need to do this on load since all plots are retransformed again after the project is loaded.
 	if (!q->isLoading())
 		q->retransform();
@@ -2855,9 +2855,6 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 		newRect.setWidth(w);
 		newRect.setHeight(h);
 		emit q->rectChanged(newRect);
-	} else if (change == QGraphicsItem::ItemSelectedChange) {
-		if (!value.toBool() || q->mouseMode() != CartesianPlot::MouseMode::SelectionMode)
-			q->setMouseMode(CartesianPlot::MouseMode::SelectionMode);
 	}
 	return QGraphicsItem::itemChange(change, value);
 }
@@ -2865,6 +2862,17 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 //##############################################################################
 //##################################  Events  ##################################
 //##############################################################################
+
+/*!
+ * \brief CartesianPlotPrivate::mousePressEvent
+ * In this function only basic stuff is done. The mousePressEvent is forwarded to the Worksheet, which
+ * has access to all cartesian plots and can apply the changes to all plots if the option "applyToAll"
+ * is set. The worksheet calls then the corresponding mousepressZoomMode/CursorMode function in this class
+ * This is done for mousePress, mouseMove and mouseRelease event
+ * This function sends a signal with the logical position, because this is the only value which is the same
+ * in all plots. Using the scene coordinates is not possible
+ * \param event
+ */
 void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
 	if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode)
@@ -3192,7 +3200,6 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QPointF point = event->pos();
 	QString info;
 	if (dataRect.contains(point)) {
-		m_insideDataRect = true;
 		QPointF logicalPoint = cSystem->mapSceneToLogical(point);
 
 		if ((mouseMode == CartesianPlot::ZoomSelectionMode) ||
@@ -3262,13 +3269,17 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 
 			update();
 		}
-	} else {
-		m_insideDataRect = false;
-		update();
-	}
+	} else
+		emit q->mouseHoverOutsideDataRectSignal();
+
 	q->info(info);
 
 	QGraphicsItem::hoverMoveEvent(event);
+}
+
+void CartesianPlotPrivate::mouseHoverOutsideDataRect() {
+	m_insideDataRect = false;
+	update();
 }
 
 void CartesianPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
@@ -3282,8 +3293,7 @@ void CartesianPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
 
 void CartesianPlotPrivate::mouseHoverZoomSelectionMode(QPointF logicPos) {
 
-	if (!isSelected())
-		return;
+	m_insideDataRect = true;
 
 	if (mouseMode == CartesianPlot::ZoomSelectionMode && !m_selectionBandIsShown) {
 
@@ -3298,7 +3308,6 @@ void CartesianPlotPrivate::mouseHoverZoomSelectionMode(QPointF logicPos) {
 		m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1, CartesianCoordinateSystem::MappingFlag::Limit));
 		m_selectionStartLine.setP2(cSystem->mapLogicalToScene(p2, CartesianCoordinateSystem::MappingFlag::Limit));
 	}
-
 	update(); // because if previous another selection mode was selected, the lines must be deleted
 }
 
@@ -3898,7 +3907,7 @@ void CartesianPlot::setColorPalette(const KConfig& config) {
 		QColor c;
 
 		//3 factors to create shades from theme's palette
-		float fac[3] = {0.25f,0.45f,0.65f};
+		std::array<float, 3> fac = {0.25f, 0.45f, 0.65f};
 
 		//Generate 15 lighter shades
 		for (int i = 0; i < 5; i++) {

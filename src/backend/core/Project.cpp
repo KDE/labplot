@@ -105,7 +105,7 @@ Project::Project() : Folder(i18n("Project"), AspectType::Project), d(new Private
 	d->author = group.readEntry("Author", QString());
 
 	//we don't have direct access to the members name and comment
-	//->temporaly disable the undo stack and call the setters
+	//->temporary disable the undo stack and call the setters
 	setUndoAware(false);
 	setIsLoading(true);
 	setName(group.readEntry("Name", i18n("Project")));
@@ -201,6 +201,8 @@ bool Project::hasChanged() const {
 
 /*!
  * \brief Project::descriptionChanged
+ * This function is called, when an object changes its name. When a column changed its name and wasn't connected before to the curve/column(formula) then
+ * this is done in this function
  * \param column
  */
 void Project::descriptionChanged(const AbstractAspect* aspect) {
@@ -208,7 +210,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 		return;
 
 	if (this != aspect) {
-		const AbstractColumn* column = dynamic_cast<const AbstractColumn*>(aspect);
+		const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
 		if (!column)
 			return;
 
@@ -260,10 +262,10 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 
 		QVector<Column*> columns = children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 		for (auto* tempColumn : columns) {
-			const QVector<Column*> formulaVariableColumns = tempColumn->formulaVariableColumns();
-			for (int i = 0; i < formulaVariableColumns.count(); i++) {
-				if (formulaVariableColumns[i] == column)
-					tempColumn->setformulVariableColumnsPath(i, columnPath);
+			const QStringList formulaVariableColumnsPath = tempColumn->formulaVariableColumnPaths();
+			for (int i = 0; i < formulaVariableColumnsPath.count(); i++) {
+				if (formulaVariableColumnsPath[i] == columnPath)
+					tempColumn->setformulVariableColumn(i, const_cast<Column*>(static_cast<const Column*>(column)));
 			}
 		}
 		return;
@@ -279,55 +281,66 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
  * \param aspect
  */
 void Project::aspectAddedSlot(const AbstractAspect* aspect) {
-	const AbstractColumn* column = dynamic_cast<const AbstractColumn*>(aspect);
-	if (!column)
+
+	QVector<AbstractAspect*> _children = aspect->children(AspectType::Column, ChildIndexFlag::Recursive);
+	QVector<const AbstractColumn*> columns;
+	for (auto child : _children)
+		columns.append(static_cast<const AbstractColumn*>(child));
+
+	const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
+	if (column)
+		columns.append(column);
+
+	if (columns.isEmpty())
 		return;
 
-	QVector<XYCurve*> curves = children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
-	QString columnPath = column->path();
+	for (auto column : columns) {
+		QVector<XYCurve*> curves = children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+		QString columnPath = column->path();
 
-	for (auto* curve : curves) {
-		curve->setUndoAware(false);
-		auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
-		if (analysisCurve) {
-			if (analysisCurve->xDataColumnPath() == columnPath)
-				analysisCurve->setXDataColumn(column);
-			if (analysisCurve->yDataColumnPath() == columnPath)
-				analysisCurve->setYDataColumn(column);
-			if (analysisCurve->y2DataColumnPath() == columnPath)
-				analysisCurve->setY2DataColumn(column);
+		for (auto* curve : curves) {
+			curve->setUndoAware(false);
+			auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
+			if (analysisCurve) {
+				if (analysisCurve->xDataColumnPath() == columnPath)
+					analysisCurve->setXDataColumn(column);
+				if (analysisCurve->yDataColumnPath() == columnPath)
+					analysisCurve->setYDataColumn(column);
+				if (analysisCurve->y2DataColumnPath() == columnPath)
+					analysisCurve->setY2DataColumn(column);
 
-			auto* fitCurve = dynamic_cast<XYFitCurve*>(curve);
-			if (fitCurve) {
-				if (fitCurve->xErrorColumnPath() == columnPath)
-					fitCurve->setXErrorColumn(column);
-				if (fitCurve->yErrorColumnPath() == columnPath)
-					fitCurve->setYErrorColumn(column);
+				auto* fitCurve = dynamic_cast<XYFitCurve*>(curve);
+				if (fitCurve) {
+					if (fitCurve->xErrorColumnPath() == columnPath)
+						fitCurve->setXErrorColumn(column);
+					if (fitCurve->yErrorColumnPath() == columnPath)
+						fitCurve->setYErrorColumn(column);
+				}
+			} else {
+				if (curve->xColumnPath() == columnPath)
+					curve->setXColumn(column);
+				if (curve->yColumnPath() == columnPath)
+					curve->setYColumn(column);
+				if (curve->valuesColumnPath() == columnPath)
+					curve->setValuesColumn(column);
+				if (curve->xErrorPlusColumnPath() == columnPath)
+					curve->setXErrorPlusColumn(column);
+				if (curve->xErrorMinusColumnPath() == columnPath)
+					curve->setXErrorMinusColumn(column);
+				if (curve->yErrorPlusColumnPath() == columnPath)
+					curve->setYErrorPlusColumn(column);
+				if (curve->yErrorMinusColumnPath() == columnPath)
+					curve->setYErrorMinusColumn(column);
 			}
-		} else {
-			if (curve->xColumnPath() == columnPath)
-				curve->setXColumn(column);
-			if (curve->yColumnPath() == columnPath)
-				curve->setYColumn(column);
-			if (curve->valuesColumnPath() == columnPath)
-				curve->setValuesColumn(column);
-			if (curve->xErrorPlusColumnPath() == columnPath)
-				curve->setXErrorPlusColumn(column);
-			if (curve->xErrorMinusColumnPath() == columnPath)
-				curve->setXErrorMinusColumn(column);
-			if (curve->yErrorPlusColumnPath() == columnPath)
-				curve->setYErrorPlusColumn(column);
-			if (curve->yErrorMinusColumnPath() == columnPath)
-				curve->setYErrorMinusColumn(column);
+			curve->setUndoAware(true);
 		}
-		curve->setUndoAware(true);
-	}
-	QVector<Column*> columns = children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
-	for (auto* tempColumn : columns) {
-		const QStringList formulaVariableColumnPaths = tempColumn->formulaVariableColumnPaths();
-		for (int i = 0; i < formulaVariableColumnPaths.count(); i++) {
-			if (formulaVariableColumnPaths[i] == column->path())
-				tempColumn->setformulVariableColumn(i, const_cast<Column*>(static_cast<const Column*>(column)));
+		QVector<Column*> columns = children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+		for (auto* tempColumn : columns) {
+			const QStringList formulaVariableColumnPaths = tempColumn->formulaVariableColumnPaths();
+			for (int i = 0; i < formulaVariableColumnPaths.count(); i++) {
+				if (formulaVariableColumnPaths[i] == column->path())
+					tempColumn->setformulVariableColumn(i, const_cast<Column*>(static_cast<const Column*>(column)));
+			}
 		}
 	}
 
@@ -590,21 +603,19 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		//if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
 		for (auto* col : columns) {
 			if (!col->formulaVariableColumnPaths().isEmpty()) {
-				QVector<Column*>& formulaVariableColumns = const_cast<QVector<Column*>&>(col->formulaVariableColumns());
-				for (auto path : col->formulaVariableColumnPaths()) {
-					bool found = false;
+				auto& formulaVariableColumns = const_cast<QVector<Column*>&>(col->formulaVariableColumns());
+				formulaVariableColumns.resize(col->formulaVariableColumnPaths().length());
+
+				for (int i = 0; i < col->formulaVariableColumnPaths().length(); i++) {
+					auto path = col->formulaVariableColumnPaths()[i];
 					for (Column* c : columns) {
 						if (!c) continue;
 						if (c->path() == path) {
-							formulaVariableColumns << c;
+							formulaVariableColumns[i] = c;
 							col->finalizeLoad();
-							found = true;
 							break;
 						}
 					}
-
-					if (!found)
-						formulaVariableColumns << nullptr;
 				}
 			}
 		}

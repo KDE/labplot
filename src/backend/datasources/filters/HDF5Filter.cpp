@@ -256,6 +256,7 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 	}
 	double hit_rate;
 	status = H5Fget_mdc_hit_rate(file, &hit_rate);
+	Q_UNUSED(status);
 	info += i18n("Metadata cache hit rate: %1", QString::number(hit_rate));
 	info += QLatin1String("<br>");
 	//TODO: herr_t H5Fget_mdc_image_info(hid_t file_id, haddr_t *image_addr, hsize_t *image_len)
@@ -530,7 +531,7 @@ QStringList HDF5FilterPrivate::readHDF5Data1D(hid_t dataset, hid_t type, int row
 	return dataString;
 }
 
-QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, int rows, int lines, QVector<void*>& dataContainer) {
+QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, int rows, int lines, std::vector<void*>& dataContainer) {
 	DEBUG("HDF5FilterPrivate::readHDF5CompoundData1D()");
 	DEBUG(" dataContainer size = " << dataContainer.size());
 	int members = H5Tget_nmembers(tid);
@@ -644,9 +645,12 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 }
 
 template <typename T>
-QVector<QStringList> HDF5FilterPrivate::readHDF5Data2D(hid_t dataset, hid_t type, int rows, int cols, int lines, QVector<void*>& dataPointer) {
+QVector<QStringList> HDF5FilterPrivate::readHDF5Data2D(hid_t dataset, hid_t type, int rows, int cols, int lines, std::vector<void*>& dataPointer) {
 	DEBUG("readHDF5Data2D() rows = " << rows << ", cols =" << cols << ", lines =" << lines);
 	QVector<QStringList> dataStrings;
+
+	if (rows == 0 || cols == 0)
+		return dataStrings;
 
 	T** data = (T**) malloc(rows*sizeof(T*));
 	data[0] = (T*) malloc(cols*rows*sizeof(T));
@@ -702,7 +706,7 @@ QVector<QStringList> HDF5FilterPrivate::readHDF5CompoundData2D(hid_t dataset, hi
 
 		// dummy container for all data columns
 		// initially contains one pointer set to NULL
-		QVector<void*> dummy(1, nullptr);
+		std::vector<void*> dummy(1, nullptr);
 		QVector<QStringList> mdataStrings;
 		if (H5Tequal(mtype, H5T_STD_I8LE) || H5Tequal(mtype, H5T_STD_I8BE))
 			mdataStrings = readHDF5Data2D<qint8>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, cols, lines, dummy);
@@ -1484,7 +1488,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 	// it contains the pointers of all columns
 	// initially there is one pointer set to nullptr
 	// check for dataContainer[0] != nullptr to decide if dataSource can be used
-	QVector<void*> dataContainer(1, nullptr);
+	std::vector<void*> dataContainer(1, nullptr);
 
 	// rank= 0: single value, 1: vector, 2: matrix, 3: 3D data, ...
 	switch (rank) {

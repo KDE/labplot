@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
-    Description          :  constains several static functions which are used on frequently throughout the kde frontend.
+    Description          :  contains several static functions which are used on frequently throughout the kde frontend.
 
  ***************************************************************************/
 

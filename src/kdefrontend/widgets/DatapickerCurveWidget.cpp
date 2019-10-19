@@ -396,16 +396,14 @@ void DatapickerCurveWidget::visibilityChanged(bool state) {
 }
 
 void DatapickerCurveWidget::updateSymbolWidgets() {
-	const QVector<DatapickerPoint*> pointsList = m_curve->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-	if (pointsList.isEmpty()) {
+	auto list = m_curve->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	if (list.isEmpty()) {
 		ui.cbXErrorType->setEnabled(true);
 		ui.cbYErrorType->setEnabled(true);
-		ui.tSymbols->setEnabled(false);
 		m_suppressTypeChange = false;
 	} else {
 		ui.cbXErrorType->setEnabled(false);
 		ui.cbYErrorType->setEnabled(false);
-		ui.tSymbols->setEnabled(true);
 		m_suppressTypeChange = true;
 	}
 }
@@ -418,11 +416,11 @@ void DatapickerCurveWidget::curveDescriptionChanged(const AbstractAspect* aspect
 		return;
 
 	m_initializing = true;
-	if (aspect->name() != ui.leName->text()) {
+	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.leComment->text()) {
+	else if (aspect->comment() != ui.leComment->text())
 		ui.leComment->setText(aspect->comment());
-	}
+
 	m_initializing = false;
 }
 

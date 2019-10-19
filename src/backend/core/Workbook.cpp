@@ -199,7 +199,10 @@ bool Workbook::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "spreadsheet") {
+		if (reader->name() == "comment") {
+			if (!readCommentElement(reader))
+				return false;
+		} else if (reader->name() == "spreadsheet") {
 			Spreadsheet* spreadsheet = new Spreadsheet("spreadsheet", true);
 			if (!spreadsheet->load(reader, preview)) {
 				delete spreadsheet;

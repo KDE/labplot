@@ -222,15 +222,15 @@ void NSLGeomTest::testLineSim() {
 		QCOMPARE(index[i], result4[i]);
 }
 
+#ifdef _MSC_VER	// crashes on Windows
+void NSLGeomTest::testLineSimMorse() {}
+#else
 void NSLGeomTest::testLineSimMorse() {
 	printf("NSLGeomTest::testLineSimMorse()\n");
-#ifdef _MSC_VER	// crashes on Windows
-	return;
-#endif
 
 	const QString fileName = m_dataDir + "morse_code.dat";
 	FILE *file;
-	if((file = fopen(fileName.toLocal8Bit().constData(), "r")) == NULL) {
+	if((file = fopen(fileName.toLocal8Bit().constData(), "r")) == nullptr) {
 		printf("ERROR reading %s. Giving up.\n", fileName.toLocal8Bit().constData());
 		return;
 	}
@@ -244,8 +244,13 @@ void NSLGeomTest::testLineSimMorse() {
 
 	printf("NSLGeomTest::testLineSimMorse(): reading data from file\n");
 	size_t i;
-	for (i = 0; i < N; i++)
-		fscanf(file,"%lf %lf", &xdata[i], &ydata[i]);
+	for (i = 0; i < N; i++) {
+		int num = fscanf(file,"%lf %lf", &xdata[i], &ydata[i]);
+		if (num != 2) {	// failed to read two values
+			printf("ERROR reading data\n");
+			return;
+		}
+	}
 
 	double atol = nsl_geom_linesim_clip_diag_perpoint(xdata.data(), ydata.data(), N);
 	printf("automatic tol clip_diag_perpoint = %.15g\n", atol);
@@ -272,6 +277,7 @@ void NSLGeomTest::testLineSimMorse() {
 	QCOMPARE(perr, 11.9586266895937);
 	QCOMPARE(aerr, 17.558046450762);
 }
+#endif
 
 //##############################################################################
 //#################  performance

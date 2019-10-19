@@ -33,6 +33,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include <QDataStream>
 #include <KLocalizedString>
 #include <KFilterDev>
+#include <array>
 #include <cmath>
 
 /*!
@@ -93,7 +94,7 @@ QStringList BinaryFilter::dataTypes() {
 returns the size of the predefined data types
 */
 int BinaryFilter::dataSize(BinaryFilter::DataType type) {
-	int sizes[] = {1,2,4,8,1,2,4,8,4,8};
+	std::array<int, 10> sizes = {1,2,4,8,1,2,4,8,4,8};
 
 	return sizes[(int)type];
 }
@@ -411,7 +412,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	if (createIndexEnabled)
 		m_actualCols++;
 
-	QVector<void*> dataContainer;
+	std::vector<void*> dataContainer;
 	int columnOffset = 0;
 
 	//TODO: support other modes

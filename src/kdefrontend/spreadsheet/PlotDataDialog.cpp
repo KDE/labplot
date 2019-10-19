@@ -132,7 +132,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 
 	//in the grid layout of the scroll area we have on default one row for the x-column,
 	//one row for the separating line and one line for the y-column.
-	//set the height of this default conente as the minimal size of the scroll area.
+	//set the height of this default content as the minimal size of the scroll area.
 	gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
 	int height = 2*ui->cbXColumn->height() + ui->line->height()
 				+ 2*gridLayout->verticalSpacing()
@@ -263,7 +263,7 @@ void PlotDataDialog::processColumns() {
 	//resize the scroll area to show five ComboBoxes at maximum without showing the scroll bars
 	int size = m_columnComboBoxes.size() >=5 ? 5 : m_columnComboBoxes.size();
 	int height = size * ui->cbXColumn->height();
-	QGridLayout* layout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
+	auto* layout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
 	if (layout) {
 		height += (size + 1)*layout->verticalSpacing();
 		if (m_plotType == PlotXYCurve)
@@ -338,6 +338,8 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 	if (m_columns.size() == 1) {
 		//one column provided, only one histogram is possible
 		//-> hide the curve placement options and the scroll areas for further columns
+		ui->lYColumn->hide();
+		ui->cbYColumn->hide();
 		ui->rbCurvePlacement1->setChecked(true);
 		ui->gbCurvePlacement->hide();
 		ui->gbPlotPlacement->setTitle(i18n("Add Histogram to"));

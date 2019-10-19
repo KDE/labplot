@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : constans.h
+    File                 : constants.h
     Project              : LabPlot
     Description          : definition of mathematical and physical constants
     --------------------------------------------------------------------

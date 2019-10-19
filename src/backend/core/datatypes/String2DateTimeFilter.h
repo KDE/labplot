@@ -34,7 +34,7 @@
 /**
  * \brief Conversion filter QString -> QDateTime.
  *
- * The standard use of this filter is explicitly specifiying the date/time format of the strings
+ * The standard use of this filter is explicitly specifying the date/time format of the strings
  * on the input, either in the constructor or via setFormat().
  * However, if the input fails to comply to this format, String2DateTimeFilter
  * tries to guess the format, using internal lists of common date and time formats (#date_formats

@@ -45,7 +45,6 @@
 #include <QStackedWidget>
 #include <QTableView>
 #include <QKeyEvent>
-#include <QShortcut>
 #include <QMenu>
 #include <QPainter>
 #include <QPrinter>
@@ -133,7 +132,7 @@ void MatrixView::init() {
 	connect(m_model, SIGNAL(changed()), this, SLOT(matrixDataChanged()));
 
 	//keyboard shortcuts
-	QShortcut* sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Matrix: select all")), m_tableView);
+	sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Matrix: select all")), m_tableView);
 	connect(sel_all, SIGNAL(activated()), m_tableView, SLOT(selectAll()));
 
 	//TODO: add shortcuts for copy&paste,
@@ -211,7 +210,6 @@ void MatrixView::modifyValues() {
 	dlg->setMatrices();
 	dlg->exec();
 }
-
 
 void MatrixView::connectActions() {
 	// selection related actions
@@ -308,7 +306,6 @@ void MatrixView::initMenus() {
 	m_matrixMenu->addMenu(submenu);
 	m_matrixMenu->addSeparator();
 
-
 	m_matrixMenu->addAction(action_select_all);
 	m_matrixMenu->addAction(action_clear_matrix);
 	m_matrixMenu->addSeparator();
@@ -349,7 +346,6 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	submenu->addAction(action_fill_function);
 	menu->insertMenu(firstAction, submenu);
 	menu->insertSeparator(firstAction);
-
 
 	// Data manipulation sub-menu
 	submenu = new QMenu(i18n("Manipulate Data"), const_cast<MatrixView*>(this));
@@ -767,7 +763,6 @@ void MatrixView::clearSelectedCells() {
 	RESET_CURSOR;
 }
 
-
 class UpdateImageTask : public QRunnable {
 public:
 	UpdateImageTask(int start, int end, QImage& image, const void* data, double scaleFactor, double min) : m_image(image), m_data(data) {
@@ -1032,7 +1027,6 @@ void MatrixView::print(QPrinter* printer) const {
 	if (remainingColumns > 0)
 		tablesCount++;
 	for (int table = 0; table < tablesCount; ++table) {
-		right = margin + vertHeaderWidth;
 		//Paint the horizontal header first
 		painter.setFont(hHeader->font());
 		QString headerString = m_tableView->model()->headerData(0, Qt::Horizontal).toString();

@@ -245,7 +245,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 			headers << l.last();
 		}
 
-		QVector<void*> dataContainer;
+		std::vector<void*> dataContainer;
 		const int columnOffset = dataSource->prepareImport(dataContainer, importMode, last - first + 1, columns.size(),
 		                                                   headers, QVector<AbstractColumn::ColumnMode>(columns.size(),
 		                                                   AbstractColumn::Numeric));
@@ -304,7 +304,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 				headers << l.first() + QChar(':') + l.at(1) + l.back();
 		}
 
-		QVector<void*> dataContainer;
+		std::vector<void*> dataContainer;
 		const int columnOffset = dataSource->prepareImport(dataContainer, importMode, last - first + 1, columns.size(),
 		                                                   headers, QVector<AbstractColumn::ColumnMode>(columns.size(),
 		                                                   AbstractColumn::Numeric));
@@ -930,7 +930,7 @@ std::vector<ROOTData::BinPars> ROOTData::readHistogram(long int pos) {
 				r[i + 1].lowedge = read<double>(buf);
 			}
 		} else {
-			buf += sizeof(double) * nbins;
+			//UNUSED: buf += sizeof(double) * nbins;
 			const double scale = (xmax - xmin) / static_cast<double>(nbins);
 			for (size_t i = 0; i < r.size() - 1; ++i) {
 				r[i + 1].lowedge = static_cast<double>(i) * scale + xmin;

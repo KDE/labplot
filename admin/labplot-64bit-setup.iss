@@ -48,7 +48,7 @@ Source: "{#CraftRoot}\bin\libintl-8.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\iconv.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libeay32.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libfreetype-6.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "{#CraftRoot}\bin\libpng15.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libpng16.dll"; DestDir: "{app}";Flags: ignoreversion
 ;Source: "{#CraftRoot}\bin\ssleay32.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libssl-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libcrypto-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
@@ -143,7 +143,7 @@ Source: "{#CraftRoot}\bin\data\locale\kconfigwidgets5.mo"; DestDir: "{app}\data\
 Source: "{#CraftRoot}\bin\data\locale\kxmlgui5.mo"; DestDir: "{app}\data\locale"; Flags: recursesubdirs ignoreversion
 
 ; kcharselect data
-Source: "{#CraftRoot}\bin\data\kf5\kcharselect\kcharselect-data"; DestDir: "{app}\data"; Flags: recursesubdirs ignoreversion
+Source: "{#CraftRoot}\bin\data\kf5\kcharselect\kcharselect-data"; DestDir: "{app}\data\kf5\kcharselect"; Flags: recursesubdirs ignoreversion
 
 ; icon theme
 Source: "{#CraftRoot}\bin\data\icontheme.rcc"; DestDir: "{app}\data";Flags: ignoreversion

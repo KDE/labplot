@@ -301,12 +301,12 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 		ui.leComment->setText(QString());
 	}
 
-	bool symmectric = m_plot->symmetricPadding();
-	ui.lPaddingHorizontalRight->setVisible(!symmectric);
-	ui.sbPaddingRight->setVisible(!symmectric);
-	ui.lPaddingVerticalDown->setVisible(!symmectric);
-	ui.sbPaddingBottom->setVisible(!symmectric);
-	if (symmectric) {
+	bool symmetric = m_plot->symmetricPadding();
+	ui.lPaddingHorizontalRight->setVisible(!symmetric);
+	ui.sbPaddingRight->setVisible(!symmetric);
+	ui.lPaddingVerticalDown->setVisible(!symmetric);
+	ui.sbPaddingBottom->setVisible(!symmetric);
+	if (symmetric) {
 		ui.lPaddingHorizontal->setText(i18n("Horizontal"));
 		ui.lPaddingVertical->setText(i18n("Vertical"));
 	} else {
@@ -543,6 +543,7 @@ void CartesianPlotDock::xMinChanged(const QString& value) {
 	if (m_initializing)
 		return;
 
+	const Lock lock(m_initializing);
 	const float min = value.toDouble();
 	for (auto* plot : m_plotList)
 		plot->setXMin(min);
@@ -552,6 +553,7 @@ void CartesianPlotDock::xMaxChanged(const QString& value) {
 	if (m_initializing)
 		return;
 
+	const Lock lock(m_initializing);
 	const float max = value.toDouble();
 	for (auto* plot : m_plotList)
 		plot->setXMax(max);
@@ -626,6 +628,7 @@ void CartesianPlotDock::yMinChanged(const QString& value) {
 	if (m_initializing)
 		return;
 
+	const Lock lock(m_initializing);
 	const float min = value.toDouble();
 	for (auto* plot : m_plotList)
 		plot->setYMin(min);
@@ -635,6 +638,7 @@ void CartesianPlotDock::yMaxChanged(const QString& value) {
 	if (m_initializing)
 		return;
 
+	const Lock lock(m_initializing);
 	const float max = value.toDouble();
 	for (auto* plot : m_plotList)
 		plot->setYMax(max);
@@ -1070,6 +1074,8 @@ void CartesianPlotDock::selectFile() {
 	QString formats;
 	for (const auto& format : QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
+		if (f == QLatin1String("*.svg"))
+			continue;
 		formats.isEmpty() ? formats += f : formats += ' ' + f;
 	}
 
@@ -1338,17 +1344,17 @@ void CartesianPlotDock::plotXAutoScaleChanged(bool value) {
 }
 
 void CartesianPlotDock::plotXMinChanged(double value) {
-	m_initializing = true;
+	if (m_initializing)return;
+	const Lock lock(m_initializing);
 	ui.leXMin->setText( QString::number(value) );
 	ui.dateTimeEditXMin->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotXMaxChanged(double value) {
-	m_initializing = true;
+	if (m_initializing)return;
+	const Lock lock(m_initializing);
 	ui.leXMax->setText( QString::number(value) );
 	ui.dateTimeEditXMax->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotXScaleChanged(int scale) {
@@ -1370,17 +1376,17 @@ void CartesianPlotDock::plotYAutoScaleChanged(bool value) {
 }
 
 void CartesianPlotDock::plotYMinChanged(double value) {
-	m_initializing = true;
+	if (m_initializing)return;
+	const Lock lock(m_initializing);
 	ui.leYMin->setText( QString::number(value) );
 	ui.dateTimeEditYMin->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotYMaxChanged(double value) {
-	m_initializing = true;
+	if (m_initializing)return;
+	const Lock lock(m_initializing);
 	ui.leYMax->setText( QString::number(value) );
 	ui.dateTimeEditYMax->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotYScaleChanged(int scale) {

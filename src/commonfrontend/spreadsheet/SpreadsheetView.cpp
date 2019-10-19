@@ -700,6 +700,11 @@ void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
 
 	if (column->isNumeric()) {
 		QAction* firstAction = menu->actions().at(1);
+		//TODO: add these menus and synchronize the behavior with the context menu creation
+		//on the spreadsheet header in eventFilter(),
+// 		menu->insertMenu(firstAction, m_plotDataMenu);
+// 		menu->insertMenu(firstAction, m_analyzePlotMenu);
+// 		menu->insertSeparator(firstAction);
 		menu->insertMenu(firstAction, m_columnSetAsMenu);
 
 		const bool hasValues = column->hasValues();
@@ -720,10 +725,7 @@ void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
 			m_columnGenerateDataMenu->setEnabled(hasCells);
 
 			//in case no valid numerical values are available, deactivate the actions that only make sense in the presence of values
-			action_reverse_columns->setEnabled(hasValues);
-			action_drop_values->setEnabled(hasValues);
-			action_mask_values->setEnabled(hasValues);
-			action_normalize_columns->setEnabled(hasValues);
+			m_columnManipulateDataMenu->setEnabled(hasValues);
 			m_columnSortMenu->setEnabled(hasValues);
 		}
 
@@ -1259,7 +1261,13 @@ void SpreadsheetView::pasteIntoSelection() {
 
 	QString input_str = QString(mime_data->data("text/plain")).trimmed();
 	QVector<QStringList> cellTexts;
-	QStringList input_rows(input_str.split(QLatin1Char('\n')));
+	QString separator;
+	if (input_str.indexOf(QLatin1String("\r\n")) != -1)
+		separator = QLatin1String("\r\n");
+	else
+		separator = QLatin1Char('\n');
+
+	QStringList input_rows(input_str.split(separator));
 	input_row_count = input_rows.count();
 	input_col_count = 0;
 	for (int i = 0; i < input_row_count; i++) {
@@ -1407,7 +1415,7 @@ void SpreadsheetView::maskSelection() {
 	for (auto* column : selectedColumns())
 		column->addUsedInPlots(plots);
 
-	//supress retransform in the dependent plots
+	//suppress retransform in the dependent plots
 	for (auto* plot : plots)
 		plot->setSuppressDataChangedSignal(true);
 
@@ -1441,7 +1449,7 @@ void SpreadsheetView::unmaskSelection() {
 	for (auto* column : selectedColumns())
 		column->addUsedInPlots(plots);
 
-	//supress retransform in the dependent plots
+	//suppress retransform in the dependent plots
 	for (auto* plot : plots)
 		plot->setSuppressDataChangedSignal(true);
 
@@ -1750,7 +1758,7 @@ void SpreadsheetView::sortSpreadsheet() {
 }
 
 /*!
-  Insert an empty column left to the firt selected column
+  Insert an empty column left to the first selected column
 */
 void SpreadsheetView::insertColumnLeft() {
 	insertColumnsLeft(1);
@@ -2474,7 +2482,6 @@ void SpreadsheetView::print(QPrinter* printer) const {
 	const int cols = m_spreadsheet->columnCount();
 	int height = margin;
 	const int vertHeaderWidth = vHeader->width();
-	int right = margin + vertHeaderWidth;
 
 	int columnsPerTable = 0;
 	int headerStringWidth = 0;
@@ -2503,7 +2510,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 		tablesCount++;
 	//Paint the horizontal header first
 	for (int table = 0; table < tablesCount; ++table) {
-		right = margin + vertHeaderWidth;
+		int right = margin + vertHeaderWidth;
 
 		painter.setFont(hHeader->font());
 		QString headerString = m_tableView->model()->headerData(0, Qt::Horizontal).toString();

@@ -345,7 +345,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			stream >> vec;
 			AbstractAspect* sourceAspect{nullptr};
 			if (!vec.isEmpty())
-				sourceAspect = (AbstractAspect*)vec.at(0);
+				sourceAspect = reinterpret_cast<AbstractAspect*>(vec.at(0));
 
 			if (!sourceAspect)
 				return false;
@@ -357,7 +357,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 
 			//accept only the events when the aspect being dragged is dropable onto the aspect under the cursor
 			//and the aspect under the cursor is not already the parent of the dragged aspect
-			AbstractAspect* destinationAspect = static_cast<AbstractAspect*>(index.internalPointer());
+			auto* destinationAspect = static_cast<AbstractAspect*>(index.internalPointer());
 			bool accept = sourceAspect->dropableOn().indexOf(destinationAspect->type()) != -1
 						&& sourceAspect->parentAspect() != destinationAspect;
 			event->setAccepted(accept);
@@ -806,6 +806,8 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 			viewItem = false;
 			currentItem = true;
 		} else if (reader->name() == "row") {
+			//we need to read the attributes first and before readElementText() otherwise they are empty
+			attribs = reader->attributes();
 			row = reader->readElementText().toInt();
 
 			QModelIndex index;
@@ -829,7 +831,6 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 				emit currentAspectChanged(part);
 
-				attribs = reader->attributes();
 				str = attribs.value("state").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.subs("state").toString());

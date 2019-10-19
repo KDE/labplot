@@ -91,6 +91,7 @@
 #include <QElapsedTimer>
 #include <QHash>
 #include <QStatusBar>
+#include <QTemporaryFile>
 #include <QTimeLine>
 #include <QtWidgets>
 #include <QtQuickWidgets/QQuickWidget>
@@ -152,7 +153,7 @@ MainWin::~MainWin() {
 	if (m_project != nullptr) {
 
 		if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr)
-			m_mdiArea->closeAllSubWindows();		
+			m_mdiArea->closeAllSubWindows();
 
 		disconnect(m_project, nullptr, this, nullptr);
 		delete m_project;
@@ -169,7 +170,7 @@ MainWin::~MainWin() {
 }
 
 void MainWin::showPresenter() {
-	Worksheet* w = activeWorksheet();
+	const Worksheet* w = dynamic_cast<Worksheet*>(m_currentAspect);
 	if (w) {
 		auto* view = dynamic_cast<WorksheetView*>(w->view());
 		view->presenterMode();
@@ -326,8 +327,8 @@ void MainWin::initGUI(const QString& fileName) {
 
 	if(m_showWelcomeScreen) {
 		m_welcomeWidget = createWelcomeScreen();
-		setCentralWidget(m_welcomeWidget);		
-	}	
+		setCentralWidget(m_welcomeWidget);
+	}
 }
 
 /**
@@ -363,7 +364,7 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	if(m_welcomeScreenHelper != nullptr)
 		delete m_welcomeScreenHelper;
 	m_welcomeScreenHelper = new WelcomeScreenHelper();
-	connect(m_welcomeScreenHelper, SIGNAL(openExampleProject(QString)), this, SLOT(openProject(const QString& )));	
+	connect(m_welcomeScreenHelper, SIGNAL(openExampleProject(QString)), this, SLOT(openProject(const QString& )));
 
 	ctxt->setContextProperty("datasetModel", m_welcomeScreenHelper->getDatasetModel());
 	ctxt->setContextProperty("helper", m_welcomeScreenHelper);
@@ -676,7 +677,7 @@ void MainWin::initMenus() {
 	m_importMenu = new QMenu(this);
 	m_importMenu->setIcon(QIcon::fromTheme("document-import"));
 	m_importMenu ->addAction(m_importFileAction);
-	m_importMenu ->addAction(m_importSqlAction);	
+	m_importMenu ->addAction(m_importSqlAction);
 	m_newMenu->addAction(m_newDatasetAction);
 	m_importMenu->addSeparator();
 	m_importMenu->addAction(m_importLabPlotAction);
@@ -689,7 +690,7 @@ void MainWin::initMenus() {
 	m_newCantorWorksheetMenu = new QMenu(i18n("CAS Worksheet"), this);
 	m_newCantorWorksheetMenu->setIcon(QIcon::fromTheme("archive-insert"));
 
-	//"Adding Cantor backends to menue and context menu"
+	//"Adding Cantor backends to menu and context menu"
 	QStringList m_availableBackend = Cantor::Backend::listAvailableBackends();
 	if (m_availableBackend.count() > 0) {
 		unplugActionList(QLatin1String("backends_list"));
@@ -898,29 +899,23 @@ void MainWin::updateGUI() {
 		return;
 	}
 
-
 	//Handle the Worksheet-object
-	Worksheet* w = this->activeWorksheet();
-	if (w != nullptr) {
-		//enable worksheet related menus
-		factory->container("worksheet", this)->setEnabled(true);
-		factory->container("analysis", this)->setEnabled(true);
-//TODO 		factory->container("drawing", this)->setEnabled(true);
-
-		//disable spreadsheet and matrix related menus
-		factory->container("spreadsheet", this)->setEnabled(false);
-		factory->container("matrix", this)->setEnabled(false);
-
+	const Worksheet* w = dynamic_cast<Worksheet*>(m_currentAspect);
+	if (!w)
+		w = dynamic_cast<Worksheet*>(m_currentAspect->parent(AspectType::Worksheet));
+	if (w) {
 		//populate worksheet menu
 		auto* view = qobject_cast<WorksheetView*>(w->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container("worksheet", this));
 		menu->clear();
 		view->createContextMenu(menu);
+		menu->setEnabled(true);
 
 		//populate analysis menu
 		menu = qobject_cast<QMenu*>(factory->container("analysis", this));
 		menu->clear();
 		view->createAnalysisMenu(menu);
+		menu->setEnabled(true);
 
 		//populate worksheet-toolbar
 		auto* toolbar = qobject_cast<QToolBar*>(factory->container("worksheet_toolbar", this));
@@ -940,6 +935,7 @@ void MainWin::updateGUI() {
 		factory->container("spreadsheet_toolbar", this)->setVisible(false);
 	} else {
 		factory->container("worksheet", this)->setEnabled(false);
+		factory->container("worksheet_toolbar", this)->setVisible(false);
 		factory->container("analysis", this)->setEnabled(false);
 //		factory->container("drawing", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->setEnabled(false);
@@ -947,16 +943,16 @@ void MainWin::updateGUI() {
 	}
 
 	//Handle the Spreadsheet-object
-	const  auto* spreadsheet = this->activeSpreadsheet();
+	const auto* spreadsheet = this->activeSpreadsheet();
+	if (!spreadsheet)
+		spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parent(AspectType::Spreadsheet));
 	if (spreadsheet) {
-		//enable spreadsheet related menus
-		factory->container("spreadsheet", this)->setEnabled(true);
-
 		//populate spreadsheet-menu
 		auto* view = qobject_cast<SpreadsheetView*>(spreadsheet->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container("spreadsheet", this));
 		menu->clear();
 		view->createContextMenu(menu);
+		menu->setEnabled(true);
 
 		//populate spreadsheet-toolbar
 		auto* toolbar = qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
@@ -966,31 +962,34 @@ void MainWin::updateGUI() {
 		toolbar->setEnabled(true);
 	} else {
 		factory->container("spreadsheet", this)->setEnabled(false);
-		factory->container("spreadsheet_toolbar", this)->setEnabled(false);
+		factory->container("spreadsheet_toolbar", this)->setVisible(false);
 	}
 
 	//Handle the Matrix-object
-	const  Matrix* matrix = this->activeMatrix();
+	const  Matrix* matrix = dynamic_cast<Matrix*>(m_currentAspect);
+	if (!matrix)
+		matrix = dynamic_cast<Matrix*>(m_currentAspect->parent(AspectType::Matrix));
 	if (matrix) {
-		factory->container("matrix", this)->setEnabled(true);
-
 		//populate matrix-menu
 		auto* view = qobject_cast<MatrixView*>(matrix->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container("matrix", this));
 		menu->clear();
 		view->createContextMenu(menu);
+		menu->setEnabled(true);
 	} else
 		factory->container("matrix", this)->setEnabled(false);
 
 #ifdef HAVE_CANTOR_LIBS
-	CantorWorksheet* cantorworksheet = this->activeCantorWorksheet();
+	const CantorWorksheet* cantorworksheet = dynamic_cast<CantorWorksheet*>(m_currentAspect);
+	if (!cantorworksheet)
+		cantorworksheet = dynamic_cast<CantorWorksheet*>(m_currentAspect->parent(AspectType::CantorWorksheet));
 	if (cantorworksheet) {
-		// enable Cantor Worksheet related menus
-		factory->container("cas_worksheet", this)->setEnabled(true);
 		auto* view = qobject_cast<CantorWorksheetView*>(cantorworksheet->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container("cas_worksheet", this));
 		menu->clear();
 		view->createContextMenu(menu);
+		menu->setEnabled(true);
+
 		auto* toolbar = qobject_cast<QToolBar*>(factory->container("cas_worksheet_toolbar", this));
 		toolbar->setVisible(true);
 		toolbar->clear();
@@ -1002,14 +1001,21 @@ void MainWin::updateGUI() {
 	}
 #endif
 
-	const Datapicker* datapicker = this->activeDatapicker();
+	const Datapicker* datapicker = dynamic_cast<Datapicker*>(m_currentAspect);
+	if (!datapicker)
+		datapicker = dynamic_cast<Datapicker*>(m_currentAspect->parent(AspectType::Datapicker));
+	if (!datapicker) {
+		if (m_currentAspect->type() == AspectType::DatapickerCurve)
+			datapicker = dynamic_cast<Datapicker*>(m_currentAspect->parentAspect());
+	}
+
 	if (datapicker) {
-		factory->container("datapicker", this)->setEnabled(true);
 		//populate datapicker-menu
 		auto* view = qobject_cast<DatapickerView*>(datapicker->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container("datapicker", this));
 		menu->clear();
 		view->createContextMenu(menu);
+		menu->setEnabled(true);
 
 		//populate spreadsheet-toolbar
 		auto* toolbar = qobject_cast<QToolBar*>(factory->container("datapicker_toolbar", this));
@@ -1159,7 +1165,6 @@ void MainWin::openProject(const QString& filename) {
 	timer.start();
 	bool rc = false;
 	if (Project::isLabPlotProject(filename)) {
-		qDebug()<<"openning project " << filename;
 		m_project->setFileName(filename);
 		rc = m_project->load(filename);
 #ifdef HAVE_LIBORIGIN
@@ -1224,6 +1229,7 @@ bool MainWin::closeProject() {
 	}
 
 	m_projectClosing = true;
+	statusBar()->clearMessage();
 	delete m_aspectTreeModel;
 	m_aspectTreeModel = nullptr;
 	delete m_project;
@@ -1286,17 +1292,27 @@ bool MainWin::saveProjectAs() {
  * auxiliary function that does the actual saving of the project
  */
 bool MainWin::save(const QString& fileName) {
+	QTemporaryFile tempFile(QDir::tempPath() + "/" + QLatin1String("labplot_save_XXXXXX"));
+	if (!tempFile.open()) {
+		KMessageBox::error(this, i18n("Couldn't open the temporary file for writing."));
+		return false;
+	}
+
 	WAIT_CURSOR;
+	const QString& tempFileName = tempFile.fileName();
+	DEBUG("Using temporary file " << tempFileName.toStdString())
+	tempFile.close();
+
 	// use file ending to find out how to compress file
 	QIODevice* file;
 	// if ending is .lml, do gzip compression anyway
 	if (fileName.endsWith(QLatin1String(".lml")))
-		file = new KCompressionDevice(fileName, KCompressionDevice::GZip);
+		file = new KCompressionDevice(tempFileName, KCompressionDevice::GZip);
 	else
-		file = new KFilterDev(fileName);
+		file = new KFilterDev(tempFileName);
 
 	if (file == nullptr)
-		file = new QFile(fileName);
+		file = new QFile(tempFileName);
 
 	bool ok;
 	if (file->open(QIODevice::WriteOnly)) {
@@ -1311,23 +1327,36 @@ bool MainWin::save(const QString& fileName) {
 		m_project->setChanged(false);
 		file->close();
 
-		setCaption(m_project->name());
-		statusBar()->showMessage(i18n("Project saved"));
-		m_saveAction->setEnabled(false);
-		m_recentProjectsAction->addUrl( QUrl(fileName) );
-		ok = true;
+		// target file must not exist
+		if (QFile::exists(fileName))
+			QFile::remove(fileName);
 
-		//if the project dock is visible, refresh the shown content
-		//(version and modification time might have been changed)
-		if (stackedWidget->currentWidget() == projectDock)
-			projectDock->setProject(m_project);
+		// do not rename temp file. Qt still holds a handle (which fails renaming on Windows) and deletes it
+		bool rc = QFile::copy(tempFileName, fileName);
+		if (rc) {
+			setCaption(m_project->name());
+			statusBar()->showMessage(i18n("Project saved"));
+			m_saveAction->setEnabled(false);
+			m_recentProjectsAction->addUrl( QUrl(fileName) );
+			ok = true;
 
-		//we have a file name now
-		// -> auto save can be activated now if not happened yet
-		if (m_autoSaveActive && !m_autoSaveTimer.isActive())
-			m_autoSaveTimer.start();
+			//if the project dock is visible, refresh the shown content
+			//(version and modification time might have been changed)
+			if (stackedWidget->currentWidget() == projectDock)
+				projectDock->setProject(m_project);
+
+			//we have a file name now
+			// -> auto save can be activated now if not happened yet
+			if (m_autoSaveActive && !m_autoSaveTimer.isActive())
+				m_autoSaveTimer.start();
+		} else {
+			RESET_CURSOR;
+			KMessageBox::error(this, i18n("Couldn't save the file '%1'.", fileName));
+			ok = false;
+		}
 	} else {
-		KMessageBox::error(this, i18n("Sorry. Could not open file for writing."));
+		RESET_CURSOR;
+		KMessageBox::error(this, i18n("Couldn't open the file '%1' for writing.", fileName));
 		ok = false;
 	}
 
@@ -1362,7 +1391,7 @@ void MainWin::print() {
 	if (part->printView())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
 	else
-		statusBar()->showMessage(QString());
+		statusBar()->clearMessage();
 }
 
 void MainWin::printPreview() {
@@ -1375,7 +1404,7 @@ void MainWin::printPreview() {
 	if (part->printPreview())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
 	else
-		statusBar()->showMessage(QString());
+		statusBar()->clearMessage();
 }
 
 /**************************************************************************************/
@@ -1411,7 +1440,7 @@ void MainWin::newSpreadsheet() {
 
 	//if the current active window is a workbook and no folder/project is selected in the project explorer,
 	//add the new spreadsheet to the workbook
-	Workbook* workbook = activeWorkbook();
+	Workbook* workbook = dynamic_cast<Workbook*>(m_currentAspect);
 	if (workbook) {
 		QModelIndex index = m_projectExplorer->currentIndex();
 		const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
@@ -1432,7 +1461,7 @@ void MainWin::newMatrix() {
 
 	//if the current active window is a workbook and no folder/project is selected in the project explorer,
 	//add the new matrix to the workbook
-	Workbook* workbook = activeWorkbook();
+	Workbook* workbook = dynamic_cast<Workbook*>(m_currentAspect);
 	if (workbook) {
 		QModelIndex index = m_projectExplorer->currentIndex();
 		const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
@@ -1462,42 +1491,6 @@ void MainWin::newNotes() {
 }
 
 /*!
-	returns a pointer to a Workbook-object, if the currently active Mdi-Subwindow is \a WorkbookView.
-	Otherwise returns \a 0.
-*/
-Workbook* MainWin::activeWorkbook() const {
-	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
-		return nullptr;
-	}
-
-	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
-	if (!win)
-		return nullptr;
-
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-	Q_ASSERT(part);
-	return dynamic_cast<Workbook*>(part);
-}
-
-/*!
-	returns a pointer to a Datapicker-object, if the currently active Mdi-Subwindow is \a DatapickerView.
-	Otherwise returns \a 0.
-*/
-Datapicker* MainWin::activeDatapicker() const {
-	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
-		return nullptr;
-	}
-
-	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
-	if (!win)
-		return nullptr;
-
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-	Q_ASSERT(part);
-	return dynamic_cast<Datapicker*>(part);
-}
-
-/*!
 	returns a pointer to a \c Spreadsheet object, if the currently active Mdi-Subwindow
 	or if the currently selected tab in a \c WorkbookView is a \c SpreadsheetView
 	Otherwise returns \c 0.
@@ -1507,80 +1500,20 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 		return nullptr;
 	}
 
-	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
-	if (!win)
+	if (!m_currentAspect)
 		return nullptr;
 
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-	Q_ASSERT(part);
 	Spreadsheet* spreadsheet = nullptr;
-	const auto* workbook = dynamic_cast<const Workbook*>(part);
-	if (workbook) {
-		spreadsheet = workbook->currentSpreadsheet();
-		if (!spreadsheet) {
-			//potentially, the spreadsheet was not selected in workbook yet since the selection in project explorer
-			//arrives in workbook's slot later than in this function
-			//->check whether we have a spreadsheet or one of its columns currently selected in the project explorer
-			spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
-			if (!spreadsheet) {
-				if (m_currentAspect->parentAspect())
-					spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parentAspect());
-			}
-		}
-	} else
-		spreadsheet = dynamic_cast<Spreadsheet*>(part);
+	if (m_currentAspect->type() == AspectType::Spreadsheet)
+		spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
+	else {
+		//check whether one of spreadsheet columns is selected and determine the spreadsheet
+		auto* parent = m_currentAspect->parentAspect();
+		if (parent && parent->type() == AspectType::Spreadsheet)
+			spreadsheet = dynamic_cast<Spreadsheet*>(parent);
+	}
 
 	return spreadsheet;
-}
-
-/*!
-	returns a pointer to a \c Matrix object, if the currently active Mdi-Subwindow
-	or if the currently selected tab in a \c WorkbookView is a \c MatrixView
-	Otherwise returns \c 0.
-*/
-Matrix* MainWin::activeMatrix() const {
-	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
-		return nullptr;
-	}
-
-	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
-	if (!win)
-		return nullptr;
-
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-	Q_ASSERT(part);
-	Matrix* matrix = nullptr;
-	const auto* workbook = dynamic_cast<Workbook*>(part);
-	if (workbook) {
-		matrix = workbook->currentMatrix();
-		if (!matrix) {
-			//potentially, the matrix was not selected in workbook yet since the selection in project explorer
-			//arrives in workbook's slot later than in this function
-			//->check whether we have a matrix currently selected in the project explorer
-			matrix = dynamic_cast<Matrix*>(m_currentAspect);
-		}
-	} else
-		matrix = dynamic_cast<Matrix*>(part);
-
-	return matrix;
-}
-
-/*!
-	returns a pointer to a Worksheet-object, if the currently active Mdi-Subwindow is \a WorksheetView
-	Otherwise returns \a 0.
-*/
-Worksheet* MainWin::activeWorksheet() const {
-	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
-	if (!win)
-		return nullptr;
-
-	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
-		return nullptr;
-	}
-
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-	Q_ASSERT(part);
-	return dynamic_cast<Worksheet*>(part);
 }
 
 #ifdef HAVE_CANTOR_LIBS
@@ -1593,19 +1526,6 @@ void MainWin::newCantorWorksheet(QAction* action) {
 }
 
 /********************************************************************************/
-/*!
-    returns a pointer to a CantorWorksheet-object, if the currently active Mdi-Subwindow is \a CantorWorksheetView
-    Otherwise returns \a 0.
-*/
-CantorWorksheet* MainWin::activeCantorWorksheet() const {
-	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
-	if (!win)
-		return nullptr;
-
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-	Q_ASSERT(part);
-	return dynamic_cast<CantorWorksheet*>(part);
-}
 #endif
 
 /*!

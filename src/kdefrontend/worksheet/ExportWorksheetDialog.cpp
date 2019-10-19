@@ -203,10 +203,10 @@ void ExportWorksheetDialog::toggleOptions() {
 	ui->gbOptions->setVisible(m_showOptions);
 	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) :
 			m_showOptionsButton->setText(i18n("Show Options"));
+
 	//resize the dialog
-	resize(layout()->minimumSize());
 	layout()->activate();
-	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
+	resize( QSize(this->width(), 0).expandedTo(minimumSize()) );
 }
 
 /*!

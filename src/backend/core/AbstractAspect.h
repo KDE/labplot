@@ -153,7 +153,7 @@ public:
 	void addChild(AbstractAspect*);
 	void addChildFast(AbstractAspect*);
 	virtual void finalizeAdd() {};
-	QVector<AbstractAspect*> children(AspectType type, ChildIndexFlags flags=nullptr);
+	QVector<AbstractAspect*> children(AspectType type, ChildIndexFlags flags=nullptr) const;
 	void insertChildBefore(AbstractAspect* child, AbstractAspect* before);
 	void insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before);
 	void reparent(AbstractAspect* newParent, int newIndex = -1);
@@ -184,7 +184,7 @@ public:
 				if (i)
 					result << i;
 
-				if (flags & Recursive)
+				if (child && flags & Recursive)
 					result << child->template children<T>(flags);
 			}
 		}

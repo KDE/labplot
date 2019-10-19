@@ -274,10 +274,9 @@ bool AbstractAspect::hidden() const {
  * \brief Set "hidden" property, i.e. whether to exclude this aspect from being shown in the explorer.
  */
 void AbstractAspect::setHidden(bool value) {
-    if (value == d->m_hidden) return;
-    exec(new PropertyChangeCommand<bool>(i18n("%1: change hidden status", d->m_name),
-				 &d->m_hidden, value),
-			"aspectHiddenAboutToChange", "aspectHiddenChanged", Q_ARG(const AbstractAspect*,this));
+    if (value == d->m_hidden)
+		return;
+	d->m_hidden = value;
 }
 
 void AbstractAspect::setIsLoading(bool load) {
@@ -541,7 +540,7 @@ void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 // 	emit old_parent->aspectRemoved(old_parent, old_sibling, this);
 }
 
-QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFlags flags) {
+QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFlags flags) const {
 	QVector<AbstractAspect*> result;
 	for (auto* child : children()) {
 		if (flags & IncludeHidden || !child->hidden()) {
@@ -602,7 +601,7 @@ QVector<AspectType> AbstractAspect::dropableOn() const {
  * \brief Load from XML
  *
  * XmlStreamReader supports errors as well as warnings. If only
- * warnings (non-critial errors) occur, this function must return
+ * warnings (non-critical errors) occur, this function must return
  * the reader at the end element corresponding to the current
  * element at the time the function was called.
  *

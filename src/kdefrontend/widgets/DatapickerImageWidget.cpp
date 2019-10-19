@@ -321,7 +321,7 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 	m_initializing = true;
 	m_imagesList = list;
 	m_image = list.first();
-	m_aspect = list.first();
+	m_aspect = list.first()->parentAspect();
 
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
@@ -399,6 +399,8 @@ void DatapickerImageWidget::selectFile() {
 	QString formats;
 	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
+		if (f == QLatin1String("*.svg"))
+			continue;
 		formats.isEmpty() ? formats += f : formats += " " + f;
 	}
 	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
@@ -492,6 +494,7 @@ void DatapickerImageWidget::logicalPositionChanged() {
 	points.logicalPos[1].setZ(ui.sbPositionZ2->value());
 	points.logicalPos[2].setZ(ui.sbPositionZ3->value());
 
+	const Lock lock(m_initializing);
 	for (auto* image : m_imagesList)
 		image->setAxisPoints(points);
 }
@@ -752,6 +755,8 @@ void DatapickerImageWidget::imageRotationAngleChanged(float angle) {
 }
 
 void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::ReferencePoints& axisPoints) {
+	if (m_initializing)return;
+	const Lock lock(m_initializing);
 	m_initializing = true;
 	ui.cbGraphType->setCurrentIndex((int) axisPoints.type);
 	ui.sbTernaryScale->setValue(axisPoints.ternaryScale);

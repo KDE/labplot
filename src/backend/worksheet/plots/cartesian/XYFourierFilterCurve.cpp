@@ -157,17 +157,6 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		return;
 	}
 
-	//check column sizes
-	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
-		filterResult.available = true;
-		filterResult.valid = false;
-		filterResult.status = i18n("Number of x and y data points must be equal.");
-		recalcLogicalPoints();
-		emit q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
-
 	//copy all valid data point for the differentiation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
@@ -182,17 +171,20 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		xmax = filterData.xRange.last();
 	}
 
-	for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
-		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
-		        && !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
 
-			// only when inside given range
-			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
-				xdataVector.append(tmpXDataColumn->valueAt(row));
-				ydataVector.append(tmpYDataColumn->valueAt(row));
-			}
+	int rowCount = qMin(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
+	for (int row = 0; row < rowCount; ++row) {
+		//only copy those data where _all_ values (for x and y, if given) are valid
+		if (std::isnan(tmpXDataColumn->valueAt(row)) || std::isnan(tmpYDataColumn->valueAt(row))
+			|| tmpXDataColumn->isMasked(row) || tmpYDataColumn->isMasked(row))
+			continue;
+
+		// only when inside given range
+		if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+			xdataVector.append(tmpXDataColumn->valueAt(row));
+			ydataVector.append(tmpYDataColumn->valueAt(row));
 		}
+
 	}
 
 	//number of data points to filter

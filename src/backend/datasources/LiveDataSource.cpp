@@ -60,11 +60,12 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
   \ingroup datasources
 */
 LiveDataSource::LiveDataSource(const QString& name, bool loading) : Spreadsheet(name, loading, AspectType::LiveDataSource),
-	m_updateTimer(new QTimer(this)) {
+	m_updateTimer(new QTimer(this)), m_watchTimer(new QTimer(this)) {
 
 	initActions();
 
 	connect(m_updateTimer, &QTimer::timeout, this, &LiveDataSource::read);
+	connect(m_watchTimer, &QTimer::timeout, this, &LiveDataSource::readOnUpdate);
 }
 
 LiveDataSource::~LiveDataSource() {
@@ -73,17 +74,16 @@ LiveDataSource::~LiveDataSource() {
 
 	delete m_filter;
 	delete m_fileSystemWatcher;
-	delete m_file;
 	delete m_localSocket;
 	delete m_tcpSocket;
 	delete m_serialPort;
-
-	delete m_updateTimer;
 }
 
 void LiveDataSource::initActions() {
 	m_plotDataAction = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot data"), this);
 	connect(m_plotDataAction, &QAction::triggered, this, &LiveDataSource::plotData);
+	m_watchTimer->setSingleShot(true);
+	m_watchTimer->setInterval(100);
 }
 
 QWidget* LiveDataSource::view() const {
@@ -129,11 +129,14 @@ QStringList LiveDataSource::supportedBaudRates() {
  */
 void LiveDataSource::updateNow() {
 	DEBUG("LiveDataSource::updateNow() update interval = " << m_updateInterval);
-	m_updateTimer->stop();
+	if (m_updateType == TimeInterval)
+		m_updateTimer->stop();
+	else
+		m_pending = false;
 	read();
 
 	//restart the timer after update
-	if (m_updateType == TimeInterval)
+	if (m_updateType == TimeInterval && !m_paused)
 		m_updateTimer->start(m_updateInterval);
 }
 
@@ -142,12 +145,9 @@ void LiveDataSource::updateNow() {
  */
 void LiveDataSource::continueReading() {
 	m_paused = false;
-	switch (m_updateType) {
-	case TimeInterval:
-		m_updateTimer->start(m_updateInterval);
-		break;
-	case NewData:
-		connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
+	if (m_pending) {
+		m_pending = false;
+		updateNow();
 	}
 }
 
@@ -156,12 +156,9 @@ void LiveDataSource::continueReading() {
  */
 void LiveDataSource::pauseReading() {
 	m_paused = true;
-	switch (m_updateType) {
-	case TimeInterval:
+	if (m_updateType == TimeInterval) {
+		m_pending = true;
 		m_updateTimer->stop();
-		break;
-	case NewData:
-		disconnect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
 	}
 }
 
@@ -318,29 +315,30 @@ LiveDataSource::ReadingType LiveDataSource::readingType() const {
  */
 void LiveDataSource::setUpdateType(UpdateType updatetype) {
 	switch (updatetype) {
-	case NewData:
+	case NewData: {
 		m_updateTimer->stop();
+		if (!m_fileSystemWatcher)
+			m_fileSystemWatcher = new QFileSystemWatcher(this);
 
-		if (!m_fileSystemWatcher) {
-			m_fileSystemWatcher = new QFileSystemWatcher;
+		m_fileSystemWatcher->addPath(m_fileName);
+		QFileInfo file(m_fileName);
+		// If the watched file currently does not exist (because it is recreated for instance), watch its containing
+		// directory instead. Once the file exists again, switch to watching the file in readOnUpdate().
+		// Reading will only start 100ms after the last update, to prevent continuous re-reading while the file is updated.
+		// If the watched file intentionally is updated more often than that, the user should switch to periodic reading.
+		if (m_fileSystemWatcher->files().contains(m_fileName))
+			m_fileSystemWatcher->removePath(file.absolutePath());
+		else
+			m_fileSystemWatcher->addPath(file.absolutePath());
 
-			//connect to file changes to read the new data
-			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
-
-			//connect to file changes to re-add the file path again - need to cope with deletion of files in text editors which
-			//on save create a new file in the temp folder first and then swap with the original one.
-			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, [=]() {m_fileSystemWatcher->addPath(m_fileName);});
-		}
-
-		if (!m_fileSystemWatcher->files().contains(m_fileName))
-			m_fileSystemWatcher->addPath(m_fileName);
-
+		connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, [&](){ m_watchTimer->start(); });
+		connect(m_fileSystemWatcher, &QFileSystemWatcher::directoryChanged, this, [&](){ m_watchTimer->start(); });
 		break;
+	}
 	case TimeInterval:
-		if (m_fileSystemWatcher) {
-			m_fileSystemWatcher->removePath(m_fileName);
-			disconnect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
-		}
+		delete m_fileSystemWatcher;
+		m_fileSystemWatcher = nullptr;
+		break;
 	}
 	m_updateType = updatetype;
 }
@@ -438,6 +436,28 @@ QMenu* LiveDataSource::createContextMenu() {
 //##############################################################################
 
 /*
+ * Called when the watch timer times out, i.e. when modifying the file or directory
+ * presumably has finished. Also see LiveDataSource::setUpdateType().
+ */
+void LiveDataSource::readOnUpdate() {
+	if (!m_fileSystemWatcher->files().contains(m_fileName)) {
+		m_fileSystemWatcher->addPath(m_fileName);
+		QFileInfo file(m_fileName);
+		if (m_fileSystemWatcher->files().contains(m_fileName))
+			m_fileSystemWatcher->removePath(file.absolutePath());
+		else {
+			m_fileSystemWatcher->addPath(file.absolutePath());
+			return;
+		}
+	}
+	if (m_paused)
+		// flag file for reading, once the user decides to continue reading
+		m_pending = true;
+	else
+		read();
+}
+
+/*
  * called periodically or on new data changes (file changed, new data in the socket, etc.)
  */
 void LiveDataSource::read() {
@@ -455,8 +475,8 @@ void LiveDataSource::read() {
 		DEBUG("	Preparing device: update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
 		switch (m_sourceType) {
 		case FileOrPipe:
-			m_file = new QFile(m_fileName);
-			m_device = m_file;
+			delete m_device;
+			m_device = new QFile(m_fileName);
 			break;
 		case NetworkTcpSocket:
 			m_tcpSocket = new QTcpSocket(this);
@@ -515,9 +535,9 @@ void LiveDataSource::read() {
 		switch (m_fileType) {
 		case AbstractFileFilter::Ascii:
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
-				static_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, 0);
+				static_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_device, this, 0);
 			} else {
-				bytes = static_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
+				bytes = static_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_device, this, m_bytesRead);
 				m_bytesRead += bytes;
 				DEBUG("Read " << bytes << " bytes, in total: " << m_bytesRead);
 			}
@@ -697,7 +717,7 @@ void LiveDataSource::plotData() {
   Saves as XML.
  */
 void LiveDataSource::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("LiveDataSource");
+	writer->writeStartElement("liveDataSource");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
@@ -756,7 +776,7 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 			col->save(writer);
 	}
 
-	writer->writeEndElement(); // "LiveDataSource"
+	writer->writeEndElement(); // "liveDataSource"
 }
 
 /*!
@@ -772,7 +792,8 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "LiveDataSource")
+		if (reader->isEndElement()
+			&& (reader->name() == "liveDataSource" || reader->name() == "LiveDataSource")) //TODO: remove "LiveDataSources" in couple of releases
 			break;
 
 		if (!reader->isStartElement())

@@ -140,30 +140,23 @@ void XYFourierTransformCurvePrivate::recalculate() {
 		return;
 	}
 
-	//check column sizes
-	if (xDataColumn->rowCount() != yDataColumn->rowCount()) {
-		transformResult.available = true;
-		transformResult.valid = false;
-		transformResult.status = i18n("Number of x and y data points must be equal.");
-		emit q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
-
 	//copy all valid data point for the transform to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	const double xmin = transformData.xRange.first();
 	const double xmax = transformData.xRange.last();
-	for (int row = 0; row < xDataColumn->rowCount(); ++row) {
-		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
-		        && !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
-			// only when inside given range
-			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-				xdataVector.append(xDataColumn->valueAt(row));
-				ydataVector.append(yDataColumn->valueAt(row));
-			}
+
+	int rowCount = qMin(xDataColumn->rowCount(), yDataColumn->rowCount());
+	for (int row = 0; row < rowCount; ++row) {
+		// only copy those data where _all_ values (for x and y, if given) are valid
+		if (std::isnan(xDataColumn->valueAt(row)) || std::isnan(yDataColumn->valueAt(row))
+				|| xDataColumn->isMasked(row) || yDataColumn->isMasked(row))
+			continue;
+
+		// only when inside given range
+		if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
+			xdataVector.append(xDataColumn->valueAt(row));
+			ydataVector.append(yDataColumn->valueAt(row));
 		}
 	}
 

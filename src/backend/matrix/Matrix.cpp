@@ -1222,7 +1222,7 @@ void Matrix::unregisterShortcuts() {
 //##############################################################################
 //########################  Data Import  #######################################
 //##############################################################################
-int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode mode,
+int Matrix::prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter::ImportMode mode,
 	int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
 	QDEBUG("prepareImport() rows =" << actualRows << " cols =" << actualCols);
 	QDEBUG("	column modes = " << columnMode);

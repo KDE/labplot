@@ -160,6 +160,10 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
 	filter->setHeaderEnabled( ui.chbHeader->isChecked() );
 }
 
+void AsciiOptionsWidget::setSeparatingCharacter(QLatin1Char character) {
+	ui.cbSeparatingCharacter->setCurrentItem(QString(character));
+}
+
 void AsciiOptionsWidget::loadSettings() const {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportAscii");
 

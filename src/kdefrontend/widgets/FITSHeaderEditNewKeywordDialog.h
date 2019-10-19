@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : Widget for adding new keyword in the FITS edit widget
 --------------------------------------------------------------------
 Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2016-2019 by Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
 /***************************************************************************
@@ -39,7 +40,9 @@ class FITSHeaderEditNewKeywordDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit FITSHeaderEditNewKeywordDialog(QWidget *parent = nullptr);
+	explicit FITSHeaderEditNewKeywordDialog(QWidget* parent = nullptr);
+	~FITSHeaderEditNewKeywordDialog();
+
 	FITSFilter::Keyword newKeyword() const;
 
 private:
@@ -51,7 +54,7 @@ private:
 	int okClicked();
 
 private slots:
-	void slotButtonClicked(QAbstractButton *button);
+	void slotButtonClicked(QAbstractButton*);
 };
 
 #endif // FITSHEADEREDITNEWKEYWORDDIALOG_H

@@ -960,10 +960,19 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 				if (ui.cbFileType->currentIndex() != i) {
 					ui.cbFileType->setCurrentIndex(i); // will call the slot fileTypeChanged which updates content and preview
 
+					//automatically set the comma separator if a csv file was selected
+					if (fileType == AbstractFileFilter::Ascii && name.endsWith(QLatin1String("csv"), Qt::CaseInsensitive))
+						m_asciiOptionsWidget->setSeparatingCharacter(QLatin1Char(','));
+
 					emit fileNameChanged();
 					return;
 				} else {
 					initOptionsWidget();
+
+					//automatically set the comma separator if a csv file was selected
+					if (fileType == AbstractFileFilter::Ascii && name.endsWith(QLatin1String("csv"), Qt::CaseInsensitive))
+						m_asciiOptionsWidget->setSeparatingCharacter(QLatin1Char(','));
+
 					updateContent(fileName);
 					break;
 				}
@@ -997,7 +1006,7 @@ void ImportFileWidget::manageFilters() {
 
 /*!
 	Depending on the selected file type, activates the corresponding options in the data portion tab
-	and populates the combobox with the available pre-defined fllter settings for the selected type.
+	and populates the combobox with the available pre-defined filter settings for the selected type.
 */
 void ImportFileWidget::fileTypeChanged(int index) {
 	Q_UNUSED(index);
@@ -1449,7 +1458,7 @@ void ImportFileWidget::refreshPreview() {
 		importedStrings = filter->previewCurrentObject(
 		                      fileName,
 		                      m_rootOptionsWidget->startRow(),
-		                      qMin(m_rootOptionsWidget->startRow() + m_rootOptionsWidget->lines() - 1,
+		                      qMin(m_rootOptionsWidget->startRow() + lines - 1,
 		                           m_rootOptionsWidget->endRow())
 		                  );
 		tmpTableWidget = m_rootOptionsWidget->previewWidget();

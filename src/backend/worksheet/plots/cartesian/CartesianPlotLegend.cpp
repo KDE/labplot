@@ -717,7 +717,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	float h = fm.ascent();
 	painter->setFont(labelFont);
 
-	//translate to left upper conner of the bounding rect plus the layout offset and the height of the title
+	//translate to left upper corner of the bounding rect plus the layout offset and the height of the title
 	painter->translate(-rect.width()/2+layoutLeftMargin, -rect.height()/2+layoutTopMargin);
 	if (title->isVisible() && !title->text().text.isEmpty())
 		painter->translate(0, title->graphicsItem()->boundingRect().height());

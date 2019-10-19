@@ -33,6 +33,7 @@
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
 #include <QIcon>
@@ -101,7 +102,8 @@ SpreadsheetModel* Spreadsheet::model() {
 */
 QWidget* Spreadsheet::view() const {
 	if (!m_partView) {
-		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this));
+		bool readOnly = (this->parentAspect()->type() == AspectType::DatapickerCurve);
+		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this), readOnly);
 		m_partView = m_view;
 	}
 	return m_partView;
@@ -775,7 +777,7 @@ void Spreadsheet::unregisterShortcuts() {
 //##############################################################################
 //########################  Data Import  #######################################
 //##############################################################################
-int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode importMode,
+int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter::ImportMode importMode,
                                int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
 	DEBUG("Spreadsheet::prepareImport()")
 	DEBUG("	resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)
@@ -811,7 +813,7 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 		Column* column = this->child<Column>(columnOffset+n);
 		DEBUG(" column " << n << " columnMode = " << columnMode[n]);
-		column->setColumnMode(columnMode[n]);
+		column->setColumnModeFast(columnMode[n]);
 
 		//in the most cases the first imported column is meant to be used as x-data.
 		//Other columns provide mostly y-data or errors.
@@ -903,10 +905,17 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 
 		//rename the columns that are already available and suppress the dataChanged signal for them
 		for (int i = 0; i < childCount<Column>(); i++) {
-			if (mode == AbstractFileFilter::Replace)
+			if (mode == AbstractFileFilter::Replace) {
 				child<Column>(i)->setSuppressDataChangedSignal(true);
+				emit child<Column>(i)->reset(child<Column>(i));
+			}
 
 			child<Column>(i)->setName(colNameList.at(i));
+			// Force aspectDescriptionChanged is send, because otherwise the column
+			// will not connected again to the curves (project.cpp, descriptionChanged)
+			// it is not that expensive to call it twice (first time in setName, but
+			// only if the name changed)
+			child<Column>(i)->aspectDescriptionChanged(child<Column>(i));
 		}
 	}
 
@@ -915,6 +924,19 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 
 void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
 	DEBUG("Spreadsheet::finalizeImport()");
+
+	//determine the dependent plots
+	QVector<CartesianPlot*> plots;
+	if (importMode == AbstractFileFilter::Replace) {
+		for (int n = startColumn; n <= endColumn; n++) {
+			Column* column = this->column(columnOffset + n - startColumn);
+			column->addUsedInPlots(plots);
+		}
+
+		//suppress retransform in the dependent plots
+		for (auto* plot : plots)
+			plot->setSuppressDataChangedSignal(true);
+	}
 
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();
@@ -950,6 +972,14 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 		if (importMode == AbstractFileFilter::Replace) {
 			column->setSuppressDataChangedSignal(false);
 			column->setChanged();
+		}
+	}
+
+	if (importMode == AbstractFileFilter::Replace) {
+		//retransform the dependent plots
+		for (auto* plot : plots) {
+			plot->setSuppressDataChangedSignal(false);
+			plot->dataChanged();
 		}
 	}
 

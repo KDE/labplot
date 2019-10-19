@@ -4,6 +4,7 @@
     Description          : Graphic Item for coordinate points of Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+	Copyright            : (C) 2015-2019 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -40,9 +41,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-QPen DatapickerPoint::selectedPen = QPen(Qt::darkBlue, 3, Qt::SolidLine);
-float DatapickerPoint::selectedOpacity = 0.3f;
-
 /**
  * \class ErrorBarItem
  * \brief A customizable error-bar for DatapickerPoint.
@@ -57,6 +55,7 @@ ErrorBarItem::ErrorBarItem(DatapickerPoint* parent, const ErrorBarType& type) :
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	initRect();
+	setAcceptHoverEvents(true);
 }
 
 void ErrorBarItem::initRect() {
@@ -93,10 +92,24 @@ void ErrorBarItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	QGraphicsItem::mouseReleaseEvent(event);
 }
 
+void ErrorBarItem::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
+	if (m_type == PlusDeltaX ||m_type == MinusDeltaX)
+		setCursor(Qt::SizeHorCursor);
+	else
+		setCursor(Qt::SizeVerCursor);
+}
+
 QVariant ErrorBarItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
 	if (change == QGraphicsItem::ItemPositionChange) {
 		QPointF newPos = value.toPointF();
-		barLineItem->setLine(0, 0, newPos.x(), newPos.y());
+		if (m_type == PlusDeltaX || m_type == MinusDeltaX) {
+			newPos.setY(0);
+			barLineItem->setLine(0, 0, newPos.x(), 0);
+		} else {
+			newPos.setX(0);
+			barLineItem->setLine(0, 0, 0, newPos.y());
+		}
+		return QGraphicsRectItem::itemChange(change, newPos);
 	}
 
 	return QGraphicsRectItem::itemChange(change, value);
@@ -205,6 +218,7 @@ CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPointF, plusDeltaXPos, plusDeltaXPo
 CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPointF, minusDeltaXPos, minusDeltaXPos)
 CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPointF, plusDeltaYPos, plusDeltaYPos)
 CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPointF, minusDeltaYPos, minusDeltaYPos)
+
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPosition, QPointF, position, retransform)
 void DatapickerPoint::setPosition(const QPointF& pos) {
@@ -213,7 +227,7 @@ void DatapickerPoint::setPosition(const QPointF& pos) {
 		exec(new DatapickerPointSetPositionCmd(d, pos, ki18n("%1: set position")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaXPos, QPointF, plusDeltaXPos, updateData)
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaXPos, QPointF, plusDeltaXPos, updatePoint)
 void DatapickerPoint::setPlusDeltaXPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->plusDeltaXPos) {
@@ -231,7 +245,7 @@ void DatapickerPoint::setPlusDeltaXPos(const QPointF& pos) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaXPos, QPointF, minusDeltaXPos, updateData)
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaXPos, QPointF, minusDeltaXPos, updatePoint)
 void DatapickerPoint::setMinusDeltaXPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->minusDeltaXPos) {
@@ -249,7 +263,7 @@ void DatapickerPoint::setMinusDeltaXPos(const QPointF& pos) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaYPos, QPointF, plusDeltaYPos, updateData)
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaYPos, QPointF, plusDeltaYPos, updatePoint)
 void DatapickerPoint::setPlusDeltaYPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->plusDeltaYPos) {
@@ -267,7 +281,7 @@ void DatapickerPoint::setPlusDeltaYPos(const QPointF& pos) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaYPos, QPointF, minusDeltaYPos, updateData)
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaYPos, QPointF, minusDeltaYPos, updatePoint)
 void DatapickerPoint::setMinusDeltaYPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->minusDeltaYPos) {
@@ -294,6 +308,7 @@ void DatapickerPoint::setPrinting(bool on) {
 //####################### Private implementation ###############################
 //##############################################################################
 DatapickerPointPrivate::DatapickerPointPrivate(DatapickerPoint* owner) : q(owner) {
+	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(true);
@@ -313,7 +328,7 @@ void DatapickerPointPrivate::retransform() {
 	boundingRectangle = path.boundingRect();
 	recalcShapeAndBoundingRect();
 	retransformErrorBar();
-	updateData();
+	updatePoint();
 }
 
 /*!
@@ -332,10 +347,10 @@ void DatapickerPointPrivate::retransformErrorBar() {
 /*!
   update datasheet on any change in position of Datapicker-Point or it's error-bar.
 */
-void DatapickerPointPrivate::updateData() {
+void DatapickerPointPrivate::updatePoint() {
 	auto* curve = dynamic_cast<DatapickerCurve*>(q->parentAspect());
 	if (curve)
-		curve->updateData(q);
+		curve->updatePoint(q);
 }
 
 void DatapickerPointPrivate::updatePropeties() {
@@ -389,9 +404,23 @@ void DatapickerPointPrivate::recalcShapeAndBoundingRect() {
 	transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
 	itemShape = QPainterPath();
 	itemShape.addRect(transformedBoundingRectangle);
+	itemShape = WorksheetElement::shapeFromPath(itemShape, pen);
 }
 
-void DatapickerPointPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+void DatapickerPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	q->setPosition(pos());
+	QGraphicsItem::mouseReleaseEvent(event);
+}
+
+void DatapickerPointPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
+	setCursor(Qt::ArrowCursor);
+}
+
+void DatapickerPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
+	setCursor(Qt::CrossCursor);
+}
+
+void DatapickerPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -412,8 +441,9 @@ void DatapickerPointPrivate::paint(QPainter *painter, const QStyleOptionGraphics
 	painter->restore();
 
 	if (isSelected() && !m_printing) {
-		painter->setPen(q->selectedPen);
-		painter->setOpacity(q->selectedOpacity);
+		//TODO: move the initialization of QPen to a parent class later so we don't
+		//need to create it in every paint() call.
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 1, Qt::SolidLine));
 		painter->drawPath(itemShape);
 	}
 }
@@ -431,7 +461,6 @@ void DatapickerPoint::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement( "datapickerPoint" );
 	writeBasicAttributes(writer);
-	writeCommentElement(writer);
 
 	//geometry
 	writer->writeStartElement( "geometry" );
@@ -439,16 +468,21 @@ void DatapickerPoint::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "y", QString::number(d->position.y()) );
 	writer->writeEndElement();
 
-	writer->writeStartElement( "errorBar" );
-	writer->writeAttribute( "plusDeltaXPos_x", QString::number(d->plusDeltaXPos.x()) );
-	writer->writeAttribute( "plusDeltaXPos_y", QString::number(d->plusDeltaXPos.y()) );
-	writer->writeAttribute( "minusDeltaXPos_x", QString::number(d->minusDeltaXPos.x()) );
-	writer->writeAttribute( "minusDeltaXPos_y", QString::number(d->minusDeltaXPos.y()) );
-	writer->writeAttribute( "plusDeltaYPos_x", QString::number(d->plusDeltaYPos.x()) );
-	writer->writeAttribute( "plusDeltaYPos_y", QString::number(d->plusDeltaYPos.y()) );
-	writer->writeAttribute( "minusDeltaYPos_x", QString::number(d->minusDeltaYPos.x()) );
-	writer->writeAttribute( "minusDeltaYPos_y", QString::number(d->minusDeltaYPos.y()) );
-	writer->writeEndElement();
+	auto* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
+	if (curve && (curve->curveErrorTypes().x != DatapickerCurve::NoError
+		|| curve->curveErrorTypes().y != DatapickerCurve::NoError)) {
+
+		writer->writeStartElement( "errorBar" );
+		writer->writeAttribute( "plusDeltaXPos_x", QString::number(d->plusDeltaXPos.x()) );
+		writer->writeAttribute( "plusDeltaXPos_y", QString::number(d->plusDeltaXPos.y()) );
+		writer->writeAttribute( "minusDeltaXPos_x", QString::number(d->minusDeltaXPos.x()) );
+		writer->writeAttribute( "minusDeltaXPos_y", QString::number(d->minusDeltaXPos.y()) );
+		writer->writeAttribute( "plusDeltaYPos_x", QString::number(d->plusDeltaYPos.x()) );
+		writer->writeAttribute( "plusDeltaYPos_y", QString::number(d->plusDeltaYPos.y()) );
+		writer->writeAttribute( "minusDeltaYPos_x", QString::number(d->minusDeltaYPos.x()) );
+		writer->writeAttribute( "minusDeltaYPos_y", QString::number(d->minusDeltaYPos.y()) );
+		writer->writeEndElement();
+	}
 
 	writer->writeEndElement(); // close "DatapickerPoint" section
 }
@@ -472,9 +506,7 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
-			if (!readCommentElement(reader)) return false;
-		} else if (!preview && reader->name() == "geometry") {
+		if (!preview && reader->name() == "geometry") {
 			attribs = reader->attributes();
 
 			str = attribs.value("x").toString();

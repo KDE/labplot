@@ -41,7 +41,7 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode) :
 	switch (mode) {
 	case AbstractColumn::Numeric:
 		m_input_filter = new String2DoubleFilter();
-		m_output_filter = new Double2StringFilter();
+		m_output_filter = new Double2StringFilter('g');
 		m_data = new QVector<double>();
 		break;
 	case AbstractColumn::Integer:
@@ -511,15 +511,17 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 		break;
 	}
 	case AbstractColumn::Text: {
+		auto* vec = static_cast<QVector<QString>*>(m_data);
 		for (int i = 0; i < num_rows; ++i)
-			static_cast<QVector<QString>*>(m_data)->replace(i, other->textAt(i));
+			vec->replace(i, other->textAt(i));
 		break;
 	}
 	case AbstractColumn::DateTime:
 	case AbstractColumn::Month:
 	case AbstractColumn::Day: {
+		auto* vec = static_cast<QVector<QDateTime>*>(m_data);
 		for (int i = 0; i < num_rows; ++i)
-			static_cast<QVector<QDateTime>*>(m_data)->replace(i, other->dateTimeAt(i));
+			vec->replace(i, other->dateTimeAt(i));
 		break;
 	}
 	}
@@ -907,11 +909,8 @@ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variab
 
 	for (auto column : variableColumns) {
 		m_formulaVariableColumnPaths << column->path();
-		if (autoUpdate) {
-			m_connectionsUpdateFormula << connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &ColumnPrivate::formulaVariableColumnRemoved);
-			connect(column->parentAspect(), &AbstractAspect::aspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
-		}
+		if (autoUpdate)
+			connectFormulaColumn(column);
 	}
 }
 
@@ -921,12 +920,24 @@ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variab
  */
 void ColumnPrivate::finalizeLoad() {
 	if (m_formulaAutoUpdate) {
-		for (auto column : m_formulaVariableColumns) {
-			m_connectionsUpdateFormula << connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &ColumnPrivate::formulaVariableColumnRemoved);
-			connect(column->parentAspect(), &AbstractAspect::aspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
-		}
+		for (auto column : m_formulaVariableColumns)
+			connectFormulaColumn(column);
 	}
+}
+
+/*!
+ * \brief ColumnPrivate::connectFormulaColumn
+ * This function is used to connect the columns to the needed slots for updating formulas
+ * \param column
+ */
+void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
+	if (!column)
+		return;
+
+	m_connectionsUpdateFormula << connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
+	connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &ColumnPrivate::formulaVariableColumnRemoved);
+	connect(column, &AbstractColumn::reset, this, &ColumnPrivate::formulaVariableColumnRemoved);
+	connect(column->parentAspect(), &AbstractAspect::aspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
 }
 
 /*!
@@ -939,6 +950,7 @@ void ColumnPrivate::finalizeLoad() {
 	m_formula = formula;
 	m_formulaVariableNames = variableNames;
 	m_formulaVariableColumnPaths = variableColumnPaths;
+	m_formulaVariableColumns.resize(variableColumnPaths.length());
 	m_formulaAutoUpdate = autoUpdate;
 }
 
@@ -959,7 +971,10 @@ void ColumnPrivate::setformulVariableColumnsPath(int index, QString path) {
 }
 
 void ColumnPrivate::setformulVariableColumn(int index, Column* column) {
+	if (m_formulaVariableColumns[index]) // if there exists already a valid column, disconnect it first
+		disconnect(m_formulaVariableColumns[index], nullptr, this, nullptr);
 	m_formulaVariableColumns[index] = column;
+	connectFormulaColumn(column);
 }
 
 /*!
@@ -1029,7 +1044,8 @@ void ColumnPrivate::updateFormula() {
 
 void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
 	const Column* column = dynamic_cast<const Column*>(aspect);
-	//TODO: why is const_cast requried here?!?
+	disconnect(column, nullptr, this, nullptr);
+	//TODO: why is const_cast required here?!?
 	int index = m_formulaVariableColumns.indexOf(const_cast<Column*>(column));
 	if (index != -1) {
 		m_formulaVariableColumns[index] = nullptr;
@@ -1400,45 +1416,71 @@ void ColumnPrivate::updateProperties() {
 	qint64 valueDateTime;
 
 	for (int row = 1; row < rowCount(); row++) {
+		if (!m_owner->isValid(row) || m_owner->isMasked(row)) {
+			// if there is one invalid or masked value, the property is No, because
+			// otherwise it's difficult to find the correct index in indexForValue().
+			// You don't know if you should increase the index or decrease it when
+			// you hit an invalid value
+			properties = AbstractColumn::Properties::No;
+			propertiesAvailable = true;
+			return;
+		}
 
 		if (m_column_mode == AbstractColumn::Integer) {
 			valueInt = integerAt(row);
 
-			// check monotonic increasing
-			if (valueInt >= prevValueInt && monotonic_increasing < 0)
-				monotonic_increasing = 1;
-			else if (valueInt < prevValueInt && monotonic_increasing >= 0)
-				monotonic_increasing = 0;
-			// else: nothing
-
-			// check monotonic decreasing
-			if (valueInt <= prevValueInt && monotonic_decreasing < 0)
-				monotonic_decreasing = 1;
-			else if (valueInt > prevValueInt && monotonic_decreasing >= 0)
+			if (valueInt > prevValueInt) {
 				monotonic_decreasing = 0;
+				if (monotonic_increasing < 0)
+					monotonic_increasing = 1;
+				else if (monotonic_increasing == 0)
+					break; // when nor increasing, nor decreasing, break
+
+			} else if (valueInt < prevValueInt) {
+				monotonic_increasing = 0;
+				if (monotonic_decreasing < 0)
+					monotonic_decreasing = 1;
+				else if (monotonic_decreasing == 0)
+					break; // when nor increasing, nor decreasing, break
+
+			} else {
+				if (monotonic_increasing < 0 && monotonic_decreasing < 0) {
+					monotonic_decreasing = 1;
+					monotonic_increasing = 1;
+				}
+			}
+
 
 			prevValueInt = valueInt;
 
 			} else if (m_column_mode == AbstractColumn::Numeric) {
 				value = valueAt(row);
 
-				// check monotonic increasing
-				if (value >= prevValue && monotonic_increasing < 0)
-					monotonic_increasing = 1;
-				else if (value < prevValue || std::isnan(value)) {
+				if (std::isnan(value)) {
 					monotonic_increasing = 0;
-					if (monotonic_decreasing == 0)
-						break;
-				}
-				// else: nothing
-
-				// check monotonic decreasing
-				if (value <= prevValue && monotonic_decreasing < 0)
-					monotonic_decreasing = 1;
-				else if (value > prevValue || std::isnan(value)) {
 					monotonic_decreasing = 0;
-					if (monotonic_increasing == 0)
-						break;
+					break;
+				}
+
+				if (value > prevValue) {
+					monotonic_decreasing = 0;
+					if (monotonic_increasing < 0)
+						monotonic_increasing = 1;
+					else if (monotonic_increasing == 0)
+						break; // when nor increasing, nor decreasing, break
+
+				} else if (value < prevValue) {
+					monotonic_increasing = 0;
+					if (monotonic_decreasing < 0)
+						monotonic_decreasing = 1;
+					else if (monotonic_decreasing == 0)
+						break; // when nor increasing, nor decreasing, break
+
+				} else {
+					if (monotonic_increasing < 0 && monotonic_decreasing < 0) {
+						monotonic_decreasing = 1;
+						monotonic_increasing = 1;
+					}
 				}
 
 				prevValue = value;
@@ -1449,18 +1491,26 @@ void ColumnPrivate::updateProperties() {
 
 				valueDateTime = dateTimeAt(row).toMSecsSinceEpoch();
 
-				// check monotonic increasing
-				if (valueDateTime >= prevValueDatetime && monotonic_increasing < 0)
-					monotonic_increasing = 1;
-				else if (valueDateTime < prevValueDatetime)
-					monotonic_increasing = 0;
-				// else: nothing
-
-				// check monotonic decreasing
-				if (valueDateTime <= prevValueDatetime && monotonic_decreasing < 0)
-					monotonic_decreasing = 1;
-				else if (valueDateTime > prevValueDatetime)
+				if (valueDateTime > prevValueDatetime) {
 					monotonic_decreasing = 0;
+					if (monotonic_increasing < 0)
+						monotonic_increasing = 1;
+					else if (monotonic_increasing == 0)
+						break; // when nor increasing, nor decreasing, break
+
+				} else if (valueDateTime < prevValueDatetime) {
+					monotonic_increasing = 0;
+					if (monotonic_decreasing < 0)
+						monotonic_decreasing = 1;
+					else if (monotonic_decreasing == 0)
+						break; // when nor increasing, nor decreasing, break
+
+				} else {
+					if (monotonic_increasing < 0 && monotonic_decreasing < 0) {
+						monotonic_decreasing = 1;
+						monotonic_increasing = 1;
+					}
+				}
 
 				prevValueDatetime = valueDateTime;
 			}

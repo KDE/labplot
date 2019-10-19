@@ -272,7 +272,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 	DEBUG("OriginProjectParser::loadFolder()")
 	const tree<Origin::ProjectNode>* projectTree = m_originFile->project();
 
-	// do not skip anything if pathesToLoad() constains only root folder
+	// do not skip anything if pathesToLoad() contains only root folder
 	bool containsRootFolder = (folder->pathesToLoad().size() == 1 && folder->pathesToLoad().contains(folder->path()));
 	if (containsRootFolder) {
 		DEBUG("	pathesToLoad contains only folder path \""  << folder->path().toStdString() << "\". Clearing pathes to load.")
@@ -878,7 +878,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		}
 	}
 
-	//TODO: "hidden" not supporrted yet
+	//TODO: "hidden" not supported yet
 //	if (spread.hidden || spread.loose)
 //		mw->hideWindow(spreadsheet);
 

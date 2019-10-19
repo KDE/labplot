@@ -126,7 +126,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	m_showOptions ? m_optionsButton->setText(i18n("Hide Options")) : m_optionsButton->setText(i18n("Show Options"));
 	connect(m_optionsButton, &QPushButton::clicked, this, &ImportFileDialog::toggleOptions);
 
-	checkOkButton();
+	ImportFileDialog::checkOkButton();
 }
 
 ImportFileDialog::~ImportFileDialog() {
@@ -228,9 +228,9 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		filter->readDataFromFile(fileName, spreadsheet, mode);
 	} else if (aspect->inherits(AspectType::Workbook)) {
 		DEBUG("ImportFileDialog::importTo(): to Workbook");
-		auto* workbook = qobject_cast<Workbook*>(aspect);
+		auto* workbook = static_cast<Workbook*>(aspect);
 		workbook->setUndoAware(false);
-		QVector<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
+		auto sheets = workbook->children<AbstractAspect>();
 
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
 		// multiple data sets/variables for HDF5, NetCDF and ROOT
@@ -254,6 +254,14 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			//and rename the already available sheets
 			if (mode == AbstractFileFilter::Replace) {
 				start = offset;
+
+				// if there are more available spreadsheets, than needed,
+				// delete the unneeded spreadsheets
+				if (offset > nrNames) {
+					for (int i = nrNames; i < offset; i++)
+						sheets[i]->remove();
+					offset = nrNames;
+				}
 
 				//rename the available sheets
 				for (int i = 0; i < offset; ++i) {

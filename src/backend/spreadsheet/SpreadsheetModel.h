@@ -69,7 +69,6 @@ public:
 	void suppressSignals(bool);
 
 private slots:
-	void handleAspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
@@ -93,6 +92,8 @@ private:
 	QStringList m_horizontal_header_data;
 	int m_defaultHeaderHeight;
 	bool m_suppressSignals{false};
+	int m_rowCount{0};
+	int m_columnCount{0};
 };
 
 #endif

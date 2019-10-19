@@ -281,7 +281,6 @@ void WorksheetView::initActions() {
 	setCartesianPlotCursorMode(m_worksheet->cartesianPlotCursorMode());
 	connect(cartesianPlotActionCursorGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotCursorModeChanged(QAction*)));
 
-
 	auto* cartesianPlotMouseModeActionGroup = new QActionGroup(this);
 	cartesianPlotMouseModeActionGroup->setExclusive(true);
 	cartesianPlotSelectionModeAction = new QAction(QIcon::fromTheme("labplot-cursor-arrow"), i18n("Select and Edit"), cartesianPlotMouseModeActionGroup);
@@ -298,7 +297,7 @@ void WorksheetView::initActions() {
 	cartesianPlotZoomYSelectionModeAction->setCheckable(true);
 
 	// TODO: change ICON
-	cartesianPlotCursorModeAction = new QAction(QIcon::fromTheme("labplot-cursor"),i18n("Cursor"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotCursorModeAction = new QAction(QIcon::fromTheme("debug-execute-from-cursor"), i18n("Cursor"), cartesianPlotMouseModeActionGroup);
 	cartesianPlotCursorModeAction->setCheckable(true);
 
 	connect(cartesianPlotMouseModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotMouseModeChanged(QAction*)));
@@ -389,10 +388,13 @@ void WorksheetView::initActions() {
 	handleCartesianPlotActions();
 	currentZoomAction = zoomInViewAction;
 	currentMagnificationAction = noMagnificationAction;
+
+	m_actionsInitialized = true;
 }
 
 void WorksheetView::initMenus() {
-	initActions();
+	if (!m_actionsInitialized)
+		initActions();
 
 	m_addNewCartesianPlotMenu = new QMenu(i18n("xy-plot"), this);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot1Action);
@@ -1156,6 +1158,9 @@ void WorksheetView::dropEvent(QDropEvent* event) {
 //####################################  SLOTs   ################################
 //##############################################################################
 void WorksheetView::useViewSizeRequested() {
+	if (!m_actionsInitialized)
+		initActions();
+
 	if (m_worksheet->useViewSize()) {
 		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -1939,6 +1944,15 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 		for (auto* plot : m_worksheet->children<CartesianPlot>() ) {
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
 				plot->navigate(op);
+			else {
+				// check if one of the plots childrend is selected. Do the operation there too.
+				for (auto* child : plot->children<WorksheetElement>()) {
+					if (m_selectedItems.indexOf(child->graphicsItem()) != -1) {
+						plot->navigate(op);
+						break;
+					}
+				}
+			}
 		}
 	} else {
 		for (auto* plot : m_worksheet->children<CartesianPlot>() )

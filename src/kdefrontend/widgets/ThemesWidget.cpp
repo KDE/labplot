@@ -63,8 +63,10 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	auto* mContentItemModel = new QStandardItemModel(this);
 	QStringList themeList = ThemeHandler::themes();
 	QStringList themeImgPathList = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes/screenshots/", QStandardPaths::LocateDirectory);
-	if (themeImgPathList.isEmpty())
+	if (themeImgPathList.isEmpty()) {
+		delete mContentItemModel;
 		return;
+	}
 
 	const QString& themeImgPath = themeImgPathList.first();
 	QString tempPath;
@@ -106,7 +108,7 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 // 	listItem->setData("file_download_theme", Qt::UserRole);
 // 	mContentItemModel->appendRow(listItem);
 
-	setModel(mContentItemModel);
+	QListView::setModel(mContentItemModel);
 
 	//resize the widget to show three items
 	QFont font;

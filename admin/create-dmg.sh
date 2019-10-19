@@ -60,21 +60,20 @@ cp -v kde/lib/libcantor_pythonbackend.dylib $INPREFIX/Frameworks/
 # icons
 cp -vf kde/share/icontheme.rcc $INPREFIX/Resources/icontheme.rcc
 
-# TODO: locale?
-
 # kcharselect data
-cp -v kde/share/kf5/kcharselect/kcharselect-data $INPREFIX/Resources/
+mkdir -p $INPREFIX/Resources/kf5/kcharselect
+cp -v kde/share/kf5/kcharselect/kcharselect-data $INPREFIX/Resources/kf5/kcharselect/
 
 # misc
 cp -v labplot/admin/Info.plist $INPREFIX
 cp -v /Applications/KDE/labplot2.app/Contents/Resources/{LABPLOT_ICONS.icns,LML_ICONS.icns} $INPREFIX/Resources
 
-# translation
-cd kde
-$GCP -vf --parents share/locale/*/LC_MESSAGES/labplot2.mo ../$INPREFIX/
-$GCP -vf --parents share/locale/*/LC_MESSAGES/kconfigwidgets5.mo ../$INPREFIX/
-$GCP -vf --parents share/locale/*/LC_MESSAGES/kxmlgui5.mo ../$INPREFIX/
-cd ..
+# translation (locale)
+cd kde/share
+$GCP -vf --parents locale/*/LC_MESSAGES/labplot2.mo ../../$INPREFIX/Resources
+$GCP -vf --parents locale/*/LC_MESSAGES/kconfigwidgets5.mo ../../$INPREFIX/Resources
+$GCP -vf --parents locale/*/LC_MESSAGES/kxmlgui5.mo ../../$INPREFIX/Resources
+cd ../..
 
 ### TODO
 # package icon

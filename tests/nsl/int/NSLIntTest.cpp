@@ -134,7 +134,7 @@ void NSLIntTest::testPerformance3Point() {
 	for (int i = 0;  i < n; i++)
 		xdata[i] = (double)i;
 
-	int np;
+	int np = 1;
 	QBENCHMARK {
 		for (int i = 0;  i < n; i++)
 			ydata[i] = 1.;
@@ -152,7 +152,7 @@ void NSLIntTest::testPerformance4Point() {
 	for (int i = 0;  i < n; i++)
 		xdata[i] = (double)i;
 
-	int np;
+	int np = 1;
 	QBENCHMARK {
 		for (int i = 0;  i < n; i++)
 			ydata[i] = 1.;

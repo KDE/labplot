@@ -97,7 +97,7 @@ Very short classes can be bundled in one file which then is named using all lowe
 * In C++ use range-based loops instead of foreach/Q_FOREACH
 	https://www.kdab.com/goodbye-q_foreach/
 * For integer data types int is preferred for small numbers and size_t for big, unsigned values. Use double as floating point type.
-* The 'auto' keyword should be used in range-based loops and for variables initialized by casting or with the 'new' operator but only for non-basic types. Do not omit '*' to keep readability.
+* The 'auto' keyword should be used in range-based loops and for variables initialized by casting or with the 'new' operator but only for non-basic types (int,double,Spreadsheet). Do not omit '*', '&' and 'const' to keep readability.
 * use smart pointers unique_ptr when possible and shared_ptr otherwise.
 * Avoid const pass-by-value parameters in function declarations. Still make the parameter const in the same function's definition if it won't be modified.
 * Use the 'override' specifier when overriding virtual functions from the base class

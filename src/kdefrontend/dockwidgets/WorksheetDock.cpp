@@ -553,7 +553,7 @@ void WorksheetDock::backgroundOpacityChanged(int value) {
 
 //"Layout"-tab
 void WorksheetDock::layoutChanged(int index) {
-	Worksheet::Layout layout = (Worksheet::Layout)index;
+	auto layout = (Worksheet::Layout)index;
 
 	bool b = (layout != Worksheet::NoLayout);
 	ui.sbLayoutTopMargin->setEnabled(b);
@@ -667,6 +667,8 @@ void WorksheetDock::selectFile() {
 	QString formats;
 	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
+		if (f == QLatin1String("*.svg"))
+			continue;
 		formats.isEmpty() ? formats += f : formats += ' ' + f;
 	}
 

@@ -45,6 +45,7 @@ extern "C" {
 #include <gsl/gsl_sort.h>
 }
 
+#include <array>
 #include <QFont>
 #include <QFontMetrics>
 #include <QIcon>
@@ -84,12 +85,13 @@ void Column::init() {
 	d->outputFilter()->input(0, this);
 	d->inputFilter()->setHidden(true);
 	d->outputFilter()->setHidden(true);
-	addChild(d->inputFilter());
-	addChild(d->outputFilter());
+	addChildFast(d->inputFilter());
+	addChildFast(d->outputFilter());
 	m_suppressDataChangedSignal = false;
 
 	m_usedInActionGroup = new QActionGroup(this);
 	connect(m_usedInActionGroup, &QActionGroup::triggered, this, &Column::navigateTo);
+	connect(this, &AbstractColumn::maskingChanged, this, [=]{d->propertiesAvailable = false;});
 }
 
 Column::~Column() {
@@ -196,6 +198,12 @@ void Column::setSuppressDataChangedSignal(bool b) {
 
 void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
 	const Project* project = this->project();
+
+	//when executing tests we don't create any project,
+	//add a null-pointer check for tests here.
+	if (!project)
+		return;
+
 	QVector<const XYCurve*> curves = project->children<const XYCurve>(AbstractAspect::Recursive);
 
 	//determine the plots where the column is consumed
@@ -422,6 +430,9 @@ void Column::setFormula(const QString& formula, const QStringList& variableNames
  * "variable columns".
  */
 void Column::updateFormula() {
+	d->statisticsAvailable = false;
+	d->hasValuesAvailable = false;
+	d->propertiesAvailable = false;
 	d->updateFormula();
 }
 
@@ -463,6 +474,7 @@ void Column::clearFormulas() {
 void Column::setTextAt(int row, const QString& new_value) {
 	DEBUG("Column::setTextAt()");
 	d->statisticsAvailable = false;
+	d->hasValuesAvailable = false;
 	d->propertiesAvailable = false;
 	exec(new ColumnSetTextCmd(d, row, new_value));
 }
@@ -476,6 +488,7 @@ void Column::replaceTexts(int first, const QVector<QString>& new_values) {
 	DEBUG("Column::replaceTexts()");
 	if (!new_values.isEmpty()) { //TODO: do we really need this check?
 		d->statisticsAvailable = false;
+		d->hasValuesAvailable = false;
 		d->propertiesAvailable = false;
 		exec(new ColumnReplaceTextsCmd(d, first, new_values));
 	}
@@ -487,8 +500,6 @@ void Column::replaceTexts(int first, const QVector<QString>& new_values) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::setDateAt(int row, QDate new_value) {
-	d->statisticsAvailable = false;
-	d->propertiesAvailable = false;
 	setDateTimeAt(row, QDateTime(new_value, timeAt(row)));
 }
 
@@ -498,8 +509,6 @@ void Column::setDateAt(int row, QDate new_value) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::setTimeAt(int row, QTime new_value) {
-	d->statisticsAvailable = false;
-	d->propertiesAvailable = false;
 	setDateTimeAt(row, QDateTime(dateAt(row), new_value));
 }
 
@@ -510,6 +519,7 @@ void Column::setTimeAt(int row, QTime new_value) {
  */
 void Column::setDateTimeAt(int row, const QDateTime& new_value) {
 	d->statisticsAvailable = false;
+	d->hasValuesAvailable = false;
 	d->propertiesAvailable = false;
 	exec(new ColumnSetDateTimeCmd(d, row, new_value));
 }
@@ -522,6 +532,7 @@ void Column::setDateTimeAt(int row, const QDateTime& new_value) {
 void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 	if (!new_values.isEmpty()) {
 		d->statisticsAvailable = false;
+		d->hasValuesAvailable = false;
 		d->propertiesAvailable = false;
 		exec(new ColumnReplaceDateTimesCmd(d, first, new_values));
 	}
@@ -602,13 +613,15 @@ const Column::ColumnStatistics& Column::statistics() const {
 }
 
 void Column::calculateStatistics() const {
+	if ( (columnMode() != AbstractColumn::Numeric)
+		&& (columnMode() != AbstractColumn::Integer) )
+		return;
+
 	d->statistics = ColumnStatistics();
 	ColumnStatistics& statistics = d->statistics;
 
-	// TODO: support other data types?
-	auto* rowValues = reinterpret_cast<QVector<double>*>(data());
-
-	size_t notNanCount = 0;
+	int rowValuesSize = 0;
+	int notNanCount = 0;
 	double val;
 	double columnSum = 0.0;
 	double columnProduct = 1.0;
@@ -618,26 +631,57 @@ void Column::calculateStatistics() const {
 	statistics.maximum = -INFINITY;
 	QMap<double, int> frequencyOfValues;
 	QVector<double> rowData;
-	rowData.reserve(rowValues->size());
-	for (int row = 0; row < rowValues->size(); ++row) {
-		val = rowValues->value(row);
-		if (std::isnan(val) || isMasked(row))
-			continue;
 
-		if (val < statistics.minimum)
-			statistics.minimum = val;
-		if (val > statistics.maximum)
-			statistics.maximum = val;
-		columnSum+= val;
-		columnSumNeg += (1.0 / val);
-		columnSumSquare += pow(val, 2.0);
-		columnProduct *= val;
-		if (frequencyOfValues.contains(val))
-			frequencyOfValues.operator [](val)++;
-		else
-			frequencyOfValues.insert(val, 1);
-		++notNanCount;
-		rowData.push_back(val);
+	if (columnMode() == AbstractColumn::Numeric) {
+		auto* rowValues = reinterpret_cast<QVector<double>*>(data());
+		rowValuesSize = rowValues->size();
+		rowData.reserve(rowValuesSize);
+
+		for (int row = 0; row < rowValuesSize; ++row) {
+			val = rowValues->value(row);
+			if (std::isnan(val) || isMasked(row))
+				continue;
+
+			if (val < statistics.minimum)
+				statistics.minimum = val;
+			if (val > statistics.maximum)
+				statistics.maximum = val;
+			columnSum += val;
+			columnSumNeg += (1.0 / val);
+			columnSumSquare += pow(val, 2.0);
+			columnProduct *= val;
+			if (frequencyOfValues.contains(val))
+				frequencyOfValues.operator [](val)++;
+			else
+				frequencyOfValues.insert(val, 1);
+			++notNanCount;
+			rowData.push_back(val);
+		}
+	} else if (columnMode() == AbstractColumn::Integer) {
+		//TODO: code duplication because of the reinterpret_cast...
+		auto* rowValues = reinterpret_cast<QVector<int>*>(data());
+		rowValuesSize = rowValues->size();
+		rowData.reserve(rowValuesSize);
+		for (int row = 0; row < rowValuesSize; ++row) {
+			val = rowValues->value(row);
+			if (std::isnan(val) || isMasked(row))
+				continue;
+
+			if (val < statistics.minimum)
+				statistics.minimum = val;
+			if (val > statistics.maximum)
+				statistics.maximum = val;
+			columnSum += val;
+			columnSumNeg += (1.0 / val);
+			columnSumSquare += pow(val, 2.0);
+			columnProduct *= val;
+			if (frequencyOfValues.contains(val))
+				frequencyOfValues.operator [](val)++;
+			else
+				frequencyOfValues.insert(val, 1);
+			++notNanCount;
+			rowData.push_back(val);
+		}
 	}
 
 	if (notNanCount == 0) {
@@ -645,7 +689,7 @@ void Column::calculateStatistics() const {
 		return;
 	}
 
-	if (rowData.size() < rowValues->size())
+	if (rowData.size() < rowValuesSize)
 		rowData.squeeze();
 
 	statistics.arithmeticMean = columnSum / notNanCount;
@@ -666,20 +710,16 @@ void Column::calculateStatistics() const {
 	absoluteMedianList.reserve((int)notNanCount);
 	absoluteMedianList.resize((int)notNanCount);
 
-	int idx = 0;
-	for (int row = 0; row < rowValues->size(); ++row) {
-		val = rowValues->value(row);
-		if (std::isnan(val) || isMasked(row) )
-			continue;
+	for (int row = 0; row < notNanCount; ++row) {
+		val = rowData.value(row);
 		columnSumVariance += pow(val - statistics.arithmeticMean, 2.0);
 
 		sumForCentralMoment_r3 += pow(val - statistics.arithmeticMean, 3.0);
 		sumForCentralMoment_r4 += pow(val - statistics.arithmeticMean, 4.0);
 		columnSumMeanDeviation += fabs( val - statistics.arithmeticMean );
 
-		absoluteMedianList[idx] = fabs(val - statistics.median);
-		columnSumMedianDeviation += absoluteMedianList[idx];
-		idx++;
+		absoluteMedianList[row] = fabs(val - statistics.median);
+		columnSumMedianDeviation += absoluteMedianList[row];
 	}
 
 	statistics.meanDeviationAroundMedian = columnSumMedianDeviation / notNanCount;
@@ -1328,10 +1368,15 @@ double Column::minimum(int startIndex, int endIndex) const {
 	ColumnMode mode = columnMode();
 	Properties property = properties();
 	if (property == Properties::No) {
+		// skipping values is only in Properties::No needed, because
+		// when there are invalid values the property must be Properties::No
 		switch (mode) {
 		case Numeric: {
 			auto* vec = static_cast<QVector<double>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
+				if (!isValid(row) || isMasked(row))
+					continue;
+
 				const double val = vec->at(row);
 				if (std::isnan(val))
 					continue;
@@ -1344,6 +1389,9 @@ double Column::minimum(int startIndex, int endIndex) const {
 		case Integer: {
 			auto* vec = static_cast<QVector<int>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
+				if (!isValid(row) || isMasked(row))
+					continue;
+
 				const int val = vec->at(row);
 
 				if (val < min)
@@ -1356,6 +1404,9 @@ double Column::minimum(int startIndex, int endIndex) const {
 		case DateTime: {
 			auto* vec = static_cast<QVector<QDateTime>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
+				if (!isValid(row) || isMasked(row))
+					continue;
+
 				const qint64 val = vec->at(row).toMSecsSinceEpoch();
 
 				if (val < min)
@@ -1373,7 +1424,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 
 	// use the properties knowledge to determine maximum faster
 	if (property == Properties::Constant || property == Properties::MonotonicIncreasing)
-		foundIndex = 0;
+		foundIndex = startIndex;
 	else if (property == Properties::MonotonicDecreasing)
 		foundIndex = endIndex;
 
@@ -1452,6 +1503,8 @@ double Column::maximum(int startIndex, int endIndex) const {
 		case Numeric: {
 			auto* vec = static_cast<QVector<double>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
+				if (!isValid(row) || isMasked(row))
+					continue;
 				const double val = vec->at(row);
 				if (std::isnan(val))
 					continue;
@@ -1464,6 +1517,8 @@ double Column::maximum(int startIndex, int endIndex) const {
 		case Integer: {
 			auto* vec = static_cast<QVector<int>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
+				if (!isValid(row) || isMasked(row))
+					continue;
 				const int val = vec->at(row);
 
 				if (val > max)
@@ -1476,6 +1531,8 @@ double Column::maximum(int startIndex, int endIndex) const {
 		case DateTime: {
 			auto* vec = static_cast<QVector<QDateTime>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
+				if (!isValid(row) || isMasked(row))
+					continue;
 				const qint64 val = vec->at(row).toMSecsSinceEpoch();
 
 				if (val > max)
@@ -1493,7 +1550,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 
 	// use the properties knowledge to determine maximum faster
 	if (property == Properties::Constant || property == Properties::MonotonicDecreasing)
-		foundIndex = 0;
+		foundIndex = startIndex;
 	else if (property == Properties::MonotonicIncreasing)
 		foundIndex = endIndex;
 
@@ -1522,7 +1579,7 @@ double Column::maximum(int startIndex, int endIndex) const {
  */
 // TODO: testing if it is faster than calculating log2.
 int Column::calculateMaxSteps (unsigned int value) {
-	const signed char LogTable256[256] = {
+	const std::array<signed char, 256> LogTable256 = {
 		-1,0,1,1,2,2,2,2,3,3,3,3,3,3,3,3,
 		4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
 		5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
@@ -1839,16 +1896,16 @@ int Column::indexForValue(double x) const {
 		if ((mode == AbstractColumn::ColumnMode::Numeric ||
 			 mode == AbstractColumn::ColumnMode::Integer)) {
 			for (int row = 0; row < rowCount(); row++) {
-				if (isValid(row)) {
-					if (row == 0)
-						prevValue = valueAt(row);
+				if (!isValid(row) || isMasked(row))
+					continue;
+				if (row == 0)
+					prevValue = valueAt(row);
 
-					double value = valueAt(row);
-					if (abs(value - x) <= abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
-						if (row < rowCount() - 1) {
-							prevValue = value;
-							index = row;
-						}
+				double value = valueAt(row);
+				if (abs(value - x) <= abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
+					if (row < rowCount() - 1) {
+						prevValue = value;
+						index = row;
 					}
 				}
 			}
@@ -1857,17 +1914,17 @@ int Column::indexForValue(double x) const {
 					mode == AbstractColumn::ColumnMode::Month ||
 					mode == AbstractColumn::ColumnMode::Day)) {
 			qint64 xInt64 = static_cast<qint64>(x);
-			int index = 0;
 			for (int row = 0; row < rowCount(); row++) {
-				if (isValid(row)) {
-					if (row == 0)
-						prevValueDateTime = dateTimeAt(row).toMSecsSinceEpoch();
+				if (!isValid(row) || isMasked(row))
+					continue;
 
-					qint64 value = dateTimeAt(row).toMSecsSinceEpoch();
-					if (abs(value - xInt64) <= abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
-						prevValueDateTime = value;
-						index = row;
-					}
+				if (row == 0)
+					prevValueDateTime = dateTimeAt(row).toMSecsSinceEpoch();
+
+				qint64 value = dateTimeAt(row).toMSecsSinceEpoch();
+				if (abs(value - xInt64) <= abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
+					prevValueDateTime = value;
+					index = row;
 				}
 			}
 			return index;
@@ -1940,12 +1997,14 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 		end = rowCount() - 1;
 		return true;
 	}
-
+	// property == Properties::No
 	switch (columnMode()) {
 		case Integer:
 		case Numeric: {
 			double value;
 			for (int i = 0; i < rowCount(); i++) {
+				if (!isValid(i) || isMasked(i))
+					continue;
 				value = valueAt(i);
 				if (value <= v2 && value >= v1) {
 					end = i;
@@ -1963,6 +2022,8 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 			qint64 v2int64 = v2;
 			qint64 v1int64 = v2;
 			for (int i = 0; i < rowCount(); i++) {
+				if (!isValid(i) || isMasked(i))
+					continue;
 				value = dateTimeAt(i).toMSecsSinceEpoch();
 				if (value <= v2int64 && value >= v1int64) {
 					end = i;

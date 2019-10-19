@@ -33,6 +33,7 @@
 #include "tools/TeXRenderer.h"
 
 #include <QMenu>
+#include <QSettings>
 #include <QSplitter>
 #include <QTextDocumentFragment>
 #include <QWidgetAction>
@@ -604,7 +605,11 @@ void LabelWidget::teXFontChanged(const QFont& font) {
 void LabelWidget::charMenu() {
 	QMenu menu;
 	KCharSelect selection(this, nullptr, KCharSelect::SearchLine | KCharSelect::CharacterTable | KCharSelect::BlockCombos | KCharSelect::HistoryButtons);
-	selection.setCurrentFont(ui.teLabel->currentFont());
+	QFont font = ui.teLabel->currentFont();
+	// use the system default size, otherwise the symbols might be hard to read
+	// if the current label font size is too small
+	font.setPointSize(QFont().pointSize());
+	selection.setCurrentFont(font);
 	connect(&selection, SIGNAL(charSelected(QChar)), this, SLOT(insertChar(QChar)));
 	connect(&selection, SIGNAL(charSelected(QChar)), &menu, SLOT(close()));
 
@@ -623,21 +628,53 @@ void LabelWidget::insertChar(QChar c) {
 void LabelWidget::dateTimeMenu() {
 	m_dateTimeMenu->clear();
 
-	QDate date = QDate::currentDate();
-	m_dateTimeMenu->addSeparator()->setText(i18n("Date"));
-	m_dateTimeMenu->addAction( date.toString(Qt::TextDate) );
-	m_dateTimeMenu->addAction( date.toString(Qt::ISODate) );
-	m_dateTimeMenu->addAction( date.toString(Qt::SystemLocaleShortDate) );
-	m_dateTimeMenu->addAction( date.toString(Qt::SystemLocaleLongDate) );
-	m_dateTimeMenu->addAction( date.toString(Qt::RFC2822Date) );
+	const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+	const QString configFile = configPath + QLatin1String("/klanguageoverridesrc");
+	if (!QFile::exists(configFile)) {
+		QDate date = QDate::currentDate();
+		m_dateTimeMenu->addSeparator()->setText(i18n("Date"));
+		m_dateTimeMenu->addAction( date.toString(Qt::TextDate) );
+		m_dateTimeMenu->addAction( date.toString(Qt::ISODate) );
+		m_dateTimeMenu->addAction( date.toString(Qt::SystemLocaleShortDate) );
+		m_dateTimeMenu->addAction( date.toString(Qt::SystemLocaleLongDate) );
+		m_dateTimeMenu->addAction( date.toString(Qt::RFC2822Date) );
 
-	QDateTime time = QDateTime::currentDateTime();
-	m_dateTimeMenu->addSeparator()->setText(i18n("Date and Time"));
-	m_dateTimeMenu->addAction( time.toString(Qt::TextDate) );
-	m_dateTimeMenu->addAction( time.toString(Qt::ISODate) );
-	m_dateTimeMenu->addAction( time.toString(Qt::SystemLocaleShortDate) );
-	m_dateTimeMenu->addAction( time.toString(Qt::SystemLocaleLongDate) );
-	m_dateTimeMenu->addAction( time.toString(Qt::RFC2822Date) );
+		QDateTime time = QDateTime::currentDateTime();
+		m_dateTimeMenu->addSeparator()->setText(i18n("Date and Time"));
+		m_dateTimeMenu->addAction( time.toString(Qt::TextDate) );
+		m_dateTimeMenu->addAction( time.toString(Qt::ISODate) );
+		m_dateTimeMenu->addAction( time.toString(Qt::SystemLocaleShortDate) );
+		m_dateTimeMenu->addAction( time.toString(Qt::SystemLocaleLongDate) );
+		m_dateTimeMenu->addAction( time.toString(Qt::RFC2822Date) );
+	} else {
+		//application language was changed:
+		//determine the currently used language and use QLocale::toString()
+		//to get the strings translated into the currently used language
+		QSettings settings (configFile, QSettings::IniFormat);
+		settings.beginGroup(QLatin1String("Language"));
+		QByteArray languageCode;
+		languageCode = settings.value(qAppName(), languageCode).toByteArray();
+		QLocale locale(QString::fromLatin1(languageCode.data()));
+
+		QDate date = QDate::currentDate();
+		m_dateTimeMenu->addSeparator()->setText(i18n("Date"));
+		m_dateTimeMenu->addAction( locale.toString(date, QLatin1String("ddd MMM d yyyy")) ); //Qt::TextDate
+		m_dateTimeMenu->addAction( locale.toString(date, QLatin1String("yyyy-MM-dd")) ); //Qt::ISODate
+		m_dateTimeMenu->addAction( locale.system().toString(date, QLocale::ShortFormat) ); //Qt::SystemLocaleShortDate
+		//no LongFormat here since it would contain strings in system's language which (potentially) is not the current application language
+		m_dateTimeMenu->addAction( locale.toString(date, QLatin1String("dd MMM yyyy")) ); //Qt::RFC2822Date
+
+		QDateTime time = QDateTime::currentDateTime();
+		m_dateTimeMenu->addSeparator()->setText(i18n("Date and Time"));
+		m_dateTimeMenu->addAction( locale.toString(time, QLatin1String("ddd MMM d hh:mm:ss yyyy")) ); //Qt::TextDate
+		m_dateTimeMenu->addAction( locale.toString(time, QLatin1String("yyyy-MM-ddTHH:mm:ss")) ); //Qt::ISODate
+		m_dateTimeMenu->addAction( locale.system().toString(time, QLocale::ShortFormat) ); //Qt::SystemLocaleShortDate
+		//no LongFormat here since it would contain strings in system's language which (potentially) is not the current application language
+
+		//TODO: RFC2822 requires time zone but Qt QLocale::toString() seems to ignore TZD (time zone designator) completely,
+		//which works correctly with QDateTime::toString()
+		m_dateTimeMenu->addAction( locale.toString(time, QLatin1String("dd MMM yyyy hh:mm:ss")) ); //Qt::RFC2822Date
+	}
 
 	m_dateTimeMenu->exec( mapToGlobal(ui.tbDateTime->rect().bottomLeft()));
 }

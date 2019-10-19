@@ -36,7 +36,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 ///////////// macros ///////////////////////////////////////////////
 
 #define NC_GET_ATT(type, ftype) \
-	type* value = (type*)malloc(len*sizeof(type)); \
+	auto* value = (type*)malloc(len*sizeof(type)); \
 	m_status = nc_get_att_ ##ftype(ncid, varid, name, value); \
 	handleError(m_status, "nc_get_att_" #ftype); \
 	for (unsigned int l = 0; l < len; l++) \
@@ -62,7 +62,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 	}
 
 #define NC_READ_AVAR(type, ftype, dtype) \
-	type* data = new type[(unsigned int)actualRows]; \
+	auto* data = new type[(unsigned int)actualRows]; \
 	\
 	size_t start = (size_t)(startRow - 1), count = (size_t)actualRows; \
 	m_status = nc_get_vara_ ##ftype(ncid, varid, &start, &count, data); \
@@ -97,7 +97,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 	}
 
 #define NC_READ_VAR2(type, ftype, dtype) \
-	type** data = (type**) malloc(rows * sizeof(type*)); \
+	auto** data = (type**) malloc(rows * sizeof(type*)); \
 	data[0] = (type*)malloc(cols * rows * sizeof(type)); \
 	for (unsigned int i = 1; i < rows; i++) \
 		data[i] = data[0] + i*cols; \
@@ -683,7 +683,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 
 	int actualRows = 0, actualCols = 0;
 	int columnOffset = 0;
-	QVector<void*> dataContainer;
+	std::vector<void*> dataContainer;
 	switch (ndims) {
 	case 0: {
 		DEBUG("	zero dimensions");

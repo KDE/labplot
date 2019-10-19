@@ -1463,18 +1463,17 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 
 	gsl_set_error_handler_off();
 
-	bool stop = false;
-	for (int i = 0; i < yVector->size(); i++) {
-		//stop iterating over i if one of the x-vectors has no elements anymore.
-		for (auto* xVector : xVectors) {
-			if (i == xVector->size()) {
-				stop = true;
-				break;
-			}
-		}
-		if (stop)
-			break;
+	//determine the minimal size of involved vectors
+	double minSize = INFINITY;
+	for (auto* xVector : xVectors) {
+		if (xVector->size() < minSize)
+			minSize = xVector->size();
+	}
 
+	if (yVector->size() < minSize)
+		minSize = yVector->size();
+
+	for (int i = 0; i < minSize; i++) {
 		for (int n = 0; n < vars.size(); ++n) {
 			const QString& varName = vars.at(n);
 			const double varValue = xVectors.at(n)->at(i);
@@ -1492,6 +1491,10 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		else
 			(*yVector)[i] = NAN;
 	}
+
+	//in case the y-vector is longer than the x-vector(s), set all elements that were not calculated to NAN
+	for (int i = minSize; i < yVector->size(); ++i)
+		(*yVector)[i] = NAN;
 
 	return true;
 }

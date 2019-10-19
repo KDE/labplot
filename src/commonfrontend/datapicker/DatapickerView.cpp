@@ -168,16 +168,22 @@ void DatapickerView::showTabContextMenu(QPoint point) {
 }
 
 void DatapickerView::handleDescriptionChanged(const AbstractAspect* aspect) {
+	if (aspect == m_datapicker)
+		return;
+
+	//determine the child that was changed and adjust the name of the corresponding tab widget
 	int index = -1;
 	QString name;
 	if (aspect->parentAspect() == m_datapicker) {
 		//datapicker curve was renamed
 		index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
-		name = aspect->name() + ": " + aspect->children<Spreadsheet>().constFirst()->name();
+		if (index != -1)
+			name = aspect->name() + ": " + aspect->children<Spreadsheet>().constFirst()->name();
 	} else {
 		//data spreadsheet was renamed or one of its columns, which is not relevant here
 		index = m_datapicker->indexOfChild<AbstractAspect>(aspect->parentAspect(), AbstractAspect::IncludeHidden);
-		name = aspect->parentAspect()->name() + ": " + aspect->name();
+		if (index != -1)
+			name = aspect->parentAspect()->name() + ": " + aspect->name();
 	}
 
 	if (index != -1)

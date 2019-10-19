@@ -41,6 +41,7 @@ public:
 	void showAsciiHeaderOptions(bool);
 	void showTimestampOptions(bool);
 	void applyFilterSettings(AsciiFilter*) const;
+	void setSeparatingCharacter(QLatin1Char);
 	void loadSettings() const;
 	void saveSettings();
 

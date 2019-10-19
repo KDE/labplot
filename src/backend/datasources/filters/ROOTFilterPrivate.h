@@ -91,7 +91,7 @@ public:
 
 	/// Directory structure in a ROOT file where seek positions to the objects inside the file are stored
 	struct Directory {
-		Directory() {}
+		Directory() : parent(0) {}
 		Directory(const std::string& name, long int parent) : name(name), parent(parent) {}
 		std::string name;
 		long int parent;

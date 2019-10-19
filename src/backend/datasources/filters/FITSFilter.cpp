@@ -342,7 +342,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		columnModes.resize(actualCols - j);
 		QStringList vectorNames;
 
-		QVector<void*> dataContainer;
+		std::vector<void*> dataContainer;
 		if (!noDataSource) {
 			dataContainer.reserve(actualCols - j);
 			columnOffset = dataSource->prepareImport(dataContainer, importMode, lines - i, actualCols - j, vectorNames, columnModes);
@@ -436,7 +436,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		if (endRow != -1)
 			lines = endRow;
 		QVector<QStringList*> stringDataPointers;
-		QVector<void*> numericDataPointers;
+		std::vector<void*> numericDataPointers;
 		QList<bool> columnNumericTypes;
 
 		int startCol = 0;
@@ -535,7 +535,6 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 
 				columnOffset = dataSource->prepareImport(numericDataPointers, importMode, lines - startRrow, matrixNumericColumnIndices.size());
 			}
-			numericDataPointers.squeeze();
 		}
 
 		int row = 1;
@@ -939,6 +938,8 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 						printError(status);
 						status = 0;
 						fits_close_file(m_fitsFile, &status);
+
+						delete[] columnNumeric;
 						return;
 					}
 				}
@@ -1531,8 +1532,10 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 	for (const QString& ext : imageExtensions) {
 		QTreeWidgetItem* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << ext);
 		if (ext == i18n("Primary header")) {
-			if (checkPrimary && naxis == 0)
+			if (checkPrimary && naxis == 0) {
+				delete treeItem;
 				continue;
+			}
 		}
 		imageExtensionItem->addChild(treeItem);
 	}

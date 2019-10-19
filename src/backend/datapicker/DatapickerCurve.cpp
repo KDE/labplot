@@ -5,6 +5,7 @@
                            of datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2015-2019 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -28,13 +29,13 @@
 #include "DatapickerCurve.h"
 #include "backend/datapicker/DatapickerCurvePrivate.h"
 #include "backend/datapicker/Datapicker.h"
-#include "backend/lib/XmlStreamReader.h"
+#include "backend/datapicker/DatapickerPoint.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/datapicker/DatapickerPoint.h"
 
-#include <QMenu>
+#include <QIcon>
 #include <QVector3D>
 
 #include <KConfig>
@@ -89,13 +90,6 @@ void DatapickerCurve::init() {
 	d->pointErrorBarPen.setColor( group.readEntry("ErrorBarBorderColor", QColor(Qt::black)) );
 	d->pointErrorBarPen.setWidthF( group.readEntry("ErrorBarBorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Point)) );
 	d->pointVisibility = group.readEntry("PointVisibility", true);
-
-	this->initAction();
-}
-
-void DatapickerCurve::initAction() {
-	updateDatasheetAction = new QAction(QIcon::fromTheme("view-refresh"), i18n("Update Spreadsheet"), this);
-	connect(updateDatasheetAction, &QAction::triggered, this, &DatapickerCurve::updateDatasheet);
 }
 
 /*!
@@ -105,30 +99,16 @@ QIcon DatapickerCurve::icon() const {
 	return  QIcon::fromTheme("labplot-xy-curve");
 }
 
-/*!
-    Return a new context menu
-*/
-QMenu* DatapickerCurve::createContextMenu() {
-	QMenu* menu = AbstractAspect::createContextMenu();
-	Q_ASSERT(menu);
-
-	QAction* firstAction = nullptr;
-	if (menu->actions().size() > 1)
-		firstAction = menu->actions().at(1);
-
-	menu->insertAction(firstAction, updateDatasheetAction);
-
-	return menu;
-}
-
 Column* DatapickerCurve::appendColumn(const QString& name) {
 	Column* col = new Column(i18n("Column"), AbstractColumn::Numeric);
 	col->insertRows(0, m_datasheet->rowCount());
 	col->setName(name);
+	col->setUndoAware(false);
 	m_datasheet->addChild(col);
 
 	return col;
 }
+
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
@@ -204,14 +184,18 @@ void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 		yLabel = QLatin1String("log(y)");
 	}
 
-	if (type == DatapickerImage::Ternary)
+	if (type == DatapickerImage::Ternary) {
 		d->posZColumn = appendColumn(i18n("c"));
+		d->posZColumn->setUndoAware(false);
+	}
 
 	d->posXColumn = m_datasheet->column(0);
 	d->posXColumn->setName(xLabel);
+	d->posXColumn->setUndoAware(false);
 
 	d->posYColumn = m_datasheet->column(1);
 	d->posYColumn->setName(yLabel);
+	d->posYColumn->setUndoAware(false);
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetCurveErrorTypes, DatapickerCurve::Errors, curveErrorTypes)
@@ -390,13 +374,9 @@ void DatapickerCurve::setSelectedInView(bool b) {
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void DatapickerCurve::updateDatasheet() {
-	beginMacro(i18n("%1: update datasheet", name()));
-
+void DatapickerCurve::updatePoints() {
 	for (auto* point : children<DatapickerPoint>(IncludeHidden))
-		updateData(point);
-
-	endMacro();
+		updatePoint(point);
 }
 
 /*!
@@ -405,12 +385,9 @@ void DatapickerCurve::updateDatasheet() {
     of curve-point or its error-bar so keep it undo unaware
     no need to create extra entry in undo stack
 */
-void DatapickerCurve::updateData(const DatapickerPoint* point) {
+void DatapickerCurve::updatePoint(const DatapickerPoint* point) {
 	Q_D(DatapickerCurve);
-	auto* datapicker = dynamic_cast<Datapicker*>(parentAspect());
-	if (!datapicker)
-		return;
-
+	auto* datapicker = static_cast<Datapicker*>(parentAspect());
 	int row = indexOfChild<DatapickerPoint>(point, AbstractAspect::IncludeHidden);
 	QVector3D data = datapicker->mapSceneToLogical(point->position());
 
@@ -455,8 +432,8 @@ QString DatapickerCurvePrivate::name() const {
 }
 
 void DatapickerCurvePrivate::retransform() {
-	QVector<DatapickerPoint*> childrenPoints = q->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-	for (auto* point : childrenPoints)
+	auto points = q->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	for (auto* point : points)
 		point->retransform();
 }
 

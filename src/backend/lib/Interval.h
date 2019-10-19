@@ -38,10 +38,6 @@ template<class T> class Interval;
 template<class T> class IntervalBase {
 	public:
 		IntervalBase() : m_start(-1), m_end(-1){}
-		IntervalBase(const IntervalBase<T>& other) {
-			m_start = other.start();
-			m_end = other.end();
-		}
 		IntervalBase(T start, T end) {
 			m_start = start;
 			m_end = end;
