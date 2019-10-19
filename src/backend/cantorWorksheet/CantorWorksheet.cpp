@@ -57,11 +57,20 @@ CantorWorksheet::CantorWorksheet(const QString &name, bool loading)
 	initializes Cantor's part and plugins
 */
 bool CantorWorksheet::init(QByteArray* content) {
-	KPluginFactory* factory = KPluginLoader(QLatin1String("libcantorpart")).factory();
-	if (factory) {
+	KPluginLoader loader(QLatin1String("libcantorpart"));
+	KPluginFactory* factory = loader.factory();
+	QDEBUG("Cantor Part file name: " << loader.fileName())
+
+	if (!factory) {
+		//we can only get to this here if we open a project having Cantor content and Cantor plugins were not found.
+		//return false here, a proper error message will be created in load() and propagated further.
+		DEBUG("Failed to load Cantor plugin:")
+		QDEBUG("	" << loader.errorString())
+		return false;
+	} else {
 		m_part = factory->create<KParts::ReadWritePart>(this, QVariantList() << m_backendName << QLatin1String("--noprogress"));
 		if (!m_part) {
-			qDebug() << "Could not create the Cantor Part.";
+			DEBUG("Could not create the Cantor Part.")
 			return false;
 		}
 		m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
@@ -95,12 +104,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 		}
 		m_plugins = handler->plugins();
 	}
-	else {
-		//we can only get to this here if we open a project having Cantor content and Cantor plugins were not found.
-		//return false here, a proper error message will be created in load() and propagated further.
-		DEBUG("Failed to load cantor plugin");
-		return false;
-	}
+
 	return true;
 }
 
