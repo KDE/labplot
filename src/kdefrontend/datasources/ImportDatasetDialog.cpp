@@ -29,14 +29,15 @@
 #include "ImportDatasetDialog.h"
 #include "ImportDatasetWidget.h"
 #include "backend/datasources/DatasetHandler.h"
-#include "KConfigGroup"
-#include "KSharedConfig"
-#include "KWindowConfig"
+
 #include "QWindow"
 #include "QProgressBar"
 #include "QDialogButtonBox"
 #include "QStatusBar"
-#include "QDebug"
+
+#include "KConfigGroup"
+#include "KSharedConfig"
+#include "KWindowConfig"
 
 /*!
 	\class ImportDatasetDialog
@@ -44,9 +45,8 @@
 
 	\ingroup kdefrontend
  */
-ImportDatasetDialog::ImportDatasetDialog(MainWin* parent, const QString& fileName) : ImportDialog(parent),
+ImportDatasetDialog::ImportDatasetDialog(MainWin* parent) : ImportDialog(parent),
 	m_importDatasetWidget(new ImportDatasetWidget(this)){
-	Q_UNUSED(fileName);
 
 	vLayout->addWidget(m_importDatasetWidget);
 	connect(m_importDatasetWidget, &ImportDatasetWidget::datasetSelected, this, &ImportDatasetDialog::checkOkButton);
@@ -65,7 +65,7 @@ ImportDatasetDialog::ImportDatasetDialog(MainWin* parent, const QString& fileNam
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-	setWindowTitle(i18nc("@title:window", "Add new Dataset"));
+	setWindowTitle(i18nc("@title:window", "Import from Dataset Collection"));
 	create();
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
@@ -126,4 +126,3 @@ void ImportDatasetDialog::checkOkButton() {
 void ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
 	Q_UNUSED(statusBar);
 }
-
