@@ -59,13 +59,13 @@ CantorWorksheet::CantorWorksheet(const QString &name, bool loading)
 bool CantorWorksheet::init(QByteArray* content) {
 	KPluginLoader loader(QLatin1String("libcantorpart"));
 	KPluginFactory* factory = loader.factory();
-	QDEBUG("Cantor Part file name: " << loader.fileName())
 
 	if (!factory) {
 		//we can only get to this here if we open a project having Cantor content and Cantor plugins were not found.
 		//return false here, a proper error message will be created in load() and propagated further.
-		DEBUG("Failed to load Cantor plugin:")
-		QDEBUG("	" << loader.errorString())
+		WARN("Failed to load Cantor plugin:")
+		WARN("Cantor Part file name: " << loader.fileName().toStdString())
+		WARN("	" << loader.errorString().toStdString())
 		return false;
 	} else {
 		m_part = factory->create<KParts::ReadWritePart>(this, QVariantList() << m_backendName << QLatin1String("--noprogress"));
