@@ -528,11 +528,6 @@ void MainWin::initActions() {
 	actionCollection()->addAction("new_live_datasource", m_newLiveDataSourceAction);
 	connect(m_newLiveDataSourceAction, &QAction::triggered, this, &MainWin::newLiveDataSourceActionTriggered);
 
-	m_newDatasetAction = new QAction(QIcon::fromTheme("application-octet-stream"), i18n("From Dataset Collection"), this);
-	m_newDatasetAction->setWhatsThis(i18n("Imports data from an online dataset"));
-	actionCollection()->addAction("import_dataset_datasource", m_newDatasetAction);
-	connect(m_newDatasetAction, &QAction::triggered, this, &MainWin::newDatasetActionTriggered);
-
 	//Import/Export
 	m_importFileAction = new QAction(QIcon::fromTheme("document-import"), i18n("From File"), this);
 	actionCollection()->setDefaultShortcut(m_importFileAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
@@ -540,18 +535,23 @@ void MainWin::initActions() {
 	actionCollection()->addAction("import_file", m_importFileAction);
 	connect(m_importFileAction, &QAction::triggered, this, [=]() {importFileDialog();});
 
-	m_importSqlAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("From SQL Database"), this);
+	m_importSqlAction = new QAction(QIcon::fromTheme("network-server-database"), i18n("From SQL Database"), this);
 	m_importSqlAction->setWhatsThis(i18n("Import data from a SQL database"));
 	actionCollection()->addAction("import_sql", m_importSqlAction);
 	connect(m_importSqlAction, &QAction::triggered, this, &MainWin::importSqlDialog);
 
-	m_importLabPlotAction = new QAction(QIcon::fromTheme("document-import"), i18n("LabPlot Project"), this);
+	m_importDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("database-index")), i18n("From Dataset Collection"), this);
+	m_importDatasetAction->setWhatsThis(i18n("Imports data from an online dataset"));
+	actionCollection()->addAction("import_dataset_datasource", m_importDatasetAction);
+	connect(m_importDatasetAction, &QAction::triggered, this, &MainWin::newDatasetActionTriggered);
+
+	m_importLabPlotAction = new QAction(QIcon::fromTheme("project-open"), i18n("LabPlot Project"), this);
 	m_importLabPlotAction->setWhatsThis(i18n("Import a project from a LabPlot project file (.lml)"));
 	actionCollection()->addAction("import_labplot", m_importLabPlotAction);
 	connect(m_importLabPlotAction, &QAction::triggered, this, &MainWin::importProjectDialog);
 
 #ifdef HAVE_LIBORIGIN
-	m_importOpjAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Origin Project (OPJ)"), this);
+	m_importOpjAction = new QAction(QIcon::fromTheme("project-open"), i18n("Origin Project (OPJ)"), this);
 	m_importOpjAction->setWhatsThis(i18n("Import a project from an OriginLab Origin project file (.opj)"));
 	actionCollection()->addAction("import_opj", m_importOpjAction);
 	connect(m_importOpjAction, &QAction::triggered, this, &MainWin::importProjectDialog);
@@ -678,7 +678,7 @@ void MainWin::initMenus() {
 	m_importMenu->setIcon(QIcon::fromTheme("document-import"));
 	m_importMenu ->addAction(m_importFileAction);
 	m_importMenu ->addAction(m_importSqlAction);
-	m_newMenu->addAction(m_newDatasetAction);
+	m_importMenu->addAction(m_importDatasetAction);
 	m_importMenu->addSeparator();
 	m_importMenu->addAction(m_importLabPlotAction);
 #ifdef HAVE_LIBORIGIN

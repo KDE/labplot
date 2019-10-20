@@ -142,6 +142,7 @@ private:
 	QAction* m_printPreviewAction;
 	QAction* m_importFileAction;
 	QAction* m_importSqlAction;
+	QAction* m_importDatasetAction;
 	QAction* m_importLabPlotAction;
 	QAction* m_importOpjAction;
 	QAction* m_exportAction;
@@ -152,7 +153,6 @@ private:
 	QAction* m_newMatrixAction;
 	QAction* m_newWorksheetAction;
 	QAction* m_newNotesAction;
-	QAction* m_newDatasetAction;
 	QAction* m_newLiveDataSourceAction;
 	QAction* m_newSqlDataSourceAction;
 	QAction* m_newScriptAction;
