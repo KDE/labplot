@@ -28,6 +28,8 @@ SolidCompression=yes
 Uninstallable=yes
 ;we install a file association for lml projects
 ChangesAssociations=yes
+; add dialog for admin/user install mode
+PrivilegesRequiredOverridesAllowed=dialog
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -187,8 +189,8 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 
 [Registry]
 ; project file association
-Root: HKCR; Subkey: ".lml"; ValueType: string; ValueName: ""; ValueData: "{#MyAppName}"; Flags: uninsdeletevalue
-Root: HKCR; Subkey: "{#MyAppName}"; ValueType: string; ValueName: ""; ValueData: "MyView"; Flags: uninsdeletekey
-Root: HKCR; Subkey: "{#MyAppName}\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\labplot2\application-x-labplot2.ico,0"
-Root: HKCR; Subkey: "{#MyAppName}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
-; Root: HKCU; Subkey: "Environment"; ValueType:string; ValueName:"KDEROOT"; ValueData:"{app}" ; Flags: preservestringtype ;
+Root: HKA; Subkey: ".lml"; ValueType: string; ValueName: ""; ValueData: "{#MyAppName}"; Flags: uninsdeletevalue
+Root: HKA; Subkey: "Software\Classes\{#MyAppName}"; ValueType: string; ValueName: ""; ValueData: "MyView"; Flags: uninsdeletekey
+Root: HKA; Subkey: "Software\Classes\{#MyAppName}\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\labplot2\application-x-labplot2.ico,0"
+Root: HKA; Subkey: "Software\Classes\{#MyAppName}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
+; Root: HKA; Subkey: "Environment"; ValueType:string; ValueName:"KDEROOT"; ValueData:"{app}" ; Flags: preservestringtype ;
