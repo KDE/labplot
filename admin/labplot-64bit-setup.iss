@@ -54,6 +54,7 @@ Source: "{#CraftRoot}\bin\libpng16.dll"; DestDir: "{app}";Flags: ignoreversion
 ;Source: "{#CraftRoot}\bin\ssleay32.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libssl-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libcrypto-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libssh2-1.dll"; DestDir: "{app}"; DestName: "libssh2.dll"; Flags: ignoreversion
 ;Source: "{#CraftRoot}\bin\libdbus-1-3.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\Qt5DBus.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libkdewin.dll"; DestDir: "{app}";Flags: ignoreversion
@@ -189,7 +190,7 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 
 [Registry]
 ; project file association
-Root: HKA; Subkey: ".lml"; ValueType: string; ValueName: ""; ValueData: "{#MyAppName}"; Flags: uninsdeletevalue
+Root: HKA; Subkey: "Software\Classes\.lml"; ValueType: string; ValueName: ""; ValueData: "{#MyAppName}"; Flags: uninsdeletevalue
 Root: HKA; Subkey: "Software\Classes\{#MyAppName}"; ValueType: string; ValueName: ""; ValueData: "MyView"; Flags: uninsdeletekey
 Root: HKA; Subkey: "Software\Classes\{#MyAppName}\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\labplot2\application-x-labplot2.ico,0"
 Root: HKA; Subkey: "Software\Classes\{#MyAppName}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
