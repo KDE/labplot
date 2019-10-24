@@ -18,7 +18,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf64}\{#MyAppName}
+DefaultDirName={autopf64}\{#MyAppName}
 DisableProgramGroupPage=yes
 OutputBaseFilename=labplot-{#MyAppVersion}-64bit-setup
 ArchitecturesAllowed=x64
@@ -30,6 +30,8 @@ Uninstallable=yes
 ChangesAssociations=yes
 ; add dialog for admin/user install mode
 PrivilegesRequiredOverridesAllowed=dialog
+DisableDirPage=no
+
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -183,8 +185,10 @@ Source: "C:\Program Files\{#ImageMagickVersion}\modules\coders\IM_MOD_RL_ps_.dll
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; IconFilename: "{app}\labplot2\labplot2.ico"
+#Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
+#Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; IconFilename: "{app}\labplot2\labplot2.ico"
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; IconFilename: "{app}\labplot2\labplot2.ico"
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
