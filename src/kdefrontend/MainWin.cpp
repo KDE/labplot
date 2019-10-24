@@ -310,6 +310,10 @@ void MainWin::initGUI(const QString& fileName) {
 				QDEBUG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().constFirst());
 				openRecentProject( m_recentProjectsAction->urls().constFirst() );
 			}
+		} else if (load == 4) { //welcome screen
+			m_showWelcomeScreen = true;
+			m_welcomeWidget = createWelcomeScreen();
+			setCentralWidget(m_welcomeWidget);
 		}
 	}
 
@@ -321,14 +325,6 @@ void MainWin::initGUI(const QString& fileName) {
 	}
 
 	updateGUIOnProjectChanges();
-
-	//load welcome screen
-	m_showWelcomeScreen  = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
-
-	if(m_showWelcomeScreen) {
-		m_welcomeWidget = createWelcomeScreen();
-		setCentralWidget(m_welcomeWidget);
-	}
 }
 
 /**

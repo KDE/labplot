@@ -50,10 +50,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 			this, &SettingsGeneralPage::changed);
 	connect(ui.chkAutoSave, &QCheckBox::stateChanged, this, &SettingsGeneralPage::autoSaveChanged);
 	connect(ui.chkMemoryInfo, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
-	connect(ui.chkWelcomeScreen, &QCheckBox::stateChanged, [this]() {
-		ui.bResetWelcomeLayout->setEnabled(ui.chkWelcomeScreen->isChecked());
-		changed();});
-	connect(ui.bResetWelcomeLayout, &QPushButton::clicked, this, &SettingsGeneralPage::resetWelcomeScreen);
+// 	connect(ui.bResetWelcomeLayout, &QPushButton::clicked, this, &SettingsGeneralPage::resetWelcomeScreen);
 
 	loadSettings();
 	interfaceChanged(ui.cbInterface->currentIndex());
@@ -69,7 +66,6 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
 	group.writeEntry(QLatin1String("ShowMemoryInfo"), ui.chkMemoryInfo->isChecked());
-	group.writeEntry(QLatin1String("ShowWelcomeScreen"), ui.chkWelcomeScreen->isChecked());
 }
 
 void SettingsGeneralPage::restoreDefaults() {
@@ -85,7 +81,6 @@ void SettingsGeneralPage::loadSettings() {
 	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), false));
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
 	ui.chkMemoryInfo->setChecked(group.readEntry<bool>(QLatin1String("ShowMemoryInfo"), true));
-	ui.chkWelcomeScreen->setChecked(group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true));
 }
 
 void SettingsGeneralPage::retranslateUi() {
@@ -94,6 +89,7 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbLoadOnStart->addItem(i18n("Create new empty project"));
 	ui.cbLoadOnStart->addItem(i18n("Create new project with worksheet"));
 	ui.cbLoadOnStart->addItem(i18n("Load last used project"));
+	ui.cbLoadOnStart->addItem(i18n("Show Welcome Screen"));
 
 	ui.cbInterface->clear();
 	ui.cbInterface->addItem(i18n("Sub-window view"));
