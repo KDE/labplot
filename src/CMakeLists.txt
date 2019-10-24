@@ -404,7 +404,7 @@ ENDIF ()
 
 IF (Cantor_FOUND)
 	target_link_libraries( labplot2lib Cantor::cantorlibs KF5::Service KF5::Parts)
-	IF (${Cantor_VERSION} VERSION_GREATER "19.08")
+	IF (${Cantor_VERSION} VERSION_GREATER "19.11")
 		target_link_libraries( labplot2lib Poppler::Qt5)
 	ENDIF()
 ENDIF ()
