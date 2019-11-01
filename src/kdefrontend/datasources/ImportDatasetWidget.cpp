@@ -82,10 +82,7 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	connect(ui.bRefresh, &QPushButton::clicked, this, &ImportDatasetWidget::refreshCategories);
 	connect(ui.bRestore, &QPushButton::clicked, this, &ImportDatasetWidget::restoreBackup);
 	connect(ui.bNewDataset, &QPushButton::clicked, this, &ImportDatasetWidget::showDatasetMetadataManager);
-	connect(ui.lwDatasets, &QListWidget::itemSelectionChanged, [this]() {
-		emit datasetSelected();
-		updateDetails();
-	});
+	connect(ui.lwDatasets, &QListWidget::itemSelectionChanged, [this]() { datasetChanged(); });
 	connect(ui.lwDatasets, &QListWidget::doubleClicked, [this]() {emit datasetDoubleClicked(); });
 
 	ui.bRefresh->hide();
@@ -386,14 +383,7 @@ QString ImportDatasetWidget::getSelectedDataset() const {
  * @param datasetHandler the DatasetHanlder that downloads processes the dataset
  */
 void ImportDatasetWidget::loadDatasetToProcess(DatasetHandler* datasetHandler) {
-	const QString fileName = getSelectedDataset() + QLatin1String(".json");
-
-	QJsonObject datasetObject = loadDatasetObject();
-
-	if(!datasetObject.isEmpty())
-		datasetHandler->processMetadata(datasetObject);
-	else
-		QMessageBox::critical(this, i18n("Invalid metadata file"), i18n("The metadata file for the choosen dataset isn't valid"));
+	datasetHandler->processMetadata(m_datasetObject);
 }
 
 /**
@@ -817,13 +807,16 @@ void ImportDatasetWidget::setDataset(const QString &datasetName) {
 /**
  * @brief Updates the details of the currently selected dataset
  */
-void ImportDatasetWidget::updateDetails() {
+void ImportDatasetWidget::datasetChanged() {
 	if(!getSelectedDataset().isEmpty()) {
-		QJsonObject datasetObject = loadDatasetObject();
-		ui.lFullName->setText(datasetObject.value("name").toString());
-		ui.lDescription->setText(datasetObject.value("description").toString());
+		m_datasetObject = loadDatasetObject();
+		ui.lFullName->setText(m_datasetObject.value("name").toString());
+		ui.lDescription->setText(m_datasetObject.value("description").toString());
 	} else {
+		m_datasetObject = QJsonObject();
 		ui.lFullName->setText("-");
 		ui.lDescription->setText("-");
 	}
+
+	emit datasetSelected();
 }
