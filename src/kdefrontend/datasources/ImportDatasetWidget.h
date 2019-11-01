@@ -46,9 +46,9 @@ class ImportDatasetWidget : public QWidget {
 public:
 	explicit ImportDatasetWidget(QWidget* parent);
 	~ImportDatasetWidget() override;
+
 	QString getSelectedDataset() const;
 	void loadDatasetToProcess(DatasetHandler*);
-	QString locateCategoryJsonFile() const;
 	const DatasetsMap& getDatasetsMap();
 	void setCollection(const QString&);
 	void setCategory(const QString&);
@@ -67,7 +67,6 @@ private:
 	QString m_selectedCategory;
 	QString m_selectedCollection;
 	DatasetModel* m_datasetModel{nullptr};
-	bool m_showDetails{false};
 
 	QString validCollectionName(const QString&);
 	void downloadCollectionsFile();
@@ -76,13 +75,12 @@ private:
 	void uploadDatasetFile(const QString&);
 	void updateDatasetCompleter();
 	void updateCategoryCompleter();
-	void loadDatasetCategoriesFromJson();
+	void loadCategories();
 	void listDatasetsForSubcategory(QTreeWidgetItem*);
 	void restoreSelectedSubcategory(const QString&);
 	void highlightLocalMetadataFiles();
 	QJsonObject loadDatasetObject();
 	void updateDetails();
-	void showDetails(bool show);
 
 private slots:
 	void updateCategoryTree(const QString&);

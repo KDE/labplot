@@ -65,12 +65,9 @@ DatasetHandler::~DatasetHandler() {
  * @brief Initiates processing the metadata file,, located at the given path, belonging to a dataset.
  * @param path the path to the metadata file
  */
-void DatasetHandler::processMetadata(const QJsonObject& object, const QString& path) {
+void DatasetHandler::processMetadata(const QJsonObject& object) {
 	m_object = new QJsonObject(object);
 	qDebug("Start processing dataset...");
-
-	m_containingDir = path.left(path.lastIndexOf(QDir::separator()));
-	qDebug() << m_containingDir;
 
 	if(!m_object->isEmpty()) {
 		configureFilter();
@@ -256,10 +253,13 @@ QString DatasetHandler::saveFileName(const QUrl& url) {
 	if (basename.isEmpty())
 		basename = "download";
 
-	QString fileName = m_containingDir + QDir::separator() + basename;
+	QDir downloadDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/datasets_download/"));
+	if (!downloadDir.exists())
+		downloadDir.mkdir(downloadDir.path());
+
+	QString fileName = downloadDir.path() + QLatin1Char('/') + basename;
 	QFileInfo fileInfo (fileName);
 	if (QFile::exists(fileName)) {
-
 		if(fileInfo.lastModified().addDays(1) < QDateTime::currentDateTime()){
 			QFile removeFile (fileName);
 			removeFile.remove();

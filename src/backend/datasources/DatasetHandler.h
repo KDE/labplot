@@ -40,9 +40,9 @@ class DatasetHandler: public QObject{
 	Q_OBJECT
 
 public:
-	DatasetHandler(Spreadsheet* spreadsheet);
+	DatasetHandler(Spreadsheet*);
 	~DatasetHandler();
-	void processMetadata(const QJsonObject& object, const QString& path);
+	void processMetadata(const QJsonObject&);
 
 private:
 	Spreadsheet* m_spreadsheet;
@@ -59,15 +59,15 @@ private:
 	void configureSpreadsheet();
 	void prepareForDataset();
 	void processDataset();
-	void doDownload(const QUrl &url);
-	bool isHttpRedirect(QNetworkReply *reply);
-	QString saveFileName(const QUrl &url);
-	bool saveToDisk(const QString &filename, QIODevice *data);
+	void doDownload(const QUrl&);
+	bool isHttpRedirect(QNetworkReply*);
+	QString saveFileName(const QUrl&);
+	bool saveToDisk(const QString& filename, QIODevice*);
 	void markMetadataAsInvalid();
 	void configureColumns();
 
 private slots:
-	void downloadFinished(QNetworkReply *reply);
+	void downloadFinished(QNetworkReply*);
 
 signals:
 	void downloadCompleted();
