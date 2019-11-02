@@ -1,5 +1,14 @@
 [
-    "Rdatasets",
-    "StatSci",
-    "Socrata"
+	{
+		"name" : "Rdatasets",
+		"description" : "<b>Rdatasets</b> is a collection of over 1300 datasets that were originally distributed alongside the statistical software environment R and some of its add-on packages. The goal is to make these data more broadly accessible for teaching and statistical software development."
+	},
+	{
+		"name" : "OzDASL",
+		"description" : "<b>OzDASL</b> is a library of data sets and associated stories. It is intended as a resource for teachers of statistics in Australia and New Zealand and elsewhere. Emphasis is given to data sets with an Australasian context, although interesting data sets from anywhere in the world are included."
+	},
+	{
+		"name" : "Socrata",
+		"description" : ""
+	}
 ]

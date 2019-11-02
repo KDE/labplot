@@ -33,6 +33,7 @@
 #include "ui_importdatasetwidget.h"
 #include "QWidget"
 #include "QMap"
+#include <QJsonArray>
 #include <QJsonObject>
 
 class QCompleter;
@@ -68,19 +69,21 @@ private:
 	QString m_selectedCategory;
 	QString m_selectedCollection;
 	DatasetModel* m_datasetModel{nullptr};
+
+	QJsonArray m_collections;
 	QJsonObject m_datasetObject;
 
 	QString validCollectionName(const QString&);
-	void downloadCollectionsFile();
-	void downloadCollectionFile(const QString&);
-	void uploadCategoryFile();
-	void uploadDatasetFile(const QString&);
+// 	void downloadCollectionsFile();
+// 	void downloadCollectionFile(const QString&);
+// 	void uploadCategoryFile();
+// 	void uploadDatasetFile(const QString&);
 	void updateDatasetCompleter();
 	void updateCategoryCompleter();
 	void loadCategories();
 	void listDatasetsForSubcategory(QTreeWidgetItem*);
 	void restoreSelectedSubcategory(const QString&);
-	void highlightLocalMetadataFiles();
+// 	void highlightLocalMetadataFiles();
 	QJsonObject loadDatasetObject();
 
 private slots:
@@ -89,9 +92,9 @@ private slots:
 	void scrollToCategoryTreeItem(const QString&);
 	void scrollToDatasetListItem(const QString&);
 	void showDatasetMetadataManager();
-	void refreshCategories();
-	void clearCache();
-	void restoreBackup();
+// 	void refreshCategories();
+// 	void clearCache();
+// 	void restoreBackup();
 
 signals:
 	void datasetSelected();

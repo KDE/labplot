@@ -67,8 +67,20 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 
 	ui.lwDatasets->setSelectionMode(QAbstractItemView::SingleSelection);
 	ui.twCategories->setSelectionMode(QAbstractItemView::SingleSelection);
-	ui.lDescription->setWordWrap(true);
-	ui.lFullName->setWordWrap(true);
+
+	const int size = ui.leSearchCategories->height();
+	ui.lSearchCategories->setPixmap( QIcon::fromTheme(QLatin1String("go-next")).pixmap(size, size) );
+	ui.lSearchDatasets->setPixmap( QIcon::fromTheme(QLatin1String("go-next")).pixmap(size, size) );
+
+	QString info = i18n("Enter the name of the category to navigate to it.");
+	ui.lSearchCategories->setToolTip(info);
+	ui.leSearchCategories->setToolTip(info);
+	ui.leSearchCategories->setPlaceholderText(i18n("Category..."));
+
+	info = i18n("Enter the name of the dataset to navigate to it.");
+	ui.lSearchDatasets->setToolTip(info);
+	ui.leSearchDatasets->setToolTip(info);
+	ui.leSearchDatasets->setPlaceholderText(i18n("Dataset..."));
 
 	connect(ui.cbCollections, &QComboBox::currentTextChanged, this, &ImportDatasetWidget::updateCategoryTree);
 	connect(ui.twCategories, &QTreeWidget::itemDoubleClicked, this, &ImportDatasetWidget::listDatasetsForSubcategory);
@@ -77,10 +89,10 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 			listDatasetsForSubcategory(ui.twCategories->selectedItems().first());
 	});
 	connect(ui.leSearchDatasets, &QLineEdit::textChanged, this, &ImportDatasetWidget::scrollToDatasetListItem);
-	connect(ui.bClearCache, &QPushButton::clicked, this, &ImportDatasetWidget::clearCache);
+// 	connect(ui.bClearCache, &QPushButton::clicked, this, &ImportDatasetWidget::clearCache);
 	connect(ui.leSearchCategories, &QLineEdit::textChanged, this, &ImportDatasetWidget::scrollToCategoryTreeItem);
-	connect(ui.bRefresh, &QPushButton::clicked, this, &ImportDatasetWidget::refreshCategories);
-	connect(ui.bRestore, &QPushButton::clicked, this, &ImportDatasetWidget::restoreBackup);
+// 	connect(ui.bRefresh, &QPushButton::clicked, this, &ImportDatasetWidget::refreshCategories);
+// 	connect(ui.bRestore, &QPushButton::clicked, this, &ImportDatasetWidget::restoreBackup);
 	connect(ui.bNewDataset, &QPushButton::clicked, this, &ImportDatasetWidget::showDatasetMetadataManager);
 	connect(ui.lwDatasets, &QListWidget::itemSelectionChanged, [this]() { datasetChanged(); });
 	connect(ui.lwDatasets, &QListWidget::doubleClicked, [this]() {emit datasetDoubleClicked(); });
@@ -104,22 +116,25 @@ ImportDatasetWidget::~ImportDatasetWidget() {
 void ImportDatasetWidget::loadCategories() {
 	m_datasetsMap.clear();
 	ui.cbCollections->clear();
-	QFile file(m_jsonDir + QLatin1String("/DatasetCollections.json"));
+
+	const QString collectionsFileName = m_jsonDir + QLatin1String("/DatasetCollections.json");
+	QFile file(collectionsFileName);
 
 	if (file.open(QIODevice::ReadOnly)) {
 		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
 		file.close();
 		if (!document.isArray()) {
-			QDEBUG("Invalid definition of " + m_jsonDir + "/DatasetCollections.json");
+			QDEBUG("Invalid definition of " + collectionsFileName);
 			return;
 		}
 
-		QJsonArray collections = document.array();
+		m_collections = document.array();
 
-		for (int col = 0; col < collections.size(); col++) {
-			const QString collection = collections[col].toString();
+		for (int col = 0; col < m_collections.size(); col++) {
+			const QJsonObject& collection = m_collections[col].toObject();
+			const QString& collectionName = collection["name"].toString();
 
-			QString path = m_jsonDir + QLatin1Char('/') + collection + ".json";
+			QString path = m_jsonDir + QLatin1Char('/') + collectionName + ".json";
 			QFile collectionFile(path);
 			if (collectionFile.open(QIODevice::ReadOnly)) {
 				QJsonDocument collectionDocument = QJsonDocument::fromJson(collectionFile.readAll());
@@ -145,7 +160,7 @@ void ImportDatasetWidget::loadCategories() {
 
 						//processing the datasets of the actual subcategory
 						for (const auto& dataset : datasetArray)
-							m_datasetsMap[collection][categoryName][subcategoryName].push_back(dataset.toObject().value("filename").toString());
+							m_datasetsMap[collectionName][categoryName][subcategoryName].push_back(dataset.toObject().value("filename").toString());
 					}
 				}
 			}
@@ -163,22 +178,36 @@ void ImportDatasetWidget::loadCategories() {
 		updateCategoryTree(ui.cbCollections->currentText());
 		restoreSelectedSubcategory(ui.cbCollections->currentText());
 	} else
-		qDebug("Couldn't open dataset collections file");
+		QMessageBox::critical(this, i18n("File not found"),
+							  i18n("Couldn't open the dataset collections file %1. Please check your installation.", collectionsFileName));
 }
 
 /**
  * @brief Returns the valid collection name based on given collection name (containing the count of datasets of the given collection)
  */
-QString ImportDatasetWidget::validCollectionName(const QString &collection) {
+QString ImportDatasetWidget::validCollectionName(const QString& collection) {
 	int index = collection.lastIndexOf(" (");
-	QString collectionName = collection.left(index);
-	return collectionName;
+	return collection.left(index);
 }
 
 /**
  * @brief Updates/fills ui.twCategories based on the selected collection.
  */
 void ImportDatasetWidget::updateCategoryTree(const QString& collectionName) {
+	//update the info field
+	QString info;
+	if (ui.cbCollections->currentIndex() != 0) {
+		for (int i = 0; i < m_collections.size(); ++i) {
+			const QJsonObject& collection = m_collections[i].toObject();
+			if ( collectionName.startsWith(collection["name"].toString()) ) {
+				info += collection["description"].toString();
+				info += "<br><br></hline><br><br>";
+				break;
+			}
+		}
+	}
+	ui.lInfo->setText(info);
+
 	QString collection = validCollectionName(collectionName);
 	m_loadingCategories = true;
 	ui.lwDatasets->clear();
@@ -257,7 +286,6 @@ void ImportDatasetWidget::listDatasetsForSubcategory(QTreeWidgetItem* item) {
 			}
 
 			updateDatasetCompleter();
-			highlightLocalMetadataFiles();
 		}
 	} else {
 		if(item->text(0).compare(m_selectedCategory) != 0) {
@@ -390,64 +418,59 @@ void ImportDatasetWidget::loadDatasetToProcess(DatasetHandler* datasetHandler) {
  * @brief Returns the QJsonObject associated with the currently selected dataset.
  */
 QJsonObject ImportDatasetWidget::loadDatasetObject() {
-	QFile file(m_jsonDir + QLatin1String("/DatasetCollections.json"));
 	bool allCollections = (ui.cbCollections->currentIndex() == 0);
 
-	if (file.open(QIODevice::ReadOnly)) {
-		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
-		if (!document.isArray()) {
-			QDEBUG("Invalid definition of " + m_jsonDir + "/DatasetCollections.json");
-			return QJsonObject() ;
-		}
+	for (int i = 0; i < m_collections.size(); ++i) {
+		const QJsonObject& collection = m_collections[i].toObject();
+		const QString& collectionName = collection["name"].toString();
 
-		QJsonArray collections = document.array();
-		for (int i = 0; i < collections.size(); ++i) {
-			const QString collection = collections[i].toString();
+		//we have to find the selected collection in the metadata file.
+		if(collectionName.compare(m_selectedCollection) == 0 || allCollections) {
+			QFile file(m_jsonDir + QLatin1Char('/') + collectionName + ".json");
 
-			//we have to find the selected collection in the metadata file.
-			if(collection.compare(m_selectedCollection) == 0 || allCollections) {
-				QFile file(m_jsonDir + QLatin1Char('/') + collection + ".json");
+			//open the metadata file of the current collection
+			if (file.open(QIODevice::ReadOnly)) {
+				QJsonDocument collectionDocument = QJsonDocument::fromJson(file.readAll());
+				file.close();
+				if(!collectionDocument.isObject()) {
+					qDebug()<< "The " +  collectionName + ".json file is invalid";
+					return QJsonObject();
+				}
 
-				//open the metadata file of the current collection
-				if (file.open(QIODevice::ReadOnly)) {
-					QJsonDocument collectionDocument = QJsonDocument::fromJson(file.readAll());
-					file.close();
-					if(!collectionDocument.isObject()) {
-						qDebug()<< "The " +  collection + ".json file is invalid";
-						return QJsonObject();
-					}
+				QJsonObject collectionObject = collectionDocument.object();
+				QJsonArray categoryArray = collectionObject.value("categories").toArray();
 
-					QJsonObject collectionObject = collectionDocument.object();
-					QJsonArray categoryArray = collectionObject.value("categories").toArray();
+				//processing categories
+				for(int i = 0 ; i < categoryArray.size(); ++i) {
+					const QJsonObject currentCategory = categoryArray[i].toObject();
+					const QString categoryName = currentCategory.value("category_name").toString();
+					if(categoryName.compare(m_selectedCategory) == 0) {
+						const QJsonArray subcategories = currentCategory.value("subcategories").toArray();
 
-					//processing categories
-					for(int i = 0 ; i < categoryArray.size(); ++i) {
-						const QJsonObject currentCategory = categoryArray[i].toObject();
-						const QString categoryName = currentCategory.value("category_name").toString();
-						if(categoryName.compare(m_selectedCategory) == 0) {
-							const QJsonArray subcategories = currentCategory.value("subcategories").toArray();
+						//processing subcategories
+						for(int j = 0; j < subcategories.size(); ++j) {
+							QJsonObject currentSubCategory = subcategories[j].toObject();
+							QString subcategoryName = currentSubCategory.value("subcategory_name").toString();
 
-							//processing subcategories
-							for(int j = 0; j < subcategories.size(); ++j) {
-								QJsonObject currentSubCategory = subcategories[j].toObject();
-								QString subcategoryName = currentSubCategory.value("subcategory_name").toString();
+							if(subcategoryName.compare(m_selectedSubcategory) == 0) {
+								const QJsonArray datasetArray = currentSubCategory.value("datasets").toArray();
 
-								if(subcategoryName.compare(m_selectedSubcategory) == 0) {
-									const QJsonArray datasetArray = currentSubCategory.value("datasets").toArray();
-
-									//processing the datasets o the actual subcategory
-									for (const auto& dataset : datasetArray) {
-										if(getSelectedDataset().compare(dataset.toObject().value("filename").toString()) == 0)
-											return dataset.toObject();
-									}
+								//processing the datasets o the actual subcategory
+								for (const auto& dataset : datasetArray) {
+									if(getSelectedDataset().compare(dataset.toObject().value("filename").toString()) == 0)
+										return dataset.toObject();
 								}
 							}
 						}
 					}
 				}
 			}
+
+			if (!allCollections)
+				break;
 		}
 	}
+
 	return QJsonObject();
 }
 
@@ -477,6 +500,7 @@ void ImportDatasetWidget::showDatasetMetadataManager() {
 /**
  * @brief Places the metadata file containing the list of collections into a specific directory.
  */
+/*
 void ImportDatasetWidget::downloadCollectionsFile() {
 	const QString fileNameOld = QStandardPaths::locate(QStandardPaths::AppDataLocation, "datasets/DatasetCollections.json");
 	const QString fileNameNew =m_jsonDir + QLatin1String("DatasetCollections.json");
@@ -489,21 +513,25 @@ void ImportDatasetWidget::downloadCollectionsFile() {
 
 	QFile::copy(fileNameOld, fileNameNew);
 }
+*/
 
 /**
  * @brief Places the metadata file of the given dataset into a specific directory.
  * @param datasetName the name of the dataset
  */
+/*
 void ImportDatasetWidget::downloadCollectionFile(const QString& collectionName) {
 	const QString fileNameOld = QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String("datasets") + QDir::separator() + collectionName);
 	const QString fileNameNew =m_jsonDir + collectionName;
 
 	QFile::copy(fileNameOld, fileNameNew);
 }
+*/
 
 /**
  * @brief Refreshes the categories, subcategories and datasets.
  */
+/*
 void ImportDatasetWidget::refreshCategories() {
 	QMessageBox::StandardButton reply;
 	reply = QMessageBox::question(this, "Refresh metadata files",
@@ -564,8 +592,6 @@ void ImportDatasetWidget::refreshCategories() {
 
 					if(!existingCollectionFile.rename(m_jsonDir + currentCollection + "_backup.json"))
 						qDebug() << " Couldn't create backup because " << existingCollectionFile.errorString();
-
-					downloadCollectionFile(currentCollection + ".json");
 				}
 			}
 		}
@@ -574,10 +600,12 @@ void ImportDatasetWidget::refreshCategories() {
 		loadCategories();
 	}
 }
+*/
 
 /**
  * @brief Restores the saved metadata files.  Revokes the effect of refreshCategories().
  */
+/*
 void ImportDatasetWidget::restoreBackup() {
 	QMessageBox::StandardButton reply;
 	reply = QMessageBox::question(this, "Restore backup", "Are you sure to restore the backup metadata files?", QMessageBox::Yes|QMessageBox::No);
@@ -629,23 +657,25 @@ void ImportDatasetWidget::restoreBackup() {
 		loadCategories();
 	}
 }
+*/
 
 /**
  * @brief Clears the content of the directory in which the download of metadata files was done.
  */
+/*
 void ImportDatasetWidget::clearCache() {
 	QMessageBox::StandardButton reply = QMessageBox::question(this, "Clear cache",
 															  "Are you sure to remove every downloaded dataset?",
 															QMessageBox::Yes|QMessageBox::No);
 
 	if(reply == QMessageBox::Yes) {
-		QDir dir(m_jsonDir);
+		QDir dir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/datasets_local/"));
 
 		if(dir.exists()) {
 			for(const auto& entry : dir.entryList()) {
 				//delete every file that isn't potentially a metadata file
 				if(!(entry.endsWith(QLatin1String(".json")) || entry.startsWith(QLatin1Char('.')))) {
-					QFile deleteFile (m_jsonDir + entry);
+					QFile deleteFile (dir.path() + QLatin1Char('/') + entry);
 					if(deleteFile.exists()) {
 						deleteFile.remove();
 					}
@@ -654,41 +684,16 @@ void ImportDatasetWidget::clearCache() {
 		} else {
 			qDebug("Couldn't clear cache, containing folder doesn't exist!");
 		}
-
-		highlightLocalMetadataFiles();
 	}
 }
-
-/**
- * @brief Highlights the name of the locally available metadata files in lwDatasets.
- */
-void ImportDatasetWidget::highlightLocalMetadataFiles() {
-	return;
-
-	QDir dir(m_jsonDir);
-
-	for(int i = 0 ; i < ui.lwDatasets->count(); ++i) {
-		QListWidgetItem* const currentItem = ui.lwDatasets->item(i);
-		bool found = false;
-		for(QString entry : dir.entryList()) {
-			if(entry.startsWith(currentItem->text()) && !entry.endsWith(".json")) {
-				found = true;
-				break;
-			}
-		}
-
-		if(found)
-			currentItem->setBackgroundColor(Qt::yellow);
-		else
-			currentItem->setBackgroundColor(Qt::white);
-	}
-}
+*/
 
 /**
  * @brief TODO: uploads the metadata file that contains the categories to store.kde.org -- Library doesn't work for indefinite time.
  */
+/*
 void ImportDatasetWidget::uploadCategoryFile() {
-	/*KNS3::UploadDialog dialog("labplot2_datasets.knsrc", this);
+	KNS3::UploadDialog dialog("labplot2_datasets.knsrc", this);
 
 	QFile file(m_jsonDir + "DatasetCategories.json");
 	qDebug() << "file " << m_jsonDir + "DatasetCategories.json "<< file.exists();
@@ -710,15 +715,16 @@ void ImportDatasetWidget::uploadCategoryFile() {
 	dialog.setUploadName("Dataset Categories");
 	qDebug() << "Upload name set: ";
 
-	dialog.exec();*/
+	dialog.exec();
 }
+*/
 
 /**
  * @brief TODO: uploads the metadata file of a dataset to store.kde.org -- Library doesn't work for indefinite time.
  */
+/*
 void ImportDatasetWidget::uploadDatasetFile(const QString& filePath) {
-	Q_UNUSED(filePath);
-	/*KNS3::UploadDialog dialog("labplot2_datasets.knsrc", this);
+	KNS3::UploadDialog dialog("labplot2_datasets.knsrc", this);
 
 	QFile file(filePath);
 	qDebug() << filePath + "  " << file.exists();
@@ -740,8 +746,9 @@ void ImportDatasetWidget::uploadDatasetFile(const QString& filePath) {
 	dialog.setUploadName("Dataset Categories");
 	qDebug() << "Upload name set: ";
 
-	dialog.exec();*/
+	dialog.exec();
 }
+*/
 
 /**
  * @brief Returns the structure containing the categories, subcategories and datasets.
@@ -808,15 +815,30 @@ void ImportDatasetWidget::setDataset(const QString &datasetName) {
  * @brief Updates the details of the currently selected dataset
  */
 void ImportDatasetWidget::datasetChanged() {
-	if(!getSelectedDataset().isEmpty()) {
-		m_datasetObject = loadDatasetObject();
-		ui.lFullName->setText(m_datasetObject.value("name").toString());
-		ui.lDescription->setText(m_datasetObject.value("description").toString());
-	} else {
-		m_datasetObject = QJsonObject();
-		ui.lFullName->setText("-");
-		ui.lDescription->setText("-");
+	QString info;
+	if (ui.cbCollections->currentIndex() != 0) {
+		const QString& collectionName = ui.cbCollections->currentText();
+		for (int i = 0; i < m_collections.size(); ++i) {
+			const QJsonObject& collection = m_collections[i].toObject();
+			if ( collectionName.startsWith(collection["name"].toString()) ) {
+				info += collection["description"].toString();
+				info += "<br><br>";
+				break;
+			}
+		}
 	}
 
+	if(!getSelectedDataset().isEmpty()) {
+		m_datasetObject = loadDatasetObject();
+
+		info += "<b>" + i18n("Dataset") + ":</b><br>";
+		info += m_datasetObject["name"].toString();
+		info += "<br><br>";
+		info += "<b>" + i18n("Description") + ":</b><br>";
+		info += m_datasetObject["description"].toString();
+	} else
+		m_datasetObject = QJsonObject();
+
+	ui.lInfo->setText(info);
 	emit datasetSelected();
 }
