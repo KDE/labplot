@@ -73,7 +73,6 @@ private:
 	QJsonArray m_collections;
 	QJsonObject m_datasetObject;
 
-	QString validCollectionName(const QString&);
 // 	void downloadCollectionsFile();
 // 	void downloadCollectionFile(const QString&);
 // 	void uploadCategoryFile();
@@ -88,7 +87,7 @@ private:
 
 private slots:
 	void datasetChanged();
-	void updateCategoryTree(const QString&);
+	void collectionChanged(int);
 	void scrollToCategoryTreeItem(const QString&);
 	void scrollToDatasetListItem(const QString&);
 	void showDatasetMetadataManager();
