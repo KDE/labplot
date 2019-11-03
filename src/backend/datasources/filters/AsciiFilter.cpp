@@ -388,6 +388,9 @@ void AsciiFilter::setVectorNames(const QString& s) {
 	if (!s.simplified().isEmpty())
 		d->vectorNames = s.simplified().split(' ');
 }
+void AsciiFilter::setVectorNames(QStringList list) {
+	d->vectorNames = list;
+}
 QStringList AsciiFilter::vectorNames() const {
 	return d->vectorNames;
 }

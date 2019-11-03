@@ -88,53 +88,48 @@ void DatasetHandler::markMetadataAsInvalid() {
  * @brief Configures the filter, that will be used later, based on the metadata file.
  */
 void DatasetHandler::configureFilter() {
-	qDebug("Configure filter");
+	//set some default values common to many datasets
+	m_filter->setNumberFormat(QLocale::C);
+	m_filter->setSkipEmptyParts(true);
+	m_filter->setHeaderEnabled(false);
+
+	//read properties specified in the dataset description
 	if(!m_object->isEmpty()) {
 		if(m_object->contains("separator"))
 			m_filter->setSeparatingCharacter(m_object->value("separator").toString());
-		else
-			markMetadataAsInvalid();
 
 		if(m_object->contains("comment_character"))
 			m_filter->setCommentCharacter(m_object->value("comment_character").toString());
-		else
-			markMetadataAsInvalid();
 
 		if(m_object->contains("create_index_column"))
 			m_filter->setCreateIndexEnabled(m_object->value("create_index_column").toBool());
-		else
-			markMetadataAsInvalid();
 
 		if(m_object->contains("skip_empty_parts"))
 			m_filter->setSkipEmptyParts(m_object->value("skip_empty_parts").toBool());
-		else
-			markMetadataAsInvalid();
 
 		if(m_object->contains("simplify_whitespaces"))
 			m_filter->setSimplifyWhitespacesEnabled(m_object->value("simplify_whitespaces").toBool());
-		else
-			markMetadataAsInvalid();
 
 		if(m_object->contains("remove_quotes"))
 			m_filter->setRemoveQuotesEnabled(m_object->value("remove_quotes").toBool());
-		else
-			markMetadataAsInvalid();
 
 		if(m_object->contains("use_first_row_for_vectorname"))
 			m_filter->setHeaderEnabled(m_object->value("use_first_row_for_vectorname").toBool());
-		else
-			markMetadataAsInvalid();
 
 		if(m_object->contains("number_format"))
 			m_filter->setNumberFormat(QLocale::Language(m_object->value("number_format").toInt()));
-		else
-			markMetadataAsInvalid();
 
 		if(m_object->contains("DateTime_format"))
 			m_filter->setDateTimeFormat(m_object->value("DateTime_format").toString());
-		else
-			markMetadataAsInvalid();
 
+		if(m_object->contains("columns")) {
+			const QJsonArray& columnsArray = m_object->value("columns").toArray();
+			QStringList columnNames;
+			for (int i = 0; i < columnsArray.size(); ++i)
+				columnNames << columnsArray[i].toString();
+
+			m_filter->setVectorNames(columnNames);
+		}
 	} else {
 		qDebug() << "Empty object";
 		markMetadataAsInvalid();

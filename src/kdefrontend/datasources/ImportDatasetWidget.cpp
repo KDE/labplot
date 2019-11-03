@@ -33,14 +33,16 @@
 #include "kdefrontend/DatasetModel.h"
 
 #include <QCompleter>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
 #include <QJsonDocument>
 #include <QJsonValue>
-#include <QStandardPaths>
-#include <QFile>
-#include <QDebug>
-#include <QTreeWidget>
 #include <QMessageBox>
-#include <QDir>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QStandardPaths>
+#include <QTreeWidget>
 
 #include <KLocalizedString>
 // #include <KNS3/DownloadDialog>
@@ -827,7 +829,20 @@ void ImportDatasetWidget::datasetChanged() {
 		info += m_datasetObject["name"].toString();
 		info += "<br><br>";
 		info += "<b>" + i18n("Description") + ":</b><br>";
-		info += m_datasetObject["description"].toString();
+
+		if (m_datasetObject.contains("description_url")) {
+			QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+			connect(manager, &QNetworkAccessManager::finished, [this] (QNetworkReply* reply) {
+				QByteArray ba = reply->readAll();
+				QString info(ba);
+				info = info.replace(QLatin1Char('\n'), QLatin1String("<br>"));
+				ui.lInfo->setText(ui.lInfo->text() + info);
+			}
+			);
+			manager->get(QNetworkRequest(QUrl(m_datasetObject["description_url"].toString())));
+
+		} else
+			info += m_datasetObject["description"].toString();
 	} else
 		m_datasetObject = QJsonObject();
 
