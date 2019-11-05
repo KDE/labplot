@@ -130,6 +130,7 @@ int main (int argc, char *argv[]) {
 	DEBUG("DEBUG debugging enabled")
 	QDEBUG("QDEBUG debugging enabled")
 
+#ifndef NDEBUG
 	// debugging paths
 	QStringList appdatapaths = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
 	DEBUG("AppDataLocation paths:")
@@ -141,6 +142,7 @@ int main (int argc, char *argv[]) {
 	DEBUG("Library search paths:")
 	for (const QString &path: QCoreApplication::libraryPaths())
 		DEBUG("	" << path.toStdString());
+#endif
 
 	KConfigGroup generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");
 	QString defaultSchemeName = generalGlobalsGroup.readEntry("ColorScheme", QStringLiteral("Breeze"));
