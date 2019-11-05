@@ -454,6 +454,8 @@ set(LML_ICONS
     ${CMAKE_CURRENT_SOURCE_DIR}/../icons/512-application-x-labplot2.png
 )
 
+add_subdirectory(3rdparty)
+
 # main executable
 set(LABPLOT_SOURCE ${KDEFRONTEND_DIR}/LabPlot.cpp)
 
@@ -473,6 +475,9 @@ ENDIF ()
 
 add_executable(labplot2 ${LABPLOT_SOURCE})
 target_link_libraries(labplot2 labplot2lib)
+IF (APPLE)
+	target_link_libraries(labplot2 KDMacTouchBar)
+ENDIF()
 
 ############## installation ################################
 install( TARGETS labplot2 DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS} )

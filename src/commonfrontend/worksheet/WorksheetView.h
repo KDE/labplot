@@ -44,6 +44,10 @@ class QTimeLine;
 class AbstractAspect;
 class WorksheetElement;
 
+#ifdef Q_OS_MAC
+	class KDMacTouchBar;
+#endif
+
 class WorksheetView : public QGraphicsView {
 	Q_OBJECT
 
@@ -256,6 +260,9 @@ public slots:
 	void createContextMenu(QMenu*);
 	void createAnalysisMenu(QMenu*);
 	void fillToolBar(QToolBar*);
+#ifdef Q_OS_MAC
+	void fillTouchBar(KDMacTouchBar*);
+#endif
 	void fillCartesianPlotToolBar(QToolBar*);
 	void print(QPrinter*);
 	void selectItem(QGraphicsItem*);

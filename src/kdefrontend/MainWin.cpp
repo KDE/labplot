@@ -75,6 +75,10 @@
 #include "kdefrontend/GuiObserver.h"
 #include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 
+#ifdef Q_OS_MAC
+#include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
+#endif
+
 #include <QMdiArea>
 #include <QMenu>
 #include <QDockWidget>
@@ -181,8 +185,9 @@ void MainWin::initGUI(const QString& fileName) {
 	statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
 
 	initActions();
-#ifdef Q_OS_DARWIN
+#ifdef Q_OS_MAC
 	setupGUI(Default, QLatin1String("/Applications/labplot2.app/Contents/Resources/labplot2ui.rc"));
+	m_touchBar = new KDMacTouchBar(this);
 #else
 	setupGUI(Default, KXMLGUIClient::xmlFile());	// should be "labplot2ui.rc"
 #endif
@@ -303,8 +308,8 @@ void MainWin::initGUI(const QString& fileName) {
 void MainWin::initActions() {
 	// ******************** File-menu *******************************
 	//add some standard actions
-	KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
-	KStandardAction::open(this, SLOT(openProject()),actionCollection());
+	m_newProjectAction = KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
+	m_openProjectAction = KStandardAction::open(this, SLOT(openProject()),actionCollection());
 	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject(QUrl)),actionCollection());
 	m_closeAction = KStandardAction::close(this, SLOT(closeProject()),actionCollection());
 	actionCollection()->setDefaultShortcut(m_closeAction, QKeySequence()); //remove the shortcut, QKeySequence::Close will be used for closing sub-windows
@@ -679,6 +684,14 @@ void MainWin::updateGUIOnProjectChanges() {
 		factory->container("cas_worksheet", this)->setEnabled(false);
 		factory->container("cas_worksheet_toolbar", this)->hide();
 #endif
+
+#ifdef Q_OS_MAC
+	for (auto* action : m_touchBar->actions())
+		m_touchBar->removeAction(action);
+
+	m_touchBar->addAction(m_newProjectAction);
+	m_touchBar->addAction(m_openProjectAction);
+#endif
 	}
 
 	factory->container("new", this)->setEnabled(!b);
@@ -732,6 +745,12 @@ void MainWin::updateGUI() {
 		return;
 	}
 
+//clear the touchbar on Mac
+#ifdef Q_OS_MAC
+	for (auto* action : m_touchBar->actions())
+		m_touchBar->removeAction(action);
+#endif
+
 	//Handle the Worksheet-object
 	const Worksheet* w = dynamic_cast<Worksheet*>(m_currentAspect);
 	if (!w)
@@ -764,6 +783,12 @@ void MainWin::updateGUI() {
 		toolbar->setVisible(true);
 		toolbar->setEnabled(true);
 
+		//populate the touchbar on Mac
+#ifdef Q_OS_MAC
+		m_touchBar->addAction(m_exportAction);
+		m_touchBar->addSeparator();
+		view->fillTouchBar(m_touchBar);
+#endif
 		//hide the spreadsheet toolbar
 		factory->container("spreadsheet_toolbar", this)->setVisible(false);
 	} else {
@@ -793,6 +818,14 @@ void MainWin::updateGUI() {
 		view->fillToolBar(toolbar);
 		toolbar->setVisible(true);
 		toolbar->setEnabled(true);
+
+		//populate the touchbar on Mac
+#ifdef Q_OS_MAC
+		m_touchBar->addAction(m_exportAction);
+		m_touchBar->addAction(m_importFileAction);
+		m_touchBar->addSeparator();
+		//view->fillTouchBar(m_touchBar);
+#endif
 	} else {
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("spreadsheet_toolbar", this)->setVisible(false);
@@ -809,6 +842,14 @@ void MainWin::updateGUI() {
 		menu->clear();
 		view->createContextMenu(menu);
 		menu->setEnabled(true);
+
+		//populate the touchbar on Mac
+#ifdef Q_OS_MAC
+		m_touchBar->addAction(m_exportAction);
+		m_touchBar->addAction(m_importFileAction);
+		m_touchBar->addSeparator();
+		//view->fillTouchBar(m_touchBar);
+#endif
 	} else
 		factory->container("matrix", this)->setEnabled(false);
 

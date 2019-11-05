@@ -61,6 +61,10 @@
 #include <KMessageBox>
 #include <KConfigGroup>
 
+#ifdef Q_OS_MAC
+#include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
+#endif
+
 #include <limits>
 
 /**
@@ -658,6 +662,16 @@ void WorksheetView::fillToolBar(QToolBar* toolBar) {
 	tbMagnification->setDefaultAction(currentMagnificationAction);
 	toolBar->addWidget(tbMagnification);
 }
+
+#ifdef Q_OS_MAC
+void WorksheetView::fillTouchBar(KDMacTouchBar* touchBar){
+	touchBar->addAction(addCartesianPlot1Action);
+	touchBar->addAction(zoomInViewAction);
+	touchBar->addAction(zoomOutViewAction);
+	touchBar->addSeparator();
+	touchBar->addAction(showPresenterMode);
+}
+#endif
 
 void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(cartesianPlotSelectionModeAction);

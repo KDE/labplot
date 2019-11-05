@@ -93,6 +93,10 @@ class QToolButton;
 class KRecentFilesAction;
 class TreeModel;
 
+#ifdef Q_OS_MAC
+	class KDMacTouchBar;
+#endif
+
 class MainWin : public KXmlGuiWindow {
 	Q_OBJECT
 
@@ -126,6 +130,10 @@ private:
 	MemoryWidget* m_memoryInfoWidget{nullptr};
 	Qt::WindowStates m_lastWindowState; //< last window state before switching to full screen mode
 
+#ifdef Q_OS_MAC
+	KDMacTouchBar* m_touchBar;
+#endif
+
 	KRecentFilesAction* m_recentProjectsAction;
 	QAction* m_saveAction;
 	QAction* m_saveAsAction;
@@ -147,6 +155,7 @@ private:
 	QAction* m_newSqlDataSourceAction;
 	QAction* m_newScriptAction;
 	QAction* m_newProjectAction;
+	QAction* m_openProjectAction;
 	QAction* m_historyAction;
 	QAction* m_undoAction;
 	QAction* m_redoAction;
