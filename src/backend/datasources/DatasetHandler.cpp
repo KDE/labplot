@@ -160,8 +160,8 @@ void DatasetHandler::configureSpreadsheet() {
 void DatasetHandler::prepareForDataset() {
 	qDebug("Start downloading dataset");
 	if(!m_object->isEmpty()) {
-		if(m_object->contains("download")) {
-			const QString& url =  m_object->value("download").toString();
+		if(m_object->contains("url")) {
+			const QString& url =  m_object->value("url").toString();
 			const QUrl downloadUrl = QUrl::fromEncoded(url.toLocal8Bit());
 			doDownload(url);
 		}
@@ -246,7 +246,7 @@ QString DatasetHandler::saveFileName(const QUrl& url) {
 	QString basename = m_object->value("filename").toString() + fileExtension;
 
 	if (basename.isEmpty())
-		basename = "download";
+		basename = "url";
 
 	QDir downloadDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/datasets_local/"));
 	if (!downloadDir.exists())
