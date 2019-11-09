@@ -38,8 +38,9 @@ set(CMAKE_AUTOMOC TRUE)
 set(QT_LIBRARIES Qt5::Widgets)
 set(QT_USE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Qt5Portability.cmake")
 
-install(FILES
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/KDMacTouchBarConfig.cmake"
-    DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake")
+# not generated
+#install(FILES
+#    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/KDMacTouchBarConfig.cmake"
+#    DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake")
 
 add_subdirectory(src)
