@@ -832,15 +832,17 @@ void ImportDatasetWidget::datasetChanged() {
 
 		if (m_datasetObject.contains("description_url")) {
 			QNetworkAccessManager* manager = new QNetworkAccessManager(this);
-			connect(manager, &QNetworkAccessManager::finished, [this] (QNetworkReply* reply) {
-				QByteArray ba = reply->readAll();
-				QString info(ba);
-				info = info.replace(QLatin1Char('\n'), QLatin1String("<br>"));
-				ui.lInfo->setText(ui.lInfo->text() + info);
-			}
-			);
-			manager->get(QNetworkRequest(QUrl(m_datasetObject["description_url"].toString())));
-
+			if (manager->networkAccessible() == QNetworkAccessManager::Accessible) {
+				connect(manager, &QNetworkAccessManager::finished, [this] (QNetworkReply* reply) {
+					QByteArray ba = reply->readAll();
+					QString info(ba);
+					info = info.replace(QLatin1Char('\n'), QLatin1String("<br>"));
+					ui.lInfo->setText(ui.lInfo->text() + info);
+				}
+				);
+				manager->get(QNetworkRequest(QUrl(m_datasetObject["description_url"].toString())));
+			} else
+				info += m_datasetObject["description"].toString();
 		} else
 			info += m_datasetObject["description"].toString();
 	} else

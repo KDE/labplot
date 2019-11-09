@@ -108,6 +108,7 @@
                     "datasets": [
                         {
                             "description": "The dataset consists of a few variables that may influence the demand for Beef in the United States.  It provides an example of the influence of inflation in monetary time series data as well as providing some interesting statistical features in building demand models in regression.",
+                            "description_url": "http://jse.amstat.org/v22n1/kopcso/BeefDemandDoc.txt",
                             "url": "http://jse.amstat.org/v22n1/kopcso/BeefDemand.txt",
                             "filename": "BeefDemand",
                             "name": "Beef Demand",
@@ -150,10 +151,12 @@
                         },
                         {
                             "description": "The dataset bestbuy.day contains monthly data on computer usage \n(MIPS) and total number of stores from August 1996 to July 2000. \nAdditionally, information on the planned number of stores through \nDecember 2001 is available. These data can be used to compare \ntime-series forecasting with trend and seasonality components and \ncausal forecasting based on simple linear regression. The simple \nlinear regression model exhibits unequal error variances, suggesting \na transformation of Y.",
+                            "description_url": "http://jse.amstat.org/datasets/bestbuy.txt",
                             "url": "http://jse.amstat.org/datasets/bestbuy.dat.txt",
-                            "filename": "Best_Buy",
+                            "filename": "BestBuy",
                             "name": " BestBuy",
-                            "separator": "SPACE"
+                            "separator": "SPACE",
+                            "columns": ["Date dd-mm-yyyy, August 1996 - July 2000", "MIPS usage (MIPS are a measure of computing resources)", "Number of stores", "Date dd-mm-yyyy, July 2000 - December 2001", "Planned Number of Stores through December 2001"]
                         },
                         {
                             "description": "The dollar amount for a monthly (January 1991 through December 2000) \nhousehold electric bill is presented as a time series. In addition, \npotential explanatory variables are included. Twelve representative \nmonthly values are provided for the average temperature, for \nheating degree days, and for cooling degree days (not for each \nmonth for each year). Additional variables give the family size \neach month and indicate when a new electric meter and new heating \nand cooling equipment was installed. To convert the billing amount \nto estimated power consumption, a tiered rate function (supplied \nin the accompanying Instructor's Manual) and the costs of \nassociated riders (provided here) must be used. Consumption \nestimates resulting from this information are supplied.\t",
@@ -199,18 +202,25 @@
                             "columns": ["Company", "Test number", "Year of test", "No. of bearings", "Load (P)", "No. of balls (Z)", "Diameter (D)", "L10", "L50", "Weibull slope", "Bearing type"]
                         },
                         {
-                            "description": "http://jse.amstat.org/datasets/baseball.txt",
+                            "description": "We consider as our population of interest the set of Major League Baseball players who played at least one game in both the 1991 and 1992 seasons, excluding pitchers. This dataset contains the 1992 salaries for that population, along with performance measures for each player from 1991. Four categorical variables indicate how free each player was to move to other teams.",
+                            "description_url": "http://jse.amstat.org/datasets/baseball.txt",
                             "url": "http://jse.amstat.org/datasets/baseball.dat.txt",
-                            "filename": "baseball_",
+                            "filename": "baseball",
                             "name": "baseball",
-                            "separator": "SPACE"
+                            "separator": "SPACE",
+                            "columns": ["Salary (in thousands of dollars)", "Batting average", "On-base percentage (OBP)", "Number of runs", "Number of hits",
+                            "Number of doubles", "Number of triples", "Number of home runs", "Number of runs batted in (RBI)", "Number of walks",
+                            "Number of strike-outs", "Number of stolen bases", "Number of errors",  "Indicator of \"free agency eligibility\"", "Indicator of \"free agent in 1991/2\"",
+                            "Indicator of \"arbitration eligibility\"", "Indicator of \"arbitration in 1991/2\"", "Player's name (in quotation marks)"]
                         },
                         {
-                            "description": "This data set contains every NCAA Basketball Tournament game \never played. The tournament has been held every year since 1939.",
+                            "description": "This data set contains every NCAA Basketball Tournament game ever played. The tournament has been held every year since 1939.",
+                            "description_url": "http://jse.amstat.org/datasets/basketball.txt",
                             "url": "http://jse.amstat.org/datasets/basketball.dat.txt",
                             "filename": "Basketball",
                             "name": "NCAA Basketball Tournament Data",
-                            "separator": "SPACE"
+                            "separator": "SPACE",
+                            "columns": ["Year", "Winning School Columns", "Winning Score", "Losing School", "Losing Score"]
                         },
                         {
                             "description": "Data are provided for Barry Bonds' plate appearances in the 2001\nbaseball season.  Variables include characteristics of the innings\nbefore the first pitch to Bonds (e.g., the number of outs, the number\nof runners on each base, the score, the opposing pitcher's earned run\naverage) and after the first pitch to Bonds (e.g., the outcome of the\nappearance, how many runs scored in the inning after Bonds hits).",
@@ -333,6 +343,22 @@
                             "columns": ["Function Point Count", "Work Hours", "Operating System: (0) Unix, (1) MVS", "Database Management System: (1) IDMS, (2) IMS, (3) INFORMIX, (4) INGRESS, (5) Other", "Language: (1) COBOL, (2) PLI, (3) C, (4) Other"]
                         },
                         {
+                            "description": "The dataset contains information for the construction of a three-way table that illustrates Simpson's Paradox. Categorical variables observed for babies born in a metropolitan area of South Africa include race, whether or not the mother had medical aid (which is similar to health insurance), and whether or not the child was included in a follow-up study. The data are provided in two formats. The file birthtotena.dat contains the category labels and cell frequencies for the three-way table.  The file birthtotenb.dat lists each case on a separate line with three variables that indicate whether or not the mother had medical aid, whether or not the mother was traced for the five-year interview, and race.",
+                            "description_url": "http://jse.amstat.org/datasets/birthtoten.txt",
+                            "url": "http://jse.amstat.org/datasets/birthtotena.dat.txt",
+                            "filename": "birthtotena",
+                            "name": "Simpson's Paradox: An Example From a Longitudinal Study in South Africa",
+                            "columns": ["Aid/NoAid", "Traced/NotTraced", "White/Black"]
+                        },
+                        {
+                            "description": "The dataset contains information for the construction of a three-way table that illustrates Simpson's Paradox. Categorical variables observed for babies born in a metropolitan area of South Africa include race, whether or not the mother had medical aid (which is similar to health insurance), and whether or not the child was included in a follow-up study. The data are provided in two formats. The file birthtotena.dat contains the category labels and cell frequencies for the three-way table.  The file birthtotenb.dat lists each case on a separate line with three variables that indicate whether or not the mother had medical aid, whether or not the mother was traced for the five-year interview, and race.",
+                            "description_url": "http://jse.amstat.org/datasets/birthtoten.txt",
+                            "url": "http://jse.amstat.org/datasets/birthtotenb.dat.txt",
+                            "filename": "birthtotenb",
+                            "name": "Simpson's Paradox: An Example From a Longitudinal Study in South Africa",
+                            "columns": ["Medical Aid? (0 = No, 1 = Yes)", "Traced? (0 = No, 1 = Five-Year Group)", "Race (1 = White, 2 = Black)"]
+                        },
+                        {
                             "description": "In many statistical models the normal distribution of the response is an essential assumption.\nThis paper uses a dataset of 2000 euro coins with information (up to the milligram) about\nthe weight of each coin. As the physical coin production process is subject to a multitude\nof (very small) variability sources, it seems reasonable to expect that the empirical\ndistribution of the weight of euro coins does agree with the normal distribution. Goodness\nof fit tests however show that this is not the case. Moreover, some outliers complicate\nthe analysis. Mixtures of normal distributions and skew normal distributions are fitted\nto the data, revealing that the normality assumption might not hold for those weights.",
                             "url": "http://jse.amstat.org/datasets/euroweight.dat.txt",
                             "filename": "euroweight",
@@ -452,6 +478,22 @@
                             "name": "Televisions, Physicians, and Life Expectancy",
                             "separator": "SPACE",
                             "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "This dataset contains 21 body dimension measurements as well as age, weight, height, and gender on 507 individuals. The 247 men and 260 women were primarily individuals in their twenties and thirties, with a scattering of older men and women, all exercising several hours a week.",
+                            "description_url": "http://jse.amstat.org/datasets/body.txt",
+                            "url": "http://jse.amstat.org/datasets/body.dat.txt",
+                            "filename": "body",
+                            "name": " Exploring Relationships in Body Dimensions",
+                            "separator": "SPACE",
+                            "columns": ["Biacromial diameter", "Biiliac diameter, or \"pelvic breadth\"", "Bitrochanteric diameter", "Chest depth between spine and sternum at nipple level, mid-expiration",
+                            "Chest diameter at nipple level, mid-expiration", "Elbow diameter, sum of two elbows", "Wrist diameter, sum of two wrists",
+                            "Knee diameter, sum of two knees", "Ankle diameter, sum of two ankles", "Shoulder girth over deltoid muscles", "Chest girth, nipple line in males and just above breast tissue in females, mid-expiration",
+                            "Waist girth, narrowest part of torso below the rib cage, average of contracted and relaxed position", "Navel (or \"Abdominal\") girth at umbilicus and iliac crest, iliac crest as a landmark",
+                            "Hip girth at level of bitrochanteric diameter", "Thigh girth below gluteal fold, average of right and left girths", "Bicep girth, flexed, average of right and left girths",
+                            "Forearm girth, extended, palm up, average of right and left girths", "Knee girth over patella, slightly flexed position, average of right and left girths",
+                            "Calf maximum girth, average of right and left girths", "Ankle minimum girth, average of right and left girths", "Wrist minimum girth, average of right and left girths",
+                            "Age (years)", "Weight (kg)", "Height (cm)", "Gender (1 - male, 0 - female)"]
                         }
                     ],
                     "subcategory_name": "Population"
