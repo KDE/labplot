@@ -4,7 +4,7 @@ add_executable (integrationtest IntegrationTest.cpp ../AnalysisTest.cpp ../../Co
 target_link_libraries(integrationtest Qt5::Test)
 target_link_libraries(integrationtest KF5::Archive KF5::XmlGui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
 IF (APPLE)
-	target_link_libraries(differentiationtest KDMacTouchBar)
+	target_link_libraries(integrationtest KDMacTouchBar)
 ENDIF ()
 
 target_link_libraries(integrationtest labplot2lib)
