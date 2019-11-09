@@ -2,6 +2,9 @@ add_executable (asciifiltertest AsciiFilterTest.cpp)
 
 target_link_libraries(asciifiltertest Qt5::Test)
 target_link_libraries(asciifiltertest KF5::Archive KF5::XmlGui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+IF (APPLE)
+	target_link_libraries(asciifiltertest KDMacTouchBar)
+ENDIF ()
 
 IF (Qt5SerialPort_FOUND)
 	target_link_libraries(asciifiltertest Qt5::SerialPort )
