@@ -411,7 +411,6 @@ void MainWin::initActions() {
 	//Undo/Redo-stuff
 	m_undoAction = KStandardAction::undo(this, SLOT(undo()), actionCollection());
 	m_redoAction = KStandardAction::redo(this, SLOT(redo()), actionCollection());
-
 	m_historyAction = new QAction(QIcon::fromTheme("view-history"), i18n("Undo/Redo History"),this);
 	actionCollection()->addAction("history", m_historyAction);
 	connect(m_historyAction, &QAction::triggered, this, &MainWin::historyDialog);
@@ -492,6 +491,20 @@ void MainWin::initActions() {
 	actionCollection()->addAction("toggle_properties_explorer_dock", m_togglePropertiesDockAction);
 
 	connect(docksActions, &QActionGroup::triggered, this, &MainWin::toggleDockWidget);
+
+	//global search
+	QAction* searchAction = new QAction(actionCollection());
+	searchAction->setShortcut(QKeySequence::Find);
+	connect(searchAction, &QAction::triggered, this, [=]() {
+		if (m_project) {
+			if (!m_projectExplorerDock->isVisible()) {
+				m_toggleProjectExplorerDockAction->setChecked(true);
+				toggleDockWidget(m_toggleProjectExplorerDockAction);
+			}
+			m_projectExplorer->search();
+		}
+	});
+	this->addAction(searchAction);
 }
 
 void MainWin::initMenus() {

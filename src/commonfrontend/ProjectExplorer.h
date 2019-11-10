@@ -57,6 +57,7 @@ public:
 	void setProject(Project*);
 	QModelIndex currentIndex() const;
 	void updateSelectedAspects();
+	void search();
 
 private:
 	void createActions();

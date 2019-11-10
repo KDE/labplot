@@ -258,6 +258,10 @@ QModelIndex ProjectExplorer::currentIndex() const {
 	return m_treeView->currentIndex();
 }
 
+void ProjectExplorer::search() {
+	m_leFilter->setFocus();
+}
+
 /*!
 	handles the contextmenu-event of the horizontal header in the tree view.
 	Provides a menu for selective showing and hiding of columns.
