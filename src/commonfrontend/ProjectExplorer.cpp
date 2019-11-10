@@ -43,6 +43,7 @@
 #include <QMenu>
 #include <QMimeData>
 #include <QPushButton>
+#include <QToolButton>
 #include <QTreeView>
 #include <QVBoxLayout>
 
@@ -73,15 +74,12 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) :
 	layoutFilter->setSpacing(0);
 	layoutFilter->setContentsMargins(0, 0, 0, 0);
 
-	QLabel* lFilter = new QLabel(i18n("Search/Filter:"));
-	layoutFilter->addWidget(lFilter);
-
 	m_leFilter = new QLineEdit(m_frameFilter);
 	m_leFilter->setClearButtonEnabled(true);
-	m_leFilter->setPlaceholderText(i18n("Search/Filter text"));
+	m_leFilter->setPlaceholderText(i18n("Search/Filter"));
 	layoutFilter->addWidget(m_leFilter);
 
-	bFilterOptions = new QPushButton(m_frameFilter);
+	bFilterOptions = new QToolButton(m_frameFilter);
 	bFilterOptions->setIcon(QIcon::fromTheme("configure"));
 	bFilterOptions->setCheckable(true);
 	layoutFilter->addWidget(bFilterOptions);

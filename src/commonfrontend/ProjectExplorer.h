@@ -39,7 +39,7 @@ class QFrame;
 class QLabel;
 class QLineEdit;
 class QModelIndex;
-class QPushButton;
+class QToolButton;
 class QSignalMapper;
 class QTreeView;
 class QXmlStreamWriter;
@@ -84,8 +84,7 @@ private:
 
 	QFrame* m_frameFilter;
 	QLineEdit* m_leFilter;
-	QPushButton* bClearFilter;
-	QPushButton* bFilterOptions;
+	QToolButton* bFilterOptions;
 
 private slots:
 	void projectLoaded();
