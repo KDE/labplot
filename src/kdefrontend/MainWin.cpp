@@ -373,24 +373,24 @@ void MainWin::initActions() {
 	connect(m_newLiveDataSourceAction, &QAction::triggered, this, &MainWin::newLiveDataSourceActionTriggered);
 
 	//Import/Export
-	m_importFileAction = new QAction(QIcon::fromTheme("document-import"), i18n("From File"), this);
+	m_importFileAction = new QAction(QIcon::fromTheme("document-import"), i18n("Import from File"), this);
 	actionCollection()->setDefaultShortcut(m_importFileAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
 	m_importFileAction->setWhatsThis(i18n("Import data from a regular file"));
 	actionCollection()->addAction("import_file", m_importFileAction);
 	connect(m_importFileAction, &QAction::triggered, this, [=]() {importFileDialog();});
 
-	m_importSqlAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("From SQL Database"), this);
+	m_importSqlAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Import from SQL Database"), this);
 	m_importSqlAction->setWhatsThis(i18n("Import data from a SQL database"));
 	actionCollection()->addAction("import_sql", m_importSqlAction);
 	connect(m_importSqlAction, &QAction::triggered, this, &MainWin::importSqlDialog);
 
-	m_importLabPlotAction = new QAction(QIcon::fromTheme("document-import"), i18n("LabPlot Project"), this);
+	m_importLabPlotAction = new QAction(QIcon::fromTheme("document-import"), i18n("Import from LabPlot Project"), this);
 	m_importLabPlotAction->setWhatsThis(i18n("Import a project from a LabPlot project file (.lml)"));
 	actionCollection()->addAction("import_labplot", m_importLabPlotAction);
 	connect(m_importLabPlotAction, &QAction::triggered, this, &MainWin::importProjectDialog);
 
 #ifdef HAVE_LIBORIGIN
-	m_importOpjAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Origin Project (OPJ)"), this);
+	m_importOpjAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Import from Origin Project (OPJ)"), this);
 	m_importOpjAction->setWhatsThis(i18n("Import a project from an OriginLab Origin project file (.opj)"));
 	actionCollection()->addAction("import_opj", m_importOpjAction);
 	connect(m_importOpjAction, &QAction::triggered, this, &MainWin::importProjectDialog);
@@ -697,14 +697,6 @@ void MainWin::updateGUIOnProjectChanges() {
 		factory->container("cas_worksheet", this)->setEnabled(false);
 		factory->container("cas_worksheet_toolbar", this)->hide();
 #endif
-
-#ifdef Q_OS_MAC
-	for (auto* action : m_touchBar->actions())
-		m_touchBar->removeAction(action);
-
-	m_touchBar->addAction(m_newProjectAction);
-	m_touchBar->addAction(m_openProjectAction);
-#endif
 	}
 
 	factory->container("new", this)->setEnabled(!b);
@@ -716,6 +708,19 @@ void MainWin::updateGUIOnProjectChanges() {
 	else
 		setCaption(m_project->name());
 
+#ifdef Q_OS_MAC
+	for (auto* action : m_touchBar->actions())
+		m_touchBar->removeAction(action);
+
+	if (b){
+		m_touchBar->addAction(m_newProjectAction);
+		m_touchBar->addAction(m_openProjectAction);
+	} else {
+		m_touchBar->addAction(m_importFileAction);
+		m_touchBar->addAction(m_newWorksheetAction);
+		m_touchBar->addAction(m_newSpreadsheetAction);
+	}
+#endif
 	// undo/redo actions are disabled in both cases - when the project is closed or opened
 	m_undoAction->setEnabled(false);
 	m_redoAction->setEnabled(false);
@@ -739,6 +744,16 @@ void MainWin::updateGUI() {
 		return;
 	}
 
+	//reset the touchbar
+#ifdef Q_OS_MAC
+	for (auto* action : m_touchBar->actions())
+		m_touchBar->removeAction(action);
+
+	m_touchBar->addAction(m_undoAction);
+	m_touchBar->addAction(m_redoAction);
+	m_touchBar->addSeparator();
+#endif
+
 	if (!m_mdiArea->currentSubWindow()) {
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
@@ -758,10 +773,14 @@ void MainWin::updateGUI() {
 		return;
 	}
 
-//clear the touchbar on Mac
+
 #ifdef Q_OS_MAC
-	for (auto* action : m_touchBar->actions())
-		m_touchBar->removeAction(action);
+	if (dynamic_cast<Folder*>(m_currentAspect)) {
+	//if (m_currentAspect->type() == AspectType::Folder) {
+		m_touchBar->addAction(m_newWorksheetAction);
+		m_touchBar->addAction(m_newSpreadsheetAction);
+		m_touchBar->addAction(m_newMatrixAction);
+	}
 #endif
 
 	//Handle the Worksheet-object
@@ -798,8 +817,6 @@ void MainWin::updateGUI() {
 
 		//populate the touchbar on Mac
 #ifdef Q_OS_MAC
-		m_touchBar->addAction(m_exportAction);
-		m_touchBar->addSeparator();
 		view->fillTouchBar(m_touchBar);
 #endif
 		//hide the spreadsheet toolbar
@@ -834,10 +851,8 @@ void MainWin::updateGUI() {
 
 		//populate the touchbar on Mac
 #ifdef Q_OS_MAC
-		m_touchBar->addAction(m_exportAction);
 		m_touchBar->addAction(m_importFileAction);
-		m_touchBar->addSeparator();
-		//view->fillTouchBar(m_touchBar);
+		view->fillTouchBar(m_touchBar);
 #endif
 	} else {
 		factory->container("spreadsheet", this)->setEnabled(false);
@@ -858,9 +873,7 @@ void MainWin::updateGUI() {
 
 		//populate the touchbar on Mac
 #ifdef Q_OS_MAC
-		m_touchBar->addAction(m_exportAction);
 		m_touchBar->addAction(m_importFileAction);
-		m_touchBar->addSeparator();
 		//view->fillTouchBar(m_touchBar);
 #endif
 	} else

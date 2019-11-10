@@ -665,10 +665,9 @@ void WorksheetView::fillToolBar(QToolBar* toolBar) {
 
 #ifdef Q_OS_MAC
 void WorksheetView::fillTouchBar(KDMacTouchBar* touchBar){
-	touchBar->addAction(addCartesianPlot1Action);
+	//touchBar->addAction(addCartesianPlot1Action);
 	touchBar->addAction(zoomInViewAction);
 	touchBar->addAction(zoomOutViewAction);
-	touchBar->addSeparator();
 	touchBar->addAction(showPresenterMode);
 }
 #endif

@@ -80,6 +80,10 @@
 
 #include <algorithm> //for std::reverse
 
+#ifdef Q_OS_MAC
+#include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
+#endif
+
 /*!
 	\class SpreadsheetView
 	\brief View class for Spreadsheet
@@ -648,6 +652,12 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
 		toolBar->addAction(action_sort_desc_column);
 	}
 }
+
+#ifdef Q_OS_MAC
+void SpreadsheetView::fillTouchBar(KDMacTouchBar* touchBar){
+	//touchBar->addAction(action_insert_column_right);
+}
+#endif
 
 /*!
  * Populates the menu \c menu with the spreadsheet and spreadsheet view relevant actions.
