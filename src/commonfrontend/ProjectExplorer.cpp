@@ -430,8 +430,13 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 
 void ProjectExplorer::navigateTo(const QString& path) {
 	const AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	if (tree_model)
-		m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(path));
+	if (tree_model) {
+		const QModelIndex& index = tree_model->modelIndexOfAspect(path);
+		m_treeView->scrollTo(index);
+		m_treeView->setCurrentIndex(index);
+		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		aspect->setSelected(true);
+	}
 }
 
 void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous) {
