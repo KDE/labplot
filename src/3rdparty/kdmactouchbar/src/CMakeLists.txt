@@ -18,7 +18,8 @@ set_target_properties(KDMacTouchBar PROPERTIES
     FRAMEWORK TRUE
     FRAMEWORK_VERSION 1
     MACOSX_FRAMEWORK_IDENTIFIER com.kdab.KDMacTouchBar
-    PUBLIC_HEADER "${HEADERS}"
+# fails building package on binary-factory
+#   PUBLIC_HEADER "${HEADERS}"
     LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib"
     MACOSX_RPATH TRUE
 )
