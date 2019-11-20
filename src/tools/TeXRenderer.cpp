@@ -119,10 +119,11 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	//out << "\\usepackage{mathtools}";
 	out << "\\begin{document}";
 	out << "\\begin{preview}";
-	out << "\\pagecolor[rgb]{" << backgroundColor.redF() << ',' << backgroundColor.greenF() << ',' << backgroundColor.blueF() << "}";
+	out << "\\colorbox[rgb]{" << backgroundColor.redF() << ',' << backgroundColor.greenF() << ',' << backgroundColor.blueF() << "}{";
 	out << "\\fontsize{" << QString::number(fontSize) << "}{" << QString::number(fontSize) << "}\\selectfont";
 	out << "\\color[rgb]{" << fontColor.redF() << ',' << fontColor.greenF() << ',' << fontColor.blueF() << "}";
 	out << body;
+	out << "}";
 	out << "\\end{preview}";
 	out << "\\end{document}";
 	out.flush();
