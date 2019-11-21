@@ -455,24 +455,34 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	//if no selection is done, apply the new color for the whole label,
-	//apply to the currently selected part of the text only otherwise
-	QTextCursor c = ui.teLabel->textCursor();
-	if (c.selectedText().isEmpty())
-		ui.teLabel->selectAll();
+	if (!m_teXEnabled && m_label->text().teXUsed) {
+		//if no selection is done, apply the new color for the whole label,
+		//apply to the currently selected part of the text only otherwise
+		QTextCursor c = ui.teLabel->textCursor();
+		if (c.selectedText().isEmpty())
+			ui.teLabel->selectAll();
 
-	ui.teLabel->setTextColor(color);
+		ui.teLabel->setTextColor(color);
+	} else {
+		for (auto* label : m_labelsList)
+			label->setFontColor(color);
+	}
 }
 
 void LabelWidget::backgroundColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	QTextCursor c = ui.teLabel->textCursor();
-	if (c.selectedText().isEmpty())
-		ui.teLabel->selectAll();
+	if (!m_teXEnabled && m_label->text().teXUsed) {
+		QTextCursor c = ui.teLabel->textCursor();
+		if (c.selectedText().isEmpty())
+			ui.teLabel->selectAll();
 
-	ui.teLabel->setTextBackgroundColor(color);
+		ui.teLabel->setTextBackgroundColor(color);
+	} else {
+		for (auto* label : m_labelsList)
+			label->setBackgroundColor(color);
+	}
 }
 
 void LabelWidget::fontSizeChanged(int value) {
