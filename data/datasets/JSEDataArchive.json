@@ -493,10 +493,12 @@
                         },
                         {
                             "description": "In many statistical models the normal distribution of the response is an essential assumption.\nThis paper uses a dataset of 2000 euro coins with information (up to the milligram) about\nthe weight of each coin. As the physical coin production process is subject to a multitude\nof (very small) variability sources, it seems reasonable to expect that the empirical\ndistribution of the weight of euro coins does agree with the normal distribution. Goodness\nof fit tests however show that this is not the case. Moreover, some outliers complicate\nthe analysis. Mixtures of normal distributions and skew normal distributions are fitted\nto the data, revealing that the normality assumption might not hold for those weights.",
+                            "description_url": "http://jse.amstat.org/datasets/euroweight.txt",
                             "url": "http://jse.amstat.org/datasets/euroweight.dat.txt",
                             "filename": "euroweight",
                             "name": "The Weight of Euro Coins",
-                            "separator": "SPACE"
+                            "separator": "TAB",
+                            "columns": ["ID", "weight in grams", "batch"]
                         },
                         {
                             "description": "Title, year of release, length in minutes, number of cast members listed, rating, and number of lines \nof description are recorded for a simple random sample of 100 movies.  One can use the sample to obtain base-line information \non the movie guide from which the data were collected.  The dataset also illustrates two paradoxes for associations between \nthree variables:  non-transitivity of positive correlation and Simpson's paradox.  SOURCE: The data were taken as a simple \nrandom sample of the approximately 19,000 movies (not including made-for-TV movies) in Leonard Maltin's Movie and Video \nGuide, 1996.  ",
