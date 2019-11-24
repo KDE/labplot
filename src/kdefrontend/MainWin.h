@@ -280,6 +280,7 @@ private slots:
 	void importFileDialog(const QString& fileName = QString());
 	void importSqlDialog();
 	void importProjectDialog();
+	void importDatasetDialog();
 	void exportDialog();
 	void editFitsFileDialog();
 	void settingsDialog();
@@ -302,7 +303,6 @@ private slots:
 	void newDatapicker();
 	//TODO: void newScript();
 	void newLiveDataSourceActionTriggered();
-	void newDatasetActionTriggered();
 
 	void createContextMenu(QMenu*) const;
 	void createFolderContextMenu(const Folder*, QMenu*) const;

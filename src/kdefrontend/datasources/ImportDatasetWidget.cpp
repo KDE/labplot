@@ -58,7 +58,8 @@
  */
 ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	m_categoryCompleter(new QCompleter),
-	m_datasetCompleter(new QCompleter) {
+	m_datasetCompleter(new QCompleter),
+	m_networkManager(new QNetworkAccessManager(this)) {
 
 	ui.setupUi(this);
 
@@ -97,6 +98,8 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	connect(ui.bNewDataset, &QPushButton::clicked, this, &ImportDatasetWidget::showDatasetMetadataManager);
 	connect(ui.lwDatasets, &QListWidget::itemSelectionChanged, [this]() { datasetChanged(); });
 	connect(ui.lwDatasets, &QListWidget::doubleClicked, [this]() {emit datasetDoubleClicked(); });
+
+	connect(m_networkManager, &QNetworkAccessManager::finished, this, &ImportDatasetWidget::downloadFinished);
 
 	ui.bRefresh->hide();
 	ui.bClearCache->hide();
@@ -404,7 +407,7 @@ QString ImportDatasetWidget::getSelectedDataset() const {
  * @brief Initiates the processing of the dataset's metadata file and of the dataset itself.
  * @param datasetHandler the DatasetHanlder that downloads processes the dataset
  */
-void ImportDatasetWidget::loadDatasetToProcess(DatasetHandler* datasetHandler) {
+void ImportDatasetWidget::import(DatasetHandler* datasetHandler) {
 	datasetHandler->processMetadata(m_datasetObject);
 }
 
@@ -832,23 +835,9 @@ void ImportDatasetWidget::datasetChanged() {
 
 		if (m_datasetObject.contains("description_url")) {
 			WAIT_CURSOR;
-			QNetworkAccessManager* manager = new QNetworkAccessManager(this);
-			if (manager->networkAccessible() == QNetworkAccessManager::Accessible) {
-				connect(manager, &QNetworkAccessManager::finished, [this] (QNetworkReply* reply) {
-					RESET_CURSOR;
-					if (reply->error() == QNetworkReply::NoError) {
-						QByteArray ba = reply->readAll();
-						QString info(ba);
-						info = info.replace(QLatin1Char('\n'), QLatin1String("<br>"));
-						ui.lInfo->setText(ui.lInfo->text() + info);
-					} else {
-						DEBUG("Failed to fetch the description.");
-						ui.lInfo->setText(ui.lInfo->text() + m_datasetObject["description"].toString());
-					}
-				}
-				);
-				manager->get(QNetworkRequest(QUrl(m_datasetObject["description_url"].toString())));
-			} else
+			if (m_networkManager->networkAccessible() == QNetworkAccessManager::Accessible)
+				m_networkManager->get(QNetworkRequest(QUrl(m_datasetObject["description_url"].toString())));
+			else
 				info += m_datasetObject["description"].toString();
 		} else
 			info += m_datasetObject["description"].toString();
@@ -857,4 +846,18 @@ void ImportDatasetWidget::datasetChanged() {
 
 	ui.lInfo->setText(info);
 	emit datasetSelected();
+}
+
+void ImportDatasetWidget::downloadFinished(QNetworkReply* reply) {
+	if (reply->error() == QNetworkReply::NoError) {
+		QByteArray ba = reply->readAll();
+		QString info(ba);
+		info = info.replace(QLatin1Char('\n'), QLatin1String("<br>"));
+		ui.lInfo->setText(ui.lInfo->text() + info);
+	} else {
+		DEBUG("Failed to fetch the description.");
+		ui.lInfo->setText(ui.lInfo->text() + m_datasetObject["description"].toString());
+	}
+	reply->deleteLater();
+	RESET_CURSOR;
 }

@@ -539,7 +539,7 @@ void MainWin::initActions() {
 	m_importDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("database-index")), i18n("From Dataset Collection"), this);
 	m_importDatasetAction->setWhatsThis(i18n("Imports data from an online dataset"));
 	actionCollection()->addAction("import_dataset_datasource", m_importDatasetAction);
-	connect(m_importDatasetAction, &QAction::triggered, this, &MainWin::newDatasetActionTriggered);
+	connect(m_importDatasetAction, &QAction::triggered, this, &MainWin::importDatasetDialog);
 
 	m_importLabPlotAction = new QAction(QIcon::fromTheme("project-open"), i18n("LabPlot Project"), this);
 	m_importLabPlotAction->setWhatsThis(i18n("Import a project from a LabPlot project file (.lml)"));
@@ -2113,6 +2113,35 @@ void MainWin::importProjectDialog() {
 }
 
 /*!
+ * \brief opens a dialog to import datasets
+ */
+void MainWin::importDatasetDialog() {
+	ImportDatasetDialog* dlg = new ImportDatasetDialog(this);
+	if (dlg->exec() == QDialog::Accepted) {
+			Spreadsheet* spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
+			DatasetHandler* dataset = new DatasetHandler(spreadsheet);
+			dlg->importToDataset(dataset, statusBar());
+
+			QTimer timer;
+			timer.setSingleShot(true);
+			QEventLoop loop;
+			connect(dataset,  &DatasetHandler::downloadCompleted, &loop, &QEventLoop::quit);
+			connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+			timer.start(1500);
+			loop.exec();
+
+			if(timer.isActive()){
+				timer.stop();
+				addAspectToProject(spreadsheet);
+				delete dataset;
+			}
+			else
+				delete dataset;
+	}
+	delete dlg;
+}
+
+/*!
   opens the dialog for the export of the currently active worksheet, spreadsheet or matrix.
  */
 void MainWin::exportDialog() {
@@ -2169,35 +2198,6 @@ void MainWin::newLiveDataSourceActionTriggered() {
 			dlg->importToLiveDataSource(dataSource, statusBar());
 			addAspectToProject(dataSource);
 		}
-	}
-	delete dlg;
-}
-
-/*!
- * \brief adds a new dataset to the current project
- */
-void MainWin::newDatasetActionTriggered() {
-	ImportDatasetDialog* dlg = new ImportDatasetDialog(this);
-	if (dlg->exec() == QDialog::Accepted) {
-			Spreadsheet* spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
-			DatasetHandler* dataset = new DatasetHandler(spreadsheet);
-			dlg->importToDataset(dataset, statusBar());
-
-			QTimer timer;
-			timer.setSingleShot(true);
-			QEventLoop loop;
-			connect(dataset,  &DatasetHandler::downloadCompleted, &loop, &QEventLoop::quit);
-			connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-			timer.start(1500);
-			loop.exec();
-
-			if(timer.isActive()){
-				timer.stop();
-				addAspectToProject(spreadsheet);
-				delete dataset;
-			}
-			else
-				delete dataset;
 	}
 	delete dlg;
 }

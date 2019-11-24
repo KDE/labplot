@@ -1,9 +1,10 @@
 /***************************************************************************
-File		: DatasetHandler.cpp
-Project		: LabPlot
-Description	: Processes a dataset's metadata file
---------------------------------------------------------------------
-Copyright	: (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
+    File                 : DatasetHandler.cpp
+    Project              : LabPlot
+    Description          : Processes a dataset's metadata file
+    --------------------------------------------------------------------
+    Copyright            : (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
+    Copyright            : (C) 2019 by Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 
@@ -33,9 +34,9 @@ Copyright	: (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
 #include <QDir>
 #include <QFile>
 #include <QJsonArray>
-#include <QJsonDocument>
+// #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonValue>
+// #include <QJsonValue>
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QtNetwork/QNetworkAccessManager>
@@ -50,7 +51,6 @@ Copyright	: (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
 */
 DatasetHandler::DatasetHandler(Spreadsheet* spreadsheet) : m_spreadsheet(spreadsheet),
 	m_filter(new AsciiFilter),
-	m_object(nullptr),
 	m_downloadManager(new QNetworkAccessManager) {
 	connect(m_downloadManager, &QNetworkAccessManager::finished, this, &DatasetHandler::downloadFinished);
 	connect(this, &DatasetHandler::downloadCompleted, this, &DatasetHandler::processDataset);
@@ -67,7 +67,7 @@ DatasetHandler::~DatasetHandler() {
  */
 void DatasetHandler::processMetadata(const QJsonObject& object) {
 	m_object = new QJsonObject(object);
-	qDebug("Start processing dataset...");
+	DEBUG("Start processing dataset...");
 
 	if(!m_object->isEmpty()) {
 		configureFilter();
@@ -81,7 +81,7 @@ void DatasetHandler::processMetadata(const QJsonObject& object) {
  */
 void DatasetHandler::markMetadataAsInvalid() {
 	m_invalidMetadataFile = true;
-	QMessageBox::critical(0, "Invalid metadata file", "The metadata file for the choosen dataset is invalid!");
+	QMessageBox::critical(0, i18n("Invalid metadata file"), i18n("The metadata file for the selected dataset is invalid."));
 }
 
 /**
@@ -131,7 +131,7 @@ void DatasetHandler::configureFilter() {
 			m_filter->setVectorNames(columnNames);
 		}
 	} else {
-		qDebug() << "Empty object";
+		DEBUG("Empty object");
 		markMetadataAsInvalid();
 	}
 }
@@ -140,14 +140,30 @@ void DatasetHandler::configureFilter() {
  * @brief Configures the spreadsheet based on the metadata file.
  */
 void DatasetHandler::configureSpreadsheet() {
-	qDebug("Conf spreadsheet");
+	DEBUG("Start preparing spreadsheet");
 	if(!m_object->isEmpty()) {
 		if(m_object->contains("name"))
 			m_spreadsheet->setName( m_object->value("name").toString());
 		else
 			markMetadataAsInvalid();
 
-		if(m_object->contains("description"))
+		if (m_object->contains("description_url")) {
+			QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+			connect(manager, &QNetworkAccessManager::finished, [this] (QNetworkReply* reply) {
+				if (reply->error() == QNetworkReply::NoError) {
+					QByteArray ba = reply->readAll();
+					QString info(ba);
+					m_spreadsheet->setComment(info);
+				} else {
+					DEBUG("Failed to fetch the description.");
+					if(m_object->contains("description"))
+						m_spreadsheet->setComment(m_object->value("description").toString());
+				}
+				reply->deleteLater();
+			}
+			);
+			manager->get(QNetworkRequest(QUrl(m_object->value("description_url").toString())));
+		} else if(m_object->contains("description"))
 			m_spreadsheet->setComment(m_object->value("description").toString());
 	} else {
 		markMetadataAsInvalid();
@@ -158,7 +174,7 @@ void DatasetHandler::configureSpreadsheet() {
  * @brief Extracts the download URL of the dataset and initiates the process of download.
  */
 void DatasetHandler::prepareForDataset() {
-	qDebug("Start downloading dataset");
+	DEBUG("Start downloading dataset");
 	if(!m_object->isEmpty()) {
 		if(m_object->contains("url")) {
 			const QString& url =  m_object->value("url").toString();
@@ -179,7 +195,7 @@ void DatasetHandler::prepareForDataset() {
  * @param url the download URL of the dataset
  */
 void DatasetHandler::doDownload(const QUrl& url) {
-	qDebug("Download request");
+	DEBUG("Download request");
 	QNetworkRequest request(url);
 	m_currentDownload = m_downloadManager->get(request);
 	connect(m_currentDownload, &QNetworkReply::downloadProgress, [this] (qint64 bytesReceived, qint64 bytesTotal) {
@@ -197,7 +213,7 @@ void DatasetHandler::doDownload(const QUrl& url) {
  * @brief Called when the download of the dataset is finished.
  */
 void DatasetHandler::downloadFinished(QNetworkReply* reply) {
-	qDebug("Download finished");
+	DEBUG("Download finished");
 	const QUrl& url = reply->url();
 	if (reply->error()) {
 		qDebug("Download of %s failed: %s\n",
@@ -288,21 +304,15 @@ bool DatasetHandler::saveToDisk(const QString& filename, QIODevice* data) {
  */
 void DatasetHandler::processDataset() {
 	m_filter->readDataFromFile(m_fileName, m_spreadsheet);
-	configureColumns();
-}
 
-/**
- * @brief Configures the columns of the spreadsheet, based on the metadata file.
- */
-void DatasetHandler::configureColumns() {
-	if(!m_object->isEmpty()) {
-		int index = 0;
-		const int columnsCount = m_spreadsheet->columnCount();
-		while(m_object->contains(i18n("column_description_%1", index)) && (index < columnsCount)) {
-			m_spreadsheet->column(index)->setComment(m_object->value(i18n("column_description_%1", index)).toString());
-			++index;
-		}
-	} else {
-		qDebug("Invalid Json document");
-	}
+	//set column comments/descriptions, if available
+	//TODO:
+// 	if(!m_object->isEmpty()) {
+// 		int index = 0;
+// 		const int columnsCount = m_spreadsheet->columnCount();
+// 		while(m_object->contains(i18n("column_description_%1", index)) && (index < columnsCount)) {
+// 			m_spreadsheet->column(index)->setComment(m_object->value(i18n("column_description_%1", index)).toString());
+// 			++index;
+// 		}
+// 	}
 }

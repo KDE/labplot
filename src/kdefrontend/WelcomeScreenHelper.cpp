@@ -137,7 +137,7 @@ void WelcomeScreenHelper::datasetClicked(const QString& category, const QString&
 		delete m_datasetHandler;
 	m_datasetHandler = new DatasetHandler(m_spreadsheet.get());
 
-	m_datasetWidget->loadDatasetToProcess(m_datasetHandler);
+	m_datasetWidget->import(m_datasetHandler);
 
 	QTimer timer;
 	timer.setSingleShot(true);

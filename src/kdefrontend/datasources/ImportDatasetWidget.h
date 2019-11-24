@@ -36,9 +36,11 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
-class QCompleter;
 class DatasetHandler;
 class DatasetModel;
+class QCompleter;
+class QNetworkAccessManager;
+class QNetworkReply;
 
 typedef QMap< QString, QMap<QString, QMap<QString, QVector<QString>>>> DatasetsMap;
 
@@ -50,7 +52,7 @@ public:
 	~ImportDatasetWidget() override;
 
 	QString getSelectedDataset() const;
-	void loadDatasetToProcess(DatasetHandler*);
+	void import(DatasetHandler*);
 	const DatasetsMap& getDatasetsMap();
 	void setCollection(const QString&);
 	void setCategory(const QString&);
@@ -69,6 +71,7 @@ private:
 	QString m_selectedCategory;
 	QString m_selectedCollection;
 	DatasetModel* m_datasetModel{nullptr};
+	QNetworkAccessManager* m_networkManager;
 
 	QJsonArray m_collections;
 	QJsonObject m_datasetObject;
@@ -91,6 +94,7 @@ private slots:
 	void scrollToCategoryTreeItem(const QString&);
 	void scrollToDatasetListItem(const QString&);
 	void showDatasetMetadataManager();
+	void downloadFinished(QNetworkReply*);
 // 	void refreshCategories();
 // 	void clearCache();
 // 	void restoreBackup();

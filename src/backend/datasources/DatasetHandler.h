@@ -47,7 +47,7 @@ public:
 private:
 	Spreadsheet* m_spreadsheet;
 	AsciiFilter* m_filter;
-	QJsonObject*  m_object;
+	QJsonObject*  m_object{nullptr};
 	QNetworkAccessManager* m_downloadManager;
 	QNetworkReply* m_currentDownload;
 	QString m_fileName;
@@ -64,7 +64,6 @@ private:
 	QString saveFileName(const QUrl&);
 	bool saveToDisk(const QString& filename, QIODevice*);
 	void markMetadataAsInvalid();
-	void configureColumns();
 
 private slots:
 	void downloadFinished(QNetworkReply*);

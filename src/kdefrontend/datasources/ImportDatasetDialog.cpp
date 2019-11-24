@@ -108,7 +108,7 @@ void ImportDatasetDialog::importToDataset(DatasetHandler* datasetHandler, QStatu
 	QTime timer;
 	timer.start();
 
-	m_importDatasetWidget->loadDatasetToProcess(datasetHandler);
+	m_importDatasetWidget->import(datasetHandler);
 
 	statusBar->showMessage(i18n("Dataset imported in %1 seconds.", static_cast<float>(timer.elapsed()/1000)));
 	RESET_CURSOR;
