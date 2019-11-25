@@ -873,7 +873,7 @@ The menu is only available when a datapicker object is selected on the <guilabel
 
 <para>This menu gives you the ability to change user settings.</para>
 
-<para>Apart from the common &kde; Settings menu entries described in the <ulink url="help:/fundamentals/ui.html#menus-settings">Settings Menu</ulink> chapter of the &kde; Fundamentals &LabPlot; has this application specific menu entry:
+<para>Apart from the common &kde; Settings menu entries described in the <ulink url="help:/fundamentals/menus.html#menus-settings">Settings Menu</ulink> chapter of the &kde; Fundamentals &LabPlot; has this application specific menu entry:
 </para>
 
 <variablelist>
@@ -892,7 +892,7 @@ The menu is only available when a datapicker object is selected on the <guilabel
 <title>The Help Menu</title>
 
 <para>
-  Additionally, &LabPlot; has the common &kde; Help menu items. For more information, read the section about the <ulink url="help:/fundamentals/ui.html#menus-help">Help Menu</ulink> of the &kde; Fundamentals.
+  Additionally, &LabPlot; has the common &kde; Help menu items. For more information, read the section about the <ulink url="help:/fundamentals/menus.html#menus-help">Help Menu</ulink> of the &kde; Fundamentals.
 </para>
 
 </sect1>
