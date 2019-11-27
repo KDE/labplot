@@ -30,6 +30,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "kdefrontend/GuiTools.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "tools/TeXRenderer.h"
 
 #include <QMenu>
@@ -300,6 +301,8 @@ void LabelWidget::setNoGeometryMode(const bool b) {
 void LabelWidget::textChanged() {
 	if (m_initializing)
 		return;
+
+	const Lock lock(m_initializing);
 
 	if (ui.tbTexUsed->isChecked()) {
 		QString text = ui.teLabel->toPlainText();
@@ -875,7 +878,8 @@ void LabelWidget::borderOpacityChanged(int value) {
 //****** SLOTs for changes triggered in TextLabel *********
 //*********************************************************
 void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
-	m_initializing = true;
+	if (m_initializing)return;
+	const Lock lock(m_initializing);
 
 	//save and restore the current cursor position after changing the text
 	QTextCursor cursor = ui.teLabel->textCursor();
@@ -890,7 +894,6 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
 
 	ui.tbTexUsed->setChecked(text.teXUsed);
 	this->teXUsedChanged(text.teXUsed);
-	m_initializing = false;
 }
 
 /*!
