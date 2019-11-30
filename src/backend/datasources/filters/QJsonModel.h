@@ -47,9 +47,11 @@ public:
 	void setKey(const QString& key);
 	void setValue(const QString& value);
 	void setType(const QJsonValue::Type type);
+	void setSize(int);
 	QString key() const;
 	QString value() const;
 	QJsonValue::Type type() const;
+	int size() const;
 
 	static QJsonTreeItem* load(const QJsonValue& value, QJsonTreeItem* parent = nullptr);
 
@@ -57,6 +59,7 @@ private:
 	QString mKey;
 	QString mValue;
 	QJsonValue::Type mType{QJsonValue::Undefined};
+	int mSize;
 	QList<QJsonTreeItem*> mChilds;
 	QJsonTreeItem* mParent;
 };
