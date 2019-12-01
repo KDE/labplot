@@ -102,6 +102,12 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp
 )
 
+if(APPLE)
+  list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/worksheet/PresenterWidget_mac.mm)
+  list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/worksheet/DynamicPresenterWidget_mac.mm)
+endif()
+
+
 set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/constantswidget.ui
 	${KDEFRONTEND_DIR}/ui/functionswidget.ui

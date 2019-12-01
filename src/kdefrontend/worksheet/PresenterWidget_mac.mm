@@ -1,7 +1,7 @@
 /***************************************************************************
-File                 : PresenterWidget.h
+File                 : PresenterWidget_mac.mm
 Project              : LabPlot
-Description          : Widget for static presenting of worksheets
+Description          : Reimplementation of QWidget::closeEvent() to workaround QTBUG-46701
 --------------------------------------------------------------------
 Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
@@ -24,40 +24,23 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
-#ifndef PRESENTERWIDGET_H
-#define PRESENTERWIDGET_H
+#include "PresenterWidget.h"
+#include <AppKit/AppKit.h>
 
-#include <QWidget>
+//After closing a widget/window where showFullScreen() was called before, we are left on macOS
+//with a black screen (https://bugreports.qt.io/browse/QTBUG-46701).
+//Explicitely close the native window to workaround this problem.
 
-class QLabel;
-class QTimeLine;
-class QPushButton;
-class SlidingPanel;
+void PresenterWidget::closeEvent(QCloseEvent* event) {
+	QWidget::closeEvent(event);
 
-class PresenterWidget : public QWidget {
-	Q_OBJECT
+	NSView* view = reinterpret_cast<NSView*>(winId());
+	if (view == nil)
+		return;
 
-public:
-	explicit PresenterWidget(const QPixmap& pixmap, const QString& worksheetName, QWidget *parent = nullptr);
-	~PresenterWidget() override;
+	NSWindow* window = view.window;
+	if (window == nil)
+		return;
 
-private:
-	QLabel* m_imageLabel;
-	QTimeLine* m_timeLine;
-	SlidingPanel* m_panel;
-	void startTimeline();
-
-protected:
-	void keyPressEvent(QKeyEvent*) override;
-	void focusOutEvent(QFocusEvent*) override;
-	bool eventFilter(QObject*, QEvent*) override;
-#ifdef Q_OS_MAC
-	void closeEvent(QCloseEvent*) override;
-#endif
-
-private slots:
-	void slideDown();
-	void slideUp();
-};
-
-#endif // PRESENTERWIDGET_H
+	[window close];
+}
