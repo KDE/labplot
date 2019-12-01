@@ -3,7 +3,7 @@ File                 : PresenterWidget_mac.mm
 Project              : LabPlot
 Description          : Reimplementation of QWidget::closeEvent() to workaround QTBUG-46701
 --------------------------------------------------------------------
-Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2019 by Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
 /***************************************************************************
