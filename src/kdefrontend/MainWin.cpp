@@ -188,6 +188,7 @@ void MainWin::initGUI(const QString& fileName) {
 #ifdef Q_OS_MAC
 	setupGUI(Default, QLatin1String("/Applications/labplot2.app/Contents/Resources/labplot2ui.rc"));
 	m_touchBar = new KDMacTouchBar(this);
+	//m_touchBar->setTouchButtonStyle(KDMacTouchBar::IconOnly);
 #else
 	setupGUI(Default, KXMLGUIClient::xmlFile());	// should be "labplot2ui.rc"
 #endif
@@ -709,8 +710,7 @@ void MainWin::updateGUIOnProjectChanges() {
 		setCaption(m_project->name());
 
 #ifdef Q_OS_MAC
-	for (auto* action : m_touchBar->actions())
-		m_touchBar->removeAction(action);
+	m_touchBar->clear();
 
 	if (b){
 		m_touchBar->addAction(m_newProjectAction);
@@ -746,8 +746,7 @@ void MainWin::updateGUI() {
 
 	//reset the touchbar
 #ifdef Q_OS_MAC
-	for (auto* action : m_touchBar->actions())
-		m_touchBar->removeAction(action);
+	m_touchBar->clear();
 
 	m_touchBar->addAction(m_undoAction);
 	m_touchBar->addAction(m_redoAction);
