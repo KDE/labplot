@@ -70,6 +70,7 @@ public:
 
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
+	void exportToClipboard(const ExportFormat, const ExportArea, const bool, const int);
 	void exportToClipboard();
 	void setIsClosing();
 	void setIsBeingPresented(bool presenting);
@@ -172,8 +173,8 @@ private:
 	QAction* addCartesianPlot3Action{nullptr};
 	QAction* addCartesianPlot4Action{nullptr};
 	QAction* addTextLabelAction{nullptr};
+	QAction* addImageAction{nullptr};
 	QAction* addHistogram{nullptr};
-	QAction* addBarChartPlot{nullptr};
 
 	QAction* verticalLayoutAction{nullptr};
 	QAction* horizontalLayoutAction{nullptr};
