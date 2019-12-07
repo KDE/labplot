@@ -47,6 +47,18 @@ public:
 
 	enum WorksheetElementName {NameCartesianPlot = 1};
 
+	enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
+	enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
+
+	enum HorizontalAlignment {hAlignLeft, hAlignCenter, hAlignRight};
+	enum VerticalAlignment {vAlignTop, vAlignCenter, vAlignBottom};
+
+	struct PositionWrapper {
+		QPointF point;
+		WorksheetElement::HorizontalPosition horizontalPosition;
+		WorksheetElement::VerticalPosition verticalPosition;
+	};
+
 	virtual QGraphicsItem* graphicsItem() const = 0;
 	virtual void setZValue(qreal);
 	virtual void setVisible(bool on) = 0;
