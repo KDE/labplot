@@ -66,6 +66,7 @@ enum class AspectType : quint64 {
 		Histogram = 0x0210008,
 		PlotArea = 0x0210010,
 		TextLabel = 0x0210020,
+		Image = 0x0210030,
 		WorksheetElementContainer = 0x0220000,
 			AbstractPlot = 0x0221000,
 				CartesianPlot = 0x0221001,

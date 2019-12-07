@@ -229,20 +229,19 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
 }
 
 void LabelWidget::initConnections() const {
-	connect( m_label, &TextLabel::textWrapperChanged, this, &LabelWidget::labelTextWrapperChanged);
-	connect( m_label, &TextLabel::teXImageUpdated, this, &LabelWidget::labelTeXImageUpdated);
-	connect( m_label, &TextLabel::teXFontChanged, this, &LabelWidget::labelTeXFontChanged);
-	connect( m_label, &TextLabel::fontColorChanged, this, &LabelWidget::labelFontColorChanged);
-	connect (m_label, &TextLabel::backgroundColorChanged, this, &LabelWidget::labelBackgroundColorChanged);
-	connect( m_label, &TextLabel::positionChanged, this, &LabelWidget::labelPositionChanged);
-	connect( m_label, &TextLabel::horizontalAlignmentChanged, this, &LabelWidget::labelHorizontalAlignmentChanged);
-	connect( m_label, &TextLabel::verticalAlignmentChanged, this, &LabelWidget::labelVerticalAlignmentChanged);
-	connect( m_label, &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
+	connect(m_label, &TextLabel::textWrapperChanged, this, &LabelWidget::labelTextWrapperChanged);
+	connect(m_label, &TextLabel::teXImageUpdated, this, &LabelWidget::labelTeXImageUpdated);
+	connect(m_label, &TextLabel::teXFontChanged, this, &LabelWidget::labelTeXFontChanged);
+	connect(m_label, &TextLabel::fontColorChanged, this, &LabelWidget::labelFontColorChanged);
+	connect(m_label, &TextLabel::backgroundColorChanged, this, &LabelWidget::labelBackgroundColorChanged);
+	connect(m_label, &TextLabel::positionChanged, this, &LabelWidget::labelPositionChanged);
+	connect(m_label, &TextLabel::horizontalAlignmentChanged, this, &LabelWidget::labelHorizontalAlignmentChanged);
+	connect(m_label, &TextLabel::verticalAlignmentChanged, this, &LabelWidget::labelVerticalAlignmentChanged);
+	connect(m_label, &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
 	connect(m_label, &TextLabel::borderShapeChanged, this, &LabelWidget::labelBorderShapeChanged);
 	connect(m_label, &TextLabel::borderPenChanged, this, &LabelWidget::labelBorderPenChanged);
 	connect(m_label, &TextLabel::borderOpacityChanged, this, &LabelWidget::labelBorderOpacityChanged);
-	connect( m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
-	connect( m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
+	connect(m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
 }
 
 /*!

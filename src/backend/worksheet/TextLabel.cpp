@@ -110,9 +110,9 @@ void TextLabel::init() {
 	textOption.setWrapMode(QTextOption::NoWrap);
 	d->staticText.setTextOption(textOption);
 	if (m_type != PlotTitle && m_type != PlotLegendTitle) {
-		d->position.horizontalPosition = TextLabel::hPositionCustom;
-		d->position.verticalPosition = TextLabel::vPositionCustom;
-		d->verticalAlignment = TextLabel::vAlignCenter;
+		d->position.horizontalPosition = WorksheetElement::hPositionCustom;
+		d->position.verticalPosition = WorksheetElement::vPositionCustom;
+		d->verticalAlignment = WorksheetElement::vAlignCenter;
 	}
 
 	// read settings from config if group exists
@@ -137,8 +137,8 @@ void TextLabel::init() {
 		d->position.point.setY( group.readEntry("PositionYValue", d->position.point.y()) );
 		d->position.horizontalPosition = (HorizontalPosition) group.readEntry("PositionX", (int)d->position.horizontalPosition);
 		d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionY", (int)d->position.verticalPosition);
-		d->horizontalAlignment = (TextLabel::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)d->horizontalAlignment);
-		d->verticalAlignment = (TextLabel::VerticalAlignment) group.readEntry("VerticalAlignment", (int)d->verticalAlignment);
+		d->horizontalAlignment = (WorksheetElement::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)d->horizontalAlignment);
+		d->verticalAlignment = (WorksheetElement::VerticalAlignment) group.readEntry("VerticalAlignment", (int)d->verticalAlignment);
 	}
 
 	DEBUG("CHECK: default/run time image resolution: " << d->teXImageResolution << '/' << QApplication::desktop()->physicalDpiX());
@@ -221,8 +221,8 @@ CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, fontColor, fontColor);
 CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, backgroundColor, backgroundColor);
 CLASS_SHARED_D_READER_IMPL(TextLabel, QFont, teXFont, teXFont);
 CLASS_SHARED_D_READER_IMPL(TextLabel, TextLabel::PositionWrapper, position, position);
-BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::HorizontalAlignment, horizontalAlignment, horizontalAlignment);
-BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::VerticalAlignment, verticalAlignment, verticalAlignment);
+BASIC_SHARED_D_READER_IMPL(TextLabel, WorksheetElement::HorizontalAlignment, horizontalAlignment, horizontalAlignment);
+BASIC_SHARED_D_READER_IMPL(TextLabel, WorksheetElement::VerticalAlignment, verticalAlignment, verticalAlignment);
 BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, rotationAngle, rotationAngle);
 
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::BorderShape, borderShape, borderShape)
@@ -295,13 +295,13 @@ void TextLabel::setRotationAngle(qreal angle) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetHorizontalAlignment, TextLabel::HorizontalAlignment, horizontalAlignment, retransform);
-void TextLabel::setHorizontalAlignment(const TextLabel::HorizontalAlignment hAlign) {
+void TextLabel::setHorizontalAlignment(const WorksheetElement::HorizontalAlignment hAlign) {
 	Q_D(TextLabel);
 	if (hAlign != d->horizontalAlignment)
 		exec(new TextLabelSetHorizontalAlignmentCmd(d, hAlign, ki18n("%1: set horizontal alignment")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetVerticalAlignment, TextLabel::VerticalAlignment, verticalAlignment, retransform);
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetVerticalAlignment, WorksheetElement::VerticalAlignment, verticalAlignment, retransform);
 void TextLabel::setVerticalAlignment(const TextLabel::VerticalAlignment vAlign) {
 	Q_D(TextLabel);
 	if (vAlign != d->verticalAlignment)
@@ -381,8 +381,8 @@ void TextLabelPrivate::retransform() {
 	if (suppressRetransform)
 		return;
 
-	if (position.horizontalPosition != TextLabel::hPositionCustom
-	        || position.verticalPosition != TextLabel::vPositionCustom)
+	if (position.horizontalPosition != WorksheetElement::hPositionCustom
+	        || position.verticalPosition != WorksheetElement::vPositionCustom)
 		updatePosition();
 
 	float x = position.point.x();
@@ -404,25 +404,25 @@ void TextLabelPrivate::retransform() {
 	//depending on the alignment, calculate the new GraphicsItem's position in parent's coordinate system
 	QPointF itemPos;
 	switch (horizontalAlignment) {
-	case TextLabel::hAlignLeft:
+	case WorksheetElement::hAlignLeft:
 		itemPos.setX(x - w/2);
 		break;
-	case TextLabel::hAlignCenter:
+	case WorksheetElement::hAlignCenter:
 		itemPos.setX(x);
 		break;
-	case TextLabel::hAlignRight:
+	case WorksheetElement::hAlignRight:
 		itemPos.setX(x + w/2);
 		break;
 	}
 
 	switch (verticalAlignment) {
-	case TextLabel::vAlignTop:
+	case WorksheetElement::vAlignTop:
 		itemPos.setY(y - h/2);
 		break;
-	case TextLabel::vAlignCenter:
+	case WorksheetElement::vAlignCenter:
 		itemPos.setY(y);
 		break;
-	case TextLabel::vAlignBottom:
+	case WorksheetElement::vAlignBottom:
 		itemPos.setY(y + h/2);
 		break;
 	}
@@ -455,21 +455,21 @@ void TextLabelPrivate::updatePosition() {
 		parentRect = scene()->sceneRect();
 	}
 
-	if (position.horizontalPosition != TextLabel::hPositionCustom) {
-		if (position.horizontalPosition == TextLabel::hPositionLeft)
+	if (position.horizontalPosition != WorksheetElement::hPositionCustom) {
+		if (position.horizontalPosition == WorksheetElement::hPositionLeft)
 			position.point.setX( parentRect.x() );
-		else if (position.horizontalPosition == TextLabel::hPositionCenter)
+		else if (position.horizontalPosition == WorksheetElement::hPositionCenter)
 			position.point.setX( parentRect.x() + parentRect.width()/2 );
-		else if (position.horizontalPosition == TextLabel::hPositionRight)
+		else if (position.horizontalPosition == WorksheetElement::hPositionRight)
 			position.point.setX( parentRect.x() + parentRect.width() );
 	}
 
-	if (position.verticalPosition != TextLabel::vPositionCustom) {
-		if (position.verticalPosition == TextLabel::vPositionTop)
+	if (position.verticalPosition != WorksheetElement::vPositionCustom) {
+		if (position.verticalPosition == WorksheetElement::vPositionTop)
 			position.point.setY( parentRect.y() );
-		else if (position.verticalPosition == TextLabel::vPositionCenter)
+		else if (position.verticalPosition == WorksheetElement::vPositionCenter)
 			position.point.setY( parentRect.y() + parentRect.height()/2 );
-		else if (position.verticalPosition == TextLabel::vPositionBottom)
+		else if (position.verticalPosition == WorksheetElement::vPositionBottom)
 			position.point.setY( parentRect.y() + parentRect.height() );
 	}
 
@@ -784,8 +784,8 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 		//convert item's center point in parent's coordinates
 		TextLabel::PositionWrapper tempPosition;
 		tempPosition.point = positionFromItemPosition(value.toPointF());
-		tempPosition.horizontalPosition = TextLabel::hPositionCustom;
-		tempPosition.verticalPosition = TextLabel::vPositionCustom;
+		tempPosition.horizontalPosition = WorksheetElement::hPositionCustom;
+		tempPosition.verticalPosition = WorksheetElement::vPositionCustom;
 
 		//emit the signals in order to notify the UI.
 		//we don't set the position related member variables during the mouse movements.
@@ -832,25 +832,25 @@ QPointF TextLabelPrivate::positionFromItemPosition(QPointF itemPos) {
 
 	//depending on the alignment, calculate the new position
 	switch (horizontalAlignment) {
-	case TextLabel::hAlignLeft:
+	case WorksheetElement::hAlignLeft:
 		tmpPosition.setX(x + w/2);
 		break;
-	case TextLabel::hAlignCenter:
+	case WorksheetElement::hAlignCenter:
 		tmpPosition.setX(x);
 		break;
-	case TextLabel::hAlignRight:
+	case WorksheetElement::hAlignRight:
 		tmpPosition.setX(x - w/2);
 		break;
 	}
 
 	switch (verticalAlignment) {
-	case TextLabel::vAlignTop:
+	case WorksheetElement::vAlignTop:
 		tmpPosition.setY(y + h/2);
 		break;
-	case TextLabel::vAlignCenter:
+	case WorksheetElement::vAlignCenter:
 		tmpPosition.setY(y);
 		break;
-	case TextLabel::vAlignBottom:
+	case WorksheetElement::vAlignBottom:
 		tmpPosition.setY(y - h/2);
 		break;
 	}
@@ -969,10 +969,10 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			else
 				d->position.point.setY(str.toDouble());
 
-			READ_INT_VALUE("horizontalPosition", position.horizontalPosition, TextLabel::HorizontalPosition);
-			READ_INT_VALUE("verticalPosition", position.verticalPosition, TextLabel::VerticalPosition);
-			READ_INT_VALUE("horizontalAlignment", horizontalAlignment, TextLabel::HorizontalAlignment);
-			READ_INT_VALUE("verticalAlignment", verticalAlignment, TextLabel::VerticalAlignment);
+			READ_INT_VALUE("horizontalPosition", position.horizontalPosition, WorksheetElement::HorizontalPosition);
+			READ_INT_VALUE("verticalPosition", position.verticalPosition, WorksheetElement::VerticalPosition);
+			READ_INT_VALUE("horizontalAlignment", horizontalAlignment, WorksheetElement::HorizontalAlignment);
+			READ_INT_VALUE("verticalAlignment", verticalAlignment, WorksheetElement::VerticalAlignment);
 			READ_DOUBLE_VALUE("rotationAngle", rotationAngle);
 
 			str = attribs.value("visible").toString();

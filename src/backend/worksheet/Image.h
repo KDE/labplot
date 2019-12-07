@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : TextLabel.h
+    File                 : Image.h
     Project              : LabPlot
-    Description          : Text label supporting reach text and latex formatting
+    Description          : Worksheet element to draw images
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2019 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,41 +26,25 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TEXTLABEL_H
-#define TEXTLABEL_H
+#ifndef IMAGE_H
+#define IMAGE_H
 
 #include "backend/lib/macros.h"
-#include "tools/TeXRenderer.h"
 #include "backend/worksheet/WorksheetElement.h"
 
 #include <QPen>
 
 class QBrush;
 class QFont;
-class TextLabelPrivate;
+class ImagePrivate;
 
-class TextLabel : public WorksheetElement {
+class Image : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	enum Type {General, PlotTitle, AxisTitle, PlotLegendTitle};
+	explicit Image(const QString& name);
+	~Image() override;
 
-	enum BorderShape {NoBorder, Rect, Ellipse, RoundSideRect, RoundCornerRect, InwardsRoundCornerRect, DentedBorderRect,
-			Cuboid, UpPointingRectangle, DownPointingRectangle, LeftPointingRectangle, RightPointingRectangle};
-
-	struct TextWrapper {
-		TextWrapper() {}
-		TextWrapper(const QString& t, bool b) : text(t), teXUsed(b) {}
-		TextWrapper(const QString& t) : text(t) {}
-
-		QString text;
-		bool teXUsed{false};
-	};
-
-	explicit TextLabel(const QString& name, Type type = General);
-	~TextLabel() override;
-
-	Type type() const;
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QGraphicsItem* graphicsItem() const override;
@@ -72,18 +55,14 @@ public:
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
 
-	CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text)
-	BASIC_D_ACCESSOR_DECL(QColor, fontColor, FontColor)
-	BASIC_D_ACCESSOR_DECL(QColor, backgroundColor, BackgroundColor)
-	CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
+	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
+	BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity)
 	CLASS_D_ACCESSOR_DECL(WorksheetElement::PositionWrapper, position, Position)
 	void setPosition(QPointF);
-	void setPositionInvalid(bool);
 	BASIC_D_ACCESSOR_DECL(WorksheetElement::HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
 	BASIC_D_ACCESSOR_DECL(WorksheetElement::VerticalAlignment, verticalAlignment, VerticalAlignment)
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 
-	BASIC_D_ACCESSOR_DECL(BorderShape, borderShape, BorderShape);
 	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
 	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
 
@@ -94,41 +73,32 @@ public:
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-	typedef TextLabelPrivate Private;
+	typedef ImagePrivate Private;
 
 private slots:
-	void updateTeXImage();
-
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChanged();
 
 protected:
-	TextLabelPrivate* const d_ptr;
-	TextLabel(const QString& name, TextLabelPrivate* dd, Type type = General);
+	ImagePrivate* const d_ptr;
+	Image(const QString&, ImagePrivate*);
 
 private:
-	Q_DECLARE_PRIVATE(TextLabel)
+	Q_DECLARE_PRIVATE(Image)
 	void init();
 
-	Type m_type;
 	QAction* visibilityAction{nullptr};
 
 signals:
-	void textWrapperChanged(const TextLabel::TextWrapper&);
-	void teXFontSizeChanged(const int);
-	void teXFontChanged(const QFont);
-	void fontColorChanged(const QColor);
-	void backgroundColorChanged(const QColor);
+	void fileNameChanged(const QString&);
+	void opacityChanged(float);
 	void positionChanged(const WorksheetElement::PositionWrapper&);
 	void horizontalAlignmentChanged(WorksheetElement::HorizontalAlignment);
 	void verticalAlignmentChanged(WorksheetElement::VerticalAlignment);
 	void rotationAngleChanged(qreal);
-	void visibleChanged(bool);
-	void borderShapeChanged(TextLabel::BorderShape);
 	void borderPenChanged(QPen&);
 	void borderOpacityChanged(float);
-
-	void teXImageUpdated(bool);
+	void visibleChanged(bool);
 	void changed();
 };
 
