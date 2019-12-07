@@ -1262,9 +1262,9 @@ void AxisPrivate::retransformTicks() {
 					break;
 			}
 		} else {
+			if (!majorTicksColumn->isValid(iMajor) || majorTicksColumn->isMasked(iMajor))
+				continue;
 			majorTickPos = majorTicksColumn->valueAt(iMajor);
-			if (std::isnan(majorTickPos))
-				break; //stop iterating after the first non numerical value in the column
 		}
 
 		//calculate start and end points for major tick's line
@@ -1317,9 +1317,9 @@ void AxisPrivate::retransformTicks() {
 				if (minorTicksType != Axis::TicksCustomColumn) {
 					minorTickPos = majorTickPos + (iMinor+1)*minorTicksSpacing;
 				} else {
+					if (!minorTicksColumn->isValid(iMinor) || minorTicksColumn->isMasked(iMinor))
+						continue;
 					minorTickPos = minorTicksColumn->valueAt(iMinor);
-					if (std::isnan(minorTickPos))
-						break; //stop iterating after the first non numerical value in the column
 
 					//in the case a custom column is used for the minor ticks, we draw them _once_ for the whole range of the axis.
 					//execute the minor ticks loop only once.
