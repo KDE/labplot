@@ -53,6 +53,7 @@
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/Image.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -427,6 +428,7 @@ void CartesianPlot::initActions() {
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("Horizontal Axis"), this);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("Vertical Axis"), this);
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), this);
+	addImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), this);
 
 	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
@@ -447,6 +449,7 @@ void CartesianPlot::initActions() {
 	connect(addHorizontalAxisAction, &QAction::triggered, this, &CartesianPlot::addHorizontalAxis);
 	connect(addVerticalAxisAction, &QAction::triggered, this, &CartesianPlot::addVerticalAxis);
 	connect(addTextLabelAction, &QAction::triggered, this, &CartesianPlot::addTextLabel);
+	connect(addImageAction, &QAction::triggered, this, &CartesianPlot::addImage);
 	connect(addCustomPointAction, &QAction::triggered, this, &CartesianPlot::addCustomPoint);
 
 	//Analysis menu actions
@@ -588,6 +591,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addVerticalAxisAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addTextLabelAction);
+	addNewMenu->addAction(addImageAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addCustomPointAction);
 
@@ -1407,6 +1411,11 @@ void CartesianPlot::addTextLabel() {
 	TextLabel* label = new TextLabel("text label");
 	this->addChild(label);
 	label->setParentGraphicsItem(graphicsItem());
+}
+
+void CartesianPlot::addImage() {
+	Image* image = new Image("image");
+	this->addChild(image);
 }
 
 void CartesianPlot::addCustomPoint() {
@@ -3686,6 +3695,13 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					return false;
 				}
 			}
+		} else if (reader->name() == "image") {
+			Image* image = new Image(QString());
+			if (!image->load(reader, preview)) {
+				delete image;
+				return false;
+			} else
+				addChildFast(image);
 		} else if (reader->name() == "plotArea")
 			m_plotArea->load(reader, preview);
 		else if (reader->name() == "axis") {

@@ -124,7 +124,7 @@ void Image::handleResize(double horizontalRatio, double verticalRatio, bool page
 	Returns an icon to be used in the project explorer.
 */
 QIcon Image::icon() const{
-	return QIcon::fromTheme("draw-image");
+	return QIcon::fromTheme("viewimage");
 }
 
 QMenu* Image::createContextMenu() {

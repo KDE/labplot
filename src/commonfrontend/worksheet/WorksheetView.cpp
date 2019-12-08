@@ -334,6 +334,7 @@ void WorksheetView::initActions() {
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("Horizontal Axis"), cartesianPlotAddNewActionGroup);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("Vertical Axis"), cartesianPlotAddNewActionGroup);
 	addPlotTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), cartesianPlotAddNewActionGroup);
+	addPlotImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), cartesianPlotAddNewActionGroup);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), cartesianPlotAddNewActionGroup);
 
 	// Analysis menu
@@ -507,6 +508,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotAddNewMenu->addAction(addVerticalAxisAction);
 	m_cartesianPlotAddNewMenu->addSeparator();
 	m_cartesianPlotAddNewMenu->addAction(addPlotTextLabelAction);
+	m_cartesianPlotAddNewMenu->addAction(addPlotImageAction);
 	m_cartesianPlotAddNewMenu->addSeparator();
 	m_cartesianPlotAddNewMenu->addAction(addCustomPointAction);
 
@@ -705,6 +707,7 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(addVerticalAxisAction);
 	toolBar->addSeparator();
 	toolBar->addAction(addPlotTextLabelAction);
+	toolBar->addAction(addPlotImageAction);
 	toolBar->addSeparator();
 	toolBar->addAction(scaleAutoAction);
 	toolBar->addAction(scaleAutoXAction);
@@ -1931,6 +1934,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addVerticalAxis();
 	else if (action == addPlotTextLabelAction)
 		plot->addTextLabel();
+	else if (action == addPlotImageAction)
+		plot->addImage();
 	else if (action == addCustomPointAction)
 		plot->addCustomPoint();
 // analysis actions
