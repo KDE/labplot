@@ -1298,12 +1298,18 @@ void AxisPrivate::retransformTicks() {
 				}
 			}
 
+			double value = scalingFactor * majorTickPos + zeroOffset;
+
+			//if custom column is used, we can have duplicated values in it and we need only unique values
+			if (majorTicksType == Axis::TicksCustomColumn && tickLabelValues.indexOf(value) != -1)
+				valid = false;
+
 			//add major tick's line to the painter path
 			if (valid) {
 				majorTicksPath.moveTo(startPoint);
 				majorTicksPath.lineTo(endPoint);
 				majorTickPoints << anchorPoint;
-				tickLabelValues<< scalingFactor*majorTickPos+zeroOffset;
+				tickLabelValues << value;
 			}
 		}
 
