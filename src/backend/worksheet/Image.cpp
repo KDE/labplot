@@ -71,6 +71,8 @@ void Image::init() {
 	KConfig config;
 	KConfigGroup group = config.group("Image");
 
+	d->opacity = group.readEntry("opacity", d->opacity);
+
 	//geometry
 	d->position.point.setX( group.readEntry("PositionXValue", d->position.point.x()) );
 	d->position.point.setY( group.readEntry("PositionYValue", d->position.point.y()) );

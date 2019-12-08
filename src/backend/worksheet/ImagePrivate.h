@@ -41,7 +41,7 @@ public:
 
 	QImage image;
 	QString fileName;
-	qreal opacity{0.0};
+	qreal opacity{1.0};
 	qreal rotationAngle{0.0};
 
 	// position in parent's coordinate system, the image will be aligned around this point

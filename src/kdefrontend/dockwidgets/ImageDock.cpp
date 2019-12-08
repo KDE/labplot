@@ -95,6 +95,7 @@ ImageDock::ImageDock(QWidget *parent): BaseDock(parent) {
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImageDock::selectFile);
 	connect(ui.leFileName, &QLineEdit::returnPressed, this, &ImageDock::fileNameChanged);
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &ImageDock::fileNameChanged);
+	connect(ui.sbOpacity, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImageDock::opacityChanged);
 
 	//Geometry
 	connect(ui.cbSize, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ImageDock::sizeChanged);
