@@ -1573,7 +1573,7 @@ double Column::maximum(int startIndex, int endIndex) const {
  * calculates log2(x)+1 for an integer value.
  * Used in y(double x) to calculate the maximum steps
  * source: https://stackoverflow.com/questions/11376288/fast-computing-of-log2-for-64-bit-integers
- * source: http://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
+ * source: https://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
  * @param value
  * @return returns calculated value
  */

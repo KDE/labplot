@@ -51,7 +51,7 @@ public:
 		TextLabel::hPositionCenter,
 		TextLabel::vPositionCenter};
 
-	//alignement
+	//alignment
 	TextLabel::HorizontalAlignment horizontalAlignment{TextLabel::hAlignCenter};
 	TextLabel::VerticalAlignment verticalAlignment{TextLabel::vAlignCenter};
 

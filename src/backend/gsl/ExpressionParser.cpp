@@ -56,7 +56,7 @@ void ExpressionParser::initFunctions() {
 		m_functions << _functions[i].name;
 
 	m_functionsGroups << i18n("Standard Mathematical functions");
-	//http://www.gnu.org/software/gsl/manual/html_node/Special-Functions.html
+	//https://www.gnu.org/software/gsl/doc/html/specfunc.html
 	m_functionsGroups << i18n("Airy Functions and Derivatives");
 	m_functionsGroups << i18n("Bessel Functions");
 	m_functionsGroups << i18n("Clausen Functions");
@@ -560,7 +560,7 @@ void ExpressionParser::initFunctions() {
 	for (int i = 0; i < 7; i++)
 		m_functionsGroupIndex << index;
 
-	// GSL Random Number Distributions: see http://www.gnu.org/software/gsl/manual/html_node/Random-Number-Distributions.html
+	// GSL Random Number Distributions: see https://www.gnu.org/software/gsl/doc/html/randist.html
 	// Gaussian Distribution
 	m_functionsNames << i18n("Probability density for a Gaussian distribution");
 	m_functionsNames << i18n("Probability density for a unit Gaussian distribution");

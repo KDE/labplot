@@ -97,7 +97,7 @@ public:
 		double logLik{0};	// log likelihood
 		double aic{0};	// Akaike information criterion
 		double bic{0};	// Schwarz Bayesian information criterion
-		// see also http://www.originlab.com/doc/Origin-Help/NLFit-Algorithm
+		// see also https://www.originlab.com/doc/Origin-Help/NLFit-Theory
 		QVector<double> paramValues;
 		QVector<double> errorValues;
 		QVector<double> tdist_tValues;

@@ -29,7 +29,7 @@ Copyright            : (C) 2019 by Alexander Semke (alexander.semke@web.de)
 
 //After closing a widget/window where showFullScreen() was called before, we are left on macOS
 //with a black screen (https://bugreports.qt.io/browse/QTBUG-46701).
-//Explicitely close the native window to workaround this problem.
+//Explicitly close the native window to workaround this problem.
 
 void DynamicPresenterWidget::closeEvent(QCloseEvent* event) {
 	QWidget::closeEvent(event);
