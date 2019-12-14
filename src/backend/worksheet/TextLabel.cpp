@@ -799,7 +799,7 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	//convert position of the item in parent coordinates to label's position
 	QPointF point = positionFromItemPosition(pos());
-	if (qAbs(point.x()-position.point.x())>20 && qAbs(point.y()-position.point.y())>20 ) {
+	if (point != position.point) {
 		//position was changed -> set the position related member variables
 		suppressRetransform = true;
 		TextLabel::PositionWrapper tempPosition;
