@@ -109,10 +109,13 @@ void TextLabel::init() {
 	QTextOption textOption;
 	textOption.setWrapMode(QTextOption::NoWrap);
 	d->staticText.setTextOption(textOption);
-	if (m_type != PlotTitle && m_type != PlotLegendTitle) {
+
+	if (m_type == PlotTitle || m_type == PlotLegendTitle) {
+		d->position.verticalPosition = WorksheetElement::vPositionTop;
+		d->verticalAlignment = WorksheetElement::vAlignBottom;
+	} else if (m_type == AxisTitle) {
 		d->position.horizontalPosition = WorksheetElement::hPositionCustom;
 		d->position.verticalPosition = WorksheetElement::vPositionCustom;
-		d->verticalAlignment = WorksheetElement::vAlignCenter;
 	}
 
 	// read settings from config if group exists
@@ -556,7 +559,6 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.lineTo(xs, ys + 0.2 * h);
 		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
 		break;
-
 	}
 	case (TextLabel::BorderShape::InwardsRoundCornerRect): {
 		const double xs = boundingRectangle.x();
@@ -725,8 +727,6 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	}
 
 	labelShape = matrix.map(labelShape);
-
-	emit q->changed();
 }
 
 void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {

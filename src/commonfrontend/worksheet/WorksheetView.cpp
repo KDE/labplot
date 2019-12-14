@@ -1308,6 +1308,12 @@ void WorksheetView::addNew(QAction* action) {
 		return;
 
 	m_worksheet->addChild(aspect);
+
+	//labels and images with their initial positions need to be retransformed
+	//ater they have gotten a parent
+	if (aspect->type() == AspectType::TextLabel || aspect->type() == AspectType::Image)
+		aspect->retransform();
+
 	handleCartesianPlotActions();
 
 	if (!m_fadeInTimeLine) {
