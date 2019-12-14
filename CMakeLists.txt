@@ -294,7 +294,7 @@ IF (ENABLE_FITS)
 FIND_PACKAGE (CFitsio)
 SET_PACKAGE_PROPERTIES (CFitsio PROPERTIES
 	DESCRIPTION "FITS IO Library"
-	URL "http://heasarc.gsfc.nasa.gov/fitsio/fitsio.html"
+	URL "https://heasarc.gsfc.nasa.gov/fitsio/fitsio.html"
 	PURPOSE "Support for the FITS (Flexible Image Transport System) data format.")
 IF (CFITSIO_FOUND)
 	add_definitions (-DHAVE_FITS)
