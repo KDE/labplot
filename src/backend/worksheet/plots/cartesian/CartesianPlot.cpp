@@ -3196,11 +3196,36 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 	}
 }
 
-void CartesianPlotPrivate::keyPressEvent(QKeyEvent * event) {
+void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Escape) {
 		setCursor(Qt::ArrowCursor);
 		q->setMouseMode(CartesianPlot::MouseMode::SelectionMode);
 		m_selectionBandIsShown = false;
+	} else if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
+		|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
+
+		const auto* worksheet = dynamic_cast<const Worksheet*>(q->parentAspect());
+		if (worksheet->layout() == Worksheet::NoLayout) {
+			const int delta = 5;
+			QRectF rect = q->rect();
+
+			if (event->key() == Qt::Key_Left) {
+				rect.setX(rect.x() - delta);
+				rect.setWidth(rect.width() - delta);
+			} else if (event->key() == Qt::Key_Right) {
+				rect.setX(rect.x() + delta);
+				rect.setWidth(rect.width() + delta);
+			} else if (event->key() == Qt::Key_Up) {
+				rect.setY(rect.y() - delta);
+				rect.setHeight(rect.height() - delta);
+			} else if (event->key() == Qt::Key_Down) {
+				rect.setY(rect.y() + delta);
+				rect.setHeight(rect.height() + delta);
+			}
+
+			q->setRect(rect);
+		}
+
 	}
 	QGraphicsItem::keyPressEvent(event);
 }

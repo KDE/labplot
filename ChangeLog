@@ -1,6 +1,8 @@
 -----2.8 -----
 	* [macOS] added support for touchbar
 	* Show the size of the members in the JSON file in the import file dialog
+	* [worksheet] In the Export Worksheet Dialog allow to export to the clipboard
+	* [worksheet] Allow to move plots, text labels and legend with arrow keys
 
 -----2.7 (24.10.2019)-----
 New features:

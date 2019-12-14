@@ -36,10 +36,11 @@
 #include <QApplication>
 #include <QBuffer>
 #include <QDesktopWidget>
-#include <QPainter>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
+#include <QKeyEvent>
 #include <QMenu>
+#include <QPainter>
 #include <QTextCharFormat>
 #include <QTextDocument>
 #include <QTextCursor>
@@ -59,7 +60,6 @@
  * in parent's coordinate system, or by specifying one of the predefined position
  * flags (\ca HorizontalPosition, \ca VerticalPosition).
  */
-
 
 TextLabel::TextLabel(const QString& name, Type type)
 	: WorksheetElement(name, AspectType::TextLabel), d_ptr(new TextLabelPrivate(this)), m_type(type) {
@@ -367,6 +367,7 @@ TextLabelPrivate::TextLabelPrivate(TextLabel* owner) : q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+	setFlag(QGraphicsItem::ItemIsFocusable);
 	setAcceptHoverEvents(true);
 }
 
@@ -811,6 +812,38 @@ void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	}
 
 	QGraphicsItem::mouseReleaseEvent(event);
+}
+
+void TextLabelPrivate::keyPressEvent(QKeyEvent* event) {
+	if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
+		|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
+		const int delta = 5;
+		QPointF point = positionFromItemPosition(pos());
+		WorksheetElement::PositionWrapper tempPosition;
+
+		if (event->key() == Qt::Key_Left) {
+			point.setX(point.x() - delta);
+			tempPosition.horizontalPosition = WorksheetElement::hPositionCustom;
+			tempPosition.verticalPosition = position.verticalPosition;
+		} else if (event->key() == Qt::Key_Right) {
+			point.setX(point.x() + delta);
+			tempPosition.horizontalPosition = WorksheetElement::hPositionCustom;
+			tempPosition.verticalPosition = position.verticalPosition;
+		} else if (event->key() == Qt::Key_Up) {
+			point.setY(point.y() - delta);
+			tempPosition.horizontalPosition = position.horizontalPosition;
+			tempPosition.verticalPosition = WorksheetElement::vPositionCustom;
+		} else if (event->key() == Qt::Key_Down) {
+			point.setY(point.y() + delta);
+			tempPosition.horizontalPosition = position.horizontalPosition;
+			tempPosition.verticalPosition = WorksheetElement::vPositionCustom;
+		}
+
+		tempPosition.point = point;
+		q->setPosition(tempPosition);
+	}
+
+	QGraphicsItem::keyPressEvent(event);
 }
 
 /*!
