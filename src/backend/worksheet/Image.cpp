@@ -31,7 +31,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 
-// #include <QApplication>
 #include <QPainter>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
@@ -87,6 +86,11 @@ void Image::init() {
 						group.readEntry("BorderWidth", d->borderPen.width()),
 						(Qt::PenStyle) group.readEntry("BorderStyle", (int)(d->borderPen.style())));
 	d->borderOpacity = group.readEntry("BorderOpacity", d->borderOpacity);
+
+	//initial placeholder image
+	int w = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
+	int h = Worksheet::convertToSceneUnits(3, Worksheet::Centimeter);
+	d->image = QIcon::fromTheme("viewimage").pixmap(w, h).toImage();
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -111,7 +115,9 @@ void Image::retransform() {
 void Image::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 	DEBUG("Image::handleResize()");
 	Q_UNUSED(pageResize);
-	Q_D(Image);
+	Q_UNUSED(horizontalRatio);
+	Q_UNUSED(verticalRatio);
+// 	Q_D(Image);
 
 // 	double ratio = 0;
 // 	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
@@ -275,16 +281,8 @@ void ImagePrivate::retransform() {
 
 	float x = position.point.x();
 	float y = position.point.y();
-
-	//determine the size of the label in scene units
-	float w, h;
-	if (!image.isNull()) {
-		w = image.width();
-		h = image.height();
-	} else {
-		w = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
-		h = Worksheet::convertToSceneUnits(3, Worksheet::Centimeter);
-	}
+	float w = image.width();
+	float h = image.height();
 
  	//depending on the alignment, calculate the new GraphicsItem's position in parent's coordinate system
 	QPointF itemPos;
@@ -327,8 +325,11 @@ void ImagePrivate::retransform() {
 void ImagePrivate::updateImage() {
 	if (!fileName.isEmpty())
 		image = QImage(fileName);
-	else
-		image = QImage();
+	else {
+		int w = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
+		int h = Worksheet::convertToSceneUnits(3, Worksheet::Centimeter);
+		image = QIcon::fromTheme("viewimage").pixmap(w, h).toImage();
+	}
 
 	retransform();
 }
@@ -426,16 +427,10 @@ void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
 
 	painter->save();
 
-	//draw the text
+	//draw the image
 	painter->rotate(-rotationAngle);
 	painter->setOpacity(opacity);
-	if (!image.isNull())
-		painter->drawImage(boundingRectangle.topLeft(), image, image.rect());
-	else {
-		painter->setPen(Qt::black);
-		painter->drawPath(borderShapePath);
-		painter->fillRect(image.rect(), QBrush(Qt::Dense6Pattern));
-	}
+	painter->drawImage(boundingRectangle.topLeft(), image, image.rect());
 	painter->restore();
 
 	//draw the border
@@ -566,21 +561,21 @@ void Image::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	//general
-	writer->writeStartElement("image");
+	writer->writeStartElement("general");
 	writer->writeAttribute("fileName", d->fileName);
-	writer->writeAttribute("opacity", QString::number(d->borderOpacity));
+	writer->writeAttribute("opacity", QString::number(d->opacity));
 	writer->writeEndElement();
 
 	//geometry
-	writer->writeStartElement( "geometry" );
-	writer->writeAttribute( "x", QString::number(d->position.point.x()) );
-	writer->writeAttribute( "y", QString::number(d->position.point.y()) );
-	writer->writeAttribute( "horizontalPosition", QString::number(d->position.horizontalPosition) );
-	writer->writeAttribute( "verticalPosition", QString::number(d->position.verticalPosition) );
-	writer->writeAttribute( "horizontalAlignment", QString::number(d->horizontalAlignment) );
-	writer->writeAttribute( "verticalAlignment", QString::number(d->verticalAlignment) );
-	writer->writeAttribute( "rotationAngle", QString::number(d->rotationAngle) );
-	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
+	writer->writeStartElement("geometry");
+	writer->writeAttribute("x", QString::number(d->position.point.x()));
+	writer->writeAttribute("y", QString::number(d->position.point.y()));
+	writer->writeAttribute("horizontalPosition", QString::number(d->position.horizontalPosition));
+	writer->writeAttribute("verticalPosition", QString::number(d->position.verticalPosition));
+	writer->writeAttribute("horizontalAlignment", QString::number(d->horizontalAlignment));
+	writer->writeAttribute("verticalAlignment", QString::number(d->verticalAlignment));
+	writer->writeAttribute("rotationAngle", QString::number(d->rotationAngle));
+	writer->writeAttribute("visible", QString::number(d->isVisible()));
 	writer->writeEndElement();
 
 	//border
@@ -612,6 +607,10 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 
 		if (!preview && reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
+		} else if (!preview && reader->name() == "general") {
+			attribs = reader->attributes();
+			d->fileName = attribs.value("fileName").toString();
+			READ_DOUBLE_VALUE("opacity", opacity);
 		} else if (!preview && reader->name() == "geometry") {
 			attribs = reader->attributes();
 
@@ -651,7 +650,7 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 	if (preview)
 		return true;
 
-	retransform();
+	d->updateImage();
 
 	return true;
 }
