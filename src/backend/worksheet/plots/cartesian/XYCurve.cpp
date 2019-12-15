@@ -602,8 +602,11 @@ void XYCurve::setXErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xErrorPlusColumn) {
 		exec(new XYCurveSetXErrorPlusColumnCmd(d, column, ki18n("%1: set x-error column")));
-		if (column)
+		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &XYCurve::updateErrorBars);
+			//in the macro we connect to recalcLogicalPoints which is not needed for error columns
+			disconnect(column, &AbstractColumn::dataChanged, this, &XYCurve::recalcLogicalPoints);
+		}
 	}
 }
 
@@ -617,8 +620,11 @@ void XYCurve::setXErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xErrorMinusColumn) {
 		exec(new XYCurveSetXErrorMinusColumnCmd(d, column, ki18n("%1: set x-error column")));
-		if (column)
+		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &XYCurve::updateErrorBars);
+			//in the macro we connect to recalcLogicalPoints which is not needed for error columns
+			disconnect(column, &AbstractColumn::dataChanged, this, &XYCurve::recalcLogicalPoints);
+		}
 	}
 }
 
@@ -639,8 +645,11 @@ void XYCurve::setYErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->yErrorPlusColumn) {
 		exec(new XYCurveSetYErrorPlusColumnCmd(d, column, ki18n("%1: set y-error column")));
-		if (column)
+		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
+			//in the macro we connect to recalcLogicalPoints which is not needed for error columns
+			disconnect(column, &AbstractColumn::dataChanged, this, &XYCurve::recalcLogicalPoints);
+		}
 	}
 }
 
@@ -654,8 +663,11 @@ void XYCurve::setYErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->yErrorMinusColumn) {
 		exec(new XYCurveSetYErrorMinusColumnCmd(d, column, ki18n("%1: set y-error column")));
-		if (column)
+		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &XYCurve::updateErrorBars);
+			//in the macro we connect to recalcLogicalPoints which is not needed for error columns
+			disconnect(column, &AbstractColumn::dataChanged, this, &XYCurve::recalcLogicalPoints);
+		}
 	}
 }
 
@@ -2481,12 +2493,14 @@ void XYCurvePrivate::updateErrorBars() {
 		capSizeY = (pointLogical.x() - symbolPointsLogical.at((int)i).x())/2;
 	}
 
+	qDebug()<<"symbolPointsLogical.size() " << symbolPointsLogical.size();
+	qDebug()<<visiblePoints;
 	for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 		if (!visiblePoints[i])
 			continue;
 
 		const QPointF& point = symbolPointsLogical.at(i);
-
+		qDebug()<<"processing point " << point;
 		int index = validPointsIndicesLogical.at(i);
 
 		//error bars for x
@@ -2535,6 +2549,7 @@ void XYCurvePrivate::updateErrorBars() {
 			else
 				errorPlus = 0;
 
+			qDebug()<<"errorPlus/index " << errorPlus << "/" << index;
 			if (yErrorType == XYCurve::SymmetricError)
 				errorMinus = errorPlus;
 			else {
@@ -2565,8 +2580,9 @@ void XYCurvePrivate::updateErrorBars() {
 	}
 
 	//map the error bars to scene coordinates
+	qDebug()<<"line vor dem map " << lines;
 	lines = cSystem->mapLogicalToScene(lines);
-
+	qDebug()<<"line nach dem map " << lines;
 	//new painter path for the drop lines
 	for (const auto& line : lines) {
 		errorBarsPath.moveTo(line.p1());
