@@ -97,10 +97,6 @@ private slots:
 
 	void imageVisibleChanged(bool);
 
-	//save/load templates
-	void loadConfigFromTemplate(KConfig&);
-	void saveConfigAsTemplate(KConfig&);
-
 signals:
 	void info(const QString&);
 };
