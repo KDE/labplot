@@ -57,6 +57,9 @@ public:
 
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
 	BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity)
+	BASIC_D_ACCESSOR_DECL(int, width, Width)
+	BASIC_D_ACCESSOR_DECL(int, height, Height)
+	BASIC_D_ACCESSOR_DECL(bool, keepRatio, KeepRatio)
 	CLASS_D_ACCESSOR_DECL(WorksheetElement::PositionWrapper, position, Position)
 	void setPosition(QPointF);
 	BASIC_D_ACCESSOR_DECL(WorksheetElement::HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
@@ -92,6 +95,9 @@ private:
 signals:
 	void fileNameChanged(const QString&);
 	void opacityChanged(float);
+	void widthChanged(int);
+	void heightChanged(int);
+	void keepRatioChanged(bool);
 	void positionChanged(const WorksheetElement::PositionWrapper&);
 	void horizontalAlignmentChanged(WorksheetElement::HorizontalAlignment);
 	void verticalAlignmentChanged(WorksheetElement::VerticalAlignment);

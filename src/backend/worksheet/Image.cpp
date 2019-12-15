@@ -88,9 +88,7 @@ void Image::init() {
 	d->borderOpacity = group.readEntry("BorderOpacity", d->borderOpacity);
 
 	//initial placeholder image
-	int w = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
-	int h = Worksheet::convertToSceneUnits(3, Worksheet::Centimeter);
-	d->image = QIcon::fromTheme("viewimage").pixmap(w, h).toImage();
+	d->image = QIcon::fromTheme("viewimage").pixmap(d->width, d->height).toImage();
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -152,6 +150,10 @@ QMenu* Image::createContextMenu() {
 
 /* ============================ getter methods ================= */
 CLASS_SHARED_D_READER_IMPL(Image, QString, fileName, fileName)
+BASIC_SHARED_D_READER_IMPL(Image, qreal, opacity, opacity)
+BASIC_SHARED_D_READER_IMPL(Image, int, width, width)
+BASIC_SHARED_D_READER_IMPL(Image, int, height, height)
+BASIC_SHARED_D_READER_IMPL(Image, bool, keepRatio, keepRatio)
 CLASS_SHARED_D_READER_IMPL(Image, WorksheetElement::PositionWrapper, position, position)
 BASIC_SHARED_D_READER_IMPL(Image, WorksheetElement::HorizontalAlignment, horizontalAlignment, horizontalAlignment)
 BASIC_SHARED_D_READER_IMPL(Image, WorksheetElement::VerticalAlignment, verticalAlignment, verticalAlignment)
@@ -173,6 +175,27 @@ void Image::setOpacity(qreal opacity) {
 	Q_D(Image);
 	if (opacity != d->opacity)
 		exec(new ImageSetOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Image, SetWidth, int, width, scaleImage)
+void Image::setWidth(int width) {
+	Q_D(Image);
+	if (width != d->width)
+		exec(new ImageSetWidthCmd(d, width, ki18n("%1: set width")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Image, SetHeight, int, height, scaleImage)
+void Image::setHeight(int height) {
+	Q_D(Image);
+	if (height != d->height)
+		exec(new ImageSetHeightCmd(d, height, ki18n("%1: set height")));
+}
+
+STD_SETTER_CMD_IMPL_S(Image, SetKeepRatio, bool, keepRatio)
+void Image::setKeepRatio(bool keepRatio) {
+	Q_D(Image);
+	if (keepRatio != d->keepRatio)
+		exec(new ImageSetKeepRatioCmd(d, keepRatio, ki18n("%1: change keep ratio")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Image, SetPosition, WorksheetElement::PositionWrapper, position, retransform);
@@ -323,14 +346,37 @@ void ImagePrivate::retransform() {
 }
 
 void ImagePrivate::updateImage() {
-	if (!fileName.isEmpty())
+	if (!fileName.isEmpty()) {
 		image = QImage(fileName);
-	else {
-		int w = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
-		int h = Worksheet::convertToSceneUnits(3, Worksheet::Centimeter);
-		image = QIcon::fromTheme("viewimage").pixmap(w, h).toImage();
+		width = image.width();
+		height = image.height();
+		q->widthChanged(width);
+		q->heightChanged(height);
+	} else {
+		width = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
+		height = Worksheet::convertToSceneUnits(3, Worksheet::Centimeter);
+		image = QIcon::fromTheme("viewimage").pixmap(width, height).toImage();
+		q->widthChanged(width);
+		q->heightChanged(height);
 	}
 
+	retransform();
+}
+
+void ImagePrivate::scaleImage() {
+	if (keepRatio) {
+		if (width != image.width()) {
+			//width was changed -> rescale the height to keep the ratio
+			height = image.height()*width/image.width();
+			q->heightChanged(height);
+		} else {
+			//height was changed -> rescale the width to keep the ratio
+			width = image.width()*height/image.height();
+			q->widthChanged(width);
+		}
+	}
+
+	image = image.scaled(width, height);
 	retransform();
 }
 
@@ -568,6 +614,9 @@ void Image::save(QXmlStreamWriter* writer) const {
 
 	//geometry
 	writer->writeStartElement("geometry");
+	writer->writeAttribute("width", QString::number(d->width));
+	writer->writeAttribute("height", QString::number(d->height));
+	writer->writeAttribute("keepRatio", QString::number(d->keepRatio));
 	writer->writeAttribute("x", QString::number(d->position.point.x()));
 	writer->writeAttribute("y", QString::number(d->position.point.y()));
 	writer->writeAttribute("horizontalPosition", QString::number(d->position.horizontalPosition));
@@ -614,6 +663,10 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "geometry") {
 			attribs = reader->attributes();
 
+			READ_INT_VALUE("width", width, int);
+			READ_INT_VALUE("height", height, int);
+			READ_INT_VALUE("keepRatio", keepRatio, bool);
+
 			str = attribs.value("x").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("x").toString());
@@ -647,10 +700,10 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	if (preview)
-		return true;
-
-	d->updateImage();
+	if (!preview) {
+		d->image = QImage(d->fileName);
+		d->scaleImage();
+	}
 
 	return true;
 }

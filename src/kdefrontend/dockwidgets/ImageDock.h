@@ -60,6 +60,9 @@ private slots:
 
 	//geometry
 	void sizeChanged(int);
+	void widthChanged(double);
+	void heightChanged(double);
+	void keepRatioChanged(int);
 	void positionXChanged(int);
 	void positionYChanged(int);
 	void customPositionXChanged(double);
@@ -80,6 +83,9 @@ private slots:
 	void imageDescriptionChanged(const AbstractAspect*);
 	void imageFileNameChanged(const QString&);
 	void imageOpacityChanged(float);
+	void imageWidthChanged(int);
+	void imageHeightChanged(int);
+	void imageKeepRatioChanged(bool);
 
 	void imagePositionChanged(const WorksheetElement::PositionWrapper&);
 	void imageHorizontalAlignmentChanged(WorksheetElement::HorizontalAlignment);

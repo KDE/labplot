@@ -42,6 +42,9 @@ public:
 	QImage image;
 	QString fileName;
 	qreal opacity{1.0};
+	int width = (int)Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter);
+	int height = (int)Worksheet::convertToSceneUnits(3.0, Worksheet::Centimeter);
+	bool keepRatio{true}; //keep aspect ratio when scaling the image
 	qreal rotationAngle{0.0};
 
 	// position in parent's coordinate system, the image will be aligned around this point
@@ -64,6 +67,7 @@ public:
 	bool swapVisible(bool on);
 	virtual void recalcShapeAndBoundingRect();
 	void updateImage();
+	void scaleImage();
 	void updatePosition();
 	QPointF positionFromItemPosition(QPointF);
 	void updateBorder();

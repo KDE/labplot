@@ -59,8 +59,8 @@ ImageDock::ImageDock(QWidget *parent): BaseDock(parent) {
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 	ui.leFileName->setCompleter(new QCompleter(new QDirModel, this));
 
-	ui.cbSize->addItem(i18n("Original"));
-	ui.cbSize->addItem(i18n("Custom"));
+// 	ui.cbSize->addItem(i18n("Original"));
+// 	ui.cbSize->addItem(i18n("Custom"));
 
 	//Positioning and alignment
 	ui.cbPositionX->addItem(i18n("Left"));
@@ -97,8 +97,12 @@ ImageDock::ImageDock(QWidget *parent): BaseDock(parent) {
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &ImageDock::fileNameChanged);
 	connect(ui.sbOpacity, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImageDock::opacityChanged);
 
-	//Geometry
-	connect(ui.cbSize, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ImageDock::sizeChanged);
+	//Size
+	connect(ui.sbWidth, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &ImageDock::widthChanged);
+	connect(ui.sbHeight, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &ImageDock::heightChanged);
+	connect(ui.chbKeepRatio, &QCheckBox::clicked, this, &ImageDock::keepRatioChanged);
+
+	//Position
 	connect(ui.cbPositionX, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ImageDock::positionXChanged);
 	connect(ui.cbPositionY, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ImageDock::positionYChanged);
 	connect(ui.sbPositionX, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &ImageDock::customPositionXChanged);
@@ -152,7 +156,12 @@ void ImageDock::setImages(QList<Image*> list) {
 	connect(m_image, &Image::opacityChanged, this, &ImageDock::imageOpacityChanged);
 	connect(m_image, &Image::visibleChanged, this, &ImageDock::imageVisibleChanged);
 
-	//Geometry
+	//Size
+	connect(m_image, &Image::widthChanged, this, &ImageDock::imageWidthChanged);
+	connect(m_image, &Image::heightChanged, this, &ImageDock::imageHeightChanged);
+	connect(m_image, &Image::keepRatioChanged, this, &ImageDock::imageKeepRatioChanged);
+
+	//Position
 	connect(m_image, &Image::positionChanged, this, &ImageDock::imagePositionChanged);
 	connect(m_image, &Image::horizontalAlignmentChanged, this, &ImageDock::imageHorizontalAlignmentChanged);
 	connect(m_image, &Image::verticalAlignmentChanged, this, &ImageDock::imageVerticalAlignmentChanged);
@@ -164,7 +173,6 @@ void ImageDock::setImages(QList<Image*> list) {
 
 	m_initializing = false;
 }
-
 
 //*************************************************************
 //******** SLOTs for changes triggered in ImageDock ***********
@@ -222,10 +230,38 @@ void ImageDock::opacityChanged(int value) {
 		image->setOpacity(opacity);
 }
 
-// geometry slots
+//Size
 void ImageDock::sizeChanged(int index) {
 	Q_UNUSED(index);
 }
+
+void ImageDock::widthChanged(double value) {
+	if (m_initializing)
+		return;
+
+	int width = Worksheet::convertToSceneUnits(value, Worksheet::Centimeter);
+	for (auto* image : m_imageList)
+		image->setWidth(width);
+}
+
+void ImageDock::heightChanged(double value) {
+	if (m_initializing)
+		return;
+
+	int height = Worksheet::convertToSceneUnits(value, Worksheet::Centimeter);
+	for (auto* image : m_imageList)
+		image->setHeight(height);
+}
+
+void ImageDock::keepRatioChanged(int state) {
+	if (m_initializing)
+		return;
+
+	for (auto* image : m_imageList)
+		image->setKeepRatio(state);
+}
+
+//Position
 /*!
     called when label's current horizontal position relative to its parent (left, center, right, custom ) is changed.
 */
@@ -394,6 +430,27 @@ void ImageDock::imageOpacityChanged(float opacity) {
 	m_initializing = false;
 }
 
+//Size
+void ImageDock::imageWidthChanged(int width) {
+	m_initializing = true;
+	ui.sbWidth->setValue( Worksheet::convertFromSceneUnits(width, Worksheet::Centimeter) );
+	m_initializing = false;
+}
+
+void ImageDock::imageHeightChanged(int height) {
+	m_initializing = true;
+	ui.sbHeight->setValue( Worksheet::convertFromSceneUnits(height, Worksheet::Centimeter) );
+	m_initializing = false;
+}
+
+
+void ImageDock::imageKeepRatioChanged(bool keep) {
+	m_initializing = true;
+	ui.chbKeepRatio->setChecked(keep);
+	m_initializing = false;
+}
+
+//Position
 void ImageDock::imagePositionChanged(const WorksheetElement::PositionWrapper& position) {
 	m_initializing = true;
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), Worksheet::Centimeter) );
@@ -427,8 +484,7 @@ void ImageDock::imageVisibleChanged(bool on) {
 	m_initializing = false;
 }
 
-//border
-
+//Border
 void ImageDock::imageBorderPenChanged(const QPen& pen) {
 	m_initializing = true;
 	if (ui.cbBorderStyle->currentIndex() != pen.style())
@@ -459,7 +515,12 @@ void ImageDock::load() {
 	ui.leFileName->setText(m_image->fileName());
 	ui.chbVisible->setChecked(m_image->isVisible());
 
-	// Geometry
+	//Size
+	ui.sbWidth->setValue( Worksheet::convertFromSceneUnits(m_image->width(), Worksheet::Centimeter) );
+	ui.sbHeight->setValue( Worksheet::convertFromSceneUnits(m_image->height(), Worksheet::Centimeter) );
+	ui.chbKeepRatio->setChecked(m_image->keepRatio());
+
+	//Position
 	ui.cbPositionX->setCurrentIndex( (int) m_image->position().horizontalPosition );
 	positionXChanged(ui.cbPositionX->currentIndex());
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_image->position().point.x(),Worksheet::Centimeter) );
