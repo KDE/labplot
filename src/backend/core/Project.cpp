@@ -565,7 +565,6 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 				RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
 				RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
 				RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
-				qDebug()<<"curve columns " << curve->xColumn() << "  " << curve->yColumn();
 			}
 			if (dynamic_cast<XYAnalysisCurve*>(curve))
 				RESTORE_POINTER(dynamic_cast<XYAnalysisCurve*>(curve), dataSourceCurve, DataSourceCurve, XYCurve, curves);
@@ -653,7 +652,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 
 		//loop over all affected plots and retransform them
 		for (auto* plot : plots) {
-			plot->setSuppressDataChangedSignal(true);
+			plot->setSuppressDataChangedSignal(false);
 			plot->dataChanged();
 		}
 
