@@ -1628,6 +1628,9 @@ void CartesianPlot::updateLegend() {
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
 void CartesianPlot::dataChanged() {
+	if (project() && project()->isLoading())
+		return;
+
 	Q_D(CartesianPlot);
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
