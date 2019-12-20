@@ -889,6 +889,8 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 	m_treeView->setCurrentIndex(currentIndex);
 	m_treeView->scrollTo(currentIndex);
+	auto* aspect = static_cast<AbstractAspect*>(currentIndex.internalPointer());
+	emit currentAspectChanged(aspect);
 
 	//when setting the current index above it gets expanded, collapse all parent indices if they are were not expanded when saved
 	collapseParents(currentIndex, expanded);
