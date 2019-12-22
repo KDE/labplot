@@ -205,19 +205,55 @@ void ImportDatasetWidget::updateCategories() {
 	QTreeWidgetItem* rootItem = new QTreeWidgetItem(QStringList(i18n("All")));
 	ui.twCategories->addTopLevelItem(rootItem);
 
+	const QString& filter = ui.leSearch->text();
+	bool categoryMatch = false;
+	bool subcategoryMatch = false;
+	bool datasetMatch = false;
+
 	//add categories
 	for(auto category : m_model->categories(m_collection)) {
-		QTreeWidgetItem* const item = new QTreeWidgetItem(QStringList(category));
-		rootItem->addChild(item);
+		categoryMatch = (filter.isEmpty() || category.startsWith(filter, Qt::CaseInsensitive));
 
-		//add sub-categories
-		for(auto subcategory : m_model->subcategories(m_collection, category))
-			item->addChild(new QTreeWidgetItem(QStringList(subcategory)));
+		if (categoryMatch) {
+			QTreeWidgetItem* const item = new QTreeWidgetItem(QStringList(category));
+			rootItem->addChild(item);
+
+			//add all sub-categories
+			for(auto subcategory : m_model->subcategories(m_collection, category))
+				item->addChild(new QTreeWidgetItem(QStringList(subcategory)));
+		} else {
+			QTreeWidgetItem* item = nullptr;
+			for(auto subcategory : m_model->subcategories(m_collection, category)) {
+				subcategoryMatch = subcategory.startsWith(filter, Qt::CaseInsensitive);
+
+				if (subcategoryMatch) {
+					if (!item) {
+						item = new QTreeWidgetItem(QStringList(category));
+						rootItem->addChild(item);
+						item->setExpanded(true);
+					}
+					item->addChild(new QTreeWidgetItem(QStringList(subcategory)));
+				} else {
+					for (QString dataset : m_model->datasets(m_collection, category, subcategory)) {
+						datasetMatch = dataset.startsWith(filter, Qt::CaseInsensitive);
+						if (datasetMatch) {
+							if (!item) {
+								item = new QTreeWidgetItem(QStringList(category));
+								rootItem->addChild(item);
+								item->setExpanded(true);
+							}
+							item->addChild(new QTreeWidgetItem(QStringList(subcategory)));
+							break;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	rootItem->setExpanded(true);
 	m_loadingCategories = false;
-	updateCategoryCompleter();
+// 	updateCategoryCompleter();
 }
 
 /**
@@ -249,13 +285,16 @@ void ImportDatasetWidget::restoreSelectedSubcategory(const QString& m_collection
 void ImportDatasetWidget::updateDatasets(QTreeWidgetItem* item) {
 	ui.lwDatasets->clear();
 
+	const QString& filter = ui.leSearch->text();
+
 	if(item->childCount() == 0) {
 		//sub-category was selected -> show all its datasets
 		m_category = item->parent()->text(0);
 		m_subcategory = item->text(0);
 
 		for (QString dataset : m_model->datasets(m_collection, m_category, m_subcategory))
-			ui.lwDatasets->addItem(new QListWidgetItem(dataset));
+			if (filter.isEmpty() || dataset.startsWith(filter, Qt::CaseInsensitive))
+				ui.lwDatasets->addItem(new QListWidgetItem(dataset));
 	} else {
 		if (!item->parent()) {
 			//top-level item "All" was selected -> show datasets for all categories and their sub-categories
@@ -264,8 +303,10 @@ void ImportDatasetWidget::updateDatasets(QTreeWidgetItem* item) {
 
 			for (auto category : m_model->categories(m_collection)) {
 				for (auto subcategory : m_model->subcategories(m_collection, category)) {
-					for (QString dataset : m_model->datasets(m_collection, category, subcategory))
-						ui.lwDatasets->addItem(new QListWidgetItem(dataset));
+					for (QString dataset : m_model->datasets(m_collection, category, subcategory)) {
+						if (filter.isEmpty() || dataset.startsWith(filter, Qt::CaseInsensitive))
+							ui.lwDatasets->addItem(new QListWidgetItem(dataset));
+					}
 				}
 			}
 		} else {
@@ -274,8 +315,10 @@ void ImportDatasetWidget::updateDatasets(QTreeWidgetItem* item) {
 			m_subcategory = "";
 
 			for (auto subcategory : m_model->subcategories(m_collection, m_category)) {
-				for (QString dataset : m_model->datasets(m_collection, m_category, subcategory))
-					ui.lwDatasets->addItem(new QListWidgetItem(dataset));
+				for (QString dataset : m_model->datasets(m_collection, m_category, subcategory)) {
+					if (filter.isEmpty() || dataset.startsWith(filter, Qt::CaseInsensitive))
+						ui.lwDatasets->addItem(new QListWidgetItem(dataset));
+				}
 			}
 		}
 	}
