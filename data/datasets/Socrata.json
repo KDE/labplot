@@ -1,7 +1,8 @@
 {
+    "name": "Socrata",
     "categories": [
         {
-            "category_name": "Statistics",
+            "name": "Statistics",
             "subcategories": [
                 {
                     "datasets": [
@@ -171,7 +172,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Administration"
+                    "name": "Administration"
                 },
                 {
                     "datasets": [
@@ -491,7 +492,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Economics"
+                    "name": "Economics"
                 },
                 {
                     "datasets": [
@@ -646,7 +647,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Other"
+                    "name": "Other"
                 },
                 {
                     "datasets": [
@@ -666,7 +667,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Travel"
+                    "name": "Travel"
                 },
                 {
                     "datasets": [
@@ -761,7 +762,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Demographics"
+                    "name": "Demographics"
                 },
                 {
                     "datasets": [
@@ -781,7 +782,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Population"
+                    "name": "Population"
                 },
                 {
                     "datasets": [
@@ -921,7 +922,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Education"
+                    "name": "Education"
                 },
                 {
                     "datasets": [
@@ -986,7 +987,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Politics"
+                    "name": "Politics"
                 },
                 {
                     "datasets": [
@@ -1036,7 +1037,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Crime"
+                    "name": "Crime"
                 },
                 {
                     "datasets": [
@@ -1056,12 +1057,12 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Technology"
+                    "name": "Technology"
                 }
             ]
         },
         {
-            "category_name": "Medicine",
+            "name": "Medicine",
             "subcategories": [
                 {
                     "datasets": [
@@ -1081,10 +1082,9 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Oncology"
+                    "name": "Oncology"
                 }
             ]
         }
-    ],
-    "collection_name": "Socrata"
+    ]
 }

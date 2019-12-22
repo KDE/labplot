@@ -1,7 +1,8 @@
 {
+    "name": "DASL",
     "categories": [
         {
-            "category_name": "Medicine",
+            "name": "Medicine",
             "subcategories": [
                 {
                     "datasets": [
@@ -51,7 +52,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Neurology"
+                    "name": "Neurology"
                 },
                 {
                     "datasets": [
@@ -116,7 +117,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Cardiology"
+                    "name": "Cardiology"
                 },
                 {
                     "datasets": [
@@ -331,7 +332,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Common"
+                    "name": "Common"
                 },
                 {
                     "datasets": [
@@ -726,7 +727,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Other"
+                    "name": "Other"
                 },
                 {
                     "datasets": [
@@ -866,7 +867,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Psychology"
+                    "name": "Psychology"
                 },
                 {
                     "datasets": [
@@ -946,12 +947,12 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Smoking"
+                    "name": "Smoking"
                 }
             ]
         },
         {
-            "category_name": "Nature",
+            "name": "Nature",
             "subcategories": [
                 {
                     "datasets": [
@@ -1196,7 +1197,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Weather"
+                    "name": "Weather"
                 },
                 {
                     "datasets": [
@@ -1246,7 +1247,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Waters"
+                    "name": "Waters"
                 },
                 {
                     "datasets": [
@@ -1431,7 +1432,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Animals"
+                    "name": "Animals"
                 },
                 {
                     "datasets": [
@@ -1556,7 +1557,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Plants"
+                    "name": "Plants"
                 },
                 {
                     "datasets": [
@@ -1576,7 +1577,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Geology"
+                    "name": "Geology"
                 },
                 {
                     "datasets": [
@@ -1671,12 +1672,12 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Other"
+                    "name": "Other"
                 }
             ]
         },
         {
-            "category_name": "Statistics",
+            "name": "Statistics",
             "subcategories": [
                 {
                     "datasets": [
@@ -3181,7 +3182,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Economics"
+                    "name": "Economics"
                 },
                 {
                     "datasets": [
@@ -4026,7 +4027,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Sport"
+                    "name": "Sport"
                 },
                 {
                     "datasets": [
@@ -4526,7 +4527,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Other"
+                    "name": "Other"
                 },
                 {
                     "datasets": [
@@ -4606,7 +4607,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Administration"
+                    "name": "Administration"
                 },
                 {
                     "datasets": [
@@ -4911,7 +4912,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Travel"
+                    "name": "Travel"
                 },
                 {
                     "datasets": [
@@ -4961,7 +4962,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Crime"
+                    "name": "Crime"
                 },
                 {
                     "datasets": [
@@ -5131,7 +5132,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Population"
+                    "name": "Population"
                 },
                 {
                     "datasets": [
@@ -5436,7 +5437,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Technology"
+                    "name": "Technology"
                 },
                 {
                     "datasets": [
@@ -5501,7 +5502,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Politics"
+                    "name": "Politics"
                 },
                 {
                     "datasets": [
@@ -5761,7 +5762,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Demographics"
+                    "name": "Demographics"
                 },
                 {
                     "datasets": [
@@ -5991,12 +5992,12 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Education"
+                    "name": "Education"
                 }
             ]
         },
         {
-            "category_name": "Physics",
+            "name": "Physics",
             "subcategories": [
                 {
                     "datasets": [
@@ -6031,7 +6032,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Astronomy"
+                    "name": "Astronomy"
                 },
                 {
                     "datasets": [
@@ -6081,12 +6082,12 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Other"
+                    "name": "Other"
                 }
             ]
         },
         {
-            "category_name": "Chemistry",
+            "name": "Chemistry",
             "subcategories": [
                 {
                     "datasets": [
@@ -6121,10 +6122,9 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "General"
+                    "name": "General"
                 }
             ]
         }
-    ],
-    "collection_name": "DASL"
+    ]
 }

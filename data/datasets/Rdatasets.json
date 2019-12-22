@@ -1,7 +1,8 @@
 {
+    "name": "Rdatasets",
     "categories": [
         {
-            "category_name": "Medicine",
+            "name": "Medicine",
             "subcategories": [
                 {
                     "datasets": [
@@ -456,7 +457,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Oncology"
+                    "name": "Oncology"
                 },
                 {
                     "datasets": [
@@ -566,7 +567,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "AIDS"
+                    "name": "AIDS"
                 },
                 {
                     "datasets": [
@@ -706,7 +707,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Smoking"
+                    "name": "Smoking"
                 },
                 {
                     "datasets": [
@@ -2781,7 +2782,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Common"
+                    "name": "Common"
                 },
                 {
                     "datasets": [
@@ -2996,7 +2997,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Genetics"
+                    "name": "Genetics"
                 },
                 {
                     "datasets": [
@@ -3301,7 +3302,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Neurology"
+                    "name": "Neurology"
                 },
                 {
                     "datasets": [
@@ -4026,12 +4027,12 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Psychology"
+                    "name": "Psychology"
                 }
             ]
         },
         {
-            "category_name": "Nature",
+            "name": "Nature",
             "subcategories": [
                 {
                     "datasets": [
@@ -5716,7 +5717,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Animals"
+                    "name": "Animals"
                 },
                 {
                     "datasets": [
@@ -6876,7 +6877,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Plants"
+                    "name": "Plants"
                 },
                 {
                     "datasets": [
@@ -7196,7 +7197,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Rivers"
+                    "name": "Rivers"
                 },
                 {
                     "datasets": [
@@ -7486,7 +7487,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Geology"
+                    "name": "Geology"
                 },
                 {
                     "datasets": [
@@ -8061,12 +8062,12 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Other"
+                    "name": "Other"
                 }
             ]
         },
         {
-            "category_name": "Statistics",
+            "name": "Statistics",
             "subcategories": [
                 {
                     "datasets": [
@@ -9214,7 +9215,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Demographics"
+                    "name": "Demographics"
                 },
                 {
                     "datasets": [
@@ -10179,7 +10180,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Traffic"
+                    "name": "Traffic"
                 },
                 {
                     "datasets": [
@@ -13274,7 +13275,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Economics"
+                    "name": "Economics"
                 },
                 {
                     "datasets": [
@@ -15034,7 +15035,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Other"
+                    "name": "Other"
                 },
                 {
                     "datasets": [
@@ -16359,7 +16360,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Administration"
+                    "name": "Administration"
                 },
                 {
                     "datasets": [
@@ -17114,7 +17115,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Sport"
+                    "name": "Sport"
                 },
                 {
                     "datasets": [
@@ -17704,7 +17705,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Technology"
+                    "name": "Technology"
                 },
                 {
                     "datasets": [
@@ -18384,12 +18385,12 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Education"
+                    "name": "Education"
                 }
             ]
         },
         {
-            "category_name": "Physics",
+            "name": "Physics",
             "subcategories": [
                 {
                     "datasets": [
@@ -18469,7 +18470,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Mechanics"
+                    "name": "Mechanics"
                 },
                 {
                     "datasets": [
@@ -18505,7 +18506,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Electronics"
+                    "name": "Electronics"
                 },
                 {
                     "datasets": [
@@ -18585,7 +18586,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Nuclear"
+                    "name": "Nuclear"
                 },
                 {
                     "datasets": [
@@ -18725,7 +18726,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Astronomy"
+                    "name": "Astronomy"
                 },
                 {
                     "datasets": [
@@ -18775,12 +18776,12 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "Thermodynamics"
+                    "name": "Thermodynamics"
                 }
             ]
         },
         {
-            "category_name": "Chemistry",
+            "name": "Chemistry",
             "subcategories": [
                 {
                     "datasets": [
@@ -19340,10 +19341,9 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "subcategory_name": "General"
+                    "name": "General"
                 }
             ]
         }
-    ],
-    "collection_name": "Rdatasets"
+    ]
 }

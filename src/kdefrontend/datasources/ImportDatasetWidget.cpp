@@ -132,13 +132,13 @@ void ImportDatasetWidget::loadCategories() {
 				//processing categories
 				for(int i = 0 ; i < categoryArray.size(); ++i) {
 					const QJsonObject& currentCategory = categoryArray[i].toObject();
-					const QString& categoryName = currentCategory.value("category_name").toString();
+					const QString& categoryName = currentCategory.value("name").toString();
 					const QJsonArray& subcategories = currentCategory.value("subcategories").toArray();
 
 					//processing subcategories
 					for(int j = 0; j < subcategories.size(); ++j) {
 						QJsonObject currentSubCategory = subcategories[j].toObject();
-						QString subcategoryName = currentSubCategory.value("subcategory_name").toString();
+						QString subcategoryName = currentSubCategory.value("name").toString();
 						const QJsonArray& datasetArray = currentSubCategory.value("datasets").toArray();
 
 						//processing the datasets of the actual subcategory
@@ -372,14 +372,14 @@ QJsonObject ImportDatasetWidget::loadDatasetObject() {
 				//processing categories
 				for(int i = 0 ; i < categoryArray.size(); ++i) {
 					const QJsonObject currentCategory = categoryArray[i].toObject();
-					const QString categoryName = currentCategory.value("category_name").toString();
+					const QString categoryName = currentCategory.value("name").toString();
 					if(m_category.isEmpty() || categoryName.compare(m_category) == 0) {
 						const QJsonArray subcategories = currentCategory.value("subcategories").toArray();
 
 						//processing subcategories
 						for(int j = 0; j < subcategories.size(); ++j) {
 							QJsonObject currentSubCategory = subcategories[j].toObject();
-							QString subcategoryName = currentSubCategory.value("subcategory_name").toString();
+							QString subcategoryName = currentSubCategory.value("name").toString();
 
 							if(m_subcategory.isEmpty() || subcategoryName.compare(m_subcategory) == 0) {
 								const QJsonArray datasetArray = currentSubCategory.value("datasets").toArray();

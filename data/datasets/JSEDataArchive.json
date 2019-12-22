@@ -1,11 +1,11 @@
 {
-    "collection_name": "JSEDataArchive",
+    "name": "JSEDataArchive",
     "categories": [
         {
-            "category_name": "Medicine",
+            "name": "Medicine",
             "subcategories": [
                 {
-                    "subcategory_name": "Common",
+                    "name": "Common",
                     "datasets": [
                         {
                             "description": "Time of Birth, Sex, and Birth Weight of 44 Babies",
@@ -94,7 +94,7 @@
                     ]
                 },
                 {
-                    "subcategory_name": "Other",
+                    "name": "Other",
                     "datasets": [
                         {
                             "description": "Drug interaction study of a new and a standard oral contraceptive \ntherapy.",
@@ -135,7 +135,7 @@
                     ]
                 },
                 {
-                    "subcategory_name": "Smoking",
+                    "name": "Smoking",
                     "datasets": [
                         {
                             "description": "Measurements of weight and tar, nicotine, and carbon monoxide content\nare given for 25 brands of domestic cigarettes.",
@@ -151,10 +151,10 @@
             ]
         },
         {
-            "category_name": "Nature",
+            "name": "Nature",
             "subcategories": [
                 {
-                    "subcategory_name": "Animals",
+                    "name": "Animals",
                     "datasets": [
                         {
                             "description": "The dataset consists of a few variables that may influence the demand for Beef in the United States. It provides an example of the influence of inflation in monetary time series data as well as providing some interesting statistical features in building demand models in regression.",
@@ -191,10 +191,10 @@
             ]
         },
         {
-            "category_name": "Statistics",
+            "name": "Statistics",
             "subcategories": [
                 {
-                    "subcategory_name": "Economics",
+                    "name": "Economics",
                     "datasets": [
                         {
                             "description": "Data are from the American Association of University Professors (AAUP) annual faculty salary survey of American colleges and universities. They include average salary and overall compensation, broken down by full, associate, and assistant professor ranks. The dataset is used for the 1995 Data Analysis Exposition, sponsored by the Statistical Graphics Section of the American Statistical Association. See the file colleges.txt for more information on the Exposition.",
@@ -249,7 +249,7 @@
                     ]
                 },
                 {
-                    "subcategory_name": "Sport",
+                    "name": "Sport",
                     "datasets": [
                         {
                             "description": "Each record contains the results of a test of a set of ball bearings. The quantities L10 and L50 are estimated percentiles of the fatigue failure distribution (obtained by fitting a Weibull distribution to the fatigue failure times, separately in each set). The objective is to analyse ln(L10) (and separately ln(L50)) by linear regression on the logarithms of P, Z and D, which are characteristics of the ball bearings. Differences between companies and between types of bearing can be tested.",
@@ -457,7 +457,7 @@
                     ]
                 },
                 {
-                    "subcategory_name": "Other",
+                    "name": "Other",
                     "datasets": [
                         {
                             "description": "Full population of data (all software projects completed by the AT&T data center from 1986 through 1991).",
@@ -605,7 +605,7 @@
                     ]
                 },
                 {
-                    "subcategory_name": "Travel",
+                    "name": "Travel",
                     "datasets": [
                         {
                             "description": "This dataset consists of all 135 large and medium sized air hubs in the United States as defined by the Federal Aviation Administration.",
@@ -628,7 +628,7 @@
                     ]
                 },
                 {
-                    "subcategory_name": "Population",
+                    "name": "Population",
                     "datasets": [
                         {
                             "description": "For each of the forty largest countries in the world (according to 1990\npopulation figures), data are given for the country's life expectancy\nat birth, number of people per television set, and number of people per\nphysician.",
@@ -658,7 +658,7 @@
                     ]
                 },
                 {
-                    "subcategory_name": "Technology",
+                    "name": "Technology",
                     "datasets": [
                         {
                             "description": "Specifications are given for 428 new vehicles for the 2004 year. The variables recorded include price, measurements relating to the size of the vehicle, and fuel efficiency.",
@@ -697,7 +697,7 @@
                     ]
                 },
                 {
-                    "subcategory_name": "Politics",
+                    "name": "Politics",
                     "datasets": [
                         {
                             "description": "For each U.S. Senator, his or her votes on whether to remove President\nClinton on each of the two articles of impeachment (plus a summary\nvariable representing each Senator's number of \"guilty\" votes) are\nprovided, as well as each Senator's values on several variables that\ncould be predictive of vote (e.g., Senator's degree of conservatism,\nhow well Clinton did in the Senator's state in the 1996 Presidential\nelection).",
@@ -722,7 +722,7 @@
                     ]
                 },
                 {
-                    "subcategory_name": "Education",
+                    "name": "Education",
                     "datasets": [
                         {
                             "description": "This dataset contains variables that address the relationship between \npublic school expenditures and academic performance, as measured by the SAT.",
