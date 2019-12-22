@@ -30,10 +30,11 @@
 #include "ImportDatasetWidget.h"
 #include "backend/datasources/DatasetHandler.h"
 
-#include "QWindow"
-#include "QProgressBar"
 #include "QDialogButtonBox"
+#include "QProgressBar"
+#include "QPushButton"
 #include "QStatusBar"
+#include "QWindow"
 
 #include "KConfigGroup"
 #include "KSharedConfig"

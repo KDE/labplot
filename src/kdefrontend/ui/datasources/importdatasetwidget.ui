@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1263</width>
-    <height>753</height>
+    <width>919</width>
+    <height>757</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,22 +20,6 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="2">
-    <widget class="QLineEdit" name="leSearchCategories">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="clearButtonEnabled">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" colspan="5">
-    <widget class="QComboBox" name="cbCollections"/>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="lCollections">
      <property name="text">
@@ -43,117 +27,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="4">
-    <widget class="QLabel" name="lSearchDatasets">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QLabel" name="lSearchCategories">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="4" colspan="2">
-    <widget class="QListWidget" name="lwDatasets">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="5">
-    <widget class="QLineEdit" name="leSearchDatasets">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="clearButtonEnabled">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="lCategories">
-     <property name="text">
-      <string>Dataset:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" colspan="2">
-    <widget class="QTreeWidget" name="twCategories">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <column>
-      <property name="text">
-       <string>Category Name</string>
-      </property>
-     </column>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="3" column="1" colspan="6">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="bRefresh">
-       <property name="text">
-        <string>Refresh</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bRestore">
-       <property name="text">
-        <string>Restore</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bNewDataset">
-       <property name="text">
-        <string>Add new dataset</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bClearCache">
-       <property name="text">
-        <string>Clear cache</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="0" column="6" rowspan="3">
+   <item row="0" column="4" rowspan="3">
     <widget class="QScrollArea" name="saDetails">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -172,8 +46,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>583</width>
-        <height>682</height>
+        <width>239</width>
+        <height>741</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -209,19 +83,98 @@
      </widget>
     </widget>
    </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lCategories">
+     <property name="text">
+      <string>Dataset:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QTreeWidget" name="twCategories">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <column>
+      <property name="text">
+       <string>Categories</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="3">
+    <widget class="QListWidget" name="lwDatasets">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="lSearch">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="leSearch">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="1" colspan="3">
+    <widget class="QComboBox" name="cbCollections"/>
+   </item>
   </layout>
  </widget>
  <tabstops>
   <tabstop>cbCollections</tabstop>
   <tabstop>twCategories</tabstop>
-  <tabstop>leSearchCategories</tabstop>
+  <tabstop>leSearch</tabstop>
   <tabstop>lwDatasets</tabstop>
-  <tabstop>leSearchDatasets</tabstop>
   <tabstop>saDetails</tabstop>
-  <tabstop>bRefresh</tabstop>
-  <tabstop>bRestore</tabstop>
-  <tabstop>bNewDataset</tabstop>
-  <tabstop>bClearCache</tabstop>
  </tabstops>
  <resources/>
  <connections/>

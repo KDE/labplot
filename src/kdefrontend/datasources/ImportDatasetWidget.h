@@ -63,41 +63,33 @@ public:
 private:
 	Ui::ImportDatasetWidget ui;
 	DatasetsMap m_datasetsMap;
-	QString m_selectedSubcategory;
+	bool m_allCollections{false};
+	QString m_collection;
+	QString m_category;
+	QString m_subcategory;
 	QCompleter* m_categoryCompleter;
 	QCompleter* m_datasetCompleter;
 	QString m_jsonDir;
 	bool m_loadingCategories{false};
-	QString m_selectedCategory;
-	QString m_selectedCollection;
-	DatasetModel* m_datasetModel{nullptr};
+	DatasetModel* m_model{nullptr};
 	QNetworkAccessManager* m_networkManager;
-
+	QTreeWidgetItem* m_rootCategoryItem;
 	QJsonArray m_collections;
 	QJsonObject m_datasetObject;
 
-// 	void downloadCollectionsFile();
-// 	void downloadCollectionFile(const QString&);
-// 	void uploadCategoryFile();
-// 	void uploadDatasetFile(const QString&);
 	void updateDatasetCompleter();
 	void updateCategoryCompleter();
-	void loadCategories();
-	void listDatasetsForSubcategory(QTreeWidgetItem*);
+	void updateDatasets(QTreeWidgetItem*);
 	void restoreSelectedSubcategory(const QString&);
-// 	void highlightLocalMetadataFiles();
+
+	void loadCategories();
 	QJsonObject loadDatasetObject();
 
 private slots:
 	void datasetChanged();
 	void collectionChanged(int);
-	void scrollToCategoryTreeItem(const QString&);
-	void scrollToDatasetListItem(const QString&);
-	void showDatasetMetadataManager();
 	void downloadFinished(QNetworkReply*);
-// 	void refreshCategories();
-// 	void clearCache();
-// 	void restoreBackup();
+	void updateCategories();
 
 signals:
 	void datasetSelected();

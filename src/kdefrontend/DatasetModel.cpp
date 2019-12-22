@@ -1,11 +1,12 @@
 /***************************************************************************
 	File                 : DatasetModel.cpp
 	Project              : LabPlot
+	Description          : Wrapper class for the collections of datasets
 	--------------------------------------------------------------------
-	Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
-	Description          : Wrapper class for datasets, and also for their categories and subcategories
- ***************************************************************************/
+	Copyright            : (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
+	Copyright            : (C) 2019 by Alexander Semke (alexander.semke@web.de)
 
+***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -26,17 +27,6 @@
  ***************************************************************************/
 
 #include "DatasetModel.h"
-#include "kdefrontend/datasources/ImportDatasetWidget.h"
-#include "backend/datasources/DatasetHandler.h"
-
-#include <QVector>
-#include <QTimer>
-#include <QFile>
-#include <QDebug>
-#include <QUrl>
-
-#include <KFilterDev>
-#include <KCompressionDevice>
 
 /*!
 \class DatasetModel
@@ -73,7 +63,6 @@ void DatasetModel::initCategories(const QMap<QString, QMap<QString, QMap<QString
 			if(!m_allCategories.contains(category))
 				m_allCategories.append(category);
 		}
-
 	}
 }
 
@@ -117,16 +106,16 @@ void DatasetModel::initDatasets(const QMap<QString, QMap<QString, QMap<QString, 
 /**
  * @brief Returns the list of categories.
  */
-QVariant DatasetModel::allCategories() {
-	return QVariant(m_allCategories);
+QStringList DatasetModel::allCategories() {
+	return QVariant(m_allCategories).toStringList();
 }
 
 /**
  * @brief Returns the list of subcategories of a given category.
  * @param category the category the subcategories of which will be returned
  */
-QVariant DatasetModel::allSubcategories(const QString& category) {
-	return QVariant(m_allSubcategories[category]);
+QStringList DatasetModel::allSubcategories(const QString& category) {
+	return QVariant(m_allSubcategories[category]).toStringList();
 }
 
 /**
@@ -147,27 +136,27 @@ QVariant DatasetModel::allDatasetsList() {
  * @brief Returns the list of categories for a given collection
  */
 QStringList DatasetModel::categories(const QString& collection) {
-	if(collection.compare("All") != 0)
+	if(!collection.isEmpty())
 		return m_categories[collection];
 	else
-		return allCategories().toStringList();
+		return allCategories();
 }
 
 /**
  * @brief  Returns the list of subcategories of a given collection and category.
  */
 QStringList DatasetModel::subcategories(const QString& collection, const QString& category) {
-	if(collection.compare("All") != 0)
+	if(!collection.isEmpty())
 		return m_subcategories[collection][category];
 	else
-		return allSubcategories(category).toStringList();
+		return allSubcategories(category);
 }
 
 /**
  * @brief Returns the list of datasets of a given collection, category and subcategory.
  */
 QStringList DatasetModel::datasets(const QString& collection, const QString& category, const QString& subcategory) {
-	if(collection.compare("All") != 0)
+	if(!collection.isEmpty())
 		return m_datasets[collection][category][subcategory];
 	else
 		return allDatasets(category, subcategory).toStringList();
@@ -191,9 +180,9 @@ int DatasetModel::datasetCount(const QString& collection) {
  */
 int DatasetModel::datasetCount(const QString& collection, const QString& category) {
 	int count = 0;
-	for(const QString& subcategory: subcategories(collection, category))	{
+	for (const QString& subcategory: subcategories(collection, category))
 		count += datasets(collection, category, subcategory).size();
-	}
+
 	return count;
 }
 
@@ -210,4 +199,3 @@ int DatasetModel::datasetCount(const QString& collection, const QString& categor
 QStringList DatasetModel::collections() {
 	return m_collectionList;
 }
-

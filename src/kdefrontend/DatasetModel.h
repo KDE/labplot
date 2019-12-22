@@ -1,11 +1,12 @@
 /***************************************************************************
 	File                 : DatasetModel.h
 	Project              : LabPlot
+	Description          : Wrapper class for the collections of datasets
 	--------------------------------------------------------------------
-	Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
-	Description          :  Wrapper class for datasets, and also for their categories and subcategories
- ***************************************************************************/
+	Copyright            : (C) 2019 Kovacs Ferencz (kferike98@gmail.com)
+	Copyright            : (C) 2019 by Alexander Semke (alexander.semke@web.de)
 
+***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -31,10 +32,6 @@
 #include <QMap>
 #include <QVariant>
 
-class ImportDatasetWidget;
-class DatasetHandler;
-class Spreadsheet;
-
 class DatasetModel : public QObject {
 	Q_OBJECT
 
@@ -50,8 +47,8 @@ public:
 	int datasetCount(const QString& collection, const QString& category);
 	int datasetCount(const QString& collection, const QString& category, const QString& subcategory);
 
-	Q_INVOKABLE QVariant allCategories();
-	Q_INVOKABLE QVariant allSubcategories(const QString&);
+	Q_INVOKABLE QStringList allCategories();
+	Q_INVOKABLE QStringList allSubcategories(const QString&);
 	Q_INVOKABLE QVariant allDatasets(const QString&, const QString&);
 	Q_INVOKABLE QVariant allDatasetsList();
 
