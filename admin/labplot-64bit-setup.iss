@@ -53,6 +53,10 @@ Source: "{#CraftRoot}\bin\iconv.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libeay32.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libfreetype-6.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libpng16.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libjpeg-62.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libtiff.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\liblcms2.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libopenjp2.dll"; DestDir: "{app}";Flags: ignoreversion
 ;Source: "{#CraftRoot}\bin\ssleay32.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libssl-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libcrypto-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
@@ -60,6 +64,8 @@ Source: "{#CraftRoot}\bin\libssh2-1.dll"; DestDir: "{app}"; DestName: "libssh2.d
 Source: "{#CraftRoot}\bin\libgit2.dll"; DestDir: "{app}";Flags: ignoreversion
 ;Source: "{#CraftRoot}\bin\libdbus-1-3.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\Qt5DBus.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libpoppler-qt5-1.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libpoppler-91.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libkdewin.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5Archive.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libKF5Attica.dll"; DestDir: "{app}";Flags: ignoreversion
