@@ -29,7 +29,6 @@
 
 #include "backend/datasources/DatasetHandler.h"
 #include "kdefrontend/datasources/ImportDatasetWidget.h"
-#include "kdefrontend/datasources/DatasetMetadataManagerDialog.h"
 #include "kdefrontend/DatasetModel.h"
 
 #include <QCompleter>
@@ -51,8 +50,6 @@
 	\ingroup kdefrontend
  */
 ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
-	m_categoryCompleter(new QCompleter),
-	m_datasetCompleter(new QCompleter),
 	m_networkManager(new QNetworkAccessManager(this)),
 	m_rootCategoryItem(new QTreeWidgetItem(QStringList(i18n("All")))) {
 
@@ -84,13 +81,6 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	connect(ui.lwDatasets, &QListWidget::itemSelectionChanged, [this]() { datasetChanged(); });
 	connect(ui.lwDatasets, &QListWidget::doubleClicked, [this]() {emit datasetDoubleClicked(); });
 	connect(m_networkManager, &QNetworkAccessManager::finished, this, &ImportDatasetWidget::downloadFinished);
-}
-
-ImportDatasetWidget::~ImportDatasetWidget() {
-	if(m_categoryCompleter != nullptr)
-		delete m_categoryCompleter;
-	if(m_datasetCompleter != nullptr)
-		delete m_datasetCompleter;
 }
 
 /**
@@ -195,6 +185,26 @@ void ImportDatasetWidget::collectionChanged(int index) {
 	}
 	ui.lInfo->setText(info);
 	updateCategories();
+
+	//update the completer
+	if(m_completer)
+		delete m_completer;
+
+	//add all categories, sub-categories and the dataset names for the current collection
+	QStringList keywords;
+	for(auto category : m_model->categories(m_collection)) {
+		keywords << category;
+		for(auto subcategory : m_model->subcategories(m_collection, category)) {
+			keywords << subcategory;
+			for (QString dataset : m_model->datasets(m_collection, category, subcategory))
+				keywords << dataset;
+		}
+	}
+
+	m_completer = new QCompleter(keywords, this);
+	m_completer->setCompletionMode(QCompleter::PopupCompletion);
+	m_completer->setCaseSensitivity(Qt::CaseSensitive);
+	ui.leSearch->setCompleter(m_completer);
 }
 
 void ImportDatasetWidget::updateCategories() {
@@ -253,7 +263,6 @@ void ImportDatasetWidget::updateCategories() {
 
 	rootItem->setExpanded(true);
 	m_loadingCategories = false;
-// 	updateCategoryCompleter();
 }
 
 /**
@@ -322,53 +331,6 @@ void ImportDatasetWidget::updateDatasets(QTreeWidgetItem* item) {
 			}
 		}
 	}
-}
-
-/**
- * @brief Updates the completer used for searching among datasets.
- */
-void ImportDatasetWidget::updateDatasetCompleter() {
-	QStringList datasetList;
-	for(int i = 0; i <ui.lwDatasets->count(); ++i) {
-		datasetList.append(ui.lwDatasets->item(i)->text());
-	}
-
-// 	if(!datasetList.isEmpty()) {
-// 		if(m_datasetCompleter != nullptr)
-// 			delete m_datasetCompleter;
-//
-// 		m_datasetCompleter = new QCompleter(datasetList);
-// 		m_datasetCompleter->setCompletionMode(QCompleter::PopupCompletion);
-// 		m_datasetCompleter->setCaseSensitivity(Qt::CaseSensitive);
-// 		ui.leSearchDatasets->setCompleter(m_datasetCompleter);
-// 	} else
-// 		ui.leSearchDatasets->setCompleter(nullptr);
-}
-
-/**
- * @brief Updates the completer used for searching among categories and subcategories.
- */
-void ImportDatasetWidget::updateCategoryCompleter() {
-	QStringList categoryList;
-	for (int i = 0; i < ui.twCategories->topLevelItemCount(); ++i) {
-		categoryList.append(ui.twCategories->topLevelItem(i)->text(0));
-		for(int j = 0; j < ui.twCategories->topLevelItem(i)->childCount(); ++j) {
-			QString text = ui.twCategories->topLevelItem(i)->text(0) + QLatin1Char(':')
-						+ ui.twCategories->topLevelItem(i)->child(j)->text(0);
-			categoryList.append(text);
-		}
-	}
-
-	if(!categoryList.isEmpty()) {
-		if(m_categoryCompleter != nullptr)
-			delete m_categoryCompleter;
-
-		m_categoryCompleter = new QCompleter(categoryList);
-		m_categoryCompleter->setCompletionMode(QCompleter::PopupCompletion);
-		m_categoryCompleter->setCaseSensitivity(Qt::CaseSensitive);
-		ui.leSearch->setCompleter(m_categoryCompleter);
-	} else
-		ui.leSearch->setCompleter(nullptr);
 }
 
 /**

@@ -31,7 +31,6 @@
 #define IMPORTDATASETWIDGET_H
 
 #include "ui_importdatasetwidget.h"
-#include "QWidget"
 #include "QMap"
 #include <QJsonArray>
 #include <QJsonObject>
@@ -49,7 +48,7 @@ class ImportDatasetWidget : public QWidget {
 
 public:
 	explicit ImportDatasetWidget(QWidget* parent);
-	~ImportDatasetWidget() override;
+	~ImportDatasetWidget() override = default;
 
 	QString getSelectedDataset() const;
 	void import(DatasetHandler*);
@@ -67,8 +66,7 @@ private:
 	QString m_collection;
 	QString m_category;
 	QString m_subcategory;
-	QCompleter* m_categoryCompleter;
-	QCompleter* m_datasetCompleter;
+	QCompleter* m_completer{nullptr};
 	QString m_jsonDir;
 	bool m_loadingCategories{false};
 	DatasetModel* m_model{nullptr};
