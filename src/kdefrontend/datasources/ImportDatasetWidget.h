@@ -78,7 +78,7 @@ private:
 	void updateDatasetCompleter();
 	void updateCategoryCompleter();
 	void updateDatasets(QTreeWidgetItem*);
-	void restoreSelectedSubcategory(const QString&);
+	void addDatasetItems(const QString& collection, const QString& category, const QString& subcategory, const QString& filter);
 
 	void loadCategories();
 	QJsonObject loadDatasetObject();

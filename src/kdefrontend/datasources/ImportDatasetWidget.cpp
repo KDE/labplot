@@ -261,30 +261,23 @@ void ImportDatasetWidget::updateCategories() {
 		}
 	}
 
+	//remote the root item "All" if nothing has matched to the filter string
+	if (rootItem->childCount() == 0)
+		ui.twCategories->clear();
+
+	//expand the root item and select the first category item
 	rootItem->setExpanded(true);
-	m_loadingCategories = false;
-}
-
-/**
- * @brief Restores the lastly selected collection, category and subcategory making it the selected QTreeWidgetItem and also lists the datasets belonigng to it
- */
-void ImportDatasetWidget::restoreSelectedSubcategory(const QString& m_collection) {
-	if(m_model->categories(m_collection).contains(m_category)) {
-		const QTreeWidgetItem* const categoryItem = ui.twCategories->findItems(m_category, Qt::MatchExactly).first();
-
-		if(m_model->subcategories(m_collection, m_category).contains(m_subcategory)) {
-			for(int i = 0; i < categoryItem->childCount(); ++i)	{
-				if(categoryItem->child(i)->text(0).compare(m_subcategory) == 0) {
-					QTreeWidgetItem* const subcategoryItem = categoryItem->child(i);
-					ui.twCategories->setCurrentItem(subcategoryItem);
-					subcategoryItem->setSelected(true);
-					m_subcategory.clear();
-					updateDatasets(subcategoryItem);
-					break;
-				}
-			}
+	if (filter.isEmpty()) {
+		rootItem->setSelected(true);
+		updateDatasets(rootItem);
+	} else {
+		if (rootItem->child(0) && rootItem->child(0)->child(0)) {
+			rootItem->child(0)->child(0)->setSelected(true);
+			updateDatasets(rootItem->child(0)->child(0));
 		}
 	}
+
+	m_loadingCategories = false;
 }
 
 /**
@@ -301,9 +294,7 @@ void ImportDatasetWidget::updateDatasets(QTreeWidgetItem* item) {
 		m_category = item->parent()->text(0);
 		m_subcategory = item->text(0);
 
-		for (QString dataset : m_model->datasets(m_collection, m_category, m_subcategory))
-			if (filter.isEmpty() || dataset.startsWith(filter, Qt::CaseInsensitive))
-				ui.lwDatasets->addItem(new QListWidgetItem(dataset));
+		addDatasetItems(m_collection, m_category, m_subcategory, filter);
 	} else {
 		if (!item->parent()) {
 			//top-level item "All" was selected -> show datasets for all categories and their sub-categories
@@ -311,24 +302,33 @@ void ImportDatasetWidget::updateDatasets(QTreeWidgetItem* item) {
 			m_subcategory = "";
 
 			for (auto category : m_model->categories(m_collection)) {
-				for (auto subcategory : m_model->subcategories(m_collection, category)) {
-					for (QString dataset : m_model->datasets(m_collection, category, subcategory)) {
-						if (filter.isEmpty() || dataset.startsWith(filter, Qt::CaseInsensitive))
-							ui.lwDatasets->addItem(new QListWidgetItem(dataset));
-					}
-				}
+				for (auto subcategory : m_model->subcategories(m_collection, category))
+					addDatasetItems(m_collection, category, subcategory, filter);
 			}
 		} else {
 			//a category was selected -> show all its datasets
 			m_category = item->text(0);
 			m_subcategory = "";
 
-			for (auto subcategory : m_model->subcategories(m_collection, m_category)) {
-				for (QString dataset : m_model->datasets(m_collection, m_category, subcategory)) {
-					if (filter.isEmpty() || dataset.startsWith(filter, Qt::CaseInsensitive))
-						ui.lwDatasets->addItem(new QListWidgetItem(dataset));
-				}
-			}
+			for (auto subcategory : m_model->subcategories(m_collection, m_category))
+				addDatasetItems(m_collection, m_category, subcategory, filter);
+		}
+	}
+
+	//select the first available dataset
+	ui.lwDatasets->setCurrentRow(0);
+}
+
+void ImportDatasetWidget::addDatasetItems(const QString& collection, const QString& category, const QString& subcategory, const QString& filter) {
+	if (!filter.isEmpty() &&
+		(category.startsWith(filter, Qt::CaseInsensitive) || subcategory.startsWith(filter, Qt::CaseInsensitive))) {
+
+		for (QString dataset : m_model->datasets(collection, category, subcategory))
+			ui.lwDatasets->addItem(new QListWidgetItem(dataset));
+	} else {
+		for (QString dataset : m_model->datasets(collection, category, subcategory)) {
+			if (filter.isEmpty() || dataset.startsWith(filter, Qt::CaseInsensitive))
+				ui.lwDatasets->addItem(new QListWidgetItem(dataset));
 		}
 	}
 }
