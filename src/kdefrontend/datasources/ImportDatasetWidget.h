@@ -48,7 +48,7 @@ class ImportDatasetWidget : public QWidget {
 
 public:
 	explicit ImportDatasetWidget(QWidget* parent);
-	~ImportDatasetWidget() override = default;
+	~ImportDatasetWidget() override;
 
 	QString getSelectedDataset() const;
 	void import(DatasetHandler*);
@@ -75,7 +75,6 @@ private:
 	bool m_initializing{false};
 	DatasetModel* m_model{nullptr};
 	QNetworkAccessManager* m_networkManager;
-	QTreeWidgetItem* m_rootCategoryItem;
 	QJsonArray m_collections;
 	QJsonObject m_datasetObject;
 

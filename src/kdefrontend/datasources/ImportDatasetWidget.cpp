@@ -50,8 +50,7 @@
 	\ingroup kdefrontend
  */
 ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
-	m_networkManager(new QNetworkAccessManager(this)),
-	m_rootCategoryItem(new QTreeWidgetItem(QStringList(i18n("All")))) {
+	m_networkManager(new QNetworkAccessManager(this)) {
 
 	ui.setupUi(this);
 
@@ -86,6 +85,10 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	connect(m_networkManager, &QNetworkAccessManager::finished, this, &ImportDatasetWidget::downloadFinished);
 }
 
+ImportDatasetWidget::~ImportDatasetWidget() {
+	delete m_model;
+}
+
 /**
  * @brief Processes the json metadata file that contains the list of categories and subcategories and their datasets.
  */
@@ -108,7 +111,7 @@ void ImportDatasetWidget::loadCategories() {
 
 		for (int col = 0; col < m_collections.size(); col++) {
 			const QJsonObject& collection = m_collections[col].toObject();
-			const QString& m_collection = collection["name"].toString();
+			const QString& m_collection = collection[QLatin1String("name")].toString();
 
 			QString path = m_jsonDir + QLatin1Char('/') + m_collection + ".json";
 			QFile collectionFile(path);
@@ -119,24 +122,24 @@ void ImportDatasetWidget::loadCategories() {
 					continue;
 				}
 
-				QJsonObject collectionObject = collectionDocument.object();
-				QJsonArray categoryArray = collectionObject.value("categories").toArray();
+				const QJsonObject& collectionObject = collectionDocument.object();
+				const QJsonArray& categoryArray = collectionObject.value(QLatin1String("categories")).toArray();
 
 				//processing categories
 				for(int i = 0 ; i < categoryArray.size(); ++i) {
 					const QJsonObject& currentCategory = categoryArray[i].toObject();
-					const QString& categoryName = currentCategory.value("name").toString();
-					const QJsonArray& subcategories = currentCategory.value("subcategories").toArray();
+					const QString& categoryName = currentCategory.value(QLatin1String("name")).toString();
+					const QJsonArray& subcategories = currentCategory.value(QLatin1String("subcategories")).toArray();
 
 					//processing subcategories
 					for(int j = 0; j < subcategories.size(); ++j) {
 						QJsonObject currentSubCategory = subcategories[j].toObject();
-						QString subcategoryName = currentSubCategory.value("name").toString();
-						const QJsonArray& datasetArray = currentSubCategory.value("datasets").toArray();
+						QString subcategoryName = currentSubCategory.value(QLatin1String("name")).toString();
+						const QJsonArray& datasetArray = currentSubCategory.value(QLatin1String("datasets")).toArray();
 
 						//processing the datasets of the actual subcategory
 						for (const auto& dataset : datasetArray)
-							m_datasetsMap[m_collection][categoryName][subcategoryName].push_back(dataset.toObject().value("filename").toString());
+							m_datasetsMap[m_collection][categoryName][subcategoryName].push_back(dataset.toObject().value(QLatin1String("filename")).toString());
 					}
 				}
 			}
@@ -147,7 +150,7 @@ void ImportDatasetWidget::loadCategories() {
 		m_model = new DatasetModel(m_datasetsMap);
 
 		//Fill up collections combo box
-		ui.cbCollections->addItem(i18n("All") + QString(" (" + QString::number(m_model->allDatasetsList().toStringList().size()) + ")"), QLatin1String("All"));
+		ui.cbCollections->addItem(i18n("All") + QString(" (" + QString::number(m_model->allDatasetsList().toStringList().size()) + ")"));
 		for (QString collection : m_model->collections())
 			ui.cbCollections->addItem(collection + " (" + QString::number(m_model->datasetCount(collection)) + ")", collection);
 
@@ -173,17 +176,17 @@ void ImportDatasetWidget::collectionChanged(int index) {
 	if (!m_allCollections) {
 		for (int i = 0; i < m_collections.size(); ++i) {
 			const QJsonObject& collection = m_collections[i].toObject();
-			if ( m_collection == collection["name"].toString() ) {
-				info += collection["description"].toString();
-				info += "<br><br></hline><br><br>";
+			if ( m_collection == collection[QLatin1String("name")].toString() ) {
+				info += collection[QLatin1String("description")].toString();
+				info += QLatin1String("<br><br></hline><br><br>");
 				break;
 			}
 		}
 	} else {
 		for (int i = 0; i < m_collections.size(); ++i) {
 			const QJsonObject& collection = m_collections[i].toObject();
-			info += collection["description"].toString();
-			info += "<br><br>";
+			info += collection[QLatin1String("description")].toString();
+			info += QLatin1String("<br><br>");
 		}
 	}
 	ui.lInfo->setText(info);
@@ -363,11 +366,11 @@ void ImportDatasetWidget::import(DatasetHandler* datasetHandler) {
 QJsonObject ImportDatasetWidget::loadDatasetObject() {
 	for (int i = 0; i < m_collections.size(); ++i) {
 		const QJsonObject& collectionJson = m_collections[i].toObject();
-		const QString& collection = collectionJson["name"].toString();
+		const QString& collection = collectionJson[QLatin1String("name")].toString();
 
 		//we have to find the selected collection in the metadata file.
 		if(m_allCollections || m_collection == collection) {
-			QFile file(m_jsonDir + QLatin1Char('/') + collection + ".json");
+			QFile file(m_jsonDir + QLatin1Char('/') + collection + QLatin1String(".json"));
 
 			//open the metadata file of the current collection
 			if (file.open(QIODevice::ReadOnly)) {
@@ -378,26 +381,26 @@ QJsonObject ImportDatasetWidget::loadDatasetObject() {
 					return QJsonObject();
 				}
 
-				QJsonArray categoryArray = doc.object().value("categories").toArray();
+				QJsonArray categoryArray = doc.object().value(QLatin1String("categories")).toArray();
 
 				//processing categories
 				for(int i = 0 ; i < categoryArray.size(); ++i) {
 					const QJsonObject currentCategory = categoryArray[i].toObject();
-					const QString categoryName = currentCategory.value("name").toString();
+					const QString categoryName = currentCategory.value(QLatin1String("name")).toString();
 					if(m_category.isEmpty() || categoryName.compare(m_category) == 0) {
-						const QJsonArray subcategories = currentCategory.value("subcategories").toArray();
+						const QJsonArray subcategories = currentCategory.value(QLatin1String("subcategories")).toArray();
 
 						//processing subcategories
 						for(int j = 0; j < subcategories.size(); ++j) {
 							QJsonObject currentSubCategory = subcategories[j].toObject();
-							QString subcategoryName = currentSubCategory.value("name").toString();
+							QString subcategoryName = currentSubCategory.value(QLatin1String("name")).toString();
 
 							if(m_subcategory.isEmpty() || subcategoryName.compare(m_subcategory) == 0) {
-								const QJsonArray datasetArray = currentSubCategory.value("datasets").toArray();
+								const QJsonArray datasetArray = currentSubCategory.value(QLatin1String("datasets")).toArray();
 
 								//processing the datasets of the actual subcategory
 								for (const auto& dataset : datasetArray) {
-									if(getSelectedDataset().compare(dataset.toObject().value("filename").toString()) == 0)
+									if(getSelectedDataset().compare(dataset.toObject().value(QLatin1String("filename")).toString()) == 0)
 										return dataset.toObject();
 								}
 
@@ -433,7 +436,8 @@ const DatasetsMap& ImportDatasetWidget::getDatasetsMap() {
  * @param category the name of the collection
  */
 void ImportDatasetWidget::setCollection(const QString& collection) {
-	ui.cbCollections->setCurrentText(collection + " (" + QString(m_model->datasetCount(collection)) + ")");
+	ui.cbCollections->setCurrentText(collection + QLatin1String(" (")
+				+ QString(m_model->datasetCount(collection)) + QLatin1Char(')'));
 }
 
 /**
@@ -502,9 +506,9 @@ void ImportDatasetWidget::datasetChanged() {
 		const QString& m_collection = ui.cbCollections->itemData(ui.cbCollections->currentIndex()).toString();
 		for (int i = 0; i < m_collections.size(); ++i) {
 			const QJsonObject& collection = m_collections[i].toObject();
-			if ( m_collection.startsWith(collection["name"].toString()) ) {
-				info += collection["description"].toString();
-				info += "<br><br>";
+			if ( m_collection.startsWith(collection[QLatin1String("name")].toString()) ) {
+				info += collection[QLatin1String("description")].toString();
+				info += QLatin1String("<br><br>");
 				break;
 			}
 		}
@@ -513,19 +517,19 @@ void ImportDatasetWidget::datasetChanged() {
 	if(!dataset.isEmpty()) {
 		m_datasetObject = loadDatasetObject();
 
-		info += "<b>" + i18n("Dataset") + ":</b><br>";
-		info += m_datasetObject["name"].toString();
-		info += "<br><br>";
-		info += "<b>" + i18n("Description") + ":</b><br>";
+		info += QLatin1String("<b>") + i18n("Dataset") + QLatin1String(":</b><br>");
+		info += m_datasetObject[QLatin1String("name")].toString();
+		info += QLatin1String("<br><br>");
+		info += QLatin1String("<b>") + i18n("Description") + QLatin1String(":</b><br>");
 
-		if (m_datasetObject.contains("description_url")) {
+		if (m_datasetObject.contains(QLatin1String("description_url"))) {
 			WAIT_CURSOR;
 			if (m_networkManager->networkAccessible() == QNetworkAccessManager::Accessible)
-				m_networkManager->get(QNetworkRequest(QUrl(m_datasetObject["description_url"].toString())));
+				m_networkManager->get(QNetworkRequest(QUrl(m_datasetObject[QLatin1String("description_url")].toString())));
 			else
-				info += m_datasetObject["description"].toString();
+				info += m_datasetObject[QLatin1String("description")].toString();
 		} else
-			info += m_datasetObject["description"].toString();
+			info += m_datasetObject[QLatin1String("description")].toString();
 	} else
 		m_datasetObject = QJsonObject();
 
@@ -541,7 +545,7 @@ void ImportDatasetWidget::downloadFinished(QNetworkReply* reply) {
 		ui.lInfo->setText(ui.lInfo->text() + info);
 	} else {
 		DEBUG("Failed to fetch the description.");
-		ui.lInfo->setText(ui.lInfo->text() + m_datasetObject["description"].toString());
+		ui.lInfo->setText(ui.lInfo->text() + m_datasetObject[QLatin1String("description")].toString());
 	}
 	reply->deleteLater();
 	RESET_CURSOR;
