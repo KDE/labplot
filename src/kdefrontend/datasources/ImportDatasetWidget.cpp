@@ -520,7 +520,6 @@ void ImportDatasetWidget::datasetChanged() {
 		info += QLatin1String("<b>") + i18n("Dataset") + QLatin1String(":</b><br>");
 		info += m_datasetObject[QLatin1String("name")].toString();
 		info += QLatin1String("<br><br>");
-		info += QLatin1String("<b>") + i18n("Description") + QLatin1String(":</b><br>");
 
 		if (m_datasetObject.contains(QLatin1String("description_url"))) {
 			WAIT_CURSOR;
@@ -528,8 +527,10 @@ void ImportDatasetWidget::datasetChanged() {
 				m_networkManager->get(QNetworkRequest(QUrl(m_datasetObject[QLatin1String("description_url")].toString())));
 			else
 				info += m_datasetObject[QLatin1String("description")].toString();
-		} else
+		} else {
+			info += QLatin1String("<b>") + i18n("Description") + QLatin1String(":</b><br>");
 			info += m_datasetObject[QLatin1String("description")].toString();
+		}
 	} else
 		m_datasetObject = QJsonObject();
 
@@ -542,6 +543,30 @@ void ImportDatasetWidget::downloadFinished(QNetworkReply* reply) {
 		QByteArray ba = reply->readAll();
 		QString info(ba);
 		info = info.replace(QLatin1Char('\n'), QLatin1String("<br>"));
+
+		//do further collection specific replacements to get better formatting
+		if (m_collection == QLatin1String("JSEDataArchive")) {
+			info = info.replace(QLatin1String("NAME:"), QLatin1String("<b>NAME:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("TYPE:"), QLatin1String("<b>TYPE:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("SIZE:"), QLatin1String("<b>SIZE:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("DESCRIPTIVE ABSTRACT:"), QLatin1String("<b>DESCRIPTIVE ABSTRACT:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("NOTE:"), QLatin1String("<b>NOTE:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("SPECIAL NOTES:"), QLatin1String("<b>SPECIAL NOTES:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("SOURCE:"), QLatin1String("<b>SOURCE:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("SOURCES:"), QLatin1String("<b>SOURCES:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("DATA <b>SOURCE:</b>"), QLatin1String("<b>DATA SOURCE:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("DATASETS LAYOUT:"), QLatin1String("<b>DATASETS LAYOUT:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("VARIABLE DESCRIPTIONS:"), QLatin1String("<b>VARIABLE DESCRIPTIONS:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("VARIABLES DESCRIPTIONS:"), QLatin1String("<b>VARIABLES DESCRIPTIONS:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("RELATED DATASETS:"), QLatin1String("<b>RELATED DATASETS:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("SPECIAL NOTES:"), QLatin1String("<b>SPECIAL NOTES:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("STORY BEHIND THE DATA:"), QLatin1String("<b>STORY BEHIND THE DATA:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("THE <b>STORY BEHIND THE DATA:</b>"), QLatin1String("<b>THE STORY BEHIND THE DATA:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("PEDAGOGICAL NOTES:"), QLatin1String("<b>PEDAGOGICAL NOTES:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("REFERENCE:"), QLatin1String("<b>REFERENCE:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("REFERENCES:"), QLatin1String("<b>REFERENCES:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("SUBMITTED BY:"), QLatin1String("<b>SUBMITTED BY:</b>"), Qt::CaseSensitive);
+		}
 		ui.lInfo->setText(ui.lInfo->text() + info);
 	} else {
 		DEBUG("Failed to fetch the description.");
