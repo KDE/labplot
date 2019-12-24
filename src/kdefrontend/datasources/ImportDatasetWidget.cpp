@@ -62,9 +62,9 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	ui.twCategories->setSelectionMode(QAbstractItemView::SingleSelection);
 
 	const int size = ui.leSearch->height();
-	ui.lSearch->setPixmap( QIcon::fromTheme(QLatin1String("go-next")).pixmap(size, size) );
+	ui.lSearch->setPixmap( QIcon::fromTheme(QLatin1String("edit-find")).pixmap(size, size) );
 
-	QString info = i18n("Enter the keyword you want to search for.");
+	QString info = i18n("Enter the keyword you want to search for");
 	ui.lSearch->setToolTip(info);
 	ui.leSearch->setToolTip(info);
 	ui.leSearch->setPlaceholderText(i18n("Search..."));
@@ -73,12 +73,15 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 			this, &ImportDatasetWidget::collectionChanged);
 	connect(ui.twCategories, &QTreeWidget::itemDoubleClicked, this, &ImportDatasetWidget::updateDatasets);
 	connect(ui.twCategories, &QTreeWidget::itemSelectionChanged, [this] {
-		if(!m_loadingCategories)
+		if(!m_initializing)
 			updateDatasets(ui.twCategories->selectedItems().first());
 	});
 
 	connect(ui.leSearch, &QLineEdit::textChanged, this, &ImportDatasetWidget::updateCategories);
-	connect(ui.lwDatasets, &QListWidget::itemSelectionChanged, [this]() { datasetChanged(); });
+	connect(ui.lwDatasets, &QListWidget::itemSelectionChanged, [this]() {
+		if (!m_initializing)
+			datasetChanged();
+	});
 	connect(ui.lwDatasets, &QListWidget::doubleClicked, [this]() {emit datasetDoubleClicked(); });
 	connect(m_networkManager, &QNetworkAccessManager::finished, this, &ImportDatasetWidget::downloadFinished);
 }
@@ -208,9 +211,8 @@ void ImportDatasetWidget::collectionChanged(int index) {
 }
 
 void ImportDatasetWidget::updateCategories() {
-	m_loadingCategories = true;
+	m_initializing = true;
 	ui.twCategories->clear();
-	ui.lwDatasets->clear();
 
 	QTreeWidgetItem* rootItem = new QTreeWidgetItem(QStringList(i18n("All")));
 	ui.twCategories->addTopLevelItem(rootItem);
@@ -265,6 +267,7 @@ void ImportDatasetWidget::updateCategories() {
 	if (rootItem->childCount() == 0)
 		ui.twCategories->clear();
 
+
 	//expand the root item and select the first category item
 	rootItem->setExpanded(true);
 	if (filter.isEmpty()) {
@@ -277,7 +280,7 @@ void ImportDatasetWidget::updateCategories() {
 		}
 	}
 
-	m_loadingCategories = false;
+	m_initializing = false;
 }
 
 /**
@@ -285,6 +288,7 @@ void ImportDatasetWidget::updateCategories() {
  * @param item the selected subcategory
  */
 void ImportDatasetWidget::updateDatasets(QTreeWidgetItem* item) {
+	m_initializing = true;
 	ui.lwDatasets->clear();
 
 	const QString& filter = ui.leSearch->text();
@@ -315,6 +319,8 @@ void ImportDatasetWidget::updateDatasets(QTreeWidgetItem* item) {
 		}
 	}
 
+	m_initializing = false;
+
 	//select the first available dataset
 	ui.lwDatasets->setCurrentRow(0);
 }
@@ -337,7 +343,7 @@ void ImportDatasetWidget::addDatasetItems(const QString& collection, const QStri
  * @brief Returns the name of the selected dataset
  */
 QString ImportDatasetWidget::getSelectedDataset() const {
-	if (ui.lwDatasets->selectedItems().count() > 0)
+	if (!ui.lwDatasets->selectedItems().isEmpty())
 		return ui.lwDatasets->selectedItems().at(0)->text();
 	else
 		return QString();
@@ -479,6 +485,18 @@ void ImportDatasetWidget::setDataset(const QString &datasetName) {
  * @brief Updates the details of the currently selected dataset
  */
 void ImportDatasetWidget::datasetChanged() {
+	QString dataset = getSelectedDataset();
+
+	//no need to fetch the same dataset description again if it's already shown
+	if (m_collection == m_prevCollection && m_category == m_prevCategory
+		&& m_subcategory == m_prevSubcategory && dataset == m_prevDataset)
+		return;
+
+	m_prevCollection = m_collection;
+	m_prevCategory = m_category;
+	m_prevSubcategory = m_subcategory;
+	m_prevDataset = dataset;
+
 	QString info;
 	if (ui.cbCollections->currentIndex() != 0) {
 		const QString& m_collection = ui.cbCollections->itemData(ui.cbCollections->currentIndex()).toString();
@@ -492,7 +510,7 @@ void ImportDatasetWidget::datasetChanged() {
 		}
 	}
 
-	if(!getSelectedDataset().isEmpty()) {
+	if(!dataset.isEmpty()) {
 		m_datasetObject = loadDatasetObject();
 
 		info += "<b>" + i18n("Dataset") + ":</b><br>";

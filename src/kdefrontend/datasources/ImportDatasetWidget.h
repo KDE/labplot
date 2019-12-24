@@ -66,9 +66,13 @@ private:
 	QString m_collection;
 	QString m_category;
 	QString m_subcategory;
+	QString m_prevCollection;
+	QString m_prevCategory;
+	QString m_prevSubcategory;
+	QString m_prevDataset;
 	QCompleter* m_completer{nullptr};
 	QString m_jsonDir;
-	bool m_loadingCategories{false};
+	bool m_initializing{false};
 	DatasetModel* m_model{nullptr};
 	QNetworkAccessManager* m_networkManager;
 	QTreeWidgetItem* m_rootCategoryItem;
