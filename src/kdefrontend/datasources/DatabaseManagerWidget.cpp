@@ -559,9 +559,9 @@ void DatabaseManagerWidget::testConnection() {
 
 /*!
  * returns \c true if \c driver is for file databases like Sqlite or for ODBC datasources.
- * returns \false otherwise.
+ * returns \c false otherwise.
  * for file databases and for ODBC/ODBC3, only the name of the database/ODBC-datasource is required.
- * used to show/hide relevant connection settins widgets.
+ * used to show/hide relevant connection settings widgets.
  */
 bool DatabaseManagerWidget::isFileDB(const QString& driver) {
 	//QSQLITE, QSQLITE3

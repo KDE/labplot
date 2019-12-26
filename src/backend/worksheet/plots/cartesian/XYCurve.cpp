@@ -1136,8 +1136,8 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
  * @param minY
  * @param maxY
  * @param overlap if at the previous call was an overlap between the previous two points
- * @param minLogicalDiffX logical difference between two pixels
  * @param pixelDiff x pixel distance between two points
+ * @param pixelCount pixel count
  */
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff, int pixelCount) {
 
@@ -1155,7 +1155,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 			return;
 
 		// using only the difference between the points is not sufficient, because p0 is updated always
-		// indipendent if new line added or not
+		// independent if new line added or not
 		int p0Pixel = (int)((p0Scene.x() - plot->dataRect().x()) / plot->dataRect().width() * pixelCount);
 		int p1Pixel = (int)((p1Scene.x() - plot->dataRect().x()) / plot->dataRect().width() * pixelCount);
 		pixelDiff = p1Pixel - p0Pixel;

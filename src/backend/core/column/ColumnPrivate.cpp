@@ -537,8 +537,8 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
  *
  * This function will return false if the data type
  * of 'other' is not the same as the type of 'this'.
- * \param other pointer to the column to copy
- * \param src_start first row to copy in the column to copy
+ * \param source pointer to the column to copy
+ * \param source_start first row to copy in the column to copy
  * \param dest_start first row to copy in
  * \param num_rows the number of rows to copy
  */
@@ -633,8 +633,8 @@ bool ColumnPrivate::copy(const ColumnPrivate* other) {
  *
  * This function will return false if the data type
  * of 'other' is not the same as the type of 'this'.
- * \param other pointer to the column to copy
- * \param src_start first row to copy in the column to copy
+ * \param source pointer to the column to copy
+ * \param source_start first row to copy in the column to copy
  * \param dest_start first row to copy in
  * \param num_rows the number of rows to copy
  */
@@ -942,7 +942,7 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 
 /*!
  * helper function used in \c Column::load() to set parameters read from the xml file.
- * \param variableColumnPathes is used to restore the pointers to columns from pathes
+ * \param variableColumnPaths is used to restore the pointers to columns from pathes
  * after the project was loaded in Project::load().
  */
  void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames,

@@ -272,17 +272,17 @@ void QxtSpanSliderPrivate::movePressedHandle() {
     The span color is calculated based on QPalette::Highlight.
 
     The keys are bound according to the following table:
-    \table
-    \header \o Orientation    \o Key           \o Handle
-    \row    \o Qt::Horizontal \o Qt::Key_Left  \o lower
-    \row    \o Qt::Horizontal \o Qt::Key_Right \o lower
-    \row    \o Qt::Horizontal \o Qt::Key_Up    \o upper
-    \row    \o Qt::Horizontal \o Qt::Key_Down  \o upper
-    \row    \o Qt::Vertical   \o Qt::Key_Up    \o lower
-    \row    \o Qt::Vertical   \o Qt::Key_Down  \o lower
-    \row    \o Qt::Vertical   \o Qt::Key_Left  \o upper
-    \row    \o Qt::Vertical   \o Qt::Key_Right \o upper
-    \endtable
+    <table>
+    <tr><th>Orientation     <th>Key            <th>Handle
+    <tr><td>Qt::Horizontal  <td>Qt::Key_Left   <td>lower
+    <tr><td>Qt::Horizontal  <td>Qt::Key_Right  <td>lower
+    <tr><td>Qt::Horizontal  <td>Qt::Key_Up     <td>upper
+    <tr><td>Qt::Horizontal  <td>Qt::Key_Down   <td>upper
+    <tr><td>Qt::Vertical    <td>Qt::Key_Up     <td>lower
+    <tr><td>Qt::Vertical    <td>Qt::Key_Down   <td>lower
+    <tr><td>Qt::Vertical    <td>Qt::Key_Left   <td>upper
+    <tr><td>Qt::Vertical    <td>Qt::Key_Right  <td>upper
+    </table>
 
     Keys are bound by the time the slider is created. A key is bound
     to same handle for the lifetime of the slider. So even if the handle
@@ -291,24 +291,20 @@ void QxtSpanSliderPrivate::movePressedHandle() {
 
     \image qxtspanslider.png "QxtSpanSlider in Plastique style."
 
-    \bold {Note:} QxtSpanSlider inherits QSlider for implementation specific
+    <b>Note:</b> QxtSpanSlider inherits QSlider for implementation specific
     reasons. Adjusting any single handle specific properties like
-    \list
-    \o QAbstractSlider::sliderPosition
-    \o QAbstractSlider::value
-    \endlist
+    -# QAbstractSlider::sliderPosition
+    -# QAbstractSlider::value
     has no effect. However, all slider specific properties like
-    \list
-    \o QAbstractSlider::invertedAppearance
-    \o QAbstractSlider::invertedControls
-    \o QAbstractSlider::minimum
-    \o QAbstractSlider::maximum
-    \o QAbstractSlider::orientation
-    \o QAbstractSlider::pageStep
-    \o QAbstractSlider::singleStep
-    \o QSlider::tickInterval
-    \o QSlider::tickPosition
-    \endlist
+    -# QAbstractSlider::invertedAppearance
+    -# QAbstractSlider::invertedControls
+    -# QAbstractSlider::minimum
+    -# QAbstractSlider::maximum
+    -# QAbstractSlider::orientation
+    -# QAbstractSlider::pageStep
+    -# QAbstractSlider::singleStep
+    -# QSlider::tickInterval
+    -# QSlider::tickPosition
     are taken into consideration.
  */
 
@@ -328,8 +324,8 @@ void QxtSpanSliderPrivate::movePressedHandle() {
     This enum describes the available span handles.
 
     \omitvalue NoHandle \omit Internal only (for now). \endomit
-    \value LowerHandle The lower boundary handle.
-    \value UpperHandle The upper boundary handle.
+    \var LowerHandle The lower boundary handle.
+    \var UpperHandle The upper boundary handle.
  */
 
 /*!
