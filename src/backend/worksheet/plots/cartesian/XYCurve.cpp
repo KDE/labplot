@@ -2459,39 +2459,9 @@ void XYCurvePrivate::updateErrorBars() {
 	}
 
 	QVector<QLineF> lines;
+	QVector<QPointF> pointsErrorBarAnchorX;
+	QVector<QPointF> pointsErrorBarAnchorY;
 	float errorPlus, errorMinus;
-
-	//the cap size for the errorbars is given in scene units.
-	//determine first the (half of the) cap size in logical units:
-	// * take the first visible point in logical units
-	// * convert it to scene units
-	// * add to this point an offset corresponding to the cap size in scene units
-	// * convert this point back to logical units
-	// * subtract from this point the original coordinates (without the new offset)
-	//   to determine the cap size in logical units.
-	float capSizeX = 0;
-	float capSizeY = 0;
-	if (errorBarsType != XYCurve::ErrorBarsSimple && !symbolPointsLogical.isEmpty()) {
-		//determine the index of the first visible point
-		size_t i = 0;
-		while (i<visiblePoints.size() && !visiblePoints[i])
-			i++;
-
-		if (i == visiblePoints.size())
-			return; //no visible points -> no error bars to draw
-
-		//cap size for x-error bars
-		QPointF pointScene = cSystem->mapLogicalToScene(symbolPointsLogical.at((int)i));
-		pointScene.setY(pointScene.y()-errorBarsCapSize);
-		QPointF pointLogical = cSystem->mapSceneToLogical(pointScene);
-		capSizeX = (pointLogical.y() - symbolPointsLogical.at((int)i).y())/2;
-
-		//cap size for y-error bars
-		pointScene = cSystem->mapLogicalToScene(symbolPointsLogical.at((int)i));
-		pointScene.setX(pointScene.x()+errorBarsCapSize);
-		pointLogical = cSystem->mapSceneToLogical(pointScene);
-		capSizeY = (pointLogical.x() - symbolPointsLogical.at((int)i).x())/2;
-	}
 
 	for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 		if (!visiblePoints[i])
@@ -2518,23 +2488,14 @@ void XYCurvePrivate::updateErrorBars() {
 			}
 
 			//draw the error bars
-			switch (errorBarsType) {
-			case XYCurve::ErrorBarsSimple:
+			if (errorMinus != 0 || errorPlus !=0)
 				lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
 									QPointF(point.x()+errorPlus, point.y())));
-				break;
-			case XYCurve::ErrorBarsWithEnds:
-				lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
-									QPointF(point.x()+errorPlus, point.y())));
-				if (errorMinus != 0) {
-					lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()-capSizeX),
-										QPointF(point.x()-errorMinus, point.y()+capSizeX)));
-				}
-				if (errorPlus != 0) {
-					lines.append(QLineF(QPointF(point.x()+errorPlus, point.y()-capSizeX),
-										QPointF(point.x()+errorPlus, point.y()+capSizeX)));
-				}
-				break;
+
+			//determine the end points of the errors bars in logical coordinates to draw later the cap
+			if (errorBarsType == XYCurve::ErrorBarsWithEnds) {
+				pointsErrorBarAnchorX << QPointF(point.x() - errorMinus, point.y());
+				pointsErrorBarAnchorX << QPointF(point.x() + errorPlus, point.y());
 			}
 		}
 
@@ -2556,21 +2517,14 @@ void XYCurvePrivate::updateErrorBars() {
 			}
 
 			//draw the error bars
-			switch (errorBarsType) {
-			case XYCurve::ErrorBarsSimple:
-				lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
-									QPointF(point.x(), point.y()+errorPlus)));
-				break;
-			case XYCurve::ErrorBarsWithEnds:
-				lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
-									QPointF(point.x(), point.y()+errorPlus)));
-				if (errorMinus != 0)
-					lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()-errorMinus),
-										QPointF(point.x()+capSizeY, point.y()-errorMinus)));
-				if (errorPlus != 0)
-					lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()+errorPlus),
-										QPointF(point.x()+capSizeY, point.y()+errorPlus)));
-				break;
+			if (errorMinus != 0 || errorPlus !=0)
+				lines.append(QLineF(QPointF(point.x(), point.y() + errorMinus),
+									QPointF(point.x(), point.y() - errorPlus)));
+
+			//determine the end points of the errors bars in logical coordinates to draw later the cap
+			if (errorBarsType == XYCurve::ErrorBarsWithEnds) {
+				pointsErrorBarAnchorY << QPointF(point.x(), point.y() + errorMinus);
+				pointsErrorBarAnchorY << QPointF(point.x(), point.y() - errorPlus);
 			}
 		}
 	}
@@ -2578,10 +2532,28 @@ void XYCurvePrivate::updateErrorBars() {
 	//map the error bars to scene coordinates
 	lines = cSystem->mapLogicalToScene(lines);
 
-	//new painter path for the drop lines
+	//new painter path for the error bars
 	for (const auto& line : lines) {
 		errorBarsPath.moveTo(line.p1());
 		errorBarsPath.lineTo(line.p2());
+	}
+
+	//add caps for x error bars
+	if (!pointsErrorBarAnchorX.isEmpty()) {
+		pointsErrorBarAnchorX = cSystem->mapLogicalToScene(pointsErrorBarAnchorX);
+		for (const auto& point : pointsErrorBarAnchorX) {
+			errorBarsPath.moveTo(QPointF(point.x(), point.y() - errorBarsCapSize/2));
+			errorBarsPath.lineTo(QPointF(point.x(), point.y() + errorBarsCapSize/2));
+		}
+	}
+
+	//add caps for y error bars
+	if (!pointsErrorBarAnchorY.isEmpty()) {
+		pointsErrorBarAnchorY = cSystem->mapLogicalToScene(pointsErrorBarAnchorY);
+		for (const auto& point : pointsErrorBarAnchorY) {
+			errorBarsPath.moveTo(QPointF(point.x() - errorBarsCapSize/2, point.y()));
+			errorBarsPath.lineTo(QPointF(point.x() + errorBarsCapSize/2, point.y()));
+		}
 	}
 
 	recalcShapeAndBoundingRect();
