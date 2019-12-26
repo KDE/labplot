@@ -577,8 +577,7 @@ void MainWin::initMenus() {
 	m_editMenu->addAction(m_editFitsFileAction);
 
 	KColorSchemeManager schemeManager;
-	KActionMenu* schemesMenu = schemeManager.createSchemeSelectionMenu(i18n("Color Theme"), this);
-	schemesMenu->menu()->setTitle(i18n("Color Theme"));
+	KActionMenu* schemesMenu = schemeManager.createSchemeSelectionMenu(i18n("Color Scheme"), QString(), this);
 	schemesMenu->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
 
 	QMenu* settingsMenu = dynamic_cast<QMenu*>(factory()->container("settings", this));
