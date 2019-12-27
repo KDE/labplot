@@ -491,10 +491,6 @@ void LabelWidget::fontSizeChanged(int value) {
 	if (m_initializing)
 		return;
 
-	QTextCursor c = ui.teLabel->textCursor();
-	if (c.selectedText().isEmpty())
-		ui.teLabel->selectAll();
-
 	QFont font = m_label->teXFont();
 	font.setPointSize(value);
 	for (auto* label : m_labelsList)
@@ -900,9 +896,10 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
  * or something else went wrong during rendering (\sa ExpressionTextEdit::validateExpression())
  */
 void LabelWidget::labelTeXImageUpdated(bool valid) {
-	if (!valid)
-		ui.teLabel->setStyleSheet(QLatin1String("QTextEdit{background: red;}"));
-	else
+	if (!valid) {
+		if (ui.teLabel->styleSheet().isEmpty())
+			ui.teLabel->setStyleSheet(QLatin1String("QTextEdit{background: red;}"));
+	} else
 		ui.teLabel->setStyleSheet(QString());
 }
 
