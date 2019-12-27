@@ -68,6 +68,18 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	tempPath = QDir::tempPath();
 #endif
 
+	// make sure we have preview.sty available
+	if (!tempPath.contains(QLatin1String("preview.sty"))) {
+		QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String("latex/preview.sty"));
+		if (file.isEmpty()) {
+			WARN("Couldn't find preview.sty.");
+			*success = false;
+			return QImage();
+		}
+		else
+			QFile::copy(file, tempPath + QDir::separator() + QLatin1String("preview.sty"));
+	}
+
 	//create a temporary file
 	QTemporaryFile file(tempPath + QDir::separator() + "labplot_XXXXXX.tex");
 	// FOR DEBUG: file.setAutoRemove(false);
