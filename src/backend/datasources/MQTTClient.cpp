@@ -27,8 +27,6 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 ***************************************************************************/
 #include "backend/datasources/MQTTClient.h"
 
-#ifdef HAVE_MQTT
-
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 
@@ -1355,4 +1353,4 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 
 	return !reader->hasError();
 }
-#endif
+

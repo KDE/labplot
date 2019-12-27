@@ -29,8 +29,6 @@ Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
 #include "MQTTConnectionManagerDialog.h"
 #include "MQTTConnectionManagerWidget.h"
 
-#ifdef HAVE_MQTT
-
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KWindowConfig>
@@ -122,4 +120,3 @@ void MQTTConnectionManagerDialog::save() {
 	if (m_changed)
 		mainWidget->saveConnections();
 }
-#endif

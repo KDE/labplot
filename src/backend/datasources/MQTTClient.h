@@ -30,7 +30,6 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
 #include "backend/core/Folder.h"
 
-#ifdef HAVE_MQTT
 #include <QTimer>
 #include <QVector>
 #include <QtMqtt/QMqttClient>
@@ -254,7 +253,5 @@ signals:
 	void MQTTTopicsChanged();
 	void readFromTopics();
 	void clientAboutToBeDeleted(const QString&, quint16);
-
-#endif //HAVE_MQTT
 };
 #endif // MQTTCLIENT_H

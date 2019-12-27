@@ -34,7 +34,6 @@ class MQTTConnectionManagerWidget;
 class QDialogButtonBox;
 
 class MQTTConnectionManagerDialog : public QDialog {
-#ifdef HAVE_MQTT
 	Q_OBJECT
 
 public:
@@ -54,7 +53,6 @@ private:
 private slots:
 	void changed();
 	void save();
-#endif	// HAVE_MQTT
 };
 
 #endif	// MQTTCONNECTIONMANAGERDIALOG_H

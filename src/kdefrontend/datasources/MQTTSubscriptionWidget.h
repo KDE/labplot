@@ -31,13 +31,10 @@ Copyright            : (C) 2019 by Kovacs Ferencz (kferike98@gmail.com)
 #include <QWidget>
 #include <QVector>
 
-#ifdef HAVE_MQTT
 #include "ui_mqttsubscriptionwidget.h"
 class QMqttSubscription;
-#endif
 
 class MQTTSubscriptionWidget : public QWidget {
-#ifdef HAVE_MQTT
 	Q_OBJECT
 
 public:
@@ -106,7 +103,6 @@ private slots:
 	void updateSubscriptionTree(const QVector<QString>&);
 	void clearWidgets();
 	void onDisconnect();
-#endif	// HAVE_MQTT
 };
 
 #endif // MQTTSUBSCRIPTIONWIDGET_H

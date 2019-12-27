@@ -27,7 +27,6 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 ***************************************************************************/
 #include "backend/datasources/MQTTSubscription.h"
 
-#ifdef HAVE_MQTT
 #include "backend/datasources/MQTTTopic.h"
 #include "backend/datasources/MQTTClient.h"
 
@@ -194,4 +193,4 @@ bool MQTTSubscription::load(XmlStreamReader* reader, bool preview) {
 	emit loaded(this->subscriptionName());
 	return !reader->hasError();
 }
-#endif
+

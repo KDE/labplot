@@ -27,7 +27,6 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 ***************************************************************************/
 #include "backend/datasources/MQTTTopic.h"
 
-#ifdef HAVE_MQTT
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTClient.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
@@ -311,4 +310,3 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 
 	return !reader->hasError();
 }
-#endif

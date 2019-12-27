@@ -38,11 +38,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ROOTOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/MQTTErrorWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/BaseDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CursorDock.cpp
@@ -100,8 +96,15 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/ResizableTextEdit.cpp
-	${KDEFRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp
 )
+
+if (Qt5Mqtt_FOUND)
+	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp)
+	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp)
+	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTErrorWidget.cpp)
+	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp)
+	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp)
+endif()
 
 if(APPLE)
   list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/worksheet/PresenterWidget_mac.mm)
@@ -118,7 +121,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsworksheetpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
-	${KDEFRONTEND_DIR}/ui/mqttwillsettingswidget.ui
+
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/databasemanagerwidget.ui
@@ -130,10 +133,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/netcdfoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/rootoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
-	${KDEFRONTEND_DIR}/ui/datasources/mqtterrorwidget.ui
-	${KDEFRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
-	${KDEFRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cursordock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
@@ -178,6 +178,13 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
 )
 
+if (Qt5Mqtt_FOUND)
+	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui)
+	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqtterrorwidget.ui)
+	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui)
+	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/mqttwillsettingswidget.ui)
+endif()
+
 set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/Folder.cpp
 	${BACKEND_DIR}/core/AbstractAspect.cpp
@@ -221,9 +228,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/plugin/PluginManager.cpp
 	${BACKEND_DIR}/datasources/AbstractDataSource.cpp
 	${BACKEND_DIR}/datasources/LiveDataSource.cpp
-	${BACKEND_DIR}/datasources/MQTTClient.cpp
-	${BACKEND_DIR}/datasources/MQTTSubscription.cpp
-	${BACKEND_DIR}/datasources/MQTTTopic.cpp
 	${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
 	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
 	${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
@@ -286,6 +290,13 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datapicker/Segments.cpp
 	${BACKEND_DIR}/datapicker/DatapickerCurve.cpp
 )
+
+if (Qt5Mqtt_FOUND)
+	list(APPEND BACKEND_SOURCES ${KDEFRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp)
+	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTClient.cpp)
+	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTSubscription.cpp)
+	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTTopic.cpp)
+endif()
 
 IF (ENABLE_LIBORIGIN)
 	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
