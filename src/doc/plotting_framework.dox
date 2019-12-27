@@ -47,6 +47,7 @@ Bits and pieces
 
 (incomplete, only examples given)
 
+\verbatim
 AbstractAspect
 |
 +- AbstractPart
@@ -88,11 +89,13 @@ AbstractAspect
           +- LogAxis
           |
           `- SqrtAxis
+\endverbatim
 
 A sample object (aspect) hierarchy
 
 (as displayed by the project explorer)
 
+\verbatim
 MyProject
 |
 `- Worksheet1
@@ -114,6 +117,7 @@ MyProject
            |     `- Curve1 (a LineSymbolCurve)
            |
            `- Legend (possibly multiple child elements)
+\endverbatim
 
 \section Features
 
