@@ -280,7 +280,8 @@ void ImportDatasetWidget::updateCategories() {
 		if (rootItem->child(0) && rootItem->child(0)->child(0)) {
 			rootItem->child(0)->child(0)->setSelected(true);
 			updateDatasets(rootItem->child(0)->child(0));
-		}
+		} else
+			updateDatasets(nullptr);
 	}
 
 	m_initializing = false;
@@ -293,6 +294,13 @@ void ImportDatasetWidget::updateCategories() {
 void ImportDatasetWidget::updateDatasets(QTreeWidgetItem* item) {
 	m_initializing = true;
 	ui.lwDatasets->clear();
+
+	if (!item) {
+		//no category item is selected because nothing matches the search string
+		m_initializing = false;
+		datasetChanged();
+		return;
+	}
 
 	const QString& filter = ui.leSearch->text();
 
@@ -325,7 +333,8 @@ void ImportDatasetWidget::updateDatasets(QTreeWidgetItem* item) {
 	m_initializing = false;
 
 	//select the first available dataset
-	ui.lwDatasets->setCurrentRow(0);
+	if (ui.lwDatasets->count())
+		ui.lwDatasets->setCurrentRow(0);
 }
 
 void ImportDatasetWidget::addDatasetItems(const QString& collection, const QString& category, const QString& subcategory, const QString& filter) {

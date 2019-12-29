@@ -30,17 +30,16 @@
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/DatasetHandler.h"
 
-#include <KLocalizedString>
 #include <QDir>
 #include <QFile>
 #include <QJsonArray>
-// #include <QJsonDocument>
 #include <QJsonObject>
-// #include <QJsonValue>
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
+
+#include <KLocalizedString>
 
 /*!
   \class DatasetHandler
