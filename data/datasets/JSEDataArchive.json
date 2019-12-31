@@ -98,7 +98,7 @@
                     "datasets": [
                         {
                             "description": "Drug interaction study of a new and a standard oral contraceptive \ntherapy.",
-                            "description_url": "jse.amstat.org/datasets/ocdrug.txt",
+                            "description_url": "http://jse.amstat.org/datasets/ocdrug.txt",
                             "url": "http://jse.amstat.org/datasets/ocdrug.dat.txt",
                             "filename": "ocdrug",
                             "name": "Drug Interaction",
