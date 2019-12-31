@@ -41,6 +41,8 @@
 #include <QNetworkReply>
 #include <QStandardPaths>
 
+#include <KConfigGroup>
+#include <KSharedConfig>
 #include <KLocalizedString>
 
 /*!
@@ -67,6 +69,7 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	ui.lSearch->setToolTip(info);
 	ui.leSearch->setToolTip(info);
 	ui.leSearch->setPlaceholderText(i18n("Search..."));
+	ui.leSearch->setFocus();
 
 	connect(ui.cbCollections, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
 			this, &ImportDatasetWidget::collectionChanged);
@@ -83,10 +86,30 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	});
 	connect(ui.lwDatasets, &QListWidget::doubleClicked, [this]() {emit datasetDoubleClicked(); });
 	connect(m_networkManager, &QNetworkAccessManager::finished, this, &ImportDatasetWidget::downloadFinished);
+
+	//select the last used collection
+	KConfigGroup conf(KSharedConfig::openConfig(), "ImportDatasetWidget");
+	const QString& collection = conf.readEntry("Collection", QString());
+	if (collection.isEmpty())
+		ui.cbCollections->setCurrentIndex(0);
+	else {
+		for (int i = 0; i < ui.cbCollections->count(); ++i) {
+			if (ui.cbCollections->itemData(i).toString() == collection) {
+				ui.cbCollections->setCurrentIndex(i);
+				break;
+			}
+		}
+	}
 }
 
 ImportDatasetWidget::~ImportDatasetWidget() {
 	delete m_model;
+
+	//save the selected collection
+	if (ui.cbCollections->currentIndex() != -1) {
+		KConfigGroup conf(KSharedConfig::openConfig(), "ImportDatasetWidget");
+		conf.writeEntry("Collection", ui.cbCollections->itemData(ui.cbCollections->currentIndex()).toString());
+	}
 }
 
 /**

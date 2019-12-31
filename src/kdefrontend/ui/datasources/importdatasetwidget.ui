@@ -96,7 +96,7 @@
    <item row="1" column="1">
     <widget class="QTreeWidget" name="twCategories">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -127,7 +127,7 @@
    <item row="1" column="3">
     <widget class="QListWidget" name="lwDatasets">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -172,8 +172,8 @@
  <tabstops>
   <tabstop>cbCollections</tabstop>
   <tabstop>twCategories</tabstop>
-  <tabstop>leSearch</tabstop>
   <tabstop>lwDatasets</tabstop>
+  <tabstop>leSearch</tabstop>
   <tabstop>saDetails</tabstop>
  </tabstops>
  <resources/>
