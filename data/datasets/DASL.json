@@ -40,7 +40,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "number of days spent in hospital by patients admitted to hospitals in New York during one year with a primary diagnosis of acute myocardial infarction (heart attack). Data are from public medicare records. Consider the distribution of stays. The data also include the age and sex of the patient and the diagnostic (DRG) code. \n",
+                            "description": "number of days spent in hospital by patients admitted to hospitals in New York during one year with a primary diagnosis of acute myocardial infarction (heart attack). Data are from public medicare records. Consider the distribution of stays. The data also include the age and sex of the patient and the diagnostic (DRG) code.",
                             "url": "https://dasl.datadescription.com/download/data/3263",
                             "filename": "Heart-attack-charges",
                             "name": "Heart attack charges",
@@ -239,7 +239,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Is it true that students\ntend to gain weight during their first year in college? Cornell Professor of Nutrition David Levitsky recruited students from two large sections\nof an introductory health course. Although they were\nvolunteers, they appeared to match the rest of the freshman\nclass in terms of demographic variables such as sex\nand ethnicity. The students were weighed during the first\nweek of the semester, then again 12 weeks later. Based\non Professor Levitsky's data, estimate the mean weight\ngain in first-semester freshmen and comment on the\n\"freshman 15\". (Weights are in pounds.)",
+                            "description": "Is it true that students\ntend to gain weight during their first year in college? Cornell Professor of Nutrition David Levitsky recruited students from two large sections\nof an introductory health course. Although they were\nvolunteers, they appeared to match the rest of the freshman\nclass in terms of demographic variables such as sex\nand ethnicity. The students were weighed during the first\nweek of the semester, then again 12 weeks later. Based\non Professor Levitsky's data, estimate the mean weight\ngain in first-semester freshmen and comment on the\n\"freshman 15\". (Weights are in pounds).",
                             "url": "https://dasl.datadescription.com/download/data/3218",
                             "filename": "Freshman-15",
                             "name": "Freshman 15",
@@ -840,7 +840,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The American International Group (AIG) was once the 18th largest corporation in the world. By early 2007 AIG had assets of $1 trillion, $110 billion in revenues, 74 million customers and 116,000 employees in 130 countries and jurisdictions. Yet just 18 months later, AIG found itself on the brink of failure and in need of emergency [\u2026]",
+                            "description": "The American International Group (AIG) was once the 18th largest corporation in the world. By early 2007 AIG had assets of $1 trillion, $110 billion in revenues, 74 million customers and 116,000 employees in 130 countries and jurisdictions. Yet just 18 months later, AIG found itself on the brink of failure and in need of emergency government assistance.Between 2007 and 2009 AIG stock lost more than 99% of its value, hitting $0.35 in early March. Could the crash have been predicted?",
                             "url": "https://dasl.datadescription.com/download/data/3047",
                             "filename": "AIG-monthly",
                             "name": "AIG monthly",
@@ -903,7 +903,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The S&P/Case-Shiller Home Price Indices track changes in the value of residential real estate nationally and in 20 metropolitan regions. (Some of these indices are actually traded on the Chicago Mercantile Exchange.) The data set Case-Shiller by City gives the monthly index values for each of the 20 cities tracked by the Case-Shiller index and [\u2026] ",
+                            "description": "The S&P/Case-Shiller Home Price Indices track changes in the value of residential real estate nationally and in 20 metropolitan regions. (Some of these indices are actually traded on the Chicago Mercantile Exchange.) The data set Case-Shiller by City gives the monthly index values for each of the 20 cities tracked by the Case-Shiller index  and two national composite series.",
                             "url": "https://dasl.datadescription.com/download/data/3102",
                             "filename": "Case-Shiller-by-city",
                             "name": "Case-Shiller by city",
@@ -1538,14 +1538,14 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "In Olympic Archery both men and women start with a field of 64 qualifiers. Each archer shoots a round of 72 arrows (total possible score: 720) to establish a seeding position. Then they participate in a single-elimination contest. Thus, the seeding round is the only one that provides data for all archers (because some are [\u2026] ",
+                            "description": "In Olympic Archery both men and women start with a field of 64 qualifiers. Each archer shoots a round of 72 arrows (total possible score: 720) to establish a seeding position. Then they participate in a single-elimination contest. Thus, the seeding round is the only one that provides data for all archers (because some are eliminated at each step of the elimination rounds). The data are the seeding round data for the 2008 Olympics.",
                             "url": "https://dasl.datadescription.com/download/data/3056",
                             "filename": "Archery",
                             "name": "Archery",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "American League baseball games are played under the designated hitter rule, meaning that pitchers, often weak hitters, do not come to bat. Baseball owners believe that the designated hitter rule means more runs scored, which in turn means higher attendance. Is there evidence that more fans attend games if the teams score more runs? The [\u2026] ",
+                            "description": "American League baseball games are played under the designated hitter rule, meaning that pitchers, often weak hitters, do not come to bat. Baseball owners believe that the designated hitter rule means more runs scored, which in turn means higher attendance. Is there evidence that more fans attend games if the teams score more runs? The data give attendance total, home, and away for each team in major league baseball for the 2016 season. Does attendance respond to winning or runs scored?",
                             "url": "https://dasl.datadescription.com/download/data/3057",
                             "filename": "Attendance-2016",
                             "name": "Attendance 2016",
@@ -1601,14 +1601,14 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "A company that makes basketballs has the motto: \"Our basketballs are ready to play.\" Therefore, it is important to the company that the basketballs are inflated with the proper amount of air when shipped. Most basketballs are inflated to 7 to 9 pounds per square inch. Recently the company selected a random basketball from its [\u2026] ",
+                            "description": "A company that makes basketballs has the motto: \"Our basketballs are ready to play.\" Therefore, it is important to the company that the basketballs are inflated with the proper amount of air when shipped. Most basketballs are inflated to 7 to 9 pounds per square inch. Recently the company selected a random basketball from its production line at four different time periods over its normal production day. The results were recorded.",
                             "url": "https://dasl.datadescription.com/download/data/3068",
                             "filename": "Basketballs",
                             "name": "Basketballs",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The Belmont Stakes is the last and longest of the three horse races that make up the Triple Crown. Curiously, in some of the Belmont races horses have run clockwise around the track, and in others they have run counterclockwise. Do the horses care? But note that the length of the race has also not [\u2026] ",
+                            "description": "The Belmont Stakes is the last and longest of the three horse races that make up the Triple Crown. Curiously, in some of the Belmont races horses have run clockwise around the track, and in others they have run counterclockwise. Do the horses care? But note that the length of the race has also not been consistent. In fact, there have been five different lengths from 1.125 miles to 1.625 miles.",
                             "url": "https://dasl.datadescription.com/download/data/3072",
                             "filename": "Belmont-stakes-2015",
                             "name": "Belmont stakes 2015",
@@ -1935,14 +1935,14 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "At a barbershop music singing competition, choruses are judged on three scales: Music (quality of the arrangement, etc.), Performance, and Singing. The scales are supposed to be independent of each other, and each is scored by a different judge, but a friend claims that he can predict a chorus's singing score from the other two [\u2026] ",
+                            "description": "At a barbershop music singing competition, choruses are judged on three scales: Music (quality of the arrangement, etc.), Performance, and Singing. The scales are supposed to be independent of each other, and each is scored by a different judge, but a friend claims that he can predict a chorus's singing score from the other two scores. Are the scores really independent?",
                             "url": "https://dasl.datadescription.com/download/data/3061",
                             "filename": "Barbershop-music",
                             "name": "Barbershop music",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "In 2016 13.27 million people attended a Broadway show, paying an average of more than $100 per ticket. The Broadway League, Inc. (https://www.broadwayleague.com/research/statistics-broadway-nyc/) provides some historical and current data. These variables are available for each year since the 1984-85 season: Season (The initial year of the season, so the 1984-85 season is 1984.) Gross ($M) [\u2026] ",
+                            "description": "In 2016 13.27 million people attended a Broadway show, paying an average of more than $100 per ticket. The Broadway League, Inc. (https://www.broadwayleague.com/research/statistics-broadway-nyc/) provides some historical and current data. These variables are available for each year since the 1984-85 season: Season (The initial year of the season, so the 1984-85 season is 1984.) Gross ($M) Attendance (M) Note: before 2009 this is Paid Attendance. Beginning 2009 it is Attendance.) Playing weeks (Total weeks during each show performed summed over all shows; the best measure of Broadway’s overall activity.)",
                             "url": "https://dasl.datadescription.com/download/data/3087",
                             "filename": "Broadway-shows",
                             "name": "Broadway shows",
@@ -1956,7 +1956,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The dataset holds facts about candy bars read from their nutrition labels. The data are a good example for multiple regression (e.g. what contributes to the calories of a candy bar?). For such an analysis, the indicator variable for nuts appears to work well. Note that 5 sugar-free candy bars are marked as NA in [\u2026] ",
+                            "description": "The dataset holds facts about candy bars read from their nutrition labels. The data are a good example for multiple regression (e.g. what contributes to the calories of a candy bar?). For such an analysis, the indicator variable for nuts appears to work well. Note that 5 sugar-free candy bars are marked as NA in the sugar variable to remove them from analyses using sugar. The data have been standardized on a per serving basis to equalize for different serving sizes.",
                             "url": "https://dasl.datadescription.com/download/data/3092",
                             "filename": "Candy-bars",
                             "name": "Candy bars",
@@ -1977,7 +1977,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The data are drawn from the work of O. M. Latter in 1902 and were used in a fundamental textbook on statistical quality control by L. H. C. Tippett (1902-1985), one of the pioneers in that field. \n",
+                            "description": "The data are drawn from the work of O. M. Latter in 1902 and were used in a fundamental textbook on statistical quality control by L. H. C. Tippett (1902-1985), one of the pioneers in that field.",
                             "url": "https://dasl.datadescription.com/download/data/3149",
                             "filename": "Cuckoos-and-quality-control",
                             "name": "Cuckoos and quality control",
@@ -2033,7 +2033,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Is the Statue of Liberty's nose too long? Her nose measures 4\u20326\u2033, but she is a large statue, after all. Her arm is 42 feet long. That means her arm is 42/4.5 = 9.3 times as long as her nose. Is that a reasonable ratio? The data give arm and nose lengths of 18 girls ",
+                            "description": "Is the Statue of Liberty's nose too long? Her nose measures 4'6'', but she is a large statue, after all. Her arm is 42 feet long. That means her arm is 42/4.5 = 9.3 times as long as her nose. Is that a reasonable ratio? The data give arm and nose lengths of 18 girls ",
                             "url": "https://dasl.datadescription.com/download/data/3311",
                             "filename": "Libertys-nose",
                             "name": "Libertys nose",
@@ -2075,7 +2075,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The GfK Roper Reports\u00ae Worldwide Survey asked 30,000 consumers in 23 countries about their attitudes on health, beauty, and other personal values. One question participants were asked was how important their personal appearance is to them. The data are a contingency table of responses to this question by age decade.",
+                            "description": "The GfK Roper Reports' Worldwide Survey asked 30,000 consumers in 23 countries about their attitudes on health, beauty, and other personal values. One question participants were asked was how important their personal appearance is to them. The data are a contingency table of responses to this question by age decade.",
                             "url": "https://dasl.datadescription.com/download/data/3392",
                             "filename": "Personal-appearance",
                             "name": "Personal appearance",
@@ -2204,7 +2204,7 @@
                 {
                     "datasets": [
                         {
-                            "description": "Commercial airlines overbook flights, selling more tickets than they have seats, because a sizeable number of reservation holders don't show up in time for their flights. But sometimes, there are more passengers wishing to board than there are seats. Most airlines try to entice travelers to voluntarily give up their seats in return for free [\u2026] ",
+                            "description": "Commercial airlines overbook flights, selling more tickets than they have seats, because a sizeable number of reservation holders don't show up in time for their flights. But sometimes, there are more passengers wishing to board than there are seats. Most airlines try to entice travelers to voluntarily give up their seats in return for free travel or other awards, but they do have to \"bump\" some travelers involuntarily. Of course, they don’t like to offend passengers by bumping, so they are constantly trying to improve their systems for predicting how many passengers will show up. Have the rates of \"bumping\" changed? Here are data on the number of passengers involuntarily denied boarding (\"bumping\" is not the approved term) per 10,000 passengers during the periods of January to September in 2016 and 2017 by airline.",
                             "url": "https://dasl.datadescription.com/download/data/3048",
                             "filename": "Airline-bumping",
                             "name": "Airline bumping 2017",
@@ -2464,14 +2464,14 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "In a statement to a Senate Public Works Committee, a senior executive of Texaco, Inc., cited a study on the effectiveness of auto filters on reducing noise. Because of concerns about performance, two types of filters were studied, a standard silencer and a new device developed by the Associated Octel Company. Noise is in decibels/10. [\u2026] ",
+                            "description": "In a statement to a Senate Public Works Committee, a senior executive of Texaco, Inc., cited a study on the effectiveness of auto filters on reducing noise. Because of concerns about performance, two types of filters were studied, a standard silencer and a new device developed by the Associated Octel Company. Noise is in decibels/10. Type 1 = standard, Type 2 = Octel.",
                             "url": "https://dasl.datadescription.com/download/data/3058",
                             "filename": "Auto-noise-filters",
                             "name": "Auto noise filters",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "A student experiment was run to test the performance of 4 brands of batteries under 2 different Environments (room temperature and cold). For each of the 8 treatments, 2 batteries of a particular brand were put into a flashlight. The flashlight was then turned on and allowed to run until the light went out. The [\u2026] ",
+                            "description": "A student experiment was run to test the performance of 4 brands of batteries under 2 different Environments (room temperature and cold). For each of the 8 treatments, 2 batteries of a particular brand were put into a flashlight. The flashlight was then turned on and allowed to run until the light went out. The number of minutes the flashlight stayed on was recorded. Each treatment condition was run twice.",
                             "url": "https://dasl.datadescription.com/download/data/3070",
                             "filename": "Batteries",
                             "name": "Batteries",
@@ -2492,7 +2492,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "A start-up company has developed an improved electronic chip for use in laboratory equipment. The company needs to project the manufacturing cost, so it develops a spreadsheet model that takes into account the purchase of production equipment, overhead, raw materials, depreciation, maintenance, and other business costs. The spreadsheet estimates the cost of producing 10,000 to [\u2026] ",
+                            "description": "A start-up company has developed an improved electronic chip for use in laboratory equipment. The company needs to project the manufacturing cost, so it develops a spreadsheet model that takes into account the purchase of production equipment, overhead, raw materials, depreciation, maintenance, and other business costs. The spreadsheet estimates the cost of producing 10,000 to 200,000 chips per year, as seen in the table.",
                             "url": "https://dasl.datadescription.com/download/data/3109",
                             "filename": "Chips",
                             "name": "Chips",
