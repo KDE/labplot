@@ -7,7 +7,7 @@
                 {
                     "datasets": [
                         {
-                            "description": "A group of female college students took a test that measured their verbal IQs and also underwent an MRI scan to measure the size of their brains (in 1000s of pixels)",
+                            "description": "A group of female college students took a test that measured their verbal IQs and also underwent an MRI scan to measure the size of their brains (in 1000s of pixels).",
                             "url": "https://dasl.datadescription.com/download/data/3084",
                             "filename": "Brain-size",
                             "name": "Brain size",
@@ -33,7 +33,7 @@
                 {
                     "datasets": [
                         {
-                            "description": "The Framingham Heart Study is one of the longest running health studies. It has followed original subjects, their children, and their grand children, looking for factors that affect cardiac health.\nThese data only include\nsubjects whose cholesterol was measured in the first exam.\nSource: \"Statistical Methods in Epidemiology\" by H.A.Kahn and C.T.Sempos\nSBP: Systolic blood pressure at first exam\nDBP: Diastolic blood pressure at first exam\nCHOL: Serum choloesterol at first exam\nFRW : Framingham relative weight; a standardized measure of weight adjusted for sex and height\nCIG: Number of cigarettes smoked/day at first exam\nDEATH: First biannual exam missed due to death; 0=\"alive at tenth biannual exam.\" (This exam was given in the 18th year of the study.)\nCAUSE: 0=aliv e at exam 10, 1=Coronary Heart Disease (sudden), 2=CHD (not sudden), 3=Stroke,4=Other cardiovascular disease, 5=cancer, 6=other",
+                            "description": "The Framingham Heart Study is one of the longest running health studies. It has followed original subjects, their children, and their grand children, looking for factors that affect cardiac health.\nThese data only include\nsubjects whose cholesterol was measured in the first exam.\nSource: \"Statistical Methods in Epidemiology\" by H.A.Kahn and C.T.Sempos\nSBP: Systolic blood pressure at first exam\nDBP: Diastolic blood pressure at first exam\nCHOL: Serum choloesterol at first exam\nFRW : Framingham relative weight; a standardized measure of weight adjusted for sex and height\nCIG: Number of cigarettes smoked/day at first exam\nDEATH: First biannual exam missed due to death; 0=\"alive at tenth biannual exam.\" (This exam was given in the 18th year of the study.)\nCAUSE: 0=aliv e at exam 10, 1=Coronary Heart Disease (sudden), 2=CHD (not sudden), 3=Stroke,4=Other cardiovascular disease, 5=cancer, 6=other.",
                             "url": "https://dasl.datadescription.com/download/data/3217",
                             "filename": "Framingham",
                             "name": "Framingham",
@@ -47,7 +47,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Number of days spent in hospital by female patients admitted to hospitals in New York during one year with a primary diagnosis of acute myocardial infarction (heart attack). Data are from public medicare records. Consider the distribution of stays. The data also include the age of the patient",
+                            "description": "Number of days spent in hospital by female patients admitted to hospitals in New York during one year with a primary diagnosis of acute myocardial infarction (heart attack). Data are from public medicare records. Consider the distribution of stays. The data also include the age of the patient.",
                             "url": "https://dasl.datadescription.com/download/data/3264",
                             "filename": "Heart-attack-stays",
                             "name": "Heart attack stays",
@@ -66,7 +66,7 @@
                 {
                     "datasets": [
                         {
-                            "description": "Does blood pressure, on average, change with age. The data here are two categorical variables: Blood pressure categorized as High, Normal, Low, and Age categorized as under 30, 30-49, and over 50",
+                            "description": "Does blood pressure, on average, change with age. The data here are two categorical variables: Blood pressure categorized as High, Normal, Low, and Age categorized as under 30, 30-49, and over 50.",
                             "url": "https://dasl.datadescription.com/download/data/3077",
                             "filename": "Blood-Pressure",
                             "name": "Blood Pressure",
@@ -190,21 +190,21 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Measurements of 250 men of various ages. The percent of a man's body that is fat is a matter of concern for health and fitness. But the %bodyfat is difficult and expensive to measure accurately. These data offer correct %bodyfat measurements along with a variety of easier to find measures. Can you build a model ",
+                            "description": "Measurements of 250 men of various ages. The percent of a man's body that is fat is a matter of concern for health and fitness. But the %bodyfat is difficult and expensive to measure accurately. These data offer correct %bodyfat measurements along with a variety of easier to find measures. Can you build a model to predict the %bodyfat from other, more easily made, measurements?",
                             "url": "https://dasl.datadescription.com/download/data/30790",
                             "filename": "Bodyfat",
                             "name": "Bodyfat",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Burger King publishes full nutrition information on its menu. These data are for the foods on the menu recently. (Visit the site listed as the reference for the most current list.) ",
+                            "description": "Burger King publishes full nutrition information on its menu. These data are for the foods on the menu recently. (Visit the site listed as the reference for the most current list.)",
                             "url": "https://dasl.datadescription.com/download/data/3089",
                             "filename": "Burger-King-items",
                             "name": "Burger King items",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Nutritionists are concerned that people have a good breakfast. But what does that mean? students collected nutrition information from the nutrition labels of cereals in one supermarket.",
+                            "description": "Nutritionists are concerned that people have a good breakfast. But what does that mean? Students collected nutrition information from the nutrition labels of cereals in one supermarket.",
                             "url": "https://dasl.datadescription.com/download/data/3107",
                             "filename": "Cereals",
                             "name": "Cereals",
@@ -225,7 +225,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Fertility (births/woman) and Female life expectancy for 219 countries of the world. (Data is available on both variables for only 200). How is life expectancy related to fertility? Are there any outliers and, if so, what do they indicate",
+                            "description": "Fertility (births/woman) and Female life expectancy for 219 countries of the world. (Data is available on both variables for only 200). How is life expectancy related to fertility? Are there any outliers and, if so, what do they indicate?",
                             "url": "https://dasl.datadescription.com/download/data/3202",
                             "filename": "Fertility-and-life-expectancy-2014",
                             "name": "Fertility and life expectancy 2014",
@@ -239,7 +239,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Is it true that students\ntend to gain weight during their first year in college? Cornell Professor of Nutrition David Levitsky recruited students from two large sections\nof an introductory health course. Although they were\nvolunteers, they appeared to match the rest of the freshman\nclass in terms of demographic variables such as sex\nand ethnicity. The students were weighed during the first\nweek of the semester, then again 12 weeks later. Based\non Professor Levitsky's data, estimate the mean weight\ngain in first-semester freshmen and comment on the\n\"freshman 15\". (Weights are in pounds).",
+                            "description": "Is it true that students\ntend to gain weight during their first year in college? Cornell Professor of Nutrition David Levitsky recruited students from two large sections\nof an introductory health course. Although they were\nvolunteers, they appeared to match the rest of the freshman\nclass in terms of demographic variables such as sex\nand ethnicity. The students were weighed during the first\nweek of the semester, then again 12 weeks later. Based\non Professor Levitsky's data, estimate the mean weight\ngain in first-semester freshmen and comment on the\n\"freshman 15\". (Weights are in pounds.)",
                             "url": "https://dasl.datadescription.com/download/data/3218",
                             "filename": "Freshman-15",
                             "name": "Freshman 15",
@@ -248,7 +248,7 @@
                         {
                             "description": "For humans, pregnancy lasts about 280 days. In other species of animals, the length of time from conception to birth varies. Is there any evidence that the gestation period is related to the animal's life span? The data give Gestation Period (in days) and Life Expectancy (in years) for 18 species of mammals.",
                             "url": "https://dasl.datadescription.com/download/data/3241",
-                            "filename": "Gestation_",
+                            "filename": "Gestation",
                             "name": "Gestation",
                             "use_first_row_for_vectorname": true
                         },
@@ -391,7 +391,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The New York Times combined survey data (economix.blogs.nytimes.com/2013/\n07/10/working-parents-wanting-fewer-hours/) with data from\nthe U.S. Bureau of Labor Statistics (BLS) (www.bls.gov/news\n.release/archives/famee_04262013.htm) comparing how mothers\nand fathers would like to allocate their time compared with\nwhat they actually do. They asked a sample of parents with\nchildren 18 or under:\n\"If money were no object, and you were free to do whatever\nyou wanted, would you stay at home, would you work full\ntime, or would you work part time?\"\nPercent of respondents to this question choosing each\nalternative are reported in the \"Desire\" columns of the table.\nData in the \"Actual\" column are from the BLS. (Note:\n\"Unemployed\" = unemployed and actively seeking work.)\nThe table reports column percents (which may not add to\n100% due to rounding)",
+                            "description": "The New York Times combined survey data (economix.blogs.nytimes.com/2013/\n07/10/working-parents-wanting-fewer-hours/) with data from\nthe U.S. Bureau of Labor Statistics (BLS) (www.bls.gov/news\n.release/archives/famee_04262013.htm) comparing how mothers\nand fathers would like to allocate their time compared with\nwhat they actually do. They asked a sample of parents with\nchildren 18 or under:\n\"If money were no object, and you were free to do whatever\nyou wanted, would you stay at home, would you work full\ntime, or would you work part time?\"\nPercent of respondents to this question choosing each\nalternative are reported in the \"Desire\" columns of the table.\nData in the \"Actual\" column are from the BLS. (Note:\n\"Unemployed\" = unemployed and actively seeking work.)\nThe table reports column percents (which may not add to\n100% due to rounding).",
                             "url": "https://dasl.datadescription.com/download/data/3344",
                             "filename": "Mothers-fathers-aspirations",
                             "name": "Mothers and fathers aspirations",
@@ -424,14 +424,14 @@
                 {
                     "datasets": [
                         {
-                            "description": "A study examined the health risks of smoking measured the cholesterol levels of people who had smoked for at least 25 years and people of similar ages who had smoked for no more than 5 years and then stopped",
+                            "description": "A study examined the health risks of smoking measured the cholesterol levels of people who had smoked for at least 25 years and people of similar ages who had smoked for no more than 5 years and then stopped.",
                             "url": "https://dasl.datadescription.com/download/data/3111",
                             "filename": "Cholesterol-and-smoking",
                             "name": "Cholesterol and smoking",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Data on 816 brands of cigarettes. What relationships are there among the nicotine content, tars, and CO? Are any brands unusually high or low in nicotine? Can you account for that? ",
+                            "description": "Data on 816 brands of cigarettes. What relationships are there among the nicotine content, tars, and CO? Are any brands unusually high or low in nicotine? Can you account for that?",
                             "url": "https://dasl.datadescription.com/download/data/3113",
                             "filename": "Cigarettes",
                             "name": "Cigarettes",
@@ -476,7 +476,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The data give the average January Temperature (in degrees Fahrenheit) and Latitude (in degrees north of the equator) for 59 U.S. cities. How are they related? ",
+                            "description": "The data give the average January Temperature (in degrees Fahrenheit) and Latitude (in degrees north of the equator) for 59 U.S. cities. How are they related?",
                             "url": "https://dasl.datadescription.com/download/data/3114",
                             "filename": "City-climate",
                             "name": "City climate",
@@ -497,21 +497,21 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Hurricane frequencies",
+                            "description": "Hurricane frequencies.",
                             "url": "https://dasl.datadescription.com/download/data/3279",
                             "filename": "Hurricane-frequencies",
                             "name": "Hurricane frequencies",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Hurricane history",
+                            "description": "Hurricane history.",
                             "url": "https://dasl.datadescription.com/download/data/3280",
                             "filename": "Hurricane-history",
                             "name": "Hurricane history",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The barometric pressure at the center of a hurricane is often used to measure the strength of the hurricane because it can predict the maximum wind speed of the storm. How well is the wind speed predicted by the barometric pressure? ",
+                            "description": "The barometric pressure at the center of a hurricane is often used to measure the strength of the hurricane because it can predict the maximum wind speed of the storm. How well is the wind speed predicted by the barometric pressure?",
                             "url": "https://dasl.datadescription.com/download/data/3278",
                             "filename": "Hurricanes-2015",
                             "name": "Hurricanes 2015",
@@ -525,14 +525,14 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Is global climate change leading to an increase in the number of major hurricanes? The data gives the number of hurricanes classified as major hurricanes in the Atlantic Ocean each year from 1944 through 2013, as reported by NOAA: ",
+                            "description": "Is global climate change leading to an increase in the number of major hurricanes? The data gives the number of hurricanes classified as major hurricanes in the Atlantic Ocean each year from 1944 through 2013, as reported by NOAA.",
                             "url": "https://dasl.datadescription.com/download/data/3323",
                             "filename": "Major-hurricane-2013",
                             "name": "Major hurricanes 2013",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Tornadoes 2015\nSource: www.nws.noaa.gov/om/hazstats/resources/weather_fatalities.pdf",
+                            "description": "Tornadoes 2015\nSource: www.nws.noaa.gov/om/hazstats/resources/weather_fatalities.pdf.",
                             "url": "https://dasl.datadescription.com/download/data/3488",
                             "filename": "Tornadoes",
                             "name": "Tornadoes 2015",
@@ -560,7 +560,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "http://www.ngdc.noaa.gov/hazard/tsu_db.shtml Extracted Event Validity 3 and 4 Cause Codes 1-5 Event Validity: 4 = definite tsunami 3 = probable tsunami 2 = questionable tsunami 1 = very doubtful tsunami 0 = event that only caused a seiche or disturbance in an inland river -1 = erroneous entry Cause Code: Valid values: 0 to 11 The source of the tsunami: 0 = Unknown 1 = Earthquake 2 = Questionable Earthquake 3 = Earthquake and Landslide 4 = Volcano and Earthquake 5 = Volcano, Earthquake, and Landslide 6 = Volcano 7 = Volcano and Landslide 8 = Landslide 9 = Meteorological 10 = Explosion 11 = Astronomical Tide",
+                            "description": "http://www.ngdc.noaa.gov/hazard/tsu_db.shtml Extracted Event Validity 3 and 4 Cause Codes 1-5 Event Validity: 4 = definite tsunami 3 = probable tsunami 2 = questionable tsunami 1 = very doubtful tsunami 0 = event that only caused a seiche or disturbance in an inland river -1 = erroneous entry Cause Code: Valid values: 0 to 11 The source of the tsunami: 0 = Unknown 1 = Earthquake 2 = Questionable Earthquake 3 = Earthquake and Landslide 4 = Volcano and Earthquake 5 = Volcano, Earthquake, and Landslide 6 = Volcano 7 = Volcano and Landslide 8 = Landslide 9 = Meteorological 10 = Explosion 11 = Astronomical Tide.",
                             "url": "https://dasl.datadescription.com/download/data/3501",
                             "filename": "Tsunamis-2018",
                             "name": "Tsunamis 2018",
@@ -619,7 +619,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The ranges inhabited by the Indian gharial\ncrocodile and the Australian saltwater crocodile overlap in\nBangladesh. Suppose a very large crocodile skeleton is found\nthere, and we wish to determine the species of the animal.\nWildlife scientists have measured the lengths of the heads\nand the complete bodies of several crocs (in centimeters) of\neach species.\n",
+                            "description": "The ranges inhabited by the Indian gharial\ncrocodile and the Australian saltwater crocodile overlap in\nBangladesh. Suppose a very large crocodile skeleton is found\nthere, and we wish to determine the species of the animal.\nWildlife scientists have measured the lengths of the heads\nand the complete bodies of several crocs (in centimeters) of\neach species.",
                             "url": "https://dasl.datadescription.com/download/data/3147",
                             "filename": "Crocodile-lengths",
                             "name": "Crocodile lengths",
@@ -640,7 +640,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The Maine lobster fishing industry is carefully controlled and licensed, and facts about it have been recorded for more than a century, so it is an important industry that we can examine in detail. The dataset holds annual data ",
+                            "description": "The Maine lobster fishing industry is carefully controlled and licensed, and facts about it have been recorded for more than a century, so it is an important industry that we can examine in detail. The dataset holds annual data.",
                             "url": "https://dasl.datadescription.com/download/data/3317",
                             "filename": "Lobsters-2016",
                             "name": "Lobsters 2016",
@@ -682,7 +682,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The number of storks in Oldenburg, Germany, plotted against the population of the town for 7 years in the 1930s. Do storks bring babies? ",
+                            "description": "The number of storks in Oldenburg, Germany, plotted against the population of the town for 7 years in the 1930s. Do storks bring babies?",
                             "url": "https://dasl.datadescription.com/download/data/3462",
                             "filename": "Storks",
                             "name": "Storks",
@@ -743,14 +743,14 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Tree growth",
+                            "description": "Tree growth.",
                             "url": "https://dasl.datadescription.com/download/data/3497",
                             "filename": "Tree-growth",
                             "name": "Tree growth",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Vineyards",
+                            "description": "Vineyards.",
                             "url": "https://dasl.datadescription.com/download/data/3513",
                             "filename": "Vineyards",
                             "name": "Vineyards",
@@ -774,35 +774,35 @@
                 {
                     "datasets": [
                         {
-                            "description": "-",
+                            "description": "Carbon footprint.",
                             "url": "https://dasl.datadescription.com/download/data/3094",
                             "filename": "Carbon-footprint",
                             "name": "Carbon footprint",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "-",
+                            "description": "Carbon footprint 2015.",
                             "url": "https://dasl.datadescription.com/download/data/3095",
                             "filename": "Carbon-footprint-2015",
                             "name": "Carbon footprint 2015",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "-",
+                            "description": "Gemstones.",
                             "url": "https://dasl.datadescription.com/download/data/3240",
                             "filename": "Gemstones",
                             "name": "Gemstones",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "It is a common belief that Yellowstone's most famous geyser erupts once an hour at very predictable intervals. But, in fact, the intervals between eruptions can vary greatly. Can we predict the interval from, for example, the duration of the previous eruption? Are there other patterns in the data worth noting? ",
+                            "description": "It is a common belief that Yellowstone's most famous geyser erupts once an hour at very predictable intervals. But, in fact, the intervals between eruptions can vary greatly. Can we predict the interval from, for example, the duration of the previous eruption? Are there other patterns in the data worth noting?",
                             "url": "https://dasl.datadescription.com/download/data/3380",
                             "filename": "Old-Faithful",
                             "name": "Old Faithful",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Ozone levels (in parts per billion, ppb) were recorded at sites in New Jersey monthly between 1926 and 1971. Here are boxplots of the data for each month (over the 46 years), lined up in order (January = 1): ",
+                            "description": "Ozone levels (in parts per billion, ppb) were recorded at sites in New Jersey monthly between 1926 and 1971. Here are boxplots of the data for each month (over the 46 years), lined up in order (January = 1).",
                             "url": "https://dasl.datadescription.com/download/data/3386",
                             "filename": "Ozone",
                             "name": "Ozone",
@@ -847,14 +847,14 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "A sample of model 2011 cars from an online information service colleted to see how fuel efficiency (as highway mpg) relates to the cost (MSRP) ",
+                            "description": "A sample of model 2011 cars from an online information service colleted to see how fuel efficiency (as highway mpg) relates to the cost (MSRP).",
                             "url": "https://dasl.datadescription.com/download/data/3050",
                             "filename": "All-the-efficiency",
                             "name": "All the efficiency",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The price of delicious apples and regular gas are components of the Consumer Price Index. The data give those prices monthly for the year 2006 ",
+                            "description": "The price of delicious apples and regular gas are components of the Consumer Price Index. The data give those prices monthly for the year 2006.",
                             "url": "https://dasl.datadescription.com/download/data/3055",
                             "filename": "Apples-and-gas",
                             "name": "Apples and gas",
@@ -875,7 +875,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "In 2015, the website NewGeography.com listed its ranking of the best cities for job growth in the United States. Nonfarm employment is also provided",
+                            "description": "In 2015, the website NewGeography.com listed its ranking of the best cities for job growth in the United States. Nonfarm employment is also provided.",
                             "url": "https://dasl.datadescription.com/download/data/3082",
                             "filename": "Boomtowns-2015",
                             "name": "Boomtowns 2015",
@@ -924,7 +924,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Coffee is the world's second largest\nlegal export commodity (after oil) and is the second largest\nsource of foreign exchange for developing nations. The\nUnited States consumes about one-fifth of the world's coffee.\nThe International Coffee Organization (ICO) computes\na coffee price index using Colombian, Brazilian, and\na mixture of other coffee data. Data are provided for the\nmonthly average ICO price index (in $US) from Jan 2009 to December 2017c",
+                            "description": "Coffee is the world's second largest\nlegal export commodity (after oil) and is the second largest\nsource of foreign exchange for developing nations. The\nUnited States consumes about one-fifth of the world's coffee.\nThe International Coffee Organization (ICO) computes\na coffee price index using Colombian, Brazilian, and\na mixture of other coffee data. Data are provided for the\nmonthly average ICO price index (in $US) from Jan 2009 to December 2017.",
                             "url": "https://dasl.datadescription.com/download/data/3119",
                             "filename": "Coffee-prices-2017",
                             "name": "Coffee-prices-2017",
@@ -980,7 +980,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Cost of Living Index (Excl. Rent) is a relative indicator of consumer goods prices, including groceries, restaurants, transportation and utilities. Cost of Living Index doesn't include accommodation expenses such as rent or mortgage. If a city has a Cost of Living Index of 120, it means Numbeo estimates it is 20% more expensive than New York (excluding rent).\nRent Index is an estimation of prices of renting apartments in the city compared to New York City. If Rent index is 80, Numbeo estimates that price of rents in that city is on an average 20% less than the price in New York.\nGroceries Index is an estimation of grocery prices in the city compared to New York City. To calculate this section, Numbeo uses weights of items in the \"Markets\" section for each city.\nRestaurants Index is a comparison of prices of meals and drinks in restaurants and bars compared to NYC.\nCost of Living Plus Rent Index is an estimation of consumer goods prices including rent comparing to New York City.\nLocal Purchasing Power shows relative purchasing power in buying goods and services in a given city for the average wage in that city. If domestic purchasing power is 40, this means that the inhabitants of that city with the average salary can afford to buy on an average 60% less goods and services than New York City residents with an average salary..",
+                            "description": "Cost of Living Index (Excl. Rent) is a relative indicator of consumer goods prices, including groceries, restaurants, transportation and utilities. Cost of Living Index doesn't include accommodation expenses such as rent or mortgage. If a city has a Cost of Living Index of 120, it means Numbeo estimates it is 20% more expensive than New York (excluding rent).\nRent Index is an estimation of prices of renting apartments in the city compared to New York City. If Rent index is 80, Numbeo estimates that price of rents in that city is on an average 20% less than the price in New York.\nGroceries Index is an estimation of grocery prices in the city compared to New York City. To calculate this section, Numbeo uses weights of items in the \"Markets\" section for each city.\nRestaurants Index is a comparison of prices of meals and drinks in restaurants and bars compared to NYC.\nCost of Living Plus Rent Index is an estimation of consumer goods prices including rent comparing to New York City.\nLocal Purchasing Power shows relative purchasing power in buying goods and services in a given city for the average wage in that city. If domestic purchasing power is 40, this means that the inhabitants of that city with the average salary can afford to buy on an average 60% less goods and services than New York City residents with an average salary.",
                             "url": "https://dasl.datadescription.com/download/data/3136",
                             "filename": "Cost-of-living-2018",
                             "name": "Cost of living 2018",
@@ -1022,7 +1022,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Quarterly e-commerce retail sales (in millions of dollars) in the United States from 1999 to 2008 ",
+                            "description": "Quarterly e-commerce retail sales (in millions of dollars) in the United States from 1999 to 2008.",
                             "url": "https://dasl.datadescription.com/download/data/3180",
                             "filename": "E-commerce",
                             "name": "E-commerce",
@@ -1043,7 +1043,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The U.S. government provides fuel economy (in miles per gallon) and other information about late model cars sold in the US. How would you model the relationship between fuel economy and engine displacement (in liters)? Are there any cars that don't fit the model? Can you explain why? ",
+                            "description": "The U.S. government provides fuel economy (in miles per gallon) and other information about late model cars sold in the US. How would you model the relationship between fuel economy and engine displacement (in liters)? Are there any cars that don't fit the model? Can you explain why?",
                             "url": "https://dasl.datadescription.com/download/data/3225",
                             "filename": "Fueleconomy-2016",
                             "name": "Fuel economy 2016",
@@ -1057,7 +1057,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "-",
+                            "description": "Gas Prices 2017",
                             "url": "https://dasl.datadescription.com/download/data/3233",
                             "filename": "Gas-Prices-2017",
                             "name": "Gas Prices 2017",
@@ -1078,21 +1078,21 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "-",
+                            "description": "GDP by state",
                             "url": "https://dasl.datadescription.com/download/data/3238",
                             "filename": "GDP-state",
                             "name": "GDP by state",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "-",
+                            "description": "GDP growth 2017.",
                             "url": "https://dasl.datadescription.com/download/data/3239",
                             "filename": "GDP-growth-2017",
                             "name": "GDP growth 2017",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Daily opening and closing stock prices (adjusted for splits and dividends) for Google, Inc. from Aug 19, 2004 through June 21, 2013 ",
+                            "description": "Daily opening and closing stock prices (adjusted for splits and dividends) for Google, Inc. from Aug 19, 2004 through June 21, 2013.",
                             "url": "https://dasl.datadescription.com/download/data/3247",
                             "filename": "Google-stock-prices",
                             "name": "Google stock prices",
@@ -1113,7 +1113,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Health expenditures",
+                            "description": "Health expenditures.",
                             "url": "https://dasl.datadescription.com/download/data/3260",
                             "filename": "Health-expenditures",
                             "name": "Health expenditures",
@@ -1127,42 +1127,42 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Holiday shopping",
+                            "description": "Holiday shopping.",
                             "url": "https://dasl.datadescription.com/download/data/3267",
                             "filename": "Holiday-shopping",
                             "name": "Holiday shopping",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Holiday spending",
+                            "description": "Holiday spending.",
                             "url": "https://dasl.datadescription.com/download/data/3268",
                             "filename": "Holiday-spending",
                             "name": "Holiday spending",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Home depot sales",
+                            "description": "Home depot sales.",
                             "url": "https://dasl.datadescription.com/download/data/3269",
                             "filename": "Home-depot-sales",
                             "name": "Home depot sales",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Home Price Index 2017",
+                            "description": "Home Price Index 2017.",
                             "url": "https://dasl.datadescription.com/download/data/3270",
                             "filename": "Home-Price-Index-2017",
                             "name": "Home Price Index 2017",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "House prices and properties in New York. What properties of a house can predict its price? Can we use such a model to identify houses that are extraordinarily expensive or inexpensive? ",
+                            "description": "House prices and properties in New York. What properties of a house can predict its price? Can we use such a model to identify houses that are extraordinarily expensive or inexpensive?",
                             "url": "https://dasl.datadescription.com/download/data/3275",
                             "filename": "Housing-prices",
                             "name": "Housing prices",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "House prices and properties in New York. What properties of a house can predict its price? Can we use such a model to identify houses that are extraordinarily expensive or inexpensive? ",
+                            "description": "House prices and properties in New York. What properties of a house can predict its price? Can we use such a model to identify houses that are extraordinarily expensive or inexpensive?",
                             "url": "https://dasl.datadescription.com/download/data/3276",
                             "filename": "Housing-prices-GE19",
                             "name": "Housing prices GE19",
@@ -1183,14 +1183,14 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The U.S. Consumer Price Index and year, every 5 years since 1916. These are the values for January of each year. What is the trend? Can we model it with a linear regression? ",
+                            "description": "The U.S. Consumer Price Index and year, every 5 years since 1916. These are the values for January of each year. What is the trend? Can we model it with a linear regression?",
                             "url": "https://dasl.datadescription.com/download/data/3291",
                             "filename": "Inflation-2016",
                             "name": "Inflation 2016",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Average annual interest rates (banks prime lending) in the United States from 1966 through 2009 ",
+                            "description": "Average annual interest rates (banks prime lending) in the United States from 1966 through 2009.",
                             "url": "https://dasl.datadescription.com/download/data/3296",
                             "filename": "Interest-rates-2009",
                             "name": "Interest rates 2009",
@@ -1225,7 +1225,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Marketing managers salaries",
+                            "description": "Marketing managers salaries.",
                             "url": "https://dasl.datadescription.com/download/data/3327",
                             "filename": "Marketing-managers-salaries",
                             "name": "Marketing managers salaries",
@@ -1239,7 +1239,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Movie budgets",
+                            "description": "Movie budgets.",
                             "url": "https://dasl.datadescription.com/download/data/3347",
                             "filename": "Movie-budgets",
                             "name": "Movie budgets",
@@ -1253,7 +1253,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Mutual fund flows",
+                            "description": "Mutual fund flows.",
                             "url": "https://dasl.datadescription.com/download/data/3354",
                             "filename": "Mutual-fund-flows",
                             "name": "Mutual fund flows",
@@ -1274,21 +1274,21 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "OECD GDP",
+                            "description": "OECD GDP.",
                             "url": "https://dasl.datadescription.com/download/data/3374",
                             "filename": "OECD-GDP",
                             "name": "OECD GDP",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "OECD GDP Growth",
+                            "description": "OECD GDP Growth.",
                             "url": "https://dasl.datadescription.com/download/data/3375",
                             "filename": "OECD-GDP-Growth",
                             "name": "OECD GDP Growth",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "OECD Unemployment",
+                            "description": "OECD Unemployment.",
                             "url": "https://dasl.datadescription.com/download/data/3376",
                             "filename": "OECD-Unemployment",
                             "name": "OECD Unemployment",
@@ -1309,7 +1309,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Sales volume and price of a slice of plain pizza ($) in Baltimore, Dallas, Chicago, and Denver for 156 weeks. How are prices and sales volumes related? Are patterns the same across cities? ",
+                            "description": "Sales volume and price of a slice of plain pizza ($) in Baltimore, Dallas, Chicago, and Denver for 156 weeks. How are prices and sales volumes related? Are patterns the same across cities?",
                             "url": "https://dasl.datadescription.com/download/data/3395",
                             "filename": "Pizza-prices",
                             "name": "Pizza prices",
@@ -1344,7 +1344,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Productivity 2016",
+                            "description": "Productivity 2016.",
                             "url": "https://dasl.datadescription.com/download/data/3409",
                             "filename": "Productivity-2016",
                             "name": "Productivity 2016",
@@ -1358,28 +1358,28 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Real estate sample 1200",
+                            "description": "Real estate sample 1200.",
                             "url": "https://dasl.datadescription.com/download/data/3423",
                             "filename": "Real-estate-sample-1200",
                             "name": "Real estate sample 1200",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Regular gas 2017",
+                            "description": "Regular gas 2017.",
                             "url": "https://dasl.datadescription.com/download/data/3426",
                             "filename": "Regular-gas-2017",
                             "name": "Regular gas 2017",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Retail trade index",
+                            "description": "Retail trade index.",
                             "url": "https://dasl.datadescription.com/download/data/3427",
                             "filename": "Retail-trade-index",
                             "name": "Retail trade index",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "A sample from Fortune 500 companies",
+                            "description": "A sample from Fortune 500 companies.",
                             "url": "https://dasl.datadescription.com/download/data/3434",
                             "filename": "Sales-profits",
                             "name": "Sales and profits",
@@ -1435,7 +1435,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Are people who use tobacco products more likely to consume alcohol? Here are data on household spending (in pounds) taken by the British government on 11 regions in Great Britain. Do tobacco and alcohol spending appear to be related? What questions do you have about these data? What conclusions can you draw? ",
+                            "description": "Are people who use tobacco products more likely to consume alcohol? Here are data on household spending (in pounds) taken by the British government on 11 regions in Great Britain. Do tobacco and alcohol spending appear to be related? What questions do you have about these data? What conclusions can you draw?",
                             "url": "https://dasl.datadescription.com/download/data/3485",
                             "filename": "Tobacco-and-alcohol",
                             "name": "Tobacco and alcohol",
@@ -1456,7 +1456,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Kelly's Blue Book: https://www.kbb.com/cars-for-sale/ accessed on 31 Aug 2017 using zip code 94305 200 mile radius BMW M5",
+                            "description": "Kelly's Blue Book: https://www.kbb.com/cars-for-sale/ accessed on 31 Aug 2017 using zip code 94305 200 mile radius BMW M5.",
                             "url": "https://dasl.datadescription.com/download/data/3508",
                             "filename": "Used-BMW",
                             "name": "Used BMW M5 2017",
@@ -1678,7 +1678,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Golfers 2017",
+                            "description": "Golfers 2017.",
                             "url": "https://dasl.datadescription.com/download/data/3244",
                             "filename": "Golfers-2017",
                             "name": "Golfers 2017",
@@ -1734,14 +1734,14 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "How are Olympic performances in various events related? The data gives winning long-jump and high-jump distances in meters, for the Summer Olympics from 1912 through 2016 ",
+                            "description": "How are Olympic performances in various events related? The data gives winning long-jump and high-jump distances in meters, for the Summer Olympics from 1912 through 2016.",
                             "url": "https://dasl.datadescription.com/download/data/3382",
                             "filename": "Olympic-jumps-2016",
                             "name": "Olympic jumps 2016",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "NFL data from the 2015 football season reported the number of yards gained by each of the league's 488 receivers ",
+                            "description": "NFL data from the 2015 football season reported the number of yards gained by each of the league's 488 receivers.",
                             "url": "https://dasl.datadescription.com/download/data/3425",
                             "filename": "Receivers-2015",
                             "name": "Receivers 2015",
@@ -1769,7 +1769,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Bjork Larsen was trying to decide whether to use a\nnew racing wax for cross-country skis. He decided that the\nwax would be worth the price if he could average less than\n55 seconds on a course he knew well, so he planned to study\nthe wax by racing on the course 8 times. The data report his race times. \n",
+                            "description": "Bjork Larsen was trying to decide whether to use a\nnew racing wax for cross-country skis. He decided that the\nwax would be worth the price if he could average less than\n55 seconds on a course he knew well, so he planned to study\nthe wax by racing on the course 8 times. The data report his race times.",
                             "url": "https://dasl.datadescription.com/download/data/3450",
                             "filename": "Ski-wax",
                             "name": "Ski wax",
@@ -1804,14 +1804,14 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Super Bowl 2016",
+                            "description": "Super Bowl 2016.",
                             "url": "https://dasl.datadescription.com/download/data/3470",
                             "filename": "Super-Bowl-2016",
                             "name": "Super Bowl 2016",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Swim and Run",
+                            "description": "Swim and Run.",
                             "url": "https://dasl.datadescription.com/download/data/3577",
                             "filename": "Swim-Run",
                             "name": "Swim and Run",
@@ -1860,14 +1860,14 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The world men's weightlifting records are categorized by weight class of the competitors. How does the weight class relate to the record? ",
+                            "description": "The world men's weightlifting records are categorized by weight class of the competitors. How does the weight class relate to the record?",
                             "url": "https://dasl.datadescription.com/download/data/3520",
                             "filename": "Weightlifting-2016",
                             "name": "Weightlifting 2016",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The Boston Marathon has had a wheelchair division since 1977.\nWho do you think\nis typically faster, the men's marathon winner on foot\nor the women's wheelchair marathon winner? Because\nthe conditions differ from year to year, and speeds have\nimproved over the years, it seems best to treat these as\npaired measurements. Here are summary statistics for\nthe pairwise differences in finishing time (in minutes):",
+                            "description": "The Boston Marathon has had a wheelchair division since 1977.\nWho do you think\nis typically faster, the men's marathon winner on foot\nor the women's wheelchair marathon winner? Because\nthe conditions differ from year to year, and speeds have\nimproved over the years, it seems best to treat these as\npaired measurements. Here are summary statistics for\nthe pairwise differences in finishing time (in minutes).",
                             "url": "https://dasl.datadescription.com/download/data/3521",
                             "filename": "Wheelchair-Marathon",
                             "name": "Wheelchair Marathon 2016",
@@ -1916,7 +1916,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The women's 1500 metres speed skating competition for the 2006 Winter Olympics was held in Turin, Italy, on 22 February ",
+                            "description": "The women's 1500 metres speed skating competition for the 2006 Winter Olympics was held in Turin, Italy, on 22 February.",
                             "url": "https://dasl.datadescription.com/download/data/3538",
                             "filename": "Womens-speed-skating",
                             "name": "Womens speed skating 2006",
@@ -2019,7 +2019,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "As a project for an Introductory Statistics course, students checked 6 bags of Fritos marked with a net weight of 35.4 grams. They carefully weighed the contents of each bag, recording the weights (in grams):",
+                            "description": "As a project for an Introductory Statistics course, students checked 6 bags of Fritos marked with a net weight of 35.4 grams. They carefully weighed the contents of each bag, recording the weights (in grams).",
                             "url": "https://dasl.datadescription.com/download/data/3222",
                             "filename": "Fritos",
                             "name": "Fritos",
@@ -2033,7 +2033,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Is the Statue of Liberty's nose too long? Her nose measures 4'6'', but she is a large statue, after all. Her arm is 42 feet long. That means her arm is 42/4.5 = 9.3 times as long as her nose. Is that a reasonable ratio? The data give arm and nose lengths of 18 girls ",
+                            "description": "Is the Statue of Liberty's nose too long? Her nose measures 4'6'', but she is a large statue, after all. Her arm is 42 feet long. That means her arm is 42/4.5 = 9.3 times as long as her nose. Is that a reasonable ratio? The data give arm and nose lengths of 18 girls.",
                             "url": "https://dasl.datadescription.com/download/data/3311",
                             "filename": "Libertys-nose",
                             "name": "Libertys nose",
@@ -2110,14 +2110,14 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The data give counts of 626 individuals categorized according to their \"tattoo status\" and their \"hepatitis status\". Is there a relationship? ",
+                            "description": "The data give counts of 626 individuals categorized according to their \"tattoo status\" and their \"hepatitis status\". Is there a relationship?",
                             "url": "https://dasl.datadescription.com/download/data/3476",
                             "filename": "Tattoos",
                             "name": "Tattoos",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "A bank is studying the time that it takes 6 of its tellers to serve an average customer. Customers line up in the queue and then go to the next available teller. Is there a difference? Can we pick out the best or worst performing teller? ",
+                            "description": "A bank is studying the time that it takes 6 of its tellers to serve an average customer. Customers line up in the queue and then go to the next available teller. Is there a difference? Can we pick out the best or worst performing teller?",
                             "url": "https://dasl.datadescription.com/download/data/3478",
                             "filename": "Tellers",
                             "name": "Tellers",
@@ -2178,7 +2178,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The United States Census Bureau keeps track of the number of adoptions in each State (and Washington D.C.). The data includes the population of each state as well. How should adoptions be summarized and displayed? ",
+                            "description": "The United States Census Bureau keeps track of the number of adoptions in each State (and Washington D.C.). The data includes the population of each state as well. How should adoptions be summarized and displayed?",
                             "url": "https://dasl.datadescription.com/download/data/3043",
                             "filename": "Adoptions",
                             "name": "Adoptions",
@@ -2267,7 +2267,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The data report the percentage of flights that were late and the percentage that departed on time for each month from 1995 through early 2016 ",
+                            "description": "The data report the percentage of flights that were late and the percentage that departed on time for each month from 1995 through early 2016.",
                             "url": "https://dasl.datadescription.com/download/data/3309",
                             "filename": "Late-arrivals-2016",
                             "name": "Late arrivals 2016",
@@ -2295,7 +2295,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The National Highway Traffic Safety Administration reports seat belt use and fatalities in car accidents by state. How do fatalities relate to seat belt use? ",
+                            "description": "The National Highway Traffic Safety Administration reports seat belt use and fatalities in car accidents by state. How do fatalities relate to seat belt use?",
                             "url": "https://dasl.datadescription.com/download/data/3442",
                             "filename": "Seat-belts-2015",
                             "name": "Seat belts 2015",
@@ -2339,7 +2339,7 @@
                         {
                             "description": "U.S. Department of Transportation reports records of border crossings into each state on the U.S. border. Here are the border crossings by trucks for Alaska, recorded each month from 1999 through 2017.",
                             "url": "https://dasl.datadescription.com/download/data/3499",
-                            "filename": "Trucks_",
+                            "filename": "Trucks",
                             "name": "Trucks",
                             "use_first_row_for_vectorname": true
                         }
@@ -2396,7 +2396,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Students in a large statistics class were asked to report the eye color and hair color. Is there an association? ",
+                            "description": "Students in a large statistics class were asked to report the eye color and hair color. Is there an association?",
                             "url": "https://dasl.datadescription.com/download/data/3197",
                             "filename": "Eye-and-Hair-color",
                             "name": "Eye and Hair color",
@@ -2424,7 +2424,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Crowd Management Strategies monitors accidents at rock concerts. In their database, they list the names and other variables of victims whose deaths were attributed to \"crowd crush\" at rock concerts. The data give the victims' ages for data from a one-year period: ",
+                            "description": "Crowd Management Strategies monitors accidents at rock concerts. In their database, they list the names and other variables of victims whose deaths were attributed to \"crowd crush\" at rock concerts. The data give the victims' ages for data from a one-year period.",
                             "url": "https://dasl.datadescription.com/download/data/3429",
                             "filename": "Rock-concert-deaths",
                             "name": "Rock concert deaths",
@@ -2506,7 +2506,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Dalia collects data via smartphone from users worldwide. This survey asked (among many other questions) about access to cars and the use of ride-hailing apps ",
+                            "description": "Dalia collects data via smartphone from users worldwide. This survey asked (among many other questions) about access to cars and the use of ride-hailing apps.",
                             "url": "https://dasl.datadescription.com/download/data/3153",
                             "filename": "Dalia",
                             "name": "Dalia",
@@ -2527,7 +2527,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "A university teacher saved every e-mail receive from students in a large introductory statistics class during one term. He then counted, for each student who had sent him at least one e-mail, how many e-mails each student had sent. What is the distribution of e-mail communications? ",
+                            "description": "A university teacher saved every e-mail receive from students in a large introductory statistics class during one term. He then counted, for each student who had sent him at least one e-mail, how many e-mails each student had sent. What is the distribution of e-mail communications?",
                             "url": "https://dasl.datadescription.com/download/data/3181",
                             "filename": "E-mails",
                             "name": "E-mails",
@@ -2602,7 +2602,7 @@
                 {
                     "datasets": [
                         {
-                            "description": "The Pew Research Center conducted a representative telephone survey in October of 2016. Among the reported results was the following table concerning the preferred political party affiliation of respondents and their ages for white voters. Is there evidence of age-based differences in party affiliation in the United States for white voters? ",
+                            "description": "The Pew Research Center conducted a representative telephone survey in October of 2016. Among the reported results was the following table concerning the preferred political party affiliation of respondents and their ages for white voters. Is there evidence of age-based differences in party affiliation in the United States for white voters?",
                             "url": "https://dasl.datadescription.com/download/data/3045",
                             "filename": "Age-and-party",
                             "name": "Age and party 2016",
@@ -2726,7 +2726,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "The estimated median age at fist marriage by sex from 1890 to 2017 is provided by the U.S. Census bureau. Since 1960, marriage ages have been increasing steadily. Has the difference between men's and women's first marriage age changed? ",
+                            "description": "The estimated median age at fist marriage by sex from 1890 to 2017 is provided by the U.S. Census bureau. Since 1960, marriage ages have been increasing steadily. Has the difference between men's and women's first marriage age changed?",
                             "url": "https://dasl.datadescription.com/download/data/3331",
                             "filename": "Marriage-age-2017",
                             "name": "Marriage age 2017",
@@ -2801,7 +2801,7 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "Scores on SAT tests for 162 students at the same school. (The identity of the school is not provided for privacy.) How are Math and Verbal scores related? Would a regression model be appropriate? Is there a difference in male and female scores? How would that difference be modeled? ",
+                            "description": "Scores on SAT tests for 162 students at the same school. (The identity of the school is not provided for privacy.) How are Math and Verbal scores related? Would a regression model be appropriate? Is there a difference in male and female scores? How would that difference be modeled?",
                             "url": "https://dasl.datadescription.com/download/data/3438",
                             "filename": "SAT-scores",
                             "name": "SAT scores",
@@ -2874,14 +2874,14 @@
                 {
                     "datasets": [
                         {
-                            "description": "On August 24, 2006, the International Astronomical Union voted that Pluto is not a planet. Some members of the public have been reluctant to accept that decision. The data show the average distance of each of the traditional nine planets from the sun. Is there a pattern? Does Pluto fit with the other \"official\" planets? ",
+                            "description": "On August 24, 2006, the International Astronomical Union voted that Pluto is not a planet. Some members of the public have been reluctant to accept that decision. The data show the average distance of each of the traditional nine planets from the sun. Is there a pattern? Does Pluto fit with the other \"official\" planets?",
                             "url": "https://dasl.datadescription.com/download/data/3397",
                             "filename": "Planets",
                             "name": "Planets",
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "On August 24, 2006, the International Astronomical Union voted that Pluto is not a planet. Some members of the public have been reluctant to accept that decision. The data show a variety of facts about the 8 planets and Pluto. Exercises consider two models for the planets. Does Pluto behave like a planet? ",
+                            "description": "On August 24, 2006, the International Astronomical Union voted that Pluto is not a planet. Some members of the public have been reluctant to accept that decision. The data show a variety of facts about the 8 planets and Pluto. Exercises consider two models for the planets. Does Pluto behave like a planet?",
                             "url": "https://dasl.datadescription.com/download/data/3398",
                             "filename": "Planets-more",
                             "name": "Planets more data",
@@ -2893,7 +2893,7 @@
                 {
                     "datasets": [
                         {
-                            "description": "Scientist Robert Boyle examined the relationship between the volume in which a gas is contained and the pressure in its container. He used a cylindrical container with a moveable top that could be raised or lowered to change the volume. He measured the Height in inches by counting equally spaced marks on the cylinder, and",
+                            "description": "Scientist Robert Boyle examined the relationship between the volume in which a gas is contained and the pressure in its container. He used a cylindrical container with a moveable top that could be raised or lowered to change the volume. He measured the Height in inches by counting equally spaced marks on the cylinder, and measured the Pressure in inches of mercury (as in a barometer). The relationship between volume (height) and pressure is now known as Boyle’s Law. Find the re-expression that makes the relationship straight, and you’ll re-discover Boyle’s Law.",
                             "url": "https://dasl.datadescription.com/download/data/3083",
                             "filename": "Boyle",
                             "name": "Boyle",
