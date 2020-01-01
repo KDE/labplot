@@ -30,6 +30,7 @@
 #include "MainWin.h"
 #include "SettingsGeneralPage.h"
 #include "SettingsWorksheetPage.h"
+#include "SettingsDatasetsPage.h"
 
 #include <QPushButton>
 #include <QDialogButtonBox>
@@ -67,6 +68,10 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 	KPageWidgetItem* worksheetFrame = addPage(m_worksheetPage, i18n("Worksheet"));
 	worksheetFrame->setIcon(QIcon::fromTheme(QLatin1String("labplot-worksheet")));
 	connect(m_worksheetPage, &SettingsWorksheetPage::settingsChanged, this, &SettingsDialog::changed);
+
+	m_datasetsPage = new SettingsDatasetsPage(this);
+	KPageWidgetItem* datasetsFrame = addPage(m_datasetsPage, i18n("Datasets"));
+	datasetsFrame->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
 
 	//restore saved settings if available
 	create(); // ensure there's a window created

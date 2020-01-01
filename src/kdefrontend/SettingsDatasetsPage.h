@@ -1,9 +1,10 @@
 /***************************************************************************
-    File                 : SettingsDialog.h
+    File                 : SettingsDatasetsPage.h
     Project              : LabPlot
+    Description          : settings page for Datasets
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2017 by Alexander Semke (alexander.semke@web.de)
-    Description          : application settings dialog
+    --------------------------------------------------------------------
+    Copyright            : (C) 2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -25,39 +26,28 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef SETTINGSDIALOG_H
-#define SETTINGSDIALOG_H
 
-#include <KPageDialog>
+#ifndef SETTINGDATASETSPAGE_H
+#define SETTINGDATASETSPAGE_H
 
-class QAbstractButton;
-class SettingsGeneralPage;
-class SettingsWorksheetPage;
-class SettingsDatasetsPage;
+#include "SettingsPage.h"
+#include "ui_settingsdatasetspage.h"
 
-class SettingsDialog : public KPageDialog {
+class SettingsDatasetsPage : public SettingsPage {
 	Q_OBJECT
 
 public:
-	explicit SettingsDialog(QWidget*);
-	~SettingsDialog() override;
+	explicit SettingsDatasetsPage(QWidget*);
 
-private slots:
-	void changed();
-	void slotButtonClicked(QAbstractButton*);
+	void applySettings() override;
+	void restoreDefaults() override;
 
 private:
-	bool m_changed{false};
-	SettingsGeneralPage* m_generalPage;
-	SettingsWorksheetPage* m_worksheetPage;
-	SettingsDatasetsPage* m_datasetsPage;
+	Ui::SettingsDatasetsPage ui;
+	void loadSettings();
 
-	void applySettings();
-	void restoreDefaults();
-
-signals:
-	void settingsChanged();
-	void resetWelcomeScreen();
+private slots:
+	void clearCache();
 };
 
 #endif
