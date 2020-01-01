@@ -31,6 +31,7 @@
 #include "backend/datasources/DatasetHandler.h"
 
 #include "QDialogButtonBox"
+#include <QElapsedTimer>
 #include "QProgressBar"
 #include "QPushButton"
 #include "QStatusBar"
@@ -106,7 +107,7 @@ void ImportDatasetDialog::importToDataset(DatasetHandler* datasetHandler, QStatu
 	WAIT_CURSOR;
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
-	QTime timer;
+	QElapsedTimer timer;
 	timer.start();
 
 	m_importDatasetWidget->import(datasetHandler);
