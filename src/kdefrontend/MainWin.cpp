@@ -80,6 +80,10 @@
 #include "DatasetModel.h"
 #include "WelcomeScreenHelper.h"
 
+#ifdef Q_OS_MAC
+#include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
+#endif
+
 #include <QMdiArea>
 #include <QMenu>
 #include <QDockWidget>
@@ -204,12 +208,14 @@ void MainWin::initGUI(const QString& fileName) {
 	statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
 
 	initActions();
-#ifdef Q_OS_DARWIN
+#ifdef Q_OS_MAC
 	setupGUI(Default, QLatin1String("/Applications/labplot2.app/Contents/Resources/labplot2ui.rc"));
+	m_touchBar = new KDMacTouchBar(this);
+	//m_touchBar->setTouchButtonStyle(KDMacTouchBar::IconOnly);
 #else
 	setupGUI(Default, KXMLGUIClient::xmlFile());	// should be "labplot2ui.rc"
 #endif
-	DEBUG("component name: " << KXMLGUIClient::componentName().toStdString());
+	DEBUG("Component name: " << KXMLGUIClient::componentName().toStdString());
 	DEBUG("XML file: " << KXMLGUIClient::xmlFile().toStdString() << " (should be \"labplot2ui.rc\")");
 
 	//all toolbars created via the KXMLGUI framework are locked on default:
@@ -460,8 +466,8 @@ void MainWin::createMdiArea() {
 void MainWin::initActions() {
 	// ******************** File-menu *******************************
 	//add some standard actions
-	KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
-	KStandardAction::open(this, SLOT(openProject()),actionCollection());
+	m_newProjectAction = KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
+	m_openProjectAction = KStandardAction::open(this, SLOT(openProject()),actionCollection());
 	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject(QUrl)),actionCollection());
 	m_closeAction = KStandardAction::close(this, SLOT(closeProject()),actionCollection());
 	actionCollection()->setDefaultShortcut(m_closeAction, QKeySequence()); //remove the shortcut, QKeySequence::Close will be used for closing sub-windows
@@ -525,7 +531,7 @@ void MainWin::initActions() {
 	connect(m_newLiveDataSourceAction, &QAction::triggered, this, &MainWin::newLiveDataSourceActionTriggered);
 
 	//Import/Export
-	m_importFileAction = new QAction(QIcon::fromTheme("document-import"), i18n("From File"), this);
+	m_importFileAction = new QAction(QIcon::fromTheme("document-import"), i18n("Import from File"), this);
 	actionCollection()->setDefaultShortcut(m_importFileAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
 	m_importFileAction->setWhatsThis(i18n("Import data from a regular file"));
 	actionCollection()->addAction("import_file", m_importFileAction);
@@ -568,7 +574,6 @@ void MainWin::initActions() {
 	//Undo/Redo-stuff
 	m_undoAction = KStandardAction::undo(this, SLOT(undo()), actionCollection());
 	m_redoAction = KStandardAction::redo(this, SLOT(redo()), actionCollection());
-
 	m_historyAction = new QAction(QIcon::fromTheme("view-history"), i18n("Undo/Redo History"),this);
 	actionCollection()->addAction("history", m_historyAction);
 	connect(m_historyAction, &QAction::triggered, this, &MainWin::historyDialog);
@@ -649,6 +654,20 @@ void MainWin::initActions() {
 	actionCollection()->addAction("toggle_properties_explorer_dock", m_togglePropertiesDockAction);
 
 	connect(docksActions, &QActionGroup::triggered, this, &MainWin::toggleDockWidget);
+
+	//global search
+	QAction* searchAction = new QAction(actionCollection());
+	searchAction->setShortcut(QKeySequence::Find);
+	connect(searchAction, &QAction::triggered, this, [=]() {
+		if (m_project) {
+			if (!m_projectExplorerDock->isVisible()) {
+				m_toggleProjectExplorerDockAction->setChecked(true);
+				toggleDockWidget(m_toggleProjectExplorerDockAction);
+			}
+			m_projectExplorer->search();
+		}
+	});
+	this->addAction(searchAction);
 }
 
 void MainWin::initMenus() {
@@ -721,8 +740,7 @@ void MainWin::initMenus() {
 	m_editMenu->addAction(m_editFitsFileAction);
 
 	KColorSchemeManager schemeManager;
-	KActionMenu* schemesMenu = schemeManager.createSchemeSelectionMenu(i18n("Color Theme"), this);
-	schemesMenu->menu()->setTitle(i18n("Color Theme"));
+	KActionMenu* schemesMenu = schemeManager.createSchemeSelectionMenu(i18n("Color Scheme"), QString(), this);
 	schemesMenu->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
 
 	QMenu* settingsMenu = dynamic_cast<QMenu*>(factory()->container("settings", this));
@@ -853,6 +871,18 @@ void MainWin::updateGUIOnProjectChanges() {
 	else
 		setCaption(m_project->name());
 
+#ifdef Q_OS_MAC
+	m_touchBar->clear();
+
+	if (b){
+		m_touchBar->addAction(m_newProjectAction);
+		m_touchBar->addAction(m_openProjectAction);
+	} else {
+		m_touchBar->addAction(m_importFileAction);
+		m_touchBar->addAction(m_newWorksheetAction);
+		m_touchBar->addAction(m_newSpreadsheetAction);
+	}
+#endif
 	// undo/redo actions are disabled in both cases - when the project is closed or opened
 	m_undoAction->setEnabled(false);
 	m_redoAction->setEnabled(false);
@@ -876,6 +906,15 @@ void MainWin::updateGUI() {
 		return;
 	}
 
+	//reset the touchbar
+#ifdef Q_OS_MAC
+	m_touchBar->clear();
+
+	m_touchBar->addAction(m_undoAction);
+	m_touchBar->addAction(m_redoAction);
+	m_touchBar->addSeparator();
+#endif
+
 	if (!m_mdiArea->currentSubWindow()) {
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
@@ -894,6 +933,16 @@ void MainWin::updateGUI() {
 #endif
 		return;
 	}
+
+
+#ifdef Q_OS_MAC
+	if (dynamic_cast<Folder*>(m_currentAspect)) {
+	//if (m_currentAspect->type() == AspectType::Folder) {
+		m_touchBar->addAction(m_newWorksheetAction);
+		m_touchBar->addAction(m_newSpreadsheetAction);
+		m_touchBar->addAction(m_newMatrixAction);
+	}
+#endif
 
 	//Handle the Worksheet-object
 	const Worksheet* w = dynamic_cast<Worksheet*>(m_currentAspect);
@@ -927,6 +976,10 @@ void MainWin::updateGUI() {
 		toolbar->setVisible(true);
 		toolbar->setEnabled(true);
 
+		//populate the touchbar on Mac
+#ifdef Q_OS_MAC
+		view->fillTouchBar(m_touchBar);
+#endif
 		//hide the spreadsheet toolbar
 		factory->container("spreadsheet_toolbar", this)->setVisible(false);
 	} else {
@@ -956,6 +1009,12 @@ void MainWin::updateGUI() {
 		view->fillToolBar(toolbar);
 		toolbar->setVisible(true);
 		toolbar->setEnabled(true);
+
+		//populate the touchbar on Mac
+#ifdef Q_OS_MAC
+		m_touchBar->addAction(m_importFileAction);
+		view->fillTouchBar(m_touchBar);
+#endif
 	} else {
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("spreadsheet_toolbar", this)->setVisible(false);
@@ -972,6 +1031,12 @@ void MainWin::updateGUI() {
 		menu->clear();
 		view->createContextMenu(menu);
 		menu->setEnabled(true);
+
+		//populate the touchbar on Mac
+#ifdef Q_OS_MAC
+		m_touchBar->addAction(m_importFileAction);
+		//view->fillTouchBar(m_touchBar);
+#endif
 	} else
 		factory->container("matrix", this)->setEnabled(false);
 

@@ -273,16 +273,14 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
 	connect(col->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &SpreadsheetModel::handleDigitsChange);
 
 	if (!m_suppressSignals) {
+		beginResetModel();
 		updateVerticalHeader();
 		updateHorizontalHeader();
-
-		beginResetModel();
-		//TODO: breaks undo/redo
-		//endInsertColumns();
 		endResetModel();
 
 		m_columnCount = m_spreadsheet->columnCount();
 		m_spreadsheet->emitColumnCountChanged();
+		emit headerDataChanged(Qt::Horizontal, 0, m_columnCount-1);
 	}
 }
 

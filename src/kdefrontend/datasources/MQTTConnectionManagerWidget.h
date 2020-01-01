@@ -31,13 +31,10 @@ Copyright            : (C) 2018-2019 Alexander Semke (alexander.semke@web.de)
 
 #include "ui_mqttconnectionmanagerwidget.h"
 
-#ifdef HAVE_MQTT
 class QMqttClient;
 class QTimer;
-#endif
 
 class MQTTConnectionManagerWidget : public QWidget {
-#ifdef HAVE_MQTT
 	Q_OBJECT
 
 public:
@@ -97,8 +94,6 @@ private slots:
 
 signals:
 	void changed();
-
-#endif	//HAVE_MQTT
 };
 
 #endif	// MQTTCONNECTIONMANAGERWIDGET_H

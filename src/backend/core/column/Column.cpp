@@ -308,8 +308,8 @@ bool Column::copy(const AbstractColumn* other) {
  *
  * This function will return false if the data type
  * of 'other' is not the same as the type of 'this'.
- * \param other pointer to the column to copy
- * \param src_start first row to copy in the column to copy
+ * \param source pointer to the column to copy
+ * \param source_start first row to copy in the column to copy
  * \param dest_start first row to copy in
  * \param num_rows the number of rows to copy
  */
@@ -753,7 +753,7 @@ void* Column::data() const {
 }
 
 /*!
- * return \c true if the column has numeric values, \false otherwise.
+ * return \c true if the column has numeric values, \c false otherwise.
  */
 bool Column::hasValues() const {
 	if (d->hasValuesAvailable)
@@ -1315,8 +1315,8 @@ void Column::handleFormatChange() {
 /*!
  * calculates the minimal value in the column.
  * for \c count = 0, the minimum of all elements is returned.
- * for \c count > 0, the minimum of the first \count elements is returned.
- * for \c count < 0, the minimum of the last \count elements is returned.
+ * for \c count > 0, the minimum of the first \p count elements is returned.
+ * for \c count < 0, the minimum of the last \p count elements is returned.
  */
 double Column::minimum(int count) const {
 	double min = INFINITY;
@@ -1447,8 +1447,8 @@ double Column::minimum(int startIndex, int endIndex) const {
 /*!
  * calculates the maximal value in the column.
  * for \c count = 0, the maximum of all elements is returned.
- * for \c count > 0, the maximum of the first \count elements is returned.
- * for \c count < 0, the maximum of the last \count elements is returned.
+ * for \c count > 0, the maximum of the first \p count elements is returned.
+ * for \c count < 0, the maximum of the last \p count elements is returned.
  */
 double Column::maximum(int count) const {
 	double max = -INFINITY;
@@ -1573,7 +1573,7 @@ double Column::maximum(int startIndex, int endIndex) const {
  * calculates log2(x)+1 for an integer value.
  * Used in y(double x) to calculate the maximum steps
  * source: https://stackoverflow.com/questions/11376288/fast-computing-of-log2-for-64-bit-integers
- * source: http://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
+ * source: https://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
  * @param value
  * @return returns calculated value
  */
@@ -1936,8 +1936,8 @@ int Column::indexForValue(double x) const {
 /*!
  * Finds the minimal and maximal index which are between v1 and v2
  * \brief Column::indicesForX
- * \param x1
- * \param x2
+ * \param v1
+ * \param v2
  * \param start
  * \param end
  * \return

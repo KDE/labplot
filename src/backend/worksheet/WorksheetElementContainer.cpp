@@ -42,8 +42,8 @@
 
 /**
  * \class WorksheetElementContainer
- * \brief Worksheet element container - parent of multiple elements
  * \ingroup worksheet
+ * \brief Worksheet element container - parent of multiple elements
  * This class provides the functionality for a containers of multiple
  * worksheet elements. Such a container can be a plot or group of elements.
  */

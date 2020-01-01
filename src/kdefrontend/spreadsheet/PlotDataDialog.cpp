@@ -424,8 +424,10 @@ void PlotDataDialog::plot() {
 	} else {
 		//add curves to a new plot(s) in a new worksheet
 		AbstractAspect* parent = m_spreadsheet->parentAspect();
-		if (dynamic_cast<DatapickerCurve*>(parent))
+		if (parent->type() == AspectType::DatapickerCurve)
 			parent = parent->parentAspect()->parentAspect();
+		else if (parent->type() == AspectType::Workbook)
+			parent = parent->parentAspect();
 #ifdef HAVE_MQTT
 		else if (dynamic_cast<MQTTTopic*>(m_spreadsheet))
 			parent = m_spreadsheet->project();

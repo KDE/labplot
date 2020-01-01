@@ -31,6 +31,7 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
+#include "backend/worksheet/Image.h"
 #include "backend/worksheet/TextLabel.h"
 #include "commonfrontend/core/PartMdiView.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
@@ -60,6 +61,10 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KConfigGroup>
+
+#ifdef Q_OS_MAC
+#include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
+#endif
 
 #include <limits>
 
@@ -202,7 +207,8 @@ void WorksheetView::initActions() {
 	addCartesianPlot3Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered"), i18n("Two Axes, Centered"), addNewActionGroup);
 	addCartesianPlot4Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin"), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), addNewActionGroup);
-	addBarChartPlot = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Bar Chart"), addNewActionGroup);
+	addImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), addNewActionGroup);
+
 	//Layout actions
 	verticalLayoutAction = new QAction(QIcon::fromTheme("labplot-editvlayout"), i18n("Vertical Layout"), layoutActionGroup);
 	verticalLayoutAction->setCheckable(true);
@@ -328,6 +334,7 @@ void WorksheetView::initActions() {
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("Horizontal Axis"), cartesianPlotAddNewActionGroup);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("Vertical Axis"), cartesianPlotAddNewActionGroup);
 	addPlotTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), cartesianPlotAddNewActionGroup);
+	addPlotImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), cartesianPlotAddNewActionGroup);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), cartesianPlotAddNewActionGroup);
 
 	// Analysis menu
@@ -407,6 +414,7 @@ void WorksheetView::initMenus() {
 	m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(QIcon::fromTheme("office-chart-line"));
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
+	m_addNewMenu->addAction(addImageAction);
 
 	m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"), this);
 	m_viewMouseModeMenu->setIcon(QIcon::fromTheme("input-mouse"));
@@ -500,6 +508,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotAddNewMenu->addAction(addVerticalAxisAction);
 	m_cartesianPlotAddNewMenu->addSeparator();
 	m_cartesianPlotAddNewMenu->addAction(addPlotTextLabelAction);
+	m_cartesianPlotAddNewMenu->addAction(addPlotImageAction);
 	m_cartesianPlotAddNewMenu->addSeparator();
 	m_cartesianPlotAddNewMenu->addAction(addCustomPointAction);
 
@@ -634,6 +643,7 @@ void WorksheetView::fillToolBar(QToolBar* toolBar) {
 	tbNewCartesianPlot->setDefaultAction(addCartesianPlot1Action);
 	toolBar->addWidget(tbNewCartesianPlot);
 	toolBar->addAction(addTextLabelAction);
+	toolBar->addAction(addImageAction);
 
 	toolBar->addSeparator();
 	toolBar->addAction(verticalLayoutAction);
@@ -658,6 +668,15 @@ void WorksheetView::fillToolBar(QToolBar* toolBar) {
 	tbMagnification->setDefaultAction(currentMagnificationAction);
 	toolBar->addWidget(tbMagnification);
 }
+
+#ifdef Q_OS_MAC
+void WorksheetView::fillTouchBar(KDMacTouchBar* touchBar){
+	//touchBar->addAction(addCartesianPlot1Action);
+	touchBar->addAction(zoomInViewAction);
+	touchBar->addAction(zoomOutViewAction);
+	touchBar->addAction(showPresenterMode);
+}
+#endif
 
 void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(cartesianPlotSelectionModeAction);
@@ -688,6 +707,7 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(addVerticalAxisAction);
 	toolBar->addSeparator();
 	toolBar->addAction(addPlotTextLabelAction);
+	toolBar->addAction(addPlotImageAction);
 	toolBar->addSeparator();
 	toolBar->addAction(scaleAutoAction);
 	toolBar->addAction(scaleAutoXAction);
@@ -1280,11 +1300,20 @@ void WorksheetView::addNew(QAction* action) {
 		TextLabel* l = new TextLabel(i18n("Text Label"));
 		l->setText(i18n("Text Label"));
 		aspect = l;
+	} else if (action == addImageAction) {
+		Image* l = new Image(i18n("Image"));
+		aspect = l;
 	}
 	if (!aspect)
 		return;
 
 	m_worksheet->addChild(aspect);
+
+	//labels and images with their initial positions need to be retransformed
+	//ater they have gotten a parent
+	if (aspect->type() == AspectType::TextLabel || aspect->type() == AspectType::Image)
+		aspect->retransform();
+
 	handleCartesianPlotActions();
 
 	if (!m_fadeInTimeLine) {
@@ -1662,12 +1691,14 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
 
-		image.save(path, "PNG");
+		if (!path.isEmpty())
+			image.save(path, "PNG");
+		else
+			QApplication::clipboard()->setImage(image, QClipboard::Clipboard);
 	}
 }
 
 void WorksheetView::exportToClipboard() {
-#ifndef QT_NO_CLIPBOARD
 	QRectF sourceRect;
 
 	if (m_selectedItems.size() == 0)
@@ -1692,9 +1723,7 @@ void WorksheetView::exportToClipboard() {
 	exportPaint(&painter, targetRect, sourceRect, true);
 	painter.end();
 
-	QClipboard* clipboard = QApplication::clipboard();
-	clipboard->setImage(image, QClipboard::Clipboard);
-#endif
+	QApplication::clipboard()->setImage(image, QClipboard::Clipboard);
 }
 
 void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background) {
@@ -1716,15 +1745,13 @@ void WorksheetView::print(QPrinter* printer) {
 	m_worksheet->setPrinting(true);
 	QPainter painter(printer);
 	painter.setRenderHint(QPainter::Antialiasing);
+
 	// draw background
 	QRectF page_rect = printer->pageRect();
 	QRectF scene_rect = scene()->sceneRect();
-	//qDebug()<<"source (scene):"<<scene_rect;
-	//qDebug()<<"target (page):"<<page_rect;
 	float scale = qMax(scene_rect.width()/page_rect.width(),scene_rect.height()/page_rect.height());
-	//qDebug()<<"scale ="<<scale;
-	//qDebug()<<"background size ="<<scene_rect.width()/scale<<scene_rect.height()/scale;
 	drawBackgroundItems(&painter, QRectF(0,0,scene_rect.width()/scale,scene_rect.height()/scale));
+
 	// draw scene
 	scene()->render(&painter);
 	m_worksheet->setPrinting(false);
@@ -1913,6 +1940,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addVerticalAxis();
 	else if (action == addPlotTextLabelAction)
 		plot->addTextLabel();
+	else if (action == addPlotImageAction)
+		plot->addImage();
 	else if (action == addCustomPointAction)
 		plot->addCustomPoint();
 // analysis actions

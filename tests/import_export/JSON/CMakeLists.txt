@@ -2,6 +2,9 @@ add_executable (jsonfiltertest JsonFilterTest.cpp)
 
 target_link_libraries(jsonfiltertest Qt5::Test)
 target_link_libraries(jsonfiltertest KF5::Archive KF5::XmlGui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+IF (APPLE)
+	target_link_libraries(jsonfiltertest KDMacTouchBar)
+ENDIF ()
 
 IF (Qt5SerialPort_FOUND)
     target_link_libraries(jsonfiltertest Qt5::SerialPort )

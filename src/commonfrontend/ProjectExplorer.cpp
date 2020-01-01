@@ -43,6 +43,7 @@
 #include <QMenu>
 #include <QMimeData>
 #include <QPushButton>
+#include <QToolButton>
 #include <QTreeView>
 #include <QVBoxLayout>
 
@@ -73,15 +74,12 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) :
 	layoutFilter->setSpacing(0);
 	layoutFilter->setContentsMargins(0, 0, 0, 0);
 
-	QLabel* lFilter = new QLabel(i18n("Search/Filter:"));
-	layoutFilter->addWidget(lFilter);
-
 	m_leFilter = new QLineEdit(m_frameFilter);
 	m_leFilter->setClearButtonEnabled(true);
-	m_leFilter->setPlaceholderText(i18n("Search/Filter text"));
+	m_leFilter->setPlaceholderText(i18n("Search/Filter"));
 	layoutFilter->addWidget(m_leFilter);
 
-	bFilterOptions = new QPushButton(m_frameFilter);
+	bFilterOptions = new QToolButton(m_frameFilter);
 	bFilterOptions->setIcon(QIcon::fromTheme("configure"));
 	bFilterOptions->setCheckable(true);
 	layoutFilter->addWidget(bFilterOptions);
@@ -260,6 +258,10 @@ QModelIndex ProjectExplorer::currentIndex() const {
 	return m_treeView->currentIndex();
 }
 
+void ProjectExplorer::search() {
+	m_leFilter->setFocus();
+}
+
 /*!
 	handles the contextmenu-event of the horizontal header in the tree view.
 	Provides a menu for selective showing and hiding of columns.
@@ -428,8 +430,13 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 
 void ProjectExplorer::navigateTo(const QString& path) {
 	const AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	if (tree_model)
-		m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(path));
+	if (tree_model) {
+		const QModelIndex& index = tree_model->modelIndexOfAspect(path);
+		m_treeView->scrollTo(index);
+		m_treeView->setCurrentIndex(index);
+		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		aspect->setSelected(true);
+	}
 }
 
 void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous) {
@@ -882,6 +889,8 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 	m_treeView->setCurrentIndex(currentIndex);
 	m_treeView->scrollTo(currentIndex);
+	auto* aspect = static_cast<AbstractAspect*>(currentIndex.internalPointer());
+	emit currentAspectChanged(aspect);
 
 	//when setting the current index above it gets expanded, collapse all parent indices if they are were not expanded when saved
 	collapseParents(currentIndex, expanded);

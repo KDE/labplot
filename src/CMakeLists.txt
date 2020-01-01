@@ -11,7 +11,7 @@ set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 # do not process this file
 set_property(SOURCE gsl_parser.h PROPERTY SKIP_AUTOMOC ON)
 
-set(GUI_SOURCES    
+set(GUI_SOURCES
     ${KDEFRONTEND_DIR}/DatasetModel.cpp
 	${KDEFRONTEND_DIR}/GuiObserver.cpp
 	${KDEFRONTEND_DIR}/GuiTools.cpp
@@ -44,14 +44,11 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ROOTOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/MQTTErrorWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/BaseDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CursorDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/ImageDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/NoteDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
@@ -105,8 +102,21 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/ResizableTextEdit.cpp
-	${KDEFRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp
 )
+
+if (Qt5Mqtt_FOUND)
+	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp)
+	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp)
+	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTErrorWidget.cpp)
+	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp)
+	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp)
+endif()
+
+if(APPLE)
+  list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/worksheet/PresenterWidget_mac.mm)
+  list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/worksheet/DynamicPresenterWidget_mac.mm)
+endif()
+
 
 set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/constantswidget.ui
@@ -117,7 +127,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsworksheetpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
-	${KDEFRONTEND_DIR}/ui/mqttwillsettingswidget.ui
+
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/databasemanagerwidget.ui
@@ -131,10 +141,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/netcdfoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/rootoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
-	${KDEFRONTEND_DIR}/ui/datasources/mqtterrorwidget.ui
-	${KDEFRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
-	${KDEFRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cursordock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
@@ -142,6 +149,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/histogramdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/imagedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/livedatadock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/notedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/matrixdock.ui
@@ -177,6 +185,13 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/fitsheadereditnewkeywordwidget.ui
 	${KDEFRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
 )
+
+if (Qt5Mqtt_FOUND)
+	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui)
+	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqtterrorwidget.ui)
+	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui)
+	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/mqttwillsettingswidget.ui)
+endif()
 
 set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/Folder.cpp
@@ -222,9 +237,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/AbstractDataSource.cpp
     ${BACKEND_DIR}/datasources/DatasetHandler.cpp
 	${BACKEND_DIR}/datasources/LiveDataSource.cpp
-	${BACKEND_DIR}/datasources/MQTTClient.cpp
-	${BACKEND_DIR}/datasources/MQTTSubscription.cpp
-	${BACKEND_DIR}/datasources/MQTTTopic.cpp
 	${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
 	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
 	${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
@@ -247,6 +259,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/note/Note.cpp
+	${BACKEND_DIR}/worksheet/Image.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElement.cpp
 	${BACKEND_DIR}/worksheet/TextLabel.cpp
 	${BACKEND_DIR}/worksheet/Worksheet.cpp
@@ -286,6 +299,13 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datapicker/Segments.cpp
 	${BACKEND_DIR}/datapicker/DatapickerCurve.cpp
 )
+
+if (Qt5Mqtt_FOUND)
+	list(APPEND BACKEND_SOURCES ${KDEFRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp)
+	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTClient.cpp)
+	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTSubscription.cpp)
+	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTTopic.cpp)
+endif()
 
 # add the qml.qrc file
 qt5_add_resources(qml_QRC ${KDEFRONTEND_DIR}/qml.qrc)
@@ -421,7 +441,7 @@ ENDIF ()
 
 IF (Cantor_FOUND)
 	target_link_libraries( labplot2lib Cantor::cantorlibs KF5::Service KF5::Parts)
-	IF (${Cantor_VERSION} VERSION_GREATER "19.08")
+	IF (${Cantor_VERSION} VERSION_GREATER "19.11")
 		target_link_libraries( labplot2lib Poppler::Qt5)
 	ENDIF()
 ENDIF ()
@@ -471,6 +491,8 @@ set(LML_ICONS
     ${CMAKE_CURRENT_SOURCE_DIR}/../icons/512-application-x-labplot2.png
 )
 
+add_subdirectory(3rdparty)
+
 # main executable
 set(LABPLOT_SOURCE ${KDEFRONTEND_DIR}/LabPlot.cpp)
 
@@ -490,6 +512,9 @@ ENDIF ()
 
 add_executable(labplot2 ${LABPLOT_SOURCE} ${qml_QRC})
 target_link_libraries(labplot2 labplot2lib)
+IF (APPLE)
+	target_link_libraries(labplot2 KDMacTouchBar)
+ENDIF()
 
 ############## installation ################################
 install( TARGETS labplot2 DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS} )

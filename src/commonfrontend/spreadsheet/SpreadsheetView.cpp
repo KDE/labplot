@@ -80,6 +80,10 @@
 
 #include <algorithm> //for std::reverse
 
+#ifdef Q_OS_MAC
+#include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
+#endif
+
 /*!
 	\class SpreadsheetView
 	\brief View class for Spreadsheet
@@ -649,6 +653,12 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
 	}
 }
 
+#ifdef Q_OS_MAC
+void SpreadsheetView::fillTouchBar(KDMacTouchBar* touchBar){
+	//touchBar->addAction(action_insert_column_right);
+}
+#endif
+
 /*!
  * Populates the menu \c menu with the spreadsheet and spreadsheet view relevant actions.
  * The menu is used
@@ -846,7 +856,7 @@ int SpreadsheetView::selectedColumnCount(bool full) const {
 }
 
 /*!
-  Returns the number of (at least partly) selected columns with the plot designation \param pd.
+  Returns the number of (at least partly) selected columns with the plot designation \param pd .
  */
 int SpreadsheetView::selectedColumnCount(AbstractColumn::PlotDesignation pd) const{
 	int count = 0;

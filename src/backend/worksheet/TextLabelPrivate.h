@@ -60,13 +60,13 @@ public:
 
 	// see TextLabel::init() for type specific default settings
 	// position in parent's coordinate system, the label gets aligned around this point
-	TextLabel::PositionWrapper position{
+	WorksheetElement::PositionWrapper position{
 		QPoint(Worksheet::convertToSceneUnits(1, Worksheet::Centimeter), Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)),
-		TextLabel::hPositionCenter, TextLabel::vPositionTop};
+		TextLabel::hPositionCenter, TextLabel::vPositionCenter};
 	bool positionInvalid{false};
 
-	TextLabel::HorizontalAlignment horizontalAlignment{TextLabel::hAlignCenter};
-	TextLabel::VerticalAlignment verticalAlignment{TextLabel::vAlignBottom};
+	WorksheetElement::HorizontalAlignment horizontalAlignment{WorksheetElement::hAlignCenter};
+	WorksheetElement::VerticalAlignment verticalAlignment{WorksheetElement::vAlignCenter};
 
 	TextLabel::BorderShape borderShape{TextLabel::NoBorder};
 	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Point), Qt::SolidLine};
@@ -104,6 +104,7 @@ public:
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+	void keyPressEvent(QKeyEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };

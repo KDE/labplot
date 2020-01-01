@@ -44,6 +44,10 @@ class QTimeLine;
 class AbstractAspect;
 class WorksheetElement;
 
+#ifdef Q_OS_MAC
+	class KDMacTouchBar;
+#endif
+
 class WorksheetView : public QGraphicsView {
 	Q_OBJECT
 
@@ -66,6 +70,7 @@ public:
 
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
+	void exportToClipboard(const ExportFormat, const ExportArea, const bool, const int);
 	void exportToClipboard();
 	void setIsClosing();
 	void setIsBeingPresented(bool presenting);
@@ -168,8 +173,8 @@ private:
 	QAction* addCartesianPlot3Action{nullptr};
 	QAction* addCartesianPlot4Action{nullptr};
 	QAction* addTextLabelAction{nullptr};
+	QAction* addImageAction{nullptr};
 	QAction* addHistogram{nullptr};
-	QAction* addBarChartPlot{nullptr};
 
 	QAction* verticalLayoutAction{nullptr};
 	QAction* horizontalLayoutAction{nullptr};
@@ -223,6 +228,7 @@ private:
 	QAction* addVerticalAxisAction{nullptr};
 	QAction* addLegendAction{nullptr};
 	QAction* addPlotTextLabelAction{nullptr};
+	QAction* addPlotImageAction{nullptr};
 	QAction* addCustomPointAction{nullptr};
 
 	QAction* scaleAutoXAction{nullptr};
@@ -256,6 +262,9 @@ public slots:
 	void createContextMenu(QMenu*);
 	void createAnalysisMenu(QMenu*);
 	void fillToolBar(QToolBar*);
+#ifdef Q_OS_MAC
+	void fillTouchBar(KDMacTouchBar*);
+#endif
 	void fillCartesianPlotToolBar(QToolBar*);
 	void print(QPrinter*);
 	void selectItem(QGraphicsItem*);

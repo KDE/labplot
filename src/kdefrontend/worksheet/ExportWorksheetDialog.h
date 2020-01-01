@@ -66,6 +66,7 @@ private slots:
 	void toggleOptions();
 	void selectFile();
 	void formatChanged(int);
+	void exportToChanged(int);
 	void fileNameChanged(const QString&);
 };
 

@@ -61,6 +61,9 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
+
+	m_cancelButton->setToolTip(i18n("Close this dialog without exporting."));
+
 	ui->leFileName->setCompleter(new QCompleter(new QDirModel, this));
 
 	ui->bOpen->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
@@ -69,6 +72,9 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-svg+xml")), QLatin1String("Scalable Vector Graphics (SVG)"));
 	ui->cbFormat->insertSeparator(3);
 	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), QLatin1String("Portable Network Graphics (PNG)"));
+
+	ui->cbExportTo->addItem(i18n("File"));
+	ui->cbExportTo->addItem(i18n("Clipboard"));
 
 	ui->cbExportArea->addItem(i18n("Object's bounding box"));
 	ui->cbExportArea->addItem(i18n("Current selection"));
@@ -82,7 +88,10 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	ui->cbResolution->addItem(QLatin1String("600"));
 	ui->cbResolution->setValidator(new QIntValidator(ui->cbResolution));
 
-	connect(ui->cbFormat, static_cast<void (QComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &ExportWorksheetDialog::formatChanged );
+	connect(ui->cbFormat, static_cast<void (QComboBox::*)(int)>(&KComboBox::currentIndexChanged),
+			this, &ExportWorksheetDialog::formatChanged);
+	connect(ui->cbExportTo, static_cast<void (QComboBox::*)(int)>(&KComboBox::currentIndexChanged),
+			this, &ExportWorksheetDialog::exportToChanged);
 	connect(ui->bOpen, &QPushButton::clicked, this, &ExportWorksheetDialog::selectFile);
 	connect(ui->leFileName, &QLineEdit::textChanged, this, &ExportWorksheetDialog::fileNameChanged);
 	connect(m_showOptionsButton, &QPushButton::clicked, this, &ExportWorksheetDialog::toggleOptions);
@@ -94,6 +103,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	//restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
 	ui->cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
+	ui->cbExportTo->setCurrentIndex(conf.readEntry("ExportTo", 0));
 	ui->cbExportArea->setCurrentIndex(conf.readEntry("Area", 0));
 	ui->chkExportBackground->setChecked(conf.readEntry("Background", true));
 	ui->cbResolution->setCurrentIndex(conf.readEntry("Resolution", 0));
@@ -114,6 +124,7 @@ ExportWorksheetDialog::~ExportWorksheetDialog() {
 	//save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
 	conf.writeEntry("Format", ui->cbFormat->currentIndex());
+	conf.writeEntry("ExportTo", ui->cbExportTo->currentIndex());
 	conf.writeEntry("Area", ui->cbExportArea->currentIndex());
 	conf.writeEntry("Background", ui->chkExportBackground->isChecked());
 	conf.writeEntry("Resolution", ui->cbResolution->currentIndex());
@@ -127,11 +138,16 @@ void ExportWorksheetDialog::setFileName(const QString& name) {
 	QString dir = conf.readEntry("LastDir", "");
 	if (dir.isEmpty()) dir = QDir::homePath();
 	ui->leFileName->setText(dir + QDir::separator() +  name);
-	this->formatChanged(ui->cbFormat->currentIndex());
+
+	formatChanged(ui->cbFormat->currentIndex());
+	exportToChanged(ui->cbExportTo->currentIndex());
 }
 
 QString ExportWorksheetDialog::path() const {
-	return ui->leFileName->text();
+	if (ui->cbExportTo->currentIndex() == 0)
+		return ui->leFileName->text();
+	else
+		return QString();
 }
 
 WorksheetView::ExportFormat ExportWorksheetDialog::exportFormat() const {
@@ -162,9 +178,8 @@ int ExportWorksheetDialog::exportResolution() const {
 void ExportWorksheetDialog::slotButtonClicked(QAbstractButton* button) {
 	if (button == m_okButton)
 		okClicked();
-	else if (button == m_cancelButton) {
+	else if (button == m_cancelButton)
 	    reject();
-	}
 }
 
 //SLOTS
@@ -176,10 +191,6 @@ void ExportWorksheetDialog::okClicked() {
 	}
 
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
-	conf.writeEntry("Format", ui->cbFormat->currentIndex());
-	conf.writeEntry("Area", ui->cbExportArea->currentIndex());
-	conf.writeEntry("Resolution", ui->cbResolution->currentIndex());
-
 	QString path = ui->leFileName->text();
 	if (!path.isEmpty()) {
 		QString dir = conf.readEntry("LastDir", "");
@@ -260,6 +271,20 @@ void ExportWorksheetDialog::formatChanged(int index) {
 	bool visible = (index == 2);
 	ui->lResolution->setVisible(visible);
 	ui->cbResolution->setVisible(visible);
+}
+/*!
+	called when the target destination (file or clipboard) format was changed.
+ */
+void ExportWorksheetDialog::exportToChanged(int index) {
+	bool toFile = (index == 0);
+	ui->lFileName->setVisible(toFile);
+	ui->leFileName->setVisible(toFile);
+	ui->bOpen->setVisible(toFile);
+
+	if (toFile)
+		m_okButton->setToolTip(i18n("Export to file and close the dialog."));
+	else
+		m_okButton->setToolTip(i18n("Export to clipboard and close the dialog."));
 }
 
 void ExportWorksheetDialog::fileNameChanged(const QString& name) {

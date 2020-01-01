@@ -70,7 +70,7 @@ double nsl_sf_theta(double x) {
 
 /*
  * source: https://stackoverflow.com/questions/11376288/fast-computing-of-log2-for-64-bit-integers
- * source: http://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
+ * source: https://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
  */
 int nsl_sf_log2_int(unsigned int x) {
 #ifdef _MSC_VER

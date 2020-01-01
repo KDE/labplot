@@ -27,7 +27,6 @@ Copyright            : (C) 2018 Fabian Kristof (fkristofszabolcs@gmail.com)
  ***************************************************************************/
 #include "MQTTWillSettingsWidget.h"
 
-#ifdef HAVE_MQTT
 /*!
 	\class MQTTWillSettingsWidget
 	\brief Widget for managing MQTT connection's will settings
@@ -168,5 +167,3 @@ void MQTTWillSettingsWidget::enableWillSettings(int state) {
 	ui.lWillUpdateInterval->setEnabled(enabled);
 	ui.leWillUpdateInterval->setEnabled(enabled);
 }
-
-#endif

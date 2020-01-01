@@ -147,21 +147,21 @@ void CustomPoint::setPosition(const QPointF& position) {
 }
 
 //Symbol
-STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolStyle, Symbol::Style, symbolStyle, retransform)
+STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolStyle, Symbol::Style, symbolStyle, recalcShapeAndBoundingRect)
 void CustomPoint::setSymbolStyle(Symbol::Style style) {
 	Q_D(CustomPoint);
 	if (style != d->symbolStyle)
 		exec(new CustomPointSetSymbolStyleCmd(d, style, ki18n("%1: set symbol style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolSize, qreal, symbolSize, retransform)
+STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolSize, qreal, symbolSize, recalcShapeAndBoundingRect)
 void CustomPoint::setSymbolSize(qreal size) {
 	Q_D(CustomPoint);
 	if (!qFuzzyCompare(1 + size, 1 + d->symbolSize))
 		exec(new CustomPointSetSymbolSizeCmd(d, size, ki18n("%1: set symbol size")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolRotationAngle, qreal, symbolRotationAngle, retransform)
+STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolRotationAngle, qreal, symbolRotationAngle, recalcShapeAndBoundingRect)
 void CustomPoint::setSymbolRotationAngle(qreal angle) {
 	Q_D(CustomPoint);
 	if (!qFuzzyCompare(1 + angle, 1 + d->symbolRotationAngle))
@@ -175,7 +175,7 @@ void CustomPoint::setSymbolBrush(const QBrush &brush) {
 		exec(new CustomPointSetSymbolBrushCmd(d, brush, ki18n("%1: set symbol filling")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolPen, QPen, symbolPen, update)
+STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolPen, QPen, symbolPen, recalcShapeAndBoundingRect)
 void CustomPoint::setSymbolPen(const QPen &pen) {
 	Q_D(CustomPoint);
 	if (pen != d->symbolPen)
@@ -189,7 +189,7 @@ void CustomPoint::setSymbolOpacity(qreal opacity) {
 		exec(new CustomPointSetSymbolOpacityCmd(d, opacity, ki18n("%1: set symbol opacity")));
 }
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL_F(CustomPoint, SetVisible, bool, swapVisible, retransform);
+STD_SWAP_METHOD_SETTER_CMD_IMPL_F(CustomPoint, SetVisible, bool, swapVisible, update);
 void CustomPoint::setVisible(bool on) {
 	Q_D(CustomPoint);
 	exec(new CustomPointSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
@@ -236,18 +236,16 @@ void CustomPointPrivate::retransform() {
 
 	//calculate the point in the scene coordinates
 	const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
-	QVector<QPointF> list, listScene;
-	list<<position;
-	listScene = cSystem->mapLogicalToScene(list, CartesianCoordinateSystem::DefaultMapping);
+	QVector<QPointF> list{position};
+	QVector<QPointF> listScene = cSystem->mapLogicalToScene(list, CartesianCoordinateSystem::DefaultMapping);
 	if (!listScene.isEmpty()) {
 		m_visible = true;
 		positionScene = listScene.at(0);
 		suppressItemChangeEvent = true;
 		setPos(positionScene);
 		suppressItemChangeEvent = false;
-	} else {
+	} else
 		m_visible = false;
-	}
 
 	recalcShapeAndBoundingRect();
 }
@@ -294,7 +292,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 			path = trafo.map(path);
 		}
 
-		pointShape = trafo.map(path);
+		pointShape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbolPen));
 		transformedBoundingRectangle = pointShape.boundingRect();
 	}
 }

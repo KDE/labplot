@@ -3,6 +3,9 @@ add_executable (correlationtest CorrelationTest.cpp ../AnalysisTest.cpp ../../Co
 
 target_link_libraries(correlationtest Qt5::Test)
 target_link_libraries(correlationtest KF5::Archive KF5::XmlGui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+IF (APPLE)
+	target_link_libraries(correlationtest KDMacTouchBar)
+ENDIF ()
 
 IF (FFTW3_FOUND)
 	target_link_libraries(correlationtest ${FFTW3_LIBRARIES})

@@ -41,6 +41,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/Image.h"
 #include "backend/worksheet/TextLabel.h"
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/cantorWorksheet/CantorWorksheet.h"
@@ -62,6 +63,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
+#include "kdefrontend/dockwidgets/ImageDock.h"
 #include "kdefrontend/dockwidgets/LiveDataDock.h"
 #include "kdefrontend/dockwidgets/MatrixDock.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
@@ -317,6 +319,11 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Text Label"));
 		raiseDock(m_mainWindow->textLabelDock, m_mainWindow->stackedWidget);
 		m_mainWindow->textLabelDock->setLabels(castList<TextLabel>(selectedAspects));
+		break;
+	case AspectType::Image:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Image"));
+		raiseDock(m_mainWindow->imageDock, m_mainWindow->stackedWidget);
+		m_mainWindow->imageDock->setImages(castList<Image>(selectedAspects));
 		break;
 	case AspectType::CustomPoint:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Custom Point"));

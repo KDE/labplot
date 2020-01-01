@@ -48,6 +48,10 @@ class QToolBar;
 class QModelIndex;
 class QItemSelection;
 
+#ifdef Q_OS_MAC
+	class KDMacTouchBar;
+#endif
+
 class SpreadsheetView : public QWidget {
 	Q_OBJECT
 
@@ -208,6 +212,9 @@ private:
 public slots:
 	void createContextMenu(QMenu*);
 	void fillToolBar(QToolBar*);
+#ifdef Q_OS_MAC
+	void fillTouchBar(KDMacTouchBar*);
+#endif
 	void print(QPrinter*) const;
 
 private slots:

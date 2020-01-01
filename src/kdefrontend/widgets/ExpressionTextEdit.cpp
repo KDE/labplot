@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright        : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
     Description      : widget for defining mathematical expressions
-	modified version of http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
+	modified version of https://doc.qt.io/qt-5/qtwidgets-tools-customcompleter-example.html
  ***************************************************************************/
 
 /***************************************************************************
@@ -80,7 +80,7 @@
   \brief  Provides a widget for defining mathematical expressions
 		  Supports syntax-highlighting and completion.
 
-		  Modified version of http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
+		  Modified version of https://doc.qt.io/qt-5/qtwidgets-tools-customcompleter-example.html
 
   \ingroup kdefrontend
 */

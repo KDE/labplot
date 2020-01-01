@@ -30,6 +30,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "kdefrontend/GuiTools.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "tools/TeXRenderer.h"
 
 #include <QMenu>
@@ -228,20 +229,19 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
 }
 
 void LabelWidget::initConnections() const {
-	connect( m_label, &TextLabel::textWrapperChanged, this, &LabelWidget::labelTextWrapperChanged);
-	connect( m_label, &TextLabel::teXImageUpdated, this, &LabelWidget::labelTeXImageUpdated);
-	connect( m_label, &TextLabel::teXFontChanged, this, &LabelWidget::labelTeXFontChanged);
-	connect( m_label, &TextLabel::fontColorChanged, this, &LabelWidget::labelFontColorChanged);
-	connect (m_label, &TextLabel::backgroundColorChanged, this, &LabelWidget::labelBackgroundColorChanged);
-	connect( m_label, &TextLabel::positionChanged, this, &LabelWidget::labelPositionChanged);
-	connect( m_label, &TextLabel::horizontalAlignmentChanged, this, &LabelWidget::labelHorizontalAlignmentChanged);
-	connect( m_label, &TextLabel::verticalAlignmentChanged, this, &LabelWidget::labelVerticalAlignmentChanged);
-	connect( m_label, &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
+	connect(m_label, &TextLabel::textWrapperChanged, this, &LabelWidget::labelTextWrapperChanged);
+	connect(m_label, &TextLabel::teXImageUpdated, this, &LabelWidget::labelTeXImageUpdated);
+	connect(m_label, &TextLabel::teXFontChanged, this, &LabelWidget::labelTeXFontChanged);
+	connect(m_label, &TextLabel::fontColorChanged, this, &LabelWidget::labelFontColorChanged);
+	connect(m_label, &TextLabel::backgroundColorChanged, this, &LabelWidget::labelBackgroundColorChanged);
+	connect(m_label, &TextLabel::positionChanged, this, &LabelWidget::labelPositionChanged);
+	connect(m_label, &TextLabel::horizontalAlignmentChanged, this, &LabelWidget::labelHorizontalAlignmentChanged);
+	connect(m_label, &TextLabel::verticalAlignmentChanged, this, &LabelWidget::labelVerticalAlignmentChanged);
+	connect(m_label, &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
 	connect(m_label, &TextLabel::borderShapeChanged, this, &LabelWidget::labelBorderShapeChanged);
 	connect(m_label, &TextLabel::borderPenChanged, this, &LabelWidget::labelBorderPenChanged);
 	connect(m_label, &TextLabel::borderOpacityChanged, this, &LabelWidget::labelBorderOpacityChanged);
-	connect( m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
-	connect( m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
+	connect(m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
 }
 
 /*!
@@ -300,6 +300,8 @@ void LabelWidget::setNoGeometryMode(const bool b) {
 void LabelWidget::textChanged() {
 	if (m_initializing)
 		return;
+
+	const Lock lock(m_initializing);
 
 	if (ui.tbTexUsed->isChecked()) {
 		QString text = ui.teLabel->toPlainText();
@@ -455,33 +457,39 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	//if no selection is done, apply the new color for the whole label,
-	//apply to the currently selected part of the text only otherwise
-	QTextCursor c = ui.teLabel->textCursor();
-	if (c.selectedText().isEmpty())
-		ui.teLabel->selectAll();
+	if (!m_teXEnabled && m_label->text().teXUsed) {
+		//if no selection is done, apply the new color for the whole label,
+		//apply to the currently selected part of the text only otherwise
+		QTextCursor c = ui.teLabel->textCursor();
+		if (c.selectedText().isEmpty())
+			ui.teLabel->selectAll();
 
-	ui.teLabel->setTextColor(color);
+		ui.teLabel->setTextColor(color);
+	} else {
+		for (auto* label : m_labelsList)
+			label->setFontColor(color);
+	}
 }
 
 void LabelWidget::backgroundColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	QTextCursor c = ui.teLabel->textCursor();
-	if (c.selectedText().isEmpty())
-		ui.teLabel->selectAll();
+	if (!m_teXEnabled && m_label->text().teXUsed) {
+		QTextCursor c = ui.teLabel->textCursor();
+		if (c.selectedText().isEmpty())
+			ui.teLabel->selectAll();
 
-	ui.teLabel->setTextBackgroundColor(color);
+		ui.teLabel->setTextBackgroundColor(color);
+	} else {
+		for (auto* label : m_labelsList)
+			label->setBackgroundColor(color);
+	}
 }
 
 void LabelWidget::fontSizeChanged(int value) {
 	if (m_initializing)
 		return;
-
-	QTextCursor c = ui.teLabel->textCursor();
-	if (c.selectedText().isEmpty())
-		ui.teLabel->selectAll();
 
 	QFont font = m_label->teXFont();
 	font.setPointSize(value);
@@ -865,7 +873,8 @@ void LabelWidget::borderOpacityChanged(int value) {
 //****** SLOTs for changes triggered in TextLabel *********
 //*********************************************************
 void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
-	m_initializing = true;
+	if (m_initializing)return;
+	const Lock lock(m_initializing);
 
 	//save and restore the current cursor position after changing the text
 	QTextCursor cursor = ui.teLabel->textCursor();
@@ -880,7 +889,6 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
 
 	ui.tbTexUsed->setChecked(text.teXUsed);
 	this->teXUsedChanged(text.teXUsed);
-	m_initializing = false;
 }
 
 /*!
@@ -888,9 +896,10 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
  * or something else went wrong during rendering (\sa ExpressionTextEdit::validateExpression())
  */
 void LabelWidget::labelTeXImageUpdated(bool valid) {
-	if (!valid)
-		ui.teLabel->setStyleSheet(QLatin1String("QTextEdit{background: red;}"));
-	else
+	if (!valid) {
+		if (ui.teLabel->styleSheet().isEmpty())
+			ui.teLabel->setStyleSheet(QLatin1String("QTextEdit{background: red;}"));
+	} else
 		ui.teLabel->setStyleSheet(QString());
 }
 

@@ -82,12 +82,8 @@ QSize SlidingPanel::sizeHint() const {
 	QSize sh;
 	const QRect& screenSize = QGuiApplication::primaryScreen()->availableGeometry();
 	sh.setWidth(screenSize.width());
-
-	//for the height use 1.5 times the height of the font used in the label (20 points) in pixels
-	QFont font;
-	font.setPointSize(20);
-	const QFontMetrics fm(font);
-	sh.setHeight(1.5*fm.ascent());
+	sh.setHeight(m_worksheetName->sizeHint().height()
+				 + layout()->contentsMargins().top() + layout()->contentsMargins().bottom());
 
 	return sh;
 }

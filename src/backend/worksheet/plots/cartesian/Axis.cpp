@@ -163,6 +163,7 @@ void Axis::init() {
 	d->title->setHidden(true);
 	d->title->graphicsItem()->setParentItem(graphicsItem());
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, false);
 	d->title->graphicsItem()->setAcceptHoverEvents(false);
 	d->title->setText(this->name());
 	if (d->orientation == AxisVertical) d->title->setRotationAngle(90);
@@ -1262,9 +1263,9 @@ void AxisPrivate::retransformTicks() {
 					break;
 			}
 		} else {
+			if (!majorTicksColumn->isValid(iMajor) || majorTicksColumn->isMasked(iMajor))
+				continue;
 			majorTickPos = majorTicksColumn->valueAt(iMajor);
-			if (std::isnan(majorTickPos))
-				break; //stop iterating after the first non numerical value in the column
 		}
 
 		//calculate start and end points for major tick's line
@@ -1298,12 +1299,18 @@ void AxisPrivate::retransformTicks() {
 				}
 			}
 
+			double value = scalingFactor * majorTickPos + zeroOffset;
+
+			//if custom column is used, we can have duplicated values in it and we need only unique values
+			if (majorTicksType == Axis::TicksCustomColumn && tickLabelValues.indexOf(value) != -1)
+				valid = false;
+
 			//add major tick's line to the painter path
 			if (valid) {
 				majorTicksPath.moveTo(startPoint);
 				majorTicksPath.lineTo(endPoint);
 				majorTickPoints << anchorPoint;
-				tickLabelValues<< scalingFactor*majorTickPos+zeroOffset;
+				tickLabelValues << value;
 			}
 		}
 
@@ -1317,9 +1324,9 @@ void AxisPrivate::retransformTicks() {
 				if (minorTicksType != Axis::TicksCustomColumn) {
 					minorTickPos = majorTickPos + (iMinor+1)*minorTicksSpacing;
 				} else {
+					if (!minorTicksColumn->isValid(iMinor) || minorTicksColumn->isMasked(iMinor))
+						continue;
 					minorTickPos = minorTicksColumn->valueAt(iMinor);
-					if (std::isnan(minorTickPos))
-						break; //stop iterating after the first non numerical value in the column
 
 					//in the case a custom column is used for the minor ticks, we draw them _once_ for the whole range of the axis.
 					//execute the minor ticks loop only once.

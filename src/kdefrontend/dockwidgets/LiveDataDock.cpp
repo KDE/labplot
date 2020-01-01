@@ -248,7 +248,7 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 
 /*!
  * \brief Sets the live data source of this dock widget
- * \param sources
+ * \param source
  */
 void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 #ifdef HAVE_MQTT

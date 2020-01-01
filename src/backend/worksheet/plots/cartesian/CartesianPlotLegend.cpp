@@ -41,10 +41,11 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/commandtemplates.h"
 
+#include <QGraphicsSceneContextMenuEvent>
+#include <QKeyEvent>
+#include <QMenu>
 #include <QPainterPath>
 #include <QPainter>
-#include <QGraphicsSceneContextMenuEvent>
-#include <QMenu>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -92,6 +93,7 @@ void CartesianPlotLegend::init() {
 	d->title->setHidden(true);
 	d->title->setParentGraphicsItem(graphicsItem());
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, false);
 	connect(d->title, &TextLabel::changed, this, &CartesianPlotLegend::retransform);
 
 	//Background
@@ -119,10 +121,6 @@ void CartesianPlotLegend::init() {
 	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", Worksheet::convertToSceneUnits(0.1f, Worksheet::Centimeter));
 	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", Worksheet::convertToSceneUnits(0.1f, Worksheet::Centimeter));
 	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 1);
-
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
-	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 
 	this->initActions();
 }
@@ -188,7 +186,7 @@ void CartesianPlotLegend::handleResize(double horizontalRatio, double verticalRa
 CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QFont, labelFont, labelFont)
 CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QColor, labelColor, labelColor)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, bool, labelColumnMajor, labelColumnMajor)
-CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, CartesianPlotLegend::PositionWrapper, position, position)
+CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, WorksheetElement::PositionWrapper, position, position)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, rotationAngle, rotationAngle)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, lineSymbolWidth, lineSymbolWidth)
 
@@ -252,7 +250,7 @@ void CartesianPlotLegend::setLineSymbolWidth(float width) {
 		exec(new CartesianPlotLegendSetLineSymbolWidthCmd(d, width, ki18n("%1: change line+symbol width")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetPosition, CartesianPlotLegend::PositionWrapper, position, updatePosition);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetPosition, WorksheetElement::PositionWrapper, position, updatePosition);
 void CartesianPlotLegend::setPosition(const PositionWrapper& pos) {
 	Q_D(CartesianPlotLegend);
 	if (pos.point != d->position.point
@@ -416,6 +414,10 @@ void CartesianPlotLegend::visibilityChangedSlot() {
 //######################### Private implementation #############################
 //##############################################################################
 CartesianPlotLegendPrivate::CartesianPlotLegendPrivate(CartesianPlotLegend *owner) : q(owner) {
+	setFlag(QGraphicsItem::ItemIsSelectable, true);
+	setFlag(QGraphicsItem::ItemIsMovable);
+	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+	setFlag(QGraphicsItem::ItemIsFocusable);
 	setAcceptHoverEvents(true);
 }
 
@@ -883,10 +885,10 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 
 	if (change == QGraphicsItem::ItemPositionChange) {
 		//convert item's center point in parent's coordinates
-		CartesianPlotLegend::PositionWrapper tempPosition;
+		WorksheetElement::PositionWrapper tempPosition;
 			tempPosition.point = value.toPointF();
-			tempPosition.horizontalPosition = CartesianPlotLegend::hPositionCustom;
-			tempPosition.verticalPosition = CartesianPlotLegend::vPositionCustom;
+			tempPosition.horizontalPosition = WorksheetElement::hPositionCustom;
+			tempPosition.verticalPosition = WorksheetElement::vPositionCustom;
 
 		//emit the signals in order to notify the UI.
 		//we don't set the position related member variables during the mouse movements.
@@ -903,15 +905,47 @@ void CartesianPlotLegendPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* eve
 	if (point != position.point) {
 		//position was changed -> set the position related member variables
 		suppressRetransform = true;
-		CartesianPlotLegend::PositionWrapper tempPosition;
+		WorksheetElement::PositionWrapper tempPosition;
 		tempPosition.point = point;
-		tempPosition.horizontalPosition = CartesianPlotLegend::hPositionCustom;
-		tempPosition.verticalPosition = CartesianPlotLegend::vPositionCustom;
+		tempPosition.horizontalPosition = WorksheetElement::hPositionCustom;
+		tempPosition.verticalPosition = WorksheetElement::vPositionCustom;
 		q->setPosition(tempPosition);
 		suppressRetransform = false;
 	}
 
 	QGraphicsItem::mouseReleaseEvent(event);
+}
+
+void CartesianPlotLegendPrivate::keyPressEvent(QKeyEvent* event) {
+	if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
+		|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
+		const int delta = 5;
+		QPointF point = pos();
+		WorksheetElement::PositionWrapper tempPosition;
+
+		if (event->key() == Qt::Key_Left) {
+			point.setX(point.x() - delta);
+			tempPosition.horizontalPosition = WorksheetElement::hPositionCustom;
+			tempPosition.verticalPosition = position.verticalPosition;
+		} else if (event->key() == Qt::Key_Right) {
+			point.setX(point.x() + delta);
+			tempPosition.horizontalPosition = WorksheetElement::hPositionCustom;
+			tempPosition.verticalPosition = position.verticalPosition;
+		} else if (event->key() == Qt::Key_Up) {
+			point.setY(point.y() - delta);
+			tempPosition.horizontalPosition = position.horizontalPosition;
+			tempPosition.verticalPosition = WorksheetElement::vPositionCustom;
+		} else if (event->key() == Qt::Key_Down) {
+			point.setY(point.y() + delta);
+			tempPosition.horizontalPosition = position.horizontalPosition;
+			tempPosition.verticalPosition = WorksheetElement::vPositionCustom;
+		}
+
+		tempPosition.point = point;
+		q->setPosition(tempPosition);
+	}
+
+	QGraphicsItem::keyPressEvent(event);
 }
 
 void CartesianPlotLegendPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
@@ -1061,13 +1095,13 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("horizontalPosition").toString());
 			else
-				d->position.horizontalPosition = (CartesianPlotLegend::HorizontalPosition)str.toInt();
+				d->position.horizontalPosition = (WorksheetElement::HorizontalPosition)str.toInt();
 
 			str = attribs.value("verticalPosition").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("verticalPosition").toString());
 			else
-				d->position.verticalPosition = (CartesianPlotLegend::VerticalPosition)str.toInt();
+				d->position.verticalPosition = (WorksheetElement::VerticalPosition)str.toInt();
 
 			READ_DOUBLE_VALUE("rotation", rotationAngle);
 		} else if (reader->name() == "textLabel") {

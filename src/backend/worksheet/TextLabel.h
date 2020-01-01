@@ -46,12 +46,6 @@ class TextLabel : public WorksheetElement {
 public:
 	enum Type {General, PlotTitle, AxisTitle, PlotLegendTitle};
 
-	enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
-	enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
-
-	enum HorizontalAlignment {hAlignLeft, hAlignCenter, hAlignRight};
-	enum VerticalAlignment {vAlignTop, vAlignCenter, vAlignBottom};
-
 	enum BorderShape {NoBorder, Rect, Ellipse, RoundSideRect, RoundCornerRect, InwardsRoundCornerRect, DentedBorderRect,
 			Cuboid, UpPointingRectangle, DownPointingRectangle, LeftPointingRectangle, RightPointingRectangle};
 
@@ -62,12 +56,6 @@ public:
 
 		QString text;
 		bool teXUsed{false};
-	};
-
-	struct PositionWrapper {
-		QPointF point;
-		HorizontalPosition horizontalPosition;
-		VerticalPosition verticalPosition;
 	};
 
 	explicit TextLabel(const QString& name, Type type = General);
@@ -88,11 +76,11 @@ public:
 	BASIC_D_ACCESSOR_DECL(QColor, fontColor, FontColor)
 	BASIC_D_ACCESSOR_DECL(QColor, backgroundColor, BackgroundColor)
 	CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
-	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
+	CLASS_D_ACCESSOR_DECL(WorksheetElement::PositionWrapper, position, Position)
 	void setPosition(QPointF);
 	void setPositionInvalid(bool);
-	BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
-	BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::VerticalAlignment, verticalAlignment, VerticalAlignment)
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 
 	BASIC_D_ACCESSOR_DECL(BorderShape, borderShape, BorderShape);
@@ -131,9 +119,9 @@ signals:
 	void teXFontChanged(const QFont);
 	void fontColorChanged(const QColor);
 	void backgroundColorChanged(const QColor);
-	void positionChanged(const TextLabel::PositionWrapper&);
-	void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);
-	void verticalAlignmentChanged(TextLabel::VerticalAlignment);
+	void positionChanged(const WorksheetElement::PositionWrapper&);
+	void horizontalAlignmentChanged(WorksheetElement::HorizontalAlignment);
+	void verticalAlignmentChanged(WorksheetElement::VerticalAlignment);
 	void rotationAngleChanged(qreal);
 	void visibleChanged(bool);
 	void borderShapeChanged(TextLabel::BorderShape);

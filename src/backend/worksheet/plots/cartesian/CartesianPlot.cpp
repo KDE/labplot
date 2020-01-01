@@ -53,6 +53,7 @@
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/Image.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -427,6 +428,7 @@ void CartesianPlot::initActions() {
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("Horizontal Axis"), this);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("Vertical Axis"), this);
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), this);
+	addImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), this);
 
 	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
@@ -447,6 +449,7 @@ void CartesianPlot::initActions() {
 	connect(addHorizontalAxisAction, &QAction::triggered, this, &CartesianPlot::addHorizontalAxis);
 	connect(addVerticalAxisAction, &QAction::triggered, this, &CartesianPlot::addVerticalAxis);
 	connect(addTextLabelAction, &QAction::triggered, this, &CartesianPlot::addTextLabel);
+	connect(addImageAction, &QAction::triggered, this, &CartesianPlot::addImage);
 	connect(addCustomPointAction, &QAction::triggered, this, &CartesianPlot::addCustomPoint);
 
 	//Analysis menu actions
@@ -588,6 +591,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addVerticalAxisAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addTextLabelAction);
+	addNewMenu->addAction(addImageAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addCustomPointAction);
 
@@ -1409,6 +1413,11 @@ void CartesianPlot::addTextLabel() {
 	label->setParentGraphicsItem(graphicsItem());
 }
 
+void CartesianPlot::addImage() {
+	Image* image = new Image("image");
+	this->addChild(image);
+}
+
 void CartesianPlot::addCustomPoint() {
 	CustomPoint* point = new CustomPoint(this, "custom point");
 	this->addChild(point);
@@ -1619,6 +1628,9 @@ void CartesianPlot::updateLegend() {
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
 void CartesianPlot::dataChanged() {
+	if (project() && project()->isLoading())
+		return;
+
 	Q_D(CartesianPlot);
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
@@ -3187,11 +3199,36 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 	}
 }
 
-void CartesianPlotPrivate::keyPressEvent(QKeyEvent * event) {
+void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Escape) {
 		setCursor(Qt::ArrowCursor);
 		q->setMouseMode(CartesianPlot::MouseMode::SelectionMode);
 		m_selectionBandIsShown = false;
+	} else if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
+		|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
+
+		const auto* worksheet = dynamic_cast<const Worksheet*>(q->parentAspect());
+		if (worksheet->layout() == Worksheet::NoLayout) {
+			const int delta = 5;
+			QRectF rect = q->rect();
+
+			if (event->key() == Qt::Key_Left) {
+				rect.setX(rect.x() - delta);
+				rect.setWidth(rect.width() - delta);
+			} else if (event->key() == Qt::Key_Right) {
+				rect.setX(rect.x() + delta);
+				rect.setWidth(rect.width() + delta);
+			} else if (event->key() == Qt::Key_Up) {
+				rect.setY(rect.y() - delta);
+				rect.setHeight(rect.height() - delta);
+			} else if (event->key() == Qt::Key_Down) {
+				rect.setY(rect.y() + delta);
+				rect.setHeight(rect.height() + delta);
+			}
+
+			q->setRect(rect);
+		}
+
 	}
 	QGraphicsItem::keyPressEvent(event);
 }
@@ -3686,6 +3723,13 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					return false;
 				}
 			}
+		} else if (reader->name() == "image") {
+			Image* image = new Image(QString());
+			if (!image->load(reader, preview)) {
+				delete image;
+				return false;
+			} else
+				addChildFast(image);
 		} else if (reader->name() == "plotArea")
 			m_plotArea->load(reader, preview);
 		else if (reader->name() == "axis") {

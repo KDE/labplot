@@ -31,15 +31,12 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
 #include "backend/spreadsheet/Spreadsheet.h"
 
-#ifdef HAVE_MQTT
 class MQTTSubscription;
 class MQTTClient;
-#endif
 
 class AsciiFilter;
 
 class MQTTTopic : public Spreadsheet {
-#ifdef HAVE_MQTT
 	Q_OBJECT
 
 public:
@@ -77,8 +74,6 @@ private slots:
 
 signals:
 	void readOccured();
-
-#endif // HAVE_MQTT
 };
 
 #endif // MQTTTOPIC_H

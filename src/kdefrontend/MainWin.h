@@ -42,7 +42,6 @@ class Worksheet;
 class Note;
 class Workbook;
 class Datapicker;
-class Image;
 class Spreadsheet;
 class Matrix;
 class GuiObserver;
@@ -72,6 +71,7 @@ class XYFourierTransformCurveDock;
 class XYConvolutionCurveDock;
 class XYCorrelationCurveDock;
 class WorksheetDock;
+class ImageDock;
 class LabelWidget;
 class DatapickerImageWidget;
 class DatapickerCurveWidget;
@@ -95,6 +95,10 @@ class QQuickWidget;
 class WelcomeScreenHelper;
 class ImportDatasetWidget;
 class TreeModel;
+
+#ifdef Q_OS_MAC
+	class KDMacTouchBar;
+#endif
 
 class MainWin : public KXmlGuiWindow {
 	Q_OBJECT
@@ -135,6 +139,10 @@ private:
 	WelcomeScreenHelper* m_welcomeScreenHelper{nullptr};
 	ImportDatasetWidget* m_importDatasetWidget{nullptr};
 
+#ifdef Q_OS_MAC
+	KDMacTouchBar* m_touchBar;
+#endif
+
 	KRecentFilesAction* m_recentProjectsAction;
 	QAction* m_saveAction;
 	QAction* m_saveAsAction;
@@ -157,6 +165,7 @@ private:
 	QAction* m_newSqlDataSourceAction;
 	QAction* m_newScriptAction;
 	QAction* m_newProjectAction;
+	QAction* m_openProjectAction;
 	QAction* m_historyAction;
 	QAction* m_undoAction;
 	QAction* m_redoAction;
@@ -226,6 +235,7 @@ private:
 	HistogramDock* histogramDock{nullptr};
 	WorksheetDock* worksheetDock{nullptr};
 	LabelWidget* textLabelDock{nullptr};
+	ImageDock* imageDock{nullptr};
 	CustomPointDock* customPointDock{nullptr};
 	DatapickerImageWidget* datapickerImageDock{nullptr};
 	DatapickerCurveWidget* datapickerCurveDock{nullptr};

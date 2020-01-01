@@ -64,7 +64,7 @@ struct func _functions[] = {
 	{"round", (func_t)round},
 	{"trunc", (func_t)trunc},
 #endif
-	/* GSL mathematical functions: see http://www.gnu.org/software/gsl/manual/gsl-ref.html#Mathematical-Functions */
+	/* GSL mathematical functions: see https://www.gnu.org/software/gsl/doc/html/math.html */
 	{"log1p", (func_t)gsl_log1p},
 	{"ldexp", (func_t)nsl_sf_ldexp},
 	{"powint", (func_t)nsl_sf_powint},
@@ -76,7 +76,7 @@ struct func _functions[] = {
 	{"pow7", (func_t)gsl_pow_7},
 	{"pow8", (func_t)gsl_pow_8},
 	{"pow9", (func_t)gsl_pow_9},
-	/* GSL special functions: see http://www.gnu.org/software/gsl/manual/html_node/Special-Functions.html */
+	/* GSL special functions: see https://www.gnu.org/software/gsl/doc/html/specfunc.html */
 	/* Airy Functions and Derivatives */
 	{"Ai", (func_t)nsl_sf_airy_Ai},
 	{"Bi", (func_t)nsl_sf_airy_Bi},
@@ -342,7 +342,7 @@ struct func _functions[] = {
 	{"etaint", (func_t)nsl_sf_etaint},
 	{"eta", (func_t)gsl_sf_eta},
 
-	/* GSL Random Number Distributions: see http://www.gnu.org/software/gsl/manual/html_node/Random-Number-Distributions.html */
+	/* GSL Random Number Distributions: see https://www.gnu.org/software/gsl/doc/html/randist.html */
 	/* Gaussian Distribution */
 	{"gaussian", (func_t)gsl_ran_gaussian_pdf},
 	{"ugaussian", (func_t)gsl_ran_ugaussian_pdf},

@@ -1,4 +1,11 @@
------2.7-----
+-----2.8 -----
+	* [macOS] added support for touchbar
+	* Show the size of the members in the JSON file in the import file dialog
+	* [worksheet] In the Export Worksheet Dialog allow to export to the clipboard
+	* [worksheet] Allow to move plots, text labels and legend with arrow keys
+	* [worksheet] Image worksheet element
+
+-----2.7 (24.10.2019)-----
 New features:
 	* Allow to move objects (drag&drop) to different folders in the project explorer
 	* [spreadsheet] allow to insert multiple rows and columns in one step
@@ -38,7 +45,7 @@ Bug fixes:
 	* [nsl] fix memory leak in line simplification (Douglas Peuker variant)
 	* [nsl] fix bug in calculating Bessel polynomials on Windows (used in Bessel filter)
 
------2.6-----
+-----2.6 (19.04.2019)-----
 New features:
 	* Histogram
 	* Import from MQTT sources
@@ -71,7 +78,7 @@ Bug fixes:
 	* [import] fix preview update and add missing close of netcdf files
 	* Don't crash when a scaling factor equal to zero was set for axis
 
------2.5-----
+-----2.5 (21.06.2018)-----
 New features:
 	* Support for reading and plotting of live-data
 	* Improved data fitting
@@ -127,7 +134,7 @@ Bug fixes:
 	* Correctly save and restore masked cells
 	* Don't crash if the rc-file was not found during the startup
 
------2.4-----
+-----2.4 (09.04.2017)-----
 New features:
 	* Support themes for plots
 	* Import and editing of FITS data files
@@ -157,7 +164,7 @@ Bug fixes:
 	* Constants are now available with full accuracy
 	* Windows: Import of files and open recent files fixed
 
------2.3-----
+-----2.3 (23.07.2016)-----
 New features:
 	* Integration of Cantor - Support for different open-source computer algebra systems
 	* Statistics on spreadsheets and matrices
@@ -181,7 +188,7 @@ Bug fixes:
 	* Save and restore custom column widths in the spreadsheet
 	* Fixed sporadic crashes during project close
 
------2.2-----
+-----2.2 (29.03.2016)-----
 New features:
 	* Datapicker - tool for extracting curves and data points from imported images
 	* Custom point on the plot with user-defined position and appearance
@@ -200,7 +207,7 @@ Bug fixes:
 	* Fixed some bugs in painting of the selection band on the worksheet
 	* Allow to open gz- and bz2-compressed LabPlot project files on the command line interface
 
------2.1-----
+-----2.1 (25.10.2015)-----
 New features:
 	* New Matrix view for handling matrix data.
 	* Workbook - a new container for grouping several objects of type Spreadsheet and/or Matrix.
@@ -221,7 +228,7 @@ Performance improvements:
 Bug fixes:
 	* Fixed wrong behaviour when doing "zoom&select" in a plot and then deselecting the plot - it was not possible anymore to select the plot again on the worksheet.
 
------2.0.2-----
+-----2.0.2 (15.03.2015)-----
 New features:
 	* Plot 2D-curves defined by mathematical equations in cartesian and polar coordinates or via a parametric equation.
 	* Linear and non-linear regression analysis. Several predefined fit-models are provided. User-defined models are also possible.
@@ -248,12 +255,12 @@ Bug fixes:
 	* BUG: 330774 - fixed wrong positioning of axis on orientation changes.
 	* Update main window title when project name is changed
 
------2.0.1-----
+-----2.0.1 (01.03.2014)-----
 Bug fix release. Solved issues:
 	* Fixed wrong scaling of legend's text labels in pdf-export
 	* Fixed memory corruption in CartesianPlotDock that can lead to crashes
 
------2.0.0-----
+-----2.0.0 (19.01.2014)-----
 First stable release of LabPlot2. LabPlot2 is a complete rewrite of LabPlot1 and lacks in this release a lot of features available in the predecessor. On the other hand, the GUI and the usability is more superior as compared to LabPlot1 and there are several new features that were not available in LabPlot1.
 
 Brief summary of features and capabilities of LabPlot2 implemented in the first release:

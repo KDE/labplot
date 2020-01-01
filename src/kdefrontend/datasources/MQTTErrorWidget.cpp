@@ -26,7 +26,7 @@ Copyright            : (C) 2018 by Kovacs Ferencz (kferike98@gmail.com)
 ***************************************************************************/
 
 #include "src/kdefrontend/datasources/MQTTErrorWidget.h"
-#ifdef HAVE_MQTT
+
 #include "backend/datasources/MQTTClient.h"
 #include <QMqttSubscription>
 #include <QMqttTopicFilter>
@@ -129,4 +129,3 @@ void MQTTErrorWidget::tryToReconnect() {
 	if (ok)
 		this->close();
 }
-#endif

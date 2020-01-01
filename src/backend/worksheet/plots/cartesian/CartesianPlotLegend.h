@@ -42,15 +42,6 @@ class CartesianPlotLegend : public WorksheetElement {
 	Q_ENUMS(VerticalPosition)
 
 public:
-	enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
-	enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
-
-	struct PositionWrapper {
-		QPointF point;
-		HorizontalPosition horizontalPosition;
-		VerticalPosition verticalPosition;
-	};
-
 	CartesianPlotLegend(CartesianPlot* parentPlot, const QString &name);
 	~CartesianPlotLegend() override;
 

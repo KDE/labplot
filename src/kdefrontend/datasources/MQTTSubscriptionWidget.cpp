@@ -25,10 +25,8 @@ Copyright            : (C) 2019 by Kovacs Ferencz (kferike98@gmail.com)
 *                                                                         *
 ***************************************************************************/
 
-
 #include "MQTTSubscriptionWidget.h"
 
-#ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
 #include "ImportFileWidget.h"
 #include "kdefrontend/dockwidgets/LiveDataDock.h"
@@ -1015,4 +1013,3 @@ void MQTTSubscriptionWidget::onDisconnect() {
 	delete m_topicCompleter;
 	delete m_subscriptionCompleter;
 }
-#endif

@@ -30,15 +30,12 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #define MQTTSUBSCRIPTION_H
 
 #include "backend/core/Folder.h"
-
-#ifdef HAVE_MQTT
 #include "backend/datasources/MQTTTopic.h"
 
 class QString;
-#endif
+
 
 class MQTTSubscription : public Folder {
-#ifdef HAVE_MQTT
 	Q_OBJECT
 
 public:
@@ -61,8 +58,6 @@ private:
 
 signals:
 	void loaded(const QString &);
-
-#endif //HAVE_MQTT
 };
 
 #endif // MQTTSUBSCRIPTION_H

@@ -72,6 +72,10 @@ void QJsonTreeItem::setType(const QJsonValue::Type type) {
 	mType = type;
 }
 
+void QJsonTreeItem::setSize(int size) {
+	mSize = size;
+}
+
 QString QJsonTreeItem::key() const {
 	return mKey;
 }
@@ -84,12 +88,20 @@ QJsonValue::Type QJsonTreeItem::type() const {
 	return mType;
 }
 
+int QJsonTreeItem::size() const {
+	return mSize;
+}
+
 QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* parent) {
 	auto* rootItem = new QJsonTreeItem(parent);
 	rootItem->setKey("root");
 
-	if (value.isObject()) {
+	if (value.isObject())
+		rootItem->setSize(QJsonDocument(value.toObject()).toJson(QJsonDocument::Compact).size());
+	else if (value.isArray())
+		rootItem->setSize(QJsonDocument(value.toArray()).toJson(QJsonDocument::Compact).size());
 
+	if (value.isObject()) {
 		//Get all QJsonValue childs
 		for (QString key : value.toObject().keys()) {
 			QJsonValue v = value.toObject().value(key);
@@ -99,6 +111,8 @@ QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* paren
 			rootItem->appendChild(child);
 		}
 	} else if (value.isArray()) {
+		//QJsonDocument(v.toObject()).toJson(QJsonDocument::Compact).size();
+
 		//Get all QJsonValue childs
 		int index = 0;
 		for (QJsonValue v : value.toArray()) {
@@ -109,8 +123,10 @@ QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* paren
 			++index;
 		}
 	} else {
-		rootItem->setValue(value.toVariant().toString());
+		QString str = value.toVariant().toString();
+		rootItem->setValue(str);
 		rootItem->setType(value.type());
+		rootItem->setSize(str.length());
 	}
 
 	return rootItem;
@@ -123,8 +139,9 @@ QJsonModel::QJsonModel(QObject* parent) : QAbstractItemModel(parent),
 	mRootItem(new QJsonTreeItem(mHeadItem)) {
 
 	mHeadItem->appendChild(mRootItem);
-	mHeaders.append("key");
-	mHeaders.append("value");
+	mHeaders.append("Key");
+	mHeaders.append("Value");
+	mHeaders.append("Size in Bytes");
 }
 
 QJsonModel::~QJsonModel() {
@@ -205,8 +222,14 @@ QVariant QJsonModel::data(const QModelIndex& index, int role) const {
 		if (index.column() == 0)
 			return QString("%1").arg(item->key());
 
-		if (index.column() == 1)
+		else if (index.column() == 1)
 			return QString("%1").arg(item->value());
+		else {
+			if (item->size() != 0)
+				return QString("%1").arg(item->size());
+			else
+				return QString();
+		}
 	} else if (Qt::EditRole == role) {
 		if (index.column() == 1)
 			return QString("%1").arg(item->value());
@@ -301,7 +324,7 @@ int QJsonModel::rowCount(const QModelIndex& parent) const {
 
 int QJsonModel::columnCount(const QModelIndex& parent) const {
 	Q_UNUSED(parent)
-	return 2;
+	return 3;
 }
 
 Qt::ItemFlags QJsonModel::flags(const QModelIndex& index) const {

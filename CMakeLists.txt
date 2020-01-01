@@ -138,7 +138,7 @@ endif ()
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions (-DLVERSION=\"2.7.0\")
+add_definitions (-DLVERSION=\"2.8.0\")
 # add_definitions (-DLDEBUG='1')
 set(BUILD_SHARED_LIBS true)
 
@@ -216,7 +216,7 @@ IF (Cantor_FOUND)
 	IF (NOT ${Cantor_VERSION} VERSION_GREATER "0")
 		add_definitions (-DOLD_CANTORLIBS_VERSION)
 	ENDIF()
-	IF (${Cantor_VERSION} VERSION_GREATER "19.08")
+	IF (${Cantor_VERSION} VERSION_GREATER "19.11")
 		FIND_PACKAGE(Poppler "0.62.0" REQUIRED COMPONENTS Qt5)
 	ENDIF()
 ELSE ()
@@ -298,7 +298,7 @@ IF (ENABLE_FITS)
 FIND_PACKAGE (CFitsio)
 SET_PACKAGE_PROPERTIES (CFitsio PROPERTIES
 	DESCRIPTION "FITS IO Library"
-	URL "http://heasarc.gsfc.nasa.gov/fitsio/fitsio.html"
+	URL "https://heasarc.gsfc.nasa.gov/fitsio/fitsio.html"
 	PURPOSE "Support for the FITS (Flexible Image Transport System) data format.")
 IF (CFITSIO_FOUND)
 	add_definitions (-DHAVE_FITS)

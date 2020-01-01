@@ -31,12 +31,9 @@ Copyright            : (C) 2018 by Ferencz Kovacs (kferike98@gmail.com)
 #include <QWidget>
 #include "ui_mqttwillsettingswidget.h"
 
-#ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
-#endif
 
 class MQTTWillSettingsWidget: public QWidget {
-#ifdef HAVE_MQTT
 	Q_OBJECT
 
 public:
@@ -59,9 +56,6 @@ private slots:
 	void willMessageTypeChanged(int);
 	void loadSettings(const MQTTClient::MQTTWill&, const QVector<QString>&);
 	void willUpdateTypeChanged(int);
-
-#endif	// HAVE_MQTT
 };
 
 #endif //MQTTWILLSETTINGSWIDGET_H
-

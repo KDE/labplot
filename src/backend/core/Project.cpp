@@ -56,8 +56,9 @@
 
 /**
  * \class Project
- * \brief Represents a project.
  * \ingroup core
+ * \brief Represents a project.
+ * 
  * Project represents the root node of all objects created during the runtime of the program.
  * Manages also the undo stack.
  */
@@ -203,7 +204,7 @@ bool Project::hasChanged() const {
  * \brief Project::descriptionChanged
  * This function is called, when an object changes its name. When a column changed its name and wasn't connected before to the curve/column(formula) then
  * this is done in this function
- * \param column
+ * \param aspect
  */
 void Project::descriptionChanged(const AbstractAspect* aspect) {
 	if (isLoading())
@@ -565,7 +566,6 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 				RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
 				RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
 				RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
-				qDebug()<<"curve columns " << curve->xColumn() << "  " << curve->yColumn();
 			}
 			if (dynamic_cast<XYAnalysisCurve*>(curve))
 				RESTORE_POINTER(dynamic_cast<XYAnalysisCurve*>(curve), dataSourceCurve, DataSourceCurve, XYCurve, curves);
@@ -653,7 +653,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 
 		//loop over all affected plots and retransform them
 		for (auto* plot : plots) {
-			plot->setSuppressDataChangedSignal(true);
+			plot->setSuppressDataChangedSignal(false);
 			plot->dataChanged();
 		}
 

@@ -790,7 +790,7 @@ void MatrixPrivate::updateViewHeader() {
 }
 
 /*!
-	Insert \count columns before column number \c before
+	Insert \p count columns before column number \c before
 */
 void MatrixPrivate::insertColumns(int before, int count) {
 	Q_ASSERT(before >= 0);

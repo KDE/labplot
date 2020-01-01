@@ -2,6 +2,9 @@ add_executable (projectimporttest ProjectImportTest.cpp)
 
 target_link_libraries(projectimporttest Qt5::Test)
 target_link_libraries(projectimporttest KF5::Archive KF5::XmlGui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+IF (APPLE)
+	target_link_libraries(projectimporttest KDMacTouchBar)
+ENDIF ()
 
 IF (Qt5SerialPort_FOUND)
 	target_link_libraries(projectimporttest Qt5::SerialPort )
