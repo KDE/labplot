@@ -30,7 +30,6 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
 #include "backend/core/Folder.h"
 
-#include <QTimer>
 #include <QVector>
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/QMqttMessage>
@@ -39,14 +38,13 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include <QtMqtt/QMqttTopicName>
 #include <QMap>
 
-class QString;
 class AsciiFilter;
 class MQTTSubscription;
 class QAction;
-#endif
+class QTimer;
+class QString;
 
 class MQTTClient : public Folder {
-#ifdef HAVE_MQTT
 	Q_OBJECT
 
 public:

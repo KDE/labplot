@@ -28,7 +28,6 @@ Copyright            : (C) 2019 by Kovacs Ferencz (kferike98@gmail.com)
 #ifndef MQTTSUBSCRIPTIONWIDGET_H
 #define MQTTSUBSCRIPTIONWIDGET_H
 
-#include <QWidget>
 #include <QVector>
 
 #include "ui_mqttsubscriptionwidget.h"

@@ -39,7 +39,6 @@ Copyright            : (C) 2018-2019 Alexander Semke (alexander.semke@web.de)
 
 #include <QTimer>
 #include <QtMqtt>
-#include <QDebug>
 #include <QListWidgetItem>
 
 /*!

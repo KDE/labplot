@@ -34,11 +34,9 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include "backend/datasources/filters/AsciiFilter.h"
 
 #include <QMenu>
-#include <QTimer>
 #include <QIcon>
 #include <QAction>
 #include <KLocalizedString>
-#include <QDebug>
 
 /*!
   \class MQTTTopic

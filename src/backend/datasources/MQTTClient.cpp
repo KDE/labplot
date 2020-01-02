@@ -52,8 +52,6 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include <QAction>
 #include <KLocalizedString>
 
-#include <QDebug>
-
 /*!
   \class MQTTClient
   \brief The MQTT Client connects to the broker set in ImportFileWidget.

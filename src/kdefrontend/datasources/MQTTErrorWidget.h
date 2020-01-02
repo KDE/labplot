@@ -28,10 +28,10 @@ Copyright            : (C) 2018 by Kovacs Ferencz (kferike98@gmail.com)
 #ifndef MQTTERRORWIDGET_H
 #define MQTTERRORWIDGET_H
 
-#include <QWidget>
-
 #include <QMqttClient>
 #include "ui_mqtterrorwidget.h"
+
+class MQTTClient;
 
 class MQTTErrorWidget : public QWidget {
 	Q_OBJECT

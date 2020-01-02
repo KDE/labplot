@@ -31,12 +31,13 @@ Copyright            : (C) 2019 by Kovacs Ferencz (kferike98@gmail.com)
 #include "ImportFileWidget.h"
 #include "kdefrontend/dockwidgets/LiveDataDock.h"
 
-#include <QMqttSubscription>
-#include <QMessageBox>
-#include <KLocalizedString>
 #include <QCompleter>
+#include <QMessageBox>
+#include <QMqttSubscription>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+
+#include <KLocalizedString>
 
 /*!
    \class MQTTSubscriptionWidget

@@ -30,10 +30,10 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #define MQTTSUBSCRIPTION_H
 
 #include "backend/core/Folder.h"
-#include "backend/datasources/MQTTTopic.h"
 
+class MQTTClient;
+class MQTTTopic;
 class QString;
-
 
 class MQTTSubscription : public Folder {
 	Q_OBJECT
@@ -42,7 +42,7 @@ public:
 	explicit MQTTSubscription(const QString& name);
 	~MQTTSubscription() override;
 
-	void setMQTTClient(MQTTClient *client);
+	void setMQTTClient(MQTTClient*);
 	QString subscriptionName() const;
 	const QVector<MQTTTopic*> topics() const;
 	MQTTClient* mqttClient() const;
