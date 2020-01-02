@@ -574,19 +574,40 @@ void ImportDatasetWidget::downloadFinished(QNetworkReply* reply) {
 	if (reply->error() == QNetworkReply::NoError) {
 		QByteArray ba = reply->readAll();
 		QString info(ba);
-		info = info.replace(QLatin1Char('\n'), QLatin1String("<br>"));
+
+		if (m_collection == QLatin1String("Rdatasets")) {
+			//detailed descriptions for R is in html format,
+			//remove the header from the html file since we construct our own header
+
+			int headerStart = info.indexOf(QLatin1String("<head>"));
+			int headerEnd = info.indexOf(QLatin1String("</head>"));
+			info = info.left(headerStart) + info.right(info.length() - headerEnd - 7);
+
+			headerStart = info.indexOf(QLatin1String("<table"));
+			headerEnd = info.indexOf(QLatin1String("</table>"));
+			info = info.left(headerStart) + info.right(info.length() - headerEnd - 8);
+
+			headerStart = info.indexOf(QLatin1String("<h2>"));
+			headerEnd = info.indexOf(QLatin1String("</h2>"));
+			info = info.left(headerStart) + info.right(info.length() - headerEnd - 5);
+
+			info = info.replace(QLatin1String("<body>\n\n\n\n\n\n"), QLatin1String("<body>"));
+			info = info.remove(QLatin1String("\n\n\n"));
+		} else
+			info = info.replace(QLatin1Char('\n'), QLatin1String("<br>"));
 
 		//do further collection specific replacements to get better formatting
 		if (m_collection == QLatin1String("JSEDataArchive")) {
-			info = info.replace(QLatin1String("NAME:"), QLatin1String("<b>NAME:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("NAME:"), QLatin1String("<b>NAME:</b>"), Qt::CaseInsensitive);
 			info = info.replace(QLatin1String("TYPE:"), QLatin1String("<b>TYPE:</b>"), Qt::CaseSensitive);
 			info = info.replace(QLatin1String("SIZE:"), QLatin1String("<b>SIZE:</b>"), Qt::CaseSensitive);
-			info = info.replace(QLatin1String("DESCRIPTIVE ABSTRACT:"), QLatin1String("<b>DESCRIPTIVE ABSTRACT:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("DESCRIPTIVE ABSTRACT:"), QLatin1String("<b>DESCRIPTIVE ABSTRACT:</b>"), Qt::CaseInsensitive);
 			info = info.replace(QLatin1String("NOTE:"), QLatin1String("<b>NOTE:</b>"), Qt::CaseSensitive);
 			info = info.replace(QLatin1String("SPECIAL NOTES:"), QLatin1String("<b>SPECIAL NOTES:</b>"), Qt::CaseSensitive);
 			info = info.replace(QLatin1String("SOURCE:"), QLatin1String("<b>SOURCE:</b>"), Qt::CaseSensitive);
-			info = info.replace(QLatin1String("SOURCES:"), QLatin1String("<b>SOURCES:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("SOURCES:"), QLatin1String("<b>SOURCES:</b>"), Qt::CaseInsensitive);
 			info = info.replace(QLatin1String("DATA <b>SOURCE:</b>"), QLatin1String("<b>DATA SOURCE:</b>"), Qt::CaseSensitive);
+			info = info.replace(QLatin1String("DATASET LAYOUT:"), QLatin1String("<b>DATASET LAYOUT:</b>"), Qt::CaseSensitive);
 			info = info.replace(QLatin1String("DATASETS LAYOUT:"), QLatin1String("<b>DATASETS LAYOUT:</b>"), Qt::CaseSensitive);
 			info = info.replace(QLatin1String("VARIABLE DESCRIPTIONS:"), QLatin1String("<b>VARIABLE DESCRIPTIONS:</b>"), Qt::CaseSensitive);
 			info = info.replace(QLatin1String("VARIABLES DESCRIPTIONS:"), QLatin1String("<b>VARIABLES DESCRIPTIONS:</b>"), Qt::CaseSensitive);
