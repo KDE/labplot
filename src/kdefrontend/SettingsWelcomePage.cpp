@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : SettingsDatasetsPage.h
+    File                 : SettingsWelcomePage.cpp
     Project              : LabPlot
-    Description          : settings page for Datasets
+    Description          : settings page for the welcome screen
     --------------------------------------------------------------------
-    Copyright            : (C) 2019 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2020 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -26,27 +26,26 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SETTINGDATASETSPAGE_H
-#define SETTINGDATASETSPAGE_H
+#include "SettingsWelcomePage.h"
 
-#include "SettingsPage.h"
-#include "ui_settingsdatasetspage.h"
+/**
+ * \brief Page for the 'General' settings of the Labplot settings dialog.
+ */
+SettingsWelcomePage::SettingsWelcomePage(QWidget* parent) : SettingsPage(parent) {
+	ui.setupUi(this);
 
-class SettingsDatasetsPage : public SettingsPage {
-	Q_OBJECT
+	connect(ui.bResetLayout, &QPushButton::clicked, this, &SettingsWelcomePage::resetWelcomeScreen);
 
-public:
-	explicit SettingsDatasetsPage(QWidget*);
+	loadSettings();
+}
 
-	void applySettings() override;
-	void restoreDefaults() override;
+void SettingsWelcomePage::applySettings() {
 
-private:
-	Ui::SettingsDatasetsPage ui;
-	void loadSettings();
+}
 
-private slots:
-	void clearCache();
-};
+void SettingsWelcomePage::restoreDefaults() {
+}
 
-#endif
+void SettingsWelcomePage::loadSettings() {
+
+}

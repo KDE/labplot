@@ -1,9 +1,9 @@
 /***************************************************************************
     File                 : SettingsDatasetsPage.cpp
     Project              : LabPlot
-    Description          : settings page for Worksheet
+    Description          : settings page for Datasets
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2019 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 

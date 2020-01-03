@@ -50,7 +50,6 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 			this, &SettingsGeneralPage::changed);
 	connect(ui.chkAutoSave, &QCheckBox::stateChanged, this, &SettingsGeneralPage::autoSaveChanged);
 	connect(ui.chkMemoryInfo, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
-// 	connect(ui.bResetWelcomeLayout, &QPushButton::clicked, this, &SettingsGeneralPage::resetWelcomeScreen);
 
 	loadSettings();
 	interfaceChanged(ui.cbInterface->currentIndex());

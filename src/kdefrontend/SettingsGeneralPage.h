@@ -56,7 +56,6 @@ private slots:
 
 signals:
 	void settingsChanged();
-	void resetWelcomeScreen();
 };
 
 #endif
