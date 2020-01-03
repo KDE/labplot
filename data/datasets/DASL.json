@@ -115,13 +115,6 @@
                             "use_first_row_for_vectorname": true
                         },
                         {
-                            "description": "In 1879, A. A. Michelson made 100 determinations of the velocity\nof light in air using a modification of a method proposed by the French\nphysicist Foucault. The data are given here as reported by Stigler.\nThe measurements are derived from sets of often widely disparate\nnumbers of observations. The numbers are in km/sec, and have had\n299,000 subtracted from them. The currently accepted \"true\"\nvelocity of light in vacuum is 299,792.5 km/sec. Stigler has\napplied the corrections used by Michelson and reports that the\n\"true\" value appropriate for comparison to these measurements\nis 734.5. Each trial may be a summary of several experimental\nobservations.",
-                            "url": "https://dasl.datadescription.com/download/data/3338",
-                            "filename": "Michelson_",
-                            "name": "Michelson",
-                            "use_first_row_for_vectorname": true
-                        },
-                        {
                             "description": "The National Health and Nutrition Examination Survey (NHANES) is a program of studies designed to assess the health and nutritional status of adults and children in the United States. The survey is unique in that it combines interviews and physical examinations.",
                             "url": "https://dasl.datadescription.com/download/data/3365",
                             "filename": "NHANES",
@@ -2904,6 +2897,13 @@
                             "url": "https://dasl.datadescription.com/download/data/3228",
                             "filename": "Fuel-efficiency",
                             "name": "Fuel efficiency",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "In 1879, A. A. Michelson made 100 determinations of the velocity\nof light in air using a modification of a method proposed by the French\nphysicist Foucault. The data are given here as reported by Stigler.\nThe measurements are derived from sets of often widely disparate\nnumbers of observations. The numbers are in km/sec, and have had\n299,000 subtracted from them. The currently accepted \"true\"\nvelocity of light in vacuum is 299,792.5 km/sec. Stigler has\napplied the corrections used by Michelson and reports that the\n\"true\" value appropriate for comparison to these measurements\nis 734.5. Each trial may be a summary of several experimental\nobservations.",
+                            "url": "https://dasl.datadescription.com/download/data/3338",
+                            "filename": "Michelson_",
+                            "name": "Michelson",
                             "use_first_row_for_vectorname": true
                         },
                         {
