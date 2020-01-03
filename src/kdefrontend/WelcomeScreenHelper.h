@@ -49,7 +49,7 @@ public:
     Q_INVOKABLE QVariant datasetDescription();
     Q_INVOKABLE QVariant datasetColumns();
     Q_INVOKABLE QVariant datasetRows();
-    Q_INVOKABLE QVariant getProjectThumbnail(const QUrl& url);
+    Q_INVOKABLE QVariant getProjectThumbnail(const QUrl&);
 	Q_INVOKABLE QVariant getExampleProjectThumbnail(const QString&);
 	Q_INVOKABLE QVariant getExampleProjects();
 	Q_INVOKABLE QVariant searchExampleProjects(const QString& searchtext);
@@ -62,7 +62,6 @@ public:
 	Q_INVOKABLE QVariant getMinIcon();
 	Q_INVOKABLE QVariant getBackIcon();
 	Q_INVOKABLE QVariant getForwardIcon();
-
 
     Spreadsheet* releaseConfiguredSpreadsheet();
 	DatasetModel* getDatasetModel();

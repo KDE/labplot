@@ -343,21 +343,15 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	showMaximized();
 
 	KToolBar* toolbar = toolBar();
-	if(toolbar != nullptr) {
+	if(toolbar)
 		toolbar->setVisible(false);
-	} else {
-		qDebug() << "There is no toolbar to hide";
-	}
 
 	QList<QVariant> recentList;
 	for (QUrl url : m_recentProjectsAction->urls())
 		recentList.append(QVariant(url));
 
-	//Set the source qml
+	//Set context property
 	QQuickWidget* quickWidget = new QQuickWidget(this);
-	QUrl source("qrc:///main.qml");
-
-	//Set ocntext property
 	QQmlContext *ctxt = quickWidget->rootContext();
 	QVariant variant(recentList);
 	ctxt->setContextProperty("recentProjects", variant);
@@ -371,7 +365,7 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	ctxt->setContextProperty("datasetModel", m_welcomeScreenHelper->getDatasetModel());
 	ctxt->setContextProperty("helper", m_welcomeScreenHelper);
 
-	quickWidget->setSource(source);
+	quickWidget->setSource(QUrl(QLatin1String("qrc:///main.qml")));
 	quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	QObject *item = quickWidget->rootObject();
 
@@ -389,9 +383,8 @@ QQuickWidget* MainWin::createWelcomeScreen() {
  * @brief Initiates resetting the layout of the welcome screen
  */
 void MainWin::resetWelcomeScreen() {
-	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
-			QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "restoreOriginalLayout");
-	}
+	if(dynamic_cast<QQuickWidget*>(centralWidget()))
+		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "restoreOriginalLayout");
 }
 
 /**
@@ -402,17 +395,12 @@ void MainWin::createMdiArea() {
 	setMinimumSize(0,0);
 
 	KToolBar* toolbar = toolBar();
-	if(toolbar != nullptr) {
+	if(toolbar)
 		toolbar->setVisible(true);
-	} else {
-		qDebug() << "There is no toolbar to display";
-	}
 
 	//Save welcome screen's dimensions.
-	if(m_showWelcomeScreen) {
-		qDebug() << "Call saving welcome screen widget dimensions";
+	if(m_showWelcomeScreen)
 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
-	}
 
 	m_mdiArea = new QMdiArea;
 	setCentralWidget(m_mdiArea);
@@ -1097,7 +1085,7 @@ bool MainWin::newProject() {
 	if (!closeProject())
 		return false;
 
-	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
+	if(dynamic_cast<QQuickWidget*>(centralWidget())) {
 		createMdiArea();
 		setCentralWidget(m_mdiArea);
 	}
@@ -1213,7 +1201,7 @@ void MainWin::openProject(const QString& filename) {
 		return;
 	}
 
-	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
+	if(dynamic_cast<QQuickWidget*>(centralWidget())) {
 		createMdiArea();
 		setCentralWidget(m_mdiArea);
 	}
@@ -1261,7 +1249,7 @@ void MainWin::openProject(const QString& filename) {
 }
 
 void MainWin::openRecentProject(const QUrl& url) {
-	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
+	if(dynamic_cast<QQuickWidget*>(centralWidget())) {
 		createMdiArea();
 		setCentralWidget(m_mdiArea);
 	}

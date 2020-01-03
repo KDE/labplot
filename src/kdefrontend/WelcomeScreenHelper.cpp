@@ -29,23 +29,20 @@
 #include "kdefrontend/datasources/ImportDatasetWidget.h"
 #include "backend/datasources/DatasetHandler.h"
 
-#include <QVector>
-#include <QTimer>
-#include <QFile>
+#include <QBuffer>
 #include <QDebug>
-#include <QUrl>
-
-#include <KFilterDev>
-#include <KCompressionDevice>
-#include <QStandardPaths>
+#include <QFile>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QDir>
-#include <KSharedConfig>
+#include <QStandardPaths>
+#include <QTimer>
+#include <QUrl>
+
 #include <KConfigGroup>
-#include <QStyle>
-#include <QBuffer>
+#include <KCompressionDevice>
+#include <KFilterDev>
+#include <KSharedConfig>
 
 /*!
 \class WelcomeScreenHelper
@@ -56,6 +53,7 @@
 WelcomeScreenHelper::WelcomeScreenHelper() {
 	m_datasetWidget = new ImportDatasetWidget(0);
 	m_datasetWidget->hide();
+
 	QIcon icon = QIcon::fromTheme("labplot-maximize");
 	m_maxIcon = icon.pixmap(icon.availableSizes().first());
 
@@ -133,7 +131,7 @@ void WelcomeScreenHelper::datasetClicked(const QString& category, const QString&
 	m_datasetWidget->setDataset(datasetName);
 	m_spreadsheet.reset(new Spreadsheet(i18n("Dataset%1", 1)));
 
-	if(m_datasetHandler != nullptr)
+	if(m_datasetHandler)
 		delete m_datasetHandler;
 	m_datasetHandler = new DatasetHandler(m_spreadsheet.get());
 
@@ -150,8 +148,7 @@ void WelcomeScreenHelper::datasetClicked(const QString& category, const QString&
 	if(timer.isActive()){
 		timer.stop();
 		emit datasetFound();
-	}
-	else
+	} else
 		emit datasetNotFound();
 }
 
@@ -377,9 +374,8 @@ void WelcomeScreenHelper::setHeightScale(QString sectionID, double scale) {
  * @brief Returns the width scale for the given section.
  */
 QVariant WelcomeScreenHelper::getWidthScale(QString sectionID) {
-	if(m_widthScale.keys().contains(sectionID)) {
+	if(m_widthScale.keys().contains(sectionID))
 		return QVariant(m_widthScale[sectionID]);
-	}
 
 	return QVariant(-1);
 }
@@ -388,9 +384,8 @@ QVariant WelcomeScreenHelper::getWidthScale(QString sectionID) {
  * @brief Returns the height scale for the given section.
  */
 QVariant WelcomeScreenHelper::getHeightScale(QString sectionID) {
-	if(m_heightScale.keys().contains(sectionID)) {
+	if(m_heightScale.keys().contains(sectionID))
 		return QVariant(m_heightScale[sectionID]);
-	}
 
 	return QVariant(-1);;
 }

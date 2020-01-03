@@ -8,9 +8,6 @@ import QtQuick.Layouts 1.3
 import QtWebView 1.1
 import QtWebEngine 1.8
 
-//import labplot.datasetmodel 1.0
-
-
 Rectangle {
     id: mainWindow
     width: 1920
@@ -183,7 +180,6 @@ Rectangle {
             showTiles();
         }
 
-
         Rectangle {
             width: 3
             height: parent.height
@@ -292,11 +288,10 @@ Rectangle {
                         anchors.fill: parent
 
                         onClicked: {
-                            if(!recentProjectsFrame.fullScreen) {
+                            if(!recentProjectsFrame.fullScreen)
                                 recentProjectsFrame.maximize()
-                            } else {
+                            else
                                 recentProjectsFrame.minimize()
-                            }
 
                             recentProjectsFrame.fullScreen = !recentProjectsFrame.fullScreen
                         }
@@ -742,11 +737,10 @@ Rectangle {
                         anchors.fill: parent
 
                         onClicked: {
-                            if(!newsSection.fullScreen) {
+                            if(!newsSection.fullScreen)
                                 newsSection.maximize()
-                            } else {
+                            else
                                 newsSection.minimize()
-                            }
 
                             newsSection.fullScreen = !newsSection.fullScreen
                         }
@@ -992,11 +986,10 @@ Rectangle {
                         anchors.fill: parent
 
                         onClicked: {
-                            if(!helpFrame.fullScreen) {
+                            if(!helpFrame.fullScreen)
                                 helpFrame.maximize()
-                            } else {
+                            else
                                 helpFrame.minimize()
-                            }
 
                             helpFrame.fullScreen = !helpFrame.fullScreen
                         }
@@ -1291,11 +1284,10 @@ Rectangle {
                         anchors.fill: parent
 
                         onClicked: {
-                            if(!datasetFrame.fullScreen) {
+                            if(!datasetFrame.fullScreen)
                                 datasetFrame.maximize()
-                            } else {
+                            else
                                 datasetFrame.minimize()
-                            }
 
                             datasetFrame.fullScreen = !datasetFrame.fullScreen
                         }
@@ -1877,6 +1869,7 @@ Rectangle {
             }
         }
 
+        // "What's new in this release" section
         ColumnLayout {
             anchors.fill: parent
             clip: true
@@ -1901,11 +1894,10 @@ Rectangle {
                         anchors.fill: parent
 
                         onClicked: {
-                            if(!releaseSection.fullScreen) {
+                            if(!releaseSection.fullScreen)
                                 releaseSection.maximize()
-                            } else {
+                            else
                                 releaseSection.minimize()
-                            }
 
                             releaseSection.fullScreen = !releaseSection.fullScreen
                         }
@@ -1926,9 +1918,8 @@ Rectangle {
                     MouseArea {
                         anchors.fill: parent
 
-                        onClicked: {
+                        onClicked:
                             releaseWebView.goBack()
-                        }
                     }
                 }
 
@@ -1946,9 +1937,8 @@ Rectangle {
                     MouseArea {
                         anchors.fill: parent
 
-                        onClicked: {
+                        onClicked:
                             releaseWebView.goForward()
-                        }
                     }
                 }
 
@@ -1964,28 +1954,24 @@ Rectangle {
                     Layout.fillHeight: true
                     wrapMode: Text.WordWrap
                 }
-
             }
 
             WebView {
                 id: releaseWebView
                 Layout.fillHeight: true
-                Layout.minimumHeight: Math.max((parent.height - parent.spacing) *0.8, parent.height - parent.spacing - 100)
-                Layout.preferredHeight: Math.max((parent.height - parent.spacing) *0.8, parent.height - parent.spacing - 100)
+                Layout.minimumHeight: Math.max((parent.height - parent.spacing) * 0.8, parent.height - parent.spacing - 100)
+                Layout.preferredHeight: Math.max((parent.height - parent.spacing) * 0.8, parent.height - parent.spacing - 100)
                 Layout.fillWidth: true
                 url: initialUrl
 
-                Component.onCompleted: {
+                Component.onCompleted:
                     releaseSection.updateIcons()
-                }
 
-                onCanGoBackChanged: {
+                onCanGoBackChanged:
                     releaseSection.updateIcons()
-                }
 
-                onCanGoForwardChanged: {
+                onCanGoForwardChanged:
                     releaseSection.updateIcons()
-                }
             }
         }
     }
