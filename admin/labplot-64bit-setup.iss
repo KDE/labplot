@@ -62,6 +62,7 @@ Source: "{#CraftRoot}\bin\libssl-1_1-x64.dll"; DestDir: "{app}";Flags: ignorever
 Source: "{#CraftRoot}\bin\libcrypto-1_1-x64.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libssh2-1.dll"; DestDir: "{app}"; DestName: "libssh2.dll"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libgit2.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libcurl.dll"; DestDir: "{app}";Flags: ignoreversion
 ;Source: "{#CraftRoot}\bin\libdbus-1-3.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\Qt5DBus.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libpoppler-qt5-1.dll"; DestDir: "{app}";Flags: ignoreversion
@@ -110,7 +111,7 @@ Source: "C:\Python36\vcruntime140.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\cantor.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\cantor_scripteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\cantor_python3server.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#CraftRoot}\bin\cantor_juliaserver.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#CraftRoot}\bin\cantor_juliaserver.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libcantorlibs.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libcantor_config.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libcantor_pythonbackend.dll"; DestDir: "{app}"; Flags: ignoreversion
