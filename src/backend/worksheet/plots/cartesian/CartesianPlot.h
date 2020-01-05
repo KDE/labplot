@@ -4,8 +4,8 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2019 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -196,6 +196,7 @@ private:
 	QAction* addTextLabelAction;
 	QAction* addImageAction;
 	QAction* addCustomPointAction;
+	QAction* addReferenceLineAction;
 
 	//scaling, zooming, navigation actions
 	QAction* scaleAutoXAction;
@@ -254,23 +255,28 @@ public slots:
 	void addTextLabel();
 	void addImage();
 	void addCustomPoint();
+	void addReferenceLine();
+
 	void scaleAutoTriggered();
 	bool scaleAuto();
 	bool scaleAutoX();
 	bool scaleAutoY();
+
 	void zoomIn();
 	void zoomOut();
 	void zoomInX();
 	void zoomOutX();
 	void zoomInY();
 	void zoomOutY();
+
 	void shiftLeftX();
 	void shiftRightX();
 	void shiftUpY();
 	void shiftDownY();
-	void cursor();
-	void dataChanged();
 
+	void cursor();
+
+	void dataChanged();
 	void curveLinePenChanged(QPen);
 
 private slots:

@@ -4,6 +4,7 @@
 	* [worksheet] In the Export Worksheet Dialog allow to export to the clipboard
 	* [worksheet] Allow to move plots, text labels and legend with arrow keys
 	* [worksheet] Image worksheet element
+	* [worksheet] Reference line on the plot
 
 -----2.7 (24.10.2019)-----
 New features:

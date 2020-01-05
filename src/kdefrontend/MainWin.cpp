@@ -4,7 +4,7 @@
     Description          : Main window of the application
     --------------------------------------------------------------------
     Copyright            : (C) 2008-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Copyright            : (C) 2009-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2020 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 

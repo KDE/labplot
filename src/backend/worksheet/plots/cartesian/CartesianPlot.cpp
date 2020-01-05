@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2020 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright            : (C) 2017-2018 by Garvit Khatri (garvitdelhi@gmail.com)
 
@@ -49,6 +49,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 #include "backend/worksheet/Worksheet.h"
@@ -430,6 +431,7 @@ void CartesianPlot::initActions() {
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), this);
 	addImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), this);
+	addReferenceLineAction = new QAction(QIcon::fromTheme("draw-line"), i18n("Reference Line"), this);
 
 	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
 	connect(addHistogramAction,&QAction::triggered, this, &CartesianPlot::addHistogram);
@@ -451,6 +453,7 @@ void CartesianPlot::initActions() {
 	connect(addTextLabelAction, &QAction::triggered, this, &CartesianPlot::addTextLabel);
 	connect(addImageAction, &QAction::triggered, this, &CartesianPlot::addImage);
 	connect(addCustomPointAction, &QAction::triggered, this, &CartesianPlot::addCustomPoint);
+	connect(addReferenceLineAction, &QAction::triggered, this, &CartesianPlot::addReferenceLine);
 
 	//Analysis menu actions
 // 	addDataOperationAction = new QAction(i18n("Data Operation"), this);
@@ -594,6 +597,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addImageAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addCustomPointAction);
+	addNewMenu->addAction(addReferenceLineAction);
 
 	zoomMenu = new QMenu(i18n("Zoom/Navigate"));
 	zoomMenu->setIcon(QIcon::fromTheme("zoom-draw"));
@@ -1422,6 +1426,12 @@ void CartesianPlot::addCustomPoint() {
 	CustomPoint* point = new CustomPoint(this, "custom point");
 	this->addChild(point);
 }
+
+void CartesianPlot::addReferenceLine() {
+	ReferenceLine* line = new ReferenceLine(this, "reference line");
+	this->addChild(line);
+}
+
 
 int CartesianPlot::curveCount(){
 	return children<XYCurve>().length();
@@ -3850,6 +3860,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				addChildFast(point);
 			else {
 				delete point;
+				return false;
+			}
+		} else if (reader->name() == "referenceLine") {
+			ReferenceLine* line = new ReferenceLine(this, QString());
+			if (line->load(reader, preview))
+				addChildFast(line);
+			else {
+				delete line;
 				return false;
 			}
 		} else if (reader->name() == "Histogram") {

@@ -53,6 +53,7 @@ class HistogramDock;
 class BarChartPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
+class ReferenceLineDock;
 class ColumnDock;
 class LiveDataDock;
 class MatrixDock;
@@ -227,6 +228,7 @@ private:
 	LabelWidget* textLabelDock{nullptr};
 	ImageDock* imageDock{nullptr};
 	CustomPointDock* customPointDock{nullptr};
+	ReferenceLineDock* referenceLineDock{nullptr};
 	DatapickerImageWidget* datapickerImageDock{nullptr};
 	DatapickerCurveWidget* datapickerCurveDock{nullptr};
 

@@ -40,6 +40,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/TextLabel.h"
@@ -82,6 +83,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "kdefrontend/dockwidgets/XYConvolutionCurveDock.h"
 #include "kdefrontend/dockwidgets/XYCorrelationCurveDock.h"
 #include "kdefrontend/dockwidgets/CustomPointDock.h"
+#include "kdefrontend/dockwidgets/ReferenceLineDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
 #ifdef HAVE_CANTOR_LIBS
 #include "kdefrontend/dockwidgets/CantorWorksheetDock.h"
@@ -329,6 +331,11 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Custom Point"));
 		raiseDock(m_mainWindow->customPointDock, m_mainWindow->stackedWidget);
 		m_mainWindow->customPointDock->setPoints(castList<CustomPoint>(selectedAspects));
+		break;
+	case AspectType::ReferenceLine:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Reference Line"));
+		raiseDock(m_mainWindow->referenceLineDock, m_mainWindow->stackedWidget);
+		m_mainWindow->referenceLineDock->setReferenceLines(castList<ReferenceLine>(selectedAspects));
 		break;
 	case AspectType::DatapickerCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Datapicker Curve"));
