@@ -38,6 +38,7 @@
 
 #include <QDialogButtonBox>
 #include <QDir>
+#include <QElapsedTimer>
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QProgressBar>
@@ -247,7 +248,7 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	//import the selected project objects into the specified folder
-	QTime timer;
+	QElapsedTimer timer;
 	timer.start();
 	connect(m_projectParser, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
 

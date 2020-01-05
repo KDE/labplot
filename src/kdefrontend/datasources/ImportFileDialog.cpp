@@ -49,6 +49,7 @@
 #include <KLocalizedString>
 
 #include <QDialogButtonBox>
+#include <QElapsedTimer>
 #include <QProgressBar>
 #include <QTcpSocket>
 #include <QLocalSocket>
@@ -159,7 +160,7 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 	statusBar->addWidget(progressBar, 1);
 	WAIT_CURSOR;
 
-	QTime timer;
+	QElapsedTimer timer;
 	timer.start();
 	DEBUG("	Initial read()");
 	source->read();
@@ -214,7 +215,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	WAIT_CURSOR;
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
-	QTime timer;
+	QElapsedTimer timer;
 	timer.start();
 
 	if (aspect->inherits(AspectType::Matrix)) {
