@@ -46,6 +46,7 @@ public:
 
 	bool suppressItemChangeEvent{false};
 	bool suppressRetransform{false};
+
 	bool m_printing{false};
 	bool m_hovered{false};
 	bool m_visible{true}; //point inside the plot (visible) or not
@@ -55,7 +56,7 @@ public:
 
 	ReferenceLine::Orientation orientation;
 	double position; //position in plot coordinates
-	double length;
+	double length; //length of the line in graphic item's coordinates
 	QPen pen;
 	qreal opacity;
 

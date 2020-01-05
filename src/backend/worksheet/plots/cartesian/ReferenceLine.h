@@ -34,6 +34,7 @@
 
 class ReferenceLinePrivate;
 class CartesianPlot;
+class QActionGroup;
 
 class ReferenceLine : public WorksheetElement {
 	Q_OBJECT
@@ -65,8 +66,6 @@ public:
 
 	typedef ReferenceLinePrivate Private;
 
-private slots:
-	void visibilityChanged();
 
 protected:
 	ReferenceLinePrivate* const d_ptr;
@@ -76,8 +75,27 @@ private:
 	Q_DECLARE_PRIVATE(ReferenceLine)
 	void init();
 	void initActions();
+	void initMenus();
 
-	QAction* visibilityAction;
+	QAction* visibilityAction{nullptr};
+	QAction* orientationHorizontalAction{nullptr};
+	QAction* orientationVerticalAction{nullptr};
+
+	QActionGroup* orientationActionGroup{nullptr};
+	QActionGroup* lineStyleActionGroup{nullptr};
+	QActionGroup* lineColorActionGroup{nullptr};
+
+	QMenu* orientationMenu{nullptr};
+	QMenu* lineMenu{nullptr};
+	QMenu* lineStyleMenu{nullptr};
+	QMenu* lineColorMenu{nullptr};
+
+private slots:
+	//SLOTs for changes triggered via QActions in the context menu
+	void orientationChangedSlot(QAction*);
+	void lineStyleChanged(QAction*);
+	void lineColorChanged(QAction*);
+	void visibilityChangedSlot();
 
 signals:
 	friend class ReferenceLineSetPositionCmd;
@@ -86,7 +104,6 @@ signals:
 	void penChanged(const QPen&);
 	void opacityChanged(qreal);
 	void visibleChanged(bool);
-
 };
 
 #endif

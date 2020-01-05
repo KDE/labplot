@@ -32,7 +32,9 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "kdefrontend/GuiTools.h"
 
+#include <QActionGroup>
 #include <QPainter>
 #include <QMenu>
 #include <QGraphicsSceneMouseEvent>
@@ -80,29 +82,92 @@ void ReferenceLine::init() {
 	d->pen.setWidthF( group.readEntry("Width", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
 	d->opacity = group.readEntry("Opacity", 1.0);
 
-	this->initActions();
-
 	retransform();
-}
-
-void ReferenceLine::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &ReferenceLine::visibilityChanged);
 }
 
 /*!
     Returns an icon to be used in the project explorer.
 */
 QIcon ReferenceLine::icon() const {
-	return  QIcon::fromTheme("draw-line");
+	return  QIcon::fromTheme(QLatin1String("draw-line"));
+}
+
+void ReferenceLine::initActions() {
+	visibilityAction = new QAction(i18n("Visible"), this);
+	visibilityAction->setCheckable(true);
+	connect(visibilityAction, &QAction::triggered, this, &ReferenceLine::visibilityChangedSlot);
+
+	//Orientation
+	orientationActionGroup = new QActionGroup(this);
+	orientationActionGroup->setExclusive(true);
+	connect(orientationActionGroup, &QActionGroup::triggered, this, &ReferenceLine::orientationChangedSlot);
+
+	orientationHorizontalAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-axis-horizontal")), i18n("Horizontal"), orientationActionGroup);
+	orientationHorizontalAction->setCheckable(true);
+
+	orientationVerticalAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-axis-vertical")), i18n("Vertical"), orientationActionGroup);
+	orientationVerticalAction->setCheckable(true);
+
+	//Line
+	lineStyleActionGroup = new QActionGroup(this);
+	lineStyleActionGroup->setExclusive(true);
+	connect(lineStyleActionGroup, &QActionGroup::triggered, this, &ReferenceLine::lineStyleChanged);
+
+	lineColorActionGroup = new QActionGroup(this);
+	lineColorActionGroup->setExclusive(true);
+	connect(lineColorActionGroup, &QActionGroup::triggered, this, &ReferenceLine::lineColorChanged);
+}
+
+void ReferenceLine::initMenus() {
+	this->initActions();
+
+	//Orientation
+	orientationMenu = new QMenu(i18n("Orientation"));
+	orientationMenu->setIcon(QIcon::fromTheme(QLatin1String("labplot-axis-horizontal")));
+	orientationMenu->addAction(orientationHorizontalAction);
+	orientationMenu->addAction(orientationVerticalAction);
+
+	//Line
+	lineMenu = new QMenu(i18n("Line"));
+	lineMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-line")));
+	lineStyleMenu = new QMenu(i18n("Style"), lineMenu);
+	lineStyleMenu->setIcon(QIcon::fromTheme(QLatin1String("object-stroke-style")));
+	lineMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-line")));
+	lineMenu->addMenu(lineStyleMenu);
+
+	lineColorMenu = new QMenu(i18n("Color"), lineMenu);
+	lineColorMenu->setIcon(QIcon::fromTheme(QLatin1String("fill-color")));
+	GuiTools::fillColorMenu(lineColorMenu, lineColorActionGroup);
+	lineMenu->addMenu(lineColorMenu);
 }
 
 QMenu* ReferenceLine::createContextMenu() {
+	if (!orientationMenu)
+		initMenus();
+
 	QMenu* menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
+
+	Q_D(const ReferenceLine);
+
+	//Orientation
+	if (d->orientation == Horizontal)
+		orientationHorizontalAction->setChecked(true);
+	else
+		orientationVerticalAction->setChecked(true);
+
+	menu->insertMenu(firstAction, orientationMenu);
+
+	//Line styles
+	GuiTools::updatePenStyles( lineStyleMenu, lineStyleActionGroup, d->pen.color() );
+	GuiTools::selectPenStyleAction(lineStyleActionGroup, d->pen.style() );
+
+	GuiTools::selectColorAction(lineColorActionGroup, d->pen.color() );
+
+	menu->insertMenu(firstAction, lineMenu);
+	menu->insertSeparator(firstAction);
 
 	return menu;
 }
@@ -176,7 +241,28 @@ void ReferenceLine::setPrinting(bool on) {
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void ReferenceLine::visibilityChanged() {
+void ReferenceLine::orientationChangedSlot(QAction* action) {
+	if (action == orientationHorizontalAction)
+		this->setOrientation(Horizontal);
+	else
+		this->setOrientation(Vertical);
+}
+
+void ReferenceLine::lineStyleChanged(QAction* action) {
+	Q_D(const ReferenceLine);
+	QPen pen = d->pen;
+	pen.setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));
+	this->setPen(pen);
+}
+
+void ReferenceLine::lineColorChanged(QAction* action) {
+	Q_D(const ReferenceLine);
+	QPen pen = d->pen;
+	pen.setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
+	this->setPen(pen);
+}
+
+void ReferenceLine::visibilityChangedSlot() {
 	Q_D(const ReferenceLine);
 	this->setVisible(!d->isVisible());
 }
