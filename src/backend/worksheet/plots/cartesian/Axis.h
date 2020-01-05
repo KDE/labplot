@@ -155,20 +155,18 @@ private:
 	void initActions();
 	void initMenus();
 
-	QAction* visibilityAction;
-	QAction* orientationHorizontalAction;
-	QAction* orientationVerticalAction;
+	QAction* visibilityAction{nullptr};
+	QAction* orientationHorizontalAction{nullptr};
+	QAction* orientationVerticalAction{nullptr};
 
-	QActionGroup* orientationActionGroup;
-	QActionGroup* lineStyleActionGroup;
-	QActionGroup* lineColorActionGroup;
+	QActionGroup* orientationActionGroup{nullptr};
+	QActionGroup* lineStyleActionGroup{nullptr};
+	QActionGroup* lineColorActionGroup{nullptr};
 
-	QMenu* orientationMenu;
-	QMenu* lineMenu;
-	QMenu* lineStyleMenu;
-	QMenu* lineColorMenu;
-
-	bool m_menusInitialized{false};
+	QMenu* orientationMenu{nullptr};
+	QMenu* lineMenu{nullptr};
+	QMenu* lineStyleMenu{nullptr};
+	QMenu* lineColorMenu{nullptr};
 
 private slots:
 	void labelChanged();

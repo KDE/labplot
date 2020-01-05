@@ -272,12 +272,10 @@ void Axis::initMenus() {
 	lineColorMenu->setIcon(QIcon::fromTheme("fill-color"));
 	GuiTools::fillColorMenu( lineColorMenu, lineColorActionGroup );
 	lineMenu->addMenu( lineColorMenu );
-
-	m_menusInitialized = true;
 }
 
 QMenu* Axis::createContextMenu() {
-	if (!m_menusInitialized)
+	if (!orientationMenu)
 		initMenus();
 
 	Q_D(const Axis);
@@ -322,7 +320,7 @@ QIcon Axis::icon() const{
 }
 
 Axis::~Axis() {
-	if (m_menusInitialized) {
+	if (orientationMenu) {
 		delete orientationMenu;
 		delete lineMenu;
 	}
