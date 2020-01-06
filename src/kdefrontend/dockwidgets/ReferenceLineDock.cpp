@@ -246,7 +246,7 @@ void ReferenceLineDock::load() {
 
 	m_initializing = true;
 
-	qDebug()<<"orient " << (int)m_line->orientation();
+	DEBUG("orient " << (int)m_line->orientation())
 	ui.cbOrientation->setCurrentIndex((int)m_line->orientation());
 	ui.lePosition->setText(QString::number(m_line->position()));
 	ui.cbLineStyle->setCurrentIndex( (int) m_line->pen().style() );

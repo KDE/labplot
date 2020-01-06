@@ -26,7 +26,7 @@
  ***************************************************************************/
 
 
-#ifndef REFERENCELINERIVATE_H
+#ifndef REFERENCELINEPRIVATE_H
 #define REFERENCELINEPRIVATE_H
 
 #include <QGraphicsItem>
