@@ -63,6 +63,7 @@ Source: "{#CraftRoot}\bin\libcrypto-1_1-x64.dll"; DestDir: "{app}";Flags: ignore
 Source: "{#CraftRoot}\bin\libssh2-1.dll"; DestDir: "{app}"; DestName: "libssh2.dll"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libgit2.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libcurl.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\libwebp-7.dll"; DestDir: "{app}";Flags: ignoreversion
 ;Source: "{#CraftRoot}\bin\libdbus-1-3.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\Qt5DBus.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libpoppler-qt5-1.dll"; DestDir: "{app}";Flags: ignoreversion
