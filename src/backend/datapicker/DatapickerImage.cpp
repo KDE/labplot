@@ -36,6 +36,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/datapicker/DatapickerImageView.h"
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
+#include "backend/lib/trace.h"
 
 #include <QDesktopWidget>
 #include <QGraphicsScene>
@@ -316,8 +317,8 @@ void DatapickerImage::setPointVisibility(const bool on) {
 }
 
 void DatapickerImage::setPrinting(bool on) const {
-	QVector<DatapickerPoint*> childPoints = parentAspect()->children<DatapickerPoint>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-	for (auto* point : childPoints)
+	auto points = parentAspect()->children<DatapickerPoint>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+	for (auto* point : points)
 		point->setPrinting(on);
 }
 
@@ -329,11 +330,11 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 
 	if (pointsType == DatapickerImage::AxisPoints) {
 		//clear image
-		int childCount = this->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
-		if (childCount) {
+		auto points = children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+		if (!points.isEmpty()) {
 			beginMacro(i18n("%1: remove all axis points", name()));
-			QVector<DatapickerPoint*> childrenPoints = children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-			for (auto* point : childrenPoints)
+
+			for (auto* point : points)
 				point->remove();
 			endMacro();
 		}
@@ -363,8 +364,8 @@ QString DatapickerImagePrivate::name() const {
 }
 
 void DatapickerImagePrivate::retransform() {
-	QVector<DatapickerPoint*> childrenPoints = q->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-	for (auto* point : childrenPoints)
+	auto points = q->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	for (auto* point : points)
 		point->retransform();
 }
 
@@ -411,6 +412,7 @@ void DatapickerImagePrivate::makeSegments() {
 	if (plotPointsType != DatapickerImage::SegmentPoints)
 		return;
 
+	PERFTRACE("DatapickerImagePrivate::makeSegments()");
 	q->m_segments->makeSegments(q->processedPlotImage);
 	q->m_segments->setSegmentsVisible(true);
 	emit q->requestUpdate();
@@ -433,9 +435,9 @@ void DatapickerImagePrivate::updateFileName() {
 		q->m_segments->setSegmentsVisible(false);
 	}
 
-	QVector<DatapickerPoint*> childPoints = q->parentAspect()->children<DatapickerPoint>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-	if (childPoints.count()) {
-		for (auto* point : childPoints)
+	auto points = q->parentAspect()->children<DatapickerPoint>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+	if (!points.isEmpty()) {
+		for (auto* point : points)
 			point->remove();
 	}
 
