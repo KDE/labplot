@@ -301,7 +301,10 @@ void ReferenceLinePrivate::retransform() {
 	if (!listScene.isEmpty()) {
 		m_visible = true;
 		suppressItemChangeEvent = true;
-		setPos(listScene.at(0));
+		if (orientation == ReferenceLine::Vertical)
+			setPos(listScene.at(0).x(), 0);
+		else
+			setPos(0, listScene.at(0).y());
 		suppressItemChangeEvent = false;
 
 		//determine the length of the line to be drawn
@@ -397,48 +400,49 @@ QVariant ReferenceLinePrivate::itemChange(GraphicsItemChange change, const QVari
 	if (suppressItemChangeEvent)
 		return value;
 
-	if (change == QGraphicsItem::ItemPositionChange) {
-		QPointF positionSceneNew = value.toPointF();
-		if (!plot->dataRect().contains(positionSceneNew)) {
-			if (orientation == ReferenceLine::Horizontal) {
-				positionSceneNew.setX(0);
-				if (positionSceneNew.y() > plot->dataRect().height()/2)
-					positionSceneNew.setY(plot->dataRect().height()/2);
-				else
-					positionSceneNew.setY(-plot->dataRect().height()/2);
-			} else {
-				positionSceneNew.setY(0);
-				if (positionSceneNew.x() > plot->dataRect().width()/2)
-					positionSceneNew.setX(plot->dataRect().width()/2);
-				else
-					positionSceneNew.setX(-plot->dataRect().width()/2);
-			}
-			return QGraphicsItem::itemChange(change, QVariant(positionSceneNew));
-		}
+	if (change != QGraphicsItem::ItemPositionChange)
+		return QGraphicsItem::itemChange(change, value);
 
+	QPointF positionSceneNew = value.toPointF();
+
+	//keepthe item position at x=0 for horizontal and y=0 for vertical
+	if (orientation == ReferenceLine::Horizontal) {
+		if (positionSceneNew.x() != 0)
+			positionSceneNew.setX(0);
+	} else {
+		if (positionSceneNew.y() != 0)
+			positionSceneNew.setY(0);
+	}
+
+	if (plot->dataRect().contains(positionSceneNew)) {
+		//emit the signals in order to notify the UI (dock widget and status bar) about the new logical position.
+		//we don't set the position related member variables during the mouse movements.
+		//this is done on mouse release events only.
 		const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 		QPointF positionLogical = cSystem->mapSceneToLogical(positionSceneNew);
 		if (orientation == ReferenceLine::Horizontal) {
-			if (positionSceneNew.x() != 0)
-				positionSceneNew.setX(0);
-
-			//emit the signals in order to notify the UI (dock widget and status bar)
-			//we don't set the position related member variables during the mouse movements.
-			//this is done on mouse release events only.
 			emit q->positionChanged(positionLogical.y());
 			emit q->statusInfo(QLatin1String("y=") + QString::number(positionLogical.y()));
 		} else {
-			if (positionSceneNew.y() != 0)
-				positionSceneNew.setY(0);
-
 			emit q->positionChanged(positionLogical.x());
 			emit q->statusInfo(QLatin1String("x=") + QString::number(positionLogical.x()));
 		}
-
-		return QGraphicsItem::itemChange(change, QVariant(positionSceneNew));
+	} else {
+		//line is moved outside of the plot, keep it at the plot boundary
+		if (orientation == ReferenceLine::Horizontal) {
+			if (positionSceneNew.y() > plot->dataRect().height()/2)
+				positionSceneNew.setY(plot->dataRect().height()/2);
+			else
+				positionSceneNew.setY(-plot->dataRect().height()/2);
+		} else {
+			if (positionSceneNew.x() > plot->dataRect().width()/2)
+				positionSceneNew.setX(plot->dataRect().width()/2);
+			else
+				positionSceneNew.setX(-plot->dataRect().width()/2);
+		}
 	}
 
-	return QGraphicsItem::itemChange(change, value);
+	return QGraphicsItem::itemChange(change, QVariant(positionSceneNew));
 }
 
 void ReferenceLinePrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
