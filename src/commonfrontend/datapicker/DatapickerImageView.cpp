@@ -342,10 +342,10 @@ void DatapickerImageView::drawBackground(QPainter* painter, const QRectF& rect) 
 	// canvas
 	if (m_image->isLoaded) {
 		if (m_image->plotImageType() == DatapickerImage::OriginalImage) {
-			QImage todraw = m_image->originalPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+			const QImage& todraw = m_image->originalPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 			painter->drawImage(scene_rect.topLeft(), todraw);
 		} else if (m_image->plotImageType() == DatapickerImage::ProcessedImage) {
-			QImage todraw = m_image->processedPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+			const QImage& todraw = m_image->processedPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 			painter->drawImage(scene_rect.topLeft(), todraw);
 		} else {
 			painter->fillRect(scene_rect, Qt::white);

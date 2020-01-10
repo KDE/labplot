@@ -27,7 +27,7 @@
 #ifndef SEGMENTS_H
 #define SEGMENTS_H
 
-#include <QList>
+#include <QVector>
 
 class QImage;
 class DatapickerImage;
@@ -44,7 +44,7 @@ public:
 
 private:
 	DatapickerImage* m_image;
-	QList<Segment*> segments;
+	QVector<Segment*> segments;
 
 	void clearSegments();
 	void loadSegment(Segment**, int);

@@ -39,7 +39,7 @@ class Segment {
 public:
 	explicit Segment(DatapickerImage*);
 
-	QList<QLine*> path;
+	QVector<QLine*> path;
 	int yLast{0};
 	int length{0};
 
