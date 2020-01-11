@@ -508,11 +508,9 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 	}
 
 	//show the magnification window
-	if ( magnificationFactor && m_image->isLoaded && sceneRect().contains(pos)
-		&& m_image->plotPointsType() != DatapickerImage::SegmentPoints ) {
+	if ( magnificationFactor && m_image->isLoaded && sceneRect().contains(pos) ) {
 
 		if (!m_image->m_magnificationWindow) {
-//            m_image->m_magnificationWindow = new QGraphicsPixmapItem(0, scene());
 			m_image->m_magnificationWindow = new QGraphicsPixmapItem;
 			scene()->addItem(m_image->m_magnificationWindow);
 			m_image->m_magnificationWindow->setZValue(std::numeric_limits<int>::max());

@@ -387,6 +387,12 @@ void DatapickerCurve::updatePoints() {
 */
 void DatapickerCurve::updatePoint(const DatapickerPoint* point) {
 	Q_D(DatapickerCurve);
+
+	//TODO: this check shouldn't be required.
+	//redesign the retransform()-call in load() to avoid it.
+	if (!parentAspect())
+		return;
+
 	auto* datapicker = static_cast<Datapicker*>(parentAspect());
 	int row = indexOfChild<DatapickerPoint>(point, AbstractAspect::IncludeHidden);
 	QVector3D data = datapicker->mapSceneToLogical(point->position());
@@ -510,17 +516,8 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
-			str = attribs.value("curveErrorType_X").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("curveErrorType_X").toString());
-			else
-				d->curveErrorTypes.x = ErrorType(str.toInt());
-
-			str = attribs.value("curveErrorType_Y").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("curveErrorType_Y").toString());
-			else
-				d->curveErrorTypes.y = ErrorType(str.toInt());
+			READ_INT_VALUE("curveErrorType_X", curveErrorTypes.x, ErrorType);
+			READ_INT_VALUE("curveErrorType_Y", curveErrorTypes.y, ErrorType);
 
 			READ_COLUMN(posXColumn);
 			READ_COLUMN(posYColumn);
@@ -532,47 +529,18 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "symbolProperties") {
 			attribs = reader->attributes();
 
-			str = attribs.value("pointRotationAngle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("pointRotationAngle").toString());
-			else
-				d->pointRotationAngle = str.toFloat();
-
-			str = attribs.value("pointOpacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("pointOpacity").toString());
-			else
-				d->pointOpacity = str.toFloat();
-
-			str = attribs.value("pointSize").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("pointSize").toString());
-			else
-				d->pointSize = str.toFloat();
-
-			str = attribs.value("pointStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("pointStyle").toString());
-			else
-				d->pointStyle = (Symbol::Style)str.toInt();
-
-			str = attribs.value("pointVisibility").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("pointVisibility").toString());
-			else
-				d->pointVisibility = (bool)str.toInt();
+			READ_DOUBLE_VALUE("pointRotationAngle", pointRotationAngle);
+			READ_DOUBLE_VALUE("pointOpacity", pointOpacity);
+			READ_DOUBLE_VALUE("pointSize", pointSize);
+			READ_INT_VALUE("pointStyle", pointStyle, Symbol::Style);
+			READ_INT_VALUE("pointVisibility", pointVisibility, bool);
 
 			READ_QBRUSH(d->pointBrush);
 			READ_QPEN(d->pointPen);
 		} else if (!preview && reader->name() == "errorBarProperties") {
 			attribs = reader->attributes();
 
-			str = attribs.value("pointErrorBarSize").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("pointErrorBarSize").toString());
-			else
-				d->pointErrorBarSize = str.toFloat();
-
+			READ_DOUBLE_VALUE("pointErrorBarSize", pointErrorBarSize);
 			READ_QBRUSH(d->pointErrorBarBrush);
 			READ_QPEN(d->pointErrorBarPen);
 		} else if (reader->name() == "datapickerPoint") {
