@@ -199,7 +199,7 @@ void Datapicker::setChildSelectedInView(int index, bool selected) {
 	--index; //-1 because of the first tab in the view being reserved for the plot image and curves
 
 	//select/deselect the data spreadhseets
-	QVector<const Spreadsheet*> spreadsheets = children<const Spreadsheet>(AbstractAspect::Recursive);
+	auto spreadsheets = children<const Spreadsheet>(AbstractAspect::Recursive);
 	const AbstractAspect* aspect = spreadsheets.at(index);
 	if (selected) {
 		emit childAspectSelectedInView(aspect);
@@ -228,9 +228,9 @@ void Datapicker::setSelectedInView(const bool b) {
 }
 
 void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
-	QVector<DatapickerPoint*> childPoints = parentAspect->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	auto points = parentAspect->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
 
-	auto* newPoint = new DatapickerPoint(i18n("Point %1", childPoints.count() + 1));
+	auto* newPoint = new DatapickerPoint(i18n("Point %1", points.count() + 1));
 	newPoint->setPosition(pos);
 	newPoint->setHidden(true);
 
@@ -238,12 +238,12 @@ void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
 	parentAspect->addChild(newPoint);
 	newPoint->retransform();
 
-	auto* datapickerCurve = dynamic_cast<DatapickerCurve*>(parentAspect);
+	auto* datapickerCurve = static_cast<DatapickerCurve*>(parentAspect);
 	if (m_image == parentAspect) {
-		DatapickerImage::ReferencePoints points = m_image->axisPoints();
-		points.scenePos[childPoints.count()].setX(pos.x());
-		points.scenePos[childPoints.count()].setY(pos.y());
-		m_image->setAxisPoints(points);
+		DatapickerImage::ReferencePoints axisPoints = m_image->axisPoints();
+		axisPoints.scenePos[points.count()].setX(pos.x());
+		axisPoints.scenePos[points.count()].setY(pos.y());
+		m_image->setAxisPoints(axisPoints);
 	} else if (datapickerCurve) {
 		newPoint->initErrorBar(datapickerCurve->curveErrorTypes());
 		datapickerCurve->updatePoint(newPoint);
