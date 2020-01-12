@@ -1184,6 +1184,8 @@ void MainWin::openProject(const QString& filename) {
 	}
 #endif
 
+	m_project->setChanged(false);
+
 	if (!rc) {
 		closeProject();
 		RESET_CURSOR;
@@ -1932,12 +1934,21 @@ void MainWin::dropEvent(QDropEvent* event) {
 		QUrl url = event->mimeData()->urls().at(0);
 		const QString& f = url.toLocalFile();
 
+		bool open = Project::isLabPlotProject(f);
 #ifdef HAVE_LIBORIGIN
-		if (Project::isLabPlotProject(f) || OriginProjectParser::isOriginProject(f))
-#else
-		if (Project::isLabPlotProject(f))
+		if (!open)
+			open = OriginProjectParser::isOriginProject(f);
 #endif
-				openProject(f);
+
+#ifdef HAVE_CANTOR_LIBS
+		if (!open) {
+			QFileInfo fi(f);
+			open = (fi.completeSuffix() == QLatin1String("cws")) || (fi.completeSuffix() == QLatin1String("ipynb"));
+		}
+#endif
+
+		if (open)
+			openProject(f);
 		else {
 			if (!m_project)
 				newProject();
