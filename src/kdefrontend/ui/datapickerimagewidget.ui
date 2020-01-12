@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>784</width>
+    <width>813</width>
     <height>1181</height>
    </rect>
   </property>
@@ -122,7 +122,7 @@
           </sizepolicy>
          </property>
          <property name="toolTip">
-          <string> Select the image file to import</string>
+          <string> Select the image file</string>
          </property>
          <property name="text">
           <string/>

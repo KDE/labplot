@@ -1452,13 +1452,16 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	}
 }
 
-// void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode
 void MainWin::handleAspectRemoved(const AbstractAspect* parent,const AbstractAspect* before,const AbstractAspect* aspect) {
 	Q_UNUSED(before);
 	Q_UNUSED(aspect);
 
-	//no need to react on AbstractSimpleFilter
-	if (!dynamic_cast<const AbstractSimpleFilter*>(aspect))
+	//no need to react on removal of
+	// - AbstractSimpleFilter
+	// - columns in the data spreadsheet of a datapicker curve,
+	//   this can only happen when changing the error type and is done on the level of DatapickerImage
+	if (!dynamic_cast<const AbstractSimpleFilter*>(aspect)
+		&& !(parent->parentAspect() && parent->parentAspect()->type() == AspectType::DatapickerCurve) )
 		m_projectExplorer->setCurrentAspect(parent);
 }
 
