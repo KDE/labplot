@@ -258,8 +258,7 @@ bool SpreadsheetModel::hasChildren(const QModelIndex& parent) const {
 
 void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
 	const Column* col = dynamic_cast<const Column*>(aspect);
-
-	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
+	if (!col || aspect->parentAspect() != m_spreadsheet)
 		return;
 
 	connect(col, &Column::plotDesignationChanged, this, &SpreadsheetModel::handlePlotDesignationChange);
@@ -289,8 +288,7 @@ void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect* aspect
 		return;
 
 	const Column* col = dynamic_cast<const Column*>(aspect);
-
-	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
+	if (!col || aspect->parentAspect() != m_spreadsheet)
 		return;
 
 	beginResetModel();
@@ -300,8 +298,7 @@ void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect* aspect
 void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
 	Q_UNUSED(before)
 	const Column* col = dynamic_cast<const Column*>(child);
-
-	if (!col || parent != static_cast<AbstractAspect*>(m_spreadsheet))
+	if (!col || parent != m_spreadsheet)
 		return;
 
 	updateVerticalHeader();
@@ -317,8 +314,7 @@ void SpreadsheetModel::handleDescriptionChange(const AbstractAspect* aspect) {
 		return;
 
 	const Column* col = dynamic_cast<const Column*>(aspect);
-
-	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
+	if (!col || aspect->parentAspect() != m_spreadsheet)
 		return;
 
 	updateHorizontalHeader();
