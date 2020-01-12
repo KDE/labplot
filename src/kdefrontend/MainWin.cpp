@@ -111,6 +111,12 @@
 #include <KConfigDialog>
 #include <KCoreConfigSkeleton>
 #include <KConfigSkeleton>
+
+//required to parse Cantor and Jupyter files
+#include <QBuffer>
+#include <KZip>
+#include <QJsonDocument>
+#include <QJsonParseError>
 #endif
 
 /*!
@@ -1018,13 +1024,18 @@ bool MainWin::newProject() {
 void MainWin::openProject() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	const QString& dir = conf.readEntry("LastOpenDir", "");
-	const QString& path = QFileDialog::getOpenFileName(this,i18n("Open Project"), dir,
+
+	QString extensions = i18n("LabPlot Projects (%1)", Project::supportedExtensions());
 #ifdef HAVE_LIBORIGIN
-	                      i18n("LabPlot Projects (%1);;Origin Projects (%2)", Project::supportedExtensions(), OriginProjectParser::supportedExtensions()) );
-#else
-	                      i18n("LabPlot Projects (%1)", Project::supportedExtensions()) );
+	extensions += i18n(";;Origin Projects (%1)", OriginProjectParser::supportedExtensions());
 #endif
 
+#ifdef HAVE_CANTOR_LIBS
+	extensions += i18n(";;Cantor Projects (.cws)");
+	extensions += i18n(";;Jupyter Notebooks (.ipynb)");
+#endif
+
+	const QString& path = QFileDialog::getOpenFileName(this,i18n("Open Project"), dir, extensions);
 	if (path.isEmpty())// "Cancel" was clicked
 		return;
 
@@ -1055,12 +1066,121 @@ void MainWin::openProject(const QString& filename) {
 	if (Project::isLabPlotProject(filename)) {
 		m_project->setFileName(filename);
 		rc = m_project->load(filename);
+	}
 #ifdef HAVE_LIBORIGIN
-	} else if (OriginProjectParser::isOriginProject(filename)) {
+	else if (OriginProjectParser::isOriginProject(filename)) {
 		OriginProjectParser parser;
 		parser.setProjectFileName(filename);
 		parser.importTo(m_project, QStringList()); //TODO: add return code
 		rc = true;
+	}
+#endif
+
+#ifdef HAVE_CANTOR_LIBS
+	else if (QFileInfo(filename).completeSuffix() == QLatin1String("cws")) {
+		QFile file(filename);
+		KZip archive(&file);
+		rc = archive.open(QIODevice::ReadOnly);
+		if (rc) {
+			const auto* contentEntry = archive.directory()->entry(QLatin1String("content.xml"));
+			if (contentEntry && contentEntry->isFile()) {
+				const auto* contentFile = static_cast<const KArchiveFile*>(contentEntry);
+				QByteArray data = contentFile->data();
+				archive.close();
+
+				//determine the name of the backend
+				QDomDocument doc;
+				doc.setContent(data);
+				QString backendName = doc.documentElement().attribute(QLatin1String("backend"));
+
+				if (!backendName.isEmpty()) {
+					//create new Cantor worksheet and load the data
+					auto* worksheet = new CantorWorksheet(backendName);
+					worksheet->setName(QFileInfo(filename).fileName());
+					worksheet->setComment(filename);
+
+					file.open(QIODevice::ReadOnly);
+					QByteArray content = file.readAll();
+					rc = worksheet->init(&content);
+					if (rc)
+						m_project->addChild(worksheet);
+					else {
+						delete worksheet;
+						RESET_CURSOR;
+						QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
+					}
+				} else {
+					RESET_CURSOR;
+					rc = false;
+					QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
+				}
+			} else {
+				RESET_CURSOR;
+				rc = false;
+				QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
+			}
+		} else {
+			RESET_CURSOR;
+			QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to open the file '%1'.", filename));
+		}
+	} else if (QFileInfo(filename).completeSuffix() == QLatin1String("ipynb")) {
+		QFile file(filename);
+		rc = file.open(QIODevice::ReadOnly);
+		if (rc) {
+			QByteArray content = file.readAll();
+			QJsonParseError error;
+			const QJsonDocument& doc = QJsonDocument::fromJson(content, &error);
+			if (error.error == QJsonParseError::NoError) {
+				//determine the backend name
+				QString backendName;
+				if ((doc["metadata"] != QJsonValue::Undefined && doc["metadata"].isObject())
+					&& (doc["metadata"]["kernelspec"] != QJsonValue::Undefined && doc["metadata"]["kernelspec"].isObject()) ) {
+
+					QString kernel;
+					if (doc["metadata"]["kernelspec"]["name"] != QJsonValue::Undefined)
+						kernel = doc["metadata"]["kernelspec"]["name"].toString();
+
+					if (!kernel.isEmpty()) {
+						if (kernel.startsWith(QLatin1String("julia")))
+							backendName = QLatin1String("julia");
+						else if (kernel == QLatin1String("sagemath"))
+							backendName = QLatin1String("sage");
+						else if (kernel == QLatin1String("ir"))
+							backendName = QLatin1String("r");
+						else
+							backendName = kernel;
+					} else
+						backendName = doc["metadata"]["kernelspec"]["language"].toString();
+
+					if (!backendName.isEmpty()) {
+						//create new Cantor worksheet and load the data
+						auto* worksheet = new CantorWorksheet(backendName);
+						worksheet->setName(QFileInfo(filename).fileName());
+						worksheet->setComment(filename);
+						rc = worksheet->init(&content);
+						if (rc)
+							m_project->addChild(worksheet);
+						else {
+							delete worksheet;
+							RESET_CURSOR;
+							QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
+						}
+					} else {
+						RESET_CURSOR;
+						rc = false;
+						QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
+					}
+				} else {
+					RESET_CURSOR;
+					rc = false;
+					QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
+				}
+			}
+		} else {
+			RESET_CURSOR;
+			rc = false;
+			QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to open the file '%1'.", filename));
+		}
 	}
 #endif
 
