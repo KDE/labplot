@@ -48,6 +48,7 @@
   <summary xml:lang="pl">Interaktywne przestawianie graficzne i analizy danych naukowych</summary>
   <summary xml:lang="pt">Gráficos interactivos e análise de dados científicos</summary>
   <summary xml:lang="pt-BR">Criação de gráficos interativos e análise de dados científicos</summary>
+  <summary xml:lang="sk">Interaktívne grafy a analýza vedeckých údajov</summary>
   <summary xml:lang="sv">Interaktiv diagramritning och analys av vetenskaplig data</summary>
   <summary xml:lang="uk">Інтерактивна побудова графіків та аналіз наукових даних</summary>
   <summary xml:lang="x-test">xxInteractive graphing and analysis of scientific dataxx</summary>
@@ -70,6 +71,7 @@
     <p xml:lang="pl">LabPlot jest aplikacją do interaktywnego przestawiania graficznego i analizy danych naukowych.</p>
     <p xml:lang="pt">O LabPlot é uma aplicação para gráficos interactivos e para a análise de dados científicos.</p>
     <p xml:lang="pt-BR">O LabPlot é um aplicativo para criação de gráficos interativos e análise de dados científicos.</p>
+    <p xml:lang="sk">LabPlot je KDE aplikácia pre interaktívne grafy a analýzu vedeckých údajov.</p>
     <p xml:lang="sv">Labplot är ett program för interaktiv diagramritning och analys av vetenskaplig data.</p>
     <p xml:lang="uk">LabPlot — програма для інтерактивної побудови графіків та аналізу наукових даних.</p>
     <p xml:lang="x-test">xxLabPlot is an application for interactive graphing and analysis of scientific data.xx</p>
@@ -143,6 +145,7 @@
       <caption xml:lang="pl">Funkcja matematyczna</caption>
       <caption xml:lang="pt">Função matemática</caption>
       <caption xml:lang="pt-BR">Função matemática</caption>
+      <caption xml:lang="sk">Matematická funkcia</caption>
       <caption xml:lang="sv">Matematisk funktion</caption>
       <caption xml:lang="uk">Математична функція</caption>
       <caption xml:lang="x-test">xxMathematical functionxx</caption>
