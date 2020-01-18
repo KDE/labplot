@@ -1129,16 +1129,19 @@ void MainWin::openProject(const QString& filename) {
 		if (rc) {
 			QByteArray content = file.readAll();
 			QJsonParseError error;
-			const QJsonDocument& doc = QJsonDocument::fromJson(content, &error);
+			// TODO: use QJsonDocument& doc = QJsonDocument::fromJson(content, &error); if minimum Qt version is at least 5.10
+			const QJsonDocument& jsonDoc = QJsonDocument::fromJson(content, &error);
+			const QJsonObject& doc = jsonDoc.object();
 			if (error.error == QJsonParseError::NoError) {
 				//determine the backend name
 				QString backendName;
+				// TODO: use doc["metadata"]["kernelspec"], etc. if minimum Qt version is at least 5.10
 				if ((doc["metadata"] != QJsonValue::Undefined && doc["metadata"].isObject())
-					&& (doc["metadata"]["kernelspec"] != QJsonValue::Undefined && doc["metadata"]["kernelspec"].isObject()) ) {
+					&& (doc["metadata"].toObject()["kernelspec"] != QJsonValue::Undefined && doc["metadata"].toObject()["kernelspec"].isObject()) ) {
 
 					QString kernel;
-					if (doc["metadata"]["kernelspec"]["name"] != QJsonValue::Undefined)
-						kernel = doc["metadata"]["kernelspec"]["name"].toString();
+					if (doc["metadata"].toObject()["kernelspec"].toObject()["name"] != QJsonValue::Undefined)
+						kernel = doc["metadata"].toObject()["kernelspec"].toObject()["name"].toString();
 
 					if (!kernel.isEmpty()) {
 						if (kernel.startsWith(QLatin1String("julia")))
@@ -1150,7 +1153,7 @@ void MainWin::openProject(const QString& filename) {
 						else
 							backendName = kernel;
 					} else
-						backendName = doc["metadata"]["kernelspec"]["language"].toString();
+						backendName = doc["metadata"].toObject()["kernelspec"].toObject()["language"].toString();
 
 					if (!backendName.isEmpty()) {
 						//create new Cantor worksheet and load the data
