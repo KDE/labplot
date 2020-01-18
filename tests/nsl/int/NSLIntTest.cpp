@@ -93,15 +93,15 @@ void NSLIntTest::test4Point_integral() {
 //##############################################################################
 
 void NSLIntTest::testPerformanceRectangle() {
-	const size_t n = 1e6;
+	const int n = 1e6;
 	QScopedArrayPointer<double> xdata(new double[n]);
 	QScopedArrayPointer<double> ydata(new double[n]);
 
-	for (size_t i = 0;  i < n; i++)
+	for (int i = 0;  i < n; i++)
 		xdata[i] = (double)i;
 
 	QBENCHMARK {
-		for (size_t i = 0;  i < n; i++)
+		for (int i = 0;  i < n; i++)
 			ydata[i] = 1.;
 		int status = nsl_int_rectangle(xdata.data(), ydata.data(), n, 0);
 		QCOMPARE(status, 0);
