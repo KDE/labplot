@@ -20,7 +20,7 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf64}\{#MyAppName}
 DisableProgramGroupPage=yes
-OutputBaseFilename=labplot-{#MyAppVersion}-64bit-setup
+OutputBaseFilename=labplot-{#MyAppVersion}-64bit-setup-MinGW
 ArchitecturesAllowed=x64
 ;use "none" for testing (much faster)
 Compression=lzma
@@ -50,7 +50,7 @@ Source: "{#CraftRoot}\bin\libz.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\liblzma-5.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libintl-8.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\iconv.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "{#CraftRoot}\bin\libeay32.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "{#CraftRoot}\bin\libeay32.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libfreetype-6.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libpng16.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libjpeg-62.dll"; DestDir: "{app}";Flags: ignoreversion
@@ -128,14 +128,14 @@ Source: "{#CraftRoot}\bin\data\config.kcfg\*"; DestDir: "{app}\data\config.kcfg"
 Source: "{#CraftRoot}\bin\data\icons\hicolor\48x48\apps\*"; DestDir: "{app}\data\icons\hicolor\48x48\apps\"; Flags: recursesubdirs ignoreversion
 ; misc
 Source: "{#CraftRoot}\bin\libfftw3.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#CraftRoot}\bin\netcdf.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#CraftRoot}\bin\hdf5_hl.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#CraftRoot}\bin\hdf5.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#CraftRoot}\bin\zlib.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#CraftRoot}\bin\szip.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#CraftRoot}\bin\liblz4.so.1.8.3.dll"; DestDir: "{app}"; DestName: "liblz4.dll"; Flags: ignoreversion
+;Source: "{#CraftRoot}\bin\netcdf.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#CraftRoot}\bin\hdf5_hl.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#CraftRoot}\bin\hdf5.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#CraftRoot}\bin\zlib.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#CraftRoot}\bin\szip.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#CraftRoot}\bin\liblz4.so.1.8.3.dll"; DestDir: "{app}"; DestName: "liblz4.dll"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libmysql.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#CraftRoot}\bin\libpq.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#CraftRoot}\bin\libpq.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; TODO craft does not install own version (check)
 ;Source: "C:\Program Files\cfitsio\cfitsio.dll"; DestDir: "{app}";Flags: ignoreversion
 
@@ -152,9 +152,9 @@ Source: "{#CraftRoot}\bin\data\applications\org.kde.labplot2.desktop"; DestDir: 
 ; Source: "{#CraftRoot}\labplot\labplot2.cmd"; DestDir: "{app}";Flags: ignoreversion
 
 ; locale (data\locale\*\LC_MESSAGES\*.mo)
-Source: "{#CraftRoot}\bin\data\locale\labplot2.mo"; DestDir: "{app}\data\locale"; Flags: recursesubdirs ignoreversion
-Source: "{#CraftRoot}\bin\data\locale\kconfigwidgets5.mo"; DestDir: "{app}\data\locale"; Flags: recursesubdirs ignoreversion
-Source: "{#CraftRoot}\bin\data\locale\kxmlgui5.mo"; DestDir: "{app}\data\locale"; Flags: recursesubdirs ignoreversion
+;Source: "{#CraftRoot}\bin\data\locale\labplot2.mo"; DestDir: "{app}\data\locale"; Flags: recursesubdirs ignoreversion
+;Source: "{#CraftRoot}\bin\data\locale\kconfigwidgets5.mo"; DestDir: "{app}\data\locale"; Flags: recursesubdirs ignoreversion
+;Source: "{#CraftRoot}\bin\data\locale\kxmlgui5.mo"; DestDir: "{app}\data\locale"; Flags: recursesubdirs ignoreversion
 
 ; kcharselect data
 Source: "{#CraftRoot}\bin\data\kf5\kcharselect\kcharselect-data"; DestDir: "{app}\data\kf5\kcharselect"; Flags: recursesubdirs ignoreversion
@@ -172,23 +172,23 @@ Source: "{#CraftRoot}\bin\libexpat.dll"; DestDir: "{app}";Flags: ignoreversion
 
 ; convert
 ; TODO
-Source: "C:\Program Files\{#ImageMagickVersion}\convert.exe"; DestDir: "{app}";Flags: ignoreversion
-Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_MagickCore_.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_MagickWand_.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_bzlib_.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_glib_.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_lcms_.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_lqr_.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_png_.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_ttf_.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_zlib_.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "C:\Program Files\{#ImageMagickVersion}\convert.exe"; DestDir: "{app}";Flags: ignoreversion
+;Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_MagickCore_.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_MagickWand_.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_bzlib_.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_glib_.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_lcms_.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_lqr_.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_png_.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_ttf_.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "C:\Program Files\{#ImageMagickVersion}\CORE_RL_zlib_.dll"; DestDir: "{app}";Flags: ignoreversion
 ; Source: "C:\Program Files\{#ImageMagickVersion}\msvcr120.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "C:\Program Files\{#ImageMagickVersion}\vcomp120.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "C:\Program Files\{#ImageMagickVersion}\delegates.xml"; DestDir: "{app}";Flags: ignoreversion
-Source: "C:\Program Files\{#ImageMagickVersion}\magic.xml"; DestDir: "{app}";Flags: ignoreversion
-Source: "C:\Program Files\{#ImageMagickVersion}\modules\coders\IM_MOD_RL_pdf_.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "C:\Program Files\{#ImageMagickVersion}\modules\coders\IM_MOD_RL_png_.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "C:\Program Files\{#ImageMagickVersion}\modules\coders\IM_MOD_RL_ps_.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "C:\Program Files\{#ImageMagickVersion}\vcomp120.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "C:\Program Files\{#ImageMagickVersion}\delegates.xml"; DestDir: "{app}";Flags: ignoreversion
+;Source: "C:\Program Files\{#ImageMagickVersion}\magic.xml"; DestDir: "{app}";Flags: ignoreversion
+;Source: "C:\Program Files\{#ImageMagickVersion}\modules\coders\IM_MOD_RL_pdf_.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "C:\Program Files\{#ImageMagickVersion}\modules\coders\IM_MOD_RL_png_.dll"; DestDir: "{app}";Flags: ignoreversion
+;Source: "C:\Program Files\{#ImageMagickVersion}\modules\coders\IM_MOD_RL_ps_.dll"; DestDir: "{app}";Flags: ignoreversion
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
