@@ -203,10 +203,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -219,10 +219,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -235,10 +235,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -281,10 +281,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -297,7 +297,7 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
             <double>9999.000000000000000</double>
@@ -323,10 +323,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -339,10 +339,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -401,10 +401,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -440,10 +440,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>

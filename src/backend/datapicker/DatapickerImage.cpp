@@ -397,6 +397,7 @@ bool DatapickerImagePrivate::uploadImage(const QString& address) {
 }
 
 void DatapickerImagePrivate::discretize() {
+	PERFTRACE("DatapickerImagePrivate::discretize()");
 	if (plotImageType != DatapickerImage::ProcessedImage)
 		return;
 
