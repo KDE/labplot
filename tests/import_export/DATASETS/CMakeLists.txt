@@ -1,0 +1,35 @@
+add_executable (datasettest DatasetsUnitTest.cpp)
+
+target_link_libraries(datasettest Qt5::Test)
+target_link_libraries(datasettest KF5::Archive KF5::XmlGui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+
+IF (Qt5SerialPort_FOUND)
+	target_link_libraries(datasettest Qt5::SerialPort )
+ENDIF ()
+IF (KF5SyntaxHighlighting_FOUND)
+	target_link_libraries(datasettest KF5::SyntaxHighlighting )
+ENDIF ()
+#TODO: KF5::NewStuff
+
+IF (Cantor_FOUND)
+	target_link_libraries(datasettest Cantor::cantorlibs )
+ENDIF ()
+IF (HDF5_FOUND)
+	target_link_libraries(datasettest ${HDF5_C_LIBRARIES} )
+ENDIF ()
+IF (FFTW3_FOUND)
+	target_link_libraries(datasettest ${FFTW3_LIBRARIES} )
+ENDIF ()
+IF (netCDF_FOUND)
+	target_link_libraries(datasettest netcdf )
+ENDIF ()
+IF (CFITSIO_FOUND)
+	target_link_libraries(datasettest ${CFITSIO_LIBRARIES} )
+ENDIF ()
+IF (USE_LIBORIGIN)
+target_link_libraries(datasettest liborigin-static )
+ENDIF ()
+
+target_link_libraries(datasettest labplot2lib)
+
+add_test(NAME datasettest COMMAND datasettest)

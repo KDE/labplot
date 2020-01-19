@@ -58,7 +58,8 @@
 <Separator/>
 <Menu name="import"><text>Import</text>
 	<Action name="import_file" />
-	<Action name="import_sql" />
+	<Action name="import_sql" />    
+    <Action name="import_dataset_datasource" />
 	<Separator/>
 	<Action name="import_labplot" />
 	<Action name="import_opj" />

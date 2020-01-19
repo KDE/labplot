@@ -92,6 +92,9 @@ class QMdiArea;
 class QMdiSubWindow;
 class QToolButton;
 class KRecentFilesAction;
+class QQuickWidget;
+class WelcomeScreenHelper;
+class ImportDatasetWidget;
 class TreeModel;
 
 #ifdef Q_OS_MAC
@@ -128,8 +131,14 @@ private:
 	bool m_autoSaveActive{false};
 	QTimer m_autoSaveTimer;
 	bool m_showMemoryInfo{true};
+	bool m_showWelcomeScreen{false};
+	bool m_saveWelcomeScreen{true};
 	MemoryWidget* m_memoryInfoWidget{nullptr};
 	Qt::WindowStates m_lastWindowState; //< last window state before switching to full screen mode
+	QMdiSubWindow* m_welcomeWindow{nullptr};
+	QQuickWidget* m_welcomeWidget{nullptr};
+	WelcomeScreenHelper* m_welcomeScreenHelper{nullptr};
+	ImportDatasetWidget* m_importDatasetWidget{nullptr};
 
 #ifdef Q_OS_MAC
 	KDMacTouchBar* m_touchBar;
@@ -142,6 +151,7 @@ private:
 	QAction* m_printPreviewAction;
 	QAction* m_importFileAction;
 	QAction* m_importSqlAction;
+	QAction* m_importDatasetAction;
 	QAction* m_importLabPlotAction;
 	QAction* m_importOpjAction;
 	QAction* m_exportAction;
@@ -258,6 +268,9 @@ protected:
 
 private slots:
 	void initGUI(const QString&);
+	QQuickWidget* createWelcomeScreen();
+	void resetWelcomeScreen();
+	void createMdiArea();
 	void updateGUI();
 	void updateGUIOnProjectChanges();
 	void undo();
@@ -279,11 +292,13 @@ private slots:
 	void importFileDialog(const QString& fileName = QString());
 	void importSqlDialog();
 	void importProjectDialog();
+	void importDatasetDialog();
 	void exportDialog();
 	void editFitsFileDialog();
 	void settingsDialog();
 	void projectChanged();
 	void colorSchemeChanged(QAction*);
+	void openDatasetExample();
 
 	//Cantor
 #ifdef HAVE_CANTOR_LIBS

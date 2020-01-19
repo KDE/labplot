@@ -20,6 +20,9 @@ string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Concurrent
 	Gui
+    Qml
+    Quick
+    QuickWidgets
 	PrintSupport
 	Sql
 	Svg
@@ -42,8 +45,9 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	TextWidgets
 	WidgetsAddons
 	XmlGui
+    NewStuffCore
+    NewStuff
 OPTIONAL_COMPONENTS
-	NewStuff
 	Service
 	Parts
 	SyntaxHighlighting

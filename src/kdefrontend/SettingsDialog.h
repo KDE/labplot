@@ -2,7 +2,7 @@
     File                 : SettingsDialog.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2020 Alexander Semke (alexander.semke@web.de)
     Description          : application settings dialog
 
  ***************************************************************************/
@@ -33,6 +33,8 @@
 class QAbstractButton;
 class SettingsGeneralPage;
 class SettingsWorksheetPage;
+class SettingsWelcomePage;
+class SettingsDatasetsPage;
 
 class SettingsDialog : public KPageDialog {
 	Q_OBJECT
@@ -49,12 +51,15 @@ private:
 	bool m_changed{false};
 	SettingsGeneralPage* m_generalPage;
 	SettingsWorksheetPage* m_worksheetPage;
+	SettingsWelcomePage* m_welcomePage;
+	SettingsDatasetsPage* m_datasetsPage;
 
 	void applySettings();
 	void restoreDefaults();
 
 signals:
 	void settingsChanged();
+	void resetWelcomeScreen();
 };
 
 #endif

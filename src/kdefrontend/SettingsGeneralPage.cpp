@@ -88,6 +88,7 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbLoadOnStart->addItem(i18n("Create new empty project"));
 	ui.cbLoadOnStart->addItem(i18n("Create new project with worksheet"));
 	ui.cbLoadOnStart->addItem(i18n("Load last used project"));
+	ui.cbLoadOnStart->addItem(i18n("Show Welcome Screen"));
 
 	ui.cbInterface->clear();
 	ui.cbInterface->addItem(i18n("Sub-window view"));

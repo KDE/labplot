@@ -1,0 +1,80 @@
+{
+    "categories": [
+        {
+            "category_name": "Statistics",
+            "subcategories": [
+                {
+                    "datasets": [
+                        "bigcity",
+                        "CanPop"
+                    ],
+                    "subcategory_name": "Demographics"
+                },
+                {
+                    "datasets": [
+                        "amis"
+                    ],
+                    "subcategory_name": "Traffic"
+                }
+            ]
+        },
+        {
+            "category_name": "Nature",
+            "subcategories": [
+                {
+                    "datasets": [
+                        "beaver",
+                        "catsM",
+                        "dogs",
+                        "ducks"
+                    ],
+                    "subcategory_name": "Animals"
+                },
+                {
+                    "datasets": [
+                        "darwin"
+                    ],
+                    "subcategory_name": "Plants"
+                },
+                {
+                    "datasets": [
+                        "manaus"
+                    ],
+                    "subcategory_name": "Rivers"
+                }
+            ]
+        },
+        {
+            "category_name": "Medicine",
+            "subcategories": [
+                {
+                    "datasets": [
+                        "aml"
+                    ],
+                    "subcategory_name": "Oncology"
+                },
+                {
+                    "datasets": [
+                        "aids",
+                        "CD4"
+                    ],
+                    "subcategory_name": "AIDS"
+                },
+                {
+                    "datasets": [
+                        "breslow"
+                    ],
+                    "subcategory_name": "Smoking"
+                },
+                {
+                    "datasets": [
+                        "calcium",
+                        "claridge",
+                        "frets"
+                    ],
+                    "subcategory_name": "Common"
+                }
+            ]
+        }
+    ]
+}

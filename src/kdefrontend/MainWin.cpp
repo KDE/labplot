@@ -37,6 +37,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/LiveDataSource.h"
+#include "backend/datasources/DatasetHandler.h"
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
@@ -66,6 +67,8 @@
 #include "commonfrontend/widgets/MemoryWidget.h"
 
 #include "kdefrontend/datasources/ImportFileDialog.h"
+#include "kdefrontend/datasources/ImportDatasetDialog.h"
+#include "kdefrontend/datasources/ImportDatasetWidget.h"
 #include "kdefrontend/datasources/ImportProjectDialog.h"
 #include "kdefrontend/datasources/ImportSQLDatabaseDialog.h"
 #include <kdefrontend/dockwidgets/CursorDock.h>
@@ -74,6 +77,8 @@
 #include "kdefrontend/SettingsDialog.h"
 #include "kdefrontend/GuiObserver.h"
 #include "kdefrontend/widgets/FITSHeaderEditDialog.h"
+#include "DatasetModel.h"
+#include "WelcomeScreenHelper.h"
 
 #ifdef Q_OS_MAC
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
@@ -92,6 +97,12 @@
 #include <QStatusBar>
 #include <QTemporaryFile>
 #include <QTimeLine>
+#include <QtWidgets>
+#include <QtQuickWidgets/QQuickWidget>
+#include <QQuickItem>
+#include <QQuickView>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
 
 #include <KActionCollection>
 #include <KConfigGroup>
@@ -143,8 +154,17 @@ MainWin::~MainWin() {
 	group.writeEntry("geometry", saveGeometry());
 	KSharedConfig::openConfig()->sync();
 
+	qDebug() << "Mainwin Destructor ";
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
+		qDebug() << "Destructor save welcome screen";
+		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
+	}
+
 	if (m_project != nullptr) {
-		m_mdiArea->closeAllSubWindows();
+
+		if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr)
+			m_mdiArea->closeAllSubWindows();
+
 		disconnect(m_project, nullptr, this, nullptr);
 		delete m_project;
 	}
@@ -154,6 +174,9 @@ MainWin::~MainWin() {
 
 	if (m_guiObserver)
 		delete m_guiObserver;
+
+	if(m_welcomeScreenHelper)
+		delete m_welcomeScreenHelper;
 }
 
 void MainWin::showPresenter() {
@@ -299,6 +322,10 @@ void MainWin::initGUI(const QString& fileName) {
 				QDEBUG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().constFirst());
 				openRecentProject( m_recentProjectsAction->urls().constFirst() );
 			}
+		} else if (load == 4) { //welcome screen
+			m_showWelcomeScreen = true;
+			m_welcomeWidget = createWelcomeScreen();
+			setCentralWidget(m_welcomeWidget);
 		}
 	}
 
@@ -310,6 +337,124 @@ void MainWin::initGUI(const QString& fileName) {
 	}
 
 	updateGUIOnProjectChanges();
+}
+
+/**
+ * @brief Creates a new welcome screen to be set as central widget.
+ */
+QQuickWidget* MainWin::createWelcomeScreen() {
+	QSize maxSize = qApp->primaryScreen()->availableSize();
+	resize(maxSize);
+	setMinimumSize(700, 400);
+	showMaximized();
+
+	KToolBar* toolbar = toolBar();
+	if(toolbar)
+		toolbar->setVisible(false);
+
+	QList<QVariant> recentList;
+	for (QUrl url : m_recentProjectsAction->urls())
+		recentList.append(QVariant(url));
+
+	//Set context property
+	QQuickWidget* quickWidget = new QQuickWidget(this);
+	QQmlContext *ctxt = quickWidget->rootContext();
+	QVariant variant(recentList);
+	ctxt->setContextProperty("recentProjects", variant);
+
+	//Create helper object
+	if(m_welcomeScreenHelper != nullptr)
+		delete m_welcomeScreenHelper;
+	m_welcomeScreenHelper = new WelcomeScreenHelper();
+	connect(m_welcomeScreenHelper, SIGNAL(openExampleProject(QString)), this, SLOT(openProject(const QString& )));
+
+	ctxt->setContextProperty("datasetModel", m_welcomeScreenHelper->getDatasetModel());
+	ctxt->setContextProperty("helper", m_welcomeScreenHelper);
+
+	quickWidget->setSource(QUrl(QLatin1String("qrc:///main.qml")));
+	quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+	QObject *item = quickWidget->rootObject();
+
+	//connect qml's signals
+	QObject::connect(item, SIGNAL(recentProjectClicked(QUrl)), this, SLOT(openRecentProject(QUrl)));
+	QObject::connect(item, SIGNAL(datasetClicked(QString, QString, QString)), m_welcomeScreenHelper, SLOT(datasetClicked(const QString&, const QString&, const QString&)));
+	QObject::connect(item, SIGNAL(openDataset()), this, SLOT(openDatasetExample()));
+	QObject::connect(item, SIGNAL(openExampleProject(QString)), m_welcomeScreenHelper, SLOT(exampleProjectClicked(const QString&)));
+	m_welcomeScreenHelper->showFirstDataset();
+
+	return quickWidget;
+}
+
+/**
+ * @brief Initiates resetting the layout of the welcome screen
+ */
+void MainWin::resetWelcomeScreen() {
+	if(dynamic_cast<QQuickWidget*>(centralWidget()))
+		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "restoreOriginalLayout");
+}
+
+/**
+ * @brief Creates a new MDI area, to replace the Welcome Screen as central widget
+ */
+void MainWin::createMdiArea() {
+	setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+	setMinimumSize(0,0);
+
+	KToolBar* toolbar = toolBar();
+	if(toolbar)
+		toolbar->setVisible(true);
+
+	//Save welcome screen's dimensions.
+	if(m_showWelcomeScreen)
+		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
+
+	m_mdiArea = new QMdiArea;
+	setCentralWidget(m_mdiArea);
+	connect(m_mdiArea, &QMdiArea::subWindowActivated, this, &MainWin::handleCurrentSubWindowChanged);
+
+	KConfigGroup group = KSharedConfig::openConfig()->group( "Settings_General" );
+	int viewMode = group.readEntry("ViewMode", 0);
+	if (viewMode == 1) {
+		m_mdiArea->setViewMode(QMdiArea::TabbedView);
+		int tabPosition = group.readEntry("TabPosition", 0);
+		m_mdiArea->setTabPosition(QTabWidget::TabPosition(tabPosition));
+		m_mdiArea->setTabsClosable(true);
+		m_mdiArea->setTabsMovable(true);
+		m_tileWindows->setVisible(false);
+		m_cascadeWindows->setVisible(false);
+	}
+
+	QAction* action  = new QAction(i18n("&Close"), this);
+	actionCollection()->setDefaultShortcut(action, QKeySequence::Close);
+	action->setStatusTip(i18n("Close the active window"));
+	actionCollection()->addAction("close window", action);
+	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::closeActiveSubWindow);
+
+	action = new QAction(i18n("Close &All"), this);
+	action->setStatusTip(i18n("Close all the windows"));
+	actionCollection()->addAction("close all windows", action);
+	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::closeAllSubWindows);
+
+	m_tileWindows = new QAction(i18n("&Tile"), this);
+	m_tileWindows->setStatusTip(i18n("Tile the windows"));
+	actionCollection()->addAction("tile windows", m_tileWindows);
+	connect(m_tileWindows, &QAction::triggered, m_mdiArea, &QMdiArea::tileSubWindows);
+
+	m_cascadeWindows = new QAction(i18n("&Cascade"), this);
+	m_cascadeWindows->setStatusTip(i18n("Cascade the windows"));
+	actionCollection()->addAction("cascade windows", m_cascadeWindows);
+	connect(m_cascadeWindows, &QAction::triggered, m_mdiArea, &QMdiArea::cascadeSubWindows);
+	action = new QAction(QIcon::fromTheme("go-next-view"), i18n("Ne&xt"), this);
+	actionCollection()->setDefaultShortcut(action, QKeySequence::NextChild);
+	action->setStatusTip(i18n("Move the focus to the next window"));
+	actionCollection()->addAction("next window", action);
+	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::activateNextSubWindow);
+
+	action = new QAction(QIcon::fromTheme("go-previous-view"), i18n("Pre&vious"), this);
+	actionCollection()->setDefaultShortcut(action, QKeySequence::PreviousChild);
+	action->setStatusTip(i18n("Move the focus to the previous window"));
+	actionCollection()->addAction("previous window", action);
+	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::activatePreviousSubWindow);
 }
 
 void MainWin::initActions() {
@@ -386,18 +531,23 @@ void MainWin::initActions() {
 	actionCollection()->addAction("import_file", m_importFileAction);
 	connect(m_importFileAction, &QAction::triggered, this, [=]() {importFileDialog();});
 
-	m_importSqlAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Import from SQL Database"), this);
+	m_importSqlAction = new QAction(QIcon::fromTheme("network-server-database"), i18n("From SQL Database"), this);
 	m_importSqlAction->setWhatsThis(i18n("Import data from a SQL database"));
 	actionCollection()->addAction("import_sql", m_importSqlAction);
 	connect(m_importSqlAction, &QAction::triggered, this, &MainWin::importSqlDialog);
 
-	m_importLabPlotAction = new QAction(QIcon::fromTheme("document-import"), i18n("Import from LabPlot Project"), this);
+	m_importDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("database-index")), i18n("From Dataset Collection"), this);
+	m_importDatasetAction->setWhatsThis(i18n("Imports data from an online dataset"));
+	actionCollection()->addAction("import_dataset_datasource", m_importDatasetAction);
+	connect(m_importDatasetAction, &QAction::triggered, this, &MainWin::importDatasetDialog);
+
+	m_importLabPlotAction = new QAction(QIcon::fromTheme("project-open"), i18n("LabPlot Project"), this);
 	m_importLabPlotAction->setWhatsThis(i18n("Import a project from a LabPlot project file (.lml)"));
 	actionCollection()->addAction("import_labplot", m_importLabPlotAction);
 	connect(m_importLabPlotAction, &QAction::triggered, this, &MainWin::importProjectDialog);
 
 #ifdef HAVE_LIBORIGIN
-	m_importOpjAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Import from Origin Project (OPJ)"), this);
+	m_importOpjAction = new QAction(QIcon::fromTheme("project-open"), i18n("Origin Project (OPJ)"), this);
 	m_importOpjAction->setWhatsThis(i18n("Import a project from an OriginLab Origin project file (.opj)"));
 	actionCollection()->addAction("import_opj", m_importOpjAction);
 	connect(m_importOpjAction, &QAction::triggered, this, &MainWin::importProjectDialog);
@@ -537,6 +687,7 @@ void MainWin::initMenus() {
 	m_importMenu->setIcon(QIcon::fromTheme("document-import"));
 	m_importMenu ->addAction(m_importFileAction);
 	m_importMenu ->addAction(m_importSqlAction);
+	m_importMenu->addAction(m_importDatasetAction);
 	m_importMenu->addSeparator();
 	m_importMenu->addAction(m_importLabPlotAction);
 #ifdef HAVE_LIBORIGIN
@@ -736,7 +887,7 @@ void MainWin::updateGUIOnProjectChanges() {
  * depending on the currently active window (worksheet or spreadsheet).
  */
 void MainWin::updateGUI() {
-	if (m_project->isLoading())
+	if (m_project == nullptr || m_project->isLoading())
 		return;
 
 	if (m_closing || m_projectClosing)
@@ -940,6 +1091,11 @@ bool MainWin::newProject() {
 	if (!closeProject())
 		return false;
 
+	if(dynamic_cast<QQuickWidget*>(centralWidget())) {
+		createMdiArea();
+		setCentralWidget(m_mdiArea);
+	}
+
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	if (m_project)
@@ -1054,6 +1210,11 @@ void MainWin::openProject(const QString& filename) {
 	if (filename == m_currentFileName) {
 		KMessageBox::information(this, i18n("The project file %1 is already opened.", filename), i18n("Open Project"));
 		return;
+	}
+
+	if(dynamic_cast<QQuickWidget*>(centralWidget())) {
+		createMdiArea();
+		setCentralWidget(m_mdiArea);
 	}
 
 	if (!newProject())
@@ -1213,6 +1374,11 @@ void MainWin::openProject(const QString& filename) {
 }
 
 void MainWin::openRecentProject(const QUrl& url) {
+	if(dynamic_cast<QQuickWidget*>(centralWidget())) {
+		createMdiArea();
+		setCentralWidget(m_mdiArea);
+	}
+
 	if (url.isLocalFile())	// fix for Windows
 		this->openProject(url.toLocalFile());
 	else
@@ -1228,6 +1394,13 @@ bool MainWin::closeProject() {
 
 	if (warnModified())
 		return false;
+
+	if(!m_closing) {
+		if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr && m_showWelcomeScreen) {
+			m_welcomeWidget = createWelcomeScreen();
+			setCentralWidget(m_welcomeWidget);
+		}
+	}
 
 	m_projectClosing = true;
 	statusBar()->clearMessage();
@@ -1497,6 +1670,10 @@ void MainWin::newNotes() {
 	Otherwise returns \c 0.
 */
 Spreadsheet* MainWin::activeSpreadsheet() const {
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
+		return nullptr;
+	}
+
 	if (!m_currentAspect)
 		return nullptr;
 
@@ -1966,22 +2143,24 @@ void MainWin::dropEvent(QDropEvent* event) {
 void MainWin::handleSettingsChanges() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group( "Settings_General" );
 
-	QMdiArea::ViewMode viewMode = QMdiArea::ViewMode(group.readEntry("ViewMode", 0));
-	if (m_mdiArea->viewMode() != viewMode) {
-		m_mdiArea->setViewMode(viewMode);
-		if (viewMode == QMdiArea::SubWindowView)
-			this->updateMdiWindowVisibility();
-	}
+	if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr) {
+		QMdiArea::ViewMode viewMode = QMdiArea::ViewMode(group.readEntry("ViewMode", 0));
+		if (m_mdiArea->viewMode() != viewMode) {
+			m_mdiArea->setViewMode(viewMode);
+			if (viewMode == QMdiArea::SubWindowView)
+				this->updateMdiWindowVisibility();
+		}
 
-	if (m_mdiArea->viewMode() == QMdiArea::TabbedView) {
-		m_tileWindows->setVisible(false);
-		m_cascadeWindows->setVisible(false);
-		QTabWidget::TabPosition tabPosition = QTabWidget::TabPosition(group.readEntry("TabPosition", 0));
-		if (m_mdiArea->tabPosition() != tabPosition)
-			m_mdiArea->setTabPosition(tabPosition);
-	} else {
-		m_tileWindows->setVisible(true);
-		m_cascadeWindows->setVisible(true);
+		if (m_mdiArea->viewMode() == QMdiArea::TabbedView) {
+			m_tileWindows->setVisible(false);
+			m_cascadeWindows->setVisible(false);
+			QTabWidget::TabPosition tabPosition = QTabWidget::TabPosition(group.readEntry("TabPosition", 0));
+			if (m_mdiArea->tabPosition() != tabPosition)
+				m_mdiArea->setTabPosition(tabPosition);
+		} else {
+			m_tileWindows->setVisible(true);
+			m_cascadeWindows->setVisible(true);
+		}
 	}
 
 	//autosave
@@ -2014,6 +2193,16 @@ void MainWin::handleSettingsChanges() {
 			}
 		}
 	}
+
+	bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
+	if(m_showWelcomeScreen != showWelcomeScreen) {
+		m_showWelcomeScreen = showWelcomeScreen;
+	}
+}
+
+void MainWin::openDatasetExample() {
+	newProject();
+	addAspectToProject(m_welcomeScreenHelper->releaseConfiguredSpreadsheet());
 }
 
 /***************************************************************************************/
@@ -2114,6 +2303,35 @@ void MainWin::importProjectDialog() {
 }
 
 /*!
+ * \brief opens a dialog to import datasets
+ */
+void MainWin::importDatasetDialog() {
+	ImportDatasetDialog* dlg = new ImportDatasetDialog(this);
+	if (dlg->exec() == QDialog::Accepted) {
+			Spreadsheet* spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
+			DatasetHandler* dataset = new DatasetHandler(spreadsheet);
+			dlg->importToDataset(dataset, statusBar());
+
+			QTimer timer;
+			timer.setSingleShot(true);
+			QEventLoop loop;
+			connect(dataset,  &DatasetHandler::downloadCompleted, &loop, &QEventLoop::quit);
+			connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+			timer.start(1500);
+			loop.exec();
+
+			if(timer.isActive()){
+				timer.stop();
+				addAspectToProject(spreadsheet);
+				delete dataset;
+			}
+			else
+				delete dataset;
+	}
+	delete dlg;
+}
+
+/*!
   opens the dialog for the export of the currently active worksheet, spreadsheet or matrix.
  */
 void MainWin::exportDialog() {
@@ -2195,6 +2413,7 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 void MainWin::settingsDialog() {
 	auto* dlg = new SettingsDialog(this);
 	connect (dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
+	connect (dlg, &SettingsDialog::resetWelcomeScreen, this, &MainWin::resetWelcomeScreen);
 	dlg->exec();
 }
 

@@ -2,7 +2,7 @@
     File                 : SettingsDialog.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2019 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2020 Alexander Semke (alexander.semke@web.de)
     Description          : application settings dialog
 
  ***************************************************************************/
@@ -29,6 +29,8 @@
 
 #include "MainWin.h"
 #include "SettingsGeneralPage.h"
+#include "SettingsDatasetsPage.h"
+#include "SettingsWelcomePage.h"
 #include "SettingsWorksheetPage.h"
 
 #include <QPushButton>
@@ -66,6 +68,15 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 	KPageWidgetItem* worksheetFrame = addPage(m_worksheetPage, i18n("Worksheet"));
 	worksheetFrame->setIcon(QIcon::fromTheme(QLatin1String("labplot-worksheet")));
 	connect(m_worksheetPage, &SettingsWorksheetPage::settingsChanged, this, &SettingsDialog::changed);
+
+	m_datasetsPage = new SettingsDatasetsPage(this);
+	KPageWidgetItem* datasetsFrame = addPage(m_datasetsPage, i18n("Datasets"));
+	datasetsFrame->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
+
+	m_welcomePage = new SettingsWelcomePage(this);
+	KPageWidgetItem* welcomeFrame = addPage(m_welcomePage, i18n("Welcome Screen"));
+	welcomeFrame->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
+	connect(m_welcomePage, &SettingsWelcomePage::resetWelcomeScreen, this, &SettingsDialog::resetWelcomeScreen);
 
 	//restore saved settings if available
 	create(); // ensure there's a window created

@@ -12,6 +12,7 @@ set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 set_property(SOURCE gsl_parser.h PROPERTY SKIP_AUTOMOC ON)
 
 set(GUI_SOURCES
+    ${KDEFRONTEND_DIR}/DatasetModel.cpp
 	${KDEFRONTEND_DIR}/GuiObserver.cpp
 	${KDEFRONTEND_DIR}/GuiTools.cpp
 	${KDEFRONTEND_DIR}/HistoryDialog.cpp
@@ -19,16 +20,23 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/SettingsDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
 	${KDEFRONTEND_DIR}/SettingsWorksheetPage.cpp
+	${KDEFRONTEND_DIR}/SettingsWelcomePage.cpp
+	${KDEFRONTEND_DIR}/SettingsDatasetsPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPage.h
 	${KDEFRONTEND_DIR}/TemplateHandler.cpp
 	${KDEFRONTEND_DIR}/ThemeHandler.cpp
+    ${KDEFRONTEND_DIR}/WelcomeScreenHelper.cpp
 	${KDEFRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerWidget.cpp
+    ${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerDialog.cpp
+    ${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/HDF5OptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FileInfoDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
+    ${KDEFRONTEND_DIR}/datasources/ImportDatasetWidget.cpp
+    ${KDEFRONTEND_DIR}/datasources/ImportDatasetDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
@@ -121,12 +129,16 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/labelwidget.ui
 	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsworksheetpage.ui
+	${KDEFRONTEND_DIR}/ui/settingswelcomepage.ui
+	${KDEFRONTEND_DIR}/ui/settingsdatasetspage.ui
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/databasemanagerwidget.ui
+    ${KDEFRONTEND_DIR}/ui/datasources/datasetmetadatamanagerwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/hdf5optionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
+    ${KDEFRONTEND_DIR}/ui/datasources/importdatasetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importprojectwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importsqldatabasewidget.ui
@@ -228,6 +240,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/plugin/PluginLoader.cpp
 	${BACKEND_DIR}/core/plugin/PluginManager.cpp
 	${BACKEND_DIR}/datasources/AbstractDataSource.cpp
+    ${BACKEND_DIR}/datasources/DatasetHandler.cpp
 	${BACKEND_DIR}/datasources/LiveDataSource.cpp
 	${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
 	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
@@ -299,6 +312,9 @@ if (Qt5Mqtt_FOUND)
 	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTSubscription.cpp)
 	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTTopic.cpp)
 endif()
+
+# add the qml.qrc file
+qt5_add_resources(qml_QRC ${KDEFRONTEND_DIR}/qml.qrc)
 
 IF (ENABLE_LIBORIGIN)
 	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
@@ -405,11 +421,16 @@ target_link_libraries( labplot2lib
 	KF5::KIOWidgets
 	KF5::TextWidgets
 	KF5::XmlGui
+    KF5::NewStuff
+    KF5::NewStuffCore
 	Qt5::Svg
 	Qt5::Core
 	Qt5::Network
 	Qt5::PrintSupport
 	Qt5::Sql
+    Qt5::Qml
+    Qt5::Quick
+    Qt5::QuickWidgets
 	${GSL_LIBRARIES}
 	${GSL_CBLAS_LIBRARIES} )
 
@@ -495,7 +516,7 @@ IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 ENDIF ()
 
-add_executable(labplot2 ${LABPLOT_SOURCE})
+add_executable(labplot2 ${LABPLOT_SOURCE} ${qml_QRC})
 target_link_libraries(labplot2 labplot2lib)
 IF (APPLE)
 	target_link_libraries(labplot2 KDMacTouchBar)
@@ -508,4 +529,5 @@ install( FILES ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico ${C
 install( PROGRAMS org.kde.labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
 install( FILES labplot2_themes.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
+install( FILES labplot2_datasets.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )

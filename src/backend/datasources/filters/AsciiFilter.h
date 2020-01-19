@@ -108,6 +108,7 @@ public:
 	bool createTimestampEnabled() const;
 
 	void setVectorNames(const QString&);
+	void setVectorNames(QStringList);
 	QStringList vectorNames() const;
 	QVector<AbstractColumn::ColumnMode> columnModes();
 
