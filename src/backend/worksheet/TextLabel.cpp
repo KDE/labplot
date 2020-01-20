@@ -748,7 +748,9 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		if (boundingRect().width() != 0.0 &&  boundingRect().height() != 0.0)
 			painter->drawImage(boundingRect(), teXImage);
 	} else {
-		painter->setPen(fontColor);
+		// don't set fontColor to pen, because the color
+		// is already in the html code
+		//painter->setPen(fontColor);
 		painter->scale(scaleFactor, scaleFactor);
 		float w = staticText.size().width();
 		float h = staticText.size().height();
@@ -1075,8 +1077,28 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	Q_D(TextLabel);
 
 	KConfigGroup group = config.group("Label");
-	d->fontColor = group.readEntry("FontColor", QColor(Qt::white));
-	d->backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::black));
+	d->fontColor = group.readEntry("FontColor", QColor(Qt::white)); // used when it's latex text
+	d->backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::black)); // used when it's latex text
+
+	if (!d->textWrapper.teXUsed) {
+		// TODO: Replace QTextEdit by QTextDocument, because this does not contain the graphical stuff
+		// to set the color in a html text, a qTextEdit must be used
+		QTextEdit te;
+		te.setHtml(d->textWrapper.text);
+		te.selectAll();
+		te.setTextColor(d->fontColor);
+		//te.setTextBackgroundColor(backgroundColor); // for plain text no background color supported, due to bug https://bugreports.qt.io/browse/QTBUG-25420
+
+		// update the text. also in the Widget to which is connected
+		TextWrapper wrapper(te.toHtml(), false, true);
+		setText(wrapper);
+	} else
+		setText(d->textWrapper.text);
+
+	// otherwise when changing theme while the textlabel dock is visible, the
+	// color comboboxes do not change the color
+	backgroundColorChanged(d->backgroundColor);
+	fontColorChanged(d->fontColor);
 
 	group = config.group("CartesianPlot");
 	QPen pen = this->borderPen();
@@ -1085,8 +1107,6 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	pen.setWidthF(group.readEntry("BorderWidth", pen.widthF()));
 	this->setBorderPen(pen);
 	this->setBorderOpacity(group.readEntry("BorderOpacity", this->borderOpacity()));
-
-	d->updateText();
 }
 
 void TextLabel::saveThemeConfig(const KConfig& config) {

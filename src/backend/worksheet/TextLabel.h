@@ -35,6 +35,7 @@
 #include "backend/worksheet/WorksheetElement.h"
 
 #include <QPen>
+#include <QTextEdit>
 
 class QBrush;
 class QFont;
@@ -49,10 +50,26 @@ public:
 	enum BorderShape {NoBorder, Rect, Ellipse, RoundSideRect, RoundCornerRect, InwardsRoundCornerRect, DentedBorderRect,
 			Cuboid, UpPointingRectangle, DownPointingRectangle, LeftPointingRectangle, RightPointingRectangle};
 
+	// The text is always in html format
 	struct TextWrapper {
 		TextWrapper() {}
-		TextWrapper(const QString& t, bool b) : text(t), teXUsed(b) {}
-		TextWrapper(const QString& t) : text(t) {}
+		TextWrapper(const QString& t, bool b, bool html): teXUsed(b) {
+			if (b) {
+				text = t; // latex does not support html, so assume t is a plain string
+				return;
+			}
+			text = createHtml(t, html);
+		}
+		TextWrapper(const QString& t, bool html = false) {
+			text = createHtml(t, html);
+		}
+		QString createHtml(QString text, bool isHtml) {
+			if (isHtml)
+				return text;
+
+			QTextEdit te(text);
+			return te.toHtml();
+		}
 
 		QString text;
 		bool teXUsed{false};
