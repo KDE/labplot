@@ -317,12 +317,11 @@ void LabelWidget::textChanged() {
 		else
 			text = ui.teLabel->toHtml();
 
-		TextLabel::TextWrapper wrapper(text, false);
+		TextLabel::TextWrapper wrapper(text, false, true);
 		for (auto* label : m_labelsList) {
 			label->setText(wrapper);
 			// Don't set FontColor, because the font color is already in the html code
-			// of the text. The font color is used to change the color for unformated
-			// text like from themes
+			// of the text. The font color is used to change the color for Latex text
 			// label->setFontColor(ui.kcbFontColor->color());
 			// label->setBackgroundColor(ui.kcbBackgroundColor->color());
 		}
@@ -466,8 +465,14 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 
 		ui.teLabel->setTextColor(color);
 	} else {
-		for (auto* label : m_labelsList)
-			label->setFontColor(color);
+        // fontcolor of the label widget is only used by the themes.
+        // Textcolor is otherwise set directly in the html
+        // for (auto* label : m_labelsList)
+        //  label->setFontColor(color);
+        QTextCursor c = ui.teLabel->textCursor();
+        if (c.selectedText().isEmpty())
+            ui.teLabel->selectAll();
+        ui.teLabel->setTextColor(color);
 	}
 }
 
@@ -482,6 +487,8 @@ void LabelWidget::backgroundColorChanged(const QColor& color) {
 
 		ui.teLabel->setTextBackgroundColor(color);
 	} else {
+		// Latex text does not support html code. For this the backgroundColor variable is used
+		// Only single color background is supported
 		for (auto* label : m_labelsList)
 			label->setBackgroundColor(color);
 	}
@@ -911,8 +918,13 @@ void LabelWidget::labelTeXFontChanged(const QFont& font) {
 }
 
 void LabelWidget::labelFontColorChanged(const QColor color) {
+	// this function is only called when the theme is changed. Otherwise the color
+	// is directly in the html text.
+	// when the theme changes, the hole text should change color regardless of the color it has
 	m_initializing = true;
 	ui.kcbFontColor->setColor(color);
+	ui.teLabel->selectAll();
+	ui.teLabel->setTextColor(color);
 	m_initializing = false;
 }
 
