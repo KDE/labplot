@@ -48,8 +48,8 @@ public:
 	void setValue(const QString& value);
 	void setType(const QJsonValue::Type type);
 	void setSize(int);
-	QString key() const;
-	QString value() const;
+	const QString& key() const;
+	const QString& value() const;
 	QJsonValue::Type type() const;
 	int size() const;
 
@@ -93,6 +93,8 @@ private:
 	QJsonTreeItem* mHeadItem;
 	QJsonTreeItem* mRootItem;
 	QStringList mHeaders;
+	QIcon mObjectIcon;
+	QIcon mArrayIcon;
 };
 
 #endif // QJSONMODEL_H

@@ -76,11 +76,11 @@ void QJsonTreeItem::setSize(int size) {
 	mSize = size;
 }
 
-QString QJsonTreeItem::key() const {
+const QString& QJsonTreeItem::key() const {
 	return mKey;
 }
 
-QString QJsonTreeItem::value() const {
+const QString& QJsonTreeItem::value() const {
 	return mValue;
 }
 
@@ -139,9 +139,12 @@ QJsonModel::QJsonModel(QObject* parent) : QAbstractItemModel(parent),
 	mRootItem(new QJsonTreeItem(mHeadItem)) {
 
 	mHeadItem->appendChild(mRootItem);
-	mHeaders.append("Key");
-	mHeaders.append("Value");
-	mHeaders.append("Size in Bytes");
+	mHeaders.append(i18n("Key"));
+	mHeaders.append(i18n("Value"));
+	mHeaders.append(i18n("Size in Bytes"));
+
+	mObjectIcon = QIcon::fromTheme(QLatin1String("labplot-json-object"));
+	mArrayIcon = QIcon::fromTheme(QLatin1String("labplot-json-array"));
 }
 
 QJsonModel::~QJsonModel() {
@@ -220,34 +223,42 @@ QVariant QJsonModel::data(const QModelIndex& index, int role) const {
 
 	if (role == Qt::DisplayRole) {
 		if (index.column() == 0)
-			return QString("%1").arg(item->key());
-
-		else if (index.column() == 1)
-			return QString("%1").arg(item->value());
-		else {
+			return item->key();
+		else if (index.column() == 1) {
+			//in case the value is very long, cut it so the preview tree tree view doesnt' explode
+			if (item->value().length() > 200)
+				return item->value().left(200) + QLatin1String(" ...");
+			else
+				return item->value();
+		} else {
 			if (item->size() != 0)
-				return QString("%1").arg(item->size());
+				return QString::number(item->size());
 			else
 				return QString();
 		}
 	} else if (Qt::EditRole == role) {
 		if (index.column() == 1)
-			return QString("%1").arg(item->value());
+			return item->value();
 	} else if (role == Qt::DecorationRole) {
 		if (index.column() == 0) {
-			QIcon icon;
-			if (item->type() == QJsonValue::Array)
-				icon = QIcon::fromTheme("labplot-json-array");
-			else if (item->type() == QJsonValue::Object)
-				icon = QIcon::fromTheme("labplot-json-object");
-
 			if (qApp->palette().color(QPalette::Base).lightness() < 128) {
+				QIcon icon;
+				if (item->type() == QJsonValue::Array)
+					icon = mArrayIcon;
+				else if (item->type() == QJsonValue::Object)
+					icon = mObjectIcon;
+
 				//dark theme is used -> invert the icons which use black colors
 				QImage image = icon.pixmap(64, 64).toImage(); //TODO: use different(standard?) pixel size?
 				image.invertPixels();
 				icon = QIcon(QPixmap::fromImage(image));
+				return icon;
+			} else {
+				if (item->type() == QJsonValue::Array)
+					return mArrayIcon;
+				else if (item->type() == QJsonValue::Object)
+					return mObjectIcon;
 			}
-			return icon;
 		}
 		return QIcon();
 	}
