@@ -77,6 +77,15 @@ Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
 #include <QMenu>
 #endif
 
+QString absolutePath(const QString& fileName) {
+#ifndef HAVE_WINDOWS
+	// make absolute path // FIXME
+	if (!fileName.isEmpty() && fileName.at(0) != QDir::separator())
+		return QDir::homePath() + QDir::separator() + fileName;
+#endif
+	return fileName;
+}
+
 /*!
    \class ImportFileWidget
    \brief Widget for importing data from a file.
@@ -319,9 +328,20 @@ void ImportFileWidget::loadSettings() {
 	sourceTypeChanged(currentSourceType());
 	readingTypeChanged(ui.cbReadingType->currentIndex());
 
-	//all set now, refresh the preview
+	//all set now, refresh the content of the file and the preview for the selected dataset
 	m_suppressRefresh = false;
-	QTimer::singleShot(0, this, [=] () { refreshPreview(); });
+	QTimer::singleShot(100, this, [=] () {
+		WAIT_CURSOR;
+		if (currentSourceType() == LiveDataSource::FileOrPipe) {
+			QString tempFileName = fileName();
+			const QString& fileName = absolutePath(tempFileName);
+			if (QFile::exists(fileName))
+				updateContent(fileName);
+		}
+
+		refreshPreview();
+		RESET_CURSOR;
+	});
 }
 
 ImportFileWidget::~ImportFileWidget() {
@@ -910,16 +930,6 @@ void ImportFileWidget::unsubscribeFromTopic(const QString& topicName, QVector<QT
 #endif
 
 /************** SLOTS **************************************************************/
-
-QString absolutePath(const QString& fileName) {
-#ifndef HAVE_WINDOWS
-	// make absolute path // FIXME
-	if (!fileName.isEmpty() && fileName.at(0) != QDir::separator())
-		return QDir::homePath() + QDir::separator() + fileName;
-#endif
-	return fileName;
-}
-
 /*!
 	called on file name changes.
 	Determines the file format (ASCII, binary etc.), if the file exists,
@@ -1539,6 +1549,9 @@ void ImportFileWidget::refreshPreview() {
 }
 
 void ImportFileWidget::updateContent(const QString& fileName) {
+	if (m_suppressRefresh)
+		return;
+
 	QDEBUG("ImportFileWidget::updateContent(): file name = " << fileName);
 	if (auto filter = currentFileFilter()) {
 		switch (filter->type()) {
