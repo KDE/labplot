@@ -125,6 +125,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 		ui.cbFileType->addItem(i18n("Ngspice RAW Binary"), AbstractFileFilter::NgspiceRawBinary);
 
 		//hide widgets relevant for live data reading only
+		ui.lRelativePath->hide();
+		ui.chbRelativePath->hide();
 		ui.lSourceType->hide();
 		ui.cbSourceType->hide();
 		ui.gbUpdateOptions->hide();
@@ -544,7 +546,8 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	case LiveDataSource::SourceType::FileOrPipe:
 		source->setFileName(fileName());
 		source->setFileLinked(ui.chbLinkFile->isChecked());
-		source->setUseRelativePath(ui.chbRelativePath->isChecked());
+		if (m_liveDataSource)
+			source->setUseRelativePath(ui.chbRelativePath->isChecked());
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
 		source->setFileName(fileName());
@@ -1633,8 +1636,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		m_cbFileName->show();
 		ui.bFileInfo->show();
 		ui.bOpen->show();
-		ui.lRelativePath->show();
-		ui.chbRelativePath->show();
+		if (m_liveDataSource) {
+			ui.lRelativePath->show();
+			ui.chbRelativePath->show();
+		}
 		ui.chbLinkFile->show();
 
 		//option for sample size are available for "continuously fixed" and "from end" reading options
