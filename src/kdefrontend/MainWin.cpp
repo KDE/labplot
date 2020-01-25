@@ -154,13 +154,11 @@ MainWin::~MainWin() {
 	group.writeEntry("geometry", saveGeometry());
 	KSharedConfig::openConfig()->sync();
 
-	qDebug() << "Mainwin Destructor ";
-	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
-		qDebug() << "Destructor save welcome screen";
+	//if welcome screen is shown, save its settings prior to deleting it
+	if(dynamic_cast<QQuickWidget*>(centralWidget()))
 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
-	}
 
-	if (m_project != nullptr) {
+	if (m_project) {
 
 		if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr)
 			m_mdiArea->closeAllSubWindows();
