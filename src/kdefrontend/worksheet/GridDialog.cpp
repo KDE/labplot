@@ -2,7 +2,7 @@
     File                 : GridDialog.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2017 by Alexander Semke
+	Copyright            : (C) 2011-2020 by Alexander Semke
     Email (use @ for *)  : alexander.semke@web.de
     Description          : dialog for editing the grid properties for the worksheet view
 
@@ -28,19 +28,23 @@
  ***************************************************************************/
 
 #include "GridDialog.h"
+
 #include <QComboBox>
 #include <QDialogButtonBox>
 #include <QLabel>
 #include <QSpinBox>
 #include <QGridLayout>
+#include <QWindow>
 
 #include <KLocalizedString>
 #include <KColorButton>
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KWindowConfig>
 
 //TODO:
 //1. improve the layout and move the UI-part to a ui-file
-//2. restore the dialog size
-//3. restore the currently active grid settings
+//2. restore the currently active grid settings
 
 /**
  * @brief Provides a dialog for editing the grid properties for the worksheet view
@@ -95,14 +99,28 @@ GridDialog::GridDialog(QWidget* parent) : QDialog(parent) {
 	label = new QLabel(i18n(" %"), widget);
 	layout->addWidget(label, 4, 2);
 
-
 	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	auto* vlayout = new QVBoxLayout(this);
 	vlayout->addWidget(widget);
 	vlayout->addWidget(buttonBox);
 
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+	//restore saved settings if available
+	create(); // ensure there's a window created
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("GridDialog"));
+	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(300, 0).expandedTo(minimumSize()));
+}
+
+GridDialog::~GridDialog() {
+	//save the current settings
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("GridDialog"));
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 void GridDialog::save(WorksheetView::GridSettings& settings) {

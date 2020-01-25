@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dialog for droping and masking values in columns
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2015-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -33,7 +33,12 @@
 #include <QThreadPool>
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QWindow>
+
 #include <KLocalizedString>
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KWindowConfig>
 
 #include <cmath>
 
@@ -43,7 +48,6 @@
 
 	\ingroup kdefrontend
  */
-
 DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent) : QDialog(parent),
 	m_spreadsheet(s), m_mask(mask) {
 
@@ -51,6 +55,7 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent) :
 
 	ui.setupUi(this);
 	setAttribute(Qt::WA_DeleteOnClose);
+
 	ui.cbOperator->addItem(i18n("Equal to"));
 	ui.cbOperator->addItem(i18n("Between (Including End Points)"));
 	ui.cbOperator->addItem(i18n("Between (Excluding End Points)"));
@@ -84,8 +89,20 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent) :
 	connect(btnBox, &QDialogButtonBox::accepted, this, &DropValuesDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &DropValuesDialog::reject);
 
-	resize( QSize(400,0).expandedTo(minimumSize()) );
-	operatorChanged(0);
+	//restore saved settings if available
+	create(); // ensure there's a window created
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("DropValuesDialog"));
+	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(400, 0).expandedTo(minimumSize()));
+}
+
+DropValuesDialog::~DropValuesDialog() {
+	//save the current settings
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("DropValuesDialog"));
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 void DropValuesDialog::setColumns(QVector<Column*> columns) {

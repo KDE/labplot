@@ -40,6 +40,7 @@ class DropValuesDialog : public QDialog {
 
 public:
 	explicit DropValuesDialog(Spreadsheet* s, bool mask = false, QWidget* parent = nullptr);
+	~DropValuesDialog() override;
 	void setColumns(QVector<Column*>);
 
 private:
