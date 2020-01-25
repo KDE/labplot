@@ -1317,7 +1317,7 @@ void SpreadsheetView::pasteIntoSelection() {
 			const int curCol = c - first_col;
 			QString nonEmptyValue;
 			for (auto r : cellTexts) {
-				if (!r.at(curCol).isEmpty()) {
+				if (curCol < r.count() && !r.at(curCol).isEmpty()) {
 					nonEmptyValue = r.at(curCol);
 					break;
 				}
@@ -1334,7 +1334,7 @@ void SpreadsheetView::pasteIntoSelection() {
 				//first non-empty value in the column to paste determines the column mode/type of the new column to be added
 				QString nonEmptyValue;
 				for (auto r : cellTexts) {
-					if (!r.at(curCol).isEmpty()) {
+					if (curCol < r.count() && !r.at(curCol).isEmpty()) {
 						nonEmptyValue = r.at(curCol);
 						break;
 					}
