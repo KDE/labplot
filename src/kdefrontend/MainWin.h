@@ -84,18 +84,21 @@ class CantorWorksheet;
 class CantorWorksheetDock;
 #endif
 
+class ImportDatasetWidget;
+class TreeModel;
+class WelcomeScreenHelper;
+
 class QDockWidget;
-class QStackedWidget;
 class QDragEnterEvent;
 class QDropEvent;
 class QMdiArea;
 class QMdiSubWindow;
+class QStackedWidget;
 class QToolButton;
-class KRecentFilesAction;
 class QQuickWidget;
-class WelcomeScreenHelper;
-class ImportDatasetWidget;
-class TreeModel;
+
+class KColorSchemeManager;
+class KRecentFilesAction;
 
 #ifdef Q_OS_MAC
 	class KDMacTouchBar;
@@ -115,6 +118,7 @@ public:
 
 private:
 	QMdiArea* m_mdiArea;
+	KColorSchemeManager* m_schemeManager;
 	QMdiSubWindow* m_currentSubWindow{nullptr};
 	Project* m_project{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};

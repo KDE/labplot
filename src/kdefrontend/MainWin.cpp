@@ -137,7 +137,8 @@
 \ingroup kdefrontend
 */
 MainWin::MainWin(QWidget *parent, const QString& filename)
-	: KXmlGuiWindow(parent) {
+	: KXmlGuiWindow(parent),
+	m_schemeManager(new KColorSchemeManager(this)) {
 
 	initGUI(filename);
 	setAcceptDrops(true);
@@ -731,8 +732,8 @@ void MainWin::initMenus() {
 	m_editMenu = new QMenu(i18n("Edit"), this);
 	m_editMenu->addAction(m_editFitsFileAction);
 
-	KColorSchemeManager schemeManager;
-	KActionMenu* schemesMenu = schemeManager.createSchemeSelectionMenu(i18n("Color Scheme"), QString(), this);
+
+	KActionMenu* schemesMenu = m_schemeManager->createSchemeSelectionMenu(i18n("Color Scheme"), QString(), this);
 	schemesMenu->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
 
 	QMenu* settingsMenu = dynamic_cast<QMenu*>(factory()->container("settings", this));
@@ -766,8 +767,7 @@ void MainWin::colorSchemeChanged(QAction* action) {
 	QString schemeName = KLocalizedString::removeAcceleratorMarker(action->text());
 
 	//background of the mdi area is not updated on theme changes, do it here.
-	KColorSchemeManager schemeManager;
-	QModelIndex index = schemeManager.indexForScheme(schemeName);
+	QModelIndex index = m_schemeManager->indexForScheme(schemeName);
 	const QPalette& palette = KColorScheme::createApplicationPalette( KSharedConfig::openConfig(index.data(Qt::UserRole).toString()) );
 	const QBrush& brush = palette.brush(QPalette::Dark);
 	m_mdiArea->setBackground(brush);
