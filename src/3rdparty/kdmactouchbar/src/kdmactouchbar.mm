@@ -469,7 +469,15 @@ public:
         button.highlighted = !button.bordered;
         button.state = action->isChecked();
         button.hidden = !action->isVisible();
-        button.image = qt_mac_create_nsimage(action->icon());
+
+		//TODO: since we're using dark breeze icons, we need to invert the pixels
+		//to get white icons for the dark background of the touch bar.
+		//this logic needs to be adjusted or avoide once we start supporting dark mode on mac
+		QImage image = action->icon().pixmap(QSize(24,24)).toImage();
+		image.invertPixels(QImage::InvertRgb);
+		button.image = qt_mac_create_nsimage(QIcon(QPixmap::fromImage(image)));
+
+		//button.image = qt_mac_create_nsimage(action->icon());
         button.title = removeMnemonics(action->text()).toNSString();
         switch (qMacTouchBar->touchButtonStyle())
         {
