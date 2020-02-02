@@ -206,13 +206,10 @@ Project* MainWin::project() const {
 }
 
 void MainWin::initGUI(const QString& fileName) {
-	m_mdiArea = new QMdiArea;
-	setCentralWidget(m_mdiArea);
-	connect(m_mdiArea, &QMdiArea::subWindowActivated, this, &MainWin::handleCurrentSubWindowChanged);
-
 	statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
 
 	initActions();
+
 #ifdef Q_OS_MAC
 	setupGUI(Default, QLatin1String("/Applications/labplot2.app/Contents/Resources/labplot2ui.rc"));
 	m_touchBar = new KDMacTouchBar(this);
@@ -220,6 +217,7 @@ void MainWin::initGUI(const QString& fileName) {
 #else
 	setupGUI(Default, KXMLGUIClient::xmlFile());	// should be "labplot2ui.rc"
 #endif
+
 	DEBUG("Component name: " << KXMLGUIClient::componentName().toStdString());
 	DEBUG("XML file: " << KXMLGUIClient::xmlFile().toStdString() << " (should be \"labplot2ui.rc\")");
 
@@ -256,6 +254,7 @@ void MainWin::initGUI(const QString& fileName) {
 // 		QMetaObject::invokeMethod(this, "close", Qt::QueuedConnection); //call close as soon as we enter the eventloop
 		return;
 	}
+
 	auto* tbImport = new QToolButton(mainToolBar);
 	tbImport->setPopupMode(QToolButton::MenuButtonPopup);
 	tbImport->setMenu(m_importMenu);
@@ -275,20 +274,9 @@ void MainWin::initGUI(const QString& fileName) {
 	//load recently used projects
 	m_recentProjectsAction->loadEntries( KSharedConfig::openConfig()->group("Recent Files") );
 
-	//set the view mode of the mdi area
-	KConfigGroup group = KSharedConfig::openConfig()->group( "Settings_General" );
-	int viewMode = group.readEntry("ViewMode", 0);
-	if (viewMode == 1) {
-		m_mdiArea->setViewMode(QMdiArea::TabbedView);
-		int tabPosition = group.readEntry("TabPosition", 0);
-		m_mdiArea->setTabPosition(QTabWidget::TabPosition(tabPosition));
-		m_mdiArea->setTabsClosable(true);
-		m_mdiArea->setTabsMovable(true);
-		m_tileWindows->setVisible(false);
-		m_cascadeWindows->setVisible(false);
-	}
 
 	//auto-save
+	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_General");
 	m_autoSaveActive = group.readEntry<bool>("AutoSave", false);
 	int interval = group.readEntry("AutoSaveInterval", 1);
 	interval = interval*60*1000;
@@ -311,17 +299,24 @@ void MainWin::initGUI(const QString& fileName) {
 		//There is no file to open. Depending on the settings do nothing,
 		//create a new project or open the last used project.
 		int load = group.readEntry("LoadOnStart", 0);
-		if (load == 1)   //create new project
-			newProject();
-		else if (load == 2) { //create new project with a worksheet
-			newProject();
-			newWorksheet();
-		} else if (load == 3) { //open last used project
-			if (!m_recentProjectsAction->urls().isEmpty()) {
-				QDEBUG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().constFirst());
-				openRecentProject( m_recentProjectsAction->urls().constFirst() );
+		if (load != 4) {
+			createMdiArea();
+			setCentralWidget(m_mdiArea);
+
+			if (load == 1)   //create new project
+				newProject();
+			else if (load == 2) { //create new project with a worksheet
+				newProject();
+				newWorksheet();
+			} else if (load == 3) { //open last used project
+				if (!m_recentProjectsAction->urls().isEmpty()) {
+					QDEBUG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().constFirst());
+					openRecentProject( m_recentProjectsAction->urls().constFirst() );
+				}
 			}
-		} else if (load == 4) { //welcome screen
+
+			updateGUIOnProjectChanges();
+		} else{ //welcome screen
 			m_showWelcomeScreen = true;
 			m_welcomeWidget = createWelcomeScreen();
 			setCentralWidget(m_welcomeWidget);
@@ -334,8 +329,6 @@ void MainWin::initGUI(const QString& fileName) {
 		m_memoryInfoWidget = new MemoryWidget(statusBar());
 		statusBar()->addPermanentWidget(m_memoryInfoWidget);
 	}
-
-	updateGUIOnProjectChanges();
 }
 
 /**
@@ -362,7 +355,7 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	ctxt->setContextProperty("recentProjects", variant);
 
 	//Create helper object
-	if(m_welcomeScreenHelper != nullptr)
+	if(m_welcomeScreenHelper)
 		delete m_welcomeScreenHelper;
 	m_welcomeScreenHelper = new WelcomeScreenHelper();
 	connect(m_welcomeScreenHelper, SIGNAL(openExampleProject(QString)), this, SLOT(openProject(const QString& )));
@@ -396,9 +389,6 @@ void MainWin::resetWelcomeScreen() {
  * @brief Creates a new MDI area, to replace the Welcome Screen as central widget
  */
 void MainWin::createMdiArea() {
-	setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
-	setMinimumSize(0,0);
-
 	KToolBar* toolbar = toolBar();
 	if(toolbar)
 		toolbar->setVisible(true);
@@ -411,6 +401,7 @@ void MainWin::createMdiArea() {
 	setCentralWidget(m_mdiArea);
 	connect(m_mdiArea, &QMdiArea::subWindowActivated, this, &MainWin::handleCurrentSubWindowChanged);
 
+	//set the view mode of the mdi area
 	KConfigGroup group = KSharedConfig::openConfig()->group( "Settings_General" );
 	int viewMode = group.readEntry("ViewMode", 0);
 	if (viewMode == 1) {
@@ -419,41 +410,16 @@ void MainWin::createMdiArea() {
 		m_mdiArea->setTabPosition(QTabWidget::TabPosition(tabPosition));
 		m_mdiArea->setTabsClosable(true);
 		m_mdiArea->setTabsMovable(true);
-		m_tileWindows->setVisible(false);
-		m_cascadeWindows->setVisible(false);
+		m_tileWindowsAction->setVisible(false);
+		m_cascadeWindowsAction->setVisible(false);
 	}
 
-	QAction* action  = new QAction(i18n("&Close"), this);
-	actionCollection()->setDefaultShortcut(action, QKeySequence::Close);
-	action->setStatusTip(i18n("Close the active window"));
-	actionCollection()->addAction("close window", action);
-	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::closeActiveSubWindow);
-
-	action = new QAction(i18n("Close &All"), this);
-	action->setStatusTip(i18n("Close all the windows"));
-	actionCollection()->addAction("close all windows", action);
-	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::closeAllSubWindows);
-
-	m_tileWindows = new QAction(i18n("&Tile"), this);
-	m_tileWindows->setStatusTip(i18n("Tile the windows"));
-	actionCollection()->addAction("tile windows", m_tileWindows);
-	connect(m_tileWindows, &QAction::triggered, m_mdiArea, &QMdiArea::tileSubWindows);
-
-	m_cascadeWindows = new QAction(i18n("&Cascade"), this);
-	m_cascadeWindows->setStatusTip(i18n("Cascade the windows"));
-	actionCollection()->addAction("cascade windows", m_cascadeWindows);
-	connect(m_cascadeWindows, &QAction::triggered, m_mdiArea, &QMdiArea::cascadeSubWindows);
-	action = new QAction(QIcon::fromTheme("go-next-view"), i18n("Ne&xt"), this);
-	actionCollection()->setDefaultShortcut(action, QKeySequence::NextChild);
-	action->setStatusTip(i18n("Move the focus to the next window"));
-	actionCollection()->addAction("next window", action);
-	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::activateNextSubWindow);
-
-	action = new QAction(QIcon::fromTheme("go-previous-view"), i18n("Pre&vious"), this);
-	actionCollection()->setDefaultShortcut(action, QKeySequence::PreviousChild);
-	action->setStatusTip(i18n("Move the focus to the previous window"));
-	actionCollection()->addAction("previous window", action);
-	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::activatePreviousSubWindow);
+	connect(m_closeWindowAction, &QAction::triggered, m_mdiArea, &QMdiArea::closeActiveSubWindow);
+	connect(m_closeAllWindowsAction, &QAction::triggered, m_mdiArea, &QMdiArea::closeAllSubWindows);
+	connect(m_tileWindowsAction, &QAction::triggered, m_mdiArea, &QMdiArea::tileSubWindows);
+	connect(m_cascadeWindowsAction, &QAction::triggered, m_mdiArea, &QMdiArea::cascadeSubWindows);
+	connect(m_nextWindowAction, &QAction::triggered, m_mdiArea, &QMdiArea::activateNextSubWindow);
+	connect(m_prevWindowAction, &QAction::triggered, m_mdiArea, &QMdiArea::activatePreviousSubWindow);
 }
 
 void MainWin::initActions() {
@@ -578,37 +544,32 @@ void MainWin::initActions() {
 	// Script
 
 	//Windows
-	QAction* action  = new QAction(i18n("&Close"), this);
-	actionCollection()->setDefaultShortcut(action, QKeySequence::Close);
-	action->setStatusTip(i18n("Close the active window"));
-	actionCollection()->addAction("close window", action);
-	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::closeActiveSubWindow);
+	m_closeWindowAction  = new QAction(i18n("&Close"), this);
+	actionCollection()->setDefaultShortcut(m_closeWindowAction, QKeySequence::Close);
+	m_closeWindowAction->setStatusTip(i18n("Close the active window"));
+	actionCollection()->addAction("close window", m_closeWindowAction);
 
-	action = new QAction(i18n("Close &All"), this);
-	action->setStatusTip(i18n("Close all the windows"));
-	actionCollection()->addAction("close all windows", action);
-	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::closeAllSubWindows);
+	m_closeAllWindowsAction = new QAction(i18n("Close &All"), this);
+	m_closeAllWindowsAction->setStatusTip(i18n("Close all the windows"));
+	actionCollection()->addAction("close all windows", m_closeAllWindowsAction);
 
-	m_tileWindows = new QAction(i18n("&Tile"), this);
-	m_tileWindows->setStatusTip(i18n("Tile the windows"));
-	actionCollection()->addAction("tile windows", m_tileWindows);
-	connect(m_tileWindows, &QAction::triggered, m_mdiArea, &QMdiArea::tileSubWindows);
+	m_tileWindowsAction = new QAction(i18n("&Tile"), this);
+	m_tileWindowsAction->setStatusTip(i18n("Tile the windows"));
+	actionCollection()->addAction("tile windows", m_tileWindowsAction);
 
-	m_cascadeWindows = new QAction(i18n("&Cascade"), this);
-	m_cascadeWindows->setStatusTip(i18n("Cascade the windows"));
-	actionCollection()->addAction("cascade windows", m_cascadeWindows);
-	connect(m_cascadeWindows, &QAction::triggered, m_mdiArea, &QMdiArea::cascadeSubWindows);
-	action = new QAction(QIcon::fromTheme("go-next-view"), i18n("Ne&xt"), this);
-	actionCollection()->setDefaultShortcut(action, QKeySequence::NextChild);
-	action->setStatusTip(i18n("Move the focus to the next window"));
-	actionCollection()->addAction("next window", action);
-	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::activateNextSubWindow);
+	m_cascadeWindowsAction = new QAction(i18n("&Cascade"), this);
+	m_cascadeWindowsAction->setStatusTip(i18n("Cascade the windows"));
+	actionCollection()->addAction("cascade windows", m_cascadeWindowsAction);
 
-	action = new QAction(QIcon::fromTheme("go-previous-view"), i18n("Pre&vious"), this);
-	actionCollection()->setDefaultShortcut(action, QKeySequence::PreviousChild);
-	action->setStatusTip(i18n("Move the focus to the previous window"));
-	actionCollection()->addAction("previous window", action);
-	connect(action, &QAction::triggered, m_mdiArea, &QMdiArea::activatePreviousSubWindow);
+	m_nextWindowAction = new QAction(QIcon::fromTheme("go-next-view"), i18n("Ne&xt"), this);
+	actionCollection()->setDefaultShortcut(m_nextWindowAction, QKeySequence::NextChild);
+	m_nextWindowAction->setStatusTip(i18n("Move the focus to the next window"));
+	actionCollection()->addAction("next window", m_nextWindowAction);
+
+	m_prevWindowAction = new QAction(QIcon::fromTheme("go-previous-view"), i18n("Pre&vious"), this);
+	actionCollection()->setDefaultShortcut(m_prevWindowAction, QKeySequence::PreviousChild);
+	m_prevWindowAction->setStatusTip(i18n("Move the focus to the previous window"));
+	actionCollection()->addAction("previous window", m_prevWindowAction);
 
 	//"Standard actions"
 	KStandardAction::preferences(this, SLOT(settingsDialog()), actionCollection());
@@ -1394,7 +1355,7 @@ bool MainWin::closeProject() {
 		return false;
 
 	if(!m_closing) {
-		if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr && m_showWelcomeScreen) {
+		if(dynamic_cast<QQuickWidget*>(centralWidget()) && m_showWelcomeScreen) {
 			m_welcomeWidget = createWelcomeScreen();
 			setCentralWidget(m_welcomeWidget);
 		}
@@ -2150,14 +2111,14 @@ void MainWin::handleSettingsChanges() {
 		}
 
 		if (m_mdiArea->viewMode() == QMdiArea::TabbedView) {
-			m_tileWindows->setVisible(false);
-			m_cascadeWindows->setVisible(false);
+			m_tileWindowsAction->setVisible(false);
+			m_cascadeWindowsAction->setVisible(false);
 			QTabWidget::TabPosition tabPosition = QTabWidget::TabPosition(group.readEntry("TabPosition", 0));
 			if (m_mdiArea->tabPosition() != tabPosition)
 				m_mdiArea->setTabPosition(tabPosition);
 		} else {
-			m_tileWindows->setVisible(true);
-			m_cascadeWindows->setVisible(true);
+			m_tileWindowsAction->setVisible(true);
+			m_cascadeWindowsAction->setVisible(true);
 		}
 	}
 

@@ -117,8 +117,8 @@ public:
 	void addAspectToProject(AbstractAspect*);
 
 private:
-	QMdiArea* m_mdiArea;
-	KColorSchemeManager* m_schemeManager;
+	QMdiArea* m_mdiArea{nullptr};
+	KColorSchemeManager* m_schemeManager{nullptr};
 	QMdiSubWindow* m_currentSubWindow{nullptr};
 	Project* m_project{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
@@ -174,8 +174,12 @@ private:
 	QAction* m_historyAction;
 	QAction* m_undoAction;
 	QAction* m_redoAction;
-	QAction* m_tileWindows;
-	QAction* m_cascadeWindows;
+	QAction* m_closeWindowAction;
+	QAction* m_closeAllWindowsAction;
+	QAction* m_tileWindowsAction;
+	QAction* m_cascadeWindowsAction;
+	QAction* m_nextWindowAction;
+	QAction* m_prevWindowAction;
 	QAction* m_newDatapickerAction;
 	QAction* m_editFitsFileAction;
 
@@ -213,7 +217,7 @@ private:
 	QMenu* m_editMenu{nullptr};
 
 	//Docks
-	QStackedWidget* stackedWidget;
+	QStackedWidget* stackedWidget{nullptr};
 	AxisDock* axisDock{nullptr};
 	QDockWidget* cursorDock{nullptr};
 	CursorDock* cursorWidget{nullptr};
