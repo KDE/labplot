@@ -314,7 +314,7 @@ if (Qt5Mqtt_FOUND)
 endif()
 
 # add the qml.qrc file
-qt5_add_resources(qml_QRC ${KDEFRONTEND_DIR}/qml.qrc)
+qt5_add_resources(qml_QRC ${KDEFRONTEND_DIR}/welcomescreen/qml.qrc)
 
 IF (ENABLE_LIBORIGIN)
 	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
