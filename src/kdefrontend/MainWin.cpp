@@ -78,7 +78,7 @@
 #include "kdefrontend/GuiObserver.h"
 #include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 #include "DatasetModel.h"
-#include "WelcomeScreenHelper.h"
+#include "welcomescreen/WelcomeScreenHelper.h"
 
 #ifdef Q_OS_MAC
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"

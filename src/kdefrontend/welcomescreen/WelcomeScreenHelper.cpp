@@ -25,7 +25,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "WelcomeScreenHelper.h"
-#include "DatasetModel.h"
+#include "kdefrontend/DatasetModel.h"
 #include "kdefrontend/datasources/ImportDatasetWidget.h"
 #include "backend/datasources/DatasetHandler.h"
 

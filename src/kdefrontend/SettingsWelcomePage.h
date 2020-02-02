@@ -27,8 +27,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SETTINGWELCOMESPAGE_H
-#define SETTINGWELCOMESPAGE_H
+#ifndef SETTINGWELCOMEPAGE_H
+#define SETTINGWELCOMEPAGE_H
 
 #include "SettingsPage.h"
 #include "ui_settingswelcomepage.h"
