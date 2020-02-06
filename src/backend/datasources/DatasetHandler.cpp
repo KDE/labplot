@@ -264,8 +264,12 @@ QString DatasetHandler::saveFileName(const QUrl& url) {
 		basename = "url";
 
 	QDir downloadDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/datasets_local/"));
-	if (!downloadDir.exists())
-		downloadDir.mkdir(downloadDir.path());
+	if (!downloadDir.exists()) {
+		if (!downloadDir.mkpath(downloadDir.path())) {
+			qDebug()<<"Failed to create the directory " << downloadDir.path();
+			return QString();
+		}
+	}
 
 	QString fileName = downloadDir.path() + QLatin1Char('/') + basename;
 	QFileInfo fileInfo (fileName);
