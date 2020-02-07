@@ -176,21 +176,21 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		return;
 	}
 
+	const AspectType type = selectedAspects.front()->type();
+
 	// update cursor dock
-	AbstractAspect* parent = selectedAspects[0]->parent(AspectType::Worksheet);
-	if (selectedAspects[0]->inherits(AspectType::Worksheet)) {
-		if (m_mainWindow->cursorWidget) {
-			Worksheet* worksheet = static_cast<Worksheet*>(selectedAspects[0]);
+	if (m_mainWindow->cursorWidget) {
+		if (type == AspectType::Worksheet) {
+			Worksheet* worksheet = static_cast<Worksheet*>(selectedAspects.front());
 			m_mainWindow->cursorWidget->setWorksheet(worksheet);
-		}
-	} else if (parent) {
-		if (m_mainWindow->cursorWidget) {
-			Worksheet* worksheet = static_cast<Worksheet*>(parent);
-			m_mainWindow->cursorWidget->setWorksheet(worksheet);
+		} else {
+			AbstractAspect* parent = selectedAspects.front()->parent(AspectType::Worksheet);
+			if (parent) {
+				Worksheet* worksheet = static_cast<Worksheet*>(parent);
+				m_mainWindow->cursorWidget->setWorksheet(worksheet);
+			}
 		}
 	}
-
-	const AspectType type = selectedAspects.front()->type();
 
 	// Check, whether objects of different types were selected.
 	// Don't show any dock widgets in this case.
