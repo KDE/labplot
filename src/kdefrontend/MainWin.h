@@ -116,6 +116,8 @@ public:
 	Project* project() const;
 	void addAspectToProject(AbstractAspect*);
 
+	enum LoadOnStart {Nothing, NewProject, NewProjectWorksheet, LastProject, WelcomeScreen};
+
 private:
 	QMdiArea* m_mdiArea{nullptr};
 	KColorSchemeManager* m_schemeManager{nullptr};
