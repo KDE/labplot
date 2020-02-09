@@ -40,6 +40,7 @@
 #include <KAboutData>
 #include <KColorSchemeManager>
 #include <KConfigGroup>
+#include <kconfigwidgets_version.h>
 #include <KCrash>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -144,10 +145,14 @@ int main (int argc, char *argv[]) {
 		DEBUG("	" << path.toStdString());
 #endif
 
+	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 67, 0)
+	QString schemeName = group.readEntry("ColorScheme")
+#else
 	KConfigGroup generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");
 	QString defaultSchemeName = generalGlobalsGroup.readEntry("ColorScheme", QStringLiteral("Breeze"));
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	QString schemeName = group.readEntry("ColorScheme", defaultSchemeName);
+#endif
 	KColorSchemeManager manager;
 	manager.activateScheme(manager.indexForScheme(schemeName));
 
