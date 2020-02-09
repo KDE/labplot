@@ -147,7 +147,7 @@ int main (int argc, char *argv[]) {
 
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 #if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 67, 0)
-	QString schemeName = group.readEntry("ColorScheme")
+	QString schemeName = group.readEntry("ColorScheme");
 #else
 	KConfigGroup generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");
 	QString defaultSchemeName = generalGlobalsGroup.readEntry("ColorScheme", QStringLiteral("Breeze"));
