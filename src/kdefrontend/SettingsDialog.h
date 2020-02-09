@@ -36,6 +36,12 @@ class SettingsWorksheetPage;
 class SettingsWelcomePage;
 class SettingsDatasetsPage;
 
+#ifdef HAVE_KUSERFEEDBACK
+namespace KUserFeedback {
+	class FeedbackConfigWidget;
+}
+#endif
+
 class SettingsDialog : public KPageDialog {
 	Q_OBJECT
 
@@ -53,6 +59,10 @@ private:
 	SettingsWorksheetPage* m_worksheetPage;
 	SettingsWelcomePage* m_welcomePage;
 	SettingsDatasetsPage* m_datasetsPage;
+
+#ifdef HAVE_KUSERFEEDBACK
+	KUserFeedback::FeedbackConfigWidget* m_userFeedbackWidget;
+#endif
 
 	void applySettings();
 	void restoreDefaults();

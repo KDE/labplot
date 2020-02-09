@@ -443,6 +443,9 @@ ENDIF ()
 IF (KF5SyntaxHighlighting_FOUND)
 	target_link_libraries( labplot2lib KF5::SyntaxHighlighting )
 ENDIF ()
+if (KUserFeedback_FOUND)
+    target_link_libraries(labplot2lib KUserFeedbackWidgets)
+endif()
 #TODO: KF5::NewStuff
 
 IF (Cantor_FOUND)

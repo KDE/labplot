@@ -80,6 +80,15 @@
 #include "DatasetModel.h"
 #include "welcomescreen/WelcomeScreenHelper.h"
 
+#ifdef HAVE_KUSERFEEDBACK
+#include <KUserFeedback/ApplicationVersionSource>
+#include <KUserFeedback/PlatformInfoSource>
+#include <KUserFeedback/QtVersionSource>
+#include <KUserFeedback/ScreenInfoSource>
+#include <KUserFeedback/StartCountSource>
+#include <KUserFeedback/UsageTimeSource>
+#endif
+
 #ifdef Q_OS_MAC
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
@@ -142,6 +151,26 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 
 	initGUI(filename);
 	setAcceptDrops(true);
+
+#ifdef HAVE_KUSERFEEDBACK
+	m_userFeedbackProvider.setProductIdentifier(QStringLiteral("org.kde.labplot"));
+	m_userFeedbackProvider.setFeedbackServer(QUrl(QStringLiteral("https://telemetry.kde.org/")));
+	m_userFeedbackProvider.setSubmissionInterval(7);
+	m_userFeedbackProvider.setApplicationStartsUntilEncouragement(5);
+	m_userFeedbackProvider.setEncouragementDelay(30);
+
+	// software version info
+	m_userFeedbackProvider.addDataSource(new KUserFeedback::ApplicationVersionSource);
+	m_userFeedbackProvider.addDataSource(new KUserFeedback::QtVersionSource);
+
+	// info about the machine
+	m_userFeedbackProvider.addDataSource(new KUserFeedback::PlatformInfoSource);
+	m_userFeedbackProvider.addDataSource(new KUserFeedback::ScreenInfoSource);
+
+	// usage info
+	m_userFeedbackProvider.addDataSource(new KUserFeedback::StartCountSource);
+	m_userFeedbackProvider.addDataSource(new KUserFeedback::UsageTimeSource);
+#endif
 
 	//restore the geometry
 	KConfigGroup group = KSharedConfig::openConfig()->group("MainWin");

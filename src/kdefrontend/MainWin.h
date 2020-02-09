@@ -100,6 +100,10 @@ class QQuickWidget;
 class KColorSchemeManager;
 class KRecentFilesAction;
 
+#ifdef HAVE_KUSERFEEDBACK
+#include <KUserFeedback/Provider>
+#endif
+
 #ifdef Q_OS_MAC
 	class KDMacTouchBar;
 #endif
@@ -117,6 +121,10 @@ public:
 	void addAspectToProject(AbstractAspect*);
 
 	enum LoadOnStart {Nothing, NewProject, NewProjectWorksheet, LastProject, WelcomeScreen};
+
+#ifdef HAVE_KUSERFEEDBACK
+	KUserFeedback::Provider& userFeedbackProvider() {return m_userFeedbackProvider;}
+#endif
 
 private:
 	QMdiArea* m_mdiArea{nullptr};
@@ -145,6 +153,10 @@ private:
 	QQuickWidget* m_welcomeWidget{nullptr};
 	WelcomeScreenHelper* m_welcomeScreenHelper{nullptr};
 	ImportDatasetWidget* m_importDatasetWidget{nullptr};
+
+#ifdef HAVE_KUSERFEEDBACK
+    KUserFeedback::Provider m_userFeedbackProvider;
+#endif
 
 #ifdef Q_OS_MAC
 	KDMacTouchBar* m_touchBar;

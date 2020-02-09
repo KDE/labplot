@@ -43,6 +43,10 @@
 #include <KWindowConfig>
 #include <KI18n/KLocalizedString>
 
+#ifdef HAVE_KUSERFEEDBACK
+#include <KUserFeedback/FeedbackConfigWidget>
+#endif
+
 /**
  * \brief Settings dialog for Labplot.
  *
@@ -77,6 +81,16 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 	KPageWidgetItem* welcomeFrame = addPage(m_welcomePage, i18n("Welcome Screen"));
 	welcomeFrame->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
 	connect(m_welcomePage, &SettingsWelcomePage::resetWelcomeScreen, this, &SettingsDialog::resetWelcomeScreen);
+
+#ifdef HAVE_KUSERFEEDBACK
+	auto* mainWin = static_cast<MainWin*>(parent);
+	m_userFeedbackWidget = new KUserFeedback::FeedbackConfigWidget(this);
+	m_userFeedbackWidget->setFeedbackProvider(&mainWin->userFeedbackProvider());
+	connect(m_userFeedbackWidget, &KUserFeedback::FeedbackConfigWidget::configurationChanged, this, &SettingsDialog::changed);
+
+	KPageWidgetItem* userFeedBackFrame = addPage(m_userFeedbackWidget, i18n("User Feedback"));
+	userFeedBackFrame->setIcon(QIcon::fromTheme(QLatin1String("preferences-desktop-locale")));
+#endif
 
 	//restore saved settings if available
 	create(); // ensure there's a window created
@@ -121,6 +135,13 @@ void SettingsDialog::applySettings() {
 	m_generalPage->applySettings();
 	m_worksheetPage->applySettings();
 	KSharedConfig::openConfig()->sync();
+
+#ifdef HAVE_KUSERFEEDBACK
+	auto* mainWin = static_cast<MainWin*>(parent());
+	mainWin->userFeedbackProvider().setTelemetryMode(m_userFeedbackWidget->telemetryMode());
+	mainWin->userFeedbackProvider().setSurveyInterval(m_userFeedbackWidget->surveyInterval());
+#endif
+
 	emit settingsChanged();
 }
 
