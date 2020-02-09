@@ -125,6 +125,7 @@
 #include <KActionMenu>
 #include <KColorScheme>
 #include <KColorSchemeManager>
+#include <kconfigwidgets_version.h>
 
 #ifdef HAVE_CANTOR_LIBS
 #include <cantor/backend.h>
@@ -722,26 +723,22 @@ void MainWin::initMenus() {
 	m_editMenu = new QMenu(i18n("Edit"), this);
 	m_editMenu->addAction(m_editFitsFileAction);
 
-
-	KActionMenu* schemesMenu = m_schemeManager->createSchemeSelectionMenu(i18n("Color Scheme"), QString(), this);
+	//set the action for the current color scheme checked
+	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+#if KCONFIGWIDGETS_VERSION > QT_VERSION_CHECK(5,67,0)
+	// Since version 5.67 KColorSchemeManager has a system default option
+	QString schemeName = group.readEntry("ColorScheme");
+#else
+	KConfigGroup generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");
+	QString defaultSchemeName = generalGlobalsGroup.readEntry("ColorScheme", QStringLiteral("Breeze"));
+	QString schemeName = group.readEntry("ColorScheme", defaultSchemeName);
+#endif
+	KActionMenu* schemesMenu = m_schemeManager->createSchemeSelectionMenu(i18n("Color Scheme"), schemeName, this);
 	schemesMenu->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
 
 	QMenu* settingsMenu = dynamic_cast<QMenu*>(factory()->container("settings", this));
 	if (settingsMenu)
 		settingsMenu->insertMenu(settingsMenu->actions().constFirst(), schemesMenu->menu());
-
-	//set the action for the current color scheme checked
-	KConfigGroup generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");
-	QString defaultSchemeName = generalGlobalsGroup.readEntry("ColorScheme", QStringLiteral("Breeze"));
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
-	QString schemeName = group.readEntry("ColorScheme", defaultSchemeName);
-
-	for (auto* action : schemesMenu->menu()->actions()) {
-		if (action->text() == schemeName) {
-			action->setChecked(true);
-			break;
-		}
-	}
 
 	connect(schemesMenu->menu(), &QMenu::triggered, this, &MainWin::colorSchemeChanged);
 
