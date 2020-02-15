@@ -167,8 +167,7 @@ void AsciiOptionsWidget::setSeparatingCharacter(QLatin1Char character) {
 void AsciiOptionsWidget::loadSettings() const {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportAscii");
 
-	//TODO: check if this works (character gets currentItem?)
-	ui.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentCharacter", "#"));
+	ui.cbCommentCharacter->setCurrentText(conf.readEntry("CommentCharacter", "#"));
 	ui.cbSeparatingCharacter->setCurrentItem(conf.readEntry("SeparatingCharacter", "auto"));
 	ui.cbNumberFormat->setCurrentIndex(conf.readEntry("NumberFormat", (int)QLocale::AnyLanguage));
 	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
