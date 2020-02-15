@@ -138,7 +138,7 @@ void Spreadsheet::removeRows(int first, int count) {
 	if ( count < 1 || first < 0 || first+count > rowCount()) return;
 	WAIT_CURSOR;
 	beginMacro( i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count) );
-	for (auto* col : children<Column>(IncludeHidden))
+	for (auto* col : children<Column>())
 		col->removeRows(first, count);
 	endMacro();
 	RESET_CURSOR;
@@ -148,7 +148,7 @@ void Spreadsheet::insertRows(int before, int count) {
 	if ( count < 1 || before < 0 || before > rowCount()) return;
 	WAIT_CURSOR;
 	beginMacro( i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count) );
-	for (auto* col : children<Column>(IncludeHidden))
+	for (auto* col : children<Column>())
 		col->insertRows(before, count);
 	endMacro();
 	RESET_CURSOR;
@@ -192,7 +192,6 @@ void Spreadsheet::setRowCount(int new_size) {
 Column* Spreadsheet::column(int index) const {
 	return child<Column>(index);
 }
-
 
 /*!
   Returns the column with the name \c name.
@@ -890,6 +889,10 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		//replace completely the previous content of the data source with the content to be imported.
 		int columns = childCount<Column>();
 
+		//rename the columns that are already available
+		for (int i = 0; i < columns; i++)
+			child<Column>(i)->setName(colNameList.at(i));
+
 		if (columns > cols) {
 			//there're more columns in the data source then required -> remove the superfluous columns
 			for (int i = 0; i < columns-cols; i++)
@@ -903,18 +906,12 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 			}
 		}
 
-		//rename the columns that are already available and suppress the dataChanged signal for them
+		// 1. suppress the dataChanged signal for all columns
+		// 2. send aspectDescriptionChanged because otherwise the column
+		//    will not be connected again to the curves (project.cpp, descriptionChanged)
 		for (int i = 0; i < childCount<Column>(); i++) {
-			if (mode == AbstractFileFilter::Replace) {
-				child<Column>(i)->setSuppressDataChangedSignal(true);
-				emit child<Column>(i)->reset(child<Column>(i));
-			}
-
-			child<Column>(i)->setName(colNameList.at(i));
-			// Force aspectDescriptionChanged is send, because otherwise the column
-			// will not connected again to the curves (project.cpp, descriptionChanged)
-			// it is not that expensive to call it twice (first time in setName, but
-			// only if the name changed)
+			child<Column>(i)->setSuppressDataChangedSignal(true);
+			emit child<Column>(i)->reset(child<Column>(i));
 			child<Column>(i)->aspectDescriptionChanged(child<Column>(i));
 		}
 	}

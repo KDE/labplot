@@ -317,9 +317,11 @@ void SpreadsheetModel::handleDescriptionChange(const AbstractAspect* aspect) {
 	if (!col || aspect->parentAspect() != m_spreadsheet)
 		return;
 
-	updateHorizontalHeader();
-	int index = m_spreadsheet->indexOfChild<Column>(col);
-	emit headerDataChanged(Qt::Horizontal, index, index);
+	if (!m_suppressSignals) {
+		updateHorizontalHeader();
+		int index = m_spreadsheet->indexOfChild<Column>(col);
+		emit headerDataChanged(Qt::Horizontal, index, index);
+	}
 }
 
 void SpreadsheetModel::handleModeChange(const AbstractColumn* col) {
