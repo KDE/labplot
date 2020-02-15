@@ -50,6 +50,8 @@ Copyright            : (C) 2009-2019 Alexander Semke (alexander.semke@web.de)
 #include <QStandardPaths>
 #endif
 
+#include <QRegularExpression>
+
 /*!
 \class AsciiFilter
 \brief Manages the import/export of data organized as columns (vectors) from/to an ASCII-file.
@@ -222,13 +224,13 @@ int AsciiFilter::columnNumber(const QString& fileName, const QString& separator)
 	}
 
 	QString line = device.readLine();
-	line.remove(QRegExp("[\\n\\r]"));
+	line.remove(QRegularExpression(QStringLiteral("[\\n\\r]")));
 
 	QStringList lineStringList;
 	if (separator.length() > 0)
 		lineStringList = line.split(separator);
 	else
-		lineStringList = line.split(QRegExp("\\s+"));
+		lineStringList = line.split(QRegularExpression(QStringLiteral("\\s+")));
 	DEBUG("number of columns : " << lineStringList.size());
 
 	return lineStringList.size();
@@ -445,7 +447,7 @@ QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
 		line = device.readLine();
 	} while (!commentCharacter.isEmpty() && line.startsWith(commentCharacter));
 
-	line.remove(QRegExp("[\\n\\r]"));	// remove any newline
+	line.remove(QRegularExpression(QStringLiteral("[\\n\\r]")));	// remove any newline
 	DEBUG("data line : \'" << line.toStdString() << '\'');
 	QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 	//TODO: remove quotes here?
@@ -512,7 +514,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	}
 
 	DEBUG(" device position after first line and comments = " << device.pos());
-	firstLine.remove(QRegExp("[\\n\\r]"));	// remove any newline
+	firstLine.remove(QRegularExpression(QStringLiteral("[\\n\\r]")));	// remove any newline
 	if (removeQuotesEnabled)
 		firstLine = firstLine.remove(QLatin1Char('"'));
 
@@ -525,7 +527,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	QStringList firstLineStringList;
 	if (separatingCharacter == "auto") {
 		DEBUG("automatic separator");
-		QRegExp regExp("(\\s+)|(,\\s+)|(;\\s+)|(:\\s+)");
+		const QRegularExpression regExp(QStringLiteral("[,;:]?\\s+"));
 		firstLineStringList = firstLine.split(regExp, (QString::SplitBehavior)skipEmptyParts);
 
 		if (!firstLineStringList.isEmpty()) {
@@ -1758,7 +1760,7 @@ int AsciiFilterPrivate::prepareToRead(const QString& message) {
 	QStringList firstLineStringList;
 	if (separatingCharacter == "auto") {
 		DEBUG("automatic separator");
-		QRegExp regExp("(\\s+)|(,\\s+)|(;\\s+)|(:\\s+)");
+		const QRegularExpression regExp(QStringLiteral("[,;:]?\\s+"));
 		firstLineStringList = firstLine.split(regExp, (QString::SplitBehavior)skipEmptyParts);
 	} else {	// use given separator
 		// replace symbolic "TAB" with '\t'
@@ -2097,7 +2099,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE("AsciiLiveDataImportReadingFromFile: ");
 #endif
-		QStringList newDataList = message.split(QRegExp("\n|\r\n|\r"), QString::SkipEmptyParts);
+		const QStringList newDataList = message.split(QRegularExpression(QStringLiteral("\n|\r\n|\r")),
+													  QString::SkipEmptyParts);
 		for (auto& line : newDataList) {
 			newData.push_back(line);
 			newLinesTillEnd++;
