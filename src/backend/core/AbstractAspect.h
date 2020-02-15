@@ -262,7 +262,7 @@ private:
 	AbstractAspectPrivate* d;
 
 	QString uniqueNameFor(const QString&) const;
-	const QVector<AbstractAspect*> children() const;
+	const QVector<AbstractAspect*>& children() const;
 	void connectChild(AbstractAspect*);
 
 public slots:

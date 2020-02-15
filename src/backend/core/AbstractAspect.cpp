@@ -555,7 +555,7 @@ QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFla
 	return result;
 }
 
-const QVector<AbstractAspect*> AbstractAspect::children() const {
+const QVector<AbstractAspect*>& AbstractAspect::children() const {
 	return d->m_children;
 }
 

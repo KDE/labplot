@@ -58,7 +58,7 @@
  * \class Project
  * \ingroup core
  * \brief Represents a project.
- * 
+ *
  * Project represents the root node of all objects created during the runtime of the program.
  * Manages also the undo stack.
  */
@@ -217,7 +217,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 
 		// When the column is created, it gets a random name and is eventually not connected to any curve.
 		// When changing the name it can match a curve and should than be connected to the curve.
-		QVector<XYCurve*> curves = children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+		const QVector<XYCurve*>& curves = children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
 		QString columnPath = column->path();
 
 		// setXColumnPath must not be set, because if curve->column matches column, there already exist a
@@ -261,11 +261,11 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 
 		}
 
-		QVector<Column*> columns = children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+		const QVector<Column*>& columns = children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 		for (auto* tempColumn : columns) {
-			const QStringList formulaVariableColumnsPath = tempColumn->formulaVariableColumnPaths();
+			const QStringList& formulaVariableColumnsPath = tempColumn->formulaVariableColumnPaths();
 			for (int i = 0; i < formulaVariableColumnsPath.count(); i++) {
-				if (formulaVariableColumnsPath[i] == columnPath)
+				if (formulaVariableColumnsPath.at(i) == columnPath)
 					tempColumn->setformulVariableColumn(i, const_cast<Column*>(static_cast<const Column*>(column)));
 			}
 		}
@@ -283,7 +283,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
  */
 void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 
-	QVector<AbstractAspect*> _children = aspect->children(AspectType::Column, ChildIndexFlag::Recursive);
+	const QVector<AbstractAspect*>& _children = aspect->children(AspectType::Column, ChildIndexFlag::Recursive);
 	QVector<const AbstractColumn*> columns;
 	for (auto child : _children)
 		columns.append(static_cast<const AbstractColumn*>(child));
@@ -296,7 +296,7 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 		return;
 
 	for (auto column : columns) {
-		QVector<XYCurve*> curves = children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+		const QVector<XYCurve*>& curves = children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
 		QString columnPath = column->path();
 
 		for (auto* curve : curves) {
@@ -335,11 +335,11 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 			}
 			curve->setUndoAware(true);
 		}
-		QVector<Column*> columns = children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+		const QVector<Column*>& columns = children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 		for (auto* tempColumn : columns) {
-			const QStringList formulaVariableColumnPaths = tempColumn->formulaVariableColumnPaths();
+			const QStringList& formulaVariableColumnPaths = tempColumn->formulaVariableColumnPaths();
 			for (int i = 0; i < formulaVariableColumnPaths.count(); i++) {
-				if (formulaVariableColumnPaths[i] == column->path())
+				if (formulaVariableColumnPaths.at(i) == column->path())
 					tempColumn->setformulVariableColumn(i, const_cast<Column*>(static_cast<const Column*>(column)));
 			}
 		}

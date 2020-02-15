@@ -187,8 +187,9 @@ void SpreadsheetView::init() {
 */
 void SpreadsheetView::resizeHeader() {
 	DEBUG("SpreadsheetView::resizeHeader()");
-	for (int i = 0; i < m_spreadsheet->children<Column>().size(); ++i) {
-		Column* col = m_spreadsheet->child<Column>(i);
+	const auto columns = m_spreadsheet->children<Column>();
+	for (int i = 0; i < columns.size(); ++i) {
+		const Column* col = columns.at(i);
 		if (col->width() == 0)
 			m_tableView->resizeColumnToContents(i);
 		else
