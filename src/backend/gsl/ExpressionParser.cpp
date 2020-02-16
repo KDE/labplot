@@ -27,6 +27,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <QRegularExpression>
+
 #include "backend/lib/macros.h"
 #include "backend/gsl/ExpressionParser.h"
 
@@ -1306,16 +1308,17 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
 	QDEBUG("variables:" << vars);
 	QStringList parameters;
 
-	QStringList strings = expr.split(QRegExp("\\W+"), QString::SkipEmptyParts);
+	QStringList strings = expr.split(QRegularExpression(QStringLiteral("\\W+")), QString::SkipEmptyParts);
 	QDEBUG("found strings:" << strings);
+	const QRegularExpression re(QRegularExpression::anchoredPattern(QStringLiteral("[0-9]*")));
 	for (int i = 0; i < strings.size(); ++i) {
 		// check if token is not a known constant/function/variable or number
 		if (constants().indexOf(strings[i]) == -1 && functions().indexOf(strings[i]) == -1
-		        && vars.indexOf(strings[i]) == -1 && QRegExp("[0-9]*").exactMatch(strings[i]) == 0)
+		    && vars.indexOf(strings[i]) == -1 && re.match(strings[i]).hasMatch())
 			parameters << strings[i];
 		else
 			QDEBUG(strings[i] << ':' << constants().indexOf(strings[i]) << ' ' << functions().indexOf(strings[i]) << ' '
-			       << vars.indexOf(strings[i]) << ' ' << QRegExp("[0-9]*").exactMatch(strings[i]));
+			       << vars.indexOf(strings[i]) << ' ' << re.match(strings[i]).hasMatch());
 	}
 	parameters.removeDuplicates();
 	QDEBUG("parameters found:" << parameters);

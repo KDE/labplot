@@ -42,8 +42,7 @@ Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
 #include <QStringList>
 #include <QMap>
 #include <QMapIterator>
-#include <QRegExpValidator>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QTcpSocket>
 #include <QUrl>
 

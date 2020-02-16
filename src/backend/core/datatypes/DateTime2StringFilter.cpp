@@ -30,7 +30,6 @@
 #include "DateTime2StringFilter.h"
 #include "backend/lib/XmlStreamReader.h"
 #include <QDateTime>
-#include <QRegExp>
 #include <QUndoCommand>
 
 #include <KLocalizedString>
