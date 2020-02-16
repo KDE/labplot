@@ -370,6 +370,7 @@ void ImportFileDialog::checkOkButton() {
 			okButton->setToolTip(i18n("Select a data container where the data has to be imported into."));
 			lPosition->setEnabled(false);
 			cbPosition->setEnabled(false);
+			cbAddTo->setFocus(); //set the focus to make the user aware about the fact that a data container needs to be provided
 			return;
 		} else {
 			lPosition->setEnabled(true);

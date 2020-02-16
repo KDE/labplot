@@ -89,10 +89,15 @@ void ImportDialog::setModel() {
 	//Frame for the "Import To"-Stuff
 	frameAddTo = new QGroupBox(this);
 	frameAddTo->setTitle(i18n("Import to"));
-	auto* grid = new QGridLayout(frameAddTo);
-	grid->addWidget(new QLabel(i18n("Data container"), frameAddTo), 0, 0);
 
-	cbAddTo = new TreeViewComboBox(frameAddTo);
+	auto* label = new QLabel(i18n("Data container"));
+	label->setToolTip(i18n("Data container where the data has to be imported into"));
+
+	auto* grid = new QGridLayout(frameAddTo);
+	grid->addWidget(label, 0, 0);
+
+	cbAddTo = new TreeViewComboBox();
+	cbAddTo->setToolTip(i18n("Data container where the data has to be imported into"));
 	cbAddTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	grid->addWidget(cbAddTo, 0, 1);
 
@@ -106,8 +111,10 @@ void ImportDialog::setModel() {
 	cbAddTo->setModel(m_aspectTreeModel);
 
 	tbNewDataContainer = new QToolButton(frameAddTo);
+	tbNewDataContainer->setText(i18n("New"));
 	tbNewDataContainer->setIcon(QIcon::fromTheme("list-add"));
-	tbNewDataContainer->setToolTip(i18n("Add new data container"));
+	tbNewDataContainer->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+	tbNewDataContainer->setToolTip(i18n("Add new data container to the project"));
 	grid->addWidget( tbNewDataContainer, 0, 2);
 
 	lPosition = new QLabel(i18n("Position"), frameAddTo);

@@ -286,6 +286,7 @@ void ImportFileWidget::loadSettings() {
 	} else
 		m_cbFileName->setUrl(QUrl(m_fileName));
 
+	ui.sbPreviewLines->setValue(conf.readEntry("PreviewLines", 100));
 
 	//live data related settings
 	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate", 13)); // index for bautrate 19200b/s
@@ -360,6 +361,7 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
 	conf.writeEntry("LastImportedFile", m_cbFileName->currentText());
 	conf.writeXdgListEntry("LastImportedFiles", m_cbFileName->urls());
+	conf.writeEntry("PreviewLines", ui.sbPreviewLines->value());
 
 	//live data related settings
 	conf.writeEntry("SourceType", (int)currentSourceType());
@@ -376,7 +378,6 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("RelativePath", (int)ui.chbRelativePath->checkState());
 
 #ifdef HAVE_MQTT
-
 	delete m_connectTimeoutTimer;
 	delete m_subscriptionWidget;
 
