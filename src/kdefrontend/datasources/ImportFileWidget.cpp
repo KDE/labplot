@@ -183,7 +183,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	m_twPreview->hide();
 
 	// the combobox for the import path
-	m_cbFileName = new KUrlComboBox(KUrlComboBox::Mode::Files, ui.tePreview);
+	m_cbFileName = new KUrlComboBox(KUrlComboBox::Mode::Files, this);
 	m_cbFileName->setMaxItems(7);
 	auto* gridLayout = dynamic_cast<QGridLayout*>(ui.gbDataSource->layout());
 	if (gridLayout)

@@ -139,7 +139,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 
 		return QVariant(col_ptr->asStringColumn()->textAt(row));
 	case Qt::ForegroundRole:
-		if (!col_ptr->isValid(index.row()))
+		if (!col_ptr->isValid(row))
 			return QVariant(QBrush(Qt::red));
 		break;
 	case MaskingRole:

@@ -349,7 +349,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		{
 			QList<DatapickerImage*> list;
 			for (auto* aspect : selectedAspects)
-				list << qobject_cast<Datapicker*>(aspect)->image();
+				list << static_cast<Datapicker*>(aspect)->image();
 			m_mainWindow->datapickerImageDock->setImages(list);
 		}
 		break;
