@@ -1310,7 +1310,11 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
 
 	QStringList strings = expr.split(QRegularExpression(QStringLiteral("\\W+")), QString::SkipEmptyParts);
 	QDEBUG("found strings:" << strings);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 	const QRegularExpression re(QRegularExpression::anchoredPattern(QStringLiteral("[0-9]*")));
+#else
+	const QRegularExpression re("\\A(?:" +  QStringLiteral("[0-9]*") + ")\\z");
+#endif
 	for (int i = 0; i < strings.size(); ++i) {
 		// check if token is not a known constant/function/variable or number
 		if (constants().indexOf(strings[i]) == -1 && functions().indexOf(strings[i]) == -1
