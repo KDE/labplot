@@ -62,6 +62,7 @@
 #include <QToolBar>
 #include <QTextStream>
 #include <QProcess>
+#include <QRegularExpression>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -1282,7 +1283,7 @@ void SpreadsheetView::pasteIntoSelection() {
 	input_row_count = input_rows.count();
 	input_col_count = 0;
 	for (int i = 0; i < input_row_count; i++) {
-		cellTexts.append(input_rows.at(i).split(QRegExp(QLatin1String("\\s+"))));
+		cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s+"))));
 		if (cellTexts.at(i).count() > input_col_count)
 			input_col_count = cellTexts.at(i).count();
 	}
