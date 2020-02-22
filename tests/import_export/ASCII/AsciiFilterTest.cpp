@@ -811,4 +811,41 @@ void AsciiFilterTest::testComments01() {
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 2.2);
 }
 
+/*!
+ * test with an empty comment character
+ */
+void AsciiFilterTest::testComments02() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "separator_semicolon_with_header.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setCommentCharacter("");
+	filter.setSeparatingCharacter(";");
+	filter.setHeaderEnabled(true);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//spreadsheet size
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 3);
+
+	//column names
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("c1"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("c2"));
+
+	//data types
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Integer);
+
+	//values
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 2);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
+	QCOMPARE(spreadsheet.column(1)->integerAt(2), 3);
+}
+
 QTEST_MAIN(AsciiFilterTest)

@@ -477,7 +477,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	// Determine the number of columns, create the columns and use (if selected) the first row to name them
 	QString firstLine;
 
-	// skip the comment lines first
+	// skip the comment lines and read the first line
 	if (!commentCharacter.isEmpty()) {
 		do {
 			if (!device.canReadLine())
@@ -493,7 +493,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 			firstLine = device.readLine();
 		} while (firstLine.startsWith(commentCharacter) || firstLine.simplified().isEmpty());
-	}
+	} else
+		firstLine = device.readLine();
 
 	// navigate to the line where we asked to start reading from
 	DEBUG("	Skipping " << startRow - 1 << " lines");
@@ -565,10 +566,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 	if (headerEnabled) {	// use first line to name vectors
 		vectorNames = firstLineStringList;
-		QDEBUG("vector names =" << vectorNames);
 		++m_actualStartRow;
 	}
-
 
 	// set range to read
 	if (endColumn == -1) {
@@ -588,6 +587,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		vectorNames.prepend(i18n("Index"));
 		m_actualCols++;
 	}
+
+	QDEBUG("vector names =" << vectorNames);
 
 //TEST: readline-seek-readline fails
 	/*	qint64 testpos = device.pos();
