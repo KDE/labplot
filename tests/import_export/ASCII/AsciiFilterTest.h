@@ -53,6 +53,7 @@ private slots:
 	void testHeader04();
 	void testHeader05();
 	void testHeader06();
+	void testHeader07();
 
 	//read ranges
 	void testColumnRange00();

@@ -334,6 +334,54 @@ void AsciiFilterTest::testHeader06() {
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
 }
 
+/*!
+ * test with a file containing the header in the second line
+ * with a subsequent comment line without any comment character.
+ * this line shouldn't disturb the detection of numeric column modes.
+ */
+void AsciiFilterTest::testHeader07() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "comment_header_comment.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter("TAB");
+	filter.setStartRow(2);
+	filter.setHeaderEnabled(true);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//spreadsheet size
+	QCOMPARE(spreadsheet.columnCount(), 3);
+	QCOMPARE(spreadsheet.rowCount(), 4);
+
+	//column names
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("counter"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("t[min]"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("#1ch1"));
+
+	//data types
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
+
+	//values
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 0);
+	QCOMPARE((bool)std::isnan(spreadsheet.column(1)->valueAt(0)), true);
+	QCOMPARE((bool)std::isnan(spreadsheet.column(2)->valueAt(0)), true);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 0.0513);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 0.3448);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 2);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), 0.1005);
+	QCOMPARE(spreadsheet.column(2)->valueAt(2), 0.3418);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(3), 3);
+	QCOMPARE(spreadsheet.column(1)->valueAt(3), 0.1516);
+	QCOMPARE(spreadsheet.column(2)->valueAt(3), 0.3433);
+}
+
 //##############################################################################
 //#####################  handling of different read ranges #####################
 //##############################################################################

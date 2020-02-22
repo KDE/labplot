@@ -644,7 +644,9 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			// text: non text -> text
 			if (mode == AbstractColumn::Text && columnModes[col] != AbstractColumn::Text)
 				columnModes[col] = mode;
-
+			// numeric: text -> numeric/interger
+			if (mode != AbstractColumn::Text && columnModes[col] == AbstractColumn::Text)
+				columnModes[col] = mode;
 			col++;
 		}
 	}
