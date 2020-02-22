@@ -889,9 +889,6 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		//replace completely the previous content of the data source with the content to be imported.
 		int columns = childCount<Column>();
 
-		//rename the columns that are already available
-		for (int i = 0; i < columns; i++)
-			child<Column>(i)->setName(colNameList.at(i));
 
 		if (columns > cols) {
 			//there're more columns in the data source then required -> remove the superfluous columns
@@ -906,12 +903,14 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 			}
 		}
 
-		// 1. suppress the dataChanged signal for all columns
-		// 2. send aspectDescriptionChanged because otherwise the column
+		// 1. rename the columns that were already available
+		// 2. suppress the dataChanged signal for all columns
+		// 3. send aspectDescriptionChanged because otherwise the column
 		//    will not be connected again to the curves (project.cpp, descriptionChanged)
 		for (int i = 0; i < childCount<Column>(); i++) {
 			child<Column>(i)->setSuppressDataChangedSignal(true);
 			emit child<Column>(i)->reset(child<Column>(i));
+			child<Column>(i)->setName(colNameList.at(i));
 			child<Column>(i)->aspectDescriptionChanged(child<Column>(i));
 		}
 	}
