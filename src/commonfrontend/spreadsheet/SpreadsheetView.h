@@ -48,12 +48,15 @@ class QToolBar;
 class QModelIndex;
 class QItemSelection;
 
+
 #ifdef Q_OS_MAC
 	class KDMacTouchBar;
 #endif
 
 class SpreadsheetView : public QWidget {
 	Q_OBJECT
+
+	friend class SpreadsheetTest;
 
 public:
 	explicit SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly = false);
@@ -216,7 +219,6 @@ public slots:
 	void fillTouchBar(KDMacTouchBar*);
 #endif
 	void print(QPrinter*) const;
-	void pasteIntoSelection();
 
 private slots:
 	void createColumnContextMenu(QMenu*);
@@ -233,6 +235,7 @@ private slots:
 	void clearSelectedCells();
 	void maskSelection();
 	void unmaskSelection();
+	void pasteIntoSelection();
 // 		void recalculateSelectedCells();
 
 	void plotData();

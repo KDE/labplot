@@ -41,24 +41,29 @@ void SpreadsheetTest::initTestCase() {
    insert two columns with float values into an empty spreadsheet
 */
 void SpreadsheetTest::testCopyPaste00() {
-	Spreadsheet* sheet = new Spreadsheet("test", false);
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(100);
 
 	const QString str = "10.0 100.0\n20.0 200.0";
-
 	QApplication::clipboard()->setText(str);
 
-	SpreadsheetView* view = new SpreadsheetView(sheet, false);
-	view->pasteIntoSelection();
+	SpreadsheetView view(&sheet, false);
+	view.pasteIntoSelection();
+
+	//spreadsheet size
+	QCOMPARE(sheet.columnCount(), 2);
+	QCOMPARE(sheet.rowCount(), 100);
 
 	//column modes
-	QCOMPARE(sheet->column(0)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(sheet->column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::Numeric);
 
 	//values
-	QCOMPARE(sheet->column(0)->valueAt(0), 10.0);
-	QCOMPARE(sheet->column(1)->valueAt(0), 100.0);
-	QCOMPARE(sheet->column(0)->valueAt(1), 20.0);
-	QCOMPARE(sheet->column(1)->valueAt(1), 200.0);
+	QCOMPARE(sheet.column(0)->valueAt(0), 10.0);
+	QCOMPARE(sheet.column(1)->valueAt(0), 100.0);
+	QCOMPARE(sheet.column(0)->valueAt(1), 20.0);
+	QCOMPARE(sheet.column(1)->valueAt(1), 200.0);
 }
 
 /*!
@@ -66,31 +71,38 @@ void SpreadsheetTest::testCopyPaste00() {
    the first column has to be converted to integer column.
 */
 void SpreadsheetTest::testCopyPaste01() {
-	Spreadsheet* sheet = new Spreadsheet("test", false);
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(100);
 
 	const QString str = "10 100.0\n20 200.0";
-
 	QApplication::clipboard()->setText(str);
 
-	SpreadsheetView* view = new SpreadsheetView(sheet, false);
-	view->pasteIntoSelection();
+	SpreadsheetView view(&sheet, false);
+	view.pasteIntoSelection();
+
+	//spreadsheet size
+	QCOMPARE(sheet.columnCount(), 2);
+	QCOMPARE(sheet.rowCount(), 100);
 
 	//column modes
-	QCOMPARE(sheet->column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(sheet->column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::Numeric);
 
 	//values
-	QCOMPARE(sheet->column(0)->integerAt(0), 10);
-	QCOMPARE(sheet->column(1)->valueAt(0), 100.0);
-	QCOMPARE(sheet->column(0)->integerAt(1), 20);
-	QCOMPARE(sheet->column(1)->valueAt(1), 200.0);
+	QCOMPARE(sheet.column(0)->integerAt(0), 10);
+	QCOMPARE(sheet.column(1)->valueAt(0), 100.0);
+	QCOMPARE(sheet.column(0)->integerAt(1), 20);
+	QCOMPARE(sheet.column(1)->valueAt(1), 200.0);
 }
 
 /*!
    insert irregular data, new columns should be added appropriately.
 */
 void SpreadsheetTest::testCopyPaste02() {
-	Spreadsheet* sheet = new Spreadsheet("test", false);
+	Spreadsheet sheet ("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(100);
 
 	const QString str = "0\n"
 						"10 20\n"
@@ -98,54 +110,92 @@ void SpreadsheetTest::testCopyPaste02() {
 						"12 22 32 42\n"
 						"13 23\n"
 						"14";
-
 	QApplication::clipboard()->setText(str);
 
-	int rows = sheet->rowCount();
 
-	SpreadsheetView* view = new SpreadsheetView(sheet, false);
-	view->pasteIntoSelection();
+	SpreadsheetView view(&sheet, false);
+	view.pasteIntoSelection();
 
 	//spreadsheet size
-	QCOMPARE(sheet->columnCount(), 4);
-	QCOMPARE(sheet->rowCount(), rows);
+	QCOMPARE(sheet.columnCount(), 4);
+	QCOMPARE(sheet.rowCount(), 100);
 
 	//column modes
-	QCOMPARE(sheet->column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(sheet->column(1)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(sheet->column(2)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(sheet->column(3)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(sheet.column(2)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(sheet.column(3)->columnMode(), AbstractColumn::Integer);
 
 	//values
-	QCOMPARE(sheet->column(0)->integerAt(0), 0);
-	QCOMPARE(sheet->column(1)->integerAt(0), 0);
-	QCOMPARE(sheet->column(2)->integerAt(0), 0);
-	QCOMPARE(sheet->column(3)->integerAt(0), 0);
+	QCOMPARE(sheet.column(0)->integerAt(0), 0);
+	QCOMPARE(sheet.column(1)->integerAt(0), 0);
+	QCOMPARE(sheet.column(2)->integerAt(0), 0);
+	QCOMPARE(sheet.column(3)->integerAt(0), 0);
 
-	QCOMPARE(sheet->column(0)->integerAt(1), 10);
-	QCOMPARE(sheet->column(1)->integerAt(1), 20);
-	QCOMPARE(sheet->column(2)->integerAt(1), 0);
-	QCOMPARE(sheet->column(3)->integerAt(1), 0);
+	QCOMPARE(sheet.column(0)->integerAt(1), 10);
+	QCOMPARE(sheet.column(1)->integerAt(1), 20);
+	QCOMPARE(sheet.column(2)->integerAt(1), 0);
+	QCOMPARE(sheet.column(3)->integerAt(1), 0);
 
-	QCOMPARE(sheet->column(0)->integerAt(2), 11);
-	QCOMPARE(sheet->column(1)->integerAt(2), 21);
-	QCOMPARE(sheet->column(2)->integerAt(2), 31);
-	QCOMPARE(sheet->column(3)->integerAt(2), 0);
+	QCOMPARE(sheet.column(0)->integerAt(2), 11);
+	QCOMPARE(sheet.column(1)->integerAt(2), 21);
+	QCOMPARE(sheet.column(2)->integerAt(2), 31);
+	QCOMPARE(sheet.column(3)->integerAt(2), 0);
 
-	QCOMPARE(sheet->column(0)->integerAt(3), 12);
-	QCOMPARE(sheet->column(1)->integerAt(3), 22);
-	QCOMPARE(sheet->column(2)->integerAt(3), 32);
-	QCOMPARE(sheet->column(3)->integerAt(3), 42);
+	QCOMPARE(sheet.column(0)->integerAt(3), 12);
+	QCOMPARE(sheet.column(1)->integerAt(3), 22);
+	QCOMPARE(sheet.column(2)->integerAt(3), 32);
+	QCOMPARE(sheet.column(3)->integerAt(3), 42);
 
-	QCOMPARE(sheet->column(0)->integerAt(4), 13);
-	QCOMPARE(sheet->column(1)->integerAt(4), 23);
-	QCOMPARE(sheet->column(2)->integerAt(4), 0);
-	QCOMPARE(sheet->column(3)->integerAt(4), 0);
+	QCOMPARE(sheet.column(0)->integerAt(4), 13);
+	QCOMPARE(sheet.column(1)->integerAt(4), 23);
+	QCOMPARE(sheet.column(2)->integerAt(4), 0);
+	QCOMPARE(sheet.column(3)->integerAt(4), 0);
 
-	QCOMPARE(sheet->column(0)->integerAt(5), 14);
-	QCOMPARE(sheet->column(1)->integerAt(5), 0);
-	QCOMPARE(sheet->column(2)->integerAt(5), 0);
-	QCOMPARE(sheet->column(3)->integerAt(5), 0);
+	QCOMPARE(sheet.column(0)->integerAt(5), 14);
+	QCOMPARE(sheet.column(1)->integerAt(5), 0);
+	QCOMPARE(sheet.column(2)->integerAt(5), 0);
+	QCOMPARE(sheet.column(3)->integerAt(5), 0);
+}
+
+/*!
+   insert the data at the edge of the spreadsheet and paste the data.
+   the spreadsheet has to be extended accordingly
+*/
+void SpreadsheetTest::testCopyPaste03() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(100);
+
+	const QString str = "1.1 2.2\n"
+						"3.3 4.4";
+	QApplication::clipboard()->setText(str);
+
+	SpreadsheetView view(&sheet, false);
+	view.goToCell(1, 1); //havigate to the edge of the spreadsheet
+	view.pasteIntoSelection();
+
+	//spreadsheet size
+	QCOMPARE(sheet.columnCount(), 3);
+	QCOMPARE(sheet.rowCount(), 100);
+
+	//column modes
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(sheet.column(2)->columnMode(), AbstractColumn::Numeric);
+
+	//values
+	QCOMPARE((bool)std::isnan(sheet.column(0)->valueAt(0)), true);
+	QCOMPARE((bool)std::isnan(sheet.column(1)->valueAt(0)), true);
+	QCOMPARE((bool)std::isnan(sheet.column(2)->valueAt(0)), true);
+
+	QCOMPARE((bool)std::isnan(sheet.column(0)->valueAt(1)), true);
+	QCOMPARE(sheet.column(1)->valueAt(1), 1.1);
+	QCOMPARE(sheet.column(2)->valueAt(1), 2.2);
+
+	QCOMPARE((bool)std::isnan(sheet.column(0)->valueAt(2)), true);
+	QCOMPARE(sheet.column(1)->valueAt(2), 3.3);
+	QCOMPARE(sheet.column(2)->valueAt(2), 4.4);
 }
 
 QTEST_MAIN(SpreadsheetTest)

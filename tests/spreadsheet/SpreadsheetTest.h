@@ -40,6 +40,7 @@ private slots:
 	void testCopyPaste00();
 	void testCopyPaste01();
 	void testCopyPaste02();
+	void testCopyPaste03();
 };
 
 #endif
