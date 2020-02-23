@@ -303,10 +303,11 @@ void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* parent, const A
 
 	updateVerticalHeader();
 	updateHorizontalHeader();
-	endResetModel();
 
 	m_columnCount = m_spreadsheet->columnCount();
 	m_spreadsheet->emitColumnCountChanged();
+
+	endResetModel();
 }
 
 void SpreadsheetModel::handleDescriptionChange(const AbstractAspect* aspect) {

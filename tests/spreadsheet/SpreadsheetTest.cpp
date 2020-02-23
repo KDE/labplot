@@ -27,10 +27,12 @@
 
 #include <QApplication>
 #include <QClipboard>
+#include <QUndoStack>
 
 #include "SpreadsheetTest.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "../src/commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "backend/core/Project.h"
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
 void SpreadsheetTest::initTestCase() {
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
@@ -100,9 +102,11 @@ void SpreadsheetTest::testCopyPaste01() {
    insert irregular data, new columns should be added appropriately.
 */
 void SpreadsheetTest::testCopyPaste02() {
-	Spreadsheet sheet ("test", false);
-	sheet.setColumnCount(2);
-	sheet.setRowCount(100);
+	Project project;
+	Spreadsheet* sheet = new Spreadsheet("test", false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(100);
 
 	const QString str = "0\n"
 						"10 20\n"
@@ -113,49 +117,80 @@ void SpreadsheetTest::testCopyPaste02() {
 	QApplication::clipboard()->setText(str);
 
 
-	SpreadsheetView view(&sheet, false);
+	SpreadsheetView view(sheet, false);
 	view.pasteIntoSelection();
 
 	//spreadsheet size
-	QCOMPARE(sheet.columnCount(), 4);
-	QCOMPARE(sheet.rowCount(), 100);
+	QCOMPARE(sheet->columnCount(), 4);
+	QCOMPARE(sheet->rowCount(), 100);
 
 	//column modes
-	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(sheet.column(2)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(sheet.column(3)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(sheet->column(0)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(sheet->column(1)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(sheet->column(2)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(sheet->column(3)->columnMode(), AbstractColumn::Integer);
 
 	//values
-	QCOMPARE(sheet.column(0)->integerAt(0), 0);
-	QCOMPARE(sheet.column(1)->integerAt(0), 0);
-	QCOMPARE(sheet.column(2)->integerAt(0), 0);
-	QCOMPARE(sheet.column(3)->integerAt(0), 0);
+	QCOMPARE(sheet->column(0)->integerAt(0), 0);
+	QCOMPARE(sheet->column(1)->integerAt(0), 0);
+	QCOMPARE(sheet->column(2)->integerAt(0), 0);
+	QCOMPARE(sheet->column(3)->integerAt(0), 0);
 
-	QCOMPARE(sheet.column(0)->integerAt(1), 10);
-	QCOMPARE(sheet.column(1)->integerAt(1), 20);
-	QCOMPARE(sheet.column(2)->integerAt(1), 0);
-	QCOMPARE(sheet.column(3)->integerAt(1), 0);
+	QCOMPARE(sheet->column(0)->integerAt(1), 10);
+	QCOMPARE(sheet->column(1)->integerAt(1), 20);
+	QCOMPARE(sheet->column(2)->integerAt(1), 0);
+	QCOMPARE(sheet->column(3)->integerAt(1), 0);
 
-	QCOMPARE(sheet.column(0)->integerAt(2), 11);
-	QCOMPARE(sheet.column(1)->integerAt(2), 21);
-	QCOMPARE(sheet.column(2)->integerAt(2), 31);
-	QCOMPARE(sheet.column(3)->integerAt(2), 0);
+	QCOMPARE(sheet->column(0)->integerAt(2), 11);
+	QCOMPARE(sheet->column(1)->integerAt(2), 21);
+	QCOMPARE(sheet->column(2)->integerAt(2), 31);
+	QCOMPARE(sheet->column(3)->integerAt(2), 0);
 
-	QCOMPARE(sheet.column(0)->integerAt(3), 12);
-	QCOMPARE(sheet.column(1)->integerAt(3), 22);
-	QCOMPARE(sheet.column(2)->integerAt(3), 32);
-	QCOMPARE(sheet.column(3)->integerAt(3), 42);
+	QCOMPARE(sheet->column(0)->integerAt(3), 12);
+	QCOMPARE(sheet->column(1)->integerAt(3), 22);
+	QCOMPARE(sheet->column(2)->integerAt(3), 32);
+	QCOMPARE(sheet->column(3)->integerAt(3), 42);
 
-	QCOMPARE(sheet.column(0)->integerAt(4), 13);
-	QCOMPARE(sheet.column(1)->integerAt(4), 23);
-	QCOMPARE(sheet.column(2)->integerAt(4), 0);
-	QCOMPARE(sheet.column(3)->integerAt(4), 0);
+	QCOMPARE(sheet->column(0)->integerAt(4), 13);
+	QCOMPARE(sheet->column(1)->integerAt(4), 23);
+	QCOMPARE(sheet->column(2)->integerAt(4), 0);
+	QCOMPARE(sheet->column(3)->integerAt(4), 0);
 
-	QCOMPARE(sheet.column(0)->integerAt(5), 14);
-	QCOMPARE(sheet.column(1)->integerAt(5), 0);
-	QCOMPARE(sheet.column(2)->integerAt(5), 0);
-	QCOMPARE(sheet.column(3)->integerAt(5), 0);
+	QCOMPARE(sheet->column(0)->integerAt(5), 14);
+	QCOMPARE(sheet->column(1)->integerAt(5), 0);
+	QCOMPARE(sheet->column(2)->integerAt(5), 0);
+	QCOMPARE(sheet->column(3)->integerAt(5), 0);
+
+
+	//undo the changes and check the results again
+	project.undoStack()->undo();
+
+	//spreadsheet size
+	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(sheet->rowCount(), 100);
+
+	//column modes
+	QCOMPARE(sheet->column(0)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(sheet->column(1)->columnMode(), AbstractColumn::Numeric);
+
+	//values
+	QCOMPARE((bool)std::isnan(sheet->column(0)->valueAt(0)), true);
+	QCOMPARE((bool)std::isnan(sheet->column(1)->valueAt(0)), true);
+
+	QCOMPARE((bool)std::isnan(sheet->column(0)->valueAt(1)), true);
+	QCOMPARE((bool)std::isnan(sheet->column(1)->valueAt(1)), true);
+
+	QCOMPARE((bool)std::isnan(sheet->column(0)->valueAt(2)), true);
+	QCOMPARE((bool)std::isnan(sheet->column(1)->valueAt(2)), true);
+
+	QCOMPARE((bool)std::isnan(sheet->column(0)->valueAt(3)), true);
+	QCOMPARE((bool)std::isnan(sheet->column(1)->valueAt(3)), true);
+
+	QCOMPARE((bool)std::isnan(sheet->column(0)->valueAt(4)), true);
+	QCOMPARE((bool)std::isnan(sheet->column(1)->valueAt(4)), true);
+
+	QCOMPARE((bool)std::isnan(sheet->column(0)->valueAt(5)), true);
+	QCOMPARE((bool)std::isnan(sheet->column(1)->valueAt(5)), true);
 }
 
 /*!
