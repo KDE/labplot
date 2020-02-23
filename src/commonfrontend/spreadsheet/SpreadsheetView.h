@@ -216,6 +216,7 @@ public slots:
 	void fillTouchBar(KDMacTouchBar*);
 #endif
 	void print(QPrinter*) const;
+	void pasteIntoSelection();
 
 private slots:
 	void createColumnContextMenu(QMenu*);
@@ -229,7 +230,6 @@ private slots:
 
 	void cutSelection();
 	void copySelection();
-	void pasteIntoSelection();
 	void clearSelectedCells();
 	void maskSelection();
 	void unmaskSelection();
