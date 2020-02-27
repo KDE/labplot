@@ -138,9 +138,9 @@ void SpreadsheetHeaderView::refresh() {
 	m_slave->setStretchLastSection(true);  // ugly hack /*(flaw in Qt? Does anyone know a better way?)*/
 	m_slave->updateGeometry();
 	m_slave->setStretchLastSection(false); // ugly hack part 2
-	setStretchLastSection(true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
+// 	setStretchLastSection(true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
 	updateGeometry();
-	setStretchLastSection(false); // ugly hack part 2
+// 	setStretchLastSection(false); // ugly hack part 2
 	resizeSection(count()-1, width);
 	update();
 }
