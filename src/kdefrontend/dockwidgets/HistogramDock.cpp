@@ -886,6 +886,7 @@ void HistogramDock::showValuesColumnFormat(const Column* column) {
 		}
 		case AbstractColumn::Text:
 		case AbstractColumn::Integer:
+		case AbstractColumn::BigInt:
 			break;
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
@@ -911,6 +912,7 @@ void HistogramDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode c
 		ui.cbValuesFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
 		break;
 	case AbstractColumn::Integer:
+	case AbstractColumn::BigInt:
 		break;
 	case AbstractColumn::Text:
 		ui.cbValuesFormat->addItem(i18n("Text"), QVariant());

@@ -933,6 +933,12 @@ void Column::save(QXmlStreamWriter* writer) const {
 			writer->writeCharacters(QByteArray::fromRawData(data, (int)size).toBase64());
 			break;
 		}
+	case AbstractColumn::BigInt: {
+			const char* data = reinterpret_cast<const char*>(static_cast< QVector<qint64>* >(d->data())->constData());
+			size_t size = d->rowCount() * sizeof(qint64);
+			writer->writeCharacters(QByteArray::fromRawData(data, (int)size).toBase64());
+			break;
+		}
 	case AbstractColumn::Text:
 		for (i = 0; i < rowCount(); ++i) {
 			writer->writeStartElement("row");
@@ -1155,23 +1161,32 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 	QString str = reader->readElementText();
 	switch (columnMode()) {
 	case AbstractColumn::Numeric: {
-			double value = str.toDouble(&ok);
-			if (!ok) {
-				reader->raiseError(i18n("invalid row value"));
-				return false;
-			}
-			setValueAt(index, value);
-			break;
+		double value = str.toDouble(&ok);
+		if (!ok) {
+			reader->raiseError(i18n("invalid row value"));
+			return false;
 		}
+		setValueAt(index, value);
+		break;
+	}
 	case AbstractColumn::Integer: {
-			int value = str.toInt(&ok);
-			if (!ok) {
-				reader->raiseError(i18n("invalid row value"));
-				return false;
-			}
-			setIntegerAt(index, value);
-			break;
+		int value = str.toInt(&ok);
+		if (!ok) {
+			reader->raiseError(i18n("invalid row value"));
+			return false;
 		}
+		setIntegerAt(index, value);
+		break;
+	}
+	case AbstractColumn::BigInt: {
+		qint64 value = str.toLongLong(&ok);
+		if (!ok) {
+			reader->raiseError(i18n("invalid row value"));
+			return false;
+		}
+		//TODO setBigIntAt(index, value);
+		break;
+	}
 	case AbstractColumn::Text:
 		setTextAt(index, str);
 		break;
@@ -1399,6 +1414,19 @@ double Column::minimum(int startIndex, int endIndex) const {
 			}
 			break;
 		}
+		case BigInt: {
+			auto* vec = static_cast<QVector<qint64>*>(data());
+			for (int row = startIndex; row < endIndex; ++row) {
+				if (!isValid(row) || isMasked(row))
+					continue;
+
+				const qint64 val = vec->at(row);
+
+				if (val < min)
+					min = val;
+			}
+			break;
+		}
 		case Text:
 			break;
 		case DateTime: {
@@ -1431,6 +1459,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 	switch (mode) {
 		case Numeric:
 		case Integer:
+		case BigInt:
 			return valueAt(foundIndex);
 		case DateTime:
 		case Month:
@@ -1526,6 +1555,18 @@ double Column::maximum(int startIndex, int endIndex) const {
 			}
 			break;
 		}
+		case BigInt: {
+			auto* vec = static_cast<QVector<qint64>*>(data());
+			for (int row = startIndex; row < endIndex; ++row) {
+				if (!isValid(row) || isMasked(row))
+					continue;
+				const qint64 val = vec->at(row);
+
+				if (val > max)
+					max = val;
+			}
+			break;
+		}
 		case Text:
 			break;
 		case DateTime: {
@@ -1557,6 +1598,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 	switch (mode) {
 		case Numeric:
 		case Integer:
+		case BigInt:
 			return valueAt(foundIndex);
 		case DateTime:
 		case Month:
@@ -1961,8 +2003,9 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 
 		switch (columnMode()) {
 			case Integer:
+			case BigInt:
 			case Numeric: {
-			if (start > 0 && valueAt(start -1) <= v2 && valueAt(start -1) >= v1)
+			if (start > 0 && valueAt(start - 1) <= v2 && valueAt(start - 1) >= v1)
 				start--;
 			if (end < rowCount() - 1 && valueAt(end + 1) <= v2 && valueAt(end + 1) >= v1)
 				end++;
@@ -2000,6 +2043,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 	// property == Properties::No
 	switch (columnMode()) {
 		case Integer:
+		case BigInt:
 		case Numeric: {
 			double value;
 			for (int i = 0; i < rowCount(); i++) {

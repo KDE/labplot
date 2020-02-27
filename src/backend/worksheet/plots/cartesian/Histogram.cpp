@@ -1145,6 +1145,7 @@ void HistogramPrivate::updateValues() {
 				case AbstractColumn::Text:
 					valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
 				case AbstractColumn::Integer:
+				case AbstractColumn::BigInt:
 				case AbstractColumn::DateTime:
 				case AbstractColumn::Month:
 				case AbstractColumn::Day:

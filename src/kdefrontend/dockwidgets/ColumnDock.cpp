@@ -146,6 +146,7 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 			break;
 		}
 	case AbstractColumn::Integer:	// nothing to set
+	case AbstractColumn::BigInt:
 	case AbstractColumn::Text:
 		break;
 	}
@@ -184,6 +185,7 @@ void ColumnDock::updateFormatWidgets(AbstractColumn::ColumnMode mode) {
 			ui.cbFormat->addItem(s, QVariant(s));
 		break;
 	case AbstractColumn::Integer:
+	case AbstractColumn::BigInt:
 	case AbstractColumn::Text:
 		break;
 	}
@@ -276,6 +278,7 @@ void ColumnDock::typeChanged(int index) {
 			break;
 		}
 	case AbstractColumn::Integer:
+	case AbstractColumn::BigInt:
 	case AbstractColumn::Text:
 		for (auto* col : m_columnsList)
 			col->setColumnMode(columnMode);
@@ -327,6 +330,7 @@ void ColumnDock::formatChanged(int index) {
 			break;
 		}
 	case AbstractColumn::Integer:
+	case AbstractColumn::BigInt:
 	case AbstractColumn::Text:
 		break;
 	case AbstractColumn::Month:
@@ -399,6 +403,7 @@ void ColumnDock::columnFormatChanged() {
 			break;
 		}
 	case AbstractColumn::Integer:
+	case AbstractColumn::BigInt:
 	case AbstractColumn::Text:
 		break;
 	case AbstractColumn::Month:

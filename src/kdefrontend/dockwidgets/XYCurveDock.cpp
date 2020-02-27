@@ -695,6 +695,7 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 		ui.cbValuesFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
 		break;
 	case AbstractColumn::Integer:
+	case AbstractColumn::BigInt:
 		break;
 	case AbstractColumn::Text:
 		ui.cbValuesFormat->addItem(i18n("Text"), QVariant());
@@ -800,6 +801,7 @@ void XYCurveDock::showValuesColumnFormat(const Column* column) {
 			break;
 		}
 		case AbstractColumn::Integer:
+		case AbstractColumn::BigInt:
 		case AbstractColumn::Text:
 			break;
 		case AbstractColumn::Month:

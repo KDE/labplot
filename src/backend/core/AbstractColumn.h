@@ -79,7 +79,7 @@ public:
 //		UInt16 = 23,	// quint16 (unsigned short)
 		Integer = 24,	// qint32 (int)
 //		UInt32 = 25,	// quint32 (unsigned int)
-//		Int64 = 26,	// qint64 (long)
+		BigInt = 26,	// qint64 (long)
 //		UInt64 = 27,	// quint64 (unsigned long)
 		// MISC
 		// QBrush = 30

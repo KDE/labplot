@@ -123,6 +123,7 @@ QIcon AbstractColumn::iconForMode(ColumnMode mode) {
 	switch (mode) {
 	case AbstractColumn::Numeric:
 	case AbstractColumn::Integer:
+	case AbstractColumn::BigInt:
 		break;
 	case AbstractColumn::Text:
 		return QIcon::fromTheme("draw-text");
@@ -265,6 +266,7 @@ bool AbstractColumn::isValid(int row) const {
 	case AbstractColumn::Numeric:
 		return !std::isnan(valueAt(row));
 	case AbstractColumn::Integer:	// there is no invalid integer
+	case AbstractColumn::BigInt:
 		return true;
 	case AbstractColumn::Text:
 		return !textAt(row).isNull();
