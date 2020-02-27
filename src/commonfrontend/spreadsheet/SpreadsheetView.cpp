@@ -753,7 +753,7 @@ void SpreadsheetView::handleAspectAdded(const AbstractAspect* aspect) {
 		return;
 
 	int index = m_spreadsheet->indexOfChild<Column>(col);
-	qDebug()<<"adding column with width " << col->width();
+	DEBUG("adding column with width " << col->width())
 	if (col->width() == 0)
 		m_tableView->resizeColumnToContents(index);
 	else
