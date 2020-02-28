@@ -2,7 +2,7 @@
     File                 : ColumnDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-	Copyright            : (C) 2011-2019 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2019 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : widget for column properties
 
@@ -198,7 +198,7 @@ void ColumnDock::updateFormatWidgets(AbstractColumn::ColumnMode mode) {
 		ui.sbPrecision->hide();
 	}
 
-	if (mode == AbstractColumn::Text || mode == AbstractColumn::Integer) {
+	if (mode == AbstractColumn::Text || mode == AbstractColumn::Integer || mode == AbstractColumn::BigInt) {
 		ui.lFormat->hide();
 		ui.cbFormat->hide();
 	} else {
@@ -224,6 +224,7 @@ void ColumnDock::retranslateUi() {
 	ui.cbType->clear();
 	ui.cbType->addItem(i18n("Numeric"), QVariant(int(AbstractColumn::Numeric)));
 	ui.cbType->addItem(i18n("Integer"), QVariant(int(AbstractColumn::Integer)));
+	ui.cbType->addItem(i18n("Big Integer"), QVariant(int(AbstractColumn::BigInt)));
 	ui.cbType->addItem(i18n("Text"), QVariant(int(AbstractColumn::Text)));
 	ui.cbType->addItem(i18n("Month Names"), QVariant(int(AbstractColumn::Month)));
 	ui.cbType->addItem(i18n("Day Names"), QVariant(int(AbstractColumn::Day)));

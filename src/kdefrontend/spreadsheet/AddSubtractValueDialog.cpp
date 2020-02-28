@@ -4,6 +4,7 @@
     Description          : Dialog for adding/subtracting a value from column values
     --------------------------------------------------------------------
     Copyright            : (C) 2018 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -161,6 +162,12 @@ void AddSubtractValueDialog::setColumns(QVector<Column*> columns) {
 		ui.dateTimeEdit->setVisible(false);
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
 		ui.leValue->setText(QString::number(column->integerAt(0)));
+	} else 	if (mode == AbstractColumn::BigInt) {
+		ui.lTimeValue->setVisible(false);
+		ui.dateTimeEdit->setVisible(false);
+		//TODO: QLongLongVaildator
+		ui.leValue->setValidator(new QIntValidator(ui.leValue));
+		ui.leValue->setText(QString::number(column->bigIntAt(0)));
 	} else 	if (mode == AbstractColumn::Numeric) {
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
@@ -195,6 +202,12 @@ void AddSubtractValueDialog::setMatrices() {
 		ui.dateTimeEdit->setVisible(false);
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
 		ui.leValue->setText(QString::number(m_matrix->cell<int>(0,0)));
+	} else 	if (m_matrix->mode() == AbstractColumn::BigInt) {
+		ui.lTimeValue->setVisible(false);
+		ui.dateTimeEdit->setVisible(false);
+		// TODO QLongLongValidator
+		ui.leValue->setValidator(new QIntValidator(ui.leValue));
+		ui.leValue->setText(QString::number(m_matrix->cell<qint64>(0,0)));
 	} else 	if (m_matrix->mode() == AbstractColumn::Numeric) {
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
@@ -281,6 +294,42 @@ void AddSubtractValueDialog::generateForColumns() {
 					new_data[i] = data->operator[](i) / value;
 
 				col->replaceInteger(0, new_data);
+			}
+			break;
+		}
+	} else if (mode == AbstractColumn::BigInt) {
+		QVector<qint64> new_data(rows);
+		qint64 value = ui.leValue->text().toLongLong();
+
+		switch (m_operation) {
+		case Subtract:
+			value *= -1;
+			//fall through
+		case Add:
+			for (auto* col : m_columns) {
+				auto* data = static_cast<QVector<qint64>* >(col->data());
+				for (int i = 0; i<rows; ++i)
+					new_data[i] = data->operator[](i) + value;
+
+				col->replaceBigInt(0, new_data);
+			}
+			break;
+		case Multiply:
+			for (auto* col : m_columns) {
+				auto* data = static_cast<QVector<qint64>* >(col->data());
+				for (int i = 0; i<rows; ++i)
+					new_data[i] = data->operator[](i) * value;
+
+				col->replaceBigInt(0, new_data);
+			}
+			break;
+		case Divide:
+			for (auto* col : m_columns) {
+				auto* data = static_cast<QVector<qint64>* >(col->data());
+				for (int i = 0; i<rows; ++i)
+					new_data[i] = data->operator[](i) / value;
+
+				col->replaceBigInt(0, new_data);
 			}
 			break;
 		}
@@ -371,7 +420,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 				{
 					new_data = m_matrix->cell<int>(i,j);
 					new_data += value;
-					m_matrix->setCell(i,j,new_data);
+					m_matrix->setCell(i, j, new_data);
 				}
 			break;
 		case Multiply:
@@ -380,7 +429,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 				{
 					new_data = m_matrix->cell<int>(i,j);
 					new_data *= value;
-					m_matrix->setCell(i,j,new_data);
+					m_matrix->setCell(i, j, new_data);
 				}
 			break;
 		case Divide:
@@ -388,6 +437,39 @@ void AddSubtractValueDialog::generateForMatrices() {
 				for(int j = 0; j<cols; ++j)
 				{
 					new_data = m_matrix->cell<int>(i,j);
+					new_data /= value;
+					m_matrix->setCell(i, j, new_data);
+				}
+			break;
+		}
+	} else if (mode == AbstractColumn::BigInt) {
+		qint64 new_data;
+		qint64 value = ui.leValue->text().toLongLong();
+
+		switch (m_operation) {
+		case Subtract:
+			value *= -1;
+			//fall through
+		case Add:
+			for (int i = 0; i<rows; ++i)
+				for(int j = 0; j<cols; ++j) {
+					new_data = m_matrix->cell<qint64>(i,j);
+					new_data += value;
+					m_matrix->setCell(i, j, new_data);
+				}
+			break;
+		case Multiply:
+			for (int i = 0; i<rows; ++i)
+				for(int j = 0; j<cols; ++j) {
+					new_data = m_matrix->cell<qint64>(i,j);
+					new_data *= value;
+					m_matrix->setCell(i, j, new_data);
+				}
+			break;
+		case Divide:
+		for (int i = 0; i<rows; ++i)
+				for(int j = 0; j<cols; ++j) {
+					new_data = m_matrix->cell<qint64>(i,j);
 					new_data /= value;
 					m_matrix->setCell(i,j,new_data);
 				}

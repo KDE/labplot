@@ -4,7 +4,7 @@
     Description          : Dialog for generating non-uniformly distributed random numbers
     --------------------------------------------------------------------
     Copyright            : (C) 2014-2019 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -41,7 +41,6 @@
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KWindowConfig>
-#include <cstdio>
 
 extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
@@ -405,6 +404,7 @@ void RandomValuesDialog::generate() {
 	const int rows = m_spreadsheet->rowCount();
 	QVector<double> data(rows);
 	QVector<int> data_int(rows);
+	QVector<qint64> data_bigint(rows);
 
 	switch (dist) {
 	case nsl_sf_stats_gaussian: {
@@ -420,6 +420,10 @@ void RandomValuesDialog::generate() {
 				for (int i = 0; i < rows; ++i)
 					data_int[i] = (int)round(gsl_ran_gaussian(r, sigma) + mu);
 				col->replaceInteger(0, data_int);
+			} else if (col->columnMode() == AbstractColumn::BigInt) {
+				for (int i = 0; i < rows; ++i)
+					data_bigint[i] = (qint64)round(gsl_ran_gaussian(r, sigma) + mu);
+				col->replaceBigInt(0, data_bigint);
 			}
 		}
 		break;
@@ -437,10 +441,15 @@ void RandomValuesDialog::generate() {
 				for (int i = 0; i < rows; ++i)
 					data_int[i] = (int)round(gsl_ran_gaussian_tail(r, a, sigma) + mu);
 				col->replaceInteger(0, data_int);
+			} else if (col->columnMode() == AbstractColumn::BigInt) {
+				for (int i = 0; i < rows; ++i)
+					data_bigint[i] = (qint64)round(gsl_ran_gaussian_tail(r, a, sigma) + mu);
+				col->replaceBigInt(0, data_bigint);
 			}
 		}
 		break;
 	}
+	//TODO: bigint
 	case nsl_sf_stats_exponential: {
 		double l = ui.leParameter1->text().toDouble();
 		double mu = ui.leParameter2->text().toDouble();

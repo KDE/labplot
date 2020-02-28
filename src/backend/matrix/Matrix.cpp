@@ -419,6 +419,7 @@ T Matrix::cell(int row, int col) const {
 }
 template double Matrix::cell<double>(int row, int col) const;
 template int Matrix::cell<int>(int row, int col) const;
+template qint64 Matrix::cell<qint64>(int row, int col) const;
 template QDateTime Matrix::cell<QDateTime>(int row, int col) const;
 template QString Matrix::cell<QString>(int row, int col) const;
 

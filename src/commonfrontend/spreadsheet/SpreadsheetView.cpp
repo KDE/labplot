@@ -1057,7 +1057,8 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			bool plottable = true;
 			bool datetime = false;
 			for (const Column* col : selectedColumns()) {
-				if ( !(col->columnMode() == AbstractColumn::Numeric || col->columnMode() == AbstractColumn::Integer) ) {
+				if ( !(col->columnMode() == AbstractColumn::Numeric || col->columnMode() == AbstractColumn::Integer ||
+							col->columnMode() == AbstractColumn::BigInt) ) {
 					datetime = (col->columnMode() == AbstractColumn::DateTime);
 					if (!datetime)
 						plottable = false;
@@ -1237,7 +1238,7 @@ void SpreadsheetView::copySelection() {
 // 				else
 				if (col_ptr->columnMode() == AbstractColumn::Numeric)
 					output_str += locale.toString(col_ptr->valueAt(first_row + r), formats.at(c), 16); // copy with max. precision
-				else if (col_ptr->columnMode() == AbstractColumn::Integer)
+				else if (col_ptr->columnMode() == AbstractColumn::Integer || col_ptr->columnMode() == AbstractColumn::BigInt)
 					output_str += QString::number(col_ptr->valueAt(first_row + r));
 				else
 					output_str += col_ptr->asStringColumn()->textAt(first_row + r);
@@ -1393,6 +1394,22 @@ void SpreadsheetView::pasteIntoSelection() {
 							col->setIntegerAt(first_row + r, locale.toInt(cellTexts.at(r).at(c)));
 						else
 							col->setIntegerAt(first_row + r, 0);
+					}
+				}
+			}
+		} else if (col->columnMode() == AbstractColumn::BigInt) {
+			if (rows == m_spreadsheet->rowCount() && rows <= cellTexts.size()) {
+				QVector<qint64> new_data(rows);
+				for (int r = 0; r < rows; ++r)
+					new_data[r] = locale.toLongLong(cellTexts.at(r).at(c));
+				col->replaceBigInt(0, new_data);
+			} else {
+				for (int r = 0; r < rows && r < input_row_count; r++) {
+					if ( isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count()) ) {
+						if (!cellTexts.at(r).at(c).isEmpty())
+							col->setBigIntAt(first_row + r, locale.toLongLong(cellTexts.at(r).at(c)));
+						else
+							col->setBigIntAt(first_row + r, 0);
 					}
 				}
 			}
