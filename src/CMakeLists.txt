@@ -223,6 +223,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/datatypes/Integer2DateTimeFilter.h
 	${BACKEND_DIR}/core/datatypes/Integer2DayOfWeekFilter.h
 	${BACKEND_DIR}/core/datatypes/Integer2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/Integer2BigIntFilter.h
 	${BACKEND_DIR}/core/datatypes/Integer2MonthFilter.h
 	${BACKEND_DIR}/core/datatypes/Integer2StringFilter.h
 	${BACKEND_DIR}/core/datatypes/String2DayOfWeekFilter.h

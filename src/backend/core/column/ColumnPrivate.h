@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2013-2019 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -115,6 +116,10 @@ public:
 	int integerAt(int row) const;
 	void setIntegerAt(int row, int new_value);
 	void replaceInteger(int first, const QVector<int>&);
+
+	qint64 bigIntAt(int row) const;
+	void setBigIntAt(int row, qint64 new_value);
+	void replaceBigInt(int first, const QVector<qint64>&);
 
 	void updateProperties();
 

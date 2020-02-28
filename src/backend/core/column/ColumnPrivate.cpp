@@ -247,8 +247,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		case AbstractColumn::Integer:
 			break;
 		case AbstractColumn::BigInt:
-			//TODO
-			// filter = new Integer2BigIntFilter();
+			filter = new Integer2BigIntFilter();
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast<QVector<int>*>(old_data)), m_column_mode);
 			m_data = new QVector<qint64>();
@@ -629,8 +628,8 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 	}
 	case AbstractColumn::BigInt: {
 		qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
-		//TODO for (int i = 0; i < num_rows; ++i)
-		//	ptr[i] = other->bigIntAt(i);
+		for (int i = 0; i < num_rows; ++i)
+			ptr[i] = other->bigIntAt(i);
 		break;
 	}
 	case AbstractColumn::Text: {
@@ -690,8 +689,8 @@ bool ColumnPrivate::copy(const AbstractColumn* source, int source_start, int des
 	}
 	case AbstractColumn::BigInt: {
 		qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
-		//TODO for (int i = 0; i < num_rows; i++)
-		//	ptr[dest_start+i] = source->bigIntAt(source_start + i);
+		for (int i = 0; i < num_rows; i++)
+			ptr[dest_start+i] = source->bigIntAt(source_start + i);
 		break;
 	}
 	case AbstractColumn::Text:
@@ -741,8 +740,8 @@ bool ColumnPrivate::copy(const ColumnPrivate* other) {
 	}
 	case AbstractColumn::BigInt: {
 		qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
-		//TODO for (int i = 0; i < num_rows; ++i)
-		//	ptr[i] = other->bigIntAt(i);
+		for (int i = 0; i < num_rows; ++i)
+			ptr[i] = other->bigIntAt(i);
 		break;
 	}
 	case AbstractColumn::Text:
@@ -797,8 +796,8 @@ bool ColumnPrivate::copy(const ColumnPrivate* source, int source_start, int dest
 	}
 	case AbstractColumn::BigInt: {
 		qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
-		//TODO for (int i = 0; i < num_rows; ++i)
-		//	ptr[dest_start+i] = source->bigIntAt(source_start + i);
+		for (int i = 0; i < num_rows; ++i)
+			ptr[dest_start+i] = source->bigIntAt(source_start + i);
 		break;
 	}
 	case AbstractColumn::Text:
@@ -1342,6 +1341,14 @@ int ColumnPrivate::integerAt(int row) const {
 }
 
 /**
+ * \brief Return the bigint value in row 'row'
+ */
+qint64 ColumnPrivate::bigIntAt(int row) const {
+	if (m_column_mode != AbstractColumn::BigInt) return 0;
+	return static_cast<QVector<qint64>*>(m_data)->value(row, 0);
+}
+
+/**
  * \brief Set the content of row 'row'
  *
  * Use this only when columnMode() is Text
@@ -1522,6 +1529,46 @@ void ColumnPrivate::replaceInteger(int first, const QVector<int>& new_values) {
 		resizeTo(first + num_rows);
 
 	int* ptr = static_cast<QVector<int>*>(m_data)->data();
+	for (int i = 0; i < num_rows; ++i)
+		ptr[first+i] = new_values.at(i);
+
+	if (!m_owner->m_suppressDataChangedSignal)
+		emit m_owner->dataChanged(m_owner);
+}
+
+/**
+ * \brief Set the content of row 'row'
+ *
+ * Use this only when columnMode() is BigInt
+ */
+void ColumnPrivate::setBigIntAt(int row, qint64 new_value) {
+	DEBUG("ColumnPrivate::setBigIntAt()");
+	if (m_column_mode != AbstractColumn::BigInt) return;
+
+	emit m_owner->dataAboutToChange(m_owner);
+	if (row >= rowCount())
+		resizeTo(row+1);
+
+	static_cast<QVector<qint64>*>(m_data)->replace(row, new_value);
+	if (!m_owner->m_suppressDataChangedSignal)
+		emit m_owner->dataChanged(m_owner);
+}
+
+/**
+ * \brief Replace a range of values
+ *
+ * Use this only when columnMode() is BigInt
+ */
+void ColumnPrivate::replaceBigInt(int first, const QVector<qint64>& new_values) {
+	DEBUG("ColumnPrivate::replaceBigInt()");
+	if (m_column_mode != AbstractColumn::BigInt) return;
+
+	emit m_owner->dataAboutToChange(m_owner);
+	int num_rows = new_values.size();
+	if (first + num_rows > rowCount())
+		resizeTo(first + num_rows);
+
+	qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
 	for (int i = 0; i < num_rows; ++i)
 		ptr[first+i] = new_values.at(i);
 

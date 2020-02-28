@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Knut Franke (knut.franke@gmx.de)
     Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Simplified filter interface for filters with
                            only one output port.
  ***************************************************************************/
@@ -54,6 +54,7 @@ public:
 	virtual QDateTime dateTimeAt(int row) const;
 	virtual double valueAt(int row) const;
 	virtual int integerAt(int row) const;
+	virtual qint64 bigIntAt(int row) const;
 
 	virtual int rowCount() const;
 	virtual QList<Interval<int>> dependentRows(const Interval<int>& inputRange) const;

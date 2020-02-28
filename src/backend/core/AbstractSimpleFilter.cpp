@@ -4,6 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 by Knut Franke, Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
+    Copyright            : (C) 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Simplified filter interface for filters with
                            only one output port.
 
@@ -227,6 +228,15 @@ double AbstractSimpleFilter::valueAt(int row) const {
  */
 int AbstractSimpleFilter::integerAt(int row) const {
 	return m_inputs.value(0) ? m_inputs.at(0)->integerAt(row) : 0;
+}
+
+/**
+ * \brief Return the bigint value in row 'row'
+ *
+ * Use this only when columnMode() is BigInt
+ */
+qint64 AbstractSimpleFilter::bigIntAt(int row) const {
+	return m_inputs.value(0) ? m_inputs.at(0)->bigIntAt(row) : 0;
 }
 
 /**

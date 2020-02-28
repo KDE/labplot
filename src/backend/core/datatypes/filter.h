@@ -2,7 +2,7 @@
     File                 : filter.h
     Project              : AbstractColumn
     --------------------------------------------------------------------
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Conversion filter header.
  ***************************************************************************/
 
@@ -35,6 +35,7 @@
 #include "backend/core/datatypes/Double2MonthFilter.h"
 #include "backend/core/datatypes/Double2DayOfWeekFilter.h"
 #include "backend/core/datatypes/Integer2DoubleFilter.h"
+#include "backend/core/datatypes/Integer2BigIntFilter.h"
 #include "backend/core/datatypes/Integer2StringFilter.h"
 #include "backend/core/datatypes/Integer2DateTimeFilter.h"
 #include "backend/core/datatypes/Integer2MonthFilter.h"

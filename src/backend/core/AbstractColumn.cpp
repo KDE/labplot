@@ -4,7 +4,7 @@
     Description          : Interface definition for data with column logic
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -542,6 +542,18 @@ void AbstractColumn::setIntegerAt(int row, const int new_value) {
 void AbstractColumn::replaceInteger(int first, const QVector<int>& new_values) {
 	Q_UNUSED(first) Q_UNUSED(new_values)
 }
+
+/**
+ * \brief Return the bigint value in row 'row'
+ *
+ * Use this only when columnMode() is BigInt
+ */
+qint64 AbstractColumn::bigIntAt(int row) const {
+	Q_UNUSED(row);
+	return 42;
+}
+
+//TODO
 
 /**
  * Returns the properties hold by this column (no, monotonic increasing, monotonic decreasing,...)
