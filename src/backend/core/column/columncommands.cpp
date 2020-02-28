@@ -31,7 +31,6 @@
 #include "columncommands.h"
 #include "ColumnPrivate.h"
 #include <KLocalizedString>
-#include <cmath>
 
 /** ***************************************************************************
  * \class ColumnSetModeCmd
@@ -937,6 +936,35 @@ void ColumnSetIntegerCmd::undo() {
 }
 
 /** ***************************************************************************
+ * \class ColumnSetBigIntCmd
+ * \brief Set the value for a bigint cell
+ ** ***************************************************************************/
+
+ColumnSetBigIntCmd::ColumnSetBigIntCmd(ColumnPrivate* col, int row, qint64 new_value, QUndoCommand* parent)
+	: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(new_value) {
+		DEBUG("ColumnSetIntegerCmd::ColumnSetIntegerCmd()");
+	setText(i18n("%1: set value for row %2", col->name(), row));
+}
+
+/**
+ * \brief Execute the command
+ */
+void ColumnSetBigIntCmd::redo() {
+	m_old_value = m_col->bigIntAt(m_row);
+	m_row_count = m_col->rowCount();
+	m_col->setBigIntAt(m_row, m_new_value);
+}
+
+/**
+ * \brief Undo the command
+ */
+void ColumnSetBigIntCmd::undo() {
+	m_col->setBigIntAt(m_row, m_old_value);
+	m_col->resizeTo(m_row_count);
+	m_col->replaceData(m_col->data());
+}
+
+/** ***************************************************************************
  * \class ColumnSetDataTimeCmd
  * \brief Set the value of a date-time cell
  ** ***************************************************************************/
@@ -1121,19 +1149,19 @@ void ColumnReplaceValuesCmd::undo() {
 }
 
 /** ***************************************************************************
- * \class ColumnReplaceIntegersCmd
+ * \class ColumnReplaceIntegerCmd
  * \brief Replace a range of integers in a int column
  ** ***************************************************************************/
 
-ColumnReplaceIntegersCmd::ColumnReplaceIntegersCmd(ColumnPrivate* col, int first, const QVector<int>& new_values, QUndoCommand* parent)
+ColumnReplaceIntegerCmd::ColumnReplaceIntegerCmd(ColumnPrivate* col, int first, const QVector<int>& new_values, QUndoCommand* parent)
 	: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values) {
-	setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() -1));
+	setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() - 1));
 }
 
 /**
  * \brief Execute the command
  */
-void ColumnReplaceIntegersCmd::redo() {
+void ColumnReplaceIntegerCmd::redo() {
 	if (!m_copied) {
 		m_old_values = static_cast<QVector<int>*>(m_col->data())->mid(m_first, m_new_values.count());
 		m_row_count = m_col->rowCount();
@@ -1145,8 +1173,39 @@ void ColumnReplaceIntegersCmd::redo() {
 /**
  * \brief Undo the command
  */
-void ColumnReplaceIntegersCmd::undo() {
+void ColumnReplaceIntegerCmd::undo() {
 	m_col->replaceInteger(m_first, m_old_values);
+	m_col->resizeTo(m_row_count);
+	m_col->replaceData(m_col->data());
+}
+
+/** ***************************************************************************
+ * \class ColumnReplaceBigIntCmd
+ * \brief Replace a range of integers in a int column
+ ** ***************************************************************************/
+
+ColumnReplaceBigIntCmd::ColumnReplaceBigIntCmd(ColumnPrivate* col, int first, const QVector<qint64>& new_values, QUndoCommand* parent)
+	: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values) {
+	setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() - 1));
+}
+
+/**
+ * \brief Execute the command
+ */
+void ColumnReplaceBigIntCmd::redo() {
+	if (!m_copied) {
+		m_old_values = static_cast<QVector<qint64>*>(m_col->data())->mid(m_first, m_new_values.count());
+		m_row_count = m_col->rowCount();
+		m_copied = true;
+	}
+	m_col->replaceBigInt(m_first, m_new_values);
+}
+
+/**
+ * \brief Undo the command
+ */
+void ColumnReplaceBigIntCmd::undo() {
+	m_col->replaceBigInt(m_first, m_old_values);
 	m_col->resizeTo(m_row_count);
 	m_col->replaceData(m_col->data());
 }

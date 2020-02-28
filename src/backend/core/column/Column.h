@@ -114,6 +114,9 @@ public:
 	int integerAt(int) const override;
 	void setIntegerAt(int, int) override;
 	void replaceInteger(int, const QVector<int>&) override;
+	qint64 bigIntAt(int) const override;
+	void setBigIntAt(int, qint64) override;
+	void replaceBigInt(int, const QVector<qint64>&) override;
 	Properties properties() const override;
 
 	double maximum(int count = 0) const override;

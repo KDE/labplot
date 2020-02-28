@@ -1536,9 +1536,9 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 			for (int row = first; row <= last; row++)
 				if (isCellSelected(row, col))
 					results[row-first] = row + 1;
-			//TODO	else
-			//		results[row-first] = col_ptr->bigIntAt(row);
-			//TODO col_ptr->replaceBigInt(first, results);
+				else
+					results[row-first] = col_ptr->bigIntAt(row);
+			col_ptr->replaceBigInt(first, results);
 			break;
 		}
 		case AbstractColumn::Text: {
@@ -1644,9 +1644,9 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
 						results[row-first] = qrand();
-				//TODO	else
-				//TODO		results[row-first] = col_ptr->bigIntAt(row);
-				//TODO col_ptr->replaceBigInt(first, results);
+					else
+						results[row-first] = col_ptr->bigIntAt(row);
+				col_ptr->replaceBigInt(first, results);
 				break;
 			}
 		case AbstractColumn::Text: {
@@ -1715,9 +1715,11 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 
 	bool doubleOk = false;
 	bool intOk = false;
+	bool bigIntOk = false;
 	bool stringOk = false;
 	double doubleValue = 0;
 	int intValue = 0;
+	qint64 bigIntValue = 0;
 	QString stringValue;
 
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with const values", m_spreadsheet->name()));
@@ -1728,7 +1730,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 		case AbstractColumn::Numeric:
 			if (!doubleOk)
 				doubleValue = QInputDialog::getDouble(this, i18n("Fill the selection with constant value"),
-				                                      i18n("Value"), 0, -2147483647, 2147483647, 6, &doubleOk);
+				                                      i18n("Value"), 0, -std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), 6, &doubleOk);
 			if (doubleOk) {
 				WAIT_CURSOR;
 				QVector<double> results(last-first+1);
@@ -1760,8 +1762,22 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 			}
 			break;
 		case AbstractColumn::BigInt:
-			//TODO
-			DEBUG("BigInt not implemented yet!")
+			//TODO: getBigInt()
+			if (!bigIntOk)
+				bigIntValue = QInputDialog::getInt(this, i18n("Fill the selection with constant value"),
+				                                i18n("Value"), 0, -2147483647, 2147483647, 1, &bigIntOk);
+			if (bigIntOk) {
+				WAIT_CURSOR;
+				QVector<qint64> results(last-first+1);
+				for (int row = first; row <= last; row++) {
+					if (isCellSelected(row, col))
+						results[row-first] = bigIntValue;
+					else
+						results[row-first] = col_ptr->bigIntAt(row);
+				}
+				col_ptr->replaceBigInt(first, results);
+				RESET_CURSOR;
+			}
 			break;
 		case AbstractColumn::Text:
 			if (!stringOk)

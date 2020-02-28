@@ -590,9 +590,38 @@ void Column::replaceInteger(int first, const QVector<int>& new_values) {
 		d->statisticsAvailable = false;
 		d->hasValuesAvailable = false;
 		d->propertiesAvailable = false;
-		exec(new ColumnReplaceIntegersCmd(d, first, new_values));
+		exec(new ColumnReplaceIntegerCmd(d, first, new_values));
 	}
 }
+
+/**
+ * \brief Set the content of row 'row'
+ *
+ * Use this only when columnMode() is BigInt
+ */
+void Column::setBigIntAt(int row, const qint64 new_value) {
+	DEBUG("Column::setBigIntAt()");
+	d->statisticsAvailable = false;
+	d->hasValuesAvailable = false;
+	d->propertiesAvailable = false;
+	exec(new ColumnSetBigIntCmd(d, row, new_value));
+}
+
+/**
+ * \brief Replace a range of values
+ *
+ * Use this only when columnMode() is Integer
+ */
+void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
+	DEBUG("Column::replaceInteger()");
+	if (!new_values.isEmpty()) {
+		d->statisticsAvailable = false;
+		d->hasValuesAvailable = false;
+		d->propertiesAvailable = false;
+		exec(new ColumnReplaceBigIntCmd(d, first, new_values));
+	}
+}
+
 /*!
  * \brief Column::properties
  * Returns the column properties of this curve (monoton increasing, monoton decreasing, ... )
@@ -784,7 +813,6 @@ bool Column::hasValues() const {
 	return d->hasValues;
 }
 
-//TODO: support all data types
 /**
  * \brief Return the content of row 'row'.
  *
@@ -833,6 +861,13 @@ double Column::valueAt(int row) const {
  */
 int Column::integerAt(int row) const {
 	return d->integerAt(row);
+}
+
+/**
+ * \brief Return the bigint value in row 'row'
+ */
+qint64 Column::bigIntAt(int row) const {
+	return d->bigIntAt(row);
 }
 
 /*
@@ -1184,7 +1219,7 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 			reader->raiseError(i18n("invalid row value"));
 			return false;
 		}
-		//TODO setBigIntAt(index, value);
+		setBigIntAt(index, value);
 		break;
 	}
 	case AbstractColumn::Text:

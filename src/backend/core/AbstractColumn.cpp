@@ -553,7 +553,23 @@ qint64 AbstractColumn::bigIntAt(int row) const {
 	return 42;
 }
 
-//TODO
+/**
+ * \brief Set the content of row 'row'
+ *
+ * Use this only when columnMode() is BigInt
+ */
+void AbstractColumn::setBigIntAt(int row, const qint64 new_value) {
+	Q_UNUSED(row) Q_UNUSED(new_value)
+};
+
+/**
+ * \brief Replace a range of values
+ *
+ * Use this only when columnMode() is BigInt
+ */
+void AbstractColumn::replaceBigInt(int first, const QVector<qint64>& new_values) {
+	Q_UNUSED(first) Q_UNUSED(new_values)
+}
 
 /**
  * Returns the properties hold by this column (no, monotonic increasing, monotonic decreasing,...)

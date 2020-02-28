@@ -200,7 +200,8 @@ public:
 	virtual void setIntegerAt(int row, int new_value);
 	virtual void replaceInteger(int first, const QVector<int>& new_values);
 	virtual qint64 bigIntAt(int row) const;
-	//TODO
+	virtual void setBigIntAt(int row, qint64 new_value);
+	virtual void replaceBigInt(int first, const QVector<qint64>& new_values);
 	virtual Properties properties() const;
 
 signals:

@@ -50,9 +50,8 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode) :
 		m_data = new QVector<int>();
 		break;
 	case AbstractColumn::BigInt:
-		//TODO
-		//m_input_filter = new String2BigIntFilter();
-		//m_output_filter = new BigInt2StringFilter();
+		m_input_filter = new String2BigIntFilter();
+		m_output_filter = new BigInt2StringFilter();
 		m_data = new QVector<qint64>();
 		break;
 	case AbstractColumn::Text:
@@ -105,11 +104,10 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, voi
 				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::BigInt:
-		//TODO
-		//m_input_filter = new String2BigIntFilter();
-		//m_output_filter = new BigInt2StringFilter();
-		//connect(static_cast<BigInt2StringFilter *>(m_output_filter), &BigInt2StringFilter::formatChanged,
-		//		m_owner, &Column::handleFormatChange);
+		m_input_filter = new String2BigIntFilter();
+		m_output_filter = new BigInt2StringFilter();
+		connect(static_cast<BigInt2StringFilter *>(m_output_filter), &BigInt2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Text:
 		m_input_filter = new SimpleCopyThroughFilter();
@@ -206,8 +204,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			m_data = new QVector<int>();
 			break;
 		case AbstractColumn::BigInt:
-			//TODO
-			//filter = new Double2BigIntFilter();
+			filter = new Double2BigIntFilter();
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast<QVector<double>*>(old_data)));
 			m_data = new QVector<qint64>();
@@ -287,22 +284,19 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		break;
 	}
 	case AbstractColumn::BigInt: {
-		//TODO
-		//disconnect(static_cast<BigInt2StringFilter*>(m_output_filter), &BigInt2StringFilter::formatChanged,
-		//		   m_owner, &Column::handleFormatChange);
+		disconnect(static_cast<BigInt2StringFilter*>(m_output_filter), &BigInt2StringFilter::formatChanged,
+				   m_owner, &Column::handleFormatChange);
 		switch (mode) {
 		case AbstractColumn::BigInt:
 			break;
 		case AbstractColumn::Integer:
-			//TODO
-			//filter = new BigInt2IntegerFilter();
+			filter = new BigInt2IntegerFilter();
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast<QVector<qint64>*>(old_data)), m_column_mode);
 			m_data = new QVector<int>();
 			break;
 		case AbstractColumn::Numeric:
-			//TODO
-			//filter = new BigInt2DoubleFilter();
+			filter = new BigInt2DoubleFilter();
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast<QVector<qint64>*>(old_data)), m_column_mode);
 			m_data = new QVector<double>();
@@ -314,22 +308,19 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			m_data = new QVector<QString>();
 			break;
 		case AbstractColumn::DateTime:
-			//TODO
-			//filter = new BigInt2DateTimeFilter();
+			filter = new BigInt2DateTimeFilter();
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast< QVector<qint64>* >(old_data)), m_column_mode);
 			m_data = new QVector<QDateTime>();
 			break;
 		case AbstractColumn::Month:
-			//TODO
-			//filter = new BigInt2MonthFilter();
+			filter = new BigInt2MonthFilter();
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast< QVector<qint64>* >(old_data)), m_column_mode);
 			m_data = new QVector<QDateTime>();
 			break;
 		case AbstractColumn::Day:
-			//TODO
-			//filter = new BigInt2DayOfWeekFilter();
+			filter = new BigInt2DayOfWeekFilter();
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast< QVector<qint64>* >(old_data)), m_column_mode);
 			m_data = new QVector<QDateTime>();
@@ -355,8 +346,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			m_data = new QVector<int>();
 			break;
 		case AbstractColumn::BigInt:
-			//TODO
-			//filter = new String2BigIntFilter();
+			filter = new String2BigIntFilter();
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast<QVector<QString>*>(old_data)), m_column_mode);
 			m_data = new QVector<qint64>();
@@ -422,14 +412,12 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			m_data = new QVector<int>();
 			break;
 		case AbstractColumn::BigInt:
-			/* TODO
 			if (m_column_mode == AbstractColumn::Month)
 				filter = new Month2BigIntFilter();
 			else if (m_column_mode == AbstractColumn::Day)
 				filter = new DayOfWeek2BigIntFilter();
 			else
 				filter = new DateTime2BigIntFilter();
-			*/
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast< QVector<QDateTime>* >(old_data)), m_column_mode);
 			m_data = new QVector<qint64>();
@@ -455,11 +443,10 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::BigInt:
-		//TODO
-		//new_in_filter = new String2BigIntFilter();
-		//new_out_filter = new BigInt2StringFilter();
-		//connect(static_cast<BigInt2StringFilter*>(new_out_filter), &BigInt2StringFilter::formatChanged,
-		//		m_owner, &Column::handleFormatChange);
+		new_in_filter = new String2BigIntFilter();
+		new_out_filter = new BigInt2StringFilter();
+		connect(static_cast<BigInt2StringFilter*>(new_out_filter), &BigInt2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Text:
 		new_in_filter = new SimpleCopyThroughFilter();
@@ -534,8 +521,8 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data,
 				   m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::BigInt:
-		//TODO disconnect(static_cast<BigInt2StringFilter*>(m_output_filter), &BigInt2StringFilter::formatChanged,
-		//		   m_owner, &Column::handleFormatChange);
+		disconnect(static_cast<BigInt2StringFilter*>(m_output_filter), &BigInt2StringFilter::formatChanged,
+				   m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Text:
 		break;
@@ -568,8 +555,8 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data,
 				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::BigInt:
-		//TODO connect(static_cast<BigInt2StringFilter*>(m_output_filter), &BigInt2StringFilter::formatChanged,
-		//		m_owner, &Column::handleFormatChange);
+		connect(static_cast<BigInt2StringFilter*>(m_output_filter), &BigInt2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Text:
 		break;
