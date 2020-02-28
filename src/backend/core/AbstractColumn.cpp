@@ -245,12 +245,12 @@ void AbstractColumn::setPlotDesignation(AbstractColumn::PlotDesignation pd) {
 
 bool AbstractColumn::isNumeric() const {
 	const AbstractColumn::ColumnMode mode = columnMode();
-	return (mode == AbstractColumn::Numeric || mode == AbstractColumn::Integer);
+	return (mode == AbstractColumn::Numeric || mode == AbstractColumn::Integer || mode == AbstractColumn::BigInt);
 }
 
 bool AbstractColumn::isPlottable() const {
 	const AbstractColumn::ColumnMode mode = columnMode();
-	return (mode == AbstractColumn::Numeric || mode == AbstractColumn::Integer || mode == AbstractColumn::DateTime);
+	return (mode == AbstractColumn::Numeric || mode == AbstractColumn::Integer || mode == AbstractColumn::BigInt || mode == AbstractColumn::DateTime);
 }
 
 /**

@@ -99,6 +99,7 @@ public:
 	QDateTime dateTimeAt(int row) const override;
 	double valueAt(int row) const override;
 	int integerAt(int row) const override;
+	qint64 bigIntAt(int row) const override;
 	void save(QXmlStreamWriter*) const override {};
 	bool load(XmlStreamReader*, bool preview) override {Q_UNUSED(preview); return true;};
 private:

@@ -422,3 +422,7 @@ double SimpleFilterColumn::valueAt(int row) const {
 int SimpleFilterColumn::integerAt(int row) const {
 	return m_owner->integerAt(row);
 }
+
+qint64 SimpleFilterColumn::bigIntAt(int row) const {
+	return m_owner->bigIntAt(row);
+}

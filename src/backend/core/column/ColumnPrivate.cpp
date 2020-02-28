@@ -1133,7 +1133,7 @@ void ColumnPrivate::updateFormula() {
 			break;
 		}
 
-		if (column->columnMode() == AbstractColumn::Integer) {
+		if (column->columnMode() == AbstractColumn::Integer || column->columnMode() == AbstractColumn::BigInt) {
 			//convert integers to doubles first
 			auto* xVector = new QVector<double>(column->rowCount());
 			for (int i = 0; i<column->rowCount(); ++i)
@@ -1306,8 +1306,8 @@ QDateTime ColumnPrivate::dateTimeAt(int row) const {
 }
 
 /**
- * \brief Return the double value in row 'row' for columns with type Numeric and Integer.
- * This function has to be used everywhere where the exact type (double or int) is not relevant for numerical calculations.
+ * \brief Return the double value in row 'row' for columns with type Numeric, Integer or BigInt.
+ * This function has to be used everywhere where the exact type (double, int or qint64) is not relevant for numerical calculations.
  * For cases where the integer value is needed without any implicit conversions, \sa integerAt() has to be used.
  */
 double ColumnPrivate::valueAt(int row) const {
@@ -1315,6 +1315,8 @@ double ColumnPrivate::valueAt(int row) const {
 		return static_cast<QVector<double>*>(m_data)->value(row, NAN);
 	else if (m_column_mode == AbstractColumn::Integer)
 		return static_cast<QVector<int>*>(m_data)->value(row, 0);
+	else if (m_column_mode == AbstractColumn::BigInt)
+		return static_cast<QVector<qint64>*>(m_data)->value(row, 0);
 	else
 		 return NAN;
 }
@@ -1579,10 +1581,13 @@ void ColumnPrivate::updateProperties() {
 
 	double prevValue = NAN;
 	int prevValueInt = 0;
+	qint64 prevValueBigInt = 0;
 	qint64 prevValueDatetime = 0;
 
 	if (m_column_mode == AbstractColumn::Integer)
 		prevValueInt = integerAt(0);
+	else if (m_column_mode == AbstractColumn::BigInt)
+		prevValueBigInt = bigIntAt(0);
 	else if (m_column_mode == AbstractColumn::Numeric)
 		prevValue = valueAt(0);
 	else if (m_column_mode == AbstractColumn::DateTime ||
@@ -1601,6 +1606,7 @@ void ColumnPrivate::updateProperties() {
 
 	double value;
 	int valueInt;
+	qint64 valueBigInt;
 	qint64 valueDateTime;
 
 	for (int row = 1; row < rowCount(); row++) {
@@ -1638,70 +1644,92 @@ void ColumnPrivate::updateProperties() {
 				}
 			}
 
-
 			prevValueInt = valueInt;
+		} else if (m_column_mode == AbstractColumn::BigInt) {
+			valueBigInt = bigIntAt(row);
 
-			} else if (m_column_mode == AbstractColumn::Numeric) {
-				value = valueAt(row);
+			if (valueBigInt > prevValueBigInt) {
+				monotonic_decreasing = 0;
+				if (monotonic_increasing < 0)
+					monotonic_increasing = 1;
+				else if (monotonic_increasing == 0)
+					break; // when nor increasing, nor decreasing, break
 
-				if (std::isnan(value)) {
-					monotonic_increasing = 0;
-					monotonic_decreasing = 0;
-					break;
+			} else if (valueBigInt < prevValueBigInt) {
+				monotonic_increasing = 0;
+				if (monotonic_decreasing < 0)
+					monotonic_decreasing = 1;
+				else if (monotonic_decreasing == 0)
+					break; // when nor increasing, nor decreasing, break
+
+			} else {
+				if (monotonic_increasing < 0 && monotonic_decreasing < 0) {
+					monotonic_decreasing = 1;
+					monotonic_increasing = 1;
 				}
-
-				if (value > prevValue) {
-					monotonic_decreasing = 0;
-					if (monotonic_increasing < 0)
-						monotonic_increasing = 1;
-					else if (monotonic_increasing == 0)
-						break; // when nor increasing, nor decreasing, break
-
-				} else if (value < prevValue) {
-					monotonic_increasing = 0;
-					if (monotonic_decreasing < 0)
-						monotonic_decreasing = 1;
-					else if (monotonic_decreasing == 0)
-						break; // when nor increasing, nor decreasing, break
-
-				} else {
-					if (monotonic_increasing < 0 && monotonic_decreasing < 0) {
-						monotonic_decreasing = 1;
-						monotonic_increasing = 1;
-					}
-				}
-
-				prevValue = value;
-
-			} else if (m_column_mode == AbstractColumn::DateTime ||
-					   m_column_mode == AbstractColumn::Month ||
-					   m_column_mode == AbstractColumn::Day) {
-
-				valueDateTime = dateTimeAt(row).toMSecsSinceEpoch();
-
-				if (valueDateTime > prevValueDatetime) {
-					monotonic_decreasing = 0;
-					if (monotonic_increasing < 0)
-						monotonic_increasing = 1;
-					else if (monotonic_increasing == 0)
-						break; // when nor increasing, nor decreasing, break
-
-				} else if (valueDateTime < prevValueDatetime) {
-					monotonic_increasing = 0;
-					if (monotonic_decreasing < 0)
-						monotonic_decreasing = 1;
-					else if (monotonic_decreasing == 0)
-						break; // when nor increasing, nor decreasing, break
-
-				} else {
-					if (monotonic_increasing < 0 && monotonic_decreasing < 0) {
-						monotonic_decreasing = 1;
-						monotonic_increasing = 1;
-					}
-				}
-
-				prevValueDatetime = valueDateTime;
 			}
+
+			prevValueBigInt = valueBigInt;
+		} else if (m_column_mode == AbstractColumn::Numeric) {
+			value = valueAt(row);
+
+			if (std::isnan(value)) {
+				monotonic_increasing = 0;
+				monotonic_decreasing = 0;
+				break;
+			}
+
+			if (value > prevValue) {
+				monotonic_decreasing = 0;
+				if (monotonic_increasing < 0)
+					monotonic_increasing = 1;
+				else if (monotonic_increasing == 0)
+					break; // when nor increasing, nor decreasing, break
+
+			} else if (value < prevValue) {
+				monotonic_increasing = 0;
+				if (monotonic_decreasing < 0)
+					monotonic_decreasing = 1;
+				else if (monotonic_decreasing == 0)
+					break; // when nor increasing, nor decreasing, break
+
+			} else {
+				if (monotonic_increasing < 0 && monotonic_decreasing < 0) {
+					monotonic_decreasing = 1;
+					monotonic_increasing = 1;
+				}
+			}
+
+			prevValue = value;
+		} else if (m_column_mode == AbstractColumn::DateTime ||
+				   m_column_mode == AbstractColumn::Month ||
+				   m_column_mode == AbstractColumn::Day) {
+
+			valueDateTime = dateTimeAt(row).toMSecsSinceEpoch();
+
+			if (valueDateTime > prevValueDatetime) {
+				monotonic_decreasing = 0;
+				if (monotonic_increasing < 0)
+					monotonic_increasing = 1;
+				else if (monotonic_increasing == 0)
+					break; // when nor increasing, nor decreasing, break
+
+			} else if (valueDateTime < prevValueDatetime) {
+				monotonic_increasing = 0;
+				if (monotonic_decreasing < 0)
+					monotonic_decreasing = 1;
+				else if (monotonic_decreasing == 0)
+					break; // when nor increasing, nor decreasing, break
+
+			} else {
+				if (monotonic_increasing < 0 && monotonic_decreasing < 0) {
+					monotonic_decreasing = 1;
+					monotonic_increasing = 1;
+				}
+			}
+
+			prevValueDatetime = valueDateTime;
+		}
 	}
 
 	properties = AbstractColumn::Properties::No;

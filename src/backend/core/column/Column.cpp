@@ -627,7 +627,7 @@ void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
  * Returns the column properties of this curve (monoton increasing, monoton decreasing, ... )
  * \see AbstractColumn::properties
  */
-AbstractColumn::Properties Column::properties() const{
+AbstractColumn::Properties Column::properties() const {
 	if (!d->propertiesAvailable)
 		d->updateProperties();
 
@@ -643,7 +643,7 @@ const Column::ColumnStatistics& Column::statistics() const {
 
 void Column::calculateStatistics() const {
 	if ( (columnMode() != AbstractColumn::Numeric)
-		&& (columnMode() != AbstractColumn::Integer) )
+		&& (columnMode() != AbstractColumn::Integer) && (columnMode() != AbstractColumn::BigInt) )
 		return;
 
 	d->statistics = ColumnStatistics();
@@ -712,6 +712,7 @@ void Column::calculateStatistics() const {
 			rowData.push_back(val);
 		}
 	}
+	//TODO: BigInt
 
 	if (notNanCount == 0) {
 		d->statisticsAvailable = true;
@@ -796,7 +797,7 @@ bool Column::hasValues() const {
 				break;
 			}
 		}
-	} else if (columnMode() == AbstractColumn::Integer) {
+	} else if (columnMode() == AbstractColumn::Integer || columnMode() == AbstractColumn::BigInt) {
 		//integer column has always valid values
 		foundValues = true;
 	} else if (columnMode() == AbstractColumn::DateTime) {
@@ -1010,6 +1011,10 @@ public:
 			auto* data = new QVector<double>(bytes.size()/(int)sizeof(double));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
+		} else if (m_private->columnMode() == AbstractColumn::BigInt) {
+			auto* data = new QVector<qint64>(bytes.size()/(int)sizeof(qint64));
+			memcpy(data->data(), bytes.data(), bytes.size());
+			m_private->replaceData(data);
 		} else {
 			auto* data = new QVector<int>(bytes.size()/(int)sizeof(int));
 			memcpy(data->data(), bytes.data(), bytes.size());
@@ -1085,7 +1090,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 		}
 		if (!preview) {
 			QString content = reader->text().toString().trimmed();
-			if (!content.isEmpty() && ( columnMode() == AbstractColumn::Numeric ||  columnMode() == AbstractColumn::Integer)) {
+			if (!content.isEmpty() && ( columnMode() == AbstractColumn::Numeric ||  columnMode() == AbstractColumn::Integer || columnMode() == AbstractColumn::BigInt)) {
 				auto* task = new DecodeColumnTask(d, content);
 				QThreadPool::globalInstance()->start(task);
 			}
@@ -1908,8 +1913,8 @@ int Column::indexForValue(double x) const {
 
 		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount()))+1;
 
-		if ((mode == AbstractColumn::ColumnMode::Numeric ||
-			 mode == AbstractColumn::ColumnMode::Integer)) {
+		if ((mode == AbstractColumn::ColumnMode::Numeric || mode == AbstractColumn::ColumnMode::Integer || 
+					mode == AbstractColumn::ColumnMode::BigInt)) {
 			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
 				double value = valueAt(index);
@@ -1970,8 +1975,8 @@ int Column::indexForValue(double x) const {
 	} else {
 		// naiv way
 		int index = 0;
-		if ((mode == AbstractColumn::ColumnMode::Numeric ||
-			 mode == AbstractColumn::ColumnMode::Integer)) {
+		if ((mode == AbstractColumn::ColumnMode::Numeric || mode == AbstractColumn::ColumnMode::Integer ||
+					mode == AbstractColumn::ColumnMode::BigInt)) {
 			for (int row = 0; row < rowCount(); row++) {
 				if (!isValid(row) || isMasked(row))
 					continue;
