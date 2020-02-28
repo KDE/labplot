@@ -875,6 +875,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 						break;
 					}
 				case AbstractColumn::Integer:	//TODO
+				case AbstractColumn::BigInt:
 				case AbstractColumn::DateTime:
 				case AbstractColumn::Day:
 				case AbstractColumn::Month:

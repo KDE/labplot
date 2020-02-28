@@ -6,7 +6,7 @@
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2010 by Knut Franke (knut.franke@gmx.de)
     Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -114,6 +114,9 @@ ColumnSetModeCmd::~ColumnSetModeCmd() {
 			case AbstractColumn::Integer:
 				delete static_cast<QVector<int>*>(m_new_data);
 				break;
+			case AbstractColumn::BigInt:
+				delete static_cast<QVector<qint64>*>(m_new_data);
+				break;
 			case AbstractColumn::Text:
 				delete static_cast<QVector<QString>*>(m_new_data);
 				break;
@@ -131,6 +134,9 @@ ColumnSetModeCmd::~ColumnSetModeCmd() {
 				break;
 			case AbstractColumn::Integer:
 				delete static_cast<QVector<int>*>(m_old_data);
+				break;
+			case AbstractColumn::BigInt:
+				delete static_cast<QVector<qint64>*>(m_old_data);
 				break;
 			case AbstractColumn::Text:
 				delete static_cast<QVector<QString>*>(m_old_data);
@@ -565,6 +571,9 @@ ColumnClearCmd::~ColumnClearCmd() {
 		case AbstractColumn::Integer:
 			delete static_cast<QVector<int>*>(m_empty_data);
 			break;
+		case AbstractColumn::BigInt:
+			delete static_cast<QVector<qint64>*>(m_empty_data);
+			break;
 		case AbstractColumn::Text:
 			delete static_cast<QVector<QString>*>(m_empty_data);
 			break;
@@ -582,6 +591,9 @@ ColumnClearCmd::~ColumnClearCmd() {
 			break;
 		case AbstractColumn::Integer:
 			delete static_cast<QVector<int>*>(m_data);
+			break;
+		case AbstractColumn::BigInt:
+			delete static_cast<QVector<qint64>*>(m_data);
 			break;
 		case AbstractColumn::Text:
 			delete static_cast<QVector<QString>*>(m_data);
@@ -611,6 +623,13 @@ void ColumnClearCmd::redo() {
 		}
 		case AbstractColumn::Integer: {
 			auto* vec = new QVector<int>(rowCount);
+			m_empty_data = vec;
+			for (int i = 0; i < rowCount; ++i)
+				vec->operator[](i) = 0;
+			break;
+		}
+		case AbstractColumn::BigInt: {
+			auto* vec = new QVector<qint64>(rowCount);
 			m_empty_data = vec;
 			for (int i = 0; i < rowCount; ++i)
 				vec->operator[](i) = 0;

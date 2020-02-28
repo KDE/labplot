@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2015-2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2018-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -93,6 +93,8 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 				return QVariant(m_matrix->text<double>(row, col));
 			case AbstractColumn::Integer:
 				return QVariant(m_matrix->text<int>(row, col));
+			case AbstractColumn::BigInt:
+				return QVariant(m_matrix->text<qint64>(row, col));
 			case AbstractColumn::DateTime:
 			case AbstractColumn::Month:
 			case AbstractColumn::Day:
@@ -206,6 +208,9 @@ bool MatrixModel::setData(const QModelIndex& index, const QVariant& value, int r
 			break;
 		case AbstractColumn::Integer:
 			m_matrix->setCell(row, column, value.toInt());
+			break;
+		case AbstractColumn::BigInt:
+			m_matrix->setCell(row, column, value.toLongLong());
 			break;
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:

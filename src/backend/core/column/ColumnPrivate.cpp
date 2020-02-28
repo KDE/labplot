@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2012-2019 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -301,35 +301,38 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			temp_col = new Column("temp_col", *(static_cast<QVector<qint64>*>(old_data)), m_column_mode);
 			m_data = new QVector<int>();
 			break;
-		//TODO
 		case AbstractColumn::Numeric:
-			filter = new Integer2DoubleFilter();
+			//TODO
+			//filter = new BigInt2DoubleFilter();
 			filter_is_temporary = true;
-			temp_col = new Column("temp_col", *(static_cast<QVector<int>*>(old_data)), m_column_mode);
+			temp_col = new Column("temp_col", *(static_cast<QVector<qint64>*>(old_data)), m_column_mode);
 			m_data = new QVector<double>();
 			break;
 		case AbstractColumn::Text:
 			filter = outputFilter();
 			filter_is_temporary = false;
-			temp_col = new Column("temp_col", *(static_cast< QVector<int>* >(old_data)), m_column_mode);
+			temp_col = new Column("temp_col", *(static_cast< QVector<qint64>* >(old_data)), m_column_mode);
 			m_data = new QVector<QString>();
 			break;
 		case AbstractColumn::DateTime:
-			filter = new Integer2DateTimeFilter();
+			//TODO
+			//filter = new BigInt2DateTimeFilter();
 			filter_is_temporary = true;
-			temp_col = new Column("temp_col", *(static_cast< QVector<int>* >(old_data)), m_column_mode);
+			temp_col = new Column("temp_col", *(static_cast< QVector<qint64>* >(old_data)), m_column_mode);
 			m_data = new QVector<QDateTime>();
 			break;
 		case AbstractColumn::Month:
-			filter = new Integer2MonthFilter();
+			//TODO
+			//filter = new BigInt2MonthFilter();
 			filter_is_temporary = true;
-			temp_col = new Column("temp_col", *(static_cast< QVector<int>* >(old_data)), m_column_mode);
+			temp_col = new Column("temp_col", *(static_cast< QVector<qint64>* >(old_data)), m_column_mode);
 			m_data = new QVector<QDateTime>();
 			break;
 		case AbstractColumn::Day:
-			filter = new Integer2DayOfWeekFilter();
+			//TODO
+			//filter = new BigInt2DayOfWeekFilter();
 			filter_is_temporary = true;
-			temp_col = new Column("temp_col", *(static_cast< QVector<int>* >(old_data)), m_column_mode);
+			temp_col = new Column("temp_col", *(static_cast< QVector<qint64>* >(old_data)), m_column_mode);
 			m_data = new QVector<QDateTime>();
 			break;
 		} // switch(mode)
@@ -351,6 +354,13 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast<QVector<QString>*>(old_data)), m_column_mode);
 			m_data = new QVector<int>();
+			break;
+		case AbstractColumn::BigInt:
+			//TODO
+			//filter = new String2BigIntFilter();
+			filter_is_temporary = true;
+			temp_col = new Column("temp_col", *(static_cast<QVector<QString>*>(old_data)), m_column_mode);
+			m_data = new QVector<qint64>();
 			break;
 		case AbstractColumn::DateTime:
 			filter = new String2DateTimeFilter();
@@ -412,6 +422,19 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			temp_col = new Column("temp_col", *(static_cast< QVector<QDateTime>* >(old_data)), m_column_mode);
 			m_data = new QVector<int>();
 			break;
+		case AbstractColumn::BigInt:
+			/* TODO
+			if (m_column_mode == AbstractColumn::Month)
+				filter = new Month2BigIntFilter();
+			else if (m_column_mode == AbstractColumn::Day)
+				filter = new DayOfWeek2BigIntFilter();
+			else
+				filter = new DateTime2BigIntFilter();
+			*/
+			filter_is_temporary = true;
+			temp_col = new Column("temp_col", *(static_cast< QVector<QDateTime>* >(old_data)), m_column_mode);
+			m_data = new QVector<qint64>();
+			break;
 		} // switch(mode)
 
 		break;
@@ -431,6 +454,13 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		new_out_filter = new Integer2StringFilter();
 		connect(static_cast<Integer2StringFilter*>(new_out_filter), &Integer2StringFilter::formatChanged,
 				m_owner, &Column::handleFormatChange);
+		break;
+	case AbstractColumn::BigInt:
+		//TODO
+		//new_in_filter = new String2BigIntFilter();
+		//new_out_filter = new BigInt2StringFilter();
+		//connect(static_cast<BigInt2StringFilter*>(new_out_filter), &BigInt2StringFilter::formatChanged,
+		//		m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Text:
 		new_in_filter = new SimpleCopyThroughFilter();
@@ -504,6 +534,10 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data,
 		disconnect(static_cast<Integer2StringFilter*>(m_output_filter), &Integer2StringFilter::formatChanged,
 				   m_owner, &Column::handleFormatChange);
 		break;
+	case AbstractColumn::BigInt:
+		//TODO disconnect(static_cast<BigInt2StringFilter*>(m_output_filter), &BigInt2StringFilter::formatChanged,
+		//		   m_owner, &Column::handleFormatChange);
+		break;
 	case AbstractColumn::Text:
 		break;
 	case AbstractColumn::DateTime:
@@ -533,6 +567,10 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data,
 	case AbstractColumn::Integer:
 		connect(static_cast<Integer2StringFilter*>(m_output_filter), &Integer2StringFilter::formatChanged,
 				m_owner, &Column::handleFormatChange);
+		break;
+	case AbstractColumn::BigInt:
+		//TODO connect(static_cast<BigInt2StringFilter*>(m_output_filter), &BigInt2StringFilter::formatChanged,
+		//		m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Text:
 		break;
@@ -587,6 +625,12 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 		int* ptr = static_cast<QVector<int>*>(m_data)->data();
 		for (int i = 0; i < num_rows; ++i)
 			ptr[i] = other->integerAt(i);
+		break;
+	}
+	case AbstractColumn::BigInt: {
+		qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
+		//TODO for (int i = 0; i < num_rows; ++i)
+		//	ptr[i] = other->bigIntAt(i);
 		break;
 	}
 	case AbstractColumn::Text: {
@@ -644,6 +688,12 @@ bool ColumnPrivate::copy(const AbstractColumn* source, int source_start, int des
 			ptr[dest_start+i] = source->integerAt(source_start + i);
 		break;
 	}
+	case AbstractColumn::BigInt: {
+		qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
+		//TODO for (int i = 0; i < num_rows; i++)
+		//	ptr[dest_start+i] = source->bigIntAt(source_start + i);
+		break;
+	}
 	case AbstractColumn::Text:
 		for (int i = 0; i < num_rows; i++)
 			static_cast<QVector<QString>*>(m_data)->replace(dest_start+i, source->textAt(source_start + i));
@@ -687,6 +737,12 @@ bool ColumnPrivate::copy(const ColumnPrivate* other) {
 		int* ptr = static_cast<QVector<int>*>(m_data)->data();
 		for (int i = 0; i < num_rows; ++i)
 			ptr[i] = other->integerAt(i);
+		break;
+	}
+	case AbstractColumn::BigInt: {
+		qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
+		//TODO for (int i = 0; i < num_rows; ++i)
+		//	ptr[i] = other->bigIntAt(i);
 		break;
 	}
 	case AbstractColumn::Text:
@@ -739,6 +795,12 @@ bool ColumnPrivate::copy(const ColumnPrivate* source, int source_start, int dest
 			ptr[dest_start+i] = source->integerAt(source_start + i);
 		break;
 	}
+	case AbstractColumn::BigInt: {
+		qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
+		//TODO for (int i = 0; i < num_rows; ++i)
+		//	ptr[dest_start+i] = source->bigIntAt(source_start + i);
+		break;
+	}
 	case AbstractColumn::Text:
 		for (int i = 0; i < num_rows; ++i)
 			static_cast<QVector<QString>*>(m_data)->replace(dest_start+i, source->textAt(source_start + i));
@@ -770,6 +832,8 @@ int ColumnPrivate::rowCount() const {
 		return static_cast<QVector<double>*>(m_data)->size();
 	case AbstractColumn::Integer:
 		return static_cast<QVector<int>*>(m_data)->size();
+	case AbstractColumn::BigInt:
+		return static_cast<QVector<qint64>*>(m_data)->size();
 	case AbstractColumn::DateTime:
 	case AbstractColumn::Month:
 	case AbstractColumn::Day:
@@ -806,6 +870,11 @@ void ColumnPrivate::resizeTo(int new_size) {
 	}
 	case AbstractColumn::Integer: {
 		auto* numeric_data = static_cast<QVector<int>*>(m_data);
+		numeric_data->insert(numeric_data->end(), new_size - old_size, 0);
+		break;
+	}
+	case AbstractColumn::BigInt: {
+		auto* numeric_data = static_cast<QVector<qint64>*>(m_data);
 		numeric_data->insert(numeric_data->end(), new_size - old_size, 0);
 		break;
 	}
@@ -852,6 +921,9 @@ void ColumnPrivate::insertRows(int before, int count) {
 		case AbstractColumn::Integer:
 			static_cast<QVector<int>*>(m_data)->insert(before, count, 0);
 			break;
+		case AbstractColumn::BigInt:
+			static_cast<QVector<qint64>*>(m_data)->insert(before, count, 0);
+			break;
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
@@ -885,6 +957,9 @@ void ColumnPrivate::removeRows(int first, int count) {
 			break;
 		case AbstractColumn::Integer:
 			static_cast<QVector<int>*>(m_data)->remove(first, corrected_count);
+			break;
+		case AbstractColumn::BigInt:
+			static_cast<QVector<qint64>*>(m_data)->remove(first, corrected_count);
 			break;
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
@@ -1247,7 +1322,7 @@ QDateTime ColumnPrivate::dateTimeAt(int row) const {
 /**
  * \brief Return the double value in row 'row' for columns with type Numeric and Integer.
  * This function has to be used everywhere where the exact type (double or int) is not relevant for numerical calculations.
- * For cases where the integer value is needed without any implicit conversions, \sa intergAt() has to be used.
+ * For cases where the integer value is needed without any implicit conversions, \sa integerAt() has to be used.
  */
 double ColumnPrivate::valueAt(int row) const {
 	if (m_column_mode == AbstractColumn::Numeric)
@@ -1276,7 +1351,7 @@ void ColumnPrivate::setTextAt(int row, const QString& new_value) {
 
 	emit m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
-		resizeTo(row+1);
+		resizeTo(row + 1);
 
 	static_cast<QVector<QString>*>(m_data)->replace(row, new_value);
 	if (!m_owner->m_suppressDataChangedSignal)

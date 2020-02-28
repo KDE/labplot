@@ -6,7 +6,7 @@
     Copyright            : (C) 2006-2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2006-2009 Knut Franke (knut.franke@gmx.de)
     Copyright            : (C) 2012-2019 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -393,6 +393,12 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 		static bool integerGreater(const QPair<int, int>& a, const QPair<int, int>& b) {
 			return a.first > b.first;
 		}
+		static bool bigIntLess(const QPair<qint64, int>& a, const QPair<qint64, int>& b) {
+			return a.first < b.first;
+		}
+		static bool bigIntGreater(const QPair<qint64, int>& a, const QPair<qint64, int>& b) {
+			return a.first > b.first;
+		}
 		static bool QStringLess(const QPair<QString, int>& a, const QPair<QString, int>& b) {
 			return a < b;
 		}
@@ -453,6 +459,33 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
 
 					QVectorIterator<QPair<int, int>> it(map);
+					Column* temp_col = new Column("temp", col->columnMode());
+
+					int k = 0;
+					// put the values in the right order into temp_col
+					while (it.hasNext()) {
+						temp_col->copy(col, it.peekNext().second, k, 1);
+						temp_col->setMasked(col->isMasked(it.next().second));
+						k++;
+					}
+					// copy the sorted column
+					col->copy(temp_col, 0, 0, rows);
+					delete temp_col;
+					break;
+				}
+			case AbstractColumn::BigInt: {
+					int rows = col->rowCount();
+					QVector< QPair<qint64, int> > map;
+
+					for (int j = 0; j < rows; j++)
+						map.append(QPair<qint64, int>(col->valueAt(j), j));
+
+					if (ascending)
+						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
+					else
+						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
+
+					QVectorIterator<QPair<qint64, int>> it(map);
 					Column* temp_col = new Column("temp", col->columnMode());
 
 					int k = 0;
@@ -568,6 +601,35 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 				else
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::integerGreater);
 				QVectorIterator<QPair<int, int>> it(map);
+
+				for (auto* col : cols) {
+					Column *temp_col = new Column("temp", col->columnMode());
+					it.toFront();
+					int j = 0;
+					// put the values in the right order into temp_col
+					while (it.hasNext()) {
+						temp_col->copy(col, it.peekNext().second, j, 1);
+						temp_col->setMasked(col->isMasked(it.next().second));
+						j++;
+					}
+					// copy the sorted column
+					col->copy(temp_col, 0, 0, rows);
+					delete temp_col;
+				}
+				break;
+			}
+		case AbstractColumn::BigInt: {
+				QVector<QPair<qint64, int>> map;
+				int rows = leading->rowCount();
+
+				for (int i = 0; i < rows; i++)
+					map.append(QPair<qint64, int>(leading->valueAt(i), i));
+
+				if (ascending)
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntLess);
+				else
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntGreater);
+				QVectorIterator<QPair<qint64, int>> it(map);
 
 				for (auto* col : cols) {
 					Column *temp_col = new Column("temp", col->columnMode());
@@ -834,6 +896,12 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
+		case AbstractColumn::BigInt: {
+			auto* vector = static_cast<QVector<qint64>*>(column->data());
+			vector->resize(actualRows);
+			dataContainer[n] = static_cast<void*>(vector);
+			break;
+		}
 		case AbstractColumn::Text: {
 			auto* vector = static_cast<QVector<QString>*>(column->data());
 			vector->resize(actualRows);
@@ -947,6 +1015,9 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 			break;
 		case AbstractColumn::Integer:
 			comment = i18np("integer data, %1 element", "integer data, %1 elements", rows);
+			break;
+		case AbstractColumn::BigInt:
+			comment = i18np("big integer data, %1 element", "big integer data, %1 elements", rows);
 			break;
 		case AbstractColumn::Text:
 			comment = i18np("text data, %1 element", "text data, %1 elements", rows);

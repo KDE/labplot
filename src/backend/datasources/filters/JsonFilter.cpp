@@ -6,7 +6,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2018 Andrey Cygankov (craftplace.ms@gmail.com)
     Copyright            : (C) 2018 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2018-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -353,6 +353,9 @@ void JsonFilterPrivate::setEmptyValue(int column, int row) {
 		case AbstractColumn::Integer:
 			static_cast<QVector<int>*>(m_dataContainer[column])->operator[](row) = 0;
 			break;
+		case AbstractColumn::BigInt:
+			static_cast<QVector<qint64>*>(m_dataContainer[column])->operator[](row) = 0;
+			break;
 		case AbstractColumn::DateTime:
 			static_cast<QVector<QDateTime>*>(m_dataContainer[column])->operator[](row) = QDateTime();
 			break;
@@ -378,6 +381,12 @@ void JsonFilterPrivate::setValueFromString(int column, int row, QString valueStr
 			bool isNumber;
 			const int value = locale.toInt(valueString, &isNumber);
 			static_cast<QVector<int>*>(m_dataContainer[column])->operator[](row) = isNumber ? value : 0;
+			break;
+		}
+		case AbstractColumn::BigInt: {
+			bool isNumber;
+			const qint64 value = locale.toLongLong(valueString, &isNumber);
+			static_cast<QVector<qint64>*>(m_dataContainer[column])->operator[](row) = isNumber ? value : 0;
 			break;
 		}
 		case AbstractColumn::DateTime: {

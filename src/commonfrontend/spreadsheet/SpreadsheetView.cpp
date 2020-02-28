@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2019 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016      by Fabian Kristof (fkristofszabolcs@gmail.com)
+    Copyright            : (C) 2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -1511,35 +1512,45 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
 		case AbstractColumn::Numeric: {
-				QVector<double> results(last-first+1);
-				for (int row = first; row <= last; row++)
-					if (isCellSelected(row, col))
-						results[row-first] = row + 1;
-					else
-						results[row-first] = col_ptr->valueAt(row);
-				col_ptr->replaceValues(first, results);
-				break;
-			}
+			QVector<double> results(last-first+1);
+			for (int row = first; row <= last; row++)
+				if (isCellSelected(row, col))
+					results[row-first] = row + 1;
+				else
+					results[row-first] = col_ptr->valueAt(row);
+			col_ptr->replaceValues(first, results);
+			break;
+		}
 		case AbstractColumn::Integer: {
-				QVector<int> results(last-first+1);
-				for (int row = first; row <= last; row++)
-					if (isCellSelected(row, col))
-						results[row-first] = row + 1;
-					else
-						results[row-first] = col_ptr->integerAt(row);
-				col_ptr->replaceInteger(first, results);
-				break;
-			}
+			QVector<int> results(last-first+1);
+			for (int row = first; row <= last; row++)
+				if (isCellSelected(row, col))
+					results[row-first] = row + 1;
+				else
+					results[row-first] = col_ptr->integerAt(row);
+			col_ptr->replaceInteger(first, results);
+			break;
+		}
+		case AbstractColumn::BigInt: {
+			QVector<qint64> results(last-first+1);
+			for (int row = first; row <= last; row++)
+				if (isCellSelected(row, col))
+					results[row-first] = row + 1;
+			//TODO	else
+			//		results[row-first] = col_ptr->bigIntAt(row);
+			//TODO col_ptr->replaceBigInt(first, results);
+			break;
+		}
 		case AbstractColumn::Text: {
-				QVector<QString> results;
-				for (int row = first; row <= last; row++)
-					if (isCellSelected(row, col))
-						results << QString::number(row+1);
-					else
-						results << col_ptr->textAt(row);
-				col_ptr->replaceTexts(first, results);
-				break;
-			}
+			QVector<QString> results;
+			for (int row = first; row <= last; row++)
+				if (isCellSelected(row, col))
+					results << QString::number(row+1);
+				else
+					results << col_ptr->textAt(row);
+			col_ptr->replaceTexts(first, results);
+			break;
+		}
 		//TODO: handle other modes
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
@@ -1571,11 +1582,12 @@ void SpreadsheetView::fillWithRowNumbers() {
 
 	for (auto* col : selectedColumns()) {
 		switch (col->columnMode()) {
-		case AbstractColumn::Numeric:
-			col->setColumnMode(AbstractColumn::Integer);
+		case AbstractColumn::Integer:
 			col->replaceInteger(0, int_data);
 			break;
-		case AbstractColumn::Integer:
+		case AbstractColumn::Numeric:
+		case AbstractColumn::BigInt:
+			col->setColumnMode(AbstractColumn::Integer);
 			col->replaceInteger(0, int_data);
 			break;
 		case AbstractColumn::Text:
@@ -1605,6 +1617,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
 		case AbstractColumn::Numeric: {
+				//TODO qrand() is obsolete. Use QRandomGenerator instead
 				QVector<double> results(last-first+1);
 				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
@@ -1615,6 +1628,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 				break;
 			}
 		case AbstractColumn::Integer: {
+				//TODO qrand() is obsolete. Use QRandomGenerator instead
 				QVector<int> results(last-first+1);
 				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
@@ -1624,7 +1638,19 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 				col_ptr->replaceInteger(first, results);
 				break;
 			}
+		case AbstractColumn::BigInt: {
+				//TODO qrand() is obsolete. Use QRandomGenerator instead
+				QVector<qint64> results(last-first+1);
+				for (int row = first; row <= last; row++)
+					if (isCellSelected(row, col))
+						results[row-first] = qrand();
+				//TODO	else
+				//TODO		results[row-first] = col_ptr->bigIntAt(row);
+				//TODO col_ptr->replaceBigInt(first, results);
+				break;
+			}
 		case AbstractColumn::Text: {
+				//TODO qrand() is obsolete. Use QRandomGenerator instead
 				QVector<QString> results;
 				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
@@ -1637,6 +1663,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day: {
+				//TODO qrand() is obsolete. Use QRandomGenerator instead
 				QVector<QDateTime> results;
 				QDate earliestDate(1, 1, 1);
 				QDate latestDate(2999, 12, 31);
@@ -1731,6 +1758,10 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 				col_ptr->replaceInteger(first, results);
 				RESET_CURSOR;
 			}
+			break;
+		case AbstractColumn::BigInt:
+			//TODO
+			DEBUG("BigInt not implemented yet!")
 			break;
 		case AbstractColumn::Text:
 			if (!stringOk)
@@ -3011,6 +3042,7 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 			query += QLatin1String("REAL");
 			break;
 		case AbstractColumn::Integer:
+		case AbstractColumn::BigInt:
 			query += QLatin1String("INTEGER");
 			break;
 		case AbstractColumn::Text:

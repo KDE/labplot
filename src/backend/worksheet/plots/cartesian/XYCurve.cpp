@@ -4,7 +4,7 @@
     Description          : A xy-curve
     --------------------------------------------------------------------
     Copyright            : (C) 2010-2018 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2013 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2013-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -1071,6 +1071,7 @@ void XYCurvePrivate::recalcLogicalPoints() {
 			switch (xColMode) {
 			case AbstractColumn::Numeric:
 			case AbstractColumn::Integer:
+			case AbstractColumn::BigInt:
 				tempPoint.setX(xColumn->valueAt(row));
 				break;
 			case AbstractColumn::Text:
@@ -1086,6 +1087,7 @@ void XYCurvePrivate::recalcLogicalPoints() {
 			switch (yColMode) {
 			case AbstractColumn::Numeric:
 			case AbstractColumn::Integer:
+			case AbstractColumn::BigInt:
 				tempPoint.setY(yColumn->valueAt(row));
 				break;
 			case AbstractColumn::Text:
@@ -1764,6 +1766,7 @@ void XYCurvePrivate::updateValues() {
 				switch (xColMode) {
 				case AbstractColumn::Numeric:
 				case AbstractColumn::Integer:
+				case AbstractColumn::BigInt:
 					valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
 					break;
 				case AbstractColumn::Text:

@@ -433,6 +433,9 @@ void SpreadsheetModel::updateHorizontalHeader() {
 		case AbstractColumn::Integer:
 			type = QLatin1String(" {") + i18n("Integer") + QLatin1Char('}');
 			break;
+		case AbstractColumn::BigInt:
+			type = QLatin1String(" {") + i18n("Big Integer") + QLatin1Char('}');
+			break;
 		case AbstractColumn::Text:
 			type = QLatin1String(" {") + i18n("Text") + QLatin1Char('}');
 			break;
