@@ -759,6 +759,7 @@ void SpreadsheetView::handleAspectAdded(const AbstractAspect* aspect) {
 	else
 		m_tableView->setColumnWidth(index, col->width());
 
+	goToCell(0, index);
 	connect(col, &Column::requestProjectContextMenu, this, &SpreadsheetView::createColumnContextMenu);
 }
 

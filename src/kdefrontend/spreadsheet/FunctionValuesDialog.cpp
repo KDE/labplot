@@ -86,8 +86,9 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent) : QD
 	ui.bAddVariable->setIcon(QIcon::fromTheme("list-add"));
 	ui.bAddVariable->setToolTip(i18n("Add new variable"));
 
-	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	ui.chkAutoUpdate->setToolTip(i18n("Automatically update the calculated values on changes in the variable columns"));
 
+	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	ui.verticalLayout->addWidget(btnBox);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 
