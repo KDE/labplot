@@ -268,9 +268,14 @@ void WorksheetDock::updatePaperSize() {
 		return;
 	}
 
-	//In UI we use cm, so we need to convert to mm first before we check with QPageSize
-	float w = (float)ui.sbWidth->value()*10;
-	float h = (float)ui.sbHeight->value()*10;
+	double w = ui.sbWidth->value();
+	double h = ui.sbHeight->value();
+	if (m_units == BaseDock::MetricUnits) {
+		//In UI we use cm, so we need to convert to mm first before we check with QPageSize
+		w *= 10;
+		h *= 10;
+	}
+
 	const QSizeF s = QSizeF(w, h);
 	const QSizeF st = s.transposed();
 
@@ -282,7 +287,8 @@ void WorksheetDock::updatePaperSize() {
 			continue;
 
 		const auto id = v.value<QPageSize::PageSizeId>();
-		const QSizeF ps = QPageSize::size(id, QPageSize::Millimeter);
+		QPageSize::Unit pageUnit = (m_units == BaseDock::MetricUnits) ? QPageSize::Millimeter : QPageSize::Inch;
+		const QSizeF ps = QPageSize::size(id, pageUnit);
 		if (s == ps) { //check the portrait-orientation first
 			ui.cbSize->setCurrentIndex(i);
 			ui.cbOrientation->setCurrentIndex(0);  //a QPageSize::PaperSize in portrait-orientation was found
@@ -304,7 +310,7 @@ void WorksheetDock::updatePaperSize() {
 //****** SLOTs for changes triggered in WorksheetDock *********
 //*************************************************************
 void WorksheetDock::retranslateUi() {
-	m_initializing = true;
+	Lock lock(m_initializing);
 
 	//Geometry
 	ui.cbOrientation->clear();
@@ -326,7 +332,7 @@ void WorksheetDock::retranslateUi() {
 	ui.sbLayoutHorizontalSpacing->setSuffix(suffix);
 	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
 
-	const QVector<QPageSize::PageSizeId> pageSizes = {
+	const QVector<QPageSize::PageSizeId> pageSizeIds = {
 		QPageSize::A0,
 		QPageSize::A1,
 		QPageSize::A2,
@@ -361,9 +367,8 @@ void WorksheetDock::retranslateUi() {
 	};
 	ui.cbSize->clear();
 	ui.cbSize->addItem(i18n("View Size"));
-	for (QPageSize::PageSizeId id : pageSizes) {
+	for (auto id : pageSizeIds)
 		ui.cbSize->addItem(QPageSize::name(id), id);
-	}
 	ui.cbSize->insertSeparator(1);
 
 	//Background
@@ -388,8 +393,6 @@ void WorksheetDock::retranslateUi() {
 	ui.cbBackgroundImageStyle->addItem(i18n("Tiled"));
 	ui.cbBackgroundImageStyle->addItem(i18n("Center Tiled"));
 	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
-
-	m_initializing = false;
 }
 
 // "General"-tab
@@ -424,6 +427,7 @@ void WorksheetDock::sizeChanged(int i) {
 	if (m_initializing)
 		return;
 
+	Lock lock(m_initializing);
 	if (i == 0) {
 		//use the complete view size (first item in the combox is selected)
 		for (auto* worksheet : m_worksheetList)
@@ -439,7 +443,6 @@ void WorksheetDock::sizeChanged(int i) {
 		if (ui.cbOrientation->currentIndex() == 1)
 			s.transpose();
 
-		m_initializing = true;
 		//s is in mm, in UI we show everything in cm/in
 		if (m_units == BaseDock::MetricUnits) {
 			ui.sbWidth->setValue(s.width()/10);
@@ -448,7 +451,6 @@ void WorksheetDock::sizeChanged(int i) {
 			ui.sbWidth->setValue(s.width()/25.4);
 			ui.sbHeight->setValue(s.height()/25.4);
 		}
-		m_initializing = false;
 
 		float w = Worksheet::convertToSceneUnits(s.width(), Worksheet::Millimeter);
 		float h = Worksheet::convertToSceneUnits(s.height(), Worksheet::Millimeter);
