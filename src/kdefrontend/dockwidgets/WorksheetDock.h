@@ -46,6 +46,8 @@ public:
 	explicit WorksheetDock(QWidget*);
 	void setWorksheets(QList<Worksheet*>);
 
+	void updateUnits() override;
+
 private:
 	Ui::WorksheetDock ui;
 	QList<Worksheet*> m_worksheetList;

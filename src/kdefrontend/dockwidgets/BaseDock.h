@@ -1,9 +1,10 @@
 /***************************************************************************
     File             : BaseDock.h
     Project          : LabPlot
-	Description      : Base dock widget
+    Description      : Base dock widget
     --------------------------------------------------------------------
-	Copyright         : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
+    Copyright         : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
+    Copyright         : (C) 2019-2020 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -28,6 +29,8 @@
 
 #ifndef BASEDOCK
 #define BASEDOCK
+
+#include "backend/worksheet/Worksheet.h"
 
 #include <QWidget>
 #include <QLineEdit>
@@ -55,12 +58,18 @@ public:
 	explicit BaseDock(QWidget* parent);
 	~BaseDock();
 
+	enum Units {MetricUnits, ImperialUnits};
+
+	virtual void updateUnits() {};
+
 protected:
 	bool m_initializing{false};
 	QLineEdit* m_leName{nullptr};
 	QLineEdit* m_leComment{nullptr};
 	AbstractAspect* m_aspect{nullptr};
 	QList<AbstractAspect*> m_aspects;
+	Units m_units{MetricUnits};
+	Worksheet::Unit m_worksheetUnit{Worksheet::Centimeter};
 
 protected slots:
 	void nameChanged();

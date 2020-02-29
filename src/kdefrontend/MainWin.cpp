@@ -2179,10 +2179,16 @@ void MainWin::handleSettingsChanges() {
 		}
 	}
 
-	bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
-	if(m_showWelcomeScreen != showWelcomeScreen) {
-		m_showWelcomeScreen = showWelcomeScreen;
+	//update the units
+	if (stackedWidget) {
+		BaseDock* dock = dynamic_cast<BaseDock*>(stackedWidget->currentWidget());
+		if (dock)
+			dock->updateUnits();
 	}
+
+	bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
+	if(m_showWelcomeScreen != showWelcomeScreen)
+		m_showWelcomeScreen = showWelcomeScreen;
 }
 
 void MainWin::openDatasetExample() {

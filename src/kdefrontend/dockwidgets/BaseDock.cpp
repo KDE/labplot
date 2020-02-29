@@ -4,6 +4,7 @@
 	Description          : Base Dock widget
 	--------------------------------------------------------------------
 	Copyright            : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
+	Copyright            : (C) 2019-2020 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,9 +30,17 @@
 #include "BaseDock.h"
 #include "backend/core/AbstractAspect.h"
 
-#include "klocalizedstring.h"
+#include <KLocalizedString>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
-BaseDock::BaseDock(QWidget* parent) : QWidget(parent) {}
+BaseDock::BaseDock(QWidget* parent) : QWidget(parent) {
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	m_units = (Units)group.readEntry("Units", (int)MetricUnits);
+
+	if (m_units == ImperialUnits)
+		m_worksheetUnit = Worksheet::Inch;
+}
 
 BaseDock::~BaseDock() = default;
 
