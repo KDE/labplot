@@ -31,10 +31,11 @@
 
 #include "CartesianPlot.h"
 #include "CartesianCoordinateSystem.h"
+#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
-#include <QStaticText>
 
 #include <QGraphicsSceneMouseEvent>
+#include <QStaticText>
 
 class CartesianPlotPrivate : public AbstractPlotPrivate {
 
@@ -91,7 +92,7 @@ public:
 	QPointF cursor0Pos{QPointF(NAN, NAN)};
 	bool cursor1Enable{false};
 	QPointF cursor1Pos{QPointF(NAN, NAN)};
-	QPen cursorPen{QPen(Qt::red, 5, Qt::SolidLine)};
+	QPen cursorPen{Qt::red, Worksheet::convertToSceneUnits(1.0, Worksheet::Point), Qt::SolidLine};
 
 signals:
 	void mousePressZoomSelectionModeSignal(QPointF logicalPos);

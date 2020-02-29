@@ -83,7 +83,7 @@ void Image::init() {
 
 	//border
 	d->borderPen = QPen(group.readEntry("BorderColor", d->borderPen.color()),
-						group.readEntry("BorderWidth", d->borderPen.width()),
+						group.readEntry("BorderWidth", d->borderPen.widthF()),
 						(Qt::PenStyle) group.readEntry("BorderStyle", (int)(d->borderPen.style())));
 	d->borderOpacity = group.readEntry("BorderOpacity", d->borderOpacity);
 
