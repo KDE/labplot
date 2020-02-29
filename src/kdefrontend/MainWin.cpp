@@ -823,7 +823,7 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_toggleProjectExplorerDockAction->setEnabled(!b);
 	m_togglePropertiesDockAction->setEnabled(!b);
 
-	if (!m_mdiArea->currentSubWindow()) {
+	if (!m_mdiArea || !m_mdiArea->currentSubWindow()) {
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
 		factory->container("worksheet", this)->setEnabled(false);
@@ -894,7 +894,7 @@ void MainWin::updateGUI() {
 	m_touchBar->addSeparator();
 #endif
 
-	if (!m_mdiArea->currentSubWindow()) {
+	if (!m_mdiArea || !m_mdiArea->currentSubWindow()) {
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
 		factory->container("worksheet", this)->setEnabled(false);
@@ -1813,7 +1813,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 		else
 			win = part->mdiSubWindow();
 
-		if (m_mdiArea->subWindowList().indexOf(win) == -1) {
+		if (m_mdiArea && m_mdiArea->subWindowList().indexOf(win) == -1) {
 			if (dynamic_cast<const Note*>(part))
 				m_mdiArea->addSubWindow(win, Qt::Tool);
 			else
@@ -1829,7 +1829,8 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 					action->setShortcut(QKeySequence());
 			}
 		}
-		m_mdiArea->setActiveSubWindow(win);
+		if (m_mdiArea)
+			m_mdiArea->setActiveSubWindow(win);
 	} else {
 		//activate the mdiView of the parent, if a child was selected
 		const AbstractAspect* parent = aspect->parentAspect();
