@@ -213,6 +213,51 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	m_initializing = false;
 }
 
+void WorksheetDock::updateUnits() {
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", (int)MetricUnits);
+	if (units == m_units)
+		return;
+
+	m_units = units;
+	Lock lock(m_initializing);
+	QString suffix;
+	if (m_units == BaseDock::MetricUnits) {
+		//convert from imperial to metric
+		m_worksheetUnit = Worksheet::Centimeter;
+		suffix = QLatin1String("cm");
+		ui.sbWidth->setValue(ui.sbWidth->value()*2.54);
+		ui.sbHeight->setValue(ui.sbHeight->value()*2.54);
+		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value()*2.54);
+		ui.sbLayoutBottomMargin->setValue(ui.sbLayoutBottomMargin->value()*2.54);
+		ui.sbLayoutLeftMargin->setValue(ui.sbLayoutLeftMargin->value()*2.54);
+		ui.sbLayoutRightMargin->setValue(ui.sbLayoutRightMargin->value()*2.54);
+		ui.sbLayoutHorizontalSpacing->setValue(ui.sbLayoutHorizontalSpacing->value()*2.54);
+		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value()*2.54);
+	} else {
+		//convert from metric to imperial
+		m_worksheetUnit = Worksheet::Inch;
+		suffix = QLatin1String("in");
+		ui.sbWidth->setValue(ui.sbWidth->value()/2.54);
+		ui.sbHeight->setValue(ui.sbHeight->value()/2.54);
+		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value()/2.54);
+		ui.sbLayoutBottomMargin->setValue(ui.sbLayoutBottomMargin->value()/2.54);
+		ui.sbLayoutLeftMargin->setValue(ui.sbLayoutLeftMargin->value()/2.54);
+		ui.sbLayoutRightMargin->setValue(ui.sbLayoutRightMargin->value()/2.54);
+		ui.sbLayoutHorizontalSpacing->setValue(ui.sbLayoutHorizontalSpacing->value()/2.54);
+		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value()/2.54);
+	}
+
+	ui.sbWidth->setSuffix(suffix);
+	ui.sbHeight->setSuffix(suffix);
+	ui.sbLayoutTopMargin->setSuffix(suffix);
+	ui.sbLayoutBottomMargin->setSuffix(suffix);
+	ui.sbLayoutLeftMargin->setSuffix(suffix);
+	ui.sbLayoutRightMargin->setSuffix(suffix);
+	ui.sbLayoutHorizontalSpacing->setSuffix(suffix);
+	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
+}
+
 /*!
 	Checks whether the size is one of the QPageSize::PageSizeId and
 	updates Size and Orientation checkbox when width/height changes.
@@ -265,6 +310,21 @@ void WorksheetDock::retranslateUi() {
 	ui.cbOrientation->clear();
 	ui.cbOrientation->addItem(i18n("Portrait"));
 	ui.cbOrientation->addItem(i18n("Landscape"));
+
+	QString suffix;
+	if (m_units == BaseDock::MetricUnits)
+		suffix = QLatin1String("cm");
+	else
+		suffix = QLatin1String("in");
+
+	ui.sbWidth->setSuffix(suffix);
+	ui.sbHeight->setSuffix(suffix);
+	ui.sbLayoutTopMargin->setSuffix(suffix);
+	ui.sbLayoutBottomMargin->setSuffix(suffix);
+	ui.sbLayoutLeftMargin->setSuffix(suffix);
+	ui.sbLayoutRightMargin->setSuffix(suffix);
+	ui.sbLayoutHorizontalSpacing->setSuffix(suffix);
+	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
 
 	const QVector<QPageSize::PageSizeId> pageSizes = {
 		QPageSize::A0,
@@ -376,14 +436,18 @@ void WorksheetDock::sizeChanged(int i) {
 	} else {
 		//determine the width and the height of the to be used predefined layout
 		QSizeF s = QPageSize::size(index, QPageSize::Millimeter);
-		if (ui.cbOrientation->currentIndex() == 1) {
+		if (ui.cbOrientation->currentIndex() == 1)
 			s.transpose();
-		}
 
 		m_initializing = true;
-		//s is in mm, in UI we show everything in cm
-		ui.sbWidth->setValue(s.width()/10);
-		ui.sbHeight->setValue(s.height()/10);
+		//s is in mm, in UI we show everything in cm/in
+		if (m_units == BaseDock::MetricUnits) {
+			ui.sbWidth->setValue(s.width()/10);
+			ui.sbHeight->setValue(s.height()/10);
+		} else {
+			ui.sbWidth->setValue(s.width()/25.4);
+			ui.sbHeight->setValue(s.height()/25.4);
+		}
 		m_initializing = false;
 
 		float w = Worksheet::convertToSceneUnits(s.width(), Worksheet::Millimeter);
@@ -399,8 +463,8 @@ void WorksheetDock::sizeChanged() {
 	if (m_initializing)
 		return;
 
-	int w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter);
-	int h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter);
+	int w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit);
+	int h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit);
 	for (auto* worksheet : m_worksheetList)
 		worksheet->setPageRect(QRect(0,0,w,h));
 }
@@ -598,7 +662,7 @@ void WorksheetDock::layoutTopMarginChanged(double margin) {
 		return;
 
 	for (auto* worksheet : m_worksheetList)
-		worksheet->setLayoutTopMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
+		worksheet->setLayoutTopMargin(Worksheet::convertToSceneUnits(margin, m_worksheetUnit));
 }
 
 void WorksheetDock::layoutBottomMarginChanged(double margin) {
@@ -606,7 +670,7 @@ void WorksheetDock::layoutBottomMarginChanged(double margin) {
 		return;
 
 	for (auto* worksheet : m_worksheetList)
-		worksheet->setLayoutBottomMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
+		worksheet->setLayoutBottomMargin(Worksheet::convertToSceneUnits(margin, m_worksheetUnit));
 }
 
 void WorksheetDock::layoutLeftMarginChanged(double margin) {
@@ -614,7 +678,7 @@ void WorksheetDock::layoutLeftMarginChanged(double margin) {
 		return;
 
 	for (auto* worksheet : m_worksheetList)
-		worksheet->setLayoutLeftMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
+		worksheet->setLayoutLeftMargin(Worksheet::convertToSceneUnits(margin, m_worksheetUnit));
 }
 
 void WorksheetDock::layoutRightMarginChanged(double margin) {
@@ -622,7 +686,7 @@ void WorksheetDock::layoutRightMarginChanged(double margin) {
 		return;
 
 	for (auto* worksheet : m_worksheetList)
-		worksheet->setLayoutRightMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
+		worksheet->setLayoutRightMargin(Worksheet::convertToSceneUnits(margin, m_worksheetUnit));
 }
 
 void WorksheetDock::layoutHorizontalSpacingChanged(double spacing) {
@@ -630,7 +694,7 @@ void WorksheetDock::layoutHorizontalSpacingChanged(double spacing) {
 		return;
 
 	for (auto* worksheet : m_worksheetList)
-		worksheet->setLayoutHorizontalSpacing(Worksheet::convertToSceneUnits(spacing, Worksheet::Centimeter));
+		worksheet->setLayoutHorizontalSpacing(Worksheet::convertToSceneUnits(spacing, m_worksheetUnit));
 }
 
 void WorksheetDock::layoutVerticalSpacingChanged(double spacing) {
@@ -638,7 +702,7 @@ void WorksheetDock::layoutVerticalSpacingChanged(double spacing) {
 		return;
 
 	for (auto* worksheet : m_worksheetList)
-		worksheet->setLayoutVerticalSpacing(Worksheet::convertToSceneUnits(spacing, Worksheet::Centimeter));
+		worksheet->setLayoutVerticalSpacing(Worksheet::convertToSceneUnits(spacing, m_worksheetUnit));
 }
 
 void WorksheetDock::layoutRowCountChanged(int count) {
@@ -726,8 +790,8 @@ void WorksheetDock::worksheetScaleContentChanged(bool scaled) {
 
 void WorksheetDock::worksheetPageRectChanged(const QRectF& rect) {
 	m_initializing = true;
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), Worksheet::Centimeter));
-	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), Worksheet::Centimeter));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), m_worksheetUnit));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), m_worksheetUnit));
 	updatePaperSize();
 	m_initializing = false;
 }
@@ -788,37 +852,37 @@ void WorksheetDock::worksheetLayoutChanged(Worksheet::Layout layout) {
 
 void WorksheetDock::worksheetLayoutTopMarginChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void WorksheetDock::worksheetLayoutBottomMarginChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutBottomMargin->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutBottomMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void WorksheetDock::worksheetLayoutLeftMarginChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutLeftMargin->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutLeftMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void WorksheetDock::worksheetLayoutRightMarginChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutRightMargin->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutRightMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void WorksheetDock::worksheetLayoutVerticalSpacingChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutVerticalSpacing->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutVerticalSpacing->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void WorksheetDock::worksheetLayoutHorizontalSpacingChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutHorizontalSpacing->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutHorizontalSpacing->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
@@ -840,8 +904,8 @@ void WorksheetDock::worksheetLayoutColumnCountChanged(int value) {
 void WorksheetDock::load() {
 	// Geometry
 	ui.chScaleContent->setChecked(m_worksheet->scaleContent());
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits( m_worksheet->pageRect().width(), Worksheet::Centimeter) );
-	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits( m_worksheet->pageRect().height(), Worksheet::Centimeter) );
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits( m_worksheet->pageRect().width(), m_worksheetUnit) );
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits( m_worksheet->pageRect().height(), m_worksheetUnit) );
 	updatePaperSize();
 
 	// Background-tab
@@ -862,12 +926,12 @@ void WorksheetDock::load() {
 
 	// Layout
 	ui.cbLayout->setCurrentIndex( (int) m_worksheet->layout() );
-	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), Worksheet::Centimeter) );
-	ui.sbLayoutBottomMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutBottomMargin(), Worksheet::Centimeter) );
-	ui.sbLayoutLeftMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutLeftMargin(), Worksheet::Centimeter) );
-	ui.sbLayoutRightMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutRightMargin(), Worksheet::Centimeter) );
-	ui.sbLayoutHorizontalSpacing->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutHorizontalSpacing(), Worksheet::Centimeter) );
-	ui.sbLayoutVerticalSpacing->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutVerticalSpacing(), Worksheet::Centimeter) );
+	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), m_worksheetUnit) );
+	ui.sbLayoutBottomMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutBottomMargin(), m_worksheetUnit) );
+	ui.sbLayoutLeftMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutLeftMargin(), m_worksheetUnit) );
+	ui.sbLayoutRightMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutRightMargin(), m_worksheetUnit) );
+	ui.sbLayoutHorizontalSpacing->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutHorizontalSpacing(), m_worksheetUnit) );
+	ui.sbLayoutVerticalSpacing->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutVerticalSpacing(), m_worksheetUnit) );
 
 	ui.sbLayoutRowCount->setValue( m_worksheet->layoutRowCount() );
 	ui.sbLayoutColumnCount->setValue( m_worksheet->layoutColumnCount() );
@@ -897,8 +961,8 @@ void WorksheetDock::loadConfig(KConfig& config) {
 
 	// Geometry
 	ui.chScaleContent->setChecked(group.readEntry("ScaleContent", false));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width", m_worksheet->pageRect().width()), Worksheet::Centimeter));
-	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height", m_worksheet->pageRect().height()), Worksheet::Centimeter));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width", m_worksheet->pageRect().width()), m_worksheetUnit));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height", m_worksheet->pageRect().height()), m_worksheetUnit));
 	if (group.readEntry("UseViewSize", false))
 		ui.cbSize->setCurrentIndex(0);
 	else
@@ -915,12 +979,12 @@ void WorksheetDock::loadConfig(KConfig& config) {
 	ui.sbBackgroundOpacity->setValue( qRound(group.readEntry("BackgroundOpacity", m_worksheet->backgroundOpacity())*100) );
 
 	// Layout
-	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutTopMargin", m_worksheet->layoutTopMargin()), Worksheet::Centimeter) );
-	ui.sbLayoutBottomMargin->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutBottomMargin", m_worksheet->layoutBottomMargin()), Worksheet::Centimeter) );
-	ui.sbLayoutLeftMargin->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutLeftMargin", m_worksheet->layoutLeftMargin()), Worksheet::Centimeter) );
-	ui.sbLayoutRightMargin->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutRightMargin", m_worksheet->layoutRightMargin()), Worksheet::Centimeter) );
-	ui.sbLayoutHorizontalSpacing->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutHorizontalSpacing", m_worksheet->layoutHorizontalSpacing()), Worksheet::Centimeter) );
-	ui.sbLayoutVerticalSpacing->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutVerticalSpacing", m_worksheet->layoutVerticalSpacing()), Worksheet::Centimeter) );
+	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutTopMargin", m_worksheet->layoutTopMargin()), m_worksheetUnit) );
+	ui.sbLayoutBottomMargin->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutBottomMargin", m_worksheet->layoutBottomMargin()), m_worksheetUnit) );
+	ui.sbLayoutLeftMargin->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutLeftMargin", m_worksheet->layoutLeftMargin()), m_worksheetUnit) );
+	ui.sbLayoutRightMargin->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutRightMargin", m_worksheet->layoutRightMargin()), m_worksheetUnit) );
+	ui.sbLayoutHorizontalSpacing->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutHorizontalSpacing", m_worksheet->layoutHorizontalSpacing()), m_worksheetUnit) );
+	ui.sbLayoutVerticalSpacing->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutVerticalSpacing", m_worksheet->layoutVerticalSpacing()), m_worksheetUnit) );
 
 	ui.sbLayoutRowCount->setValue(group.readEntry("LayoutRowCount", m_worksheet->layoutRowCount()));
 	ui.sbLayoutColumnCount->setValue(group.readEntry("LayoutColumnCount", m_worksheet->layoutColumnCount()));
@@ -932,8 +996,8 @@ void WorksheetDock::saveConfigAsTemplate(KConfig& config) {
 	//General
 	group.writeEntry("ScaleContent",ui.chScaleContent->isChecked());
 	group.writeEntry("UseViewSize",ui.cbSize->currentIndex() == 0);
-	group.writeEntry("Width",Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter));
-	group.writeEntry("Height",Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter));
+	group.writeEntry("Width",Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit));
+	group.writeEntry("Height",Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit));
 
 	//Background
 	group.writeEntry("BackgroundType",ui.cbBackgroundType->currentIndex());
@@ -946,12 +1010,12 @@ void WorksheetDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value()/100.0);
 
 	//Layout
-	group.writeEntry("LayoutTopMargin",Worksheet::convertToSceneUnits(ui.sbLayoutTopMargin->value(), Worksheet::Centimeter));
-	group.writeEntry("LayoutBottomMargin",Worksheet::convertToSceneUnits(ui.sbLayoutBottomMargin->value(), Worksheet::Centimeter));
-	group.writeEntry("LayoutLeftMargin",Worksheet::convertToSceneUnits(ui.sbLayoutLeftMargin->value(), Worksheet::Centimeter));
-	group.writeEntry("LayoutRightMargin",Worksheet::convertToSceneUnits(ui.sbLayoutRightMargin->value(), Worksheet::Centimeter));
-	group.writeEntry("LayoutVerticalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutVerticalSpacing->value(), Worksheet::Centimeter));
-	group.writeEntry("LayoutHorizontalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutHorizontalSpacing->value(), Worksheet::Centimeter));
+	group.writeEntry("LayoutTopMargin",Worksheet::convertToSceneUnits(ui.sbLayoutTopMargin->value(), m_worksheetUnit));
+	group.writeEntry("LayoutBottomMargin",Worksheet::convertToSceneUnits(ui.sbLayoutBottomMargin->value(), m_worksheetUnit));
+	group.writeEntry("LayoutLeftMargin",Worksheet::convertToSceneUnits(ui.sbLayoutLeftMargin->value(), m_worksheetUnit));
+	group.writeEntry("LayoutRightMargin",Worksheet::convertToSceneUnits(ui.sbLayoutRightMargin->value(), m_worksheetUnit));
+	group.writeEntry("LayoutVerticalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutVerticalSpacing->value(), m_worksheetUnit));
+	group.writeEntry("LayoutHorizontalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutHorizontalSpacing->value(), m_worksheetUnit));
 	group.writeEntry("LayoutRowCount", ui.sbLayoutRowCount->value());
 	group.writeEntry("LayoutColumnCount", ui.sbLayoutColumnCount->value());
 

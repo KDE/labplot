@@ -48,6 +48,8 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 			this, &SettingsGeneralPage::changed);
 	connect(ui.cbTabPosition, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
 			this, &SettingsGeneralPage::changed);
+	connect(ui.cbUnits, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &SettingsGeneralPage::changed);
 	connect(ui.chkAutoSave, &QCheckBox::stateChanged, this, &SettingsGeneralPage::autoSaveChanged);
 	connect(ui.chkMemoryInfo, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
 
@@ -62,6 +64,7 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("ViewMode"), ui.cbInterface->currentIndex());
 	group.writeEntry(QLatin1String("TabPosition"), ui.cbTabPosition->currentIndex());
 	group.writeEntry(QLatin1String("MdiWindowVisibility"), ui.cbMdiVisibility->currentIndex());
+	group.writeEntry(QLatin1String("Units"), ui.cbUnits->currentIndex());
 	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
 	group.writeEntry(QLatin1String("ShowMemoryInfo"), ui.chkMemoryInfo->isChecked());
@@ -77,6 +80,7 @@ void SettingsGeneralPage::loadSettings() {
 	ui.cbInterface->setCurrentIndex(group.readEntry(QLatin1String("ViewMode"), 0));
 	ui.cbTabPosition->setCurrentIndex(group.readEntry(QLatin1String("TabPosition"), 0));
 	ui.cbMdiVisibility->setCurrentIndex(group.readEntry(QLatin1String("MdiWindowVisibility"), 0));
+	ui.cbUnits->setCurrentIndex(group.readEntry(QLatin1String("Units"), 0));
 	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), false));
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
 	ui.chkMemoryInfo->setChecked(group.readEntry<bool>(QLatin1String("ShowMemoryInfo"), true));
@@ -104,6 +108,9 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbTabPosition->addItem(i18n("Bottom"));
 	ui.cbTabPosition->addItem(i18n("Left"));
 	ui.cbTabPosition->addItem(i18n("Right"));
+
+	ui.cbUnits->addItem(i18n("Metric"));
+	ui.cbUnits->addItem(i18n("Imperial"));
 }
 
 void SettingsGeneralPage::changed() {
