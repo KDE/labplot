@@ -314,6 +314,8 @@ void MainWin::initGUI(const QString& fileName) {
 	connect(&m_autoSaveTimer, &QTimer::timeout, this, &MainWin::autoSaveProject);
 
 	if (!fileName.isEmpty()) {
+		createMdiArea();
+		setCentralWidget(m_mdiArea);
 #ifdef HAVE_LIBORIGIN
 		if (Project::isLabPlotProject(fileName) || OriginProjectParser::isOriginProject(fileName)) {
 #else
