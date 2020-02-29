@@ -241,7 +241,7 @@ void PlotDataDialog::processColumns() {
 		if (index >= 0) {
 			for (int i = index; i >= 0; --i) {
 				Column* column = m_spreadsheet->column(i);
-				if (column->plotDesignation() == AbstractColumn::X) {
+				if (column->plotDesignation() == AbstractColumn::X && column->isPlottable()) {
 					xColumnName = column->name();
 					m_columns.prepend(column);
 					columnNames.prepend(xColumnName);
