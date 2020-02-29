@@ -1209,7 +1209,7 @@ void CartesianPlotDock::horizontalPaddingChanged(double value) {
 		return;
 	double padding = Worksheet::convertToSceneUnits(value, Worksheet::Centimeter);
 	for (auto* plot : m_plotList)
-			plot->setHorizontalPadding(padding);
+		plot->setHorizontalPadding(padding);
 
 	if (m_plot->symmetricPadding()) {
 		for (auto* plot: m_plotList)
@@ -1249,39 +1249,39 @@ void CartesianPlotDock::bottomPaddingChanged(double value) {
 }
 
 void CartesianPlotDock::cursorLineWidthChanged(int width) {
-    if (m_initializing)
-        return;
+	if (m_initializing)
+		return;
 
-    for (auto* plot : m_plotList) {
-        QPen pen = plot->cursorPen();
-        pen.setWidth(width);
-        plot->setCursorPen(pen);
-    }
+	for (auto* plot : m_plotList) {
+		QPen pen = plot->cursorPen();
+		pen.setWidthF( Worksheet::convertToSceneUnits(width, Worksheet::Point) );
+		plot->setCursorPen(pen);
+	}
 }
 
 void CartesianPlotDock::cursorLineColorChanged(QColor color) {
-    if (m_initializing)
-        return;
+	if (m_initializing)
+		return;
 
-    for (auto* plot : m_plotList) {
-        QPen pen = plot->cursorPen();
-        pen.setColor(color);
-        plot->setCursorPen(pen);
-    }
+	for (auto* plot : m_plotList) {
+		QPen pen = plot->cursorPen();
+		pen.setColor(color);
+		plot->setCursorPen(pen);
+	}
 }
 
 void CartesianPlotDock::cursorLineStyleChanged(int index) {
-    if (m_initializing)
-        return;
+	if (m_initializing)
+		return;
 
-    if (index > 5)
-        return;
+	if (index > 5)
+		return;
 
-    for (auto* plot : m_plotList) {
-        QPen pen = plot->cursorPen();
-        pen.setStyle(static_cast<Qt::PenStyle>(index));
-        plot->setCursorPen(pen);
-    }
+	for (auto* plot : m_plotList) {
+		QPen pen = plot->cursorPen();
+		pen.setStyle(static_cast<Qt::PenStyle>(index));
+		plot->setCursorPen(pen);
+	}
 }
 
 //*************************************************************
@@ -1532,11 +1532,11 @@ void CartesianPlotDock::plotSymmetricPaddingChanged(bool symmetric) {
 }
 
 void CartesianPlotDock::plotCursorPenChanged(QPen pen) {
-    m_initializing = true;
-    ui.sbCursorLineWidth->setValue(pen.width());
-    ui.kcbCursorLineColor->setColor(pen.color());
-    ui.cbCursorLineStyle->setCurrentIndex(pen.style());
-    m_initializing = false;
+	m_initializing = true;
+	ui.sbCursorLineWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
+	ui.kcbCursorLineColor->setColor(pen.color());
+	ui.cbCursorLineStyle->setCurrentIndex(pen.style());
+	m_initializing = false;
 }
 
 //*************************************************************
