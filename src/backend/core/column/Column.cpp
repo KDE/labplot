@@ -711,8 +711,32 @@ void Column::calculateStatistics() const {
 			++notNanCount;
 			rowData.push_back(val);
 		}
+	} else if (columnMode() == AbstractColumn::BigInt) {
+		//TODO: code duplication because of the reinterpret_cast...
+		auto* rowValues = reinterpret_cast<QVector<qint64>*>(data());
+		rowValuesSize = rowValues->size();
+		rowData.reserve(rowValuesSize);
+		for (int row = 0; row < rowValuesSize; ++row) {
+			val = rowValues->value(row);
+			if (std::isnan(val) || isMasked(row))
+				continue;
+
+			if (val < statistics.minimum)
+				statistics.minimum = val;
+			if (val > statistics.maximum)
+				statistics.maximum = val;
+			columnSum += val;
+			columnSumNeg += (1.0 / val);
+			columnSumSquare += pow(val, 2.0);
+			columnProduct *= val;
+			if (frequencyOfValues.contains(val))
+				frequencyOfValues.operator [](val)++;
+			else
+				frequencyOfValues.insert(val, 1);
+			++notNanCount;
+			rowData.push_back(val);
+		}
 	}
-	//TODO: BigInt
 
 	if (notNanCount == 0) {
 		d->statisticsAvailable = true;
