@@ -2,7 +2,7 @@
     File                 : LabelWidget.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2017 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Description          : label settings widget
 
@@ -63,6 +63,11 @@
 LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new QMenu(this)) {
 	ui.setupUi(this);
 
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	m_units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::MetricUnits);
+	if (m_units == BaseDock::ImperialUnits)
+		m_worksheetUnit = Worksheet::Inch;
+
 	m_dateTimeMenu->setSeparatorsCollapsible(false); //we don't want the first separator to be removed
 
 	ui.kcbFontColor->setColor(Qt::black); // default color
@@ -98,6 +103,15 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	ui.cbPositionY->addItem(i18n("Center"));
 	ui.cbPositionY->addItem(i18n("Bottom"));
 	ui.cbPositionY->addItem(i18n("Custom"));
+
+	QString suffix;
+	if (m_units == BaseDock::MetricUnits)
+		suffix = QLatin1String("cm");
+	else
+		suffix = QLatin1String("in");
+
+	ui.sbPositionX->setSuffix(suffix);
+	ui.sbPositionY->setSuffix(suffix);
 
 	ui.cbHorizontalAlignment->addItem(i18n("Left"));
 	ui.cbHorizontalAlignment->addItem(i18n("Center"));
@@ -289,6 +303,33 @@ void LabelWidget::setNoGeometryMode(const bool b) {
 	ui.sbOffsetY->setVisible(!b);
 	ui.lRotation->setVisible(!b);
 	ui.sbRotation->setVisible(!b);
+}
+
+void LabelWidget::updateUnits() {
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::MetricUnits);
+	if (units == m_units)
+		return;
+
+	m_units = units;
+	Lock lock(m_initializing);
+	QString suffix;
+	if (m_units == BaseDock::MetricUnits) {
+		//convert from imperial to metric
+		m_worksheetUnit = Worksheet::Centimeter;
+		suffix = QLatin1String("cm");
+		ui.sbPositionX->setValue(ui.sbPositionX->value()*2.54);
+		ui.sbPositionY->setValue(ui.sbPositionX->value()*2.54);
+	} else {
+		//convert from metric to imperial
+		m_worksheetUnit = Worksheet::Inch;
+		suffix = QLatin1String("in");
+		ui.sbPositionX->setValue(ui.sbPositionX->value()/2.54);
+		ui.sbPositionY->setValue(ui.sbPositionY->value()/2.54);
+	}
+
+	ui.sbPositionX->setSuffix(suffix);
+	ui.sbPositionY->setSuffix(suffix);
 }
 
 //**********************************************************
@@ -743,7 +784,7 @@ void LabelWidget::customPositionXChanged(double value) {
 		return;
 
 	TextLabel::PositionWrapper position = m_label->position();
-	position.point.setX(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+	position.point.setX(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 	for (auto* label : m_labelsList)
 		label->setPosition(position);
 }
@@ -753,7 +794,7 @@ void LabelWidget::customPositionYChanged(double value) {
 		return;
 
 	TextLabel::PositionWrapper position = m_label->position();
-	position.point.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+	position.point.setY(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 	for (auto* label : m_labelsList)
 		label->setPosition(position);
 }
@@ -930,8 +971,8 @@ void LabelWidget::labelFontColorChanged(const QColor color) {
 
 void LabelWidget::labelPositionChanged(const TextLabel::PositionWrapper& position) {
 	m_initializing = true;
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), Worksheet::Centimeter) );
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), Worksheet::Centimeter) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit) );
 	ui.cbPositionX->setCurrentIndex( position.horizontalPosition );
 	ui.cbPositionY->setCurrentIndex( position.verticalPosition );
 	m_initializing = false;
@@ -1041,10 +1082,10 @@ void LabelWidget::load() {
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( (int) m_label->position().horizontalPosition );
 	positionXChanged(ui.cbPositionX->currentIndex());
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.x(),Worksheet::Centimeter) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.x(),m_worksheetUnit) );
 	ui.cbPositionY->setCurrentIndex( (int) m_label->position().verticalPosition );
 	positionYChanged(ui.cbPositionY->currentIndex());
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.y(),Worksheet::Centimeter) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.y(),m_worksheetUnit) );
 
 	if (!m_axesList.isEmpty()) {
 		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetX(), Worksheet::Point) );
@@ -1079,9 +1120,9 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_label->position().horizontalPosition ) );
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_label->position().point.x()),Worksheet::Centimeter) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_label->position().point.x()),m_worksheetUnit) );
 	ui.cbPositionY->setCurrentIndex( group.readEntry("PositionY", (int) m_label->position().verticalPosition ) );
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_label->position().point.y()),Worksheet::Centimeter) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_label->position().point.y()),m_worksheetUnit) );
 
 	if (!m_axesList.isEmpty()) {
 		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetX", m_axesList.first()->titleOffsetX()), Worksheet::Point) );
@@ -1109,9 +1150,9 @@ void LabelWidget::saveConfig(KConfigGroup& group) {
 
 	// Geometry
 	group.writeEntry("PositionX", ui.cbPositionX->currentIndex());
-	group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(),Worksheet::Centimeter) );
+	group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(),m_worksheetUnit) );
 	group.writeEntry("PositionY", ui.cbPositionY->currentIndex());
-	group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),Worksheet::Centimeter) );
+	group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),m_worksheetUnit) );
 
 	if (!m_axesList.isEmpty()) {
 		group.writeEntry("OffsetX",  Worksheet::convertToSceneUnits(ui.sbOffsetX->value(), Worksheet::Point) );

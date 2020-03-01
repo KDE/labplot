@@ -397,7 +397,7 @@ void CartesianPlotDock::updateUnits() {
 	QString suffix;
 	if (m_units == BaseDock::MetricUnits) {
 		//convert from imperial to metric
-		m_worksheetUnit = m_worksheetUnit;
+		m_worksheetUnit = Worksheet::Centimeter;
 		suffix = QLatin1String("cm");
 		ui.sbLeft->setValue(ui.sbLeft->value()*2.54);
 		ui.sbTop->setValue(ui.sbTop->value()*2.54);
@@ -432,6 +432,8 @@ void CartesianPlotDock::updateUnits() {
 	ui.sbPaddingVertical->setSuffix(suffix);
 	ui.sbPaddingRight->setSuffix(suffix);
 	ui.sbPaddingBottom->setSuffix(suffix);
+
+	labelWidget->updateUnits();
 }
 //************************************************************
 //**** SLOTs for changes triggered in CartesianPlotDock ******
