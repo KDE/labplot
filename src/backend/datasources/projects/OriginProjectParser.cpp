@@ -51,6 +51,7 @@
 #include <QDir>
 #include <QDateTime>
 #include <QFontMetrics>
+#include <QRegularExpression>
 
 /*!
 \class OriginProjectParser
@@ -2054,18 +2055,11 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	QDEBUG("	UTF8 string: " << str.toUtf8());
 	QString line = str;
 
-	//replace \l(...) and %(...) tags
-	QRegExp rxline("\\\\\\s*l\\s*\\(\\s*\\d+\\s*\\)");
+	//replace %(...) tags
 // 	QRegExp rxcol("\\%\\(\\d+\\)");
-	int pos = rxline.indexIn(line);
-	while (pos > -1) {
-		QString value = rxline.cap(0);
-		int len = value.length();
-		value.replace(QRegExp(" "), QString());
-		value = "\\c{" + value.mid(3, value.length()-4) + '}';
-		line.replace(pos, len, value);
-		pos = rxline.indexIn(line);
-	}
+
+	// replace \l(x) (plot legend tags) with \\c{x}, where x is a digit
+	line.replace(QRegularExpression(QStringLiteral("\\\\\\s*l\\s*\\(\\s*(\\d+)\\s*\\)")), QStringLiteral("\\c{\\1}"));
 
 	// replace umlauts etc.
 	line = replaceSpecialChars(line);
@@ -2073,102 +2067,70 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	// replace tabs	(not really supported)
 	line.replace('\t', "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 
-	//Lookbehind conditions are not supported - so need to reverse string
-	QRegExp rx("\\)[^\\)\\(]*\\((?!\\s*[buig\\+\\-]\\s*\\\\)");
-	QRegExp rxfont("\\)[^\\)\\(]*\\((?![^\\:]*\\:f\\s*\\\\)");
+	// In PCRE2 (which is what QRegularExpression uses) variable-length lookbehind is supposed to be
+	// exprimental in Perl 5.30; which means it doesn't work at the moment, i.e. using a variable-length
+	// negative lookbehind isn't valid syntax from QRegularExpression POV.
+	// Ultimately we have to reverse the string and use a negative _lookahead_ instead.
+	// The goal is to temporatily replace '(' and ')' that don't denote tags; this is so that we
+	// can handle parenthesis that are inside the tag, e.g. '\b(bold (cf))', we want the '(cf)' part
+	// to remain as is.
+	const QRegularExpression nonTagsRe("\\)([^)(]*)\\((?!\\s*([buigs\\+\\-]|\\d{1,3}\\s*[pc]|[\\w ]+\\s*:\\s*f)\\s*\\\\)");
 	QString linerev = strreverse(line);
-	QString lBracket = strreverse("&lbracket;");
-	QString rBracket = strreverse("&rbracket;");
-	QString ltagBracket = strreverse("&ltagbracket;");
-	QString rtagBracket = strreverse("&rtagbracket;");
-	int pos1 = rx.indexIn(linerev);
-	int pos2 = rxfont.indexIn(linerev);
+	const QString lBracket = strreverse("&lbracket;");
+	const QString rBracket = strreverse("&rbracket;");
+	linerev.replace(nonTagsRe, rBracket + QStringLiteral("\\1") + lBracket);
 
-	while (pos1 > -1 || pos2 > -1) {
-		if (pos1 == pos2) {
-			QString value = rx.cap(0);
-			int len = value.length();
-			value = rBracket + value.mid(1, len-2) + lBracket;
-			linerev.replace(pos1, len, value);
-		}
-		else if ((pos1 > pos2 && pos2 != -1) || pos1 == -1) {
-			QString value = rxfont.cap(0);
-			int len = value.length();
-			value = rtagBracket + value.mid(1, len-2) + ltagBracket;
-			linerev.replace(pos2, len, value);
-		}
-		else if ((pos2 > pos1 && pos1 != -1) || pos2 == -1) {
-			QString value = rx.cap(0);
-			int len = value.length();
-			value = rtagBracket + value.mid(1, len-2) + ltagBracket;
-			linerev.replace(pos1, len, value);
-		}
-
-		pos1 = rx.indexIn(linerev);
-		pos2 = rxfont.indexIn(linerev);
-	}
-	linerev.replace(ltagBracket, "(");
-	linerev.replace(rtagBracket, ")");
-
+	// change the line back to normal
 	line = strreverse(linerev);
 
-	//replace \b(...), \i(...), \u(...), \g(...), \+(...), \-(...), \f:font(...) tags
-	const QString rxstr[] = { "\\\\\\s*b\\s*\\(", "\\\\\\s*i\\s*\\(", "\\\\\\s*u\\s*\\(", "\\\\\\s*g\\s*\\(", "\\\\\\s*\\+\\s*\\(", "\\\\\\s*\\-\\s*\\(", "\\\\\\s*f\\:[^\\(]*\\("};
-
-	int postag[] = {0, 0, 0, 0, 0, 0, 0};
-	QString ltag[] = {"<b>","<i>","<u>","<font face=Symbol>","<sup>","<sub>","<font face=%1>"};
-	QString rtag[] = {"</b>","</i>","</u>","</font>","</sup>","</sub>","</font>"};
-	QRegExp rxtags[7];
-	for (int i = 0; i < 7; ++i)
-		rxtags[i].setPattern(rxstr[i]+"[^\\(\\)]*\\)");
-
-	bool flag = true;
-	while (flag) {
-		for (int i = 0; i < 7; ++i) {
-			postag[i] = rxtags[i].indexIn(line);
-			while (postag[i] > -1) {
-				QString value = rxtags[i].cap(0);
-				int len = value.length();
-				pos2 = value.indexOf("(");
-				if (i < 6)
-					value = ltag[i] + value.mid(pos2+1, len-pos2-2) + rtag[i];
-				else {
-					int posfont = value.indexOf("f:");
-					value = ltag[i].arg(value.mid(posfont+2, pos2-posfont-2)) + value.mid(pos2+1, len-pos2-2) + rtag[i];
-				}
-				line.replace(postag[i], len, value);
-				postag[i] = rxtags[i].indexIn(line);
-			}
+	//replace \-(...), \+(...), \b(...), \i(...), \u(...), \s(....), \g(...), \f:font(...),
+	// \c'number'(...), \p'size'(...) tags with equivalent HTML syntax; for the syntax supported by
+	// LabPlot see: https://doc.qt.io/qt-5/richtext-html-subset.html
+	// for the OriginLab synxtax see: https://www.originlab.com/doc/LabTalk/ref/Label-cmd#Syntax:
+	const QRegularExpression tagsRe(QStringLiteral("\\\\\\s*([-+bgisu]|f:(\\w[\\w ]+)|[pc]\\s*(\\d+))\\s*\\(([^()]+?)\\)"));
+	QRegularExpressionMatch rmatch;
+	while (line.contains(tagsRe, &rmatch)) {
+		QString rep;
+		const QString tagText = rmatch.captured(4);
+		const QString marker = rmatch.captured(1);
+		if (marker.startsWith(QLatin1Char('-'))) {
+				rep = QStringLiteral("<sub>%1</sub>").arg(tagText);
+		} else if (marker.startsWith(QLatin1Char('+'))) {
+				rep = QStringLiteral("<sup>%1</sup>").arg(tagText);
+		} else if (marker.startsWith(QLatin1Char('b'))) {
+				rep = QStringLiteral("<b>%1</b>").arg(tagText);
+		} else if (marker.startsWith(QLatin1Char('g'))) { // greek symbols e.g. α φ
+				rep = QStringLiteral("<font face=Symbol>%1</font>").arg(tagText);
+		} else if (marker.startsWith(QLatin1Char('i'))) {
+				rep = QStringLiteral("<i>%1</i>").arg(tagText);
+		} else if (marker.startsWith(QLatin1Char('s'))) {
+				rep = QStringLiteral("<s>%1</s>").arg(tagText);
+		} else if (marker.startsWith(QLatin1Char('u'))) {
+				rep = QStringLiteral("<u>%1</u>").arg(tagText);
+		} else if (marker.startsWith(QLatin1Char('f'))) {
+				rep = QStringLiteral("<font face=\"%1\">%2</font>").arg(rmatch.captured(2).trimmed(), tagText);
+		} else if (marker.startsWith(QLatin1Char('p'))) { // e.g. \p200(...), means use font-size 200%
+				rep = QStringLiteral("<span style=\"font-size: %1%\">%2</span>").arg(rmatch.captured(3), tagText);
+		} else if (marker.startsWith(QLatin1Char('c'))) {
+			// e.g. \c12(...), set the text color to the corresponding color from
+			// the color drop-down list in OriginLab
+				const int colorIndex = rmatch.captured(3).toInt();
+				Origin::Color c;
+				c.type = Origin::Color::ColorType::Regular;
+				c.regular = colorIndex <= 23 ? static_cast<Origin::Color::RegularColor>(colorIndex)
+											   : Origin::Color::RegularColor::Black;
+				QColor color = OriginProjectParser::color(c);
+				rep = QStringLiteral("<span style=\"color: %1\">%2</span>").arg(color.name(), tagText);
 		}
-		flag = false;
-		for (int i = 0; i < 7; ++i) {
-			if (rxtags[i].indexIn(line) > -1) {
-				flag = true;
-				break;
-			}
-		}
+		line.replace(rmatch.capturedStart(0), rmatch.capturedLength(0), rep);
 	}
 
-	//replace unclosed tags
-	for (int i = 0; i < 6; ++i)
-		line.replace(QRegExp(rxstr[i]), ltag[i]);
-	rxfont.setPattern(rxstr[6]);
-	pos = rxfont.indexIn(line);
-	while (pos > -1) {
-		QString value = rxfont.cap(0);
-		int len = value.length();
-		int posfont = value.indexOf("f:");
-		value = ltag[6].arg(value.mid(posfont+2, len-posfont-3));
-		line.replace(pos, len, value);
-		pos = rxfont.indexIn(line);
-	}
-
+	// put non-tag '(' and ')' back in their places
 	line.replace("&lbracket;", "(");
 	line.replace("&rbracket;", ")");
 
 	// special characters
-	QRegExp rxs("\\\\\\((\\d+)\\)");
-	line.replace(rxs, "&#\\1;");
+	line.replace(QRegularExpression(QStringLiteral("\\\\\\((\\d+)\\)")), "&#\\1;");
 
 	DEBUG("	result: " << line.toStdString());
 
