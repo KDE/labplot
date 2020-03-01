@@ -104,6 +104,8 @@ private:
 	int m_prepared{false};
 	int m_columnOffset{0}; // indexes the "start column" in the datasource. Data will be imported starting from this column.
 	std::vector<void*> m_dataContainer; // pointers to the actual data containers
+
+	void fix2DigitDateTime(QDateTime&, QString format);
 };
 
 #endif
