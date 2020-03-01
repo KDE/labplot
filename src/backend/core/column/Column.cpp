@@ -610,7 +610,7 @@ void Column::setBigIntAt(int row, const qint64 new_value) {
 /**
  * \brief Replace a range of values
  *
- * Use this only when columnMode() is Integer
+ * Use this only when columnMode() is BigInt
  */
 void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
 	DEBUG("Column::replaceInteger()");
@@ -642,8 +642,8 @@ const Column::ColumnStatistics& Column::statistics() const {
 }
 
 void Column::calculateStatistics() const {
-	if ( (columnMode() != AbstractColumn::Numeric)
-		&& (columnMode() != AbstractColumn::Integer) && (columnMode() != AbstractColumn::BigInt) )
+	if ( (columnMode() != AbstractColumn::Numeric) && (columnMode() != AbstractColumn::Integer)
+			&& (columnMode() != AbstractColumn::BigInt) )
 		return;
 
 	d->statistics = ColumnStatistics();
@@ -1114,7 +1114,8 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 		}
 		if (!preview) {
 			QString content = reader->text().toString().trimmed();
-			if (!content.isEmpty() && ( columnMode() == AbstractColumn::Numeric ||  columnMode() == AbstractColumn::Integer || columnMode() == AbstractColumn::BigInt)) {
+			if (!content.isEmpty() && ( columnMode() == AbstractColumn::Numeric ||
+				columnMode() == AbstractColumn::Integer || columnMode() == AbstractColumn::BigInt)) {
 				auto* task = new DecodeColumnTask(d, content);
 				QThreadPool::globalInstance()->start(task);
 			}

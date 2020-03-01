@@ -48,6 +48,7 @@ bool AbstractFileFilter::isNan(QString s) {
 AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, const QString& dateTimeFormat, QLocale::Language lang) {
 	QLocale locale(lang);
 
+	//TODO: use BigInt as default integer?
 	if (valueString.size() == 0)	// empty string treated as integer (meaning the non-empty strings will determine the data type)
 		return AbstractColumn::Integer;
 

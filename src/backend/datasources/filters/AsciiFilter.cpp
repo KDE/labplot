@@ -644,7 +644,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			// text: non text -> text
 			if (mode == AbstractColumn::Text && columnModes[col] != AbstractColumn::Text)
 				columnModes[col] = mode;
-			// numeric: text -> numeric/interger
+			// numeric: text -> numeric/integer
 			if (mode != AbstractColumn::Text && columnModes[col] == AbstractColumn::Text)
 				columnModes[col] = mode;
 			col++;
@@ -1944,6 +1944,12 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& message) {
 					lineString += QString::number(isNumber ? value : 0);
 					break;
 				}
+				case AbstractColumn::BigInt: {
+					bool isNumber;
+					const qint64 value = locale.toLongLong(valueString, &isNumber);
+					lineString += QString::number(isNumber ? value : 0);
+					break;
+				}
 				case AbstractColumn::DateTime: {
 					QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 					fix2DigitDateTime(valueDateTime, dateTimeFormat);
@@ -2111,6 +2117,13 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
+			case AbstractColumn::BigInt: {
+				QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(n)->data());
+				vector->reserve(m_actualRows);
+				vector->resize(m_actualRows);
+				m_dataContainer[n] = static_cast<void *>(vector);
+				break;
+			}
 			case AbstractColumn::Text: {
 				QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
@@ -2272,6 +2285,33 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						}
 						break;
 					}
+					case AbstractColumn::BigInt: {
+						QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(n)->data());
+						m_dataContainer[n] = static_cast<void *>(vector);
+
+						//if the keepNValues got smaller then we move the last keepNValues count of data
+						//in the first keepNValues places
+						if (m_actualRows > spreadsheet->mqttClient()->keepNValues()) {
+							for (int i = 0; i < spreadsheet->mqttClient()->keepNValues(); i++) {
+								static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[] (i) =
+								    static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->mqttClient()->keepNValues() + i);
+							}
+						}
+
+						//if the keepNValues got bigger we move the existing values to the last m_actualRows positions
+						//then fill the remaining lines with 0
+						if (m_actualRows < spreadsheet->mqttClient()->keepNValues()) {
+							vector->reserve( spreadsheet->mqttClient()->keepNValues());
+							vector->resize( spreadsheet->mqttClient()->keepNValues());
+							for (int i = 1; i <= m_actualRows; i++) {
+								static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[] (spreadsheet->mqttClient()->keepNValues() - i) =
+								    static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[](spreadsheet->mqttClient()->keepNValues() - i - rowDiff);
+							}
+							for (int i = 0; i < rowDiff; i++)
+								static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[](i) = 0;
+						}
+						break;
+					}
 					case AbstractColumn::Text: {
 						QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
 						m_dataContainer[n] = static_cast<void *>(vector);
@@ -2424,6 +2464,13 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
+			case AbstractColumn::BigInt: {
+				QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(n)->data());
+				vector->reserve(m_actualRows);
+				vector->resize(m_actualRows);
+				m_dataContainer[n] = static_cast<void *>(vector);
+				break;
+			}
 			case AbstractColumn::Text: {
 				QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
@@ -2479,6 +2526,14 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 					}
 					case AbstractColumn::Integer: {
 						QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(col)->data());
+						vector->pop_front();
+						vector->reserve(m_actualRows);
+						vector->resize(m_actualRows);
+						m_dataContainer[col] = static_cast<void *>(vector);
+						break;
+					}
+					case AbstractColumn::BigInt: {
+						QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->reserve(m_actualRows);
 						vector->resize(m_actualRows);
@@ -2585,6 +2640,12 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						static_cast<QVector<int>*>(m_dataContainer[col])->operator[](currentRow) = (isNumber ? value : 0);
 						break;
 					}
+					case AbstractColumn::BigInt: {
+						bool isNumber;
+						const qint64 value = locale.toLongLong(valueString, &isNumber);
+						static_cast<QVector<qint64>*>(m_dataContainer[col])->operator[](currentRow) = (isNumber ? value : 0);
+						break;
+					}
 					case AbstractColumn::DateTime: {
 						QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 						fix2DigitDateTime(valueDateTime, dateTimeFormat);
@@ -2611,6 +2672,9 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						break;
 					case AbstractColumn::Integer:
 						static_cast<QVector<int>*>(m_dataContainer[col])->operator[](currentRow) = 0;
+						break;
+					case AbstractColumn::BigInt:
+						static_cast<QVector<qint64>*>(m_dataContainer[col])->operator[](currentRow) = 0;
 						break;
 					case AbstractColumn::DateTime:
 						static_cast<QVector<QDateTime>*>(m_dataContainer[col])->operator[](currentRow) = QDateTime();
@@ -2701,6 +2765,13 @@ void AsciiFilterPrivate::setPreparedForMQTT(bool prepared, MQTTTopic* topic, con
 			}
 			case AbstractColumn::Integer: {
 				QVector<int>* vector = static_cast<QVector<int>* >(topic->child<Column>(n)->data());
+				vector->reserve(m_actualRows);
+				vector->resize(m_actualRows);
+				m_dataContainer[n] = static_cast<void *>(vector);
+				break;
+			}
+			case AbstractColumn::BigInt: {
+				QVector<qint64>* vector = static_cast<QVector<qint64>* >(topic->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);

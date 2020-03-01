@@ -261,7 +261,7 @@ void PlotDataDialog::processColumns() {
 	}
 
 	//resize the scroll area to show five ComboBoxes at maximum without showing the scroll bars
-	int size = m_columnComboBoxes.size() >=5 ? 5 : m_columnComboBoxes.size();
+	int size = m_columnComboBoxes.size() >= 5 ? 5 : m_columnComboBoxes.size();
 	int height = size * ui->cbXColumn->height();
 	auto* layout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
 	if (layout) {
@@ -277,7 +277,7 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 	m_columnComboBoxes << ui->cbYColumn;
 
 	//ui-widget only has one combobox for the y-data -> add additional comboboxes dynamically if required
-	if (m_columns.size()>2) {
+	if (m_columns.size() > 2) {
 		auto* gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
 		for (int i = 2; i < m_columns.size(); ++i) {
 			QLabel* label = new QLabel(i18n("Y-data"));

@@ -1531,7 +1531,7 @@ void XYCurvePrivate::updateLines() {
 				const double x2 = x[i+1];
 				const double step = fabs(x2 - x1)/(lineInterpolationPointsCount + 1);
 
-				for (int i=0; i < (lineInterpolationPointsCount + 1); i++) {
+				for (int i = 0; i < (lineInterpolationPointsCount + 1); i++) {
 					double xi = x1+i*step;
 					double yi = gsl_spline_eval(spline, xi, acc);
 					xinterp.push_back(xi);
@@ -1838,7 +1838,7 @@ void XYCurvePrivate::updateFilling() {
 	// - no filling was enabled
 	// - the nubmer of visible points on the scene is too high
 	// - no scene points available, everything outside of the plot region or no scene points calculated yet
-	if (fillingPosition == XYCurve::NoFilling || symbolPointsScene.size()>1000 || symbolPointsScene.isEmpty()) {
+	if (fillingPosition == XYCurve::NoFilling || symbolPointsScene.size() > 1000 || symbolPointsScene.isEmpty()) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1850,7 +1850,7 @@ void XYCurvePrivate::updateFilling() {
 	if (!lines.isEmpty())
 		fillLines = lines;
 	else {
-		for (int i = 0; i < symbolPointsLogical.count()-1; i++) {
+		for (int i = 0; i < symbolPointsLogical.count() - 1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 			fillLines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
@@ -2092,8 +2092,8 @@ double XYCurve::y(double x, bool &valueFound) const {
 	}
 
 	valueFound = true;
-	if (yColumnMode == AbstractColumn::ColumnMode::Numeric ||
-		yColumnMode == AbstractColumn::ColumnMode::Integer) {
+	if (yColumnMode == AbstractColumn::ColumnMode::Numeric || yColumnMode == AbstractColumn::ColumnMode::Integer ||
+			yColumnMode == AbstractColumn::ColumnMode::BigInt) {
 		return yColumn()->valueAt(index);
 	} else {
 		valueFound = false;
@@ -2180,7 +2180,8 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 		double errorPlus, errorMinus;
 		if (errorPlusColumn && errorPlusColumn->isValid(i) && !errorPlusColumn->isMasked(i))
 			if (errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Numeric ||
-					errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Integer)
+					errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Integer ||
+					errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 				errorPlus = errorPlusColumn->valueAt(i);
 			else if (errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::DateTime ||
 					 errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Month ||
@@ -2196,7 +2197,8 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 		else {
 			if (errorMinusColumn && errorMinusColumn->isValid(i) && !errorMinusColumn->isMasked(i))
 				if (errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Numeric ||
-					errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Integer)
+					errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Integer ||
+					errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 					errorMinus = errorMinusColumn->valueAt(i);
 				else if (errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::DateTime ||
 						 errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Month ||
@@ -2209,8 +2211,8 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 		}
 
 		double value;
-		if (column1->columnMode() == AbstractColumn::ColumnMode::Numeric ||
-			column1->columnMode() == AbstractColumn::ColumnMode::Integer)
+		if (column1->columnMode() == AbstractColumn::ColumnMode::Numeric || column1->columnMode() == AbstractColumn::ColumnMode::Integer ||
+				column1->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			value = column1->valueAt(i);
 		else if (column1->columnMode() == AbstractColumn::ColumnMode::DateTime ||
 				 column1->columnMode() == AbstractColumn::ColumnMode::Month ||
