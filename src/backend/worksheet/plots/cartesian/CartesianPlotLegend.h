@@ -96,7 +96,7 @@ protected:
 	CartesianPlotLegendPrivate* const d_ptr;
 
 private:
-    	Q_DECLARE_PRIVATE(CartesianPlotLegend)
+	Q_DECLARE_PRIVATE(CartesianPlotLegend)
 	void init();
 	void initActions();
 

@@ -81,46 +81,69 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : BaseDock(par
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CartesianPlotLegendDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &CartesianPlotLegendDock::commentChanged);
-	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
-	connect( ui.kfrLabelFont, SIGNAL(fontSelected(QFont)), this, SLOT(labelFontChanged(QFont)) );
-	connect( ui.kcbLabelColor, SIGNAL(changed(QColor)), this, SLOT(labelColorChanged(QColor)) );
-	connect( ui.cbOrder, SIGNAL(currentIndexChanged(int)), this, SLOT(labelOrderChanged(int)) );
-	connect( ui.sbLineSymbolWidth, SIGNAL(valueChanged(double)), this, SLOT(lineSymbolWidthChanged(double)) );
+	connect(ui.chkVisible, &QCheckBox::clicked, this, &CartesianPlotLegendDock::visibilityChanged);
+	connect(ui.kfrLabelFont, &KFontRequester::fontSelected, this, &CartesianPlotLegendDock::labelFontChanged);
+	connect(ui.kcbLabelColor, &KColorButton::changed, this, &CartesianPlotLegendDock::labelColorChanged);
+	connect(ui.cbOrder, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &CartesianPlotLegendDock::labelOrderChanged);
+	connect(ui.sbLineSymbolWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::lineSymbolWidthChanged);
 
-	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
-	connect( ui.cbPositionY, SIGNAL(currentIndexChanged(int)), this, SLOT(positionYChanged(int)) );
-	connect( ui.sbPositionX, SIGNAL(valueChanged(double)), this, SLOT(customPositionXChanged(double)) );
-	connect( ui.sbPositionY, SIGNAL(valueChanged(double)), this, SLOT(customPositionYChanged(double)) );
+	connect(ui.cbPositionX, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &CartesianPlotLegendDock::positionXChanged);
+	connect(ui.cbPositionY, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &CartesianPlotLegendDock::positionYChanged);
+	connect(ui.sbPositionX, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::customPositionXChanged);
+	connect(ui.sbPositionY, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::customPositionYChanged);
 
-	connect( ui.sbRotation, SIGNAL(valueChanged(int)), this, SLOT(rotationChanged(int)) );
+	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::rotationChanged);
 
 	//Background
-	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
-	connect( ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundColorStyleChanged(int)) );
-	connect( ui.cbBackgroundImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundImageStyleChanged(int)) );
-	connect( ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundBrushStyleChanged(int)) );
-	connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()) );
-	connect( ui.leBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
-	connect( ui.leBackgroundFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged()) );
-	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed(QColor)), this, SLOT(backgroundFirstColorChanged(QColor)) );
-	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed(QColor)), this, SLOT(backgroundSecondColorChanged(QColor)) );
-	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
+	connect(ui.cbBackgroundType, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &CartesianPlotLegendDock::backgroundTypeChanged);
+	connect(ui.cbBackgroundColorStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &CartesianPlotLegendDock::backgroundColorStyleChanged);
+	connect(ui.cbBackgroundImageStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &CartesianPlotLegendDock::backgroundImageStyleChanged);
+	connect(ui.cbBackgroundBrushStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &CartesianPlotLegendDock::backgroundBrushStyleChanged);
+	connect(ui.bOpen, &QPushButton::clicked, this, &CartesianPlotLegendDock::selectFile);
+	connect(ui.leBackgroundFileName, &QLineEdit::returnPressed, this, &CartesianPlotLegendDock::fileNameChanged);
+	connect(ui.leBackgroundFileName, &QLineEdit::textChanged, this, &CartesianPlotLegendDock::fileNameChanged);
+	connect(ui.kcbBackgroundFirstColor, &KColorButton::changed, this, &CartesianPlotLegendDock::backgroundFirstColorChanged);
+	connect(ui.kcbBackgroundSecondColor, &KColorButton::changed, this, &CartesianPlotLegendDock::backgroundSecondColorChanged);
+	connect(ui.sbBackgroundOpacity, QOverload<int>::of(&QSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::backgroundOpacityChanged);
 
 	//Border
-	connect( ui.cbBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(borderStyleChanged(int)) );
-	connect( ui.kcbBorderColor, SIGNAL(changed(QColor)), this, SLOT(borderColorChanged(QColor)) );
-	connect( ui.sbBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(borderWidthChanged(double)) );
-	connect( ui.sbBorderCornerRadius, SIGNAL(valueChanged(double)), this, SLOT(borderCornerRadiusChanged(double)) );
-	connect( ui.sbBorderOpacity, SIGNAL(valueChanged(int)), this, SLOT(borderOpacityChanged(int)) );
+	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &CartesianPlotLegendDock::borderStyleChanged);
+	connect(ui.kcbBorderColor, &KColorButton::changed, this, &CartesianPlotLegendDock::borderColorChanged);
+	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::borderWidthChanged);
+	connect(ui.sbBorderCornerRadius, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::borderCornerRadiusChanged);
+	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::borderOpacityChanged);
 
 	//Layout
-	connect( ui.sbLayoutTopMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutTopMarginChanged(double)) );
-	connect( ui.sbLayoutBottomMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutBottomMarginChanged(double)) );
-	connect( ui.sbLayoutLeftMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutLeftMarginChanged(double)) );
-	connect( ui.sbLayoutRightMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutRightMarginChanged(double)) );
-	connect( ui.sbLayoutHorizontalSpacing, SIGNAL(valueChanged(double)), this, SLOT(layoutHorizontalSpacingChanged(double)) );
-	connect( ui.sbLayoutVerticalSpacing, SIGNAL(valueChanged(double)), this, SLOT(layoutVerticalSpacingChanged(double)) );
-	connect( ui.sbLayoutColumnCount, SIGNAL(valueChanged(int)), this, SLOT(layoutColumnCountChanged(int)) );
+	connect(ui.sbLayoutTopMargin, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::layoutTopMarginChanged);
+	connect(ui.sbLayoutBottomMargin, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::layoutBottomMarginChanged);
+	connect(ui.sbLayoutLeftMargin, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::layoutLeftMarginChanged);
+	connect(ui.sbLayoutRightMargin, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::layoutRightMarginChanged);
+	connect(ui.sbLayoutHorizontalSpacing, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::layoutHorizontalSpacingChanged);
+	connect(ui.sbLayoutVerticalSpacing, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::layoutVerticalSpacingChanged);
+	connect(ui.sbLayoutColumnCount, QOverload<int>::of(&QSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::layoutColumnCountChanged);
 
 	//template handler
 	auto* frame = new QFrame(this);
@@ -129,9 +152,9 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : BaseDock(par
 
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlotLegend);
 	layout->addWidget(templateHandler);
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CartesianPlotLegendDock::loadConfigFromTemplate);
+	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &CartesianPlotLegendDock::saveConfigAsTemplate);
+	connect(templateHandler, &TemplateHandler::info, this, &CartesianPlotLegendDock::info);
 
 	ui.verticalLayout->addWidget(frame);
 
@@ -190,37 +213,37 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 
 	//SIGNALs/SLOTs
 	//General
-	connect( m_legend, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(legendDescriptionChanged(const AbstractAspect*)) );
-	connect( m_legend, SIGNAL(labelFontChanged(QFont&)), this, SLOT(legendLabelFontChanged(QFont&)) );
-	connect( m_legend, SIGNAL(labelColorChanged(QColor&)), this, SLOT(legendLabelColorChanged(QColor&)) );
-	connect( m_legend, SIGNAL(labelColumnMajorChanged(bool)), this, SLOT(legendLabelOrderChanged(bool)) );
-	connect( m_legend, SIGNAL(positionChanged(CartesianPlotLegend::PositionWrapper)),
-			 this, SLOT(legendPositionChanged(CartesianPlotLegend::PositionWrapper)) );
-	connect( m_legend, SIGNAL(rotationAngleChanged(qreal)), this, SLOT(legendRotationAngleChanged(qreal)) );
-	connect( m_legend, SIGNAL(lineSymbolWidthChanged(float)), this, SLOT(legendLineSymbolWidthChanged(float)) );
-	connect(m_legend, SIGNAL(visibilityChanged(bool)), this, SLOT(legendVisibilityChanged(bool)));
+	connect(m_legend, &AbstractAspect::aspectDescriptionChanged, this, &CartesianPlotLegendDock::legendDescriptionChanged);
+	connect(m_legend, &CartesianPlotLegend::labelFontChanged, this, &CartesianPlotLegendDock::legendLabelFontChanged);
+	connect(m_legend, &CartesianPlotLegend::labelColorChanged, this, &CartesianPlotLegendDock::legendLabelColorChanged);
+	connect(m_legend, &CartesianPlotLegend::labelColumnMajorChanged, this, &CartesianPlotLegendDock::legendLabelOrderChanged);
+	connect(m_legend, QOverload<const CartesianPlotLegend::PositionWrapper&>::of(&CartesianPlotLegend::positionChanged),
+			this, &CartesianPlotLegendDock::legendPositionChanged);
+	connect(m_legend, &CartesianPlotLegend::rotationAngleChanged, this, &CartesianPlotLegendDock::legendRotationAngleChanged);
+	connect(m_legend, &CartesianPlotLegend::lineSymbolWidthChanged, this, &CartesianPlotLegendDock::legendLineSymbolWidthChanged);
+	connect(m_legend, &CartesianPlotLegend::visibilityChanged, this, &CartesianPlotLegendDock::legendVisibilityChanged);
 
 	//background
-	connect( m_legend, SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), this, SLOT(legendBackgroundTypeChanged(PlotArea::BackgroundType)) );
-	connect( m_legend, SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)), this, SLOT(legendBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)) );
-	connect( m_legend, SIGNAL(backgroundImageStyleChanged(PlotArea::BackgroundImageStyle)), this, SLOT(legendBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle)) );
-	connect( m_legend, SIGNAL(backgroundBrushStyleChanged(Qt::BrushStyle)), this, SLOT(legendBackgroundBrushStyleChanged(Qt::BrushStyle)) );
-	connect( m_legend, SIGNAL(backgroundFirstColorChanged(QColor&)), this, SLOT(legendBackgroundFirstColorChanged(QColor&)) );
-	connect( m_legend, SIGNAL(backgroundSecondColorChanged(QColor&)), this, SLOT(legendBackgroundSecondColorChanged(QColor&)) );
-	connect( m_legend, SIGNAL(backgroundFileNameChanged(QString&)), this, SLOT(legendBackgroundFileNameChanged(QString&)) );
-	connect( m_legend, SIGNAL(backgroundOpacityChanged(float)), this, SLOT(legendBackgroundOpacityChanged(float)) );
-	connect( m_legend, SIGNAL(borderPenChanged(QPen&)), this, SLOT(legendBorderPenChanged(QPen&)) );
-	connect( m_legend, SIGNAL(borderCornerRadiusChanged(float)), this, SLOT(legendBorderCornerRadiusChanged(float)) );
-	connect( m_legend, SIGNAL(borderOpacityChanged(float)), this, SLOT(legendBorderOpacityChanged(float)) );
+	connect(m_legend, &CartesianPlotLegend::backgroundTypeChanged, this, &CartesianPlotLegendDock::legendBackgroundTypeChanged);
+	connect(m_legend, &CartesianPlotLegend::backgroundColorStyleChanged, this, &CartesianPlotLegendDock::legendBackgroundColorStyleChanged);
+	connect(m_legend, &CartesianPlotLegend::backgroundImageStyleChanged, this, &CartesianPlotLegendDock::legendBackgroundImageStyleChanged);
+	connect(m_legend, &CartesianPlotLegend::backgroundBrushStyleChanged, this, &CartesianPlotLegendDock::legendBackgroundBrushStyleChanged);
+	connect(m_legend, &CartesianPlotLegend::backgroundFirstColorChanged, this, &CartesianPlotLegendDock::legendBackgroundFirstColorChanged);
+	connect(m_legend, &CartesianPlotLegend::backgroundSecondColorChanged, this, &CartesianPlotLegendDock::legendBackgroundSecondColorChanged);
+	connect(m_legend, &CartesianPlotLegend::backgroundFileNameChanged, this, &CartesianPlotLegendDock::legendBackgroundFileNameChanged);
+	connect(m_legend, &CartesianPlotLegend::backgroundOpacityChanged, this, &CartesianPlotLegendDock::legendBackgroundOpacityChanged);
+	connect(m_legend, &CartesianPlotLegend::borderPenChanged, this, &CartesianPlotLegendDock::legendBorderPenChanged);
+	connect(m_legend, &CartesianPlotLegend::borderCornerRadiusChanged, this, &CartesianPlotLegendDock::legendBorderCornerRadiusChanged);
+	connect(m_legend, &CartesianPlotLegend::borderOpacityChanged, this, &CartesianPlotLegendDock::legendBorderOpacityChanged);
 
 	//layout
-	connect(m_legend,SIGNAL(layoutTopMarginChanged(float)),this,SLOT(legendLayoutTopMarginChanged(float)));
-	connect(m_legend,SIGNAL(layoutBottomMarginChanged(float)),this,SLOT(legendLayoutBottomMarginChanged(float)));
-	connect(m_legend,SIGNAL(layoutLeftMarginChanged(float)),this,SLOT(legendLayoutLeftMarginChanged(float)));
-	connect(m_legend,SIGNAL(layoutRightMarginChanged(float)),this,SLOT(legendLayoutRightMarginChanged(float)));
-	connect(m_legend,SIGNAL(layoutVerticalSpacingChanged(float)),this,SLOT(legendLayoutVerticalSpacingChanged(float)));
-	connect(m_legend,SIGNAL(layoutHorizontalSpacingChanged(float)),this,SLOT(legendLayoutHorizontalSpacingChanged(float)));
-	connect(m_legend,SIGNAL(layoutColumnCountChanged(int)),this,SLOT(legendLayoutColumnCountChanged(int)));
+	connect(m_legend, &CartesianPlotLegend::layoutTopMarginChanged, this, &CartesianPlotLegendDock::legendLayoutTopMarginChanged);
+	connect(m_legend, &CartesianPlotLegend::layoutBottomMarginChanged, this, &CartesianPlotLegendDock::legendLayoutBottomMarginChanged);
+	connect(m_legend, &CartesianPlotLegend::layoutLeftMarginChanged, this, &CartesianPlotLegendDock::legendLayoutLeftMarginChanged);
+	connect(m_legend, &CartesianPlotLegend::layoutRightMarginChanged, this, &CartesianPlotLegendDock::legendLayoutRightMarginChanged);
+	connect(m_legend, &CartesianPlotLegend::layoutVerticalSpacingChanged, this, &CartesianPlotLegendDock::legendLayoutVerticalSpacingChanged);
+	connect(m_legend, &CartesianPlotLegend::layoutHorizontalSpacingChanged, this, &CartesianPlotLegendDock::legendLayoutHorizontalSpacingChanged);
+	connect(m_legend, &CartesianPlotLegend::layoutColumnCountChanged, this, &CartesianPlotLegendDock::legendLayoutColumnCountChanged);
 }
 
 void CartesianPlotLegendDock::activateTitleTab() const{
