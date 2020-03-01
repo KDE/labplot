@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for image properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2019 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2019-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -43,6 +43,7 @@ class ImageDock : public BaseDock {
 public:
 	explicit ImageDock(QWidget*);
 	void setImages(QList<Image*>);
+	void updateUnits() override;
 
 private:
 	Ui::ImageDock ui;
