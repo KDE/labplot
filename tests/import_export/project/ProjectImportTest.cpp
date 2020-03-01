@@ -409,6 +409,62 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	QCOMPARE(!std::isnan(column->valueAt(3)), false);
 	QCOMPARE(!std::isnan(column->valueAt(4)), false);
 }
+
+void ProjectImportTest::testParseOriginTags_data()
+{
+	QTest::addColumn<QString>("originTag");
+	QTest::addColumn<QString>("labPlotHTML");
+
+	QTest::newRow("bold") << "\\b(bold)" << "<b>bold</b>";
+
+	QTest::newRow("italic") << "\\i(italic)" << "<i>italic</i>";
+
+	QTest::newRow("strike through") << "\\s(strike through)" << "<s>strike through</s>";
+
+	QTest::newRow("underlined") << "\\u(underlined)" << "<u>underlined</u>";
+
+	QTest::newRow("greek char") << "\\g(a)" << "<font face=Symbol>a</font>";
+
+	QTest::newRow("sub-script") << "a\\-(b)" << "a<sub>b</sub>";
+
+	QTest::newRow("super-script") << "a\\+(b)" << "a<sup>b</sup>";
+
+	QTest::newRow("set-font") << "\\f:dejavu sans(text)" << "<font face=\"dejavu sans\">text</font>";
+
+	QTest::newRow("font-size")	<< "some \\p200(big) text"
+								<< "some <span style=\"font-size: 200%\">big</span> text";
+
+	QTest::newRow("color")	<< "some \\c15(colored) text"
+							<< "some <span style=\"color: #8000ff\">colored</span> text";
+
+	QTest::newRow("nested-non-tag-parenthesis")
+			<< "\\b(text (c) and (fh) and a(t) and empty ())"
+			<< "<b>text (c) and (fh) and a(t) and empty ()</b>";
+
+	QTest::newRow("nested-tags")
+			<< "\\b(bold text with some \\i(italic) bits and some \\c15(color)) "
+			   "then a change of \\f:dejavu sans(font)"
+			<< "<b>bold text with some <i>italic</i> bits and some "
+			   "<span style=\"color: #8000ff\">color</span></b> "
+			   "then a change of <font face=\"dejavu sans\">font</font>";
+
+	QTest::newRow("nested-tags-with-extra-spaces")
+			<< "\\ b (bold text with some \\ i(italic) bits and some \\c 15 (color)) "
+			   "then a change of \\ f:dejavu sans( font)"
+			<< "<b>bold text with some <i>italic</i> bits and some "
+			   "<span style=\"color: #8000ff\">color</span></b> "
+			   "then a change of <font face=\"dejavu sans\"> font</font>";
+}
+
+void ProjectImportTest::testParseOriginTags()
+{
+	QFETCH(QString, originTag);
+	QFETCH(QString, labPlotHTML);
+
+	OriginProjectParser parser;
+	QCOMPARE(parser.parseOriginTags(originTag), labPlotHTML);
+}
+
 #endif
 
 QTEST_MAIN(ProjectImportTest)
