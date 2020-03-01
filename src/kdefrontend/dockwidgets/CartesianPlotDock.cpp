@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for cartesian plot properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2020 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -56,7 +56,7 @@
   \ingroup kdefrontend
 */
 
-CartesianPlotDock::CartesianPlotDock(QWidget *parent) : BaseDock(parent) {
+CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_leComment = ui.leComment;
@@ -386,11 +386,58 @@ void CartesianPlotDock::activateTitleTab() {
 	ui.tabWidget->setCurrentWidget(ui.tabTitle);
 }
 
+void CartesianPlotDock::updateUnits() {
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", (int)MetricUnits);
+	if (units == m_units)
+		return;
+
+	m_units = units;
+	Lock lock(m_initializing);
+	QString suffix;
+	if (m_units == BaseDock::MetricUnits) {
+		//convert from imperial to metric
+		m_worksheetUnit = m_worksheetUnit;
+		suffix = QLatin1String("cm");
+		ui.sbLeft->setValue(ui.sbLeft->value()*2.54);
+		ui.sbTop->setValue(ui.sbTop->value()*2.54);
+		ui.sbWidth->setValue(ui.sbWidth->value()*2.54);
+		ui.sbHeight->setValue(ui.sbHeight->value()*2.54);
+		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value()*2.54);
+		ui.sbPaddingHorizontal->setValue(ui.sbPaddingHorizontal->value()*2.54);
+		ui.sbPaddingVertical->setValue(ui.sbPaddingVertical->value()*2.54);
+		ui.sbPaddingRight->setValue(ui.sbPaddingRight->value()*2.54);
+		ui.sbPaddingBottom->setValue(ui.sbPaddingBottom->value()*2.54);
+	} else {
+		//convert from metric to imperial
+		m_worksheetUnit = Worksheet::Inch;
+		suffix = QLatin1String("in");
+		ui.sbLeft->setValue(ui.sbLeft->value()/2.54);
+		ui.sbTop->setValue(ui.sbTop->value()/2.54);
+		ui.sbWidth->setValue(ui.sbWidth->value()/2.54);
+		ui.sbHeight->setValue(ui.sbHeight->value()/2.54);
+		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value()/2.54);
+		ui.sbPaddingHorizontal->setValue(ui.sbPaddingHorizontal->value()/2.54);
+		ui.sbPaddingVertical->setValue(ui.sbPaddingVertical->value()/2.54);
+		ui.sbPaddingRight->setValue(ui.sbPaddingRight->value()/2.54);
+		ui.sbPaddingBottom->setValue(ui.sbPaddingBottom->value()/2.54);
+	}
+
+	ui.sbLeft->setSuffix(suffix);
+	ui.sbTop->setSuffix(suffix);
+	ui.sbWidth->setSuffix(suffix);
+	ui.sbHeight->setSuffix(suffix);
+	ui.sbBorderCornerRadius->setSuffix(suffix);
+	ui.sbPaddingHorizontal->setSuffix(suffix);
+	ui.sbPaddingVertical->setSuffix(suffix);
+	ui.sbPaddingRight->setSuffix(suffix);
+	ui.sbPaddingBottom->setSuffix(suffix);
+}
 //************************************************************
 //**** SLOTs for changes triggered in CartesianPlotDock ******
 //************************************************************
 void CartesianPlotDock::retranslateUi() {
-	m_initializing = true;
+	Lock lock(m_initializing);
 
 	//general
 	ui.cbXRangeFormat->addItem(i18n("numeric"));
@@ -445,7 +492,21 @@ void CartesianPlotDock::retranslateUi() {
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
 
-	m_initializing = false;
+	QString suffix;
+	if (m_units == BaseDock::MetricUnits)
+		suffix = QLatin1String("cm");
+	else
+		suffix = QLatin1String("in");
+
+	ui.sbLeft->setSuffix(suffix);
+	ui.sbTop->setSuffix(suffix);
+	ui.sbWidth->setSuffix(suffix);
+	ui.sbHeight->setSuffix(suffix);
+	ui.sbBorderCornerRadius->setSuffix(suffix);
+	ui.sbPaddingHorizontal->setSuffix(suffix);
+	ui.sbPaddingVertical->setSuffix(suffix);
+	ui.sbPaddingRight->setSuffix(suffix);
+	ui.sbPaddingBottom->setSuffix(suffix);
 }
 
 // "General"-tab
@@ -461,10 +522,10 @@ void CartesianPlotDock::geometryChanged() {
 	if (m_initializing)
 		return;
 
-	float x = Worksheet::convertToSceneUnits(ui.sbLeft->value(), Worksheet::Centimeter);
-	float y = Worksheet::convertToSceneUnits(ui.sbTop->value(), Worksheet::Centimeter);
-	float w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter);
-	float h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter);
+	float x = Worksheet::convertToSceneUnits(ui.sbLeft->value(), m_worksheetUnit);
+	float y = Worksheet::convertToSceneUnits(ui.sbTop->value(), m_worksheetUnit);
+	float w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit);
+	float h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit);
 
 	QRectF rect(x,y,w,h);
 	m_plot->setRect(rect);
@@ -1166,7 +1227,7 @@ void CartesianPlotDock::borderCornerRadiusChanged(double value) {
 		return;
 
 	for (auto* plot : m_plotList)
-		plot->plotArea()->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+		plot->plotArea()->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 }
 
 void CartesianPlotDock::borderOpacityChanged(int value) {
@@ -1207,7 +1268,7 @@ void CartesianPlotDock::symmetricPaddingChanged(bool checked) {
 void CartesianPlotDock::horizontalPaddingChanged(double value) {
 	if (m_initializing)
 		return;
-	double padding = Worksheet::convertToSceneUnits(value, Worksheet::Centimeter);
+	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* plot : m_plotList)
 		plot->setHorizontalPadding(padding);
 
@@ -1220,7 +1281,7 @@ void CartesianPlotDock::horizontalPaddingChanged(double value) {
 void CartesianPlotDock::rightPaddingChanged(double value) {
 	if (m_initializing)
 		return;
-	double padding = Worksheet::convertToSceneUnits(value, Worksheet::Centimeter);
+	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* plot : m_plotList)
 		plot->setRightPadding(padding);
 }
@@ -1230,7 +1291,7 @@ void CartesianPlotDock::verticalPaddingChanged(double value) {
 		return;
 
 	// TODO: find better solution (set spinbox range). When plot->rect().width() does change?
-	double padding = Worksheet::convertToSceneUnits(value, Worksheet::Centimeter);
+	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* plot : m_plotList)
 		plot->setVerticalPadding(padding);
 
@@ -1243,7 +1304,7 @@ void CartesianPlotDock::verticalPaddingChanged(double value) {
 void CartesianPlotDock::bottomPaddingChanged(double value) {
 	if (m_initializing)
 		return;
-	double padding = Worksheet::convertToSceneUnits(value, Worksheet::Centimeter);
+	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* plot : m_plotList)
 		plot->setBottomPadding(padding);
 }
@@ -1302,10 +1363,10 @@ void CartesianPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 
 void CartesianPlotDock::plotRectChanged(QRectF& rect) {
 	m_initializing = true;
-	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(rect.x(), Worksheet::Centimeter));
-	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(rect.y(), Worksheet::Centimeter));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), Worksheet::Centimeter));
-	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), Worksheet::Centimeter));
+	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(rect.x(), m_worksheetUnit));
+	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(rect.y(), m_worksheetUnit));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), m_worksheetUnit));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), m_worksheetUnit));
 	m_initializing = false;
 }
 
@@ -1490,7 +1551,7 @@ void CartesianPlotDock::plotBorderPenChanged(QPen& pen) {
 
 void CartesianPlotDock::plotBorderCornerRadiusChanged(float value) {
 	m_initializing = true;
-	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
@@ -1503,25 +1564,25 @@ void CartesianPlotDock::plotBorderOpacityChanged(float value) {
 
 void CartesianPlotDock::plotHorizontalPaddingChanged(float value) {
 	m_initializing = true;
-	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void CartesianPlotDock::plotVerticalPaddingChanged(float value) {
 	m_initializing = true;
-	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void CartesianPlotDock::plotRightPaddingChanged(double value) {
 	m_initializing = true;
-	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void CartesianPlotDock::plotBottomPaddingChanged(double value) {
 	m_initializing = true;
-	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
@@ -1565,10 +1626,10 @@ void CartesianPlotDock::loadConfigFromTemplate(KConfig& config) {
 void CartesianPlotDock::load() {
 	//General-tab
 	ui.chkVisible->setChecked(m_plot->isVisible());
-	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().x(), Worksheet::Centimeter));
-	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), Worksheet::Centimeter));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().width(), Worksheet::Centimeter));
-	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), Worksheet::Centimeter));
+	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().x(), m_worksheetUnit));
+	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), m_worksheetUnit));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().width(), m_worksheetUnit));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), m_worksheetUnit));
 
 	switch (m_plot->rangeType()) {
 	case CartesianPlot::RangeFree:
@@ -1650,17 +1711,17 @@ void CartesianPlotDock::load() {
 		ui.leBackgroundFileName->setStyleSheet(QString());
 
 	//Padding
-	ui.sbPaddingHorizontal->setValue( Worksheet::convertFromSceneUnits(m_plot->horizontalPadding(), Worksheet::Centimeter) );
-	ui.sbPaddingVertical->setValue( Worksheet::convertFromSceneUnits(m_plot->verticalPadding(), Worksheet::Centimeter) );
-	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(m_plot->rightPadding(), Worksheet::Centimeter));
-	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(m_plot->bottomPadding(), Worksheet::Centimeter));
+	ui.sbPaddingHorizontal->setValue( Worksheet::convertFromSceneUnits(m_plot->horizontalPadding(), m_worksheetUnit) );
+	ui.sbPaddingVertical->setValue( Worksheet::convertFromSceneUnits(m_plot->verticalPadding(), m_worksheetUnit) );
+	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(m_plot->rightPadding(), m_worksheetUnit));
+	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(m_plot->bottomPadding(), m_worksheetUnit));
 	ui.cbPaddingSymmetric->setChecked(m_plot->symmetricPadding());
 
 	//Border
 	ui.kcbBorderColor->setColor( m_plot->plotArea()->borderPen().color() );
 	ui.cbBorderStyle->setCurrentIndex( (int) m_plot->plotArea()->borderPen().style() );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderPen().widthF(), Worksheet::Point) );
-	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderCornerRadius(), Worksheet::Centimeter) );
+	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderCornerRadius(), m_worksheetUnit) );
 	ui.sbBorderOpacity->setValue( round(m_plot->plotArea()->borderOpacity()*100) );
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
 
@@ -1695,17 +1756,17 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_plot->plotArea()->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_plot->plotArea()->backgroundSecondColor()) );
 	ui.sbBackgroundOpacity->setValue( round(group.readEntry("BackgroundOpacity", m_plot->plotArea()->backgroundOpacity())*100.0) );
-	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(group.readEntry("HorizontalPadding", m_plot->horizontalPadding()), Worksheet::Centimeter));
-	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(group.readEntry("VerticalPadding", m_plot->verticalPadding()), Worksheet::Centimeter));
-	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("RightPadding", m_plot->rightPadding()), Worksheet::Centimeter));
-	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BottomPadding", m_plot->bottomPadding()), Worksheet::Centimeter));
+	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(group.readEntry("HorizontalPadding", m_plot->horizontalPadding()), m_worksheetUnit));
+	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(group.readEntry("VerticalPadding", m_plot->verticalPadding()), m_worksheetUnit));
+	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("RightPadding", m_plot->rightPadding()), m_worksheetUnit));
+	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BottomPadding", m_plot->bottomPadding()), m_worksheetUnit));
 	ui.cbPaddingSymmetric->setChecked(group.readEntry("SymmetricPadding", m_plot->symmetricPadding()));
 
 	//Border-tab
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_plot->plotArea()->borderPen().color()) );
 	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) m_plot->plotArea()->borderPen().style()) );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_plot->plotArea()->borderPen().widthF()), Worksheet::Point) );
-	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", m_plot->plotArea()->borderCornerRadius()), Worksheet::Centimeter) );
+	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", m_plot->plotArea()->borderCornerRadius()), m_worksheetUnit) );
 	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", m_plot->plotArea()->borderOpacity())*100 );
 
 	m_initializing = true;
@@ -1736,17 +1797,17 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("BackgroundFirstColor", ui.kcbBackgroundFirstColor->color());
 	group.writeEntry("BackgroundSecondColor", ui.kcbBackgroundSecondColor->color());
 	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value()/100.0);
-	group.writeEntry("HorizontalPadding", Worksheet::convertToSceneUnits(ui.sbPaddingHorizontal->value(), Worksheet::Centimeter));
-	group.writeEntry("VerticalPadding", Worksheet::convertToSceneUnits(ui.sbPaddingVertical->value(), Worksheet::Centimeter));
-	group.writeEntry("RightPadding", Worksheet::convertToSceneUnits(ui.sbPaddingRight->value(), Worksheet::Centimeter));
-	group.writeEntry("BottomPadding", Worksheet::convertToSceneUnits(ui.sbPaddingBottom->value(), Worksheet::Centimeter));
+	group.writeEntry("HorizontalPadding", Worksheet::convertToSceneUnits(ui.sbPaddingHorizontal->value(), m_worksheetUnit));
+	group.writeEntry("VerticalPadding", Worksheet::convertToSceneUnits(ui.sbPaddingVertical->value(), m_worksheetUnit));
+	group.writeEntry("RightPadding", Worksheet::convertToSceneUnits(ui.sbPaddingRight->value(), m_worksheetUnit));
+	group.writeEntry("BottomPadding", Worksheet::convertToSceneUnits(ui.sbPaddingBottom->value(), m_worksheetUnit));
 	group.writeEntry("SymmetricPadding", ui.cbPaddingSymmetric->isChecked());
 
 	//Border
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
 	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Point));
-	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), Worksheet::Centimeter));
+	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), m_worksheetUnit));
 	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
 
 	config.sync();

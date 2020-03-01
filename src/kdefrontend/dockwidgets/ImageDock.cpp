@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for image properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2019 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2019-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -51,7 +51,7 @@
   \ingroup kdefrontend
 */
 
-ImageDock::ImageDock(QWidget *parent): BaseDock(parent) {
+ImageDock::ImageDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_leComment = ui.leComment;
@@ -81,6 +81,18 @@ ImageDock::ImageDock(QWidget *parent): BaseDock(parent) {
 	ui.cbVerticalAlignment->addItem(i18n("Center"));
 	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
 
+	QString suffix;
+	if (m_units == BaseDock::MetricUnits)
+		suffix = QLatin1String("cm");
+	else
+		suffix = QLatin1String("in");
+
+	ui.sbWidth->setSuffix(suffix);
+	ui.sbHeight->setSuffix(suffix);
+	ui.sbPositionX->setSuffix(suffix);
+	ui.sbPositionY->setSuffix(suffix);
+
+	//border
 	ui.cbBorderStyle->addItem(i18n("No line"));
 	ui.cbBorderStyle->addItem(i18n("Solid line"));
 	ui.cbBorderStyle->addItem(i18n("Dash line"));
@@ -121,7 +133,7 @@ ImageDock::ImageDock(QWidget *parent): BaseDock(parent) {
 }
 
 void ImageDock::setImages(QList<Image*> list) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	m_imageList = list;
 	m_image = list.first();
 	m_aspect = list.first();
@@ -170,8 +182,39 @@ void ImageDock::setImages(QList<Image*> list) {
 	//Border
 	connect(m_image, &Image::borderPenChanged, this, &ImageDock::imageBorderPenChanged);
 	connect(m_image, &Image::borderOpacityChanged, this, &ImageDock::imageBorderOpacityChanged);
+}
 
-	m_initializing = false;
+void ImageDock::updateUnits() {
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", (int)MetricUnits);
+	if (units == m_units)
+		return;
+
+	m_units = units;
+	Lock lock(m_initializing);
+	QString suffix;
+	if (m_units == BaseDock::MetricUnits) {
+		//convert from imperial to metric
+		m_worksheetUnit = m_worksheetUnit;
+		suffix = QLatin1String("cm");
+		ui.sbWidth->setValue(ui.sbWidth->value()*2.54);
+		ui.sbHeight->setValue(ui.sbHeight->value()*2.54);
+		ui.sbPositionX->setValue(ui.sbPositionX->value()*2.54);
+		ui.sbPositionY->setValue(ui.sbPositionY->value()*2.54);
+	} else {
+		//convert from metric to imperial
+		m_worksheetUnit = Worksheet::Inch;
+		suffix = QLatin1String("in");
+		ui.sbWidth->setValue(ui.sbWidth->value()/2.54);
+		ui.sbHeight->setValue(ui.sbHeight->value()/2.54);
+		ui.sbPositionX->setValue(ui.sbPositionX->value()/2.54);
+		ui.sbPositionY->setValue(ui.sbPositionY->value()/2.54);
+	}
+
+	ui.sbWidth->setSuffix(suffix);
+	ui.sbHeight->setSuffix(suffix);
+	ui.sbPositionX->setSuffix(suffix);
+	ui.sbPositionY->setSuffix(suffix);
 }
 
 //*************************************************************
@@ -239,7 +282,7 @@ void ImageDock::widthChanged(double value) {
 	if (m_initializing)
 		return;
 
-	int width = Worksheet::convertToSceneUnits(value, Worksheet::Centimeter);
+	int width = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* image : m_imageList)
 		image->setWidth(width);
 }
@@ -248,7 +291,7 @@ void ImageDock::heightChanged(double value) {
 	if (m_initializing)
 		return;
 
-	int height = Worksheet::convertToSceneUnits(value, Worksheet::Centimeter);
+	int height = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* image : m_imageList)
 		image->setHeight(height);
 }
@@ -305,7 +348,7 @@ void ImageDock::customPositionXChanged(double value) {
 		return;
 
 	WorksheetElement::PositionWrapper position = m_image->position();
-	position.point.setX(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+	position.point.setX(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 	for (auto* image : m_imageList)
 		image->setPosition(position);
 }
@@ -315,7 +358,7 @@ void ImageDock::customPositionYChanged(double value) {
 		return;
 
 	WorksheetElement::PositionWrapper position = m_image->position();
-	position.point.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+	position.point.setY(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 	for (auto* image : m_imageList)
 		image->setPosition(position);
 }
@@ -433,13 +476,13 @@ void ImageDock::imageOpacityChanged(float opacity) {
 //Size
 void ImageDock::imageWidthChanged(int width) {
 	m_initializing = true;
-	ui.sbWidth->setValue( Worksheet::convertFromSceneUnits(width, Worksheet::Centimeter) );
+	ui.sbWidth->setValue( Worksheet::convertFromSceneUnits(width, m_worksheetUnit) );
 	m_initializing = false;
 }
 
 void ImageDock::imageHeightChanged(int height) {
 	m_initializing = true;
-	ui.sbHeight->setValue( Worksheet::convertFromSceneUnits(height, Worksheet::Centimeter) );
+	ui.sbHeight->setValue( Worksheet::convertFromSceneUnits(height, m_worksheetUnit) );
 	m_initializing = false;
 }
 
@@ -453,8 +496,8 @@ void ImageDock::imageKeepRatioChanged(bool keep) {
 //Position
 void ImageDock::imagePositionChanged(const WorksheetElement::PositionWrapper& position) {
 	m_initializing = true;
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), Worksheet::Centimeter) );
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), Worksheet::Centimeter) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit) );
 	ui.cbPositionX->setCurrentIndex( position.horizontalPosition );
 	ui.cbPositionY->setCurrentIndex( position.verticalPosition );
 	m_initializing = false;
@@ -516,17 +559,17 @@ void ImageDock::load() {
 	ui.chbVisible->setChecked(m_image->isVisible());
 
 	//Size
-	ui.sbWidth->setValue( Worksheet::convertFromSceneUnits(m_image->width(), Worksheet::Centimeter) );
-	ui.sbHeight->setValue( Worksheet::convertFromSceneUnits(m_image->height(), Worksheet::Centimeter) );
+	ui.sbWidth->setValue( Worksheet::convertFromSceneUnits(m_image->width(), m_worksheetUnit) );
+	ui.sbHeight->setValue( Worksheet::convertFromSceneUnits(m_image->height(), m_worksheetUnit) );
 	ui.chbKeepRatio->setChecked(m_image->keepRatio());
 
 	//Position
 	ui.cbPositionX->setCurrentIndex( (int) m_image->position().horizontalPosition );
 	positionXChanged(ui.cbPositionX->currentIndex());
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_image->position().point.x(),Worksheet::Centimeter) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_image->position().point.x(), m_worksheetUnit) );
 	ui.cbPositionY->setCurrentIndex( (int) m_image->position().verticalPosition );
 	positionYChanged(ui.cbPositionY->currentIndex());
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_image->position().point.y(),Worksheet::Centimeter) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_image->position().point.y(), m_worksheetUnit) );
 
 	ui.cbHorizontalAlignment->setCurrentIndex( (int) m_image->horizontalAlignment() );
 	ui.cbVerticalAlignment->setCurrentIndex( (int) m_image->verticalAlignment() );

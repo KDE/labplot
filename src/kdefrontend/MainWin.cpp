@@ -2184,9 +2184,12 @@ void MainWin::handleSettingsChanges() {
 
 	//update the units
 	if (stackedWidget) {
-		BaseDock* dock = dynamic_cast<BaseDock*>(stackedWidget->currentWidget());
-		if (dock)
-			dock->updateUnits();
+		for (int i = 0; i < stackedWidget->count(); ++i) {
+			auto* widget = stackedWidget->widget(i);
+			BaseDock* dock = dynamic_cast<BaseDock*>(widget);
+			if (dock)
+				dock->updateUnits();
+		}
 	}
 
 	bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);

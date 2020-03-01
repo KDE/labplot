@@ -2,7 +2,7 @@
     File                 : CartesianPlotLegendDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2018 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2020 by Alexander Semke (alexander.semke@web.de)
     Description          : widget for cartesian plot legend properties
 
  ***************************************************************************/
@@ -143,7 +143,7 @@ void CartesianPlotLegendDock::init() {
 }
 
 void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	m_legendList = list;
 	m_legend = list.first();
 	m_aspect = list.first();
@@ -221,19 +221,68 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	connect(m_legend,SIGNAL(layoutVerticalSpacingChanged(float)),this,SLOT(legendLayoutVerticalSpacingChanged(float)));
 	connect(m_legend,SIGNAL(layoutHorizontalSpacingChanged(float)),this,SLOT(legendLayoutHorizontalSpacingChanged(float)));
 	connect(m_legend,SIGNAL(layoutColumnCountChanged(int)),this,SLOT(legendLayoutColumnCountChanged(int)));
-
-	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::activateTitleTab() const{
 	ui.tabWidget->setCurrentWidget(ui.tabTitle);
 }
 
+void CartesianPlotLegendDock::updateUnits() {
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", (int)MetricUnits);
+	if (units == m_units)
+		return;
+
+	m_units = units;
+	Lock lock(m_initializing);
+	QString suffix;
+	if (m_units == BaseDock::MetricUnits) {
+		//convert from imperial to metric
+		m_worksheetUnit = m_worksheetUnit;
+		suffix = QLatin1String("cm");
+		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value()*2.54);
+		ui.sbPositionX->setValue(ui.sbPositionX->value()*2.54);
+		ui.sbPositionY->setValue(ui.sbPositionY->value()*2.54);
+		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value()*2.54);
+		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value()*2.54);
+		ui.sbLayoutBottomMargin->setValue(ui.sbLayoutBottomMargin->value()*2.54);
+		ui.sbLayoutLeftMargin->setValue(ui.sbLayoutLeftMargin->value()*2.54);
+		ui.sbLayoutRightMargin->setValue(ui.sbLayoutRightMargin->value()*2.54);
+		ui.sbLayoutHorizontalSpacing->setValue(ui.sbLayoutHorizontalSpacing->value()*2.54);
+		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value()*2.54);
+	} else {
+		//convert from metric to imperial
+		m_worksheetUnit = Worksheet::Inch;
+		suffix = QLatin1String("in");
+		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value()/2.54);
+		ui.sbPositionX->setValue(ui.sbPositionX->value()/2.54);
+		ui.sbPositionY->setValue(ui.sbPositionY->value()/2.54);
+		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value()/2.54);
+		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value()/2.54);
+		ui.sbLayoutBottomMargin->setValue(ui.sbLayoutBottomMargin->value()/2.54);
+		ui.sbLayoutLeftMargin->setValue(ui.sbLayoutLeftMargin->value()/2.54);
+		ui.sbLayoutRightMargin->setValue(ui.sbLayoutRightMargin->value()/2.54);
+		ui.sbLayoutHorizontalSpacing->setValue(ui.sbLayoutHorizontalSpacing->value()/2.54);
+		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value()/2.54);
+	}
+
+	ui.sbLineSymbolWidth->setSuffix(suffix);
+	ui.sbPositionX->setSuffix(suffix);
+	ui.sbPositionY->setSuffix(suffix);
+	ui.sbBorderCornerRadius->setSuffix(suffix);
+	ui.sbLayoutTopMargin->setSuffix(suffix);
+	ui.sbLayoutBottomMargin->setSuffix(suffix);
+	ui.sbLayoutLeftMargin->setSuffix(suffix);
+	ui.sbLayoutRightMargin->setSuffix(suffix);
+	ui.sbLayoutHorizontalSpacing->setSuffix(suffix);
+	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
+}
+
 //************************************************************
 //** SLOTs for changes triggered in CartesianPlotLegendDock **
 //************************************************************
 void CartesianPlotLegendDock::retranslateUi() {
-	m_initializing = true;
+	Lock lock(m_initializing);
 
 	ui.cbBackgroundType->addItem(i18n("Color"));
 	ui.cbBackgroundType->addItem(i18n("Image"));
@@ -268,7 +317,22 @@ void CartesianPlotLegendDock::retranslateUi() {
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
 
-	m_initializing = false;
+	QString suffix;
+	if (m_units == BaseDock::MetricUnits)
+		suffix = QLatin1String("cm");
+	else
+		suffix = QLatin1String("in");
+
+	ui.sbLineSymbolWidth->setSuffix(suffix);
+	ui.sbPositionX->setSuffix(suffix);
+	ui.sbPositionY->setSuffix(suffix);
+	ui.sbBorderCornerRadius->setSuffix(suffix);
+	ui.sbLayoutTopMargin->setSuffix(suffix);
+	ui.sbLayoutBottomMargin->setSuffix(suffix);
+	ui.sbLayoutLeftMargin->setSuffix(suffix);
+	ui.sbLayoutRightMargin->setSuffix(suffix);
+	ui.sbLayoutHorizontalSpacing->setSuffix(suffix);
+	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
 }
 
 // "General"-tab
@@ -313,7 +377,7 @@ void CartesianPlotLegendDock::lineSymbolWidthChanged(double value) {
 		return;
 
 	for (auto* legend : m_legendList)
-		legend->setLineSymbolWidth(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+		legend->setLineSymbolWidth(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 }
 
 /*!
@@ -361,7 +425,7 @@ void CartesianPlotLegendDock::customPositionXChanged(double value) {
 		return;
 
 	CartesianPlotLegend::PositionWrapper position = m_legend->position();
-	position.point.setX(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+	position.point.setX(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 	for (auto* legend : m_legendList)
 		legend->setPosition(position);
 }
@@ -371,7 +435,7 @@ void CartesianPlotLegendDock::customPositionYChanged(double value) {
 		return;
 
 	CartesianPlotLegend::PositionWrapper position = m_legend->position();
-	position.point.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+	position.point.setY(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 	for (auto* legend : m_legendList)
 		legend->setPosition(position);
 }
@@ -611,7 +675,7 @@ void CartesianPlotLegendDock::borderCornerRadiusChanged(double value) {
 		return;
 
 	for (auto* legend : m_legendList)
-		legend->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+		legend->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 }
 
 void CartesianPlotLegendDock::borderOpacityChanged(int value) {
@@ -629,7 +693,7 @@ void CartesianPlotLegendDock::layoutTopMarginChanged(double margin) {
 		return;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutTopMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
+		legend->setLayoutTopMargin(Worksheet::convertToSceneUnits(margin, m_worksheetUnit));
 }
 
 void CartesianPlotLegendDock::layoutBottomMarginChanged(double margin) {
@@ -637,7 +701,7 @@ void CartesianPlotLegendDock::layoutBottomMarginChanged(double margin) {
 		return;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutBottomMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
+		legend->setLayoutBottomMargin(Worksheet::convertToSceneUnits(margin, m_worksheetUnit));
 }
 
 void CartesianPlotLegendDock::layoutLeftMarginChanged(double margin) {
@@ -645,7 +709,7 @@ void CartesianPlotLegendDock::layoutLeftMarginChanged(double margin) {
 		return;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutLeftMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
+		legend->setLayoutLeftMargin(Worksheet::convertToSceneUnits(margin, m_worksheetUnit));
 }
 
 void CartesianPlotLegendDock::layoutRightMarginChanged(double margin) {
@@ -653,7 +717,7 @@ void CartesianPlotLegendDock::layoutRightMarginChanged(double margin) {
 		return;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutRightMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
+		legend->setLayoutRightMargin(Worksheet::convertToSceneUnits(margin, m_worksheetUnit));
 }
 
 void CartesianPlotLegendDock::layoutHorizontalSpacingChanged(double spacing) {
@@ -661,7 +725,7 @@ void CartesianPlotLegendDock::layoutHorizontalSpacingChanged(double spacing) {
 		return;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutHorizontalSpacing(Worksheet::convertToSceneUnits(spacing, Worksheet::Centimeter));
+		legend->setLayoutHorizontalSpacing(Worksheet::convertToSceneUnits(spacing, m_worksheetUnit));
 }
 
 void CartesianPlotLegendDock::layoutVerticalSpacingChanged(double spacing) {
@@ -669,7 +733,7 @@ void CartesianPlotLegendDock::layoutVerticalSpacingChanged(double spacing) {
 		return;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutVerticalSpacing(Worksheet::convertToSceneUnits(spacing, Worksheet::Centimeter));
+		legend->setLayoutVerticalSpacing(Worksheet::convertToSceneUnits(spacing, m_worksheetUnit));
 }
 
 void CartesianPlotLegendDock::layoutColumnCountChanged(int count) {
@@ -726,15 +790,15 @@ void CartesianPlotLegendDock::legendLabelOrderChanged(bool b) {
 
 void CartesianPlotLegendDock::legendLineSymbolWidthChanged(float value) {
 	m_initializing = true;
-	ui.sbLineSymbolWidth->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLineSymbolWidth->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 
 void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::PositionWrapper& position) {
 	m_initializing = true;
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), Worksheet::Centimeter) );
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), Worksheet::Centimeter) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit) );
 	ui.cbPositionX->setCurrentIndex( position.horizontalPosition );
 	ui.cbPositionY->setCurrentIndex( position.verticalPosition );
 	m_initializing = false;
@@ -818,7 +882,7 @@ void CartesianPlotLegendDock::legendBorderPenChanged(QPen& pen) {
 
 void CartesianPlotLegendDock::legendBorderCornerRadiusChanged(float value) {
 	m_initializing = true;
-	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
@@ -831,37 +895,37 @@ void CartesianPlotLegendDock::legendBorderOpacityChanged(float opacity) {
 //Layout
 void CartesianPlotLegendDock::legendLayoutTopMarginChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendLayoutBottomMarginChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutBottomMargin->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutBottomMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendLayoutLeftMarginChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutLeftMargin->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutLeftMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendLayoutRightMarginChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutRightMargin->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutRightMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendLayoutVerticalSpacingChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutVerticalSpacing->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutVerticalSpacing->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendLayoutHorizontalSpacingChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutHorizontalSpacing->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutHorizontalSpacing->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
@@ -890,13 +954,13 @@ void CartesianPlotLegendDock::load() {
 	else
 		ui.cbOrder->setCurrentIndex(1); //row major
 
-	ui.sbLineSymbolWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), Worksheet::Centimeter) );
+	ui.sbLineSymbolWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), m_worksheetUnit) );
 
 	//Geometry
 	ui.cbPositionX->setCurrentIndex(m_legend->position().horizontalPosition);
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_legend->position().point.x(), Worksheet::Centimeter) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_legend->position().point.x(), m_worksheetUnit) );
 	ui.cbPositionY->setCurrentIndex(m_legend->position().verticalPosition);
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_legend->position().point.y(), Worksheet::Centimeter) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_legend->position().point.y(), m_worksheetUnit) );
 	ui.sbRotation->setValue(m_legend->rotationAngle());
 
 	ui.chkVisible->setChecked( m_legend->isVisible() );
@@ -921,16 +985,16 @@ void CartesianPlotLegendDock::load() {
 	ui.kcbBorderColor->setColor( m_legend->borderPen().color() );
 	ui.cbBorderStyle->setCurrentIndex( (int) m_legend->borderPen().style() );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->borderPen().widthF(), Worksheet::Point) );
-	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(m_legend->borderCornerRadius(), Worksheet::Centimeter) );
+	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(m_legend->borderCornerRadius(), m_worksheetUnit) );
 	ui.sbBorderOpacity->setValue( qRound(m_legend->borderOpacity()*100.0) );
 
 	// Layout
-	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), Worksheet::Centimeter) );
-	ui.sbLayoutBottomMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutBottomMargin(), Worksheet::Centimeter) );
-	ui.sbLayoutLeftMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutLeftMargin(), Worksheet::Centimeter) );
-	ui.sbLayoutRightMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutRightMargin(), Worksheet::Centimeter) );
-	ui.sbLayoutHorizontalSpacing->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutHorizontalSpacing(), Worksheet::Centimeter) );
-	ui.sbLayoutVerticalSpacing->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), Worksheet::Centimeter) );
+	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), m_worksheetUnit) );
+	ui.sbLayoutBottomMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutBottomMargin(), m_worksheetUnit) );
+	ui.sbLayoutLeftMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutLeftMargin(), m_worksheetUnit) );
+	ui.sbLayoutRightMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutRightMargin(), m_worksheetUnit) );
+	ui.sbLayoutHorizontalSpacing->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutHorizontalSpacing(), m_worksheetUnit) );
+	ui.sbLayoutVerticalSpacing->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), m_worksheetUnit) );
 
 	ui.sbLayoutColumnCount->setValue( m_legend->layoutColumnCount() );
 
@@ -979,13 +1043,13 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 		ui.cbOrder->setCurrentIndex(1); //row major
 
 	ui.sbLineSymbolWidth->setValue(group.readEntry("LineSymbolWidth",
-													Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), Worksheet::Centimeter)) );
+													Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), m_worksheetUnit)) );
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_legend->position().horizontalPosition ) );
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_legend->position().point.x()),Worksheet::Centimeter) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_legend->position().point.x()),m_worksheetUnit) );
 	ui.cbPositionY->setCurrentIndex( group.readEntry("PositionY", (int) m_legend->position().verticalPosition ) );
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_legend->position().point.y()),Worksheet::Centimeter) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_legend->position().point.y()),m_worksheetUnit) );
 	ui.sbRotation->setValue( group.readEntry("Rotation", (int) m_legend->rotationAngle() ) );
 
 	ui.chkVisible->setChecked( group.readEntry("Visible", m_legend->isVisible()) );
@@ -1004,22 +1068,22 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_legend->borderPen().color()) );
 	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) m_legend->borderPen().style()) );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_legend->borderPen().widthF()), Worksheet::Point) );
-	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", m_legend->borderCornerRadius()), Worksheet::Centimeter) );
+	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", m_legend->borderCornerRadius()), m_worksheetUnit) );
 	ui.sbBorderOpacity->setValue( qRound(group.readEntry("BorderOpacity", m_legend->borderOpacity())*100.0) );
 
 	// Layout
 	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin",
-												   Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), Worksheet::Centimeter)) );
+												   Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), m_worksheetUnit)) );
 	ui.sbLayoutBottomMargin->setValue(group.readEntry("LayoutBottomMargin",
-													   Worksheet::convertFromSceneUnits(m_legend->layoutBottomMargin(), Worksheet::Centimeter)) );
+													   Worksheet::convertFromSceneUnits(m_legend->layoutBottomMargin(), m_worksheetUnit)) );
 	ui.sbLayoutLeftMargin->setValue(group.readEntry("LayoutLeftMargin",
-													 Worksheet::convertFromSceneUnits(m_legend->layoutLeftMargin(), Worksheet::Centimeter)) );
+													 Worksheet::convertFromSceneUnits(m_legend->layoutLeftMargin(), m_worksheetUnit)) );
 	ui.sbLayoutRightMargin->setValue(group.readEntry("LayoutRightMargin",
-													  Worksheet::convertFromSceneUnits(m_legend->layoutRightMargin(), Worksheet::Centimeter)) );
+													  Worksheet::convertFromSceneUnits(m_legend->layoutRightMargin(), m_worksheetUnit)) );
 	ui.sbLayoutHorizontalSpacing->setValue(group.readEntry("LayoutHorizontalSpacing",
-														    Worksheet::convertFromSceneUnits(m_legend->layoutHorizontalSpacing(), Worksheet::Centimeter)) );
+														    Worksheet::convertFromSceneUnits(m_legend->layoutHorizontalSpacing(), m_worksheetUnit)) );
 	ui.sbLayoutVerticalSpacing->setValue(group.readEntry("LayoutVerticalSpacing",
-														  Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), Worksheet::Centimeter)) );
+														  Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), m_worksheetUnit)) );
 	ui.sbLayoutColumnCount->setValue(group.readEntry("LayoutColumnCount", m_legend->layoutColumnCount()));
 
 	//Title
@@ -1041,13 +1105,13 @@ void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("LabelFont", font);
 	group.writeEntry("LabelColor", ui.kcbLabelColor->color());
 	group.writeEntry("LabelColumMajorOrder", ui.cbOrder->currentIndex() == 0);// true for "column major", false for "row major"
-	group.writeEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(ui.sbLineSymbolWidth->value(), Worksheet::Centimeter));
+	group.writeEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(ui.sbLineSymbolWidth->value(), m_worksheetUnit));
 
 	//Geometry
 	group.writeEntry("PositionX", ui.cbPositionX->currentIndex());
-	group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(),Worksheet::Centimeter) );
+	group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(),m_worksheetUnit) );
 	group.writeEntry("PositionY", ui.cbPositionY->currentIndex());
-	group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),Worksheet::Centimeter) );
+	group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),m_worksheetUnit) );
 	group.writeEntry("Rotation", ui.sbRotation->value());
 
 	group.writeEntry("Visible", ui.chkVisible->isChecked());
@@ -1066,16 +1130,16 @@ void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
 	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Point));
-	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), Worksheet::Centimeter));
+	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), m_worksheetUnit));
 	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
 
 	//Layout
-	group.writeEntry("LayoutTopMargin",Worksheet::convertToSceneUnits(ui.sbLayoutTopMargin->value(), Worksheet::Centimeter));
-	group.writeEntry("LayoutBottomMargin",Worksheet::convertToSceneUnits(ui.sbLayoutBottomMargin->value(), Worksheet::Centimeter));
-	group.writeEntry("LayoutLeftMargin",Worksheet::convertToSceneUnits(ui.sbLayoutLeftMargin->value(), Worksheet::Centimeter));
-	group.writeEntry("LayoutRightMargin",Worksheet::convertToSceneUnits(ui.sbLayoutRightMargin->value(), Worksheet::Centimeter));
-	group.writeEntry("LayoutVerticalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutVerticalSpacing->value(), Worksheet::Centimeter));
-	group.writeEntry("LayoutHorizontalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutHorizontalSpacing->value(), Worksheet::Centimeter));
+	group.writeEntry("LayoutTopMargin",Worksheet::convertToSceneUnits(ui.sbLayoutTopMargin->value(), m_worksheetUnit));
+	group.writeEntry("LayoutBottomMargin",Worksheet::convertToSceneUnits(ui.sbLayoutBottomMargin->value(), m_worksheetUnit));
+	group.writeEntry("LayoutLeftMargin",Worksheet::convertToSceneUnits(ui.sbLayoutLeftMargin->value(), m_worksheetUnit));
+	group.writeEntry("LayoutRightMargin",Worksheet::convertToSceneUnits(ui.sbLayoutRightMargin->value(), m_worksheetUnit));
+	group.writeEntry("LayoutVerticalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutVerticalSpacing->value(), m_worksheetUnit));
+	group.writeEntry("LayoutHorizontalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutHorizontalSpacing->value(), m_worksheetUnit));
 	group.writeEntry("LayoutColumnCount", ui.sbLayoutColumnCount->value());
 
 	//Title
