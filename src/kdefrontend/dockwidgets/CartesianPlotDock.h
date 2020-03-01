@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for cartesian plot properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -49,6 +49,7 @@ public:
 	explicit CartesianPlotDock(QWidget*);
 	void setPlots(QList<CartesianPlot*>);
 	void activateTitleTab();
+	void updateUnits() override;
 
 private:
 	Ui::CartesianPlotDock ui;
