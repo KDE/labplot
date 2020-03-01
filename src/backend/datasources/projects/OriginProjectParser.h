@@ -89,6 +89,8 @@ private:
 	QStringList m_noteNameList;
 	bool m_importUnusedObjects{false};
 
+	friend class ProjectImportTest;
+
 protected:
 	bool load(Project*, bool) override;
 };

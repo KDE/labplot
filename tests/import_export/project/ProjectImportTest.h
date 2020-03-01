@@ -44,6 +44,8 @@ private slots:
 	void testOrigin03();
 	void testOrigin04();
 	void testOriginTextNumericColumns();
+	void testParseOriginTags_data();
+	void testParseOriginTags();
 #endif
 
 private:
