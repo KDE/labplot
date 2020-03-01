@@ -2,7 +2,7 @@
     File                 : LabelWidget.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2014 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Description          : label settings widget
 
@@ -31,6 +31,7 @@
 
 #include "ui_labelwidget.h"
 #include "backend/worksheet/TextLabel.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include <KConfigGroup>
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
@@ -52,6 +53,7 @@ public:
 
 	void setLabels(QList<TextLabel*>);
 	void setAxes(QList<Axis*>);
+	void updateUnits();
 
 	void load();
 	void loadConfig(KConfigGroup&);
@@ -68,6 +70,8 @@ private:
 	bool m_initializing{false};
 	QMenu* m_dateTimeMenu;
 	bool m_teXEnabled{false};
+	BaseDock::Units m_units{BaseDock::MetricUnits};
+	Worksheet::Unit m_worksheetUnit{Worksheet::Centimeter};
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
 	KSyntaxHighlighting::Repository m_repository;

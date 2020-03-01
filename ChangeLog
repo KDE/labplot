@@ -5,6 +5,7 @@
 	* [worksheet] Allow to move plots, text labels and legend with arrow keys
 	* [worksheet] Image worksheet element
 	* [worksheet] Reference line on the plot
+	* [worksheet] Support for imperial units for geometry and size settings of objects
 	* Allow to open Cantor and Jupyter projects
 
 -----2.7 (24.10.2019)-----

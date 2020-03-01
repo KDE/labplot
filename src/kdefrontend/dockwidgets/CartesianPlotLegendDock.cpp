@@ -261,7 +261,7 @@ void CartesianPlotLegendDock::updateUnits() {
 	QString suffix;
 	if (m_units == BaseDock::MetricUnits) {
 		//convert from imperial to metric
-		m_worksheetUnit = m_worksheetUnit;
+		m_worksheetUnit = Worksheet::Centimeter;
 		suffix = QLatin1String("cm");
 		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value()*2.54);
 		ui.sbPositionX->setValue(ui.sbPositionX->value()*2.54);
@@ -299,6 +299,8 @@ void CartesianPlotLegendDock::updateUnits() {
 	ui.sbLayoutRightMargin->setSuffix(suffix);
 	ui.sbLayoutHorizontalSpacing->setSuffix(suffix);
 	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
+
+	labelWidget->updateUnits();
 }
 
 //************************************************************

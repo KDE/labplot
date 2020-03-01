@@ -76,6 +76,7 @@
 #include "kdefrontend/HistoryDialog.h"
 #include "kdefrontend/SettingsDialog.h"
 #include "kdefrontend/GuiObserver.h"
+#include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 #include "DatasetModel.h"
 #include "welcomescreen/WelcomeScreenHelper.h"
@@ -2189,6 +2190,11 @@ void MainWin::handleSettingsChanges() {
 			BaseDock* dock = dynamic_cast<BaseDock*>(widget);
 			if (dock)
 				dock->updateUnits();
+			else {
+				auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
+				if (labelWidget)
+					labelWidget->updateUnits();
+			}
 		}
 	}
 

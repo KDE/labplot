@@ -195,7 +195,7 @@ void ImageDock::updateUnits() {
 	QString suffix;
 	if (m_units == BaseDock::MetricUnits) {
 		//convert from imperial to metric
-		m_worksheetUnit = m_worksheetUnit;
+		m_worksheetUnit = Worksheet::Centimeter;
 		suffix = QLatin1String("cm");
 		ui.sbWidth->setValue(ui.sbWidth->value()*2.54);
 		ui.sbHeight->setValue(ui.sbHeight->value()*2.54);
