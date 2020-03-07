@@ -264,7 +264,7 @@ void AbstractColumn::clear() {}
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
 	case AbstractColumn::Numeric:
-		return !std::isnan(valueAt(row));
+		return !(std::isnan(valueAt(row)) || std::isinf(valueAt(row)));
 	case AbstractColumn::Integer:	// there is no invalid integer
 	case AbstractColumn::BigInt:
 		return true;

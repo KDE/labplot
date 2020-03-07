@@ -87,6 +87,9 @@ private slots:
 	void testComments01();
 	void testComments02();
 
+	//datetime data
+	void testDateTime00();
+
 private:
 	QString m_dataDir;
 };
