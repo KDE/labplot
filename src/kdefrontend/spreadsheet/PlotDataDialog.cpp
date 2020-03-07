@@ -498,7 +498,12 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* yColumn = columnFromName(name);
-			if (yColumn == xColumn) continue;
+
+			//if only one column was selected, allow to use this column for x and for y.
+			//otherwise, don't assign xColumn to y
+			if (m_columns.size() > 1 && yColumn == xColumn)
+				continue;
+
 			addCurve(name, xColumn, yColumn, plot);
 		}
 		break;
