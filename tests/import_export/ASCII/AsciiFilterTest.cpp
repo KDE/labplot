@@ -896,4 +896,46 @@ void AsciiFilterTest::testComments02() {
 	QCOMPARE(spreadsheet.column(1)->integerAt(2), 3);
 }
 
+
+//##############################################################################
+//#########################  handling of datetime data #########################
+//##############################################################################
+/*!
+ * read data containing only two characters for the year - 'yy'. The default year in
+ * QDateTime is 1900 . When reading such two-characters DateTime values we want
+ * to have the current centure after the import.
+ */
+void AsciiFilterTest::testDateTime00() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "datetime_01.csv";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter(",");
+	filter.setHeaderEnabled(true);
+	filter.setDateTimeFormat(QLatin1String("dd/MM/yy hh:mm:ss"));
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//spreadsheet size
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+
+	//column names
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Date"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Water Pressure"));
+
+	//data types
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::DateTime);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+
+	//values
+	QDateTime value = QDateTime::fromString(QLatin1String("01/01/2019 00:00:00"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0), value);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 14.7982);
+
+	value = QDateTime::fromString(QLatin1String("01/01/2019 00:00:00"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0), value);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 14.8026);
+}
+
 QTEST_MAIN(AsciiFilterTest)
