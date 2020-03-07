@@ -9,11 +9,11 @@
 	* Allow to open Cantor and Jupyter projects
 
 Bug fixes:
-    BUG: 418390 - Ignore infinite values (created in CAS worksheets for example) in curves.
-    BUG: 412455 - Don't crash (sporadically) when openning the color scheme menu
+    BUG: 418390 - Ignore infinite values (created in CAS worksheets for example) in curves
+    BUG: 412455 - Don't crash (sporadically) when opening the color scheme menu
     BUG: 415214 - Better algorithm to draw the error bar caps
     BUG: 413397 - Properly handle removal of columns in the spreadsheet model
-    BUG: 413401    In plot data dialog, don't add new worksheets as children to workbooks, use the proper parent aspect
+    BUG: 413401 - In plot data dialog, don't add new worksheets as children to workbooks, use the proper parent aspect
 
 -----2.7 (24.10.2019)-----
 New features:
