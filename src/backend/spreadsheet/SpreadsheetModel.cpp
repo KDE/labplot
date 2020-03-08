@@ -121,6 +121,16 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 				return QVariant(i18n("invalid cell (ignored in all operations)"));
 		}
 	case Qt::EditRole:
+		if (col_ptr->columnMode() == AbstractColumn::Numeric) {
+			double value = col_ptr->valueAt(row);
+			if (std::isnan(value))
+				return QVariant("-");
+			else if (std::isinf(value))
+				return QVariant(QLatin1String("inf"));
+			else
+				return QVariant(col_ptr->asStringColumn()->textAt(row));
+		}
+
 		if (col_ptr->isValid(row))
 			return QVariant(col_ptr->asStringColumn()->textAt(row));
 
