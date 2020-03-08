@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2019 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2020 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016      by Fabian Kristof (fkristofszabolcs@gmail.com)
 
  ***************************************************************************/
@@ -2598,6 +2598,45 @@ void SpreadsheetView::unregisterShortcuts() {
 	action_clear_selection->setShortcut(QKeySequence());
 }
 
+/*!
+ * the spreadsheet can have empty rows at the end full with NaNs.
+ * for the export we only need to export valid (non-empty) rows.
+ * this functions determines the maximal row to export, or -1
+ * if the spreadsheet doesn't have any data yet.
+*/
+int SpreadsheetView::maxRowToExport() const {
+	int maxRow = -1;
+	for (int j = 0; j < m_spreadsheet->columnCount(); ++j) {
+		Column* col = m_spreadsheet->column(j);
+		if (col->columnMode() == AbstractColumn::Numeric) {
+			for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
+				if (!std::isnan(col->valueAt(i)) && i > maxRow)
+					maxRow = i;
+			}
+		} if (col->columnMode() == AbstractColumn::Integer) {
+			//TODO:
+			//integer column found. Since empty integer cells are equal to 0
+			//at the moment, we need to export the whole column.
+			//this logic needs to be adjusted once we're able to descriminate
+			//between empty and 0 values for integer columns
+			maxRow = m_spreadsheet->rowCount();
+			break;
+		} else if (col->columnMode() == AbstractColumn::DateTime) {
+			for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
+				if (col->dateTimeAt(i).isValid() && i > maxRow)
+					maxRow = i;
+			}
+		} else if (col->columnMode() == AbstractColumn::Text) {
+			for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
+				if (!col->textAt(i).isEmpty() && i > maxRow)
+					maxRow = i;
+			}
+		}
+	}
+
+	return maxRow;
+}
+
 void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
@@ -2605,8 +2644,12 @@ void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader,
 
 	PERFTRACE("export spreadsheet to file");
 	QTextStream out(&file);
-	const int cols = m_spreadsheet->columnCount();
 
+	int maxRow = maxRowToExport();
+	if (maxRow < 0)
+		return;
+
+	const int cols = m_spreadsheet->columnCount();
 	QString sep = separator;
 	sep = sep.replace(QLatin1String("TAB"), QLatin1String("\t"), Qt::CaseInsensitive);
 	sep = sep.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
@@ -2614,7 +2657,7 @@ void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader,
 	//export header (column names)
 	if (exportHeader) {
 		for (int j = 0; j < cols; ++j) {
-			out << m_spreadsheet->column(j)->name();
+			out << '"' << m_spreadsheet->column(j)->name() <<'"';
 			if (j != cols - 1)
 				out << sep;
 		}
@@ -2623,7 +2666,7 @@ void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader,
 
 	//export values
 	QLocale locale(language);
-	for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
+	for (int i = 0; i <= maxRow; ++i) {
 		for (int j = 0; j < cols; ++j) {
 			Column* col = m_spreadsheet->column(j);
 			if (col->columnMode() == AbstractColumn::Numeric) {
@@ -3030,6 +3073,13 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 		return;
 	}
 
+
+	int maxRow = maxRowToExport();
+	if (maxRow < 0) {
+		db.close();
+		return;
+	}
+
 	//create bulk insert statement
 	{
 	PERFTRACE("Create the bulk insert statement");
@@ -3042,7 +3092,7 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 	}
 	query += QLatin1String(") VALUES ");
 
-	for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
+	for (int i = 0; i <= maxRow; ++i) {
 		if (i != 0)
 			query += QLatin1String(",");
 

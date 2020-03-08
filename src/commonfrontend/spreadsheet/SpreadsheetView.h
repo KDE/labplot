@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2019 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -103,6 +103,7 @@ private:
 	                   const bool skipEmptyRows,const bool exportEntire) const;
 	void exportToFits(const QString& path, const int exportTo, const bool commentsAsUnits) const;
 	void exportToSQLite(const QString& path) const;
+	int maxRowToExport() const;
 
 	void insertColumnsLeft(int);
 	void insertColumnsRight(int);
