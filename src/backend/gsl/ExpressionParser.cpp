@@ -1361,10 +1361,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 			return false;
 
 		(*xVector)[i] = x;
-		if (std::isfinite(y))
-			(*yVector)[i] = y;
-		else
-			(*yVector)[i] = NAN;
+		(*yVector)[i] = y;
 	}
 
 	return true;
@@ -1395,10 +1392,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 			return false;
 
 		(*xVector)[i] = x;
-		if (std::isfinite(y))
-			(*yVector)[i] = y;
-		else
-			(*yVector)[i] = NAN;
+		(*yVector)[i] = y;
 	}
 
 	return true;
@@ -1418,10 +1412,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 		if (parse_errors() > 0)
 			return false;
 
-		if (std::isfinite(y))
-			(*yVector)[i] = y;
-		else
-			(*yVector)[i] = NAN;
+		(*yVector)[i] = y;
 	}
 
 	return true;
@@ -1448,10 +1439,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 		if (parse_errors() > 0)
 			return false;
 
-		if (std::isfinite(y))
-			(*yVector)[i] = y;
-		else
-			(*yVector)[i] = NAN;
+		(*yVector)[i] = y;
 	}
 
 	return true;
@@ -1493,10 +1481,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		if (parse_errors() > 0)
 			return false;
 
-		if (std::isfinite(y))
-			(*yVector)[i] = y;
-		else
-			(*yVector)[i] = NAN;
+		(*yVector)[i] = y;
 	}
 
 	//in case the y-vector is longer than the x-vector(s), set all elements that were not calculated to NAN
@@ -1529,13 +1514,8 @@ bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, co
 		if (parse_errors() > 0)
 			return false;
 
-		if (std::isfinite(r)) {
-			(*xVector)[i] = r*cos(phi);
-			(*yVector)[i] = r*sin(phi);
-		} else {
-			(*xVector)[i] = NAN;
-			(*yVector)[i] = NAN;
-		}
+		(*xVector)[i] = r*cos(phi);
+		(*yVector)[i] = r*sin(phi);
 	}
 
 	return true;
@@ -1567,19 +1547,13 @@ bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& e
 		if (parse_errors() > 0)
 			return false;
 
-		if (std::isfinite(x))
-			(*xVector)[i] = x;
-		else
-			(*xVector)[i] = NAN;
+		(*xVector)[i] = x;
 
 		const double y = parse(yFunc);
 		if (parse_errors() > 0)
 			return false;
 
-		if (std::isfinite(y))
-			(*yVector)[i] = y;
-		else
-			(*yVector)[i] = NAN;
+		(*yVector)[i] = y;
 	}
 
 	return true;
