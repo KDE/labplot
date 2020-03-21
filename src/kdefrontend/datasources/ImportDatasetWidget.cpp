@@ -244,13 +244,10 @@ void ImportDatasetWidget::updateCategories() {
 	ui.twCategories->addTopLevelItem(rootItem);
 
 	const QString& filter = ui.leSearch->text();
-	bool categoryMatch = false;
-	bool subcategoryMatch = false;
-	bool datasetMatch = false;
 
 	//add categories
 	for(auto category : m_model->categories(m_collection)) {
-		categoryMatch = (filter.isEmpty() || category.startsWith(filter, Qt::CaseInsensitive));
+		bool categoryMatch = (filter.isEmpty() || category.startsWith(filter, Qt::CaseInsensitive));
 
 		if (categoryMatch) {
 			QTreeWidgetItem* const item = new QTreeWidgetItem(QStringList(category));
@@ -262,7 +259,7 @@ void ImportDatasetWidget::updateCategories() {
 		} else {
 			QTreeWidgetItem* item = nullptr;
 			for(auto subcategory : m_model->subcategories(m_collection, category)) {
-				subcategoryMatch = subcategory.startsWith(filter, Qt::CaseInsensitive);
+				bool subcategoryMatch = subcategory.startsWith(filter, Qt::CaseInsensitive);
 
 				if (subcategoryMatch) {
 					if (!item) {
@@ -273,7 +270,7 @@ void ImportDatasetWidget::updateCategories() {
 					item->addChild(new QTreeWidgetItem(QStringList(subcategory)));
 				} else {
 					for (QString dataset : m_model->datasets(m_collection, category, subcategory)) {
-						datasetMatch = dataset.startsWith(filter, Qt::CaseInsensitive);
+						bool datasetMatch = dataset.startsWith(filter, Qt::CaseInsensitive);
 						if (datasetMatch) {
 							if (!item) {
 								item = new QTreeWidgetItem(QStringList(category));

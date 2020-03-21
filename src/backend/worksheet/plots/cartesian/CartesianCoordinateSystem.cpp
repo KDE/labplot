@@ -148,7 +148,7 @@ private:
 //TODO: own header
 class CartesianCoordinateSystemPrivate {
 public:
-	CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner);
+	explicit CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner);
 	~CartesianCoordinateSystemPrivate();
 
 	CartesianCoordinateSystem* const q;

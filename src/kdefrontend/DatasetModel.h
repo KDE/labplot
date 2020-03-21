@@ -36,7 +36,7 @@ class DatasetModel : public QObject {
 	Q_OBJECT
 
 public:
-	DatasetModel(const QMap<QString, QMap<QString, QMap<QString, QVector<QString>>>>&);
+	explicit DatasetModel(const QMap<QString, QMap<QString, QMap<QString, QVector<QString>>>>&);
 	~DatasetModel();
 
 	QStringList collections();

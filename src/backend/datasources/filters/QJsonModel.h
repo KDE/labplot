@@ -44,22 +44,22 @@ public:
 	QJsonTreeItem* parent();
 	int childCount() const;
 	int row() const;
-	void setKey(const QString& key);
-	void setValue(const QString& value);
-	void setType(const QJsonValue::Type type);
+	void setKey(const QString&);
+	void setValue(const QString&);
+	void setType(const QJsonValue::Type);
 	void setSize(int);
 	const QString& key() const;
 	const QString& value() const;
 	QJsonValue::Type type() const;
 	int size() const;
 
-	static QJsonTreeItem* load(const QJsonValue& value, QJsonTreeItem* parent = nullptr);
+	static QJsonTreeItem* load(const QJsonValue&, QJsonTreeItem* parent = nullptr);
 
 private:
 	QString mKey;
 	QString mValue;
 	QJsonValue::Type mType{QJsonValue::Undefined};
-	int mSize;
+	int mSize{0};
 	QList<QJsonTreeItem*> mChilds;
 	QJsonTreeItem* mParent;
 };
@@ -74,10 +74,10 @@ public:
 	void clear();
 	bool load(const QString& fileName);
 	bool load(QIODevice*);
-	bool loadJson(const QByteArray& json);
-	bool loadJson(const QJsonDocument& jdoc);
-	QVariant data(const QModelIndex& index, int role) const override;
-	bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
+	bool loadJson(const QByteArray&);
+	bool loadJson(const QJsonDocument&);
+	QVariant data(const QModelIndex&, int role) const override;
+	bool setData(const QModelIndex&, const QVariant& value, int role = Qt::EditRole) override;
 	QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 	QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const override;
 	QModelIndex parent(const QModelIndex&) const override;

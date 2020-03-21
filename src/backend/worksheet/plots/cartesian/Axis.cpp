@@ -65,7 +65,7 @@ extern "C" {
  */
 class AxisGrid : public QGraphicsItem {
 public:
-	AxisGrid(AxisPrivate* a) {
+	explicit AxisGrid(AxisPrivate* a) {
 		axis = a;
 		setFlag(QGraphicsItem::ItemIsSelectable, false);
 		setFlag(QGraphicsItem::ItemIsFocusable, false);
