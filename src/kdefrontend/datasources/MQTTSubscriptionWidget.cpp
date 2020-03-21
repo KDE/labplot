@@ -334,7 +334,8 @@ void MQTTSubscriptionWidget::manageCommonLevelSubscriptions() {
 					}
 				}
 				QDEBUG("Manage: " << commonTopics[topicIdx]);
-				equalTopics.append(equalTopicsMap[commonTopics[topicIdx]]);
+				if (topicIdx != -1)
+					equalTopics.append(equalTopicsMap[commonTopics[topicIdx]]);
 
 				//Add the common topic ("merging")
 				QString commonTopic;

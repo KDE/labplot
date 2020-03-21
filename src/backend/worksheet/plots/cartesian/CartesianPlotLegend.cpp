@@ -768,7 +768,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			}
 
 			//draw the legend item for histogram
-			const XYCurve* curve = dynamic_cast<XYCurve*>(curvesList.at(index));
+			const XYCurve* curve = static_cast<XYCurve*>(curvesList.at(index));
 
 			//curve's line (painted at the half of the ascent size)
 			if (curve->lineType() != XYCurve::NoLine) {

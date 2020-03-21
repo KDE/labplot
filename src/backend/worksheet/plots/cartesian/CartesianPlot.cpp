@@ -3218,7 +3218,7 @@ void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
 	} else if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
 		|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
 
-		const auto* worksheet = dynamic_cast<const Worksheet*>(q->parentAspect());
+		const auto* worksheet = static_cast<const Worksheet*>(q->parentAspect());
 		if (worksheet->layout() == Worksheet::NoLayout) {
 			const int delta = 5;
 			QRectF rect = q->rect();

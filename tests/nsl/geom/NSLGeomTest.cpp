@@ -103,7 +103,7 @@ void NSLGeomTest::testLineSim() {
 	printf("* Simplification (Douglas Peucker variant) nout = %zu\n", no);
 	double tolout = nsl_geom_linesim_douglas_peucker_variant(xdata, ydata, n, no, index);
 	perr = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
-	aerr = nsl_geom_linesim_area_error(xdata, ydata, n, index); 
+	aerr = nsl_geom_linesim_area_error(xdata, ydata, n, index);
 	printf("tolout = %.15g, pos. error = %.15g, area error = %.15g)\n", tolout, perr, aerr);
 	QCOMPARE(tolout, 0.994505452921406);
 	QCOMPARE(perr, 0.0378688524590164);
@@ -248,6 +248,7 @@ void NSLGeomTest::testLineSimMorse() {
 		int num = fscanf(file,"%lf %lf", &xdata[i], &ydata[i]);
 		if (num != 2) {	// failed to read two values
 			printf("ERROR reading data\n");
+			fclose(file);
 			return;
 		}
 	}
@@ -276,6 +277,7 @@ void NSLGeomTest::testLineSimMorse() {
 	printf("maxtol = %.15g (pos. error = %.15g, area error = %.15g)\n", tolout, perr, aerr);
 	QCOMPARE(perr, 11.9586266895937);
 	QCOMPARE(aerr, 17.558046450762);
+	fclose(file);
 }
 #endif
 

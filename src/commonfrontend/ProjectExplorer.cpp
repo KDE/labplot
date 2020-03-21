@@ -832,6 +832,9 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 			else if (currentItem)
 				currentIndex = index;
 			else if (viewItem) {
+				if (row < 0) //should never happen, but we need to handle the corrupted file
+					continue;
+
 				auto* part = dynamic_cast<AbstractPart*>(aspects.at(row));
 				if (!part)
 					continue; //TODO: add error/warning message here?
