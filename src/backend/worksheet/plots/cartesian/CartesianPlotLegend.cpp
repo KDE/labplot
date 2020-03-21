@@ -91,7 +91,7 @@ void CartesianPlotLegend::init() {
  	d->title = new TextLabel(this->name(), TextLabel::PlotLegendTitle);
 	addChild(d->title);
 	d->title->setHidden(true);
-	d->title->setParentGraphicsItem(graphicsItem());
+	d->title->setParentGraphicsItem(d);
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, false);
 	connect(d->title, &TextLabel::changed, this, &CartesianPlotLegend::retransform);

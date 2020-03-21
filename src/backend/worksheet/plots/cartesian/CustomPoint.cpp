@@ -86,8 +86,6 @@ void CustomPoint::init() {
 	d->symbolPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)) );
 
 	this->initActions();
-
-	retransform();
 }
 
 void CustomPoint::initActions() {

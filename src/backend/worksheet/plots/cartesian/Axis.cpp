@@ -161,7 +161,7 @@ void Axis::init() {
 	connect( d->title, &TextLabel::changed, this, &Axis::labelChanged);
 	addChild(d->title);
 	d->title->setHidden(true);
-	d->title->graphicsItem()->setParentItem(graphicsItem());
+	d->title->graphicsItem()->setParentItem(d);
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, false);
 	d->title->graphicsItem()->setAcceptHoverEvents(false);

@@ -1425,13 +1425,14 @@ void CartesianPlot::addImage() {
 void CartesianPlot::addCustomPoint() {
 	CustomPoint* point = new CustomPoint(this, "custom point");
 	this->addChild(point);
+	point->retransform();
 }
 
 void CartesianPlot::addReferenceLine() {
 	ReferenceLine* line = new ReferenceLine(this, "reference line");
 	this->addChild(line);
+	line->retransform();
 }
-
 
 int CartesianPlot::curveCount(){
 	return children<XYCurve>().length();

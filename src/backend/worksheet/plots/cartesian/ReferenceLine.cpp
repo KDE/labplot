@@ -81,8 +81,6 @@ void ReferenceLine::init() {
 	d->pen.setColor( group.readEntry("Color", QColor(Qt::black)) );
 	d->pen.setWidthF( group.readEntry("Width", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
 	d->opacity = group.readEntry("Opacity", 1.0);
-
-	retransform();
 }
 
 /*!
