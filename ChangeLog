@@ -7,6 +7,7 @@
 	* [worksheet] Reference line on the plot
 	* [worksheet] Support for imperial units for geometry and size settings of objects
 	* [spreadsheet] show infinite values as such and not as NaN
+	* [spreadsheet] support big integer (64 bit) as data type
 	* Allow to open Cantor and Jupyter projects
 
 Bug fixes:
