@@ -382,6 +382,44 @@ void AsciiFilterTest::testHeader07() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(3), 0.3433);
 }
 
+/*!
+ * the header contains spaces in the column names, values are tab separated.
+ * when using "auto" for the separator characters, the tab character has to
+ * be properly recognized and used.
+ */
+void AsciiFilterTest::testHeader08() {
+	//TODO: this test fails at the moment.
+	return;
+
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "separator_tab_with_header_with_spaces.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter("auto");
+	filter.setHeaderEnabled(true);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//spreadsheet size
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+
+	//column names
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("first column"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("second column"));
+
+	//data types
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Integer);
+
+	//values
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 2);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 3);
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 4);
+}
+
 //##############################################################################
 //#####################  handling of different read ranges #####################
 //##############################################################################
