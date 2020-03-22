@@ -2415,23 +2415,28 @@ void CartesianPlot::zoom(bool x, bool in) {
 	case ScaleLog10Abs: {
 		double oldRange = log10(max) - log10(min);
 		double newRange = (log10(max) - log10(min)) * factor;
-		max = pow(10, log10(max) + (newRange - oldRange) / 2.);
-		min = pow(10, log10(min) - (newRange - oldRange) / 2.);
+		max = max * pow(10, (newRange - oldRange) / 2.);
+		min = min / pow(10, (newRange - oldRange) / 2.);
 		break;
 	}
 	case ScaleLog2:
-	case ScaleLog2Abs:
-		//TODO
+	case ScaleLog2Abs: {
+		double oldRange = log2(max) - log2(min);
+		double newRange = (log2(max) - log2(min)) * factor;
+		max = max * pow(2, (newRange - oldRange) / 2.);
+		min = min / pow(2, (newRange - oldRange) / 2.);
 		break;
+	}
 	case ScaleLn:
-	case ScaleLnAbs:
-		//TODO
+	case ScaleLnAbs: {
+		double oldRange = log(max) - log(min);
+		double newRange = (log(max) - log(min)) * factor;
+		max = max * exp((newRange - oldRange) / 2.);
+		min = min / exp((newRange - oldRange) / 2.);
 		break;
+	}
 	case ScaleSqrt:
-		//TODO
-		break;
 	case ScaleX2:
-		//TODO
 		break;
 	}
 
