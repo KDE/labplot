@@ -88,7 +88,7 @@ public:
 	void setPlotsLocked(bool);
 	bool plotsLocked();
 	int getPlotCount();
-	WorksheetElement* getPlot(int index);
+	CartesianPlot* getPlot(int index);
 	TreeModel* cursorModel();
 
 	void cursorModelPlotAdded(QString name);

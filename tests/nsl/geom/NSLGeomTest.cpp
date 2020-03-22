@@ -252,6 +252,7 @@ void NSLGeomTest::testLineSimMorse() {
 			return;
 		}
 	}
+	fclose(file);
 
 	double atol = nsl_geom_linesim_clip_diag_perpoint(xdata.data(), ydata.data(), N);
 	printf("automatic tol clip_diag_perpoint = %.15g\n", atol);
@@ -277,7 +278,6 @@ void NSLGeomTest::testLineSimMorse() {
 	printf("maxtol = %.15g (pos. error = %.15g, area error = %.15g)\n", tolout, perr, aerr);
 	QCOMPARE(perr, 11.9586266895937);
 	QCOMPARE(aerr, 17.558046450762);
-	fclose(file);
 }
 #endif
 
