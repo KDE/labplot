@@ -1706,15 +1706,12 @@ void MainWin::projectChanged() {
 }
 
 void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win) {
-	if (!win)
-		return;
-
-	auto* view = static_cast<PartMdiView*>(win);
-	if (!view) {
+	if (!win) {
 		updateGUI();
 		return;
 	}
 
+	auto* view = static_cast<PartMdiView*>(win);
 	if (view == m_currentSubWindow) {
 		//do nothing, if the current sub-window gets selected again.
 		//This event happens, when labplot loses the focus (modal window is opened or the user switches to another application)
