@@ -56,7 +56,7 @@ CantorWorksheet::CantorWorksheet(const QString &name, bool loading)
 	initializes Cantor's part and plugins
 */
 bool CantorWorksheet::init(QByteArray* content) {
-	KPluginLoader loader(QLatin1String("libcantorpart"));
+	KPluginLoader loader(QLatin1String("cantorpart"));
 	KPluginFactory* factory = loader.factory();
 
 	if (!factory) {
