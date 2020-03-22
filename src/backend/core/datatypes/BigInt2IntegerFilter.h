@@ -44,9 +44,7 @@ public:
 
 		qint64 value = m_inputs.value(0)->bigIntAt(row);
 
-		int result = 0;
-		if (!std::isnan(value))
-			result = (int)(value);
+		int result = static_cast<int>(value);
 		//DEBUG("BigInt2Integer::integerAt() " << value << " -> " << result);
 
 		return result;
