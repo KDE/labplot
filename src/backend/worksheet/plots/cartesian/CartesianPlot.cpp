@@ -1425,13 +1425,14 @@ void CartesianPlot::addImage() {
 void CartesianPlot::addCustomPoint() {
 	CustomPoint* point = new CustomPoint(this, "custom point");
 	this->addChild(point);
+	point->retransform();
 }
 
 void CartesianPlot::addReferenceLine() {
 	ReferenceLine* line = new ReferenceLine(this, "reference line");
 	this->addChild(line);
+	line->retransform();
 }
-
 
 int CartesianPlot::curveCount(){
 	return children<XYCurve>().length();
@@ -2290,8 +2291,6 @@ void CartesianPlot::calculateCurvesYMinMax(bool completeRange) {
 		if (max > d->curvesYMax)
 			d->curvesYMax = max;
 	}
-
-
 }
 
 void CartesianPlot::zoomIn() {
@@ -2303,16 +2302,8 @@ void CartesianPlot::zoomIn() {
 	setUndoAware(true);
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
-	double oldRange = (d->xMax - d->xMin);
-	double newRange = (d->xMax - d->xMin) / m_zoomFactor;
-	d->xMax = d->xMax + (newRange - oldRange) / 2;
-	d->xMin = d->xMin - (newRange - oldRange) / 2;
-
-	oldRange = (d->yMax - d->yMin);
-	newRange = (d->yMax - d->yMin) / m_zoomFactor;
-	d->yMax = d->yMax + (newRange - oldRange) / 2;
-	d->yMin = d->yMin - (newRange - oldRange) / 2;
-
+	zoom(true, true); //zoom in x
+	zoom(false, true); //zoom in y
 	d->retransformScales();
 }
 
@@ -2325,16 +2316,8 @@ void CartesianPlot::zoomOut() {
 	setUndoAware(true);
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
-	double oldRange = (d->xMax-d->xMin);
-	double newRange = (d->xMax-d->xMin)*m_zoomFactor;
-	d->xMax = d->xMax + (newRange-oldRange)/2;
-	d->xMin = d->xMin - (newRange-oldRange)/2;
-
-	oldRange = (d->yMax-d->yMin);
-	newRange = (d->yMax-d->yMin)*m_zoomFactor;
-	d->yMax = d->yMax + (newRange-oldRange)/2;
-	d->yMin = d->yMin - (newRange-oldRange)/2;
-
+	zoom(true, false); //zoom out x
+	zoom(false, false); //zoom out y
 	d->retransformScales();
 }
 
@@ -2345,11 +2328,7 @@ void CartesianPlot::zoomInX() {
 	setAutoScaleX(false);
 	setUndoAware(true);
 	d->curvesYMinMaxIsDirty = true;
-	double oldRange = (d->xMax-d->xMin);
-	double newRange = (d->xMax-d->xMin)/m_zoomFactor;
-	d->xMax = d->xMax + (newRange-oldRange)/2;
-	d->xMin = d->xMin - (newRange-oldRange)/2;
-
+	zoom(true, true); //zoom in x
 	if (d->autoScaleY && autoScaleY())
 		return;
 
@@ -2363,10 +2342,7 @@ void CartesianPlot::zoomOutX() {
 	setAutoScaleX(false);
 	setUndoAware(true);
 	d->curvesYMinMaxIsDirty = true;
-	double oldRange = (d->xMax-d->xMin);
-	double newRange = (d->xMax-d->xMin)*m_zoomFactor;
-	d->xMax = d->xMax + (newRange-oldRange)/2;
-	d->xMin = d->xMin - (newRange-oldRange)/2;
+	zoom(true, false); //zoom out x
 
 	if (d->autoScaleY && autoScaleY())
 		return;
@@ -2381,13 +2357,11 @@ void CartesianPlot::zoomInY() {
 	setAutoScaleY(false);
 	setUndoAware(true);
 	d->curvesYMinMaxIsDirty = true;
-	double oldRange = (d->yMax-d->yMin);
-	double newRange = (d->yMax-d->yMin)/m_zoomFactor;
-	d->yMax = d->yMax + (newRange-oldRange)/2;
-	d->yMin = d->yMin - (newRange-oldRange)/2;
+	zoom(false, true); //zoom in y
 
 	if (d->autoScaleX && autoScaleX())
 		return;
+
 	d->retransformScales();
 }
 
@@ -2398,15 +2372,76 @@ void CartesianPlot::zoomOutY() {
 	setAutoScaleY(false);
 	setUndoAware(true);
 	d->curvesYMinMaxIsDirty = true;
-	double oldRange = (d->yMax-d->yMin);
-	double newRange = (d->yMax-d->yMin)*m_zoomFactor;
-	d->yMax = d->yMax + (newRange-oldRange)/2;
-	d->yMin = d->yMin - (newRange-oldRange)/2;
+	zoom(false, false); //zoom out y
 
 	if (d->autoScaleX && autoScaleX())
 		return;
 
 	d->retransformScales();
+}
+
+/*!
+ * helper function called in other zoom*() functions
+ * and doing the actual change of the data ranges.
+ * @param x if set to \true the x-range is modified, the y-range for \c false
+ * @param in the "zoom in" is performed if set to \c \true, "zoom out" for \c false
+ */
+void CartesianPlot::zoom(bool x, bool in) {
+	Q_D(CartesianPlot);
+
+	double min;
+	double max;
+	if (x) {
+		min = d->xMin;
+		max = d->xMax;
+	} else {
+		min = d->yMin;
+		max = d->yMax;
+	}
+
+	double factor = m_zoomFactor;
+	if (in)
+		factor = 1/factor;
+
+	switch (d->xScale) {
+	case ScaleLinear: {
+		double oldRange = max - min;
+		double newRange = (max - min) * factor;
+		max = max + (newRange - oldRange) / 2;
+		min = min - (newRange - oldRange) / 2;
+		break;
+	}
+	case ScaleLog10:
+	case ScaleLog10Abs: {
+		double oldRange = log10(max) - log10(min);
+		double newRange = (log10(max) - log10(min)) * factor;
+		max = pow(10, log10(max) + (newRange - oldRange) / 2.);
+		min = pow(10, log10(min) - (newRange - oldRange) / 2.);
+		break;
+	}
+	case ScaleLog2:
+	case ScaleLog2Abs:
+		//TODO
+		break;
+	case ScaleLn:
+	case ScaleLnAbs:
+		//TODO
+		break;
+	case ScaleSqrt:
+		//TODO
+		break;
+	case ScaleX2:
+		//TODO
+		break;
+	}
+
+	if (x) {
+		d->xMin = min;
+		d->xMax = max;
+	} else {
+		d->yMin = min;
+		d->yMax = max;
+	}
 }
 
 void CartesianPlot::shiftLeftX() {
@@ -3217,7 +3252,7 @@ void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
 	} else if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
 		|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
 
-		const auto* worksheet = dynamic_cast<const Worksheet*>(q->parentAspect());
+		const auto* worksheet = static_cast<const Worksheet*>(q->parentAspect());
 		if (worksheet->layout() == Worksheet::NoLayout) {
 			const int delta = 5;
 			QRectF rect = q->rect();
@@ -3339,7 +3374,6 @@ void CartesianPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
 }
 
 void CartesianPlotPrivate::mouseHoverZoomSelectionMode(QPointF logicPos) {
-
 	m_insideDataRect = true;
 
 	if (mouseMode == CartesianPlot::ZoomSelectionMode && !m_selectionBandIsShown) {

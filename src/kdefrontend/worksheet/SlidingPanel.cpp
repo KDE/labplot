@@ -55,7 +55,7 @@ SlidingPanel::SlidingPanel(QWidget *parent, const QString &worksheetName) : QFra
 	setLayout(hlayout);
 
 	QPalette pal(palette());
-	pal.setColor(QPalette::Background, Qt::gray);
+	pal.setColor(QPalette::Window, Qt::gray);
 	setAutoFillBackground(true);
 	setPalette(pal);
 

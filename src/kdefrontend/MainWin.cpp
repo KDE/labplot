@@ -212,14 +212,14 @@ MainWin::~MainWin() {
 void MainWin::showPresenter() {
 	const Worksheet* w = dynamic_cast<Worksheet*>(m_currentAspect);
 	if (w) {
-		auto* view = dynamic_cast<WorksheetView*>(w->view());
+		auto* view = static_cast<WorksheetView*>(w->view());
 		view->presenterMode();
 	} else {
 		//currently active object is not a worksheet but we're asked to start in the presenter mode
 		//determine the first available worksheet and show it in the presenter mode
-		QVector<Worksheet*> worksheets = m_project->children<Worksheet>();
+		auto worksheets = m_project->children<Worksheet>();
 		if (worksheets.size() > 0) {
-			auto* view = qobject_cast<WorksheetView*>(worksheets.first()->view());
+			auto* view = static_cast<WorksheetView*>(worksheets.constFirst()->view());
 			view->presenterMode();
 		} else {
 			QMessageBox::information(this, i18n("Presenter Mode"),
@@ -1248,15 +1248,20 @@ void MainWin::openProject(const QString& filename) {
 					worksheet->setName(QFileInfo(filename).fileName());
 					worksheet->setComment(filename);
 
-					file.open(QIODevice::ReadOnly);
-					QByteArray content = file.readAll();
-					rc = worksheet->init(&content);
-					if (rc)
-						m_project->addChild(worksheet);
-					else {
-						delete worksheet;
+					rc = file.open(QIODevice::ReadOnly);
+					if (rc) {
+						QByteArray content = file.readAll();
+						rc = worksheet->init(&content);
+						if (rc)
+							m_project->addChild(worksheet);
+						else {
+							delete worksheet;
+							RESET_CURSOR;
+							QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
+						}
+					}else {
 						RESET_CURSOR;
-						QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
+						QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to open the file '%1'.", filename));
 					}
 				} else {
 					RESET_CURSOR;
@@ -1548,7 +1553,7 @@ void MainWin::print() {
 	if (!win)
 		return;
 
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	AbstractPart* part = static_cast<PartMdiView*>(win)->part();
 	statusBar()->showMessage(i18n("Preparing printing of %1", part->name()));
 	if (part->printView())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
@@ -1561,7 +1566,7 @@ void MainWin::printPreview() {
 	if (!win)
 		return;
 
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	AbstractPart* part = static_cast<PartMdiView*>(win)->part();
 	statusBar()->showMessage(i18n("Preparing printing of %1", part->name()));
 	if (part->printPreview())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
@@ -1658,9 +1663,8 @@ void MainWin::newNotes() {
 	Otherwise returns \c 0.
 */
 Spreadsheet* MainWin::activeSpreadsheet() const {
-	if(dynamic_cast<QQuickWidget*>(centralWidget()) != nullptr) {
+	if(dynamic_cast<QQuickWidget*>(centralWidget()))
 		return nullptr;
-	}
 
 	if (!m_currentAspect)
 		return nullptr;
@@ -1702,15 +1706,12 @@ void MainWin::projectChanged() {
 }
 
 void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win) {
-	if (!win)
-		return;
-
-	auto* view = qobject_cast<PartMdiView*>(win);
-	if (!view) {
+	if (!win) {
 		updateGUI();
 		return;
 	}
 
+	auto* view = static_cast<PartMdiView*>(win);
 	if (view == m_currentSubWindow) {
 		//do nothing, if the current sub-window gets selected again.
 		//This event happens, when labplot loses the focus (modal window is opened or the user switches to another application)
@@ -1756,8 +1757,9 @@ void MainWin::handleAspectRemoved(const AbstractAspect* parent,const AbstractAsp
 }
 
 void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
-	const auto* part = qobject_cast<const AbstractPart*>(aspect);
-	if (!part) return;
+	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
+	if (!part)
+		return;
 
 	const auto* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
 	auto* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
@@ -2342,7 +2344,7 @@ void MainWin::exportDialog() {
 	if (!win)
 		return;
 
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	AbstractPart* part = static_cast<PartMdiView*>(win)->part();
 	if (part->exportView())
 		statusBar()->showMessage(i18n("%1 exported", part->name()));
 }

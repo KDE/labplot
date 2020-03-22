@@ -6,6 +6,7 @@
 	* [worksheet] Image worksheet element
 	* [worksheet] Reference line on the plot
 	* [worksheet] Support for imperial units for geometry and size settings of objects
+	* [spreadsheet] show infinite values as such and not as NaN
 	* Allow to open Cantor and Jupyter projects
 
 Bug fixes:

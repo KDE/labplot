@@ -38,7 +38,7 @@
 class AbstractAspect;
 
 struct Lock {
-	inline Lock(bool& variable)
+	inline explicit Lock(bool& variable)
 		: variable(variable = true){
 	}
 

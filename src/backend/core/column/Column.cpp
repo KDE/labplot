@@ -119,7 +119,6 @@ QMenu* Column::createContextMenu() {
 	//"Used in" menu containing all curves where the column is used
 	QMenu* usedInMenu = new QMenu(i18n("Used in"));
 	usedInMenu->setIcon(QIcon::fromTheme("go-next-view"));
-	usedInMenu->addSection(i18n("Curves"));
 
 	//remove previously added actions
 	for (auto* action : m_usedInActionGroup->actions())
@@ -204,7 +203,7 @@ void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
 	if (!project)
 		return;
 
-	QVector<const XYCurve*> curves = project->children<const XYCurve>(AbstractAspect::Recursive);
+	auto curves = project->children<const XYCurve>(AbstractAspect::Recursive);
 
 	//determine the plots where the column is consumed
 	for (const auto* curve : curves) {
@@ -213,16 +212,16 @@ void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
 			|| (curve->xErrorType() == XYCurve::AsymmetricError && (curve->xErrorPlusColumn() == this ||curve->xErrorMinusColumn() == this))
 			|| (curve->yErrorType() == XYCurve::SymmetricError && curve->yErrorPlusColumn() == this)
 			|| (curve->yErrorType() == XYCurve::AsymmetricError && (curve->yErrorPlusColumn() == this ||curve->yErrorMinusColumn() == this)) ) {
-			auto* plot = dynamic_cast<CartesianPlot*>(curve->parentAspect());
+			auto* plot = static_cast<CartesianPlot*>(curve->parentAspect());
 			if (plots.indexOf(plot) == -1)
 				plots << plot;
 		}
 	}
 
-	QVector<const Histogram*> hists = project->children<const Histogram>(AbstractAspect::Recursive);
+	auto hists = project->children<const Histogram>(AbstractAspect::Recursive);
 	for (const auto* hist : hists) {
 		if (hist->dataColumn() == this ) {
-			auto* plot = dynamic_cast<CartesianPlot*>(hist->parentAspect());
+			auto* plot = static_cast<CartesianPlot*>(hist->parentAspect());
 			if (plots.indexOf(plot) == -1)
 				plots << plot;
 		}

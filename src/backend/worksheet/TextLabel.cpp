@@ -198,11 +198,11 @@ void TextLabel::handleResize(double horizontalRatio, double verticalRatio, bool 
 	Returns an icon to be used in the project explorer.
 */
 QIcon TextLabel::icon() const{
-	return  QIcon::fromTheme("draw-text");
+	return QIcon::fromTheme("draw-text");
 }
 
 QMenu* TextLabel::createContextMenu() {
-	QMenu *menu = WorksheetElement::createContextMenu();
+	QMenu* menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
 
 	if (!visibilityAction) {
@@ -266,6 +266,7 @@ void TextLabel::setPosition(const PositionWrapper& pos) {
 	Q_D(TextLabel);
 	if (pos.point != d->position.point || pos.horizontalPosition != d->position.horizontalPosition || pos.verticalPosition != d->position.verticalPosition)
 		exec(new TextLabelSetPositionCmd(d, pos, ki18n("%1: set position")));
+
 }
 
 /*!
@@ -285,9 +286,8 @@ void TextLabel::setPosition(QPointF point) {
  */
 void TextLabel::setPositionInvalid(bool invalid) {
 	Q_D(TextLabel);
-	if (invalid != d->positionInvalid) {
+	if (invalid != d->positionInvalid)
 		d->positionInvalid = invalid;
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetRotationAngle, qreal, rotationAngle, recalcShapeAndBoundingRect);
@@ -389,11 +389,11 @@ void TextLabelPrivate::retransform() {
 	        || position.verticalPosition != WorksheetElement::vPositionCustom)
 		updatePosition();
 
-	float x = position.point.x();
-	float y = position.point.y();
+	double x = position.point.x();
+	double y = position.point.y();
 
 	//determine the size of the label in scene units.
-	float w, h;
+	double w, h;
 	if (textWrapper.teXUsed) {
 		//image size is in pixel, convert to scene units
 		w = teXImage.width()*teXImageScaleFactor;
@@ -852,15 +852,14 @@ void TextLabelPrivate::keyPressEvent(QKeyEvent* event) {
  *	converts label's position to GraphicsItem's position.
  */
 QPointF TextLabelPrivate::positionFromItemPosition(QPointF itemPos) {
-	float x = itemPos.x();
-	float y = itemPos.y();
-	float w, h;
+	double x = itemPos.x();
+	double y = itemPos.y();
+	double w, h;
 	QPointF tmpPosition;
 	if (textWrapper.teXUsed) {
 		w = teXImage.width()*scaleFactor;
 		h = teXImage.height()*scaleFactor;
-	}
-	else {
+	} else {
 		w = staticText.size().width()*scaleFactor;
 		h = staticText.size().height()*scaleFactor;
 	}

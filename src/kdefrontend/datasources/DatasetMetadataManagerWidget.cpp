@@ -443,12 +443,14 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
 					document.setObject(rootObject);
 				}
 				file.close();
-				file.open(QIODevice::ReadWrite | QIODevice::Truncate);
-				file.write(document.toJson());
-				file.close();
-			} else {
+				bool rc = file.open(QIODevice::ReadWrite | QIODevice::Truncate);
+				if (rc) {
+					file.write(document.toJson());
+					file.close();
+				} else
+					qDebug() << "Couldn't write file, because " << file.errorString();
+			} else
 				qDebug() << "Couldn't open dataset category file, because " << file.errorString();
-			}
 		}
 		//If the collection doesn't exist we have to create a new json file for it.
 		else {

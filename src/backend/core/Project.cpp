@@ -525,7 +525,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		//LiveDataSource:
 		//call finalizeLoad() to replace relative with absolute paths if required
 		//and to create columns during the initial read
-		QVector<LiveDataSource*> sources = children<LiveDataSource>(AbstractAspect::Recursive);
+		auto sources = children<LiveDataSource>(AbstractAspect::Recursive);
 		for (auto* source : sources) {
 			if (!source) continue;
 			source->finalizeLoad();
@@ -533,12 +533,12 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 
 		//everything is read now.
 		//restore the pointer to the data sets (columns) in xy-curves etc.
-		QVector<Column*> columns = children<Column>(AbstractAspect::Recursive);
+		auto columns = children<Column>(AbstractAspect::Recursive);
 
 		//xy-curves
 		// cannot be removed by the column observer, because it does not react
 		// on curve changes
-		QVector<XYCurve*> curves = children<XYCurve>(AbstractAspect::Recursive);
+		auto curves = children<XYCurve>(AbstractAspect::Recursive);
 		for (auto* curve : curves) {
 			if (!curve) continue;
 			curve->suppressRetransform(true);
@@ -574,7 +574,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		}
 
 		//axes
-		QVector<Axis*> axes = children<Axis>(AbstractAspect::Recursive);
+		auto axes = children<Axis>(AbstractAspect::Recursive);
 		for (auto* axis : axes) {
 			if (!axis) continue;
 			RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
@@ -582,14 +582,14 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		}
 
 		//histograms
-		QVector<Histogram*> hists = children<Histogram>(AbstractAspect::Recursive);
+		auto hists = children<Histogram>(AbstractAspect::Recursive);
 		for (auto* hist : hists) {
 			if (!hist) continue;
 			RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
 		}
 
 		//data picker curves
-		QVector<DatapickerCurve*> dataPickerCurves = children<DatapickerCurve>(AbstractAspect::Recursive);
+		auto dataPickerCurves = children<DatapickerCurve>(AbstractAspect::Recursive);
 		for (auto* dataPickerCurve : dataPickerCurves) {
 			if (!dataPickerCurve) continue;
 			RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
@@ -639,7 +639,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 				//determine the plots where the column is consumed
 				for (const auto* curve : curves) {
 					if (curve->xColumn() == column || curve->yColumn() == column) {
-						auto* plot = dynamic_cast<CartesianPlot*>(curve->parentAspect());
+						auto* plot = static_cast<CartesianPlot*>(curve->parentAspect());
 						if (plots.indexOf(plot) == -1) {
 							plots << plot;
 							plot->setSuppressDataChangedSignal(true);
@@ -656,7 +656,6 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 			plot->setSuppressDataChangedSignal(false);
 			plot->dataChanged();
 		}
-
 	}
 
 	emit loaded();

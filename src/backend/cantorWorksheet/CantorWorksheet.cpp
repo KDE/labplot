@@ -56,7 +56,7 @@ CantorWorksheet::CantorWorksheet(const QString &name, bool loading)
 	initializes Cantor's part and plugins
 */
 bool CantorWorksheet::init(QByteArray* content) {
-	KPluginLoader loader(QLatin1String("libcantorpart"));
+	KPluginLoader loader(QLatin1String("cantorpart"));
 	KPluginFactory* factory = loader.factory();
 
 	if (!factory) {
@@ -98,7 +98,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 		//available plugins
 		auto* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
 		if (!handler) {
-			KMessageBox::error(view(), i18n("no PanelPluginHandle found for the Cantor Part."));
+			KMessageBox::error(nullptr, i18n("No PanelPluginHandle found for the Cantor Part."));
 			return false;
 		}
 		m_plugins = handler->plugins();

@@ -36,20 +36,20 @@ class AsciiFilter;
 class QNetworkAccessManager;
 class QNetworkReply;
 
-class DatasetHandler: public QObject{
+class DatasetHandler : public QObject{
 	Q_OBJECT
 
 public:
-	DatasetHandler(Spreadsheet*);
+	explicit DatasetHandler(Spreadsheet*);
 	~DatasetHandler();
 	void processMetadata(const QJsonObject&);
 
 private:
 	Spreadsheet* m_spreadsheet;
 	AsciiFilter* m_filter;
-	QJsonObject*  m_object{nullptr};
+	QJsonObject* m_object{nullptr};
 	QNetworkAccessManager* m_downloadManager;
-	QNetworkReply* m_currentDownload;
+	QNetworkReply* m_currentDownload{nullptr};
 	QString m_fileName;
 	bool m_invalidMetadataFile{false};
 	QString m_containingDir;

@@ -81,8 +81,6 @@ void ReferenceLine::init() {
 	d->pen.setColor( group.readEntry("Color", QColor(Qt::black)) );
 	d->pen.setWidthF( group.readEntry("Width", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
 	d->opacity = group.readEntry("Opacity", 1.0);
-
-	retransform();
 }
 
 /*!
@@ -418,7 +416,7 @@ QVariant ReferenceLinePrivate::itemChange(GraphicsItemChange change, const QVari
 		//emit the signals in order to notify the UI (dock widget and status bar) about the new logical position.
 		//we don't set the position related member variables during the mouse movements.
 		//this is done on mouse release events only.
-		const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
+		const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 		QPointF positionLogical = cSystem->mapSceneToLogical(positionSceneNew);
 		if (orientation == ReferenceLine::Horizontal) {
 			emit q->positionChanged(positionLogical.y());

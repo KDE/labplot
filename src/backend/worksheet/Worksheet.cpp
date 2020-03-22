@@ -100,12 +100,12 @@ void Worksheet::init() {
 
 	//layout
 	d->layout = (Worksheet::Layout) group.readEntry("Layout", (int) Worksheet::VerticalLayout);
-	d->layoutTopMargin =  group.readEntry("LayoutTopMargin", convertToSceneUnits(1, Centimeter));
-	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", convertToSceneUnits(1, Centimeter));
-	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", convertToSceneUnits(1, Centimeter));
-	d->layoutRightMargin = group.readEntry("LayoutRightMargin", convertToSceneUnits(1, Centimeter));
-	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", convertToSceneUnits(1, Centimeter));
-	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", convertToSceneUnits(1, Centimeter));
+	d->layoutTopMargin =  group.readEntry("LayoutTopMargin", convertToSceneUnits(0.5, Centimeter));
+	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", convertToSceneUnits(0.5, Centimeter));
+	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", convertToSceneUnits(0.5, Centimeter));
+	d->layoutRightMargin = group.readEntry("LayoutRightMargin", convertToSceneUnits(0.5, Centimeter));
+	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", convertToSceneUnits(0.5, Centimeter));
+	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", convertToSceneUnits(0.5, Centimeter));
 	d->layoutRowCount = group.readEntry("LayoutRowCount", 2);
 	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 2);
 
@@ -426,10 +426,10 @@ int Worksheet::getPlotCount() {
  * \param index Number of plot which should be returned
  * \return Pointer to the CartesianPlot which was searched with index
  */
-WorksheetElement *Worksheet::getPlot(int index) {
-	QVector<CartesianPlot*> cartesianPlots = children<CartesianPlot>();
-	if (cartesianPlots.length()-1 >= index)
-		return cartesianPlots[index];
+CartesianPlot* Worksheet::getPlot(int index) {
+	auto plots = children<CartesianPlot>();
+	if (plots.length() - 1 >= index)
+		return plots.at(index);
 	return nullptr;
 }
 
@@ -849,7 +849,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 		// y values
 		for (int i = 0; i < getPlotCount(); i++) { // i=0 is the x Axis
 
-			auto* plot = dynamic_cast<CartesianPlot*>(getPlot(i));
+			auto* plot = getPlot(i);
 			if (!plot || !plot->isVisible())
 				continue;
 
@@ -1121,23 +1121,25 @@ void Worksheet::updateCompleteCursorTreeModel() {
 		// set X data
 		QModelIndex xName = treeModel->index(0, WorksheetPrivate::TreeModelColumn::SIGNALNAME);
 		treeModel->setData(xName, QVariant("X"));
-		CartesianPlot* plot0 = dynamic_cast<CartesianPlot*>(getPlot(0));
-		double valueCursor[2];
-		for (int i = 0; i < 2; i++) {
-			valueCursor[i] = plot0->cursorPos(i);
-			QModelIndex cursor = treeModel->index(0,WorksheetPrivate::TreeModelColumn::CURSOR0+i);
+		auto* plot0 = getPlot(0);
+		if (plot0) {
+			double valueCursor[2];
+			for (int i = 0; i < 2; i++) {
+				valueCursor[i] = plot0->cursorPos(i);
+				QModelIndex cursor = treeModel->index(0,WorksheetPrivate::TreeModelColumn::CURSOR0+i);
 
-			treeModel->setData(cursor, QVariant(valueCursor[i]));
+				treeModel->setData(cursor, QVariant(valueCursor[i]));
+			}
+			QModelIndex diff = treeModel->index(0,WorksheetPrivate::TreeModelColumn::CURSORDIFF);
+			treeModel->setData(diff, QVariant(valueCursor[1]-valueCursor[0]));
 		}
-		QModelIndex diff = treeModel->index(0,WorksheetPrivate::TreeModelColumn::CURSORDIFF);
-		treeModel->setData(diff, QVariant(valueCursor[1]-valueCursor[0]));
 	} else {
 		//treeModel->insertRows(0, plotCount, treeModel->index(0,0)); // add empty rows. Then they become filled
 	}
 
 	// set plot name, y value, background
 	for (int i = 0; i < plotCount; i++) {
-		CartesianPlot* plot = dynamic_cast<CartesianPlot*>(getPlot(i));
+		auto* plot = getPlot(i);
 		QModelIndex plotName;
 		int addOne = 0;
 

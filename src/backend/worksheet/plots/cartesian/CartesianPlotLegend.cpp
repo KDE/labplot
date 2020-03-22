@@ -91,7 +91,7 @@ void CartesianPlotLegend::init() {
  	d->title = new TextLabel(this->name(), TextLabel::PlotLegendTitle);
 	addChild(d->title);
 	d->title->setHidden(true);
-	d->title->setParentGraphicsItem(graphicsItem());
+	d->title->setParentGraphicsItem(d);
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, false);
 	connect(d->title, &TextLabel::changed, this, &CartesianPlotLegend::retransform);
@@ -768,7 +768,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			}
 
 			//draw the legend item for histogram
-			const XYCurve* curve = dynamic_cast<XYCurve*>(curvesList.at(index));
+			const XYCurve* curve = static_cast<XYCurve*>(curvesList.at(index));
 
 			//curve's line (painted at the half of the ascent size)
 			if (curve->lineType() != XYCurve::NoLine) {

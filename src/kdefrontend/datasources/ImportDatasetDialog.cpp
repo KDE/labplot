@@ -76,11 +76,10 @@ ImportDatasetDialog::ImportDatasetDialog(MainWin* parent) : ImportDialog(parent)
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size());
-	} else {
+	} else
 		resize(QSize(0, 0).expandedTo(minimumSize()));
-	}
 
-	checkOkButton();
+	ImportDatasetDialog::checkOkButton();
 }
 
 ImportDatasetDialog::~ImportDatasetDialog() {
@@ -112,7 +111,7 @@ void ImportDatasetDialog::importToDataset(DatasetHandler* datasetHandler, QStatu
 
 	m_importDatasetWidget->import(datasetHandler);
 
-	statusBar->showMessage(i18n("Dataset imported in %1 seconds.", static_cast<float>(timer.elapsed()/1000)));
+	statusBar->showMessage(i18n("Dataset imported in %1 seconds.", static_cast<float>(timer.elapsed())/1000));
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
 }

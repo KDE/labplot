@@ -48,7 +48,7 @@ public:
 private:
 	ImportDatasetWidget* m_importDatasetWidget;
 
-protected  slots:
+protected slots:
 	void checkOkButton() override;
 
 };

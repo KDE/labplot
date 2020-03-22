@@ -2043,12 +2043,19 @@ QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const 
 
 QString OriginProjectParser::replaceSpecialChars(QString text) const {
 	QString t = text;
-        for (const auto& r : charReplacementList())
-                t.replace(r.first, r.second);
+	for (const auto& r : charReplacementList())
+		t.replace(r.first, r.second);
 	return t;
 }
 
-// taken from SciDAVis
+/*!
+ * converts the string with Origin's syntax for text formatting/highlighting
+ * to a string in the richtext/html format supported by Qt.
+ * For the supported syntax, see:
+ * https://www.originlab.com/doc/LabTalk/ref/Label-cmd
+ * https://www.originlab.com/doc/Origin-Help/TextOb-Prop-Text-tab
+ * https://doc.qt.io/qt-5/richtext-html-subset.html
+ */
 QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	DEBUG("parseOriginTags()");
 	DEBUG("	string: " << str.toStdString());
@@ -2084,9 +2091,7 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	line = strreverse(linerev);
 
 	//replace \-(...), \+(...), \b(...), \i(...), \u(...), \s(....), \g(...), \f:font(...),
-	// \c'number'(...), \p'size'(...) tags with equivalent HTML syntax; for the syntax supported by
-	// LabPlot see: https://doc.qt.io/qt-5/richtext-html-subset.html
-	// for the OriginLab synxtax see: https://www.originlab.com/doc/LabTalk/ref/Label-cmd#Syntax:
+	// \c'number'(...), \p'size'(...) tags with equivalent supported HTML syntax
 	const QRegularExpression tagsRe(QStringLiteral("\\\\\\s*([-+bgisu]|f:(\\w[\\w ]+)|[pc]\\s*(\\d+))\\s*\\(([^()]+?)\\)"));
 	QRegularExpressionMatch rmatch;
 	while (line.contains(tagsRe, &rmatch)) {

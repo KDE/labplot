@@ -65,7 +65,7 @@ extern "C" {
  */
 class AxisGrid : public QGraphicsItem {
 public:
-	AxisGrid(AxisPrivate* a) {
+	explicit AxisGrid(AxisPrivate* a) {
 		axis = a;
 		setFlag(QGraphicsItem::ItemIsSelectable, false);
 		setFlag(QGraphicsItem::ItemIsFocusable, false);
@@ -161,7 +161,7 @@ void Axis::init() {
 	connect( d->title, &TextLabel::changed, this, &Axis::labelChanged);
 	addChild(d->title);
 	d->title->setHidden(true);
-	d->title->graphicsItem()->setParentItem(graphicsItem());
+	d->title->graphicsItem()->setParentItem(d);
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, false);
 	d->title->graphicsItem()->setAcceptHoverEvents(false);
@@ -1886,24 +1886,27 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 	//add title label, if available
 	if ( title->isVisible() && !title->text().text.isEmpty() ) {
-		//determine the new position of the title label:
-		//we calculate the new position here and not in retransform(),
-		//since it depends on the size and position of the tick labels, tickLabelsPath, available here.
-		QRectF rect = linePath.boundingRect();
-		qreal offsetX = titleOffsetX - labelsOffset; //the distance to the axis line
-		qreal offsetY = titleOffsetY - labelsOffset; //the distance to the axis line
-		if (orientation == Axis::AxisHorizontal) {
-			offsetY -= title->graphicsItem()->boundingRect().height()/2;
-			if (labelsPosition == Axis::LabelsOut)
-				offsetY -= tickLabelsPath.boundingRect().height();
-			title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2 + titleOffsetX, rect.bottomLeft().y() - offsetY ) );
-		} else {
-			offsetX -= title->graphicsItem()->boundingRect().width()/2;
-			if (labelsPosition == Axis::LabelsOut)
-				offsetX -= tickLabelsPath.boundingRect().width();
-			title->setPosition( QPointF( rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y())/2 - titleOffsetY) );
+		const QRectF& titleRect = title->graphicsItem()->boundingRect();
+		if (titleRect.width() != 0.0 &&  titleRect.height() != 0.0) {
+			//determine the new position of the title label:
+			//we calculate the new position here and not in retransform(),
+			//since it depends on the size and position of the tick labels, tickLabelsPath, available here.
+			QRectF rect = linePath.boundingRect();
+			qreal offsetX = titleOffsetX - labelsOffset; //the distance to the axis line
+			qreal offsetY = titleOffsetY - labelsOffset; //the distance to the axis line
+			if (orientation == Axis::AxisHorizontal) {
+				offsetY -= titleRect.height()/2;
+				if (labelsPosition == Axis::LabelsOut)
+					offsetY -= tickLabelsPath.boundingRect().height();
+				title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2 + titleOffsetX, rect.bottomLeft().y() - offsetY ) );
+			} else {
+				offsetX -= titleRect.width()/2;
+				if (labelsPosition == Axis::LabelsOut)
+					offsetX -= tickLabelsPath.boundingRect().width();
+				title->setPosition( QPointF( rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y())/2 - titleOffsetY) );
+			}
+			axisShape.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 		}
-		axisShape.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 	}
 
 	boundingRectangle = axisShape.boundingRect();

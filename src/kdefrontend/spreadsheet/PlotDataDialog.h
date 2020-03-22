@@ -82,13 +82,11 @@ private:
 	void addHistogram(const QString& name, Column* column, CartesianPlot*);
 	Column* columnFromName(const QString&) const;
 
-protected  slots:
-	virtual void checkOkButton();
-
 private slots:
 	void plot();
 	void curvePlacementChanged();
 	void plotPlacementChanged();
+	void checkOkButton();
 };
 
 #endif
