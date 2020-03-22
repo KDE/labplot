@@ -164,6 +164,7 @@ private:
 	void initMenus();
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
+	void zoom(bool x, bool in);
 
 	void calculateCurvesXMinMax(bool completeRange = true);
 	void calculateCurvesYMinMax(bool completeRange = true);
