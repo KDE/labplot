@@ -2440,12 +2440,14 @@ void CartesianPlot::zoom(bool x, bool in) {
 		break;
 	}
 
-	if (x) {
-		d->xMin = min;
-		d->xMax = max;
-	} else {
-		d->yMin = min;
-		d->yMax = max;
+	if (!std::isnan(min) && !std::isnan(max) && std::isfinite(min) && std::isfinite(max)) {
+		if (x) {
+			d->xMin = min;
+			d->xMax = max;
+		} else {
+			d->yMin = min;
+			d->yMax = max;
+		}
 	}
 }
 
@@ -2608,7 +2610,6 @@ void CartesianPlotPrivate::retransformScales() {
 	DEBUG(" xmin/xmax = " << xMin << '/'<< xMax << ", ymin/ymax = " << yMin << '/' << yMax);
 	PERFTRACE("CartesianPlotPrivate::retransformScales()");
 
-	auto* plot = dynamic_cast<CartesianPlot*>(q);
 	QVector<CartesianScale*> scales;
 
 	//check ranges for log-scales
@@ -2729,22 +2730,22 @@ void CartesianPlotPrivate::retransformScales() {
 
 	if (xMin != xMinPrev) {
 		deltaXMin = xMin - xMinPrev;
-		emit plot->xMinChanged(xMin);
+		emit q->xMinChanged(xMin);
 	}
 
 	if (xMax != xMaxPrev) {
 		deltaXMax = xMax - xMaxPrev;
-		emit plot->xMaxChanged(xMax);
+		emit q->xMaxChanged(xMax);
 	}
 
 	if (yMin != yMinPrev) {
 		deltaYMin = yMin - yMinPrev;
-		emit plot->yMinChanged(yMin);
+		emit q->yMinChanged(yMin);
 	}
 
 	if (yMax != yMaxPrev) {
 		deltaYMax = yMax - yMaxPrev;
-		emit plot->yMaxChanged(yMax);
+		emit q->yMaxChanged(yMax);
 	}
 
 	xMinPrev = xMin;
