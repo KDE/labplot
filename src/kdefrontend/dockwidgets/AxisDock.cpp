@@ -156,7 +156,7 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 			this, &AxisDock::minorTicksTypeChanged);
 	connect(ui.sbMinorTicksNumber, QOverload<int>::of(&QSpinBox::valueChanged),
 			this, &AxisDock::minorTicksNumberChanged);
-	connect(ui.sbMajorTicksIncrementNumeric, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+	connect(ui.sbMinorTicksIncrementNumeric, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
 			this, &AxisDock::minorTicksIncrementChanged);
 	connect(dtsbMinorTicksIncrement, &DateTimeSpinBox::valueChanged,
 			this, &AxisDock::minorTicksIncrementChanged);

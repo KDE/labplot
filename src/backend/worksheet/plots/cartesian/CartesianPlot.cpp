@@ -258,6 +258,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setMajorGridPen(pen);
 			pen = axis->minorGridPen();
 			pen.setStyle(Qt::NoPen);
+			axis->setMinorGridPen(pen);
 			axis->setLabelsPosition(Axis::NoLabels);
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
