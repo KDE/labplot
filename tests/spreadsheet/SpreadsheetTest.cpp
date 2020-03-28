@@ -39,10 +39,17 @@ void SpreadsheetTest::initTestCase() {
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 }
 
+//**********************************************************
+//****************** Copy&Paste tests **********************
+//**********************************************************
+
+//**********************************************************
+//********** Handling of different columns modes ***********
+//**********************************************************
 /*!
    insert two columns with float values into an empty spreadsheet
 */
-void SpreadsheetTest::testCopyPaste00() {
+void SpreadsheetTest::testCopyPasteColumnMode00() {
 	Spreadsheet sheet("test", false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
@@ -72,7 +79,38 @@ void SpreadsheetTest::testCopyPaste00() {
    insert one column with integer values and one column with float numbers into an empty spreadsheet.
    the first column has to be converted to integer column.
 */
-void SpreadsheetTest::testCopyPaste01() {
+void SpreadsheetTest::testCopyPasteColumnMode01() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(100);
+
+	const QString str = "10 " + QString::number(std::numeric_limits<long long>::min())
+						+ "\n20 " + QString::number(std::numeric_limits<long long>::max());
+	QApplication::clipboard()->setText(str);
+
+	SpreadsheetView view(&sheet, false);
+	view.pasteIntoSelection();
+
+	//spreadsheet size
+	QCOMPARE(sheet.columnCount(), 2);
+	QCOMPARE(sheet.rowCount(), 100);
+
+	//column modes
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::BigInt);
+
+	//values
+	QCOMPARE(sheet.column(0)->integerAt(0), 10);
+	QCOMPARE(sheet.column(1)->bigIntAt(0), std::numeric_limits<long long>::min());
+	QCOMPARE(sheet.column(0)->integerAt(1), 20);
+	QCOMPARE(sheet.column(1)->bigIntAt(1), std::numeric_limits<long long>::max());
+}
+
+/*!
+   insert one column with integer and one column with big integer values into an empty spreadsheet.
+   the first column has to be converted to integer column, the second to big integer.
+*/
+void SpreadsheetTest::testCopyPasteColumnMode02() {
 	Spreadsheet sheet("test", false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
@@ -98,10 +136,13 @@ void SpreadsheetTest::testCopyPaste01() {
 	QCOMPARE(sheet.column(1)->valueAt(1), 200.0);
 }
 
+//**********************************************************
+//********* Handling of spreadsheet size changes ***********
+//**********************************************************
 /*!
    insert irregular data, new columns should be added appropriately.
 */
-void SpreadsheetTest::testCopyPaste02() {
+void SpreadsheetTest::testCopyPasteSizeChange00() {
 	Project project;
 	Spreadsheet* sheet = new Spreadsheet("test", false);
 	project.addChild(sheet);
@@ -197,7 +238,7 @@ void SpreadsheetTest::testCopyPaste02() {
    insert the data at the edge of the spreadsheet and paste the data.
    the spreadsheet has to be extended accordingly
 */
-void SpreadsheetTest::testCopyPaste03() {
+void SpreadsheetTest::testCopyPasteSizeChange01() {
 	Spreadsheet sheet("test", false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);

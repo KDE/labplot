@@ -37,10 +37,15 @@ private slots:
 	void initTestCase();
 
 	//copy and paste
-	void testCopyPaste00();
-	void testCopyPaste01();
-	void testCopyPaste02();
-	void testCopyPaste03();
+
+	//handling of different column modes
+	void testCopyPasteColumnMode00();
+	void testCopyPasteColumnMode01();
+	void testCopyPasteColumnMode02();
+
+	//handling of spreadsheet size changes
+	void testCopyPasteSizeChange00();
+	void testCopyPasteSizeChange01();
 };
 
 #endif
