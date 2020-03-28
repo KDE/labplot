@@ -55,18 +55,25 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 	if (isNan(valueString))
 		return AbstractColumn::Numeric;
 
+	const std::string stdValueString = valueString.toStdString();
+
 	// check if integer first
 	bool ok;
-	locale.toInt(valueString, &ok);
-	DEBUG("string " << valueString.toStdString() << ": toInt " << locale.toInt(valueString, &ok) << "?:" << ok);
+	int intValue = locale.toInt(valueString, &ok);
+	DEBUG("string " << stdValueString << ": toInt " << intValue << "?:" << ok);
 	if (ok || isNan(valueString))
 		return AbstractColumn::Integer;
 
+	//check big integer
+	qint64 bigIntValue = locale.toLongLong(valueString, &ok);
+	DEBUG("string " << stdValueString << ": toBigInt " << bigIntValue << "?:" << ok);
+	if (ok || isNan(valueString))
+		return AbstractColumn::BigInt;
 
 	//try to convert to a double
 	AbstractColumn::ColumnMode mode = AbstractColumn::Numeric;
-	locale.toDouble(valueString, &ok);
-	DEBUG("string " << valueString.toStdString() << ": toDouble " << locale.toDouble(valueString, &ok) << "?:" << ok);
+	double value = locale.toDouble(valueString, &ok);
+	DEBUG("string " << stdValueString << ": toDouble " << value << "?:" << ok);
 
 	//if not a number, check datetime. if that fails: string
 	if (!ok) {
