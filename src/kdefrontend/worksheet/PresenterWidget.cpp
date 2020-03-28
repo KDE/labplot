@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : Widget for static presenting of worksheets
 --------------------------------------------------------------------
 Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2018-2020 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
 /***************************************************************************
@@ -50,7 +51,7 @@ PresenterWidget::PresenterWidget(const QPixmap &pixmap, const QString& worksheet
 	m_panel = new SlidingPanel(this, worksheetName);
 	qApp->installEventFilter(this);
 	connect(m_timeLine, &QTimeLine::valueChanged, m_panel, &SlidingPanel::movePanel);
-	connect(m_panel->quitButton(), &QPushButton::clicked, this, &PresenterWidget::close);
+	connect(m_panel->quitButton(), &QPushButton::clicked, this, [=]() {close();});
 }
 
 PresenterWidget::~PresenterWidget() {
