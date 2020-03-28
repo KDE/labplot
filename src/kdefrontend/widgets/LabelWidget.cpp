@@ -638,7 +638,7 @@ void LabelWidget::fontChanged(const QFont& font) {
 
 	// use format instead of using ui.teLabel->setFontFamily(font.family());
 	// because this calls after every command textChanged() which is inefficient
-	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	QTextCharFormat format;
 	format.setFontFamily(font.family());
 	format.setFontPointSize(font.pointSize());
 	format.setFontItalic(font.italic());
@@ -647,7 +647,7 @@ void LabelWidget::fontChanged(const QFont& font) {
 		format.setUnderlineStyle(QTextCharFormat::UnderlineStyle::SingleUnderline);
 	if (font.strikeOut()) // anytime true. don't know why
 		format.setFontStrikeOut(font.strikeOut());
-	ui.teLabel->setCurrentCharFormat(format);
+	ui.teLabel->mergeCurrentCharFormat(format);
 }
 
 void LabelWidget::teXFontChanged(const QFont& font) {
