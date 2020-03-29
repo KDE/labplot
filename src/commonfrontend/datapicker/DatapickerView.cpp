@@ -4,7 +4,7 @@
     Description          : View class for Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -37,6 +37,7 @@
 
 #include <QHBoxLayout>
 #include <QMenu>
+#include <QTabBar>
 #include <QTabWidget>
 
 #include <KLocalizedString>
@@ -48,7 +49,7 @@
     \ingroup commonfrontend
  */
 DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
-	m_tabWidget(new TabWidget(this)),
+	m_tabWidget(new QTabWidget(this)),
 	m_datapicker(datapicker) {
 
 	m_tabWidget->setTabPosition(QTabWidget::South);
@@ -77,9 +78,9 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 	connect(m_datapicker, &Datapicker::aspectAboutToBeRemoved, this, &DatapickerView::handleAspectAboutToBeRemoved);
 	connect(m_datapicker, &Datapicker::datapickerItemSelected, this, &DatapickerView::itemSelected);
 
-	connect(m_tabWidget, &TabWidget::currentChanged, this, &DatapickerView::tabChanged);
-	connect(m_tabWidget, &TabWidget::customContextMenuRequested, this, &DatapickerView::showTabContextMenu);
-	connect(m_tabWidget, &TabWidget::tabMoved, this, &DatapickerView::tabMoved);
+	connect(m_tabWidget, &QTabWidget::currentChanged, this, &DatapickerView::tabChanged);
+	connect(m_tabWidget, &QTabWidget::customContextMenuRequested, this, &DatapickerView::showTabContextMenu);
+	connect(m_tabWidget->tabBar(), &QTabBar::tabMoved, this, &DatapickerView::tabMoved);
 }
 
 DatapickerView::~DatapickerView() {

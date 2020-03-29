@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Workbook
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -36,6 +36,8 @@
 
 #include <QHBoxLayout>
 #include <QMenu>
+#include <QTabBar>
+#include <QTabWidget>
 
 #include <KLocalizedString>
 
@@ -46,7 +48,7 @@
 	\ingroup commonfrontend
  */
 WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
-	m_tabWidget(new TabWidget(this)),
+	m_tabWidget(new QTabWidget(this)),
 	m_workbook(workbook) {
 
 	m_tabWidget->setTabPosition(QTabWidget::South);
@@ -78,9 +80,9 @@ WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
 	connect(m_workbook, &Workbook::requestProjectContextMenu, this, &WorkbookView::createContextMenu);
 	connect(m_workbook, &Workbook::workbookItemSelected, this, &WorkbookView::itemSelected);
 
-	connect(m_tabWidget, &TabWidget::currentChanged, this, &WorkbookView::tabChanged);
-	connect(m_tabWidget, &TabWidget::customContextMenuRequested, this, &WorkbookView::showTabContextMenu);
-	connect(m_tabWidget, &TabWidget::tabMoved, this, &WorkbookView::tabMoved);
+	connect(m_tabWidget, &QTabWidget::currentChanged, this, &WorkbookView::tabChanged);
+	connect(m_tabWidget, &QTabWidget::customContextMenuRequested, this, &WorkbookView::showTabContextMenu);
+	connect(m_tabWidget->tabBar(), &QTabBar::tabMoved, this, &WorkbookView::tabMoved);
 }
 
 WorkbookView::~WorkbookView() {

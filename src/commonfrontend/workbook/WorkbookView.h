@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Workbook
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,26 +29,14 @@
 #ifndef WORKBOOKVIEW_H
 #define WORKBOOKVIEW_H
 
-#include <QTabWidget>
-#include <QTabBar>
+#include <QWidget>
 
 class AbstractAspect;
 class Workbook;
 class QAction;
 class QMenu;
-class QPrinter;
+class QTabWidget;
 class QToolBar;
-
-class TabWidget : public QTabWidget {
-	Q_OBJECT
-public:
-	explicit TabWidget(QWidget* parent) : QTabWidget(parent) {
-		connect(tabBar(), SIGNAL(tabMoved(int, int)), this, SIGNAL(tabMoved(int, int)));
-	}
-
-signals:
-	void tabMoved(int, int);
-};
 
 class WorkbookView : public QWidget {
 	Q_OBJECT
@@ -60,7 +48,7 @@ public:
 	int currentIndex() const;
 
 private:
-	TabWidget* m_tabWidget;
+	QTabWidget* m_tabWidget;
 	Workbook* m_workbook;
 	int lastSelectedIndex{0};
 	bool m_initializing;
