@@ -53,8 +53,8 @@ NetCDFOptionsWidget::NetCDFOptionsWidget(QWidget* parent, ImportFileWidget* file
 
 	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
 
-	connect( ui.twContent, SIGNAL(itemSelectionChanged()), SLOT(netcdfTreeWidgetSelectionChanged()) );
-	connect( ui.bRefreshPreview, SIGNAL(clicked()), fileWidget, SLOT(refreshPreview()) );
+	connect(ui.twContent, &QTreeWidget::itemSelectionChanged, this, &NetCDFOptionsWidget::netcdfTreeWidgetSelectionChanged);
+	connect(ui.bRefreshPreview, &QPushButton::clicked, fileWidget, &ImportFileWidget::refreshPreview);
 }
 
 void NetCDFOptionsWidget::clear() {

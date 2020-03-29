@@ -285,7 +285,7 @@ void WorksheetView::initActions() {
 	cartesianPlotApplyToAllCursor = new QAction(i18n("All Plots"), cartesianPlotActionCursorGroup);
 	cartesianPlotApplyToAllCursor->setCheckable(true);
 	setCartesianPlotCursorMode(m_worksheet->cartesianPlotCursorMode());
-	connect(cartesianPlotActionCursorGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotCursorModeChanged(QAction*)));
+	connect(cartesianPlotActionCursorGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotCursorModeChanged);
 
 	auto* cartesianPlotMouseModeActionGroup = new QActionGroup(this);
 	cartesianPlotMouseModeActionGroup->setExclusive(true);
@@ -306,7 +306,7 @@ void WorksheetView::initActions() {
 	cartesianPlotCursorModeAction = new QAction(QIcon::fromTheme("debug-execute-from-cursor"), i18n("Cursor"), cartesianPlotMouseModeActionGroup);
 	cartesianPlotCursorModeAction->setCheckable(true);
 
-	connect(cartesianPlotMouseModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotMouseModeChanged(QAction*)));
+	connect(cartesianPlotMouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotMouseModeChanged);
 
 	auto* cartesianPlotAddNewActionGroup = new QActionGroup(this);
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), cartesianPlotAddNewActionGroup);

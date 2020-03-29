@@ -72,14 +72,14 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 	m_initializing = false;
 
 	//SIGNALs/SLOTs
-	connect(m_datapicker, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(handleDescriptionChanged(const AbstractAspect*)));
-	connect(m_datapicker, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
-	connect(m_datapicker, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
-	connect(m_datapicker, SIGNAL(datapickerItemSelected(int)), this, SLOT(itemSelected(int)));
+	connect(m_datapicker, &Datapicker::aspectDescriptionChanged, this, &DatapickerView::handleDescriptionChanged);
+	connect(m_datapicker, &Datapicker::aspectAdded, this, &DatapickerView::handleAspectAdded);
+	connect(m_datapicker, &Datapicker::aspectAboutToBeRemoved, this, &DatapickerView::handleAspectAboutToBeRemoved);
+	connect(m_datapicker, &Datapicker::datapickerItemSelected, this, &DatapickerView::itemSelected);
 
-	connect(m_tabWidget, SIGNAL(currentChanged(int)), SLOT(tabChanged(int)));
-	connect(m_tabWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTabContextMenu(QPoint)));
-	connect(m_tabWidget, SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int,int)));
+	connect(m_tabWidget, &TabWidget::currentChanged, this, &DatapickerView::tabChanged);
+	connect(m_tabWidget, &TabWidget::customContextMenuRequested, this, &DatapickerView::showTabContextMenu);
+	connect(m_tabWidget, &TabWidget::tabMoved, this, &DatapickerView::tabMoved);
 }
 
 DatapickerView::~DatapickerView() {

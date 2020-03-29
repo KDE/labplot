@@ -99,9 +99,9 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
 	//Signals/Slots
-	connect(ui.leFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)));
-	connect(ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()));
-	connect(m_bNewFolder, SIGNAL(clicked()), this, SLOT(newFolder()));
+	connect(ui.leFileName, &QLineEdit::textChanged, this, &ImportProjectDialog::fileNameChanged);
+	connect(ui.bOpen, &QPushButton::clicked, this, &ImportProjectDialog::selectFile);
+	connect(m_bNewFolder, &QPushButton::clicked, this, &ImportProjectDialog::newFolder);
 	connect(ui.chbUnusedObjects, &QCheckBox::stateChanged, this, &ImportProjectDialog::refreshPreview);
 	connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -250,7 +250,7 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	//import the selected project objects into the specified folder
 	QElapsedTimer timer;
 	timer.start();
-	connect(m_projectParser, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
+	connect(m_projectParser, &ProjectParser::completed, progressBar, &QProgressBar::setValue);
 
 #ifdef HAVE_LIBORIGIN
 	if (m_projectType == ProjectOrigin && ui.chbUnusedObjects->isVisible() && ui.chbUnusedObjects->isChecked())
@@ -285,8 +285,8 @@ void ImportProjectDialog::refreshPreview() {
 
 	ui.tvPreview->setModel(m_projectParser->model());
 
-	connect(ui.tvPreview->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-	        this, SLOT(selectionChanged(QItemSelection,QItemSelection)) );
+	connect(ui.tvPreview->selectionModel(), &QItemSelectionModel::selectionChanged,
+	        this, &ImportProjectDialog::selectionChanged);
 
 	//show top-level containers only
 	if (ui.tvPreview->model()) {

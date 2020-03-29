@@ -128,12 +128,12 @@ void MatrixView::init() {
 	area->setWidget(m_imageLabel);
 
 	//SLOTs
-	connect(m_matrix, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
-	connect(m_model, SIGNAL(changed()), this, SLOT(matrixDataChanged()));
+	connect(m_matrix, &Matrix::requestProjectContextMenu, this, &MatrixView::createContextMenu);
+	connect(m_model, &MatrixModel::changed, this, &MatrixView::matrixDataChanged);
 
 	//keyboard shortcuts
 	sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Matrix: select all")), m_tableView);
-	connect(sel_all, SIGNAL(activated()), m_tableView, SLOT(selectAll()));
+	connect(sel_all, &QShortcut::activated, m_tableView, &QTableView::selectAll);
 
 	//TODO: add shortcuts for copy&paste,
 	//for a single shortcut we need to descriminate between copy&paste for columns, rows or selected cells.
@@ -155,7 +155,7 @@ void MatrixView::initActions() {
 	action_data_view->setChecked(true);
 	action_image_view = new QAction(QIcon::fromTheme("image-x-generic"), i18n("Image"), viewActionGroup);
 	action_image_view->setCheckable(true);
-	connect(viewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(switchView(QAction*)));
+	connect(viewActionGroup, &QActionGroup::triggered, this, &MatrixView::switchView);
 
 	action_fill_function = new QAction(QIcon::fromTheme(QString()), i18n("Function Values"), this);
 	action_fill_const = new QAction(QIcon::fromTheme(QString()), i18n("Const Values"), this);
@@ -186,7 +186,7 @@ void MatrixView::initActions() {
 	action_header_format_2->setCheckable(true);
 	action_header_format_3= new QAction(i18n("Rows, Columns and xy-Values"), headerFormatActionGroup);
 	action_header_format_3->setCheckable(true);
-	connect(headerFormatActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(headerFormatChanged(QAction*)));
+	connect(headerFormatActionGroup, &QActionGroup::triggered, this, &MatrixView::headerFormatChanged);
 
 	// column related actions
 	action_add_columns = new QAction(QIcon::fromTheme("edit-table-insert-column-right"), i18n("&Add Columns"), this);
@@ -213,40 +213,40 @@ void MatrixView::modifyValues() {
 
 void MatrixView::connectActions() {
 	// selection related actions
-	connect(action_cut_selection, SIGNAL(triggered()), this, SLOT(cutSelection()));
-	connect(action_copy_selection, SIGNAL(triggered()), this, SLOT(copySelection()));
-	connect(action_paste_into_selection, SIGNAL(triggered()), this, SLOT(pasteIntoSelection()));
-	connect(action_clear_selection, SIGNAL(triggered()), this, SLOT(clearSelectedCells()));
-	connect(action_select_all, SIGNAL(triggered()), m_tableView, SLOT(selectAll()));
+	connect(action_cut_selection, &QAction::triggered, this, &MatrixView::cutSelection);
+	connect(action_copy_selection, &QAction::triggered, this, &MatrixView::copySelection);
+	connect(action_paste_into_selection, &QAction::triggered, this, &MatrixView::pasteIntoSelection);
+	connect(action_clear_selection, &QAction::triggered, this, &MatrixView::clearSelectedCells);
+	connect(action_select_all, &QAction::triggered, m_tableView, &QTableView::selectAll);
 
 	// matrix related actions
-	connect(action_fill_function, SIGNAL(triggered()), this, SLOT(fillWithFunctionValues()));
-	connect(action_fill_const, SIGNAL(triggered()), this, SLOT(fillWithConstValues()));
+	connect(action_fill_function, &QAction::triggered, this, &MatrixView::fillWithFunctionValues);
+	connect(action_fill_const, &QAction::triggered, this, &MatrixView::fillWithConstValues);
 
-	connect(action_go_to_cell, SIGNAL(triggered()), this, SLOT(goToCell()));
-	//connect(action_duplicate, SIGNAL(triggered()), this, SLOT(duplicate()));
-	connect(action_clear_matrix, SIGNAL(triggered()), m_matrix, SLOT(clear()));
-	connect(action_transpose, SIGNAL(triggered()), m_matrix, SLOT(transpose()));
-	connect(action_mirror_horizontally, SIGNAL(triggered()), m_matrix, SLOT(mirrorHorizontally()));
-	connect(action_mirror_vertically, SIGNAL(triggered()), m_matrix, SLOT(mirrorVertically()));
+	connect(action_go_to_cell, &QAction::triggered, this, QOverload<>::of(&MatrixView::goToCell));
+	//connect(action_duplicate, &QAction::triggered, this, &MatrixView::duplicate);
+	connect(action_clear_matrix, &QAction::triggered, m_matrix, &Matrix::clear);
+	connect(action_transpose, &QAction::triggered, m_matrix, &Matrix::transpose);
+	connect(action_mirror_horizontally, &QAction::triggered, m_matrix, &Matrix::mirrorHorizontally);
+	connect(action_mirror_vertically, &QAction::triggered, m_matrix, &Matrix::mirrorVertically);
 	connect(action_add_value, &QAction::triggered, this, &MatrixView::modifyValues);
 	connect(action_subtract_value, &QAction::triggered, this, &MatrixView::modifyValues);
 	connect(action_multiply_value, &QAction::triggered, this, &MatrixView::modifyValues);
 	connect(action_divide_value, &QAction::triggered, this, &MatrixView::modifyValues);
 
 	// column related actions
-	connect(action_add_columns, SIGNAL(triggered()), this, SLOT(addColumns()));
-	connect(action_insert_columns, SIGNAL(triggered()), this, SLOT(insertEmptyColumns()));
-	connect(action_remove_columns, SIGNAL(triggered()), this, SLOT(removeSelectedColumns()));
-	connect(action_clear_columns, SIGNAL(triggered()), this, SLOT(clearSelectedColumns()));
-	connect(action_statistics_columns, SIGNAL(triggered()), this, SLOT(showColumnStatistics()));
+	connect(action_add_columns, &QAction::triggered, this, &MatrixView::addColumns);
+	connect(action_insert_columns, &QAction::triggered, this, &MatrixView::insertEmptyColumns);
+	connect(action_remove_columns, &QAction::triggered, this, &MatrixView::removeSelectedColumns);
+	connect(action_clear_columns, &QAction::triggered, this, &MatrixView::clearSelectedColumns);
+	connect(action_statistics_columns, &QAction::triggered, this, &MatrixView::showColumnStatistics);
 
 	// row related actions
-	connect(action_add_rows, SIGNAL(triggered()), this, SLOT(addRows()));
-	connect(action_insert_rows, SIGNAL(triggered()), this, SLOT(insertEmptyRows()));
-	connect(action_remove_rows, SIGNAL(triggered()), this, SLOT(removeSelectedRows()));
-	connect(action_clear_rows, SIGNAL(triggered()), this, SLOT(clearSelectedRows()));
-	connect(action_statistics_rows, SIGNAL(triggered()), this, SLOT(showRowStatistics()));
+	connect(action_add_rows, &QAction::triggered, this, &MatrixView::addRows);
+	connect(action_insert_rows, &QAction::triggered, this, &MatrixView::insertEmptyRows);
+	connect(action_remove_rows, &QAction::triggered, this, &MatrixView::removeSelectedRows);
+	connect(action_clear_rows, &QAction::triggered, this, &MatrixView::clearSelectedRows);
+	connect(action_statistics_rows, &QAction::triggered, this, &MatrixView::showRowStatistics);
 }
 
 void MatrixView::initMenus() {
@@ -405,8 +405,8 @@ void MatrixView::adjustHeaders() {
 			m_tableView->setRowHeight(i, m_matrix->rowHeight(i));
 	}
 
-	connect(v_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleVerticalSectionResized(int,int,int)));
-	connect(h_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
+	connect(v_header, &QHeaderView::sectionResized, this, &MatrixView::handleVerticalSectionResized);
+	connect(h_header, &QHeaderView::sectionResized, this, &MatrixView::handleHorizontalSectionResized);
 }
 
 /*!

@@ -36,19 +36,19 @@
 
 SpreadsheetCommentsHeaderModel::SpreadsheetCommentsHeaderModel(SpreadsheetModel* spreadsheet_model, QObject* parent)
 	: QAbstractTableModel(parent), m_spreadsheet_model(spreadsheet_model) {
-	  
-	connect(m_spreadsheet_model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
-		this, SIGNAL(headerDataChanged(Qt::Orientation,int,int)));
-	connect(m_spreadsheet_model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
-		this, SIGNAL(headerDataChanged(Qt::Orientation,int,int)));
-	connect(m_spreadsheet_model, SIGNAL(columnsAboutToBeInserted(QModelIndex,int,int)),
-		this, SIGNAL(columnsAboutToBeInserted(QModelIndex,int,int)));
-	connect(m_spreadsheet_model, SIGNAL(columnsAboutToBeRemoved(QModelIndex,int,int)),
-		this, SIGNAL(columnsAboutToBeRemoved(QModelIndex,int,int)));
-	connect(m_spreadsheet_model, SIGNAL(columnsInserted(QModelIndex,int,int)),
-		this, SIGNAL(columnsInserted(QModelIndex,int,int)));
-	connect(m_spreadsheet_model, SIGNAL(columnsRemoved(QModelIndex,int,int)),
-		this, SIGNAL(columnsRemoved(QModelIndex,int,int)));
+
+	connect(m_spreadsheet_model, &SpreadsheetModel::headerDataChanged,
+		this, &SpreadsheetCommentsHeaderModel::headerDataChanged);
+	connect(m_spreadsheet_model, &SpreadsheetModel::headerDataChanged,
+		this, &SpreadsheetCommentsHeaderModel::headerDataChanged);
+	connect(m_spreadsheet_model, &SpreadsheetModel::columnsAboutToBeInserted,
+		this, &SpreadsheetCommentsHeaderModel::columnsAboutToBeInserted);
+	connect(m_spreadsheet_model, &SpreadsheetModel::columnsAboutToBeRemoved,
+		this, &SpreadsheetCommentsHeaderModel::columnsAboutToBeRemoved);
+	connect(m_spreadsheet_model, &SpreadsheetModel::columnsInserted,
+		this, &SpreadsheetCommentsHeaderModel::columnsInserted);
+	connect(m_spreadsheet_model, &SpreadsheetModel::columnsRemoved,
+		this, &SpreadsheetCommentsHeaderModel::columnsRemoved);
 }
 
 Qt::ItemFlags SpreadsheetCommentsHeaderModel::flags(const QModelIndex& index ) const {
