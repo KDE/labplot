@@ -53,12 +53,12 @@ public:
 
 	void showPopup() override;
 	void hidePopup() override;
-	void setInvalid(bool invalid, QString tooltip = QString());
+	void setInvalid(bool invalid, const QString& tooltip = QString());
 
 	void useCurrentIndexText(const bool set);
 
 	QString currentText() const;
-	void setText(QString text);
+	void setText(const QString& text);
 
 private:
 	QTreeView* m_treeView;

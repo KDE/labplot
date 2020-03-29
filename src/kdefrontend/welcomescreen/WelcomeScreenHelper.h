@@ -54,10 +54,10 @@ public:
 	Q_INVOKABLE QVariant getExampleProjects();
 	Q_INVOKABLE QVariant searchExampleProjects(const QString& searchtext);
 	Q_INVOKABLE QVariant getExampleProjectTags(const QString&);
-	Q_INVOKABLE void setWidthScale(QString sectionID, double scale);
-	Q_INVOKABLE void setHeightScale(QString sectionID, double scale);
-	Q_INVOKABLE QVariant getWidthScale(QString sectionID);
-	Q_INVOKABLE QVariant getHeightScale(QString sectionID);
+	Q_INVOKABLE void setWidthScale(const QString& sectionID, double scale);
+	Q_INVOKABLE void setHeightScale(const QString& sectionID, double scale);
+	Q_INVOKABLE QVariant getWidthScale(const QString& sectionID);
+	Q_INVOKABLE QVariant getHeightScale(const QString& sectionID);
 	Q_INVOKABLE QVariant getMaxIcon();
 	Q_INVOKABLE QVariant getMinIcon();
 	Q_INVOKABLE QVariant getBackIcon();

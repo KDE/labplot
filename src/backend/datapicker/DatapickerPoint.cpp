@@ -46,7 +46,7 @@
  * \brief A customizable error-bar for DatapickerPoint.
  */
 
-ErrorBarItem::ErrorBarItem(DatapickerPoint* parent, const ErrorBarType& type) :
+ErrorBarItem::ErrorBarItem(DatapickerPoint* parent, ErrorBarType type) :
 	QGraphicsRectItem(parent->graphicsItem()),
 	barLineItem(new QGraphicsLineItem(parent->graphicsItem())),
 	m_type(type),
@@ -68,12 +68,12 @@ void ErrorBarItem::initRect() {
 		m_rect = yBarRect;
 }
 
-void ErrorBarItem::setPosition(const QPointF& position) {
+void ErrorBarItem::setPosition(QPointF position) {
 	setPos(position);
 	barLineItem->setLine(0, 0, position.x(), position.y());
 }
 
-void ErrorBarItem::setRectSize(const qreal size) {
+void ErrorBarItem::setRectSize(qreal size) {
 	QMatrix matrix;
 	matrix.scale(size, size);
 	setRect(matrix.mapRect(m_rect));
@@ -155,7 +155,7 @@ void DatapickerPoint::init() {
 	d->minusDeltaYPos = group.readEntry("MinusDeltaYPos", QPointF(0, 30));
 }
 
-void DatapickerPoint::initErrorBar(const DatapickerCurve::Errors& errors) {
+void DatapickerPoint::initErrorBar(DatapickerCurve::Errors errors) {
 	m_errorBarItemList.clear();
 	if (errors.x != DatapickerCurve::NoError) {
 		ErrorBarItem* plusDeltaXItem = new ErrorBarItem(this, ErrorBarItem::PlusDeltaX);
@@ -221,14 +221,14 @@ CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPointF, minusDeltaYPos, minusDeltaY
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPosition, QPointF, position, retransform)
-void DatapickerPoint::setPosition(const QPointF& pos) {
+void DatapickerPoint::setPosition(QPointF pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->position)
 		exec(new DatapickerPointSetPositionCmd(d, pos, ki18n("%1: set position")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaXPos, QPointF, plusDeltaXPos, updatePoint)
-void DatapickerPoint::setPlusDeltaXPos(const QPointF& pos) {
+void DatapickerPoint::setPlusDeltaXPos(QPointF pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->plusDeltaXPos) {
 		auto* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
@@ -246,7 +246,7 @@ void DatapickerPoint::setPlusDeltaXPos(const QPointF& pos) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaXPos, QPointF, minusDeltaXPos, updatePoint)
-void DatapickerPoint::setMinusDeltaXPos(const QPointF& pos) {
+void DatapickerPoint::setMinusDeltaXPos(QPointF pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->minusDeltaXPos) {
 		auto* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
@@ -264,7 +264,7 @@ void DatapickerPoint::setMinusDeltaXPos(const QPointF& pos) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaYPos, QPointF, plusDeltaYPos, updatePoint)
-void DatapickerPoint::setPlusDeltaYPos(const QPointF& pos) {
+void DatapickerPoint::setPlusDeltaYPos(QPointF pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->plusDeltaYPos) {
 		auto* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
@@ -282,7 +282,7 @@ void DatapickerPoint::setPlusDeltaYPos(const QPointF& pos) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaYPos, QPointF, minusDeltaYPos, updatePoint)
-void DatapickerPoint::setMinusDeltaYPos(const QPointF& pos) {
+void DatapickerPoint::setMinusDeltaYPos(QPointF pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->minusDeltaYPos) {
 		auto* curve = dynamic_cast<DatapickerCurve*>(parentAspect());

@@ -50,7 +50,7 @@ public:
 	explicit AbstractFileFilter(FileType type) : m_type(type) {}
 	~AbstractFileFilter() override = default;
 
-	static bool isNan(QString);
+	static bool isNan(const QString&);
 	static AbstractColumn::ColumnMode columnMode(const QString& valueString, const QString& dateTimeFormat, QLocale::Language);
 	static QStringList numberFormats();
 	static AbstractFileFilter::FileType fileType(const QString&);

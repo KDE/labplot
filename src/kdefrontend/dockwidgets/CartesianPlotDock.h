@@ -183,7 +183,7 @@ private slots:
 	void plotSymmetricPaddingChanged(bool);
 
 	// Cursor
-	void plotCursorPenChanged(QPen);
+	void plotCursorPenChanged(const QPen&);
 
 	//save/load template
 	void loadConfigFromTemplate(KConfig&);

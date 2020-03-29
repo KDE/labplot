@@ -40,11 +40,11 @@ class ErrorBarItem : public QObject, public QGraphicsRectItem {
 public:
 	enum ErrorBarType {PlusDeltaX, MinusDeltaX, PlusDeltaY, MinusDeltaY};
 
-	explicit ErrorBarItem(DatapickerPoint* parent = nullptr, const ErrorBarType& type = PlusDeltaX);
+	explicit ErrorBarItem(DatapickerPoint* parent = nullptr, ErrorBarType type = PlusDeltaX);
 	void setRectSize(const qreal);
 
 public slots:
-	void setPosition(const QPointF&);
+	void setPosition(QPointF);
 
 private:
 	void initRect();
@@ -71,16 +71,16 @@ public:
 	QGraphicsItem* graphicsItem() const;
 	void setParentGraphicsItem(QGraphicsItem*);
 	void setPrinting(bool);
-	void initErrorBar(const DatapickerCurve::Errors&);
+	void initErrorBar(DatapickerCurve::Errors);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-	CLASS_D_ACCESSOR_DECL(QPointF, position, Position)
-	CLASS_D_ACCESSOR_DECL(QPointF, plusDeltaXPos, PlusDeltaXPos)
-	CLASS_D_ACCESSOR_DECL(QPointF, minusDeltaXPos, MinusDeltaXPos)
-	CLASS_D_ACCESSOR_DECL(QPointF, plusDeltaYPos, PlusDeltaYPos)
-	CLASS_D_ACCESSOR_DECL(QPointF, minusDeltaYPos, MinusDeltaYPos)
+	BASIC_D_ACCESSOR_DECL(QPointF, position, Position)
+	BASIC_D_ACCESSOR_DECL(QPointF, plusDeltaXPos, PlusDeltaXPos)
+	BASIC_D_ACCESSOR_DECL(QPointF, minusDeltaXPos, MinusDeltaXPos)
+	BASIC_D_ACCESSOR_DECL(QPointF, plusDeltaYPos, PlusDeltaYPos)
+	BASIC_D_ACCESSOR_DECL(QPointF, minusDeltaYPos, MinusDeltaYPos)
 
 	typedef DatapickerPointPrivate Private;
 

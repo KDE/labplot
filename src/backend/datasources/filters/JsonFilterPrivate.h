@@ -42,9 +42,9 @@ public:
 	explicit JsonFilterPrivate (JsonFilter* owner);
 
 	int checkRow(QJsonValueRef value, int &countCols);
-	int parseColumnModes(QJsonValue row, QString rowName = QString());
+	int parseColumnModes(const QJsonValue& row, const QString& rowName = QString());
 	void setEmptyValue(int column, int row);
-	void setValueFromString(int column, int row, QString value);
+	void setValueFromString(int column, int row, const QString& value);
 
 	int prepareDeviceToRead(QIODevice&);
 	int prepareDocumentToRead(const QJsonDocument&);

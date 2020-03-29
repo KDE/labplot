@@ -241,7 +241,7 @@ QIcon MQTTClient::icon() const {
  * \param host the hostname of the broker we want to connect to
  * \param port the port used by the broker
  */
-void MQTTClient::setMQTTClientHostPort(const QString& host, const quint16& port) {
+void MQTTClient::setMQTTClientHostPort(const QString& host, quint16 port) {
 	m_client->setHostname(host);
 	m_client->setPort(port);
 }
@@ -365,7 +365,7 @@ QVector<QString> MQTTClient::topicNames() const {
  * \param filter the name of the subscribed topic
  * \param qos the qos level of the subscription
  */
-void MQTTClient::addInitialMQTTSubscriptions(const QMqttTopicFilter& filter, const quint8& qos) {
+void MQTTClient::addInitialMQTTSubscriptions(const QMqttTopicFilter& filter, quint8 qos) {
 	m_subscribedTopicNameQoS[filter] = qos;
 }
 
@@ -685,7 +685,7 @@ QString MQTTClient::checkCommonLevel(const QString& first, const QString& second
 	return commonTopic;
 }
 
-void MQTTClient::setWillSettings(MQTTWill settings) {
+void MQTTClient::setWillSettings(const MQTTWill& settings) {
 	m_MQTTWill = settings;
 }
 

@@ -227,7 +227,7 @@ void Datapicker::setSelectedInView(const bool b) {
 		emit childAspectDeselectedInView(this);
 }
 
-void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
+void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 	auto points = parentAspect->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
 
 	auto* newPoint = new DatapickerPoint(i18n("Point %1", points.count() + 1));
@@ -253,11 +253,11 @@ void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
 	emit requestUpdateActions();
 }
 
-QVector3D Datapicker::mapSceneToLogical(const QPointF& point) const {
+QVector3D Datapicker::mapSceneToLogical(QPointF point) const {
 	return m_transform->mapSceneToLogical(point, m_image->axisPoints());
 }
 
-QVector3D Datapicker::mapSceneLengthToLogical(const QPointF& point) const {
+QVector3D Datapicker::mapSceneLengthToLogical(QPointF point) const {
 	return m_transform->mapSceneLengthToLogical(point, m_image->axisPoints());
 }
 

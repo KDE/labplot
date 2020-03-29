@@ -35,13 +35,13 @@ class QColor;
 
 class ImageEditor {
 public:
-	static void discretize(QImage*, QImage*, DatapickerImage::EditorSettings, QColor);
+	static void discretize(QImage*, QImage*, const DatapickerImage::EditorSettings&, QColor);
 	static bool processedPixelIsOn(const QImage&, int, int);
 	static QRgb findBackgroundColor(const QImage*);
 	static int colorAttributeMax(DatapickerImage::ColorAttributes);
 	static void uploadHistogram(int*, QImage*, QColor, DatapickerImage::ColorAttributes);
 	static int discretizeValueForeground(int, int, DatapickerImage::ColorAttributes, const QColor, const QImage*);
-	static bool pixelIsOn(int, DatapickerImage::ColorAttributes, DatapickerImage::EditorSettings);
+	static bool pixelIsOn(int, DatapickerImage::ColorAttributes, const DatapickerImage::EditorSettings&);
 
 	static int discretizeHue(int, int, const QImage*);
 	static int discretizeSaturation(int, int, const QImage*);

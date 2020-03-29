@@ -45,7 +45,7 @@ QMutex mutex;
 
 class DiscretizeTask : public QRunnable {
 public:
-	DiscretizeTask(int start, int end, QImage* plotImage, QImage* originalImage, DatapickerImage::EditorSettings settings, QColor background) :
+	DiscretizeTask(int start, int end, QImage* plotImage, QImage* originalImage, const DatapickerImage::EditorSettings& settings, QColor background) :
 		m_start(start),
 		m_end(end),
 		m_plotImage(plotImage),
@@ -98,7 +98,7 @@ private:
  *
  */
 void ImageEditor::discretize(QImage* plotImage, QImage* originalImage,
-                             DatapickerImage::EditorSettings settings, QColor background) {
+                             const DatapickerImage::EditorSettings& settings, QColor background) {
 	plotImage->fill(white);
 	QThreadPool* pool = QThreadPool::globalInstance();
 	int range = ceil(double(plotImage->height())/pool->maxThreadCount());
@@ -332,7 +332,7 @@ bool ImageEditor::pixelIsOn(int value, int low, int high) {
 		return ((low <= value) || (value <= high));
 }
 
-bool ImageEditor::pixelIsOn( int value, DatapickerImage::ColorAttributes type,DatapickerImage::EditorSettings settings ) {
+bool ImageEditor::pixelIsOn( int value, DatapickerImage::ColorAttributes type, const DatapickerImage::EditorSettings& settings ) {
 	switch (type) {
 	case DatapickerImage::None:
 		break;

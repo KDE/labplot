@@ -81,7 +81,7 @@ int QxtSpanSliderPrivate::pixelPosToRangeValue(int pos) const {
 	                                       sliderMax - sliderMin, opt.upsideDown);
 }
 
-void QxtSpanSliderPrivate::handleMousePress(const QPoint& pos, QStyle::SubControl& control, int value, QxtSpanSlider::SpanHandle handle) {
+void QxtSpanSliderPrivate::handleMousePress(QPoint pos, QStyle::SubControl& control, int value, QxtSpanSlider::SpanHandle handle) {
 	QStyleOptionSlider opt;
 	initStyleOption(&opt, handle);
 	QxtSpanSlider* p = &qxt_p();
@@ -112,7 +112,7 @@ void QxtSpanSliderPrivate::setupPainter(QPainter* painter, Qt::Orientation orien
 		painter->setPen(QPen(highlight.darker(150), 0));
 }
 
-void QxtSpanSliderPrivate::drawSpan(QStylePainter* painter, const QRect& rect) const {
+void QxtSpanSliderPrivate::drawSpan(QStylePainter* painter, QRect rect) const {
 	QStyleOptionSlider opt;
 	initStyleOption(&opt);
 	const QSlider* p = &qxt_p();

@@ -683,7 +683,7 @@ void XYCurveDock::initTabs() {
 
   synchronize this function with ColumnDock::updateFormat.
 */
-void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode columnMode) {
+void XYCurveDock::updateValuesFormatWidgets(AbstractColumn::ColumnMode columnMode) {
 	ui.cbValuesFormat->clear();
 
 	switch (columnMode) {
@@ -754,7 +754,7 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 	}
 }
 
-void XYCurveDock::checkColumnAvailability(TreeViewComboBox* cb, const AbstractColumn* column, const QString columnPath) {
+void XYCurveDock::checkColumnAvailability(TreeViewComboBox* cb, const AbstractColumn* column, const QString& columnPath) {
 	if (!cb)
 		return;// normally it shouldn't be called
 

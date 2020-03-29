@@ -46,14 +46,14 @@ public:
 
 	QxtSpanSliderPrivate();
 	void initStyleOption(QStyleOptionSlider* option, QxtSpanSlider::SpanHandle handle = QxtSpanSlider::UpperHandle) const;
-	int pick(const QPoint& pt) const {
+	int pick(QPoint pt) const {
 		return qxt_p().orientation() == Qt::Horizontal ? pt.x() : pt.y();
 	}
 	int pixelPosToRangeValue(int pos) const;
-	void handleMousePress(const QPoint& pos, QStyle::SubControl& control, int value, QxtSpanSlider::SpanHandle handle);
+	void handleMousePress(QPoint pos, QStyle::SubControl& control, int value, QxtSpanSlider::SpanHandle handle);
 	void drawHandle(QStylePainter* painter, QxtSpanSlider::SpanHandle handle) const;
 	void setupPainter(QPainter* painter, Qt::Orientation orientation, qreal x1, qreal y1, qreal x2, qreal y2) const;
-	void drawSpan(QStylePainter* painter, const QRect& rect) const;
+	void drawSpan(QStylePainter* painter, QRect rect) const;
 	void triggerAction(QAbstractSlider::SliderAction action, bool main);
 	void swapControls();
 

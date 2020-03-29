@@ -52,11 +52,11 @@ public:
 
 	void setCurves(QList<XYCurve*>);
 	virtual void setupGeneral();
-	void checkColumnAvailability(TreeViewComboBox*, const AbstractColumn *column, const QString columnPath);
+	void checkColumnAvailability(TreeViewComboBox*, const AbstractColumn*, const QString& columnPath);
 
 private:
 	virtual void initGeneralTab();
-	void updateValuesFormatWidgets(const AbstractColumn::ColumnMode);
+	void updateValuesFormatWidgets(AbstractColumn::ColumnMode);
 	void showValuesColumnFormat(const Column*);
 
 	void load();

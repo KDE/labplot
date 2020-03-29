@@ -587,7 +587,7 @@ short Version(char*& buffer) {
 }
 
 /// Skip ROOT object
-void Skip(char*& buffer, const size_t& n) {
+void Skip(char*& buffer, size_t n) {
 	for (size_t i = 0; i < n; ++i) {
 		size_t count;
 		Version(buffer, count);

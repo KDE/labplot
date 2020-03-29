@@ -99,7 +99,7 @@ void JsonOptionsWidget::saveSettings() {
 	conf.writeEntry("ParseRowsName", ui.chbImportObjectNames->isChecked());
 }
 
-void JsonOptionsWidget::loadDocument(QString filename) {
+void JsonOptionsWidget::loadDocument(const QString& filename) {
 	if (m_filename == filename) return;
 	else
 		m_filename = filename;

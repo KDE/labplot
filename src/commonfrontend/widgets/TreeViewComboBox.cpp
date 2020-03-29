@@ -196,11 +196,11 @@ QString TreeViewComboBox::currentText() const {
 		return QString();
 }
 
-void TreeViewComboBox::setText(QString text) {
+void TreeViewComboBox::setText(const QString& text) {
 	m_lineEditText = text;
 }
 
-void TreeViewComboBox::setInvalid(bool invalid, QString tooltip) {
+void TreeViewComboBox::setInvalid(bool invalid, const QString& tooltip) {
 	if (invalid) {
 		setStyleSheet("background: red;");
 		setToolTip(tooltip);

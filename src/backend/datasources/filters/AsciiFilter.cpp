@@ -1745,7 +1745,7 @@ void AsciiFilterPrivate::write(const QString & fileName, AbstractDataSource* dat
 /*!
  * fix date time with 2-digit years
  */
-void AsciiFilterPrivate::fix2DigitDateTime(QDateTime& dateTime, QString format) {
+void AsciiFilterPrivate::fix2DigitDateTime(QDateTime& dateTime, const QString& format) {
 	// interpret 2-digit year smaller than 50 as 20XX
 	if (dateTime.date().year() < 1950 && !format.contains("yyyy"))
 		dateTime = dateTime.addYears(100);

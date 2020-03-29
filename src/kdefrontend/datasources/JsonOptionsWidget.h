@@ -47,7 +47,7 @@ public:
 	void clearModel();
 	void loadSettings() const;
 	void saveSettings();
-	void loadDocument(QString filename);
+	void loadDocument(const QString& filename);
 	QAbstractItemModel* model();
 
 private:

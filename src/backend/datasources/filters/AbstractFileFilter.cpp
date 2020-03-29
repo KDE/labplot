@@ -37,7 +37,7 @@ Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <QLocale>
 #include <KLocalizedString>
 
-bool AbstractFileFilter::isNan(QString s) {
+bool AbstractFileFilter::isNan(const QString& s) {
 	const static QStringList nanStrings{"NA", "NAN", "N/A", "-NA", "-NAN", "NULL"};
 	if (nanStrings.contains(s, Qt::CaseInsensitive))
 		return true;

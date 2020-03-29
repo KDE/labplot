@@ -128,11 +128,11 @@ public:
 	void setKeepLastValues(bool);
 	bool keepLastValues() const;
 
-	void setMQTTClientHostPort(const QString&, const quint16&);
+	void setMQTTClientHostPort(const QString&, quint16);
 	void setMQTTClientAuthentication(const QString&, const QString&);
 	void setMQTTClientId(const QString&);
 
-	void addInitialMQTTSubscriptions(const QMqttTopicFilter&, const quint8&);
+	void addInitialMQTTSubscriptions(const QMqttTopicFilter&, quint8);
 	QVector<QString> MQTTSubscriptions() const;
 
 	bool checkTopicContains(const QString& superior, const QString& inferior);
@@ -159,7 +159,7 @@ public:
 	QVector<QString> topicNames() const;
 	bool checkAllArrived();
 
-	void setWillSettings(MQTTWill);
+	void setWillSettings(const MQTTWill&);
 	MQTTWill willSettings() const;
 
 	void setMQTTWillUse(bool);

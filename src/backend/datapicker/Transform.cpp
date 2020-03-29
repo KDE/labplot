@@ -86,7 +86,7 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 	return true;
 }
 
-QVector3D Transform::mapSceneToLogical(const QPointF& scenePoint, const DatapickerImage::ReferencePoints& axisPoints) {
+QVector3D Transform::mapSceneToLogical(QPointF scenePoint, const DatapickerImage::ReferencePoints& axisPoints) {
 	X[3] = scenePoint.x();
 	Y[3] = scenePoint.y();
 
@@ -123,11 +123,11 @@ QVector3D Transform::mapSceneToLogical(const QPointF& scenePoint, const Datapick
 	return QVector3D{};
 }
 
-QVector3D Transform::mapSceneLengthToLogical(const QPointF& errorSpan, const DatapickerImage::ReferencePoints& axisPoints) {
+QVector3D Transform::mapSceneLengthToLogical(QPointF errorSpan, const DatapickerImage::ReferencePoints& axisPoints) {
 	return mapSceneToLogical(errorSpan, axisPoints) - mapSceneToLogical(QPointF(0,0), axisPoints);
 }
 
-QVector3D Transform::mapCartesianToType(const QPointF& point, const DatapickerImage::ReferencePoints &axisPoints) const {
+QVector3D Transform::mapCartesianToType(QPointF point, const DatapickerImage::ReferencePoints &axisPoints) const {
 	if (axisPoints.type == DatapickerImage::LogarithmicX) {
 		return QVector3D(exp(point.x()), point.y(), 0);
 	} else if (axisPoints.type == DatapickerImage::LogarithmicY) {

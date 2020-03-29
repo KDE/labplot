@@ -1594,7 +1594,7 @@ void CartesianPlotDock::plotSymmetricPaddingChanged(bool symmetric) {
 	m_initializing = false;
 }
 
-void CartesianPlotDock::plotCursorPenChanged(QPen pen) {
+void CartesianPlotDock::plotCursorPenChanged(const QPen& pen) {
 	m_initializing = true;
 	ui.sbCursorLineWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
 	ui.kcbCursorLineColor->setColor(pen.color());

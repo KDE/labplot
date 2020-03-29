@@ -359,21 +359,21 @@ QVariant WelcomeScreenHelper::searchExampleProjects(const QString& searchtext) {
 /**
  * @brief Sets the width scale for the given section, which will be saved.
  */
-void WelcomeScreenHelper::setWidthScale(QString sectionID, double scale) {
+void WelcomeScreenHelper::setWidthScale(const QString& sectionID, double scale) {
 	m_widthScale[sectionID] = scale;
 }
 
 /**
  * @brief Sets the height scale for the given section, which will be saved.
  */
-void WelcomeScreenHelper::setHeightScale(QString sectionID, double scale) {
+void WelcomeScreenHelper::setHeightScale(const QString& sectionID, double scale) {
 	m_heightScale[sectionID] = scale;
 }
 
 /**
  * @brief Returns the width scale for the given section.
  */
-QVariant WelcomeScreenHelper::getWidthScale(QString sectionID) {
+QVariant WelcomeScreenHelper::getWidthScale(const QString& sectionID) {
 	if(m_widthScale.contains(sectionID))
 		return QVariant(m_widthScale[sectionID]);
 
@@ -383,7 +383,7 @@ QVariant WelcomeScreenHelper::getWidthScale(QString sectionID) {
 /**
  * @brief Returns the height scale for the given section.
  */
-QVariant WelcomeScreenHelper::getHeightScale(QString sectionID) {
+QVariant WelcomeScreenHelper::getHeightScale(const QString& sectionID) {
 	if(m_heightScale.contains(sectionID))
 		return QVariant(m_heightScale[sectionID]);
 

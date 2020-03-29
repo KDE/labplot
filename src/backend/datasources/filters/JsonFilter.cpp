@@ -276,7 +276,7 @@ int JsonFilterPrivate::checkRow(QJsonValueRef value, int& countCols) {
 /*!
 returns -1 if a parse error has occurred, 1 if the current row type not supported and 0 otherwise.
 */
-int JsonFilterPrivate::parseColumnModes(QJsonValue row, QString rowName) {
+int JsonFilterPrivate::parseColumnModes(const QJsonValue& row, const QString& rowName) {
 	columnModes.clear();
 	vectorNames.clear();
 
@@ -366,7 +366,7 @@ void JsonFilterPrivate::setEmptyValue(int column, int row) {
 	}
 }
 
-void JsonFilterPrivate::setValueFromString(int column, int row, QString valueString) {
+void JsonFilterPrivate::setValueFromString(int column, int row, const QString& valueString) {
 	QLocale locale(numberFormat);
 	switch (columnModes[column]) {
 		case AbstractColumn::Numeric: {
