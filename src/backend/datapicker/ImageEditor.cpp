@@ -127,7 +127,7 @@ bool ImageEditor::processedPixelIsOn(const QImage& plotImage, int x, int y) {
 //#####################  private helper functions  #############################
 //##############################################################################
 QRgb ImageEditor::findBackgroundColor(const QImage* plotImage) {
-	QList<ColorEntry>::iterator itrC;
+	ColorList::iterator itrC;
 	ColorList colors;
 	int x, y = 0;
 	for (x = 0; x < plotImage->width(); ++x) {

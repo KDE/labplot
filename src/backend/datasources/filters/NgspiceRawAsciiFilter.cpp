@@ -183,11 +183,11 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 
 	//number of variables
 	line = file.readLine();
-	const int vars = line.right(line.length() - 15).toInt(); //remove the "No. Variables: " sub-string
+	const int vars = line.rightRef(line.length() - 15).toInt(); //remove the "No. Variables: " sub-string
 
 	//number of points
 	line = file.readLine();
-	const int points = line.right(line.length() - 12).toInt(); //remove the "No. Points: " sub-string
+	const int points = line.rightRef(line.length() - 12).toInt(); //remove the "No. Points: " sub-string
 
 	//add names of the variables
 	vectorNames.clear();
@@ -296,11 +296,11 @@ QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileNa
 
 	//number of variables
 	line = file.readLine();
-	const int vars = line.right(line.length() - 15).toInt(); //remove the "No. Variables: " sub-string
+	const int vars = line.rightRef(line.length() - 15).toInt(); //remove the "No. Variables: " sub-string
 
 	//number of points
 	line = file.readLine();
-	const int points = line.right(line.length() - 12).toInt(); //remove the "No. Points: " sub-string
+	const int points = line.rightRef(line.length() - 12).toInt(); //remove the "No. Points: " sub-string
 
 	//add names of the variables
 	vectorNames.clear();

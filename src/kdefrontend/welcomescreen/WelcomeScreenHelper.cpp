@@ -55,10 +55,10 @@ WelcomeScreenHelper::WelcomeScreenHelper() {
 	m_datasetWidget->hide();
 
 	QIcon icon = QIcon::fromTheme("labplot-maximize");
-	m_maxIcon = icon.pixmap(icon.availableSizes().first());
+	m_maxIcon = icon.pixmap(icon.availableSizes().constFirst());
 
 	icon = QIcon::fromTheme("labplot-minimize");
-	m_minIcon = icon.pixmap(icon.availableSizes().first());
+	m_minIcon = icon.pixmap(icon.availableSizes().constFirst());
 
 	m_datasetModel = new DatasetModel(m_datasetWidget->getDatasetsMap());
 
@@ -374,7 +374,7 @@ void WelcomeScreenHelper::setHeightScale(QString sectionID, double scale) {
  * @brief Returns the width scale for the given section.
  */
 QVariant WelcomeScreenHelper::getWidthScale(QString sectionID) {
-	if(m_widthScale.keys().contains(sectionID))
+	if(m_widthScale.contains(sectionID))
 		return QVariant(m_widthScale[sectionID]);
 
 	return QVariant(-1);
@@ -384,7 +384,7 @@ QVariant WelcomeScreenHelper::getWidthScale(QString sectionID) {
  * @brief Returns the height scale for the given section.
  */
 QVariant WelcomeScreenHelper::getHeightScale(QString sectionID) {
-	if(m_heightScale.keys().contains(sectionID))
+	if(m_heightScale.contains(sectionID))
 		return QVariant(m_heightScale[sectionID]);
 
 	return QVariant(-1);;
@@ -421,7 +421,7 @@ QVariant WelcomeScreenHelper::getMinIcon() {
  */
 QVariant WelcomeScreenHelper::getBackIcon() {
 	QIcon icon = QIcon::fromTheme("labplot-back");
-	QPixmap pixmap = icon.pixmap(icon.availableSizes().first());
+	QPixmap pixmap = icon.pixmap(icon.availableSizes().constFirst());
 	QByteArray bArray;
 	QBuffer buffer(&bArray);
 	buffer.open(QIODevice::WriteOnly);
@@ -436,7 +436,7 @@ QVariant WelcomeScreenHelper::getBackIcon() {
  */
 QVariant WelcomeScreenHelper::getForwardIcon() {
 	QIcon icon = QIcon::fromTheme("labplot-forward");
-	QPixmap pixmap = icon.pixmap(icon.availableSizes().first());
+	QPixmap pixmap = icon.pixmap(icon.availableSizes().constFirst());
 	QByteArray bArray;
 	QBuffer buffer(&bArray);
 	buffer.open(QIODevice::WriteOnly);

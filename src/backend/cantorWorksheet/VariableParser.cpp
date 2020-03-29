@@ -108,7 +108,7 @@ void VariableParser::parseOctaveValues() {
 			valueStringList << values.split(QLatin1Char(' '));
 	}
 
-	valueStringList.removeAll(QStringLiteral(""));
+	valueStringList.removeAll(QString());
 	parseValues(valueStringList);
 }
 

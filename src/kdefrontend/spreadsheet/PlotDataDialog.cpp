@@ -475,7 +475,7 @@ void PlotDataDialog::plot() {
 	//select the parent plot of the last added curve in the project explorer
 	m_spreadsheet->project()->setSuppressAspectAddedSignal(false);
 	if (m_lastAddedCurve)
-		m_spreadsheet->project()->requestNavigateTo(m_lastAddedCurve->parentAspect()->path());
+		emit m_spreadsheet->project()->requestNavigateTo(m_lastAddedCurve->parentAspect()->path());
 	RESET_CURSOR;
 }
 

@@ -66,7 +66,6 @@ public:
 
 	typedef ReferenceLinePrivate Private;
 
-
 protected:
 	ReferenceLinePrivate* const d_ptr;
 	ReferenceLine(const QString& name, ReferenceLinePrivate* dd);
@@ -99,7 +98,7 @@ private slots:
 
 signals:
 	friend class ReferenceLineSetPositionCmd;
-	void orientationChanged(Orientation);
+	void orientationChanged(ReferenceLine::Orientation);
 	void positionChanged(double);
 	void penChanged(const QPen&);
 	void opacityChanged(qreal);

@@ -999,7 +999,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 // 	worksheet->setPageRect(size);
 	worksheet->setUseViewSize(true);
 
-	QMap<TextLabel*, QSizeF> textLabelPositions;
+	QHash<TextLabel*, QSizeF> textLabelPositions;
 
 	// worksheet background color
 	const Origin::ColorGradientDirection bckgColorGradient = graph.windowBackgroundColorGradient;
@@ -1352,7 +1352,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		//worksheet and plots got their sizes,
 		//-> position all text labels inside the plots correctly by converting
 		//the relative positions determined above to the absolute values
-		QMap<TextLabel*, QSizeF>::const_iterator it = textLabelPositions.constBegin();
+		QHash<TextLabel*, QSizeF>::const_iterator it = textLabelPositions.constBegin();
 		while (it != textLabelPositions.constEnd()) {
 			TextLabel* label = it.key();
 			const QSizeF& ratios = it.value();

@@ -177,7 +177,6 @@ void DatasetHandler::prepareForDataset() {
 	if(!m_object->isEmpty()) {
 		if(m_object->contains("url")) {
 			const QString& url =  m_object->value("url").toString();
-			const QUrl downloadUrl = QUrl::fromEncoded(url.toLocal8Bit());
 			doDownload(url);
 		}
 		else {

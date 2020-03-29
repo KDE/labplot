@@ -378,12 +378,12 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 		toolbar->setVisible(false);
 
 	QList<QVariant> recentList;
-	for (QUrl url : m_recentProjectsAction->urls())
+	for (QUrl& url : m_recentProjectsAction->urls())
 		recentList.append(QVariant(url));
 
 	//Set context property
 	QQuickWidget* quickWidget = new QQuickWidget(this);
-	QQmlContext *ctxt = quickWidget->rootContext();
+	QQmlContext* ctxt = quickWidget->rootContext();
 	QVariant variant(recentList);
 	ctxt->setContextProperty("recentProjects", variant);
 
@@ -405,7 +405,7 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	QObject::connect(item, SIGNAL(datasetClicked(QString, QString, QString)), m_welcomeScreenHelper, SLOT(datasetClicked(const QString&, const QString&, const QString&)));
 	QObject::connect(item, SIGNAL(openDataset()), this, SLOT(openDatasetExample()));
 	QObject::connect(item, SIGNAL(openExampleProject(QString)), m_welcomeScreenHelper, SLOT(exampleProjectClicked(const QString&)));
-	m_welcomeScreenHelper->showFirstDataset();
+	emit m_welcomeScreenHelper->showFirstDataset();
 
 	return quickWidget;
 }

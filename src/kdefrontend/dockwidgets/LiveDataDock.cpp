@@ -683,7 +683,7 @@ void LiveDataDock::willUpdateIntervalChanged(int interval) {
 void LiveDataDock::statisticsChanged(MQTTClient::WillStatisticsType willStatisticsType) {
 	if (willStatisticsType >= 0) {
 		//if it's not already added and it's checked we add it
-		if (!m_mqttClient->willStatistics()[static_cast<int>(willStatisticsType)])
+		if (!m_mqttClient->willStatistics().at(static_cast<int>(willStatisticsType)))
 			m_mqttClient->addWillStatistics(willStatisticsType);
 		else //otherwise remove it
 			m_mqttClient->removeWillStatistics(willStatisticsType);

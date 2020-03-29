@@ -333,7 +333,7 @@ signals:
 	void cursorPenChanged(QPen);
 	void curveDataChanged(const XYCurve*);
 	void curveVisibilityChangedSignal();
-	void mouseModeChanged(MouseMode);
+	void mouseModeChanged(CartesianPlot::MouseMode);
 	void cursor0EnableChanged(bool enable);
 	void cursor1EnableChanged(bool enable);
 };

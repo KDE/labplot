@@ -1440,7 +1440,7 @@ int CartesianPlot::curveCount(){
 }
 
 const XYCurve* CartesianPlot::getCurve(int index){
-	return children<XYCurve>()[index];
+	return children<XYCurve>().at(index);
 }
 
 double CartesianPlot::cursorPos(int cursorNumber) {

@@ -305,13 +305,11 @@ int JsonFilterPrivate::parseColumnModes(QJsonValue row, QString rowName) {
 		QJsonValue columnValue;
 		switch (rowType) {
 			case QJsonValue::Array: {
-				QJsonArray arr = row.toArray();
 				columnValue = *(row.toArray().begin() + i);
 				vectorNames << i18n("Column %1", QString::number(i + 1));
 				break;
 			}
 			case QJsonValue::Object: {
-				QJsonObject obj = row.toObject();
 				QString key = row.toObject().keys().at(i);
 				vectorNames << key;
 				columnValue = row.toObject().value(key);

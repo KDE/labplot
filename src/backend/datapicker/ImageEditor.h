@@ -57,6 +57,6 @@ private:
 		QColor color;
 		int count;
 	};
-	typedef QList<ColorEntry> ColorList;
+	typedef QVector<ColorEntry> ColorList;
 };
 #endif // IMAGEEDITOR_H

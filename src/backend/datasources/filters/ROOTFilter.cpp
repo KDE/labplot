@@ -293,10 +293,10 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 
 		QStringList headers;
 		for (const auto& l : columns) {
-			QString lastelement = l.back(), leaf = l.front();
+			QString lastelement = l.back();
 			bool isArray = false;
 			if (lastelement.at(0) == '[' && lastelement.at(lastelement.size() - 1) == ']') {
-				lastelement.mid(1, lastelement.length() - 2).toUInt(&isArray);
+				lastelement.midRef(1, lastelement.length() - 2).toUInt(&isArray);
 			}
 			if (!isArray || l.count() == 2)
 				headers << l.join(isArray ? QString() : QString(':'));
@@ -315,7 +315,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 			QString lastelement = l.back(), leaf = l.front();
 			bool isArray = false;
 			if (lastelement.at(0) == '[' && lastelement.at(lastelement.size() - 1) == ']') {
-				element = lastelement.mid(1, lastelement.length() - 2).toUInt(&isArray);
+				element = lastelement.midRef(1, lastelement.length() - 2).toUInt(&isArray);
 				if (!isArray)
 					element = 0;
 				if (l.count() > 2)
@@ -465,7 +465,7 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 			QString lastelement = l.back(), leaf = l.front();
 			bool isArray = false;
 			if (lastelement.at(0) == '[' && lastelement.at(lastelement.size() - 1) == ']') {
-				element = lastelement.mid(1, lastelement.length() - 2).toUInt(&isArray);
+				element = lastelement.midRef(1, lastelement.length() - 2).toUInt(&isArray);
 				if (!isArray)
 					element = 0;
 				if (l.count() > 2)

@@ -184,11 +184,11 @@ void NgspiceRawBinaryFilterPrivate::readDataFromFile(const QString& fileName, Ab
 
 	//number of variables
 	line = file.readLine();
-	const int vars = line.right(line.length() - 15).toInt(); //remove the "No. Variables: " sub-string
+	const int vars = line.rightRef(line.length() - 15).toInt(); //remove the "No. Variables: " sub-string
 
 	//number of points
 	line = file.readLine();
-	const int points = line.right(line.length() - 12).toInt(); //remove the "No. Points: " sub-string
+	const int points = line.rightRef(line.length() - 12).toInt(); //remove the "No. Points: " sub-string
 
 	//add names of the variables
 	vectorNames.clear();
@@ -277,12 +277,12 @@ QVector<QStringList> NgspiceRawBinaryFilterPrivate::preview(const QString& fileN
 
 	//number of variables
 	line = file.readLine();
-	const int vars = line.right(line.length() - 15).toInt(); //remove the "No. Variables: " sub-string
+	const int vars = line.rightRef(line.length() - 15).toInt(); //remove the "No. Variables: " sub-string
 	DEBUG("	vars = " << vars);
 
 	//number of points
 	line = file.readLine();
-	const int points = line.right(line.length() - 12).toInt(); //remove the "No. Points: " sub-string
+	const int points = line.rightRef(line.length() - 12).toInt(); //remove the "No. Points: " sub-string
 	DEBUG("	points = " << points);
 
 	//add names of the variables
