@@ -61,12 +61,14 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 	bool ok;
 	int intValue = locale.toInt(valueString, &ok);
 	DEBUG("string " << stdValueString << ": toInt " << intValue << "?:" << ok);
+	Q_UNUSED(intValue)
 	if (ok || isNan(valueString))
 		return AbstractColumn::Integer;
 
 	//check big integer
 	qint64 bigIntValue = locale.toLongLong(valueString, &ok);
 	DEBUG("string " << stdValueString << ": toBigInt " << bigIntValue << "?:" << ok);
+	Q_UNUSED(bigIntValue)
 	if (ok || isNan(valueString))
 		return AbstractColumn::BigInt;
 
@@ -74,6 +76,7 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 	AbstractColumn::ColumnMode mode = AbstractColumn::Numeric;
 	double value = locale.toDouble(valueString, &ok);
 	DEBUG("string " << stdValueString << ": toDouble " << value << "?:" << ok);
+	Q_UNUSED(value)
 
 	//if not a number, check datetime. if that fails: string
 	if (!ok) {
