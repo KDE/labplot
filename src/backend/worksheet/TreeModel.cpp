@@ -27,12 +27,17 @@ Copyright            : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
 ***************************************************************************/
 
 #include "TreeModel.h"
+#include <QAbstractItemModel>
+// #include <QModelIndex>
+
+#include <QTreeView>
+#include <QVariant>
 
 //##########################################################
 // TreeItem ###############################################
 //##########################################################
 
-TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem *parent) :
+TreeItem::TreeItem(const QVector<QVariant>& data, TreeItem* parent) :
 	itemData(data),
 	parentItem(parent) {
 }
@@ -94,7 +99,7 @@ bool TreeItem::insertColumns(int position, int columns) {
 	return true;
 }
 
-TreeItem *TreeItem::parent() {
+TreeItem* TreeItem::parent() {
 	return parentItem;
 }
 
@@ -121,7 +126,7 @@ bool TreeItem::removeColumns(int position, int columns) {
 	return true;
 }
 
-bool TreeItem::setData(int column, const QVariant &value) {
+bool TreeItem::setData(int column, const QVariant& value) {
 	if (column < 0 || column >= itemData.size())
 		return false;
 
@@ -129,7 +134,7 @@ bool TreeItem::setData(int column, const QVariant &value) {
 	return true;
 }
 
-bool TreeItem::setBackgroundColor(int column, const QVariant &value) {
+bool TreeItem::setBackgroundColor(int column, const QVariant& value) {
 	if (column < 0 || column >= itemData.size())
 		return false;
 
@@ -141,7 +146,7 @@ bool TreeItem::setBackgroundColor(int column, const QVariant &value) {
 // TreeModel ###############################################
 //##########################################################
 
-TreeModel::TreeModel(const QStringList &headers, QObject *parent)
+TreeModel::TreeModel(const QStringList& headers, QObject* parent)
 	: QAbstractItemModel(parent) {
 	QVector<QVariant> rootData;
 	for (auto header : headers)
@@ -154,7 +159,7 @@ TreeModel::~TreeModel() {
 	delete rootItem;
 }
 
-int TreeModel::columnCount(const QModelIndex & /* parent */) const {
+int TreeModel::columnCount(const QModelIndex& /* parent */) const {
 	return rootItem->columnCount();
 }
 
@@ -163,7 +168,7 @@ QVariant TreeModel::treeData(const int row, const int column, const QModelIndex&
 	return data(currentIndex, role);
 }
 
-QVariant TreeModel::data(const QModelIndex &index, int role) const {
+QVariant TreeModel::data(const QModelIndex& index, int role) const {
 	if (!index.isValid())
 		return QVariant();
 
@@ -178,14 +183,14 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const {
 	return item->backgroundColor();
 }
 
-Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const {
+Qt::ItemFlags TreeModel::flags(const QModelIndex& index) const {
 	if (!index.isValid())
 		return nullptr;
 
 	return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
 }
 
-TreeItem *TreeModel::getItem(const QModelIndex &index) const {
+TreeItem *TreeModel::getItem(const QModelIndex& index) const {
 	if (index.isValid()) {
 		TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
 		if (item)
@@ -201,7 +206,7 @@ QVariant TreeModel::headerData(int section, Qt::Orientation orientation, int rol
 	return QVariant();
 }
 
-QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent) const {
+QModelIndex TreeModel::index(int row, int column, const QModelIndex& parent) const {
 	if (parent.isValid() && parent.column() != 0)
 		return QModelIndex();
 
@@ -214,7 +219,7 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent) con
 		return QModelIndex();
 }
 
-bool TreeModel::insertColumns(int position, int columns, const QModelIndex &parent) {
+bool TreeModel::insertColumns(int position, int columns, const QModelIndex& parent) {
 	bool success;
 
 	beginInsertColumns(parent, position, position + columns - 1);
@@ -224,7 +229,7 @@ bool TreeModel::insertColumns(int position, int columns, const QModelIndex &pare
 	return success;
 }
 
-bool TreeModel::insertRows(int position, int rows, const QModelIndex &parent) {
+bool TreeModel::insertRows(int position, int rows, const QModelIndex& parent) {
 	TreeItem *parentItem = getItem(parent);
 	bool success;
 
@@ -248,7 +253,7 @@ QModelIndex TreeModel::parent(const QModelIndex &index) const {
 	return createIndex(parentItem->childNumber(), 0, parentItem);
 }
 
-bool TreeModel::removeColumns(int position, int columns, const QModelIndex &parent) {
+bool TreeModel::removeColumns(int position, int columns, const QModelIndex& parent) {
 	bool success;
 
 	beginRemoveColumns(parent, position, position + columns - 1);
@@ -261,7 +266,7 @@ bool TreeModel::removeColumns(int position, int columns, const QModelIndex &pare
 	return success;
 }
 
-bool TreeModel::removeRows(int position, int rows, const QModelIndex &parent) {
+bool TreeModel::removeRows(int position, int rows, const QModelIndex& parent) {
 	TreeItem *parentItem = getItem(parent);
 
 	beginRemoveRows(parent, position, position + rows - 1);
@@ -277,12 +282,12 @@ int TreeModel::rowCount(const QModelIndex &parent) const {
 	return parentItem->childCount();
 }
 
-bool TreeModel::setTreeData(const QVariant data, const int row, const int column, const QModelIndex &parent, int role) {
+bool TreeModel::setTreeData(const QVariant& data, const int row, const int column, const QModelIndex& parent, int role) {
 	QModelIndex curveIndex = index(row, column, parent);
 	return setData(curveIndex, data, role);
 }
 
-bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+bool TreeModel::setData(const QModelIndex& index, const QVariant& value, int role) {
 
 	if (role == Qt::EditRole || role == Qt::DisplayRole) {
 		TreeItem *item = getItem(index);
@@ -303,7 +308,7 @@ bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int rol
 	return false;
 }
 
-bool TreeModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role) {
+bool TreeModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role) {
 	if (role != Qt::EditRole && role != Qt::DisplayRole && orientation != Qt::Horizontal)
 		return false;
 
@@ -315,7 +320,7 @@ bool TreeModel::setHeaderData(int section, Qt::Orientation orientation, const QV
 	return result;
 }
 
-int TreeModel::compareStrings(const QString value, const int row, const int column, const QModelIndex &parent) {
+int TreeModel::compareStrings(const QString& value, const int row, const int column, const QModelIndex& parent) {
 	QModelIndex plotIndex = index(row, column, parent);
 	return plotIndex.data().toString().compare(value);
 }
