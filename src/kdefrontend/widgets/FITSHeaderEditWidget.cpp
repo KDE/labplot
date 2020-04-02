@@ -239,19 +239,22 @@ void FITSHeaderEditWidget::openFile() {
 bool FITSHeaderEditWidget::save() {
 	bool saved = false;
 
-	for (const QString& fileName : m_extensionData.keys()) {
-		if (m_extensionData[fileName].updates.newKeywords.size() > 0) {
-			m_fitsFilter->addNewKeyword(fileName,m_extensionData[fileName].updates.newKeywords);
+	QMap<QString, ExtensionData>::const_iterator it = m_extensionData.constBegin();
+	while (it != m_extensionData.constEnd()) {
+		const QString& fileName = it.key();
+		const auto& data = it.value();
+		if (data.updates.newKeywords.size() > 0) {
+			m_fitsFilter->addNewKeyword(fileName, data.updates.newKeywords);
 			if (!saved)
 				saved = true;
 		}
-		if (m_extensionData[fileName].updates.removedKeywords.size() > 0) {
-			m_fitsFilter->deleteKeyword(fileName, m_extensionData[fileName].updates.removedKeywords);
+		if (data.updates.removedKeywords.size() > 0) {
+			m_fitsFilter->deleteKeyword(fileName, data.updates.removedKeywords);
 			if (!saved)
 				saved = true;
 		}
 		if (!saved) {
-			for (const FITSFilter::Keyword& key : m_extensionData[fileName].updates.updatedKeywords) {
+			for (const FITSFilter::Keyword& key : data.updates.updatedKeywords) {
 				if (!key.isEmpty()) {
 					saved = true;
 					break;
@@ -259,9 +262,11 @@ bool FITSHeaderEditWidget::save() {
 			}
 		}
 
-		m_fitsFilter->updateKeywords(fileName, m_extensionData[fileName].keywords, m_extensionData[fileName].updates.updatedKeywords);
-		m_fitsFilter->addKeywordUnit(fileName, m_extensionData[fileName].keywords);
-		m_fitsFilter->addKeywordUnit(fileName, m_extensionData[fileName].updates.newKeywords);
+		m_fitsFilter->updateKeywords(fileName, data.keywords, data.updates.updatedKeywords);
+		m_fitsFilter->addKeywordUnit(fileName, data.keywords);
+		m_fitsFilter->addKeywordUnit(fileName, data.updates.newKeywords);
+
+		++it;
 	}
 
 	if (m_removedExtensions.size() > 0) {
@@ -607,10 +612,12 @@ void FITSHeaderEditWidget::closeFile() {
 			m_seletedExtension = newCurrent->text(0);
 			fillTable();
 		}
-
-		for (const QString& key : m_extensionData.keys()) {
+		QMap<QString, ExtensionData>::const_iterator it = m_extensionData.constBegin();
+		while (it != m_extensionData.constEnd()) {
+			const QString& key = it.key();
 			if (key.startsWith(current->text(0)))
 				m_extensionData.remove(key);
+			++it;
 		}
 
 		delete current;
