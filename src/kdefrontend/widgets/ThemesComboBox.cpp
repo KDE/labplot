@@ -78,7 +78,8 @@ bool ThemesComboBox::eventFilter(QObject* object, QEvent* event) {
 		this->setFocus();
 		return true;
 	}
-	return false;
+
+	return QComboBox::eventFilter(object, event);
 }
 
 void ThemesComboBox::handleThemeChanged(const QString& theme) {

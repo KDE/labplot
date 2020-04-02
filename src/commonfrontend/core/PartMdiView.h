@@ -39,7 +39,7 @@ class PartMdiView : public QMdiSubWindow {
 	Q_OBJECT
 
 public:
-	explicit PartMdiView(AbstractPart* part);
+	explicit PartMdiView(AbstractPart*);
 	~PartMdiView() override;
 	AbstractPart* part() const;
 
@@ -51,7 +51,7 @@ private:
 private slots:
 	void handleAspectDescriptionChanged(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
-	void windowStateChanged(Qt::WindowStates oldState, Qt::WindowStates newState);
+	void slotWindowStateChanged(Qt::WindowStates oldState, Qt::WindowStates newState);
 };
 
 #endif // ifndef PART_MDI_VIEW_H

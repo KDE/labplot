@@ -53,7 +53,7 @@ PartMdiView::PartMdiView(AbstractPart* part) : QMdiSubWindow(nullptr), m_part(pa
 
 	connect(m_part, &AbstractPart::aspectDescriptionChanged, this, &PartMdiView::handleAspectDescriptionChanged);
 	connect(m_part, &AbstractPart::aspectAboutToBeRemoved, this, &PartMdiView::handleAspectAboutToBeRemoved);
-	connect(this, &QMdiSubWindow::windowStateChanged, this, &PartMdiView::windowStateChanged);
+	connect(this, &QMdiSubWindow::windowStateChanged, this, &PartMdiView::slotWindowStateChanged);
 }
 
 PartMdiView::~PartMdiView() {
@@ -83,7 +83,7 @@ void PartMdiView::closeEvent(QCloseEvent *event) {
 	event->accept();
 }
 
-void PartMdiView::windowStateChanged(Qt::WindowStates oldState, Qt::WindowStates newState) {
+void PartMdiView::slotWindowStateChanged(Qt::WindowStates oldState, Qt::WindowStates newState) {
 	Q_UNUSED(oldState);
 
 	if (m_closing)
