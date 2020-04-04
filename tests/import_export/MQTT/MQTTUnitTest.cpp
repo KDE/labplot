@@ -546,7 +546,6 @@ void MQTTUnitTest::testSubscriptions() {
 			QTextStream in(file);
 			while(!in.atEnd()) {
 				QString topic = in.readLine();
-				QVector<QString> subscriptions = mqttClient->MQTTSubscriptions();
 				bool found = liveDock->testSubscribe(topic);
 				QCOMPARE(found, true);
 			}
@@ -559,7 +558,6 @@ void MQTTUnitTest::testSubscriptions() {
 		if(file->open(QIODevice::ReadOnly)) {
 			QTextStream in(file);
 			int count = in.readLine().simplified().toInt();
-			QVector<QString> sub = mqttClient->MQTTSubscriptions();
 			QCOMPARE(mqttClient->MQTTSubscriptions().size(), count);
 
 			while(!in.atEnd()) {
