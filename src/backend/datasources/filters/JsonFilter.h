@@ -62,14 +62,14 @@ public:
 
 	QVector<QStringList> preview(const QString& fileName);
 	QVector<QStringList> preview(QIODevice& device);
-	QVector<QStringList> preview(QJsonDocument& doc);
+	QVector<QStringList> preview(const QJsonDocument& doc);
 
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;
 
 	void setDataRowType(const QJsonValue::Type);
 	QJsonValue::Type dataRowType() const;
-	void setModelRows(const QVector<int>);
+	void setModelRows(const QVector<int>&);
 	QVector<int> modelRows() const;
 
 	void setDateTimeFormat(const QString&);

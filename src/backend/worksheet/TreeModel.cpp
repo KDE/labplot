@@ -27,11 +27,6 @@ Copyright            : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
 ***************************************************************************/
 
 #include "TreeModel.h"
-#include <QAbstractItemModel>
-// #include <QModelIndex>
-
-#include <QTreeView>
-#include <QVariant>
 
 //##########################################################
 // TreeItem ###############################################

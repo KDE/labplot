@@ -75,7 +75,7 @@ QVector<QStringList> JsonFilter::preview(QIODevice& device) {
 	return d->preview(device);
 }
 
-QVector<QStringList> JsonFilter::preview(QJsonDocument& doc) {
+QVector<QStringList> JsonFilter::preview(const QJsonDocument& doc) {
 	return d->preview(doc);
 }
 
@@ -128,7 +128,7 @@ QJsonValue::Type JsonFilter::dataRowType() const {
 	return d->rowType;
 }
 
-void JsonFilter::setModelRows(QVector<int> rows) {
+void JsonFilter::setModelRows(const QVector<int>& rows) {
 	d->modelRows = rows;
 }
 
@@ -643,7 +643,7 @@ QVector<QStringList> JsonFilterPrivate::preview(const QString& fileName) {
 /*!
 generates the preview for device \c device.
 */
-QVector<QStringList> JsonFilterPrivate::preview(QIODevice &device) {
+QVector<QStringList> JsonFilterPrivate::preview(QIODevice& device) {
 	const int deviceError = prepareDeviceToRead(device);
 	if (deviceError != 0) {
 		DEBUG("Device error = " << deviceError);
@@ -656,7 +656,7 @@ QVector<QStringList> JsonFilterPrivate::preview(QIODevice &device) {
 /*!
 generates the preview for document \c doc.
 */
-QVector<QStringList> JsonFilterPrivate::preview(QJsonDocument &doc) {
+QVector<QStringList> JsonFilterPrivate::preview(const QJsonDocument& doc) {
 	if (prepareDocumentToRead(doc) != 0)
 		return QVector<QStringList>();
 	return preview();

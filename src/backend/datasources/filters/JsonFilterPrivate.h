@@ -31,8 +31,8 @@
 #define JSONFILTERPRIVATE_H
 
 #include "QJsonModel.h"
+
 class QJsonDocument;
-class KFilterDev;
 class AbstractDataSource;
 class AbstractColumn;
 
@@ -41,7 +41,7 @@ class JsonFilterPrivate {
 public:
 	explicit JsonFilterPrivate (JsonFilter* owner);
 
-	int checkRow(QJsonValueRef value, int &countCols);
+	int checkRow(QJsonValueRef value, int& countCols);
 	int parseColumnModes(const QJsonValue& row, const QString& rowName = QString());
 	void setEmptyValue(int column, int row);
 	void setValueFromString(int column, int row, const QString& value);
@@ -49,11 +49,11 @@ public:
 	int prepareDeviceToRead(QIODevice&);
 	int prepareDocumentToRead(const QJsonDocument&);
 
-	void readDataFromDevice(QIODevice& device, AbstractDataSource* = nullptr,
+	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace);
-	void readDataFromDocument(const QJsonDocument& doc, AbstractDataSource* = nullptr,
+	void readDataFromDocument(const QJsonDocument&, AbstractDataSource* = nullptr,
 	                          AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 
 	void importData(AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace,
@@ -62,7 +62,7 @@ public:
 	void write(const QString& fileName, AbstractDataSource*);
 	QVector<QStringList> preview(const QString& fileName);
 	QVector<QStringList> preview(QIODevice& device);
-	QVector<QStringList> preview(QJsonDocument& doc);
+	QVector<QStringList> preview(const QJsonDocument&);
 	QVector<QStringList> preview();
 
 	const JsonFilter* q;
