@@ -39,7 +39,7 @@ public:
 	explicit SortDialog(QWidget* parent = nullptr);
 	~SortDialog() override;
 
-	void setColumns(QVector<Column*>);
+	void setColumns(const QVector<Column*>&);
 
 	enum {Separately = 0, Together = 1};
 	enum {Ascending = 0, Descending = 1};

@@ -233,7 +233,7 @@ bool TreeViewComboBox::eventFilter(QObject* object, QEvent* event) {
 		this->setFocus();
 		return true;
 	}
-	return false;
+	return QComboBox::eventFilter(object, event);
 }
 
 //SLOTs

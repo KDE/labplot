@@ -105,7 +105,7 @@ DropValuesDialog::~DropValuesDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void DropValuesDialog::setColumns(QVector<Column*> columns) {
+void DropValuesDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
 }
 

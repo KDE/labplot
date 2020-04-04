@@ -60,7 +60,7 @@ void fillTree(QTreeWidgetItem* node, const ROOTFilter::Directory& dir)
 QHash<QStringList, QVector<QStringList> > findLeaves(
 	QTreeWidgetItem* node,
 	ROOTFilter* filter,
-	const QString& fileName, QStringList path = QStringList{}
+	const QString& fileName, const QStringList& path = QStringList{}
 ) {
 	QHash<QStringList, QVector<QStringList> > leaves;
 	if (node->childCount() > 0) {

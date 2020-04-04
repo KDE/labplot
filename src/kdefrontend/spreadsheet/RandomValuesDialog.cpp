@@ -130,7 +130,7 @@ RandomValuesDialog::~RandomValuesDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void RandomValuesDialog::setColumns(QVector<Column*> columns) {
+void RandomValuesDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
 }
 

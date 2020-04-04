@@ -229,7 +229,7 @@ private slots:
 	void goToPreviousColumn();
 	void goToCell();
 	void sortSpreadsheet();
-	void sortDialog(QVector<Column*>);
+	void sortDialog(const QVector<Column*>&);
 
 	void cutSelection();
 	void copySelection();

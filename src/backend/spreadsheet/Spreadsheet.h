@@ -104,7 +104,7 @@ public slots:
 	void clearMasks();
 
 	void moveColumn(int from, int to);
-	void sortColumns(Column* leading, QVector<Column*>, bool ascending);
+	void sortColumns(Column* leading, const QVector<Column*>&, bool ascending);
 
 private:
 	void init();

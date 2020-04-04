@@ -44,7 +44,7 @@ public:
 		LiveDataDock = 1
 	};
 
-	void setTopicList (QStringList topicList);
+	void setTopicList(const QStringList& topicList);
 	QStringList getTopicList();
 
 	int subscriptionCount();

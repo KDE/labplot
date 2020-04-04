@@ -138,7 +138,7 @@ CLASS_SHARED_D_READER_IMPL(CustomPoint, QPen, symbolPen, symbolPen)
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetPosition, QPointF, position, retransform)
-void CustomPoint::setPosition(const QPointF& position) {
+void CustomPoint::setPosition(QPointF position) {
 	Q_D(CustomPoint);
 	if (position != d->position)
 		exec(new CustomPointSetPositionCmd(d, position, ki18n("%1: set position")));

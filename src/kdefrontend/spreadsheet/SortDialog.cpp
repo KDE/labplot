@@ -88,7 +88,7 @@ void SortDialog::sortColumns() {
 	emit sort(leading, m_columns, ui.cbOrdering->currentIndex() == Ascending);
 }
 
-void SortDialog::setColumns(QVector<Column*> columns) {
+void SortDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
 
 	for (auto* col : m_columns)

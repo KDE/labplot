@@ -374,29 +374,29 @@ int Spreadsheet::colY(int col) {
 /*! Sorts the given list of column.
   If 'leading' is a null pointer, each column is sorted separately.
 */
-void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascending) {
+void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, bool ascending) {
 	if (cols.isEmpty()) return;
 
 	// the normal QPair comparison does not work properly with descending sorting
 	// therefore we use our own compare functions
 	class CompareFunctions {
 	public:
-		static bool doubleLess(const QPair<double, int>& a, const QPair<double, int>& b) {
+		static bool doubleLess(QPair<double, int> a, QPair<double, int> b) {
 			return a.first < b.first;
 		}
-		static bool doubleGreater(const QPair<double, int>& a, const QPair<double, int>& b) {
+		static bool doubleGreater(QPair<double, int> a, QPair<double, int> b) {
 			return a.first > b.first;
 		}
-		static bool integerLess(const QPair<int, int>& a, const QPair<int, int>& b) {
+		static bool integerLess(QPair<int, int> a, QPair<int, int> b) {
 			return a.first < b.first;
 		}
-		static bool integerGreater(const QPair<int, int>& a, const QPair<int, int>& b) {
+		static bool integerGreater(QPair<int, int> a, QPair<int, int> b) {
 			return a.first > b.first;
 		}
-		static bool bigIntLess(const QPair<qint64, int>& a, const QPair<qint64, int>& b) {
+		static bool bigIntLess(QPair<qint64, int> a, QPair<qint64, int> b) {
 			return a.first < b.first;
 		}
-		static bool bigIntGreater(const QPair<qint64, int>& a, const QPair<qint64, int>& b) {
+		static bool bigIntGreater(QPair<qint64, int> a, QPair<qint64, int> b) {
 			return a.first > b.first;
 		}
 		static bool QStringLess(const QPair<QString, int>& a, const QPair<QString, int>& b) {

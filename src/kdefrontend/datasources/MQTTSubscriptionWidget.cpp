@@ -119,7 +119,7 @@ MQTTSubscriptionWidget::~MQTTSubscriptionWidget() {
 	delete m_searchTimer;
 }
 
-void MQTTSubscriptionWidget::setTopicList(QStringList topicList) {
+void MQTTSubscriptionWidget::setTopicList(const QStringList& topicList) {
 	m_topicList = topicList;
 }
 

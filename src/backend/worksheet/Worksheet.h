@@ -91,8 +91,8 @@ public:
 	CartesianPlot* getPlot(int index);
 	TreeModel* cursorModel();
 
-	void cursorModelPlotAdded(QString name);
-	void cursorModelPlotRemoved(QString name);
+	void cursorModelPlotAdded(const QString& name);
+	void cursorModelPlotRemoved(const QString& name);
 
 	BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
 	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
@@ -137,7 +137,7 @@ public slots:
 	void cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode);
 
 	// slots needed by the cursor
-	void updateCurveBackground(QPen pen, QString curveName);
+	void updateCurveBackground(const QPen&, const QString& curveName);
 	void updateCompleteCursorTreeModel();
 	void cursorPosChanged(int cursorNumber, double xPos);
 	void curveAdded(const XYCurve* curve);

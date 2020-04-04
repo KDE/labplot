@@ -81,7 +81,7 @@ public:
 	const QStringList& formulaVariableNames() const;
 	const QVector<Column*>& formulaVariableColumns() const;
 	const QStringList& formulaVariableColumnPaths() const;
-	void setformulVariableColumnsPath(int index, QString path);
+	void setformulVariableColumnsPath(int index, const QString& path);
 	void setformulVariableColumn(int index, Column *column);
 	bool formulaAutoUpdate() const;
 	void setFormula(const QString& formula, const QStringList& variableNames,
@@ -93,8 +93,8 @@ public:
 	//cell formulas
 	QString formula(int row) const;
 	QVector< Interval<int> > formulaIntervals() const;
-	void setFormula(Interval<int> i, QString formula);
-	void setFormula(int row, QString formula);
+	void setFormula(const Interval<int>& i, const QString& formula);
+	void setFormula(int row, const QString& formula);
 	void clearFormulas();
 
 	QString textAt(int row) const;

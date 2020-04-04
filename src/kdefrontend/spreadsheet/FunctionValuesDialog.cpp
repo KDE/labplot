@@ -118,7 +118,7 @@ FunctionValuesDialog::~FunctionValuesDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
+void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
 
 	//formula expression

@@ -1106,7 +1106,7 @@ const QStringList& ColumnPrivate::formulaVariableColumnPaths() const {
 	return m_formulaVariableColumnPaths;
 }
 
-void ColumnPrivate::setformulVariableColumnsPath(int index, QString path) {
+void ColumnPrivate::setformulVariableColumnsPath(int index, const QString& path) {
 	m_formulaVariableColumnPaths[index] = path;
 }
 
@@ -1229,14 +1229,14 @@ QVector< Interval<int> > ColumnPrivate::formulaIntervals() const {
 /**
  * \brief Set a formula string for an interval of rows
  */
-void ColumnPrivate::setFormula(Interval<int> i, QString formula) {
+void ColumnPrivate::setFormula(const Interval<int>& i, const QString& formula) {
 	m_formulas.setValue(i, formula);
 }
 
 /**
  * \brief Overloaded function for convenience
  */
-void ColumnPrivate::setFormula(int row, QString formula) {
+void ColumnPrivate::setFormula(int row, const QString& formula) {
 	setFormula(Interval<int>(row,row), formula);
 }
 

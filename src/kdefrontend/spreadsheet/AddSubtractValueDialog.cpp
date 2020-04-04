@@ -150,7 +150,7 @@ AddSubtractValueDialog::~AddSubtractValueDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void AddSubtractValueDialog::setColumns(QVector<Column*> columns) {
+void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
 
 	//depending on the current column mode, activate/deactivate the corresponding widgets
@@ -224,9 +224,8 @@ void AddSubtractValueDialog::setMatrices() {
  * from every column element.
  */
 
-QString AddSubtractValueDialog::getMessage(QString name)
-{
-	QString msg = "";
+QString AddSubtractValueDialog::getMessage(const QString& name) {
+	QString msg;
 	QString value = ui.leValue->text();
 	switch (m_operation) {
 	case Add:

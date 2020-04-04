@@ -403,7 +403,7 @@ const QStringList& Column::formulaVariableColumnPaths() const {
 	return d->formulaVariableColumnPaths();
 }
 
-void Column::setformulVariableColumnsPath(int index, const QString path) {
+void Column::setformulVariableColumnsPath(int index, const QString& path) {
 	d->setformulVariableColumnsPath(index, path);
 }
 
@@ -1937,7 +1937,7 @@ int Column::indexForValue(double x) const {
 
 		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount()))+1;
 
-		if ((mode == AbstractColumn::ColumnMode::Numeric || mode == AbstractColumn::ColumnMode::Integer || 
+		if ((mode == AbstractColumn::ColumnMode::Numeric || mode == AbstractColumn::ColumnMode::Integer ||
 					mode == AbstractColumn::ColumnMode::BigInt)) {
 			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);

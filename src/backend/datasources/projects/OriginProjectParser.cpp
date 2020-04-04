@@ -2041,7 +2041,7 @@ QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const 
 	return replacements;
 }
 
-QString OriginProjectParser::replaceSpecialChars(QString text) const {
+QString OriginProjectParser::replaceSpecialChars(const QString& text) const {
 	QString t = text;
 	for (const auto& r : charReplacementList())
 		t.replace(r.first, r.second);
@@ -2056,7 +2056,7 @@ QString OriginProjectParser::replaceSpecialChars(QString text) const {
  * https://www.originlab.com/doc/Origin-Help/TextOb-Prop-Text-tab
  * https://doc.qt.io/qt-5/richtext-html-subset.html
  */
-QString OriginProjectParser::parseOriginTags(const QString &str) const {
+QString OriginProjectParser::parseOriginTags(const QString& str) const {
 	DEBUG("parseOriginTags()");
 	DEBUG("	string: " << str.toStdString());
 	QDEBUG("	UTF8 string: " << str.toUtf8());

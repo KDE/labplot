@@ -2370,7 +2370,7 @@ void SpreadsheetView::goToCell() {
 }
 
 //! Open the sort dialog for the given columns
-void SpreadsheetView::sortDialog(QVector<Column*> cols) {
+void SpreadsheetView::sortDialog(const QVector<Column*>& cols) {
 	if (cols.isEmpty()) return;
 
 	for (auto* col : cols)

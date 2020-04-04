@@ -46,10 +46,10 @@ class FunctionValuesDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit FunctionValuesDialog(Spreadsheet* s, QWidget* parent = nullptr);
+	explicit FunctionValuesDialog(Spreadsheet*, QWidget* parent = nullptr);
 	~FunctionValuesDialog() override;
-	void setColumns(QVector<Column*>);
-	bool validVariableName(QLineEdit *le);
+	void setColumns(const QVector<Column*>&);
+	bool validVariableName(QLineEdit*);
 
 private:
 	Ui::FunctionValuesWidget ui;

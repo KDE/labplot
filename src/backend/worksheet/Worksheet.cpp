@@ -923,7 +923,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 	}
 }
 
-void Worksheet::cursorModelPlotAdded(QString name) {
+void Worksheet::cursorModelPlotAdded(const QString& name) {
 	Q_UNUSED(name);
 //	TreeModel* treeModel = cursorModel();
 //	int rowCount = treeModel->rowCount();
@@ -933,7 +933,7 @@ void Worksheet::cursorModelPlotAdded(QString name) {
 	updateCompleteCursorTreeModel();
 }
 
-void Worksheet::cursorModelPlotRemoved(QString name) {
+void Worksheet::cursorModelPlotRemoved(const QString& name) {
 	TreeModel* treeModel = cursorModel();
 	int rowCount = treeModel->rowCount();
 
@@ -1068,7 +1068,7 @@ void Worksheet::curveRemoved(const XYCurve* curve) {
  * @param pen Pen of the curve
  * @param curveName Curve name to find in treemodel
  */
-void Worksheet::updateCurveBackground(QPen pen, QString curveName) {
+void Worksheet::updateCurveBackground(const QPen& pen, const QString& curveName) {
 	const CartesianPlot* plot = static_cast<const CartesianPlot*>(QObject::sender());
 	TreeModel* treeModel = cursorModel();
 	int rowCount = treeModel->rowCount();
