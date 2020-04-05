@@ -2456,6 +2456,75 @@ void CartesianPlot::zoom(bool x, bool in) {
 	}
 }
 
+/*!
+ * helper function called in other shift*() functions
+ * and doing the actual change of the data ranges.
+ * @param x if set to \true the x-range is modified, the y-range for \c false
+ * @param leftOrDown the "shift left" for x or "shift dows" for y is performed if set to \c \true,
+ * "shift right" or "shift up" for \c false
+ */
+void CartesianPlot::shift(bool x, bool leftOrDown) {
+	Q_D(CartesianPlot);
+
+	double min;
+	double max;
+	double offset = 0.0;
+	double factor = 0.1;
+	if (x) {
+		min = d->xMin;
+		max = d->xMax;
+	} else {
+		min = d->yMin;
+		max = d->yMax;
+	}
+
+	if (leftOrDown)
+		factor *= -1.;
+
+	switch (d->xScale) {
+	case ScaleLinear: {
+		offset = (max - min) * factor;
+		min += offset;
+		max += offset;
+		break;
+	}
+	case ScaleLog10:
+	case ScaleLog10Abs: {
+		offset = (log10(max) - log10(min)) * factor;
+		min *= pow(10, offset);
+		max *= pow(10, offset);
+		break;
+	}
+	case ScaleLog2:
+	case ScaleLog2Abs: {
+		offset = (log2(max) - log2(min)) * factor;
+		min *= pow(2, offset);
+		max *= pow(2, offset);
+		break;
+	}
+	case ScaleLn:
+	case ScaleLnAbs: {
+		offset = (log10(max) - log10(min)) * factor;
+		min *= exp(offset);
+		max *= exp(offset);
+		break;
+	}
+	case ScaleSqrt:
+	case ScaleX2:
+		break;
+	}
+
+	if (!std::isnan(min) && !std::isnan(max) && std::isfinite(min) && std::isfinite(max)) {
+		if (x) {
+			d->xMin = min;
+			d->xMax = max;
+		} else {
+			d->yMin = min;
+			d->yMax = max;
+		}
+	}
+}
+
 void CartesianPlot::shiftLeftX() {
 	Q_D(CartesianPlot);
 
@@ -2463,9 +2532,7 @@ void CartesianPlot::shiftLeftX() {
 	setAutoScaleX(false);
 	setUndoAware(true);
 	d->curvesYMinMaxIsDirty = true;
-	double offsetX = (d->xMax-d->xMin)*0.1;
-	d->xMax -= offsetX;
-	d->xMin -= offsetX;
+	shift(true, true);
 
 	if (d->autoScaleY && scaleAutoY())
 		return;
@@ -2480,9 +2547,7 @@ void CartesianPlot::shiftRightX() {
 	setAutoScaleX(false);
 	setUndoAware(true);
 	d->curvesYMinMaxIsDirty = true;
-	double offsetX = (d->xMax-d->xMin)*0.1;
-	d->xMax += offsetX;
-	d->xMin += offsetX;
+	shift(true, false);
 
 	if (d->autoScaleY && scaleAutoY())
 		return;
@@ -2497,9 +2562,7 @@ void CartesianPlot::shiftUpY() {
 	setAutoScaleY(false);
 	setUndoAware(true);
 	d->curvesXMinMaxIsDirty = true;
-	double offsetY = (d->yMax-d->yMin)*0.1;
-	d->yMax += offsetY;
-	d->yMin += offsetY;
+	shift(false, false);
 
 	if (d->autoScaleX && scaleAutoX())
 		return;
@@ -2514,9 +2577,7 @@ void CartesianPlot::shiftDownY() {
 	setAutoScaleY(false);
 	setUndoAware(true);
 	d->curvesXMinMaxIsDirty = true;
-	double offsetY = (d->yMax-d->yMin)*0.1;
-	d->yMax -= offsetY;
-	d->yMin -= offsetY;
+	shift(false, true);
 
 	if (d->autoScaleX && scaleAutoX())
 		return;
