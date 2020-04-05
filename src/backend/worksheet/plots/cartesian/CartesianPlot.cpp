@@ -2396,19 +2396,22 @@ void CartesianPlot::zoom(bool x, bool in) {
 
 	double min;
 	double max;
+	CartesianPlot::Scale scale;
 	if (x) {
 		min = d->xMin;
 		max = d->xMax;
+		scale = d->xScale;
 	} else {
 		min = d->yMin;
 		max = d->yMax;
+		scale = d->yScale;
 	}
 
 	double factor = m_zoomFactor;
 	if (in)
 		factor = 1/factor;
 
-	switch (d->xScale) {
+	switch (scale) {
 	case ScaleLinear: {
 		double oldRange = max - min;
 		double newRange = (max - min) * factor;
@@ -2468,20 +2471,23 @@ void CartesianPlot::shift(bool x, bool leftOrDown) {
 
 	double min;
 	double max;
+	CartesianPlot::Scale scale;
 	double offset = 0.0;
 	double factor = 0.1;
 	if (x) {
 		min = d->xMin;
 		max = d->xMax;
+		scale = d->xScale;
 	} else {
 		min = d->yMin;
 		max = d->yMax;
+		scale = d->yScale;
 	}
 
 	if (leftOrDown)
 		factor *= -1.;
 
-	switch (d->xScale) {
+	switch (scale) {
 	case ScaleLinear: {
 		offset = (max - min) * factor;
 		min += offset;
@@ -3093,7 +3099,6 @@ void CartesianPlotPrivate::setZoomSelectionBandShow(bool show) {
 }
 
 void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-
 	if (mouseMode == CartesianPlot::SelectionMode) {
 		if (panningStarted && dataRect.contains(event->pos()) ) {
 			//don't retransform on small mouse movement deltas
@@ -3104,12 +3109,74 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 			const QPointF logicalEnd = cSystem->mapSceneToLogical(event->pos());
 			const QPointF logicalStart = cSystem->mapSceneToLogical(m_panningStart);
-			const float deltaX = (logicalStart.x() - logicalEnd.x());
-			const float deltaY = (logicalStart.y() - logicalEnd.y());
-			xMax += deltaX;
-			xMin += deltaX;
-			yMax += deltaY;
-			yMin += deltaY;
+
+			//handle the change in x
+			switch (xScale) {
+			case CartesianPlot::ScaleLinear: {
+				const float deltaX = (logicalStart.x() - logicalEnd.x());
+				xMax += deltaX;
+				xMin += deltaX;
+				break;
+			}
+			case CartesianPlot::ScaleLog10:
+			case CartesianPlot::ScaleLog10Abs: {
+				const float deltaX = log10(logicalStart.x()) - log10(logicalEnd.x());
+				xMin *= pow(10, deltaX);
+				xMax *= pow(10, deltaX);
+				break;
+			}
+			case CartesianPlot::ScaleLog2:
+			case CartesianPlot::ScaleLog2Abs: {
+				const float deltaX = log2(logicalStart.x()) - log2(logicalEnd.x());
+				xMin *= pow(2, deltaX);
+				xMax *= pow(2, deltaX);
+				break;
+			}
+			case CartesianPlot::ScaleLn:
+			case CartesianPlot::ScaleLnAbs: {
+				const float deltaX = log(logicalStart.x()) - log(logicalEnd.x());
+				xMin *= exp(deltaX);
+				xMax *= exp(deltaX);
+				break;
+			}
+			case CartesianPlot::ScaleSqrt:
+			case CartesianPlot::ScaleX2:
+				break;
+			}
+
+			//handle the change in y
+			switch (yScale) {
+			case CartesianPlot::ScaleLinear: {
+				const float deltaY = (logicalStart.y() - logicalEnd.y());
+				yMax += deltaY;
+				yMin += deltaY;
+				break;
+			}
+			case CartesianPlot::ScaleLog10:
+			case CartesianPlot::ScaleLog10Abs: {
+				const float deltaY = log10(logicalStart.y()) - log10(logicalEnd.y());
+				yMin *= pow(10, deltaY);
+				yMax *= pow(10, deltaY);
+				break;
+			}
+			case CartesianPlot::ScaleLog2:
+			case CartesianPlot::ScaleLog2Abs: {
+				const float deltaY = log2(logicalStart.y()) - log2(logicalEnd.y());
+				yMin *= pow(2, deltaY);
+				yMax *= pow(2, deltaY);
+				break;
+			}
+			case CartesianPlot::ScaleLn:
+			case CartesianPlot::ScaleLnAbs: {
+				const float deltaY = log(logicalStart.y()) - log(logicalEnd.y());
+				yMin *= exp(deltaY);
+				yMax *= exp(deltaY);
+				break;
+			}
+			case CartesianPlot::ScaleSqrt:
+			case CartesianPlot::ScaleX2:
+				break;
+			}
 
 			q->setUndoAware(false);
 			q->setAutoScaleX(false);
