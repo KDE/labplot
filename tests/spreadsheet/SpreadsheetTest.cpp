@@ -25,14 +25,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <QApplication>
-#include <QClipboard>
-#include <QUndoStack>
-
 #include "SpreadsheetTest.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/Project.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
+
+#include <QApplication>
+#include <QClipboard>
+#include <QUndoStack>
 
 void SpreadsheetTest::initTestCase() {
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");

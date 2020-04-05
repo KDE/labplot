@@ -38,7 +38,7 @@ class DatasetHandler;
 class Spreadsheet;
 class DatasetModel;
 
-class WelcomeScreenHelper:  public QObject {
+class WelcomeScreenHelper : public QObject {
     Q_OBJECT
 
 public:
@@ -92,7 +92,5 @@ signals:
     void datasetNotFound();
     void showFirstDataset();
 	void openExampleProject(QString);
-
-
 };
 #endif //WELCOMESCREENHELPER_H

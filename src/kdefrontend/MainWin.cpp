@@ -391,7 +391,8 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	if(m_welcomeScreenHelper)
 		delete m_welcomeScreenHelper;
 	m_welcomeScreenHelper = new WelcomeScreenHelper();
-	connect(m_welcomeScreenHelper, SIGNAL(openExampleProject(QString)), this, SLOT(openProject(const QString& )));
+	connect(m_welcomeScreenHelper, &WelcomeScreenHelper::openExampleProject,
+			this, QOverload<const QString&>::of(&MainWin::openProject));
 
 	ctxt->setContextProperty("datasetModel", m_welcomeScreenHelper->getDatasetModel());
 	ctxt->setContextProperty("helper", m_welcomeScreenHelper);
@@ -402,9 +403,9 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 
 	//connect qml's signals
 	QObject::connect(item, SIGNAL(recentProjectClicked(QUrl)), this, SLOT(openRecentProject(QUrl)));
-	QObject::connect(item, SIGNAL(datasetClicked(QString, QString, QString)), m_welcomeScreenHelper, SLOT(datasetClicked(const QString&, const QString&, const QString&)));
+	QObject::connect(item, SIGNAL(datasetClicked(QString,QString,QString)), m_welcomeScreenHelper, SLOT(datasetClicked(QString,QString,QString)));
 	QObject::connect(item, SIGNAL(openDataset()), this, SLOT(openDatasetExample()));
-	QObject::connect(item, SIGNAL(openExampleProject(QString)), m_welcomeScreenHelper, SLOT(exampleProjectClicked(const QString&)));
+	QObject::connect(item, SIGNAL(openExampleProject(QString)), m_welcomeScreenHelper, SLOT(exampleProjectClicked(QString)));
 	emit m_welcomeScreenHelper->showFirstDataset();
 
 	return quickWidget;
@@ -1459,7 +1460,7 @@ bool MainWin::saveProjectAs() {
  * auxiliary function that does the actual saving of the project
  */
 bool MainWin::save(const QString& fileName) {
-	QTemporaryFile tempFile(QDir::tempPath() + "/" + QLatin1String("labplot_save_XXXXXX"));
+	QTemporaryFile tempFile(QDir::tempPath() + QLatin1Char('/') + QLatin1String("labplot_save_XXXXXX"));
 	if (!tempFile.open()) {
 		KMessageBox::error(this, i18n("Couldn't open the temporary file for writing."));
 		return false;

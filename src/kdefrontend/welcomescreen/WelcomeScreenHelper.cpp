@@ -50,8 +50,8 @@
 
 \ingroup kdefrontend
 */
-WelcomeScreenHelper::WelcomeScreenHelper() {
-	m_datasetWidget = new ImportDatasetWidget(0);
+WelcomeScreenHelper::WelcomeScreenHelper() : m_datasetWidget(new ImportDatasetWidget(0)) {
+	;
 	m_datasetWidget->hide();
 
 	QIcon icon = QIcon::fromTheme("labplot-maximize");
@@ -74,7 +74,7 @@ WelcomeScreenHelper::~WelcomeScreenHelper() {
 	conf.writeEntry("width_count", widthCount);
 	int currentWidthIndex = 0;
 
-	for(auto item = m_widthScale.begin(); item != m_widthScale.end() && currentWidthIndex < widthCount; item++) {
+	for(auto item = m_widthScale.begin(); item != m_widthScale.end() && currentWidthIndex < widthCount; ++item) {
 		conf.writeEntry("widthName_" + QString::number(currentWidthIndex), item.key());
 		conf.writeEntry("widthValue_" + QString::number(currentWidthIndex), QString::number(item.value()));
 		currentWidthIndex++;
@@ -84,7 +84,7 @@ WelcomeScreenHelper::~WelcomeScreenHelper() {
 	conf.writeEntry("height_count", widthCount);
 	int currentHeightIndex = 0;
 
-	for(auto item = m_heightScale.begin(); item != m_heightScale.end() && currentHeightIndex < heightCount; item++) {
+	for(auto item = m_heightScale.begin(); item != m_heightScale.end() && currentHeightIndex < heightCount; ++item) {
 		conf.writeEntry("heightName_" + QString::number(currentHeightIndex), item.key());
 		conf.writeEntry("heightValue_" + QString::number(currentHeightIndex), QString::number(item.value()));
 		currentHeightIndex++;
@@ -338,7 +338,7 @@ QVariant WelcomeScreenHelper::searchExampleProjects(const QString& searchtext) {
 	QStringList results;
 
 	//search based on tags
-	for(auto tag = m_tagMap.begin(); tag != m_tagMap.end(); tag++) {
+	for(auto tag = m_tagMap.begin(); tag != m_tagMap.end(); ++tag) {
 		if (tag.key().contains(searchtext)) {
 			for(QString example : tag.value()) {
 				if(!results.contains(example))

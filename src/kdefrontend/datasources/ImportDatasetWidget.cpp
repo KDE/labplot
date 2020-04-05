@@ -173,9 +173,9 @@ void ImportDatasetWidget::loadCategories() {
 		m_model = new DatasetModel(m_datasetsMap);
 
 		//Fill up collections combo box
-		ui.cbCollections->addItem(i18n("All") + QString(" (" + QString::number(m_model->allDatasetsList().toStringList().size()) + ")"));
-		for (QString collection : m_model->collections())
-			ui.cbCollections->addItem(collection + " (" + QString::number(m_model->datasetCount(collection)) + ")", collection);
+		ui.cbCollections->addItem(i18n("All") + QLatin1String(" (") + QString::number(m_model->allDatasetsList().toStringList().size()) + QLatin1Char(')'));
+		for (const QString& collection : m_model->collections())
+			ui.cbCollections->addItem(collection + QLatin1String(" (") + QString::number(m_model->datasetCount(collection)) + QLatin1Char(')'), collection);
 
 		collectionChanged(ui.cbCollections->currentIndex());
 	} else
