@@ -1641,14 +1641,14 @@ void XYCurvePrivate::updateDropLines() {
 		for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
-			lines.append( QLineF(point, QPointF(point.x(), dynamic_cast<const Column*>(yColumn)->minimum())) );
+			lines.append( QLineF(point, QPointF(point.x(), yColumn->minimum())) );
 		}
 		break;
 	case XYCurve::DropLineXMaxBaseline:
 		for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
-			lines.append( QLineF(point, QPointF(point.x(), dynamic_cast<const Column*>(yColumn)->maximum())) );
+			lines.append( QLineF(point, QPointF(point.x(), yColumn->maximum())) );
 		}
 		break;
 	}
@@ -2305,6 +2305,8 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 
 		if (index >= 1)
 			index --; // use one before so it is secured that I'm before point.x()
+		else if (index == -1)
+			return false;
 
 		double xMaxSquare = mouseScenePos.x() + maxDist;
 		bool stop = false;

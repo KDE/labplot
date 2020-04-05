@@ -828,9 +828,12 @@ void Worksheet::cartesianPlotMouseMoveCursorMode(int cursorNumber, QPointF logic
 void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 	if (d->suppressCursorPosChanged)
 		return;
-	TreeModel* treeModel = cursorModel();
 
 	auto* sender = dynamic_cast<CartesianPlot*>(QObject::sender());
+	if (!sender)
+		return;
+
+	TreeModel* treeModel = cursorModel();
 
 	// if ApplyActionToSelection, each plot has it's own x value
 	if (cartesianPlotCursorMode() == Worksheet::ApplyActionToAll) {

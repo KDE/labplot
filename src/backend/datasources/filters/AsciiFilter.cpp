@@ -2062,25 +2062,24 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 	}
 
 	MQTTTopic* spreadsheet = dynamic_cast<MQTTTopic*>(dataSource);
+	if (!spreadsheet)
+		return;
 
 	const int keepNValues = spreadsheet->mqttClient()->keepNValues();
 
 	if (!m_prepared) {
-		qDebug()<<"Start preparing filter for: " << spreadsheet->topicName();
+		DEBUG("Start preparing filter for: " << spreadsheet->topicName().toStdString());
 
 		//Prepare the filter
 		const int mqttPrepareError = prepareToRead(message);
 		if (mqttPrepareError != 0) {
 			DEBUG("Mqtt Prepare Error = " << mqttPrepareError);
-			qDebug()<<mqttPrepareError<<"  itt van baj mqttPrepareError";
 			return;
 		}
 
 		// prepare import for spreadsheet
 		spreadsheet->setUndoAware(false);
 		spreadsheet->resize(AbstractFileFilter::Replace, vectorNames, m_actualCols);
-		qDebug() << "fds resized to col: " << m_actualCols;
-		qDebug() << "fds rowCount: " << spreadsheet->rowCount();
 
 		//columns in a MQTTTopic don't have any manual changes.
 		//make the available columns undo unaware and suppress the "data changed" signal.
@@ -2709,7 +2708,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 			//determine the plots where the column is consumed
 			for (const auto* curve : curves) {
 				if (curve->xColumn() == column || curve->yColumn() == column) {
-					CartesianPlot* plot = dynamic_cast<CartesianPlot*>(curve->parentAspect());
+					CartesianPlot* plot = static_cast<CartesianPlot*>(curve->parentAspect());
 					if (plots.indexOf(plot) == -1) {
 						plots << plot;
 						plot->setSuppressDataChangedSignal(true);

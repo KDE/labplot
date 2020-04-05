@@ -303,12 +303,13 @@ void ProjectImportTest::testOrigin04() {
 	QCOMPARE(spreadsheet != nullptr, true);
 
 	//the (0,0)-cell has the value 1.0
-	if (spreadsheet != nullptr)
+	if (spreadsheet != nullptr) {
 		QCOMPARE(spreadsheet->column(0)->valueAt(0), 1.0);
 
-	//set the value to 5.0
-	spreadsheet->column(0)->setValueAt(0, 5.0);
-	QCOMPARE(spreadsheet->column(0)->valueAt(0), 5.0);
+		//set the value to 5.0
+		spreadsheet->column(0)->setValueAt(0, 5.0);
+		QCOMPARE(spreadsheet->column(0)->valueAt(0), 5.0);
+	}
 
 	//re-import
 	parser.importTo(&project, selectedPathes);

@@ -57,13 +57,13 @@ private:
 	CantorWorksheet* m_worksheet;
 	KParts::ReadWritePart* m_part{nullptr};
 
-	QAction* m_evaluateEntryAction;
-	QAction* m_insertCommandEntryAction;
-	QAction* m_insertTextEntryAction;
+	QAction* m_evaluateEntryAction{nullptr};
+	QAction* m_insertCommandEntryAction{nullptr};
+	QAction* m_insertTextEntryAction{nullptr};
 	QAction* m_insertMarkdownEntryAction{nullptr};
-	QAction* m_insertLatexEntryAction;
-	QAction* m_insertPageBreakAction;
-	QAction* m_removeCurrentEntryAction;
+	QAction* m_insertLatexEntryAction{nullptr};
+	QAction* m_insertPageBreakAction{nullptr};
+	QAction* m_removeCurrentEntryAction{nullptr};
 	QAction* m_computeEigenvectorsAction{nullptr};
 	QAction* m_createMatrixAction{nullptr};
 	QAction* m_computeEigenvaluesAction{nullptr};
@@ -71,17 +71,17 @@ private:
 	QAction* m_differentiationAction{nullptr};
 	QAction* m_integrationAction{nullptr};
 	QAction* m_solveEquationsAction{nullptr};
-	QAction* m_restartBackendAction;
-	QAction* m_evaluateWorsheetAction;
-	QAction* m_zoomIn;
-	QAction* m_zoomOut;
-	QAction* m_find;
-	QAction* m_replace;
-	QAction* m_syntaxHighlighting;
-	QAction* m_lineNumbers;
-	QAction* m_animateWorksheet;
-	QAction* m_latexTypesetting;
-	QAction* m_showCompletion;
+	QAction* m_restartBackendAction{nullptr};
+	QAction* m_evaluateWorsheetAction{nullptr};
+	QAction* m_zoomIn{nullptr};
+	QAction* m_zoomOut{nullptr};
+	QAction* m_find{nullptr};
+	QAction* m_replace{nullptr};
+	QAction* m_syntaxHighlighting{nullptr};
+	QAction* m_lineNumbers{nullptr};
+	QAction* m_animateWorksheet{nullptr};
+	QAction* m_latexTypesetting{nullptr};
+	QAction* m_showCompletion{nullptr};
 
 	QMenu* m_worksheetMenu{nullptr};
 	QMenu* m_linearAlgebraMenu{nullptr};

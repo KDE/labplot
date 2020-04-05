@@ -1712,11 +1712,13 @@ void CartesianPlot::xDataChanged() {
 	//in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
 	if (children<XYCurve>().size() == 1) {
 		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
-		const AbstractColumn* col = curve->xColumn();
-		if (col->columnMode() == AbstractColumn::DateTime && d->xRangeFormat != CartesianPlot::DateTime) {
-			setUndoAware(false);
-			setXRangeFormat(CartesianPlot::DateTime);
-			setUndoAware(true);
+		if (curve) {
+			const AbstractColumn* col = curve->xColumn();
+			if (col->columnMode() == AbstractColumn::DateTime && d->xRangeFormat != CartesianPlot::DateTime) {
+				setUndoAware(false);
+				setXRangeFormat(CartesianPlot::DateTime);
+				setUndoAware(true);
+			}
 		}
 	}
 	emit curveDataChanged(dynamic_cast<XYCurve*>(QObject::sender()));
@@ -1756,11 +1758,13 @@ void CartesianPlot::yDataChanged() {
 	//in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
 	if (children<XYCurve>().size() == 1) {
 		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
-		const AbstractColumn* col = curve->yColumn();
-		if (col->columnMode() == AbstractColumn::DateTime && d->xRangeFormat != CartesianPlot::DateTime) {
-			setUndoAware(false);
-			setYRangeFormat(CartesianPlot::DateTime);
-			setUndoAware(true);
+		if (curve) {
+			const AbstractColumn* col = curve->yColumn();
+			if (col->columnMode() == AbstractColumn::DateTime && d->xRangeFormat != CartesianPlot::DateTime) {
+				setUndoAware(false);
+				setYRangeFormat(CartesianPlot::DateTime);
+				setUndoAware(true);
+			}
 		}
 	}
 	emit curveDataChanged(dynamic_cast<XYCurve*>(QObject::sender()));

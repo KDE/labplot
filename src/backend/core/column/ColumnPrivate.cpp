@@ -1151,8 +1151,7 @@ void ColumnPrivate::updateFormula() {
 	if (valid) {
 		//resize the spreadsheet if one of the data vectors from
 		//other spreadsheet(s) has more elements than the parent spreadsheet
-		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(m_owner->parentAspect());
-		Q_ASSERT(spreadsheet);
+		Spreadsheet* spreadsheet = static_cast<Spreadsheet*>(m_owner->parentAspect());
 		if (spreadsheet->rowCount() < maxRowCount)
 			spreadsheet->setRowCount(maxRowCount);
 
