@@ -447,7 +447,7 @@ void CartesianPlotDock::retranslateUi() {
 	ui.cbYRangeFormat->addItem(i18n("numeric"));
 	ui.cbYRangeFormat->addItem(i18n("datetime"));
 
-	ui.cbXScaling->addItem( i18n("Linear") );
+	ui.cbXScaling->addItem( i18n("linear") );
 	ui.cbXScaling->addItem( i18n("log(x)") );
 	ui.cbXScaling->addItem( i18n("log2(x)") );
 	ui.cbXScaling->addItem( i18n("ln(x)") );
