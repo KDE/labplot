@@ -30,7 +30,7 @@
 #include "MainWin.h"
 #include "SettingsGeneralPage.h"
 #include "SettingsDatasetsPage.h"
-#include "SettingsWelcomePage.h"
+// #include "SettingsWelcomePage.h"
 #include "SettingsWorksheetPage.h"
 
 #include <QPushButton>
@@ -77,10 +77,10 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 	KPageWidgetItem* datasetsFrame = addPage(m_datasetsPage, i18n("Datasets"));
 	datasetsFrame->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
 
-	m_welcomePage = new SettingsWelcomePage(this);
-	KPageWidgetItem* welcomeFrame = addPage(m_welcomePage, i18n("Welcome Screen"));
-	welcomeFrame->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
-	connect(m_welcomePage, &SettingsWelcomePage::resetWelcomeScreen, this, &SettingsDialog::resetWelcomeScreen);
+// 	m_welcomePage = new SettingsWelcomePage(this);
+// 	KPageWidgetItem* welcomeFrame = addPage(m_welcomePage, i18n("Welcome Screen"));
+// 	welcomeFrame->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
+// 	connect(m_welcomePage, &SettingsWelcomePage::resetWelcomeScreen, this, &SettingsDialog::resetWelcomeScreen);
 
 #ifdef HAVE_KUSERFEEDBACK
 	auto* mainWin = static_cast<MainWin*>(parent);

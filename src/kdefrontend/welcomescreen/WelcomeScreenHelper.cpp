@@ -51,7 +51,6 @@
 \ingroup kdefrontend
 */
 WelcomeScreenHelper::WelcomeScreenHelper() : m_datasetWidget(new ImportDatasetWidget(0)) {
-	;
 	m_datasetWidget->hide();
 
 	QIcon icon = QIcon::fromTheme("labplot-maximize");

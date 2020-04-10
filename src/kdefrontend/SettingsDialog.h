@@ -33,7 +33,7 @@
 class QAbstractButton;
 class SettingsGeneralPage;
 class SettingsWorksheetPage;
-class SettingsWelcomePage;
+// class SettingsWelcomePage;
 class SettingsDatasetsPage;
 
 #ifdef HAVE_KUSERFEEDBACK
@@ -57,7 +57,7 @@ private:
 	bool m_changed{false};
 	SettingsGeneralPage* m_generalPage;
 	SettingsWorksheetPage* m_worksheetPage;
-	SettingsWelcomePage* m_welcomePage;
+// 	SettingsWelcomePage* m_welcomePage;
 	SettingsDatasetsPage* m_datasetsPage;
 
 #ifdef HAVE_KUSERFEEDBACK

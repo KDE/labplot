@@ -79,7 +79,7 @@
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 #include "DatasetModel.h"
-#include "welcomescreen/WelcomeScreenHelper.h"
+// #include "welcomescreen/WelcomeScreenHelper.h"
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/ApplicationVersionSource>
@@ -107,12 +107,12 @@
 #include <QStatusBar>
 #include <QTemporaryFile>
 #include <QTimeLine>
-#include <QtWidgets>
-#include <QtQuickWidgets/QQuickWidget>
-#include <QQuickItem>
-#include <QQuickView>
-#include <QQmlApplicationEngine>
-#include <QQmlContext>
+// #include <QtWidgets>
+// #include <QtQuickWidgets/QQuickWidget>
+// #include <QQuickItem>
+// #include <QQuickView>
+// #include <QQmlApplicationEngine>
+// #include <QQmlContext>
 
 #include <KActionCollection>
 #include <KConfigGroup>
@@ -187,13 +187,13 @@ MainWin::~MainWin() {
 	KSharedConfig::openConfig()->sync();
 
 	//if welcome screen is shown, save its settings prior to deleting it
-	if(dynamic_cast<QQuickWidget*>(centralWidget()))
-		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
+// 	if(dynamic_cast<QQuickWidget*>(centralWidget()))
+// 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
 
 	if (m_project) {
 
-		if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr)
-			m_mdiArea->closeAllSubWindows();
+// 		if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr)
+// 			m_mdiArea->closeAllSubWindows();
 
 		disconnect(m_project, nullptr, this, nullptr);
 		delete m_project;
@@ -205,8 +205,8 @@ MainWin::~MainWin() {
 	if (m_guiObserver)
 		delete m_guiObserver;
 
-	if(m_welcomeScreenHelper)
-		delete m_welcomeScreenHelper;
+// 	if(m_welcomeScreenHelper)
+// 		delete m_welcomeScreenHelper;
 }
 
 void MainWin::showPresenter() {
@@ -350,9 +350,9 @@ void MainWin::initGUI(const QString& fileName) {
 
 			updateGUIOnProjectChanges();
 		} else{ //welcome screen
-			m_showWelcomeScreen = true;
-			m_welcomeWidget = createWelcomeScreen();
-			setCentralWidget(m_welcomeWidget);
+// 			m_showWelcomeScreen = true;
+// 			m_welcomeWidget = createWelcomeScreen();
+// 			setCentralWidget(m_welcomeWidget);
 		}
 	}
 
@@ -367,6 +367,7 @@ void MainWin::initGUI(const QString& fileName) {
 /**
  * @brief Creates a new welcome screen to be set as central widget.
  */
+/*
 QQuickWidget* MainWin::createWelcomeScreen() {
 	QSize maxSize = qApp->primaryScreen()->availableSize();
 	resize(maxSize);
@@ -410,14 +411,16 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 
 	return quickWidget;
 }
-
+*/
 /**
  * @brief Initiates resetting the layout of the welcome screen
  */
+/*
 void MainWin::resetWelcomeScreen() {
 	if(dynamic_cast<QQuickWidget*>(centralWidget()))
 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "restoreOriginalLayout");
 }
+*/
 
 /**
  * @brief Creates a new MDI area, to replace the Welcome Screen as central widget
@@ -428,8 +431,8 @@ void MainWin::createMdiArea() {
 		toolbar->setVisible(true);
 
 	//Save welcome screen's dimensions.
-	if(m_showWelcomeScreen)
-		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
+// 	if(m_showWelcomeScreen)
+// 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
 
 	m_mdiArea = new QMdiArea;
 	setCentralWidget(m_mdiArea);
@@ -1080,10 +1083,10 @@ bool MainWin::newProject() {
 	if (!closeProject())
 		return false;
 
-	if(dynamic_cast<QQuickWidget*>(centralWidget())) {
-		createMdiArea();
-		setCentralWidget(m_mdiArea);
-	}
+// 	if(dynamic_cast<QQuickWidget*>(centralWidget())) {
+// 		createMdiArea();
+// 		setCentralWidget(m_mdiArea);
+// 	}
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
@@ -1201,10 +1204,10 @@ void MainWin::openProject(const QString& filename) {
 		return;
 	}
 
-	if(dynamic_cast<QQuickWidget*>(centralWidget())) {
-		createMdiArea();
-		setCentralWidget(m_mdiArea);
-	}
+// 	if(dynamic_cast<QQuickWidget*>(centralWidget())) {
+// 		createMdiArea();
+// 		setCentralWidget(m_mdiArea);
+// 	}
 
 	if (!newProject())
 		return;
@@ -1368,10 +1371,10 @@ void MainWin::openProject(const QString& filename) {
 }
 
 void MainWin::openRecentProject(const QUrl& url) {
-	if(dynamic_cast<QQuickWidget*>(centralWidget())) {
-		createMdiArea();
-		setCentralWidget(m_mdiArea);
-	}
+// 	if(dynamic_cast<QQuickWidget*>(centralWidget())) {
+// 		createMdiArea();
+// 		setCentralWidget(m_mdiArea);
+// 	}
 
 	if (url.isLocalFile())	// fix for Windows
 		this->openProject(url.toLocalFile());
@@ -1390,10 +1393,10 @@ bool MainWin::closeProject() {
 		return false;
 
 	if(!m_closing) {
-		if(dynamic_cast<QQuickWidget*>(centralWidget()) && m_showWelcomeScreen) {
-			m_welcomeWidget = createWelcomeScreen();
-			setCentralWidget(m_welcomeWidget);
-		}
+// 		if(dynamic_cast<QQuickWidget*>(centralWidget()) && m_showWelcomeScreen) {
+// 			m_welcomeWidget = createWelcomeScreen();
+// 			setCentralWidget(m_welcomeWidget);
+// 		}
 	}
 
 	m_projectClosing = true;
@@ -1664,8 +1667,8 @@ void MainWin::newNotes() {
 	Otherwise returns \c 0.
 */
 Spreadsheet* MainWin::activeSpreadsheet() const {
-	if(dynamic_cast<QQuickWidget*>(centralWidget()))
-		return nullptr;
+// 	if(dynamic_cast<QQuickWidget*>(centralWidget()))
+// 		return nullptr;
 
 	if (!m_currentAspect)
 		return nullptr;
@@ -2135,25 +2138,25 @@ void MainWin::dropEvent(QDropEvent* event) {
 void MainWin::handleSettingsChanges() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group( "Settings_General" );
 
-	if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr) {
-		QMdiArea::ViewMode viewMode = QMdiArea::ViewMode(group.readEntry("ViewMode", 0));
-		if (m_mdiArea->viewMode() != viewMode) {
-			m_mdiArea->setViewMode(viewMode);
-			if (viewMode == QMdiArea::SubWindowView)
-				this->updateMdiWindowVisibility();
-		}
-
-		if (m_mdiArea->viewMode() == QMdiArea::TabbedView) {
-			m_tileWindowsAction->setVisible(false);
-			m_cascadeWindowsAction->setVisible(false);
-			QTabWidget::TabPosition tabPosition = QTabWidget::TabPosition(group.readEntry("TabPosition", 0));
-			if (m_mdiArea->tabPosition() != tabPosition)
-				m_mdiArea->setTabPosition(tabPosition);
-		} else {
-			m_tileWindowsAction->setVisible(true);
-			m_cascadeWindowsAction->setVisible(true);
-		}
-	}
+// 	if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr) {
+// 		QMdiArea::ViewMode viewMode = QMdiArea::ViewMode(group.readEntry("ViewMode", 0));
+// 		if (m_mdiArea->viewMode() != viewMode) {
+// 			m_mdiArea->setViewMode(viewMode);
+// 			if (viewMode == QMdiArea::SubWindowView)
+// 				this->updateMdiWindowVisibility();
+// 		}
+//
+// 		if (m_mdiArea->viewMode() == QMdiArea::TabbedView) {
+// 			m_tileWindowsAction->setVisible(false);
+// 			m_cascadeWindowsAction->setVisible(false);
+// 			QTabWidget::TabPosition tabPosition = QTabWidget::TabPosition(group.readEntry("TabPosition", 0));
+// 			if (m_mdiArea->tabPosition() != tabPosition)
+// 				m_mdiArea->setTabPosition(tabPosition);
+// 		} else {
+// 			m_tileWindowsAction->setVisible(true);
+// 			m_cascadeWindowsAction->setVisible(true);
+// 		}
+// 	}
 
 	//autosave
 	bool autoSave = group.readEntry("AutoSave", 0);
@@ -2208,7 +2211,7 @@ void MainWin::handleSettingsChanges() {
 
 void MainWin::openDatasetExample() {
 	newProject();
-	addAspectToProject(m_welcomeScreenHelper->releaseConfiguredSpreadsheet());
+// 	addAspectToProject(m_welcomeScreenHelper->releaseConfiguredSpreadsheet());
 }
 
 /***************************************************************************************/
@@ -2419,7 +2422,7 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 void MainWin::settingsDialog() {
 	auto* dlg = new SettingsDialog(this);
 	connect (dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
-	connect (dlg, &SettingsDialog::resetWelcomeScreen, this, &MainWin::resetWelcomeScreen);
+// 	connect (dlg, &SettingsDialog::resetWelcomeScreen, this, &MainWin::resetWelcomeScreen);
 	dlg->exec();
 }
 

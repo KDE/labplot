@@ -20,12 +20,12 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/SettingsDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
 	${KDEFRONTEND_DIR}/SettingsWorksheetPage.cpp
-	${KDEFRONTEND_DIR}/SettingsWelcomePage.cpp
+# 	${KDEFRONTEND_DIR}/SettingsWelcomePage.cpp
 	${KDEFRONTEND_DIR}/SettingsDatasetsPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPage.h
 	${KDEFRONTEND_DIR}/TemplateHandler.cpp
 	${KDEFRONTEND_DIR}/ThemeHandler.cpp
-	${KDEFRONTEND_DIR}/welcomescreen/WelcomeScreenHelper.cpp
+# 	${KDEFRONTEND_DIR}/welcomescreen/WelcomeScreenHelper.cpp
 	${KDEFRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerDialog.cpp
@@ -129,7 +129,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/labelwidget.ui
 	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsworksheetpage.ui
-	${KDEFRONTEND_DIR}/ui/settingswelcomepage.ui
+# 	${KDEFRONTEND_DIR}/ui/settingswelcomepage.ui
 	${KDEFRONTEND_DIR}/ui/settingsdatasetspage.ui
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
@@ -326,7 +326,7 @@ if (Qt5Mqtt_FOUND)
 endif()
 
 # add the qml.qrc file
-qt5_add_resources(qml_QRC ${KDEFRONTEND_DIR}/welcomescreen/qml.qrc)
+# qt5_add_resources(qml_QRC ${KDEFRONTEND_DIR}/welcomescreen/qml.qrc)
 
 IF (ENABLE_LIBORIGIN)
 	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
@@ -440,9 +440,9 @@ target_link_libraries( labplot2lib
 	Qt5::Network
 	Qt5::PrintSupport
 	Qt5::Sql
-	Qt5::Qml
-	Qt5::Quick
-	Qt5::QuickWidgets
+# 	Qt5::Qml
+# 	Qt5::Quick
+# 	Qt5::QuickWidgets
 	${GSL_LIBRARIES}
 	${GSL_CBLAS_LIBRARIES} )
 
