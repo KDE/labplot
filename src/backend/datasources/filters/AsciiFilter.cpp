@@ -528,15 +528,21 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	QStringList firstLineStringList;
 	if (separatingCharacter == "auto") {
 		DEBUG("automatic separator");
-		const QRegularExpression regExp(QStringLiteral("[,;:]?\\s+"));
-		firstLineStringList = firstLine.split(regExp, (QString::SplitBehavior)skipEmptyParts);
+		if (firstLine.indexOf(QLatin1Char('\t')) != -1) {
+			//in case we have a mix of tabs and spaces in the header, give the tab character the preference
+			m_separator = QLatin1Char('\t');
+			firstLineStringList = firstLine.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
+		} else {
+			const QRegularExpression regExp(QStringLiteral("[,;:]?\\s+"));
+			firstLineStringList = firstLine.split(regExp, (QString::SplitBehavior)skipEmptyParts);
 
-		if (!firstLineStringList.isEmpty()) {
-			int length1 = firstLineStringList.at(0).length();
-			if (firstLineStringList.size() > 1)
-				m_separator = firstLine.mid(length1, 1);
-			else
-				m_separator = ' ';
+			if (!firstLineStringList.isEmpty()) {
+				int length1 = firstLineStringList.at(0).length();
+				if (firstLineStringList.size() > 1)
+					m_separator = firstLine.mid(length1, 1);
+				else
+					m_separator = ' ';
+			}
 		}
 	} else {	// use given separator
 		// replace symbolic "TAB" with '\t'

@@ -388,9 +388,6 @@ void AsciiFilterTest::testHeader07() {
  * be properly recognized and used.
  */
 void AsciiFilterTest::testHeader08() {
-	//TODO: this test fails at the moment.
-	return;
-
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
 	const QString fileName = m_dataDir + "separator_tab_with_header_with_spaces.txt";
