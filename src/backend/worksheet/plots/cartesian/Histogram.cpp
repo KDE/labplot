@@ -875,12 +875,12 @@ void HistogramPrivate::recalcHistogram() {
 			m_bins = (size_t) 1 + log2(count);
 			break;
 		case Histogram::Doane: {
-			const double skewness = dynamic_cast<const Column*>(dataColumn)->statistics().skewness;
+			const double skewness = static_cast<const Column*>(dataColumn)->statistics().skewness;
 			m_bins = (size_t)( 1 + log2(count) + log2(1 + abs(skewness)/sqrt((double)6*(count-2)/(count+1)/(count+3))) );
 			break;
 		}
 		case Histogram::Scott: {
-			const double sigma = dynamic_cast<const Column*>(dataColumn)->statistics().standardDeviation;
+			const double sigma = static_cast<const Column*>(dataColumn)->statistics().standardDeviation;
 			const double width = 3.5*sigma/cbrt(count);
 			DEBUG("blablub " << sigma << "  " << width << "  " <<(binRangesMax - binRangesMin)/width);
 			m_bins = (size_t)(binRangesMax - binRangesMin)/width;
@@ -940,9 +940,8 @@ void HistogramPrivate::updateLines() {
 		horizontalHistogram();
 
 	//map the lines and the symbol positions to the scene coordinates
-	const auto* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
-	const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
-	Q_ASSERT(cSystem);
+	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
+	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 	lines = cSystem->mapLogicalToScene(lines);
 	visiblePoints = std::vector<bool>(pointsLogical.count(), false);
 	cSystem->mapLogicalToScene(pointsLogical, pointsScene, visiblePoints);
@@ -1221,7 +1220,7 @@ void HistogramPrivate::updateFilling() {
 	}
 
 	QVector<QLineF> fillLines;
-	const auto* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
 	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
 
 	//if there're no interpolation lines available (Histogram::NoLine selected), create line-interpolation,
@@ -1521,7 +1520,7 @@ void HistogramPrivate::drawFilling(QPainter* painter) {
 }
 
 void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	const auto* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
 	if (plot->mouseMode() == CartesianPlot::SelectionMode && !isSelected()) {
 		m_hovered = true;
 		emit q->hovered();
@@ -1530,7 +1529,7 @@ void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 }
 
 void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	const auto* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
 	if (plot->mouseMode() == CartesianPlot::SelectionMode && m_hovered) {
 		m_hovered = false;
 		emit q->unhovered();
@@ -1745,7 +1744,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("XYCurve");
 
 	int index = parentAspect()->indexOfChild<Histogram>(this);
-	const auto* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
+	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	QColor themeColor;
 	if (index<plot->themeColorPalette().size())
 		themeColor = plot->themeColorPalette().at(index);

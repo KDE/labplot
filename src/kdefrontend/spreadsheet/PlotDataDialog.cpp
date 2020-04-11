@@ -378,14 +378,14 @@ void PlotDataDialog::plot() {
 	if (ui->rbPlotPlacement1->isChecked()) {
 		//add curves to an existing plot
 		auto* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
-		auto* plot = dynamic_cast<CartesianPlot*>(aspect);
+		auto* plot = static_cast<CartesianPlot*>(aspect);
 		plot->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
 		addCurvesToPlot(plot);
 		plot->endMacro();
 	} else if (ui->rbPlotPlacement2->isChecked()) {
 		//add curves to a new plot in an existing worksheet
 		auto* aspect = static_cast<AbstractAspect*>(cbExistingWorksheets->currentModelIndex().internalPointer());
-		auto* worksheet = dynamic_cast<Worksheet*>(aspect);
+		auto* worksheet = static_cast<Worksheet*>(aspect);
 		worksheet->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
 
 		if (ui->rbCurvePlacement1->isChecked()) {

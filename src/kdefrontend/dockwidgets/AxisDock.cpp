@@ -1,4 +1,4 @@
-/***************************************************************************
+	/***************************************************************************
     File                 : AxisDock.cpp
     Project              : LabPlot
     Description          : axes widget class
@@ -882,7 +882,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		ui.sbMajorTicksNumber->hide();
 		ui.lMajorTicksIncrementNumeric->show();
 
-		const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+		const auto* plot = static_cast<const CartesianPlot*>(m_axis->parentAspect());
 		bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
 					|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
 		if (numeric) {
@@ -932,7 +932,7 @@ void AxisDock::majorTicksIncrementChanged() {
 	if (m_initializing)
 		return;
 
-	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+	const auto* plot = static_cast<const CartesianPlot*>(m_axis->parentAspect());
 
 	bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
 		|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
@@ -1102,7 +1102,7 @@ void AxisDock::minorTicksTypeChanged(int index) {
 		ui.lMinorTicksNumber->hide();
 		ui.sbMinorTicksNumber->hide();
 
-		const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+		const auto* plot = static_cast<const CartesianPlot*>(m_axis->parentAspect());
 		bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
 					|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
 		if (numeric) {

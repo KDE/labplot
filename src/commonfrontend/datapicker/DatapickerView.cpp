@@ -98,7 +98,7 @@ DatapickerView::~DatapickerView() {
 }
 
 void DatapickerView::fillToolBar(QToolBar* toolBar) {
-	auto* view = dynamic_cast<DatapickerImageView*>(m_datapicker->image()->view());
+	auto* view = static_cast<DatapickerImageView*>(m_datapicker->image()->view());
 	view->fillToolBar(toolBar);
 }
 
@@ -193,21 +193,18 @@ void DatapickerView::handleDescriptionChanged(const AbstractAspect* aspect) {
 
 void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
 	int index;
-	const AbstractPart* part;
 	QString name;
-	if (dynamic_cast<const DatapickerImage*>(aspect)) {
+	const AbstractPart* part = dynamic_cast<const DatapickerImage*>(aspect);
+	if (part) {
 		index = 0;
-		part = dynamic_cast<const AbstractPart*>(aspect);
 		name = aspect->name();
 	} else if (dynamic_cast<const DatapickerCurve*>(aspect)) {
 		index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
-		const Spreadsheet* spreadsheet = dynamic_cast<const Spreadsheet*>(aspect->child<AbstractAspect>(0));
-		Q_ASSERT(spreadsheet);
-		part = dynamic_cast<const AbstractPart*>(spreadsheet);
+		const Spreadsheet* spreadsheet = static_cast<const Spreadsheet*>(aspect->child<AbstractAspect>(0));
+		part = spreadsheet;
 		name = aspect->name() + ": " + spreadsheet->name();
-	} else {
+	} else
 		return;
-	}
 
 	m_tabWidget->insertTab(index, part->view(), name);
 	m_tabWidget->setTabIcon(m_tabWidget->count(), aspect->icon());

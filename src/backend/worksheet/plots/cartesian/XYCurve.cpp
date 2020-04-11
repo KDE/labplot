@@ -82,9 +82,8 @@ XYCurve::~XYCurve() = default;
 
 void XYCurve::finalizeAdd() {
 	Q_D(XYCurve);
-	d->plot = dynamic_cast<const CartesianPlot*>(parentAspect());
-	Q_ASSERT(d->plot);
-	d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem());
+	d->plot = static_cast<const CartesianPlot*>(parentAspect());
+	d->cSystem = static_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem());
 }
 
 void XYCurve::init() {
@@ -170,7 +169,7 @@ QMenu* XYCurve::createContextMenu() {
 	menu->insertAction(firstAction, visibilityAction);
 
 	//"data analysis" menu
-	auto* plot = dynamic_cast<CartesianPlot*>(parentAspect());
+	auto* plot = static_cast<CartesianPlot*>(parentAspect());
 	menu->insertMenu(visibilityAction, plot->analysisMenu());
 	menu->insertSeparator(visibilityAction);
 

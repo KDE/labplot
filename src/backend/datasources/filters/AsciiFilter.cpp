@@ -703,6 +703,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 	//TODO: may be also a matrix?
 	auto* spreadsheet = dynamic_cast<LiveDataSource*>(dataSource);
+	if (!spreadsheet)
+		return 0;
 
 	if (spreadsheet->sourceType() != LiveDataSource::SourceType::FileOrPipe)
 		if (device.isSequential() && device.bytesAvailable() < (int)sizeof(quint16))

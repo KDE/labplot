@@ -356,7 +356,7 @@ void SpreadsheetModel::handleModeChange(const AbstractColumn* col) {
 
 	//output filter was changed after the mode change, update the signal-slot connection
 	disconnect(nullptr, SIGNAL(digitsChanged()), this, SLOT(handledigitsChange()));
-	connect(dynamic_cast<const Column*>(col)->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &SpreadsheetModel::handleDigitsChange);
+	connect(static_cast<const Column*>(col)->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &SpreadsheetModel::handleDigitsChange);
 }
 
 void SpreadsheetModel::handleDigitsChange() {
