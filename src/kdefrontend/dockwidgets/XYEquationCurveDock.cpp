@@ -125,6 +125,7 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
+	m_aspect = list.first();
 	m_equationCurve = dynamic_cast<XYEquationCurve*>(m_curve);
 	Q_ASSERT(m_equationCurve);
 	m_aspectTreeModel =  new AspectTreeModel(m_curve->project());

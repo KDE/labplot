@@ -45,7 +45,7 @@ BaseDock::BaseDock(QWidget* parent) : QWidget(parent) {
 BaseDock::~BaseDock() = default;
 
 void BaseDock::nameChanged() {
-	if (m_initializing)
+	if (m_initializing || !m_aspect)
 		return;
 
 	if (!m_aspect->setName(m_leName->text(), false)) {
@@ -59,7 +59,7 @@ void BaseDock::nameChanged() {
 }
 
 void BaseDock::commentChanged() {
-	if (m_initializing)
+	if (m_initializing || !m_aspect)
 		return;
 
 	m_aspect->setComment(m_leComment->text());
