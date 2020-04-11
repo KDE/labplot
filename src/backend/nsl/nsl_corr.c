@@ -141,9 +141,6 @@ int nsl_corr_fft_FFTW(double s[], double r[], size_t n, double out[]) {
 		return -1;
 
 	const size_t size = 2*(n/2+1);
-	if (size <= 0)
-		return -1;
-
 	double* in = (double*)malloc(size*sizeof(double));
 	fftw_plan rpf = fftw_plan_dft_r2c_1d(n, in, (fftw_complex*)in, FFTW_ESTIMATE);
 
