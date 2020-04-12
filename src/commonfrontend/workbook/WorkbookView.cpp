@@ -53,7 +53,7 @@ WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
 
 	m_tabWidget->setTabPosition(QTabWidget::South);
 	m_tabWidget->setTabShape(QTabWidget::Rounded);
-	m_tabWidget->setMovable(true);
+// 	m_tabWidget->setMovable(true);
 	m_tabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 	m_tabWidget->setMinimumSize(200, 200);
 
@@ -82,7 +82,7 @@ WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
 
 	connect(m_tabWidget, &QTabWidget::currentChanged, this, &WorkbookView::tabChanged);
 	connect(m_tabWidget, &QTabWidget::customContextMenuRequested, this, &WorkbookView::showTabContextMenu);
-	connect(m_tabWidget->tabBar(), &QTabBar::tabMoved, this, &WorkbookView::tabMoved);
+// 	connect(m_tabWidget->tabBar(), &QTabBar::tabMoved, this, &WorkbookView::tabMoved);
 }
 
 WorkbookView::~WorkbookView() {
