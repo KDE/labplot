@@ -554,7 +554,7 @@
     </widget>
    </item>
    <item row="16" column="0" colspan="3">
-    <widget class="QLabel" name="lGeometry_2">
+    <widget class="QLabel" name="lBorder">
      <property name="font">
       <font>
        <weight>75</weight>

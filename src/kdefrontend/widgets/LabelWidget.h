@@ -59,8 +59,9 @@ public:
 	void loadConfig(KConfigGroup&);
 	void saveConfig(KConfigGroup&);
 
-	void setNoGeometryMode(const bool);
-	void setFixedLabelMode(const bool);
+	void setGeometryAvailable(bool);
+	void setFixedLabelMode(bool);
+	void setBorderAvailable(bool);
 
 private:
 	Ui::LabelWidget ui;

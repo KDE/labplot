@@ -89,6 +89,7 @@ void CartesianPlotLegend::init() {
 
 	//Title
  	d->title = new TextLabel(this->name(), TextLabel::PlotLegendTitle);
+	d->title->setBorderShape(TextLabel::NoBorder);
 	addChild(d->title);
 	d->title->setHidden(true);
 	d->title->setParentGraphicsItem(d);

@@ -441,6 +441,8 @@ void TextLabelPrivate::retransform() {
 	boundingRectangle.setHeight(h);
 
 	updateBorder();
+
+	emit q->changed();
 }
 
 /*!

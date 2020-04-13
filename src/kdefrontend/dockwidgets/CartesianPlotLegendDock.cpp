@@ -56,7 +56,8 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : BaseDock(par
 	//"Title"-tab
 	auto hboxLayout = new QHBoxLayout(ui.tabTitle);
 	labelWidget = new LabelWidget(ui.tabTitle);
-	labelWidget->setNoGeometryMode(true);
+	labelWidget->setGeometryAvailable(false);
+	labelWidget->setBorderAvailable(false);
 	hboxLayout->addWidget(labelWidget);
 	hboxLayout->setContentsMargins(2,2,2,2);
 	hboxLayout->setSpacing(2);

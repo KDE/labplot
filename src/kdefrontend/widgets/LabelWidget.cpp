@@ -285,24 +285,42 @@ void LabelWidget::setFixedLabelMode(const bool b) {
  * enables/disables all geometry relevant widgets.
  * Used when displaying legend's title label.
  */
-void LabelWidget::setNoGeometryMode(const bool b) {
-	ui.lGeometry->setVisible(!b);
-	ui.lPositionX->setVisible(!b);
-	ui.cbPositionX->setVisible(!b);
-	ui.sbPositionX->setVisible(!b);
-	ui.lPositionY->setVisible(!b);
-	ui.cbPositionY->setVisible(!b);
-	ui.sbPositionY->setVisible(!b);
-	ui.lHorizontalAlignment->setVisible(!b);
-	ui.cbHorizontalAlignment->setVisible(!b);
-	ui.lVerticalAlignment->setVisible(!b);
-	ui.cbVerticalAlignment->setVisible(!b);
-	ui.lOffsetX->setVisible(!b);
-	ui.lOffsetY->setVisible(!b);
-	ui.sbOffsetX->setVisible(!b);
-	ui.sbOffsetY->setVisible(!b);
-	ui.lRotation->setVisible(!b);
-	ui.sbRotation->setVisible(!b);
+void LabelWidget::setGeometryAvailable(const bool b) {
+	ui.lGeometry->setVisible(b);
+	ui.lPositionX->setVisible(b);
+	ui.cbPositionX->setVisible(b);
+	ui.sbPositionX->setVisible(b);
+	ui.lPositionY->setVisible(b);
+	ui.cbPositionY->setVisible(b);
+	ui.sbPositionY->setVisible(b);
+	ui.lHorizontalAlignment->setVisible(b);
+	ui.cbHorizontalAlignment->setVisible(b);
+	ui.lVerticalAlignment->setVisible(b);
+	ui.cbVerticalAlignment->setVisible(b);
+	ui.lOffsetX->setVisible(b);
+	ui.lOffsetY->setVisible(b);
+	ui.sbOffsetX->setVisible(b);
+	ui.sbOffsetY->setVisible(b);
+	ui.lRotation->setVisible(b);
+	ui.sbRotation->setVisible(b);
+}
+
+/*!
+ * enables/disables all border relevant widgets.
+ * Used when displaying legend's title label.
+ */
+void LabelWidget::setBorderAvailable(bool b) {
+	ui.lBorder->setVisible(b);
+	ui.lBorderShape->setVisible(b);
+	ui.cbBorderShape->setVisible(b);
+	ui.lBorderStyle->setVisible(b);
+	ui.cbBorderStyle->setVisible(b);
+	ui.lBorderColor->setVisible(b);
+	ui.kcbBorderColor->setVisible(b);
+	ui.lBorderWidth->setVisible(b);
+	ui.sbBorderWidth->setVisible(b);
+	ui.lBorderOpacity->setVisible(b);
+	ui.sbBorderOpacity->setVisible(b);
 }
 
 void LabelWidget::updateUnits() {
