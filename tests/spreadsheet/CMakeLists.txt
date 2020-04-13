@@ -5,7 +5,7 @@ add_executable (spreadsheettest SpreadsheetTest.cpp)
 target_link_libraries(spreadsheettest Qt5::Test)
 target_link_libraries(spreadsheettest ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
 IF (APPLE)
-	target_link_libraries(asciifiltertest KDMacTouchBar)
+	target_link_libraries(spreadsheettest KDMacTouchBar)
 ENDIF ()
 
 target_link_libraries(spreadsheettest labplot2lib)
