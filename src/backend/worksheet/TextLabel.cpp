@@ -1081,7 +1081,7 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	d->fontColor = group.readEntry("FontColor", QColor(Qt::white)); // used when it's latex text
 	d->backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::black)); // used when it's latex text
 
-	if (!d->textWrapper.teXUsed) {
+	if (!d->textWrapper.teXUsed && !d->textWrapper.text.isEmpty()) {
 		// TODO: Replace QTextEdit by QTextDocument, because this does not contain the graphical stuff
 		// to set the color in a html text, a qTextEdit must be used
 		QTextEdit te;
@@ -1093,8 +1093,7 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 		// update the text. also in the Widget to which is connected
 		TextWrapper wrapper(te.toHtml(), false, true);
 		setText(wrapper);
-	} else
-		setText(d->textWrapper.text);
+	}
 
 	// otherwise when changing theme while the textlabel dock is visible, the
 	// color comboboxes do not change the color
