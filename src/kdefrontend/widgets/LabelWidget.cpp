@@ -29,6 +29,8 @@
 #include "LabelWidget.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "tools/TeXRenderer.h"
@@ -222,6 +224,7 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 
 	this->load();
 	initConnections();
+	updateBackground();
 }
 
 void LabelWidget::setAxes(QList<Axis*> axes) {
@@ -238,6 +241,36 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
 
 	this->load();
 	initConnections();
+	updateBackground();
+}
+
+/*!
+ * this function keeps the background color of the TextEdit in LabelWidget in sync with
+ * the background color of the parent aspect. This is to avoid the situations where the
+ * text wouldn't be readable anymore if the foreground color is close or equal to the
+ * background color of TextEdit - e.g., a label with white foreground color on a dark worksheet
+ * and with white background color in TextEdit (desktop default color).
+ *
+ * Called if the background color of the parent aspect has changed.
+ */
+void LabelWidget::updateBackground() const {
+	if (ui.tbTexUsed->isChecked())
+		return;
+
+	QColor color;
+	AspectType type = m_label->parentAspect()->type();
+	if (type == AspectType::Worksheet)
+		color = static_cast<const Worksheet*>(m_label->parentAspect())->backgroundFirstColor();
+	else if (type == AspectType::CartesianPlot)
+		color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->backgroundFirstColor();
+	else if (type == AspectType::CartesianPlotLegend)
+		color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->backgroundFirstColor();
+	if (type == AspectType::Axis)
+		color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->backgroundFirstColor();
+
+	QPalette p = ui.teLabel->palette();
+	p.setColor(QPalette::Base, color);
+	ui.teLabel->setPalette(p);
 }
 
 void LabelWidget::initConnections() const {
@@ -254,6 +287,21 @@ void LabelWidget::initConnections() const {
 	connect(m_label, &TextLabel::borderPenChanged, this, &LabelWidget::labelBorderPenChanged);
 	connect(m_label, &TextLabel::borderOpacityChanged, this, &LabelWidget::labelBorderOpacityChanged);
 	connect(m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
+
+	AspectType type = m_label->parentAspect()->type();
+	if (type == AspectType::Worksheet) {
+		auto* worksheet = static_cast<const Worksheet*>(m_label->parentAspect());
+		connect(worksheet, &Worksheet::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+	}else if (type == AspectType::CartesianPlot) {
+		auto* plotArea = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea();
+		connect(plotArea, &PlotArea::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+	} else if (type == AspectType::CartesianPlotLegend) {
+		auto* legend = static_cast<const CartesianPlotLegend*>(m_label->parentAspect());
+		connect(legend, &CartesianPlotLegend::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+	} else if (type == AspectType::Axis) {
+		auto* plotArea = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea();
+		connect(plotArea, &PlotArea::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+	}
 }
 
 /*!
@@ -384,6 +432,9 @@ void LabelWidget::textChanged() {
 		for (auto* label : m_labelsList)
 			label->setText(wrapper);
 	}
+
+	//background color gets lost on every text change...
+	updateBackground();
 }
 
 /*!
@@ -1067,13 +1118,16 @@ void LabelWidget::load() {
 		ui.kfontRequester->setFont(ui.teLabel->currentFont());
 	}
 
-	 //TODO: why?
-	 // don't use colors from the textlabel, but
-// 	QTextCharFormat format = ui.teLabel->currentCharFormat();
-// 	ui.kcbFontColor->setColor(format.foreground().color());
-// 	ui.kcbBackgroundColor->setColor(format.background().color());
+	// if the text is empty yet, user LabelWidget::fontColor(),
+	//extract the color from the html formatted text otherwise
+	 if (!m_label->text().text.isEmpty()) {
+		QTextCharFormat format = ui.teLabel->currentCharFormat();
+		ui.kcbFontColor->setColor(format.foreground().color());
+		//ui.kcbBackgroundColor->setColor(format.background().color());
+	 } else
+		ui.kcbFontColor->setColor(m_label->fontColor());
 
-	ui.kcbFontColor->setColor(m_label->fontColor());
+	//used for latex text only
 	ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
 
 	this->teXUsedChanged(m_label->text().teXUsed);

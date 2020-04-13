@@ -89,6 +89,7 @@ private slots:
 	void charFormatChanged(const QTextCharFormat&);
 	void teXUsedChanged(bool);
 	void fontColorChanged(const QColor&);
+	void updateBackground() const;
 	void backgroundColorChanged(const QColor&);
 	void fontBoldChanged(bool);
 	void fontItalicChanged(bool);
