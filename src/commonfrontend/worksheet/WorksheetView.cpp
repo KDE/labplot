@@ -1879,15 +1879,34 @@ void WorksheetView::cartesianPlotAddNew(QAction* action) {
 		for (auto* plot : plots) {
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
 				++selectedPlots;
+			else {
+				//current plot is not selected, check if one of its children is selected
+				auto children = plot->children<WorksheetElement>();
+				for (auto* child : children) {
+					if (m_selectedItems.indexOf(child->graphicsItem()) != -1) {
+						++selectedPlots;
+						break;
+					}
+				}
+			}
 		}
 
 		if  (selectedPlots > 1)
 			m_worksheet->beginMacro(i18n("%1: Add curve to %2 plots", m_worksheet->name(), selectedPlots));
 
 		for (auto* plot : plots) {
-			//TODO: or if any children of a plot is selected
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
 				this->cartesianPlotAdd(plot, action);
+			else {
+				//current plot is not selected, check if one of its children is selected
+				auto children = plot->children<WorksheetElement>();
+				for (auto* child : children) {
+					if (m_selectedItems.indexOf(child->graphicsItem()) != -1) {
+						this->cartesianPlotAdd(plot, action);
+						break;
+					}
+				}
+			}
 		}
 
 		if (selectedPlots > 1)
