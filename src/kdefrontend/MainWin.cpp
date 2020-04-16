@@ -701,9 +701,9 @@ void MainWin::initMenus() {
 	if (m_availableBackend.count() > 0) {
 		unplugActionList(QLatin1String("backends_list"));
 		QList<QAction*> newBackendActions;
-		for (Cantor::Backend* backend : Cantor::Backend::availableBackends()) {
+		for (auto* backend : Cantor::Backend::availableBackends()) {
 			if (!backend->isEnabled()) continue;
-			QAction* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(),this);
+			QAction* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), this);
 			action->setData(backend->name());
 			newBackendActions << action;
 			m_newCantorWorksheetMenu->addAction(action);
@@ -2427,10 +2427,9 @@ void MainWin::settingsDialog() {
 }
 
 #ifdef HAVE_CANTOR_LIBS
-void MainWin::cantorSettingsDialog()
-{
+void MainWin::cantorSettingsDialog() {
 	static KCoreConfigSkeleton* emptyConfig = new KCoreConfigSkeleton();
-	KConfigDialog *cantorDialog = new KConfigDialog(this,  QLatin1String("Cantor Settings"), emptyConfig);
+	KConfigDialog* cantorDialog = new KConfigDialog(this,  QLatin1String("Cantor Settings"), emptyConfig);
 	for (auto* backend : Cantor::Backend::availableBackends())
 		if (backend->config()) //It has something to configure, so add it to the dialog
 			cantorDialog->addPage(backend->settingsWidget(cantorDialog), backend->config(), backend->name(),  backend->icon());
