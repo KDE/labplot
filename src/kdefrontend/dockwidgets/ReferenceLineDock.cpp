@@ -112,10 +112,15 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 //**********************************************************
 //Position
 void ReferenceLineDock::orientationChanged(int index) {
+	ReferenceLine::Orientation orientation = (ReferenceLine::Orientation)index;
+	if (orientation == ReferenceLine::Horizontal)
+		ui.lPosition->setText(QLatin1String("y:"));
+	else
+		ui.lPosition->setText(QLatin1String("x:"));
+
 	if (m_initializing)
 		return;
 
-	ReferenceLine::Orientation orientation = (ReferenceLine::Orientation)index;
 	for (auto* line : m_linesList)
 		line->setOrientation(orientation);
 }
