@@ -136,6 +136,69 @@ void SpreadsheetTest::testCopyPasteColumnMode02() {
 	QCOMPARE(sheet.column(1)->valueAt(1), 200.0);
 }
 
+
+/*!
+   Properly handle empty values in the tab separated data.
+*/
+void SpreadsheetTest::testCopyPasteColumnMode03() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(100);
+
+	const QString str = "1000		1000		1000\n"
+						"985		985		985\n"
+						"970	-7,06562	970		970\n"
+						"955	-5,93881	955		955\n"
+						"940	-4,97594	940	-4,97594	940";
+
+	QApplication::clipboard()->setText(str);
+
+	SpreadsheetView view(&sheet, false);
+	view.pasteIntoSelection();
+
+	//spreadsheet size
+	QCOMPARE(sheet.columnCount(), 5);
+	QCOMPARE(sheet.rowCount(), 100);
+
+	//column modes
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(sheet.column(2)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(sheet.column(3)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(sheet.column(4)->columnMode(), AbstractColumn::Integer);
+
+	//values
+	QCOMPARE(sheet.column(0)->integerAt(0), 1000);
+	QCOMPARE((bool)std::isnan(sheet.column(1)->valueAt(0)), true);
+	QCOMPARE(sheet.column(2)->integerAt(0), 1000);
+	QCOMPARE((bool)std::isnan(sheet.column(3)->valueAt(0)), true);
+	QCOMPARE(sheet.column(4)->integerAt(0), 1000);
+
+	QCOMPARE(sheet.column(0)->integerAt(1), 985);
+	QCOMPARE((bool)std::isnan(sheet.column(1)->valueAt(1)), true);
+	QCOMPARE(sheet.column(2)->integerAt(1), 985);
+	QCOMPARE((bool)std::isnan(sheet.column(3)->valueAt(1)), true);
+	QCOMPARE(sheet.column(4)->integerAt(1), 985);
+
+	QCOMPARE(sheet.column(0)->integerAt(2), 970);
+	QCOMPARE(sheet.column(1)->valueAt(2), -7.06562);
+	QCOMPARE(sheet.column(2)->integerAt(2), 970);
+	QCOMPARE((bool)std::isnan(sheet.column(3)->valueAt(2)), true);
+	QCOMPARE(sheet.column(4)->integerAt(2), 970);
+
+	QCOMPARE(sheet.column(0)->integerAt(3), 955);
+	QCOMPARE(sheet.column(1)->valueAt(3), -5.93881);
+	QCOMPARE(sheet.column(2)->integerAt(3), 955);
+	QCOMPARE((bool)std::isnan(sheet.column(3)->valueAt(3)), true);
+	QCOMPARE(sheet.column(4)->integerAt(3), 955);
+
+	QCOMPARE(sheet.column(0)->integerAt(4), 940);
+	QCOMPARE(sheet.column(1)->valueAt(4), -4.97594);
+	QCOMPARE(sheet.column(2)->integerAt(4), 940);
+	QCOMPARE(sheet.column(1)->valueAt(4), -4.97594);
+	QCOMPARE(sheet.column(4)->integerAt(4), 940);
+}
+
 //**********************************************************
 //********* Handling of spreadsheet size changes ***********
 //**********************************************************

@@ -42,6 +42,7 @@ private slots:
 	void testCopyPasteColumnMode00();
 	void testCopyPasteColumnMode01();
 	void testCopyPasteColumnMode02();
+	void testCopyPasteColumnMode03();
 
 	//handling of spreadsheet size changes
 	void testCopyPasteSizeChange00();

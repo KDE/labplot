@@ -1284,8 +1284,15 @@ void SpreadsheetView::pasteIntoSelection() {
 	QStringList input_rows(input_str.split(separator));
 	input_row_count = input_rows.count();
 	input_col_count = 0;
+	bool hasTabs = false;
+	if (input_row_count > 0 && input_rows.constFirst().indexOf(QLatin1Char('\t')) != -1)
+		hasTabs = true;
+
 	for (int i = 0; i < input_row_count; i++) {
-		cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s+"))));
+		if (hasTabs)
+			cellTexts.append(input_rows.at(i).split(QLatin1Char('\t')));
+		else
+			cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s+"))));
 		if (cellTexts.at(i).count() > input_col_count)
 			input_col_count = cellTexts.at(i).count();
 	}
