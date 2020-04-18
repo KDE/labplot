@@ -19,22 +19,15 @@ GCP=/opt/local/libexec/gnubin/cp
 # run after "craft labplot"
 #########################################
 
-#echo "CLEAN UP"
-#rm -rf $PREFIX/$NAME.app
-
-#mkdir -pv $INPREFIX/{Frameworks,Resources,MacOS,PlugIns/iconengines,share/appdata,share/applications}
-
-## application
-#cp -v labplot/build/src/$NAME.app/Contents/MacOS/$NAME $INPREFIX/MacOS
+mkdir -pv $INPREFIX/share/{appdata,applications}
 
 echo "Running macdeployqt ..."
 # -verbose=3
 macdeployqt $PREFIX/$NAME.app -verbose=2
 
 #########################################
-#TODO: check
 
-echo "install files"
+echo "Install files"
 # splash
 cp -v kde/share/$NAME/splash.png $INPREFIX/Resources/
 # rc-file
@@ -56,7 +49,8 @@ cp -v kde/Applications/cantor.app/Contents/MacOS/cantor $INPREFIX/MacOS
 cp -v kde/Applications/cantor_scripteditor.app/Contents/MacOS/cantor_scripteditor $INPREFIX/MacOS
 cp -vr kde/plugins/cantor $INPREFIX/PlugIns
 cp -v kde/lib/libcantor_config.dylib $INPREFIX/Frameworks/
-cp -v kde/lib/libcantor_pythonbackend.dylib $INPREFIX/Frameworks/
+# not available in cantor master
+#cp -v kde/lib/libcantor_pythonbackend.dylib $INPREFIX/Frameworks/
 
 # icons
 cp -vf kde/share/icontheme.rcc $INPREFIX/Resources/icontheme.rcc
@@ -92,7 +86,8 @@ else
 fi
 mv $PREFIX/$NAME.app ./$TMPDIR 
 
-#CHECK ln -s /Applications ./$TMPDIR/Applications
+# Add link for easy install
+ln -s /Applications ./$TMPDIR/Applications
 
 ## remove stuff we don't need or like
 #rm -rf $TMPDIR/$NAME.app/Contents/Plugins/bearer
@@ -100,6 +95,6 @@ mv $PREFIX/$NAME.app ./$TMPDIR
 ###############################################
 
 # create the final disk image
-echo "BUILDING PACKAGE"
+echo "Building package"
 rm -f ./labplot-$VERSION.dmg
 hdiutil create -srcfolder ./$TMPDIR -format UDBZ -fs HFS+ -imagekey zlib-level=9 ./labplot-$VERSION.dmg
