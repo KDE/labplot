@@ -674,11 +674,39 @@ void ProjectExplorer::deleteSelected() {
 		return;
 
 	m_project->beginMacro(i18np("Project Explorer: delete %1 selected object", "Project Explorer: delete %1 selected objects", items.size()/4));
+
+	//determine all selected aspect
+	QVector<AbstractAspect*> aspects;
 	for (int i = 0; i < items.size()/4; ++i) {
 		const QModelIndex& index = items.at(i*4);
 		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		aspect->remove();
+		aspects << aspect;
 	}
+
+	//determine aspects to be deleted:
+	//it's enough to delete parent items in the selection only,
+	//skip all selected aspects where one of the parents is also in the selection
+	//for example selected columns of a selected spreadsheet, etc.
+	QVector<AbstractAspect*> aspectsToDelete;
+	for (auto* aspect : aspects) {
+		auto* parent = aspect->parentAspect();
+		int parentSelected = false;
+		while (parent) {
+			if (aspects.indexOf(parent) != -1) {
+				parentSelected = true;
+				break;
+			}
+
+			parent = parent->parentAspect();
+		}
+
+		if (!parentSelected)
+			aspectsToDelete << aspect; //parent is not in the selection
+	}
+
+	for (auto* aspect : aspectsToDelete)
+		aspect->remove();
+
 	m_project->endMacro();
 }
 
