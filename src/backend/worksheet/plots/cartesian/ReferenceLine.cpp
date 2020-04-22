@@ -159,9 +159,8 @@ QMenu* ReferenceLine::createContextMenu() {
 	menu->insertMenu(firstAction, orientationMenu);
 
 	//Line styles
-	GuiTools::updatePenStyles( lineStyleMenu, lineStyleActionGroup, d->pen.color() );
-	GuiTools::selectPenStyleAction(lineStyleActionGroup, d->pen.style() );
-
+	GuiTools::updatePenStyles(lineStyleMenu, lineStyleActionGroup, d->pen.color());
+	GuiTools::selectPenStyleAction(lineStyleActionGroup, d->pen.style());
 	GuiTools::selectColorAction(lineColorActionGroup, d->pen.color() );
 
 	menu->insertMenu(firstAction, lineMenu);
@@ -289,20 +288,18 @@ void ReferenceLinePrivate::retransform() {
 	//calculate the position in the scene coordinates
 	QVector<QPointF> listLogical;
 	if (orientation == ReferenceLine::Vertical)
-		listLogical << QPointF(position, (plot->yMax() - plot->yMin())/2);
+		listLogical << QPointF(position, plot->yMin() + (plot->yMax() - plot->yMin())/2);
 	else
-		listLogical << QPointF((plot->xMax() - plot->xMin())/2, position);
+		listLogical << QPointF(plot->xMin() + (plot->xMax() - plot->xMin())/2, position);
 
 	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
-	QVector<QPointF> listScene = cSystem->mapLogicalToScene(listLogical, CartesianCoordinateSystem::DefaultMapping);
+	QVector<QPointF> listScene = cSystem->mapLogicalToScene(listLogical);
 
 	if (!listScene.isEmpty()) {
+		positionScene = listScene.at(0);
 		m_visible = true;
 		suppressItemChangeEvent = true;
-		if (orientation == ReferenceLine::Vertical)
-			setPos(listScene.at(0).x(), 0);
-		else
-			setPos(0, listScene.at(0).y());
+		setPos(positionScene);
 		suppressItemChangeEvent = false;
 
 		//determine the length of the line to be drawn
@@ -312,7 +309,7 @@ void ReferenceLinePrivate::retransform() {
 		else
 			pointsLogical << QPointF(plot->xMin(), position) << QPointF(plot->xMax(), position);
 
-		QVector<QPointF> pointsScene = cSystem->mapLogicalToScene(pointsLogical, CartesianCoordinateSystem::DefaultMapping);
+		QVector<QPointF> pointsScene = cSystem->mapLogicalToScene(pointsLogical);
 
 		if (pointsScene.size() > 1) {
 			if (orientation == ReferenceLine::Vertical)
@@ -403,13 +400,14 @@ QVariant ReferenceLinePrivate::itemChange(GraphicsItemChange change, const QVari
 
 	QPointF positionSceneNew = value.toPointF();
 
-	//keepthe item position at x=0 for horizontal and y=0 for vertical
+	//don't allow to move the line outside of the plot rect
+	//in the direction orthogonal to the orientation of the line
 	if (orientation == ReferenceLine::Horizontal) {
-		if (positionSceneNew.x() != 0)
-			positionSceneNew.setX(0);
+		if (positionSceneNew.x() != positionScene.x())
+			positionSceneNew.setX(positionScene.x());
 	} else {
-		if (positionSceneNew.y() != 0)
-			positionSceneNew.setY(0);
+		if (positionSceneNew.y() != positionScene.y())
+			positionSceneNew.setY(positionScene.y());
 	}
 
 	if (plot->dataRect().contains(positionSceneNew)) {
@@ -428,15 +426,15 @@ QVariant ReferenceLinePrivate::itemChange(GraphicsItemChange change, const QVari
 	} else {
 		//line is moved outside of the plot, keep it at the plot boundary
 		if (orientation == ReferenceLine::Horizontal) {
-			if (positionSceneNew.y() > plot->dataRect().height()/2)
-				positionSceneNew.setY(plot->dataRect().height()/2);
+			if (positionSceneNew.y() < plot->dataRect().y())
+				positionSceneNew.setY(plot->dataRect().y());
 			else
-				positionSceneNew.setY(-plot->dataRect().height()/2);
+				positionSceneNew.setY(plot->dataRect().y() + plot->dataRect().height());
 		} else {
-			if (positionSceneNew.x() > plot->dataRect().width()/2)
-				positionSceneNew.setX(plot->dataRect().width()/2);
+			if (positionSceneNew.x() < plot->dataRect().x())
+				positionSceneNew.setX(plot->dataRect().x());
 			else
-				positionSceneNew.setX(-plot->dataRect().width()/2);
+				positionSceneNew.setX(plot->dataRect().x() + plot->dataRect().width());
 		}
 	}
 
