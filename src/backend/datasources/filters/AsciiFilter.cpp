@@ -1236,8 +1236,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 						break;
 					}
 					case AbstractColumn::DateTime: {
-						QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
-						fix2DigitDateTime(valueDateTime, dateTimeFormat);
+						QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
 						static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
 						break;
 					}
@@ -1431,8 +1430,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 					break;
 				}
 				case AbstractColumn::DateTime: {
-					QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
-					fix2DigitDateTime(valueDateTime, dateTimeFormat);
+					QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
 					static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
 					break;
 				}
@@ -1592,8 +1590,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 					break;
 				}
 				case AbstractColumn::DateTime: {
-					QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
-					fix2DigitDateTime(valueDateTime, dateTimeFormat);
+					QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
 					lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
 					break;
 				}
@@ -1718,8 +1715,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 					break;
 				}
 				case AbstractColumn::DateTime: {
-					QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
-					fix2DigitDateTime(valueDateTime, dateTimeFormat);
+					QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
 					lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
 					break;
 				}
@@ -1743,7 +1739,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 /*!
     writes the content of \c dataSource to the file \c fileName.
 */
-void AsciiFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
+void AsciiFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
 	Q_UNUSED(fileName);
 	Q_UNUSED(dataSource);
 
@@ -1751,12 +1747,26 @@ void AsciiFilterPrivate::write(const QString & fileName, AbstractDataSource* dat
 }
 
 /*!
- * fix date time with 2-digit years
+ * create datetime from \c string using \c format considering corner cases
  */
-void AsciiFilterPrivate::fix2DigitDateTime(QDateTime& dateTime, const QString& format) {
+QDateTime AsciiFilterPrivate::parseDateTime(const QString& string, const QString& format) {
+	//DEBUG("string = " << string.toStdString() << ", format = " << format.toStdString())
+	QString fixedString(string);
+	QString fixedFormat(format);
+	if (!format.contains("yy")) {	// no year given: set temporary to 2000 (must be a leap year to parse "Feb 29")
+		fixedString.append(" 2000");
+		fixedFormat.append(" yyyy");
+	}
+
+	QDateTime dateTime = QDateTime::fromString(fixedString, fixedFormat);
+	//QDEBUG("fromString() =" << dateTime)
 	// interpret 2-digit year smaller than 50 as 20XX
 	if (dateTime.date().year() < 1950 && !format.contains("yyyy"))
 		dateTime = dateTime.addYears(100);
+	//QDEBUG("dateTime fixed =" << dateTime)
+	//DEBUG("dateTime.toString =" << dateTime.toString(format).toStdString())
+
+	return dateTime;
 }
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
@@ -1959,8 +1969,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& message) {
 					break;
 				}
 				case AbstractColumn::DateTime: {
-					QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
-					fix2DigitDateTime(valueDateTime, dateTimeFormat);
+					QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
 					lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
 					break;
 				}
@@ -2654,8 +2663,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						break;
 					}
 					case AbstractColumn::DateTime: {
-						QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
-						fix2DigitDateTime(valueDateTime, dateTimeFormat);
+						QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
 						static_cast<QVector<QDateTime>*>(m_dataContainer[col])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
 						break;
 					}
