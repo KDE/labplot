@@ -538,7 +538,7 @@ IF (APPLE)
 ENDIF()
 
 ############## installation ################################
-install( TARGETS labplot2 DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install( TARGETS labplot2 DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/${PROJECT_NAME} )
 install( FILES ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot2.ico DESTINATION ${DATA_INSTALL_DIR}/${PROJECT_NAME} )
 install( PROGRAMS org.kde.labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
