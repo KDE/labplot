@@ -1370,8 +1370,10 @@ void SpreadsheetView::pasteIntoSelection() {
 		if (col->columnMode() == AbstractColumn::Numeric) {
 			if (rows == m_spreadsheet->rowCount() && rows <= cellTexts.size()) {
 				QVector<double> new_data(rows);
-				for (int r = 0; r < rows; ++r)
-					new_data[r] = locale.toDouble(cellTexts.at(r).at(c));
+				for (int r = 0; r < rows; ++r) {
+					if (c < cellTexts.at(r).count())
+						new_data[r] = locale.toDouble(cellTexts.at(r).at(c));
+				}
 				col->replaceValues(0, new_data);
 			} else {
 				for (int r = 0; r < rows && r < input_row_count; r++) {
@@ -1386,8 +1388,10 @@ void SpreadsheetView::pasteIntoSelection() {
 		} else if (col->columnMode() == AbstractColumn::Integer) {
 			if (rows == m_spreadsheet->rowCount() && rows <= cellTexts.size()) {
 				QVector<int> new_data(rows);
-				for (int r = 0; r < rows; ++r)
-					new_data[r] = locale.toInt(cellTexts.at(r).at(c));
+				for (int r = 0; r < rows; ++r) {
+					if (c < cellTexts.at(r).count())
+						new_data[r] = locale.toInt(cellTexts.at(r).at(c));
+				}
 				col->replaceInteger(0, new_data);
 			} else {
 				for (int r = 0; r < rows && r < input_row_count; r++) {
