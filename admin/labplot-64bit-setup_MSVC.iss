@@ -22,8 +22,8 @@ DefaultDirName={autopf64}\{#MyAppName}
 DisableProgramGroupPage=yes
 OutputBaseFilename=labplot-{#MyAppVersion}-64bit-setup-MSVC
 ArchitecturesAllowed=x64
-;use "none" for testing (much faster)
-Compression=lzma
+;use "lzma" for compression (slow)
+Compression=none
 SolidCompression=yes
 Uninstallable=yes
 ;we install a file association for lml projects
@@ -54,7 +54,7 @@ Source: "{#CraftRoot}\bin\iconv.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\freetype.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\libpng16.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\jpeg62.dll"; DestDir: "{app}";Flags: ignoreversion
-;Source: "{#CraftRoot}\bin\libtiff.dll"; DestDir: "{app}";Flags: ignoreversion
+Source: "{#CraftRoot}\bin\tiff.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\lcms2.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\openjp2.dll"; DestDir: "{app}";Flags: ignoreversion
 ;Source: "{#CraftRoot}\bin\ssleay32.dll"; DestDir: "{app}";Flags: ignoreversion
@@ -106,7 +106,7 @@ Source: "{#CraftRoot}\bin\KF5WindowSystem.dll"; DestDir: "{app}";Flags: ignoreve
 Source: "{#CraftRoot}\bin\KF5XmlGui.dll"; DestDir: "{app}";Flags: ignoreversion
 ;Source: "{#CraftRoot}\bin\libKF5Notifications.dll"; DestDir: "{app}";Flags: ignoreversion
 ; missing lib on minimal Windows 10
-Source: "C:\Python36\vcruntime140.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CraftRoot}\bin\vcruntime140.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#CraftRoot}\dev-utils\bin\msvcr120.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; Cantor
 Source: "{#CraftRoot}\bin\cantor.exe"; DestDir: "{app}"; Flags: ignoreversion
@@ -120,7 +120,7 @@ Source: "{#CraftRoot}\plugins\cantorpart.dll"; DestDir: "{app}\plugins"; Flags: 
 Source: "{#CraftRoot}\plugins\cantor\*"; DestDir: "{app}\plugins\cantor"; Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\bin\data\kxmlgui5\cantor\*"; DestDir: "{app}\data"; Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\bin\data\cantor\*"; DestDir: "{app}\data"; Flags: recursesubdirs ignoreversion
-Source: "{#CraftRoot}\bin\data\doc\HTML\en\cantor\*"; DestDir: "{app}\doc\HTML\en\cantor";Flags: recursesubdirs ignoreversion
+;Source: "{#CraftRoot}\bin\data\doc\HTML\en\cantor\*"; DestDir: "{app}\doc\HTML\en\cantor";Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\etc\xdg\cantor*"; DestDir: "{app}\etc\xdg"; Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\bin\data\metainfo\org.kde.cantor.appdata.xml"; DestDir: "{app}\data\metainfo"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\data\applications\org.kde.cantor.desktop"; DestDir: "{app}\data\applications"; Flags: ignoreversion
