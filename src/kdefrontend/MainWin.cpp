@@ -574,6 +574,13 @@ void MainWin::initActions() {
 	actionCollection()->addAction("history", m_historyAction);
 	connect(m_historyAction, &QAction::triggered, this, &MainWin::historyDialog);
 
+#ifdef Q_OS_MAC
+	m_undoIconOnlyAction = new QAction(m_undoAction->icon(), QString());
+	connect(m_undoIconOnlyAction, &QAction::triggered, this, &MainWin::undo);
+
+	m_redoIconOnlyAction = new QAction(m_redoAction->icon(), QString());
+	connect(m_redoIconOnlyAction, &QAction::triggered, this, &MainWin::redo);
+#endif
 	// TODO: more menus
 	//  Appearance
 	// Analysis: see WorksheetView.cpp
@@ -867,6 +874,7 @@ void MainWin::updateGUIOnProjectChanges() {
 		m_touchBar->addAction(m_importFileAction);
 		m_touchBar->addAction(m_newWorksheetAction);
 		m_touchBar->addAction(m_newSpreadsheetAction);
+		m_touchBar->addAction(m_newMatrixAction);
 	}
 #endif
 	// undo/redo actions are disabled in both cases - when the project is closed or opened
@@ -896,8 +904,8 @@ void MainWin::updateGUI() {
 #ifdef Q_OS_MAC
 	m_touchBar->clear();
 
-	m_touchBar->addAction(m_undoAction);
-	m_touchBar->addAction(m_redoAction);
+	m_touchBar->addAction(m_undoIconOnlyAction);
+	m_touchBar->addAction(m_redoIconOnlyAction);
 	m_touchBar->addSeparator();
 #endif
 
@@ -923,7 +931,6 @@ void MainWin::updateGUI() {
 
 #ifdef Q_OS_MAC
 	if (dynamic_cast<Folder*>(m_currentAspect)) {
-	//if (m_currentAspect->type() == AspectType::Folder) {
 		m_touchBar->addAction(m_newWorksheetAction);
 		m_touchBar->addAction(m_newSpreadsheetAction);
 		m_touchBar->addAction(m_newMatrixAction);

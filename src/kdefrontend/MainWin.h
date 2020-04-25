@@ -160,6 +160,8 @@ private:
 
 #ifdef Q_OS_MAC
 	KDMacTouchBar* m_touchBar;
+	QAction* m_undoIconOnlyAction;
+	QAction* m_redoIconOnlyAction;
 #endif
 
 	KRecentFilesAction* m_recentProjectsAction;
