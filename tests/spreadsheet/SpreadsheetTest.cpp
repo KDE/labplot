@@ -37,6 +37,7 @@
 void SpreadsheetTest::initTestCase() {
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+	QLocale::setDefault(QLocale(QLocale::C));
 }
 
 //**********************************************************
@@ -147,9 +148,9 @@ void SpreadsheetTest::testCopyPasteColumnMode03() {
 
 	const QString str = "1000		1000		1000\n"
 						"985		985		985\n"
-						"970	-7,06562	970		970\n"
-						"955	-5,93881	955		955\n"
-						"940	-4,97594	940	-4,97594	940";
+						"970	-7.06562	970		970\n"
+						"955	-5.93881	955		955\n"
+						"940	-4.97594	940	-4.97594	940";
 
 	QApplication::clipboard()->setText(str);
 
