@@ -43,6 +43,8 @@ public:
 	XYAnalysisCurve(const QString&, AspectType type);
 	~XYAnalysisCurve() override;
 
+	static void copyData(QVector<double>& xData, QVector<double>& yData, const AbstractColumn* xDataColumn, const AbstractColumn* yDataColumn, double xMin, double xMax);
+
 	virtual void recalculate() = 0;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

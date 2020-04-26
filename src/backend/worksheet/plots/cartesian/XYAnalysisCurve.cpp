@@ -41,6 +41,7 @@
 #include "backend/lib/macros.h"
 
 #include <KLocalizedString>
+#include <QDateTime>
 
 XYAnalysisCurve::XYAnalysisCurve(const QString& name, AspectType type)
 	: XYCurve(name, new XYAnalysisCurvePrivate(this), type) {
@@ -64,6 +65,45 @@ void XYAnalysisCurve::init() {
 	d->symbolsStyle = Symbol::NoSymbols;
 }
 
+void XYAnalysisCurve::copyData(QVector<double>& xData, QVector<double>& yData,
+							   const AbstractColumn* xDataColumn, const AbstractColumn* yDataColumn,
+							   double xMin, double xMax) {
+
+	int rowCount = qMin(xDataColumn->rowCount(), yDataColumn->rowCount());
+	for (int row = 0; row < rowCount; ++row) {
+		double x = NAN;
+		if (xDataColumn->columnMode() == AbstractColumn::Numeric)
+			x = xDataColumn->valueAt(row);
+		else if (xDataColumn->columnMode() == AbstractColumn::Integer)
+			x =xDataColumn->integerAt(row);
+		else if (xDataColumn->columnMode() == AbstractColumn::BigInt)
+			x = xDataColumn->bigIntAt(row);
+		else if (xDataColumn->columnMode() == AbstractColumn::DateTime)
+			x = xDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
+
+		double y = NAN;
+		if (yDataColumn->columnMode() == AbstractColumn::Numeric)
+			y = yDataColumn->valueAt(row);
+		else if (yDataColumn->columnMode() == AbstractColumn::Integer)
+			y =yDataColumn->integerAt(row);
+		else if (yDataColumn->columnMode() == AbstractColumn::BigInt)
+			y = yDataColumn->bigIntAt(row);
+		else if (yDataColumn->columnMode() == AbstractColumn::DateTime)
+			y = yDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
+
+		//only copy those data where _all_ values (for x and y, if given) are valid
+		if (!std::isnan(x) && !std::isnan(y)
+			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
+
+			// only when inside given range
+			if (x >= xMin && x <= xMax) {
+				xData.append(x);
+				yData.append(y);
+			}
+		}
+	}
+
+}
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################

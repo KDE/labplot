@@ -42,7 +42,6 @@
 
 #include <KLocalizedString>
 
-#include <QDateTime>
 #include <QIcon>
 #include <QElapsedTimer>
 #include <QThreadPool>
@@ -178,38 +177,7 @@ void XYSmoothCurvePrivate::recalculate() {
 		xmax = smoothData.xRange.last();
 	}
 
-	for (int row = 0; row<tmpXDataColumn->rowCount(); ++row) {
-		double x = NAN;
-		if (tmpXDataColumn->columnMode() == AbstractColumn::Numeric)
-			x = tmpXDataColumn->valueAt(row);
-		else if (tmpXDataColumn->columnMode() == AbstractColumn::Integer)
-			x =tmpXDataColumn->integerAt(row);
-		else if (tmpXDataColumn->columnMode() == AbstractColumn::BigInt)
-			x = tmpXDataColumn->bigIntAt(row);
-		else if (tmpXDataColumn->columnMode() == AbstractColumn::DateTime)
-			x = tmpXDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
-
-		double y = NAN;
-		if (tmpYDataColumn->columnMode() == AbstractColumn::Numeric)
-			y = tmpYDataColumn->valueAt(row);
-		else if (tmpYDataColumn->columnMode() == AbstractColumn::Integer)
-			y =tmpYDataColumn->integerAt(row);
-		else if (tmpYDataColumn->columnMode() == AbstractColumn::BigInt)
-			y = tmpYDataColumn->bigIntAt(row);
-		else if (tmpYDataColumn->columnMode() == AbstractColumn::DateTime)
-			y = tmpYDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
-
-		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!std::isnan(x) && !std::isnan(y)
-			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
-
-			// only when inside given range
-			if (x >= xmin && x <= xmax) {
-				xdataVector.append(x);
-				ydataVector.append(y);
-			}
-		}
-	}
+	XYAnalysisCurve::copyData(xdataVector, ydataVector, tmpXDataColumn, tmpYDataColumn, xmin, xmax);
 
 	//number of data points to smooth
 	const size_t n = (size_t)xdataVector.size();
