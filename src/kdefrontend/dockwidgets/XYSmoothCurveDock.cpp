@@ -210,6 +210,7 @@ void XYSmoothCurveDock::setModel() {
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
+	cbDataSourceCurve->setModel(m_aspectTreeModel);
 	cbXDataColumn->setModel(m_aspectTreeModel);
 	cbYDataColumn->setModel(m_aspectTreeModel);
 
