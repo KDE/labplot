@@ -104,8 +104,8 @@ QStringList LiveDataSource::availablePorts() {
 	for (const QSerialPortInfo& sp : QSerialPortInfo::availablePorts()) {
 		ports.append(sp.portName());
 
-		DEBUG(" port " << sp.portName().toStdString() << ": " << sp.systemLocation().toStdString() << sp.description().toStdString()
-			<< ' ' << sp.manufacturer().toStdString() << ' ' << sp.serialNumber().toStdString());
+		DEBUG(" port " << STDSTRING(sp.portName()) << ": " << STDSTRING(sp.systemLocation()) << STDSTRING(sp.description())
+			<< ' ' << STDSTRING(sp.manufacturer()) << ' ' << STDSTRING(sp.serialNumber()));
 	}
 	// For Testing:
 	// ports.append("/dev/pts/26");
@@ -511,7 +511,7 @@ void LiveDataSource::read() {
 		case SerialPort:
 			m_serialPort = new QSerialPort(this);
 			m_device = m_serialPort;
-			DEBUG("	Serial: " << m_serialPortName.toStdString() << ", " << m_baudRate);
+			DEBUG("	Serial: " << STDSTRING(m_serialPortName) << ", " << m_baudRate);
 			m_serialPort->setBaudRate(m_baudRate);
 			m_serialPort->setPortName(m_serialPortName);
 			m_serialPort->open(QIODevice::ReadOnly);

@@ -219,7 +219,7 @@ QString AsciiFilter::fileInfoString(const QString& fileName) {
 int AsciiFilter::columnNumber(const QString& fileName, const QString& separator) {
 	KFilterDev device(fileName);
 	if (!device.open(QIODevice::ReadOnly)) {
-		DEBUG("Could not open file " << fileName.toStdString() << " for determining number of columns");
+		DEBUG("Could not open file " << STDSTRING(fileName) << " for determining number of columns");
 		return -1;
 	}
 
@@ -240,7 +240,7 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 	KFilterDev device(fileName);
 
 	if (!device.open(QIODevice::ReadOnly)) {
-		DEBUG("Could not open file " << fileName.toStdString() << " to determine number of lines");
+		DEBUG("Could not open file " << STDSTRING(fileName) << " to determine number of lines");
 
 		return 0;
 	}
@@ -448,7 +448,7 @@ QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
 	} while (!commentCharacter.isEmpty() && line.startsWith(commentCharacter));
 
 	line.remove(QRegularExpression(QStringLiteral("[\\n\\r]")));	// remove any newline
-	DEBUG("data line : \'" << line.toStdString() << '\'');
+	DEBUG("data line : \'" << STDSTRING(line) << '\'');
 	QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 	//TODO: remove quotes here?
 	if (simplifyWhitespacesEnabled) {
@@ -511,7 +511,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		}
 
 		firstLine = device.readLine();
-		DEBUG("	line = " << firstLine.toStdString());
+		DEBUG("	line = " << STDSTRING(firstLine));
 	}
 
 	DEBUG(" device position after first line and comments = " << device.pos());
@@ -522,7 +522,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	//TODO: this doesn't work, the split below introduces whitespaces again
 // 	if (simplifyWhitespacesEnabled)
 // 		firstLine = firstLine.simplified();
-	DEBUG("First line: \'" << firstLine.toStdString() << '\'');
+	DEBUG("First line: \'" << STDSTRING(firstLine) << '\'');
 
 	// determine separator and split first line
 	QStringList firstLineStringList;
@@ -555,7 +555,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		m_separator = m_separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
 		firstLineStringList = firstLine.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 	}
-	DEBUG("separator: \'" << m_separator.toStdString() << '\'');
+	DEBUG("separator: \'" << STDSTRING(m_separator) << '\'');
 	DEBUG("number of columns: " << firstLineStringList.size());
 	QDEBUG("first line: " << firstLineStringList);
 	DEBUG("headerEnabled: " << headerEnabled);
@@ -598,10 +598,10 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 //TEST: readline-seek-readline fails
 	/*	qint64 testpos = device.pos();
-		DEBUG("read data line @ pos " << testpos << " : " << device.readLine().toStdString());
+		DEBUG("read data line @ pos " << testpos << " : " << STDSTRING(device.readLine()));
 		device.seek(testpos);
 		testpos = device.pos();
-		DEBUG("read data line again @ pos " << testpos << "  : " << device.readLine().toStdString());
+		DEBUG("read data line again @ pos " << testpos << "  : " << STDSTRING(device.readLine()));
 	*/
 /////////////////////////////////////////////////////////////////
 
@@ -681,7 +681,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
     reads the content of the file \c fileName to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	DEBUG("AsciiFilterPrivate::readDataFromFile(): fileName = \'" << fileName.toStdString() << "\', dataSource = "
+	DEBUG("AsciiFilterPrivate::readDataFromFile(): fileName = \'" << STDSTRING(fileName) << "\', dataSource = "
 	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode));
 
 	//dirty hack: set readingFile and readingFileName in order to know in lineNumber(QIODevice)
@@ -1185,7 +1185,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				lineStringList << line;
 			QDEBUG("	line = " << lineStringList << ", separator = \'" << m_separator << "\'");
 
-			DEBUG("	Line bytes: " << line.size() << " line: " << line.toStdString());
+			DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
 			if (simplifyWhitespacesEnabled) {
 				for (int i = 0; i < lineStringList.size(); ++i)
 					lineStringList[i] = lineStringList[i].simplified();
@@ -1205,7 +1205,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 					QString valueString = lineStringList.at(n);
 					if (removeQuotesEnabled)
 						valueString.remove(QLatin1Char('"'));
-					DEBUG("	value string = " << valueString.toStdString());
+					DEBUG("	value string = " << STDSTRING(valueString));
 
 					// set value depending on data type
 					switch (columnModes[n]) {
@@ -1338,7 +1338,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		m_prepared = true;
 	}
 
-	DEBUG("locale = " << QLocale::languageToString(numberFormat).toStdString());
+	DEBUG("locale = " << STDSTRING(QLocale::languageToString(numberFormat)));
 	QLocale locale(numberFormat);
 
 	// Read the data
@@ -1379,7 +1379,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			continue;
 
 		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-// 		DEBUG("	Line bytes: " << line.size() << " line: " << line.toStdString());
+// 		DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
 		if (simplifyWhitespacesEnabled) {
 			for (int i = 0; i < lineStringList.size(); ++i)
 				lineStringList[i] = lineStringList[i].simplified();
@@ -1631,7 +1631,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	}
 
 	//number formatting
-	DEBUG("locale = " << QLocale::languageToString(numberFormat).toStdString());
+	DEBUG("locale = " << STDSTRING(QLocale::languageToString(numberFormat)));
 	QLocale locale(numberFormat);
 
 	// Read the data
@@ -1668,7 +1668,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 		QDEBUG(" line = " << lineStringList);
 
-		DEBUG("	Line bytes: " << line.size() << " line: " << line.toStdString());
+		DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
 		if (simplifyWhitespacesEnabled) {
 			for (int i = 0; i < lineStringList.size(); ++i)
 				lineStringList[i] = lineStringList[i].simplified();
@@ -1690,7 +1690,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 				if (removeQuotesEnabled)
 					valueString.remove(QLatin1Char('"'));
 
-				//DEBUG(" valueString = " << valueString.toStdString());
+				//DEBUG(" valueString = " << STDSTRING(valueString));
 				if (skipEmptyParts && !QString::compare(valueString, " "))	// handle left white spaces
 					continue;
 
@@ -1750,7 +1750,7 @@ void AsciiFilterPrivate::write(const QString& fileName, AbstractDataSource* data
  * create datetime from \c string using \c format considering corner cases
  */
 QDateTime AsciiFilterPrivate::parseDateTime(const QString& string, const QString& format) {
-	//DEBUG("string = " << string.toStdString() << ", format = " << format.toStdString())
+	//DEBUG("string = " << STDSTRING(string) << ", format = " << STDSTRING(format))
 	QString fixedString(string);
 	QString fixedFormat(format);
 	if (!format.contains("yy")) {	// no year given: set temporary to 2000 (must be a leap year to parse "Feb 29")
@@ -1764,7 +1764,7 @@ QDateTime AsciiFilterPrivate::parseDateTime(const QString& string, const QString
 	if (dateTime.date().year() < 1950 && !format.contains("yyyy"))
 		dateTime = dateTime.addYears(100);
 	//QDEBUG("dateTime fixed =" << dateTime)
-	//DEBUG("dateTime.toString =" << dateTime.toString(format).toStdString())
+	//DEBUG("dateTime.toString =" << STDSTRING(dateTime.toString(format)))
 
 	return dateTime;
 }
@@ -1839,7 +1839,7 @@ int AsciiFilterPrivate::prepareToRead(const QString& message) {
 	QString firstLine = lines.at(0);
 	if (simplifyWhitespacesEnabled)
 		firstLine = firstLine.simplified();
-	DEBUG("First line: \'" << firstLine.toStdString() << '\'');
+	DEBUG("First line: \'" << STDSTRING(firstLine) << '\'');
 
 	// determine separator and split first line
 	QStringList firstLineStringList;
@@ -1858,7 +1858,7 @@ int AsciiFilterPrivate::prepareToRead(const QString& message) {
 		m_separator = m_separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
 		firstLineStringList = firstLine.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 	}
-	DEBUG("separator: \'" << m_separator.toStdString() << '\'');
+	DEBUG("separator: \'" << STDSTRING(m_separator) << '\'');
 	DEBUG("number of columns: " << firstLineStringList.size());
 	QDEBUG("first line: " << firstLineStringList);
 
@@ -1914,7 +1914,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& message) {
 	prepareToRead(message);
 
 	//number formatting
-	DEBUG("locale = " << QLocale::languageToString(numberFormat).toStdString());
+	DEBUG("locale = " << STDSTRING(QLocale::languageToString(numberFormat)));
 	QLocale locale(numberFormat);
 
 	// Read the data
@@ -1944,7 +1944,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& message) {
 		for (int n = 0; n < m_actualCols - offset; ++n) {
 			if (n < lineStringList.size()) {
 				QString valueString = lineStringList.at(n);
-				//DEBUG(" valueString = " << valueString.toStdString());
+				//DEBUG(" valueString = " << STDSTRING(valueString));
 				if (skipEmptyParts && !QString::compare(valueString, " "))	// handle left white spaces
 					continue;
 
@@ -2085,7 +2085,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 	const int keepNValues = spreadsheet->mqttClient()->keepNValues();
 
 	if (!m_prepared) {
-		DEBUG("Start preparing filter for: " << spreadsheet->topicName().toStdString());
+		DEBUG("Start preparing filter for: " << STDSTRING(spreadsheet->topicName()));
 
 		//Prepare the filter
 		const int mqttPrepareError = prepareToRead(message);

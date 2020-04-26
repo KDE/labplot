@@ -117,7 +117,7 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	proc.start("file", QStringList() << "-b" << "-z" << fileName);
 	if (!proc.waitForFinished(1000)) {
 		proc.kill();
-		DEBUG("ERROR: reading file type of file" << fileName.toStdString());
+		DEBUG("ERROR: reading file type of file" << STDSTRING(fileName));
 		return Binary;
 	}
 	fileInfo = proc.readLine();

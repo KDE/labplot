@@ -249,8 +249,8 @@ void MainWin::initGUI(const QString& fileName) {
 	setupGUI(Default, KXMLGUIClient::xmlFile());	// should be "labplot2ui.rc"
 #endif
 
-	DEBUG("Component name: " << KXMLGUIClient::componentName().toStdString());
-	DEBUG("XML file: " << KXMLGUIClient::xmlFile().toStdString() << " (should be \"labplot2ui.rc\")");
+	DEBUG("Component name: " << STDSTRING(KXMLGUIClient::componentName()));
+	DEBUG("XML file: " << STDSTRING(KXMLGUIClient::xmlFile()) << " (should be \"labplot2ui.rc\")");
 
 	//all toolbars created via the KXMLGUI framework are locked on default:
 	// * on the very first program start, unlock all toolbars
@@ -1478,7 +1478,7 @@ bool MainWin::save(const QString& fileName) {
 
 	WAIT_CURSOR;
 	const QString& tempFileName = tempFile.fileName();
-	DEBUG("Using temporary file " << tempFileName.toStdString())
+	DEBUG("Using temporary file " << STDSTRING(tempFileName))
 	tempFile.close();
 
 	// use file ending to find out how to compress file

@@ -1377,7 +1377,7 @@ void Column::handleFormatChange() {
 	if (columnMode() == AbstractColumn::DateTime) {
 		auto* input_filter = static_cast<String2DateTimeFilter*>(d->inputFilter());
 		auto* output_filter = static_cast<DateTime2StringFilter*>(d->outputFilter());
-		DEBUG("change format " << input_filter->format().toStdString() << " to " << output_filter->format().toStdString());
+		DEBUG("change format " << STDSTRING(input_filter->format()) << " to " << STDSTRING(output_filter->format()));
 		input_filter->setFormat(output_filter->format());
 	}
 

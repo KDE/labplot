@@ -276,20 +276,20 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 	// do not skip anything if pathesToLoad() contains only root folder
 	bool containsRootFolder = (folder->pathesToLoad().size() == 1 && folder->pathesToLoad().contains(folder->path()));
 	if (containsRootFolder) {
-		DEBUG("	pathesToLoad contains only folder path \""  << folder->path().toStdString() << "\". Clearing pathes to load.")
+		DEBUG("	pathesToLoad contains only folder path \""  << STDSTRING(folder->path()) << "\". Clearing pathes to load.")
 		folder->setPathesToLoad(QStringList());
 	}
 
 	//load folder's children: logic for reading the selected objects only is similar to Folder::readChildAspectElement
 	for (tree<Origin::ProjectNode>::sibling_iterator it = projectTree->begin(baseIt); it != projectTree->end(baseIt); ++it) {
 		QString name(QString::fromLatin1(it->name.c_str())); //name of the current child
-		DEBUG("	* folder item name = " << name.toStdString())
+		DEBUG("	* folder item name = " << STDSTRING(name))
 
 		//check whether we need to skip the loading of the current child
 		if (!folder->pathesToLoad().isEmpty()) {
 			//child's path is not available yet (child not added yet) -> construct the path manually
 			const QString childPath = folder->path() + '/' + name;
-			DEBUG("		path = " << childPath.toStdString())
+			DEBUG("		path = " << STDSTRING(childPath))
 
 			//skip the current child aspect it is not in the list of aspects to be loaded
 			if (folder->pathesToLoad().indexOf(childPath) == -1) {
@@ -447,14 +447,14 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		DEBUG("	spread.objectId = " << spread.objectID);
 		// skip unused spreads if selected
 		if (spread.objectID < 0 && !m_importUnusedObjects) {
-			DEBUG("	Dropping unused loose spread: " << name.toStdString());
+			DEBUG("	Dropping unused loose spread: " << STDSTRING(name));
 			continue;
 		}
 
 		const QString childPath = folder->path() + '/' + name;
 		// we could also use spread.loose
 		if (!m_spreadNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
-			DEBUG("	Adding loose spread: " << name.toStdString());
+			DEBUG("	Adding loose spread: " << STDSTRING(name));
 
 			Spreadsheet* spreadsheet = new Spreadsheet(name);
 			loadSpreadsheet(spreadsheet, preview, name);
@@ -475,14 +475,14 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		DEBUG("	excel.objectId = " << excel.objectID);
 		// skip unused data sets if selected
 		if (excel.objectID < 0 && !m_importUnusedObjects) {
-			DEBUG("	Dropping unused loose excel: " << name.toStdString());
+			DEBUG("	Dropping unused loose excel: " << STDSTRING(name));
 			continue;
 		}
 
 		const QString childPath = folder->path() + '/' + name;
 		// we could also use excel.loose
 		if (!m_excelNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
-			DEBUG("	Adding loose excel: " << name.toStdString());
+			DEBUG("	Adding loose excel: " << STDSTRING(name));
 			DEBUG("	 containing number of sheets = " << excel.sheets.size());
 
 			Workbook* workbook = new Workbook(name);
@@ -504,13 +504,13 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		DEBUG("	originMatrix.objectId = " << originMatrix.objectID);
 		// skip unused data sets if selected
 		if (originMatrix.objectID < 0 && !m_importUnusedObjects) {
-			DEBUG("	Dropping unused loose matrix: " << name.toStdString());
+			DEBUG("	Dropping unused loose matrix: " << STDSTRING(name));
 			continue;
 		}
 
 		const QString childPath = folder->path() + '/' + name;
 		if (!m_matrixNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
-			DEBUG("	Adding loose matrix: " << name.toStdString());
+			DEBUG("	Adding loose matrix: " << STDSTRING(name));
 			DEBUG("	containing number of sheets = " << originMatrix.sheets.size());
 			if (originMatrix.sheets.size() == 1) { // single sheet -> load into a matrix
 				Matrix* matrix = new Matrix(name);
@@ -536,13 +536,13 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		DEBUG("	graph.objectId = " << graph.objectID);
 		// skip unused graph if selected
 		if (graph.objectID < 0 && !m_importUnusedObjects) {
-			DEBUG("	Dropping unused loose graph: " << name.toStdString());
+			DEBUG("	Dropping unused loose graph: " << STDSTRING(name));
 			continue;
 		}
 
 		const QString childPath = folder->path() + '/' + name;
 		if (!m_graphNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
-			DEBUG("	Adding loose graph: " << name.toStdString());
+			DEBUG("	Adding loose graph: " << STDSTRING(name));
 			Worksheet* worksheet = new Worksheet(name);
 			loadWorksheet(worksheet, preview);
 			aspect = worksheet;
@@ -561,13 +561,13 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		DEBUG("	originNote.objectId = " << originNote.objectID);
 		// skip unused notes if selected
 		if (originNote.objectID < 0 && !m_importUnusedObjects) {
-			DEBUG("	Dropping unused loose note: " << name.toStdString());
+			DEBUG("	Dropping unused loose note: " << STDSTRING(name));
 			continue;
 		}
 
 		const QString childPath = folder->path() + '/' + name;
 		if (!m_noteNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
-			DEBUG("	Adding loose note: " << name.toStdString());
+			DEBUG("	Adding loose note: " << STDSTRING(name));
 			Note* note = new Note(name);
 			loadNote(note, preview);
 			aspect = note;
@@ -1112,7 +1112,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				Origin::GraphCurve originCurve = layer.curves[0];
 				QString xColumnName = QString::fromLatin1(originCurve.xColumnName.c_str());
 				//TODO: "Partikelgrö"
-				DEBUG("	xColumnName = " << xColumnName.toStdString());
+				DEBUG("	xColumnName = " << STDSTRING(xColumnName));
 				QDEBUG("	UTF8 xColumnName = " << xColumnName.toUtf8());
 				QString yColumnName = QString::fromLatin1(originCurve.yColumnName.c_str());
 
@@ -1164,7 +1164,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			//add legend if available
 			const Origin::TextBox& originLegend = layer.legend;
 			const QString& legendText = QString::fromLatin1(originLegend.text.c_str());
-			DEBUG(" legend text = " << legendText.toStdString());
+			DEBUG(" legend text = " << STDSTRING(legendText));
 			if (!originLegend.text.empty()) {
 				CartesianPlotLegend* legend = new CartesianPlotLegend(plot, i18n("legend"));
 
@@ -1189,7 +1189,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				if (!legendTitle.isEmpty())
 					legendTitle = parseOriginText(legendTitle);
 
-				DEBUG(" legend title = " << legendTitle.toStdString());
+				DEBUG(" legend title = " << STDSTRING(legendTitle));
 				legend->title()->setText(legendTitle);
 
 				//TODO: text color
@@ -1270,7 +1270,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 						// replace %(1), %(2), etc. with curve name
 						curveText.replace(QString("%(%1)").arg(curveIndex), QString::fromLatin1(originCurve.yColumnName.c_str()));
 						curveText = curveText.trimmed();
-						DEBUG(" curve " << curveIndex << " text = " << curveText.toStdString());
+						DEBUG(" curve " << curveIndex << " text = " << STDSTRING(curveText));
 
 						//XYCurve* xyCurve = new XYCurve(i18n("Curve%1", QString::number(curveIndex)));
 						//TODO: curve (legend) does not support HTML text yet.
@@ -1506,14 +1506,14 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->setMinorTicksPen(pen);
 
 	QString titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
-	DEBUG("	axis title text = " << titleText.toStdString());
+	DEBUG("	axis title text = " << STDSTRING(titleText));
 	//TODO: parseOriginText() returns html formatted string. What is axisFormat.color used for?
 	//TODO: use axisFormat.fontSize to override the global font size for the hmtl string?
 	//TODO: convert special character here too
-	DEBUG("	curve name = " << axisTitle.toStdString());
+	DEBUG("	curve name = " << STDSTRING(axisTitle));
 	titleText.replace("%(?X)", axisTitle);
 	titleText.replace("%(?Y)", axisTitle);
-	DEBUG(" axis title = " << titleText.toStdString());
+	DEBUG(" axis title = " << STDSTRING(titleText));
 	axis->title()->setText(titleText);
 	axis->title()->setRotationAngle(axisFormat.label.rotation);
 
@@ -1822,7 +1822,7 @@ QString OriginProjectParser::parseOriginText(const QString &str) const {
 		text.append(parseOriginTags(lines[i]));
 	}
 
-	DEBUG(" PARSED TEXT = " << text.toStdString());
+	DEBUG(" PARSED TEXT = " << STDSTRING(text));
 
 	return text;
 }
@@ -2058,7 +2058,7 @@ QString OriginProjectParser::replaceSpecialChars(const QString& text) const {
  */
 QString OriginProjectParser::parseOriginTags(const QString& str) const {
 	DEBUG("parseOriginTags()");
-	DEBUG("	string: " << str.toStdString());
+	DEBUG("	string: " << STDSTRING(str));
 	QDEBUG("	UTF8 string: " << str.toUtf8());
 	QString line = str;
 
@@ -2137,7 +2137,7 @@ QString OriginProjectParser::parseOriginTags(const QString& str) const {
 	// special characters
 	line.replace(QRegularExpression(QStringLiteral("\\\\\\((\\d+)\\)")), "&#\\1;");
 
-	DEBUG("	result: " << line.toStdString());
+	DEBUG("	result: " << STDSTRING(line));
 
 	return line;
 }

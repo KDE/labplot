@@ -356,7 +356,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 	}
 
 	QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[dist]) + ".png");
-	DEBUG("Distribution pixmap path = " << file.toStdString());
+	DEBUG("Distribution pixmap path = " << STDSTRING(file));
 	ui.lFuncPic->setPixmap(QPixmap(file));
 }
 

@@ -141,7 +141,7 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 	case AbstractColumn::Day:
 	case AbstractColumn::DateTime: {
 			auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
-			DEBUG("	set column format: " << filter->format().toStdString());
+			DEBUG("	set column format: " << STDSTRING(filter->format()));
 			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->format()));
 			break;
 		}

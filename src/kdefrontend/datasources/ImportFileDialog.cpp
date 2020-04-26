@@ -419,7 +419,7 @@ void ImportFileDialog::checkOkButton() {
 				okButton->setEnabled(true);
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
 			} else {
-				DEBUG("failed connect to local socket - " << lsocket.errorString().toStdString());
+				DEBUG("failed connect to local socket - " << STDSTRING(lsocket.errorString()));
 				okButton->setEnabled(false);
 				okButton->setToolTip(i18n("Could not connect to the provided local socket."));
 			}
@@ -440,7 +440,7 @@ void ImportFileDialog::checkOkButton() {
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
 				socket.disconnectFromHost();
 			} else {
-				DEBUG("failed to connect to TCP socket - " << socket.errorString().toStdString());
+				DEBUG("failed to connect to TCP socket - " << STDSTRING(socket.errorString()));
 				okButton->setEnabled(false);
 				okButton->setToolTip(i18n("Could not connect to the provided TCP socket."));
 			}
@@ -462,7 +462,7 @@ void ImportFileDialog::checkOkButton() {
 				socket.disconnectFromHost();
 				// read-only socket is disconnected immediately (no waitForDisconnected())
 			} else {
-				DEBUG("failed to connect to UDP socket - " << socket.errorString().toStdString());
+				DEBUG("failed to connect to UDP socket - " << STDSTRING(socket.errorString()));
 				okButton->setEnabled(false);
 				okButton->setToolTip(i18n("Could not connect to the provided UDP socket."));
 			}
@@ -480,7 +480,7 @@ void ImportFileDialog::checkOkButton() {
 		if (!sPort.isEmpty()) {
 			QSerialPort serialPort{this};
 
-			DEBUG("	Port: " << sPort.toStdString() << ", Settings: " << baudRate << ',' << serialPort.dataBits()
+			DEBUG("	Port: " << STDSTRING(sPort) << ", Settings: " << baudRate << ',' << serialPort.dataBits()
 					<< ',' << serialPort.parity() << ',' << serialPort.stopBits());
 			serialPort.setPortName(sPort);
 			serialPort.setBaudRate(baudRate);

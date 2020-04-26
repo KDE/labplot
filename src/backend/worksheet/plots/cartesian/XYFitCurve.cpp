@@ -613,7 +613,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	case nsl_fit_model_custom:
 		break;
 	}
-	DEBUG("model: " << model.toStdString());
+	DEBUG("model: " << STDSTRING(model));
 
 	if (paramNamesUtf8.isEmpty())
 		paramNamesUtf8 << paramNames;
@@ -1489,7 +1489,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 
 //				DEBUG("evaluate deriv"<<QString(func)<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15));
 //				DEBUG("evaluate deriv"<<QString(func)<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15));
-//				DEBUG("	deriv = "<<QString::number(sqrt(weight[i])*(f_pdp-f_p)/eps, 'g', 15).toStdString());
+//				DEBUG("	deriv = " << STDSTRING(QString::number(sqrt(weight[i])*(f_pdp-f_p)/eps, 'g', 15));
 
 				if (fixed[j])
 					gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
@@ -1724,7 +1724,7 @@ void XYFitCurvePrivate::recalculate() {
 
 	//function to fit
 	gsl_multifit_function_fdf f;
-	DEBUG("model = " << fitData.model.toStdString());
+	DEBUG("model = " << STDSTRING(fitData.model));
 	struct data params = {n, xdata, ydata, weight, fitData.modelCategory, fitData.modelType, fitData.degree, &fitData.model, &fitData.paramNames, fitData.paramLowerLimits.data(), fitData.paramUpperLimits.data(), fitData.paramFixed.data()};
 	f.f = &func_f;
 	f.df = &func_df;
@@ -2256,7 +2256,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("degree", fitData.degree, int);
 			if (d->fitData.modelCategory == nsl_fit_model_custom) {
 				READ_STRING_VALUE("model", fitData.model);
-				DEBUG("read model = " << d->fitData.model.toStdString());
+				DEBUG("read model = " << STDSTRING(d->fitData.model));
 			}
 			READ_INT_VALUE("maxIterations", fitData.maxIterations, int);
 			READ_DOUBLE_VALUE("eps", fitData.eps);
@@ -2332,7 +2332,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				delete column;
 				return false;
 			}
-			DEBUG("############################   reading column " << column->name().toStdString())
+			DEBUG("############################   reading column " << STDSTRING(column->name()))
 			if (column->name() == "x")
 				d->xColumn = column;
 			else if (column->name() == "y")

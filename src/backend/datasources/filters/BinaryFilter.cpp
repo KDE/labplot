@@ -232,7 +232,7 @@ void BinaryFilterPrivate::readDataFromFile(const QString& fileName, AbstractData
 	numRows = BinaryFilter::rowNumber(fileName, vectors, dataType);
 
 	if (! device.open(QIODevice::ReadOnly)) {
-		DEBUG("	could not open file " << fileName.toStdString());
+		DEBUG("	could not open file " << STDSTRING(fileName));
 		return;
 	}
 	readDataFromDevice(device, dataSource, importMode);
@@ -285,7 +285,7 @@ int BinaryFilterPrivate::prepareStreamToRead(QDataStream& in) {
     reads \c lines lines of the device \c device and return as string for preview.
 */
 QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int lines) {
-	DEBUG("BinaryFilterPrivate::preview( " << fileName.toStdString() << ", " << lines << ")");
+	DEBUG("BinaryFilterPrivate::preview( " << STDSTRING(fileName) << ", " << lines << ")");
 	QVector<QStringList> dataStrings;
 
 	KFilterDev device(fileName);

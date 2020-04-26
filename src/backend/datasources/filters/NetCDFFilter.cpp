@@ -294,7 +294,7 @@ QString NetCDFFilter::fileCDLString(const QString& fileName) {
 		CDLString += proc->readAll();
 		CDLString.replace('\n', "<br>\n");
 		CDLString.replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;");
-		//DEBUG("	CDL string: " << CDLString.toStdString());
+		//DEBUG("	CDL string: " << STDSTRING(CDLString));
 	}
 #else	//TODO: ncdump on Win, Mac
 	Q_UNUSED(fileName)
@@ -316,7 +316,7 @@ NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) : q(owner) {
 #ifdef HAVE_NETCDF
 void NetCDFFilterPrivate::handleError(int err, const QString& function) {
 	if (err != NC_NOERR) {
-		DEBUG("NETCDF ERROR:" << function.toStdString() << "() - " << nc_strerror(err));
+		DEBUG("NETCDF ERROR:" << STDSTRING(function) << "() - " << nc_strerror(err));
 		return;
 	}
 	Q_UNUSED(function);
@@ -653,7 +653,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 
 	if (currentVarName.isEmpty())
 		return dataStrings << (QStringList() << i18n("No variable selected"));
-	DEBUG(" current variable = " << currentVarName.toStdString());
+	DEBUG(" current variable = " << STDSTRING(currentVarName));
 
 #ifdef HAVE_NETCDF
 	int ncid;
@@ -719,7 +719,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 		if (dataSource)
 			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
 
-		DEBUG("	Reading data of type " << translateDataType(type).toStdString());
+		DEBUG("	Reading data of type " << STDSTRING(translateDataType(type)));
 		switch (type) {
 		case NC_BYTE: { NC_READ_VAR(signed char, schar, int); break; }
 		case NC_UBYTE: { NC_READ_VAR(unsigned char, uchar, int); break; }
@@ -794,7 +794,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 		if (dataSource)
 			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
 
-		DEBUG("	Reading data of type " << translateDataType(type).toStdString());
+		DEBUG("	Reading data of type " << STDSTRING(translateDataType(type)));
 		switch (type) {
 		case NC_BYTE: { NC_READ_AVAR(signed char, schar, int); break; }
 		case NC_UBYTE: { NC_READ_AVAR(unsigned char, uchar, int); break; }

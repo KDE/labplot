@@ -466,7 +466,7 @@ void ImportFileWidget::showOptions(bool b) {
 }
 
 QString ImportFileWidget::fileName() const {
-	DEBUG("ImportFileWidget::fileName() : " << m_cbFileName->currentText().toStdString())
+	DEBUG("ImportFileWidget::fileName() : " << STDSTRING(m_cbFileName->currentText()))
 	return m_cbFileName->currentText();
 }
 
@@ -816,8 +816,8 @@ void ImportFileWidget::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("ImportFileWidget"));
 	const QString& dir = conf.readEntry(QLatin1String("LastDir"), "");
 	const QString& path = QFileDialog::getOpenFileName(this, i18n("Select the File Data Source"), dir);
-	DEBUG("	dir = " << dir.toStdString())
-	DEBUG("	path = " << path.toStdString())
+	DEBUG("	dir = " << STDSTRING(dir))
+	DEBUG("	path = " << STDSTRING(path))
 	if (path.isEmpty())	//cancel was clicked in the file-dialog
 		return;
 
@@ -836,7 +836,7 @@ void ImportFileWidget::selectFile() {
 	urls.insert(0, QUrl::fromLocalFile(path).url()); // add type of path
 	m_cbFileName->setUrls(urls);
 	m_cbFileName->setCurrentText(urls.first());
-	DEBUG("	combobox text = " << m_cbFileName->currentText().toStdString())
+	DEBUG("	combobox text = " << STDSTRING(m_cbFileName->currentText()))
 	fileNameChanged(path); // why do I have to call this function separately
 }
 
@@ -940,7 +940,7 @@ void ImportFileWidget::unsubscribeFromTopic(const QString& topicName, QVector<QT
 	and activates the corresponding options.
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
-	DEBUG("ImportFileWidget::fileNameChanged() : " << name.toStdString())
+	DEBUG("ImportFileWidget::fileNameChanged() : " << STDSTRING(name))
 	const QString fileName = absolutePath(name);
 
 	bool fileExists = QFile::exists(fileName);
@@ -1284,7 +1284,7 @@ void ImportFileWidget::refreshPreview() {
 	int lines = ui.sbPreviewLines->value();
 
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
-		DEBUG("	file name = " << fileName.toStdString());
+		DEBUG("	file name = " << STDSTRING(fileName));
 
 	// generic table widget
 	if (fileType == AbstractFileFilter::Ascii || fileType == AbstractFileFilter::Binary
@@ -1317,14 +1317,14 @@ void ImportFileWidget::refreshPreview() {
 			DEBUG("Local socket: CONNECT PREVIEW");
 			lsocket.connectToServer(fileName, QLocalSocket::ReadOnly);
 			if (lsocket.waitForConnected()) {
-				DEBUG("connected to local socket " << fileName.toStdString());
+				DEBUG("connected to local socket " << STDSTRING(fileName));
 				if (lsocket.waitForReadyRead())
 					importedStrings = filter->preview(lsocket);
 				DEBUG("Local socket: DISCONNECT PREVIEW");
 				lsocket.disconnectFromServer();
 				// read-only socket is disconnected immediately (no waitForDisconnected())
 			} else
-				DEBUG("failed connect to local socket " << fileName.toStdString() << " - " << lsocket.errorString().toStdString());
+				DEBUG("failed connect to local socket " << STDSTRING(fileName) << " - " << STDSTRING(lsocket.errorString()));
 
 			break;
 		}
@@ -1338,7 +1338,7 @@ void ImportFileWidget::refreshPreview() {
 
 				tcpSocket.disconnectFromHost();
 			} else
-				DEBUG("failed to connect to TCP socket " << " - " << tcpSocket.errorString().toStdString());
+				DEBUG("failed to connect to TCP socket " << " - " << STDSTRING(tcpSocket.errorString()));
 
 			break;
 		}
@@ -1348,7 +1348,7 @@ void ImportFileWidget::refreshPreview() {
 			udpSocket.bind(QHostAddress(host()), port().toInt());
 			udpSocket.connectToHost(host(), 0, QUdpSocket::ReadOnly);
 			if (udpSocket.waitForConnected()) {
-				DEBUG("	connected to UDP socket " << host().toStdString() << ':' << port().toInt());
+				DEBUG("	connected to UDP socket " << STDSTRING(host()) << ':' << port().toInt());
 				if (!udpSocket.waitForReadyRead(2000) )
 					DEBUG("	ERROR: not ready for read after 2 sec");
 				if (udpSocket.hasPendingDatagrams()) {
@@ -1361,13 +1361,13 @@ void ImportFileWidget::refreshPreview() {
 				DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
 				udpSocket.disconnectFromHost();
 			} else
-				DEBUG("failed to connect to UDP socket " << " - " << udpSocket.errorString().toStdString());
+				DEBUG("failed to connect to UDP socket " << " - " << STDSTRING(udpSocket.errorString()));
 
 			break;
 		}
 		case LiveDataSource::SourceType::SerialPort: {
 			QSerialPort sPort{this};
-			DEBUG("	Port: " << serialPort().toStdString() << ", Settings: " << baudRate() << ',' << sPort.dataBits()
+			DEBUG("	Port: " << STDSTRING(serialPort()) << ", Settings: " << baudRate() << ',' << sPort.dataBits()
 			      << ',' << sPort.parity() << ',' << sPort.stopBits());
 			sPort.setPortName(serialPort());
 			sPort.setBaudRate(baudRate());
@@ -1443,10 +1443,10 @@ void ImportFileWidget::refreshPreview() {
 
 		QString extensionName = m_fitsOptionsWidget->extensionName(&ok);
 		if (!extensionName.isEmpty()) {
-			DEBUG("	extension name = " << extensionName.toStdString());
+			DEBUG("	extension name = " << STDSTRING(extensionName));
 			fileName = extensionName;
 		}
-		DEBUG("	file name = " << fileName.toStdString());
+		DEBUG("	file name = " << STDSTRING(fileName));
 
 		bool readFitsTableToMatrix;
 		importedStrings = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
@@ -1920,7 +1920,7 @@ void ImportFileWidget::onMqttConnect() {
  * removes every information about the former connection
  */
 void ImportFileWidget::onMqttDisconnect() {
-	DEBUG("Disconected from " << m_client->hostname().toStdString());
+	DEBUG("Disconnected from " << STDSTRING(m_client->hostname()));
 	m_connectTimeoutTimer->stop();
 
 	ui.lTopics->hide();

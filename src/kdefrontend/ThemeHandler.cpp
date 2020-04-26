@@ -104,7 +104,7 @@ QStringList ThemeHandler::themeList() {
 	}
 
 	if (!themes.isEmpty())
-		DEBUG("	first theme path: " << themes.first().toStdString());
+		DEBUG("	first theme path: " << STDSTRING(themes.first()));
 
 	return themes;
 }
@@ -123,7 +123,7 @@ QStringList ThemeHandler::themes() {
 	}
 
 	if (!themes.isEmpty()) {
-		DEBUG("	first theme: " << themes.first().toStdString());
+		DEBUG("	first theme: " << STDSTRING(themes.first()));
 		QDEBUG("	themes = " << themes);
 	}
 
@@ -134,14 +134,14 @@ QStringList ThemeHandler::themes() {
  * get path for theme of name 'name'
  */
 const QString ThemeHandler::themeFilePath(const QString& name) {
-	DEBUG("ThemeHandler::themeFilePath() name = " << name.toStdString());
+	DEBUG("ThemeHandler::themeFilePath() name = " << STDSTRING(name));
 	QStringList themePaths = themeList();
 
 	for (int i = 0; i < themePaths.size(); ++i) {
 		const QString& path = themePaths.at(i);
 		const QString& fileName = QFileInfo(path).fileName();
 		if (fileName == name) {
-			DEBUG("	theme \"" << name.toStdString() << "\" path: " << path.toStdString());
+			DEBUG("	theme \"" << STDSTRING(name) << "\" path: " << STDSTRING(path));
 			return path;
 		}
 	}

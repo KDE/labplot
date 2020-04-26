@@ -45,7 +45,7 @@ NgspiceRawBinaryFilter::~NgspiceRawBinaryFilter() = default;
 bool NgspiceRawBinaryFilter::isNgspiceBinaryFile(const QString& fileName) {
 	QFile file(fileName);
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		DEBUG("Failed to open the file " << fileName.toStdString());
+		DEBUG("Failed to open the file " << STDSTRING(fileName));
 		return false;
 	}
 
@@ -164,12 +164,12 @@ NgspiceRawBinaryFilterPrivate::NgspiceRawBinaryFilterPrivate(NgspiceRawBinaryFil
     reads the content of the file \c fileName to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void NgspiceRawBinaryFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	DEBUG("NgspiceRawBinaryFilterPrivate::readDataFromFile(): fileName = \'" << fileName.toStdString() << "\', dataSource = "
+	DEBUG("NgspiceRawBinaryFilterPrivate::readDataFromFile(): fileName = \'" << STDSTRING(fileName) << "\', dataSource = "
 	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode));
 
 	QFile file(fileName);
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		DEBUG("Failed to open the file " << fileName.toStdString());
+		DEBUG("Failed to open the file " << STDSTRING(fileName));
 		return;
 	}
 
@@ -262,7 +262,7 @@ QVector<QStringList> NgspiceRawBinaryFilterPrivate::preview(const QString& fileN
 
 	QFile file(fileName);
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		DEBUG("Failed to open the file " << fileName.toStdString());
+		DEBUG("Failed to open the file " << STDSTRING(fileName));
 		return dataStrings;
 	}
 

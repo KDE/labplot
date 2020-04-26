@@ -337,7 +337,7 @@ QString HDF5Filter::fileDDLString(const QString& fileName) {
 		DDLString += proc->readAll();
 		DDLString.replace('\n', "<br>\n");
 		DDLString.replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;");
-		//DEBUG("	DDL string: " << DDLString.toStdString());
+		//DEBUG("	DDL string: " << STDSTRING(DDLString));
 	}
 #else	//TODO: h5dump on Win, Mac
 	Q_UNUSED(fileName)
@@ -364,7 +364,7 @@ void HDF5FilterPrivate::handleError(int err, const QString& function, const QStr
 	Q_UNUSED(arg)
 #else
 	if (err < 0) {
-		DEBUG("ERROR " << err << ": " << function.toStdString() << "() - " << arg.toStdString());
+		DEBUG("ERROR " << err << ": " << STDSTRING(function) << "() - " << STDSTRING(arg));
 	}
 #endif
 }
@@ -622,7 +622,7 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 			}
 			H5T_class_t mclass = H5Tget_member_class(tid, m);
 			handleError((int)mclass, "H5Tget_member_class");
-			DEBUG("unsupported type of class " << translateHDF5Class(mclass).toStdString());
+			DEBUG("unsupported type of class " << STDSTRING(translateHDF5Class(mclass)));
 		}
 
 		if (!dataContainer[0]) {
@@ -774,7 +774,7 @@ QVector<QStringList> HDF5FilterPrivate::readHDF5CompoundData2D(hid_t dataset, hi
 #ifndef NDEBUG
 			H5T_class_t mclass = H5Tget_member_class(tid, m);
 #endif
-			DEBUG("unsupported class " << translateHDF5Class(mclass).toStdString());
+			DEBUG("unsupported class " << STDSTRING(translateHDF5Class(mclass)));
 		}
 
 		m_status = H5Tclose(ctype);
@@ -1457,7 +1457,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 		ok = false;
 		return dataStrings << (QStringList() << i18n("No data set selected"));
 	}
-	DEBUG(" current data set = " << currentDataSetName.toStdString());
+	DEBUG(" current data set = " << STDSTRING(currentDataSetName));
 
 #ifdef HAVE_HDF5
 	QByteArray bafileName = fileName.toLatin1();

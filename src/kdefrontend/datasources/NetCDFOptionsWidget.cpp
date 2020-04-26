@@ -95,7 +95,7 @@ void NetCDFOptionsWidget::netcdfTreeWidgetSelectionChanged() {
 		QDEBUG("name =" << name << "varName =" << varName);
 
 		QString importedText = filter->readAttribute(fileName, name, varName);
-		DEBUG("importedText =" << importedText.toStdString());
+		DEBUG("importedText =" << STDSTRING(importedText));
 
 		QStringList lineStrings = importedText.split('\n');
 		int rows = lineStrings.size();

@@ -47,7 +47,7 @@ public:
 		int result;
 		bool valid;
 		QString textValue = m_inputs.value(0)->textAt(row);
-		//DEBUG("	textValue = " << textValue.toStdString());
+		//DEBUG("	textValue = " << STDSTRING(textValue));
 		if (m_use_default_locale) // we need a new QLocale instance here in case the default changed since the last call
 			result = QLocale().toInt(textValue, &valid);
 		else

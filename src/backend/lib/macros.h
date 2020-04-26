@@ -50,6 +50,7 @@
 #endif
 
 #define UTF8_QSTRING(str) QString::fromUtf8(str)
+#define STDSTRING(qstr) qstr.toUtf8().constData()
 
 #define ENUM_TO_STRING(class, enum, value) \
     (class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(value))

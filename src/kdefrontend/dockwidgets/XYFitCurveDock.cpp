@@ -815,7 +815,7 @@ void XYFitCurveDock::updateModelEquation() {
 	}
 
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
-		DEBUG("Model pixmap path = " << file.toStdString());
+		DEBUG("Model pixmap path = " << STDSTRING(file));
 		uiGeneralTab.lFuncPic->setPixmap(file);
 		uiGeneralTab.lFuncPic->show();
 		uiGeneralTab.teEquation->hide();
@@ -972,6 +972,10 @@ void XYFitCurveDock::recalculateClicked() {
 
 	//update fitParametersWidget
 	if (m_fitData.useResults) {
+		//TODO: fix crash fitting datetime data
+		DEBUG(" nr of param names = " << m_fitData.paramNames.size())
+		DEBUG("	size of start values = " << m_fitData.paramStartValues.size())
+		DEBUG("	size of param values = " << m_fitCurve->fitResult().paramValues.size())
 		for (int i = 0; i < m_fitData.paramNames.size(); i++)
 			m_fitData.paramStartValues[i] = m_fitCurve->fitResult().paramValues[i];
 		fitParametersWidget->setFitData(&m_fitData);
@@ -1062,7 +1066,7 @@ void XYFitCurveDock::resultCopySelection() {
 	}
 	str += '\n';
 	QApplication::clipboard()->setText(str);
-	DEBUG(QApplication::clipboard()->text().toStdString());
+	DEBUG(STDSTRING(QApplication::clipboard()->text()));
 }
 
 void XYFitCurveDock::resultCopyAll() {
@@ -1139,7 +1143,7 @@ void XYFitCurveDock::resultCopyAll() {
 	}
 
 	QApplication::clipboard()->setText(str);
-	DEBUG(QApplication::clipboard()->text().toStdString());
+	DEBUG(STDSTRING(QApplication::clipboard()->text()));
 }
 
 void XYFitCurveDock::resultParametersContextMenuRequest(QPoint pos) {

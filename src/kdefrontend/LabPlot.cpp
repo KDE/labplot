@@ -64,7 +64,7 @@ int main (int argc, char *argv[]) {
 #endif
 	KAboutData aboutData( QStringLiteral("labplot2"), QString("LabPlot"),
 		LVERSION, i18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
-		KAboutLicense::GPL,i18n("(c) 2007-2020"), buildType, QStringLiteral("https://labplot.kde.org"));
+		KAboutLicense::GPL, i18n("(c) 2007-2020"), buildType, QStringLiteral("https://labplot.kde.org"));
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), "stefan.gerlach@uni.kn", nullptr);
 	aboutData.addAuthor(i18n("Alexander Semke"), i18nc("@info:credit", "Developer"), "alexander.semke@web.de", nullptr);
 	aboutData.addAuthor(i18n("Fábián Kristóf-Szabolcs"), i18nc("@info:credit", "Developer"), "f-kristof@hotmail.com", nullptr);
@@ -141,13 +141,13 @@ int main (int argc, char *argv[]) {
 	QStringList appdatapaths = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
 	DEBUG("AppDataLocation paths:")
 	for (const QString &path: appdatapaths)
-		DEBUG("	" << path.toStdString());
+		DEBUG("	" << STDSTRING(path));
 	DEBUG("Icon theme search paths:")
 	for (const QString &path: QIcon::themeSearchPaths())
-		DEBUG("	" << path.toStdString());
+		DEBUG("	" << STDSTRING(path));
 	DEBUG("Library search paths:")
 	for (const QString &path: QCoreApplication::libraryPaths())
-		DEBUG("	" << path.toStdString());
+		DEBUG("	" << STDSTRING(path));
 #endif
 
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));

@@ -271,14 +271,14 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) : q(owner) {}
  * \param importMode
  */
 QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, bool* okToMatrix, int lines) {
-	DEBUG("FITSFilterPrivate::readCHDU() file name = " << fileName.toStdString());
+	DEBUG("FITSFilterPrivate::readCHDU() file name = " << STDSTRING(fileName));
 	QVector<QStringList> dataStrings;
 
 #ifdef HAVE_FITS
 	int status = 0;
 
 	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READONLY, &status)) {
-		DEBUG("	ERROR opening file " << fileName.toStdString());
+		DEBUG("	ERROR opening file " << STDSTRING(fileName));
 		printError(status);
 		return dataStrings;
 	}
@@ -964,7 +964,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
  * \param fileName the name of the FITS file to be analyzed
  */
 QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fileName) {
-	DEBUG("FITSFilterPrivate::extensionNames() file name = " << fileName.toStdString());
+	DEBUG("FITSFilterPrivate::extensionNames() file name = " << STDSTRING(fileName));
 #ifdef HAVE_FITS
 	QMultiMap<QString, QString> extensions;
 	int status = 0;

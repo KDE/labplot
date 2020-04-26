@@ -941,7 +941,7 @@ void XYCurvePrivate::retransform() {
 	if (!isVisible())
 		return;
 
-	DEBUG("\nXYCurvePrivate::retransform() name = " << name().toStdString() << ", m_suppressRetransform = " << m_suppressRetransform);
+	DEBUG("\nXYCurvePrivate::retransform() name = " << STDSTRING(name()) << ", m_suppressRetransform = " << m_suppressRetransform);
 	DEBUG("	plot = " << plot);
 	if (m_suppressRetransform || !plot)
 		return;

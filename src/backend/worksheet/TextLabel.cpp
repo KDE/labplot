@@ -97,7 +97,7 @@ void TextLabel::init() {
 	}
 
 	const KConfig config;
-	DEBUG("	config has group \"" << groupName.toStdString() << "\": " << config.hasGroup(groupName));
+	DEBUG("	config has group \"" << STDSTRING(groupName) << "\": " << config.hasGroup(groupName));
 	// group is always valid if you call config.group(..;
 	KConfigGroup group;
 	if (config.hasGroup(groupName))

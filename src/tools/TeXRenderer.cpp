@@ -87,7 +87,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	if (file.open()) {
 		QDir::setCurrent(tempPath);
 	} else {
-		WARN(QString("Couldn't open the file " + file.fileName()).toStdString());
+		WARN("Couldn't open the file " << STDSTRING(file.fileName()));
 		*success = false;
 		return QImage();
 	}

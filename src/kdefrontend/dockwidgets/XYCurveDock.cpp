@@ -808,7 +808,7 @@ void XYCurveDock::showValuesColumnFormat(const Column* column) {
 		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
 			const auto* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
-			DEBUG("	column values format = " << filter->format().toStdString());
+			DEBUG("	column values format = " << STDSTRING(filter->format()));
 			ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
 			break;
 		}

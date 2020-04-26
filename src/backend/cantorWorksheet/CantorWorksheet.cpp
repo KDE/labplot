@@ -63,8 +63,8 @@ bool CantorWorksheet::init(QByteArray* content) {
 		//we can only get to this here if we open a project having Cantor content and Cantor plugins were not found.
 		//return false here, a proper error message will be created in load() and propagated further.
 		WARN("Failed to load Cantor plugin:")
-		WARN("Cantor Part file name: " << loader.fileName().toStdString())
-		WARN("	" << loader.errorString().toStdString())
+		WARN("Cantor Part file name: " << STDSTRING(loader.fileName()))
+		WARN("	" << STDSTRING(loader.errorString()))
 		return false;
 	} else {
 		m_part = factory->create<KParts::ReadWritePart>(this, QVariantList() << m_backendName << QLatin1String("--noprogress"));

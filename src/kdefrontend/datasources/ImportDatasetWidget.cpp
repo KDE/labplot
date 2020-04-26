@@ -406,7 +406,7 @@ QJsonObject ImportDatasetWidget::loadDatasetObject() {
 				QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
 				file.close();
 				if(!doc.isObject()) {
-					DEBUG("The " +  collection.toStdString() + ".json file is invalid");
+					DEBUG("The " <<  STDSTRING(collection) << ".json file is invalid");
 					return QJsonObject();
 				}
 
