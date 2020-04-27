@@ -36,6 +36,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
@@ -46,6 +47,8 @@ extern "C" {
 }
 
 #include <array>
+
+#include <QClipboard>
 #include <QFont>
 #include <QFontMetrics>
 #include <QIcon>
@@ -88,6 +91,9 @@ void Column::init() {
 	addChildFast(d->inputFilter());
 	addChildFast(d->outputFilter());
 	m_suppressDataChangedSignal = false;
+
+	m_copyDataAction = new QAction(QIcon::fromTheme("edit-copy"), i18n("Copy Data"), this);
+	connect(m_copyDataAction, &QAction::triggered, this, &Column::copyData);
 
 	m_usedInActionGroup = new QActionGroup(this);
 	connect(m_usedInActionGroup, &QActionGroup::triggered, this, &Column::navigateTo);
@@ -181,6 +187,9 @@ QMenu* Column::createContextMenu() {
 	menu->insertMenu(firstAction, usedInMenu);
 	menu->insertSeparator(firstAction);
 
+	menu->insertAction(firstAction, m_copyDataAction);
+	menu->insertSeparator(firstAction);
+
 	return menu;
 }
 
@@ -188,6 +197,38 @@ void Column::navigateTo(QAction* action) {
 	project()->navigateTo(action->data().toString());
 }
 
+/*!
+ * copies the values of the column to the clipboard
+ */
+void Column::copyData() {
+	QLocale locale;
+	QString output;
+	int rows = rowCount();
+
+	if (columnMode() == AbstractColumn::Numeric) {
+		const Double2StringFilter* filter = static_cast<Double2StringFilter*>(outputFilter());
+		char format = filter->numericFormat();
+		for (int r = 0; r < rows; r++) {
+			output += locale.toString(valueAt(r), format, 16); // copy with max. precision
+			if (r < rows-1)
+				output += '\n';
+		}
+	} else if (columnMode() == AbstractColumn::Integer || columnMode() == AbstractColumn::BigInt) {
+		for (int r = 0; r < rowCount(); r++) {
+			output += QString::number(valueAt(r));
+			if (r < rows-1)
+				output += '\n';
+		}
+	} else {
+		for (int r = 0; r < rowCount(); r++) {
+			output += asStringColumn()->textAt(r);
+			if (r < rows-1)
+				output += '\n';
+		}
+	}
+
+	QApplication::clipboard()->setText(output);
+}
 /*!
  *
  */

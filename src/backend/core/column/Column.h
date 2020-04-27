@@ -153,8 +153,9 @@ private:
 
 	void calculateStatistics() const;
 
-	bool m_suppressDataChangedSignal;
-	QActionGroup* m_usedInActionGroup;
+	bool m_suppressDataChangedSignal{false};
+	QAction* m_copyDataAction{nullptr};
+	QActionGroup* m_usedInActionGroup{nullptr};
 
 	ColumnPrivate* d;
 	ColumnStringIO* m_string_io;
@@ -165,6 +166,7 @@ signals:
 private slots:
 	void navigateTo(QAction*);
 	void handleFormatChange();
+	void copyData();
 
 	friend class ColumnPrivate;
 	friend class ColumnStringIO;
