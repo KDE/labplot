@@ -54,6 +54,7 @@ private:
 
 	XYSmoothCurve* m_smoothCurve{nullptr};
 	XYSmoothCurve::SmoothData m_smoothData;
+	bool m_dateTimeRange{false};
 
 protected:
 	void setModel() override;
@@ -68,6 +69,8 @@ private slots:
 	void autoRangeChanged();
 	void xRangeMinChanged();
 	void xRangeMaxChanged();
+	void xRangeMinDateTimeChanged(const QDateTime&);
+	void xRangeMaxDateTimeChanged(const QDateTime&);
 	void typeChanged();
 	void pointsChanged();
 	void weightChanged();
