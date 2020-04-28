@@ -240,6 +240,7 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
+	m_aspect = m_curve;
 	m_interpolationCurve = dynamic_cast<XYInterpolationCurve*>(m_curve);
 	Q_ASSERT(m_interpolationCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
