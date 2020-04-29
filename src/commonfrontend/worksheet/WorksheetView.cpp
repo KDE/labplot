@@ -210,10 +210,15 @@ void WorksheetView::initActions() {
 	addImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), addNewActionGroup);
 
 	//Layout actions
-	verticalLayoutAction = new QAction(QIcon::fromTheme("labplot-editvlayout"), i18n("Vertical Layout"), layoutActionGroup);
+	//TODO: the icons labplot-editvlayout and labplot-edithlayout are confusing for the user.
+	//the orientation is visualized as a horizontal or vertical line on the icon, but the user
+	//percieves the two objects (resembles plots on the worksheet) separated by this line much stronger than the line itself.
+	//with this, the two objects separated by a vertical line are percieved to be layed out in a _horizontal_ order and the
+	//same for the vertical line. Because of this we change the icons here. We can rename the icons later in the breeze icon set.
+	verticalLayoutAction = new QAction(QIcon::fromTheme("labplot-edithlayout"), i18n("Vertical Layout"), layoutActionGroup);
 	verticalLayoutAction->setCheckable(true);
 
-	horizontalLayoutAction = new QAction(QIcon::fromTheme("labplot-edithlayout"), i18n("Horizontal Layout"), layoutActionGroup);
+	horizontalLayoutAction = new QAction(QIcon::fromTheme("labplot-editvlayout"), i18n("Horizontal Layout"), layoutActionGroup);
 	horizontalLayoutAction->setCheckable(true);
 
 	gridLayoutAction = new QAction(QIcon::fromTheme("labplot-editgrid"), i18n("Grid Layout"), layoutActionGroup);
