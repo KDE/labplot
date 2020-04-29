@@ -1713,26 +1713,26 @@ void XYCurvePrivate::updateValues() {
 	case XYCurve::NoValues:
 	case XYCurve::ValuesX: {
 			CartesianPlot::RangeFormat rangeFormat = plot->xRangeFormat();
-			for (int i = 0; i < symbolPointsScene.size(); ++i) {
+			for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 				if (!visiblePoints[i]) continue;
 				QString value;
 				if (rangeFormat == CartesianPlot::Numeric)
-					value = QString::number(cSystem->mapSceneToLogical(symbolPointsScene[i]).x());
+					value = QString::number(symbolPointsLogical[i].x());
 				else
-					value = QDateTime::fromMSecsSinceEpoch(cSystem->mapSceneToLogical(symbolPointsScene[i]).x()).toString();
+					value = QDateTime::fromMSecsSinceEpoch(symbolPointsLogical[i].x()).toString();
 				valuesStrings << valuesPrefix + value + valuesSuffix;
 			}
 			break;
 		}
 	case XYCurve::ValuesY: {
 			CartesianPlot::RangeFormat rangeFormat = plot->yRangeFormat();
-			for (int i = 0; i < symbolPointsScene.size(); ++i) {
+			for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 				if (!visiblePoints[i]) continue;
 				QString value;
 				if (rangeFormat == CartesianPlot::Numeric)
-					value = QString::number(cSystem->mapSceneToLogical(symbolPointsScene[i]).y());
+					value = QString::number(symbolPointsLogical[i].y());
 				else
-					value = QDateTime::fromMSecsSinceEpoch(cSystem->mapSceneToLogical(symbolPointsScene[i]).y()).toString();
+					value = QDateTime::fromMSecsSinceEpoch(symbolPointsLogical[i].y()).toString();
 				valuesStrings << valuesPrefix + value + valuesSuffix;
 			}
 			break;
@@ -1741,21 +1741,20 @@ void XYCurvePrivate::updateValues() {
 	case XYCurve::ValuesXYBracketed: {
 			CartesianPlot::RangeFormat xRangeFormat = plot->xRangeFormat();
 			CartesianPlot::RangeFormat yRangeFormat = plot->yRangeFormat();
-			for (int i = 0; i < symbolPointsScene.size(); ++i) {
+			for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 				if (!visiblePoints[i]) continue;
-				QPointF logicalValue = cSystem->mapSceneToLogical(symbolPointsScene[i]);
 				QString value;
 				if (valuesType == XYCurve::ValuesXYBracketed)
 					value = '(';
 				if (xRangeFormat == CartesianPlot::Numeric)
-					value += QString::number(logicalValue.x());
+					value += QString::number(symbolPointsLogical[i].x());
 				else
-					value += QDateTime::fromMSecsSinceEpoch(logicalValue.x()).toString();
+					value += QDateTime::fromMSecsSinceEpoch(symbolPointsLogical[i].x()).toString();
 
 				if (yRangeFormat == CartesianPlot::Numeric)
-					value += ',' + QString::number(logicalValue.y());
+					value += ',' + QString::number(symbolPointsLogical[i].y());
 				else
-					value += ',' + QDateTime::fromMSecsSinceEpoch(logicalValue.y()).toString();
+					value += ',' + QDateTime::fromMSecsSinceEpoch(symbolPointsLogical[i].y()).toString();
 
 				if (valuesType == XYCurve::ValuesXYBracketed)
 					value += ')';
