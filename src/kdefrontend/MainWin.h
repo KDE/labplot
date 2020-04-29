@@ -2,7 +2,7 @@
     File                 : MainWin.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Main window of the application
  ***************************************************************************/
@@ -200,31 +200,13 @@ private:
 	QAction* m_editFitsFileAction;
 
 	//toggling doch widgets
-	QAction* m_toggleProjectExplorerDocQAction;
-	QAction* m_togglePropertiesDocQAction;
+	QAction* m_toggleProjectExplorerDockAction;
+	QAction* m_togglePropertiesDockAction;
 
-	//worksheet actions
-	QAction* worksheetZoomInAction;
-	QAction* worksheetZoomOutAction;
-	QAction* worksheetZoomOriginAction;
-	QAction* worksheetZoomFitPageHeightAction;
-	QAction* worksheetZoomFitPageWidthAction;
-	QAction* worksheetZoomFitSelectionAction;
-
-	QAction* worksheetNavigationModeAction;
-	QAction* worksheetZoomModeAction;
-	QAction* worksheetSelectionModeAction;
-
-	QAction* worksheetVerticalLayoutAction;
-	QAction* worksheetHorizontalLayoutAction;
-	QAction* worksheetGridLayoutAction;
-	QAction* worksheetBreakLayoutAction;
-
+	//window visibility
 	QAction* m_visibilityFolderAction;
 	QAction* m_visibilitySubfolderAction;
 	QAction* m_visibilityAllAction;
-	QAction* m_toggleProjectExplorerDockAction;
-	QAction* m_togglePropertiesDockAction;
 
 	//Menus
 	QMenu* m_visibilityMenu{nullptr};
