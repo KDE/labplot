@@ -1712,34 +1712,55 @@ void XYCurvePrivate::updateValues() {
 	switch (valuesType) {
 	case XYCurve::NoValues:
 	case XYCurve::ValuesX: {
+			CartesianPlot::RangeFormat rangeFormat = plot->xRangeFormat();
 			for (int i = 0; i < symbolPointsScene.size(); ++i) {
 				if (!visiblePoints[i]) continue;
-				valuesStrings << valuesPrefix + QString::number(cSystem->mapSceneToLogical(symbolPointsScene[i]).x()) + valuesSuffix;
+				QString value;
+				if (rangeFormat == CartesianPlot::Numeric)
+					value = QString::number(cSystem->mapSceneToLogical(symbolPointsScene[i]).x());
+				else
+					value = QDateTime::fromMSecsSinceEpoch(cSystem->mapSceneToLogical(symbolPointsScene[i]).x()).toString();
+				valuesStrings << valuesPrefix + value + valuesSuffix;
 			}
 			break;
 		}
 	case XYCurve::ValuesY: {
+			CartesianPlot::RangeFormat rangeFormat = plot->yRangeFormat();
 			for (int i = 0; i < symbolPointsScene.size(); ++i) {
 				if (!visiblePoints[i]) continue;
-				valuesStrings << valuesPrefix + QString::number(cSystem->mapSceneToLogical(symbolPointsScene[i]).y()) + valuesSuffix;
+				QString value;
+				if (rangeFormat == CartesianPlot::Numeric)
+					value = QString::number(cSystem->mapSceneToLogical(symbolPointsScene[i]).y());
+				else
+					value = QDateTime::fromMSecsSinceEpoch(cSystem->mapSceneToLogical(symbolPointsScene[i]).y()).toString();
+				valuesStrings << valuesPrefix + value + valuesSuffix;
 			}
 			break;
 		}
-	case XYCurve::ValuesXY: {
-			for (int i = 0; i < symbolPointsScene.size(); ++i) {
-				if (!visiblePoints[i]) continue;
-				QPointF logicalValue = cSystem->mapSceneToLogical(symbolPointsScene[i]);
-				valuesStrings << valuesPrefix + QString::number(logicalValue.x()) + ','
-							  + QString::number(logicalValue.y()) + valuesSuffix;
-			}
-			break;
-		}
+	case XYCurve::ValuesXY:
 	case XYCurve::ValuesXYBracketed: {
+			CartesianPlot::RangeFormat xRangeFormat = plot->xRangeFormat();
+			CartesianPlot::RangeFormat yRangeFormat = plot->yRangeFormat();
 			for (int i = 0; i < symbolPointsScene.size(); ++i) {
 				if (!visiblePoints[i]) continue;
 				QPointF logicalValue = cSystem->mapSceneToLogical(symbolPointsScene[i]);
-				valuesStrings <<  valuesPrefix + '(' + QString::number(logicalValue.x()) + ','
-							  + QString::number(logicalValue.y()) +')' + valuesSuffix;
+				QString value;
+				if (valuesType == XYCurve::ValuesXYBracketed)
+					value = '(';
+				if (xRangeFormat == CartesianPlot::Numeric)
+					value += QString::number(logicalValue.x());
+				else
+					value += QDateTime::fromMSecsSinceEpoch(logicalValue.x()).toString();
+
+				if (yRangeFormat == CartesianPlot::Numeric)
+					value += ',' + QString::number(logicalValue.y());
+				else
+					value += ',' + QDateTime::fromMSecsSinceEpoch(logicalValue.y()).toString();
+
+				if (valuesType == XYCurve::ValuesXYBracketed)
+					value += ')';
+
+				valuesStrings << valuesPrefix + value + valuesSuffix;
 			}
 			break;
 		}
