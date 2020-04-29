@@ -727,15 +727,8 @@ void XYCurveDock::updateValuesFormatWidgets(AbstractColumn::ColumnMode columnMod
 		}
 	}
 
-	if (columnMode == AbstractColumn::Numeric) {
-		ui.lValuesPrecision->show();
-		ui.sbValuesPrecision->show();
-	} else {
-		ui.lValuesPrecision->hide();
-		ui.sbValuesPrecision->hide();
-	}
-
-	if (columnMode == AbstractColumn::Text) {
+	//no formatting for int, big int and text
+	if (columnMode == AbstractColumn::Integer || columnMode == AbstractColumn::BigInt || columnMode == AbstractColumn::Text) {
 		ui.lValuesFormatTop->hide();
 		ui.lValuesFormat->hide();
 		ui.cbValuesFormat->hide();
@@ -743,6 +736,15 @@ void XYCurveDock::updateValuesFormatWidgets(AbstractColumn::ColumnMode columnMod
 		ui.lValuesFormatTop->show();
 		ui.lValuesFormat->show();
 		ui.cbValuesFormat->show();
+	}
+
+	//precision is only available for Numeric
+	if (columnMode == AbstractColumn::Numeric) {
+		ui.lValuesPrecision->show();
+		ui.sbValuesPrecision->show();
+	} else {
+		ui.lValuesPrecision->hide();
+		ui.sbValuesPrecision->hide();
 	}
 
 	if (columnMode == AbstractColumn::DateTime) {
