@@ -82,6 +82,9 @@ protected:
 	XYCurve* m_curve{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
 
+public slots:
+	void visibilityChanged(bool);
+
 private slots:
 	void init();
 	void retranslateUi();
@@ -89,7 +92,6 @@ private slots:
 	//SLOTs for changes triggered in XYCurveDock
 	void xColumnChanged(const QModelIndex&);
 	void yColumnChanged(const QModelIndex&);
-	void visibilityChanged(bool);
 
 	//Line-Tab
 	void lineTypeChanged(int);

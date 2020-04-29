@@ -67,16 +67,16 @@ private slots:
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
-	void xRangeMinChanged();
-	void xRangeMaxChanged();
+	void xRangeMinChanged(double);
+	void xRangeMaxChanged(double);
 	void xRangeMinDateTimeChanged(const QDateTime&);
 	void xRangeMaxDateTimeChanged(const QDateTime&);
-	void typeChanged();
-	void pointsChanged();
-	void weightChanged();
-	void percentileChanged();
-	void orderChanged();
-	void modeChanged();
+	void typeChanged(int);
+	void pointsChanged(int);
+	void weightChanged(int);
+	void percentileChanged(double);
+	void orderChanged(int);
+	void modeChanged(int);
 	void valueChanged();
 
 	void recalculateClicked();

@@ -3,7 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Copyright        : (C) 2017 Alexander Semke (alexander.semke@web.de)
+    Copyright        : (C) 2017-2020 Alexander Semke (alexander.semke@web.de)
     Description      : widget for editing properties of smooth curves
 
  ***************************************************************************/
@@ -33,8 +33,6 @@
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
-#include <QMenu>
-#include <QWidgetAction>
 #include <QStandardItemModel>
 
 /*!
@@ -104,28 +102,28 @@ void XYSmoothCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	//Slots
-	connect( uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYSmoothCurveDock::nameChanged );
-	connect( uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYSmoothCurveDock::commentChanged );
-	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
-	connect( uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)) );
-	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
-	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
-	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
+	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYSmoothCurveDock::nameChanged );
+	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYSmoothCurveDock::commentChanged );
+	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYSmoothCurveDock::visibilityChanged);
+	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::dataSourceTypeChanged);
+	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYSmoothCurveDock::autoRangeChanged);
+	connect(uiGeneralTab.sbMin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYSmoothCurveDock::xRangeMinChanged);
+	connect(uiGeneralTab.sbMax, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYSmoothCurveDock::xRangeMaxChanged);
 	connect(uiGeneralTab.dateTimeEditMin, &QDateTimeEdit::dateTimeChanged, this, &XYSmoothCurveDock::xRangeMinDateTimeChanged);
 	connect(uiGeneralTab.dateTimeEditMax, &QDateTimeEdit::dateTimeChanged, this, &XYSmoothCurveDock::xRangeMaxDateTimeChanged);
-	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
-	connect( uiGeneralTab.sbPoints, SIGNAL(valueChanged(int)), this, SLOT(pointsChanged()) );
-	connect( uiGeneralTab.cbWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(weightChanged()) );
-	connect( uiGeneralTab.sbPercentile, SIGNAL(valueChanged(double)), this, SLOT(percentileChanged()) );
-	connect( uiGeneralTab.sbOrder, SIGNAL(valueChanged(int)), this, SLOT(orderChanged()) );
-	connect( uiGeneralTab.cbMode, SIGNAL(currentIndexChanged(int)), this, SLOT(modeChanged()) );
-	connect( uiGeneralTab.sbLeftValue, SIGNAL(valueChanged(double)), this, SLOT(valueChanged()) );
-	connect( uiGeneralTab.sbRightValue, SIGNAL(valueChanged(double)), this, SLOT(valueChanged()) );
-	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
+	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::typeChanged);
+	connect(uiGeneralTab.sbPoints, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYSmoothCurveDock::pointsChanged);
+	connect(uiGeneralTab.cbWeight, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::weightChanged);
+	connect(uiGeneralTab.sbPercentile, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYSmoothCurveDock::percentileChanged);
+	connect(uiGeneralTab.sbOrder, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYSmoothCurveDock::orderChanged);
+	connect(uiGeneralTab.cbMode, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::modeChanged);
+	connect(uiGeneralTab.sbLeftValue, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYSmoothCurveDock::valueChanged);
+	connect(uiGeneralTab.sbRightValue, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYSmoothCurveDock::valueChanged);
+	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYSmoothCurveDock::recalculateClicked);
 
-	connect( cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)) );
-	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
-	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
+	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYSmoothCurveDock::dataSourceCurveChanged);
+	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYSmoothCurveDock::xDataColumnChanged);
+	connect(cbYDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYSmoothCurveDock::yDataColumnChanged);
 }
 
 void XYSmoothCurveDock::initGeneralTab() {
@@ -189,13 +187,13 @@ void XYSmoothCurveDock::initGeneralTab() {
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
 	uiGeneralTab.cbType->setCurrentIndex(m_smoothData.type);
-	typeChanged();	// needed, when type does not change
+	typeChanged(uiGeneralTab.cbType->currentIndex());	// needed, when type does not change
 	uiGeneralTab.sbPoints->setValue((int)m_smoothData.points);
 	uiGeneralTab.cbWeight->setCurrentIndex(m_smoothData.weight);
 	uiGeneralTab.sbPercentile->setValue(m_smoothData.percentile);
 	uiGeneralTab.sbOrder->setValue((int)m_smoothData.order);
 	uiGeneralTab.cbMode->setCurrentIndex(m_smoothData.mode);
-	modeChanged();	// needed, when mode does not change
+	modeChanged(uiGeneralTab.cbMode->currentIndex());	// needed, when mode does not change
 	uiGeneralTab.sbLeftValue->setValue(m_smoothData.lvalue);
 	uiGeneralTab.sbRightValue->setValue(m_smoothData.rvalue);
 	valueChanged();
@@ -325,7 +323,6 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	cbXDataColumn->useCurrentIndexText(true);
 	cbXDataColumn->setInvalid(false);
-
 }
 
 void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -375,17 +372,13 @@ void XYSmoothCurveDock::autoRangeChanged() {
 		}
 	}
 }
-void XYSmoothCurveDock::xRangeMinChanged() {
-	double xMin = uiGeneralTab.sbMin->value();
-
-	m_smoothData.xRange.first() = xMin;
+void XYSmoothCurveDock::xRangeMinChanged(double value) {
+	m_smoothData.xRange.first() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYSmoothCurveDock::xRangeMaxChanged() {
-	double xMax = uiGeneralTab.sbMax->value();
-
-	m_smoothData.xRange.last() = xMax;
+void XYSmoothCurveDock::xRangeMaxChanged(double value) {
+	m_smoothData.xRange.last() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
@@ -405,8 +398,8 @@ void XYSmoothCurveDock::xRangeMaxDateTimeChanged(const QDateTime& dateTime) {
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYSmoothCurveDock::typeChanged() {
-	auto type = (nsl_smooth_type)uiGeneralTab.cbType->currentIndex();
+void XYSmoothCurveDock::typeChanged(int index) {
+	auto type = (nsl_smooth_type)index;
 	m_smoothData.type = type;
 
 	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbMode->model());
@@ -457,35 +450,29 @@ void XYSmoothCurveDock::typeChanged() {
 	enableRecalculate();
 }
 
-void XYSmoothCurveDock::pointsChanged() {
-	m_smoothData.points = (unsigned int)uiGeneralTab.sbPoints->value();
-
-	// set maximum order
-	uiGeneralTab.sbOrder->setMaximum((int)m_smoothData.points - 1);
-
+void XYSmoothCurveDock::pointsChanged(int value) {
+	m_smoothData.points = (unsigned int)value;
+	uiGeneralTab.sbOrder->setMaximum(value - 1); // set maximum order
 	enableRecalculate();
 }
 
-void XYSmoothCurveDock::weightChanged() {
-	m_smoothData.weight = (nsl_smooth_weight_type)uiGeneralTab.cbWeight->currentIndex();
-
+void XYSmoothCurveDock::weightChanged(int index) {
+	m_smoothData.weight = (nsl_smooth_weight_type)index;
 	enableRecalculate();
 }
 
-void XYSmoothCurveDock::percentileChanged() {
-	m_smoothData.percentile = uiGeneralTab.sbPercentile->value();
-
+void XYSmoothCurveDock::percentileChanged(double value) {
+	m_smoothData.percentile = value;
 	enableRecalculate();
 }
 
-void XYSmoothCurveDock::orderChanged() {
-	m_smoothData.order = (unsigned int)uiGeneralTab.sbOrder->value();
-
+void XYSmoothCurveDock::orderChanged(int value) {
+	m_smoothData.order = (unsigned int)value;
 	enableRecalculate();
 }
 
-void XYSmoothCurveDock::modeChanged() {
-	m_smoothData.mode = (nsl_smooth_pad_mode)(uiGeneralTab.cbMode->currentIndex());
+void XYSmoothCurveDock::modeChanged(int index) {
+	m_smoothData.mode = (nsl_smooth_pad_mode)index;
 
 	if (m_smoothData.mode == nsl_smooth_pad_constant) {
 		uiGeneralTab.lLeftValue->show();
