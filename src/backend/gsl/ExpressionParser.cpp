@@ -1330,6 +1330,9 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
 	return parameters;
 }
 
+/*
+ * Evaluate cartesian expression returning true on success and false if parsing fails
+ */
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,
         int count, QVector<double>* xVector, QVector<double>* yVector,
         const QStringList& paramNames, const QVector<double>& paramValues) {

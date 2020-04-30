@@ -1512,8 +1512,10 @@ int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
 
 /* prepare the fit result columns */
 void XYFitCurvePrivate::prepareResultColumns() {
+	DEBUG("XYFitCurvePrivate::prepareResultColumns()")
 	//create fit result columns if not available yet, clear them otherwise
 	if (!xColumn) {	// all columns are treated together
+		DEBUG("	Creating columns")
 		xColumn = new Column("x", AbstractColumn::Numeric);
 		yColumn = new Column("y", AbstractColumn::Numeric);
 		residualsColumn = new Column("residuals", AbstractColumn::Numeric);
@@ -1534,10 +1536,12 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		q->setYColumn(yColumn);
 		q->setUndoAware(true);
 	} else {
+		DEBUG("	Clear columns")
 		xVector->clear();
 		yVector->clear();
 		residualsVector->clear();
 	}
+	DEBUG("XYFitCurvePrivate::prepareResultColumns() DONE")
 }
 
 void XYFitCurvePrivate::recalculate() {
@@ -1965,17 +1969,22 @@ void XYFitCurvePrivate::recalculate() {
 
 	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
 	residualsVector->resize(tmpXDataColumn->rowCount());
+	DEBUG("Residual vector size: " << residualsVector->size())
 	if (fitData.autoRange) {	// evaluate full range of residuals
 		xVector->resize(tmpXDataColumn->rowCount());
 		for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
 			(*xVector)[i] = tmpXDataColumn->valueAt(i);
+
 		ExpressionParser* parser = ExpressionParser::getInstance();
 		bool rc = parser->evaluateCartesian(fitData.model, xVector, residualsVector,
 							fitData.paramNames, fitResult.paramValues);
-		for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
-			(*residualsVector)[i] = tmpYDataColumn->valueAt(i) - (*residualsVector)[i];
-		if (!rc)
+		if (rc) {
+			for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
+				(*residualsVector)[i] = tmpYDataColumn->valueAt(i) - (*residualsVector)[i];
+		} else {
+			DEBUG("ERROR: Failed parsing residuals")
 			residualsVector->clear();
+		}
 	} else {	// only selected range
 		size_t j = 0;
 		for (int i = 0; i < tmpXDataColumn->rowCount(); i++) {
@@ -1999,7 +2008,7 @@ void XYFitCurvePrivate::recalculate() {
 	DEBUG("XYFitCurvePrivate::recalculate() DONE");
 }
 
-/* evaluate fit function */
+/* evaluate fit function (preview == true: use start values, default: false) */
 void XYFitCurvePrivate::evaluate(bool preview) {
 	DEBUG("XYFitCurvePrivate::evaluate() preview = " << preview);
 
@@ -2021,7 +2030,9 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 		return;
 	}
 
-	prepareResultColumns();
+	//only needed for preview (else we have all columns)
+	if (preview)
+		prepareResultColumns();
 
 	if (!xVector || !yVector) {
 		DEBUG(" xVector or yVector not defined!");
@@ -2058,6 +2069,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), (int)fitData.evaluatedPoints,
 						xVector, yVector, fitData.paramNames, paramValues);
 	if (!rc) {
+		DEBUG("ERROR: Parsing fit function failed")
 		xVector->clear();
 		yVector->clear();
 		residualsVector->clear();
@@ -2065,6 +2077,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 
 	recalcLogicalPoints();
 	emit q->dataChanged();
+	DEBUG("XYFitCurvePrivate::evaluate() DONE");
 }
 
 /*!
