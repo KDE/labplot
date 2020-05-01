@@ -1129,9 +1129,9 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 }
 
 /*!
- * Adds a line, which connects two points, but only if the don't lie on the same xAxis pixel.
+ * Adds a line, which connects two points, but only if they don't lie on the same xAxis pixel.
  * If they lie on the same x pixel, draw a vertical line between the minimum and maximum y value. So all points are included
- * This function can be used for all axis scalings (log, sqrt, linear, ...). For the linear case use the above function, because it's optimized for the linear case
+ * This function can be used for all axis scalings (linear, log, sqrt, ...). For the linear case use the function above, because it's optimized for the linear case
  * @param p0 first point
  * @param p1 second point
  * @param minY
@@ -1143,7 +1143,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff, int pixelCount) {
 
 	if (plot->xScale() == CartesianPlot::Scale::ScaleLinear) { // implemented for completeness only
-		double minLogicalDiffX = 1/((plot->xMax()-plot->xMin())/pixelCount);
+		double minLogicalDiffX = 1./((plot->xMax() - plot->xMin())/pixelCount);
 		addLine(p0, p1, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
 	} else {
 		// for nonlinear scaling the pixel distance must be calculated for every point pair
@@ -1152,8 +1152,10 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 
 		// if the point is not valid, don't create a line
 		//if (std::isnan(p0Scene.x()) || std::isnan(p0Scene.y()))
-		if ((p0Scene.x() == 0 && p0Scene.y() == 0) || (p1Scene.x() == 0 && p1Scene.y() == 0)) // no possibility to create line
+		if ((p0Scene.x() == 0 && p0Scene.y() == 0) || (p1Scene.x() == 0 && p1Scene.y() == 0)) { // not possible to create line
+			DEBUG("Not possible to create a line between : " << p0Scene.x() << ' ' << p0Scene.y() << ", "<< p1Scene.x() << ' ' << p1Scene.y())
 			return;
+		}
 
 		// using only the difference between the points is not sufficient, because p0 is updated always
 		// independent if new line added or not
@@ -1166,7 +1168,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 
 /*!
  * \brief XYCurvePrivate::addLine
- * This function is part of the other two addLine() functions to not have two times the same code
+ * This function is called from the other two addLine() functions to avoid duplication
  * @param p0 first point
  * @param p1 second point
  * @param minY
@@ -1175,6 +1177,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
  * @param pixelDiff x pixel distance between two points
  */
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff) {
+	//QDEBUG("XYCurvePrivate::addLine():" << p0 << ' ' << p1 << ' ' << minY << ' ' << maxY << ' ' << overlap << ' ' << pixelDiff)
 	if (pixelDiff == 0) {
 		if (overlap) { // second and so the x axis pixels are the same
 		  if (p1.y() > maxY)
@@ -1209,29 +1212,29 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 				if (minY == maxY) {
 					lines.append(QLineF(p0, p1)); // line from previous point to actual point
 				} else if (p0.y() == minY) { // draw vertical line
-					lines.append(QLineF(p0.x(),maxY, p0.x(), minY));
+					lines.append(QLineF(p0.x(), maxY, p0.x(), minY));
 					if (p1.y() >= minY && p1.y() <= maxY && pixelDiff == 1)
 						return;
 
-					lines.append(QLineF(p0,p1));
+					lines.append(QLineF(p0, p1));
 				} else if (p0.y() == maxY) { // draw vertical line
-					lines.append(QLineF(p0.x(),maxY, p0.x(), minY));
+					lines.append(QLineF(p0.x(), maxY, p0.x(), minY));
 					if (p1.y() >= minY && p1.y() <= maxY && pixelDiff == 1)
 						return;
 
 					// draw line, only if there is a pixelDiff = 1 otherwise no line needed, because when drawing a new vertical line, this line is already included
-					lines.append(QLineF(p0,p1));
+					lines.append(QLineF(p0, p1));
 				} else { // last point nor min nor max
-					lines.append(QLineF(p0.x(),maxY, p0.x(), minY));
+					lines.append(QLineF(p0.x(), maxY, p0.x(), minY));
 					if (p1.y() >= minY && p1.y() <= maxY && pixelDiff == 1)
 						return;
 
-					lines.append(QLineF(p0,p1));
+					lines.append(QLineF(p0, p1));
 				}
-			} else// x in scene
+			} else // x in scene
 				DEBUG("addLine: not in scene");
-		} else// no overlap
-			lines.append(QLineF(p0,p1));
+		} else // no overlap
+			lines.append(QLineF(p0, p1));
 	}
 }
 
