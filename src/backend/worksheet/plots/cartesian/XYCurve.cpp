@@ -122,7 +122,7 @@ void XYCurve::init() {
 	d->valuesDistance = group.readEntry("ValuesDistance", Worksheet::convertToSceneUnits(5, Worksheet::Point));
 	d->valuesRotationAngle = group.readEntry("ValuesRotation", 0.0);
 	d->valuesOpacity = group.readEntry("ValuesOpacity", 1.0);
-	d->valuesNumericFormat = group.readEntry("ValuesNumericFormat", "f").front().toLatin1();
+	d->valuesNumericFormat = group.readEntry("ValuesNumericFormat", "f").at(0).toLatin1();
 	d->valuesPrecision = group.readEntry("ValuesNumericFormat", 2);
 	d->valuesDateTimeFormat = group.readEntry("ValuesDateTimeFormat", "yyyy-MM-dd");
 	d->valuesPrefix = group.readEntry("ValuesPrefix", "");
