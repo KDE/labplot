@@ -1140,7 +1140,11 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	for (auto index : indexes) {
 		int row = index.row();
 		int col = index.column();
-		if (m_spreadsheet->column(col)->isMasked(row)) {
+		const auto* column = m_spreadsheet->column(col);
+		//TODO: the null pointer check shouldn't be actually required here
+		//but when deleting the columns the selection model in the view
+		//and the aspect model sometimes get out of sync and we crash...
+		if (column && column->isMasked(row)) {
 			hasMasked = true;
 			break;
 		}
@@ -1149,7 +1153,8 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	for (auto index : indexes) {
 		int row = index.row();
 		int col = index.column();
-		if (!m_spreadsheet->column(col)->isMasked(row)) {
+		const auto* column = m_spreadsheet->column(col);
+		if (column && !column->isMasked(row)) {
 			hasUnmasked = true;
 			break;
 		}
@@ -1254,6 +1259,14 @@ void SpreadsheetView::copySelection() {
 	RESET_CURSOR;
 }
 
+bool determineLocale(const QString& value, QLocale& locale) {
+	int pointIndex = value.indexOf(QLatin1Char('.'));
+	int commaIndex = value.indexOf(QLatin1Char('.'));
+	if (pointIndex != -1 && commaIndex != -1) {
+
+	}
+	return false;
+}
 void SpreadsheetView::pasteIntoSelection() {
 	if (m_spreadsheet->columnCount() < 1 || m_spreadsheet->rowCount() < 1)
 		return;
@@ -1298,6 +1311,7 @@ void SpreadsheetView::pasteIntoSelection() {
 	}
 
 	QLocale locale;
+	bool localeDetermined = false;
 
 	if ( (first_col == -1 || first_row == -1) || (last_row == first_row && last_col == first_col) ) {
 		// if there is no selection or only one cell selected, the
@@ -1328,8 +1342,12 @@ void SpreadsheetView::pasteIntoSelection() {
 					break;
 				}
 			}
+
+			if (!localeDetermined)
+				localeDetermined = determineLocale(nonEmptyValue, locale);
+
 			const AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(nonEmptyValue,
-													QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"));
+													QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"), locale);
 			col->setColumnMode(mode);
 		}
 
@@ -1345,8 +1363,12 @@ void SpreadsheetView::pasteIntoSelection() {
 						break;
 					}
 				}
+
+				if (!localeDetermined)
+					localeDetermined = determineLocale(nonEmptyValue, locale);
+
 				const AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(nonEmptyValue,
-														QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"));
+														QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"), locale);
 				Column* new_col = new Column(QString::number(curCol), mode);
 				new_col->setPlotDesignation(AbstractColumn::Y);
 				new_col->insertRows(0, m_spreadsheet->rowCount());
