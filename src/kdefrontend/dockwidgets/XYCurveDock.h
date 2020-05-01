@@ -3,7 +3,7 @@
     Project          : LabPlot
     Description      : widget for curve properties
     --------------------------------------------------------------------
-    Copyright         : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright         : (C) 2010-2020 Alexander Semke (alexander.semke@web.de)
     Copyright         : (C) 2013 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -56,8 +56,7 @@ public:
 
 private:
 	virtual void initGeneralTab();
-	void updateValuesFormatWidgets(AbstractColumn::ColumnMode);
-	void showValuesColumnFormat(const Column*);
+	void updateValuesWidgets();
 
 	void load();
 	void loadConfig(KConfig&);
@@ -127,6 +126,9 @@ private slots:
 	void valuesDistanceChanged(double);
 	void valuesRotationChanged(int);
 	void valuesOpacityChanged(int);
+	void valuesNumericFormatChanged(int);
+	void valuesPrecisionChanged(int);
+	void valuesDateTimeFormatChanged(const QString&);
 	void valuesPrefixChanged();
 	void valuesSuffixChanged();
 	void valuesFontChanged(const QFont&);
@@ -191,6 +193,9 @@ private slots:
 	void curveValuesDistanceChanged(qreal);
 	void curveValuesOpacityChanged(qreal);
 	void curveValuesRotationAngleChanged(qreal);
+	void curveValuesNumericFormatChanged(char);
+	void curveValuesPrecisionChanged(int);
+	void curveValuesDateTimeFormatChanged(const QString&);
 	void curveValuesPrefixChanged(const QString&);
 	void curveValuesSuffixChanged(const QString&);
 	void curveValuesFontChanged(QFont);

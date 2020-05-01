@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -122,6 +122,9 @@ void XYCurve::init() {
 	d->valuesDistance = group.readEntry("ValuesDistance", Worksheet::convertToSceneUnits(5, Worksheet::Point));
 	d->valuesRotationAngle = group.readEntry("ValuesRotation", 0.0);
 	d->valuesOpacity = group.readEntry("ValuesOpacity", 1.0);
+	d->valuesNumericFormat = group.readEntry("ValuesNumericFormat", "f").front().toLatin1();
+	d->valuesPrecision = group.readEntry("ValuesNumericFormat", 2);
+	d->valuesDateTimeFormat = group.readEntry("ValuesDateTimeFormat", "yyyy-MM-dd");
 	d->valuesPrefix = group.readEntry("ValuesPrefix", "");
 	d->valuesSuffix = group.readEntry("ValuesSuffix", "");
 	d->valuesFont = group.readEntry("ValuesFont", QFont());
@@ -261,6 +264,9 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesPosition, valuesPosition, val
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesDistance, valuesDistance)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesRotationAngle, valuesRotationAngle)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesOpacity, valuesOpacity)
+CLASS_SHARED_D_READER_IMPL(XYCurve, char, valuesNumericFormat, valuesNumericFormat)
+BASIC_SHARED_D_READER_IMPL(XYCurve, int, valuesPrecision, valuesPrecision)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesDateTimeFormat, valuesDateTimeFormat)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesPrefix, valuesPrefix)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesSuffix, valuesSuffix)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QColor, valuesColor, valuesColor)
@@ -294,7 +300,6 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorBarsType, errorBarsType, error
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsCapSize, errorBarsCapSize)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, errorBarsPen, errorBarsPen)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsOpacity, errorBarsOpacity)
-
 
 /*!
  * return \c true if the data in the source columns (x, y) used in the analysis curves, \c false otherwise
@@ -494,7 +499,26 @@ void XYCurve::setValuesOpacity(qreal opacity) {
 		exec(new XYCurveSetValuesOpacityCmd(d, opacity, ki18n("%1: set values opacity")));
 }
 
-//TODO: Format, Precision
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesNumericFormat, char, valuesNumericFormat, updateValues)
+void XYCurve::setValuesNumericFormat(char format) {
+	Q_D(XYCurve);
+	if (format != d->valuesNumericFormat)
+		exec(new XYCurveSetValuesNumericFormatCmd(d, format, ki18n("%1: set values numeric format")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesPrecision, int, valuesPrecision, updateValues)
+void XYCurve::setValuesPrecision(int precision) {
+	Q_D(XYCurve);
+	if (precision != d->valuesPrecision)
+		exec(new XYCurveSetValuesPrecisionCmd(d, precision, ki18n("%1: set values precision")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesDateTimeFormat, QString, valuesDateTimeFormat, updateValues)
+void XYCurve::setValuesDateTimeFormat(const QString& format) {
+	Q_D(XYCurve);
+	if (format != d->valuesDateTimeFormat)
+		exec(new XYCurveSetValuesDateTimeFormatCmd(d, format, ki18n("%1: set values datetime format")));
+}
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesPrefix, QString, valuesPrefix, updateValues)
 void XYCurve::setValuesPrefix(const QString& prefix) {
@@ -1715,92 +1739,107 @@ void XYCurvePrivate::updateValues() {
 	switch (valuesType) {
 	case XYCurve::NoValues:
 	case XYCurve::ValuesX: {
-			CartesianPlot::RangeFormat rangeFormat = plot->xRangeFormat();
-			for (int i = 0; i < symbolPointsLogical.size(); ++i) {
-				if (!visiblePoints[i]) continue;
-				QString value;
-				if (rangeFormat == CartesianPlot::Numeric)
-					value = QString::number(symbolPointsLogical[i].x());
-				else
-					value = QDateTime::fromMSecsSinceEpoch(symbolPointsLogical[i].x()).toString();
-				valuesStrings << valuesPrefix + value + valuesSuffix;
-			}
-			break;
+		CartesianPlot::RangeFormat rangeFormat = plot->xRangeFormat();
+		int precision = valuesPrecision;
+		if (xColumn->columnMode() == AbstractColumn::Integer || xColumn->columnMode() == AbstractColumn::BigInt)
+			precision = 0;
+		for (int i = 0; i < symbolPointsLogical.size(); ++i) {
+			if (!visiblePoints[i]) continue;
+			QString value;
+			if (rangeFormat == CartesianPlot::Numeric)
+				value = QString::number(symbolPointsLogical[i].x(), valuesNumericFormat, precision);
+			else
+				value = QDateTime::fromMSecsSinceEpoch(symbolPointsLogical[i].x()).toString(valuesDateTimeFormat);
+			valuesStrings << valuesPrefix + value + valuesSuffix;
 		}
+		break;
+	}
 	case XYCurve::ValuesY: {
-			CartesianPlot::RangeFormat rangeFormat = plot->yRangeFormat();
-			for (int i = 0; i < symbolPointsLogical.size(); ++i) {
-				if (!visiblePoints[i]) continue;
-				QString value;
-				if (rangeFormat == CartesianPlot::Numeric)
-					value = QString::number(symbolPointsLogical[i].y());
-				else
-					value = QDateTime::fromMSecsSinceEpoch(symbolPointsLogical[i].y()).toString();
-				valuesStrings << valuesPrefix + value + valuesSuffix;
-			}
-			break;
+		CartesianPlot::RangeFormat rangeFormat = plot->yRangeFormat();
+		int precision = valuesPrecision;
+		if (yColumn->columnMode() == AbstractColumn::Integer || yColumn->columnMode() == AbstractColumn::BigInt)
+			precision = 0;
+		for (int i = 0; i < symbolPointsLogical.size(); ++i) {
+			if (!visiblePoints[i]) continue;
+			QString value;
+			if (rangeFormat == CartesianPlot::Numeric)
+				value = QString::number(symbolPointsLogical[i].y(), valuesNumericFormat, precision);
+			else
+				value = QDateTime::fromMSecsSinceEpoch(symbolPointsLogical[i].y()).toString(valuesDateTimeFormat);
+			valuesStrings << valuesPrefix + value + valuesSuffix;
 		}
+		break;
+	}
 	case XYCurve::ValuesXY:
 	case XYCurve::ValuesXYBracketed: {
-			CartesianPlot::RangeFormat xRangeFormat = plot->xRangeFormat();
-			CartesianPlot::RangeFormat yRangeFormat = plot->yRangeFormat();
-			for (int i = 0; i < symbolPointsLogical.size(); ++i) {
-				if (!visiblePoints[i]) continue;
-				QString value;
-				if (valuesType == XYCurve::ValuesXYBracketed)
-					value = '(';
-				if (xRangeFormat == CartesianPlot::Numeric)
-					value += QString::number(symbolPointsLogical[i].x());
-				else
-					value += QDateTime::fromMSecsSinceEpoch(symbolPointsLogical[i].x()).toString();
+		CartesianPlot::RangeFormat xRangeFormat = plot->xRangeFormat();
+		CartesianPlot::RangeFormat yRangeFormat = plot->yRangeFormat();
 
-				if (yRangeFormat == CartesianPlot::Numeric)
-					value += ',' + QString::number(symbolPointsLogical[i].y());
-				else
-					value += ',' + QDateTime::fromMSecsSinceEpoch(symbolPointsLogical[i].y()).toString();
+		int xPrecision = valuesPrecision;
+		if (xColumn->columnMode() == AbstractColumn::Integer || xColumn->columnMode() == AbstractColumn::BigInt)
+			xPrecision = 0;
 
-				if (valuesType == XYCurve::ValuesXYBracketed)
-					value += ')';
+		int yPrecision = valuesPrecision;
+		if (yColumn->columnMode() == AbstractColumn::Integer || yColumn->columnMode() == AbstractColumn::BigInt)
+			yPrecision = 0;
 
-				valuesStrings << valuesPrefix + value + valuesSuffix;
-			}
-			break;
-		}
-	case XYCurve::ValuesCustomColumn: {
-			if (!valuesColumn) {
-				recalcShapeAndBoundingRect();
-				return;
-			}
-
-			int endRow;
-			if (symbolPointsLogical.size()>valuesColumn->rowCount())
-				endRow =  valuesColumn->rowCount();
+		for (int i = 0; i < symbolPointsLogical.size(); ++i) {
+			if (!visiblePoints[i]) continue;
+			QString value;
+			if (valuesType == XYCurve::ValuesXYBracketed)
+				value = '(';
+			if (xRangeFormat == CartesianPlot::Numeric)
+				value += QString::number(symbolPointsLogical[i].x(), valuesNumericFormat, xPrecision);
 			else
-				endRow = symbolPointsLogical.size();
+				value += QDateTime::fromMSecsSinceEpoch(symbolPointsLogical[i].x()).toString(valuesDateTimeFormat);
 
-			AbstractColumn::ColumnMode xColMode = valuesColumn->columnMode();
-			for (int i = 0; i < endRow; ++i) {
-				if (!visiblePoints[i]) continue;
+			if (yRangeFormat == CartesianPlot::Numeric)
+				value += ',' + QString::number(symbolPointsLogical[i].y(), valuesNumericFormat, yPrecision);
+			else
+				value += ',' + QDateTime::fromMSecsSinceEpoch(symbolPointsLogical[i].y()).toString(valuesDateTimeFormat);
 
-				if ( !valuesColumn->isValid(i) || valuesColumn->isMasked(i) )
-					continue;
+			if (valuesType == XYCurve::ValuesXYBracketed)
+				value += ')';
 
-				switch (xColMode) {
-				case AbstractColumn::Numeric:
-				case AbstractColumn::Integer:
-				case AbstractColumn::BigInt:
-					valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
-					break;
-				case AbstractColumn::Text:
-					valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
-				case AbstractColumn::DateTime:
-				case AbstractColumn::Month:
-				case AbstractColumn::Day:
-					//TODO
-					break;
-				}
+			valuesStrings << valuesPrefix + value + valuesSuffix;
+		}
+		break;
+	}
+	case XYCurve::ValuesCustomColumn: {
+		if (!valuesColumn) {
+			recalcShapeAndBoundingRect();
+			return;
+		}
+
+		int endRow;
+		if (symbolPointsLogical.size()>valuesColumn->rowCount())
+			endRow =  valuesColumn->rowCount();
+		else
+			endRow = symbolPointsLogical.size();
+
+		AbstractColumn::ColumnMode xColMode = valuesColumn->columnMode();
+		for (int i = 0; i < endRow; ++i) {
+			if (!visiblePoints[i]) continue;
+
+			if ( !valuesColumn->isValid(i) || valuesColumn->isMasked(i) )
+				continue;
+
+			switch (xColMode) {
+			case AbstractColumn::Numeric:
+			case AbstractColumn::Integer:
+			case AbstractColumn::BigInt:
+				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
+				break;
+			case AbstractColumn::Text:
+				valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
+				//TODO
+				break;
 			}
 		}
+	}
 	}
 
 	//Calculate the coordinates where to paint the value strings.

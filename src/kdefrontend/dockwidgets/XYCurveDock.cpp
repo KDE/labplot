@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for XYCurve properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2017 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -70,6 +70,27 @@ XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());
 	cbValuesColumn = new TreeViewComboBox(ui.tabValues);
 	gridLayout->addWidget(cbValuesColumn, 2, 2, 1, 1);
+
+	//add formats for numeric values
+	ui.cbValuesNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
+	ui.cbValuesNumericFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
+	ui.cbValuesNumericFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
+	ui.cbValuesNumericFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
+	ui.cbValuesNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
+
+	//add format for date, time and datetime values
+	for (const auto& s : AbstractColumn::dateFormats())
+		ui.cbValuesDateTimeFormat->addItem(s, QVariant(s));
+
+	for (const auto& s : AbstractColumn::timeFormats())
+		ui.cbValuesDateTimeFormat->addItem(s, QVariant(s));
+
+	for (const auto& s1 : AbstractColumn::dateFormats()) {
+		for (const auto& s2 : AbstractColumn::timeFormats())
+			ui.cbValuesDateTimeFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
+	}
+
+	ui.cbValuesNumericFormat->setEditable(true);
 
 	//Tab "Filling"
 	ui.cbFillingColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
@@ -141,8 +162,9 @@ XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 	connect( ui.sbValuesDistance, SIGNAL(valueChanged(double)), this, SLOT(valuesDistanceChanged(double)) );
 	connect( ui.sbValuesRotation, SIGNAL(valueChanged(int)), this, SLOT(valuesRotationChanged(int)) );
 	connect( ui.sbValuesOpacity, SIGNAL(valueChanged(int)), this, SLOT(valuesOpacityChanged(int)) );
-
-	//TODO connect( ui.cbValuesFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesColumnFormatChanged(int)) );
+	connect(ui.cbValuesNumericFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::valuesNumericFormatChanged);
+	connect(ui.sbValuesPrecision, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYCurveDock::valuesPrecisionChanged);
+	connect(ui.cbValuesDateTimeFormat, &QComboBox::currentTextChanged, this, &XYCurveDock::valuesDateTimeFormatChanged);
 	connect( ui.leValuesPrefix, SIGNAL(returnPressed()), this, SLOT(valuesPrefixChanged()) );
 	connect( ui.leValuesSuffix, SIGNAL(returnPressed()), this, SLOT(valuesSuffixChanged()) );
 	connect( ui.kfrValuesFont, SIGNAL(fontSelected(QFont)), this, SLOT(valuesFontChanged(QFont)) );
@@ -593,10 +615,10 @@ void XYCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(curveXColumnChanged(const AbstractColumn*)));
-	connect(m_curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(curveYColumnChanged(const AbstractColumn*)));
-	connect(m_curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged(bool)));
+	connect(m_curve, &XYCurve::aspectDescriptionChanged, this, &XYCurveDock::curveDescriptionChanged);
+	connect(m_curve, &XYCurve::xColumnChanged, this, &XYCurveDock::curveXColumnChanged);
+	connect(m_curve, &XYCurve::yColumnChanged, this, &XYCurveDock::curveYColumnChanged);
+	connect(m_curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYCurveDock::curveVisibilityChanged);
 	DEBUG("XYCurveDock::initGeneralTab() DONE");
 }
 
@@ -647,6 +669,9 @@ void XYCurveDock::initTabs() {
 	connect(m_curve, SIGNAL(valuesDistanceChanged(qreal)), this, SLOT(curveValuesDistanceChanged(qreal)));
 	connect(m_curve, SIGNAL(valuesOpacityChanged(qreal)), this, SLOT(curveValuesOpacityChanged(qreal)));
 	connect(m_curve, SIGNAL(valuesRotationAngleChanged(qreal)), this, SLOT(curveValuesRotationAngleChanged(qreal)));
+	connect(m_curve, &XYCurve::valuesNumericFormatChanged, this, &XYCurveDock::curveValuesNumericFormatChanged);
+	connect(m_curve, &XYCurve::valuesPrecisionChanged, this, &XYCurveDock::curveValuesPrecisionChanged);
+	connect(m_curve, &XYCurve::valuesDateTimeFormatChanged, this, &XYCurveDock::curveValuesDateTimeFormatChanged);
 	connect(m_curve, SIGNAL(valuesPrefixChanged(QString)), this, SLOT(curveValuesPrefixChanged(QString)));
 	connect(m_curve, SIGNAL(valuesSuffixChanged(QString)), this, SLOT(curveValuesSuffixChanged(QString)));
 	connect(m_curve, SIGNAL(valuesFontChanged(QFont)), this, SLOT(curveValuesFontChanged(QFont)));
@@ -676,86 +701,6 @@ void XYCurveDock::initTabs() {
 	connect(m_curve, SIGNAL(errorBarsOpacityChanged(qreal)), this, SLOT(curveErrorBarsOpacityChanged(qreal)));
 }
 
-/*!
-  depending on the currently selected values column type (column mode) updates the widgets for the values column format,
-  shows/hides the allowed widgets, fills the corresponding combobox with the possible entries.
-  Called when the values column was changed.
-
-  synchronize this function with ColumnDock::updateFormat.
-*/
-void XYCurveDock::updateValuesFormatWidgets(AbstractColumn::ColumnMode columnMode) {
-	ui.cbValuesFormat->clear();
-
-	switch (columnMode) {
-	case AbstractColumn::Numeric:
-		ui.cbValuesFormat->addItem(i18n("Decimal"), QVariant('f'));
-		ui.cbValuesFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
-		ui.cbValuesFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
-		ui.cbValuesFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
-		ui.cbValuesFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
-		break;
-	case AbstractColumn::Integer:
-	case AbstractColumn::BigInt:
-		break;
-	case AbstractColumn::Text:
-		ui.cbValuesFormat->addItem(i18n("Text"), QVariant());
-		break;
-	case AbstractColumn::Month:
-		ui.cbValuesFormat->addItem(i18n("Number without Leading Zero"), QVariant("M"));
-		ui.cbValuesFormat->addItem(i18n("Number with Leading Zero"), QVariant("MM"));
-		ui.cbValuesFormat->addItem(i18n("Abbreviated Month Name"), QVariant("MMM"));
-		ui.cbValuesFormat->addItem(i18n("Full Month Name"), QVariant("MMMM"));
-		break;
-	case AbstractColumn::Day:
-		ui.cbValuesFormat->addItem(i18n("Number without Leading Zero"), QVariant("d"));
-		ui.cbValuesFormat->addItem(i18n("Number with Leading Zero"), QVariant("dd"));
-		ui.cbValuesFormat->addItem(i18n("Abbreviated Day Name"), QVariant("ddd"));
-		ui.cbValuesFormat->addItem(i18n("Full Day Name"), QVariant("dddd"));
-		break;
-	case AbstractColumn::DateTime: {
-			for (const auto& s : AbstractColumn::dateFormats())
-				ui.cbValuesFormat->addItem(s, QVariant(s));
-
-			for (const auto& s : AbstractColumn::timeFormats())
-				ui.cbValuesFormat->addItem(s, QVariant(s));
-
-			for (const auto& s1 : AbstractColumn::dateFormats()) {
-				for (const auto& s2 : AbstractColumn::timeFormats())
-					ui.cbValuesFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
-			}
-			break;
-		}
-	}
-
-	//no formatting for int, big int and text
-	if (columnMode == AbstractColumn::Integer || columnMode == AbstractColumn::BigInt || columnMode == AbstractColumn::Text) {
-		ui.lValuesFormatTop->hide();
-		ui.lValuesFormat->hide();
-		ui.cbValuesFormat->hide();
-	} else {
-		ui.lValuesFormatTop->show();
-		ui.lValuesFormat->show();
-		ui.cbValuesFormat->show();
-	}
-
-	//precision is only available for Numeric
-	if (columnMode == AbstractColumn::Numeric) {
-		ui.lValuesPrecision->show();
-		ui.sbValuesPrecision->show();
-	} else {
-		ui.lValuesPrecision->hide();
-		ui.sbValuesPrecision->hide();
-	}
-
-	if (columnMode == AbstractColumn::DateTime) {
-		ui.cbValuesFormat->setCurrentItem("yyyy-MM-dd hh:mm:ss.zzz");
-		ui.cbValuesFormat->setEditable(true);
-	} else {
-		ui.cbValuesFormat->setCurrentIndex(0);
-		ui.cbValuesFormat->setEditable(false);
-	}
-}
-
 void XYCurveDock::checkColumnAvailability(TreeViewComboBox* cb, const AbstractColumn* column, const QString& columnPath) {
 	if (!cb)
 		return;// normally it shouldn't be called
@@ -776,46 +721,6 @@ void XYCurveDock::checkColumnAvailability(TreeViewComboBox* cb, const AbstractCo
 		cb->setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", columnPath));
 	}
 	cb->setText(columnPath.split('/').last());
-}
-
-/*!
-  shows the formatting properties of the column \c column.
-  Called, when a new column for the values was selected - either by changing the type of the values (none, x, y, etc.) or
-  by selecting a new custom column for the values.
-*/
-void XYCurveDock::showValuesColumnFormat(const Column* column) {
-	if (!column) {
-		// no valid column is available
-		// -> hide all the format properties widgets (equivalent to showing the properties of the column mode "Text")
-		this->updateValuesFormatWidgets(AbstractColumn::Text);
-	} else {
-		AbstractColumn::ColumnMode columnMode = column->columnMode();
-
-		//update the format widgets for the new column mode
-		this->updateValuesFormatWidgets(columnMode);
-
-		//show the actual formatting properties
-		switch (columnMode) {
-		case AbstractColumn::Numeric: {
-			const auto* filter = static_cast<Double2StringFilter*>(column->outputFilter());
-			ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->numericFormat()));
-			ui.sbValuesPrecision->setValue(filter->numDigits());
-			break;
-		}
-		case AbstractColumn::Integer:
-		case AbstractColumn::BigInt:
-		case AbstractColumn::Text:
-			break;
-		case AbstractColumn::Month:
-		case AbstractColumn::Day:
-		case AbstractColumn::DateTime: {
-			const auto* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
-			DEBUG("	column values format = " << STDSTRING(filter->format()));
-			ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
-			break;
-		}
-		}
-	}
 }
 
 void XYCurveDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
@@ -844,6 +749,8 @@ void XYCurveDock::retranslateUi() {
 }
 
 void XYCurveDock::xColumnChanged(const QModelIndex& index) {
+	updateValuesWidgets();
+
 	if (m_initializing)
 		return;
 
@@ -859,6 +766,8 @@ void XYCurveDock::xColumnChanged(const QModelIndex& index) {
 }
 
 void XYCurveDock::yColumnChanged(const QModelIndex& index) {
+	updateValuesWidgets();
+
 	if (m_initializing)
 		return;
 
@@ -1222,58 +1131,14 @@ void XYCurveDock::symbolsBorderWidthChanged(double value) {
   called when the type of the values (none, x, y, (x,y) etc.) was changed.
 */
 void XYCurveDock::valuesTypeChanged(int index) {
-	const auto valuesType = XYCurve::ValuesType(index);
-
-	if (valuesType == XYCurve::NoValues) {
-		//no values are to paint -> deactivate all the pertinent widgets
-		ui.cbValuesPosition->setEnabled(false);
-		ui.lValuesColumn->hide();
-		cbValuesColumn->hide();
-		ui.sbValuesDistance->setEnabled(false);
-		ui.sbValuesRotation->setEnabled(false);
-		ui.sbValuesOpacity->setEnabled(false);
-		ui.cbValuesFormat->setEnabled(false);
-		ui.cbValuesFormat->setEnabled(false);
-		ui.sbValuesPrecision->setEnabled(false);
-		ui.leValuesPrefix->setEnabled(false);
-		ui.leValuesSuffix->setEnabled(false);
-		ui.kfrValuesFont->setEnabled(false);
-		ui.kcbValuesColor->setEnabled(false);
-	} else {
-		ui.cbValuesPosition->setEnabled(true);
-		ui.sbValuesDistance->setEnabled(true);
-		ui.sbValuesRotation->setEnabled(true);
-		ui.sbValuesOpacity->setEnabled(true);
-		ui.cbValuesFormat->setEnabled(true);
-		ui.sbValuesPrecision->setEnabled(true);
-		ui.leValuesPrefix->setEnabled(true);
-		ui.leValuesSuffix->setEnabled(true);
-		ui.kfrValuesFont->setEnabled(true);
-		ui.kcbValuesColor->setEnabled(true);
-
-		const Column* column;
-		if (valuesType == XYCurve::ValuesCustomColumn) {
-			ui.lValuesColumn->show();
-			cbValuesColumn->show();
-
-			column = static_cast<Column*>(cbValuesColumn->currentModelIndex().internalPointer());
-		} else {
-			ui.lValuesColumn->hide();
-			cbValuesColumn->hide();
-
-			if (valuesType == XYCurve::ValuesY)
-				column = static_cast<const Column*>(m_curve->yColumn());
-			else
-				column = static_cast<const Column*>(m_curve->xColumn());
-		}
-		this->showValuesColumnFormat(column);
-	}
-
 	if (m_initializing)
 		return;
 
+	this->updateValuesWidgets();
+
+	const auto type = XYCurve::ValuesType(index);
 	for (auto* curve : m_curvesList)
-		curve->setValuesType(valuesType);
+		curve->setValuesType(type);
 }
 
 /*!
@@ -1283,12 +1148,98 @@ void XYCurveDock::valuesColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* column = static_cast<Column*>(index.internalPointer());
-	this->showValuesColumnFormat(column);
+	this->updateValuesWidgets();
 
-	for (auto* curve : m_curvesList) {
-		//TODO save also the format of the currently selected column for the values (precision etc.)
+	auto* column = static_cast<Column*>(index.internalPointer());
+	for (auto* curve : m_curvesList)
 		curve->setValuesColumn(column);
+}
+
+/*!
+  shows the formatting properties of the column \c column.
+  Called, when a new column for the values was selected - either by changing the type of the values (none, x, y, etc.) or
+  by selecting a new custom column for the values.
+*/
+
+/*!
+  depending on the currently selected values column type (column mode) updates the widgets for the values column format,
+  shows/hides the allowed widgets, fills the corresponding combobox with the possible entries.
+  Called when the values column was changed.
+*/
+void XYCurveDock::updateValuesWidgets() {
+	const auto type = XYCurve::ValuesType(ui.cbValuesType->currentIndex());
+	bool showValues = (type != XYCurve::NoValues);
+
+	ui.cbValuesPosition->setEnabled(showValues);
+	ui.sbValuesDistance->setEnabled(showValues);
+	ui.sbValuesRotation->setEnabled(showValues);
+	ui.sbValuesOpacity->setEnabled(showValues);
+	ui.kfrValuesFont->setEnabled(showValues);
+	ui.kcbValuesColor->setEnabled(showValues);
+
+	if (type == XYCurve::ValuesCustomColumn) {
+		ui.lValuesColumn->show();
+		cbValuesColumn->show();
+	} else {
+		ui.lValuesColumn->hide();
+		cbValuesColumn->hide();
+	}
+
+	const AbstractColumn* xColumn = nullptr;
+	const AbstractColumn* yColumn = nullptr;
+	switch (type) {
+		case XYCurve::NoValues:
+			break;
+		case XYCurve::ValuesX:
+			xColumn = m_curve->xColumn();
+			break;
+		case XYCurve::ValuesY:
+			yColumn = m_curve->yColumn();
+			break;
+		case XYCurve::ValuesXY:
+		case XYCurve::ValuesXYBracketed:
+			xColumn = m_curve->xColumn();
+			yColumn = m_curve->yColumn();
+			break;
+		case XYCurve::ValuesCustomColumn:
+			break;
+	}
+
+	bool hasInteger = (xColumn && (xColumn->columnMode() == AbstractColumn::Integer || xColumn->columnMode() == AbstractColumn::Integer))
+					|| (yColumn && (yColumn->columnMode() == AbstractColumn::Integer || yColumn->columnMode() == AbstractColumn::Integer));
+
+	bool hasNumeric = (xColumn && xColumn->columnMode() == AbstractColumn::Numeric)
+					|| (yColumn && yColumn->columnMode() == AbstractColumn::Numeric);
+
+	bool hasDateTime = (xColumn && xColumn->columnMode() == AbstractColumn::DateTime)
+					|| (yColumn && yColumn->columnMode() == AbstractColumn::DateTime);
+
+	//hide all the format related widgets first and
+	//then show only what is required depending of the column mode(s)
+	ui.lValuesFormat->hide();
+	ui.lValuesNumericFormat->hide();
+	ui.cbValuesNumericFormat->hide();
+	ui.lValuesPrecision->hide();
+	ui.sbValuesPrecision->hide();
+	ui.lValuesDateTimeFormat->hide();
+	ui.cbValuesDateTimeFormat->hide();
+
+	if (hasNumeric || hasInteger) {
+		ui.lValuesFormat->show();
+		ui.lValuesNumericFormat->show();
+		ui.cbValuesNumericFormat->show();
+	}
+
+	//precision is only available for Numeric
+	if (hasNumeric) {
+		ui.lValuesPrecision->show();
+		ui.sbValuesPrecision->show();
+	}
+
+	if (hasDateTime) {
+		ui.lValuesFormat->show();
+		ui.lValuesDateTimeFormat->show();
+		ui.cbValuesDateTimeFormat->show();
 	}
 }
 
@@ -1323,6 +1274,31 @@ void XYCurveDock::valuesOpacityChanged(int value) {
 	qreal opacity = (float)value/100.;
 	for (auto* curve : m_curvesList)
 		curve->setValuesOpacity(opacity);
+}
+
+void XYCurveDock::valuesNumericFormatChanged(int index) {
+	if (m_initializing)
+		return;
+
+	char format = ui.cbValuesNumericFormat->itemData(index).toChar().toLatin1();
+	for (auto* curve : m_curvesList)
+		curve->setValuesNumericFormat(format);
+}
+
+void XYCurveDock::valuesDateTimeFormatChanged(const QString& format) {
+	if (m_initializing)
+		return;
+
+	for (auto* curve : m_curvesList)
+		curve->setValuesDateTimeFormat(format);
+}
+
+void XYCurveDock::valuesPrecisionChanged(int precision) {
+	if (m_initializing)
+		return;
+
+	for (auto* curve : m_curvesList)
+		curve->setValuesPrecision(precision);
 }
 
 void XYCurveDock::valuesPrefixChanged() {
@@ -1794,6 +1770,7 @@ void XYCurveDock::curveXColumnChanged(const AbstractColumn* column) {
 	this->setModelIndexFromAspect(cbXColumn, column);
 	cbXColumn->useCurrentIndexText(true);
 	cbXColumn->setInvalid(false);
+	updateValuesWidgets();
 	m_initializing = false;
 }
 
@@ -1802,6 +1779,7 @@ void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
 	this->setModelIndexFromAspect(cbYColumn, column);
 	cbYColumn->useCurrentIndexText(true);
 	cbYColumn->setInvalid(false);
+	updateValuesWidgets();
 	m_initializing = false;
 }
 
@@ -1925,6 +1903,21 @@ void XYCurveDock::curveValuesDistanceChanged(qreal distance) {
 void XYCurveDock::curveValuesRotationAngleChanged(qreal angle) {
 	m_initializing = true;
 	ui.sbValuesRotation->setValue(angle);
+	m_initializing = false;
+}
+void XYCurveDock::curveValuesNumericFormatChanged(char format) {
+	m_initializing = true;
+	ui.cbValuesNumericFormat->setCurrentIndex(ui.cbValuesNumericFormat->findData(format));
+	m_initializing = false;
+}
+void XYCurveDock::curveValuesPrecisionChanged(int precision) {
+	m_initializing = true;
+	ui.sbValuesPrecision->setValue(precision);
+	m_initializing = false;
+}
+void XYCurveDock::curveValuesDateTimeFormatChanged(const QString& format) {
+	m_initializing = true;
+	ui.cbValuesDateTimeFormat->setCurrentText(format);
 	m_initializing = false;
 }
 void XYCurveDock::curveValuesOpacityChanged(qreal opacity) {
@@ -2098,12 +2091,16 @@ void XYCurveDock::load() {
 	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(m_curve->valuesDistance(), Worksheet::Point) );
 	ui.sbValuesRotation->setValue( m_curve->valuesRotationAngle() );
 	ui.sbValuesOpacity->setValue( round(m_curve->valuesOpacity()*100.0) );
+	ui.sbValuesPrecision->setValue(m_curve->valuesPrecision());
+	ui.cbValuesNumericFormat->setCurrentIndex(ui.cbValuesNumericFormat->findData(m_curve->valuesNumericFormat()));
+	ui.cbValuesDateTimeFormat->setCurrentText(m_curve->valuesDateTimeFormat());
 	ui.leValuesPrefix->setText( m_curve->valuesPrefix() );
 	ui.leValuesSuffix->setText( m_curve->valuesSuffix() );
 	QFont valuesFont = m_curve->valuesFont();
 	valuesFont.setPointSizeF( round(Worksheet::convertFromSceneUnits(valuesFont.pixelSize(), Worksheet::Point)) );
 	ui.kfrValuesFont->setFont(valuesFont);
 	ui.kcbValuesColor->setColor( m_curve->valuesColor() );
+	this->updateValuesWidgets();
 
 	//Filling
 	ui.cbFillingPosition->setCurrentIndex( (int) m_curve->fillingPosition() );
@@ -2273,6 +2270,9 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("ValuesDistance", Worksheet::convertToSceneUnits(ui.sbValuesDistance->value(),Worksheet::Point));
 	group.writeEntry("ValuesRotation", ui.sbValuesRotation->value());
 	group.writeEntry("ValuesOpacity", ui.sbValuesOpacity->value()/100.0);
+	group.writeEntry("valuesNumericFormat", ui.cbValuesNumericFormat->currentText());
+	group.writeEntry("valuesPrecision", ui.sbValuesPrecision->value());
+	group.writeEntry("valuesDateTimeFormat", ui.cbValuesDateTimeFormat->currentText());
 	group.writeEntry("ValuesPrefix", ui.leValuesPrefix->text());
 	group.writeEntry("ValuesSuffix", ui.leValuesSuffix->text());
 	group.writeEntry("ValuesFont", ui.kfrValuesFont->font());

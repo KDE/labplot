@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Private members of XYCurve
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
@@ -103,6 +103,9 @@ public:
 	qreal valuesDistance;
 	qreal valuesRotationAngle;
 	qreal valuesOpacity;
+	char valuesNumericFormat; //'g', 'e', 'E', etc. for numeric values
+	int valuesPrecision; //number of digits for numeric values
+	QString valuesDateTimeFormat;
 	QString valuesPrefix;
 	QString valuesSuffix;
 	QFont valuesFont;
