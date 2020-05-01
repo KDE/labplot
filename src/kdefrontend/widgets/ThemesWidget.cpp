@@ -79,26 +79,14 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 			tempPath = themeImgPath + "Unavailable.png";
 
 		listItem->setIcon(QIcon(QPixmap(tempPath)));
-		listItem->setText(themeList.at(i));
-		mContentItemModel->appendRow(listItem);
+		if (themeList.at(i) == QLatin1String("Default")) {
+			listItem->setText(i18n("Default"));
+			mContentItemModel->insertRow(0, listItem);
+		} else {
+			listItem->setText(themeList.at(i));
+			mContentItemModel->appendRow(listItem);
+		}
 	}
-
-	//create and add the icon for "None"
-	QPixmap pm(size, size);
-	QPen pen(Qt::SolidPattern, 1);
-	const QColor& color = (palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
-	pen.setColor(color);
-	QPainter pa;
-	pm.fill(Qt::transparent);
-	pa.begin(&pm);
-	pa.setPen(pen);
-	pa.drawRect(2, 2, size - 4, size - 4);
-	pa.end();
-
-	auto* listItem = new QStandardItem();
-	listItem->setIcon(pm);
-	listItem->setText(i18n("None"));
-	mContentItemModel->appendRow(listItem);
 
 	//adding download themes option
 	//TODO: activate this later
@@ -130,7 +118,7 @@ void ThemesWidget::applyClicked(const QModelIndex& index) {
 // 		this->downloadThemes();
 // 	else
 
-	if (index.row() == model()->rowCount()-1)
+	if (index.row() == 0)
 		emit themeSelected(QString()); //item with the string "None" was selected -> no theme
 	else
 		emit themeSelected(themeName);
