@@ -531,20 +531,21 @@ void XYCurveDock::setModel() {
 	cbYErrorPlusColumn->setModel(m_aspectTreeModel);
 
 	if (cbXColumn) {
+		QString msg = i18n("The column \"%1\" is not available. If a new column at this path is created, it will automatically be used again by this curve.");
 		QString path = m_curve->xColumnPath().split('/').last();
 		if (m_curve->xColumn()) {
-			path += QString("\t ")+m_curve->xColumn()->plotDesignationString();
+			path += QString("\t ") + m_curve->xColumn()->plotDesignationString();
 			cbXColumn->setInvalid(false);
 		} else
-			cbXColumn->setInvalid(true, i18n("The column \"%1\" is not available. If a new column at this path is created, it is linked to this curve. If you wanna hold this column, don't change anything in this combobox.", m_curve->xColumnPath()));
+			cbXColumn->setInvalid(true, msg.arg(m_curve->xColumnPath()));
 		cbXColumn->setText(path);
 
 		path = m_curve->yColumnPath().split('/').last();
 		if (m_curve->yColumn()) {
-			path += QString("\t ")+m_curve->yColumn()->plotDesignationString();
+			path += QString("\t ") + m_curve->yColumn()->plotDesignationString();
 			cbYColumn->setInvalid(false);
 		} else
-			cbYColumn->setInvalid(true, i18n("The column \"%1\" is not available. If a new column at this path is created, it is linked to this curve. If you wanna hold this column, don't change anything in this combobox.", m_curve->xColumnPath()));
+			cbYColumn->setInvalid(true, msg.arg(m_curve->yColumnPath()));
 		cbYColumn->setText(path);
 	}
 }
