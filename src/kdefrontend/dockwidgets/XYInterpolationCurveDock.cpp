@@ -498,43 +498,43 @@ void XYInterpolationCurveDock::variantChanged() {
 	switch (variant) {
 	case nsl_interp_pch_variant_finite_difference:
 		uiGeneralTab.lParameter->hide();
-                uiGeneralTab.lTension->hide();
-                uiGeneralTab.sbTension->hide();
-                uiGeneralTab.lContinuity->hide();
-                uiGeneralTab.sbContinuity->hide();
-                uiGeneralTab.lBias->hide();
-                uiGeneralTab.sbBias->hide();
+		uiGeneralTab.lTension->hide();
+		uiGeneralTab.sbTension->hide();
+		uiGeneralTab.lContinuity->hide();
+		uiGeneralTab.sbContinuity->hide();
+		uiGeneralTab.lBias->hide();
+		uiGeneralTab.sbBias->hide();
 		break;
 	case nsl_interp_pch_variant_catmull_rom:
 		uiGeneralTab.lParameter->show();
-                uiGeneralTab.lTension->show();
-                uiGeneralTab.sbTension->show();
-                uiGeneralTab.sbTension->setEnabled(false);
-                uiGeneralTab.sbTension->setValue(0.0);
-                uiGeneralTab.lContinuity->hide();
-                uiGeneralTab.sbContinuity->hide();
-                uiGeneralTab.lBias->hide();
-                uiGeneralTab.sbBias->hide();
+		uiGeneralTab.lTension->show();
+		uiGeneralTab.sbTension->show();
+		uiGeneralTab.sbTension->setEnabled(false);
+		uiGeneralTab.sbTension->setValue(0.0);
+		uiGeneralTab.lContinuity->hide();
+		uiGeneralTab.sbContinuity->hide();
+		uiGeneralTab.lBias->hide();
+		uiGeneralTab.sbBias->hide();
 		break;
 	case nsl_interp_pch_variant_cardinal:
 		uiGeneralTab.lParameter->show();
-                uiGeneralTab.lTension->show();
-                uiGeneralTab.sbTension->show();
-                uiGeneralTab.sbTension->setEnabled(true);
-                uiGeneralTab.lContinuity->hide();
-                uiGeneralTab.sbContinuity->hide();
-                uiGeneralTab.lBias->hide();
-                uiGeneralTab.sbBias->hide();
+		uiGeneralTab.lTension->show();
+		uiGeneralTab.sbTension->show();
+		uiGeneralTab.sbTension->setEnabled(true);
+		uiGeneralTab.lContinuity->hide();
+		uiGeneralTab.sbContinuity->hide();
+		uiGeneralTab.lBias->hide();
+		uiGeneralTab.sbBias->hide();
 		break;
 	case nsl_interp_pch_variant_kochanek_bartels:
 		uiGeneralTab.lParameter->show();
-                uiGeneralTab.lTension->show();
-                uiGeneralTab.sbTension->show();
-                uiGeneralTab.sbTension->setEnabled(true);
-                uiGeneralTab.lContinuity->show();
-                uiGeneralTab.sbContinuity->show();
-                uiGeneralTab.lBias->show();
-                uiGeneralTab.sbBias->show();
+		uiGeneralTab.lTension->show();
+		uiGeneralTab.sbTension->show();
+		uiGeneralTab.sbTension->setEnabled(true);
+		uiGeneralTab.lContinuity->show();
+		uiGeneralTab.sbContinuity->show();
+		uiGeneralTab.lBias->show();
+		uiGeneralTab.sbBias->show();
 		break;
 	}
 

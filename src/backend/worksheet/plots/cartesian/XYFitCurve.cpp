@@ -924,7 +924,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			delete[] b;
 
 			break;
-        	}
+		}
 		}
 		break;
 	case nsl_fit_model_peak:

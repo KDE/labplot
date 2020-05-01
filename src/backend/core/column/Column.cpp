@@ -1428,7 +1428,7 @@ void Column::handleFormatChange() {
 
 	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
-    d->propertiesAvailable = false;
+	d->propertiesAvailable = false;
 	DEBUG("Column::handleFormatChange() DONE");
 }
 
@@ -1745,8 +1745,8 @@ int Column::calculateMaxSteps (unsigned int value) {
 		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7
 	};
 
-	unsigned int r;     // r will be lg(v)
-	unsigned int t, tt; // temporaries
+	unsigned int r;		// r will be lg(v)
+	unsigned int t, tt;	// temporaries
 	if ((tt = value >> 16))
 		r = (t = tt >> 8) ? 24 + LogTable256[t] : 16 + LogTable256[tt];
 	else

@@ -434,7 +434,7 @@ CartesianPlot* Worksheet::getPlot(int index) {
 }
 
 TreeModel* Worksheet::cursorModel() {
-    return d->cursorData;
+	return d->cursorData;
 }
 
 void Worksheet::update() {

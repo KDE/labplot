@@ -125,16 +125,16 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	setWindowIcon(QIcon::fromTheme("document-import"));
 
 	//"What's this?" texts
-    QString info = i18n("Specify the file where the project content has to be imported from.");
+	QString info = i18n("Specify the file where the project content has to be imported from.");
 	ui.leFileName->setWhatsThis(info);
 
-    info = i18n("Select one or several objects to be imported into the current project.\n"
+	info = i18n("Select one or several objects to be imported into the current project.\n"
 	            "Note, all children of the selected objects as well as all the dependent objects will be automatically selected.\n"
 	            "To import the whole project, select the top-level project node."
 	           );
 	ui.tvPreview->setWhatsThis(info);
 
-    info = i18n("Specify the target folder in the current project where the selected objects have to be imported into.");
+	info = i18n("Specify the target folder in the current project where the selected objects have to be imported into.");
 	m_cbAddTo->setWhatsThis(info);
 
 	//restore saved settings if available
@@ -286,7 +286,7 @@ void ImportProjectDialog::refreshPreview() {
 	ui.tvPreview->setModel(m_projectParser->model());
 
 	connect(ui.tvPreview->selectionModel(), &QItemSelectionModel::selectionChanged,
-	        this, &ImportProjectDialog::selectionChanged);
+		this, &ImportProjectDialog::selectionChanged);
 
 	//show top-level containers only
 	if (ui.tvPreview->model()) {

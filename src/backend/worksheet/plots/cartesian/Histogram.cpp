@@ -291,7 +291,7 @@ void Histogram::setType(Histogram::HistogramType type) {
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramOrientation, Histogram::HistogramOrientation, orientation, updateOrientation)
 void Histogram::setOrientation(Histogram::HistogramOrientation orientation) {
-    Q_D(Histogram);
+	Q_D(Histogram);
 	if (orientation != d->orientation)
 		exec(new HistogramSetHistogramOrientationCmd(d, orientation, ki18n("%1: set histogram orientation")));
 }
@@ -1368,10 +1368,10 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	if (m_hovered && !isSelected() && !m_printing) {
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
-                        QPainter p(&pix);
-                        p.setCompositionMode(QPainter::CompositionMode_SourceIn);	// source (shadow) pixels merged with the alpha channel of the destination (m_pixmap)
-                        p.fillRect(pix.rect(), QApplication::palette().color(QPalette::Shadow));
-                        p.end();
+			QPainter p(&pix);
+			p.setCompositionMode(QPainter::CompositionMode_SourceIn);	// source (shadow) pixels merged with the alpha channel of the destination (m_pixmap)
+			p.fillRect(pix.rect(), QApplication::palette().color(QPalette::Shadow));
+			p.end();
 
 			m_hoverEffectImage = ImageTools::blurred(pix.toImage(), m_pixmap.rect(), 5);
 			m_hoverEffectImageIsDirty = false;
@@ -1384,10 +1384,10 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	if (isSelected() && !m_printing) {
 		if (m_selectionEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
-                        QPainter p(&pix);
-                        p.setCompositionMode(QPainter::CompositionMode_SourceIn);
-                        p.fillRect(pix.rect(), QApplication::palette().color(QPalette::Highlight));
-                        p.end();
+			QPainter p(&pix);
+			p.setCompositionMode(QPainter::CompositionMode_SourceIn);
+			p.fillRect(pix.rect(), QApplication::palette().color(QPalette::Highlight));
+			p.end();
 
 			m_selectionEffectImage = ImageTools::blurred(pix.toImage(), m_pixmap.rect(), 5);
 			m_selectionEffectImageIsDirty = false;

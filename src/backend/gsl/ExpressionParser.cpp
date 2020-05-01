@@ -1334,8 +1334,8 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
  * Evaluate cartesian expression returning true on success and false if parsing fails
  */
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,
-        int count, QVector<double>* xVector, QVector<double>* yVector,
-        const QStringList& paramNames, const QVector<double>& paramValues) {
+		int count, QVector<double>* xVector, QVector<double>* yVector,
+		const QStringList& paramNames, const QVector<double>& paramValues) {
 
 	QByteArray xminba = min.toLatin1();
 	const double xMin = parse(xminba.constData());
@@ -1371,7 +1371,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 }
 
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,
-        int count, QVector<double>* xVector, QVector<double>* yVector) {
+		int count, QVector<double>* xVector, QVector<double>* yVector) {
 
 	QByteArray xminba = min.toLatin1();
 	const double xMin = parse(xminba.constData());
@@ -1422,7 +1422,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 }
 
 bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector,
-        const QStringList& paramNames, const QVector<double>& paramValues) {
+		const QStringList& paramNames, const QVector<double>& paramValues) {
 
 	QByteArray funcba = expr.toLatin1();
 	const char* func = funcba.constData();
@@ -1495,7 +1495,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 }
 
 bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, const QString& max,
-                                     int count, QVector<double>* xVector, QVector<double>* yVector) {
+		int count, QVector<double>* xVector, QVector<double>* yVector) {
 
 	QByteArray minba = min.toLatin1();
 	const double minValue = parse(minba.constData());
@@ -1525,7 +1525,7 @@ bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, co
 }
 
 bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& expr2, const QString& min, const QString& max,
-        int count, QVector<double>* xVector, QVector<double>* yVector) {
+		int count, QVector<double>* xVector, QVector<double>* yVector) {
 
 	QByteArray minba = min.toLatin1();
 	const double minValue = parse(minba.constData());

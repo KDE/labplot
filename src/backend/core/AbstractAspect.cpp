@@ -267,14 +267,14 @@ QDateTime AbstractAspect::creationTime() const {
 }
 
 bool AbstractAspect::hidden() const {
-    return d->m_hidden;
+	return d->m_hidden;
 }
 
 /**
  * \brief Set "hidden" property, i.e. whether to exclude this aspect from being shown in the explorer.
  */
 void AbstractAspect::setHidden(bool value) {
-    if (value == d->m_hidden)
+	if (value == d->m_hidden)
 		return;
 	d->m_hidden = value;
 }

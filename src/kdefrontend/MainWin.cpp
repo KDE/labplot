@@ -223,7 +223,7 @@ void MainWin::showPresenter() {
 			view->presenterMode();
 		} else {
 			QMessageBox::information(this, i18n("Presenter Mode"),
-			                         i18n("No worksheets are available in the project. The presenter mode will not be started."));
+				i18n("No worksheets are available in the project. The presenter mode will not be started."));
 		}
 	}
 }
@@ -336,7 +336,7 @@ void MainWin::initGUI(const QString& fileName) {
 			createMdiArea();
 			setCentralWidget(m_mdiArea);
 
-			if (load == NewProject)   //create new project
+			if (load == NewProject)	//create new project
 				newProject();
 			else if (load == NewProjectWorksheet) { //create new project with a worksheet
 				newProject();
@@ -472,9 +472,9 @@ void MainWin::initActions() {
 	m_printAction = KStandardAction::print(this, SLOT(print()),actionCollection());
 	m_printPreviewAction = KStandardAction::printPreview(this, SLOT(printPreview()),actionCollection());
 
-    //TODO: on Mac OS when going full-screen we get a crash because of an stack-overflow
+	//TODO: on Mac OS when going full-screen we get a crash because of an stack-overflow
 #ifndef Q_OS_MAC
-    KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
+	KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
 #endif
 
 	//New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
@@ -786,8 +786,8 @@ void MainWin::colorSchemeChanged(QAction* action) {
 bool MainWin::warnModified() {
 	if (m_project->hasChanged()) {
 		int want_save = KMessageBox::warningYesNoCancel( this,
-		                i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
-		                i18n("Save Project"));
+			i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
+			i18n("Save Project"));
 		switch (want_save) {
 		case KMessageBox::Yes:
 			return !saveProject();
@@ -1447,7 +1447,7 @@ bool MainWin::saveProjectAs() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	const QString& dir = conf.readEntry("LastOpenDir", "");
 	QString path  = QFileDialog::getSaveFileName(this, i18n("Save Project As"), dir,
-	                i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
+		i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
 
 	if (path.isEmpty())// "Cancel" was clicked
 		return false;
@@ -1695,7 +1695,7 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 
 #ifdef HAVE_CANTOR_LIBS
 /*
-    adds a new Cantor Spreadsheet to the project.
+	adds a new Cantor Spreadsheet to the project.
 */
 void MainWin::newCantorWorksheet(QAction* action) {
 	CantorWorksheet* cantorworksheet = new CantorWorksheet(action->data().toString());
@@ -1785,8 +1785,8 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
 }
 
 /*!
-    called when the current aspect in the tree of the project explorer was changed.
-    Selects the new aspect.
+	called when the current aspect in the tree of the project explorer was changed.
+	Selects the new aspect.
 */
 void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect) {
 	if (!aspect)
@@ -1812,7 +1812,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 	if (part) {
 		//for LiveDataSource we currently don't show any view
 		/*if (dynamic_cast<const LiveDataSource*>(part))
-		    return;*/
+			return;*/
 
 		PartMdiView* win;
 
@@ -2259,7 +2259,7 @@ void MainWin::importFileDialog(const QString& fileName) {
 		m_currentAspect->type() == AspectType::Workbook)
 		dlg->setCurrentIndex(m_projectExplorer->currentIndex());
 	else if (m_currentAspect->type() == AspectType::Column &&
-             m_currentAspect->parentAspect()->type() == AspectType::Spreadsheet)
+			m_currentAspect->parentAspect()->type() == AspectType::Spreadsheet)
 		dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 
 	if (dlg->exec() == QDialog::Accepted) {
@@ -2281,7 +2281,7 @@ void MainWin::importSqlDialog() {
 		m_currentAspect->type() == AspectType::Workbook)
 		dlg->setCurrentIndex(m_projectExplorer->currentIndex());
 	else if (m_currentAspect->type() == AspectType::Column &&
-             m_currentAspect->parentAspect()->type() == AspectType::Spreadsheet)
+			m_currentAspect->parentAspect()->type() == AspectType::Spreadsheet)
 		dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 
 

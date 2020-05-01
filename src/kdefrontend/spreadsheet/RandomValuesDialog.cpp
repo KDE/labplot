@@ -362,21 +362,21 @@ void RandomValuesDialog::distributionChanged(int index) {
 
 void RandomValuesDialog::checkValues() {
 	if (ui.leParameter1->text().simplified().isEmpty()) {
-        m_okButton->setEnabled(false);
+		m_okButton->setEnabled(false);
 		return;
 	}
 
 	if (ui.leParameter2->isVisible() && ui.leParameter2->text().simplified().isEmpty()) {
-        m_okButton->setEnabled(false);
+		m_okButton->setEnabled(false);
 		return;
 	}
 
 	if (ui.leParameter3->isVisible() && ui.leParameter3->text().simplified().isEmpty()) {
-        m_okButton->setEnabled(false);
+		m_okButton->setEnabled(false);
 		return;
 	}
 
-    m_okButton->setEnabled(true);
+	m_okButton->setEnabled(true);
 	return;
 }
 

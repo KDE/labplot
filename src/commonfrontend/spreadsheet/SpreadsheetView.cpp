@@ -1753,7 +1753,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 		case AbstractColumn::Numeric:
 			if (!doubleOk)
 				doubleValue = QInputDialog::getDouble(this, i18n("Fill the selection with constant value"),
-				                                      i18n("Value"), 0, -std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), 6, &doubleOk);
+					i18n("Value"), 0, -std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), 6, &doubleOk);
 			if (doubleOk) {
 				WAIT_CURSOR;
 				QVector<double> results(last-first+1);
@@ -1770,7 +1770,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 		case AbstractColumn::Integer:
 			if (!intOk)
 				intValue = QInputDialog::getInt(this, i18n("Fill the selection with constant value"),
-				                                i18n("Value"), 0, -2147483647, 2147483647, 1, &intOk);
+					i18n("Value"), 0, -2147483647, 2147483647, 1, &intOk);
 			if (intOk) {
 				WAIT_CURSOR;
 				QVector<int> results(last-first+1);
@@ -1788,7 +1788,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 			//TODO: getBigInt()
 			if (!bigIntOk)
 				bigIntValue = QInputDialog::getInt(this, i18n("Fill the selection with constant value"),
-				                                i18n("Value"), 0, -2147483647, 2147483647, 1, &bigIntOk);
+					i18n("Value"), 0, -2147483647, 2147483647, 1, &bigIntOk);
 			if (bigIntOk) {
 				WAIT_CURSOR;
 				QVector<qint64> results(last-first+1);
@@ -1805,7 +1805,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 		case AbstractColumn::Text:
 			if (!stringOk)
 				stringValue = QInputDialog::getText(this, i18n("Fill the selection with constant value"),
-				                                    i18n("Value"), QLineEdit::Normal, nullptr, &stringOk);
+					i18n("Value"), QLineEdit::Normal, nullptr, &stringOk);
 			if (stringOk && !stringValue.isEmpty()) {
 				WAIT_CURSOR;
 				QVector<QString> results;
@@ -1833,7 +1833,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 }
 
 /*!
-    Open the sort dialog for all columns.
+	Open the sort dialog for all columns.
 */
 void SpreadsheetView::sortSpreadsheet() {
 	sortDialog(m_spreadsheet->children<Column>());
@@ -2072,7 +2072,7 @@ void SpreadsheetView::reverseColumns() {
 	WAIT_CURSOR;
 	QVector<Column*> cols = selectedColumns();
 	m_spreadsheet->beginMacro(i18np("%1: reverse column", "%1: reverse columns",
-	                                m_spreadsheet->name(), cols.size()));
+		m_spreadsheet->name(), cols.size()));
 	for (auto* col : cols) {
 		if (col->columnMode() != AbstractColumn::Numeric)
 			continue;
@@ -2495,7 +2495,7 @@ bool SpreadsheetView::exportView() {
 			const bool skipEmptyRows = dlg->skipEmptyRows();
 			const bool exportEntire = dlg->entireSpreadheet();
 			exportToLaTeX(path, exportHeader, gridLines, captions,
-			                    exportLatexHeader, skipEmptyRows, exportEntire);
+				exportLatexHeader, skipEmptyRows, exportEntire);
 			break;
 		}
 		case ExportSpreadsheetDialog::FITS: {
@@ -2560,7 +2560,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 		headerStringWidth += m_tableView->columnWidth(col);
 		firstRowStringWidth += m_spreadsheet->column(col)->asStringColumn()->textAt(0).length();
 		if ((headerStringWidth >= printer->pageRect().width() -2*margin) ||
-		        (firstRowStringWidth >= printer->pageRect().width() - 2*margin)) {
+				(firstRowStringWidth >= printer->pageRect().width() - 2*margin)) {
 			tablesNeeded = true;
 			break;
 		}
@@ -2637,7 +2637,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 			for (; j < toJ; j++) {
 				int w = m_tableView->columnWidth(j);
 				cellText = m_spreadsheet->column(j)->isValid(i) ? m_spreadsheet->text(i,j)+'\t':
-				           QLatin1String("- \t");
+						QLatin1String("- \t");
 				tr = painter.boundingRect(tr,Qt::AlignCenter,cellText);
 				br.setTopLeft(QPoint(right,height));
 				br.setWidth(w);
@@ -2753,8 +2753,8 @@ void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader,
 }
 
 void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeaders,
-                                    const bool gridLines, const bool captions, const bool latexHeaders,
-                                    const bool skipEmptyRows, const bool exportEntire) const {
+		const bool gridLines, const bool captions, const bool latexHeaders,
+		const bool skipEmptyRows, const bool exportEntire) const {
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
 		return;

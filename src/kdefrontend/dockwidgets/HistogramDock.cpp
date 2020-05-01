@@ -246,7 +246,7 @@ void HistogramDock::init() {
 		pa.translate(iconSize/2,iconSize/2);
 		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
 		pa.end();
-        ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style));
+		ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style));
 	}
 
 	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
@@ -1310,7 +1310,7 @@ void HistogramDock::selectFile() {
 
 	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
 	if (path.isEmpty())
-        	return; //cancel was clicked in the file-dialog
+		return; //cancel was clicked in the file-dialog
 
 	int pos = path.lastIndexOf(QDir::separator());
 	if (pos != -1) {

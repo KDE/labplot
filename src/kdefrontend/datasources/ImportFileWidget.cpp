@@ -1933,7 +1933,7 @@ void ImportFileWidget::onMqttDisconnect() {
 	emit subscriptionsChanged();
 	RESET_CURSOR;
 	QMessageBox::critical(this, i18n("Disconnected"),
-	                      i18n("Disconnected from the broker '%1' before the connection was successful.", m_client->hostname()));
+		i18n("Disconnected from the broker '%1' before the connection was successful.", m_client->hostname()));
 }
 
 /*!
@@ -2164,7 +2164,7 @@ void ImportFileWidget::showWillSettings() {
 
 	QVector<QTreeWidgetItem*> children;
 	for (int i = 0; i < m_subscriptionWidget->subscriptionCount(); ++i)
-        MQTTSubscriptionWidget::findSubscriptionLeafChildren(children, m_subscriptionWidget->topLevelSubscription(i));
+		MQTTSubscriptionWidget::findSubscriptionLeafChildren(children, m_subscriptionWidget->topLevelSubscription(i));
 
 	QVector<QString> topics;
 	for (int i = 0; i < children.size(); ++i)

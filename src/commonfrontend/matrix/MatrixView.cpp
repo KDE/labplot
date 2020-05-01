@@ -620,7 +620,7 @@ void MatrixView::fillWithFunctionValues() {
 void MatrixView::fillWithConstValues() {
 	bool ok = false;
 	double value = QInputDialog::getDouble(this, i18n("Fill the matrix with constant value"),
-	                                       i18n("Value"), 0, -2147483647, 2147483647, 6, &ok);
+		i18n("Value"), 0, -2147483647, 2147483647, 6, &ok);
 	if (ok) {
 		WAIT_CURSOR;
 		auto* newData = static_cast<QVector<QVector<double>>*>(m_matrix->data());

@@ -224,7 +224,7 @@ ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QStri
 }
 
 void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource,
-                                         AbstractFileFilter::ImportMode importMode) {
+		AbstractFileFilter::ImportMode importMode) {
 	DEBUG("ROOTFilterPrivate::readDataFromFile()");
 
 	long int pos = 0;
@@ -247,8 +247,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 
 		std::vector<void*> dataContainer;
 		const int columnOffset = dataSource->prepareImport(dataContainer, importMode, last - first + 1, columns.size(),
-		                                                   headers, QVector<AbstractColumn::ColumnMode>(columns.size(),
-		                                                   AbstractColumn::Numeric));
+			headers, QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::Numeric));
 
 		// read data
 		DEBUG("	reading " << first - last + 1 << " lines");
@@ -306,8 +305,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 
 		std::vector<void*> dataContainer;
 		const int columnOffset = dataSource->prepareImport(dataContainer, importMode, last - first + 1, columns.size(),
-		                                                   headers, QVector<AbstractColumn::ColumnMode>(columns.size(),
-		                                                   AbstractColumn::Numeric));
+			headers, QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::Numeric));
 
 		int c = 0;
 		for (const auto& l : columns) {
@@ -330,7 +328,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		}
 
 		dataSource->finalizeImport(columnOffset, 0, columns.size() - 1, QString(), importMode);
-    }
+	}
 }
 
 void ROOTFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {

@@ -259,11 +259,11 @@ QLocale::Language ExportSpreadsheetDialog::numberFormat() const {
 }
 
 void ExportSpreadsheetDialog::slotButtonClicked(QAbstractButton* button) {
-    if (button == m_okButton)
-	    okClicked();
-    else if (button == m_cancelButton) {
-	reject();
-    }
+	if (button == m_okButton)
+		okClicked();
+	else if (button == m_cancelButton) {
+		reject();
+	}
 }
 
 void ExportSpreadsheetDialog::setExportToImage(bool possible) {
