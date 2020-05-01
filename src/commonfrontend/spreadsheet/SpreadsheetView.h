@@ -34,20 +34,20 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/IntervalAttribute.h"
 
+class AbstractAspect;
 class Column;
 class Spreadsheet;
-class SpreadsheetModel;
 class SpreadsheetItemDelegate;
 class SpreadsheetHeaderView;
-class AbstractAspect;
-class QTableView;
+class SpreadsheetModel;
 
-class QPrinter;
-class QMenu;
-class QToolBar;
-class QModelIndex;
+class QActionGroup;
 class QItemSelection;
-
+class QMenu;
+class QPrinter;
+class QModelIndex;
+class QTableView;
+class QToolBar;
 
 #ifdef Q_OS_MAC
 	class KDMacTouchBar;
@@ -173,7 +173,13 @@ private:
 	QAction* action_drop_values;
 	QAction* action_mask_values;
 	QAction* action_join_columns;
-	QAction* action_normalize_columns;
+	QActionGroup* normalizeColumnActionGroup;
+	QAction* action_normalize_column_1;
+	QAction* action_normalize_column_2;
+	QAction* action_normalize_column_3;
+	QAction* action_normalize_column_4;
+	QAction* action_normalize_column_5;
+	QAction* action_normalize_column_6;
 	QAction* action_normalize_selection;
 	QAction* action_sort_columns;
 	QAction* action_sort_asc_column;
@@ -202,16 +208,17 @@ private:
 	QAction* addFourierFilterAction;
 
 	//Menus
-	QMenu* m_selectionMenu;
-	QMenu* m_columnMenu;
+	QMenu* m_selectionMenu{nullptr};;
+	QMenu* m_columnMenu{nullptr};;
 	QMenu* m_columnSetAsMenu{nullptr};
 	QMenu* m_columnGenerateDataMenu{nullptr};
 	QMenu* m_columnManipulateDataMenu;
+	QMenu* m_columnNormalizeMenu{nullptr};
 	QMenu* m_columnSortMenu{nullptr};
-	QMenu* m_rowMenu;
-	QMenu* m_spreadsheetMenu;
-	QMenu* m_plotDataMenu;
-	QMenu* m_analyzePlotMenu;
+	QMenu* m_rowMenu{nullptr};;
+	QMenu* m_spreadsheetMenu{nullptr};;
+	QMenu* m_plotDataMenu{nullptr};;
+	QMenu* m_analyzePlotMenu{nullptr};;
 
 public slots:
 	void createContextMenu(QMenu*);
@@ -268,7 +275,7 @@ private slots:
 	void dropColumnValues();
 	void maskColumnValues();
 	void joinColumns();
-	void normalizeSelectedColumns();
+	void normalizeSelectedColumns(QAction*);
 	void normalizeSelection();
 
 	void sortSelectedColumns();

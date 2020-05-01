@@ -8,6 +8,7 @@
 	* [worksheet] Support for imperial units for geometry and size settings of objects
 	* [spreadsheet] show infinite values as such and not as NaN
 	* [spreadsheet] support big integer (64 bit) as data type
+	* [spreadsheet] column normalization methods "divide by max", "divide by min", "divide by mean", "divide by median", "divide by std" and "(x-mean)/std"
 	* Allow to open Cantor and Jupyter projects
 
 Bug fixes:

@@ -277,7 +277,15 @@ void SpreadsheetView::initActions() {
 	action_mask_values = new QAction(QIcon::fromTheme(QString()), i18n("Mask Values"), this);
 	action_reverse_columns = new QAction(QIcon::fromTheme(QString()), i18n("Reverse"), this);
 // 	action_join_columns = new QAction(QIcon::fromTheme(QString()), i18n("Join"), this);
-	action_normalize_columns = new QAction(QIcon::fromTheme(QString()), i18n("&Normalize"), this);
+
+	normalizeColumnActionGroup = new QActionGroup(this);
+	action_normalize_column_1 = new QAction(i18n("Divide by min"), normalizeColumnActionGroup);
+	action_normalize_column_2 = new QAction(i18n("Divide by max"), normalizeColumnActionGroup);
+	action_normalize_column_3 = new QAction(i18n("Divide by mean"), normalizeColumnActionGroup);
+	action_normalize_column_4 = new QAction(i18n("Divide by median"), normalizeColumnActionGroup);
+	action_normalize_column_5 = new QAction(i18n("Divide by std"), normalizeColumnActionGroup);
+	action_normalize_column_6 = new QAction(QLatin1String("(x-mean)/std"), normalizeColumnActionGroup);
+
 	action_normalize_selection = new QAction(QIcon::fromTheme(QString()), i18n("&Normalize Selection"), this);
 
 	//sort and statistics
@@ -478,7 +486,17 @@ void SpreadsheetView::initMenus() {
 		m_columnManipulateDataMenu->addAction(action_mask_values);
 		m_columnManipulateDataMenu->addSeparator();
 		// 	m_columnManipulateDataMenu->addAction(action_join_columns);
-		m_columnManipulateDataMenu->addAction(action_normalize_columns);
+
+		m_columnNormalizeMenu = new QMenu(i18n("Normalize"), this);
+		m_columnNormalizeMenu->addAction(action_normalize_column_1);
+		m_columnNormalizeMenu->addAction(action_normalize_column_2);
+		m_columnNormalizeMenu->addAction(action_normalize_column_3);
+		m_columnNormalizeMenu->addAction(action_normalize_column_4);
+		m_columnNormalizeMenu->addAction(action_normalize_column_5);
+		m_columnNormalizeMenu->addSeparator();
+		m_columnNormalizeMenu->addAction(action_normalize_column_6);
+		m_columnManipulateDataMenu->addMenu(m_columnNormalizeMenu);
+
 		m_columnMenu->addMenu(m_columnManipulateDataMenu);
 		m_columnMenu->addSeparator();
 
@@ -600,7 +618,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_drop_values, &QAction::triggered, this, &SpreadsheetView::dropColumnValues);
 	connect(action_mask_values, &QAction::triggered, this, &SpreadsheetView::maskColumnValues);
 // 	connect(action_join_columns, &QAction::triggered, this, &SpreadsheetView::joinColumns);
-	connect(action_normalize_columns, &QAction::triggered, this, &SpreadsheetView::normalizeSelectedColumns);
+	connect(normalizeColumnActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::normalizeSelectedColumns);
 	connect(action_normalize_selection, &QAction::triggered, this, &SpreadsheetView::normalizeSelection);
 
 	//sort
@@ -1258,7 +1276,7 @@ void SpreadsheetView::copySelection() {
 	QApplication::clipboard()->setText(output_str);
 	RESET_CURSOR;
 }
-
+/*
 bool determineLocale(const QString& value, QLocale& locale) {
 	int pointIndex = value.indexOf(QLatin1Char('.'));
 	int commaIndex = value.indexOf(QLatin1Char('.'));
@@ -1266,7 +1284,8 @@ bool determineLocale(const QString& value, QLocale& locale) {
 
 	}
 	return false;
-}
+}*/
+
 void SpreadsheetView::pasteIntoSelection() {
 	if (m_spreadsheet->columnCount() < 1 || m_spreadsheet->rowCount() < 1)
 		return;
@@ -1311,7 +1330,7 @@ void SpreadsheetView::pasteIntoSelection() {
 	}
 
 	QLocale locale;
-	bool localeDetermined = false;
+// 	bool localeDetermined = false;
 
 	if ( (first_col == -1 || first_row == -1) || (last_row == first_row && last_col == first_col) ) {
 		// if there is no selection or only one cell selected, the
@@ -1343,11 +1362,11 @@ void SpreadsheetView::pasteIntoSelection() {
 				}
 			}
 
-			if (!localeDetermined)
-				localeDetermined = determineLocale(nonEmptyValue, locale);
+// 			if (!localeDetermined)
+// 				localeDetermined = determineLocale(nonEmptyValue, locale);
 
 			const AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(nonEmptyValue,
-													QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"), locale);
+													QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"));
 			col->setColumnMode(mode);
 		}
 
@@ -1364,11 +1383,11 @@ void SpreadsheetView::pasteIntoSelection() {
 					}
 				}
 
-				if (!localeDetermined)
-					localeDetermined = determineLocale(nonEmptyValue, locale);
+// 				if (!localeDetermined)
+// 					localeDetermined = determineLocale(nonEmptyValue, locale);
 
 				const AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(nonEmptyValue,
-														QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"), locale);
+														QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"));
 				Column* new_col = new Column(QString::number(curCol), mode);
 				new_col->setPlotDesignation(AbstractColumn::Y);
 				new_col->insertRows(0, m_spreadsheet->rowCount());
@@ -2126,17 +2145,55 @@ void SpreadsheetView::joinColumns() {
 	//TODO
 }
 
-void SpreadsheetView::normalizeSelectedColumns() {
+void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: normalize columns", m_spreadsheet->name()));
 	for (auto* col : selectedColumns()) {
 		if (col->columnMode() == AbstractColumn::Numeric) {
 			col->setSuppressDataChangedSignal(true);
-			double max = col->maximum();
-			if (max != 0.0) {// avoid division by zero
-				for (int row = 0; row < col->rowCount(); row++)
-					col->setValueAt(row, col->valueAt(row) / max);
+
+			auto* data = static_cast<QVector<double>* >(col->data());
+			QVector<double> new_data(col->rowCount());
+
+			if (action == action_normalize_column_1) { //divide by max
+				double max = col->maximum();
+				if (max != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / max;
+				}
+			} else if (action == action_normalize_column_2) { //divide by min
+				double min = col->minimum();
+				if (min != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / min;
+				}
+			} else if (action == action_normalize_column_3) { //divide my mean
+				double mean = col->statistics().arithmeticMean;
+				if (mean != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / mean;
+				}
+			} else if (action == action_normalize_column_4) { //divide by median
+				double median = col->statistics().median;
+				if (median != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / median;
+				}
+			} else if (action == action_normalize_column_5) { //divide by std
+				double std = col->statistics().standardDeviation;
+				if (std != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / std;
+				}
+			} else if (action == action_normalize_column_6) { // (x-mean)/std
+				double mean = col->statistics().arithmeticMean;
+				double std = col->statistics().standardDeviation;
+				if (std != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = (data->operator[](i) - mean) / std;
+				}
 			}
+			col->replaceValues(0, new_data);
 			col->setSuppressDataChangedSignal(false);
 			col->setChanged();
 		}
