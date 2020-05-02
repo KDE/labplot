@@ -106,6 +106,8 @@ void XYIntegrationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYIntegrationCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.sbMin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYIntegrationCurveDock::xRangeMinChanged);
 	connect(uiGeneralTab.sbMax, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYIntegrationCurveDock::xRangeMaxChanged);
+	connect(uiGeneralTab.dateTimeEditMin, &QDateTimeEdit::dateTimeChanged, this, &XYIntegrationCurveDock::xRangeMinDateTimeChanged);
+	connect(uiGeneralTab.dateTimeEditMax, &QDateTimeEdit::dateTimeChanged, this, &XYIntegrationCurveDock::xRangeMaxDateTimeChanged);
 	connect(uiGeneralTab.cbMethod, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYIntegrationCurveDock::methodChanged);
 	connect(uiGeneralTab.cbAbsolute, &QCheckBox::clicked, this, &XYIntegrationCurveDock::absoluteChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYIntegrationCurveDock::recalculateClicked);
@@ -142,20 +144,42 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	m_integrationCurve = dynamic_cast<XYIntegrationCurve*>(m_curve);
 
+	//data source
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_integrationCurve->dataSourceType());
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_integrationCurve->dataSourceCurve());
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_integrationCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_integrationCurve->yDataColumn());
+
+	//auto range
 	uiGeneralTab.cbAutoRange->setChecked(m_integrationData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_integrationData.xRange.first());
-	uiGeneralTab.sbMax->setValue(m_integrationData.xRange.last());
 	this->autoRangeChanged();
+
+	//range widgets
+	const auto* plot = static_cast<const CartesianPlot*>(m_integrationCurve->parentAspect());
+	m_dateTimeRange = (plot->xRangeFormat() != CartesianPlot::Numeric);
+	if (!m_dateTimeRange) {
+		uiGeneralTab.sbMin->setValue(m_integrationData.xRange.first());
+		uiGeneralTab.sbMax->setValue(m_integrationData.xRange.last());
+	} else {
+		uiGeneralTab.dateTimeEditMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_integrationData.xRange.first()) );
+		uiGeneralTab.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_integrationData.xRange.last()) );
+	}
+
+	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
+	uiGeneralTab.sbMin->setVisible(!m_dateTimeRange);
+	uiGeneralTab.lMax->setVisible(!m_dateTimeRange);
+	uiGeneralTab.sbMax->setVisible(!m_dateTimeRange);
+	uiGeneralTab.lMinDateTime->setVisible(m_dateTimeRange);
+	uiGeneralTab.dateTimeEditMin->setVisible(m_dateTimeRange);
+	uiGeneralTab.lMaxDateTime->setVisible(m_dateTimeRange);
+	uiGeneralTab.dateTimeEditMax->setVisible(m_dateTimeRange);
+
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
 	uiGeneralTab.cbMethod->setCurrentIndex(m_integrationData.method);
-	this->methodChanged();
+	this->methodChanged(m_integrationData.method);
 	uiGeneralTab.cbAbsolute->setChecked(m_integrationData.absolute);
 	this->absoluteChanged();
 
@@ -318,12 +342,16 @@ void XYIntegrationCurveDock::autoRangeChanged() {
 	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
 	m_integrationData.autoRange = autoRange;
 
-	if (autoRange) {
-		uiGeneralTab.lMin->setEnabled(false);
-		uiGeneralTab.sbMin->setEnabled(false);
-		uiGeneralTab.lMax->setEnabled(false);
-		uiGeneralTab.sbMax->setEnabled(false);
+	uiGeneralTab.lMin->setEnabled(!autoRange);
+	uiGeneralTab.sbMin->setEnabled(!autoRange);
+	uiGeneralTab.lMax->setEnabled(!autoRange);
+	uiGeneralTab.sbMax->setEnabled(!autoRange);
+	uiGeneralTab.lMinDateTime->setEnabled(!autoRange);
+	uiGeneralTab.dateTimeEditMin->setEnabled(!autoRange);
+	uiGeneralTab.lMaxDateTime->setEnabled(!autoRange);
+	uiGeneralTab.dateTimeEditMax->setEnabled(!autoRange);
 
+	if (autoRange) {
 		const AbstractColumn* xDataColumn = nullptr;
 		if (m_integrationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
 			xDataColumn = m_integrationCurve->xDataColumn();
@@ -333,33 +361,45 @@ void XYIntegrationCurveDock::autoRangeChanged() {
 		}
 
 		if (xDataColumn) {
-			uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
-			uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
+			if (!m_dateTimeRange) {
+				uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
+				uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
+			} else {
+				uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->minimum()));
+				uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->maximum()));
+			}
 		}
-	} else {
-		uiGeneralTab.lMin->setEnabled(true);
-		uiGeneralTab.sbMin->setEnabled(true);
-		uiGeneralTab.lMax->setEnabled(true);
-		uiGeneralTab.sbMax->setEnabled(true);
 	}
-
 }
-void XYIntegrationCurveDock::xRangeMinChanged() {
-	double xMin = uiGeneralTab.sbMin->value();
 
-	m_integrationData.xRange.first() = xMin;
+void XYIntegrationCurveDock::xRangeMinChanged(double value) {
+	m_integrationData.xRange.first() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYIntegrationCurveDock::xRangeMaxChanged() {
-	double xMax = uiGeneralTab.sbMax->value();
-
-	m_integrationData.xRange.last() = xMax;
+void XYIntegrationCurveDock::xRangeMaxChanged(double value) {
+	m_integrationData.xRange.last() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYIntegrationCurveDock::methodChanged() {
-	const auto method = (nsl_int_method_type)uiGeneralTab.cbMethod->currentIndex();
+void XYIntegrationCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {
+	if (m_initializing)
+		return;
+
+	m_integrationData.xRange.first() = dateTime.toMSecsSinceEpoch();
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYIntegrationCurveDock::xRangeMaxDateTimeChanged(const QDateTime& dateTime) {
+	if (m_initializing)
+		return;
+
+	m_integrationData.xRange.last() = dateTime.toMSecsSinceEpoch();
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYIntegrationCurveDock::methodChanged(int index) {
+	const auto method = (nsl_int_method_type)index;
 	m_integrationData.method = method;
 
 	// update absolute option
@@ -495,7 +535,7 @@ void XYIntegrationCurveDock::curveIntegrationDataChanged(const XYIntegrationCurv
 	m_initializing = true;
 	m_integrationData = integrationData;
 	uiGeneralTab.cbMethod->setCurrentIndex(m_integrationData.method);
-	this->methodChanged();
+	this->methodChanged(m_integrationData.method);
 	uiGeneralTab.cbAbsolute->setChecked(m_integrationData.absolute);
 	this->absoluteChanged();
 

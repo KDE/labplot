@@ -55,6 +55,7 @@ private:
 
 	XYIntegrationCurve* m_integrationCurve{nullptr};
 	XYIntegrationCurve::IntegrationData m_integrationData;
+	bool m_dateTimeRange{false};
 
 protected:
 	void setModel() override;
@@ -67,9 +68,11 @@ private slots:
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
-	void xRangeMinChanged();
-	void xRangeMaxChanged();
-	void methodChanged();
+	void xRangeMinChanged(double);
+	void xRangeMaxChanged(double);
+	void xRangeMinDateTimeChanged(const QDateTime&);
+	void xRangeMaxDateTimeChanged(const QDateTime&);
+	void methodChanged(int);
 	void absoluteChanged();
 
 	void recalculateClicked();

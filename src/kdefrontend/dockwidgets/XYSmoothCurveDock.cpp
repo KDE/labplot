@@ -155,13 +155,18 @@ void XYSmoothCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	m_smoothCurve = dynamic_cast<XYSmoothCurve*>(m_curve);
 
+	//data source
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_smoothCurve->dataSourceType());
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_smoothCurve->dataSourceCurve());
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_smoothCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_smoothCurve->yDataColumn());
-	uiGeneralTab.cbAutoRange->setChecked(m_smoothData.autoRange);
 
+	//auto range
+	uiGeneralTab.cbAutoRange->setChecked(m_smoothData.autoRange);
+	this->autoRangeChanged();
+
+	//range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_smoothCurve->parentAspect());
 	m_dateTimeRange = (plot->xRangeFormat() != CartesianPlot::Numeric);
 	if (!m_dateTimeRange) {
@@ -180,8 +185,6 @@ void XYSmoothCurveDock::initGeneralTab() {
 	uiGeneralTab.dateTimeEditMin->setVisible(m_dateTimeRange);
 	uiGeneralTab.lMaxDateTime->setVisible(m_dateTimeRange);
 	uiGeneralTab.dateTimeEditMax->setVisible(m_dateTimeRange);
-
-	this->autoRangeChanged();
 
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
@@ -372,6 +375,7 @@ void XYSmoothCurveDock::autoRangeChanged() {
 		}
 	}
 }
+
 void XYSmoothCurveDock::xRangeMinChanged(double value) {
 	m_smoothData.xRange.first() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
