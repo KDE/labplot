@@ -211,7 +211,7 @@ void StatisticsDialog::setColumns(const QVector<Column*>& columns) {
 }
 
 const QString StatisticsDialog::isNanValue(const double value) {
-	return (std::isnan(value) ? QLatin1String("-") : QString::number(value,'g', 10));
+	return (std::isnan(value) ? QLatin1String("-") : QString::number(value,'f'));
 }
 
 void StatisticsDialog::currentTabChanged(int index) {
