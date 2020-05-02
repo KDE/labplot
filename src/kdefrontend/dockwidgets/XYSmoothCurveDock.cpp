@@ -162,9 +162,6 @@ void XYSmoothCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_smoothCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_smoothCurve->yDataColumn());
 
-	//auto range
-	uiGeneralTab.cbAutoRange->setChecked(m_smoothData.autoRange);
-	this->autoRangeChanged();
 
 	//range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_smoothCurve->parentAspect());
@@ -176,6 +173,10 @@ void XYSmoothCurveDock::initGeneralTab() {
 		uiGeneralTab.dateTimeEditMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_smoothData.xRange.first()) );
 		uiGeneralTab.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_smoothData.xRange.last()) );
 	}
+
+	//auto range
+	uiGeneralTab.cbAutoRange->setChecked(m_smoothData.autoRange);
+	this->autoRangeChanged();
 
 	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
 	uiGeneralTab.sbMin->setVisible(!m_dateTimeRange);

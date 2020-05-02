@@ -106,9 +106,11 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYDifferentiationCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.sbMin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYDifferentiationCurveDock::xRangeMinChanged);
 	connect(uiGeneralTab.sbMax, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYDifferentiationCurveDock::xRangeMaxChanged);
-	connect( uiGeneralTab.cbDerivOrder, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDifferentiationCurveDock::derivOrderChanged);
-	connect( uiGeneralTab.sbAccOrder, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYDifferentiationCurveDock::accOrderChanged);
-	connect( uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYDifferentiationCurveDock::recalculateClicked);
+	connect(uiGeneralTab.dateTimeEditMin, &QDateTimeEdit::dateTimeChanged, this, &XYDifferentiationCurveDock::xRangeMinDateTimeChanged);
+	connect(uiGeneralTab.dateTimeEditMax, &QDateTimeEdit::dateTimeChanged, this, &XYDifferentiationCurveDock::xRangeMaxDateTimeChanged);
+	connect(uiGeneralTab.cbDerivOrder, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDifferentiationCurveDock::derivOrderChanged);
+	connect(uiGeneralTab.sbAccOrder, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYDifferentiationCurveDock::accOrderChanged);
+	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYDifferentiationCurveDock::recalculateClicked);
 
 	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYDifferentiationCurveDock::dataSourceCurveChanged);
 	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYDifferentiationCurveDock::xDataColumnChanged);
@@ -142,22 +144,45 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	m_differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(m_curve);
 
+	//data source
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_differentiationCurve->dataSourceType());
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_differentiationCurve->dataSourceCurve());
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_differentiationCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_differentiationCurve->yDataColumn());
+
+	//range widgets
+	const auto* plot = static_cast<const CartesianPlot*>(m_differentiationCurve->parentAspect());
+	m_dateTimeRange = (plot->xRangeFormat() != CartesianPlot::Numeric);
+	if (!m_dateTimeRange) {
+		uiGeneralTab.sbMin->setValue(m_differentiationData.xRange.first());
+		uiGeneralTab.sbMax->setValue(m_differentiationData.xRange.last());
+	} else {
+		uiGeneralTab.dateTimeEditMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_differentiationData.xRange.first()) );
+		uiGeneralTab.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_differentiationData.xRange.last()) );
+	}
+
+	//auto range
 	uiGeneralTab.cbAutoRange->setChecked(m_differentiationData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_differentiationData.xRange.first());
-	uiGeneralTab.sbMax->setValue(m_differentiationData.xRange.last());
 	this->autoRangeChanged();
+
+	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
+	uiGeneralTab.sbMin->setVisible(!m_dateTimeRange);
+	uiGeneralTab.lMax->setVisible(!m_dateTimeRange);
+	uiGeneralTab.sbMax->setVisible(!m_dateTimeRange);
+	uiGeneralTab.lMinDateTime->setVisible(m_dateTimeRange);
+	uiGeneralTab.dateTimeEditMin->setVisible(m_dateTimeRange);
+	uiGeneralTab.lMaxDateTime->setVisible(m_dateTimeRange);
+	uiGeneralTab.dateTimeEditMax->setVisible(m_dateTimeRange);
+
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
 	uiGeneralTab.cbDerivOrder->setCurrentIndex(m_differentiationData.derivOrder);
-	this->derivOrderChanged();
+	this->derivOrderChanged(m_differentiationData.derivOrder);
+
 	uiGeneralTab.sbAccOrder->setValue(m_differentiationData.accOrder);
-	this->accOrderChanged();
+	this->accOrderChanged(m_differentiationData.accOrder);
 
 	this->showDifferentiationResult();
 
@@ -379,12 +404,16 @@ void XYDifferentiationCurveDock::autoRangeChanged() {
 	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
 	m_differentiationData.autoRange = autoRange;
 
-	if (autoRange) {
-		uiGeneralTab.lMin->setEnabled(false);
-		uiGeneralTab.sbMin->setEnabled(false);
-		uiGeneralTab.lMax->setEnabled(false);
-		uiGeneralTab.sbMax->setEnabled(false);
+	uiGeneralTab.lMin->setEnabled(!autoRange);
+	uiGeneralTab.sbMin->setEnabled(!autoRange);
+	uiGeneralTab.lMax->setEnabled(!autoRange);
+	uiGeneralTab.sbMax->setEnabled(!autoRange);
+	uiGeneralTab.lMinDateTime->setEnabled(!autoRange);
+	uiGeneralTab.dateTimeEditMin->setEnabled(!autoRange);
+	uiGeneralTab.lMaxDateTime->setEnabled(!autoRange);
+	uiGeneralTab.dateTimeEditMax->setEnabled(!autoRange);
 
+	if (autoRange) {
 		const AbstractColumn* xDataColumn = nullptr;
 		if (m_differentiationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
 			xDataColumn = m_differentiationCurve->xDataColumn();
@@ -394,33 +423,45 @@ void XYDifferentiationCurveDock::autoRangeChanged() {
 		}
 
 		if (xDataColumn) {
-			uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
-			uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
+			if (!m_dateTimeRange) {
+				uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
+				uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
+			} else {
+				uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->minimum()));
+				uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->maximum()));
+			}
 		}
-	} else {
-		uiGeneralTab.lMin->setEnabled(true);
-		uiGeneralTab.sbMin->setEnabled(true);
-		uiGeneralTab.lMax->setEnabled(true);
-		uiGeneralTab.sbMax->setEnabled(true);
 	}
 }
 
-void XYDifferentiationCurveDock::xRangeMinChanged() {
-	double xMin = uiGeneralTab.sbMin->value();
-
-	m_differentiationData.xRange.first() = xMin;
+void XYDifferentiationCurveDock::xRangeMinChanged(double value) {
+	m_differentiationData.xRange.first() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYDifferentiationCurveDock::xRangeMaxChanged() {
-	double xMax = uiGeneralTab.sbMax->value();
-
-	m_differentiationData.xRange.last() = xMax;
+void XYDifferentiationCurveDock::xRangeMaxChanged(double value) {
+	m_differentiationData.xRange.last() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYDifferentiationCurveDock::derivOrderChanged() {
-	const auto derivOrder = (nsl_diff_deriv_order_type)uiGeneralTab.cbDerivOrder->currentIndex();
+void XYDifferentiationCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {
+	if (m_initializing)
+		return;
+
+	m_differentiationData.xRange.first() = dateTime.toMSecsSinceEpoch();
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYDifferentiationCurveDock::xRangeMaxDateTimeChanged(const QDateTime& dateTime) {
+	if (m_initializing)
+		return;
+
+	m_differentiationData.xRange.last() = dateTime.toMSecsSinceEpoch();
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYDifferentiationCurveDock::derivOrderChanged(int index) {
+	const auto derivOrder = (nsl_diff_deriv_order_type)index;
 	m_differentiationData.derivOrder = derivOrder;
 
 	// update avail. accuracies
@@ -460,10 +501,8 @@ void XYDifferentiationCurveDock::derivOrderChanged() {
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYDifferentiationCurveDock::accOrderChanged() {
-	const auto accOrder = (int)uiGeneralTab.sbAccOrder->value();
-	m_differentiationData.accOrder = accOrder;
-
+void XYDifferentiationCurveDock::accOrderChanged(int value) {
+	m_differentiationData.accOrder = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
@@ -578,9 +617,9 @@ void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDiffere
 	m_initializing = true;
 	m_differentiationData = differentiationData;
 	uiGeneralTab.cbDerivOrder->setCurrentIndex(m_differentiationData.derivOrder);
-	this->derivOrderChanged();
+	this->derivOrderChanged(m_differentiationData.derivOrder);
 	uiGeneralTab.sbAccOrder->setValue(m_differentiationData.accOrder);
-	this->accOrderChanged();
+	this->accOrderChanged(m_differentiationData.accOrder);
 
 	this->showDifferentiationResult();
 	m_initializing = false;

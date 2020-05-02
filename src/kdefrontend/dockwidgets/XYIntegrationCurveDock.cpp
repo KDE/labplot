@@ -151,10 +151,6 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_integrationCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_integrationCurve->yDataColumn());
 
-	//auto range
-	uiGeneralTab.cbAutoRange->setChecked(m_integrationData.autoRange);
-	this->autoRangeChanged();
-
 	//range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_integrationCurve->parentAspect());
 	m_dateTimeRange = (plot->xRangeFormat() != CartesianPlot::Numeric);
@@ -165,6 +161,10 @@ void XYIntegrationCurveDock::initGeneralTab() {
 		uiGeneralTab.dateTimeEditMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_integrationData.xRange.first()) );
 		uiGeneralTab.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_integrationData.xRange.last()) );
 	}
+
+	//auto range
+	uiGeneralTab.cbAutoRange->setChecked(m_integrationData.autoRange);
+	this->autoRangeChanged();
 
 	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
 	uiGeneralTab.sbMin->setVisible(!m_dateTimeRange);
