@@ -99,7 +99,7 @@ void XYAnalysisCurve::copyData(QVector<double>& xData, QVector<double>& yData,
 			if (x >= xMin && x <= xMax) {
 				xData.append(x);
 				yData.append(y);
-				qDebug()<< "adding " << x << "   " << y;
+				DEBUG("adding " << x << ' ' << y)
 			}
 		}
 	}
