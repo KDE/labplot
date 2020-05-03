@@ -73,7 +73,7 @@ void XYSmoothCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYSmoothCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-smooth-curve");
+	return QIcon::fromTheme("labplot-xy-smoothing-curve");
 }
 
 //##############################################################################
