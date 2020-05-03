@@ -1995,8 +1995,16 @@ void XYFitCurvePrivate::recalculate() {
 	DEBUG("Residual vector size: " << residualsVector->size())
 	if (fitData.autoRange) {	// evaluate full range of residuals
 		xVector->resize(tmpXDataColumn->rowCount());
+		auto mode = tmpXDataColumn->columnMode();
 		for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
-			(*xVector)[i] = tmpXDataColumn->valueAt(i);
+			if (mode == AbstractColumn::Numeric)
+				(*xVector)[i] = tmpXDataColumn->valueAt(i);
+			else if (mode == AbstractColumn::Integer)
+				(*xVector)[i] = tmpXDataColumn->integerAt(i);
+			else if (mode == AbstractColumn::BigInt)
+				(*xVector)[i] = tmpXDataColumn->bigIntAt(i);
+			else if (mode == AbstractColumn::DateTime)
+				(*xVector)[i] = tmpXDataColumn->dateTimeAt(i).toMSecsSinceEpoch();
 
 		ExpressionParser* parser = ExpressionParser::getInstance();
 		bool rc = parser->evaluateCartesian(fitData.model, xVector, residualsVector,
