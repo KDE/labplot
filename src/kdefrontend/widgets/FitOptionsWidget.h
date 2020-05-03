@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for editing advanced fit parameters
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2020 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -43,6 +43,7 @@ private:
 	XYFitCurve::FitData* m_fitData;
 	XYFitCurve* m_fitCurve;
 	bool m_changed{false};
+	bool m_dateTimeRange{false};
 
 signals:
 	void finished();
@@ -53,8 +54,12 @@ private slots:
 	void autoEvalRangeChanged();
 	void fitRangeMinChanged();
 	void fitRangeMaxChanged();
+	void fitRangeMinDateTimeChanged(const QDateTime&);
+	void fitRangeMaxDateTimeChanged(const QDateTime&);
 	void evalRangeMinChanged();
 	void evalRangeMaxChanged();
+	void evalRangeMinDateTimeChanged(const QDateTime&);
+	void evalRangeMaxDateTimeChanged(const QDateTime&);
 	void applyClicked();
 	void changed();
 };
