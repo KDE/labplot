@@ -2,7 +2,7 @@
     File             : XYFitCurveDock.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright        : (C) 2014-2020 Alexander Semke (alexander.semke@web.de)
     Copyright        : (C) 2016-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : widget for editing properties of fit curves
 
@@ -163,12 +163,12 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twParameters->setContextMenuPolicy(Qt::CustomContextMenu);
 	uiGeneralTab.twGoodness->setContextMenuPolicy(Qt::CustomContextMenu);
 	uiGeneralTab.twLog->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(uiGeneralTab.twParameters, SIGNAL(customContextMenuRequested(QPoint)), this,
-			SLOT(resultParametersContextMenuRequest(QPoint)) );
-	connect(uiGeneralTab.twGoodness, SIGNAL(customContextMenuRequested(QPoint)), this,
-			SLOT(resultGoodnessContextMenuRequest(QPoint)) );
-	connect(uiGeneralTab.twLog, SIGNAL(customContextMenuRequested(QPoint)), this,
-			SLOT(resultLogContextMenuRequest(QPoint)) );
+	connect(uiGeneralTab.twParameters, &QTableWidget::customContextMenuRequested,
+			this, &XYFitCurveDock::resultParametersContextMenuRequest);
+	connect(uiGeneralTab.twGoodness, &QTableWidget::customContextMenuRequested,
+			this, &XYFitCurveDock::resultGoodnessContextMenuRequest);
+	connect(uiGeneralTab.twLog, &QTableWidget::customContextMenuRequested,
+			this, &XYFitCurveDock::resultLogContextMenuRequest);
 
 	uiGeneralTab.twLog->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	uiGeneralTab.twGoodness->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
@@ -187,30 +187,29 @@ void XYFitCurveDock::setupGeneral() {
 	//Slots
 	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYFitCurveDock::nameChanged);
 	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYFitCurveDock::commentChanged);
-	connect(uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)));
-	connect(uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)));
-
+	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYFitCurveDock::visibilityChanged);
+	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.lWeights, &QPushButton::clicked, this, &XYFitCurveDock::showWeightsOptions);
-	connect(uiGeneralTab.cbXWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(xWeightChanged(int)));
-	connect(uiGeneralTab.cbYWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(yWeightChanged(int)));
-	connect(uiGeneralTab.cbCategory, SIGNAL(currentIndexChanged(int)), this, SLOT(categoryChanged(int)));
-	connect(uiGeneralTab.cbModel, SIGNAL(currentIndexChanged(int)), this, SLOT(modelTypeChanged(int)));
-	connect(uiGeneralTab.sbDegree, SIGNAL(valueChanged(int)), this, SLOT(updateModelEquation()));
-	connect(uiGeneralTab.teEquation, SIGNAL(expressionChanged()), this, SLOT(expressionChanged()));
-	connect(uiGeneralTab.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()));
-	connect(uiGeneralTab.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()));
-	connect(uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()));
-	connect(uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()));
+	connect(uiGeneralTab.cbXWeight, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::xWeightChanged);
+	connect(uiGeneralTab.cbYWeight, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::yWeightChanged);
+	connect(uiGeneralTab.cbCategory, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::categoryChanged);
+	connect(uiGeneralTab.cbModel, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::modelTypeChanged);
+	connect(uiGeneralTab.sbDegree, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYFitCurveDock::updateModelEquation);
+	connect(uiGeneralTab.teEquation, &ExpressionTextEdit::expressionChanged, this, &XYFitCurveDock::expressionChanged);
+	connect(uiGeneralTab.tbConstants, &QToolButton::clicked, this, &XYFitCurveDock::showConstants);
+	connect(uiGeneralTab.tbFunctions, &QToolButton::clicked, this, &XYFitCurveDock::showFunctions);
+	connect(uiGeneralTab.pbOptions, &QPushButton::clicked, this, &XYFitCurveDock::showOptions);
+	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFitCurveDock::recalculateClicked);
 	connect(uiGeneralTab.lData, &QPushButton::clicked, this, &XYFitCurveDock::showDataOptions);
 	connect(uiGeneralTab.lFit, &QPushButton::clicked, this, &XYFitCurveDock::showFitOptions);
 	connect(uiGeneralTab.lParameters, &QPushButton::clicked, this, &XYFitCurveDock::showParameters);
 	connect(uiGeneralTab.lResults, &QPushButton::clicked, this, &XYFitCurveDock::showResults);
 
-	connect(cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)));
-	connect(cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)));
-	connect(cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)));
-	connect(cbXErrorColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xErrorColumnChanged(QModelIndex)));
-	connect(cbYErrorColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yErrorColumnChanged(QModelIndex)));
+	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYFitCurveDock::dataSourceCurveChanged);
+	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYFitCurveDock::xDataColumnChanged);
+	connect(cbYDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYFitCurveDock::yDataColumnChanged);
+	connect(cbXErrorColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYFitCurveDock::xErrorColumnChanged);
+	connect(cbYErrorColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYFitCurveDock::yErrorColumnChanged);
 }
 
 /*
@@ -237,10 +236,9 @@ void XYFitCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
-	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
-	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
-	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
-	auto* fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
+	auto* fitCurve = static_cast<XYFitCurve*>(m_curve);
+	checkColumnAvailability(cbXDataColumn, fitCurve->xDataColumn(), fitCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, fitCurve->yDataColumn(), fitCurve->yDataColumnPath());
 	checkColumnAvailability(cbXErrorColumn, fitCurve->xErrorColumn(), fitCurve->xErrorColumnPath());
 	checkColumnAvailability(cbYErrorColumn, fitCurve->yErrorColumn(), fitCurve->yErrorColumnPath());
 
@@ -266,9 +264,9 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.yWeightsType);
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 
-	if (m_fitData.paramStartValues.size() > 0) {
+	if (m_fitData.paramStartValues.size() > 0)
 		DEBUG("	B start value 0 = " << m_fitData.paramStartValues.at(0));
-	}
+
 	DEBUG("	B model degree = " << m_fitData.degree);
 
 	this->showFitResult();
@@ -828,9 +826,9 @@ void XYFitCurveDock::showConstants() {
 	QMenu menu;
 	ConstantsWidget constants(&menu);
 
-	connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant(QString)));
-	connect(&constants, SIGNAL(constantSelected(QString)), &menu, SLOT(close()));
-	connect(&constants, SIGNAL(canceled()), &menu, SLOT(close()));
+	connect(&constants, &ConstantsWidget::constantSelected, this, &XYFitCurveDock::insertConstant);
+	connect(&constants, &ConstantsWidget::constantSelected, &menu, &QMenu::close);
+	connect(&constants, &ConstantsWidget::canceled, &menu, &QMenu::close);
 
 	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&constants);
@@ -843,9 +841,9 @@ void XYFitCurveDock::showConstants() {
 void XYFitCurveDock::showFunctions() {
 	QMenu menu;
 	FunctionsWidget functions(&menu);
-	connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insertFunction(QString)));
-	connect(&functions, SIGNAL(functionSelected(QString)), &menu, SLOT(close()));
-	connect(&functions, SIGNAL(canceled()), &menu, SLOT(close()));
+	connect(&functions, &FunctionsWidget::functionSelected, this, &XYFitCurveDock::insertFunction);
+	connect(&functions, &FunctionsWidget::functionSelected, &menu, &QMenu::close);
+	connect(&functions, &FunctionsWidget::canceled, &menu, &QMenu::close);
 
 	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&functions);
@@ -917,8 +915,8 @@ void XYFitCurveDock::parametersValid(bool valid) {
 void XYFitCurveDock::showOptions() {
 	QMenu menu;
 	FitOptionsWidget w(&menu, &m_fitData, m_fitCurve);
-	connect(&w, SIGNAL(finished()), &menu, SLOT(close()));
-	connect(&w, SIGNAL(optionsChanged()), this, SLOT(enableRecalculate()));
+	connect(&w, &FitOptionsWidget::finished, &menu, &QMenu::close);
+	connect(&w, &FitOptionsWidget::optionsChanged, this, &XYFitCurveDock::enableRecalculate);
 
 	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&w);
@@ -1148,20 +1146,20 @@ void XYFitCurveDock::resultCopyAll() {
 
 void XYFitCurveDock::resultParametersContextMenuRequest(QPoint pos) {
 	auto* contextMenu = new QMenu;
-	contextMenu->addAction(i18n("Copy Selection"), this, SLOT(resultCopySelection()));
-	contextMenu->addAction(i18n("Copy All"), this, SLOT(resultCopyAll()));
+	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopySelection);
+	contextMenu->addAction(i18n("Copy All"), this, &XYFitCurveDock::resultCopyAll);
 	contextMenu->exec(uiGeneralTab.twParameters->mapToGlobal(pos));
 }
 void XYFitCurveDock::resultGoodnessContextMenuRequest(QPoint pos) {
 	auto* contextMenu = new QMenu;
-	contextMenu->addAction(i18n("Copy Selection"), this, SLOT(resultCopySelection()));
-	contextMenu->addAction(i18n("Copy All"), this, SLOT(resultCopyAll()));
+	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopySelection);
+	contextMenu->addAction(i18n("Copy All"), this, &XYFitCurveDock::resultCopyAll);
 	contextMenu->exec(uiGeneralTab.twGoodness->mapToGlobal(pos));
 }
 void XYFitCurveDock::resultLogContextMenuRequest(QPoint pos) {
 	auto* contextMenu = new QMenu;
-	contextMenu->addAction(i18n("Copy Selection"), this, SLOT(resultCopySelection()));
-	contextMenu->addAction(i18n("Copy All"), this, SLOT(resultCopyAll()));
+	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopySelection);
+	contextMenu->addAction(i18n("Copy All"), this, &XYFitCurveDock::resultCopyAll);
 	contextMenu->exec(uiGeneralTab.twLog->mapToGlobal(pos));
 }
 
