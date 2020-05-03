@@ -137,12 +137,10 @@ void XYIntegrationCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
-	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
-	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
-	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
-
 	//show the properties of the first curve
-	m_integrationCurve = dynamic_cast<XYIntegrationCurve*>(m_curve);
+	m_integrationCurve = static_cast<XYIntegrationCurve*>(m_curve);
+	checkColumnAvailability(cbXDataColumn, m_integrationCurve->xDataColumn(), m_integrationCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, m_integrationCurve->yDataColumn(), m_integrationCurve->yDataColumnPath());
 
 	//data source
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_integrationCurve->dataSourceType());
@@ -162,10 +160,6 @@ void XYIntegrationCurveDock::initGeneralTab() {
 		uiGeneralTab.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_integrationData.xRange.last()) );
 	}
 
-	//auto range
-	uiGeneralTab.cbAutoRange->setChecked(m_integrationData.autoRange);
-	this->autoRangeChanged();
-
 	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
 	uiGeneralTab.sbMin->setVisible(!m_dateTimeRange);
 	uiGeneralTab.lMax->setVisible(!m_dateTimeRange);
@@ -174,6 +168,10 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	uiGeneralTab.dateTimeEditMin->setVisible(m_dateTimeRange);
 	uiGeneralTab.lMaxDateTime->setVisible(m_dateTimeRange);
 	uiGeneralTab.dateTimeEditMax->setVisible(m_dateTimeRange);
+
+	//auto range
+	uiGeneralTab.cbAutoRange->setChecked(m_integrationData.autoRange);
+	this->autoRangeChanged();
 
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());

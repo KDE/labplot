@@ -137,12 +137,10 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
-	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
-	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
-	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
-
 	//show the properties of the first curve
-	m_differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(m_curve);
+	m_differentiationCurve = static_cast<XYDifferentiationCurve*>(m_curve);
+	checkColumnAvailability(cbXDataColumn, m_differentiationCurve->xDataColumn(), m_differentiationCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, m_differentiationCurve->yDataColumn(), m_differentiationCurve->yDataColumnPath());
 
 	//data source
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_differentiationCurve->dataSourceType());
@@ -162,10 +160,6 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 		uiGeneralTab.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_differentiationData.xRange.last()) );
 	}
 
-	//auto range
-	uiGeneralTab.cbAutoRange->setChecked(m_differentiationData.autoRange);
-	this->autoRangeChanged();
-
 	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
 	uiGeneralTab.sbMin->setVisible(!m_dateTimeRange);
 	uiGeneralTab.lMax->setVisible(!m_dateTimeRange);
@@ -174,6 +168,10 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	uiGeneralTab.dateTimeEditMin->setVisible(m_dateTimeRange);
 	uiGeneralTab.lMaxDateTime->setVisible(m_dateTimeRange);
 	uiGeneralTab.dateTimeEditMax->setVisible(m_dateTimeRange);
+
+	//auto range
+	uiGeneralTab.cbAutoRange->setChecked(m_differentiationData.autoRange);
+	this->autoRangeChanged();
 
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());

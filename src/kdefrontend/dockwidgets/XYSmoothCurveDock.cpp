@@ -148,12 +148,10 @@ void XYSmoothCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
-	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
-	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
-	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
-
 	//show the properties of the first curve
-	m_smoothCurve = dynamic_cast<XYSmoothCurve*>(m_curve);
+	m_smoothCurve = static_cast<XYSmoothCurve*>(m_curve);
+	checkColumnAvailability(cbXDataColumn, m_smoothCurve->xDataColumn(), m_smoothCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, m_smoothCurve->yDataColumn(), m_smoothCurve->yDataColumnPath());
 
 	//data source
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_smoothCurve->dataSourceType());
@@ -161,7 +159,6 @@ void XYSmoothCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_smoothCurve->dataSourceCurve());
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_smoothCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_smoothCurve->yDataColumn());
-
 
 	//range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_smoothCurve->parentAspect());
@@ -174,10 +171,6 @@ void XYSmoothCurveDock::initGeneralTab() {
 		uiGeneralTab.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_smoothData.xRange.last()) );
 	}
 
-	//auto range
-	uiGeneralTab.cbAutoRange->setChecked(m_smoothData.autoRange);
-	this->autoRangeChanged();
-
 	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
 	uiGeneralTab.sbMin->setVisible(!m_dateTimeRange);
 	uiGeneralTab.lMax->setVisible(!m_dateTimeRange);
@@ -186,6 +179,10 @@ void XYSmoothCurveDock::initGeneralTab() {
 	uiGeneralTab.dateTimeEditMin->setVisible(m_dateTimeRange);
 	uiGeneralTab.lMaxDateTime->setVisible(m_dateTimeRange);
 	uiGeneralTab.dateTimeEditMax->setVisible(m_dateTimeRange);
+
+	//auto range
+	uiGeneralTab.cbAutoRange->setChecked(m_smoothData.autoRange);
+	this->autoRangeChanged();
 
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
