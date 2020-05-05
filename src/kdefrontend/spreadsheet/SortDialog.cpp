@@ -68,6 +68,7 @@ SortDialog::SortDialog(QWidget* parent) : QDialog(parent) {
 
 	ui.cbOrdering->setCurrentIndex(conf.readEntry(QLatin1String("Ordering"), 0));
 	ui.cbSorting->setCurrentIndex(conf.readEntry(QLatin1String("Sorting"), 0));
+	changeType(ui.cbSorting->currentIndex());
 }
 
 SortDialog::~SortDialog() {

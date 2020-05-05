@@ -728,41 +728,45 @@ void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
 	if (!column)
 		return; //should never happen, since the sender is always a Column
 
-	if (column->isNumeric()) {
-		QAction* firstAction = menu->actions().at(1);
-		//TODO: add these menus and synchronize the behavior with the context menu creation
-		//on the spreadsheet header in eventFilter(),
+	QAction* firstAction = menu->actions().at(1);
+	//TODO: add these menus and synchronize the behavior with the context menu creation
+	//on the spreadsheet header in eventFilter(),
 // 		menu->insertMenu(firstAction, m_plotDataMenu);
 // 		menu->insertMenu(firstAction, m_analyzePlotMenu);
 // 		menu->insertSeparator(firstAction);
+
+	const bool hasValues = column->hasValues();
+	const bool numeric = column->isNumeric();
+
+	if (numeric)
 		menu->insertMenu(firstAction, m_columnSetAsMenu);
 
-		const bool hasValues = column->hasValues();
-
-		if (!m_readOnly) {
+	if (!m_readOnly) {
+		if (numeric) {
 			menu->insertSeparator(firstAction);
 			menu->insertMenu(firstAction, m_columnGenerateDataMenu);
 			menu->insertSeparator(firstAction);
 			menu->insertMenu(firstAction, m_columnManipulateDataMenu);
 			menu->insertSeparator(firstAction);
-			menu->insertMenu(firstAction, m_columnSortMenu);
-			action_sort_asc_column->setVisible(true);
-			action_sort_desc_column->setVisible(true);
-			action_sort_columns->setVisible(false);
-
-			//in case no cells are available, deactivate the actions that only make sense in the presence of cells
-			const bool hasCells = m_spreadsheet->rowCount() > 0;
-			m_columnGenerateDataMenu->setEnabled(hasCells);
-
-			//in case no valid numerical values are available, deactivate the actions that only make sense in the presence of values
-			m_columnManipulateDataMenu->setEnabled(hasValues);
-			m_columnSortMenu->setEnabled(hasValues);
 		}
 
-		menu->insertSeparator(firstAction);
-		menu->insertAction(firstAction, action_statistics_columns);
-		action_statistics_columns->setEnabled(hasValues);
+		menu->insertMenu(firstAction, m_columnSortMenu);
+		action_sort_asc_column->setVisible(true);
+		action_sort_desc_column->setVisible(true);
+		action_sort_columns->setVisible(false);
+
+		//in case no cells are available, deactivate the actions that only make sense in the presence of cells
+		const bool hasCells = m_spreadsheet->rowCount() > 0;
+		m_columnGenerateDataMenu->setEnabled(numeric && hasCells);
+
+		//in case no valid numerical values are available, deactivate the actions that only make sense in the presence of values
+		m_columnManipulateDataMenu->setEnabled(numeric && hasValues);
+		m_columnSortMenu->setEnabled(hasValues);
 	}
+
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, action_statistics_columns);
+	action_statistics_columns->setEnabled(numeric && hasValues);
 }
 
 //SLOTS
@@ -1074,6 +1078,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			bool numeric = true;
 			bool plottable = true;
 			bool datetime = false;
+			bool hasValues = false;
 			for (const Column* col : selectedColumns()) {
 				if ( !(col->columnMode() == AbstractColumn::Numeric || col->columnMode() == AbstractColumn::Integer ||
 							col->columnMode() == AbstractColumn::BigInt) ) {
@@ -1086,36 +1091,30 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				}
 			}
 
+			for (const Column* col : selectedColumns()) {
+				if (col->hasValues()) {
+					hasValues = true;
+					break;
+				}
+			}
+
 			m_plotDataMenu->setEnabled(plottable);
 			m_analyzePlotMenu->setEnabled(numeric);
 			m_columnSetAsMenu->setEnabled(numeric);
+			action_statistics_columns->setEnabled(numeric && hasValues);
+
 			if (!m_readOnly) {
 				m_columnGenerateDataMenu->setEnabled(numeric);
 				m_columnManipulateDataMenu->setEnabled(numeric || datetime);
 				m_columnSortMenu->setEnabled(numeric);
-			}
-			action_statistics_columns->setEnabled(numeric);
 
-			if (numeric) {
-				bool hasValues = false;
-				for (const Column* col : selectedColumns()) {
-					if (col->hasValues()) {
-						hasValues = true;
-						break;
-					}
-				}
+				//in case no cells are available, deactivate the actions that only make sense in the presence of cells
+				const bool hasCells = m_spreadsheet->rowCount() > 0;
+				m_columnGenerateDataMenu->setEnabled(numeric && hasCells);
 
-				if (!m_readOnly) {
-					//in case no cells are available, deactivate the actions that only make sense in the presence of cells
-					const bool hasCells = m_spreadsheet->rowCount() > 0;
-					m_columnGenerateDataMenu->setEnabled(hasCells);
-
-					//in case no valid numerical values are available, deactivate the actions that only make sense in the presence of values
-					m_columnManipulateDataMenu->setEnabled(hasValues);
-					m_columnSortMenu->setEnabled(hasValues);
-				}
-
-				action_statistics_columns->setEnabled(hasValues);
+				//in case no valid numerical values are available, deactivate the actions that only make sense in the presence of values
+				m_columnManipulateDataMenu->setEnabled(numeric && hasValues);
+				m_columnSortMenu->setEnabled(hasValues);
 			}
 
 			m_columnMenu->exec(global_pos);

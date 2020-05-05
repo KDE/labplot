@@ -854,23 +854,41 @@ bool Column::hasValues() const {
 		return d->hasValues;
 
 	bool foundValues = false;
-	if (columnMode() == AbstractColumn::Numeric) {
+	switch (columnMode()) {
+	case AbstractColumn::Numeric: {
 		for (int row = 0; row < rowCount(); ++row) {
 			if (!std::isnan(valueAt(row))) {
 				foundValues = true;
 				break;
 			}
 		}
-	} else if (columnMode() == AbstractColumn::Integer || columnMode() == AbstractColumn::BigInt) {
+		break;
+	}
+	case AbstractColumn::Text: {
+		for (int row = 0; row < rowCount(); ++row) {
+			if (!textAt(row).isEmpty()) {
+				foundValues = true;
+				break;
+			}
+		}
+		break;
+	}
+	case AbstractColumn::Integer:
+	case AbstractColumn::BigInt:
 		//integer column has always valid values
 		foundValues = true;
-	} else if (columnMode() == AbstractColumn::DateTime) {
+		break;
+	case AbstractColumn::DateTime:
+	case AbstractColumn::Month:
+	case AbstractColumn::Day: {
 		for (int row = 0; row < rowCount(); ++row) {
 			if (dateTimeAt(row).isValid()) {
 				foundValues = true;
 				break;
 			}
 		}
+		break;
+	}
 	}
 
 	d->hasValues = foundValues;
