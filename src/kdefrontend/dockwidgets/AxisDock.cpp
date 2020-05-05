@@ -1977,17 +1977,17 @@ void AxisDock::load() {
 /*!
  * Determine the number of decimals for using in a QDoubleSpinBox
  * \param diff
- * \return
+ * \return two relevant digits
  */
 int AxisDock::determineDecimals(double diff) {
-	diff /= 10; // step one decimal before
-	double power10 = 1;
+	diff /= 10.; // step one decimal before
+	double power10 = 1.;
 	for (int i = 0; i < 10; i++) {
-		double nearest = round(diff * power10) / power10;
-		if (nearest > 0) {
-			return i;
-		}
-		power10 *= 10;
+		double nearest = round(fabs(diff) * power10) / power10;
+		if (nearest > 0)
+			return i+1;
+
+		power10 *= 10.;
 	}
 
 	return 10;
