@@ -409,11 +409,6 @@ void SpreadsheetView::initMenus() {
 	m_columnMenu = new QMenu(this);
 	m_columnMenu->addMenu(m_plotDataMenu);
 
-	// Data manipulation sub-menu
-	QMenu* dataManipulationMenu = new QMenu(i18n("Data Manipulation"), this);
-	dataManipulationMenu->setIcon(QIcon::fromTheme("zoom-draw"));
-	dataManipulationMenu->addAction(addDataReductionAction);
-
 	// Data fit sub-menu
 	QMenu* dataFitMenu = new QMenu(i18n("Fit"), this);
 	dataFitMenu->setIcon(QIcon::fromTheme("labplot-xy-fit-curve"));
@@ -434,16 +429,17 @@ void SpreadsheetView::initMenus() {
 
 	//analyze and plot data menu
 	m_analyzePlotMenu = new QMenu(i18n("Analyze and Plot Data"), this);
-	m_analyzePlotMenu->insertMenu(nullptr, dataManipulationMenu);
+	m_analyzePlotMenu->addMenu(dataFitMenu);
 	m_analyzePlotMenu->addSeparator();
 	m_analyzePlotMenu->addAction(addDifferentiationAction);
 	m_analyzePlotMenu->addAction(addIntegrationAction);
 	m_analyzePlotMenu->addSeparator();
 	m_analyzePlotMenu->addAction(addInterpolationAction);
 	m_analyzePlotMenu->addAction(addSmoothAction);
+	m_analyzePlotMenu->addSeparator();
 	m_analyzePlotMenu->addAction(addFourierFilterAction);
 	m_analyzePlotMenu->addSeparator();
-	m_analyzePlotMenu->addMenu(dataFitMenu);
+	m_analyzePlotMenu->addAction(addDataReductionAction);
 	m_columnMenu->addMenu(m_analyzePlotMenu);
 
 	m_columnSetAsMenu = new QMenu(i18n("Set Column As"), this);
