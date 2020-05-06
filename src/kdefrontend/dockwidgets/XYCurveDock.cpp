@@ -1178,42 +1178,57 @@ void XYCurveDock::updateValuesWidgets() {
 	ui.kfrValuesFont->setEnabled(showValues);
 	ui.kcbValuesColor->setEnabled(showValues);
 
+	bool hasInteger = false;
+	bool hasNumeric = false;
+	bool hasDateTime = false;
+
 	if (type == XYCurve::ValuesCustomColumn) {
 		ui.lValuesColumn->show();
 		cbValuesColumn->show();
+
+		auto* column = static_cast<Column*>(cbValuesColumn->currentModelIndex().internalPointer());
+		if (column) {
+			if (column->columnMode() == AbstractColumn::Numeric)
+				hasNumeric = true;
+			else if (column->columnMode() == AbstractColumn::Integer || column->columnMode() == AbstractColumn::BigInt)
+				hasInteger = true;
+			else if (column->columnMode() == AbstractColumn::DateTime)
+				hasDateTime = true;
+		}
 	} else {
 		ui.lValuesColumn->hide();
 		cbValuesColumn->hide();
+
+
+		const AbstractColumn* xColumn = nullptr;
+		const AbstractColumn* yColumn = nullptr;
+		switch (type) {
+			case XYCurve::NoValues:
+				break;
+			case XYCurve::ValuesX:
+				xColumn = m_curve->xColumn();
+				break;
+			case XYCurve::ValuesY:
+				yColumn = m_curve->yColumn();
+				break;
+			case XYCurve::ValuesXY:
+			case XYCurve::ValuesXYBracketed:
+				xColumn = m_curve->xColumn();
+				yColumn = m_curve->yColumn();
+				break;
+			case XYCurve::ValuesCustomColumn:
+				break;
+		}
+
+		hasInteger = (xColumn && (xColumn->columnMode() == AbstractColumn::Integer || xColumn->columnMode() == AbstractColumn::Integer))
+						|| (yColumn && (yColumn->columnMode() == AbstractColumn::Integer || yColumn->columnMode() == AbstractColumn::Integer));
+
+		hasNumeric = (xColumn && xColumn->columnMode() == AbstractColumn::Numeric)
+						|| (yColumn && yColumn->columnMode() == AbstractColumn::Numeric);
+
+		hasDateTime = (xColumn && xColumn->columnMode() == AbstractColumn::DateTime)
+						|| (yColumn && yColumn->columnMode() == AbstractColumn::DateTime);
 	}
-
-	const AbstractColumn* xColumn = nullptr;
-	const AbstractColumn* yColumn = nullptr;
-	switch (type) {
-		case XYCurve::NoValues:
-			break;
-		case XYCurve::ValuesX:
-			xColumn = m_curve->xColumn();
-			break;
-		case XYCurve::ValuesY:
-			yColumn = m_curve->yColumn();
-			break;
-		case XYCurve::ValuesXY:
-		case XYCurve::ValuesXYBracketed:
-			xColumn = m_curve->xColumn();
-			yColumn = m_curve->yColumn();
-			break;
-		case XYCurve::ValuesCustomColumn:
-			break;
-	}
-
-	bool hasInteger = (xColumn && (xColumn->columnMode() == AbstractColumn::Integer || xColumn->columnMode() == AbstractColumn::Integer))
-					|| (yColumn && (yColumn->columnMode() == AbstractColumn::Integer || yColumn->columnMode() == AbstractColumn::Integer));
-
-	bool hasNumeric = (xColumn && xColumn->columnMode() == AbstractColumn::Numeric)
-					|| (yColumn && yColumn->columnMode() == AbstractColumn::Numeric);
-
-	bool hasDateTime = (xColumn && xColumn->columnMode() == AbstractColumn::DateTime)
-					|| (yColumn && yColumn->columnMode() == AbstractColumn::DateTime);
 
 	//hide all the format related widgets first and
 	//then show only what is required depending of the column mode(s)

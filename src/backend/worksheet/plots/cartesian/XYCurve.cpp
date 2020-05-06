@@ -1832,10 +1832,11 @@ void XYCurvePrivate::updateValues() {
 				break;
 			case AbstractColumn::Text:
 				valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
+				break;
 			case AbstractColumn::DateTime:
 			case AbstractColumn::Month:
 			case AbstractColumn::Day:
-				//TODO
+				valuesStrings << valuesPrefix + valuesColumn->dateTimeAt(i).toString(valuesDateTimeFormat) + valuesSuffix;
 				break;
 			}
 		}
