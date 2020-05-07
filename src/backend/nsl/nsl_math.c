@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL math functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2018-2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -28,6 +28,23 @@
 
 #include "nsl_math.h"
 #include <gsl/gsl_math.h>
+
+/*
+ * TODO: see Axis::determineDecimals()
+ */
+int nsl_math_decimals(double value) {
+	value /= 10.; // step one decimal before
+        double power10 = 1.;
+        for (int i = 0; i < 10; i++) {
+                double nearest = round(fabs(value) * power10) / power10;
+                if (nearest > 0)
+                        return i;
+
+                power10 *= 10.;
+        }
+
+        return 10;
+}
 
 double nsl_math_round_places(double value, unsigned int n) {
 	// no need to round

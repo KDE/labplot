@@ -29,6 +29,9 @@
 #ifndef NSL_MATH_H
 #define NSL_MATH_H
 
+/* get number of decimals */
+int nsl_math_decimals(double value);
+
 /* round double value to n decimal places */
 double nsl_math_round_places(double value, unsigned int n); 
 

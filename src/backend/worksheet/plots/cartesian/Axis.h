@@ -54,7 +54,7 @@ public:
 	};
 	Q_DECLARE_FLAGS(TicksDirection, TicksFlags)
 
-	enum TicksType {TicksTotalNumber, TicksIncrement, TicksCustomColumn, TicksCustomValues};
+	enum TicksType {TicksTotalNumber, TicksSpacing, TicksCustomColumn, TicksCustomValues};
 	enum ArrowType {NoArrow, SimpleArrowSmall, SimpleArrowBig, FilledArrowSmall, FilledArrowBig, SemiFilledArrowSmall, SemiFilledArrowBig};
 	enum ArrowPosition {ArrowLeft, ArrowRight, ArrowBoth};
 	enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
@@ -99,7 +99,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(TicksDirection, majorTicksDirection, MajorTicksDirection)
 	BASIC_D_ACCESSOR_DECL(TicksType, majorTicksType, MajorTicksType)
 	BASIC_D_ACCESSOR_DECL(int, majorTicksNumber, MajorTicksNumber)
-	BASIC_D_ACCESSOR_DECL(qreal, majorTicksIncrement, MajorTicksIncrement)
+	BASIC_D_ACCESSOR_DECL(qreal, majorTicksSpacing, MajorTicksSpacing)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, majorTicksColumn, MajorTicksColumn)
 	QString& majorTicksColumnPath() const;
 	CLASS_D_ACCESSOR_DECL(QPen, majorTicksPen, MajorTicksPen)
@@ -109,7 +109,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(TicksDirection, minorTicksDirection, MinorTicksDirection)
 	BASIC_D_ACCESSOR_DECL(TicksType, minorTicksType, MinorTicksType)
 	BASIC_D_ACCESSOR_DECL(int, minorTicksNumber, MinorTicksNumber)
-	BASIC_D_ACCESSOR_DECL(qreal, minorTicksIncrement, MinorTicksIncrement)
+	BASIC_D_ACCESSOR_DECL(qreal, minorTicksSpacing, MinorTicksSpacing)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, minorTicksColumn, MinorTicksColumn)
 	QString& minorTicksColumnPath() const;
 	CLASS_D_ACCESSOR_DECL(QPen, minorTicksPen, MinorTicksPen)
@@ -206,7 +206,7 @@ signals:
 	void majorTicksDirectionChanged(Axis::TicksDirection);
 	void majorTicksTypeChanged(Axis::TicksType);
 	void majorTicksNumberChanged(int);
-	void majorTicksIncrementChanged(qreal);
+	void majorTicksSpacingChanged(qreal);
 	void majorTicksColumnChanged(const AbstractColumn*);
 	void majorTicksPenChanged(QPen);
 	void majorTicksLengthChanged(qreal);

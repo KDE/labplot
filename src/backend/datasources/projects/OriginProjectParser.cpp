@@ -1390,8 +1390,8 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->setEnd(originAxis.max);
 
 	//ticks
-	axis->setMajorTicksType(Axis::TicksIncrement);
-	axis->setMajorTicksIncrement(originAxis.step);
+	axis->setMajorTicksType(Axis::TicksSpacing);
+	axis->setMajorTicksSpacing(originAxis.step);
 	axis->setMinorTicksType(Axis::TicksTotalNumber);
 	axis->setMinorTicksNumber(originAxis.minorTicks);
 

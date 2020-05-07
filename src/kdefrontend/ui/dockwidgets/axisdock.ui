@@ -531,9 +531,9 @@
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="lMajorTicksIncrementNumeric">
+        <widget class="QLabel" name="lMajorTicksSpacingNumeric">
          <property name="text">
-          <string>Increment:</string>
+          <string>Spacing:</string>
          </property>
         </widget>
        </item>
@@ -593,9 +593,9 @@
         </widget>
        </item>
        <item row="4" column="2">
-        <widget class="QDoubleSpinBox" name="sbMajorTicksIncrementNumeric">
-         <property name="minimum">
-          <double>-2147483647.000000000000000</double>
+        <widget class="QDoubleSpinBox" name="sbMajorTicksSpacingNumeric">
+         <property name="toolTip">
+          <string>spacing between major ticks</string>
          </property>
          <property name="maximum">
           <double>999999999999999.000000000000000</double>
@@ -671,9 +671,9 @@
         </widget>
        </item>
        <item row="19" column="0">
-        <widget class="QLabel" name="lMinorTicksIncrementNumeric">
+        <widget class="QLabel" name="lMinorTicksSpacingNumeric">
          <property name="text">
-          <string>Increment:</string>
+          <string>Spacing:</string>
          </property>
         </widget>
        </item>
@@ -942,7 +942,7 @@
         </widget>
        </item>
        <item row="19" column="2">
-        <widget class="QDoubleSpinBox" name="sbMinorTicksIncrementNumeric">
+        <widget class="QDoubleSpinBox" name="sbMinorTicksSpacingNumeric">
          <property name="minimum">
           <double>-2147483647.000000000000000</double>
          </property>

@@ -4,7 +4,7 @@
     Description          : axes widget class
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2012-2013 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2012-2020 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
 
@@ -133,10 +133,10 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 			this, &AxisDock::majorTicksTypeChanged);
 	connect(ui.sbMajorTicksNumber, QOverload<int>::of(&QSpinBox::valueChanged),
 			this, &AxisDock::majorTicksNumberChanged);
-	connect(ui.sbMajorTicksIncrementNumeric, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-			this, &AxisDock::majorTicksIncrementChanged);
+	connect(ui.sbMajorTicksSpacingNumeric, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &AxisDock::majorTicksSpacingChanged);
 	connect(dtsbMajorTicksIncrement, &DateTimeSpinBox::valueChanged,
-			this, &AxisDock::majorTicksIncrementChanged);
+			this, &AxisDock::majorTicksSpacingChanged);
 	connect(cbMajorTicksColumn, &TreeViewComboBox::currentModelIndexChanged,
 			this, &AxisDock::majorTicksColumnChanged);
 	connect(ui.cbMajorTicksLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -156,10 +156,10 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 			this, &AxisDock::minorTicksTypeChanged);
 	connect(ui.sbMinorTicksNumber, QOverload<int>::of(&QSpinBox::valueChanged),
 			this, &AxisDock::minorTicksNumberChanged);
-	connect(ui.sbMinorTicksIncrementNumeric, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-			this, &AxisDock::minorTicksIncrementChanged);
+	connect(ui.sbMinorTicksSpacingNumeric, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &AxisDock::minorTicksSpacingChanged);
 	connect(dtsbMinorTicksIncrement, &DateTimeSpinBox::valueChanged,
-			this, &AxisDock::minorTicksIncrementChanged);
+			this, &AxisDock::minorTicksSpacingChanged);
 	connect(cbMinorTicksColumn, &TreeViewComboBox::currentModelIndexChanged,
 			this, &AxisDock::minorTicksColumnChanged);
 	connect(ui.cbMinorTicksLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -278,7 +278,7 @@ void AxisDock::init() {
 	pa.begin( &pm );
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setBrush(Qt::SolidPattern);
-	pa.drawLine(3,10,17,10);
+	pa.drawLine(3, 10, 17, 10);
 	pa.end();
 	ui.cbArrowType->setItemIcon(0, pm);
 
@@ -287,7 +287,7 @@ void AxisDock::init() {
 	pm.fill(Qt::transparent);
 	pa.begin( &pm );
 	pa.setRenderHint(QPainter::Antialiasing);
-	pa.drawLine(3,10,17,10);
+	pa.drawLine(3, 10, 17, 10);
 	pa.drawLine(17,10, 10, 10-5*cos_phi);
 	pa.drawLine(17,10, 10, 10+5*cos_phi);
 	pa.end();
@@ -297,7 +297,7 @@ void AxisDock::init() {
 	pm.fill(Qt::transparent);
 	pa.begin( &pm );
 	pa.setRenderHint(QPainter::Antialiasing);
-	pa.drawLine(3,10,17,10);
+	pa.drawLine(3, 10, 17, 10);
 	pa.drawLine(17,10, 10, 10-10*cos_phi);
 	pa.drawLine(17,10, 10, 10+10*cos_phi);
 	pa.end();
@@ -308,7 +308,7 @@ void AxisDock::init() {
 	pa.begin( &pm );
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setBrush(Qt::SolidPattern);
-	pa.drawLine(3,10,17,10);
+	pa.drawLine(3, 10, 17, 10);
 	QPointF points3[3] = {QPointF(17, 10), QPointF(10, 10-4*cos_phi), QPointF(10, 10+4*cos_phi) };
 	pa.drawPolygon(points3, 3);
 	pa.end();
@@ -319,7 +319,7 @@ void AxisDock::init() {
 	pa.begin( &pm );
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setBrush(Qt::SolidPattern);
-	pa.drawLine(3,10,17,10);
+	pa.drawLine(3, 10, 17, 10);
 	QPointF points4[3] = {QPointF(17, 10), QPointF(10, 10-10*cos_phi), QPointF(10, 10+10*cos_phi) };
 	pa.drawPolygon(points4, 3);
 	pa.end();
@@ -330,7 +330,7 @@ void AxisDock::init() {
 	pa.begin( &pm );
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setBrush(Qt::SolidPattern);
-	pa.drawLine(3,10,17,10);
+	pa.drawLine(3, 10, 17, 10);
 	QPointF points5[4] = {QPointF(17, 10), QPointF(10, 10-4*cos_phi), QPointF(13, 10), QPointF(10, 10+4*cos_phi) };
 	pa.drawPolygon(points5, 4);
 	pa.end();
@@ -341,7 +341,7 @@ void AxisDock::init() {
 	pa.begin( &pm );
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setBrush(Qt::SolidPattern);
-	pa.drawLine(3,10,17,10);
+	pa.drawLine(3, 10, 17, 10);
 	QPointF points6[4] = {QPointF(17, 10), QPointF(10, 10-10*cos_phi), QPointF(13, 10), QPointF(10, 10+10*cos_phi) };
 	pa.drawPolygon(points6, 4);
 	pa.end();
@@ -357,7 +357,7 @@ void AxisDock::init() {
 	ui.cbMajorTicksDirection->addItem( i18n("In and Out") );
 
 	ui.cbMajorTicksType->addItem( i18n("Number") );
-	ui.cbMajorTicksType->addItem( i18n("Increment") );
+	ui.cbMajorTicksType->addItem( i18n("Spacing") );
 	ui.cbMajorTicksType->addItem( i18n("Custom column") );
 
 	ui.cbMinorTicksDirection->addItem( i18n("None") );
@@ -366,7 +366,7 @@ void AxisDock::init() {
 	ui.cbMinorTicksDirection->addItem( i18n("In and Out") );
 
 	ui.cbMinorTicksType->addItem( i18n("Number") );
-	ui.cbMinorTicksType->addItem( i18n("Increment") );
+	ui.cbMinorTicksType->addItem( i18n("Spacing") );
 	ui.cbMinorTicksType->addItem( i18n("Custom column") );
 
 	GuiTools::updatePenStyles(ui.cbLineStyle, QColor(Qt::black));
@@ -465,14 +465,14 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, &Axis::majorTicksDirectionChanged, this, &AxisDock::axisMajorTicksDirectionChanged);
 	connect(m_axis, &Axis::majorTicksTypeChanged, this, &AxisDock::axisMajorTicksTypeChanged);
 	connect(m_axis, &Axis::majorTicksNumberChanged, this, &AxisDock::axisMajorTicksNumberChanged);
-	connect(m_axis, &Axis::majorTicksIncrementChanged, this, &AxisDock::axisMajorTicksIncrementChanged);
+	connect(m_axis, &Axis::majorTicksSpacingChanged, this, &AxisDock::axisMajorTicksSpacingChanged);
 	connect(m_axis, &Axis::majorTicksPenChanged, this, &AxisDock::axisMajorTicksPenChanged);
 	connect(m_axis, &Axis::majorTicksLengthChanged, this, &AxisDock::axisMajorTicksLengthChanged);
 	connect(m_axis, &Axis::majorTicksOpacityChanged, this, &AxisDock::axisMajorTicksOpacityChanged);
 	connect(m_axis, &Axis::minorTicksDirectionChanged, this, &AxisDock::axisMinorTicksDirectionChanged);
 	connect(m_axis, &Axis::minorTicksTypeChanged, this, &AxisDock::axisMinorTicksTypeChanged);
 	connect(m_axis, &Axis::minorTicksNumberChanged, this, &AxisDock::axisMinorTicksNumberChanged);
-	connect(m_axis, &Axis::minorTicksIncrementChanged, this, &AxisDock::axisMinorTicksIncrementChanged);
+	connect(m_axis, &Axis::minorTicksIncrementChanged, this, &AxisDock::axisMinorTicksSpacingChanged);
 	connect(m_axis, &Axis::minorTicksPenChanged, this, &AxisDock::axisMinorTicksPenChanged);
 	connect(m_axis, &Axis::minorTicksLengthChanged, this, &AxisDock::axisMinorTicksLengthChanged);
 	connect(m_axis, &Axis::minorTicksOpacityChanged, this, &AxisDock::axisMinorTicksOpacityChanged);
@@ -832,8 +832,8 @@ void AxisDock::majorTicksDirectionChanged(int index) {
 	ui.cbMajorTicksType->setEnabled(b);
 	ui.lMajorTicksNumber->setEnabled(b);
 	ui.sbMajorTicksNumber->setEnabled(b);
-	ui.lMajorTicksIncrementNumeric->setEnabled(b);
-	ui.sbMajorTicksIncrementNumeric->setEnabled(b);
+	ui.lMajorTicksSpacingNumeric->setEnabled(b);
+	ui.sbMajorTicksSpacingNumeric->setEnabled(b);
 	ui.lMajorTicksIncrementDateTime->setEnabled(b);
 	dtsbMajorTicksIncrement->setEnabled(b);
 	ui.lMajorTicksLineStyle->setEnabled(b);
@@ -871,16 +871,16 @@ void AxisDock::majorTicksTypeChanged(int index) {
 	if (type == Axis::TicksTotalNumber) {
 		ui.lMajorTicksNumber->show();
 		ui.sbMajorTicksNumber->show();
-		ui.lMajorTicksIncrementNumeric->hide();
-		ui.sbMajorTicksIncrementNumeric->hide();
+		ui.lMajorTicksSpacingNumeric->hide();
+		ui.sbMajorTicksSpacingNumeric->hide();
 		ui.lMajorTicksIncrementDateTime->hide();
 		dtsbMajorTicksIncrement->hide();
 		ui.lMajorTicksColumn->hide();
 		cbMajorTicksColumn->hide();
-	} else if (type == Axis::TicksIncrement) {
+	} else if (type == Axis::TicksSpacing) {
 		ui.lMajorTicksNumber->hide();
 		ui.sbMajorTicksNumber->hide();
-		ui.lMajorTicksIncrementNumeric->show();
+		ui.lMajorTicksSpacingNumeric->show();
 
 		const auto* plot = static_cast<const CartesianPlot*>(m_axis->parentAspect());
 		bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
@@ -888,26 +888,26 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		if (numeric) {
 			ui.lMajorTicksIncrementDateTime->hide();
 			dtsbMajorTicksIncrement->hide();
-			ui.lMajorTicksIncrementNumeric->show();
-			ui.sbMajorTicksIncrementNumeric->show();
+			ui.lMajorTicksSpacingNumeric->show();
+			ui.sbMajorTicksSpacingNumeric->show();
 		} else {
 			ui.lMajorTicksIncrementDateTime->show();
 			dtsbMajorTicksIncrement->show();
-			ui.lMajorTicksIncrementNumeric->hide();
-			ui.sbMajorTicksIncrementNumeric->hide();
+			ui.lMajorTicksSpacingNumeric->hide();
+			ui.sbMajorTicksSpacingNumeric->hide();
 		}
 
 		ui.lMajorTicksColumn->hide();
 		cbMajorTicksColumn->hide();
 
-		// Check if Increment is not to small
-		majorTicksIncrementChanged();
+		// Check if spacing is not to small
+		majorTicksSpacingChanged();
 	} else {
 		ui.lMajorTicksNumber->hide();
 		ui.sbMajorTicksNumber->hide();
-		ui.lMajorTicksIncrementNumeric->hide();
-		ui.sbMajorTicksIncrementNumeric->hide();
-		dtsbMajorTicksIncrement->hide();
+		ui.lMajorTicksSpacingNumeric->hide();
+		ui.sbMajorTicksSpacingNumeric->hide();
+		ui.lMajorTicksIncrementDateTime->hide();
 		dtsbMajorTicksIncrement->hide();
 		ui.lMajorTicksColumn->show();
 		cbMajorTicksColumn->show();
@@ -928,7 +928,7 @@ void AxisDock::majorTicksNumberChanged(int value) {
 		axis->setMajorTicksNumber(value);
 }
 
-void AxisDock::majorTicksIncrementChanged() {
+void AxisDock::majorTicksSpacingChanged() {
 	if (m_initializing)
 		return;
 
@@ -937,31 +937,35 @@ void AxisDock::majorTicksIncrementChanged() {
 	bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
 		|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
 
-	double value = numeric ? ui.sbMajorTicksIncrementNumeric->value() : dtsbMajorTicksIncrement->value();
-	double diff = m_axis->end() - m_axis->start();
+	double value = numeric ? ui.sbMajorTicksSpacingNumeric->value() : dtsbMajorTicksIncrement->value();
+	double diff = fabs(m_axis->end() - m_axis->start());
+	DEBUG("value = " << value << ", diff = " << diff)
 
-	if (value == 0 || diff / value > 100 || value < 0) { // maximum of 100 ticks
-
+	// fix spacing if incorrect
+	if (value == 0. || diff / value > 100.) {
 		if (value == 0)
 			value = diff / ui.sbMajorTicksNumber->value();
 
-		if (diff / value > 100)
-			value = diff / 100;
+		if (diff / value > 100.)	// maximum of 100 ticks
+			value = diff / 100.;
 
+		DEBUG("new value = " << value)
 		// determine stepsize and number of decimals
 		m_initializing = true;
 		if (numeric) {
-			int decimal = determineDecimals(value * 10);
-			ui.sbMajorTicksIncrementNumeric->setDecimals(decimal);
-			ui.sbMajorTicksIncrementNumeric->setSingleStep(determineStep(diff, decimal));
-			ui.sbMajorTicksIncrementNumeric->setValue(value);
-		} else
+			//TODO: check
+			int decimal = determineDecimals(value * 10.);
+			DEBUG("decimal = " << decimal)
+			ui.sbMajorTicksSpacingNumeric->setDecimals(decimal);
+			ui.sbMajorTicksSpacingNumeric->setSingleStep(determineStep(diff, decimal));
+			ui.sbMajorTicksSpacingNumeric->setValue(value);
+		} else	//TODO: check reversed axis
 			dtsbMajorTicksIncrement->setValue(value);
 		m_initializing = false;
 	}
 
 	for (auto* axis : m_axesList)
-		axis->setMajorTicksIncrement(value);
+		axis->setMajorTicksSpacing(value);
 }
 
 void AxisDock::majorTicksLineStyleChanged(int index) {
@@ -1058,8 +1062,8 @@ void AxisDock::minorTicksDirectionChanged(int index) {
 	ui.cbMinorTicksType->setEnabled(b);
 	ui.lMinorTicksNumber->setEnabled(b);
 	ui.sbMinorTicksNumber->setEnabled(b);
-	ui.lMinorTicksIncrementNumeric->setEnabled(b);
-	ui.sbMinorTicksIncrementNumeric->setEnabled(b);
+	ui.lMinorTicksSpacingNumeric->setEnabled(b);
+	ui.sbMinorTicksSpacingNumeric->setEnabled(b);
 	ui.lMinorTicksIncrementDateTime->setEnabled(b);
 	dtsbMinorTicksIncrement->setEnabled(b);
 	ui.lMinorTicksLineStyle->setEnabled(b);
@@ -1092,13 +1096,13 @@ void AxisDock::minorTicksTypeChanged(int index) {
 	if (type == Axis::TicksTotalNumber) {
 		ui.lMinorTicksNumber->show();
 		ui.sbMinorTicksNumber->show();
-		ui.lMinorTicksIncrementNumeric->hide();
-		ui.sbMinorTicksIncrementNumeric->hide();
+		ui.lMinorTicksSpacingNumeric->hide();
+		ui.sbMinorTicksSpacingNumeric->hide();
 		ui.lMinorTicksColumn->hide();
 		cbMinorTicksColumn->hide();
 		ui.lMinorTicksIncrementDateTime->hide();
 		dtsbMinorTicksIncrement->hide();
-	} else if ( type == Axis::TicksIncrement) {
+	} else if ( type == Axis::TicksSpacing) {
 		ui.lMinorTicksNumber->hide();
 		ui.sbMinorTicksNumber->hide();
 
@@ -1106,13 +1110,13 @@ void AxisDock::minorTicksTypeChanged(int index) {
 		bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
 					|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
 		if (numeric) {
-			ui.lMinorTicksIncrementNumeric->show();
-			ui.sbMinorTicksIncrementNumeric->show();
+			ui.lMinorTicksSpacingNumeric->show();
+			ui.sbMinorTicksSpacingNumeric->show();
 			ui.lMinorTicksIncrementDateTime->hide();
 			dtsbMinorTicksIncrement->hide();
 		} else {
-			ui.lMinorTicksIncrementNumeric->hide();
-			ui.sbMinorTicksIncrementNumeric->hide();
+			ui.lMinorTicksSpacingNumeric->hide();
+			ui.sbMinorTicksSpacingNumeric->hide();
 			ui.lMinorTicksIncrementDateTime->show();
 			dtsbMinorTicksIncrement->show();
 		}
@@ -1120,13 +1124,13 @@ void AxisDock::minorTicksTypeChanged(int index) {
 		ui.lMinorTicksColumn->hide();
 		cbMinorTicksColumn->hide();
 
-		// Check if Increment is not to small
-		minorTicksIncrementChanged();
+		// Check if spacing is not to small
+		minorTicksSpacingChanged();
 	} else {
 		ui.lMinorTicksNumber->hide();
 		ui.sbMinorTicksNumber->hide();
-		ui.lMinorTicksIncrementNumeric->hide();
-		ui.sbMinorTicksIncrementNumeric->hide();
+		ui.lMinorTicksSpacingNumeric->hide();
+		ui.sbMinorTicksSpacingNumeric->hide();
 		ui.lMinorTicksIncrementDateTime->hide();
 		dtsbMinorTicksIncrement->hide();
 		ui.lMinorTicksColumn->show();
@@ -1148,7 +1152,7 @@ void AxisDock::minorTicksNumberChanged(int value) {
 		axis->setMinorTicksNumber(value);
 }
 
-void AxisDock::minorTicksIncrementChanged() {
+void AxisDock::minorTicksSpacingChanged() {
 	if (m_initializing)
 		return;
 
@@ -1157,13 +1161,14 @@ void AxisDock::minorTicksIncrementChanged() {
 	bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
 		|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
 
-	double value = numeric ? ui.sbMinorTicksIncrementNumeric->value() : dtsbMinorTicksIncrement->value();
+	double value = numeric ? ui.sbMinorTicksSpacingNumeric->value() : dtsbMinorTicksIncrement->value();
 	double numberTicks = 0.0;
 
+	//TODO: check
 	if (value > 0)
 		numberTicks = (m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1) / value -1; // recal
 
-	if (value == 0 || numberTicks > 100 || value < 0) {
+	if (value == 0. || numberTicks > 100 || value < 0) {
 		if (value == 0)
 			value = (m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1) / (ui.sbMinorTicksNumber->value() + 1);
 
@@ -1176,16 +1181,16 @@ void AxisDock::minorTicksIncrementChanged() {
 		m_initializing = true;
 		if (numeric) {
 			int decimal = determineDecimals(value * 10);
-			ui.sbMinorTicksIncrementNumeric->setDecimals(decimal);
-			ui.sbMinorTicksIncrementNumeric->setSingleStep(determineStep((m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1), decimal));
-			ui.sbMinorTicksIncrementNumeric->setValue(value);
+			ui.sbMinorTicksSpacingNumeric->setDecimals(decimal);
+			ui.sbMinorTicksSpacingNumeric->setSingleStep(determineStep((m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1), decimal));
+			ui.sbMinorTicksSpacingNumeric->setValue(value);
 		} else
 			dtsbMinorTicksIncrement->setValue(value);
 		m_initializing = false;
 	}
 
 	for (auto* axis : m_axesList)
-		axis->setMinorTicksIncrement(value);
+		axis->setMinorTicksSpacing(value);
 }
 
 void AxisDock::minorTicksColumnChanged(const QModelIndex& index) {
@@ -1577,8 +1582,8 @@ void AxisDock::axisStartChanged(double value) {
 	// determine stepsize and number of decimals
 	double diff = m_axis->end() - m_axis->start();
 	int decimal = determineDecimals(diff);
-	ui.sbMajorTicksIncrementNumeric->setDecimals(decimal);
-	ui.sbMajorTicksIncrementNumeric->setSingleStep(determineStep(diff, decimal));
+	ui.sbMajorTicksSpacingNumeric->setDecimals(decimal);
+	ui.sbMajorTicksSpacingNumeric->setSingleStep(determineStep(diff, decimal));
 }
 
 void AxisDock::axisEndChanged(double value) {
@@ -1587,13 +1592,13 @@ void AxisDock::axisEndChanged(double value) {
 
 	ui.leEnd->setText( QString::number(value) );
 	ui.dateTimeEditEnd->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
-	ui.sbMajorTicksIncrementNumeric->setSingleStep(floor(m_axis->end() - m_axis->start())/10);
+	ui.sbMajorTicksSpacingNumeric->setSingleStep(floor(m_axis->end() - m_axis->start())/10);
 
 	// determine stepsize and number of decimals
 	double diff = m_axis->end() - m_axis->start();
 	int decimal = determineDecimals(diff);
-	ui.sbMajorTicksIncrementNumeric->setDecimals(decimal);
-	ui.sbMajorTicksIncrementNumeric->setSingleStep(determineStep(diff, decimal));
+	ui.sbMajorTicksSpacingNumeric->setDecimals(decimal);
+	ui.sbMajorTicksSpacingNumeric->setSingleStep(determineStep(diff, decimal));
 }
 
 void AxisDock::axisZeroOffsetChanged(qreal value) {
@@ -1658,7 +1663,7 @@ void AxisDock::axisMajorTicksNumberChanged(int number) {
 	ui.sbMajorTicksNumber->setValue(number);
 	m_initializing = false;
 }
-void AxisDock::axisMajorTicksIncrementChanged(qreal increment) {
+void AxisDock::axisMajorTicksSpacingChanged(qreal increment) {
 	m_initializing = true;
 	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
 	if (plot) {
@@ -1666,7 +1671,7 @@ void AxisDock::axisMajorTicksIncrementChanged(qreal increment) {
 			|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
 
 		if (numeric)
-			ui.sbMajorTicksIncrementNumeric->setValue(increment);
+			ui.sbMajorTicksSpacingNumeric->setValue(increment);
 		else {
 			dtsbMajorTicksIncrement->setValue(increment);
 		}
@@ -1707,7 +1712,7 @@ void AxisDock::axisMinorTicksNumberChanged(int number) {
 	ui.sbMinorTicksNumber->setValue(number);
 	m_initializing = false;
 }
-void AxisDock::axisMinorTicksIncrementChanged(qreal increment) {
+void AxisDock::axisMinorTicksSpacingChanged(qreal increment) {
 	m_initializing = true;
 	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
 	if (plot) {
@@ -1715,7 +1720,7 @@ void AxisDock::axisMinorTicksIncrementChanged(qreal increment) {
 			|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
 
 		if (numeric)
-			ui.sbMinorTicksIncrementNumeric->setValue(increment);
+			ui.sbMinorTicksSpacingNumeric->setValue(increment);
 		else {
 			dtsbMinorTicksIncrement->setValue(increment);
 		}
@@ -1859,9 +1864,8 @@ void AxisDock::load() {
 	ui.leStart->setText( QString::number(m_axis->start()) );
 	ui.leEnd->setText( QString::number(m_axis->end()) );
 
-
-	ui.sbMajorTicksIncrementNumeric->setDecimals(0);
-	ui.sbMajorTicksIncrementNumeric->setSingleStep(m_axis->majorTicksIncrement());
+	ui.sbMajorTicksSpacingNumeric->setDecimals(0);
+	ui.sbMajorTicksSpacingNumeric->setSingleStep(m_axis->majorTicksSpacing());
 
 	//depending on range format of the axis (numeric vs. datetime), show/hide the corresponding widgets
 	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
@@ -2079,9 +2083,9 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.cbMajorTicksType->setCurrentIndex( group.readEntry("MajorTicksType", (int) m_axis->majorTicksType()) );
 	ui.sbMajorTicksNumber->setValue( group.readEntry("MajorTicksNumber", m_axis->majorTicksNumber()) );
 	if (numeric)
-		ui.sbMajorTicksIncrementNumeric->setValue(group.readEntry("MajorTicksIncrement", m_axis->majorTicksIncrement()));
+		ui.sbMajorTicksSpacingNumeric->setValue(group.readEntry("MajorTicksIncrement", m_axis->majorTicksSpacing()));
 	else
-		dtsbMajorTicksIncrement->setValue(group.readEntry("MajorTicksIncrement", m_axis->majorTicksIncrement()));
+		dtsbMajorTicksIncrement->setValue(group.readEntry("MajorTicksIncrement", m_axis->majorTicksSpacing()));
 	ui.cbMajorTicksLineStyle->setCurrentIndex( group.readEntry("MajorTicksLineStyle", (int) m_axis->majorTicksPen().style()) );
 	ui.kcbMajorTicksColor->setColor( group.readEntry("MajorTicksColor", m_axis->majorTicksPen().color()) );
 	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorTicksWidth", m_axis->majorTicksPen().widthF()),Worksheet::Point) );
@@ -2093,9 +2097,9 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.cbMinorTicksType->setCurrentIndex( group.readEntry("MinorTicksType", (int) m_axis->minorTicksType()) );
 	ui.sbMinorTicksNumber->setValue( group.readEntry("MinorTicksNumber", m_axis->minorTicksNumber()) );
 	if (numeric)
-		ui.sbMinorTicksIncrementNumeric->setValue(group.readEntry("MajorTicksIncrement", m_axis->majorTicksIncrement()));
+		ui.sbMinorTicksSpacingNumeric->setValue(group.readEntry("MinorTicksIncrement", m_axis->minorTicksSpacing()));
 	else
-		dtsbMinorTicksIncrement->setValue(group.readEntry("MajorTicksIncrement", m_axis->majorTicksIncrement()));
+		dtsbMinorTicksIncrement->setValue(group.readEntry("MinorTicksIncrement", m_axis->minorTicksSpacing()));
 	ui.cbMinorTicksLineStyle->setCurrentIndex( group.readEntry("MinorTicksLineStyle", (int) m_axis->minorTicksPen().style()) );
 	ui.kcbMinorTicksColor->setColor( group.readEntry("MinorTicksColor", m_axis->minorTicksPen().color()) );
 	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksWidth", m_axis->minorTicksPen().widthF()),Worksheet::Point) );
@@ -2191,7 +2195,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("MajorTicksType", ui.cbMajorTicksType->currentIndex());
 	group.writeEntry("MajorTicksNumber", ui.sbMajorTicksNumber->value());
 	if (numeric)
-		group.writeEntry("MajorTicksIncrement", QString::number(ui.sbMajorTicksIncrementNumeric->value()));
+		group.writeEntry("MajorTicksIncrement", QString::number(ui.sbMajorTicksSpacingNumeric->value()));
 	else
 		group.writeEntry("MajorTicksIncrement", QString::number(dtsbMajorTicksIncrement->value()));
 	group.writeEntry("MajorTicksLineStyle", ui.cbMajorTicksLineStyle->currentIndex());
@@ -2205,7 +2209,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("MinorTicksType", ui.cbMinorTicksType->currentIndex());
 	group.writeEntry("MinorTicksNumber", ui.sbMinorTicksNumber->value());
 	if (numeric)
-		group.writeEntry("MinorTicksIncrement", QString::number(ui.sbMinorTicksIncrementNumeric->value()));
+		group.writeEntry("MinorTicksIncrement", QString::number(ui.sbMinorTicksSpacingNumeric->value()));
 	else
 		group.writeEntry("MinorTicksIncrement", QString::number(dtsbMinorTicksIncrement->value()));
 	group.writeEntry("MinorTicksLineStyle", ui.cbMinorTicksLineStyle->currentIndex());

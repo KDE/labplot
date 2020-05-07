@@ -4,7 +4,7 @@
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2013-2018 Stefan Gerlach  (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2013-2020 Stefan Gerlach  (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -50,6 +50,7 @@
 #include <KLocalizedString>
 
 extern "C" {
+#include <gsl/gsl_math.h>
 #include "backend/nsl/nsl_math.h"
 }
 
@@ -173,7 +174,8 @@ void Axis::init() {
 	d->majorTicksDirection = (Axis::TicksDirection) group.readEntry("MajorTicksDirection", (int) Axis::ticksOut);
 	d->majorTicksType = (Axis::TicksType) group.readEntry("MajorTicksType", (int) Axis::TicksTotalNumber);
 	d->majorTicksNumber = group.readEntry("MajorTicksNumber", 11);
-	d->majorTicksIncrement = group.readEntry("MajorTicksIncrement", -1.0); // set to negative value, so axisdocks determines the value to not to have to much labels the first time switched to TicksIncrement
+	d->majorTicksSpacing = group.readEntry("MajorTicksIncrement", 0.0); // set to 0, so axisdock determines the value to not have to many labels the first time switched to Spacing
+
 	d->majorTicksPen.setStyle((Qt::PenStyle) group.readEntry("MajorTicksLineStyle", (int)Qt::SolidLine) );
 	d->majorTicksPen.setColor( group.readEntry("MajorTicksColor", QColor(Qt::black) ) );
 	d->majorTicksPen.setWidthF( group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point) ) );
@@ -183,7 +185,7 @@ void Axis::init() {
 	d->minorTicksDirection = (Axis::TicksDirection) group.readEntry("MinorTicksDirection", (int) Axis::ticksOut);
 	d->minorTicksType = (Axis::TicksType) group.readEntry("MinorTicksType", (int) Axis::TicksTotalNumber);
 	d->minorTicksNumber = group.readEntry("MinorTicksNumber", 1);
-	d->minorTicksIncrement = group.readEntry("MinorTicksIncrement", -1.0);
+	d->minorTicksIncrement = group.readEntry("MinorTicksIncrement", 0.0);	// see MajorTicksIncrement
 	d->minorTicksPen.setStyle((Qt::PenStyle) group.readEntry("MinorTicksLineStyle", (int)Qt::SolidLine) );
 	d->minorTicksPen.setColor( group.readEntry("MinorTicksColor", QColor(Qt::black) ) );
 	d->minorTicksPen.setWidthF( group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point) ) );
@@ -406,7 +408,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, arrowSize, arrowSize)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, majorTicksDirection, majorTicksDirection)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksType, majorTicksType, majorTicksType)
 BASIC_SHARED_D_READER_IMPL(Axis, int, majorTicksNumber, majorTicksNumber)
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksIncrement, majorTicksIncrement)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksSpacing, majorTicksSpacing)
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, majorTicksColumn, majorTicksColumn)
 QString& Axis::majorTicksColumnPath() const { return d_ptr->majorTicksColumnPath; }
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksLength, majorTicksLength)
@@ -416,7 +418,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksOpacity, majorTicksOpacity)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, minorTicksDirection, minorTicksDirection)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksType, minorTicksType, minorTicksType)
 BASIC_SHARED_D_READER_IMPL(Axis, int, minorTicksNumber, minorTicksNumber)
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksIncrement, minorTicksIncrement)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksSpacing, minorTicksIncrement)
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, minorTicksColumn, minorTicksColumn)
 QString& Axis::minorTicksColumnPath() const { return d_ptr->minorTicksColumnPath; }
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksLength, minorTicksLength)
@@ -619,11 +621,11 @@ void Axis::setMajorTicksNumber(int majorTicksNumber) {
 		exec(new AxisSetMajorTicksNumberCmd(d, majorTicksNumber, ki18n("%1: set the total number of the major ticks")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksIncrement, qreal, majorTicksIncrement, retransformTicks);
-void Axis::setMajorTicksIncrement(qreal majorTicksIncrement) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksSpacing, qreal, majorTicksSpacing, retransformTicks);
+void Axis::setMajorTicksSpacing(qreal majorTicksSpacing) {
 	Q_D(Axis);
-	if (majorTicksIncrement != d->majorTicksIncrement)
-		exec(new AxisSetMajorTicksIncrementCmd(d, majorTicksIncrement, ki18n("%1: set the increment for the major ticks")));
+	if (majorTicksSpacing != d->majorTicksSpacing)
+		exec(new AxisSetMajorTicksSpacingCmd(d, majorTicksSpacing, ki18n("%1: set the spacing of the major ticks")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksColumn, const AbstractColumn*, majorTicksColumn, retransformTicks)
@@ -684,11 +686,11 @@ void Axis::setMinorTicksNumber(int minorTicksNumber) {
 		exec(new AxisSetMinorTicksNumberCmd(d, minorTicksNumber, ki18n("%1: set the total number of the minor ticks")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksIncrement, qreal, minorTicksIncrement, retransformTicks);
-void Axis::setMinorTicksIncrement(qreal minorTicksIncrement) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksSpacing, qreal, minorTicksIncrement, retransformTicks);
+void Axis::setMinorTicksSpacing(qreal minorTicksSpacing) {
 	Q_D(Axis);
-	if (minorTicksIncrement != d->minorTicksIncrement)
-		exec(new AxisSetMinorTicksIncrementCmd(d, minorTicksIncrement, ki18n("%1: set the increment for the minor ticks")));
+	if (minorTicksSpacing != d->minorTicksIncrement)
+		exec(new AxisSetMinorTicksSpacingCmd(d, minorTicksSpacing, ki18n("%1: set the spacing of the minor ticks")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksColumn, const AbstractColumn*, minorTicksColumn, retransformTicks)
@@ -1154,55 +1156,54 @@ void AxisPrivate::retransformTicks() {
 		return;
 	}
 
-	//determine the spacing for the major ticks
-	double majorTicksSpacing = 0;
+	//determine the increment for the major ticks
+	double majorTicksIncrement = 0;
 	int tmpMajorTicksNumber = 0;
 	if (majorTicksType == Axis::TicksTotalNumber) {
-		//the total number of the major ticks is given - > determine the spacing
+		//the total number of major ticks is given - > determine the increment
 		tmpMajorTicksNumber = majorTicksNumber;
 		switch (scale) {
 			case Axis::ScaleLinear:
-				majorTicksSpacing = (end-start)/(majorTicksNumber-1);
+				majorTicksIncrement = (end-start)/(majorTicksNumber-1);
 				break;
 			case Axis::ScaleLog10:
-				majorTicksSpacing = (log10(end)-log10(start))/(majorTicksNumber-1);
+				majorTicksIncrement = (log10(end)-log10(start))/(majorTicksNumber-1);
 				break;
 			case Axis::ScaleLog2:
-				majorTicksSpacing = (log(end)-log(start))/log(2)/(majorTicksNumber-1);
+				majorTicksIncrement = (log(end)-log(start))/log(2)/(majorTicksNumber-1);
 				break;
 			case Axis::ScaleLn:
-				majorTicksSpacing = (log(end)-log(start))/(majorTicksNumber-1);
+				majorTicksIncrement = (log(end)-log(start))/(majorTicksNumber-1);
 				break;
 			case Axis::ScaleSqrt:
-				majorTicksSpacing = (sqrt(end)-sqrt(start))/(majorTicksNumber-1);
+				majorTicksIncrement = (sqrt(end)-sqrt(start))/(majorTicksNumber-1);
 				break;
 			case Axis::ScaleX2:
-				majorTicksSpacing = (pow(end,2)-pow(start,2))/(majorTicksNumber-1);
+				majorTicksIncrement = (end*end - start*start)/(majorTicksNumber-1);
 		}
-	} else if (majorTicksType == Axis::TicksIncrement) {
-		//the spacing (increment) of the major ticks is given - > determine the number
-		majorTicksSpacing = majorTicksIncrement;
+	} else if (majorTicksType == Axis::TicksSpacing) {
+		//the increment of the major ticks is given -> determine the number
+		majorTicksIncrement = majorTicksSpacing * GSL_SIGN(end-start);
 		switch (scale) {
 			case Axis::ScaleLinear:
-				tmpMajorTicksNumber = qRound((end-start)/majorTicksSpacing + 1);
+				tmpMajorTicksNumber = qRound((end-start)/majorTicksIncrement + 1);
 				break;
 			case Axis::ScaleLog10:
-				tmpMajorTicksNumber = qRound((log10(end)-log10(start))/majorTicksSpacing + 1);
+				tmpMajorTicksNumber = qRound((log10(end)-log10(start))/majorTicksIncrement + 1);
 				break;
 			case Axis::ScaleLog2:
-				tmpMajorTicksNumber = qRound((log(end)-log(start))/log(2)/majorTicksSpacing + 1);
+				tmpMajorTicksNumber = qRound((log(end)-log(start))/log(2)/majorTicksIncrement + 1);
 				break;
 			case Axis::ScaleLn:
-				tmpMajorTicksNumber = qRound((log(end)-log(start))/majorTicksSpacing + 1);
+				tmpMajorTicksNumber = qRound((log(end)-log(start))/majorTicksIncrement + 1);
 				break;
 			case Axis::ScaleSqrt:
-				tmpMajorTicksNumber = qRound((sqrt(end)-sqrt(start))/majorTicksSpacing + 1);
+				tmpMajorTicksNumber = qRound((sqrt(end)-sqrt(start))/majorTicksIncrement + 1);
 				break;
 			case Axis::ScaleX2:
-				tmpMajorTicksNumber = qRound((pow(end,2)-pow(start,2))/majorTicksSpacing + 1);
+				tmpMajorTicksNumber = qRound((end*end - start*start)/majorTicksIncrement + 1);
 		}
-	} else {
-		//custom column was provided
+	} else { //custom column was provided
 		if (majorTicksColumn) {
 			tmpMajorTicksNumber = majorTicksColumn->rowCount();
 		} else {
@@ -1214,7 +1215,7 @@ void AxisPrivate::retransformTicks() {
 	int tmpMinorTicksNumber;
 	if (minorTicksType == Axis::TicksTotalNumber)
 		tmpMinorTicksNumber = minorTicksNumber;
-	else if (minorTicksType == Axis::TicksIncrement)
+	else if (minorTicksType == Axis::TicksSpacing)
 		tmpMinorTicksNumber = (end - start)/ (majorTicksNumber - 1)/minorTicksIncrement - 1;
 	else
 		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
@@ -1236,28 +1237,28 @@ void AxisPrivate::retransformTicks() {
 		if (majorTicksType != Axis::TicksCustomColumn) {
 			switch (scale) {
 				case Axis::ScaleLinear:
-					majorTickPos = start + majorTicksSpacing*iMajor;
-					nextMajorTickPos = start + majorTicksSpacing*(iMajor+1);
+					majorTickPos = start + majorTicksIncrement*iMajor;
+					nextMajorTickPos = start + majorTicksIncrement*(iMajor+1);
 					break;
 				case Axis::ScaleLog10:
-					majorTickPos = pow(10, log10(start) + majorTicksSpacing*iMajor);
-					nextMajorTickPos = pow(10, log10(start) + majorTicksSpacing*(iMajor+1));
+					majorTickPos = pow(10, log10(start) + majorTicksIncrement*iMajor);
+					nextMajorTickPos = pow(10, log10(start) + majorTicksIncrement*(iMajor+1));
 					break;
 				case Axis::ScaleLog2:
-					majorTickPos = pow(2, log(start)/log(2) + majorTicksSpacing*iMajor);
-					nextMajorTickPos = pow(2, log(start)/log(2) + majorTicksSpacing*(iMajor+1));
+					majorTickPos = pow(2, log(start)/log(2) + majorTicksIncrement*iMajor);
+					nextMajorTickPos = pow(2, log(start)/log(2) + majorTicksIncrement*(iMajor+1));
 					break;
 				case Axis::ScaleLn:
-					majorTickPos = exp(log(start) + majorTicksSpacing*iMajor);
-					nextMajorTickPos = exp(log(start) + majorTicksSpacing*(iMajor+1));
+					majorTickPos = exp(log(start) + majorTicksIncrement*iMajor);
+					nextMajorTickPos = exp(log(start) + majorTicksIncrement*(iMajor+1));
 					break;
 				case Axis::ScaleSqrt:
-					majorTickPos = pow(sqrt(start) + majorTicksSpacing*iMajor, 2);
-					nextMajorTickPos = pow(sqrt(start) + majorTicksSpacing*(iMajor+1), 2);
+					majorTickPos = pow(sqrt(start) + majorTicksIncrement*iMajor, 2);
+					nextMajorTickPos = pow(sqrt(start) + majorTicksIncrement*(iMajor+1), 2);
 					break;
 				case Axis::ScaleX2:
-					majorTickPos = sqrt(sqrt(start) + majorTicksSpacing*iMajor);
-					nextMajorTickPos = sqrt(sqrt(start) + majorTicksSpacing*(iMajor+1));
+					majorTickPos = sqrt(sqrt(start) + majorTicksIncrement*iMajor);
+					nextMajorTickPos = sqrt(sqrt(start) + majorTicksIncrement*(iMajor+1));
 					break;
 			}
 		} else {
@@ -1313,14 +1314,14 @@ void AxisPrivate::retransformTicks() {
 		}
 
 		//minor ticks
-		if ((Axis::noTicks != minorTicksDirection) && (tmpMajorTicksNumber > 1) && (tmpMinorTicksNumber > 0) && (iMajor<tmpMajorTicksNumber-1)) {
+		if ((Axis::noTicks != minorTicksDirection) && (tmpMajorTicksNumber > 1) && (tmpMinorTicksNumber > 0) && (iMajor < tmpMajorTicksNumber-1)) {
 			//minor ticks are placed at equidistant positions independent of the selected scaling for the major ticks positions
-			double minorTicksSpacing = (nextMajorTickPos-majorTickPos)/(tmpMinorTicksNumber+1);
+			double minorTicksIncrement = (nextMajorTickPos-majorTickPos)/(tmpMinorTicksNumber+1);
 
 			for (int iMinor = 0; iMinor < tmpMinorTicksNumber; iMinor++) {
 				//calculate minor tick's position
 				if (minorTicksType != Axis::TicksCustomColumn) {
-					minorTickPos = majorTickPos + (iMinor+1)*minorTicksSpacing;
+					minorTickPos = majorTickPos + (iMinor+1)*minorTicksIncrement;
 				} else {
 					if (!minorTicksColumn->isValid(iMinor) || minorTicksColumn->isMasked(iMinor))
 						continue;
@@ -1387,23 +1388,23 @@ void AxisPrivate::retransformTickLabelStrings() {
 	if (suppressRetransform)
 		return;
 
-// 	DEBUG("AxisPrivate::retransformTickLabelStrings()");
+	//DEBUG("AxisPrivate::retransformTickLabelStrings()");
 	if (labelsAutoPrecision) {
 		//check, whether we need to increase the current precision
 		int newPrecision = upperLabelsPrecision(labelsPrecision);
-		if (newPrecision!= labelsPrecision) {
+		if (newPrecision != labelsPrecision) {
 			labelsPrecision = newPrecision;
 			emit q->labelsPrecisionChanged(labelsPrecision);
 		} else {
 			//check, whether we can reduce the current precision
 			newPrecision = lowerLabelsPrecision(labelsPrecision);
-			if (newPrecision!= labelsPrecision) {
+			if (newPrecision != labelsPrecision) {
 				labelsPrecision = newPrecision;
 				emit q->labelsPrecisionChanged(labelsPrecision);
 			}
 		}
 	}
-// 	DEBUG("labelsPrecision =" << labelsPrecision);
+	//DEBUG("labelsPrecision =" << labelsPrecision);
 
 	//automatically switch from 'decimal' to 'scientific' format for big numbers (>10^4)
 	//and back to decimal when the numbers get smaller after the auto-switch again
@@ -1497,7 +1498,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	where no duplicates for the tick label float occur.
  */
 int AxisPrivate::upperLabelsPrecision(int precision) {
-// 	DEBUG("AxisPrivate::upperLabelsPrecision() precision =" << precision);
+	//DEBUG("AxisPrivate::upperLabelsPrecision() precision =" << precision);
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, increase the precision.
 	QVector<double> tempValues;
@@ -1517,7 +1518,7 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	}
 
 	//no duplicates for the current precision found: return the current value
-// 	DEBUG("	upper precision = " << precision);
+	//DEBUG("	upper precision = " << precision);
 	return precision;
 }
 
@@ -2074,7 +2075,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "direction", QString::number(d->majorTicksDirection) );
 	writer->writeAttribute( "type", QString::number(d->majorTicksType) );
 	writer->writeAttribute( "number", QString::number(d->majorTicksNumber) );
-	writer->writeAttribute( "increment", QString::number(d->majorTicksIncrement) );
+	writer->writeAttribute( "increment", QString::number(d->majorTicksSpacing) );
 	WRITE_COLUMN(d->majorTicksColumn, majorTicksColumn);
 	writer->writeAttribute( "length", QString::number(d->majorTicksLength) );
 	WRITE_QPEN(d->majorTicksPen);
@@ -2182,7 +2183,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("direction", majorTicksDirection, Axis::TicksDirection);
 			READ_INT_VALUE("type", majorTicksType, Axis::TicksType);
 			READ_INT_VALUE("number", majorTicksNumber, int);
-			READ_DOUBLE_VALUE("increment", majorTicksIncrement);
+			READ_DOUBLE_VALUE("increment", majorTicksSpacing);
 			READ_COLUMN(majorTicksColumn);
 			READ_DOUBLE_VALUE("length", majorTicksLength);
 			READ_QPEN(d->majorTicksPen);

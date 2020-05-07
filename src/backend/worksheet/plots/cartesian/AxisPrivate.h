@@ -90,7 +90,7 @@ public:
 	Axis::TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
 	Axis::TicksType majorTicksType; //!< the way how the number of major ticks is specified  - either as a total number or an increment
 	int majorTicksNumber; //!< number of major ticks
-	qreal majorTicksIncrement; //!< increment (step) for the major ticks
+	qreal majorTicksSpacing; //!< spacing (step) for the major ticks
 	const AbstractColumn* majorTicksColumn{nullptr}; //!< column containing values for major ticks' positions
 	QString majorTicksColumnPath;
 	qreal majorTicksLength; //!< major tick length (in page units!)
@@ -100,7 +100,7 @@ public:
 	Axis::TicksDirection minorTicksDirection; //!< minor ticks direction: inwards, outwards, both, or none
 	Axis::TicksType minorTicksType;  //!< the way how the number of minor ticks is specified  - either as a total number or an increment
 	int minorTicksNumber; //!< number of minor ticks (between each two major ticks)
-	qreal minorTicksIncrement; //!< increment (step) for the minor ticks
+	qreal minorTicksIncrement; //!< spacing (step) for the minor ticks
 	const AbstractColumn* minorTicksColumn{nullptr}; //!< column containing values for minor ticks' positions
 	QString minorTicksColumnPath;
 	qreal minorTicksLength; //!< minor tick length (in page units!)

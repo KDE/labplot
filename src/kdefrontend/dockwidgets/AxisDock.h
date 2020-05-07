@@ -105,7 +105,7 @@ private slots:
 	void majorTicksDirectionChanged(int);
 	void majorTicksTypeChanged(int);
  	void majorTicksNumberChanged(int);
-	void majorTicksIncrementChanged();
+	void majorTicksSpacingChanged();
 	void majorTicksColumnChanged(const QModelIndex&);
 	void majorTicksLineStyleChanged(int);
 	void majorTicksColorChanged(const QColor&);
@@ -117,7 +117,7 @@ private slots:
 	void minorTicksDirectionChanged(int);
 	void minorTicksTypeChanged(int);
  	void minorTicksNumberChanged(int);
-	void minorTicksIncrementChanged();
+	void minorTicksSpacingChanged();
 	void minorTicksColumnChanged(const QModelIndex&);
 	void minorTicksLineStyleChanged(int);
 	void minorTicksColorChanged(const QColor&);
@@ -176,14 +176,14 @@ private slots:
 	void axisMajorTicksDirectionChanged(Axis::TicksDirection);
 	void axisMajorTicksTypeChanged(Axis::TicksType);
 	void axisMajorTicksNumberChanged(int);
-	void axisMajorTicksIncrementChanged(qreal);
+	void axisMajorTicksSpacingChanged(qreal);
 	void axisMajorTicksPenChanged(const QPen&);
 	void axisMajorTicksLengthChanged(qreal);
 	void axisMajorTicksOpacityChanged(qreal);
 	void axisMinorTicksDirectionChanged(Axis::TicksDirection);
 	void axisMinorTicksTypeChanged(Axis::TicksType);
 	void axisMinorTicksNumberChanged(int);
-	void axisMinorTicksIncrementChanged(qreal);
+	void axisMinorTicksSpacingChanged(qreal);
 	void axisMinorTicksPenChanged(const QPen&);
 	void axisMinorTicksLengthChanged(qreal);
 	void axisMinorTicksOpacityChanged(qreal);
