@@ -2143,42 +2143,57 @@ void SpreadsheetView::joinColumns() {
 void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: normalize columns", m_spreadsheet->name()));
+	QStringList messages;
+	QString message = i18n("Normalization of column <i>%1</i> was not possible because of %2.");
 	for (auto* col : selectedColumns()) {
 		if (col->columnMode() == AbstractColumn::Numeric) {
-			col->setSuppressDataChangedSignal(true);
-
 			auto* data = static_cast<QVector<double>* >(col->data());
 			QVector<double> new_data(col->rowCount());
 
-			if (action == action_normalize_column_1) { //divide by max
-				double max = col->maximum();
-				if (max != 0.0) {
-					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / max;
-				}
-			} else if (action == action_normalize_column_2) { //divide by min
+			if (action == action_normalize_column_1) { //divide by min
 				double min = col->minimum();
 				if (min != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
 						new_data[i] = data->operator[](i) / min;
+				} else {
+					messages << message.arg(col->name()).arg(QLatin1String("min = 0"));
+					continue;
+				}
+			} else if (action == action_normalize_column_2) { //divide by max
+				double max = col->maximum();
+				if (max != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / max;
+				} else {
+					messages << message.arg(col->name()).arg(QLatin1String("max = 0"));
+					continue;
 				}
 			} else if (action == action_normalize_column_3) { //divide my mean
 				double mean = col->statistics().arithmeticMean;
 				if (mean != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
 						new_data[i] = data->operator[](i) / mean;
+				} else {
+					messages << message.arg(col->name()).arg(QLatin1String("mean = 0"));
+					continue;
 				}
 			} else if (action == action_normalize_column_4) { //divide by median
 				double median = col->statistics().median;
 				if (median != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
 						new_data[i] = data->operator[](i) / median;
+				} else {
+					messages << message.arg(col->name()).arg(QLatin1String("median = 0"));
+					continue;
 				}
 			} else if (action == action_normalize_column_5) { //divide by std
 				double std = col->statistics().standardDeviation;
 				if (std != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
 						new_data[i] = data->operator[](i) / std;
+				} else {
+					messages << message.arg(col->name()).arg(QLatin1String("std = 0"));
+					continue;
 				}
 			} else if (action == action_normalize_column_6) { // (x-mean)/std
 				double mean = col->statistics().arithmeticMean;
@@ -2186,15 +2201,26 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				if (std != 0.0) {
 					for (int i = 0; i < col->rowCount(); ++i)
 						new_data[i] = (data->operator[](i) - mean) / std;
+				} else {
+					messages << message.arg(col->name()).arg(QLatin1String("std = 0"));
+					continue;
 				}
 			}
 			col->replaceValues(0, new_data);
-			col->setSuppressDataChangedSignal(false);
-			col->setChanged();
 		}
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
+
+	if (!messages.isEmpty()) {
+		QString info;
+		for (const QString& message : messages) {
+			if (!info.isEmpty())
+				info += QLatin1String("<br><br>");
+			info += message;
+		}
+		QMessageBox::warning(this, i18n("Normalization not possible"), info);
+	}
 }
 
 void SpreadsheetView::normalizeSelection() {
