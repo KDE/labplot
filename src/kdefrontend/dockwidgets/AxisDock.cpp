@@ -46,6 +46,7 @@
 #include <KMessageBox>
 
 extern "C" {
+#include <gsl/gsl_math.h>
 #include "backend/nsl/nsl_math.h"
 }
 
@@ -943,7 +944,7 @@ void AxisDock::majorTicksSpacingChanged() {
 
 	double spacing = numeric ? ui.sbMajorTicksSpacingNumeric->value() : dtsbMajorTicksIncrement->value();
 	double range = fabs(m_axis->end() - m_axis->start());
-	DEBUG("spacing = " << spacing << ", range = " << range)
+	DEBUG("major spacing = " << spacing << ", range = " << range)
 
 	// fix spacing if incorrect (not set or > 100 ticks)
 	if (spacing == 0. || range / spacing > 100.) {
@@ -958,9 +959,9 @@ void AxisDock::majorTicksSpacingChanged() {
 		m_initializing = true;
 		if (numeric) {
 			int decimals = nsl_math_rounded_decimals(spacing) + 1;
-			DEBUG("decimals = " << decimals << ", step = " << range/100.)
+			DEBUG("decimals = " << decimals << ", step = " << gsl_pow_int(10., -decimals))
 			ui.sbMajorTicksSpacingNumeric->setDecimals(decimals);
-			ui.sbMajorTicksSpacingNumeric->setSingleStep(range/100.);
+			ui.sbMajorTicksSpacingNumeric->setSingleStep(gsl_pow_int(10., -decimals));
 			ui.sbMajorTicksSpacingNumeric->setMaximum(range);
 			ui.sbMajorTicksSpacingNumeric->setValue(spacing);
 		} else	//TODO: check reversed axis
@@ -1167,30 +1168,33 @@ void AxisDock::minorTicksSpacingChanged() {
 
 	double spacing = numeric ? ui.sbMinorTicksSpacingNumeric->value() : dtsbMinorTicksIncrement->value();
 	double range = fabs(m_axis->end() - m_axis->start());
-	DEBUG("spacing = " << spacing << ", range = " << range)
-	//TODO: double?
-	double numberTicks = 0.;
+	DEBUG("minor spacing = " << spacing << ", range = " << range)
+	int numberTicks = 0;
 
-	//TODO: check
+	int majorTicks = m_axis->majorTicksNumber();
 	if (spacing > 0.)
-		numberTicks = range / (m_axis->majorTicksNumber() - 1) / spacing - 1; // recalc
+		numberTicks = range / (majorTicks - 1) / spacing - 1; // recalc
+	DEBUG("	nticks = " << numberTicks)
 
 	// set if unset or > 100.
 	if (spacing == 0. || numberTicks > 100) {
 		if (spacing == 0.)
-			spacing = range / (m_axis->majorTicksNumber() - 1) / (ui.sbMinorTicksNumber->value() + 1);
+			spacing = range / (majorTicks - 1) / (ui.sbMinorTicksNumber->value() + 1);
 
-		numberTicks = range / (m_axis->majorTicksNumber() - 1) / spacing - 1; // recalculate number of ticks
+		numberTicks = range / (majorTicks - 1) / spacing - 1; // recalculate number of ticks
 
 		if (numberTicks > 100) // maximum 100 minor ticks
-			spacing = range / (m_axis->majorTicksNumber() - 1) / (100 + 1);
+			spacing = range / (majorTicks - 1) / (100 + 1);
 
+		DEBUG("new spacing = " << spacing)
+		DEBUG("new nticks = " << numberTicks)
 		// determine stepsize and number of decimals
 		m_initializing = true;
 		if (numeric) {
 			int decimals = nsl_math_rounded_decimals(spacing) + 1;
+			DEBUG("decimals = " << decimals << ", step = " << determineStep(range / (majorTicks - 1), decimals))
 			ui.sbMinorTicksSpacingNumeric->setDecimals(decimals);
-			ui.sbMinorTicksSpacingNumeric->setSingleStep(determineStep(range / (m_axis->majorTicksNumber() - 1), decimals));
+			ui.sbMinorTicksSpacingNumeric->setSingleStep(determineStep(range / (majorTicks - 1), decimals));
 			ui.sbMinorTicksSpacingNumeric->setValue(spacing);
 		} else
 			dtsbMinorTicksIncrement->setValue(spacing);

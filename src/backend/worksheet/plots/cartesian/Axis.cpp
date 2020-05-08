@@ -1216,7 +1216,7 @@ void AxisPrivate::retransformTicks() {
 	if (minorTicksType == Axis::TicksTotalNumber)
 		tmpMinorTicksNumber = minorTicksNumber;
 	else if (minorTicksType == Axis::TicksSpacing)
-		tmpMinorTicksNumber = (end - start)/ (majorTicksNumber - 1)/minorTicksIncrement - 1;
+		tmpMinorTicksNumber = fabs(end - start)/ (majorTicksNumber - 1)/minorTicksIncrement - 1;
 	else
 		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
 
@@ -1316,7 +1316,9 @@ void AxisPrivate::retransformTicks() {
 		//minor ticks
 		if ((Axis::noTicks != minorTicksDirection) && (tmpMajorTicksNumber > 1) && (tmpMinorTicksNumber > 0) && (iMajor < tmpMajorTicksNumber-1)) {
 			//minor ticks are placed at equidistant positions independent of the selected scaling for the major ticks positions
-			double minorTicksIncrement = (nextMajorTickPos-majorTickPos)/(tmpMinorTicksNumber+1);
+			double minorTicksIncrement = (nextMajorTickPos - majorTickPos)/(tmpMinorTicksNumber + 1);
+			DEBUG("minorTicksIncrement = " << minorTicksIncrement)
+			DEBUG("tmpMinorTicksNumber = " << tmpMinorTicksNumber)
 
 			for (int iMinor = 0; iMinor < tmpMinorTicksNumber; iMinor++) {
 				//calculate minor tick's position
@@ -1332,6 +1334,7 @@ void AxisPrivate::retransformTicks() {
 					if (iMajor > 0)
 						break;
 				}
+				DEBUG("minorTickPos = " << minorTickPos)
 
 				//calculate start and end points for minor tick's line
 				if (orientation == Axis::AxisHorizontal) {
