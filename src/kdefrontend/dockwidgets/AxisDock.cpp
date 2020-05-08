@@ -945,12 +945,12 @@ void AxisDock::majorTicksSpacingChanged() {
 	double range = fabs(m_axis->end() - m_axis->start());
 	DEBUG("spacing = " << spacing << ", range = " << range)
 
-	// fix spacing if incorrect
+	// fix spacing if incorrect (not set or > 100 ticks)
 	if (spacing == 0. || range / spacing > 100.) {
 		if (spacing == 0)
-			spacing = range / ui.sbMajorTicksNumber->value();
+			spacing = range / (ui.sbMajorTicksNumber->value() - 1);
 
-		if (range / spacing > 100.)	// maximum of 100 ticks
+		if (range / spacing > 100.)
 			spacing = range / 100.;
 
 		DEBUG("new spacing = " << spacing)
@@ -958,9 +958,10 @@ void AxisDock::majorTicksSpacingChanged() {
 		m_initializing = true;
 		if (numeric) {
 			int decimals = nsl_math_rounded_decimals(spacing) + 1;
-			DEBUG("decimals = " << decimals)
+			DEBUG("decimals = " << decimals << ", step = " << range/100.)
 			ui.sbMajorTicksSpacingNumeric->setDecimals(decimals);
-			ui.sbMajorTicksSpacingNumeric->setSingleStep(determineStep(range, decimals));
+			ui.sbMajorTicksSpacingNumeric->setSingleStep(range/100.);
+			ui.sbMajorTicksSpacingNumeric->setMaximum(range);
 			ui.sbMajorTicksSpacingNumeric->setValue(spacing);
 		} else	//TODO: check reversed axis
 			dtsbMajorTicksIncrement->setValue(spacing);
@@ -1164,38 +1165,40 @@ void AxisDock::minorTicksSpacingChanged() {
 	bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
 		|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
 
-	//TODO: rename to spacing
-	double value = numeric ? ui.sbMinorTicksSpacingNumeric->value() : dtsbMinorTicksIncrement->value();
-	double numberTicks = 0.0;
+	double spacing = numeric ? ui.sbMinorTicksSpacingNumeric->value() : dtsbMinorTicksIncrement->value();
+	double range = fabs(m_axis->end() - m_axis->start());
+	DEBUG("spacing = " << spacing << ", range = " << range)
+	//TODO: double?
+	double numberTicks = 0.;
 
 	//TODO: check
-	//TODO: use range
-	if (value > 0)
-		numberTicks = (m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1) / value -1; // recal
+	if (spacing > 0.)
+		numberTicks = range / (m_axis->majorTicksNumber() - 1) / spacing - 1; // recalc
 
-	if (value == 0. || numberTicks > 100 || value < 0) {
-		if (value == 0)
-			value = (m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1) / (ui.sbMinorTicksNumber->value() + 1);
+	// set if unset or > 100.
+	if (spacing == 0. || numberTicks > 100) {
+		if (spacing == 0.)
+			spacing = range / (m_axis->majorTicksNumber() - 1) / (ui.sbMinorTicksNumber->value() + 1);
 
-		numberTicks = (m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1) / value -1; // recalculate number of ticks
+		numberTicks = range / (m_axis->majorTicksNumber() - 1) / spacing - 1; // recalculate number of ticks
 
 		if (numberTicks > 100) // maximum 100 minor ticks
-			value = (m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1) / (100 + 1);
+			spacing = range / (m_axis->majorTicksNumber() - 1) / (100 + 1);
 
 		// determine stepsize and number of decimals
 		m_initializing = true;
 		if (numeric) {
-			int decimals = nsl_math_rounded_decimals(value) + 1;
+			int decimals = nsl_math_rounded_decimals(spacing) + 1;
 			ui.sbMinorTicksSpacingNumeric->setDecimals(decimals);
-			ui.sbMinorTicksSpacingNumeric->setSingleStep(determineStep((m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1), decimals));
-			ui.sbMinorTicksSpacingNumeric->setValue(value);
+			ui.sbMinorTicksSpacingNumeric->setSingleStep(determineStep(range / (m_axis->majorTicksNumber() - 1), decimals));
+			ui.sbMinorTicksSpacingNumeric->setValue(spacing);
 		} else
-			dtsbMinorTicksIncrement->setValue(value);
+			dtsbMinorTicksIncrement->setValue(spacing);
 		m_initializing = false;
 	}
 
 	for (auto* axis : m_axesList)
-		axis->setMinorTicksSpacing(value);
+		axis->setMinorTicksSpacing(spacing);
 }
 
 void AxisDock::minorTicksColumnChanged(const QModelIndex& index) {
