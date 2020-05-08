@@ -29,21 +29,22 @@
 #include "nsl_math.h"
 #include <gsl/gsl_math.h>
 
-/*
- * TODO: see Axis::determineDecimals()
- */
-int nsl_math_decimals(double value) {
-	value /= 10.; // step one decimal before
-        double power10 = 1.;
-        for (int i = 0; i < 10; i++) {
-                double nearest = round(fabs(value) * power10) / power10;
-                if (nearest > 0)
-                        return i;
+int nsl_math_decimal_places(double value) {
+	return -floor(log10(fabs(value)));
+}
 
-                power10 *= 10.;
-        }
+int nsl_math_rounded_decimals(double value) {
+	int places = nsl_math_decimal_places(value);
 
-        return 10;
+// printf("        places = %d, rv = %g\n", places, round(fabs(value) * pow(10, places)));
+	if (round(fabs(value) * pow(10, places)) >= 5.)
+		places--;
+
+	return places;
+}
+
+int nsl_math_rounded_decimals_max(double value, int max) {
+	return GSL_MIN(max, nsl_math_rounded_decimals(value));
 }
 
 double nsl_math_round_places(double value, unsigned int n) {

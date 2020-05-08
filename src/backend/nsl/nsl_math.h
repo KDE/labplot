@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL math functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2018-2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -29,8 +29,19 @@
 #ifndef NSL_MATH_H
 #define NSL_MATH_H
 
-/* get number of decimals */
-int nsl_math_decimals(double value);
+/* returns decimal places of signed value
+* 0.1 -> 1, 0.06 -> 2, 23 -> -1, 100 -> -2
+*/
+int nsl_math_decimal_places(double value);
+
+/* return decimal places of signed value rounded to one digit
+* 0.1 -> 1, 0.006 -> 2, 0.8 -> 0, 12 -> -1, 520 -> -3
+*/
+int nsl_math_rounded_decimals(double value);
+
+/* nsl_math_rounded_decimals() but max 'max'
+ */
+int nsl_math_rounded_decimals_max(double value, int max);
 
 /* round double value to n decimal places */
 double nsl_math_round_places(double value, unsigned int n); 

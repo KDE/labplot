@@ -45,6 +45,10 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
+extern "C" {
+#include "backend/nsl/nsl_math.h"
+}
+
 /*!
  \class AxisDock
  \brief Provides a widget for editing the properties of the axes currently selected in the project explorer.
@@ -937,35 +941,34 @@ void AxisDock::majorTicksSpacingChanged() {
 	bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
 		|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
 
-	double value = numeric ? ui.sbMajorTicksSpacingNumeric->value() : dtsbMajorTicksIncrement->value();
-	double diff = fabs(m_axis->end() - m_axis->start());
-	DEBUG("value = " << value << ", diff = " << diff)
+	double spacing = numeric ? ui.sbMajorTicksSpacingNumeric->value() : dtsbMajorTicksIncrement->value();
+	double range = fabs(m_axis->end() - m_axis->start());
+	DEBUG("spacing = " << spacing << ", range = " << range)
 
 	// fix spacing if incorrect
-	if (value == 0. || diff / value > 100.) {
-		if (value == 0)
-			value = diff / ui.sbMajorTicksNumber->value();
+	if (spacing == 0. || range / spacing > 100.) {
+		if (spacing == 0)
+			spacing = range / ui.sbMajorTicksNumber->value();
 
-		if (diff / value > 100.)	// maximum of 100 ticks
-			value = diff / 100.;
+		if (range / spacing > 100.)	// maximum of 100 ticks
+			spacing = range / 100.;
 
-		DEBUG("new value = " << value)
+		DEBUG("new spacing = " << spacing)
 		// determine stepsize and number of decimals
 		m_initializing = true;
 		if (numeric) {
-			//TODO: check
-			int decimal = determineDecimals(value * 10.);
-			DEBUG("decimal = " << decimal)
-			ui.sbMajorTicksSpacingNumeric->setDecimals(decimal);
-			ui.sbMajorTicksSpacingNumeric->setSingleStep(determineStep(diff, decimal));
-			ui.sbMajorTicksSpacingNumeric->setValue(value);
+			int decimals = nsl_math_rounded_decimals(spacing) + 1;
+			DEBUG("decimals = " << decimals)
+			ui.sbMajorTicksSpacingNumeric->setDecimals(decimals);
+			ui.sbMajorTicksSpacingNumeric->setSingleStep(determineStep(range, decimals));
+			ui.sbMajorTicksSpacingNumeric->setValue(spacing);
 		} else	//TODO: check reversed axis
-			dtsbMajorTicksIncrement->setValue(value);
+			dtsbMajorTicksIncrement->setValue(spacing);
 		m_initializing = false;
 	}
 
 	for (auto* axis : m_axesList)
-		axis->setMajorTicksSpacing(value);
+		axis->setMajorTicksSpacing(spacing);
 }
 
 void AxisDock::majorTicksLineStyleChanged(int index) {
@@ -1161,10 +1164,12 @@ void AxisDock::minorTicksSpacingChanged() {
 	bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
 		|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
 
+	//TODO: rename to spacing
 	double value = numeric ? ui.sbMinorTicksSpacingNumeric->value() : dtsbMinorTicksIncrement->value();
 	double numberTicks = 0.0;
 
 	//TODO: check
+	//TODO: use range
 	if (value > 0)
 		numberTicks = (m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1) / value -1; // recal
 
@@ -1180,9 +1185,9 @@ void AxisDock::minorTicksSpacingChanged() {
 		// determine stepsize and number of decimals
 		m_initializing = true;
 		if (numeric) {
-			int decimal = determineDecimals(value * 10);
-			ui.sbMinorTicksSpacingNumeric->setDecimals(decimal);
-			ui.sbMinorTicksSpacingNumeric->setSingleStep(determineStep((m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1), decimal));
+			int decimals = nsl_math_rounded_decimals(value) + 1;
+			ui.sbMinorTicksSpacingNumeric->setDecimals(decimals);
+			ui.sbMinorTicksSpacingNumeric->setSingleStep(determineStep((m_axis->end() - m_axis->start()) / (m_axis->majorTicksNumber() - 1), decimals));
 			ui.sbMinorTicksSpacingNumeric->setValue(value);
 		} else
 			dtsbMinorTicksIncrement->setValue(value);
@@ -1580,10 +1585,11 @@ void AxisDock::axisStartChanged(double value) {
 	ui.dateTimeEditStart->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 
 	// determine stepsize and number of decimals
-	double diff = m_axis->end() - m_axis->start();
-	int decimal = determineDecimals(diff);
-	ui.sbMajorTicksSpacingNumeric->setDecimals(decimal);
-	ui.sbMajorTicksSpacingNumeric->setSingleStep(determineStep(diff, decimal));
+	double range = m_axis->end() - m_axis->start();
+	int decimals = nsl_math_rounded_decimals(range) + 1;
+	DEBUG("range = " << range << ", decimals = " << decimals)
+	ui.sbMajorTicksSpacingNumeric->setDecimals(decimals);
+	ui.sbMajorTicksSpacingNumeric->setSingleStep(determineStep(range, decimals));
 }
 
 void AxisDock::axisEndChanged(double value) {
@@ -1592,13 +1598,13 @@ void AxisDock::axisEndChanged(double value) {
 
 	ui.leEnd->setText( QString::number(value) );
 	ui.dateTimeEditEnd->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
-	ui.sbMajorTicksSpacingNumeric->setSingleStep(floor(m_axis->end() - m_axis->start())/10);
 
 	// determine stepsize and number of decimals
-	double diff = m_axis->end() - m_axis->start();
-	int decimal = determineDecimals(diff);
-	ui.sbMajorTicksSpacingNumeric->setDecimals(decimal);
-	ui.sbMajorTicksSpacingNumeric->setSingleStep(determineStep(diff, decimal));
+	double range = m_axis->end() - m_axis->start();
+	int decimals = nsl_math_rounded_decimals(range) + 1;
+	DEBUG("range = " << range << ", decimals = " << decimals)
+	ui.sbMajorTicksSpacingNumeric->setDecimals(decimals);
+	ui.sbMajorTicksSpacingNumeric->setSingleStep(determineStep(range, decimals));
 }
 
 void AxisDock::axisZeroOffsetChanged(qreal value) {
@@ -1976,25 +1982,6 @@ void AxisDock::load() {
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, ui.kcbMinorTicksColor->color());
 	GuiTools::updatePenStyles(ui.cbMajorGridStyle, ui.kcbMajorGridColor->color());
 	GuiTools::updatePenStyles(ui.cbMinorGridStyle, ui.kcbMinorGridColor->color());
-}
-
-/*!
- * Determine the number of decimals for using in a QDoubleSpinBox
- * \param diff
- * \return two relevant digits
- */
-int AxisDock::determineDecimals(double diff) {
-	diff /= 10.; // step one decimal before
-	double power10 = 1.;
-	for (int i = 0; i < 10; i++) {
-		double nearest = round(fabs(diff) * power10) / power10;
-		if (nearest > 0)
-			return i+1;
-
-		power10 *= 10.;
-	}
-
-	return 10;
 }
 
 /*!
