@@ -174,12 +174,6 @@ private:
 	QAction* action_mask_values;
 	QAction* action_join_columns;
 	QActionGroup* normalizeColumnActionGroup;
-	QAction* action_normalize_column_1;
-	QAction* action_normalize_column_2;
-	QAction* action_normalize_column_3;
-	QAction* action_normalize_column_4;
-	QAction* action_normalize_column_5;
-	QAction* action_normalize_column_6;
 	QAction* action_normalize_selection;
 	QAction* action_sort_columns;
 	QAction* action_sort_asc_column;
