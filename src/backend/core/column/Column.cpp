@@ -44,6 +44,7 @@
 
 extern "C" {
 #include <gsl/gsl_sort.h>
+#include <gsl/gsl_statistics.h>
 }
 
 #include <array>
@@ -797,10 +798,13 @@ void Column::calculateStatistics() const {
 	double sumForCentralMoment_r3 = 0.0;
 	double sumForCentralMoment_r4 = 0.0;
 
-	//sort the data to calculate the median
+	//sort the data to calculate the percentiles
 	gsl_sort(rowData.data(), 1, notNanCount);
-	statistics.median = (notNanCount%2) ? rowData.at((int)((notNanCount-1)/2)) :
-	                    (rowData.at((int)((notNanCount-1)/2)) + rowData.at((int)(notNanCount/2)))/2.0;
+// 	statistics.median = (notNanCount%2) ? rowData.at((int)((notNanCount-1)/2)) :
+// 	                    (rowData.at((int)((notNanCount-1)/2)) + rowData.at((int)(notNanCount/2)))/2.0;
+	statistics.firstQuartile = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.25);
+	statistics.median = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.50);
+	statistics.thirdQuartile = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.75);
 
 	QVector<double> absoluteMedianList;
 	absoluteMedianList.reserve((int)notNanCount);

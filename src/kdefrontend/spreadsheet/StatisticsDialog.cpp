@@ -109,11 +109,23 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) : QDia
 	                     "<b></td>"
 	                     "<td>%6</td>"
 	                     "</tr>"
-	                     "<tr>"
+						 "<tr>"
+	                     "<td><b>"
+	                     + i18n("First Quartile")+
+	                     "<b></td>"
+	                     "<td>%7</td>"
+	                     "</tr>"
+						 "<tr>"
 	                     "<td><b>"
 	                     + i18n("Median")+
 	                     "<b></td>"
-	                     "<td>%7</td>"
+	                     "<td>%8</td>"
+	                     "</tr>"
+	                     "<tr>"
+	                     "<td><b>"
+	                     + i18n("Third Quartile")+
+	                     "<b></td>"
+	                     "<td>%9</td>"
 	                     "</tr>"
 	                     "<tr></tr>"
 	                     "<tr>"
@@ -126,31 +138,31 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) : QDia
 	                     "<td><b>"
 	                     + i18n("Variance")+
 	                     "<b></td>"
-	                     "<td>%8</td>"
+	                     "<td>%10</td>"
 	                     "</tr>"
 	                     "<tr>"
 	                     "<td><b>"
 	                     + i18n("Standard deviation")+
 	                     "<b></td>"
-	                     "<td>%9</td>"
+	                     "<td>%11</td>"
 	                     "</tr>"
 	                     "<tr>"
 	                     "<td><b>"
 	                     + i18n("Mean absolute deviation around mean")+
 	                     "<b></td>"
-	                     "<td>%10</td>"
+	                     "<td>%12</td>"
 	                     "</tr>"
 	                     "<tr>"
 	                     "<td><b>"
 	                     + i18n("Mean absolute deviation around median")+
 	                     "<b></td>"
-	                     "<td>%11</td>"
+	                     "<td>%13</td>"
 	                     "</tr>"
 	                     "<tr>"
 	                     "<td><b>"
 	                     + i18n("Median absolute deviation")+
 	                     "<b></td>"
-	                     "<td>%12</td>"
+	                     "<td>%14</td>"
 	                     "</tr>"
 	                     "<tr></tr>"
 	                     "<tr>"
@@ -163,19 +175,19 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) : QDia
 	                     "<td><b>"
 	                     + i18n("Skewness")+
 	                     "<b></td>"
-	                     "<td>%13</td>"
+	                     "<td>%15</td>"
 	                     "</tr>"
 	                     "<tr>"
 	                     "<td><b>"
 	                     + i18n("Kurtosis")+
 	                     "<b></td>"
-	                     "<td>%14</td>"
+	                     "<td>%16</td>"
 	                     "</tr>"
 	                     "<tr>"
 	                     "<td><b>"
 	                     + i18n("Entropy")+
 	                     "<b></td>"
-	                     "<td>%15</td>"
+	                     "<td>%17</td>"
 	                     "</tr>"
 	                     "</table>");
 
@@ -221,18 +233,20 @@ void StatisticsDialog::currentTabChanged(int index) {
 
 	auto* const textEdit = static_cast<QTextEdit*>(m_twStatistics->currentWidget());
 	textEdit->setHtml(m_htmlText.arg(isNanValue(statistics.minimum == INFINITY ? NAN : statistics.minimum),
-	                                 isNanValue(statistics.maximum == -INFINITY ? NAN : statistics.maximum),
-	                                 isNanValue(statistics.arithmeticMean),
-	                                 isNanValue(statistics.geometricMean),
-	                                 isNanValue(statistics.harmonicMean),
-	                                 isNanValue(statistics.contraharmonicMean),
-	                                 isNanValue(statistics.median),
-	                                 isNanValue(statistics.variance),
-	                                 isNanValue(statistics.standardDeviation)).
-	                  arg(isNanValue(statistics.meanDeviation),
-	                      isNanValue(statistics.meanDeviationAroundMedian),
-	                      isNanValue(statistics.medianDeviation),
-	                      isNanValue(statistics.skewness),
-	                      isNanValue(statistics.kurtosis),
-	                      isNanValue(statistics.entropy)));
+									isNanValue(statistics.maximum == -INFINITY ? NAN : statistics.maximum),
+									isNanValue(statistics.arithmeticMean),
+									isNanValue(statistics.geometricMean),
+									isNanValue(statistics.harmonicMean),
+									isNanValue(statistics.contraharmonicMean),
+									isNanValue(statistics.firstQuartile),
+									isNanValue(statistics.median),
+									isNanValue(statistics.thirdQuartile),
+									isNanValue(statistics.variance),
+									isNanValue(statistics.standardDeviation)).
+						arg(isNanValue(statistics.meanDeviation),
+							isNanValue(statistics.meanDeviationAroundMedian),
+							isNanValue(statistics.medianDeviation),
+							isNanValue(statistics.skewness),
+							isNanValue(statistics.kurtosis),
+							isNanValue(statistics.entropy)));
 }

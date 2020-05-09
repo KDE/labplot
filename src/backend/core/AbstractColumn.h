@@ -107,7 +107,9 @@ public:
 			geometricMean = NAN;
 			harmonicMean = NAN;
 			contraharmonicMean = NAN;
+			firstQuartile = NAN;
 			median = NAN;
+			thirdQuartile = NAN;
 			variance = NAN;
 			standardDeviation = NAN;
 			meanDeviation = NAN;
@@ -123,7 +125,9 @@ public:
 		double geometricMean;
 		double harmonicMean;
 		double contraharmonicMean;
+		double firstQuartile;
 		double median;
+		double thirdQuartile;
 		double variance;
 		double standardDeviation;
 		double meanDeviation; // mean absolute deviation around mean

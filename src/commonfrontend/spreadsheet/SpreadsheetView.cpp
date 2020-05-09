@@ -86,8 +86,11 @@
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
 
-enum NormalizationMethod {DivideByMin, DivideByMax, DivideByMean, DivideByMedian, DivideBySD, DivideBySum,
-							ZScoreSD, ZScoreMAD, ZScoreIQR};
+enum NormalizationMethod {DivideBySum, DivideByMin, DivideByMax, DivideByCount,
+						DivideByMean, DivideByMedian, DivideByRange,
+						DivideBySD, DivideByMAD, DivideByIQR,
+						ZScoreSD, ZScoreMAD, ZScoreIQR,
+						Rescale};
 /*!
 	\class SpreadsheetView
 	\brief View class for Spreadsheet
@@ -281,24 +284,47 @@ void SpreadsheetView::initActions() {
 // 	action_join_columns = new QAction(QIcon::fromTheme(QString()), i18n("Join"), this);
 
 	normalizeColumnActionGroup = new QActionGroup(this);
-	QAction* normalizeAction = new QAction(i18n("Divide by Min"), normalizeColumnActionGroup);
+	QAction* normalizeAction = new QAction(i18n("Divide by Sum"), normalizeColumnActionGroup);
+	normalizeAction->setData(DivideBySum);
+
+	normalizeAction = new QAction(i18n("Divide by Min"), normalizeColumnActionGroup);
 	normalizeAction->setData(DivideByMin);
+
 	normalizeAction = new QAction(i18n("Divide by Max"), normalizeColumnActionGroup);
 	normalizeAction->setData(DivideByMax);
+
+	normalizeAction = new QAction(i18n("Divide by Count"), normalizeColumnActionGroup);
+	normalizeAction->setData(DivideByCount);
+
 	normalizeAction = new QAction(i18n("Divide by Mean"), normalizeColumnActionGroup);
 	normalizeAction->setData(DivideByMean);
+
 	normalizeAction = new QAction(i18n("Divide by Median"), normalizeColumnActionGroup);
 	normalizeAction->setData(DivideByMedian);
+
+	normalizeAction = new QAction(i18n("Divide by Range"), normalizeColumnActionGroup);
+	normalizeAction->setData(DivideByRange);
+
 	normalizeAction = new QAction(i18n("Divide by SD"), normalizeColumnActionGroup);
 	normalizeAction->setData(DivideBySD);
-	normalizeAction = new QAction(i18n("Divide by Sum"), normalizeColumnActionGroup);
-	normalizeAction->setData(DivideBySum);
+
+	normalizeAction = new QAction(i18n("Divide by MAD"), normalizeColumnActionGroup);
+	normalizeAction->setData(DivideByMAD);
+
+	normalizeAction = new QAction(i18n("Divide by IQR"), normalizeColumnActionGroup);
+	normalizeAction->setData(DivideByIQR);
+
 	normalizeAction = new QAction(QLatin1String("(x-Mean)/SD"), normalizeColumnActionGroup);
 	normalizeAction->setData(ZScoreSD);
+
 	normalizeAction = new QAction(QLatin1String("(x-Median)/MAD"), normalizeColumnActionGroup);
 	normalizeAction->setData(ZScoreMAD);
-// 	normalizeAction = new QAction(QLatin1String("(x-Median)/IQR"), normalizeColumnActionGroup);
-// 	normalizeAction->setData(ZScoreIQR);
+
+	normalizeAction = new QAction(QLatin1String("(x-Median)/IQR"), normalizeColumnActionGroup);
+	normalizeAction->setData(ZScoreIQR);
+
+	normalizeAction = new QAction(QLatin1String("Rescale to [a, b]"), normalizeColumnActionGroup);
+	normalizeAction->setData(Rescale);
 
 	action_normalize_selection = new QAction(QIcon::fromTheme(QString()), i18n("&Normalize Selection"), this);
 
@@ -497,16 +523,43 @@ void SpreadsheetView::initMenus() {
 		m_columnManipulateDataMenu->addSeparator();
 		// 	m_columnManipulateDataMenu->addAction(action_join_columns);
 
+		//normalization menu with the following structure
+		//Divide by Sum
+		//Divide by Min
+		//Divide by Max
+		//Divide by Count
+		//--------------
+		//Divide by Mean
+		//Divide by Median
+		//Divide by Range
+		//Divide by SD
+		//Divide by MAD
+		//Divide by IQR
+		//--------------
+		//(x-Mean)/SD
+		//(x-Median)/MAD
+		//(x-Median)/IQR
+		//--------------
+		//Rescale to [a, b]
+
 		m_columnNormalizeMenu = new QMenu(i18n("Normalize"), this);
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(0));
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(1));
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(2));
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(3));
+		m_columnNormalizeMenu->addSeparator();
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(4));
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(5));
-		m_columnNormalizeMenu->addSeparator();
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(6));
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(7));
+		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(8));
+		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(9));
+		m_columnNormalizeMenu->addSeparator();
+		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(10));
+		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(11));
+		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(12));
+		m_columnNormalizeMenu->addSeparator();
+		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(13));
 		m_columnManipulateDataMenu->addMenu(m_columnNormalizeMenu);
 
 		m_columnMenu->addMenu(m_columnManipulateDataMenu);
@@ -2177,6 +2230,17 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 		QVector<double> new_data(col->rowCount());
 
 		switch (method) {
+		case DivideBySum: {
+			double sum = std::accumulate(data->begin(), data->end(), 0);
+			if (sum != 0.0) {
+				for (int i = 0; i < col->rowCount(); ++i)
+					new_data[i] = data->operator[](i) / sum;
+			} else {
+				messages << message.arg(col->name()).arg(QLatin1String("Sum = 0"));
+				continue;
+			}
+			break;
+		}
 		case DivideByMin: {
 			double min = col->minimum();
 			if (min != 0.0) {
@@ -2195,6 +2259,17 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 					new_data[i] = data->operator[](i) / max;
 			} else {
 				messages << message.arg(col->name()).arg(QLatin1String("Max = 0"));
+				continue;
+			}
+			break;
+		}
+		case DivideByCount: {
+			int count = data->size();
+			if (count != 0.0) {
+				for (int i = 0; i < col->rowCount(); ++i)
+					new_data[i] = data->operator[](i) / count;
+			} else {
+				messages << message.arg(col->name()).arg(QLatin1String("Count = 0"));
 				continue;
 			}
 			break;
@@ -2221,6 +2296,17 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 			}
 			break;
 		}
+		case DivideByRange: {
+			double range = col->statistics().maximum - col->statistics().minimum;
+			if (range != 0.0) {
+				for (int i = 0; i < col->rowCount(); ++i)
+					new_data[i] = data->operator[](i) / range;
+			} else {
+				messages << message.arg(col->name()).arg(QLatin1String("Range = 0"));
+				continue;
+			}
+			break;
+		}
 		case DivideBySD: {
 			double std = col->statistics().standardDeviation;
 			if (std != 0.0) {
@@ -2232,13 +2318,24 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 			}
 			break;
 		}
-		case DivideBySum: {
-			double sum = std::accumulate(data->begin(), data->end(), 0);
-			if (sum != 0.0) {
+		case DivideByMAD: {
+			double mad = col->statistics().medianDeviation;
+			if (mad != 0.0) {
 				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / sum;
+					new_data[i] = data->operator[](i) / mad;
 			} else {
-				messages << message.arg(col->name()).arg(QLatin1String("Sum = 0"));
+				messages << message.arg(col->name()).arg(QLatin1String("MAD = 0"));
+				continue;
+			}
+			break;
+		}
+		case DivideByIQR: {
+			double iqr = col->statistics().thirdQuartile - col->statistics().firstQuartile;
+			if (iqr != 0.0) {
+				for (int i = 0; i < col->rowCount(); ++i)
+					new_data[i] = data->operator[](i) / iqr;
+			} else {
+				messages << message.arg(col->name()).arg(QLatin1String("IQR = 0"));
 				continue;
 			}
 			break;
@@ -2270,6 +2367,8 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 		case ZScoreIQR: {
 			break;
 		}
+		case Rescale:
+			break;
 		}
 
 		col->replaceValues(0, new_data);
