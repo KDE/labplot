@@ -270,16 +270,16 @@ void StatisticsDialog::currentTabChanged(int index) {
 									isNanValue(statistics.harmonicMean),
 									isNanValue(statistics.contraharmonicMean),
 									modeValue(m_columns[index], statistics.mode),
-									isNanValue(statistics.firstQuartile),
-									isNanValue(statistics.median),
-									isNanValue(statistics.thirdQuartile),
-									isNanValue(statistics.iqr)).
-						arg(isNanValue(statistics.variance),
+									isNanValue(statistics.firstQuartile)).
+						arg(isNanValue(statistics.median),
+							isNanValue(statistics.thirdQuartile),
+							isNanValue(statistics.iqr),
+							isNanValue(statistics.variance),
 							isNanValue(statistics.standardDeviation),
 							isNanValue(statistics.meanDeviation),
 							isNanValue(statistics.meanDeviationAroundMedian),
 							isNanValue(statistics.medianDeviation),
-							isNanValue(statistics.skewness),
-							isNanValue(statistics.kurtosis),
+							isNanValue(statistics.skewness)).
+						arg(isNanValue(statistics.kurtosis),
 							isNanValue(statistics.entropy)));
 }
