@@ -2367,7 +2367,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 		case ZScoreIQR: {
 			double median = col->statistics().median;
 			double iqr = col->statistics().thirdQuartile - col->statistics().firstQuartile;
-			if (mad != 0.0) {
+			if (iqr != 0.0) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = (data->operator[](i) - median) / iqr;
 			} else {
@@ -2376,9 +2376,9 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 			}
 			break;
 		}
-		}
-		case Rescale:
+		case Rescale: {
 			break;
+		}
 		}
 
 		col->replaceValues(0, new_data);
