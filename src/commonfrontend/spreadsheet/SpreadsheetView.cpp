@@ -74,6 +74,7 @@
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 #include "kdefrontend/spreadsheet/AddSubtractValueDialog.h"
 #include "kdefrontend/spreadsheet/DropValuesDialog.h"
+#include "kdefrontend/spreadsheet/RescaleDialog.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
 #include "kdefrontend/spreadsheet/RandomValuesDialog.h"
 #include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
@@ -2210,13 +2211,32 @@ void SpreadsheetView::joinColumns() {
 }
 
 void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
-	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18n("%1: normalize columns", m_spreadsheet->name()));
-	QStringList messages;
-	QString message = i18n("Normalization of column <i>%1</i> was not possible because of %2.");
+	auto columns = selectedColumns();
+	if (columns.isEmpty())
+		return;
+
 	auto method = static_cast<NormalizationMethod>(action->data().toInt());
 
-	for (auto* col : selectedColumns()) {
+	double rescaleIntervalMin = 0.0;
+	double rescaleIntervalMax = 0.0;
+	if (method == Rescale) {
+		auto* dlg = new RescaleDialog(this);
+		dlg->setColumns(columns);
+		int rc = dlg->exec();
+		if (rc != QDialog::Accepted)
+			return;
+
+		rescaleIntervalMin = dlg->min();
+		rescaleIntervalMax = dlg->max();
+		delete dlg;
+	}
+
+	WAIT_CURSOR;
+	QStringList messages;
+	QString message = i18n("Normalization of the column <i>%1</i> was not possible because of %2.");
+	m_spreadsheet->beginMacro(i18n("%1: normalize columns", m_spreadsheet->name()));
+
+	for (auto* col : columns) {
 		if (col->columnMode() != AbstractColumn::Numeric
 			&& col->columnMode() != AbstractColumn::Integer
 			&& col->columnMode() != AbstractColumn::BigInt)
@@ -2377,6 +2397,15 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 			break;
 		}
 		case Rescale: {
+			double min = col->statistics().minimum;
+			double max = col->statistics().maximum;
+			if (max - min != 0.0) {
+				for (int i = 0; i < col->rowCount(); ++i)
+					new_data[i] = rescaleIntervalMin + (data->operator[](i) - min)/(max - min)*(rescaleIntervalMax - rescaleIntervalMin);
+			} else {
+				messages << message.arg(col->name()).arg(QLatin1String("Max - Min = 0"));
+				continue;
+			}
 			break;
 		}
 		}

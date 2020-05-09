@@ -83,6 +83,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/DropValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/FunctionValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/RandomValuesDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/RescaleDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/StatisticsDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
@@ -182,6 +183,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/dropvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/rescalewidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/sortdialogwidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
