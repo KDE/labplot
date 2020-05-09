@@ -240,10 +240,10 @@ void StatisticsDialog::currentTabChanged(int index) {
 									isNanValue(statistics.contraharmonicMean),
 									isNanValue(statistics.firstQuartile),
 									isNanValue(statistics.median),
-									isNanValue(statistics.thirdQuartile),
-									isNanValue(statistics.variance),
-									isNanValue(statistics.standardDeviation)).
-						arg(isNanValue(statistics.meanDeviation),
+									isNanValue(statistics.thirdQuartile)).
+						arg(isNanValue(statistics.variance),
+							isNanValue(statistics.standardDeviation),
+							isNanValue(statistics.meanDeviation),
 							isNanValue(statistics.meanDeviationAroundMedian),
 							isNanValue(statistics.medianDeviation),
 							isNanValue(statistics.skewness),
