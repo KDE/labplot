@@ -1,23 +1,29 @@
 -----2.8 -----
 	* [macOS] added support for touchbar
+	* Improved datetime data support
 	* Show the size of the members in the JSON file in the import file dialog
 	* [worksheet] In the Export Worksheet Dialog allow to export to the clipboard
 	* [worksheet] Allow to move plots, text labels and legend with arrow keys
 	* [worksheet] Image worksheet element
 	* [worksheet] Reference line on the plot
 	* [worksheet] Support for imperial units for geometry and size settings of objects
+	* [worksheet] Improve axes major and minor tick settings
 	* [spreadsheet] show infinite values as such and not as NaN
 	* [spreadsheet] support big integer (64 bit) as data type
 	* [spreadsheet] column normalization methods "divide by max", "divide by min", etc.
 	* [spreadsheet] added the size of the data set, its mode, 1st and 3rd quartiles and IQR to the column statistics
 	* Allow to open Cantor and Jupyter projects
+	* [Windows] improved craft blueprint and installer package
 
 Bug fixes:
+    BUG: 421193 - import float(4) data from hdf5
     BUG: 418390 - Ignore infinite values (created in CAS worksheets for example) in curves
     BUG: 412455 - Don't crash (sporadically) when opening the color scheme menu
     BUG: 415214 - Better algorithm to draw the error bar caps
     BUG: 413397 - Properly handle removal of columns in the spreadsheet model
     BUG: 413401 - In plot data dialog, don't add new worksheets as children to workbooks, use the proper parent aspect
+    * Fix Cantor support and unicode characters on Windows
+    * Fix evaluating fit residuals
 
 -----2.7 (24.10.2019)-----
 New features:
