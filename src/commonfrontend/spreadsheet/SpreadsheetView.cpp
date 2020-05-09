@@ -295,9 +295,9 @@ void SpreadsheetView::initActions() {
 	normalizeAction->setData(DivideBySum);
 	normalizeAction = new QAction(QLatin1String("(x-Mean)/SD"), normalizeColumnActionGroup);
 	normalizeAction->setData(ZScoreSD);
-	normalizeAction = new QAction(QLatin1String("(x-Mean)/MAD"), normalizeColumnActionGroup);
+	normalizeAction = new QAction(QLatin1String("(x-Median)/MAD"), normalizeColumnActionGroup);
 	normalizeAction->setData(ZScoreMAD);
-// 	normalizeAction = new QAction(QLatin1String("(x-Mean)/IQR"), normalizeColumnActionGroup);
+// 	normalizeAction = new QAction(QLatin1String("(x-Median)/IQR"), normalizeColumnActionGroup);
 // 	normalizeAction->setData(ZScoreIQR);
 
 	action_normalize_selection = new QAction(QIcon::fromTheme(QString()), i18n("&Normalize Selection"), this);
@@ -2164,108 +2164,115 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 	auto method = static_cast<NormalizationMethod>(action->data().toInt());
 
 	for (auto* col : selectedColumns()) {
-		if (col->columnMode() == AbstractColumn::Numeric) {
-			auto* data = static_cast<QVector<double>* >(col->data());
-			QVector<double> new_data(col->rowCount());
+		if (col->columnMode() != AbstractColumn::Numeric
+			&& col->columnMode() != AbstractColumn::Integer
+			&& col->columnMode() != AbstractColumn::BigInt)
+			continue;
 
-			switch (method) {
-			case DivideByMin: {
-				double min = col->minimum();
-				if (min != 0.0) {
-					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / min;
-				} else {
-					messages << message.arg(col->name()).arg(QLatin1String("Min = 0"));
-					continue;
-				}
-				break;
-			}
-			case DivideByMax: {
-				double max = col->maximum();
-				if (max != 0.0) {
-					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / max;
-				} else {
-					messages << message.arg(col->name()).arg(QLatin1String("Max = 0"));
-					continue;
-				}
-				break;
-			}
-			case DivideByMean: {
-				double mean = col->statistics().arithmeticMean;
-				if (mean != 0.0) {
-					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / mean;
-				} else {
-					messages << message.arg(col->name()).arg(QLatin1String("Mean = 0"));
-					continue;
-				}
-				break;
-			}
-			case DivideByMedian: {
-				double median = col->statistics().median;
-				if (median != 0.0) {
-					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / median;
-				} else {
-					messages << message.arg(col->name()).arg(QLatin1String("Median = 0"));
-					continue;
-				}
-				break;
-			}
-			case DivideBySD: {
-				double std = col->statistics().standardDeviation;
-				if (std != 0.0) {
-					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / std;
-				} else {
-					messages << message.arg(col->name()).arg(QLatin1String("SD = 0"));
-					continue;
-				}
-				break;
-			}
-			case DivideBySum: {
-				double sum = std::accumulate(data->begin(), data->end(), 0);
-				if (sum != 0.0) {
-					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = data->operator[](i) / sum;
-				} else {
-					messages << message.arg(col->name()).arg(QLatin1String("Sum = 0"));
-					continue;
-				}
-				break;
-			}
-			case ZScoreSD: {
-				double mean = col->statistics().arithmeticMean;
-				double std = col->statistics().standardDeviation;
-				if (std != 0.0) {
-					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = (data->operator[](i) - mean) / std;
-				} else {
-					messages << message.arg(col->name()).arg(QLatin1String("SD = 0"));
-					continue;
-				}
-				break;
-			}
-			case ZScoreMAD: {
-				double mean = col->statistics().arithmeticMean;
-				double mad = col->statistics().medianDeviation;
-				if (mad != 0.0) {
-					for (int i = 0; i < col->rowCount(); ++i)
-						new_data[i] = (data->operator[](i) - mean) / mad;
-				} else {
-					messages << message.arg(col->name()).arg(QLatin1String("MAD = 0"));
-					continue;
-				}
-				break;
-			}
-			case ZScoreIQR: {
-				break;
-			}
-			}
+		if (col->columnMode() == AbstractColumn::Integer
+			|| col->columnMode() == AbstractColumn::BigInt)
+			col->setColumnMode(AbstractColumn::Numeric);
 
-			col->replaceValues(0, new_data);
+		auto* data = static_cast<QVector<double>* >(col->data());
+		QVector<double> new_data(col->rowCount());
+
+		switch (method) {
+		case DivideByMin: {
+			double min = col->minimum();
+			if (min != 0.0) {
+				for (int i = 0; i < col->rowCount(); ++i)
+					new_data[i] = data->operator[](i) / min;
+			} else {
+				messages << message.arg(col->name()).arg(QLatin1String("Min = 0"));
+				continue;
+			}
+			break;
 		}
+		case DivideByMax: {
+			double max = col->maximum();
+			if (max != 0.0) {
+				for (int i = 0; i < col->rowCount(); ++i)
+					new_data[i] = data->operator[](i) / max;
+			} else {
+				messages << message.arg(col->name()).arg(QLatin1String("Max = 0"));
+				continue;
+			}
+			break;
+		}
+		case DivideByMean: {
+			double mean = col->statistics().arithmeticMean;
+			if (mean != 0.0) {
+				for (int i = 0; i < col->rowCount(); ++i)
+					new_data[i] = data->operator[](i) / mean;
+			} else {
+				messages << message.arg(col->name()).arg(QLatin1String("Mean = 0"));
+				continue;
+			}
+			break;
+		}
+		case DivideByMedian: {
+			double median = col->statistics().median;
+			if (median != 0.0) {
+				for (int i = 0; i < col->rowCount(); ++i)
+					new_data[i] = data->operator[](i) / median;
+			} else {
+				messages << message.arg(col->name()).arg(QLatin1String("Median = 0"));
+				continue;
+			}
+			break;
+		}
+		case DivideBySD: {
+			double std = col->statistics().standardDeviation;
+			if (std != 0.0) {
+				for (int i = 0; i < col->rowCount(); ++i)
+					new_data[i] = data->operator[](i) / std;
+			} else {
+				messages << message.arg(col->name()).arg(QLatin1String("SD = 0"));
+				continue;
+			}
+			break;
+		}
+		case DivideBySum: {
+			double sum = std::accumulate(data->begin(), data->end(), 0);
+			if (sum != 0.0) {
+				for (int i = 0; i < col->rowCount(); ++i)
+					new_data[i] = data->operator[](i) / sum;
+			} else {
+				messages << message.arg(col->name()).arg(QLatin1String("Sum = 0"));
+				continue;
+			}
+			break;
+		}
+		case ZScoreSD: {
+			double mean = col->statistics().arithmeticMean;
+			double std = col->statistics().standardDeviation;
+			if (std != 0.0) {
+				for (int i = 0; i < col->rowCount(); ++i)
+					new_data[i] = (data->operator[](i) - mean) / std;
+			} else {
+				messages << message.arg(col->name()).arg(QLatin1String("SD = 0"));
+				continue;
+			}
+			break;
+		}
+		case ZScoreMAD: {
+			double median = col->statistics().median;
+			double mad = col->statistics().medianDeviation;
+			if (mad != 0.0) {
+				for (int i = 0; i < col->rowCount(); ++i)
+					new_data[i] = (data->operator[](i) - median) / mad;
+			} else {
+				messages << message.arg(col->name()).arg(QLatin1String("MAD = 0"));
+				continue;
+			}
+			break;
+		}
+		case ZScoreIQR: {
+			break;
+		}
+		}
+
+		col->replaceValues(0, new_data);
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
