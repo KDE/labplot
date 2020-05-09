@@ -1621,38 +1621,37 @@ void AxisPrivate::retransformTickLabelPositions() {
 			}
 
 			// for rotated labels (angle is not zero), align label's corner at the position of the tick
-			// TODO: simplify
-			if (abs(labelsRotationAngle) > 179.999 && abs(labelsRotationAngle) < 180.009) { // +-180°
+			if (fabs(fabs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
 				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() + width/2);
-					pos.setY( endPoint.y() + labelsOffset );
+					pos.setX(endPoint.x() + width/2);
+					pos.setY(endPoint.y() + labelsOffset );
 				} else {
-					pos.setX( startPoint.x() + width/2);
-					pos.setY( startPoint.y() - height + labelsOffset );
+					pos.setX(startPoint.x() + width/2);
+					pos.setY(startPoint.y() - height + labelsOffset );
 				}
 			} else if (labelsRotationAngle <= -0.01) { // [-0.01°, -180°)
 				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() + sine * height/2);
-					pos.setY( endPoint.y() + labelsOffset + cosine * height/2);
+					pos.setX(endPoint.x() + sine * height/2);
+					pos.setY(endPoint.y() + labelsOffset + cosine * height/2);
 				} else {
-					pos.setX( startPoint.x() + sine * height/2 - diffx);
-					pos.setY( startPoint.y() + labelsOffset + cosine * height/2 + diffy);
+					pos.setX(startPoint.x() + sine * height/2 - diffx);
+					pos.setY(startPoint.y() + labelsOffset + cosine * height/2 + diffy);
 				}
 			} else if (labelsRotationAngle >= 0.01) { // [0.01°, 180°)
 				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() - diffx + sine * height/2);
-					pos.setY( endPoint.y() + labelsOffset + diffy + cosine * height/2);
+					pos.setX(endPoint.x() - diffx + sine * height/2);
+					pos.setY(endPoint.y() + labelsOffset + diffy + cosine * height/2);
 				} else {
-					pos.setX( startPoint.x() + sine * height/2);
-					pos.setY( startPoint.y() + labelsOffset + cosine * height/2);
+					pos.setX(startPoint.x() + sine * height/2);
+					pos.setY(startPoint.y() + labelsOffset + cosine * height/2);
 				}
 			} else {	// 0°
 				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() - width/2);
-					pos.setY( endPoint.y() + height + labelsOffset );
+					pos.setX(endPoint.x() - width/2);
+					pos.setY(endPoint.y() + height + labelsOffset);
 				} else {
-					pos.setX( startPoint.x() - width/2);
-					pos.setY( startPoint.y() + labelsOffset );
+					pos.setX(startPoint.x() - width/2);
+					pos.setY(startPoint.y() + labelsOffset);
 				}
 			}
 		// ---------------------- vertical -------------------------
@@ -1665,56 +1664,55 @@ void AxisPrivate::retransformTickLabelPositions() {
 				endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? -xDirection *  majorTicksLength  : 0, 0);
 			}
 
-			//TODO: simplify
-			if (labelsRotationAngle >= 89.999 && labelsRotationAngle <= 90.009) { // +90°
+			if (fabs(labelsRotationAngle - 90.) < 1.e-2) { // +90°
 				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() - labelsOffset);
-					pos.setY( endPoint.y() + width/2 );
+					pos.setX(endPoint.x() - labelsOffset);
+					pos.setY(endPoint.y() + width/2 );
 				} else {
-					pos.setX( startPoint.x() - labelsOffset);
-					pos.setY( startPoint.y() + width/2);
+					pos.setX(startPoint.x() - labelsOffset);
+					pos.setY(startPoint.y() + width/2);
 				}
-			} else if (labelsRotationAngle >= -90.999 && labelsRotationAngle <= -89.009) { // -90°
+			} else if (fabs(labelsRotationAngle + 90.) < 1.e-2) { // -90°
 				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() - labelsOffset - height);
-					pos.setY( endPoint.y() - width/2 );
+					pos.setX(endPoint.x() - labelsOffset - height);
+					pos.setY(endPoint.y() - width/2);
 				} else {
-					pos.setX( startPoint.x() - labelsOffset);
-					pos.setY( startPoint.y() - width/2 );
+					pos.setX(startPoint.x() - labelsOffset);
+					pos.setY(startPoint.y() - width/2);
 				}
-			} else if (abs(labelsRotationAngle) > 179.999 && abs(labelsRotationAngle) < 180.009) { // +-180°
+			} else if (fabs(fabs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
 				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() - labelsOffset);
-					pos.setY( endPoint.y() - height/2);
+					pos.setX(endPoint.x() - labelsOffset);
+					pos.setY(endPoint.y() - height/2);
 				} else {
-					pos.setX( startPoint.x() - labelsOffset + width);
-					pos.setY( startPoint.y() - height/2 );
+					pos.setX(startPoint.x() - labelsOffset + width);
+					pos.setY(startPoint.y() - height/2);
 				}
-			} else if (abs(labelsRotationAngle) >= 0.01 && abs(labelsRotationAngle) < 90.01) { // [0.01°, 90°)
+			} else if (fabs(labelsRotationAngle) >= 0.01 && fabs(labelsRotationAngle) <= 89.99) { // [0.01°, 90°)
 				if (labelsPosition == Axis::LabelsOut) {
 					// left
-					pos.setX( endPoint.x() - labelsOffset - diffx + sine * height/2);
-					pos.setY( endPoint.y() + cosine * height/2 + diffy);
+					pos.setX(endPoint.x() - labelsOffset - diffx + sine * height/2);
+					pos.setY(endPoint.y() + cosine * height/2 + diffy);
 				} else {
-					pos.setX( startPoint.x() - labelsOffset + sine * height/2);
-					pos.setY( startPoint.y() + cosine * height/2);
+					pos.setX(startPoint.x() - labelsOffset + sine * height/2);
+					pos.setY(startPoint.y() + cosine * height/2);
 				}
-			} else if (abs(labelsRotationAngle) >= 90.01 && abs(labelsRotationAngle) < 180) { // [90.01, 180)
+			} else if (fabs(labelsRotationAngle) >= 90.01 && fabs(labelsRotationAngle) <= 179.99) { // [90.01, 180)
 				if (labelsPosition == Axis::LabelsOut) {
 					// left
-					pos.setX( endPoint.x() - labelsOffset + sine * height/2);
-					pos.setY( endPoint.y() + cosine * height/2);
+					pos.setX(endPoint.x() - labelsOffset + sine * height/2);
+					pos.setY(endPoint.y() + cosine * height/2);
 				} else {
-					pos.setX( startPoint.x() - labelsOffset - diffx + sine * height/2);
-					pos.setY( startPoint.y() + diffy + cosine * height/2);
+					pos.setX(startPoint.x() - labelsOffset - diffx + sine * height/2);
+					pos.setY(startPoint.y() + diffy + cosine * height/2);
 				}
 			} else { // 0°
 				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() - width - labelsOffset);
-					pos.setY( endPoint.y() + height/2 );
+					pos.setX(endPoint.x() - width - labelsOffset);
+					pos.setY(endPoint.y() + height/2);
 				} else {
-					pos.setX( startPoint.x() - labelsOffset);
-					pos.setY( startPoint.y() + height/2 );
+					pos.setX(startPoint.x() - labelsOffset);
+					pos.setY(startPoint.y() + height/2);
 				}
 			}
 		}
