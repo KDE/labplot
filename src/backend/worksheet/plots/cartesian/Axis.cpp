@@ -1239,33 +1239,28 @@ void AxisPrivate::retransformTicks() {
 		if (majorTicksType != Axis::TicksCustomColumn) {
 			switch (scale) {
 				case Axis::ScaleLinear:
-					majorTickPos = start + majorTicksIncrement*iMajor;
-					nextMajorTickPos = start + majorTicksIncrement*(iMajor+1);
+					majorTickPos = start + majorTicksIncrement * iMajor;
+					nextMajorTickPos = majorTickPos + majorTicksIncrement;
 					break;
 				case Axis::ScaleLog10:
-					//TODO: simplify
-					majorTickPos = pow(10, log10(start) + majorTicksIncrement*iMajor);
-					nextMajorTickPos = pow(10, log10(start) + majorTicksIncrement*(iMajor+1));
+					majorTickPos = start * pow(10, majorTicksIncrement*iMajor);
+					nextMajorTickPos = majorTickPos * pow(10, majorTicksIncrement);
 					break;
 				case Axis::ScaleLog2:
-					//TODO: simplify
-					majorTickPos = pow(2, log(start)/log(2) + majorTicksIncrement*iMajor);
-					nextMajorTickPos = pow(2, log(start)/log(2) + majorTicksIncrement*(iMajor+1));
+					majorTickPos = start * pow(2, majorTicksIncrement*iMajor);
+					nextMajorTickPos = majorTickPos * pow(2, majorTicksIncrement);
 					break;
 				case Axis::ScaleLn:
-					//TODO: simplify
-					majorTickPos = exp(log(start) + majorTicksIncrement*iMajor);
-					nextMajorTickPos = exp(log(start) + majorTicksIncrement*(iMajor+1));
+					majorTickPos = start * exp(majorTicksIncrement*iMajor);
+					nextMajorTickPos = majorTickPos * exp(majorTicksIncrement);
 					break;
 				case Axis::ScaleSqrt:
-					//TODO: simplify
 					majorTickPos = pow(sqrt(start) + majorTicksIncrement*iMajor, 2);
 					nextMajorTickPos = pow(sqrt(start) + majorTicksIncrement*(iMajor+1), 2);
 					break;
 				case Axis::ScaleX2:
-					//TODO: simplify
-					majorTickPos = sqrt(sqrt(start) + majorTicksIncrement*iMajor);
-					nextMajorTickPos = sqrt(sqrt(start) + majorTicksIncrement*(iMajor+1));
+					majorTickPos = sqrt(start*start + majorTicksIncrement*iMajor);
+					nextMajorTickPos = sqrt(start*start + majorTicksIncrement*(iMajor+1));
 					break;
 			}
 		} else {	// custom column
@@ -1276,9 +1271,8 @@ void AxisPrivate::retransformTicks() {
 			if (iMajor < tmpMajorTicksNumber - 1) {
 				if (majorTicksColumn->isValid(iMajor+1) && !majorTicksColumn->isMasked(iMajor+1))
 					nextMajorTickPos = majorTicksColumn->valueAt(iMajor+1);
-			} else	// last tick
+			} else	// last major tick
 				tmpMinorTicksNumber = 0;
-
 		}
 
 		//calculate start and end points for major tick's line
