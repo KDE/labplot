@@ -522,7 +522,7 @@ QStringList HDF5FilterPrivate::readHDF5Data1D(hid_t dataset, hid_t type, int row
 	DEBUG("	dataContainer = " << dataContainer);
 	for (int i = startRow - 1; i < qMin(endRow, lines + startRow - 1); ++i) {
 		if (dataContainer)	// read to data source
-			static_cast<QVector<T>*>(dataContainer)->operator[](i-startRow+1) = data[i];
+			static_cast<QVector<double>*>(dataContainer)->operator[](i-startRow+1) = data[i];
 		else				// for preview
 			dataString << QString::number(static_cast<double>(data[i]));
 	}
@@ -1651,8 +1651,6 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 						dataString = (QStringList() << i18n("unsupported integer type for rank 1"));
 						QDEBUG(dataString);
 					}
-
-
 					break;
 				}
 			case H5T_FLOAT: {
