@@ -1232,7 +1232,9 @@ void AxisPrivate::retransformTicks() {
 	const double middleY = plot->yMin() + (plot->yMax() - plot->yMin())/2;
 	bool valid;
 
+	DEBUG("tmpMajorTicksNumber = " << tmpMajorTicksNumber)
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
+		DEBUG("major tick " << iMajor)
 		//calculate major tick's position
 		if (majorTicksType != Axis::TicksCustomColumn) {
 			switch (scale) {
@@ -1241,34 +1243,46 @@ void AxisPrivate::retransformTicks() {
 					nextMajorTickPos = start + majorTicksIncrement*(iMajor+1);
 					break;
 				case Axis::ScaleLog10:
+					//TODO: simplify
 					majorTickPos = pow(10, log10(start) + majorTicksIncrement*iMajor);
 					nextMajorTickPos = pow(10, log10(start) + majorTicksIncrement*(iMajor+1));
 					break;
 				case Axis::ScaleLog2:
+					//TODO: simplify
 					majorTickPos = pow(2, log(start)/log(2) + majorTicksIncrement*iMajor);
 					nextMajorTickPos = pow(2, log(start)/log(2) + majorTicksIncrement*(iMajor+1));
 					break;
 				case Axis::ScaleLn:
+					//TODO: simplify
 					majorTickPos = exp(log(start) + majorTicksIncrement*iMajor);
 					nextMajorTickPos = exp(log(start) + majorTicksIncrement*(iMajor+1));
 					break;
 				case Axis::ScaleSqrt:
+					//TODO: simplify
 					majorTickPos = pow(sqrt(start) + majorTicksIncrement*iMajor, 2);
 					nextMajorTickPos = pow(sqrt(start) + majorTicksIncrement*(iMajor+1), 2);
 					break;
 				case Axis::ScaleX2:
+					//TODO: simplify
 					majorTickPos = sqrt(sqrt(start) + majorTicksIncrement*iMajor);
 					nextMajorTickPos = sqrt(sqrt(start) + majorTicksIncrement*(iMajor+1));
 					break;
 			}
-		} else {
+		} else {	// custom column
 			if (!majorTicksColumn->isValid(iMajor) || majorTicksColumn->isMasked(iMajor))
 				continue;
 			majorTickPos = majorTicksColumn->valueAt(iMajor);
+			// set next major tick pos for minor ticks
+			if (iMajor < tmpMajorTicksNumber - 1) {
+				if (majorTicksColumn->isValid(iMajor+1) && !majorTicksColumn->isMasked(iMajor+1))
+					nextMajorTickPos = majorTicksColumn->valueAt(iMajor+1);
+			} else	// last tick
+				tmpMinorTicksNumber = 0;
+
 		}
 
 		//calculate start and end points for major tick's line
-		if (majorTicksDirection != Axis::noTicks ) {
+		if (majorTicksDirection != Axis::noTicks) {
 			if (orientation == Axis::AxisHorizontal) {
 				anchorPoint.setX(majorTickPos);
 				anchorPoint.setY(offset);
@@ -1314,16 +1328,18 @@ void AxisPrivate::retransformTicks() {
 		}
 
 		//minor ticks
-		if ((Axis::noTicks != minorTicksDirection) && (tmpMajorTicksNumber > 1) && (tmpMinorTicksNumber > 0) && (iMajor < tmpMajorTicksNumber-1)) {
+		DEBUG("	tmpMinorTicksNumber = " << tmpMinorTicksNumber)
+		if (Axis::noTicks != minorTicksDirection && tmpMajorTicksNumber > 1 && tmpMinorTicksNumber > 0 && iMajor < tmpMajorTicksNumber - 1 && nextMajorTickPos != majorTickPos) {
 			//minor ticks are placed at equidistant positions independent of the selected scaling for the major ticks positions
 			double minorTicksIncrement = (nextMajorTickPos - majorTickPos)/(tmpMinorTicksNumber + 1);
-			DEBUG("minorTicksIncrement = " << minorTicksIncrement)
-			DEBUG("tmpMinorTicksNumber = " << tmpMinorTicksNumber)
+			//DEBUG("	nextMajorTickPos = " << nextMajorTickPos)
+			//DEBUG("	majorTickPos = " << majorTickPos)
+			//DEBUG("	minorTicksIncrement = " << minorTicksIncrement)
 
 			for (int iMinor = 0; iMinor < tmpMinorTicksNumber; iMinor++) {
 				//calculate minor tick's position
 				if (minorTicksType != Axis::TicksCustomColumn) {
-					minorTickPos = majorTickPos + (iMinor+1)*minorTicksIncrement;
+					minorTickPos = majorTickPos + (iMinor + 1) * minorTicksIncrement;
 				} else {
 					if (!minorTicksColumn->isValid(iMinor) || minorTicksColumn->isMasked(iMinor))
 						continue;
@@ -1334,7 +1350,7 @@ void AxisPrivate::retransformTicks() {
 					if (iMajor > 0)
 						break;
 				}
-				DEBUG("minorTickPos = " << minorTickPos)
+				//DEBUG("		minorTickPos = " << minorTickPos)
 
 				//calculate start and end points for minor tick's line
 				if (orientation == Axis::AxisHorizontal) {
