@@ -1232,9 +1232,9 @@ void AxisPrivate::retransformTicks() {
 	const double middleY = plot->yMin() + (plot->yMax() - plot->yMin())/2;
 	bool valid;
 
-	DEBUG("tmpMajorTicksNumber = " << tmpMajorTicksNumber)
+	//DEBUG("tmpMajorTicksNumber = " << tmpMajorTicksNumber)
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
-		DEBUG("major tick " << iMajor)
+		//DEBUG("major tick " << iMajor)
 		//calculate major tick's position
 		if (majorTicksType != Axis::TicksCustomColumn) {
 			switch (scale) {
@@ -1322,7 +1322,7 @@ void AxisPrivate::retransformTicks() {
 		}
 
 		//minor ticks
-		DEBUG("	tmpMinorTicksNumber = " << tmpMinorTicksNumber)
+		//DEBUG("	tmpMinorTicksNumber = " << tmpMinorTicksNumber)
 		if (Axis::noTicks != minorTicksDirection && tmpMajorTicksNumber > 1 && tmpMinorTicksNumber > 0 && iMajor < tmpMajorTicksNumber - 1 && nextMajorTickPos != majorTickPos) {
 			//minor ticks are placed at equidistant positions independent of the selected scaling for the major ticks positions
 			double minorTicksIncrement = (nextMajorTickPos - majorTickPos)/(tmpMinorTicksNumber + 1);
@@ -1590,8 +1590,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 
 	QTextDocument td;
 	td.setDefaultFont(labelsFont);
-	double cosinus = cos(labelsRotationAngle * M_PI / 180); // calculate only one time
-	double sinus = sin(labelsRotationAngle * M_PI / 180); // calculate only one time
+	double cosine = cos(labelsRotationAngle * M_PI / 180.); // calculate only one time
+	double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	for ( int i = 0; i < majorTickPoints.size(); i++ ) {
 		if ((orientation == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric) ||
 				(orientation == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric)) {
@@ -1606,8 +1606,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 			width = fm.boundingRect(tickLabelStrings.at(i)).width();
 		}
 
-		double diffx = cosinus * width;
-		double diffy = sinus * width;
+		double diffx = cosine * width;
+		double diffy = sine * width;
 		anchorPoint = majorTickPoints.at(i);
 
 		//center align all labels with respect to the end point of the tick line
@@ -1621,6 +1621,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 			}
 
 			// for rotated labels (angle is not zero), align label's corner at the position of the tick
+			// TODO: simplify
 			if (abs(labelsRotationAngle) > 179.999 && abs(labelsRotationAngle) < 180.009) { // +-180°
 				if (labelsPosition == Axis::LabelsOut) {
 					pos.setX( endPoint.x() + width/2);
@@ -1631,19 +1632,19 @@ void AxisPrivate::retransformTickLabelPositions() {
 				}
 			} else if (labelsRotationAngle <= -0.01) { // [-0.01°, -180°)
 				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() + sinus * height/2);
-					pos.setY( endPoint.y() + labelsOffset + cosinus * height/2);
+					pos.setX( endPoint.x() + sine * height/2);
+					pos.setY( endPoint.y() + labelsOffset + cosine * height/2);
 				} else {
-					pos.setX( startPoint.x() + sinus * height/2 - diffx);
-					pos.setY( startPoint.y() + labelsOffset + cosinus * height/2 + diffy);
+					pos.setX( startPoint.x() + sine * height/2 - diffx);
+					pos.setY( startPoint.y() + labelsOffset + cosine * height/2 + diffy);
 				}
 			} else if (labelsRotationAngle >= 0.01) { // [0.01°, 180°)
 				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() - diffx + sinus * height/2);
-					pos.setY( endPoint.y() + labelsOffset + diffy + cosinus * height/2);
+					pos.setX( endPoint.x() - diffx + sine * height/2);
+					pos.setY( endPoint.y() + labelsOffset + diffy + cosine * height/2);
 				} else {
-					pos.setX( startPoint.x() + sinus * height/2);
-					pos.setY( startPoint.y() + labelsOffset + cosinus * height/2);
+					pos.setX( startPoint.x() + sine * height/2);
+					pos.setY( startPoint.y() + labelsOffset + cosine * height/2);
 				}
 			} else {	// 0°
 				if (labelsPosition == Axis::LabelsOut) {
@@ -1664,6 +1665,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 				endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? -xDirection *  majorTicksLength  : 0, 0);
 			}
 
+			//TODO: simplify
 			if (labelsRotationAngle >= 89.999 && labelsRotationAngle <= 90.009) { // +90°
 				if (labelsPosition == Axis::LabelsOut) {
 					pos.setX( endPoint.x() - labelsOffset);
@@ -1691,20 +1693,20 @@ void AxisPrivate::retransformTickLabelPositions() {
 			} else if (abs(labelsRotationAngle) >= 0.01 && abs(labelsRotationAngle) < 90.01) { // [0.01°, 90°)
 				if (labelsPosition == Axis::LabelsOut) {
 					// left
-					pos.setX( endPoint.x() - labelsOffset - diffx + sinus * height/2);
-					pos.setY( endPoint.y() + cosinus * height/2 + diffy);
+					pos.setX( endPoint.x() - labelsOffset - diffx + sine * height/2);
+					pos.setY( endPoint.y() + cosine * height/2 + diffy);
 				} else {
-					pos.setX( startPoint.x() - labelsOffset + sinus * height/2);
-					pos.setY( startPoint.y() + cosinus * height/2);
+					pos.setX( startPoint.x() - labelsOffset + sine * height/2);
+					pos.setY( startPoint.y() + cosine * height/2);
 				}
 			} else if (abs(labelsRotationAngle) >= 90.01 && abs(labelsRotationAngle) < 180) { // [90.01, 180)
 				if (labelsPosition == Axis::LabelsOut) {
 					// left
-					pos.setX( endPoint.x() - labelsOffset + sinus * height/2);
-					pos.setY( endPoint.y() + cosinus * height/2);
+					pos.setX( endPoint.x() - labelsOffset + sine * height/2);
+					pos.setY( endPoint.y() + cosine * height/2);
 				} else {
-					pos.setX( startPoint.x() - labelsOffset - diffx + sinus * height/2);
-					pos.setY( startPoint.y() + diffy + cosinus * height/2);
+					pos.setX( startPoint.x() - labelsOffset - diffx + sine * height/2);
+					pos.setY( startPoint.y() + diffy + cosine * height/2);
 				}
 			} else { // 0°
 				if (labelsPosition == Axis::LabelsOut) {

@@ -1168,13 +1168,13 @@ void AxisDock::minorTicksSpacingChanged() {
 
 	double spacing = numeric ? ui.sbMinorTicksSpacingNumeric->value() : dtsbMinorTicksIncrement->value();
 	double range = fabs(m_axis->end() - m_axis->start());
-	DEBUG("minor spacing = " << spacing << ", range = " << range)
+	//DEBUG("minor spacing = " << spacing << ", range = " << range)
 	int numberTicks = 0;
 
 	int majorTicks = m_axis->majorTicksNumber();
 	if (spacing > 0.)
 		numberTicks = range / (majorTicks - 1) / spacing - 1; // recalc
-	DEBUG("	nticks = " << numberTicks)
+	//DEBUG("	nticks = " << numberTicks)
 
 	// set if unset or > 100.
 	if (spacing == 0. || numberTicks > 100) {
@@ -1192,9 +1192,10 @@ void AxisDock::minorTicksSpacingChanged() {
 		m_initializing = true;
 		if (numeric) {
 			int decimals = nsl_math_rounded_decimals(spacing) + 1;
-			DEBUG("decimals = " << decimals << ", step = " << determineStep(range / (majorTicks - 1), decimals))
+			DEBUG("decimals = " << decimals << ", step = " << gsl_pow_int(10., -decimals))
 			ui.sbMinorTicksSpacingNumeric->setDecimals(decimals);
-			ui.sbMinorTicksSpacingNumeric->setSingleStep(determineStep(range / (majorTicks - 1), decimals));
+			ui.sbMinorTicksSpacingNumeric->setSingleStep(gsl_pow_int(10., -decimals));
+			ui.sbMinorTicksSpacingNumeric->setMaximum(range);
 			ui.sbMinorTicksSpacingNumeric->setValue(spacing);
 		} else
 			dtsbMinorTicksIncrement->setValue(spacing);
@@ -1592,11 +1593,12 @@ void AxisDock::axisStartChanged(double value) {
 	ui.dateTimeEditStart->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 
 	// determine stepsize and number of decimals
-	double range = m_axis->end() - m_axis->start();
+	double range = fabs(m_axis->end() - m_axis->start());
 	int decimals = nsl_math_rounded_decimals(range) + 1;
 	DEBUG("range = " << range << ", decimals = " << decimals)
 	ui.sbMajorTicksSpacingNumeric->setDecimals(decimals);
-	ui.sbMajorTicksSpacingNumeric->setSingleStep(determineStep(range, decimals));
+	ui.sbMajorTicksSpacingNumeric->setSingleStep(gsl_pow_int(10., -decimals));
+	ui.sbMajorTicksSpacingNumeric->setMaximum(range);
 }
 
 void AxisDock::axisEndChanged(double value) {
@@ -1607,11 +1609,12 @@ void AxisDock::axisEndChanged(double value) {
 	ui.dateTimeEditEnd->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 
 	// determine stepsize and number of decimals
-	double range = m_axis->end() - m_axis->start();
+	double range = fabs(m_axis->end() - m_axis->start());
 	int decimals = nsl_math_rounded_decimals(range) + 1;
 	DEBUG("range = " << range << ", decimals = " << decimals)
 	ui.sbMajorTicksSpacingNumeric->setDecimals(decimals);
-	ui.sbMajorTicksSpacingNumeric->setSingleStep(determineStep(range, decimals));
+	ui.sbMajorTicksSpacingNumeric->setSingleStep(gsl_pow_int(10., -decimals));
+	ui.sbMajorTicksSpacingNumeric->setMaximum(range);
 }
 
 void AxisDock::axisZeroOffsetChanged(qreal value) {
@@ -1989,27 +1992,6 @@ void AxisDock::load() {
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, ui.kcbMinorTicksColor->color());
 	GuiTools::updatePenStyles(ui.cbMajorGridStyle, ui.kcbMajorGridColor->color());
 	GuiTools::updatePenStyles(ui.cbMinorGridStyle, ui.kcbMinorGridColor->color());
-}
-
-/*!
- * Determine the step in a QDoubleSpinBox with specific decimals and diff
- * \param diff Difference between the largest value and smallest value
- * \param decimal
- * \return
- */
-double AxisDock::determineStep(double diff, int decimal) {
-	if (decimal == 0) {
-		double ten = 1;
-		for (unsigned int i = 1; i < 1000000000; i++) {
-			if (diff/ten <= 10) {
-				return ten/10; // use one decimal before
-			}
-			ten *= 10;
-		}
-		return 1;
-	}
-
-	return static_cast<double>(1)/(pow(10,decimal));
 }
 
 void AxisDock::loadConfigFromTemplate(KConfig& config) {

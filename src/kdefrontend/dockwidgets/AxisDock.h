@@ -71,8 +71,6 @@ private:
 	DateTimeSpinBox* dtsbMajorTicksIncrement {nullptr};
 	DateTimeSpinBox* dtsbMinorTicksIncrement {nullptr};
 
-	double determineStep(double diff, int decimal);
-
 private slots:
 	void init();
 
