@@ -101,15 +101,18 @@ public:
 
 	struct ColumnStatistics {
 		ColumnStatistics() {
+			size = 0;
 			minimum = NAN;
 			maximum = NAN;
 			arithmeticMean = NAN;
 			geometricMean = NAN;
 			harmonicMean = NAN;
 			contraharmonicMean = NAN;
+			mode = NAN;
 			firstQuartile = NAN;
 			median = NAN;
 			thirdQuartile = NAN;
+			iqr = NAN;
 			variance = NAN;
 			standardDeviation = NAN;
 			meanDeviation = NAN;
@@ -119,15 +122,18 @@ public:
 			kurtosis = NAN;
 			entropy = NAN;
 		}
+		int size;
 		double minimum;
 		double maximum;
 		double arithmeticMean;
 		double geometricMean;
 		double harmonicMean;
 		double contraharmonicMean;
+		double mode;
 		double firstQuartile;
 		double median;
 		double thirdQuartile;
+		double iqr;
 		double variance;
 		double standardDeviation;
 		double meanDeviation; // mean absolute deviation around mean

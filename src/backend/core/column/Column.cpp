@@ -787,10 +787,40 @@ void Column::calculateStatistics() const {
 	if (rowData.size() < rowValuesSize)
 		rowData.squeeze();
 
+	statistics.size = notNanCount;
 	statistics.arithmeticMean = columnSum / notNanCount;
 	statistics.geometricMean = pow(columnProduct, 1.0 / notNanCount);
 	statistics.harmonicMean = notNanCount / columnSumNeg;
 	statistics.contraharmonicMean = columnSumSquare / columnSum;
+
+	//calculate the mode, the most frequent value in the data set
+	int maxFreq = 0;
+	double mode = NAN;
+	QMap<double, int>::const_iterator it = frequencyOfValues.constBegin();
+	while (it != frequencyOfValues.constEnd()) {
+		if (it.value() > maxFreq) {
+			maxFreq = it.value();
+			mode = it.key();
+		}
+		++it;
+	}
+
+	//check how many times the max frequency occurs in the data set.
+	//if more than once, we have a multi-modal distribution and don't show any mode
+	it = frequencyOfValues.constBegin();
+	int maxFreqOccurance = 0;
+	while (it != frequencyOfValues.constEnd()) {
+		if (it.value() == maxFreq)
+			++maxFreqOccurance;
+
+		if (maxFreqOccurance > 1) {
+			mode = NAN;
+			break;
+		}
+		++it;
+	}
+
+	statistics.mode = mode;
 
 	double columnSumVariance = 0;
 	double columnSumMeanDeviation = 0.0;
@@ -805,6 +835,7 @@ void Column::calculateStatistics() const {
 	statistics.firstQuartile = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.25);
 	statistics.median = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.50);
 	statistics.thirdQuartile = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.75);
+	statistics.iqr = statistics.thirdQuartile - statistics.firstQuartile;
 
 	QVector<double> absoluteMedianList;
 	absoluteMedianList.reserve((int)notNanCount);

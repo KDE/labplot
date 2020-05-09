@@ -2350,7 +2350,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 			break;
 		}
 		case DivideByIQR: {
-			double iqr = col->statistics().thirdQuartile - col->statistics().firstQuartile;
+			double iqr = col->statistics().iqr;
 			if (iqr != 0.0) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = data->operator[](i) / iqr;
