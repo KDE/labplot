@@ -2321,7 +2321,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 		}
 		case DivideByMode: {
 			double mode = col->statistics().mode;
-			if (mode != 0.0 && !isnan(mode)) {
+			if (mode != 0.0 && !std::isnan(mode)) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = data->operator[](i) / mode;
 			} else {
