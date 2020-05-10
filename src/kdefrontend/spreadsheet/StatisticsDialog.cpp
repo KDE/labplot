@@ -139,12 +139,6 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) : QDia
 	                     "<b></td>"
 	                     "<td>%11</td>"
 	                     "</tr>"
-						"<tr>"
-	                     "<td><b>"
-	                     + i18n("Interquartile Range")+
-	                     "<b></td>"
-	                     "<td>%12</td>"
-	                     "</tr>"
 	                     "<tr></tr>"
 	                     "<tr>"
 	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
@@ -156,32 +150,38 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) : QDia
 	                     "<td><b>"
 	                     + i18n("Variance")+
 	                     "<b></td>"
-	                     "<td>%13</td>"
+						 "<td>%12</td>"
 	                     "</tr>"
 	                     "<tr>"
 	                     "<td><b>"
 	                     + i18n("Standard deviation")+
 	                     "<b></td>"
-	                     "<td>%14</td>"
+						 "<td>%13</td>"
 	                     "</tr>"
 	                     "<tr>"
 	                     "<td><b>"
 	                     + i18n("Mean absolute deviation around mean")+
 	                     "<b></td>"
-	                     "<td>%15</td>"
+						 "<td>%14</td>"
 	                     "</tr>"
 	                     "<tr>"
 	                     "<td><b>"
 	                     + i18n("Mean absolute deviation around median")+
 	                     "<b></td>"
-	                     "<td>%16</td>"
+						 "<td>%15</td>"
 	                     "</tr>"
 	                     "<tr>"
 	                     "<td><b>"
 	                     + i18n("Median absolute deviation")+
 	                     "<b></td>"
-	                     "<td>%17</td>"
+						 "<td>%16</td>"
 	                     "</tr>"
+						 "<tr>"
+						  "<td><b>"
+						  + i18n("Interquartile Range")+
+						  "<b></td>"
+						  "<td>%17</td>"
+						  "</tr>"
 	                     "<tr></tr>"
 	                     "<tr>"
 	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
@@ -273,12 +273,12 @@ void StatisticsDialog::currentTabChanged(int index) {
 									isNanValue(statistics.firstQuartile)).
 						arg(isNanValue(statistics.median),
 							isNanValue(statistics.thirdQuartile),
-							isNanValue(statistics.iqr),
 							isNanValue(statistics.variance),
 							isNanValue(statistics.standardDeviation),
 							isNanValue(statistics.meanDeviation),
 							isNanValue(statistics.meanDeviationAroundMedian),
 							isNanValue(statistics.medianDeviation),
+							isNanValue(statistics.iqr),
 							isNanValue(statistics.skewness)).
 						arg(isNanValue(statistics.kurtosis),
 							isNanValue(statistics.entropy)));

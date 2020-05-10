@@ -88,7 +88,7 @@
 #endif
 
 enum NormalizationMethod {DivideBySum, DivideByMin, DivideByMax, DivideByCount,
-						DivideByMean, DivideByMedian, DivideByRange,
+						DivideByMean, DivideByMedian, DivideByMode, DivideByRange,
 						DivideBySD, DivideByMAD, DivideByIQR,
 						ZScoreSD, ZScoreMAD, ZScoreIQR,
 						Rescale};
@@ -302,6 +302,9 @@ void SpreadsheetView::initActions() {
 
 	normalizeAction = new QAction(i18n("Divide by Median"), normalizeColumnActionGroup);
 	normalizeAction->setData(DivideByMedian);
+
+	normalizeAction = new QAction(i18n("Divide by Mode"), normalizeColumnActionGroup);
+	normalizeAction->setData(DivideByMode);
 
 	normalizeAction = new QAction(i18n("Divide by Range"), normalizeColumnActionGroup);
 	normalizeAction->setData(DivideByRange);
@@ -2312,6 +2315,20 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 					new_data[i] = data->operator[](i) / median;
 			} else {
 				messages << message.arg(col->name()).arg(QLatin1String("Median = 0"));
+				continue;
+			}
+			break;
+		}
+		case DivideByMode: {
+			double mode = col->statistics().mode;
+			if (mode != 0.0 && !isnan(mode)) {
+				for (int i = 0; i < col->rowCount(); ++i)
+					new_data[i] = data->operator[](i) / mode;
+			} else {
+				if (mode == 0.0)
+					messages << message.arg(col->name()).arg(QLatin1String("Mode = 0"));
+				else
+					messages << message.arg(col->name()).arg(i18n("'Mode not defined'"));
 				continue;
 			}
 			break;
