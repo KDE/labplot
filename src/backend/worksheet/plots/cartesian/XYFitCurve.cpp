@@ -1540,7 +1540,8 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		DEBUG("	Clear columns")
 		xVector->clear();
 		yVector->clear();
-		residualsVector->clear();
+		// keep residuals (clear not needed)
+		//residualsVector->clear();
 	}
 	DEBUG("XYFitCurvePrivate::prepareResultColumns() DONE")
 }
@@ -1568,7 +1569,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult = XYFitCurve::FitResult();
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
-		DEBUG("ERROR: Preparing source data columns failed!");
+		DEBUG("	ERROR: Preparing source data columns failed!");
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
@@ -1613,7 +1614,7 @@ void XYFitCurvePrivate::recalculate() {
 		xmin = fitData.fitRange.first();
 		xmax = fitData.fitRange.last();
 	}
-	DEBUG("fit range = " << xmin << " .. " << xmax);
+	DEBUG("	fit range = " << xmin << " .. " << xmax);
 
 	//logic from XYAnalysisCurve::copyData(), extended by the handling of error columns.
 	//TODO: decide how to deal with non-numerical error columns
@@ -1668,7 +1669,7 @@ void XYFitCurvePrivate::recalculate() {
 
 	//number of data points to fit
 	const size_t n = xdataVector.size();
-	DEBUG("number of data points: " << n);
+	DEBUG("	number of data points: " << n);
 	if (n == 0) {
 		fitResult.available = true;
 		fitResult.valid = false;
@@ -1700,8 +1701,8 @@ void XYFitCurvePrivate::recalculate() {
 	double* ydata = ydataVector.data();
 	double* xerror = xerrorVector.data();	// size may be 0
 	double* yerror = yerrorVector.data();	// size may be 0
-	DEBUG("x error vector size: " << xerrorVector.size());
-	DEBUG("y error vector size: " << yerrorVector.size());
+	DEBUG("	x error vector size: " << xerrorVector.size());
+	DEBUG("	y error vector size: " << yerrorVector.size());
 	double* weight = new double[n];
 
 	for (size_t i = 0; i < n; i++)
@@ -1746,12 +1747,12 @@ void XYFitCurvePrivate::recalculate() {
 		const bool fixed = fitData.paramFixed.data()[i];
 		if (fixed)
 			nf++;
-		DEBUG("parameter " << i << " fixed: " << fixed);
+		DEBUG("	parameter " << i << " fixed: " << fixed);
 	}
 
 	//function to fit
 	gsl_multifit_function_fdf f;
-	DEBUG("model = " << STDSTRING(fitData.model));
+	DEBUG("	model = " << STDSTRING(fitData.model));
 	struct data params = {n, xdata, ydata, weight, fitData.modelCategory, fitData.modelType, fitData.degree, &fitData.model, &fitData.paramNames, fitData.paramLowerLimits.data(), fitData.paramUpperLimits.data(), fitData.paramFixed.data()};
 	f.f = &func_f;
 	f.df = &func_df;
@@ -1760,32 +1761,32 @@ void XYFitCurvePrivate::recalculate() {
 	f.p = np;
 	f.params = &params;
 
-	DEBUG("initialize the derivative solver (using Levenberg-Marquardt robust solver)");
+	DEBUG("	initialize the derivative solver (using Levenberg-Marquardt robust solver)");
 	const gsl_multifit_fdfsolver_type* T = gsl_multifit_fdfsolver_lmsder;
 	gsl_multifit_fdfsolver* s = gsl_multifit_fdfsolver_alloc(T, n, np);
 
-	DEBUG("set start values");
+	DEBUG("	set start values");
 	double* x_init = fitData.paramStartValues.data();
 	double* x_min = fitData.paramLowerLimits.data();
 	double* x_max = fitData.paramUpperLimits.data();
-	DEBUG("scale start values if limits are set");
+	DEBUG("	scale start values if limits are set");
 	for (unsigned int i = 0; i < np; i++)
 		x_init[i] = nsl_fit_map_unbound(x_init[i], x_min[i], x_max[i]);
-	DEBUG(" DONE");
+	DEBUG(" 	DONE");
 	gsl_vector_view x = gsl_vector_view_array(x_init, np);
-	DEBUG("Turning off GSL error handler to avoid overflow/underflow");
+	DEBUG("	Turning off GSL error handler to avoid overflow/underflow");
 	gsl_set_error_handler_off();
-	DEBUG("Initialize solver with function f and initial guess x");
+	DEBUG("	Initialize solver with function f and initial guess x");
 	gsl_multifit_fdfsolver_set(s, &f, &x.vector);
 
-	DEBUG("Iterate ...");
+	DEBUG("	Iterate ...");
 	int status;
 	unsigned int iter = 0;
 	fitResult.solverOutput.clear();
 	writeSolverState(s);
 	do {
 		iter++;
-		DEBUG("	iter " << iter);
+		DEBUG("		iter " << iter);
 
 		// update weights for Y-depending weights (using function values from residuals)
 		if (fitData.yWeightsType == nsl_fit_weight_statistical_fit) {
@@ -1796,21 +1797,21 @@ void XYFitCurvePrivate::recalculate() {
 				weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i)/sqrt(weight[i]) + ydata[i]);	// 1/Y_i^2
 		}
 
-		DEBUG("	run fdfsolver_iterate");
+		DEBUG("		run fdfsolver_iterate");
 		status = gsl_multifit_fdfsolver_iterate(s);
-		DEBUG("	fdfsolver_iterate DONE");
+		DEBUG("		fdfsolver_iterate DONE");
 		writeSolverState(s);
 		if (status) {
-			DEBUG("iter " << iter << ", status = " << gsl_strerror(status));
+			DEBUG("		iter " << iter << ", status = " << gsl_strerror(status));
 			break;
 		}
 		status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
-		DEBUG("	iter " << iter << ", test status = " << status);
+		DEBUG("		iter " << iter << ", test status = " << status);
 	} while (status == GSL_CONTINUE && iter < maxIters);
 
 	// second run for x-error fitting
 	if (xerrorVector.size() > 0) {
-		DEBUG("Rerun fit with x errors");
+		DEBUG("	Rerun fit with x errors");
 
 		unsigned int iter2 = 0;
 		double chisq = 0, chisqOld = 0;
@@ -1897,7 +1898,7 @@ void XYFitCurvePrivate::recalculate() {
 				status = gsl_multifit_fdfsolver_iterate(s);
 				//printf ("status = %s\n", gsl_strerror (status));
 				if (status) {
-					DEBUG("iter " << iter << ", status = " << gsl_strerror(status));
+					DEBUG("		iter " << iter << ", status = " << gsl_strerror(status));
 					break;
 				}
 				status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
@@ -1950,11 +1951,11 @@ void XYFitCurvePrivate::recalculate() {
 	// for a linear model without intercept R-squared is calculated differently
 	// see https://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-does-summary_0028_0029-report-strange-results-for-the-R_005e2-estimate-when-I-fit-a-linear-model-with-no-intercept_003f
 	if (fitData.modelCategory == nsl_fit_model_basic && fitData.modelType == nsl_fit_model_polynomial && fitData.degree == 1 && x_init[0] == 0) {
-		DEBUG("Using alternative R^2 for linear model without intercept");
+		DEBUG("	Using alternative R^2 for linear model without intercept");
 		fitResult.sst = gsl_stats_tss_m(ydata, 1, n, 0);
 	}
 	if (fitResult.sst < fitResult.sse) {
-		DEBUG("Using alternative R^2 since R^2 would be negative (probably custom model without intercept)");
+		DEBUG("	Using alternative R^2 since R^2 would be negative (probably custom model without intercept)");
 		fitResult.sst = gsl_stats_tss_m(ydata, 1, n, 0);
 	}
 
@@ -1982,7 +1983,7 @@ void XYFitCurvePrivate::recalculate() {
 		// use results as start values if desired
 		if (fitData.useResults) {
 			fitData.paramStartValues.data()[i] = fitResult.paramValues[i];
-			DEBUG("saving parameter " << i << ": " << fitResult.paramValues[i] << ' ' << fitData.paramStartValues.data()[i]);
+			DEBUG("	saving parameter " << i << ": " << fitResult.paramValues[i] << ' ' << fitData.paramStartValues.data()[i]);
 		}
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
 		fitResult.tdist_tValues[i] = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
@@ -1992,7 +1993,7 @@ void XYFitCurvePrivate::recalculate() {
 
 	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
 	residualsVector->resize(tmpXDataColumn->rowCount());
-	DEBUG("Residual vector size: " << residualsVector->size())
+	DEBUG("	Residual vector size: " << residualsVector->size())
 	if (fitData.autoRange) {	// evaluate full range of residuals
 		xVector->resize(tmpXDataColumn->rowCount());
 		auto mode = tmpXDataColumn->columnMode();
@@ -2013,7 +2014,7 @@ void XYFitCurvePrivate::recalculate() {
 			for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
 				(*residualsVector)[i] = tmpYDataColumn->valueAt(i) - (*residualsVector)[i];
 		} else {
-			DEBUG("ERROR: Failed parsing residuals")
+			DEBUG("	ERROR: Failed parsing residuals")
 			residualsVector->clear();
 		}
 	} else {	// only selected range
@@ -2055,13 +2056,14 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	}
 
 	if (!tmpXDataColumn) {
-		DEBUG("ERROR: Preparing source data column failed!");
+		DEBUG("	ERROR: Preparing source data column failed!");
 		recalcLogicalPoints();
 		emit q->dataChanged();
 		return;
 	}
 
 	//only needed for preview (else we have all columns)
+	// should not harm even if not in preview now that residuals are not cleared
 	if (preview)
 		prepareResultColumns();
 
@@ -2100,7 +2102,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), (int)fitData.evaluatedPoints,
 						xVector, yVector, fitData.paramNames, paramValues);
 	if (!rc) {
-		DEBUG("ERROR: Parsing fit function failed")
+		DEBUG("	ERROR: Parsing fit function failed")
 		xVector->clear();
 		yVector->clear();
 		residualsVector->clear();

@@ -970,10 +970,9 @@ void XYFitCurveDock::recalculateClicked() {
 
 	//update fitParametersWidget
 	if (m_fitData.useResults) {
-		//TODO: fix crash fitting datetime data
-		DEBUG(" nr of param names = " << m_fitData.paramNames.size())
-		DEBUG("	size of start values = " << m_fitData.paramStartValues.size())
-		DEBUG("	size of param values = " << m_fitCurve->fitResult().paramValues.size())
+		//DEBUG(" nr of param names = " << m_fitData.paramNames.size())
+		//DEBUG("	size of start values = " << m_fitData.paramStartValues.size())
+		//DEBUG("	size of param values = " << m_fitCurve->fitResult().paramValues.size())
 		for (int i = 0; i < m_fitData.paramNames.size(); i++)
 			m_fitData.paramStartValues[i] = m_fitCurve->fitResult().paramValues[i];
 		fitParametersWidget->setFitData(&m_fitData);
@@ -1026,7 +1025,7 @@ void XYFitCurveDock::enableRecalculate() {
 
 	// PREVIEW as soon as recalculate is enabled (does not need source data)
 	if (m_parametersValid && m_fitData.previewEnabled) {
-		DEBUG("	ENABLE EVALUATE AND PREVIEW");
+		DEBUG("	EVALUATE WITH PREVIEW ENABLED");
 		// use recent fit data
 		m_fitCurve->setFitData(m_fitData);
 		// calculate fit function
@@ -1034,7 +1033,7 @@ void XYFitCurveDock::enableRecalculate() {
 		setPlotXRange();
 	}
 	else {
-		DEBUG("	EVALUATE PREVIEW DISABLED");
+		DEBUG("	PREVIEW DISABLED");
 	}
 }
 
