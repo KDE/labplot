@@ -535,6 +535,8 @@ void SpreadsheetView::initMenus() {
 		//--------------
 		//Divide by Mean
 		//Divide by Median
+		//Divide by Mode
+		//---------------
 		//Divide by Range
 		//Divide by SD
 		//Divide by MAD
@@ -555,15 +557,17 @@ void SpreadsheetView::initMenus() {
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(4));
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(5));
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(6));
+		m_columnNormalizeMenu->addSeparator();
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(7));
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(8));
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(9));
-		m_columnNormalizeMenu->addSeparator();
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(10));
+		m_columnNormalizeMenu->addSeparator();
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(11));
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(12));
-		m_columnNormalizeMenu->addSeparator();
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(13));
+		m_columnNormalizeMenu->addSeparator();
+		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(14));
 		m_columnManipulateDataMenu->addMenu(m_columnNormalizeMenu);
 
 		m_columnMenu->addMenu(m_columnManipulateDataMenu);
