@@ -572,8 +572,8 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
  * Use this only when columnMode() is Numeric
  */
 void Column::setValueAt(int row, const double new_value) {
-	DEBUG("Column::setValueAt()");
-	qDebug()<<"setvalue";
+	DEBUG("Column::setValueAt()")
+	DEBUG("setvalue")
 	exec(new ColumnSetValueCmd(d, row, new_value));
 }
 
@@ -583,7 +583,7 @@ void Column::setValueAt(int row, const double new_value) {
  * Use this only when columnMode() is Numeric
  */
 void Column::replaceValues(int first, const QVector<double>& new_values) {
-	DEBUG("Column::replaceValues()");
+	DEBUG("Column::replaceValues()")
 	if (!new_values.isEmpty())
 		exec(new ColumnReplaceValuesCmd(d, first, new_values));
 }
@@ -594,7 +594,7 @@ void Column::replaceValues(int first, const QVector<double>& new_values) {
  * Use this only when columnMode() is Integer
  */
 void Column::setIntegerAt(int row, const int new_value) {
-	DEBUG("Column::setIntegerAt()");
+	DEBUG("Column::setIntegerAt()")
 	exec(new ColumnSetIntegerCmd(d, row, new_value));
 }
 
@@ -604,7 +604,7 @@ void Column::setIntegerAt(int row, const int new_value) {
  * Use this only when columnMode() is Integer
  */
 void Column::replaceInteger(int first, const QVector<int>& new_values) {
-	DEBUG("Column::replaceInteger()");
+	DEBUG("Column::replaceInteger()")
 	if (!new_values.isEmpty())
 		exec(new ColumnReplaceIntegerCmd(d, first, new_values));
 }
@@ -615,7 +615,7 @@ void Column::replaceInteger(int first, const QVector<int>& new_values) {
  * Use this only when columnMode() is BigInt
  */
 void Column::setBigIntAt(int row, const qint64 new_value) {
-	DEBUG("Column::setBigIntAt()");
+	DEBUG("Column::setBigIntAt()")
 	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
 	d->propertiesAvailable = false;
@@ -628,7 +628,7 @@ void Column::setBigIntAt(int row, const qint64 new_value) {
  * Use this only when columnMode() is BigInt
  */
 void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
-	DEBUG("Column::replaceInteger()");
+	DEBUG("Column::replaceInteger()")
 	if (!new_values.isEmpty())
 		exec(new ColumnReplaceBigIntCmd(d, first, new_values));
 }
