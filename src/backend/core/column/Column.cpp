@@ -43,6 +43,7 @@
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 
 extern "C" {
+#include <gsl/gsl_math.h>
 #include <gsl/gsl_sort.h>
 #include <gsl/gsl_statistics.h>
 }
@@ -687,7 +688,7 @@ void Column::calculateStatistics() const {
 				statistics.maximum = val;
 			columnSum += val;
 			columnSumNeg += (1.0 / val);
-			columnSumSquare += pow(val, 2.0);
+			columnSumSquare += val*val;
 			columnProduct *= val;
 			if (frequencyOfValues.contains(val))
 				frequencyOfValues.operator [](val)++;
@@ -712,7 +713,7 @@ void Column::calculateStatistics() const {
 				statistics.maximum = val;
 			columnSum += val;
 			columnSumNeg += (1.0 / val);
-			columnSumSquare += pow(val, 2.0);
+			columnSumSquare += val*val;
 			columnProduct *= val;
 			if (frequencyOfValues.contains(val))
 				frequencyOfValues.operator [](val)++;
@@ -737,7 +738,7 @@ void Column::calculateStatistics() const {
 				statistics.maximum = val;
 			columnSum += val;
 			columnSumNeg += (1.0 / val);
-			columnSumSquare += pow(val, 2.0);
+			columnSumSquare += val*val;
 			columnProduct *= val;
 			if (frequencyOfValues.contains(val))
 				frequencyOfValues.operator [](val)++;
@@ -813,11 +814,11 @@ void Column::calculateStatistics() const {
 
 	for (int row = 0; row < notNanCount; ++row) {
 		val = rowData.value(row);
-		columnSumVariance += pow(val - statistics.arithmeticMean, 2.0);
+		columnSumVariance += gsl_pow_2(val - statistics.arithmeticMean);
 
-		sumForCentralMoment_r3 += pow(val - statistics.arithmeticMean, 3.0);
-		sumForCentralMoment_r4 += pow(val - statistics.arithmeticMean, 4.0);
-		columnSumMeanDeviation += fabs( val - statistics.arithmeticMean );
+		sumForCentralMoment_r3 += gsl_pow_3(val - statistics.arithmeticMean);
+		sumForCentralMoment_r4 += gsl_pow_4(val - statistics.arithmeticMean);
+		columnSumMeanDeviation += fabs(val - statistics.arithmeticMean);
 
 		absoluteMedianList[row] = fabs(val - statistics.median);
 		columnSumMedianDeviation += absoluteMedianList[row];
@@ -835,8 +836,8 @@ void Column::calculateStatistics() const {
 
 	statistics.variance = columnSumVariance / notNanCount;
 	statistics.standardDeviation = sqrt(statistics.variance * notNanCount / (notNanCount - 1));
-	statistics.skewness = centralMoment_r3 / pow(statistics.standardDeviation, 3.0);
-	statistics.kurtosis = (centralMoment_r4 / pow(statistics.standardDeviation, 4.0)) - 3.0;
+	statistics.skewness = centralMoment_r3 / gsl_pow_3(statistics.standardDeviation);
+	statistics.kurtosis = (centralMoment_r4 / gsl_pow_4(statistics.standardDeviation)) - 3.0;
 	statistics.meanDeviation = columnSumMeanDeviation / notNanCount;
 
 	double entropy = 0.0;

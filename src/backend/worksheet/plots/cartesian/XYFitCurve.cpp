@@ -1540,8 +1540,7 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		DEBUG("	Clear columns")
 		xVector->clear();
 		yVector->clear();
-		// keep residuals (clear not needed)
-		//residualsVector->clear();
+		//TODO: residualsVector->clear();
 	}
 	DEBUG("XYFitCurvePrivate::prepareResultColumns() DONE")
 }

@@ -339,6 +339,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 
 	initGeneralTab();
 	initTabs();
+	enableRecalculate();
 
 	m_initializing = false;
 
@@ -346,7 +347,6 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	if (m_fitData.paramStartValues.size() == 0)
 		updateModelEquation();
 
-	enableRecalculate();
 }
 
 //*************************************************************
