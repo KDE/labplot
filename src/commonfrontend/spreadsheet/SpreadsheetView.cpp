@@ -171,6 +171,7 @@ void SpreadsheetView::init() {
 	connectActions();
 	showComments(false);
 
+	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::updateHeaderGeometry);
 	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::handleHeaderDataChanged);
 	connect(m_spreadsheet, &Spreadsheet::aspectAdded, this, &SpreadsheetView::handleAspectAdded);
 	connect(m_spreadsheet, &Spreadsheet::aspectAboutToBeRemoved,this, &SpreadsheetView::handleAspectAboutToBeRemoved);
@@ -2738,6 +2739,19 @@ void SpreadsheetView::sortColumnDescending() {
 		col->setSuppressDataChangedSignal(false);
 		col->setChanged();
 	}
+}
+
+/*!
+  Cause a repaint of the header.
+*/
+void SpreadsheetView::updateHeaderGeometry(Qt::Orientation o, int first, int last) {
+	Q_UNUSED(first)
+	Q_UNUSED(last)
+	//TODO
+	if (o != Qt::Horizontal) return;
+	m_tableView->horizontalHeader()->setStretchLastSection(true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
+	m_tableView->horizontalHeader()->updateGeometry();
+	m_tableView->horizontalHeader()->setStretchLastSection(false); // ugly hack part 2
 }
 
 /*!

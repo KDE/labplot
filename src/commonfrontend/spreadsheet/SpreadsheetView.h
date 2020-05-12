@@ -291,6 +291,7 @@ private slots:
 	void currentColumnChanged(const QModelIndex& current, const QModelIndex & previous);
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
+	void updateHeaderGeometry(Qt::Orientation o, int first, int last);
 
 	void selectColumn(int);
 	void deselectColumn(int);
