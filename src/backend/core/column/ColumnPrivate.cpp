@@ -578,6 +578,7 @@ void ColumnPrivate::replaceData(void* data) {
 	DEBUG("ColumnPrivate::replaceData()");
 	emit m_owner->dataAboutToChange(m_owner);
 	m_data = data;
+	invalidate();
 	if (!m_owner->m_suppressDataChangedSignal)
 		emit m_owner->dataChanged(m_owner);
 }
@@ -590,11 +591,11 @@ void ColumnPrivate::replaceData(void* data) {
  * Use a filter to convert a column to another type.
  */
 bool ColumnPrivate::copy(const AbstractColumn* other) {
-	DEBUG("ColumnPrivate::copy(other)");
+// 	DEBUG("ColumnPrivate::copy(other)");
 	if (other->columnMode() != columnMode()) return false;
-	DEBUG("	mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode()));
+// 	DEBUG("	mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode()));
 	int num_rows = other->rowCount();
-	DEBUG("	rows " << num_rows);
+// 	DEBUG("	rows " << num_rows);
 
 	emit m_owner->dataAboutToChange(m_owner);
 	resizeTo(num_rows);
@@ -652,7 +653,7 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
  * \param num_rows the number of rows to copy
  */
 bool ColumnPrivate::copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) {
-	DEBUG("ColumnPrivate::copy()");
+// 	DEBUG("ColumnPrivate::copy()");
 	if (source->columnMode() != m_column_mode) return false;
 	if (num_rows == 0) return true;
 
@@ -799,6 +800,8 @@ bool ColumnPrivate::copy(const ColumnPrivate* source, int source_start, int dest
 		break;
 	}
 
+	invalidate();
+
 	if (!m_owner->m_suppressDataChangedSignal)
 		emit m_owner->dataChanged(m_owner);
 
@@ -846,7 +849,7 @@ void ColumnPrivate::resizeTo(int new_size) {
 	if (new_size == old_size)
 		return;
 
-	DEBUG("ColumnPrivate::resizeTo() " << old_size << " -> " << new_size);
+// 	DEBUG("ColumnPrivate::resizeTo() " << old_size << " -> " << new_size);
 
 	switch (m_column_mode) {
 	case AbstractColumn::Numeric: {
@@ -1336,6 +1339,12 @@ qint64 ColumnPrivate::bigIntAt(int row) const {
 	return static_cast<QVector<qint64>*>(m_data)->value(row, 0);
 }
 
+void ColumnPrivate::invalidate() {
+	statisticsAvailable = false;
+	hasValuesAvailable = false;
+	propertiesAvailable = false;
+}
+
 /**
  * \brief Set the content of row 'row'
  *
@@ -1343,6 +1352,8 @@ qint64 ColumnPrivate::bigIntAt(int row) const {
  */
 void ColumnPrivate::setTextAt(int row, const QString& new_value) {
 	if (m_column_mode != AbstractColumn::Text) return;
+
+	invalidate();
 
 	emit m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
@@ -1360,6 +1371,8 @@ void ColumnPrivate::setTextAt(int row, const QString& new_value) {
  */
 void ColumnPrivate::replaceTexts(int first, const QVector<QString>& new_values) {
 	if (m_column_mode != AbstractColumn::Text) return;
+
+	invalidate();
 
 	emit m_owner->dataAboutToChange(m_owner);
 	int num_rows = new_values.size();
@@ -1412,6 +1425,8 @@ void ColumnPrivate::setDateTimeAt(int row, const QDateTime& new_value) {
 	        m_column_mode != AbstractColumn::Day)
 		return;
 
+	invalidate();
+
 	emit m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
 		resizeTo(row+1);
@@ -1432,6 +1447,8 @@ void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_va
 	        m_column_mode != AbstractColumn::Day)
 		return;
 
+	invalidate();
+
 	emit m_owner->dataAboutToChange(m_owner);
 	int num_rows = new_values.size();
 	if (first + num_rows > rowCount())
@@ -1439,6 +1456,7 @@ void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_va
 
 	for (int i = 0; i < num_rows; ++i)
 		static_cast<QVector<QDateTime>*>(m_data)->replace(first+i, new_values.at(i));
+
 
 	if (!m_owner->m_suppressDataChangedSignal)
 		emit m_owner->dataChanged(m_owner);
@@ -1452,6 +1470,8 @@ void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_va
 void ColumnPrivate::setValueAt(int row, double new_value) {
 //	DEBUG("ColumnPrivate::setValueAt()");
 	if (m_column_mode != AbstractColumn::Numeric) return;
+
+	invalidate();
 
 	emit m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
@@ -1470,6 +1490,8 @@ void ColumnPrivate::setValueAt(int row, double new_value) {
 void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) {
 	DEBUG("ColumnPrivate::replaceValues()");
 	if (m_column_mode != AbstractColumn::Numeric) return;
+
+	invalidate();
 
 	emit m_owner->dataAboutToChange(m_owner);
 	int num_rows = new_values.size();
@@ -1493,6 +1515,8 @@ void ColumnPrivate::setIntegerAt(int row, int new_value) {
 	DEBUG("ColumnPrivate::setIntegerAt()");
 	if (m_column_mode != AbstractColumn::Integer) return;
 
+	invalidate();
+
 	emit m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
 		resizeTo(row+1);
@@ -1510,6 +1534,8 @@ void ColumnPrivate::setIntegerAt(int row, int new_value) {
 void ColumnPrivate::replaceInteger(int first, const QVector<int>& new_values) {
 	DEBUG("ColumnPrivate::replaceInteger()");
 	if (m_column_mode != AbstractColumn::Integer) return;
+
+	invalidate();
 
 	emit m_owner->dataAboutToChange(m_owner);
 	int num_rows = new_values.size();
@@ -1533,6 +1559,8 @@ void ColumnPrivate::setBigIntAt(int row, qint64 new_value) {
 	DEBUG("ColumnPrivate::setBigIntAt()");
 	if (m_column_mode != AbstractColumn::BigInt) return;
 
+	invalidate();
+
 	emit m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
 		resizeTo(row+1);
@@ -1550,6 +1578,8 @@ void ColumnPrivate::setBigIntAt(int row, qint64 new_value) {
 void ColumnPrivate::replaceBigInt(int first, const QVector<qint64>& new_values) {
 	DEBUG("ColumnPrivate::replaceBigInt()");
 	if (m_column_mode != AbstractColumn::BigInt) return;
+
+	invalidate();
 
 	emit m_owner->dataAboutToChange(m_owner);
 	int num_rows = new_values.size();

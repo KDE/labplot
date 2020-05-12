@@ -150,6 +150,8 @@ private:
 	Column* m_owner{nullptr};
 	QVector<QMetaObject::Connection> m_connectionsUpdateFormula;
 
+	void invalidate();
+
 private:
 	void connectFormulaColumn(const AbstractColumn* column);
 

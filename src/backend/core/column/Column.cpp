@@ -514,9 +514,6 @@ void Column::clearFormulas() {
  */
 void Column::setTextAt(int row, const QString& new_value) {
 	DEBUG("Column::setTextAt()");
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
-	d->propertiesAvailable = false;
 	exec(new ColumnSetTextCmd(d, row, new_value));
 }
 
@@ -527,12 +524,8 @@ void Column::setTextAt(int row, const QString& new_value) {
  */
 void Column::replaceTexts(int first, const QVector<QString>& new_values) {
 	DEBUG("Column::replaceTexts()");
-	if (!new_values.isEmpty()) { //TODO: do we really need this check?
-		d->statisticsAvailable = false;
-		d->hasValuesAvailable = false;
-		d->propertiesAvailable = false;
+	if (!new_values.isEmpty()) //TODO: do we really need this check?
 		exec(new ColumnReplaceTextsCmd(d, first, new_values));
-	}
 }
 
 /**
@@ -559,9 +552,6 @@ void Column::setTimeAt(int row, QTime new_value) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::setDateTimeAt(int row, const QDateTime& new_value) {
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
-	d->propertiesAvailable = false;
 	exec(new ColumnSetDateTimeCmd(d, row, new_value));
 }
 
@@ -571,12 +561,8 @@ void Column::setDateTimeAt(int row, const QDateTime& new_value) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
-	if (!new_values.isEmpty()) {
-		d->statisticsAvailable = false;
-		d->hasValuesAvailable = false;
-		d->propertiesAvailable = false;
+	if (!new_values.isEmpty())
 		exec(new ColumnReplaceDateTimesCmd(d, first, new_values));
-	}
 }
 
 /**
@@ -585,10 +571,8 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
  * Use this only when columnMode() is Numeric
  */
 void Column::setValueAt(int row, const double new_value) {
-// 	DEBUG("Column::setValueAt()");
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
-	d->propertiesAvailable = false;
+	DEBUG("Column::setValueAt()");
+	qDebug()<<"setvalue";
 	exec(new ColumnSetValueCmd(d, row, new_value));
 }
 
@@ -599,12 +583,8 @@ void Column::setValueAt(int row, const double new_value) {
  */
 void Column::replaceValues(int first, const QVector<double>& new_values) {
 	DEBUG("Column::replaceValues()");
-	if (!new_values.isEmpty()) {
-		d->statisticsAvailable = false;
-		d->hasValuesAvailable = false;
-		d->propertiesAvailable = false;
+	if (!new_values.isEmpty())
 		exec(new ColumnReplaceValuesCmd(d, first, new_values));
-	}
 }
 
 /**
@@ -614,9 +594,6 @@ void Column::replaceValues(int first, const QVector<double>& new_values) {
  */
 void Column::setIntegerAt(int row, const int new_value) {
 	DEBUG("Column::setIntegerAt()");
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
-	d->propertiesAvailable = false;
 	exec(new ColumnSetIntegerCmd(d, row, new_value));
 }
 
@@ -627,12 +604,8 @@ void Column::setIntegerAt(int row, const int new_value) {
  */
 void Column::replaceInteger(int first, const QVector<int>& new_values) {
 	DEBUG("Column::replaceInteger()");
-	if (!new_values.isEmpty()) {
-		d->statisticsAvailable = false;
-		d->hasValuesAvailable = false;
-		d->propertiesAvailable = false;
+	if (!new_values.isEmpty())
 		exec(new ColumnReplaceIntegerCmd(d, first, new_values));
-	}
 }
 
 /**
@@ -655,12 +628,8 @@ void Column::setBigIntAt(int row, const qint64 new_value) {
  */
 void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
 	DEBUG("Column::replaceInteger()");
-	if (!new_values.isEmpty()) {
-		d->statisticsAvailable = false;
-		d->hasValuesAvailable = false;
-		d->propertiesAvailable = false;
+	if (!new_values.isEmpty())
 		exec(new ColumnReplaceBigIntCmd(d, first, new_values));
-	}
 }
 
 /*!
