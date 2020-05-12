@@ -113,6 +113,7 @@ public:
 			median = NAN;
 			thirdQuartile = NAN;
 			iqr = NAN;
+			trimean = NAN;
 			variance = NAN;
 			standardDeviation = NAN;
 			meanDeviation = NAN;
@@ -134,6 +135,7 @@ public:
 		double median;
 		double thirdQuartile;
 		double iqr;
+		double trimean;
 		double variance;
 		double standardDeviation;
 		double meanDeviation; // mean absolute deviation around mean

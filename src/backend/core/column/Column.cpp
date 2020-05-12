@@ -805,6 +805,7 @@ void Column::calculateStatistics() const {
 	statistics.median = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.50);
 	statistics.thirdQuartile = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.75);
 	statistics.iqr = statistics.thirdQuartile - statistics.firstQuartile;
+	statistics.trimean = (statistics.firstQuartile + 2*statistics.median + statistics.thirdQuartile) / 4;
 
 	QVector<double> absoluteMedianList;
 	absoluteMedianList.reserve((int)notNanCount);
@@ -833,7 +834,7 @@ void Column::calculateStatistics() const {
 	const double centralMoment_r4 = sumForCentralMoment_r4 / notNanCount;
 
 	statistics.variance = columnSumVariance / notNanCount;
-	statistics.standardDeviation = sqrt(statistics.variance);
+	statistics.standardDeviation = sqrt(statistics.variance * notNanCount / (notNanCount - 1));
 	statistics.skewness = centralMoment_r3 / pow(statistics.standardDeviation, 3.0);
 	statistics.kurtosis = (centralMoment_r4 / pow(statistics.standardDeviation, 4.0)) - 3.0;
 	statistics.meanDeviation = columnSumMeanDeviation / notNanCount;
