@@ -285,8 +285,8 @@ void StatisticsDialog::currentTabChanged(int index) {
 							isNanValue(statistics.meanDeviation),
 							isNanValue(statistics.meanDeviationAroundMedian),
 							isNanValue(statistics.medianDeviation),
-							isNanValue(statistics.iqr),
-							isNanValue(statistics.skewness)).
-						arg(isNanValue(statistics.kurtosis),
+							isNanValue(statistics.iqr)).
+						arg(isNanValue(statistics.skewness),
+							isNanValue(statistics.kurtosis),
 							isNanValue(statistics.entropy)));
 }
