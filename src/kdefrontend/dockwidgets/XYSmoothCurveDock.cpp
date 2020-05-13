@@ -328,8 +328,7 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			case AbstractColumn::DateTime:
 			case AbstractColumn::Month:
 			case AbstractColumn::Day:
-				if (!std::isnan(column->dateTimeAt(row).toMSecsSinceEpoch()))
-					n++;
+				n++;
 				break;
 			case AbstractColumn::Text:
 				break;
