@@ -139,6 +139,12 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) : QDia
 	                     "<b></td>"
 	                     "<td>%11</td>"
 	                     "</tr>"
+	                     "<tr>"
+	                     "<td><b>"
+	                     + i18n("Trimean")+
+	                     "<b></td>"
+	                     "<td>%12</td>"
+	                     "</tr>"
 	                     "<tr></tr>"
 	                     "<tr>"
 	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
@@ -150,37 +156,37 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) : QDia
 	                     "<td><b>"
 	                     + i18n("Variance")+
 	                     "<b></td>"
-						 "<td>%12</td>"
+						 "<td>%13</td>"
 	                     "</tr>"
 	                     "<tr>"
 	                     "<td><b>"
 	                     + i18n("Standard deviation")+
 	                     "<b></td>"
-						 "<td>%13</td>"
+						 "<td>%14</td>"
 	                     "</tr>"
 	                     "<tr>"
 	                     "<td><b>"
 	                     + i18n("Mean absolute deviation around mean")+
 	                     "<b></td>"
-						 "<td>%14</td>"
+						 "<td>%15</td>"
 	                     "</tr>"
 	                     "<tr>"
 	                     "<td><b>"
 	                     + i18n("Mean absolute deviation around median")+
 	                     "<b></td>"
-						 "<td>%15</td>"
+						 "<td>%16</td>"
 	                     "</tr>"
 	                     "<tr>"
 	                     "<td><b>"
 	                     + i18n("Median absolute deviation")+
 	                     "<b></td>"
-						 "<td>%16</td>"
+						 "<td>%17</td>"
 	                     "</tr>"
 						 "<tr>"
 						  "<td><b>"
 						  + i18n("Interquartile Range")+
 						  "<b></td>"
-						  "<td>%17</td>"
+						  "<td>%18</td>"
 						  "</tr>"
 	                     "<tr></tr>"
 	                     "<tr>"
@@ -193,19 +199,19 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) : QDia
 	                     "<td><b>"
 	                     + i18n("Skewness")+
 	                     "<b></td>"
-	                     "<td>%18</td>"
+	                     "<td>%19</td>"
 	                     "</tr>"
 	                     "<tr>"
 	                     "<td><b>"
 	                     + i18n("Kurtosis")+
 	                     "<b></td>"
-	                     "<td>%19</td>"
+	                     "<td>%20</td>"
 	                     "</tr>"
 	                     "<tr>"
 	                     "<td><b>"
 	                     + i18n("Entropy")+
 	                     "<b></td>"
-	                     "<td>%20</td>"
+	                     "<td>%21</td>"
 	                     "</tr>"
 	                     "</table>");
 
@@ -273,6 +279,7 @@ void StatisticsDialog::currentTabChanged(int index) {
 									isNanValue(statistics.firstQuartile)).
 						arg(isNanValue(statistics.median),
 							isNanValue(statistics.thirdQuartile),
+							isNanValue(statistics.trimean),
 							isNanValue(statistics.variance),
 							isNanValue(statistics.standardDeviation),
 							isNanValue(statistics.meanDeviation),
