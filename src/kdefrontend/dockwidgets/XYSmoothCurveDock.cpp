@@ -314,10 +314,29 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		}
 
 		unsigned int n = 0;
-		for (int row = 0; row < column->rowCount(); row++)
-			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
-				n++;
+		for (int row = 0; row < column->rowCount(); row++) {
+			if (column->isMasked(row))
+				continue;
 
+			switch (column->columnMode()) {
+			case AbstractColumn::Numeric:
+			case AbstractColumn::Integer:
+			case AbstractColumn::BigInt:
+				if (!std::isnan(column->valueAt(row)))
+					n++;
+				break;
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
+				if (!std::isnan(column->dateTimeAt(row).toMSecsSinceEpoch()))
+					n++;
+				break;
+			case AbstractColumn::Text:
+				break;
+			}
+		}
+
+		DEBUG("	Set maximum points to " << n)
 		// set maximum of sbPoints to number of columns
 		uiGeneralTab.sbPoints->setMaximum((int)n);
 	}
