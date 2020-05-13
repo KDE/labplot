@@ -194,7 +194,6 @@ void ExportWorksheetDialog::okClicked() {
 	QString path = ui->leFileName->text();
 	if (!path.isEmpty()) {
 		QString dir = conf.readEntry("LastDir", "");
-		ui->leFileName->setText(path);
 		int pos = path.lastIndexOf(QDir::separator());
 		if (pos != -1) {
 			QString newDir = path.left(pos);
@@ -242,7 +241,7 @@ void ExportWorksheetDialog::selectFile() {
 		int pos = path.lastIndexOf(QDir::separator());
 		if (pos != -1) {
 			const QString newDir = path.left(pos);
-			if (newDir != dir)
+			if (newDir != dir && QDir(newDir).exists())
 				conf.writeEntry("LastDir", newDir);
 		}
 	}
@@ -272,6 +271,7 @@ void ExportWorksheetDialog::formatChanged(int index) {
 	ui->lResolution->setVisible(visible);
 	ui->cbResolution->setVisible(visible);
 }
+
 /*!
 	called when the target destination (file or clipboard) format was changed.
  */
@@ -288,5 +288,21 @@ void ExportWorksheetDialog::exportToChanged(int index) {
 }
 
 void ExportWorksheetDialog::fileNameChanged(const QString& name) {
-	m_okButton->setEnabled(!name.simplified().isEmpty());
+	if (name.simplified().isEmpty()) {
+		m_okButton->setEnabled(false);
+		return;
+	}
+	QString path = ui->leFileName->text();
+	int pos = path.lastIndexOf(QDir::separator());
+	if (pos != -1) {
+		QString dir = path.left(pos);
+		if (!QDir(dir).exists()) {
+			ui->leFileName->setStyleSheet("QLineEdit{background:red;}");
+			m_okButton->setEnabled(false);
+			return;
+		} else
+			ui->leFileName->setStyleSheet(QString());
+	}
+
+	m_okButton->setEnabled(true);
 }

@@ -94,9 +94,6 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	ui->lNumberFormat->setToolTip(textNumberFormatShort);
 	ui->cbNumberFormat->setToolTip(textNumberFormatShort);
 
-	connect(btnBox, &QDialogButtonBox::accepted, this, &ExportSpreadsheetDialog::accept);
-	connect(btnBox, &QDialogButtonBox::rejected, this, &ExportSpreadsheetDialog::reject);
-
 	connect(ui->bOpen, &QPushButton::clicked, this, &ExportSpreadsheetDialog::selectFile);
 	connect(ui->leFileName, &QLineEdit::textChanged, this, &ExportSpreadsheetDialog::fileNameChanged );
 	connect(m_showOptionsButton, &QPushButton::clicked, this, &ExportSpreadsheetDialog::toggleOptions);
@@ -289,11 +286,10 @@ void ExportSpreadsheetDialog::okClicked() {
 	QString path = ui->leFileName->text();
 	if (!path.isEmpty()) {
 		QString dir = conf.readEntry("LastDir", "");
-		ui->leFileName->setText(path);
 		int pos = path.lastIndexOf(QDir::separator());
 		if (pos != -1) {
 			QString newDir = path.left(pos);
-			if (newDir != dir && QDir(newDir).exists())
+			if (newDir != dir)
 				conf.writeEntry("LastDir", newDir);
 		}
 	}
@@ -519,5 +515,21 @@ ExportSpreadsheetDialog::Format ExportSpreadsheetDialog::format() const {
 }
 
 void ExportSpreadsheetDialog::fileNameChanged(const QString& name) {
-	m_okButton->setEnabled(!name.simplified().isEmpty());
+	if (name.simplified().isEmpty()) {
+		m_okButton->setEnabled(false);
+		return;
+	}
+	QString path = ui->leFileName->text();
+	int pos = path.lastIndexOf(QDir::separator());
+	if (pos != -1) {
+		QString dir = path.left(pos);
+		if (!QDir(dir).exists()) {
+			ui->leFileName->setStyleSheet("QLineEdit{background:red;}");
+			m_okButton->setEnabled(false);
+			return;
+		} else
+			ui->leFileName->setStyleSheet(QString());
+	}
+
+	m_okButton->setEnabled(true);
 }
