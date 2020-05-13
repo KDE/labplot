@@ -293,7 +293,7 @@ void ExportSpreadsheetDialog::okClicked() {
 		int pos = path.lastIndexOf(QDir::separator());
 		if (pos != -1) {
 			QString newDir = path.left(pos);
-			if (newDir != dir)
+			if (newDir != dir && QDir(newDir).exists())
 				conf.writeEntry("LastDir", newDir);
 		}
 	}

@@ -51,6 +51,7 @@
 #include <QDate>
 #include <QApplication>
 #include <QMenu>
+#include <QMessageBox>
 #include <QMimeData>
 #include <QPainter>
 #include <QPrinter>
@@ -3047,8 +3048,11 @@ int SpreadsheetView::maxRowToExport() const {
 
 void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
 	QFile file(path);
-	if (!file.open(QFile::WriteOnly | QFile::Truncate))
+	if (!file.open(QFile::WriteOnly | QFile::Truncate)) {
+		RESET_CURSOR;
+		QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
 		return;
+	}
 
 	PERFTRACE("export spreadsheet to file");
 	QTextStream out(&file);
@@ -3094,8 +3098,11 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 		const bool gridLines, const bool captions, const bool latexHeaders,
 		const bool skipEmptyRows, const bool exportEntire) const {
 	QFile file(path);
-	if (!file.open(QFile::WriteOnly | QFile::Truncate))
+	if (!file.open(QFile::WriteOnly | QFile::Truncate)) {
+		RESET_CURSOR;
+		QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
 		return;
+	}
 
 	QList<Column*> toExport;
 	int cols;
