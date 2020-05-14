@@ -518,7 +518,7 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	}
 	}
 
-	plot->scaleAuto();
+	plot->dataChanged();
 }
 
 /*!
