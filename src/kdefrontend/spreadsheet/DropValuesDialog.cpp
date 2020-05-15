@@ -57,12 +57,12 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent) :
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	ui.cbOperator->addItem(i18n("Equal to"));
-	ui.cbOperator->addItem(i18n("Between (Including End Points)"));
-	ui.cbOperator->addItem(i18n("Between (Excluding End Points)"));
+	ui.cbOperator->addItem(i18n("Between (Incl. End Points)"));
+	ui.cbOperator->addItem(i18n("Between (Excl. End Points)"));
 	ui.cbOperator->addItem(i18n("Greater than"));
 	ui.cbOperator->addItem(i18n("Greater than or Equal to"));
-	ui.cbOperator->addItem(i18n("Lesser than"));
-	ui.cbOperator->addItem(i18n("Lesser than or Equal to"));
+	ui.cbOperator->addItem(i18n("Less than"));
+	ui.cbOperator->addItem(i18n("Less than or Equal to"));
 
 	ui.leValue1->setValidator( new QDoubleValidator(ui.leValue1) );
 	ui.leValue2->setValidator( new QDoubleValidator(ui.leValue2) );
@@ -90,8 +90,11 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent) :
 	connect(btnBox, &QDialogButtonBox::rejected, this, &DropValuesDialog::reject);
 
 	//restore saved settings if available
-	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("DropValuesDialog"));
+	ui.cbOperator->setCurrentIndex(conf.readEntry("Operator", 0));
+	operatorChanged(ui.cbOperator->currentIndex());
+
+	create(); // ensure there's a window created
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -102,6 +105,7 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent) :
 DropValuesDialog::~DropValuesDialog() {
 	//save the current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("DropValuesDialog"));
+	conf.writeEntry("Operator", ui.cbOperator->currentIndex());
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
