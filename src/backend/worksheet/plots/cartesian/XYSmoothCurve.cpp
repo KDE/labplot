@@ -113,11 +113,13 @@ void XYSmoothCurvePrivate::recalculate() {
 	if (!xColumn) {
 		xColumn = new Column("x", AbstractColumn::Numeric);
 		yColumn = new Column("y", AbstractColumn::Numeric);
+
 		xVector = static_cast<QVector<double>* >(xColumn->data());
 		yVector = static_cast<QVector<double>* >(yColumn->data());
 
 		xColumn->setHidden(true);
 		q->addChild(xColumn);
+
 		yColumn->setHidden(true);
 		q->addChild(yColumn);
 
@@ -128,6 +130,14 @@ void XYSmoothCurvePrivate::recalculate() {
 	} else {
 		xVector->clear();
 		yVector->clear();
+		if (roughVector)
+			roughVector->clear();
+	}
+
+	if (!roughColumn) {
+		roughColumn = new Column("rough", AbstractColumn::Numeric);
+		roughVector = static_cast<QVector<double>* >(roughColumn->data());
+		q->addChild(roughColumn);
 	}
 
 	// clear the previous result
@@ -194,6 +204,9 @@ void XYSmoothCurvePrivate::recalculate() {
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 
+	double ydataOriginal [n];
+	memcpy(ydataOriginal, ydata, n*sizeof(double));
+
 	// smooth settings
 	const nsl_smooth_type type = smoothData.type;
 	const size_t points = smoothData.points;
@@ -244,6 +257,12 @@ void XYSmoothCurvePrivate::recalculate() {
 	smoothResult.status = QString::number(status);
 	smoothResult.elapsedTime = timer.elapsed();
 
+	//fill rough vector
+	roughVector->resize((int)n);
+	for (int i = 0; i < (int)n; ++i)
+		roughVector->data()[i] = ydataOriginal[i] - ydata[i];
+	roughColumn->setChanged();
+
 	//redraw the curve
 	recalcLogicalPoints();
 	emit q->dataChanged();
@@ -290,6 +309,10 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const{
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
 	}
+
+	if (d->roughColumn)
+		d->roughColumn->save(writer);
+
 	writer->writeEndElement(); //"smoothResult"
 
 	writer->writeEndElement(); //"xySmoothCurve"
@@ -343,6 +366,8 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == "y")
 				d->yColumn = column;
+			else
+				d->roughColumn = column;
 		}
 	}
 
@@ -367,6 +392,9 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 
 		recalcLogicalPoints();
 	}
+
+	if (d->roughColumn)
+		addChild(d->roughColumn);
 
 	return true;
 }

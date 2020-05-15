@@ -788,11 +788,15 @@ void AbstractAspect::setSelected(bool s) {
 void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	//forward the signal to the highest possible level in the parent-child hierarchy
 	//e.g. axis of a plot was selected. Don't include parent aspects here that do not
-	//need to react on the selection of children: e.g. Folder or XYFitCurve with
-	//the child column for calculated residuals
+	//need to react on the selection of children:
+	//* Folder
+	//* XYFitCurve with the child column for calculated residuals
+	//* XYSmouthCurve with the child column for calculated rough values
+	//* CantorWorksheet with the child columns for CAS variables
 	if (aspect->parentAspect()
 		&& !aspect->parentAspect()->inherits(AspectType::Folder)
 		&& !aspect->parentAspect()->inherits(AspectType::XYFitCurve)
+		&& !aspect->parentAspect()->inherits(AspectType::XYSmoothCurve)
 		&& !aspect->parentAspect()->inherits(AspectType::CantorWorksheet))
 		emit aspect->parentAspect()->selected(aspect);
 }
@@ -800,11 +804,15 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	//forward the signal to the highest possible level in the parent-child hierarchy
 	//e.g. axis of a plot was selected. Don't include parent aspects here that do not
-	//need to react on the deselection of children: e.g. Folder or XYFitCurve with
-	//the child column for calculated residuals
+	//need to react on the deselection of children:
+	//* Folder
+	//* XYFitCurve with the child column for calculated residuals
+	//* XYSmouthCurve with the child column for calculated rough values
+	//* CantorWorksheet with the child columns for CAS variables
 	if (aspect->parentAspect()
 		&& !aspect->parentAspect()->inherits(AspectType::Folder)
 		&& !aspect->parentAspect()->inherits(AspectType::XYFitCurve)
+		&& !aspect->parentAspect()->inherits(AspectType::XYSmoothCurve)
 		&& !aspect->parentAspect()->inherits(AspectType::CantorWorksheet))
 		emit aspect->parentAspect()->deselected(aspect);
 }

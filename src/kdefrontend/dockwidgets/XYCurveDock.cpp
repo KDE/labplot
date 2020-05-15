@@ -30,8 +30,6 @@
 #include "XYCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
-#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
@@ -505,7 +503,7 @@ void XYCurveDock::setModel() {
 	QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
 	                       AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
 	                       AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot,
-	                       AspectType::XYFitCurve, AspectType::CantorWorksheet};
+	                       AspectType::XYFitCurve, AspectType::XYSmoothCurve, AspectType::CantorWorksheet};
 
 	if (cbXColumn) {
 		cbXColumn->setTopLevelClasses(list);

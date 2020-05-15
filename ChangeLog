@@ -12,6 +12,7 @@
 	* [spreadsheet] support big integer (64 bit) as data type
 	* [spreadsheet] column normalization methods "divide by max", "divide by min", etc.
 	* [spreadsheet] added the size of the data set, its mode, 1st and 3rd quartiles and IQR to the column statistics
+	* [analysis] calculate and expose the rough values as the result of a smooth (data = smooth + rough)
 	* Allow to open Cantor and Jupyter projects
 	* [Windows] improved craft blueprint and installer package
 
