@@ -204,7 +204,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 
-	double ydataOriginal [n];
+	double* ydataOriginal = new double[n];
 	memcpy(ydataOriginal, ydata, n*sizeof(double));
 
 	// smooth settings
