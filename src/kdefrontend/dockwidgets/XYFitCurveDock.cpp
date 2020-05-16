@@ -970,12 +970,16 @@ void XYFitCurveDock::recalculateClicked() {
 
 	//update fitParametersWidget
 	if (m_fitData.useResults) {
-		//DEBUG(" nr of param names = " << m_fitData.paramNames.size())
-		//DEBUG("	size of start values = " << m_fitData.paramStartValues.size())
-		//DEBUG("	size of param values = " << m_fitCurve->fitResult().paramValues.size())
-		for (int i = 0; i < m_fitData.paramNames.size(); i++)
-			m_fitData.paramStartValues[i] = m_fitCurve->fitResult().paramValues[i];
-		fitParametersWidget->setFitData(&m_fitData);
+		DEBUG(" nr of param names = " << m_fitData.paramNames.size())
+		DEBUG("	size of start values = " << m_fitData.paramStartValues.size())
+		DEBUG("	size of param values = " << m_fitCurve->fitResult().paramValues.size())
+		if (m_fitCurve->fitResult().paramValues.size() > 0) {	// may be 0 if fit fails
+			for (int i = 0; i < m_fitData.paramNames.size(); i++)
+				m_fitData.paramStartValues[i] = m_fitCurve->fitResult().paramValues.at(i);
+			fitParametersWidget->setFitData(&m_fitData);
+		} else {
+			DEBUG(" WARNING: no fit result available!")
+		}
 	}
 
 	this->showFitResult();
