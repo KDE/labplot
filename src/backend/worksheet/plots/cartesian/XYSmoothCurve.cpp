@@ -393,8 +393,10 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 		recalcLogicalPoints();
 	}
 
-	if (d->roughColumn)
+	if (d->roughColumn) {
 		addChild(d->roughColumn);
+		d->roughVector = static_cast<QVector<double>* >(d->roughColumn->data());
+	}
 
 	return true;
 }
