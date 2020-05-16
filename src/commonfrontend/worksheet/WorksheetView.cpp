@@ -1666,6 +1666,10 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	} else if (format == WorksheetView::Svg) {
 		QSvgGenerator generator;
 		generator.setFileName(path);
+// 		if (!generator.isValid()) {
+// 			RESET_CURSOR;
+// 			QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
+// 		}
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
 		w = w*QApplication::desktop()->physicalDpiX()/25.4;
@@ -1696,9 +1700,13 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
 
-		if (!path.isEmpty())
-			image.save(path, "PNG");
-		else
+		if (!path.isEmpty()) {
+			bool rc = image.save(path, "PNG");
+			if (!rc) {
+				RESET_CURSOR;
+				QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
+			}
+		} else
 			QApplication::clipboard()->setImage(image, QClipboard::Clipboard);
 	}
 }

@@ -1810,11 +1810,7 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect) {
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
-		//for LiveDataSource we currently don't show any view
-		/*if (dynamic_cast<const LiveDataSource*>(part))
-			return;*/
-
-		PartMdiView* win;
+		PartMdiView* win{nullptr};
 
 		//for aspects being children of a Workbook, we show workbook's window, otherwise the window of the selected part
 		const auto* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
