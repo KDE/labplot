@@ -42,6 +42,8 @@
 
 #include <cmath>
 
+enum Operator {EqualTo, BetweenIncl, BetweenExcl, GreaterThan, GreaterThanEqualTo, LessThan, LessThanEqualTo};
+
 /*!
 	\class DropValuesDialog
 	\brief Dialog for generating values from a mathematical function.
@@ -131,7 +133,7 @@ void DropValuesDialog::okClicked() const {
 //TODO: m_column->setMasked() is slow, we need direct access to the masked-container -> redesign
 class MaskValuesTask : public QRunnable {
 	public:
-		MaskValuesTask(Column* col, int op, double value1, double value2) {
+		MaskValuesTask(Column* col, Operator op, double value1, double value2) {
 			m_column = col;
 			m_operator = op;
 			m_value1 = value1;
@@ -143,75 +145,71 @@ class MaskValuesTask : public QRunnable {
 			bool changed = false;
 			auto* data = static_cast<QVector<double>* >(m_column->data());
 
-			//equal to
-			//TODO: use an enum
-			if (m_operator == 0) {
+			switch (m_operator) {
+			case EqualTo: {
 				for (int i = 0; i < data->size(); ++i) {
 					if (data->at(i) == m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
 				}
+				break;
 			}
-
-			//between (including end points)
-			else if (m_operator == 1) {
+			case BetweenIncl: {
 				for (int i = 0; i < data->size(); ++i) {
 					if (data->at(i) >= m_value1 && data->at(i) <= m_value2) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
 				}
+				break;
 			}
 
-			//between (excluding end points)
-			else if (m_operator == 2) {
+			case BetweenExcl: {
 				for (int i = 0; i < data->size(); ++i) {
 					if (data->at(i) > m_value1 && data->at(i) < m_value2) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
 				}
+				break;
 			}
-
-			//greater than
-			else if (m_operator == 3) {
+			case GreaterThan: {
 				for (int i = 0; i < data->size(); ++i) {
 					if (data->at(i) > m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
 				}
+				break;
 			}
 
-			//greater than or equal to
-			else if (m_operator == 4) {
+			case GreaterThanEqualTo: {
 				for (int i = 0; i < data->size(); ++i) {
 					if (data->at(i) >= m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
 				}
+				break;
 			}
-
-			//lesser than
-			else if (m_operator == 5) {
+			case LessThan: {
 				for (int i = 0; i < data->size(); ++i) {
 					if (data->at(i) < m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
 				}
+				break;
 			}
-
-			//lesser than or equal to
-			else if (m_operator == 6) {
+			case LessThanEqualTo: {
 				for (int i = 0; i < data->size(); ++i) {
 					if (data->at(i) <= m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
 				}
+			}
 			}
 
 			m_column->setSuppressDataChangedSignal(false);
@@ -220,15 +218,15 @@ class MaskValuesTask : public QRunnable {
 		}
 
 	private:
-		Column* m_column;
-		int m_operator;
+		Operator m_operator;
 		double m_value1;
 		double m_value2;
+		Column* m_column;
 };
 
 class DropValuesTask : public QRunnable {
 	public:
-		DropValuesTask(Column* col, int op, double value1, double value2) {
+		DropValuesTask(Column* col, Operator op, double value1, double value2) {
 			m_column = col;
 			m_operator = op;
 			m_value1 = value1;
@@ -240,68 +238,62 @@ class DropValuesTask : public QRunnable {
 			auto* data = static_cast<QVector<double>* >(m_column->data());
 			QVector<double> new_data(*data);
 
-			//equal to
-			if (m_operator == 0) {
+			switch (m_operator) {
+			case EqualTo: {
 				for (auto& d : new_data) {
 					if (d == m_value1) {
 						d = NAN;
 						changed = true;
 					}
 				}
+				break;
 			}
-
-			//between (including end points)
-			else if (m_operator == 1) {
+			case BetweenIncl: {
 				for (auto& d : new_data) {
 					if (d >= m_value1 && d <= m_value2) {
 						d = NAN;
 						changed = true;
 					}
 				}
+				break;
 			}
-
-			//between (excluding end points)
-			else if (m_operator == 2) {
+			case BetweenExcl: {
 				for (auto& d : new_data) {
 					if (d > m_value1 && d < m_value2) {
 						d = NAN;
 						changed = true;
 					}
 				}
+				break;
 			}
-
-			//greater than
-			else if (m_operator == 3) {
+			case GreaterThan: {
 				for (auto& d : new_data) {
 					if (d > m_value1) {
 						d = NAN;
 						changed = true;
 					}
 				}
+				break;
 			}
-
-			//greater than or equal to
-			else if (m_operator == 4) {
+			case GreaterThanEqualTo: {
 				for (auto& d : new_data) {
 					if (d >= m_value1) {
 						d = NAN;
 						changed = true;
 					}
 				}
+				break;
 			}
-
-			//less than
-			else if (m_operator == 5) {
+			case LessThan: {
 				for (auto& d : new_data) {
 					if (d < m_value1) {
 						d = NAN;
 						changed = true;
 					}
 				}
+				break;
 			}
-
-			//less than or equal to
-			else if (m_operator == 6) {
+			case LessThanEqualTo: {
 				for (auto& d : new_data) {
 					if (d <= m_value1) {
 						d = NAN;
@@ -309,16 +301,17 @@ class DropValuesTask : public QRunnable {
 					}
 				}
 			}
+			}
 
 			if (changed)
 				m_column->replaceValues(0, new_data);
 		}
 
 	private:
-		Column* m_column;
-		int m_operator;
+		Operator m_operator;
 		double m_value1;
 		double m_value2;
+		Column* m_column;
 };
 
 void DropValuesDialog::maskValues() const {
@@ -327,7 +320,7 @@ void DropValuesDialog::maskValues() const {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: mask values", m_spreadsheet->name()));
 
-	const int op = ui.cbOperator->currentIndex();
+	const Operator op = static_cast<Operator>(ui.cbOperator->currentIndex());
 	const double value1 = ui.leValue1->text().toDouble();
 	const double value2 = ui.leValue2->text().toDouble();
 
@@ -352,7 +345,7 @@ void DropValuesDialog::dropValues() const {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: drop values", m_spreadsheet->name()));
 
-	const int op = ui.cbOperator->currentIndex();
+	const Operator op = static_cast<Operator>(ui.cbOperator->currentIndex());
 	const double value1 = ui.leValue1->text().toDouble();
 	const double value2 = ui.leValue2->text().toDouble();
 
