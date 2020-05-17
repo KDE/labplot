@@ -84,7 +84,7 @@ Very short classes can be bundled in one file which then is named using all lowe
     var = (foo - 1) + (bar - 2) + (baz - 3)
     char *s = (char*) malloc(LENGTH * sizeof(char));
 @endcode
-- enum and structs should be defined first in a class
+- enum and structs should be defined first in a class. use strongly typed enums ("enum class")
 - parameter names in a method definition should only be used to explains the usage of the parameter
 - In SIGNAL() and SLOT() macros, use as little whitespace as possible. This gives a little speed up since Qt does not have to normalize the signal/slot name.
 
