@@ -131,6 +131,7 @@ void DropValuesDialog::okClicked() const {
 }
 
 //TODO: m_column->setMasked() is slow, we need direct access to the masked-container -> redesign
+//TODO: provide template based solution to avoid code duplication
 class MaskValuesTask : public QRunnable {
 	public:
 		MaskValuesTask(Column* col, Operator op, double value1, double value2) {
@@ -144,69 +145,182 @@ class MaskValuesTask : public QRunnable {
 			m_column->setSuppressDataChangedSignal(true);
 			bool changed = false;
 			auto* data = static_cast<QVector<double>* >(m_column->data());
+			auto* data_int = static_cast<QVector<int>* >(m_column->data());
+			auto* data_bigint = static_cast<QVector<qint64>* >(m_column->data());
+			const int rows = m_column->rowCount();
 
 			switch (m_operator) {
 			case EqualTo: {
-				for (int i = 0; i < data->size(); ++i) {
-					if (data->at(i) == m_value1) {
-						m_column->setMasked(i, true);
-						changed = true;
+				if (m_column->columnMode() == AbstractColumn::Numeric) {
+					for (int i = 0; i < rows; ++i) {
+						if (data->at(i) == m_value1) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
+					}
+				} else 	if (m_column->columnMode() == AbstractColumn::Integer) {
+					for (int i = 0; i < rows; ++i) {
+						if (data_int->at(i) == m_value1) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
+					}
+				} else if (m_column->columnMode() == AbstractColumn::BigInt) {
+					for (int i = 0; i < rows; ++i) {
+						if (data_bigint->at(i) == m_value1) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
 					}
 				}
 				break;
 			}
 			case BetweenIncl: {
-				for (int i = 0; i < data->size(); ++i) {
-					if (data->at(i) >= m_value1 && data->at(i) <= m_value2) {
-						m_column->setMasked(i, true);
-						changed = true;
+				if (m_column->columnMode() == AbstractColumn::Numeric) {
+					for (int i = 0; i < rows; ++i) {
+						if (data->at(i) >= m_value1 && data->at(i) <= m_value2) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
+					}
+				} else if (m_column->columnMode() == AbstractColumn::Integer) {
+					for (int i = 0; i < rows; ++i) {
+						if (data_int->at(i) >= m_value1 && data_int->at(i) <= m_value2) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
+					}
+				} else if (m_column->columnMode() == AbstractColumn::BigInt) {
+					for (int i = 0; i < rows; ++i) {
+						if (data_bigint->at(i) >= m_value1 && data_bigint->at(i) <= m_value2) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
 					}
 				}
 				break;
 			}
-
 			case BetweenExcl: {
-				for (int i = 0; i < data->size(); ++i) {
-					if (data->at(i) > m_value1 && data->at(i) < m_value2) {
-						m_column->setMasked(i, true);
-						changed = true;
+				if (m_column->columnMode() == AbstractColumn::Numeric) {
+					for (int i = 0; i < rows; ++i) {
+						if (data->at(i) > m_value1 && data->at(i) < m_value2) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
+					}
+				} else if (m_column->columnMode() == AbstractColumn::Integer) {
+					for (int i = 0; i < rows; ++i) {
+						if (data_int->at(i) > m_value1 && data_int->at(i) < m_value2) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
+					}
+				} else if (m_column->columnMode() == AbstractColumn::BigInt) {
+					for (int i = 0; i < rows; ++i) {
+						if (data_bigint->at(i) > m_value1 && data_bigint->at(i) < m_value2) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
 					}
 				}
 				break;
 			}
 			case GreaterThan: {
-				for (int i = 0; i < data->size(); ++i) {
-					if (data->at(i) > m_value1) {
-						m_column->setMasked(i, true);
-						changed = true;
+				if (m_column->columnMode() == AbstractColumn::Numeric) {
+					for (int i = 0; i < rows; ++i) {
+						if (data->at(i) > m_value1) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
+					}
+				} else if (m_column->columnMode() == AbstractColumn::Integer) {
+					for (int i = 0; i < rows; ++i) {
+						if (data_int->at(i) > m_value1) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
+					}
+				} else if (m_column->columnMode() == AbstractColumn::BigInt) {
+					for (int i = 0; i < rows; ++i) {
+						if (data_bigint->at(i) > m_value1) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
 					}
 				}
 				break;
 			}
-
 			case GreaterThanEqualTo: {
-				for (int i = 0; i < data->size(); ++i) {
-					if (data->at(i) >= m_value1) {
-						m_column->setMasked(i, true);
-						changed = true;
+				if (m_column->columnMode() == AbstractColumn::Numeric) {
+					for (int i = 0; i < rows; ++i) {
+						if (data->at(i) >= m_value1) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
+					}
+				} else if (m_column->columnMode() == AbstractColumn::Integer) {
+					for (int i = 0; i < rows; ++i) {
+						if (data_int->at(i) >= m_value1) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
+					}
+				} else if (m_column->columnMode() == AbstractColumn::BigInt) {
+					for (int i = 0; i < rows; ++i) {
+						if (data_bigint->at(i) >= m_value1) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
 					}
 				}
 				break;
 			}
 			case LessThan: {
-				for (int i = 0; i < data->size(); ++i) {
-					if (data->at(i) < m_value1) {
-						m_column->setMasked(i, true);
-						changed = true;
+				if (m_column->columnMode() == AbstractColumn::Numeric) {
+					for (int i = 0; i < rows; ++i) {
+						if (data->at(i) < m_value1) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
+					}
+				} else if (m_column->columnMode() == AbstractColumn::Integer) {
+					for (int i = 0; i < rows; ++i) {
+						if (data_int->at(i) < m_value1) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
+					}
+				} else if (m_column->columnMode() == AbstractColumn::BigInt) {
+					for (int i = 0; i < rows; ++i) {
+						if (data_bigint->at(i) < m_value1) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
 					}
 				}
 				break;
 			}
 			case LessThanEqualTo: {
-				for (int i = 0; i < data->size(); ++i) {
-					if (data->at(i) <= m_value1) {
-						m_column->setMasked(i, true);
-						changed = true;
+				if (m_column->columnMode() == AbstractColumn::Numeric) {
+					for (int i = 0; i < rows; ++i) {
+						if (data->at(i) <= m_value1) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
+					}
+				} else if (m_column->columnMode() == AbstractColumn::Integer) {
+					for (int i = 0; i < rows; ++i) {
+						if (data_int->at(i) <= m_value1) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
+					}
+				} else if (m_column->columnMode() == AbstractColumn::BigInt) {
+					for (int i = 0; i < rows; ++i) {
+						if (data_bigint->at(i) <= m_value1) {
+							m_column->setMasked(i, true);
+							changed = true;
+						}
 					}
 				}
 			}
@@ -224,6 +338,7 @@ class MaskValuesTask : public QRunnable {
 		Column* m_column;
 };
 
+//TODO: provide template based solution to avoid code duplication
 class DropValuesTask : public QRunnable {
 	public:
 		DropValuesTask(Column* col, Operator op, double value1, double value2) {
@@ -235,76 +350,221 @@ class DropValuesTask : public QRunnable {
 
 		void run() override {
 			bool changed = false;
-			auto* data = static_cast<QVector<double>* >(m_column->data());
-			QVector<double> new_data(*data);
 
-			switch (m_operator) {
-			case EqualTo: {
-				for (auto& d : new_data) {
-					if (d == m_value1) {
-						d = NAN;
-						changed = true;
-					}
-				}
-				break;
-			}
-			case BetweenIncl: {
-				for (auto& d : new_data) {
-					if (d >= m_value1 && d <= m_value2) {
-						d = NAN;
-						changed = true;
-					}
-				}
-				break;
-			}
-			case BetweenExcl: {
-				for (auto& d : new_data) {
-					if (d > m_value1 && d < m_value2) {
-						d = NAN;
-						changed = true;
-					}
-				}
-				break;
-			}
-			case GreaterThan: {
-				for (auto& d : new_data) {
-					if (d > m_value1) {
-						d = NAN;
-						changed = true;
-					}
-				}
-				break;
-			}
-			case GreaterThanEqualTo: {
-				for (auto& d : new_data) {
-					if (d >= m_value1) {
-						d = NAN;
-						changed = true;
-					}
-				}
-				break;
-			}
-			case LessThan: {
-				for (auto& d : new_data) {
-					if (d < m_value1) {
-						d = NAN;
-						changed = true;
-					}
-				}
-				break;
-			}
-			case LessThanEqualTo: {
-				for (auto& d : new_data) {
-					if (d <= m_value1) {
-						d = NAN;
-						changed = true;
-					}
-				}
-			}
-			}
+			if (m_column->columnMode() == AbstractColumn::Numeric) {
+				auto* data = static_cast<QVector<double>* >(m_column->data());
+				QVector<double> new_data(*data);
 
-			if (changed)
-				m_column->replaceValues(0, new_data);
+				switch (m_operator) {
+				case EqualTo: {
+					for (auto& d : new_data) {
+						if (d == m_value1) {
+							d = NAN;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case BetweenIncl: {
+					for (auto& d : new_data) {
+						if (d >= m_value1 && d <= m_value2) {
+							d = NAN;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case BetweenExcl: {
+					for (auto& d : new_data) {
+						if (d > m_value1 && d < m_value2) {
+							d = NAN;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case GreaterThan: {
+					for (auto& d : new_data) {
+						if (d > m_value1) {
+							d = NAN;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case GreaterThanEqualTo: {
+					for (auto& d : new_data) {
+						if (d >= m_value1) {
+							d = NAN;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case LessThan: {
+					for (auto& d : new_data) {
+						if (d < m_value1) {
+							d = NAN;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case LessThanEqualTo: {
+					for (auto& d : new_data) {
+						if (d <= m_value1) {
+							d = NAN;
+							changed = true;
+						}
+					}
+				}
+				}
+
+				if (changed)
+					m_column->replaceValues(0, new_data);
+			} else if (m_column->columnMode() == AbstractColumn::Integer) {
+				auto* data = static_cast<QVector<int>* >(m_column->data());
+				QVector<int> new_data(*data);
+
+				switch (m_operator) {
+				case EqualTo: {
+					for (auto& d : new_data) {
+						if (d == m_value1) {
+							d = 0;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case BetweenIncl: {
+					for (auto& d : new_data) {
+						if (d >= m_value1 && d <= m_value2) {
+							d = 0;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case BetweenExcl: {
+					for (auto& d : new_data) {
+						if (d > m_value1 && d < m_value2) {
+							d = 0;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case GreaterThan: {
+					for (auto& d : new_data) {
+						if (d > m_value1) {
+							d = 0;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case GreaterThanEqualTo: {
+					for (auto& d : new_data) {
+						if (d >= m_value1) {
+							d = 0;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case LessThan: {
+					for (auto& d : new_data) {
+						if (d < m_value1) {
+							d = 0;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case LessThanEqualTo: {
+					for (auto& d : new_data) {
+						if (d <= m_value1) {
+							d = 0;
+							changed = true;
+						}
+					}
+				}
+				}
+
+				if (changed)
+					m_column->replaceInteger(0, new_data);
+			} else if (m_column->columnMode() == AbstractColumn::BigInt) {
+				auto* data = static_cast<QVector<qint64>* >(m_column->data());
+				QVector<qint64> new_data(*data);
+
+				switch (m_operator) {
+				case EqualTo: {
+					for (auto& d : new_data) {
+						if (d == m_value1) {
+							d = 0;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case BetweenIncl: {
+					for (auto& d : new_data) {
+						if (d >= m_value1 && d <= m_value2) {
+							d = 0;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case BetweenExcl: {
+					for (auto& d : new_data) {
+						if (d > m_value1 && d < m_value2) {
+							d = 0;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case GreaterThan: {
+					for (auto& d : new_data) {
+						if (d > m_value1) {
+							d = 0;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case GreaterThanEqualTo: {
+					for (auto& d : new_data) {
+						if (d >= m_value1) {
+							d = 0;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case LessThan: {
+					for (auto& d : new_data) {
+						if (d < m_value1) {
+							d = 0;
+							changed = true;
+						}
+					}
+					break;
+				}
+				case LessThanEqualTo: {
+					for (auto& d : new_data) {
+						if (d <= m_value1) {
+							d = 0;
+							changed = true;
+						}
+					}
+				}
+				}
+
+				if (changed)
+					m_column->replaceBigInt(0, new_data);
+			}
 		}
 
 	private:
