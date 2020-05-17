@@ -89,7 +89,7 @@ public:
 	}
 
 	QUndoStack undo_stack;
-	MdiWindowVisibility mdiWindowVisibility{Project::folderOnly};
+	MdiWindowVisibility mdiWindowVisibility{Project::MdiWindowVisibility::folderOnly};
 	QString fileName;
 	QString version;
 	QString author;
@@ -134,7 +134,7 @@ Project::~Project() {
 	//if the project is being closed, in Worksheet the scene items are being removed and the selection in the view can change.
 	//don't react on these changes since this can lead crashes (worksheet object is already in the destructor).
 	//->notify all worksheets about the project being closed.
-	for (auto* w : children<Worksheet>(AbstractAspect::Recursive))
+	for (auto* w : children<Worksheet>(ChildIndexFlag::Recursive))
 		w->setIsClosing();
 
 	d->undo_stack.clear();
@@ -217,7 +217,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 
 		// When the column is created, it gets a random name and is eventually not connected to any curve.
 		// When changing the name it can match a curve and should than be connected to the curve.
-		const QVector<XYCurve*>& curves = children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+		const QVector<XYCurve*>& curves = children<XYCurve>(ChildIndexFlag::Recursive);
 		QString columnPath = column->path();
 
 		// setXColumnPath must not be set, because if curve->column matches column, there already exist a
@@ -261,7 +261,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 
 		}
 
-		const QVector<Column*>& columns = children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+		const QVector<Column*>& columns = children<Column>(ChildIndexFlag::Recursive);
 		for (auto* tempColumn : columns) {
 			const QStringList& formulaVariableColumnsPath = tempColumn->formulaVariableColumnPaths();
 			for (int i = 0; i < formulaVariableColumnsPath.count(); i++) {
@@ -296,7 +296,7 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 		return;
 
 	for (auto column : columns) {
-		const QVector<XYCurve*>& curves = children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+		const QVector<XYCurve*>& curves = children<XYCurve>(ChildIndexFlag::Recursive);
 		QString columnPath = column->path();
 
 		for (auto* curve : curves) {
@@ -335,7 +335,7 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 			}
 			curve->setUndoAware(true);
 		}
-		const QVector<Column*>& columns = children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+		const QVector<Column*>& columns = children<Column>(ChildIndexFlag::Recursive);
 		for (auto* tempColumn : columns) {
 			const QStringList& formulaVariableColumnPaths = tempColumn->formulaVariableColumnPaths();
 			for (int i = 0; i < formulaVariableColumnPaths.count(); i++) {
@@ -400,7 +400,7 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
  */
 void Project::save(QXmlStreamWriter* writer) const {
 	//save all children
-	for (auto* child : children<AbstractAspect>(IncludeHidden)) {
+	for (auto* child : children<AbstractAspect>(ChildIndexFlag::IncludeHidden)) {
 		writer->writeStartElement("child_aspect");
 		child->save(writer);
 		writer->writeEndElement();
@@ -525,7 +525,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		//LiveDataSource:
 		//call finalizeLoad() to replace relative with absolute paths if required
 		//and to create columns during the initial read
-		auto sources = children<LiveDataSource>(AbstractAspect::Recursive);
+		auto sources = children<LiveDataSource>(ChildIndexFlag::Recursive);
 		for (auto* source : sources) {
 			if (!source) continue;
 			source->finalizeLoad();
@@ -533,12 +533,12 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 
 		//everything is read now.
 		//restore the pointer to the data sets (columns) in xy-curves etc.
-		auto columns = children<Column>(AbstractAspect::Recursive);
+		auto columns = children<Column>(ChildIndexFlag::Recursive);
 
 		//xy-curves
 		// cannot be removed by the column observer, because it does not react
 		// on curve changes
-		auto curves = children<XYCurve>(AbstractAspect::Recursive);
+		auto curves = children<XYCurve>(ChildIndexFlag::Recursive);
 		for (auto* curve : curves) {
 			if (!curve) continue;
 			curve->suppressRetransform(true);
@@ -574,7 +574,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		}
 
 		//axes
-		auto axes = children<Axis>(AbstractAspect::Recursive);
+		auto axes = children<Axis>(ChildIndexFlag::Recursive);
 		for (auto* axis : axes) {
 			if (!axis) continue;
 			RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
@@ -582,14 +582,14 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		}
 
 		//histograms
-		auto hists = children<Histogram>(AbstractAspect::Recursive);
+		auto hists = children<Histogram>(ChildIndexFlag::Recursive);
 		for (auto* hist : hists) {
 			if (!hist) continue;
 			RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
 		}
 
 		//data picker curves
-		auto dataPickerCurves = children<DatapickerCurve>(AbstractAspect::Recursive);
+		auto dataPickerCurves = children<DatapickerCurve>(ChildIndexFlag::Recursive);
 		for (auto* dataPickerCurve : dataPickerCurves) {
 			if (!dataPickerCurve) continue;
 			RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
@@ -622,7 +622,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 
 		//all data was read in spreadsheets:
 		//call CartesianPlot::retransform() to retransform the plots
-		for (auto* plot : children<CartesianPlot>(AbstractAspect::Recursive)) {
+		for (auto* plot : children<CartesianPlot>(ChildIndexFlag::Recursive)) {
 			plot->setIsLoading(false);
 			plot->retransform();
 		}

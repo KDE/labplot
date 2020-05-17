@@ -114,7 +114,7 @@ class AbstractAspect : public QObject {
 	Q_OBJECT
 
 public:
-	enum ChildIndexFlag {
+	enum class ChildIndexFlag {
 		IncludeHidden = 0x01,
 		Recursive = 0x02,
 		Compress = 0x04
@@ -181,23 +181,23 @@ public:
 	template <class T> QVector<T*> children(ChildIndexFlags flags = nullptr) const {
 		QVector<T*> result;
 		for (auto* child: children()) {
-			if (flags & IncludeHidden || !child->hidden()) {
+			if (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) {
 				T* i = dynamic_cast<T*>(child);
 				if (i)
 					result << i;
 
-				if (child && flags & Recursive)
+				if (child && flags & ChildIndexFlag::Recursive)
 					result << child->template children<T>(flags);
 			}
 		}
 		return result;
 	}
 
-	template <class T> T* child(int index, ChildIndexFlags flags=nullptr) const {
+	template <class T> T* child(int index, ChildIndexFlags flags = nullptr) const {
 		int i = 0;
 		for (auto* child: children()) {
 			T* c = dynamic_cast<T*>(child);
-			if (c && (flags & IncludeHidden || !child->hidden()) && index == i++)
+			if (c && (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) && index == i++)
 				return c;
 		}
 		return nullptr;
@@ -216,7 +216,7 @@ public:
 		int result = 0;
 		for (auto* child: children()) {
 			T* i = dynamic_cast<T*>(child);
-			if (i && (flags & IncludeHidden || !child->hidden()))
+			if (i && (flags & ChildIndexFlag::IncludeHidden || !child->hidden()))
 				result++;
 		}
 		return result;
@@ -227,7 +227,7 @@ public:
 		for (auto* c:	 children()) {
 			if (child == c) return index;
 			T* i = dynamic_cast<T*>(c);
-			if (i && (flags & IncludeHidden || !c->hidden()))
+			if (i && (flags & ChildIndexFlag::IncludeHidden || !c->hidden()))
 				index++;
 		}
 		return -1;

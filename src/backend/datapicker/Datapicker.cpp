@@ -199,7 +199,7 @@ void Datapicker::setChildSelectedInView(int index, bool selected) {
 	--index; //-1 because of the first tab in the view being reserved for the plot image and curves
 
 	//select/deselect the data spreadhseets
-	auto spreadsheets = children<const Spreadsheet>(AbstractAspect::Recursive);
+	auto spreadsheets = children<const Spreadsheet>(ChildIndexFlag::Recursive);
 	const AbstractAspect* aspect = spreadsheets.at(index);
 	if (selected) {
 		emit childAspectSelectedInView(aspect);
@@ -228,7 +228,7 @@ void Datapicker::setSelectedInView(const bool b) {
 }
 
 void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
-	auto points = parentAspect->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	auto points = parentAspect->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 
 	auto* newPoint = new DatapickerPoint(i18n("Point %1", points.count() + 1));
 	newPoint->setPosition(pos);
@@ -265,7 +265,7 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const auto* curve = qobject_cast<const DatapickerCurve*>(aspect);
 	if (curve) {
 		//clear scene
-		auto points = curve->children<DatapickerPoint>(IncludeHidden);
+		auto points = curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 		for (auto* point : points)
 			handleChildAspectAboutToBeRemoved(point);
 
@@ -286,19 +286,19 @@ void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
 		handleChildAspectAdded(addedPoint);
 	else if (curve) {
 		connect(m_image, &DatapickerImage::axisPointsChanged, curve, &DatapickerCurve::updatePoints);
-		auto points = curve->children<DatapickerPoint>(IncludeHidden);
+		auto points = curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 		for (auto* point : points)
 			handleChildAspectAdded(point);
 	} else
 		return;
 
 	qreal zVal = 0;
-	auto points = m_image->children<DatapickerPoint>(IncludeHidden);
+	auto points = m_image->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 	for (auto* point : points)
 		point->graphicsItem()->setZValue(zVal++);
 
 	for (const auto* curve : children<DatapickerCurve>()) {
-		for (auto* point : curve->children<DatapickerPoint>(IncludeHidden))
+		for (auto* point : curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden))
 			point->graphicsItem()->setZValue(zVal++);
 	}
 
@@ -336,7 +336,7 @@ void Datapicker::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	//serialize all children
-	for (auto* child : children<AbstractAspect>(IncludeHidden))
+	for (auto* child : children<AbstractAspect>(ChildIndexFlag::IncludeHidden))
 		child->save(writer);
 
 	writer->writeEndElement(); // close "datapicker" section
@@ -381,8 +381,8 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	for (auto* aspect : children<AbstractAspect>(IncludeHidden)) {
-		for (auto* point : aspect->children<DatapickerPoint>(IncludeHidden))
+	for (auto* aspect : children<AbstractAspect>(ChildIndexFlag::IncludeHidden)) {
+		for (auto* point : aspect->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden))
 			handleAspectAdded(point);
 	}
 

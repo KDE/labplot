@@ -317,7 +317,7 @@ void DatapickerImage::setPointVisibility(const bool on) {
 }
 
 void DatapickerImage::setPrinting(bool on) const {
-	auto points = parentAspect()->children<DatapickerPoint>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+	auto points = parentAspect()->children<DatapickerPoint>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
 	for (auto* point : points)
 		point->setPrinting(on);
 }
@@ -330,7 +330,7 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 
 	if (pointsType == DatapickerImage::AxisPoints) {
 		//clear image
-		auto points = children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+		auto points = children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 		if (!points.isEmpty()) {
 			beginMacro(i18n("%1: remove all axis points", name()));
 
@@ -364,7 +364,7 @@ QString DatapickerImagePrivate::name() const {
 }
 
 void DatapickerImagePrivate::retransform() {
-	auto points = q->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	auto points = q->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* point : points)
 		point->retransform();
 }
@@ -436,7 +436,7 @@ void DatapickerImagePrivate::updateFileName() {
 		q->m_segments->setSegmentsVisible(false);
 	}
 
-	auto points = q->parentAspect()->children<DatapickerPoint>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+	auto points = q->parentAspect()->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 	if (!points.isEmpty()) {
 		for (auto* point : points)
 			point->remove();
@@ -512,7 +512,7 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//serialize all children
-	for (auto* child : children<AbstractAspect>(IncludeHidden))
+	for (auto* child : children<AbstractAspect>(ChildIndexFlag::IncludeHidden))
 		child->save(writer);
 
 	writer->writeEndElement();

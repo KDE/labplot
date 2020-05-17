@@ -352,7 +352,7 @@ void DatapickerCurve::setPointVisibility(bool on) {
 }
 
 void DatapickerCurve::setPrinting(bool on) {
-	for (auto* point : children<DatapickerPoint>(IncludeHidden))
+	for (auto* point : children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden))
 		point->setPrinting(on);
 }
 
@@ -370,7 +370,7 @@ void DatapickerCurve::setSelectedInView(bool b) {
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
 void DatapickerCurve::updatePoints() {
-	for (auto* point : children<DatapickerPoint>(IncludeHidden))
+	for (auto* point : children<DatapickerPoint>(ChildIndexFlag::IncludeHidden))
 		updatePoint(point);
 }
 
@@ -389,7 +389,7 @@ void DatapickerCurve::updatePoint(const DatapickerPoint* point) {
 		return;
 
 	auto* datapicker = static_cast<Datapicker*>(parentAspect());
-	int row = indexOfChild<DatapickerPoint>(point, AbstractAspect::IncludeHidden);
+	int row = indexOfChild<DatapickerPoint>(point, ChildIndexFlag::IncludeHidden);
 	QVector3D data = datapicker->mapSceneToLogical(point->position());
 
 	if (d->posXColumn)
@@ -433,7 +433,7 @@ QString DatapickerCurvePrivate::name() const {
 }
 
 void DatapickerCurvePrivate::retransform() {
-	auto points = q->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	auto points = q->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* point : points)
 		point->retransform();
 }
@@ -481,7 +481,7 @@ void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//serialize all children
-	for (auto* child : children<AbstractAspect>(IncludeHidden))
+	for (auto* child : children<AbstractAspect>(ChildIndexFlag::IncludeHidden))
 		child->save(writer);
 
 	writer->writeEndElement(); // close section

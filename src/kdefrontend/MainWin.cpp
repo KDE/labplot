@@ -625,15 +625,15 @@ void MainWin::initActions() {
 
 	m_visibilityFolderAction = new QAction(QIcon::fromTheme("folder"), i18n("Current &Folder Only"), windowVisibilityActions);
 	m_visibilityFolderAction->setCheckable(true);
-	m_visibilityFolderAction->setData(Project::folderOnly);
+	m_visibilityFolderAction->setData(static_cast<int>(Project::MdiWindowVisibility::folderOnly));
 
 	m_visibilitySubfolderAction = new QAction(QIcon::fromTheme("folder-documents"), i18n("Current Folder and &Subfolders"), windowVisibilityActions);
 	m_visibilitySubfolderAction->setCheckable(true);
-	m_visibilitySubfolderAction->setData(Project::folderAndSubfolders);
+	m_visibilitySubfolderAction->setData(static_cast<int>(Project::MdiWindowVisibility::folderAndSubfolders));
 
 	m_visibilityAllAction = new QAction(i18n("&All"), windowVisibilityActions);
 	m_visibilityAllAction->setCheckable(true);
-	m_visibilityAllAction->setData(Project::allMdiWindows);
+	m_visibilityAllAction->setData(static_cast<int>(Project::MdiWindowVisibility::allMdiWindows));
 
 	connect(windowVisibilityActions, &QActionGroup::triggered, this, &MainWin::setMdiWindowVisibility);
 
@@ -1110,9 +1110,9 @@ bool MainWin::newProject() {
 	KConfigGroup group = KSharedConfig::openConfig()->group( "Settings_General" );
 	Project::MdiWindowVisibility vis = Project::MdiWindowVisibility(group.readEntry("MdiWindowVisibility", 0));
 	m_project->setMdiWindowVisibility( vis );
-	if (vis == Project::folderOnly)
+	if (vis == Project::MdiWindowVisibility::folderOnly)
 		m_visibilityFolderAction->setChecked(true);
-	else if (vis == Project::folderAndSubfolders)
+	else if (vis == Project::MdiWindowVisibility::folderAndSubfolders)
 		m_visibilitySubfolderAction->setChecked(true);
 	else
 		m_visibilityAllAction->setChecked(true);
@@ -1942,12 +1942,12 @@ void MainWin::updateMdiWindowVisibility() const {
 	QList<QMdiSubWindow *> windows = m_mdiArea->subWindowList();
 	PartMdiView* part_view;
 	switch (m_project->mdiWindowVisibility()) {
-	case Project::allMdiWindows:
+	case Project::MdiWindowVisibility::allMdiWindows:
 		for (auto* window : windows)
 			window->show();
 
 		break;
-	case Project::folderOnly:
+	case Project::MdiWindowVisibility::folderOnly:
 		for (auto* window : windows) {
 			part_view = qobject_cast<PartMdiView *>(window);
 			Q_ASSERT(part_view);
@@ -1957,7 +1957,7 @@ void MainWin::updateMdiWindowVisibility() const {
 				part_view->hide();
 		}
 		break;
-	case Project::folderAndSubfolders:
+	case Project::MdiWindowVisibility::folderAndSubfolders:
 		for (auto* window : windows) {
 			part_view = qobject_cast<PartMdiView *>(window);
 			if (part_view->part()->isDescendantOf(m_currentFolder))

@@ -136,7 +136,7 @@ void Folder::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	for (auto* child : children<AbstractAspect>(IncludeHidden)) {
+	for (auto* child : children<AbstractAspect>(ChildIndexFlag::IncludeHidden)) {
 		writer->writeStartElement(QLatin1String("child_aspect"));
 		child->save(writer);
 		writer->writeEndElement(); // "child_aspect"

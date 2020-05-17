@@ -111,7 +111,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 	cbExistingPlots->setModel(m_plotsModel);
 
 	//select the first available plot, if available
-	auto plots = m_spreadsheet->project()->children<CartesianPlot>(AbstractAspect::Recursive);
+	auto plots = m_spreadsheet->project()->children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
 	if (!plots.isEmpty()) {
 		const auto* plot = plots.first();
 		cbExistingPlots->setCurrentModelIndex(m_plotsModel->modelIndexOfAspect(plot));
@@ -124,7 +124,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 	cbExistingWorksheets->setModel(m_worksheetsModel);
 
 	//select the first available worksheet, if available
-	auto worksheets = m_spreadsheet->project()->children<Worksheet>(AbstractAspect::Recursive);
+	auto worksheets = m_spreadsheet->project()->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
 	if (!worksheets.isEmpty()) {
 		const auto* worksheet = worksheets.first();
 		cbExistingWorksheets->setCurrentModelIndex(m_worksheetsModel->modelIndexOfAspect(worksheet));

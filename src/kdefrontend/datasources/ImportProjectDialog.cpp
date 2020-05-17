@@ -206,7 +206,7 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	const QString& targetFolderPath = targetFolder->path();
 	const Project* targetProject = targetFolder->project();
 	QStringList targetAllPathes;
-	for (const auto* aspect : targetProject->children<AbstractAspect>(AbstractAspect::Recursive)) {
+	for (const auto* aspect : targetProject->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive)) {
 		if (!dynamic_cast<const Folder*>(aspect))
 			targetAllPathes << aspect->path();
 	}

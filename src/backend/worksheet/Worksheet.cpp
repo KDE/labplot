@@ -269,7 +269,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		cursorModelPlotAdded(p->name());
 	}
 	qreal zVal = 0;
-	for (auto* child : children<WorksheetElement>(IncludeHidden))
+	for (auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))
 		child->graphicsItem()->setZValue(zVal++);
 
 	//if a theme was selected in the worksheet, apply this theme for newly added children
@@ -343,7 +343,7 @@ void Worksheet::childDeselected(const AbstractAspect* aspect) {
 void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b) {
 	//determine the corresponding aspect
 	const AbstractAspect* aspect(nullptr);
-	for (const auto* child : children<WorksheetElement>(IncludeHidden) ) {
+	for (const auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden) ) {
 		aspect = this->aspectFromGraphicsItem(child, item);
 		if (aspect)
 			break;
@@ -367,7 +367,7 @@ WorksheetElement* Worksheet::aspectFromGraphicsItem(const WorksheetElement* aspe
 	if ( aspect->graphicsItem() == item )
 		return const_cast<WorksheetElement*>(aspect);
 	else {
-		for (const auto* child : aspect->children<WorksheetElement>(AbstractAspect::IncludeHidden) ) {
+		for (const auto* child : aspect->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden) ) {
 			WorksheetElement* a = this->aspectFromGraphicsItem(child, item);
 			if (a)
 				return a;
@@ -393,7 +393,7 @@ void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item) {
 	Q_ASSERT(item);
 	//determine the corresponding aspect
 	AbstractAspect* aspect(nullptr);
-	for (const auto* child : children<WorksheetElement>(IncludeHidden) ) {
+	for (const auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden) ) {
 		aspect = this->aspectFromGraphicsItem(child, item);
 		if (aspect)
 			break;
@@ -718,7 +718,7 @@ void Worksheet::setPageRect(const QRectF& rect) {
 }
 
 void Worksheet::setPrinting(bool on) const {
-	QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+	QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* child : childElements)
 		child->setPrinting(on);
 }
@@ -739,7 +739,7 @@ void Worksheet::setTheme(const QString& theme) {
 
 void Worksheet::cartesianPlotMousePressZoomSelectionMode(QPointF logicPos) {
 	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
-		auto plots = children<CartesianPlot>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mousePressZoomSelectionMode(logicPos);
 	} else {
@@ -750,7 +750,7 @@ void Worksheet::cartesianPlotMousePressZoomSelectionMode(QPointF logicPos) {
 
 void Worksheet::cartesianPlotMouseReleaseZoomSelectionMode() {
 	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
-		auto plots = children<CartesianPlot>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseReleaseZoomSelectionMode();
 	} else {
@@ -761,7 +761,7 @@ void Worksheet::cartesianPlotMouseReleaseZoomSelectionMode() {
 
 void Worksheet::cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logicPos) {
 	if (cartesianPlotCursorMode() == Worksheet::ApplyActionToAll) {
-		auto plots = children<CartesianPlot>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mousePressCursorMode(cursorNumber, logicPos);
 	} else {
@@ -774,7 +774,7 @@ void Worksheet::cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logi
 
 void Worksheet::cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos) {
 	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
-		QVector<CartesianPlot*> plots = children<CartesianPlot>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+		QVector<CartesianPlot*> plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseMoveZoomSelectionMode(logicPos);
 	} else {
@@ -785,7 +785,7 @@ void Worksheet::cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos) {
 
 void Worksheet::cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos) {
 	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
-		auto plots = children<CartesianPlot>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseHoverZoomSelectionMode(logicPos);
 	} else {
@@ -796,7 +796,7 @@ void Worksheet::cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos) {
 
 void Worksheet::cartesianPlotMouseHoverOutsideDataRect() {
 	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
-		auto plots = children<CartesianPlot>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseHoverOutsideDataRect();
 	} else {
@@ -807,7 +807,7 @@ void Worksheet::cartesianPlotMouseHoverOutsideDataRect() {
 
 void Worksheet::cartesianPlotMouseMoveCursorMode(int cursorNumber, QPointF logicPos) {
 	if (cartesianPlotCursorMode() == Worksheet::ApplyActionToAll) {
-		auto plots = children<CartesianPlot>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseMoveCursorMode(cursorNumber, logicPos);
 	} else {
@@ -1232,7 +1232,7 @@ void WorksheetPrivate::updatePageRect() {
 		if (scaleContent) {
 			qreal horizontalRatio = pageRect.width() / oldRect.width();
 			qreal verticalRatio = pageRect.height() / oldRect.height();
-			QVector<WorksheetElement*> childElements = q->children<WorksheetElement>(AbstractAspect::IncludeHidden);
+			QVector<WorksheetElement*> childElements = q->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 			if (useViewSize) {
 				//don't make the change of the geometry undoable/redoable if the view size is used.
 				for (auto* elem : childElements) {
@@ -1392,7 +1392,7 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//serialize all children
-	for (auto* child : children<WorksheetElement>(IncludeHidden))
+	for (auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))
 		child->save(writer);
 
 	writer->writeEndElement(); // close "worksheet" section
@@ -1573,7 +1573,7 @@ void Worksheet::loadTheme(const QString& theme) {
 	this->setBackgroundType((PlotArea::BackgroundType)(group.readEntry("BackgroundType",(int) this->backgroundType())));
 
 	//load the theme for all the children
-	const QVector<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
+	const QVector<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* child : childElements)
 		child->loadThemeConfig(config);
 }

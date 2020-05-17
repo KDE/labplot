@@ -262,7 +262,7 @@ void CantorWorksheet::save(QXmlStreamWriter* writer) const{
 	writer->writeEndElement();
 
 	//save columns(variables)
-	for (auto* col : children<Column>(IncludeHidden))
+	for (auto* col : children<Column>(ChildIndexFlag::IncludeHidden))
 		col->save(writer);
 
 	writer->writeEndElement(); // close "cantorWorksheet" section

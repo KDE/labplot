@@ -88,7 +88,7 @@ void WorksheetElementContainer::setVisible(bool on) {
 	}
 
 	//change the visibility of all children
-	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
 	for (auto* elem : childList)
 		elem->setVisible(on);
 
@@ -105,7 +105,7 @@ bool WorksheetElementContainer::isVisible() const {
 }
 
 bool WorksheetElementContainer::isFullyVisible() const {
-	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
 	for (const auto* elem : childList) {
 		if (!elem->isVisible())
 			return false;
@@ -125,7 +125,7 @@ void WorksheetElementContainer::retransform() {
 	PERFTRACE("WorksheetElementContainer::retransform()");
 	Q_D(WorksheetElementContainer);
 
-	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
 	for (auto* child : childList)
 		child->retransform();
 
@@ -163,7 +163,7 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 		element->graphicsItem()->setParentItem(d);
 
 		qreal zVal = 0;
-		for (auto* child : children<WorksheetElement>(IncludeHidden))
+		for (auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))
 			child->setZValue(zVal++);
 	}
 

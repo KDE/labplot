@@ -396,7 +396,7 @@ void DatapickerCurveWidget::visibilityChanged(bool state) {
 }
 
 void DatapickerCurveWidget::updateSymbolWidgets() {
-	auto list = m_curve->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	auto list = m_curve->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	if (list.isEmpty()) {
 		ui.cbXErrorType->setEnabled(true);
 		ui.cbYErrorType->setEnabled(true);

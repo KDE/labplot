@@ -772,7 +772,7 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 
 	//columns
 	if (!m_fileLinked) {
-		for (auto* col : children<Column>(IncludeHidden))
+		for (auto* col : children<Column>(ChildIndexFlag::IncludeHidden))
 			col->save(writer);
 	}
 

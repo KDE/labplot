@@ -428,7 +428,7 @@ void DatapickerImageView::mousePressEvent(QMouseEvent* event) {
 
 	if (entryMode && !pointsUnderCursor && m_image->isLoaded && sceneRect().contains(eventPos)) {
 		if ( m_image->plotPointsType() == DatapickerImage::AxisPoints ) {
-			int childCount = m_image->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
+			int childCount = m_image->childCount<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 			if (childCount < 3)
 				m_datapicker->addNewPoint(eventPos, m_image);
 		} else if ( m_image->plotPointsType() == DatapickerImage::CurvePoints && m_datapicker->activeCurve() ) {
@@ -581,7 +581,7 @@ void DatapickerImageView::mouseModeChanged(QAction* action) {
 
 		if (currentPlotPointsTypeAction != action) {
 			if (action == setAxisPointsAction) {
-				int count = m_image->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
+				int count = m_image->childCount<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 				if (count) {
 					auto button = QMessageBox::question(this, i18n("Remove existing reference points?"),
 														i18n("All available reference points will be removed. Do you want to continue?"));
@@ -645,7 +645,7 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 		shift.setY(1);
 
 	m_image->beginMacro(i18n("%1: change position of selected DatapickerPoints.", m_image->name()));
-	const QVector<DatapickerPoint*> axisPoints = m_image->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	const QVector<DatapickerPoint*> axisPoints = m_image->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* point : axisPoints) {
 		if (!point->graphicsItem()->isSelected())
 			continue;
@@ -654,7 +654,7 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 		newPos = newPos + shift;
 		point->setPosition(newPos);
 
-		int pointIndex = m_image->indexOfChild<DatapickerPoint>(point, AbstractAspect::IncludeHidden);
+		int pointIndex = m_image->indexOfChild<DatapickerPoint>(point, AbstractAspect::ChildIndexFlag::IncludeHidden);
 		if (pointIndex == -1) continue;
 		DatapickerImage::ReferencePoints points = m_image->axisPoints();
 		points.scenePos[pointIndex].setX(point->position().x());
@@ -665,7 +665,7 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 	}
 
 	for (auto* curve : m_image->parentAspect()->children<DatapickerCurve>()) {
-		for (auto* point : curve->children<DatapickerPoint>(AbstractAspect::IncludeHidden)) {
+		for (auto* point : curve->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden)) {
 			if (!point->graphicsItem()->isSelected())
 				continue;
 
@@ -716,7 +716,7 @@ void DatapickerImageView::handleImageActions() {
 		magnificationActionGroup->setEnabled(true);
 		setAxisPointsAction->setEnabled(true);
 
-		int pointsCount = m_image->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
+		int pointsCount = m_image->childCount<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 		if (pointsCount > 0)
 			navigationActionGroup->setEnabled(true);
 		else

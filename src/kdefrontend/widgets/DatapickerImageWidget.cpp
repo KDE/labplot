@@ -794,7 +794,7 @@ void DatapickerImageWidget::imageMinSegmentLengthChanged(const int value) {
 }
 
 void DatapickerImageWidget::updateSymbolWidgets() {
-	int pointCount = m_image->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	int pointCount = m_image->childCount<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	if (pointCount)
 		ui.tSymbol->setEnabled(true);
 	else

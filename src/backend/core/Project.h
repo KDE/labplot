@@ -39,7 +39,7 @@ class Project : public Folder {
 	Q_OBJECT
 
 public:
-	enum MdiWindowVisibility {
+	enum class MdiWindowVisibility {
 		folderOnly,
 		folderAndSubfolders,
 		allMdiWindows

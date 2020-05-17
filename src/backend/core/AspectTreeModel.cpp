@@ -314,7 +314,7 @@ void AspectTreeModel::aspectAdded(const AbstractAspect* aspect) {
 	connect(aspect, &AbstractAspect::childAspectDeselectedInView, this, &AspectTreeModel::aspectDeselectedInView);
 
 	//add signal-slot connects for all children, too
-	for (const auto* child : aspect->children<AbstractAspect>(AbstractAspect::Recursive)) {
+	for (const auto* child : aspect->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive)) {
 		connect(child, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
 		connect(child, &AbstractAspect::childAspectSelectedInView, this, &AspectTreeModel::aspectSelectedInView);
 		connect(child, &AbstractAspect::childAspectDeselectedInView, this, &AspectTreeModel::aspectDeselectedInView);
@@ -383,7 +383,7 @@ QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect* aspect, in
 QModelIndex AspectTreeModel::modelIndexOfAspect(const QString& path, int column) const {
 	//determine the aspect out of aspect path
 	AbstractAspect* aspect = nullptr;
-	auto children = m_root->children(AspectType::AbstractAspect, AbstractAspect::Recursive);
+	auto children = m_root->children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
 	for (auto* child: children) {
 		if (child->path() == path) {
 			aspect = child;

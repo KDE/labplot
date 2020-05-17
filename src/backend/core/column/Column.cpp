@@ -136,7 +136,7 @@ QMenu* Column::createContextMenu() {
 
 	//add curves where the column is currently in use
 	usedInMenu->addSection(i18n("XY-Curves"));
-	auto curves = project->children<XYCurve>(AbstractAspect::Recursive);
+	auto curves = project->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (const auto* curve : curves) {
 		bool used = false;
 
@@ -159,7 +159,7 @@ QMenu* Column::createContextMenu() {
 
 	//add histograms where the column is used
 	usedInMenu->addSection(i18n("Histograms"));
-	auto hists = project->children<Histogram>(AbstractAspect::Recursive);
+	auto hists = project->children<Histogram>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (const auto* hist : hists) {
 		bool used = (hist->dataColumn() == this);
 		if (used) {
@@ -171,7 +171,7 @@ QMenu* Column::createContextMenu() {
 
 	//add calculated columns where the column is used in formula variables
 	usedInMenu->addSection(i18n("Calculated Columns"));
-	QVector<Column*> columns = project->children<Column>(AbstractAspect::Recursive);
+	QVector<Column*> columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 	const QString& path = this->path();
 	for (const auto* column : columns) {
 		auto paths = column->formulaVariableColumnPaths();
@@ -246,7 +246,7 @@ void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
 	if (!project)
 		return;
 
-	auto curves = project->children<const XYCurve>(AbstractAspect::Recursive);
+	auto curves = project->children<const XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
 
 	//determine the plots where the column is consumed
 	for (const auto* curve : curves) {
@@ -261,7 +261,7 @@ void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
 		}
 	}
 
-	auto hists = project->children<const Histogram>(AbstractAspect::Recursive);
+	auto hists = project->children<const Histogram>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (const auto* hist : hists) {
 		if (hist->dataColumn() == this ) {
 			auto* plot = static_cast<CartesianPlot*>(hist->parentAspect());

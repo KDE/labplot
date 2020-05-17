@@ -136,7 +136,7 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 		const QStringList columnPaths = m_columns.first()->formulaVariableColumnPaths();
 
 		//add all available variables and select the corresponding columns
-		const QVector<AbstractAspect*> cols = m_spreadsheet->project()->children(AspectType::Column, AbstractAspect::Recursive);
+		const QVector<AbstractAspect*> cols = m_spreadsheet->project()->children(AspectType::Column, AbstractAspect::ChildIndexFlag::Recursive);
 		for (int i = 0; i < variableNames.size(); ++i) {
 			addVariable();
 			m_variableNames[i]->setText(variableNames.at(i));

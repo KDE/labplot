@@ -3691,7 +3691,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	}
 
 	//serialize all children (plot area, title text label, axes and curves)
-	for (auto* elem : children<WorksheetElement>(IncludeHidden))
+	for (auto* elem : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))
 		elem->save(writer);
 
 	writer->writeEndElement(); // close "cartesianPlot" section
@@ -4095,7 +4095,7 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 	this->setColorPalette(config);
 
 	//load the theme for all the children
-	for (auto* child : children<WorksheetElement>(AbstractAspect::IncludeHidden))
+	for (auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))
 		child->loadThemeConfig(config);
 
 	Q_D(CartesianPlot);
@@ -4103,15 +4103,15 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 }
 
 void CartesianPlot::saveTheme(KConfig &config) {
-	const QVector<Axis*>& axisElements = children<Axis>(AbstractAspect::IncludeHidden);
-	const QVector<PlotArea*>& plotAreaElements = children<PlotArea>(AbstractAspect::IncludeHidden);
-	const QVector<TextLabel*>& textLabelElements = children<TextLabel>(AbstractAspect::IncludeHidden);
+	const QVector<Axis*>& axisElements = children<Axis>(ChildIndexFlag::IncludeHidden);
+	const QVector<PlotArea*>& plotAreaElements = children<PlotArea>(ChildIndexFlag::IncludeHidden);
+	const QVector<TextLabel*>& textLabelElements = children<TextLabel>(ChildIndexFlag::IncludeHidden);
 
 	axisElements.at(0)->saveThemeConfig(config);
 	plotAreaElements.at(0)->saveThemeConfig(config);
 	textLabelElements.at(0)->saveThemeConfig(config);
 
-	for (auto *child : children<XYCurve>(AbstractAspect::IncludeHidden))
+	for (auto *child : children<XYCurve>(ChildIndexFlag::IncludeHidden))
 		child->saveThemeConfig(config);
 }
 

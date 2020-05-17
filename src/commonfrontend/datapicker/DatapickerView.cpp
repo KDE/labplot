@@ -59,12 +59,12 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 	m_tabWidget->setMinimumSize(600, 600);
 
 	auto* layout = new QHBoxLayout(this);
-	layout->setContentsMargins(0,0,0,0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(m_tabWidget);
 
 	//add tab for each children view
 	m_initializing = true;
-	for (const auto* aspect : m_datapicker->children<AbstractAspect>(AbstractAspect::IncludeHidden)) {
+	for (const auto* aspect : m_datapicker->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden)) {
 		handleAspectAdded(aspect);
 		for (const auto* child : aspect->children<AbstractAspect>()) {
 			handleAspectAdded(child);
@@ -85,7 +85,7 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 
 DatapickerView::~DatapickerView() {
 	//delete all children views here, its own view will be deleted in ~AbstractPart()
-	for (const auto* aspect : m_datapicker->children<AbstractAspect>(AbstractAspect::IncludeHidden)) {
+	for (const auto* aspect : m_datapicker->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden)) {
 		for (const auto* child : aspect->children<AbstractAspect>()) {
 			const auto* part = dynamic_cast<const AbstractPart*>(child);
 			if (part)
@@ -154,7 +154,7 @@ void DatapickerView::itemSelected(int index) {
 
 void DatapickerView::showTabContextMenu(QPoint point) {
 	QMenu* menu = nullptr;
-	auto* aspect = m_datapicker->child<AbstractAspect>(m_tabWidget->currentIndex(), AbstractAspect::IncludeHidden);
+	auto* aspect = m_datapicker->child<AbstractAspect>(m_tabWidget->currentIndex(), AbstractAspect::ChildIndexFlag::IncludeHidden);
 	auto* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
 	if (spreadsheet) {
 		menu = spreadsheet->createContextMenu();
@@ -177,12 +177,12 @@ void DatapickerView::handleDescriptionChanged(const AbstractAspect* aspect) {
 	QString name;
 	if (aspect->parentAspect() == m_datapicker) {
 		//datapicker curve was renamed
-		index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
+		index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::ChildIndexFlag::IncludeHidden);
 		if (index != -1)
 			name = aspect->name() + ": " + aspect->children<Spreadsheet>().constFirst()->name();
 	} else {
 		//data spreadsheet was renamed or one of its columns, which is not relevant here
-		index = m_datapicker->indexOfChild<AbstractAspect>(aspect->parentAspect(), AbstractAspect::IncludeHidden);
+		index = m_datapicker->indexOfChild<AbstractAspect>(aspect->parentAspect(), AbstractAspect::ChildIndexFlag::IncludeHidden);
 		if (index != -1)
 			name = aspect->parentAspect()->name() + ": " + aspect->name();
 	}
@@ -199,7 +199,7 @@ void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
 		index = 0;
 		name = aspect->name();
 	} else if (dynamic_cast<const DatapickerCurve*>(aspect)) {
-		index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
+		index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::ChildIndexFlag::IncludeHidden);
 		const Spreadsheet* spreadsheet = static_cast<const Spreadsheet*>(aspect->child<AbstractAspect>(0));
 		part = spreadsheet;
 		name = aspect->name() + ": " + spreadsheet->name();
@@ -213,7 +213,7 @@ void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
 void DatapickerView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const auto* curve = dynamic_cast<const DatapickerCurve*>(aspect);
 	if (curve) {
-		int index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
+		int index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::ChildIndexFlag::IncludeHidden);
 		m_tabWidget->removeTab(index);
 	}
 }

@@ -204,9 +204,9 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	//restore column pointers:
 	//1. extend the pathes to contain the parent structures first
 	//2. restore the pointers from the pathes
-	const QVector<Column*> columns = project->children<Column>(AbstractAspect::Recursive);
-	const QVector<Spreadsheet*> spreadsheets = project->children<Spreadsheet>(AbstractAspect::Recursive);
-	for (auto* curve : project->children<XYCurve>(AbstractAspect::Recursive)) {
+	const QVector<Column*> columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+	const QVector<Spreadsheet*> spreadsheets = project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (auto* curve : project->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive)) {
 		curve->suppressRetransform(true);
 
 		//x-column
@@ -254,7 +254,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	}
 
 	if (!preview) {
-		for (auto* plot : project->children<CartesianPlot>(AbstractAspect::Recursive)) {
+		for (auto* plot : project->children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive)) {
 			plot->setIsLoading(false);
 			plot->retransform();
 		}

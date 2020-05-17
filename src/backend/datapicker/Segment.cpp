@@ -170,7 +170,7 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
 				for (int i = l; i <= h; ++i) {
 					if (count%q->m_image->pointSeparation() == 0) {
 						bool positionUsed = false;
-						const auto points = datapicker->activeCurve()->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+						const auto points = datapicker->activeCurve()->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 						for (const auto* point : points) {
 							if (point->position() == QPoint(line->x1(), i)*scaleFactor)
 								positionUsed = true;

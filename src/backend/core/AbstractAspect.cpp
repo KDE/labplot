@@ -525,7 +525,7 @@ void AbstractAspect::removeAllChildren() {
 void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 	Q_ASSERT(parentAspect() != nullptr);
 	Q_ASSERT(newParent != nullptr);
-	int max_index = newParent->childCount<AbstractAspect>(IncludeHidden);
+	int max_index = newParent->childCount<AbstractAspect>(ChildIndexFlag::IncludeHidden);
 	if (newIndex == -1)
 		newIndex = max_index;
 	Q_ASSERT(newIndex >= 0 && newIndex <= max_index);
@@ -543,10 +543,10 @@ void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFlags flags) const {
 	QVector<AbstractAspect*> result;
 	for (auto* child : children()) {
-		if (flags & IncludeHidden || !child->hidden()) {
-			if (child->inherits(type) || !(flags & Compress)) {
+		if (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) {
+			if (child->inherits(type) || !(flags & ChildIndexFlag::Compress)) {
 				result << child;
-				if (flags & Recursive) {
+				if (flags & ChildIndexFlag::Recursive) {
 					result << child->children(type, flags);
 				}
 			}
