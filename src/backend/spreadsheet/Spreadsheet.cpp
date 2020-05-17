@@ -765,9 +765,15 @@ void Spreadsheet::setColumnSelectedInView(int index, bool selected) {
 	if (selected) {
 		emit childAspectSelectedInView(child<Column>(index));
 
-		//deselect the spreadsheet in the project explorer, if a child (column) was selected.
-		//prevents unwanted multiple selection with spreadsheet (if it was selected before).
-		emit childAspectDeselectedInView(this);
+		//deselect the spreadsheet in the project explorer, if a child (column) was selected
+		//and also all possible parents like folder, workbook, datapicker curve, datapicker
+		//to prevents unwanted multiple selection in the project explorer
+		//if one of the parents of the selected column was also selected before.
+		AbstractAspect* parent = this;
+		while (parent) {
+			emit childAspectDeselectedInView(parent);
+			parent = parent->parentAspect();
+		}
 	} else
 		emit childAspectDeselectedInView(child<Column>(index));
 }
