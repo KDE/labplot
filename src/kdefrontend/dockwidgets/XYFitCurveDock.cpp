@@ -3,7 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014-2020 Alexander Semke (alexander.semke@web.de)
-    Copyright        : (C) 2016-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2016-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : widget for editing properties of fit curves
 
  ***************************************************************************/
@@ -703,6 +703,11 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	case nsl_fit_model_basic:
 		switch (index) {
 		case nsl_fit_model_polynomial:
+			uiGeneralTab.lDegree->setVisible(true);
+			uiGeneralTab.sbDegree->setVisible(true);
+			uiGeneralTab.sbDegree->setMaximum(10);
+			//TODO: limit degree to n-1
+			break;
 		case nsl_fit_model_fourier:
 			uiGeneralTab.lDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setVisible(true);
