@@ -2190,9 +2190,20 @@ void SpreadsheetView::reverseColumns() {
 		m_spreadsheet->name(), cols.size()));
 	for (auto* col : cols) {
 		if (col->columnMode() == AbstractColumn::Numeric) {
+			//determine the last row containing a valid value,
+			//ignore all following empty rows when doing the reverse
 			auto* data = static_cast<QVector<double>* >(col->data());
 			QVector<double> new_data(*data);
-			std::reverse(new_data.begin(), new_data.end());
+			auto itEnd = new_data.begin();
+			auto it = new_data.begin();
+			while (it != new_data.end()) {
+				if (!std::isnan(*it))
+					itEnd = it;
+				++it;
+			}
+			++itEnd;
+
+			std::reverse(new_data.begin(), itEnd);
 			col->replaceValues(0, new_data);
 		} else if (col->columnMode() == AbstractColumn::Integer) {
 			auto* data = static_cast<QVector<int>* >(col->data());
