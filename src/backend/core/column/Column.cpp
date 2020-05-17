@@ -1003,7 +1003,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 
 	writer->writeAttribute("rows", QString::number(rowCount()));
-	writer->writeAttribute("designation", QString::number(plotDesignation()));
+	writer->writeAttribute("designation", QString::number(static_cast<int>(plotDesignation())));
 	writer->writeAttribute("mode", QString::number(columnMode()));
 	writer->writeAttribute("width", QString::number(width()));
 
@@ -1378,25 +1378,25 @@ AbstractColumn::PlotDesignation Column::plotDesignation() const {
 
 QString Column::plotDesignationString() const {
 	switch (plotDesignation()) {
-	case AbstractColumn::NoDesignation:
+	case PlotDesignation::NoDesignation:
 		return QString("");
-	case AbstractColumn::X:
+	case PlotDesignation::X:
 		return QLatin1String("[X]");
-	case AbstractColumn::Y:
+	case PlotDesignation::Y:
 		return QLatin1String("[Y]");
-	case AbstractColumn::Z:
+	case PlotDesignation::Z:
 		return QLatin1String("[Z]");
-	case AbstractColumn::XError:
+	case PlotDesignation::XError:
 		return QLatin1String("[") + i18n("X-error") + QLatin1Char(']');
-	case AbstractColumn::XErrorPlus:
+	case PlotDesignation::XErrorPlus:
 		return QLatin1String("[") + i18n("X-error +") + QLatin1Char(']');
-	case AbstractColumn::XErrorMinus:
+	case PlotDesignation::XErrorMinus:
 		return QLatin1String("[") + i18n("X-error -") + QLatin1Char(']');
-	case AbstractColumn::YError:
+	case PlotDesignation::YError:
 		return QLatin1String("[") + i18n("Y-error") + QLatin1Char(']');
-	case AbstractColumn::YErrorPlus:
+	case PlotDesignation::YErrorPlus:
 		return QLatin1String("[") + i18n("Y-error +") + QLatin1Char(']');
-	case AbstractColumn::YErrorMinus:
+	case PlotDesignation::YErrorMinus:
 		return QLatin1String("[") + i18n("Y-error -") + QLatin1Char(']');
 	}
 

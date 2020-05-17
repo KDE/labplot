@@ -145,7 +145,7 @@ private:
 	QStringList m_formulaVariableColumnPaths;
 	bool m_formulaAutoUpdate{false};
 	IntervalAttribute<QString> m_formulas;
-	AbstractColumn::PlotDesignation m_plot_designation{AbstractColumn::NoDesignation};
+	AbstractColumn::PlotDesignation m_plot_designation{AbstractColumn::PlotDesignation::NoDesignation};
 	int m_width{0}; //column width in the view
 	Column* m_owner{nullptr};
 	QVector<QMetaObject::Connection> m_connectionsUpdateFormula;

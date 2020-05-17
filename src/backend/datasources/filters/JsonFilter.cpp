@@ -626,9 +626,9 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
 		if (createIndexEnabled)
-			spreadsheet->column(m_columnOffset )->setPlotDesignation(Column::X);
+			spreadsheet->column(m_columnOffset )->setPlotDesignation(AbstractColumn::PlotDesignation::X);
 		if (importObjectNames)
-			spreadsheet->column(m_columnOffset + (int)createIndexEnabled)->setPlotDesignation(Column::X);
+			spreadsheet->column(m_columnOffset + (int)createIndexEnabled)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
 	}
 
 	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);

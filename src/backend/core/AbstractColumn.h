@@ -50,7 +50,7 @@ class AbstractColumn : public AbstractAspect {
 	Q_ENUMS(ColumnMode)
 
 public:
-	enum PlotDesignation {NoDesignation, X, Y, Z, XError, XErrorPlus, XErrorMinus, YError, YErrorMinus, YErrorPlus};
+	enum class PlotDesignation {NoDesignation, X, Y, Z, XError, XErrorPlus, XErrorMinus, YError, YErrorMinus, YErrorPlus};
 	enum ColumnMode {
 		// BASIC FORMATS
 		Numeric = 0,	// double

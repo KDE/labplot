@@ -213,8 +213,8 @@ void PlotDataDialog::processColumns() {
 
 	//skip error and non-plottable columns
 	for (Column* col : selectedColumns) {
-		if ((col->plotDesignation() == AbstractColumn::X || col->plotDesignation() == AbstractColumn::Y
-			|| col->plotDesignation() == AbstractColumn::NoDesignation) && col->isPlottable())
+		if ((col->plotDesignation() == AbstractColumn::PlotDesignation::X || col->plotDesignation() == AbstractColumn::PlotDesignation::Y
+			|| col->plotDesignation() == AbstractColumn::PlotDesignation::NoDesignation) && col->isPlottable())
 			m_columns << col;
 	}
 
@@ -231,7 +231,7 @@ void PlotDataDialog::processColumns() {
 	QString xColumnName;
 	for (const Column* column : m_columns) {
 		columnNames << column->name();
-		if (m_plotType == PlotXYCurve && xColumnName.isEmpty() && column->plotDesignation() == AbstractColumn::X)
+		if (m_plotType == PlotXYCurve && xColumnName.isEmpty() && column->plotDesignation() == AbstractColumn::PlotDesignation::X)
 			xColumnName = column->name();
 	}
 
@@ -241,7 +241,7 @@ void PlotDataDialog::processColumns() {
 		if (index >= 0) {
 			for (int i = index; i >= 0; --i) {
 				Column* column = m_spreadsheet->column(i);
-				if (column->plotDesignation() == AbstractColumn::X && column->isPlottable()) {
+				if (column->plotDesignation() == AbstractColumn::PlotDesignation::X && column->isPlottable()) {
 					xColumnName = column->name();
 					m_columns.prepend(column);
 					columnNames.prepend(xColumnName);

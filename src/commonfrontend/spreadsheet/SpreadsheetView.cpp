@@ -243,34 +243,34 @@ void SpreadsheetView::initActions() {
 	action_clear_columns = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Selected Columns"), this);
 
 	action_set_as_none = new QAction(i18n("None"), this);
-	action_set_as_none->setData(AbstractColumn::NoDesignation);
+	action_set_as_none->setData(static_cast<int>(AbstractColumn::PlotDesignation::NoDesignation));
 
 	action_set_as_x = new QAction("X", this);
-	action_set_as_x->setData(AbstractColumn::X);
+	action_set_as_x->setData(static_cast<int>(AbstractColumn::PlotDesignation::X));
 
 	action_set_as_y = new QAction("Y", this);
-	action_set_as_y->setData(AbstractColumn::Y);
+	action_set_as_y->setData(static_cast<int>(AbstractColumn::PlotDesignation::Y));
 
 	action_set_as_z = new QAction("Z", this);
-	action_set_as_z->setData(AbstractColumn::Z);
+	action_set_as_z->setData(static_cast<int>(AbstractColumn::PlotDesignation::Z));
 
 	action_set_as_xerr = new QAction(i18n("X-error"), this);
-	action_set_as_xerr->setData(AbstractColumn::XError);
+	action_set_as_xerr->setData(static_cast<int>(AbstractColumn::PlotDesignation::XError));
 
 	action_set_as_xerr_minus = new QAction(i18n("X-error minus"), this);
-	action_set_as_xerr_minus->setData(AbstractColumn::XErrorMinus);
+	action_set_as_xerr_minus->setData(static_cast<int>(AbstractColumn::PlotDesignation::XErrorMinus));
 
 	action_set_as_xerr_plus = new QAction(i18n("X-error plus"), this);
-	action_set_as_xerr_plus->setData(AbstractColumn::XErrorPlus);
+	action_set_as_xerr_plus->setData(static_cast<int>(AbstractColumn::PlotDesignation::XErrorPlus));
 
 	action_set_as_yerr = new QAction(i18n("Y-error"), this);
-	action_set_as_yerr->setData(AbstractColumn::YError);
+	action_set_as_yerr->setData(static_cast<int>(AbstractColumn::PlotDesignation::YError));
 
 	action_set_as_yerr_minus = new QAction(i18n("Y-error minus"), this);
-	action_set_as_yerr_minus->setData(AbstractColumn::YErrorMinus);
+	action_set_as_yerr_minus->setData(static_cast<int>(AbstractColumn::PlotDesignation::YErrorMinus));
 
 	action_set_as_yerr_plus = new QAction(i18n("Y-error plus"), this);
-	action_set_as_yerr_plus->setData(AbstractColumn::YErrorPlus);
+	action_set_as_yerr_plus->setData(static_cast<int>(AbstractColumn::PlotDesignation::YErrorPlus));
 
 	//data manipulation
 	action_add_value = new QAction(i18n("Add Value"), this);
@@ -1463,7 +1463,7 @@ void SpreadsheetView::pasteIntoSelection() {
 				const AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(nonEmptyValue,
 														QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"));
 				Column* new_col = new Column(QString::number(curCol), mode);
-				new_col->setPlotDesignation(AbstractColumn::Y);
+				new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 				new_col->insertRows(0, m_spreadsheet->rowCount());
 				m_spreadsheet->addChild(new_col);
 			}
@@ -1992,7 +1992,7 @@ void SpreadsheetView::insertColumnsLeft(int count) {
 
 		for (int i = 0; i < count; ++i) {
 			Column* newCol = new Column(QString::number(i + 1), AbstractColumn::Numeric);
-			newCol->setPlotDesignation(AbstractColumn::Y);
+			newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 
 			//resize the new column and insert it before the first selected column
 			newCol->insertRows(0, m_spreadsheet->rowCount());
@@ -2005,7 +2005,7 @@ void SpreadsheetView::insertColumnsLeft(int count) {
 
 			for (int i = 0; i < count; ++i) {
 				Column* newCol = new Column(QString::number(i + 1), AbstractColumn::Numeric);
-				newCol->setPlotDesignation(AbstractColumn::Y);
+				newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 				newCol->insertRows(0, m_spreadsheet->rowCount());
 				m_spreadsheet->insertChildBefore(newCol, firstCol);
 			}
@@ -2017,7 +2017,7 @@ void SpreadsheetView::insertColumnsLeft(int count) {
 
 			for (int i = 0; i < count; ++i) {
 				Column* newCol = new Column(QString::number(i + 1), AbstractColumn::Numeric);
-				(i == 0) ? newCol->setPlotDesignation(AbstractColumn::X) : newCol->setPlotDesignation(AbstractColumn::Y);
+				(i == 0) ? newCol->setPlotDesignation(AbstractColumn::PlotDesignation::X) : newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 				newCol->insertRows(0, rows);
 
 				//add/append a new column
@@ -2069,7 +2069,7 @@ void SpreadsheetView::insertColumnsRight(int count) {
 
 			for (int i = 0; i < count; ++i) {
 				Column* newCol = new Column(QString::number(i+1), AbstractColumn::Numeric);
-				newCol->setPlotDesignation(AbstractColumn::Y);
+				newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 				newCol->insertRows(0, m_spreadsheet->rowCount());
 
 				//insert the new column before the column next to the last selected column
@@ -2078,7 +2078,7 @@ void SpreadsheetView::insertColumnsRight(int count) {
 		} else {
 			for (int i = 0; i < count; ++i) {
 				Column* newCol = new Column(QString::number(i+1), AbstractColumn::Numeric);
-				newCol->setPlotDesignation(AbstractColumn::Y);
+				newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 				newCol->insertRows(0, m_spreadsheet->rowCount());
 
 				//last column selected, no next column available -> add/append a new column
@@ -2089,7 +2089,7 @@ void SpreadsheetView::insertColumnsRight(int count) {
 		if (m_spreadsheet->columnCount()>0) {
 			for (int i = 0; i < count; ++i) {
 				Column* newCol = new Column(QString::number(i+1), AbstractColumn::Numeric);
-				newCol->setPlotDesignation(AbstractColumn::Y);
+				newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 				newCol->insertRows(0, m_spreadsheet->rowCount());
 
 				//columns available but no columns selected -> append the new column at the very end
@@ -2103,7 +2103,7 @@ void SpreadsheetView::insertColumnsRight(int count) {
 
 			for (int i = 0; i < count; ++i) {
 				Column* newCol = new Column(QString::number(i+1), AbstractColumn::Numeric);
-				(i == 0) ? newCol->setPlotDesignation(AbstractColumn::X) : newCol->setPlotDesignation(AbstractColumn::Y);
+				(i == 0) ? newCol->setPlotDesignation(AbstractColumn::PlotDesignation::X) : newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 				newCol->insertRows(0, rows);
 
 				//add/append a new column

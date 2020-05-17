@@ -138,7 +138,7 @@ public:
 private:
 	ColumnPrivate* m_col;
 	AbstractColumn::PlotDesignation m_new_pd;
-	AbstractColumn::PlotDesignation m_old_pd{AbstractColumn::X};
+	AbstractColumn::PlotDesignation m_old_pd{AbstractColumn::PlotDesignation::X};
 };
 
 class ColumnClearCmd : public QUndoCommand {

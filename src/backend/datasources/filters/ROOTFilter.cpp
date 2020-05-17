@@ -259,24 +259,24 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 			QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c]);
 			if (l.first() == QStringLiteral("center")) {
 				if (spreadsheet)
-					spreadsheet->column(columnOffset + c)->setPlotDesignation(Column::X);
+					spreadsheet->column(columnOffset + c)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
 				for (int i = first; i <= last; ++i)
 					container[i - first] = (i > 0 && i < nbins - 1) ? 0.5 * (bins[i].lowedge + bins[i + 1].lowedge)
 					                                                : i == 0 ? bins.front().lowedge   // -infinity
 					                                                         : -bins.front().lowedge; // +infinity
 			} else if (l.first() == QStringLiteral("low")) {
 				if (spreadsheet)
-					spreadsheet->column(columnOffset + c)->setPlotDesignation(Column::X);
+					spreadsheet->column(columnOffset + c)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
 				for (int i = first; i <= last; ++i)
 					container[i - first] = bins[i].lowedge;
 			} else if (l.first() == QStringLiteral("content")) {
 				if (spreadsheet)
-					spreadsheet->column(columnOffset + c)->setPlotDesignation(Column::Y);
+					spreadsheet->column(columnOffset + c)->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 				for (int i = first; i <= last; ++i)
 					container[i - first] = bins[i].content;
 			} else if (l.first() == QStringLiteral("error")) {
 				if (spreadsheet)
-					spreadsheet->column(columnOffset + c)->setPlotDesignation(Column::YError);
+					spreadsheet->column(columnOffset + c)->setPlotDesignation(AbstractColumn::PlotDesignation::YError);
 				for (int i = first; i <= last; ++i)
 					container[i - first] = std::sqrt(bins[i].sumw2);
 			}

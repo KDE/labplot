@@ -82,7 +82,7 @@ void Spreadsheet::init() {
 
 	for (int i = 0; i < columns; i++) {
 		Column* new_col = new Column(QString::number(i+1), AbstractColumn::Numeric);
-		new_col->setPlotDesignation(i == 0 ? AbstractColumn::X : AbstractColumn::Y);
+		new_col->setPlotDesignation(i == 0 ? AbstractColumn::PlotDesignation::X : AbstractColumn::PlotDesignation::Y);
 		addChild(new_col);
 	}
 	setRowCount(rows);
@@ -235,7 +235,7 @@ void Spreadsheet::insertColumns(int before, int count) {
 	int rows = rowCount();
 	for (int i = 0; i < count; i++) {
 		Column * new_col = new Column(QString::number(i+1), AbstractColumn::Numeric);
-		new_col->setPlotDesignation(AbstractColumn::Y);
+		new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 		new_col->insertRows(0, rows);
 		insertChildBefore(new_col, before_col);
 	}
@@ -329,12 +329,12 @@ void Spreadsheet::copy(Spreadsheet* other) {
 */
 int Spreadsheet::colX(int col) {
 	for (int i = col-1; i >= 0; i--) {
-		if (column(i)->plotDesignation() == AbstractColumn::X)
+		if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::X)
 			return i;
 	}
 	int cols = columnCount();
 	for (int i = col+1; i < cols; i++) {
-		if (column(i)->plotDesignation() == AbstractColumn::X)
+		if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::X)
 			return i;
 	}
 	return -1;
@@ -346,25 +346,25 @@ int Spreadsheet::colX(int col) {
 int Spreadsheet::colY(int col) {
 	int cols = columnCount();
 
-	if (column(col)->plotDesignation() == AbstractColumn::XError ||
-	        column(col)->plotDesignation() == AbstractColumn::YError) {
+	if (column(col)->plotDesignation() == AbstractColumn::PlotDesignation::XError ||
+	        column(col)->plotDesignation() == AbstractColumn::PlotDesignation::YError) {
 		// look to the left first
 		for (int i = col-1; i >= 0; i--) {
-			if (column(i)->plotDesignation() == AbstractColumn::Y)
+			if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::Y)
 				return i;
 		}
 		for (int i = col+1; i < cols; i++) {
-			if (column(i)->plotDesignation() == AbstractColumn::Y)
+			if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::Y)
 				return i;
 		}
 	} else {
 		// look to the right first
 		for (int i = col+1; i < cols; i++) {
-			if (column(i)->plotDesignation() == AbstractColumn::Y)
+			if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::Y)
 				return i;
 		}
 		for (int i = col-1; i >= 0; i--) {
-			if (column(i)->plotDesignation() == AbstractColumn::Y)
+			if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::Y)
 				return i;
 		}
 	}
@@ -886,7 +886,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 		//Other columns provide mostly y-data or errors.
 		//TODO: this has to be configurable for the user in the import widget,
 		//it should be possible to specify x-error plot designation, etc.
-		AbstractColumn::PlotDesignation desig =  (n == 0) ? AbstractColumn::X : AbstractColumn::Y;
+		AbstractColumn::PlotDesignation desig =  (n == 0) ? AbstractColumn::PlotDesignation::X : AbstractColumn::PlotDesignation::Y;
 		column->setPlotDesignation(desig);
 
 		switch (columnMode[n]) {

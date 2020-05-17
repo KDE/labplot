@@ -650,24 +650,24 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		//plot designation
 		switch (column.type) {
 		case Origin::SpreadColumn::X:
-			col->setPlotDesignation(AbstractColumn::X);
+			col->setPlotDesignation(AbstractColumn::PlotDesignation::X);
 			break;
 		case Origin::SpreadColumn::Y:
-			col->setPlotDesignation(AbstractColumn::Y);
+			col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 			break;
 		case Origin::SpreadColumn::Z:
-			col->setPlotDesignation(AbstractColumn::Z);
+			col->setPlotDesignation(AbstractColumn::PlotDesignation::Z);
 			break;
 		case Origin::SpreadColumn::XErr:
-			col->setPlotDesignation(AbstractColumn::XError);
+			col->setPlotDesignation(AbstractColumn::PlotDesignation::XError);
 			break;
 		case Origin::SpreadColumn::YErr:
-			col->setPlotDesignation(AbstractColumn::YError);
+			col->setPlotDesignation(AbstractColumn::PlotDesignation::YError);
 			break;
 		case Origin::SpreadColumn::Label:
 		case Origin::SpreadColumn::NONE:
 		default:
-			col->setPlotDesignation(AbstractColumn::NoDesignation);
+			col->setPlotDesignation(AbstractColumn::PlotDesignation::NoDesignation);
 		}
 
 		QString format;

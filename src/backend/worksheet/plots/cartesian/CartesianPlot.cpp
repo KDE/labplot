@@ -782,7 +782,7 @@ void CartesianPlot::processDropEvent(QDropEvent* event) {
 	//determine the first column with "x plot designation" as the x-data column for all curves to be created
 	const AbstractColumn* xColumn = nullptr;
 	for (const auto* column : columns) {
-		if (column->plotDesignation() == AbstractColumn::X) {
+		if (column->plotDesignation() == AbstractColumn::PlotDesignation::X) {
 			xColumn = column;
 			break;
 		}
