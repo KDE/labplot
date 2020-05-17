@@ -1578,8 +1578,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	}
 
 	QFontMetrics fm(labelsFont);
-	float width = 0;
-	float height = fm.ascent();
+	double width = 0;
+	double height = fm.ascent();
 	QPointF pos;
 	const double middleX = plot->xMin() + (plot->xMax() - plot->xMin())/2;
 	const double middleY = plot->yMin() + (plot->yMax() - plot->yMin())/2;
@@ -1627,7 +1627,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setY(endPoint.y() + labelsOffset );
 				} else {
 					pos.setX(startPoint.x() + width/2);
-					pos.setY(startPoint.y() - height + labelsOffset );
+					pos.setY(startPoint.y() - height - labelsOffset);
 				}
 			} else if (labelsRotationAngle <= -0.01) { // [-0.01°, -180°)
 				if (labelsPosition == Axis::LabelsOut) {
@@ -1635,7 +1635,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setY(endPoint.y() + labelsOffset + cosine * height/2);
 				} else {
 					pos.setX(startPoint.x() + sine * height/2 - diffx);
-					pos.setY(startPoint.y() + labelsOffset + cosine * height/2 + diffy);
+					pos.setY(startPoint.y() - labelsOffset + cosine * height/2 + diffy);
 				}
 			} else if (labelsRotationAngle >= 0.01) { // [0.01°, 180°)
 				if (labelsPosition == Axis::LabelsOut) {
@@ -1643,7 +1643,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setY(endPoint.y() + labelsOffset + diffy + cosine * height/2);
 				} else {
 					pos.setX(startPoint.x() + sine * height/2);
-					pos.setY(startPoint.y() + labelsOffset + cosine * height/2);
+					pos.setY(startPoint.y() - labelsOffset + cosine * height/2);
 				}
 			} else {	// 0°
 				if (labelsPosition == Axis::LabelsOut) {
@@ -1651,7 +1651,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setY(endPoint.y() + height + labelsOffset);
 				} else {
 					pos.setX(startPoint.x() - width/2);
-					pos.setY(startPoint.y() + labelsOffset);
+					pos.setY(startPoint.y() - labelsOffset);
 				}
 			}
 		// ---------------------- vertical -------------------------
@@ -1669,7 +1669,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(endPoint.x() - labelsOffset);
 					pos.setY(endPoint.y() + width/2 );
 				} else {
-					pos.setX(startPoint.x() - labelsOffset);
+					pos.setX(startPoint.x() + labelsOffset);
 					pos.setY(startPoint.y() + width/2);
 				}
 			} else if (fabs(labelsRotationAngle + 90.) < 1.e-2) { // -90°
@@ -1677,7 +1677,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(endPoint.x() - labelsOffset - height);
 					pos.setY(endPoint.y() - width/2);
 				} else {
-					pos.setX(startPoint.x() - labelsOffset);
+					pos.setX(startPoint.x() + labelsOffset);
 					pos.setY(startPoint.y() - width/2);
 				}
 			} else if (fabs(fabs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
@@ -1685,7 +1685,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(endPoint.x() - labelsOffset);
 					pos.setY(endPoint.y() - height/2);
 				} else {
-					pos.setX(startPoint.x() - labelsOffset + width);
+					pos.setX(startPoint.x() + labelsOffset + width);
 					pos.setY(startPoint.y() - height/2);
 				}
 			} else if (fabs(labelsRotationAngle) >= 0.01 && fabs(labelsRotationAngle) <= 89.99) { // [0.01°, 90°)
@@ -1694,7 +1694,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(endPoint.x() - labelsOffset - diffx + sine * height/2);
 					pos.setY(endPoint.y() + cosine * height/2 + diffy);
 				} else {
-					pos.setX(startPoint.x() - labelsOffset + sine * height/2);
+					pos.setX(startPoint.x() + labelsOffset + sine * height/2);
 					pos.setY(startPoint.y() + cosine * height/2);
 				}
 			} else if (fabs(labelsRotationAngle) >= 90.01 && fabs(labelsRotationAngle) <= 179.99) { // [90.01, 180)
@@ -1703,7 +1703,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(endPoint.x() - labelsOffset + sine * height/2);
 					pos.setY(endPoint.y() + cosine * height/2);
 				} else {
-					pos.setX(startPoint.x() - labelsOffset - diffx + sine * height/2);
+					pos.setX(startPoint.x() + labelsOffset - diffx + sine * height/2);
 					pos.setY(startPoint.y() + diffy + cosine * height/2);
 				}
 			} else { // 0°
@@ -1711,7 +1711,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(endPoint.x() - width - labelsOffset);
 					pos.setY(endPoint.y() + height/2);
 				} else {
-					pos.setX(startPoint.x() - labelsOffset);
+					pos.setX(startPoint.x() + labelsOffset);
 					pos.setY(startPoint.y() + height/2);
 				}
 			}
@@ -1906,17 +1906,17 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 			//we calculate the new position here and not in retransform(),
 			//since it depends on the size and position of the tick labels, tickLabelsPath, available here.
 			QRectF rect = linePath.boundingRect();
-			qreal offsetX = titleOffsetX - labelsOffset; //the distance to the axis line
-			qreal offsetY = titleOffsetY - labelsOffset; //the distance to the axis line
+			qreal offsetX = titleOffsetX; //the distance to the axis line
+			qreal offsetY = titleOffsetY; //the distance to the axis line
 			if (orientation == Axis::AxisHorizontal) {
 				offsetY -= titleRect.height()/2;
 				if (labelsPosition == Axis::LabelsOut)
-					offsetY -= tickLabelsPath.boundingRect().height();
+					offsetY -= labelsOffset + tickLabelsPath.boundingRect().height();
 				title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2 + titleOffsetX, rect.bottomLeft().y() - offsetY ) );
 			} else {
 				offsetX -= titleRect.width()/2;
 				if (labelsPosition == Axis::LabelsOut)
-					offsetX -= tickLabelsPath.boundingRect().width();
+					offsetX -= labelsOffset+ tickLabelsPath.boundingRect().width();
 				title->setPosition( QPointF( rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y())/2 - titleOffsetY) );
 			}
 			axisShape.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
