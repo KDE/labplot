@@ -42,7 +42,7 @@
 
 #include <cmath>
 
-enum Operator {EqualTo, BetweenIncl, BetweenExcl, GreaterThan, GreaterThanEqualTo, LessThan, LessThanEqualTo};
+enum class Operator {EqualTo, BetweenIncl, BetweenExcl, GreaterThan, GreaterThanEqualTo, LessThan, LessThanEqualTo};
 
 /*!
 	\class DropValuesDialog
@@ -150,7 +150,7 @@ class MaskValuesTask : public QRunnable {
 			const int rows = m_column->rowCount();
 
 			switch (m_operator) {
-			case EqualTo: {
+			case Operator::EqualTo:
 				if (m_column->columnMode() == AbstractColumn::Numeric) {
 					for (int i = 0; i < rows; ++i) {
 						if (data->at(i) == m_value1) {
@@ -174,8 +174,7 @@ class MaskValuesTask : public QRunnable {
 					}
 				}
 				break;
-			}
-			case BetweenIncl: {
+			case Operator::BetweenIncl:
 				if (m_column->columnMode() == AbstractColumn::Numeric) {
 					for (int i = 0; i < rows; ++i) {
 						if (data->at(i) >= m_value1 && data->at(i) <= m_value2) {
@@ -199,8 +198,7 @@ class MaskValuesTask : public QRunnable {
 					}
 				}
 				break;
-			}
-			case BetweenExcl: {
+			case Operator::BetweenExcl:
 				if (m_column->columnMode() == AbstractColumn::Numeric) {
 					for (int i = 0; i < rows; ++i) {
 						if (data->at(i) > m_value1 && data->at(i) < m_value2) {
@@ -224,8 +222,7 @@ class MaskValuesTask : public QRunnable {
 					}
 				}
 				break;
-			}
-			case GreaterThan: {
+			case Operator::GreaterThan:
 				if (m_column->columnMode() == AbstractColumn::Numeric) {
 					for (int i = 0; i < rows; ++i) {
 						if (data->at(i) > m_value1) {
@@ -249,8 +246,7 @@ class MaskValuesTask : public QRunnable {
 					}
 				}
 				break;
-			}
-			case GreaterThanEqualTo: {
+			case Operator::GreaterThanEqualTo:
 				if (m_column->columnMode() == AbstractColumn::Numeric) {
 					for (int i = 0; i < rows; ++i) {
 						if (data->at(i) >= m_value1) {
@@ -274,8 +270,7 @@ class MaskValuesTask : public QRunnable {
 					}
 				}
 				break;
-			}
-			case LessThan: {
+			case Operator::LessThan:
 				if (m_column->columnMode() == AbstractColumn::Numeric) {
 					for (int i = 0; i < rows; ++i) {
 						if (data->at(i) < m_value1) {
@@ -299,8 +294,7 @@ class MaskValuesTask : public QRunnable {
 					}
 				}
 				break;
-			}
-			case LessThanEqualTo: {
+			case Operator::LessThanEqualTo:
 				if (m_column->columnMode() == AbstractColumn::Numeric) {
 					for (int i = 0; i < rows; ++i) {
 						if (data->at(i) <= m_value1) {
@@ -323,7 +317,6 @@ class MaskValuesTask : public QRunnable {
 						}
 					}
 				}
-			}
 			}
 
 			m_column->setSuppressDataChangedSignal(false);
@@ -356,7 +349,7 @@ class DropValuesTask : public QRunnable {
 				QVector<double> new_data(*data);
 
 				switch (m_operator) {
-				case EqualTo: {
+				case Operator::EqualTo:
 					for (auto& d : new_data) {
 						if (d == m_value1) {
 							d = NAN;
@@ -364,8 +357,7 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case BetweenIncl: {
+				case Operator::BetweenIncl:
 					for (auto& d : new_data) {
 						if (d >= m_value1 && d <= m_value2) {
 							d = NAN;
@@ -373,8 +365,7 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case BetweenExcl: {
+				case Operator::BetweenExcl:
 					for (auto& d : new_data) {
 						if (d > m_value1 && d < m_value2) {
 							d = NAN;
@@ -382,8 +373,7 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case GreaterThan: {
+				case Operator::GreaterThan:
 					for (auto& d : new_data) {
 						if (d > m_value1) {
 							d = NAN;
@@ -391,8 +381,7 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case GreaterThanEqualTo: {
+				case Operator::GreaterThanEqualTo:
 					for (auto& d : new_data) {
 						if (d >= m_value1) {
 							d = NAN;
@@ -400,8 +389,7 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case LessThan: {
+				case Operator::LessThan:
 					for (auto& d : new_data) {
 						if (d < m_value1) {
 							d = NAN;
@@ -409,15 +397,13 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case LessThanEqualTo: {
+				case Operator::LessThanEqualTo:
 					for (auto& d : new_data) {
 						if (d <= m_value1) {
 							d = NAN;
 							changed = true;
 						}
 					}
-				}
 				}
 
 				if (changed)
@@ -427,7 +413,7 @@ class DropValuesTask : public QRunnable {
 				QVector<int> new_data(*data);
 
 				switch (m_operator) {
-				case EqualTo: {
+				case Operator::EqualTo:
 					for (auto& d : new_data) {
 						if (d == m_value1) {
 							d = 0;
@@ -435,8 +421,7 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case BetweenIncl: {
+				case Operator::BetweenIncl:
 					for (auto& d : new_data) {
 						if (d >= m_value1 && d <= m_value2) {
 							d = 0;
@@ -444,8 +429,7 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case BetweenExcl: {
+				case Operator::BetweenExcl:
 					for (auto& d : new_data) {
 						if (d > m_value1 && d < m_value2) {
 							d = 0;
@@ -453,8 +437,7 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case GreaterThan: {
+				case Operator::GreaterThan:
 					for (auto& d : new_data) {
 						if (d > m_value1) {
 							d = 0;
@@ -462,8 +445,7 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case GreaterThanEqualTo: {
+				case Operator::GreaterThanEqualTo:
 					for (auto& d : new_data) {
 						if (d >= m_value1) {
 							d = 0;
@@ -471,8 +453,7 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case LessThan: {
+				case Operator::LessThan:
 					for (auto& d : new_data) {
 						if (d < m_value1) {
 							d = 0;
@@ -480,15 +461,13 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case LessThanEqualTo: {
+				case Operator::LessThanEqualTo:
 					for (auto& d : new_data) {
 						if (d <= m_value1) {
 							d = 0;
 							changed = true;
 						}
 					}
-				}
 				}
 
 				if (changed)
@@ -498,7 +477,7 @@ class DropValuesTask : public QRunnable {
 				QVector<qint64> new_data(*data);
 
 				switch (m_operator) {
-				case EqualTo: {
+				case Operator::EqualTo:
 					for (auto& d : new_data) {
 						if (d == m_value1) {
 							d = 0;
@@ -506,8 +485,7 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case BetweenIncl: {
+				case Operator::BetweenIncl:
 					for (auto& d : new_data) {
 						if (d >= m_value1 && d <= m_value2) {
 							d = 0;
@@ -515,8 +493,7 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case BetweenExcl: {
+				case Operator::BetweenExcl:
 					for (auto& d : new_data) {
 						if (d > m_value1 && d < m_value2) {
 							d = 0;
@@ -524,8 +501,7 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case GreaterThan: {
+				case Operator::GreaterThan:
 					for (auto& d : new_data) {
 						if (d > m_value1) {
 							d = 0;
@@ -533,8 +509,7 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case GreaterThanEqualTo: {
+				case Operator::GreaterThanEqualTo:
 					for (auto& d : new_data) {
 						if (d >= m_value1) {
 							d = 0;
@@ -542,8 +517,7 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case LessThan: {
+				case Operator::LessThan:
 					for (auto& d : new_data) {
 						if (d < m_value1) {
 							d = 0;
@@ -551,15 +525,13 @@ class DropValuesTask : public QRunnable {
 						}
 					}
 					break;
-				}
-				case LessThanEqualTo: {
+				case Operator::LessThanEqualTo:
 					for (auto& d : new_data) {
 						if (d <= m_value1) {
 							d = 0;
 							changed = true;
 						}
 					}
-				}
 				}
 
 				if (changed)
