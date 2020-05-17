@@ -2189,13 +2189,22 @@ void SpreadsheetView::reverseColumns() {
 	m_spreadsheet->beginMacro(i18np("%1: reverse column", "%1: reverse columns",
 		m_spreadsheet->name(), cols.size()));
 	for (auto* col : cols) {
-		if (col->columnMode() != AbstractColumn::Numeric)
-			continue;
-
-		auto* data = static_cast<QVector<double>* >(col->data());
-		QVector<double> new_data(*data);
-		std::reverse(new_data.begin(), new_data.end());
-		col->replaceValues(0, new_data);
+		if (col->columnMode() == AbstractColumn::Numeric) {
+			auto* data = static_cast<QVector<double>* >(col->data());
+			QVector<double> new_data(*data);
+			std::reverse(new_data.begin(), new_data.end());
+			col->replaceValues(0, new_data);
+		} else if (col->columnMode() == AbstractColumn::Integer) {
+			auto* data = static_cast<QVector<int>* >(col->data());
+			QVector<int> new_data(*data);
+			std::reverse(new_data.begin(), new_data.end());
+			col->replaceInteger(0, new_data);
+		} else if (col->columnMode() == AbstractColumn::BigInt) {
+			auto* data = static_cast<QVector<qint64>* >(col->data());
+			QVector<qint64> new_data(*data);
+			std::reverse(new_data.begin(), new_data.end());
+			col->replaceBigInt(0, new_data);
+		}
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
