@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Plot area (for background filling and clipping).
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2020 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -580,23 +580,46 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 }
 
 void PlotArea::loadThemeConfig(const KConfig& config) {
-	const KConfigGroup group = config.group("CartesianPlot");
+	if (config.hasGroup(QLatin1String("Theme"))) {
+		const KConfigGroup& group = config.group("CartesianPlot");
 
-	this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle",(int) this->backgroundBrushStyle()));
-	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle)(group.readEntry("BackgroundColorStyle",(int) this->backgroundColorStyle())));
-	this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor",(QColor) this->backgroundFirstColor()));
-	this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle)group.readEntry("BackgroundImageStyle",(int) this->backgroundImageStyle()));
-	this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", this->backgroundOpacity()));
-	this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor",(QColor) this->backgroundSecondColor()));
-	this->setBackgroundType((PlotArea::BackgroundType)(group.readEntry("BackgroundType",(int) this->backgroundType())));
+		//background
+		this->setBackgroundType((PlotArea::BackgroundType)(group.readEntry("BackgroundType",(int) this->backgroundType())));
+		this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle)(group.readEntry("BackgroundColorStyle",(int) this->backgroundColorStyle())));
+		this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle)group.readEntry("BackgroundImageStyle",(int) this->backgroundImageStyle()));
+		this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle",(int) this->backgroundBrushStyle()));
+		this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor",(QColor) this->backgroundFirstColor()));
+		this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor",(QColor) this->backgroundSecondColor()));
+		this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", this->backgroundOpacity()));
 
-	QPen pen = this->borderPen();
-	pen.setColor(group.readEntry("BorderColor", pen.color()));
-	pen.setStyle((Qt::PenStyle)(group.readEntry("BorderStyle", (int) pen.style())));
-	pen.setWidthF(group.readEntry("BorderWidth", pen.widthF()));
-	this->setBorderPen(pen);
-	this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", this->borderCornerRadius()));
-	this->setBorderOpacity(group.readEntry("BorderOpacity", this->borderOpacity()));
+		//border
+		QPen pen = this->borderPen();
+		pen.setColor(group.readEntry("BorderColor", pen.color()));
+		pen.setStyle((Qt::PenStyle)(group.readEntry("BorderStyle", (int) pen.style())));
+		pen.setWidthF(group.readEntry("BorderWidth", pen.widthF()));
+		this->setBorderPen(pen);
+		this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", this->borderCornerRadius()));
+		this->setBorderOpacity(group.readEntry("BorderOpacity", this->borderOpacity()));
+	} else {
+		const KConfigGroup& group = config.group("PlotArea");
+
+		//background
+		this->setBackgroundType((PlotArea::BackgroundType) group.readEntry("BackgroundType", (int)PlotArea::Color));
+		this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor));
+		this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled));
+		this->setBackgroundBrushStyle((Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", (int) Qt::SolidPattern));
+		this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor", QColor(Qt::white)));
+		this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor", QColor(Qt::black)));
+		this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", 1.0));
+
+		//border
+		QPen pen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
+						group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
+						(Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
+		this->setBorderPen(pen);
+		this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", 0.0));
+		this->setBorderOpacity(group.readEntry("BorderOpacity", 1.0));
+	}
 }
 
 void PlotArea::saveThemeConfig(const KConfig& config) {

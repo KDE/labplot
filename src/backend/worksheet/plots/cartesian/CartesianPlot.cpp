@@ -1165,13 +1165,15 @@ STD_SETTER_CMD_IMPL_S(CartesianPlot, SetTheme, QString, theme)
 void CartesianPlot::setTheme(const QString& theme) {
 	Q_D(CartesianPlot);
 	if (theme != d->theme) {
-		if (!theme.isEmpty()) {
-			beginMacro( i18n("%1: load theme %2", name(), theme) );
-			exec(new CartesianPlotSetThemeCmd(d, theme, ki18n("%1: set theme")));
-			loadTheme(theme);
-			endMacro();
-		} else
-			exec(new CartesianPlotSetThemeCmd(d, theme, ki18n("%1: disable theming")));
+		QString info;
+		if (!theme.isEmpty())
+			info = i18n("%1: load theme %2", name(), theme);
+		else
+			info = i18n("%1: load default theme", name());
+		beginMacro(info);
+		exec(new CartesianPlotSetThemeCmd(d, theme, ki18n("%1: set theme")));
+		loadTheme(theme);
+		endMacro();
 	}
 }
 
@@ -4079,17 +4081,34 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 //#########################  Theme management ##################################
 //##############################################################################
 void CartesianPlot::loadTheme(const QString& theme) {
-	KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
-	loadThemeConfig(config);
+	if (!theme.isEmpty()) {
+		KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
+		loadThemeConfig(config);
+	} else {
+		KConfig config;
+		loadThemeConfig(config);
+	}
 }
 
 void CartesianPlot::loadThemeConfig(const KConfig& config) {
-	QString str = config.name();
+	Q_D(CartesianPlot);
 
-	// theme path is saved with UNIX dir separator
-	str = str.right(str.length() - str.lastIndexOf(QLatin1Char('/')) - 1);
-	DEBUG("	set theme to " << STDSTRING(str));
-	this->setTheme(str);
+	QString theme = QString();
+	if (config.hasGroup(QLatin1String("Theme"))) {
+		theme = config.name();
+
+		// theme path is saved with UNIX dir separator
+		theme = theme.right(theme.length() - theme.lastIndexOf(QLatin1Char('/')) - 1);
+		DEBUG("	set theme to " << STDSTRING(theme));
+	}
+
+	//loadThemeConfig() can be called from
+	//1. CartesianPlot::setTheme() when the user changes the theme for the plot
+	//2. Worksheet::setTheme() -> Worksheet::loadTheme() when the user changes the theme for the worksheet
+	//In the second case (i.e. when d->theme is not equal to theme yet),
+	///we need to put the new theme name on the undo-stack.
+	if (theme != d->theme)
+		exec(new CartesianPlotSetThemeCmd(d, theme, ki18n("%1: set theme")));
 
 	//load the color palettes for the curves
 	this->setColorPalette(config);
@@ -4098,7 +4117,6 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 	for (auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))
 		child->loadThemeConfig(config);
 
-	Q_D(CartesianPlot);
 	d->update(this->rect());
 }
 

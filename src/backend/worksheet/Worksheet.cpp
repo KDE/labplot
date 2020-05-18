@@ -4,7 +4,7 @@
     Description          : Worksheet
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2019 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2020 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -89,14 +89,7 @@ void Worksheet::init() {
 	d->m_scene->setSceneRect(d->pageRect);
 
 	//background
-	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
-	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor);
-	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled);
-	d->backgroundBrushStyle = (Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", (int) Qt::SolidPattern);
 	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
-	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
-	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
-	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
 
 	//layout
 	d->layout = (Worksheet::Layout) group.readEntry("Layout", (int) Worksheet::VerticalLayout);
@@ -112,8 +105,7 @@ void Worksheet::init() {
 	//default theme
 	KConfigGroup settings = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
 	d->theme = settings.readEntry(QStringLiteral("Theme"), QString());
-	if (!d->theme.isEmpty())
-		loadTheme(d->theme);
+	loadTheme(d->theme);
 }
 
 /*!
@@ -726,14 +718,15 @@ void Worksheet::setPrinting(bool on) const {
 STD_SETTER_CMD_IMPL_S(Worksheet, SetTheme, QString, theme)
 void Worksheet::setTheme(const QString& theme) {
 	if (theme != d->theme) {
-		if (!theme.isEmpty()) {
-			beginMacro( i18n("%1: load theme %2", name(), theme) );
-			exec(new WorksheetSetThemeCmd(d, theme, ki18n("%1: set theme")));
-			loadTheme(theme);
-			endMacro();
-		} else {
-			exec(new WorksheetSetThemeCmd(d, theme, ki18n("%1: disable theming")));
-		}
+		QString info;
+ 		if (!theme.isEmpty())
+			info = i18n("%1: load theme %2", name(), theme);
+		else
+			info = i18n("%1: load default theme", name());
+		beginMacro(info);
+		exec(new WorksheetSetThemeCmd(d, theme, ki18n("%1: set theme")));
+		loadTheme(theme);
+		endMacro();
 	}
 }
 
@@ -1560,20 +1553,41 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 //#########################  Theme management ##################################
 //##############################################################################
 void Worksheet::loadTheme(const QString& theme) {
-	KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
+	if (!theme.isEmpty()) {
+		//load values from the theme config
+		KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
 
-	//apply the same background color for Worksheet as for the CartesianPlot
-	const KConfigGroup group = config.group("CartesianPlot");
-	this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle",(int) this->backgroundBrushStyle()));
-	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle)(group.readEntry("BackgroundColorStyle",(int) this->backgroundColorStyle())));
-	this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor",(QColor) this->backgroundFirstColor()));
-	this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle)group.readEntry("BackgroundImageStyle",(int) this->backgroundImageStyle()));
-	this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", this->backgroundOpacity()));
-	this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor",(QColor) this->backgroundSecondColor()));
-	this->setBackgroundType((PlotArea::BackgroundType)(group.readEntry("BackgroundType",(int) this->backgroundType())));
+		//apply the same background color for Worksheet as for the CartesianPlot
+		const KConfigGroup group = config.group("CartesianPlot");
 
-	//load the theme for all the children
-	const QVector<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden);
-	for (auto* child : childElements)
-		child->loadThemeConfig(config);
+		this->setBackgroundType((PlotArea::BackgroundType)(group.readEntry("BackgroundType",(int) this->backgroundType())));
+		this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle)(group.readEntry("BackgroundColorStyle",(int) this->backgroundColorStyle())));
+		this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle)group.readEntry("BackgroundImageStyle",(int) this->backgroundImageStyle()));
+		this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle",(int) this->backgroundBrushStyle()));
+		this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor",(QColor) this->backgroundFirstColor()));
+		this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor",(QColor) this->backgroundSecondColor()));
+		this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", this->backgroundOpacity()));
+
+		//load the theme for all the children
+		const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
+		for (auto* child : children)
+			child->loadThemeConfig(config);
+	} else {
+		//load default values
+		KConfig config;
+		KConfigGroup group = config.group("Worksheet");
+
+		this->setBackgroundType((PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color));
+		this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor));
+		this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled));
+		this->setBackgroundBrushStyle((Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", (int) Qt::SolidPattern));
+		this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor", QColor(Qt::white)));
+		this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor", QColor(Qt::black)));
+		this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", 1.0));
+
+		//load the theme for all the children
+		const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
+		for (auto* child : children)
+			child->loadThemeConfig(config);
+	}
 }
