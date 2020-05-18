@@ -192,7 +192,7 @@ void MQTTUnitTest::testIntegerMessage() {
 		const MQTTTopic* testTopic = nullptr;
 
 		if(timer.isActive()) {
-			QVector<const MQTTTopic*> topic = mqttClient->children <const MQTTTopic>(AbstractAspect::Recursive);
+			QVector<const MQTTTopic*> topic = mqttClient->children <const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
 			for(int i = 0; i < topic.size(); ++i) {
 				if (topic[i]->topicName() == "labplot/mqttUnitTest") {
 					testTopic = topic[i];
@@ -285,7 +285,7 @@ void MQTTUnitTest::testNumericMessage() {
 		const MQTTTopic* testTopic = nullptr;
 
 		if(timer.isActive()) {
-			QVector<const MQTTTopic*> topic = mqttClient->children <const MQTTTopic>(AbstractAspect::Recursive);
+			QVector<const MQTTTopic*> topic = mqttClient->children <const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
 			for(int i = 0; i < topic.size(); ++i) {
 				if (topic[i]->topicName() == "labplot/mqttUnitTest") {
 					testTopic = topic[i];
@@ -378,7 +378,7 @@ void MQTTUnitTest::testTextMessage() {
 		const MQTTTopic* testTopic = nullptr;
 
 		if(timer.isActive()) {
-			QVector<const MQTTTopic*> topic = mqttClient->children <const MQTTTopic>(AbstractAspect::Recursive);
+			QVector<const MQTTTopic*> topic = mqttClient->children <const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
 			for(int i = 0; i < topic.size(); ++i) {
 				if (topic[i]->topicName() == "labplot/mqttUnitTest") {
 					testTopic = topic[i];

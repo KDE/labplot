@@ -2715,7 +2715,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 		PERFTRACE("AsciiLiveDataImport, notify affected columns and plots");
 
 		const Project* project = spreadsheet->project();
-		QVector<const XYCurve*> curves = project->children<const XYCurve>(AbstractAspect::Recursive);
+		QVector<const XYCurve*> curves = project->children<const XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
 		QVector<CartesianPlot*> plots;
 
 		for (int n = 0; n < m_actualCols; ++n) {

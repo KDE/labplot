@@ -145,7 +145,7 @@ void MQTTSubscription::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//MQTTTopics
-	for (auto* topic : children<MQTTTopic>(IncludeHidden))
+	for (auto* topic : children<MQTTTopic>(AbstractAspect::ChildIndexFlag::IncludeHidden))
 		topic->save(writer);
 
 	writer->writeEndElement(); // "MQTTSubscription"

@@ -2377,7 +2377,7 @@ void MainWin::newLiveDataSourceActionTriggered() {
 
 			mqttClient->setName(mqttClient->clientHostName());
 
-			QVector<const MQTTClient*> existingClients = m_project->children<const MQTTClient>(AbstractAspect::Recursive);
+			QVector<const MQTTClient*> existingClients = m_project->children<const MQTTClient>(AbstractAspect::ChildIndexFlag::Recursive);
 
 			//doesn't make sense to have more MQTTClients connected to the same broker
 			bool found = false;

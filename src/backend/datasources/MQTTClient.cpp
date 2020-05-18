@@ -571,7 +571,7 @@ void MQTTClient::reparentTopic(const QString& topicName, const QString& parentTo
 
 		if (found) {
 			//get every topic of the MQTTClient
-			QVector<MQTTTopic*> topics = children<MQTTTopic>(AbstractAspect::Recursive);
+			QVector<MQTTTopic*> topics = children<MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
 			//Search for the given topic among the MQTTTopics
 			for (auto* topic : topics) {
 				if (topicName == topic->topicName()) {
@@ -796,7 +796,7 @@ QString MQTTClient::willOwnMessage() const {
  * \brief Updates the will message of the client
  */
 void MQTTClient::updateWillMessage() {
-	QVector<const MQTTTopic*> topics = children<const MQTTTopic>(AbstractAspect::Recursive);
+	QVector<const MQTTTopic*> topics = children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
 	const MQTTTopic* willTopic = nullptr;
 
 	//Search for the will topic
@@ -1155,7 +1155,7 @@ void MQTTClient::save(QXmlStreamWriter* writer) const {
 	m_filter->save(writer);
 
 	//MQTTSubscription
-	for (auto* sub : children<MQTTSubscription>(IncludeHidden))
+	for (auto* sub : children<MQTTSubscription>(AbstractAspect::ChildIndexFlag::IncludeHidden))
 		sub->save(writer);
 
 	writer->writeEndElement(); // "MQTTClient"

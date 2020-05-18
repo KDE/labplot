@@ -215,7 +215,7 @@ void MQTTTopic::save(QXmlStreamWriter* writer) const {
 	m_filter->save(writer);
 
 	//Columns
-	for (auto* col : children<Column>(IncludeHidden))
+	for (auto* col : children<Column>(AbstractAspect::ChildIndexFlag::IncludeHidden))
 		col->save(writer);
 
 	writer->writeEndElement(); //MQTTTopic
