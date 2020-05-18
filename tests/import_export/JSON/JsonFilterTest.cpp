@@ -59,9 +59,9 @@ void JsonFilterTest::testArrayImport() {
 	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Text);
 	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
 
-	QCOMPARE(spreadsheet.column(0)->plotDesignation(), Column::X);
-	QCOMPARE(spreadsheet.column(1)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(2)->plotDesignation(), Column::Y);
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	QCOMPARE(spreadsheet.column(0)->name(), i18n("index"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Column 1")); //TODO is translatable in JsonFilter
@@ -101,11 +101,11 @@ void JsonFilterTest::testObjectImport01() {
 	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
 	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::Text);
 
-	QCOMPARE(spreadsheet.column(0)->plotDesignation(), Column::X);
-	QCOMPARE(spreadsheet.column(1)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(2)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(3)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(4)->plotDesignation(), Column::Y);
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(3)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(4)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	QCOMPARE(spreadsheet.column(0)->name(), i18n("index"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("1"));
@@ -155,11 +155,11 @@ void JsonFilterTest::testObjectImport02() {
 	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
 	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::Text);
 
-	QCOMPARE(spreadsheet.column(0)->plotDesignation(), Column::X);
-	QCOMPARE(spreadsheet.column(1)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(2)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(3)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(4)->plotDesignation(), Column::Y);
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(3)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(4)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	QCOMPARE(spreadsheet.column(0)->name(), i18n("name"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("1"));
@@ -210,9 +210,9 @@ void JsonFilterTest::testObjectImport03() {
 	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
 	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
 
-	QCOMPARE(spreadsheet.column(0)->plotDesignation(), Column::X);
-	QCOMPARE(spreadsheet.column(1)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(2)->plotDesignation(), Column::Y);
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	QCOMPARE(spreadsheet.column(0)->name(), i18n("name"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("2"));
@@ -260,12 +260,12 @@ void JsonFilterTest::testObjectImport04() {
 	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::Numeric);
 	QCOMPARE(spreadsheet.column(5)->columnMode(), AbstractColumn::Integer);
 
-	QCOMPARE(spreadsheet.column(0)->plotDesignation(), Column::X);
-	QCOMPARE(spreadsheet.column(1)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(2)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(3)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(4)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(5)->plotDesignation(), Column::Y);
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(3)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(4)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(5)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	QCOMPARE(spreadsheet.column(0)->name(), i18n("timestamp"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("1. open"));
