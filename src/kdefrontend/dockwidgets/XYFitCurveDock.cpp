@@ -255,19 +255,20 @@ void XYFitCurveDock::initGeneralTab() {
 		uiGeneralTab.cbCategory->setCurrentIndex(uiGeneralTab.cbCategory->count() - 1);
 	else
 		uiGeneralTab.cbCategory->setCurrentIndex(m_fitData.modelCategory);
-	if (m_fitData.modelCategory != nsl_fit_model_custom)
-		uiGeneralTab.cbModel->setCurrentIndex(tmpModelType);
-	m_fitData.modelType = tmpModelType;
 	categoryChanged(m_fitData.modelCategory);	// fill model types
+
+	m_fitData.modelType = tmpModelType;
+	if (m_fitData.modelCategory != nsl_fit_model_custom)
+		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 
 	uiGeneralTab.cbXWeight->setCurrentIndex(m_fitData.xWeightsType);
 	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.yWeightsType);
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 
 	if (m_fitData.paramStartValues.size() > 0)
-		DEBUG("	B start value 0 = " << m_fitData.paramStartValues.at(0));
+		DEBUG("	start value 1 = " << m_fitData.paramStartValues.at(0));
 
-	DEBUG("	B model degree = " << m_fitData.degree);
+	DEBUG("	model degree = " << m_fitData.degree);
 
 	this->showFitResult();
 
