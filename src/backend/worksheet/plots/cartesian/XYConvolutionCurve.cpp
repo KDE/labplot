@@ -166,11 +166,11 @@ void XYConvolutionCurvePrivate::recalculate() {
 		xmax = convolutionData.xRange.last();
 	}
 
-	//only copy those data where values are valid
+	//only copy those data where values are valid and in range
 	if (tmpXDataColumn != nullptr) {	// x-axis present (with possible range)
 		for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
-			if (!std::isnan(tmpXDataColumn->valueAt(row)) && !tmpXDataColumn->isMasked(row)
-				&& !std::isnan(tmpYDataColumn->valueAt(row)) && !tmpYDataColumn->isMasked(row)) {
+			if (tmpXDataColumn->isValid(row) && !tmpXDataColumn->isMasked(row)
+				&& tmpYDataColumn->isValid(row) && !tmpYDataColumn->isMasked(row)) {
 				if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
 					xdataVector.append(tmpXDataColumn->valueAt(row));
 					ydataVector.append(tmpYDataColumn->valueAt(row));
@@ -179,7 +179,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 		}
 	} else {	// no x-axis: take all valid values
 		for (int row = 0; row < tmpYDataColumn->rowCount(); ++row)
-			if (!std::isnan(tmpYDataColumn->valueAt(row)) && !tmpYDataColumn->isMasked(row))
+			if (tmpYDataColumn->isValid(row) && !tmpYDataColumn->isMasked(row))
 				ydataVector.append(tmpYDataColumn->valueAt(row));
 	}
 
@@ -187,7 +187,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 	const size_t kernelSize = convolutionData.kernelSize;
 	if (tmpY2DataColumn != nullptr) {
 		for (int row = 0; row < tmpY2DataColumn->rowCount(); ++row)
-			if (!std::isnan(tmpY2DataColumn->valueAt(row)) && !tmpY2DataColumn->isMasked(row))
+			if (tmpY2DataColumn->isValid(row) && !tmpY2DataColumn->isMasked(row))
 				y2dataVector.append(tmpY2DataColumn->valueAt(row));
 		DEBUG("kernel = given response");
 	} else {
