@@ -72,6 +72,7 @@ public:
 
 	bool isReadOnly() const override;
 	int rowCount() const override;
+	int availableRowCount() const override;
 	int width() const;
 	void setWidth(const int);
 	void clear() override;

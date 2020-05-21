@@ -53,6 +53,7 @@ public:
 	bool copy(const ColumnPrivate*, int source_start, int dest_start, int num_rows);
 
 	int rowCount() const;
+	int availableRowCount() const;
 	void resizeTo(int);
 
 	void insertRows(int before, int count);

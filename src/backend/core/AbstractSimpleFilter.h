@@ -57,6 +57,7 @@ public:
 	virtual qint64 bigIntAt(int row) const;
 
 	virtual int rowCount() const;
+	virtual int availableRowCount() const;
 	virtual QList<Interval<int>> dependentRows(const Interval<int>& inputRange) const;
 
 	void save(QXmlStreamWriter*) const override;
@@ -91,6 +92,7 @@ public:
 
 	AbstractColumn::ColumnMode columnMode() const override;
 	int rowCount() const override { return m_owner->rowCount(); }
+	int availableRowCount() const override { return m_owner->availableRowCount(); }
 	AbstractColumn::PlotDesignation plotDesignation() const override { return m_owner->plotDesignation(); }
 	QString plotDesignationString() const override { return m_owner->plotDesignationString(); }
 	QString textAt(int row) const override;

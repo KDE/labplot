@@ -700,19 +700,24 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	if (m_fitData.modelType != index)
 		uiGeneralTab.sbDegree->setValue(1);
 
+	auto* aspect = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
+	auto* xColumn = dynamic_cast<AbstractColumn*>(aspect);
+	int availableRowCount = (xColumn != nullptr) ? xColumn->availableRowCount() : 0;
+	DEBUG(" available row count = " << availableRowCount)
+
 	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic:
 		switch (index) {
 		case nsl_fit_model_polynomial:
 			uiGeneralTab.lDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setVisible(true);
-			uiGeneralTab.sbDegree->setMaximum(10);
-			//TODO: limit degree to n-1
+			uiGeneralTab.sbDegree->setMaximum(qMin(availableRowCount - 1, 10));
 			break;
 		case nsl_fit_model_fourier:
 			uiGeneralTab.lDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setMaximum(10);
+			//TODO: limit degree
 			break;
 		case nsl_fit_model_power:
 			uiGeneralTab.lDegree->setVisible(true);
@@ -1018,8 +1023,8 @@ void XYFitCurveDock::enableRecalculate() {
 	//no fitting possible without the x- and y-data
 	bool hasSourceData = false;
 	if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
-		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
+		auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
+		auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
 		if (aspectX) {
 			cbXDataColumn->useCurrentIndexText(true);

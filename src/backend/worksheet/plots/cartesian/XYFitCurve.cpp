@@ -119,11 +119,12 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 	double xmax = tmpXDataColumn->maximum();
 	//double ymin = tmpYDataColumn->minimum();
 	//double ymax = tmpYDataColumn->maximum();
-	double xrange = xmax-xmin;
+	double xrange = xmax - xmin;
 	//double yrange = ymax-ymin;
 	DEBUG("	x min/max = " << xmin << ' ' << xmax);
 	//DEBUG("	y min/max = " << ymin << ' ' << ymax);
 
+	// guess start values for parameter
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
 		switch (modelType) {

@@ -194,6 +194,11 @@ bool AbstractColumn::copy(const AbstractColumn *source, int source_start, int de
  */
 
 /**
+ * \fn int AbstractColumn::availableRowCount() const
+ * \brief Return the number of available data rows
+ */
+
+/**
  * \brief Insert some empty (or initialized with invalid values) rows
  */
 void AbstractColumn::insertRows(int before, int count) {

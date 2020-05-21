@@ -249,6 +249,15 @@ int AbstractSimpleFilter::rowCount() const {
 }
 
 /**
+ * \brief Number of output rows == number of input rows
+ *
+ * ... unless overridden in a subclass.
+ */
+int AbstractSimpleFilter::availableRowCount() const {
+	return m_inputs.value(0) ? m_inputs.at(0)->availableRowCount() : 0;
+}
+
+/**
  * \brief Rows that will change when the given input interval changes.
  *
  * This implementation assumes a 1:1 correspondence between input and output rows, but can be

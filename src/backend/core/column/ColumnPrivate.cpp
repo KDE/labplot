@@ -811,9 +811,7 @@ bool ColumnPrivate::copy(const ColumnPrivate* source, int source_start, int dest
 /**
  * \brief Return the data vector size
  *
- * This returns the number of rows that actually contain data.
- * Rows beyond this can be masked etc. but should be ignored by filters,
- * plots etc.
+ * This returns the size of the column container
  */
 int ColumnPrivate::rowCount() const {
 	switch (m_column_mode) {
@@ -832,6 +830,24 @@ int ColumnPrivate::rowCount() const {
 	}
 
 	return 0;
+}
+
+/**
+ * \brief Return the number of available rows
+ *
+ * This returns the number of rows that actually contain data.
+ * Rows beyond this can be masked etc. but should be ignored by filters,
+ * plots etc.
+ */
+int ColumnPrivate::availableRowCount() const {
+
+	int availableRowCount = 0;
+	for (int row = 0; row < rowCount(); row++) {
+		if (m_owner->isValid(row) && !m_owner->isMasked(row))
+			availableRowCount++;
+	}
+
+	return availableRowCount;
 }
 
 /**
@@ -1275,8 +1291,8 @@ QString ColumnPrivate::textAt(int row) const {
  */
 QDate ColumnPrivate::dateAt(int row) const {
 	if (m_column_mode != AbstractColumn::DateTime &&
-	        m_column_mode != AbstractColumn::Month &&
-	        m_column_mode != AbstractColumn::Day)
+		m_column_mode != AbstractColumn::Month &&
+		m_column_mode != AbstractColumn::Day)
 		return QDate{};
 	return dateTimeAt(row).date();
 }
@@ -1288,8 +1304,8 @@ QDate ColumnPrivate::dateAt(int row) const {
  */
 QTime ColumnPrivate::timeAt(int row) const {
 	if (m_column_mode != AbstractColumn::DateTime &&
-	        m_column_mode != AbstractColumn::Month &&
-	        m_column_mode != AbstractColumn::Day)
+		m_column_mode != AbstractColumn::Month &&
+		m_column_mode != AbstractColumn::Day)
 		return QTime{};
 	return dateTimeAt(row).time();
 }
@@ -1301,8 +1317,8 @@ QTime ColumnPrivate::timeAt(int row) const {
  */
 QDateTime ColumnPrivate::dateTimeAt(int row) const {
 	if (m_column_mode != AbstractColumn::DateTime &&
-	        m_column_mode != AbstractColumn::Month &&
-	        m_column_mode != AbstractColumn::Day)
+		m_column_mode != AbstractColumn::Month &&
+		m_column_mode != AbstractColumn::Day)
 		return QDateTime();
 	return static_cast<QVector<QDateTime>*>(m_data)->value(row);
 }
@@ -1393,8 +1409,8 @@ void ColumnPrivate::replaceTexts(int first, const QVector<QString>& new_values) 
  */
 void ColumnPrivate::setDateAt(int row, QDate new_value) {
 	if (m_column_mode != AbstractColumn::DateTime &&
-	        m_column_mode != AbstractColumn::Month &&
-	        m_column_mode != AbstractColumn::Day)
+		m_column_mode != AbstractColumn::Month &&
+		m_column_mode != AbstractColumn::Day)
 		return;
 
 	setDateTimeAt(row, QDateTime(new_value, timeAt(row)));
@@ -1407,8 +1423,8 @@ void ColumnPrivate::setDateAt(int row, QDate new_value) {
  */
 void ColumnPrivate::setTimeAt(int row, QTime new_value) {
 	if (m_column_mode != AbstractColumn::DateTime &&
-	        m_column_mode != AbstractColumn::Month &&
-	        m_column_mode != AbstractColumn::Day)
+		m_column_mode != AbstractColumn::Month &&
+		m_column_mode != AbstractColumn::Day)
 		return;
 
 	setDateTimeAt(row, QDateTime(dateAt(row), new_value));
@@ -1421,8 +1437,8 @@ void ColumnPrivate::setTimeAt(int row, QTime new_value) {
  */
 void ColumnPrivate::setDateTimeAt(int row, const QDateTime& new_value) {
 	if (m_column_mode != AbstractColumn::DateTime &&
-	        m_column_mode != AbstractColumn::Month &&
-	        m_column_mode != AbstractColumn::Day)
+		m_column_mode != AbstractColumn::Month &&
+		m_column_mode != AbstractColumn::Day)
 		return;
 
 	invalidate();
@@ -1443,8 +1459,8 @@ void ColumnPrivate::setDateTimeAt(int row, const QDateTime& new_value) {
  */
 void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 	if (m_column_mode != AbstractColumn::DateTime &&
-	        m_column_mode != AbstractColumn::Month &&
-	        m_column_mode != AbstractColumn::Day)
+		m_column_mode != AbstractColumn::Month &&
+		m_column_mode != AbstractColumn::Day)
 		return;
 
 	invalidate();

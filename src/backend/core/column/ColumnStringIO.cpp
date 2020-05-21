@@ -55,6 +55,10 @@ int ColumnStringIO::rowCount() const {
 	return m_owner->rowCount();
 }
 
+int ColumnStringIO::availableRowCount() const {
+	return m_owner->availableRowCount();
+}
+
 bool ColumnStringIO::isValid(int row) const {
 	if (m_setting)
 		return true;

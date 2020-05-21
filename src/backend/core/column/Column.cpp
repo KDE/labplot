@@ -1360,13 +1360,20 @@ AbstractColumn::ColumnMode Column::columnMode() const {
 
 /**
  * \brief Return the data vector size
+ */
+int Column::rowCount() const {
+	return d->rowCount();
+}
+
+/**
+ * \brief Return the number of available data rows
  *
  * This returns the number of rows that actually contain data.
  * Rows beyond this can be masked etc. but should be ignored by filters,
  * plots etc.
  */
-int Column::rowCount() const {
-	return d->rowCount();
+int Column::availableRowCount() const {
+	return d->availableRowCount();
 }
 
 /**
