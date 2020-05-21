@@ -3237,47 +3237,49 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	d->m_suppressRecalc = true;
 
 	//Line
-	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)this->linePen().style()));
-	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
+	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
+	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)));
 	p.setColor(themeColor);
 	this->setLinePen(p);
-	this->setLineOpacity(group.readEntry("LineOpacity", this->lineOpacity()));
+	this->setLineOpacity(group.readEntry("LineOpacity", 1.0));
 
 	//Drop line
-	p.setStyle((Qt::PenStyle)group.readEntry("DropLineStyle",(int) this->dropLinePen().style()));
-	p.setWidthF(group.readEntry("DropLineWidth", this->dropLinePen().widthF()));
+	p.setStyle((Qt::PenStyle)group.readEntry("DropLineStyle", (int)Qt::SolidLine));
+	p.setWidthF(group.readEntry("DropLineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)));
 	p.setColor(themeColor);
 	this->setDropLinePen(p);
-	this->setDropLineOpacity(group.readEntry("DropLineOpacity", this->dropLineOpacity()));
+	this->setDropLineOpacity(group.readEntry("DropLineOpacity", 1.0));
 
 	//Symbol
-	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", this->symbolsOpacity()));
-	QBrush brush = symbolsBrush();
+	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", 1.0));
+	QBrush brush;
+	brush.setStyle((Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern));
 	brush.setColor(themeColor);
 	this->setSymbolsBrush(brush);
-	p = symbolsPen();
+	p.setStyle((Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine));
 	p.setColor(themeColor);
+	p.setWidthF(group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)));
 	this->setSymbolsPen(p);
 
 	//Values
-	this->setValuesOpacity(group.readEntry("ValuesOpacity", this->valuesOpacity()));
-	this->setValuesColor(group.readEntry("ValuesColor", this->valuesColor()));
+	this->setValuesOpacity(group.readEntry("ValuesOpacity", 1.0));
+	this->setValuesColor(group.readEntry("ValuesColor", QColor(Qt::black)));
 
 	//Filling
-	this->setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle",(int) this->fillingBrushStyle()));
-	this->setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle",(int) this->fillingColorStyle()));
-	this->setFillingOpacity(group.readEntry("FillingOpacity", this->fillingOpacity()));
-	this->setFillingPosition((XYCurve::FillingPosition)group.readEntry("FillingPosition",(int) this->fillingPosition()));
-	this->setFillingSecondColor(group.readEntry("FillingSecondColor",(QColor) this->fillingSecondColor()));
+	this->setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle", (int)Qt::SolidPattern));
+	this->setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle", (int)PlotArea::SingleColor));
+	this->setFillingOpacity(group.readEntry("FillingOpacity", 1.0));
+	this->setFillingPosition((XYCurve::FillingPosition)group.readEntry("FillingPosition", (int)XYCurve::NoFilling));
 	this->setFillingFirstColor(themeColor);
-	this->setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType",(int) this->fillingType()));
+	this->setFillingSecondColor(group.readEntry("FillingSecondColor", QColor(Qt::black)));
+	this->setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType", (int)PlotArea::Color));
 
 	//Error Bars
-	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle",(int) this->errorBarsPen().style()));
-	p.setWidthF(group.readEntry("ErrorBarsWidth", this->errorBarsPen().widthF()));
+	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine));
+	p.setWidthF(group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)));
 	p.setColor(themeColor);
 	this->setErrorBarsPen(p);
-	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity",this->errorBarsOpacity()));
+	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity", 1.0));
 
 	d->m_suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();

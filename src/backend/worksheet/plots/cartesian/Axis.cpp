@@ -2271,44 +2271,49 @@ void Axis::loadThemeConfig(const KConfig& config) {
 
 	QPen p;
 	// Tick label
-	this->setLabelsColor(group.readEntry("LabelsFontColor",(QColor) this->labelsColor()));
-	this->setLabelsOpacity(group.readEntry("LabelsOpacity",this->labelsOpacity()));
+	this->setLabelsColor(group.readEntry("LabelsFontColor", QColor(Qt::black)));
+	this->setLabelsOpacity(group.readEntry("LabelsOpacity", 1.0));
 
 	//Line
-	this->setLineOpacity(group.readEntry("LineOpacity",this->lineOpacity()));
+	this->setLineOpacity(group.readEntry("LineOpacity", 1.0));
 	p.setColor(group.readEntry("LineColor", (QColor) this->linePen().color()));
 	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle",(int) this->linePen().style()));
 	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
 	this->setLinePen(p);
 
-	//Major ticks
-	this->setMajorGridOpacity(group.readEntry("MajorGridOpacity", this->majorGridOpacity()));
-	p.setColor(group.readEntry("MajorGridColor",(QColor) this->majorGridPen().color()));
+	//Major grid
 	if (firstAxis)
-		p.setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle",(int) this->majorGridPen().style()));
+		p.setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle", (int)Qt::NoPen));
 	else
 		p.setStyle(Qt::NoPen);
-	p.setWidthF(group.readEntry("MajorGridWidth", this->majorGridPen().widthF()));
+	p.setColor(group.readEntry("MajorGridColor",QColor(Qt::gray)));
+	p.setWidthF(group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)));
 	this->setMajorGridPen(p);
-	p.setColor(group.readEntry("MajorTicksColor",(QColor)this->majorTicksPen().color()));
-	p.setStyle((Qt::PenStyle)group.readEntry("MajorTicksLineStyle",(int) this->majorTicksPen().style()));
-	p.setWidthF(group.readEntry("MajorTicksWidth", this->majorTicksPen().widthF()));
+	this->setMajorGridOpacity(group.readEntry("MajorGridOpacity", 1.0));
+
+	//Major ticks
+	p.setStyle((Qt::PenStyle)group.readEntry("MajorTicksLineStyle", (int)Qt::SolidLine));
+	p.setColor(group.readEntry("MajorTicksColor", QColor(Qt::black)));
+	p.setWidthF(group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)));
 	this->setMajorTicksPen(p);
-	this->setMajorTicksOpacity(group.readEntry("MajorTicksOpacity",this->majorTicksOpacity()));
+	this->setMajorTicksOpacity(group.readEntry("MajorTicksOpacity", 1.0));
+
+	//Minor grid
+	if (firstAxis)
+		p.setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle", (int)Qt::NoPen));
+	else
+		p.setStyle(Qt::NoPen);
+	p.setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)));
+	p.setWidthF(group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)));
+	this->setMinorGridOpacity(group.readEntry("MinorGridOpacity", 1.0));
+	this->setMinorGridPen(p);
 
 	//Minor ticks
-	this->setMinorGridOpacity(group.readEntry("MinorGridOpacity", this->minorGridOpacity()));
-	p.setColor(group.readEntry("MinorGridColor",(QColor) this->minorGridPen().color()));
-	if (firstAxis)
-		p.setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle",(int) this->minorGridPen().style()));
-	else
-		p.setStyle(Qt::NoPen);
-	p.setWidthF(group.readEntry("MinorGridWidth", this->minorGridPen().widthF()));
-	this->setMinorGridPen(p);
-	p.setColor(group.readEntry("MinorTicksColor",(QColor) this->minorTicksPen().color()));
-	p.setWidthF(group.readEntry("MinorTicksWidth", this->minorTicksPen().widthF()));
+	p.setStyle((Qt::PenStyle)group.readEntry("MinorTicksLineStyle", (int)Qt::SolidLine));
+	p.setColor(group.readEntry("MinorTicksColor", QColor(Qt::black)));
+	p.setWidthF(group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)));
 	this->setMinorTicksPen(p);
-	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity",this->minorTicksOpacity()));
+	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity", 1.0));
 
 	const QVector<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* child : childElements)
