@@ -1205,6 +1205,8 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			copySelection();
 		else if (key_event->matches(QKeySequence::Paste))
 			pasteIntoSelection();
+		else if (key_event->key() == Qt::Key_Backspace)
+			clearSelectedCells();
 	}
 
 	return QWidget::eventFilter(watched, event);

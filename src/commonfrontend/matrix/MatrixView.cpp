@@ -570,6 +570,8 @@ bool MatrixView::eventFilter(QObject * watched, QEvent * event) {
 void MatrixView::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
 		advanceCell();
+	else if (event->key() == Qt::Key_Backspace)
+		clearSelectedCells();
 }
 
 //##############################################################################
