@@ -955,9 +955,11 @@ void XYFitCurveDock::setPlotXRange() {
 	if (plot != nullptr) {
 		double rmin = m_fitData.evalRange.first();
 		double rmax = m_fitData.evalRange.last();
-		double extend = (rmax-rmin) * 0.05;	// 5 percent of range
-		plot->setXMin(rmin - extend);
-		plot->setXMax(rmax + extend);
+		double extend = (rmax-rmin) * 0.05;	// +/- 5 percent of range. may be < 0
+		if (extend != 0.) {	// avoid zero range
+			plot->setXMin(rmin - extend);
+			plot->setXMax(rmax + extend);
+		}
 	}
 }
 
