@@ -1205,7 +1205,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			copySelection();
 		else if (key_event->matches(QKeySequence::Paste))
 			pasteIntoSelection();
-		else if (key_event->key() == Qt::Key_Backspace)
+		else if (key_event->key() == Qt::Key_Backspace || key_event->matches(QKeySequence::Delete))
 			clearSelectedCells();
 	}
 
@@ -3019,14 +3019,6 @@ void SpreadsheetView::print(QPrinter* printer) const {
 		}
 	}
 	RESET_CURSOR;
-}
-
-void SpreadsheetView::registerShortcuts() {
-	action_clear_selection->setShortcut(QKeySequence::Delete);
-}
-
-void SpreadsheetView::unregisterShortcuts() {
-	action_clear_selection->setShortcut(QKeySequence());
 }
 
 /*!

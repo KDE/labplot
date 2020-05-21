@@ -570,7 +570,7 @@ bool MatrixView::eventFilter(QObject * watched, QEvent * event) {
 void MatrixView::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
 		advanceCell();
-	else if (event->key() == Qt::Key_Backspace)
+	else if (event->key() == Qt::Key_Backspace || event->matches(QKeySequence::Delete))
 		clearSelectedCells();
 }
 
@@ -1519,12 +1519,4 @@ void MatrixView::exportToFits(const QString &fileName, const int exportTo) const
 	filter->write(fileName, m_matrix);
 
 	delete filter;
-}
-
-void MatrixView::registerShortcuts() {
-	action_clear_selection ->setShortcut(QKeySequence::Delete);
-}
-
-void MatrixView::unregisterShortcuts() {
-	action_clear_selection->setShortcut(QKeySequence());
 }

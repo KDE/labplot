@@ -80,9 +80,6 @@ public:
 	void emitRowCountChanged() { emit rowCountChanged(rowCount()); }
 	void emitColumnCountChanged() { emit columnCountChanged(columnCount()); }
 
-	void registerShortcuts() override;
-	void unregisterShortcuts() override;
-
 	//data import
 	int prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter::ImportMode,
 		int rows, int cols, QStringList colNameList, QVector<AbstractColumn::ColumnMode>) override;

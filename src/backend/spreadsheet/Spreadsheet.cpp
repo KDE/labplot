@@ -830,17 +830,6 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 	return !reader->hasError();
 }
 
-void Spreadsheet::registerShortcuts() {
-	//TODO: when we create a live-data source we don't have the view here yet. why?
-	if (m_view)
-		m_view->registerShortcuts();
-}
-
-void Spreadsheet::unregisterShortcuts() {
-	if (m_view)
-		m_view->unregisterShortcuts();
-}
-
 //##############################################################################
 //########################  Data Import  #######################################
 //##############################################################################

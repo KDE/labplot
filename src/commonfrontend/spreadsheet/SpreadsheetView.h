@@ -88,9 +88,6 @@ public:
 	bool printView();
 	bool printPreview();
 
-	void registerShortcuts();
-	void unregisterShortcuts();
-
 private:
 	void init();
 	void initActions();

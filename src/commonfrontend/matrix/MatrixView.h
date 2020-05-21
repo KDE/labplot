@@ -76,9 +76,6 @@ public:
                            const bool entire, const bool captions) const;
 	void exportToFits(const QString& fileName, const int exportTo) const;
 
-	void registerShortcuts();
-	void unregisterShortcuts();
-
 public slots:
 	void createContextMenu(QMenu*) const;
 	void print(QPrinter*) const;
