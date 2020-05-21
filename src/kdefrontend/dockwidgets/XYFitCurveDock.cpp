@@ -705,6 +705,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	int availableRowCount = (xColumn != nullptr) ? xColumn->availableRowCount() : 0;
 	DEBUG(" available row count = " << availableRowCount)
 
+	bool disableFit = false;
 	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic:
 		switch (index) {
@@ -714,20 +715,27 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 			uiGeneralTab.sbDegree->setMaximum(qMin(availableRowCount - 1, 10));
 			break;
 		case nsl_fit_model_fourier:
-			uiGeneralTab.lDegree->setVisible(true);
-			uiGeneralTab.sbDegree->setVisible(true);
-			uiGeneralTab.sbDegree->setMaximum(10);
-			//TODO: limit degree
+			if (availableRowCount < 4) {	// too few data points
+				uiGeneralTab.lDegree->setVisible(false);
+				uiGeneralTab.sbDegree->setVisible(false);
+				disableFit = true;
+			} else {
+				uiGeneralTab.lDegree->setVisible(true);
+				uiGeneralTab.sbDegree->setVisible(true);
+				uiGeneralTab.sbDegree->setMaximum(qMin(availableRowCount/2 - 1, 10));
+			}
 			break;
 		case nsl_fit_model_power:
 			uiGeneralTab.lDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setMaximum(2);
+			//TODO: limit degree depending on availableRowCount
 			break;
 		case nsl_fit_model_exponential:
 			uiGeneralTab.lDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setMaximum(10);
+			//TODO: limit degree depending on availableRowCount
 			break;
 		default:
 			uiGeneralTab.lDegree->setVisible(false);
@@ -750,6 +758,9 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	m_fitData.modelType = index;
 
 	updateModelEquation();
+
+	if (disableFit)
+		uiGeneralTab.pbRecalculate->setEnabled(false);
 }
 
 /*!
