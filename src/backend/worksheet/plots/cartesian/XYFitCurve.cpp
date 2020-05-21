@@ -1620,48 +1620,66 @@ void XYFitCurvePrivate::recalculate() {
 	//TODO: decide how to deal with non-numerical error columns
 	int rowCount = qMin(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 	for (int row = 0; row < rowCount; ++row) {
+		// omit invalid data
+		if (!tmpXDataColumn->isValid(row) || tmpXDataColumn->isMasked(row) ||
+				!tmpYDataColumn->isValid(row) || tmpYDataColumn->isMasked(row))
+			continue;
+
 		double x = NAN;
-		if (tmpXDataColumn->columnMode() == AbstractColumn::Numeric)
+		switch (tmpXDataColumn->columnMode()) {
+		case AbstractColumn::Numeric:
 			x = tmpXDataColumn->valueAt(row);
-		else if (tmpXDataColumn->columnMode() == AbstractColumn::Integer)
-			x =tmpXDataColumn->integerAt(row);
-		else if (tmpXDataColumn->columnMode() == AbstractColumn::BigInt)
+			break;
+		case AbstractColumn::Integer:
+			x = tmpXDataColumn->integerAt(row);
+			break;
+		case AbstractColumn::BigInt:
 			x = tmpXDataColumn->bigIntAt(row);
-		else if (tmpXDataColumn->columnMode() == AbstractColumn::DateTime)
+			break;
+		case AbstractColumn::Text:	// not valid
+			break;
+		case AbstractColumn::DateTime:
+		case AbstractColumn::Day:
+		case AbstractColumn::Month:
 			x = tmpXDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
+		}
 
 		double y = NAN;
-		if (tmpYDataColumn->columnMode() == AbstractColumn::Numeric)
+		switch (tmpYDataColumn->columnMode()) {
+		case AbstractColumn::Numeric:
 			y = tmpYDataColumn->valueAt(row);
-		else if (tmpYDataColumn->columnMode() == AbstractColumn::Integer)
-			y =tmpYDataColumn->integerAt(row);
-		else if (tmpYDataColumn->columnMode() == AbstractColumn::BigInt)
+			break;
+		case AbstractColumn::Integer:
+			y = tmpYDataColumn->integerAt(row);
+			break;
+		case AbstractColumn::BigInt:
 			y = tmpYDataColumn->bigIntAt(row);
-		else if (tmpYDataColumn->columnMode() == AbstractColumn::DateTime)
+			break;
+		case AbstractColumn::Text:	// not valid
+			break;
+		case AbstractColumn::DateTime:
+		case AbstractColumn::Day:
+		case AbstractColumn::Month:
 			y = tmpYDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
+		}
 
-		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!std::isnan(x) && !std::isnan(y)
-			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
-
-			// only when inside given range
-			if (x >= xmin && x <= xmax) {
-				if ((!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) {	// x-y
+		// only when inside given range
+		if (x >= xmin && x <= xmax) {
+			if ((!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) {	// x-y
+				xdataVector.append(x);
+				ydataVector.append(y);
+			} else if (!xErrorColumn && yErrorColumn) {	// x-y-dy
+				if (!std::isnan(yErrorColumn->valueAt(row))) {
 					xdataVector.append(x);
 					ydataVector.append(y);
-				} else if (!xErrorColumn && yErrorColumn) {	// x-y-dy
-					if (!std::isnan(yErrorColumn->valueAt(row))) {
-						xdataVector.append(x);
-						ydataVector.append(y);
-						yerrorVector.append(yErrorColumn->valueAt(row));
-					}
-				} else if (xErrorColumn && yErrorColumn) {	// x-y-dx-dy
-					if (!std::isnan(xErrorColumn->valueAt(row)) && !std::isnan(yErrorColumn->valueAt(row))) {
-						xdataVector.append(x);
-						ydataVector.append(y);
-						xerrorVector.append(xErrorColumn->valueAt(row));
-						yerrorVector.append(yErrorColumn->valueAt(row));
-					}
+					yerrorVector.append(yErrorColumn->valueAt(row));
+				}
+			} else if (xErrorColumn && yErrorColumn) {	// x-y-dx-dy
+				if (!std::isnan(xErrorColumn->valueAt(row)) && !std::isnan(yErrorColumn->valueAt(row))) {
+					xdataVector.append(x);
+					ydataVector.append(y);
+					xerrorVector.append(xErrorColumn->valueAt(row));
+					yerrorVector.append(yErrorColumn->valueAt(row));
 				}
 			}
 		}
