@@ -301,8 +301,7 @@ void XYFitCurveDock::setModel() {
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
 	list = {AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet, AspectType::LiveDataSource,
-	        AspectType::Column, AspectType::CantorWorksheet, AspectType::Datapicker
-	       };
+	        AspectType::Column, AspectType::CantorWorksheet, AspectType::Datapicker};
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 	cbXErrorColumn->setTopLevelClasses(list);
@@ -401,6 +400,9 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	// set model dependent start values from new data
 	XYFitCurve::initStartValues(m_fitData, m_curve);
+
+	// update model limits depending on number of points
+	modelTypeChanged(uiGeneralTab.cbModel->currentIndex());
 
 	cbXDataColumn->useCurrentIndexText(true);
 	cbXDataColumn->setInvalid(false);
@@ -700,10 +702,20 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	if (m_fitData.modelType != index)
 		uiGeneralTab.sbDegree->setValue(1);
 
-	auto* aspect = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-	auto* xColumn = dynamic_cast<AbstractColumn*>(aspect);
-	int availableRowCount = (xColumn != nullptr) ? xColumn->availableRowCount() : 0;
-	DEBUG(" available row count = " << availableRowCount)
+	const AbstractColumn* xColumn = nullptr;
+	if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
+		DEBUG("	data source: Spreadsheet")
+		//auto* aspect = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
+		//xColumn = dynamic_cast<AbstractColumn*>(aspect);
+		xColumn = m_fitCurve->xDataColumn();
+	} else {
+		DEBUG("	data source: Curve")
+		if (m_fitCurve->dataSourceCurve() != nullptr)
+			xColumn = m_fitCurve->dataSourceCurve()->xColumn();
+	}
+	// with no xColumn: show all models (assume 100 data points)
+	const int availableRowCount = (xColumn != nullptr) ? xColumn->availableRowCount() : 100;
+	DEBUG("	available row count = " << availableRowCount)
 
 	bool disableFit = false;
 	switch (m_fitData.modelCategory) {

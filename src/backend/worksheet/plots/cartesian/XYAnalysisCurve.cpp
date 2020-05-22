@@ -311,7 +311,7 @@ void XYAnalysisCurve::save(QXmlStreamWriter* writer) const {
 
 	//write data source specific information
 	writer->writeStartElement("dataSource");
-	writer->writeAttribute( "type", QString::number(d->dataSourceType) );
+	writer->writeAttribute("type", QString::number(d->dataSourceType));
 	WRITE_PATH(d->dataSourceCurve, dataSourceCurve);
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
