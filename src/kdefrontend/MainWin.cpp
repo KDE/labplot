@@ -177,6 +177,8 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	//restore the geometry
 	KConfigGroup group = KSharedConfig::openConfig()->group("MainWin");
 	restoreGeometry(group.readEntry("geometry", QByteArray()));
+
+	m_lastOpenFileFilter = group.readEntry(QLatin1String("lastOpenFileFilter"), QString());
 }
 
 MainWin::~MainWin() {
@@ -186,12 +188,13 @@ MainWin::~MainWin() {
 	group.writeEntry("geometry", saveGeometry());
 	KSharedConfig::openConfig()->sync();
 
+	group.writeEntry(QLatin1String("lastOpenFileFilter"), m_lastOpenFileFilter);
+
 	//if welcome screen is shown, save its settings prior to deleting it
 // 	if(dynamic_cast<QQuickWidget*>(centralWidget()))
 // 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
 
 	if (m_project) {
-
 // 		if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr)
 // 			m_mdiArea->closeAllSubWindows();
 
@@ -1177,20 +1180,33 @@ bool MainWin::newProject() {
 }
 
 void MainWin::openProject() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
-	const QString& dir = conf.readEntry("LastOpenDir", "");
+	KConfigGroup group(KSharedConfig::openConfig(), "MainWin");
+	const QString& dir = group.readEntry("LastOpenDir", "");
 
-	QString extensions = i18n("LabPlot Projects (%1)", Project::supportedExtensions());
+	bool supportOthers = false;
+	QString allExtensions = Project::supportedExtensions();
+	QString extensions = i18n("LabPlot Projects (%1)", allExtensions);
+	if (m_lastOpenFileFilter.isEmpty())
+		m_lastOpenFileFilter = extensions;
+
 #ifdef HAVE_LIBORIGIN
 	extensions += i18n(";;Origin Projects (%1)", OriginProjectParser::supportedExtensions());
+	allExtensions += " " + OriginProjectParser::supportedExtensions();
+	supportOthers = true;
 #endif
 
 #ifdef HAVE_CANTOR_LIBS
-	extensions += i18n(";;Cantor Projects (.cws)");
-	extensions += i18n(";;Jupyter Notebooks (.ipynb)");
+	extensions += i18n(";;Cantor Projects (*.cws)");
+	extensions += i18n(";;Jupyter Notebooks (*.ipynb)");
+	allExtensions += QLatin1String(" *.cws *.ipynb");
+	supportOthers = true;
 #endif
 
-	const QString& path = QFileDialog::getOpenFileName(this,i18n("Open Project"), dir, extensions);
+	//add an entry for "All supported files" if we support more than labplot
+	if (supportOthers)
+		extensions = i18n("All supported files (%1)", allExtensions) + QLatin1String(";;") + extensions;
+
+	const QString& path = QFileDialog::getOpenFileName(this,i18n("Open Project"), dir, extensions, &m_lastOpenFileFilter);
 	if (path.isEmpty())// "Cancel" was clicked
 		return;
 
@@ -1201,7 +1217,7 @@ void MainWin::openProject() {
 	if (pos != -1) {
 		const QString& newDir = path.left(pos);
 		if (newDir != dir)
-			conf.writeEntry("LastOpenDir", newDir);
+			group.writeEntry("LastOpenDir", newDir);
 	}
 }
 

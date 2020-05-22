@@ -153,6 +153,7 @@ private:
 	QQuickWidget* m_welcomeWidget{nullptr};
 // 	WelcomeScreenHelper* m_welcomeScreenHelper{nullptr};
 	ImportDatasetWidget* m_importDatasetWidget{nullptr};
+	QString m_lastOpenFileFilter;
 
 #ifdef HAVE_KUSERFEEDBACK
     KUserFeedback::Provider m_userFeedbackProvider;
