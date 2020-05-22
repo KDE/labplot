@@ -60,6 +60,7 @@
 #include <KSharedConfig>
 
 extern "C" {
+#include <gsl/gsl_math.h>
 #include <gsl/gsl_spline.h>
 #include <gsl/gsl_errno.h>
 }
@@ -1555,7 +1556,7 @@ void XYCurvePrivate::updateLines() {
 			for (unsigned int i = 0; i < count - 1; i++) {
 				const double x1 = x[i];
 				const double x2 = x[i+1];
-				const double step = fabs(x2 - x1)/(lineInterpolationPointsCount + 1);
+				const double step = std::abs(x2 - x1)/(lineInterpolationPointsCount + 1);
 
 				for (int i = 0; i < (lineInterpolationPointsCount + 1); i++) {
 					double xi = x1+i*step;
@@ -2294,10 +2295,10 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 
 /*!
  * \brief XYCurve::activateCurve
- * Checks if the mousepos distance to the curve is less than @p pow(maxDist,2)
+ * Checks if the mousepos distance to the curve is less than @p maxDist
  * \p mouseScenePos
  * \p maxDist Maximum distance the point lies away from the curve
- * \return Returns true if the distance is smaller than pow(maxDist,2).
+ * \return Returns true if the distance is smaller than maxDist.
  */
 bool XYCurve::activateCurve(QPointF mouseScenePos, double maxDist) {
 	Q_D(XYCurve);
@@ -2322,7 +2323,7 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 	if (maxDist < 0)
 		maxDist = (linePen.width() < 10) ? 10 : linePen.width();
 
-	double maxDistSquare = maxDist * maxDist;
+	double maxDistSquare = gsl_pow_2(maxDist);
 
 	auto properties = q->xColumn()->properties();
 	if (properties == AbstractColumn::Properties::No) {
@@ -2330,8 +2331,8 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 		if (lineType == XYCurve::NoLine) {
 			QPointF curvePosPrevScene = symbolPointsScene[0];
 			QPointF curvePosScene = curvePosPrevScene;
-			for (int row =0; row < rowCount; row ++) {
-				if (pow(mouseScenePos.x() - curvePosScene.x(), 2) + pow(mouseScenePos.y() - curvePosScene.y(), 2) <= maxDistSquare)
+			for (int row = 0; row < rowCount; row ++) {
+				if (gsl_pow_2(mouseScenePos.x() - curvePosScene.x()) + gsl_pow_2(mouseScenePos.y() - curvePosScene.y()) <= maxDistSquare)
 					return true;
 
 				curvePosPrevScene = curvePosScene;
@@ -2377,7 +2378,7 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 			if (lineType == XYCurve::NoLine) {// check points only if no line otherwise check only the lines
 				if (curvePosScene.x() > xMaxSquare)
 					stop = true; // one more time if bigger
-				if (pow(mouseScenePos.x()- curvePosScene.x(),2)+pow(mouseScenePos.y()-curvePosScene.y(),2) <= maxDistSquare)
+				if (gsl_pow_2(mouseScenePos.x()- curvePosScene.x()) + gsl_pow_2(mouseScenePos.y()-curvePosScene.y()) <= maxDistSquare)
 					return true;
 			} else {
 				if (lines[index].p1().x() > xMaxSquare)
@@ -2419,23 +2420,23 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 bool XYCurvePrivate::pointLiesNearLine(const QPointF p1, const QPointF p2, const QPointF pos, const double maxDist) const{
 	double dx12 = p2.x() - p1.x();
 	double dy12 = p2.y() - p1.y();
-	double vecLenght = sqrt(pow(dx12,2) + pow(dy12,2));
+	double vecLength = gsl_hypot(dx12, dy12);
 
-	if (vecLenght == 0) {
-		if (pow(p1.x() - pos.x(), 2) + pow(p1.y()-pos.y(), 2) <= pow(maxDist, 2))
+	if (vecLength == 0) {
+		if (gsl_pow_2(p1.x() - pos.x()) + gsl_pow_2(p1.y()-pos.y()) <= gsl_pow_2(maxDist))
 			return true;
 		 return false;
 	}
-	QPointF unitvec(dx12/vecLenght,dy12/vecLenght);
+	QPointF unitvec(dx12/vecLength, dy12/vecLength);
 
 	double dx1m = pos.x() - p1.x();
 	double dy1m = pos.y() - p1.y();
 
-	double dist_segm = qAbs(dx1m*unitvec.y() - dy1m*unitvec.x());
+	double dist_segm = std::abs(dx1m*unitvec.y() - dy1m*unitvec.x());
 	double scalarProduct = dx1m*unitvec.x() + dy1m*unitvec.y();
 
 	if (scalarProduct > 0) {
-		if (scalarProduct < vecLenght && dist_segm < maxDist)
+		if (scalarProduct < vecLength && dist_segm < maxDist)
 			return true;
 	}
 	return false;
