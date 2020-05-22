@@ -141,7 +141,7 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 	case AbstractColumn::Day:
 	case AbstractColumn::DateTime: {
 			auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
-			DEBUG("	set column format: " << STDSTRING(filter->format()));
+// 			DEBUG("	set column format: " << STDSTRING(filter->format()));
 			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->format()));
 			break;
 		}
@@ -158,6 +158,7 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
   Called when the type (column mode) is changed.
 */
 void ColumnDock::updateFormatWidgets(AbstractColumn::ColumnMode mode) {
+	const Lock lock(m_initializing);
 	ui.cbFormat->clear();
 
 	switch (mode) {
@@ -255,10 +256,6 @@ void ColumnDock::typeChanged(int index) {
 
 	AbstractColumn::ColumnMode columnMode = (AbstractColumn::ColumnMode)ui.cbType->itemData(index).toInt();
 
-	m_initializing = true;
-	this->updateFormatWidgets(columnMode);
-	m_initializing = false;
-
 	switch (columnMode) {
 	case AbstractColumn::Numeric: {
 			int digits = ui.sbPrecision->value();
@@ -308,6 +305,11 @@ void ColumnDock::typeChanged(int index) {
 		}
 		break;
 	}
+
+	const Lock lock(m_initializing);
+	this->updateFormatWidgets(columnMode);
+	this->updateTypeWidgets(columnMode);
+
 	DEBUG("ColumnDock::typeChanged() DONE");
 }
 
