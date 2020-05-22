@@ -378,11 +378,11 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
-
 	if (m_initializing)
 		return;
+
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
