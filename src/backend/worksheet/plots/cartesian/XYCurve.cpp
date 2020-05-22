@@ -1011,20 +1011,20 @@ void XYCurvePrivate::retransform() {
 		int countPixelX = ceil(widthDatarectInch*QApplication::desktop()->physicalDpiX());
 		int countPixelY = ceil(heightDatarectInch*QApplication::desktop()->physicalDpiY());
 
-		if (countPixelX <=0 || countPixelY <=0) {
+		if (countPixelX <= 0 || countPixelY <= 0) {
 			RESET_CURSOR;
 			return;
 		}
 
-		double minLogicalDiffX = 1/(plot->dataRect().width()/countPixelX);
-		double minLogicalDiffY = 1/(plot->dataRect().height()/countPixelY);
+		double minLogicalDiffX = 1./(plot->dataRect().width()/countPixelX);
+		double minLogicalDiffY = 1./(plot->dataRect().height()/countPixelY);
 		QVector<QVector<bool>> scenePointsUsed;
 		// size of the datarect in pixels
-		scenePointsUsed.resize(countPixelX+1);
-		for (int i=0; i< countPixelX+1; i++)
-			scenePointsUsed[i].resize(countPixelY+1);
+		scenePointsUsed.resize(countPixelX + 1);
+		for (int i = 0; i < countPixelX + 1; i++)
+			scenePointsUsed[i].resize(countPixelY + 1);
 
-		int columnProperties = xColumn->properties();
+		auto columnProperties = xColumn->properties();
 		int startIndex;
 		int endIndex;
 		if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing ||
@@ -2215,10 +2215,10 @@ bool XYCurve::minMaxX(int indexMin, int indexMax, double& xMin, double& xMax, bo
  * \ includeErrorBars If true respect the error bars in the min/max calculation
  */
 bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column2, const ErrorType errorType, const AbstractColumn* errorPlusColumn, const AbstractColumn* errorMinusColumn, int indexMin, int indexMax, double& min, double& max, bool includeErrorBars) const {
-	// when property is greater than 1 there is a benefit in finding minimum and maximum
-	// for property == 0 it must be iterated over all values so it does not matter if this function or the below one is used
-	// if the property of the second column is greater 0 means, that all values are valid and not masked
-	if ((!includeErrorBars || errorType == XYCurve::NoError) && column1->properties() > 0 && column2 && column2->properties() > 0) {
+	// when property is increasing or decreasing there is a benefit in finding minimum and maximum
+	// for property == AbstractColumn::Properties::No it must be iterated over all values so it does not matter if this function or the below one is used
+	// if the property of the second column is not AbstractColumn::Properties::No means, that all values are valid and not masked
+	if ((!includeErrorBars || errorType == XYCurve::NoError) && column1->properties() != AbstractColumn::Properties::No && column2 && column2->properties() != AbstractColumn::Properties::No) {
 		min = column1->minimum(indexMin, indexMax);
 		max = column1->maximum(indexMin, indexMax);
 		return true;
@@ -2320,25 +2320,25 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 		return false;
 
 	if (maxDist < 0)
-		maxDist = linePen.width() < 10 ? 10: linePen.width();
+		maxDist = (linePen.width() < 10) ? 10 : linePen.width();
 
-	double maxDistSquare = pow(maxDist,2);
+	double maxDistSquare = maxDist * maxDist;
 
-	int properties = q->xColumn()->properties();
+	auto properties = q->xColumn()->properties();
 	if (properties == AbstractColumn::Properties::No) {
 		// assumption: points exist if no line. otherwise previously returned false
 		if (lineType == XYCurve::NoLine) {
 			QPointF curvePosPrevScene = symbolPointsScene[0];
 			QPointF curvePosScene = curvePosPrevScene;
 			for (int row =0; row < rowCount; row ++) {
-				if (pow(mouseScenePos.x() - curvePosScene.x(),2) + pow(mouseScenePos.y() - curvePosScene.y(),2) <= maxDistSquare)
+				if (pow(mouseScenePos.x() - curvePosScene.x(), 2) + pow(mouseScenePos.y() - curvePosScene.y(), 2) <= maxDistSquare)
 					return true;
 
 				curvePosPrevScene = curvePosScene;
 				curvePosScene = symbolPointsScene[row];
 			}
 		} else {
-			for (int row=0; row < rowCount; row++) {
+			for (int row = 0; row < rowCount; row++) {
 				QLineF line = lines[row];
 				if (pointLiesNearLine(line.p1(), line.p2(), mouseScenePos, maxDist))
 					return true;

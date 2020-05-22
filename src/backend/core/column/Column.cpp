@@ -2002,20 +2002,22 @@ int Column::indexForValue(double x) const {
 
 	double prevValue = 0;
 	qint64 prevValueDateTime = 0;
-	AbstractColumn::ColumnMode mode = columnMode();
-	int property = properties();
-	if (property == AbstractColumn::Properties::MonotonicIncreasing ||
-			property == AbstractColumn::Properties::MonotonicDecreasing) {
+	auto mode = columnMode();
+	auto property = properties();
+	if (property == Properties::MonotonicIncreasing ||
+			property == Properties::MonotonicDecreasing) {
 		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
-		bool increase = (property != AbstractColumn::Properties::MonotonicDecreasing);
+		bool increase = (property != Properties::MonotonicDecreasing);
 
 		int lowerIndex = 0;
 		int higherIndex = rowCount() - 1;
 
-		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount()))+1;
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount())) + 1;
 
-		if ((mode == AbstractColumn::ColumnMode::Numeric || mode == AbstractColumn::ColumnMode::Integer ||
-					mode == AbstractColumn::ColumnMode::BigInt)) {
+		switch (mode) {
+		case ColumnMode::Numeric:
+		case ColumnMode::Integer:
+		case ColumnMode::BigInt:
 			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
 				double value = valueAt(index);
@@ -2039,9 +2041,12 @@ int Column::indexForValue(double x) const {
 					higherIndex = index;
 
 			}
-		} else if ((mode == AbstractColumn::ColumnMode::DateTime ||
-					mode == AbstractColumn::ColumnMode::Month ||
-					mode == AbstractColumn::ColumnMode::Day)) {
+			break;
+		case ColumnMode::Text:
+			break;
+		case ColumnMode::DateTime:
+		case ColumnMode::Month:
+		case ColumnMode::Day: {
 			qint64 xInt64 = static_cast<qint64>(x);
 			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
@@ -2067,8 +2072,9 @@ int Column::indexForValue(double x) const {
 
 			}
 		}
+		}
 
-	} else if (property == AbstractColumn::Properties::Constant) {
+	} else if (property == Properties::Constant) {
 		if (rowCount() > 0)
 			return 0;
 		else
@@ -2076,8 +2082,10 @@ int Column::indexForValue(double x) const {
 	} else {
 		// naiv way
 		int index = 0;
-		if ((mode == AbstractColumn::ColumnMode::Numeric || mode == AbstractColumn::ColumnMode::Integer ||
-					mode == AbstractColumn::ColumnMode::BigInt)) {
+		switch (mode) {
+		case ColumnMode::Numeric:
+		case ColumnMode::Integer:
+		case ColumnMode::BigInt:
 			for (int row = 0; row < rowCount(); row++) {
 				if (!isValid(row) || isMasked(row))
 					continue;
@@ -2093,9 +2101,11 @@ int Column::indexForValue(double x) const {
 				}
 			}
 			return index;
-		} else if ((mode == AbstractColumn::ColumnMode::DateTime ||
-					mode == AbstractColumn::ColumnMode::Month ||
-					mode == AbstractColumn::ColumnMode::Day)) {
+		case ColumnMode::Text:
+			break;
+		case ColumnMode::DateTime:
+		case ColumnMode::Month:
+		case ColumnMode::Day: {
 			qint64 xInt64 = static_cast<qint64>(x);
 			for (int row = 0; row < rowCount(); row++) {
 				if (!isValid(row) || isMasked(row))
@@ -2111,6 +2121,7 @@ int Column::indexForValue(double x) const {
 				}
 			}
 			return index;
+		}
 		}
 	}
 	return -1;
