@@ -321,7 +321,7 @@ void HistogramDock::setModel() {
 	QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
 	                       AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
 	                       AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot,
-	                       AspectType::XYFitCurve, AspectType::CantorWorksheet};
+	                       AspectType::XYFitCurve, AspectType::XYSmoothCurve, AspectType::CantorWorksheet};
 
 	cbDataColumn->setTopLevelClasses(list);
 	cbValuesColumn->setTopLevelClasses(list);
