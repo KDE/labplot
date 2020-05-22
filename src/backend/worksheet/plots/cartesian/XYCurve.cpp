@@ -1730,7 +1730,7 @@ void XYCurvePrivate::updateValues() {
 	valuesPoints.clear();
 	valuesStrings.clear();
 
-	if (valuesType == XYCurve::NoValues) {
+	if (valuesType == XYCurve::NoValues || symbolPointsLogical.isEmpty()) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
