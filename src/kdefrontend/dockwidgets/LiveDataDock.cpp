@@ -116,7 +116,7 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 	ui.cbUpdateType->setCurrentIndex(static_cast<int>(client->updateType()));
 	ui.cbReadingType->setCurrentIndex(static_cast<int>(client->readingType()));
 
-	if (client->updateType() == MQTTClient::NewData) {
+	if (client->updateType() == MQTTClient::UpdateType::NewData) {
 		ui.lUpdateInterval->hide();
 		ui.sbUpdateInterval->hide();
 	}
@@ -132,7 +132,7 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 	ui.sbKeepNValues->setValue(client->keepNValues());
 	ui.sbKeepNValues->setEnabled(true);
 
-	if (client->readingType() == MQTTClient::TillEnd) {
+	if (client->readingType() == MQTTClient::ReadingType::TillEnd) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
 	} else
@@ -140,10 +140,10 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 
 	// disable "whole file" option
 	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-	QStandardItem* item = model->item(LiveDataSource::WholeFile);
+	QStandardItem* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
-	if (static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex()) == LiveDataSource::WholeFile)
-		ui.cbReadingType->setCurrentIndex(LiveDataSource::TillEnd);
+	if (static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex()) == LiveDataSource::ReadingType::WholeFile)
+		ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::TillEnd));
 
 	m_mqttClient = client; // updates may be applied from now on
 
@@ -239,7 +239,7 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 		connect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription, client, &MQTTClient::addMQTTSubscription);
 	}
 
-	if (client->willUpdateType() == MQTTClient::OnClick && client->MQTTWillUse())
+	if (client->willUpdateType() == MQTTClient::WillUpdateType::OnClick && client->MQTTWillUse())
 		ui.bWillUpdateNow->show();
 
 	m_previousMQTTClient = oldclient;
@@ -437,13 +437,13 @@ void LiveDataDock::updateTypeChanged(int idx) {
 		DEBUG("LiveDataDock::updateTypeChanged()");
 		const auto type = static_cast<MQTTClient::UpdateType>(idx);
 
-		if (type == MQTTClient::TimeInterval) {
+		if (type == MQTTClient::UpdateType::TimeInterval) {
 			ui.lUpdateInterval->show();
 			ui.sbUpdateInterval->show();
 
 			m_mqttClient->setUpdateType(type);
 			m_mqttClient->setUpdateInterval(ui.sbUpdateInterval->value());
-		} else if (type == MQTTClient::NewData) {
+		} else if (type == MQTTClient::UpdateType::NewData) {
 			ui.lUpdateInterval->hide();
 			ui.sbUpdateInterval->hide();
 
@@ -480,7 +480,7 @@ void LiveDataDock::readingTypeChanged(int idx) {
 	else if (m_mqttClient) {
 		MQTTClient::ReadingType type = static_cast<MQTTClient::ReadingType>(idx);
 
-		if (type == MQTTClient::TillEnd) {
+		if (type == MQTTClient::ReadingType::TillEnd) {
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 		} else {
@@ -573,7 +573,7 @@ void LiveDataDock::useWillMessage(bool use) {
 
 	if (use) {
 		m_mqttClient->setMQTTWillUse(true);
-		if (m_mqttClient->willUpdateType() == MQTTClient::OnClick)
+		if (m_mqttClient->willUpdateType() == MQTTClient::WillUpdateType::OnClick)
 			ui.bWillUpdateNow->show();
 
 	} else {
@@ -647,10 +647,10 @@ void LiveDataDock::willOwnMessageChanged(const QString& message) {
 void LiveDataDock::willUpdateTypeChanged(int updateType) {
 	m_mqttClient->setWillUpdateType(static_cast<MQTTClient::WillUpdateType>(updateType));
 
-	if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::TimePeriod) {
+	if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::TimePeriod) {
 		ui.bWillUpdateNow->hide();
 		m_mqttClient->startWillTimer();
-	} else if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::OnClick) {
+	} else if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::OnClick) {
 		ui.bWillUpdateNow->show();
 
 		//if update type is on click we stop the will timer
@@ -682,7 +682,7 @@ void LiveDataDock::willUpdateIntervalChanged(int interval) {
  * adds or removes the statistic represented by the index from m_mqttClient
  */
 void LiveDataDock::statisticsChanged(MQTTClient::WillStatisticsType willStatisticsType) {
-	if (willStatisticsType >= 0) {
+	if (static_cast<int>(willStatisticsType) >= 0) {
 		//if it's not already added and it's checked we add it
 		if (!m_mqttClient->willStatistics().at(static_cast<int>(willStatisticsType)))
 			m_mqttClient->addWillStatistics(willStatisticsType);
@@ -921,7 +921,7 @@ void LiveDataDock::showWillSettings() {
 	connect(&willSettingsWidget, &MQTTWillSettingsWidget::applyClicked, [this, &menu, &willSettingsWidget]() {
 		this->useWillMessage(willSettingsWidget.will().enabled);
 		this->willMessageTypeChanged(willSettingsWidget.will().willMessageType);
-		this->updateTypeChanged(willSettingsWidget.will().willUpdateType);
+		this->updateTypeChanged(static_cast<int>(willSettingsWidget.will().willUpdateType));
 		this->willRetainChanged(willSettingsWidget.will().willRetain);
 		this->willUpdateIntervalChanged(willSettingsWidget.will().willTimeInterval);
 		this->willOwnMessageChanged(willSettingsWidget.will().willOwnMessage);

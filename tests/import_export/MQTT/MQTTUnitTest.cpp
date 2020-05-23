@@ -147,7 +147,7 @@ void MQTTUnitTest::testIntegerMessage() {
 	MQTTClient* mqttClient = new MQTTClient("test");
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
-	mqttClient->setReadingType(MQTTClient::TillEnd);
+	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
 	mqttClient->setMQTTClientHostPort("broker.hivemq.com", 1883);
@@ -240,7 +240,7 @@ void MQTTUnitTest::testNumericMessage() {
 	MQTTClient* mqttClient = new MQTTClient("test");
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
-	mqttClient->setReadingType(MQTTClient::TillEnd);
+	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
 	mqttClient->setMQTTClientHostPort("broker.hivemq.com", 1883);
@@ -333,7 +333,7 @@ void MQTTUnitTest::testTextMessage() {
 	MQTTClient* mqttClient = new MQTTClient("test");
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
-	mqttClient->setReadingType(MQTTClient::TillEnd);
+	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
 	mqttClient->setMQTTClientHostPort("broker.hivemq.com", 1883);
@@ -412,7 +412,7 @@ void MQTTUnitTest::testSubscriptions() {
 	MQTTClient* mqttClient = new MQTTClient("test");
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
-	mqttClient->setReadingType(MQTTClient::TillEnd);
+	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
 	mqttClient->setMQTTClientHostPort("broker.hivemq.com", 1883);

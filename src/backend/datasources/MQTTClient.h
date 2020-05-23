@@ -211,8 +211,8 @@ public:
 	void reparentTopic(const QString& topic, const QString& parent);
 
 private:
-	UpdateType m_updateType{TimeInterval};
-	ReadingType m_readingType{ContinuousFixed};
+	MQTTClient::UpdateType m_updateType{MQTTClient::UpdateType::TimeInterval};
+	MQTTClient::ReadingType m_readingType{MQTTClient::ReadingType::ContinuousFixed};
 	bool m_paused{false};
 	bool m_prepared{false};
 	int m_sampleSize{1};
