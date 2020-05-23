@@ -67,12 +67,12 @@ void CursorDock::setWorksheet(Worksheet* worksheet) {
 	ui->cbCursor0en->setChecked(cursor0Enabled);
 	ui->cbCursor1en->setChecked(cursor1Enabled);
 
-	ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSOR0, !cursor0Enabled);
-	ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSOR1, !cursor1Enabled);
+	ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), !cursor0Enabled);
+	ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), !cursor1Enabled);
 	if (cursor0Enabled && cursor1Enabled)
-		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, false);
+		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), false);
 	else
-		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, true);
+		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), true);
 
 	ui->tvCursorData->expandAll();
 
@@ -122,11 +122,11 @@ void CursorDock::plotCursor0EnableChanged(bool enable) {
 	m_initializing = true;
 
 	ui->cbCursor0en->setChecked(enable);
-	ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSOR0, !enable);
+	ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), !enable);
 	if (enable && ui->cbCursor1en->isChecked())
-		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, false);
+		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), false);
 	else
-		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, true);
+		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), true);
 
 	m_initializing = false;
 }
@@ -135,11 +135,11 @@ void CursorDock::plotCursor1EnableChanged(bool enable) {
 	m_initializing = true;
 
 	ui->cbCursor1en->setChecked(enable);
-	ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSOR1, !enable);
+	ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), !enable);
 	if (enable && ui->cbCursor0en->isChecked())
-		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, false);
+		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), false);
 	else
-		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, true);
+		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), true);
 
 	m_initializing = false;
 }

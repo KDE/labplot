@@ -82,7 +82,7 @@ public:
 	Worksheet::CartesianPlotActionMode cartesianPlotActionMode{Worksheet::CartesianPlotActionMode::ApplyActionToSelection};
 	Worksheet::CartesianPlotActionMode cartesianPlotCursorMode{Worksheet::CartesianPlotActionMode::ApplyActionToAll};
 
-	enum TreeModelColumn {
+	enum class TreeModelColumn {
 		PLOTNAME = 0,
 		SIGNALNAME = 0,
 		CURSOR0,
