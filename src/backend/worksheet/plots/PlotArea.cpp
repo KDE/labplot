@@ -76,7 +76,7 @@ void PlotArea::init() {
 	KConfigGroup group = config.group("PlotArea");
 
 	//Background
-	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int)PlotArea::Color);
+	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", static_cast<int>(BackgroundType::Color));
 	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor);
 	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled);
 	d->backgroundBrushStyle = (Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", (int) Qt::SolidPattern);
@@ -309,7 +309,7 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 	//draw the area
 	painter->setOpacity(backgroundOpacity);
 	painter->setPen(Qt::NoPen);
-	if (backgroundType == PlotArea::Color) {
+	if (backgroundType == PlotArea::BackgroundType::Color) {
 		switch (backgroundColorStyle) {
 		case PlotArea::SingleColor: {
 			painter->setBrush(QBrush(backgroundFirstColor));
@@ -351,7 +351,7 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 			break;
 		}
 		}
-	} else if (backgroundType == PlotArea::Image) {
+	} else if (backgroundType == PlotArea::BackgroundType::Image) {
 		if ( !backgroundFileName.trimmed().isEmpty() ) {
 			QPixmap pix(backgroundFileName);
 			switch (backgroundImageStyle) {
@@ -386,7 +386,7 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 			}
 		}
-	} else if (backgroundType == PlotArea::Pattern) {
+	} else if (backgroundType == PlotArea::BackgroundType::Pattern) {
 		painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
 	}
 
@@ -438,7 +438,7 @@ void PlotArea::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	writer->writeStartElement( "background" );
-	writer->writeAttribute( "type", QString::number(d->backgroundType) );
+	writer->writeAttribute( "type", QString::number(static_cast<int>(d->backgroundType)) );
 	writer->writeAttribute( "colorStyle", QString::number(d->backgroundColorStyle) );
 	writer->writeAttribute( "imageStyle", QString::number(d->backgroundImageStyle) );
 	writer->writeAttribute( "brushStyle", QString::number(d->backgroundBrushStyle) );
@@ -587,7 +587,7 @@ void PlotArea::loadThemeConfig(const KConfig& config) {
 		group = config.group("PlotArea");
 
 	//background
-	this->setBackgroundType((PlotArea::BackgroundType) group.readEntry("BackgroundType", (int)PlotArea::Color));
+	this->setBackgroundType((PlotArea::BackgroundType) group.readEntry("BackgroundType", static_cast<int>(PlotArea::BackgroundType::Color)));
 	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor));
 	this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled));
 	this->setBackgroundBrushStyle((Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", (int) Qt::SolidPattern));

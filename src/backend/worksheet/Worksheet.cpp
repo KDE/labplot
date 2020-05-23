@@ -1363,7 +1363,7 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 
 	//background properties
 	writer->writeStartElement( "background" );
-	writer->writeAttribute( "type", QString::number(d->backgroundType) );
+	writer->writeAttribute( "type", QString::number(static_cast<int>(d->backgroundType)) );
 	writer->writeAttribute( "colorStyle", QString::number(d->backgroundColorStyle) );
 	writer->writeAttribute( "imageStyle", QString::number(d->backgroundImageStyle) );
 	writer->writeAttribute( "brushStyle", QString::number(d->backgroundBrushStyle) );
@@ -1572,7 +1572,7 @@ void Worksheet::loadTheme(const QString& theme) {
 		group = config->group("Worksheet");
 	}
 
-	this->setBackgroundType((PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color));
+	this->setBackgroundType((PlotArea::BackgroundType) group.readEntry("BackgroundType", static_cast<int>(PlotArea::BackgroundType::Color)));
 	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor));
 	this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled));
 	this->setBackgroundBrushStyle((Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", (int) Qt::SolidPattern));

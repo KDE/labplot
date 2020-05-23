@@ -478,7 +478,7 @@ void CartesianPlotLegendDock::rotationChanged(int value) {
 void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 	const auto type = (PlotArea::BackgroundType)index;
 
-	if (type == PlotArea::Color) {
+	if (type == PlotArea::BackgroundType::Color) {
 		ui.lBackgroundColorStyle->show();
 		ui.cbBackgroundColorStyle->show();
 		ui.lBackgroundImageStyle->hide();
@@ -503,7 +503,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
 		}
-	} else if (type == PlotArea::Image) {
+	} else if (type == PlotArea::BackgroundType::Image) {
 		ui.lBackgroundColorStyle->hide();
 		ui.cbBackgroundColorStyle->hide();
 		ui.lBackgroundImageStyle->show();
@@ -518,7 +518,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 		ui.kcbBackgroundFirstColor->hide();
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
-	} else if (type == PlotArea::Pattern) {
+	} else if (type == PlotArea::BackgroundType::Pattern) {
 		ui.lBackgroundFirstColor->setText(i18n("Color:"));
 		ui.lBackgroundColorStyle->hide();
 		ui.cbBackgroundColorStyle->hide();
@@ -845,7 +845,7 @@ void CartesianPlotLegendDock::legendVisibilityChanged(bool on) {
 //Background
 void CartesianPlotLegendDock::legendBackgroundTypeChanged(PlotArea::BackgroundType type) {
 	m_initializing = true;
-	ui.cbBackgroundType->setCurrentIndex(type);
+	ui.cbBackgroundType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 

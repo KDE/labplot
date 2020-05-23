@@ -776,7 +776,7 @@ void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
 void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_rect) {
 	// canvas
 	painter->setOpacity(m_worksheet->backgroundOpacity());
-	if (m_worksheet->backgroundType() == PlotArea::Color) {
+	if (m_worksheet->backgroundType() == PlotArea::BackgroundType::Color) {
 		switch (m_worksheet->backgroundColorStyle()) {
 		case PlotArea::SingleColor: {
 				painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
@@ -821,7 +821,7 @@ void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_r
 			//	painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
 		}
 		painter->drawRect(scene_rect);
-	} else if (m_worksheet->backgroundType() == PlotArea::Image) {	// background image
+	} else if (m_worksheet->backgroundType() == PlotArea::BackgroundType::Image) {	// background image
 		const QString& backgroundFileName = m_worksheet->backgroundFileName().trimmed();
 		if ( !backgroundFileName.isEmpty() ) {
 			QPixmap pix(backgroundFileName);
@@ -851,7 +851,7 @@ void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_r
 				//	painter->drawPixmap(scene_rect.topLeft(),pix);
 			}
 		}
-	} else if (m_worksheet->backgroundType() == PlotArea::Pattern) {	// background pattern
+	} else if (m_worksheet->backgroundType() == PlotArea::BackgroundType::Pattern) {	// background pattern
 		painter->setBrush(QBrush(m_worksheet->backgroundFirstColor(),m_worksheet->backgroundBrushStyle()));
 		painter->drawRect(scene_rect);
 	}

@@ -483,7 +483,7 @@ void WorksheetDock::orientationChanged(int index) {
 void WorksheetDock::backgroundTypeChanged(int index) {
 	auto type = (PlotArea::BackgroundType)index;
 
-	if (type == PlotArea::Color) {
+	if (type == PlotArea::BackgroundType::Color) {
 		ui.lBackgroundColorStyle->show();
 		ui.cbBackgroundColorStyle->show();
 		ui.lBackgroundImageStyle->hide();
@@ -508,7 +508,7 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
 		}
-	} else if (type == PlotArea::Image) {
+	} else if (type == PlotArea::BackgroundType::Image) {
 		ui.lBackgroundFirstColor->hide();
 		ui.kcbBackgroundFirstColor->hide();
 		ui.lBackgroundSecondColor->hide();
@@ -523,7 +523,7 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 		ui.lBackgroundFileName->show();
 		ui.leBackgroundFileName->show();
 		ui.bOpen->show();
-	} else if (type == PlotArea::Pattern) {
+	} else if (type == PlotArea::BackgroundType::Pattern) {
 		ui.lBackgroundFirstColor->setText(i18n("Color:"));
 		ui.lBackgroundFirstColor->show();
 		ui.kcbBackgroundFirstColor->show();
@@ -800,7 +800,7 @@ void WorksheetDock::worksheetPageRectChanged(const QRectF& rect) {
 
 void WorksheetDock::worksheetBackgroundTypeChanged(PlotArea::BackgroundType type) {
 	m_initializing = true;
-	ui.cbBackgroundType->setCurrentIndex(type);
+	ui.cbBackgroundType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 

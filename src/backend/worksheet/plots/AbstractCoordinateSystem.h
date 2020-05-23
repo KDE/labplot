@@ -39,7 +39,7 @@ class QRectF;
 
 class AbstractCoordinateSystem {
 public:
-	enum MappingFlag {
+	enum class MappingFlag {
 		DefaultMapping = 0x00,
 		SuppressPageClipping = 0x01,
 		MarkGaps = 0x02,
@@ -51,11 +51,11 @@ public:
 	explicit AbstractCoordinateSystem(AbstractPlot*);
 	virtual ~AbstractCoordinateSystem();
 
-	virtual QVector<QPointF> mapLogicalToScene(const QVector<QPointF>&, MappingFlags flags = DefaultMapping) const = 0;
-	virtual QPointF mapLogicalToScene(QPointF, MappingFlags flags = DefaultMapping) const = 0;
-	virtual QVector<QLineF> mapLogicalToScene(const QVector<QLineF>&, MappingFlags flags = DefaultMapping) const = 0;
-	virtual QVector<QPointF> mapSceneToLogical(const QVector<QPointF>&, MappingFlags flags = DefaultMapping) const = 0;
-	virtual QPointF mapSceneToLogical(QPointF, MappingFlags flags = DefaultMapping) const = 0;
+	virtual QVector<QPointF> mapLogicalToScene(const QVector<QPointF>&, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
+	virtual QPointF mapLogicalToScene(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
+	virtual QVector<QLineF> mapLogicalToScene(const QVector<QLineF>&, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
+	virtual QVector<QPointF> mapSceneToLogical(const QVector<QPointF>&, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
+	virtual QPointF mapSceneToLogical(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
 
 	class LineClipResult {
 	public:
@@ -78,10 +78,10 @@ public:
 
 	//static members
 	static bool clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult = nullptr);
-	static bool approximatelyEqual(double a, double b, double epsilon=0.0000001);
-	static bool essentiallyEqual(double a, double b, double epsilon=0.0000001);
-	static bool definitelyGreaterThan(double a, double b, double epsilon=0.0000001);
-	static bool definitelyLessThan(double a, double b, double epsilon=0.0000001);
+	static bool approximatelyEqual(double a, double b, double epsilon = 1.e-7);
+	static bool essentiallyEqual(double a, double b, double epsilon = 1.e-7);
+	static bool definitelyGreaterThan(double a, double b, double epsilon = 1.e-7);
+	static bool definitelyLessThan(double a, double b, double epsilon = 1.e-7);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractCoordinateSystem::MappingFlags)

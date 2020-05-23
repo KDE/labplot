@@ -1876,17 +1876,17 @@ bool CartesianPlot::scaleAutoX() {
 			setIsLoading(true);
 			d->retransformScales();
 			setIsLoading(false);
-			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMin, 0), AbstractCoordinateSystem::SuppressPageClipping);
+			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMin, 0), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			point.setX(point.x() - errorBarsCapSize);
-			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
+			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			// Problem is, when the scaling is not linear (for example log(x)) and the minimum is 0. In this
 			// case mapLogicalToScene returns (0,0) which is smaller than the curves minimum
 			if (point.x() < d->curvesXMin)
 				d->curvesXMin = point.x();
 
-			point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMax, 0), AbstractCoordinateSystem::SuppressPageClipping);
+			point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMax, 0), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			point.setX(point.x() + errorBarsCapSize);
-			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
+			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			if (point.x() > d->curvesXMax)
 				d->curvesXMax = point.x();
 		}
@@ -1963,15 +1963,15 @@ bool CartesianPlot::scaleAutoY() {
 			setIsLoading(true);
 			d->retransformScales();
 			setIsLoading(false);
-			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(0, d->curvesYMin), AbstractCoordinateSystem::SuppressPageClipping);
+			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(0, d->curvesYMin), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			point.setY(point.y() + errorBarsCapSize);
-			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
+			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			if (point.y() < d->curvesYMin)
 				d->curvesYMin = point.y();
 
-			point = coordinateSystem()->mapLogicalToScene(QPointF(0, d->curvesYMax), AbstractCoordinateSystem::SuppressPageClipping);
+			point = coordinateSystem()->mapLogicalToScene(QPointF(0, d->curvesYMax), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			point.setY(point.y() - errorBarsCapSize);
-			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
+			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			if (point.y() > d->curvesYMax)
 				d->curvesYMax = point.y();
 		}
@@ -2046,15 +2046,15 @@ bool CartesianPlot::scaleAuto() {
 			setIsLoading(true);
 			d->retransformScales();
 			setIsLoading(false);
-			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMin, 0), AbstractCoordinateSystem::SuppressPageClipping);
+			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMin, 0), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			point.setX(point.x() - errorBarsCapSize);
-			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
+			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			if (point.x() < d->curvesXMin)
 				d->curvesXMin = point.x();
 
-			point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMax, 0), AbstractCoordinateSystem::SuppressPageClipping);
+			point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMax, 0), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			point.setX(point.x() + errorBarsCapSize);
-			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
+			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			if (point.x() > d->curvesXMax)
 				d->curvesXMax = point.x();
 		}
@@ -2079,15 +2079,15 @@ bool CartesianPlot::scaleAuto() {
 			setIsLoading(true);
 			d->retransformScales();
 			setIsLoading(false);
-			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(0, d->curvesYMin), AbstractCoordinateSystem::SuppressPageClipping);
+			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(0, d->curvesYMin), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			point.setY(point.y() + errorBarsCapSize);
-			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
+			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			if (point.y() < d->curvesYMin)
 				d->curvesYMin = point.y();
 
-			point = coordinateSystem()->mapLogicalToScene(QPointF(0, d->curvesYMax), AbstractCoordinateSystem::SuppressPageClipping);
+			point = coordinateSystem()->mapLogicalToScene(QPointF(0, d->curvesYMax), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			point.setY(point.y() - errorBarsCapSize);
-			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::SuppressPageClipping);
+			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			if (point.y() > d->curvesYMax)
 				d->curvesYMax = point.y();
 		}
@@ -3060,16 +3060,16 @@ void CartesianPlotPrivate::mousePressZoomSelectionMode(QPointF logicalPos) {
 		if (logicalPos.y() > yMax)
 			logicalPos.setY(yMax);
 
-		m_selectionStart = cSystem->mapLogicalToScene(logicalPos, CartesianCoordinateSystem::SuppressPageClipping);
+		m_selectionStart = cSystem->mapLogicalToScene(logicalPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	} else if (mouseMode == CartesianPlot::ZoomXSelectionMode) {
 		logicalPos.setY(yMin); // must be done, because the other plots can have other ranges, value must be in the scenes
-		m_selectionStart.setX(cSystem->mapLogicalToScene(logicalPos, CartesianCoordinateSystem::SuppressPageClipping).x());
+		m_selectionStart.setX(cSystem->mapLogicalToScene(logicalPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping).x());
 		m_selectionStart.setY(dataRect.y());
 	} else if (mouseMode == CartesianPlot::ZoomYSelectionMode) {
 		logicalPos.setX(xMin); // must be done, because the other plots can have other ranges, value must be in the scenes
 		m_selectionStart.setX(dataRect.x());
-		m_selectionStart.setY(cSystem->mapLogicalToScene(logicalPos, CartesianCoordinateSystem::SuppressPageClipping).y());
+		m_selectionStart.setY(cSystem->mapLogicalToScene(logicalPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping).y());
 	}
 	m_selectionEnd = m_selectionStart;
 	m_selectionBandIsShown = true;
@@ -3195,7 +3195,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			q->info(QString());
 			return;
 		}
-		emit q->mouseMoveZoomSelectionModeSignal(cSystem->mapSceneToLogical(event->pos(), CartesianCoordinateSystem::MappingFlag::Limit));
+		emit q->mouseMoveZoomSelectionModeSignal(cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit));
 
 	} else if (mouseMode == CartesianPlot::Cursor) {
 		QGraphicsItem::mouseMoveEvent(event);
@@ -3214,9 +3214,9 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos) {
 	QString info;
-	QPointF logicalStart = cSystem->mapSceneToLogical(m_selectionStart, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+	QPointF logicalStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	if (mouseMode == CartesianPlot::ZoomSelectionMode) {
-		m_selectionEnd = cSystem->mapLogicalToScene(logicalPos, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+		m_selectionEnd = cSystem->mapLogicalToScene(logicalPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		QPointF logicalEnd = logicalPos;
 		if (xRangeFormat == CartesianPlot::Numeric)
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
@@ -3307,8 +3307,8 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode() {
 	bool retransformPlot = true;
 
 	//determine the new plot ranges
-	QPointF logicalZoomStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::SuppressPageClipping);
-	QPointF logicalZoomEnd = cSystem->mapSceneToLogical(m_selectionEnd, AbstractCoordinateSystem::SuppressPageClipping);
+	QPointF logicalZoomStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	QPointF logicalZoomEnd = cSystem->mapSceneToLogical(m_selectionEnd, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	if (m_selectionEnd.x() > m_selectionStart.x()) {
 		xMin = logicalZoomStart.x();
 		xMax = logicalZoomEnd.x();

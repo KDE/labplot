@@ -133,7 +133,7 @@ void XYCurve::init() {
 	d->valuesColor = group.readEntry("ValuesColor", QColor(Qt::black));
 
 	d->fillingPosition = (XYCurve::FillingPosition) group.readEntry("FillingPosition", (int)XYCurve::NoFilling);
-	d->fillingType = (PlotArea::BackgroundType) group.readEntry("FillingType", (int)PlotArea::Color);
+	d->fillingType = (PlotArea::BackgroundType) group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color));
 	d->fillingColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("FillingColorStyle", (int) PlotArea::SingleColor);
 	d->fillingImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("FillingImageStyle", (int) PlotArea::Scaled);
 	d->fillingBrushStyle = (Qt::BrushStyle) group.readEntry("FillingBrushStyle", (int) Qt::SolidPattern);
@@ -2843,7 +2843,7 @@ void XYCurvePrivate::drawValues(QPainter* painter) {
 void XYCurvePrivate::drawFilling(QPainter* painter) {
 	for (const auto& pol : fillPolygons) {
 		QRectF rect = pol.boundingRect();
-		if (fillingType == PlotArea::Color) {
+		if (fillingType == PlotArea::BackgroundType::Color) {
 			switch (fillingColorStyle) {
 			case PlotArea::SingleColor: {
 					painter->setBrush(QBrush(fillingFirstColor));
@@ -2885,7 +2885,7 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 					break;
 				}
 			}
-		} else if (fillingType == PlotArea::Image) {
+		} else if (fillingType == PlotArea::BackgroundType::Image) {
 			if ( !fillingFileName.trimmed().isEmpty() ) {
 				QPixmap pix(fillingFileName);
 				switch (fillingImageStyle) {
@@ -2922,7 +2922,7 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
 				}
 			}
-		} else if (fillingType == PlotArea::Pattern)
+		} else if (fillingType == PlotArea::BackgroundType::Pattern)
 			painter->setBrush(QBrush(fillingFirstColor, fillingBrushStyle));
 
 		painter->drawPolygon(pol);
@@ -3038,7 +3038,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 	//Filling
 	writer->writeStartElement( "filling" );
 	writer->writeAttribute( "position", QString::number(d->fillingPosition) );
-	writer->writeAttribute( "type", QString::number(d->fillingType) );
+	writer->writeAttribute( "type", QString::number(static_cast<int>(d->fillingType)) );
 	writer->writeAttribute( "colorStyle", QString::number(d->fillingColorStyle) );
 	writer->writeAttribute( "imageStyle", QString::number(d->fillingImageStyle) );
 	writer->writeAttribute( "brushStyle", QString::number(d->fillingBrushStyle) );
@@ -3270,7 +3270,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	this->setFillingPosition((XYCurve::FillingPosition)group.readEntry("FillingPosition", (int)XYCurve::NoFilling));
 	this->setFillingFirstColor(themeColor);
 	this->setFillingSecondColor(group.readEntry("FillingSecondColor", QColor(Qt::black)));
-	this->setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType", (int)PlotArea::Color));
+	this->setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color)));
 
 	//Error Bars
 	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine));

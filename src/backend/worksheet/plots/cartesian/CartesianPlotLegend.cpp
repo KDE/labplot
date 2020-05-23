@@ -98,7 +98,7 @@ void CartesianPlotLegend::init() {
 	connect(d->title, &TextLabel::changed, this, &CartesianPlotLegend::retransform);
 
 	//Background
-	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
+	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", static_cast<int>(PlotArea::BackgroundType::Color));
 	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor);
 	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled);
 	d->backgroundBrushStyle = (Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", (int) Qt::SolidPattern);
@@ -625,7 +625,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	//draw the area
 	painter->setOpacity(backgroundOpacity);
 	painter->setPen(Qt::NoPen);
-	if (backgroundType == PlotArea::Color) {
+	if (backgroundType == PlotArea::BackgroundType::Color) {
 		switch (backgroundColorStyle) {
 			case PlotArea::SingleColor:{
 				painter->setBrush(QBrush(backgroundFirstColor));
@@ -667,7 +667,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				break;
 			}
 		}
-	} else if (backgroundType == PlotArea::Image) {
+	} else if (backgroundType == PlotArea::BackgroundType::Image) {
 		if ( !backgroundFileName.trimmed().isEmpty() ) {
 			QPixmap pix(backgroundFileName);
 			switch (backgroundImageStyle) {
@@ -693,7 +693,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 					painter->drawTiledPixmap(rect,pix,QPoint(rect.size().width()/2,rect.size().height()/2));
 			}
 		}
-	} else if (backgroundType == PlotArea::Pattern) {
+	} else if (backgroundType == PlotArea::BackgroundType::Pattern) {
 		painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
 	}
 
@@ -998,7 +998,7 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 
 	//background
 	writer->writeStartElement( "background" );
-	writer->writeAttribute( "type", QString::number(d->backgroundType) );
+	writer->writeAttribute( "type", QString::number(static_cast<int>(d->backgroundType)) );
 	writer->writeAttribute( "colorStyle", QString::number(d->backgroundColorStyle) );
 	writer->writeAttribute( "imageStyle", QString::number(d->backgroundImageStyle) );
 	writer->writeAttribute( "brushStyle", QString::number(d->backgroundBrushStyle) );

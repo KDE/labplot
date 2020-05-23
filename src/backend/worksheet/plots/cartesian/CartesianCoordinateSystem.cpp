@@ -218,9 +218,9 @@ CartesianScale *CartesianScale::createLogScale(const Interval<double> &interval,
 QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF> &points, MappingFlags flags) const {
 	const QRectF pageRect = d->plot->dataRect();
 	QVector<QPointF> result;
-	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
-	const bool limit = flags & Limit;
-	const bool noPageClippingY = flags & SuppressPageClippingY;
+	bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool limit = flags & MappingFlag::Limit;
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
 	const double xPage = pageRect.x();
 	const double yPage = pageRect.y();
 	const double w = pageRect.width();
@@ -284,9 +284,9 @@ QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPoi
 void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logicalPoints,
 		QVector<QPointF>& scenePoints, std::vector<bool>& visiblePoints, MappingFlags flags) const {
 	const QRectF pageRect = d->plot->dataRect();
-	const bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
-	const bool limit = flags & Limit;
-	const bool noPageClippingY = flags & SuppressPageClippingY;
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool limit = flags & MappingFlag::Limit;
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
 	const double xPage = pageRect.x();
 	const double yPage = pageRect.y();
 	const double w = pageRect.width();
@@ -352,9 +352,9 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, const QVector<QPointF>& logicalPoints,
 		QVector<QPointF>& scenePoints, std::vector<bool>& visiblePoints, QVector<QVector<bool>>& scenePointsUsed, double minLogicalDiffX, double minLogicalDiffY, MappingFlags flags) const {
 	const QRectF pageRect = d->plot->dataRect();
-	const bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
-	const bool limit = flags & Limit;
-	const bool noPageClippingY = flags & SuppressPageClippingY;
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool limit = flags & MappingFlag::Limit;
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
 	const double xPage = pageRect.x();
 	const double yPage = pageRect.y();
 	const double w = pageRect.width();
@@ -418,9 +418,9 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, 
 
 QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, MappingFlags flags) const {
 	const QRectF pageRect = d->plot->dataRect();
-	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
-	bool noPageClippingY = flags & SuppressPageClippingY;
-	bool limit = flags & Limit;
+	bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
+	bool limit = flags & MappingFlag::Limit;
 
 	double x = logicalPoint.x();
 	double y = logicalPoint.y();
@@ -475,7 +475,7 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, Mappi
 QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLineF> &lines, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
 	QVector<QLineF> result;
-	const bool doPageClipping = !pageRect.isNull() && !(flags & SuppressPageClipping);
+	const bool doPageClipping = !pageRect.isNull() && !(flags & MappingFlag::SuppressPageClipping);
 
 	double xGapBefore = NAN;
 	double xGapAfter = NAN;
@@ -554,7 +554,7 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 				if (!yScale->map(&y2))
 					continue;
 
-				if (flags & MarkGaps) {
+				if (flags & MappingFlag::MarkGaps) {
 					//mark the end of the gap
 					if (!std::isnan(xGapBefore)) {
 						if (clipResult.xClippedLeft[0]) {
@@ -632,9 +632,9 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 QVector<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QVector<QPointF>& points, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
 	QVector<QPointF> result;
-	const bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
-	const bool limit = flags & Limit;
-	const bool noPageClippingY = flags & SuppressPageClippingY;
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool limit = flags & MappingFlag::Limit;
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
 	const double xPage = pageRect.x();
 	const double yPage = pageRect.y();
 	const double w = pageRect.width();
@@ -704,9 +704,9 @@ QVector<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QVector<QPoi
 QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
 	QPointF result;
-	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
-	bool limit = flags & Limit;
-	const bool noPageClippingY = flags & SuppressPageClippingY;
+	bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	bool limit = flags & MappingFlag::Limit;
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
 
 	if (limit) {
 		// set to max/min if passed over

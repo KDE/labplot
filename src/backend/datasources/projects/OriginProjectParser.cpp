@@ -1727,9 +1727,9 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		curve->setFillingPosition(XYCurve::FillingBelow);
 
 		if (originCurve.fillAreaPattern == 0) {
-			curve->setFillingType(PlotArea::Color);
+			curve->setFillingType(PlotArea::BackgroundType::Color);
 		} else {
-			curve->setFillingType(PlotArea::Pattern);
+			curve->setFillingType(PlotArea::BackgroundType::Pattern);
 
 			//map different patterns in originCurve.fillAreaPattern (has the values of Origin::FillPattern) to Qt::BrushStyle;
 			switch (originCurve.fillAreaPattern) {

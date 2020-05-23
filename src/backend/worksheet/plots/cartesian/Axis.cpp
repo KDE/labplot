@@ -992,7 +992,7 @@ void AxisPrivate::retransformLine() {
 	}
 
 	lines.append(QLineF(startPoint, endPoint));
-	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
+	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
 	for (const auto& line : lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
@@ -1735,7 +1735,7 @@ void AxisPrivate::retransformMajorGrid() {
 	//major tick points are already in scene coordinates, convert them back to logical...
 	//TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	//Currently, grid lines disappear somtimes without this flag
-	QVector<QPointF> logicalMajorTickPoints = cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
+	QVector<QPointF> logicalMajorTickPoints = cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	if (logicalMajorTickPoints.isEmpty())
 		return;
@@ -1792,7 +1792,7 @@ void AxisPrivate::retransformMajorGrid() {
 		}
 	}
 
-	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);
+	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	for (const auto& line : lines) {
 		majorGridPath.moveTo(line.p1());
 		majorGridPath.lineTo(line.p2());
@@ -1814,7 +1814,7 @@ void AxisPrivate::retransformMinorGrid() {
 	//minor tick points are already in scene coordinates, convert them back to logical...
 	//TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	//Currently, grid lines disappear somtimes without this flag
-	QVector<QPointF> logicalMinorTickPoints = cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
+	QVector<QPointF> logicalMinorTickPoints = cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	QVector<QLineF> lines;
 	if (orientation == Axis::AxisHorizontal) { //horizontal axis
@@ -1831,7 +1831,7 @@ void AxisPrivate::retransformMinorGrid() {
 			lines.append( QLineF(xMin, point.y(), xMax, point.y()) );
 	}
 
-	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);
+	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	for (const auto& line : lines) {
 		minorGridPath.moveTo(line.p1());
 		minorGridPath.lineTo(line.p2());

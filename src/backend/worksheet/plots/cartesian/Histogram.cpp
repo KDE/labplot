@@ -121,7 +121,7 @@ void Histogram::init() {
 	d->valuesColor = group.readEntry("ValuesColor", QColor(Qt::black));
 
 	d->fillingEnabled = group.readEntry("FillingEnabled", true);
-	d->fillingType = (PlotArea::BackgroundType) group.readEntry("FillingType", (int)PlotArea::Color);
+	d->fillingType = (PlotArea::BackgroundType) group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color));
 	d->fillingColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("FillingColorStyle", (int) PlotArea::SingleColor);
 	d->fillingImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("FillingImageStyle", (int) PlotArea::Scaled);
 	d->fillingBrushStyle = (Qt::BrushStyle) group.readEntry("FillingBrushStyle", (int) Qt::SolidPattern);
@@ -1462,7 +1462,7 @@ void HistogramPrivate::drawValues(QPainter* painter) {
 
 void HistogramPrivate::drawFilling(QPainter* painter) {
 	const QRectF& rect = fillPolygon.boundingRect();
-	if (fillingType == PlotArea::Color) {
+	if (fillingType == PlotArea::BackgroundType::Color) {
 		switch (fillingColorStyle) {
 		case PlotArea::SingleColor: {
 			painter->setBrush(QBrush(fillingFirstColor));
@@ -1504,7 +1504,7 @@ void HistogramPrivate::drawFilling(QPainter* painter) {
 			break;
 		}
 		}
-	} else if (fillingType == PlotArea::Image) {
+	} else if (fillingType == PlotArea::BackgroundType::Image) {
 		if ( !fillingFileName.trimmed().isEmpty() ) {
 			QPixmap pix(fillingFileName);
 			switch (fillingImageStyle) {
@@ -1541,7 +1541,7 @@ void HistogramPrivate::drawFilling(QPainter* painter) {
 				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 			}
 		}
-	} else if (fillingType == PlotArea::Pattern)
+	} else if (fillingType == PlotArea::BackgroundType::Pattern)
 		painter->setBrush(QBrush(fillingFirstColor,fillingBrushStyle));
 
 	painter->drawPolygon(fillPolygon);
@@ -1625,7 +1625,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	//Filling
 	writer->writeStartElement("filling");
 	writer->writeAttribute( "enalbed", QString::number(d->fillingEnabled) );
-	writer->writeAttribute( "type", QString::number(d->fillingType) );
+	writer->writeAttribute( "type", QString::number(static_cast<int>(d->fillingType)) );
 	writer->writeAttribute( "colorStyle", QString::number(d->fillingColorStyle) );
 	writer->writeAttribute( "imageStyle", QString::number(d->fillingImageStyle) );
 	writer->writeAttribute( "brushStyle", QString::number(d->fillingBrushStyle) );
@@ -1820,7 +1820,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	this->setFillingOpacity(group.readEntry("FillingOpacity", 1.0));
 	this->setFillingFirstColor(themeColor);
 	this->setFillingSecondColor(group.readEntry("FillingSecondColor", QColor(Qt::black)));
-	this->setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType", (int)PlotArea::Color));
+	this->setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color)));
 
 	//Error Bars
 	//TODO:

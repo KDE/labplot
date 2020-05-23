@@ -1049,7 +1049,7 @@ void HistogramDock::fillingEnabledChanged(int state) {
 void HistogramDock::fillingTypeChanged(int index) {
 	auto type = (PlotArea::BackgroundType)index;
 
-	if (type == PlotArea::Color) {
+	if (type == PlotArea::BackgroundType::Color) {
 		ui.lFillingColorStyle->show();
 		ui.cbFillingColorStyle->show();
 		ui.lFillingImageStyle->hide();
@@ -1074,7 +1074,7 @@ void HistogramDock::fillingTypeChanged(int index) {
 			ui.lFillingSecondColor->show();
 			ui.kcbFillingSecondColor->show();
 		}
-	} else if (type == PlotArea::Image) {
+	} else if (type == PlotArea::BackgroundType::Image) {
 		ui.lFillingColorStyle->hide();
 		ui.cbFillingColorStyle->hide();
 		ui.lFillingImageStyle->show();
@@ -1089,7 +1089,7 @@ void HistogramDock::fillingTypeChanged(int index) {
 		ui.kcbFillingFirstColor->hide();
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
-	} else if (type == PlotArea::Pattern) {
+	} else if (type == PlotArea::BackgroundType::Pattern) {
 		ui.lFillingFirstColor->setText(i18n("Color:"));
 		ui.lFillingColorStyle->hide();
 		ui.cbFillingColorStyle->hide();
@@ -1526,7 +1526,7 @@ void HistogramDock::curveFillingEnabledChanged(bool status) {
 }
 void HistogramDock::curveFillingTypeChanged(PlotArea::BackgroundType type) {
 	m_initializing = true;
-	ui.cbFillingType->setCurrentIndex(type);
+	ui.cbFillingType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 void HistogramDock::curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle style) {

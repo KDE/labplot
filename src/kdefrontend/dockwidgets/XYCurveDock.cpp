@@ -1376,7 +1376,7 @@ void XYCurveDock::fillingPositionChanged(int index) {
 void XYCurveDock::fillingTypeChanged(int index) {
 	const auto type = (PlotArea::BackgroundType)index;
 
-	if (type == PlotArea::Color) {
+	if (type == PlotArea::BackgroundType::Color) {
 		ui.lFillingColorStyle->show();
 		ui.cbFillingColorStyle->show();
 		ui.lFillingImageStyle->hide();
@@ -1401,7 +1401,7 @@ void XYCurveDock::fillingTypeChanged(int index) {
 			ui.lFillingSecondColor->show();
 			ui.kcbFillingSecondColor->show();
 		}
-	} else if (type == PlotArea::Image) {
+	} else if (type == PlotArea::BackgroundType::Image) {
 		ui.lFillingColorStyle->hide();
 		ui.cbFillingColorStyle->hide();
 		ui.lFillingImageStyle->show();
@@ -1416,7 +1416,7 @@ void XYCurveDock::fillingTypeChanged(int index) {
 		ui.kcbFillingFirstColor->hide();
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
-	} else if (type == PlotArea::Pattern) {
+	} else if (type == PlotArea::BackgroundType::Pattern) {
 		ui.lFillingFirstColor->setText(i18n("Color:"));
 		ui.lFillingColorStyle->hide();
 		ui.cbFillingColorStyle->hide();
@@ -1969,7 +1969,7 @@ void XYCurveDock::curveFillingPositionChanged(XYCurve::FillingPosition position)
 }
 void XYCurveDock::curveFillingTypeChanged(PlotArea::BackgroundType type) {
 	m_initializing = true;
-	ui.cbFillingType->setCurrentIndex(type);
+	ui.cbFillingType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 void XYCurveDock::curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle style) {

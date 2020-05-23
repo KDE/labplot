@@ -42,7 +42,7 @@ public:
 	explicit PlotArea(const QString& name, CartesianPlot *parent);
 	~PlotArea() override;
 
-	enum BackgroundType {Color, Image, Pattern};
+	enum class BackgroundType {Color, Image, Pattern};
 	enum BackgroundColorStyle {SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
 			TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient, RadialGradient};
 	enum BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
