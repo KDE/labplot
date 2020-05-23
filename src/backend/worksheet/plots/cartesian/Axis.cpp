@@ -158,7 +158,7 @@ void Axis::init() {
 	d->arrowSize = group.readEntry("ArrowSize", Worksheet::convertToSceneUnits(10, Worksheet::Point));
 
 	// axis title
- 	d->title = new TextLabel(this->name(), TextLabel::AxisTitle);
+ 	d->title = new TextLabel(this->name(), TextLabel::Type::AxisTitle);
 	connect( d->title, &TextLabel::changed, this, &Axis::labelChanged);
 	addChild(d->title);
 	d->title->setHidden(true);

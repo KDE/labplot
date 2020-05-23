@@ -68,7 +68,7 @@ public:
 	WorksheetElement::HorizontalAlignment horizontalAlignment{WorksheetElement::hAlignCenter};
 	WorksheetElement::VerticalAlignment verticalAlignment{WorksheetElement::vAlignCenter};
 
-	TextLabel::BorderShape borderShape{TextLabel::NoBorder};
+	TextLabel::BorderShape borderShape{TextLabel::BorderShape::NoBorder};
 	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Point), Qt::SolidLine};
 	qreal borderOpacity{1.0};
 

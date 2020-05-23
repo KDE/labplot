@@ -88,8 +88,8 @@ void CartesianPlotLegend::init() {
 	d->rotationAngle = group.readEntry("Rotation", 0.0);
 
 	//Title
- 	d->title = new TextLabel(this->name(), TextLabel::PlotLegendTitle);
-	d->title->setBorderShape(TextLabel::NoBorder);
+ 	d->title = new TextLabel(this->name(), TextLabel::Type::PlotLegendTitle);
+	d->title->setBorderShape(TextLabel::BorderShape::NoBorder);
 	addChild(d->title);
 	d->title->setHidden(true);
 	d->title->setParentGraphicsItem(d);

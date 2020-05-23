@@ -902,7 +902,7 @@ void LabelWidget::visibilityChanged(bool state) {
 //border
 void LabelWidget::borderShapeChanged(int index) {
 	auto shape = (TextLabel::BorderShape)index;
-	bool b = (shape != TextLabel::NoBorder);
+	bool b = (shape != TextLabel::BorderShape::NoBorder);
 	ui.lBorderStyle->setVisible(b);
 	ui.cbBorderStyle->setVisible(b);
 	ui.lBorderWidth->setVisible(b);
@@ -1075,7 +1075,7 @@ void LabelWidget::labelVisibleChanged(bool on) {
 //border
 void LabelWidget::labelBorderShapeChanged(TextLabel::BorderShape shape) {
 	m_initializing = true;
-	ui.cbBorderShape->setCurrentIndex(shape);
+	ui.cbBorderShape->setCurrentIndex(static_cast<int>(shape));
 	m_initializing = false;
 }
 
@@ -1141,10 +1141,10 @@ void LabelWidget::load() {
 	ui.teLabel->setFocus();
 
 	// Geometry
-	ui.cbPositionX->setCurrentIndex( (int) m_label->position().horizontalPosition );
+	ui.cbPositionX->setCurrentIndex( (int)m_label->position().horizontalPosition );
 	positionXChanged(ui.cbPositionX->currentIndex());
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.x(),m_worksheetUnit) );
-	ui.cbPositionY->setCurrentIndex( (int) m_label->position().verticalPosition );
+	ui.cbPositionY->setCurrentIndex( (int)m_label->position().verticalPosition );
 	positionYChanged(ui.cbPositionY->currentIndex());
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.y(),m_worksheetUnit) );
 
@@ -1157,7 +1157,7 @@ void LabelWidget::load() {
 	ui.sbRotation->setValue( m_label->rotationAngle() );
 
 	//Border
-	ui.cbBorderShape->setCurrentIndex( m_label->borderShape() );
+	ui.cbBorderShape->setCurrentIndex(static_cast<int>(m_label->borderShape()));
 	ui.kcbBorderColor->setColor( m_label->borderPen().color() );
 	ui.cbBorderStyle->setCurrentIndex( (int) m_label->borderPen().style() );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_label->borderPen().widthF(), Worksheet::Point) );

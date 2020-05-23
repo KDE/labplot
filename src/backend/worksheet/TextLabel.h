@@ -45,9 +45,9 @@ class TextLabel : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	enum Type {General, PlotTitle, AxisTitle, PlotLegendTitle};
+	enum class Type {General, PlotTitle, AxisTitle, PlotLegendTitle};
 
-	enum BorderShape {NoBorder, Rect, Ellipse, RoundSideRect, RoundCornerRect, InwardsRoundCornerRect, DentedBorderRect,
+	enum class BorderShape {NoBorder, Rect, Ellipse, RoundSideRect, RoundCornerRect, InwardsRoundCornerRect, DentedBorderRect,
 			Cuboid, UpPointingRectangle, DownPointingRectangle, LeftPointingRectangle, RightPointingRectangle};
 
 	// The text is always in html format
@@ -75,7 +75,7 @@ public:
 		bool teXUsed{false};
 	};
 
-	explicit TextLabel(const QString& name, Type type = General);
+	explicit TextLabel(const QString& name, Type type = Type::General);
 	~TextLabel() override;
 
 	Type type() const;
@@ -121,7 +121,7 @@ private slots:
 
 protected:
 	TextLabelPrivate* const d_ptr;
-	TextLabel(const QString& name, TextLabelPrivate* dd, Type type = General);
+	TextLabel(const QString& name, TextLabelPrivate* dd, Type type = Type::General);
 
 private:
 	Q_DECLARE_PRIVATE(TextLabel)

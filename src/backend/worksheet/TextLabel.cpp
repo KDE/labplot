@@ -82,16 +82,16 @@ void TextLabel::init() {
 
 	QString groupName;
 	switch (m_type) {
-	case General:
+	case Type::General:
 		groupName = "TextLabel";
 		break;
-	case PlotTitle:
+	case Type::PlotTitle:
 		groupName = "PlotTitle";
 		break;
-	case AxisTitle:
+	case Type::AxisTitle:
 		groupName = "AxisTitle";
 		break;
-	case PlotLegendTitle:
+	case Type::PlotLegendTitle:
 		groupName = "PlotLegendTitle";
 		break;
 	}
@@ -110,10 +110,10 @@ void TextLabel::init() {
 	textOption.setWrapMode(QTextOption::NoWrap);
 	d->staticText.setTextOption(textOption);
 
-	if (m_type == PlotTitle || m_type == PlotLegendTitle) {
+	if (m_type == Type::PlotTitle || m_type == Type::PlotLegendTitle) {
 		d->position.verticalPosition = WorksheetElement::vPositionTop;
 		d->verticalAlignment = WorksheetElement::vAlignBottom;
-	} else if (m_type == AxisTitle) {
+	} else if (m_type == Type::AxisTitle) {
 		d->position.horizontalPosition = WorksheetElement::hPositionCustom;
 		d->position.verticalPosition = WorksheetElement::vPositionCustom;
 	}
@@ -520,13 +520,12 @@ void TextLabelPrivate::updateTeXImage() {
 void TextLabelPrivate::updateBorder() {
 	borderShapePath = QPainterPath();
 	switch (borderShape) {
-	case (TextLabel::NoBorder):
+	case TextLabel::BorderShape::NoBorder:
 		break;
-	case (TextLabel::BorderShape::Rect): {
+	case TextLabel::BorderShape::Rect:
 		borderShapePath.addRect(boundingRectangle);
 		break;
-	}
-	case (TextLabel::BorderShape::Ellipse): {
+	case TextLabel::BorderShape::Ellipse: {
 		const double xs = boundingRectangle.x();
 		const double ys = boundingRectangle.y();
 		const double w = boundingRectangle.width();
@@ -534,7 +533,7 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.addEllipse(xs  - 0.1 * w, ys - 0.1 * h, 1.2 * w,  1.2 * h);
 		break;
 	}
-	case (TextLabel::BorderShape::RoundSideRect): {
+	case TextLabel::BorderShape::RoundSideRect: {
 		const double xs = boundingRectangle.x();
 		const double ys = boundingRectangle.y();
 		const double w = boundingRectangle.width();
@@ -546,7 +545,7 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.quadTo(xs - h/2, ys + h/2, xs, ys);
 		break;
 	}
-	case (TextLabel::BorderShape::RoundCornerRect): {
+	case TextLabel::BorderShape::RoundCornerRect: {
 		const double xs = boundingRectangle.x();
 		const double ys = boundingRectangle.y();
 		const double w = boundingRectangle.width();
@@ -562,7 +561,7 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
 		break;
 	}
-	case (TextLabel::BorderShape::InwardsRoundCornerRect): {
+	case TextLabel::BorderShape::InwardsRoundCornerRect: {
 		const double xs = boundingRectangle.x();
 		const double ys = boundingRectangle.y();
 		const double w = boundingRectangle.width();
@@ -578,7 +577,7 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.quadTo(xs, ys, xs, ys - 0.3 * h);
 		break;
 	}
-	case (TextLabel::BorderShape::DentedBorderRect): {
+	case TextLabel::BorderShape::DentedBorderRect: {
 		const double xs = boundingRectangle.x();
 		const double ys = boundingRectangle.y();
 		const double w = boundingRectangle.width();
@@ -590,7 +589,7 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.quadTo(xs, ys + h / 2, xs - 0.2 * h, ys - 0.2 * h);
 		break;
 	}
-	case (TextLabel::BorderShape::Cuboid): {
+	case TextLabel::BorderShape::Cuboid: {
 		const double xs = boundingRectangle.x();
 		const double ys = boundingRectangle.y();
 		const double w = boundingRectangle.width();
@@ -608,7 +607,7 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.lineTo(xs + w + 0.3 * h, ys - 0.2 * h);
 		break;
 	}
-	case (TextLabel::BorderShape::UpPointingRectangle): {
+	case TextLabel::BorderShape::UpPointingRectangle: {
 		const double xs = boundingRectangle.x();
 		const double ys = boundingRectangle.y();
 		const double w = boundingRectangle.width();
@@ -720,7 +719,7 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	QMatrix matrix;
 	matrix.rotate(-rotationAngle);
 	labelShape = QPainterPath();
-	if (borderShape != TextLabel::NoBorder) {
+	if (borderShape != TextLabel::BorderShape::NoBorder) {
 		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));
 		transformedBoundingRectangle = matrix.mapRect(labelShape.boundingRect());
 	} else {
@@ -761,7 +760,7 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	painter->restore();
 
 	//draw the border
-	if (borderShape != TextLabel::NoBorder) {
+	if (borderShape != TextLabel::BorderShape::NoBorder) {
 		painter->save();
 		painter->rotate(-rotationAngle);
 		painter->setPen(borderPen);
@@ -951,7 +950,7 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 
 	//border
 	writer->writeStartElement("border");
-	writer->writeAttribute("borderShape", QString::number(d->borderShape));
+	writer->writeAttribute("borderShape", QString::number(static_cast<int>(d->borderShape)));
 	WRITE_QPEN(d->borderPen);
 	writer->writeAttribute("borderOpacity", QString::number(d->borderOpacity));
 	writer->writeEndElement();
