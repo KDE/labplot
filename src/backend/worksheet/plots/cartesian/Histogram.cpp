@@ -1769,7 +1769,11 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 //#########################  Theme management ##################################
 //##############################################################################
 void Histogram::loadThemeConfig(const KConfig& config) {
-	KConfigGroup group = config.group("XYCurve");
+	KConfigGroup group;
+	if (config.hasGroup(QLatin1String("Theme")))
+		group = config.group("XYCurve"); //when loading from the theme config, use the same properties as for XYCurve
+	else
+		group = config.group("Histogram");
 
 	int index = parentAspect()->indexOfChild<Histogram>(this);
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
@@ -1787,32 +1791,36 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	d->m_suppressRecalc = true;
 
 	//Line
-	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)this->linePen().style()));
+	p.setStyle((Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine));
+	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
 	p.setColor(themeColor);
 	this->setLinePen(p);
-	this->setLineOpacity(group.readEntry("LineOpacity", this->lineOpacity()));
+	this->setLineOpacity(group.readEntry("LineOpacity", 1.0));
 
 	//Symbol
-	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", this->symbolsOpacity()));
-	QBrush brush = symbolsBrush();
+	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", 1.0));
+
+	QBrush brush;
+	brush.setStyle((Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern));
 	brush.setColor(themeColor);
 	this->setSymbolsBrush(brush);
-	p = symbolsPen();
+	p.setStyle((Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine));
 	p.setColor(themeColor);
+	p.setWidthF(group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point)));
 	this->setSymbolsPen(p);
 
 	//Values
-	this->setValuesOpacity(group.readEntry("ValuesOpacity", this->valuesOpacity()));
-	this->setValuesColor(group.readEntry("ValuesColor", this->valuesColor()));
+	this->setValuesOpacity(group.readEntry("ValuesOpacity", 1.0));
+	this->setValuesColor(group.readEntry("ValuesColor", themeColor));
 
 	//Filling
-	this->setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle",(int) this->fillingBrushStyle()));
-	this->setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle",(int) this->fillingColorStyle()));
-	this->setFillingOpacity(group.readEntry("FillingOpacity", this->fillingOpacity()));
-	this->setFillingSecondColor(group.readEntry("FillingSecondColor",(QColor) this->fillingSecondColor()));
+	this->setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle", (int)Qt::SolidPattern));
+	this->setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle", (int)PlotArea::SingleColor));
+	this->setFillingOpacity(group.readEntry("FillingOpacity", 1.0));
 	this->setFillingFirstColor(themeColor);
-	this->setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType",(int) this->fillingType()));
+	this->setFillingSecondColor(group.readEntry("FillingSecondColor", QColor(Qt::black)));
+	this->setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType", (int)PlotArea::Color));
 
 	//Error Bars
 	//TODO:
