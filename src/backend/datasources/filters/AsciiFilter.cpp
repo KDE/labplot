@@ -2173,7 +2173,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 	} else {
 		//we have to read all the data when reading from end
 		//so we set readingType to TillEnd
-		if (static_cast<int> (spreadsheet->mqttClient()->readingType()) == MQTTClient::ReadingType::FromEnd)
+		if (spreadsheet->mqttClient()->readingType() == MQTTClient::ReadingType::FromEnd)
 			readingType = MQTTClient::ReadingType::TillEnd;
 		else
 			readingType = spreadsheet->mqttClient()->readingType();

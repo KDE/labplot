@@ -87,7 +87,7 @@ MQTTClient::~MQTTClient() {
  * depending on the update type, periodically or on data changes, starts the timer.
  */
 void MQTTClient::ready() {
-	if (m_updateType == TimeInterval)
+	if (m_updateType == UpdateType::TimeInterval)
 		m_updateTimer->start(m_updateInterval);
 }
 
@@ -97,7 +97,7 @@ void MQTTClient::ready() {
 void MQTTClient::updateNow() {
 	m_updateTimer->stop();
 	read();
-	if ((m_updateType == TimeInterval) && !m_paused)
+	if ((m_updateType == UpdateType::TimeInterval) && !m_paused)
 		m_updateTimer->start(m_updateInterval);
 }
 
@@ -106,7 +106,7 @@ void MQTTClient::updateNow() {
  */
 void MQTTClient::continueReading() {
 	m_paused = false;
-	if (m_updateType == TimeInterval)
+	if (m_updateType == UpdateType::TimeInterval)
 		m_updateTimer->start(m_updateInterval);
 }
 
@@ -115,7 +115,7 @@ void MQTTClient::continueReading() {
  */
 void MQTTClient::pauseReading() {
 	m_paused = true;
-	if (m_updateType == TimeInterval)
+	if (m_updateType == UpdateType::TimeInterval)
 		m_updateTimer->stop();
 }
 
@@ -215,7 +215,7 @@ MQTTClient::ReadingType MQTTClient::readingType() const {
  * \param updatetype
  */
 void MQTTClient::setUpdateType(UpdateType updateType) {
-	if (updateType == NewData)
+	if (updateType == UpdateType::NewData)
 		m_updateTimer->stop();
 
 	m_updateType = updateType;
@@ -1119,14 +1119,14 @@ void MQTTClient::save(QXmlStreamWriter* writer) const {
 	//general
 	writer->writeStartElement("general");
 	writer->writeAttribute("subscriptionCount", QString::number(m_MQTTSubscriptions.size()));
-	writer->writeAttribute("updateType", QString::number(m_updateType));
-	writer->writeAttribute("readingType", QString::number(m_readingType));
+	writer->writeAttribute("updateType", QString::number(static_cast<int>(m_updateType)));
+	writer->writeAttribute("readingType", QString::number(static_cast<int>(m_readingType)));
 	writer->writeAttribute("keepValues", QString::number(m_keepNValues));
 
-	if (m_updateType == TimeInterval)
+	if (m_updateType == UpdateType::TimeInterval)
 		writer->writeAttribute("updateInterval", QString::number(m_updateInterval));
 
-	if (m_readingType != TillEnd)
+	if (m_readingType != ReadingType::TillEnd)
 		writer->writeAttribute("sampleSize", QString::number(m_sampleSize));
 
 	writer->writeAttribute("host", m_client->hostname());
@@ -1210,7 +1210,7 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 			else
 				m_readingType =  static_cast<ReadingType>(str.toInt());
 
-			if (m_updateType == TimeInterval) {
+			if (m_updateType == UpdateType::TimeInterval) {
 				str = attribs.value("updateInterval").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'updateInterval'"));
@@ -1218,7 +1218,7 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 					m_updateInterval = str.toInt();
 			}
 
-			if (m_readingType != TillEnd) {
+			if (m_readingType != ReadingType::TillEnd) {
 				str = attribs.value("sampleSize").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'sampleSize'"));

@@ -126,15 +126,17 @@ void MQTTWillSettingsWidget::loadSettings(const MQTTClient::MQTTWill& will, cons
 	if (!will.willTopic.isEmpty())
 		ui.cbWillTopic->setCurrentText(will.willTopic);
 
-	if (ui.cbWillMessageType->currentIndex() != static_cast<int> (will.willMessageType))
-		ui.cbWillMessageType->setCurrentIndex(will.willMessageType);
+	int messageType = static_cast<int>(will.willMessageType);
+	if (ui.cbWillMessageType->currentIndex() != messageType)
+		ui.cbWillMessageType->setCurrentIndex(messageType);
 	else
-		willMessageTypeChanged(will.willMessageType);
+		willMessageTypeChanged(messageType);
 
-	if (ui.cbWillUpdate->currentIndex() != static_cast<int> (will.willUpdateType))
-		ui.cbWillUpdate->setCurrentIndex(will.willUpdateType);
+	int updateType = static_cast<int>(will.willUpdateType);
+	if (ui.cbWillUpdate->currentIndex() != updateType)
+		ui.cbWillUpdate->setCurrentIndex(updateType);
 	else
-		willUpdateTypeChanged(will.willUpdateType);
+		willUpdateTypeChanged(updateType);
 
 	ui.leWillOwnMessage->setText(will.willOwnMessage);
 	ui.leWillUpdateInterval->setText(QString::number(will.willTimeInterval));
