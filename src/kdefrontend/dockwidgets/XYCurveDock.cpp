@@ -88,7 +88,7 @@ XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 			ui.cbValuesDateTimeFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
 	}
 
-	ui.cbValuesNumericFormat->setEditable(true);
+	ui.cbValuesDateTimeFormat->setEditable(true);
 
 	//Tab "Filling"
 	ui.cbFillingColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);

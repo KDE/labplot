@@ -54,8 +54,7 @@ private:
 	TreeViewComboBox* cbDataColumn;
 	TreeViewComboBox* cbValuesColumn;
 
-	void updateValuesFormatWidgets(const AbstractColumn::ColumnMode);
-	void showValuesColumnFormat(const Column*);
+	void updateValuesWidgets();
 
 	void load();
 	void loadConfig(KConfig&);
@@ -112,6 +111,9 @@ private slots:
 	void valuesDistanceChanged(double);
 	void valuesRotationChanged(int);
 	void valuesOpacityChanged(int);
+	void valuesNumericFormatChanged(int);
+	void valuesPrecisionChanged(int);
+	void valuesDateTimeFormatChanged(const QString&);
 	void valuesPrefixChanged();
 	void valuesSuffixChanged();
 	void valuesFontChanged(const QFont&);
@@ -172,6 +174,9 @@ private slots:
 	void curveValuesDistanceChanged(qreal);
 	void curveValuesOpacityChanged(qreal);
 	void curveValuesRotationAngleChanged(qreal);
+	void curveValuesNumericFormatChanged(char);
+	void curveValuesPrecisionChanged(int);
+	void curveValuesDateTimeFormatChanged(const QString&);
 	void curveValuesPrefixChanged(const QString&);
 	void curveValuesSuffixChanged(const QString&);
 	void curveValuesFontChanged(QFont);

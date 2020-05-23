@@ -111,6 +111,9 @@ void Histogram::init() {
 	d->valuesDistance = group.readEntry("ValuesDistance", Worksheet::convertToSceneUnits(5, Worksheet::Point));
 	d->valuesRotationAngle = group.readEntry("ValuesRotation", 0.0);
 	d->valuesOpacity = group.readEntry("ValuesOpacity", 1.0);
+	d->valuesNumericFormat = group.readEntry("ValuesNumericFormat", "f").at(0).toLatin1();
+	d->valuesPrecision = group.readEntry("ValuesNumericFormat", 2);
+	d->valuesDateTimeFormat = group.readEntry("ValuesDateTimeFormat", "yyyy-MM-dd");
 	d->valuesPrefix = group.readEntry("ValuesPrefix", "");
 	d->valuesSuffix = group.readEntry("ValuesSuffix", "");
 	d->valuesFont = group.readEntry("ValuesFont", QFont());
@@ -220,6 +223,9 @@ BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesPosition, valuesPosition,
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesDistance, valuesDistance)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesRotationAngle, valuesRotationAngle)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesOpacity, valuesOpacity)
+CLASS_SHARED_D_READER_IMPL(Histogram, char, valuesNumericFormat, valuesNumericFormat)
+BASIC_SHARED_D_READER_IMPL(Histogram, int, valuesPrecision, valuesPrecision)
+CLASS_SHARED_D_READER_IMPL(Histogram, QString, valuesDateTimeFormat, valuesDateTimeFormat)
 CLASS_SHARED_D_READER_IMPL(Histogram, QString, valuesPrefix, valuesPrefix)
 CLASS_SHARED_D_READER_IMPL(Histogram, QString, valuesSuffix, valuesSuffix)
 CLASS_SHARED_D_READER_IMPL(Histogram, QColor, valuesColor, valuesColor)
@@ -487,7 +493,26 @@ void Histogram::setValuesOpacity(qreal opacity) {
 		exec(new HistogramSetValuesOpacityCmd(d, opacity, ki18n("%1: set values opacity")));
 }
 
-//TODO: Format, Precision
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesNumericFormat, char, valuesNumericFormat, updateValues)
+void Histogram::setValuesNumericFormat(char format) {
+	Q_D(Histogram);
+	if (format != d->valuesNumericFormat)
+		exec(new HistogramSetValuesNumericFormatCmd(d, format, ki18n("%1: set values numeric format")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesPrecision, int, valuesPrecision, updateValues)
+void Histogram::setValuesPrecision(int precision) {
+	Q_D(Histogram);
+	if (precision != d->valuesPrecision)
+		exec(new HistogramSetValuesPrecisionCmd(d, precision, ki18n("%1: set values precision")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesDateTimeFormat, QString, valuesDateTimeFormat, updateValues)
+void Histogram::setValuesDateTimeFormat(const QString& format) {
+	Q_D(Histogram);
+	if (format != d->valuesDateTimeFormat)
+		exec(new HistogramSetValuesDateTimeFormatCmd(d, format, ki18n("%1: set values datetime format")));
+}
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesPrefix, QString, valuesPrefix, updateValues)
 void Histogram::setValuesPrefix(const QString& prefix) {

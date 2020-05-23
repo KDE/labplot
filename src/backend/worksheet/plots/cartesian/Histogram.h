@@ -96,6 +96,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, valuesDistance, ValuesDistance)
 	BASIC_D_ACCESSOR_DECL(qreal, valuesRotationAngle, ValuesRotationAngle)
 	BASIC_D_ACCESSOR_DECL(qreal, valuesOpacity, ValuesOpacity)
+	BASIC_D_ACCESSOR_DECL(char, valuesNumericFormat, ValuesNumericFormat)
+	BASIC_D_ACCESSOR_DECL(int, valuesPrecision, ValuesPrecision)
+	CLASS_D_ACCESSOR_DECL(QString, valuesDateTimeFormat, ValuesDateTimeFormat)
 	CLASS_D_ACCESSOR_DECL(QString, valuesPrefix, ValuesPrefix)
 	CLASS_D_ACCESSOR_DECL(QString, valuesSuffix, ValuesSuffix)
 	CLASS_D_ACCESSOR_DECL(QColor, valuesColor, ValuesColor)
@@ -188,6 +191,9 @@ signals:
 	void valuesDistanceChanged(qreal);
 	void valuesRotationAngleChanged(qreal);
 	void valuesOpacityChanged(qreal);
+	void valuesNumericFormatChanged(char);
+	void valuesPrecisionChanged(int);
+	void valuesDateTimeFormatChanged(QString);
 	void valuesPrefixChanged(QString);
 	void valuesSuffixChanged(QString);
 	void valuesFontChanged(QFont);

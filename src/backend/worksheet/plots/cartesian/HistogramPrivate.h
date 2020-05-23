@@ -123,6 +123,9 @@ public:
 	qreal valuesDistance;
 	qreal valuesRotationAngle;
 	qreal valuesOpacity;
+	char valuesNumericFormat; //'g', 'e', 'E', etc. for numeric values
+	int valuesPrecision; //number of digits for numeric values
+	QString valuesDateTimeFormat;
 	QString valuesPrefix;
 	QString valuesSuffix;
 	QFont valuesFont;
