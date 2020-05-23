@@ -647,10 +647,17 @@ void LiveDataDock::willOwnMessageChanged(const QString& message) {
 void LiveDataDock::willUpdateTypeChanged(int updateType) {
 	m_mqttClient->setWillUpdateType(static_cast<MQTTClient::WillUpdateType>(updateType));
 
+<<<<<<< HEAD
 	if (updateType == static_cast<int>(MQTTClient::WillUpdateType::TimePeriod)) {
 		ui.bWillUpdateNow->hide();
 		m_mqttClient->startWillTimer();
 	} else if (updateType == static_cast<int>(MQTTClient::WillUpdateType::OnClick)) {
+=======
+	if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::TimePeriod) {
+		ui.bWillUpdateNow->hide();
+		m_mqttClient->startWillTimer();
+	} else if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::OnClick) {
+>>>>>>> 89e8ac3aa142df66580c3d747a1832c200e304dd
 		ui.bWillUpdateNow->show();
 
 		//if update type is on click we stop the will timer
@@ -682,7 +689,11 @@ void LiveDataDock::willUpdateIntervalChanged(int interval) {
  * adds or removes the statistic represented by the index from m_mqttClient
  */
 void LiveDataDock::statisticsChanged(MQTTClient::WillStatisticsType willStatisticsType) {
+<<<<<<< HEAD
 	if (willStatisticsType != MQTTClient::WillStatisticsType::NoStatistics) {
+=======
+	if (static_cast<int>(willStatisticsType) >= 0) {
+>>>>>>> 89e8ac3aa142df66580c3d747a1832c200e304dd
 		//if it's not already added and it's checked we add it
 		if (!m_mqttClient->willStatistics().at(static_cast<int>(willStatisticsType)))
 			m_mqttClient->addWillStatistics(willStatisticsType);
