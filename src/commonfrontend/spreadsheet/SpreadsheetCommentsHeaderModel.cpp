@@ -68,7 +68,7 @@ QVariant SpreadsheetCommentsHeaderModel::headerData(int section, Qt::Orientation
 	if (orientation != Qt::Horizontal || role != Qt::DisplayRole || section < 0 || section >= columnCount())
 		return QVariant();
 
-	return QVariant(m_spreadsheet_model->headerData(section, Qt::Horizontal, SpreadsheetModel::CommentRole));
+	return QVariant(m_spreadsheet_model->headerData(section, Qt::Horizontal, static_cast<int>(SpreadsheetModel::CustomDataRole::CommentRole)));
 }
 
 int SpreadsheetCommentsHeaderModel::rowCount(const QModelIndex& parent) const{

@@ -162,9 +162,9 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 		if (!col_ptr->isValid(row))
 			return QVariant(QBrush(Qt::red));
 		break;
-	case MaskingRole:
+	case static_cast<int>(CustomDataRole::MaskingRole):
 		return QVariant(col_ptr->isMasked(row));
-	case FormulaRole:
+	case static_cast<int>(CustomDataRole::FormulaRole):
 		return QVariant(col_ptr->formula(row));
 // 	case Qt::DecorationRole:
 // 		if (m_formula_mode)
@@ -188,7 +188,7 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 			return m_horizontal_header_data.at(section);
 		case Qt::DecorationRole:
 			return m_spreadsheet->child<Column>(section)->icon();
-		case SpreadsheetModel::CommentRole:
+		case static_cast<int>(CustomDataRole::CommentRole):
 			return m_spreadsheet->child<Column>(section)->comment();
 		}
 		break;
@@ -239,23 +239,19 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 	}
 
 	switch (role) {
-	case Qt::EditRole: {
+	case Qt::EditRole:
 		// remark: the validity of the cell is determined by the input filter
 		if (m_formula_mode)
 			column->setFormula(row, value.toString());
 		else
 			column->asStringColumn()->setTextAt(row, value.toString());
-
 		return true;
-	}
-	case MaskingRole: {
+	case static_cast<int>(CustomDataRole::MaskingRole):
 		m_spreadsheet->column(index.column())->setMasked(row, value.toBool());
 		return true;
-	}
-	case FormulaRole: {
+	case static_cast<int>(CustomDataRole::FormulaRole):
 		m_spreadsheet->column(index.column())->setFormula(row, value.toString());
 		return true;
-	}
 	}
 
 	return false;

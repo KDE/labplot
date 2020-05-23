@@ -51,7 +51,7 @@ void SpreadsheetItemDelegate::paint(QPainter* painter, const QStyleOptionViewIte
 		const QModelIndex& index) const {
 
 	QItemDelegate::paint(painter, option, index);
-	if (!index.data(SpreadsheetModel::MaskingRole).toBool())
+	if (!index.data(static_cast<int>(SpreadsheetModel::CustomDataRole::MaskingRole)).toBool())
 		return;
 
 	painter->save();

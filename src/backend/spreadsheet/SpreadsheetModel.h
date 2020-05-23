@@ -45,7 +45,7 @@ class SpreadsheetModel : public QAbstractItemModel {
 public:
 	explicit SpreadsheetModel(Spreadsheet*);
 
-	enum CustomDataRole {
+	enum class CustomDataRole {
 		MaskingRole = Qt::UserRole, //!< bool determining whether the cell is masked
 		FormulaRole = Qt::UserRole+1, //!< the cells formula
 		CommentRole = Qt::UserRole+2, //!< the column comment (for headerData())
