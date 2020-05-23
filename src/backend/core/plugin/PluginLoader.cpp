@@ -65,7 +65,7 @@ QObject *PluginLoader::instance() {
 }
 
 bool PluginLoader::isActive() const {
-	return (Active == m_status);
+	return (PluginStatus::Active == m_status);
 }
 
 bool PluginLoader::load() {
@@ -93,10 +93,10 @@ bool PluginLoader::load() {
 // 			}
 		} else {
 			m_statusString = m_loader->errorString();
-			m_status = ErrorFromQt;
+			m_status = PluginStatus::ErrorFromQt;
 		}
 	}
-	return (Active == m_status);
+	return (PluginStatus::Active == m_status);
 }
 
 bool PluginLoader::unload() {
@@ -104,7 +104,7 @@ bool PluginLoader::unload() {
 		m_loader->unload();
 	delete m_loader;
 	m_loader = nullptr;
-	m_status = NotYetLoaded;
+	m_status = PluginStatus::NotYetLoaded;
 	m_statusString = i18n("Not yet loaded.");
 
 	return true;
