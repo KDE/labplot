@@ -50,7 +50,7 @@ public:
 	int numDigits() const { return m_digits; }
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Text; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Text; }
 
 private:
 	friend class Double2StringFilterSetFormatCmd;
@@ -79,7 +79,7 @@ public:
 protected:
 	//! Using typed ports: only double inputs are accepted.
 	bool inputAcceptable(int, const AbstractColumn *source) override {
-		return source->columnMode() == AbstractColumn::Numeric;
+		return source->columnMode() == AbstractColumn::ColumnMode::Numeric;
 	}
 };
 

@@ -911,7 +911,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			if (!m_filter->load(reader))
 				return false;
 		} else if (reader->name() == "column") {
-			Column* column = new Column(QString(), AbstractColumn::Text);
+			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Text);
 			if (!column->load(reader, preview)) {
 				delete column;
 				setColumnCount(0);

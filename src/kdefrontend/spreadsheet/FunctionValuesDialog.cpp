@@ -418,8 +418,8 @@ void FunctionValuesDialog::generate() {
 	const QString& expression = ui.teEquation->toPlainText();
 	bool autoUpdate = (ui.chkAutoUpdate->checkState() == Qt::Checked);
 	for (auto* col : m_columns) {
-		if (col->columnMode() != AbstractColumn::Numeric)
-			col->setColumnMode(AbstractColumn::Numeric);
+		if (col->columnMode() != AbstractColumn::ColumnMode::Numeric)
+			col->setColumnMode(AbstractColumn::ColumnMode::Numeric);
 
 		col->setFormula(expression, variableNames, variableColumns, autoUpdate);
 		col->updateFormula();

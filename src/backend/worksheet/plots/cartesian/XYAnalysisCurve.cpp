@@ -77,39 +77,39 @@ void XYAnalysisCurve::copyData(QVector<double>& xData, QVector<double>& yData,
 
 		double x = NAN;
 		switch (xDataColumn->columnMode()) {
-		case AbstractColumn::Numeric:
+		case AbstractColumn::ColumnMode::Numeric:
 			x = xDataColumn->valueAt(row);
 			break;
-		case AbstractColumn::Integer:
+		case AbstractColumn::ColumnMode::Integer:
 			x = xDataColumn->integerAt(row);
 			break;
-		case AbstractColumn::BigInt:
+		case AbstractColumn::ColumnMode::BigInt:
 			x = xDataColumn->bigIntAt(row);
 			break;
-		case AbstractColumn::Text:	// invalid
+		case AbstractColumn::ColumnMode::Text:	// invalid
 			break;
-		case AbstractColumn::DateTime:
-		case AbstractColumn::Day:
-		case AbstractColumn::Month:
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Month:
 			x = xDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
 		}
 
 		double y = NAN;
 		switch (yDataColumn->columnMode()) {
-		case AbstractColumn::Numeric:
+		case AbstractColumn::ColumnMode::Numeric:
 			y = yDataColumn->valueAt(row);
 			break;
-		case AbstractColumn::Integer:
+		case AbstractColumn::ColumnMode::Integer:
 			y = yDataColumn->integerAt(row);
 			break;
-		case AbstractColumn::BigInt:
+		case AbstractColumn::ColumnMode::BigInt:
 			y = yDataColumn->bigIntAt(row);
 			break;
-		case AbstractColumn::Text:	// invalid
+		case AbstractColumn::ColumnMode::Text:	// invalid
 			break;
-		case AbstractColumn::DateTime:
-		case AbstractColumn::Day:
-		case AbstractColumn::Month:
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Month:
 			y = yDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
 		}
 

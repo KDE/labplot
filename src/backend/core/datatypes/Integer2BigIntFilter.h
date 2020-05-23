@@ -49,13 +49,13 @@ public:
 	}
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::BigInt; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::BigInt; }
 
 protected:
 	//! Using typed ports: only integer inputs are accepted
 	bool inputAcceptable(int, const AbstractColumn *source) override {
 		DEBUG("inputAcceptable(): source type = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, source->columnMode()));
-		return source->columnMode() == AbstractColumn::Integer;
+		return source->columnMode() == AbstractColumn::ColumnMode::Integer;
 	}
 };
 

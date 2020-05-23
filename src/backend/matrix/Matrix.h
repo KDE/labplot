@@ -46,9 +46,9 @@ public:
 	enum HeaderFormat {HeaderRowsColumns, HeaderValues, HeaderRowsColumnsValues};
 
 	explicit Matrix(const QString& name, bool loading = false,
-		   const AbstractColumn::ColumnMode = AbstractColumn::Numeric);
+		   const AbstractColumn::ColumnMode = AbstractColumn::ColumnMode::Numeric);
 	Matrix(int rows, int cols, const QString& name,
-		   const AbstractColumn::ColumnMode = AbstractColumn::Numeric);
+		   const AbstractColumn::ColumnMode = AbstractColumn::ColumnMode::Numeric);
 	~Matrix() override;
 
 	QIcon icon() const override;

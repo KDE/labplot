@@ -207,7 +207,7 @@ void Column::copyData() {
 	QString output;
 	int rows = rowCount();
 
-	if (columnMode() == AbstractColumn::Numeric) {
+	if (columnMode() == ColumnMode::Numeric) {
 		const Double2StringFilter* filter = static_cast<Double2StringFilter*>(outputFilter());
 		char format = filter->numericFormat();
 		for (int r = 0; r < rows; r++) {
@@ -215,7 +215,7 @@ void Column::copyData() {
 			if (r < rows-1)
 				output += '\n';
 		}
-	} else if (columnMode() == AbstractColumn::Integer || columnMode() == AbstractColumn::BigInt) {
+	} else if (columnMode() == ColumnMode::Integer || columnMode() == ColumnMode::BigInt) {
 		for (int r = 0; r < rowCount(); r++) {
 			output += QString::number(valueAt(r));
 			if (r < rows-1)
@@ -653,8 +653,8 @@ const Column::ColumnStatistics& Column::statistics() const {
 }
 
 void Column::calculateStatistics() const {
-	if ( (columnMode() != AbstractColumn::Numeric) && (columnMode() != AbstractColumn::Integer)
-			&& (columnMode() != AbstractColumn::BigInt) )
+	if ( (columnMode() != ColumnMode::Numeric) && (columnMode() != ColumnMode::Integer)
+			&& (columnMode() != ColumnMode::BigInt) )
 		return;
 
 	d->statistics = ColumnStatistics();
@@ -672,7 +672,7 @@ void Column::calculateStatistics() const {
 	QMap<double, int> frequencyOfValues;
 	QVector<double> rowData;
 
-	if (columnMode() == AbstractColumn::Numeric) {
+	if (columnMode() == ColumnMode::Numeric) {
 		auto* rowValues = reinterpret_cast<QVector<double>*>(data());
 		rowValuesSize = rowValues->size();
 		rowData.reserve(rowValuesSize);
@@ -697,7 +697,7 @@ void Column::calculateStatistics() const {
 			++notNanCount;
 			rowData.push_back(val);
 		}
-	} else if (columnMode() == AbstractColumn::Integer) {
+	} else if (columnMode() == ColumnMode::Integer) {
 		//TODO: code duplication because of the reinterpret_cast...
 		auto* rowValues = reinterpret_cast<QVector<int>*>(data());
 		rowValuesSize = rowValues->size();
@@ -722,7 +722,7 @@ void Column::calculateStatistics() const {
 			++notNanCount;
 			rowData.push_back(val);
 		}
-	} else if (columnMode() == AbstractColumn::BigInt) {
+	} else if (columnMode() == ColumnMode::BigInt) {
 		//TODO: code duplication because of the reinterpret_cast...
 		auto* rowValues = reinterpret_cast<QVector<qint64>*>(data());
 		rowValuesSize = rowValues->size();
@@ -866,7 +866,7 @@ bool Column::hasValues() const {
 
 	bool foundValues = false;
 	switch (columnMode()) {
-	case AbstractColumn::Numeric: {
+	case ColumnMode::Numeric: {
 		for (int row = 0; row < rowCount(); ++row) {
 			if (!std::isnan(valueAt(row))) {
 				foundValues = true;
@@ -875,7 +875,7 @@ bool Column::hasValues() const {
 		}
 		break;
 	}
-	case AbstractColumn::Text: {
+	case ColumnMode::Text: {
 		for (int row = 0; row < rowCount(); ++row) {
 			if (!textAt(row).isEmpty()) {
 				foundValues = true;
@@ -884,14 +884,14 @@ bool Column::hasValues() const {
 		}
 		break;
 	}
-	case AbstractColumn::Integer:
-	case AbstractColumn::BigInt:
+	case ColumnMode::Integer:
+	case ColumnMode::BigInt:
 		//integer column has always valid values
 		foundValues = true;
 		break;
-	case AbstractColumn::DateTime:
-	case AbstractColumn::Month:
-	case AbstractColumn::Day: {
+	case ColumnMode::DateTime:
+	case ColumnMode::Month:
+	case ColumnMode::Day: {
 		for (int row = 0; row < rowCount(); ++row) {
 			if (dateTimeAt(row).isValid()) {
 				foundValues = true;
@@ -1004,7 +1004,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 
 	writer->writeAttribute("rows", QString::number(rowCount()));
 	writer->writeAttribute("designation", QString::number(static_cast<int>(plotDesignation())));
-	writer->writeAttribute("mode", QString::number(columnMode()));
+	writer->writeAttribute("mode", QString::number(static_cast<int>(columnMode())));
 	writer->writeAttribute("width", QString::number(width()));
 
 	//save the formula used to generate column values, if available
@@ -1050,25 +1050,25 @@ void Column::save(QXmlStreamWriter* writer) const {
 
 	int i;
 	switch (columnMode()) {
-	case AbstractColumn::Numeric: {
+	case ColumnMode::Numeric: {
 			const char* data = reinterpret_cast<const char*>(static_cast< QVector<double>* >(d->data())->constData());
 			size_t size = d->rowCount() * sizeof(double);
 			writer->writeCharacters(QByteArray::fromRawData(data, (int)size).toBase64());
 			break;
 		}
-	case AbstractColumn::Integer: {
+	case ColumnMode::Integer: {
 			const char* data = reinterpret_cast<const char*>(static_cast< QVector<int>* >(d->data())->constData());
 			size_t size = d->rowCount() * sizeof(int);
 			writer->writeCharacters(QByteArray::fromRawData(data, (int)size).toBase64());
 			break;
 		}
-	case AbstractColumn::BigInt: {
+	case ColumnMode::BigInt: {
 			const char* data = reinterpret_cast<const char*>(static_cast< QVector<qint64>* >(d->data())->constData());
 			size_t size = d->rowCount() * sizeof(qint64);
 			writer->writeCharacters(QByteArray::fromRawData(data, (int)size).toBase64());
 			break;
 		}
-	case AbstractColumn::Text:
+	case ColumnMode::Text:
 		for (i = 0; i < rowCount(); ++i) {
 			writer->writeStartElement("row");
 			writer->writeAttribute("index", QString::number(i));
@@ -1076,9 +1076,9 @@ void Column::save(QXmlStreamWriter* writer) const {
 			writer->writeEndElement();
 		}
 		break;
-	case AbstractColumn::DateTime:
-	case AbstractColumn::Month:
-	case AbstractColumn::Day:
+	case ColumnMode::DateTime:
+	case ColumnMode::Month:
+	case ColumnMode::Day:
 		for (i = 0; i < rowCount(); ++i) {
 			writer->writeStartElement("row");
 			writer->writeAttribute("index", QString::number(i));
@@ -1100,11 +1100,11 @@ public:
 	};
 	void run() override {
 		QByteArray bytes = QByteArray::fromBase64(m_content.toLatin1());
-		if (m_private->columnMode() == AbstractColumn::Numeric) {
+		if (m_private->columnMode() == AbstractColumn::ColumnMode::Numeric) {
 			auto* data = new QVector<double>(bytes.size()/(int)sizeof(double));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
-		} else if (m_private->columnMode() == AbstractColumn::BigInt) {
+		} else if (m_private->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 			auto* data = new QVector<qint64>(bytes.size()/(int)sizeof(qint64));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
@@ -1183,8 +1183,8 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 		}
 		if (!preview) {
 			QString content = reader->text().toString().trimmed();
-			if (!content.isEmpty() && ( columnMode() == AbstractColumn::Numeric ||
-				columnMode() == AbstractColumn::Integer || columnMode() == AbstractColumn::BigInt)) {
+			if (!content.isEmpty() && ( columnMode() == ColumnMode::Numeric ||
+				columnMode() == ColumnMode::Integer || columnMode() == ColumnMode::BigInt)) {
 				auto* task = new DecodeColumnTask(d, content);
 				QThreadPool::globalInstance()->start(task);
 			}
@@ -1294,7 +1294,7 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 
 	QString str = reader->readElementText();
 	switch (columnMode()) {
-	case AbstractColumn::Numeric: {
+	case ColumnMode::Numeric: {
 		double value = str.toDouble(&ok);
 		if (!ok) {
 			reader->raiseError(i18n("invalid row value"));
@@ -1303,7 +1303,7 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 		setValueAt(index, value);
 		break;
 	}
-	case AbstractColumn::Integer: {
+	case ColumnMode::Integer: {
 		int value = str.toInt(&ok);
 		if (!ok) {
 			reader->raiseError(i18n("invalid row value"));
@@ -1312,7 +1312,7 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 		setIntegerAt(index, value);
 		break;
 	}
-	case AbstractColumn::BigInt: {
+	case ColumnMode::BigInt: {
 		qint64 value = str.toLongLong(&ok);
 		if (!ok) {
 			reader->raiseError(i18n("invalid row value"));
@@ -1321,13 +1321,13 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 		setBigIntAt(index, value);
 		break;
 	}
-	case AbstractColumn::Text:
+	case ColumnMode::Text:
 		setTextAt(index, str);
 		break;
 
-	case AbstractColumn::DateTime:
-	case AbstractColumn::Month:
-	case AbstractColumn::Day:
+	case ColumnMode::DateTime:
+	case ColumnMode::Month:
+	case ColumnMode::Day:
 		QDateTime date_time = QDateTime::fromString(str,"yyyy-dd-MM hh:mm:ss:zzz");
 		setDateTimeAt(index, date_time);
 		break;
@@ -1451,7 +1451,7 @@ QVector< Interval<int> > Column::formulaIntervals() const {
 
 void Column::handleFormatChange() {
 	DEBUG("Column::handleFormatChange() mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode()));
-	if (columnMode() == AbstractColumn::DateTime) {
+	if (columnMode() == ColumnMode::DateTime) {
 		auto* input_filter = static_cast<String2DateTimeFilter*>(d->inputFilter());
 		auto* output_filter = static_cast<DateTime2StringFilter*>(d->outputFilter());
 		DEBUG("change format " << STDSTRING(input_filter->format()) << " to " << STDSTRING(output_filter->format()));
@@ -1527,7 +1527,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 		// skipping values is only in Properties::No needed, because
 		// when there are invalid values the property must be Properties::No
 		switch (mode) {
-		case Numeric: {
+		case ColumnMode::Numeric: {
 			auto* vec = static_cast<QVector<double>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
@@ -1542,7 +1542,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 			}
 			break;
 		}
-		case Integer: {
+		case ColumnMode::Integer: {
 			auto* vec = static_cast<QVector<int>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
@@ -1555,7 +1555,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 			}
 			break;
 		}
-		case BigInt: {
+		case ColumnMode::BigInt: {
 			auto* vec = static_cast<QVector<qint64>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
@@ -1568,9 +1568,9 @@ double Column::minimum(int startIndex, int endIndex) const {
 			}
 			break;
 		}
-		case Text:
+		case ColumnMode::Text:
 			break;
-		case DateTime: {
+		case ColumnMode::DateTime: {
 			auto* vec = static_cast<QVector<QDateTime>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
@@ -1583,8 +1583,8 @@ double Column::minimum(int startIndex, int endIndex) const {
 			}
 			break;
 		}
-		case Day:
-		case Month:
+		case ColumnMode::Day:
+		case ColumnMode::Month:
 		default:
 			break;
 		}
@@ -1598,15 +1598,15 @@ double Column::minimum(int startIndex, int endIndex) const {
 		foundIndex = endIndex;
 
 	switch (mode) {
-		case Numeric:
-		case Integer:
-		case BigInt:
+		case ColumnMode::Numeric:
+		case ColumnMode::Integer:
+		case ColumnMode::BigInt:
 			return valueAt(foundIndex);
-		case DateTime:
-		case Month:
-		case Day:
+		case ColumnMode::DateTime:
+		case ColumnMode::Month:
+		case ColumnMode::Day:
 			return dateTimeAt(foundIndex).toMSecsSinceEpoch();
-		case Text:
+		case ColumnMode::Text:
 		default:
 			break;
 	}
@@ -1670,7 +1670,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 	Properties property = properties();
 	if (property == Properties::No) {
 		switch (mode) {
-		case Numeric: {
+		case ColumnMode::Numeric: {
 			auto* vec = static_cast<QVector<double>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
@@ -1684,7 +1684,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 			}
 			break;
 		}
-		case Integer: {
+		case ColumnMode::Integer: {
 			auto* vec = static_cast<QVector<int>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
@@ -1696,7 +1696,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 			}
 			break;
 		}
-		case BigInt: {
+		case ColumnMode::BigInt: {
 			auto* vec = static_cast<QVector<qint64>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
@@ -1708,9 +1708,9 @@ double Column::maximum(int startIndex, int endIndex) const {
 			}
 			break;
 		}
-		case Text:
+		case ColumnMode::Text:
 			break;
-		case DateTime: {
+		case ColumnMode::DateTime: {
 			auto* vec = static_cast<QVector<QDateTime>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
@@ -1722,8 +1722,8 @@ double Column::maximum(int startIndex, int endIndex) const {
 			}
 			break;
 		}
-		case Day:
-		case Month:
+		case ColumnMode::Day:
+		case ColumnMode::Month:
 		default:
 			break;
 		}
@@ -1737,15 +1737,15 @@ double Column::maximum(int startIndex, int endIndex) const {
 		foundIndex = endIndex;
 
 	switch (mode) {
-		case Numeric:
-		case Integer:
-		case BigInt:
+		case ColumnMode::Numeric:
+		case ColumnMode::Integer:
+		case ColumnMode::BigInt:
 			return valueAt(foundIndex);
-		case DateTime:
-		case Month:
-		case Day:
+		case ColumnMode::DateTime:
+		case ColumnMode::Month:
+		case ColumnMode::Day:
 			return dateTimeAt(foundIndex).toMSecsSinceEpoch();
-		case Text:
+		case ColumnMode::Text:
 		default:
 			break;
 	}
@@ -2154,9 +2154,9 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 		end = indexForValue(v2);
 
 		switch (columnMode()) {
-			case Integer:
-			case BigInt:
-			case Numeric: {
+			case ColumnMode::Integer:
+			case ColumnMode::BigInt:
+			case ColumnMode::Numeric: {
 			if (start > 0 && valueAt(start - 1) <= v2 && valueAt(start - 1) >= v1)
 				start--;
 			if (end < rowCount() - 1 && valueAt(end + 1) <= v2 && valueAt(end + 1) >= v1)
@@ -2164,9 +2164,9 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 
 			break;
 			}
-			case DateTime:
-			case Month:
-			case Day: {
+			case ColumnMode::DateTime:
+			case ColumnMode::Month:
+			case ColumnMode::Day: {
 				qint64 v1int64 = v1;
 				qint64 v2int64 = v2;
 				qint64 value;
@@ -2183,7 +2183,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 				}
 				break;
 			}
-			case Text:
+			case ColumnMode::Text:
 				return false;
 		}
 		return true;
@@ -2194,9 +2194,9 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 	}
 	// property == Properties::No
 	switch (columnMode()) {
-		case Integer:
-		case BigInt:
-		case Numeric: {
+		case ColumnMode::Integer:
+		case ColumnMode::BigInt:
+		case ColumnMode::Numeric: {
 			double value;
 			for (int i = 0; i < rowCount(); i++) {
 				if (!isValid(i) || isMasked(i))
@@ -2211,9 +2211,9 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 			}
 			break;
 		}
-		case DateTime:
-		case Month:
-		case Day: {
+		case ColumnMode::DateTime:
+		case ColumnMode::Month:
+		case ColumnMode::Day: {
 			qint64 value;
 			qint64 v2int64 = v2;
 			qint64 v1int64 = v2;
@@ -2229,7 +2229,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 			}
 			break;
 		}
-		case Text:
+		case ColumnMode::Text:
 			return false;
 
 	}

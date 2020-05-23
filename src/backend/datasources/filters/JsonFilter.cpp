@@ -282,19 +282,19 @@ int JsonFilterPrivate::parseColumnModes(const QJsonValue& row, const QString& ro
 
 	//add index column if required
 	if (createIndexEnabled) {
-		columnModes << AbstractColumn::Integer;
+		columnModes << AbstractColumn::ColumnMode::Integer;
 		vectorNames << i18n("index");
 	}
 
 	//add column for object names if required
 	if (importObjectNames) {
-		const AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(rowName, dateTimeFormat, numberFormat);
+		const auto mode = AbstractFileFilter::columnMode(rowName, dateTimeFormat, numberFormat);
 		columnModes << mode;
-		if (mode == AbstractColumn::DateTime)
+		if (mode == AbstractColumn::ColumnMode::DateTime)
 			vectorNames << i18n("timestamp");
-		else if (mode == AbstractColumn::Month)
+		else if (mode == AbstractColumn::ColumnMode::Month)
 			vectorNames << i18n("month");
-		else if (mode == AbstractColumn::Day)
+		else if (mode == AbstractColumn::ColumnMode::Day)
 			vectorNames << i18n("day");
 		else
 			vectorNames << i18n("name");
@@ -326,7 +326,7 @@ int JsonFilterPrivate::parseColumnModes(const QJsonValue& row, const QString& ro
 
 		switch (columnValue.type()) {
 			case QJsonValue::Double:
-				columnModes << AbstractColumn::Numeric;
+				columnModes << AbstractColumn::ColumnMode::Numeric;
 				break;
 			case QJsonValue::String:
 				columnModes << AbstractFileFilter::columnMode(columnValue.toString(), dateTimeFormat, numberFormat);
@@ -345,23 +345,23 @@ int JsonFilterPrivate::parseColumnModes(const QJsonValue& row, const QString& ro
 
 void JsonFilterPrivate::setEmptyValue(int column, int row) {
 	switch (columnModes[column]) {
-		case AbstractColumn::Numeric:
+		case AbstractColumn::ColumnMode::Numeric:
 			static_cast<QVector<double>*>(m_dataContainer[column])->operator[](row) = nanValue;
 			break;
-		case AbstractColumn::Integer:
+		case AbstractColumn::ColumnMode::Integer:
 			static_cast<QVector<int>*>(m_dataContainer[column])->operator[](row) = 0;
 			break;
-		case AbstractColumn::BigInt:
+		case AbstractColumn::ColumnMode::BigInt:
 			static_cast<QVector<qint64>*>(m_dataContainer[column])->operator[](row) = 0;
 			break;
-		case AbstractColumn::DateTime:
+		case AbstractColumn::ColumnMode::DateTime:
 			static_cast<QVector<QDateTime>*>(m_dataContainer[column])->operator[](row) = QDateTime();
 			break;
-		case AbstractColumn::Text:
+		case AbstractColumn::ColumnMode::Text:
 			static_cast<QVector<QString>*>(m_dataContainer[column])->operator[](row) = QString();
 			break;
-		case AbstractColumn::Month:
-		case AbstractColumn::Day:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
 			break;
 	}
 }
@@ -369,35 +369,35 @@ void JsonFilterPrivate::setEmptyValue(int column, int row) {
 void JsonFilterPrivate::setValueFromString(int column, int row, const QString& valueString) {
 	QLocale locale(numberFormat);
 	switch (columnModes[column]) {
-		case AbstractColumn::Numeric: {
+		case AbstractColumn::ColumnMode::Numeric: {
 			bool isNumber;
 			const double value = locale.toDouble(valueString, &isNumber);
 			static_cast<QVector<double>*>(m_dataContainer[column])->operator[](row) = isNumber ? value : nanValue;
 			break;
 		}
-		case AbstractColumn::Integer: {
+		case AbstractColumn::ColumnMode::Integer: {
 			bool isNumber;
 			const int value = locale.toInt(valueString, &isNumber);
 			static_cast<QVector<int>*>(m_dataContainer[column])->operator[](row) = isNumber ? value : 0;
 			break;
 		}
-		case AbstractColumn::BigInt: {
+		case AbstractColumn::ColumnMode::BigInt: {
 			bool isNumber;
 			const qint64 value = locale.toLongLong(valueString, &isNumber);
 			static_cast<QVector<qint64>*>(m_dataContainer[column])->operator[](row) = isNumber ? value : 0;
 			break;
 		}
-		case AbstractColumn::DateTime: {
+		case AbstractColumn::ColumnMode::DateTime: {
 			const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 			static_cast<QVector<QDateTime>*>(m_dataContainer[column])->operator[](row) =
 					valueDateTime.isValid() ? valueDateTime : QDateTime();
 			break;
 		}
-		case AbstractColumn::Text:
+		case AbstractColumn::ColumnMode::Text:
 			static_cast<QVector<QString>*>(m_dataContainer[column])->operator[](row) = valueString;
 			break;
-		case AbstractColumn::Month:
-		case AbstractColumn::Day:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
 			break;
 	}
 }
@@ -602,7 +602,7 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 
 			switch (value.type()) {
 			case QJsonValue::Double:
-				if (columnModes[colOffset + n] == AbstractColumn::Numeric)
+				if (columnModes[colOffset + n] == AbstractColumn::ColumnMode::Numeric)
 					static_cast<QVector<double>*>(m_dataContainer[colOffset + n])->operator[](i) = value.toDouble();
 				else
 					setEmptyValue(colOffset + n, i + startRow - 1);
@@ -710,7 +710,7 @@ QVector<QStringList> JsonFilterPrivate::preview() {
 
 			switch (value.type()) {
 			case QJsonValue::Double:
-				if (columnModes[n] == AbstractColumn::Numeric)
+				if (columnModes[n] == AbstractColumn::ColumnMode::Numeric)
 					lineString += QString::number(value.toDouble(), 'g', 16);
 				else
 					lineString += lineString += QString();

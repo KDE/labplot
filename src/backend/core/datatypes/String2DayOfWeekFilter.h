@@ -72,11 +72,11 @@ public:
 	}
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Day; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Day; }
 
 protected:
 	bool inputAcceptable(int, const AbstractColumn *source) override {
-		return source->columnMode() == AbstractColumn::Text;
+		return source->columnMode() == AbstractColumn::ColumnMode::Text;
 	}
 };
 

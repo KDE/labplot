@@ -59,12 +59,12 @@ public:
 	}
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::DateTime; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::DateTime; }
 
 protected:
 	//! Using typed ports: only double inputs are accepted.
 	bool inputAcceptable(int, const AbstractColumn *source) override {
-		return source->columnMode() == AbstractColumn::Numeric;
+		return source->columnMode() == AbstractColumn::ColumnMode::Numeric;
 	}
 };
 

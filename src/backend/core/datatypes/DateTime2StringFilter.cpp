@@ -61,9 +61,10 @@ QString DateTime2StringFilter::textAt(int row) const {
 }
 
 bool DateTime2StringFilter::inputAcceptable(int, const AbstractColumn *source) {
-	return (source->columnMode() == AbstractColumn::DateTime)
-		|| (source->columnMode() == AbstractColumn::Day)
-		|| (source->columnMode() == AbstractColumn::Month);
+	auto mode = source->columnMode();
+	return (mode == AbstractColumn::ColumnMode::DateTime)
+		|| (mode == AbstractColumn::ColumnMode::Day)
+		|| (mode == AbstractColumn::ColumnMode::Month);
 }
 
 DateTime2StringFilterSetFormatCmd::DateTime2StringFilterSetFormatCmd(DateTime2StringFilter* target, const QString &new_format)

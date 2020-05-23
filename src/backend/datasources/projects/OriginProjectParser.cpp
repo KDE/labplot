@@ -692,13 +692,13 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 						break;
 				} else {
 					if (value.as_string() != nullptr) {
-						col->setColumnMode(AbstractColumn::Text);
+						col->setColumnMode(AbstractColumn::ColumnMode::Text);
 						break;
 					}
 				}
 			}
 
-			if (col->columnMode() == AbstractColumn::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
 				for (unsigned int i = column.beginRow; i < column.endRow; ++i) {
 					const double value = column.data.at(i).as_double();
 					if (column.data.at(i).type() == Origin::Variant::V_DOUBLE && value != _ONAN)
@@ -720,7 +720,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 			break;
 		}
 		case Origin::Text:
-			col->setColumnMode(AbstractColumn::Text);
+			col->setColumnMode(AbstractColumn::ColumnMode::Text);
 			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
 				col->setTextAt(i, column.data[i].as_string());
 			break;
@@ -763,7 +763,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
-			col->setColumnMode(AbstractColumn::DateTime);
+			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 
 			DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			filter->setFormat(format);
@@ -824,7 +824,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
-			col->setColumnMode(AbstractColumn::DateTime);
+			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 
 			DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			filter->setFormat(format);
@@ -845,7 +845,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
-			col->setColumnMode(AbstractColumn::Month);
+			col->setColumnMode(AbstractColumn::ColumnMode::Month);
 
 			DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			filter->setFormat(format);
@@ -866,7 +866,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
-			col->setColumnMode(AbstractColumn::Day);
+			col->setColumnMode(AbstractColumn::ColumnMode::Day);
 
 			DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			filter->setFormat(format);

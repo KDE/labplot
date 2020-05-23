@@ -81,7 +81,7 @@ void Spreadsheet::init() {
 	const int rows = group.readEntry(QLatin1String("RowCount"), 100);
 
 	for (int i = 0; i < columns; i++) {
-		Column* new_col = new Column(QString::number(i+1), AbstractColumn::Numeric);
+		Column* new_col = new Column(QString::number(i+1), AbstractColumn::ColumnMode::Numeric);
 		new_col->setPlotDesignation(i == 0 ? AbstractColumn::PlotDesignation::X : AbstractColumn::PlotDesignation::Y);
 		addChild(new_col);
 	}
@@ -234,7 +234,7 @@ void Spreadsheet::insertColumns(int before, int count) {
 	Column * before_col = column(before);
 	int rows = rowCount();
 	for (int i = 0; i < count; i++) {
-		Column * new_col = new Column(QString::number(i+1), AbstractColumn::Numeric);
+		Column * new_col = new Column(QString::number(i+1), AbstractColumn::ColumnMode::Numeric);
 		new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 		new_col->insertRows(0, rows);
 		insertChildBefore(new_col, before_col);
@@ -419,7 +419,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 	if (leading == nullptr) { // sort separately
 		for (auto* col : cols) {
 			switch (col->columnMode()) {
-			case AbstractColumn::Numeric: {
+			case AbstractColumn::ColumnMode::Numeric: {
 					int rows = col->rowCount();
 					QVector< QPair<double, int> > map;
 
@@ -446,7 +446,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					delete temp_col;
 					break;
 				}
-			case AbstractColumn::Integer: {
+			case AbstractColumn::ColumnMode::Integer: {
 					int rows = col->rowCount();
 					QVector< QPair<int, int> > map;
 
@@ -473,7 +473,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					delete temp_col;
 					break;
 				}
-			case AbstractColumn::BigInt: {
+			case AbstractColumn::ColumnMode::BigInt: {
 					int rows = col->rowCount();
 					QVector< QPair<qint64, int> > map;
 
@@ -500,7 +500,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					delete temp_col;
 					break;
 				}
-			case AbstractColumn::Text: {
+			case AbstractColumn::ColumnMode::Text: {
 					int rows = col->rowCount();
 					QVector<QPair<QString, int>> map;
 
@@ -527,9 +527,9 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					delete temp_col;
 					break;
 				}
-			case AbstractColumn::DateTime:
-			case AbstractColumn::Month:
-			case AbstractColumn::Day: {
+			case AbstractColumn::ColumnMode::DateTime:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day: {
 					int rows = col->rowCount();
 					QVector< QPair<QDateTime, int> > map;
 
@@ -560,7 +560,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 		}
 	} else { // sort with leading column
 		switch (leading->columnMode()) {
-		case AbstractColumn::Numeric: {
+		case AbstractColumn::ColumnMode::Numeric: {
 				QVector<QPair<double, int>> map;
 				int rows = leading->rowCount();
 
@@ -589,7 +589,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				}
 				break;
 			}
-		case AbstractColumn::Integer: {
+		case AbstractColumn::ColumnMode::Integer: {
 				QVector<QPair<int, int>> map;
 				int rows = leading->rowCount();
 
@@ -618,7 +618,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				}
 				break;
 			}
-		case AbstractColumn::BigInt: {
+		case AbstractColumn::ColumnMode::BigInt: {
 				QVector<QPair<qint64, int>> map;
 				int rows = leading->rowCount();
 
@@ -647,7 +647,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				}
 				break;
 			}
-		case AbstractColumn::Text: {
+		case AbstractColumn::ColumnMode::Text: {
 				QVector<QPair<QString, int>> map;
 				int rows = leading->rowCount();
 
@@ -676,9 +676,9 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				}
 				break;
 			}
-		case AbstractColumn::DateTime:
-		case AbstractColumn::Month:
-		case AbstractColumn::Day: {
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day: {
 				QVector<QPair<QDateTime, int>> map;
 				int rows = leading->rowCount();
 
@@ -868,44 +868,44 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 	for (int n = 0; n < actualCols; n++) {
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 		Column* column = this->child<Column>(columnOffset+n);
-		DEBUG(" column " << n << " columnMode = " << columnMode[n]);
+		DEBUG(" column " << n << " columnMode = " << static_cast<int>(columnMode[n]));
 		column->setColumnModeFast(columnMode[n]);
 
 		//in the most cases the first imported column is meant to be used as x-data.
 		//Other columns provide mostly y-data or errors.
 		//TODO: this has to be configurable for the user in the import widget,
 		//it should be possible to specify x-error plot designation, etc.
-		AbstractColumn::PlotDesignation desig =  (n == 0) ? AbstractColumn::PlotDesignation::X : AbstractColumn::PlotDesignation::Y;
+		auto desig =  (n == 0) ? AbstractColumn::PlotDesignation::X : AbstractColumn::PlotDesignation::Y;
 		column->setPlotDesignation(desig);
 
 		switch (columnMode[n]) {
-		case AbstractColumn::Numeric: {
+		case AbstractColumn::ColumnMode::Numeric: {
 			auto* vector = static_cast<QVector<double>*>(column->data());
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
-		case AbstractColumn::Integer: {
+		case AbstractColumn::ColumnMode::Integer: {
 			auto* vector = static_cast<QVector<int>*>(column->data());
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
-		case AbstractColumn::BigInt: {
+		case AbstractColumn::ColumnMode::BigInt: {
 			auto* vector = static_cast<QVector<qint64>*>(column->data());
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
-		case AbstractColumn::Text: {
+		case AbstractColumn::ColumnMode::Text: {
 			auto* vector = static_cast<QVector<QString>*>(column->data());
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
-		case AbstractColumn::Month:
-		case AbstractColumn::Day:
-		case AbstractColumn::DateTime: {
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::DateTime: {
 			auto* vector = static_cast<QVector<QDateTime>* >(column->data());
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
@@ -937,14 +937,14 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	if (mode == AbstractFileFilter::Append) {
 		columnOffset = childCount<Column>();
 		for (int n = 0; n < cols; n++ ) {
-			newColumn = new Column(colNameList.at(n), AbstractColumn::Numeric);
+			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Numeric);
 			newColumn->setUndoAware(false);
 			addChildFast(newColumn);
 		}
 	} else if (mode == AbstractFileFilter::Prepend) {
 		Column* firstColumn = child<Column>(0);
 		for (int n = 0; n < cols; n++ ) {
-			newColumn = new Column(colNameList.at(n), AbstractColumn::Numeric);
+			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Numeric);
 			newColumn->setUndoAware(false);
 			insertChildBeforeFast(newColumn, firstColumn);
 		}
@@ -960,7 +960,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		} else {
 			//create additional columns if needed
 			for (int i = columns; i < cols; i++) {
-				newColumn = new Column(colNameList.at(i), AbstractColumn::Numeric);
+				newColumn = new Column(colNameList.at(i), AbstractColumn::ColumnMode::Numeric);
 				newColumn->setUndoAware(false);
 				addChildFast(newColumn);
 			}
@@ -1001,29 +1001,29 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 	const int rows = rowCount();
 	for (int n = startColumn; n <= endColumn; n++) {
 		Column* column = this->column(columnOffset + n - startColumn);
-		DEBUG("	column " << n << " of type " << column->columnMode());
+		DEBUG("	column " << n << " of type " << static_cast<int>(column->columnMode()));
 
 		QString comment;
 		switch (column->columnMode()) {
-		case AbstractColumn::Numeric:
+		case AbstractColumn::ColumnMode::Numeric:
 			comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
 			break;
-		case AbstractColumn::Integer:
+		case AbstractColumn::ColumnMode::Integer:
 			comment = i18np("integer data, %1 element", "integer data, %1 elements", rows);
 			break;
-		case AbstractColumn::BigInt:
+		case AbstractColumn::ColumnMode::BigInt:
 			comment = i18np("big integer data, %1 element", "big integer data, %1 elements", rows);
 			break;
-		case AbstractColumn::Text:
+		case AbstractColumn::ColumnMode::Text:
 			comment = i18np("text data, %1 element", "text data, %1 elements", rows);
 			break;
-		case AbstractColumn::Month:
+		case AbstractColumn::ColumnMode::Month:
 			comment = i18np("month data, %1 element", "month data, %1 elements", rows);
 			break;
-		case AbstractColumn::Day:
+		case AbstractColumn::ColumnMode::Day:
 			comment = i18np("day data, %1 element", "day data, %1 elements", rows);
 			break;
-		case AbstractColumn::DateTime:
+		case AbstractColumn::ColumnMode::DateTime:
 			comment = i18np("date and time data, %1 element", "date and time data, %1 elements", rows);
 			// set same datetime format in column
 			auto* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());

@@ -51,12 +51,12 @@ public:
 	}
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Integer; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Integer; }
 
 protected:
 	//! Using typed ports: only bigint inputs are accepted.
 	bool inputAcceptable(int, const AbstractColumn *source) override {
-		return source->columnMode() == AbstractColumn::BigInt;
+		return source->columnMode() == AbstractColumn::ColumnMode::BigInt;
 	}
 };
 

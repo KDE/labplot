@@ -39,7 +39,7 @@ public:
 	explicit Integer2StringFilter() {}
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Text; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Text; }
 
 public:
 	QString textAt(int row) const override {
@@ -54,7 +54,7 @@ public:
 protected:
 	//! Using typed ports: only double inputs are accepted.
 	bool inputAcceptable(int, const AbstractColumn *source) override {
-		return source->columnMode() == AbstractColumn::Integer;
+		return source->columnMode() == AbstractColumn::ColumnMode::Integer;
 	}
 };
 

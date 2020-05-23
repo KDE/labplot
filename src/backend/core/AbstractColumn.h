@@ -51,7 +51,7 @@ class AbstractColumn : public AbstractAspect {
 
 public:
 	enum class PlotDesignation {NoDesignation, X, Y, Z, XError, XErrorPlus, XErrorMinus, YError, YErrorMinus, YErrorPlus};
-	enum ColumnMode {
+	enum class ColumnMode {
 		// BASIC FORMATS
 		Numeric = 0,	// double
 		Text = 1,	// QString

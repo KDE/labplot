@@ -121,7 +121,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 				return QVariant(i18n("invalid cell (ignored in all operations)"));
 		}
 	case Qt::EditRole:
-		if (col_ptr->columnMode() == AbstractColumn::Numeric) {
+		if (col_ptr->columnMode() == AbstractColumn::ColumnMode::Numeric) {
 			double value = col_ptr->valueAt(row);
 			if (std::isnan(value))
 				return QVariant("-");
@@ -140,7 +140,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 
 		break;
 	case Qt::DisplayRole:
-		if (col_ptr->columnMode() == AbstractColumn::Numeric) {
+		if (col_ptr->columnMode() == AbstractColumn::ColumnMode::Numeric) {
 			double value = col_ptr->valueAt(row);
 			if (std::isnan(value))
 				return QVariant("-");
@@ -221,7 +221,7 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 	Column* column = m_spreadsheet->column(index.column());
 
 	//don't do anything if no new value was provided
-	if (column->columnMode() == AbstractColumn::Numeric) {
+	if (column->columnMode() == AbstractColumn::ColumnMode::Numeric) {
 		bool ok;
 		QLocale locale;
 		double new_value = locale.toDouble(value.toString(), &ok);
@@ -447,25 +447,25 @@ void SpreadsheetModel::updateHorizontalHeader() {
 
 		QString type;
 		switch (col->columnMode()) {
-		case AbstractColumn::Numeric:
+		case AbstractColumn::ColumnMode::Numeric:
 			type = QLatin1String(" {") + i18n("Numeric") + QLatin1Char('}');
 			break;
-		case AbstractColumn::Integer:
+		case AbstractColumn::ColumnMode::Integer:
 			type = QLatin1String(" {") + i18n("Integer") + QLatin1Char('}');
 			break;
-		case AbstractColumn::BigInt:
+		case AbstractColumn::ColumnMode::BigInt:
 			type = QLatin1String(" {") + i18n("Big Integer") + QLatin1Char('}');
 			break;
-		case AbstractColumn::Text:
+		case AbstractColumn::ColumnMode::Text:
 			type = QLatin1String(" {") + i18n("Text") + QLatin1Char('}');
 			break;
-		case AbstractColumn::Month:
+		case AbstractColumn::ColumnMode::Month:
 			type = QLatin1String(" {") + i18n("Month Names") + QLatin1Char('}');
 			break;
-		case AbstractColumn::Day:
+		case AbstractColumn::ColumnMode::Day:
 			type = QLatin1String(" {") + i18n("Day Names") + QLatin1Char('}');
 			break;
-		case AbstractColumn::DateTime:
+		case AbstractColumn::ColumnMode::DateTime:
 			type = QLatin1String(" {") + i18n("Date and Time") + QLatin1Char('}');
 			break;
 		}

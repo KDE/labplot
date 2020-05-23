@@ -112,8 +112,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	//create interpolation result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::Numeric);
-		yColumn = new Column("y", AbstractColumn::Numeric);
+		xColumn = new Column("x", AbstractColumn::ColumnMode::Numeric);
+		yColumn = new Column("y", AbstractColumn::ColumnMode::Numeric);
 		xVector = static_cast<QVector<double>* >(xColumn->data());
 		yVector = static_cast<QVector<double>* >(yColumn->data());
 
@@ -504,7 +504,7 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("status", interpolationResult.status);
 			READ_INT_VALUE("time", interpolationResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
-			Column* column = new Column(QString(), AbstractColumn::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Numeric);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;

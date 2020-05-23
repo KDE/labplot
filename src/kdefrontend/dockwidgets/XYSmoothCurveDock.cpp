@@ -319,18 +319,18 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 				continue;
 
 			switch (column->columnMode()) {
-			case AbstractColumn::Numeric:
-			case AbstractColumn::Integer:
-			case AbstractColumn::BigInt:
+			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Integer:
+			case AbstractColumn::ColumnMode::BigInt:
 				if (!std::isnan(column->valueAt(row)))
 					n++;
 				break;
-			case AbstractColumn::DateTime:
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
+			case AbstractColumn::ColumnMode::DateTime:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
 				n++;
 				break;
-			case AbstractColumn::Text:
+			case AbstractColumn::ColumnMode::Text:
 				break;
 			}
 		}

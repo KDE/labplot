@@ -86,23 +86,23 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 		case Qt::ToolTipRole:
 		case Qt::EditRole:
 		case Qt::DisplayRole: {
-			AbstractColumn::ColumnMode mode = m_matrix->mode();
+			auto mode = m_matrix->mode();
 			//DEBUG("MatrixModel::data() DisplayRole, mode = " << mode);
 			switch (mode) {
-			case AbstractColumn::Numeric:
+			case AbstractColumn::ColumnMode::Numeric:
 				return QVariant(m_matrix->text<double>(row, col));
-			case AbstractColumn::Integer:
+			case AbstractColumn::ColumnMode::Integer:
 				return QVariant(m_matrix->text<int>(row, col));
-			case AbstractColumn::BigInt:
+			case AbstractColumn::ColumnMode::BigInt:
 				return QVariant(m_matrix->text<qint64>(row, col));
-			case AbstractColumn::DateTime:
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
+			case AbstractColumn::ColumnMode::DateTime:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
 				return QVariant(m_matrix->text<QDateTime>(row, col));
-			case AbstractColumn::Text:	// should not happen
+			case AbstractColumn::ColumnMode::Text:	// should not happen
 				return QVariant(m_matrix->text<QString>(row, col));
 			default:
-				DEBUG("	unknown column mode " << mode << " found");
+				DEBUG("	unknown column mode " << static_cast<int>(mode) << " found");
 				break;
 			}
 			break;
@@ -201,29 +201,29 @@ bool MatrixModel::setData(const QModelIndex& index, const QVariant& value, int r
 	int column = index.column();
 
 	if (role == Qt::EditRole) {
-		const AbstractColumn::ColumnMode mode = m_matrix->mode();
+		const auto mode = m_matrix->mode();
 		switch (mode) {
-		case AbstractColumn::Numeric: 
+		case AbstractColumn::ColumnMode::Numeric: 
 			m_matrix->setCell(row, column, value.toDouble());
 			break;
-		case AbstractColumn::Integer:
+		case AbstractColumn::ColumnMode::Integer:
 			m_matrix->setCell(row, column, value.toInt());
 			break;
-		case AbstractColumn::BigInt:
+		case AbstractColumn::ColumnMode::BigInt:
 			m_matrix->setCell(row, column, value.toLongLong());
 			break;
-		case AbstractColumn::DateTime:
-		case AbstractColumn::Month:
-		case AbstractColumn::Day:
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
 			DEBUG("	WARNING: DateTime format not supported yet");	// should not happen
 			//TODO: m_matrix->setCell(row, column, value.toDateTime());
 			break;
-		case AbstractColumn::Text:
+		case AbstractColumn::ColumnMode::Text:
 			DEBUG("	WARNING: Text format not supported yet");	// should not happen
 			m_matrix->setCell(row, column, value.toString());
 			break;
 		default:
-			DEBUG("	Unsupported column mode " << mode);
+			DEBUG("	Unsupported column mode " << static_cast<int>(mode));
 			break;
 		}
 

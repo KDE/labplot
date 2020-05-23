@@ -115,8 +115,8 @@ void XYEquationCurve::setEquationData(const XYEquationCurve::EquationData& equat
 //######################### Private implementation #############################
 //##############################################################################
 XYEquationCurvePrivate::XYEquationCurvePrivate(XYEquationCurve* owner) : XYCurvePrivate(owner),
-	xColumn(new Column("x", AbstractColumn::Numeric)),
-	yColumn(new Column("y", AbstractColumn::Numeric)),
+	xColumn(new Column("x", AbstractColumn::ColumnMode::Numeric)),
+	yColumn(new Column("y", AbstractColumn::ColumnMode::Numeric)),
 	xVector(static_cast<QVector<double>* >(xColumn->data())),
 	yVector(static_cast<QVector<double>* >(yColumn->data())),
 	q(owner)  {

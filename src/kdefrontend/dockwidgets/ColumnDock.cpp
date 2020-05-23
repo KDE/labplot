@@ -110,7 +110,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	ui.leName->setToolTip("");
 
 	//show the properties of the first column
-	AbstractColumn::ColumnMode columnMode = m_column->columnMode();
+	auto columnMode = m_column->columnMode();
 	this->updateFormatWidgets(columnMode);
 	this->updateTypeWidgets(columnMode);
 	ui.cbPlotDesignation->setCurrentIndex( int(m_column->plotDesignation()) );
@@ -131,23 +131,23 @@ void ColumnDock::setColumns(QList<Column*> list) {
 void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 	ui.cbType->setCurrentIndex(ui.cbType->findData((int)mode));
 	switch (mode) {
-	case AbstractColumn::Numeric: {
+	case AbstractColumn::ColumnMode::Numeric: {
 			auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
 			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->numericFormat()));
 			ui.sbPrecision->setValue(filter->numDigits());
 			break;
 		}
-	case AbstractColumn::Month:
-	case AbstractColumn::Day:
-	case AbstractColumn::DateTime: {
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+	case AbstractColumn::ColumnMode::DateTime: {
 			auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
 // 			DEBUG("	set column format: " << STDSTRING(filter->format()));
 			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->format()));
 			break;
 		}
-	case AbstractColumn::Integer:	// nothing to set
-	case AbstractColumn::BigInt:
-	case AbstractColumn::Text:
+	case AbstractColumn::ColumnMode::Integer:	// nothing to set
+	case AbstractColumn::ColumnMode::BigInt:
+	case AbstractColumn::ColumnMode::Text:
 		break;
 	}
 }
@@ -162,36 +162,36 @@ void ColumnDock::updateFormatWidgets(AbstractColumn::ColumnMode mode) {
 	ui.cbFormat->clear();
 
 	switch (mode) {
-	case AbstractColumn::Numeric:
+	case AbstractColumn::ColumnMode::Numeric:
 		ui.cbFormat->addItem(i18n("Decimal"), QVariant('f'));
 		ui.cbFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
 		ui.cbFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
 		ui.cbFormat->addItem(i18n("Automatic (g)"), QVariant('g'));
 		ui.cbFormat->addItem(i18n("Automatic (G)"), QVariant('G'));
 		break;
-	case AbstractColumn::Month:
+	case AbstractColumn::ColumnMode::Month:
 		ui.cbFormat->addItem(i18n("Number without Leading Zero"), QVariant("M"));
 		ui.cbFormat->addItem(i18n("Number with Leading Zero"), QVariant("MM"));
 		ui.cbFormat->addItem(i18n("Abbreviated Month Name"), QVariant("MMM"));
 		ui.cbFormat->addItem(i18n("Full Month Name"), QVariant("MMMM"));
 		break;
-	case AbstractColumn::Day:
+	case AbstractColumn::ColumnMode::Day:
 		ui.cbFormat->addItem(i18n("Number without Leading Zero"), QVariant("d"));
 		ui.cbFormat->addItem(i18n("Number with Leading Zero"), QVariant("dd"));
 		ui.cbFormat->addItem(i18n("Abbreviated Day Name"), QVariant("ddd"));
 		ui.cbFormat->addItem(i18n("Full Day Name"), QVariant("dddd"));
 		break;
-	case AbstractColumn::DateTime:
+	case AbstractColumn::ColumnMode::DateTime:
 		for (const auto& s : AbstractColumn::dateTimeFormats())
 			ui.cbFormat->addItem(s, QVariant(s));
 		break;
-	case AbstractColumn::Integer:
-	case AbstractColumn::BigInt:
-	case AbstractColumn::Text:
+	case AbstractColumn::ColumnMode::Integer:
+	case AbstractColumn::ColumnMode::BigInt:
+	case AbstractColumn::ColumnMode::Text:
 		break;
 	}
 
-	if (mode == AbstractColumn::Numeric) {
+	if (mode == AbstractColumn::ColumnMode::Numeric) {
 		ui.lPrecision->show();
 		ui.sbPrecision->show();
 	} else {
@@ -199,7 +199,7 @@ void ColumnDock::updateFormatWidgets(AbstractColumn::ColumnMode mode) {
 		ui.sbPrecision->hide();
 	}
 
-	if (mode == AbstractColumn::Text || mode == AbstractColumn::Integer || mode == AbstractColumn::BigInt) {
+	if (mode == AbstractColumn::ColumnMode::Text || mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt) {
 		ui.lFormat->hide();
 		ui.cbFormat->hide();
 	} else {
@@ -207,7 +207,7 @@ void ColumnDock::updateFormatWidgets(AbstractColumn::ColumnMode mode) {
 		ui.cbFormat->show();
 	}
 
-	if (mode == AbstractColumn::DateTime) {
+	if (mode == AbstractColumn::ColumnMode::DateTime) {
 		ui.cbFormat->setEditable(true);
 		ui.cbFormat->setCurrentItem("yyyy-MM-dd hh:mm:ss.zzz");
 	} else {
@@ -223,13 +223,13 @@ void ColumnDock::retranslateUi() {
 	m_initializing = true;
 
 	ui.cbType->clear();
-	ui.cbType->addItem(i18n("Numeric"), QVariant(int(AbstractColumn::Numeric)));
-	ui.cbType->addItem(i18n("Integer"), QVariant(int(AbstractColumn::Integer)));
-	ui.cbType->addItem(i18n("Big Integer"), QVariant(int(AbstractColumn::BigInt)));
-	ui.cbType->addItem(i18n("Text"), QVariant(int(AbstractColumn::Text)));
-	ui.cbType->addItem(i18n("Month Names"), QVariant(int(AbstractColumn::Month)));
-	ui.cbType->addItem(i18n("Day Names"), QVariant(int(AbstractColumn::Day)));
-	ui.cbType->addItem(i18n("Date and Time"), QVariant(int(AbstractColumn::DateTime)));
+	ui.cbType->addItem(i18n("Numeric"), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Numeric)));
+	ui.cbType->addItem(i18n("Integer"), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Integer)));
+	ui.cbType->addItem(i18n("Big Integer"), QVariant(static_cast<int>(AbstractColumn::ColumnMode::BigInt)));
+	ui.cbType->addItem(i18n("Text"), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Text)));
+	ui.cbType->addItem(i18n("Month Names"), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Month)));
+	ui.cbType->addItem(i18n("Day Names"), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Day)));
+	ui.cbType->addItem(i18n("Date and Time"), QVariant(static_cast<int>(AbstractColumn::ColumnMode::DateTime)));
 
 	ui.cbPlotDesignation->clear();
 	ui.cbPlotDesignation->addItem(i18n("None"));
@@ -254,10 +254,10 @@ void ColumnDock::typeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	AbstractColumn::ColumnMode columnMode = (AbstractColumn::ColumnMode)ui.cbType->itemData(index).toInt();
+	auto columnMode = (AbstractColumn::ColumnMode)ui.cbType->itemData(index).toInt();
 
 	switch (columnMode) {
-	case AbstractColumn::Numeric: {
+	case AbstractColumn::ColumnMode::Numeric: {
 			int digits = ui.sbPrecision->value();
 			for (auto* col : m_columnsList) {
 				col->beginMacro(i18n("%1: change column type", col->name()));
@@ -275,14 +275,14 @@ void ColumnDock::typeChanged(int index) {
 			}
 			break;
 		}
-	case AbstractColumn::Integer:
-	case AbstractColumn::BigInt:
-	case AbstractColumn::Text:
+	case AbstractColumn::ColumnMode::Integer:
+	case AbstractColumn::ColumnMode::BigInt:
+	case AbstractColumn::ColumnMode::Text:
 		for (auto* col : m_columnsList)
 			col->setColumnMode(columnMode);
 		break;
-	case AbstractColumn::Month:
-	case AbstractColumn::Day:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
 		for (auto* col : m_columnsList) {
 			col->beginMacro(i18n("%1: change column type", col->name()));
 			// the format is saved as item data
@@ -293,7 +293,7 @@ void ColumnDock::typeChanged(int index) {
 			col->endMacro();
 		}
 		break;
-	case AbstractColumn::DateTime:
+	case AbstractColumn::ColumnMode::DateTime:
 		for (auto* col : m_columnsList) {
 			col->beginMacro(i18n("%1: change column type", col->name()));
 			// the format is the current text
@@ -321,10 +321,10 @@ void ColumnDock::formatChanged(int index) {
 	if (m_initializing)
 		return;
 
-	AbstractColumn::ColumnMode mode = (AbstractColumn::ColumnMode)ui.cbType->itemData(ui.cbType->currentIndex()).toInt();
+	auto mode = (AbstractColumn::ColumnMode)ui.cbType->itemData(ui.cbType->currentIndex()).toInt();
 
 	switch (mode) {
-	case AbstractColumn::Numeric: {
+	case AbstractColumn::ColumnMode::Numeric: {
 			char format = ui.cbFormat->itemData(index).toChar().toLatin1();
 			for (auto* col : m_columnsList) {
 				auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
@@ -332,13 +332,13 @@ void ColumnDock::formatChanged(int index) {
 			}
 			break;
 		}
-	case AbstractColumn::Integer:
-	case AbstractColumn::BigInt:
-	case AbstractColumn::Text:
+	case AbstractColumn::ColumnMode::Integer:
+	case AbstractColumn::ColumnMode::BigInt:
+	case AbstractColumn::ColumnMode::Text:
 		break;
-	case AbstractColumn::Month:
-	case AbstractColumn::Day:
-	case AbstractColumn::DateTime: {
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+	case AbstractColumn::ColumnMode::DateTime: {
 			QString format = ui.cbFormat->itemData(index).toString();
 			for (auto* col : m_columnsList) {
 				auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
@@ -389,7 +389,7 @@ void ColumnDock::columnModeChanged(const AbstractAspect* aspect) {
 		return;
 
 	m_initializing = true;
-	AbstractColumn::ColumnMode columnMode = m_column->columnMode();
+	auto columnMode = m_column->columnMode();
 	this->updateFormatWidgets(columnMode);
 	this->updateTypeWidgets(columnMode);
 	m_initializing = false;
@@ -398,20 +398,20 @@ void ColumnDock::columnModeChanged(const AbstractAspect* aspect) {
 void ColumnDock::columnFormatChanged() {
 	DEBUG("ColumnDock::columnFormatChanged()");
 	m_initializing = true;
-	AbstractColumn::ColumnMode columnMode = m_column->columnMode();
+	auto columnMode = m_column->columnMode();
 	switch (columnMode) {
-	case AbstractColumn::Numeric: {
+	case AbstractColumn::ColumnMode::Numeric: {
 			auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
 			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->numericFormat()));
 			break;
 		}
-	case AbstractColumn::Integer:
-	case AbstractColumn::BigInt:
-	case AbstractColumn::Text:
+	case AbstractColumn::ColumnMode::Integer:
+	case AbstractColumn::ColumnMode::BigInt:
+	case AbstractColumn::ColumnMode::Text:
 		break;
-	case AbstractColumn::Month:
-	case AbstractColumn::Day:
-	case AbstractColumn::DateTime: {
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+	case AbstractColumn::ColumnMode::DateTime: {
 			auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
 			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->format()));
 			break;
@@ -429,6 +429,6 @@ void ColumnDock::columnPrecisionChanged() {
 
 void ColumnDock::columnPlotDesignationChanged(const AbstractColumn* col) {
 	m_initializing = true;
-	ui.cbPlotDesignation->setCurrentIndex( int(col->plotDesignation()) );
+	ui.cbPlotDesignation->setCurrentIndex(int(col->plotDesignation()));
 	m_initializing = false;
 }

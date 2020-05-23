@@ -613,7 +613,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	columnModes.resize(m_actualCols);
 	int col = 0;
 	if (createIndexEnabled) {
-		columnModes[0] = AbstractColumn::Integer;
+		columnModes[0] = AbstractColumn::ColumnMode::Integer;
 		col = 1;
 	}
 
@@ -642,21 +642,21 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 				valueString.remove(QLatin1Char('"'));
 			if (col == m_actualCols)
 				break;
-			AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
+			auto mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 
 			// numeric: integer -> numeric
-			if (mode == AbstractColumn::Numeric && columnModes[col] == AbstractColumn::Integer)
+			if (mode == AbstractColumn::ColumnMode::Numeric && columnModes[col] == AbstractColumn::ColumnMode::Integer)
 				columnModes[col] = mode;
 			// text: non text -> text
-			if (mode == AbstractColumn::Text && columnModes[col] != AbstractColumn::Text)
+			if (mode == AbstractColumn::ColumnMode::Text && columnModes[col] != AbstractColumn::ColumnMode::Text)
 				columnModes[col] = mode;
 			// numeric: text -> numeric/integer
-			if (mode != AbstractColumn::Text && columnModes[col] == AbstractColumn::Text)
+			if (mode != AbstractColumn::ColumnMode::Text && columnModes[col] == AbstractColumn::ColumnMode::Text)
 				columnModes[col] = mode;
 			col++;
 		}
 	}
-	QDEBUG("column modes = " << columnModes);
+	//QDEBUG("column modes = " << columnModes);
 
 	// ATTENTION: This resets the position in the device to 0
 	m_actualRows = (int)q->lineNumber(device);
@@ -729,11 +729,11 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			m_actualRows = 1;
 			if (createIndexEnabled) {
 				m_actualCols = 2;
-				columnModes << AbstractColumn::Integer << AbstractColumn::Numeric;
+				columnModes << AbstractColumn::ColumnMode::Integer << AbstractColumn::ColumnMode::Numeric;
 				vectorNames << i18n("Index") << i18n("Value");
 			} else {
 				m_actualCols = 1;
-				columnModes << AbstractColumn::Numeric;
+				columnModes << AbstractColumn::ColumnMode::Numeric;
 				vectorNames << i18n("Value");
 			}
 			QDEBUG("	vector names = " << vectorNames);
@@ -771,39 +771,39 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 			spreadsheet->child<Column>(n)->setColumnMode(columnModes[n]);
 			switch (columnModes[n]) {
-			case AbstractColumn::Numeric: {
+			case AbstractColumn::ColumnMode::Numeric: {
 				QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::Integer: {
+			case AbstractColumn::ColumnMode::Integer: {
 				QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::BigInt: {
+			case AbstractColumn::ColumnMode::BigInt: {
 				QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(n)->data());
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::Text: {
+			case AbstractColumn::ColumnMode::Text: {
 				QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::DateTime: {
+			case AbstractColumn::ColumnMode::DateTime: {
 				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
 			//TODO
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
 				break;
 			}
 		}
@@ -1002,39 +1002,39 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		for (int n = 0; n < m_actualCols; ++n) {
 			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 			switch (columnModes[n]) {
-			case AbstractColumn::Numeric: {
+			case AbstractColumn::ColumnMode::Numeric: {
 				QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::Integer: {
+			case AbstractColumn::ColumnMode::Integer: {
 				QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::BigInt: {
+			case AbstractColumn::ColumnMode::BigInt: {
 				QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(n)->data());
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::Text: {
+			case AbstractColumn::ColumnMode::Text: {
 				QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::DateTime: {
+			case AbstractColumn::ColumnMode::DateTime: {
 				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
 			//TODO
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
 				break;
 			}
 		}
@@ -1074,35 +1074,35 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			for (int row = 0; row < linesToRead; ++row) {
 				for (int col = 0; col < m_actualCols; ++col) {
 					switch (columnModes[col]) {
-					case AbstractColumn::Numeric: {
+					case AbstractColumn::ColumnMode::Numeric: {
 						QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->resize(m_actualRows);
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
 					}
-					case AbstractColumn::Integer: {
+					case AbstractColumn::ColumnMode::Integer: {
 						QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->resize(m_actualRows);
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
 					}
-					case AbstractColumn::BigInt: {
+					case AbstractColumn::ColumnMode::BigInt: {
 						QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->resize(m_actualRows);
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
 					}
-					case AbstractColumn::Text: {
+					case AbstractColumn::ColumnMode::Text: {
 						QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->resize(m_actualRows);
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
 					}
-					case AbstractColumn::DateTime: {
+					case AbstractColumn::ColumnMode::DateTime: {
 						QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->resize(m_actualRows);
@@ -1110,8 +1110,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 						break;
 					}
 					//TODO
-					case AbstractColumn::Month:
-					case AbstractColumn::Day:
+					case AbstractColumn::ColumnMode::Month:
+					case AbstractColumn::ColumnMode::Day:
 						break;
 					}
 				}
@@ -1198,7 +1198,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 					lineStringList.prepend(QString::number(indexColumnIdx++));
 			}
 
-			QDEBUG("	column modes = " << columnModes);
+			//QDEBUG("	column modes = " << static_cast<QVector<int>>(columnModes));
 			for (int n = 0; n < m_actualCols; ++n) {
 				DEBUG("	actual col = " << n);
 				if (n < lineStringList.size()) {
@@ -1209,7 +1209,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 					// set value depending on data type
 					switch (columnModes[n]) {
-					case AbstractColumn::Numeric: {
+					case AbstractColumn::ColumnMode::Numeric: {
 						DEBUG("	Numeric");
 						bool isNumber;
 						const double value = locale.toDouble(valueString, &isNumber);
@@ -1217,7 +1217,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 // 						qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<double>*>(m_dataContainer[n])->size();
 						break;
 					}
-					case AbstractColumn::Integer: {
+					case AbstractColumn::ColumnMode::Integer: {
 						DEBUG("	Integer");
 						bool isNumber;
 						const int value = locale.toInt(valueString, &isNumber);
@@ -1226,7 +1226,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 						break;
 					}
-					case AbstractColumn::BigInt: {
+					case AbstractColumn::ColumnMode::BigInt: {
 						DEBUG("	BigInt");
 						bool isNumber;
 						const qint64 value = locale.toLongLong(valueString, &isNumber);
@@ -1235,43 +1235,43 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 						break;
 					}
-					case AbstractColumn::DateTime: {
+					case AbstractColumn::ColumnMode::DateTime: {
 						QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
 						static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
 						break;
 					}
-					case AbstractColumn::Text:
+					case AbstractColumn::ColumnMode::Text:
 						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = valueString;
 						break;
-					case AbstractColumn::Month:
+					case AbstractColumn::ColumnMode::Month:
 						//TODO
 						break;
-					case AbstractColumn::Day:
+					case AbstractColumn::ColumnMode::Day:
 						//TODO
 						break;
 					}
 				} else {
 					DEBUG("	missing columns in this line");
 					switch (columnModes[n]) {
-					case AbstractColumn::Numeric:
+					case AbstractColumn::ColumnMode::Numeric:
 						static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = nanValue;
 						break;
-					case AbstractColumn::Integer:
+					case AbstractColumn::ColumnMode::Integer:
 						static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = 0;
 						break;
-					case AbstractColumn::BigInt:
+					case AbstractColumn::ColumnMode::BigInt:
 						static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[](currentRow) = 0;
 						break;
-					case AbstractColumn::DateTime:
+					case AbstractColumn::ColumnMode::DateTime:
 						static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = QDateTime();
 						break;
-					case AbstractColumn::Text:
+					case AbstractColumn::ColumnMode::Text:
 						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow).clear();
 						break;
-					case AbstractColumn::Month:
+					case AbstractColumn::ColumnMode::Month:
 						//TODO
 						break;
-					case AbstractColumn::Day:
+					case AbstractColumn::ColumnMode::Day:
 						//TODO
 						break;
 					}
@@ -1327,8 +1327,8 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		if (dynamic_cast<Matrix*>(dataSource)) {
 			auto mode = columnModes[0];
 			//TODO: remove this when Matrix supports text type
-			if (mode == AbstractColumn::Text)
-				mode = AbstractColumn::Numeric;
+			if (mode == AbstractColumn::ColumnMode::Text)
+				mode = AbstractColumn::ColumnMode::Numeric;
 			for (auto& c : columnModes)
 				if (c != mode)
 					c = mode;
@@ -1411,57 +1411,57 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 
 				// set value depending on data type
 				switch (columnModes.at(n)) {
-				case AbstractColumn::Numeric: {
+				case AbstractColumn::ColumnMode::Numeric: {
 					bool isNumber;
 					const double value = locale.toDouble(valueString, &isNumber);
 					static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : nanValue);
 					break;
 				}
-				case AbstractColumn::Integer: {
+				case AbstractColumn::ColumnMode::Integer: {
 					bool isNumber;
 					const int value = locale.toInt(valueString, &isNumber);
 					static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : 0);
 					break;
 				}
-				case AbstractColumn::BigInt: {
+				case AbstractColumn::ColumnMode::BigInt: {
 					bool isNumber;
 					const qint64 value = locale.toLongLong(valueString, &isNumber);
 					static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : 0);
 					break;
 				}
-				case AbstractColumn::DateTime: {
+				case AbstractColumn::ColumnMode::DateTime: {
 					QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
 					static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
 					break;
 				}
-				case AbstractColumn::Text: {
+				case AbstractColumn::ColumnMode::Text: {
 					auto* colData = static_cast<QVector<QString>*>(m_dataContainer[n]);
 					colData->operator[](currentRow) = valueString;
 					break;
 				}
-				case AbstractColumn::Month:	// never happens
-				case AbstractColumn::Day:
+				case AbstractColumn::ColumnMode::Month:	// never happens
+				case AbstractColumn::ColumnMode::Day:
 					break;
 				}
 			} else {	// missing columns in this line
 				switch (columnModes.at(n)) {
-				case AbstractColumn::Numeric:
+				case AbstractColumn::ColumnMode::Numeric:
 					static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = nanValue;
 					break;
-				case AbstractColumn::Integer:
+				case AbstractColumn::ColumnMode::Integer:
 					static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = 0;
 					break;
-				case AbstractColumn::BigInt:
+				case AbstractColumn::ColumnMode::BigInt:
 					static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[](currentRow) = 0;
 					break;
-				case AbstractColumn::DateTime:
+				case AbstractColumn::ColumnMode::DateTime:
 					static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = QDateTime();
 					break;
-				case AbstractColumn::Text:
+				case AbstractColumn::ColumnMode::Text:
 					static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow).clear();
 					break;
-				case AbstractColumn::Month:	// never happens
-				case AbstractColumn::Day:
+				case AbstractColumn::ColumnMode::Month:	// never happens
+				case AbstractColumn::ColumnMode::Day:
 					break;
 				}
 			}
@@ -1571,34 +1571,34 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 					valueString.remove(QLatin1Char('"'));
 
 				switch (columnModes[n]) {
-				case AbstractColumn::Numeric: {
+				case AbstractColumn::ColumnMode::Numeric: {
 					bool isNumber;
 					const double value = locale.toDouble(valueString, &isNumber);
 					lineString += QString::number(isNumber ? value : nanValue, 'g', 16);
 					break;
 				}
-				case AbstractColumn::Integer: {
+				case AbstractColumn::ColumnMode::Integer: {
 					bool isNumber;
 					const int value = locale.toInt(valueString, &isNumber);
 					lineString += QString::number(isNumber ? value : 0);
 					break;
 				}
-				case AbstractColumn::BigInt: {
+				case AbstractColumn::ColumnMode::BigInt: {
 					bool isNumber;
 					const qint64 value = locale.toLongLong(valueString, &isNumber);
 					lineString += QString::number(isNumber ? value : 0);
 					break;
 				}
-				case AbstractColumn::DateTime: {
+				case AbstractColumn::ColumnMode::DateTime: {
 					QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
 					lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
 					break;
 				}
-				case AbstractColumn::Text:
+				case AbstractColumn::ColumnMode::Text:
 					lineString += valueString;
 					break;
-				case AbstractColumn::Month:	// never happens
-				case AbstractColumn::Day:
+				case AbstractColumn::ColumnMode::Month:	// never happens
+				case AbstractColumn::ColumnMode::Day:
 					break;
 				}
 			} else 	// missing columns in this line
@@ -1696,34 +1696,34 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 
 				// set value depending on data type
 				switch (columnModes[n]) {
-				case AbstractColumn::Numeric: {
+				case AbstractColumn::ColumnMode::Numeric: {
 					bool isNumber;
 					const double value = locale.toDouble(valueString, &isNumber);
 					lineString += QString::number(isNumber ? value : nanValue, 'g', 15);
 					break;
 				}
-				case AbstractColumn::Integer: {
+				case AbstractColumn::ColumnMode::Integer: {
 					bool isNumber;
 					const int value = locale.toInt(valueString, &isNumber);
 					lineString += QString::number(isNumber ? value : 0);
 					break;
 				}
-				case AbstractColumn::BigInt: {
+				case AbstractColumn::ColumnMode::BigInt: {
 					bool isNumber;
 					const qint64 value = locale.toLongLong(valueString, &isNumber);
 					lineString += QString::number(isNumber ? value : 0);
 					break;
 				}
-				case AbstractColumn::DateTime: {
+				case AbstractColumn::ColumnMode::DateTime: {
 					QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
 					lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
 					break;
 				}
-				case AbstractColumn::Text:
+				case AbstractColumn::ColumnMode::Text:
 					lineString += valueString;
 					break;
-				case AbstractColumn::Month:	// never happens
-				case AbstractColumn::Day:
+				case AbstractColumn::ColumnMode::Month:	// never happens
+				case AbstractColumn::ColumnMode::Day:
 					break;
 				}
 			} else 	// missing columns in this line
@@ -1875,13 +1875,13 @@ int AsciiFilterPrivate::prepareToRead(const QString& message) {
 	//add index column
 	if (createIndexEnabled) {
 		vectorNames << i18n("index");
-		columnModes << AbstractColumn::Integer;
+		columnModes << AbstractColumn::ColumnMode::Integer;
 	}
 
 	//add timestamp column
 	if (createTimestampEnabled) {
 		vectorNames << i18n("timestamp");
-		columnModes << AbstractColumn::DateTime;
+		columnModes << AbstractColumn::ColumnMode::DateTime;
 	}
 
 	//parse the first data line to determine data type for each column
@@ -1950,36 +1950,36 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& message) {
 
 				// set value depending on data type
 				switch (columnModes[n+offset]) {
-				case AbstractColumn::Numeric: {
+				case AbstractColumn::ColumnMode::Numeric: {
 					bool isNumber;
 					const double value = locale.toDouble(valueString, &isNumber);
 					lineString += QString::number(isNumber ? value : nanValue, 'g', 15);
 					break;
 				}
-				case AbstractColumn::Integer: {
+				case AbstractColumn::ColumnMode::Integer: {
 					bool isNumber;
 					const int value = locale.toInt(valueString, &isNumber);
 					lineString += QString::number(isNumber ? value : 0);
 					break;
 				}
-				case AbstractColumn::BigInt: {
+				case AbstractColumn::ColumnMode::BigInt: {
 					bool isNumber;
 					const qint64 value = locale.toLongLong(valueString, &isNumber);
 					lineString += QString::number(isNumber ? value : 0);
 					break;
 				}
-				case AbstractColumn::DateTime: {
+				case AbstractColumn::ColumnMode::DateTime: {
 					QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
 					lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
 					break;
 				}
-				case AbstractColumn::Text:
+				case AbstractColumn::ColumnMode::Text:
 					if (removeQuotesEnabled)
 						valueString.remove(QLatin1Char('"'));
 					lineString += valueString;
 					break;
-				case AbstractColumn::Month:	// never happens
-				case AbstractColumn::Day:
+				case AbstractColumn::ColumnMode::Month:	// never happens
+				case AbstractColumn::ColumnMode::Day:
 					break;
 				}
 			} else 	// missing columns in this line
@@ -2119,35 +2119,35 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 			spreadsheet->child<Column>(n)->setColumnMode(columnModes[n]);
 			switch (columnModes[n]) {
-			case AbstractColumn::Numeric: {
+			case AbstractColumn::ColumnMode::Numeric: {
 				QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::Integer: {
+			case AbstractColumn::ColumnMode::Integer: {
 				QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::BigInt: {
+			case AbstractColumn::ColumnMode::BigInt: {
 				QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::Text: {
+			case AbstractColumn::ColumnMode::Text: {
 				QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::DateTime: {
+			case AbstractColumn::ColumnMode::DateTime: {
 				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
@@ -2155,8 +2155,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 				break;
 			}
 			//TODO
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
 				break;
 			}
 		}
@@ -2246,7 +2246,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 				for (int n = 0; n < columnModes.size(); ++n) {
 					// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 					switch (columnModes[n]) {
-					case AbstractColumn::Numeric: {
+					case AbstractColumn::ColumnMode::Numeric: {
 						QVector<double>*  vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
 						m_dataContainer[n] = static_cast<void *>(vector);
 
@@ -2274,7 +2274,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						}
 						break;
 					}
-					case AbstractColumn::Integer: {
+					case AbstractColumn::ColumnMode::Integer: {
 						QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
 						m_dataContainer[n] = static_cast<void *>(vector);
 
@@ -2301,7 +2301,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						}
 						break;
 					}
-					case AbstractColumn::BigInt: {
+					case AbstractColumn::ColumnMode::BigInt: {
 						QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(n)->data());
 						m_dataContainer[n] = static_cast<void *>(vector);
 
@@ -2328,7 +2328,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						}
 						break;
 					}
-					case AbstractColumn::Text: {
+					case AbstractColumn::ColumnMode::Text: {
 						QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
 						m_dataContainer[n] = static_cast<void *>(vector);
 
@@ -2355,7 +2355,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						}
 						break;
 					}
-					case AbstractColumn::DateTime: {
+					case AbstractColumn::ColumnMode::DateTime: {
 						QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
 						m_dataContainer[n] = static_cast<void *>(vector);
 
@@ -2383,8 +2383,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						break;
 					}
 					//TODO
-					case AbstractColumn::Month:
-					case AbstractColumn::Day:
+					case AbstractColumn::ColumnMode::Month:
+					case AbstractColumn::ColumnMode::Day:
 						break;
 					}
 				}
@@ -2466,35 +2466,35 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 		for (int n = 0; n < m_actualCols; ++n) {
 			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 			switch (columnModes[n]) {
-			case AbstractColumn::Numeric: {
+			case AbstractColumn::ColumnMode::Numeric: {
 				QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::Integer: {
+			case AbstractColumn::ColumnMode::Integer: {
 				QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::BigInt: {
+			case AbstractColumn::ColumnMode::BigInt: {
 				QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::Text: {
+			case AbstractColumn::ColumnMode::Text: {
 				QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::DateTime: {
+			case AbstractColumn::ColumnMode::DateTime: {
 				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
@@ -2502,8 +2502,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 				break;
 			}
 			//TODO
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
 				break;
 			}
 		}
@@ -2532,7 +2532,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 			for (int row = 0; row < linesToRead; ++row) {
 				for (int col = 0;  col < m_actualCols; ++col) {
 					switch (columnModes[col]) {
-					case AbstractColumn::Numeric: {
+					case AbstractColumn::ColumnMode::Numeric: {
 						QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->reserve(m_actualRows);
@@ -2540,7 +2540,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
 					}
-					case AbstractColumn::Integer: {
+					case AbstractColumn::ColumnMode::Integer: {
 						QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->reserve(m_actualRows);
@@ -2548,7 +2548,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
 					}
-					case AbstractColumn::BigInt: {
+					case AbstractColumn::ColumnMode::BigInt: {
 						QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->reserve(m_actualRows);
@@ -2556,7 +2556,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
 					}
-					case AbstractColumn::Text: {
+					case AbstractColumn::ColumnMode::Text: {
 						QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->reserve(m_actualRows);
@@ -2564,7 +2564,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
 					}
-					case AbstractColumn::DateTime: {
+					case AbstractColumn::ColumnMode::DateTime: {
 						QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->reserve(m_actualRows);
@@ -2573,8 +2573,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						break;
 					}
 					//TODO
-					case AbstractColumn::Month:
-					case AbstractColumn::Day:
+					case AbstractColumn::ColumnMode::Month:
+					case AbstractColumn::ColumnMode::Day:
 						break;
 					}
 				}
@@ -2644,63 +2644,63 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 
 					// set value depending on data type
 					switch (columnModes[col]) {
-					case AbstractColumn::Numeric: {
+					case AbstractColumn::ColumnMode::Numeric: {
 						bool isNumber;
 						const double value = locale.toDouble(valueString, &isNumber);
 						static_cast<QVector<double>*>(m_dataContainer[col])->operator[](currentRow) = (isNumber ? value : nanValue);
 						break;
 					}
-					case AbstractColumn::Integer: {
+					case AbstractColumn::ColumnMode::Integer: {
 						bool isNumber;
 						const int value = locale.toInt(valueString, &isNumber);
 						static_cast<QVector<int>*>(m_dataContainer[col])->operator[](currentRow) = (isNumber ? value : 0);
 						break;
 					}
-					case AbstractColumn::BigInt: {
+					case AbstractColumn::ColumnMode::BigInt: {
 						bool isNumber;
 						const qint64 value = locale.toLongLong(valueString, &isNumber);
 						static_cast<QVector<qint64>*>(m_dataContainer[col])->operator[](currentRow) = (isNumber ? value : 0);
 						break;
 					}
-					case AbstractColumn::DateTime: {
+					case AbstractColumn::ColumnMode::DateTime: {
 						QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
 						static_cast<QVector<QDateTime>*>(m_dataContainer[col])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
 						break;
 					}
-					case AbstractColumn::Text:
+					case AbstractColumn::ColumnMode::Text:
 						if (removeQuotesEnabled)
 							valueString.remove(QLatin1Char('"'));
 						static_cast<QVector<QString>*>(m_dataContainer[col])->operator[](currentRow) = valueString;
 						break;
-					case AbstractColumn::Month:
+					case AbstractColumn::ColumnMode::Month:
 						//TODO
 						break;
-					case AbstractColumn::Day:
+					case AbstractColumn::ColumnMode::Day:
 						//TODO
 						break;
 					}
 				} else {
 					DEBUG("	missing columns in this line");
 					switch (columnModes[n]) {
-					case AbstractColumn::Numeric:
+					case AbstractColumn::ColumnMode::Numeric:
 						static_cast<QVector<double>*>(m_dataContainer[col])->operator[](currentRow) = nanValue;
 						break;
-					case AbstractColumn::Integer:
+					case AbstractColumn::ColumnMode::Integer:
 						static_cast<QVector<int>*>(m_dataContainer[col])->operator[](currentRow) = 0;
 						break;
-					case AbstractColumn::BigInt:
+					case AbstractColumn::ColumnMode::BigInt:
 						static_cast<QVector<qint64>*>(m_dataContainer[col])->operator[](currentRow) = 0;
 						break;
-					case AbstractColumn::DateTime:
+					case AbstractColumn::ColumnMode::DateTime:
 						static_cast<QVector<QDateTime>*>(m_dataContainer[col])->operator[](currentRow) = QDateTime();
 						break;
-					case AbstractColumn::Text:
+					case AbstractColumn::ColumnMode::Text:
 						static_cast<QVector<QString>*>(m_dataContainer[col])->operator[](currentRow).clear();
 						break;
-					case AbstractColumn::Month:
+					case AbstractColumn::ColumnMode::Month:
 						//TODO
 						break;
-					case AbstractColumn::Day:
+					case AbstractColumn::ColumnMode::Day:
 						//TODO
 						break;
 					}
@@ -2771,35 +2771,35 @@ void AsciiFilterPrivate::setPreparedForMQTT(bool prepared, MQTTTopic* topic, con
 			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 			topic->child<Column>(n)->setColumnMode(columnModes[n]);
 			switch (columnModes[n]) {
-			case AbstractColumn::Numeric: {
+			case AbstractColumn::ColumnMode::Numeric: {
 				QVector<double>* vector = static_cast<QVector<double>* >(topic->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::Integer: {
+			case AbstractColumn::ColumnMode::Integer: {
 				QVector<int>* vector = static_cast<QVector<int>* >(topic->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::BigInt: {
+			case AbstractColumn::ColumnMode::BigInt: {
 				QVector<qint64>* vector = static_cast<QVector<qint64>* >(topic->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::Text: {
+			case AbstractColumn::ColumnMode::Text: {
 				QVector<QString>* vector = static_cast<QVector<QString>*>(topic->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
-			case AbstractColumn::DateTime: {
+			case AbstractColumn::ColumnMode::DateTime: {
 				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(topic->child<Column>(n)->data());
 				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
@@ -2807,8 +2807,8 @@ void AsciiFilterPrivate::setPreparedForMQTT(bool prepared, MQTTTopic* topic, con
 				break;
 			}
 			//TODO
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
 				break;
 			}
 		}

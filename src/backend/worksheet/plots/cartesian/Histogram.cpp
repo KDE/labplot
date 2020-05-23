@@ -1130,7 +1130,7 @@ void HistogramPrivate::updateValues() {
 		}
 
 		const int endRow = qMin(pointsLogical.size(), valuesColumn->rowCount());
-		const AbstractColumn::ColumnMode xColMode = valuesColumn->columnMode();
+		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!visiblePoints[i]) continue;
 
@@ -1138,16 +1138,16 @@ void HistogramPrivate::updateValues() {
 				continue;
 
 			switch (xColMode) {
-				case AbstractColumn::Numeric:
+				case AbstractColumn::ColumnMode::Numeric:
 					valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
 					break;
-				case AbstractColumn::Text:
+				case AbstractColumn::ColumnMode::Text:
 					valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
-				case AbstractColumn::Integer:
-				case AbstractColumn::BigInt:
-				case AbstractColumn::DateTime:
-				case AbstractColumn::Month:
-				case AbstractColumn::Day:
+				case AbstractColumn::ColumnMode::Integer:
+				case AbstractColumn::ColumnMode::BigInt:
+				case AbstractColumn::ColumnMode::DateTime:
+				case AbstractColumn::ColumnMode::Month:
+				case AbstractColumn::ColumnMode::Day:
 					//TODO
 					break;
 			}

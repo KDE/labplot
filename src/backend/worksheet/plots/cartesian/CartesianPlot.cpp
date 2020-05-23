@@ -1491,7 +1491,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		if (children<XYCurve>().size() == 1) {
 			const auto* col = dynamic_cast<const Column*>(curve->xColumn());
 			if (col) {
-				if (col->columnMode() == AbstractColumn::DateTime) {
+				if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
 					setUndoAware(false);
 					setXRangeFormat(CartesianPlot::DateTime);
 					setUndoAware(true);
@@ -1511,7 +1511,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 			col = dynamic_cast<const Column*>(curve->yColumn());
 			if (col) {
-				if (col->columnMode() == AbstractColumn::DateTime) {
+				if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
 					setUndoAware(false);
 					setYRangeFormat(CartesianPlot::DateTime);
 					setUndoAware(true);
@@ -1716,7 +1716,7 @@ void CartesianPlot::xDataChanged() {
 		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
 		if (curve) {
 			const AbstractColumn* col = curve->xColumn();
-			if (col->columnMode() == AbstractColumn::DateTime && d->xRangeFormat != CartesianPlot::DateTime) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::DateTime && d->xRangeFormat != CartesianPlot::DateTime) {
 				setUndoAware(false);
 				setXRangeFormat(CartesianPlot::DateTime);
 				setUndoAware(true);
@@ -1762,7 +1762,7 @@ void CartesianPlot::yDataChanged() {
 		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
 		if (curve) {
 			const AbstractColumn* col = curve->yColumn();
-			if (col->columnMode() == AbstractColumn::DateTime && d->xRangeFormat != CartesianPlot::DateTime) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::DateTime && d->xRangeFormat != CartesianPlot::DateTime) {
 				setUndoAware(false);
 				setYRangeFormat(CartesianPlot::DateTime);
 				setUndoAware(true);

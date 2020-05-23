@@ -423,7 +423,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 
 	if (createIndexEnabled) {
 		vectorNames.prepend(i18n("Index"));
-		columnModes[0] = AbstractColumn::Integer;
+		columnModes[0] = AbstractColumn::ColumnMode::Integer;
 	}
 
 	columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);

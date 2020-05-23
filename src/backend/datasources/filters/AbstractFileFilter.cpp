@@ -58,10 +58,10 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 
 	//TODO: use BigInt as default integer?
 	if (valueString.size() == 0)	// empty string treated as integer (meaning the non-empty strings will determine the data type)
-		return AbstractColumn::Integer;
+		return AbstractColumn::ColumnMode::Integer;
 
 	if (isNan(valueString))
-		return AbstractColumn::Numeric;
+		return AbstractColumn::ColumnMode::Numeric;
 
 	const std::string stdValueString = valueString.toStdString();
 
@@ -71,17 +71,17 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 	DEBUG("string " << stdValueString << ": toInt " << intValue << "?:" << ok);
 	Q_UNUSED(intValue)
 	if (ok || isNan(valueString))
-		return AbstractColumn::Integer;
+		return AbstractColumn::ColumnMode::Integer;
 
 	//check big integer
 	qint64 bigIntValue = locale.toLongLong(valueString, &ok);
 	DEBUG("string " << stdValueString << ": toBigInt " << bigIntValue << "?:" << ok);
 	Q_UNUSED(bigIntValue)
 	if (ok || isNan(valueString))
-		return AbstractColumn::BigInt;
+		return AbstractColumn::ColumnMode::BigInt;
 
 	//try to convert to a double
-	AbstractColumn::ColumnMode mode = AbstractColumn::Numeric;
+	auto mode = AbstractColumn::ColumnMode::Numeric;
 	double value = locale.toDouble(valueString, &ok);
 	DEBUG("string " << stdValueString << ": toDouble " << value << "?:" << ok);
 	Q_UNUSED(value)
@@ -90,9 +90,9 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 	if (!ok) {
 		QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 		if (valueDateTime.isValid())
-			mode = AbstractColumn::DateTime;
+			mode = AbstractColumn::ColumnMode::DateTime;
 		else
-			mode = AbstractColumn::Text;
+			mode = AbstractColumn::ColumnMode::Text;
 	}
 
 	return mode;

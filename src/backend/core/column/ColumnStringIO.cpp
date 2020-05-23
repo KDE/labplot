@@ -40,7 +40,7 @@ ColumnStringIO::ColumnStringIO(Column* owner)
 }
 
 AbstractColumn::ColumnMode ColumnStringIO::columnMode() const {
-	return AbstractColumn::Text;
+	return AbstractColumn::ColumnMode::Text;
 }
 
 AbstractColumn::PlotDesignation ColumnStringIO::plotDesignation() const {
@@ -83,7 +83,7 @@ QString ColumnStringIO::textAt(int row) const {
 }
 
 bool ColumnStringIO::copy(const AbstractColumn *other) {
-	if (other->columnMode() != AbstractColumn::Text) return false;
+	if (other->columnMode() != AbstractColumn::ColumnMode::Text) return false;
 	m_owner->d->inputFilter()->input(0,other);
 	m_owner->copy(m_owner->d->inputFilter()->output(0));
 	m_owner->d->inputFilter()->input(0,this);
@@ -91,7 +91,7 @@ bool ColumnStringIO::copy(const AbstractColumn *other) {
 }
 
 bool ColumnStringIO::copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows) {
-	if (source->columnMode() != AbstractColumn::Text) return false;
+	if (source->columnMode() != AbstractColumn::ColumnMode::Text) return false;
 	m_owner->d->inputFilter()->input(0,source);
 	m_owner->copy(m_owner->d->inputFilter()->output(0), source_start, dest_start, num_rows);
 	m_owner->d->inputFilter()->input(0,this);

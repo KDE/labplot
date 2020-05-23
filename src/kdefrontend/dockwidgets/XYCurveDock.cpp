@@ -1186,11 +1186,11 @@ void XYCurveDock::updateValuesWidgets() {
 
 		auto* column = static_cast<Column*>(cbValuesColumn->currentModelIndex().internalPointer());
 		if (column) {
-			if (column->columnMode() == AbstractColumn::Numeric)
+			if (column->columnMode() == AbstractColumn::ColumnMode::Numeric)
 				hasNumeric = true;
-			else if (column->columnMode() == AbstractColumn::Integer || column->columnMode() == AbstractColumn::BigInt)
+			else if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt)
 				hasInteger = true;
-			else if (column->columnMode() == AbstractColumn::DateTime)
+			else if (column->columnMode() == AbstractColumn::ColumnMode::DateTime)
 				hasDateTime = true;
 		}
 	} else {
@@ -1218,14 +1218,14 @@ void XYCurveDock::updateValuesWidgets() {
 				break;
 		}
 
-		hasInteger = (xColumn && (xColumn->columnMode() == AbstractColumn::Integer || xColumn->columnMode() == AbstractColumn::Integer))
-						|| (yColumn && (yColumn->columnMode() == AbstractColumn::Integer || yColumn->columnMode() == AbstractColumn::Integer));
+		hasInteger = (xColumn && (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::Integer))
+						|| (yColumn && (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::Integer));
 
-		hasNumeric = (xColumn && xColumn->columnMode() == AbstractColumn::Numeric)
-						|| (yColumn && yColumn->columnMode() == AbstractColumn::Numeric);
+		hasNumeric = (xColumn && xColumn->columnMode() == AbstractColumn::ColumnMode::Numeric)
+						|| (yColumn && yColumn->columnMode() == AbstractColumn::ColumnMode::Numeric);
 
-		hasDateTime = (xColumn && xColumn->columnMode() == AbstractColumn::DateTime)
-						|| (yColumn && yColumn->columnMode() == AbstractColumn::DateTime);
+		hasDateTime = (xColumn && xColumn->columnMode() == AbstractColumn::ColumnMode::DateTime)
+						|| (yColumn && yColumn->columnMode() == AbstractColumn::ColumnMode::DateTime);
 	}
 
 	//hide all the format related widgets first and

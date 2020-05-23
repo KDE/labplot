@@ -100,7 +100,7 @@ QIcon DatapickerCurve::icon() const {
 }
 
 Column* DatapickerCurve::appendColumn(const QString& name) {
-	Column* col = new Column(i18n("Column"), AbstractColumn::Numeric);
+	Column* col = new Column(i18n("Column"), AbstractColumn::ColumnMode::Numeric);
 	col->insertRows(0, m_datasheet->rowCount());
 	col->setName(name);
 	m_datasheet->addChild(col);

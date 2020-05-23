@@ -121,15 +121,15 @@ QStringList AbstractColumn::dateTimeFormats() {
  */
 QIcon AbstractColumn::iconForMode(ColumnMode mode) {
 	switch (mode) {
-	case AbstractColumn::Numeric:
-	case AbstractColumn::Integer:
-	case AbstractColumn::BigInt:
+	case ColumnMode::Numeric:
+	case ColumnMode::Integer:
+	case ColumnMode::BigInt:
 		break;
-	case AbstractColumn::Text:
+	case ColumnMode::Text:
 		return QIcon::fromTheme("draw-text");
-	case AbstractColumn::DateTime:
-	case AbstractColumn::Month:
-	case AbstractColumn::Day:
+	case ColumnMode::DateTime:
+	case ColumnMode::Month:
+	case ColumnMode::Day:
 		return QIcon::fromTheme("chronometer");
 	}
 
@@ -249,13 +249,13 @@ void AbstractColumn::setPlotDesignation(AbstractColumn::PlotDesignation pd) {
 }
 
 bool AbstractColumn::isNumeric() const {
-	const AbstractColumn::ColumnMode mode = columnMode();
-	return (mode == AbstractColumn::Numeric || mode == AbstractColumn::Integer || mode == AbstractColumn::BigInt);
+	const auto mode = columnMode();
+	return (mode == ColumnMode::Numeric || mode == ColumnMode::Integer || mode == ColumnMode::BigInt);
 }
 
 bool AbstractColumn::isPlottable() const {
-	const AbstractColumn::ColumnMode mode = columnMode();
-	return (mode == AbstractColumn::Numeric || mode == AbstractColumn::Integer || mode == AbstractColumn::BigInt || mode == AbstractColumn::DateTime);
+	const auto mode = columnMode();
+	return (mode == ColumnMode::Numeric || mode == ColumnMode::Integer || mode == ColumnMode::BigInt || mode == ColumnMode::DateTime);
 }
 
 /**
@@ -268,16 +268,16 @@ void AbstractColumn::clear() {}
  */
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
-	case AbstractColumn::Numeric:
+	case ColumnMode::Numeric:
 		return !(std::isnan(valueAt(row)) || std::isinf(valueAt(row)));
-	case AbstractColumn::Integer:	// there is no invalid integer
-	case AbstractColumn::BigInt:
+	case ColumnMode::Integer:	// there is no invalid integer
+	case ColumnMode::BigInt:
 		return true;
-	case AbstractColumn::Text:
+	case ColumnMode::Text:
 		return !textAt(row).isNull();
-	case AbstractColumn::DateTime:
-	case AbstractColumn::Month:
-	case AbstractColumn::Day:
+	case ColumnMode::DateTime:
+	case ColumnMode::Month:
+	case ColumnMode::Day:
 		return dateTimeAt(row).isValid();
 	}
 

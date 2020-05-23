@@ -46,12 +46,12 @@ public:
 	}
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::BigInt; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::BigInt; }
 
 protected:
 	//! Using typed ports: only day inputs are accepted.
 	bool inputAcceptable(int, const AbstractColumn *source) override {
-		return source->columnMode() == AbstractColumn::Day;
+		return source->columnMode() == AbstractColumn::ColumnMode::Day;
 	}
 };
 

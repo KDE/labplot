@@ -51,7 +51,7 @@ public:
 	QString format() const { return m_format; }
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Text; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Text; }
 
 private:
 	friend class DateTime2StringFilterSetFormatCmd;

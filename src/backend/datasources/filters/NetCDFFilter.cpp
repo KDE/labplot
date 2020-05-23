@@ -696,19 +696,19 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 		case NC_SHORT:
 		case NC_USHORT:
 		case NC_INT:
-			columnModes[0] = AbstractColumn::Integer;
+			columnModes[0] = AbstractColumn::ColumnMode::Integer;
 			break;
 		case NC_UINT: 	// converted to double (int is too small)
 		case NC_INT64:
-			columnModes[0] = AbstractColumn::BigInt;
+			columnModes[0] = AbstractColumn::ColumnMode::BigInt;
 			break;
 		case NC_UINT64:	// converted to double (int is too small)
 		case NC_DOUBLE:
 		case NC_FLOAT:
-			columnModes[0] = AbstractColumn::Numeric;
+			columnModes[0] = AbstractColumn::ColumnMode::Numeric;
 			break;
 		case NC_CHAR:
-			columnModes[0] = AbstractColumn::Text;
+			columnModes[0] = AbstractColumn::ColumnMode::Text;
 			break;
 		//TODO: NC_STRING
 		}
@@ -771,19 +771,19 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 		case NC_SHORT:
 		case NC_USHORT:
 		case NC_INT:
-			columnModes[0] = AbstractColumn::Integer;
+			columnModes[0] = AbstractColumn::ColumnMode::Integer;
 			break;
 		case NC_UINT: 	// converted to double (int is too small)
 		case NC_INT64:
-			columnModes[0] = AbstractColumn::BigInt;
+			columnModes[0] = AbstractColumn::ColumnMode::BigInt;
 			break;
 		case NC_UINT64:	// converted to double (int is too small)
 		case NC_DOUBLE:
 		case NC_FLOAT:
-			columnModes[0] = AbstractColumn::Numeric;
+			columnModes[0] = AbstractColumn::ColumnMode::Numeric;
 			break;
 		case NC_CHAR:
-			columnModes[0] = AbstractColumn::Text;
+			columnModes[0] = AbstractColumn::ColumnMode::Text;
 			break;
 		//TODO: NC_STRING
 		}
@@ -863,22 +863,22 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 		case NC_USHORT:
 		case NC_INT:
 			for (int i = 0; i < actualCols; i++)
-				columnModes[i] = AbstractColumn::Integer;
+				columnModes[i] = AbstractColumn::ColumnMode::Integer;
 			break;
 		case NC_UINT: 	// converted to double (int is too small)
 		case NC_INT64:
 			for (int i = 0; i < actualCols; i++)
-				columnModes[i] = AbstractColumn::BigInt;
+				columnModes[i] = AbstractColumn::ColumnMode::BigInt;
 			break;
 		case NC_UINT64:	// converted to double (int is too small)
 		case NC_DOUBLE:
 		case NC_FLOAT:
 			for (int i = 0; i < actualCols; i++)
-				columnModes[i] = AbstractColumn::Numeric;
+				columnModes[i] = AbstractColumn::ColumnMode::Numeric;
 			break;
 		case NC_CHAR:
 			for (int i = 0; i < actualCols; i++)
-				columnModes[i] = AbstractColumn::Text;
+				columnModes[i] = AbstractColumn::ColumnMode::Text;
 			break;
 		//TODO: NC_STRING
 		}

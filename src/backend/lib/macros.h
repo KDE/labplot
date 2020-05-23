@@ -53,7 +53,7 @@
 #define STDSTRING(qstr) qstr.toUtf8().constData()
 
 #define ENUM_TO_STRING(class, enum, value) \
-    (class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(value))
+    (class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(static_cast<int>(value)))
 #define ENUM_COUNT(class, enum) \
 	(class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).keyCount())
 

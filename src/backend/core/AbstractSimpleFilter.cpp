@@ -173,7 +173,7 @@ AbstractColumn::ColumnMode AbstractSimpleFilter::columnMode() const {
 	// calling this function while m_input is empty is a sign of very bad code
 	// nevertheless it will return some rather meaningless value to
 	// avoid crashes
-	return m_inputs.value(0) ? m_inputs.at(0)->columnMode() : AbstractColumn::Text;
+	return m_inputs.value(0) ? m_inputs.at(0)->columnMode() : AbstractColumn::ColumnMode::Text;
 }
 
 /**

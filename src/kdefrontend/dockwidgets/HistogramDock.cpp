@@ -869,7 +869,7 @@ void HistogramDock::showValuesColumnFormat(const Column* column) {
   if (!column) {
 	// no valid column is available
 	// -> hide all the format properties widgets (equivalent to showing the properties of the column mode "Text")
-	this->updateValuesFormatWidgets(AbstractColumn::Text);
+	this->updateValuesFormatWidgets(AbstractColumn::ColumnMode::Text);
   } else {
 	AbstractColumn::ColumnMode columnMode = column->columnMode();
 
@@ -878,19 +878,19 @@ void HistogramDock::showValuesColumnFormat(const Column* column) {
 
 	 //show the actual formatting properties
 	switch (columnMode) {
-		case AbstractColumn::Numeric:{
+		case AbstractColumn::ColumnMode::Numeric: {
 		  auto* filter = static_cast<Double2StringFilter*>(column->outputFilter());
 		  ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->numericFormat()));
 		  ui.sbValuesPrecision->setValue(filter->numDigits());
 		  break;
 		}
-		case AbstractColumn::Text:
-		case AbstractColumn::Integer:
-		case AbstractColumn::BigInt:
+		case AbstractColumn::ColumnMode::Text:
+		case AbstractColumn::ColumnMode::Integer:
+		case AbstractColumn::ColumnMode::BigInt:
 			break;
-		case AbstractColumn::Month:
-		case AbstractColumn::Day:
-		case AbstractColumn::DateTime: {
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::DateTime: {
 				auto* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
 				ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
 				break;
@@ -904,32 +904,32 @@ void HistogramDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode c
 	ui.cbValuesFormat->clear();
 
 	switch (columnMode) {
-	case AbstractColumn::Numeric:
+	case AbstractColumn::ColumnMode::Numeric:
 		ui.cbValuesFormat->addItem(i18n("Decimal"), QVariant('f'));
 		ui.cbValuesFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
 		ui.cbValuesFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
 		ui.cbValuesFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
 		ui.cbValuesFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
 		break;
-	case AbstractColumn::Integer:
-	case AbstractColumn::BigInt:
+	case AbstractColumn::ColumnMode::Integer:
+	case AbstractColumn::ColumnMode::BigInt:
 		break;
-	case AbstractColumn::Text:
+	case AbstractColumn::ColumnMode::Text:
 		ui.cbValuesFormat->addItem(i18n("Text"), QVariant());
 		break;
-	case AbstractColumn::Month:
+	case AbstractColumn::ColumnMode::Month:
 		ui.cbValuesFormat->addItem(i18n("Number without Leading Zero"), QVariant("M"));
 		ui.cbValuesFormat->addItem(i18n("Number with Leading Zero"), QVariant("MM"));
 		ui.cbValuesFormat->addItem(i18n("Abbreviated Month Name"), QVariant("MMM"));
 		ui.cbValuesFormat->addItem(i18n("Full Month Name"), QVariant("MMMM"));
 		break;
-	case AbstractColumn::Day:
+	case AbstractColumn::ColumnMode::Day:
 		ui.cbValuesFormat->addItem(i18n("Number without Leading Zero"), QVariant("d"));
 		ui.cbValuesFormat->addItem(i18n("Number with Leading Zero"), QVariant("dd"));
 		ui.cbValuesFormat->addItem(i18n("Abbreviated Day Name"), QVariant("ddd"));
 		ui.cbValuesFormat->addItem(i18n("Full Day Name"), QVariant("dddd"));
 		break;
-	case AbstractColumn::DateTime:
+	case AbstractColumn::ColumnMode::DateTime:
 		for (const auto& s : AbstractColumn::dateFormats())
 			ui.cbValuesFormat->addItem(s, QVariant(s));
 
@@ -944,7 +944,7 @@ void HistogramDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode c
 
 	ui.cbValuesFormat->setCurrentIndex(0);
 
-	if (columnMode == AbstractColumn::Numeric) {
+	if (columnMode == AbstractColumn::ColumnMode::Numeric) {
 		ui.lValuesPrecision->show();
 		ui.sbValuesPrecision->show();
 	} else {
@@ -952,7 +952,7 @@ void HistogramDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode c
 		ui.sbValuesPrecision->hide();
 	}
 
-	if (columnMode == AbstractColumn::Text) {
+	if (columnMode == AbstractColumn::ColumnMode::Text) {
 		ui.lValuesFormatTop->hide();
 		ui.lValuesFormat->hide();
 		ui.cbValuesFormat->hide();
@@ -963,7 +963,7 @@ void HistogramDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode c
 		ui.cbValuesFormat->setCurrentIndex(0);
 	}
 
-	if (columnMode == AbstractColumn::DateTime) {
+	if (columnMode == AbstractColumn::ColumnMode::DateTime) {
 		ui.cbValuesFormat->setEditable(true);
 	} else {
 		ui.cbValuesFormat->setEditable(false);

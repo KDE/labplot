@@ -5,7 +5,7 @@
     Description          : A xy-curve defined by a fit model
     --------------------------------------------------------------------
     Copyright            : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -1518,9 +1518,9 @@ void XYFitCurvePrivate::prepareResultColumns() {
 	//create fit result columns if not available yet, clear them otherwise
 	if (!xColumn) {	// all columns are treated together
 		DEBUG("	Creating columns")
-		xColumn = new Column("x", AbstractColumn::Numeric);
-		yColumn = new Column("y", AbstractColumn::Numeric);
-		residualsColumn = new Column("residuals", AbstractColumn::Numeric);
+		xColumn = new Column("x", AbstractColumn::ColumnMode::Numeric);
+		yColumn = new Column("y", AbstractColumn::ColumnMode::Numeric);
+		residualsColumn = new Column("residuals", AbstractColumn::ColumnMode::Numeric);
 		xVector = static_cast<QVector<double>* >(xColumn->data());
 		yVector = static_cast<QVector<double>* >(yColumn->data());
 		residualsVector = static_cast<QVector<double>* >(residualsColumn->data());
@@ -1627,39 +1627,39 @@ void XYFitCurvePrivate::recalculate() {
 
 		double x = NAN;
 		switch (tmpXDataColumn->columnMode()) {
-		case AbstractColumn::Numeric:
+		case AbstractColumn::ColumnMode::Numeric:
 			x = tmpXDataColumn->valueAt(row);
 			break;
-		case AbstractColumn::Integer:
+		case AbstractColumn::ColumnMode::Integer:
 			x = tmpXDataColumn->integerAt(row);
 			break;
-		case AbstractColumn::BigInt:
+		case AbstractColumn::ColumnMode::BigInt:
 			x = tmpXDataColumn->bigIntAt(row);
 			break;
-		case AbstractColumn::Text:	// not valid
+		case AbstractColumn::ColumnMode::Text:	// not valid
 			break;
-		case AbstractColumn::DateTime:
-		case AbstractColumn::Day:
-		case AbstractColumn::Month:
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Month:
 			x = tmpXDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
 		}
 
 		double y = NAN;
 		switch (tmpYDataColumn->columnMode()) {
-		case AbstractColumn::Numeric:
+		case AbstractColumn::ColumnMode::Numeric:
 			y = tmpYDataColumn->valueAt(row);
 			break;
-		case AbstractColumn::Integer:
+		case AbstractColumn::ColumnMode::Integer:
 			y = tmpYDataColumn->integerAt(row);
 			break;
-		case AbstractColumn::BigInt:
+		case AbstractColumn::ColumnMode::BigInt:
 			y = tmpYDataColumn->bigIntAt(row);
 			break;
-		case AbstractColumn::Text:	// not valid
+		case AbstractColumn::ColumnMode::Text:	// not valid
 			break;
-		case AbstractColumn::DateTime:
-		case AbstractColumn::Day:
-		case AbstractColumn::Month:
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Month:
 			y = tmpYDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
 		}
 
@@ -2016,13 +2016,13 @@ void XYFitCurvePrivate::recalculate() {
 		xVector->resize(tmpXDataColumn->rowCount());
 		auto mode = tmpXDataColumn->columnMode();
 		for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
-			if (mode == AbstractColumn::Numeric)
+			if (mode == AbstractColumn::ColumnMode::Numeric)
 				(*xVector)[i] = tmpXDataColumn->valueAt(i);
-			else if (mode == AbstractColumn::Integer)
+			else if (mode == AbstractColumn::ColumnMode::Integer)
 				(*xVector)[i] = tmpXDataColumn->integerAt(i);
-			else if (mode == AbstractColumn::BigInt)
+			else if (mode == AbstractColumn::ColumnMode::BigInt)
 				(*xVector)[i] = tmpXDataColumn->bigIntAt(i);
-			else if (mode == AbstractColumn::DateTime)
+			else if (mode == AbstractColumn::ColumnMode::DateTime)
 				(*xVector)[i] = tmpXDataColumn->dateTimeAt(i).toMSecsSinceEpoch();
 
 		ExpressionParser* parser = ExpressionParser::getInstance();
@@ -2391,7 +2391,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("bic", fitResult.bic);
 			READ_STRING_VALUE("solverOutput", fitResult.solverOutput);
 		} else if (reader->name() == "column") {
-			Column* column = new Column(QString(), AbstractColumn::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Numeric);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;

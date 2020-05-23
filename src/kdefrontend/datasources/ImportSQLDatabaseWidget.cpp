@@ -284,11 +284,11 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 		const QString valueString = q.record().value(i).toString();
 		AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 		m_columnModes << mode;
-		if (mode != AbstractColumn::Numeric)
+		if (mode != AbstractColumn::ColumnMode::Numeric)
 			numeric = false;
 
 		//header item
-		QTableWidgetItem* item = new QTableWidgetItem(m_columnNames[i] + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, mode) + QLatin1String("}"));
+		QTableWidgetItem* item = new QTableWidgetItem(m_columnNames[i] + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, AbstractColumn::ColumnMode, mode) + QLatin1String("}"));
 		item->setTextAlignment(Qt::AlignLeft);
 		item->setIcon(AbstractColumn::iconForMode(mode));
 		ui.twPreview->setHorizontalHeaderItem(i, item);
@@ -379,34 +379,34 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 
 			// set value depending on data type
 			switch (m_columnModes[col]) {
-			case AbstractColumn::Numeric: {
+			case AbstractColumn::ColumnMode::Numeric: {
 				bool isNumber;
 				const double value = numberFormat.toDouble(valueString, &isNumber);
 				static_cast<QVector<double>*>(dataContainer[col])->operator[](row) = (isNumber ? value : NAN);
 				break;
 			}
-			case AbstractColumn::Integer: {
+			case AbstractColumn::ColumnMode::Integer: {
 				bool isNumber;
 				const int value = numberFormat.toInt(valueString, &isNumber);
 				static_cast<QVector<int>*>(dataContainer[col])->operator[](row) = (isNumber ? value : NAN);
 				break;
 			}
-			case AbstractColumn::BigInt: {
+			case AbstractColumn::ColumnMode::BigInt: {
 				bool isNumber;
 				const qint64 value = numberFormat.toLongLong(valueString, &isNumber);
 				static_cast<QVector<qint64>*>(dataContainer[col])->operator[](row) = (isNumber ? value : NAN);
 				break;
 			}
-			case AbstractColumn::DateTime: {
+			case AbstractColumn::ColumnMode::DateTime: {
 				const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 				static_cast<QVector<QDateTime>*>(dataContainer[col])->operator[](row) = valueDateTime.isValid() ? valueDateTime : QDateTime();
 				break;
 			}
-			case AbstractColumn::Text:
+			case AbstractColumn::ColumnMode::Text:
 				static_cast<QVector<QString>*>(dataContainer[col])->operator[](row) = valueString;
 				break;
-			case AbstractColumn::Month:	// never happens
-			case AbstractColumn::Day:
+			case AbstractColumn::ColumnMode::Month:	// never happens
+			case AbstractColumn::ColumnMode::Day:
 				break;
 			}
 		}

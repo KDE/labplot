@@ -1084,8 +1084,8 @@ void XYCurvePrivate::recalcLogicalPoints() {
 	if (!xColumn || !yColumn)
 		return;
 
-	AbstractColumn::ColumnMode xColMode = xColumn->columnMode();
-	AbstractColumn::ColumnMode yColMode = yColumn->columnMode();
+	auto xColMode = xColumn->columnMode();
+	auto yColMode = yColumn->columnMode();
 	QPointF tempPoint;
 
 	//take over only valid and non masked points.
@@ -1093,34 +1093,34 @@ void XYCurvePrivate::recalcLogicalPoints() {
 		if ( xColumn->isValid(row) && yColumn->isValid(row)
 				&& (!xColumn->isMasked(row)) && (!yColumn->isMasked(row)) ) {
 			switch (xColMode) {
-			case AbstractColumn::Numeric:
-			case AbstractColumn::Integer:
-			case AbstractColumn::BigInt:
+			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Integer:
+			case AbstractColumn::ColumnMode::BigInt:
 				tempPoint.setX(xColumn->valueAt(row));
 				break;
-			case AbstractColumn::Text:
+			case AbstractColumn::ColumnMode::Text:
 				break;
-			case AbstractColumn::DateTime:
+			case AbstractColumn::ColumnMode::DateTime:
 				tempPoint.setX(xColumn->dateTimeAt(row).toMSecsSinceEpoch());
 				break;
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
 				break;
 			}
 
 			switch (yColMode) {
-			case AbstractColumn::Numeric:
-			case AbstractColumn::Integer:
-			case AbstractColumn::BigInt:
+			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Integer:
+			case AbstractColumn::ColumnMode::BigInt:
 				tempPoint.setY(yColumn->valueAt(row));
 				break;
-			case AbstractColumn::Text:
+			case AbstractColumn::ColumnMode::Text:
 				break;
-			case AbstractColumn::DateTime:
+			case AbstractColumn::ColumnMode::DateTime:
 				tempPoint.setY(yColumn->dateTimeAt(row).toMSecsSinceEpoch());
 				break;
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
 				break;
 			}
 			symbolPointsLogical.append(tempPoint);
@@ -1307,7 +1307,7 @@ void XYCurvePrivate::updateLines() {
 	int startIndex, endIndex;
 
 	// find index for xMin and xMax to not loop throug all values
-	AbstractColumn::Properties columnProperties = q->xColumn()->properties();
+	auto columnProperties = q->xColumn()->properties();
 	if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing ||
 		columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
 		double xMin = cSystem->mapSceneToLogical(plot->dataRect().topLeft()).x();
@@ -1742,7 +1742,7 @@ void XYCurvePrivate::updateValues() {
 	case XYCurve::ValuesX: {
 		CartesianPlot::RangeFormat rangeFormat = plot->xRangeFormat();
 		int precision = valuesPrecision;
-		if (xColumn->columnMode() == AbstractColumn::Integer || xColumn->columnMode() == AbstractColumn::BigInt)
+		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
 		for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
@@ -1758,7 +1758,7 @@ void XYCurvePrivate::updateValues() {
 	case XYCurve::ValuesY: {
 		CartesianPlot::RangeFormat rangeFormat = plot->yRangeFormat();
 		int precision = valuesPrecision;
-		if (yColumn->columnMode() == AbstractColumn::Integer || yColumn->columnMode() == AbstractColumn::BigInt)
+		if (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
 		for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
@@ -1777,11 +1777,11 @@ void XYCurvePrivate::updateValues() {
 		CartesianPlot::RangeFormat yRangeFormat = plot->yRangeFormat();
 
 		int xPrecision = valuesPrecision;
-		if (xColumn->columnMode() == AbstractColumn::Integer || xColumn->columnMode() == AbstractColumn::BigInt)
+		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			xPrecision = 0;
 
 		int yPrecision = valuesPrecision;
-		if (yColumn->columnMode() == AbstractColumn::Integer || yColumn->columnMode() == AbstractColumn::BigInt)
+		if (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			yPrecision = 0;
 
 		for (int i = 0; i < symbolPointsLogical.size(); ++i) {
@@ -1818,7 +1818,7 @@ void XYCurvePrivate::updateValues() {
 		else
 			endRow = symbolPointsLogical.size();
 
-		AbstractColumn::ColumnMode xColMode = valuesColumn->columnMode();
+		auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!visiblePoints[i]) continue;
 
@@ -1826,17 +1826,17 @@ void XYCurvePrivate::updateValues() {
 				continue;
 
 			switch (xColMode) {
-			case AbstractColumn::Numeric:
-			case AbstractColumn::Integer:
-			case AbstractColumn::BigInt:
+			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Integer:
+			case AbstractColumn::ColumnMode::BigInt:
 				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
 				break;
-			case AbstractColumn::Text:
+			case AbstractColumn::ColumnMode::Text:
 				valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
 				break;
-			case AbstractColumn::DateTime:
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
+			case AbstractColumn::ColumnMode::DateTime:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
 				valuesStrings << valuesPrefix + valuesColumn->dateTimeAt(i).toString(valuesDateTimeFormat) + valuesSuffix;
 				break;
 			}
@@ -2147,7 +2147,7 @@ double XYCurve::y(double x, bool &valueFound) const {
 		return NAN;
 	}
 
-	AbstractColumn::ColumnMode yColumnMode = yColumn()->columnMode();
+	auto yColumnMode = yColumn()->columnMode();
 	int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
@@ -2176,7 +2176,7 @@ QDateTime XYCurve::yDateTime(double x, bool &valueFound) const {
 		valueFound = false;
 		return QDateTime();
 	}
-   AbstractColumn::ColumnMode yColumnMode = yColumn()->columnMode();
+   auto yColumnMode = yColumn()->columnMode();
    int index = xColumn()->indexForValue(x);
    if (index < 0) {
 	   valueFound = false;

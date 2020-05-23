@@ -254,12 +254,24 @@ QString modeValue(Column* column, double value) {
 	if (std::isnan(value))
 		return QLatin1String("-");
 
-	if (column->columnMode() == AbstractColumn::Integer)
+	switch (column->columnMode()) {
+	case AbstractColumn::ColumnMode::Integer:
 		return QString::number((int)value);
-	else if (column->columnMode() == AbstractColumn::BigInt)
+	case AbstractColumn::ColumnMode::BigInt:
 		return QString::number((qint64)value);
-	else
+	case AbstractColumn::ColumnMode::Text:
+		//TODO
+	case AbstractColumn::ColumnMode::DateTime:
+		//TODO
+	case AbstractColumn::ColumnMode::Day:
+		//TODO
+	case AbstractColumn::ColumnMode::Month:
+		//TODO
+	case AbstractColumn::ColumnMode::Numeric:
 		return QString::number(value, 'f');
+	}
+
+	return QString();
 }
 
 void StatisticsDialog::currentTabChanged(int index) {
