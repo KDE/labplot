@@ -99,7 +99,7 @@ void Matrix::init() {
 	QByteArray formatba = group.readEntry("NumericFormat", "f").toLatin1();
 	d->numericFormat = *formatba.data();
 	d->precision = group.readEntry("Precision", 3);
-	d->headerFormat = (Matrix::HeaderFormat)group.readEntry("HeaderFormat", (int)Matrix::HeaderRowsColumns);
+	d->headerFormat = (Matrix::HeaderFormat)group.readEntry("HeaderFormat", static_cast<int>(HeaderFormat::HeaderRowsColumns));
 }
 
 /*!
@@ -1041,7 +1041,7 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 	//format
 	writer->writeStartElement("format");
 	writer->writeAttribute("mode", QString::number(static_cast<int>(d->mode)));
-	writer->writeAttribute("headerFormat", QString::number(d->headerFormat));
+	writer->writeAttribute("headerFormat", QString::number(static_cast<int>(d->headerFormat)));
 	writer->writeAttribute("numericFormat", QString(QChar(d->numericFormat)));
 	writer->writeAttribute("precision", QString::number(d->precision));
 	writer->writeEndElement();

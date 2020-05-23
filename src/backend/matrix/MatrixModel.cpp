@@ -120,15 +120,15 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 
 QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int role) const {
 	QString result;
-	Matrix::HeaderFormat headerFormat = m_matrix->headerFormat();
+	auto headerFormat = m_matrix->headerFormat();
 	switch (orientation) {
 		case Qt::Horizontal:
 			switch (role) {
 				case Qt::DisplayRole:
 				case Qt::ToolTipRole:
-					if (headerFormat == Matrix::HeaderRowsColumns) {
+					if (headerFormat == Matrix::HeaderFormat::HeaderRowsColumns) {
 						result = QString::number(section+1);
-					} else if (headerFormat == Matrix::HeaderValues) {
+					} else if (headerFormat == Matrix::HeaderFormat::HeaderValues) {
 						double diff = m_matrix->xEnd() - m_matrix->xStart();
 						double step = 0.0;
 						if (m_matrix->columnCount() > 1)
@@ -153,9 +153,9 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 			switch (role) {
 				case Qt::DisplayRole:
 				case Qt::ToolTipRole:
-					if (headerFormat == Matrix::HeaderRowsColumns) {
+					if (headerFormat == Matrix::HeaderFormat::HeaderRowsColumns) {
 						result = QString::number(section+1);
-					} else if (headerFormat == Matrix::HeaderValues) {
+					} else if (headerFormat == Matrix::HeaderFormat::HeaderValues) {
 						double diff = m_matrix->yEnd() - m_matrix->yStart();
 						double step = 0.0;
 						if (m_matrix->rowCount() > 1)

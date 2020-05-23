@@ -416,9 +416,9 @@ void MatrixView::resizeHeaders() {
 	m_tableView->resizeColumnsToContents();
 	m_tableView->resizeRowsToContents();
 
-	if (m_matrix->headerFormat() == Matrix::HeaderRowsColumns)
+	if (m_matrix->headerFormat() == Matrix::HeaderFormat::HeaderRowsColumns)
 		action_header_format_1->setChecked(true);
-	else if (m_matrix->headerFormat() == Matrix::HeaderValues)
+	else if (m_matrix->headerFormat() == Matrix::HeaderFormat::HeaderValues)
 		action_header_format_2->setChecked(true);
 	else
 		action_header_format_3->setChecked(true);
@@ -852,11 +852,11 @@ void MatrixView::matrixDataChanged() {
 
 void MatrixView::headerFormatChanged(QAction* action) {
 	if (action == action_header_format_1)
-		m_matrix->setHeaderFormat(Matrix::HeaderRowsColumns);
+		m_matrix->setHeaderFormat(Matrix::HeaderFormat::HeaderRowsColumns);
 	else if (action == action_header_format_2)
-		m_matrix->setHeaderFormat(Matrix::HeaderValues);
+		m_matrix->setHeaderFormat(Matrix::HeaderFormat::HeaderValues);
 	else
-		m_matrix->setHeaderFormat(Matrix::HeaderRowsColumnsValues);
+		m_matrix->setHeaderFormat(Matrix::HeaderFormat::HeaderRowsColumnsValues);
 }
 
 //############################# column related slots ###########################

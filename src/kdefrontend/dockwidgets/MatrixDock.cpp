@@ -307,7 +307,7 @@ void MatrixDock::load() {
 	//format
 	ui.cbFormat->setCurrentIndex(ui.cbFormat->findData((int)m_matrix->numericFormat()));
 	ui.sbPrecision->setValue(m_matrix->precision());
-	ui.cbHeader->setCurrentIndex(m_matrix->headerFormat());
+	ui.cbHeader->setCurrentIndex(static_cast<int>(m_matrix->headerFormat()));
 }
 
 void MatrixDock::loadConfigFromTemplate(KConfig& config) {

@@ -43,7 +43,7 @@ class Matrix : public AbstractDataSource {
 	Q_ENUMS(HeaderFormat)
 
 public:
-	enum HeaderFormat {HeaderRowsColumns, HeaderValues, HeaderRowsColumnsValues};
+	enum class HeaderFormat {HeaderRowsColumns, HeaderValues, HeaderRowsColumnsValues};
 
 	explicit Matrix(const QString& name, bool loading = false,
 		   const AbstractColumn::ColumnMode = AbstractColumn::ColumnMode::Numeric);
