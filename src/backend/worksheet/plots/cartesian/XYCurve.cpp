@@ -1812,12 +1812,7 @@ void XYCurvePrivate::updateValues() {
 			return;
 		}
 
-		int endRow;
-		if (symbolPointsLogical.size()>valuesColumn->rowCount())
-			endRow =  valuesColumn->rowCount();
-		else
-			endRow = symbolPointsLogical.size();
-
+		const int endRow = qMin(symbolPointsLogical.size(), valuesColumn->rowCount());
 		auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!visiblePoints[i]) continue;
@@ -1827,6 +1822,8 @@ void XYCurvePrivate::updateValues() {
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Numeric:
+				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i), valuesNumericFormat, valuesPrecision) + valuesSuffix;
+				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
 				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;

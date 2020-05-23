@@ -1163,18 +1163,21 @@ void HistogramPrivate::updateValues() {
 				continue;
 
 			switch (xColMode) {
-				case AbstractColumn::ColumnMode::Numeric:
-					valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
-					break;
-				case AbstractColumn::ColumnMode::Text:
-					valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
-				case AbstractColumn::ColumnMode::Integer:
-				case AbstractColumn::ColumnMode::BigInt:
-				case AbstractColumn::ColumnMode::DateTime:
-				case AbstractColumn::ColumnMode::Month:
-				case AbstractColumn::ColumnMode::Day:
-					//TODO
-					break;
+			case AbstractColumn::ColumnMode::Numeric:
+				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i), valuesNumericFormat, valuesPrecision) + valuesSuffix;
+				break;
+			case AbstractColumn::ColumnMode::Integer:
+			case AbstractColumn::ColumnMode::BigInt:
+				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
+				break;
+			case AbstractColumn::ColumnMode::Text:
+				valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
+				break;
+			case AbstractColumn::ColumnMode::DateTime:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+				valuesStrings << valuesPrefix + valuesColumn->dateTimeAt(i).toString(valuesDateTimeFormat) + valuesSuffix;
+				break;
 			}
 		}
 	}
