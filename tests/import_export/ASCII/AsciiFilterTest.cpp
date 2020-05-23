@@ -103,9 +103,9 @@ void AsciiFilterTest::testEmptyLines01() {
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
 	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("values"));
 
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
 
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
 	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
@@ -136,9 +136,9 @@ void AsciiFilterTest::testSparseFile01() {
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Col1"));
 	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Col2"));
 
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
 
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
 	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
@@ -173,9 +173,9 @@ void AsciiFilterTest::testSparseFile02() {
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Col1"));
 	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Col2"));
 
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
 	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
@@ -210,9 +210,9 @@ void AsciiFilterTest::testSparseFile03() {
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Col1"));
 	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Col2"));
 
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
 	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
@@ -360,9 +360,9 @@ void AsciiFilterTest::testHeader07() {
 	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("#1ch1"));
 
 	//data types
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//values
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 0);
@@ -406,8 +406,8 @@ void AsciiFilterTest::testHeader08() {
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("second column"));
 
 	//data types
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
 
 	//values
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
@@ -434,9 +434,9 @@ void AsciiFilterTest::testColumnRange00() {
 	QCOMPARE(spreadsheet.rowCount(), 5);
 	QCOMPARE(spreadsheet.columnCount(), 3);
 
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//check the values for the first line
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1.716299);
@@ -459,10 +459,10 @@ void AsciiFilterTest::testColumnRange01() {
 	QCOMPARE(spreadsheet.rowCount(), 5);
 	QCOMPARE(spreadsheet.columnCount(), 4);
 
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//check the values for the first line
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
@@ -487,8 +487,8 @@ void AsciiFilterTest::testColumnRange02() {
 	QCOMPARE(spreadsheet.rowCount(), 5);
 	QCOMPARE(spreadsheet.columnCount(), 2);
 
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//check the values for the first line
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), -0.485527);
@@ -512,9 +512,9 @@ void AsciiFilterTest::testColumnRange03() {
 	QCOMPARE(spreadsheet.rowCount(), 5);
 	QCOMPARE(spreadsheet.columnCount(), 3);
 
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//check the values for the first line
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
@@ -538,7 +538,7 @@ void AsciiFilterTest::testColumnRange04() {
 	QCOMPARE(spreadsheet.rowCount(), 5);
 	QCOMPARE(spreadsheet.columnCount(), 1);
 
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//check the values for the first line
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), -0.288690);
@@ -579,7 +579,7 @@ void AsciiFilterTest::testColumnRange06() {
 	QCOMPARE(spreadsheet.rowCount(), 5);
 	QCOMPARE(spreadsheet.columnCount(), 1);
 
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
 }
 
@@ -599,9 +599,9 @@ void AsciiFilterTest::testRowRange00() {
 	QCOMPARE(spreadsheet.rowCount(), 3);
 	QCOMPARE(spreadsheet.columnCount(), 3);
 
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//check the values for the first and for the last lines
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1.711721);
@@ -629,9 +629,9 @@ void AsciiFilterTest::testRowRange01() {
 	QCOMPARE(spreadsheet.rowCount(), 3);
 	QCOMPARE(spreadsheet.columnCount(), 3);
 
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//check the values for the first and for the last lines
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1.711721);
@@ -681,8 +681,8 @@ void AsciiFilterTest::testRowColumnRange00() {
 	QCOMPARE(spreadsheet.rowCount(), 3);
 	QCOMPARE(spreadsheet.columnCount(), 2);
 
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//check the values for the first and for the last lines
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), -0.485527);
@@ -715,10 +715,10 @@ void AsciiFilterTest::testQuotedStrings00() {
 	QCOMPARE(spreadsheet.rowCount(), 3);
 	QCOMPARE(spreadsheet.columnCount(), 4);
 
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Text);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	QCOMPARE(spreadsheet.column(0)->textAt(0), QLatin1String("a"));
 	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1000);
@@ -759,10 +759,10 @@ void AsciiFilterTest::testQuotedStrings01() {
 	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("col4"));
 
 	//data types
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Text);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//values
 	QCOMPARE(spreadsheet.column(0)->textAt(0), QLatin1String("a"));
@@ -798,10 +798,10 @@ void AsciiFilterTest::testQuotedStrings02() {
 // 	QCOMPARE(spreadsheet.rowCount(), 1);
 // 	QCOMPARE(spreadsheet.columnCount(), 4);
 
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Text);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	QCOMPARE(spreadsheet.column(0)->textAt(0), QLatin1String("a"));
 	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1000);
@@ -832,10 +832,10 @@ void AsciiFilterTest::testQuotedStrings03() {
 	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("col4"));
 
 	//data types
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Text);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//values
 	QCOMPARE(spreadsheet.column(0)->textAt(0), QLatin1String("a"));
@@ -860,8 +860,8 @@ void AsciiFilterTest::testComments00() {
 	QCOMPARE(spreadsheet.columnCount(), 2);
 
 	//data types
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//values
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
@@ -883,8 +883,8 @@ void AsciiFilterTest::testComments01() {
 	QCOMPARE(spreadsheet.columnCount(), 2);
 
 	//data types
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//values
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
@@ -917,8 +917,8 @@ void AsciiFilterTest::testComments02() {
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("c2"));
 
 	//data types
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
 
 	//values
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
@@ -960,8 +960,8 @@ void AsciiFilterTest::testDateTime00() {
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Water Pressure"));
 
 	//data types
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::DateTime);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//values
 	QDateTime value = QDateTime::fromString(QLatin1String("01/01/2019 00:00:00"), QLatin1String("dd/MM/yyyy hh:mm:ss"));

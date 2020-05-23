@@ -37,10 +37,10 @@ void DifferentiationTest::testLinear() {
 	QVector<double> yData = {1.,2.,3.,4.};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::Integer);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
 	yDataColumn.replaceValues(0, yData);
 
 	XYDifferentiationCurve differentiationCurve("differentiation");
@@ -80,10 +80,10 @@ void DifferentiationTest::testLinearNonEquidistant() {
 	QVector<double> yData = {1.,1.5,3.,5.};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
 	yDataColumn.replaceValues(0, yData);
 
 	XYDifferentiationCurve differentiationCurve("differentiation");
@@ -123,10 +123,10 @@ void DifferentiationTest::testQuadratic() {
 	QVector<double> yData = {1.,4.,9.,16.};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
 	yDataColumn.replaceValues(0, yData);
 
 	XYDifferentiationCurve differentiationCurve("differentiation");
@@ -166,10 +166,10 @@ void DifferentiationTest::testQuadraticNonEquidistant() {
 	QVector<double> yData = {1.,2.25,9.,25.};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
 	yDataColumn.replaceValues(0, yData);
 
 	XYDifferentiationCurve differentiationCurve("differentiation");
@@ -209,10 +209,10 @@ void DifferentiationTest::testQuadraticSecondOrder() {
 	QVector<double> yData = {1.,4.,9.,16.};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
 	yDataColumn.replaceValues(0, yData);
 
 	XYDifferentiationCurve differentiationCurve("differentiation");
@@ -253,10 +253,10 @@ void DifferentiationTest::testCubicSecondOrder() {
 	QVector<double> yData = {1.,8.,27.,64.};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
 	yDataColumn.replaceValues(0, yData);
 
 	XYDifferentiationCurve differentiationCurve("differentiation");
@@ -297,10 +297,10 @@ void DifferentiationTest::testCubicThirdOrder() {
 	QVector<double> yData = {1.,8.,27.,64.,125.};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
 	yDataColumn.replaceValues(0, yData);
 
 	XYDifferentiationCurve differentiationCurve("differentiation");

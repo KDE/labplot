@@ -37,10 +37,10 @@ void IntegrationTest::testLinear() {
 	QVector<double> yData = {1.,2.,3.,4.};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::Integer);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
 	yDataColumn.replaceValues(0, yData);
 
 	XYIntegrationCurve integrationCurve("integration");

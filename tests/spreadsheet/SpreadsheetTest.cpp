@@ -66,8 +66,8 @@ void SpreadsheetTest::testCopyPasteColumnMode00() {
 	QCOMPARE(sheet.rowCount(), 100);
 
 	//column modes
-	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//values
 	QCOMPARE(sheet.column(0)->valueAt(0), 10.0);
@@ -97,8 +97,8 @@ void SpreadsheetTest::testCopyPasteColumnMode01() {
 	QCOMPARE(sheet.rowCount(), 100);
 
 	//column modes
-	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::BigInt);
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::BigInt);
 
 	//values
 	QCOMPARE(sheet.column(0)->integerAt(0), 10);
@@ -127,8 +127,8 @@ void SpreadsheetTest::testCopyPasteColumnMode02() {
 	QCOMPARE(sheet.rowCount(), 100);
 
 	//column modes
-	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//values
 	QCOMPARE(sheet.column(0)->integerAt(0), 10);
@@ -162,11 +162,11 @@ void SpreadsheetTest::testCopyPasteColumnMode03() {
 	QCOMPARE(sheet.rowCount(), 100);
 
 	//column modes
-	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(sheet.column(2)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(sheet.column(3)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(sheet.column(4)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(sheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Integer);
 
 	//values
 	QCOMPARE(sheet.column(0)->integerAt(0), 1000);
@@ -230,10 +230,10 @@ void SpreadsheetTest::testCopyPasteSizeChange00() {
 	QCOMPARE(sheet->rowCount(), 100);
 
 	//column modes
-	QCOMPARE(sheet->column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(sheet->column(1)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(sheet->column(2)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(sheet->column(3)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(sheet->column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(sheet->column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(sheet->column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(sheet->column(3)->columnMode(), AbstractColumn::ColumnMode::Integer);
 
 	//values
 	QCOMPARE(sheet->column(0)->integerAt(0), 0);
@@ -275,8 +275,8 @@ void SpreadsheetTest::testCopyPasteSizeChange00() {
 	QCOMPARE(sheet->rowCount(), 100);
 
 	//column modes
-	QCOMPARE(sheet->column(0)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(sheet->column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(sheet->column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet->column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//values
 	QCOMPARE((bool)std::isnan(sheet->column(0)->valueAt(0)), true);
@@ -320,9 +320,9 @@ void SpreadsheetTest::testCopyPasteSizeChange01() {
 	QCOMPARE(sheet.rowCount(), 100);
 
 	//column modes
-	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(sheet.column(2)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	//values
 	QCOMPARE((bool)std::isnan(sheet.column(0)->valueAt(0)), true);
