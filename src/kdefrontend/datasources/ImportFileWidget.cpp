@@ -161,7 +161,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.gbUpdateOptions->hide();
 	setMQTTVisible(false);
 
-	ui.cbReadingType->addItem(i18n("Whole file"), LiveDataSource::WholeFile);
+	ui.cbReadingType->addItem(i18n("Whole file"), static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 
 	ui.bOpen->setIcon( QIcon::fromTheme(QLatin1String("document-open")) );
 	ui.bFileInfo->setIcon( QIcon::fromTheme(QLatin1String("help-about")) );
@@ -290,9 +290,9 @@ void ImportFileWidget::loadSettings() {
 
 	//live data related settings
 	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate", 13)); // index for bautrate 19200b/s
-	ui.cbReadingType->setCurrentIndex(conf.readEntry("ReadingType", (int)LiveDataSource::WholeFile));
+	ui.cbReadingType->setCurrentIndex(conf.readEntry("ReadingType", static_cast<int>(LiveDataSource::ReadingType::WholeFile)));
 	ui.cbSerialPort->setCurrentIndex(conf.readEntry("SerialPort").toInt());
-	ui.cbUpdateType->setCurrentIndex(conf.readEntry("UpdateType", (int)LiveDataSource::NewData));
+	ui.cbUpdateType->setCurrentIndex(conf.readEntry("UpdateType", static_cast<int>(LiveDataSource::UpdateType::NewData)));
 	updateTypeChanged(ui.cbUpdateType->currentIndex());
 	ui.leHost->setText(conf.readEntry("Host",""));
 	ui.sbKeepNValues->setValue(conf.readEntry("KeepNValues", 0)); // keep all values
@@ -328,14 +328,14 @@ void ImportFileWidget::loadSettings() {
 
 	//update the status of the widgets
 	fileTypeChanged(fileType);
-	sourceTypeChanged(currentSourceType());
+	sourceTypeChanged(static_cast<int>(currentSourceType()));
 	readingTypeChanged(ui.cbReadingType->currentIndex());
 
 	//all set now, refresh the content of the file and the preview for the selected dataset
 	m_suppressRefresh = false;
 	QTimer::singleShot(100, this, [=] () {
 		WAIT_CURSOR;
-		if (currentSourceType() == LiveDataSource::FileOrPipe) {
+		if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
 			QString tempFileName = fileName();
 			const QString& fileName = absolutePath(tempFileName);
 			if (QFile::exists(fileName))
@@ -966,7 +966,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		return;
 	}
 
-	if (currentSourceType() == LiveDataSource::FileOrPipe) {
+	if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
 		const AbstractFileFilter::FileType fileType = AbstractFileFilter::fileType(fileName);
 		for (int i = 0; i < ui.cbFileType->count(); ++i) {
 			if (static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt()) == fileType) {
@@ -1109,7 +1109,7 @@ void ImportFileWidget::fileTypeChanged(int index) {
 	ui.cbFilter->setCurrentIndex(lastUsedFilterIndex);
 	filterChanged(lastUsedFilterIndex);
 
-	if (currentSourceType() == LiveDataSource::FileOrPipe) {
+	if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
 		QString tempFileName = fileName();
 		const QString& fileName = absolutePath(tempFileName);
 		if (QFile::exists(fileName))
@@ -1119,7 +1119,7 @@ void ImportFileWidget::fileTypeChanged(int index) {
 	//for file types other than ASCII and binary we support re-reading the whole file only
 	//select "read whole file" and deactivate the combobox
 	if (m_liveDataSource && (fileType != AbstractFileFilter::Ascii && fileType != AbstractFileFilter::Binary)) {
-		ui.cbReadingType->setCurrentIndex(LiveDataSource::ReadingType::WholeFile);
+		ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 		ui.cbReadingType->setEnabled(false);
 	} else
 		ui.cbReadingType->setEnabled(true);
@@ -1141,7 +1141,7 @@ void ImportFileWidget::initOptionsWidget() {
 
 		//for MQTT topics we don't allow to set the vector names since the different topics
 		//can have different number of columns
-		bool isMQTT = (currentSourceType() == LiveDataSource::MQTT);
+		bool isMQTT = (currentSourceType() == LiveDataSource::SourceType::MQTT);
 		m_asciiOptionsWidget->showAsciiHeaderOptions(!isMQTT);
 		m_asciiOptionsWidget->showTimestampOptions(isMQTT);
 
@@ -1629,7 +1629,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 	// enable/disable "on new data"-option
 	const auto* model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
-	QStandardItem* item = model->item(LiveDataSource::UpdateType::NewData);
+	QStandardItem* item = model->item(static_cast<int>(LiveDataSource::UpdateType::NewData));
 
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
@@ -1816,7 +1816,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 	//deactivate/activate options that are specific to file of pipe sources only
 	auto* typeModel = qobject_cast<const QStandardItemModel*>(ui.cbFileType->model());
-	if (sourceType != LiveDataSource::FileOrPipe) {
+	if (sourceType != LiveDataSource::SourceType::FileOrPipe) {
 		//deactivate file types other than ascii and binary
 		for (int i = 2; i < ui.cbFileType->count(); ++i)
 			typeModel->item(i)->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
@@ -1825,10 +1825,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 		//"whole file" read option is available for file or pipe only, disable it
 		typeModel = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-		QStandardItem* item = typeModel->item(LiveDataSource::WholeFile);
+		QStandardItem* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
-		if (static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex()) == LiveDataSource::WholeFile)
-			ui.cbReadingType->setCurrentIndex(LiveDataSource::TillEnd);
+		if (static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex()) == LiveDataSource::ReadingType::WholeFile)
+			ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::TillEnd));
 
 		//"update options" groupbox can be deactivated for "file and pipe" if the file is invalid.
 		//Activate the groupbox when switching from "file and pipe" to a different source type.
@@ -1839,7 +1839,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 		//enable "whole file" item for file or pipe
 		typeModel = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-		QStandardItem* item = typeModel->item(LiveDataSource::ReadingType::WholeFile);
+		QStandardItem* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 	}
 

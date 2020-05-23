@@ -38,9 +38,9 @@ class ErrorBarItem : public QObject, public QGraphicsRectItem {
 	Q_OBJECT
 
 public:
-	enum ErrorBarType {PlusDeltaX, MinusDeltaX, PlusDeltaY, MinusDeltaY};
+	enum class ErrorBarType {PlusDeltaX, MinusDeltaX, PlusDeltaY, MinusDeltaY};
 
-	explicit ErrorBarItem(DatapickerPoint* parent = nullptr, ErrorBarType type = PlusDeltaX);
+	explicit ErrorBarItem(DatapickerPoint* parent = nullptr, ErrorBarType type = ErrorBarType::PlusDeltaX);
 	void setRectSize(const qreal);
 
 public slots:

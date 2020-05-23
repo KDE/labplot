@@ -129,14 +129,14 @@ QStringList LiveDataSource::supportedBaudRates() {
  */
 void LiveDataSource::updateNow() {
 	DEBUG("LiveDataSource::updateNow() update interval = " << m_updateInterval);
-	if (m_updateType == TimeInterval)
+	if (m_updateType == UpdateType::TimeInterval)
 		m_updateTimer->stop();
 	else
 		m_pending = false;
 	read();
 
 	//restart the timer after update
-	if (m_updateType == TimeInterval && !m_paused)
+	if (m_updateType == UpdateType::TimeInterval && !m_paused)
 		m_updateTimer->start(m_updateInterval);
 }
 
@@ -156,7 +156,7 @@ void LiveDataSource::continueReading() {
  */
 void LiveDataSource::pauseReading() {
 	m_paused = true;
-	if (m_updateType == TimeInterval) {
+	if (m_updateType == UpdateType::TimeInterval) {
 		m_pending = true;
 		m_updateTimer->stop();
 	}
@@ -315,7 +315,7 @@ LiveDataSource::ReadingType LiveDataSource::readingType() const {
  */
 void LiveDataSource::setUpdateType(UpdateType updatetype) {
 	switch (updatetype) {
-	case NewData: {
+	case UpdateType::NewData: {
 		m_updateTimer->stop();
 		if (!m_fileSystemWatcher)
 			m_fileSystemWatcher = new QFileSystemWatcher(this);
@@ -335,7 +335,7 @@ void LiveDataSource::setUpdateType(UpdateType updatetype) {
 		connect(m_fileSystemWatcher, &QFileSystemWatcher::directoryChanged, this, [&](){ m_watchTimer->start(); });
 		break;
 	}
-	case TimeInterval:
+	case UpdateType::TimeInterval:
 		delete m_fileSystemWatcher;
 		m_fileSystemWatcher = nullptr;
 		break;
@@ -474,11 +474,11 @@ void LiveDataSource::read() {
 	if (!m_prepared) {
 		DEBUG("	Preparing device: update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
 		switch (m_sourceType) {
-		case FileOrPipe:
+		case SourceType::FileOrPipe:
 			delete m_device;
 			m_device = new QFile(m_fileName);
 			break;
-		case NetworkTcpSocket:
+		case SourceType::NetworkTcpSocket:
 			m_tcpSocket = new QTcpSocket(this);
 			m_device = m_tcpSocket;
 			m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
@@ -487,19 +487,19 @@ void LiveDataSource::read() {
 			connect(m_tcpSocket, static_cast<void (QTcpSocket::*) (QAbstractSocket::SocketError)>(&QTcpSocket::error), this, &LiveDataSource::tcpSocketError);
 
 			break;
-		case NetworkUdpSocket:
+		case SourceType::NetworkUdpSocket:
 			m_udpSocket = new QUdpSocket(this);
 			m_device = m_udpSocket;
 			m_udpSocket->bind(QHostAddress(m_host), m_port);
 			m_udpSocket->connectToHost(m_host, 0, QUdpSocket::ReadOnly);
 
 			// only connect to readyRead when update is on new data
-			if (m_updateType == NewData)
+			if (m_updateType == UpdateType::NewData)
 				connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
 			connect(m_udpSocket, static_cast<void (QUdpSocket::*) (QAbstractSocket::SocketError)>(&QUdpSocket::error), this, &LiveDataSource::tcpSocketError);
 
 			break;
-		case LocalSocket:
+		case SourceType::LocalSocket:
 			m_localSocket = new QLocalSocket(this);
 			m_device = m_localSocket;
 			m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
@@ -508,7 +508,7 @@ void LiveDataSource::read() {
 			connect(m_localSocket, static_cast<void (QLocalSocket::*) (QLocalSocket::LocalSocketError)>(&QLocalSocket::error), this, &LiveDataSource::localSocketError);
 
 			break;
-		case SerialPort:
+		case SourceType::SerialPort:
 			m_serialPort = new QSerialPort(this);
 			m_device = m_serialPort;
 			DEBUG("	Serial: " << STDSTRING(m_serialPortName) << ", " << m_baudRate);
@@ -517,11 +517,11 @@ void LiveDataSource::read() {
 			m_serialPort->open(QIODevice::ReadOnly);
 
 			// only connect to readyRead when update is on new data
-			if (m_updateType == NewData)
+			if (m_updateType == UpdateType::NewData)
 				connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
 			connect(m_serialPort, static_cast<void (QSerialPort::*) (QSerialPort::SerialPortError)>(&QSerialPort::error), this, &LiveDataSource::serialPortError);
 			break;
-		case MQTT:
+		case SourceType::MQTT:
 			break;
 		}
 		m_prepared = true;
@@ -530,7 +530,7 @@ void LiveDataSource::read() {
 	qint64 bytes = 0;
 
 	switch (m_sourceType) {
-	case FileOrPipe:
+	case SourceType::FileOrPipe:
 		DEBUG("Reading FileOrPipe. type = " << ENUM_TO_STRING(AbstractFileFilter, FileType, m_fileType));
 		switch (m_fileType) {
 		case AbstractFileFilter::Ascii:
@@ -561,20 +561,20 @@ void LiveDataSource::read() {
 			break;
 		}
 		break;
-	case NetworkTcpSocket:
+	case SourceType::NetworkTcpSocket:
 		DEBUG("reading from TCP socket. state before abort = " << m_tcpSocket->state());
 		m_tcpSocket->abort();
 		m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
 		DEBUG("reading from TCP socket. state after reconnect = " << m_tcpSocket->state());
 		break;
-	case NetworkUdpSocket:
+	case SourceType::NetworkUdpSocket:
 		DEBUG("	Reading from UDP socket. state = " << m_udpSocket->state());
 
 		// reading data here
 		if (m_fileType == AbstractFileFilter::Ascii)
 			static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 		break;
-	case LocalSocket:
+	case SourceType::LocalSocket:
 		DEBUG("	Reading from local socket. state before abort = " << m_localSocket->state());
 		if (m_localSocket->state() == QLocalSocket::ConnectingState)
 			m_localSocket->abort();
@@ -583,14 +583,14 @@ void LiveDataSource::read() {
 			m_localSocket->waitForReadyRead();
 		DEBUG("	Reading from local socket. state after reconnect = " << m_localSocket->state());
 		break;
-	case SerialPort:
+	case SourceType::SerialPort:
 		DEBUG("	Reading from serial port");
 
 		// reading data here
 		if (m_fileType == AbstractFileFilter::Ascii)
 			static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 		break;
-	case MQTT:
+	case SourceType::MQTT:
 		break;
 	}
 
@@ -615,7 +615,7 @@ void LiveDataSource::readyRead() {
 
 	//since we won't have the timer to call read() where we create new connections
 	//for sequential devices in read() we just request data/connect to servers
-	if (m_updateType == NewData)
+	if (m_updateType == UpdateType::NewData)
 		read();
 }
 
@@ -725,7 +725,7 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("general");
 
 	switch (m_sourceType) {
-	case FileOrPipe:
+	case SourceType::FileOrPipe:
 		writer->writeAttribute("fileType", QString::number(m_fileType));
 		writer->writeAttribute("fileLinked", QString::number(m_fileLinked));
 		writer->writeAttribute("relativePath", QString::number(m_relativePath));
@@ -738,32 +738,30 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 			writer->writeAttribute("fileName", m_fileName);
 
 		break;
-	case SerialPort:
+	case SourceType::SerialPort:
 		writer->writeAttribute("baudRate", QString::number(m_baudRate));
 		writer->writeAttribute("serialPortName", m_serialPortName);
 		break;
-	case NetworkTcpSocket:
-	case NetworkUdpSocket:
+	case SourceType::NetworkTcpSocket:
+	case SourceType::NetworkUdpSocket:
 		writer->writeAttribute("host", m_host);
 		writer->writeAttribute("port", QString::number(m_port));
 		break;
-	case LocalSocket:
+	case SourceType::LocalSocket:
 		break;
-	case MQTT:
-		break;
-	default:
+	case SourceType::MQTT:
 		break;
 	}
 
-	writer->writeAttribute("updateType", QString::number(m_updateType));
-	writer->writeAttribute("readingType", QString::number(m_readingType));
-	writer->writeAttribute("sourceType", QString::number(m_sourceType));
+	writer->writeAttribute("updateType", QString::number(static_cast<int>(m_updateType)));
+	writer->writeAttribute("readingType", QString::number(static_cast<int>(m_readingType)));
+	writer->writeAttribute("sourceType", QString::number(static_cast<int>(m_sourceType)));
 	writer->writeAttribute("keepNValues", QString::number(m_keepNValues));
 
-	if (m_updateType == TimeInterval)
+	if (m_updateType == UpdateType::TimeInterval)
 		writer->writeAttribute("updateInterval", QString::number(m_updateInterval));
 
-	if (m_readingType != TillEnd)
+	if (m_readingType != ReadingType::TillEnd)
 		writer->writeAttribute("sampleSize", QString::number(m_sampleSize));
 	writer->writeEndElement(); //general
 
@@ -847,7 +845,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			else
 				m_readingType =  static_cast<ReadingType>(str.toInt());
 
-			if (m_updateType == TimeInterval) {
+			if (m_updateType == UpdateType::TimeInterval) {
 				str = attribs.value("updateInterval").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.subs("updateInterval").toString());
@@ -855,7 +853,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 					m_updateInterval = str.toInt();
 			}
 
-			if (m_readingType != TillEnd) {
+			if (m_readingType != ReadingType::TillEnd) {
 				str = attribs.value("sampleSize").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.subs("sampleSize").toString());
@@ -864,7 +862,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			}
 
 			switch (m_sourceType) {
-			case SerialPort:
+			case SourceType::SerialPort:
 				str = attribs.value("baudRate").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.subs("baudRate").toString());
@@ -878,8 +876,8 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 					m_serialPortName = str;
 
 				break;
-			case NetworkTcpSocket:
-			case NetworkUdpSocket:
+			case SourceType::NetworkTcpSocket:
+			case SourceType::NetworkUdpSocket:
 				str = attribs.value("host").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.subs("host").toString());
@@ -892,13 +890,11 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 				else
 					m_host = str;
 				break;
-			case MQTT:
+			case SourceType::MQTT:
 				break;
-			case FileOrPipe:
+			case SourceType::FileOrPipe:
 				break;
-			case LocalSocket:
-				break;
-			default:
+			case SourceType::LocalSocket:
 				break;
 			}
 

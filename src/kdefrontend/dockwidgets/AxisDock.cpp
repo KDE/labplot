@@ -777,7 +777,7 @@ void AxisDock::lineWidthChanged(double  value) {
 	QPen pen;
 	for (auto* axis : m_axesList) {
 		pen = axis->linePen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Point));
+		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
 		axis->setLinePen(pen);
 	}
 }
@@ -821,7 +821,7 @@ void AxisDock::arrowSizeChanged(int value) {
 	if (m_initializing)
 		return;
 
-	float v = Worksheet::convertToSceneUnits(value, Worksheet::Point);
+	float v = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* axis : m_axesList)
 		axis->setArrowSize(v);
 }
@@ -1035,7 +1035,7 @@ void AxisDock::majorTicksWidthChanged(double value) {
 	QPen pen;
 	for (auto* axis : m_axesList) {
 		pen = axis->majorTicksPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		axis->setMajorTicksPen(pen);
 	}
 }
@@ -1045,7 +1045,7 @@ void AxisDock::majorTicksLengthChanged(double value) {
 		return;
 
 	for (auto* axis : m_axesList)
-		axis->setMajorTicksLength( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		axis->setMajorTicksLength( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 }
 
 void AxisDock::majorTicksOpacityChanged(int value) {
@@ -1265,7 +1265,7 @@ void AxisDock::minorTicksWidthChanged(double value) {
 	QPen pen;
 	for (auto* axis : m_axesList) {
 		pen = axis->minorTicksPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		axis->setMinorTicksPen(pen);
 	}
 }
@@ -1275,7 +1275,7 @@ void AxisDock::minorTicksLengthChanged(double value) {
 		return;
 
 	for (auto* axis : m_axesList)
-		axis->setMinorTicksLength( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		axis->setMinorTicksLength( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 }
 
 void AxisDock::minorTicksOpacityChanged(int value) {
@@ -1355,7 +1355,7 @@ void AxisDock::labelsOffsetChanged(double value) {
 		return;
 
 	for (auto* axis : m_axesList)
-		axis->setLabelsOffset( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		axis->setLabelsOffset( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 }
 
 void AxisDock::labelsRotationChanged(int value) {
@@ -1389,7 +1389,7 @@ void AxisDock::labelsFontChanged(const QFont& font) {
 		return;
 
 	QFont labelsFont = font;
-	labelsFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	labelsFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point) );
 	for (auto* axis : m_axesList)
 		axis->setLabelsFont( labelsFont );
 }
@@ -1458,7 +1458,7 @@ void AxisDock::majorGridWidthChanged(double  value) {
 	QPen pen;
 	for (auto* axis : m_axesList) {
 		pen = axis->majorGridPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Point));
+		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
 		axis->setMajorGridPen(pen);
 	}
 }
@@ -1518,7 +1518,7 @@ void AxisDock::minorGridWidthChanged(double  value) {
 	QPen pen;
 	for (auto* axis : m_axesList) {
 		pen = axis->minorGridPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Point));
+		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
 		axis->setMinorGridPen(pen);
 	}
 }
@@ -1635,7 +1635,7 @@ void AxisDock::axisLinePenChanged(const QPen& pen) {
 	ui.cbLineStyle->setCurrentIndex( pen.style() );
 	ui.kcbLineColor->setColor( pen.color() );
 	GuiTools::updatePenStyles(ui.cbLineStyle, pen.color() );
-	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Point) );
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 
@@ -1659,7 +1659,7 @@ void AxisDock::axisArrowPositionChanged(Axis::ArrowPosition position) {
 
 void AxisDock::axisArrowSizeChanged(qreal size) {
 	m_initializing = true;
-	ui.sbArrowSize->setValue( (int)Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
+	ui.sbArrowSize->setValue( (int)Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 
@@ -1698,12 +1698,12 @@ void AxisDock::axisMajorTicksPenChanged(const QPen& pen) {
 	m_initializing = true;
 	ui.cbMajorTicksLineStyle->setCurrentIndex(pen.style());
 	ui.kcbMajorTicksColor->setColor(pen.color());
-	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point) );
+	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 void AxisDock::axisMajorTicksLengthChanged(qreal length) {
 	m_initializing = true;
-	ui.sbMajorTicksLength->setValue( Worksheet::convertFromSceneUnits(length,Worksheet::Point) );
+	ui.sbMajorTicksLength->setValue( Worksheet::convertFromSceneUnits(length, Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 void AxisDock::axisMajorTicksOpacityChanged(qreal opacity) {
@@ -1747,12 +1747,12 @@ void AxisDock::axisMinorTicksPenChanged(const QPen& pen) {
 	m_initializing = true;
 	ui.cbMinorTicksLineStyle->setCurrentIndex(pen.style());
 	ui.kcbMinorTicksColor->setColor(pen.color());
-	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point) );
+	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 void AxisDock::axisMinorTicksLengthChanged(qreal length) {
 	m_initializing = true;
-	ui.sbMinorTicksLength->setValue( Worksheet::convertFromSceneUnits(length,Worksheet::Point) );
+	ui.sbMinorTicksLength->setValue( Worksheet::convertFromSceneUnits(length, Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 void AxisDock::axisMinorTicksOpacityChanged(qreal opacity) {
@@ -1789,7 +1789,7 @@ void AxisDock::axisLabelsPositionChanged(Axis::LabelsPosition position) {
 }
 void AxisDock::axisLabelsOffsetChanged(double offset) {
 	m_initializing = true;
-	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(offset, Worksheet::Point) );
+	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(offset, Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 void AxisDock::axisLabelsRotationAngleChanged(qreal rotation) {
@@ -1801,7 +1801,7 @@ void AxisDock::axisLabelsFontChanged(const QFont& font) {
 	m_initializing = true;
 	//we need to set the font size in points for KFontRequester
 	QFont newFont(font);
-	newFont.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
+	newFont.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)) );
 	ui.kfrLabelsFont->setFont(newFont);
 	m_initializing = false;
 }
@@ -1832,7 +1832,7 @@ void AxisDock::axisMajorGridPenChanged(const QPen& pen) {
 	ui.cbMajorGridStyle->setCurrentIndex((int) pen.style());
 	ui.kcbMajorGridColor->setColor(pen.color());
 	GuiTools::updatePenStyles(ui.cbMajorGridStyle, pen.color());
-	ui.sbMajorGridWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
+	ui.sbMajorGridWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	m_initializing = false;
 }
 void AxisDock::axisMajorGridOpacityChanged(qreal opacity) {
@@ -1845,7 +1845,7 @@ void AxisDock::axisMinorGridPenChanged(const QPen& pen) {
 	ui.cbMinorGridStyle->setCurrentIndex((int) pen.style());
 	ui.kcbMinorGridColor->setColor(pen.color());
 	GuiTools::updatePenStyles(ui.cbMinorGridStyle, pen.color());
-	ui.sbMinorGridWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
+	ui.sbMinorGridWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	m_initializing = false;
 }
 void AxisDock::axisMinorGridOpacityChanged(qreal opacity) {
@@ -1928,11 +1928,11 @@ void AxisDock::load() {
 	//Line
 	ui.cbLineStyle->setCurrentIndex( (int) m_axis->linePen().style() );
 	ui.kcbLineColor->setColor( m_axis->linePen().color() );
-	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->linePen().widthF(),Worksheet::Point) );
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->linePen().widthF(), Worksheet::Unit::Point) );
 	ui.sbLineOpacity->setValue( round(m_axis->lineOpacity()*100.0) );
 	ui.cbArrowType->setCurrentIndex( (int)m_axis->arrowType() );
 	ui.cbArrowPosition->setCurrentIndex( (int)m_axis->arrowPosition() );
-	ui.sbArrowSize->setValue( (int)Worksheet::convertFromSceneUnits(m_axis->arrowSize(), Worksheet::Point) );
+	ui.sbArrowSize->setValue( (int)Worksheet::convertFromSceneUnits(m_axis->arrowSize(), Worksheet::Unit::Point) );
 
 	//Major ticks
 	ui.cbMajorTicksDirection->setCurrentIndex( (int) m_axis->majorTicksDirection() );
@@ -1940,8 +1940,8 @@ void AxisDock::load() {
 	ui.sbMajorTicksNumber->setValue( m_axis->majorTicksNumber() );
 	ui.cbMajorTicksLineStyle->setCurrentIndex( (int) m_axis->majorTicksPen().style() );
 	ui.kcbMajorTicksColor->setColor( m_axis->majorTicksPen().color() );
-	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits( m_axis->majorTicksPen().widthF(),Worksheet::Point) );
-	ui.sbMajorTicksLength->setValue( Worksheet::convertFromSceneUnits( m_axis->majorTicksLength(),Worksheet::Point) );
+	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits( m_axis->majorTicksPen().widthF(), Worksheet::Unit::Point) );
+	ui.sbMajorTicksLength->setValue( Worksheet::convertFromSceneUnits( m_axis->majorTicksLength(), Worksheet::Unit::Point) );
 	ui.sbMajorTicksOpacity->setValue( round(m_axis->majorTicksOpacity()*100.0) );
 
 	//Minor ticks
@@ -1950,8 +1950,8 @@ void AxisDock::load() {
 	ui.sbMinorTicksNumber->setValue( m_axis->minorTicksNumber() );
 	ui.cbMinorTicksLineStyle->setCurrentIndex( (int) m_axis->minorTicksPen().style() );
 	ui.kcbMinorTicksColor->setColor( m_axis->minorTicksPen().color() );
-	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->minorTicksPen().widthF(),Worksheet::Point) );
-	ui.sbMinorTicksLength->setValue( Worksheet::convertFromSceneUnits(m_axis->minorTicksLength(),Worksheet::Point) );
+	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->minorTicksPen().widthF(), Worksheet::Unit::Point) );
+	ui.sbMinorTicksLength->setValue( Worksheet::convertFromSceneUnits(m_axis->minorTicksLength(), Worksheet::Unit::Point) );
 	ui.sbMinorTicksOpacity->setValue( round(m_axis->minorTicksOpacity()*100.0) );
 
 	//Extra ticks
@@ -1959,7 +1959,7 @@ void AxisDock::load() {
 
 	// Tick label
 	ui.cbLabelsPosition->setCurrentIndex( (int) m_axis->labelsPosition() );
-	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(m_axis->labelsOffset(),Worksheet::Point) );
+	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(m_axis->labelsOffset(), Worksheet::Unit::Point) );
 	ui.sbLabelsRotation->setValue( m_axis->labelsRotationAngle() );
 	ui.cbLabelsFormat->setCurrentIndex( (int) m_axis->labelsFormat() );
 	ui.chkLabelsAutoPrecision->setChecked( (int) m_axis->labelsAutoPrecision() );
@@ -1967,7 +1967,7 @@ void AxisDock::load() {
 	ui.cbLabelsDateTimeFormat->setCurrentText(m_axis->labelsDateTimeFormat());
 	//we need to set the font size in points for KFontRequester
 	QFont font = m_axis->labelsFont();
-	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
+	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)) );
 	ui.kfrLabelsFont->setFont( font );
 	ui.kcbLabelsFontColor->setColor( m_axis->labelsColor() );
 	ui.leLabelsPrefix->setText( m_axis->labelsPrefix() );
@@ -1977,12 +1977,12 @@ void AxisDock::load() {
 	//Grid
 	ui.cbMajorGridStyle->setCurrentIndex( (int) m_axis->majorGridPen().style() );
 	ui.kcbMajorGridColor->setColor( m_axis->majorGridPen().color() );
-	ui.sbMajorGridWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->majorGridPen().widthF(),Worksheet::Point) );
+	ui.sbMajorGridWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->majorGridPen().widthF(), Worksheet::Unit::Point) );
 	ui.sbMajorGridOpacity->setValue( round(m_axis->majorGridOpacity()*100.0) );
 
 	ui.cbMinorGridStyle->setCurrentIndex( (int) m_axis->minorGridPen().style() );
 	ui.kcbMinorGridColor->setColor( m_axis->minorGridPen().color() );
-	ui.sbMinorGridWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->minorGridPen().widthF(),Worksheet::Point) );
+	ui.sbMinorGridWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->minorGridPen().widthF(), Worksheet::Unit::Point) );
 	ui.sbMinorGridOpacity->setValue( round(m_axis->minorGridOpacity()*100.0) );
 
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
@@ -2048,11 +2048,11 @@ void AxisDock::loadConfig(KConfig& config) {
 	//Line
 	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", (int) m_axis->linePen().style()) );
 	ui.kcbLineColor->setColor( group.readEntry("LineColor", m_axis->linePen().color()) );
-	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", m_axis->linePen().widthF()),Worksheet::Point) );
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", m_axis->linePen().widthF()), Worksheet::Unit::Point) );
 	ui.sbLineOpacity->setValue( round(group.readEntry("LineOpacity", m_axis->lineOpacity())*100.0) );
 	ui.cbArrowType->setCurrentIndex( group.readEntry("ArrowType", (int) m_axis->arrowType()) );
 	ui.cbArrowPosition->setCurrentIndex( group.readEntry("ArrowPosition", (int) m_axis->arrowPosition()) );
-	ui.sbArrowSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ArrowSize", m_axis->arrowSize()), Worksheet::Point) );
+	ui.sbArrowSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ArrowSize", m_axis->arrowSize()), Worksheet::Unit::Point) );
 
 	//Major ticks
 	ui.cbMajorTicksDirection->setCurrentIndex( group.readEntry("MajorTicksDirection", (int) m_axis->majorTicksDirection()) );
@@ -2064,8 +2064,8 @@ void AxisDock::loadConfig(KConfig& config) {
 		dtsbMajorTicksIncrement->setValue(group.readEntry("MajorTicksIncrement", m_axis->majorTicksSpacing()));
 	ui.cbMajorTicksLineStyle->setCurrentIndex( group.readEntry("MajorTicksLineStyle", (int) m_axis->majorTicksPen().style()) );
 	ui.kcbMajorTicksColor->setColor( group.readEntry("MajorTicksColor", m_axis->majorTicksPen().color()) );
-	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorTicksWidth", m_axis->majorTicksPen().widthF()),Worksheet::Point) );
-	ui.sbMajorTicksLength->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorTicksLength", m_axis->majorTicksLength()),Worksheet::Point) );
+	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorTicksWidth", m_axis->majorTicksPen().widthF()), Worksheet::Unit::Point) );
+	ui.sbMajorTicksLength->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorTicksLength", m_axis->majorTicksLength()), Worksheet::Unit::Point) );
 	ui.sbMajorTicksOpacity->setValue( round(group.readEntry("MajorTicksOpacity", m_axis->majorTicksOpacity())*100.0) );
 
 	//Minor ticks
@@ -2078,8 +2078,8 @@ void AxisDock::loadConfig(KConfig& config) {
 		dtsbMinorTicksIncrement->setValue(group.readEntry("MinorTicksIncrement", m_axis->minorTicksSpacing()));
 	ui.cbMinorTicksLineStyle->setCurrentIndex( group.readEntry("MinorTicksLineStyle", (int) m_axis->minorTicksPen().style()) );
 	ui.kcbMinorTicksColor->setColor( group.readEntry("MinorTicksColor", m_axis->minorTicksPen().color()) );
-	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksWidth", m_axis->minorTicksPen().widthF()),Worksheet::Point) );
-	ui.sbMinorTicksLength->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksLength", m_axis->minorTicksLength()),Worksheet::Point) );
+	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksWidth", m_axis->minorTicksPen().widthF()), Worksheet::Unit::Point) );
+	ui.sbMinorTicksLength->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksLength", m_axis->minorTicksLength()), Worksheet::Unit::Point) );
 	ui.sbMinorTicksOpacity->setValue( round(group.readEntry("MinorTicksOpacity", m_axis->minorTicksOpacity())*100.0) );
 
 	//Extra ticks
@@ -2091,11 +2091,11 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.sbLabelsPrecision->setValue( group.readEntry("LabelsPrecision", (int)m_axis->labelsPrecision()) );
 	ui.cbLabelsDateTimeFormat->setCurrentText( group.readEntry("LabelsDateTimeFormat", "yyyy-MM-dd hh:mm:ss") );
 	ui.cbLabelsPosition->setCurrentIndex( group.readEntry("LabelsPosition", (int) m_axis->labelsPosition()) );
-	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LabelsOffset", m_axis->labelsOffset()), Worksheet::Point) );
+	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LabelsOffset", m_axis->labelsOffset()), Worksheet::Unit::Point) );
 	ui.sbLabelsRotation->setValue( group.readEntry("LabelsRotation", m_axis->labelsRotationAngle()) );
 	//we need to set the font size in points for KFontRequester
 	QFont font = m_axis->labelsFont();
-	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
+	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)) );
 	ui.kfrLabelsFont->setFont( group.readEntry("LabelsFont", font) );
 	ui.kcbLabelsFontColor->setColor( group.readEntry("LabelsFontColor", m_axis->labelsColor()) );
 	ui.leLabelsPrefix->setText( group.readEntry("LabelsPrefix", m_axis->labelsPrefix()) );
@@ -2105,12 +2105,12 @@ void AxisDock::loadConfig(KConfig& config) {
 	//Grid
 	ui.cbMajorGridStyle->setCurrentIndex( group.readEntry("MajorGridStyle", (int) m_axis->majorGridPen().style()) );
 	ui.kcbMajorGridColor->setColor( group.readEntry("MajorGridColor", m_axis->majorGridPen().color()) );
-	ui.sbMajorGridWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorGridWidth", m_axis->majorGridPen().widthF()),Worksheet::Point) );
+	ui.sbMajorGridWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorGridWidth", m_axis->majorGridPen().widthF()), Worksheet::Unit::Point) );
 	ui.sbMajorGridOpacity->setValue( round(group.readEntry("MajorGridOpacity", m_axis->majorGridOpacity())*100.0) );
 
 	ui.cbMinorGridStyle->setCurrentIndex( group.readEntry("MinorGridStyle", (int) m_axis->minorGridPen().style()) );
 	ui.kcbMinorGridColor->setColor( group.readEntry("MinorGridColor", m_axis->minorGridPen().color()) );
-	ui.sbMinorGridWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorGridWidth", m_axis->minorGridPen().widthF()),Worksheet::Point) );
+	ui.sbMinorGridWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorGridWidth", m_axis->minorGridPen().widthF()), Worksheet::Unit::Point) );
 	ui.sbMinorGridOpacity->setValue( round(group.readEntry("MinorGridOpacity", m_axis->minorGridOpacity())*100.0) );
 
 	m_initializing = true;
@@ -2163,7 +2163,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	//Line
 	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());
 	group.writeEntry("LineColor", ui.kcbLineColor->color());
-	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(), Worksheet::Point));
+	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(), Worksheet::Unit::Point));
 	group.writeEntry("LineOpacity", ui.sbLineOpacity->value()/100.);
 
 	//Major ticks
@@ -2176,8 +2176,8 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 		group.writeEntry("MajorTicksIncrement", QString::number(dtsbMajorTicksIncrement->value()));
 	group.writeEntry("MajorTicksLineStyle", ui.cbMajorTicksLineStyle->currentIndex());
 	group.writeEntry("MajorTicksColor", ui.kcbMajorTicksColor->color());
-	group.writeEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(ui.sbMajorTicksWidth->value(),Worksheet::Point));
-	group.writeEntry("MajorTicksLength", Worksheet::convertToSceneUnits(ui.sbMajorTicksLength->value(),Worksheet::Point));
+	group.writeEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(ui.sbMajorTicksWidth->value(), Worksheet::Unit::Point));
+	group.writeEntry("MajorTicksLength", Worksheet::convertToSceneUnits(ui.sbMajorTicksLength->value(), Worksheet::Unit::Point));
 	group.writeEntry("MajorTicksOpacity", ui.sbMajorTicksOpacity->value()/100.);
 
 	//Minor ticks
@@ -2190,8 +2190,8 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 		group.writeEntry("MinorTicksIncrement", QString::number(dtsbMinorTicksIncrement->value()));
 	group.writeEntry("MinorTicksLineStyle", ui.cbMinorTicksLineStyle->currentIndex());
 	group.writeEntry("MinorTicksColor", ui.kcbMinorTicksColor->color());
-	group.writeEntry("MinorTicksWidth", Worksheet::convertFromSceneUnits(ui.sbMinorTicksWidth->value(),Worksheet::Point));
-	group.writeEntry("MinorTicksLength", Worksheet::convertFromSceneUnits(ui.sbMinorTicksLength->value(),Worksheet::Point));
+	group.writeEntry("MinorTicksWidth", Worksheet::convertFromSceneUnits(ui.sbMinorTicksWidth->value(), Worksheet::Unit::Point));
+	group.writeEntry("MinorTicksLength", Worksheet::convertFromSceneUnits(ui.sbMinorTicksLength->value(), Worksheet::Unit::Point));
 	group.writeEntry("MinorTicksOpacity", ui.sbMinorTicksOpacity->value()/100.);
 
 	//Extra ticks
@@ -2202,7 +2202,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("LabelsAutoPrecision", ui.chkLabelsAutoPrecision->isChecked());
 	group.writeEntry("LabelsPrecision", ui.sbLabelsPrecision->value());
 	group.writeEntry("LabelsPosition", ui.cbLabelsPosition->currentIndex());
-	group.writeEntry("LabelsOffset", Worksheet::convertToSceneUnits(ui.sbLabelsOffset->value(), Worksheet::Point));
+	group.writeEntry("LabelsOffset", Worksheet::convertToSceneUnits(ui.sbLabelsOffset->value(), Worksheet::Unit::Point));
 	group.writeEntry("LabelsRotation", ui.sbLabelsRotation->value());
 	group.writeEntry("LabelsFont", ui.kfrLabelsFont->font());
 	group.writeEntry("LabelsFontColor", ui.kcbLabelsFontColor->color());
@@ -2213,12 +2213,12 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	//Grid
 	group.writeEntry("MajorGridStyle", ui.cbMajorGridStyle->currentIndex());
 	group.writeEntry("MajorGridColor", ui.kcbMajorGridColor->color());
-	group.writeEntry("MajorGridWidth", Worksheet::convertToSceneUnits(ui.sbMajorGridWidth->value(), Worksheet::Point));
+	group.writeEntry("MajorGridWidth", Worksheet::convertToSceneUnits(ui.sbMajorGridWidth->value(), Worksheet::Unit::Point));
 	group.writeEntry("MajorGridOpacity", ui.sbMajorGridOpacity->value()/100.);
 
 	group.writeEntry("MinorGridStyle", ui.cbMinorGridStyle->currentIndex());
 	group.writeEntry("MinorGridColor", ui.kcbMinorGridColor->color());
-	group.writeEntry("MinorGridWidth", Worksheet::convertToSceneUnits(ui.sbMinorGridWidth->value(), Worksheet::Point));
+	group.writeEntry("MinorGridWidth", Worksheet::convertToSceneUnits(ui.sbMinorGridWidth->value(), Worksheet::Unit::Point));
 	group.writeEntry("MinorGridOpacity", ui.sbMinorGridOpacity->value()/100.);
 	config.sync();
 }

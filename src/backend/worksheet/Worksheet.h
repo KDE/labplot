@@ -50,9 +50,9 @@ public:
 	explicit Worksheet(const QString& name, bool loading = false);
 	~Worksheet() override;
 
-	enum Unit {Millimeter, Centimeter, Inch, Point};
-	enum Layout {NoLayout, VerticalLayout, HorizontalLayout, GridLayout};
-	enum CartesianPlotActionMode {ApplyActionToSelection, ApplyActionToAll};
+	enum class Unit {Millimeter, Centimeter, Inch, Point};
+	enum class Layout {NoLayout, VerticalLayout, HorizontalLayout, GridLayout};
+	enum class CartesianPlotActionMode {ApplyActionToSelection, ApplyActionToAll};
 
 	static float convertToSceneUnits(const float value, const Worksheet::Unit unit);
 	static float convertFromSceneUnits(const float value, const Worksheet::Unit unit);

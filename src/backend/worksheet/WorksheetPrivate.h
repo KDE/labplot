@@ -65,7 +65,7 @@ public:
 	QString backgroundFileName;
 	float backgroundOpacity{1.0};
 
-	Worksheet::Layout layout{Worksheet::VerticalLayout};
+	Worksheet::Layout layout{Worksheet::Layout::VerticalLayout};
 	bool suppressLayoutUpdate{false};
 	bool suppressCursorPosChanged{false};
 	float layoutTopMargin{0.0};

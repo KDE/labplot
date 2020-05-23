@@ -61,23 +61,23 @@ public:
 			mutex.unlock();
 			for (int x = 0; x < m_plotImage->width(); ++x) {
 				int value = ImageEditor::discretizeHue(x, y, m_originalImage);
-				if (!ImageEditor::pixelIsOn(value, DatapickerImage::Hue, m_settings))
+				if (!ImageEditor::pixelIsOn(value, DatapickerImage::ColorAttributes::Hue, m_settings))
 					continue;
 
 				value = ImageEditor::discretizeSaturation(x, y, m_originalImage);
-				if (!ImageEditor::pixelIsOn(value, DatapickerImage::Saturation, m_settings))
+				if (!ImageEditor::pixelIsOn(value, DatapickerImage::ColorAttributes::Saturation, m_settings))
 					continue;
 
 				value = ImageEditor::discretizeValue(x, y, m_originalImage);
-				if (!ImageEditor::pixelIsOn(value, DatapickerImage::Value, m_settings))
+				if (!ImageEditor::pixelIsOn(value, DatapickerImage::ColorAttributes::Value, m_settings))
 					continue;
 
 				value = ImageEditor::discretizeIntensity(x, y, m_originalImage);
-				if (!ImageEditor::pixelIsOn(value, DatapickerImage::Saturation, m_settings))
+				if (!ImageEditor::pixelIsOn(value, DatapickerImage::ColorAttributes::Saturation, m_settings))
 					continue;
 
 				value = ImageEditor::discretizeForeground(x, y, m_background, m_originalImage);
-				if (!ImageEditor::pixelIsOn(value, DatapickerImage::Foreground, m_settings))
+				if (!ImageEditor::pixelIsOn(value, DatapickerImage::ColorAttributes::Foreground, m_settings))
 					continue;
 
 				line[x] = black;
@@ -177,17 +177,17 @@ int ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes type) {
 	//Intensity, Foreground, Saturation and Value are from 0 to 100
 	//Hue is from 0 to 360
 	switch (type) {
-	case DatapickerImage::None:
+	case DatapickerImage::ColorAttributes::None:
 		return 0;
-	case DatapickerImage::Intensity:
+	case DatapickerImage::ColorAttributes::Intensity:
 		return 100;
-	case DatapickerImage::Foreground:
+	case DatapickerImage::ColorAttributes::Foreground:
 		return 100;
-	case DatapickerImage::Hue:
+	case DatapickerImage::ColorAttributes::Hue:
 		return 360;
-	case DatapickerImage::Saturation:
+	case DatapickerImage::ColorAttributes::Saturation:
 		return 100;
-	case DatapickerImage::Value:
+	case DatapickerImage::ColorAttributes::Value:
 	default:
 		return 100;
 	}
@@ -272,9 +272,9 @@ int ImageEditor::discretizeValueForeground(int x, int y, DatapickerImage::ColorA
 	// convert hue from 0 to 359, saturation from 0 to 255, value from 0 to 255
 	int value = 0;
 	switch (type) {
-	case DatapickerImage::None:
+	case DatapickerImage::ColorAttributes::None:
 		break;
-	case DatapickerImage::Intensity: {
+	case DatapickerImage::ColorAttributes::Intensity: {
 		const int r = color.red();
 		const int g = color.green();
 		const int b = color.blue();
@@ -284,7 +284,7 @@ int ImageEditor::discretizeValueForeground(int x, int y, DatapickerImage::ColorA
 			value = maxIntensity;
 		break;
 	}
-	case DatapickerImage::Foreground: {
+	case DatapickerImage::ColorAttributes::Foreground: {
 		const int r = color.red();
 		const int g = color.green();
 		const int b = color.blue();
@@ -297,7 +297,7 @@ int ImageEditor::discretizeValueForeground(int x, int y, DatapickerImage::ColorA
 			value = maxForeground;
 		break;
 	}
-	case DatapickerImage::Hue: {
+	case DatapickerImage::ColorAttributes::Hue: {
 		const int h = color.hue();
 		value = h * maxHue / 359;
 		if (value < 0)
@@ -306,14 +306,14 @@ int ImageEditor::discretizeValueForeground(int x, int y, DatapickerImage::ColorA
 			value = maxHue;
 		break;
 	}
-	case DatapickerImage::Saturation: {
+	case DatapickerImage::ColorAttributes::Saturation: {
 		const int s = color.saturation();
 		value = s * maxSaturation / 255;
 		if (maxSaturation < value)
 			value = maxSaturation;
 		break;
 	}
-	case DatapickerImage::Value: {
+	case DatapickerImage::ColorAttributes::Value: {
 		const int v = color.value();
 		value = v * maxValue / 255;
 		if (maxValue < value)
@@ -334,17 +334,17 @@ bool ImageEditor::pixelIsOn(int value, int low, int high) {
 
 bool ImageEditor::pixelIsOn( int value, DatapickerImage::ColorAttributes type, const DatapickerImage::EditorSettings& settings ) {
 	switch (type) {
-	case DatapickerImage::None:
+	case DatapickerImage::ColorAttributes::None:
 		break;
-	case DatapickerImage::Intensity:
+	case DatapickerImage::ColorAttributes::Intensity:
 		return pixelIsOn(value, settings.intensityThresholdLow, settings.intensityThresholdHigh);
-	case DatapickerImage::Foreground:
+	case DatapickerImage::ColorAttributes::Foreground:
 		return pixelIsOn(value, settings.foregroundThresholdLow, settings.foregroundThresholdHigh);
-	case DatapickerImage::Hue:
+	case DatapickerImage::ColorAttributes::Hue:
 		return pixelIsOn(value, settings.hueThresholdLow, settings.hueThresholdHigh);
-	case DatapickerImage::Saturation:
+	case DatapickerImage::ColorAttributes::Saturation:
 		return pixelIsOn(value, settings.saturationThresholdLow, settings.saturationThresholdHigh);
-	case DatapickerImage::Value:
+	case DatapickerImage::ColorAttributes::Value:
 		return pixelIsOn(value, settings.valueThresholdLow, settings.valueThresholdHigh);
 	}
 

@@ -92,7 +92,7 @@ public:
 	QPointF cursor0Pos{QPointF(NAN, NAN)};
 	bool cursor1Enable{false};
 	QPointF cursor1Pos{QPointF(NAN, NAN)};
-	QPen cursorPen{Qt::red, Worksheet::convertToSceneUnits(1.0, Worksheet::Point), Qt::SolidLine};
+	QPen cursorPen{Qt::red, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
 
 signals:
 	void mousePressZoomSelectionModeSignal(QPointF logicalPos);

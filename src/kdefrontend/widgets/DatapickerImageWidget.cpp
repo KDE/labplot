@@ -186,27 +186,27 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 	QString hueFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/colorchooser/colorchooser_hue.xpm");
 	QString saturationFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/colorchooser/colorchooser_saturation.xpm");
 
-	gvHue = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Hue));
+	gvHue = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes::Hue));
 	gvHue->setToolTip(i18n("Select the range for the hue.\nEverything outside of this range will be set to white."));
 	editTabLayout->addWidget(gvHue, 2, 2);
 	gvHue->setScalePixmap(hueFile);
 
-	gvSaturation = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Saturation));
+	gvSaturation = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes::Saturation));
 	gvSaturation->setToolTip(i18n("Select the range for the saturation.\nEverything outside of this range will be set to white."));
 	editTabLayout->addWidget(gvSaturation, 4, 2);
 	gvSaturation->setScalePixmap(saturationFile);
 
-	gvValue = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Value));
+	gvValue = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes::Value));
 	gvValue->setToolTip(i18n("Select the range for the value, the degree of lightness of the color.\nEverything outside of this range will be set to white."));
 	editTabLayout->addWidget(gvValue, 6,2);
 	gvValue->setScalePixmap(valueFile);
 
-	gvIntensity = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Intensity));
+	gvIntensity = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes::Intensity));
 	gvIntensity->setToolTip(i18n("Select the range for the intensity.\nEverything outside of this range will be set to white."));
 	editTabLayout->addWidget(gvIntensity, 8, 2);
 	gvIntensity->setScalePixmap(valueFile);
 
-	gvForeground = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Foreground));
+	gvForeground = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes::Foreground));
 	gvForeground->setToolTip(i18n("Select the range for the colors that are not part of the background color.\nEverything outside of this range will be set to white."));
 	editTabLayout->addWidget(gvForeground, 10, 2);
 	gvForeground->setScalePixmap(valueFile);
@@ -444,7 +444,7 @@ void DatapickerImageWidget::graphTypeChanged() {
 	DatapickerImage::ReferencePoints points = m_image->axisPoints();
 	points.type = DatapickerImage::GraphType(ui.cbGraphType->currentIndex());
 
-	if (points.type != DatapickerImage::Ternary) {
+	if (points.type != DatapickerImage::GraphType::Ternary) {
 		ui.lTernaryScale->setHidden(true);
 		ui.sbTernaryScale->setHidden(true);
 		ui.lPositionZ1->setHidden(true);
@@ -527,7 +527,7 @@ void DatapickerImageWidget::pointsSizeChanged(double value) {
 		return;
 
 	for (auto* image : m_imagesList)
-		image->setPointSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		image->setPointSize( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 }
 
 void DatapickerImageWidget::pointsRotationChanged(int value) {
@@ -623,7 +623,7 @@ void DatapickerImageWidget::pointsBorderWidthChanged(double value) {
 	QPen pen;
 	for (auto* image : m_imagesList) {
 		pen = image->pointPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		image->setPointPen(pen);
 	}
 }
@@ -809,7 +809,7 @@ void DatapickerImageWidget::symbolStyleChanged(Symbol::Style style) {
 
 void DatapickerImageWidget::symbolSizeChanged(qreal size) {
 	m_initializing = true;
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
+	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 
@@ -838,7 +838,7 @@ void DatapickerImageWidget::symbolPenChanged(const QPen& pen) {
 	ui.cbSymbolBorderStyle->setCurrentIndex( (int) pen.style());
 	ui.kcbSymbolBorderColor->setColor( pen.color());
 	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, pen.color());
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Point));
+	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
@@ -889,14 +889,14 @@ void DatapickerImageWidget::load() {
 	ui.sbPointSeparation->setValue(m_image->pointSeparation());
 	ui.sbMinSegmentLength->setValue(m_image->minSegmentLength());
 	ui.cbSymbolStyle->setCurrentIndex( (int)m_image->pointStyle() - 1 );
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_image->pointSize(), Worksheet::Point) );
+	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_image->pointSize(), Worksheet::Unit::Point) );
 	ui.sbSymbolRotation->setValue( m_image->pointRotationAngle() );
 	ui.sbSymbolOpacity->setValue( round(m_image->pointOpacity()*100.0) );
 	ui.cbSymbolFillingStyle->setCurrentIndex( (int) m_image->pointBrush().style() );
 	ui.kcbSymbolFillingColor->setColor(  m_image->pointBrush().color() );
 	ui.cbSymbolBorderStyle->setCurrentIndex( (int) m_image->pointPen().style() );
 	ui.kcbSymbolBorderColor->setColor( m_image->pointPen().color() );
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_image->pointPen().widthF(), Worksheet::Point) );
+	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_image->pointPen().widthF(), Worksheet::Unit::Point) );
 	ui.chbSymbolVisible->setChecked( m_image->pointVisibility() );
 	m_initializing = false;
 }

@@ -298,8 +298,8 @@ void ImagePrivate::retransform() {
 	if (suppressRetransform)
 		return;
 
-	if (position.horizontalPosition != WorksheetElement::hPositionCustom
-	        || position.verticalPosition != WorksheetElement::vPositionCustom)
+	if (position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom
+	        || position.verticalPosition != WorksheetElement::VerticalPosition::Custom)
 		updatePosition();
 
 	float x = position.point.x();
@@ -310,25 +310,25 @@ void ImagePrivate::retransform() {
  	//depending on the alignment, calculate the new GraphicsItem's position in parent's coordinate system
 	QPointF itemPos;
 	switch (horizontalAlignment) {
-	case WorksheetElement::hAlignLeft:
+	case WorksheetElement::HorizontalAlignment::Left:
 		itemPos.setX(x - w/2);
 		break;
-	case WorksheetElement::hAlignCenter:
+	case WorksheetElement::HorizontalAlignment::Center:
 		itemPos.setX(x);
 		break;
-	case WorksheetElement::hAlignRight:
+	case WorksheetElement::HorizontalAlignment::Right:
 		itemPos.setX(x + w/2);
 		break;
 	}
 
 	switch (verticalAlignment) {
-	case WorksheetElement::vAlignTop:
+	case WorksheetElement::VerticalAlignment::Top:
 		itemPos.setY(y - h/2);
 		break;
-	case WorksheetElement::vAlignCenter:
+	case WorksheetElement::VerticalAlignment::Center:
 		itemPos.setY(y);
 		break;
-	case WorksheetElement::vAlignBottom:
+	case WorksheetElement::VerticalAlignment::Bottom:
 		itemPos.setY(y + h/2);
 		break;
 	}
@@ -353,8 +353,8 @@ void ImagePrivate::updateImage() {
 		q->widthChanged(width);
 		q->heightChanged(height);
 	} else {
-		width = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
-		height = Worksheet::convertToSceneUnits(3, Worksheet::Centimeter);
+		width = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter);
+		height = Worksheet::convertToSceneUnits(3, Worksheet::Unit::Centimeter);
 		image = QIcon::fromTheme("viewimage").pixmap(width, height).toImage();
 		q->widthChanged(width);
 		q->heightChanged(height);
@@ -396,21 +396,21 @@ void ImagePrivate::updatePosition() {
 		parentRect = scene()->sceneRect();
 	}
 
-	if (position.horizontalPosition != WorksheetElement::hPositionCustom) {
-		if (position.horizontalPosition == WorksheetElement::hPositionLeft)
+	if (position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom) {
+		if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Left)
 			position.point.setX( parentRect.x() );
-		else if (position.horizontalPosition == WorksheetElement::hPositionCenter)
+		else if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Center)
 			position.point.setX( parentRect.x() + parentRect.width()/2 );
-		else if (position.horizontalPosition == WorksheetElement::hPositionRight)
+		else if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Right)
 			position.point.setX( parentRect.x() + parentRect.width() );
 	}
 
-	if (position.verticalPosition != WorksheetElement::vPositionCustom) {
-		if (position.verticalPosition == WorksheetElement::vPositionTop)
+	if (position.verticalPosition != WorksheetElement::VerticalPosition::Custom) {
+		if (position.verticalPosition == WorksheetElement::VerticalPosition::Top)
 			position.point.setY( parentRect.y() );
-		else if (position.verticalPosition == WorksheetElement::vPositionCenter)
+		else if (position.verticalPosition == WorksheetElement::VerticalPosition::Center)
 			position.point.setY( parentRect.y() + parentRect.height()/2 );
-		else if (position.verticalPosition == WorksheetElement::vPositionBottom)
+		else if (position.verticalPosition == WorksheetElement::VerticalPosition::Bottom)
 			position.point.setY( parentRect.y() + parentRect.height() );
 	}
 
@@ -508,8 +508,8 @@ QVariant ImagePrivate::itemChange(GraphicsItemChange change, const QVariant &val
 		//convert item's center point in parent's coordinates
 		WorksheetElement::PositionWrapper tempPosition;
 		tempPosition.point = positionFromItemPosition(value.toPointF());
-		tempPosition.horizontalPosition = WorksheetElement::hPositionCustom;
-		tempPosition.verticalPosition = WorksheetElement::vPositionCustom;
+		tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
+		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
 
 		//emit the signals in order to notify the UI.
 		//we don't set the position related member variables during the mouse movements.
@@ -528,8 +528,8 @@ void ImagePrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		suppressRetransform = true;
 		WorksheetElement::PositionWrapper tempPosition;
 		tempPosition.point = point;
-		tempPosition.horizontalPosition = WorksheetElement::hPositionCustom;
-		tempPosition.verticalPosition = WorksheetElement::vPositionCustom;
+		tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
+		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
 		q->setPosition(tempPosition);
 		suppressRetransform = false;
 	}
@@ -549,25 +549,25 @@ QPointF ImagePrivate::positionFromItemPosition(QPointF itemPos) {
 
 	//depending on the alignment, calculate the new position
 	switch (horizontalAlignment) {
-	case WorksheetElement::hAlignLeft:
+	case WorksheetElement::HorizontalAlignment::Left:
 		tmpPosition.setX(x + w/2);
 		break;
-	case WorksheetElement::hAlignCenter:
+	case WorksheetElement::HorizontalAlignment::Center:
 		tmpPosition.setX(x);
 		break;
-	case WorksheetElement::hAlignRight:
+	case WorksheetElement::HorizontalAlignment::Right:
 		tmpPosition.setX(x - w/2);
 		break;
 	}
 
 	switch (verticalAlignment) {
-	case WorksheetElement::vAlignTop:
+	case WorksheetElement::VerticalAlignment::Top:
 		tmpPosition.setY(y + h/2);
 		break;
-	case WorksheetElement::vAlignCenter:
+	case WorksheetElement::VerticalAlignment::Center:
 		tmpPosition.setY(y);
 		break;
-	case WorksheetElement::vAlignBottom:
+	case WorksheetElement::VerticalAlignment::Bottom:
 		tmpPosition.setY(y - h/2);
 		break;
 	}
@@ -619,10 +619,10 @@ void Image::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("keepRatio", QString::number(d->keepRatio));
 	writer->writeAttribute("x", QString::number(d->position.point.x()));
 	writer->writeAttribute("y", QString::number(d->position.point.y()));
-	writer->writeAttribute("horizontalPosition", QString::number(d->position.horizontalPosition));
-	writer->writeAttribute("verticalPosition", QString::number(d->position.verticalPosition));
-	writer->writeAttribute("horizontalAlignment", QString::number(d->horizontalAlignment));
-	writer->writeAttribute("verticalAlignment", QString::number(d->verticalAlignment));
+	writer->writeAttribute("horizontalPosition", QString::number(static_cast<int>(d->position.horizontalPosition)));
+	writer->writeAttribute("verticalPosition", QString::number(static_cast<int>(d->position.verticalPosition)));
+	writer->writeAttribute("horizontalAlignment", QString::number(static_cast<int>(d->horizontalAlignment)));
+	writer->writeAttribute("verticalAlignment", QString::number(static_cast<int>(d->verticalAlignment)));
 	writer->writeAttribute("rotationAngle", QString::number(d->rotationAngle));
 	writer->writeAttribute("visible", QString::number(d->isVisible()));
 	writer->writeEndElement();

@@ -330,7 +330,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	//TODO redesign this, if the hierarchy will be changend in future (a plot is a child of a new object group/container or so)
 	auto* w = dynamic_cast<Worksheet*>(m_plot->parentAspect());
 	if (w) {
-		bool b = (w->layout() == Worksheet::NoLayout);
+		bool b = (w->layout() == Worksheet::Layout::NoLayout);
 		ui.sbTop->setEnabled(b);
 		ui.sbLeft->setEnabled(b);
 		ui.sbWidth->setEnabled(b);
@@ -397,7 +397,7 @@ void CartesianPlotDock::updateUnits() {
 	QString suffix;
 	if (m_units == BaseDock::MetricUnits) {
 		//convert from imperial to metric
-		m_worksheetUnit = Worksheet::Centimeter;
+		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QLatin1String("cm");
 		ui.sbLeft->setValue(ui.sbLeft->value()*2.54);
 		ui.sbTop->setValue(ui.sbTop->value()*2.54);
@@ -410,7 +410,7 @@ void CartesianPlotDock::updateUnits() {
 		ui.sbPaddingBottom->setValue(ui.sbPaddingBottom->value()*2.54);
 	} else {
 		//convert from metric to imperial
-		m_worksheetUnit = Worksheet::Inch;
+		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QLatin1String("in");
 		ui.sbLeft->setValue(ui.sbLeft->value()/2.54);
 		ui.sbTop->setValue(ui.sbTop->value()/2.54);
@@ -529,7 +529,7 @@ void CartesianPlotDock::geometryChanged() {
 	float w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit);
 	float h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit);
 
-	QRectF rect(x,y,w,h);
+	QRectF rect(x, y, w, h);
 	m_plot->setRect(rect);
 }
 
@@ -539,7 +539,7 @@ void CartesianPlotDock::geometryChanged() {
     Shows the new geometry values of the first plot if the layout was activated.
  */
 void CartesianPlotDock::layoutChanged(Worksheet::Layout layout) {
-	bool b = (layout == Worksheet::NoLayout);
+	bool b = (layout == Worksheet::Layout::NoLayout);
 	ui.sbTop->setEnabled(b);
 	ui.sbLeft->setEnabled(b);
 	ui.sbWidth->setEnabled(b);
@@ -1219,7 +1219,7 @@ void CartesianPlotDock::borderWidthChanged(double value) {
 	QPen pen;
 	for (auto* plot : m_plotList) {
 		pen = plot->plotArea()->borderPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		plot->plotArea()->setBorderPen(pen);
 	}
 }
@@ -1317,7 +1317,7 @@ void CartesianPlotDock::cursorLineWidthChanged(int width) {
 
 	for (auto* plot : m_plotList) {
 		QPen pen = plot->cursorPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(width, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(width, Worksheet::Unit::Point) );
 		plot->setCursorPen(pen);
 	}
 }
@@ -1547,7 +1547,7 @@ void CartesianPlotDock::plotBorderPenChanged(QPen& pen) {
 	if (ui.kcbBorderColor->color() != pen.color())
 		ui.kcbBorderColor->setColor(pen.color());
 	if (ui.sbBorderWidth->value() != pen.widthF())
-		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
+		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
@@ -1596,7 +1596,7 @@ void CartesianPlotDock::plotSymmetricPaddingChanged(bool symmetric) {
 
 void CartesianPlotDock::plotCursorPenChanged(const QPen& pen) {
 	m_initializing = true;
-	ui.sbCursorLineWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
+	ui.sbCursorLineWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	ui.kcbCursorLineColor->setColor(pen.color());
 	ui.cbCursorLineStyle->setCurrentIndex(pen.style());
 	m_initializing = false;
@@ -1722,7 +1722,7 @@ void CartesianPlotDock::load() {
 	//Border
 	ui.kcbBorderColor->setColor( m_plot->plotArea()->borderPen().color() );
 	ui.cbBorderStyle->setCurrentIndex( (int) m_plot->plotArea()->borderPen().style() );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderPen().widthF(), Worksheet::Point) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderPen().widthF(), Worksheet::Unit::Point) );
 	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderCornerRadius(), m_worksheetUnit) );
 	ui.sbBorderOpacity->setValue( round(m_plot->plotArea()->borderOpacity()*100) );
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
@@ -1767,7 +1767,7 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	//Border-tab
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_plot->plotArea()->borderPen().color()) );
 	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) m_plot->plotArea()->borderPen().style()) );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_plot->plotArea()->borderPen().widthF()), Worksheet::Point) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_plot->plotArea()->borderPen().widthF()), Worksheet::Unit::Point) );
 	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", m_plot->plotArea()->borderCornerRadius()), m_worksheetUnit) );
 	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", m_plot->plotArea()->borderOpacity())*100 );
 
@@ -1808,7 +1808,7 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	//Border
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
-	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Point));
+	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Unit::Point));
 	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), m_worksheetUnit));
 	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
 

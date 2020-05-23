@@ -70,25 +70,25 @@ void DatapickerCurve::init() {
 	KConfig config;
 	KConfigGroup group;
 	group = config.group("DatapickerCurve");
-	d->curveErrorTypes.x = (ErrorType) group.readEntry("CurveErrorType_X", (int) NoError);
-	d->curveErrorTypes.y = (ErrorType) group.readEntry("CurveErrorType_X", (int) NoError);
+	d->curveErrorTypes.x = (ErrorType) group.readEntry("CurveErrorType_X", static_cast<int>(ErrorType::NoError));
+	d->curveErrorTypes.y = (ErrorType) group.readEntry("CurveErrorType_Y", static_cast<int>(ErrorType::NoError));
 
 	// point properties
 	d->pointStyle = (Symbol::Style)group.readEntry("PointStyle", (int)Symbol::Cross);
-	d->pointSize = group.readEntry("Size", Worksheet::convertToSceneUnits(7, Worksheet::Point));
+	d->pointSize = group.readEntry("Size", Worksheet::convertToSceneUnits(7, Worksheet::Unit::Point));
 	d->pointRotationAngle = group.readEntry("Rotation", 0.0);
 	d->pointOpacity = group.readEntry("Opacity", 1.0);
 	d->pointBrush.setStyle( (Qt::BrushStyle)group.readEntry("FillingStyle", (int)Qt::NoBrush) );
 	d->pointBrush.setColor( group.readEntry("FillingColor", QColor(Qt::black)) );
 	d->pointPen.setStyle( (Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine) );
 	d->pointPen.setColor( group.readEntry("BorderColor", QColor(Qt::red)) );
-	d->pointPen.setWidthF( group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Point)) );
-	d->pointErrorBarSize = group.readEntry("ErrorBarSize", Worksheet::convertToSceneUnits(8, Worksheet::Point));
+	d->pointPen.setWidthF( group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)) );
+	d->pointErrorBarSize = group.readEntry("ErrorBarSize", Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
 	d->pointErrorBarBrush.setStyle( (Qt::BrushStyle)group.readEntry("ErrorBarFillingStyle", (int)Qt::NoBrush) );
 	d->pointErrorBarBrush.setColor( group.readEntry("ErrorBarFillingColor", QColor(Qt::black)) );
 	d->pointErrorBarPen.setStyle( (Qt::PenStyle)group.readEntry("ErrorBarBorderStyle", (int)Qt::SolidLine) );
 	d->pointErrorBarPen.setColor( group.readEntry("ErrorBarBorderColor", QColor(Qt::black)) );
-	d->pointErrorBarPen.setWidthF( group.readEntry("ErrorBarBorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Point)) );
+	d->pointErrorBarPen.setWidthF( group.readEntry("ErrorBarBorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)) );
 	d->pointVisibility = group.readEntry("PointVisibility", true);
 }
 
@@ -169,21 +169,21 @@ void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 	QString xLabel('x');
 	QString yLabel('y');
 
-	if (type == DatapickerImage::PolarInDegree) {
+	if (type == DatapickerImage::GraphType::PolarInDegree) {
 		xLabel = QLatin1String("r");
 		yLabel = QLatin1String("y(deg)");
-	} else if (type == DatapickerImage::PolarInRadians) {
+	} else if (type == DatapickerImage::GraphType::PolarInRadians) {
 		xLabel = QLatin1String("r");
 		yLabel = QLatin1String("y(rad)");
-	} else if (type == DatapickerImage::LogarithmicX) {
+	} else if (type == DatapickerImage::GraphType::LogarithmicX) {
 		xLabel = QLatin1String("log(x)");
 		yLabel = QLatin1String("y");
-	} else if (type == DatapickerImage::LogarithmicY) {
+	} else if (type == DatapickerImage::GraphType::LogarithmicY) {
 		xLabel = QLatin1String("x");
 		yLabel = QLatin1String("log(y)");
 	}
 
-	if (type == DatapickerImage::Ternary)
+	if (type == DatapickerImage::GraphType::Ternary)
 		d->posZColumn = appendColumn(i18n("c"));
 
 	d->posXColumn = m_datasheet->column(0);
@@ -200,30 +200,30 @@ void DatapickerCurve::setCurveErrorTypes(const DatapickerCurve::Errors errors) {
 		beginMacro(i18n("%1: set xy-error type", name()));
 		exec(new DatapickerCurveSetCurveErrorTypesCmd(d, errors, ki18n("%1: set xy-error type")));
 
-		if ( errors.x != NoError && !d->plusDeltaXColumn )
+		if ( errors.x != ErrorType::NoError && !d->plusDeltaXColumn )
 			setPlusDeltaXColumn(appendColumn(QLatin1String("+delta_x")));
-		else if ( d->plusDeltaXColumn && errors.x == NoError ) {
+		else if ( d->plusDeltaXColumn && errors.x ==ErrorType:: NoError ) {
 			d->plusDeltaXColumn->remove();
 			d->plusDeltaXColumn = nullptr;
 		}
 
-		if ( errors.x == AsymmetricError && !d->minusDeltaXColumn )
+		if ( errors.x == ErrorType::AsymmetricError && !d->minusDeltaXColumn )
 			setMinusDeltaXColumn(appendColumn(QLatin1String("-delta_x")));
-		else if ( d->minusDeltaXColumn && errors.x != AsymmetricError ) {
+		else if ( d->minusDeltaXColumn && errors.x != ErrorType::AsymmetricError ) {
 			d->minusDeltaXColumn->remove();
 			d->minusDeltaXColumn = nullptr;
 		}
 
-		if ( errors.y != NoError && !d->plusDeltaYColumn )
+		if ( errors.y != ErrorType::NoError && !d->plusDeltaYColumn )
 			setPlusDeltaYColumn(appendColumn(QLatin1String("+delta_y")));
-		else if ( d->plusDeltaYColumn && errors.y == NoError ) {
+		else if ( d->plusDeltaYColumn && errors.y == ErrorType::NoError ) {
 			d->plusDeltaYColumn->remove();
 			d->plusDeltaYColumn = nullptr;
 		}
 
-		if ( errors.y == AsymmetricError && !d->minusDeltaYColumn )
+		if ( errors.y == ErrorType::AsymmetricError && !d->minusDeltaYColumn )
 			setMinusDeltaYColumn(appendColumn(QLatin1String("-delta_y")));
-		else if ( d->minusDeltaYColumn && errors.y != AsymmetricError ) {
+		else if ( d->minusDeltaYColumn && errors.y != ErrorType::AsymmetricError ) {
 			d->minusDeltaYColumn->remove();
 			d->minusDeltaYColumn = nullptr;
 		}
@@ -458,8 +458,8 @@ void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->minusDeltaXColumn, minusDeltaXColumn);
 	WRITE_COLUMN(d->plusDeltaYColumn, plusDeltaYColumn);
 	WRITE_COLUMN(d->minusDeltaYColumn, minusDeltaYColumn);
-	writer->writeAttribute( "curveErrorType_X", QString::number(d->curveErrorTypes.x) );
-	writer->writeAttribute( "curveErrorType_Y", QString::number(d->curveErrorTypes.y) );
+	writer->writeAttribute( "curveErrorType_X", QString::number(static_cast<int>(d->curveErrorTypes.x)) );
+	writer->writeAttribute( "curveErrorType_Y", QString::number(static_cast<int>(d->curveErrorTypes.y)) );
 	writer->writeEndElement();
 
 	//symbol properties

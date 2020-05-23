@@ -38,8 +38,8 @@ public:
 
 	DatapickerImage::ReferencePoints axisPoints;
 	DatapickerImage::EditorSettings settings;
-	DatapickerImage::PointsType plotPointsType{DatapickerImage::AxisPoints};
-	DatapickerImage::PlotImageType plotImageType{DatapickerImage::NoImage};
+	DatapickerImage::PointsType plotPointsType{DatapickerImage::PointsType::AxisPoints};
+	DatapickerImage::PlotImageType plotImageType{DatapickerImage::PlotImageType::NoImage};
 
 	DatapickerImage* const q;
 	QRectF pageRect;

@@ -1201,8 +1201,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				//In Origin the legend can be placed outside of the plot which is not possible in LabPlot.
 				//To achieve this we'll need to increase padding area in the plot and to place the legend outside of the plot area.
 				CartesianPlotLegend::PositionWrapper position;
-				position.horizontalPosition = CartesianPlotLegend::hPositionRight;
-				position.verticalPosition = CartesianPlotLegend::vPositionBottom;
+				position.horizontalPosition = WorksheetElement::HorizontalPosition::Right;
+				position.verticalPosition = WorksheetElement::VerticalPosition::Bottom;
 				legend->setPosition(position);
 
 				//rotation
@@ -1451,7 +1451,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	gridColor.type = Origin::Color::ColorType::Regular;
 	gridColor.regular = majorGrid.color;
 	gridPen.setColor(OriginProjectParser::color(gridColor));
-	gridPen.setWidthF(Worksheet::convertToSceneUnits(majorGrid.width, Worksheet::Point));
+	gridPen.setWidthF(Worksheet::convertToSceneUnits(majorGrid.width, Worksheet::Unit::Point));
 	axis->setMajorGridPen(gridPen);
 
 	//minor grid
@@ -1484,7 +1484,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	gridColor.regular = minorGrid.color;
 	gridPen.setColor(OriginProjectParser::color(gridColor));
-	gridPen.setWidthF(Worksheet::convertToSceneUnits(minorGrid.width, Worksheet::Point));
+	gridPen.setWidthF(Worksheet::convertToSceneUnits(minorGrid.width, Worksheet::Unit::Point));
 	axis->setMinorGridPen(gridPen);
 
 	//process Origin::GraphAxisFormat
@@ -1495,10 +1495,10 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	color.type = Origin::Color::ColorType::Regular;
 	color.regular = axisFormat.color;
 	pen.setColor(OriginProjectParser::color(color));
-	pen.setWidthF(Worksheet::convertToSceneUnits(axisFormat.thickness, Worksheet::Point));
+	pen.setWidthF(Worksheet::convertToSceneUnits(axisFormat.thickness, Worksheet::Unit::Point));
 	axis->setLinePen(pen);
 
-	axis->setMajorTicksLength( Worksheet::convertToSceneUnits(axisFormat.majorTickLength, Worksheet::Point) );
+	axis->setMajorTicksLength( Worksheet::convertToSceneUnits(axisFormat.majorTickLength, Worksheet::Unit::Point) );
 	axis->setMajorTicksDirection( (Axis::TicksFlags) axisFormat.majorTicksType);
 	axis->setMajorTicksPen(pen);
 	axis->setMinorTicksLength( axis->majorTicksLength()/2); // minorTicksLength is half of majorTicksLength
@@ -1545,7 +1545,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	QFont font;
 	//TODO: font family?
-	font.setPixelSize( Worksheet::convertToSceneUnits(tickAxis.fontSize, Worksheet::Point) );
+	font.setPixelSize( Worksheet::convertToSceneUnits(tickAxis.fontSize, Worksheet::Unit::Point) );
 	font.setBold(tickAxis.fontBold);
 	axis->setLabelsFont(font);
 	//TODO: handle string dataName member in GraphAxisTick
@@ -1612,7 +1612,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		}
 
 		pen.setStyle(penStyle);
-		pen.setWidthF( Worksheet::convertToSceneUnits(originCurve.lineWidth, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(originCurve.lineWidth, Worksheet::Unit::Point) );
 		pen.setColor(color(originCurve.lineColor));
 		curve->setLineOpacity(1 - originCurve.lineTransparency/255);
 
@@ -1680,7 +1680,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		}
 
 		//symbol size
-		curve->setSymbolsSize(Worksheet::convertToSceneUnits(originCurve.symbolSize, Worksheet::Point));
+		curve->setSymbolsSize(Worksheet::convertToSceneUnits(originCurve.symbolSize, Worksheet::Unit::Point));
 
 		//symbol fill color
 		QBrush brush = curve->symbolsBrush();

@@ -195,7 +195,7 @@ void ImageDock::updateUnits() {
 	QString suffix;
 	if (m_units == BaseDock::MetricUnits) {
 		//convert from imperial to metric
-		m_worksheetUnit = Worksheet::Centimeter;
+		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QLatin1String("cm");
 		ui.sbWidth->setValue(ui.sbWidth->value()*2.54);
 		ui.sbHeight->setValue(ui.sbHeight->value()*2.54);
@@ -203,7 +203,7 @@ void ImageDock::updateUnits() {
 		ui.sbPositionY->setValue(ui.sbPositionY->value()*2.54);
 	} else {
 		//convert from metric to imperial
-		m_worksheetUnit = Worksheet::Inch;
+		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QLatin1String("in");
 		ui.sbWidth->setValue(ui.sbWidth->value()/2.54);
 		ui.sbHeight->setValue(ui.sbHeight->value()/2.54);
@@ -432,7 +432,7 @@ void ImageDock::borderWidthChanged(double value) {
 	QPen pen;
 	for (auto* image : m_imageList) {
 		pen = image->borderPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		image->setBorderPen(pen);
 	}
 }
@@ -498,20 +498,20 @@ void ImageDock::imagePositionChanged(const WorksheetElement::PositionWrapper& po
 	m_initializing = true;
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit) );
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit) );
-	ui.cbPositionX->setCurrentIndex( position.horizontalPosition );
-	ui.cbPositionY->setCurrentIndex( position.verticalPosition );
+	ui.cbPositionX->setCurrentIndex( static_cast<int>(position.horizontalPosition) );
+	ui.cbPositionY->setCurrentIndex( static_cast<int>(position.verticalPosition) );
 	m_initializing = false;
 }
 
 void ImageDock::imageHorizontalAlignmentChanged(WorksheetElement::HorizontalAlignment index) {
 	m_initializing = true;
-	ui.cbHorizontalAlignment->setCurrentIndex(index);
+	ui.cbHorizontalAlignment->setCurrentIndex(static_cast<int>(index));
 	m_initializing = false;
 }
 
 void ImageDock::imageVerticalAlignmentChanged(WorksheetElement::VerticalAlignment index) {
 	m_initializing = true;
-	ui.cbVerticalAlignment->setCurrentIndex(index);
+	ui.cbVerticalAlignment->setCurrentIndex(static_cast<int>(index));
 	m_initializing = false;
 }
 
@@ -535,7 +535,7 @@ void ImageDock::imageBorderPenChanged(const QPen& pen) {
 	if (ui.kcbBorderColor->color() != pen.color())
 		ui.kcbBorderColor->setColor(pen.color());
 	if (ui.sbBorderWidth->value() != pen.widthF())
-		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
+		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
@@ -578,7 +578,7 @@ void ImageDock::load() {
 	//Border
 	ui.kcbBorderColor->setColor( m_image->borderPen().color() );
 	ui.cbBorderStyle->setCurrentIndex( (int) m_image->borderPen().style() );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_image->borderPen().widthF(), Worksheet::Point) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_image->borderPen().widthF(), Worksheet::Unit::Point) );
 	ui.sbBorderOpacity->setValue( round(m_image->borderOpacity()*100) );
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
 

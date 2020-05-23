@@ -111,11 +111,11 @@ void TextLabel::init() {
 	d->staticText.setTextOption(textOption);
 
 	if (m_type == Type::PlotTitle || m_type == Type::PlotLegendTitle) {
-		d->position.verticalPosition = WorksheetElement::vPositionTop;
-		d->verticalAlignment = WorksheetElement::vAlignBottom;
+		d->position.verticalPosition = WorksheetElement::VerticalPosition::Top;
+		d->verticalAlignment = WorksheetElement::VerticalAlignment::Bottom;
 	} else if (m_type == Type::AxisTitle) {
-		d->position.horizontalPosition = WorksheetElement::hPositionCustom;
-		d->position.verticalPosition = WorksheetElement::vPositionCustom;
+		d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
+		d->position.verticalPosition = WorksheetElement::VerticalPosition::Custom;
 	}
 
 	// read settings from config if group exists
@@ -140,8 +140,8 @@ void TextLabel::init() {
 		d->position.point.setY( group.readEntry("PositionYValue", d->position.point.y()) );
 		d->position.horizontalPosition = (HorizontalPosition) group.readEntry("PositionX", (int)d->position.horizontalPosition);
 		d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionY", (int)d->position.verticalPosition);
-		d->horizontalAlignment = (WorksheetElement::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)d->horizontalAlignment);
-		d->verticalAlignment = (WorksheetElement::VerticalAlignment) group.readEntry("VerticalAlignment", (int)d->verticalAlignment);
+		d->horizontalAlignment = (WorksheetElement::HorizontalAlignment) group.readEntry("HorizontalAlignment", static_cast<int>(d->horizontalAlignment));
+		d->verticalAlignment = (WorksheetElement::VerticalAlignment) group.readEntry("VerticalAlignment", static_cast<int>(d->verticalAlignment));
 	}
 
 	DEBUG("CHECK: default/run time image resolution: " << d->teXImageResolution << '/' << QApplication::desktop()->physicalDpiX());
@@ -385,8 +385,8 @@ void TextLabelPrivate::retransform() {
 	if (suppressRetransform)
 		return;
 
-	if (position.horizontalPosition != WorksheetElement::hPositionCustom
-	        || position.verticalPosition != WorksheetElement::vPositionCustom)
+	if (position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom
+	        || position.verticalPosition != WorksheetElement::VerticalPosition::Custom)
 		updatePosition();
 
 	double x = position.point.x();
@@ -408,25 +408,25 @@ void TextLabelPrivate::retransform() {
 	//depending on the alignment, calculate the new GraphicsItem's position in parent's coordinate system
 	QPointF itemPos;
 	switch (horizontalAlignment) {
-	case WorksheetElement::hAlignLeft:
+	case WorksheetElement::HorizontalAlignment::Left:
 		itemPos.setX(x - w/2);
 		break;
-	case WorksheetElement::hAlignCenter:
+	case WorksheetElement::HorizontalAlignment::Center:
 		itemPos.setX(x);
 		break;
-	case WorksheetElement::hAlignRight:
+	case WorksheetElement::HorizontalAlignment::Right:
 		itemPos.setX(x + w/2);
 		break;
 	}
 
 	switch (verticalAlignment) {
-	case WorksheetElement::vAlignTop:
+	case WorksheetElement::VerticalAlignment::Top:
 		itemPos.setY(y - h/2);
 		break;
-	case WorksheetElement::vAlignCenter:
+	case WorksheetElement::VerticalAlignment::Center:
 		itemPos.setY(y);
 		break;
-	case WorksheetElement::vAlignBottom:
+	case WorksheetElement::VerticalAlignment::Bottom:
 		itemPos.setY(y + h/2);
 		break;
 	}
@@ -461,21 +461,21 @@ void TextLabelPrivate::updatePosition() {
 		parentRect = scene()->sceneRect();
 	}
 
-	if (position.horizontalPosition != WorksheetElement::hPositionCustom) {
-		if (position.horizontalPosition == WorksheetElement::hPositionLeft)
+	if (position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom) {
+		if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Left)
 			position.point.setX( parentRect.x() );
-		else if (position.horizontalPosition == WorksheetElement::hPositionCenter)
+		else if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Center)
 			position.point.setX( parentRect.x() + parentRect.width()/2 );
-		else if (position.horizontalPosition == WorksheetElement::hPositionRight)
+		else if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Right)
 			position.point.setX( parentRect.x() + parentRect.width() );
 	}
 
-	if (position.verticalPosition != WorksheetElement::vPositionCustom) {
-		if (position.verticalPosition == WorksheetElement::vPositionTop)
+	if (position.verticalPosition != WorksheetElement::VerticalPosition::Custom) {
+		if (position.verticalPosition == WorksheetElement::VerticalPosition::Top)
 			position.point.setY( parentRect.y() );
-		else if (position.verticalPosition == WorksheetElement::vPositionCenter)
+		else if (position.verticalPosition == WorksheetElement::VerticalPosition::Center)
 			position.point.setY( parentRect.y() + parentRect.height()/2 );
-		else if (position.verticalPosition == WorksheetElement::vPositionBottom)
+		else if (position.verticalPosition == WorksheetElement::VerticalPosition::Bottom)
 			position.point.setY( parentRect.y() + parentRect.height() );
 	}
 
@@ -788,8 +788,8 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 		//convert item's center point in parent's coordinates
 		TextLabel::PositionWrapper tempPosition;
 		tempPosition.point = positionFromItemPosition(value.toPointF());
-		tempPosition.horizontalPosition = WorksheetElement::hPositionCustom;
-		tempPosition.verticalPosition = WorksheetElement::vPositionCustom;
+		tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
+		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
 
 		//emit the signals in order to notify the UI.
 		//we don't set the position related member variables during the mouse movements.
@@ -808,8 +808,8 @@ void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		suppressRetransform = true;
 		TextLabel::PositionWrapper tempPosition;
 		tempPosition.point = point;
-		tempPosition.horizontalPosition = TextLabel::hPositionCustom;
-		tempPosition.verticalPosition = TextLabel::vPositionCustom;
+		tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
+		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
 		q->setPosition(tempPosition);
 		suppressRetransform = false;
 	}
@@ -826,20 +826,20 @@ void TextLabelPrivate::keyPressEvent(QKeyEvent* event) {
 
 		if (event->key() == Qt::Key_Left) {
 			point.setX(point.x() - delta);
-			tempPosition.horizontalPosition = WorksheetElement::hPositionCustom;
+			tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
 			tempPosition.verticalPosition = position.verticalPosition;
 		} else if (event->key() == Qt::Key_Right) {
 			point.setX(point.x() + delta);
-			tempPosition.horizontalPosition = WorksheetElement::hPositionCustom;
+			tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
 			tempPosition.verticalPosition = position.verticalPosition;
 		} else if (event->key() == Qt::Key_Up) {
 			point.setY(point.y() - delta);
 			tempPosition.horizontalPosition = position.horizontalPosition;
-			tempPosition.verticalPosition = WorksheetElement::vPositionCustom;
+			tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
 		} else if (event->key() == Qt::Key_Down) {
 			point.setY(point.y() + delta);
 			tempPosition.horizontalPosition = position.horizontalPosition;
-			tempPosition.verticalPosition = WorksheetElement::vPositionCustom;
+			tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
 		}
 
 		tempPosition.point = point;
@@ -867,25 +867,25 @@ QPointF TextLabelPrivate::positionFromItemPosition(QPointF itemPos) {
 
 	//depending on the alignment, calculate the new position
 	switch (horizontalAlignment) {
-	case WorksheetElement::hAlignLeft:
+	case WorksheetElement::HorizontalAlignment::Left:
 		tmpPosition.setX(x + w/2);
 		break;
-	case WorksheetElement::hAlignCenter:
+	case WorksheetElement::HorizontalAlignment::Center:
 		tmpPosition.setX(x);
 		break;
-	case WorksheetElement::hAlignRight:
+	case WorksheetElement::HorizontalAlignment::Right:
 		tmpPosition.setX(x - w/2);
 		break;
 	}
 
 	switch (verticalAlignment) {
-	case WorksheetElement::vAlignTop:
+	case WorksheetElement::VerticalAlignment::Top:
 		tmpPosition.setY(y + h/2);
 		break;
-	case WorksheetElement::vAlignCenter:
+	case WorksheetElement::VerticalAlignment::Center:
 		tmpPosition.setY(y);
 		break;
-	case WorksheetElement::vAlignBottom:
+	case WorksheetElement::VerticalAlignment::Bottom:
 		tmpPosition.setY(y - h/2);
 		break;
 	}
@@ -928,10 +928,10 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement( "geometry" );
 	writer->writeAttribute( "x", QString::number(d->position.point.x()) );
 	writer->writeAttribute( "y", QString::number(d->position.point.y()) );
-	writer->writeAttribute( "horizontalPosition", QString::number(d->position.horizontalPosition) );
-	writer->writeAttribute( "verticalPosition", QString::number(d->position.verticalPosition) );
-	writer->writeAttribute( "horizontalAlignment", QString::number(d->horizontalAlignment) );
-	writer->writeAttribute( "verticalAlignment", QString::number(d->verticalAlignment) );
+	writer->writeAttribute( "horizontalPosition", QString::number(static_cast<int>(d->position.horizontalPosition)) );
+	writer->writeAttribute( "verticalPosition", QString::number(static_cast<int>(d->position.verticalPosition)) );
+	writer->writeAttribute( "horizontalAlignment", QString::number(static_cast<int>(d->horizontalAlignment)) );
+	writer->writeAttribute( "verticalAlignment", QString::number(static_cast<int>(d->verticalAlignment)) );
 	writer->writeAttribute( "rotationAngle", QString::number(d->rotationAngle) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();

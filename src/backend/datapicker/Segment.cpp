@@ -74,7 +74,7 @@ void Segment::setVisible(bool on) {
 //####################### Private implementation ###############################
 //##############################################################################
 SegmentPrivate::SegmentPrivate(Segment *owner) :
-	scaleFactor(Worksheet::convertToSceneUnits(1, Worksheet::Inch)/QApplication::desktop()->physicalDpiX()),
+	scaleFactor(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch)/QApplication::desktop()->physicalDpiX()),
 	q(owner) {
 
 	setFlag(QGraphicsItem::ItemIsSelectable);

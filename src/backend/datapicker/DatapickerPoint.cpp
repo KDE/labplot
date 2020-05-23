@@ -62,7 +62,7 @@ void ErrorBarItem::initRect() {
 	QRectF xBarRect(-0.15, -0.5, 0.3, 1);
 	QRectF yBarRect(-0.5, -0.15, 1, 0.3);
 
-	if (m_type == PlusDeltaX || m_type == MinusDeltaX)
+	if (m_type == ErrorBarType::PlusDeltaX || m_type == ErrorBarType::MinusDeltaX)
 		m_rect = xBarRect;
 	else
 		m_rect = yBarRect;
@@ -80,20 +80,20 @@ void ErrorBarItem::setRectSize(qreal size) {
 }
 
 void ErrorBarItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	if (m_type == PlusDeltaX)
+	if (m_type == ErrorBarType::PlusDeltaX)
 		m_parentItem->setPlusDeltaXPos(pos());
-	else if (m_type == MinusDeltaX)
+	else if (m_type == ErrorBarType::MinusDeltaX)
 		m_parentItem->setMinusDeltaXPos(pos());
-	else if (m_type == PlusDeltaY)
+	else if (m_type == ErrorBarType::PlusDeltaY)
 		m_parentItem->setPlusDeltaYPos(pos());
-	else if (m_type == MinusDeltaY)
+	else if (m_type == ErrorBarType::MinusDeltaY)
 		m_parentItem->setMinusDeltaYPos(pos());
 
 	QGraphicsItem::mouseReleaseEvent(event);
 }
 
 void ErrorBarItem::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (m_type == PlusDeltaX ||m_type == MinusDeltaX)
+	if (m_type == ErrorBarType::PlusDeltaX ||m_type == ErrorBarType::MinusDeltaX)
 		setCursor(Qt::SizeHorCursor);
 	else
 		setCursor(Qt::SizeVerCursor);
@@ -102,7 +102,7 @@ void ErrorBarItem::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 QVariant ErrorBarItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
 	if (change == QGraphicsItem::ItemPositionChange) {
 		QPointF newPos = value.toPointF();
-		if (m_type == PlusDeltaX || m_type == MinusDeltaX) {
+		if (m_type == ErrorBarType::PlusDeltaX || m_type == ErrorBarType::MinusDeltaX) {
 			newPos.setY(0);
 			barLineItem->setLine(0, 0, newPos.x(), 0);
 		} else {
@@ -147,8 +147,8 @@ void DatapickerPoint::init() {
 	KConfig config;
 	KConfigGroup group;
 	group = config.group("DatapickerPoint");
-	d->position.setX( group.readEntry("PositionXValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
-	d->position.setY( group.readEntry("PositionYValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
+	d->position.setX( group.readEntry("PositionXValue", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)) );
+	d->position.setY( group.readEntry("PositionYValue", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)) );
 	d->plusDeltaXPos = group.readEntry("PlusDeltaXPos", QPointF(30, 0));
 	d->minusDeltaXPos = group.readEntry("MinusDeltaXPos", QPointF(-30, 0));
 	d->plusDeltaYPos = group.readEntry("PlusDeltaYPos", QPointF(0, -30));
@@ -157,24 +157,24 @@ void DatapickerPoint::init() {
 
 void DatapickerPoint::initErrorBar(DatapickerCurve::Errors errors) {
 	m_errorBarItemList.clear();
-	if (errors.x != DatapickerCurve::NoError) {
-		ErrorBarItem* plusDeltaXItem = new ErrorBarItem(this, ErrorBarItem::PlusDeltaX);
+	if (errors.x != DatapickerCurve::ErrorType::NoError) {
+		auto* plusDeltaXItem = new ErrorBarItem(this, ErrorBarItem::ErrorBarType::PlusDeltaX);
 		plusDeltaXItem->setPosition(plusDeltaXPos());
 		connect(this, &DatapickerPoint::plusDeltaXPosChanged, plusDeltaXItem, &ErrorBarItem::setPosition);
 
-		ErrorBarItem* minusDeltaXItem = new ErrorBarItem(this, ErrorBarItem::MinusDeltaX);
+		auto* minusDeltaXItem = new ErrorBarItem(this, ErrorBarItem::ErrorBarType::MinusDeltaX);
 		minusDeltaXItem->setPosition(minusDeltaXPos());
 		connect(this, &DatapickerPoint::minusDeltaXPosChanged, minusDeltaXItem, &ErrorBarItem::setPosition);
 
 		m_errorBarItemList<<plusDeltaXItem<<minusDeltaXItem;
 	}
 
-	if (errors.y != DatapickerCurve::NoError) {
-		ErrorBarItem* plusDeltaYItem = new ErrorBarItem(this, ErrorBarItem::PlusDeltaY);
+	if (errors.y != DatapickerCurve::ErrorType::NoError) {
+		auto* plusDeltaYItem = new ErrorBarItem(this, ErrorBarItem::ErrorBarType::PlusDeltaY);
 		plusDeltaYItem->setPosition(plusDeltaYPos());
 		connect(this, &DatapickerPoint::plusDeltaYPosChanged, plusDeltaYItem, &ErrorBarItem::setPosition);
 
-		ErrorBarItem* minusDeltaYItem = new ErrorBarItem(this, ErrorBarItem::MinusDeltaY);
+		auto* minusDeltaYItem = new ErrorBarItem(this, ErrorBarItem::ErrorBarType::MinusDeltaY);
 		minusDeltaYItem->setPosition(minusDeltaYPos());
 		connect(this, &DatapickerPoint::minusDeltaYPosChanged, minusDeltaYItem, &ErrorBarItem::setPosition);
 
@@ -236,7 +236,7 @@ void DatapickerPoint::setPlusDeltaXPos(QPointF pos) {
 			return;
 
 		beginMacro(i18n("%1: set +delta_X position", name()));
-		if (curve->curveErrorTypes().x == DatapickerCurve::SymmetricError) {
+		if (curve->curveErrorTypes().x == DatapickerCurve::ErrorType::SymmetricError) {
 			exec(new DatapickerPointSetPlusDeltaXPosCmd(d, pos, ki18n("%1: set +delta X position")));
 			setMinusDeltaXPos(QPointF(-qAbs(pos.x()), pos.y()));
 		} else
@@ -254,7 +254,7 @@ void DatapickerPoint::setMinusDeltaXPos(QPointF pos) {
 			return;
 
 		beginMacro(i18n("%1: set -delta_X position", name()));
-		if (curve->curveErrorTypes().x == DatapickerCurve::SymmetricError) {
+		if (curve->curveErrorTypes().x == DatapickerCurve::ErrorType::SymmetricError) {
 			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, ki18n("%1: set -delta_X position")));
 			setPlusDeltaXPos(QPointF(qAbs(pos.x()), pos.y()));
 		} else
@@ -272,7 +272,7 @@ void DatapickerPoint::setPlusDeltaYPos(QPointF pos) {
 			return;
 
 		beginMacro(i18n("%1: set +delta_Y position", name()));
-		if (curve->curveErrorTypes().y == DatapickerCurve::SymmetricError) {
+		if (curve->curveErrorTypes().y == DatapickerCurve::ErrorType::SymmetricError) {
 			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, ki18n("%1: set +delta_Y position")));
 			setMinusDeltaYPos(QPointF(pos.x(), qAbs(pos.y())));
 		} else
@@ -290,7 +290,7 @@ void DatapickerPoint::setMinusDeltaYPos(QPointF pos) {
 			return;
 
 		beginMacro(i18n("%1: set -delta_Y position", name()));
-		if (curve->curveErrorTypes().y == DatapickerCurve::SymmetricError) {
+		if (curve->curveErrorTypes().y == DatapickerCurve::ErrorType::SymmetricError) {
 			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, ki18n("%1: set -delta_Y position")));
 			setPlusDeltaYPos(QPointF(pos.x(), -qAbs(pos.y())));
 		} else
@@ -469,8 +469,8 @@ void DatapickerPoint::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	auto* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
-	if (curve && (curve->curveErrorTypes().x != DatapickerCurve::NoError
-		|| curve->curveErrorTypes().y != DatapickerCurve::NoError)) {
+	if (curve && (curve->curveErrorTypes().x != DatapickerCurve::ErrorType::NoError
+		|| curve->curveErrorTypes().y != DatapickerCurve::ErrorType::NoError)) {
 
 		writer->writeStartElement( "errorBar" );
 		writer->writeAttribute( "plusDeltaXPos_x", QString::number(d->plusDeltaXPos.x()) );

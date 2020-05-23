@@ -270,24 +270,24 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 	ui.cbReadingType->setCurrentIndex(static_cast<int>(readingType));
 
 	switch (sourceType) {
-	case LiveDataSource::FileOrPipe:
+	case LiveDataSource::SourceType::FileOrPipe:
 		ui.leSourceInfo->setText(source->fileName());
 		if (QFile::exists(source->fileName()))
 			ui.leSourceInfo->setStyleSheet(QString());
 		else
 			ui.leSourceInfo->setStyleSheet("QLineEdit{background:red;}");
 		break;
-	case LiveDataSource::NetworkTcpSocket:
-	case LiveDataSource::NetworkUdpSocket:
+	case LiveDataSource::SourceType::NetworkTcpSocket:
+	case LiveDataSource::SourceType::NetworkUdpSocket:
 		ui.leSourceInfo->setText(QStringLiteral("%1:%2").arg(source->host()).arg(source->port()));
 		break;
-	case LiveDataSource::LocalSocket:
+	case LiveDataSource::SourceType::LocalSocket:
 		ui.leSourceInfo->setText(source->localSocketName());
 		break;
-	case LiveDataSource::SerialPort:
+	case LiveDataSource::SourceType::SerialPort:
 		ui.leSourceInfo->setText(source->serialPortName());
 		break;
-	case LiveDataSource::MQTT:
+	case LiveDataSource::SourceType::MQTT:
 		break;
 	}
 
@@ -308,24 +308,24 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 
 	// disable "whole file" when having no file (i.e. socket or port)
 	auto* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-	QStandardItem* item = model->item(LiveDataSource::WholeFile);
+	QStandardItem* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe) {
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 		//for file types other than ASCII and binary we support re-reading the whole file only
 		//select "read whole file" and deactivate the combobox
 		if (fileType != AbstractFileFilter::Ascii && fileType != AbstractFileFilter::Binary) {
-			ui.cbReadingType->setCurrentIndex(LiveDataSource::WholeFile);
+			ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 			ui.cbReadingType->setEnabled(false);
 		} else
 			ui.cbReadingType->setEnabled(true);
 	} else {
-		if (static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex()) == LiveDataSource::WholeFile)
-			ui.cbReadingType->setCurrentIndex(LiveDataSource::TillEnd);
+		if (ui.cbReadingType->currentIndex() == static_cast<int>(LiveDataSource::ReadingType::WholeFile))
+			ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::TillEnd));
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	}
 
-	if (((sourceType == LiveDataSource::FileOrPipe || sourceType == LiveDataSource::NetworkUdpSocket) &&
-	        (readingType == LiveDataSource::ContinuousFixed || readingType == LiveDataSource::FromEnd)))
+	if (((sourceType == LiveDataSource::SourceType::FileOrPipe || sourceType == LiveDataSource::SourceType::NetworkUdpSocket) &&
+	        (readingType == LiveDataSource::ReadingType::ContinuousFixed || readingType == LiveDataSource::ReadingType::FromEnd)))
 		ui.sbSampleSize->setValue(source->sampleSize());
 	else {
 		ui.lSampleSize->hide();
@@ -334,9 +334,9 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 
 	// disable "on new data"-option if not available
 	model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
-	item = model->item(LiveDataSource::NewData);
-	if (sourceType == LiveDataSource::NetworkTcpSocket || sourceType == LiveDataSource::NetworkUdpSocket ||
-	        sourceType == LiveDataSource::SerialPort)
+	item = model->item(static_cast<int>(LiveDataSource::UpdateType::NewData));
+	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::NetworkUdpSocket ||
+	        sourceType == LiveDataSource::SourceType::SerialPort)
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	else
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -409,13 +409,13 @@ void LiveDataDock::updateTypeChanged(int idx) {
 		const auto updateType = static_cast<LiveDataSource::UpdateType>(idx);
 
 		switch (updateType) {
-		case LiveDataSource::TimeInterval: {
+		case LiveDataSource::UpdateType::TimeInterval: {
 				ui.lUpdateInterval->show();
 				ui.sbUpdateInterval->show();
-				const LiveDataSource::SourceType s = m_liveDataSource->sourceType();
-				const LiveDataSource::ReadingType r = m_liveDataSource->readingType();
-				const bool showSampleSize = ((s == LiveDataSource::FileOrPipe || s == LiveDataSource::NetworkUdpSocket) &&
-				                             (r == LiveDataSource::ContinuousFixed || r == LiveDataSource::FromEnd));
+				const auto s = m_liveDataSource->sourceType();
+				const auto r = m_liveDataSource->readingType();
+				const bool showSampleSize = ((s == LiveDataSource::SourceType::FileOrPipe || s == LiveDataSource::SourceType::NetworkUdpSocket) &&
+				                             (r == LiveDataSource::ReadingType::ContinuousFixed || r == LiveDataSource::ReadingType::FromEnd));
 				ui.lSampleSize->setVisible(showSampleSize);
 				ui.sbSampleSize->setVisible(showSampleSize);
 
@@ -423,7 +423,7 @@ void LiveDataDock::updateTypeChanged(int idx) {
 				m_liveDataSource->setUpdateInterval(ui.sbUpdateInterval->value());
 				break;
 			}
-		case LiveDataSource::NewData:
+		case LiveDataSource::UpdateType::NewData:
 			ui.lUpdateInterval->hide();
 			ui.sbUpdateInterval->hide();
 			ui.lSampleSize->hide();
@@ -435,7 +435,7 @@ void LiveDataDock::updateTypeChanged(int idx) {
 #ifdef HAVE_MQTT
 	else if (m_mqttClient) {
 		DEBUG("LiveDataDock::updateTypeChanged()");
-		const MQTTClient::UpdateType type = static_cast<MQTTClient::UpdateType>(idx);
+		const auto type = static_cast<MQTTClient::UpdateType>(idx);
 
 		if (type == MQTTClient::TimeInterval) {
 			ui.lUpdateInterval->show();
@@ -460,12 +460,13 @@ void LiveDataDock::updateTypeChanged(int idx) {
 void LiveDataDock::readingTypeChanged(int idx) {
 	if (m_liveDataSource)  {
 		const auto type = static_cast<LiveDataSource::ReadingType>(idx);
-		const LiveDataSource::SourceType sourceType = m_liveDataSource->sourceType();
-		const LiveDataSource::UpdateType updateType = m_liveDataSource->updateType();
+		const auto sourceType = m_liveDataSource->sourceType();
+		const auto updateType = m_liveDataSource->updateType();
 
-		if (sourceType == LiveDataSource::NetworkTcpSocket || sourceType == LiveDataSource::LocalSocket || sourceType == LiveDataSource::SerialPort
-		        || type == LiveDataSource::TillEnd || type == LiveDataSource::WholeFile
-		        || updateType == LiveDataSource::NewData) {
+		if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::LocalSocket
+			|| sourceType == LiveDataSource::SourceType::SerialPort
+		        || type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile
+		        || updateType == LiveDataSource::UpdateType::NewData) {
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 		} else {

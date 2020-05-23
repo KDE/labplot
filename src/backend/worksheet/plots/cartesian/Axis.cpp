@@ -151,11 +151,11 @@ void Axis::init() {
 	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);
 
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int) Qt::SolidLine) );
-	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
+	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Unit::Point ) ) );
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
 	d->arrowType = (Axis::ArrowType) group.readEntry("ArrowType", (int)Axis::NoArrow);
 	d->arrowPosition = (Axis::ArrowPosition) group.readEntry("ArrowPosition", (int)Axis::ArrowRight);
-	d->arrowSize = group.readEntry("ArrowSize", Worksheet::convertToSceneUnits(10, Worksheet::Point));
+	d->arrowSize = group.readEntry("ArrowSize", Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
 
 	// axis title
  	d->title = new TextLabel(this->name(), TextLabel::Type::AxisTitle);
@@ -168,8 +168,8 @@ void Axis::init() {
 	d->title->graphicsItem()->setAcceptHoverEvents(false);
 	d->title->setText(this->name());
 	if (d->orientation == AxisVertical) d->title->setRotationAngle(90);
-	d->titleOffsetX = Worksheet::convertToSceneUnits(2, Worksheet::Point); //distance to the axis tick labels
-	d->titleOffsetY = Worksheet::convertToSceneUnits(2, Worksheet::Point); //distance to the axis tick labels
+	d->titleOffsetX = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Point); //distance to the axis tick labels
+	d->titleOffsetY = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Point); //distance to the axis tick labels
 
 	d->majorTicksDirection = (Axis::TicksDirection) group.readEntry("MajorTicksDirection", (int) Axis::ticksOut);
 	d->majorTicksType = (Axis::TicksType) group.readEntry("MajorTicksType", (int) Axis::TicksTotalNumber);
@@ -178,8 +178,8 @@ void Axis::init() {
 
 	d->majorTicksPen.setStyle((Qt::PenStyle) group.readEntry("MajorTicksLineStyle", (int)Qt::SolidLine) );
 	d->majorTicksPen.setColor( group.readEntry("MajorTicksColor", QColor(Qt::black) ) );
-	d->majorTicksPen.setWidthF( group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point) ) );
-	d->majorTicksLength = group.readEntry("MajorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Point));
+	d->majorTicksPen.setWidthF( group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point) ) );
+	d->majorTicksLength = group.readEntry("MajorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point));
 	d->majorTicksOpacity = group.readEntry("MajorTicksOpacity", 1.0);
 
 	d->minorTicksDirection = (Axis::TicksDirection) group.readEntry("MinorTicksDirection", (int) Axis::ticksOut);
@@ -188,8 +188,8 @@ void Axis::init() {
 	d->minorTicksIncrement = group.readEntry("MinorTicksIncrement", 0.0);	// see MajorTicksIncrement
 	d->minorTicksPen.setStyle((Qt::PenStyle) group.readEntry("MinorTicksLineStyle", (int)Qt::SolidLine) );
 	d->minorTicksPen.setColor( group.readEntry("MinorTicksColor", QColor(Qt::black) ) );
-	d->minorTicksPen.setWidthF( group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point) ) );
-	d->minorTicksLength = group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Point));
+	d->minorTicksPen.setWidthF( group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point) ) );
+	d->minorTicksLength = group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Point));
 	d->minorTicksOpacity = group.readEntry("MinorTicksOpacity", 1.0);
 
 	//Labels
@@ -198,10 +198,10 @@ void Axis::init() {
 	d->labelsPrecision = group.readEntry("LabelsPrecision", 1);
 	d->labelsDateTimeFormat = group.readEntry("LabelsDateTimeFormat", "yyyy-MM-dd hh:mm:ss");
 	d->labelsPosition = (Axis::LabelsPosition) group.readEntry("LabelsPosition", (int) Axis::LabelsOut);
-	d->labelsOffset = group.readEntry("LabelsOffset",  Worksheet::convertToSceneUnits( 5.0, Worksheet::Point ));
+	d->labelsOffset = group.readEntry("LabelsOffset",  Worksheet::convertToSceneUnits( 5.0, Worksheet::Unit::Point ));
 	d->labelsRotationAngle = group.readEntry("LabelsRotation", 0);
 	d->labelsFont = group.readEntry("LabelsFont", QFont());
-	d->labelsFont.setPixelSize( Worksheet::convertToSceneUnits( 10.0, Worksheet::Point ) );
+	d->labelsFont.setPixelSize( Worksheet::convertToSceneUnits( 10.0, Worksheet::Unit::Point ) );
 	d->labelsColor = group.readEntry("LabelsFontColor", QColor(Qt::black));
 	d->labelsPrefix =  group.readEntry("LabelsPrefix", "" );
 	d->labelsSuffix =  group.readEntry("LabelsSuffix", "" );
@@ -210,13 +210,13 @@ void Axis::init() {
 	//major grid
 	d->majorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MajorGridStyle", (int) Qt::NoPen) );
 	d->majorGridPen.setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)) );
-	d->majorGridPen.setWidthF( group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
+	d->majorGridPen.setWidthF( group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Unit::Point ) ) );
 	d->majorGridOpacity = group.readEntry("MajorGridOpacity", 1.0);
 
 	//minor grid
 	d->minorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MinorGridStyle", (int) Qt::NoPen) );
 	d->minorGridPen.setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)) );
-	d->minorGridPen.setWidthF( group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
+	d->minorGridPen.setWidthF( group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Unit::Point ) ) );
 	d->minorGridOpacity = group.readEntry("MinorGridOpacity", 1.0);
 }
 
@@ -2287,14 +2287,14 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	else
 		p.setStyle(Qt::NoPen);
 	p.setColor(group.readEntry("MajorGridColor",QColor(Qt::gray)));
-	p.setWidthF(group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)));
+	p.setWidthF(group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	this->setMajorGridPen(p);
 	this->setMajorGridOpacity(group.readEntry("MajorGridOpacity", 1.0));
 
 	//Major ticks
 	p.setStyle((Qt::PenStyle)group.readEntry("MajorTicksLineStyle", (int)Qt::SolidLine));
 	p.setColor(group.readEntry("MajorTicksColor", QColor(Qt::black)));
-	p.setWidthF(group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)));
+	p.setWidthF(group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	this->setMajorTicksPen(p);
 	this->setMajorTicksOpacity(group.readEntry("MajorTicksOpacity", 1.0));
 
@@ -2304,14 +2304,14 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	else
 		p.setStyle(Qt::NoPen);
 	p.setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)));
-	p.setWidthF(group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)));
+	p.setWidthF(group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	this->setMinorGridOpacity(group.readEntry("MinorGridOpacity", 1.0));
 	this->setMinorGridPen(p);
 
 	//Minor ticks
 	p.setStyle((Qt::PenStyle)group.readEntry("MinorTicksLineStyle", (int)Qt::SolidLine));
 	p.setColor(group.readEntry("MinorTicksColor", QColor(Qt::black)));
-	p.setWidthF(group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)));
+	p.setWidthF(group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	this->setMinorTicksPen(p);
 	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity", 1.0));
 

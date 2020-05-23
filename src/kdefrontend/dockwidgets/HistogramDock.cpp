@@ -671,7 +671,7 @@ void HistogramDock::lineWidthChanged(double value) {
 	QPen pen;
 	for (auto* curve : m_curvesList) {
 		pen = curve->linePen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		curve->setLinePen(pen);
 	}
 }
@@ -733,7 +733,7 @@ void HistogramDock::symbolsSizeChanged(double value) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		curve->setSymbolsSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		curve->setSymbolsSize( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 }
 
 void HistogramDock::symbolsRotationChanged(int value) {
@@ -829,7 +829,7 @@ void HistogramDock::symbolsBorderWidthChanged(double value) {
 	QPen pen;
 	for (auto* curve : m_curvesList) {
 		pen = curve->symbolsPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		curve->setSymbolsPen(pen);
 	}
 }
@@ -946,7 +946,7 @@ void HistogramDock::valuesDistanceChanged(double  value) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		curve->setValuesDistance( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		curve->setValuesDistance( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 }
 
 void HistogramDock::valuesRotationChanged(int value) {
@@ -1014,7 +1014,7 @@ void HistogramDock::valuesFontChanged(const QFont& font) {
 		return;
 
 	QFont valuesFont = font;
-	valuesFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	valuesFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point) );
 	for (auto* curve : m_curvesList)
 		curve->setValuesFont(valuesFont);
 }
@@ -1210,7 +1210,7 @@ void HistogramDock::errorBarsCapSizeChanged(double value) const {
 	if (m_initializing)
 		return;
 
-	float size = Worksheet::convertToSceneUnits(value, Worksheet::Point);
+	float size = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* curve : m_curvesList)
 		curve->setErrorBarsCapSize(size);
 }
@@ -1251,7 +1251,7 @@ void HistogramDock::errorBarsWidthChanged(double value) const {
 	QPen pen;
 	for (auto* curve : m_curvesList) {
 		pen = curve->errorBarsPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		curve->setErrorBarsPen(pen);
 	}
 }
@@ -1398,7 +1398,7 @@ void HistogramDock::curveLinePenChanged(const QPen& pen) {
 	ui.cbLineStyle->setCurrentIndex( (int)pen.style());
 	ui.kcbLineColor->setColor( pen.color());
 	GuiTools::updatePenStyles(ui.cbLineStyle, pen.color());
-	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits( pen.widthF(), Worksheet::Point) );
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits( pen.widthF(), Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 void HistogramDock::curveLineOpacityChanged(qreal opacity) {
@@ -1415,7 +1415,7 @@ void HistogramDock::curveSymbolsStyleChanged(Symbol::Style style) {
 }
 void HistogramDock::curveSymbolsSizeChanged(qreal size) {
 	m_initializing = true;
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
+	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 void HistogramDock::curveSymbolsRotationAngleChanged(qreal angle) {
@@ -1440,7 +1440,7 @@ void HistogramDock::curveSymbolsPenChanged(const QPen& pen) {
 	ui.cbSymbolBorderStyle->setCurrentIndex( (int) pen.style());
 	ui.kcbSymbolBorderColor->setColor( pen.color());
 	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, pen.color());
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Point));
+	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
@@ -1457,12 +1457,12 @@ void HistogramDock::curveValuesColumnChanged(const AbstractColumn* column) {
 }
 void HistogramDock::curveValuesPositionChanged(Histogram::ValuesPosition position) {
 	m_initializing = true;
-  	ui.cbValuesPosition->setCurrentIndex((int) position);
+	ui.cbValuesPosition->setCurrentIndex((int) position);
 	m_initializing = false;
 }
 void HistogramDock::curveValuesDistanceChanged(qreal distance) {
 	m_initializing = true;
-  	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(distance, Worksheet::Point) );
+	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(distance, Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 void HistogramDock::curveValuesRotationAngleChanged(qreal angle) {
@@ -1502,7 +1502,7 @@ void HistogramDock::curveValuesSuffixChanged(const QString& suffix) {
 }
 void HistogramDock::curveValuesFontChanged(QFont font) {
 	m_initializing = true;
-	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
+	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)) );
   	ui.kfrValuesFont->setFont(font);
 	m_initializing = false;
 }
@@ -1574,7 +1574,7 @@ void HistogramDock::curveErrorTypeChanged(Histogram::ErrorType type) {
 }
 void HistogramDock::curveErrorBarsCapSizeChanged(qreal size) {
 	m_initializing = true;
-	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
+	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 void HistogramDock::curveErrorBarsTypeChanged(XYCurve::ErrorBarsType type) {
@@ -1587,7 +1587,7 @@ void HistogramDock::curveErrorBarsPenChanged(const QPen& pen) {
 	ui.cbErrorBarsStyle->setCurrentIndex( (int) pen.style());
 	ui.kcbErrorBarsColor->setColor( pen.color());
 	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, pen.color());
-	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point) );
+	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 void HistogramDock::curveErrorBarsOpacityChanged(qreal opacity) {
@@ -1611,31 +1611,31 @@ void HistogramDock::loadConfig(KConfig& config) {
 	ui.cbLineType->setCurrentIndex( group.readEntry("LineType", (int) m_curve->lineType()) );
 	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", (int) m_curve->linePen().style()) );
 	ui.kcbLineColor->setColor( group.readEntry("LineColor", m_curve->linePen().color()) );
-	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", m_curve->linePen().widthF()), Worksheet::Point) );
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", m_curve->linePen().widthF()), Worksheet::Unit::Point) );
 	ui.sbLineOpacity->setValue( round(group.readEntry("LineOpacity", m_curve->lineOpacity())*100.0) );
 
 	//Symbols
 	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", (int)m_curve->symbolsStyle()) );
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_curve->symbolsSize()), Worksheet::Point) );
+	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_curve->symbolsSize()), Worksheet::Unit::Point) );
 	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", m_curve->symbolsRotationAngle()) );
 	ui.sbSymbolOpacity->setValue( round(group.readEntry("SymbolOpacity", m_curve->symbolsOpacity())*100.0) );
 	ui.cbSymbolFillingStyle->setCurrentIndex( group.readEntry("SymbolFillingStyle", (int) m_curve->symbolsBrush().style()) );
 	ui.kcbSymbolFillingColor->setColor(  group.readEntry("SymbolFillingColor", m_curve->symbolsBrush().color()) );
 	ui.cbSymbolBorderStyle->setCurrentIndex( group.readEntry("SymbolBorderStyle", (int) m_curve->symbolsPen().style()) );
 	ui.kcbSymbolBorderColor->setColor( group.readEntry("SymbolBorderColor", m_curve->symbolsPen().color()) );
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth",m_curve->symbolsPen().widthF()), Worksheet::Point) );
+	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth",m_curve->symbolsPen().widthF()), Worksheet::Unit::Point) );
 
   	//Values
   	ui.cbValuesType->setCurrentIndex( group.readEntry("ValuesType", (int) m_curve->valuesType()) );
   	ui.cbValuesPosition->setCurrentIndex( group.readEntry("ValuesPosition", (int) m_curve->valuesPosition()) );
-  	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ValuesDistance", m_curve->valuesDistance()), Worksheet::Point) );
+	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ValuesDistance", m_curve->valuesDistance()), Worksheet::Unit::Point) );
 	ui.sbValuesRotation->setValue( group.readEntry("ValuesRotation", m_curve->valuesRotationAngle()) );
 	ui.sbValuesOpacity->setValue( round(group.readEntry("ValuesOpacity",m_curve->valuesOpacity())*100.0) );
 	this->updateValuesWidgets();
   	ui.leValuesPrefix->setText( group.readEntry("ValuesPrefix", m_curve->valuesPrefix()) );
   	ui.leValuesSuffix->setText( group.readEntry("ValuesSuffix", m_curve->valuesSuffix()) );
 	QFont valuesFont = m_curve->valuesFont();
-	valuesFont.setPointSizeF( round(Worksheet::convertFromSceneUnits(valuesFont.pixelSize(), Worksheet::Point)) );
+	valuesFont.setPointSizeF( round(Worksheet::convertFromSceneUnits(valuesFont.pixelSize(), Worksheet::Unit::Point)) );
   	ui.kfrValuesFont->setFont( group.readEntry("ValuesFont", valuesFont) );
   	ui.kcbValuesColor->setColor( group.readEntry("ValuesColor", m_curve->valuesColor()) );
 
@@ -1653,10 +1653,10 @@ void HistogramDock::loadConfig(KConfig& config) {
 	//Error bars
 	ui.cbErrorType->setCurrentIndex( group.readEntry("ErrorType", (int) m_curve->errorType()) );
 	ui.cbErrorBarsType->setCurrentIndex( group.readEntry("ErrorBarsType", (int) m_curve->errorBarsType()) );
-	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsCapSize", m_curve->errorBarsCapSize()), Worksheet::Point) );
+	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsCapSize", m_curve->errorBarsCapSize()), Worksheet::Unit::Point) );
 	ui.cbErrorBarsStyle->setCurrentIndex( group.readEntry("ErrorBarsStyle", (int) m_curve->errorBarsPen().style()) );
 	ui.kcbErrorBarsColor->setColor( group.readEntry("ErrorBarsColor", m_curve->errorBarsPen().color()) );
-	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsWidth", m_curve->errorBarsPen().widthF()),Worksheet::Point) );
+	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsWidth", m_curve->errorBarsPen().widthF()),Worksheet::Unit::Point) );
 	ui.sbErrorBarsOpacity->setValue( round(group.readEntry("ErrorBarsOpacity", m_curve->errorBarsOpacity())*100.0) );
 }
 
@@ -1687,13 +1687,13 @@ void HistogramDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("LineType", ui.cbLineType->currentIndex());
 	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());
 	group.writeEntry("LineColor", ui.kcbLineColor->color());
-	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(),Worksheet::Point));
+	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(), Worksheet::Unit::Point));
 	group.writeEntry("LineOpacity", ui.sbLineOpacity->value()/100.0);
 
 	//Values
 	group.writeEntry("ValuesType", ui.cbValuesType->currentIndex());
 	group.writeEntry("ValuesPosition", ui.cbValuesPosition->currentIndex());
-	group.writeEntry("ValuesDistance", Worksheet::convertToSceneUnits(ui.sbValuesDistance->value(),Worksheet::Point));
+	group.writeEntry("ValuesDistance", Worksheet::convertToSceneUnits(ui.sbValuesDistance->value(), Worksheet::Unit::Point));
 	group.writeEntry("ValuesRotation", ui.sbValuesRotation->value());
 	group.writeEntry("ValuesOpacity", ui.sbValuesOpacity->value()/100.0);
 	group.writeEntry("ValuesPrefix", ui.leValuesPrefix->text());

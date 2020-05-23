@@ -68,7 +68,7 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	m_units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::MetricUnits);
 	if (m_units == BaseDock::ImperialUnits)
-		m_worksheetUnit = Worksheet::Inch;
+		m_worksheetUnit = Worksheet::Unit::Inch;
 
 	m_dateTimeMenu->setSeparatorsCollapsible(false); //we don't want the first separator to be removed
 
@@ -380,13 +380,13 @@ void LabelWidget::updateUnits() {
 	QString suffix;
 	if (m_units == BaseDock::MetricUnits) {
 		//convert from imperial to metric
-		m_worksheetUnit = Worksheet::Centimeter;
+		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QLatin1String("cm");
 		ui.sbPositionX->setValue(ui.sbPositionX->value()*2.54);
 		ui.sbPositionY->setValue(ui.sbPositionX->value()*2.54);
 	} else {
 		//convert from metric to imperial
-		m_worksheetUnit = Worksheet::Inch;
+		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QLatin1String("in");
 		ui.sbPositionX->setValue(ui.sbPositionX->value()/2.54);
 		ui.sbPositionY->setValue(ui.sbPositionY->value()/2.54);
@@ -880,7 +880,7 @@ void LabelWidget::offsetXChanged(double value) {
 		return;
 
 	for (auto* axis : m_axesList)
-		axis->setTitleOffsetX( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		axis->setTitleOffsetX( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 }
 
 void LabelWidget::offsetYChanged(double value) {
@@ -888,7 +888,7 @@ void LabelWidget::offsetYChanged(double value) {
 		return;
 
 	for (auto* axis : m_axesList)
-		axis->setTitleOffsetY( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		axis->setTitleOffsetY( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 }
 
 void LabelWidget::visibilityChanged(bool state) {
@@ -955,7 +955,7 @@ void LabelWidget::borderWidthChanged(double value) {
 	QPen pen;
 	for (auto* label : m_labelsList) {
 		pen = label->borderPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		label->setBorderPen(pen);
 	}
 }
@@ -1025,8 +1025,8 @@ void LabelWidget::labelPositionChanged(const TextLabel::PositionWrapper& positio
 	m_initializing = true;
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit) );
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit) );
-	ui.cbPositionX->setCurrentIndex( position.horizontalPosition );
-	ui.cbPositionY->setCurrentIndex( position.verticalPosition );
+	ui.cbPositionX->setCurrentIndex( static_cast<int>(position.horizontalPosition) );
+	ui.cbPositionY->setCurrentIndex( static_cast<int>(position.verticalPosition) );
 	m_initializing = false;
 }
 
@@ -1038,25 +1038,25 @@ void LabelWidget::labelBackgroundColorChanged(const QColor color) {
 
 void LabelWidget::labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment index) {
 	m_initializing = true;
-	ui.cbHorizontalAlignment->setCurrentIndex(index);
+	ui.cbHorizontalAlignment->setCurrentIndex(static_cast<int>(index));
 	m_initializing = false;
 }
 
 void LabelWidget::labelVerticalAlignmentChanged(TextLabel::VerticalAlignment index) {
 	m_initializing = true;
-	ui.cbVerticalAlignment->setCurrentIndex(index);
+	ui.cbVerticalAlignment->setCurrentIndex(static_cast<int>(index));
 	m_initializing = false;
 }
 
 void LabelWidget::labelOffsetxChanged(qreal offset) {
 	m_initializing = true;
-	ui.sbOffsetX->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Point));
+	ui.sbOffsetX->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
 void LabelWidget::labelOffsetyChanged(qreal offset) {
 	m_initializing = true;
-	ui.sbOffsetY->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Point));
+	ui.sbOffsetY->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
@@ -1086,7 +1086,7 @@ void LabelWidget::labelBorderPenChanged(const QPen& pen) {
 	if (ui.kcbBorderColor->color() != pen.color())
 		ui.kcbBorderColor->setColor(pen.color());
 	if (ui.sbBorderWidth->value() != pen.widthF())
-		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
+		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
@@ -1143,14 +1143,14 @@ void LabelWidget::load() {
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( (int)m_label->position().horizontalPosition );
 	positionXChanged(ui.cbPositionX->currentIndex());
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.x(),m_worksheetUnit) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.x(), m_worksheetUnit) );
 	ui.cbPositionY->setCurrentIndex( (int)m_label->position().verticalPosition );
 	positionYChanged(ui.cbPositionY->currentIndex());
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.y(),m_worksheetUnit) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.y(), m_worksheetUnit) );
 
 	if (!m_axesList.isEmpty()) {
-		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetX(), Worksheet::Point) );
-		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetY(), Worksheet::Point) );
+		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetX(), Worksheet::Unit::Point) );
+		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetY(), Worksheet::Unit::Point) );
 	}
 	ui.cbHorizontalAlignment->setCurrentIndex( (int) m_label->horizontalAlignment() );
 	ui.cbVerticalAlignment->setCurrentIndex( (int) m_label->verticalAlignment() );
@@ -1160,7 +1160,7 @@ void LabelWidget::load() {
 	ui.cbBorderShape->setCurrentIndex(static_cast<int>(m_label->borderShape()));
 	ui.kcbBorderColor->setColor( m_label->borderPen().color() );
 	ui.cbBorderStyle->setCurrentIndex( (int) m_label->borderPen().style() );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_label->borderPen().widthF(), Worksheet::Point) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_label->borderPen().widthF(), Worksheet::Unit::Point) );
 	ui.sbBorderOpacity->setValue( round(m_label->borderOpacity()*100) );
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
 
@@ -1181,13 +1181,13 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_label->position().horizontalPosition ) );
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_label->position().point.x()),m_worksheetUnit) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_label->position().point.x()), m_worksheetUnit) );
 	ui.cbPositionY->setCurrentIndex( group.readEntry("PositionY", (int) m_label->position().verticalPosition ) );
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_label->position().point.y()),m_worksheetUnit) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_label->position().point.y()), m_worksheetUnit) );
 
 	if (!m_axesList.isEmpty()) {
-		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetX", m_axesList.first()->titleOffsetX()), Worksheet::Point) );
-		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetY", m_axesList.first()->titleOffsetY()), Worksheet::Point) );
+		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetX", m_axesList.first()->titleOffsetX()), Worksheet::Unit::Point) );
+		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetY", m_axesList.first()->titleOffsetY()), Worksheet::Unit::Point) );
 	}
 	ui.cbHorizontalAlignment->setCurrentIndex( group.readEntry("HorizontalAlignment", (int) m_label->horizontalAlignment()) );
 	ui.cbVerticalAlignment->setCurrentIndex( group.readEntry("VerticalAlignment", (int) m_label->verticalAlignment()) );
@@ -1197,7 +1197,7 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	ui.cbBorderShape->setCurrentIndex(group.readEntry("BorderShape").toInt());
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_label->borderPen().color()) );
 	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int)m_label->borderPen().style()) );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_label->borderPen().widthF()), Worksheet::Point) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_label->borderPen().widthF()), Worksheet::Unit::Point) );
 	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", m_label->borderOpacity())*100 );
 	m_initializing = false;
 }
@@ -1216,8 +1216,8 @@ void LabelWidget::saveConfig(KConfigGroup& group) {
 	group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),m_worksheetUnit) );
 
 	if (!m_axesList.isEmpty()) {
-		group.writeEntry("OffsetX",  Worksheet::convertToSceneUnits(ui.sbOffsetX->value(), Worksheet::Point) );
-		group.writeEntry("OffsetY",  Worksheet::convertToSceneUnits(ui.sbOffsetY->value(), Worksheet::Point) );
+		group.writeEntry("OffsetX",  Worksheet::convertToSceneUnits(ui.sbOffsetX->value(), Worksheet::Unit::Point) );
+		group.writeEntry("OffsetY",  Worksheet::convertToSceneUnits(ui.sbOffsetY->value(), Worksheet::Unit::Point) );
 	}
 	group.writeEntry("HorizontalAlignment", ui.cbHorizontalAlignment->currentIndex());
 	group.writeEntry("VerticalAlignment", ui.cbVerticalAlignment->currentIndex());
@@ -1227,6 +1227,6 @@ void LabelWidget::saveConfig(KConfigGroup& group) {
 	group.writeEntry("BorderShape", ui.cbBorderShape->currentIndex());
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
-	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Point));
+	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Unit::Point));
 	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
 }

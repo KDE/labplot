@@ -2386,7 +2386,7 @@ void MainWin::editFitsFileDialog() {
 void MainWin::newLiveDataSourceActionTriggered() {
 	ImportFileDialog* dlg = new ImportFileDialog(this, true);
 	if (dlg->exec() == QDialog::Accepted) {
-		if (static_cast<LiveDataSource::SourceType>(dlg->sourceType()) == LiveDataSource::MQTT) {
+		if (static_cast<LiveDataSource::SourceType>(dlg->sourceType()) == LiveDataSource::SourceType::MQTT) {
 #ifdef HAVE_MQTT
 			MQTTClient* mqttClient = new MQTTClient(i18n("MQTT Client%1", 1));
 			dlg->importToMQTT(mqttClient);

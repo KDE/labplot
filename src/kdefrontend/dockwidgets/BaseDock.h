@@ -69,7 +69,7 @@ protected:
 	AbstractAspect* m_aspect{nullptr};
 	QList<AbstractAspect*> m_aspects;
 	Units m_units{MetricUnits};
-	Worksheet::Unit m_worksheetUnit{Worksheet::Centimeter};
+	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
 
 protected slots:
 	void nameChanged();

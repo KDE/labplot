@@ -74,16 +74,16 @@ void CartesianPlotLegend::init() {
 	KConfigGroup group = config.group( "CartesianPlotLegend" );
 
 	d->labelFont = group.readEntry("LabelsFont", QFont());
-	d->labelFont.setPixelSize( Worksheet::convertToSceneUnits( 10, Worksheet::Point ) );
+	d->labelFont.setPixelSize( Worksheet::convertToSceneUnits( 10, Worksheet::Unit::Point ) );
 
 	d->labelColor = Qt::black;
 	d->labelColumnMajor = true;
-	d->lineSymbolWidth = group.readEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter));
+	d->lineSymbolWidth = group.readEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter));
 	d->rowCount = 0;
 	d->columnCount = 0;
 
-	d->position.horizontalPosition = CartesianPlotLegend::hPositionRight;
-	d->position.verticalPosition = CartesianPlotLegend::vPositionBottom;
+	d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Right;
+	d->position.verticalPosition = WorksheetElement::VerticalPosition::Bottom;
 
 	d->rotationAngle = group.readEntry("Rotation", 0.0);
 
@@ -108,19 +108,18 @@ void CartesianPlotLegend::init() {
 	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
 
 	//Border
-	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
-										 group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
-										 (Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
+	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)), group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
+				 (Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
 	d->borderCornerRadius = group.readEntry("BorderCornerRadius", 0.0);
 	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
 
 	//Layout
-	d->layoutTopMargin =  group.readEntry("LayoutTopMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Centimeter));
-	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Centimeter));
-	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Centimeter));
-	d->layoutRightMargin = group.readEntry("LayoutRightMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Centimeter));
-	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", Worksheet::convertToSceneUnits(0.1f, Worksheet::Centimeter));
-	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", Worksheet::convertToSceneUnits(0.1f, Worksheet::Centimeter));
+	d->layoutTopMargin =  group.readEntry("LayoutTopMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
+	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
+	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
+	d->layoutRightMargin = group.readEntry("LayoutRightMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
+	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", Worksheet::convertToSceneUnits(0.1f, Worksheet::Unit::Centimeter));
+	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", Worksheet::convertToSceneUnits(0.1f, Worksheet::Unit::Centimeter));
 	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 1);
 
 	this->initActions();
@@ -578,24 +577,24 @@ void CartesianPlotLegendPrivate::updatePosition() {
 	//position the legend relative to the actual plot size minus small offset
 	//TODO: make the offset dependent on the size of axis ticks.
 	const QRectF parentRect = q->m_plot->dataRect();
-	float hOffset = Worksheet::convertToSceneUnits(10, Worksheet::Point);
-	float vOffset = Worksheet::convertToSceneUnits(10, Worksheet::Point);
+	float hOffset = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
+	float vOffset = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
 
-	if (position.horizontalPosition != CartesianPlotLegend::hPositionCustom) {
-		if (position.horizontalPosition == CartesianPlotLegend::hPositionLeft)
+	if (position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom) {
+		if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Left)
 			position.point.setX(parentRect.x() + rect.width()/2 + hOffset);
-		else if (position.horizontalPosition == CartesianPlotLegend::hPositionCenter)
+		else if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Center)
 			position.point.setX(parentRect.x() + parentRect.width()/2);
-		else if (position.horizontalPosition == CartesianPlotLegend::hPositionRight)
+		else if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Right)
 			position.point.setX(parentRect.x() + parentRect.width() - rect.width()/2 - hOffset);
 	}
 
-	if (position.verticalPosition != CartesianPlotLegend::vPositionCustom) {
-		if (position.verticalPosition == CartesianPlotLegend::vPositionTop)
+	if (position.verticalPosition != WorksheetElement::VerticalPosition::Custom) {
+		if (position.verticalPosition == WorksheetElement::VerticalPosition::Top)
 			position.point.setY(parentRect.y() + rect.height()/2 + vOffset);
-		else if (position.verticalPosition == CartesianPlotLegend::vPositionCenter)
+		else if (position.verticalPosition == WorksheetElement::VerticalPosition::Center)
 			position.point.setY(parentRect.y() + parentRect.height()/2);
-		else if (position.verticalPosition == CartesianPlotLegend::vPositionBottom)
+		else if (position.verticalPosition == WorksheetElement::VerticalPosition::Bottom)
 			position.point.setY(parentRect.y() + parentRect.height() -  rect.height()/2 -vOffset);
 	}
 
@@ -784,7 +783,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->setPen(curve->errorBarsPen());
 
 				//curve's error bars for x
-				float errorBarsSize = Worksheet::convertToSceneUnits(10, Worksheet::Point);
+				float errorBarsSize = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
 				if (curve->symbolsStyle()!=Symbol::NoSymbols && errorBarsSize<curve->symbolsSize()*1.4)
 					errorBarsSize = curve->symbolsSize()*1.4;
 
@@ -888,8 +887,8 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 		//convert item's center point in parent's coordinates
 		WorksheetElement::PositionWrapper tempPosition;
 			tempPosition.point = value.toPointF();
-			tempPosition.horizontalPosition = WorksheetElement::hPositionCustom;
-			tempPosition.verticalPosition = WorksheetElement::vPositionCustom;
+			tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
+			tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
 
 		//emit the signals in order to notify the UI.
 		//we don't set the position related member variables during the mouse movements.
@@ -908,8 +907,8 @@ void CartesianPlotLegendPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* eve
 		suppressRetransform = true;
 		WorksheetElement::PositionWrapper tempPosition;
 		tempPosition.point = point;
-		tempPosition.horizontalPosition = WorksheetElement::hPositionCustom;
-		tempPosition.verticalPosition = WorksheetElement::vPositionCustom;
+		tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
+		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
 		q->setPosition(tempPosition);
 		suppressRetransform = false;
 	}
@@ -926,20 +925,20 @@ void CartesianPlotLegendPrivate::keyPressEvent(QKeyEvent* event) {
 
 		if (event->key() == Qt::Key_Left) {
 			point.setX(point.x() - delta);
-			tempPosition.horizontalPosition = WorksheetElement::hPositionCustom;
+			tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
 			tempPosition.verticalPosition = position.verticalPosition;
 		} else if (event->key() == Qt::Key_Right) {
 			point.setX(point.x() + delta);
-			tempPosition.horizontalPosition = WorksheetElement::hPositionCustom;
+			tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
 			tempPosition.verticalPosition = position.verticalPosition;
 		} else if (event->key() == Qt::Key_Up) {
 			point.setY(point.y() - delta);
 			tempPosition.horizontalPosition = position.horizontalPosition;
-			tempPosition.verticalPosition = WorksheetElement::vPositionCustom;
+			tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
 		} else if (event->key() == Qt::Key_Down) {
 			point.setY(point.y() + delta);
 			tempPosition.horizontalPosition = position.horizontalPosition;
-			tempPosition.verticalPosition = WorksheetElement::vPositionCustom;
+			tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
 		}
 
 		tempPosition.point = point;
@@ -989,8 +988,8 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement( "geometry" );
 	writer->writeAttribute( "x", QString::number(d->position.point.x()) );
 	writer->writeAttribute( "y", QString::number(d->position.point.y()) );
-	writer->writeAttribute( "horizontalPosition", QString::number(d->position.horizontalPosition) );
-	writer->writeAttribute( "verticalPosition", QString::number(d->position.verticalPosition) );
+	writer->writeAttribute( "horizontalPosition", QString::number(static_cast<int>(d->position.horizontalPosition)) );
+	writer->writeAttribute( "verticalPosition", QString::number(static_cast<int>(d->position.verticalPosition)) );
 	writer->writeAttribute( "rotation", QString::number(d->rotationAngle) );
 	writer->writeEndElement();
 

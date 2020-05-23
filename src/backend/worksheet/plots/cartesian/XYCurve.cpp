@@ -99,28 +99,28 @@ void XYCurve::init() {
 	d->lineInterpolationPointsCount = group.readEntry("LineInterpolationPointsCount", 1);
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine) );
 	d->linePen.setColor( group.readEntry("LineColor", QColor(Qt::black)) );
-	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
+	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)) );
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
 
 	d->dropLineType = (XYCurve::DropLineType) group.readEntry("DropLineType", (int)XYCurve::NoLine);
 	d->dropLinePen.setStyle( (Qt::PenStyle) group.readEntry("DropLineStyle", (int)Qt::SolidLine) );
 	d->dropLinePen.setColor( group.readEntry("DropLineColor", QColor(Qt::black)));
-	d->dropLinePen.setWidthF( group.readEntry("DropLineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
+	d->dropLinePen.setWidthF( group.readEntry("DropLineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)) );
 	d->dropLineOpacity = group.readEntry("DropLineOpacity", 1.0);
 
 	d->symbolsStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::NoSymbols);
-	d->symbolsSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Point));
+	d->symbolsSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->symbolsRotationAngle = group.readEntry("SymbolRotation", 0.0);
 	d->symbolsOpacity = group.readEntry("SymbolOpacity", 1.0);
 	d->symbolsBrush.setStyle( (Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern) );
 	d->symbolsBrush.setColor( group.readEntry("SymbolFillingColor", QColor(Qt::black)) );
 	d->symbolsPen.setStyle( (Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine) );
 	d->symbolsPen.setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
-	d->symbolsPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)) );
+	d->symbolsPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point)) );
 
 	d->valuesType = (XYCurve::ValuesType) group.readEntry("ValuesType", (int)XYCurve::NoValues);
 	d->valuesPosition = (XYCurve::ValuesPosition) group.readEntry("ValuesPosition", (int)XYCurve::ValuesAbove);
-	d->valuesDistance = group.readEntry("ValuesDistance", Worksheet::convertToSceneUnits(5, Worksheet::Point));
+	d->valuesDistance = group.readEntry("ValuesDistance", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->valuesRotationAngle = group.readEntry("ValuesRotation", 0.0);
 	d->valuesOpacity = group.readEntry("ValuesOpacity", 1.0);
 	d->valuesNumericFormat = group.readEntry("ValuesNumericFormat", "f").at(0).toLatin1();
@@ -129,7 +129,7 @@ void XYCurve::init() {
 	d->valuesPrefix = group.readEntry("ValuesPrefix", "");
 	d->valuesSuffix = group.readEntry("ValuesSuffix", "");
 	d->valuesFont = group.readEntry("ValuesFont", QFont());
-	d->valuesFont.setPixelSize( Worksheet::convertToSceneUnits( 8, Worksheet::Point ) );
+	d->valuesFont.setPixelSize( Worksheet::convertToSceneUnits( 8, Worksheet::Unit::Point ) );
 	d->valuesColor = group.readEntry("ValuesColor", QColor(Qt::black));
 
 	d->fillingPosition = (XYCurve::FillingPosition) group.readEntry("FillingPosition", (int)XYCurve::NoFilling);
@@ -145,10 +145,10 @@ void XYCurve::init() {
 	d->xErrorType = (XYCurve::ErrorType) group.readEntry("XErrorType", (int)XYCurve::NoError);
 	d->yErrorType = (XYCurve::ErrorType) group.readEntry("YErrorType", (int)XYCurve::NoError);
 	d->errorBarsType = (XYCurve::ErrorBarsType) group.readEntry("ErrorBarsType", (int)XYCurve::ErrorBarsSimple);
-	d->errorBarsCapSize = group.readEntry( "ErrorBarsCapSize", Worksheet::convertToSceneUnits(10, Worksheet::Point) );
+	d->errorBarsCapSize = group.readEntry( "ErrorBarsCapSize", Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point) );
 	d->errorBarsPen.setStyle( (Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine) );
 	d->errorBarsPen.setColor( group.readEntry("ErrorBarsColor", QColor(Qt::black)) );
-	d->errorBarsPen.setWidthF( group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
+	d->errorBarsPen.setWidthF( group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)) );
 	d->errorBarsOpacity = group.readEntry("ErrorBarsOpacity", 1.0);
 }
 
@@ -1007,8 +1007,8 @@ void XYCurvePrivate::retransform() {
 	#endif
 
 	if (!symbolPointsLogical.isEmpty()) {
-		float widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Inch);
-		float heightDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().height(), Worksheet::Inch);
+		float widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Unit::Inch);
+		float heightDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().height(), Worksheet::Unit::Inch);
 		int countPixelX = ceil(widthDatarectInch*QApplication::desktop()->physicalDpiX());
 		int countPixelY = ceil(heightDatarectInch*QApplication::desktop()->physicalDpiY());
 
@@ -1289,8 +1289,8 @@ void XYCurvePrivate::updateLines() {
 		return;
 	}
 
-	float widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Inch);
-	//float heightDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().height(), Worksheet::Inch);	// unsed
+	float widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Unit::Inch);
+	//float heightDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().height(), Worksheet::Unit::Inch);	// unsed
 	int countPixelX = ceil(widthDatarectInch*QApplication::desktop()->physicalDpiX());
 	//int countPixelY = ceil(heightDatarectInch*QApplication::desktop()->physicalDpiY());	// unused
 
@@ -3236,14 +3236,14 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 
 	//Line
 	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
-	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)));
+	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	p.setColor(themeColor);
 	this->setLinePen(p);
 	this->setLineOpacity(group.readEntry("LineOpacity", 1.0));
 
 	//Drop line
 	p.setStyle((Qt::PenStyle)group.readEntry("DropLineStyle", (int)Qt::SolidLine));
-	p.setWidthF(group.readEntry("DropLineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)));
+	p.setWidthF(group.readEntry("DropLineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	p.setColor(themeColor);
 	this->setDropLinePen(p);
 	this->setDropLineOpacity(group.readEntry("DropLineOpacity", 1.0));
@@ -3256,7 +3256,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	this->setSymbolsBrush(brush);
 	p.setStyle((Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine));
 	p.setColor(themeColor);
-	p.setWidthF(group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)));
+	p.setWidthF(group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point)));
 	this->setSymbolsPen(p);
 
 	//Values
@@ -3274,7 +3274,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 
 	//Error Bars
 	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine));
-	p.setWidthF(group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)));
+	p.setWidthF(group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	p.setColor(themeColor);
 	this->setErrorBarsPen(p);
 	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity", 1.0));

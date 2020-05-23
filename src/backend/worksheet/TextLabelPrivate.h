@@ -46,9 +46,9 @@ public:
 	//we need to scale from the font size specified in points to scene units.
 	//furhermore, we create the tex-image in a higher resolution then usual desktop resolution
 	// -> take this into account
-	float scaleFactor{Worksheet::convertToSceneUnits(1, Worksheet::Point)};
+	float scaleFactor{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)};
 	int teXImageResolution{QApplication::desktop()->physicalDpiX()};
-	float teXImageScaleFactor{Worksheet::convertToSceneUnits(2.54/QApplication::desktop()->physicalDpiX(), Worksheet::Centimeter)};
+	float teXImageScaleFactor{Worksheet::convertToSceneUnits(2.54/QApplication::desktop()->physicalDpiX(), Worksheet::Unit::Centimeter)};
 
 	TextLabel::TextWrapper textWrapper;
 	QFont teXFont{"Computer Modern", 42};
@@ -61,15 +61,15 @@ public:
 	// see TextLabel::init() for type specific default settings
 	// position in parent's coordinate system, the label gets aligned around this point
 	WorksheetElement::PositionWrapper position{
-		QPoint(Worksheet::convertToSceneUnits(1, Worksheet::Centimeter), Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)),
-		TextLabel::hPositionCenter, TextLabel::vPositionCenter};
+		QPoint(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)),
+		TextLabel::HorizontalPosition::Center, TextLabel::VerticalPosition::Center};
 	bool positionInvalid{false};
 
-	WorksheetElement::HorizontalAlignment horizontalAlignment{WorksheetElement::hAlignCenter};
-	WorksheetElement::VerticalAlignment verticalAlignment{WorksheetElement::vAlignCenter};
+	WorksheetElement::HorizontalAlignment horizontalAlignment{WorksheetElement::HorizontalAlignment::Center};
+	WorksheetElement::VerticalAlignment verticalAlignment{WorksheetElement::VerticalAlignment::Center};
 
 	TextLabel::BorderShape borderShape{TextLabel::BorderShape::NoBorder};
-	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Point), Qt::SolidLine};
+	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
 	qreal borderOpacity{1.0};
 
 	QString name() const;

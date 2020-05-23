@@ -79,7 +79,7 @@ void ReferenceLine::init() {
 
 	d->pen.setStyle( (Qt::PenStyle) group.readEntry("Style", (int)Qt::SolidLine) );
 	d->pen.setColor( group.readEntry("Color", QColor(Qt::black)) );
-	d->pen.setWidthF( group.readEntry("Width", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
+	d->pen.setWidthF( group.readEntry("Width", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)) );
 	d->opacity = group.readEntry("Opacity", 1.0);
 }
 

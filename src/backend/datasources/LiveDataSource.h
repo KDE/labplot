@@ -53,7 +53,7 @@ class LiveDataSource : public Spreadsheet {
 	Q_ENUMS(ReadingType)
 
 public:
-	enum SourceType {
+	enum class SourceType {
 		FileOrPipe = 0,		// regular file or pipe
 		NetworkTcpSocket,	// TCP socket
 		NetworkUdpSocket,	// UDP socket
@@ -62,12 +62,12 @@ public:
 		MQTT
 	};
 
-	enum UpdateType {
+	enum class UpdateType {
 		TimeInterval = 0,	// update periodically using given interval
 		NewData			// update when new data is available
 	};
 
-	enum ReadingType {
+	enum class ReadingType {
 		ContinuousFixed = 0,	// read continuously sampleSize number of samples (lines)
 		FromEnd,		// read sampleSize number of samples (lines) from end
 		TillEnd,		// read until the end

@@ -45,13 +45,13 @@ public:
 	WorksheetElement(const QString&, AspectType);
 	~WorksheetElement() override;
 
-	enum WorksheetElementName {NameCartesianPlot = 1};
+	enum class WorksheetElementName {NameCartesianPlot = 1};
 
-	enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
-	enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
+	enum class HorizontalPosition {Left, Center, Right, Custom};
+	enum class VerticalPosition {Top, Center, Bottom, Custom};
 
-	enum HorizontalAlignment {hAlignLeft, hAlignCenter, hAlignRight};
-	enum VerticalAlignment {vAlignTop, vAlignCenter, vAlignBottom};
+	enum class HorizontalAlignment {Left, Center, Right};
+	enum class VerticalAlignment {Top, Center, Bottom};
 
 	struct PositionWrapper {
 		QPointF point;

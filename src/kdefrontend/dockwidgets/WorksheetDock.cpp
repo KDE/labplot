@@ -224,7 +224,7 @@ void WorksheetDock::updateUnits() {
 	QString suffix;
 	if (m_units == BaseDock::MetricUnits) {
 		//convert from imperial to metric
-		m_worksheetUnit = Worksheet::Centimeter;
+		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QLatin1String("cm");
 		ui.sbWidth->setValue(ui.sbWidth->value()*2.54);
 		ui.sbHeight->setValue(ui.sbHeight->value()*2.54);
@@ -236,7 +236,7 @@ void WorksheetDock::updateUnits() {
 		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value()*2.54);
 	} else {
 		//convert from metric to imperial
-		m_worksheetUnit = Worksheet::Inch;
+		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QLatin1String("in");
 		ui.sbWidth->setValue(ui.sbWidth->value()/2.54);
 		ui.sbHeight->setValue(ui.sbHeight->value()/2.54);
@@ -452,8 +452,8 @@ void WorksheetDock::sizeChanged(int i) {
 			ui.sbHeight->setValue(s.height()/25.4);
 		}
 
-		float w = Worksheet::convertToSceneUnits(s.width(), Worksheet::Millimeter);
-		float h = Worksheet::convertToSceneUnits(s.height(), Worksheet::Millimeter);
+		float w = Worksheet::convertToSceneUnits(s.width(), Worksheet::Unit::Millimeter);
+		float h = Worksheet::convertToSceneUnits(s.height(), Worksheet::Unit::Millimeter);
 		for (auto* worksheet : m_worksheetList) {
 			worksheet->setUseViewSize(false);
 			worksheet->setPageRect(QRect(0,0,w,h));
@@ -621,7 +621,7 @@ void WorksheetDock::backgroundOpacityChanged(int value) {
 void WorksheetDock::layoutChanged(int index) {
 	auto layout = (Worksheet::Layout)index;
 
-	bool b = (layout != Worksheet::NoLayout);
+	bool b = (layout != Worksheet::Layout::NoLayout);
 	ui.sbLayoutTopMargin->setEnabled(b);
 	ui.sbLayoutBottomMargin->setEnabled(b);
 	ui.sbLayoutLeftMargin->setEnabled(b);
@@ -637,7 +637,7 @@ void WorksheetDock::layoutChanged(int index) {
 
 	if (b) {
 		//show grid specific settings if grid layout selected
-		bool grid = (layout == Worksheet::GridLayout);
+		bool grid = (layout == Worksheet::Layout::GridLayout);
 		ui.lGrid->setVisible(grid);
 		ui.lRowCount->setVisible(grid);
 		ui.sbLayoutRowCount->setVisible(grid);
@@ -848,7 +848,7 @@ void WorksheetDock::worksheetBackgroundOpacityChanged(float opacity) {
 
 void WorksheetDock::worksheetLayoutChanged(Worksheet::Layout layout) {
 	m_initializing = true;
-	ui.cbLayout->setCurrentIndex(layout);
+	ui.cbLayout->setCurrentIndex(static_cast<int>(layout));
 	m_initializing = false;
 }
 

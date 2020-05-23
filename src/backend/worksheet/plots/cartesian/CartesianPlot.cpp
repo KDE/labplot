@@ -152,10 +152,10 @@ void CartesianPlot::init() {
 	m_title->setParentGraphicsItem(m_plotArea->graphicsItem());
 
 	//offset between the plot area and the area defining the coordinate system, in scene units.
-	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
-	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
-	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
-	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
+	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 	d->symmetricPadding = true;
 
 	connect(this, &AbstractAspect::aspectAdded, this, &CartesianPlot::childAdded);
@@ -305,8 +305,8 @@ void CartesianPlot::initDefault(Type type) {
 			d->yMin = -0.5;
 			d->yMax = 0.5;
 
-			d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
-			d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
+			d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
+			d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 
 			QPen pen = m_plotArea->borderPen();
 			pen.setStyle(Qt::NoPen);
@@ -348,8 +348,8 @@ void CartesianPlot::initDefault(Type type) {
 			d->yMin = -0.5;
 			d->yMax = 0.5;
 
-			d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
-			d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
+			d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
+			d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 
 			QPen pen = m_plotArea->borderPen();
 			pen.setStyle(Qt::NoPen);
@@ -396,10 +396,10 @@ void CartesianPlot::initDefault(Type type) {
 
 	//Geometry, specify the plot rect in scene coordinates.
 	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
-	float x = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
-	float y = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
-	float w = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
-	float h = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
+	float x = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter);
+	float y = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter);
+	float w = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Centimeter);
+	float h = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Centimeter);
 
 	//all plot children are initialized -> set the geometry of the plot in scene coordinates.
 	d->rect = QRectF(x,y,w,h);
@@ -1814,7 +1814,7 @@ void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
 	const auto* worksheet = dynamic_cast<const Worksheet*>(parentAspect());
 	if (worksheet) {
 		if (mouseMode == CartesianPlot::SelectionMode) {
-			if (worksheet->layout() != Worksheet::NoLayout)
+			if (worksheet->layout() != Worksheet::Layout::NoLayout)
 				graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 			else
 				graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -2642,7 +2642,7 @@ void CartesianPlot::visibilityChanged() {
 //################### Private implementation ##########################
 //#####################################################################
 CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot) : AbstractPlotPrivate(plot), q(plot) {
-	setData(0, WorksheetElement::NameCartesianPlot);
+	setData(0, static_cast<int>(WorksheetElement::WorksheetElementName::NameCartesianPlot));
 	m_cursor0Text.prepare();
 	m_cursor1Text.prepare();
 }
@@ -3394,7 +3394,7 @@ void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
 		|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
 
 		const auto* worksheet = static_cast<const Worksheet*>(q->parentAspect());
-		if (worksheet->layout() == Worksheet::NoLayout) {
+		if (worksheet->layout() == Worksheet::Layout::NoLayout) {
 			const int delta = 5;
 			QRectF rect = q->rect();
 

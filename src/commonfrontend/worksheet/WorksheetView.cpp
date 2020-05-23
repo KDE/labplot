@@ -113,16 +113,16 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(), m_workshee
 	//no need to resize the view when the project is being opened,
 	//all views will be resized to the stored values at the end
 	if (!m_worksheet->isLoading()) {
-		float w = Worksheet::convertFromSceneUnits(sceneRect().width(), Worksheet::Inch);
-		float h = Worksheet::convertFromSceneUnits(sceneRect().height(), Worksheet::Inch);
+		float w = Worksheet::convertFromSceneUnits(sceneRect().width(), Worksheet::Unit::Inch);
+		float h = Worksheet::convertFromSceneUnits(sceneRect().height(), Worksheet::Unit::Inch);
 		w *= QApplication::desktop()->physicalDpiX();
 		h *= QApplication::desktop()->physicalDpiY();
 		resize(w*1.1, h*1.1);
 	}
 
 	//rescale to the original size
-	static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
-	static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
+	static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+	static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 	setTransform(QTransform::fromScale(hscale, vscale));
 
 	initBasicActions();
@@ -933,9 +933,9 @@ bool WorksheetView::isPlotAtPos(QPoint pos) const {
 	bool plot = false;
 	QGraphicsItem* item = itemAt(pos);
 	if (item) {
-		plot = item->data(0).toInt() == WorksheetElement::NameCartesianPlot;
+		plot = item->data(0).toInt() == static_cast<int>(WorksheetElement::WorksheetElementName::NameCartesianPlot);
 		if (!plot && item->parentItem())
-			plot = item->parentItem()->data(0).toInt() == WorksheetElement::NameCartesianPlot;
+			plot = item->parentItem()->data(0).toInt() == static_cast<int>(WorksheetElement::WorksheetElementName::NameCartesianPlot);
 	}
 
 	return plot;
@@ -947,10 +947,10 @@ CartesianPlot* WorksheetView::plotAt(QPoint pos) const {
 		return nullptr;
 
 	QGraphicsItem* plotItem = nullptr;
-	if (item->data(0).toInt() == WorksheetElement::NameCartesianPlot)
+	if (item->data(0).toInt() == static_cast<int>(WorksheetElement::WorksheetElementName::NameCartesianPlot))
 		plotItem = item;
 	else {
-		if (item->parentItem() && item->parentItem()->data(0).toInt() == WorksheetElement::NameCartesianPlot)
+		if (item->parentItem() && item->parentItem()->data(0).toInt() == static_cast<int>(WorksheetElement::WorksheetElementName::NameCartesianPlot))
 			plotItem = item->parentItem();
 	}
 
@@ -1096,7 +1096,7 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 
 		//copy the part of the view to be shown magnified
 		QPointF pos = mapToScene(event->pos());
-		const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
+		const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Unit::Centimeter)/transform().m11();
 
 		const QRectF copyRect(pos.x() - size/(2*magnificationFactor), pos.y() - size/(2*magnificationFactor), size/magnificationFactor, size/magnificationFactor);
 		QPixmap px = grab(mapFromScene(copyRect).boundingRect());
@@ -1207,8 +1207,8 @@ void WorksheetView::useViewSizeRequested() {
 
 void WorksheetView::processResize() {
 	if (size() != sceneRect().size()) {
-		static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
-		static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
+		static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+		static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 		m_worksheet->setUndoAware(false);
 		m_worksheet->setPageRect(QRectF(0.0, 0.0, width()/hscale, height()/vscale));
 		m_worksheet->setUndoAware(true);
@@ -1221,8 +1221,8 @@ void WorksheetView::changeZoom(QAction* action) {
 	else if (action == zoomOutViewAction)
 		zoom(-1);
 	else if (action == zoomOriginAction) {
-		static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
-		static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
+		static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+		static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 		setTransform(QTransform::fromScale(hscale, vscale));
 	} else if (action == zoomFitPageWidthAction) {
 		float scaleFactor = viewport()->width()/scene()->sceneRect().width();
@@ -1434,7 +1434,7 @@ void WorksheetView::changeLayout(QAction* action) {
 
 		breakLayoutAction->setEnabled(false);
 
-		m_worksheet->setLayout(Worksheet::NoLayout);
+		m_worksheet->setLayout(Worksheet::Layout::NoLayout);
 	} else {
 		verticalLayoutAction->setEnabled(false);
 		horizontalLayoutAction->setEnabled(false);
@@ -1443,13 +1443,13 @@ void WorksheetView::changeLayout(QAction* action) {
 
 		if (action == verticalLayoutAction) {
 			verticalLayoutAction->setChecked(true);
-			m_worksheet->setLayout(Worksheet::VerticalLayout);
+			m_worksheet->setLayout(Worksheet::Layout::VerticalLayout);
 		} else if (action == horizontalLayoutAction) {
 			horizontalLayoutAction->setChecked(true);
-			m_worksheet->setLayout(Worksheet::HorizontalLayout);
+			m_worksheet->setLayout(Worksheet::Layout::HorizontalLayout);
 		} else {
 			gridLayoutAction->setChecked(true);
-			m_worksheet->setLayout(Worksheet::GridLayout);
+			m_worksheet->setLayout(Worksheet::Layout::GridLayout);
 		}
 	}
 }
@@ -1595,7 +1595,7 @@ void WorksheetView::handleCartesianPlotActions() {
 		//check whether we have cartesian plots selected
 		for (auto* item : m_selectedItems) {
 			//TODO: or if a children of a plot is selected
-			if (item->data(0).toInt() == WorksheetElement::NameCartesianPlot) {
+			if (item->data(0).toInt() == static_cast<int>(WorksheetElement::WorksheetElementName::NameCartesianPlot)) {
 				plot = true;
 				break;
 			}
@@ -1650,8 +1650,8 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		printer.setOutputFormat(QPrinter::PdfFormat);
 
 		printer.setOutputFileName(path);
-		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
-		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
+		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 		printer.setPaperSize( QSizeF(w, h), QPrinter::Millimeter);
 		printer.setPageMargins(0,0,0,0, QPrinter::Millimeter);
 		printer.setPrintRange(QPrinter::PageRange);
@@ -1670,8 +1670,8 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 // 			RESET_CURSOR;
 // 			QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
 // 		}
-		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
-		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
+		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 		w = w*QApplication::desktop()->physicalDpiX()/25.4;
 		h = h*QApplication::desktop()->physicalDpiY()/25.4;
 
@@ -1686,8 +1686,8 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	} else {
 		//PNG
 		//TODO add all formats supported by Qt in QImage
-		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
-		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
+		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 		w = w*resolution/25.4;
 		h = h*resolution/25.4;
 		QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
@@ -1722,8 +1722,8 @@ void WorksheetView::exportToClipboard() {
 			sourceRect = sourceRect.united( item->mapToScene(item->boundingRect()).boundingRect() );
 	}
 
-	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
-	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
+	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 	w = w*QApplication::desktop()->physicalDpiX()/25.4;
 	h = h*QApplication::desktop()->physicalDpiY()/25.4;
 	QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
@@ -1779,7 +1779,7 @@ void WorksheetView::updateBackground() {
  * enables the corresponding action
  */
 void WorksheetView::layoutChanged(Worksheet::Layout layout) {
-	if (layout == Worksheet::NoLayout) {
+	if (layout == Worksheet::Layout::NoLayout) {
 		verticalLayoutAction->setEnabled(true);
 		verticalLayoutAction->setChecked(false);
 
@@ -1796,9 +1796,9 @@ void WorksheetView::layoutChanged(Worksheet::Layout layout) {
 		gridLayoutAction->setEnabled(false);
 		breakLayoutAction->setEnabled(true);
 
-		if (layout == Worksheet::VerticalLayout)
+		if (layout == Worksheet::Layout::VerticalLayout)
 			verticalLayoutAction->setChecked(true);
-		else if (layout == Worksheet::HorizontalLayout)
+		else if (layout == Worksheet::Layout::HorizontalLayout)
 			horizontalLayoutAction->setChecked(true);
 		else
 			gridLayoutAction->setChecked(true);
@@ -1887,7 +1887,7 @@ void WorksheetView::cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode m
 
 void WorksheetView::cartesianPlotAddNew(QAction* action) {
 	QVector<CartesianPlot*> plots = m_worksheet->children<CartesianPlot>();
-	if (m_worksheet->cartesianPlotActionMode() == Worksheet::ApplyActionToSelection) {
+	if (m_worksheet->cartesianPlotActionMode() == Worksheet::CartesianPlotActionMode::ApplyActionToSelection) {
 		int selectedPlots = 0;
 		for (auto* plot : plots) {
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
@@ -2001,7 +2001,7 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 
 void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 	CartesianPlot::NavigationOperation op = (CartesianPlot::NavigationOperation)action->data().toInt();
-	if (m_worksheet->cartesianPlotActionMode() == Worksheet::ApplyActionToSelection) {
+	if (m_worksheet->cartesianPlotActionMode() == Worksheet::CartesianPlotActionMode::ApplyActionToSelection) {
 		for (auto* plot : m_worksheet->children<CartesianPlot>() ) {
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
 				plot->navigate(op);
@@ -2038,8 +2038,8 @@ void WorksheetView::presenterMode() {
 	//show static presenter widget (default)
 	QRectF sourceRect(scene()->sceneRect());
 
-	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
-	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
+	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 	w *= QApplication::desktop()->physicalDpiX()/25.4;
 	h *= QApplication::desktop()->physicalDpiY()/25.4;
 

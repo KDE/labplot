@@ -53,13 +53,13 @@ public:
 	explicit DatapickerImage(const QString& name, bool loading = false);
 	~DatapickerImage() override;
 
-	enum GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary};
-	enum ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
-	enum PlotImageType { NoImage, OriginalImage, ProcessedImage };
-	enum PointsType { AxisPoints, CurvePoints, SegmentPoints };
+	enum class GraphType {Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary};
+	enum class ColorAttributes {None, Intensity, Foreground, Hue, Saturation, Value};
+	enum class PlotImageType {NoImage, OriginalImage, ProcessedImage};
+	enum class PointsType {AxisPoints, CurvePoints, SegmentPoints};
 
 	struct ReferencePoints {
-		GraphType type{Cartesian};
+		GraphType type{GraphType::Cartesian};
 		QPointF scenePos[3];
 		QVector3D logicalPos[3];
 		double ternaryScale{1.0};

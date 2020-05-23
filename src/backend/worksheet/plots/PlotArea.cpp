@@ -87,7 +87,7 @@ void PlotArea::init() {
 
 	//Border
 	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
-	                    group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
+	                    group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
 	                    (Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
 	d->borderCornerRadius = group.readEntry("BorderCornerRadius", 0.0);
 	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
@@ -597,7 +597,7 @@ void PlotArea::loadThemeConfig(const KConfig& config) {
 
 	//border
 	QPen pen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
-					group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
+					group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
 					(Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
 	this->setBorderPen(pen);
 	this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", 0.0));

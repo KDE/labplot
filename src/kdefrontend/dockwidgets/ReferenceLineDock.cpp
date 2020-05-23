@@ -171,7 +171,7 @@ void ReferenceLineDock::widthChanged(double value) {
 	QPen pen;
 	for (auto* line : m_linesList) {
 		pen = line->pen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		line->setPen(pen);
 	}
 }
@@ -226,7 +226,7 @@ void ReferenceLineDock::linePenChanged(const QPen& pen) {
 	ui.cbLineStyle->setCurrentIndex( (int)pen.style());
 	ui.kcbLineColor->setColor( pen.color());
 	GuiTools::updatePenStyles(ui.cbLineStyle, pen.color());
-	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits( pen.widthF(), Worksheet::Point) );
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits( pen.widthF(), Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 
@@ -255,7 +255,7 @@ void ReferenceLineDock::load() {
 	ui.lePosition->setText(QString::number(m_line->position()));
 	ui.cbLineStyle->setCurrentIndex( (int) m_line->pen().style() );
 	ui.kcbLineColor->setColor( m_line->pen().color() );
-	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(m_line->pen().widthF(), Worksheet::Point) );
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(m_line->pen().widthF(), Worksheet::Unit::Point) );
 	ui.sbLineOpacity->setValue( round(m_line->opacity()*100.0) );
 	ui.chkVisible->setChecked( m_line->isVisible() );
 

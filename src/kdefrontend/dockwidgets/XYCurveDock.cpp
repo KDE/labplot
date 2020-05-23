@@ -889,7 +889,7 @@ void XYCurveDock::lineWidthChanged(double value) {
 	QPen pen;
 	for (auto* curve : m_curvesList) {
 		pen = curve->linePen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		curve->setLinePen(pen);
 	}
 }
@@ -961,7 +961,7 @@ void XYCurveDock::dropLineWidthChanged(double value) {
 	QPen pen;
 	for (auto* curve : m_curvesList) {
 		pen = curve->dropLinePen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		curve->setDropLinePen(pen);
 	}
 }
@@ -1023,7 +1023,7 @@ void XYCurveDock::symbolsSizeChanged(double value) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		curve->setSymbolsSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		curve->setSymbolsSize( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 }
 
 void XYCurveDock::symbolsRotationChanged(int value) {
@@ -1119,7 +1119,7 @@ void XYCurveDock::symbolsBorderWidthChanged(double value) {
 	QPen pen;
 	for (auto* curve : m_curvesList) {
 		pen = curve->symbolsPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		curve->setSymbolsPen(pen);
 	}
 }
@@ -1270,7 +1270,7 @@ void XYCurveDock::valuesDistanceChanged(double  value) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		curve->setValuesDistance( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		curve->setValuesDistance( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 }
 
 void XYCurveDock::valuesRotationChanged(int value) {
@@ -1338,7 +1338,7 @@ void XYCurveDock::valuesFontChanged(const QFont& font) {
 		return;
 
 	QFont valuesFont = font;
-	valuesFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	valuesFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point) );
 	for (auto* curve : m_curvesList)
 		curve->setValuesFont(valuesFont);
 }
@@ -1708,7 +1708,7 @@ void XYCurveDock::errorBarsCapSizeChanged(double value) const {
 	if (m_initializing)
 		return;
 
-	float size = Worksheet::convertToSceneUnits(value, Worksheet::Point);
+	float size = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* curve : m_curvesList)
 		curve->setErrorBarsCapSize(size);
 }
@@ -1749,7 +1749,7 @@ void XYCurveDock::errorBarsWidthChanged(double value) const {
 	QPen pen;
 	for (auto* curve : m_curvesList) {
 		pen = curve->errorBarsPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		curve->setErrorBarsPen(pen);
 	}
 }
@@ -1829,7 +1829,7 @@ void XYCurveDock::curveLinePenChanged(const QPen& pen) {
 	ui.cbLineStyle->setCurrentIndex( (int)pen.style());
 	ui.kcbLineColor->setColor( pen.color());
 	GuiTools::updatePenStyles(ui.cbLineStyle, pen.color());
-	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits( pen.widthF(), Worksheet::Point) );
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits( pen.widthF(), Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 void XYCurveDock::curveLineOpacityChanged(qreal opacity) {
@@ -1847,7 +1847,7 @@ void XYCurveDock::curveDropLinePenChanged(const QPen& pen) {
 	ui.cbDropLineStyle->setCurrentIndex( (int) pen.style());
 	ui.kcbDropLineColor->setColor( pen.color());
 	GuiTools::updatePenStyles(ui.cbDropLineStyle, pen.color());
-	ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point) );
+	ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 void XYCurveDock::curveDropLineOpacityChanged(qreal opacity) {
@@ -1864,7 +1864,7 @@ void XYCurveDock::curveSymbolsStyleChanged(Symbol::Style style) {
 }
 void XYCurveDock::curveSymbolsSizeChanged(qreal size) {
 	m_initializing = true;
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
+	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 void XYCurveDock::curveSymbolsRotationAngleChanged(qreal angle) {
@@ -1889,7 +1889,7 @@ void XYCurveDock::curveSymbolsPenChanged(const QPen& pen) {
 	ui.cbSymbolBorderStyle->setCurrentIndex( (int) pen.style());
 	ui.kcbSymbolBorderColor->setColor( pen.color());
 	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, pen.color());
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Point));
+	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
@@ -1911,7 +1911,7 @@ void XYCurveDock::curveValuesPositionChanged(XYCurve::ValuesPosition position) {
 }
 void XYCurveDock::curveValuesDistanceChanged(qreal distance) {
 	m_initializing = true;
-	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(distance, Worksheet::Point) );
+	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(distance, Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 void XYCurveDock::curveValuesRotationAngleChanged(qreal angle) {
@@ -1951,7 +1951,7 @@ void XYCurveDock::curveValuesSuffixChanged(const QString& suffix) {
 }
 void XYCurveDock::curveValuesFontChanged(QFont font) {
 	m_initializing = true;
-	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
+	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)) );
 	ui.kfrValuesFont->setFont(font);
 	m_initializing = false;
 }
@@ -2043,7 +2043,7 @@ void XYCurveDock::curveYErrorMinusColumnChanged(const AbstractColumn* column) {
 }
 void XYCurveDock::curveErrorBarsCapSizeChanged(qreal size) {
 	m_initializing = true;
-	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
+	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 void XYCurveDock::curveErrorBarsTypeChanged(XYCurve::ErrorBarsType type) {
@@ -2056,7 +2056,7 @@ void XYCurveDock::curveErrorBarsPenChanged(const QPen& pen) {
 	ui.cbErrorBarsStyle->setCurrentIndex( (int) pen.style());
 	ui.kcbErrorBarsColor->setColor( pen.color());
 	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, pen.color());
-	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point) );
+	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 void XYCurveDock::curveErrorBarsOpacityChanged(qreal opacity) {
@@ -2078,31 +2078,31 @@ void XYCurveDock::load() {
 	ui.sbLineInterpolationPointsCount->setValue( m_curve->lineInterpolationPointsCount() );
 	ui.cbLineStyle->setCurrentIndex( (int) m_curve->linePen().style() );
 	ui.kcbLineColor->setColor( m_curve->linePen().color() );
-	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->linePen().widthF(), Worksheet::Point) );
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->linePen().widthF(), Worksheet::Unit::Point) );
 	ui.sbLineOpacity->setValue( round(m_curve->lineOpacity()*100.0) );
 
 	//Drop lines
 	ui.cbDropLineType->setCurrentIndex( (int) m_curve->dropLineType() );
 	ui.cbDropLineStyle->setCurrentIndex( (int) m_curve->dropLinePen().style() );
 	ui.kcbDropLineColor->setColor( m_curve->dropLinePen().color() );
-	ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->dropLinePen().widthF(),Worksheet::Point) );
+	ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->dropLinePen().widthF(), Worksheet::Unit::Point) );
 	ui.sbDropLineOpacity->setValue( round(m_curve->dropLineOpacity()*100.0) );
 
 	//Symbols
 	ui.cbSymbolStyle->setCurrentIndex( (int)m_curve->symbolsStyle() );
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_curve->symbolsSize(), Worksheet::Point) );
+	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_curve->symbolsSize(), Worksheet::Unit::Point) );
 	ui.sbSymbolRotation->setValue( m_curve->symbolsRotationAngle() );
 	ui.sbSymbolOpacity->setValue( round(m_curve->symbolsOpacity()*100.0) );
 	ui.cbSymbolFillingStyle->setCurrentIndex( (int) m_curve->symbolsBrush().style() );
 	ui.kcbSymbolFillingColor->setColor(  m_curve->symbolsBrush().color() );
 	ui.cbSymbolBorderStyle->setCurrentIndex( (int) m_curve->symbolsPen().style() );
 	ui.kcbSymbolBorderColor->setColor( m_curve->symbolsPen().color() );
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->symbolsPen().widthF(), Worksheet::Point) );
+	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->symbolsPen().widthF(), Worksheet::Unit::Point) );
 
 	//Values
 	ui.cbValuesType->setCurrentIndex( (int) m_curve->valuesType() );
 	ui.cbValuesPosition->setCurrentIndex( (int) m_curve->valuesPosition() );
-	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(m_curve->valuesDistance(), Worksheet::Point) );
+	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(m_curve->valuesDistance(), Worksheet::Unit::Point) );
 	ui.sbValuesRotation->setValue( m_curve->valuesRotationAngle() );
 	ui.sbValuesOpacity->setValue( round(m_curve->valuesOpacity()*100.0) );
 	ui.sbValuesPrecision->setValue(m_curve->valuesPrecision());
@@ -2111,7 +2111,7 @@ void XYCurveDock::load() {
 	ui.leValuesPrefix->setText( m_curve->valuesPrefix() );
 	ui.leValuesSuffix->setText( m_curve->valuesSuffix() );
 	QFont valuesFont = m_curve->valuesFont();
-	valuesFont.setPointSizeF( round(Worksheet::convertFromSceneUnits(valuesFont.pixelSize(), Worksheet::Point)) );
+	valuesFont.setPointSizeF( round(Worksheet::convertFromSceneUnits(valuesFont.pixelSize(), Worksheet::Unit::Point)) );
 	ui.kfrValuesFont->setFont(valuesFont);
 	ui.kcbValuesColor->setColor( m_curve->valuesColor() );
 	this->updateValuesWidgets();
@@ -2131,10 +2131,10 @@ void XYCurveDock::load() {
 	ui.cbXErrorType->setCurrentIndex( (int) m_curve->xErrorType() );
 	ui.cbYErrorType->setCurrentIndex( (int) m_curve->yErrorType() );
 	ui.cbErrorBarsType->setCurrentIndex( (int) m_curve->errorBarsType() );
-	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(m_curve->errorBarsCapSize(), Worksheet::Point) );
+	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(m_curve->errorBarsCapSize(), Worksheet::Unit::Point) );
 	ui.cbErrorBarsStyle->setCurrentIndex( (int) m_curve->errorBarsPen().style() );
 	ui.kcbErrorBarsColor->setColor( m_curve->errorBarsPen().color() );
-	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->errorBarsPen().widthF(),Worksheet::Point) );
+	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->errorBarsPen().widthF(), Worksheet::Unit::Point) );
 	ui.sbErrorBarsOpacity->setValue( round(m_curve->errorBarsOpacity()*100.0) );
 
 	m_initializing = true;
@@ -2180,37 +2180,37 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	ui.sbLineInterpolationPointsCount->setValue( group.readEntry("LineInterpolationPointsCount", m_curve->lineInterpolationPointsCount()) );
 	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", (int) m_curve->linePen().style()) );
 	ui.kcbLineColor->setColor( group.readEntry("LineColor", m_curve->linePen().color()) );
-	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", m_curve->linePen().widthF()), Worksheet::Point) );
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", m_curve->linePen().widthF()), Worksheet::Unit::Point) );
 	ui.sbLineOpacity->setValue( round(group.readEntry("LineOpacity", m_curve->lineOpacity())*100.0) );
 
 	//Drop lines
 	ui.cbDropLineType->setCurrentIndex( group.readEntry("DropLineType", (int) m_curve->dropLineType()) );
 	ui.cbDropLineStyle->setCurrentIndex( group.readEntry("DropLineStyle", (int) m_curve->dropLinePen().style()) );
 	ui.kcbDropLineColor->setColor( group.readEntry("DropLineColor", m_curve->dropLinePen().color()) );
-	ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("DropLineWidth", m_curve->dropLinePen().widthF()),Worksheet::Point) );
+	ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("DropLineWidth", m_curve->dropLinePen().widthF()), Worksheet::Unit::Point) );
 	ui.sbDropLineOpacity->setValue( round(group.readEntry("DropLineOpacity", m_curve->dropLineOpacity())*100.0) );
 
 	//Symbols
 	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", (int)m_curve->symbolsStyle()) );
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_curve->symbolsSize()), Worksheet::Point) );
+	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_curve->symbolsSize()), Worksheet::Unit::Point) );
 	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", m_curve->symbolsRotationAngle()) );
 	ui.sbSymbolOpacity->setValue( round(group.readEntry("SymbolOpacity", m_curve->symbolsOpacity())*100.0) );
 	ui.cbSymbolFillingStyle->setCurrentIndex( group.readEntry("SymbolFillingStyle", (int) m_curve->symbolsBrush().style()) );
 	ui.kcbSymbolFillingColor->setColor(  group.readEntry("SymbolFillingColor", m_curve->symbolsBrush().color()) );
 	ui.cbSymbolBorderStyle->setCurrentIndex( group.readEntry("SymbolBorderStyle", (int) m_curve->symbolsPen().style()) );
 	ui.kcbSymbolBorderColor->setColor( group.readEntry("SymbolBorderColor", m_curve->symbolsPen().color()) );
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth",m_curve->symbolsPen().widthF()), Worksheet::Point) );
+	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth",m_curve->symbolsPen().widthF()), Worksheet::Unit::Point) );
 
 	//Values
 	ui.cbValuesType->setCurrentIndex( group.readEntry("ValuesType", (int) m_curve->valuesType()) );
 	ui.cbValuesPosition->setCurrentIndex( group.readEntry("ValuesPosition", (int) m_curve->valuesPosition()) );
-	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ValuesDistance", m_curve->valuesDistance()), Worksheet::Point) );
+	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ValuesDistance", m_curve->valuesDistance()), Worksheet::Unit::Point) );
 	ui.sbValuesRotation->setValue( group.readEntry("ValuesRotation", m_curve->valuesRotationAngle()) );
 	ui.sbValuesOpacity->setValue( round(group.readEntry("ValuesOpacity",m_curve->valuesOpacity())*100.0) );
 	ui.leValuesPrefix->setText( group.readEntry("ValuesPrefix", m_curve->valuesPrefix()) );
 	ui.leValuesSuffix->setText( group.readEntry("ValuesSuffix", m_curve->valuesSuffix()) );
 	QFont valuesFont = m_curve->valuesFont();
-	valuesFont.setPointSizeF( round(Worksheet::convertFromSceneUnits(valuesFont.pixelSize(), Worksheet::Point)) );
+	valuesFont.setPointSizeF( round(Worksheet::convertFromSceneUnits(valuesFont.pixelSize(), Worksheet::Unit::Point)) );
 	ui.kfrValuesFont->setFont( group.readEntry("ValuesFont", valuesFont) );
 	ui.kcbValuesColor->setColor( group.readEntry("ValuesColor", m_curve->valuesColor()) );
 
@@ -2229,10 +2229,10 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	ui.cbXErrorType->setCurrentIndex( group.readEntry("XErrorType", (int) m_curve->xErrorType()) );
 	ui.cbYErrorType->setCurrentIndex( group.readEntry("YErrorType", (int) m_curve->yErrorType()) );
 	ui.cbErrorBarsType->setCurrentIndex( group.readEntry("ErrorBarsType", (int) m_curve->errorBarsType()) );
-	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsCapSize", m_curve->errorBarsCapSize()), Worksheet::Point) );
+	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsCapSize", m_curve->errorBarsCapSize()), Worksheet::Unit::Point) );
 	ui.cbErrorBarsStyle->setCurrentIndex( group.readEntry("ErrorBarsStyle", (int) m_curve->errorBarsPen().style()) );
 	ui.kcbErrorBarsColor->setColor( group.readEntry("ErrorBarsColor", m_curve->errorBarsPen().color()) );
-	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsWidth", m_curve->errorBarsPen().widthF()),Worksheet::Point) );
+	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsWidth", m_curve->errorBarsPen().widthF()), Worksheet::Unit::Point) );
 	ui.sbErrorBarsOpacity->setValue( round(group.readEntry("ErrorBarsOpacity", m_curve->errorBarsOpacity())*100.0) );
 
 	m_initializing = true;
@@ -2257,31 +2257,31 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("LineInterpolationPointsCount", ui.sbLineInterpolationPointsCount->value() );
 	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());
 	group.writeEntry("LineColor", ui.kcbLineColor->color());
-	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(),Worksheet::Point) );
+	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(), Worksheet::Unit::Point) );
 	group.writeEntry("LineOpacity", ui.sbLineOpacity->value()/100.0);
 
 	//Drop Line
 	group.writeEntry("DropLineType", ui.cbDropLineType->currentIndex());
 	group.writeEntry("DropLineStyle", ui.cbDropLineStyle->currentIndex());
 	group.writeEntry("DropLineColor", ui.kcbDropLineColor->color());
-	group.writeEntry("DropLineWidth", Worksheet::convertToSceneUnits(ui.sbDropLineWidth->value(),Worksheet::Point) );
+	group.writeEntry("DropLineWidth", Worksheet::convertToSceneUnits(ui.sbDropLineWidth->value(), Worksheet::Unit::Point) );
 	group.writeEntry("DropLineOpacity", ui.sbDropLineOpacity->value()/100.0);
 
 	//Symbol (TODO: character)
 	group.writeEntry("SymbolStyle", ui.cbSymbolStyle->currentIndex());
-	group.writeEntry("SymbolSize", Worksheet::convertToSceneUnits(ui.sbSymbolSize->value(),Worksheet::Point));
+	group.writeEntry("SymbolSize", Worksheet::convertToSceneUnits(ui.sbSymbolSize->value(),Worksheet::Unit::Point));
 	group.writeEntry("SymbolRotation", ui.sbSymbolRotation->value());
 	group.writeEntry("SymbolOpacity", ui.sbSymbolOpacity->value()/100.0);
 	group.writeEntry("SymbolFillingStyle", ui.cbSymbolFillingStyle->currentIndex());
 	group.writeEntry("SymbolFillingColor", ui.kcbSymbolFillingColor->color());
 	group.writeEntry("SymbolBorderStyle", ui.cbSymbolBorderStyle->currentIndex());
 	group.writeEntry("SymbolBorderColor", ui.kcbSymbolBorderColor->color());
-	group.writeEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(ui.sbSymbolBorderWidth->value(),Worksheet::Point));
+	group.writeEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(ui.sbSymbolBorderWidth->value(), Worksheet::Unit::Point));
 
 	//Values
 	group.writeEntry("ValuesType", ui.cbValuesType->currentIndex());
 	group.writeEntry("ValuesPosition", ui.cbValuesPosition->currentIndex());
-	group.writeEntry("ValuesDistance", Worksheet::convertToSceneUnits(ui.sbValuesDistance->value(),Worksheet::Point));
+	group.writeEntry("ValuesDistance", Worksheet::convertToSceneUnits(ui.sbValuesDistance->value(), Worksheet::Unit::Point));
 	group.writeEntry("ValuesRotation", ui.sbValuesRotation->value());
 	group.writeEntry("ValuesOpacity", ui.sbValuesOpacity->value()/100.0);
 	group.writeEntry("valuesNumericFormat", ui.cbValuesNumericFormat->currentText());
@@ -2307,10 +2307,10 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("XErrorType", ui.cbXErrorType->currentIndex());
 	group.writeEntry("YErrorType", ui.cbYErrorType->currentIndex());
 	group.writeEntry("ErrorBarsType", ui.cbErrorBarsType->currentIndex());
-	group.writeEntry("ErrorBarsCapSize", Worksheet::convertToSceneUnits(ui.sbErrorBarsCapSize->value(),Worksheet::Point) );
+	group.writeEntry("ErrorBarsCapSize", Worksheet::convertToSceneUnits(ui.sbErrorBarsCapSize->value(), Worksheet::Unit::Point) );
 	group.writeEntry("ErrorBarsStyle", ui.cbErrorBarsStyle->currentIndex());
 	group.writeEntry("ErrorBarsColor", ui.kcbErrorBarsColor->color());
-	group.writeEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(ui.sbErrorBarsWidth->value(),Worksheet::Point) );
+	group.writeEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(ui.sbErrorBarsWidth->value(), Worksheet::Unit::Point) );
 	group.writeEntry("ErrorBarsOpacity", ui.sbErrorBarsOpacity->value()/100.0);
 
 	config.sync();

@@ -42,24 +42,24 @@ public:
 	QImage image;
 	QString fileName;
 	qreal opacity{1.0};
-	int width = (int)Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter);
-	int height = (int)Worksheet::convertToSceneUnits(3.0, Worksheet::Centimeter);
+	int width = (int)Worksheet::convertToSceneUnits(2.0, Worksheet::Unit::Centimeter);
+	int height = (int)Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Centimeter);
 	bool keepRatio{true}; //keep aspect ratio when scaling the image
 	qreal rotationAngle{0.0};
 
 	// position in parent's coordinate system, the image will be aligned around this point
 	TextLabel::PositionWrapper position{
-		QPoint(Worksheet::convertToSceneUnits(1, Worksheet::Centimeter),
-			   Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)),
-		TextLabel::hPositionCenter,
-		TextLabel::vPositionCenter};
+		QPoint(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter),
+			   Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)),
+		TextLabel::HorizontalPosition::Center,
+		TextLabel::VerticalPosition::Center};
 
 	//alignment
-	TextLabel::HorizontalAlignment horizontalAlignment{TextLabel::hAlignCenter};
-	TextLabel::VerticalAlignment verticalAlignment{TextLabel::vAlignCenter};
+	TextLabel::HorizontalAlignment horizontalAlignment{TextLabel::HorizontalAlignment::Center};
+	TextLabel::VerticalAlignment verticalAlignment{TextLabel::VerticalAlignment::Center};
 
 	//border
-	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Point), Qt::SolidLine};
+	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
 	qreal borderOpacity{1.0};
 
 	QString name() const;

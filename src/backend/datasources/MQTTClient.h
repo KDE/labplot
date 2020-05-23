@@ -48,29 +48,29 @@ class MQTTClient : public Folder {
 	Q_OBJECT
 
 public:
-	enum UpdateType {
+	enum class UpdateType {
 		TimeInterval = 0,
 		NewData
 	};
 
-	enum ReadingType {
+	enum class ReadingType {
 		ContinuousFixed = 0,
 		FromEnd,
 		TillEnd
 	};
 
-	enum WillMessageType {
+	enum class WillMessageType {
 		OwnMessage = 0,
 		Statistics,
 		LastMessage
 	};
 
-	enum WillUpdateType {
+	enum class WillUpdateType {
 		TimePeriod = 0,
 		OnClick
 	};
 
-	enum WillStatisticsType {
+	enum class WillStatisticsType {
 		NoStatistics = -1,
 		Minimum,
 		Maximum,

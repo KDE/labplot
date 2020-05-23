@@ -39,7 +39,7 @@ BaseDock::BaseDock(QWidget* parent) : QWidget(parent) {
 	m_units = (Units)group.readEntry("Units", (int)MetricUnits);
 
 	if (m_units == ImperialUnits)
-		m_worksheetUnit = Worksheet::Inch;
+		m_worksheetUnit = Worksheet::Unit::Inch;
 }
 
 BaseDock::~BaseDock() = default;

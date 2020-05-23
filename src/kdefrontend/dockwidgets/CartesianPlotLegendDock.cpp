@@ -262,7 +262,7 @@ void CartesianPlotLegendDock::updateUnits() {
 	QString suffix;
 	if (m_units == BaseDock::MetricUnits) {
 		//convert from imperial to metric
-		m_worksheetUnit = Worksheet::Centimeter;
+		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QLatin1String("cm");
 		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value()*2.54);
 		ui.sbPositionX->setValue(ui.sbPositionX->value()*2.54);
@@ -276,7 +276,7 @@ void CartesianPlotLegendDock::updateUnits() {
 		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value()*2.54);
 	} else {
 		//convert from metric to imperial
-		m_worksheetUnit = Worksheet::Inch;
+		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QLatin1String("in");
 		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value()/2.54);
 		ui.sbPositionX->setValue(ui.sbPositionX->value()/2.54);
@@ -376,7 +376,7 @@ void CartesianPlotLegendDock::labelFontChanged(const QFont& font) {
 		return;
 
 	QFont labelsFont = font;
-	labelsFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	labelsFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point) );
 	for (auto* legend : m_legendList)
 		legend->setLabelFont(labelsFont);
 }
@@ -691,7 +691,7 @@ void CartesianPlotLegendDock::borderWidthChanged(double value) {
 	QPen pen;
 	for (auto* legend : m_legendList) {
 		pen = legend->borderPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		legend->setBorderPen(pen);
 	}
 }
@@ -794,7 +794,7 @@ void CartesianPlotLegendDock::legendLabelFontChanged(QFont& font) {
 	m_initializing = true;
 	//we need to set the font size in points for KFontRequester
 	QFont f(font);
-	f.setPointSizeF( Worksheet::convertFromSceneUnits(f.pixelSize(), Worksheet::Point) );
+	f.setPointSizeF( Worksheet::convertFromSceneUnits(f.pixelSize(), Worksheet::Unit::Point) );
 	ui.kfrLabelFont->setFont(f);
 	m_initializing = false;
 }
@@ -825,8 +825,8 @@ void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::P
 	m_initializing = true;
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit) );
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit) );
-	ui.cbPositionX->setCurrentIndex( position.horizontalPosition );
-	ui.cbPositionY->setCurrentIndex( position.verticalPosition );
+	ui.cbPositionX->setCurrentIndex( static_cast<int>(position.horizontalPosition) );
+	ui.cbPositionY->setCurrentIndex( static_cast<int>(position.verticalPosition) );
 	m_initializing = false;
 }
 
@@ -902,7 +902,7 @@ void CartesianPlotLegendDock::legendBorderPenChanged(QPen& pen) {
 	if (ui.kcbBorderColor->color() != pen.color())
 		ui.kcbBorderColor->setColor(pen.color());
 	if (ui.sbBorderWidth->value() != pen.widthF())
-		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
+		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
@@ -970,7 +970,7 @@ void CartesianPlotLegendDock::load() {
 	//Format
 	//we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF( qRound(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
+	font.setPointSizeF( qRound(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)) );
 	ui.kfrLabelFont->setFont(font);
 
 	ui.kcbLabelColor->setColor( m_legend->labelColor() );
@@ -983,9 +983,9 @@ void CartesianPlotLegendDock::load() {
 	ui.sbLineSymbolWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), m_worksheetUnit) );
 
 	//Geometry
-	ui.cbPositionX->setCurrentIndex(m_legend->position().horizontalPosition);
+	ui.cbPositionX->setCurrentIndex(static_cast<int>(m_legend->position().horizontalPosition));
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_legend->position().point.x(), m_worksheetUnit) );
-	ui.cbPositionY->setCurrentIndex(m_legend->position().verticalPosition);
+	ui.cbPositionY->setCurrentIndex(static_cast<int>(m_legend->position().verticalPosition));
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_legend->position().point.y(), m_worksheetUnit) );
 	ui.sbRotation->setValue(m_legend->rotationAngle());
 
@@ -1010,7 +1010,7 @@ void CartesianPlotLegendDock::load() {
 	//Border
 	ui.kcbBorderColor->setColor( m_legend->borderPen().color() );
 	ui.cbBorderStyle->setCurrentIndex( (int) m_legend->borderPen().style() );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->borderPen().widthF(), Worksheet::Point) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->borderPen().widthF(), Worksheet::Unit::Point) );
 	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(m_legend->borderCornerRadius(), m_worksheetUnit) );
 	ui.sbBorderOpacity->setValue( qRound(m_legend->borderOpacity()*100.0) );
 
@@ -1057,7 +1057,7 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	//Format
 	//we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF( qRound(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
+	font.setPointSizeF( qRound(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)) );
 	ui.kfrLabelFont->setFont( group.readEntry("LabelFont", font) );
 
 	ui.kcbLabelColor->setColor( group.readEntry("LabelColor", m_legend->labelColor()) );
@@ -1068,8 +1068,7 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	else
 		ui.cbOrder->setCurrentIndex(1); //row major
 
-	ui.sbLineSymbolWidth->setValue(group.readEntry("LineSymbolWidth",
-													Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), m_worksheetUnit)) );
+	ui.sbLineSymbolWidth->setValue(group.readEntry("LineSymbolWidth", Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), m_worksheetUnit)) );
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_legend->position().horizontalPosition ) );
@@ -1093,23 +1092,17 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	//Border
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_legend->borderPen().color()) );
 	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) m_legend->borderPen().style()) );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_legend->borderPen().widthF()), Worksheet::Point) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_legend->borderPen().widthF()), Worksheet::Unit::Point) );
 	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", m_legend->borderCornerRadius()), m_worksheetUnit) );
 	ui.sbBorderOpacity->setValue( qRound(group.readEntry("BorderOpacity", m_legend->borderOpacity())*100.0) );
 
 	// Layout
-	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin",
-												   Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), m_worksheetUnit)) );
-	ui.sbLayoutBottomMargin->setValue(group.readEntry("LayoutBottomMargin",
-													   Worksheet::convertFromSceneUnits(m_legend->layoutBottomMargin(), m_worksheetUnit)) );
-	ui.sbLayoutLeftMargin->setValue(group.readEntry("LayoutLeftMargin",
-													 Worksheet::convertFromSceneUnits(m_legend->layoutLeftMargin(), m_worksheetUnit)) );
-	ui.sbLayoutRightMargin->setValue(group.readEntry("LayoutRightMargin",
-													  Worksheet::convertFromSceneUnits(m_legend->layoutRightMargin(), m_worksheetUnit)) );
-	ui.sbLayoutHorizontalSpacing->setValue(group.readEntry("LayoutHorizontalSpacing",
-														    Worksheet::convertFromSceneUnits(m_legend->layoutHorizontalSpacing(), m_worksheetUnit)) );
-	ui.sbLayoutVerticalSpacing->setValue(group.readEntry("LayoutVerticalSpacing",
-														  Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), m_worksheetUnit)) );
+	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin", Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), m_worksheetUnit)) );
+	ui.sbLayoutBottomMargin->setValue(group.readEntry("LayoutBottomMargin", Worksheet::convertFromSceneUnits(m_legend->layoutBottomMargin(), m_worksheetUnit)) );
+	ui.sbLayoutLeftMargin->setValue(group.readEntry("LayoutLeftMargin", Worksheet::convertFromSceneUnits(m_legend->layoutLeftMargin(), m_worksheetUnit)) );
+	ui.sbLayoutRightMargin->setValue(group.readEntry("LayoutRightMargin", Worksheet::convertFromSceneUnits(m_legend->layoutRightMargin(), m_worksheetUnit)) );
+	ui.sbLayoutHorizontalSpacing->setValue(group.readEntry("LayoutHorizontalSpacing", Worksheet::convertFromSceneUnits(m_legend->layoutHorizontalSpacing(), m_worksheetUnit)) );
+	ui.sbLayoutVerticalSpacing->setValue(group.readEntry("LayoutVerticalSpacing", Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), m_worksheetUnit)) );
 	ui.sbLayoutColumnCount->setValue(group.readEntry("LayoutColumnCount", m_legend->layoutColumnCount()));
 
 	//Title
@@ -1127,7 +1120,7 @@ void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
 	//General-tab
 	//Format
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point) );
 	group.writeEntry("LabelFont", font);
 	group.writeEntry("LabelColor", ui.kcbLabelColor->color());
 	group.writeEntry("LabelColumMajorOrder", ui.cbOrder->currentIndex() == 0);// true for "column major", false for "row major"
@@ -1155,7 +1148,7 @@ void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
 	//Border
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
-	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Point));
+	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Unit::Point));
 	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), m_worksheetUnit));
 	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
 

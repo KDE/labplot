@@ -157,7 +157,7 @@ QMenu* WorksheetElement::createContextMenu() {
 		if (!w)
 			return menu;
 
-		if (w->layout() != Worksheet::NoLayout) {
+		if (w->layout() != Worksheet::Layout::NoLayout) {
 			m_moveBehindMenu->setTitle(i18n("Move in &front of"));
 			m_moveBehindMenu->setIcon(QIcon::fromTheme("draw-arrow-up"));
 			m_moveInFrontOfMenu->setTitle(i18n("Move &behind"));

@@ -186,8 +186,8 @@ void DatapickerCurveWidget::hideErrorBarWidgets(bool on) {
 //*************************************************************
 //"General"-tab
 void DatapickerCurveWidget::xErrorTypeChanged(int index) {
-	if ( DatapickerCurve::ErrorType(index) != DatapickerCurve::NoError
-		|| m_curve->curveErrorTypes().y != DatapickerCurve::NoError )
+	if ( DatapickerCurve::ErrorType(index) != DatapickerCurve::ErrorType::NoError
+		|| m_curve->curveErrorTypes().y != DatapickerCurve::ErrorType::NoError )
 		hideErrorBarWidgets(false);
 	else
 		hideErrorBarWidgets(true);
@@ -203,8 +203,8 @@ void DatapickerCurveWidget::xErrorTypeChanged(int index) {
 }
 
 void DatapickerCurveWidget::yErrorTypeChanged(int index) {
-	if ( DatapickerCurve::ErrorType(index) != DatapickerCurve::NoError
-		|| m_curve->curveErrorTypes().x != DatapickerCurve::NoError )
+	if ( DatapickerCurve::ErrorType(index) != DatapickerCurve::ErrorType::NoError
+		|| m_curve->curveErrorTypes().x != DatapickerCurve::ErrorType::NoError )
 		hideErrorBarWidgets(false);
 	else
 		hideErrorBarWidgets(true);
@@ -247,7 +247,7 @@ void DatapickerCurveWidget::sizeChanged(double value) {
 		return;
 
 	for (auto* curve : m_curveList)
-		curve->setPointSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		curve->setPointSize( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 }
 
 void DatapickerCurveWidget::rotationChanged(int value) {
@@ -272,7 +272,7 @@ void DatapickerCurveWidget::errorBarSizeChanged(double value) {
 		return;
 
 	for (auto* curve : m_curveList)
-		curve->setPointErrorBarSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		curve->setPointErrorBarSize( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 }
 
 void DatapickerCurveWidget::fillingStyleChanged(int index) {
@@ -382,7 +382,7 @@ void DatapickerCurveWidget::borderWidthChanged(double value) {
 	QPen pen;
 	for (auto* curve : m_curveList) {
 		pen = curve->pointPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		curve->setPointPen(pen);
 	}
 }
@@ -439,13 +439,13 @@ void DatapickerCurveWidget::symbolStyleChanged(Symbol::Style style) {
 
 void DatapickerCurveWidget::symbolSizeChanged(qreal size) {
 	m_initializing = true;
-	ui.sbSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
+	ui.sbSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 
 void DatapickerCurveWidget::symbolErrorBarSizeChanged(qreal size) {
 	m_initializing = true;
-	ui.sbErrorBarSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
+	ui.sbErrorBarSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 
@@ -482,7 +482,7 @@ void DatapickerCurveWidget::symbolPenChanged(const QPen& pen) {
 	ui.cbBorderStyle->setCurrentIndex( (int) pen.style());
 	ui.kcbBorderColor->setColor( pen.color());
 	GuiTools::updatePenStyles(ui.cbBorderStyle, pen.color());
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Point));
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
@@ -503,17 +503,17 @@ void DatapickerCurveWidget::load() {
 	ui.cbXErrorType->setCurrentIndex((int) m_curve->curveErrorTypes().x);
 	ui.cbYErrorType->setCurrentIndex((int) m_curve->curveErrorTypes().y);
 	ui.cbStyle->setCurrentIndex( (int)m_curve->pointStyle() - 1 );
-	ui.sbSize->setValue( Worksheet::convertFromSceneUnits(m_curve->pointSize(), Worksheet::Point) );
+	ui.sbSize->setValue( Worksheet::convertFromSceneUnits(m_curve->pointSize(), Worksheet::Unit::Point) );
 	ui.sbRotation->setValue( m_curve->pointRotationAngle() );
 	ui.sbOpacity->setValue( round(m_curve->pointOpacity()*100.0) );
 	ui.cbFillingStyle->setCurrentIndex( (int) m_curve->pointBrush().style() );
 	ui.kcbFillingColor->setColor(  m_curve->pointBrush().color() );
 	ui.cbBorderStyle->setCurrentIndex( (int) m_curve->pointPen().style() );
 	ui.kcbBorderColor->setColor( m_curve->pointPen().color() );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->pointPen().widthF(), Worksheet::Point) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->pointPen().widthF(), Worksheet::Unit::Point) );
 	ui.chbVisible->setChecked( m_curve->pointVisibility() );
 	ui.cbErrorBarFillingStyle->setCurrentIndex( (int) m_curve->pointErrorBarBrush().style() );
 	ui.kcbErrorBarFillingColor->setColor(  m_curve->pointErrorBarBrush().color() );
-	ui.sbErrorBarSize->setValue( Worksheet::convertFromSceneUnits(m_curve->pointErrorBarSize(), Worksheet::Point) );
+	ui.sbErrorBarSize->setValue( Worksheet::convertFromSceneUnits(m_curve->pointErrorBarSize(), Worksheet::Unit::Point) );
 	m_initializing = false;
 }

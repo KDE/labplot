@@ -59,11 +59,11 @@
  */
 DatapickerImage::DatapickerImage(const QString& name, bool loading) :
 	AbstractPart(name, AspectType::DatapickerImage),
-	foregroundBins( new int[ImageEditor::colorAttributeMax(Foreground) + 1]),
-	hueBins( new int[ImageEditor::colorAttributeMax(Hue) + 1]),
-	saturationBins( new int[ImageEditor::colorAttributeMax(Saturation) + 1]),
-	valueBins( new int[ImageEditor::colorAttributeMax(Value) + 1]),
-	intensityBins( new int[ImageEditor::colorAttributeMax(Intensity) + 1]),
+	foregroundBins( new int[ImageEditor::colorAttributeMax(ColorAttributes::Foreground) + 1]),
+	hueBins( new int[ImageEditor::colorAttributeMax(ColorAttributes::Hue) + 1]),
+	saturationBins( new int[ImageEditor::colorAttributeMax(ColorAttributes::Saturation) + 1]),
+	valueBins( new int[ImageEditor::colorAttributeMax(ColorAttributes::Value) + 1]),
+	intensityBins( new int[ImageEditor::colorAttributeMax(ColorAttributes::Intensity) + 1]),
 	d(new DatapickerImagePrivate(this)),
 	m_segments(new Segments(this)) {
 
@@ -90,11 +90,11 @@ void DatapickerImage::init() {
 	d->rotationAngle = group.readEntry("RotationAngle", 0.0);
 	d->minSegmentLength = group.readEntry("MinSegmentLength", 30);
 	d->pointSeparation = group.readEntry("PointSeparation", 30);
-	d->axisPoints.type = (DatapickerImage::GraphType) group.readEntry("GraphType", (int) DatapickerImage::Cartesian);
+	d->axisPoints.type = (DatapickerImage::GraphType) group.readEntry("GraphType", static_cast<int>(DatapickerImage::GraphType::Cartesian));
 	d->axisPoints.ternaryScale = group.readEntry("TernaryScale", 1);
 
 	//edit image settings
-	d->plotImageType = DatapickerImage::OriginalImage;
+	d->plotImageType = DatapickerImage::PlotImageType::OriginalImage;
 	d->settings.foregroundThresholdHigh = group.readEntry("ForegroundThresholdHigh", 90);
 	d->settings.foregroundThresholdLow = group.readEntry("ForegroundThresholdLow", 30);
 	d->settings.hueThresholdHigh = group.readEntry("HueThresholdHigh", 360);
@@ -108,14 +108,14 @@ void DatapickerImage::init() {
 
 	// reference point symbol properties
 	d->pointStyle = (Symbol::Style)group.readEntry("PointStyle", (int)Symbol::Cross);
-	d->pointSize = group.readEntry("Size", Worksheet::convertToSceneUnits(7, Worksheet::Point));
+	d->pointSize = group.readEntry("Size", Worksheet::convertToSceneUnits(7, Worksheet::Unit::Point));
 	d->pointRotationAngle = group.readEntry("Rotation", 0.0);
 	d->pointOpacity = group.readEntry("Opacity", 1.0);
 	d->pointBrush.setStyle( (Qt::BrushStyle)group.readEntry("FillingStyle", (int)Qt::NoBrush) );
 	d->pointBrush.setColor( group.readEntry("FillingColor", QColor(Qt::black)) );
 	d->pointPen.setStyle( (Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine) );
 	d->pointPen.setColor( group.readEntry("BorderColor", QColor(Qt::red)) );
-	d->pointPen.setWidthF( group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Point)) );
+	d->pointPen.setWidthF( group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)) );
 	d->pointVisibility = group.readEntry("PointVisibility", true);
 }
 
@@ -215,7 +215,7 @@ QRectF DatapickerImage::pageRect() const {
 
 void DatapickerImage::setPlotImageType(const DatapickerImage::PlotImageType type) {
 	d->plotImageType = type;
-	if (d->plotImageType == DatapickerImage::ProcessedImage)
+	if (d->plotImageType == DatapickerImage::PlotImageType::ProcessedImage)
 		d->discretize();
 
 	emit requestUpdate();
@@ -328,7 +328,7 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 
 	d->plotPointsType = pointsType;
 
-	if (pointsType == DatapickerImage::AxisPoints) {
+	if (pointsType == DatapickerImage::PointsType::AxisPoints) {
 		//clear image
 		auto points = children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 		if (!points.isEmpty()) {
@@ -339,9 +339,9 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 			endMacro();
 		}
 		m_segments->setSegmentsVisible(false);
-	} else if (pointsType == DatapickerImage::CurvePoints)
+	} else if (pointsType == DatapickerImage::PointsType::CurvePoints)
 		m_segments->setSegmentsVisible(false);
-	else if (pointsType == DatapickerImage::SegmentPoints) {
+	else if (pointsType == DatapickerImage::PointsType::SegmentPoints) {
 		d->makeSegments();
 		m_segments->setSegmentsVisible(true);
 	}
@@ -380,16 +380,16 @@ bool DatapickerImagePrivate::uploadImage(const QString& address) {
 		q->processedPlotImage = q->originalPlotImage;
 		q->background = ImageEditor::findBackgroundColor(&q->originalPlotImage);
 		//upload Histogram
-		ImageEditor::uploadHistogram(q->intensityBins, &q->originalPlotImage, q->background, DatapickerImage::Intensity);
-		ImageEditor::uploadHistogram(q->foregroundBins, &q->originalPlotImage, q->background, DatapickerImage::Foreground);
-		ImageEditor::uploadHistogram(q->hueBins, &q->originalPlotImage, q->background, DatapickerImage::Hue);
-		ImageEditor::uploadHistogram(q->saturationBins, &q->originalPlotImage, q->background, DatapickerImage::Saturation);
-		ImageEditor::uploadHistogram(q->valueBins, &q->originalPlotImage, q->background, DatapickerImage::Value);
+		ImageEditor::uploadHistogram(q->intensityBins, &q->originalPlotImage, q->background, DatapickerImage::ColorAttributes::Intensity);
+		ImageEditor::uploadHistogram(q->foregroundBins, &q->originalPlotImage, q->background, DatapickerImage::ColorAttributes::Foreground);
+		ImageEditor::uploadHistogram(q->hueBins, &q->originalPlotImage, q->background, DatapickerImage::ColorAttributes::Hue);
+		ImageEditor::uploadHistogram(q->saturationBins, &q->originalPlotImage, q->background, DatapickerImage::ColorAttributes::Saturation);
+		ImageEditor::uploadHistogram(q->valueBins, &q->originalPlotImage, q->background, DatapickerImage::ColorAttributes::Value);
 		discretize();
 
 		//resize the screen
-		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Inch)/QApplication::desktop()->physicalDpiX();
-		double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Inch)/QApplication::desktop()->physicalDpiX();
+		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Unit::Inch)/QApplication::desktop()->physicalDpiX();
+		double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Unit::Inch)/QApplication::desktop()->physicalDpiX();
 		m_scene->setSceneRect(0, 0, w, h);
 		q->isLoaded = true;
 	}
@@ -398,19 +398,19 @@ bool DatapickerImagePrivate::uploadImage(const QString& address) {
 
 void DatapickerImagePrivate::discretize() {
 	PERFTRACE("DatapickerImagePrivate::discretize()");
-	if (plotImageType != DatapickerImage::ProcessedImage)
+	if (plotImageType != DatapickerImage::PlotImageType::ProcessedImage)
 		return;
 
 	ImageEditor::discretize(&q->processedPlotImage, &q->originalPlotImage, settings, q->background);
 
-	if (plotPointsType != DatapickerImage::SegmentPoints)
+	if (plotPointsType != DatapickerImage::PointsType::SegmentPoints)
 		emit q->requestUpdate();
 	else
 		makeSegments();
 }
 
 void DatapickerImagePrivate::makeSegments() {
-	if (plotPointsType != DatapickerImage::SegmentPoints)
+	if (plotPointsType != DatapickerImage::PointsType::SegmentPoints)
 		return;
 
 	PERFTRACE("DatapickerImagePrivate::makeSegments()");
@@ -459,11 +459,11 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 	//general properties
 	writer->writeStartElement( "general" );
 	writer->writeAttribute( "fileName", d->fileName );
-	writer->writeAttribute( "plotPointsType", QString::number(d->plotPointsType) );
+	writer->writeAttribute( "plotPointsType", QString::number(static_cast<int>(d->plotPointsType)) );
 	writer->writeEndElement();
 
 	writer->writeStartElement( "axisPoint" );
-	writer->writeAttribute( "graphType", QString::number(d->axisPoints.type) );
+	writer->writeAttribute( "graphType", QString::number(static_cast<int>(d->axisPoints.type)) );
 	writer->writeAttribute( "ternaryScale", QString::number(d->axisPoints.ternaryScale) );
 	writer->writeAttribute( "axisPointLogicalX1", QString::number(d->axisPoints.logicalPos[0].x()) );
 	writer->writeAttribute( "axisPointLogicalY1", QString::number(d->axisPoints.logicalPos[0].y()) );
@@ -484,7 +484,7 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 
 	//editor and segment settings
 	writer->writeStartElement( "editorSettings" );
-	writer->writeAttribute( "plotImageType", QString::number(d->plotImageType) );
+	writer->writeAttribute( "plotImageType", QString::number(static_cast<int>(d->plotImageType)) );
 	writer->writeAttribute( "rotationAngle", QString::number(d->rotationAngle) );
 	writer->writeAttribute( "minSegmentLength", QString::number(d->minSegmentLength) );
 	writer->writeAttribute( "pointSeparation", QString::number(d->pointSeparation) );

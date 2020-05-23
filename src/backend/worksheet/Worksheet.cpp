@@ -92,13 +92,13 @@ void Worksheet::init() {
 	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
 
 	//layout
-	d->layout = (Worksheet::Layout) group.readEntry("Layout", (int) Worksheet::VerticalLayout);
-	d->layoutTopMargin =  group.readEntry("LayoutTopMargin", convertToSceneUnits(0.5, Centimeter));
-	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", convertToSceneUnits(0.5, Centimeter));
-	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", convertToSceneUnits(0.5, Centimeter));
-	d->layoutRightMargin = group.readEntry("LayoutRightMargin", convertToSceneUnits(0.5, Centimeter));
-	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", convertToSceneUnits(0.5, Centimeter));
-	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", convertToSceneUnits(0.5, Centimeter));
+	d->layout = (Layout) group.readEntry("Layout", static_cast<int>(Layout::VerticalLayout));
+	d->layoutTopMargin =  group.readEntry("LayoutTopMargin", convertToSceneUnits(0.5, Unit::Centimeter));
+	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", convertToSceneUnits(0.5, Unit::Centimeter));
+	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", convertToSceneUnits(0.5, Unit::Centimeter));
+	d->layoutRightMargin = group.readEntry("LayoutRightMargin", convertToSceneUnits(0.5, Unit::Centimeter));
+	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", convertToSceneUnits(0.5, Unit::Centimeter));
+	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", convertToSceneUnits(0.5, Unit::Centimeter));
 	d->layoutRowCount = group.readEntry("LayoutRowCount", 2);
 	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 2);
 
@@ -113,14 +113,14 @@ void Worksheet::init() {
  */
 float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit unit) {
 	switch (unit) {
-	case Worksheet::Millimeter:
-		return value*10.0;
-	case Worksheet::Centimeter:
-		return value*100.0;
-	case Worksheet::Inch:
-		return value*25.4*10.;
-	case Worksheet::Point:
-		return value*25.4/72.*10.;
+	case Unit::Millimeter:
+		return value * 10.0;
+	case Unit::Centimeter:
+		return value * 100.0;
+	case Unit::Inch:
+		return value * 25.4 * 10.;
+	case Unit::Point:
+		return value * 25.4/72. * 10.;
 	}
 
 	return 0;
@@ -131,13 +131,13 @@ float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit un
  */
 float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit unit) {
 	switch (unit) {
-	case Worksheet::Millimeter:
+	case Unit::Millimeter:
 		return value/10.0;
-	case Worksheet::Centimeter:
+	case Unit::Centimeter:
 		return value/100.0;
-	case Worksheet::Inch:
+	case Unit::Inch:
 		return value/25.4/10.;
-	case Worksheet::Point:
+	case Unit::Point:
 		return value/25.4/10.*72.;
 	}
 
@@ -272,7 +272,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 
 	//recalculated the layout
 	if (!isLoading()) {
-		if (d->layout != Worksheet::NoLayout)
+		if (d->layout != Worksheet::Layout::NoLayout)
 			d->updateLayout(false);
 	}
 }
@@ -289,7 +289,7 @@ void Worksheet::handleAspectRemoved(const AbstractAspect* parent, const Abstract
 	Q_UNUSED(parent);
 	Q_UNUSED(before);
 
-	if (d->layout != Worksheet::NoLayout)
+	if (d->layout != Worksheet::Layout::NoLayout)
 		d->updateLayout(false);
 	auto* plot = dynamic_cast<const CartesianPlot*>(child);
 	if (plot)
@@ -467,7 +467,7 @@ void Worksheet::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mo
 
 	d->cartesianPlotCursorMode = mode;
 
-	if (mode == Worksheet::CartesianPlotActionMode::ApplyActionToAll) {
+	if (mode == CartesianPlotActionMode::ApplyActionToAll) {
 		d->suppressCursorPosChanged = true;
 		QVector<CartesianPlot*> plots = children<CartesianPlot>();
 		QPointF logicPos;
@@ -731,7 +731,7 @@ void Worksheet::setTheme(const QString& theme) {
 }
 
 void Worksheet::cartesianPlotMousePressZoomSelectionMode(QPointF logicPos) {
-	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
+	if (cartesianPlotActionMode() == CartesianPlotActionMode::ApplyActionToAll) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mousePressZoomSelectionMode(logicPos);
@@ -742,7 +742,7 @@ void Worksheet::cartesianPlotMousePressZoomSelectionMode(QPointF logicPos) {
 }
 
 void Worksheet::cartesianPlotMouseReleaseZoomSelectionMode() {
-	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
+	if (cartesianPlotActionMode() == CartesianPlotActionMode::ApplyActionToAll) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseReleaseZoomSelectionMode();
@@ -753,7 +753,7 @@ void Worksheet::cartesianPlotMouseReleaseZoomSelectionMode() {
 }
 
 void Worksheet::cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logicPos) {
-	if (cartesianPlotCursorMode() == Worksheet::ApplyActionToAll) {
+	if (cartesianPlotCursorMode() == CartesianPlotActionMode::ApplyActionToAll) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mousePressCursorMode(cursorNumber, logicPos);
@@ -766,7 +766,7 @@ void Worksheet::cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logi
 }
 
 void Worksheet::cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos) {
-	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
+	if (cartesianPlotActionMode() == CartesianPlotActionMode::ApplyActionToAll) {
 		QVector<CartesianPlot*> plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseMoveZoomSelectionMode(logicPos);
@@ -777,7 +777,7 @@ void Worksheet::cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos) {
 }
 
 void Worksheet::cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos) {
-	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
+	if (cartesianPlotActionMode() == CartesianPlotActionMode::ApplyActionToAll) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseHoverZoomSelectionMode(logicPos);
@@ -788,7 +788,7 @@ void Worksheet::cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos) {
 }
 
 void Worksheet::cartesianPlotMouseHoverOutsideDataRect() {
-	if (cartesianPlotActionMode() == Worksheet::ApplyActionToAll) {
+	if (cartesianPlotActionMode() == CartesianPlotActionMode::ApplyActionToAll) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseHoverOutsideDataRect();
@@ -799,7 +799,7 @@ void Worksheet::cartesianPlotMouseHoverOutsideDataRect() {
 }
 
 void Worksheet::cartesianPlotMouseMoveCursorMode(int cursorNumber, QPointF logicPos) {
-	if (cartesianPlotCursorMode() == Worksheet::ApplyActionToAll) {
+	if (cartesianPlotCursorMode() == CartesianPlotActionMode::ApplyActionToAll) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseMoveCursorMode(cursorNumber, logicPos);
@@ -829,7 +829,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 	TreeModel* treeModel = cursorModel();
 
 	// if ApplyActionToSelection, each plot has it's own x value
-	if (cartesianPlotCursorMode() == Worksheet::ApplyActionToAll) {
+	if (cartesianPlotCursorMode() == CartesianPlotActionMode::ApplyActionToAll) {
 		// x values
 		int rowPlot = 1;
 		QModelIndex xName = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME));
@@ -996,7 +996,7 @@ void Worksheet::curveAdded(const XYCurve* curve) {
 
 	int i = 0;
 	// first row is the x axis when applied to all plots. Starting at the second row
-	if (cartesianPlotCursorMode() == Worksheet::ApplyActionToAll)
+	if (cartesianPlotCursorMode() == CartesianPlotActionMode::ApplyActionToAll)
 		i = 1;
 
 	for (; i < rowCount; i++) {
@@ -1110,7 +1110,7 @@ void Worksheet::updateCompleteCursorTreeModel() {
 	if (plotCount < 1)
 		return;
 
-	if (cartesianPlotCursorMode() == Worksheet::CartesianPlotActionMode::ApplyActionToAll) {
+	if (cartesianPlotCursorMode() == CartesianPlotActionMode::ApplyActionToAll) {
 		// 1 because of the X data
 		treeModel->insertRows(0, 1); //, treeModel->index(0,0)); // add empty rows. Then they become filled
 
@@ -1146,7 +1146,7 @@ void Worksheet::updateCompleteCursorTreeModel() {
 		treeModel->insertRows(treeModel->rowCount(), 1); //, treeModel->index(0, 0));
 
 		// add plot name and X row if needed
-		if (cartesianPlotCursorMode() == Worksheet::CartesianPlotActionMode::ApplyActionToAll) {
+		if (cartesianPlotCursorMode() == CartesianPlotActionMode::ApplyActionToAll) {
 			plotName = treeModel->index(i + 1, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME)); // plus one because first row are the x values
 			treeModel->setData(plotName, QVariant(plot->name()));
 		} else {
@@ -1219,7 +1219,7 @@ void WorksheetPrivate::updatePageRect() {
 	QRectF oldRect = m_scene->sceneRect();
 	m_scene->setSceneRect(pageRect);
 
-	if (layout != Worksheet::NoLayout)
+	if (layout != Worksheet::Layout::NoLayout)
 		updateLayout();
 	else {
 		if (scaleContent) {
@@ -1254,7 +1254,7 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 		return;
 
 	QVector<WorksheetElementContainer*> list = q->children<WorksheetElementContainer>();
-	if (layout == Worksheet::NoLayout) {
+	if (layout == Worksheet::Layout::NoLayout) {
 		for (auto* elem : list)
 			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 
@@ -1265,14 +1265,14 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 	float y = layoutTopMargin;
 	float w, h;
 	int count = list.count();
-	if (layout == Worksheet::VerticalLayout) {
+	if (layout == Worksheet::Layout::VerticalLayout) {
 		w = m_scene->sceneRect().width() - layoutLeftMargin - layoutRightMargin;
 		h = (m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (count-1)*layoutVerticalSpacing)/count;
 		for (auto* elem : list) {
 			setContainerRect(elem, x, y, h, w, undoable);
 			y += h + layoutVerticalSpacing;
 		}
-	} else if (layout == Worksheet::HorizontalLayout) {
+	} else if (layout == Worksheet::Layout::HorizontalLayout) {
 		w = (m_scene->sceneRect().width()-layoutLeftMargin-layoutRightMargin- (count-1)*layoutHorizontalSpacing)/count;
 		h = m_scene->sceneRect().height() - layoutTopMargin-layoutBottomMargin;
 		for (auto* elem : list) {
@@ -1350,7 +1350,7 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 
 	//layout
 	writer->writeStartElement( "layout" );
-	writer->writeAttribute( "layout", QString::number(d->layout) );
+	writer->writeAttribute( "layout", QString::number(static_cast<int>(d->layout)) );
 	writer->writeAttribute( "topMargin", QString::number(d->layoutTopMargin) );
 	writer->writeAttribute( "bottomMargin", QString::number(d->layoutBottomMargin) );
 	writer->writeAttribute( "leftMargin", QString::number(d->layoutLeftMargin) );
@@ -1380,8 +1380,8 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 	// cartesian properties
 	writer->writeStartElement( "plotProperties" );
 	writer->writeAttribute( "plotsLocked", QString::number(d->plotsLocked) );
-	writer->writeAttribute( "cartesianPlotActionMode", QString::number(d->cartesianPlotActionMode));
-	writer->writeAttribute( "cartesianPlotCursorMode", QString::number(d->cartesianPlotCursorMode));
+	writer->writeAttribute( "cartesianPlotActionMode", QString::number(static_cast<int>(d->cartesianPlotActionMode)));
+	writer->writeAttribute( "cartesianPlotCursorMode", QString::number(static_cast<int>(d->cartesianPlotCursorMode)));
 	writer->writeEndElement();
 
 	//serialize all children

@@ -76,14 +76,14 @@ void CustomPoint::init() {
 	d->position.setY( group.readEntry("PositionYValue", d->plot->yMin() + (d->plot->yMax()-d->plot->yMin())/2) );
 
 	d->symbolStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Circle);
-	d->symbolSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Point));
+	d->symbolSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->symbolRotationAngle = group.readEntry("SymbolRotation", 0.0);
 	d->symbolOpacity = group.readEntry("SymbolOpacity", 1.0);
 	d->symbolBrush.setStyle( (Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern) );
 	d->symbolBrush.setColor( group.readEntry("SymbolFillingColor", QColor(Qt::red)) );
 	d->symbolPen.setStyle( (Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine) );
 	d->symbolPen.setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
-	d->symbolPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)) );
+	d->symbolPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point)) );
 
 	this->initActions();
 }
