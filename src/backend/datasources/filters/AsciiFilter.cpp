@@ -1900,7 +1900,7 @@ int AsciiFilterPrivate::prepareToRead(const QString& message) {
 	m_actualStartRow = startRow;
 	m_actualRows = lines.size();
 
-	QDEBUG("column modes = " << columnModes);
+// 	QDEBUG("column modes = " << columnModes);
 	DEBUG("actual cols/rows (w/o header): " << m_actualCols << ' ' << m_actualRows);
 
 	return 0;
