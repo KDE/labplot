@@ -379,6 +379,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 
 	// the normal QPair comparison does not work properly with descending sorting
 	// therefore we use our own compare functions
+	// TODO: check this. a.first, b.first for QString anf DateTime too?
 	class CompareFunctions {
 	public:
 		static bool doubleLess(QPair<double, int> a, QPair<double, int> b) {
@@ -454,9 +455,9 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						map.append(QPair<int, int>(col->valueAt(j), j));
 
 					if (ascending)
-						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
+						std::stable_sort(map.begin(), map.end(), CompareFunctions::integerLess);
 					else
-						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
+						std::stable_sort(map.begin(), map.end(), CompareFunctions::integerGreater);
 
 					QVectorIterator<QPair<int, int>> it(map);
 					Column* temp_col = new Column("temp", col->columnMode());
@@ -481,9 +482,9 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						map.append(QPair<qint64, int>(col->valueAt(j), j));
 
 					if (ascending)
-						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
+						std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntLess);
 					else
-						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
+						std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntGreater);
 
 					QVectorIterator<QPair<qint64, int>> it(map);
 					Column* temp_col = new Column("temp", col->columnMode());
@@ -501,6 +502,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					break;
 				}
 			case AbstractColumn::ColumnMode::Text: {
+					DEBUG("	Text column. rows: " << col->rowCount())
 					int rows = col->rowCount();
 					QVector<QPair<QString, int>> map;
 
