@@ -118,7 +118,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 	double xmin = tmpXDataColumn->minimum();
 	double xmax = tmpXDataColumn->maximum();
 	//double ymin = tmpYDataColumn->minimum();
-	//double ymax = tmpYDataColumn->maximum();
+	double ymax = tmpYDataColumn->maximum();
 	double xrange = xmax - xmin;
 	//double yrange = ymax-ymin;
 	DEBUG("	x min/max = " << xmin << ' ' << xmax);
@@ -149,6 +149,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 			for (int d = 0; d < degree; d++) {
 				paramStartValues[3*d+2] = xmin + (d+1.)*xrange/(degree+1.);	// mu
 				paramStartValues[3*d+1] = xrange/(10.*degree);	// sigma
+				paramStartValues[3*d] = paramStartValues[3*d+1] * ymax;		// A = sigma * ymax
 			}
 			break;
 		case nsl_fit_model_voigt:
@@ -197,9 +198,12 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 		case nsl_sf_stats_sech:
 		case nsl_sf_stats_cauchy_lorentz:
 		case nsl_sf_stats_levy:
-			// use (xmax+xmin)/2 as mu and (xmax-xmin)/10 as sigma
+			// mu
 			paramStartValues[2] = (xmin+xmax)/2.;
+			// sigma
 			paramStartValues[1] = xrange/10.;
+			// A = sigma * y_max
+			paramStartValues[0] = paramStartValues[1] * ymax;
 			break;
 		//TODO: other types
 		default:
