@@ -1392,7 +1392,7 @@ void XYCurveDock::fillingTypeChanged(int index) {
 		ui.kcbFillingFirstColor->show();
 
 		auto style = (PlotArea::BackgroundColorStyle) ui.cbFillingColorStyle->currentIndex();
-		if (style == PlotArea::SingleColor) {
+		if (style == PlotArea::BackgroundColorStyle::SingleColor) {
 			ui.lFillingFirstColor->setText(i18n("Color:"));
 			ui.lFillingSecondColor->hide();
 			ui.kcbFillingSecondColor->hide();
@@ -1444,7 +1444,7 @@ void XYCurveDock::fillingTypeChanged(int index) {
 void XYCurveDock::fillingColorStyleChanged(int index) {
 	const auto style = (PlotArea::BackgroundColorStyle)index;
 
-	if (style == PlotArea::SingleColor) {
+	if (style == PlotArea::BackgroundColorStyle::SingleColor) {
 		ui.lFillingFirstColor->setText(i18n("Color:"));
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
@@ -1974,12 +1974,12 @@ void XYCurveDock::curveFillingTypeChanged(PlotArea::BackgroundType type) {
 }
 void XYCurveDock::curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle style) {
 	m_initializing = true;
-	ui.cbFillingColorStyle->setCurrentIndex(style);
+	ui.cbFillingColorStyle->setCurrentIndex(static_cast<int>(style));
 	m_initializing = false;
 }
 void XYCurveDock::curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle style) {
 	m_initializing = true;
-	ui.cbFillingImageStyle->setCurrentIndex(style);
+	ui.cbFillingImageStyle->setCurrentIndex(static_cast<int>(style));
 	m_initializing = false;
 }
 void XYCurveDock::curveFillingBrushStyleChanged(Qt::BrushStyle style) {

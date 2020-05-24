@@ -1022,7 +1022,7 @@ void CartesianPlotDock::backgroundTypeChanged(int index) {
 		ui.kcbBackgroundFirstColor->show();
 
 		auto style = (PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
-		if (style == PlotArea::SingleColor) {
+		if (style == PlotArea::BackgroundColorStyle::SingleColor) {
 			ui.lBackgroundFirstColor->setText(i18n("Color:"));
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
@@ -1074,7 +1074,7 @@ void CartesianPlotDock::backgroundTypeChanged(int index) {
 void CartesianPlotDock::backgroundColorStyleChanged(int index) {
 	auto style = (PlotArea::BackgroundColorStyle)index;
 
-	if (style == PlotArea::SingleColor) {
+	if (style == PlotArea::BackgroundColorStyle::SingleColor) {
 		ui.lBackgroundFirstColor->setText(i18n("Color:"));
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
@@ -1500,13 +1500,13 @@ void CartesianPlotDock::plotBackgroundTypeChanged(PlotArea::BackgroundType type)
 
 void CartesianPlotDock::plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle style) {
 	m_initializing = true;
-	ui.cbBackgroundColorStyle->setCurrentIndex(style);
+	ui.cbBackgroundColorStyle->setCurrentIndex(static_cast<int>(style));
 	m_initializing = false;
 }
 
 void CartesianPlotDock::plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle style) {
 	m_initializing = true;
-	ui.cbBackgroundImageStyle->setCurrentIndex(style);
+	ui.cbBackgroundImageStyle->setCurrentIndex(static_cast<int>(style));
 	m_initializing = false;
 }
 

@@ -778,39 +778,39 @@ void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_r
 	painter->setOpacity(m_worksheet->backgroundOpacity());
 	if (m_worksheet->backgroundType() == PlotArea::BackgroundType::Color) {
 		switch (m_worksheet->backgroundColorStyle()) {
-		case PlotArea::SingleColor: {
+		case PlotArea::BackgroundColorStyle::SingleColor: {
 				painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
 				break;
 			}
-		case PlotArea::HorizontalLinearGradient: {
+		case PlotArea::BackgroundColorStyle::HorizontalLinearGradient: {
 				QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.topRight());
 				linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
 				linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
 				painter->setBrush(QBrush(linearGrad));
 				break;
 			}
-		case PlotArea::VerticalLinearGradient: {
+		case PlotArea::BackgroundColorStyle::VerticalLinearGradient: {
 				QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomLeft());
 				linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
 				linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
 				painter->setBrush(QBrush(linearGrad));
 				break;
 			}
-		case PlotArea::TopLeftDiagonalLinearGradient: {
+		case PlotArea::BackgroundColorStyle::TopLeftDiagonalLinearGradient: {
 				QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomRight());
 				linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
 				linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
 				painter->setBrush(QBrush(linearGrad));
 				break;
 			}
-		case PlotArea::BottomLeftDiagonalLinearGradient: {
+		case PlotArea::BackgroundColorStyle::BottomLeftDiagonalLinearGradient: {
 				QLinearGradient linearGrad(scene_rect.bottomLeft(), scene_rect.topRight());
 				linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
 				linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
 				painter->setBrush(QBrush(linearGrad));
 				break;
 			}
-		case PlotArea::RadialGradient: {
+		case PlotArea::BackgroundColorStyle::RadialGradient: {
 				QRadialGradient radialGrad(scene_rect.center(), scene_rect.width()/2);
 				radialGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
 				radialGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
@@ -826,25 +826,25 @@ void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_r
 		if ( !backgroundFileName.isEmpty() ) {
 			QPixmap pix(backgroundFileName);
 			switch (m_worksheet->backgroundImageStyle()) {
-			case PlotArea::ScaledCropped:
+			case PlotArea::BackgroundImageStyle::ScaledCropped:
 				pix = pix.scaled(scene_rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
 				painter->drawPixmap(scene_rect.topLeft(),pix);
 				break;
-			case PlotArea::Scaled:
+			case PlotArea::BackgroundImageStyle::Scaled:
 				pix = pix.scaled(scene_rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
 				painter->drawPixmap(scene_rect.topLeft(),pix);
 				break;
-			case PlotArea::ScaledAspectRatio:
+			case PlotArea::BackgroundImageStyle::ScaledAspectRatio:
 				pix = pix.scaled(scene_rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
 				painter->drawPixmap(scene_rect.topLeft(),pix);
 				break;
-			case PlotArea::Centered:
+			case PlotArea::BackgroundImageStyle::Centered:
 				painter->drawPixmap(QPointF(scene_rect.center().x()-pix.size().width()/2,scene_rect.center().y()-pix.size().height()/2),pix);
 				break;
-			case PlotArea::Tiled:
+			case PlotArea::BackgroundImageStyle::Tiled:
 				painter->drawTiledPixmap(scene_rect,pix);
 				break;
-			case PlotArea::CenterTiled:
+			case PlotArea::BackgroundImageStyle::CenterTiled:
 				painter->drawTiledPixmap(scene_rect,pix,QPoint(scene_rect.size().width()/2,scene_rect.size().height()/2));
 				break;
 				//default:

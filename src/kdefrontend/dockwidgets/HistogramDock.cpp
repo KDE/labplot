@@ -1065,7 +1065,7 @@ void HistogramDock::fillingTypeChanged(int index) {
 		ui.kcbFillingFirstColor->show();
 
 		auto style = (PlotArea::BackgroundColorStyle) ui.cbFillingColorStyle->currentIndex();
-		if (style == PlotArea::SingleColor) {
+		if (style == PlotArea::BackgroundColorStyle::SingleColor) {
 			ui.lFillingFirstColor->setText(i18n("Color:"));
 			ui.lFillingSecondColor->hide();
 			ui.kcbFillingSecondColor->hide();
@@ -1117,7 +1117,7 @@ void HistogramDock::fillingTypeChanged(int index) {
 void HistogramDock::fillingColorStyleChanged(int index) {
 	auto style = (PlotArea::BackgroundColorStyle)index;
 
-	if (style == PlotArea::SingleColor) {
+	if (style == PlotArea::BackgroundColorStyle::SingleColor) {
 		ui.lFillingFirstColor->setText(i18n("Color:"));
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
@@ -1531,12 +1531,12 @@ void HistogramDock::curveFillingTypeChanged(PlotArea::BackgroundType type) {
 }
 void HistogramDock::curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle style) {
 	m_initializing = true;
-	ui.cbFillingColorStyle->setCurrentIndex(style);
+	ui.cbFillingColorStyle->setCurrentIndex(static_cast<int>(style));
 	m_initializing = false;
 }
 void HistogramDock::curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle style) {
 	m_initializing = true;
-	ui.cbFillingImageStyle->setCurrentIndex(style);
+	ui.cbFillingImageStyle->setCurrentIndex(static_cast<int>(style));
 	m_initializing = false;
 }
 void HistogramDock::curveFillingBrushStyleChanged(Qt::BrushStyle style) {

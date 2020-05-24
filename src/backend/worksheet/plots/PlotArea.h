@@ -43,9 +43,9 @@ public:
 	~PlotArea() override;
 
 	enum class BackgroundType {Color, Image, Pattern};
-	enum BackgroundColorStyle {SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
+	enum class BackgroundColorStyle {SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
 			TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient, RadialGradient};
-	enum BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
+	enum class BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
 
 	QGraphicsItem* graphicsItem() const override;
 	void setVisible(bool on) override;

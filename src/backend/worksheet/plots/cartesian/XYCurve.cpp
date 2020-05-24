@@ -134,9 +134,9 @@ void XYCurve::init() {
 
 	d->fillingPosition = (XYCurve::FillingPosition) group.readEntry("FillingPosition", (int)XYCurve::NoFilling);
 	d->fillingType = (PlotArea::BackgroundType) group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color));
-	d->fillingColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("FillingColorStyle", (int) PlotArea::SingleColor);
-	d->fillingImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("FillingImageStyle", (int) PlotArea::Scaled);
-	d->fillingBrushStyle = (Qt::BrushStyle) group.readEntry("FillingBrushStyle", (int) Qt::SolidPattern);
+	d->fillingColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("FillingColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor));
+	d->fillingImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("FillingImageStyle", static_cast<int>(PlotArea::BackgroundImageStyle::Scaled));
+	d->fillingBrushStyle = (Qt::BrushStyle) group.readEntry("FillingBrushStyle", static_cast<int>(Qt::SolidPattern));
 	d->fillingFileName = group.readEntry("FillingFileName", QString());
 	d->fillingFirstColor = group.readEntry("FillingFirstColor", QColor(Qt::white));
 	d->fillingSecondColor = group.readEntry("FillingSecondColor", QColor(Qt::black));
@@ -2845,39 +2845,39 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 		QRectF rect = pol.boundingRect();
 		if (fillingType == PlotArea::BackgroundType::Color) {
 			switch (fillingColorStyle) {
-			case PlotArea::SingleColor: {
+			case PlotArea::BackgroundColorStyle::SingleColor: {
 					painter->setBrush(QBrush(fillingFirstColor));
 					break;
 				}
-			case PlotArea::HorizontalLinearGradient: {
+			case PlotArea::BackgroundColorStyle::HorizontalLinearGradient: {
 					QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
 					linearGrad.setColorAt(0, fillingFirstColor);
 					linearGrad.setColorAt(1, fillingSecondColor);
 					painter->setBrush(QBrush(linearGrad));
 					break;
 				}
-			case PlotArea::VerticalLinearGradient: {
+			case PlotArea::BackgroundColorStyle::VerticalLinearGradient: {
 					QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
 					linearGrad.setColorAt(0, fillingFirstColor);
 					linearGrad.setColorAt(1, fillingSecondColor);
 					painter->setBrush(QBrush(linearGrad));
 					break;
 				}
-			case PlotArea::TopLeftDiagonalLinearGradient: {
+			case PlotArea::BackgroundColorStyle::TopLeftDiagonalLinearGradient: {
 					QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
 					linearGrad.setColorAt(0, fillingFirstColor);
 					linearGrad.setColorAt(1, fillingSecondColor);
 					painter->setBrush(QBrush(linearGrad));
 					break;
 				}
-			case PlotArea::BottomLeftDiagonalLinearGradient: {
+			case PlotArea::BackgroundColorStyle::BottomLeftDiagonalLinearGradient: {
 					QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
 					linearGrad.setColorAt(0, fillingFirstColor);
 					linearGrad.setColorAt(1, fillingSecondColor);
 					painter->setBrush(QBrush(linearGrad));
 					break;
 				}
-			case PlotArea::RadialGradient: {
+			case PlotArea::BackgroundColorStyle::RadialGradient: {
 					QRadialGradient radialGrad(rect.center(), rect.width()/2);
 					radialGrad.setColorAt(0, fillingFirstColor);
 					radialGrad.setColorAt(1, fillingSecondColor);
@@ -2889,22 +2889,22 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 			if ( !fillingFileName.trimmed().isEmpty() ) {
 				QPixmap pix(fillingFileName);
 				switch (fillingImageStyle) {
-				case PlotArea::ScaledCropped:
+				case PlotArea::BackgroundImageStyle::ScaledCropped:
 					pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
 					break;
-				case PlotArea::Scaled:
+				case PlotArea::BackgroundImageStyle::Scaled:
 					pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
 					break;
-				case PlotArea::ScaledAspectRatio:
+				case PlotArea::BackgroundImageStyle::ScaledAspectRatio:
 					pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
 					break;
-				case PlotArea::Centered: {
+				case PlotArea::BackgroundImageStyle::Centered: {
 						QPixmap backpix(rect.size().toSize());
 						backpix.fill();
 						QPainter p(&backpix);
@@ -2914,10 +2914,10 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 						painter->setBrushOrigin(-pix.size().width()/2, -pix.size().height()/2);
 						break;
 					}
-				case PlotArea::Tiled:
+				case PlotArea::BackgroundImageStyle::Tiled:
 					painter->setBrush(QBrush(pix));
 					break;
-				case PlotArea::CenterTiled:
+				case PlotArea::BackgroundImageStyle::CenterTiled:
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
 				}
@@ -3039,8 +3039,8 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement( "filling" );
 	writer->writeAttribute( "position", QString::number(d->fillingPosition) );
 	writer->writeAttribute( "type", QString::number(static_cast<int>(d->fillingType)) );
-	writer->writeAttribute( "colorStyle", QString::number(d->fillingColorStyle) );
-	writer->writeAttribute( "imageStyle", QString::number(d->fillingImageStyle) );
+	writer->writeAttribute( "colorStyle", QString::number(static_cast<int>(d->fillingColorStyle)) );
+	writer->writeAttribute( "imageStyle", QString::number(static_cast<int>(d->fillingImageStyle)) );
 	writer->writeAttribute( "brushStyle", QString::number(d->fillingBrushStyle) );
 	writer->writeAttribute( "firstColor_r", QString::number(d->fillingFirstColor.red()) );
 	writer->writeAttribute( "firstColor_g", QString::number(d->fillingFirstColor.green()) );
@@ -3265,7 +3265,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 
 	//Filling
 	this->setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle", (int)Qt::SolidPattern));
-	this->setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle", (int)PlotArea::SingleColor));
+	this->setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor)));
 	this->setFillingOpacity(group.readEntry("FillingOpacity", 1.0));
 	this->setFillingPosition((XYCurve::FillingPosition)group.readEntry("FillingPosition", (int)XYCurve::NoFilling));
 	this->setFillingFirstColor(themeColor);

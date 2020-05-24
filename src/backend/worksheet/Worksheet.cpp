@@ -1364,8 +1364,8 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 	//background properties
 	writer->writeStartElement( "background" );
 	writer->writeAttribute( "type", QString::number(static_cast<int>(d->backgroundType)) );
-	writer->writeAttribute( "colorStyle", QString::number(d->backgroundColorStyle) );
-	writer->writeAttribute( "imageStyle", QString::number(d->backgroundImageStyle) );
+	writer->writeAttribute( "colorStyle", QString::number(static_cast<int>(d->backgroundColorStyle)) );
+	writer->writeAttribute( "imageStyle", QString::number(static_cast<int>(d->backgroundImageStyle)) );
 	writer->writeAttribute( "brushStyle", QString::number(d->backgroundBrushStyle) );
 	writer->writeAttribute( "firstColor_r", QString::number(d->backgroundFirstColor.red()) );
 	writer->writeAttribute( "firstColor_g", QString::number(d->backgroundFirstColor.green()) );
@@ -1573,9 +1573,9 @@ void Worksheet::loadTheme(const QString& theme) {
 	}
 
 	this->setBackgroundType((PlotArea::BackgroundType) group.readEntry("BackgroundType", static_cast<int>(PlotArea::BackgroundType::Color)));
-	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor));
-	this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled));
-	this->setBackgroundBrushStyle((Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", (int) Qt::SolidPattern));
+	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor)));
+	this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", static_cast<int>(PlotArea::BackgroundImageStyle::Scaled)));
+	this->setBackgroundBrushStyle((Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", static_cast<int>(Qt::SolidPattern)));
 	this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor", QColor(Qt::white)));
 	this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor", QColor(Qt::black)));
 	this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", 1.0));

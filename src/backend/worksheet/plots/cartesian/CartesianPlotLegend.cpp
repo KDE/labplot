@@ -99,9 +99,9 @@ void CartesianPlotLegend::init() {
 
 	//Background
 	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", static_cast<int>(PlotArea::BackgroundType::Color));
-	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor);
-	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled);
-	d->backgroundBrushStyle = (Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", (int) Qt::SolidPattern);
+	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor));
+	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", static_cast<int>(PlotArea::BackgroundImageStyle::Scaled));
+	d->backgroundBrushStyle = (Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", static_cast<int>(Qt::SolidPattern));
 	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
 	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
 	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
@@ -627,39 +627,39 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	painter->setPen(Qt::NoPen);
 	if (backgroundType == PlotArea::BackgroundType::Color) {
 		switch (backgroundColorStyle) {
-			case PlotArea::SingleColor:{
+			case PlotArea::BackgroundColorStyle::SingleColor: {
 				painter->setBrush(QBrush(backgroundFirstColor));
 				break;
 			}
-			case PlotArea::HorizontalLinearGradient:{
+			case PlotArea::BackgroundColorStyle::HorizontalLinearGradient: {
 				QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
 				linearGrad.setColorAt(0, backgroundFirstColor);
 				linearGrad.setColorAt(1, backgroundSecondColor);
 				painter->setBrush(QBrush(linearGrad));
 				break;
 			}
-			case PlotArea::VerticalLinearGradient:{
+			case PlotArea::BackgroundColorStyle::VerticalLinearGradient: {
 				QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
 				linearGrad.setColorAt(0, backgroundFirstColor);
 				linearGrad.setColorAt(1, backgroundSecondColor);
 				painter->setBrush(QBrush(linearGrad));
 				break;
 			}
-			case PlotArea::TopLeftDiagonalLinearGradient:{
+			case PlotArea::BackgroundColorStyle::TopLeftDiagonalLinearGradient: {
 				QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
 				linearGrad.setColorAt(0, backgroundFirstColor);
 				linearGrad.setColorAt(1, backgroundSecondColor);
 				painter->setBrush(QBrush(linearGrad));
 				break;
 			}
-			case PlotArea::BottomLeftDiagonalLinearGradient:{
+			case PlotArea::BackgroundColorStyle::BottomLeftDiagonalLinearGradient: {
 				QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
 				linearGrad.setColorAt(0, backgroundFirstColor);
 				linearGrad.setColorAt(1, backgroundSecondColor);
 				painter->setBrush(QBrush(linearGrad));
 				break;
 			}
-			case PlotArea::RadialGradient:{
+			case PlotArea::BackgroundColorStyle::RadialGradient: {
 				QRadialGradient radialGrad(rect.center(), rect.width()/2);
 				radialGrad.setColorAt(0, backgroundFirstColor);
 				radialGrad.setColorAt(1, backgroundSecondColor);
@@ -671,25 +671,25 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 		if ( !backgroundFileName.trimmed().isEmpty() ) {
 			QPixmap pix(backgroundFileName);
 			switch (backgroundImageStyle) {
-				case PlotArea::ScaledCropped:
+				case PlotArea::BackgroundImageStyle::ScaledCropped:
 					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
 					painter->drawPixmap(rect.topLeft(),pix);
 					break;
-				case PlotArea::Scaled:
+				case PlotArea::BackgroundImageStyle::Scaled:
 					pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
 					painter->drawPixmap(rect.topLeft(),pix);
 					break;
-				case PlotArea::ScaledAspectRatio:
+				case PlotArea::BackgroundImageStyle::ScaledAspectRatio:
 					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
 					painter->drawPixmap(rect.topLeft(),pix);
 					break;
-				case PlotArea::Centered:
+				case PlotArea::BackgroundImageStyle::Centered:
 					painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
 					break;
-				case PlotArea::Tiled:
+				case PlotArea::BackgroundImageStyle::Tiled:
 					painter->drawTiledPixmap(rect,pix);
 					break;
-				case PlotArea::CenterTiled:
+				case PlotArea::BackgroundImageStyle::CenterTiled:
 					painter->drawTiledPixmap(rect,pix,QPoint(rect.size().width()/2,rect.size().height()/2));
 			}
 		}
@@ -999,8 +999,8 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 	//background
 	writer->writeStartElement( "background" );
 	writer->writeAttribute( "type", QString::number(static_cast<int>(d->backgroundType)) );
-	writer->writeAttribute( "colorStyle", QString::number(d->backgroundColorStyle) );
-	writer->writeAttribute( "imageStyle", QString::number(d->backgroundImageStyle) );
+	writer->writeAttribute( "colorStyle", QString::number(static_cast<int>(d->backgroundColorStyle)) );
+	writer->writeAttribute( "imageStyle", QString::number(static_cast<int>(d->backgroundImageStyle)) );
 	writer->writeAttribute( "brushStyle", QString::number(d->backgroundBrushStyle) );
 	writer->writeAttribute( "firstColor_r", QString::number(d->backgroundFirstColor.red()) );
 	writer->writeAttribute( "firstColor_g", QString::number(d->backgroundFirstColor.green()) );
