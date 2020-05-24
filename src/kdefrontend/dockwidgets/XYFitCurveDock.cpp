@@ -1329,8 +1329,8 @@ void XYFitCurveDock::showFitResult() {
 		uiGeneralTab.twGoodness->item(1, 2)->setText(QString::number(fitResult.rms));
 		uiGeneralTab.twGoodness->item(2, 2)->setText(QString::number(fitResult.rsd));
 
-		uiGeneralTab.twGoodness->item(3, 2)->setText(QString::number(fitResult.rsquare, 'g', 15));
-		uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(fitResult.rsquareAdj, 'g', 15));
+		uiGeneralTab.twGoodness->item(3, 2)->setText(QString::number(fitResult.rsquare, 'g'));
+		uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(fitResult.rsquareAdj, 'g'));
 
 		// chi^2 and F test p-values
 		uiGeneralTab.twGoodness->item(5, 2)->setText(QString::number(fitResult.chisq_p, 'g', 3));
