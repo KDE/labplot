@@ -1548,13 +1548,15 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	if (!isLoading()) {
 		//if a theme was selected, apply the theme settings for newly added children,
 		//load default theme settings otherwise.
-		const auto* elem = static_cast<const WorksheetElement*>(child);
-		if (!d->theme.isEmpty()) {
-			KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
-			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
-		} else {
-			KConfig config;
-			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
+		const auto* elem = dynamic_cast<const WorksheetElement*>(child);
+		if (elem) {
+			if (!d->theme.isEmpty()) {
+				KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
+				const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
+			} else {
+				KConfig config;
+				const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
+			}
 		}
 	}
 }
