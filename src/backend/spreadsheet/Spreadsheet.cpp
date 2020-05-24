@@ -76,7 +76,9 @@ Spreadsheet::Spreadsheet(const QString& name, bool loading, AspectType type)
 	initializes the spreadsheet with the default number of columns and rows
 */
 void Spreadsheet::init() {
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Spreadsheet"));
+	KConfig config;
+	KConfigGroup group = config.group(QLatin1String("Spreadsheet"));
+
 	const int columns = group.readEntry(QLatin1String("ColumnCount"), 2);
 	const int rows = group.readEntry(QLatin1String("RowCount"), 100);
 
