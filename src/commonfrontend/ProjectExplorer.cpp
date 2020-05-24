@@ -377,6 +377,11 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 	return QObject::eventFilter(obj, event);
 }
 
+void ProjectExplorer::keyPressEvent(QKeyEvent* event) {
+	if (event->matches(QKeySequence::Delete))
+		deleteSelected();
+}
+
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
@@ -666,15 +671,6 @@ void ProjectExplorer::deleteSelected() {
 		return;
 
 
-	int rc = KMessageBox::warningYesNo( this,
-	                                    i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", items.size()/4),
-	                                    i18np("Delete selected object", "Delete selected objects", items.size()/4));
-
-	if (rc == KMessageBox::No)
-		return;
-
-	m_project->beginMacro(i18np("Project Explorer: delete %1 selected object", "Project Explorer: delete %1 selected objects", items.size()/4));
-
 	//determine all selected aspect
 	QVector<AbstractAspect*> aspects;
 	for (int i = 0; i < items.size()/4; ++i) {
@@ -682,6 +678,19 @@ void ProjectExplorer::deleteSelected() {
 		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		aspects << aspect;
 	}
+
+	QString msg;
+	if (aspects.size() > 1)
+		msg = i18n("Do you really want to delete the selected %1 objects?", aspects.size());
+	else
+		 msg = i18n("Do you really want to delete %1?", aspects.constFirst()->name());
+
+	int rc = KMessageBox::warningYesNo(this, msg, i18np("Delete selected object", "Delete selected objects", aspects.size()));
+
+	if (rc == KMessageBox::No)
+		return;
+
+	m_project->beginMacro(i18np("Project Explorer: delete %1 selected object", "Project Explorer: delete %1 selected objects", items.size()/4));
 
 	//determine aspects to be deleted:
 	//it's enough to delete parent items in the selection only,
