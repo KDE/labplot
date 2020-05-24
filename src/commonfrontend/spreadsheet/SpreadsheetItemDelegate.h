@@ -46,6 +46,9 @@ public:
 private:
 	QColor m_maskingColor{0xff,0,0};
 	bool eventFilter(QObject*, QEvent*) override;
+
+signals:
+	void returnPressed();
 };
 
 #endif

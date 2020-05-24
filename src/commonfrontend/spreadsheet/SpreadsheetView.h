@@ -294,6 +294,7 @@ private slots:
 	void deselectColumn(int);
 	void columnClicked(int);
 	void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+	void advanceCell();
 };
 
 #endif

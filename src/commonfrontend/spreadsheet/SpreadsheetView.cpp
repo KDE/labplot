@@ -142,7 +142,9 @@ void SpreadsheetView::init() {
 	initMenus();
 
 	m_tableView->setModel(m_model);
-	m_tableView->setItemDelegate(new SpreadsheetItemDelegate(this));
+	auto* delegate = new SpreadsheetItemDelegate(this);
+	connect(delegate, &SpreadsheetItemDelegate::returnPressed, this, &SpreadsheetView::advanceCell);
+	m_tableView->setItemDelegate(delegate);
 	m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
 	//horizontal header
@@ -1207,9 +1209,24 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			pasteIntoSelection();
 		else if (key_event->key() == Qt::Key_Backspace || key_event->matches(QKeySequence::Delete))
 			clearSelectedCells();
+		else if (key_event->key() == Qt::Key_Return || key_event->key() == Qt::Key_Enter)
+			advanceCell();
 	}
 
 	return QWidget::eventFilter(watched, event);
+}
+
+/*!
+	Advance current cell after [Return] or [Enter] was pressed
+*/
+void SpreadsheetView::advanceCell() {
+	const QModelIndex& idx = m_tableView->currentIndex();
+	const int row = idx.row();
+	const int col = idx.column();
+	if (row + 1 == m_spreadsheet->rowCount())
+		m_spreadsheet->setRowCount(m_spreadsheet->rowCount() + 1);
+
+	m_tableView->setCurrentIndex(idx.sibling(row + 1, col));
 }
 
 /*!
