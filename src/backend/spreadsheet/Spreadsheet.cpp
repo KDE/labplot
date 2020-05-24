@@ -425,6 +425,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 		DEBUG("	sort separately")
 		for (auto* col : cols) {
 			int rows = col->rowCount();
+			std::unique_ptr<Column> temp_col(new Column("temp", col->columnMode()));
 
 			switch (col->columnMode()) {
 			case AbstractColumn::ColumnMode::Numeric: {
@@ -440,8 +441,6 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
 
 					QVectorIterator< QPair<double, int> > it(map);
-					//TODO: use unique pointer
-					Column *temp_col = new Column("temp", col->columnMode());
 
 					int k = 0;
 					// put the values in the right order into temp_col
@@ -451,8 +450,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						k++;
 					}
 					// copy the sorted column
-					col->copy(temp_col, 0, 0, rows);
-					delete temp_col;
+					col->copy(temp_col.get(), 0, 0, rows);
 					break;
 				}
 			case AbstractColumn::ColumnMode::Integer: {
@@ -467,8 +465,6 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::integerGreater);
 
 					QVectorIterator<QPair<int, int>> it(map);
-					//TODO: use unique pointer
-					Column* temp_col = new Column("temp", col->columnMode());
 
 					int k = 0;
 					// put the values in the right order into temp_col
@@ -478,8 +474,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						k++;
 					}
 					// copy the sorted column
-					col->copy(temp_col, 0, 0, rows);
-					delete temp_col;
+					col->copy(temp_col.get(), 0, 0, rows);
 					break;
 				}
 			case AbstractColumn::ColumnMode::BigInt: {
@@ -494,8 +489,6 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntGreater);
 
 					QVectorIterator<QPair<qint64, int>> it(map);
-					//TODO: use unique pointer
-					Column* temp_col = new Column("temp", col->columnMode());
 
 					int k = 0;
 					// put the values in the right order into temp_col
@@ -505,8 +498,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						k++;
 					}
 					// copy the sorted column
-					col->copy(temp_col, 0, 0, rows);
-					delete temp_col;
+					col->copy(temp_col.get(), 0, 0, rows);
 					break;
 				}
 			case AbstractColumn::ColumnMode::Text: {
@@ -522,8 +514,6 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringGreater);
 
 					QVectorIterator< QPair<QString, int> > it(map);
-					//TODO: use unique pointer
-					Column* temp_col = new Column("temp", col->columnMode());
 
 					int k = 0;
 					// put the values in the right order into temp_col
@@ -533,8 +523,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						k++;
 					}
 					// copy the sorted column
-					col->copy(temp_col, 0, 0, rows);
-					delete temp_col;
+					col->copy(temp_col.get(), 0, 0, rows);
 					break;
 				}
 			case AbstractColumn::ColumnMode::DateTime:
@@ -552,8 +541,6 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
 
 					QVectorIterator< QPair<QDateTime, int> > it(map);
-					//TODO: use unique pointer
-					Column *temp_col = new Column("temp", col->columnMode());
 
 					int k = 0;
 					// put the values in the right order into temp_col
@@ -563,8 +550,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						k++;
 					}
 					// copy the sorted column
-					col->copy(temp_col, 0, 0, rows);
-					delete temp_col;
+					col->copy(temp_col.get(), 0, 0, rows);
 					break;
 				}
 			}
@@ -588,7 +574,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				QVectorIterator<QPair<double, int>> it(map);
 
 				for (auto* col : cols) {
-					Column *temp_col = new Column("temp", col->columnMode());
+					std::unique_ptr<Column> temp_col(new Column("temp", col->columnMode()));
 					it.toFront();
 					int j = 0;
 					// put the values in the right order into temp_col
@@ -598,8 +584,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						j++;
 					}
 					// copy the sorted column
-					col->copy(temp_col, 0, 0, rows);
-					delete temp_col;
+					col->copy(temp_col.get(), 0, 0, rows);
 				}
 				break;
 			}
@@ -616,7 +601,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				QVectorIterator<QPair<int, int>> it(map);
 
 				for (auto* col : cols) {
-					Column *temp_col = new Column("temp", col->columnMode());
+					std::unique_ptr<Column> temp_col(new Column("temp", col->columnMode()));
 					it.toFront();
 					int j = 0;
 					// put the values in the right order into temp_col
@@ -626,8 +611,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						j++;
 					}
 					// copy the sorted column
-					col->copy(temp_col, 0, 0, rows);
-					delete temp_col;
+					col->copy(temp_col.get(), 0, 0, rows);
 				}
 				break;
 			}
@@ -644,7 +628,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				QVectorIterator<QPair<qint64, int>> it(map);
 
 				for (auto* col : cols) {
-					Column *temp_col = new Column("temp", col->columnMode());
+					std::unique_ptr<Column> temp_col(new Column("temp", col->columnMode()));
 					it.toFront();
 					int j = 0;
 					// put the values in the right order into temp_col
@@ -654,8 +638,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						j++;
 					}
 					// copy the sorted column
-					col->copy(temp_col, 0, 0, rows);
-					delete temp_col;
+					col->copy(temp_col.get(), 0, 0, rows);
 				}
 				break;
 			}
@@ -673,7 +656,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				QVectorIterator<QPair<QString, int>> it(map);
 
 				for (auto* col : cols) {
-					Column *temp_col = new Column("temp", col->columnMode());
+					std::unique_ptr<Column> temp_col(new Column("temp", col->columnMode()));
 					it.toFront();
 					int j = 0;
 					// put the values in the right order into temp_col
@@ -683,8 +666,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						j++;
 					}
 					// copy the sorted column
-					col->copy(temp_col, 0, 0, rows);
-					delete temp_col;
+					col->copy(temp_col.get(), 0, 0, rows);
 				}
 				break;
 			}
@@ -704,7 +686,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				QVectorIterator<QPair<QDateTime, int>> it(map);
 
 				for (auto* col : cols) {
-					Column *temp_col = new Column("temp", col->columnMode());
+					std::unique_ptr<Column> temp_col(new Column("temp", col->columnMode()));
 					it.toFront();
 					int j = 0;
 					// put the values in the right order into temp_col
@@ -714,8 +696,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						j++;
 					}
 					// copy the sorted column
-					col->copy(temp_col, 0, 0, rows);
-					delete temp_col;
+					col->copy(temp_col.get(), 0, 0, rows);
 				}
 				break;
 			}
