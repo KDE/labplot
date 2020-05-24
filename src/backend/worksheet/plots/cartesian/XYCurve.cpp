@@ -3261,7 +3261,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 
 	//Values
 	this->setValuesOpacity(group.readEntry("ValuesOpacity", 1.0));
-	this->setValuesColor(group.readEntry("ValuesColor", QColor(Qt::black)));
+	this->setValuesColor(group.readEntry("ValuesColor", themeColor));
 
 	//Filling
 	this->setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle", (int)Qt::SolidPattern));

@@ -1546,53 +1546,15 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	}
 
 	if (!isLoading()) {
-		//if a theme was selected, apply the theme settings for newly added children, too
+		//if a theme was selected, apply the theme settings for newly added children,
+		//load default theme settings otherwise.
+		const auto* elem = static_cast<const WorksheetElement*>(child);
 		if (!d->theme.isEmpty()) {
-			const auto* elem = dynamic_cast<const WorksheetElement*>(child);
-			if (elem) {
-				KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
-				const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
-			}
+			KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
+			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
 		} else {
-			//no theme is available, apply the default colors for curves only, s.a. XYCurve::loadThemeConfig()
-			const auto* curve = dynamic_cast<const XYCurve*>(child);
-			if (curve) {
-				int index = indexOfChild<XYCurve>(curve);
-				QColor themeColor;
-				if (index < m_themeColorPalette.size())
-					themeColor = m_themeColorPalette.at(index);
-				else {
-					if (m_themeColorPalette.size())
-						themeColor = m_themeColorPalette.last();
-				}
-
-				auto* c = const_cast<XYCurve*>(curve);
-
-				//Line
-				QPen p = curve->linePen();
-				p.setColor(themeColor);
-				c->setLinePen(p);
-
-				//Drop line
-				p = curve->dropLinePen();
-				p.setColor(themeColor);
-				c->setDropLinePen(p);
-
-				//Symbol
-				QBrush brush = c->symbolsBrush();
-				brush.setColor(themeColor);
-				c->setSymbolsBrush(brush);
-				p = c->symbolsPen();
-				p.setColor(themeColor);
-				c->setSymbolsPen(p);
-
-				//Filling
-				c->setFillingFirstColor(themeColor);
-
-				//Error bars
-				p.setColor(themeColor);
-				c->setErrorBarsPen(p);
-			}
+			KConfig config;
+			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
 		}
 	}
 }
