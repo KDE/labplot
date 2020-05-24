@@ -377,7 +377,9 @@ int Spreadsheet::colY(int col) {
   If 'leading' is a null pointer, each column is sorted separately.
 */
 void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, bool ascending) {
+	DEBUG("Spreadsheet::sortColumns() : ascending = " << ascending)
 	if (cols.isEmpty()) return;
+
 
 	// the normal QPair comparison does not work properly with descending sorting
 	// therefore we use our own compare functions
@@ -420,14 +422,17 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 	beginMacro(i18n("%1: sort columns", name()));
 
 	if (leading == nullptr) { // sort separately
+		DEBUG("	sort separately")
 		for (auto* col : cols) {
+			int rows = col->rowCount();
+
 			switch (col->columnMode()) {
 			case AbstractColumn::ColumnMode::Numeric: {
-					int rows = col->rowCount();
 					QVector< QPair<double, int> > map;
 
-					for (int j = 0; j < rows; j++)
-						map.append(QPair<double, int>(col->valueAt(j), j));
+					for (int i = 0; i < rows; i++)
+						if (col->isValid(i))
+							map.append(QPair<double, int>(col->valueAt(i), i));
 
 					if (ascending)
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
@@ -435,6 +440,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
 
 					QVectorIterator< QPair<double, int> > it(map);
+					//TODO: use unique pointer
 					Column *temp_col = new Column("temp", col->columnMode());
 
 					int k = 0;
@@ -450,11 +456,10 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					break;
 				}
 			case AbstractColumn::ColumnMode::Integer: {
-					int rows = col->rowCount();
 					QVector< QPair<int, int> > map;
 
-					for (int j = 0; j < rows; j++)
-						map.append(QPair<int, int>(col->valueAt(j), j));
+					for (int i = 0; i < rows; i++)
+						map.append(QPair<int, int>(col->valueAt(i), i));
 
 					if (ascending)
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::integerLess);
@@ -462,6 +467,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::integerGreater);
 
 					QVectorIterator<QPair<int, int>> it(map);
+					//TODO: use unique pointer
 					Column* temp_col = new Column("temp", col->columnMode());
 
 					int k = 0;
@@ -477,11 +483,10 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					break;
 				}
 			case AbstractColumn::ColumnMode::BigInt: {
-					int rows = col->rowCount();
 					QVector< QPair<qint64, int> > map;
 
-					for (int j = 0; j < rows; j++)
-						map.append(QPair<qint64, int>(col->valueAt(j), j));
+					for (int i = 0; i < rows; i++)
+						map.append(QPair<qint64, int>(col->valueAt(i), i));
 
 					if (ascending)
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntLess);
@@ -489,6 +494,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntGreater);
 
 					QVectorIterator<QPair<qint64, int>> it(map);
+					//TODO: use unique pointer
 					Column* temp_col = new Column("temp", col->columnMode());
 
 					int k = 0;
@@ -504,12 +510,11 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					break;
 				}
 			case AbstractColumn::ColumnMode::Text: {
-					DEBUG("	Text column. rows: " << col->rowCount())
-					int rows = col->rowCount();
 					QVector<QPair<QString, int>> map;
 
-					for (int j = 0; j < rows; j++)
-						map.append(QPair<QString, int>(col->textAt(j), j));
+					for (int i = 0; i < rows; i++)
+						if (!col->textAt(i).isEmpty())
+							map.append(QPair<QString, int>(col->textAt(i), i));
 
 					if (ascending)
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringLess);
@@ -517,6 +522,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringGreater);
 
 					QVectorIterator< QPair<QString, int> > it(map);
+					//TODO: use unique pointer
 					Column* temp_col = new Column("temp", col->columnMode());
 
 					int k = 0;
@@ -534,11 +540,11 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 			case AbstractColumn::ColumnMode::DateTime:
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day: {
-					int rows = col->rowCount();
 					QVector< QPair<QDateTime, int> > map;
 
-					for (int j = 0; j < rows; j++)
-						map.append(QPair<QDateTime, int>(col->dateTimeAt(j), j));
+					for (int i = 0; i < rows; i++)
+						if (col->isValid(i))
+							map.append(QPair<QDateTime, int>(col->dateTimeAt(i), i));
 
 					if (ascending)
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
@@ -546,6 +552,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
 
 					QVectorIterator< QPair<QDateTime, int> > it(map);
+					//TODO: use unique pointer
 					Column *temp_col = new Column("temp", col->columnMode());
 
 					int k = 0;
@@ -563,13 +570,16 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 			}
 		}
 	} else { // sort with leading column
+		DEBUG("	sort with leading column")
+		int rows = leading->rowCount();
+
 		switch (leading->columnMode()) {
 		case AbstractColumn::ColumnMode::Numeric: {
 				QVector<QPair<double, int>> map;
-				int rows = leading->rowCount();
 
 				for (int i = 0; i < rows; i++)
-					map.append(QPair<double, int>(leading->valueAt(i), i));
+					if (leading->isValid(i))
+						map.append(QPair<double, int>(leading->valueAt(i), i));
 
 				if (ascending)
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
@@ -595,7 +605,6 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 			}
 		case AbstractColumn::ColumnMode::Integer: {
 				QVector<QPair<int, int>> map;
-				int rows = leading->rowCount();
 
 				for (int i = 0; i < rows; i++)
 					map.append(QPair<int, int>(leading->valueAt(i), i));
@@ -624,7 +633,6 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 			}
 		case AbstractColumn::ColumnMode::BigInt: {
 				QVector<QPair<qint64, int>> map;
-				int rows = leading->rowCount();
 
 				for (int i = 0; i < rows; i++)
 					map.append(QPair<qint64, int>(leading->valueAt(i), i));
@@ -653,10 +661,10 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 			}
 		case AbstractColumn::ColumnMode::Text: {
 				QVector<QPair<QString, int>> map;
-				int rows = leading->rowCount();
 
 				for (int i = 0; i < rows; i++)
-					map.append(QPair<QString, int>(leading->textAt(i), i));
+					if (!leading->textAt(i).isEmpty())
+						map.append(QPair<QString, int>(leading->textAt(i), i));
 
 				if (ascending)
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringLess);
@@ -684,10 +692,10 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day: {
 				QVector<QPair<QDateTime, int>> map;
-				int rows = leading->rowCount();
 
 				for (int i = 0; i < rows; i++)
-					map.append(QPair<QDateTime, int>(leading->dateTimeAt(i), i));
+					if (leading->isValid(i))
+						map.append(QPair<QDateTime, int>(leading->dateTimeAt(i), i));
 
 				if (ascending)
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
