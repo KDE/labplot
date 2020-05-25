@@ -1229,7 +1229,12 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 	QString formula;
 	QStringList variableNames;
 	QStringList columnPathes;
-	bool autoUpdate = reader->attributes().value("autoUpdate").toInt();
+
+	//read the autoUpdate attribute if available (older project files created with <2.8 don't have it)
+	bool autoUpdate = false;
+	if (reader->attributes().hasAttribute("autoUpdate"))
+		autoUpdate = reader->attributes().value("autoUpdate").toInt();
+
 	while (reader->readNext()) {
 		if (reader->isEndElement()) break;
 
