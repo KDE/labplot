@@ -1336,6 +1336,7 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,
 		int count, QVector<double>* xVector, QVector<double>* yVector,
 		const QStringList& paramNames, const QVector<double>& paramValues) {
+	DEBUG("ExpressionParser::evaluateCartesian() 1")
 
 	QByteArray xminba = min.toLatin1();
 	const double xMin = parse(xminba.constData());
@@ -1372,6 +1373,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,
 		int count, QVector<double>* xVector, QVector<double>* yVector) {
+	DEBUG("ExpressionParser::evaluateCartesian() 2")
 
 	QByteArray xminba = min.toLatin1();
 	const double xMin = parse(xminba.constData());
@@ -1402,6 +1404,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 }
 
 bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector) {
+	DEBUG("ExpressionParser::evaluateCartesian() 3")
 	QByteArray funcba = expr.toLatin1();
 	const char* func = funcba.constData();
 
@@ -1423,6 +1426,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 
 bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector,
 		const QStringList& paramNames, const QVector<double>& paramValues) {
+	DEBUG("ExpressionParser::evaluateCartesian() 4")
 
 	QByteArray funcba = expr.toLatin1();
 	const char* func = funcba.constData();
@@ -1454,6 +1458,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	Data is stored in \c dataVectors.
  */
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList& vars, const QVector<QVector<double>*>& xVectors, QVector<double>* yVector) {
+	DEBUG("ExpressionParser::evaluateCartesian() 4")
 	Q_ASSERT(vars.size() == xVectors.size());
 
 	QByteArray funcba = expr.toLatin1();
@@ -1479,7 +1484,9 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 			assign_variable(varba.constData(), varValue);
 		}
 
+		//TODO DEBUG("BEFORE CRASH")
 		const double y = parse(func);
+		//DEBUG("AFTER CRASH")
 
 		if (parse_errors() > 0)
 			return false;

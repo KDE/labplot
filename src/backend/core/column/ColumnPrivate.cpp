@@ -575,7 +575,7 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data,
  * \brief Replace data pointer
  */
 void ColumnPrivate::replaceData(void* data) {
-	DEBUG("ColumnPrivate::replaceData()");
+	DEBUG("ColumnPrivate::replaceData()")
 	emit m_owner->dataAboutToChange(m_owner);
 	m_data = data;
 	invalidate();
@@ -1062,7 +1062,8 @@ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variab
 	m_formulaAutoUpdate = autoUpdate;
 
 	for (auto connection: m_connectionsUpdateFormula)
-		disconnect(connection);
+		if (static_cast<bool>(connection))
+			disconnect(connection);
 
 	m_formulaVariableColumnPaths.clear();
 
@@ -1093,7 +1094,8 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 	if (!column)
 		return;
 
-	m_connectionsUpdateFormula << connect(column, &Column::dataChanged, m_owner, &Column::updateFormula);
+	DEBUG("ColumnPrivate::connectFormulaColumn()")
+	m_connectionsUpdateFormula << connect(column, &AbstractColumn::dataChanged, m_owner, &Column::updateFormula);
 	connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &ColumnPrivate::formulaVariableColumnRemoved);
 	connect(column, &AbstractColumn::reset, this, &ColumnPrivate::formulaVariableColumnRemoved);
 	connect(column->parentAspect(), &AbstractAspect::aspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
@@ -1140,6 +1142,7 @@ void ColumnPrivate::setformulVariableColumn(int index, Column* column) {
  * \sa FunctionValuesDialog::generate()
  */
 void ColumnPrivate::updateFormula() {
+	DEBUG("ColumnPrivate::updateFormula()")
 	//determine variable names and the data vectors of the specified columns
 	QVector<QVector<double>*> xVectors;
 	QVector<QVector<double>*> xNewVectors;
@@ -1181,7 +1184,9 @@ void ColumnPrivate::updateFormula() {
 
 		//evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		ExpressionParser* parser = ExpressionParser::getInstance();
+		DEBUG("Calling evaluateCartesian()")
 		parser->evaluateCartesian(m_formula, m_formulaVariableNames, xVectors, &new_data);
+		DEBUG("Calling replaceValues()")
 		replaceValues(0, new_data);
 
 		// initialize remaining rows with NAN
@@ -1198,6 +1203,8 @@ void ColumnPrivate::updateFormula() {
 	//delete help vectors created for the conversion from int to double
 	for (auto* vector : xNewVectors)
 		delete vector;
+
+	DEBUG("ColumnPrivate::updateFormula() DONE")
 }
 
 void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
@@ -1207,6 +1214,7 @@ void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
 	int index = m_formulaVariableColumns.indexOf(const_cast<Column*>(column));
 	if (index != -1) {
 		m_formulaVariableColumns[index] = nullptr;
+		DEBUG("ColumnPrivate::formulaVariableColumnRemoved():updateFormula()")
 		updateFormula();
 	}
 }
@@ -1216,6 +1224,7 @@ void ColumnPrivate::formulaVariableColumnAdded(const AbstractAspect* aspect) {
 	if (index != -1) {
 		const Column* column = dynamic_cast<const Column*>(aspect);
 		m_formulaVariableColumns[index] = const_cast<Column*>(column);
+		DEBUG("ColumnPrivate::formulaVariableColumnAdded():updateFormula()")
 		updateFormula();
 	}
 }
@@ -1505,6 +1514,7 @@ void ColumnPrivate::setValueAt(int row, double new_value) {
  */
 void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) {
 	DEBUG("ColumnPrivate::replaceValues()");
+
 	if (m_column_mode != AbstractColumn::ColumnMode::Numeric) return;
 
 	invalidate();

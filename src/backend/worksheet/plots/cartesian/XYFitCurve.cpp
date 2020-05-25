@@ -2470,5 +2470,6 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		recalcLogicalPoints();
 	}
 
+	DEBUG("XYFitCurve::load() DONE");
 	return true;
 }

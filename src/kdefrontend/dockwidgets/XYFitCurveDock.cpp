@@ -287,6 +287,7 @@ void XYFitCurveDock::initGeneralTab() {
 
 	connect(fitParametersWidget, &FitParametersWidget::parametersChanged, this, &XYFitCurveDock::parametersChanged);
 	connect(fitParametersWidget, &FitParametersWidget::parametersValid, this, &XYFitCurveDock::parametersValid);
+	DEBUG("XYFitCurveDock::initGeneralTab() DONE");
 }
 
 void XYFitCurveDock::setModel() {
@@ -314,6 +315,7 @@ void XYFitCurveDock::setModel() {
 	cbYErrorColumn->setModel(m_aspectTreeModel);
 
 	XYCurveDock::setModel();
+	DEBUG("XYFitCurveDock::setModel() DONE");
 }
 
 /*!
@@ -1075,6 +1077,7 @@ void XYFitCurveDock::enableRecalculate() {
 	else {
 		DEBUG("	PREVIEW DISABLED");
 	}
+	DEBUG("XYFitCurveDock::enableRecalculate() DONE");
 }
 
 void XYFitCurveDock::resultCopySelection() {
@@ -1218,7 +1221,7 @@ void XYFitCurveDock::showFitResult() {
 	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
 
 	if (!fitResult.available) {
-		DEBUG("fit result not available");
+		DEBUG(" fit result not available");
 		return;
 	}
 
@@ -1226,7 +1229,7 @@ void XYFitCurveDock::showFitResult() {
 	uiGeneralTab.twLog->item(0, 1)->setText(fitResult.status);
 
 	if (!fitResult.valid) {
-		DEBUG("fit result not valid");
+		DEBUG(" fit result not valid");
 		return;
 	}
 
@@ -1352,6 +1355,7 @@ void XYFitCurveDock::showFitResult() {
 
 	//enable the "recalculate"-button if the source data was changed since the last fit
 	uiGeneralTab.pbRecalculate->setEnabled(m_fitCurve->isSourceDataChangedSinceLastRecalc());
+	DEBUG("XYFitCurveDock::showFitResult() DONE");
 }
 
 //*************************************************************
