@@ -45,7 +45,7 @@ class JsonFilter : public AbstractFileFilter {
 	Q_OBJECT
 
 public:
-	enum DataContainerType {Array, Object};
+	enum class DataContainerType {Array, Object};
 
 	JsonFilter();
 	~JsonFilter() override;

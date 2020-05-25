@@ -447,9 +447,9 @@ int JsonFilterPrivate::prepareDocumentToRead(const QJsonDocument& doc) {
 
 	if (!m_preparedDoc.isEmpty()) {
 		if (m_preparedDoc.isArray())
-			containerType = JsonFilter::Array;
+			containerType = JsonFilter::DataContainerType::Array;
 		else if (m_preparedDoc.isObject())
-			containerType = JsonFilter::Object;
+			containerType = JsonFilter::DataContainerType::Object;
 		else
 			return 2;
 	} else
@@ -462,7 +462,7 @@ int JsonFilterPrivate::prepareDocumentToRead(const QJsonDocument& doc) {
 	importObjectNames = (importObjectNames && (rowType == QJsonValue::Object));
 
 	switch (containerType) {
-		case JsonFilter::Array: {
+		case JsonFilter::DataContainerType::Array: {
 			QJsonArray arr = m_preparedDoc.array();
 
 			if (arr.count() < startRow)
@@ -477,7 +477,7 @@ int JsonFilterPrivate::prepareDocumentToRead(const QJsonDocument& doc) {
 			}
 			break;
 		}
-		case JsonFilter::Object: {
+		case JsonFilter::DataContainerType::Object: {
 			QJsonObject obj = m_preparedDoc.object();
 
 			if (obj.count() < startRow)
@@ -570,10 +570,10 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 
 		QJsonValue row;
 		switch (containerType) {
-		case JsonFilter::Array:
+		case JsonFilter::DataContainerType::Array:
 			row = *(m_preparedDoc.array().begin() + rowOffset + i);
 			break;
-		case JsonFilter::Object:
+		case JsonFilter::DataContainerType::Object:
 			if (importObjectNames) {
 				const QString& rowName = (m_preparedDoc.object().begin() + rowOffset + i).key();
 				setValueFromString((int)createIndexEnabled, i, rowName);
@@ -675,11 +675,11 @@ QVector<QStringList> JsonFilterPrivate::preview() {
 		QString rowName;
 		QJsonValue row;
 		switch (containerType) {
-			case JsonFilter::Object:
+			case JsonFilter::DataContainerType::Object:
 				rowName = (m_preparedDoc.object().begin() + rowOffset + i).key();
 				row = *(m_preparedDoc.object().begin() + rowOffset + i);
 				break;
-			case JsonFilter::Array:
+			case JsonFilter::DataContainerType::Array:
 				row = *(m_preparedDoc.array().begin() + rowOffset + i);
 				break;
 		}

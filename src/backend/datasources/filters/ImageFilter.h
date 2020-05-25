@@ -37,7 +37,7 @@ class ImageFilter : public AbstractFileFilter {
 	Q_ENUMS(ImportFormat)
 
 public:
-	enum ImportFormat {MATRIX, XYZ, XYRGB};
+	enum class ImportFormat {MATRIX, XYZ, XYRGB};
 
 	ImageFilter();
 	~ImageFilter() override;

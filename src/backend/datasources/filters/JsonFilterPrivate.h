@@ -68,7 +68,7 @@ public:
 	const JsonFilter* q;
 	QJsonModel* model;
 
-	JsonFilter::DataContainerType containerType{JsonFilter::Object};
+	JsonFilter::DataContainerType containerType{JsonFilter::DataContainerType::Object};
 	QJsonValue::Type rowType{QJsonValue::Object};
 	QVector<int> modelRows;
 

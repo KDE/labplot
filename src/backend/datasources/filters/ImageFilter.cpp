@@ -164,15 +164,15 @@ void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	int actualCols = 0, actualRows = 0;
 
 	switch (importFormat) {
-	case ImageFilter::MATRIX:
+	case ImageFilter::ImportFormat::MATRIX:
 		actualCols = endColumn-startColumn+1;
 		actualRows = endRow-startRow+1;
 		break;
-	case ImageFilter::XYZ:
+	case ImageFilter::ImportFormat::XYZ:
 		actualCols = 3;
 		actualRows = (endColumn-startColumn+1)*(endRow-startRow+1);
 		break;
-	case ImageFilter::XYRGB:
+	case ImageFilter::ImportFormat::XYRGB:
 		actualCols = 5;
 		actualRows = (endColumn-startColumn+1)*(endRow-startRow+1);
 	}
@@ -201,7 +201,7 @@ void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 
 	// read data
 	switch (importFormat) {
-	case ImageFilter::MATRIX: {
+	case ImageFilter::ImportFormat::MATRIX: {
 			for (int i = 0; i < actualRows; ++i) {
 				for (int j = 0; j < actualCols; ++j) {
 					double value = qGray(image.pixel(j+startColumn-1, i+startRow-1));
@@ -211,7 +211,7 @@ void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 			}
 			break;
 		}
-	case ImageFilter::XYZ: {
+	case ImageFilter::ImportFormat::XYZ: {
 			int currentRow = 0;
 			for (int i = startRow-1; i < endRow; ++i) {
 				for (int j = startColumn-1; j < endColumn; ++j) {
@@ -225,7 +225,7 @@ void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 			}
 			break;
 		}
-	case ImageFilter::XYRGB: {
+	case ImageFilter::ImportFormat::XYRGB: {
 			int currentRow = 0;
 			for (int i = startRow-1; i < endRow; ++i) {
 				for ( int j = startColumn-1; j < endColumn; ++j) {

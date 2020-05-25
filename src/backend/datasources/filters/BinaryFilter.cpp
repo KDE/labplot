@@ -324,61 +324,61 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 		for (int n = 0; n < m_actualCols; ++n) {
 			//TODO: use ColumnMode when it supports all types
 			switch (dataType) {
-			case BinaryFilter::INT8: {
+			case BinaryFilter::DataType::INT8: {
 					qint8 value;
 					in >> value;
 					lineString << QString::number(value);
 					break;
 				}
-			case BinaryFilter::INT16: {
+			case BinaryFilter::DataType::INT16: {
 					qint16 value;
 					in >> value;
 					lineString << QString::number(value);
 					break;
 				}
-			case BinaryFilter::INT32: {
+			case BinaryFilter::DataType::INT32: {
 					qint32 value;
 					in >> value;
 					lineString << QString::number(value);
 					break;
 				}
-			case BinaryFilter::INT64: {
+			case BinaryFilter::DataType::INT64: {
 					qint64 value;
 					in >> value;
 					lineString << QString::number(value);
 					break;
 				}
-			case BinaryFilter::UINT8: {
+			case BinaryFilter::DataType::UINT8: {
 					quint8 value;
 					in >> value;
 					lineString << QString::number(value);
 					break;
 				}
-			case BinaryFilter::UINT16: {
+			case BinaryFilter::DataType::UINT16: {
 					quint16 value;
 					in >> value;
 					lineString << QString::number(value);
 					break;
 				}
-			case BinaryFilter::UINT32: {
+			case BinaryFilter::DataType::UINT32: {
 					quint32 value;
 					in >> value;
 					lineString << QString::number(value);
 					break;
 				}
-			case BinaryFilter::UINT64: {
+			case BinaryFilter::DataType::UINT64: {
 					quint64 value;
 					in >> value;
 					lineString << QString::number(value);
 					break;
 				}
-			case BinaryFilter::REAL32: {
+			case BinaryFilter::DataType::REAL32: {
 					float value;
 					in >> value;
 					lineString << QString::number(value);
 					break;
 				}
-			case BinaryFilter::REAL64: {
+			case BinaryFilter::DataType::REAL64: {
 					double value;
 					in >> value;
 					lineString << QString::number(value);
@@ -448,61 +448,61 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 			DEBUG("reading column " << n);
 			//TODO: use ColumnMode when it supports all types
 			switch (dataType) {
-			case BinaryFilter::INT8: {
+			case BinaryFilter::DataType::INT8: {
 					qint8 value;
 					in >> value;
 					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
-			case BinaryFilter::INT16: {
+			case BinaryFilter::DataType::INT16: {
 					qint16 value;
 					in >> value;
 					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
-			case BinaryFilter::INT32: {
+			case BinaryFilter::DataType::INT32: {
 					qint32 value;
 					in >> value;
 					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
-			case BinaryFilter::INT64: {
+			case BinaryFilter::DataType::INT64: {
 					qint64 value;
 					in >> value;
 					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
-			case BinaryFilter::UINT8: {
+			case BinaryFilter::DataType::UINT8: {
 					quint8 value;
 					in >> value;
 					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
-			case BinaryFilter::UINT16: {
+			case BinaryFilter::DataType::UINT16: {
 					quint16 value;
 					in >> value;
 					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
-			case BinaryFilter::UINT32: {
+			case BinaryFilter::DataType::UINT32: {
 					quint32 value;
 					in >> value;
 					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
-			case BinaryFilter::UINT64: {
+			case BinaryFilter::DataType::UINT64: {
 					quint64 value;
 					in >> value;
 					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
-			case BinaryFilter::REAL32: {
+			case BinaryFilter::DataType::REAL32: {
 					float value;
 					in >> value;
 					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
-			case BinaryFilter::REAL64: {
+			case BinaryFilter::DataType::REAL64: {
 					double value;
 					in >> value;
 					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
@@ -536,7 +536,7 @@ void BinaryFilterPrivate::write(const QString & fileName, AbstractDataSource* da
 void BinaryFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("binaryFilter");
 	writer->writeAttribute("vectors", QString::number(d->vectors) );
-	writer->writeAttribute("dataType", QString::number(d->dataType) );
+	writer->writeAttribute("dataType", QString::number(static_cast<int>(d->dataType)) );
 	writer->writeAttribute("byteOrder", QString::number(d->byteOrder) );
 	writer->writeAttribute("autoMode", QString::number(d->autoModeEnabled) );
 	writer->writeAttribute("startRow", QString::number(d->startRow) );

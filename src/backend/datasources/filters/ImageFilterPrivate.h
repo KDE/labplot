@@ -39,7 +39,7 @@ public:
 
 	const ImageFilter* q;
 
-	ImageFilter::ImportFormat importFormat{ImageFilter::MATRIX};	// how to import the image
+	ImageFilter::ImportFormat importFormat{ImageFilter::ImportFormat::MATRIX};	// how to import the image
 	int startRow{1};		// start row
 	int endRow{-1}; 		// end row
 	int startColumn{1};		// start column

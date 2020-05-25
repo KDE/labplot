@@ -48,7 +48,7 @@ public:
 	const BinaryFilter* q;
 
 	size_t vectors{2};
-	BinaryFilter::DataType dataType{BinaryFilter::INT8};
+	BinaryFilter::DataType dataType{BinaryFilter::DataType::INT8};
 	QDataStream::ByteOrder byteOrder{QDataStream::LittleEndian};
 	QVector<AbstractColumn::ColumnMode> columnModes;
 
