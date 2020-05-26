@@ -313,7 +313,7 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 		//for file types other than ASCII and binary we support re-reading the whole file only
 		//select "read whole file" and deactivate the combobox
-		if (fileType != AbstractFileFilter::Ascii && fileType != AbstractFileFilter::Binary) {
+		if (fileType != AbstractFileFilter::FileType::Ascii && fileType != AbstractFileFilter::FileType::Binary) {
 			ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 			ui.cbReadingType->setEnabled(false);
 		} else

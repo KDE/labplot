@@ -38,7 +38,7 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
 \ingroup datasources
 */
-ImageFilter::ImageFilter():AbstractFileFilter(Image), d(new ImageFilterPrivate(this)) {}
+ImageFilter::ImageFilter():AbstractFileFilter(FileType::Image), d(new ImageFilterPrivate(this)) {}
 
 ImageFilter::~ImageFilter() = default;
 
@@ -250,7 +250,7 @@ void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 			Column* column = spreadsheet->column(columnOffset+n);
 			column->setComment(comment);
 			column->setUndoAware(true);
-			if (mode == AbstractFileFilter::Replace) {
+			if (mode == AbstractFileFilter::ImportMode::Replace) {
 				column->setSuppressDataChangedSignal(false);
 				column->setChanged();
 			}

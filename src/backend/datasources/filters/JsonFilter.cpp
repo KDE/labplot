@@ -49,7 +49,7 @@
 
 \ingroup datasources
 */
-JsonFilter::JsonFilter() : AbstractFileFilter(JSON), d(new JsonFilterPrivate(this)) {}
+JsonFilter::JsonFilter() : AbstractFileFilter(FileType::JSON), d(new JsonFilterPrivate(this)) {}
 
 JsonFilter::~JsonFilter() = default;
 

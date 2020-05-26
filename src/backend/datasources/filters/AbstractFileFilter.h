@@ -44,8 +44,8 @@ class AbstractFileFilter : public QObject {
 	Q_ENUMS(ImportMode)
 
 public:
-	enum FileType {Ascii, Binary, Image, HDF5, NETCDF, FITS, JSON, ROOT, NgspiceRawAscii, NgspiceRawBinary};
-	enum ImportMode {Append, Prepend, Replace};
+	enum class FileType {Ascii, Binary, Image, HDF5, NETCDF, FITS, JSON, ROOT, NgspiceRawAscii, NgspiceRawBinary};
+	enum class ImportMode {Append, Prepend, Replace};
 
 	explicit AbstractFileFilter(FileType type) : m_type(type) {}
 	~AbstractFileFilter() override = default;
@@ -58,7 +58,7 @@ public:
 	static AbstractFileFilter::FileType fileType(const QString&);
 	static QStringList fileTypes();
 
-	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = AbstractFileFilter::Replace) = 0;
+	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) = 0;
 	virtual void write(const QString& fileName, AbstractDataSource*) = 0;
 
 	virtual void loadFilterSettings(const QString& filterName) = 0;

@@ -235,12 +235,12 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
 		// multiple data sets/variables for HDF5, NetCDF and ROOT
-		if (fileType == AbstractFileFilter::HDF5 || fileType == AbstractFileFilter::NETCDF ||
-			fileType == AbstractFileFilter::ROOT) {
+		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF ||
+			fileType == AbstractFileFilter::FileType::ROOT) {
 			QStringList names;
-			if (fileType == AbstractFileFilter::HDF5)
+			if (fileType == AbstractFileFilter::FileType::HDF5)
 				names = m_importFileWidget->selectedHDF5Names();
-			else if (fileType == AbstractFileFilter::NETCDF)
+			else if (fileType == AbstractFileFilter::FileType::NETCDF)
 				names = m_importFileWidget->selectedNetCDFNames();
 			else
 				names = m_importFileWidget->selectedROOTNames();
@@ -253,7 +253,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 			//in replace mode add only missing sheets (from offset to nrNames)
 			//and rename the already available sheets
-			if (mode == AbstractFileFilter::Replace) {
+			if (mode == AbstractFileFilter::ImportMode::Replace) {
 				start = offset;
 
 				// if there are more available spreadsheets, than needed,
@@ -268,7 +268,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				for (int i = 0; i < offset; ++i) {
 					//HDF5 variable names contain the whole path, remove it and keep the name only
 					QString sheetName = names.at(i);
-					if (fileType == AbstractFileFilter::HDF5)
+					if (fileType == AbstractFileFilter::FileType::HDF5)
 						sheetName = names[i].mid(names[i].lastIndexOf("/") + 1);
 
 					auto* sheet = sheets.at(i);
@@ -282,26 +282,26 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			for (int i = start; i < nrNames; ++i) {
 				//HDF5 variable names contain the whole path, remove it and keep the name only
 				QString sheetName = names.at(i);
-				if (fileType == AbstractFileFilter::HDF5)
+				if (fileType == AbstractFileFilter::FileType::HDF5)
 					sheetName = names[i].mid(names[i].lastIndexOf("/") + 1);
 
 				auto* spreadsheet = new Spreadsheet(sheetName);
-				if (mode == AbstractFileFilter::Prepend && !sheets.isEmpty())
+				if (mode == AbstractFileFilter::ImportMode::Prepend && !sheets.isEmpty())
 					workbook->insertChildBefore(spreadsheet, sheets[0]);
 				else
 					workbook->addChildFast(spreadsheet);
 			}
 
 			// start at offset for append, else at 0
-			if (mode != AbstractFileFilter::Append)
+			if (mode != AbstractFileFilter::ImportMode::Append)
 				offset = 0;
 
 			// import all sets to a different sheet
 			sheets = workbook->children<AbstractAspect>();
 			for (int i = 0; i < nrNames; ++i) {
-				if (fileType == AbstractFileFilter::HDF5)
+				if (fileType == AbstractFileFilter::FileType::HDF5)
 					static_cast<HDF5Filter*>(filter)->setCurrentDataSetName(names[i]);
-				else if (fileType == AbstractFileFilter::NETCDF)
+				else if (fileType == AbstractFileFilter::FileType::NETCDF)
 					static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names[i]);
 				else
 					static_cast<ROOTFilter*>(filter)->setCurrentObject(names[i]);

@@ -50,13 +50,13 @@ public:
 	int prepareDocumentToRead(const QJsonDocument&);
 
 	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace);
+			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	void readDataFromDocument(const QJsonDocument&, AbstractDataSource* = nullptr,
-	                          AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	                          AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 
-	void importData(AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace,
+	void importData(AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace,
 	                int lines = -1);
 
 	void write(const QString& fileName, AbstractDataSource*);

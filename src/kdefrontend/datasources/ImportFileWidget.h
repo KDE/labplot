@@ -113,7 +113,7 @@ private:
 
 private slots:
 	void fileNameChanged(const QString&);
-	void fileTypeChanged(int);
+	void fileTypeChanged(int = 0);
 
 	void sourceTypeChanged(int);
 	void updateTypeChanged(int);

@@ -38,7 +38,7 @@ Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 \ingroup datasources
 */
-NgspiceRawBinaryFilter::NgspiceRawBinaryFilter() : AbstractFileFilter(NgspiceRawBinary), d(new NgspiceRawBinaryFilterPrivate(this)) {}
+NgspiceRawBinaryFilter::NgspiceRawBinaryFilter() : AbstractFileFilter(FileType::NgspiceRawBinary), d(new NgspiceRawBinaryFilterPrivate(this)) {}
 
 NgspiceRawBinaryFilter::~NgspiceRawBinaryFilter() = default;
 

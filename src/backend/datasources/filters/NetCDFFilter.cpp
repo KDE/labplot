@@ -129,7 +129,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
 	\ingroup datasources
 */
-NetCDFFilter::NetCDFFilter():AbstractFileFilter(NETCDF), d(new NetCDFFilterPrivate(this)) {}
+NetCDFFilter::NetCDFFilter():AbstractFileFilter(FileType::NETCDF), d(new NetCDFFilterPrivate(this)) {}
 
 NetCDFFilter::~NetCDFFilter() = default;
 

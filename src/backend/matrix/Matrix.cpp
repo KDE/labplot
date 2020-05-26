@@ -1307,7 +1307,7 @@ int Matrix::prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter:
 	setSuppressDataChangedSignal(true);
 
 	// resize the matrix
-	if (mode == AbstractFileFilter::Replace) {
+	if (mode == AbstractFileFilter::ImportMode::Replace) {
 		clear();
 		setDimensions(actualRows, actualCols);
 	} else {

@@ -118,7 +118,7 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	if (!proc.waitForFinished(1000)) {
 		proc.kill();
 		DEBUG("ERROR: reading file type of file" << STDSTRING(fileName));
-		return Binary;
+		return FileType::Binary;
 	}
 	fileInfo = proc.readLine();
 #endif
@@ -132,40 +132,40 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		|| fileName.endsWith(QLatin1String("json.lzma"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("json.xz"), Qt::CaseInsensitive) ) {
 		//*.json files can be recognized as ASCII. so, do the check for the json-extension as first.
-		fileType = JSON;
+		fileType = FileType::JSON;
 	} else if (fileInfo.contains(QLatin1String("ASCII"))
 		|| fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("csv"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive)
 		|| fileInfo.contains(QLatin1String("compressed data"))/* for gzipped ascii data */ ) {
 		if (NgspiceRawAsciiFilter::isNgspiceAsciiFile(fileName))
-			fileType = NgspiceRawAscii;
+			fileType = FileType::NgspiceRawAscii;
 		else //probably ascii data
-			fileType = Ascii;
+			fileType = FileType::Ascii;
 	} else if (fileInfo.contains(QLatin1String("Hierarchical Data Format"))
 		|| fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive) )
-		fileType = HDF5;
+		fileType = FileType::HDF5;
 	else if (fileInfo.contains(QLatin1String("NetCDF Data Format"))
 		|| fileName.endsWith(QLatin1String("nc"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("netcdf"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("cdf"), Qt::CaseInsensitive))
-		fileType = NETCDF;
+		fileType = FileType::NETCDF;
 	else if (fileInfo.contains(QLatin1String("FITS image data"))
 		|| fileName.endsWith(QLatin1String("fits"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("fit"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("fts"), Qt::CaseInsensitive))
-		fileType = FITS;
+		fileType = FileType::FITS;
 	else if (fileInfo.contains(QLatin1String("ROOT")) //can be "ROOT Data Format" or "ROOT file Version ??? (Compression: 1)"
 		||  fileName.endsWith(QLatin1String("root"), Qt::CaseInsensitive)) // TODO find out file description
-		fileType = ROOT;
+		fileType = FileType::ROOT;
 	else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
-		fileType = Image;
+		fileType = FileType::Image;
 	else if (NgspiceRawBinaryFilter::isNgspiceBinaryFile(fileName))
-		fileType = NgspiceRawBinary;
+		fileType = FileType::NgspiceRawBinary;
 	else
-		fileType = Binary;
+		fileType = FileType::Binary;
 
 	return fileType;
 }

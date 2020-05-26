@@ -184,36 +184,36 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 		//depending on the file type, generate summary and content information about the file
 		//TODO: content information (in BNF) for more types
 		switch (AbstractFileFilter::fileType(fileName)) {
-		case AbstractFileFilter::Ascii:
+		case AbstractFileFilter::FileType::Ascii:
 			infoStrings << AsciiFilter::fileInfoString(fileName);
 			break;
-		case AbstractFileFilter::Binary:
+		case AbstractFileFilter::FileType::Binary:
 			infoStrings << BinaryFilter::fileInfoString(fileName);
 			break;
-		case AbstractFileFilter::Image:
+		case AbstractFileFilter::FileType::Image:
 			infoStrings << ImageFilter::fileInfoString(fileName);
 			break;
-		case AbstractFileFilter::HDF5:
+		case AbstractFileFilter::FileType::HDF5:
 			infoStrings << HDF5Filter::fileInfoString(fileName);
 			infoStrings << "<b>" << i18n("Content:") << "</b>";
 			infoStrings << HDF5Filter::fileDDLString(fileName);
 			break;
-		case AbstractFileFilter::NETCDF:
+		case AbstractFileFilter::FileType::NETCDF:
 			infoStrings << NetCDFFilter::fileInfoString(fileName);
 			infoStrings << "<b>" << i18n("Content:") << "</b>";
 			infoStrings << NetCDFFilter::fileCDLString(fileName);
 			break;
-		case AbstractFileFilter::FITS:
+		case AbstractFileFilter::FileType::FITS:
 			infoStrings << FITSFilter::fileInfoString(fileName);
 			break;
-		case AbstractFileFilter::JSON:
+		case AbstractFileFilter::FileType::JSON:
 			infoStrings << JsonFilter::fileInfoString(fileName);
 			break;
-		case AbstractFileFilter::ROOT:
+		case AbstractFileFilter::FileType::ROOT:
 			infoStrings << ROOTFilter::fileInfoString(fileName);
 			break;
-		case AbstractFileFilter::NgspiceRawAscii:
-		case AbstractFileFilter::NgspiceRawBinary:
+		case AbstractFileFilter::FileType::NgspiceRawAscii:
+		case AbstractFileFilter::FileType::NgspiceRawBinary:
 			infoStrings << NgspiceRawAsciiFilter::fileInfoString(fileName);
 			break;
 		}

@@ -50,7 +50,7 @@ public:
 	explicit ImportSQLDatabaseWidget(QWidget*);
 	~ImportSQLDatabaseWidget() override;
 
-	void read(AbstractDataSource*, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
+	void read(AbstractDataSource*, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::ImportMode::Replace);
 	QString selectedTable() const;
 	bool isValid() const;
 	bool isNumericData() const;

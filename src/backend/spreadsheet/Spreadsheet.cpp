@@ -844,7 +844,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 	columnOffset = this->resize(importMode, colNameList, actualCols);
 
 	// resize the spreadsheet
-	if (importMode == AbstractFileFilter::Replace) {
+	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		clear();
 		setRowCount(actualRows);
 	}  else {
@@ -927,21 +927,21 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	int columnOffset = 0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
 
 	Column* newColumn = nullptr;
-	if (mode == AbstractFileFilter::Append) {
+	if (mode == AbstractFileFilter::ImportMode::Append) {
 		columnOffset = childCount<Column>();
 		for (int n = 0; n < cols; n++ ) {
 			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Numeric);
 			newColumn->setUndoAware(false);
 			addChildFast(newColumn);
 		}
-	} else if (mode == AbstractFileFilter::Prepend) {
+	} else if (mode == AbstractFileFilter::ImportMode::Prepend) {
 		Column* firstColumn = child<Column>(0);
 		for (int n = 0; n < cols; n++ ) {
 			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Numeric);
 			newColumn->setUndoAware(false);
 			insertChildBeforeFast(newColumn, firstColumn);
 		}
-	} else if (mode == AbstractFileFilter::Replace) {
+	} else if (mode == AbstractFileFilter::ImportMode::Replace) {
 		//replace completely the previous content of the data source with the content to be imported.
 		int columns = childCount<Column>();
 
@@ -979,7 +979,7 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 
 	//determine the dependent plots
 	QVector<CartesianPlot*> plots;
-	if (importMode == AbstractFileFilter::Replace) {
+	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		for (int n = startColumn; n <= endColumn; n++) {
 			Column* column = this->column(columnOffset + n - startColumn);
 			column->addUsedInPlots(plots);
@@ -1024,13 +1024,13 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 		}
 		column->setComment(comment);
 
-		if (importMode == AbstractFileFilter::Replace) {
+		if (importMode == AbstractFileFilter::ImportMode::Replace) {
 			column->setSuppressDataChangedSignal(false);
 			column->setChanged();
 		}
 	}
 
-	if (importMode == AbstractFileFilter::Replace) {
+	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		//retransform the dependent plots
 		for (auto* plot : plots) {
 			plot->setSuppressDataChangedSignal(false);

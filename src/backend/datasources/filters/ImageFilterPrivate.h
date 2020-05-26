@@ -34,7 +34,7 @@ class ImageFilterPrivate {
 public:
 	explicit ImageFilterPrivate(ImageFilter*);
 
-	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace);
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	void write(const QString& fileName, AbstractDataSource*);
 
 	const ImageFilter* q;

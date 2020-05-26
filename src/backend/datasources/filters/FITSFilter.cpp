@@ -46,7 +46,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
  * \since 2.2.0
  * \ingroup datasources
  */
-FITSFilter::FITSFilter():AbstractFileFilter(FITS), d(new FITSFilterPrivate(this)) {}
+FITSFilter::FITSFilter():AbstractFileFilter(FileType::FITS), d(new FITSFilterPrivate(this)) {}
 
 FITSFilter::~FITSFilter() = default;
 
@@ -55,7 +55,7 @@ void FITSFilter::readDataFromFile(const QString &fileName, AbstractDataSource *d
 }
 
 QVector<QStringList> FITSFilter::readChdu(const QString &fileName, bool* okToMatrix, int lines) {
-	return d->readCHDU(fileName, nullptr, AbstractFileFilter::Replace, okToMatrix, lines);
+	return d->readCHDU(fileName, nullptr, AbstractFileFilter::ImportMode::Replace, okToMatrix, lines);
 }
 
 void FITSFilter::write(const QString &fileName, AbstractDataSource *dataSource) {
@@ -505,7 +505,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 				spreadsheet->setUndoAware(false);
 				columnOffset = spreadsheet->resize(importMode, columnNames, actualCols - startCol);
 
-				if (importMode == AbstractFileFilter::Replace) {
+				if (importMode == AbstractFileFilter::ImportMode::Replace) {
 					spreadsheet->clear();
 					spreadsheet->setRowCount(lines - startRrow);
 				} else {
@@ -518,13 +518,13 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 						spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::ColumnMode::Numeric);
 						auto* datap = static_cast<QVector<double>* >(spreadsheet->column(columnOffset+n)->data());
 						numericDataPointers.push_back(datap);
-						if (importMode == AbstractFileFilter::Replace)
+						if (importMode == AbstractFileFilter::ImportMode::Replace)
 							datap->clear();
 					} else {
 						spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::ColumnMode::Text);
 						auto* list = static_cast<QStringList*>(spreadsheet->column(columnOffset+n)->data());
 						stringDataPointers.push_back(list);
-						if (importMode == AbstractFileFilter::Replace)
+						if (importMode == AbstractFileFilter::ImportMode::Replace)
 							list->clear();
 					}
 				}
@@ -553,7 +553,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 			isMatrix = true;
 			coll = matrixNumericColumnIndices.first();
 			actualCols = matrixNumericColumnIndices.last();
-			if (importMode == AbstractFileFilter::Replace) {
+			if (importMode == AbstractFileFilter::ImportMode::Replace) {
 				for (auto* col : numericDataPointers)
 					static_cast<QVector<double>*>(col)->clear();
 			}

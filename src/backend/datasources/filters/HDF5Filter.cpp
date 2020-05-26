@@ -47,7 +47,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
 	\ingroup datasources
 */
-HDF5Filter::HDF5Filter():AbstractFileFilter(HDF5), d(new HDF5FilterPrivate(this)) {}
+HDF5Filter::HDF5Filter():AbstractFileFilter(FileType::HDF5), d(new HDF5FilterPrivate(this)) {}
 
 HDF5Filter::~HDF5Filter() = default;
 

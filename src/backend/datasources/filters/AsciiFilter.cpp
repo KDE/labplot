@@ -58,7 +58,7 @@ Copyright            : (C) 2009-2019 Alexander Semke (alexander.semke@web.de)
 
 \ingroup datasources
 */
-AsciiFilter::AsciiFilter() : AbstractFileFilter(Ascii), d(new AsciiFilterPrivate(this)) {}
+AsciiFilter::AsciiFilter() : AbstractFileFilter(FileType::Ascii), d(new AsciiFilterPrivate(this)) {}
 
 AsciiFilter::~AsciiFilter() = default;
 
@@ -744,7 +744,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		// prepare import for spreadsheet
 		spreadsheet->setUndoAware(false);
-		spreadsheet->resize(AbstractFileFilter::Replace, vectorNames, m_actualCols);
+		spreadsheet->resize(AbstractFileFilter::ImportMode::Replace, vectorNames, m_actualCols);
 
 		//columns in a file data source don't have any manual changes.
 		//make the available columns undo unaware and suppress the "data changed" signal.
@@ -1485,7 +1485,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	//is smaller than the initial size of the spreadsheet (=m_actualRows).
 	//TODO: should also be relevant for Matrix
 	auto* s = dynamic_cast<Spreadsheet*>(dataSource);
-	if (s && currentRow != m_actualRows && importMode == AbstractFileFilter::Replace)
+	if (s && currentRow != m_actualRows && importMode == AbstractFileFilter::ImportMode::Replace)
 		s->setRowCount(currentRow);
 
 	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
@@ -2096,7 +2096,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 
 		// prepare import for spreadsheet
 		spreadsheet->setUndoAware(false);
-		spreadsheet->resize(AbstractFileFilter::Replace, vectorNames, m_actualCols);
+		spreadsheet->resize(AbstractFileFilter::ImportMode::Replace, vectorNames, m_actualCols);
 
 		//columns in a MQTTTopic don't have any manual changes.
 		//make the available columns undo unaware and suppress the "data changed" signal.

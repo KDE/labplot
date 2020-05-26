@@ -157,7 +157,7 @@ private:
 	QString m_localSocketName;
 	QString m_host;
 
-	AbstractFileFilter::FileType m_fileType{AbstractFileFilter::Ascii};
+	AbstractFileFilter::FileType m_fileType{AbstractFileFilter::FileType::Ascii};
 	UpdateType m_updateType;
 	SourceType m_sourceType;
 	ReadingType m_readingType;

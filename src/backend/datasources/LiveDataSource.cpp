@@ -387,28 +387,28 @@ QIcon LiveDataSource::icon() const {
 	QIcon icon;
 
 	switch (m_fileType) {
-	case AbstractFileFilter::Ascii:
+	case AbstractFileFilter::FileType::Ascii:
 		icon = QIcon::fromTheme("text-plain");
 		break;
-	case AbstractFileFilter::Binary:
+	case AbstractFileFilter::FileType::Binary:
 		icon = QIcon::fromTheme("application-octet-stream");
 		break;
-	case AbstractFileFilter::Image:
+	case AbstractFileFilter::FileType::Image:
 		icon = QIcon::fromTheme("image-x-generic");
 		break;
 	// TODO: missing icons
-	case AbstractFileFilter::HDF5:
-	case AbstractFileFilter::NETCDF:
+	case AbstractFileFilter::FileType::HDF5:
+	case AbstractFileFilter::FileType::NETCDF:
 		break;
-	case AbstractFileFilter::FITS:
+	case AbstractFileFilter::FileType::FITS:
 		icon = QIcon::fromTheme("kstars_fitsviewer");
 		break;
-	case AbstractFileFilter::JSON:
+	case AbstractFileFilter::FileType::JSON:
 		icon = QIcon::fromTheme("application-json");
 		break;
-	case AbstractFileFilter::ROOT:
-	case AbstractFileFilter::NgspiceRawAscii:
-	case AbstractFileFilter::NgspiceRawBinary:
+	case AbstractFileFilter::FileType::ROOT:
+	case AbstractFileFilter::FileType::NgspiceRawAscii:
+	case AbstractFileFilter::FileType::NgspiceRawBinary:
 		break;
 	}
 
@@ -533,7 +533,7 @@ void LiveDataSource::read() {
 	case SourceType::FileOrPipe:
 		DEBUG("Reading FileOrPipe. type = " << ENUM_TO_STRING(AbstractFileFilter, FileType, m_fileType));
 		switch (m_fileType) {
-		case AbstractFileFilter::Ascii:
+		case AbstractFileFilter::FileType::Ascii:
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
 				static_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_device, this, 0);
 			} else {
@@ -542,22 +542,22 @@ void LiveDataSource::read() {
 				DEBUG("Read " << bytes << " bytes, in total: " << m_bytesRead);
 			}
 			break;
-		case AbstractFileFilter::Binary:
+		case AbstractFileFilter::FileType::Binary:
 			//TODO: not implemented yet
 			// bytes = qSharedPointerCast<BinaryFilter>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 // 			m_bytesRead += bytes;
-		case AbstractFileFilter::ROOT:
-		case AbstractFileFilter::NgspiceRawAscii:
-		case AbstractFileFilter::NgspiceRawBinary:
+		case AbstractFileFilter::FileType::ROOT:
+		case AbstractFileFilter::FileType::NgspiceRawAscii:
+		case AbstractFileFilter::FileType::NgspiceRawBinary:
 			//only re-reading of the whole file is supported
 			m_filter->readDataFromFile(m_fileName, this);
 			break;
 		//TODO: other types not implemented yet
-		case AbstractFileFilter::Image:
-		case AbstractFileFilter::HDF5:
-		case AbstractFileFilter::NETCDF:
-		case AbstractFileFilter::FITS:
-		case AbstractFileFilter::JSON:
+		case AbstractFileFilter::FileType::Image:
+		case AbstractFileFilter::FileType::HDF5:
+		case AbstractFileFilter::FileType::NETCDF:
+		case AbstractFileFilter::FileType::FITS:
+		case AbstractFileFilter::FileType::JSON:
 			break;
 		}
 		break;
@@ -571,7 +571,7 @@ void LiveDataSource::read() {
 		DEBUG("	Reading from UDP socket. state = " << m_udpSocket->state());
 
 		// reading data here
-		if (m_fileType == AbstractFileFilter::Ascii)
+		if (m_fileType == AbstractFileFilter::FileType::Ascii)
 			static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 		break;
 	case SourceType::LocalSocket:
@@ -587,7 +587,7 @@ void LiveDataSource::read() {
 		DEBUG("	Reading from serial port");
 
 		// reading data here
-		if (m_fileType == AbstractFileFilter::Ascii)
+		if (m_fileType == AbstractFileFilter::FileType::Ascii)
 			static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 		break;
 	case SourceType::MQTT:
@@ -606,11 +606,11 @@ void LiveDataSource::readyRead() {
 	DEBUG("LiveDataSource::readyRead() update type = " << ENUM_TO_STRING(LiveDataSource,UpdateType,m_updateType));
 	DEBUG("	REMAINING TIME = " << m_updateTimer->remainingTime());
 
-	if (m_fileType == AbstractFileFilter::Ascii)
+	if (m_fileType == AbstractFileFilter::FileType::Ascii)
 		static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 
 //TODO: not implemented yet
-//	else if (m_fileType == AbstractFileFilter::Binary)
+//	else if (m_fileType == AbstractFileFilter::FileType::Binary)
 //		dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 
 	//since we won't have the timer to call read() where we create new connections
@@ -726,7 +726,7 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 
 	switch (m_sourceType) {
 	case SourceType::FileOrPipe:
-		writer->writeAttribute("fileType", QString::number(m_fileType));
+		writer->writeAttribute("fileType", QString::number(static_cast<int>(m_fileType)));
 		writer->writeAttribute("fileLinked", QString::number(m_fileLinked));
 		writer->writeAttribute("relativePath", QString::number(m_relativePath));
 		if (m_relativePath) {
