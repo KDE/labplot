@@ -156,8 +156,13 @@ ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
 void ExportSpreadsheetDialog::setFileName(const QString& name) {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
 	QString dir = conf.readEntry("LastDir", "");
-	if (dir.isEmpty()) dir = QDir::homePath();
-	ui->leFileName->setText(dir + QDir::separator() +  name);
+	if (dir.isEmpty()) {	// use project dir as fallback
+		KConfigGroup conf2(KSharedConfig::openConfig(), "MainWin");
+		dir = conf2.readEntry("LastOpenDir", "");
+		if (dir.isEmpty())
+			dir = QDir::homePath();
+	}
+	ui->leFileName->setText(dir + QLatin1Char('/') + name);
 	this->formatChanged(ui->cbFormat->currentIndex());
 }
 
