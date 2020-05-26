@@ -1094,6 +1094,13 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 	if (!column)
 		return;
 
+	//avoid circular dependencies - the current column cannot be part of the variable columns.
+	//this should't actually happen because of the checks done when the formula is defined,
+	//but in case we have bugs somewhere or somebody manipulated the project xml file we add
+	//a sanity check to avoid recursive calls here and crash because of the stack overflow.
+	if (column == m_owner)
+		return;
+
 	DEBUG("ColumnPrivate::connectFormulaColumn()")
 	m_connectionsUpdateFormula << connect(column, &AbstractColumn::dataChanged, m_owner, &Column::updateFormula);
 	connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &ColumnPrivate::formulaVariableColumnRemoved);
