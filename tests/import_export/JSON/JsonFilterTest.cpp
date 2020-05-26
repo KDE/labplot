@@ -48,7 +48,7 @@ void JsonFilterTest::testArrayImport() {
 	JsonFilter filter;
 
 	const QString fileName = m_dataDir + "array.json";
-	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setCreateIndexEnabled(true);
 	filter.setDataRowType(QJsonValue::Array);
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
@@ -88,7 +88,7 @@ void JsonFilterTest::testObjectImport01() {
 	JsonFilter filter;
 
 	const QString fileName = m_dataDir + "object.json";
-	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setCreateIndexEnabled(true);
 	filter.setDataRowType(QJsonValue::Object);
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
@@ -142,7 +142,7 @@ void JsonFilterTest::testObjectImport02() {
 	JsonFilter filter;
 
 	const QString fileName = m_dataDir + "object.json";
-	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setDataRowType(QJsonValue::Object);
 	filter.setImportObjectNames(true);
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
@@ -197,7 +197,7 @@ void JsonFilterTest::testObjectImport03() {
 	JsonFilter filter;
 
 	const QString fileName = m_dataDir + "object.json";
-	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setDataRowType(QJsonValue::Object);
 	filter.setImportObjectNames(true);
 	filter.setStartColumn(2);
@@ -239,7 +239,7 @@ void JsonFilterTest::testObjectImport04() {
 	JsonFilter filter;
 
 	const QString fileName = m_dataDir + "intraday.json";
-	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	QVector<int> rows{0, 1};
 	filter.setModelRows(rows);
 	filter.setDataRowType(QJsonValue::Object);
