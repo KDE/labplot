@@ -34,6 +34,10 @@
 #include <QClipboard>
 #include <QUndoStack>
 
+extern "C" {
+#include <gsl/gsl_math.h>
+}
+
 void SpreadsheetTest::initTestCase() {
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
@@ -336,6 +340,308 @@ void SpreadsheetTest::testCopyPasteSizeChange01() {
 	QCOMPARE((bool)std::isnan(sheet.column(0)->valueAt(2)), true);
 	QCOMPARE(sheet.column(1)->valueAt(2), 3.3);
 	QCOMPARE(sheet.column(2)->valueAt(2), 4.4);
+}
+
+/////////////////////////////// Sorting tests ////////////////////////////
+
+/*
+ * check sorting double values with NaN ascending as leading column
+ */
+void SpreadsheetTest::testSortNumeric1() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(10);
+
+	QVector<double> xData = {0.5, -0.2, GSL_NAN, 2.0, -1.0};
+	QVector<int> yData = {1, 2, 3, 4, 5};
+
+	sheet.column(0)->replaceValues(0, xData);
+	sheet.column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	sheet.column(1)->replaceInteger(0, yData);
+
+	// sort
+	QVector<Column*> cols;
+	cols << sheet.column(0) << sheet.column(1);
+	sheet.sortColumns(sheet.column(0), cols, true);
+
+	//values
+	QCOMPARE(sheet.column(0)->valueAt(0), -1.0);
+	QCOMPARE(sheet.column(0)->valueAt(1), -0.2);
+	QCOMPARE(sheet.column(0)->valueAt(2), 0.5);
+	QCOMPARE(sheet.column(0)->valueAt(3), 2.0);
+	QCOMPARE(sheet.column(1)->integerAt(0), 5);
+	QCOMPARE(sheet.column(1)->integerAt(1), 2);
+	QCOMPARE(sheet.column(1)->integerAt(2), 1);
+	QCOMPARE(sheet.column(1)->integerAt(3), 4);
+	QCOMPARE(sheet.column(1)->integerAt(4), 0);
+}
+
+/*
+ * check sorting double values with NaN descending as leading column
+ */
+void SpreadsheetTest::testSortNumeric2() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(10);
+
+	QVector<double> xData = {0.5, -0.2, GSL_NAN, 2.0, -1.0};
+	QVector<int> yData = {1, 2, 3, 4, 5};
+
+	sheet.column(0)->replaceValues(0, xData);
+	sheet.column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	sheet.column(1)->replaceInteger(0, yData);
+
+	// sort
+	QVector<Column*> cols;
+	cols << sheet.column(0) << sheet.column(1);
+	sheet.sortColumns(sheet.column(0), cols, false);
+
+	//values
+	QCOMPARE(sheet.column(0)->valueAt(0), 2.0);
+	QCOMPARE(sheet.column(0)->valueAt(1), 0.5);
+	QCOMPARE(sheet.column(0)->valueAt(2), -0.2);
+	QCOMPARE(sheet.column(0)->valueAt(3), -1.0);
+	QCOMPARE(sheet.column(1)->integerAt(0), 4);
+	QCOMPARE(sheet.column(1)->integerAt(1), 1);
+	QCOMPARE(sheet.column(1)->integerAt(2), 2);
+	QCOMPARE(sheet.column(1)->integerAt(3), 5);
+	QCOMPARE(sheet.column(1)->integerAt(4), 0);
+}
+
+/*
+ * check sorting integer values with empty entries ascending as leading column
+ */
+void SpreadsheetTest::testSortInteger1() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(7);
+
+	QVector<int> xData1 = {4, 5, 2};
+	QVector<int> xData2 = {3, 6, -1};
+	QVector<int> yData = {1, 2, 3, 4, 5, 6, 7};
+
+	sheet.column(0)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	sheet.column(0)->replaceInteger(0, xData1);
+	sheet.column(0)->replaceInteger(4, xData2);
+	sheet.column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	sheet.column(1)->replaceInteger(0, yData);
+
+	// sort
+	QVector<Column*> cols;
+	cols << sheet.column(0) << sheet.column(1);
+	sheet.sortColumns(sheet.column(0), cols, true);
+
+	//values
+	QCOMPARE(sheet.column(0)->integerAt(0), -1);
+	QCOMPARE(sheet.column(0)->integerAt(1), 0);
+	QCOMPARE(sheet.column(0)->integerAt(2), 2);
+	QCOMPARE(sheet.column(0)->integerAt(3), 3);
+	QCOMPARE(sheet.column(0)->integerAt(4), 4);
+	QCOMPARE(sheet.column(0)->integerAt(5), 5);
+	QCOMPARE(sheet.column(0)->integerAt(6), 6);
+	QCOMPARE(sheet.column(1)->integerAt(0), 7);
+	QCOMPARE(sheet.column(1)->integerAt(1), 4);
+	QCOMPARE(sheet.column(1)->integerAt(2), 3);
+	QCOMPARE(sheet.column(1)->integerAt(3), 5);
+	QCOMPARE(sheet.column(1)->integerAt(4), 1);
+	QCOMPARE(sheet.column(1)->integerAt(5), 2);
+	QCOMPARE(sheet.column(1)->integerAt(6), 6);
+}
+
+/*
+ * check sorting integer values with empty entries descending as leading column
+ */
+void SpreadsheetTest::testSortInteger2() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(7);
+
+	QVector<int> xData1 = {4, 5, 2};
+	QVector<int> xData2 = {3, 6, -1};
+	QVector<int> yData = {1, 2, 3, 4, 5, 6, 7};
+
+	sheet.column(0)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	sheet.column(0)->replaceInteger(0, xData1);
+	sheet.column(0)->replaceInteger(4, xData2);
+	sheet.column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	sheet.column(1)->replaceInteger(0, yData);
+
+	// sort
+	QVector<Column*> cols;
+	cols << sheet.column(0) << sheet.column(1);
+	sheet.sortColumns(sheet.column(0), cols, false);
+
+	//values
+	QCOMPARE(sheet.column(0)->integerAt(6), -1);
+	QCOMPARE(sheet.column(0)->integerAt(5), 0);
+	QCOMPARE(sheet.column(0)->integerAt(4), 2);
+	QCOMPARE(sheet.column(0)->integerAt(3), 3);
+	QCOMPARE(sheet.column(0)->integerAt(2), 4);
+	QCOMPARE(sheet.column(0)->integerAt(1), 5);
+	QCOMPARE(sheet.column(0)->integerAt(0), 6);
+	QCOMPARE(sheet.column(1)->integerAt(6), 7);
+	QCOMPARE(sheet.column(1)->integerAt(5), 4);
+	QCOMPARE(sheet.column(1)->integerAt(4), 3);
+	QCOMPARE(sheet.column(1)->integerAt(3), 5);
+	QCOMPARE(sheet.column(1)->integerAt(2), 1);
+	QCOMPARE(sheet.column(1)->integerAt(1), 2);
+	QCOMPARE(sheet.column(1)->integerAt(0), 6);
+}
+
+/*
+ * check sorting big int values with empty entries ascending as leading column
+ */
+void SpreadsheetTest::testSortBigInt1() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(7);
+
+	QVector<qint64> xData1 = {40000000000, 50000000000, 20000000000};
+	QVector<qint64> xData2 = {30000000000, 60000000000, -10000000000};
+	QVector<qint64> yData = {1, 2, 3, 4, 5, 6, 7};
+
+	sheet.column(0)->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+	sheet.column(0)->replaceBigInt(0, xData1);
+	sheet.column(0)->replaceBigInt(4, xData2);
+	sheet.column(1)->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+	sheet.column(1)->replaceBigInt(0, yData);
+
+	// sort
+	QVector<Column*> cols;
+	cols << sheet.column(0) << sheet.column(1);
+	sheet.sortColumns(sheet.column(0), cols, true);
+
+	//values
+	QCOMPARE(sheet.column(0)->bigIntAt(0), -10000000000ll);
+	QCOMPARE(sheet.column(0)->bigIntAt(1), 0);
+	QCOMPARE(sheet.column(0)->bigIntAt(2), 20000000000ll);
+	QCOMPARE(sheet.column(0)->bigIntAt(3), 30000000000ll);
+	QCOMPARE(sheet.column(0)->bigIntAt(4), 40000000000ll);
+	QCOMPARE(sheet.column(0)->bigIntAt(5), 50000000000ll);
+	QCOMPARE(sheet.column(0)->bigIntAt(6), 60000000000ll);
+	QCOMPARE(sheet.column(1)->bigIntAt(0), 7);
+	QCOMPARE(sheet.column(1)->bigIntAt(1), 4);
+	QCOMPARE(sheet.column(1)->bigIntAt(2), 3);
+	QCOMPARE(sheet.column(1)->bigIntAt(3), 5);
+	QCOMPARE(sheet.column(1)->bigIntAt(4), 1);
+	QCOMPARE(sheet.column(1)->bigIntAt(5), 2);
+	QCOMPARE(sheet.column(1)->bigIntAt(6), 6);
+}
+
+/*
+ * check sorting big int values with empty entries descending as leading column
+ */
+void SpreadsheetTest::testSortBigInt2() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(7);
+
+	QVector<qint64> xData1 = {40000000000, 50000000000, 20000000000};
+	QVector<qint64> xData2 = {30000000000, 60000000000, -10000000000};
+	QVector<qint64> yData = {1, 2, 3, 4, 5, 6, 7};
+
+	sheet.column(0)->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+	sheet.column(0)->replaceBigInt(0, xData1);
+	sheet.column(0)->replaceBigInt(4, xData2);
+	sheet.column(1)->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+	sheet.column(1)->replaceBigInt(0, yData);
+
+	// sort
+	QVector<Column*> cols;
+	cols << sheet.column(0) << sheet.column(1);
+	sheet.sortColumns(sheet.column(0), cols, false);
+
+	//values
+	QCOMPARE(sheet.column(0)->bigIntAt(6), -10000000000ll);
+	QCOMPARE(sheet.column(0)->bigIntAt(5), 0);
+	QCOMPARE(sheet.column(0)->bigIntAt(4), 20000000000ll);
+	QCOMPARE(sheet.column(0)->bigIntAt(3), 30000000000ll);
+	QCOMPARE(sheet.column(0)->bigIntAt(2), 40000000000ll);
+	QCOMPARE(sheet.column(0)->bigIntAt(1), 50000000000ll);
+	QCOMPARE(sheet.column(0)->bigIntAt(0), 60000000000ll);
+	QCOMPARE(sheet.column(1)->bigIntAt(6), 7);
+	QCOMPARE(sheet.column(1)->bigIntAt(5), 4);
+	QCOMPARE(sheet.column(1)->bigIntAt(4), 3);
+	QCOMPARE(sheet.column(1)->bigIntAt(3), 5);
+	QCOMPARE(sheet.column(1)->bigIntAt(2), 1);
+	QCOMPARE(sheet.column(1)->bigIntAt(1), 2);
+	QCOMPARE(sheet.column(1)->bigIntAt(0), 6);
+}
+
+/*
+ * check sorting text with empty entries ascending as leading column
+ */
+void SpreadsheetTest::testSortText1() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(7);
+
+	QVector<QString> xData = {"ben", "amy", "eddy", "", "carl", "dan"};
+	QVector<int> yData = {1, 2, 3, 4, 5, 6, 7};
+
+	sheet.column(0)->setColumnMode(AbstractColumn::ColumnMode::Text);
+	sheet.column(0)->replaceTexts(0, xData);
+	sheet.column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	sheet.column(1)->replaceInteger(0, yData);
+
+	// sort
+	QVector<Column*> cols;
+	cols << sheet.column(0) << sheet.column(1);
+	sheet.sortColumns(sheet.column(0), cols, true);
+
+	//values
+	QCOMPARE(sheet.column(0)->textAt(0), QLatin1String("amy"));
+	QCOMPARE(sheet.column(0)->textAt(1), QLatin1String("ben"));
+	QCOMPARE(sheet.column(0)->textAt(2), QLatin1String("carl"));
+	QCOMPARE(sheet.column(0)->textAt(3), QLatin1String("dan"));
+	QCOMPARE(sheet.column(0)->textAt(4), QLatin1String("eddy"));
+	QCOMPARE(sheet.column(0)->textAt(5), QLatin1String(""));
+	QCOMPARE(sheet.column(0)->textAt(6), QLatin1String(""));
+	QCOMPARE(sheet.column(1)->integerAt(0), 2);
+	QCOMPARE(sheet.column(1)->integerAt(1), 1);
+	QCOMPARE(sheet.column(1)->integerAt(2), 5);
+	QCOMPARE(sheet.column(1)->integerAt(3), 6);
+	QCOMPARE(sheet.column(1)->integerAt(4), 3);
+	QCOMPARE(sheet.column(1)->integerAt(5), 0);
+	QCOMPARE(sheet.column(1)->integerAt(6), 0);
+}
+
+/*
+ * check sorting text with empty entries descending as leading column
+ */
+void SpreadsheetTest::testSortText2() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(7);
+
+	QVector<QString> xData = {"ben", "amy", "eddy", "", "carl", "dan"};
+	QVector<int> yData = {1, 2, 3, 4, 5, 6, 7};
+
+	sheet.column(0)->setColumnMode(AbstractColumn::ColumnMode::Text);
+	sheet.column(0)->replaceTexts(0, xData);
+	sheet.column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	sheet.column(1)->replaceInteger(0, yData);
+
+	// sort
+	QVector<Column*> cols;
+	cols << sheet.column(0) << sheet.column(1);
+	sheet.sortColumns(sheet.column(0), cols, false);
+
+	//values
+	QCOMPARE(sheet.column(0)->textAt(4), QLatin1String("amy"));
+	QCOMPARE(sheet.column(0)->textAt(3), QLatin1String("ben"));
+	QCOMPARE(sheet.column(0)->textAt(2), QLatin1String("carl"));
+	QCOMPARE(sheet.column(0)->textAt(1), QLatin1String("dan"));
+	QCOMPARE(sheet.column(0)->textAt(0), QLatin1String("eddy"));
+	QCOMPARE(sheet.column(0)->textAt(5), QLatin1String(""));
+	QCOMPARE(sheet.column(0)->textAt(6), QLatin1String(""));
+	QCOMPARE(sheet.column(1)->integerAt(4), 2);
+	QCOMPARE(sheet.column(1)->integerAt(3), 1);
+	QCOMPARE(sheet.column(1)->integerAt(2), 5);
+	QCOMPARE(sheet.column(1)->integerAt(1), 6);
+	QCOMPARE(sheet.column(1)->integerAt(0), 3);
+	QCOMPARE(sheet.column(1)->integerAt(5), 0);
+	QCOMPARE(sheet.column(1)->integerAt(6), 0);
 }
 
 QTEST_MAIN(SpreadsheetTest)

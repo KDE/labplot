@@ -47,6 +47,16 @@ private slots:
 	//handling of spreadsheet size changes
 	void testCopyPasteSizeChange00();
 	void testCopyPasteSizeChange01();
+
+	// sorting tests
+	void testSortNumeric1();
+	void testSortNumeric2();
+	void testSortInteger1();
+	void testSortInteger2();
+	void testSortBigInt1();
+	void testSortBigInt2();
+	void testSortText1();
+	void testSortText2();
 };
 
 #endif
