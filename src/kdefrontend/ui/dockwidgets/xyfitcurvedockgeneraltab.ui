@@ -801,7 +801,7 @@
       <string>Data to fit</string>
      </property>
      <property name="text">
-      <string>Data</string>
+      <string>Data:</string>
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
@@ -875,10 +875,12 @@
       <enum>Qt::LeftToRight</enum>
      </property>
      <property name="text">
-      <string>Weights</string>
+      <string>Weights:</string>
      </property>
      <property name="icon">
-      <iconset theme="arrow-down"/>
+      <iconset theme="arrow-down">
+       <normaloff/>
+      </iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -918,7 +920,7 @@
       <string notr="true"/>
      </property>
      <property name="text">
-      <string>Fit</string>
+      <string>Fit:</string>
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
