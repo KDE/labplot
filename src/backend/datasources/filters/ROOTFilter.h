@@ -45,7 +45,7 @@ public:
 	ROOTFilter();
 	~ROOTFilter() override;
 
-	enum ColumnTypes {Center = 1, Low = 2, Content = 4, Error = 8};
+	//UNUSED enum class ColumnTypes {Center = 1, Low = 2, Content = 4, Error = 8};
 
 	static QString fileInfoString(const QString&);
 

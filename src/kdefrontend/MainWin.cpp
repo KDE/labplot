@@ -1190,14 +1190,14 @@ void MainWin::openProject() {
 		m_lastOpenFileFilter = extensions;
 
 #ifdef HAVE_LIBORIGIN
-	extensions += i18n(";;Origin Projects (%1)", OriginProjectParser::supportedExtensions());
+	extensions += QLatin1String(";;") + i18n("Origin Projects (%1)", OriginProjectParser::supportedExtensions());
 	allExtensions += " " + OriginProjectParser::supportedExtensions();
 	supportOthers = true;
 #endif
 
 #ifdef HAVE_CANTOR_LIBS
-	extensions += i18n(";;Cantor Projects (*.cws)");
-	extensions += i18n(";;Jupyter Notebooks (*.ipynb)");
+	extensions += QLatin1String(";;") + i18n("Cantor Projects (*.cws)");
+	extensions += QLatin1String(";;") + i18n("Jupyter Notebooks (*.ipynb)");
 	allExtensions += QLatin1String(" *.cws *.ipynb");
 	supportOthers = true;
 #endif

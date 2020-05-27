@@ -46,8 +46,7 @@ class AbstractColumn;
 /**
  * @brief Read TH1 histograms and TTrees from ROOT files without depending on ROOT libraries
  */
-class ROOTData
- {
+class ROOTData {
 public:
 	/**
 	 * @brief Open ROOT file and save file positions of histograms and trees
@@ -74,7 +73,7 @@ public:
 	 * Histograms are identified by their bin type. The lowest byte indicates the size
 	 * of the numeric types for cross checks during the import.
 	 */
-	enum ContentType {Invalid = 0, Tree = 0x10, NTuple = 0x11, Basket = 0x20,
+	enum class ContentType {Invalid = 0, Tree = 0x10, NTuple = 0x11, Basket = 0x20,
 	                  Streamer = 0x30,
 	                  Double = 0x48, Float = 0x54,
 	                  Long = 0x68, Int = 0x74, Short = 0x82, Byte = 0x91,
@@ -195,7 +194,7 @@ private:
 		std::string title;
 		int cycle;
 		size_t keylength;
-		enum CompressionType { none, zlib, lz4 } compression;
+		enum class CompressionType { none, zlib, lz4 } compression;
 		size_t start;
 		size_t compressed_count;
 		size_t count;
@@ -251,7 +250,6 @@ private:
 };
 
 class ROOTFilterPrivate {
-
 public:
 	ROOTFilterPrivate();
 	/**
@@ -278,6 +276,7 @@ public:
 	/// Get the number of bins in the current histogram
 	int rowsInCurrentObject(const QString& fileName);
 
+	//TODO: needs to be public?
 	/// Identifier of the current histogram
 	QString currentObject;
 	/// First row to read (can be -1, skips the underflow bin 0)
@@ -287,7 +286,7 @@ public:
 	/// Columns to read
 	QVector<QStringList> columns;
 private:
-	enum FileType { Invalid = 0, Hist, Tree};
+	enum class FileType {Invalid = 0, Hist, Tree};
 	/**
 	 * @brief Parse currentObject to find the corresponding position in the file
 	 *
