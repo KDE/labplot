@@ -1213,7 +1213,7 @@ void MainWin::openProject() {
 	this->openProject(path);
 
 	//save new "last open directory"
-	int pos = path.lastIndexOf(QLatin1String(('/'));
+	int pos = path.lastIndexOf(QLatin1String("/"));
 	if (pos != -1) {
 		const QString& newDir = path.left(pos);
 		if (newDir != dir)
@@ -1472,7 +1472,7 @@ bool MainWin::saveProjectAs() {
 		path.append(QLatin1String(".lml"));
 
 	//save new "last open directory"
-	int pos = path.lastIndexOf(QLatin1String('/'));
+	int pos = path.lastIndexOf(QLatin1String("/"));
 	if (pos != -1) {
 		const QString& newDir = path.left(pos);
 		if (newDir != dir)
