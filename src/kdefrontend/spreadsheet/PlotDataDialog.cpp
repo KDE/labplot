@@ -472,10 +472,29 @@ void PlotDataDialog::plot() {
 		parent->endMacro();
 	}
 
-	//select the parent plot of the last added curve in the project explorer
+	//if more than two curves are produced, select the parent plot of the last added curve in the project explorer.
+	//if a custom fit is being done, select the last created fit curve independent of the number of created curves.
 	m_spreadsheet->project()->setSuppressAspectAddedSignal(false);
-	if (m_lastAddedCurve)
-		emit m_spreadsheet->project()->requestNavigateTo(m_lastAddedCurve->parentAspect()->path());
+	if (m_lastAddedCurve) {
+		QString path;
+		if (!m_analysisMode) {
+			if (m_columns.size() > 2)
+				path = m_lastAddedCurve->parentAspect()->path();
+			else
+				path = m_lastAddedCurve->path();
+		} else {
+			if (m_analysisAction == FitCustom)
+				path = m_lastAddedCurve->path();
+			else {
+				if (m_columns.size() > 2)
+					path = m_lastAddedCurve->parentAspect()->path();
+				else
+					path = m_lastAddedCurve->path();
+			}
+		}
+
+		emit m_spreadsheet->project()->requestNavigateTo(path);
+	}
 	RESET_CURSOR;
 }
 
