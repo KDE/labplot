@@ -95,7 +95,7 @@ void Histogram::init() {
 	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)) );
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
 
-	d->symbolsStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::NoSymbols);
+	d->symbolsStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Style::NoSymbols);
 	d->symbolsSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->symbolsRotationAngle = group.readEntry("SymbolRotation", 0.0);
 	d->symbolsOpacity = group.readEntry("SymbolOpacity", 1.0);
@@ -1091,7 +1091,7 @@ void HistogramPrivate::horizontalHistogram() {
 
 void HistogramPrivate::updateSymbols() {
 	symbolsPath = QPainterPath();
-	if (symbolsStyle != Symbol::NoSymbols) {
+	if (symbolsStyle != Symbol::Style::NoSymbols) {
 		QPainterPath path = Symbol::pathFromStyle(symbolsStyle);
 
 		QTransform trafo;
@@ -1300,7 +1300,7 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 	if (lineType != Histogram::NoLine)
 		curveShape.addPath(WorksheetElement::shapeFromPath(linePath, linePen));
 
-	if (symbolsStyle != Symbol::NoSymbols)
+	if (symbolsStyle != Symbol::Style::NoSymbols)
 		curveShape.addPath(symbolsPath);
 
 	if (valuesType != Histogram::NoValues)
@@ -1337,7 +1337,7 @@ void HistogramPrivate::draw(QPainter* painter) {
 	}
 
 	//draw symbols
-	if (symbolsStyle != Symbol::NoSymbols) {
+	if (symbolsStyle != Symbol::Style::NoSymbols) {
 		painter->setOpacity(symbolsOpacity);
 		painter->setPen(symbolsPen);
 		painter->setBrush(symbolsBrush);
@@ -1599,7 +1599,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 
 	//Symbols
 	writer->writeStartElement( "symbols" );
-	writer->writeAttribute( "symbolsStyle", QString::number(d->symbolsStyle) );
+	writer->writeAttribute( "symbolsStyle", QString::number(static_cast<int>(d->symbolsStyle)) );
 	writer->writeAttribute( "opacity", QString::number(d->symbolsOpacity) );
 	writer->writeAttribute( "rotation", QString::number(d->symbolsRotationAngle) );
 	writer->writeAttribute( "size", QString::number(d->symbolsSize) );

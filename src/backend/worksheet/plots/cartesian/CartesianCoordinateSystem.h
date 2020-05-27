@@ -42,7 +42,7 @@ class CartesianScale {
 public:
 	virtual ~CartesianScale();
 
-	enum ScaleType {ScaleLinear, ScaleLog};
+	enum class ScaleType {ScaleLinear, ScaleLog};
 
 	static CartesianScale* createLinearScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
 		double logicalStart, double logicalEnd);

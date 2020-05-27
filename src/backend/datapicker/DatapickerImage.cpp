@@ -107,7 +107,7 @@ void DatapickerImage::init() {
 	d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", 30);
 
 	// reference point symbol properties
-	d->pointStyle = (Symbol::Style)group.readEntry("PointStyle", (int)Symbol::Cross);
+	d->pointStyle = (Symbol::Style)group.readEntry("PointStyle", (int)Symbol::Style::Cross);
 	d->pointSize = group.readEntry("Size", Worksheet::convertToSceneUnits(7, Worksheet::Unit::Point));
 	d->pointRotationAngle = group.readEntry("Rotation", 0.0);
 	d->pointOpacity = group.readEntry("Opacity", 1.0);
@@ -505,7 +505,7 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "pointRotationAngle", QString::number(d->pointRotationAngle) );
 	writer->writeAttribute( "pointOpacity", QString::number(d->pointOpacity) );
 	writer->writeAttribute( "pointSize", QString::number(d->pointSize) );
-	writer->writeAttribute( "pointStyle", QString::number(d->pointStyle) );
+	writer->writeAttribute( "pointStyle", QString::number(static_cast<int>(d->pointStyle)) );
 	writer->writeAttribute( "pointVisibility", QString::number(d->pointVisibility) );
 	WRITE_QBRUSH(d->pointBrush);
 	WRITE_QPEN(d->pointPen);

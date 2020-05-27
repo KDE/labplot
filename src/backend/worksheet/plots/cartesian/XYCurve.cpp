@@ -108,7 +108,7 @@ void XYCurve::init() {
 	d->dropLinePen.setWidthF( group.readEntry("DropLineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)) );
 	d->dropLineOpacity = group.readEntry("DropLineOpacity", 1.0);
 
-	d->symbolsStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::NoSymbols);
+	d->symbolsStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Style::NoSymbols);
 	d->symbolsSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->symbolsRotationAngle = group.readEntry("SymbolRotation", 0.0);
 	d->symbolsOpacity = group.readEntry("SymbolOpacity", 1.0);
@@ -1000,7 +1000,7 @@ void XYCurvePrivate::retransform() {
 	//calculate the scene coordinates
 	// This condition cannot be used, because symbolPointsLogical is also used in updateErrorBars(), updateDropLines() and in updateFilling()
 	// TODO: check updateErrorBars() and updateDropLines() and if they aren't available don't calculate this part
-	//if (symbolsStyle != Symbol::NoSymbols || valuesType != XYCurve::NoValues ) {
+	//if (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues ) {
 	{
 	#ifdef PERFTRACE_CURVES
 			PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform(), map logical points to scene coordinates");
@@ -1054,7 +1054,7 @@ void XYCurvePrivate::retransform() {
 								   minLogicalDiffX, minLogicalDiffY);
 	}
 	}
-	//} // (symbolsStyle != Symbol::NoSymbols || valuesType != XYCurve::NoValues )
+	//} // (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues )
 
 	m_suppressRecalc = true;
 	updateLines();
@@ -1697,7 +1697,7 @@ void XYCurvePrivate::updateSymbols() {
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateSymbols()");
 #endif
 	symbolsPath = QPainterPath();
-	if (symbolsStyle != Symbol::NoSymbols) {
+	if (symbolsStyle != Symbol::Style::NoSymbols) {
 		QPainterPath path = Symbol::pathFromStyle(symbolsStyle);
 
 		QTransform trafo;
@@ -2646,7 +2646,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	if (dropLineType != XYCurve::NoDropLine)
 		curveShape.addPath(WorksheetElement::shapeFromPath(dropLinePath, dropLinePen));
 
-	if (symbolsStyle != Symbol::NoSymbols)
+	if (symbolsStyle != Symbol::Style::NoSymbols)
 		curveShape.addPath(symbolsPath);
 
 	if (valuesType != XYCurve::NoValues)
@@ -2705,7 +2705,7 @@ void XYCurvePrivate::draw(QPainter* painter) {
 	}
 
 	//draw symbols
-	if (symbolsStyle != Symbol::NoSymbols) {
+	if (symbolsStyle != Symbol::Style::NoSymbols) {
 		painter->setOpacity(symbolsOpacity);
 		painter->setPen(symbolsPen);
 		painter->setBrush(symbolsBrush);
@@ -3012,7 +3012,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 
 	//Symbols
 	writer->writeStartElement( "symbols" );
-	writer->writeAttribute( "symbolsStyle", QString::number(d->symbolsStyle) );
+	writer->writeAttribute( "symbolsStyle", QString::number(static_cast<int>(d->symbolsStyle)) );
 	writer->writeAttribute( "opacity", QString::number(d->symbolsOpacity) );
 	writer->writeAttribute( "rotation", QString::number(d->symbolsRotationAngle) );
 	writer->writeAttribute( "size", QString::number(d->symbolsSize) );

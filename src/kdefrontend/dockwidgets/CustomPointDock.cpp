@@ -195,7 +195,7 @@ void CustomPointDock::visibilityChanged(bool state) {
 void CustomPointDock::symbolStyleChanged(int index) {
 	auto style = Symbol::Style(index);
 	//enable/disable the  filling options in the GUI depending on the currently selected points.
-	if (style != Symbol::Line && style != Symbol::Cross) {
+	if (style != Symbol::Style::Line && style != Symbol::Style::Cross) {
 		ui.cbSymbolFillingStyle->setEnabled(true);
 		bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex()) == Qt::NoBrush);
 		ui.kcbSymbolFillingColor->setEnabled(!noBrush);

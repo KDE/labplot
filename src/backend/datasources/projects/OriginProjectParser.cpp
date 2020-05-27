@@ -1628,55 +1628,55 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		curve->setSymbolsRotationAngle(0);
 		switch (originCurve.symbolShape) {
 		case 0: //NoSymbol
-			curve->setSymbolsStyle(Symbol::NoSymbols);
+			curve->setSymbolsStyle(Symbol::Style::NoSymbols);
 			break;
 		case 1: //Rect
-			curve->setSymbolsStyle(Symbol::Square);
+			curve->setSymbolsStyle(Symbol::Style::Square);
 			break;
 		case 2: //Ellipse
 		case 20://Sphere
-			curve->setSymbolsStyle(Symbol::Circle);
+			curve->setSymbolsStyle(Symbol::Style::Circle);
 			break;
 		case 3: //UTriangle
-			curve->setSymbolsStyle(Symbol::EquilateralTriangle);
+			curve->setSymbolsStyle(Symbol::Style::EquilateralTriangle);
 			break;
 		case 4: //DTriangle
-			curve->setSymbolsStyle(Symbol::EquilateralTriangle);
+			curve->setSymbolsStyle(Symbol::Style::EquilateralTriangle);
 			break;
 		case 5: //Diamond
-			curve->setSymbolsStyle(Symbol::Diamond);
+			curve->setSymbolsStyle(Symbol::Style::Diamond);
 			break;
 		case 6: //Cross +
-			curve->setSymbolsStyle(Symbol::Cross);
+			curve->setSymbolsStyle(Symbol::Style::Cross);
 			break;
 		case 7: //Cross x
-			curve->setSymbolsStyle(Symbol::Cross);
+			curve->setSymbolsStyle(Symbol::Style::Cross);
 			break;
 		case 8: //Snow
-			curve->setSymbolsStyle(Symbol::Star4);
+			curve->setSymbolsStyle(Symbol::Style::Star4);
 			break;
 		case 9: //Horizontal -
-			curve->setSymbolsStyle(Symbol::Line);
+			curve->setSymbolsStyle(Symbol::Style::Line);
 			curve->setSymbolsRotationAngle(90);
 			break;
 		case 10: //Vertical |
-			curve->setSymbolsStyle(Symbol::Line);
+			curve->setSymbolsStyle(Symbol::Style::Line);
 			break;
 		case 15: //LTriangle
-			curve->setSymbolsStyle(Symbol::EquilateralTriangle);
+			curve->setSymbolsStyle(Symbol::Style::EquilateralTriangle);
 			break;
 		case 16: //RTriangle
-			curve->setSymbolsStyle(Symbol::EquilateralTriangle);
+			curve->setSymbolsStyle(Symbol::Style::EquilateralTriangle);
 			break;
 		case 17: //Hexagon
 		case 19: //Pentagon
-			curve->setSymbolsStyle(Symbol::Square);
+			curve->setSymbolsStyle(Symbol::Style::Square);
 			break;
 		case 18: //Star
-			curve->setSymbolsStyle(Symbol::Star5);
+			curve->setSymbolsStyle(Symbol::Style::Star5);
 			break;
 		default:
-			curve->setSymbolsStyle(Symbol::NoSymbols);
+			curve->setSymbolsStyle(Symbol::Style::NoSymbols);
 		}
 
 		//symbol size
@@ -1714,7 +1714,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		//handle unsigned char pointOffset member
 		//handle bool connectSymbols member
 	} else {
-		curve->setSymbolsStyle(Symbol::NoSymbols);
+		curve->setSymbolsStyle(Symbol::Style::NoSymbols);
 	}
 
 	//filling properties

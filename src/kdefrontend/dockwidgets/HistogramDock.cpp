@@ -689,7 +689,7 @@ void HistogramDock::lineOpacityChanged(int value) {
 void HistogramDock::symbolsStyleChanged(int index) {
 	const auto style = Symbol::Style(index);
 
-	if (style == Symbol::NoSymbols) {
+	if (style == Symbol::Style::NoSymbols) {
 		ui.sbSymbolSize->setEnabled(false);
 		ui.sbSymbolRotation->setEnabled(false);
 		ui.sbSymbolOpacity->setEnabled(false);
@@ -706,7 +706,7 @@ void HistogramDock::symbolsStyleChanged(int index) {
 		ui.sbSymbolOpacity->setEnabled(true);
 
 		//enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
-		if (style != Symbol::Line && style != Symbol::Cross) {
+		if (style != Symbol::Style::Line && style != Symbol::Style::Cross) {
 			ui.cbSymbolFillingStyle->setEnabled(true);
 			bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex()) == Qt::NoBrush);
 			ui.kcbSymbolFillingColor->setEnabled(!noBrush);

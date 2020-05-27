@@ -75,7 +75,7 @@ void CustomPoint::init() {
 	d->position.setX( group.readEntry("PositionXValue", d->plot->xMin() + (d->plot->xMax()-d->plot->xMin())/2) );
 	d->position.setY( group.readEntry("PositionYValue", d->plot->yMin() + (d->plot->yMax()-d->plot->yMin())/2) );
 
-	d->symbolStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Circle);
+	d->symbolStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Style::Circle);
 	d->symbolSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->symbolRotationAngle = group.readEntry("SymbolRotation", 0.0);
 	d->symbolOpacity = group.readEntry("SymbolOpacity", 1.0);
@@ -276,7 +276,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
 	pointShape = QPainterPath();
-	if (m_visible && symbolStyle != Symbol::NoSymbols) {
+	if (m_visible && symbolStyle != Symbol::Style::NoSymbols) {
 		QPainterPath path = Symbol::pathFromStyle(symbolStyle);
 
 		QTransform trafo;
@@ -301,7 +301,7 @@ void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 	if (!m_visible)
 		return;
 
-	if (symbolStyle != Symbol::NoSymbols) {
+	if (symbolStyle != Symbol::Style::NoSymbols) {
 		painter->setOpacity(symbolOpacity);
 		painter->setPen(symbolPen);
 		painter->setBrush(symbolBrush);
@@ -384,7 +384,7 @@ void CustomPoint::save(QXmlStreamWriter* writer) const {
 
 	//Symbols
 	writer->writeStartElement("symbol");
-	writer->writeAttribute( "symbolStyle", QString::number(d->symbolStyle) );
+	writer->writeAttribute( "symbolStyle", QString::number(static_cast<int>(d->symbolStyle)) );
 	writer->writeAttribute( "opacity", QString::number(d->symbolOpacity) );
 	writer->writeAttribute( "rotation", QString::number(d->symbolRotationAngle) );
 	writer->writeAttribute( "size", QString::number(d->symbolSize) );

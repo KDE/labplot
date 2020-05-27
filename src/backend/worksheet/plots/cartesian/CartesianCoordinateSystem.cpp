@@ -76,7 +76,7 @@ bool CartesianScale::contains(double value) const {
 class LinearScale : public CartesianScale {
 public:
 	LinearScale(const Interval<double> &interval, double offset, double gradient)
-		: CartesianScale(ScaleLinear, interval, offset, gradient, 0) {
+		: CartesianScale(ScaleType::ScaleLinear, interval, offset, gradient, 0) {
 			Q_ASSERT(gradient != 0.0);
 
 		}
@@ -107,7 +107,7 @@ public:
 class LogScale : public CartesianScale {
 public:
 	LogScale(const Interval<double> &interval, double offset, double scaleFactor, double base, bool abs)
-		: CartesianScale(ScaleLog, interval, offset, scaleFactor, base), m_abs(abs) {
+		: CartesianScale(ScaleType::ScaleLog, interval, offset, scaleFactor, base), m_abs(abs) {
 			Q_ASSERT(scaleFactor != 0.0);
 			Q_ASSERT(base > 0.0);
 	}

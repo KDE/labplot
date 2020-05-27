@@ -222,7 +222,7 @@ void DatapickerCurveWidget::yErrorTypeChanged(int index) {
 void DatapickerCurveWidget::styleChanged(int index) {
 	auto style = Symbol::Style(index + 1);
 	//enable/disable the  filling options in the GUI depending on the currently selected points.
-	if (style != Symbol::Line && style != Symbol::Cross) {
+	if (style != Symbol::Style::Line && style != Symbol::Style::Cross) {
  		ui.cbFillingStyle->setEnabled(true);
 		bool noBrush = (Qt::BrushStyle(ui.cbFillingStyle->currentIndex()) == Qt::NoBrush);
 		ui.kcbFillingColor->setEnabled(!noBrush);

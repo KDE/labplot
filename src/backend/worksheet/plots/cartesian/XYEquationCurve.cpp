@@ -70,7 +70,7 @@ void XYEquationCurve::init() {
 
 	//TODO: read from the saved settings for XYEquationCurve?
 	d->lineType = XYCurve::Line;
-	d->symbolsStyle = Symbol::NoSymbols;
+	d->symbolsStyle = Symbol::Style::NoSymbols;
 
 	setUndoAware(false);
 	suppressRetransform(true);

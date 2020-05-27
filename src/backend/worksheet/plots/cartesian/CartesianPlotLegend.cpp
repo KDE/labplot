@@ -749,7 +749,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				//for the brush, use the histogram filling or symbols filling or no brush
 				if (hist->fillingEnabled())
 					painter->setBrush(QBrush(hist->fillingFirstColor(), hist->fillingBrushStyle()));
-				else if (hist->symbolsStyle() != Symbol::NoSymbols)
+				else if (hist->symbolsStyle() != Symbol::Style::NoSymbols)
 					painter->setBrush(hist->symbolsBrush());
 				else
 					painter->setBrush(Qt::NoBrush);
@@ -784,7 +784,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 				//curve's error bars for x
 				float errorBarsSize = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
-				if (curve->symbolsStyle()!=Symbol::NoSymbols && errorBarsSize<curve->symbolsSize()*1.4)
+				if (curve->symbolsStyle()!=Symbol::Style::NoSymbols && errorBarsSize<curve->symbolsSize()*1.4)
 					errorBarsSize = curve->symbolsSize()*1.4;
 
 				switch (curve->errorBarsType()) {
@@ -828,7 +828,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			}
 
 			//curve's symbol
-			if (curve->symbolsStyle()!=Symbol::NoSymbols) {
+			if (curve->symbolsStyle() != Symbol::Style::NoSymbols) {
 				painter->setOpacity(curve->symbolsOpacity());
 				painter->setBrush(curve->symbolsBrush());
 				painter->setPen(curve->symbolsPen());
