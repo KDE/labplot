@@ -222,6 +222,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 void CartesianPlotDock::init() {
 	this->retranslateUi();
 
+	GuiTools::updatePenStyles(ui.cbCursorLineStyle, Qt::black);
+
 	/*
 	 //TODO: activate later once range breaking is implemented
 	//create icons for the different styles for scale breaking
@@ -1322,7 +1324,7 @@ void CartesianPlotDock::cursorLineWidthChanged(int width) {
 	}
 }
 
-void CartesianPlotDock::cursorLineColorChanged(QColor color) {
+void CartesianPlotDock::cursorLineColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
@@ -1331,6 +1333,10 @@ void CartesianPlotDock::cursorLineColorChanged(QColor color) {
 		pen.setColor(color);
 		plot->setCursorPen(pen);
 	}
+
+	m_initializing = true;
+	GuiTools::updatePenStyles(ui.cbCursorLineStyle, color);
+	m_initializing = false;
 }
 
 void CartesianPlotDock::cursorLineStyleChanged(int index) {
@@ -1732,6 +1738,7 @@ void CartesianPlotDock::load() {
 	ui.cbCursorLineStyle->setCurrentIndex(pen.style());
 	ui.kcbCursorLineColor->setColor(pen.color());
 	ui.sbCursorLineWidth->setValue(pen.width());
+	GuiTools::updatePenStyles(ui.cbCursorLineStyle, pen.color());
 }
 
 void CartesianPlotDock::loadConfig(KConfig& config) {
@@ -1773,6 +1780,7 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 
 	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
+	GuiTools::updatePenStyles(ui.cbCursorLineStyle, m_plot->cursorPen().color());
 	m_initializing = false;
 }
 
