@@ -168,6 +168,8 @@ signals:
 	void requestUpdate();
 	void useViewSizeRequested();
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
+	void showCursorDock(TreeModel*, QVector<CartesianPlot*>);
+	void propertiesExplorerRequested();
 
 	void backgroundTypeChanged(PlotArea::BackgroundType);
 	void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
@@ -189,7 +191,6 @@ signals:
 	void layoutRowCountChanged(int);
 	void layoutColumnCountChanged(int);
 	void themeChanged(const QString&);
-	void showCursorDock(TreeModel*, QVector<CartesianPlot*>);
 };
 
 #endif

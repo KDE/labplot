@@ -100,6 +100,7 @@ private:
 	void contextMenuEvent(QContextMenuEvent*) override;
 	void wheelEvent(QWheelEvent*) override;
 	void mousePressEvent(QMouseEvent*) override;
+	void mouseDoubleClickEvent(QMouseEvent*) override;
 	void mouseReleaseEvent(QMouseEvent*) override;
 	void mouseMoveEvent(QMouseEvent*) override;
 	void keyPressEvent(QKeyEvent*) override;
@@ -308,6 +309,7 @@ private slots:
 
 signals:
 	void statusInfo(const QString&);
+	void propertiesExplorerRequested();
 };
 
 #endif

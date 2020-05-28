@@ -1057,6 +1057,10 @@ void WorksheetView::mouseReleaseEvent(QMouseEvent* event) {
 	QGraphicsView::mouseReleaseEvent(event);
 }
 
+void WorksheetView::mouseDoubleClickEvent(QMouseEvent*) {
+	emit propertiesExplorerRequested();
+}
+
 void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 	if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode != CartesianPlot::SelectionMode ) {
 		//check whether there is a cartesian plot under the cursor

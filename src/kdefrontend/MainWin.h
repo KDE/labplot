@@ -342,6 +342,7 @@ private slots:
 	void projectExplorerDockVisibilityChanged(bool);
 	void propertiesDockVisibilityChanged(bool);
 	void cursorDockVisibilityChanged(bool);
+	void propertiesExplorerRequested();
 
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
 };

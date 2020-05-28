@@ -1145,6 +1145,8 @@ bool MainWin::newProject() {
 
 		auto* sa = new QScrollArea(m_propertiesDock);
 		stackedWidget = new QStackedWidget(sa);
+		stackedWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+		stackedWidget->setMinimumSize(0, 0);
 		sa->setWidget(stackedWidget);
 		sa->setWidgetResizable(true);
 		m_propertiesDock->setWidget(sa);
@@ -1765,8 +1767,10 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 		connect(part, &AbstractPart::showRequested, this, &MainWin::handleShowSubWindowRequested);
 
 		const auto* worksheet = dynamic_cast<const Worksheet*>(aspect);
-		if (worksheet)
+		if (worksheet) {
 			connect(worksheet, &Worksheet::cartesianPlotMouseModeChanged, this, &MainWin::cartesianPlotMouseModeChanged);
+			connect(worksheet, &Worksheet::propertiesExplorerRequested, this, &MainWin::propertiesExplorerRequested);
+		}
 	}
 }
 
@@ -2001,6 +2005,11 @@ void MainWin::toggleDockWidget(QAction* action)  {
 			m_propertiesDock->show();
 // 			toggleShowWidget(m_propertiesDock, false);
 	}
+}
+
+void MainWin::propertiesExplorerRequested() {
+	if (!m_propertiesDock->isVisible())
+		m_propertiesDock->show();
 }
 
 /*
