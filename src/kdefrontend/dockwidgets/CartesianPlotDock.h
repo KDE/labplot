@@ -131,9 +131,9 @@ private slots:
 	void bottomPaddingChanged(double);
 
 	// "Cursor"-tab
-	void cursorLineWidthChanged(int width);
-	void cursorLineColorChanged(QColor color);
-	void cursorLineStyleChanged(int index);
+	void cursorLineWidthChanged(int);
+	void cursorLineColorChanged(const QColor&);
+	void cursorLineStyleChanged(int);
 
 	//SLOTs for changes triggered in CartesianPlot
 	//general
