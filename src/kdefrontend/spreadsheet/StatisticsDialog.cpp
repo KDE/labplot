@@ -75,7 +75,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) : QDia
 // 	                     "<tr></tr>"
 	                     "<tr>"
 	                     "<td width=70%><b>"
-	                     + i18n("Size")+
+	                     + i18n("Count")+
 	                     "<b></td>"
 	                     "<td>%1</td>"
 	                     "</tr>"
