@@ -648,4 +648,90 @@ void SpreadsheetTest::testSortText2() {
 	QCOMPARE(sheet.column(1)->integerAt(6), 7);
 }
 
+/*
+ * check sorting datetimes with invalid entries ascending as leading column
+ */
+void SpreadsheetTest::testSortDateTime1() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(8);
+
+	QVector<QDateTime> xData{
+		QDateTime(QDate(2020, 02, 29), QTime(12, 12, 12)),
+		QDateTime(QDate(2020, 02, 28), QTime(12, 12, 12)),
+		QDateTime(QDate(2019, 02, 28), QTime(12, 12, 12)),
+		QDateTime(QDate(2019, 02, 29), QTime(12, 12, 12)),	// invalid
+		QDateTime(QDate(2020, 02, 29), QTime(12, 12, 13)),
+		QDateTime(QDate(2020, 02, 29), QTime(11, 12, 12)),
+		};
+	QVector<int> yData = {1, 2, 3, 4, 5, 6, 7};
+
+	sheet.column(0)->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+	sheet.column(0)->replaceDateTimes(0, xData);
+	sheet.column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	sheet.column(1)->replaceInteger(0, yData);
+
+	// sort
+	QVector<Column*> cols;
+	cols << sheet.column(0) << sheet.column(1);
+	sheet.sortColumns(sheet.column(0), cols, true);
+
+	//values
+	QCOMPARE(sheet.column(0)->dateTimeAt(0), QDateTime(QDate(2019, 02, 28), QTime(12, 12, 12)));
+	QCOMPARE(sheet.column(0)->dateTimeAt(1), QDateTime(QDate(2020, 02, 28), QTime(12, 12, 12)));
+	QCOMPARE(sheet.column(0)->dateTimeAt(2), QDateTime(QDate(2020, 02, 29), QTime(11, 12, 12)));
+	QCOMPARE(sheet.column(0)->dateTimeAt(3), QDateTime(QDate(2020, 02, 29), QTime(12, 12, 12)));
+	QCOMPARE(sheet.column(0)->dateTimeAt(4), QDateTime(QDate(2020, 02, 29), QTime(12, 12, 13)));
+	QCOMPARE(sheet.column(1)->integerAt(0), 3);
+	QCOMPARE(sheet.column(1)->integerAt(1), 2);
+	QCOMPARE(sheet.column(1)->integerAt(2), 6);
+	QCOMPARE(sheet.column(1)->integerAt(3), 1);
+	QCOMPARE(sheet.column(1)->integerAt(4), 5);
+	QCOMPARE(sheet.column(1)->integerAt(5), 4);
+	QCOMPARE(sheet.column(1)->integerAt(6), 7);
+}
+
+/*
+ * check sorting datetimes with invalid entries descending as leading column
+ */
+void SpreadsheetTest::testSortDateTime2() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(8);
+
+	QVector<QDateTime> xData{
+		QDateTime(QDate(2020, 02, 29), QTime(12, 12, 12)),
+		QDateTime(QDate(2020, 02, 28), QTime(12, 12, 12)),
+		QDateTime(QDate(2019, 02, 28), QTime(12, 12, 12)),
+		QDateTime(QDate(2019, 02, 29), QTime(12, 12, 12)),	// invalid
+		QDateTime(QDate(2020, 02, 29), QTime(12, 12, 13)),
+		QDateTime(QDate(2020, 02, 29), QTime(11, 12, 12)),
+		};
+	QVector<int> yData = {1, 2, 3, 4, 5, 6, 7};
+
+	sheet.column(0)->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+	sheet.column(0)->replaceDateTimes(0, xData);
+	sheet.column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	sheet.column(1)->replaceInteger(0, yData);
+
+	// sort
+	QVector<Column*> cols;
+	cols << sheet.column(0) << sheet.column(1);
+	sheet.sortColumns(sheet.column(0), cols, false);
+
+	//values
+	QCOMPARE(sheet.column(0)->dateTimeAt(4), QDateTime(QDate(2019, 02, 28), QTime(12, 12, 12)));
+	QCOMPARE(sheet.column(0)->dateTimeAt(3), QDateTime(QDate(2020, 02, 28), QTime(12, 12, 12)));
+	QCOMPARE(sheet.column(0)->dateTimeAt(2), QDateTime(QDate(2020, 02, 29), QTime(11, 12, 12)));
+	QCOMPARE(sheet.column(0)->dateTimeAt(1), QDateTime(QDate(2020, 02, 29), QTime(12, 12, 12)));
+	QCOMPARE(sheet.column(0)->dateTimeAt(0), QDateTime(QDate(2020, 02, 29), QTime(12, 12, 13)));
+	QCOMPARE(sheet.column(1)->integerAt(4), 3);
+	QCOMPARE(sheet.column(1)->integerAt(3), 2);
+	QCOMPARE(sheet.column(1)->integerAt(2), 6);
+	QCOMPARE(sheet.column(1)->integerAt(1), 1);
+	QCOMPARE(sheet.column(1)->integerAt(0), 5);
+	QCOMPARE(sheet.column(1)->integerAt(5), 4);
+	QCOMPARE(sheet.column(1)->integerAt(6), 7);
+}
+
 QTEST_MAIN(SpreadsheetTest)

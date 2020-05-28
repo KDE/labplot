@@ -57,6 +57,8 @@ private slots:
 	void testSortBigInt2();
 	void testSortText1();
 	void testSortText2();
+	void testSortDateTime1();
+	void testSortDateTime2();
 };
 
 #endif

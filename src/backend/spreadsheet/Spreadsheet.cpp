@@ -383,7 +383,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 
 	// the normal QPair comparison does not work properly with descending sorting
 	// therefore we use our own compare functions
-	// TODO: check this. a.first, b.first for QString anf DateTime too?
+	// TODO: check this. a.first, b.first for QString and DateTime too?
 	class CompareFunctions {
 	public:
 		static bool doubleLess(QPair<double, int> a, QPair<double, int> b) {
@@ -571,7 +571,6 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						invalidIndex << i;
 				const int filledRows = map.size();
 				const int invalidRows = invalidIndex.size();
-
 
 				if (ascending)
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
