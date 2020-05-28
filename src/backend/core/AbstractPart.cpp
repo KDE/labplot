@@ -156,7 +156,12 @@ QMenu* AbstractPart::createContextMenu() {
 }
 
 bool AbstractPart::isDraggable() const {
-	return true;
+	//TODO: moving workbook children doesn't work at the moment, don't allow to move it for now
+	if ((type() == AspectType::Spreadsheet || type() == AspectType::Matrix)
+		&& parentAspect()->type() == AspectType::Workbook)
+		return false;
+	else
+		return true;
 }
 
 QVector<AspectType> AbstractPart::dropableOn() const {
