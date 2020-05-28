@@ -407,7 +407,7 @@ void DatapickerImageWidget::selectFile() {
 	if (path.isEmpty())
 		return; //cancel was clicked in the file-dialog
 
-	int pos = path.lastIndexOf(QDir::separator());
+	int pos = path.lastIndexOf(QLatin1String("/"));
 	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir != dir)

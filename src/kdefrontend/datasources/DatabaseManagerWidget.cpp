@@ -235,7 +235,7 @@ void DatabaseManagerWidget::selectFile() {
 	if (path.isEmpty())
 		return; //cancel was clicked in the file-dialog
 
-	int pos = path.lastIndexOf(QDir::separator());
+	int pos = path.lastIndexOf(QLatin1String("/"));
 	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir != dir)
@@ -268,13 +268,14 @@ void DatabaseManagerWidget::portChanged() {
 }
 
 void DatabaseManagerWidget::databaseNameChanged() {
-	QString dbName = ui.leDatabase->text().simplified();
+	QString dbName{ui.leDatabase->text().simplified()};
 	if (isFileDB(ui.cbDriver->currentText())) {
-#ifndef HAVE_WINDOWS
-		// make relative path
-		if ( !dbName.isEmpty() && dbName.at(0) != QDir::separator())
-			dbName = QDir::homePath() + QDir::separator() + dbName;
+#ifdef HAVE_WINDOWS
+		if (!dbName.isEmpty() && dbName.at(1) != QLatin1String(":"))
+#else
+		if (!dbName.isEmpty() && dbName.at(0) != QLatin1String("/"))
 #endif
+			dbName = QDir::homePath() + QLatin1String("/") + dbName;
 
 		if (!dbName.isEmpty()) {
 			bool fileExists = QFile::exists(dbName);
@@ -290,7 +291,7 @@ void DatabaseManagerWidget::databaseNameChanged() {
 	}
 
 	//don't allow to try to connect if no database name was provided
-	ui.bTestConnection->setEnabled( !dbName.isEmpty() );
+	ui.bTestConnection->setEnabled(!dbName.isEmpty());
 
 	if (m_initializing)
 		return;
@@ -507,12 +508,13 @@ void DatabaseManagerWidget::testConnection() {
 
 	//don't allow to test the connection for file DBs if the file doesn't exist
 	if (isFileDB(ui.cbDriver->currentText())) {
-		QString fileName = ui.leDatabase->text();
-#ifndef HAVE_WINDOWS
-		// make relative path
-		if ( !fileName.isEmpty() && fileName.at(0) != QDir::separator())
-			fileName = QDir::homePath() + QDir::separator() + fileName;
+		QString fileName{ui.leDatabase->text()};
+#ifdef HAVE_WINDOWS
+		if ( !fileName.isEmpty() && fileName.at(1) != QLatin1String(":"))
+#else
+		if ( !fileName.isEmpty() && fileName.at(0) != QLatin1String("/"))
 #endif
+			fileName = QDir::homePath() + QLatin1String("/") + fileName;
 
 		if (!QFile::exists(fileName)) {
 			KMessageBox::error(this, i18n("Failed to connect to the database '%1'.", m_current_connection->dbName),

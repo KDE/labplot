@@ -291,7 +291,7 @@ void ExportSpreadsheetDialog::okClicked() {
 	QString path = ui->leFileName->text();
 	if (!path.isEmpty()) {
 		QString dir = conf.readEntry("LastDir", "");
-		int pos = path.lastIndexOf(QDir::separator());
+		int pos = path.lastIndexOf(QLatin1String("/"));
 		if (pos != -1) {
 			QString newDir = path.left(pos);
 			if (newDir != dir)
@@ -346,7 +346,7 @@ void ExportSpreadsheetDialog::selectFile() {
 	if (!path.isEmpty()) {
 		ui->leFileName->setText(path);
 
-		int pos = path.lastIndexOf(QDir::separator());
+		int pos = path.lastIndexOf(QLatin1String("/"));
 		if (pos != -1) {
 			QString newDir = path.left(pos);
 			if (newDir != dir)
@@ -525,7 +525,7 @@ void ExportSpreadsheetDialog::fileNameChanged(const QString& name) {
 		return;
 	}
 	QString path = ui->leFileName->text();
-	int pos = path.lastIndexOf(QDir::separator());
+	int pos = path.lastIndexOf(QLatin1String("/"));
 	if (pos != -1) {
 		QString dir = path.left(pos);
 		if (!QDir(dir).exists()) {

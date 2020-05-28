@@ -77,11 +77,11 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 			return QImage();
 		}
 		else
-			QFile::copy(file, tempPath + QDir::separator() + QLatin1String("preview.sty"));
+			QFile::copy(file, tempPath + QLatin1String("/") + QLatin1String("preview.sty"));
 	}
 
 	//create a temporary file
-	QTemporaryFile file(tempPath + QDir::separator() + "labplot_XXXXXX.tex");
+	QTemporaryFile file(tempPath + QLatin1String("/") + "labplot_XXXXXX.tex");
 	// FOR DEBUG: file.setAutoRemove(false);
 	// DEBUG("temp file path = " << file.fileName().toUtf8().constData());
 	if (file.open()) {

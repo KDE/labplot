@@ -386,7 +386,7 @@ void ImportProjectDialog::selectFile() {
 	if (path.isEmpty())
 		return; //cancel was clicked in the file-dialog
 
-	int pos = path.lastIndexOf(QDir::separator());
+	int pos = path.lastIndexOf(QLatin1String("/"));
 	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir != lastDir)
@@ -398,12 +398,15 @@ void ImportProjectDialog::selectFile() {
 }
 
 void ImportProjectDialog::fileNameChanged(const QString& name) {
-	QString fileName = name;
-#ifndef HAVE_WINDOWS
+	QString fileName{name};
+
 	// make relative path
-	if ( !fileName.isEmpty() && fileName.at(0) != QDir::separator())
-		fileName = QDir::homePath() + QDir::separator() + fileName;
+#ifdef HAVE_WINDOWS
+	if ( !fileName.isEmpty() && fileName.at(1) != QLatin1String(":"))
+#else
+	if ( !fileName.isEmpty() && fileName.at(0) != QLatin1String("/"))
 #endif
+		fileName = QDir::homePath() + QLatin1String("/") + fileName;
 
 	bool fileExists = QFile::exists(fileName);
 	if (fileExists)
@@ -424,7 +427,7 @@ void ImportProjectDialog::fileNameChanged(const QString& name) {
 
 void ImportProjectDialog::newFolder() {
 	QString path = ui.leFileName->text();
-	QString name = path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+	QString name = path.right( path.length() - path.lastIndexOf(QLatin1String("/"))-1 );
 
 	bool ok;
 	QInputDialog* dlg = new QInputDialog(this);

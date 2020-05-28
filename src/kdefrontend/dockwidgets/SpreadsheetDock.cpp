@@ -206,7 +206,7 @@ void SpreadsheetDock::load() {
 void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
-	const int index = config.name().lastIndexOf(QDir::separator());
+	const int index = config.name().lastIndexOf(QLatin1String("/"));
 	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else

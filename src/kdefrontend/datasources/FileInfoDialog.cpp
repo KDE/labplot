@@ -119,18 +119,14 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 	QString fileTypeString;
 	QIODevice *file = new QFile(name);
 
-	QString fileName;
-#ifdef Q_OS_WIN
+	QString fileName{name};
+#ifdef HAVE_WINDOWS
 	if (name.at(1) != QLatin1Char(':'))
-		fileName = QDir::homePath() + name;
-	else
-		fileName = name;
 #else
-	if (name.at(0) != QDir::separator())
-		fileName = QDir::homePath() + QDir::separator() + name;
-	else
-		fileName = name;
+	if (name.at(0) != QLatin1String("/"))
 #endif
+		fileName = QDir::homePath() + QLatin1String("/") + name;
+
 	if (!file)
 		file = new QFile(fileName);
 

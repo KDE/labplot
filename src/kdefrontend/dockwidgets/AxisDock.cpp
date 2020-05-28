@@ -1997,7 +1997,7 @@ void AxisDock::load() {
 void AxisDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
-	int index = config.name().lastIndexOf(QDir::separator());
+	int index = config.name().lastIndexOf(QLatin1String("/"));
 	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else

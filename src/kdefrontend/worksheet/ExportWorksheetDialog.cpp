@@ -137,7 +137,7 @@ void ExportWorksheetDialog::setFileName(const QString& name) {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
 	QString dir = conf.readEntry("LastDir", "");
 	if (dir.isEmpty()) dir = QDir::homePath();
-	ui->leFileName->setText(dir + QDir::separator() +  name);
+	ui->leFileName->setText(dir + QLatin1String("/") +  name);
 
 	formatChanged(ui->cbFormat->currentIndex());
 	exportToChanged(ui->cbExportTo->currentIndex());
@@ -194,7 +194,7 @@ void ExportWorksheetDialog::okClicked() {
 	QString path = ui->leFileName->text();
 	if (!path.isEmpty()) {
 		QString dir = conf.readEntry("LastDir", "");
-		int pos = path.lastIndexOf(QDir::separator());
+		int pos = path.lastIndexOf(QLatin1String("/"));
 		if (pos != -1) {
 			QString newDir = path.left(pos);
 			if (newDir != dir)
@@ -238,7 +238,7 @@ void ExportWorksheetDialog::selectFile() {
 	if (!path.isEmpty()) {
 		ui->leFileName->setText(path);
 
-		int pos = path.lastIndexOf(QDir::separator());
+		int pos = path.lastIndexOf(QLatin1String("/"));
 		if (pos != -1) {
 			const QString newDir = path.left(pos);
 			if (newDir != dir && QDir(newDir).exists())
@@ -293,7 +293,7 @@ void ExportWorksheetDialog::fileNameChanged(const QString& name) {
 		return;
 	}
 	QString path = ui->leFileName->text();
-	int pos = path.lastIndexOf(QDir::separator());
+	int pos = path.lastIndexOf(QLatin1String("/"));
 	if (pos != -1) {
 		QString dir = path.left(pos);
 		if (!QDir(dir).exists()) {

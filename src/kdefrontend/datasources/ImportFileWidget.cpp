@@ -78,11 +78,13 @@ Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
 #endif
 
 QString absolutePath(const QString& fileName) {
-#ifndef HAVE_WINDOWS
-	// make absolute path // FIXME
-	if (!fileName.isEmpty() && fileName.at(0) != QDir::separator())
-		return QDir::homePath() + QDir::separator() + fileName;
+#ifdef HAVE_WINDOWS
+	if (!fileName.isEmpty() && fileName.at(1) != QLatin1String(":"))
+#else
+	if (!fileName.isEmpty() && fileName.at(0) != QLatin1String("/"))
 #endif
+		return QDir::homePath() + QLatin1String("/") + fileName;
+
 	return fileName;
 }
 

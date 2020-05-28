@@ -95,7 +95,7 @@ void SettingsDatasetsPage::clearCache() {
 			if (fileName == QLatin1Char('.') || fileName == QLatin1String(".."))
 				continue;
 
-			QFile file(dir.path() + QDir::separator() + fileName);
+			QFile file(dir.path() + QLatin1String("/") + fileName);
 			file.remove();
 		}
 

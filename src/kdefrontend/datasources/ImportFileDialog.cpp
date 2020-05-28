@@ -384,10 +384,12 @@ void ImportFileDialog::checkOkButton() {
 	}
 
 	QString fileName = m_importFileWidget->fileName();
-#ifndef HAVE_WINDOWS
-	if (!fileName.isEmpty() && fileName.at(0) != QDir::separator())
-		fileName = QDir::homePath() + QDir::separator() + fileName;
+#ifdef HAVE_WINDOWS
+	if (!fileName.isEmpty() && fileName.at(1) != QLatin1String(":"))
+#else
+	if (!fileName.isEmpty() && fileName.at(0) != QLatin1String("/"))
 #endif
+		fileName = QDir::homePath() + QLatin1String("/") + fileName;
 
 	DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, m_importFileWidget->currentSourceType()));
 	switch (m_importFileWidget->currentSourceType()) {

@@ -192,7 +192,7 @@ void FITSHeaderEditWidget::openFile() {
 	if (fileName.isEmpty())
 		return;
 
-	int pos = fileName.lastIndexOf(QDir::separator());
+	int pos = fileName.lastIndexOf(QLatin1String("/"));
 	if (pos != -1) {
 		QString newDir = fileName.left(pos);
 		if (newDir != dir)

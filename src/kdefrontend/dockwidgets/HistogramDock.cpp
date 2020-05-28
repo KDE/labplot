@@ -1284,7 +1284,7 @@ void HistogramDock::selectFile() {
 	if (path.isEmpty())
 		return; //cancel was clicked in the file-dialog
 
-	int pos = path.lastIndexOf(QDir::separator());
+	int pos = path.lastIndexOf(QLatin1String("/"));
 	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir != dir)
@@ -1663,7 +1663,7 @@ void HistogramDock::loadConfig(KConfig& config) {
 void HistogramDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
-	int index = config.name().lastIndexOf(QDir::separator());
+	int index = config.name().lastIndexOf(QLatin1String("/"));
 	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else

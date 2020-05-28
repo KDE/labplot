@@ -195,7 +195,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		loadFolder(project, projectIt, preview);
 	} else { // for lower versions put all windows on rootfolder
 		DEBUG("	have no project tree");
-		int pos = m_projectFileName.lastIndexOf(QDir::separator()) + 1;
+		int pos = m_projectFileName.lastIndexOf(QLatin1String("/")) + 1;
 		project->setName((const char*)m_projectFileName.mid(pos).toLocal8Bit());
 	}
 	// imports all loose windows (like prior version 6 which has no project tree)

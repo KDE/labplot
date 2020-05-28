@@ -176,7 +176,7 @@ void ThemeHandler::loadSelected(const QString& name) {
 	//TODO: activate this later
 // 	if (KStandardDirs::checkAccess(themeFilePath, W_OK)) {
 // 		pbPublishTheme->setEnabled(true);
-// 		m_currentLocalTheme = themeFilePath.right(themeFilePath.length() - themeFilePath.lastIndexOf(QDir::separator()) - 1);
+// 		m_currentLocalTheme = themeFilePath.right(themeFilePath.length() - themeFilePath.lastIndexOf(QLatin1String("/")) - 1);
 // 	} else {
 // 		pbPublishTheme->setEnabled(false);
 // 		m_currentLocalTheme.clear();
