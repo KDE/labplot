@@ -1251,11 +1251,11 @@ void CartesianPlotDock::symmetricPaddingChanged(bool checked) {
 	ui.sbPaddingBottom->setVisible(!checked);
 
 	if (checked) {
-		ui.lPaddingHorizontal->setText(i18n("Horizontal"));
-		ui.lPaddingVertical->setText(i18n("Vertical"));
+		ui.lPaddingHorizontal->setText(i18n("Horizontal:"));
+		ui.lPaddingVertical->setText(i18n("Vertical:"));
 	} else {
-		ui.lPaddingHorizontal->setText(i18n("Left"));
-		ui.lPaddingVertical->setText(i18n("Top"));
+		ui.lPaddingHorizontal->setText(i18n("Left:"));
+		ui.lPaddingVertical->setText(i18n("Top:"));
 	}
 
 	for (auto* plot : m_plotList)
