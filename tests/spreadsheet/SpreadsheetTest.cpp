@@ -353,7 +353,7 @@ void SpreadsheetTest::testSortNumeric1() {
 	sheet.setRowCount(10);
 
 	QVector<double> xData = {0.5, -0.2, GSL_NAN, 2.0, -1.0};
-	QVector<int> yData = {1, 2, 3, 4, 5};
+	QVector<int> yData = {1, 2, 3, 4, 5, 6};
 
 	sheet.column(0)->replaceValues(0, xData);
 	sheet.column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
@@ -369,11 +369,13 @@ void SpreadsheetTest::testSortNumeric1() {
 	QCOMPARE(sheet.column(0)->valueAt(1), -0.2);
 	QCOMPARE(sheet.column(0)->valueAt(2), 0.5);
 	QCOMPARE(sheet.column(0)->valueAt(3), 2.0);
+	//QCOMPARE(sheet.column(0)->valueAt(4), GSL_NAN);
 	QCOMPARE(sheet.column(1)->integerAt(0), 5);
 	QCOMPARE(sheet.column(1)->integerAt(1), 2);
 	QCOMPARE(sheet.column(1)->integerAt(2), 1);
 	QCOMPARE(sheet.column(1)->integerAt(3), 4);
-	QCOMPARE(sheet.column(1)->integerAt(4), 0);
+	QCOMPARE(sheet.column(1)->integerAt(4), 3);
+	QCOMPARE(sheet.column(1)->integerAt(5), 6);
 }
 
 /*
@@ -385,7 +387,7 @@ void SpreadsheetTest::testSortNumeric2() {
 	sheet.setRowCount(10);
 
 	QVector<double> xData = {0.5, -0.2, GSL_NAN, 2.0, -1.0};
-	QVector<int> yData = {1, 2, 3, 4, 5};
+	QVector<int> yData = {1, 2, 3, 4, 5, 6, 7};
 
 	sheet.column(0)->replaceValues(0, xData);
 	sheet.column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
@@ -405,7 +407,9 @@ void SpreadsheetTest::testSortNumeric2() {
 	QCOMPARE(sheet.column(1)->integerAt(1), 1);
 	QCOMPARE(sheet.column(1)->integerAt(2), 2);
 	QCOMPARE(sheet.column(1)->integerAt(3), 5);
-	QCOMPARE(sheet.column(1)->integerAt(4), 0);
+	QCOMPARE(sheet.column(1)->integerAt(4), 3);
+	QCOMPARE(sheet.column(1)->integerAt(5), 6);
+	QCOMPARE(sheet.column(1)->integerAt(6), 7);
 }
 
 /*
@@ -574,7 +578,7 @@ void SpreadsheetTest::testSortBigInt2() {
 void SpreadsheetTest::testSortText1() {
 	Spreadsheet sheet("test", false);
 	sheet.setColumnCount(2);
-	sheet.setRowCount(7);
+	sheet.setRowCount(8);
 
 	QVector<QString> xData = {"ben", "amy", "eddy", "", "carl", "dan"};
 	QVector<int> yData = {1, 2, 3, 4, 5, 6, 7};
@@ -602,8 +606,8 @@ void SpreadsheetTest::testSortText1() {
 	QCOMPARE(sheet.column(1)->integerAt(2), 5);
 	QCOMPARE(sheet.column(1)->integerAt(3), 6);
 	QCOMPARE(sheet.column(1)->integerAt(4), 3);
-	QCOMPARE(sheet.column(1)->integerAt(5), 0);
-	QCOMPARE(sheet.column(1)->integerAt(6), 0);
+	QCOMPARE(sheet.column(1)->integerAt(5), 4);
+	QCOMPARE(sheet.column(1)->integerAt(6), 7);
 }
 
 /*
@@ -612,7 +616,7 @@ void SpreadsheetTest::testSortText1() {
 void SpreadsheetTest::testSortText2() {
 	Spreadsheet sheet("test", false);
 	sheet.setColumnCount(2);
-	sheet.setRowCount(7);
+	sheet.setRowCount(8);
 
 	QVector<QString> xData = {"ben", "amy", "eddy", "", "carl", "dan"};
 	QVector<int> yData = {1, 2, 3, 4, 5, 6, 7};
@@ -640,8 +644,8 @@ void SpreadsheetTest::testSortText2() {
 	QCOMPARE(sheet.column(1)->integerAt(2), 5);
 	QCOMPARE(sheet.column(1)->integerAt(1), 6);
 	QCOMPARE(sheet.column(1)->integerAt(0), 3);
-	QCOMPARE(sheet.column(1)->integerAt(5), 0);
-	QCOMPARE(sheet.column(1)->integerAt(6), 0);
+	QCOMPARE(sheet.column(1)->integerAt(5), 4);
+	QCOMPARE(sheet.column(1)->integerAt(6), 7);
 }
 
 QTEST_MAIN(SpreadsheetTest)

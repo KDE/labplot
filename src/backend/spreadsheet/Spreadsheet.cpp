@@ -425,7 +425,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 		DEBUG("	sort separately")
 		for (auto* col : cols) {
 			int rows = col->rowCount();
-			std::unique_ptr<Column> temp_col(new Column("temp", col->columnMode()));
+			std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
 
 			switch (col->columnMode()) {
 			case AbstractColumn::ColumnMode::Numeric: {
@@ -443,14 +443,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					QVectorIterator< QPair<double, int> > it(map);
 
 					int k = 0;
-					// put the values in the right order into temp_col
+					// put the values in the right order into tempCol
 					while (it.hasNext()) {
-						temp_col->copy(col, it.peekNext().second, k, 1);
-						temp_col->setMasked(col->isMasked(it.next().second));
+						tempCol->copy(col, it.peekNext().second, k, 1);
+						tempCol->setMasked(col->isMasked(it.next().second));
 						k++;
 					}
 					// copy the sorted column
-					col->copy(temp_col.get(), 0, 0, rows);
+					col->copy(tempCol.get(), 0, 0, rows);
 					break;
 				}
 			case AbstractColumn::ColumnMode::Integer: {
@@ -467,14 +467,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					QVectorIterator<QPair<int, int>> it(map);
 
 					int k = 0;
-					// put the values in the right order into temp_col
+					// put the values in the right order into tempCol
 					while (it.hasNext()) {
-						temp_col->copy(col, it.peekNext().second, k, 1);
-						temp_col->setMasked(col->isMasked(it.next().second));
+						tempCol->copy(col, it.peekNext().second, k, 1);
+						tempCol->setMasked(col->isMasked(it.next().second));
 						k++;
 					}
 					// copy the sorted column
-					col->copy(temp_col.get(), 0, 0, rows);
+					col->copy(tempCol.get(), 0, 0, rows);
 					break;
 				}
 			case AbstractColumn::ColumnMode::BigInt: {
@@ -491,14 +491,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					QVectorIterator<QPair<qint64, int>> it(map);
 
 					int k = 0;
-					// put the values in the right order into temp_col
+					// put the values in the right order into tempCol
 					while (it.hasNext()) {
-						temp_col->copy(col, it.peekNext().second, k, 1);
-						temp_col->setMasked(col->isMasked(it.next().second));
+						tempCol->copy(col, it.peekNext().second, k, 1);
+						tempCol->setMasked(col->isMasked(it.next().second));
 						k++;
 					}
 					// copy the sorted column
-					col->copy(temp_col.get(), 0, 0, rows);
+					col->copy(tempCol.get(), 0, 0, rows);
 					break;
 				}
 			case AbstractColumn::ColumnMode::Text: {
@@ -516,14 +516,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					QVectorIterator< QPair<QString, int> > it(map);
 
 					int k = 0;
-					// put the values in the right order into temp_col
+					// put the values in the right order into tempCol
 					while (it.hasNext()) {
-						temp_col->copy(col, it.peekNext().second, k, 1);
-						temp_col->setMasked(col->isMasked(it.next().second));
+						tempCol->copy(col, it.peekNext().second, k, 1);
+						tempCol->setMasked(col->isMasked(it.next().second));
 						k++;
 					}
 					// copy the sorted column
-					col->copy(temp_col.get(), 0, 0, rows);
+					col->copy(tempCol.get(), 0, 0, rows);
 					break;
 				}
 			case AbstractColumn::ColumnMode::DateTime:
@@ -543,14 +543,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					QVectorIterator< QPair<QDateTime, int> > it(map);
 
 					int k = 0;
-					// put the values in the right order into temp_col
+					// put the values in the right order into tempCol
 					while (it.hasNext()) {
-						temp_col->copy(col, it.peekNext().second, k, 1);
-						temp_col->setMasked(col->isMasked(it.next().second));
+						tempCol->copy(col, it.peekNext().second, k, 1);
+						tempCol->setMasked(col->isMasked(it.next().second));
 						k++;
 					}
 					// copy the sorted column
-					col->copy(temp_col.get(), 0, 0, rows);
+					col->copy(tempCol.get(), 0, 0, rows);
 					break;
 				}
 			}
@@ -562,9 +562,16 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 		switch (leading->columnMode()) {
 		case AbstractColumn::ColumnMode::Numeric: {
 				QVector<QPair<double, int>> map;
+				QVector<int> invalidIndex;
 
 				for (int i = 0; i < rows; i++)
-					map.append(QPair<double, int>(leading->valueAt(i), i));
+					if (leading->isValid(i))
+						map.append(QPair<double, int>(leading->valueAt(i), i));
+					else
+						invalidIndex << i;
+				const int filledRows = map.size();
+				const int invalidRows = invalidIndex.size();
+
 
 				if (ascending)
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
@@ -573,17 +580,28 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				QVectorIterator<QPair<double, int>> it(map);
 
 				for (auto* col : cols) {
-					std::unique_ptr<Column> temp_col(new Column("temp", col->columnMode()));
+					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
 					it.toFront();
 					int j = 0;
-					// put the values in the right order into temp_col
+					// put the values in correct order into tempCol
 					while (it.hasNext()) {
-						temp_col->copy(col, it.peekNext().second, j, 1);
-						temp_col->setMasked(col->isMasked(it.next().second));
+						tempCol->copy(col, it.peekNext().second, j, 1);
+						tempCol->setMasked(col->isMasked(it.next().second));
 						j++;
 					}
 					// copy the sorted column
-					col->copy(temp_col.get(), 0, 0, rows);
+					if (col == leading)	// update all rows
+						col->copy(tempCol.get(), 0, 0, rows);
+					else {	// do not overwrite unused cols
+						std::unique_ptr<Column> tempInvalidCol(new Column("temp2", col->columnMode()));
+						for (int i = 0; i < invalidRows; i++) {
+							const int idx = invalidIndex.at(i);
+							tempInvalidCol->copy(col, idx, i, 1);
+							tempInvalidCol->setMasked(col->isMasked(idx));
+						}
+						col->copy(tempCol.get(), 0, 0, filledRows);
+						col->copy(tempInvalidCol.get(), 0, filledRows, invalidRows);
+					}
 				}
 				break;
 			}
@@ -601,17 +619,17 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				QVectorIterator<QPair<int, int>> it(map);
 
 				for (auto* col : cols) {
-					std::unique_ptr<Column> temp_col(new Column("temp", col->columnMode()));
+					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
 					it.toFront();
 					int j = 0;
-					// put the values in the right order into temp_col
+					// put the values in the right order into tempCol
 					while (it.hasNext()) {
-						temp_col->copy(col, it.peekNext().second, j, 1);
-						temp_col->setMasked(col->isMasked(it.next().second));
+						tempCol->copy(col, it.peekNext().second, j, 1);
+						tempCol->setMasked(col->isMasked(it.next().second));
 						j++;
 					}
 					// copy the sorted column
-					col->copy(temp_col.get(), 0, 0, rows);
+					col->copy(tempCol.get(), 0, 0, rows);
 				}
 				break;
 			}
@@ -628,26 +646,32 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				QVectorIterator<QPair<qint64, int>> it(map);
 
 				for (auto* col : cols) {
-					std::unique_ptr<Column> temp_col(new Column("temp", col->columnMode()));
+					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
 					it.toFront();
 					int j = 0;
-					// put the values in the right order into temp_col
+					// put the values in the right order into tempCol
 					while (it.hasNext()) {
-						temp_col->copy(col, it.peekNext().second, j, 1);
-						temp_col->setMasked(col->isMasked(it.next().second));
+						tempCol->copy(col, it.peekNext().second, j, 1);
+						tempCol->setMasked(col->isMasked(it.next().second));
 						j++;
 					}
 					// copy the sorted column
-					col->copy(temp_col.get(), 0, 0, rows);
+					col->copy(tempCol.get(), 0, 0, rows);
 				}
 				break;
 			}
 		case AbstractColumn::ColumnMode::Text: {
 				QVector<QPair<QString, int>> map;
+				QVector<int> emptyIndex;
 
 				for (int i = 0; i < rows; i++)
 					if (!leading->textAt(i).isEmpty())
 						map.append(QPair<QString, int>(leading->textAt(i), i));
+					else
+						emptyIndex << i;
+				//QDEBUG("	empty indices: " << emptyIndex)
+				const int filledRows = map.size();
+				const int emptyRows = emptyIndex.size();
 
 				if (ascending)
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringLess);
@@ -656,20 +680,29 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				QVectorIterator<QPair<QString, int>> it(map);
 
 				for (auto* col : cols) {
-					std::unique_ptr<Column> temp_col(new Column("temp", col->columnMode()));
+					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
 					it.toFront();
 					int j = 0;
-					// put the values in the right order into temp_col
+					// put the values in the right order into tempCol
 					while (it.hasNext()) {
-						temp_col->copy(col, it.peekNext().second, j, 1);
-						temp_col->setMasked(col->isMasked(it.next().second));
+						tempCol->copy(col, it.peekNext().second, j, 1);
+						tempCol->setMasked(col->isMasked(it.next().second));
 						j++;
 					}
+
 					// copy the sorted column
 					if (col == leading)	// update all rows
-						col->copy(temp_col.get(), 0, 0, rows);
-					else	// do not overwrite unused cols
-						col->copy(temp_col.get(), 0, 0, map.size());
+						col->copy(tempCol.get(), 0, 0, rows);
+					else {	// do not overwrite unused cols
+						std::unique_ptr<Column> tempEmptyCol(new Column("temp2", col->columnMode()));
+						for (int i = 0; i < emptyRows; i++) {
+							const int idx = emptyIndex.at(i);
+							tempEmptyCol->copy(col, idx, i, 1);
+							tempEmptyCol->setMasked(col->isMasked(idx));
+						}
+						col->copy(tempCol.get(), 0, 0, filledRows);
+						col->copy(tempEmptyCol.get(), 0, filledRows, emptyRows);
+					}
 				}
 				break;
 			}
@@ -677,10 +710,15 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day: {
 				QVector<QPair<QDateTime, int>> map;
+				QVector<int> invalidIndex;
 
 				for (int i = 0; i < rows; i++)
 					if (leading->isValid(i))
 						map.append(QPair<QDateTime, int>(leading->dateTimeAt(i), i));
+					else
+						invalidIndex << i;
+				const int filledRows = map.size();
+				const int invalidRows = invalidIndex.size();
 
 				if (ascending)
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
@@ -689,20 +727,28 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				QVectorIterator<QPair<QDateTime, int>> it(map);
 
 				for (auto* col : cols) {
-					std::unique_ptr<Column> temp_col(new Column("temp", col->columnMode()));
+					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
 					it.toFront();
 					int j = 0;
-					// put the values in the right order into temp_col
+					// put the values in the right order into tempCol
 					while (it.hasNext()) {
-						temp_col->copy(col, it.peekNext().second, j, 1);
-						temp_col->setMasked(col->isMasked(it.next().second));
+						tempCol->copy(col, it.peekNext().second, j, 1);
+						tempCol->setMasked(col->isMasked(it.next().second));
 						j++;
 					}
 					// copy the sorted column
 					if (col == leading)	// update all rows
-						col->copy(temp_col.get(), 0, 0, rows);
-					else	// do not overwrite unused cols
-						col->copy(temp_col.get(), 0, 0, map.size());
+						col->copy(tempCol.get(), 0, 0, rows);
+					else {	// do not overwrite unused cols
+						std::unique_ptr<Column> tempInvalidCol(new Column("temp2", col->columnMode()));
+						for (int i = 0; i < invalidRows; i++) {
+							const int idx = invalidIndex.at(i);
+							tempInvalidCol->copy(col, idx, i, 1);
+							tempInvalidCol->setMasked(col->isMasked(idx));
+						}
+						col->copy(tempCol.get(), 0, 0, filledRows);
+						col->copy(tempInvalidCol.get(), 0, filledRows, invalidRows);
+					}
 				}
 				break;
 			}
