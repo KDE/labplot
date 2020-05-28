@@ -564,8 +564,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				QVector<QPair<double, int>> map;
 
 				for (int i = 0; i < rows; i++)
-					if (leading->isValid(i))
-						map.append(QPair<double, int>(leading->valueAt(i), i));
+					map.append(QPair<double, int>(leading->valueAt(i), i));
 
 				if (ascending)
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
@@ -589,6 +588,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				break;
 			}
 		case AbstractColumn::ColumnMode::Integer: {
+				//TODO: check if still working when invalid integer entries are supported
 				QVector<QPair<int, int>> map;
 
 				for (int i = 0; i < rows; i++)
@@ -666,7 +666,10 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						j++;
 					}
 					// copy the sorted column
-					col->copy(temp_col.get(), 0, 0, rows);
+					if (col == leading)	// update all rows
+						col->copy(temp_col.get(), 0, 0, rows);
+					else	// do not overwrite unused cols
+						col->copy(temp_col.get(), 0, 0, map.size());
 				}
 				break;
 			}
@@ -696,7 +699,10 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						j++;
 					}
 					// copy the sorted column
-					col->copy(temp_col.get(), 0, 0, rows);
+					if (col == leading)	// update all rows
+						col->copy(temp_col.get(), 0, 0, rows);
+					else	// do not overwrite unused cols
+						col->copy(temp_col.get(), 0, 0, map.size());
 				}
 				break;
 			}
