@@ -1232,7 +1232,7 @@ void CartesianPlot::addDataReductionCurve() {
 	if (curCurve) {
 		beginMacro( i18n("%1: reduce '%2'", name(), curCurve->name()) );
 		curve->setName( i18n("Reduction of '%1'", curCurve->name()) );
-		curve->setDataSourceType(XYAnalysisCurve::DataSourceCurve);
+		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
@@ -1251,7 +1251,7 @@ void CartesianPlot::addDifferentiationCurve() {
 	if (curCurve) {
 		beginMacro( i18n("%1: differentiate '%2'", name(), curCurve->name()) );
 		curve->setName( i18n("Derivative of '%1'", curCurve->name()) );
-		curve->setDataSourceType(XYAnalysisCurve::DataSourceCurve);
+		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
@@ -1270,7 +1270,7 @@ void CartesianPlot::addIntegrationCurve() {
 	if (curCurve) {
 		beginMacro( i18n("%1: integrate '%2'", name(), curCurve->name()) );
 		curve->setName( i18n("Integral of '%1'", curCurve->name()) );
-		curve->setDataSourceType(XYAnalysisCurve::DataSourceCurve);
+		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
@@ -1289,7 +1289,7 @@ void CartesianPlot::addInterpolationCurve() {
 	if (curCurve) {
 		beginMacro( i18n("%1: interpolate '%2'", name(), curCurve->name()) );
 		curve->setName( i18n("Interpolation of '%1'", curCurve->name()) );
-		curve->setDataSourceType(XYAnalysisCurve::DataSourceCurve);
+		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 		curve->setDataSourceCurve(curCurve);
 		curve->recalculate();
 		this->addChild(curve);
@@ -1308,7 +1308,7 @@ void CartesianPlot::addSmoothCurve() {
 	if (curCurve) {
 		beginMacro( i18n("%1: smooth '%2'", name(), curCurve->name()) );
 		curve->setName( i18n("Smoothing of '%1'", curCurve->name()) );
-		curve->setDataSourceType(XYAnalysisCurve::DataSourceCurve);
+		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
@@ -1328,7 +1328,7 @@ void CartesianPlot::addFitCurve() {
 	if (curCurve) {
 		beginMacro( i18n("%1: fit to '%2'", name(), curCurve->name()) );
 		curve->setName( i18n("Fit to '%1'", curCurve->name()) );
-		curve->setDataSourceType(XYAnalysisCurve::DataSourceCurve);
+		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 		curve->setDataSourceCurve(curCurve);
 
 
@@ -1366,7 +1366,7 @@ void CartesianPlot::addFourierFilterCurve() {
 	if (curCurve) {
 		beginMacro( i18n("%1: Fourier filtering of '%2'", name(), curCurve->name()) );
 		curve->setName( i18n("Fourier filtering of '%1'", curCurve->name()) );
-		curve->setDataSourceType(XYAnalysisCurve::DataSourceCurve);
+		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 	} else {

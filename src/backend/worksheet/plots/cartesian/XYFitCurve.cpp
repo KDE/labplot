@@ -1559,7 +1559,7 @@ void XYFitCurvePrivate::recalculate() {
 	// prepare source data columns
 	const AbstractColumn* tmpXDataColumn = nullptr;
 	const AbstractColumn* tmpYDataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		DEBUG("	spreadsheet columns as data source");
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
@@ -2068,7 +2068,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 
 	// prepare source data columns
 	const AbstractColumn* tmpXDataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		DEBUG("	spreadsheet columns as data source");
 		tmpXDataColumn = xDataColumn;
 	} else {

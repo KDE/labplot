@@ -149,7 +149,7 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	m_filterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
 
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_filterCurve->dataSourceType());
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_filterCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_filterCurve->dataSourceCurve());
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_filterCurve->xDataColumn());
@@ -232,7 +232,7 @@ void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 void XYFourierFilterCurveDock::dataSourceTypeChanged(int index) {
 	auto type = (XYAnalysisCurve::DataSourceType)index;
-	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
 		uiGeneralTab.lXColumn->show();
@@ -322,7 +322,7 @@ void XYFourierFilterCurveDock::autoRangeChanged() {
 		uiGeneralTab.sbMax->setEnabled(false);
 
 		const AbstractColumn* xDataColumn = nullptr;
-		if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
+		if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
 			xDataColumn = m_filterCurve->xDataColumn();
 		else {
 			if (m_filterCurve->dataSourceCurve())
@@ -424,7 +424,7 @@ void XYFourierFilterCurveDock::unitChanged() {
 	int n = 100;
 	double f = 1.0; // sample frequency
 	const AbstractColumn* xDataColumn = nullptr;
-	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
+	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
 		xDataColumn = m_filterCurve->xDataColumn();
 	else {
 		if (m_filterCurve->dataSourceCurve())
@@ -501,7 +501,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 	int n = 100;
 	double f = 1.0; // sample frequency
 	const AbstractColumn* xDataColumn = nullptr;
-	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
+	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
 		xDataColumn = m_filterCurve->xDataColumn();
 	else {
 		if (m_filterCurve->dataSourceCurve())
@@ -595,7 +595,7 @@ void XYFourierFilterCurveDock::enableRecalculate() const {
 
 	//no filtering possible without the x- and y-data
 	bool hasSourceData = false;
-	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
@@ -662,7 +662,7 @@ void XYFourierFilterCurveDock::curveDescriptionChanged(const AbstractAspect* asp
 
 void XYFourierFilterCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 

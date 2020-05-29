@@ -143,7 +143,7 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	checkColumnAvailability(cbYDataColumn, m_differentiationCurve->yDataColumn(), m_differentiationCurve->yDataColumnPath());
 
 	//data source
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_differentiationCurve->dataSourceType());
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_differentiationCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_differentiationCurve->dataSourceCurve());
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_differentiationCurve->xDataColumn());
@@ -246,7 +246,7 @@ void XYDifferentiationCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 void XYDifferentiationCurveDock::dataSourceTypeChanged(int index) {
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
-	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
 		uiGeneralTab.lXColumn->show();
@@ -413,7 +413,7 @@ void XYDifferentiationCurveDock::autoRangeChanged() {
 
 	if (autoRange) {
 		const AbstractColumn* xDataColumn = nullptr;
-		if (m_differentiationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
+		if (m_differentiationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
 			xDataColumn = m_differentiationCurve->xDataColumn();
 		else {
 			if (m_differentiationCurve->dataSourceCurve())
@@ -522,7 +522,7 @@ void XYDifferentiationCurveDock::enableRecalculate() const {
 
 	//no differentiation possible without the x- and y-data
 	bool hasSourceData = false;
-	if (m_differentiationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (m_differentiationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
@@ -589,7 +589,7 @@ void XYDifferentiationCurveDock::curveDescriptionChanged(const AbstractAspect* a
 
 void XYDifferentiationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 

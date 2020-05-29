@@ -145,7 +145,7 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	checkColumnAvailability(cbYDataColumn, m_dataReductionCurve->yDataColumn(), m_dataReductionCurve->yDataColumnPath());
 
 	//data source
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_dataReductionCurve->dataSourceType());
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_dataReductionCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_dataReductionCurve->dataSourceCurve());
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_dataReductionCurve->xDataColumn());
@@ -257,7 +257,7 @@ void XYDataReductionCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 void XYDataReductionCurveDock::dataSourceTypeChanged(int index) {
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
-	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
 		uiGeneralTab.lXColumn->show();
@@ -337,7 +337,7 @@ void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 void XYDataReductionCurveDock::updateTolerance() {
 	const AbstractColumn* xDataColumn = nullptr;
 	const AbstractColumn* yDataColumn = nullptr;
-	if (m_dataReductionCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (m_dataReductionCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		xDataColumn = m_dataReductionCurve->xDataColumn();
 		yDataColumn = m_dataReductionCurve->yDataColumn();
 	} else {
@@ -407,7 +407,7 @@ void XYDataReductionCurveDock::autoRangeChanged() {
 
 	if (autoRange) {
 		const AbstractColumn* xDataColumn = nullptr;
-		if (m_dataReductionCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
+		if (m_dataReductionCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
 			xDataColumn = m_dataReductionCurve->xDataColumn();
 		else {
 			if (m_dataReductionCurve->dataSourceCurve())
@@ -617,7 +617,7 @@ void XYDataReductionCurveDock::enableRecalculate() const {
 
 	//no dataReductioning possible without the x- and y-data
 	bool hasSourceData = false;
-	if (m_dataReductionCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (m_dataReductionCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
@@ -685,7 +685,7 @@ void XYDataReductionCurveDock::curveDescriptionChanged(const AbstractAspect* asp
 
 void XYDataReductionCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 

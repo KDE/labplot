@@ -38,7 +38,7 @@ class XYAnalysisCurve : public XYCurve {
 	Q_OBJECT
 
 public:
-	enum DataSourceType {DataSourceSpreadsheet, DataSourceCurve};
+	enum class DataSourceType {Spreadsheet, Curve};
 
 	XYAnalysisCurve(const QString&, AspectType type);
 	~XYAnalysisCurve() override;

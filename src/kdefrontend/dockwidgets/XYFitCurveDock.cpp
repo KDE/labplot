@@ -242,7 +242,7 @@ void XYFitCurveDock::initGeneralTab() {
 	checkColumnAvailability(cbXErrorColumn, fitCurve->xErrorColumn(), fitCurve->xErrorColumnPath());
 	checkColumnAvailability(cbYErrorColumn, fitCurve->yErrorColumn(), fitCurve->yErrorColumnPath());
 
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_fitCurve->dataSourceType());
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_fitCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_fitCurve->dataSourceCurve());
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_fitCurve->xDataColumn());
@@ -356,7 +356,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 void XYFitCurveDock::dataSourceTypeChanged(int index) {
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
-	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
 		uiGeneralTab.lXColumn->show();
@@ -705,7 +705,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		uiGeneralTab.sbDegree->setValue(1);
 
 	const AbstractColumn* xColumn = nullptr;
-	if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		DEBUG("	data source: Spreadsheet")
 		//auto* aspect = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		//xColumn = dynamic_cast<AbstractColumn*>(aspect);
@@ -1047,7 +1047,7 @@ void XYFitCurveDock::enableRecalculate() {
 
 	//no fitting possible without the x- and y-data
 	bool hasSourceData = false;
-	if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
@@ -1376,7 +1376,7 @@ void XYFitCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 
 void XYFitCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 

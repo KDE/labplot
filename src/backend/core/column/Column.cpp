@@ -142,7 +142,7 @@ QMenu* Column::createContextMenu() {
 
 		const auto* analysisCurve = dynamic_cast<const XYAnalysisCurve*>(curve);
 		if (analysisCurve) {
-			if (analysisCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet
+			if (analysisCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet
 					&& (analysisCurve->xDataColumn() == this || analysisCurve->yDataColumn() == this || analysisCurve->y2DataColumn() == this) )
 				used = true;
 		} else {

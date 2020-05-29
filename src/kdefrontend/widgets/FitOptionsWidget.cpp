@@ -127,7 +127,7 @@ void FitOptionsWidget::autoRangeChanged() {
 
 	if (autoRange) {
 		const AbstractColumn* xDataColumn = nullptr;
-		if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
+		if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
 			xDataColumn = m_fitCurve->xDataColumn();
 		else {
 			if (m_fitCurve->dataSourceCurve())
@@ -164,7 +164,7 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 
 	if (autoRange) {
 		const AbstractColumn* xDataColumn = nullptr;
-		if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
+		if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
 			xDataColumn = m_fitCurve->xDataColumn();
 		else {
 			if (m_fitCurve->dataSourceCurve())

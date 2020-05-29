@@ -165,7 +165,7 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	checkColumnAvailability(cbYDataColumn, m_interpolationCurve->yDataColumn(), m_interpolationCurve->yDataColumnPath());
 
 	//data source
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_interpolationCurve->dataSourceType());
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_interpolationCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_interpolationCurve->dataSourceCurve());
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_interpolationCurve->xDataColumn());
@@ -279,7 +279,7 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
-	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
 		uiGeneralTab.lXColumn->show();
@@ -447,7 +447,7 @@ void XYInterpolationCurveDock::autoRangeChanged() {
 
 	if (autoRange) {
 		const AbstractColumn* xDataColumn = nullptr;
-		if (m_interpolationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
+		if (m_interpolationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
 			xDataColumn = m_interpolationCurve->xDataColumn();
 		else {
 			if (m_interpolationCurve->dataSourceCurve())
@@ -660,7 +660,7 @@ void XYInterpolationCurveDock::enableRecalculate() const {
 
 	//no interpolation possible without the x- and y-data
 	bool hasSourceData = false;
-	if (m_interpolationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (m_interpolationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
@@ -727,7 +727,7 @@ void XYInterpolationCurveDock::curveDescriptionChanged(const AbstractAspect* asp
 
 void XYInterpolationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 
