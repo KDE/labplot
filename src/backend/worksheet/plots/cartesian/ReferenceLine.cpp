@@ -74,7 +74,7 @@ void ReferenceLine::init() {
 	KConfigGroup group;
 	group = config.group("ReferenceLine");
 
-	d->orientation = (Orientation)group.readEntry("Orientation", (int)Vertical);
+	d->orientation = (Qt::Orientation)group.readEntry("Orientation", static_cast<int>(Qt::Vertical));
 	d->position = group.readEntry("Position", d->plot->xMin() + (d->plot->xMax() - d->plot->xMin())/2);
 
 	d->pen.setStyle( (Qt::PenStyle) group.readEntry("Style", (int)Qt::SolidLine) );
@@ -150,12 +150,11 @@ QMenu* ReferenceLine::createContextMenu() {
 
 	Q_D(const ReferenceLine);
 
-	//Orientation
-	if (d->orientation == Horizontal)
+	//OrientatioQt::n
+	if (d->orientation == Qt::Horizontal)
 		orientationHorizontalAction->setChecked(true);
 	else
 		orientationVerticalAction->setChecked(true);
-
 	menu->insertMenu(firstAction, orientationMenu);
 
 	//Line styles
@@ -185,14 +184,14 @@ void ReferenceLine::handleResize(double horizontalRatio, double verticalRatio, b
 }
 
 /* ============================ getter methods ================= */
-CLASS_SHARED_D_READER_IMPL(ReferenceLine, ReferenceLine::Orientation, orientation, orientation)
+CLASS_SHARED_D_READER_IMPL(ReferenceLine, Qt::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(ReferenceLine, double, position, position)
 CLASS_SHARED_D_READER_IMPL(ReferenceLine, QPen, pen, pen)
 BASIC_SHARED_D_READER_IMPL(ReferenceLine, qreal, opacity, opacity)
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F_S(ReferenceLine, SetOrientation, ReferenceLine::Orientation, orientation, retransform)
-void ReferenceLine::setOrientation(Orientation orientation) {
+STD_SETTER_CMD_IMPL_F_S(ReferenceLine, SetOrientation, Qt::Orientation, orientation, retransform)
+void ReferenceLine::setOrientation(Qt::Orientation orientation) {
 	Q_D(ReferenceLine);
 	if (orientation != d->orientation)
 		exec(new ReferenceLineSetOrientationCmd(d, orientation, ki18n("%1: set orientation")));
@@ -240,9 +239,9 @@ void ReferenceLine::setPrinting(bool on) {
 //##############################################################################
 void ReferenceLine::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
-		this->setOrientation(Horizontal);
+		this->setOrientation(Qt::Horizontal);
 	else
-		this->setOrientation(Vertical);
+		this->setOrientation(Qt::Vertical);
 }
 
 void ReferenceLine::lineStyleChanged(QAction* action) {
@@ -287,7 +286,7 @@ void ReferenceLinePrivate::retransform() {
 
 	//calculate the position in the scene coordinates
 	QVector<QPointF> listLogical;
-	if (orientation == ReferenceLine::Vertical)
+	if (orientation == Qt::Vertical)
 		listLogical << QPointF(position, plot->yMin() + (plot->yMax() - plot->yMin())/2);
 	else
 		listLogical << QPointF(plot->xMin() + (plot->xMax() - plot->xMin())/2, position);
@@ -304,7 +303,7 @@ void ReferenceLinePrivate::retransform() {
 
 		//determine the length of the line to be drawn
 		QVector<QPointF> pointsLogical;
-		if (orientation == ReferenceLine::Vertical)
+		if (orientation == Qt::Vertical)
 			pointsLogical << QPointF(position, plot->yMin()) << QPointF(position, plot->yMax());
 		else
 			pointsLogical << QPointF(plot->xMin(), position) << QPointF(plot->xMax(), position);
@@ -312,7 +311,7 @@ void ReferenceLinePrivate::retransform() {
 		QVector<QPointF> pointsScene = cSystem->mapLogicalToScene(pointsLogical);
 
 		if (pointsScene.size() > 1) {
-			if (orientation == ReferenceLine::Vertical)
+			if (orientation == Qt::Vertical)
 				length = pointsScene.at(0).y() - pointsScene.at(1).y();
 			else
 				length = pointsScene.at(0).x() - pointsScene.at(1).x();
@@ -354,7 +353,7 @@ void ReferenceLinePrivate::recalcShapeAndBoundingRect() {
 	lineShape = QPainterPath();
 	if (m_visible) {
 		QPainterPath path;
-		if (orientation == ReferenceLine::Horizontal) {
+		if (orientation == Qt::Horizontal) {
 			path.moveTo(-length/2, 0);
 			path.lineTo(length/2, 0);
 		} else {
@@ -375,7 +374,7 @@ void ReferenceLinePrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 	painter->setOpacity(opacity);
 	painter->setPen(pen);
-	if (orientation == ReferenceLine::Horizontal)
+	if (orientation == Qt::Horizontal)
 		painter->drawLine(-length/2, 0, length/2, 0);
 	else
 		painter->drawLine(0, length/2, 0, -length/2);
@@ -402,7 +401,7 @@ QVariant ReferenceLinePrivate::itemChange(GraphicsItemChange change, const QVari
 
 	//don't allow to move the line outside of the plot rect
 	//in the direction orthogonal to the orientation of the line
-	if (orientation == ReferenceLine::Horizontal) {
+	if (orientation == Qt::Horizontal) {
 		if (positionSceneNew.x() != positionScene.x())
 			positionSceneNew.setX(positionScene.x());
 	} else {
@@ -416,7 +415,7 @@ QVariant ReferenceLinePrivate::itemChange(GraphicsItemChange change, const QVari
 		//this is done on mouse release events only.
 		const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 		QPointF positionLogical = cSystem->mapSceneToLogical(positionSceneNew);
-		if (orientation == ReferenceLine::Horizontal) {
+		if (orientation == Qt::Horizontal) {
 			emit q->positionChanged(positionLogical.y());
 			emit q->statusInfo(QLatin1String("y=") + QString::number(positionLogical.y()));
 		} else {
@@ -425,7 +424,7 @@ QVariant ReferenceLinePrivate::itemChange(GraphicsItemChange change, const QVari
 		}
 	} else {
 		//line is moved outside of the plot, keep it at the plot boundary
-		if (orientation == ReferenceLine::Horizontal) {
+		if (orientation == Qt::Horizontal) {
 			if (positionSceneNew.y() < plot->dataRect().y())
 				positionSceneNew.setY(plot->dataRect().y());
 			else
@@ -446,7 +445,7 @@ void ReferenceLinePrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	suppressRetransform = true;
 	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 	QPointF positionLogical = cSystem->mapSceneToLogical(pos());
-	if (orientation == ReferenceLine::Horizontal)
+	if (orientation == Qt::Horizontal)
 		q->setPosition(positionLogical.y());
 	else
 		q->setPosition(positionLogical.x());
@@ -524,7 +523,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 			READ_DOUBLE_VALUE("position", position);
-			READ_INT_VALUE("orientation", orientation, ReferenceLine::Orientation);
+			READ_INT_VALUE("orientation", orientation, Qt::Orientation);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())

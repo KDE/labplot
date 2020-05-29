@@ -40,8 +40,6 @@ class ReferenceLine : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	enum Orientation {Horizontal, Vertical};
-
 	explicit ReferenceLine(const CartesianPlot*, const QString&);
 	~ReferenceLine() override;
 
@@ -53,7 +51,7 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 
 	BASIC_D_ACCESSOR_DECL(double, position, Position)
-	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
+	BASIC_D_ACCESSOR_DECL(Qt::Orientation, orientation, Orientation)
 	CLASS_D_ACCESSOR_DECL(QPen, pen, Pen)
 	BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity)
 
@@ -98,7 +96,7 @@ private slots:
 
 signals:
 	friend class ReferenceLineSetPositionCmd;
-	void orientationChanged(ReferenceLine::Orientation);
+	void orientationChanged(Qt::Orientation);
 	void positionChanged(double);
 	void penChanged(const QPen&);
 	void opacityChanged(qreal);

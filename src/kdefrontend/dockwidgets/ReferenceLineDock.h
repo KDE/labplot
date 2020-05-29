@@ -71,7 +71,7 @@ private slots:
 
 	//Position
 	void linePositionChanged(double);
-	void lineOrientationChanged(ReferenceLine::Orientation);
+	void lineOrientationChanged(Qt::Orientation);
 
 	//Line
 	void linePenChanged(const QPen&);

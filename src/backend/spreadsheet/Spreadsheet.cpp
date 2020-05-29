@@ -383,7 +383,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 
 	// the normal QPair comparison does not work properly with descending sorting
 	// therefore we use our own compare functions
-	// TODO: check this. a.first, b.first for QString and DateTime too?
+	// TODO: check this. a < b vs. a.first < b.first
 	class CompareFunctions {
 	public:
 		static bool doubleLess(QPair<double, int> a, QPair<double, int> b) {

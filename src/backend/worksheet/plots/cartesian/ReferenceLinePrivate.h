@@ -54,7 +54,7 @@ public:
 	QRectF boundingRectangle;
 	QPainterPath lineShape;
 
-	ReferenceLine::Orientation orientation{ReferenceLine::Horizontal};
+	Qt::Orientation orientation{Qt::Horizontal};
 	double position{0.0}; //position in plot coordinates
 	double length{0.0}; //length of the line in graphic item's coordinates
 	QPen pen;

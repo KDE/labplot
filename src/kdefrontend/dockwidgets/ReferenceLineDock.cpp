@@ -112,8 +112,8 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 //**********************************************************
 //Position
 void ReferenceLineDock::orientationChanged(int index) {
-	ReferenceLine::Orientation orientation = (ReferenceLine::Orientation)index;
-	if (orientation == ReferenceLine::Horizontal)
+	auto orientation = (Qt::Orientation)index;
+	if (orientation == Qt::Horizontal)
 		ui.lPosition->setText(QLatin1String("y:"));
 	else
 		ui.lPosition->setText(QLatin1String("x:"));
@@ -215,9 +215,9 @@ void ReferenceLineDock::linePositionChanged(double position) {
 	m_initializing = false;
 }
 
-void ReferenceLineDock::lineOrientationChanged(ReferenceLine::Orientation orientation) {
+void ReferenceLineDock::lineOrientationChanged(Qt::Orientation orientation) {
 	m_initializing = true;
-	ui.cbOrientation->setCurrentIndex((int)orientation);
+	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
 	m_initializing = false;
 }
 
