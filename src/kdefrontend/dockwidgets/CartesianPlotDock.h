@@ -147,14 +147,14 @@ private slots:
 	void plotXMinChanged(double);
 	void plotXMaxChanged(double);
 	void plotXRangeFormatChanged(CartesianPlot::RangeFormat);
-	void plotXScaleChanged(int);
+	void plotXScaleChanged(CartesianPlot::Scale);
 
 
 	void plotYAutoScaleChanged(bool);
 	void plotYMinChanged(double);
 	void plotYMaxChanged(double);
 	void plotYRangeFormatChanged(CartesianPlot::RangeFormat);
-	void plotYScaleChanged(int);
+	void plotYScaleChanged(CartesianPlot::Scale);
 
 	void plotVisibleChanged(bool);
 

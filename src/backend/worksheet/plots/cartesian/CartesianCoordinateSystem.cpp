@@ -188,9 +188,9 @@ CartesianScale *CartesianScale::createLogScale(const Interval<double> &interval,
 		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd, CartesianPlot::Scale type) {
 
 	double base;
-	if (type == CartesianPlot::ScaleLog10 || type == CartesianPlot::ScaleLog10Abs)
+	if (type == CartesianPlot::Scale::Log10 || type == CartesianPlot::Scale::Log10Abs)
 		base = 10.0;
-	else if (type == CartesianPlot::ScaleLog2 || type == CartesianPlot::ScaleLog2Abs)
+	else if (type == CartesianPlot::Scale::Log2 || type == CartesianPlot::Scale::Log2Abs)
 		base = 2.0;
 	else
 		base = M_E;
@@ -208,7 +208,7 @@ CartesianScale *CartesianScale::createLogScale(const Interval<double> &interval,
 	double b = (sceneEnd - sceneStart) / lDiff;
 	double a = sceneStart - b * log(logicalStart)/log(base);
 
-	bool abs = (type == CartesianPlot::ScaleLog10Abs || type == CartesianPlot::ScaleLog2Abs || type == CartesianPlot::ScaleLnAbs);
+	bool abs = (type == CartesianPlot::Scale::Log10Abs || type == CartesianPlot::Scale::Log2Abs || type == CartesianPlot::Scale::LnAbs);
 	return new LogScale(interval, a, b, base, abs);
 }
 

@@ -1062,16 +1062,16 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			//scales
 			switch (originXAxis.scale) {
 			case Origin::GraphAxis::Linear:
-				plot->setXScale(CartesianPlot::ScaleLinear);
+				plot->setXScale(CartesianPlot::Scale::Linear);
 				break;
 			case Origin::GraphAxis::Log10:
-				plot->setXScale(CartesianPlot::ScaleLog10);
+				plot->setXScale(CartesianPlot::Scale::Log10);
 				break;
 			case Origin::GraphAxis::Ln:
-				plot->setXScale(CartesianPlot::ScaleLn);
+				plot->setXScale(CartesianPlot::Scale::Ln);
 				break;
 			case Origin::GraphAxis::Log2:
-				plot->setXScale(CartesianPlot::ScaleLog2);
+				plot->setXScale(CartesianPlot::Scale::Log2);
 				break;
 			case Origin::GraphAxis::Probability:
 			case Origin::GraphAxis::Probit:
@@ -1079,22 +1079,22 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			case Origin::GraphAxis::OffsetReciprocal:
 			case Origin::GraphAxis::Logit:
 				//TODO:
-				plot->setXScale(CartesianPlot::ScaleLinear);
+				plot->setXScale(CartesianPlot::Scale::Linear);
 				break;
 			}
 
 			switch (originYAxis.scale) {
 			case Origin::GraphAxis::Linear:
-				plot->setYScale(CartesianPlot::ScaleLinear);
+				plot->setYScale(CartesianPlot::Scale::Linear);
 				break;
 			case Origin::GraphAxis::Log10:
-				plot->setYScale(CartesianPlot::ScaleLog10);
+				plot->setYScale(CartesianPlot::Scale::Log10);
 				break;
 			case Origin::GraphAxis::Ln:
-				plot->setYScale(CartesianPlot::ScaleLn);
+				plot->setYScale(CartesianPlot::Scale::Ln);
 				break;
 			case Origin::GraphAxis::Log2:
-				plot->setYScale(CartesianPlot::ScaleLog2);
+				plot->setYScale(CartesianPlot::Scale::Log2);
 				break;
 			case Origin::GraphAxis::Probability:
 			case Origin::GraphAxis::Probit:
@@ -1102,7 +1102,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			case Origin::GraphAxis::OffsetReciprocal:
 			case Origin::GraphAxis::Logit:
 				//TODO:
-				plot->setYScale(CartesianPlot::ScaleLinear);
+				plot->setYScale(CartesianPlot::Scale::Linear);
 				break;
 			}
 

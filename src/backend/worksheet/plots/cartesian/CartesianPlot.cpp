@@ -130,8 +130,8 @@ void CartesianPlot::init() {
 	d->rangeLastValues = 1000;
 	d->autoScaleX = true;
 	d->autoScaleY = true;
-	d->xScale = ScaleLinear;
-	d->yScale = ScaleLinear;
+	d->xScale = Scale::Linear;
+	d->yScale = Scale::Linear;
 	d->xRangeBreakingEnabled = false;
 	d->yRangeBreakingEnabled = false;
 
@@ -2378,39 +2378,39 @@ void CartesianPlot::zoom(bool x, bool in) {
 		factor = 1/factor;
 
 	switch (scale) {
-	case ScaleLinear: {
+	case Scale::Linear: {
 		double oldRange = max - min;
 		double newRange = (max - min) * factor;
 		max = max + (newRange - oldRange) / 2;
 		min = min - (newRange - oldRange) / 2;
 		break;
 	}
-	case ScaleLog10:
-	case ScaleLog10Abs: {
+	case Scale::Log10:
+	case Scale::Log10Abs: {
 		double oldRange = log10(max) - log10(min);
 		double newRange = (log10(max) - log10(min)) * factor;
 		max = max * pow(10, (newRange - oldRange) / 2.);
 		min = min / pow(10, (newRange - oldRange) / 2.);
 		break;
 	}
-	case ScaleLog2:
-	case ScaleLog2Abs: {
+	case Scale::Log2:
+	case Scale::Log2Abs: {
 		double oldRange = log2(max) - log2(min);
 		double newRange = (log2(max) - log2(min)) * factor;
 		max = max * pow(2, (newRange - oldRange) / 2.);
 		min = min / pow(2, (newRange - oldRange) / 2.);
 		break;
 	}
-	case ScaleLn:
-	case ScaleLnAbs: {
+	case Scale::Ln:
+	case Scale::LnAbs: {
 		double oldRange = log(max) - log(min);
 		double newRange = (log(max) - log(min)) * factor;
 		max = max * exp((newRange - oldRange) / 2.);
 		min = min / exp((newRange - oldRange) / 2.);
 		break;
 	}
-	case ScaleSqrt:
-	case ScaleX2:
+	case Scale::Sqrt:
+	case Scale::X2:
 		break;
 	}
 
@@ -2454,35 +2454,35 @@ void CartesianPlot::shift(bool x, bool leftOrDown) {
 		factor *= -1.;
 
 	switch (scale) {
-	case ScaleLinear: {
+	case Scale::Linear: {
 		offset = (max - min) * factor;
 		min += offset;
 		max += offset;
 		break;
 	}
-	case ScaleLog10:
-	case ScaleLog10Abs: {
+	case Scale::Log10:
+	case Scale::Log10Abs: {
 		offset = (log10(max) - log10(min)) * factor;
 		min *= pow(10, offset);
 		max *= pow(10, offset);
 		break;
 	}
-	case ScaleLog2:
-	case ScaleLog2Abs: {
+	case Scale::Log2:
+	case Scale::Log2Abs: {
 		offset = (log2(max) - log2(min)) * factor;
 		min *= pow(2, offset);
 		max *= pow(2, offset);
 		break;
 	}
-	case ScaleLn:
-	case ScaleLnAbs: {
+	case Scale::Ln:
+	case Scale::LnAbs: {
 		offset = (log10(max) - log10(min)) * factor;
 		min *= exp(offset);
 		max *= exp(offset);
 		break;
 	}
-	case ScaleSqrt:
-	case ScaleX2:
+	case Scale::Sqrt:
+	case Scale::X2:
 		break;
 	}
 
@@ -2651,7 +2651,7 @@ void CartesianPlotPrivate::retransformScales() {
 	QVector<CartesianScale*> scales;
 
 	//check ranges for log-scales
-	if (xScale != CartesianPlot::ScaleLinear)
+	if (xScale != CartesianPlot::Scale::Linear)
 		checkXRange();
 
 	//check whether we have x-range breaks - the first break, if available, should be valid
@@ -2708,7 +2708,7 @@ void CartesianPlotPrivate::retransformScales() {
 	cSystem->setXScales(scales);
 
 	//check ranges for log-scales
-	if (yScale != CartesianPlot::ScaleLinear)
+	if (yScale != CartesianPlot::Scale::Linear)
 		checkYRange();
 
 	//check whether we have y-range breaks - the first break, if available, should be valid
@@ -2932,7 +2932,7 @@ CartesianScale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, dou
 // 	Interval<double> interval (logicalStart-0.01, logicalEnd+0.01); //TODO: move this to CartesianScale
 	Interval<double> interval (std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
 // 	Interval<double> interval (logicalStart, logicalEnd);
-	if (type == CartesianPlot::ScaleLinear)
+	if (type == CartesianPlot::Scale::Linear)
 		return CartesianScale::createLinearScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	else
 		return CartesianScale::createLogScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd, type);
@@ -3078,69 +3078,69 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 			//handle the change in x
 			switch (xScale) {
-			case CartesianPlot::ScaleLinear: {
+			case CartesianPlot::Scale::Linear: {
 				const float deltaX = (logicalStart.x() - logicalEnd.x());
 				xMax += deltaX;
 				xMin += deltaX;
 				break;
 			}
-			case CartesianPlot::ScaleLog10:
-			case CartesianPlot::ScaleLog10Abs: {
+			case CartesianPlot::Scale::Log10:
+			case CartesianPlot::Scale::Log10Abs: {
 				const float deltaX = log10(logicalStart.x()) - log10(logicalEnd.x());
 				xMin *= pow(10, deltaX);
 				xMax *= pow(10, deltaX);
 				break;
 			}
-			case CartesianPlot::ScaleLog2:
-			case CartesianPlot::ScaleLog2Abs: {
+			case CartesianPlot::Scale::Log2:
+			case CartesianPlot::Scale::Log2Abs: {
 				const float deltaX = log2(logicalStart.x()) - log2(logicalEnd.x());
 				xMin *= pow(2, deltaX);
 				xMax *= pow(2, deltaX);
 				break;
 			}
-			case CartesianPlot::ScaleLn:
-			case CartesianPlot::ScaleLnAbs: {
+			case CartesianPlot::Scale::Ln:
+			case CartesianPlot::Scale::LnAbs: {
 				const float deltaX = log(logicalStart.x()) - log(logicalEnd.x());
 				xMin *= exp(deltaX);
 				xMax *= exp(deltaX);
 				break;
 			}
-			case CartesianPlot::ScaleSqrt:
-			case CartesianPlot::ScaleX2:
+			case CartesianPlot::Scale::Sqrt:
+			case CartesianPlot::Scale::X2:
 				break;
 			}
 
 			//handle the change in y
 			switch (yScale) {
-			case CartesianPlot::ScaleLinear: {
+			case CartesianPlot::Scale::Linear: {
 				const float deltaY = (logicalStart.y() - logicalEnd.y());
 				yMax += deltaY;
 				yMin += deltaY;
 				break;
 			}
-			case CartesianPlot::ScaleLog10:
-			case CartesianPlot::ScaleLog10Abs: {
+			case CartesianPlot::Scale::Log10:
+			case CartesianPlot::Scale::Log10Abs: {
 				const float deltaY = log10(logicalStart.y()) - log10(logicalEnd.y());
 				yMin *= pow(10, deltaY);
 				yMax *= pow(10, deltaY);
 				break;
 			}
-			case CartesianPlot::ScaleLog2:
-			case CartesianPlot::ScaleLog2Abs: {
+			case CartesianPlot::Scale::Log2:
+			case CartesianPlot::Scale::Log2Abs: {
 				const float deltaY = log2(logicalStart.y()) - log2(logicalEnd.y());
 				yMin *= pow(2, deltaY);
 				yMax *= pow(2, deltaY);
 				break;
 			}
-			case CartesianPlot::ScaleLn:
-			case CartesianPlot::ScaleLnAbs: {
+			case CartesianPlot::Scale::Ln:
+			case CartesianPlot::Scale::LnAbs: {
 				const float deltaY = log(logicalStart.y()) - log(logicalEnd.y());
 				yMin *= exp(deltaY);
 				yMax *= exp(deltaY);
 				break;
 			}
-			case CartesianPlot::ScaleSqrt:
-			case CartesianPlot::ScaleX2:
+			case CartesianPlot::Scale::Sqrt:
+			case CartesianPlot::Scale::X2:
 				break;
 			}
 
@@ -3615,8 +3615,8 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "xMax", QString::number(d->xMax, 'g', 16) );
 	writer->writeAttribute( "yMin", QString::number(d->yMin, 'g', 16) );
 	writer->writeAttribute( "yMax", QString::number(d->yMax, 'g', 16) );
-	writer->writeAttribute( "xScale", QString::number(d->xScale) );
-	writer->writeAttribute( "yScale", QString::number(d->yScale) );
+	writer->writeAttribute( "xScale", QString::number(static_cast<int>(d->xScale)) );
+	writer->writeAttribute( "yScale", QString::number(static_cast<int>(d->yScale)) );
 	writer->writeAttribute( "xRangeFormat", QString::number(d->xRangeFormat) );
 	writer->writeAttribute( "yRangeFormat", QString::number(d->yRangeFormat) );
 	writer->writeAttribute( "horizontalPadding", QString::number(d->horizontalPadding) );

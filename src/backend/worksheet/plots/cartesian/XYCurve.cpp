@@ -1167,7 +1167,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
  */
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff, int pixelCount) {
 
-	if (plot->xScale() == CartesianPlot::Scale::ScaleLinear) { // implemented for completeness only
+	if (plot->xScale() == CartesianPlot::Scale::Linear) { // implemented for completeness only
 		double minLogicalDiffX = 1./((plot->xMax() - plot->xMin())/pixelCount);
 		addLine(p0, p1, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
 	} else {

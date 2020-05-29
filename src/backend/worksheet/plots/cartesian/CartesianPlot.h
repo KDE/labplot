@@ -62,7 +62,7 @@ public:
 	explicit CartesianPlot(const QString &name);
 	~CartesianPlot() override;
 
-	enum Scale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleLog10Abs, ScaleLog2Abs, ScaleLnAbs, ScaleSqrt, ScaleX2};
+	enum class Scale {Linear, Log10, Log2, Ln, Log10Abs, Log2Abs, LnAbs, Sqrt, X2};
 	enum Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
 	enum RangeFormat {Numeric, DateTime};
 	enum RangeType {RangeFree, RangeLast, RangeFirst};
@@ -308,11 +308,11 @@ signals:
 	void xAutoScaleChanged(bool);
 	void xMinChanged(double);
 	void xMaxChanged(double);
-	void xScaleChanged(int);
+	void xScaleChanged(CartesianPlot::Scale);
 	void yAutoScaleChanged(bool);
 	void yMinChanged(double);
 	void yMaxChanged(double);
-	void yScaleChanged(int);
+	void yScaleChanged(CartesianPlot::Scale);
 	void xRangeBreakingEnabledChanged(bool);
 	void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 	void yRangeBreakingEnabledChanged(bool);

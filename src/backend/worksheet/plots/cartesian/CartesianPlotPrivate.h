@@ -69,7 +69,7 @@ public:
 	float xMinPrev{0.0}, xMaxPrev{1.0}, yMinPrev{0.0}, yMaxPrev{1.0};
 	bool autoScaleX{true}, autoScaleY{true};
 	float autoScaleOffsetFactor{0.0f};
-	CartesianPlot::Scale xScale{CartesianPlot::ScaleLinear}, yScale{CartesianPlot::ScaleLinear};
+	CartesianPlot::Scale xScale{CartesianPlot::Scale::Linear}, yScale{CartesianPlot::Scale::Linear};
 	bool xRangeBreakingEnabled{false};
 	bool yRangeBreakingEnabled{false};
 	CartesianPlot::RangeBreaks xRangeBreaks;
