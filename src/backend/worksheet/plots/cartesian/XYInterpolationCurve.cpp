@@ -444,7 +444,7 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "continuity", QString::number(d->interpolationData.continuity) );
 	writer->writeAttribute( "bias", QString::number(d->interpolationData.bias) );
 	writer->writeAttribute( "npoints", QString::number(d->interpolationData.npoints) );
-	writer->writeAttribute( "pointsMode", QString::number(d->interpolationData.pointsMode) );
+	writer->writeAttribute( "pointsMode", QString::number(static_cast<int>(d->interpolationData.pointsMode)) );
 	writer->writeAttribute( "evaluate", QString::number(d->interpolationData.evaluate) );
 	writer->writeEndElement();// interpolationData
 

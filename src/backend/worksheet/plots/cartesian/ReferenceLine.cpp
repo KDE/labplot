@@ -150,7 +150,7 @@ QMenu* ReferenceLine::createContextMenu() {
 
 	Q_D(const ReferenceLine);
 
-	//OrientatioQt::n
+	//Orientation
 	if (d->orientation == Qt::Horizontal)
 		orientationHorizontalAction->setChecked(true);
 	else
