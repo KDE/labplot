@@ -263,7 +263,7 @@ void CartesianPlotLegendDock::updateUnits() {
 	if (m_units == BaseDock::MetricUnits) {
 		//convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
-		suffix = QLatin1String("cm");
+		suffix = QLatin1String(" cm");
 		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value()*2.54);
 		ui.sbPositionX->setValue(ui.sbPositionX->value()*2.54);
 		ui.sbPositionY->setValue(ui.sbPositionY->value()*2.54);
@@ -277,7 +277,7 @@ void CartesianPlotLegendDock::updateUnits() {
 	} else {
 		//convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
-		suffix = QLatin1String("in");
+		suffix = QLatin1String(" in");
 		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value()/2.54);
 		ui.sbPositionX->setValue(ui.sbPositionX->value()/2.54);
 		ui.sbPositionY->setValue(ui.sbPositionY->value()/2.54);
@@ -345,9 +345,9 @@ void CartesianPlotLegendDock::retranslateUi() {
 
 	QString suffix;
 	if (m_units == BaseDock::MetricUnits)
-		suffix = QLatin1String("cm");
+		suffix = QLatin1String(" cm");
 	else
-		suffix = QLatin1String("in");
+		suffix = QLatin1String(" in");
 
 	ui.sbLineSymbolWidth->setSuffix(suffix);
 	ui.sbPositionX->setSuffix(suffix);

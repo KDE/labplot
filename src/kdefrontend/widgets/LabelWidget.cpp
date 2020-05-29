@@ -108,9 +108,9 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 
 	QString suffix;
 	if (m_units == BaseDock::MetricUnits)
-		suffix = QLatin1String("cm");
+		suffix = QLatin1String(" cm");
 	else
-		suffix = QLatin1String("in");
+		suffix = QLatin1String(" in");
 
 	ui.sbPositionX->setSuffix(suffix);
 	ui.sbPositionY->setSuffix(suffix);
@@ -381,13 +381,13 @@ void LabelWidget::updateUnits() {
 	if (m_units == BaseDock::MetricUnits) {
 		//convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
-		suffix = QLatin1String("cm");
+		suffix = QLatin1String(" cm");
 		ui.sbPositionX->setValue(ui.sbPositionX->value()*2.54);
 		ui.sbPositionY->setValue(ui.sbPositionX->value()*2.54);
 	} else {
 		//convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
-		suffix = QLatin1String("in");
+		suffix = QLatin1String(" in");
 		ui.sbPositionX->setValue(ui.sbPositionX->value()/2.54);
 		ui.sbPositionY->setValue(ui.sbPositionY->value()/2.54);
 	}

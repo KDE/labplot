@@ -197,7 +197,7 @@
    <item row="4" column="0" colspan="3">
     <widget class="QLabel" name="lFontColor">
      <property name="text">
-      <string>Foreground color:</string>
+      <string>Font color:</string>
      </property>
     </widget>
    </item>

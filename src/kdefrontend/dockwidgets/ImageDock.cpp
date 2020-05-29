@@ -83,9 +83,9 @@ ImageDock::ImageDock(QWidget* parent) : BaseDock(parent) {
 
 	QString suffix;
 	if (m_units == BaseDock::MetricUnits)
-		suffix = QLatin1String("cm");
+		suffix = QLatin1String(" cm");
 	else
-		suffix = QLatin1String("in");
+		suffix = QLatin1String(" in");
 
 	ui.sbWidth->setSuffix(suffix);
 	ui.sbHeight->setSuffix(suffix);
@@ -196,7 +196,7 @@ void ImageDock::updateUnits() {
 	if (m_units == BaseDock::MetricUnits) {
 		//convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
-		suffix = QLatin1String("cm");
+		suffix = QLatin1String(" cm");
 		ui.sbWidth->setValue(ui.sbWidth->value()*2.54);
 		ui.sbHeight->setValue(ui.sbHeight->value()*2.54);
 		ui.sbPositionX->setValue(ui.sbPositionX->value()*2.54);
@@ -204,7 +204,7 @@ void ImageDock::updateUnits() {
 	} else {
 		//convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
-		suffix = QLatin1String("in");
+		suffix = QLatin1String(" in");
 		ui.sbWidth->setValue(ui.sbWidth->value()/2.54);
 		ui.sbHeight->setValue(ui.sbHeight->value()/2.54);
 		ui.sbPositionX->setValue(ui.sbPositionX->value()/2.54);

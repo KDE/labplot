@@ -303,18 +303,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 		ui.leComment->setText(QString());
 	}
 
-	bool symmetric = m_plot->symmetricPadding();
-	ui.lPaddingHorizontalRight->setVisible(!symmetric);
-	ui.sbPaddingRight->setVisible(!symmetric);
-	ui.lPaddingVerticalDown->setVisible(!symmetric);
-	ui.sbPaddingBottom->setVisible(!symmetric);
-	if (symmetric) {
-		ui.lPaddingHorizontal->setText(i18n("Horizontal"));
-		ui.lPaddingVertical->setText(i18n("Vertical"));
-	} else {
-		ui.lPaddingHorizontal->setText(i18n("Left"));
-		ui.lPaddingVertical->setText(i18n("Top"));
-	}
+	symmetricPaddingChanged(m_plot->symmetricPadding());
 
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
@@ -400,7 +389,7 @@ void CartesianPlotDock::updateUnits() {
 	if (m_units == BaseDock::MetricUnits) {
 		//convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
-		suffix = QLatin1String("cm");
+		suffix = QLatin1String(" cm");
 		ui.sbLeft->setValue(ui.sbLeft->value()*2.54);
 		ui.sbTop->setValue(ui.sbTop->value()*2.54);
 		ui.sbWidth->setValue(ui.sbWidth->value()*2.54);
@@ -413,7 +402,7 @@ void CartesianPlotDock::updateUnits() {
 	} else {
 		//convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
-		suffix = QLatin1String("in");
+		suffix = QLatin1String(" in");
 		ui.sbLeft->setValue(ui.sbLeft->value()/2.54);
 		ui.sbTop->setValue(ui.sbTop->value()/2.54);
 		ui.sbWidth->setValue(ui.sbWidth->value()/2.54);
@@ -444,10 +433,10 @@ void CartesianPlotDock::retranslateUi() {
 	Lock lock(m_initializing);
 
 	//general
-	ui.cbXRangeFormat->addItem(i18n("numeric"));
-	ui.cbXRangeFormat->addItem(i18n("datetime"));
-	ui.cbYRangeFormat->addItem(i18n("numeric"));
-	ui.cbYRangeFormat->addItem(i18n("datetime"));
+	ui.cbXRangeFormat->addItem(i18n("Numeric"));
+	ui.cbXRangeFormat->addItem(i18n("Date and Time"));
+	ui.cbYRangeFormat->addItem(i18n("Numeric"));
+	ui.cbYRangeFormat->addItem(i18n("Date and Time"));
 
 	ui.cbXScaling->addItem( i18n("linear") );
 	ui.cbXScaling->addItem( i18n("log(x)") );
@@ -498,9 +487,9 @@ void CartesianPlotDock::retranslateUi() {
 
 	QString suffix;
 	if (m_units == BaseDock::MetricUnits)
-		suffix = QLatin1String("cm");
+		suffix = QLatin1String(" cm");
 	else
-		suffix = QLatin1String("in");
+		suffix = QLatin1String(" in");
 
 	ui.sbLeft->setSuffix(suffix);
 	ui.sbTop->setSuffix(suffix);
@@ -1244,9 +1233,6 @@ void CartesianPlotDock::borderOpacityChanged(int value) {
 }
 
 void CartesianPlotDock::symmetricPaddingChanged(bool checked) {
-	if (m_initializing)
-		return;
-
 	ui.lPaddingHorizontalRight->setVisible(!checked);
 	ui.sbPaddingRight->setVisible(!checked);
 	ui.lPaddingVerticalDown->setVisible(!checked);
@@ -1259,6 +1245,9 @@ void CartesianPlotDock::symmetricPaddingChanged(bool checked) {
 		ui.lPaddingHorizontal->setText(i18n("Left:"));
 		ui.lPaddingVertical->setText(i18n("Top:"));
 	}
+
+	if (m_initializing)
+		return;
 
 	for (auto* plot : m_plotList)
 		plot->setSymmetricPadding(checked);

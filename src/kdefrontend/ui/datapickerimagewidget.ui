@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>813</width>
+    <width>656</width>
     <height>1181</height>
    </rect>
   </property>
@@ -522,7 +522,7 @@
           </sizepolicy>
          </property>
          <property name="suffix">
-          <string>px</string>
+          <string> px</string>
          </property>
         </widget>
        </item>
@@ -558,7 +558,7 @@
           </sizepolicy>
          </property>
          <property name="suffix">
-          <string>px</string>
+          <string> px</string>
          </property>
          <property name="prefix">
           <string/>

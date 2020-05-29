@@ -1123,7 +1123,7 @@
        <item row="14" column="2">
         <widget class="QDoubleSpinBox" name="sbBorderCornerRadius">
          <property name="suffix">
-          <string>cm</string>
+          <string> cm</string>
          </property>
          <property name="singleStep">
           <double>0.500000000000000</double>
@@ -1327,7 +1327,7 @@
        <item row="3" column="2">
         <widget class="QSpinBox" name="sbCursorLineWidth">
          <property name="suffix">
-          <string>pt</string>
+          <string> pt</string>
          </property>
          <property name="prefix">
           <string/>

@@ -224,7 +224,7 @@ void WorksheetView::initActions() {
 	gridLayoutAction = new QAction(QIcon::fromTheme("labplot-editgrid"), i18n("Grid Layout"), layoutActionGroup);
 	gridLayoutAction->setCheckable(true);
 
-	breakLayoutAction = new QAction(QIcon::fromTheme("labplot-editbreaklayout"), i18n("Break Layout"), layoutActionGroup);
+	breakLayoutAction = new QAction(QIcon::fromTheme("labplot-editbreaklayout"), i18n("No Layout"), layoutActionGroup);
 	breakLayoutAction->setEnabled(false);
 
 	//Grid actions
