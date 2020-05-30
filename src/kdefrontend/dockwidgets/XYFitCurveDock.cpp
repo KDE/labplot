@@ -1325,7 +1325,6 @@ void XYFitCurveDock::showFitResult() {
 	}
 
 	// Goodness of fit
-	uiGeneralTab.twGoodness->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	uiGeneralTab.twGoodness->item(0, 2)->setText(QString::number(fitResult.sse));
 
 	if (fitResult.dof != 0) {
