@@ -1168,7 +1168,7 @@ void XYFitCurveDock::resultCopyAll() {
 		else
 			str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + '\n';
 		str += i18n("degrees of freedom:") + ' ' + QString::number(fitResult.dof) + '\n';
-		str += i18n("number of parameters:") + ' ' + QString::number(fitResult.paramValues.size()) + '\n';
+		str += i18n("parameters:") + ' ' + QString::number(fitResult.paramValues.size()) + '\n';
 		str += i18n("fit range:") + ' ' + QString::number(m_fitData.fitRange.first()) + " .. " + QString::number(m_fitData.fitRange.last()) + '\n';
 
 		str += i18n("Iterations:") + '\n';

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>847</width>
-    <height>1618</height>
+    <width>446</width>
+    <height>1260</height>
    </rect>
   </property>
   <property name="autoFillBackground">
@@ -142,7 +142,7 @@
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
+      <enum>QSizePolicy::Preferred</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -276,11 +276,11 @@
          <attribute name="horizontalHeaderCascadingSectionResizes">
           <bool>false</bool>
          </attribute>
-         <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>75</number>
-         </attribute>
          <attribute name="horizontalHeaderMinimumSectionSize">
           <number>15</number>
+         </attribute>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>75</number>
          </attribute>
          <attribute name="horizontalHeaderStretchLastSection">
           <bool>false</bool>
@@ -321,11 +321,11 @@
          <attribute name="horizontalHeaderCascadingSectionResizes">
           <bool>true</bool>
          </attribute>
-         <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>200</number>
-         </attribute>
          <attribute name="horizontalHeaderMinimumSectionSize">
           <number>50</number>
+         </attribute>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>200</number>
          </attribute>
          <attribute name="horizontalHeaderStretchLastSection">
           <bool>true</bool>
@@ -602,7 +602,7 @@
          </item>
          <item row="4" column="0">
           <property name="text">
-           <string>Degrees of freedom</string>
+           <string>Degrees of Freedom</string>
           </property>
          </item>
          <item row="4" column="1">
@@ -612,7 +612,7 @@
          </item>
          <item row="5" column="0">
           <property name="text">
-           <string>Number of parameter</string>
+           <string>Parameters</string>
           </property>
          </item>
          <item row="5" column="1">
@@ -704,8 +704,7 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -805,8 +804,7 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -879,8 +877,7 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -924,8 +921,7 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -982,8 +978,7 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -1047,8 +1042,7 @@
      </property>
      <property name="icon">
       <iconset theme="configure">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
     </widget>
    </item>
@@ -1056,6 +1050,9 @@
     <spacer name="verticalSpacer_7">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Minimum</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -1102,7 +1099,16 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <property name="spacing">
@@ -1110,6 +1116,12 @@
       </property>
       <item row="2" column="0" colspan="2">
        <widget class="QLabel" name="lFuncPic">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
          <string/>
         </property>
