@@ -1,6 +1,5 @@
 -----2.8 -----
-	* [macOS] added support for touchbar
-	* Improved datetime data support
+	* Improved DateTime data support
 	* Show the size of the members in the JSON file in the import file dialog
 	* [worksheet] In the Export Worksheet Dialog allow to export to the clipboard
 	* [worksheet] Allow to move plots, text labels and legend with arrow keys
@@ -11,10 +10,12 @@
 	* [spreadsheet] show infinite values as such and not as NaN
 	* [spreadsheet] support big integer (64 bit) as data type
 	* [spreadsheet] column normalization methods "divide by max", "divide by min", etc.
+	* [spreadsheet] Tukey's ladder of powers
 	* [spreadsheet] added the size of the data set, its mode, 1st and 3rd quartiles and IQR to the column statistics
 	* [analysis] calculate and expose the rough values as the result of a smooth (data = smooth + rough)
 	* Allow to open Cantor and Jupyter projects
 	* [Windows] improved craft blueprint and installer package
+	* [macOS] added support for touchbar
 
 Bug fixes:
     BUG: 421193 - import float(4) data from hdf5
@@ -23,7 +24,7 @@ Bug fixes:
     BUG: 415214 - Better algorithm to draw the error bar caps
     BUG: 413397 - Properly handle removal of columns in the spreadsheet model
     BUG: 413401 - In plot data dialog, don't add new worksheets as children to workbooks, use the proper parent aspect
-    * Fix Cantor support and unicode characters on Windows
+    * Fix Cantor support and Unicode characters on Windows
     * Fix evaluating fit residuals
 
 -----2.7 (24.10.2019)-----
@@ -37,7 +38,6 @@ New features:
 		* In "Functions Values" dialog don't allow to select columns to be calculated as variable columns (avoid circular dependencies)
 		* In "Used in" context menu of a column show all other calculated columns where this column is used as a variable
 	* [spreadsheet] when pasting data into empty columns, automatically convert their type to the type of the data to be pasted
-	* BUG 406805 - support für directory structures in ROOT files
 	* Automatically update curves if a data column deleted before was re-added again (during the import or manually)
 	* When auto-scaling in the plot take also the error bars into account, if available
 	* For live data sources allow to save the relative path to the data source
@@ -55,11 +55,12 @@ Performance:
 	* Increased the plotting speed for curves with many data points by removing points which are shown on the same pixel in the scene
 
 Bug fixes:
-	* Disable autoscale when zooming, otherwise wrong (= auto scaled) data region is shown after project save&open
+	* Disable auto-scale when zooming, otherwise wrong (= auto scaled) data region is shown after project save&open
 	* [macOS] fix determining number of lines of data files
 	* Bug 408530 - correctly show error bars for data source columns having NANs
 	* Bug 407847 - fixed the broken project import
 	* Bug 411122 - fixed missing option for the resolution of PNG files in the export dialog
+	* BUG 406805 - support for directory structures in ROOT files
 	* [data fitting] handle weighted fitting with zero errors correctly
 	* [data fitting] allow weighted fitting with data source from curve
 	* [data fitting] fix function for calculating bounded values

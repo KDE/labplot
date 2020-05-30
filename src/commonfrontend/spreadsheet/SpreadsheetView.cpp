@@ -84,6 +84,8 @@
 
 #include <algorithm> //for std::reverse
 
+#include <gsl/gsl_math.h>
+
 #ifdef Q_OS_MAC
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
@@ -93,6 +95,9 @@ enum NormalizationMethod {DivideBySum, DivideByMin, DivideByMax, DivideByCount,
 						DivideBySD, DivideByMAD, DivideByIQR,
 						ZScoreSD, ZScoreMAD, ZScoreIQR,
 						Rescale};
+
+enum TukeyLadderPower {InverseSquared, Inverse, InverseSquareRoot, Log, SquareRoot, Squared};
+
 /*!
 	\class SpreadsheetView
 	\brief View class for Spreadsheet
@@ -247,13 +252,13 @@ void SpreadsheetView::initActions() {
 	action_set_as_none = new QAction(i18n("None"), this);
 	action_set_as_none->setData(static_cast<int>(AbstractColumn::PlotDesignation::NoDesignation));
 
-	action_set_as_x = new QAction("X", this);
+	action_set_as_x = new QAction(QLatin1String("X"), this);
 	action_set_as_x->setData(static_cast<int>(AbstractColumn::PlotDesignation::X));
 
-	action_set_as_y = new QAction("Y", this);
+	action_set_as_y = new QAction(QLatin1String("Y"), this);
 	action_set_as_y->setData(static_cast<int>(AbstractColumn::PlotDesignation::Y));
 
-	action_set_as_z = new QAction("Z", this);
+	action_set_as_z = new QAction(QLatin1String("Z"), this);
 	action_set_as_z->setData(static_cast<int>(AbstractColumn::PlotDesignation::Z));
 
 	action_set_as_xerr = new QAction(i18n("X-error"), this);
@@ -288,6 +293,7 @@ void SpreadsheetView::initActions() {
 	action_reverse_columns = new QAction(QIcon::fromTheme(QString()), i18n("Reverse"), this);
 // 	action_join_columns = new QAction(QIcon::fromTheme(QString()), i18n("Join"), this);
 
+	//normalization
 	normalizeColumnActionGroup = new QActionGroup(this);
 	QAction* normalizeAction = new QAction(i18n("Divide by Sum"), normalizeColumnActionGroup);
 	normalizeAction->setData(DivideBySum);
@@ -335,6 +341,26 @@ void SpreadsheetView::initActions() {
 	normalizeAction->setData(Rescale);
 
 	action_normalize_selection = new QAction(QIcon::fromTheme(QString()), i18n("&Normalize Selection"), this);
+
+	//Tukey's ladder of powers
+	ladderOfPowersActionGroup = new QActionGroup(this);
+	QAction* ladderAction = new QAction("1/x²", ladderOfPowersActionGroup);
+	ladderAction->setData(InverseSquared);
+
+	ladderAction = new QAction(QLatin1String("1/x"), ladderOfPowersActionGroup);
+	ladderAction->setData(Inverse);
+
+	ladderAction = new QAction("1/√x", ladderOfPowersActionGroup);
+	ladderAction->setData(InverseSquareRoot);
+
+	ladderAction = new QAction(QLatin1String("log(x)"), ladderOfPowersActionGroup);
+	ladderAction->setData(DivideBySum);
+
+	ladderAction = new QAction("√x", ladderOfPowersActionGroup);
+	ladderAction->setData(SquareRoot);
+
+	ladderAction = new QAction("x²", ladderOfPowersActionGroup);
+	ladderAction->setData(Squared);
 
 	//sort and statistics
 	action_sort_columns = new QAction(QIcon::fromTheme(QString()), i18n("&Selected Columns"), this);
@@ -574,6 +600,18 @@ void SpreadsheetView::initMenus() {
 		m_columnNormalizeMenu->addAction(normalizeColumnActionGroup->actions().at(14));
 		m_columnManipulateDataMenu->addMenu(m_columnNormalizeMenu);
 
+		//"Ladder of powers" transformation
+		m_columnLadderOfPowersMenu = new QMenu(i18n("Ladder of Powers"), this);
+		m_columnLadderOfPowersMenu->addAction(ladderOfPowersActionGroup->actions().at(0));
+		m_columnLadderOfPowersMenu->addAction(ladderOfPowersActionGroup->actions().at(1));
+		m_columnLadderOfPowersMenu->addAction(ladderOfPowersActionGroup->actions().at(2));
+		m_columnLadderOfPowersMenu->addAction(ladderOfPowersActionGroup->actions().at(3));
+		m_columnLadderOfPowersMenu->addAction(ladderOfPowersActionGroup->actions().at(4));
+		m_columnLadderOfPowersMenu->addAction(ladderOfPowersActionGroup->actions().at(5));
+
+		m_columnManipulateDataMenu->addSeparator();
+		m_columnManipulateDataMenu->addMenu(m_columnLadderOfPowersMenu);
+
 		m_columnMenu->addMenu(m_columnManipulateDataMenu);
 		m_columnMenu->addSeparator();
 
@@ -696,6 +734,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_mask_values, &QAction::triggered, this, &SpreadsheetView::maskColumnValues);
 // 	connect(action_join_columns, &QAction::triggered, this, &SpreadsheetView::joinColumns);
 	connect(normalizeColumnActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::normalizeSelectedColumns);
+	connect(ladderOfPowersActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::powerTransformSelectedColumns);
 	connect(action_normalize_selection, &QAction::triggered, this, &SpreadsheetView::normalizeSelection);
 
 	//sort
@@ -2252,9 +2291,9 @@ void SpreadsheetView::maskColumnValues() {
 	dlg->exec();
 }
 
-void SpreadsheetView::joinColumns() {
-	//TODO
-}
+// void SpreadsheetView::joinColumns() {
+// 	//TODO
+// }
 
 void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 	auto columns = selectedColumns();
@@ -2484,6 +2523,96 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 		}
 		QMessageBox::warning(this, i18n("Normalization not possible"), info);
 	}
+}
+
+void SpreadsheetView::powerTransformSelectedColumns(QAction* action) {
+	auto columns = selectedColumns();
+	if (columns.isEmpty())
+		return;
+
+	auto power = static_cast<TukeyLadderPower>(action->data().toInt());
+
+	WAIT_CURSOR;
+	m_spreadsheet->beginMacro(i18n("%1: power transform columns", m_spreadsheet->name()));
+
+	for (auto* col : columns) {
+		if (col->columnMode() != AbstractColumn::ColumnMode::Numeric
+			&& col->columnMode() != AbstractColumn::ColumnMode::Integer
+			&& col->columnMode() != AbstractColumn::ColumnMode::BigInt)
+			continue;
+
+		if (col->columnMode() == AbstractColumn::ColumnMode::Integer
+			|| col->columnMode() == AbstractColumn::ColumnMode::BigInt)
+			col->setColumnMode(AbstractColumn::ColumnMode::Numeric);
+
+		auto* data = static_cast<QVector<double>* >(col->data());
+		QVector<double> new_data(col->rowCount());
+
+		switch (power) {
+		case InverseSquared: {
+			for (int i = 0; i < col->rowCount(); ++i) {
+				double x = data->operator[](i);
+				if (x != 0.0)
+					new_data[i] = 1 / gsl_pow_2(x);
+				else
+					new_data[i] = NAN;
+			}
+			break;
+		}
+		case Inverse: {
+			for (int i = 0; i < col->rowCount(); ++i) {
+				double x = data->operator[](i);
+				if (x != 0.0)
+					new_data[i] = 1 / x;
+				else
+					new_data[i] = NAN;
+			}
+			break;
+		}
+		case InverseSquareRoot: {
+			for (int i = 0; i < col->rowCount(); ++i) {
+				double x = data->operator[](i);
+				if (x >= 0.0)
+					new_data[i] = 1 / std::sqrt(x);
+				else
+					new_data[i] = NAN;
+			}
+			break;
+		}
+		case Log: {
+			for (int i = 0; i < col->rowCount(); ++i) {
+				double x = data->operator[](i);
+				if (x >= 0.0)
+					new_data[i] = log10(x);
+				else
+					new_data[i] = NAN;
+			}
+			break;
+		}
+		case SquareRoot: {
+			for (int i = 0; i < col->rowCount(); ++i) {
+				double x = data->operator[](i);
+				if (x >= 0.0)
+					new_data[i] = std::sqrt(x);
+				else
+					new_data[i] = NAN;
+			}
+			break;
+		}
+		case Squared: {
+			for (int i = 0; i < col->rowCount(); ++i) {
+				double x = data->operator[](i);
+				new_data[i] = gsl_pow_2(x);
+			}
+			break;
+		}
+		}
+
+		col->replaceValues(0, new_data);
+	}
+
+	m_spreadsheet->endMacro();
+	RESET_CURSOR;
 }
 
 void SpreadsheetView::normalizeSelection() {
@@ -2746,7 +2875,7 @@ void SpreadsheetView::sortDialog(const QVector<Column*>& cols) {
 		col->setSuppressDataChangedSignal(true);
 
 	auto* dlg = new SortDialog();
-	connect(dlg, SIGNAL(sort(Column*,QVector<Column*>,bool)), m_spreadsheet, SLOT(sortColumns(Column*,QVector<Column*>,bool)));
+	connect(dlg, &SortDialog::sort, m_spreadsheet, &Spreadsheet::sortColumns);
 	dlg->setColumns(cols);
 	int rc = dlg->exec();
 

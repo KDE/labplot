@@ -171,6 +171,7 @@ private:
 	QAction* action_mask_values;
 	QAction* action_join_columns;
 	QActionGroup* normalizeColumnActionGroup;
+	QActionGroup* ladderOfPowersActionGroup;
 	QAction* action_normalize_selection;
 	QAction* action_sort_columns;
 	QAction* action_sort_asc_column;
@@ -205,6 +206,7 @@ private:
 	QMenu* m_columnGenerateDataMenu{nullptr};
 	QMenu* m_columnManipulateDataMenu;
 	QMenu* m_columnNormalizeMenu{nullptr};
+	QMenu* m_columnLadderOfPowersMenu{nullptr};
 	QMenu* m_columnSortMenu{nullptr};
 	QMenu* m_rowMenu{nullptr};;
 	QMenu* m_spreadsheetMenu{nullptr};;
@@ -265,8 +267,9 @@ private slots:
 	void reverseColumns();
 	void dropColumnValues();
 	void maskColumnValues();
-	void joinColumns();
+// 	void joinColumns();
 	void normalizeSelectedColumns(QAction*);
+	void powerTransformSelectedColumns(QAction*);
 	void normalizeSelection();
 
 	void sortSelectedColumns();
