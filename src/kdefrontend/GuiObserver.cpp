@@ -120,6 +120,12 @@ bool raiseDock(T*& dock, QStackedWidget* parent)
 	}
 	parent->setCurrentWidget(dock);
 
+	//in the scroll area scroll up to the top
+	if (parent->parent() && parent->parent()->parent()) {
+		auto* sa = dynamic_cast<QScrollArea*>(parent->parent()->parent());
+		if (sa)
+			sa->ensureVisible(0 ,0);
+	}
 	return generated;
 }
 
