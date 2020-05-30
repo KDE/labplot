@@ -96,7 +96,7 @@ enum NormalizationMethod {DivideBySum, DivideByMin, DivideByMax, DivideByCount,
 						ZScoreSD, ZScoreMAD, ZScoreIQR,
 						Rescale};
 
-enum TukeyLadderPower {InverseSquared, Inverse, InverseSquareRoot, Log, SquareRoot, Squared};
+enum TukeyLadderPower {InverseSquared, Inverse, InverseSquareRoot, Log, SquareRoot, Squared, Cube};
 
 /*!
 	\class SpreadsheetView
@@ -344,23 +344,27 @@ void SpreadsheetView::initActions() {
 
 	//Tukey's ladder of powers
 	ladderOfPowersActionGroup = new QActionGroup(this);
-	QAction* ladderAction = new QAction("1/x²", ladderOfPowersActionGroup);
-	ladderAction->setData(InverseSquared);
 
-	ladderAction = new QAction(QLatin1String("1/x"), ladderOfPowersActionGroup);
-	ladderAction->setData(Inverse);
+	QAction* ladderAction = new QAction("x³", ladderOfPowersActionGroup);
+	ladderAction->setData(Cube);
 
-	ladderAction = new QAction("1/√x", ladderOfPowersActionGroup);
-	ladderAction->setData(InverseSquareRoot);
-
-	ladderAction = new QAction(QLatin1String("log(x)"), ladderOfPowersActionGroup);
-	ladderAction->setData(DivideBySum);
+	ladderAction = new QAction("x²", ladderOfPowersActionGroup);
+	ladderAction->setData(Squared);
 
 	ladderAction = new QAction("√x", ladderOfPowersActionGroup);
 	ladderAction->setData(SquareRoot);
 
-	ladderAction = new QAction("x²", ladderOfPowersActionGroup);
-	ladderAction->setData(Squared);
+	ladderAction = new QAction(QLatin1String("log(x)"), ladderOfPowersActionGroup);
+	ladderAction->setData(DivideBySum);
+
+	ladderAction = new QAction("1/√x", ladderOfPowersActionGroup);
+	ladderAction->setData(InverseSquareRoot);
+
+	ladderAction = new QAction(QLatin1String("1/x"), ladderOfPowersActionGroup);
+	ladderAction->setData(Inverse);
+
+	ladderAction = new QAction("1/x²", ladderOfPowersActionGroup);
+	ladderAction->setData(InverseSquared);
 
 	//sort and statistics
 	action_sort_columns = new QAction(QIcon::fromTheme(QString()), i18n("&Selected Columns"), this);
@@ -608,6 +612,7 @@ void SpreadsheetView::initMenus() {
 		m_columnLadderOfPowersMenu->addAction(ladderOfPowersActionGroup->actions().at(3));
 		m_columnLadderOfPowersMenu->addAction(ladderOfPowersActionGroup->actions().at(4));
 		m_columnLadderOfPowersMenu->addAction(ladderOfPowersActionGroup->actions().at(5));
+		m_columnLadderOfPowersMenu->addAction(ladderOfPowersActionGroup->actions().at(6));
 
 		m_columnManipulateDataMenu->addSeparator();
 		m_columnManipulateDataMenu->addMenu(m_columnLadderOfPowersMenu);
@@ -2603,6 +2608,13 @@ void SpreadsheetView::powerTransformSelectedColumns(QAction* action) {
 			for (int i = 0; i < col->rowCount(); ++i) {
 				double x = data->operator[](i);
 				new_data[i] = gsl_pow_2(x);
+			}
+			break;
+		}
+		case Cube: {
+			for (int i = 0; i < col->rowCount(); ++i) {
+				double x = data->operator[](i);
+				new_data[i] = gsl_pow_3(x);
 			}
 			break;
 		}
