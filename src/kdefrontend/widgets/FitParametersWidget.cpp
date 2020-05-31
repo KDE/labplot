@@ -30,6 +30,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QKeyEvent>
+#include <QScrollBar>
 #include <KLocalizedString>
 
 /*!
@@ -217,6 +218,13 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 		ui.tableWidget->setCurrentCell(0, 0);
 	}
 	m_initializing = false;
+
+	//set the size of the table to the minimum possible
+	int h = ui.tableWidget->horizontalHeader()->height();
+	h += ui.tableWidget->verticalHeader()->sectionSize(0) * ui.tableWidget->verticalHeader()->count();
+	if (ui.tableWidget->horizontalScrollBar()->isVisible())
+		h += ui.tableWidget->horizontalScrollBar()->height();
+	setMaximumSize(16777215, h);
 }
 
 bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
