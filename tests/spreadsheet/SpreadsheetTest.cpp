@@ -34,7 +34,6 @@
 #include <QClipboard>
 #include <QUndoStack>
 
-#include <cstdlib>
 extern "C" {
 #include <gsl/gsl_math.h>
 }
@@ -746,7 +745,8 @@ void SpreadsheetTest::testSortPerformanceNumeric() {
 	QVector<double> xData;
 	QVector<int> yData;
 	for (int i = 0; i < sheet.rowCount(); i++) {
-		xData << random()/RAND_MAX;
+		//TODO: qrand obsolete
+		xData << qrand()/RAND_MAX;
 		yData << i + 1;
 	}
 
