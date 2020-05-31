@@ -65,6 +65,9 @@
 #include <QTextStream>
 #include <QProcess>
 #include <QRegularExpression>
+#if QT_VERSION >= 0x051000
+#include <QRandomGenerator>
+#endif
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -1816,44 +1819,56 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
 		case AbstractColumn::ColumnMode::Numeric: {
-				//TODO qrand() is obsolete. Use QRandomGenerator instead
 				QVector<double> results(last-first+1);
 				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
+#if QT_VERSION >= 0x051000
+						results[row-first] = QRandomGenerator::global()->generateDouble();
+#else
 						results[row-first] = double(qrand())/double(RAND_MAX);
+#endif
 					else
 						results[row-first] = col_ptr->valueAt(row);
 				col_ptr->replaceValues(first, results);
 				break;
 			}
 		case AbstractColumn::ColumnMode::Integer: {
-				//TODO qrand() is obsolete. Use QRandomGenerator instead
 				QVector<int> results(last-first+1);
 				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
+#if QT_VERSION >= 0x051000
+						results[row-first] = QRandomGenerator::global()->generate();
+#else
 						results[row-first] = qrand();
+#endif
 					else
 						results[row-first] = col_ptr->integerAt(row);
 				col_ptr->replaceInteger(first, results);
 				break;
 			}
 		case AbstractColumn::ColumnMode::BigInt: {
-				//TODO qrand() is obsolete. Use QRandomGenerator instead
 				QVector<qint64> results(last-first+1);
 				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
+#if QT_VERSION >= 0x051000
+						results[row-first] = QRandomGenerator::global()->generate64();
+#else
 						results[row-first] = qrand();
+#endif
 					else
 						results[row-first] = col_ptr->bigIntAt(row);
 				col_ptr->replaceBigInt(first, results);
 				break;
 			}
 		case AbstractColumn::ColumnMode::Text: {
-				//TODO qrand() is obsolete. Use QRandomGenerator instead
 				QVector<QString> results;
 				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
+#if QT_VERSION >= 0x051000
+						results[row-first] = QString::number(QRandomGenerator::global()->generateDouble());
+#else
 						results << QString::number(double(qrand())/double(RAND_MAX));
+#endif
 					else
 						results << col_ptr->textAt(row);
 				col_ptr->replaceTexts(first, results);
@@ -1862,14 +1877,17 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 		case AbstractColumn::ColumnMode::DateTime:
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day: {
-				//TODO qrand() is obsolete. Use QRandomGenerator instead
 				QVector<QDateTime> results;
 				QDate earliestDate(1, 1, 1);
 				QDate latestDate(2999, 12, 31);
 				QTime midnight(0, 0, 0, 0);
 				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
+#if QT_VERSION >= 0x051000
+						results << QDateTime( earliestDate.addDays((QRandomGenerator::global()->generateDouble())*((double)earliestDate.daysTo(latestDate)), midnight.addMSecs((QRandomGenerator::global()->generateDouble())*1000*60*60*24));
+#else
 						results << QDateTime( earliestDate.addDays(((double)qrand())*((double)earliestDate.daysTo(latestDate))/((double)RAND_MAX)), midnight.addMSecs(((qint64)qrand())*1000*60*60*24/RAND_MAX));
+#endif
 					else
 						results << col_ptr->dateTimeAt(row);
 				col_ptr->replaceDateTimes(first, results);

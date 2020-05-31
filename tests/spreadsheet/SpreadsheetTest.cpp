@@ -33,6 +33,9 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QUndoStack>
+#if QT_VERSION >= 0x051000
+#include <QRandomGenerator>
+#endif
 
 extern "C" {
 #include <gsl/gsl_math.h>
@@ -1037,10 +1040,12 @@ void SpreadsheetTest::testSortPerformanceNumeric1() {
 	sheet.setRowCount(100000);
 
 	QVector<double> xData;
-	for (int i = 0; i < sheet.rowCount(); i++) {
-		//TODO: qrand obsolete
+	for (int i = 0; i < sheet.rowCount(); i++)
+#if QT_VERSION >= 0x051000
+		xData << QRandomGenerator::global()->generateDouble();
+#else
 		xData << qrand()/RAND_MAX;
-	}
+#endif
 
 	sheet.column(0)->replaceValues(0, xData);
 
@@ -1064,8 +1069,11 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 	QVector<double> xData;
 	QVector<int> yData;
 	for (int i = 0; i < sheet.rowCount(); i++) {
-		//TODO: qrand obsolete
+#if QT_VERSION >= 0x051000
+		xData << QRandomGenerator::global()->generateDouble();
+#else
 		xData << qrand()/RAND_MAX;
+#endif
 		yData << i + 1;
 	}
 
