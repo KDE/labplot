@@ -2087,7 +2087,7 @@ void MainWin::cursorDockVisibilityChanged(bool visible) {
 }
 
 void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode mode) {
-	if (mode != CartesianPlot::Cursor) {
+	if (mode != CartesianPlot::MouseMode::Cursor) {
 		if (cursorDock)
 			cursorDock->hide();
 	} else {

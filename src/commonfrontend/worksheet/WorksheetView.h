@@ -111,7 +111,7 @@ private:
 
 	Worksheet* m_worksheet;
 	MouseMode m_mouseMode{SelectionMode};
-	CartesianPlot::MouseMode m_cartesianPlotMouseMode{CartesianPlot::SelectionMode};
+	CartesianPlot::MouseMode m_cartesianPlotMouseMode{CartesianPlot::MouseMode::Selection};
 	bool m_selectionBandIsShown{false};
 	QPoint m_selectionStart;
 	QPoint m_selectionEnd;

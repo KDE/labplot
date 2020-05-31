@@ -2945,7 +2945,7 @@ void XYCurvePrivate::suppressRetransform(bool on) {
  * \p event
  */
 void XYCurvePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-	if (plot->mouseMode() != CartesianPlot::MouseMode::SelectionMode) {
+	if (plot->mouseMode() != CartesianPlot::MouseMode::Selection) {
 		event->ignore();
 		return QGraphicsItem::mousePressEvent(event);
 	}

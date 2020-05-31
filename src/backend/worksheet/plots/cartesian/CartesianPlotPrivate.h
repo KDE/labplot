@@ -58,7 +58,7 @@ public:
 	void setZoomSelectionBandShow(bool show);
 
 	QRectF dataRect;
-	CartesianPlot::RangeType rangeType{CartesianPlot::RangeFree};
+	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
 	CartesianPlot::RangeFormat xRangeFormat{CartesianPlot::Numeric};
 	CartesianPlot::RangeFormat yRangeFormat{CartesianPlot::Numeric};
 	QString xRangeDateTimeFormat;
@@ -81,7 +81,7 @@ public:
 	double curvesXMin{INFINITY}, curvesXMax{-INFINITY}, curvesYMin{INFINITY}, curvesYMax{-INFINITY};
 
 	CartesianPlot* const q;
-	CartesianPlot::MouseMode mouseMode{CartesianPlot::SelectionMode};
+	CartesianPlot::MouseMode mouseMode{CartesianPlot::MouseMode::Selection};
 	CartesianCoordinateSystem* cSystem{nullptr};
 	bool suppressRetransform{false};
 	bool panningStarted{false};

@@ -65,15 +65,15 @@ public:
 	enum class Scale {Linear, Log10, Log2, Ln, Log10Abs, Log2Abs, LnAbs, Sqrt, X2};
 	enum Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
 	enum RangeFormat {Numeric, DateTime};
-	enum RangeType {RangeFree, RangeLast, RangeFirst};
-	enum RangeBreakStyle {RangeBreakSimple, RangeBreakVertical, RangeBreakSloped};
-	enum MouseMode {SelectionMode, ZoomSelectionMode, ZoomXSelectionMode, ZoomYSelectionMode, Cursor};
+	enum class RangeType {Free, Last, First};
+	enum class RangeBreakStyle {Simple, Vertical, Sloped};
+	enum class MouseMode {Selection, ZoomSelection, ZoomXSelection, ZoomYSelection, Cursor};
 	enum NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
 	                          ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY
 	                         };
 
 	struct RangeBreak {
-		RangeBreak() : start(NAN), end(NAN), position(0.5), style(RangeBreakSloped) {}
+		RangeBreak() : start(NAN), end(NAN), position(0.5), style(RangeBreakStyle::Sloped) {}
 		bool isValid() const {
 			return (!std::isnan(start) && !std::isnan(end));
 		}

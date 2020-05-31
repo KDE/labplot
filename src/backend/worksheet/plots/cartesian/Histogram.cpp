@@ -1549,7 +1549,7 @@ void HistogramPrivate::drawFilling(QPainter* painter) {
 
 void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	if (plot->mouseMode() == CartesianPlot::SelectionMode && !isSelected()) {
+	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && !isSelected()) {
 		m_hovered = true;
 		emit q->hovered();
 		update();
@@ -1558,7 +1558,7 @@ void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 
 void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	if (plot->mouseMode() == CartesianPlot::SelectionMode && m_hovered) {
+	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && m_hovered) {
 		m_hovered = false;
 		emit q->unhovered();
 		update();

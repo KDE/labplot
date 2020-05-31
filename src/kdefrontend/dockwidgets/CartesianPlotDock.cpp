@@ -542,15 +542,15 @@ void CartesianPlotDock::rangeTypeChanged() {
 	if (ui.rbRangeFirst->isChecked()) {
 		ui.leRangeFirst->setEnabled(true);
 		ui.leRangeLast->setEnabled(false);
-		type = CartesianPlot::RangeFirst;
+		type = CartesianPlot::RangeType::First;
 	} else if (ui.rbRangeLast->isChecked()) {
 		ui.leRangeFirst->setEnabled(false);
 		ui.leRangeLast->setEnabled(true);
-		type = CartesianPlot::RangeLast;
+		type = CartesianPlot::RangeType::Last;
 	} else {
 		ui.leRangeFirst->setEnabled(false);
 		ui.leRangeLast->setEnabled(false);
-		type = CartesianPlot::RangeFree;
+		type = CartesianPlot::RangeType::Free;
 	}
 
 	if (m_initializing)
@@ -1371,13 +1371,13 @@ void CartesianPlotDock::plotRectChanged(QRectF& rect) {
 void CartesianPlotDock::plotRangeTypeChanged(CartesianPlot::RangeType type) {
 	m_initializing = true;
 	switch (type) {
-	case CartesianPlot::RangeFree:
+	case CartesianPlot::RangeType::Free:
 		ui.rbRangeFree->setChecked(true);
 		break;
-	case CartesianPlot::RangeFirst:
+	case CartesianPlot::RangeType::First:
 		ui.rbRangeFirst->setChecked(true);
 		break;
-	case CartesianPlot::RangeLast:
+	case CartesianPlot::RangeType::Last:
 		ui.rbRangeLast->setChecked(true);
 		break;
 	}
@@ -1630,13 +1630,13 @@ void CartesianPlotDock::load() {
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), m_worksheetUnit));
 
 	switch (m_plot->rangeType()) {
-	case CartesianPlot::RangeFree:
+	case CartesianPlot::RangeType::Free:
 		ui.rbRangeFree->setChecked(true);
 		break;
-	case CartesianPlot::RangeFirst:
+	case CartesianPlot::RangeType::First:
 		ui.rbRangeFirst->setChecked(true);
 		break;
-	case CartesianPlot::RangeLast:
+	case CartesianPlot::RangeType::Last:
 		ui.rbRangeLast->setChecked(true);
 		break;
 	}

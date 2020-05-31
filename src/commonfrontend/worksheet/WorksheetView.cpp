@@ -1062,19 +1062,19 @@ void WorksheetView::mouseDoubleClickEvent(QMouseEvent*) {
 }
 
 void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
-	if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode != CartesianPlot::SelectionMode ) {
+	if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode != CartesianPlot::MouseMode::Selection) {
 		//check whether there is a cartesian plot under the cursor
 		//and set the cursor appearance according to the current mouse mode for the cartesian plots
 		if ( isPlotAtPos(event->pos()) ) {
-			if (m_cartesianPlotMouseMode == CartesianPlot::ZoomSelectionMode)
+			if (m_cartesianPlotMouseMode == CartesianPlot::MouseMode::ZoomSelection)
 				setCursor(Qt::CrossCursor);
-			else if (m_cartesianPlotMouseMode == CartesianPlot::ZoomXSelectionMode)
+			else if (m_cartesianPlotMouseMode == CartesianPlot::MouseMode::ZoomXSelection)
 				setCursor(Qt::SizeHorCursor);
-			else if (m_cartesianPlotMouseMode == CartesianPlot::ZoomYSelectionMode)
+			else if (m_cartesianPlotMouseMode == CartesianPlot::MouseMode::ZoomYSelection)
 				setCursor(Qt::SizeVerCursor);
 		} else
 			setCursor(Qt::ArrowCursor);
-	} else if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode == CartesianPlot::SelectionMode )
+	} else if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode == CartesianPlot::MouseMode::Selection)
 		setCursor(Qt::ArrowCursor);
 	else if (m_selectionBandIsShown) {
 		QRect rect = QRect(m_selectionStart, m_selectionEnd).normalized();
@@ -1572,7 +1572,7 @@ void WorksheetView::selectionChanged() {
 
 		//if one of the "zoom&select" plot mouse modes was selected before, activate the default "selection mode" again
 		//since no plots are selected now.
-		if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode!= CartesianPlot::SelectionMode) {
+		if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode!= CartesianPlot::MouseMode::Selection) {
 			cartesianPlotSelectionModeAction->setChecked(true);
 			cartesianPlotMouseModeChanged(cartesianPlotSelectionModeAction);
 		}
@@ -1857,15 +1857,15 @@ void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
 		return;
 
 	if (action == cartesianPlotSelectionModeAction)
-		m_cartesianPlotMouseMode = CartesianPlot::SelectionMode;
+		m_cartesianPlotMouseMode = CartesianPlot::MouseMode::Selection;
 	else if (action == cartesianPlotZoomSelectionModeAction)
-		m_cartesianPlotMouseMode = CartesianPlot::ZoomSelectionMode;
+		m_cartesianPlotMouseMode = CartesianPlot::MouseMode::ZoomSelection;
 	else if (action == cartesianPlotZoomXSelectionModeAction)
-		m_cartesianPlotMouseMode = CartesianPlot::ZoomXSelectionMode;
+		m_cartesianPlotMouseMode = CartesianPlot::MouseMode::ZoomXSelection;
 	else if (action == cartesianPlotZoomYSelectionModeAction)
-		m_cartesianPlotMouseMode = CartesianPlot::ZoomYSelectionMode;
+		m_cartesianPlotMouseMode = CartesianPlot::MouseMode::ZoomYSelection;
 	else if (action == cartesianPlotCursorModeAction)
-		m_cartesianPlotMouseMode = CartesianPlot::Cursor;
+		m_cartesianPlotMouseMode = CartesianPlot::MouseMode::Cursor;
 
 	for (auto* plot : m_worksheet->children<CartesianPlot>() )
 		plot->setMouseMode(m_cartesianPlotMouseMode);
@@ -1876,13 +1876,13 @@ void WorksheetView::cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode m
 		return;
 
 	m_suppressMouseModeChange = true;
-	if (mouseMode == CartesianPlot::MouseMode::SelectionMode)
+	if (mouseMode == CartesianPlot::MouseMode::Selection)
 		cartesianPlotSelectionModeAction->setChecked(true);
-	else if (mouseMode == CartesianPlot::MouseMode::ZoomSelectionMode)
+	else if (mouseMode == CartesianPlot::MouseMode::ZoomSelection)
 		cartesianPlotZoomSelectionModeAction->setChecked(true);
-	else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelectionMode)
+	else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection)
 		cartesianPlotZoomXSelectionModeAction->setChecked(true);
-	else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelectionMode)
+	else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection)
 		cartesianPlotZoomYSelectionModeAction->setChecked(true);
 	else if (mouseMode == CartesianPlot::MouseMode::Cursor)
 		cartesianPlotCursorModeAction->setChecked(true);
