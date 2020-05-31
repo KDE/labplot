@@ -178,6 +178,8 @@ void CartesianPlot::init() {
 void CartesianPlot::setType(Type type) {
 	Q_D(CartesianPlot);
 
+	d->type = type;
+
 	switch (type) {
 	case FourAxes: {
 			d->xMin = 0.0;
@@ -197,12 +199,6 @@ void CartesianPlot::setType(Type type) {
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksIn);
 			axis->setMinorTicksNumber(1);
-			QPen pen = axis->majorGridPen();
-			pen.setStyle(Qt::SolidLine);
-			axis->setMajorGridPen(pen);
-			pen = axis->minorGridPen();
-			pen.setStyle(Qt::DotLine);
-			axis->setMinorGridPen(pen);
 			axis->setSuppressRetransform(false);
 
 			axis = new Axis("x axis 2", Axis::AxisHorizontal);
@@ -216,7 +212,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksIn);
 			axis->setMinorTicksNumber(1);
-			pen = axis->minorGridPen();
+			QPen pen = axis->minorGridPen();
 			pen.setStyle(Qt::NoPen);
 			axis->setMajorGridPen(pen);
 			pen = axis->minorGridPen();
@@ -237,12 +233,6 @@ void CartesianPlot::setType(Type type) {
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksIn);
 			axis->setMinorTicksNumber(1);
-			pen = axis->majorGridPen();
-			pen.setStyle(Qt::SolidLine);
-			axis->setMajorGridPen(pen);
-			pen = axis->minorGridPen();
-			pen.setStyle(Qt::DotLine);
-			axis->setMinorGridPen(pen);
 			axis->setSuppressRetransform(false);
 
 			axis = new Axis("y axis 2", Axis::AxisVertical);
@@ -414,6 +404,11 @@ void CartesianPlot::setType(Type type) {
 	//all plot children are initialized -> set the geometry of the plot in scene coordinates.
 	d->rect = QRectF(x,y,w,h);
 	d->retransform();
+}
+
+CartesianPlot::Type CartesianPlot::type() const {
+	Q_D(const CartesianPlot);
+	return d->type;
 }
 
 void CartesianPlot::initActions() {

@@ -208,13 +208,13 @@ void Axis::init() {
 	d->labelsOpacity = group.readEntry("LabelsOpacity", 1.0);
 
 	//major grid
-	d->majorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MajorGridStyle", (int) Qt::NoPen) );
+	d->majorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MajorGridStyle", (int) Qt::SolidLine) );
 	d->majorGridPen.setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)) );
 	d->majorGridPen.setWidthF( group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Unit::Point ) ) );
 	d->majorGridOpacity = group.readEntry("MajorGridOpacity", 1.0);
 
 	//minor grid
-	d->minorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MinorGridStyle", (int) Qt::NoPen) );
+	d->minorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MinorGridStyle", (int) Qt::DotLine) );
 	d->minorGridPen.setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)) );
 	d->minorGridPen.setWidthF( group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Unit::Point ) ) );
 	d->minorGridOpacity = group.readEntry("MinorGridOpacity", 1.0);
@@ -2292,12 +2292,12 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	this->setLinePen(p);
 
 	//Major grid
-	if (firstAxis)
-		p.setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle", (int)Qt::NoPen));
-	else
+	if (firstAxis) {
+		p.setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle", (int)Qt::SolidLine));
+		p.setColor(group.readEntry("MajorGridColor",QColor(Qt::gray)));
+		p.setWidthF(group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
+	} else
 		p.setStyle(Qt::NoPen);
-	p.setColor(group.readEntry("MajorGridColor",QColor(Qt::gray)));
-	p.setWidthF(group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	this->setMajorGridPen(p);
 	this->setMajorGridOpacity(group.readEntry("MajorGridOpacity", 1.0));
 
@@ -2309,12 +2309,12 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	this->setMajorTicksOpacity(group.readEntry("MajorTicksOpacity", 1.0));
 
 	//Minor grid
-	if (firstAxis)
-		p.setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle", (int)Qt::NoPen));
-	else
+	if (firstAxis) {
+		p.setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle", (int)Qt::DotLine));
+		p.setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)));
+		p.setWidthF(group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
+	} else
 		p.setStyle(Qt::NoPen);
-	p.setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)));
-	p.setWidthF(group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	this->setMinorGridOpacity(group.readEntry("MinorGridOpacity", 1.0));
 	this->setMinorGridPen(p);
 
@@ -2325,9 +2325,9 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	this->setMinorTicksPen(p);
 	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity", 1.0));
 
-	const QVector<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::ChildIndexFlag::IncludeHidden);
-	for (auto* child : childElements)
-		child->loadThemeConfig(config);
+	//load the theme for the title label
+	Q_D(Axis);
+	d->title->loadThemeConfig(config);
 }
 
 void Axis::saveThemeConfig(const KConfig& config) {
@@ -2365,6 +2365,7 @@ void Axis::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("MinorTicksOpacity", this->minorTicksOpacity());
 	group.writeEntry("MinorTicksType", (int)this->minorTicksType());
 
-	const QVector<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::ChildIndexFlag::IncludeHidden);
-	childElements.at(0)->saveThemeConfig(config);
+	//same the theme config for the title label
+	Q_D(Axis);
+	d->title->saveThemeConfig(config);
 }

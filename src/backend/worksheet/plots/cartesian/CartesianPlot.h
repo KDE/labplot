@@ -94,6 +94,8 @@ public:
 	};
 
 	void setType(Type type);
+	Type type() const;
+
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QMenu* analysisMenu();
