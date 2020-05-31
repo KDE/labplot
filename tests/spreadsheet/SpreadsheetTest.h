@@ -59,6 +59,8 @@ private slots:
 	void testSortText2();
 	void testSortDateTime1();
 	void testSortDateTime2();
+
+	void testSortPerformanceNumeric();
 };
 
 #endif

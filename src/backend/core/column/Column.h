@@ -99,6 +99,7 @@ public:
 	void* data() const;
 	bool hasValues() const;
 
+	void setFromColumn(int, AbstractColumn*, int);
 	QString textAt(int) const override;
 	void setTextAt(int, const QString&) override;
 	void replaceTexts(int, const QVector<QString>&) override;

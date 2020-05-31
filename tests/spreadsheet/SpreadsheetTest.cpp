@@ -734,4 +734,32 @@ void SpreadsheetTest::testSortDateTime2() {
 	QCOMPARE(sheet.column(1)->integerAt(6), 7);
 }
 
+/*
+ * check performance of sorting double values
+ */
+void SpreadsheetTest::testSortPerformanceNumeric() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(100000);
+
+	QVector<double> xData;
+	QVector<int> yData;
+	for (int i = 0; i < sheet.rowCount(); i++) {
+		xData << random()/RAND_MAX;
+		yData << i + 1;
+	}
+
+	sheet.column(0)->replaceValues(0, xData);
+	sheet.column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	sheet.column(1)->replaceInteger(0, yData);
+
+	QVector<Column*> cols;
+	cols << sheet.column(0) << sheet.column(1);
+
+	// sort
+	QBENCHMARK {
+		sheet.sortColumns(sheet.column(0), cols, true);
+	}
+}
+
 QTEST_MAIN(SpreadsheetTest)

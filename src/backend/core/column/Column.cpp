@@ -907,6 +907,36 @@ bool Column::hasValues() const {
 	return d->hasValues;
 }
 
+/*
+ * set item at i to col[j] for same columnMode()
+ */
+
+void Column::setFromColumn(int i, AbstractColumn* col, int j) {
+	if (col->columnMode() != columnMode())
+		return;
+
+	switch (columnMode()) {
+	case ColumnMode::Numeric:
+		setValueAt(i, col->valueAt(j));
+		break;
+	case ColumnMode::Integer:
+		setIntegerAt(i, col->integerAt(j));
+		break;
+	case ColumnMode::BigInt:
+		setBigIntAt(i, col->bigIntAt(j));
+		break;
+	case ColumnMode::Text:
+		setTextAt(i, col->textAt(j));
+		break;
+	case ColumnMode::DateTime:
+	case ColumnMode::Month:
+	case ColumnMode::Day:
+		setDateTimeAt(i, col->dateTimeAt(j));
+		break;
+	}
+}
+
+
 /**
  * \brief Return the content of row 'row'.
  *

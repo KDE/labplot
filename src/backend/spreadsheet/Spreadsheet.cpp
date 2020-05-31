@@ -434,20 +434,17 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					for (int i = 0; i < rows; i++)
 						if (col->isValid(i))
 							map.append(QPair<double, int>(col->valueAt(i), i));
+					const int filledRows = map.size();
 
 					if (ascending)
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
 					else
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
 
-					QVectorIterator< QPair<double, int> > it(map);
-
-					int k = 0;
 					// put the values in the right order into tempCol
-					while (it.hasNext()) {
-						tempCol->copy(col, it.peekNext().second, k, 1);
-						tempCol->setMasked(col->isMasked(it.next().second));
-						k++;
+					for (int i = 0; i < filledRows; i++) {
+						tempCol->copy(col, map.at(i).second, i, 1);
+						tempCol->setMasked(col->isMasked(map.at(i).second));
 					}
 					// copy the sorted column
 					col->copy(tempCol.get(), 0, 0, rows);
@@ -464,14 +461,10 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					else
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::integerGreater);
 
-					QVectorIterator<QPair<int, int>> it(map);
-
-					int k = 0;
 					// put the values in the right order into tempCol
-					while (it.hasNext()) {
-						tempCol->copy(col, it.peekNext().second, k, 1);
-						tempCol->setMasked(col->isMasked(it.next().second));
-						k++;
+					for (int i = 0; i < rows; i++) {
+						tempCol->copy(col, map.at(i).second, i, 1);
+						tempCol->setMasked(col->isMasked(map.at(i).second));
 					}
 					// copy the sorted column
 					col->copy(tempCol.get(), 0, 0, rows);
@@ -488,14 +481,10 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					else
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntGreater);
 
-					QVectorIterator<QPair<qint64, int>> it(map);
-
-					int k = 0;
 					// put the values in the right order into tempCol
-					while (it.hasNext()) {
-						tempCol->copy(col, it.peekNext().second, k, 1);
-						tempCol->setMasked(col->isMasked(it.next().second));
-						k++;
+					for (int i = 0; i < rows; i++) {
+						tempCol->copy(col, map.at(i).second, i, 1);
+						tempCol->setMasked(col->isMasked(map.at(i).second));
 					}
 					// copy the sorted column
 					col->copy(tempCol.get(), 0, 0, rows);
@@ -507,20 +496,17 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					for (int i = 0; i < rows; i++)
 						if (!col->textAt(i).isEmpty())
 							map.append(QPair<QString, int>(col->textAt(i), i));
+					const int filledRows = map.size();
 
 					if (ascending)
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringLess);
 					else
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringGreater);
 
-					QVectorIterator< QPair<QString, int> > it(map);
-
-					int k = 0;
 					// put the values in the right order into tempCol
-					while (it.hasNext()) {
-						tempCol->copy(col, it.peekNext().second, k, 1);
-						tempCol->setMasked(col->isMasked(it.next().second));
-						k++;
+					for (int i = 0; i < filledRows; i++) {
+						tempCol->copy(col, map.at(i).second, i, 1);
+						tempCol->setMasked(col->isMasked(map.at(i).second));
 					}
 					// copy the sorted column
 					col->copy(tempCol.get(), 0, 0, rows);
@@ -534,20 +520,17 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					for (int i = 0; i < rows; i++)
 						if (col->isValid(i))
 							map.append(QPair<QDateTime, int>(col->dateTimeAt(i), i));
+					const int filledRows = map.size();
 
 					if (ascending)
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
 					else
 						std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
 
-					QVectorIterator< QPair<QDateTime, int> > it(map);
-
-					int k = 0;
 					// put the values in the right order into tempCol
-					while (it.hasNext()) {
-						tempCol->copy(col, it.peekNext().second, k, 1);
-						tempCol->setMasked(col->isMasked(it.next().second));
-						k++;
+					for (int i = 0; i < filledRows; i++) {
+						tempCol->copy(col, map.at(i).second, i, 1);
+						tempCol->setMasked(col->isMasked(map.at(i).second));
 					}
 					// copy the sorted column
 					col->copy(tempCol.get(), 0, 0, rows);
@@ -576,18 +559,17 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
 				else
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
-				QVectorIterator<QPair<double, int>> it(map);
 
 				for (auto* col : cols) {
-					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
-					it.toFront();
-					int j = 0;
+					auto columnMode = col->columnMode();
+					std::unique_ptr<Column> tempCol(new Column("temp", columnMode));
 					// put the values in correct order into tempCol
-					while (it.hasNext()) {
-						tempCol->copy(col, it.peekNext().second, j, 1);
-						tempCol->setMasked(col->isMasked(it.next().second));
-						j++;
+					for (int i = 0; i < filledRows; i++) {
+						//too slow: tempCol->copy(col, map.at(i).second, i, 1);
+						tempCol->setFromColumn(i, col, map.at(i).second);
+						tempCol->setMasked(col->isMasked(map.at(i).second));
 					}
+
 					// copy the sorted column
 					if (col == leading)	// update all rows
 						col->copy(tempCol.get(), 0, 0, rows);
@@ -595,7 +577,8 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						std::unique_ptr<Column> tempInvalidCol(new Column("temp2", col->columnMode()));
 						for (int i = 0; i < invalidRows; i++) {
 							const int idx = invalidIndex.at(i);
-							tempInvalidCol->copy(col, idx, i, 1);
+							//too slow: tempInvalidCol->copy(col, idx, i, 1);
+							tempInvalidCol->setFromColumn(i, col, idx);
 							tempInvalidCol->setMasked(col->isMasked(idx));
 						}
 						col->copy(tempCol.get(), 0, 0, filledRows);
@@ -615,17 +598,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::integerLess);
 				else
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::integerGreater);
-				QVectorIterator<QPair<int, int>> it(map);
 
 				for (auto* col : cols) {
 					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
-					it.toFront();
-					int j = 0;
 					// put the values in the right order into tempCol
-					while (it.hasNext()) {
-						tempCol->copy(col, it.peekNext().second, j, 1);
-						tempCol->setMasked(col->isMasked(it.next().second));
-						j++;
+					for (int i = 0; i < rows; i++) {
+						//too slow: tempCol->copy(col, map.at(i).second, i, 1);
+						tempCol->setFromColumn(i, col, map.at(i).second);
+						tempCol->setMasked(col->isMasked(map.at(i).second));
 					}
 					// copy the sorted column
 					col->copy(tempCol.get(), 0, 0, rows);
@@ -642,17 +622,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntLess);
 				else
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntGreater);
-				QVectorIterator<QPair<qint64, int>> it(map);
 
 				for (auto* col : cols) {
 					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
-					it.toFront();
-					int j = 0;
 					// put the values in the right order into tempCol
-					while (it.hasNext()) {
-						tempCol->copy(col, it.peekNext().second, j, 1);
-						tempCol->setMasked(col->isMasked(it.next().second));
-						j++;
+					for (int i = 0; i < rows; i++) {
+						//too slow: tempCol->copy(col, map.at(i).second, i, 1);
+						tempCol->setFromColumn(i, col, map.at(i).second);
+						tempCol->setMasked(col->isMasked(map.at(i).second));
 					}
 					// copy the sorted column
 					col->copy(tempCol.get(), 0, 0, rows);
@@ -676,17 +653,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringLess);
 				else
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringGreater);
-				QVectorIterator<QPair<QString, int>> it(map);
 
 				for (auto* col : cols) {
 					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
-					it.toFront();
-					int j = 0;
 					// put the values in the right order into tempCol
-					while (it.hasNext()) {
-						tempCol->copy(col, it.peekNext().second, j, 1);
-						tempCol->setMasked(col->isMasked(it.next().second));
-						j++;
+					for (int i = 0; i < filledRows; i++) {
+						//too slow: tempCol->copy(col, map.at(i).second, i, 1);
+						tempCol->setFromColumn(i, col, map.at(i).second);
+						tempCol->setMasked(col->isMasked(map.at(i).second));
 					}
 
 					// copy the sorted column
@@ -696,7 +670,8 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						std::unique_ptr<Column> tempEmptyCol(new Column("temp2", col->columnMode()));
 						for (int i = 0; i < emptyRows; i++) {
 							const int idx = emptyIndex.at(i);
-							tempEmptyCol->copy(col, idx, i, 1);
+							//too slow: tempEmptyCol->copy(col, idx, i, 1);
+							tempEmptyCol->setFromColumn(i, col, idx);
 							tempEmptyCol->setMasked(col->isMasked(idx));
 						}
 						col->copy(tempCol.get(), 0, 0, filledRows);
@@ -723,17 +698,14 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
 				else
 					std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
-				QVectorIterator<QPair<QDateTime, int>> it(map);
 
 				for (auto* col : cols) {
 					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
-					it.toFront();
-					int j = 0;
 					// put the values in the right order into tempCol
-					while (it.hasNext()) {
-						tempCol->copy(col, it.peekNext().second, j, 1);
-						tempCol->setMasked(col->isMasked(it.next().second));
-						j++;
+					for (int i = 0; i < filledRows; i++) {
+						//too slow: tempCol->copy(col, map.at(i).second, i, 1);
+						tempCol->setFromColumn(i, col, map.at(i).second);
+						tempCol->setMasked(col->isMasked(map.at(i).second));
 					}
 					// copy the sorted column
 					if (col == leading)	// update all rows
@@ -742,7 +714,8 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 						std::unique_ptr<Column> tempInvalidCol(new Column("temp2", col->columnMode()));
 						for (int i = 0; i < invalidRows; i++) {
 							const int idx = invalidIndex.at(i);
-							tempInvalidCol->copy(col, idx, i, 1);
+							//too slow: tempInvalidCol->copy(col, idx, i, 1);
+							tempInvalidCol->setFromColumn(i, col, idx);
 							tempInvalidCol->setMasked(col->isMasked(idx));
 						}
 						col->copy(tempCol.get(), 0, 0, filledRows);
@@ -753,6 +726,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 			}
 		}
 	}
+
 	endMacro();
 	RESET_CURSOR;
 } // end of sortColumns()
