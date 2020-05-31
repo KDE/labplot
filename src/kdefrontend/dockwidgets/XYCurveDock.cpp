@@ -546,6 +546,24 @@ void XYCurveDock::setModel() {
 			cbYColumn->setInvalid(true, msg.arg(m_curve->yColumnPath()));
 		cbYColumn->setText(path);
 	}
+
+
+	//this function is called after the dock widget is initializes and the curves are set.
+	//so, we use this function to finalize the initialization eventhough it's not related
+	//to the actual set of the model (could also be solved by a new class XYAnalysisiCurveDock).
+
+	//hide property widgets that are not relevant for analysis curves
+	bool visible = (m_curve->type() == AspectType::XYCurve);
+	ui.lLineType->setVisible(visible);
+	ui.cbLineType->setVisible(visible);
+	ui.lLineSkipGaps->setVisible(visible);
+	ui.chkLineSkipGaps->setVisible(visible);
+	ui.lLineIncreasingXOnly->setVisible(visible);
+	ui.chkLineIncreasingXOnly->setVisible(visible);
+
+	//remove the tab "Error bars" for analysis curves
+	if (!visible)
+		ui.tabWidget->removeTab(5);
 }
 
 /*!

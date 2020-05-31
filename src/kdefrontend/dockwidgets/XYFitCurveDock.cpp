@@ -65,8 +65,6 @@ extern "C" {
 */
 
 XYFitCurveDock::XYFitCurveDock(QWidget* parent) : XYCurveDock(parent) {
-	//remove the tab "Error bars"
-	ui.tabWidget->removeTab(5);
 }
 
 /*!
