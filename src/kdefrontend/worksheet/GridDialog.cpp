@@ -125,9 +125,9 @@ GridDialog::~GridDialog() {
 
 void GridDialog::save(WorksheetView::GridSettings& settings) {
 	if (cbStyle->currentIndex() == 0)
-		settings.style  = WorksheetView::LineGrid;
+		settings.style  = WorksheetView::GridStyle::Line;
 	else
-		settings.style  = WorksheetView::DotGrid;
+		settings.style  = WorksheetView::GridStyle::Dot;
 
 	settings.horizontalSpacing = sbHorizontalSpacing->value();
 	settings.verticalSpacing = sbVerticalSpacing->value();

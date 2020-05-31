@@ -54,9 +54,9 @@ class WorksheetView : public QGraphicsView {
 public:
 	explicit WorksheetView(Worksheet* worksheet);
 
-	enum ExportFormat {Pdf, Svg, Png};
-	enum GridStyle {NoGrid, LineGrid, DotGrid};
-	enum ExportArea {ExportBoundingBox, ExportSelection, ExportWorksheet};
+	enum class ExportFormat {PDF, SVG, PNG};
+	enum class GridStyle {NoGrid, Line, Dot};
+	enum class ExportArea {BoundingBox, Selection, Worksheet};
 
 	struct GridSettings {
 		GridStyle style;

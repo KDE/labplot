@@ -751,7 +751,7 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 	sourceRect = scene()->sceneRect();
 
 	//print
-	if (format == WorksheetView::Pdf) {
+	if (format == WorksheetView::ExportFormat::PDF) {
 		QPrinter printer(QPrinter::HighResolution);
 		printer.setOutputFormat(QPrinter::PdfFormat);
 		printer.setOutputFileName(path);
@@ -768,7 +768,7 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		painter.begin(&printer);
 		exportPaint(&painter, targetRect, sourceRect);
 		painter.end();
-	} else if (format == WorksheetView::Svg) {
+	} else if (format == WorksheetView::ExportFormat::SVG) {
 		QSvgGenerator generator;
 		generator.setFileName(path);
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);

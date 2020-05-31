@@ -97,7 +97,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(), m_workshee
 	setAcceptDrops(true);
 	setCacheMode(QGraphicsView::CacheBackground);
 
-	m_gridSettings.style = WorksheetView::NoGrid;
+	m_gridSettings.style = GridStyle::NoGrid;
 
 	//signal/slot connections
 	connect(m_worksheet, &Worksheet::requestProjectContextMenu, this, &WorksheetView::createContextMenu);
@@ -231,7 +231,7 @@ void WorksheetView::initActions() {
 	noGridAction = new QAction(i18n("No Grid"), gridActionGroup);
 	noGridAction->setCheckable(true);
 	noGridAction->setChecked(true);
-	noGridAction->setData(WorksheetView::NoGrid);
+	noGridAction->setData(static_cast<int>(GridStyle::NoGrid));
 
 	denseLineGridAction = new QAction(i18n("Dense Line Grid"), gridActionGroup);
 	denseLineGridAction->setCheckable(true);
@@ -857,7 +857,7 @@ void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_r
 	}
 
 	//grid
-	if (m_gridSettings.style != WorksheetView::NoGrid) {
+	if (m_gridSettings.style != GridStyle::NoGrid) {
 		QColor c = m_gridSettings.color;
 		c.setAlphaF(m_gridSettings.opacity);
 		painter->setPen(c);
@@ -868,7 +868,7 @@ void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_r
 		qreal top = scene_rect.top();
 		qreal bottom = scene_rect.bottom();
 
-		if (m_gridSettings.style == WorksheetView::LineGrid) {
+		if (m_gridSettings.style == GridStyle::Line) {
 			QLineF line;
 
 			//horizontal lines
@@ -1460,28 +1460,28 @@ void WorksheetView::changeLayout(QAction* action) {
 
 void WorksheetView::changeGrid(QAction* action) {
 	if (action == noGridAction) {
-		m_gridSettings.style = WorksheetView::NoGrid;
+		m_gridSettings.style = GridStyle::NoGrid;
 		snapToGridAction->setEnabled(false);
 	} else if (action == sparseLineGridAction) {
-		m_gridSettings.style = WorksheetView::LineGrid;
+		m_gridSettings.style = GridStyle::Line;
 		m_gridSettings.color = Qt::gray;
 		m_gridSettings.opacity = 0.7;
 		m_gridSettings.horizontalSpacing = 15;
 		m_gridSettings.verticalSpacing = 15;
 	} else if (action == denseLineGridAction) {
-		m_gridSettings.style = WorksheetView::LineGrid;
+		m_gridSettings.style = GridStyle::Line;
 		m_gridSettings.color = Qt::gray;
 		m_gridSettings.opacity = 0.7;
 		m_gridSettings.horizontalSpacing = 5;
 		m_gridSettings.verticalSpacing = 5;
 	} else if (action == denseDotGridAction) {
-		m_gridSettings.style = WorksheetView::DotGrid;
+		m_gridSettings.style = GridStyle::Dot;
 		m_gridSettings.color = Qt::black;
 		m_gridSettings.opacity = 0.7;
 		m_gridSettings.horizontalSpacing = 5;
 		m_gridSettings.verticalSpacing = 5;
 	} else if (action == sparseDotGridAction) {
-		m_gridSettings.style = WorksheetView::DotGrid;
+		m_gridSettings.style = GridStyle::Dot;
 		m_gridSettings.color = Qt::black;
 		m_gridSettings.opacity = 0.7;
 		m_gridSettings.horizontalSpacing = 15;
@@ -1494,7 +1494,7 @@ void WorksheetView::changeGrid(QAction* action) {
 			return;
 	}
 
-	if (m_gridSettings.style == WorksheetView::NoGrid)
+	if (m_gridSettings.style == GridStyle::NoGrid)
 		snapToGridAction->setEnabled(false);
 	else
 		snapToGridAction->setEnabled(true);
@@ -1639,9 +1639,9 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	QRectF sourceRect;
 
 	//determine the rectangular to print
-	if (area == WorksheetView::ExportBoundingBox)
+	if (area == ExportArea::BoundingBox)
 		sourceRect = scene()->itemsBoundingRect();
-	else if (area == WorksheetView::ExportSelection) {
+	else if (area == ExportArea::Selection) {
 		//TODO doesn't work: rect = scene()->selectionArea().boundingRect();
 		for (const auto* item : m_selectedItems)
 			sourceRect = sourceRect.united( item->mapToScene(item->boundingRect()).boundingRect() );
@@ -1649,7 +1649,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		sourceRect = scene()->sceneRect();
 
 	//print
-	if (format == WorksheetView::Pdf) {
+	if (format == ExportFormat::PDF) {
 		QPrinter printer(QPrinter::HighResolution);
 		printer.setOutputFormat(QPrinter::PdfFormat);
 
@@ -1667,7 +1667,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		painter.begin(&printer);
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
-	} else if (format == WorksheetView::Svg) {
+	} else if (format == ExportFormat::SVG) {
 		QSvgGenerator generator;
 		generator.setFileName(path);
 // 		if (!generator.isValid()) {
