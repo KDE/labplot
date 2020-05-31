@@ -42,7 +42,6 @@ public:
 	void setColumns(const QVector<Column*>&);
 
 	enum {Separately = 0, Together = 1};
-	enum {Ascending = 0, Descending = 1};
 
 private slots:
 	void sortColumns();
