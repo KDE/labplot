@@ -51,14 +51,14 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.leName, &QLineEdit::textChanged, this, &ReferenceLineDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &ReferenceLineDock::commentChanged);
 
-	connect(ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)) );
-	connect(ui.lePosition, &QLineEdit::returnPressed, this, &ReferenceLineDock::positionChanged);
-	connect(ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)));
+	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::orientationChanged);
+	connect(ui.lePosition, &QLineEdit::textChanged, this, &ReferenceLineDock::positionChanged);
+	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceLineDock::visibilityChanged);
 
-	connect(ui.cbLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(styleChanged(int)) );
-	connect(ui.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(colorChanged(QColor)) );
-	connect(ui.sbLineWidth, SIGNAL(valueChanged(double)), this, SLOT(widthChanged(double)) );
-	connect(ui.sbLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(opacityChanged(int)) );
+	connect(ui.cbLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::styleChanged);
+	connect(ui.kcbLineColor, &KColorButton::changed, this, &ReferenceLineDock::colorChanged);
+	connect(ui.sbLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ReferenceLineDock::widthChanged);
+	connect(ui.sbLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &ReferenceLineDock::opacityChanged);
 
 	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbLineStyle, QColor(Qt::black));
@@ -112,7 +112,7 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 //**********************************************************
 //Position
 void ReferenceLineDock::orientationChanged(int index) {
-	auto orientation = (Qt::Orientation)index;
+	auto orientation = (index == 0) ? Qt::Horizontal : Qt::Vertical;
 	if (orientation == Qt::Horizontal)
 		ui.lPosition->setText(QLatin1String("y:"));
 	else
@@ -217,7 +217,10 @@ void ReferenceLineDock::linePositionChanged(double position) {
 
 void ReferenceLineDock::lineOrientationChanged(Qt::Orientation orientation) {
 	m_initializing = true;
-	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
+	if (orientation == Qt::Horizontal)
+		ui.cbOrientation->setCurrentIndex(0);
+	else
+		ui.cbOrientation->setCurrentIndex(1);
 	m_initializing = false;
 }
 
@@ -251,7 +254,7 @@ void ReferenceLineDock::load() {
 
 	m_initializing = true;
 
-	ui.cbOrientation->setCurrentIndex((int)m_line->orientation());
+	ui.cbOrientation->setCurrentIndex((m_line->orientation() == Qt::Horizontal) ? 0 : 1);
 	ui.lePosition->setText(QString::number(m_line->position()));
 	ui.cbLineStyle->setCurrentIndex( (int) m_line->pen().style() );
 	ui.kcbLineColor->setColor( m_line->pen().color() );
