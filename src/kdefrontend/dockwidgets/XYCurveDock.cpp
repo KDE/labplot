@@ -200,7 +200,7 @@ XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 	auto* layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::XYCurve);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::XYCurve);
 	layout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));

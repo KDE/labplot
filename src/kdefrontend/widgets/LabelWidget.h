@@ -71,7 +71,7 @@ private:
 	bool m_initializing{false};
 	QMenu* m_dateTimeMenu;
 	bool m_teXEnabled{false};
-	BaseDock::Units m_units{BaseDock::MetricUnits};
+	BaseDock::Units m_units{BaseDock::Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;

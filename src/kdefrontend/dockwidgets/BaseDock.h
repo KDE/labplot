@@ -39,10 +39,10 @@ class AbstractAspect;
 
 struct Lock {
 	inline explicit Lock(bool& variable)
-		: variable(variable = true){
+		: variable(variable = true) {
 	}
 
-	inline ~Lock(){
+	inline ~Lock() {
 		variable = false;
 	}
 
@@ -58,7 +58,7 @@ public:
 	explicit BaseDock(QWidget* parent);
 	~BaseDock();
 
-	enum Units {MetricUnits, ImperialUnits};
+	enum class Units {Metric, Imperial};
 
 	virtual void updateUnits() {};
 
@@ -68,7 +68,7 @@ protected:
 	QLineEdit* m_leComment{nullptr};
 	AbstractAspect* m_aspect{nullptr};
 	QList<AbstractAspect*> m_aspects;
-	Units m_units{MetricUnits};
+	Units m_units{Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
 
 protected slots:

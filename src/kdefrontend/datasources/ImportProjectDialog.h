@@ -45,7 +45,7 @@ class ImportProjectDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	enum ProjectType {ProjectLabPlot, ProjectOrigin};
+	enum class ProjectType {LabPlot, Origin};
 
 	explicit ImportProjectDialog(MainWin*, ProjectType);
 	~ImportProjectDialog() override;

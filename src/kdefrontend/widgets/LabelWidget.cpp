@@ -66,8 +66,8 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	ui.setupUi(this);
 
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
-	m_units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::MetricUnits);
-	if (m_units == BaseDock::ImperialUnits)
+	m_units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::Units::Metric);
+	if (m_units == BaseDock::Units::Imperial)
 		m_worksheetUnit = Worksheet::Unit::Inch;
 
 	m_dateTimeMenu->setSeparatorsCollapsible(false); //we don't want the first separator to be removed
@@ -107,7 +107,7 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	ui.cbPositionY->addItem(i18n("Custom"));
 
 	QString suffix;
-	if (m_units == BaseDock::MetricUnits)
+	if (m_units == BaseDock::Units::Metric)
 		suffix = QLatin1String(" cm");
 	else
 		suffix = QLatin1String(" in");
@@ -371,14 +371,14 @@ void LabelWidget::setBorderAvailable(bool b) {
 
 void LabelWidget::updateUnits() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
-	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::MetricUnits);
+	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::Units::Metric);
 	if (units == m_units)
 		return;
 
 	m_units = units;
 	Lock lock(m_initializing);
 	QString suffix;
-	if (m_units == BaseDock::MetricUnits) {
+	if (m_units == BaseDock::Units::Metric) {
 		//convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QLatin1String(" cm");

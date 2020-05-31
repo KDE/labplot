@@ -222,7 +222,7 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	auto* hlayout = new QHBoxLayout(frame);
 	hlayout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::Axis);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Axis);
 	hlayout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &AxisDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &AxisDock::saveConfigAsTemplate);

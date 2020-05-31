@@ -108,11 +108,11 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 
 	QString title;
 	switch (m_projectType) {
-	case (ProjectLabPlot):
+	case ProjectType::LabPlot:
 		m_projectParser = new LabPlotProjectParser();
 		title = i18nc("@title:window", "Import LabPlot Project");
 		break;
-	case (ProjectOrigin):
+	case ProjectType::Origin:
 #ifdef HAVE_LIBORIGIN
 		m_projectParser = new OriginProjectParser();
 		title = i18nc("@title:window", "Import Origin Project");
@@ -148,10 +148,10 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 
 	QString lastImportedFile;
 	switch (m_projectType) {
-	case (ProjectLabPlot):
+	case ProjectType::LabPlot:
 		lastImportedFile = QLatin1String("LastImportedLabPlotProject");
 		break;
-	case (ProjectOrigin):
+	case ProjectType::Origin:
 		lastImportedFile = QLatin1String("LastImportedOriginProject");
 		break;
 	}
@@ -167,10 +167,10 @@ ImportProjectDialog::~ImportProjectDialog() {
 
 	QString lastImportedFile;
 	switch (m_projectType) {
-	case (ProjectLabPlot):
+	case ProjectType::LabPlot:
 		lastImportedFile = QLatin1String("LastImportedLabPlotProject");
 		break;
-	case (ProjectOrigin):
+	case ProjectType::Origin:
 		lastImportedFile = QLatin1String("LastImportedOriginProject");
 		break;
 	}
@@ -253,7 +253,7 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	connect(m_projectParser, &ProjectParser::completed, progressBar, &QProgressBar::setValue);
 
 #ifdef HAVE_LIBORIGIN
-	if (m_projectType == ProjectOrigin && ui.chbUnusedObjects->isVisible() && ui.chbUnusedObjects->isChecked())
+	if (m_projectType == ProjectType::Origin && ui.chbUnusedObjects->isVisible() && ui.chbUnusedObjects->isChecked())
 		reinterpret_cast<OriginProjectParser*>(m_projectParser)->setImportUnusedObjects(true);
 #endif
 
@@ -272,7 +272,7 @@ void ImportProjectDialog::refreshPreview() {
 	m_projectParser->setProjectFileName(project);
 
 #ifdef HAVE_LIBORIGIN
-	if (m_projectType == ProjectOrigin) {
+	if (m_projectType == ProjectType::Origin) {
 		auto* originParser = reinterpret_cast<OriginProjectParser*>(m_projectParser);
 		if (originParser->hasUnusedObjects())
 			ui.chbUnusedObjects->show();
@@ -367,12 +367,12 @@ void ImportProjectDialog::selectFile() {
 	QString supportedFormats;
 	QString lastDirConfEntryName;
 	switch (m_projectType) {
-	case (ProjectLabPlot):
+	case ProjectType::LabPlot:
 		title = i18nc("@title:window", "Open LabPlot Project");
 		lastDirConfEntryName = QLatin1String("LastImportLabPlotProjectDir");
 		supportedFormats = i18n("LabPlot Projects (%1)", Project::supportedExtensions());
 		break;
-	case (ProjectOrigin):
+	case ProjectType::Origin:
 #ifdef HAVE_LIBORIGIN
 		title = i18nc("@title:window", "Open Origin Project");
 		lastDirConfEntryName = QLatin1String("LastImportOriginProjecttDir");

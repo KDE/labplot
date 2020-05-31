@@ -56,7 +56,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.sbRowCount, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SpreadsheetDock::rowCountChanged);
 	connect(ui.cbShowComments, &QCheckBox::stateChanged, this, &SpreadsheetDock::commentsShownChanged);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::Spreadsheet);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Spreadsheet);
 	ui.gridLayout->addWidget(templateHandler, 11, 0, 1, 4);
 	templateHandler->show();
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &SpreadsheetDock::loadConfigFromTemplate);

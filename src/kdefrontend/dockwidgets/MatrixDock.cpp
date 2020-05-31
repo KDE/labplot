@@ -73,7 +73,7 @@ MatrixDock::MatrixDock(QWidget* parent): BaseDock(parent) {
 	connect(ui.sbPrecision, SIGNAL(valueChanged(int)), this, SLOT(precisionChanged(int)));
 	connect(ui.cbHeader, SIGNAL(currentIndexChanged(int)), this, SLOT(headerFormatChanged(int)));
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::Matrix);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Matrix);
 	ui.gridLayout->addWidget(templateHandler, 22, 0, 1, 4);
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));

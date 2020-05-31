@@ -36,9 +36,9 @@
 
 BaseDock::BaseDock(QWidget* parent) : QWidget(parent) {
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
-	m_units = (Units)group.readEntry("Units", (int)MetricUnits);
+	m_units = (Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 
-	if (m_units == ImperialUnits)
+	if (m_units == Units::Imperial)
 		m_worksheetUnit = Worksheet::Unit::Inch;
 }
 

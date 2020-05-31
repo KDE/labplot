@@ -141,7 +141,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): BaseDock(parent) {
 	connect(m_themeHandler, &ThemeHandler::loadThemeRequested, this, &WorksheetDock::loadTheme);
 	connect(m_themeHandler, &ThemeHandler::info, this, &WorksheetDock::info);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Worksheet);
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &WorksheetDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &WorksheetDock::saveConfigAsTemplate);
@@ -215,14 +215,14 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 
 void WorksheetDock::updateUnits() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
-	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", (int)MetricUnits);
+	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;
 
 	m_units = units;
 	Lock lock(m_initializing);
 	QString suffix;
-	if (m_units == BaseDock::MetricUnits) {
+	if (m_units == Units::Metric) {
 		//convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QLatin1String(" cm");
@@ -270,7 +270,7 @@ void WorksheetDock::updatePaperSize() {
 
 	double w = ui.sbWidth->value();
 	double h = ui.sbHeight->value();
-	if (m_units == BaseDock::MetricUnits) {
+	if (m_units == Units::Metric) {
 		//In UI we use cm, so we need to convert to mm first before we check with QPageSize
 		w *= 10;
 		h *= 10;
@@ -287,7 +287,7 @@ void WorksheetDock::updatePaperSize() {
 			continue;
 
 		const auto id = v.value<QPageSize::PageSizeId>();
-		QPageSize::Unit pageUnit = (m_units == BaseDock::MetricUnits) ? QPageSize::Millimeter : QPageSize::Inch;
+		QPageSize::Unit pageUnit = (m_units == Units::Metric) ? QPageSize::Millimeter : QPageSize::Inch;
 		const QSizeF ps = QPageSize::size(id, pageUnit);
 		if (s == ps) { //check the portrait-orientation first
 			ui.cbSize->setCurrentIndex(i);
@@ -318,7 +318,7 @@ void WorksheetDock::retranslateUi() {
 	ui.cbOrientation->addItem(i18n("Landscape"));
 
 	QString suffix;
-	if (m_units == BaseDock::MetricUnits)
+	if (m_units == Units::Metric)
 		suffix = QLatin1String(" cm");
 	else
 		suffix = QLatin1String(" in");
@@ -444,7 +444,7 @@ void WorksheetDock::sizeChanged(int i) {
 			s.transpose();
 
 		//s is in mm, in UI we show everything in cm/in
-		if (m_units == BaseDock::MetricUnits) {
+		if (m_units == Units::Metric) {
 			ui.sbWidth->setValue(s.width()/10);
 			ui.sbHeight->setValue(s.height()/10);
 		} else {

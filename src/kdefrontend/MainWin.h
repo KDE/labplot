@@ -120,7 +120,7 @@ public:
 	Project* project() const;
 	void addAspectToProject(AbstractAspect*);
 
-	enum LoadOnStart {Nothing, NewProject, NewProjectWorksheet, LastProject, WelcomeScreen};
+	enum class LoadOnStart {Nothing, NewProject, NewProjectWorksheet, LastProject, WelcomeScreen};
 
 #ifdef HAVE_KUSERFEEDBACK
 	KUserFeedback::Provider& userFeedbackProvider() {return m_userFeedbackProvider;}

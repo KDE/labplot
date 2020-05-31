@@ -46,7 +46,7 @@ NoteDock::NoteDock(QWidget *parent) : BaseDock(parent) {
 	connect(ui.kcbTextColor, &KColorButton::changed, this, &NoteDock::textColorChanged);
 	connect(ui.kfrTextFont, &KFontRequester::fontSelected, this, &NoteDock::textFontChanged);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Worksheet);
 	ui.gridLayout->addWidget(templateHandler, 8, 3);
 	templateHandler->show();
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &NoteDock::loadConfigFromTemplate);

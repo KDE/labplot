@@ -114,7 +114,7 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 	this->retranslateUi();
 
 	//disable the load-button if no templates are available yet
-	QStringList list = QDir(m_dirName + m_subDirNames.at(m_className)).entryList();
+	QStringList list = QDir(m_dirName + m_subDirNames.at(static_cast<int>(m_className))).entryList();
 	list.removeAll(QLatin1String("."));
 	list.removeAll(QLatin1String(".."));
 	m_tbLoad->setEnabled(list.size());
@@ -139,7 +139,7 @@ void TemplateHandler::loadMenu() {
 	QMenu menu;
 	menu.addSection(i18n("Load From Template"));
 
-	QStringList list = QDir(m_dirName + m_subDirNames.at(m_className)).entryList();
+	QStringList list = QDir(m_dirName + m_subDirNames.at(static_cast<int>(m_className))).entryList();
 	list.removeAll(QLatin1String("."));
 	list.removeAll(QLatin1String(".."));
 	for (int i = 0; i < list.size(); ++i) {
@@ -154,7 +154,7 @@ void TemplateHandler::loadMenu() {
 }
 
 void TemplateHandler::loadMenuSelected(QAction* action) {
-	QString configFile = m_dirName + m_subDirNames.at(m_className) + '/' + action->data().toString();
+	QString configFile = m_dirName + m_subDirNames.at(static_cast<int>(m_className)) + '/' + action->data().toString();
 	KConfig config(configFile, KConfig::SimpleConfig);
 	emit loadConfigRequested(config);
 	emit info( i18n("Template \"%1\" was loaded.", action->text().remove('&')) );
@@ -164,7 +164,7 @@ void TemplateHandler::saveMenu() {
 	QMenu menu;
 	menu.addSection(i18n("Save As Template"));
 
-	QStringList list = QDir(m_dirName + m_subDirNames.at(m_className)).entryList();
+	QStringList list = QDir(m_dirName + m_subDirNames.at(static_cast<int>(m_className))).entryList();
 	list.removeAll(QLatin1String("."));
 	list.removeAll(QLatin1String(".."));
 	for (int i = 0; i < list.size(); ++i) {
@@ -205,7 +205,7 @@ void TemplateHandler::saveMenu() {
  * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
 void TemplateHandler::saveNewSelected(const QString& filename) {
-	QString path = m_dirName + m_subDirNames.at(m_className) + '/' + filename;
+	QString path = m_dirName + m_subDirNames.at(static_cast<int>(m_className)) + '/' + filename;
 	KConfig config(path, KConfig::SimpleConfig);
 	emit saveConfigRequested(config);
 	emit info( i18n("New template \"%1\" was saved.", filename) );

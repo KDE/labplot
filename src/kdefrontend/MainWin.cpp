@@ -334,17 +334,17 @@ void MainWin::initGUI(const QString& fileName) {
 	} else {
 		//There is no file to open. Depending on the settings do nothing,
 		//create a new project or open the last used project.
-		LoadOnStart load = (LoadOnStart)group.readEntry("LoadOnStart", (int)Nothing);
-		if (load != WelcomeScreen) {
+		LoadOnStart load = (LoadOnStart)group.readEntry("LoadOnStart", static_cast<int>(LoadOnStart::Nothing));
+		if (load != LoadOnStart::WelcomeScreen) {
 			createMdiArea();
 			setCentralWidget(m_mdiArea);
 
-			if (load == NewProject)	//create new project
+			if (load == LoadOnStart::NewProject)	//create new project
 				newProject();
-			else if (load == NewProjectWorksheet) { //create new project with a worksheet
+			else if (load == LoadOnStart::NewProjectWorksheet) { //create new project with a worksheet
 				newProject();
 				newWorksheet();
-			} else if (load == LastProject) { //open last used project
+			} else if (load == LoadOnStart::LastProject) { //open last used project
 				if (!m_recentProjectsAction->urls().isEmpty()) {
 					QDEBUG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().constFirst());
 					openRecentProject( m_recentProjectsAction->urls().constFirst() );
@@ -2320,9 +2320,9 @@ void MainWin::importProjectDialog() {
 
 	ImportProjectDialog::ProjectType type;
 	if (QObject::sender() == m_importOpjAction)
-		type = ImportProjectDialog::ProjectOrigin;
+		type = ImportProjectDialog::ProjectType::Origin;
 	else
-		type = ImportProjectDialog::ProjectLabPlot;
+		type = ImportProjectDialog::ProjectType::LabPlot;
 
 	auto* dlg = new ImportProjectDialog(this, type);
 

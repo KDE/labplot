@@ -151,7 +151,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : BaseDock(par
 	auto* layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlotLegend);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CartesianPlotLegend);
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CartesianPlotLegendDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &CartesianPlotLegendDock::saveConfigAsTemplate);
@@ -253,14 +253,14 @@ void CartesianPlotLegendDock::activateTitleTab() const{
 
 void CartesianPlotLegendDock::updateUnits() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
-	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", (int)MetricUnits);
+	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;
 
 	m_units = units;
 	Lock lock(m_initializing);
 	QString suffix;
-	if (m_units == BaseDock::MetricUnits) {
+	if (m_units == Units::Metric) {
 		//convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QLatin1String(" cm");
@@ -344,7 +344,7 @@ void CartesianPlotLegendDock::retranslateUi() {
 	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
 
 	QString suffix;
-	if (m_units == BaseDock::MetricUnits)
+	if (m_units == Units::Metric)
 		suffix = QLatin1String(" cm");
 	else
 		suffix = QLatin1String(" in");

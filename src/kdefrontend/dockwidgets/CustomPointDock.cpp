@@ -77,7 +77,7 @@ CustomPointDock::CustomPointDock(QWidget *parent): BaseDock(parent) {
 	connect( ui.sbSymbolBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(symbolBorderWidthChanged(double)) );
 
 	//Template handler
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::CustomPoint);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CustomPoint);
 	ui.verticalLayout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));

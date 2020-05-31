@@ -38,15 +38,15 @@ class DateTimeSpinBox : public QAbstractSpinBox {
 
 	Q_OBJECT;
 private:
-    enum Type {
-	year,
-	month,
-	day,
-	hour,
-	minute,
-	second,
-	millisecond
-    };
+	enum Type {
+		year,
+		month,
+		day,
+		hour,
+		minute,
+		second,
+		millisecond
+	};
 
 public:
 	explicit DateTimeSpinBox(QWidget* parent);
