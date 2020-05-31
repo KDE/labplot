@@ -62,6 +62,8 @@ public:
 	void recalcShapeAndBoundingRect();
 	void setPrinting(bool);
 
+	bool isDefault{false};
+
 	//general
 	bool autoScale;
 	Axis::AxisOrientation orientation; //!< horizontal or vertical

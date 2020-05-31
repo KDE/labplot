@@ -57,6 +57,8 @@ public:
 	void updateCursor();
 	void setZoomSelectionBandShow(bool show);
 
+	CartesianPlot::Type type{CartesianPlot::FourAxes};
+
 	QRectF dataRect;
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
 	CartesianPlot::RangeFormat xRangeFormat{CartesianPlot::Numeric};
@@ -86,6 +88,7 @@ public:
 	bool suppressRetransform{false};
 	bool panningStarted{false};
 	bool locked{false};
+
 	// Cursor
 	bool cursor0Enable{false};
 	int selectedCursor{0};

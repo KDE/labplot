@@ -175,7 +175,7 @@ void CartesianPlot::init() {
 	initializes all children of \c CartesianPlot and
 	setups a default plot of type \c type with a plot title.
 */
-void CartesianPlot::initDefault(Type type) {
+void CartesianPlot::setType(Type type) {
 	Q_D(CartesianPlot);
 
 	switch (type) {
@@ -187,6 +187,7 @@ void CartesianPlot::initDefault(Type type) {
 
 			//Axes
 			Axis* axis = new Axis("x axis 1", Axis::AxisHorizontal);
+			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisBottom);
@@ -205,6 +206,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setSuppressRetransform(false);
 
 			axis = new Axis("x axis 2", Axis::AxisHorizontal);
+			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisTop);
@@ -225,6 +227,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setSuppressRetransform(false);
 
 			axis = new Axis("y axis 1", Axis::AxisVertical);
+			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisLeft);
@@ -243,6 +246,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setSuppressRetransform(false);
 
 			axis = new Axis("y axis 2", Axis::AxisVertical);
+			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisRight);
@@ -272,6 +276,7 @@ void CartesianPlot::initDefault(Type type) {
 			d->yMax = 1.0;
 
 			Axis* axis = new Axis("x axis 1", Axis::AxisHorizontal);
+			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisBottom);
@@ -285,6 +290,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setSuppressRetransform(false);
 
 			axis = new Axis("y axis 1", Axis::AxisVertical);
+			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisLeft);
@@ -313,6 +319,7 @@ void CartesianPlot::initDefault(Type type) {
 			m_plotArea->setBorderPen(pen);
 
 			Axis* axis = new Axis("x axis 1", Axis::AxisHorizontal);
+			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisCentered);
@@ -327,6 +334,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setSuppressRetransform(false);
 
 			axis = new Axis("y axis 1", Axis::AxisVertical);
+			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisCentered);
@@ -356,6 +364,7 @@ void CartesianPlot::initDefault(Type type) {
 			m_plotArea->setBorderPen(pen);
 
 			Axis* axis = new Axis("x axis 1", Axis::AxisHorizontal);
+			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisCustom);
@@ -371,6 +380,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setSuppressRetransform(false);
 
 			axis = new Axis("y axis 1", Axis::AxisVertical);
+			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisCustom);

@@ -93,7 +93,7 @@ public:
 		int lastChanged;
 	};
 
-	void initDefault(Type = FourAxes);
+	void setType(Type type);
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QMenu* analysisMenu();
