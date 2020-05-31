@@ -1279,28 +1279,28 @@ void WorksheetView::addNew(QAction* action) {
 	WorksheetElement* aspect = nullptr;
 	if (action == addCartesianPlot1Action) {
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
-		plot->initDefault(CartesianPlot::FourAxes);
+		plot->setType(CartesianPlot::FourAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot1Action);
 	} else if (action == addCartesianPlot2Action) {
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
-		plot->initDefault(CartesianPlot::TwoAxes);
+		plot->setType(CartesianPlot::TwoAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot2Action);
 	} else if (action == addCartesianPlot3Action) {
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
-		plot->initDefault(CartesianPlot::TwoAxesCentered);
+		plot->setType(CartesianPlot::TwoAxesCentered);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot3Action);
 	} else if (action == addCartesianPlot4Action) {
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
-		plot->initDefault(CartesianPlot::TwoAxesCenteredZero);
+		plot->setType(CartesianPlot::TwoAxesCenteredZero);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)

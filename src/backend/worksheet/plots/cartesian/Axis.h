@@ -134,8 +134,12 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, minorGridPen, MinorGridPen)
 	BASIC_D_ACCESSOR_DECL(qreal, minorGridOpacity, MinorGridOpacity)
 
+	void setDefault(bool);
+	bool isDefault() const;
+
 	void setVisible(bool) override;
 	bool isVisible() const override;
+
 	void setPrinting(bool) override;
 	void setSuppressRetransform(bool);
 	void retransform() override;

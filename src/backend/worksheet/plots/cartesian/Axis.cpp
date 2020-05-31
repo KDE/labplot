@@ -480,6 +480,16 @@ bool Axis::isVisible() const {
 	return d->isVisible();
 }
 
+void Axis::setDefault(bool value) {
+	Q_D(Axis);
+	d->isDefault = value;
+}
+
+bool Axis::isDefault() const {
+	Q_D(const Axis);
+	return d->isDefault;
+}
+
 void Axis::setPrinting(bool on) {
 	Q_D(Axis);
 	d->setPrinting(on);
