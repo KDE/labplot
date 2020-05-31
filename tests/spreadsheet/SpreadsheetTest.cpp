@@ -34,6 +34,7 @@
 #include <QClipboard>
 #include <QUndoStack>
 
+#include <cstdlib>
 extern "C" {
 #include <gsl/gsl_math.h>
 }
