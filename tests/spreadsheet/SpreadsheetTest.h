@@ -49,6 +49,17 @@ private slots:
 	void testCopyPasteSizeChange01();
 
 	// sorting tests
+	void testSortSingleNumeric1();
+	void testSortSingleNumeric2();
+	void testSortSingleInteger1();
+	void testSortSingleInteger2();
+	void testSortSingleBigInt1();
+	void testSortSingleBigInt2();
+	void testSortSingleText1();
+	void testSortSingleText2();
+	void testSortSingleDateTime1();
+	void testSortSingleDateTime2();
+
 	void testSortNumeric1();
 	void testSortNumeric2();
 	void testSortInteger1();
@@ -60,7 +71,8 @@ private slots:
 	void testSortDateTime1();
 	void testSortDateTime2();
 
-	void testSortPerformanceNumeric();
+	void testSortPerformanceNumeric1();
+	void testSortPerformanceNumeric2();
 };
 
 #endif

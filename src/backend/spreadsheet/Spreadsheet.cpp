@@ -443,11 +443,11 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 
 					// put the values in the right order into tempCol
 					for (int i = 0; i < filledRows; i++) {
-						tempCol->copy(col, map.at(i).second, i, 1);
-						tempCol->setMasked(col->isMasked(map.at(i).second));
+						int idx = map.at(i).second;
+						//too slow: tempCol->copy(col, idx, i, 1);
+						tempCol->setFromColumn(i, col, idx);
+						tempCol->setMasked(col->isMasked(idx));
 					}
-					// copy the sorted column
-					col->copy(tempCol.get(), 0, 0, rows);
 					break;
 				}
 			case AbstractColumn::ColumnMode::Integer: {
@@ -463,11 +463,11 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 
 					// put the values in the right order into tempCol
 					for (int i = 0; i < rows; i++) {
-						tempCol->copy(col, map.at(i).second, i, 1);
-						tempCol->setMasked(col->isMasked(map.at(i).second));
+						int idx = map.at(i).second;
+						//too slow: tempCol->copy(col, idx, i, 1);
+						tempCol->setFromColumn(i, col, idx);
+						tempCol->setMasked(col->isMasked(idx));
 					}
-					// copy the sorted column
-					col->copy(tempCol.get(), 0, 0, rows);
 					break;
 				}
 			case AbstractColumn::ColumnMode::BigInt: {
@@ -483,11 +483,11 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 
 					// put the values in the right order into tempCol
 					for (int i = 0; i < rows; i++) {
-						tempCol->copy(col, map.at(i).second, i, 1);
-						tempCol->setMasked(col->isMasked(map.at(i).second));
+						int idx = map.at(i).second;
+						//too slow: tempCol->copy(col, idx, i, 1);
+						tempCol->setFromColumn(i, col, idx);
+						tempCol->setMasked(col->isMasked(idx));
 					}
-					// copy the sorted column
-					col->copy(tempCol.get(), 0, 0, rows);
 					break;
 				}
 			case AbstractColumn::ColumnMode::Text: {
@@ -505,11 +505,11 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 
 					// put the values in the right order into tempCol
 					for (int i = 0; i < filledRows; i++) {
-						tempCol->copy(col, map.at(i).second, i, 1);
-						tempCol->setMasked(col->isMasked(map.at(i).second));
+						int idx = map.at(i).second;
+						//too slow: tempCol->copy(col, idx, i, 1);
+						tempCol->setFromColumn(i, col, idx);
+						tempCol->setMasked(col->isMasked(idx));
 					}
-					// copy the sorted column
-					col->copy(tempCol.get(), 0, 0, rows);
 					break;
 				}
 			case AbstractColumn::ColumnMode::DateTime:
@@ -529,14 +529,16 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 
 					// put the values in the right order into tempCol
 					for (int i = 0; i < filledRows; i++) {
-						tempCol->copy(col, map.at(i).second, i, 1);
-						tempCol->setMasked(col->isMasked(map.at(i).second));
+						int idx = map.at(i).second;
+						//too slow: tempCol->copy(col, idx, i, 1);
+						tempCol->setFromColumn(i, col, idx);
+						tempCol->setMasked(col->isMasked(idx));
 					}
-					// copy the sorted column
-					col->copy(tempCol.get(), 0, 0, rows);
 					break;
 				}
 			}
+			// copy the sorted column
+			col->copy(tempCol.get(), 0, 0, rows);
 		}
 	} else { // sort with leading column
 		DEBUG("	sort with leading column")
@@ -565,9 +567,10 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					std::unique_ptr<Column> tempCol(new Column("temp", columnMode));
 					// put the values in correct order into tempCol
 					for (int i = 0; i < filledRows; i++) {
-						//too slow: tempCol->copy(col, map.at(i).second, i, 1);
-						tempCol->setFromColumn(i, col, map.at(i).second);
-						tempCol->setMasked(col->isMasked(map.at(i).second));
+						int idx = map.at(i).second;
+						//too slow: tempCol->copy(col, idx, i, 1);
+						tempCol->setFromColumn(i, col, idx);
+						tempCol->setMasked(col->isMasked(idx));
 					}
 
 					// copy the sorted column
@@ -603,9 +606,10 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
 					// put the values in the right order into tempCol
 					for (int i = 0; i < rows; i++) {
-						//too slow: tempCol->copy(col, map.at(i).second, i, 1);
-						tempCol->setFromColumn(i, col, map.at(i).second);
-						tempCol->setMasked(col->isMasked(map.at(i).second));
+						int idx = map.at(i).second;
+						//too slow: tempCol->copy(col, idx, i, 1);
+						tempCol->setFromColumn(i, col, idx);
+						tempCol->setMasked(col->isMasked(idx));
 					}
 					// copy the sorted column
 					col->copy(tempCol.get(), 0, 0, rows);
@@ -627,9 +631,10 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
 					// put the values in the right order into tempCol
 					for (int i = 0; i < rows; i++) {
-						//too slow: tempCol->copy(col, map.at(i).second, i, 1);
-						tempCol->setFromColumn(i, col, map.at(i).second);
-						tempCol->setMasked(col->isMasked(map.at(i).second));
+						int idx = map.at(i).second;
+						//too slow: tempCol->copy(col, idx, i, 1);
+						tempCol->setFromColumn(i, col, idx);
+						tempCol->setMasked(col->isMasked(idx));
 					}
 					// copy the sorted column
 					col->copy(tempCol.get(), 0, 0, rows);
@@ -658,9 +663,10 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
 					// put the values in the right order into tempCol
 					for (int i = 0; i < filledRows; i++) {
-						//too slow: tempCol->copy(col, map.at(i).second, i, 1);
-						tempCol->setFromColumn(i, col, map.at(i).second);
-						tempCol->setMasked(col->isMasked(map.at(i).second));
+						int idx = map.at(i).second;
+						//too slow: tempCol->copy(col, idx, i, 1);
+						tempCol->setFromColumn(i, col, idx);
+						tempCol->setMasked(col->isMasked(idx));
 					}
 
 					// copy the sorted column
@@ -703,9 +709,10 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
 					// put the values in the right order into tempCol
 					for (int i = 0; i < filledRows; i++) {
-						//too slow: tempCol->copy(col, map.at(i).second, i, 1);
-						tempCol->setFromColumn(i, col, map.at(i).second);
-						tempCol->setMasked(col->isMasked(map.at(i).second));
+						int idx = map.at(i).second;
+						//too slow: tempCol->copy(col, idx, i, 1);
+						tempCol->setFromColumn(i, col, idx);
+						tempCol->setMasked(col->isMasked(idx));
 					}
 					// copy the sorted column
 					if (col == leading)	// update all rows
