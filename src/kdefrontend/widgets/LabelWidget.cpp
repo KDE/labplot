@@ -1166,6 +1166,7 @@ void LabelWidget::load() {
 
 	//Border
 	ui.cbBorderShape->setCurrentIndex(static_cast<int>(m_label->borderShape()));
+	borderShapeChanged(ui.cbBorderShape->currentIndex());
 	ui.kcbBorderColor->setColor( m_label->borderPen().color() );
 	ui.cbBorderStyle->setCurrentIndex( (int) m_label->borderPen().style() );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_label->borderPen().widthF(), Worksheet::Unit::Point) );
