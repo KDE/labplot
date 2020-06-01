@@ -49,7 +49,10 @@ private:
 	bool m_invalidRanges{false};
 
 	bool eventFilter(QObject*, QEvent*) override;
+	void resizeEvent(QResizeEvent*) override;
+
 	void highlightInvalid(int row, int col, bool invalid);
+	void updateTableSize();
 
 signals:
 	void parametersChanged(bool);

@@ -72,6 +72,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent) : QWidget(parent) {
 	ui.tableWidget->installEventFilter(this);
 
 	connect( ui.tableWidget, SIGNAL(cellChanged(int,int)), this, SLOT(changed()) );
+	updateTableSize();
 }
 
 void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
@@ -219,12 +220,7 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 	}
 	m_initializing = false;
 
-	//set the size of the table to the minimum possible
-	int h = ui.tableWidget->horizontalHeader()->height();
-	h += ui.tableWidget->verticalHeader()->sectionSize(0) * ui.tableWidget->verticalHeader()->count();
-	if (ui.tableWidget->horizontalScrollBar()->isVisible())
-		h += ui.tableWidget->horizontalScrollBar()->height();
-	setMaximumSize(16777215, h);
+	updateTableSize();
 }
 
 bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
@@ -246,6 +242,20 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 
 	return QWidget::eventFilter(watched, event);
 }
+
+void FitParametersWidget::resizeEvent(QResizeEvent*) {
+	updateTableSize();
+}
+
+void FitParametersWidget::updateTableSize() {
+	//set the size of the table to the minimum possible
+	int h = ui.tableWidget->horizontalHeader()->height();
+	h += ui.tableWidget->verticalHeader()->sectionSize(0) * ui.tableWidget->verticalHeader()->count();
+	if (ui.tableWidget->horizontalScrollBar()->isVisible())
+		h += ui.tableWidget->horizontalScrollBar()->height();
+	setMaximumSize(16777215, h);
+}
+
 
 void FitParametersWidget::changed() {
 	DEBUG("FitParametersWidget::changed()");
