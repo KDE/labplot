@@ -258,7 +258,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -273,11 +273,11 @@
          <property name="columnCount">
           <number>7</number>
          </property>
-         <attribute name="horizontalHeaderMinimumSectionSize">
-          <number>15</number>
+         <attribute name="horizontalHeaderCascadingSectionResizes">
+          <bool>true</bool>
          </attribute>
          <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>75</number>
+          <number>120</number>
          </attribute>
          <attribute name="horizontalHeaderStretchLastSection">
           <bool>true</bool>
@@ -639,7 +639,8 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff>.</normaloff>.</iconset>
+       <normaloff/>
+      </iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -739,7 +740,8 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff>.</normaloff>.</iconset>
+       <normaloff/>
+      </iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -812,7 +814,8 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff>.</normaloff>.</iconset>
+       <normaloff/>
+      </iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -856,7 +859,8 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff>.</normaloff>.</iconset>
+       <normaloff/>
+      </iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -913,7 +917,8 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff>.</normaloff>.</iconset>
+       <normaloff/>
+      </iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -977,7 +982,8 @@
      </property>
      <property name="icon">
       <iconset theme="configure">
-       <normaloff>.</normaloff>.</iconset>
+       <normaloff/>
+      </iconset>
      </property>
     </widget>
    </item>
@@ -1034,16 +1040,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
       <property name="spacing">

@@ -155,9 +155,9 @@ void XYFitCurveDock::setupGeneral() {
 	headerLabels << QString() << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << QLatin1String("P > |t|") << i18n("Conf. Interval");
 	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
 
-	headerLabels.clear();
-	headerLabels << i18n("Measure") << i18n("Value");
-	uiGeneralTab.twGoodness->setHorizontalHeaderLabels(headerLabels);
+	//headerLabels.clear();
+	//headerLabels << i18n("Measure") << i18n("Value");
+	//uiGeneralTab.twGoodness->setHorizontalHeaderLabels(headerLabels);
 
 	// show all options per default
 	showDataOptions(true);
@@ -1349,6 +1349,9 @@ void XYFitCurveDock::showFitResult() {
 	//resize the table headers to fit the new content
 	uiGeneralTab.twLog->resizeColumnsToContents();
 	uiGeneralTab.twParameters->resizeColumnsToContents();
+	//twGoodness doesn't have any header -> resize sections
+	uiGeneralTab.twGoodness->resizeColumnToContents(0);
+	uiGeneralTab.twGoodness->resizeColumnToContents(1);
 
 	//enable the "recalculate"-button if the source data was changed since the last fit
 	uiGeneralTab.pbRecalculate->setEnabled(m_fitCurve->isSourceDataChangedSinceLastRecalc());
