@@ -248,9 +248,21 @@ void FitParametersWidget::resizeEvent(QResizeEvent*) {
 }
 
 void FitParametersWidget::updateTableSize() {
+	auto horHeader = ui.tableWidget->horizontalHeader();
+	auto vertHeader = ui.tableWidget->verticalHeader();
+	int count = vertHeader->count();
+
+	//show the vertrical scrollbar if we have more than 5 rows and limit the max size to 5 rows
+	if (count <= 5)
+		ui.tableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	else {
+		ui.tableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+		count = 5;
+	}
+
 	//set the size of the table to the minimum possible
-	int h = ui.tableWidget->horizontalHeader()->height();
-	h += ui.tableWidget->verticalHeader()->sectionSize(0) * ui.tableWidget->verticalHeader()->count();
+	int h = horHeader->height();
+	h += vertHeader->sectionSize(0) * count;
 	if (ui.tableWidget->horizontalScrollBar()->isVisible())
 		h += ui.tableWidget->horizontalScrollBar()->height();
 	setMaximumSize(16777215, h);
