@@ -150,6 +150,15 @@ void XYFitCurveDock::setupGeneral() {
 	//don't allow word wrapping in the log-table for the multi-line iterations string
 	uiGeneralTab.twLog->setWordWrap(false);
 
+	//header labels
+	QStringList headerLabels;
+	headerLabels << QString() << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << QLatin1String("P > |t|") << i18n("Conf. Interval");
+	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
+
+	headerLabels.clear();
+	headerLabels << i18n("Measure") << i18n("Value");
+	uiGeneralTab.twGoodness->setHorizontalHeaderLabels(headerLabels);
+
 	// show all options per default
 	showDataOptions(true);
 	showFitOptions(true);
@@ -170,13 +179,11 @@ void XYFitCurveDock::setupGeneral() {
 
 	uiGeneralTab.twLog->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	uiGeneralTab.twGoodness->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
-	uiGeneralTab.twGoodness->item(0, 1)->setText(UTF8_QSTRING("χ²"));
-	uiGeneralTab.twGoodness->item(1, 1)->setText(i18n("reduced") + ' ' + UTF8_QSTRING("χ²")
-		+ " (" + UTF8_QSTRING("χ²") + "/dof)");
-	uiGeneralTab.twGoodness->item(3, 1)->setText(UTF8_QSTRING("R²"));
-	uiGeneralTab.twGoodness->item(4, 1)->setText(UTF8_QSTRING("R̄²"));
-	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²") + ' ' + i18n("test"));
-	uiGeneralTab.twGoodness->item(5, 1)->setText("P > " + UTF8_QSTRING("χ²"));
+	uiGeneralTab.twGoodness->item(0, 0)->setText(uiGeneralTab.twGoodness->item(0, 0)->text() + UTF8_QSTRING(" (χ²)"));
+	uiGeneralTab.twGoodness->item(1, 0)->setText(uiGeneralTab.twGoodness->item(1, 0)->text() + UTF8_QSTRING(" (χ²/dof)"));
+	uiGeneralTab.twGoodness->item(3, 0)->setText(uiGeneralTab.twGoodness->item(3, 0)->text() + UTF8_QSTRING(" (R²)"));
+	uiGeneralTab.twGoodness->item(4, 0)->setText(uiGeneralTab.twGoodness->item(4, 0)->text() + UTF8_QSTRING(" (R̄²)"));
+	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²-") + i18n("test") + UTF8_QSTRING(" ( P > χ²)"));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -1212,7 +1219,7 @@ void XYFitCurveDock::showFitResult() {
 	//clear the previous result
 	uiGeneralTab.twParameters->setRowCount(0);
 	for (int row = 0; row < uiGeneralTab.twGoodness->rowCount(); ++row)
-		uiGeneralTab.twGoodness->item(row, 2)->setText(QString());
+		uiGeneralTab.twGoodness->item(row, 1)->setText(QString());
 	for (int row = 0; row < uiGeneralTab.twLog->rowCount(); ++row)
 		uiGeneralTab.twLog->item(row, 1)->setText(QString());
 
@@ -1258,9 +1265,6 @@ void XYFitCurveDock::showFitResult() {
 	// Parameters
 	const int np = m_fitData.paramNames.size();
 	uiGeneralTab.twParameters->setRowCount(np);
-	QStringList headerLabels;
-	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << QLatin1String("P > |t|") << i18n("Conf. Interval");
-	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
 
 	for (int i = 0; i < np; i++) {
 		const double paramValue = fitResult.paramValues.at(i);
@@ -1323,32 +1327,28 @@ void XYFitCurveDock::showFitResult() {
 	}
 
 	// Goodness of fit
-	uiGeneralTab.twGoodness->item(0, 2)->setText(QString::number(fitResult.sse));
+	uiGeneralTab.twGoodness->item(0, 1)->setText(QString::number(fitResult.sse));
 
 	if (fitResult.dof != 0) {
-		uiGeneralTab.twGoodness->item(1, 2)->setText(QString::number(fitResult.rms));
-		uiGeneralTab.twGoodness->item(2, 2)->setText(QString::number(fitResult.rsd));
+		uiGeneralTab.twGoodness->item(1, 1)->setText(QString::number(fitResult.rms));
+		uiGeneralTab.twGoodness->item(2, 1)->setText(QString::number(fitResult.rsd));
 
-		uiGeneralTab.twGoodness->item(3, 2)->setText(QString::number(fitResult.rsquare, 'g'));
-		uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(fitResult.rsquareAdj, 'g'));
+		uiGeneralTab.twGoodness->item(3, 1)->setText(QString::number(fitResult.rsquare, 'g'));
+		uiGeneralTab.twGoodness->item(4, 1)->setText(QString::number(fitResult.rsquareAdj, 'g'));
 
 		// chi^2 and F test p-values
-		uiGeneralTab.twGoodness->item(5, 2)->setText(QString::number(fitResult.chisq_p, 'g', 3));
-		uiGeneralTab.twGoodness->item(6, 2)->setText(QString::number(fitResult.fdist_F, 'g', 3));
-		uiGeneralTab.twGoodness->item(7, 2)->setText(QString::number(fitResult.fdist_p, 'g', 3));
-		uiGeneralTab.twGoodness->item(9, 2)->setText(QString::number(fitResult.aic, 'g', 3));
-		uiGeneralTab.twGoodness->item(10, 2)->setText(QString::number(fitResult.bic, 'g', 3));
+		uiGeneralTab.twGoodness->item(5, 1)->setText(QString::number(fitResult.chisq_p, 'g', 3));
+		uiGeneralTab.twGoodness->item(6, 1)->setText(QString::number(fitResult.fdist_F, 'g', 3));
+		uiGeneralTab.twGoodness->item(7, 1)->setText(QString::number(fitResult.fdist_p, 'g', 3));
+		uiGeneralTab.twGoodness->item(9, 1)->setText(QString::number(fitResult.aic, 'g', 3));
+		uiGeneralTab.twGoodness->item(10, 1)->setText(QString::number(fitResult.bic, 'g', 3));
 	}
 
-	uiGeneralTab.twGoodness->item(8, 2)->setText(QString::number(fitResult.mae));
+	uiGeneralTab.twGoodness->item(8, 1)->setText(QString::number(fitResult.mae));
 
 	//resize the table headers to fit the new content
 	uiGeneralTab.twLog->resizeColumnsToContents();
 	uiGeneralTab.twParameters->resizeColumnsToContents();
-	//twGoodness doesn't have any header -> resize sections
-	uiGeneralTab.twGoodness->resizeColumnToContents(0);
-	uiGeneralTab.twGoodness->resizeColumnToContents(1);
-	uiGeneralTab.twGoodness->resizeColumnToContents(2);
 
 	//enable the "recalculate"-button if the source data was changed since the last fit
 	uiGeneralTab.pbRecalculate->setEnabled(m_fitCurve->isSourceDataChangedSinceLastRecalc());

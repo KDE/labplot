@@ -258,7 +258,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -273,11 +273,11 @@
          <property name="columnCount">
           <number>7</number>
          </property>
-         <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>75</number>
-         </attribute>
          <attribute name="horizontalHeaderMinimumSectionSize">
           <number>15</number>
+         </attribute>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>75</number>
          </attribute>
          <attribute name="horizontalHeaderStretchLastSection">
           <bool>true</bool>
@@ -310,7 +310,7 @@
           <number>11</number>
          </property>
          <property name="columnCount">
-          <number>3</number>
+          <number>2</number>
          </property>
          <attribute name="horizontalHeaderVisible">
           <bool>false</bool>
@@ -340,18 +340,12 @@
          <row/>
          <column/>
          <column/>
-         <column/>
          <item row="0" column="0">
           <property name="text">
            <string>Sum of squared residuals</string>
           </property>
          </item>
          <item row="0" column="1">
-          <property name="text">
-           <string/>
-          </property>
-         </item>
-         <item row="0" column="2">
           <property name="text">
            <string/>
           </property>
@@ -366,22 +360,12 @@
            <string/>
           </property>
          </item>
-         <item row="1" column="2">
-          <property name="text">
-           <string/>
-          </property>
-         </item>
          <item row="2" column="0">
           <property name="text">
-           <string>Root mean square error</string>
+           <string>Root mean square error (RMSE, SD)</string>
           </property>
          </item>
          <item row="2" column="1">
-          <property name="text">
-           <string>RMSE, SD</string>
-          </property>
-         </item>
-         <item row="2" column="2">
           <property name="text">
            <string/>
           </property>
@@ -396,22 +380,12 @@
            <string/>
           </property>
          </item>
-         <item row="3" column="2">
-          <property name="text">
-           <string/>
-          </property>
-         </item>
          <item row="4" column="0">
           <property name="text">
-           <string>Adj. coefficient of determ.</string>
+           <string>Adj. coefficient of determination</string>
           </property>
          </item>
          <item row="4" column="1">
-          <property name="text">
-           <string/>
-          </property>
-         </item>
-         <item row="4" column="2">
           <property name="text">
            <string/>
           </property>
@@ -426,11 +400,6 @@
            <string/>
           </property>
          </item>
-         <item row="5" column="2">
-          <property name="text">
-           <string/>
-          </property>
-         </item>
          <item row="6" column="0">
           <property name="text">
            <string>F test</string>
@@ -438,70 +407,45 @@
          </item>
          <item row="6" column="1">
           <property name="text">
-           <string>F</string>
-          </property>
-         </item>
-         <item row="6" column="2">
-          <property name="text">
            <string/>
           </property>
          </item>
          <item row="7" column="0">
           <property name="text">
-           <string/>
-          </property>
-         </item>
-         <item row="7" column="1">
-          <property name="text">
            <string>P &gt; F</string>
           </property>
          </item>
-         <item row="7" column="2">
+         <item row="7" column="1">
           <property name="text">
            <string/>
           </property>
          </item>
          <item row="8" column="0">
           <property name="text">
-           <string>Mean absolute error</string>
+           <string>Mean absolute error (MAE)</string>
           </property>
          </item>
          <item row="8" column="1">
-          <property name="text">
-           <string>MAE</string>
-          </property>
-         </item>
-         <item row="8" column="2">
           <property name="text">
            <string/>
           </property>
          </item>
          <item row="9" column="0">
           <property name="text">
-           <string>Akaike information criterion</string>
+           <string>Akaike information criterion (AIC)</string>
           </property>
          </item>
          <item row="9" column="1">
-          <property name="text">
-           <string>AIC</string>
-          </property>
-         </item>
-         <item row="9" column="2">
           <property name="text">
            <string/>
           </property>
          </item>
          <item row="10" column="0">
           <property name="text">
-           <string>Bayesian information criterion</string>
+           <string>Bayesian information criterion (BIC)</string>
           </property>
          </item>
          <item row="10" column="1">
-          <property name="text">
-           <string>BIC</string>
-          </property>
-         </item>
-         <item row="10" column="2">
           <property name="text">
            <string/>
           </property>
@@ -695,8 +639,7 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -796,8 +739,7 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -870,8 +812,7 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -915,8 +856,7 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -973,8 +913,7 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -1038,8 +977,7 @@
      </property>
      <property name="icon">
       <iconset theme="configure">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
     </widget>
    </item>
@@ -1096,7 +1034,16 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <property name="spacing">
