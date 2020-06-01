@@ -34,6 +34,7 @@ Name[x-test]=xxLabPlot2xx
 Name[zh_CN]=LabPlot2
 Name[zh_TW]=LabPlot2
 GenericName=Plotting and Data Analysis Software
+GenericName[x-test]=xxPlotting and Data Analysis Softwarexx
 Comment=LabPlot is a KDE-application for interactive graphing and analysis of scientific data.
 Comment[bs]=LabPlot je KDE-aplikacija za interaktivnu grafiku i analizu naučnih podataka.
 Comment[ca]=El LabPlot és una aplicació KDE per a la representació interactiva de grafs i anàlisi de dades científiques.
