@@ -2286,15 +2286,15 @@ void Axis::loadThemeConfig(const KConfig& config) {
 
 	//Line
 	this->setLineOpacity(group.readEntry("LineOpacity", 1.0));
-	p.setColor(group.readEntry("LineColor", (QColor) this->linePen().color()));
-	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle",(int) this->linePen().style()));
-	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
+	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
+	p.setColor(group.readEntry("LineColor", QColor(Qt::black)));
+	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	this->setLinePen(p);
 
 	//Major grid
 	if (firstAxis) {
 		p.setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle", (int)Qt::SolidLine));
-		p.setColor(group.readEntry("MajorGridColor",QColor(Qt::gray)));
+		p.setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)));
 		p.setWidthF(group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	} else
 		p.setStyle(Qt::NoPen);
