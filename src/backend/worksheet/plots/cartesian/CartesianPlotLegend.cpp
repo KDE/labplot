@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Legend for the cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2020 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -76,7 +76,7 @@ void CartesianPlotLegend::init() {
 	d->labelFont = group.readEntry("LabelsFont", QFont());
 	d->labelFont.setPixelSize( Worksheet::convertToSceneUnits( 10, Worksheet::Unit::Point ) );
 
-	d->labelColor = Qt::black;
+	d->labelColor =  group.readEntry("FontColor", QColor(Qt::black));
 	d->labelColumnMajor = true;
 	d->lineSymbolWidth = group.readEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter));
 	d->rowCount = 0;
@@ -1016,6 +1016,7 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement( "border" );
 	WRITE_QPEN(d->borderPen);
 	writer->writeAttribute( "borderOpacity", QString::number(d->borderOpacity) );
+	writer->writeAttribute( "borderCornerRadius", QString::number(d->borderCornerRadius) );
 	writer->writeEndElement();
 
 	//layout
@@ -1058,18 +1059,8 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 
 			READ_QCOLOR(d->labelColor);
 			READ_QFONT(d->labelFont);
-
-			str = attribs.value("columnMajor").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("columnMajor").toString());
-			else
-				d->labelColumnMajor = str.toInt();
-
-			str = attribs.value("lineSymbolWidth").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("lineSymbolWidth").toString());
-			else
-				d->lineSymbolWidth = str.toDouble();
+			READ_INT_VALUE("columnMajor", labelColumnMajor, int);
+			READ_DOUBLE_VALUE("lineSymbolWidth", lineSymbolWidth);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())
@@ -1113,29 +1104,10 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "background") {
 			attribs = reader->attributes();
 
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("type").toString());
-			else
-				d->backgroundType = PlotArea::BackgroundType(str.toInt());
-
-			str = attribs.value("colorStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("colorStyle").toString());
-			else
-				d->backgroundColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
-
-			str = attribs.value("imageStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("imageStyle").toString());
-			else
-				d->backgroundImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
-
-			str = attribs.value("brushStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("brushStyle").toString());
-			else
-				d->backgroundBrushStyle = Qt::BrushStyle(str.toInt());
+			READ_INT_VALUE("type", backgroundType, PlotArea::BackgroundType);
+			READ_INT_VALUE("colorStyle", backgroundColorStyle, PlotArea::BackgroundColorStyle);
+			READ_INT_VALUE("imageStyle", backgroundImageStyle, PlotArea::BackgroundImageStyle);
+			READ_INT_VALUE("brushStyle", backgroundBrushStyle, Qt::BrushStyle);
 
 			str = attribs.value("firstColor_r").toString();
 			if (str.isEmpty())
@@ -1176,65 +1148,21 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 			str = attribs.value("fileName").toString();
 			d->backgroundFileName = str;
 
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("opacity").toString());
-			else
-				d->backgroundOpacity = str.toDouble();
+			READ_DOUBLE_VALUE("opacity", backgroundOpacity);
 		} else if (!preview && reader->name() == "border") {
 			attribs = reader->attributes();
-
 			READ_QPEN(d->borderPen);
-
-			str = attribs.value("borderOpacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("borderOpacity").toString());
-			else
-				d->borderOpacity = str.toDouble();
+			READ_DOUBLE_VALUE("borderCornerRadius", borderCornerRadius);
+			READ_DOUBLE_VALUE("borderOpacity", borderOpacity);
 		} else if (!preview && reader->name() == "layout") {
 			attribs = reader->attributes();
-
-			str = attribs.value("topMargin").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("topMargin").toString());
-			else
-				d->layoutTopMargin = str.toDouble();
-
-			str = attribs.value("bottomMargin").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("bottomMargin").toString());
-			else
-				d->layoutBottomMargin = str.toDouble();
-
-			str = attribs.value("leftMargin").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("leftMargin").toString());
-			else
-				d->layoutLeftMargin = str.toDouble();
-
-			str = attribs.value("rightMargin").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("rightMargin").toString());
-			else
-				d->layoutRightMargin = str.toDouble();
-
-			str = attribs.value("verticalSpacing").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("verticalSpacing").toString());
-			else
-				d->layoutVerticalSpacing = str.toDouble();
-
-			str = attribs.value("horizontalSpacing").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("horizontalSpacing").toString());
-			else
-				d->layoutHorizontalSpacing = str.toDouble();
-
-			str = attribs.value("columnCount").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("columnCount").toString());
-			else
-				d->layoutColumnCount = str.toInt();
+			READ_DOUBLE_VALUE("topMargin", layoutTopMargin);
+			READ_DOUBLE_VALUE("bottomMargin", layoutBottomMargin);
+			READ_DOUBLE_VALUE("leftMargin", layoutLeftMargin);
+			READ_DOUBLE_VALUE("rightMargin", layoutRightMargin);
+			READ_DOUBLE_VALUE("verticalSpacing", layoutVerticalSpacing);
+			READ_DOUBLE_VALUE("horizontalSpacing", layoutHorizontalSpacing);
+			READ_INT_VALUE("columnCount", layoutColumnCount, int);
 		}
 	}
 
@@ -1242,25 +1170,37 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 }
 
 void CartesianPlotLegend::loadThemeConfig(const KConfig& config) {
-	KConfigGroup groupLabel = config.group("Label");
-	this->setLabelColor(groupLabel.readEntry("FontColor", QColor(Qt::white)));
+	KConfigGroup group;
 
-	const KConfigGroup group = config.group("CartesianPlot");
-	this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle",(int) this->backgroundBrushStyle()));
-	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle)(group.readEntry("BackgroundColorStyle",(int) this->backgroundColorStyle())));
-	this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor",(QColor) this->backgroundFirstColor()));
-	this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle)group.readEntry("BackgroundImageStyle",(int) this->backgroundImageStyle()));
-	this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", this->backgroundOpacity()));
-	this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor",(QColor) this->backgroundSecondColor()));
-	this->setBackgroundType((PlotArea::BackgroundType)(group.readEntry("BackgroundType",(int) this->backgroundType())));
+	//for the font color use the value defined in the theme config for Label
+	if (config.hasGroup(QLatin1String("Theme")))
+		group = config.group(QLatin1String("Label"));
+	else
+		group = config.group(QLatin1String("CartesianPlotLegend"));
 
-	QPen pen = this->borderPen();
-	pen.setColor(group.readEntry("BorderColor", pen.color()));
-	pen.setStyle((Qt::PenStyle)(group.readEntry("BorderStyle", (int) pen.style())));
-	pen.setWidthF(group.readEntry("BorderWidth", pen.widthF()));
+	this->setLabelColor(group.readEntry("FontColor", QColor(Qt::white)));
+
+	//for other theme dependent settings use the values defined in the theme config for CartesianPlot
+	if (config.hasGroup(QLatin1String("Theme")))
+		group = config.group("CartesianPlot");
+
+	//background
+	this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle", (int)Qt::SolidPattern));
+	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle)(group.readEntry("BackgroundColorStyle", (int)PlotArea::BackgroundColorStyle::SingleColor)));
+	this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor", QColor(Qt::white)));
+	this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle)group.readEntry("BackgroundImageStyle", (int)PlotArea::BackgroundImageStyle::Scaled));
+	this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", 1.0));
+	this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor", QColor(Qt::black)));
+	this->setBackgroundType((PlotArea::BackgroundType)(group.readEntry("BackgroundType", (int)PlotArea::BackgroundType::Color)));
+
+	//border
+	QPen pen;
+	pen.setColor(group.readEntry("BorderColor", QColor(Qt::black)));
+	pen.setStyle((Qt::PenStyle)(group.readEntry("BorderStyle", (int)Qt::SolidLine)));
+	pen.setWidthF(group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	this->setBorderPen(pen);
-	this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", this->borderCornerRadius()));
-	this->setBorderOpacity(group.readEntry("BorderOpacity", this->borderOpacity()));
+	this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", 0.0));
+	this->setBorderOpacity(group.readEntry("BorderOpacity", 1.0));
 
 	title()->loadThemeConfig(config);
 }
