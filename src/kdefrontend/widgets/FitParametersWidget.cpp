@@ -265,6 +265,7 @@ void FitParametersWidget::updateTableSize() {
 	h += vertHeader->sectionSize(0) * count;
 	if (ui.tableWidget->horizontalScrollBar()->isVisible())
 		h += ui.tableWidget->horizontalScrollBar()->height();
+	setMinimumSize(16777215, h);
 	setMaximumSize(16777215, h);
 }
 
