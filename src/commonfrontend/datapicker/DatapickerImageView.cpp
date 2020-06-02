@@ -145,23 +145,23 @@ void DatapickerImageView::initActions() {
 	// Mouse mode actions
 	navigationModeAction = new QAction(QIcon::fromTheme("input-mouse"), i18n("Navigate"), mouseModeActionGroup);
 	navigationModeAction->setCheckable(true);
-	navigationModeAction->setData(NavigationMode);
+	navigationModeAction->setData(static_cast<int>(MouseMode::Navigation));
 
 	zoomSelectionModeAction = new QAction(QIcon::fromTheme("page-zoom"), i18n("Select and Zoom"), mouseModeActionGroup);
 	zoomSelectionModeAction->setCheckable(true);
-	zoomSelectionModeAction->setData(ZoomSelectionMode);
+	zoomSelectionModeAction->setData(static_cast<int>(MouseMode::ZoomSelection));
 
 	setAxisPointsAction = new QAction(QIcon::fromTheme("labplot-plot-axis-points"), i18n("Set Axis Points"), mouseModeActionGroup);
 	setAxisPointsAction->setCheckable(true);
-	setAxisPointsAction->setData(ReferencePointsEntryMode);
+	setAxisPointsAction->setData(static_cast<int>(MouseMode::ReferencePointsEntry));
 
 	setCurvePointsAction = new QAction(QIcon::fromTheme("labplot-xy-curve-points"), i18n("Set Curve Points"), mouseModeActionGroup);
 	setCurvePointsAction->setCheckable(true);
-	setCurvePointsAction->setData(CurvePointsEntryMode);
+	setCurvePointsAction->setData(static_cast<int>(MouseMode::CurvePointsEntry));
 
 	selectSegmentAction = new QAction(QIcon::fromTheme("labplot-xy-curve-segments"), i18n("Select Curve Segments"), mouseModeActionGroup);
 	selectSegmentAction->setCheckable(true);
-	selectSegmentAction->setData(CurveSegmentsEntryMode);
+	selectSegmentAction->setData(static_cast<int>(MouseMode::CurveSegmentsEntry));
 
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("New Curve"), this);
 
@@ -319,7 +319,7 @@ void DatapickerImageView::setScene(QGraphicsScene* scene) {
 }
 
 void DatapickerImageView::drawForeground(QPainter* painter, const QRectF& rect) {
-	if (m_mouseMode == ZoomSelectionMode && m_selectionBandIsShown) {
+	if (m_mouseMode == MouseMode::ZoomSelection && m_selectionBandIsShown) {
 		painter->save();
 		const QRectF& selRect = mapToScene(QRect(m_selectionStart, m_selectionEnd).normalized()).boundingRect();
 		painter->setPen(QPen(Qt::black, 5/transform().m11()));
@@ -364,7 +364,7 @@ void DatapickerImageView::drawBackground(QPainter* painter, const QRectF& rect) 
 //##############################################################################
 void DatapickerImageView::wheelEvent(QWheelEvent* event) {
 	//https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
-	if (m_mouseMode == ZoomSelectionMode || (QApplication::keyboardModifiers() & Qt::ControlModifier)) {
+	if (m_mouseMode == MouseMode::ZoomSelection || (QApplication::keyboardModifiers() & Qt::ControlModifier)) {
 		int numDegrees = event->delta() / 8;
 		int numSteps = numDegrees / 15; // see QWheelEvent documentation
 		zoom(numSteps);
@@ -406,15 +406,15 @@ void DatapickerImageView::mousePressEvent(QMouseEvent* event) {
 		return;
 	}
 
-	if (event->button() == Qt::LeftButton && m_mouseMode == ZoomSelectionMode) {
+	if (event->button() == Qt::LeftButton && m_mouseMode == MouseMode::ZoomSelection) {
 		m_selectionStart = event->pos();
 		m_selectionBandIsShown = true;
 		return;
 	}
 
 	QPointF eventPos = mapToScene(event->pos());
-	bool entryMode = (m_mouseMode == ReferencePointsEntryMode
-					  || m_mouseMode == CurvePointsEntryMode || m_mouseMode == CurveSegmentsEntryMode);
+	bool entryMode = (m_mouseMode == MouseMode::ReferencePointsEntry
+					  || m_mouseMode == MouseMode::CurvePointsEntry || m_mouseMode == MouseMode::CurveSegmentsEntry);
 
 	//check whether there is a point item under the cursor
 	bool pointsUnderCursor = false;
@@ -454,7 +454,7 @@ void DatapickerImageView::mousePressEvent(QMouseEvent* event) {
 }
 
 void DatapickerImageView::mouseReleaseEvent(QMouseEvent* event) {
-	if (event->button() == Qt::LeftButton && m_mouseMode == ZoomSelectionMode) {
+	if (event->button() == Qt::LeftButton && m_mouseMode == MouseMode::ZoomSelection) {
 		m_selectionBandIsShown = false;
 		viewport()->repaint(QRect(m_selectionStart, m_selectionEnd).normalized());
 

@@ -759,7 +759,7 @@ void WorksheetView::setPlotLock(bool lock) {
 }
 
 void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
-	if (m_mouseMode == ZoomSelectionMode && m_selectionBandIsShown) {
+	if (m_mouseMode == MouseMode::ZoomSelection && m_selectionBandIsShown) {
 		painter->save();
 		const QRectF& selRect = mapToScene(QRect(m_selectionStart, m_selectionEnd).normalized()).boundingRect();
 		//TODO: don't hardcode for black here, use a a different color depending on the theme of the worksheet/plot under the mouse cursor?
@@ -983,7 +983,7 @@ void WorksheetView::resizeEvent(QResizeEvent* event) {
 
 void WorksheetView::wheelEvent(QWheelEvent* event) {
 	//https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
-	if (m_mouseMode == ZoomSelectionMode || (QApplication::keyboardModifiers() & Qt::ControlModifier)) {
+	if (m_mouseMode == MouseMode::ZoomSelection || (QApplication::keyboardModifiers() & Qt::ControlModifier)) {
 		int numDegrees = event->delta() / 8;
 		int numSteps = numDegrees / 15; // see QWheelEvent documentation
 		zoom(numSteps);
@@ -1025,7 +1025,7 @@ void WorksheetView::mousePressEvent(QMouseEvent* event) {
 		return;
 	}
 
-	if (event->button() == Qt::LeftButton && m_mouseMode == ZoomSelectionMode) {
+	if (event->button() == Qt::LeftButton && m_mouseMode == MouseMode::ZoomSelection) {
 		m_selectionStart = event->pos();
 		m_selectionEnd = m_selectionStart; //select&zoom'g starts -> reset the end point to the start point
 		m_selectionBandIsShown = true;
@@ -1044,7 +1044,7 @@ void WorksheetView::mousePressEvent(QMouseEvent* event) {
 }
 
 void WorksheetView::mouseReleaseEvent(QMouseEvent* event) {
-	if (event->button() == Qt::LeftButton && m_mouseMode == ZoomSelectionMode) {
+	if (event->button() == Qt::LeftButton && m_mouseMode == MouseMode::ZoomSelection) {
 		m_selectionBandIsShown = false;
 		viewport()->repaint(QRect(m_selectionStart, m_selectionEnd).normalized());
 
@@ -1062,7 +1062,7 @@ void WorksheetView::mouseDoubleClickEvent(QMouseEvent*) {
 }
 
 void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
-	if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode != CartesianPlot::MouseMode::Selection) {
+	if (m_mouseMode == MouseMode::Selection && m_cartesianPlotMouseMode != CartesianPlot::MouseMode::Selection) {
 		//check whether there is a cartesian plot under the cursor
 		//and set the cursor appearance according to the current mouse mode for the cartesian plots
 		if ( isPlotAtPos(event->pos()) ) {
@@ -1074,7 +1074,7 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 				setCursor(Qt::SizeVerCursor);
 		} else
 			setCursor(Qt::ArrowCursor);
-	} else if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode == CartesianPlot::MouseMode::Selection)
+	} else if (m_mouseMode == MouseMode::Selection && m_cartesianPlotMouseMode == CartesianPlot::MouseMode::Selection)
 		setCursor(Qt::ArrowCursor);
 	else if (m_selectionBandIsShown) {
 		QRect rect = QRect(m_selectionStart, m_selectionEnd).normalized();
@@ -1260,15 +1260,15 @@ void WorksheetView::magnificationChanged(QAction* action) {
 
 void WorksheetView::mouseModeChanged(QAction* action) {
 	if (action == selectionModeAction) {
-		m_mouseMode = SelectionMode;
+		m_mouseMode = MouseMode::Selection;
 		setInteractive(true);
 		setDragMode(QGraphicsView::NoDrag);
 	} else if (action == navigationModeAction) {
-		m_mouseMode = NavigationMode;
+		m_mouseMode = MouseMode::Navigation;
 		setInteractive(false);
 		setDragMode(QGraphicsView::ScrollHandDrag);
 	} else {
-		m_mouseMode = ZoomSelectionMode;
+		m_mouseMode = MouseMode::ZoomSelection;
 		setInteractive(false);
 		setDragMode(QGraphicsView::NoDrag);
 	}
@@ -1572,7 +1572,7 @@ void WorksheetView::selectionChanged() {
 
 		//if one of the "zoom&select" plot mouse modes was selected before, activate the default "selection mode" again
 		//since no plots are selected now.
-		if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode!= CartesianPlot::MouseMode::Selection) {
+		if (m_mouseMode == MouseMode::Selection && m_cartesianPlotMouseMode != CartesianPlot::MouseMode::Selection) {
 			cartesianPlotSelectionModeAction->setChecked(true);
 			cartesianPlotMouseModeChanged(cartesianPlotSelectionModeAction);
 		}

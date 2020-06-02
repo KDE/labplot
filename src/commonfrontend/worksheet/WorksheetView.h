@@ -66,7 +66,7 @@ public:
 		double opacity;
 	};
 
-	enum MouseMode {SelectionMode, NavigationMode, ZoomSelectionMode};
+	enum class MouseMode {Selection, Navigation, ZoomSelection};
 
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
@@ -110,7 +110,7 @@ private:
 	void dropEvent(QDropEvent*) override;
 
 	Worksheet* m_worksheet;
-	MouseMode m_mouseMode{SelectionMode};
+	MouseMode m_mouseMode{MouseMode::Selection};
 	CartesianPlot::MouseMode m_cartesianPlotMouseMode{CartesianPlot::MouseMode::Selection};
 	bool m_selectionBandIsShown{false};
 	QPoint m_selectionStart;
