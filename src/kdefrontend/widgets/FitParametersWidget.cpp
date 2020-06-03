@@ -248,6 +248,10 @@ void FitParametersWidget::resizeEvent(QResizeEvent*) {
 }
 
 void FitParametersWidget::updateTableSize() {
+	if (m_resizing)
+		return;
+
+	m_resizing = true;
 	auto horHeader = ui.tableWidget->horizontalHeader();
 	auto vertHeader = ui.tableWidget->verticalHeader();
 	int count = vertHeader->count();
@@ -267,6 +271,7 @@ void FitParametersWidget::updateTableSize() {
 		h += ui.tableWidget->horizontalScrollBar()->height();
 	setMinimumSize(16777215, h);
 	setMaximumSize(16777215, h);
+	m_resizing = false;
 }
 
 
