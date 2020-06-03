@@ -47,7 +47,8 @@ private:
 };
 
 void DateTime2StringFilter::setFormat(const QString& format) {
-	exec(new DateTime2StringFilterSetFormatCmd(static_cast<DateTime2StringFilter*>(this), format));
+	if (m_format != format)
+		exec(new DateTime2StringFilterSetFormatCmd(this, format));
 }
 
 QString DateTime2StringFilter::textAt(int row) const {

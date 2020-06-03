@@ -18,15 +18,28 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="2">
-    <widget class="QLineEdit" name="leName"/>
+   <item row="10" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>2</height>
+      </size>
+     </property>
+    </spacer>
    </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QLabel" name="lComment">
+   <item row="9" column="0" colspan="2">
+    <widget class="QLabel" name="lPlotDesignation">
      <property name="text">
-      <string>Comment:</string>
+      <string>Plot designation:</string>
      </property>
     </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLineEdit" name="leName"/>
    </item>
    <item row="1" column="2">
     <widget class="QLineEdit" name="leComment">
@@ -37,6 +50,49 @@
       </sizepolicy>
      </property>
     </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QLabel" name="lType">
+     <property name="text">
+      <string>Data type:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QLabel" name="lPrecision">
+     <property name="text">
+      <string>Precision:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1">
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>15</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="9" column="2">
+    <widget class="KComboBox" name="cbPlotDesignation"/>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="QLabel" name="lNumericFormat">
+     <property name="text">
+      <string>Numeric:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="KComboBox" name="cbNumericFormat"/>
    </item>
    <item row="2" column="1">
     <spacer name="verticalSpacer_3">
@@ -54,6 +110,13 @@
      </property>
     </spacer>
    </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QLabel" name="lComment">
+     <property name="text">
+      <string>Comment:</string>
+     </property>
+    </widget>
+   </item>
    <item row="3" column="0" colspan="2">
     <widget class="QLabel" name="lFormat_2">
      <property name="font">
@@ -67,32 +130,8 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QLabel" name="lType">
-     <property name="text">
-      <string>Data type:</string>
-     </property>
-    </widget>
-   </item>
    <item row="4" column="2">
     <widget class="KComboBox" name="cbType"/>
-   </item>
-   <item row="5" column="0" colspan="2">
-    <widget class="QLabel" name="lFormat">
-     <property name="text">
-      <string>Format type:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="2">
-    <widget class="KComboBox" name="cbFormat"/>
-   </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="QLabel" name="lPrecision">
-     <property name="text">
-      <string>Precision:</string>
-     </property>
-    </widget>
    </item>
    <item row="6" column="2">
     <widget class="QSpinBox" name="sbPrecision">
@@ -101,44 +140,15 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
-    <spacer name="verticalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>15</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="8" column="0" colspan="2">
-    <widget class="QLabel" name="lPlotDesignation">
+   <item row="7" column="0">
+    <widget class="QLabel" name="lDateTimeFormat">
      <property name="text">
-      <string>Plot designation:</string>
+      <string>DateTime:</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="2">
-    <widget class="KComboBox" name="cbPlotDesignation"/>
-   </item>
-   <item row="9" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>2</height>
-      </size>
-     </property>
-    </spacer>
+   <item row="7" column="2">
+    <widget class="QComboBox" name="cbDateTimeFormat"/>
    </item>
   </layout>
  </widget>

@@ -2,7 +2,7 @@
     File                 : ColumnDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2019 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2020 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : widget for column properties
 
@@ -51,11 +51,25 @@ ColumnDock::ColumnDock(QWidget* parent) : BaseDock(parent) {
 	m_leName = ui.leName;
 	m_leComment = ui.leComment;
 
+	//add formats for numeric values
+	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
+	ui.cbNumericFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
+	ui.cbNumericFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
+	ui.cbNumericFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
+	ui.cbNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
+
+	//add format for date, time and datetime values
+	for (const auto& s : AbstractColumn::dateTimeFormats())
+		ui.cbDateTimeFormat->addItem(s, QVariant(s));
+
+	ui.cbDateTimeFormat->setEditable(true);
+
 	connect(ui.leName, &QLineEdit::textChanged, this, &ColumnDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &ColumnDock::commentChanged);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::typeChanged);
-	connect(ui.cbFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::formatChanged);
+	connect(ui.cbNumericFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::numericFormatChanged);
 	connect(ui.sbPrecision, QOverload<int>::of(&QSpinBox::valueChanged), this, &ColumnDock::precisionChanged);
+	connect(ui.cbDateTimeFormat, &QComboBox::currentTextChanged, this, &ColumnDock::dateTimeFormatChanged);
 	connect(ui.cbPlotDesignation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::plotDesignationChanged);
 
 	retranslateUi();
@@ -124,13 +138,18 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	m_initializing = false;
 }
 
+/*!
+  depending on the currently selected column type (column mode) updates the widgets for the column format,
+  shows/hides the allowed widgets, fills the corresponding combobox with the possible entries.
+  Called when the type (column mode) is changed.
+*/
 void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 	const Lock lock(m_initializing);
 	ui.cbType->setCurrentIndex(ui.cbType->findData((int)mode));
 	switch (mode) {
 	case AbstractColumn::ColumnMode::Numeric: {
 			auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
-			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->numericFormat()));
+			ui.cbNumericFormat->setCurrentIndex(ui.cbNumericFormat->findData(filter->numericFormat()));
 			ui.sbPrecision->setValue(filter->numDigits());
 			break;
 		}
@@ -139,7 +158,7 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 	case AbstractColumn::ColumnMode::DateTime: {
 			auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
 // 			DEBUG("	set column format: " << STDSTRING(filter->format()));
-			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->format()));
+			ui.cbDateTimeFormat->setCurrentIndex(ui.cbDateTimeFormat->findData(filter->format()));
 			break;
 		}
 	case AbstractColumn::ColumnMode::Integer:	// nothing to set
@@ -148,69 +167,29 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 		break;
 	}
 
-	this->updateFormatWidgets(mode);
-}
+	//hide all the format related widgets first and
+	//then show only what is required depending of the column mode(s)
+	ui.lNumericFormat->hide();
+	ui.cbNumericFormat->hide();
+	ui.lPrecision->hide();
+	ui.sbPrecision->hide();
+	ui.lDateTimeFormat->hide();
+	ui.cbDateTimeFormat->hide();
 
-/*!
-  depending on the currently selected column type (column mode) updates the widgets for the column format,
-  shows/hides the allowed widgets, fills the corresponding combobox with the possible entries.
-  Called when the type (column mode) is changed.
-*/
-void ColumnDock::updateFormatWidgets(AbstractColumn::ColumnMode mode) {
-	ui.cbFormat->clear();
-
-	switch (mode) {
-	case AbstractColumn::ColumnMode::Numeric:
-		ui.cbFormat->addItem(i18n("Decimal"), QVariant('f'));
-		ui.cbFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
-		ui.cbFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
-		ui.cbFormat->addItem(i18n("Automatic (g)"), QVariant('g'));
-		ui.cbFormat->addItem(i18n("Automatic (G)"), QVariant('G'));
-		break;
-	case AbstractColumn::ColumnMode::Month:
-		ui.cbFormat->addItem(i18n("Number without Leading Zero"), QVariant("M"));
-		ui.cbFormat->addItem(i18n("Number with Leading Zero"), QVariant("MM"));
-		ui.cbFormat->addItem(i18n("Abbreviated Month Name"), QVariant("MMM"));
-		ui.cbFormat->addItem(i18n("Full Month Name"), QVariant("MMMM"));
-		break;
-	case AbstractColumn::ColumnMode::Day:
-		ui.cbFormat->addItem(i18n("Number without Leading Zero"), QVariant("d"));
-		ui.cbFormat->addItem(i18n("Number with Leading Zero"), QVariant("dd"));
-		ui.cbFormat->addItem(i18n("Abbreviated Day Name"), QVariant("ddd"));
-		ui.cbFormat->addItem(i18n("Full Day Name"), QVariant("dddd"));
-		break;
-	case AbstractColumn::ColumnMode::DateTime:
-		for (const auto& s : AbstractColumn::dateTimeFormats())
-			ui.cbFormat->addItem(s, QVariant(s));
-		break;
-	case AbstractColumn::ColumnMode::Integer:
-	case AbstractColumn::ColumnMode::BigInt:
-	case AbstractColumn::ColumnMode::Text:
-		break;
+	if (mode == AbstractColumn::ColumnMode::Numeric) {
+		ui.lNumericFormat->show();
+		ui.cbNumericFormat->show();
 	}
 
+	//precision is only available for Numeric
 	if (mode == AbstractColumn::ColumnMode::Numeric) {
 		ui.lPrecision->show();
 		ui.sbPrecision->show();
-	} else {
-		ui.lPrecision->hide();
-		ui.sbPrecision->hide();
-	}
-
-	if (mode == AbstractColumn::ColumnMode::Text || mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt) {
-		ui.lFormat->hide();
-		ui.cbFormat->hide();
-	} else {
-		ui.lFormat->show();
-		ui.cbFormat->show();
 	}
 
 	if (mode == AbstractColumn::ColumnMode::DateTime) {
-		ui.cbFormat->setEditable(true);
-		ui.cbFormat->setCurrentItem("yyyy-MM-dd hh:mm:ss.zzz");
-	} else {
-		ui.cbFormat->setEditable(false);
-		ui.cbFormat->setCurrentIndex(0);
+		ui.lDateTimeFormat->show();
+		ui.cbDateTimeFormat->show();
 	}
 }
 
@@ -256,23 +235,23 @@ void ColumnDock::typeChanged(int index) {
 
 	switch (columnMode) {
 	case AbstractColumn::ColumnMode::Numeric: {
-			int digits = ui.sbPrecision->value();
-			for (auto* col : m_columnsList) {
-				col->beginMacro(i18n("%1: change column type", col->name()));
-				col->setColumnMode(columnMode);
-				auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
+		int digits = ui.sbPrecision->value();
+		for (auto* col : m_columnsList) {
+			col->beginMacro(i18n("%1: change column type", col->name()));
+			col->setColumnMode(columnMode);
+			auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
 
-				//TODO: using
-				//char format = ui.cbFormat->itemData(ui.cbFormat->currentIndex()).toChar().toLatin1();
-				//outside of the for-loop and
-				//filter->setNumericFormat(format);
-				//inseide the loop leads to wrong results when converting from integer to numeric -> 'f' is set instead of 'e'
-				filter->setNumericFormat(ui.cbFormat->itemData(ui.cbFormat->currentIndex()).toChar().toLatin1());
-				filter->setNumDigits(digits);
-				col->endMacro();
-			}
-			break;
+			//TODO: using
+			//char format = ui.cbFormat->itemData(ui.cbFormat->currentIndex()).toChar().toLatin1();
+			//outside of the for-loop and
+			//filter->setNumericFormat(format);
+			//inside the loop leads to wrong results when converting from integer to numeric -> 'f' is set instead of 'e'
+			filter->setNumericFormat(ui.cbNumericFormat->itemData(ui.cbNumericFormat->currentIndex()).toChar().toLatin1());
+			filter->setNumDigits(digits);
+			col->endMacro();
 		}
+		break;
+	}
 	case AbstractColumn::ColumnMode::Integer:
 	case AbstractColumn::ColumnMode::BigInt:
 	case AbstractColumn::ColumnMode::Text:
@@ -284,7 +263,7 @@ void ColumnDock::typeChanged(int index) {
 		for (auto* col : m_columnsList) {
 			col->beginMacro(i18n("%1: change column type", col->name()));
 			// the format is saved as item data
-			QString format = ui.cbFormat->itemData(ui.cbFormat->currentIndex()).toString();
+			QString format = ui.cbDateTimeFormat->itemData(ui.cbDateTimeFormat->currentIndex()).toString();
 			col->setColumnMode(columnMode);
 			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			filter->setFormat(format);
@@ -295,7 +274,7 @@ void ColumnDock::typeChanged(int index) {
 		for (auto* col : m_columnsList) {
 			col->beginMacro(i18n("%1: change column type", col->name()));
 			// the format is the current text
-			QString format = ui.cbFormat->currentText();
+			QString format = ui.cbDateTimeFormat->currentText();
 			col->setColumnMode(columnMode);
 			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			filter->setFormat(format);
@@ -309,41 +288,15 @@ void ColumnDock::typeChanged(int index) {
 	DEBUG("ColumnDock::typeChanged() DONE");
 }
 
-/*!
-  called when the format for the current type (column mode) was changed.
-*/
-void ColumnDock::formatChanged(int index) {
-	DEBUG("ColumnDock::formatChanged()");
+void ColumnDock::numericFormatChanged(int index) {
 	if (m_initializing)
 		return;
 
-	auto mode = (AbstractColumn::ColumnMode)ui.cbType->itemData(ui.cbType->currentIndex()).toInt();
-
-	switch (mode) {
-	case AbstractColumn::ColumnMode::Numeric: {
-			char format = ui.cbFormat->itemData(index).toChar().toLatin1();
-			for (auto* col : m_columnsList) {
-				auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
-				filter->setNumericFormat(format);
-			}
-			break;
-		}
-	case AbstractColumn::ColumnMode::Integer:
-	case AbstractColumn::ColumnMode::BigInt:
-	case AbstractColumn::ColumnMode::Text:
-		break;
-	case AbstractColumn::ColumnMode::Month:
-	case AbstractColumn::ColumnMode::Day:
-	case AbstractColumn::ColumnMode::DateTime: {
-			QString format = ui.cbFormat->itemData(index).toString();
-			for (auto* col : m_columnsList) {
-				auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-				filter->setFormat(format);
-			}
-			break;
-		}
+	char format = ui.cbNumericFormat->itemData(index).toChar().toLatin1();
+	for (auto* col : m_columnsList) {
+		auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
+		filter->setNumericFormat(format);
 	}
-	DEBUG("ColumnDock::formatChanged() DONE");
 }
 
 void ColumnDock::precisionChanged(int digits) {
@@ -353,6 +306,16 @@ void ColumnDock::precisionChanged(int digits) {
 	for (auto* col : m_columnsList) {
 		auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
 		filter->setNumDigits(digits);
+	}
+}
+
+void ColumnDock::dateTimeFormatChanged(const QString& format) {
+	if (m_initializing)
+		return;
+
+	for (auto* col : m_columnsList) {
+		auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+		filter->setFormat(format);
 	}
 }
 
@@ -393,10 +356,10 @@ void ColumnDock::columnFormatChanged() {
 	auto columnMode = m_column->columnMode();
 	switch (columnMode) {
 	case AbstractColumn::ColumnMode::Numeric: {
-			auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
-			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->numericFormat()));
-			break;
-		}
+		auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
+		ui.cbNumericFormat->setCurrentIndex(ui.cbNumericFormat->findData(filter->numericFormat()));
+		break;
+	}
 	case AbstractColumn::ColumnMode::Integer:
 	case AbstractColumn::ColumnMode::BigInt:
 	case AbstractColumn::ColumnMode::Text:
@@ -404,10 +367,11 @@ void ColumnDock::columnFormatChanged() {
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
 	case AbstractColumn::ColumnMode::DateTime: {
-			auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
-			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->format()));
-			break;
-		}
+		auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
+		qDebug()<<filter->format();
+		ui.cbDateTimeFormat->setCurrentText(filter->format());
+		break;
+	}
 	}
 }
 

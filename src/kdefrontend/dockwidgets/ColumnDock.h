@@ -49,14 +49,14 @@ private:
 	Column* m_column{nullptr};
 
 	void updateTypeWidgets(AbstractColumn::ColumnMode);
-	void updateFormatWidgets(AbstractColumn::ColumnMode);
 
 private slots:
 	void retranslateUi();
 
 	void typeChanged(int);
-	void formatChanged(int);
+	void numericFormatChanged(int);
 	void precisionChanged(int);
+	void dateTimeFormatChanged(const QString&);
 	void plotDesignationChanged(int);
 
 	//SLOTs for changes triggered in Column

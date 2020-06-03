@@ -77,16 +77,8 @@ XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 	ui.cbValuesNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
 
 	//add format for date, time and datetime values
-	for (const auto& s : AbstractColumn::dateFormats())
+	for (const auto& s : AbstractColumn::dateTimeFormats())
 		ui.cbValuesDateTimeFormat->addItem(s, QVariant(s));
-
-	for (const auto& s : AbstractColumn::timeFormats())
-		ui.cbValuesDateTimeFormat->addItem(s, QVariant(s));
-
-	for (const auto& s1 : AbstractColumn::dateFormats()) {
-		for (const auto& s2 : AbstractColumn::timeFormats())
-			ui.cbValuesDateTimeFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
-	}
 
 	ui.cbValuesDateTimeFormat->setEditable(true);
 
