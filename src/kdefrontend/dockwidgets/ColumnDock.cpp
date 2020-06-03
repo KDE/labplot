@@ -368,7 +368,7 @@ void ColumnDock::columnFormatChanged() {
 	case AbstractColumn::ColumnMode::Day:
 	case AbstractColumn::ColumnMode::DateTime: {
 		auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
-		qDebug()<<filter->format();
+		DEBUG(filter->format())
 		ui.cbDateTimeFormat->setCurrentText(filter->format());
 		break;
 	}
