@@ -47,6 +47,7 @@ private:
 	bool m_initializing{false};
 	bool m_rehighlighting{false};
 	bool m_invalidRanges{false};
+	bool m_resizing{false};
 
 	bool eventFilter(QObject*, QEvent*) override;
 	void resizeEvent(QResizeEvent*) override;
