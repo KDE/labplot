@@ -35,8 +35,6 @@
 #include "backend/core/datatypes/String2DoubleFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
-#include "backend/datapicker/DatapickerCurve.h"
-#include "backend/datasources/LiveDataSource.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
@@ -55,10 +53,10 @@ ColumnDock::ColumnDock(QWidget* parent) : BaseDock(parent) {
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &ColumnDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &ColumnDock::commentChanged);
-	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
-	connect(ui.cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(formatChanged(int)));
-	connect(ui.sbPrecision, SIGNAL(valueChanged(int)), this, SLOT(precisionChanged(int)) );
-	connect(ui.cbPlotDesignation, SIGNAL(currentIndexChanged(int)), this, SLOT(plotDesignationChanged(int)));
+	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::typeChanged);
+	connect(ui.cbFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::formatChanged);
+	connect(ui.sbPrecision, QOverload<int>::of(&QSpinBox::valueChanged), this, &ColumnDock::precisionChanged);
+	connect(ui.cbPlotDesignation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::plotDesignationChanged);
 
 	retranslateUi();
 }
@@ -77,7 +75,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	for (auto* col : m_columnsList) {
 		auto* s = dynamic_cast<Spreadsheet*>(col->parentAspect());
 		if (s) {
-			if (dynamic_cast<LiveDataSource*>(s) || dynamic_cast<DatapickerCurve*>(s->parentAspect())) {
+			if (s->type() == AspectType::LiveDataSource || s->parentAspect()->type() == AspectType::DatapickerCurve) {
 				nonEditable = true;
 				break;
 			}
@@ -89,7 +87,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 
 	if (list.size() == 1) {
 		//names and comments of non-editable columns in a file data source can be changed.
-		if (!nonEditable && dynamic_cast<LiveDataSource*>(m_column->parentAspect()) != nullptr) {
+		if (!nonEditable && m_column->parentAspect()->type() == AspectType::LiveDataSource) {
 			ui.leName->setEnabled(false);
 			ui.leComment->setEnabled(false);
 		} else {
@@ -110,9 +108,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	ui.leName->setToolTip("");
 
 	//show the properties of the first column
-	auto columnMode = m_column->columnMode();
-	this->updateFormatWidgets(columnMode);
-	this->updateTypeWidgets(columnMode);
+	updateTypeWidgets(m_column->columnMode());
 	ui.cbPlotDesignation->setCurrentIndex( int(m_column->plotDesignation()) );
 
 	// slots
@@ -129,6 +125,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 }
 
 void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
+	const Lock lock(m_initializing);
 	ui.cbType->setCurrentIndex(ui.cbType->findData((int)mode));
 	switch (mode) {
 	case AbstractColumn::ColumnMode::Numeric: {
@@ -150,6 +147,8 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 	case AbstractColumn::ColumnMode::Text:
 		break;
 	}
+
+	this->updateFormatWidgets(mode);
 }
 
 /*!
@@ -158,7 +157,6 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
   Called when the type (column mode) is changed.
 */
 void ColumnDock::updateFormatWidgets(AbstractColumn::ColumnMode mode) {
-	const Lock lock(m_initializing);
 	ui.cbFormat->clear();
 
 	switch (mode) {
@@ -306,9 +304,7 @@ void ColumnDock::typeChanged(int index) {
 		break;
 	}
 
-	const Lock lock(m_initializing);
-	this->updateFormatWidgets(columnMode);
-	this->updateTypeWidgets(columnMode);
+	updateTypeWidgets(columnMode);
 
 	DEBUG("ColumnDock::typeChanged() DONE");
 }
@@ -388,16 +384,12 @@ void ColumnDock::columnModeChanged(const AbstractAspect* aspect) {
 	if (m_column != aspect)
 		return;
 
-	m_initializing = true;
-	auto columnMode = m_column->columnMode();
-	this->updateFormatWidgets(columnMode);
-	this->updateTypeWidgets(columnMode);
-	m_initializing = false;
+	updateTypeWidgets(m_column->columnMode());
 }
 
 void ColumnDock::columnFormatChanged() {
 	DEBUG("ColumnDock::columnFormatChanged()");
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	auto columnMode = m_column->columnMode();
 	switch (columnMode) {
 	case AbstractColumn::ColumnMode::Numeric: {
@@ -417,18 +409,15 @@ void ColumnDock::columnFormatChanged() {
 			break;
 		}
 	}
-	m_initializing = false;
 }
 
 void ColumnDock::columnPrecisionChanged() {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
 	ui.sbPrecision->setValue(filter->numDigits());
-	m_initializing = false;
 }
 
 void ColumnDock::columnPlotDesignationChanged(const AbstractColumn* col) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbPlotDesignation->setCurrentIndex(int(col->plotDesignation()));
-	m_initializing = false;
 }
