@@ -218,7 +218,7 @@ void CartesianPlot::setType(Type type) {
 			pen = axis->minorGridPen();
 			pen.setStyle(Qt::NoPen);
 			axis->setMinorGridPen(pen);
-			axis->setLabelsPosition(Axis::NoLabels);
+			axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
@@ -253,7 +253,7 @@ void CartesianPlot::setType(Type type) {
 			pen = axis->minorGridPen();
 			pen.setStyle(Qt::NoPen);
 			axis->setMinorGridPen(pen);
-			axis->setLabelsPosition(Axis::NoLabels);
+			axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
@@ -276,7 +276,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
-			axis->setArrowType(Axis::FilledArrowSmall);
+			axis->setArrowType(Axis::ArrowType::FilledSmall);
 			axis->setSuppressRetransform(false);
 
 			axis = new Axis("y axis 1", Qt::Vertical);
@@ -290,7 +290,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
-			axis->setArrowType(Axis::FilledArrowSmall);
+			axis->setArrowType(Axis::ArrowType::FilledSmall);
 			axis->setSuppressRetransform(false);
 
 			break;
@@ -319,7 +319,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
-			axis->setArrowType(Axis::FilledArrowSmall);
+			axis->setArrowType(Axis::ArrowType::FilledSmall);
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
@@ -334,7 +334,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
-			axis->setArrowType(Axis::FilledArrowSmall);
+			axis->setArrowType(Axis::ArrowType::FilledSmall);
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
@@ -365,7 +365,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
-			axis->setArrowType(Axis::FilledArrowSmall);
+			axis->setArrowType(Axis::ArrowType::FilledSmall);
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
@@ -381,7 +381,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
-			axis->setArrowType(Axis::FilledArrowSmall);
+			axis->setArrowType(Axis::ArrowType::FilledSmall);
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 

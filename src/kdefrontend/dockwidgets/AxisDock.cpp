@@ -793,7 +793,7 @@ void AxisDock::lineOpacityChanged(int value) {
 
 void AxisDock::arrowTypeChanged(int index) {
 	auto type = (Axis::ArrowType)index;
-	if (type == Axis::NoArrow) {
+	if (type == Axis::ArrowType::NoArrow) {
 		ui.cbArrowPosition->setEnabled(false);
 		ui.sbArrowSize->setEnabled(false);
 	} else {
@@ -1327,7 +1327,7 @@ void AxisDock::labelsDateTimeFormatChanged(int) {
 void AxisDock::labelsPositionChanged(int index) {
 	auto position = Axis::LabelsPosition(index);
 
-	bool b = (position != Axis::NoLabels);
+	bool b = (position != Axis::LabelsPosition::NoLabels);
 	ui.lLabelsOffset->setEnabled(b);
 	ui.sbLabelsOffset->setEnabled(b);
 	ui.lLabelsRotation->setEnabled(b);
@@ -1784,7 +1784,7 @@ void AxisDock::axisLabelsDateTimeFormatChanged(const QString& format) {
 }
 void AxisDock::axisLabelsPositionChanged(Axis::LabelsPosition position) {
 	m_initializing = true;
-	ui.cbLabelsPosition->setCurrentIndex(position);
+	ui.cbLabelsPosition->setCurrentIndex(static_cast<int>(position));
 	m_initializing = false;
 }
 void AxisDock::axisLabelsOffsetChanged(double offset) {

@@ -54,10 +54,10 @@ public:
 	Q_DECLARE_FLAGS(TicksDirection, TicksFlags)
 
 	enum class TicksType {TotalNumber, Spacing, CustomColumn, CustomValues};
-	enum ArrowType {NoArrow, SimpleArrowSmall, SimpleArrowBig, FilledArrowSmall, FilledArrowBig, SemiFilledArrowSmall, SemiFilledArrowBig};
-	enum ArrowPosition {ArrowLeft, ArrowRight, ArrowBoth};
+	enum class ArrowType {NoArrow, SimpleSmall, SimpleBig, FilledSmall, FilledBig, SemiFilledSmall, SemiFilledBig};
+	enum class ArrowPosition {Left, Right, Both};
 	enum class Scale {Linear, Log10, Log2, Ln, Sqrt, X2};
-	enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
+	enum class LabelsPosition {NoLabels, In, Out};
 
 	explicit Axis(const QString&, Qt::Orientation orientation = Qt::Horizontal);
 	~Axis() override;

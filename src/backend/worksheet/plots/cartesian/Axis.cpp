@@ -151,10 +151,10 @@ void Axis::init() {
 	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);
 
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int) Qt::SolidLine) );
-	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Unit::Point ) ) );
+	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Unit::Point) ) );
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
-	d->arrowType = (Axis::ArrowType) group.readEntry("ArrowType", (int)Axis::NoArrow);
-	d->arrowPosition = (Axis::ArrowPosition) group.readEntry("ArrowPosition", (int)Axis::ArrowRight);
+	d->arrowType = (Axis::ArrowType) group.readEntry("ArrowType", static_cast<int>(ArrowType::NoArrow));
+	d->arrowPosition = (Axis::ArrowPosition) group.readEntry("ArrowPosition", static_cast<int>(ArrowPosition::Right));
 	d->arrowSize = group.readEntry("ArrowSize", Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
 
 	// axis title
@@ -182,7 +182,7 @@ void Axis::init() {
 	d->majorTicksLength = group.readEntry("MajorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point));
 	d->majorTicksOpacity = group.readEntry("MajorTicksOpacity", 1.0);
 
-	d->minorTicksDirection = (Axis::TicksDirection) group.readEntry("MinorTicksDirection", (int) Axis::ticksOut);
+	d->minorTicksDirection = (TicksDirection) group.readEntry("MinorTicksDirection", (int) Axis::ticksOut);
 	d->minorTicksType = (TicksType) group.readEntry("MinorTicksType", static_cast<int>(TicksType::TotalNumber));
 	d->minorTicksNumber = group.readEntry("MinorTicksNumber", 1);
 	d->minorTicksIncrement = group.readEntry("MinorTicksIncrement", 0.0);	// see MajorTicksIncrement
@@ -193,11 +193,11 @@ void Axis::init() {
 	d->minorTicksOpacity = group.readEntry("MinorTicksOpacity", 1.0);
 
 	//Labels
-	d->labelsFormat = (Axis::LabelsFormat) group.readEntry("LabelsFormat", static_cast<int>(LabelsFormat::Decimal));
+	d->labelsFormat = (LabelsFormat) group.readEntry("LabelsFormat", static_cast<int>(LabelsFormat::Decimal));
 	d->labelsAutoPrecision = group.readEntry("LabelsAutoPrecision", true);
 	d->labelsPrecision = group.readEntry("LabelsPrecision", 1);
 	d->labelsDateTimeFormat = group.readEntry("LabelsDateTimeFormat", "yyyy-MM-dd hh:mm:ss");
-	d->labelsPosition = (Axis::LabelsPosition) group.readEntry("LabelsPosition", (int) Axis::LabelsOut);
+	d->labelsPosition = (LabelsPosition) group.readEntry("LabelsPosition", (int) LabelsPosition::Out);
 	d->labelsOffset = group.readEntry("LabelsOffset",  Worksheet::convertToSceneUnits( 5.0, Worksheet::Unit::Point ));
 	d->labelsRotationAngle = group.readEntry("LabelsRotation", 0);
 	d->labelsFont = group.readEntry("LabelsFont", QFont());
@@ -1022,17 +1022,17 @@ void AxisPrivate::retransformArrow() {
 		return;
 
 	arrowPath = QPainterPath();
-	if (arrowType == Axis::NoArrow || lines.isEmpty()) {
+	if (arrowType == Axis::ArrowType::NoArrow || lines.isEmpty()) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
 
-	if (arrowPosition == Axis::ArrowRight || arrowPosition == Axis::ArrowBoth) {
+	if (arrowPosition == Axis::ArrowPosition::Right || arrowPosition == Axis::ArrowPosition::Both) {
 		const QPointF& endPoint = lines.at(lines.size()-1).p2();
 		this->addArrow(endPoint, 1);
 	}
 
-	if (arrowPosition == Axis::ArrowLeft || arrowPosition == Axis::ArrowBoth) {
+	if (arrowPosition == Axis::ArrowPosition::Left || arrowPosition == Axis::ArrowPosition::Both) {
 		const QPointF& endPoint = lines.at(0).p1();
 		this->addArrow(endPoint, -1);
 	}
@@ -1049,37 +1049,37 @@ void AxisPrivate::addArrow(QPointF startPoint, int direction) {
 		arrowPath.lineTo(endPoint);
 
 		switch (arrowType) {
-			case Axis::NoArrow:
+			case Axis::ArrowType::NoArrow:
 				break;
-			case Axis::SimpleArrowSmall:
+			case Axis::ArrowType::SimpleSmall:
 				arrowPath.moveTo(endPoint);
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()-arrowSize/4*cos_phi));
 				arrowPath.moveTo(endPoint);
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()+arrowSize/4*cos_phi));
 				break;
-			case Axis::SimpleArrowBig:
+			case Axis::ArrowType::SimpleBig:
 				arrowPath.moveTo(endPoint);
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()-arrowSize/2*cos_phi));
 				arrowPath.moveTo(endPoint);
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()+arrowSize/2*cos_phi));
 				break;
-			case Axis::FilledArrowSmall:
+			case Axis::ArrowType::FilledSmall:
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()-arrowSize/4*cos_phi));
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()+arrowSize/4*cos_phi));
 				arrowPath.lineTo(endPoint);
 				break;
-			case Axis::FilledArrowBig:
+			case Axis::ArrowType::FilledBig:
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()-arrowSize/2*cos_phi));
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()+arrowSize/2*cos_phi));
 				arrowPath.lineTo(endPoint);
 				break;
-			case Axis::SemiFilledArrowSmall:
+			case Axis::ArrowType::SemiFilledSmall:
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()-arrowSize/4*cos_phi));
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/8, endPoint.y()));
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()+arrowSize/4*cos_phi));
 				arrowPath.lineTo(endPoint);
 				break;
-			case Axis::SemiFilledArrowBig:
+			case Axis::ArrowType::SemiFilledBig:
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()-arrowSize/2*cos_phi));
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()));
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()+arrowSize/2*cos_phi));
@@ -1092,37 +1092,37 @@ void AxisPrivate::addArrow(QPointF startPoint, int direction) {
 		arrowPath.lineTo(endPoint);
 
 		switch (arrowType) {
-			case Axis::NoArrow:
+			case Axis::ArrowType::NoArrow:
 				break;
-			case Axis::SimpleArrowSmall:
+			case Axis::ArrowType::SimpleSmall:
 				arrowPath.moveTo(endPoint);
 				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
 				arrowPath.moveTo(endPoint);
 				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
 				break;
-			case Axis::SimpleArrowBig:
+			case Axis::ArrowType::SimpleBig:
 				arrowPath.moveTo(endPoint);
 				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
 				arrowPath.moveTo(endPoint);
 				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
 				break;
-			case Axis::FilledArrowSmall:
+			case Axis::ArrowType::FilledSmall:
 				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
 				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
 				arrowPath.lineTo(endPoint);
 				break;
-			case Axis::FilledArrowBig:
+			case Axis::ArrowType::FilledBig:
 				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
 				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
 				arrowPath.lineTo(endPoint);
 				break;
-			case Axis::SemiFilledArrowSmall:
+			case Axis::ArrowType::SemiFilledSmall:
 				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
 				arrowPath.lineTo(QPointF(endPoint.x(), endPoint.y()+direction*arrowSize/8));
 				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
 				arrowPath.lineTo(endPoint);
 				break;
-			case Axis::SemiFilledArrowBig:
+			case Axis::ArrowType::SemiFilledBig:
 				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
 				arrowPath.lineTo(QPointF(endPoint.x(), endPoint.y()+direction*arrowSize/4));
 				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
@@ -1582,7 +1582,7 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
  */
 void AxisPrivate::retransformTickLabelPositions() {
 	tickLabelPoints.clear();
-	if (majorTicksDirection == Axis::noTicks || labelsPosition == Axis::NoLabels) {
+	if (majorTicksDirection == Axis::noTicks || labelsPosition == Axis::LabelsPosition::NoLabels) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1632,7 +1632,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 
 			// for rotated labels (angle is not zero), align label's corner at the position of the tick
 			if (fabs(fabs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
-				if (labelsPosition == Axis::LabelsOut) {
+				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() + width/2);
 					pos.setY(endPoint.y() + labelsOffset );
 				} else {
@@ -1640,7 +1640,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setY(startPoint.y() - height - labelsOffset);
 				}
 			} else if (labelsRotationAngle <= -0.01) { // [-0.01°, -180°)
-				if (labelsPosition == Axis::LabelsOut) {
+				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() + sine * height/2);
 					pos.setY(endPoint.y() + labelsOffset + cosine * height/2);
 				} else {
@@ -1648,7 +1648,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setY(startPoint.y() - labelsOffset + cosine * height/2 + diffy);
 				}
 			} else if (labelsRotationAngle >= 0.01) { // [0.01°, 180°)
-				if (labelsPosition == Axis::LabelsOut) {
+				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - diffx + sine * height/2);
 					pos.setY(endPoint.y() + labelsOffset + diffy + cosine * height/2);
 				} else {
@@ -1656,7 +1656,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setY(startPoint.y() - labelsOffset + cosine * height/2);
 				}
 			} else {	// 0°
-				if (labelsPosition == Axis::LabelsOut) {
+				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - width/2);
 					pos.setY(endPoint.y() + height + labelsOffset);
 				} else {
@@ -1675,7 +1675,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 			}
 
 			if (fabs(labelsRotationAngle - 90.) < 1.e-2) { // +90°
-				if (labelsPosition == Axis::LabelsOut) {
+				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - labelsOffset);
 					pos.setY(endPoint.y() + width/2 );
 				} else {
@@ -1683,7 +1683,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setY(startPoint.y() + width/2);
 				}
 			} else if (fabs(labelsRotationAngle + 90.) < 1.e-2) { // -90°
-				if (labelsPosition == Axis::LabelsOut) {
+				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - labelsOffset - height);
 					pos.setY(endPoint.y() - width/2);
 				} else {
@@ -1691,7 +1691,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setY(startPoint.y() - width/2);
 				}
 			} else if (fabs(fabs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
-				if (labelsPosition == Axis::LabelsOut) {
+				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - labelsOffset);
 					pos.setY(endPoint.y() - height/2);
 				} else {
@@ -1699,7 +1699,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setY(startPoint.y() - height/2);
 				}
 			} else if (fabs(labelsRotationAngle) >= 0.01 && fabs(labelsRotationAngle) <= 89.99) { // [0.01°, 90°)
-				if (labelsPosition == Axis::LabelsOut) {
+				if (labelsPosition == Axis::LabelsPosition::Out) {
 					// left
 					pos.setX(endPoint.x() - labelsOffset - diffx + sine * height/2);
 					pos.setY(endPoint.y() + cosine * height/2 + diffy);
@@ -1708,7 +1708,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setY(startPoint.y() + cosine * height/2);
 				}
 			} else if (fabs(labelsRotationAngle) >= 90.01 && fabs(labelsRotationAngle) <= 179.99) { // [90.01, 180)
-				if (labelsPosition == Axis::LabelsOut) {
+				if (labelsPosition == Axis::LabelsPosition::Out) {
 					// left
 					pos.setX(endPoint.x() - labelsOffset + sine * height/2);
 					pos.setY(endPoint.y() + cosine * height/2);
@@ -1717,7 +1717,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setY(startPoint.y() + diffy + cosine * height/2);
 				}
 			} else { // 0°
-				if (labelsPosition == Axis::LabelsOut) {
+				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - width - labelsOffset);
 					pos.setY(endPoint.y() + height/2);
 				} else {
@@ -1882,7 +1882,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	axisShape.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksPen));
 
 	QPainterPath  tickLabelsPath = QPainterPath();
-	if (labelsPosition != Axis::NoLabels) {
+	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
 		QTransform trafo;
 		QPainterPath tempPath;
 		QFontMetrics fm(labelsFont);
@@ -1920,12 +1920,12 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 			qreal offsetY = titleOffsetY; //the distance to the axis line
 			if (orientation == Qt::Horizontal) {
 				offsetY -= titleRect.height()/2;
-				if (labelsPosition == Axis::LabelsOut)
+				if (labelsPosition == Axis::LabelsPosition::Out)
 					offsetY -= labelsOffset + tickLabelsPath.boundingRect().height();
 				title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2 + titleOffsetX, rect.bottomLeft().y() - offsetY ) );
 			} else {
 				offsetX -= titleRect.width()/2;
-				if (labelsPosition == Axis::LabelsOut)
+				if (labelsPosition == Axis::LabelsPosition::Out)
 					offsetX -= labelsOffset+ tickLabelsPath.boundingRect().width();
 				title->setPosition( QPointF( rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y())/2 - titleOffsetY) );
 			}
@@ -1963,7 +1963,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		painter->drawPath(linePath);
 
 		//draw the arrow
-		if (arrowType != Axis::NoArrow)
+		if (arrowType != Axis::ArrowType::NoArrow)
 			painter->drawPath(arrowPath);
 	}
 
@@ -1984,7 +1984,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 	}
 
 	// draw tick labels
-	if (labelsPosition != Axis::NoLabels) {
+	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
 		painter->setOpacity(labelsOpacity);
 		painter->setPen(QPen(labelsColor));
 		painter->setFont(labelsFont);
@@ -2088,8 +2088,8 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement( "line" );
 	WRITE_QPEN(d->linePen);
 	writer->writeAttribute( "opacity", QString::number(d->lineOpacity) );
-	writer->writeAttribute( "arrowType", QString::number(d->arrowType) );
-	writer->writeAttribute( "arrowPosition", QString::number(d->arrowPosition) );
+	writer->writeAttribute( "arrowType", QString::number(static_cast<int>(d->arrowType)) );
+	writer->writeAttribute( "arrowPosition", QString::number(static_cast<int>(d->arrowPosition)) );
 	writer->writeAttribute( "arrowSize", QString::number(d->arrowSize) );
 	writer->writeEndElement();
 
@@ -2121,7 +2121,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 
 	//labels
 	writer->writeStartElement( "labels" );
-	writer->writeAttribute( "position", QString::number(d->labelsPosition) );
+	writer->writeAttribute( "position", QString::number(static_cast<int>(d->labelsPosition)) );
 	writer->writeAttribute( "offset", QString::number(d->labelsOffset) );
 	writer->writeAttribute( "rotation", QString::number(d->labelsRotationAngle) );
 	writer->writeAttribute( "format", QString::number(static_cast<int>(d->labelsFormat)) );
