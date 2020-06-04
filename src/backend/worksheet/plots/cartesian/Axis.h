@@ -43,7 +43,6 @@ class Axis: public WorksheetElement {
 	Q_OBJECT
 
 public:
-	enum AxisOrientation {AxisHorizontal, AxisVertical};
 	enum AxisPosition {AxisTop, AxisBottom, AxisLeft, AxisRight, AxisCentered, AxisCustom};
 	enum LabelsFormat {FormatDecimal, FormatScientificE, FormatPowers10, FormatPowers2, FormatPowersE, FormatMultipliesPi};
 	enum TicksFlags {
@@ -60,7 +59,7 @@ public:
 	enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 	enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
 
-	explicit Axis(const QString&, AxisOrientation orientation = AxisHorizontal);
+	explicit Axis(const QString&, Qt::Orientation orientation = Qt::Horizontal);
 	~Axis() override;
 
 	void finalizeAdd() override;
@@ -76,7 +75,7 @@ public:
 	void saveThemeConfig(const KConfig&) override;
 
 	BASIC_D_ACCESSOR_DECL(bool, autoScale, AutoScale)
-	BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation)
+	BASIC_D_ACCESSOR_DECL(Qt::Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(AxisPosition, position, Position)
 	BASIC_D_ACCESSOR_DECL(AxisScale, scale, Scale)
 	BASIC_D_ACCESSOR_DECL(double, start, Start)
@@ -150,7 +149,7 @@ public:
 
 protected:
 	AxisPrivate* const d_ptr;
-	Axis(const QString&, AxisOrientation, AxisPrivate*);
+	Axis(const QString&, Qt::Orientation, AxisPrivate*);
 	TextLabel* m_title;
 
 private:
@@ -185,7 +184,7 @@ private slots:
 	void visibilityChangedSlot();
 
 signals:
-	void orientationChanged(Axis::AxisOrientation);
+	void orientationChanged(Qt::Orientation);
 	void positionChanged(Axis::AxisPosition);
 	void positionChanged(double);
 	void scaleChanged(Axis::AxisScale);

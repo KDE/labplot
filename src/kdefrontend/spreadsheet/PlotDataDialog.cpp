@@ -397,7 +397,7 @@ void PlotDataDialog::plot() {
 			//set the x-axis names
 			const QString& xColumnName = ui->cbXColumn->currentText();
 			for (auto* axis : plot->children<Axis>()) {
-				if (axis->orientation() == Axis::AxisHorizontal) {
+				if (axis->orientation() == Qt::Horizontal) {
 					axis->title()->setText(xColumnName);
 					break;
 				}
@@ -407,7 +407,7 @@ void PlotDataDialog::plot() {
 			if (m_columnComboBoxes.size() == 2) {
 				const QString& yColumnName = m_columnComboBoxes[1]->currentText();
 				for (auto* axis : plot->children<Axis>()) {
-					if (axis->orientation() == Axis::AxisVertical) {
+					if (axis->orientation() == Qt::Vertical) {
 						axis->title()->setText(yColumnName);
 						break;
 					}
@@ -445,7 +445,7 @@ void PlotDataDialog::plot() {
 			//set the x-axis names
 			const QString& xColumnName = ui->cbXColumn->currentText();
 			for (auto* axis : plot->children<Axis>()) {
-				if (axis->orientation() == Axis::AxisHorizontal) {
+				if (axis->orientation() == Qt::Horizontal) {
 					axis->title()->setText(xColumnName);
 					break;
 				}
@@ -455,7 +455,7 @@ void PlotDataDialog::plot() {
 			if (m_columnComboBoxes.size() == 2) {
 				const QString& yColumnName = m_columnComboBoxes[1]->currentText();
 				for (auto* axis : plot->children<Axis>()) {
-					if (axis->orientation() == Axis::AxisVertical) {
+					if (axis->orientation() == Qt::Vertical) {
 						axis->title()->setText(yColumnName);
 						break;
 					}
@@ -564,10 +564,10 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			bool xSet = false;
 			bool ySet = false;
 			for (auto* axis : plot->children<Axis>()) {
-				if (axis->orientation() == Axis::AxisHorizontal && !xSet) {
+				if (axis->orientation() == Qt::Horizontal && !xSet) {
 					axis->title()->setText(xColumnName);
 					xSet = true;
-				} else if (axis->orientation() == Axis::AxisVertical && !ySet) {
+				} else if (axis->orientation() == Qt::Vertical && !ySet) {
 					axis->title()->setText(name);
 					ySet = true;
 				}
@@ -590,7 +590,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			//set the axis names in the new plot
 			bool xSet = false;
 			for (auto* axis : plot->children<Axis>()) {
-				if (axis->orientation() == Axis::AxisHorizontal && !xSet) {
+				if (axis->orientation() == Qt::Horizontal && !xSet) {
 					axis->title()->setText(name);
 					xSet = true;
 				}

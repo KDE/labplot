@@ -66,7 +66,7 @@ public:
 
 	//general
 	bool autoScale;
-	Axis::AxisOrientation orientation; //!< horizontal or vertical
+	Qt::Orientation orientation; //!< horizontal or vertical
 	Axis::AxisPosition position; //!< left, right, bottom, top or custom (usually not changed after creation)
 	Axis::AxisScale scale;
 	double offset; //!< offset from zero in the direction perpendicular to the axis

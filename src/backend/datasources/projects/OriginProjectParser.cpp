@@ -1117,7 +1117,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				QString yColumnName = QString::fromLatin1(originCurve.yColumnName.c_str());
 
 				if (!originXAxis.formatAxis[0].hidden) {
-					Axis* axis = new Axis("x", Axis::AxisHorizontal);
+					Axis* axis = new Axis("x", Qt::Horizontal);
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::AxisBottom);
 					plot->addChildFast(axis);
@@ -1127,7 +1127,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				//x top
 				if (!originXAxis.formatAxis[1].hidden) {
-					Axis* axis = new Axis("x top", Axis::AxisHorizontal);
+					Axis* axis = new Axis("x top", Qt::Horizontal);
 					axis->setPosition(Axis::AxisTop);
 					axis->setSuppressRetransform(true);
 					plot->addChildFast(axis);
@@ -1137,7 +1137,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				//y left
 				if (!originYAxis.formatAxis[0].hidden) {
-					Axis* axis = new Axis("y", Axis::AxisVertical);
+					Axis* axis = new Axis("y", Qt::Vertical);
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::AxisLeft);
 					plot->addChildFast(axis);
@@ -1147,7 +1147,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				//y right
 				if (!originYAxis.formatAxis[1].hidden) {
-					Axis* axis = new Axis("y right", Axis::AxisVertical);
+					Axis* axis = new Axis("y right", Qt::Vertical);
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::AxisRight);
 					plot->addChildFast(axis);

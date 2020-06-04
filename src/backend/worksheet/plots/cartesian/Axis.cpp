@@ -115,13 +115,13 @@ private:
  *
  *  \ingroup worksheet
  */
-Axis::Axis(const QString& name, AxisOrientation orientation)
+Axis::Axis(const QString& name, Qt::Orientation orientation)
 		: WorksheetElement(name, AspectType::Axis), d_ptr(new AxisPrivate(this)) {
 	d_ptr->orientation = orientation;
 	init();
 }
 
-Axis::Axis(const QString& name, AxisOrientation orientation, AxisPrivate* dd)
+Axis::Axis(const QString& name, Qt::Orientation orientation, AxisPrivate* dd)
 		: WorksheetElement(name, AspectType::Axis), d_ptr(dd) {
 	d_ptr->orientation = orientation;
 	init();
@@ -167,7 +167,7 @@ void Axis::init() {
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, false);
 	d->title->graphicsItem()->setAcceptHoverEvents(false);
 	d->title->setText(this->name());
-	if (d->orientation == AxisVertical) d->title->setRotationAngle(90);
+	if (d->orientation == Qt::Vertical) d->title->setRotationAngle(90);
 	d->titleOffsetX = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Point); //distance to the axis tick labels
 	d->titleOffsetY = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Point); //distance to the axis tick labels
 
@@ -288,7 +288,7 @@ QMenu* Axis::createContextMenu() {
 	menu->insertAction(firstAction, visibilityAction);
 
 	//Orientation
-	if ( d->orientation == AxisHorizontal )
+	if (d->orientation == Qt::Horizontal)
 		orientationHorizontalAction->setChecked(true);
 	else
 		orientationVerticalAction->setChecked(true);
@@ -313,7 +313,7 @@ QMenu* Axis::createContextMenu() {
 QIcon Axis::icon() const{
 	Q_D(const Axis);
 	QIcon ico;
-	if (d->orientation == Axis::AxisHorizontal)
+	if (d->orientation == Qt::Horizontal)
 		ico = QIcon::fromTheme("labplot-axis-horizontal");
 	else
 		ico = QIcon::fromTheme("labplot-axis-vertical");
@@ -386,7 +386,7 @@ void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageR
 
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(Axis, bool, autoScale, autoScale)
-BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisOrientation, orientation, orientation)
+BASIC_SHARED_D_READER_IMPL(Axis, Qt::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisPosition, position, position)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisScale, scale, scale)
 BASIC_SHARED_D_READER_IMPL(Axis, double, offset, offset)
@@ -455,7 +455,7 @@ void Axis::setAutoScale(bool autoScale) {
 			if (!plot)
 				return;
 
-			if (d->orientation == Axis::AxisHorizontal) {
+			if (d->orientation == Qt::Horizontal) {
 				d->end = plot->xMax();
 				d->start = plot->xMin();
 			} else {
@@ -495,8 +495,8 @@ void Axis::setPrinting(bool on) {
 	d->setPrinting(on);
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetOrientation, Axis::AxisOrientation, orientation, retransform);
-void Axis::setOrientation( AxisOrientation orientation) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetOrientation, Qt::Orientation, orientation, retransform);
+void Axis::setOrientation(Qt::Orientation orientation) {
 	Q_D(Axis);
 	if (orientation != d->orientation)
 		exec(new AxisSetOrientationCmd(d, orientation, ki18n("%1: set axis orientation")));
@@ -896,9 +896,9 @@ void Axis::minorTicksColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 //##############################################################################
 void Axis::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
-		this->setOrientation(AxisHorizontal);
+		this->setOrientation(Qt::Horizontal);
 	else
-		this->setOrientation(AxisVertical);
+		this->setOrientation(Qt::Vertical);
 }
 
 void Axis::lineStyleChanged(QAction* action) {
@@ -975,7 +975,7 @@ void AxisPrivate::retransformLine() {
 	QPointF startPoint;
 	QPointF endPoint;
 
-	if (orientation == Axis::AxisHorizontal) {
+	if (orientation == Qt::Horizontal) {
 		if (position == Axis::AxisTop)
 			offset = plot->yMax();
 		else if (position == Axis::AxisBottom)
@@ -1043,7 +1043,7 @@ void AxisPrivate::retransformArrow() {
 void AxisPrivate::addArrow(QPointF startPoint, int direction) {
 	static const double cos_phi = cos(M_PI/6.);
 
-	if (orientation == Axis::AxisHorizontal) {
+	if (orientation == Qt::Horizontal) {
 		QPointF endPoint = QPointF(startPoint.x() + direction*arrowSize, startPoint.y());
 		arrowPath.moveTo(startPoint);
 		arrowPath.lineTo(endPoint);
@@ -1287,7 +1287,7 @@ void AxisPrivate::retransformTicks() {
 
 		//calculate start and end points for major tick's line
 		if (majorTicksDirection != Axis::noTicks) {
-			if (orientation == Axis::AxisHorizontal) {
+			if (orientation == Qt::Horizontal) {
 				anchorPoint.setX(majorTickPos);
 				anchorPoint.setY(offset);
 				valid = transformAnchor(&anchorPoint);
@@ -1357,7 +1357,7 @@ void AxisPrivate::retransformTicks() {
 				//DEBUG("		minorTickPos = " << minorTickPos)
 
 				//calculate start and end points for minor tick's line
-				if (orientation == Axis::AxisHorizontal) {
+				if (orientation == Qt::Horizontal) {
 					anchorPoint.setX(minorTickPos);
 					anchorPoint.setY(offset);
 					valid = transformAnchor(&anchorPoint);
@@ -1459,8 +1459,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 	tickLabelStrings.clear();
 	QString str;
-	if ( (orientation == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
-		|| (orientation == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) ) {
+	if ( (orientation == Qt::Horizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
+		|| (orientation == Qt::Vertical && plot->yRangeFormat() == CartesianPlot::Numeric) ) {
 		if (labelsFormat == Axis::FormatDecimal) {
 			QString nullStr = QString::number(0, 'f', labelsPrecision);
 			for (const auto value : tickLabelValues) {
@@ -1603,8 +1603,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	double cosine = cos(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	for ( int i = 0; i < majorTickPoints.size(); i++ ) {
-		if ((orientation == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric) ||
-				(orientation == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric)) {
+		if ((orientation == Qt::Horizontal && plot->xRangeFormat() == CartesianPlot::Numeric) ||
+				(orientation == Qt::Vertical && plot->yRangeFormat() == CartesianPlot::Numeric)) {
 			if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
 				width = fm.boundingRect(tickLabelStrings.at(i)).width();
 			} else {
@@ -1621,7 +1621,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 		anchorPoint = majorTickPoints.at(i);
 
 		//center align all labels with respect to the end point of the tick line
-		if (orientation == Axis::AxisHorizontal) {
+		if (orientation == Qt::Horizontal) {
 			if (offset < middleY) {
 				startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
 				endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
@@ -1754,7 +1754,7 @@ void AxisPrivate::retransformMajorGrid() {
 	//when iterating over all grid lines, skip the first and the last points for auto scaled axes,
 	//since we don't want to paint any grid lines at the plot boundaries
 	bool skipLowestTick, skipUpperTick;
-	if (orientation == Axis::AxisHorizontal) { //horizontal axis
+	if (orientation == Qt::Horizontal) { //horizontal axis
 		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), plot->xMin());
 		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), plot->xMax());
 	} else {
@@ -1783,7 +1783,7 @@ void AxisPrivate::retransformMajorGrid() {
 	}
 
 	QVector<QLineF> lines;
-	if (orientation == Axis::AxisHorizontal) { //horizontal axis
+	if (orientation == Qt::Horizontal) { //horizontal axis
 		double yMin = plot->yMin();
 		double yMax = plot->yMax();
 
@@ -1827,7 +1827,7 @@ void AxisPrivate::retransformMinorGrid() {
 	QVector<QPointF> logicalMinorTickPoints = cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	QVector<QLineF> lines;
-	if (orientation == Axis::AxisHorizontal) { //horizontal axis
+	if (orientation == Qt::Horizontal) { //horizontal axis
 		double yMin = plot->yMin();
 		double yMax = plot->yMax();
 
@@ -1918,7 +1918,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 			QRectF rect = linePath.boundingRect();
 			qreal offsetX = titleOffsetX; //the distance to the axis line
 			qreal offsetY = titleOffsetY; //the distance to the axis line
-			if (orientation == Axis::AxisHorizontal) {
+			if (orientation == Qt::Horizontal) {
 				offsetY -= titleRect.height()/2;
 				if (labelsPosition == Axis::LabelsOut)
 					offsetY -= labelsOffset + tickLabelsPath.boundingRect().height();
@@ -1990,8 +1990,8 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		painter->setFont(labelsFont);
 		QTextDocument td;
 		td.setDefaultFont(labelsFont);
-		if ((orientation == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric) ||
-				(orientation == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric)) {
+		if ((orientation == Qt::Horizontal && plot->xRangeFormat() == CartesianPlot::Numeric) ||
+				(orientation == Qt::Vertical && plot->yRangeFormat() == CartesianPlot::Numeric)) {
 			for (int i = 0; i < tickLabelPoints.size(); i++) {
 				painter->translate(tickLabelPoints.at(i));
 				painter->save();
@@ -2174,7 +2174,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("autoScale", autoScale, bool);
-			READ_INT_VALUE("orientation", orientation, Axis::AxisOrientation);
+			READ_INT_VALUE("orientation", orientation, Qt::Orientation);
 			READ_INT_VALUE("position", position, Axis::AxisPosition);
 			READ_INT_VALUE("scale", scale, Axis::AxisScale);
 			READ_DOUBLE_VALUE("offset", offset);

@@ -152,7 +152,7 @@ private slots:
 	//SLOTs for changes triggered in Axis
 	//General-Tab
 	void axisDescriptionChanged(const AbstractAspect*);
-	void axisOrientationChanged(Axis::AxisOrientation);
+	void axisOrientationChanged(Qt::Orientation);
 	void axisPositionChanged(Axis::AxisPosition);
 	void axisPositionChanged(float);
 	void axisScaleChanged(Axis::AxisScale);
