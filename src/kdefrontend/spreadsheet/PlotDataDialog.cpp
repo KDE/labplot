@@ -231,11 +231,11 @@ void PlotDataDialog::processColumns() {
 	QString xColumnName;
 	for (const Column* column : m_columns) {
 		columnNames << column->name();
-		if (m_plotType == PlotXYCurve && xColumnName.isEmpty() && column->plotDesignation() == AbstractColumn::PlotDesignation::X)
+		if (m_plotType == PlotType::XYCurve && xColumnName.isEmpty() && column->plotDesignation() == AbstractColumn::PlotDesignation::X)
 			xColumnName = column->name();
 	}
 
-	if (m_plotType == PlotXYCurve && xColumnName.isEmpty()) {
+	if (m_plotType == PlotType::XYCurve && xColumnName.isEmpty()) {
 		//no X-column was selected -> look for the first non-selected X-column left to the first selected column
 		const int index = m_spreadsheet->indexOfChild<Column>(selectedColumns.first()) - 1;
 		if (index >= 0) {
@@ -252,10 +252,10 @@ void PlotDataDialog::processColumns() {
 	}
 
 	switch (m_plotType) {
-	case PlotXYCurve:
+	case PlotType::XYCurve:
 		processColumnsForXYCurve(columnNames, xColumnName);
 		break;
-	case PlotHistogram:
+	case PlotType::Histogram:
 		processColumnsForHistogram(columnNames);
 		break;
 	}
@@ -266,7 +266,7 @@ void PlotDataDialog::processColumns() {
 	auto* layout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
 	if (layout) {
 		height += (size + 1)*layout->verticalSpacing();
-		if (m_plotType == PlotXYCurve)
+		if (m_plotType == PlotType::XYCurve)
 			height += layout->verticalSpacing(); //one more spacing for the separating line
 	}
 	ui->scrollAreaColumns->setMinimumSize(ui->scrollAreaColumns->width(), height);
@@ -512,7 +512,7 @@ Column* PlotDataDialog::columnFromName(const QString& name) const {
 void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	switch (m_plotType) {
-	case PlotXYCurve: {
+	case PlotType::XYCurve: {
 		Column* xColumn = columnFromName(ui->cbXColumn->currentText());
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
@@ -527,7 +527,7 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 		}
 		break;
 	}
-	case PlotHistogram: {
+	case PlotType::Histogram: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
@@ -548,7 +548,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 	worksheet->setSuppressLayoutUpdate(true);
 
 	switch (m_plotType) {
-	case PlotXYCurve: {
+	case PlotType::XYCurve: {
 		const QString& xColumnName = ui->cbXColumn->currentText();
 		Column* xColumn = columnFromName(xColumnName);
 		for (auto* comboBox : m_columnComboBoxes) {
@@ -579,7 +579,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 		}
 		break;
 	}
-	case PlotHistogram: {
+	case PlotType::Histogram: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
@@ -727,8 +727,8 @@ void PlotDataDialog::plotPlacementChanged() {
 void PlotDataDialog::checkOkButton() {
 	bool enable = false;
 	QString msg;
-	if ( (m_plotType == PlotXYCurve && (ui->cbXColumn->currentIndex() == -1 || ui->cbYColumn->currentIndex() == -1)) ||
-		(m_plotType == PlotHistogram && ui->cbXColumn->currentIndex() == -1) )
+	if ( (m_plotType == PlotType::XYCurve && (ui->cbXColumn->currentIndex() == -1 || ui->cbYColumn->currentIndex() == -1)) ||
+		(m_plotType == PlotType::Histogram && ui->cbXColumn->currentIndex() == -1) )
 		msg = i18n("No data selected to plot.");
 	else if (ui->rbPlotPlacement1->isChecked()) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());

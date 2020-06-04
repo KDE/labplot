@@ -47,13 +47,13 @@ class PlotDataDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	enum PlotType {PlotXYCurve, PlotHistogram};
+	enum class PlotType {XYCurve, Histogram};
 	enum AnalysisAction {DataReduction,
 		Differentiation, Integration, Interpolation, Smoothing,
 		FitLinear, FitPower, FitExp1, FitExp2, FitInvExp, FitGauss, FitCauchyLorentz, FitTan, FitTanh, FitErrFunc, FitCustom,
 		FourierFilter};
 
-	explicit PlotDataDialog(Spreadsheet*, PlotType = PlotXYCurve, QWidget* parent = nullptr);
+	explicit PlotDataDialog(Spreadsheet*, PlotType = PlotType::XYCurve, QWidget* parent = nullptr);
 	~PlotDataDialog() override;
 
 	void setAnalysisAction(AnalysisAction);

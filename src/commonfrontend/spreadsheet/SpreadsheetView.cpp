@@ -386,9 +386,9 @@ void SpreadsheetView::initActions() {
 
 	//plot data action
 	action_plot_data_xycurve = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-Curve"), this);
-	action_plot_data_xycurve->setData(PlotDataDialog::PlotXYCurve);
+	action_plot_data_xycurve->setData(static_cast<int>(PlotDataDialog::PlotType::XYCurve));
 	action_plot_data_histogram = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), this);
-	action_plot_data_histogram->setData(PlotDataDialog::PlotHistogram);
+	action_plot_data_histogram->setData(static_cast<int>(PlotDataDialog::PlotType::Histogram));
 
 	//Analyze and plot menu actions
 	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Reduce Data"), this);
@@ -1687,7 +1687,7 @@ void SpreadsheetView::unmaskSelection() {
 
 void SpreadsheetView::plotData() {
 	const QAction* action = dynamic_cast<const QAction*>(QObject::sender());
-	PlotDataDialog::PlotType type = PlotDataDialog::PlotXYCurve;
+	PlotDataDialog::PlotType type = PlotDataDialog::PlotType::XYCurve;
 	if (action == action_plot_data_xycurve || action == action_plot_data_histogram)
 		type = (PlotDataDialog::PlotType)action->data().toInt();
 
