@@ -1119,7 +1119,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				if (!originXAxis.formatAxis[0].hidden) {
 					Axis* axis = new Axis("x", Qt::Horizontal);
 					axis->setSuppressRetransform(true);
-					axis->setPosition(Axis::AxisBottom);
+					axis->setPosition(Axis::Position::Bottom);
 					plot->addChildFast(axis);
 					loadAxis(originXAxis, axis, 0, xColumnName);
 					axis->setSuppressRetransform(false);
@@ -1128,7 +1128,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				//x top
 				if (!originXAxis.formatAxis[1].hidden) {
 					Axis* axis = new Axis("x top", Qt::Horizontal);
-					axis->setPosition(Axis::AxisTop);
+					axis->setPosition(Axis::Position::Top);
 					axis->setSuppressRetransform(true);
 					plot->addChildFast(axis);
 					loadAxis(originXAxis, axis, 1, xColumnName);
@@ -1139,7 +1139,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				if (!originYAxis.formatAxis[0].hidden) {
 					Axis* axis = new Axis("y", Qt::Vertical);
 					axis->setSuppressRetransform(true);
-					axis->setPosition(Axis::AxisLeft);
+					axis->setPosition(Axis::Position::Left);
 					plot->addChildFast(axis);
 					loadAxis(originYAxis, axis, 0, yColumnName);
 					axis->setSuppressRetransform(false);
@@ -1149,7 +1149,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				if (!originYAxis.formatAxis[1].hidden) {
 					Axis* axis = new Axis("y right", Qt::Vertical);
 					axis->setSuppressRetransform(true);
-					axis->setPosition(Axis::AxisRight);
+					axis->setPosition(Axis::Position::Right);
 					plot->addChildFast(axis);
 					loadAxis(originYAxis, axis, 1, yColumnName);
 					axis->setSuppressRetransform(false);
@@ -1390,24 +1390,24 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->setEnd(originAxis.max);
 
 	//ticks
-	axis->setMajorTicksType(Axis::TicksSpacing);
+	axis->setMajorTicksType(Axis::TicksType::Spacing);
 	axis->setMajorTicksSpacing(originAxis.step);
-	axis->setMinorTicksType(Axis::TicksTotalNumber);
+	axis->setMinorTicksType(Axis::TicksType::TotalNumber);
 	axis->setMinorTicksNumber(originAxis.minorTicks);
 
 	//scale
 	switch (originAxis.scale) {
 	case Origin::GraphAxis::Linear:
-		axis->setScale(Axis::ScaleLinear);
+		axis->setScale(Axis::Scale::Linear);
 		break;
 	case Origin::GraphAxis::Log10:
-		axis->setScale(Axis::ScaleLog10);
+		axis->setScale(Axis::Scale::Log10);
 		break;
 	case Origin::GraphAxis::Ln:
-		axis->setScale(Axis::ScaleLn);
+		axis->setScale(Axis::Scale::Ln);
 		break;
 	case Origin::GraphAxis::Log2:
-		axis->setScale(Axis::ScaleLog2);
+		axis->setScale(Axis::Scale::Log2);
 		break;
 	case Origin::GraphAxis::Probability:
 	case Origin::GraphAxis::Probit:
@@ -1415,7 +1415,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	case Origin::GraphAxis::OffsetReciprocal:
 	case Origin::GraphAxis::Logit:
 		//TODO:
-		axis->setScale(Axis::ScaleLinear);
+		axis->setScale(Axis::Scale::Linear);
 		break;
 	}
 

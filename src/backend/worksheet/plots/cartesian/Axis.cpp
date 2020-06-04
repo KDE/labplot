@@ -141,9 +141,9 @@ void Axis::init() {
 	KConfigGroup group = config.group("Axis");
 
 	d->autoScale = true;
-	d->position = Axis::AxisCustom;
+	d->position = Axis::Position::Custom;
 	d->offset = group.readEntry("PositionOffset", 0);
-	d->scale = (Axis::AxisScale) group.readEntry("Scale", (int) Axis::ScaleLinear);
+	d->scale = (Scale) group.readEntry("Scale", static_cast<int>(Scale::Linear));
 	d->autoScale = group.readEntry("AutoScale", true);
 	d->start = group.readEntry("Start", 0);
 	d->end = group.readEntry("End", 10);
@@ -172,7 +172,7 @@ void Axis::init() {
 	d->titleOffsetY = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Point); //distance to the axis tick labels
 
 	d->majorTicksDirection = (Axis::TicksDirection) group.readEntry("MajorTicksDirection", (int) Axis::ticksOut);
-	d->majorTicksType = (Axis::TicksType) group.readEntry("MajorTicksType", (int) Axis::TicksTotalNumber);
+	d->majorTicksType = (TicksType) group.readEntry("MajorTicksType", static_cast<int>(TicksType::TotalNumber));
 	d->majorTicksNumber = group.readEntry("MajorTicksNumber", 11);
 	d->majorTicksSpacing = group.readEntry("MajorTicksIncrement", 0.0); // set to 0, so axisdock determines the value to not have to many labels the first time switched to Spacing
 
@@ -183,7 +183,7 @@ void Axis::init() {
 	d->majorTicksOpacity = group.readEntry("MajorTicksOpacity", 1.0);
 
 	d->minorTicksDirection = (Axis::TicksDirection) group.readEntry("MinorTicksDirection", (int) Axis::ticksOut);
-	d->minorTicksType = (Axis::TicksType) group.readEntry("MinorTicksType", (int) Axis::TicksTotalNumber);
+	d->minorTicksType = (TicksType) group.readEntry("MinorTicksType", static_cast<int>(TicksType::TotalNumber));
 	d->minorTicksNumber = group.readEntry("MinorTicksNumber", 1);
 	d->minorTicksIncrement = group.readEntry("MinorTicksIncrement", 0.0);	// see MajorTicksIncrement
 	d->minorTicksPen.setStyle((Qt::PenStyle) group.readEntry("MinorTicksLineStyle", (int)Qt::SolidLine) );
@@ -193,7 +193,7 @@ void Axis::init() {
 	d->minorTicksOpacity = group.readEntry("MinorTicksOpacity", 1.0);
 
 	//Labels
-	d->labelsFormat = (Axis::LabelsFormat) group.readEntry("LabelsFormat", (int)Axis::FormatDecimal);
+	d->labelsFormat = (Axis::LabelsFormat) group.readEntry("LabelsFormat", static_cast<int>(LabelsFormat::Decimal));
 	d->labelsAutoPrecision = group.readEntry("LabelsAutoPrecision", true);
 	d->labelsPrecision = group.readEntry("LabelsPrecision", 1);
 	d->labelsDateTimeFormat = group.readEntry("LabelsDateTimeFormat", "yyyy-MM-dd hh:mm:ss");
@@ -387,8 +387,8 @@ void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageR
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(Axis, bool, autoScale, autoScale)
 BASIC_SHARED_D_READER_IMPL(Axis, Qt::Orientation, orientation, orientation)
-BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisPosition, position, position)
-BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisScale, scale, scale)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::Position, position, position)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::Scale, scale, scale)
 BASIC_SHARED_D_READER_IMPL(Axis, double, offset, offset)
 BASIC_SHARED_D_READER_IMPL(Axis, double, start, start)
 BASIC_SHARED_D_READER_IMPL(Axis, double, end, end)
@@ -502,15 +502,15 @@ void Axis::setOrientation(Qt::Orientation orientation) {
 		exec(new AxisSetOrientationCmd(d, orientation, ki18n("%1: set axis orientation")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetPosition, Axis::AxisPosition, position, retransform);
-void Axis::setPosition(AxisPosition position) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetPosition, Axis::Position, position, retransform);
+void Axis::setPosition(Position position) {
 	Q_D(Axis);
 	if (position != d->position)
 		exec(new AxisSetPositionCmd(d, position, ki18n("%1: set axis position")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetScaling, Axis::AxisScale, scale, retransformTicks);
-void Axis::setScale(AxisScale scale) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetScaling, Axis::Scale, scale, retransformTicks);
+void Axis::setScale(Scale scale) {
 	Q_D(Axis);
 	if (scale != d->scale)
 		exec(new AxisSetScalingCmd(d, scale, ki18n("%1: set axis scale")));
@@ -746,7 +746,7 @@ void Axis::setLabelsFormat(LabelsFormat labelsFormat) {
 	if (labelsFormat != d->labelsFormat) {
 
 		//TODO: this part is not undo/redo-aware
-		if (labelsFormat == Axis::FormatDecimal)
+		if (labelsFormat == LabelsFormat::Decimal)
 			d->labelsFormatDecimalOverruled = true;
 		else
 			d->labelsFormatDecimalOverruled = false;
@@ -976,11 +976,11 @@ void AxisPrivate::retransformLine() {
 	QPointF endPoint;
 
 	if (orientation == Qt::Horizontal) {
-		if (position == Axis::AxisTop)
+		if (position == Axis::Position::Top)
 			offset = plot->yMax();
-		else if (position == Axis::AxisBottom)
+		else if (position == Axis::Position::Bottom)
 			offset = plot->yMin();
-		else if (position == Axis::AxisCentered)
+		else if (position == Axis::Position::Centered)
 			offset = plot->yMin() + (plot->yMax()-plot->yMin())/2;
 
 		startPoint.setX(start);
@@ -988,11 +988,11 @@ void AxisPrivate::retransformLine() {
 		endPoint.setX(end);
 		endPoint.setY(offset);
 	} else { // vertical
-		if (position == Axis::AxisLeft)
+		if (position == Axis::Position::Left)
 			offset = plot->xMin();
-		else if (position == Axis::AxisRight)
+		else if (position == Axis::Position::Right)
 			offset = plot->xMax();
-		else if (position == Axis::AxisCentered)
+		else if (position == Axis::Position::Centered)
 			offset = plot->xMin() + (plot->xMax()-plot->xMin())/2;
 
 		startPoint.setX(offset);
@@ -1169,48 +1169,48 @@ void AxisPrivate::retransformTicks() {
 	//determine the increment for the major ticks
 	double majorTicksIncrement = 0;
 	int tmpMajorTicksNumber = 0;
-	if (majorTicksType == Axis::TicksTotalNumber) {
+	if (majorTicksType == Axis::TicksType::TotalNumber) {
 		//the total number of major ticks is given - > determine the increment
 		tmpMajorTicksNumber = majorTicksNumber;
 		switch (scale) {
-			case Axis::ScaleLinear:
+			case Axis::Scale::Linear:
 				majorTicksIncrement = (end-start)/(majorTicksNumber-1);
 				break;
-			case Axis::ScaleLog10:
+			case Axis::Scale::Log10:
 				majorTicksIncrement = (log10(end)-log10(start))/(majorTicksNumber-1);
 				break;
-			case Axis::ScaleLog2:
+			case Axis::Scale::Log2:
 				majorTicksIncrement = (log(end)-log(start))/log(2)/(majorTicksNumber-1);
 				break;
-			case Axis::ScaleLn:
+			case Axis::Scale::Ln:
 				majorTicksIncrement = (log(end)-log(start))/(majorTicksNumber-1);
 				break;
-			case Axis::ScaleSqrt:
+			case Axis::Scale::Sqrt:
 				majorTicksIncrement = (sqrt(end)-sqrt(start))/(majorTicksNumber-1);
 				break;
-			case Axis::ScaleX2:
+			case Axis::Scale::X2:
 				majorTicksIncrement = (end*end - start*start)/(majorTicksNumber-1);
 		}
-	} else if (majorTicksType == Axis::TicksSpacing) {
+	} else if (majorTicksType == Axis::TicksType::Spacing) {
 		//the increment of the major ticks is given -> determine the number
 		majorTicksIncrement = majorTicksSpacing * GSL_SIGN(end-start);
 		switch (scale) {
-			case Axis::ScaleLinear:
+			case Axis::Scale::Linear:
 				tmpMajorTicksNumber = qRound((end-start)/majorTicksIncrement + 1);
 				break;
-			case Axis::ScaleLog10:
+			case Axis::Scale::Log10:
 				tmpMajorTicksNumber = qRound((log10(end)-log10(start))/majorTicksIncrement + 1);
 				break;
-			case Axis::ScaleLog2:
+			case Axis::Scale::Log2:
 				tmpMajorTicksNumber = qRound((log(end)-log(start))/log(2)/majorTicksIncrement + 1);
 				break;
-			case Axis::ScaleLn:
+			case Axis::Scale::Ln:
 				tmpMajorTicksNumber = qRound((log(end)-log(start))/majorTicksIncrement + 1);
 				break;
-			case Axis::ScaleSqrt:
+			case Axis::Scale::Sqrt:
 				tmpMajorTicksNumber = qRound((sqrt(end)-sqrt(start))/majorTicksIncrement + 1);
 				break;
-			case Axis::ScaleX2:
+			case Axis::Scale::X2:
 				tmpMajorTicksNumber = qRound((end*end - start*start)/majorTicksIncrement + 1);
 		}
 	} else { //custom column was provided
@@ -1223,9 +1223,9 @@ void AxisPrivate::retransformTicks() {
 	}
 
 	int tmpMinorTicksNumber;
-	if (minorTicksType == Axis::TicksTotalNumber)
+	if (minorTicksType == Axis::TicksType::TotalNumber)
 		tmpMinorTicksNumber = minorTicksNumber;
-	else if (minorTicksType == Axis::TicksSpacing)
+	else if (minorTicksType == Axis::TicksType::Spacing)
 		tmpMinorTicksNumber = fabs(end - start)/ (majorTicksNumber - 1)/minorTicksIncrement - 1;
 	else
 		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
@@ -1246,29 +1246,29 @@ void AxisPrivate::retransformTicks() {
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
 		//DEBUG("major tick " << iMajor)
 		//calculate major tick's position
-		if (majorTicksType != Axis::TicksCustomColumn) {
+		if (majorTicksType != Axis::TicksType::CustomColumn) {
 			switch (scale) {
-				case Axis::ScaleLinear:
+				case Axis::Scale::Linear:
 					majorTickPos = start + majorTicksIncrement * iMajor;
 					nextMajorTickPos = majorTickPos + majorTicksIncrement;
 					break;
-				case Axis::ScaleLog10:
+				case Axis::Scale::Log10:
 					majorTickPos = start * pow(10, majorTicksIncrement*iMajor);
 					nextMajorTickPos = majorTickPos * pow(10, majorTicksIncrement);
 					break;
-				case Axis::ScaleLog2:
+				case Axis::Scale::Log2:
 					majorTickPos = start * pow(2, majorTicksIncrement*iMajor);
 					nextMajorTickPos = majorTickPos * pow(2, majorTicksIncrement);
 					break;
-				case Axis::ScaleLn:
+				case Axis::Scale::Ln:
 					majorTickPos = start * exp(majorTicksIncrement*iMajor);
 					nextMajorTickPos = majorTickPos * exp(majorTicksIncrement);
 					break;
-				case Axis::ScaleSqrt:
+				case Axis::Scale::Sqrt:
 					majorTickPos = pow(sqrt(start) + majorTicksIncrement*iMajor, 2);
 					nextMajorTickPos = pow(sqrt(start) + majorTicksIncrement*(iMajor+1), 2);
 					break;
-				case Axis::ScaleX2:
+				case Axis::Scale::X2:
 					majorTickPos = sqrt(start*start + majorTicksIncrement*iMajor);
 					nextMajorTickPos = sqrt(start*start + majorTicksIncrement*(iMajor+1));
 					break;
@@ -1319,7 +1319,7 @@ void AxisPrivate::retransformTicks() {
 			double value = scalingFactor * majorTickPos + zeroOffset;
 
 			//if custom column is used, we can have duplicated values in it and we need only unique values
-			if (majorTicksType == Axis::TicksCustomColumn && tickLabelValues.indexOf(value) != -1)
+			if (majorTicksType == Axis::TicksType::CustomColumn && tickLabelValues.indexOf(value) != -1)
 				valid = false;
 
 			//add major tick's line to the painter path
@@ -1342,7 +1342,7 @@ void AxisPrivate::retransformTicks() {
 
 			for (int iMinor = 0; iMinor < tmpMinorTicksNumber; iMinor++) {
 				//calculate minor tick's position
-				if (minorTicksType != Axis::TicksCustomColumn) {
+				if (minorTicksType != Axis::TicksType::CustomColumn) {
 					minorTickPos = majorTickPos + (iMinor + 1) * minorTicksIncrement;
 				} else {
 					if (!minorTicksColumn->isValid(iMinor) || minorTicksColumn->isMasked(iMinor))
@@ -1431,10 +1431,10 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 	//automatically switch from 'decimal' to 'scientific' format for big numbers (>10^4)
 	//and back to decimal when the numbers get smaller after the auto-switch again
-	if (labelsFormat == Axis::FormatDecimal && !labelsFormatDecimalOverruled) {
+	if (labelsFormat == Axis::LabelsFormat::Decimal && !labelsFormatDecimalOverruled) {
 		for (auto value : tickLabelValues) {
 			if (std::abs(value) > 1e4) {
-				labelsFormat = Axis::FormatScientificE;
+				labelsFormat = Axis::LabelsFormat::ScientificE;
 				emit q->labelsFormatChanged(labelsFormat);
 				labelsFormatAutoChanged = true;
 				break;
@@ -1452,7 +1452,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 		if (changeBack) {
 			labelsFormatAutoChanged = false;
-			labelsFormat = Axis::FormatDecimal;
+			labelsFormat = Axis::LabelsFormat::Decimal;
 			emit q->labelsFormatChanged(labelsFormat);
 		}
 	}
@@ -1461,7 +1461,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	QString str;
 	if ( (orientation == Qt::Horizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
 		|| (orientation == Qt::Vertical && plot->yRangeFormat() == CartesianPlot::Numeric) ) {
-		if (labelsFormat == Axis::FormatDecimal) {
+		if (labelsFormat == Axis::LabelsFormat::Decimal) {
 			QString nullStr = QString::number(0, 'f', labelsPrecision);
 			for (const auto value : tickLabelValues) {
 				str = QString::number(value, 'f', labelsPrecision);
@@ -1469,7 +1469,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
-		} else if (labelsFormat == Axis::FormatScientificE) {
+		} else if (labelsFormat == Axis::LabelsFormat::ScientificE) {
 			QString nullStr = QString::number(0, 'e', labelsPrecision);
 			for (const auto value : tickLabelValues) {
 				str = QString::number(value, 'e', labelsPrecision);
@@ -1477,25 +1477,25 @@ void AxisPrivate::retransformTickLabelStrings() {
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
-		} else if (labelsFormat == Axis::FormatPowers10) {
+		} else if (labelsFormat == Axis::LabelsFormat::Powers10) {
 			for (const auto value : tickLabelValues) {
 				str = "10<span style=\"vertical-align:super\">" + QString::number(log10(value), 'f', labelsPrecision) + "</span>";
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
-		} else if (labelsFormat == Axis::FormatPowers2) {
+		} else if (labelsFormat == Axis::LabelsFormat::Powers2) {
 			for (const auto value : tickLabelValues) {
 				str = "2<span style=\"vertical-align:super\">" + QString::number(log2(value), 'f', labelsPrecision) + "</span>";
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
-		} else if (labelsFormat == Axis::FormatPowersE) {
+		} else if (labelsFormat == Axis::LabelsFormat::PowersE) {
 			for (const auto value : tickLabelValues) {
 				str = "e<span style=\"vertical-align:super\">" + QString::number(log(value), 'f', labelsPrecision) + "</span>";
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
-		} else if (labelsFormat == Axis::FormatMultipliesPi) {
+		} else if (labelsFormat == Axis::LabelsFormat::MultipliesPi) {
 			for (const auto value : tickLabelValues) {
 				str = "<span>" + QString::number(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
 				str = labelsPrefix + str + labelsSuffix;
@@ -1605,7 +1605,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 	for ( int i = 0; i < majorTickPoints.size(); i++ ) {
 		if ((orientation == Qt::Horizontal && plot->xRangeFormat() == CartesianPlot::Numeric) ||
 				(orientation == Qt::Vertical && plot->yRangeFormat() == CartesianPlot::Numeric)) {
-			if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
+			if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
 				width = fm.boundingRect(tickLabelStrings.at(i)).width();
 			} else {
 				td.setHtml(tickLabelStrings.at(i));
@@ -1890,7 +1890,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		td.setDefaultFont(labelsFont);
 		for (int i = 0; i < tickLabelPoints.size(); i++) {
 			tempPath = QPainterPath();
-			if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
+			if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
 				tempPath.addRect(fm.boundingRect(tickLabelStrings.at(i)));
 			} else {
 				td.setHtml(tickLabelStrings.at(i));
@@ -1997,7 +1997,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 				painter->save();
 				painter->rotate(-labelsRotationAngle);
 
-				if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
+				if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
 					painter->drawText(QPoint(0,0), tickLabelStrings.at(i));
 				} else {
 					td.setHtml(tickLabelStrings.at(i));
@@ -2058,19 +2058,19 @@ void AxisPrivate::setPrinting(bool on) {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void Axis::save(QXmlStreamWriter* writer) const{
+void Axis::save(QXmlStreamWriter* writer) const {
 	Q_D(const Axis);
 
-	writer->writeStartElement( "axis" );
-	writeBasicAttributes( writer );
-	writeCommentElement( writer );
+	writer->writeStartElement("axis");
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
 
 	//general
 	writer->writeStartElement( "general" );
 	writer->writeAttribute( "autoScale", QString::number(d->autoScale) );
 	writer->writeAttribute( "orientation", QString::number(d->orientation) );
-	writer->writeAttribute( "position", QString::number(d->position) );
-	writer->writeAttribute( "scale", QString::number(d->scale) );
+	writer->writeAttribute( "position", QString::number(static_cast<int>(d->position)) );
+	writer->writeAttribute( "scale", QString::number(static_cast<int>(d->scale)) );
 	writer->writeAttribute( "offset", QString::number(d->offset) );
 	writer->writeAttribute( "start", QString::number(d->start) );
 	writer->writeAttribute( "end", QString::number(d->end) );
@@ -2082,7 +2082,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeEndElement();
 
 	//label
-	d->title->save( writer );
+	d->title->save(writer);
 
 	//line
 	writer->writeStartElement( "line" );
@@ -2096,7 +2096,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	//major ticks
 	writer->writeStartElement( "majorTicks" );
 	writer->writeAttribute( "direction", QString::number(d->majorTicksDirection) );
-	writer->writeAttribute( "type", QString::number(d->majorTicksType) );
+	writer->writeAttribute( "type", QString::number(static_cast<int>(d->majorTicksType)) );
 	writer->writeAttribute( "number", QString::number(d->majorTicksNumber) );
 	writer->writeAttribute( "increment", QString::number(d->majorTicksSpacing) );
 	WRITE_COLUMN(d->majorTicksColumn, majorTicksColumn);
@@ -2108,7 +2108,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	//minor ticks
 	writer->writeStartElement( "minorTicks" );
 	writer->writeAttribute( "direction", QString::number(d->minorTicksDirection) );
-	writer->writeAttribute( "type", QString::number(d->minorTicksType) );
+	writer->writeAttribute( "type", QString::number(static_cast<int>(d->minorTicksType)) );
 	writer->writeAttribute( "number", QString::number(d->minorTicksNumber) );
 	writer->writeAttribute( "increment", QString::number(d->minorTicksIncrement) );
 	WRITE_COLUMN(d->minorTicksColumn, minorTicksColumn);
@@ -2124,7 +2124,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "position", QString::number(d->labelsPosition) );
 	writer->writeAttribute( "offset", QString::number(d->labelsOffset) );
 	writer->writeAttribute( "rotation", QString::number(d->labelsRotationAngle) );
-	writer->writeAttribute( "format", QString::number(d->labelsFormat) );
+	writer->writeAttribute( "format", QString::number(static_cast<int>(d->labelsFormat)) );
 	writer->writeAttribute( "precision", QString::number(d->labelsPrecision) );
 	writer->writeAttribute( "autoPrecision", QString::number(d->labelsAutoPrecision) );
 	writer->writeAttribute( "dateTimeFormat", d->labelsDateTimeFormat );
@@ -2175,8 +2175,8 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			READ_INT_VALUE("autoScale", autoScale, bool);
 			READ_INT_VALUE("orientation", orientation, Qt::Orientation);
-			READ_INT_VALUE("position", position, Axis::AxisPosition);
-			READ_INT_VALUE("scale", scale, Axis::AxisScale);
+			READ_INT_VALUE("position", position, Axis::Position);
+			READ_INT_VALUE("scale", scale, Axis::Scale);
 			READ_DOUBLE_VALUE("offset", offset);
 			READ_DOUBLE_VALUE("start", start);
 			READ_DOUBLE_VALUE("end", end);

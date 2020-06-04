@@ -192,7 +192,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
-			axis->setPosition(Axis::AxisBottom);
+			axis->setPosition(Axis::Position::Bottom);
 			axis->setStart(0);
 			axis->setEnd(1);
 			axis->setMajorTicksDirection(Axis::ticksIn);
@@ -205,7 +205,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
-			axis->setPosition(Axis::AxisTop);
+			axis->setPosition(Axis::Position::Top);
 			axis->setStart(0);
 			axis->setEnd(1);
 			axis->setMajorTicksDirection(Axis::ticksIn);
@@ -226,7 +226,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
-			axis->setPosition(Axis::AxisLeft);
+			axis->setPosition(Axis::Position::Left);
 			axis->setStart(0);
 			axis->setEnd(1);
 			axis->setMajorTicksDirection(Axis::ticksIn);
@@ -239,7 +239,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
-			axis->setPosition(Axis::AxisRight);
+			axis->setPosition(Axis::Position::Right);
 			axis->setStart(0);
 			axis->setEnd(1);
 			axis->setOffset(1);
@@ -269,7 +269,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
-			axis->setPosition(Axis::AxisBottom);
+			axis->setPosition(Axis::Position::Bottom);
 			axis->setStart(0);
 			axis->setEnd(1);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
@@ -283,7 +283,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
-			axis->setPosition(Axis::AxisLeft);
+			axis->setPosition(Axis::Position::Left);
 			axis->setStart(0);
 			axis->setEnd(1);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
@@ -312,7 +312,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
-			axis->setPosition(Axis::AxisCentered);
+			axis->setPosition(Axis::Position::Centered);
 			axis->setStart(-0.5);
 			axis->setEnd(0.5);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
@@ -327,7 +327,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
-			axis->setPosition(Axis::AxisCentered);
+			axis->setPosition(Axis::Position::Centered);
 			axis->setStart(-0.5);
 			axis->setEnd(0.5);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
@@ -357,7 +357,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
-			axis->setPosition(Axis::AxisCustom);
+			axis->setPosition(Axis::Position::Custom);
 			axis->setOffset(0);
 			axis->setStart(-0.5);
 			axis->setEnd(0.5);
@@ -373,7 +373,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
-			axis->setPosition(Axis::AxisCustom);
+			axis->setPosition(Axis::Position::Custom);
 			axis->setOffset(0);
 			axis->setStart(-0.5);
 			axis->setEnd(0.5);
@@ -2816,7 +2816,7 @@ void CartesianPlotPrivate::retransformScales() {
 				axis->setSuppressRetransform(false);
 			}
 			//TODO;
-// 			if (axis->position() == Axis::AxisCustom && deltaYMin != 0) {
+// 			if (axis->position() == Axis::Position::Custom && deltaYMin != 0) {
 // 				axis->setOffset(axis->offset() + deltaYMin, false);
 // 			}
 		} else {
@@ -2836,7 +2836,7 @@ void CartesianPlotPrivate::retransformScales() {
 			}
 
 			//TODO;
-// 			if (axis->position() == Axis::AxisCustom && deltaXMin != 0) {
+// 			if (axis->position() == Axis::Position::Custom && deltaXMin != 0) {
 // 				axis->setOffset(axis->offset() + deltaXMin, false);
 // 			}
 		}

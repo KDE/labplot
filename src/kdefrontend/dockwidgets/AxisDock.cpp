@@ -450,8 +450,8 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	// general
 	connect(m_axis, &Axis::aspectDescriptionChanged, this, &AxisDock::axisDescriptionChanged);
 	connect(m_axis, &Axis::orientationChanged, this, &AxisDock::axisOrientationChanged);
-	connect(m_axis, QOverload<Axis::AxisPosition>::of(&Axis::positionChanged),
-			this, QOverload<Axis::AxisPosition>::of(&AxisDock::axisPositionChanged));
+	connect(m_axis, QOverload<Axis::Position>::of(&Axis::positionChanged),
+			this, QOverload<Axis::Position>::of(&AxisDock::axisPositionChanged));
 	connect(m_axis, &Axis::scaleChanged, this, &AxisDock::axisScaleChanged);
 	connect(m_axis, &Axis::autoScaleChanged, this, &AxisDock::axisAutoScaleChanged);
 	connect(m_axis, &Axis::startChanged, this, &AxisDock::axisStartChanged);
@@ -562,15 +562,15 @@ void AxisDock::orientationChanged(int index) {
 
 	//depending on the current orientation we need to update axis position and labels position
 
-	//axis position, map from the current index in the combobox to the enum value in Axis::AxisPosition
-	Axis::AxisPosition axisPosition;
+	//axis position, map from the current index in the combobox to the enum value in Axis::Position
+	Axis::Position axisPosition;
 	int posIndex = ui.cbPosition->currentIndex();
 	if (orientation == Qt::Horizontal) {
 		if (posIndex > 1)
 			posIndex += 2;
-		axisPosition = Axis::AxisPosition(posIndex);
+		axisPosition = Axis::Position(posIndex);
 	} else
-		axisPosition = Axis::AxisPosition(posIndex+2);
+		axisPosition = Axis::Position(posIndex+2);
 
 	//labels position
 	posIndex = ui.cbLabelsPosition->currentIndex();
@@ -601,15 +601,15 @@ void AxisDock::positionChanged(int index) {
 	if (m_initializing)
 		return;
 
-	//map from the current index in the combo box to the enum value in Axis::AxisPosition,
+	//map from the current index in the combo box to the enum value in Axis::Position,
 	//depends on the current orientation
-	Axis::AxisPosition position;
+	Axis::Position position;
 	if ( ui.cbOrientation->currentIndex() == 0 ) {
 		if (index>1)
 			index += 2;
-		position = Axis::AxisPosition(index);
+		position = Axis::Position(index);
 	} else
-		position = Axis::AxisPosition(index+2);
+		position = Axis::Position(index+2);
 
 	for (auto* axis : m_axesList)
 		axis->setPosition(position);
@@ -631,7 +631,7 @@ void AxisDock::scaleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	auto scale = (Axis::AxisScale)index;
+	auto scale = (Axis::Scale)index;
 	for (auto* axis : m_axesList)
 		axis->setScale(scale);
 }
@@ -657,8 +657,8 @@ void AxisDock::startChanged() {
 	double value = ui.leStart->text().toDouble();
 
 	//check first, whether the value for the lower limit is valid for the log- and square root scaling. If not, set the default values.
-	auto scale = Axis::AxisScale(ui.cbScale->currentIndex());
-	if (scale == Axis::ScaleLog10 || scale == Axis::ScaleLog2 || scale == Axis::ScaleLn) {
+	auto scale = Axis::Scale(ui.cbScale->currentIndex());
+	if (scale == Axis::Scale::Log10 || scale == Axis::Scale::Log2 || scale == Axis::Scale::Ln) {
 		if (value <= 0) {
 			KMessageBox::sorry(this,
 			                   i18n("The axes lower limit has a non-positive value. Default minimal value will be used."),
@@ -666,7 +666,7 @@ void AxisDock::startChanged() {
 			ui.leStart->setText( "0.01" );
 			value = 0.01;
 		}
-	} else if (scale == Axis::ScaleSqrt) {
+	} else if (scale == Axis::Scale::Sqrt) {
 		if (value < 0) {
 			KMessageBox::sorry(this,
 			                   i18n("The axes lower limit has a negative value. Default minimal value will be used."),
@@ -873,7 +873,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		return;
 
 	auto type = Axis::TicksType(index);
-	if (type == Axis::TicksTotalNumber) {
+	if (type == Axis::TicksType::TotalNumber) {
 		ui.lMajorTicksNumber->show();
 		ui.sbMajorTicksNumber->show();
 		ui.lMajorTicksSpacingNumeric->hide();
@@ -882,7 +882,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		dtsbMajorTicksIncrement->hide();
 		ui.lMajorTicksColumn->hide();
 		cbMajorTicksColumn->hide();
-	} else if (type == Axis::TicksSpacing) {
+	} else if (type == Axis::TicksType::Spacing) {
 		ui.lMajorTicksNumber->hide();
 		ui.sbMajorTicksNumber->hide();
 		ui.lMajorTicksSpacingNumeric->show();
@@ -1098,7 +1098,7 @@ void AxisDock::minorTicksTypeChanged(int index) {
 		return;
 
 	auto type = Axis::TicksType(index);
-	if (type == Axis::TicksTotalNumber) {
+	if (type == Axis::TicksType::TotalNumber) {
 		ui.lMinorTicksNumber->show();
 		ui.sbMinorTicksNumber->show();
 		ui.lMinorTicksSpacingNumeric->hide();
@@ -1107,7 +1107,7 @@ void AxisDock::minorTicksTypeChanged(int index) {
 		cbMinorTicksColumn->hide();
 		ui.lMinorTicksIncrementDateTime->hide();
 		dtsbMinorTicksIncrement->hide();
-	} else if ( type == Axis::TicksSpacing) {
+	} else if ( type == Axis::TicksType::Spacing) {
 		ui.lMinorTicksNumber->hide();
 		ui.sbMinorTicksNumber->hide();
 
@@ -1554,11 +1554,11 @@ void AxisDock::axisOrientationChanged(Qt::Orientation orientation) {
 	m_initializing = false;
 }
 
-void AxisDock::axisPositionChanged(Axis::AxisPosition position) {
+void AxisDock::axisPositionChanged(Axis::Position position) {
 	m_initializing = true;
 
 	//map from the enum Qt::Orientation to the index in the combo box
-	int index(position);
+	int index{static_cast<int>(position)};
 	if (index > 1)
 		ui.cbPosition->setCurrentIndex(index-2);
 	else
@@ -1573,9 +1573,9 @@ void AxisDock::axisPositionChanged(float value) {
 	m_initializing = false;
 }
 
-void AxisDock::axisScaleChanged(Axis::AxisScale scale) {
+void AxisDock::axisScaleChanged(Axis::Scale scale) {
 	m_initializing = true;
-	ui.cbScale->setCurrentIndex( (int)scale );
+	ui.cbScale->setCurrentIndex(static_cast<int>(scale));
 	m_initializing = false;
 }
 
@@ -1671,7 +1671,7 @@ void AxisDock::axisMajorTicksDirectionChanged(Axis::TicksDirection direction) {
 }
 void AxisDock::axisMajorTicksTypeChanged(Axis::TicksType type) {
 	m_initializing = true;
-	ui.cbMajorTicksType->setCurrentIndex(type);
+	ui.cbMajorTicksType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 void AxisDock::axisMajorTicksNumberChanged(int number) {
@@ -1720,7 +1720,7 @@ void AxisDock::axisMinorTicksDirectionChanged(Axis::TicksDirection direction) {
 }
 void AxisDock::axisMinorTicksTypeChanged(Axis::TicksType type) {
 	m_initializing = true;
-	ui.cbMinorTicksType->setCurrentIndex(type);
+	ui.cbMinorTicksType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 void AxisDock::axisMinorTicksNumberChanged(int number) {
@@ -1764,7 +1764,7 @@ void AxisDock::axisMinorTicksOpacityChanged(qreal opacity) {
 //labels
 void AxisDock::axisLabelsFormatChanged(Axis::LabelsFormat format) {
 	m_initializing = true;
-	ui.cbLabelsFormat->setCurrentIndex(format);
+	ui.cbLabelsFormat->setCurrentIndex(static_cast<int>(format));
 	m_initializing = false;
 }
 void AxisDock::axisLabelsAutoPrecisionChanged(bool on) {
@@ -2139,9 +2139,9 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
 
 	if (ui.cbPosition->currentIndex() == 2) {
-		group.writeEntry("Position", (int)Axis::AxisCentered);
+		group.writeEntry("Position", static_cast<int>(Axis::Position::Centered));
 	} else if (ui.cbPosition->currentIndex() == 3) {
-		group.writeEntry("Position", (int)Axis::AxisCustom);
+		group.writeEntry("Position", static_cast<int>(Axis::Position::Custom));
 	} else {
 		if (ui.cbOrientation->currentIndex() == Qt::Horizontal)
 			group.writeEntry("Position", ui.cbPosition->currentIndex());

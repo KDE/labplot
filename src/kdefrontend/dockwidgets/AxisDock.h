@@ -153,9 +153,9 @@ private slots:
 	//General-Tab
 	void axisDescriptionChanged(const AbstractAspect*);
 	void axisOrientationChanged(Qt::Orientation);
-	void axisPositionChanged(Axis::AxisPosition);
+	void axisPositionChanged(Axis::Position);
 	void axisPositionChanged(float);
-	void axisScaleChanged(Axis::AxisScale);
+	void axisScaleChanged(Axis::Scale);
 	void axisAutoScaleChanged(bool);
 	void axisStartChanged(double);
 	void axisEndChanged(double);

@@ -43,8 +43,8 @@ class Axis: public WorksheetElement {
 	Q_OBJECT
 
 public:
-	enum AxisPosition {AxisTop, AxisBottom, AxisLeft, AxisRight, AxisCentered, AxisCustom};
-	enum LabelsFormat {FormatDecimal, FormatScientificE, FormatPowers10, FormatPowers2, FormatPowersE, FormatMultipliesPi};
+	enum class Position {Top, Bottom, Left, Right, Centered, Custom};
+	enum class LabelsFormat {Decimal, ScientificE, Powers10, Powers2, PowersE, MultipliesPi};
 	enum TicksFlags {
 		noTicks = 0x00,
 		ticksIn = 0x01,
@@ -53,10 +53,10 @@ public:
 	};
 	Q_DECLARE_FLAGS(TicksDirection, TicksFlags)
 
-	enum TicksType {TicksTotalNumber, TicksSpacing, TicksCustomColumn, TicksCustomValues};
+	enum class TicksType {TotalNumber, Spacing, CustomColumn, CustomValues};
 	enum ArrowType {NoArrow, SimpleArrowSmall, SimpleArrowBig, FilledArrowSmall, FilledArrowBig, SemiFilledArrowSmall, SemiFilledArrowBig};
 	enum ArrowPosition {ArrowLeft, ArrowRight, ArrowBoth};
-	enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
+	enum class Scale {Linear, Log10, Log2, Ln, Sqrt, X2};
 	enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
 
 	explicit Axis(const QString&, Qt::Orientation orientation = Qt::Horizontal);
@@ -76,8 +76,8 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(bool, autoScale, AutoScale)
 	BASIC_D_ACCESSOR_DECL(Qt::Orientation, orientation, Orientation)
-	BASIC_D_ACCESSOR_DECL(AxisPosition, position, Position)
-	BASIC_D_ACCESSOR_DECL(AxisScale, scale, Scale)
+	BASIC_D_ACCESSOR_DECL(Position, position, Position)
+	BASIC_D_ACCESSOR_DECL(Scale, scale, Scale)
 	BASIC_D_ACCESSOR_DECL(double, start, Start)
 	BASIC_D_ACCESSOR_DECL(double, end, End)
 	void setOffset(const double, const bool=true);
@@ -185,9 +185,9 @@ private slots:
 
 signals:
 	void orientationChanged(Qt::Orientation);
-	void positionChanged(Axis::AxisPosition);
+	void positionChanged(Position);
 	void positionChanged(double);
-	void scaleChanged(Axis::AxisScale);
+	void scaleChanged(Scale);
 	void startChanged(double);
 	void autoScaleChanged(bool);
 	void endChanged(double);
