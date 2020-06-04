@@ -51,7 +51,7 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 
 	BASIC_D_ACCESSOR_DECL(double, position, Position)
-	BASIC_D_ACCESSOR_DECL(Qt::Orientation, orientation, Orientation)
+	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
 	CLASS_D_ACCESSOR_DECL(QPen, pen, Pen)
 	BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity)
 
@@ -96,7 +96,7 @@ private slots:
 
 signals:
 	friend class ReferenceLineSetPositionCmd;
-	void orientationChanged(Qt::Orientation);
+	void orientationChanged(Orientation);
 	void positionChanged(double);
 	void penChanged(const QPen&);
 	void opacityChanged(qreal);

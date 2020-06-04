@@ -59,7 +59,7 @@ public:
 	enum class Scale {Linear, Log10, Log2, Ln, Sqrt, X2};
 	enum class LabelsPosition {NoLabels, In, Out};
 
-	explicit Axis(const QString&, Qt::Orientation orientation = Qt::Horizontal);
+	explicit Axis(const QString&, Orientation orientation = Orientation::Horizontal);
 	~Axis() override;
 
 	void finalizeAdd() override;
@@ -75,7 +75,7 @@ public:
 	void saveThemeConfig(const KConfig&) override;
 
 	BASIC_D_ACCESSOR_DECL(bool, autoScale, AutoScale)
-	BASIC_D_ACCESSOR_DECL(Qt::Orientation, orientation, Orientation)
+	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
 	BASIC_D_ACCESSOR_DECL(Scale, scale, Scale)
 	BASIC_D_ACCESSOR_DECL(double, start, Start)
@@ -149,7 +149,7 @@ public:
 
 protected:
 	AxisPrivate* const d_ptr;
-	Axis(const QString&, Qt::Orientation, AxisPrivate*);
+	Axis(const QString&, Orientation, AxisPrivate*);
 	TextLabel* m_title;
 
 private:
@@ -184,7 +184,7 @@ private slots:
 	void visibilityChangedSlot();
 
 signals:
-	void orientationChanged(Qt::Orientation);
+	void orientationChanged(Orientation);
 	void positionChanged(Position);
 	void positionChanged(double);
 	void scaleChanged(Scale);

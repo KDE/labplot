@@ -112,8 +112,8 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 //**********************************************************
 //Position
 void ReferenceLineDock::orientationChanged(int index) {
-	auto orientation = (index == 0) ? Qt::Horizontal : Qt::Vertical;
-	if (orientation == Qt::Horizontal)
+	auto orientation{ReferenceLine::Orientation(index)};
+	if (orientation == ReferenceLine::Orientation::Horizontal)
 		ui.lPosition->setText(QLatin1String("y:"));
 	else
 		ui.lPosition->setText(QLatin1String("x:"));
@@ -215,12 +215,9 @@ void ReferenceLineDock::linePositionChanged(double position) {
 	m_initializing = false;
 }
 
-void ReferenceLineDock::lineOrientationChanged(Qt::Orientation orientation) {
+void ReferenceLineDock::lineOrientationChanged(ReferenceLine::Orientation orientation) {
 	m_initializing = true;
-	if (orientation == Qt::Horizontal)
-		ui.cbOrientation->setCurrentIndex(0);
-	else
-		ui.cbOrientation->setCurrentIndex(1);
+	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
 	m_initializing = false;
 }
 
@@ -254,7 +251,7 @@ void ReferenceLineDock::load() {
 
 	m_initializing = true;
 
-	ui.cbOrientation->setCurrentIndex((m_line->orientation() == Qt::Horizontal) ? 0 : 1);
+	ui.cbOrientation->setCurrentIndex(static_cast<int>(m_line->orientation()));
 	ui.lePosition->setText(QString::number(m_line->position()));
 	ui.cbLineStyle->setCurrentIndex( (int) m_line->pen().style() );
 	ui.kcbLineColor->setColor( m_line->pen().color() );

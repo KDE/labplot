@@ -188,7 +188,7 @@ void CartesianPlot::setType(Type type) {
 			d->yMax = 1.0;
 
 			//Axes
-			Axis* axis = new Axis("x axis 1", Qt::Horizontal);
+			Axis* axis = new Axis("x axis 1", Axis::Orientation::Horizontal);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -201,7 +201,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setMinorTicksNumber(1);
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("x axis 2", Qt::Horizontal);
+			axis = new Axis("x axis 2", Axis::Orientation::Horizontal);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -222,7 +222,7 @@ void CartesianPlot::setType(Type type) {
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("y axis 1", Qt::Vertical);
+			axis = new Axis("y axis 1", Axis::Orientation::Vertical);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -235,7 +235,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setMinorTicksNumber(1);
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("y axis 2", Qt::Vertical);
+			axis = new Axis("y axis 2", Axis::Orientation::Vertical);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -265,7 +265,7 @@ void CartesianPlot::setType(Type type) {
 			d->yMin = 0.0;
 			d->yMax = 1.0;
 
-			Axis* axis = new Axis("x axis 1", Qt::Horizontal);
+			Axis* axis = new Axis("x axis 1", Axis::Orientation::Horizontal);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -279,7 +279,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setArrowType(Axis::ArrowType::FilledSmall);
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("y axis 1", Qt::Vertical);
+			axis = new Axis("y axis 1", Axis::Orientation::Vertical);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -308,7 +308,7 @@ void CartesianPlot::setType(Type type) {
 			pen.setStyle(Qt::NoPen);
 			m_plotArea->setBorderPen(pen);
 
-			Axis* axis = new Axis("x axis 1", Qt::Horizontal);
+			Axis* axis = new Axis("x axis 1", Axis::Orientation::Horizontal);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -323,7 +323,7 @@ void CartesianPlot::setType(Type type) {
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("y axis 1", Qt::Vertical);
+			axis = new Axis("y axis 1", Axis::Orientation::Vertical);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -353,7 +353,7 @@ void CartesianPlot::setType(Type type) {
 			pen.setStyle(Qt::NoPen);
 			m_plotArea->setBorderPen(pen);
 
-			Axis* axis = new Axis("x axis 1", Qt::Horizontal);
+			Axis* axis = new Axis("x axis 1", Axis::Orientation::Horizontal);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -369,7 +369,7 @@ void CartesianPlot::setType(Type type) {
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("y axis 1", Qt::Vertical);
+			axis = new Axis("y axis 1", Axis::Orientation::Vertical);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -1186,7 +1186,7 @@ void CartesianPlot::setTheme(const QString& theme) {
 //########################## Slots ###############################
 //################################################################
 void CartesianPlot::addHorizontalAxis() {
-	Axis* axis = new Axis("x-axis", Qt::Horizontal);
+	Axis* axis = new Axis("x-axis", Axis::Orientation::Horizontal);
 	if (axis->autoScale()) {
 		axis->setUndoAware(false);
 		axis->setStart(xMin());
@@ -1197,7 +1197,7 @@ void CartesianPlot::addHorizontalAxis() {
 }
 
 void CartesianPlot::addVerticalAxis() {
-	Axis* axis = new Axis("y-axis", Qt::Vertical);
+	Axis* axis = new Axis("y-axis", Axis::Orientation::Vertical);
 	if (axis->autoScale()) {
 		axis->setUndoAware(false);
 		axis->setStart(yMin());
@@ -1503,7 +1503,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 					//set column's datetime format for all horizontal axis
 					for (auto* axis : children<Axis>()) {
-						if (axis->orientation() == Qt::Horizontal) {
+						if (axis->orientation() == Axis::Orientation::Horizontal) {
 							auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 							d->xRangeDateTimeFormat = filter->format();
 							axis->setUndoAware(false);
@@ -1523,7 +1523,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 					//set column's datetime format for all vertical axis
 					for (auto* axis : children<Axis>()) {
-						if (axis->orientation() == Qt::Vertical) {
+						if (axis->orientation() == Axis::Orientation::Vertical) {
 							auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 							d->yRangeDateTimeFormat = filter->format();
 							axis->setUndoAware(false);
@@ -2800,7 +2800,7 @@ void CartesianPlotPrivate::retransformScales() {
 		if (!axis->autoScale())
 			continue;
 
-		if (axis->orientation() == Qt::Horizontal) {
+		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			if (deltaXMax != 0) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
@@ -2890,14 +2890,14 @@ void CartesianPlotPrivate::rangeChanged() {
 
 void CartesianPlotPrivate::xRangeFormatChanged() {
 	for (auto* axis : q->children<Axis>()) {
-		if (axis->orientation() == Qt::Horizontal)
+		if (axis->orientation() == Axis::Orientation::Horizontal)
 			axis->retransformTickLabelStrings();
 	}
 }
 
 void CartesianPlotPrivate::yRangeFormatChanged() {
 	for (auto* axis : q->children<Axis>()) {
-		if (axis->orientation() == Qt::Vertical)
+		if (axis->orientation() == Axis::Orientation::Vertical)
 			axis->retransformTickLabelStrings();
 	}
 }
@@ -3329,7 +3329,7 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 		if (!axis->graphicsItem()->isSelected())
 			continue;
 
-		if (axis->orientation() == Qt::Horizontal)
+		if (axis->orientation() == Axis::Orientation::Horizontal)
 			zoomX  = true;
 		else
 			zoomY = true;
