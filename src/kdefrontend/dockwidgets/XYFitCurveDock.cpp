@@ -336,12 +336,14 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_fitData = m_fitCurve->fitData();
-	if (m_fitData.paramStartValues.size() > 0) {
-		DEBUG("	start value 1 = " << m_fitData.paramStartValues.at(0));
-	}
-	DEBUG("	model degree = " << m_fitData.degree);
-	DEBUG("	# params = " << m_fitData.paramNames.size());
-	DEBUG("	# start values = " << m_fitData.paramStartValues.size());
+
+	DEBUG("XYFitCurveDock::setCurves()	model type = " << m_fitData.modelType);
+	DEBUG("XYFitCurveDock::setCurves()	model = " << STDSTRING(m_fitData.model));
+	DEBUG("XYFitCurveDock::setCurves()	model degree = " << m_fitData.degree);
+	DEBUG("XYFitCurveDock::setCurves()	# params = " << m_fitData.paramNames.size());
+	DEBUG("XYFitCurveDock::setCurves()	# start values = " << m_fitData.paramStartValues.size());
+	for (auto startValue: m_fitData.paramStartValues)
+		DEBUG("XYFitCurveDock::setCurves()	start value = " << startValue);
 	fitParametersWidget->setFitData(&m_fitData);
 
 	initGeneralTab();

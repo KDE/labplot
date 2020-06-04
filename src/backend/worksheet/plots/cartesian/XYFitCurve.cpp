@@ -284,6 +284,7 @@ void XYFitCurve::initFitData(PlotDataDialog::AnalysisAction action) {
  * sets the model expression and the parameter names for given model category, model type and degree in \c fitData
  */
 void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
+	DEBUG("XYFitCurve::initFitData()")
 	nsl_fit_model_category modelCategory = fitData.modelCategory;
 	int modelType = fitData.modelType;
 	QString& model = fitData.model;
@@ -619,7 +620,8 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	case nsl_fit_model_custom:
 		break;
 	}
-	DEBUG("model: " << STDSTRING(model));
+	DEBUG("XYFitCurve::initFitData()	model: " << STDSTRING(model));
+	DEBUG("XYFitCurve::initFitData()	# params: " << paramNames.size());
 
 	if (paramNamesUtf8.isEmpty())
 		paramNamesUtf8 << paramNames;
@@ -2318,7 +2320,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("fitRangeMin", fitData.fitRange.first());
 			READ_DOUBLE_VALUE("fitRangeMax", fitData.fitRange.last());
 			READ_INT_VALUE("modelCategory", fitData.modelCategory, nsl_fit_model_category);
-			READ_INT_VALUE("modelType", fitData.modelType, unsigned int);
+			READ_INT_VALUE("modelType", fitData.modelType, int);
 			READ_INT_VALUE("xWeightsType", fitData.xWeightsType, nsl_fit_weight_type);
 			READ_INT_VALUE("weightsType", fitData.yWeightsType, nsl_fit_weight_type);
 			READ_INT_VALUE("degree", fitData.degree, int);
@@ -2336,10 +2338,6 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("useResults", fitData.useResults, bool);
 			READ_INT_VALUE("previewEnabled", fitData.previewEnabled, bool);
 
-			//set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
-			XYFitCurve::initFitData(d->fitData);
-			// remove default names and start values
-			d->fitData.paramStartValues.clear();
 		} else if (!preview && reader->name() == "name") {	// needed for custom model
 			d->fitData.paramNames << reader->readElementText();
 		} else if (!preview && reader->name() == "startValue") {
@@ -2410,20 +2408,9 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	// older model save the param names also for non-custom models: remove them
-	while (d->fitData.paramNames.size() > d->fitData.paramStartValues.size())
-		d->fitData.paramNames.removeLast();
-
-	if (d->fitData.paramNamesUtf8.isEmpty())
-		d->fitData.paramNamesUtf8 << d->fitData.paramNames;
-	DEBUG("# params = " << d->fitData.paramNames.size());
-
-	if (preview)
-		return true;
-
 	// new fit model style (reset model type of old projects)
 	if (d->fitData.modelCategory == nsl_fit_model_basic && d->fitData.modelType >= NSL_FIT_MODEL_BASIC_COUNT) {
-		DEBUG("RESET old fit model");
+		DEBUG("XYFitCurve::load() RESET old fit model");
 		d->fitData.modelType = 0;
 		d->fitData.degree = 1;
 		d->fitData.paramNames.clear();
@@ -2446,7 +2433,18 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	if (d->fitResult.tdist_marginValues.size() == 0)
 		d->fitResult.tdist_marginValues.resize(np);
 
-	DEBUG("# start values = " << d->fitData.paramStartValues.size());
+	if (d->fitData.paramNamesUtf8.isEmpty())
+		d->fitData.paramNamesUtf8 << d->fitData.paramNames;
+
+	//set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
+	XYFitCurve::initFitData(d->fitData);
+
+	DEBUG("XYFitCurve::load() model type = " << d->fitData.modelType);
+	DEBUG("XYFitCurve::load() # params = " << d->fitData.paramNames.size());
+	DEBUG("XYFitCurve::load() # start values = " << d->fitData.paramStartValues.size());
+
+	if (preview)
+		return true;
 
 	// wait for data to be read before using the pointers
 	QThreadPool::globalInstance()->waitForDone();
