@@ -57,7 +57,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 
 	//range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(fitCurve->parentAspect());
-	m_dateTimeRange = (plot->xRangeFormat() != CartesianPlot::Numeric);
+	m_dateTimeRange = (plot->xRangeFormat() != CartesianPlot::RangeFormat::Numeric);
 	if (!m_dateTimeRange) {
 		ui.leMin->setText(QString::number(m_fitData->fitRange.first()));
 		ui.leMax->setText(QString::number(m_fitData->fitRange.last()));

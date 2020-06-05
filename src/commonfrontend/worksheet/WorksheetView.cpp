@@ -367,31 +367,31 @@ void WorksheetView::initActions() {
 
 	auto* cartesianPlotNavigationGroup = new QActionGroup(this);
 	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("Auto Scale"), cartesianPlotNavigationGroup);
-	scaleAutoAction->setData(CartesianPlot::ScaleAuto);
+	scaleAutoAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAuto));
 	scaleAutoXAction = new QAction(QIcon::fromTheme("labplot-auto-scale-x"), i18n("Auto Scale X"), cartesianPlotNavigationGroup);
-	scaleAutoXAction->setData(CartesianPlot::ScaleAutoX);
+	scaleAutoXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoX));
 	scaleAutoYAction = new QAction(QIcon::fromTheme("labplot-auto-scale-y"), i18n("Auto Scale Y"), cartesianPlotNavigationGroup);
-	scaleAutoYAction->setData(CartesianPlot::ScaleAutoY);
+	scaleAutoYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoY));
 	zoomInAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom In"), cartesianPlotNavigationGroup);
-	zoomInAction->setData(CartesianPlot::ZoomIn);
+	zoomInAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomIn));
 	zoomOutAction = new QAction(QIcon::fromTheme("zoom-out"), i18n("Zoom Out"), cartesianPlotNavigationGroup);
-	zoomOutAction->setData(CartesianPlot::ZoomOut);
+	zoomOutAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOut));
 	zoomInXAction = new QAction(QIcon::fromTheme("labplot-zoom-in-x"), i18n("Zoom In X"), cartesianPlotNavigationGroup);
-	zoomInXAction->setData(CartesianPlot::ZoomInX);
+	zoomInXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomInX));
 	zoomOutXAction = new QAction(QIcon::fromTheme("labplot-zoom-out-x"), i18n("Zoom Out X"), cartesianPlotNavigationGroup);
-	zoomOutXAction->setData(CartesianPlot::ZoomOutX);
+	zoomOutXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOutX));
 	zoomInYAction = new QAction(QIcon::fromTheme("labplot-zoom-in-y"), i18n("Zoom In Y"), cartesianPlotNavigationGroup);
-	zoomInYAction->setData(CartesianPlot::ZoomInY);
+	zoomInYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomInY));
 	zoomOutYAction = new QAction(QIcon::fromTheme("labplot-zoom-out-y"), i18n("Zoom Out Y"), cartesianPlotNavigationGroup);
-	zoomOutYAction->setData(CartesianPlot::ZoomOutY);
+	zoomOutYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOutY));
 	shiftLeftXAction = new QAction(QIcon::fromTheme("labplot-shift-left-x"), i18n("Shift Left X"), cartesianPlotNavigationGroup);
-	shiftLeftXAction->setData(CartesianPlot::ShiftLeftX);
+	shiftLeftXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftLeftX));
 	shiftRightXAction = new QAction(QIcon::fromTheme("labplot-shift-right-x"), i18n("Shift Right X"), cartesianPlotNavigationGroup);
-	shiftRightXAction->setData(CartesianPlot::ShiftRightX);
+	shiftRightXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftRightX));
 	shiftUpYAction = new QAction(QIcon::fromTheme("labplot-shift-up-y"), i18n("Shift Up Y"), cartesianPlotNavigationGroup);
-	shiftUpYAction->setData(CartesianPlot::ShiftUpY);
+	shiftUpYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftUpY));
 	shiftDownYAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("Shift Down Y"), cartesianPlotNavigationGroup);
-	shiftDownYAction->setData(CartesianPlot::ShiftDownY);
+	shiftDownYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftDownY));
 
 	connect(cartesianPlotNavigationGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotNavigationChanged);
 
@@ -1279,28 +1279,28 @@ void WorksheetView::addNew(QAction* action) {
 	WorksheetElement* aspect = nullptr;
 	if (action == addCartesianPlot1Action) {
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
-		plot->setType(CartesianPlot::FourAxes);
+		plot->setType(CartesianPlot::Type::FourAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot1Action);
 	} else if (action == addCartesianPlot2Action) {
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
-		plot->setType(CartesianPlot::TwoAxes);
+		plot->setType(CartesianPlot::Type::TwoAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot2Action);
 	} else if (action == addCartesianPlot3Action) {
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
-		plot->setType(CartesianPlot::TwoAxesCentered);
+		plot->setType(CartesianPlot::Type::TwoAxesCentered);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot3Action);
 	} else if (action == addCartesianPlot4Action) {
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
-		plot->setType(CartesianPlot::TwoAxesCenteredZero);
+		plot->setType(CartesianPlot::Type::TwoAxesCenteredZero);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)

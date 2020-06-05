@@ -391,7 +391,7 @@ void PlotDataDialog::plot() {
 		if (ui->rbCurvePlacement1->isChecked()) {
 			//all curves in one plot
 			CartesianPlot* plot = new CartesianPlot( i18n("Plot data from %1", m_spreadsheet->name()) );
-			plot->setType(CartesianPlot::FourAxes);
+			plot->setType(CartesianPlot::Type::FourAxes);
 
 			//set the axis titles before we add the plot to the worksheet
 			//set the x-axis names
@@ -439,7 +439,7 @@ void PlotDataDialog::plot() {
 		if (ui->rbCurvePlacement1->isChecked()) {
 			//all curves in one plot
 			CartesianPlot* plot = new CartesianPlot( i18n("Plot data from %1", m_spreadsheet->name()) );
-			plot->setType(CartesianPlot::FourAxes);
+			plot->setType(CartesianPlot::Type::FourAxes);
 
 			//set the axis titles before we add the plot to the worksheet
 			//set the x-axis names
@@ -558,7 +558,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 				continue;
 
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
-			plot->setType(CartesianPlot::FourAxes);
+			plot->setType(CartesianPlot::Type::FourAxes);
 
 			//set the axis names in the new plot
 			bool xSet = false;
@@ -585,7 +585,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			Column* column = columnFromName(name);
 
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
-			plot->setType(CartesianPlot::FourAxes);
+			plot->setType(CartesianPlot::Type::FourAxes);
 
 			//set the axis names in the new plot
 			bool xSet = false;

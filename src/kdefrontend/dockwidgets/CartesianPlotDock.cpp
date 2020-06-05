@@ -1420,7 +1420,7 @@ void CartesianPlotDock::plotXScaleChanged(CartesianPlot::Scale scale) {
 
 void CartesianPlotDock::plotXRangeFormatChanged(CartesianPlot::RangeFormat format) {
 	m_initializing = true;
-	ui.cbXRangeFormat->setCurrentIndex(format);
+	ui.cbXRangeFormat->setCurrentIndex(static_cast<int>(format));
 	m_initializing = false;
 }
 
@@ -1452,7 +1452,7 @@ void CartesianPlotDock::plotYScaleChanged(CartesianPlot::Scale scale) {
 
 void CartesianPlotDock::plotYRangeFormatChanged(CartesianPlot::RangeFormat format) {
 	m_initializing = true;
-	ui.cbYRangeFormat->setCurrentIndex(format);
+	ui.cbYRangeFormat->setCurrentIndex(static_cast<int>(format));
 	m_initializing = false;
 }
 

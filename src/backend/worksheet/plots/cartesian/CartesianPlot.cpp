@@ -122,8 +122,8 @@ void CartesianPlot::init() {
 	m_coordinateSystem = d->cSystem;
 
 	d->rangeType = RangeType::Free;
-	d->xRangeFormat = CartesianPlot::Numeric;
-	d->yRangeFormat = CartesianPlot::Numeric;
+	d->xRangeFormat = RangeFormat::Numeric;
+	d->yRangeFormat = RangeFormat::Numeric;
 	d->xRangeDateTimeFormat = "yyyy-MM-dd hh:mm:ss";
 	d->yRangeDateTimeFormat = "yyyy-MM-dd hh:mm:ss";
 	d->rangeFirstValues = 1000;
@@ -181,7 +181,7 @@ void CartesianPlot::setType(Type type) {
 	d->type = type;
 
 	switch (type) {
-	case FourAxes: {
+	case Type::FourAxes: {
 			d->xMin = 0.0;
 			d->xMax = 1.0;
 			d->yMin = 0.0;
@@ -259,7 +259,7 @@ void CartesianPlot::setType(Type type) {
 
 			break;
 		}
-	case TwoAxes: {
+	case Type::TwoAxes: {
 			d->xMin = 0.0;
 			d->xMax = 1.0;
 			d->yMin = 0.0;
@@ -295,7 +295,7 @@ void CartesianPlot::setType(Type type) {
 
 			break;
 		}
-	case TwoAxesCentered: {
+	case Type::TwoAxesCentered: {
 			d->xMin = -0.5;
 			d->xMax = 0.5;
 			d->yMin = -0.5;
@@ -340,7 +340,7 @@ void CartesianPlot::setType(Type type) {
 
 			break;
 		}
-	case TwoAxesCenteredZero: {
+	case Type::TwoAxesCenteredZero: {
 			d->xMin = -0.5;
 			d->xMax = 0.5;
 			d->yMin = -0.5;
@@ -733,26 +733,26 @@ QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
 	return aspects;
 }
 
-void CartesianPlot::navigate(CartesianPlot::NavigationOperation op) {
+void CartesianPlot::navigate(NavigationOperation op) {
 	Q_D(CartesianPlot);
-	if (op == ScaleAuto) {
+	if (op == NavigationOperation::ScaleAuto) {
 		if (d->curvesXMinMaxIsDirty || d->curvesYMinMaxIsDirty || !autoScaleX() || !autoScaleY()) {
 			d->curvesXMinMaxIsDirty = true;
 			d->curvesYMinMaxIsDirty = true;
 		}
 		scaleAuto();
-	} else if (op == ScaleAutoX) setAutoScaleX(true);
-	else if (op == ScaleAutoY) setAutoScaleY(true);
-	else if (op == ZoomIn) zoomIn();
-	else if (op == ZoomOut) zoomOut();
-	else if (op == ZoomInX) zoomInX();
-	else if (op == ZoomOutX) zoomOutX();
-	else if (op == ZoomInY) zoomInY();
-	else if (op == ZoomOutY) zoomOutY();
-	else if (op == ShiftLeftX) shiftLeftX();
-	else if (op == ShiftRightX) shiftRightX();
-	else if (op == ShiftUpY) shiftUpY();
-	else if (op == ShiftDownY) shiftDownY();
+	} else if (op == NavigationOperation::ScaleAutoX) setAutoScaleX(true);
+	else if (op == NavigationOperation::ScaleAutoY) setAutoScaleY(true);
+	else if (op == NavigationOperation::ZoomIn) zoomIn();
+	else if (op == NavigationOperation::ZoomOut) zoomOut();
+	else if (op == NavigationOperation::ZoomInX) zoomInX();
+	else if (op == NavigationOperation::ZoomOutX) zoomOutX();
+	else if (op == NavigationOperation::ZoomInY) zoomInY();
+	else if (op == NavigationOperation::ZoomOutY) zoomOutY();
+	else if (op == NavigationOperation::ShiftLeftX) shiftLeftX();
+	else if (op == NavigationOperation::ShiftRightX) shiftRightX();
+	else if (op == NavigationOperation::ShiftUpY) shiftUpY();
+	else if (op == NavigationOperation::ShiftDownY) shiftDownY();
 }
 
 void CartesianPlot::setSuppressDataChangedSignal(bool value) {
@@ -1498,7 +1498,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			if (col) {
 				if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
 					setUndoAware(false);
-					setXRangeFormat(CartesianPlot::DateTime);
+					setXRangeFormat(RangeFormat::DateTime);
 					setUndoAware(true);
 
 					//set column's datetime format for all horizontal axis
@@ -1518,7 +1518,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			if (col) {
 				if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
 					setUndoAware(false);
-					setYRangeFormat(CartesianPlot::DateTime);
+					setYRangeFormat(RangeFormat::DateTime);
 					setUndoAware(true);
 
 					//set column's datetime format for all vertical axis
@@ -1685,9 +1685,9 @@ void CartesianPlot::xDataChanged() {
 		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
 		if (curve) {
 			const AbstractColumn* col = curve->xColumn();
-			if (col->columnMode() == AbstractColumn::ColumnMode::DateTime && d->xRangeFormat != CartesianPlot::DateTime) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::DateTime && d->xRangeFormat != RangeFormat::DateTime) {
 				setUndoAware(false);
-				setXRangeFormat(CartesianPlot::DateTime);
+				setXRangeFormat(RangeFormat::DateTime);
 				setUndoAware(true);
 			}
 		}
@@ -1731,9 +1731,9 @@ void CartesianPlot::yDataChanged() {
 		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
 		if (curve) {
 			const AbstractColumn* col = curve->yColumn();
-			if (col->columnMode() == AbstractColumn::ColumnMode::DateTime && d->xRangeFormat != CartesianPlot::DateTime) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::DateTime && d->xRangeFormat != RangeFormat::DateTime) {
 				setUndoAware(false);
-				setYRangeFormat(CartesianPlot::DateTime);
+				setYRangeFormat(RangeFormat::DateTime);
 				setUndoAware(true);
 			}
 		}
@@ -3187,14 +3187,14 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos) {
 	if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
 		m_selectionEnd = cSystem->mapLogicalToScene(logicalPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		QPointF logicalEnd = logicalPos;
-		if (xRangeFormat == CartesianPlot::Numeric)
+		if (xRangeFormat == CartesianPlot::RangeFormat::Numeric)
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
 		else
 			info = i18n("from x=%1 to x=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
 						QDateTime::fromMSecsSinceEpoch(logicalEnd.x()).toString(xRangeDateTimeFormat));
 
 		info += QLatin1String(", ");
-		if (yRangeFormat == CartesianPlot::Numeric)
+		if (yRangeFormat == CartesianPlot::RangeFormat::Numeric)
 			info += QString::fromUtf8("Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
 		else
 			info += i18n("from y=%1 to y=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
@@ -3204,7 +3204,7 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos) {
 		m_selectionEnd.setX(cSystem->mapLogicalToScene(logicalPos, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping).x());//event->pos().x());
 		m_selectionEnd.setY(dataRect.bottom());
 		QPointF logicalEnd = logicalPos;
-		if (xRangeFormat == CartesianPlot::Numeric)
+		if (xRangeFormat == CartesianPlot::RangeFormat::Numeric)
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
 		else
 			info = i18n("from x=%1 to x=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
@@ -3214,7 +3214,7 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos) {
 		logicalPos.setX(xMin); // must be done, because the other plots can have other ranges, value must be in the scenes
 		m_selectionEnd.setY(cSystem->mapLogicalToScene(logicalPos, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping).y());//event->pos().y());
 		QPointF logicalEnd = logicalPos;
-		if (yRangeFormat == CartesianPlot::Numeric)
+		if (yRangeFormat == CartesianPlot::RangeFormat::Numeric)
 			info = QString::fromUtf8("Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
 		else
 			info = i18n("from y=%1 to y=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
@@ -3230,7 +3230,7 @@ void CartesianPlotPrivate::mouseMoveCursorMode(int cursorNumber, QPointF logical
 	cursorNumber == 0 ? cursor0Pos = p1 : cursor1Pos = p1;
 
 	QString info;
-	if (xRangeFormat == CartesianPlot::Numeric)
+	if (xRangeFormat == CartesianPlot::RangeFormat::Numeric)
 		info = QString::fromUtf8("x=") + QString::number(logicalPos.x());
 	else
 		info = i18n("x=%1", QDateTime::fromMSecsSinceEpoch(logicalPos.x()).toString(xRangeDateTimeFormat));
@@ -3397,13 +3397,13 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 		if ((mouseMode == CartesianPlot::MouseMode::ZoomSelection) ||
 			mouseMode == CartesianPlot::MouseMode::Selection) {
 			info = "x=";
-			if (xRangeFormat == CartesianPlot::Numeric)
+			if (xRangeFormat == CartesianPlot::RangeFormat::Numeric)
 				 info += QString::number(logicalPoint.x());
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x()).toString(xRangeDateTimeFormat);
 
 			info += ", y=";
-			if (yRangeFormat == CartesianPlot::Numeric)
+			if (yRangeFormat == CartesianPlot::RangeFormat::Numeric)
 				info += QString::number(logicalPoint.y());
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y()).toString(yRangeDateTimeFormat);
@@ -3413,14 +3413,14 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			emit q->mouseHoverZoomSelectionModeSignal(logicalPoint);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection && !m_selectionBandIsShown) {
 			info = "x=";
-			if (xRangeFormat == CartesianPlot::Numeric)
+			if (xRangeFormat == CartesianPlot::RangeFormat::Numeric)
 				 info += QString::number(logicalPoint.x());
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x()).toString(xRangeDateTimeFormat);
 			emit q->mouseHoverZoomSelectionModeSignal(logicalPoint);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection && !m_selectionBandIsShown) {
 			info = "y=";
-			if (yRangeFormat == CartesianPlot::Numeric)
+			if (yRangeFormat == CartesianPlot::RangeFormat::Numeric)
 				info += QString::number(logicalPoint.y());
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y()).toString(yRangeDateTimeFormat);
@@ -3445,7 +3445,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			}
 		} else if (mouseMode == CartesianPlot::MouseMode::Cursor) {
 			info = "x=";
-			if (yRangeFormat == CartesianPlot::Numeric)
+			if (yRangeFormat == CartesianPlot::RangeFormat::Numeric)
 				info += QString::number(logicalPoint.x());
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x()).toString(xRangeDateTimeFormat);
@@ -3622,8 +3622,8 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "yMax", QString::number(d->yMax, 'g', 16) );
 	writer->writeAttribute( "xScale", QString::number(static_cast<int>(d->xScale)) );
 	writer->writeAttribute( "yScale", QString::number(static_cast<int>(d->yScale)) );
-	writer->writeAttribute( "xRangeFormat", QString::number(d->xRangeFormat) );
-	writer->writeAttribute( "yRangeFormat", QString::number(d->yRangeFormat) );
+	writer->writeAttribute( "xRangeFormat", QString::number(static_cast<int>(d->xRangeFormat)) );
+	writer->writeAttribute( "yRangeFormat", QString::number(static_cast<int>(d->yRangeFormat)) );
 	writer->writeAttribute( "horizontalPadding", QString::number(d->horizontalPadding) );
 	writer->writeAttribute( "verticalPadding", QString::number(d->verticalPadding) );
 	writer->writeAttribute( "rightPadding", QString::number(d->rightPadding) );

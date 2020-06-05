@@ -1747,7 +1747,7 @@ void XYCurvePrivate::updateValues() {
 		for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			QString value;
-			if (rangeFormat == CartesianPlot::Numeric)
+			if (rangeFormat == CartesianPlot::RangeFormat::Numeric)
 				value = QString::number(symbolPointsLogical[i].x(), valuesNumericFormat, precision);
 			else
 				value = QDateTime::fromMSecsSinceEpoch(symbolPointsLogical[i].x()).toString(valuesDateTimeFormat);
@@ -1763,7 +1763,7 @@ void XYCurvePrivate::updateValues() {
 		for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			QString value;
-			if (rangeFormat == CartesianPlot::Numeric)
+			if (rangeFormat == CartesianPlot::RangeFormat::Numeric)
 				value = QString::number(symbolPointsLogical[i].y(), valuesNumericFormat, precision);
 			else
 				value = QDateTime::fromMSecsSinceEpoch(symbolPointsLogical[i].y()).toString(valuesDateTimeFormat);
@@ -1789,12 +1789,12 @@ void XYCurvePrivate::updateValues() {
 			QString value;
 			if (valuesType == XYCurve::ValuesXYBracketed)
 				value = '(';
-			if (xRangeFormat == CartesianPlot::Numeric)
+			if (xRangeFormat == CartesianPlot::RangeFormat::Numeric)
 				value += QString::number(symbolPointsLogical[i].x(), valuesNumericFormat, xPrecision);
 			else
 				value += QDateTime::fromMSecsSinceEpoch(symbolPointsLogical[i].x()).toString(valuesDateTimeFormat);
 
-			if (yRangeFormat == CartesianPlot::Numeric)
+			if (yRangeFormat == CartesianPlot::RangeFormat::Numeric)
 				value += ',' + QString::number(symbolPointsLogical[i].y(), valuesNumericFormat, yPrecision);
 			else
 				value += ',' + QDateTime::fromMSecsSinceEpoch(symbolPointsLogical[i].y()).toString(valuesDateTimeFormat);

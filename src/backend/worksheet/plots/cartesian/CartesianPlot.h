@@ -63,12 +63,12 @@ public:
 	~CartesianPlot() override;
 
 	enum class Scale {Linear, Log10, Log2, Ln, Log10Abs, Log2Abs, LnAbs, Sqrt, X2};
-	enum Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
-	enum RangeFormat {Numeric, DateTime};
+	enum class Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
+	enum class RangeFormat {Numeric, DateTime};
 	enum class RangeType {Free, Last, First};
 	enum class RangeBreakStyle {Simple, Vertical, Sloped};
 	enum class MouseMode {Selection, ZoomSelection, ZoomXSelection, ZoomYSelection, Cursor};
-	enum NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
+	enum class NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
 	                          ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY
 	                         };
 

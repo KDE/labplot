@@ -1459,8 +1459,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 	tickLabelStrings.clear();
 	QString str;
-	if ( (orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
-		|| (orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::Numeric) ) {
+	if ( (orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric)
+		|| (orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) ) {
 		if (labelsFormat == Axis::LabelsFormat::Decimal) {
 			QString nullStr = QString::number(0, 'f', labelsPrecision);
 			for (const auto value : tickLabelValues) {
@@ -1603,8 +1603,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	double cosine = cos(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	for ( int i = 0; i < majorTickPoints.size(); i++ ) {
-		if ((orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::Numeric) ||
-				(orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::Numeric)) {
+		if ((orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric) ||
+				(orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric)) {
 			if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
 				width = fm.boundingRect(tickLabelStrings.at(i)).width();
 			} else {
@@ -1990,8 +1990,8 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		painter->setFont(labelsFont);
 		QTextDocument td;
 		td.setDefaultFont(labelsFont);
-		if ((orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::Numeric) ||
-				(orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::Numeric)) {
+		if ((orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric) ||
+				(orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric)) {
 			for (int i = 0; i < tickLabelPoints.size(); i++) {
 				painter->translate(tickLabelPoints.at(i));
 				painter->save();

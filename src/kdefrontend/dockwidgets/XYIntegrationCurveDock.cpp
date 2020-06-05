@@ -146,7 +146,7 @@ void XYIntegrationCurveDock::initGeneralTab() {
 
 	//range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_integrationCurve->parentAspect());
-	m_dateTimeRange = (plot->xRangeFormat() != CartesianPlot::Numeric);
+	m_dateTimeRange = (plot->xRangeFormat() != CartesianPlot::RangeFormat::Numeric);
 	if (!m_dateTimeRange) {
 		uiGeneralTab.sbMin->setValue(m_integrationData.xRange.first());
 		uiGeneralTab.sbMax->setValue(m_integrationData.xRange.last());

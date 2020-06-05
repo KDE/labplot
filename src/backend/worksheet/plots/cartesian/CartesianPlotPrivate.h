@@ -57,12 +57,12 @@ public:
 	void updateCursor();
 	void setZoomSelectionBandShow(bool show);
 
-	CartesianPlot::Type type{CartesianPlot::FourAxes};
+	CartesianPlot::Type type{CartesianPlot::Type::FourAxes};
 
 	QRectF dataRect;
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
-	CartesianPlot::RangeFormat xRangeFormat{CartesianPlot::Numeric};
-	CartesianPlot::RangeFormat yRangeFormat{CartesianPlot::Numeric};
+	CartesianPlot::RangeFormat xRangeFormat{CartesianPlot::RangeFormat::Numeric};
+	CartesianPlot::RangeFormat yRangeFormat{CartesianPlot::RangeFormat::Numeric};
 	QString xRangeDateTimeFormat;
 	QString yRangeDateTimeFormat;
 	int rangeFirstValues{1000};
