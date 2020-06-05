@@ -59,9 +59,9 @@ public:
 	enum class DropLineType {NoDropLine, X, Y, XY, XZeroBaseline, XMinBaseline, XMaxBaseline};
 	enum class ValuesType {NoValues, X, Y, XY, XYBracketed, CustomColumn};
 	enum class ValuesPosition {Above, Under, Left, Right};
-	enum ErrorType {NoError, SymmetricError, AsymmetricError};
-	enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
-	enum ErrorBarsType {ErrorBarsSimple, ErrorBarsWithEnds};
+	enum class ErrorType {NoError, Symmetric, Asymmetric};
+	enum class FillingPosition {NoFilling, Above, Below, ZeroBaseline, Left, Right};
+	enum class ErrorBarsType {Simple, WithEnds};
 
 	explicit XYCurve(const QString &name, AspectType type = AspectType::XYCurve);
 	~XYCurve() override;

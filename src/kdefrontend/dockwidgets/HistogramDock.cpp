@@ -1194,8 +1194,8 @@ void HistogramDock::errorTypeChanged(int index) const {
 }
 
 void HistogramDock::errorBarsTypeChanged(int index) const {
-	auto type = XYCurve::ErrorBarsType(index);
-	bool b = (type == XYCurve::ErrorBarsWithEnds);
+	auto type{XYCurve::ErrorBarsType(index)};
+	bool b = (type == XYCurve::ErrorBarsType::WithEnds);
 	ui.lErrorBarsCapSize->setVisible(b);
 	ui.sbErrorBarsCapSize->setVisible(b);
 
@@ -1579,7 +1579,7 @@ void HistogramDock::curveErrorBarsCapSizeChanged(qreal size) {
 }
 void HistogramDock::curveErrorBarsTypeChanged(XYCurve::ErrorBarsType type) {
 	m_initializing = true;
-	ui.cbErrorBarsType->setCurrentIndex((int)type);
+	ui.cbErrorBarsType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 void HistogramDock::curveErrorBarsPenChanged(const QPen& pen) {

@@ -778,7 +778,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			}
 
 			//error bars
-			if ( (curve->xErrorType() != XYCurve::NoError && curve->xErrorPlusColumn()) || (curve->yErrorType() != XYCurve::NoError && curve->yErrorPlusColumn()) ) {
+			if ( (curve->xErrorType() != XYCurve::ErrorType::NoError && curve->xErrorPlusColumn()) || (curve->yErrorType() != XYCurve::ErrorType::NoError && curve->yErrorPlusColumn()) ) {
 				painter->setOpacity(curve->errorBarsOpacity());
 				painter->setPen(curve->errorBarsPen());
 
@@ -788,19 +788,19 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 					errorBarsSize = curve->symbolsSize()*1.4;
 
 				switch (curve->errorBarsType()) {
-				case XYCurve::ErrorBarsSimple:
+				case XYCurve::ErrorBarsType::Simple:
 					//horiz. line
-					if (curve->xErrorType() != XYCurve::NoError)
+					if (curve->xErrorType() != XYCurve::ErrorType::NoError)
 						painter->drawLine(lineSymbolWidth/2-errorBarsSize/2, h/2,
 										lineSymbolWidth/2+errorBarsSize/2, h/2);
 					//vert. line
-					if (curve->yErrorType() != XYCurve::NoError)
+					if (curve->yErrorType() != XYCurve::ErrorType::NoError)
 						painter->drawLine(lineSymbolWidth/2, h/2-errorBarsSize/2,
 										lineSymbolWidth/2, h/2+errorBarsSize/2);
 					break;
-				case XYCurve::ErrorBarsWithEnds:
+				case XYCurve::ErrorBarsType::WithEnds:
 					//horiz. line
-					if (curve->xErrorType() != XYCurve::NoError) {
+					if (curve->xErrorType() != XYCurve::ErrorType::NoError) {
 						painter->drawLine(lineSymbolWidth/2-errorBarsSize/2, h/2,
 										lineSymbolWidth/2+errorBarsSize/2, h/2);
 
@@ -812,7 +812,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 					}
 
 					//vert. line
-					if (curve->yErrorType() != XYCurve::NoError) {
+					if (curve->yErrorType() != XYCurve::ErrorType::NoError) {
 						painter->drawLine(lineSymbolWidth/2, h/2-errorBarsSize/2,
 										lineSymbolWidth/2, h/2+errorBarsSize/2);
 

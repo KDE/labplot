@@ -1724,7 +1724,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		//with 'fillAreaType'=0x14 the area included inside the curve is filled. First and last curve points are joined by a line to close the otherwise open area.
 		//with 'fillAreaType'=0x12 the area excluded outside the curve is filled. The inverse of fillAreaType=0x14 is filled.
 		//At the moment we only support the first type, so set it to XYCurve::FillingBelow
-		curve->setFillingPosition(XYCurve::FillingBelow);
+		curve->setFillingPosition(XYCurve::FillingPosition::Below);
 
 		if (originCurve.fillAreaPattern == 0) {
 			curve->setFillingType(PlotArea::BackgroundType::Color);
@@ -1785,7 +1785,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		//fillAreaPatternBorderColor   for the line color
 		//fillAreaPatternBorderWidth   for the line width
 	} else
-		curve->setFillingPosition(XYCurve::NoFilling);
+		curve->setFillingPosition(XYCurve::FillingPosition::NoFilling);
 }
 
 bool OriginProjectParser::loadNote(Note* note, bool preview) {

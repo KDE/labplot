@@ -1371,9 +1371,9 @@ void XYCurveDock::valuesColorChanged(const QColor& color) {
 
 //Filling-tab
 void XYCurveDock::fillingPositionChanged(int index) {
-	const auto fillingPosition = XYCurve::FillingPosition(index);
+	const auto fillingPosition{XYCurve::FillingPosition(index)};
 
-	bool b = (fillingPosition != XYCurve::NoFilling);
+	bool b = (fillingPosition != XYCurve::FillingPosition::NoFilling);
 	ui.cbFillingType->setEnabled(b);
 	ui.cbFillingColorStyle->setEnabled(b);
 	ui.cbFillingBrushStyle->setEnabled(b);
@@ -1710,8 +1710,8 @@ void XYCurveDock::yErrorMinusColumnChanged(const QModelIndex& index) const {
 }
 
 void XYCurveDock::errorBarsTypeChanged(int index) const {
-	auto type = XYCurve::ErrorBarsType(index);
-	bool b = (type == XYCurve::ErrorBarsWithEnds);
+	const auto type{XYCurve::ErrorBarsType(index)};
+	bool b = (type == XYCurve::ErrorBarsType::WithEnds);
 	ui.lErrorBarsCapSize->setVisible(b);
 	ui.sbErrorBarsCapSize->setVisible(b);
 
@@ -2066,7 +2066,7 @@ void XYCurveDock::curveErrorBarsCapSizeChanged(qreal size) {
 }
 void XYCurveDock::curveErrorBarsTypeChanged(XYCurve::ErrorBarsType type) {
 	m_initializing = true;
-	ui.cbErrorBarsType->setCurrentIndex( (int) type);
+	ui.cbErrorBarsType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 void XYCurveDock::curveErrorBarsPenChanged(const QPen& pen) {

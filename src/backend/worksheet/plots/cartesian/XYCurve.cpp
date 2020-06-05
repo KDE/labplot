@@ -93,7 +93,7 @@ void XYCurve::init() {
 	KConfig config;
 	KConfigGroup group = config.group("XYCurve");
 
-	d->lineType = (LineType) group.readEntry("LineType", static_cast<int>(XYCurve::LineType::Line));
+	d->lineType = (LineType) group.readEntry("LineType", static_cast<int>(LineType::Line));
 	d->lineIncreasingXOnly = group.readEntry("LineIncreasingXOnly", false);
 	d->lineSkipGaps = group.readEntry("SkipLineGaps", false);
 	d->lineInterpolationPointsCount = group.readEntry("LineInterpolationPointsCount", 1);
@@ -102,13 +102,13 @@ void XYCurve::init() {
 	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)) );
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
 
-	d->dropLineType = (DropLineType) group.readEntry("DropLineType", static_cast<int>(XYCurve::LineType::NoLine));
+	d->dropLineType = (DropLineType) group.readEntry("DropLineType", static_cast<int>(LineType::NoLine));
 	d->dropLinePen.setStyle( (Qt::PenStyle) group.readEntry("DropLineStyle", (int)Qt::SolidLine) );
 	d->dropLinePen.setColor( group.readEntry("DropLineColor", QColor(Qt::black)));
 	d->dropLinePen.setWidthF( group.readEntry("DropLineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)) );
 	d->dropLineOpacity = group.readEntry("DropLineOpacity", 1.0);
 
-	d->symbolsStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Style::NoSymbols);
+	d->symbolsStyle = (Symbol::Style)group.readEntry("SymbolStyle", static_cast<int>(Symbol::Style::NoSymbols));
 	d->symbolsSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->symbolsRotationAngle = group.readEntry("SymbolRotation", 0.0);
 	d->symbolsOpacity = group.readEntry("SymbolOpacity", 1.0);
@@ -118,8 +118,8 @@ void XYCurve::init() {
 	d->symbolsPen.setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
 	d->symbolsPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point)) );
 
-	d->valuesType = (ValuesType) group.readEntry("ValuesType", static_cast<int>(XYCurve::ValuesType::NoValues));
-	d->valuesPosition = (ValuesPosition) group.readEntry("ValuesPosition", static_cast<int>(XYCurve::ValuesPosition::Above));
+	d->valuesType = (ValuesType) group.readEntry("ValuesType", static_cast<int>(ValuesType::NoValues));
+	d->valuesPosition = (ValuesPosition) group.readEntry("ValuesPosition", static_cast<int>(ValuesPosition::Above));
 	d->valuesDistance = group.readEntry("ValuesDistance", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->valuesRotationAngle = group.readEntry("ValuesRotation", 0.0);
 	d->valuesOpacity = group.readEntry("ValuesOpacity", 1.0);
@@ -129,10 +129,10 @@ void XYCurve::init() {
 	d->valuesPrefix = group.readEntry("ValuesPrefix", "");
 	d->valuesSuffix = group.readEntry("ValuesSuffix", "");
 	d->valuesFont = group.readEntry("ValuesFont", QFont());
-	d->valuesFont.setPixelSize( Worksheet::convertToSceneUnits( 8, Worksheet::Unit::Point ) );
+	d->valuesFont.setPixelSize( Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point) );
 	d->valuesColor = group.readEntry("ValuesColor", QColor(Qt::black));
 
-	d->fillingPosition = (FillingPosition) group.readEntry("FillingPosition", (int)XYCurve::NoFilling);
+	d->fillingPosition = (FillingPosition) group.readEntry("FillingPosition", static_cast<int>(FillingPosition::NoFilling));
 	d->fillingType = (PlotArea::BackgroundType) group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color));
 	d->fillingColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("FillingColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor));
 	d->fillingImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("FillingImageStyle", static_cast<int>(PlotArea::BackgroundImageStyle::Scaled));
@@ -142,9 +142,9 @@ void XYCurve::init() {
 	d->fillingSecondColor = group.readEntry("FillingSecondColor", QColor(Qt::black));
 	d->fillingOpacity = group.readEntry("FillingOpacity", 1.0);
 
-	d->xErrorType = (ErrorType) group.readEntry("XErrorType", (int)XYCurve::NoError);
-	d->yErrorType = (ErrorType) group.readEntry("YErrorType", (int)XYCurve::NoError);
-	d->errorBarsType = (ErrorBarsType) group.readEntry("ErrorBarsType", (int)XYCurve::ErrorBarsSimple);
+	d->xErrorType = (ErrorType) group.readEntry("XErrorType", static_cast<int>(ErrorType::NoError));
+	d->yErrorType = (ErrorType) group.readEntry("YErrorType", static_cast<int>(ErrorType::NoError));
+	d->errorBarsType = (ErrorBarsType) group.readEntry("ErrorBarsType", static_cast<int>(ErrorBarsType::Simple));
 	d->errorBarsCapSize = group.readEntry( "ErrorBarsCapSize", Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point) );
 	d->errorBarsPen.setStyle( (Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine) );
 	d->errorBarsPen.setColor( group.readEntry("ErrorBarsColor", QColor(Qt::black)) );
@@ -1898,7 +1898,7 @@ void XYCurvePrivate::updateFilling() {
 	// - no filling was enabled
 	// - the nubmer of visible points on the scene is too high
 	// - no scene points available, everything outside of the plot region or no scene points calculated yet
-	if (fillingPosition == XYCurve::NoFilling || symbolPointsScene.size() > 1000 || symbolPointsScene.isEmpty()) {
+	if (fillingPosition == XYCurve::FillingPosition::NoFilling || symbolPointsScene.size() > 1000 || symbolPointsScene.isEmpty()) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1938,7 +1938,7 @@ void XYCurvePrivate::updateFilling() {
 	const QPointF& last = symbolPointsLogical.at(symbolPointsLogical.size()-1);//last point of the curve, may not be visible currently
 	QPointF edge;
 	float xEnd = 0, yEnd = 0;
-	if (fillingPosition == XYCurve::FillingAbove) {
+	if (fillingPosition == XYCurve::FillingPosition::Above) {
 		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()));
 
 		//start point
@@ -1963,7 +1963,7 @@ void XYCurvePrivate::updateFilling() {
 
 		//coordinate at which to close all polygons
 		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax())).y();
-	} else if (fillingPosition == XYCurve::FillingBelow) {
+	} else if (fillingPosition == XYCurve::FillingPosition::Below) {
 		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
 
 		//start point
@@ -1988,7 +1988,7 @@ void XYCurvePrivate::updateFilling() {
 
 		//coordinate at which to close all polygons
 		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin())).y();
-	} else if (fillingPosition == XYCurve::FillingZeroBaseline) {
+	} else if (fillingPosition == XYCurve::FillingPosition::ZeroBaseline) {
 		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
 
 		//start point
@@ -2030,7 +2030,7 @@ void XYCurvePrivate::updateFilling() {
 		}
 
 		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()>0 ? plot->yMin() : 0)).y();
-	} else if (fillingPosition == XYCurve::FillingLeft) {
+	} else if (fillingPosition == XYCurve::FillingPosition::Left) {
 		edge = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
 
 		//start point
@@ -2099,7 +2099,7 @@ void XYCurvePrivate::updateFilling() {
 				pol << fillLines.at(i-1).p2() << p1;
 			} else {
 				//-> we have a break in the curve -> close the polygon, add it to the polygon list and start a new polygon
-				if (fillingPosition == XYCurve::FillingAbove || fillingPosition == XYCurve::FillingBelow || fillingPosition == XYCurve::FillingZeroBaseline) {
+				if (fillingPosition == XYCurve::FillingPosition::Above || fillingPosition == XYCurve::FillingPosition::Below || fillingPosition == XYCurve::FillingPosition::ZeroBaseline) {
 					pol << QPointF(fillLines.at(i-1).p2().x(), yEnd);
 					pol << QPointF(start.x(), yEnd);
 				} else {
@@ -2119,7 +2119,7 @@ void XYCurvePrivate::updateFilling() {
 		pol << end;
 
 	//close the last polygon
-	if (fillingPosition == XYCurve::FillingAbove || fillingPosition == XYCurve::FillingBelow || fillingPosition == XYCurve::FillingZeroBaseline) {
+	if (fillingPosition == XYCurve::FillingPosition::Above || fillingPosition == XYCurve::FillingPosition::Below || fillingPosition == XYCurve::FillingPosition::ZeroBaseline) {
 		pol << QPointF(end.x(), yEnd);
 		pol << QPointF(start.x(), yEnd);
 	} else {
@@ -2216,7 +2216,7 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 	// when property is increasing or decreasing there is a benefit in finding minimum and maximum
 	// for property == AbstractColumn::Properties::No it must be iterated over all values so it does not matter if this function or the below one is used
 	// if the property of the second column is not AbstractColumn::Properties::No means, that all values are valid and not masked
-	if ((!includeErrorBars || errorType == XYCurve::NoError) && column1->properties() != AbstractColumn::Properties::No && column2 && column2->properties() != AbstractColumn::Properties::No) {
+	if ((!includeErrorBars || errorType == ErrorType::NoError) && column1->properties() != AbstractColumn::Properties::No && column2 && column2->properties() != AbstractColumn::Properties::No) {
 		min = column1->minimum(indexMin, indexMax);
 		max = column1->maximum(indexMin, indexMax);
 		return true;
@@ -2252,7 +2252,7 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 		else
 			errorPlus = 0;
 
-		if (errorType == XYCurve::SymmetricError)
+		if (errorType == ErrorType::Symmetric)
 			errorMinus = errorPlus;
 		else {
 			if (errorMinusColumn && errorMinusColumn->isValid(i) && !errorMinusColumn->isMasked(i))
@@ -2520,7 +2520,7 @@ void XYCurve::setHover(bool on) {
 
 void XYCurvePrivate::updateErrorBars() {
 	errorBarsPath = QPainterPath();
-	if (xErrorType == XYCurve::NoError && yErrorType == XYCurve::NoError) {
+	if (xErrorType == XYCurve::ErrorType::NoError && yErrorType == XYCurve::ErrorType::NoError) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -2538,14 +2538,14 @@ void XYCurvePrivate::updateErrorBars() {
 		int index = validPointsIndicesLogical.at(i);
 
 		//error bars for x
-		if (xErrorType != XYCurve::NoError) {
+		if (xErrorType != XYCurve::ErrorType::NoError) {
 			//determine the values for the errors
 			if (xErrorPlusColumn && xErrorPlusColumn->isValid(index) && !xErrorPlusColumn->isMasked(index))
 				errorPlus = xErrorPlusColumn->valueAt(index);
 			else
 				errorPlus = 0;
 
-			if (xErrorType == XYCurve::SymmetricError)
+			if (xErrorType == XYCurve::ErrorType::Symmetric)
 				errorMinus = errorPlus;
 			else {
 				if (xErrorMinusColumn && xErrorMinusColumn->isValid(index) && !xErrorMinusColumn->isMasked(index))
@@ -2555,26 +2555,26 @@ void XYCurvePrivate::updateErrorBars() {
 			}
 
 			//draw the error bars
-			if (errorMinus != 0 || errorPlus !=0)
+			if (errorMinus != 0 || errorPlus != 0)
 				lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
 									QPointF(point.x()+errorPlus, point.y())));
 
 			//determine the end points of the errors bars in logical coordinates to draw later the cap
-			if (errorBarsType == XYCurve::ErrorBarsWithEnds) {
+			if (errorBarsType == XYCurve::ErrorBarsType::WithEnds) {
 				pointsErrorBarAnchorX << QPointF(point.x() - errorMinus, point.y());
 				pointsErrorBarAnchorX << QPointF(point.x() + errorPlus, point.y());
 			}
 		}
 
 		//error bars for y
-		if (yErrorType != XYCurve::NoError) {
+		if (yErrorType != XYCurve::ErrorType::NoError) {
 			//determine the values for the errors
 			if (yErrorPlusColumn && yErrorPlusColumn->isValid(index) && !yErrorPlusColumn->isMasked(index))
 				errorPlus = yErrorPlusColumn->valueAt(index);
 			else
 				errorPlus = 0;
 
-			if (yErrorType == XYCurve::SymmetricError)
+			if (yErrorType == XYCurve::ErrorType::Symmetric)
 				errorMinus = errorPlus;
 			else {
 				if (yErrorMinusColumn && yErrorMinusColumn->isValid(index) && !yErrorMinusColumn->isMasked(index) )
@@ -2584,12 +2584,12 @@ void XYCurvePrivate::updateErrorBars() {
 			}
 
 			//draw the error bars
-			if (errorMinus != 0 || errorPlus !=0)
+			if (errorMinus != 0 || errorPlus != 0)
 				lines.append(QLineF(QPointF(point.x(), point.y() + errorMinus),
 									QPointF(point.x(), point.y() - errorPlus)));
 
 			//determine the end points of the errors bars in logical coordinates to draw later the cap
-			if (errorBarsType == XYCurve::ErrorBarsWithEnds) {
+			if (errorBarsType == XYCurve::ErrorBarsType::WithEnds) {
 				pointsErrorBarAnchorY << QPointF(point.x(), point.y() + errorMinus);
 				pointsErrorBarAnchorY << QPointF(point.x(), point.y() - errorPlus);
 			}
@@ -2652,7 +2652,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	if (valuesType != XYCurve::ValuesType::NoValues)
 		curveShape.addPath(valuesPath);
 
-	if (xErrorType != XYCurve::NoError || yErrorType != XYCurve::NoError)
+	if (xErrorType != XYCurve::ErrorType::NoError || yErrorType != XYCurve::ErrorType::NoError)
 		curveShape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsPen));
 
 	boundingRectangle = curveShape.boundingRect();
@@ -2674,7 +2674,7 @@ void XYCurvePrivate::draw(QPainter* painter) {
 #endif
 
 	//draw filling
-	if (fillingPosition != XYCurve::NoFilling) {
+	if (fillingPosition != XYCurve::FillingPosition::NoFilling) {
 		painter->setOpacity(fillingOpacity);
 		painter->setPen(Qt::SolidLine);
 		drawFilling(painter);
@@ -2697,7 +2697,7 @@ void XYCurvePrivate::draw(QPainter* painter) {
 	}
 
 	//draw error bars
-	if ( (xErrorType != XYCurve::NoError) || (yErrorType != XYCurve::NoError) ) {
+	if ( (xErrorType != XYCurve::ErrorType::NoError) || (yErrorType != XYCurve::ErrorType::NoError) ) {
 		painter->setOpacity(errorBarsOpacity);
 		painter->setPen(errorBarsPen);
 		painter->setBrush(Qt::NoBrush);
@@ -3037,7 +3037,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 
 	//Filling
 	writer->writeStartElement( "filling" );
-	writer->writeAttribute( "position", QString::number(d->fillingPosition) );
+	writer->writeAttribute( "position", QString::number(static_cast<int>(d->fillingPosition)) );
 	writer->writeAttribute( "type", QString::number(static_cast<int>(d->fillingType)) );
 	writer->writeAttribute( "colorStyle", QString::number(static_cast<int>(d->fillingColorStyle)) );
 	writer->writeAttribute( "imageStyle", QString::number(static_cast<int>(d->fillingImageStyle)) );
@@ -3054,13 +3054,13 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 
 	//Error bars
 	writer->writeStartElement( "errorBars" );
-	writer->writeAttribute( "xErrorType", QString::number(d->xErrorType) );
+	writer->writeAttribute( "xErrorType", QString::number(static_cast<int>(d->xErrorType)) );
 	WRITE_COLUMN(d->xErrorPlusColumn, xErrorPlusColumn);
 	WRITE_COLUMN(d->xErrorMinusColumn, xErrorMinusColumn);
-	writer->writeAttribute( "yErrorType", QString::number(d->yErrorType) );
+	writer->writeAttribute( "yErrorType", QString::number(static_cast<int>(d->yErrorType)) );
 	WRITE_COLUMN(d->yErrorPlusColumn, yErrorPlusColumn);
 	WRITE_COLUMN(d->yErrorMinusColumn, yErrorMinusColumn);
-	writer->writeAttribute( "type", QString::number(d->errorBarsType) );
+	writer->writeAttribute( "type", QString::number(static_cast<int>(d->errorBarsType)) );
 	writer->writeAttribute( "capSize", QString::number(d->errorBarsCapSize) );
 	WRITE_QPEN(d->errorBarsPen);
 	writer->writeAttribute( "opacity", QString::number(d->errorBarsOpacity) );
@@ -3103,7 +3103,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "lines") {
 			attribs = reader->attributes();
 
-			READ_INT_VALUE("type", lineType, XYCurve::LineType);
+			READ_INT_VALUE("type", lineType, LineType);
 			READ_INT_VALUE("skipGaps", lineSkipGaps, bool);
 			READ_INT_VALUE("increasingXOnly", lineIncreasingXOnly, bool);
 			READ_INT_VALUE("interpolationPointsCount", lineInterpolationPointsCount, int);
@@ -3112,7 +3112,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "dropLines") {
 			attribs = reader->attributes();
 
-			READ_INT_VALUE("type", dropLineType, XYCurve::DropLineType);
+			READ_INT_VALUE("type", dropLineType, DropLineType);
 			READ_QPEN(d->dropLinePen);
 			READ_DOUBLE_VALUE("opacity", dropLineOpacity);
 
@@ -3129,10 +3129,10 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "values") {
 			attribs = reader->attributes();
 
-			READ_INT_VALUE("type", valuesType, XYCurve::ValuesType);
+			READ_INT_VALUE("type", valuesType, ValuesType);
 			READ_COLUMN(valuesColumn);
 
-			READ_INT_VALUE("position", valuesPosition, XYCurve::ValuesPosition);
+			READ_INT_VALUE("position", valuesPosition, ValuesPosition);
 			READ_DOUBLE_VALUE("distance", valuesDistance);
 			READ_DOUBLE_VALUE("rotation", valuesRotationAngle);
 			READ_DOUBLE_VALUE("opacity", valuesOpacity);
@@ -3146,7 +3146,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "filling") {
 			attribs = reader->attributes();
 
-			READ_INT_VALUE("position", fillingPosition, XYCurve::FillingPosition);
+			READ_INT_VALUE("position", fillingPosition, FillingPosition);
 			READ_INT_VALUE("type", fillingType, PlotArea::BackgroundType);
 			READ_INT_VALUE("colorStyle", fillingColorStyle, PlotArea::BackgroundColorStyle);
 			READ_INT_VALUE("imageStyle", fillingImageStyle, PlotArea::BackgroundImageStyle );
@@ -3193,15 +3193,15 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "errorBars") {
 			attribs = reader->attributes();
 
-			READ_INT_VALUE("xErrorType", xErrorType, XYCurve::ErrorType);
+			READ_INT_VALUE("xErrorType", xErrorType, ErrorType);
 			READ_COLUMN(xErrorPlusColumn);
 			READ_COLUMN(xErrorMinusColumn);
 
-			READ_INT_VALUE("yErrorType", yErrorType, XYCurve::ErrorType);
+			READ_INT_VALUE("yErrorType", yErrorType, ErrorType);
 			READ_COLUMN(yErrorPlusColumn);
 			READ_COLUMN(yErrorMinusColumn);
 
-			READ_INT_VALUE("type", errorBarsType, XYCurve::ErrorBarsType);
+			READ_INT_VALUE("type", errorBarsType, ErrorBarsType);
 			READ_DOUBLE_VALUE("capSize", errorBarsCapSize);
 
 			READ_QPEN(d->errorBarsPen);
@@ -3267,7 +3267,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	this->setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle", (int)Qt::SolidPattern));
 	this->setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor)));
 	this->setFillingOpacity(group.readEntry("FillingOpacity", 1.0));
-	this->setFillingPosition((XYCurve::FillingPosition)group.readEntry("FillingPosition", (int)XYCurve::NoFilling));
+	this->setFillingPosition((FillingPosition)group.readEntry("FillingPosition", static_cast<int>(FillingPosition::NoFilling)));
 	this->setFillingFirstColor(themeColor);
 	this->setFillingSecondColor(group.readEntry("FillingSecondColor", QColor(Qt::black)));
 	this->setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color)));

@@ -1344,7 +1344,7 @@ void CartesianPlot::addFitCurve() {
 		curve->initStartValues(curCurve);
 
 		//fit with weights for y if the curve has error bars for y
-		if (curCurve->yErrorType() == XYCurve::SymmetricError && curCurve->yErrorPlusColumn()) {
+		if (curCurve->yErrorType() == XYCurve::ErrorType::Symmetric && curCurve->yErrorPlusColumn()) {
 			XYFitCurve::FitData fitData = curve->fitData();
 			fitData.yWeightsType = nsl_fit_weight_instrumental;
 			curve->setFitData(fitData);

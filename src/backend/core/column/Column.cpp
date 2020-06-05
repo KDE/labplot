@@ -251,10 +251,10 @@ void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
 	//determine the plots where the column is consumed
 	for (const auto* curve : curves) {
 		if (curve->xColumn() == this || curve->yColumn() == this
-			|| (curve->xErrorType() == XYCurve::SymmetricError && curve->xErrorPlusColumn() == this)
-			|| (curve->xErrorType() == XYCurve::AsymmetricError && (curve->xErrorPlusColumn() == this ||curve->xErrorMinusColumn() == this))
-			|| (curve->yErrorType() == XYCurve::SymmetricError && curve->yErrorPlusColumn() == this)
-			|| (curve->yErrorType() == XYCurve::AsymmetricError && (curve->yErrorPlusColumn() == this ||curve->yErrorMinusColumn() == this)) ) {
+			|| (curve->xErrorType() == XYCurve::ErrorType::Symmetric && curve->xErrorPlusColumn() == this)
+			|| (curve->xErrorType() == XYCurve::ErrorType::Asymmetric && (curve->xErrorPlusColumn() == this ||curve->xErrorMinusColumn() == this))
+			|| (curve->yErrorType() == XYCurve::ErrorType::Symmetric && curve->yErrorPlusColumn() == this)
+			|| (curve->yErrorType() == XYCurve::ErrorType::Asymmetric && (curve->yErrorPlusColumn() == this ||curve->yErrorMinusColumn() == this)) ) {
 			auto* plot = static_cast<CartesianPlot*>(curve->parentAspect());
 			if (plots.indexOf(plot) == -1)
 				plots << plot;

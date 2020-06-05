@@ -131,7 +131,7 @@ void Histogram::init() {
 	d->fillingOpacity = group.readEntry("FillingOpacity", 1.0);
 
 	d->errorType = (Histogram::ErrorType) group.readEntry("ErrorType", (int)Histogram::NoError);
-	d->errorBarsType = (XYCurve::ErrorBarsType) group.readEntry("ErrorBarsType", (int)XYCurve::ErrorBarsSimple);
+	d->errorBarsType = (XYCurve::ErrorBarsType) group.readEntry("ErrorBarsType", static_cast<int>(XYCurve::ErrorBarsType::Simple));
 	d->errorBarsCapSize = group.readEntry( "ErrorBarsCapSize", Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point) );
 	d->errorBarsPen.setStyle( (Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine) );
 	d->errorBarsPen.setColor( group.readEntry("ErrorBarsColor", QColor(Qt::black)) );
