@@ -99,7 +99,7 @@ void Column::init() {
 
 	m_usedInActionGroup = new QActionGroup(this);
 	connect(m_usedInActionGroup, &QActionGroup::triggered, this, &Column::navigateTo);
-	connect(this, &AbstractColumn::maskingChanged, this, [=]{d->propertiesAvailable = false;});
+	connect(this, &AbstractColumn::maskingChanged, this, [=]{d->invalidate();});
 }
 
 Column::~Column() {
