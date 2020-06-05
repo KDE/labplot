@@ -103,7 +103,7 @@ private slots:
 	void resultParametersContextMenuRequest(QPoint);
 	void resultGoodnessContextMenuRequest(QPoint);
 	void resultLogContextMenuRequest(QPoint);
-	void resultCopySelection();
+	void resultCopy(bool copyAll = false);
 	void resultCopyAll();
 
 	//SLOTs for changes triggered in XYCurve

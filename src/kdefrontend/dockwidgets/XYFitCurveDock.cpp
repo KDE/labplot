@@ -1088,10 +1088,9 @@ void XYFitCurveDock::enableRecalculate() {
 	DEBUG("XYFitCurveDock::enableRecalculate() DONE");
 }
 
-void XYFitCurveDock::resultCopySelection() {
+void XYFitCurveDock::resultCopy(bool copyAll) {
 	QTableWidget* tw{nullptr};
 	int currentTab = uiGeneralTab.twResults->currentIndex();
-	DEBUG("current tab = " << currentTab);
 	if (currentTab == 0)
 		tw = uiGeneralTab.twParameters;
 	else if (currentTab == 1)
@@ -1101,114 +1100,49 @@ void XYFitCurveDock::resultCopySelection() {
 	else
 		return;
 
-	const QTableWidgetSelectionRange& range = tw->selectedRanges().constFirst();
 	QString str;
-	for (int i = 0; i < range.rowCount(); ++i) {
-		if (i > 0)
-			str += '\n';
-		for (int j = 0; j < range.columnCount(); ++j) {
-			if (j > 0)
-				str += '\t';
-			str += tw->item(range.topRow() + i, range.leftColumn() + j)->text();
+	QString rowStr;
+	for (int i = 0; i < tw->rowCount(); ++i) {
+		for (int j = 0; j < tw->columnCount(); ++j) {
+			if (!copyAll && !tw->item(i, j)->isSelected())
+				continue;
+
+			if (!rowStr.isEmpty())
+				rowStr += '\t';
+
+			rowStr += tw->item(i, j)->text();
+		}
+		if (!rowStr.isEmpty()) {
+			if (!str.isEmpty())
+				str += '\n';
+			str += rowStr;
+			rowStr.clear();
 		}
 	}
-	str += '\n';
+
 	QApplication::clipboard()->setText(str);
 	DEBUG(STDSTRING(QApplication::clipboard()->text()));
 }
 
 void XYFitCurveDock::resultCopyAll() {
-	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
-	int currentTab = uiGeneralTab.twResults->currentIndex();
-	QString str;
-	if (currentTab == 0) {
-		str = i18n("Parameters:") + '\n';
-
-		const int np = fitResult.paramValues.size();
-		for (int i = 0; i < np; i++) {
-			if (m_fitData.paramFixed.at(i))
-				str += m_fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i)) + '\n';
-			else {
-				str += m_fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
-					+ UTF8_QSTRING("±") + QString::number(fitResult.errorValues.at(i))
-					+ " (" + QString::number(100.*fitResult.errorValues.at(i)/std::abs(fitResult.paramValues.at(i)), 'g', 3) + " %)\n";
-
-				const double margin = fitResult.tdist_marginValues.at(i);
-				QString tdistValueString;
-				if (fitResult.tdist_tValues.at(i) < std::numeric_limits<double>::max())
-					tdistValueString = QString::number(fitResult.tdist_tValues.at(i), 'g', 3);
-				else
-					tdistValueString = UTF8_QSTRING("∞");
-				str += " (" + i18n("t statistic:") + ' ' + tdistValueString + ", "
-					+ i18n("p value:") + ' ' + QString::number(fitResult.tdist_pValues.at(i), 'g', 3) + ", "
-					+ i18n("conf. interval:") + ' ';
-				if (std::abs(fitResult.tdist_tValues.at(i)) < 1.e6) {
-					str += QString::number(fitResult.paramValues.at(i) - margin) + " .. "
-						+ QString::number(fitResult.paramValues.at(i) + margin) + ")\n";
-				} else {
-					str += i18n("too small");
-				}
-			}
-		}
-	} else if (currentTab == 1) {
-		str = i18n("Goodness of fit:") + '\n';
-		str += i18n("sum of squared residuals") + " (" + UTF8_QSTRING("χ²") + "): " + QString::number(fitResult.sse) + '\n';
-		if (fitResult.dof != 0) {
-			str += i18n("reduced") + ' ' + UTF8_QSTRING("χ²") + ": " + QString::number(fitResult.rms) + '\n';
-			str += i18n("root mean square error") + " (RMSE): " + QString::number(fitResult.rsd) + '\n';
-			str += i18n("coefficient of determination") + " (" + UTF8_QSTRING("R²") + "): " + QString::number(fitResult.rsquare, 'g', 15) + '\n';
-			str += i18n("adj. coefficient of determination")+ " (" + UTF8_QSTRING("R̄²")
-				+ "): " + QString::number(fitResult.rsquareAdj, 'g', 15) + "\n\n";
-
-			str += i18n("P > ") + UTF8_QSTRING("χ²") + ": " + QString::number(fitResult.chisq_p, 'g', 3) + '\n';
-			str += i18n("F statistic") + ": " + QString::number(fitResult.fdist_F, 'g', 3) + '\n';
-			str += i18n("P > F") + ": " + QString::number(fitResult.fdist_p, 'g', 3) + '\n';
-		}
-		str += i18n("mean absolute error:") + ' ' + QString::number(fitResult.mae) + '\n';
-		str += i18n("Akaike information criterion:") + ' ' + QString::number(fitResult.aic) + '\n';
-		str += i18n("Bayesian information criterion:") + ' ' + QString::number(fitResult.bic) + '\n';
-	} else if (currentTab == 2) {
-		str = i18n("status:") + ' ' + fitResult.status + '\n';
-		str += i18n("iterations:") + ' ' + QString::number(fitResult.iterations) + '\n';
-		str += i18n("tolerance:") + ' ' + QString::number(m_fitData.eps) + '\n';
-		if (fitResult.elapsedTime > 1000)
-			str += i18n("calculation time: %1 s", fitResult.elapsedTime/1000) + '\n';
-		else
-			str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + '\n';
-		str += i18n("degrees of freedom:") + ' ' + QString::number(fitResult.dof) + '\n';
-		str += i18n("parameters:") + ' ' + QString::number(fitResult.paramValues.size()) + '\n';
-		str += i18n("fit range:") + ' ' + QString::number(m_fitData.fitRange.first()) + " .. " + QString::number(m_fitData.fitRange.last()) + '\n';
-
-		str += i18n("Iterations:") + '\n';
-		for (const auto &s : m_fitData.paramNamesUtf8)
-			str += s + '\t';
-		str += UTF8_QSTRING("χ²");
-
-		const QStringList iterations = fitResult.solverOutput.split(';');
-		for (const auto &s : iterations)
-			if (!s.isEmpty())
-				str += '\n' + s;
-	}
-
-	QApplication::clipboard()->setText(str);
-	DEBUG(STDSTRING(QApplication::clipboard()->text()));
+	resultCopy(true);
 }
 
 void XYFitCurveDock::resultParametersContextMenuRequest(QPoint pos) {
 	auto* contextMenu = new QMenu;
-	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopySelection);
+	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopy, QKeySequence::Copy);
 	contextMenu->addAction(i18n("Copy All"), this, &XYFitCurveDock::resultCopyAll);
 	contextMenu->exec(uiGeneralTab.twParameters->mapToGlobal(pos));
 }
 void XYFitCurveDock::resultGoodnessContextMenuRequest(QPoint pos) {
 	auto* contextMenu = new QMenu;
-	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopySelection);
+	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopy, QKeySequence::Copy);
 	contextMenu->addAction(i18n("Copy All"), this, &XYFitCurveDock::resultCopyAll);
 	contextMenu->exec(uiGeneralTab.twGoodness->mapToGlobal(pos));
 }
 void XYFitCurveDock::resultLogContextMenuRequest(QPoint pos) {
 	auto* contextMenu = new QMenu;
-	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopySelection);
+	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopy, QKeySequence::Copy);
 	contextMenu->addAction(i18n("Copy All"), this, &XYFitCurveDock::resultCopyAll);
 	contextMenu->exec(uiGeneralTab.twLog->mapToGlobal(pos));
 }
