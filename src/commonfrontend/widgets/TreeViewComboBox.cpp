@@ -298,6 +298,10 @@ bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
 	for (AspectType type : m_topLevelClasses) {
 		if (aspect->type() == type)
 			return true;
+
+		if (type == AspectType::XYAnalysisCurve)
+			if (aspect->inherits(AspectType::XYAnalysisCurve))
+				return true;
 	}
 	return false;
 }
