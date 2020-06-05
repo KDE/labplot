@@ -28,8 +28,6 @@ Copyright            : (C) 2019 by Kovacs Ferencz (kferike98@gmail.com)
 #ifndef MQTTSUBSCRIPTIONWIDGET_H
 #define MQTTSUBSCRIPTIONWIDGET_H
 
-#include <QVector>
-
 #include "ui_mqttsubscriptionwidget.h"
 class QMqttSubscription;
 
@@ -39,9 +37,9 @@ class MQTTSubscriptionWidget : public QWidget {
 public:
 	explicit MQTTSubscriptionWidget(QWidget* parent = nullptr);
 	~MQTTSubscriptionWidget() override;
-	enum MQTTParentWidget {
-		ImportFileWidget = 0,
-		LiveDataDock = 1
+	enum class MQTTParentWidget {
+		ImportFileWidget,
+		LiveDataDock
 	};
 
 	void setTopicList(const QStringList& topicList);
