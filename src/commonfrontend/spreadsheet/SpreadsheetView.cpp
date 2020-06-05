@@ -343,7 +343,7 @@ void SpreadsheetView::initActions() {
 	normalizeAction = new QAction(QLatin1String("Rescale to [a, b]"), normalizeColumnActionGroup);
 	normalizeAction->setData(Rescale);
 
-	action_normalize_selection = new QAction(QIcon::fromTheme(QString()), i18n("&Normalize Selection"), this);
+// 	action_normalize_selection = new QAction(QIcon::fromTheme(QString()), i18n("&Normalize Selection"), this);
 
 	//Tukey's ladder of powers
 	ladderOfPowersActionGroup = new QActionGroup(this);
@@ -478,7 +478,7 @@ void SpreadsheetView::initMenus() {
 		m_selectionMenu->addAction(action_mask_selection);
 		m_selectionMenu->addAction(action_unmask_selection);
 		m_selectionMenu->addSeparator();
-		m_selectionMenu->addAction(action_normalize_selection);
+// 		m_selectionMenu->addAction(action_normalize_selection);
 	}
 
 	//plot data menu
@@ -743,7 +743,7 @@ void SpreadsheetView::connectActions() {
 // 	connect(action_join_columns, &QAction::triggered, this, &SpreadsheetView::joinColumns);
 	connect(normalizeColumnActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::normalizeSelectedColumns);
 	connect(ladderOfPowersActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::powerTransformSelectedColumns);
-	connect(action_normalize_selection, &QAction::triggered, this, &SpreadsheetView::normalizeSelection);
+// 	connect(action_normalize_selection, &QAction::triggered, this, &SpreadsheetView::normalizeSelection);
 
 	//sort
 	connect(action_sort_columns, &QAction::triggered, this, &SpreadsheetView::sortSelectedColumns);
@@ -2645,6 +2645,8 @@ void SpreadsheetView::powerTransformSelectedColumns(QAction* action) {
 	RESET_CURSOR;
 }
 
+//TODO: either make this complete (support all column modes and normalization methods) or remove this code completely.
+/*
 void SpreadsheetView::normalizeSelection() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: normalize selection", m_spreadsheet->name()));
@@ -2668,7 +2670,7 @@ void SpreadsheetView::normalizeSelection() {
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
-
+*/
 void SpreadsheetView::sortSelectedColumns() {
 	sortDialog(selectedColumns());
 }

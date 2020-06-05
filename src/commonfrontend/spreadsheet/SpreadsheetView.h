@@ -172,7 +172,6 @@ private:
 	QAction* action_join_columns;
 	QActionGroup* normalizeColumnActionGroup;
 	QActionGroup* ladderOfPowersActionGroup;
-	QAction* action_normalize_selection;
 	QAction* action_sort_columns;
 	QAction* action_sort_asc_column;
 	QAction* action_sort_desc_column;
@@ -270,7 +269,6 @@ private slots:
 // 	void joinColumns();
 	void normalizeSelectedColumns(QAction*);
 	void powerTransformSelectedColumns(QAction*);
-	void normalizeSelection();
 
 	void sortSelectedColumns();
 	void sortColumnAscending();
