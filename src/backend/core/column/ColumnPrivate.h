@@ -123,7 +123,7 @@ public:
 	void replaceBigInt(int first, const QVector<qint64>&);
 
 	void updateProperties();
-
+	void invalidate();
 	void finalizeLoad();
 
 	mutable AbstractColumn::ColumnStatistics statistics;
@@ -150,8 +150,6 @@ private:
 	int m_width{0}; //column width in the view
 	Column* m_owner{nullptr};
 	QVector<QMetaObject::Connection> m_connectionsUpdateFormula;
-
-	void invalidate();
 
 private:
 	void connectFormulaColumn(const AbstractColumn* column);
