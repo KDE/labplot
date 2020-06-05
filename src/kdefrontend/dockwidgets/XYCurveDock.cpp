@@ -803,7 +803,7 @@ void XYCurveDock::visibilityChanged(bool state) {
 void XYCurveDock::lineTypeChanged(int index) {
 	const auto lineType = XYCurve::LineType(index);
 
-	if ( lineType == XYCurve::NoLine) {
+	if ( lineType == XYCurve::LineType::NoLine) {
 		ui.chkLineSkipGaps->setEnabled(false);
 		ui.cbLineStyle->setEnabled(false);
 		ui.kcbLineColor->setEnabled(false);
@@ -818,8 +818,8 @@ void XYCurveDock::lineTypeChanged(int index) {
 		ui.sbLineWidth->setEnabled(true);
 		ui.sbLineOpacity->setEnabled(true);
 
-		if (lineType == XYCurve::SplineCubicNatural || lineType == XYCurve::SplineCubicPeriodic
-		        || lineType == XYCurve::SplineAkimaNatural || lineType == XYCurve::SplineAkimaPeriodic) {
+		if (lineType == XYCurve::LineType::SplineCubicNatural || lineType == XYCurve::LineType::SplineCubicPeriodic
+		        || lineType == XYCurve::LineType::SplineAkimaNatural || lineType == XYCurve::LineType::SplineAkimaPeriodic) {
 			ui.lLineInterpolationPointsCount->show();
 			ui.sbLineInterpolationPointsCount->show();
 			ui.lLineSkipGaps->hide();
@@ -916,7 +916,7 @@ void XYCurveDock::lineOpacityChanged(int value) {
 void XYCurveDock::dropLineTypeChanged(int index) {
 	const auto dropLineType = XYCurve::DropLineType(index);
 
-	if ( dropLineType == XYCurve::NoDropLine) {
+	if ( dropLineType == XYCurve::DropLineType::NoDropLine) {
 		ui.cbDropLineStyle->setEnabled(false);
 		ui.kcbDropLineColor->setEnabled(false);
 		ui.sbDropLineWidth->setEnabled(false);
@@ -1176,8 +1176,8 @@ void XYCurveDock::valuesColumnChanged(const QModelIndex& index) {
   Called when the values column was changed.
 */
 void XYCurveDock::updateValuesWidgets() {
-	const auto type = XYCurve::ValuesType(ui.cbValuesType->currentIndex());
-	bool showValues = (type != XYCurve::NoValues);
+	const auto type{XYCurve::ValuesType(ui.cbValuesType->currentIndex())};
+	bool showValues{type != XYCurve::ValuesType::NoValues};
 
 	ui.cbValuesPosition->setEnabled(showValues);
 	ui.sbValuesDistance->setEnabled(showValues);
@@ -1190,7 +1190,7 @@ void XYCurveDock::updateValuesWidgets() {
 	bool hasNumeric = false;
 	bool hasDateTime = false;
 
-	if (type == XYCurve::ValuesCustomColumn) {
+	if (type == XYCurve::ValuesType::CustomColumn) {
 		ui.lValuesColumn->show();
 		cbValuesColumn->show();
 
@@ -1211,20 +1211,20 @@ void XYCurveDock::updateValuesWidgets() {
 		const AbstractColumn* xColumn = nullptr;
 		const AbstractColumn* yColumn = nullptr;
 		switch (type) {
-			case XYCurve::NoValues:
+			case XYCurve::ValuesType::NoValues:
 				break;
-			case XYCurve::ValuesX:
+			case XYCurve::ValuesType::X:
 				xColumn = m_curve->xColumn();
 				break;
-			case XYCurve::ValuesY:
+			case XYCurve::ValuesType::Y:
 				yColumn = m_curve->yColumn();
 				break;
-			case XYCurve::ValuesXY:
-			case XYCurve::ValuesXYBracketed:
+			case XYCurve::ValuesType::XY:
+			case XYCurve::ValuesType::XYBracketed:
 				xColumn = m_curve->xColumn();
 				yColumn = m_curve->yColumn();
 				break;
-			case XYCurve::ValuesCustomColumn:
+			case XYCurve::ValuesType::CustomColumn:
 				break;
 		}
 

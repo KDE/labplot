@@ -37,12 +37,12 @@ class XYEquationCurve : public XYCurve {
 	Q_OBJECT
 
 public:
-	enum EquationType {Cartesian, Polar, Parametric, Implicit, Neutral};
+	enum class EquationType {Cartesian, Polar, Parametric, Implicit, Neutral};
 
 	struct EquationData {
 		EquationData() : min("0"), max("1") {};
 
-		EquationType type{Cartesian};
+		EquationType type{EquationType::Cartesian};
 		QString expression1;
 		QString expression2;
 		QString min;

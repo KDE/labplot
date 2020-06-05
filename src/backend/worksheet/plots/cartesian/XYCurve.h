@@ -53,12 +53,12 @@ public:
 	friend class XYCurveSetYErrorPlusColumnCmd;
 	friend class XYCurveSetYErrorMinusColumnCmd;
 	friend class XYCurveSetValuesColumnCmd;
-	enum LineType {NoLine, Line, StartHorizontal, StartVertical, MidpointHorizontal, MidpointVertical, Segments2, Segments3,
+	enum class LineType {NoLine, Line, StartHorizontal, StartVertical, MidpointHorizontal, MidpointVertical, Segments2, Segments3,
 	               SplineCubicNatural, SplineCubicPeriodic, SplineAkimaNatural, SplineAkimaPeriodic
 	              };
-	enum DropLineType {NoDropLine, DropLineX, DropLineY, DropLineXY, DropLineXZeroBaseline, DropLineXMinBaseline, DropLineXMaxBaseline};
-	enum ValuesType {NoValues, ValuesX, ValuesY, ValuesXY, ValuesXYBracketed, ValuesCustomColumn};
-	enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
+	enum class DropLineType {NoDropLine, X, Y, XY, XZeroBaseline, XMinBaseline, XMaxBaseline};
+	enum class ValuesType {NoValues, X, Y, XY, XYBracketed, CustomColumn};
+	enum class ValuesPosition {Above, Under, Left, Right};
 	enum ErrorType {NoError, SymmetricError, AsymmetricError};
 	enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
 	enum ErrorBarsType {ErrorBarsSimple, ErrorBarsWithEnds};

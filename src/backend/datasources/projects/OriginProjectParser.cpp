@@ -1313,7 +1313,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 					eqData.expression1 = QString(function.formula.c_str());
 
 					if (function.type == Origin::Function::Polar) {
-						eqData.type = XYEquationCurve::Polar;
+						eqData.type = XYEquationCurve::EquationType::Polar;
 
 						//replace 'x' by 'phi'
 						eqData.expression1 = eqData.expression1.replace('x', "phi");
@@ -1560,33 +1560,33 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 	if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::LineSymbol) {
 		switch (originCurve.lineConnect) {
 		case Origin::GraphCurve::NoLine:
-			curve->setLineType(XYCurve::NoLine);
+			curve->setLineType(XYCurve::LineType::NoLine);
 			break;
 		case Origin::GraphCurve::Straight:
-			curve->setLineType(XYCurve::Line);
+			curve->setLineType(XYCurve::LineType::Line);
 			break;
 		case Origin::GraphCurve::TwoPointSegment:
-			curve->setLineType(XYCurve::Segments2);
+			curve->setLineType(XYCurve::LineType::Segments2);
 			break;
 		case Origin::GraphCurve::ThreePointSegment:
-			curve->setLineType(XYCurve::Segments3);
+			curve->setLineType(XYCurve::LineType::Segments3);
 			break;
 		case Origin::GraphCurve::BSpline:
 		case Origin::GraphCurve::Bezier:
 		case Origin::GraphCurve::Spline:
-			curve->setLineType(XYCurve::SplineCubicNatural);
+			curve->setLineType(XYCurve::LineType::SplineCubicNatural);
 			break;
 		case Origin::GraphCurve::StepHorizontal:
-			curve->setLineType(XYCurve::StartHorizontal);
+			curve->setLineType(XYCurve::LineType::StartHorizontal);
 			break;
 		case Origin::GraphCurve::StepVertical:
-			curve->setLineType(XYCurve::StartVertical);
+			curve->setLineType(XYCurve::LineType::StartVertical);
 			break;
 		case Origin::GraphCurve::StepHCenter:
-			curve->setLineType(XYCurve::MidpointHorizontal);
+			curve->setLineType(XYCurve::LineType::MidpointHorizontal);
 			break;
 		case Origin::GraphCurve::StepVCenter:
-			curve->setLineType(XYCurve::MidpointVertical);
+			curve->setLineType(XYCurve::LineType::MidpointVertical);
 			break;
 		}
 
@@ -1686,7 +1686,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		QBrush brush = curve->symbolsBrush();
 		if (originCurve.symbolFillColor.type == Origin::Color::ColorType::Automatic) {
 			//"automatic" color -> the color of the line, if available, has to be used, black otherwise
-			if (curve->lineType() != XYCurve::NoLine)
+			if (curve->lineType() != XYCurve::LineType::NoLine)
 				brush.setColor(curve->linePen().color());
 			else
 				brush.setColor(Qt::black);
@@ -1699,7 +1699,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		QPen pen = curve->symbolsPen();
 		if (originCurve.symbolColor.type == Origin::Color::ColorType::Automatic) {
 			//"automatic" color -> the color of the line, if available, has to be used, black otherwise
-			if (curve->lineType() != XYCurve::NoLine)
+			if (curve->lineType() != XYCurve::LineType::NoLine)
 				pen.setColor(curve->linePen().color());
 			else
 				pen.setColor(Qt::black);

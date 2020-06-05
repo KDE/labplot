@@ -97,7 +97,7 @@ private slots:
 
 private:
 	EquationHighlighter* m_highlighter;
-	XYEquationCurve::EquationType m_expressionType{XYEquationCurve::Neutral};
+	XYEquationCurve::EquationType m_expressionType{XYEquationCurve::EquationType::Neutral};
 	QStringList m_variables;
 	QCompleter* m_completer;
 	bool m_isValid{false};

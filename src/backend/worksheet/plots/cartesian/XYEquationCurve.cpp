@@ -69,7 +69,7 @@ void XYEquationCurve::init() {
 	addChildFast(d->yColumn);
 
 	//TODO: read from the saved settings for XYEquationCurve?
-	d->lineType = XYCurve::Line;
+	d->lineType = XYCurve::LineType::Line;
 	d->symbolsStyle = Symbol::Style::NoSymbols;
 
 	setUndoAware(false);
@@ -148,13 +148,13 @@ void XYEquationCurvePrivate::recalculate() {
 
 	ExpressionParser* parser = ExpressionParser::getInstance();
 	bool rc = false;
-	if (equationData.type == XYEquationCurve::Cartesian) {
+	if (equationData.type == XYEquationCurve::EquationType::Cartesian) {
 		rc = parser->evaluateCartesian( equationData.expression1, equationData.min, equationData.max,
 						equationData.count, xVector, yVector );
-	} else if (equationData.type == XYEquationCurve::Polar) {
+	} else if (equationData.type == XYEquationCurve::EquationType::Polar) {
 		rc = parser->evaluatePolar( equationData.expression1, equationData.min, equationData.max,
 						equationData.count, xVector, yVector );
-	} else if (equationData.type == XYEquationCurve::Parametric) {
+	} else if (equationData.type == XYEquationCurve::EquationType::Parametric) {
 		rc = parser->evaluateParametric(equationData.expression1, equationData.expression2,
 						equationData.min, equationData.max, equationData.count,
 						xVector, yVector);
@@ -183,7 +183,7 @@ void XYEquationCurve::save(QXmlStreamWriter* writer) const{
 
 	//write xy-equationCurve specific information
 	writer->writeStartElement("equationData");
-	writer->writeAttribute( "type", QString::number(d->equationData.type) );
+	writer->writeAttribute( "type", QString::number(static_cast<int>(d->equationData.type)) );
 	writer->writeAttribute( "expression1", d->equationData.expression1 );
 	writer->writeAttribute( "expression2", d->equationData.expression2 );
 	writer->writeAttribute( "min", d->equationData.min);

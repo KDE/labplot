@@ -771,7 +771,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			const XYCurve* curve = static_cast<XYCurve*>(curvesList.at(index));
 
 			//curve's line (painted at the half of the ascent size)
-			if (curve->lineType() != XYCurve::NoLine) {
+			if (curve->lineType() != XYCurve::LineType::NoLine) {
 				painter->setPen(curve->linePen());
 				painter->setOpacity(curve->lineOpacity());
 				painter->drawLine(0, h/2, lineSymbolWidth, h/2);

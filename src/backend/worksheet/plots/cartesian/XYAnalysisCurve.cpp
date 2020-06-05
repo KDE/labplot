@@ -61,7 +61,7 @@ XYAnalysisCurve::~XYAnalysisCurve() = default;
 
 void XYAnalysisCurve::init() {
 	Q_D(XYAnalysisCurve);
-	d->lineType = XYCurve::Line;
+	d->lineType = XYCurve::LineType::Line;
 	d->symbolsStyle = Symbol::Style::NoSymbols;
 }
 
