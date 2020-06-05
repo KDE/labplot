@@ -342,8 +342,9 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	DEBUG("XYFitCurveDock::setCurves()	model degree = " << m_fitData.degree);
 	DEBUG("XYFitCurveDock::setCurves()	# params = " << m_fitData.paramNames.size());
 	DEBUG("XYFitCurveDock::setCurves()	# start values = " << m_fitData.paramStartValues.size());
-	for (auto startValue: m_fitData.paramStartValues)
-		DEBUG("XYFitCurveDock::setCurves()	start value = " << startValue);
+	//for (auto startValue: m_fitData.paramStartValues)
+	//	DEBUG("XYFitCurveDock::setCurves()	start value = " << startValue);
+
 	fitParametersWidget->setFitData(&m_fitData);
 
 	initGeneralTab();
