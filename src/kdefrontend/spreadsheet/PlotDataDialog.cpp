@@ -483,7 +483,7 @@ void PlotDataDialog::plot() {
 			else
 				path = m_lastAddedCurve->path();
 		} else {
-			if (m_analysisAction == FitCustom)
+			if (m_analysisAction == AnalysisAction::FitCustom)
 				path = m_lastAddedCurve->path();
 			else {
 				if (m_columns.size() > 2)
@@ -635,37 +635,37 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 
 		XYAnalysisCurve* analysisCurve = nullptr;
 		switch (m_analysisAction) {
-			case DataReduction:
+			case AnalysisAction::DataReduction:
 				analysisCurve = new XYDataReductionCurve(i18n("Reduction of '%1'", name));
 				break;
-			case Differentiation:
+			case AnalysisAction::Differentiation:
 				analysisCurve = new XYDifferentiationCurve(i18n("Derivative of '%1'", name));
 				break;
-			case Integration:
+			case AnalysisAction::Integration:
 				analysisCurve = new XYIntegrationCurve(i18n("Integral of '%1'", name));
 				break;
-			case Interpolation:
+			case AnalysisAction::Interpolation:
 				analysisCurve = new XYInterpolationCurve(i18n("Interpolation of '%1'", name));
 				break;
-			case Smoothing:
+			case AnalysisAction::Smoothing:
 				analysisCurve = new XYSmoothCurve(i18n("Smoothing of '%1'", name));
 				break;
-			case FitLinear:
-			case FitPower:
-			case FitExp1:
-			case FitExp2:
-			case FitInvExp:
-			case FitGauss:
-			case FitCauchyLorentz:
-			case FitTan:
-			case FitTanh:
-			case FitErrFunc:
-			case FitCustom:
+			case AnalysisAction::FitLinear:
+			case AnalysisAction::FitPower:
+			case AnalysisAction::FitExp1:
+			case AnalysisAction::FitExp2:
+			case AnalysisAction::FitInvExp:
+			case AnalysisAction::FitGauss:
+			case AnalysisAction::FitCauchyLorentz:
+			case AnalysisAction::FitTan:
+			case AnalysisAction::FitTanh:
+			case AnalysisAction::FitErrFunc:
+			case AnalysisAction::FitCustom:
 				analysisCurve = new XYFitCurve(i18n("Fit to '%1'", name));
 				static_cast<XYFitCurve*>(analysisCurve)->initFitData(m_analysisAction);
 				static_cast<XYFitCurve*>(analysisCurve)->initStartValues(curve);
 				break;
-			case FourierFilter:
+			case AnalysisAction::FourierFilter:
 				analysisCurve = new XYFourierFilterCurve(i18n("Fourier Filter of '%1'", name));
 				break;
 		}
@@ -674,7 +674,7 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 			analysisCurve->suppressRetransform(true);
 			analysisCurve->setXDataColumn(xColumn);
 			analysisCurve->setYDataColumn(yColumn);
-			if (m_analysisAction != FitCustom) //no custom fit-model set yet, no need to recalculate
+			if (m_analysisAction != AnalysisAction::FitCustom) //no custom fit-model set yet, no need to recalculate
 				analysisCurve->recalculate();
 			analysisCurve->suppressRetransform(false);
 			plot->addChild(analysisCurve);

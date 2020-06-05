@@ -220,54 +220,54 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
  * sets the parameter names for given model category, model type and degree in \c fitData for given action
  */
 void XYFitCurve::initFitData(PlotDataDialog::AnalysisAction action) {
-	if (!action)
+	if (action != PlotDataDialog::AnalysisAction::DataReduction)
 		return;
 
 	Q_D(XYFitCurve);
 	XYFitCurve::FitData& fitData = d->fitData;
-	if (action == PlotDataDialog::FitLinear) {
+	if (action == PlotDataDialog::AnalysisAction::FitLinear) {
 		//Linear
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = (int)nsl_fit_model_polynomial;
 		fitData.degree = 1;
-	} else if (action == PlotDataDialog::FitPower) {
+	} else if (action == PlotDataDialog::AnalysisAction::FitPower) {
 		//Power
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = (int)nsl_fit_model_power;
 		fitData.degree = 1;
-	} else if (action == PlotDataDialog::FitExp1) {
+	} else if (action == PlotDataDialog::AnalysisAction::FitExp1) {
 		//Exponential (degree 1)
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = (int)nsl_fit_model_exponential;
 		fitData.degree = 1;
-	} else if (action == PlotDataDialog::FitExp2) {
+	} else if (action == PlotDataDialog::AnalysisAction::FitExp2) {
 		//Exponential (degree 2)
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = (int)nsl_fit_model_exponential;
 		fitData.degree = 2;
-	} else if (action == PlotDataDialog::FitInvExp) {
+	} else if (action == PlotDataDialog::AnalysisAction::FitInvExp) {
 		//Inverse exponential
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = (int)nsl_fit_model_inverse_exponential;
-	} else if (action == PlotDataDialog::FitGauss) {
+	} else if (action == PlotDataDialog::AnalysisAction::FitGauss) {
 		//Gauss
 		fitData.modelCategory = nsl_fit_model_peak;
 		fitData.modelType = (int)nsl_fit_model_gaussian;
 		fitData.degree = 1;
-	} else if (action == PlotDataDialog::FitCauchyLorentz) {
+	} else if (action == PlotDataDialog::AnalysisAction::FitCauchyLorentz) {
 		//Cauchy-Lorentz
 		fitData.modelCategory = nsl_fit_model_peak;
 		fitData.modelType = (int)nsl_fit_model_lorentz;
 		fitData.degree = 1;
-	} else if (action == PlotDataDialog::FitTan) {
+	} else if (action == PlotDataDialog::AnalysisAction::FitTan) {
 		//Arc tangent
 		fitData.modelCategory = nsl_fit_model_growth;
 		fitData.modelType = (int)nsl_fit_model_atan;
-	} else if (action == PlotDataDialog::FitTanh) {
+	} else if (action == PlotDataDialog::AnalysisAction::FitTanh) {
 		//Hyperbolic tangent
 		fitData.modelCategory = nsl_fit_model_growth;
 		fitData.modelType = (int)nsl_fit_model_tanh;
-	} else if (action == PlotDataDialog::FitErrFunc) {
+	} else if (action == PlotDataDialog::AnalysisAction::FitErrFunc) {
 		//Error function
 		fitData.modelCategory = nsl_fit_model_growth;
 		fitData.modelType = (int)nsl_fit_model_erf;

@@ -48,7 +48,7 @@ class PlotDataDialog : public QDialog {
 
 public:
 	enum class PlotType {XYCurve, Histogram};
-	enum AnalysisAction {DataReduction,
+	enum class AnalysisAction {DataReduction,
 		Differentiation, Integration, Interpolation, Smoothing,
 		FitLinear, FitPower, FitExp1, FitExp2, FitInvExp, FitGauss, FitCauchyLorentz, FitTan, FitTanh, FitErrFunc, FitCustom,
 		FourierFilter};
@@ -69,7 +69,7 @@ private:
 	AspectTreeModel* m_plotsModel;
 	AspectTreeModel* m_worksheetsModel;
 	PlotType m_plotType;
-	AnalysisAction m_analysisAction{Differentiation};
+	AnalysisAction m_analysisAction{AnalysisAction::Differentiation};
 	bool m_analysisMode{false};
 	AbstractAspect* m_lastAddedCurve{nullptr};
 

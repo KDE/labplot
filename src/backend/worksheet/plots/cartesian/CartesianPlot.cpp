@@ -472,47 +472,47 @@ void CartesianPlot::initActions() {
 	addCorrelationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Auto-/Cross-Correlation"), this);
 
 	QAction* fitAction = new QAction(i18n("Linear"), this);
-	fitAction->setData(PlotDataDialog::FitLinear);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitLinear));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(i18n("Power"), this);
-	fitAction->setData(PlotDataDialog::FitPower);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitPower));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(i18n("Exponential (degree 1)"), this);
-	fitAction->setData(PlotDataDialog::FitExp1);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitExp1));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(i18n("Exponential (degree 2)"), this);
-	fitAction->setData(PlotDataDialog::FitExp2);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitExp2));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(i18n("Inverse exponential"), this);
-	fitAction->setData(PlotDataDialog::FitInvExp);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitInvExp));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(i18n("Gauss"), this);
-	fitAction->setData(PlotDataDialog::FitGauss);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitGauss));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(i18n("Cauchy-Lorentz"), this);
-	fitAction->setData(PlotDataDialog::FitCauchyLorentz);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitCauchyLorentz));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(i18n("Arc Tangent"), this);
-	fitAction->setData(PlotDataDialog::FitTan);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitTan));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(i18n("Hyperbolic Tangent"), this);
-	fitAction->setData(PlotDataDialog::FitTanh);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitTanh));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(i18n("Error Function"), this);
-	fitAction->setData(PlotDataDialog::FitErrFunc);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitErrFunc));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(i18n("Custom"), this);
-	fitAction->setData(PlotDataDialog::FitCustom);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitCustom));
 	addFitAction.append(fitAction);
 
 	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier Filter"), this);

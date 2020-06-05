@@ -143,7 +143,7 @@ bool Matrix::exportView() const {
 		const QString path = dlg->path();
 		WAIT_CURSOR;
 
-		if (dlg->format() == ExportSpreadsheetDialog::LaTeX) {
+		if (dlg->format() == ExportSpreadsheetDialog::Format::LaTeX) {
 			const bool verticalHeader = dlg->matrixVerticalHeader();
 			const bool horizontalHeader = dlg->matrixHorizontalHeader();
 			const bool latexHeader = dlg->exportHeader();
@@ -152,7 +152,7 @@ bool Matrix::exportView() const {
 			const bool captions = dlg->captions();
 			m_view->exportToLaTeX(path, verticalHeader, horizontalHeader,
 				latexHeader, gridLines, entire, captions);
-		} else if (dlg->format() == ExportSpreadsheetDialog::FITS) {
+		} else if (dlg->format() == ExportSpreadsheetDialog::Format::FITS) {
 			const int exportTo = dlg->exportToFits();
 			m_view->exportToFits(path, exportTo );
 		} else {

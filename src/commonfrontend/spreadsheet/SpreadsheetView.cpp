@@ -393,64 +393,64 @@ void SpreadsheetView::initActions() {
 	//Analyze and plot menu actions
 	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Reduce Data"), this);
 //	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-data-reduction-curve"), i18n("Reduce Data"), this);
-	addDataReductionAction->setData(PlotDataDialog::DataReduction);
+	addDataReductionAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::DataReduction));
 	addDifferentiationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Differentiate"), this);
 //	addDifferentiationAction = new QAction(QIcon::fromTheme("labplot-xy-differentiation-curve"), i18n("Differentiate"), this);
-	addDifferentiationAction->setData(PlotDataDialog::Differentiation);
+	addDifferentiationAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::Differentiation));
 	addIntegrationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Integrate"), this);
 //	addIntegrationAction = new QAction(QIcon::fromTheme("labplot-xy-integration-curve"), i18n("Integrate"), this);
-	addIntegrationAction->setData(PlotDataDialog::Integration);
+	addIntegrationAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::Integration));
 	addInterpolationAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("Interpolate"), this);
-	addInterpolationAction->setData(PlotDataDialog::Interpolation);
+	addInterpolationAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::Interpolation));
 	addSmoothAction = new QAction(QIcon::fromTheme("labplot-xy-smoothing-curve"), i18n("Smooth"), this);
-	addSmoothAction->setData(PlotDataDialog::Smoothing);
+	addSmoothAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::Smoothing));
 
 	QAction* fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Linear"), this);
-	fitAction->setData(PlotDataDialog::FitLinear);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitLinear));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Power"), this);
-	fitAction->setData(PlotDataDialog::FitPower);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitPower));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Exponential (degree 1)"), this);
-	fitAction->setData(PlotDataDialog::FitExp1);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitExp1));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Exponential (degree 2)"), this);
-	fitAction->setData(PlotDataDialog::FitExp2);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitExp2));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Inverse Exponential"), this);
-	fitAction->setData(PlotDataDialog::FitInvExp);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitInvExp));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Gauss"), this);
-	fitAction->setData(PlotDataDialog::FitGauss);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitGauss));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Cauchy-Lorentz"), this);
-	fitAction->setData(PlotDataDialog::FitCauchyLorentz);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitCauchyLorentz));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Arc Tangent"), this);
-	fitAction->setData(PlotDataDialog::FitTan);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitTan));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Hyperbolic Tangent"), this);
-	fitAction->setData(PlotDataDialog::FitTanh);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitTanh));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Error Function"), this);
-	fitAction->setData(PlotDataDialog::FitErrFunc);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitErrFunc));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Custom"), this);
-	fitAction->setData(PlotDataDialog::FitCustom);
+	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitCustom));
 	addFitAction.append(fitAction);
 
 	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier Filter"), this);
-	addFourierFilterAction->setData(PlotDataDialog::FourierFilter);
+	addFourierFilterAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FourierFilter));
 }
 
 void SpreadsheetView::initMenus() {
@@ -3015,15 +3015,15 @@ bool SpreadsheetView::exportView() {
 		const bool exportHeader = dlg->exportHeader();
 		WAIT_CURSOR;
 		switch (dlg->format()) {
-		case ExportSpreadsheetDialog::ASCII: {
+		case ExportSpreadsheetDialog::Format::ASCII: {
 			const QString separator = dlg->separator();
 			const QLocale::Language format = dlg->numberFormat();
 			exportToFile(path, exportHeader, separator, format);
 			break;
 		}
-		case ExportSpreadsheetDialog::Binary:
+		case ExportSpreadsheetDialog::Format::Binary:
 			break;
-		case ExportSpreadsheetDialog::LaTeX: {
+		case ExportSpreadsheetDialog::Format::LaTeX: {
 			const bool exportLatexHeader = dlg->exportLatexHeader();
 			const bool gridLines = dlg->gridLines();
 			const bool captions = dlg->captions();
@@ -3033,13 +3033,13 @@ bool SpreadsheetView::exportView() {
 				exportLatexHeader, skipEmptyRows, exportEntire);
 			break;
 		}
-		case ExportSpreadsheetDialog::FITS: {
+		case ExportSpreadsheetDialog::Format::FITS: {
 			const int exportTo = dlg->exportToFits();
 			const bool commentsAsUnits = dlg->commentsAsUnitsFits();
 			exportToFits(path, exportTo, commentsAsUnits);
 			break;
 		}
-		case ExportSpreadsheetDialog::SQLite:
+		case ExportSpreadsheetDialog::Format::SQLite:
 			exportToSQLite(path);
 			break;
 		}
