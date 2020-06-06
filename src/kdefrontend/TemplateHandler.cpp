@@ -4,7 +4,7 @@
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
     Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni.kn)
-    Copyright            : (C) 2012-2019 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -39,7 +39,13 @@
 #include <QToolButton>
 #include <QWidgetAction>
 
+
+#include <QApplication>
+#include <QMouseEvent>
+#include <QTimer>
+
 #include <KConfig>
+#include <KConfigGroup>
 #include <KIconLoader>
 #include <KLocalizedString>
 
@@ -53,7 +59,7 @@
   \ingroup kdefrontend
 */
 
-TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(parent) {
+TemplateHandler::TemplateHandler(QWidget* parent, ClassName name) : QWidget(parent) {
 	auto* horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
 	horizontalLayout->setMargin(0);
@@ -78,25 +84,37 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 // 	QSpacerItem* horizontalSpacer2 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
 // 	horizontalLayout->addItem(horizontalSpacer2);
 
-	m_tbCopy = new QToolButton(this);
-	m_tbCopy->setIconSize(QSize(size, size));
-	m_tbCopy->setEnabled(false);
-	horizontalLayout->addWidget(m_tbCopy);
-
-	m_tbPaste = new QToolButton(this);
-	m_tbPaste->setIconSize(QSize(size, size));
-	m_tbPaste->setEnabled(false);
-	horizontalLayout->addWidget(m_tbPaste);
+// 	m_tbCopy = new QToolButton(this);
+// 	m_tbCopy->setIconSize(QSize(size, size));
+// 	m_tbCopy->setEnabled(false);
+// 	horizontalLayout->addWidget(m_tbCopy);
+//
+// 	m_tbPaste = new QToolButton(this);
+// 	m_tbPaste->setIconSize(QSize(size, size));
+// 	m_tbPaste->setEnabled(false);
+// 	horizontalLayout->addWidget(m_tbPaste);
 
 	m_tbLoad->setIcon(QIcon::fromTheme("document-open"));
 	m_tbSave->setIcon(QIcon::fromTheme("document-save"));
 	m_tbSaveDefault->setIcon(QIcon::fromTheme("document-save-as"));
-	m_tbCopy->setIcon(QIcon::fromTheme("edit-copy"));
-	m_tbPaste->setIcon(QIcon::fromTheme("edit-paste"));
+// 	m_tbCopy->setIcon(QIcon::fromTheme("edit-copy"));
+// 	m_tbPaste->setIcon(QIcon::fromTheme("edit-paste"));
 
 	connect(m_tbLoad, &QToolButton::clicked, this, &TemplateHandler::loadMenu);
 	connect(m_tbSave, &QToolButton::clicked, this, &TemplateHandler::saveMenu);
 	connect(m_tbSaveDefault, &QToolButton::clicked, this, &TemplateHandler::saveDefaults);
+
+
+	KConfig config;
+	KConfigGroup group = config.group(QLatin1String("TemplateHandler"));
+	auto style = (Qt::ToolButtonStyle)group.readEntry(QLatin1String("TextPosition"), (int)Qt::ToolButtonTextBesideIcon);
+	m_tbLoad->setToolButtonStyle(style);
+	m_tbSave->setToolButtonStyle(style);
+	m_tbSaveDefault->setToolButtonStyle(style);
+
+	m_tbLoad->installEventFilter(this);
+	m_tbSave->installEventFilter(this);
+	m_tbSaveDefault->installEventFilter(this);
 
 	m_className = name;
 
@@ -120,16 +138,84 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 	m_tbLoad->setEnabled(list.size());
 
 	//TODO: implement copy&paste of properties and activate copy- and paste-buttons again
-	m_tbCopy->hide();
-	m_tbPaste->hide();
+// 	m_tbCopy->hide();
+// 	m_tbPaste->hide();
 }
 
 void TemplateHandler::retranslateUi() {
+	m_tbLoad->setText(i18n("Load"));
 	m_tbLoad->setToolTip(i18n("Load properties from a template"));
+	m_tbSave->setText(i18n("Save"));
 	m_tbSave->setToolTip(i18n("Save current properties as a template"));
+	m_tbSaveDefault->setText(i18n("Save Default"));
 	m_tbSaveDefault->setToolTip(i18n("Save current properties as default"));
-	m_tbCopy->setToolTip(i18n("Copy properties"));
-	m_tbPaste->setToolTip(i18n("Paste properties"));
+// 	m_tbCopy->setToolTip(i18n("Copy properties"));
+// 	m_tbPaste->setToolTip(i18n("Paste properties"));
+}
+
+bool TemplateHandler::eventFilter(QObject* obj, QEvent* event) {
+	if (event->type() == QEvent::MouseButtonPress) {
+		auto* mouseEvent = static_cast<QMouseEvent*>(event);
+		if (mouseEvent->button() == Qt::RightButton) {
+			if (!m_textPositionMenu) {
+				auto style = m_tbLoad->toolButtonStyle();
+
+				m_textPositionMenu = new QMenu(this);
+				m_textPositionMenu->addSection(i18n("Toolbar Settings"));
+
+				auto* actionGroup = new QActionGroup(this);
+				actionGroup->setExclusive(true);
+				connect(actionGroup, &QActionGroup::triggered, this, &TemplateHandler::updateTextPosition);
+
+				auto* subMenu = new QMenu(i18n("Text position"), m_textPositionMenu);
+
+				QAction* action = new QAction(i18n("Icons only"), actionGroup);
+				action->setCheckable(true);
+				action->setData((int)Qt::ToolButtonIconOnly);
+				if (style == Qt::ToolButtonIconOnly)
+					action->setChecked(true);
+				subMenu->addAction(action);
+
+				action = new QAction(i18n("Text only"), actionGroup);
+				action->setCheckable(true);
+				action->setData((int)Qt::ToolButtonTextOnly);
+				if (style == Qt::ToolButtonTextOnly)
+					action->setChecked(true);
+				subMenu->addAction(action);
+
+				action = new QAction(i18n("Text Alongside Icons"), actionGroup);
+				action->setCheckable(true);
+				action->setData((int)Qt::ToolButtonTextBesideIcon);
+				if (style == Qt::ToolButtonTextBesideIcon)
+					action->setChecked(true);
+				subMenu->addAction(action);
+
+				action = new QAction(i18n("Text Under Icons"), actionGroup);
+				action->setCheckable(true);
+				action->setData((int)Qt::ToolButtonTextUnderIcon);
+				if (style == Qt::ToolButtonTextUnderIcon)
+					action->setChecked(true);
+				subMenu->addAction(action);
+				m_textPositionMenu->addMenu(subMenu);
+
+			}
+
+			auto* widget = static_cast<QWidget*>(obj);
+			m_textPositionMenu->exec(widget->mapToGlobal(mouseEvent->pos()));
+		}
+	}
+	return QWidget::eventFilter(obj, event);
+}
+
+void TemplateHandler::updateTextPosition(QAction* action) {
+	auto style = static_cast<Qt::ToolButtonStyle>(action->data().toInt());
+	m_tbLoad->setToolButtonStyle(style);
+	m_tbSave->setToolButtonStyle(style);
+	m_tbSaveDefault->setToolButtonStyle(style);
+
+	KConfig config;
+	KConfigGroup group = config.group(QLatin1String("TemplateHandler"));
+	group.writeEntry(QLatin1String("TextPosition"), (int)style);
 }
 
 //##############################################################################
@@ -194,10 +280,11 @@ void TemplateHandler::saveMenu() {
 	menu.addAction(widgetAction);
 
 	QPoint pos(-menu.sizeHint().width()+m_tbSave->width(),-menu.sizeHint().height());
+	menu.setFocus();
 	menu.exec(m_tbSave->mapToGlobal(pos));
 
 	//TODO: focus is not set. why?
-	leFilename->setFocus();
+// 	leFilename->setFocus();
 }
 
 /*!

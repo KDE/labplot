@@ -32,6 +32,7 @@
 
 #include <QWidget>
 
+class QMenu;
 class QToolButton;
 class KConfig;
 
@@ -45,16 +46,18 @@ public:
 
 private:
 	void retranslateUi();
+	bool eventFilter(QObject*, QEvent*) override;
 
 	QString m_dirName;
 	ClassName m_className;
 	QList<QString> m_subDirNames;
 
+	QMenu* m_textPositionMenu{nullptr};
 	QToolButton* m_tbLoad;
 	QToolButton* m_tbSave;
 	QToolButton* m_tbSaveDefault;
-	QToolButton* m_tbCopy;
-	QToolButton* m_tbPaste;
+// 	QToolButton* m_tbCopy;
+// 	QToolButton* m_tbPaste;
 
 private slots:
 	void loadMenu();
@@ -63,6 +66,7 @@ private slots:
 	void saveMenuSelected(QAction*);
 	void saveNewSelected(const QString&);
 	void saveDefaults();
+	void updateTextPosition(QAction*);
 
 signals:
 	void loadConfigRequested(KConfig&);
