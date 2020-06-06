@@ -99,6 +99,9 @@ void ColumnDock::setColumns(QList<Column*> list) {
 		}
 	}
 
+	//if columns of different modes are selected, change of the mode is not possible
+	bool sameMode = true;
+
 	if (list.size() == 1) {
 		//names and comments of non-editable columns in a file data source can be changed.
 		if (!nonEditable && m_column->parentAspect()->type() == AspectType::LiveDataSource) {
@@ -117,7 +120,25 @@ void ColumnDock::setColumns(QList<Column*> list) {
 
 		ui.leName->setText(QString());
 		ui.leComment->setText(QString());
+
+		auto mode = m_column->columnMode();
+		for (auto* col : m_columnsList) {
+			if (col->columnMode() != mode) {
+				sameMode = false;
+				break;
+			}
+		}
 	}
+
+	ui.lType->setEnabled(sameMode);
+	ui.cbType->setEnabled(sameMode);
+	ui.lNumericFormat->setEnabled(sameMode);
+	ui.cbNumericFormat->setEnabled(sameMode);
+	ui.lPrecision->setEnabled(sameMode);
+	ui.sbPrecision->setEnabled(sameMode);
+	ui.lDateTimeFormat->setEnabled(sameMode);
+	ui.cbDateTimeFormat->setEnabled(sameMode);
+
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
 
@@ -133,7 +154,8 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	connect(m_column, &AbstractColumn::plotDesignationChanged, this, &ColumnDock::columnPlotDesignationChanged);
 
 	//don't allow to change the column type at least one non-editable column
-	ui.cbType->setEnabled(!nonEditable);
+	if (sameMode)
+		ui.cbType->setEnabled(!nonEditable);
 
 	m_initializing = false;
 }
