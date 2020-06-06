@@ -2012,6 +2012,7 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
 		fitResult.tdist_tValues[i] = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
 		fitResult.tdist_pValues[i] = nsl_stats_tdist_p(fitResult.tdist_tValues.at(i), fitResult.dof);
+		//TODO: use alpha value
 		fitResult.tdist_marginValues[i] = nsl_stats_tdist_margin(0.05, fitResult.dof, fitResult.errorValues.at(i));
 	}
 

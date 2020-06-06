@@ -216,7 +216,7 @@ double nsl_stats_chisq_p(double t, double dof) {
 double nsl_stats_fdist_F(double sst, double rms, unsigned int np, int version) {
 	switch (version) {
 	case 2:
-		if (np > 1)	// scale accourding R
+		if (np > 1)	// scale according R
 			sst /= np;
 		break;
 	default:

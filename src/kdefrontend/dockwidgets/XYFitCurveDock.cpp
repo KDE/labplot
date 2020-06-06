@@ -152,8 +152,13 @@ void XYFitCurveDock::setupGeneral() {
 
 	//header labels
 	QStringList headerLabels;
-	headerLabels << QString() << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << QLatin1String("P > |t|") << i18n("Conf. Interval");
+	//TODO: use alpha
+	const int confidenceInterval = 95;
+	headerLabels << QString() << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << QLatin1String("P > |t|")
+		<< i18n("Lower") << i18n("Upper");
 	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
+	uiGeneralTab.twParameters->horizontalHeaderItem(6)->setToolTip(i18n("%1 \% lower confidence level", confidenceInterval));
+	uiGeneralTab.twParameters->horizontalHeaderItem(7)->setToolTip(i18n("%1 \% upper confidence level", confidenceInterval));
 
 	//headerLabels.clear();
 	//headerLabels << i18n("Measure") << i18n("Value");
@@ -1280,11 +1285,13 @@ void XYFitCurveDock::showFitResult() {
 			// Conf. interval
 			if (!std::isnan(errorValue)) {
 				const double margin = fitResult.tdist_marginValues.at(i);
-				if (fitResult.tdist_tValues.at(i) < 1.e6)
-					item = new QTableWidgetItem(QString::number(paramValue - margin) + QLatin1String(" .. ") + QString::number(paramValue + margin));
-				else
-					item = new QTableWidgetItem(i18n("too small"));
+				//TODO: if (fitResult.tdist_tValues.at(i) > 1.e6)
+				//	item = new QTableWidgetItem(i18n("too small"));
+
+				item = new QTableWidgetItem(QString::number(paramValue - margin));
 				uiGeneralTab.twParameters->setItem(i, 6, item);
+				item = new QTableWidgetItem(QString::number(paramValue + margin));
+				uiGeneralTab.twParameters->setItem(i, 7, item);
 			}
 		}
 	}
