@@ -37,8 +37,8 @@ MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient
 	ui.setupUi(this);
 	ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000));
 
-	connect(ui.cbWillMessageType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &MQTTWillSettingsWidget::willMessageTypeChanged);
-	connect(ui.cbWillUpdate, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &MQTTWillSettingsWidget::willUpdateTypeChanged);
+	connect(ui.cbWillMessageType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MQTTWillSettingsWidget::willMessageTypeChanged);
+	connect(ui.cbWillUpdate, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MQTTWillSettingsWidget::willUpdateTypeChanged);
 
 	connect(ui.chbEnabled, &QCheckBox::stateChanged, this, &MQTTWillSettingsWidget::enableWillSettings);
 	connect(ui.chbWillRetain, &QCheckBox::stateChanged, [this](int state) {
@@ -53,10 +53,10 @@ MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient
 	connect(ui.lwWillStatistics, &QListWidget::itemChanged, [this](QListWidgetItem* item) {
 		m_statisticsType = static_cast<MQTTClient::WillStatisticsType>(ui.lwWillStatistics->row(item));
 	});
-	connect(ui.cbWillQoS, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this](int index) {
+	connect(ui.cbWillQoS, QOverload<int>::of(&QComboBox::currentIndexChanged), [this](int index) {
 		m_will.willQoS = index;
 	});
-	connect(ui.cbWillTopic, static_cast<void (QComboBox::*) (const QString&)>(&QComboBox::currentTextChanged), [this](const QString& text) {
+	connect(ui.cbWillTopic, QOverload<const QString&>::of(&QComboBox::currentTextChanged), [this](const QString& text) {
 		m_will.willTopic = text;
 	});
 	connect(ui.bApply, &QPushButton::clicked, this, &MQTTWillSettingsWidget::applyClicked);

@@ -45,7 +45,7 @@ ConstantsWidget::ConstantsWidget(QWidget* parent) : QWidget(parent) {
 
 	//SLOTS
 	connect(ui.leFilter, &QLineEdit::textChanged, this, &ConstantsWidget::filterChanged);
-	connect(ui.cbGroup, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ConstantsWidget::groupChanged );
+	connect(ui.cbGroup, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ConstantsWidget::groupChanged );
 	connect(ui.lwConstants, &QListWidget::currentTextChanged, this, &ConstantsWidget::constantChanged);
 	connect(ui.bInsert, &QPushButton::clicked, this, &ConstantsWidget::insertClicked);
 	connect(ui.bCancel, &QPushButton::clicked, this, &ConstantsWidget::canceled);

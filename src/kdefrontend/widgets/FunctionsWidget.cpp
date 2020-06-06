@@ -45,7 +45,7 @@ FunctionsWidget::FunctionsWidget(QWidget* parent) : QWidget(parent) {
 
 	//SLOTS
 	connect(ui.leFilter, &QLineEdit::textChanged, this, &FunctionsWidget::filterChanged);
-	connect(ui.cbGroup, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &FunctionsWidget::groupChanged);
+	connect(ui.cbGroup, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &FunctionsWidget::groupChanged);
 	connect(ui.bInsert, &QPushButton::clicked, this, &FunctionsWidget::insertClicked);
 	connect(ui.bCancel, &QPushButton::clicked, this, &FunctionsWidget::canceled);
 	connect(ui.lwFunctions, &QListWidget::itemDoubleClicked, this, &FunctionsWidget::insertClicked);
