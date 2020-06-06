@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>344</width>
-    <height>490</height>
+    <width>469</width>
+    <height>627</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -229,11 +229,38 @@
         </property>
        </widget>
       </item>
+      <item row="14" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Confidence Interval</string>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="3">
+       <widget class="QSpinBox" name="sbConfidenceInterval">
+        <property name="suffix">
+         <string>%</string>
+        </property>
+        <property name="value">
+         <number>95</number>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="0">
+       <widget class="KSeparator" name="kseparator"/>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KSeparator</class>
+   <extends>QFrame</extends>
+   <header>kseparator.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

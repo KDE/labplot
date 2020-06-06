@@ -92,6 +92,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	ui.cbUseDataErrors->setChecked(m_fitData->useDataErrors);
 	ui.cbUseResults->setChecked(m_fitData->useResults);
 	ui.cbPreview->setChecked(m_fitData->previewEnabled);
+	ui.sbConfidenceInterval->setValue(m_fitData->confidenceInterval);
 
 	//SLOTS
 	connect(ui.leEps, &QLineEdit::textChanged, this, &FitOptionsWidget::changed);
@@ -100,6 +101,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	connect(ui.cbUseDataErrors, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
 	connect(ui.cbUseResults, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
 	connect(ui.cbPreview, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
+	connect(ui.sbConfidenceInterval, QOverload<int>::of(&QSpinBox::valueChanged), this, &FitOptionsWidget::changed);
 	connect(ui.pbApply, &QPushButton::clicked, this, &FitOptionsWidget::applyClicked);
 	connect(ui.pbCancel, &QPushButton::clicked, this, &FitOptionsWidget::finished);
 	connect(ui.cbAutoRange, &QCheckBox::clicked, this, &FitOptionsWidget::autoRangeChanged);
@@ -241,6 +243,7 @@ void FitOptionsWidget::applyClicked() {
 	m_fitData->useDataErrors = ui.cbUseDataErrors->isChecked();
 	m_fitData->useResults = ui.cbUseResults->isChecked();
 	m_fitData->previewEnabled = ui.cbPreview->isChecked();
+	m_fitData->confidenceInterval = ui.sbConfidenceInterval->value();
 
 	if (m_changed)
 		emit optionsChanged();

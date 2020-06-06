@@ -44,7 +44,6 @@
 #include <QStandardItemModel>
 #include <QStandardPaths>
 #include <QClipboard>
-#include <QDir>
 
 extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
@@ -152,17 +151,9 @@ void XYFitCurveDock::setupGeneral() {
 
 	//header labels
 	QStringList headerLabels;
-	//TODO: use alpha
-	const int confidenceInterval = 95;
 	headerLabels << QString() << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << QLatin1String("P > |t|")
 		<< i18n("Lower") << i18n("Upper");
 	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
-	uiGeneralTab.twParameters->horizontalHeaderItem(6)->setToolTip(i18n("%1 \% lower confidence level", confidenceInterval));
-	uiGeneralTab.twParameters->horizontalHeaderItem(7)->setToolTip(i18n("%1 \% upper confidence level", confidenceInterval));
-
-	//headerLabels.clear();
-	//headerLabels << i18n("Measure") << i18n("Value");
-	//uiGeneralTab.twGoodness->setHorizontalHeaderLabels(headerLabels);
 
 	// show all options per default
 	showDataOptions(true);
@@ -286,8 +277,6 @@ void XYFitCurveDock::initGeneralTab() {
 
 	DEBUG("	model degree = " << m_fitData.degree);
 
-	this->showFitResult();
-
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	//Slots
@@ -360,6 +349,8 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 
 	initGeneralTab();
 	initTabs();
+
+	showFitResult();
 	enableRecalculate();
 
 	m_initializing = false;
@@ -1206,6 +1197,12 @@ void XYFitCurveDock::showFitResult() {
 		return;
 	}
 
+	// used confidence interval
+	int confidenceInterval = m_fitData.confidenceInterval;
+	uiGeneralTab.twParameters->horizontalHeaderItem(6)->setToolTip(i18n("%1 \% lower confidence level", confidenceInterval));
+	uiGeneralTab.twParameters->horizontalHeaderItem(7)->setToolTip(i18n("%1 \% upper confidence level", confidenceInterval));
+
+	// log
 	uiGeneralTab.twLog->item(1, 1)->setText(QString::number(fitResult.iterations));
 	uiGeneralTab.twLog->item(2, 1)->setText(QString::number(m_fitData.eps));
 	if (fitResult.elapsedTime > 1000)

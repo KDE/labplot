@@ -4,7 +4,7 @@
     Description          : A xy-curve defined by a fit model
     --------------------------------------------------------------------
     Copyright            : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -65,6 +65,7 @@ public:
 		bool useDataErrors{true};	// use given data errors when fitting (default)
 		bool useResults{true};		// use results as new start values (default)
 		bool previewEnabled{true};	// preview fit function with given start parameters
+		int confidenceInterval{95};	// confidence interval for fit result
 
 		bool autoRange{true};		// use all data points? (default)
 		bool autoEvalRange{true};	// evaluate fit function on full data range (default)

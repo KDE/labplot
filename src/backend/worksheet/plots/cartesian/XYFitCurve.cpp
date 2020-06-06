@@ -2012,8 +2012,9 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
 		fitResult.tdist_tValues[i] = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
 		fitResult.tdist_pValues[i] = nsl_stats_tdist_p(fitResult.tdist_tValues.at(i), fitResult.dof);
-		//TODO: use alpha value
-		fitResult.tdist_marginValues[i] = nsl_stats_tdist_margin(0.05, fitResult.dof, fitResult.errorValues.at(i));
+		// CI = 100* (1 - alpha)
+		double alpha = 1.0 - fitData.confidenceInterval/100.;
+		fitResult.tdist_marginValues[i] = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(i));
 	}
 
 	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
@@ -2197,6 +2198,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("useDataErrors", QString::number(d->fitData.useDataErrors));
 	writer->writeAttribute("useResults", QString::number(d->fitData.useResults));
 	writer->writeAttribute("previewEnabled", QString::number(d->fitData.previewEnabled));
+	writer->writeAttribute("confidenceInterval", QString::number(d->fitData.confidenceInterval));
 
 	if (d->fitData.modelCategory == nsl_fit_model_custom) {
 		writer->writeStartElement("paramNames");
@@ -2338,6 +2340,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("useDataErrors", fitData.useDataErrors, bool);
 			READ_INT_VALUE("useResults", fitData.useResults, bool);
 			READ_INT_VALUE("previewEnabled", fitData.previewEnabled, bool);
+			READ_INT_VALUE("confidenceInterval", fitData.confidenceInterval, int);
 
 		} else if (!preview && reader->name() == "name") {	// needed for custom model
 			d->fitData.paramNames << reader->readElementText();
