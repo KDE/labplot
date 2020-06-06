@@ -1102,19 +1102,27 @@ void XYFitCurveDock::resultCopy(bool copyAll) {
 
 	QString str;
 	QString rowStr;
+
+	//copy the header of the parameters table if we copy everything in this table
+	if (copyAll && tw == uiGeneralTab.twParameters) {
+		for (int i = 1; i < tw->columnCount(); ++i)
+			str += QLatin1Char('\t') + tw->horizontalHeaderItem(i)->text();
+	}
+
+	//copy the content of the table
 	for (int i = 0; i < tw->rowCount(); ++i) {
 		for (int j = 0; j < tw->columnCount(); ++j) {
 			if (!copyAll && !tw->item(i, j)->isSelected())
 				continue;
 
 			if (!rowStr.isEmpty())
-				rowStr += '\t';
+				rowStr += QLatin1Char('\t');
 
 			rowStr += tw->item(i, j)->text();
 		}
 		if (!rowStr.isEmpty()) {
 			if (!str.isEmpty())
-				str += '\n';
+				str += QLatin1Char('\n');
 			str += rowStr;
 			rowStr.clear();
 		}
