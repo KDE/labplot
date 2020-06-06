@@ -49,6 +49,7 @@ private:
 	void initGeneralTab() override;
 	void showFitResult();
 	void updateSettings(const AbstractColumn*);
+	bool eventFilter(QObject*, QEvent*) override;
 
 	Ui::XYFitCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbDataSourceCurve{nullptr};

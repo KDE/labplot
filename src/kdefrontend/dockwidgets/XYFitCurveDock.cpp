@@ -166,6 +166,12 @@ void XYFitCurveDock::setupGeneral() {
 	showParameters(true);
 	showResults(true);
 
+	//CTRL+C copies only the last cell in the selection, we want to copy the whole selection.
+	//install event filters to handle CTRL+C key events.
+	uiGeneralTab.twParameters->installEventFilter(this);
+	uiGeneralTab.twGoodness->installEventFilter(this);
+	uiGeneralTab.twLog->installEventFilter(this);
+
 	// context menus
 	uiGeneralTab.twParameters->setContextMenuPolicy(Qt::CustomContextMenu);
 	uiGeneralTab.twGoodness->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -357,6 +363,18 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	if (m_fitData.paramStartValues.size() == 0)
 		updateModelEquation();
 
+}
+
+bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {
+	if (event->type() == QEvent::KeyPress
+		&& (obj == uiGeneralTab.twParameters || obj == uiGeneralTab.twGoodness || obj == uiGeneralTab.twLog)) {
+		auto* key_event = static_cast<QKeyEvent*>(event);
+		if (key_event->matches(QKeySequence::Copy)) {
+			resultCopy();
+			return true;
+		}
+	}
+	return QWidget::eventFilter(obj, event);
 }
 
 //*************************************************************
