@@ -109,6 +109,7 @@ private:
 	void insertRowsBelow(int);
 
 	QTableView* m_tableView;
+	bool m_editorEntered{false};
 	Spreadsheet* m_spreadsheet;
 	SpreadsheetItemDelegate* m_delegate;
 	SpreadsheetModel* m_model;

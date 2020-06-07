@@ -67,7 +67,7 @@ void SpreadsheetItemDelegate::setEditorData(QWidget* editor, const QModelIndex& 
 	editor->metaObject()->userProperty().write(editor, index.data(Qt::EditRole));
 }
 
- bool SpreadsheetItemDelegate::eventFilter(QObject* editor, QEvent* event) {
+bool SpreadsheetItemDelegate::eventFilter(QObject* editor, QEvent* event) {
 	if (event->type() == QEvent::KeyPress) {
 		auto* keyEvent = static_cast<QKeyEvent*>(event);
 		if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
@@ -76,6 +76,9 @@ void SpreadsheetItemDelegate::setEditorData(QWidget* editor, const QModelIndex& 
 			emit returnPressed();
 			return true;
 		}
+	} else if (event->type() == QEvent::InputMethodQuery) {
+		emit editorEntered();
+		return true;
 	}
 
 	return QItemDelegate::eventFilter(editor, event);

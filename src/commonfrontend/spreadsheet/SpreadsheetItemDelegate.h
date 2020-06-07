@@ -49,6 +49,7 @@ private:
 
 signals:
 	void returnPressed();
+	void editorEntered();
 };
 
 #endif
