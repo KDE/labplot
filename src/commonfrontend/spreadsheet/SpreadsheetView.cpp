@@ -367,7 +367,7 @@ void SpreadsheetView::initActions() {
 	ladderAction->setData(SquareRoot);
 
 	ladderAction = new QAction(QLatin1String("log(x)"), ladderOfPowersActionGroup);
-	ladderAction->setData(DivideBySum);
+	ladderAction->setData(Log);
 
 	ladderAction = new QAction("1/√x", ladderOfPowersActionGroup);
 	ladderAction->setData(InverseSquareRoot);
