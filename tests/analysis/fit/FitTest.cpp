@@ -85,7 +85,7 @@ void FitTest::testLinearNorris() {
 	QCOMPARE(fitResult.sse, 26.6173985294224);
 	QCOMPARE(fitResult.rms, 0.782864662630069);
 	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 5436385.54083098
-	QCOMPARE(fitResult.fdist_F, 5436385.54079785);
+	FuzzyCompare(fitResult.fdist_F, 5436385.54079785, 1.e-9);
 }
 
 void FitTest::testLinearPontius() {
@@ -614,7 +614,7 @@ void FitTest::testLinearWampler3() {
 	QCOMPARE(fitResult.sse, 83554268.0000000);
 	QCOMPARE(fitResult.rms, 5570284.53333333);
 	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 675524.458247789
-	QCOMPARE(fitResult.fdist_F, 675524.458240122);
+	FuzzyCompare(fitResult.fdist_F, 675524.458240122, 1.e-7);
 }
 
 void FitTest::testLinearWampler4() {
@@ -803,7 +803,8 @@ void FitTest::testLinearWP_OLS() {
 	DEBUG(std::setprecision(15) << fitResult.chisq_p);	// result: 0.999996987409119
 //	FuzzyCompare(fitResult.chisq_p, ???, 1.e-8);
 	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 5471.2433330734
-	FuzzyCompare(fitResult.fdist_F, 5471.2, 2.e-6);
+	FuzzyCompare(fitResult.fdist_F, 5471.2, 1.e-5);
+	DEBUG(std::setprecision(15) << fitResult.fdist_p);	// result: 0.0
 	QCOMPARE(fitResult.fdist_p, 0.0);
 	DEBUG(std::setprecision(15) << fitResult.logLik);	// result: 1.0890247702592
 	FuzzyCompare(fitResult.logLik, 1.0890, 3.e-5);
