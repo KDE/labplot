@@ -43,6 +43,7 @@ public:
 	enum class ClassName {Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, Histogram, XYCurve, Axis, CustomPoint};
 
 	TemplateHandler(QWidget* parent, ClassName);
+	void setToolButtonStyle(Qt::ToolButtonStyle);
 
 private:
 	void retranslateUi();

@@ -49,6 +49,8 @@
 #include <KIconLoader>
 #include <KLocalizedString>
 
+static QVector<TemplateHandler*> templateHandlers;
+
  /*!
   \class TemplateHandler
   \brief Provides a widget with buttons for saving and loading of templates.
@@ -140,6 +142,8 @@ TemplateHandler::TemplateHandler(QWidget* parent, ClassName name) : QWidget(pare
 	//TODO: implement copy&paste of properties and activate copy- and paste-buttons again
 // 	m_tbCopy->hide();
 // 	m_tbPaste->hide();
+
+	templateHandlers << this;
 }
 
 void TemplateHandler::retranslateUi() {
@@ -209,13 +213,21 @@ bool TemplateHandler::eventFilter(QObject* obj, QEvent* event) {
 
 void TemplateHandler::updateTextPosition(QAction* action) {
 	auto style = static_cast<Qt::ToolButtonStyle>(action->data().toInt());
-	m_tbLoad->setToolButtonStyle(style);
-	m_tbSave->setToolButtonStyle(style);
-	m_tbSaveDefault->setToolButtonStyle(style);
 
+	//save the curret style
 	KConfig config;
 	KConfigGroup group = config.group(QLatin1String("TemplateHandler"));
 	group.writeEntry(QLatin1String("TextPosition"), (int)style);
+
+	//update all available template handlers
+	for (auto* handler : templateHandlers)
+		handler->setToolButtonStyle(style);
+}
+
+void TemplateHandler::setToolButtonStyle(Qt::ToolButtonStyle style) {
+	m_tbLoad->setToolButtonStyle(style);
+	m_tbSave->setToolButtonStyle(style);
+	m_tbSaveDefault->setToolButtonStyle(style);
 }
 
 //##############################################################################
