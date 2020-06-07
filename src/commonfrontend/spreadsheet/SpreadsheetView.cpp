@@ -78,6 +78,7 @@
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 #include "kdefrontend/spreadsheet/AddSubtractValueDialog.h"
 #include "kdefrontend/spreadsheet/DropValuesDialog.h"
+#include "kdefrontend/spreadsheet/GoToDialog.h"
 #include "kdefrontend/spreadsheet/RescaleDialog.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
 #include "kdefrontend/spreadsheet/RandomValuesDialog.h"
@@ -2902,15 +2903,23 @@ void SpreadsheetView::clearSelectedCells() {
 }
 
 void SpreadsheetView::goToCell() {
-	bool ok;
+	auto* dlg = new GoToDialog(this);
+	if (dlg->exec() == QDialog::Accepted) {
+		int row = dlg->row();
+		if (row < 1)
+			row = 1;
+		if (row > m_spreadsheet->rowCount())
+			row = m_spreadsheet->rowCount();
 
-	int col = QInputDialog::getInt(nullptr, i18n("Go to Cell"), i18n("Enter column"), 1, 1, m_spreadsheet->columnCount(), 1, &ok);
-	if (!ok) return;
+		int col = dlg->column();
+		if (col < 1)
+			col = 1;
+		if (col > m_spreadsheet->columnCount())
+			col = m_spreadsheet->columnCount();
 
-	int row = QInputDialog::getInt(nullptr, i18n("Go to Cell"), i18n("Enter row"), 1, 1, m_spreadsheet->rowCount(), 1, &ok);
-	if (!ok) return;
-
-	goToCell(row-1, col-1);
+		goToCell(row-1, col-1);
+	}
+	delete dlg;
 }
 
 //! Open the sort dialog for the given columns

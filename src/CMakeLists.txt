@@ -81,6 +81,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/ExportSpreadsheetDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/AddSubtractValueDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/DropValuesDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/GoToDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/FunctionValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/RandomValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/RescaleDialog.cpp
