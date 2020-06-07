@@ -1970,7 +1970,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.mse = fitResult.sse/n;
 	fitResult.rmse = sqrt(fitResult.mse);
 	fitResult.mae = gsl_blas_dasum(s->f)/n;
-	// SST needed for coefficient of determination, R-squared
+	// SST needed for coefficient of determination, R-squared and F test
 	fitResult.sst = gsl_stats_tss(ydata, 1, n);
 	// for a linear model without intercept R-squared is calculated differently
 	// see https://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-does-summary_0028_0029-report-strange-results-for-the-R_005e2-estimate-when-I-fit-a-linear-model-with-no-intercept_003f
@@ -1986,7 +1986,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.rsquare = nsl_stats_rsquare(fitResult.sse, fitResult.sst);
 	fitResult.rsquareAdj = nsl_stats_rsquareAdj(fitResult.rsquare, np, fitResult.dof, 1);
 	fitResult.chisq_p = nsl_stats_chisq_p(fitResult.sse, fitResult.dof);
-	fitResult.fdist_F = nsl_stats_fdist_F(fitResult.sst, fitResult.rms, np, 1);
+	fitResult.fdist_F = nsl_stats_fdist_F(fitResult.rsquare, np, fitResult.dof);
 	fitResult.fdist_p = nsl_stats_fdist_p(fitResult.fdist_F, np, fitResult.dof);
 	fitResult.logLik = nsl_stats_logLik(fitResult.sse, n);
 	fitResult.aic = nsl_stats_aic(fitResult.sse, n, np, 1);

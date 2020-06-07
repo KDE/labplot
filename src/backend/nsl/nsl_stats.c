@@ -213,17 +213,9 @@ double nsl_stats_chisq_p(double t, double dof) {
 }
 
 /* F distribution */
-double nsl_stats_fdist_F(double sst, double rms, unsigned int np, int version) {
-	switch (version) {
-	case 2:
-		if (np > 1)	// scale according R
-			sst /= np;
-		break;
-	default:
-		if (np > 2)     // scale according NIST reference
-			sst /= (np-1);
-	}
-	return sst/rms;
+double nsl_stats_fdist_F(double rsquare, size_t np, size_t dof) {
+	// (sst/sse - 1.) * dof/(p-1) = dof/(p-1)/(1./R^2 - 1)
+	return dof/(np - 1)/(1./rsquare - 1.);
 }
 double nsl_stats_fdist_p(double F, size_t np, double dof) {
 	double p = gsl_cdf_fdist_Q(F, (double)np, dof);

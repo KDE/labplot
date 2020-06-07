@@ -80,7 +80,7 @@ double nsl_stats_tdist_margin(double alpha, double dof, double error);
 double nsl_stats_chisq_p(double t, double dof);
 
 /* F distribution */
-double nsl_stats_fdist_F(double sst, double rms, unsigned int np, int version);
+double nsl_stats_fdist_F(double rsquare, size_t np, size_t dof);
 /* p value */
 double nsl_stats_fdist_p(double F, size_t np, double dof);
 
