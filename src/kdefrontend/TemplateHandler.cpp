@@ -214,7 +214,7 @@ bool TemplateHandler::eventFilter(QObject* obj, QEvent* event) {
 void TemplateHandler::updateTextPosition(QAction* action) {
 	auto style = static_cast<Qt::ToolButtonStyle>(action->data().toInt());
 
-	//save the curret style
+	//save the current style
 	KConfig config;
 	KConfigGroup group = config.group(QLatin1String("TemplateHandler"));
 	group.writeEntry(QLatin1String("TextPosition"), (int)style);
