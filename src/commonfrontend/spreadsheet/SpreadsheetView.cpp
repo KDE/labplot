@@ -230,9 +230,9 @@ void SpreadsheetView::initActions() {
 	action_cut_selection = new QAction(QIcon::fromTheme("edit-cut"), i18n("Cu&t"), this);
 	action_copy_selection = new QAction(QIcon::fromTheme("edit-copy"), i18n("&Copy"), this);
 	action_paste_into_selection = new QAction(QIcon::fromTheme("edit-paste"), i18n("Past&e"), this);
-	action_mask_selection = new QAction(QIcon::fromTheme("edit-node"), i18n("&Mask Selection"), this);
-	action_unmask_selection = new QAction(QIcon::fromTheme("format-remove-node"), i18n("&Unmask Selection"), this);
-	action_clear_selection = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Selection"), this);
+	action_mask_selection = new QAction(QIcon::fromTheme("edit-node"), i18n("&Mask"), this);
+	action_unmask_selection = new QAction(QIcon::fromTheme("format-remove-node"), i18n("&Unmask"), this);
+	action_clear_selection = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Content"), this);
 	action_select_all = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this);
 
 // 	action_set_formula = new QAction(QIcon::fromTheme(QString()), i18n("Assign &Formula"), this);
