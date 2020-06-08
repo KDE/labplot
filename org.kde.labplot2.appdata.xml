@@ -21,6 +21,7 @@
   <name xml:lang="id">LabPlot</name>
   <name xml:lang="it">LabPlot</name>
   <name xml:lang="nl">LabPlot</name>
+  <name xml:lang="nn">LabPlot</name>
   <name xml:lang="pl">LabPlot</name>
   <name xml:lang="pt">LabPlot</name>
   <name xml:lang="pt-BR">LabPlot</name>
@@ -46,6 +47,7 @@
   <summary xml:lang="id">Penggrafikan yang interaktif dan analisis data ilmiah</summary>
   <summary xml:lang="it">Grafica interattiva e analisi dei dati scientifici</summary>
   <summary xml:lang="nl">Interactief maken van grafieken en analyseren van wetenschappelijke gegevens</summary>
+  <summary xml:lang="nn">Interaktiv plotting og analyse av vitskaplege data</summary>
   <summary xml:lang="pl">Interaktywne przestawianie graficzne i analizy danych naukowych</summary>
   <summary xml:lang="pt">Gráficos interactivos e análise de dados científicos</summary>
   <summary xml:lang="pt-BR">Criação de gráficos interativos e análise de dados científicos</summary>
@@ -71,6 +73,7 @@
     <p xml:lang="id">LabPlot adalah sebuah aplikasi untuk penggrafikan interaktif dan analisis data ilmiah.</p>
     <p xml:lang="it">LabPlot è un'applicazione per la grafica interattiva e per l'analisi dei dati scientifici.</p>
     <p xml:lang="nl">LabPlot2 is een toepassing voor het interactief maken van grafieken en het analyseren van wetenschappelijke gegevens.</p>
+    <p xml:lang="nn">LabPlot er program for interaktiv plotting og analyse av vitskaplege data.</p>
     <p xml:lang="pl">LabPlot jest aplikacją do interaktywnego przestawiania graficznego i analizy danych naukowych.</p>
     <p xml:lang="pt">O LabPlot é uma aplicação para gráficos interactivos e para a análise de dados científicos.</p>
     <p xml:lang="pt-BR">O LabPlot é um aplicativo para criação de gráficos interativos e análise de dados científicos.</p>
@@ -97,6 +100,7 @@
     <p xml:lang="id">LabPlot menyediakan cara mudah untuk menciptakan, mengelola, dan mengedit plot. Ini memungkinkanmu menghasilkan plot berdasarkan data dari lembar-kerja atau data yang diimpor dari file eksternal. Plot bisa diekspor ke beberapa format grafik pixmap dan vector.</p>
     <p xml:lang="it">LabPlot fornisce una modalità semplice per creare, gestire e modificare i grafici. Ti permette di generare grafici basati sui dati di un foglio elettronico, oppure importati da file esterni. I grafici possono essere esportati in diverse immagini e in diversi formati grafici vettoriali.</p>
     <p xml:lang="nl">Met LabPlot is het eenvoudig plots te maken, te beheren en te bewerken. U kunt er plots mee maken op basis van gegevens in een werkblad (spreadsheet), of van gegevens die uit externe bestanden zijn geïmporteerd. Plots kunnen worden geëxporteerd in diverse pixmap- of vector-grafische bestanden.</p>
+    <p xml:lang="nn">LabPlot gjer det lett å laga, administrera og redigera plott. Du kan laga plott frå rekneark­data og data importert frå eksterne filer, og du kan eksportera plotta til fleire punkt- og vektorgrafikkformat.</p>
     <p xml:lang="pl">LabPlot zapewnia łatwy sposób do tworzenia, zarządzania i edytowania wykresów. Umożliwia tworzenie wykresów na podstawie danych z arkusza kalkulacyjnego lub danych zaimportowanych z plików zewnętrznych. Wykresy można eksportować do kilku formatów graficznych map pikselowych i wektorowych.</p>
     <p xml:lang="pt">O LabPlot oferece uma forma simples de criar, gerir e editar os gráficos. Permite-lhe produzir gráficos com base nos dados de uma folha de cálculo ou nos dados importados de ficheiros externos. Os gráficos podem ser exportados para diferentes formatos de imagens rasterizados e vectoriais.</p>
     <p xml:lang="pt-BR">O LabPlot oferece uma forma simples de criar, gerenciar e editar gráficos. Permite-lhe produzir gráficos com base nos dados de uma planilha ou nos dados importados de arquivos externos. Os gráficos podem ser exportados para diferentes formatos de imagens rasterizadas e vetoriais.</p>
@@ -125,6 +129,7 @@
       <caption xml:lang="id">Contoh pas</caption>
       <caption xml:lang="it">Adatta esempio</caption>
       <caption xml:lang="nl">Voorbeeld aanpassing</caption>
+      <caption xml:lang="nn">Eksempel på kurvetilpassing</caption>
       <caption xml:lang="pl">Przykład dopasowania</caption>
       <caption xml:lang="pt">Exemplo de ajuste</caption>
       <caption xml:lang="pt-BR">Exemplo de ajuste</caption>
@@ -149,6 +154,7 @@
       <caption xml:lang="id">Fungsi matematika</caption>
       <caption xml:lang="it">Funzioni matematica</caption>
       <caption xml:lang="nl">Wiskundige functie</caption>
+      <caption xml:lang="nn">Matematisk funksjon</caption>
       <caption xml:lang="pl">Funkcja matematyczna</caption>
       <caption xml:lang="pt">Função matemática</caption>
       <caption xml:lang="pt-BR">Função matemática</caption>
@@ -173,6 +179,7 @@
       <caption xml:lang="id">Lembar kerja CAS</caption>
       <caption xml:lang="it">Foglio di lavoro CAS</caption>
       <caption xml:lang="nl">CAS werkblad</caption>
+      <caption xml:lang="nn">CAS-arbeidsark</caption>
       <caption xml:lang="pl">Arkusz roboczy CAS</caption>
       <caption xml:lang="pt">Folha de cálculo CAS</caption>
       <caption xml:lang="pt-BR">Folha de trabalho CAS</caption>
