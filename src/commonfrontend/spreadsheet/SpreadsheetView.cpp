@@ -1300,15 +1300,27 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	m_selectionMenu->setEnabled(cellsAvail);
 	action_select_all->setEnabled(cellsAvail);
 	action_clear_spreadsheet->setEnabled(cellsAvail);
-	action_clear_masks->setEnabled(cellsAvail);
 	action_sort_spreadsheet->setEnabled(cellsAvail);
 	action_go_to_cell->setEnabled(cellsAvail);
 	action_statistics_all_columns->setEnabled(cellsAvail);
 
-	//deactivate mask/unmask actions if there are no unmasked/masked cells
-	//in the current selection
-	QModelIndexList indexes = m_tableView->selectionModel()->selectedIndexes();
+	//deactivate the "Clear masks" action for the spreadsheet
+	//if there are no masked cells in the spreadsheet
 	bool hasMasked = false;
+	for (int i = 0; i < m_spreadsheet->columnCount(); ++i) {
+		const auto* column = m_spreadsheet->column(i);
+		if (column->maskedIntervals().size() > 0) {
+			hasMasked = true;
+			break;
+		}
+	}
+
+	action_clear_masks->setEnabled(hasMasked);
+
+	//deactivate mask/unmask actions for the selection
+	//if there are no unmasked/masked cells in the current selection
+	QModelIndexList indexes = m_tableView->selectionModel()->selectedIndexes();
+	hasMasked = false;
 	bool hasUnmasked = false;
 	for (auto index : indexes) {
 		int row = index.row();
