@@ -343,11 +343,13 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 		ui->rbCurvePlacement1->setChecked(true);
 		ui->gbCurvePlacement->hide();
 		ui->gbPlotPlacement->setTitle(i18n("Add Histogram to"));
+		ui->scrollAreaColumns->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	} else {
 		ui->gbCurvePlacement->setTitle(i18n("Histogram Placement"));
 		ui->rbCurvePlacement1->setText(i18n("All histograms in one plot"));
 		ui->rbCurvePlacement2->setText(i18n("One plot per histogram"));
 		ui->gbPlotPlacement->setTitle(i18n("Add Histograms to"));
+		ui->scrollAreaColumns->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
 		//use the already available cbYColumn combo box
 		ui->lYColumn->setText(i18n("Data"));
