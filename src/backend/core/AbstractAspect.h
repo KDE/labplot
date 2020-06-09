@@ -155,7 +155,7 @@ public:
 	void addChild(AbstractAspect*);
 	void addChildFast(AbstractAspect*);
 	virtual void finalizeAdd() {};
-	QVector<AbstractAspect*> children(AspectType type, ChildIndexFlags flags=nullptr) const;
+	QVector<AbstractAspect*> children(AspectType type, ChildIndexFlags flags = {}) const;
 	void insertChildBefore(AbstractAspect* child, AbstractAspect* before);
 	void insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before);
 	void reparent(AbstractAspect* newParent, int newIndex = -1);
@@ -178,7 +178,7 @@ public:
 		return nullptr;
 	}
 
-	template <class T> QVector<T*> children(ChildIndexFlags flags = nullptr) const {
+	template <class T> QVector<T*> children(ChildIndexFlags flags = {}) const {
 		QVector<T*> result;
 		for (auto* child: children()) {
 			if (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) {
@@ -193,7 +193,7 @@ public:
 		return result;
 	}
 
-	template <class T> T* child(int index, ChildIndexFlags flags = nullptr) const {
+	template <class T> T* child(int index, ChildIndexFlags flags = {}) const {
 		int i = 0;
 		for (auto* child: children()) {
 			T* c = dynamic_cast<T*>(child);
@@ -212,7 +212,7 @@ public:
 		return nullptr;
 	}
 
-	template <class T> int childCount(ChildIndexFlags flags = nullptr) const {
+	template <class T> int childCount(ChildIndexFlags flags = {}) const {
 		int result = 0;
 		for (auto* child: children()) {
 			T* i = dynamic_cast<T*>(child);
@@ -222,7 +222,7 @@ public:
 		return result;
 	}
 
-	template <class T> int indexOfChild(const AbstractAspect* child, ChildIndexFlags flags = nullptr) const {
+	template <class T> int indexOfChild(const AbstractAspect* child, ChildIndexFlags flags = {}) const {
 		int index = 0;
 		for (auto* c:	 children()) {
 			if (child == c) return index;
