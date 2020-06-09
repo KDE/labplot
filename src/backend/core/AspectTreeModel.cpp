@@ -234,7 +234,7 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 
 Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const {
 	if (!index.isValid())
-		return nullptr;
+		return Qt::NoItemFlags;
 
 	Qt::ItemFlags result;
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());

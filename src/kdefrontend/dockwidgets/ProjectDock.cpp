@@ -51,7 +51,7 @@ ProjectDock::ProjectDock(QWidget *parent): BaseDock(parent) {
 	connect(ui.tbComment, &QTextBrowser::textChanged, this, &ProjectDock::commentChanged);
 
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Worksheet);
-	ui.verticalLayout->addWidget(templateHandler, 0, nullptr);
+	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &ProjectDock::loadConfig);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &ProjectDock::saveConfig);
