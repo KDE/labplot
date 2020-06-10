@@ -220,7 +220,8 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
  * sets the parameter names for given model category, model type and degree in \c fitData for given action
  */
 void XYFitCurve::initFitData(PlotDataDialog::AnalysisAction action) {
-	if (action != PlotDataDialog::AnalysisAction::DataReduction)
+	//TODO: exclude others too?
+	if (action == PlotDataDialog::AnalysisAction::DataReduction)
 		return;
 
 	Q_D(XYFitCurve);
