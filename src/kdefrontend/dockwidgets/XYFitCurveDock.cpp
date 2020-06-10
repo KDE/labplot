@@ -1198,7 +1198,7 @@ void XYFitCurveDock::showFitResult() {
 	}
 
 	// used confidence interval
-	int confidenceInterval = m_fitData.confidenceInterval;
+	double confidenceInterval = m_fitData.confidenceInterval;
 	uiGeneralTab.twParameters->horizontalHeaderItem(6)->setToolTip(i18n("%1 \% lower confidence level", confidenceInterval));
 	uiGeneralTab.twParameters->horizontalHeaderItem(7)->setToolTip(i18n("%1 \% upper confidence level", confidenceInterval));
 

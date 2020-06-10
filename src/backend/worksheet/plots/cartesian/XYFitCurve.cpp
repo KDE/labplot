@@ -2340,7 +2340,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("useDataErrors", fitData.useDataErrors, bool);
 			READ_INT_VALUE("useResults", fitData.useResults, bool);
 			READ_INT_VALUE("previewEnabled", fitData.previewEnabled, bool);
-			READ_INT_VALUE("confidenceInterval", fitData.confidenceInterval, int);
+			READ_DOUBLE_VALUE("confidenceInterval", fitData.confidenceInterval);
 
 		} else if (!preview && reader->name() == "name") {	// needed for custom model
 			d->fitData.paramNames << reader->readElementText();

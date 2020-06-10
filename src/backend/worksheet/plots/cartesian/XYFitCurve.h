@@ -65,7 +65,7 @@ public:
 		bool useDataErrors{true};	// use given data errors when fitting (default)
 		bool useResults{true};		// use results as new start values (default)
 		bool previewEnabled{true};	// preview fit function with given start parameters
-		int confidenceInterval{95};	// confidence interval for fit result
+		double confidenceInterval{95.};	// confidence interval for fit result
 
 		bool autoRange{true};		// use all data points? (default)
 		bool autoEvalRange{true};	// evaluate fit function on full data range (default)
