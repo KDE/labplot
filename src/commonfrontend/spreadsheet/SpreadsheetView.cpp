@@ -1270,8 +1270,12 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 		else if (key_event->key() == Qt::Key_Return || key_event->key() == Qt::Key_Enter)
 			advanceCell();
 		else if (key_event->key() == Qt::Key_Insert) {
-			if (!m_editorEntered)
-				insertRowBelow();
+			if (!m_editorEntered) {
+				if (lastSelectedColumn(true) != -1)
+					insertColumnRight();
+				else
+					insertRowBelow();
+			}
 		}
 	}
 
