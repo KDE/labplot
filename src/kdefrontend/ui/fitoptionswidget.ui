@@ -245,7 +245,16 @@
          <string>%</string>
         </property>
         <property name="decimals">
-         <number>1</number>
+         <number>5</number>
+        </property>
+        <property name="minimum">
+         <double>0.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>99.999949999999998</double>
+        </property>
+        <property name="value">
+         <double>95.000000000000000</double>
         </property>
        </widget>
       </item>

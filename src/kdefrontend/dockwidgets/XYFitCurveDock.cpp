@@ -1199,8 +1199,8 @@ void XYFitCurveDock::showFitResult() {
 
 	// used confidence interval
 	double confidenceInterval = m_fitData.confidenceInterval;
-	uiGeneralTab.twParameters->horizontalHeaderItem(6)->setToolTip(i18n("%1 \% lower confidence level", confidenceInterval));
-	uiGeneralTab.twParameters->horizontalHeaderItem(7)->setToolTip(i18n("%1 \% upper confidence level", confidenceInterval));
+	uiGeneralTab.twParameters->horizontalHeaderItem(6)->setToolTip(i18n("%1\% lower confidence level", QString::number(confidenceInterval, 'g', 7)));
+	uiGeneralTab.twParameters->horizontalHeaderItem(7)->setToolTip(i18n("%1\% upper confidence level", QString::number(confidenceInterval, 'g', 7)));
 
 	// log
 	uiGeneralTab.twLog->item(1, 1)->setText(QString::number(fitResult.iterations));
