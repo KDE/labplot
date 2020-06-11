@@ -217,12 +217,13 @@ void SpreadsheetView::init() {
 void SpreadsheetView::resizeHeader() {
 	DEBUG("SpreadsheetView::resizeHeader()");
 	const auto columns = m_spreadsheet->children<Column>();
-	for (int i = 0; i < columns.size(); ++i) {
-		const Column* col = columns.at(i);
+	int i = 0;
+	for (auto col: columns) {
 		if (col->width() == 0)
 			m_tableView->resizeColumnToContents(i);
 		else
 			m_tableView->setColumnWidth(i, col->width());
+		i++;
 	}
 }
 
@@ -973,6 +974,7 @@ bool SpreadsheetView::areCommentsShown() const {
   toggles the column comment in the horizontal header
 */
 void SpreadsheetView::toggleComments() {
+	DEBUG("SpreadsheetView::toggleComments()")
 	showComments(!areCommentsShown());
 	//TODO
 	if (areCommentsShown())
@@ -983,6 +985,7 @@ void SpreadsheetView::toggleComments() {
 
 //! Shows (\c on=true) or hides (\c on=false) the column comments in the horizontal header
 void SpreadsheetView::showComments(bool on) {
+	DEBUG("SpreadsheetView::showComments()")
 	m_horizontalHeader->showComments(on);
 }
 
