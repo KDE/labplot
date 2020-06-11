@@ -346,9 +346,12 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	auto* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
 	QCOMPARE(spreadsheet != nullptr, true);
 
+	//additional pointer check for static code analysis tools like Coverity that are not aware of QCOMPARE above
+	if (!spreadsheet)
+		return;
+
 	//check the values in the imported columns
-	if (spreadsheet != nullptr)
-		QCOMPARE(spreadsheet->columnCount(), 6);
+	QCOMPARE(spreadsheet->columnCount(), 6);
 
 	//1st column, Origin::TextNumeric:
 	//first non-empty value is numerical, column is set to Numeric, empty or text values in the column a set to NAN
