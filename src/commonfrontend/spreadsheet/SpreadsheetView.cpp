@@ -2244,20 +2244,19 @@ void SpreadsheetView::clearSelectedColumns() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: clear selected columns", m_spreadsheet->name()));
 
-	if (formulaModeActive()) {
-		for (auto* col : selectedColumns()) {
-			col->setSuppressDataChangedSignal(true);
-			col->clearFormulas();
-			col->setSuppressDataChangedSignal(false);
-			col->setChanged();
-		}
-	} else {
-		for (auto* col : selectedColumns()) {
-			col->setSuppressDataChangedSignal(true);
-			col->clear();
-			col->setSuppressDataChangedSignal(false);
-			col->setChanged();
-		}
+// 	if (formulaModeActive()) {
+// 		for (auto* col : selectedColumns()) {
+// 			col->setSuppressDataChangedSignal(true);
+// 			col->clearFormulas();
+// 			col->setSuppressDataChangedSignal(false);
+// 			col->setChanged();
+// 		}
+// 	} else {
+	for (auto* col : selectedColumns()) {
+		col->setSuppressDataChangedSignal(true);
+		col->clear();
+		col->setSuppressDataChangedSignal(false);
+		col->setChanged();
 	}
 
 	m_spreadsheet->endMacro();
@@ -2850,19 +2849,18 @@ void SpreadsheetView::clearSelectedRows() {
 	m_spreadsheet->beginMacro(i18n("%1: clear selected rows", m_spreadsheet->name()));
 	for (auto* col : selectedColumns()) {
 		col->setSuppressDataChangedSignal(true);
-		if (formulaModeActive()) {
-			for (const auto& i : selectedRows().intervals())
-				col->setFormula(i, QString());
-		} else {
-			for (const auto& i : selectedRows().intervals()) {
-				if (i.end() == col->rowCount()-1)
-					col->removeRows(i.start(), i.size());
-				else {
-					QVector<QString> empties;
-					for (int j = 0; j < i.size(); j++)
-						empties << QString();
-					col->asStringColumn()->replaceTexts(i.start(), empties);
-				}
+// 		if (formulaModeActive()) {
+// 			for (const auto& i : selectedRows().intervals())
+// 				col->setFormula(i, QString());
+// 		} else {
+		for (const auto& i : selectedRows().intervals()) {
+			if (i.end() == col->rowCount()-1)
+				col->removeRows(i.start(), i.size());
+			else {
+				QVector<QString> empties;
+				for (int j = 0; j < i.size(); j++)
+					empties << QString();
+				col->asStringColumn()->replaceTexts(i.start(), empties);
 			}
 		}
 
@@ -2901,19 +2899,25 @@ void SpreadsheetView::clearSelectedCells() {
 	m_spreadsheet->beginMacro(i18n("%1: clear selected cells", m_spreadsheet->name()));
 	for (auto* column : selectedColumns()) {
 		column->setSuppressDataChangedSignal(true);
-		if (formulaModeActive()) {
-			int col = m_spreadsheet->indexOfChild<Column>(column);
-			for (int row = last; row >= first; row--)
-				if (isCellSelected(row, col))
-					column->setFormula(row, QString());
+// 		if (formulaModeActive()) {
+// 			int col = m_spreadsheet->indexOfChild<Column>(column);
+// 			for (int row = last; row >= first; row--)
+// 				if (isCellSelected(row, col))
+// 					column->setFormula(row, QString());
+// 		} else {
+		int index = m_spreadsheet->indexOfChild<Column>(column);
+		if (isColumnSelected(index, true)) {
+			//if the whole column is selected, clear directly instead of looping over the rows
+			column->clear();
 		} else {
-			int col = m_spreadsheet->indexOfChild<Column>(column);
-			for (int row = last; row >= first; row--)
-				if (isCellSelected(row, col)) {
+			for (int row = last; row >= first; row--) {
+				if (isCellSelected(row, index)) {
 					if (row < column->rowCount())
 						column->asStringColumn()->setTextAt(row, QString());
 				}
+			}
 		}
+
 		column->setSuppressDataChangedSignal(false);
 		column->setChanged();
 	}
