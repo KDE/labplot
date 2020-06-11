@@ -123,7 +123,7 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.129756097560976);
 	QCOMPARE(aerr, 0.525);
 
-		for (i = 0; i < nout; ++i)
+	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result2[i]);
 
         const double tol2 = 1.5;
@@ -137,7 +137,7 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.1725);
 	QCOMPARE(aerr, 0.2);
 
-		for (i = 0; i < nout; ++i)
+	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result3[i]);
 
         const double tol3 = 0.5;
@@ -152,7 +152,7 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.0519512195121951);
 	QCOMPARE(aerr, 0.275);
 
-		for (i = 0; i < nout; ++i)
+	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result4[i]);
 
         const double tol4 = 0.7;
@@ -165,7 +165,7 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.0378688524590164);
 	QCOMPARE(aerr, 0.25);
 
-		for (i = 0; i < nout; ++i)
+	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result[i]);
 
         const double tol5 = 1.6;
@@ -178,7 +178,8 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.1725);
 	QCOMPARE(aerr, 0.2);
 
-		for (i = 0; i < nout; ++i)
+	// nout can be up to 10 when third arg of nsl_geom_linesim_visvalingam_whyatt() is 10
+	for (i = 0; i < GSL_MAX(nout, 6); ++i)
 		QCOMPARE(index[i], result3[i]);
 
 	const size_t result5[] = {0, 2, 3, 5, 6, 7, 9};
@@ -191,7 +192,7 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.01);
 	QCOMPARE(aerr, 0.05);
 
-		for (i = 0; i < nout; ++i)
+	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result5[i]);
 
         const double mintol = 2.0;
@@ -205,7 +206,7 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.129756097560976);
 	QCOMPARE(aerr, 0.525);
 
-		for (i = 0; i < nout; ++i)
+	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result2[i]);
 
         const size_t region = 5;
@@ -218,7 +219,7 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.0519512195121951);
 	QCOMPARE(aerr, 0.275);
 
-		for (i = 0; i < nout; ++i)
+	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result4[i]);
 }
 
