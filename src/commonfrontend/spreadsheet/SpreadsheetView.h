@@ -129,7 +129,6 @@ private:
 // 		QAction* action_set_formula;
 // 		QAction* action_recalculate;
 	QAction* action_fill_row_numbers;
-	QAction* action_fill_sel_row_numbers;
 	QAction* action_fill_random;
 	QAction* action_fill_equidistant;
 	QAction* action_fill_random_nonuniform;

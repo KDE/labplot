@@ -239,7 +239,7 @@ void SpreadsheetView::initActions() {
 
 // 	action_set_formula = new QAction(QIcon::fromTheme(QString()), i18n("Assign &Formula"), this);
 // 	action_recalculate = new QAction(QIcon::fromTheme(QString()), i18n("Recalculate"), this);
-	action_fill_sel_row_numbers = new QAction(QIcon::fromTheme(QString()), i18n("Row Numbers"), this);
+// 	action_fill_sel_row_numbers = new QAction(QIcon::fromTheme(QString()), i18n("Row Numbers"), this);
 	action_fill_row_numbers = new QAction(QIcon::fromTheme(QString()), i18n("Row Numbers"), this);
 	action_fill_random = new QAction(QIcon::fromTheme(QString()), i18n("Uniform Random Values"), this);
 	action_fill_random_nonuniform = new QAction(QIcon::fromTheme(QString()), i18n("Random Values"), this);
@@ -469,15 +469,14 @@ void SpreadsheetView::initMenus() {
 	//Selection menu
 	m_selectionMenu = new QMenu(i18n("Selection"), this);
 	m_selectionMenu->setIcon(QIcon::fromTheme("selection"));
-	QMenu* submenu = nullptr;
 
 	if (!m_readOnly) {
-		submenu = new QMenu(i18n("Fi&ll Selection With"), this);
-		submenu->setIcon(QIcon::fromTheme("select-rectangle"));
-		submenu->addAction(action_fill_sel_row_numbers);
-		submenu->addAction(action_fill_const);
-		m_selectionMenu->addMenu(submenu);
-		m_selectionMenu->addSeparator();
+// 		submenu = new QMenu(i18n("Fi&ll Selection With"), this);
+// 		submenu->setIcon(QIcon::fromTheme("select-rectangle"));
+// 		submenu->addAction(action_fill_sel_row_numbers);
+// 		submenu->addAction(action_fill_const);
+// 		m_selectionMenu->addMenu(submenu);
+// 		m_selectionMenu->addSeparator();
 		m_selectionMenu->addAction(action_cut_selection);
 	}
 
@@ -682,11 +681,11 @@ void SpreadsheetView::initMenus() {
 	//Row menu
 	m_rowMenu = new QMenu(this);
 	if (!m_readOnly) {
-		submenu = new QMenu(i18n("Fi&ll Selection With"), this);
-		submenu->addAction(action_fill_sel_row_numbers);
-		submenu->addAction(action_fill_const);
-		m_rowMenu->addMenu(submenu);
-		m_rowMenu->addSeparator();
+// 		submenu = new QMenu(i18n("Fi&ll Selection With"), this);
+// 		submenu->addAction(action_fill_sel_row_numbers);
+// 		submenu->addAction(action_fill_const);
+// 		m_rowMenu->addMenu(submenu);
+// 		m_rowMenu->addSeparator();
 
 		m_rowMenu->addAction(action_insert_row_above);
 		m_rowMenu->addAction(action_insert_row_below);
@@ -714,7 +713,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_clear_selection, &QAction::triggered, this, &SpreadsheetView::clearSelectedCells);
 // 	connect(action_recalculate, &QAction::triggered, this, &SpreadsheetView::recalculateSelectedCells);
 	connect(action_fill_row_numbers, &QAction::triggered, this, &SpreadsheetView::fillWithRowNumbers);
-	connect(action_fill_sel_row_numbers, &QAction::triggered, this, &SpreadsheetView::fillSelectedCellsWithRowNumbers);
+// 	connect(action_fill_sel_row_numbers, &QAction::triggered, this, &SpreadsheetView::fillSelectedCellsWithRowNumbers);
 // 	connect(action_fill_random, &QAction::triggered, this, &SpreadsheetView::fillSelectedCellsWithRandomNumbers);
 	connect(action_fill_random_nonuniform, &QAction::triggered, this, &SpreadsheetView::fillWithRandomValues);
 	connect(action_fill_equidistant, &QAction::triggered, this, &SpreadsheetView::fillWithEquidistantValues);
