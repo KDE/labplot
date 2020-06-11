@@ -84,7 +84,7 @@ public:
 	qreal arrowSize;
 
 	// Title
-	TextLabel* title;
+	TextLabel* title{nullptr};
 	qreal titleOffsetX; //distance to the axis line
 	qreal titleOffsetY; //distance to the axis line
 
@@ -124,13 +124,13 @@ public:
 	QString labelsSuffix;
 
 	//Grid
-	AxisGrid* gridItem;
+	AxisGrid* gridItem{nullptr};
 	QPen majorGridPen;
 	qreal majorGridOpacity;
 	QPen minorGridPen;
 	qreal minorGridOpacity;
 
-	Axis* const q;
+	Axis* const q{nullptr};
 
 	QPainterPath linePath;
 	QPainterPath majorGridPath;
