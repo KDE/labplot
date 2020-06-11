@@ -1041,11 +1041,11 @@ void XYCurvePrivate::retransform() {
 			if (startIndex < 0)
 				startIndex = 0;
 			if (endIndex < 0)
-				endIndex = symbolPointsLogical.size()-1;
+				endIndex = symbolPointsLogical.size() - 1;
 
 		} else {
 			startIndex = 0;
-			endIndex = symbolPointsLogical.size()-1;
+			endIndex = symbolPointsLogical.size() - 1;
 		}
 
 		visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
@@ -1323,12 +1323,12 @@ void XYCurvePrivate::updateLines() {
 		if (startIndex < 0)
 			startIndex = 0;
 		if(endIndex < 0 || endIndex >= static_cast<int>(count))
-			endIndex = static_cast<int>(count)-1;
+			endIndex = static_cast<int>(count) - 1;
 
-		count = static_cast<unsigned int>(endIndex - startIndex +1);
+		count = static_cast<unsigned int>(endIndex - startIndex + 1);
 	}else {
 		startIndex = 0;
-		endIndex = static_cast<int>(count)-1;
+		endIndex = static_cast<int>(count) - 1;
 	}
 
 	if (columnProperties == AbstractColumn::Properties::Constant) {
@@ -1407,8 +1407,8 @@ void XYCurvePrivate::updateLines() {
 				p1 = symbolPointsLogical[i+1];
 				if (lineIncreasingXOnly && (p1.x() < p0.x()))
 					continue;
-				tempPoint1 = QPointF(p0.x() + (p1.x()-p0.x())/2, p0.y());
-				tempPoint2 = QPointF(p0.x() + (p1.x()-p0.x())/2, p1.y());
+				tempPoint1 = QPointF(p0.x() + (p1.x()-p0.x())/2., p0.y());
+				tempPoint2 = QPointF(p0.x() + (p1.x()-p0.x())/2., p1.y());
 				addLine(p0, tempPoint1, minY, maxY, overlap, pixelDiff, countPixelX);
 				addLine(tempPoint1, tempPoint2, minY, maxY, overlap, pixelDiff, countPixelX);
 				addLine(tempPoint2, p1, minY, maxY, overlap, pixelDiff, countPixelX);
@@ -1428,8 +1428,8 @@ void XYCurvePrivate::updateLines() {
 				p1 = symbolPointsLogical[i+1];
 				if (lineIncreasingXOnly && (p1.x() < p0.x()))
 					continue;
-				tempPoint1 = QPointF(p0.x(), p0.y() + (p1.y()-p0.y())/2);
-				tempPoint2 = QPointF(p1.x(), p0.y() + (p1.y()-p0.y())/2);
+				tempPoint1 = QPointF(p0.x(), p0.y() + (p1.y()-p0.y())/2.);
+				tempPoint2 = QPointF(p1.x(), p0.y() + (p1.y()-p0.y())/2.);
 				addLine(p0, tempPoint1, minY, maxY, overlap, pixelDiff, countPixelX);
 				addLine(tempPoint1, tempPoint2, minY, maxY, overlap, pixelDiff, countPixelX);
 				addLine(tempPoint2, p1, minY, maxY, overlap, pixelDiff, countPixelX);
@@ -1852,19 +1852,19 @@ void XYCurvePrivate::updateValues() {
 		w = fm.boundingRect(valuesStrings.at(i)).width();
 		switch (valuesPosition) {
 		case XYCurve::ValuesPosition::Above:
-			tempPoint.setX( symbolPointsScene.at(i).x() - w/2);
+			tempPoint.setX( symbolPointsScene.at(i).x() - w/2.);
 			tempPoint.setY( symbolPointsScene.at(i).y() - valuesDistance );
 			break;
 		case XYCurve::ValuesPosition::Under:
-			tempPoint.setX( symbolPointsScene.at(i).x() -w/2 );
-			tempPoint.setY( symbolPointsScene.at(i).y() + valuesDistance + h/2);
+			tempPoint.setX( symbolPointsScene.at(i).x() - w/2.);
+			tempPoint.setY( symbolPointsScene.at(i).y() + valuesDistance + h/2.);
 			break;
 		case XYCurve::ValuesPosition::Left:
-			tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1 );
+			tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1.);
 			tempPoint.setY( symbolPointsScene.at(i).y());
 			break;
 		case XYCurve::ValuesPosition::Right:
-			tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1 );
+			tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1.);
 			tempPoint.setY( symbolPointsScene.at(i).y() );
 			break;
 		}
@@ -1875,7 +1875,7 @@ void XYCurvePrivate::updateValues() {
 	QPainterPath path;
 	for (int i = 0; i < valuesPoints.size(); i++) {
 		path = QPainterPath();
-		path.addText( QPoint(0,0), valuesFont, valuesStrings.at(i) );
+		path.addText( QPoint(0, 0), valuesFont, valuesStrings.at(i) );
 
 		trafo.reset();
 		trafo.translate( valuesPoints.at(i).x(), valuesPoints.at(i).y() );
@@ -2029,7 +2029,7 @@ void XYCurvePrivate::updateFilling() {
 			}
 		}
 
-		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()>0 ? plot->yMin() : 0)).y();
+		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin() > 0 ? plot->yMin() : 0)).y();
 	} else if (fillingPosition == XYCurve::FillingPosition::Left) {
 		edge = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
 
@@ -2318,7 +2318,7 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 		return false;
 
 	if (maxDist < 0)
-		maxDist = (linePen.width() < 10) ? 10 : linePen.width();
+		maxDist = (linePen.width() < 10) ? 10. : linePen.width();
 
 	double maxDistSquare = gsl_pow_2(maxDist);
 
@@ -2386,7 +2386,7 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 					return true;
 			}
 
-			if (stop || (index >= rowCount-1 && increase) || (index <=0 && !increase))
+			if (stop || (index >= rowCount-1 && increase) || (index <= 0 && !increase))
 				break;
 
 			if (increase)
