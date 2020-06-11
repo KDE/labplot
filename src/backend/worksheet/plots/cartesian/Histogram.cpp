@@ -876,11 +876,12 @@ void HistogramPrivate::recalcHistogram() {
 				binRangesMax = dataColumn->maximum();
 				emit q->binRangesMaxChanged(binRangesMax);
 			}
-		} else {
-			if (binRangesMin >= binRangesMax) {
-				emit q->dataChanged();
-				return;
-			}
+		}
+
+		if (binRangesMin >= binRangesMax) {
+			emit q->dataChanged();
+			emit q->info(i18n("Calculation of the histogram not possible. The max value must be bigger then the min value."));
+			return;
 		}
 
 		switch (binningMethod) {
