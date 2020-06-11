@@ -638,6 +638,13 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	}
 
 	emit selectedAspectsChanged(selectedAspects);
+
+	//emitting the signal above is done to show the properties widgets for the selected aspect(s).
+	//with this the project explorer looses the focus and don't react on the key events like DEL key press, etc.
+	//->reset the focus here again.
+	//TODO: after the focus is set again we react on DEL in the event filter, but navigation with the arrow keys in the table
+	//is still not possible. Looks like we need to set the selection again...
+	setFocus();
 }
 
 /*!
