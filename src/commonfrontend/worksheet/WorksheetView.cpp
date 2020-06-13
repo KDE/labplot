@@ -206,7 +206,7 @@ void WorksheetView::initActions() {
 	addCartesianPlot2Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes"), i18n("Box Plot, Two Axes"), addNewActionGroup);
 	addCartesianPlot3Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered"), i18n("Two Axes, Centered"), addNewActionGroup);
 	addCartesianPlot4Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin"), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
-	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), addNewActionGroup);
+	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text"), addNewActionGroup);
 	addImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), addNewActionGroup);
 
 	//Layout actions
@@ -301,10 +301,10 @@ void WorksheetView::initActions() {
 	cartesianPlotZoomSelectionModeAction = new QAction(QIcon::fromTheme("labplot-zoom-select"), i18n("Select Region and Zoom In"), cartesianPlotMouseModeActionGroup);
 	cartesianPlotZoomSelectionModeAction->setCheckable(true);
 
-	cartesianPlotZoomXSelectionModeAction = new QAction(QIcon::fromTheme("labplot-zoom-select-x"), i18n("Select x-region and Zoom In"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotZoomXSelectionModeAction = new QAction(QIcon::fromTheme("labplot-zoom-select-x"), i18n("Select x-Region and Zoom In"), cartesianPlotMouseModeActionGroup);
 	cartesianPlotZoomXSelectionModeAction->setCheckable(true);
 
-	cartesianPlotZoomYSelectionModeAction = new QAction(QIcon::fromTheme("labplot-zoom-select-y"), i18n("Select y-region and Zoom In"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotZoomYSelectionModeAction = new QAction(QIcon::fromTheme("labplot-zoom-select-y"), i18n("Select y-Region and Zoom In"), cartesianPlotMouseModeActionGroup);
 	cartesianPlotZoomYSelectionModeAction->setCheckable(true);
 
 	// TODO: change ICON
@@ -314,9 +314,9 @@ void WorksheetView::initActions() {
 	connect(cartesianPlotMouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotMouseModeChanged);
 
 	auto* cartesianPlotAddNewActionGroup = new QActionGroup(this);
-	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), cartesianPlotAddNewActionGroup);
+	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-Curve"), cartesianPlotAddNewActionGroup);
 	addHistogramAction = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), cartesianPlotAddNewActionGroup);
-	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical Equation"), cartesianPlotAddNewActionGroup);
+	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-Curve from a Formula"), cartesianPlotAddNewActionGroup);
 	// TODO: no own icons yet
 	addDataOperationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Data Operation"), cartesianPlotAddNewActionGroup);
 //	addDataOperationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-data-operation-curve"), i18n("Data Operation"), cartesianPlotAddNewActionGroup);
@@ -338,7 +338,7 @@ void WorksheetView::initActions() {
 	addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("Legend"), cartesianPlotAddNewActionGroup);
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("Horizontal Axis"), cartesianPlotAddNewActionGroup);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("Vertical Axis"), cartesianPlotAddNewActionGroup);
-	addPlotTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), cartesianPlotAddNewActionGroup);
+	addPlotTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text"), cartesianPlotAddNewActionGroup);
 	addPlotImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), cartesianPlotAddNewActionGroup);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), cartesianPlotAddNewActionGroup);
 
