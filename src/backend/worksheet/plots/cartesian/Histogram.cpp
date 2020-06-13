@@ -1033,7 +1033,7 @@ void HistogramPrivate::verticalHistogram() {
 	}
 
 	if (lineType != Histogram::DropLines)
-		lines.append(QLineF(binRangesMin, 0., binRangesMax, 0.));
+		lines.append(QLineF(binRangesMax, 0., binRangesMin, 0.));
 }
 
 void HistogramPrivate::horizontalHistogram() {
@@ -1266,21 +1266,50 @@ void HistogramPrivate::updateFilling() {
 	if (!fillLines.size())
 		return;
 
+	//create the filling polygon for the visible lines
+
+	//in case the histogram is zoomed, handle the clipping on the l.h.s.
+	const QPointF& firstPoint = fillLines.constFirst().p1();
+	QPointF start;
+	if (plot->xMin() > binRangesMin) {
+		start = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin() > 0 ? plot->yMin() : 0));
+
+		if (start.x() != firstPoint.x())
+			fillPolygon << QPointF(start.x(), firstPoint.y());
+	}
+
+	//add the first point of the fist visible line
+	fillPolygon << firstPoint;
+
+	//iterate over all visible lines and add unique points.
+	//skip the last closing line, the filling polygon will be closed below.
 	QPointF p1, p2;
-	for (int i = 0; i < fillLines.size(); ++i) {
+	for (int i = 0; i < fillLines.size() - 1; ++i) {
 		const QLineF& line = fillLines.at(i);
 		p1 = line.p1();
 		p2 = line.p2();
 		if (i != 0 && p1 != fillLines.at(i-1).p2())
-			fillPolygon << fillLines.at(i-1).p2() << p1;
+			fillPolygon << p1;
 
-		fillPolygon << p1 << p2;
+		fillPolygon << p2;
 	}
 
-	//close the last polygon
-	float yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()>0 ? plot->yMin() : 0)).y();
-	fillPolygon << QPointF(fillLines.last().p2().x(), yEnd);
-	fillPolygon << QPointF(fillLines.first().p1().x(), yEnd);
+	//in case the histogram is zoomed, handle the clipping on the r.h.s.
+	const QPointF& lastPoint = fillLines.at(fillLines.size()-2).p2();
+	QPointF end;
+	if (plot->xMax() < binRangesMax) {
+		end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin() > 0 ? plot->yMin() : 0));
+
+		if (end.y() != lastPoint.y())
+			fillPolygon << QPointF(end.x(), lastPoint.y());
+	}
+	else
+		end = cSystem->mapLogicalToScene(QPointF(binRangesMax, plot->yMin() > 0 ? plot->yMin() : 0));
+
+	//close the polygon
+	fillPolygon << end;
+	if (plot->xMin() > binRangesMin)
+		fillPolygon << start;
 
 	recalcShapeAndBoundingRect();
 }
