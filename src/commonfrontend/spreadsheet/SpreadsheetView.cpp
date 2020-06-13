@@ -995,14 +995,17 @@ void SpreadsheetView::currentColumnChanged(const QModelIndex & current, const QM
 		return;
 }
 
-//TODO
 void SpreadsheetView::handleHeaderDataChanged(Qt::Orientation orientation, int first, int last) {
-	if (orientation != Qt::Horizontal) return;
+	if (orientation != Qt::Horizontal)
+		return;
 
-	QItemSelectionModel * sel_model = m_tableView->selectionModel();
+	m_tableView->resizeColumnToContents(first);
+	Q_UNUSED(last)
 
-	int col = sel_model->currentIndex().column();
-	if (col < first || col > last) return;
+	//TODO
+// 	QItemSelectionModel * sel_model = m_tableView->selectionModel();
+// 	int col = sel_model->currentIndex().column();
+// 	if (col < first || col > last) return;
 }
 
 /*!
