@@ -154,11 +154,11 @@ void SpreadsheetView::init() {
 	auto* delegate = new SpreadsheetItemDelegate(this);
 	connect(delegate, &SpreadsheetItemDelegate::returnPressed, this, &SpreadsheetView::advanceCell);
 	connect(delegate, &SpreadsheetItemDelegate::editorEntered, this, [=]() {
-		action_insert_row_below->setShortcut(QKeySequence());
+// 		action_insert_row_below->setShortcut(QKeySequence());
 		m_editorEntered = true;
 	});
 	connect(delegate, &SpreadsheetItemDelegate::closeEditor, this, [=]() {
-		action_insert_row_below->setShortcut(Qt::Key_Insert);
+// 		action_insert_row_below->setShortcut(Qt::Key_Insert);
 		m_editorEntered = false;
 	});
 
@@ -389,7 +389,8 @@ void SpreadsheetView::initActions() {
 	// row related actions
 	action_insert_row_above = new QAction(QIcon::fromTheme("edit-table-insert-row-above") ,i18n("Insert Row Above"), this);
 	action_insert_row_below = new QAction(QIcon::fromTheme("edit-table-insert-row-below"), i18n("Insert Row Below"), this);
-	action_insert_row_below->setShortcut(Qt::Key_Insert);
+	//TODO: setting of the following shortcut collides with the key press handling in the event filter
+	//action_insert_row_below->setShortcut(Qt::Key_Insert);
 	action_insert_rows_above = new QAction(QIcon::fromTheme("edit-table-insert-row-above") ,i18n("Insert Multiple Rows Above"), this);
 	action_insert_rows_below = new QAction(QIcon::fromTheme("edit-table-insert-row-below"), i18n("Insert Multiple Rows Below"), this);
 	action_remove_rows = new QAction(QIcon::fromTheme("edit-table-delete-row"), i18n("Remo&ve Selected Rows"), this);
@@ -1271,7 +1272,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			advanceCell();
 		else if (key_event->key() == Qt::Key_Insert) {
 			if (!m_editorEntered) {
-				if (lastSelectedColumn(true) != -1)
+				if (lastSelectedColumn(true) >= 0)
 					insertColumnRight();
 				else
 					insertRowBelow();
