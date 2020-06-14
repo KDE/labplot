@@ -999,13 +999,8 @@ void SpreadsheetView::handleHeaderDataChanged(Qt::Orientation orientation, int f
 	if (orientation != Qt::Horizontal)
 		return;
 
-	m_tableView->resizeColumnToContents(first);
-	Q_UNUSED(last)
-
-	//TODO
-// 	QItemSelectionModel * sel_model = m_tableView->selectionModel();
-// 	int col = sel_model->currentIndex().column();
-// 	if (col < first || col > last) return;
+	for (int index = first; index <= last; ++index)
+		m_tableView->resizeColumnToContents(index);
 }
 
 /*!

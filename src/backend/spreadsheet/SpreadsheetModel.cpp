@@ -293,9 +293,10 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
 		updateHorizontalHeader();
 		endResetModel();
 
+		int index = m_spreadsheet->indexOfChild<AbstractAspect>(aspect);
 		m_columnCount = m_spreadsheet->columnCount();
 		m_spreadsheet->emitColumnCountChanged();
-		emit headerDataChanged(Qt::Horizontal, 0, m_columnCount-1);
+		emit headerDataChanged(Qt::Horizontal, index, m_columnCount - 1);
 	}
 }
 
