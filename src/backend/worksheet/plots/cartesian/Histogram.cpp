@@ -61,13 +61,13 @@ extern "C" {
 }
 
 Histogram::Histogram(const QString &name)
-	: WorksheetElement(name, AspectType::Histogram), d_ptr(new HistogramPrivate(this)) {
+	: WorksheetElement(name, AspectType::Histogram), Curve(), d_ptr(new HistogramPrivate(this)) {
 
 	init();
 }
 
 Histogram::Histogram(const QString &name, HistogramPrivate *dd)
-	: WorksheetElement(name, AspectType::Histogram), d_ptr(dd) {
+	: WorksheetElement(name, AspectType::Histogram), Curve(), d_ptr(dd) {
 
 	init();
 }
@@ -180,6 +180,16 @@ bool Histogram::isVisible() const {
 void Histogram::setPrinting(bool on) {
 	Q_D(Histogram);
 	d->m_printing = on;
+}
+
+bool Histogram::activateCurve(QPointF mouseScenePos, double maxDist) {
+	Q_D(Histogram);
+	return d->activateCurve(mouseScenePos, maxDist);
+}
+
+void Histogram::setHover(bool on) {
+	Q_D(Histogram);
+	d->setHover(on);
 }
 
 //##############################################################################
@@ -700,7 +710,7 @@ void Histogram::visibilityChangedSlot() {
 //##############################################################################
 HistogramPrivate::HistogramPrivate(Histogram *owner) : q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
-	setAcceptHoverEvents(true);
+	setAcceptHoverEvents(false);
 }
 
 HistogramPrivate::~HistogramPrivate() {
@@ -1593,6 +1603,48 @@ void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 		emit q->unhovered();
 		update();
 	}
+}
+
+bool HistogramPrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
+	if (!isVisible())
+		return false;
+
+	return curveShape.contains(mouseScenePos);
+}
+
+/*!
+ * checks if the mousePress event was done near the histogram shape
+ * and selects the graphics item if it is the case.
+ * \p event
+ */
+void HistogramPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	if (static_cast<const CartesianPlot*>(q->parentAspect())->mouseMode()
+		!= CartesianPlot::MouseMode::Selection) {
+		event->ignore();
+		return QGraphicsItem::mousePressEvent(event);
+	}
+
+	if(q->activateCurve(event->pos())){
+		setSelected(true);
+		return;
+	}
+
+	event->ignore();
+	setSelected(false);
+	QGraphicsItem::mousePressEvent(event);
+}
+
+/*!
+ * Is called in CartesianPlot::hoverMoveEvent where it is determined which curve to hover.
+ * \p on
+ */
+void HistogramPrivate::setHover(bool on) {
+	if(on == m_hovered)
+		return; // don't update if state not changed
+
+	m_hovered = on;
+	on ? emit q->hovered() : emit q->unhovered();
+	update();
 }
 
 //##############################################################################

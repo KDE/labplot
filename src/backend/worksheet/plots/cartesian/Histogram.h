@@ -39,7 +39,7 @@
 
 class HistogramPrivate;
 
-class Histogram : public WorksheetElement {
+class Histogram : public WorksheetElement, public Curve {
 	Q_OBJECT
 
 public:
@@ -60,6 +60,9 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
+
+	bool activateCurve(QPointF mouseScenePos, double maxDist = -1) override;
+	void setHover(bool on) override;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	QString& dataColumnPath() const;
