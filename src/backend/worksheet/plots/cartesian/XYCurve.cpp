@@ -225,6 +225,29 @@ void XYCurve::setPrinting(bool on) {
 	d->setPrinting(on);
 }
 
+/*!
+ * \brief XYCurve::activateCurve
+ * Checks if the mousepos distance to the curve is less than @p maxDist
+ * \p mouseScenePos
+ * \p maxDist Maximum distance the point lies away from the curve
+ * \return Returns true if the distance is smaller than maxDist.
+ */
+bool XYCurve::activateCurve(QPointF mouseScenePos, double maxDist) {
+	Q_D(XYCurve);
+	return d->activateCurve(mouseScenePos, maxDist);
+}
+
+/*!
+ * \brief XYCurve::setHover
+ * Will be called in CartesianPlot::hoverMoveEvent()
+ * See d->setHover(on) for more documentation
+ * \p on
+ */
+void XYCurve::setHover(bool on) {
+	Q_D(XYCurve);
+	d->setHover(on);
+}
+
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
@@ -2290,18 +2313,6 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 	return true;
 }
 
-/*!
- * \brief XYCurve::activateCurve
- * Checks if the mousepos distance to the curve is less than @p maxDist
- * \p mouseScenePos
- * \p maxDist Maximum distance the point lies away from the curve
- * \return Returns true if the distance is smaller than maxDist.
- */
-bool XYCurve::activateCurve(QPointF mouseScenePos, double maxDist) {
-	Q_D(XYCurve);
-	return d->activateCurve(mouseScenePos, maxDist);
-}
-
 bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 	if (!isVisible())
 		return false;
@@ -2505,17 +2516,6 @@ bool XYCurvePrivate::pointLiesNearCurve(const QPointF mouseScenePos, const QPoin
 		}
 	}
 	return false;
-}
-
-/*!
- * \brief XYCurve::setHover
- * Will be called in CartesianPlot::hoverMoveEvent()
- * See d->setHover(on) for more documentation
- * \p on
- */
-void XYCurve::setHover(bool on) {
-	Q_D(XYCurve);
-	d->setHover(on);
 }
 
 void XYCurvePrivate::updateErrorBars() {
@@ -2939,9 +2939,8 @@ void XYCurvePrivate::suppressRetransform(bool on) {
 }
 
 /*!
- * \brief XYCurvePrivate::mousePressEvent
- * checks with activateCurve, if the mousePress was in the near
- * of the curve. If it was, the curve will be selected
+ * checks if the mousePress event was done near the histogram shape
+ * and selects the graphics item if it is the case.
  * \p event
  */
 void XYCurvePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
@@ -2961,9 +2960,7 @@ void XYCurvePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 /*!
- * \brief XYCurvePrivate::setHover
- * Will be called from CartesianPlot::hoverMoveEvent which
- * determines, which curve is hovered
+ * Is called in CartesianPlot::hoverMoveEvent where it is determined which curve to hover.
  * \p on
  */
 void XYCurvePrivate::setHover(bool on) {

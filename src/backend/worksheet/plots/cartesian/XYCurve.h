@@ -31,6 +31,7 @@
 #define XYCURVE_H
 
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/Curve.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/lib/macros.h"
@@ -42,7 +43,7 @@
 
 class XYCurvePrivate;
 
-class XYCurve: public WorksheetElement {
+class XYCurve: public WorksheetElement, public Curve {
 	Q_OBJECT
 
 public:
@@ -79,8 +80,9 @@ public:
 	bool minMax(const AbstractColumn *column1, const AbstractColumn *column2, const ErrorType errorType, const AbstractColumn *errorPlusColumn, const AbstractColumn *errorMinusColumn, int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars) const;
 	bool minMaxX(int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars = true) const;
 	bool minMaxY(int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars = true) const;
-	bool activateCurve(QPointF mouseScenePos, double maxDist = -1);
-	void setHover(bool on);
+
+	bool activateCurve(QPointF mouseScenePos, double maxDist = -1) override;
+	void setHover(bool on) override;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)

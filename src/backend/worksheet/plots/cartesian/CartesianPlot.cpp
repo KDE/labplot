@@ -3430,7 +3430,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			// hovering curves is implemented in the parent, because no ignoreEvent() exists
 			// for it. Checking all curves and hover the first
 			bool curve_hovered = false;
-			QVector<XYCurve*> curves = q->children<XYCurve>();
+			const auto& curves = q->children<Curve>();
 			for (int i=curves.count() - 1; i >= 0; i--){ // because the last curve is above the other curves
 				if (curve_hovered){ // if a curve is already hovered, disable hover for the rest
 					curves[i]->setHover(false);
