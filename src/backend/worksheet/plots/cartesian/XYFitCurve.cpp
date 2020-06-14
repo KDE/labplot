@@ -2002,6 +2002,8 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.tdist_tValues.resize(np);
 	fitResult.tdist_pValues.resize(np);
 	fitResult.tdist_marginValues.resize(np);
+	// CI = 100* (1 - alpha)
+	const double alpha = 1.0 - fitData.confidenceInterval/100.;
 	for (unsigned int i = 0; i < np; i++) {
 		// scale resulting values if they are bounded
 		fitResult.paramValues[i] = nsl_fit_map_bound(gsl_vector_get(s->x, i), x_min[i], x_max[i]);
@@ -2013,8 +2015,6 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
 		fitResult.tdist_tValues[i] = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
 		fitResult.tdist_pValues[i] = nsl_stats_tdist_p(fitResult.tdist_tValues.at(i), fitResult.dof);
-		// CI = 100* (1 - alpha)
-		double alpha = 1.0 - fitData.confidenceInterval/100.;
 		fitResult.tdist_marginValues[i] = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(i));
 	}
 
