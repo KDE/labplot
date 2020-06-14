@@ -111,7 +111,7 @@ void Worksheet::init() {
 /*!
 	converts from \c unit to the scene units. At the moment, 1 scene unit corresponds to 1/10 mm.
  */
-float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit unit) {
+double Worksheet::convertToSceneUnits(const double value, const Worksheet::Unit unit) {
 	switch (unit) {
 	case Unit::Millimeter:
 		return value * 10.0;
@@ -129,7 +129,7 @@ float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit un
 /*!
 	converts from the scene units to \c unit . At the moment, 1 scene unit corresponds to 1/10 mm.
  */
-float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit unit) {
+double Worksheet::convertFromSceneUnits(const double value, const Worksheet::Unit unit) {
 	switch (unit) {
 	case Unit::Millimeter:
 		return value/10.0;

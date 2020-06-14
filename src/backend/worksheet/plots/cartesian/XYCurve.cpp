@@ -764,11 +764,11 @@ void XYCurve::handleResize(double horizontalRatio, double verticalRatio, bool pa
 	setSymbolsSize(d->symbolsSize * horizontalRatio);
 
 	QPen pen = d->symbolsPen;
-	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
+	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.);
 	setSymbolsPen(pen);
 
 	pen = d->linePen;
-	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
+	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.);
 	setLinePen(pen);
 
 	//setValuesDistance(d->distance*);
@@ -962,12 +962,10 @@ bool XYCurvePrivate::swapVisible(bool on) {
   triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-
 	if (!isVisible())
 		return;
 
 	DEBUG("\nXYCurvePrivate::retransform() name = " << STDSTRING(name()) << ", m_suppressRetransform = " << m_suppressRetransform);
-	DEBUG("	plot = " << plot);
 	if (m_suppressRetransform || !plot)
 		return;
 
@@ -1002,23 +1000,25 @@ void XYCurvePrivate::retransform() {
 	// TODO: check updateErrorBars() and updateDropLines() and if they aren't available don't calculate this part
 	//if (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues ) {
 	{
-	#ifdef PERFTRACE_CURVES
-			PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform(), map logical points to scene coordinates");
-	#endif
+#ifdef PERFTRACE_CURVES
+	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform(), map logical points to scene coordinates");
+#endif
 
 	if (!symbolPointsLogical.isEmpty()) {
-		float widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Unit::Inch);
-		float heightDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().height(), Worksheet::Unit::Inch);
-		int countPixelX = ceil(widthDatarectInch*QApplication::desktop()->physicalDpiX());
-		int countPixelY = ceil(heightDatarectInch*QApplication::desktop()->physicalDpiY());
+		double widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Unit::Inch);
+		double heightDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().height(), Worksheet::Unit::Inch);
+		int countPixelX = ceil(widthDatarectInch * QApplication::desktop()->physicalDpiX());
+		int countPixelY = ceil(heightDatarectInch * QApplication::desktop()->physicalDpiY());
 
 		if (countPixelX <= 0 || countPixelY <= 0) {
 			RESET_CURSOR;
 			return;
 		}
 
-		double minLogicalDiffX = 1./(plot->dataRect().width()/countPixelX);
-		double minLogicalDiffY = 1./(plot->dataRect().height()/countPixelY);
+		DEBUG("	countPixelX = " << countPixelX << ", plot->dataRect().width() = " << plot->dataRect().width())
+		double minLogicalDiffX = plot->dataRect().width()/countPixelX;
+		DEBUG("	-> minLogicalDiffX = " << minLogicalDiffX)
+		double minLogicalDiffY = plot->dataRect().height()/countPixelY;
 		QVector<QVector<bool>> scenePointsUsed;
 		// size of the datarect in pixels
 		scenePointsUsed.resize(countPixelX + 1);
@@ -1049,9 +1049,8 @@ void XYCurvePrivate::retransform() {
 		}
 
 		visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
-		cSystem->mapLogicalToScene(startIndex, endIndex, symbolPointsLogical,
-								   symbolPointsScene, visiblePoints, scenePointsUsed,
-								   minLogicalDiffX, minLogicalDiffY);
+		cSystem->mapLogicalToScene(startIndex, endIndex, symbolPointsLogical, symbolPointsScene,
+				visiblePoints, scenePointsUsed, minLogicalDiffX, minLogicalDiffY);
 	}
 	}
 	//} // (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues )
@@ -1128,7 +1127,7 @@ void XYCurvePrivate::recalcLogicalPoints() {
 			validPointsIndicesLogical.push_back(row);
 		} else {
 			if (!connectedPointsLogical.empty())
-				connectedPointsLogical[connectedPointsLogical.size()-1] = false;
+				connectedPointsLogical[connectedPointsLogical.size() - 1] = false;
 		}
 	}
 
@@ -1136,7 +1135,7 @@ void XYCurvePrivate::recalcLogicalPoints() {
 }
 
 /*!
- * Adds a line, which connects two points, but only if the don't lie on the same xAxis pixel.
+ * Adds a line, which connects two points, but only if they don't lie on the same xAxis pixel.
  * If they lie on the same x pixel, draw a vertical line between the minimum and maximum y value. So all points are included
  * This function is only valid for linear x Axis scale!
  * @param p0 first point
@@ -1148,7 +1147,9 @@ void XYCurvePrivate::recalcLogicalPoints() {
  * @param pixelDiff x pixel distance between two points
  */
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, double minLogicalDiffX, int& pixelDiff) {
-	pixelDiff = (int)(p1.x() * minLogicalDiffX) - (int)(p0.x() * minLogicalDiffX);
+	DEBUG("XYCurvePrivate::addLine() linear axis. minLogicalDiffX = " << minLogicalDiffX)
+	pixelDiff = qRound(p1.x() / minLogicalDiffX) - qRound(p0.x() / minLogicalDiffX);
+	QDEBUG("	p0 = " << p0 << ", p1 = " << p1  << "p0.x*minLogicalDiffX = " << p0.x()*minLogicalDiffX << ", p1.x*minLogicalDiffX = " << p1.x()*minLogicalDiffX << ", pixelDiff = " << pixelDiff);
 
 	addLine(p0, p1, minY, maxY, overlap, pixelDiff);
 }
@@ -1166,9 +1167,13 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
  * @param pixelCount pixel count
  */
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff, int pixelCount) {
+	DEBUG("XYCurvePrivate::addLine() general")
 
-	if (plot->xScale() == CartesianPlot::Scale::Linear) { // implemented for completeness only
-		double minLogicalDiffX = 1./((plot->xMax() - plot->xMin())/pixelCount);
+	if (plot->xScale() == CartesianPlot::Scale::Linear) {
+		double minLogicalDiffX = (plot->xMax() - plot->xMin())/pixelCount;
+		DEBUG("	plot->xMax() - plot->xMin() = " << plot->xMax() - plot->xMin()) 
+		DEBUG("	plot->dataRect().width() = " << plot->dataRect().width())
+		DEBUG("	-> minLogicalDiffX = " << minLogicalDiffX)
 		addLine(p0, p1, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
 	} else {
 		// for nonlinear scaling the pixel distance must be calculated for every point pair
@@ -1178,14 +1183,14 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 		// if the point is not valid, don't create a line
 		//if (std::isnan(p0Scene.x()) || std::isnan(p0Scene.y()))
 		if ((p0Scene.x() == 0 && p0Scene.y() == 0) || (p1Scene.x() == 0 && p1Scene.y() == 0)) { // not possible to create line
-			DEBUG("Not possible to create a line between : " << p0Scene.x() << ' ' << p0Scene.y() << ", "<< p1Scene.x() << ' ' << p1Scene.y())
+			DEBUG("Not possible to create a line between " << p0Scene.x() << ',' << p0Scene.y() << " and "<< p1Scene.x() << ',' << p1Scene.y())
 			return;
 		}
 
 		// using only the difference between the points is not sufficient, because p0 is updated always
 		// independent if new line added or not
-		int p0Pixel = (int)((p0Scene.x() - plot->dataRect().x()) / plot->dataRect().width() * pixelCount);
-		int p1Pixel = (int)((p1Scene.x() - plot->dataRect().x()) / plot->dataRect().width() * pixelCount);
+		int p0Pixel = qRound((p0Scene.x() - plot->dataRect().x()) / (double)plot->dataRect().width() * pixelCount);
+		int p1Pixel = qRound((p1Scene.x() - plot->dataRect().x()) / (double)plot->dataRect().width() * pixelCount);
 		pixelDiff = p1Pixel - p0Pixel;
 		addLine(p0, p1, minY, maxY, overlap, pixelDiff);
 	}
@@ -1202,16 +1207,16 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
  * @param pixelDiff x pixel distance between two points
  */
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff) {
-	//QDEBUG("XYCurvePrivate::addLine():" << p0 << ' ' << p1 << ' ' << minY << ' ' << maxY << ' ' << overlap << ' ' << pixelDiff)
+	QDEBUG("XYCurvePrivate::addLine() Part 2:" << p0 << ' ' << p1 << ' ' << "minY=" << minY << ' ' << "maxY=" << maxY << ' ' << overlap << ' ' << pixelDiff)
 	if (pixelDiff == 0) {
-		if (overlap) { // second and so the x axis pixels are the same
-		  if (p1.y() > maxY)
-			maxY = p1.y();
+		DEBUG("	pixelDiff == 0!	p0.x = " << p0.x() << ", p1.x = " << p1.x())
+		if (overlap) { // second time and so the x axis pixel is the same
+			if (p1.y() > maxY)
+				maxY = p1.y();
 
-		  if (p1.y() < minY)
-			minY = p1.y();
-
-		} else { // first time pixel are same
+			if (p1.y() < minY)
+				minY = p1.y();
+		} else { // first time pixel are the same
 			if (p0.y() < p1.y()) {
 				minY = p0.y();
 				maxY = p1.y();
@@ -1221,28 +1226,22 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 			}
 			overlap = true;
 		}
-	} else {
+	} else {	// pixelDiff != 0
 		if (overlap) { // when previously overlap was true, draw the previous line
 			overlap = false;
 
 			// last point from previous pixel must be evaluated
 			if (p0.y() > maxY)
-			  maxY = p0.y();
+				maxY = p0.y();
 
 			if (p0.y() < minY)
-			  minY = p0.y();
+			 	minY = p0.y();
 
 
 			if (true) { //p1.x() >= plot->xMin() && p1.x() <= plot->xMax()) { // x inside scene
 				if (minY == maxY) {
 					lines.append(QLineF(p0, p1)); // line from previous point to actual point
-				} else if (p0.y() == minY) { // draw vertical line
-					lines.append(QLineF(p0.x(), maxY, p0.x(), minY));
-					if (p1.y() >= minY && p1.y() <= maxY && pixelDiff == 1)
-						return;
-
-					lines.append(QLineF(p0, p1));
-				} else if (p0.y() == maxY) { // draw vertical line
+				} else if (p0.y() == minY || p0.y() == maxY) { // draw vertical line
 					lines.append(QLineF(p0.x(), maxY, p0.x(), minY));
 					if (p1.y() >= minY && p1.y() <= maxY && pixelDiff == 1)
 						return;
@@ -1256,8 +1255,9 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 
 					lines.append(QLineF(p0, p1));
 				}
-			} else // x in scene
+			} else { // x in scene
 				DEBUG("addLine: not in scene");
+			}
 		} else // no overlap
 			lines.append(QLineF(p0, p1));
 	}
@@ -1270,6 +1270,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
   lines where both points are outside of the scene
 */
 void XYCurvePrivate::updateLines() {
+	DEBUG("XYCurvePrivate::updateLines()")
 #ifdef PERFTRACE_CURVES
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines()");
 #endif
@@ -1289,9 +1290,9 @@ void XYCurvePrivate::updateLines() {
 		return;
 	}
 
-	float widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Unit::Inch);
+	double widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Unit::Inch);
 	//float heightDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().height(), Worksheet::Unit::Inch);	// unsed
-	int countPixelX = ceil(widthDatarectInch*QApplication::desktop()->physicalDpiX());
+	int countPixelX = ceil(widthDatarectInch * QApplication::desktop()->physicalDpiX());
 	//int countPixelY = ceil(heightDatarectInch*QApplication::desktop()->physicalDpiY());	// unused
 
 	// only valid for linear scale
@@ -1306,27 +1307,27 @@ void XYCurvePrivate::updateLines() {
 	QPointF tempPoint1, tempPoint2; // used as temporaryPoints to interpolate datapoints if the corresponding setting is set
 	int startIndex, endIndex;
 
-	// find index for xMin and xMax to not loop throug all values
+	// find index for xMin and xMax to not loop through all values
 	auto columnProperties = q->xColumn()->properties();
 	if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing ||
 		columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
 		double xMin = cSystem->mapSceneToLogical(plot->dataRect().topLeft()).x();
 		double xMax = cSystem->mapSceneToLogical(plot->dataRect().bottomRight()).x();
-		startIndex= Column::indexForValue(xMin, symbolPointsLogical, columnProperties);
+		startIndex = Column::indexForValue(xMin, symbolPointsLogical, columnProperties);
 		endIndex = Column::indexForValue(xMax, symbolPointsLogical, columnProperties);
 
 		if (startIndex > endIndex)
 			std::swap(startIndex, endIndex);
 
 		startIndex--; // use one value before
-		endIndex ++;
+		endIndex++;
 		if (startIndex < 0)
 			startIndex = 0;
-		if(endIndex < 0 || endIndex >= static_cast<int>(count))
+		if (endIndex < 0 || endIndex >= static_cast<int>(count))
 			endIndex = static_cast<int>(count) - 1;
 
 		count = static_cast<unsigned int>(endIndex - startIndex + 1);
-	}else {
+	} else {
 		startIndex = 0;
 		endIndex = static_cast<int>(count) - 1;
 	}
@@ -1346,6 +1347,7 @@ void XYCurvePrivate::updateLines() {
 		case XYCurve::LineType::NoLine:
 			break;
 		case XYCurve::LineType::Line: {
+			//TODO: check
 			for (int i = startIndex; i < endIndex; i++) {
 				if (!lineSkipGaps && !connectedPointsLogical[i])
 					continue;
@@ -1693,6 +1695,7 @@ void XYCurvePrivate::updateDropLines() {
 }
 
 void XYCurvePrivate::updateSymbols() {
+	DEBUG("XYCurvePrivate::updateSymbols()")
 #ifdef PERFTRACE_CURVES
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateSymbols()");
 #endif
@@ -1852,20 +1855,20 @@ void XYCurvePrivate::updateValues() {
 		w = fm.boundingRect(valuesStrings.at(i)).width();
 		switch (valuesPosition) {
 		case XYCurve::ValuesPosition::Above:
-			tempPoint.setX( symbolPointsScene.at(i).x() - w/2.);
-			tempPoint.setY( symbolPointsScene.at(i).y() - valuesDistance );
+			tempPoint.setX(symbolPointsScene.at(i).x() - w/2.);
+			tempPoint.setY(symbolPointsScene.at(i).y() - valuesDistance);
 			break;
 		case XYCurve::ValuesPosition::Under:
-			tempPoint.setX( symbolPointsScene.at(i).x() - w/2.);
-			tempPoint.setY( symbolPointsScene.at(i).y() + valuesDistance + h/2.);
+			tempPoint.setX(symbolPointsScene.at(i).x() - w/2.);
+			tempPoint.setY(symbolPointsScene.at(i).y() + valuesDistance + h/2.);
 			break;
 		case XYCurve::ValuesPosition::Left:
-			tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1.);
-			tempPoint.setY( symbolPointsScene.at(i).y());
+			tempPoint.setX(symbolPointsScene.at(i).x() - valuesDistance - w - 1.);
+			tempPoint.setY(symbolPointsScene.at(i).y());
 			break;
 		case XYCurve::ValuesPosition::Right:
-			tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1.);
-			tempPoint.setY( symbolPointsScene.at(i).y() );
+			tempPoint.setX(symbolPointsScene.at(i).x() + valuesDistance - 1.);
+			tempPoint.setY(symbolPointsScene.at(i).y());
 			break;
 		}
 		valuesPoints.append(tempPoint);
@@ -1896,7 +1899,7 @@ void XYCurvePrivate::updateFilling() {
 
 	//don't try to calculate the filling polygons if
 	// - no filling was enabled
-	// - the nubmer of visible points on the scene is too high
+	// - the number of visible points on the scene is too high
 	// - no scene points available, everything outside of the plot region or no scene points calculated yet
 	if (fillingPosition == XYCurve::FillingPosition::NoFilling || symbolPointsScene.size() > 1000 || symbolPointsScene.isEmpty()) {
 		recalcShapeAndBoundingRect();

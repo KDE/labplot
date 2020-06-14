@@ -46,9 +46,9 @@ public:
 	//we need to scale from the font size specified in points to scene units.
 	//furhermore, we create the tex-image in a higher resolution then usual desktop resolution
 	// -> take this into account
-	float scaleFactor{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)};
+	double scaleFactor{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)};
 	int teXImageResolution{QApplication::desktop()->physicalDpiX()};
-	float teXImageScaleFactor{Worksheet::convertToSceneUnits(2.54/QApplication::desktop()->physicalDpiX(), Worksheet::Unit::Centimeter)};
+	double teXImageScaleFactor{Worksheet::convertToSceneUnits(2.54/QApplication::desktop()->physicalDpiX(), Worksheet::Unit::Centimeter)};
 
 	TextLabel::TextWrapper textWrapper;
 	QFont teXFont{"Computer Modern", 42};

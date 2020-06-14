@@ -262,7 +262,7 @@ QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPoi
 				}
 
 				if (noPageClippingY)
-					y = pageRect.y() + pageRect.height()/2;
+					y = pageRect.y() + pageRect.height()/2.;
 
 				const QPointF mappedPoint(x, y);
 				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint))
@@ -329,7 +329,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 				}
 
 				if (noPageClippingY)
-					y = yPage + h/2;
+					y = yPage + h/2.;
 
 				const QPointF mappedPoint(x, y);
 				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
@@ -343,7 +343,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 
 /*!
 	Maps the points in logical coordinates from \c points and fills the \c visiblePoints with the points in logical coordinates restricted to the current intervals.
-	If there are points, which lies on another the point will not be added a second time.
+	If there are points, that lie on another one they will not be added a second time.
 	@param logicalPoints List of points in logical coordinates
 	@param scenePoints List for the points in scene coordinates
 	@param visiblePoints List for the logical coordinates restricted to the current region of the coordinate system
@@ -397,13 +397,13 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, 
 				}
 
 				if (noPageClippingY)
-					y = yPage + h/2;
+					y = yPage + h/2.;
 
 				const QPointF mappedPoint(x, y);
 				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
 
-					int indexX = (int)((mappedPoint.x() - d->plot->dataRect().x())*minLogicalDiffX);
-					int indexY = (int)((mappedPoint.y() - d->plot->dataRect().y())*minLogicalDiffY);
+					int indexX = qRound((mappedPoint.x() - d->plot->dataRect().x()) / minLogicalDiffX);
+					int indexY = qRound((mappedPoint.y() - d->plot->dataRect().y()) / minLogicalDiffY);
 					if (scenePointsUsed[indexX][indexY])
 						continue;
 
@@ -461,7 +461,7 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, Mappi
 			}
 
 			if (noPageClippingY)
-				y = pageRect.y() + h/2;
+				y = pageRect.y() + h/2.;
 
 			QPointF mappedPoint(x, y);
 			if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint))
@@ -558,12 +558,12 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 					//mark the end of the gap
 					if (!std::isnan(xGapBefore)) {
 						if (clipResult.xClippedLeft[0]) {
-							QLineF gapMarker(x1 + xGapBefore/4, y1 - xGapBefore/2, x1 - xGapBefore/4, y1 + xGapBefore/2);
+							QLineF gapMarker(x1 + xGapBefore/4., y1 - xGapBefore/2., x1 - xGapBefore/4., y1 + xGapBefore/2.);
 // 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 						if (clipResult.xClippedLeft[1]) {
-							QLineF gapMarker(x2 + xGapBefore/4, y2 - xGapBefore/2, x2 - xGapBefore/4, y2 + xGapBefore/2);
+							QLineF gapMarker(x2 + xGapBefore/4., y2 - xGapBefore/2., x2 - xGapBefore/4., y2 + xGapBefore/2.);
 // 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
@@ -572,12 +572,12 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 					//mark the beginning of the gap
 					if (!std::isnan(xGapAfter)) {
 						if (clipResult.xClippedRight[0]) {
-							QLineF gapMarker(x1 + xGapAfter/4, y1 - xGapAfter/2, x1 - xGapAfter/4, y1 + xGapAfter/2);
+							QLineF gapMarker(x1 + xGapAfter/4., y1 - xGapAfter/2., x1 - xGapAfter/4., y1 + xGapAfter/2.);
 // 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 						if (clipResult.xClippedRight[1]) {
-							QLineF gapMarker(x2 + xGapAfter/4, y2 - xGapAfter/2, x2 - xGapAfter/4, y2 + xGapAfter/2);
+							QLineF gapMarker(x2 + xGapAfter/4., y2 - xGapAfter/2., x2 - xGapAfter/4., y2 + xGapAfter/2.);
 // 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
@@ -585,12 +585,12 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 
 					if (!std::isnan(yGapBefore)) {
 						if (clipResult.yClippedTop[0]) {
-							QLineF gapMarker(x1 + yGapBefore/2, y1 - yGapBefore/4, x1 - yGapBefore/2, y1 + yGapBefore/4);
+							QLineF gapMarker(x1 + yGapBefore/2., y1 - yGapBefore/4., x1 - yGapBefore/2., y1 + yGapBefore/4.);
 // 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 						if (clipResult.yClippedTop[1]) {
-							QLineF gapMarker(x2 + yGapBefore/2, y2 - yGapBefore/4, x2 - yGapBefore/2, y2 + yGapBefore/4);
+							QLineF gapMarker(x2 + yGapBefore/2., y2 - yGapBefore/4., x2 - yGapBefore/2., y2 + yGapBefore/4.);
 // 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
@@ -598,14 +598,14 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 
 					if (!std::isnan(yGapAfter)) {
 						if (clipResult.yClippedBottom[0]) {
-							QLineF gapMarker(QPointF(x1 + yGapAfter / 2, y1 - yGapAfter / 4),
-									QPointF(x1 - yGapAfter / 2, y1 + yGapAfter / 4));
+							QLineF gapMarker(QPointF(x1 + yGapAfter/2., y1 - yGapAfter/4.),
+									QPointF(x1 - yGapAfter/2., y1 + yGapAfter/4.));
 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 						if (clipResult.yClippedBottom[1]) {
-							QLineF gapMarker(QPointF(x2 + yGapAfter / 2, y2 - yGapAfter / 4),
-									QPointF(x2 - yGapAfter / 2, y2 + yGapAfter / 4));
+							QLineF gapMarker(QPointF(x2 + yGapAfter/2., y2 - yGapAfter/4.),
+									QPointF(x2 - yGapAfter/2., y2 + yGapAfter/4.));
 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
@@ -658,7 +658,7 @@ QVector<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QVector<QPoi
 		}
 
 		if (noPageClippingY)
-			y = yPage + h/2;
+			y = yPage + h/2.;
 
 		if (noPageClipping || limit || pageRect.contains(point)) {
 			bool found = false;
@@ -722,7 +722,7 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
 	}
 
 	if (noPageClippingY)
-		logicalPoint.setY(pageRect.y() + pageRect.height()/2);
+		logicalPoint.setY(pageRect.y() + pageRect.height()/2.);
 
 	if (noPageClipping || limit || pageRect.contains(logicalPoint)) {
 		double x = logicalPoint.x();
