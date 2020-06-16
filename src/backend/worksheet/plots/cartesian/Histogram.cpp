@@ -1090,7 +1090,7 @@ void HistogramPrivate::horizontalHistogram() {
 			else
 				value += gsl_histogram_get(m_histogram, i);
 
-			const double y = binRangesMin + i*width - width/2;
+			const double y = binRangesMin + i*width + width/2;
 			lines.append(QLineF(0., y, value, y));
 			pointsLogical.append(QPointF(value, y));
 		}
@@ -1606,6 +1606,7 @@ void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 }
 
 bool HistogramPrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
+	Q_UNUSED(maxDist)
 	if (!isVisible())
 		return false;
 
