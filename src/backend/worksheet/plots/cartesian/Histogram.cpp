@@ -1036,7 +1036,7 @@ void HistogramPrivate::verticalHistogram() {
 			else
 				value += gsl_histogram_get(m_histogram, i);
 
-			const double x = binRangesMin + i*width - width/2;
+			const double x = binRangesMin + i*width + width/2;
 			lines.append(QLineF(x, 0., x, value));
 			pointsLogical.append(QPointF(x, value));
 		}
