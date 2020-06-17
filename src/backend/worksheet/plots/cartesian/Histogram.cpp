@@ -342,22 +342,28 @@ public:
 
 	void redo() override {
 		m_autoBinRangesOld = m_private->autoBinRanges;
+		m_private->autoBinRanges = m_autoBinRanges;
 		if (m_autoBinRanges) {
 			m_binRangesMinOld = m_private->binRangesMin;
 			m_binRangesMaxOld = m_private->binRangesMax;
 			m_private->q->recalcHistogram();
 		}
-		m_private->autoBinRanges = m_autoBinRanges;
 		emit m_private->q->autoBinRangesChanged(m_autoBinRanges);
 	};
 
 	void undo() override {
+		m_private->autoBinRanges = m_autoBinRangesOld;
 		if (!m_autoBinRangesOld) {
-			m_private->binRangesMin = m_binRangesMinOld;
-			m_private->binRangesMax = m_binRangesMaxOld;
+			if (m_private->binRangesMin != m_binRangesMinOld) {
+				m_private->binRangesMin = m_binRangesMinOld;
+				emit m_private->q->binRangesMinChanged(m_private->binRangesMin);
+			}
+			if (m_private->binRangesMax != m_binRangesMaxOld) {
+				m_private->binRangesMax = m_binRangesMaxOld;
+				emit m_private->q->binRangesMaxChanged(m_private->binRangesMax);
+			}
 			m_private->recalcHistogram();
 		}
-		m_private->autoBinRanges = m_autoBinRangesOld;
 		emit m_private->q->autoBinRangesChanged(m_autoBinRangesOld);
 	}
 
