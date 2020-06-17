@@ -30,7 +30,6 @@
   <name xml:lang="sv">Labplot</name>
   <name xml:lang="tr">LabPlot</name>
   <name xml:lang="uk">LabPlot</name>
-  <name xml:lang="x-test">xxLabPlotxx</name>
   <name xml:lang="zh-CN">LabPlot</name>
   <name xml:lang="zh-TW">LabPlot</name>
   <summary>Interactive graphing and analysis of scientific data</summary>
@@ -55,7 +54,6 @@
   <summary xml:lang="sk">Interaktívne grafy a analýza vedeckých údajov</summary>
   <summary xml:lang="sv">Interaktiv diagramritning och analys av vetenskaplig data</summary>
   <summary xml:lang="uk">Інтерактивна побудова графіків та аналіз наукових даних</summary>
-  <summary xml:lang="x-test">xxInteractive graphing and analysis of scientific dataxx</summary>
   <description>
     <p>
       LabPlot is an application for interactive graphing and analysis of scientific data.
@@ -81,7 +79,6 @@
     <p xml:lang="sk">LabPlot je KDE aplikácia pre interaktívne grafy a analýzu vedeckých údajov.</p>
     <p xml:lang="sv">Labplot är ett program för interaktiv diagramritning och analys av vetenskaplig data.</p>
     <p xml:lang="uk">LabPlot — програма для інтерактивної побудови графіків та аналізу наукових даних.</p>
-    <p xml:lang="x-test">xxLabPlot is an application for interactive graphing and analysis of scientific data.xx</p>
     <p>
       LabPlot provides an easy way to create, manage and edit plots. It allows you to produce plots based on data from a spreadsheet or on data imported from external files. Plots can be exported to several pixmap and vector graphic formats.
     </p>
@@ -109,7 +106,6 @@
     <p xml:lang="sv">Labplot tillhandahåller ett enkelt sätt att skapa, hantera och redigera diagram. Det låter dig skapa diagram baserat på data från ett kalkylark eller data importerad från externa filer. Diagram kan exporteras till flera olika punktavbildnings- och vektorgrafik-format.</p>
     <p xml:lang="tr">LabPlot çizimleri oluşturmak, yönetmek ve düzenlemek için kolay bir yol sağlar. Bir tablodaki verilere veya harici dosyalardan alınan verilere dayalı çizimler üretmenizi sağlar. Çizimler çeşitli piksmap ve vektör grafik formatlarına aktarılabilir.</p>
     <p xml:lang="uk">За допомогою LabPlot просто створювати креслення, керувати ними та редагувати креслення. За допомогою програми можна створювати креслення на основі електронної таблиці або даних, імпортованих із зовнішнього файла. Креслення можна експортувати у форматі растрового або векторного зображення.</p>
-    <p xml:lang="x-test">xxLabPlot provides an easy way to create, manage and edit plots. It allows you to produce plots based on data from a spreadsheet or on data imported from external files. Plots can be exported to several pixmap and vector graphic formats.xx</p>
     <p xml:lang="zh-CN">LabPlot 提供了一种方便地创建、 管理和编辑图表的方式。它允许您基于电子表格的数据或从外部文件导入的数据来绘制图表。图表可以导出到多种格式的位图或矢量图形。</p>
   </description>
   <url type="homepage">https://labplot.kde.org/</url>
@@ -136,7 +132,6 @@
       <caption xml:lang="ru">Пример автоподбора масштаба</caption>
       <caption xml:lang="sv">Anpassningsexempel</caption>
       <caption xml:lang="uk">Приклад апроксимації</caption>
-      <caption xml:lang="x-test">xxFit examplexx</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/labplot2_appdata_01.png</image>
     </screenshot>
     <screenshot type="default">
@@ -162,7 +157,6 @@
       <caption xml:lang="sk">Matematická funkcia</caption>
       <caption xml:lang="sv">Matematisk funktion</caption>
       <caption xml:lang="uk">Математична функція</caption>
-      <caption xml:lang="x-test">xxMathematical functionxx</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/labplot2_appdata_02.png</image>
     </screenshot>
     <screenshot type="default">
@@ -186,7 +180,6 @@
       <caption xml:lang="ru">Лист исходных данных</caption>
       <caption xml:lang="sv">CAS-arbetsblad</caption>
       <caption xml:lang="uk">Робочий аркуш СКА</caption>
-      <caption xml:lang="x-test">xxCAS worksheetxx</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/labplot2_appdata_03.png</image>
     </screenshot>
   </screenshots>
