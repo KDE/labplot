@@ -999,8 +999,8 @@ void XYCurvePrivate::retransform() {
 
 	symbolPointsScene.clear();
 
-	if ( (nullptr == xColumn) || (nullptr == yColumn) ) {
-		DEBUG("	xColumn or yColumn == NULL");
+	if (!xColumn || !yColumn) {
+		DEBUG("	xColumn or yColumn not available");
 		linePath = QPainterPath();
 		dropLinePath = QPainterPath();
 		symbolsPath = QPainterPath();
@@ -1260,7 +1260,6 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 			if (p0.y() < minY)
 			 	minY = p0.y();
 
-
 			if (true) { //p1.x() >= plot->xMin() && p1.x() <= plot->xMax()) { // x inside scene
 				if (minY == maxY) {
 					lines.append(QLineF(p0, p1)); // line from previous point to actual point
@@ -1313,9 +1312,9 @@ void XYCurvePrivate::updateLines() {
 		return;
 	}
 
-	double widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Unit::Inch);
+	const double widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Unit::Inch);
 	//float heightDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().height(), Worksheet::Unit::Inch);	// unsed
-	int countPixelX = ceil(widthDatarectInch * QApplication::desktop()->physicalDpiX());
+	const int countPixelX = ceil(widthDatarectInch * QApplication::desktop()->physicalDpiX());
 	//int countPixelY = ceil(heightDatarectInch*QApplication::desktop()->physicalDpiY());	// unused
 
 	// only valid for linear scale
@@ -1334,8 +1333,8 @@ void XYCurvePrivate::updateLines() {
 	auto columnProperties = q->xColumn()->properties();
 	if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing ||
 		columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
-		double xMin = cSystem->mapSceneToLogical(plot->dataRect().topLeft()).x();
-		double xMax = cSystem->mapSceneToLogical(plot->dataRect().bottomRight()).x();
+		const double xMin = cSystem->mapSceneToLogical(plot->dataRect().topLeft()).x();
+		const double xMax = cSystem->mapSceneToLogical(plot->dataRect().bottomRight()).x();
 		startIndex = Column::indexForValue(xMin, symbolPointsLogical, columnProperties);
 		endIndex = Column::indexForValue(xMax, symbolPointsLogical, columnProperties);
 
@@ -1584,8 +1583,8 @@ void XYCurvePrivate::updateLines() {
 				const double step = std::abs(x2 - x1)/(lineInterpolationPointsCount + 1);
 
 				for (int i = 0; i < (lineInterpolationPointsCount + 1); i++) {
-					double xi = x1+i*step;
-					double yi = gsl_spline_eval(spline, xi, acc);
+					const double xi = x1+i*step;
+					const double yi = gsl_spline_eval(spline, xi, acc);
 					xinterp.push_back(xi);
 					yinterp.push_back(yi);
 				}
@@ -1608,8 +1607,8 @@ void XYCurvePrivate::updateLines() {
 
 			delete[] x;
 			delete[] y;
-			gsl_spline_free (spline);
-			gsl_interp_accel_free (acc);
+			gsl_spline_free(spline);
+			gsl_interp_accel_free(acc);
 			break;
 			}
 		}
@@ -1652,11 +1651,9 @@ void XYCurvePrivate::updateDropLines() {
 
 	//calculate drop lines
 	QVector<QLineF> lines;
-	float xMin = 0;
-	float yMin = 0;
+	const double xMin = plot->xMin();
+	const double yMin = plot->yMin();
 
-	xMin = plot->xMin();
-	yMin = plot->yMin();
 	switch (dropLineType) {
 	case XYCurve::DropLineType::NoDropLine:
 		break;
@@ -2171,7 +2168,7 @@ double XYCurve::y(double x, bool &valueFound) const {
 	}
 
 	auto yColumnMode = yColumn()->columnMode();
-	int index = xColumn()->indexForValue(x);
+	const int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
 		return NAN;
@@ -2199,21 +2196,22 @@ QDateTime XYCurve::yDateTime(double x, bool &valueFound) const {
 		valueFound = false;
 		return QDateTime();
 	}
-   auto yColumnMode = yColumn()->columnMode();
-   int index = xColumn()->indexForValue(x);
-   if (index < 0) {
-	   valueFound = false;
-	   return QDateTime();
-   }
 
-   valueFound = true;
-   if (yColumnMode == AbstractColumn::ColumnMode::Day ||
-	   yColumnMode == AbstractColumn::ColumnMode::Month ||
-	   yColumnMode == AbstractColumn::ColumnMode::DateTime)
-	   return yColumn()->dateTimeAt(index);
+	auto yColumnMode = yColumn()->columnMode();
+	const int index = xColumn()->indexForValue(x);
+	if (index < 0) {
+		valueFound = false;
+		return QDateTime();
+	}
 
-   valueFound = false;
-   return QDateTime();
+	valueFound = true;
+	if (yColumnMode == AbstractColumn::ColumnMode::Day ||
+			yColumnMode == AbstractColumn::ColumnMode::Month ||
+			yColumnMode == AbstractColumn::ColumnMode::DateTime)
+		return yColumn()->dateTimeAt(index);
+
+	valueFound = false;
+	return QDateTime();
 }
 
 bool XYCurve::minMaxY(int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars) const {
@@ -2334,7 +2332,7 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 	if (maxDist < 0)
 		maxDist = (linePen.width() < 10) ? 10. : linePen.width();
 
-	double maxDistSquare = gsl_pow_2(maxDist);
+	const double maxDistSquare = gsl_pow_2(maxDist);
 
 	auto properties = q->xColumn()->properties();
 	if (properties == AbstractColumn::Properties::No) {
@@ -2364,7 +2362,7 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 		if (properties == AbstractColumn::Properties::MonotonicDecreasing)
 			increase = false;
 
-		double x = mouseScenePos.x()-maxDist;
+		double x = mouseScenePos.x() - maxDist;
 		int index = 0;
 
 		QPointF curvePosScene;
@@ -2382,7 +2380,7 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 		else if (index == -1)
 			return false;
 
-		double xMaxSquare = mouseScenePos.x() + maxDist;
+		const double xMaxSquare = mouseScenePos.x() + maxDist;
 		bool stop = false;
 		while (true) {
 			// assumption: points exist if no line. otherwise previously returned false
@@ -2428,10 +2426,10 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
  * \p maxDist Maximal distance away from the curve, which is valid
  * \return Return true if point lies next to the line
  */
-bool XYCurvePrivate::pointLiesNearLine(const QPointF p1, const QPointF p2, const QPointF pos, const double maxDist) const{
-	double dx12 = p2.x() - p1.x();
-	double dy12 = p2.y() - p1.y();
-	double vecLength = gsl_hypot(dx12, dy12);
+bool XYCurvePrivate::pointLiesNearLine(const QPointF p1, const QPointF p2, const QPointF pos, const double maxDist) const {
+	const double dx12 = p2.x() - p1.x();
+	const double dy12 = p2.y() - p1.y();
+	const double vecLength = gsl_hypot(dx12, dy12);
 
 	if (vecLength == 0) {
 		if (gsl_pow_2(p1.x() - pos.x()) + gsl_pow_2(p1.y()-pos.y()) <= gsl_pow_2(maxDist))
@@ -2440,11 +2438,11 @@ bool XYCurvePrivate::pointLiesNearLine(const QPointF p1, const QPointF p2, const
 	}
 	QPointF unitvec(dx12/vecLength, dy12/vecLength);
 
-	double dx1m = pos.x() - p1.x();
-	double dy1m = pos.y() - p1.y();
+	const double dx1m = pos.x() - p1.x();
+	const double dy1m = pos.y() - p1.y();
 
-	double dist_segm = std::abs(dx1m*unitvec.y() - dy1m*unitvec.x());
-	double scalarProduct = dx1m*unitvec.x() + dy1m*unitvec.y();
+	const double dist_segm = std::abs(dx1m*unitvec.y() - dy1m*unitvec.x());
+	const double scalarProduct = dx1m*unitvec.x() + dy1m*unitvec.y();
 
 	if (scalarProduct > 0) {
 		if (scalarProduct < vecLength && dist_segm < maxDist)
@@ -2531,14 +2529,14 @@ void XYCurvePrivate::updateErrorBars() {
 	QVector<QLineF> lines;
 	QVector<QPointF> pointsErrorBarAnchorX;
 	QVector<QPointF> pointsErrorBarAnchorY;
-	float errorPlus, errorMinus;
+	double errorPlus, errorMinus;
 
 	for (int i = 0; i < symbolPointsLogical.size(); ++i) {
 		if (!visiblePoints[i])
 			continue;
 
 		const QPointF& point = symbolPointsLogical.at(i);
-		int index = validPointsIndicesLogical.at(i);
+		const int index = validPointsIndicesLogical.at(i);
 
 		//error bars for x
 		if (xErrorType != XYCurve::ErrorType::NoError) {
@@ -2612,8 +2610,8 @@ void XYCurvePrivate::updateErrorBars() {
 	if (!pointsErrorBarAnchorX.isEmpty()) {
 		pointsErrorBarAnchorX = cSystem->mapLogicalToScene(pointsErrorBarAnchorX);
 		for (const auto& point : pointsErrorBarAnchorX) {
-			errorBarsPath.moveTo(QPointF(point.x(), point.y() - errorBarsCapSize/2));
-			errorBarsPath.lineTo(QPointF(point.x(), point.y() + errorBarsCapSize/2));
+			errorBarsPath.moveTo(QPointF(point.x(), point.y() - errorBarsCapSize/2.));
+			errorBarsPath.lineTo(QPointF(point.x(), point.y() + errorBarsCapSize/2.));
 		}
 	}
 
@@ -2621,8 +2619,8 @@ void XYCurvePrivate::updateErrorBars() {
 	if (!pointsErrorBarAnchorY.isEmpty()) {
 		pointsErrorBarAnchorY = cSystem->mapLogicalToScene(pointsErrorBarAnchorY);
 		for (const auto& point : pointsErrorBarAnchorY) {
-			errorBarsPath.moveTo(QPointF(point.x() - errorBarsCapSize/2, point.y()));
-			errorBarsPath.lineTo(QPointF(point.x() + errorBarsCapSize/2, point.y()));
+			errorBarsPath.moveTo(QPointF(point.x() - errorBarsCapSize/2., point.y()));
+			errorBarsPath.lineTo(QPointF(point.x() + errorBarsCapSize/2., point.y()));
 		}
 	}
 
@@ -3323,9 +3321,9 @@ void XYCurve::saveThemeConfig(const KConfig& config) {
 	int index = parentAspect()->indexOfChild<XYCurve>(this);
 	if (index < 5) {
 		KConfigGroup themeGroup = config.group("Theme");
-		for (int i = index; i<5; i++) {
+		for (int i = index; i < 5; i++) {
 			QString s = "ThemePaletteColor" + QString::number(i+1);
-			themeGroup.writeEntry(s,(QColor) this->linePen().color());
+			themeGroup.writeEntry(s, (QColor)this->linePen().color());
 		}
 	}
 }
