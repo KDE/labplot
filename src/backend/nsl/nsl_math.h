@@ -29,6 +29,9 @@
 #ifndef NSL_MATH_H
 #define NSL_MATH_H
 
+#define M_PI_180 (M_PI/180.)
+#define M_180_PI (180./M_PI)
+
 /* returns decimal places of signed value
 * 0.1 -> 1, 0.06 -> 2, 23 -> -1, 100 -> -2
 */

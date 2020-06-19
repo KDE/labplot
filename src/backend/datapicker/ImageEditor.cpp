@@ -29,10 +29,14 @@
 #include <QThreadPool>
 #include <QElapsedTimer>
 #include <QMutex>
-#include <cmath>
+
+extern "C" {
+#include <gsl/gsl_math.h>
+}
 
 static const QRgb white = QColor(Qt::white).rgb();
 static const QRgb black = QColor(Qt::black).rgb();
+static const double colorScale = gsl_hypot3(255, 255, 255);
 
 //Intensity, Foreground, Saturation and Value are from 0 to 100, Hue is from 0 to 360
 static const int maxIntensity = 100;
@@ -239,8 +243,8 @@ int ImageEditor::discretizeIntensity(int x, int y, const QImage* originalImage) 
 	const int g = qGreen(color);
 	const int b = qBlue(color);
 
-	const double intensity = sqrt ((double) (r * r + g * g + b * b));
-	int value = (int) (intensity * maxIntensity / sqrt((double) (255 * 255 + 255 * 255 + 255 * 255)) + 0.5);
+	const double intensity = gsl_hypot3(r, g, b);
+	int value = (int) (intensity * maxIntensity / colorScale + 0.5);
 
 	if (maxIntensity < value)
 		value = maxIntensity;
@@ -256,8 +260,8 @@ int ImageEditor::discretizeForeground(int x, int y, const QColor background, con
 	const int rBg = background.red();
 	const int gBg = background.green();
 	const int bBg = background.blue();
-	const double distance = sqrt ((double) ((r - rBg) * (r - rBg) + (g - gBg) * (g - gBg) + (b - bBg) * (b - bBg)));
-	int value = (int) (distance * maxForeground / sqrt((double) (255 * 255 + 255 * 255 + 255 * 255)) + 0.5);
+	const double distance = gsl_hypot3(r - rBg, g - gBg, b - bBg);
+	int value = (int) (distance * maxForeground / colorScale + 0.5);
 
 	if (maxForeground < value)
 		value = maxForeground;
@@ -278,8 +282,8 @@ int ImageEditor::discretizeValueForeground(int x, int y, DatapickerImage::ColorA
 		const int r = color.red();
 		const int g = color.green();
 		const int b = color.blue();
-		const double intensity = sqrt ((double) (r * r + g * g + b * b));
-		value = (int) (intensity * maxIntensity / sqrt((double) (255 * 255 + 255 * 255 + 255 * 255)) + 0.5);
+		const double intensity = gsl_hypot3(r, g, b);
+		value = (int) (intensity * maxIntensity / colorScale + 0.5);
 		if (maxIntensity < value)
 			value = maxIntensity;
 		break;
@@ -291,8 +295,8 @@ int ImageEditor::discretizeValueForeground(int x, int y, DatapickerImage::ColorA
 		const int rBg = background.red();
 		const int gBg = background.green();
 		const int bBg = background.blue();
-		const double distance = sqrt ((double) ((r - rBg) * (r - rBg) + (g - gBg) * (g - gBg) + (b - bBg) * (b - bBg)));
-		value = (int) (distance * maxForeground / sqrt((double) (255 * 255 + 255 * 255 + 255 * 255)) + 0.5);
+		const double distance = gsl_hypot3(r - rBg, g - gBg, b - bBg);
+		value = (int) (distance * maxForeground / colorScale + 0.5);
 		if (maxForeground < value)
 			value = maxForeground;
 		break;

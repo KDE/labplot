@@ -32,7 +32,7 @@
 
 class Transform {
 public:
-	Transform();
+	Transform() = default;
 	QVector3D mapSceneToLogical(QPointF,const DatapickerImage::ReferencePoints&);
 	QVector3D mapSceneLengthToLogical(QPointF,const DatapickerImage::ReferencePoints&);
 

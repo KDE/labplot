@@ -26,9 +26,15 @@
  ***************************************************************************/
 
 #include "Transform.h"
+//TODO: replace with GSL or better methods
 #include <cmath>
 
-Transform::Transform() = default;
+extern "C" {
+#include <gsl/gsl_math.h>
+#include "backend/nsl/nsl_math.h"
+}
+
+//Transform::Transform() = default;
 
 bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisPoints) {
 	if (axisPoints.type == DatapickerImage::GraphType::LogarithmicX) {
@@ -53,8 +59,8 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 		for (int i = 0; i < 3; ++i) {
 			if (axisPoints.logicalPos[i].x() < 0)
 				return false;
-			x[i] = axisPoints.logicalPos[i].x()*cos(axisPoints.logicalPos[i].y()*M_PI / 180.0);
-			y[i] = axisPoints.logicalPos[i].x()*sin(axisPoints.logicalPos[i].y()*M_PI / 180.0);
+			x[i] = axisPoints.logicalPos[i].x()*cos(axisPoints.logicalPos[i].y() * M_PI_180);
+			y[i] = axisPoints.logicalPos[i].x()*sin(axisPoints.logicalPos[i].y() * M_PI_180);
 			X[i] = axisPoints.scenePos[i].x();
 			Y[i] = axisPoints.scenePos[i].y();
 		}
@@ -70,7 +76,7 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 	} else if (axisPoints.type == DatapickerImage::GraphType::Ternary) {
 		for (int i = 0; i < 3; ++i) {
 			x[i] = (2*axisPoints.logicalPos[i].y() + axisPoints.logicalPos[i].z())/(2*axisPoints.ternaryScale);
-			y[i] = (sqrt(3)*axisPoints.logicalPos[i].z())/(2*axisPoints.ternaryScale);
+			y[i] = (M_SQRT3 * axisPoints.logicalPos[i].z())/(2*axisPoints.ternaryScale);
 			X[i] = axisPoints.scenePos[i].x();
 			Y[i] = axisPoints.scenePos[i].y();
 		}
@@ -134,14 +140,14 @@ QVector3D Transform::mapCartesianToType(QPointF point, const DatapickerImage::Re
 		return QVector3D(point.x(), exp(point.y()), 0);
 	} else if (axisPoints.type == DatapickerImage::GraphType::PolarInDegree) {
 		double r = sqrt(point.x()*point.x() + point.y()*point.y());
-		double angle = atan(point.y()*180/(point.x()*M_PI));
+		double angle = atan(point.y() / point.x() * M_180_PI);
 		return QVector3D(r, angle, 0);
 	} else if (axisPoints.type == DatapickerImage::GraphType::PolarInRadians) {
 		double r = sqrt(point.x()*point.x() + point.y()*point.y());
 		double angle = atan(point.y()/point.x());
 		return QVector3D(r, angle, 0);
 	} else if (axisPoints.type == DatapickerImage::GraphType::Ternary) {
-		double c = (point.y()*2*axisPoints.ternaryScale)/sqrt(3);
+		double c = (point.y()*2*axisPoints.ternaryScale)/M_SQRT3;
 		double b = (point.x()*2*axisPoints.ternaryScale - c)/2;
 		double a = axisPoints.ternaryScale - b - c;
 		return QVector3D(a, b, c);

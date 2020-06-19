@@ -34,7 +34,6 @@
 
 #include <klocalizedstring.h>
 
-#include <cmath>
 extern "C" {
 #include <gsl/gsl_version.h>
 #include <gsl/gsl_errno.h>
@@ -1290,8 +1289,8 @@ const QVector<int>& ExpressionParser::constantsGroupIndices() {
 }
 
 bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
-	for (int i = 0; i < vars.size(); ++i) {
-		QByteArray varba = vars.at(i).toLatin1();
+	for (const auto& var: vars) {
+		QByteArray varba = var.toLatin1();
 		assign_variable(varba.constData(), 0);
 	}
 

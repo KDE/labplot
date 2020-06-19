@@ -37,8 +37,6 @@
 #include <QIcon>
 #include <KLocalizedString>
 
-#include <cmath>
-
 /**
  * \class AbstractColumn
  * \brief Interface definition for data with column logic

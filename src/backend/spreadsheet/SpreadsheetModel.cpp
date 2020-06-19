@@ -36,7 +36,6 @@
 #include <QIcon>
 
 #include <KLocalizedString>
-#include <cmath>
 
 /*!
 	\class SpreadsheetModel
