@@ -71,6 +71,7 @@ private:
 	Project* m_project{nullptr};
 	QPoint m_dragStartPos;
 	bool m_dragStarted{false};
+	bool m_changeSelectionFromView{false};
 
 	QAction* caseSensitiveAction;
 	QAction* matchCompleteWordAction;

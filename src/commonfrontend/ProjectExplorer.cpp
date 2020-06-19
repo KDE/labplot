@@ -595,6 +595,7 @@ void ProjectExplorer::selectIndex(const QModelIndex&  index) {
 		return;
 
 	if ( !m_treeView->selectionModel()->isSelected(index) ) {
+		m_changeSelectionFromView = true;
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 		m_treeView->setExpanded(index, true);
 		m_treeView->scrollTo(index);
@@ -605,8 +606,10 @@ void ProjectExplorer::deselectIndex(const QModelIndex & index) {
 	if (m_project->isLoading())
 		return;
 
-	if ( m_treeView->selectionModel()->isSelected(index) )
+	if ( m_treeView->selectionModel()->isSelected(index) ) {
+		m_changeSelectionFromView = true;
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
+	}
 }
 
 void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) {
@@ -641,10 +644,13 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 
 	//emitting the signal above is done to show the properties widgets for the selected aspect(s).
 	//with this the project explorer looses the focus and don't react on the key events like DEL key press, etc.
-	//->reset the focus here again.
+	//If we explicitely select an item in the project explorer (not via a selection in the view), we want to keep the focus here.
 	//TODO: after the focus is set again we react on DEL in the event filter, but navigation with the arrow keys in the table
 	//is still not possible. Looks like we need to set the selection again...
-	setFocus();
+	if (!m_changeSelectionFromView)
+		setFocus();
+	else
+		m_changeSelectionFromView = false;
 }
 
 /*!
@@ -653,9 +659,8 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 void ProjectExplorer::updateSelectedAspects() {
 	QModelIndexList items = m_treeView->selectionModel()->selectedRows();
 	QList<AbstractAspect*> selectedAspects;
-	for (const QModelIndex& index : items) {
+	for (const QModelIndex& index : items)
 		selectedAspects << static_cast<AbstractAspect*>(index.internalPointer());
-	}
 
 	emit selectedAspectsChanged(selectedAspects);
 }
