@@ -1110,7 +1110,7 @@ void XYCurvePrivate::recalcLogicalPoints() {
 	auto yColMode = yColumn->columnMode();
 	QPointF tempPoint;
 
-	//take over only valid and non masked points.
+	//take only valid and non masked points
 	for (int row = 0; row < xColumn->rowCount(); row++) {
 		if ( xColumn->isValid(row) && yColumn->isValid(row)
 				&& (!xColumn->isMasked(row)) && (!yColumn->isMasked(row)) ) {
@@ -1145,6 +1145,7 @@ void XYCurvePrivate::recalcLogicalPoints() {
 			case AbstractColumn::ColumnMode::Day:
 				break;
 			}
+
 			symbolPointsLogical.append(tempPoint);
 			connectedPointsLogical.push_back(true);
 			validPointsIndicesLogical.push_back(row);
@@ -1170,9 +1171,9 @@ void XYCurvePrivate::recalcLogicalPoints() {
  * @param pixelDiff x pixel distance between two points
  */
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, double minLogicalDiffX, int& pixelDiff) {
-	DEBUG("XYCurvePrivate::addLine() linear axis. minLogicalDiffX = " << minLogicalDiffX)
+	//DEBUG("XYCurvePrivate::addLine() linear axis. minLogicalDiffX = " << minLogicalDiffX)
 	pixelDiff = qRound(p1.x() / minLogicalDiffX) - qRound(p0.x() / minLogicalDiffX);
-	QDEBUG("	p0 = " << p0 << ", p1 = " << p1  << "p0.x*minLogicalDiffX = " << p0.x()*minLogicalDiffX << ", p1.x*minLogicalDiffX = " << p1.x()*minLogicalDiffX << ", pixelDiff = " << pixelDiff);
+	//QDEBUG("	p0 = " << p0 << ", p1 = " << p1  << "p0.x*minLogicalDiffX = " << p0.x()*minLogicalDiffX << ", p1.x*minLogicalDiffX = " << p1.x()*minLogicalDiffX << ", pixelDiff = " << pixelDiff);
 
 	addLine(p0, p1, minY, maxY, overlap, pixelDiff);
 }
@@ -1190,13 +1191,13 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
  * @param pixelCount pixel count
  */
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff, int pixelCount) {
-	DEBUG("XYCurvePrivate::addLine() general")
+	//DEBUG("XYCurvePrivate::addLine() general")
 
 	if (plot->xScale() == CartesianPlot::Scale::Linear) {
 		double minLogicalDiffX = (plot->xMax() - plot->xMin())/pixelCount;
-		DEBUG("	plot->xMax() - plot->xMin() = " << plot->xMax() - plot->xMin()) 
-		DEBUG("	plot->dataRect().width() = " << plot->dataRect().width())
-		DEBUG("	-> minLogicalDiffX = " << minLogicalDiffX)
+		//DEBUG("	plot->xMax() - plot->xMin() = " << plot->xMax() - plot->xMin())
+		//DEBUG("	plot->dataRect().width() = " << plot->dataRect().width())
+		//DEBUG("	-> minLogicalDiffX = " << minLogicalDiffX)
 		addLine(p0, p1, minY, maxY, overlap, minLogicalDiffX, pixelDiff);
 	} else {
 		// for nonlinear scaling the pixel distance must be calculated for every point pair
@@ -1230,9 +1231,9 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
  * @param pixelDiff x pixel distance between two points
  */
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff) {
-	QDEBUG("XYCurvePrivate::addLine() Part 2:" << p0 << ' ' << p1 << ' ' << "minY=" << minY << ' ' << "maxY=" << maxY << ' ' << overlap << ' ' << pixelDiff)
+	//QDEBUG("XYCurvePrivate::addLine() Part 2:" << p0 << ' ' << p1 << ' ' << "minY=" << minY << ' ' << "maxY=" << maxY << ' ' << overlap << ' ' << pixelDiff)
 	if (pixelDiff == 0) {
-		DEBUG("	pixelDiff == 0!	p0.x = " << p0.x() << ", p1.x = " << p1.x())
+		//DEBUG("	pixelDiff == 0!	p0.x = " << p0.x() << ", p1.x = " << p1.x())
 		if (overlap) { // second time and so the x axis pixel is the same
 			if (p1.y() > maxY)
 				maxY = p1.y();

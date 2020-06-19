@@ -29,6 +29,7 @@
 
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/lib/macros.h"
 
 /* ============================================================================ */
 /* =================================== scales ================================= */
@@ -196,9 +197,7 @@ CartesianScale *CartesianScale::createLogScale(const Interval<double> &interval,
 		base = M_E;
 
 
-	if (logicalStart < 0.0 || logicalStart == 0.0)
-		return nullptr;
-	if (logicalEnd < 0.0 || logicalEnd == 0.0)
+	if (logicalStart <= 0.0 || logicalEnd <= 0.0)
 		return nullptr;
 
 	double lDiff = (log(logicalEnd) - log(logicalStart)) / log(base);
@@ -250,15 +249,8 @@ QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPoi
 
 				if (limit) {
 					// set to max/min if passed over
-					if (x < xPage)
-						x = xPage;
-					if (x > xPage + w)
-						x = xPage + w;
-
-					if (y < yPage)
-						y = yPage;
-					if (y > yPage + h)
-						y = yPage + h;
+					x = qBound(xPage, x, xPage + w);
+					y = qBound(yPage, y, yPage + h);
 				}
 
 				if (noPageClippingY)
@@ -317,15 +309,8 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 
 				if (limit) {
 					// set to max/min if passed over
-					if (x < xPage)
-						x = xPage;
-					if (x > xPage + w)
-						x = xPage + w;
-
-					if (y < yPage)
-						y = yPage;
-					if (y > yPage + h)
-						y = yPage + h;
+					x = qBound(xPage, x, xPage + w);
+					y = qBound(yPage, y, yPage + h);
 				}
 
 				if (noPageClippingY)
@@ -349,8 +334,8 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 	@param visiblePoints List for the logical coordinates restricted to the current region of the coordinate system
 	@param scenePointsUsed List of bools which scene point was already used
  */
-void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, const QVector<QPointF>& logicalPoints,
-		QVector<QPointF>& scenePoints, std::vector<bool>& visiblePoints, QVector<QVector<bool>>& scenePointsUsed, double minLogicalDiffX, double minLogicalDiffY, MappingFlags flags) const {
+void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, const QVector<QPointF>& logicalPoints, QVector<QPointF>& scenePoints,
+		std::vector<bool>& visiblePoints, QVector<QVector<bool>>& scenePointsUsed, double minLogicalDiffX, double minLogicalDiffY, MappingFlags flags) const {
 	const QRectF pageRect = d->plot->dataRect();
 	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
 	const bool limit = flags & MappingFlag::Limit;
@@ -370,40 +355,29 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, 
 				const QPointF& point = logicalPoints.at(i);
 
 				double x = point.x();
-				if (!xScale->contains(x))
-					continue;
-
-				if (!xScale->map(&x))
+				if (!xScale->contains(x) || !xScale->map(&x))
 					continue;
 
 				double y = point.y();
-				if (!yScale->contains(y))
-					continue;
-
-				if (!yScale->map(&y))
+				if (!yScale->contains(y) || !yScale->map(&y))
 					continue;
 
 				if (limit) {
 					// set to max/min if passed over
-					if (x < xPage)
-						x = xPage;
-					if (x > xPage + w)
-						x = xPage + w;
-
-					if (y < yPage)
-						y = yPage;
-					if (y > yPage + h)
-						y = yPage + h;
+					x = qBound(xPage, x, xPage + w);
+					y = qBound(yPage, y, yPage + h);
 				}
 
 				if (noPageClippingY)
 					y = yPage + h/2.;
 
 				const QPointF mappedPoint(x, y);
+				//DEBUG(mappedPoint.x() << ' ' << mappedPoint.y())
 				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
 
-					int indexX = qRound((mappedPoint.x() - d->plot->dataRect().x()) / minLogicalDiffX);
-					int indexY = qRound((mappedPoint.y() - d->plot->dataRect().y()) / minLogicalDiffY);
+					const int indexX = qRound((mappedPoint.x() - d->plot->dataRect().x()) / minLogicalDiffX);
+					const int indexY = qRound((mappedPoint.y() - d->plot->dataRect().y()) / minLogicalDiffY);
+					//DEBUG()
 					if (scenePointsUsed[indexX][indexY])
 						continue;
 
@@ -449,15 +423,8 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, Mappi
 
 			if (limit) {
 				// set to max/min if passed over
-				if (x < xPage)
-					x = xPage;
-				if (x > xPage + w)
-					x = xPage + w;
-
-				if (y < yPage)
-					y = yPage;
-				if (y > yPage + h)
-					y = yPage + h;
+				x = qBound(xPage, x, xPage + w);
+				y = qBound(yPage, y, yPage + h);
 			}
 
 			if (noPageClippingY)
@@ -646,15 +613,8 @@ QVector<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QVector<QPoi
 		double y = point.y();
 		if (limit) {
 			// set to max/min if passed over
-			if (x < xPage)
-				x = xPage;
-			if (x > xPage + w)
-				x = xPage + w;
-
-			if (y < yPage)
-				y = yPage;
-			if (y > yPage + h)
-				y = yPage + h;
+			x = qBound(xPage, x, xPage + w);
+			y = qBound(yPage, y, yPage + h);
 		}
 
 		if (noPageClippingY)
@@ -710,6 +670,7 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
 
 	if (limit) {
 		// set to max/min if passed over
+		// TODO: qBound?
 		if (logicalPoint.x() < pageRect.x())
 			logicalPoint.setX(pageRect.x());
 		if (logicalPoint.x() > pageRect.x() + pageRect.width())
